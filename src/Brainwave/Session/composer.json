@@ -1,0 +1,41 @@
+{
+    "name": "brainwave/session",
+    "type": "library",
+    "description": "Narrowspark Framework for Creative People.",
+    "keywords": ["narrowspark", "brainwave", "session"],
+    "license": "MIT",
+    "homepage": "http://github.com/n-brainwave/session",
+    "authors": [
+        {
+          "name"    : "Daniel Bannert",
+          "email"   : "d.bannert@anolilab.de",
+          "homepage": "http://www.anolilab.de",
+          "role"    : "Developer"
+        }
+    ],
+    "require": {
+        "php": ">=5.4.0",
+        "brainwave/cookie"               : "self.version",
+        "brainwave/encrypter"            : "self.version",
+        "brainwave/support"              : "self.version",
+        "nesbot/carbon"                  : "~1.18",
+        "symfony/http-foundation"        : "~2.6.6"
+    },
+    "autoload": {
+        "psr-4": {
+            "Brainwave\\Session\\"       : ""
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Brainwave\\Session\\Tests\\": "Tests/"
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master"                 : "0.9.8-dev"
+        }
+    },
+    "minimum-stability"                  : "dev",
+    "prefer-stable"                      : true
+}

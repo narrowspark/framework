@@ -1,0 +1,44 @@
+language: php
+
+php:
+  - 5.4
+  - 5.5
+  - 5.6
+  - 7.0
+  - hhvm
+  - nightly
+  - hhvm-nightly
+
+matrix:
+  allow_failures:
+    - php: 7.0
+    - php: nightly
+    - php: hhvm
+    - php: hhvm-nightly
+  fast_finish: true
+
+sudo: false
+
+cache:
+  directories:
+    - $HOME/.composer/cache
+
+before_install:
+  - if [[ "$TRAVIS_PULL_REQUEST" != "false" ]]; then git fetch origin "refs/pull/$TRAVIS_PULL_REQUEST/merge"; else git fetch origin "$TRAVIS_BRANCH"; fi;
+  - if [[ "$TRAVIS_COMMIT" != `git rev-parse FETCH_HEAD` ]]; then echo "Pull request or branch commit hash has changed, aborting!"; exit 1; fi;
+  - composer self-update
+  - travis_retry composer install --prefer-source --no-interaction
+  - OCULAR_ENV='5.4'
+
+install:
+  - curl http://get.sensiolabs.org/php-cs-fixer.phar -o php-cs-fixer.phar
+  - curl http://get.sensiolabs.org/security-checker.phar -o security-checker.phar
+
+script:
+  - php -n php-cs-fixer.phar fix -v --dry-run
+  - php -n security-checker.phar security:check --format=simple
+  - vendor/bin/phpunit --verbose --coverage-clover build/logs/clover.xml
+  - if [ $(phpenv version-name) = $OCULAR_ENV ]; then wget https://scrutinizer-ci.com/ocular.phar; php ocular.phar code-coverage:upload --format=php-clover coverage.clover; fi
+
+after_script:
+  - php vendor/bin/coveralls -v
