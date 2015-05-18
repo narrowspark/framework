@@ -1,6 +1,6 @@
 <?php
 
-namespace Brainwave\Events;
+namespace Brainwave\Events\Test;
 
 /**
  * Narrowspark - a PHP 5 framework.
@@ -12,18 +12,16 @@ namespace Brainwave\Events;
  *
  * @license     http://www.narrowspark.com/license
  *
- * @version     0.9.7-dev
+ * @version     0.9.8-dev
  */
 
-use Brainwave\Contracts\Queue\Factory as FactoryContract;
-
 /**
- * QueueManager.
+ * Queue.
  *
  * @author  Daniel Bannert
  *
  * @since   0.9.8-dev
  */
-class QueueManager implements FactoryContract
+class QueueTest extends \PHPUnit_Framework_TestCase
 {
 }
