@@ -1,0 +1,49 @@
+{
+    "name"       : "brainwave/exception",
+    "type"       : "library",
+    "description": "Narrowspark Framework for Creative People.",
+    "keywords"   : ["narrowspark", "brainwave", "exception", "debug", "Symfony"],
+    "license"    : "MIT",
+    "homepage"   : "http://github.com/n-brainwave/session",
+    "support"    : {
+        "issues": "https://github.com/narrowspark/framework/issues",
+        "source": "https://github.com/narrowspark/framework"
+    },
+    "authors"    : [
+        {
+          "name"    : "Daniel Bannert",
+          "email"   : "d.bannert@anolilab.de",
+          "homepage": "http://www.anolilab.de",
+          "role"    : "Developer"
+        }
+    ],
+    "require": {
+        "php"                                : ">=5.4.0",
+        "brainwave/conifg"                   : "self.version",
+        "brainwave/cotracts"                 : "self.version",
+        "brainwave/log"                      : "self.version",
+        "brainwave/container"                : "self.version",
+        "container-interop/container-interop": "~1.0",
+        "filp/whoops"                        : "~1.1.5",
+        "symfony/http-foundation"            : "~2.6.6",
+        "symfony/debug"                      : "~2.6.6",
+        "psr/log"                            : "~1.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Brainwave\\Exception\\"         : ""
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Brainwave\\Exception\\Tests\\"  : "Tests/"
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master"                     : "0.9.8-dev"
+        }
+    },
+    "minimum-stability"                      : "dev",
+    "prefer-stable"                          : true
+}

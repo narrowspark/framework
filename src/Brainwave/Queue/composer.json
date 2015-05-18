@@ -1,0 +1,37 @@
+{
+    "name"       : "brainwave/queue",
+    "type"       : "library",
+    "description": "Narrowspark Framework for Creative People.",
+    "keywords"   : ["narrowspark", "brainwave", "queue", "symfony"],
+    "license"    : "MIT",
+    "homepage"   : "http://github.com/n-brainwave/queue",
+    "support"    : {
+        "issues": "https://github.com/narrowspark/framework/issues",
+        "source": "https://github.com/narrowspark/framework"
+    },
+    "authors"    : [
+        {
+          "name"    : "Daniel Bannert",
+          "email"   : "d.bannert@anolilab.de",
+          "homepage": "http://www.anolilab.de",
+          "role"    : "Developer"
+        }
+    ],
+    "require": {
+        "php"                      : ">=5.4.0",
+        "brainwave/cotracts"       : "self.version",
+        "symfony/event-dispatcher" : "~2.6.6"
+    },
+    "autoload": {
+        "psr-4": {
+            "Brainwave\\Queue\\"   : ""
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master"           : "0.9.7-dev"
+        }
+    },
+    "minimum-stability"            : "dev",
+    "prefer-stable"                : true
+}
