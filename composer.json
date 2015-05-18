@@ -1,0 +1,108 @@
+{
+    "name"       : "narrowspark/framework",
+    "type"       : "framework",
+    "description": "Narrowspark Framework for Creative People.",
+    "keywords"   : ["framework", "narrowspark", "http", "request", "response", "brainwave", "container"],
+    "license"    : "MIT",
+    "homepage"   : "https://github.com/narrowspark/framework",
+    "support"    : {
+        "issues": "https://github.com/narrowspark/framework/issues",
+        "source": "https://github.com/narrowspark/framework"
+    },
+    "authors"    : [
+        {
+          "name"    : "Daniel Bannert",
+          "email"   : "d.bannert@anolilab.de",
+          "homepage": "http://www.anolilab.de",
+          "role"    : "Developer"
+        }
+    ],
+    "require": {
+        "php"                                : ">=5.4.0",
+        "ext-mcrypt"                         : "*",
+        "ext-openssl"                        : "*",
+        "ext-mbstring"                       : "*",
+        "classpreloader/classpreloader"      : "~1.3",
+        "container-interop/container-interop": "~1.1",
+        "danielstjules/stringy"              : "~1.9",
+        "filp/whoops"                        : "~1.1.5",
+        "ircmaxell/random-lib"               : "~1.1",
+        "ircmaxell/password-compat"          : "~1.0.4",
+        "league/flysystem"                   : "~1.0.3",
+        "monolog/monolog"                    : "~1.13.1",
+        "mpoiriert/invoker"                  : "~1.1",
+        "nesbot/carbon"                      : "~1.18",
+        "nikic/fast-route"                   : "~0.4",
+        "psy/psysh"                          : "~0.4.4",
+        "stecman/symfony-console-completion" : "~0.5.1",
+        "swiftmailer/swiftmailer"            : "~5.4",
+        "stack/builder"                      : "~1.0.3",
+        "symfony/console"                    : "2.7.*@dev",
+        "symfony/debug"                      : "~2.6.6",
+        "symfony/event-dispatcher"           : "~2.6.6",
+        "symfony/finder"                     : "~2.6.6",
+        "symfony/http-foundation"            : "~2.6.6",
+        "symfony/http-kernel"                : "~2.6.6",
+        "symfony/var-dumper"                 : "~2.6.6",
+        "vlucas/phpdotenv"                   : "~1.1"
+    },
+    "replace": {
+        "brainwave/cache"                    : "self.version",
+        "brainwave/conifg"                   : "self.version",
+        "brainwave/console"                  : "self.version",
+        "brainwave/container"                : "self.version",
+        "brainwave/contracts"                : "self.version",
+        "brainwave/cookie"                   : "self.version",
+        "brainwave/database"                 : "self.version",
+        "brainwave/encrypter"                : "self.version",
+        "brainwave/events"                   : "self.version",
+        "brainwave/exception"                : "self.version",
+        "brainwave/filessystem"              : "self.version",
+        "brainwave/hashing"                  : "self.version",
+        "brainwave/http"                     : "self.version",
+        "brainwave/log"                      : "self.version",
+        "brainwave/mail"                     : "self.version",
+        "brainwave/routing"                  : "self.version",
+        "brainwave/session"                  : "self.version",
+        "brainwave/support"                  : "self.version",
+        "brainwave/translator"               : "self.version",
+        "brainwave/view"                     : "self.version"
+    },
+    "require-dev": {
+        "fabpot/php-cs-fixer"                : "~1.8",
+        "mockery/mockery"                    : "~0.9.4",
+        "phpunit/phpunit"                    : "~4.6.4",
+        "predis/predis"                      : "~1.0.1",
+        "satooshi/php-coveralls"             : "~0.6.1",
+        "sensiolabs/security-checker"        : "~2.0",
+        "fzaninotto/faker"                   : "~1.4"
+    },
+    "autoload": {
+        "psr-4": {
+            "Brainwave\\"                    : "src/Brainwave/"
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master"                     : "0.9.8-dev"
+        }
+    },
+    "scripts": {
+        "post-install-cmd": [
+            "php vendor/bin/security-checker security:check --format=simple"
+        ],
+        "post-update-cmd": [
+            "php vendor/bin/security-checker security:check --format=simple"
+        ]
+    },
+    "suggest": {
+        "guzzlehttp/guzzle"                  : "Required to use the Mailgun, Mandrill, and Postmark mail drivers (~5.0).",
+        "aws/aws-sdk-php"                    : "Required to use the SQS queue driver and SES mail driver (~2.4).",
+        "league/flysystem-aws-s3-v2"         : "Required to use the Flysystem S3 driver for SDK2 (~1.0).",
+        "league/flysystem-aws-s3-v3"         : "Required to use the Flysystem S3 driver for SDK3 (~1.0).",
+        "league/flysystem-rackspace"         : "Required to use the Flysystem Rackspace driver (~1.0).",
+        "predis/predis"                      : "Required to use the redis cache and queue drivers (~1.0.1)."
+    },
+    "minimum-stability"                      : "dev",
+    "prefer-stable"                          : true
+}

@@ -1,0 +1,51 @@
+{
+    "name"       : "brainwave/console",
+    "type"       : "library",
+    "description": "Narrowspark Framework for Creative People.",
+    "keywords"   : ["framework", "narrowspark", "cli", "command", "cerebro"],
+    "license"    : "MIT",
+    "homepage"   : "http://github.com/narrowspark/framework",
+    "support"    : {
+        "issues": "https://github.com/narrowspark/framework/issues",
+        "source": "https://github.com/narrowspark/framework"
+    },
+    "authors": [
+        {
+          "name"    : "Daniel Bannert",
+          "email"   : "d.bannert@anolilab.de",
+          "homepage": "http://www.anolilab.de",
+          "role"    : "Developer"
+        }
+    ],
+    "require": {
+        "php"                                : ">=5.4.0",
+        "brainwave/cotracts"                 : "self.version",
+        "brainwave/log"                      : "self.version",
+        "container-interop/container-interop": "~1.0",
+        "mpoiriert/invoker"                  : "~1.1",
+        "nesbot/carbon"                      : "~1.18",
+        "stecman/symfony-console-completion" : "~0.5.1",
+        "symfony/console"                    : "2.7.*@dev"
+    },
+    "autoload": {
+        "psr-4": {
+            "Brainwave\\Console\\"           : ""
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Brainwave\\Console\\Tests\\"    : "Tests/"
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master"                     : "0.9.8-dev"
+        }
+    },
+    "suggest": {
+        "symfony/process"                    : "Required to use scheduling component (~2.6.6).",
+        "nesbot/carbon"                      : "Required to use scheduling component (~1.18)."
+    },
+    "minimum-stability"                      : "dev",
+    "prefer-stable"                          : true
+}

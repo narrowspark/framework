@@ -1,0 +1,35 @@
+{
+    "name"       : "narrowspark/contracts",
+    "type"       : "library",
+    "description": "Narrowspark Framework for Creative People.",
+    "keywords"   : ["framework", "narrowspark", "contracts", "interfaces"],
+    "license"    : "MIT",
+    "homepage"   : "http://github.com/narrowspark/framework",
+    "support"    : {
+        "issues": "https://github.com/narrowspark/framework/issues",
+        "source": "https://github.com/narrowspark/framework"
+    },
+    "authors"    : [
+        {
+          "name"    : "Daniel Bannert",
+          "email"   : "d.bannert@anolilab.de",
+          "homepage": "http://www.anolilab.de",
+          "role"    : "Developer"
+        }
+    ],
+    "require": {
+        "php"                       : "~5.4.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Brainwave\\Contracts\\": ""
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master"            : "0.9.8-dev"
+        }
+    },
+    "minimum-stability"             : "dev",
+    "prefer-stable"                 : true
+}

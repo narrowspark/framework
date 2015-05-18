@@ -1,0 +1,536 @@
+//colors
+$color_baltic_sea_approx: #2b2b2b;
+$color_quill_gray_approx: #d4d4d4;
+$color_tapa_approx: #777;
+$color_valencia_approx: #cd3f3f;
+$color_fuscous_gray_approx: #555;
+$color_alto_approx: #ddd;
+$color_sunset_orange_approx: #e94d4d;
+$white: #fff;
+$black_20: rgba(0, 0, 0, .2);
+$color_shark_approx: #272727;
+$white_4: rgba(255, 255, 255, .04);
+//$color_scooter_approx: #26ade4;
+$color_carnation_approx: #f15c5e;
+$color_masala_approx: #3a3a3a;
+$color_shady_lady_approx: #a5a5a5;
+//$color_picton_blue_approx: #4dbce9;
+$color_roman_approx: #d65152;
+$color_jagged_ice_approx: #bee9ea;
+$color_mine_shaft_approx: #333;
+$color_gallery_approx: #f0f0f0;
+$color_buttercup_approx: #eda31a;
+$color_alto_approx: #d2d2d2;
+$black_30: rgba(0, 0, 0, .3);
+$color_cape_cod_approx: #404040;
+$color_gray_approx: #828282;
+$color_fountain_blue_approx: #4bb1b1;
+$color_vista_blue_approx: #86d2b6;
+$black_8: rgba(0, 0, 0, .08);
+$color_gun_powder_approx: #463c54;
+$color_mountain_mist_approx: #999;
+$color_tuatara_approx: #373837;
+$color_wattle_approx: #d1e751;
+$color_pewter_approx: #93a1a1;
+$color_celeste_approx: #ccc;
+$color_flame_pea_approx: #db613b;
+$color_light_orchid_approx: #dda0dd;
+$color_lilac_approx: #d0a0d0;
+$color_anzac_approx: #e3b446;
+$white_5: rgba(255, 255, 255, .05);
+$white_10: rgba(255, 255, 255, .1);
+
+//fonts
+$font_0: Lucida Grande;
+$font_1: Lucida Sans Unicode;
+$font_2: Lucida Sans;
+$font_3: Geneva;
+$font_4: Verdana;
+$font_5: sans-serif;
+$font_6: Source Code Pro;
+$font_7: Monaco;
+$font_8: Consolas;
+$font_9: Lucida Console;
+$font_10: monospace;
+
+
+//@extend-elements
+//original selectors
+//pre.prettyprint, code.prettyprint
+%extend_1 {
+    font-weight: normal;
+    font-family: $font_6, $font_7, $font_8, $font_9, $font_10;
+    background: $color_shark_approx;
+    color: $color_mountain_mist_approx;
+    font-size: 11px;
+    line-height: 1.5em;
+}
+
+.cf {
+    *zoom: 1;
+    &:before {
+        content: " ";
+        display: table;
+    }
+    &:after {
+        content: " ";
+        display: table;
+        clear: both;
+    }
+}
+body {
+    font: 14px $font_0, $font_1, $font_2, $font_3, $font_4, $font_5;
+    color: $color_baltic_sea_approx;
+    background-color: $color_quill_gray_approx;
+    padding: 0;
+    margin: 0;
+    max-height: 100%;
+}
+a {
+    text-decoration: none;
+}
+.container {
+    height: 100%;
+    width: 100%;
+    position: fixed;
+    margin: 0;
+    padding: 0;
+    left: 0;
+    top: 0;
+}
+.branding {
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    color: $color_tapa_approx;
+    font-size: 10px;
+    z-index: 100;
+    a {
+        color: $color_valencia_approx;
+    }
+}
+header {
+    padding: 20px;
+    color: $color_fuscous_gray_approx;
+    background-color: $color_alto_approx;
+    //Instead of the line below you could use @includebox-sizing($bs)
+    box-sizing: border-box;
+    border-left: 5px solid $color_sunset_orange_approx;
+    background-repeat: no-repeat;
+    background-position: right;
+}
+.exc-title {
+    margin: 0;
+    //color: $color_sunset_orange_approx;
+    font-weight: bold;
+}
+#plain-exception {
+    opacity: .8
+}
+.exc-title-primary {
+    color: $color_sunset_orange_approx;
+}
+.exc-message {
+    font-size: 16px;
+    margin: 5px 0;
+    word-wrap: break-word;
+    font-weight: bold;
+}
+.stack-container {
+    height: 100%;
+    position: relative;
+}
+.details-container {
+    height: 100%;
+    overflow: auto;
+    float: right;
+    width: 70%;
+    background: $white;
+}
+.details {
+    padding: 10px 20px;
+    border-left: 5px solid $black_20;
+}
+.frames-container {
+    height: 100%;
+    overflow: auto;
+    float: left;
+    width: 30%;
+    background: $color_shark_approx;
+}
+.frame {
+    padding: 14px;
+    color: $white;
+    border-right: 1px solid $black_20;
+    cursor: pointer;
+    &:nth-child(even) {
+        color: $white;
+        background: $white_4;
+    }
+    &.active {
+        background-color: $color_carnation_approx;
+        color: $white;
+        .frame-index {
+            font-size: 11px;
+            color: $white;
+        }
+        .frame-class {
+            color: $white;
+        }
+    }
+    &:not('.active') {
+        :hover {
+            background: $color_masala_approx;
+        }
+    }
+}
+.frame-class {
+    font-weight: bold;
+    color: $color_roman_approx;
+}
+.frame-function {
+    font-weight: bold;
+}
+.frame-index {
+    font-weight: bold;
+    font-size: 11px;
+    color: $color_shady_lady_approx;
+}
+.active {
+    .frame-class {
+        color: $color_jagged_ice_approx;
+    }
+    .frame-file {
+        color: $color_jagged_ice_approx;
+    }
+    .frame-line {
+        color: $color_jagged_ice_approx;
+    }
+}
+.frame-file {
+    font-family: $font_6, $font_7, $font_8, $font_9, $font_10;
+    word-wrap: break-word;
+    .editor-link {
+        color: $color_mine_shaft_approx;
+    }
+}
+.frame-line {
+    font-weight: bold;
+    color: $color_shady_lady_approx;
+    &:before {
+        content: ":";
+    }
+}
+.frame-code {
+    padding: 20px;
+    background: $color_gallery_approx;
+    display: none;
+    border-left: 5px solid $color_buttercup_approx;
+    &.active {
+        display: block;
+    }
+    .frame-file {
+        background: $color_carnation_approx;
+        color: $white;
+        font-size: 11px;
+        padding: 10px 10px 5px 10px;
+    }
+}
+.code-block {
+    padding: 10px;
+    margin: 0;
+    //Instead of the line below you could use @includebox-shadow($shadow-1, $shadow-2, $shadow-3, $shadow-4, $shadow-5, $shadow-6, $shadow-7, $shadow-8, $shadow-9, $shadow-10)
+    box-shadow: inset 0 0 6px $black_30;
+}
+.linenums {
+  margin: 0 0 0 10px;
+  li {
+        color: $color_shady_lady_approx;
+        &.current {
+            background: $white_5;
+            padding-top: 4px;
+            padding-left: 1px;
+            &.active {
+                background: $white_10;
+            }
+        }
+    }
+}
+.frame-comments {
+    border-top: none;
+    padding: 5px;
+    font-size: 12px;
+    background: $color_cape_cod_approx;
+    &.empty {
+        padding: 8px 15px;
+        &:before {
+            content: "No comments for this stack frame.";
+            font-style: italic;
+            color: $color_gray_approx;
+        }
+    }
+}
+.frame-comment {
+    padding: 10px 5px;
+    color: $color_alto_approx;
+    a {
+        color: $color_jagged_ice_approx;
+        font-weight: bold;
+        text-decoration: none;
+        &:hover {
+            color: $color_fountain_blue_approx;
+        }
+    }
+    &:not(':last-child') {
+        border-bottom: 1px dotted $black_30;
+    }
+}
+.frame-comment-context {
+    font-size: 10px;
+    font-weight: bold;
+    color: $color_vista_blue_approx;
+}
+.data-table {
+    width: 100%;
+    margin: 10px 0;
+    tbody {
+        font: 12px/1.5 $font_6, $font_7, $font_8, $font_9, $font_10;
+    }
+    thead {
+        display: none;
+    }
+    tr {
+        padding: 5px 0;
+    }
+    td {
+        &:first-child {
+            width: 20%;
+            min-width: 130px;
+            overflow: hidden;
+            font-weight: bold;
+            color: $color_gun_powder_approx;
+            padding-right: 5px;
+        }
+        &:last-child {
+            width: 80%;
+            //Instead of the line below you could use @includeword-break($value)
+            word-break: break-word;
+            //Instead of the line below you could use @includehyphens($value)
+            hyphens: auto;
+        }
+    }
+    .empty {
+        color: $color_mountain_mist_approx;
+        font-style: italic;
+    }
+}
+.handler {
+    padding: 10px;
+    font: 12px/1.5 $font_6, $font_7, $font_8, $font_9, $font_10;
+    &.active {
+        &:nth-child(even) {
+            color: $white;
+            background: $color_shark_approx;
+        }
+        &:nth-child(odd) {
+            color: $white;
+            background: $color_tuatara_approx;
+        }
+    }
+}
+pre {
+    .str {
+        color: $color_wattle_approx;
+    }
+    .kwd {
+        color: $color_roman_approx;
+        font-weight: bold;
+    }
+    .com {
+        color: $color_fuscous_gray_approx;
+        font-weight: bold;
+    }
+    .typ {
+        color: $white;
+    }
+    .lit {
+        color: $color_sunset_orange_approx;
+    }
+    .pun {
+        color: $color_pewter_approx;
+        font-weight: bold;
+    }
+    .pln {
+        color: $color_celeste_approx;
+    }
+    .tag {
+        color: $color_flame_pea_approx;
+    }
+    .htm {
+        color: $color_light_orchid_approx;
+    }
+    .xsl {
+        color: $color_lilac_approx;
+    }
+    .atn {
+        color: $white;
+        font-weight: normal;
+    }
+    .atv {
+        color: $color_anzac_approx;
+    }
+    .dec {
+        color: $white;
+    }
+    &.prettyprint {
+        @extend %extend_1;
+        white-space: pre-wrap;
+        a {
+            text-decoration: none;
+        }
+    }
+}
+code {
+    .str {
+        color: $color_wattle_approx;
+    }
+    .kwd {
+        color: $color_roman_approx;
+        font-weight: bold;
+    }
+    .com {
+        color: $color_fuscous_gray_approx;
+        font-weight: bold;
+    }
+    .typ {
+        color: $white;
+    }
+    .lit {
+        color: $color_sunset_orange_approx;
+    }
+    .pun {
+        color: $color_pewter_approx;
+        font-weight: bold;
+    }
+    .pln {
+        color: $color_celeste_approx;
+    }
+    .tag {
+        color: $color_flame_pea_approx;
+    }
+    .htm {
+        color: $color_light_orchid_approx;
+    }
+    .xsl {
+        color: $color_lilac_approx;
+    }
+    .atn {
+        color: $white;
+        font-weight: normal;
+    }
+    .atv {
+        color: $color_anzac_approx;
+    }
+    .dec {
+        color: $white;
+    }
+    &.prettyprint {
+        @extend %extend_1;
+        a {
+            text-decoration: none;
+        }
+    }
+}
+.data-table-container label {
+    font-size: 16px;
+    font-weight: bold;
+    color: $color_carnation_approx;
+    display: block;
+    margin: 10px 0 5px;
+    padding: 10px 0 5px;
+    border-bottom: 1px solid $black_8;
+}
+
+.help button {
+    cursor: help;
+    height:   28px;
+    position: absolute;
+    top: 30px;
+    right: 80px;
+    &:hover + #help-overlay {
+        display: block;
+    }
+}
+
+#help-overlay {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(54, 54, 54, 0.5);
+    label {
+        color: #4288ce;
+        font-weight: bold;
+    }
+}
+
+#help-overlay div {
+    width: 200px;
+    padding: 5px;
+    color: #463c54;
+    background-color: white;
+    border-radius: 10px;
+}
+
+#help-clipboard {
+    position: absolute;
+    right: 30px;
+    top: 75px;
+}
+
+#help-framestack {
+    position: absolute;
+    left: 200px;
+    top: 50px;
+}
+
+#help-exc-message {
+    position: absolute;
+    left: 60%;
+    top: 10px;
+}
+
+#help-code {
+    position: absolute;
+    right: 30px;
+    top: 250px;
+}
+
+#help-request {
+    position: absolute;
+    right: 30px;
+    top: 450px;
+}
+
+/* inspired by githubs kbd styles */
+kbd {
+    -moz-border-bottom-colors: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    background-color: #fcfcfc;
+    border-color: #ccc #ccc #bbb;
+    border-image: none;
+    border-radius: 3px;
+    border-style: solid;
+    border-width: 1px;
+    box-shadow: 0 -1px 0 #bbb inset;
+    color: #555;
+    display: inline-block;
+    font-size: 11px;
+    line-height: 10px;
+    padding: 3px 5px;
+    vertical-align: middle;
+}

@@ -1,0 +1,45 @@
+{
+    "name"       : "brainwave/container",
+    "type"       : "library",
+    "description": "Narrowspark Framework for Creative People.",
+    "keywords"   : ["framework", "narrowspark", "container", "container-interop", "di", "dependency", "injection", "dependency injection"],
+    "license"    : "MIT",
+    "homepage"   : "http://github.com/narrowspark/framework",
+    "support"    : {
+        "issues": "https://github.com/narrowspark/framework/issues",
+        "source": "https://github.com/narrowspark/framework"
+    },
+    "authors"    : [
+        {
+          "name"    : "Daniel Bannert",
+          "email"   : "d.bannert@anolilab.de",
+          "homepage": "http://www.anolilab.de",
+          "role"    : "Developer"
+        }
+    ],
+    "require": {
+        "php"                                : ">=5.4.0",
+        "container-interop/container-interop": "~1.0",
+        "mpoiriert/invoker"                  : "~1.1"
+    },
+    "require-dev": {
+        "mockery/mockery"                    : "~0.9.3"
+    },
+    "autoload": {
+        "psr-4": {
+            "Brainwave\\Container\\"         : ""
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Brainwave\\Container\\Tests\\"  : "Tests/"
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master"                     : "0.9.8-dev"
+        }
+    },
+    "minimum-stability"                      : "dev",
+    "prefer-stable"                          : true
+}

@@ -1,0 +1,54 @@
+{
+    "name"       : "brainwave/mail",
+    "type"       : "library",
+    "description": "Narrowspark Framework for Creative People.",
+    "keywords"   : ["framework", "narrowspark", "slim", "mail", "brainwave"],
+    "license"    : "MIT",
+    "homepage"   : "http://github.com/narrowspark/framework",
+    "support"    : {
+        "issues": "https://github.com/narrowspark/framework/issues",
+        "source": "https://github.com/narrowspark/framework"
+    },
+    "authors": [
+        {
+          "name"    : "Daniel Bannert",
+          "email"   : "d.bannert@anolilab.de",
+          "homepage": "http://www.anolilab.de",
+          "role"    : "Developer"
+        }
+    ],
+    "require": {
+        "php"                         : ">=5.4.0",
+        "brainwave/log"               : "self.version",
+        "brainwave/contracts"         : "self.version",
+        "brainwave/config"            : "self.version",
+        "brainwave/events"            : "self.version",
+        "brainwave/view"              : "self.version",
+        "swiftmailer/swiftmailer"     : "~5.4",
+        "psr/log"                     : "~1.0",
+    },
+    "require-dev": {
+        "guzzlehttp/guzzle"           : "~5"
+    },
+    "autoload": {
+        "psr-4": {
+            "Brainwave\\Mail\\"       : ""
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Brainwave\\Mail\\Tests\\": "Tests/"
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master"              : "0.9.8-dev"
+        }
+    },
+    "suggest" : {
+        "aws/aws-sdk-php"             : "Required to use the SES mail driver (~2.4).",
+        "guzzlehttp/guzzle"           : "Required to use the Mailgun, Mandrill, and Postmark mail drivers (~5.0)."
+    },
+    "minimum-stability"               : "dev",
+    "prefer-stable"                   : true
+}

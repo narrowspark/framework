@@ -1,0 +1,49 @@
+{
+    "name"       : "brainwave/routing",
+    "type"       : "library",
+    "description": "Narrowspark Framework for Creative People.",
+    "keywords"   : ["brainwave", "narrowspark", "route", "FastRoute", "dispatcher"],
+    "license"    : "MIT",
+    "homepage"   : "http://github.com/narrowspark/framework",
+    "support"    : {
+        "issues": "https://github.com/narrowspark/framework/issues",
+        "source": "https://github.com/narrowspark/framework"
+    },
+    "authors"    : [
+        {
+          "name"    : "Daniel Bannert",
+          "email"   : "d.bannert@anolilab.de",
+          "homepage": "http://www.anolilab.de",
+          "role"    : "Developer"
+        }
+    ],
+    "require": {
+        "php"                                : ">=5.4.0",
+        "brainwave/container"                : "self.version",
+        "brainwave/contracts"                : "self.version",
+        "brainwave/http"                     : "self.version",
+        "container-interop/container-interop": "~1.0",
+        "nikic/fast-route"                   : "~0.4",
+        "symfony/http-kernel"                : "~2.6.6"
+    },
+    "require-dev":{
+        "phpunit/phpunit"                    : "~4.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Brainwave\\Routing\\"           : ""
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Brainwave\\Tests\\Routing\\"    : "Tests/"
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master"                     : "0.9.8-dev"
+        }
+    },
+    "minimum-stability"                      : "dev",
+    "prefer-stable"                          : true
+}

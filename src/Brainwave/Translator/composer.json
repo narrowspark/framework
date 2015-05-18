@@ -1,0 +1,50 @@
+{
+    "name"       : "brainwave/translator",
+    "type"       : "library",
+    "description": "Narrowspark Framework for Creative People.",
+    "keywords"   : ["narrowspark", "brainwave", "translator"],
+    "license"    : "MIT",
+    "homepage"   : "http://github.com/n-brainwave/translator",
+    "support"    : {
+        "issues": "https://github.com/narrowspark/framework/issues",
+        "source": "https://github.com/narrowspark/framework"
+    },
+    "authors"    : [
+        {
+          "name"    : "Daniel Bannert",
+          "email"   : "d.bannert@anolilab.de",
+          "homepage": "http://www.anolilab.de",
+          "role"    : "Developer"
+        }
+    ],
+    "require": {
+        "php"                               : ">=5.4.0",
+        "brainwave/contracts"               : "self.version",
+        "brainwave/filesystem"              : "self.version"
+    },
+    "require-dev": {
+        "brainwave/cache"                   : "self.version",
+        "symfony/event-dispatcher"          : "~2.6.6"
+    },
+    "autoload": {
+        "psr-4": {
+            "Brainwave\\Translator\\"       : ""
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Brainwave\\Translator\\Tests\\": "tests/"
+        }
+    },
+    "suggest": {
+        "symfony/var-dumper"                : "Required to use the Helper::dd() (~2.6.6).",
+        "vlucas/phpdotenv"                  : "Required to use the Helper::env() (~1.1)."
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master"                    : "0.9.8-dev"
+        }
+    },
+    "minimum-stability"                     : "dev",
+    "prefer-stable"                         : true
+}
