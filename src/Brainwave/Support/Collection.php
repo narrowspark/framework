@@ -442,7 +442,10 @@ class Collection implements
      */
     public function map(callable $callback)
     {
-        return new static (array_map($callback, $this->data, array_keys($this->data)));
+        $keys = array_keys($this->data);
+        $data = array_map($callback, $this->data, $keys);
+
+        return new static(array_combine($keys, $data));
     }
 
     /**
@@ -764,9 +767,7 @@ class Collection implements
      */
     public function transform(callable $callback)
     {
-        $keys = array_keys($this->items);
-
-        $this->data = array_combine($keys, array_map($callback, $this->data, $keys));
+        $this->items = $this->map($callback)->all();
 
         return $this;
     }
