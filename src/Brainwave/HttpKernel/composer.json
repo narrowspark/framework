@@ -1,0 +1,40 @@
+{
+    "name"       : "brainwave/http-kernel",
+    "type"       : "library",
+    "description": "Narrowspark Framework for Creative People.",
+    "keywords"   : ["narrowspark", "brainwave", "http", "request", "response", "stack", "kernel"],
+    "license"    : "MIT",
+    "homepage"   : "http://github.com/n-brainwave/http",
+    "support"    : {
+        "issues": "https://github.com/narrowspark/framework/issues",
+        "source": "https://github.com/narrowspark/framework"
+    },
+    "authors"    : [
+        {
+          "name"    : "Daniel Bannert",
+          "email"   : "d.bannert@anolilab.de",
+          "homepage": "http://www.anolilab.de",
+          "role"    : "Developer"
+        }
+    ],
+    "require": {
+        "php"                                : ">=5.4.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Brainwave\\HttpKernel\\"        : ""
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Brainwave\\HttpKernel\\Tests\\": "Tests/"
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master"                    : "0.10-dev"
+        }
+    },
+    "minimum-stability"                     : "dev",
+    "prefer-stable"                         : true
+}
