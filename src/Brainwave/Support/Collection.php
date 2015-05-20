@@ -50,9 +50,7 @@ class Collection implements
      */
     public function __construct($data = [])
     {
-        $data = !is_null($data) ? $this->getArrayableItems($data) : [];
-
-        $this->data = is_array($data) ? $data : (array) $data;
+        $this->data = is_array($data) ? $data : $this->getArrayableItems($data);
     }
 
     /**
@@ -1126,12 +1124,12 @@ class Collection implements
     protected function getArrayableItems($items)
     {
         if ($items instanceof self) {
-            $items = $items->all();
+            return $items->all();
         } elseif ($items instanceof Arrayable) {
-            $items = $items->toArray();
+            return $items->toArray();
         }
 
-        return $items;
+        return (array) $items;
     }
 
     /**
