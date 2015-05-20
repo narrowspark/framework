@@ -34,6 +34,7 @@
         "nesbot/carbon"                      : "~1.18",
         "nikic/fast-route"                   : "~0.4",
         "psy/psysh"                          : "~0.4.4",
+        "psr/http-message"                   : "^0.11",
         "stecman/symfony-console-completion" : "~0.5.1",
         "swiftmailer/swiftmailer"            : "~5.4",
         "stack/builder"                      : "~1.0.3",
