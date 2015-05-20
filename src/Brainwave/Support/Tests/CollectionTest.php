@@ -457,7 +457,7 @@ class SupportCollectionTest extends \PHPUnit_Framework_TestCase
     public function testMap()
     {
         $data = new Collection(['first' => 'narrowspark', 'last' => 'sparkel']);
-        $data = $data->map(function($item, $key) { return $key.'-'.strrev($item); });
+        $data = $data->map(function ($item, $key) { return $key.'-'.strrev($item); });
         $this->assertEquals(['first' => 'first-rolyat', 'last' => 'last-llewto'], $data->all());
     }
 
