@@ -2,7 +2,7 @@
     "name"       : "brainwave/events",
     "type"       : "library",
     "description": "Narrowspark Framework for Creative People.",
-    "keywords"   : ["narrowspark", "brainwave", "events", "symfony"],
+    "keywords"   : ["narrowspark", "brainwave", "events", "symfony", "event-loop", "asynchronous"],
     "license"    : "MIT",
     "homepage"   : "http://github.com/n-brainwave/events",
     "support"    : {
@@ -38,6 +38,11 @@
         "branch-alias": {
             "dev-master"                     : "0.9.8-dev"
         }
+    },
+    "suggest": {
+        "ext-libevent"                       : "Allows for use of a more performant event-loop implementation. (>=0.1)",
+        "ext-libev"                          : "Allows for use of a more performant event-loop implementation. (~1.0)",
+        "ext-event"                          : "Allows for use of a more performant event-loop implementation. (*)"
     },
     "minimum-stability"                      : "dev",
     "prefer-stable"                          : true
