@@ -15,7 +15,6 @@ namespace Brainwave\Events;
  * @version     0.9.8-dev
  */
 
-use Brainwave\Contracts\Events\Loops as LoopsContract;
 use Interop\Container\ContainerInterface as ContainerContract;
 use Symfony\Component\EventDispatcher\Event;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -28,7 +27,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
  *
  * @since   0.9.5-dev
  */
-class Dispatcher implements EventDispatcherInterface, LoopsContract
+class Dispatcher implements EventDispatcherInterface
 {
     /**
      * Event dispatcher.
@@ -52,13 +51,6 @@ class Dispatcher implements EventDispatcherInterface, LoopsContract
     protected $listenerIds = [];
 
     /**
-     * Async events
-     *
-     * @var array
-     */
-    protected $asyncEvents = [];
-
-    /**
      * Constructor.
      *
      * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $eventDispatcher
@@ -68,34 +60,6 @@ class Dispatcher implements EventDispatcherInterface, LoopsContract
     {
         $this->eventDispatcher = $eventDispatcher;
         $this->container       = $container;
-    }
-
-    /**
-     * Dispatch all saved events.
-     *
-     * @return void
-     */
-    public function dispatchAsync()
-    {
-        foreach ($this->asyncEvents as $eachEntry) {
-            $this->dispatcher->dispatch($eachEntry['name'], $eachEntry['event']);
-        }
-    }
-
-    /**
-     * Store an asynchronous event to be dispatched later.
-     *
-     * @param string                                       $eventName
-     * @param Symfony\Component\EventDispatcher\Event|null $event
-     *
-     * @return void
-     */
-    public function addAsyncEvent($eventName, Event $event = null)
-    {
-        $this->asyncEvents[] = [
-            'name'  => $eventName,
-            'event' => $event,
-        ];
     }
 
     /**

@@ -1,0 +1,48 @@
+{
+    "name"       : "brainwave/loop",
+    "type"       : "library",
+    "description": "Narrowspark Framework for Creative People.",
+    "keywords"   : ["narrowspark", "brainwave", "loop", "symfony", "event-loop", "asynchronous"],
+    "license"    : "MIT",
+    "homepage"   : "http://github.com/n-brainwave/loop",
+    "support"    : {
+        "issues": "https://github.com/narrowspark/framework/issues",
+        "source": "https://github.com/narrowspark/framework"
+    },
+    "authors"    : [
+        {
+          "name"    : "Daniel Bannert",
+          "email"   : "d.bannert@anolilab.de",
+          "homepage": "http://www.anolilab.de",
+          "role"    : "Developer"
+        }
+    ],
+    "require": {
+        "php"                                : ">=5.4.0",
+        "brainwave/cotracts"                 : "self.version",
+        "brainwave/container"                : "self.version",
+        "container-interop/container-interop": "~1.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Brainwave\\Loop\\"            : ""
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Brainwave\\Loop\\Tests\\"     : "Tests/"
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master"                     : "0.9.8-dev"
+        }
+    },
+    "suggest": {
+        "ext-libevent"                       : "Allows for use of a more performant event-loop implementation. (>=0.1)",
+        "ext-libev"                          : "Allows for use of a more performant event-loop implementation. (~1.0)",
+        "ext-event"                          : "Allows for use of a more performant event-loop implementation. (*)"
+    },
+    "minimum-stability"                      : "dev",
+    "prefer-stable"                          : true
+}
