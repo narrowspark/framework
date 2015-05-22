@@ -12,18 +12,33 @@ namespace Brainwave\Events;
  *
  * @license     http://www.narrowspark.com/license
  *
- * @version     0.9.7-dev
+ * @version     0.9.8-dev
  */
 
+use Brainwave\Contracts\Queue\Adapter as AdapterContract;
 use Brainwave\Contracts\Queue\Pushable as PushableContract;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Queue.
  *
  * @author  Daniel Bannert
  *
- * @since   0.9.8-dev
+ * @since   0.10-dev
  */
-class Queue implements PushableContract
+abstract class Queue implements PushableContract
 {
+    /**
+     * @param AdapterContract          $adapter     The queue adapter
+     * @param EventDispatcherInterface $dispatcher  The event dispatcher
+     * @param bool                     $failUnknown Whether to fail jobs whose status hasn't been implicitly set:
+     *                                              - true: jobs with status unknown are assumed to have not been consumed (fail)
+     *                                              - false: jobs with status unknown are assumed to have been consumed (delete)
+     */
+    public function __construct(AdapterContract $adapter, EventDispatcherInterface $dispatcher, $failUnknown = false)
+    {
+        $this->adapter     = $adapter;
+        $this->dispatcher  = $dispatcher;
+        $this->failUnknown = $failUnknown;
+    }
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace Brainwave\Contracts\Queue;
+namespace Brainwave\Events\Adapter;
 
 /**
  * Narrowspark - a PHP 5 framework.
@@ -12,20 +12,17 @@ namespace Brainwave\Contracts\Queue;
  *
  * @license     http://www.narrowspark.com/license
  *
- * @version     0.9.7-dev
+ * @version     0.9.8-dev
  */
 
 /**
- * Consumer.
+ * AsyncAdapter.
  *
  * @author  Daniel Bannert
  *
- * @since   0.9.7-dev
+ * @since   0.10-dev
  */
-interface Consumer
+class AsyncAdapter extends SyncAdapter
 {
-    /**
-     * @param $event
-     */
-    public function consume($event);
+
 }

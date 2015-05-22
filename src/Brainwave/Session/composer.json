@@ -19,7 +19,8 @@
         "brainwave/encrypter"            : "self.version",
         "brainwave/support"              : "self.version",
         "nesbot/carbon"                  : "~1.18",
-        "symfony/http-foundation"        : "~2.6.6"
+        "symfony/http-foundation"        : "~2.6.7
+ *"
     },
     "autoload": {
         "psr-4": {

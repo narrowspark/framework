@@ -42,7 +42,8 @@
         }
     },
     "suggest": {
-        "symfony/var-dumper"             : "Required to use the Helper::dd() (~2.6.6).",
+        "symfony/var-dumper"             : "Required to use the Helper::dd() (~2.6.7
+ *).",
         "vlucas/phpdotenv"               : "Required to use the Helper::env() (~1.1)."
     },
     "minimum-stability"                  : "dev",
