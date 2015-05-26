@@ -2,7 +2,7 @@
     "name"       : "brainwave/support",
     "type"       : "library",
     "description": "Narrowspark Framework for Creative People.",
-    "keywords"   : ["framework", "narrowspark", "support", "brainwave", "env", "dumper"],
+    "keywords"   : ["framework", "narrowspark", "support", "brainwave", "env", "manager", "dumper"],
     "license"    : "MIT",
     "homepage"   : "http://github.com/narrowspark/framework",
     "support"    : {
@@ -18,33 +18,34 @@
         }
     ],
     "require": {
-        "php"                            : ">=5.4.0",
-        "ext-mbstring"                   : "*",
-        "brainwave/contracts"            : "self.version",
-        "danielstjules/stringy"          : "~1.9"
+        "php"                                : ">=5.4.0",
+        "ext-mbstring"                       : "*",
+        "brainwave/contracts"                : "self.version",
+        "container-interop/container-interop": "~1.0",
+        "danielstjules/stringy"              : "~1.9"
     },
     "require-dev": {
-        "mockery/mockery"                : "~0.9.3"
+        "mockery/mockery"                    : "~0.9.3"
     },
     "autoload": {
         "psr-4": {
-            "Brainwave\\Support\\"       : ""
+            "Brainwave\\Support\\"           : ""
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Brainwave\\Support\\Tests\\": "tests/"
+            "Brainwave\\Support\\Tests\\"    : "tests/"
         }
     },
     "extra": {
         "branch-alias": {
-            "dev-master"                 : "0.9.8-dev"
+            "dev-master"                     : "0.9.8-dev"
         }
     },
     "suggest": {
-        "symfony/var-dumper"             : "Required to use the Helper::dd() (~2.6.6).",
-        "vlucas/phpdotenv"               : "Required to use the Helper::env() (~1.1)."
+        "symfony/var-dumper"                 : "Required to use the Helper::dd() (~2.6.7).",
+        "vlucas/phpdotenv"                   : "Required to use the Helper::env() (~1.1)."
     },
-    "minimum-stability"                  : "dev",
-    "prefer-stable"                      : true
+    "minimum-stability"                      : "dev",
+    "prefer-stable"                          : true
 }
