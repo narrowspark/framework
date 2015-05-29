@@ -15,6 +15,7 @@ namespace Brainwave\Mail\Providers;
  * @version     0.9.8-dev
  */
 
+use Aws\Sdk;
 use Aws\Ses\SesClient;
 use Brainwave\Application\ServiceProvider;
 use Brainwave\Mail\Mailer;
@@ -173,9 +174,21 @@ class MailServiceProvider extends ServiceProvider
     protected function registerSesTransport($config)
     {
         $this->app->bind('ses.transport', function () use ($config) {
-            $sesClient = SesClient::factory($config['mail::ses']);
+            // Adjust configuration for V3 of the AWS SDK.
+            if (defined('Aws\Sdk::VERSION')) {
+                $config += [
+                    'version' => 'latest',
+                    'service' => 'email',
+                    'credentials' => [
+                        'key'    => $config['key'],
+                        'secret' => $config['secret'],
+                    ],
+                ];
 
-            return new SesTransport($sesClient);
+                unset($config['key'], $config['secret']);
+            }
+
+            return new SesTransport(SesClient::factory($config));
         });
     }
 
