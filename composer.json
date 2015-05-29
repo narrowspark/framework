@@ -96,7 +96,7 @@
         ]
     },
     "suggest": {
-        "guzzlehttp/guzzle"                  : "Required to use the Mailgun, Mandrill, and Postmark mail drivers (~5.0).",
+        "guzzlehttp/guzzle"                  : "Required to use the Mailgun, Mandrill, and Postmark mail drivers (~6.0).",
         "aws/aws-sdk-php"                    : "Required to use the SQS queue driver and SES mail driver (~2.4).",
         "league/flysystem-aws-s3-v2"         : "Required to use the Flysystem S3 driver for SDK2 (~1.0).",
         "league/flysystem-aws-s3-v3"         : "Required to use the Flysystem S3 driver for SDK3 (~1.0).",

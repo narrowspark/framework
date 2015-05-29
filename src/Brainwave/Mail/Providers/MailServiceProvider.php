@@ -23,6 +23,7 @@ use Brainwave\Mail\Transport\Mailgun as MailgunTransport;
 use Brainwave\Mail\Transport\Mandrill as MandrillTransport;
 use Brainwave\Mail\Transport\Postmark as PostmarkTransport;
 use Brainwave\Mail\Transport\Ses as SesTransport;
+use GuzzleHttp\Client as HttpClient;
 
 /**
  * MailServiceProvider.
@@ -213,10 +214,11 @@ class MailServiceProvider extends ServiceProvider
      */
     protected function registerMailgunTransport($config)
     {
+        $client = new HttpClient;
         $mailgun = $config['mail::services.mailgun'];
 
         $$this->app->bind('swift.transport', function () use ($mailgun) {
-            return new MailgunTransport($mailgun['secret'], $mailgun['base.url'], $mailgun['domain']);
+            return new MailgunTransport($client, $mailgun['secret'], $mailgun['base.url'], $mailgun['domain']);
         });
     }
 
@@ -229,10 +231,11 @@ class MailServiceProvider extends ServiceProvider
      */
     protected function registerMandrillTransport($config)
     {
+        $client = new HttpClient;
         $mandrill = $config['mail::services.mandrill'];
 
         $this->app->bind('swift.transport', function () use ($mandrill) {
-            return new MandrillTransport($mandrill['secret']);
+            return new MandrillTransport($client, $mandrill['secret']);
         });
     }
 
