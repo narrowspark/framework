@@ -780,7 +780,7 @@ class Collection implements
     public function unique($key = null)
     {
         if (is_null($key)) {
-            return new static(array_unique($this->data));
+            return new static(array_unique($this->data, SORT_REGULAR));
         }
 
         $key = $this->valueRetriever($key);
