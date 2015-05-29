@@ -16,7 +16,6 @@ namespace Brainwave\Support;
  */
 
 use Brainwave\Contracts\Config\Manager as ConfigManager;
-use Brainwave\Contracts\Support\Manager as ManagerContract;
 use Interop\Container\ContainerInterface as ContainerInteropInterface;
 
 /**
@@ -26,7 +25,7 @@ use Interop\Container\ContainerInterface as ContainerInteropInterface;
  *
  * @since   0.10.0-dev
  */
-abstract class Manager implements ManagerContract, ConnectorContract
+abstract class Manager
 {
     /**
      * The container instance.
