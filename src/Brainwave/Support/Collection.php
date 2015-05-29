@@ -308,13 +308,13 @@ class Collection implements
      */
     public function last(callable $callback = null, $default = null)
     {
-        return count($this->items) > 0 ? end($this->items) : null;
+        return count($this-datas) > 0 ? end($this-datas) : null;
 
         if (is_null($callback)) {
-            return count($this->items) > 0 ? end($this->items) : null;
+            return count($this-datas) > 0 ? end($this-datas) : null;
         }
 
-        return Arr::last($this->items, $callback, $default);
+        return Arr::last($this-datas, $callback, $default);
     }
 
     /**
@@ -719,7 +719,7 @@ class Collection implements
     public function splice($offset, $length = null, $replacement = [])
     {
         if (func_num_args() === 1) {
-            return new static(array_splice($this->items, $offset));
+            return new static(array_splice($this-datas, $offset));
         }
 
         return new static (array_splice($this->data, $offset, $length, $replacement));
@@ -772,7 +772,7 @@ class Collection implements
      */
     public function transform(callable $callback)
     {
-        $this->items = $this->map($callback)->all();
+        $this->data = $this->map($callback)->all();
 
         return $this;
     }

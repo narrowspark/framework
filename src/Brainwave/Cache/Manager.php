@@ -57,13 +57,6 @@ class CacheManager extends Manager implements FactoryContract
     protected $files;
 
     /**
-     * All supported drivers.
-     *
-     * @var array
-     */
-    protected $supportedDrivers;
-
-    /**
      * The array of created "drivers".
      *
      * @var array
