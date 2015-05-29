@@ -422,11 +422,11 @@ class Request extends SymfonyRequest implements RequestContract, \ArrayAccess
      *
      * @param string $offset
      *
-     * @return string
+     * @return string|null
      */
     public function offsetGet($offset)
     {
-        return $this->all()[$offset];
+        return Arr::get($this->all(), $offset, null);
     }
 
     /**

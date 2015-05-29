@@ -454,6 +454,13 @@ class SupportCollectionTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(['foo', 'bar'], $data->pluck('some')->all());
     }
 
+    public function testMap()
+    {
+        $data = new Collection(['first' => 'narrowspark', 'last' => 'sparkel']);
+        $data = $data->map(function ($item, $key) { return $key.'-'.strrev($item); });
+        $this->assertEquals(['first' => 'first-rolyat', 'last' => 'last-llewto'], $data->all());
+    }
+
     public function testTransform()
     {
         $data = new Collection(['narrowspark', 'colin', 'shawn']);

@@ -23,9 +23,8 @@ if (file_exists(__DIR__.'/local.php_cs')) {
 }
 
 return Symfony\CS\Config\Config::create()
-    ->setUsingCache(true)
-    // use default SYMFONY_LEVEL and extra fixers:
-    ->level(Symfony\CS\FixerInterface::SYMFONY_LEVEL)
+    // use default PSR-2_LEVEL:
+    ->level(Symfony\CS\FixerInterface::PSR2_LEVEL)
     ->fixers(
         [
             'ordered_use',
@@ -36,7 +35,6 @@ return Symfony\CS\Config\Config::create()
             'header_comment',
             'newline_after_open_tag',
             'phpdoc_order',
-            '-phpdoc_to_comment',
         ]
     )
     ->finder($finder);
