@@ -51,6 +51,23 @@ class SupportCollectionTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('foo', $c->first());
     }
 
+    public function testLastWithCallback()
+    {
+        $data = new Collection([2, 4, 3, 2]);
+
+        $result = $data->last(function($key, $value) { return $value > 2; });
+        $this->assertEquals(3, $result);
+    }
+
+
+    public function testLastWithCallbackAndDefault()
+    {
+        $data = new Collection(['foo', 'bar']);
+
+        $result = $data->last(function($key, $value) { return $value === 'baz'; }, 'default');
+        $this->assertEquals('default', $result);
+    }
+
     public function testShiftReturnsAndRemovesFirstItemInCollection()
     {
         $c = new Collection(['foo', 'bar']);

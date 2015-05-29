@@ -300,14 +300,21 @@ class Collection implements
         return new static(array_keys($this->data));
     }
 
-    /**
-     * Get the last item from the collection.
+    /* Get the last item from the collection.
      *
-     * @return mixed|null
+     * @param  callable|null  $callback
+     * @param  mixed  $default
+     * @return mixed
      */
-    public function last()
+    public function last(callable $callback = null, $default = null)
     {
-        return count($this->data) > 0 ? end($this->data) : null;
+        return count($this->items) > 0 ? end($this->items) : null;
+
+        if (is_null($callback)) {
+            return count($this->items) > 0 ? end($this->items) : null;
+        }
+
+        return Arr::last($this->items, $callback, $default);
     }
 
     /**
