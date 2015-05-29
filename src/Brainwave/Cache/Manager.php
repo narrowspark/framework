@@ -31,15 +31,16 @@ use Brainwave\Contracts\Cache\Factory as FactoryContract;
 use Brainwave\Contracts\Config\Manager as ConfigContract;
 use Brainwave\Filesystem\Filesystem;
 use Brainwave\Support\Arr;
+use Brainwave\Support\Manager;
 
 /**
- * Manager.
+ * CacheManager.
  *
  * @author  Daniel Bannert
  *
  * @since   0.8.0-dev
  */
-class Manager implements FactoryContract
+class CacheManager extends Manager implements FactoryContract
 {
     /**
      * Config instance.
@@ -102,105 +103,15 @@ class Manager implements FactoryContract
      */
     public function driver($driver, array $options = [])
     {
-        $driver = $driver ?: $this->getDefaultDriver();
-
-        if (!$this->driverExists($driver)) {
-            throw new CacheException(
-                sprintf('The cache driver [%s] is not supported by the bundle.', $driver)
-            );
-        }
-
-        // If the given driver has not been created before, we will create the instances
-        // here and cache it so we can return it next time very quickly. If there is
-        // already a driver created by this name, we'll just return that instance.
-        if (!isset($this->drivers[$driver])) {
-            $this->drivers[$driver] = $this->createDriver($driver, $options);
-        }
-
-        $class = $this->drivers[$driver];
+        $class = parent::driver($driver, $options);
 
         if (!$class::isSupported()) {
             throw new CacheException(
-                sprintf('The cache driver [%s] is not supported by your running settingsuration.', $driver)
+                sprintf('The driver [%s] is not supported by your running settingsuration.', $driver)
             );
         }
 
         return $class;
-    }
-
-    /**
-     * Create a new driver instance.
-     *
-     * @param string $driver
-     * @param array  $options
-     *
-     * @return mixed
-     */
-    protected function createDriver($driver, array $options = [])
-    {
-        $method = 'create'.ucfirst($driver).'Driver';
-        $options = array_filter($options);
-
-        // We'll check to see if a creator method exists for the given driver. If not we
-        // will check for a custom driver creator, which allows developers to create
-        // drivers using their own customized driver creator Closure to create it.
-        if (isset($this->customCreators[$driver])) {
-            return $this->callCustomCreator($driver, $options);
-        } elseif (method_exists($this, $method)) {
-            return empty($options) ? $this->$method() : $this->$method($options);
-        }
-
-        throw new InvalidCacheArgumentException(sprintf('Driver [%s] not supported.', $driver));
-    }
-
-    /**
-     * Call a custom driver creator.
-     *
-     * @param string $driver
-     * @param array  $options
-     *
-     * @return mixed
-     */
-    protected function callCustomCreator($driver, array $options = [])
-    {
-        return $this->customCreators[$driver]($options);
-    }
-
-    /**
-     * Register a custom driver creator Closure.
-     *
-     * @param string   $driver
-     * @param \Closure $callback
-     *
-     * @return $this
-     */
-    public function extend($driver, \Closure $callback)
-    {
-        $this->customCreators[$driver] = $callback;
-
-        return $this;
-    }
-
-    /**
-     * Get all of the created "drivers".
-     *
-     * @return array
-     */
-    public function getDrivers()
-    {
-        return $this->drivers;
-    }
-
-    /**
-     * Check if the given driver is supported.
-     *
-     * @param string $driver
-     *
-     * @return bool
-     */
-    public function driverExists($driver)
-    {
-        return isset($this->supportedDrivers[$driver]);
     }
 
     /**
@@ -251,26 +162,6 @@ class Manager implements FactoryContract
     public function setPrefix($name)
     {
         $this->config->bind('cache::prefix', $name);
-    }
-
-    /**
-     * Get the default cache driver name.
-     *
-     * @return string
-     */
-    public function getDefaultDriver()
-    {
-        return $this->config->get('cache::driver');
-    }
-
-    /**
-     * Set the default cache driver name.
-     *
-     * @param string $name
-     */
-    public function setDefaultDriver($name)
-    {
-        $this->config->bind('cache::driver', $name);
     }
 
     /**
