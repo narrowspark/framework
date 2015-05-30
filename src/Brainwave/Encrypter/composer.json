@@ -18,7 +18,7 @@
         }
     ],
     "require": {
-        "php"                                : ">=5.4.0",
+        "php"                                : ">=5.5.9",
         "brainwave/config"                   : "self.version",
         "brainwave/contracts"                : "self.version",
         "ircmaxell/random-lib"               : "~1.1"
@@ -35,7 +35,7 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-master"                     : "0.9.8-dev"
+            "dev-master"                     : "0.10.0-dev"
         }
     },
     "suggest": {

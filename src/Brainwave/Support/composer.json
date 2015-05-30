@@ -18,7 +18,7 @@
         }
     ],
     "require": {
-        "php"                                : ">=5.4.0",
+        "php"                                : ">=5.5.9",
         "ext-mbstring"                       : "*",
         "brainwave/contracts"                : "self.version",
         "container-interop/container-interop": "~1.0",
@@ -39,7 +39,7 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-master"                     : "0.9.8-dev"
+            "dev-master"                     : "0.10.0-dev"
         }
     },
     "suggest": {

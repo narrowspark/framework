@@ -18,7 +18,7 @@
         }
     ],
     "require": {
-        "php"                                : ">=5.4.0",
+        "php"                                : ">=5.5.9",
         "ext-mcrypt"                         : "*",
         "ext-openssl"                        : "*",
         "ext-mbstring"                       : "*",
@@ -27,7 +27,6 @@
         "danielstjules/stringy"              : "~1.9",
         "filp/whoops"                        : "~1.1.5",
         "ircmaxell/random-lib"               : "~1.1",
-        "ircmaxell/password-compat"          : "~1.0.4",
         "league/flysystem"                   : "~1.0.3",
         "monolog/monolog"                    : "~1.13.1",
         "mpoiriert/invoker"                  : "~1.1",
@@ -84,7 +83,7 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-master"                     : "0.9.8-dev"
+            "dev-master"                     : "0.10.0-dev"
         }
     },
     "scripts": {

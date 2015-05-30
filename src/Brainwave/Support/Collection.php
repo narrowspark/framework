@@ -12,7 +12,7 @@ namespace Brainwave\Support;
  *
  * @license     http://www.narrowspark.com/license
  *
- * @version     0.9.8-dev
+ * @version     0.10.0-dev
  */
 
 use Brainwave\Contracts\Encrypter\Encrypter as EncrypterContract;

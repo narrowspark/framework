@@ -14,7 +14,7 @@
         }
     ],
     "require": {
-        "php": ">=5.4.0",
+        "php"                            : ">=5.5.9",
         "brainwave/cookie"               : "self.version",
         "brainwave/encrypter"            : "self.version",
         "brainwave/support"              : "self.version",
@@ -33,7 +33,7 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-master"                 : "0.9.8-dev"
+            "dev-master"                 : "0.10.0-dev"
         }
     },
     "minimum-stability"                  : "dev",

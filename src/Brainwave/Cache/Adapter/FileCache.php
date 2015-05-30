@@ -12,7 +12,7 @@ namespace Brainwave\Cache\Adapter;
  *
  * @license     http://www.narrowspark.com/license
  *
- * @version     0.9.8-dev
+ * @version     0.10.0-dev
  */
 
 use Brainwave\Contracts\Cache\Adapter as AdapterContract;
