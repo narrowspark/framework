@@ -18,7 +18,6 @@ namespace Brainwave\Filesystem\Adapters;
 use Aws\S3\S3Client;
 use Brainwave\Contracts\Filesystem\Connector as ConnectorContract;
 use Brainwave\Support\Arr;
-use League\Flysystem\AwsS3v2\AwsS3Adapter as AwsS3v2;
 use League\Flysystem\AwsS3v3\AwsS3Adapter as AwsS3v3;
 
 /**
@@ -89,7 +88,7 @@ class AwsS3Connector implements ConnectorContract
      */
     protected function getClient(array $auth)
     {
-        return S3Client::factory($auth);
+        return new S3Client($auth);
     }
 
     /**
@@ -124,16 +123,10 @@ class AwsS3Connector implements ConnectorContract
      * @param \Aws\S3\S3Client $client
      * @param string[]         $config
      *
-     * @return \League\Flysystem\AwsS3v2\AwsS3Adapter|\League\Flysystem\AwsS3v3\AwsS3Adapter
+     * @return \League\Flysystem\AwsS3v3\AwsS3Adapter
      */
     protected function getAdapter(S3Client $client, array $config)
     {
-        if ($config['aws.version']) {
-            $aws = new AwsS3v2($client, $config['bucket'], $config['prefix'], $config['options']);
-        } else {
-            $aws = new AwsS3v3($client, $config['bucket'], $config['options']);
-        }
-
-        return $aws;
+        return new AwsS3v3($client, $config['bucket'], $config['options']);
     }
 }
