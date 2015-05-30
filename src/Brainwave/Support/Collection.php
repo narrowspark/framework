@@ -156,10 +156,7 @@ class Collection implements
     /**
      * Diff the collection with the given items.
      *
-     * @param  \Brainwave\Support\Collection|
-     *         Arrayable|
-     *         array $items
-     * @param Collection $items
+     * @param mixed $items
      *
      * @return static
      */
@@ -484,9 +481,7 @@ class Collection implements
     /**
      * Merge the collection with the given items.
      *
-     * @param  \Brainwave\Support\Collection|
-     *         Arrayable|
-     *         array $items
+     * @param mixed $items
      *
      * @return static
      */
@@ -966,10 +961,7 @@ class Collection implements
     /**
      * Intersect the collection with the given items.
      *
-     * @param  \Brainwave\Support\Collection|
-     *         Arrayable|
-     *         array $items
-     * @param Collection $items
+     * @param mixed $items
      *
      * @return static
      */
@@ -1122,9 +1114,7 @@ class Collection implements
     /**
      * Results array of items from Collection or Arrayable.
      *
-     * @param  \Brainwave\Support\Collection|
-     *         Arrayable|
-     *         array $items
+     * @param mixed $items
      *
      * @return array
      */
@@ -1134,6 +1124,8 @@ class Collection implements
             return $items->all();
         } elseif ($items instanceof Arrayable) {
             return $items->toArray();
+        } elseif ($items instanceof Jsonable) {
+            return json_decode($items->toJson(), true);
         }
 
         return (array) $items;
