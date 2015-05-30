@@ -12,7 +12,7 @@ namespace Brainwave\Cache;
  *
  * @license     http://www.narrowspark.com/license
  *
- * @version     0.9.8-dev
+ * @version     0.10.0-dev
  */
 
 use Brainwave\Cache\Adapter\ApcCache;
@@ -55,13 +55,6 @@ class CacheManager extends Manager implements FactoryContract
      * @var \Brainwave\Filesystem\Filesystem
      */
     protected $files;
-
-    /**
-     * All supported drivers.
-     *
-     * @var array
-     */
-    protected $supportedDrivers;
 
     /**
      * The array of created "drivers".

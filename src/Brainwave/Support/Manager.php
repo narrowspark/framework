@@ -56,6 +56,13 @@ abstract class Manager
     protected $drivers = [];
 
     /**
+     * All supported drivers.
+     *
+     * @var array
+     */
+    protected $supportedDrivers = [];
+
+    /**
      * Set a ContainerInteropInterface container
      *
      * @param ContainerInteropInterface $container
@@ -120,18 +127,18 @@ abstract class Manager
     /**
      * Builder.
      *
-     * @param string $driver  The cache driver to use
-     * @param array  $options
+     * @param string|null $driver The cache driver to use
+     * @param array       $options
      *
      * @throws CacheException
      *
      * @return mixed
      */
-    public function driver($driver, array $options = [])
+    public function driver($driver = null, array $options = [])
     {
          $driver = $driver ?: $this->getDefaultDriver();
 
-        if (!$this->driverExists($driver)) {
+        if (!$this->hasDriver($driver)) {
             throw new \Exception(
                 sprintf('The driver [%s] is not supported by the bundle.', $driver)
             );
@@ -217,7 +224,7 @@ abstract class Manager
      *
      * @return bool
      */
-    public function driverExists($driver)
+    public function hasDriver($driver)
     {
         return isset($this->supportedDrivers[$driver]);
     }

@@ -9,7 +9,7 @@ namespace Brainwave\Routing\Test\UrlGenerator;
  * @copyright   2015 Daniel Bannert
  * @link        http://www.narrowspark.de
  * @license     http://www.narrowspark.com/license
- * @version     0.9.8-dev
+ * @version     0.10.0-dev
  * @package     Narrowspark/framework
  *
  * For the full copyright and license information, please view the LICENSE

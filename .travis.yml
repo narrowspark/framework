@@ -9,8 +9,19 @@ php:
   - nightly
   - hhvm-nightly
 
+env:
+  global:
+    - setup=basic
+
 matrix:
+  include:
+    - php: 5.4
+      env: setup=lowest
+    - php: 5.4
+     env: setup=stable
   allow_failures:
+    - env: setup=lowest
+    - env: setup=stable
     - php: 7.0
     - php: nightly
     - php: hhvm
@@ -33,6 +44,10 @@ before_install:
 install:
   - curl http://get.sensiolabs.org/php-cs-fixer.phar -o php-cs-fixer.phar
   - curl http://get.sensiolabs.org/security-checker.phar -o security-checker.phar
+  - if [[ $setup = 'basic' ]]; then travis_retry composer install --no-interaction --prefer-source; fi
+  - if [[ $setup = 'stable' ]]; then travis_retry composer update --prefer-source --no-interaction --prefer-stable; fi
+  - if [[ $setup = 'lowest' ]]; then travis_retry composer update --prefer-source --no-interaction --prefer-lowest --prefer-stable; fi
+
 
 script:
   - php -n php-cs-fixer.phar fix -v --dry-run

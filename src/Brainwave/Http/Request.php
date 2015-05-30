@@ -12,7 +12,7 @@ namespace Brainwave\Http;
  *
  * @license     http://www.narrowspark.com/license
  *
- * @version     0.9.8-dev
+ * @version     0.10.0-dev
  */
 
 use Brainwave\Contracts\Http\Request as RequestContract;
@@ -510,10 +510,10 @@ class Request extends SymfonyRequest implements RequestContract, \ArrayAccess
      */
     public function __get($key)
     {
-        $input = $this->input();
+        $all = $this->all();
 
-        if (array_key_exists($key, $input)) {
-            return $this->input($key);
+        if (array_key_exists($key, $all)) {
+            return $all[$key];
         }
 
         return;
