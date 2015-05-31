@@ -18,7 +18,7 @@
         }
     ],
     "require": {
-        "php"                                : ">=5.4.0",
+        "php"                                : ">=5.5.9",
         "brainwave/cotracts"                 : "self.version",
         "brainwave/log"                      : "self.version",
         "container-interop/container-interop": "~1.0",
@@ -39,11 +39,11 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-master"                     : "0.9.8-dev"
+            "dev-master"                     : "0.10.0-dev"
         }
     },
     "suggest": {
-        "symfony/process"                    : "Required to use scheduling component (~2.6.6).",
+        "symfony/process"                    : "Required to use scheduling component (~2.6.8).",
         "nesbot/carbon"                      : "Required to use scheduling component (~1.18)."
     },
     "minimum-stability"                      : "dev",
