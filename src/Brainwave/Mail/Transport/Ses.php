@@ -81,7 +81,7 @@ class Ses implements \Swift_Transport
             'Source' => key($message->getSender()),
             'Destinations' => $this->getTo($message),
             'RawMessage' => [
-                'Data' => $this->getMessage($message),
+                'Data' => (string) $message,
             ],
         ]);
     }
@@ -92,26 +92,6 @@ class Ses implements \Swift_Transport
     public function registerPlugin(\Swift_Events_EventListener $plugin)
     {
         //
-    }
-
-    /**
-     * Get the "message" payload field for the API request.
-     *
-     * This method provides compatibility with Version 2 and Version 3 of the AWS SDK.
-     *
-     * @param  \Swift_Mime_Message  $message
-     * @return array
-     */
-    protected function getMessage(Swift_Mime_Message $message)
-    {
-        $message = (string) $message;
-
-        // Version 2 of the SDK requires you to explicitly base64_encode().
-        if (defined('Aws\Common\Aws::VERSION')) {
-            $message = base64_encode($message);
-        }
-
-        return $message;
     }
 
     /**

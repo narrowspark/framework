@@ -63,6 +63,17 @@ class MailServiceProvider extends ServiceProvider
                 $mailer->alwaysFrom($from['address'], $from['name']);
             }
 
+            // If a "to" address is set, we will set it on the mailer so that all mail
+            // messages sent by the applications will utilize the same "to" address
+            // on each one, which makes it easier for a develop to test, view and share
+            // emails sent from a development or staging environment without spamming
+            // real customers.
+            $to = $app->get('config')->get('mail.to');
+
+            if (is_array($to) && isset($to['address'])) {
+                $mailer->alwaysTo($to['address'], $to['name']);
+            }
+
             return $mailer;
         });
     }
@@ -174,19 +185,18 @@ class MailServiceProvider extends ServiceProvider
     protected function registerSesTransport($config)
     {
         $this->app->bind('ses.transport', function () use ($config) {
-            // Adjust configuration for V3 of the AWS SDK.
-            if (defined('Aws\Sdk::VERSION')) {
-                $config += [
-                    'version' => 'latest',
-                    'service' => 'email',
-                    'credentials' => [
-                        'key'    => $config['key'],
-                        'secret' => $config['secret'],
-                    ],
-                ];
 
-                unset($config['key'], $config['secret']);
-            }
+            $config  = $this->app->get('config')->get('services.ses', []);
+            $config += [
+                'version' => 'latest',
+                'service' => 'email',
+                'credentials' => [
+                    'key'    => $config['key'],
+                    'secret' => $config['secret'],
+                ],
+            ];
+
+            unset($config['key'], $config['secret']);
 
             return new SesTransport(SesClient::factory($config));
         });

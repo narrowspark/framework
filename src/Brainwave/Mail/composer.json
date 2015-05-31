@@ -29,7 +29,7 @@
     },
     "require-dev": {
         "guzzlehttp/guzzle"           : "~5",
-        "aws/aws-sdk-php"             : "~2.4|~3.0"
+        "aws/aws-sdk-php"             : "~3.0"
     },
     "autoload": {
         "psr-4": {
@@ -47,8 +47,8 @@
         }
     },
     "suggest" : {
-        "aws/aws-sdk-php"             : "Required to use the SES mail driver (~2.4|~3.0).",
-        "guzzlehttp/guzzle"           : "Required to use the Mailgun, Mandrill, and Postmark mail drivers (~5.3|~6.0)."
+        "aws/aws-sdk-php"             : "Required to use the SES mail driver (~3.0).",
+        "guzzlehttp/guzzle"           : "Required to use the Mailgun, Mandrill, and Postmark mail drivers (~6.0)."
     },
     "minimum-stability"               : "dev",
     "prefer-stable"                   : true
