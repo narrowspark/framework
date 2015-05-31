@@ -24,7 +24,7 @@
     },
     "require-dev": {
         "brainwave/cache"                   : "self.version",
-        "symfony/event-dispatcher"          : "~2.6.9"
+        "symfony/event-dispatcher"          : "~2.7"
     },
     "autoload": {
         "psr-4": {
