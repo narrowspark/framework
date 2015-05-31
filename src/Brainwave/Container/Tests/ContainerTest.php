@@ -315,7 +315,8 @@ class ContainerCircularReferenceStubF
     }
 }
 
-class ContainerTestInterfaceStub {
+class ContainerTestInterfaceStub
+{
     public function __construct(IContainerContractStub $stub)
     {
         $this->stub = $stub;

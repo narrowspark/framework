@@ -193,7 +193,7 @@ class Request extends SymfonyRequest implements RequestContract, \ArrayAccess
 
         foreach ($accepts as $accept) {
             if ($accept === '*/*') {
-               return true;
+                return true;
             }
 
             foreach ((array) $contentTypes as $type) {

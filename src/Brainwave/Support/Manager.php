@@ -136,7 +136,7 @@ abstract class Manager
      */
     public function driver($driver = null, array $options = [])
     {
-         $driver = $driver ?: $this->getDefaultDriver();
+        $driver = $driver ?: $this->getDefaultDriver();
 
         if (!$this->hasDriver($driver)) {
             throw new \Exception(
