@@ -329,6 +329,20 @@ class FilesystemAdapter implements CloudFilesystemContract
     }
 
     /**
+     * Call a Flysystem driver plugin.
+     *
+     * @param  string  $method
+     * @param  array  $arguments
+     * @return mixed
+     *
+     * @throws \BadMethodCallException
+     */
+    public function __call($method, array $arguments)
+    {
+        return $this->driver->__call($method, $arguments);
+    }
+
+    /**
      * Parse the given visibility value.
      *
      * @param string|null $visibility
