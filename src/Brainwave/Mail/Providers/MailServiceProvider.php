@@ -198,7 +198,7 @@ class MailServiceProvider extends ServiceProvider
 
             unset($config['key'], $config['secret']);
 
-            return new SesTransport(SesClient::factory($config));
+            return new SesTransport(new SesClient($config));
         });
     }
 
