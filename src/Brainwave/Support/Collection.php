@@ -184,18 +184,6 @@ class Collection implements
     }
 
     /**
-     * Fetch a nested element of the collection.
-     *
-     * @param string $key
-     *
-     * @return static
-     */
-    public function fetch($key)
-    {
-        return new static (array_fetch($this->data, $key));
-    }
-
-    /**
      * Run a filter over each of the items.
      *
      * @param callable $callback
