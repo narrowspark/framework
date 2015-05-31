@@ -19,8 +19,8 @@ namespace Brainwave\Mail\Test;
 
 use Aws\Ses\SesClient;
 use Brainwave\Application\Application;
-use Brainwave\Mail\TransportManager;
 use Brainwave\Mail\Transport\Ses as SesTransport;
+use Brainwave\Mail\TransportManager;
 use Brainwave\Support\Collection;
 
 /**

@@ -35,7 +35,7 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
  */
 class Manager implements TranslatorContract
 {
-     //Register all needed traits
+    //Register all needed traits
     use HelpersTrait, FiltersTrait, ReplacementTrait, TranslateTrait;
 
     /**

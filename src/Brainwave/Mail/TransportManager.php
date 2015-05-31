@@ -26,5 +26,4 @@ use Brainwave\Support\Manager;
  */
 class TransportManager extends Manager
 {
-
 }
