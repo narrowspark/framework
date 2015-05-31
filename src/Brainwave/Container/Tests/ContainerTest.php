@@ -9,7 +9,7 @@ namespace Brainwave\Container\Test;
  * @copyright   2015 Daniel Bannert
  * @link        http://www.narrowspark.de
  * @license     http://www.narrowspark.com/license
- * @version     0.9.8-dev
+ * @version     0.10.0-dev
  * @package     Narrowspark/framework
  *
  * For the full copyright and license information, please view the LICENSE
@@ -249,6 +249,24 @@ return $obj; });
         $parameters = [];
         $container->make('ContainerCircularReferenceStubA', $parameters);
     }
+
+    /**
+      * Methods should using contextual binding
+      */
+    public function testContextualBindingOnMethods()
+    {
+        $container = new Container;
+        $container->when("ContainerTestInterfaceStub")->needs("IContainerContractStub")->give("ContainerImplementationStub");
+
+         // Works if using constructor
+        $constructor = $container->make('ContainerTestInterfaceStub');
+        $result = $constructor->getStub();
+        $this->assertInstanceOf("ContainerImplementationStub", $result);
+
+         // Doesn't work if using methods
+        $result = $container->call('ContainerTestInterfaceStub@go');
+        $this->assertInstanceOf("ContainerImplementationStub", $result);
+    }
 }
 
 class ContainerConcreteStub
@@ -294,5 +312,22 @@ class ContainerCircularReferenceStubF
 {
     public function __construct(ContainerCircularReferenceStubD $d)
     {
+    }
+}
+
+class ContainerTestInterfaceStub {
+    public function __construct(IContainerContractStub $stub)
+    {
+        $this->stub = $stub;
+    }
+
+    public function go(IContainerContractStub $stub)
+    {
+        return $stub;
+    }
+
+    public function getStub()
+    {
+        return $this->stub;
     }
 }

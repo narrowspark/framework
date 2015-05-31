@@ -18,11 +18,11 @@
         }
     ],
     "require": {
-        "php"                                : ">=5.4.0",
+        "php"                                : ">=5.5.9",
         "brainwave/cotracts"                 : "self.version",
         "brainwave/container"                : "self.version",
         "container-interop/container-interop": "~1.0",
-        "symfony/event-dispatcher"           : "~2.6.6"
+        "symfony/event-dispatcher"           : "~2.6.9"
     },
     "autoload": {
         "psr-4": {
@@ -36,7 +36,7 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-master"                     : "0.9.8-dev"
+            "dev-master"                     : "0.10.0-dev"
         }
     },
     "minimum-stability"                      : "dev",

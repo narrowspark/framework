@@ -18,20 +18,23 @@
         }
     ],
     "require": {
-        "php"                      : ">=5.4.0",
-        "brainwave/cotracts"       : "self.version",
-        "symfony/event-dispatcher" : "~2.6.6"
+        "php"                                 : ">=5.5.9",
+        "brainwave/cotracts"                  : "self.version",
+        "symfony/event-dispatcher"            : "~2.6.9"
     },
     "autoload": {
         "psr-4": {
-            "Brainwave\\Queue\\"   : ""
+            "Brainwave\\Queue\\"              : ""
         }
+    },
+    "autoload-dev": {
+        "psr-4": { "Brainwave\\Queue\\Test\\": "Tests/" }
     },
     "extra": {
         "branch-alias": {
-            "dev-master"           : "0.9.7-dev"
+            "dev-master"                      : "0.9.7-dev"
         }
     },
-    "minimum-stability"            : "dev",
-    "prefer-stable"                : true
+    "minimum-stability"                       : "dev",
+    "prefer-stable"                           : true
 }

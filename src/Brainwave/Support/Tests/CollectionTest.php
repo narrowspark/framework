@@ -17,6 +17,7 @@ namespace Brainwave\Support\Test;
  *
  */
 
+use Brainwave\Contracts\Support\Arrayable;
 use Brainwave\Support\Collection;
 use Mockery as Mock;
 
@@ -50,6 +51,23 @@ class SupportCollectionTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('foo', $c->first());
     }
 
+    public function testLastWithCallback()
+    {
+        $data = new Collection([2, 4, 3, 2]);
+
+        $result = $data->last(function($key, $value) { return $value > 2; });
+        $this->assertEquals(3, $result);
+    }
+
+
+    public function testLastWithCallbackAndDefault()
+    {
+        $data = new Collection(['foo', 'bar']);
+
+        $result = $data->last(function($key, $value) { return $value === 'baz'; }, 'default');
+        $this->assertEquals('default', $result);
+    }
+
     public function testShiftReturnsAndRemovesFirstItemInCollection()
     {
         $c = new Collection(['foo', 'bar']);
@@ -78,6 +96,45 @@ class SupportCollectionTest extends \PHPUnit_Framework_TestCase
         $c = new Collection();
 
         $this->assertTrue($c->isEmpty());
+    }
+
+    public function testEmptyCollectionIsConstructed()
+    {
+        $collection = new Collection('foo');
+        $this->assertSame(['foo'], $collection->all());
+
+        $collection = new Collection(2);
+        $this->assertSame([2], $collection->all());
+
+        $collection = new Collection(false);
+        $this->assertSame([false], $collection->all());
+
+        $collection = new Collection(null);
+        $this->assertSame([], $collection->all());
+
+        $collection = new Collection;
+        $this->assertSame([], $collection->all());
+    }
+
+    public function testGetArrayableItems()
+    {
+        $collection = new Collection;
+
+        $class  = new ReflectionClass($collection);
+        $method = $class->getMethod('getArrayableItems');
+        $method->setAccessible(true);
+
+        $items = new TestArrayableObject;
+        $array = $method->invokeArgs($collection, [$items]);
+        $this->assertSame(['foo' => 'bar'], $array);
+
+        $items = new Collection(['foo' => 'bar']);
+        $array = $method->invokeArgs($collection, [$items]);
+        $this->assertSame(['foo' => 'bar'], $array);
+
+        $items = ['foo' => 'bar'];
+        $array = $method->invokeArgs($collection, [$items]);
+        $this->assertSame(['foo' => 'bar'], $array);
     }
 
     public function testToArrayCallsToArrayOnEachItemInCollection()
@@ -211,6 +268,9 @@ class SupportCollectionTest extends \PHPUnit_Framework_TestCase
     {
         $c = new Collection(['Hello', 'World', 'World']);
         $this->assertEquals(['Hello', 'World'], $c->unique()->all());
+
+        $c = new Collection([[1, 2], [1, 2], [2, 3], [3, 4], [2, 3]]);
+        $this->assertEquals([[1, 2], [2, 3], [3, 4]], $c->unique()->values()->all());
     }
 
     public function testCollapse()
@@ -454,6 +514,13 @@ class SupportCollectionTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(['foo', 'bar'], $data->pluck('some')->all());
     }
 
+    public function testMap()
+    {
+        $data = new Collection(['first' => 'narrowspark', 'last' => 'sparkel']);
+        $data = $data->map(function ($item, $key) { return $key.'-'.strrev($item); });
+        $this->assertEquals(['first' => 'first-rolyat', 'last' => 'last-llewto'], $data->all());
+    }
+
     public function testTransform()
     {
         $data = new Collection(['narrowspark', 'colin', 'shawn']);
@@ -690,4 +757,12 @@ class TestArrayAccessImplementation implements \ArrayAccess
     {
         unset($this->arr[$offset]);
     }
+}
+
+class TestArrayableObject implements Arrayable
+{
+   public function toArray()
+   {
+       return ['foo' => 'bar'];
+   }
 }

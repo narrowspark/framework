@@ -12,7 +12,7 @@ namespace Brainwave\Support;
  *
  * @license     http://www.narrowspark.com/license
  *
- * @version     0.9.8-dev
+ * @version     0.10.0-dev
  */
 
 use Brainwave\Contracts\Encrypter\Encrypter as EncrypterContract;
@@ -50,9 +50,7 @@ class Collection implements
      */
     public function __construct($data = [])
     {
-        $data = !is_null($data) ? $this->getArrayableItems($data) : [];
-
-        $this->data = is_array($data) ? $data : (array) $data;
+        $this->data = is_array($data) ? $data : $this->getArrayableItems($data);
     }
 
     /**
@@ -158,10 +156,7 @@ class Collection implements
     /**
      * Diff the collection with the given items.
      *
-     * @param  \Brainwave\Support\Collection|
-     *         Arrayable|
-     *         array $items
-     * @param Collection $items
+     * @param mixed $items
      *
      * @return static
      */
@@ -302,14 +297,21 @@ class Collection implements
         return new static(array_keys($this->data));
     }
 
-    /**
-     * Get the last item from the collection.
+    /* Get the last item from the collection.
      *
-     * @return mixed|null
+     * @param  callable|null  $callback
+     * @param  mixed  $default
+     * @return mixed
      */
-    public function last()
+    public function last(callable $callback = null, $default = null)
     {
-        return count($this->data) > 0 ? end($this->data) : null;
+        return count($this-datas) > 0 ? end($this-datas) : null;
+
+        if (is_null($callback)) {
+            return count($this-datas) > 0 ? end($this-datas) : null;
+        }
+
+        return Arr::last($this-datas, $callback, $default);
     }
 
     /**
@@ -442,7 +444,10 @@ class Collection implements
      */
     public function map(callable $callback)
     {
-        return new static (array_map($callback, $this->data, array_keys($this->data)));
+        $keys = array_keys($this->data);
+        $data = array_map($callback, $this->data, $keys);
+
+        return new static(array_combine($keys, $data));
     }
 
     /**
@@ -476,9 +481,7 @@ class Collection implements
     /**
      * Merge the collection with the given items.
      *
-     * @param  \Brainwave\Support\Collection|
-     *         Arrayable|
-     *         array $items
+     * @param mixed $items
      *
      * @return static
      */
@@ -711,7 +714,7 @@ class Collection implements
     public function splice($offset, $length = null, $replacement = [])
     {
         if (func_num_args() === 1) {
-            return new static(array_splice($this->items, $offset));
+            return new static(array_splice($this-datas, $offset));
         }
 
         return new static (array_splice($this->data, $offset, $length, $replacement));
@@ -764,9 +767,7 @@ class Collection implements
      */
     public function transform(callable $callback)
     {
-        $keys = array_keys($this->items);
-
-        $this->data = array_combine($keys, array_map($callback, $this->data, $keys));
+        $this->data = $this->map($callback)->all();
 
         return $this;
     }
@@ -781,7 +782,7 @@ class Collection implements
     public function unique($key = null)
     {
         if (is_null($key)) {
-            return new static(array_unique($this->data));
+            return new static(array_unique($this->data, SORT_REGULAR));
         }
 
         $key = $this->valueRetriever($key);
@@ -960,10 +961,7 @@ class Collection implements
     /**
      * Intersect the collection with the given items.
      *
-     * @param  \Brainwave\Support\Collection|
-     *         Arrayable|
-     *         array $items
-     * @param Collection $items
+     * @param mixed $items
      *
      * @return static
      */
@@ -1116,21 +1114,21 @@ class Collection implements
     /**
      * Results array of items from Collection or Arrayable.
      *
-     * @param  \Brainwave\Support\Collection|
-     *         Arrayable|
-     *         array $items
+     * @param mixed $items
      *
      * @return array
      */
     protected function getArrayableItems($items)
     {
         if ($items instanceof self) {
-            $items = $items->all();
+            return $items->all();
         } elseif ($items instanceof Arrayable) {
-            $items = $items->toArray();
+            return $items->toArray();
+        } elseif ($items instanceof Jsonable) {
+            return json_decode($items->toJson(), true);
         }
 
-        return $items;
+        return (array) $items;
     }
 
     /**
