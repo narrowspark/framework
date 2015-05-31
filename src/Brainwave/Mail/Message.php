@@ -93,11 +93,16 @@ class Message
      *
      * @param string|array $address
      * @param string|null  $name
+     * @param bool         $override  Will force ignoring the previous recipients
      *
      * @return \Brainwave\Mail\Message
      */
-    public function to($address, $name = null)
+    public function to($address, $name = null, $override = false)
     {
+        if ($override) {
+            return $this->swift->setTo($address, $name);
+        }
+
         return $this->addAddresses($address, $name, 'To');
     }
 
