@@ -15,7 +15,7 @@ namespace Brainwave\Mail\Transport;
  * @version     0.10.0-dev
  */
 
-use GuzzleHttp\Client;
+use GuzzleHttp\ClientInterface;
 
 /**
  * Mandrill.
@@ -27,6 +27,13 @@ use GuzzleHttp\Client;
 class Mandrill implements \Swift_Transport
 {
     /**
+     * Guzzle client instance.
+     *
+     * @var \GuzzleHttp\ClientInterface
+     */
+    protected $client;
+
+    /**
      * The Mandrill API key.
      *
      * @var string
@@ -36,10 +43,12 @@ class Mandrill implements \Swift_Transport
     /**
      * Create a new Mandrill transport instance.
      *
-     * @param string $key
+     * @param  \GuzzleHttp\ClientInterface $client
+     * @param string                       $key
      */
-    public function __construct($key)
+    public function __construct(ClientInterface $client, $key)
     {
+        $this->client = $client;
         $this->key = $key;
     }
 
@@ -77,16 +86,20 @@ class Mandrill implements \Swift_Transport
      */
     public function send(\Swift_Mime_Message $message, &$failedRecipients = null)
     {
-        $client = $this->getHttpClient();
+        $data = [
+            'key' => $this->key,
+            'to' => $this->getToAddresses($message),
+            'raw_message' => (string) $message,
+            'async' => false,
+        ];
 
-        $client->post('https://mandrillapp.com/api/1.0/messages/send-raw.json', [
-            'body' => [
-                'key' => $this->key,
-                'raw_message' => (string) $message,
-                'async' => false,
-                'to' => $this->getToAddresses($message),
-            ],
-        ]);
+        if (version_compare(ClientInterface::VERSION, '6') === 1) {
+            $options = ['form_params' => $data];
+        } else {
+            $options = ['body' => $data];
+        }
+
+        return $this->client->post('https://mandrillapp.com/api/1.0/messages/send-raw.json', $options);
     }
 
     /**
@@ -121,16 +134,6 @@ class Mandrill implements \Swift_Transport
     public function registerPlugin(\Swift_Events_EventListener $plugin)
     {
         //
-    }
-
-    /**
-     * Get a new HTTP client instance.
-     *
-     * @return \GuzzleHttp\Client
-     */
-    protected function getHttpClient()
-    {
-        return new Client();
     }
 
     /**

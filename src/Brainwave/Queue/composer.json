@@ -20,7 +20,7 @@
     "require": {
         "php"                                 : ">=5.5.9",
         "brainwave/cotracts"                  : "self.version",
-        "symfony/event-dispatcher"            : "~2.6.8"
+        "symfony/event-dispatcher"            : "~2.6.9"
     },
     "autoload": {
         "psr-4": {
