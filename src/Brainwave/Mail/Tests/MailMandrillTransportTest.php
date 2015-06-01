@@ -12,8 +12,10 @@ namespace Brainwave\Mail\Test;
  *
  * @license     http://www.narrowspark.com/license
  *
- * @version     0.9.8-dev
+ * @version     0.10.0-dev
  */
+
+use Brainwave\Mail\Transport\Mandrill;
 
 /**
  * MailMandrillTransportTest.
@@ -29,14 +31,16 @@ class MailMandrillTransportTest extends \PHPUnit_Framework_TestCase
         $message = new \Swift_Message('Foo subject', 'Bar body');
         $message->setTo('me@example.com');
         $message->setBcc('you@example.com');
-        $transport = new \Brainwave\Mail\Test\MandrillTransportStub('testkey');
-        $client = $this->getMock('GuzzleHttp\Client', ['post']);
-        $transport->setHttpClient($client);
+
+        $client = $this->getMock('GuzzleHttp\ClientInterface', ['post']);
+        $transport = new Mandrill($client, 'testkey');
+
         $client->expects($this->once())
             ->method('post')
-            ->with($this->equalTo('https://mandrillapp.com/api/1.0/messages/send-raw.json'),
+            ->with(
+                $this->equalTo('https://mandrillapp.com/api/1.0/messages/send-raw.json'),
                 $this->equalTo([
-                    'body' => [
+                    'form_params' => [
                         'key' => 'testkey',
                         'raw_message' => $message->toString(),
                         'async' => false,
@@ -45,20 +49,5 @@ class MailMandrillTransportTest extends \PHPUnit_Framework_TestCase
                 ])
             );
         $transport->send($message);
-    }
-}
-
-class MandrillTransportStub extends \Brainwave\Mail\Transport\Mandrill
-{
-    protected $client;
-
-    protected function getHttpClient()
-    {
-        return $this->client;
-    }
-
-    public function setHttpClient($client)
-    {
-        $this->client = $client;
     }
 }

@@ -18,13 +18,13 @@
         }
     ],
     "require": {
-        "php"                               : ">=5.4.0",
+        "php"                               : ">=5.5.9",
         "brainwave/contracts"               : "self.version",
         "brainwave/filesystem"              : "self.version"
     },
     "require-dev": {
         "brainwave/cache"                   : "self.version",
-        "symfony/event-dispatcher"          : "~2.6.6"
+        "symfony/event-dispatcher"          : "~2.7"
     },
     "autoload": {
         "psr-4": {
@@ -36,13 +36,9 @@
             "Brainwave\\Translator\\Tests\\": "tests/"
         }
     },
-    "suggest": {
-        "symfony/var-dumper"                : "Required to use the Helper::dd() (~2.6.6).",
-        "vlucas/phpdotenv"                  : "Required to use the Helper::env() (~1.1)."
-    },
     "extra": {
         "branch-alias": {
-            "dev-master"                    : "0.9.8-dev"
+            "dev-master"                    : "0.10.0-dev"
         }
     },
     "minimum-stability"                     : "dev",

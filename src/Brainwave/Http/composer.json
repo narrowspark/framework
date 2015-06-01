@@ -18,14 +18,14 @@
         }
     ],
     "require": {
-        "php"                          : ">=5.4.0",
+        "php"                          : ">=5.5.9",
         "brainwave/container"          : "self.version",
         "brainwave/cookie"             : "self.version",
         "brainwave/contracts"          : "self.version",
         "brainwave/session"            : "self.version",
         "stack/builder"                : "~1.0.3",
-        "symfony/http-foundation"      : "~2.6.6",
-        "symfony/http-kernel"          : "~2.6.6"
+        "symfony/http-foundation"      : "~2.7",
+        "symfony/http-kernel"          : "~2.7"
     },
     "autoload": {
         "psr-4": {
@@ -39,7 +39,7 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-master"              : "0.9.8-dev"
+            "dev-master"              : "0.10.0-dev"
         }
     },
     "minimum-stability"               : "dev",

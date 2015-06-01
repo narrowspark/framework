@@ -12,7 +12,7 @@ namespace Brainwave\Support;
  *
  * @license     http://www.narrowspark.com/license
  *
- * @version     0.9.8-dev
+ * @version     0.10.0-dev
  */
 
 /**
@@ -138,31 +138,6 @@ class Arr
         static::forget($array, $keys);
 
         return $array;
-    }
-
-    /**
-     * Fetch a flattened array of a nested array element.
-     *
-     * @param array  $array
-     * @param string $key
-     *
-     * @return array
-     */
-    public static function fetch($array, $key)
-    {
-        $results = [];
-
-        foreach (explode('.', $key) as $segment) {
-            foreach ($array as $value) {
-                $value = (array) $value;
-
-                $results[] = $value[$segment];
-            }
-
-            $array = array_values($results);
-        }
-
-        return array_values($results);
     }
 
     /**

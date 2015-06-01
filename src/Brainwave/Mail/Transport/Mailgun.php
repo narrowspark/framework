@@ -12,10 +12,10 @@ namespace Brainwave\Mail\Transport;
  *
  * @license     http://www.narrowspark.com/license
  *
- * @version     0.9.8-dev
+ * @version     0.10.0-dev
  */
 
-use GuzzleHttp\Client;
+use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Post\PostFile;
 
 /**
@@ -27,6 +27,13 @@ use GuzzleHttp\Post\PostFile;
  */
 class Mailgun implements \Swift_Transport
 {
+    /**
+     * Guzzle client instance.
+     *
+     * @var \GuzzleHttp\ClientInterface
+     */
+    protected $client;
+
     /**
      * The Mailgun API key.
      *
@@ -51,12 +58,14 @@ class Mailgun implements \Swift_Transport
     /**
      * Create a new Mailgun transport instance.
      *
-     * @param string $key
-     * @param string $base
-     * @param string $domain
+     * @param \GuzzleHttp\ClientInterface $client
+     * @param string                      $key
+     * @param string                      $base
+     * @param string                      $domain
      */
-    public function __construct($key, $base, $domain)
+    public function __construct(ClientInterface $client, $key, $base, $domain)
     {
+        $this->client = $client;
         $this->key = $key;
         $this->domain = $domain;
         $this->url = $base.$this->domain.'/messages.mime';
@@ -96,15 +105,14 @@ class Mailgun implements \Swift_Transport
      */
     public function send(\Swift_Mime_Message $message, &$failedRecipients = null)
     {
-        $client = $this->getHttpClient();
+        $options = ['auth' => ['api', $this->key]];
 
-        $client->post($this->url, [
-            'auth' => ['api', $this->key],
-            'body' => [
-                'to' => $this->getTo($message),
-                'message' => new PostFile('message', $message),
-            ],
-        ]);
+        $options['multipart'] = [
+            ['name' => 'to', 'contents' => $this->getTo($message)],
+            ['name' => 'message', 'contents' => (string) $message, 'filename' => 'message.mime'],
+        ];
+
+        return $this->client->post($this->url, $options);
     }
 
     /**
@@ -137,16 +145,6 @@ class Mailgun implements \Swift_Transport
         }
 
         return implode(',', $formatted);
-    }
-
-    /**
-     * Get a new HTTP client instance.
-     *
-     * @return \GuzzleHttp\Client
-     */
-    protected function getHttpClient()
-    {
-        return new Client();
     }
 
     /**

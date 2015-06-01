@@ -12,7 +12,7 @@ namespace Brainwave\Filesystem;
  *
  * @license     http://www.narrowspark.com/license
  *
- * @version     0.9.8-dev
+ * @version     0.10.0-dev
  */
 use Brainwave\Contracts\Filesystem\FileNotFoundException as ContractFileNotFoundException;
 use Brainwave\Contracts\Filesystem\Filesystem as CloudFilesystemContract;
@@ -326,6 +326,20 @@ class FilesystemAdapter implements CloudFilesystemContract
     public function getDriver()
     {
         return $this->driver;
+    }
+
+    /**
+     * Call a Flysystem driver plugin.
+     *
+     * @param  string  $method
+     * @param  array  $arguments
+     * @return mixed
+     *
+     * @throws \BadMethodCallException
+     */
+    public function __call($method, array $arguments)
+    {
+        return $this->driver->__call($method, $arguments);
     }
 
     /**

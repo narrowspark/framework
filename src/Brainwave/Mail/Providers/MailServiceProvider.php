@@ -12,9 +12,10 @@ namespace Brainwave\Mail\Providers;
  *
  * @license     http://www.narrowspark.com/license
  *
- * @version     0.9.8-dev
+ * @version     0.10.0-dev
  */
 
+use Aws\Sdk;
 use Aws\Ses\SesClient;
 use Brainwave\Application\ServiceProvider;
 use Brainwave\Mail\Mailer;
@@ -23,6 +24,7 @@ use Brainwave\Mail\Transport\Mailgun as MailgunTransport;
 use Brainwave\Mail\Transport\Mandrill as MandrillTransport;
 use Brainwave\Mail\Transport\Postmark as PostmarkTransport;
 use Brainwave\Mail\Transport\Ses as SesTransport;
+use GuzzleHttp\Client as HttpClient;
 
 /**
  * MailServiceProvider.
@@ -59,6 +61,17 @@ class MailServiceProvider extends ServiceProvider
 
             if (is_array($from) && isset($from['address'])) {
                 $mailer->alwaysFrom($from['address'], $from['name']);
+            }
+
+            // If a "to" address is set, we will set it on the mailer so that all mail
+            // messages sent by the applications will utilize the same "to" address
+            // on each one, which makes it easier for a develop to test, view and share
+            // emails sent from a development or staging environment without spamming
+            // real customers.
+            $to = $app->get('config')->get('mail.to');
+
+            if (is_array($to) && isset($to['address'])) {
+                $mailer->alwaysTo($to['address'], $to['name']);
             }
 
             return $mailer;
@@ -172,9 +185,20 @@ class MailServiceProvider extends ServiceProvider
     protected function registerSesTransport($config)
     {
         $this->app->bind('ses.transport', function () use ($config) {
-            $sesClient = SesClient::factory($config['mail::ses']);
 
-            return new SesTransport($sesClient);
+            $config  = $this->app->get('config')->get('services.ses', []);
+            $config += [
+                'version' => 'latest',
+                'service' => 'email',
+                'credentials' => [
+                    'key'    => $config['key'],
+                    'secret' => $config['secret'],
+                ],
+            ];
+
+            unset($config['key'], $config['secret']);
+
+            return new SesTransport(new SesClient($config));
         });
     }
 
@@ -213,10 +237,11 @@ class MailServiceProvider extends ServiceProvider
      */
     protected function registerMailgunTransport($config)
     {
+        $client = new HttpClient;
         $mailgun = $config['mail::services.mailgun'];
 
         $$this->app->bind('swift.transport', function () use ($mailgun) {
-            return new MailgunTransport($mailgun['secret'], $mailgun['base.url'], $mailgun['domain']);
+            return new MailgunTransport($client, $mailgun['secret'], $mailgun['base.url'], $mailgun['domain']);
         });
     }
 
@@ -229,10 +254,11 @@ class MailServiceProvider extends ServiceProvider
      */
     protected function registerMandrillTransport($config)
     {
+        $client = new HttpClient;
         $mandrill = $config['mail::services.mandrill'];
 
         $this->app->bind('swift.transport', function () use ($mandrill) {
-            return new MandrillTransport($mandrill['secret']);
+            return new MandrillTransport($client, $mandrill['secret']);
         });
     }
 

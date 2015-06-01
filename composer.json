@@ -18,33 +18,30 @@
         }
     ],
     "require": {
-        "php"                                : ">=5.4.0",
-        "ext-mcrypt"                         : "*",
-        "ext-openssl"                        : "*",
+        "php"                                : ">=5.5.9",
         "ext-mbstring"                       : "*",
-        "classpreloader/classpreloader"      : "~1.3",
+        "classpreloader/classpreloader"      : "~1.4",
         "container-interop/container-interop": "~1.1",
         "danielstjules/stringy"              : "~1.9",
-        "filp/whoops"                        : "~1.1.5",
+        "filp/whoops"                        : "~1.1.6",
         "ircmaxell/random-lib"               : "~1.1",
-        "ircmaxell/password-compat"          : "~1.0.4",
         "league/flysystem"                   : "~1.0.3",
         "monolog/monolog"                    : "~1.13.1",
         "mpoiriert/invoker"                  : "~1.1",
-        "nesbot/carbon"                      : "~1.18",
-        "nikic/fast-route"                   : "~0.4",
+        "nesbot/carbon"                      : "~1.19",
+        "nikic/fast-route"                   : "~0.5",
         "psy/psysh"                          : "~0.4.4",
         "stecman/symfony-console-completion" : "~0.5.1",
         "swiftmailer/swiftmailer"            : "~5.4",
         "stack/builder"                      : "~1.0.3",
-        "symfony/console"                    : "2.7.*@dev",
-        "symfony/debug"                      : "~2.6.6",
-        "symfony/event-dispatcher"           : "~2.6.6",
-        "symfony/finder"                     : "~2.6.6",
-        "symfony/http-foundation"            : "~2.6.6",
-        "symfony/http-kernel"                : "~2.6.6",
-        "symfony/var-dumper"                 : "~2.6.6",
-        "vlucas/phpdotenv"                   : "~1.1"
+        "symfony/console"                    : "~2.7",
+        "symfony/debug"                      : "~2.7",
+        "symfony/event-dispatcher"           : "~2.7",
+        "symfony/finder"                     : "~2.7",
+        "symfony/http-foundation"            : "~2.7",
+        "symfony/http-kernel"                : "~2.7",
+        "symfony/var-dumper"                 : "~2.7",
+        "vlucas/phpdotenv"                   : "~2.0.1"
     },
     "replace": {
         "brainwave/cache"                    : "self.version",
@@ -69,12 +66,13 @@
         "brainwave/view"                     : "self.version"
     },
     "require-dev": {
+        "aws/aws-sdk-php"                    : "~3.0",
         "fabpot/php-cs-fixer"                : "~1.8",
         "mockery/mockery"                    : "~0.9.4",
-        "phpunit/phpunit"                    : "~4.6.4",
+        "phpunit/phpunit"                    : "~4.6.9",
         "predis/predis"                      : "~1.0.1",
         "satooshi/php-coveralls"             : "~0.6.1",
-        "sensiolabs/security-checker"        : "~2.0",
+        "sensiolabs/security-checker"        : "~2.0.5",
         "fzaninotto/faker"                   : "~1.4"
     },
     "autoload": {
@@ -84,7 +82,7 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-master"                     : "0.9.8-dev"
+            "dev-master"                     : "0.10.0-dev"
         }
     },
     "scripts": {
@@ -96,13 +94,15 @@
         ]
     },
     "suggest": {
-        "guzzlehttp/guzzle"                  : "Required to use the Mailgun, Mandrill, and Postmark mail drivers (~5.0).",
-        "aws/aws-sdk-php"                    : "Required to use the SQS queue driver and SES mail driver (~2.4).",
-        "league/flysystem-aws-s3-v2"         : "Required to use the Flysystem S3 driver for SDK2 (~1.0).",
+        "aws/aws-sdk-php"                    : "Required to use the SQS queue driver and SES mail driver (~3.0).",
+        "ext-mcrypt"                         : "*",
+        "ext-openssl"                        : "*",
+        "ext-curl"                           : "Required to use for guzzle (*)",
+        "guzzlehttp/guzzle"                  : "Required to use the Mailgun, Mandrill, and Postmark mail drivers (~6.0).",
         "league/flysystem-aws-s3-v3"         : "Required to use the Flysystem S3 driver for SDK3 (~1.0).",
         "league/flysystem-rackspace"         : "Required to use the Flysystem Rackspace driver (~1.0).",
         "predis/predis"                      : "Required to use the redis cache and queue drivers (~1.0.1)."
     },
-    "minimum-stability"                      : "dev",
+    "minimum-stability"                      : "stable",
     "prefer-stable"                          : true
 }

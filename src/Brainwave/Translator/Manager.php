@@ -12,7 +12,7 @@ namespace Brainwave\Translator;
  *
  * @license     http://www.narrowspark.com/license
  *
- * @version     0.9.8-dev
+ * @version     0.10.0-dev
  */
 
 use Brainwave\Contracts\Cache\Factory as CacheContract;
@@ -35,7 +35,7 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
  */
 class Manager implements TranslatorContract
 {
-     //Register all needed traits
+    //Register all needed traits
     use HelpersTrait, FiltersTrait, ReplacementTrait, TranslateTrait;
 
     /**

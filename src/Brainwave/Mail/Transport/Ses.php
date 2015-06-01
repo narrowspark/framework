@@ -12,7 +12,7 @@ namespace Brainwave\Mail\Transport;
  *
  * @license     http://www.narrowspark.com/license
  *
- * @version     0.9.8-dev
+ * @version     0.10.0-dev
  */
 
 use Aws\Ses\SesClient;
@@ -78,10 +78,10 @@ class Ses implements \Swift_Transport
     public function send(\Swift_Mime_Message $message, &$failedRecipients = null)
     {
         return $this->ses->sendRawEmail([
-            'Source' => $message->getSender(),
+            'Source' => key($message->getSender()),
             'Destinations' => $this->getTo($message),
             'RawMessage' => [
-                'Data' => base64_encode((string) $message),
+                'Data' => (string) $message,
             ],
         ]);
     }
