@@ -1,6 +1,6 @@
 <?php
 
-namespace Brainwave\Loop;
+namespace Brainwave\Loop\Adapters;
 
 /**
  * Narrowspark - a PHP 5 framework.
@@ -12,20 +12,17 @@ namespace Brainwave\Loop;
  *
  * @license     http://www.narrowspark.com/license
  *
- * @version     0.10-dev
+ * @version     0.10.0-dev
  */
 
-use Brainwave\Contracts\Loop\Loop as LoopContract;
-use Interop\Container\ContainerInterface as ContainerContract;
-
 /**
- * Loop.
+ * LibeventLoop.
  *
  * @author  Daniel Bannert
  *
- * @since   0.10-dev
+ * @since   0.10.0-dev
  */
-class Loop implements LoopContract
+class LibeventLoop
 {
 
 }

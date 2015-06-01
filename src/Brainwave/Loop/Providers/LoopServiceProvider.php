@@ -33,7 +33,10 @@ class LoopServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->singleton('loop', function ($app) {
-            return new Loop($app);
+            $loop = new Loop();
+            $loop->setContainer($app);
+
+            return $loop;
         });
     }
 
