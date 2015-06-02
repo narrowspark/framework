@@ -147,27 +147,47 @@ class Str extends StaticStringy
     /**
      * Generate a more truly "random" alpha-numeric string.
      *
-     * @param int $length
+     * @param string $type
+     * @param int    $length
      *
      * @throws \RuntimeException
      *
      * @return string
      */
-    public static function random($length = 16)
+    public static function random($type = 'alnum', $length = 16)
     {
-        if (function_exists('random_bytes')) {
-            $bytes = random_bytes($length * 2);
-        } elseif (function_exists('openssl_random_pseudo_bytes')) {
-            $bytes = openssl_random_pseudo_bytes($length * 2);
-        } else {
-            throw new \RuntimeException('OpenSSL extension is required for PHP 5 users.');
+        switch ($type) {
+            case 'alnum':
+                $pool = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+                break;
+            case 'alpha':
+                $pool = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+                break;
+            case 'hexdec':
+                $pool = '0123456789abcdef';
+                break;
+            case 'numeric':
+                $pool = '0123456789';
+                break;
+            case 'nozero':
+                $pool = '123456789';
+                break;
+            case 'distinct':
+                $pool = '2345679ACDEFHJKLMNPRSTUVWXYZ';
+                break;
+            default:
+                $pool = (string) $type;
+                break;
         }
 
-        if ($bytes === false) {
-            throw new \RuntimeException('Unable to generate random string.');
+        $token = '';
+        $max   = strlen($pool);
+
+        for ($i = 0; $i < $length; $i++) {
+            $token .= $pool[self::cryptoRandSecure(0, $max)];
         }
 
-        return substr(str_replace(['/', '+', '='], '', base64_encode($bytes)), 0, $length);
+        return $token;
     }
 
     /**
@@ -245,5 +265,45 @@ class Str extends StaticStringy
         $value = ucwords(str_replace(['-', '_'], ' ', $value));
 
         return static::$studlyCache[$key] = str_replace(' ', '', $value);
+    }
+
+        /**
+     * Generate secure rand
+     *
+     * @param int $min
+     * @param int $max
+     *
+     * @return string
+     */
+    protected static function cryptoRandSecure($min, $max)
+    {
+        $range = $max - $min;
+
+        if ($range < 0) {
+            return $min; // not so random...
+        }
+
+        $log    = log( $range, 2 );
+        $bytes  = (int) ($log / 8) + 1; // length in bytes
+        $bits   = (int) $log + 1; // length in bits
+        $filter = (int) (1 << $bits) - 1; // set all lower bits to 1
+
+        do {
+            if (function_exists('random_bytes')) {
+                $rnd = hexdec(bin2hex(random_bytes($bytes));
+            } elseif (function_exists('openssl_random_pseudo_bytes')) {
+                $rnd = hexdec(bin2hex(openssl_random_pseudo_bytes($bytes));
+            } else {
+                throw new \RuntimeException('OpenSSL extension is required for PHP 5 users.');
+            }
+
+            if ($rnd === false) {
+                throw new \RuntimeException('Unable to generate random string.');
+            }
+
+            $rnd = $rnd & $filter; // discard irrelevant bits
+        } while ($rnd >= $range);
+
+        return $min + $rnd;
     }
 }
