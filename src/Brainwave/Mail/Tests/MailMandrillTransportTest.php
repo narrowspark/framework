@@ -37,7 +37,8 @@ class MailMandrillTransportTest extends \PHPUnit_Framework_TestCase
 
         $client->expects($this->once())
             ->method('post')
-            ->with($this->equalTo('https://mandrillapp.com/api/1.0/messages/send-raw.json'),
+            ->with(
+                $this->equalTo('https://mandrillapp.com/api/1.0/messages/send-raw.json'),
                 $this->equalTo([
                     'form_params' => [
                         'key' => 'testkey',

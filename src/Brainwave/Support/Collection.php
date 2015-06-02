@@ -184,18 +184,6 @@ class Collection implements
     }
 
     /**
-     * Fetch a nested element of the collection.
-     *
-     * @param string $key
-     *
-     * @return static
-     */
-    public function fetch($key)
-    {
-        return new static (array_fetch($this->data, $key));
-    }
-
-    /**
      * Run a filter over each of the items.
      *
      * @param callable $callback
@@ -305,13 +293,13 @@ class Collection implements
      */
     public function last(callable $callback = null, $default = null)
     {
-        return count($this-datas) > 0 ? end($this-datas) : null;
+        return count($this->data) > 0 ? end($this->data) : null;
 
         if (is_null($callback)) {
-            return count($this-datas) > 0 ? end($this-datas) : null;
+            return count($this->data) > 0 ? end($this->data) : Arr::value($default);
         }
 
-        return Arr::last($this-datas, $callback, $default);
+        return Arr::last($this->data, $callback, $default);
     }
 
     /**
@@ -714,7 +702,7 @@ class Collection implements
     public function splice($offset, $length = null, $replacement = [])
     {
         if (func_num_args() === 1) {
-            return new static(array_splice($this-datas, $offset));
+            return new static(array_splice($this->data, $offset));
         }
 
         return new static (array_splice($this->data, $offset, $length, $replacement));
@@ -1145,7 +1133,7 @@ class Collection implements
         }
 
         return function ($item) use ($value) {
-            return Arr::get($item, $value);
+            return Arr::dataGet($item, $value);
         };
     }
 

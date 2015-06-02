@@ -17,6 +17,7 @@ namespace Brainwave\Http;
 
 use Brainwave\Contracts\Http\Response as ResponseContract;
 use Brainwave\Contracts\Support\Jsonable;
+use Brainwave\Http\Traits\ResponseParameterTrait;
 use Symfony\Component\HttpFoundation\JsonResponse as SymfonyJsonResponse;
 
 /**

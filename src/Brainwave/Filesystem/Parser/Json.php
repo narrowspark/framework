@@ -95,7 +95,7 @@ class Json implements ParserContract
      *
      * @param string $filename
      *
-     * @return array
+     * @return string|null
      */
     private function parseJson($filename)
     {
