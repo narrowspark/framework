@@ -24,6 +24,6 @@ use Brainwave\Support\Manager;
  *
  * @since   0.10.0-dev
  */
-class TransportManager extends Manager
-{
-}
+// class TransportManager extends Manager
+// {
+// }

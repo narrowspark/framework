@@ -164,14 +164,14 @@ class MailMailerTest extends \PHPUnit_Framework_TestCase
     {
         unset($_SERVER['__mailer.test']);
         $mailer = $this->getMailer();
-        $mailer->getSwiftMailer()->shouldReceive('getTransport')->andReturn($transport = m::mock('\Swift_Transport'));
+        $mailer->getSwiftMailer()->shouldReceive('getTransport')->andReturn($transport = Mock::mock('\Swift_Transport'));
         $transport->shouldReceive('stop');
         $view = Mock::mock('\StdClass');
         $mailer->getViewFactory()->shouldReceive('make')->once()->andReturn($view);
         $view->shouldReceive('render')->once()->andReturn('rendered.view');
         $swift = new \Brainwave\Mail\Test\FailingSwiftMailerStub();
 
-        $this->setSwiftMailer($mailersend('foo', ['data'], function ($m) {});
+        $this->setSwiftMailer($mailersend('foo', ['data'], function ($m) {}));
 
         $this->assertEquals(['info@narrowspark.de'], $mailer->failures());
     }
@@ -182,7 +182,7 @@ class MailMailerTest extends \PHPUnit_Framework_TestCase
         $swift->shouldReceive('getTransport')->andReturn($transport = Mock::mock('\Swift_Transport'));
         $transport->shouldReceive('stop');
 
-        $this->setSwiftMailer($mailermailer;
+        $this->setSwiftMailer($mailermailer);
     }
 
 

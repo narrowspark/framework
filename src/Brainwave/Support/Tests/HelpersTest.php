@@ -176,26 +176,26 @@ class SupportHelpersTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('daniel', Helper::objectGet($class, 'name.first'));
     }
 
-    public function testGet()
+    public function testDataGet()
     {
         $object = (object) ['users' => ['name' => ['daniel', 'Brainwave']]];
         $array = [(object) ['users' => [(object) ['name' => 'daniel']]]];
         $dottedArray = ['users' => ['first.name' => 'Daniel']];
 
         $arrayAccess = new SupportTestArrayAccess(['price' => 56, 'user' => new SupportTestArrayAccess(['name' => 'John'])]);
-        $this->assertEquals('daniel', Arr::get($object, 'users.name.0'));
-        $this->assertEquals('daniel', Arr::get($array, '0.users.0.name'));
-        $this->assertNull(Arr::get($array, '0.users.3'));
-        $this->assertEquals('Not found', Arr::get($array, '0.users.3', 'Not found'));
-        $this->assertEquals('Not found', Arr::get($array, '0.users.3', function () { return 'Not found'; }));
-        $this->assertEquals('Daniel', Arr::get($dottedArray, ['users', 'first.name']));
-        $this->assertEquals('Not found', Arr::get($dottedArray, ['users', 'last.name'], 'Not found'));
-        $this->assertEquals(56, Arr::get($arrayAccess, 'price'));
-        $this->assertEquals('John', Arr::get($arrayAccess, 'user.name'));
-        $this->assertEquals('void', Arr::get($arrayAccess, 'foo', 'void'));
-        $this->assertEquals('void', Arr::get($arrayAccess, 'user.foo', 'void'));
-        $this->assertNull(Arr::get($arrayAccess, 'foo'));
-        $this->assertNull(Arr::get($arrayAccess, 'user.foo'));
+        $this->assertEquals('daniel', Arr::dataGet($object, 'users.name.0'));
+        $this->assertEquals('daniel', Arr::dataGet($array, '0.users.0.name'));
+        $this->assertNull(Arr::dataGet($array, '0.users.3'));
+        $this->assertEquals('Not found', Arr::dataGet($array, '0.users.3', 'Not found'));
+        $this->assertEquals('Not found', Arr::dataGet($array, '0.users.3', function () { return 'Not found'; }));
+        $this->assertEquals('Daniel', Arr::dataGet($dottedArray, ['users', 'first.name']));
+        $this->assertEquals('Not found', Arr::dataGet($dottedArray, ['users', 'last.name'], 'Not found'));
+        $this->assertEquals(56, Arr::dataGet($arrayAccess, 'price'));
+        $this->assertEquals('John', Arr::dataGet($arrayAccess, 'user.name'));
+        $this->assertEquals('void', Arr::dataGet($arrayAccess, 'foo', 'void'));
+        $this->assertEquals('void', Arr::dataGet($arrayAccess, 'user.foo', 'void'));
+        $this->assertNull(Arr::dataGet($arrayAccess, 'foo'));
+        $this->assertNull(Arr::dataGet($arrayAccess, 'user.foo'));
     }
 
     public function testArrayWhere()
