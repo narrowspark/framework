@@ -424,9 +424,10 @@ class Request extends SymfonyRequest implements RequestContract, \ArrayAccess
      */
     public function format($default = 'html')
     {
-        foreach ($this->getAcceptableContentTypes() as $type)
-        {
-            if ($format = $this->getFormat($type)) return $format;
+        foreach ($this->getAcceptableContentTypes() as $type) {
+            if ($format = $this->getFormat($type)) {
+                return $format;
+            }
         }
         return $default;
     }
