@@ -184,7 +184,7 @@ class Request extends SymfonyRequest implements RequestContract, \ArrayAccess
     /**
     * Determines whether the current requests accepts a given content type.
     *
-    * @param  string|array  $contentTypes
+    * @param  string  $contentTypes
     * @return bool
     */
     public function accepts($contentTypes)
