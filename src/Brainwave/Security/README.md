@@ -17,7 +17,7 @@ Thank you for considering contributing to the Narrowspark framework! The contrib
 
 ## Requirements
 
-PHP 5.4.0 or above
+PHP 5.5.9 or above
 
 ## Installation
 
