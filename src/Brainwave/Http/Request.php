@@ -417,6 +417,21 @@ class Request extends SymfonyRequest implements RequestContract, \ArrayAccess
     }
 
     /**
+     * Get the data format expected in the response.
+     *
+     * @param  string  $default
+     * @return string
+     */
+    public function format($default = 'html')
+    {
+        foreach ($this->getAcceptableContentTypes() as $type)
+        {
+            if ($format = $this->getFormat($type)) return $format;
+        }
+        return $default;
+    }
+
+    /**
      * Get a subset of the items from the input data.
      *
      * @param array $keys

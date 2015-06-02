@@ -37,11 +37,6 @@
     </filter>
 
     <logging>
-        <log type="coverage-clover" target="build/logs/clover.xml"/>
-        <log type="coverage-html" target="./report" charset="UTF-8"
-            yui="true" highlight="true"
-            lowUpperBound="50" highLowerBound="80" />
-        <log type="coverage-clover" target="build/logs/clover.xml"/>
         <log type="testdox-html" target="build/logs/testdox-html.html" logIncompleteSkipped="false"/>
         <log type="junit" target="build/logs/logfile.xml" logIncompleteSkipped="false"/>
     </logging>

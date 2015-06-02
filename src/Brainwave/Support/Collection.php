@@ -296,7 +296,7 @@ class Collection implements
         return count($this->data) > 0 ? end($this->data) : null;
 
         if (is_null($callback)) {
-            return count($this->data) > 0 ? end($this->data) : Arr::value($default);;
+            return count($this->data) > 0 ? end($this->data) : Arr::value($default);
         }
 
         return Arr::last($this->data, $callback, $default);
@@ -1133,7 +1133,7 @@ class Collection implements
         }
 
         return function ($item) use ($value) {
-            return Arr::get($item, $value);
+            return Arr::dataGet($item, $value);
         };
     }
 

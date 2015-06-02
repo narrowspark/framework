@@ -32,31 +32,32 @@ use Brainwave\Support\Collection;
  */
 class MailSesTransportTest extends \PHPUnit_Framework_TestCase
 {
-    public function testGetTransport()
-    {
-        /** @var Application $app */
-        $app = [
-            'config' => new Collection([
-                'services.ses' => [
-                    'key'    => 'foo',
-                    'secret' => 'bar',
-                    'region' => 'us-east-1',
-                ]
-            ])
-        ];
+    // public function testGetTransport()
+    // {
+    //     /** @var Application $app */
+    //     $app = [
+    //         'config' => new Collection([
+    //             'services.ses' => [
+    //                 'key'    => 'foo',
+    //                 'secret' => 'bar',
+    //                 'region' => 'us-east-1',
+    //             ]
+    //         ])
+    //     ];
 
-        $manager = new TransportManager($app);
+    //     $manager = new TransportManager($app);
 
-        /** @var SesTransport $transport */
-        $transport = $manager->driver('ses');
+    //     /** @var SesTransport $transport */
+    //     $transport = $manager->driver('ses');
 
-        /** @var SesClient $ses */
-        $ses = $this->readAttribute($transport, 'ses');
-        $this->assertEquals('us-east-1', $ses->getRegion());
-    }
+    //     /** @var SesClient $ses */
+    //     $ses = $this->readAttribute($transport, 'ses');
+    //     $this->assertEquals('us-east-1', $ses->getRegion());
+    // }
+
     public function testSend()
     {
-        $message = new Swift_Message('Foo subject', 'Bar body');
+        $message = new \Swift_Message('Foo subject', 'Bar body');
         $message->setSender('myself@example.com');
         $message->setTo('me@example.com');
         $message->setBcc('you@example.com');
