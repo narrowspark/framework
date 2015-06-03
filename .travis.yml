@@ -51,8 +51,8 @@ install:
 script:
   - php -n php-cs-fixer.phar fix -v --dry-run
   - php -n security-checker.phar security:check --format=simple
-  - vendor/bin/phpunit --verbose --coverage-clover build/logs/clover.xml
-  - if [ $(phpenv version-name) = $OCULAR_ENV ]; then wget https://scrutinizer-ci.com/ocular.phar; php ocular.phar code-coverage:upload --format=php-clover coverage.clover; fi
+  - vendor/bin/phpunit --verbose --coverage-clover clover-data
+  - if [ $(phpenv version-name) = $OCULAR_ENV ]; then wget https://scrutinizer-ci.com/ocular.phar; php ocular.phar code-coverage:upload --format=php-clover clover-data; fi
 
 after_script:
   - php vendor/bin/coveralls -v
