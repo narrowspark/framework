@@ -159,10 +159,10 @@ class SupportHelpersTest extends \PHPUnit_Framework_TestCase
                     '#baz',
                 ],
             ],
-        ], array_pluck($data, 'comments'));
-        $this->assertEquals([['#foo', '#bar'], ['#baz']], array_pluck($data, 'comments.tags'));
-        $this->assertEquals([null, null], array_pluck($data, 'foo'));
-        $this->assertEquals([null, null], array_pluck($data, 'foo.bar'));
+        ], Arr::pluck($data, 'comments'));
+        $this->assertEquals([['#foo', '#bar'], ['#baz']], Arr::pluck($data, 'comments.tags'));
+        $this->assertEquals([null, null], Arr::pluck($data, 'foo'));
+        $this->assertEquals([null, null], Arr::pluck($data, 'foo.bar'));
     }
 
     public function testArrayFirst()
