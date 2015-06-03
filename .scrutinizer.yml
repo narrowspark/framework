@@ -97,15 +97,9 @@ build:
     dependencies:
         override:
             - 'composer install'
-    tests:
-        override:
-            -
-                command: 'phpunit -c tests/phpunit.xml --coverage-clover=coverage-data tests'
-                coverage:
-                    file: 'coverage-data'
-                    format: 'php-clover'
 
 tools:
+    external_code_coverage:      true
     php_changetracking:          true
 
     php_code_sniffer:
