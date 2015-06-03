@@ -808,7 +808,9 @@ class Collection implements
     public function random($amount = 1)
     {
         if ($amount > ($count = $this->count())) {
-            throw new \InvalidArgumentException(sprintf('You requested [%s] items, but there are only [%s] items in the collection', $amount, $count));
+            throw new \InvalidArgumentException(
+                sprintf('You requested [%s] items, but there are only [%s] items in the collection', $amount, $count)
+            );
         }
 
         $keys = array_rand($this->data, $amount);
@@ -1030,6 +1032,26 @@ class Collection implements
     public function getCachingIterator($flags = \CachingIterator::CALL_TOSTRING)
     {
         return new \CachingIterator($this->getIterator(), $flags);
+    }
+
+    /**
+     * Checks if the collection is associative.
+     *
+     * @return bool
+     */
+    public function isAssociative()
+    {
+        return !$this->isSequential();
+    }
+
+    /**
+     * Checks if the collection is sequential.
+     *
+     * @return bool
+     */
+    public function isSequential()
+    {
+        return $this->keys()->filter('is_string')->isEmpty();
     }
 
     /**

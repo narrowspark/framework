@@ -727,6 +727,24 @@ class TestAccessorEloquentTestStub
         $this->assertEquals([2, 5, null], $c[1]->all());
         $this->assertEquals([3, 6, null], $c[2]->all());
     }
+
+    public function testIsSequential()
+    {
+        $c = new Collection(['foo', 'bar', 2 => 'baz']);
+        $this->assertTrue($c->isSequential());
+
+        $c = new Collection(['foo', 'bar', 'zoo' => 'baz']);
+        $this->assertFalse($c->isSequential());
+    }
+
+    public function testIsAssociative()
+    {
+        $c = new Collection(['foo' => 'bar', 'bar' => 'baz']);
+        $this->assertTrue($c->isAssociative());
+
+        $c = new Collection([0 => 'bar', 1 => 'bar', 'baz']);
+        $this->assertFalse($c->isAssociative());
+    }
 }
 
 class TestArrayAccessImplementation implements \ArrayAccess
