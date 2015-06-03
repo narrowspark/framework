@@ -19,7 +19,6 @@ use Brainwave\Contracts\Encrypter\DecryptException;
 use Brainwave\Contracts\Encrypter\Encrypter as EncrypterContract;
 use Brainwave\Contracts\Encrypter\InvalidKeyException;
 use Brainwave\Contracts\Hashing\Generator as HashContract;
-use Brainwave\Encrypter\Adapter\Mcrypt;
 use Brainwave\Encrypter\Adapter\OpenSsl;
 use Brainwave\Support\Arr;
 use RandomLib\Generator as RandomLib;
@@ -110,28 +109,13 @@ class Encrypter implements EncrypterContract
         $this->hash = $hash;
         $this->rand = $rand;
 
-        if (!extension_loaded('mcrypt') && !extension_loaded('openssl')) {
-            throw new DecryptException('Narrowspark requires the Mcrypt or Openssl PHP extension.'.PHP_EOL);
+        if (!extension_loaded('openssl')) {
+            throw new DecryptException('Narrowspark requires the Openssl PHP extension.'.PHP_EOL);
         }
 
-        $this->checkExtension();
-    }
-
-    /**
-     * Check witch extension to use.
-     *
-     * Openssl is 30x faster as mcrypt
-     *
-     * @return bool|null
-     */
-    protected function checkExtension()
-    {
         if (extension_loaded('openssl')) {
             $this->engine = 'openssl';
             $this->generator = new OpenSsl($this->hash, $this->rand, $this->key, $this->mode, $this->cipher);
-        } elseif (extension_loaded('mcrypt')) {
-            $this->engine = 'mcrypt';
-            $this->generator = new Mcrypt($this->hash, $this->rand, $this->key, $this->mode, $this->cipher);
         }
 
         $this->generator->setup();
