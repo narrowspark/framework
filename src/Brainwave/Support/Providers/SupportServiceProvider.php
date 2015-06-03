@@ -20,6 +20,7 @@ use Brainwave\Support\Arr;
 use Brainwave\Support\Helper;
 use Brainwave\Support\StaticalProxyResolver;
 use Brainwave\Support\Str;
+use RandomLib\Factory as RandomLib;
 
 /**
  * SupportServiceProvider.
@@ -85,6 +86,44 @@ class SupportServiceProvider extends ServiceProvider
     }
 
     /**
+     * Register randomlib.
+     *
+     * @return \RandomLib\Factory|null
+     */
+    protected function registerRand()
+    {
+        $this->app->singleton('rand', function () {
+            return new RandomLib();
+        });
+    }
+
+    /**
+     * Register randomlib generator.
+     *
+     * @return \RandomLib\Factory|null
+     */
+    protected function registerRandGenerator()
+    {
+        $this->app->bind('rand.generator', function ($app) {
+            $generatorStrength = ucfirst(
+                $app->get('config')->get(
+                    'app::generator.strength',
+                    'Medium'
+                )
+            );
+
+            $generator = sprintf('get%sStrengthGenerator', $generatorStrength);
+
+            return $app->get('rand')->$generator();
+        });
+    }
+
+    public function aliases()
+    {
+        return ['rand' => 'RandomLib\Factory'];
+    }
+
+    /**
      * Get the services provided by the provider.
      *
      * @return string[]
@@ -94,6 +133,8 @@ class SupportServiceProvider extends ServiceProvider
         return [
             'arr',
             'helper',
+            'rand',
+            'rand.generator',
             'str',
             'statical.resolver',
         ];

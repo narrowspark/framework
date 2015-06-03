@@ -20,8 +20,7 @@
     "require": {
         "php"                            : ">=5.5.9",
         "brainwave/support"              : "self.version",
-        "brainwave/contracts"            : "self.version",
-        "ircmaxell/random-lib"           : "~1.1"
+        "brainwave/contracts"            : "self.version"
     },
     "autoload": {
         "psr-4": {
