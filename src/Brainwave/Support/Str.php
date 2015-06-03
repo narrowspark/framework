@@ -290,9 +290,9 @@ class Str extends StaticStringy
 
         do {
             if (function_exists('random_bytes')) {
-                $rnd = hexdec(bin2hex(random_bytes($bytes));
+                $rnd = hexdec(bin2hex(random_bytes($bytes)));
             } elseif (function_exists('openssl_random_pseudo_bytes')) {
-                $rnd = hexdec(bin2hex(openssl_random_pseudo_bytes($bytes));
+                $rnd = hexdec(bin2hex(openssl_random_pseudo_bytes($bytes)));
             } else {
                 throw new \RuntimeException('OpenSSL extension is required for PHP 5 users.');
             }
