@@ -130,6 +130,41 @@ class SupportHelpersTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(['daniel'], $values);
     }
 
+    public function testArrayPluck()
+    {
+        $data = [
+            'post-1' => [
+                'comments' => [
+                    'tags' => [
+                        '#foo', '#bar',
+                    ],
+                ],
+            ],
+            'post-2' => [
+                'comments' => [
+                    'tags' => [
+                        '#baz',
+                    ],
+                ],
+            ],
+        ];
+        $this->assertEquals([
+            0 => [
+                'tags' => [
+                    '#foo', '#bar',
+                ],
+            ],
+            1 => [
+                'tags' => [
+                    '#baz',
+                ],
+            ],
+        ], array_pluck($data, 'comments'));
+        $this->assertEquals([['#foo', '#bar'], ['#baz']], array_pluck($data, 'comments.tags'));
+        $this->assertEquals([null, null], array_pluck($data, 'foo'));
+        $this->assertEquals([null, null], array_pluck($data, 'foo.bar'));
+    }
+
     public function testArrayFirst()
     {
         $array = ['name' => 'daniel', 'otherDeveloper' => 'david'];
