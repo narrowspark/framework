@@ -100,7 +100,7 @@ class CacheManager extends Manager implements FactoryContract
 
         if (!$class::isSupported()) {
             throw new CacheException(
-                sprintf('The driver [%s] is not supported by your running settingsuration.', $driver)
+                sprintf('The driver [%s] is not supported by your running setting duration.', $driver)
             );
         }
 

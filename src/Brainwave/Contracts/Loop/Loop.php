@@ -25,53 +25,63 @@ namespace Brainwave\Contracts\Loop;
 interface Loop
 {
     /**
-     * Register a listener to be notified when a stream is ready to read.
+     * Executes a single tick, processing callbacks and handling any available I/O.
      *
-     * @param stream   $stream   The PHP stream resource to check.
-     * @param callable $listener Invoked when the stream is ready.
+     * @param bool $blocking Determines if the tick should block and wait for I/O if no other tasks are scheduled.
      */
-    public function onReadable($stream, callable $listener);
+    public function tick($blocking = true);
 
     /**
-     * Enables readable notifications when a stream is ready to write.
-     *
-     * @param stream $stream The PHP stream resource to check.
+     * Stops the event loop.
      */
-    public function enableRead($stream);
+    public function stop();
 
     /**
-     * Disables readable notifications when a stream is ready to write.
+     * Determines if the event loop is running.
      *
-     * @param stream $stream The PHP stream resource to check.
+     * @return bool
      */
-    public function disableRead($stream);
+    public function isRunning();
 
     /**
-     * Register a listener to be notified when a stream is ready to write.
-     *
-     * @param stream   $stream   The PHP stream resource to check.
-     * @param callable $listener Invoked when the stream is ready.
+     * Removes all events (I/O, timers, callbacks, signal handlers, etc.) from the loop.
      */
-    public function onWritable($stream, callable $listener);
+    public function flush();
 
     /**
-     * Enables writable notifications when a stream is ready to write.
+     * Determines if there are any pending events in the loop. Returns true if there are no pending events.
      *
-     * @param stream $stream The PHP stream resource to check.
+     * @return bool
      */
-    public function enableWrite($stream);
+    public function isEmpty();
 
     /**
-     * Disables writable notifications when a stream is ready to write.
-     *
-     * @param stream $stream The PHP stream resource to check.
+     * Performs any reinitializing necessary after forking.
      */
-    public function disableWrite($stream);
+    public function reInit();
 
     /**
-     * Remove all listeners for the given stream.
+     * Sets the maximum number of callbacks set with schedule() that will be executed per tick.
      *
-     * @param stream $stream The PHP stream resource.
+     * @param int|null $depth
+     *
+     * @return int Current max depth if $depth = null or previous max depth otherwise.
      */
-    public function remove($stream);
+    public function maxScheduleDepth($depth = null);
+
+    /**
+     * Define a callback function to be run after all I/O has been handled in the current tick.
+     * Callbacks are called in the order defined.
+     *
+     * @param callable $callback
+     * @param mixed[]|null $args Array of arguments to be passed to the callback function.
+     */
+    public function schedule(callable $callback, array $args = null);
+
+    /**
+     * Determines if signal handling is enabled.
+     * *
+     * @return bool
+     */
+    public function signalHandlingEnabled();
 }
