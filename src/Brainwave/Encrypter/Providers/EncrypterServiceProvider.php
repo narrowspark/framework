@@ -38,11 +38,10 @@ class EncrypterServiceProvider extends ServiceProvider
             $encrypt = new Encrypter(
                 $app->get('hash'),
                 $app->get('hash.rand.generator'),
-                $config->get('app::crypt.key')
+                $config->get('app::crypt.key'),
+                $config->get('app::crypt.cipher'),
+                $config->get('app::crypt.mode')
             );
-
-            $encrypt->setMode($config->get('app::crypt.mode'));
-            $encrypt->setCipher($config->get('app::crypt.cipher'));
 
             return $encrypt;
         });
