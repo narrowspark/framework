@@ -55,14 +55,14 @@ class OpenSsl implements AdapterContract
      *
      * @var string
      */
-    protected $cipher = 'aes-256';
+    protected $cipher = 'AES-256';
 
     /**
      * The mode used for encryption.
      *
      * @var string
      */
-    protected $mode = 'cbc';
+    protected $mode = 'CBC';
 
     /**
      * A "sliding" Initialization Vector.
@@ -95,7 +95,7 @@ class OpenSsl implements AdapterContract
      */
     public function setup()
     {
-        return 'OpenSsl';
+        return 'OpenSSL';
     }
 
     /**

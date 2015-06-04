@@ -19,10 +19,10 @@
     ],
     "require": {
         "php"                                : ">=5.5.9",
-        "ext-mbstring"                       : "*",
         "brainwave/contracts"                : "self.version",
         "container-interop/container-interop": "~1.0",
         "danielstjules/stringy"              : "~1.9",
+        "ext-mbstring"                       : "*",
         "ircmaxell/random-lib"               : "~1.1"
     },
     "require-dev": {
