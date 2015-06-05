@@ -77,10 +77,10 @@ class OpenSsl implements AdapterContract
      * @param HashContract $hash
      * @param RandomLib    $rand
      * @param string       $key
-     * @param string       $mode
      * @param string       $cipher
+     * @param string       $mode
      */
-    public function __construct(HashContract $hash, RandomLib $rand, $key, $mode, $cipher)
+    public function __construct(HashContract $hash, RandomLib $rand, $key, $cipher, $mode)
     {
         $this->hash = $hash;
         $this->rand = $rand;

@@ -100,18 +100,12 @@ class Encrypter implements EncrypterContract
      */
     public function __construct(HashContract $hash, RandomLib $rand, $key, $cipher = 'AES-256', $mode = 'CBC')
     {
-        $len = mb_strlen($key = (string) $key, '8bit');
-
-        if ($len === 16 || $len === 32) {
-           $this->key = $key;
-        } else {
-           throw new \RuntimeException('The only supported key lengths are 16 bytes and 32 bytes.');
-        }
+        $this->secruityCheck($key, $cipher, $mode);
 
         $this->hash = $hash;
         $this->rand = $rand;
 
-        $this->generator = new OpenSsl($this->hash, $this->rand, $this->key, $mode, $cipher);
+        $this->generator = new OpenSsl($this->hash, $this->rand, $this->key, $this->cipher, $this->mode);
 
         $this->generator->setup();
     }
@@ -213,6 +207,33 @@ class Encrypter implements EncrypterContract
 
         if (strlen($this->key) < '32') {
             throw new InvalidKeyException('The encryption key must be a random string.');
+        }
+    }
+
+    /**
+     * Check key if it has the right length and the right cipher + mode is set
+     *
+     * @param  string $key
+     * @param  string $cipher
+     * @param  string $mode
+     *
+     * @throws \RuntimeException
+     */
+    protected function secruityCheck($key, $cipher, $mode)
+    {
+        $len = mb_strlen($key = (string) $key, '8bit');
+
+        if (($len === 16 && $cipher === 'AES-128') || ($len === 32 && $cipher === 'AES-256')) {
+            $this->key = $key;
+        } else {
+            throw new \RuntimeException('The only supported key lengths are 16 bytes and 32 bytes.');
+        }
+
+        if (($cipher === 'AES-128' || $cipher === 'AES-256') && $mode === 'CBC') {
+            $this->cipher = $cipher;
+            $this->mode   = $mode;
+        } else {
+            throw new \RuntimeException('The only supported ciphers are AES-128-CBC and AES-256-CBC.');
         }
     }
 }
