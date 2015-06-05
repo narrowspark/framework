@@ -55,25 +55,25 @@ class EncrypterTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException RuntimeException
-     * @expectedExceptionMessage The only supported ciphers are AES-128-CBC and AES-256-CBC with the correct key lengths.
+     * @expectedExceptionMessage The only supported ciphers are [AES-128-CBC, AES-256-CBC] with the correct key lengths.
      */
     public function testWithBadKeyLength()
     {
-        $e = new Encrypter(Mock::mock('Brainwave\Contracts\Hashing\Generator'), Mock::mock('RandomLib\Generator'), str_repeat('a', 5));
+        new Encrypter(Mock::mock('Brainwave\Contracts\Hashing\Generator'), Mock::mock('RandomLib\Generator'), str_repeat('a', 5));
     }
 
     /**
      * @expectedException RuntimeException
-     * @expectedExceptionMessage The only supported ciphers are AES-128-CBC and AES-256-CBC with the correct key lengths.
+     * @expectedExceptionMessage The only supported ciphers are [AES-128-CBC, AES-256-CBC] with the correct key lengths.
      */
     public function testWithBadKeyLengthAlternativeCipher()
     {
-        $e = new Encrypter(Mock::mock('Brainwave\Contracts\Hashing\Generator'), Mock::mock('RandomLib\Generator'), str_repeat('a', 16), 'AES-256', 'CFB8');
+        new Encrypter(Mock::mock('Brainwave\Contracts\Hashing\Generator'), Mock::mock('RandomLib\Generator'), str_repeat('a', 16), 'AES-256', 'CFB8');
     }
 
     /**
      * @expectedException RuntimeException
-     * @expectedExceptionMessage The only supported ciphers are AES-128-CBC and AES-256-CBC with the correct key lengths.
+     * @expectedExceptionMessage The only supported ciphers are [AES-128-CBC, AES-256-CBC] with the correct key lengths.
      */
     public function testWithUnsupportedCipher()
     {
@@ -81,7 +81,7 @@ class EncrypterTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException Illuminate\Contracts\Encryption\DecryptException
+     * @expectedException Brainwave\Contracts\Encryption\DecryptException
      * @expectedExceptionMessage The payload is invalid.
      */
     public function testExceptionThrownWhenPayloadIsInvalid()
@@ -93,7 +93,7 @@ class EncrypterTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException Illuminate\Contracts\Encryption\DecryptException
+     * @expectedException Brainwave\Contracts\Encryption\DecryptException
      * @expectedExceptionMessage The MAC is invalid.
      */
     public function testExceptionThrownWithDifferentKey()

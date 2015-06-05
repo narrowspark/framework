@@ -69,20 +69,6 @@ class Encrypter implements EncrypterContract
     protected $rand;
 
     /**
-     * The algorithm used for encryption.
-     *
-     * @var string
-     */
-    protected $cipher;
-
-    /**
-     * The mode used for encryption.
-     *
-     * @var string
-     */
-    protected $mode;
-
-    /**
      * Extension.
      *
      * @var \Brainwave\Contracts\Encryption\Adapter
@@ -90,24 +76,36 @@ class Encrypter implements EncrypterContract
     protected $generator;
 
     /**
+     * An array of supported ciphers with allowed key lengths.
+     *
+     * Each element is an array of valid lengths, the first being preferred.
+     *
+     * @var array
+     */
+    protected $lengths = [
+        'AES-128-CBC' => [16, 32],
+        'AES-256-CBC' => [32],
+    ];
+
+    /**
      * Constructor.
      *
      * @param \Brainwave\Contracts\Hashing\Generator $hash
      * @param \RandomLib\Generator                   $rand
-     * @param string                                 $key    Encryption key
-     * @param string                                 $cipher Encryption $cipher
-     * @param string                                 $mode   Encryption $mode
+     * @param string                                 $key
+     * @param string                                 $cipher
+     * @param string                                 $mode
      */
     public function __construct(HashContract $hash, RandomLib $rand, $key, $cipher = 'AES-256', $mode = 'CBC')
     {
-        $this->secruityCheck($key, $cipher, $mode);
+        $this->ensureValid($cipher, $mode, $key);
+
+        $this->key  = $key;
 
         $this->hash = $hash;
         $this->rand = $rand;
 
-        $this->generator = new OpenSsl($this->hash, $this->rand, $this->key, $this->cipher, $this->mode);
-
-        $this->generator->setup();
+        $this->generator = new OpenSsl($this->hash, $this->rand, $this->key, $cipher, $mode);
     }
 
     /**
@@ -143,8 +141,6 @@ class Encrypter implements EncrypterContract
      */
     public function encrypt($data)
     {
-        $this->checkKey();
-
         $value = $this->generator->encrypt($data);
 
         if ($value === false) {
@@ -165,8 +161,6 @@ class Encrypter implements EncrypterContract
      */
     public function decrypt($data)
     {
-        $this->checkKey();
-
         // Decode the JSON string
         $data = json_decode($data, true);
 
@@ -195,45 +189,29 @@ class Encrypter implements EncrypterContract
     }
 
     /**
-     * Check the current key is usable to perform cryptographic operations.
+     * Throw an exception if the given key is invalid.
      *
-     * @throws \Brainwave\Encryption\InvalidKeyException
-     */
-    protected function checkKey()
-    {
-        if ($this->key === '' || $this->key === 'SomeRandomString') {
-            throw new InvalidKeyException('The encryption key must be not be empty.');
-        }
-
-        if (strlen($this->key) < '32') {
-            throw new InvalidKeyException('The encryption key must be a random string.');
-        }
-    }
-
-    /**
-     * Check key if it has the right length and the right cipher + mode is set
+     * This ensures that the given key has a valid length for the chosen cipher,
+     * while also taking into account backwards compatibility (v5.0 generated
+     * 32 byte keys for the AES-128-CBC-cipher).
      *
-     * @param  string $key
-     * @param  string $cipher
-     * @param  string $mode
+     * @param string $cipher
+     * @param string mode
+     * @param string $key
+     * @return void
      *
      * @throws \RuntimeException
      */
-    protected function secruityCheck($key, $cipher, $mode)
+    public function ensureValid($cipher, $mode, $key)
     {
-        $len = mb_strlen($key = (string) $key, '8bit');
+        $length = mb_strlen($key, '8bit');
 
-        if (($len === 16 && $cipher === 'AES-128') || ($len === 32 && $cipher === 'AES-256')) {
-            $this->key = $key;
-        } else {
-            throw new \RuntimeException('The only supported key lengths are 16 bytes and 32 bytes.');
+        if (isset($this->lengths[$cipher.'-'.$mode]) && in_array($length, $this->lengths[$cipher.'-'.$mode])) {
+            return;
         }
 
-        if (($cipher === 'AES-128' || $cipher === 'AES-256') && $mode === 'CBC') {
-            $this->cipher = $cipher;
-            $this->mode   = $mode;
-        } else {
-            throw new \RuntimeException('The only supported ciphers are AES-128-CBC and AES-256-CBC.');
-        }
+        $validCiphers = implode(', ', array_keys($this->lengths));
+
+        throw new \RuntimeException("The only supported ciphers are [$validCiphers] with the correct key lengths.");
     }
 }
