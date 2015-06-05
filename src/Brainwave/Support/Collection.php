@@ -186,13 +186,16 @@ class Collection implements
     /**
      * Run a filter over each of the items.
      *
-     * @param callable $callback
-     *
+     * @param  callable|null  $callback
      * @return static
      */
-    public function filter(callable $callback)
+    public function filter(callable $callback = null)
     {
-        return new static (array_filter($this->data, $callback));
+        if ($callback === null) {
+            return new static(array_filter($this->items));
+        }
+
+        return new static(array_filter($this->items, $callback));
     }
 
     /**
@@ -808,7 +811,9 @@ class Collection implements
     public function random($amount = 1)
     {
         if ($amount > ($count = $this->count())) {
-            throw new \InvalidArgumentException(sprintf('You requested [%s] items, but there are only [%s] items in the collection', $amount, $count));
+            throw new \InvalidArgumentException(
+                sprintf('You requested [%s] items, but there are only [%s] items in the collection', $amount, $count)
+            );
         }
 
         $keys = array_rand($this->data, $amount);
@@ -1030,6 +1035,26 @@ class Collection implements
     public function getCachingIterator($flags = \CachingIterator::CALL_TOSTRING)
     {
         return new \CachingIterator($this->getIterator(), $flags);
+    }
+
+    /**
+     * Checks if the collection is associative.
+     *
+     * @return bool
+     */
+    public function isAssociative()
+    {
+        return !$this->isSequential();
+    }
+
+    /**
+     * Checks if the collection is sequential.
+     *
+     * @return bool
+     */
+    public function isSequential()
+    {
+        return $this->keys()->filter('is_string')->isEmpty();
     }
 
     /**

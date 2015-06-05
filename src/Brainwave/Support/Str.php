@@ -16,6 +16,7 @@ namespace Brainwave\Support;
  */
 
 use Stringy\StaticStringy;
+use RandomLib\Factory as RandomLib;
 
 /**
  * Str.
@@ -147,14 +148,12 @@ class Str extends StaticStringy
     /**
      * Generate a more truly "random" alpha-numeric string.
      *
-     * @param string $type
      * @param int    $length
-     *
-     * @throws \RuntimeException
+     * @param string $type
      *
      * @return string
      */
-    public static function random($type = 'alnum', $length = 16)
+    public static function random($length = 16, $type = 'alnum')
     {
         switch ($type) {
             case 'alnum':
@@ -180,14 +179,51 @@ class Str extends StaticStringy
                 break;
         }
 
-        $token = '';
-        $max   = strlen($pool);
+        $factory   = new RandomLib;
+        $generator = $factory->getMediumStrengthGenerator();
 
-        for ($i = 0; $i < $length; $i++) {
-            $token .= $pool[self::cryptoRandSecure(0, $max)];
+        return $generator->generateString($length, $pool);
+    }
+
+    /**
+     * Compares two strings.
+     *
+     * This method implements a constant-time algorithm to compare strings.
+     * Regardless of the used implementation, it will leak length information.
+     *
+     * This method is adapted from Symfony\Component\Security\Core\Util\StringUtils.
+     *
+     * @param  string  $knownString
+     * @param  string  $userInput
+     * @return bool
+     */
+    public static function equals($knownString, $userInput)
+    {
+        if (!is_string($knownString)) {
+            $knownString = (string) $knownString;
         }
 
-        return $token;
+        if (!is_string($userInput)) {
+            $userInput = (string) $userInput;
+        }
+
+        if (function_exists('hash_equals')) {
+            return hash_equals($knownString, $userInput);
+        }
+
+        $knownLength = mb_strlen($knownString);
+
+        if (mb_strlen($userInput) !== $knownLength) {
+            return false;
+        }
+
+        $result = 0;
+
+        for ($i = 0; $i < $knownLength; ++$i) {
+            $result |= (ord($knownString[$i]) ^ ord($userInput[$i]));
+        }
+
+        return 0 === $result;
     }
 
     /**
@@ -265,45 +301,5 @@ class Str extends StaticStringy
         $value = ucwords(str_replace(['-', '_'], ' ', $value));
 
         return static::$studlyCache[$key] = str_replace(' ', '', $value);
-    }
-
-        /**
-     * Generate secure rand
-     *
-     * @param int $min
-     * @param int $max
-     *
-     * @return string
-     */
-    protected static function cryptoRandSecure($min, $max)
-    {
-        $range = $max - $min;
-
-        if ($range < 0) {
-            return $min; // not so random...
-        }
-
-        $log    = log( $range, 2 );
-        $bytes  = (int) ($log / 8) + 1; // length in bytes
-        $bits   = (int) $log + 1; // length in bits
-        $filter = (int) (1 << $bits) - 1; // set all lower bits to 1
-
-        do {
-            if (function_exists('random_bytes')) {
-                $rnd = hexdec(bin2hex(random_bytes($bytes));
-            } elseif (function_exists('openssl_random_pseudo_bytes')) {
-                $rnd = hexdec(bin2hex(openssl_random_pseudo_bytes($bytes));
-            } else {
-                throw new \RuntimeException('OpenSSL extension is required for PHP 5 users.');
-            }
-
-            if ($rnd === false) {
-                throw new \RuntimeException('Unable to generate random string.');
-            }
-
-            $rnd = $rnd & $filter; // discard irrelevant bits
-        } while ($rnd >= $range);
-
-        return $min + $rnd;
     }
 }

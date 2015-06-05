@@ -1,6 +1,6 @@
 <?php
 
-namespace Brainwave\Encrypter\Adapter;
+namespace Brainwave\Encryption\Adapter;
 
 /**
  * Narrowspark - a PHP 5 framework.
@@ -15,7 +15,7 @@ namespace Brainwave\Encrypter\Adapter;
  * @version     0.10.0-dev
  */
 
-use Brainwave\Contracts\Encrypter\Adapter as AdapterContract;
+use Brainwave\Contracts\Encryption\Adapter as AdapterContract;
 use Brainwave\Contracts\Hashing\Generator as HashContract;
 use RandomLib\Generator as RandomLib;
 
@@ -55,14 +55,14 @@ class OpenSsl implements AdapterContract
      *
      * @var string
      */
-    protected $cipher = 'aes-256';
+    protected $cipher = 'AES-256';
 
     /**
      * The mode used for encryption.
      *
      * @var string
      */
-    protected $mode = 'cbc';
+    protected $mode = 'CBC';
 
     /**
      * A "sliding" Initialization Vector.
@@ -95,7 +95,7 @@ class OpenSsl implements AdapterContract
      */
     public function setup()
     {
-        return 'OpenSsl';
+        return 'OpenSSL';
     }
 
     /**

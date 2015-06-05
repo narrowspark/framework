@@ -196,6 +196,9 @@ class SupportCollectionTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals([1 => ['id' => 2, 'name' => 'World']], $c->filter(function ($item) {
             return $item['id'] === 2;
         })->all());
+
+        $c = new Collection(['', 'Hello', '', 'World']);
+        $this->assertEquals(['Hello', 'World'], $c->filter()->values()->toArray());
     }
 
     public function testWhere()
@@ -726,6 +729,24 @@ class TestAccessorEloquentTestStub
         $this->assertEquals([1, 4, 7], $c[0]->all());
         $this->assertEquals([2, 5, null], $c[1]->all());
         $this->assertEquals([3, 6, null], $c[2]->all());
+    }
+
+    public function testIsSequential()
+    {
+        $c = new Collection(['foo', 'bar', 2 => 'baz']);
+        $this->assertTrue($c->isSequential());
+
+        $c = new Collection(['foo', 'bar', 'zoo' => 'baz']);
+        $this->assertFalse($c->isSequential());
+    }
+
+    public function testIsAssociative()
+    {
+        $c = new Collection(['foo' => 'bar', 'bar' => 'baz']);
+        $this->assertTrue($c->isAssociative());
+
+        $c = new Collection([0 => 'bar', 1 => 'bar', 'baz']);
+        $this->assertFalse($c->isAssociative());
     }
 }
 

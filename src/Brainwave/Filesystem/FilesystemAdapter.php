@@ -307,15 +307,11 @@ class FilesystemAdapter implements CloudFilesystemContract
      */
     protected function filterContentsByType($contents, $type)
     {
-        $contents = Collection::make($contents);
-
-        $contents = $contents->filter(function ($value) use ($type) {
-            return $value['type'] === $type;
-        })->map(function ($value) {
-            return $value['path'];
-        });
-
-        return $contents->values()->all();
+        return Collection::make($contents)
+           ->where('type', $type)
+           ->pluck('path')
+           ->values()
+           ->all();
     }
 
     /**

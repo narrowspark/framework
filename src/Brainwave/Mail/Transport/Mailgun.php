@@ -16,7 +16,6 @@ namespace Brainwave\Mail\Transport;
  */
 
 use GuzzleHttp\ClientInterface;
-use GuzzleHttp\Post\PostFile;
 
 /**
  * Mailgun.
@@ -105,12 +104,10 @@ class Mailgun implements \Swift_Transport
      */
     public function send(\Swift_Mime_Message $message, &$failedRecipients = null)
     {
-        $options = ['auth' => ['api', $this->key]];
-
-        $options['multipart'] = [
+        $options = ['auth' => ['api', $this->key], 'multipart' => [
             ['name' => 'to', 'contents' => $this->getTo($message)],
             ['name' => 'message', 'contents' => (string) $message, 'filename' => 'message.mime'],
-        ];
+        ]];
 
         return $this->client->post($this->url, $options);
     }

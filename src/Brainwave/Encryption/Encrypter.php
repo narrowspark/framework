@@ -1,6 +1,6 @@
 <?php
 
-namespace Brainwave\Encrypter;
+namespace Brainwave\Encryption;
 
 /**
  * Narrowspark - a PHP 5 framework.
@@ -15,11 +15,12 @@ namespace Brainwave\Encrypter;
  * @version     0.10.0-dev
  */
 
-use Brainwave\Contracts\Encrypter\DecryptException;
-use Brainwave\Contracts\Encrypter\Encrypter as EncrypterContract;
-use Brainwave\Contracts\Encrypter\InvalidKeyException;
+use Brainwave\Contracts\Encryption\DecryptException;
+use Brainwave\Contracts\Encryption\EncryptException;
+use Brainwave\Contracts\Encryption\Encrypter as EncrypterContract;
+use Brainwave\Contracts\Encryption\InvalidKeyException;
 use Brainwave\Contracts\Hashing\Generator as HashContract;
-use Brainwave\Encrypter\Adapter\OpenSsl;
+use Brainwave\Encryption\Adapter\OpenSsl;
 use Brainwave\Support\Arr;
 use RandomLib\Generator as RandomLib;
 
@@ -54,14 +55,6 @@ class Encrypter implements EncrypterContract
     ];
 
     /**
-     * Holds which crypt engine internaly should be use,
-     * which will be determined automatically.
-     *
-     * @var string
-     */
-    protected $engine = '';
-
-    /**
      * Hash generator instance.
      *
      * @var \Brainwave\Contracts\Hashing\Generator
@@ -80,19 +73,19 @@ class Encrypter implements EncrypterContract
      *
      * @var string
      */
-    protected $cipher = null;
+    protected $cipher;
 
     /**
      * The mode used for encryption.
      *
      * @var string
      */
-    protected $mode = null;
+    protected $mode;
 
     /**
      * Extension.
      *
-     * @var \Brainwave\Contracts\Encrypter\Adapter
+     * @var \Brainwave\Contracts\Encryption\Adapter
      */
     protected $generator;
 
@@ -101,22 +94,24 @@ class Encrypter implements EncrypterContract
      *
      * @param \Brainwave\Contracts\Hashing\Generator $hash
      * @param \RandomLib\Generator                   $rand
-     * @param string                                 $key  Encryption key
+     * @param string                                 $key    Encryption key
+     * @param string                                 $cipher Encryption $cipher
+     * @param string                                 $mode   Encryption $mode
      */
-    public function __construct(HashContract $hash, RandomLib $rand, $key)
+    public function __construct(HashContract $hash, RandomLib $rand, $key, $cipher = 'AES-256', $mode = 'CBC')
     {
-        $this->key = (string) $key;
+        $len = mb_strlen($key = (string) $key, '8bit');
+
+        if ($len === 16 || $len === 32) {
+           $this->key = $key;
+        } else {
+           throw new \RuntimeException('The only supported key lengths are 16 bytes and 32 bytes.');
+        }
+
         $this->hash = $hash;
         $this->rand = $rand;
 
-        if (!extension_loaded('openssl')) {
-            throw new DecryptException('Narrowspark requires the Openssl PHP extension.'.PHP_EOL);
-        }
-
-        if (extension_loaded('openssl')) {
-            $this->engine = 'openssl';
-            $this->generator = new OpenSsl($this->hash, $this->rand, $this->key, $this->mode, $this->cipher);
-        }
+        $this->generator = new OpenSsl($this->hash, $this->rand, $this->key, $mode, $cipher);
 
         $this->generator->setup();
     }
@@ -133,26 +128,6 @@ class Encrypter implements EncrypterContract
         $this->key = (string) $key;
 
         return $this;
-    }
-
-    /**
-     * Set crypt mode.
-     *
-     * @param string $mode
-     */
-    public function setMode($mode)
-    {
-        $this->mode = $mode;
-    }
-
-    /**
-     * Set the encryption cipher.
-     *
-     * @param string $cipher
-     */
-    public function setCipher($cipher)
-    {
-        $this->cipher = $cipher;
     }
 
     /**
@@ -176,7 +151,13 @@ class Encrypter implements EncrypterContract
     {
         $this->checkKey();
 
-        return json_encode($this->generator->encrypt($data));
+        $value = $this->generator->encrypt($data);
+
+        if ($value === false) {
+            throw new EncryptException('Could not encrypt the data.');
+        }
+
+        return json_encode($value);
     }
 
     /**
@@ -199,14 +180,20 @@ class Encrypter implements EncrypterContract
             throw new DecryptException('Invalid data passed to decrypt()');
         }
 
+        $decrypted = $this->generator->decrypt($data);
+
+        if ($decrypted === false) {
+            throw new DecryptException('Could not decrypt the data.');
+        }
+
         // Return decrypted data.
-        return unserialize($this->generator->decrypt($data));
+        return unserialize($decrypted);
     }
 
     /**
      * Get generator.
      *
-     * @return \Brainwave\Contracts\Encrypter\Adapter
+     * @return \Brainwave\Contracts\Encryption\Adapter
      */
     public function getGenerator()
     {
