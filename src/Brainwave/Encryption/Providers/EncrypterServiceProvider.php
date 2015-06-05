@@ -1,6 +1,6 @@
 <?php
 
-namespace Brainwave\Encrypter\Providers;
+namespace Brainwave\Encryption\Providers;
 
 /**
  * Narrowspark - a PHP 5 framework.
@@ -16,7 +16,7 @@ namespace Brainwave\Encrypter\Providers;
  */
 
 use Brainwave\Application\ServiceProvider;
-use Brainwave\Encrypter\Encrypter;
+use Brainwave\Encryption\Encrypter;
 
 /**
  * EncrypterServiceProvider.

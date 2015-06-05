@@ -1,6 +1,6 @@
 <?php
 
-namespace Brainwave\Encrypter;
+namespace Brainwave\Encryption;
 
 /**
  * Narrowspark - a PHP 5 framework.
@@ -15,12 +15,12 @@ namespace Brainwave\Encrypter;
  * @version     0.10.0-dev
  */
 
-use Brainwave\Contracts\Encrypter\DecryptException;
-use Brainwave\Contracts\Encrypter\EncryptException;
-use Brainwave\Contracts\Encrypter\Encrypter as EncrypterContract;
-use Brainwave\Contracts\Encrypter\InvalidKeyException;
+use Brainwave\Contracts\Encryption\DecryptException;
+use Brainwave\Contracts\Encryption\EncryptException;
+use Brainwave\Contracts\Encryption\Encrypter as EncrypterContract;
+use Brainwave\Contracts\Encryption\InvalidKeyException;
 use Brainwave\Contracts\Hashing\Generator as HashContract;
-use Brainwave\Encrypter\Adapter\OpenSsl;
+use Brainwave\Encryption\Adapter\OpenSsl;
 use Brainwave\Support\Arr;
 use RandomLib\Generator as RandomLib;
 
@@ -85,7 +85,7 @@ class Encrypter implements EncrypterContract
     /**
      * Extension.
      *
-     * @var \Brainwave\Contracts\Encrypter\Adapter
+     * @var \Brainwave\Contracts\Encryption\Adapter
      */
     protected $generator;
 
@@ -193,7 +193,7 @@ class Encrypter implements EncrypterContract
     /**
      * Get generator.
      *
-     * @return \Brainwave\Contracts\Encrypter\Adapter
+     * @return \Brainwave\Contracts\Encryption\Adapter
      */
     public function getGenerator()
     {

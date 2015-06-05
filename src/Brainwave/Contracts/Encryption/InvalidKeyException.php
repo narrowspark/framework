@@ -1,6 +1,6 @@
 <?php
 
-namespace Brainwave\Contracts\Encrypter;
+namespace Brainwave\Contracts\Encryption;
 
 /**
  * Narrowspark - a PHP 5 framework.
@@ -16,13 +16,12 @@ namespace Brainwave\Contracts\Encrypter;
  */
 
 /**
- * EncryptException.
+ * InvalidKeyException.
  *
  * @author  Daniel Bannert
  *
- * @since   0.10.0-dev
+ * @since   0.9.5-dev
  */
- class EncryptException extends \RuntimeException
- {
-
- }
+class InvalidKeyException extends \InvalidArgumentException
+{
+}

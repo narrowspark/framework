@@ -1,6 +1,6 @@
 <?php
 
-namespace Brainwave\Contracts\Encrypter;
+namespace Brainwave\Contracts\Encryption;
 
 /**
  * Narrowspark - a PHP 5 framework.
@@ -16,12 +16,13 @@ namespace Brainwave\Contracts\Encrypter;
  */
 
 /**
- * DecryptException.
+ * EncryptException.
  *
  * @author  Daniel Bannert
  *
- * @since   0.9.4-dev
+ * @since   0.10.0-dev
  */
-class DecryptException extends \RuntimeException
-{
-}
+ class EncryptException extends \RuntimeException
+ {
+
+ }

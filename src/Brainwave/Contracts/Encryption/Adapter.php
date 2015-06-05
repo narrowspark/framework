@@ -1,6 +1,6 @@
 <?php
 
-namespace Brainwave\Contracts\Encrypter;
+namespace Brainwave\Contracts\Encryption;
 
 /**
  * Narrowspark - a PHP 5 framework.
@@ -16,7 +16,7 @@ namespace Brainwave\Contracts\Encrypter;
  */
 
 /**
- * Encrypter.
+ * Adapter.
  *
  * @author  Daniel Bannert
  *

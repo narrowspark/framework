@@ -1,6 +1,6 @@
 <?php
 
-namespace Brainwave\Cookie\Test;
+namespace Brainwave\Encryption\Test;
 
 /*
  * Narrowspark - a PHP 5 framework
