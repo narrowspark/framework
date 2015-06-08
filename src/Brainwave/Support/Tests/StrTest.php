@@ -129,4 +129,16 @@ class StrTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('narrowspark_php_framework', Str::snake('Narrowspark     Php    Framework'));
         $this->assertEquals('narrowspaaaark_phppp_framewoooork!!!', Str::snake('Narrowspaaaark Phppp Framewoooork!!!'));
     }
+
+    public function testBetween()
+    {
+        $this->assertEquals('Middle', Str::between('StartMiddleEnd', 'Start', 'End'));
+        $this->assertEquals('', Str::between('MiddleEnd', 'Start', 'End'));
+        $this->assertEquals('', Str::between('StartMiddle', 'Start', 'End'));
+        $this->assertEquals('', Str::between('StartMiddleEnd', 'End', 'Start'));
+        $this->assertEquals('Middle', Str::between('StartMiddleStart', 'Start', 'Start'));
+        $this->assertEquals('MiddleEnd', Str::between('StartMiddleEnd', 'Start', ''));
+        $this->assertEquals('StartMiddle', Str::between('StartMiddleEnd', '', 'End'));
+        $this->assertEquals('StartMiddleEnd', Str::between('StartMiddleEnd', '', ''));
+    }
 }

@@ -591,7 +591,7 @@ class Collection implements
     {
         $items = $this->data;
 
-        array_shuffle($items);
+        shuffle($items);
 
         return new static($items);
     }

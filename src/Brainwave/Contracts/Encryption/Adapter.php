@@ -25,13 +25,6 @@ namespace Brainwave\Contracts\Encryption;
 interface Adapter
 {
     /**
-     * Setup extension.
-     *
-     * @return null|string
-     */
-    public function setup();
-
-    /**
      * Encrypt data returning a JSON encoded array safe for storage in a database
      * or file. The array has the following structure before it is encoded:.
      *

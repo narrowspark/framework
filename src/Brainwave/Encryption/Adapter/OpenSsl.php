@@ -55,14 +55,14 @@ class OpenSsl implements AdapterContract
      *
      * @var string
      */
-    protected $cipher = 'AES-256';
+    protected $cipher;
 
     /**
      * The mode used for encryption.
      *
      * @var string
      */
-    protected $mode = 'CBC';
+    protected $mode;
 
     /**
      * A "sliding" Initialization Vector.
@@ -77,25 +77,17 @@ class OpenSsl implements AdapterContract
      * @param HashContract $hash
      * @param RandomLib    $rand
      * @param string       $key
-     * @param string       $mode
      * @param string       $cipher
+     * @param string       $mode
      */
-    public function __construct(HashContract $hash, RandomLib $rand, $key, $mode, $cipher)
+    public function __construct(HashContract $hash, RandomLib $rand, $key, $cipher, $mode)
     {
         $this->hash = $hash;
         $this->rand = $rand;
-        $this->key = (string) $key;
+        $this->key  = (string) $key;
 
-        $this->setMode($mode);
-        $this->setCipher($cipher);
-    }
-
-    /**
-     * setup openSsl.
-     */
-    public function setup()
-    {
-        return 'OpenSSL';
+        $this->cipher = $cipher;
+        $this->mode   = $mode;
     }
 
     /**
@@ -117,7 +109,8 @@ class OpenSsl implements AdapterContract
      */
     public function encrypt($data)
     {
-        $ivLength = openssl_cipher_iv_length($this->cipher.'-'.$this->mode);
+        $ivLength = openssl_cipher_iv_length($this
+        ->cipher.'-'.$this->mode);
         $this->encryptIV = openssl_random_pseudo_bytes($ivLength);
 
         // Prepeare the array with data.
@@ -198,34 +191,6 @@ class OpenSsl implements AdapterContract
     protected function doDecrypt($value, $iv)
     {
         return openssl_decrypt($value, $this->cipher.'-'.$this->mode, $this->key, OPENSSL_RAW_DATA, $iv);
-    }
-
-    /**
-     * Set crypt mode.
-     *
-     * @param string|null $mode
-     */
-    protected function setMode($mode = null)
-    {
-        if (null === $mode) {
-            return;
-        }
-
-        $this->mode = $mode;
-    }
-
-    /**
-     * Set the encryption cipher.
-     *
-     * @param string|null $cipher
-     */
-    protected function setCipher($cipher = null)
-    {
-        if (null === $cipher) {
-            return;
-        }
-
-        $this->cipher = $cipher;
     }
 
     /**
