@@ -16,8 +16,8 @@ namespace Brainwave\Encryption;
  */
 
 use Brainwave\Contracts\Encryption\DecryptException;
-use Brainwave\Contracts\Encryption\EncryptException;
 use Brainwave\Contracts\Encryption\Encrypter as EncrypterContract;
+use Brainwave\Contracts\Encryption\EncryptException;
 use Brainwave\Contracts\Encryption\InvalidKeyException;
 use Brainwave\Contracts\Hashing\Generator as HashContract;
 use Brainwave\Encryption\Adapter\OpenSsl;
@@ -198,15 +198,15 @@ class Encrypter implements EncrypterContract
      * @param string $cipher
      * @param string mode
      * @param string $key
+     * @throws \RuntimeException
      * @return void
      *
-     * @throws \RuntimeException
      */
     public function ensureValid($cipher, $mode, $key)
     {
         $length = mb_strlen($key, '8bit');
 
-        if (isset($this->lengths[$cipher.'-'.$mode]) && in_array($length, $this->lengths[$cipher.'-'.$mode])) {
+        if (isset($this->lengths[$cipher.'-'.$mode]) && in_array($length, $this->lengths[$cipher.'-'.$mode], true)) {
             return;
         }
 

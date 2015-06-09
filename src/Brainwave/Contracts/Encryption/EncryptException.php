@@ -24,5 +24,4 @@ namespace Brainwave\Contracts\Encryption;
  */
  class EncryptException extends \RuntimeException
  {
-
  }
