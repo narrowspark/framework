@@ -32,21 +32,21 @@ trait HandlerTrait
      * @var array
      */
     protected $handler = [
-        'stream' => '\Monolog\Handler\StreamHandler',
-        'amqp' => '\Monolog\Handler\AmqpHandler',
-        'gelf' => '\Monolog\Handler\GelfHandler',
-        'cube' => '\Monolog\Handler\CubeHandler',
-        'raven' => '\Monolog\Handler\RavenHandler',
-        'zendMonitor' => '\Monolog\Handler\ZendMonitorHandler',
-        'newRelic' => '\Monolog\Handler\NewRelicHandler',
+        'stream' => \Monolog\Handler\StreamHandler::class,
+        'amqp' => \Monolog\Handler\AmqpHandler::class,
+        'gelf' => \Monolog\Handler\GelfHandler::class,
+        'cube' => \Monolog\Handler\CubeHandler::class,
+        'raven' => \Monolog\Handler\RavenHandler::class,
+        'zendMonitor' => \Monolog\Handler\ZendMonitorHandler::class,
+        'newRelic' => \Monolog\Handler\NewRelicHandler::class,
         //Log
-        'errorLog' => '\Monolog\Handler\ErrorLogHandler',
-        'loggly' => '\Monolog\Handler\LogglyHandler',
-        'syslogUdp' => '\Monolog\Handler\SyslogUdpHandler',
+        'errorLog' => \Monolog\Handler\ErrorLogHandler::class,
+        'loggly' => \Monolog\Handler\LogglyHandler::class,
+        'syslogUdp' => \Monolog\Handler\SyslogUdpHandler::class,
         //Browser
-        'browser' => '\Monolog\Handler\BrowserConsoleHandler',
-        'firePHP' => '\Monolog\Handler\FirePHPHandler',
-        'chromePHP' => '\Monolog\Handler\ChromePHPHandler',
+        'browser' => \Monolog\Handler\BrowserConsoleHandler::class,
+        'firePHP' => \Monolog\Handler\FirePHPHandler::class,
+        'chromePHP' => \Monolog\Handler\ChromePHPHandler::class,
     ];
 
     /**
