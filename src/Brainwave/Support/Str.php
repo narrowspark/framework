@@ -12,9 +12,10 @@ namespace Brainwave\Support;
  *
  * @license     http://www.narrowspark.com/license
  *
- * @version     0.9.8-dev
+ * @version     0.10.0-dev
  */
 
+use RandomLib\Factory as RandomLib;
 use Stringy\StaticStringy;
 
 /**
@@ -147,27 +148,82 @@ class Str extends StaticStringy
     /**
      * Generate a more truly "random" alpha-numeric string.
      *
-     * @param int $length
-     *
-     * @throws \RuntimeException
+     * @param int    $length
+     * @param string $type
      *
      * @return string
      */
-    public static function random($length = 16)
+    public static function random($length = 16, $type = 'alnum')
     {
-        if (function_exists('random_bytes')) {
-            $bytes = random_bytes($length * 2);
-        } elseif (function_exists('openssl_random_pseudo_bytes')) {
-            $bytes = openssl_random_pseudo_bytes($length * 2);
-        } else {
-            throw new \RuntimeException('OpenSSL extension is required for PHP 5 users.');
+        switch ($type) {
+            case 'alnum':
+                $pool = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+                break;
+            case 'alpha':
+                $pool = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+                break;
+            case 'hexdec':
+                $pool = '0123456789abcdef';
+                break;
+            case 'numeric':
+                $pool = '0123456789';
+                break;
+            case 'nozero':
+                $pool = '123456789';
+                break;
+            case 'distinct':
+                $pool = '2345679ACDEFHJKLMNPRSTUVWXYZ';
+                break;
+            default:
+                $pool = (string) $type;
+                break;
         }
 
-        if ($bytes === false) {
-            throw new \RuntimeException('Unable to generate random string.');
+        $factory   = new RandomLib;
+        $generator = $factory->getMediumStrengthGenerator();
+
+        return $generator->generateString($length, $pool);
+    }
+
+    /**
+     * Compares two strings.
+     *
+     * This method implements a constant-time algorithm to compare strings.
+     * Regardless of the used implementation, it will leak length information.
+     *
+     * This method is adapted from Symfony\Component\Security\Core\Util\StringUtils.
+     *
+     * @param  string  $knownString
+     * @param  string  $userInput
+     * @return bool
+     */
+    public static function equals($knownString, $userInput)
+    {
+        if (!is_string($knownString)) {
+            $knownString = (string) $knownString;
         }
 
-        return substr(str_replace(['/', '+', '='], '', base64_encode($bytes)), 0, $length);
+        if (!is_string($userInput)) {
+            $userInput = (string) $userInput;
+        }
+
+        if (function_exists('hash_equals')) {
+            return hash_equals($knownString, $userInput);
+        }
+
+        $knownLength = mb_strlen($knownString);
+
+        if (mb_strlen($userInput) !== $knownLength) {
+            return false;
+        }
+
+        $result = 0;
+
+        for ($i = 0; $i < $knownLength; ++$i) {
+            $result |= (ord($knownString[$i]) ^ ord($userInput[$i]));
+        }
+
+        return 0 === $result;
     }
 
     /**
@@ -245,5 +301,42 @@ class Str extends StaticStringy
         $value = ucwords(str_replace(['-', '_'], ' ', $value));
 
         return static::$studlyCache[$key] = str_replace(' ', '', $value);
+    }
+
+    /**
+     * Get the string between the given start and end in the given string.
+     *
+     * @param string $string
+     * @param string $start
+     * @param string $end
+     *
+     * @return string
+     */
+    public static function between($string, $start, $end)
+    {
+        if ($start === '' && $end === '') {
+            return $string;
+        }
+
+        if ($start !== '' && strpos($string, $start) === false) {
+            return '';
+        }
+
+        if ($end !== '' && strpos($string, $end) === false) {
+            return '';
+        }
+
+        if ($start === '') {
+            return substr($string, 0, strpos($string, $end));
+        }
+
+        if ($end === '') {
+            return substr($string, strpos($string, $start) + strlen($start));
+        }
+
+        $stringWithoutStart = explode($start, $string)[1];
+        $middle             = explode($end, $stringWithoutStart)[0];
+
+        return $middle;
     }
 }

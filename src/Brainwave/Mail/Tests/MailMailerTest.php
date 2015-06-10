@@ -9,7 +9,7 @@ namespace Brainwave\Mail\Test;
  * @copyright   2015 Daniel Bannert
  * @link        http://www.narrowspark.de
  * @license     http://www.narrowspark.com/license
- * @version     0.9.8-dev
+ * @version     0.10.0-dev
  * @package     Narrowspark/framework
  *
  * For the full copyright and license information, please view the LICENSE
@@ -164,14 +164,14 @@ class MailMailerTest extends \PHPUnit_Framework_TestCase
     {
         unset($_SERVER['__mailer.test']);
         $mailer = $this->getMailer();
-        $mailer->getSwiftMailer()->shouldReceive('getTransport')->andReturn($transport = m::mock('\Swift_Transport'));
+        $mailer->getSwiftMailer()->shouldReceive('getTransport')->andReturn($transport = Mock::mock('\Swift_Transport'));
         $transport->shouldReceive('stop');
         $view = Mock::mock('\StdClass');
         $mailer->getViewFactory()->shouldReceive('make')->once()->andReturn($view);
         $view->shouldReceive('render')->once()->andReturn('rendered.view');
         $swift = new \Brainwave\Mail\Test\FailingSwiftMailerStub();
 
-        $this->setSwiftMailer($mailersend('foo', ['data'], function ($m) {});
+        $this->setSwiftMailer($mailersend('foo', ['data'], function ($m) {}));
 
         $this->assertEquals(['info@narrowspark.de'], $mailer->failures());
     }
@@ -182,7 +182,7 @@ class MailMailerTest extends \PHPUnit_Framework_TestCase
         $swift->shouldReceive('getTransport')->andReturn($transport = Mock::mock('\Swift_Transport'));
         $transport->shouldReceive('stop');
 
-        $this->setSwiftMailer($mailermailer;
+        $this->setSwiftMailer($mailermailer);
     }
 
 

@@ -12,7 +12,7 @@ namespace Brainwave\View\Engines\Adapter;
  *
  * @license     http://www.narrowspark.com/license
  *
- * @version     0.9.8-dev
+ * @version     0.10.0-dev
  */
 
 use Brainwave\Contracts\Config\Manager as ConfigContract;

@@ -1,6 +1,6 @@
 <?php
 
-namespace Brainwave\Crypter\Proxies;
+namespace Brainwave\Mail;
 
 /**
  * Narrowspark - a PHP 5 framework.
@@ -12,22 +12,18 @@ namespace Brainwave\Crypter\Proxies;
  *
  * @license     http://www.narrowspark.com/license
  *
- * @version     0.9.8-dev
+ * @version     0.10.0-dev
  */
 
-use Brainwave\Support\StaticalProxyManager;
+use Brainwave\Support\Manager;
 
 /**
- * Crypt.
+ * TransportManager.
  *
  * @author  Daniel Bannert
  *
- * @since   0.9.4-dev
+ * @since   0.10.0-dev
  */
-class Crypt extends StaticalProxyManager
-{
-    protected static function getFacadeAccessor()
-    {
-        return 'encrypter';
-    }
-}
+// class TransportManager extends Manager
+// {
+// }

@@ -1,6 +1,6 @@
 <?php
 
-namespace Brainwave\Encrypter\Providers;
+namespace Brainwave\Encryption\Providers;
 
 /**
  * Narrowspark - a PHP 5 framework.
@@ -12,11 +12,11 @@ namespace Brainwave\Encrypter\Providers;
  *
  * @license     http://www.narrowspark.com/license
  *
- * @version     0.9.8-dev
+ * @version     0.10.0-dev
  */
 
 use Brainwave\Application\ServiceProvider;
-use Brainwave\Encrypter\Encrypter;
+use Brainwave\Encryption\Encrypter;
 
 /**
  * EncrypterServiceProvider.
@@ -38,11 +38,10 @@ class EncrypterServiceProvider extends ServiceProvider
             $encrypt = new Encrypter(
                 $app->get('hash'),
                 $app->get('hash.rand.generator'),
-                $config->get('app::crypt.key')
+                $config->get('app::crypt.key'),
+                $config->get('app::crypt.cipher'),
+                $config->get('app::crypt.mode')
             );
-
-            $encrypt->setMode($config->get('app::crypt.mode'));
-            $encrypt->setCipher($config->get('app::crypt.cipher'));
 
             return $encrypt;
         });

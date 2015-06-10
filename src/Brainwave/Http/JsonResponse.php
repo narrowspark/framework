@@ -12,11 +12,12 @@ namespace Brainwave\Http;
  *
  * @license     http://www.narrowspark.com/license
  *
- * @version     0.9.8-dev
+ * @version     0.10.0-dev
  */
 
 use Brainwave\Contracts\Http\Response as ResponseContract;
 use Brainwave\Contracts\Support\Jsonable;
+use Brainwave\Http\Traits\ResponseParameterTrait;
 use Symfony\Component\HttpFoundation\JsonResponse as SymfonyJsonResponse;
 
 /**

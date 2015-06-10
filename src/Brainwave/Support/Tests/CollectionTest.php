@@ -17,6 +17,7 @@ namespace Brainwave\Support\Test;
  *
  */
 
+use Brainwave\Contracts\Support\Arrayable;
 use Brainwave\Support\Collection;
 use Mockery as Mock;
 
@@ -50,6 +51,23 @@ class SupportCollectionTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('foo', $c->first());
     }
 
+    public function testLastWithCallback()
+    {
+        $data = new Collection([2, 4, 3, 2]);
+
+        $result = $data->last(function ($key, $value) { return $value > 2; });
+        $this->assertEquals(3, $result);
+    }
+
+
+    public function testLastWithCallbackAndDefault()
+    {
+        $data = new Collection(['foo', 'bar']);
+
+        $result = $data->last(function ($key, $value) { return $value === 'baz'; }, 'default');
+        $this->assertEquals('default', $result);
+    }
+
     public function testShiftReturnsAndRemovesFirstItemInCollection()
     {
         $c = new Collection(['foo', 'bar']);
@@ -78,6 +96,45 @@ class SupportCollectionTest extends \PHPUnit_Framework_TestCase
         $c = new Collection();
 
         $this->assertTrue($c->isEmpty());
+    }
+
+    public function testEmptyCollectionIsConstructed()
+    {
+        $collection = new Collection('foo');
+        $this->assertSame(['foo'], $collection->all());
+
+        $collection = new Collection(2);
+        $this->assertSame([2], $collection->all());
+
+        $collection = new Collection(false);
+        $this->assertSame([false], $collection->all());
+
+        $collection = new Collection(null);
+        $this->assertSame([], $collection->all());
+
+        $collection = new Collection;
+        $this->assertSame([], $collection->all());
+    }
+
+    public function testGetArrayableItems()
+    {
+        $collection = new Collection;
+
+        $class  = new \ReflectionClass($collection);
+        $method = $class->getMethod('getArrayableItems');
+        $method->setAccessible(true);
+
+        $items = new TestArrayableObject;
+        $array = $method->invokeArgs($collection, [$items]);
+        $this->assertSame(['foo' => 'bar'], $array);
+
+        $items = new Collection(['foo' => 'bar']);
+        $array = $method->invokeArgs($collection, [$items]);
+        $this->assertSame(['foo' => 'bar'], $array);
+
+        $items = ['foo' => 'bar'];
+        $array = $method->invokeArgs($collection, [$items]);
+        $this->assertSame(['foo' => 'bar'], $array);
     }
 
     public function testToArrayCallsToArrayOnEachItemInCollection()
@@ -139,6 +196,9 @@ class SupportCollectionTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals([1 => ['id' => 2, 'name' => 'World']], $c->filter(function ($item) {
             return $item['id'] === 2;
         })->all());
+
+        $c = new Collection(['', 'Hello', '', 'World']);
+        $this->assertEquals(['Hello', 'World'], $c->filter()->values()->toArray());
     }
 
     public function testWhere()
@@ -211,11 +271,14 @@ class SupportCollectionTest extends \PHPUnit_Framework_TestCase
     {
         $c = new Collection(['Hello', 'World', 'World']);
         $this->assertEquals(['Hello', 'World'], $c->unique()->all());
+
+        $c = new Collection([[1, 2], [1, 2], [2, 3], [3, 4], [2, 3]]);
+        $this->assertEquals([[1, 2], [2, 3], [3, 4]], $c->unique()->values()->all());
     }
 
     public function testCollapse()
     {
-        $data = new Collection([[$object1 = new \StdClass()], [$object2 = new \StdClass()]]);
+        $data = new Collection([[$object1 = new \stdClass()], [$object2 = new \stdClass()]]);
         $this->assertEquals([$object1, $object2], $data->collapse()->all());
     }
 
@@ -667,6 +730,24 @@ class TestAccessorEloquentTestStub
         $this->assertEquals([2, 5, null], $c[1]->all());
         $this->assertEquals([3, 6, null], $c[2]->all());
     }
+
+    public function testIsSequential()
+    {
+        $c = new Collection(['foo', 'bar', 2 => 'baz']);
+        $this->assertTrue($c->isSequential());
+
+        $c = new Collection(['foo', 'bar', 'zoo' => 'baz']);
+        $this->assertFalse($c->isSequential());
+    }
+
+    public function testIsAssociative()
+    {
+        $c = new Collection(['foo' => 'bar', 'bar' => 'baz']);
+        $this->assertTrue($c->isAssociative());
+
+        $c = new Collection([0 => 'bar', 1 => 'bar', 'baz']);
+        $this->assertFalse($c->isAssociative());
+    }
 }
 
 class TestArrayAccessImplementation implements \ArrayAccess
@@ -696,5 +777,13 @@ class TestArrayAccessImplementation implements \ArrayAccess
     public function offsetUnset($offset)
     {
         unset($this->arr[$offset]);
+    }
+}
+
+class TestArrayableObject implements Arrayable
+{
+    public function toArray()
+    {
+        return ['foo' => 'bar'];
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace Brainwave\Contracts\Encrypter;
+namespace Brainwave\Contracts\Encryption;
 
 /**
  * Narrowspark - a PHP 5 framework.
@@ -12,17 +12,17 @@ namespace Brainwave\Contracts\Encrypter;
  *
  * @license     http://www.narrowspark.com/license
  *
- * @version     0.9.8-dev
+ * @version     0.10.0-dev
  */
 
 /**
- * Encrypter.
+ * Adapter.
  *
  * @author  Daniel Bannert
  *
- * @since   0.9.4-dev
+ * @since   0.9.7-dev
  */
-interface Encrypter
+interface Adapter
 {
     /**
      * Encrypt data returning a JSON encoded array safe for storage in a database
@@ -38,8 +38,8 @@ interface Encrypter
      *
      * @param mixed $data Data to encrypt.
      *
-     * @return string Serialized array containing the encrypted data
-     *                along with some meta data.
+     * @return array Serialized array containing the encrypted data
+     *               along with some meta data.
      */
     public function encrypt($data);
 
