@@ -104,20 +104,29 @@ class Collection implements
     }
 
     /**
-     * Add data to set.
+     * Get the max value of a given key.
      *
-     * @param array $items Key-value array of data to append to this set
+     * @param  string  $key
+     * @return mixed
      */
-    public function replace(array $items)
+    public function max($key)
     {
-        //TODO
-        foreach ($this->data as $key => $item) {
-            if ($callback($item, $key) === false) {
-                break;
-            }
-        }
+        return $this->reduce(function ($result, $item) use ($key) {
+            return is_null($result) || $item->{$key} > $result ? $item->{$key} : $result;
+        });
+    }
 
-        return $this;
+    /**
+     * Get the min value of a given key.
+     *
+     * @param  string  $key
+     * @return mixed
+     */
+    public function min($key)
+    {
+        return $this->reduce(function ($result, $item) use ($key) {
+            return is_null($result) || $item->{$key} < $result ? $item->{$key} : $result;
+        });
     }
 
     /**
