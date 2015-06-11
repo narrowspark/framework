@@ -17,7 +17,6 @@ namespace Brainwave\Support;
 
 use Brainwave\Contracts\Encrypter\Encrypter as EncrypterContract;
 use Brainwave\Contracts\Support\Arrayable;
-use Brainwave\Contracts\Support\Collection as CollectionContract;
 use Brainwave\Contracts\Support\Jsonable;
 
 /**
@@ -33,8 +32,7 @@ class Collection implements
     \Countable,
     \IteratorAggregate,
     Jsonable,
-    \JsonSerializable,
-    CollectionContract
+    \JsonSerializable
 {
     /**
      * Key-value array of data.
