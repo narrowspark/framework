@@ -370,6 +370,36 @@ class SupportCollectionTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(['foo', 'bar'], $data->pluck('email')->all());
     }
 
+    public function testGettingMaxItemsFromCollection()
+    {
+        $c = new Collection([(object) ['foo' => 10], (object) ['foo' => 20]]);
+        $this->assertEquals(20, $c->max('foo'));
+
+        $c = new Collection([['foo' => 10], ['foo' => 20]]);
+        $this->assertEquals(20, $c->max('foo'));
+
+        $c = new Collection([1, 2, 3, 4, 5]);
+        $this->assertEquals(5, $c->max());
+
+        $c = new Collection();
+        $this->assertNull($c->max());
+    }
+
+    public function testGettingMinItemsFromCollection()
+    {
+        $c = new Collection([(object) ['foo' => 10], (object) ['foo' => 20]]);
+        $this->assertEquals(10, $c->min('foo'));
+
+        $c = new Collection([['foo' => 10], ['foo' => 20]]);
+        $this->assertEquals(10, $c->min('foo'));
+
+        $c = new Collection([1, 2, 3, 4, 5]);
+        $this->assertEquals(1, $c->min());
+
+        $c = new Collection();
+        $this->assertNull($c->min());
+    }
+
     public function testImplode()
     {
         $data = new Collection([['name' => 'narrowspark', 'email' => 'foo'], ['name' => 'sparkel', 'email' => 'bar']]);

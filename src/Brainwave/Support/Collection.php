@@ -104,12 +104,15 @@ class Collection implements
     /**
      * Get the max value of a given key.
      *
-     * @param  string  $key
+     * @param string|null $key
+     *
      * @return mixed
      */
-    public function max($key)
+    public function max($key = null)
     {
         return $this->reduce(function ($result, $item) use ($key) {
+            $value = Arr::dataGet($item, $key);
+
             return is_null($result) || $item->{$key} > $result ? $item->{$key} : $result;
         });
     }
@@ -117,13 +120,16 @@ class Collection implements
     /**
      * Get the min value of a given key.
      *
-     * @param  string  $key
+     * @param string|null $key
+     *
      * @return mixed
      */
-    public function min($key)
+    public function min($key = null)
     {
         return $this->reduce(function ($result, $item) use ($key) {
-            return is_null($result) || $item->{$key} < $result ? $item->{$key} : $result;
+            $value = Arr::dataGet($item, $key);
+
+            return is_null($result) || $value < $result ? $value : $result;
         });
     }
 
