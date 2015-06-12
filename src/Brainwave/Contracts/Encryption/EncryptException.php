@@ -1,6 +1,6 @@
 <?php
 
-namespace Brainwave\Crypter\Proxies;
+namespace Brainwave\Contracts\Encryption;
 
 /**
  * Narrowspark - a PHP 5 framework.
@@ -15,19 +15,13 @@ namespace Brainwave\Crypter\Proxies;
  * @version     0.10.0-dev
  */
 
-use Brainwave\Support\StaticalProxyManager;
-
 /**
- * Crypt.
+ * EncryptException.
  *
  * @author  Daniel Bannert
  *
- * @since   0.9.4-dev
+ * @since   0.10.0-dev
  */
-class Crypt extends StaticalProxyManager
-{
-    protected static function getFacadeAccessor()
-    {
-        return 'encrypter';
-    }
-}
+ class EncryptException extends \RuntimeException
+ {
+ }

@@ -17,7 +17,6 @@ namespace Brainwave\Support;
 
 use Brainwave\Contracts\Encrypter\Encrypter as EncrypterContract;
 use Brainwave\Contracts\Support\Arrayable;
-use Brainwave\Contracts\Support\Collection as CollectionContract;
 use Brainwave\Contracts\Support\Jsonable;
 
 /**
@@ -33,8 +32,7 @@ class Collection implements
     \Countable,
     \IteratorAggregate,
     Jsonable,
-    \JsonSerializable,
-    CollectionContract
+    \JsonSerializable
 {
     /**
      * Key-value array of data.
@@ -104,20 +102,35 @@ class Collection implements
     }
 
     /**
-     * Add data to set.
+     * Get the max value of a given key.
      *
-     * @param array $items Key-value array of data to append to this set
+     * @param string|null $key
+     *
+     * @return mixed
      */
-    public function replace(array $items)
+    public function max($key = null)
     {
-        //TODO
-        foreach ($this->data as $key => $item) {
-            if ($callback($item, $key) === false) {
-                break;
-            }
-        }
+        return $this->reduce(function ($result, $item) use ($key) {
+            $value = Arr::dataGet($item, $key);
 
-        return $this;
+            return is_null($result) || $item->{$key} > $result ? $item->{$key} : $result;
+        });
+    }
+
+    /**
+     * Get the min value of a given key.
+     *
+     * @param string|null $key
+     *
+     * @return mixed
+     */
+    public function min($key = null)
+    {
+        return $this->reduce(function ($result, $item) use ($key) {
+            $value = Arr::dataGet($item, $key);
+
+            return is_null($result) || $value < $result ? $value : $result;
+        });
     }
 
     /**
@@ -186,13 +199,16 @@ class Collection implements
     /**
      * Run a filter over each of the items.
      *
-     * @param callable $callback
-     *
+     * @param  callable|null  $callback
      * @return static
      */
-    public function filter(callable $callback)
+    public function filter(callable $callback = null)
     {
-        return new static (array_filter($this->data, $callback));
+        if ($callback === null) {
+            return new static(array_filter($this->items));
+        }
+
+        return new static(array_filter($this->items, $callback));
     }
 
     /**
@@ -588,7 +604,7 @@ class Collection implements
     {
         $items = $this->data;
 
-        array_shuffle($items);
+        shuffle($items);
 
         return new static($items);
     }
@@ -808,7 +824,9 @@ class Collection implements
     public function random($amount = 1)
     {
         if ($amount > ($count = $this->count())) {
-            throw new \InvalidArgumentException(sprintf('You requested [%s] items, but there are only [%s] items in the collection', $amount, $count));
+            throw new \InvalidArgumentException(
+                sprintf('You requested [%s] items, but there are only [%s] items in the collection', $amount, $count)
+            );
         }
 
         $keys = array_rand($this->data, $amount);
@@ -1030,6 +1048,26 @@ class Collection implements
     public function getCachingIterator($flags = \CachingIterator::CALL_TOSTRING)
     {
         return new \CachingIterator($this->getIterator(), $flags);
+    }
+
+    /**
+     * Checks if the collection is associative.
+     *
+     * @return bool
+     */
+    public function isAssociative()
+    {
+        return !$this->isSequential();
+    }
+
+    /**
+     * Checks if the collection is sequential.
+     *
+     * @return bool
+     */
+    public function isSequential()
+    {
+        return $this->keys()->filter('is_string')->isEmpty();
     }
 
     /**

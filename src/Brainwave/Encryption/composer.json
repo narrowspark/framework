@@ -19,6 +19,7 @@
     ],
     "require": {
         "php"                                : ">=5.5.9",
+        "ext-openssl"                        : "*",
         "brainwave/config"                   : "self.version",
         "brainwave/contracts"                : "self.version",
         "ircmaxell/random-lib"               : "~1.1"
@@ -39,8 +40,6 @@
         }
     },
     "suggest": {
-        "ext-openssl"                        : "*",
-        "ext-mcrypt"                         : "*"
     },
     "minimum-stability"                      : "dev",
     "prefer-stable"                          : true

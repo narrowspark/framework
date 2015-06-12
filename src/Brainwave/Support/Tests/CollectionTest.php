@@ -196,6 +196,9 @@ class SupportCollectionTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals([1 => ['id' => 2, 'name' => 'World']], $c->filter(function ($item) {
             return $item['id'] === 2;
         })->all());
+
+        $c = new Collection(['', 'Hello', '', 'World']);
+        $this->assertEquals(['Hello', 'World'], $c->filter()->values()->toArray());
     }
 
     public function testWhere()
@@ -365,6 +368,36 @@ class SupportCollectionTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(['narrowspark' => 'foo', 'sparkel' => 'bar'], $data->pluck('email', 'name')->all());
         $this->assertEquals(['foo', 'bar'], $data->pluck('email')->all());
+    }
+
+    public function testGettingMaxItemsFromCollection()
+    {
+        $c = new Collection([(object) ['foo' => 10], (object) ['foo' => 20]]);
+        $this->assertEquals(20, $c->max('foo'));
+
+        $c = new Collection([['foo' => 10], ['foo' => 20]]);
+        $this->assertEquals(20, $c->max('foo'));
+
+        $c = new Collection([1, 2, 3, 4, 5]);
+        $this->assertEquals(5, $c->max());
+
+        $c = new Collection();
+        $this->assertNull($c->max());
+    }
+
+    public function testGettingMinItemsFromCollection()
+    {
+        $c = new Collection([(object) ['foo' => 10], (object) ['foo' => 20]]);
+        $this->assertEquals(10, $c->min('foo'));
+
+        $c = new Collection([['foo' => 10], ['foo' => 20]]);
+        $this->assertEquals(10, $c->min('foo'));
+
+        $c = new Collection([1, 2, 3, 4, 5]);
+        $this->assertEquals(1, $c->min());
+
+        $c = new Collection();
+        $this->assertNull($c->min());
     }
 
     public function testImplode()
@@ -726,6 +759,24 @@ class TestAccessorEloquentTestStub
         $this->assertEquals([1, 4, 7], $c[0]->all());
         $this->assertEquals([2, 5, null], $c[1]->all());
         $this->assertEquals([3, 6, null], $c[2]->all());
+    }
+
+    public function testIsSequential()
+    {
+        $c = new Collection(['foo', 'bar', 2 => 'baz']);
+        $this->assertTrue($c->isSequential());
+
+        $c = new Collection(['foo', 'bar', 'zoo' => 'baz']);
+        $this->assertFalse($c->isSequential());
+    }
+
+    public function testIsAssociative()
+    {
+        $c = new Collection(['foo' => 'bar', 'bar' => 'baz']);
+        $this->assertTrue($c->isAssociative());
+
+        $c = new Collection([0 => 'bar', 1 => 'bar', 'baz']);
+        $this->assertFalse($c->isAssociative());
     }
 }
 

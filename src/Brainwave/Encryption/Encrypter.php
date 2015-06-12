@@ -1,6 +1,6 @@
 <?php
 
-namespace Brainwave\Encrypter;
+namespace Brainwave\Encryption;
 
 /**
  * Narrowspark - a PHP 5 framework.
@@ -15,12 +15,12 @@ namespace Brainwave\Encrypter;
  * @version     0.10.0-dev
  */
 
-use Brainwave\Contracts\Encrypter\DecryptException;
-use Brainwave\Contracts\Encrypter\Encrypter as EncrypterContract;
-use Brainwave\Contracts\Encrypter\InvalidKeyException;
+use Brainwave\Contracts\Encryption\DecryptException;
+use Brainwave\Contracts\Encryption\Encrypter as EncrypterContract;
+use Brainwave\Contracts\Encryption\EncryptException;
+use Brainwave\Contracts\Encryption\InvalidKeyException;
 use Brainwave\Contracts\Hashing\Generator as HashContract;
-use Brainwave\Encrypter\Adapter\Mcrypt;
-use Brainwave\Encrypter\Adapter\OpenSsl;
+use Brainwave\Encryption\Adapter\OpenSsl;
 use Brainwave\Support\Arr;
 use RandomLib\Generator as RandomLib;
 
@@ -55,14 +55,6 @@ class Encrypter implements EncrypterContract
     ];
 
     /**
-     * Holds which crypt engine internaly should be use,
-     * which will be determined automatically.
-     *
-     * @var string
-     */
-    protected $engine = '';
-
-    /**
      * Hash generator instance.
      *
      * @var \Brainwave\Contracts\Hashing\Generator
@@ -77,64 +69,43 @@ class Encrypter implements EncrypterContract
     protected $rand;
 
     /**
-     * The algorithm used for encryption.
-     *
-     * @var string
-     */
-    protected $cipher = null;
-
-    /**
-     * The mode used for encryption.
-     *
-     * @var string
-     */
-    protected $mode = null;
-
-    /**
      * Extension.
      *
-     * @var \Brainwave\Contracts\Encrypter\Adapter
+     * @var \Brainwave\Contracts\Encryption\Adapter
      */
     protected $generator;
+
+    /**
+     * An array of supported ciphers with allowed key lengths.
+     *
+     * Each element is an array of valid lengths, the first being preferred.
+     *
+     * @var array
+     */
+    protected $lengths = [
+        'AES-128-CBC' => [16, 32],
+        'AES-256-CBC' => [32],
+    ];
 
     /**
      * Constructor.
      *
      * @param \Brainwave\Contracts\Hashing\Generator $hash
      * @param \RandomLib\Generator                   $rand
-     * @param string                                 $key  Encryption key
+     * @param string                                 $key
+     * @param string                                 $cipher
+     * @param string                                 $mode
      */
-    public function __construct(HashContract $hash, RandomLib $rand, $key)
+    public function __construct(HashContract $hash, RandomLib $rand, $key, $cipher = 'AES-256', $mode = 'CBC')
     {
-        $this->key = (string) $key;
+        $this->ensureValid($cipher, $mode, $key);
+
+        $this->key  = $key;
+
         $this->hash = $hash;
         $this->rand = $rand;
 
-        if (!extension_loaded('mcrypt') && !extension_loaded('openssl')) {
-            throw new DecryptException('Narrowspark requires the Mcrypt or Openssl PHP extension.'.PHP_EOL);
-        }
-
-        $this->checkExtension();
-    }
-
-    /**
-     * Check witch extension to use.
-     *
-     * Openssl is 30x faster as mcrypt
-     *
-     * @return bool|null
-     */
-    protected function checkExtension()
-    {
-        if (extension_loaded('openssl')) {
-            $this->engine = 'openssl';
-            $this->generator = new OpenSsl($this->hash, $this->rand, $this->key, $this->mode, $this->cipher);
-        } elseif (extension_loaded('mcrypt')) {
-            $this->engine = 'mcrypt';
-            $this->generator = new Mcrypt($this->hash, $this->rand, $this->key, $this->mode, $this->cipher);
-        }
-
-        $this->generator->setup();
+        $this->generator = new OpenSsl($this->hash, $this->rand, $this->key, $cipher, $mode);
     }
 
     /**
@@ -149,26 +120,6 @@ class Encrypter implements EncrypterContract
         $this->key = (string) $key;
 
         return $this;
-    }
-
-    /**
-     * Set crypt mode.
-     *
-     * @param string $mode
-     */
-    public function setMode($mode)
-    {
-        $this->mode = $mode;
-    }
-
-    /**
-     * Set the encryption cipher.
-     *
-     * @param string $cipher
-     */
-    public function setCipher($cipher)
-    {
-        $this->cipher = $cipher;
     }
 
     /**
@@ -190,9 +141,13 @@ class Encrypter implements EncrypterContract
      */
     public function encrypt($data)
     {
-        $this->checkKey();
+        $value = $this->generator->encrypt($data);
 
-        return json_encode($this->generator->encrypt($data));
+        if ($value === false) {
+            throw new EncryptException('Could not encrypt the data.');
+        }
+
+        return json_encode($value);
     }
 
     /**
@@ -206,8 +161,6 @@ class Encrypter implements EncrypterContract
      */
     public function decrypt($data)
     {
-        $this->checkKey();
-
         // Decode the JSON string
         $data = json_decode($data, true);
 
@@ -215,14 +168,20 @@ class Encrypter implements EncrypterContract
             throw new DecryptException('Invalid data passed to decrypt()');
         }
 
+        $decrypted = $this->generator->decrypt($data);
+
+        if ($decrypted === false) {
+            throw new DecryptException('Could not decrypt the data.');
+        }
+
         // Return decrypted data.
-        return unserialize($this->generator->decrypt($data));
+        return unserialize($decrypted);
     }
 
     /**
      * Get generator.
      *
-     * @return \Brainwave\Contracts\Encrypter\Adapter
+     * @return \Brainwave\Contracts\Encryption\Adapter
      */
     public function getGenerator()
     {
@@ -230,18 +189,29 @@ class Encrypter implements EncrypterContract
     }
 
     /**
-     * Check the current key is usable to perform cryptographic operations.
+     * Throw an exception if the given key is invalid.
      *
-     * @throws \Brainwave\Encryption\InvalidKeyException
+     * This ensures that the given key has a valid length for the chosen cipher,
+     * while also taking into account backwards compatibility (v5.0 generated
+     * 32 byte keys for the AES-128-CBC-cipher).
+     *
+     * @param string $cipher
+     * @param string mode
+     * @param string $key
+     * @throws \RuntimeException
+     * @return void
+     *
      */
-    protected function checkKey()
+    public function ensureValid($cipher, $mode, $key)
     {
-        if ($this->key === '' || $this->key === 'SomeRandomString') {
-            throw new InvalidKeyException('The encryption key must be not be empty.');
+        $length = mb_strlen($key, '8bit');
+
+        if (isset($this->lengths[$cipher.'-'.$mode]) && in_array($length, $this->lengths[$cipher.'-'.$mode], true)) {
+            return;
         }
 
-        if (strlen($this->key) < '32') {
-            throw new InvalidKeyException('The encryption key must be a random string.');
-        }
+        $validCiphers = implode(', ', array_keys($this->lengths));
+
+        throw new \RuntimeException("The only supported ciphers are [$validCiphers] with the correct key lengths.");
     }
 }

@@ -19,6 +19,8 @@
     ],
     "require": {
         "php"                                : ">=5.5.9",
+        "ext-curl"                           : "*",
+        "ext-openssl"                        : "*",
         "ext-mbstring"                       : "*",
         "classpreloader/classpreloader"      : "~1.4",
         "container-interop/container-interop": "~1.1",
@@ -67,7 +69,7 @@
     },
     "require-dev": {
         "aws/aws-sdk-php"                    : "~3.0",
-        "fabpot/php-cs-fixer"                : "~1.8",
+        "fabpot/php-cs-fixer"                : "~1.8.1",
         "mockery/mockery"                    : "~0.9.4",
         "phpunit/phpunit"                    : "~4.6.9",
         "predis/predis"                      : "~1.0.1",
@@ -94,8 +96,6 @@
     },
     "suggest": {
         "aws/aws-sdk-php"                    : "Required to use the SQS queue driver and SES mail driver (~3.0).",
-        "ext-mcrypt"                         : "*",
-        "ext-openssl"                        : "*",
         "ext-curl"                           : "Required to use for guzzle (*)",
         "guzzlehttp/guzzle"                  : "Required to use the Mailgun, Mandrill, and Postmark mail drivers (~6.0).",
         "league/flysystem-aws-s3-v3"         : "Required to use the Flysystem S3 driver for SDK3 (~1.0).",

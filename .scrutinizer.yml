@@ -91,8 +91,20 @@ checks:
         avoid_multiple_statements_on_same_line: true
         avoid_fixme_comments: true
 
+build:
+    environment:
+        php: '5.5.25'
+    dependencies:
+        override:
+            - 'composer install'
+
 tools:
+    external_code_coverage:      true
     php_changetracking:          true
+
+    php_code_sniffer:
+        config:
+            standard:            PSR-2
 
     php_cs_fixer:
         enabled:                 true

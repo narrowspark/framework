@@ -134,7 +134,11 @@ class FilesystemAdapter implements CloudFilesystemContract
      */
     public function prepend($path, $data)
     {
-        return $this->put($path, $data.PHP_EOL.$this->get($path));
+        if ($this->exists($path)) {
+            return $this->put($path, $data.PHP_EOL.$this->get($path));
+        }
+
+        return $this->put($path, $data);
     }
 
     /**
@@ -147,7 +151,11 @@ class FilesystemAdapter implements CloudFilesystemContract
      */
     public function append($path, $data)
     {
-        return $this->put($path, $this->get($path).PHP_EOL.$data);
+         if ($this->exists($path)) {
+             return $this->put($path, $this->get($path).PHP_EOL.$data);
+         }
+
+         return $this->put($path, $data);
     }
 
     /**
@@ -307,15 +315,11 @@ class FilesystemAdapter implements CloudFilesystemContract
      */
     protected function filterContentsByType($contents, $type)
     {
-        $contents = Collection::make($contents);
-
-        $contents = $contents->filter(function ($value) use ($type) {
-            return $value['type'] === $type;
-        })->map(function ($value) {
-            return $value['path'];
-        });
-
-        return $contents->values()->all();
+        return Collection::make($contents)
+           ->where('type', $type)
+           ->pluck('path')
+           ->values()
+           ->all();
     }
 
     /**
