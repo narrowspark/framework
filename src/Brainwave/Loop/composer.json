@@ -25,23 +25,23 @@
     },
     "autoload": {
         "psr-4": {
-            "Brainwave\\Loop\\"            : ""
+            "Brainwave\\Loop\\"              : ""
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Brainwave\\Loop\\Tests\\"     : "Tests/"
+            "Brainwave\\Loop\\Tests\\"       : "Tests/"
         }
     },
     "extra": {
         "branch-alias": {
-            "dev-master"                     : "0.9.8-dev"
+            "dev-master"                     : "0.10.0-dev"
         }
     },
     "suggest": {
-        "ext-libevent"                       : "Allows for use of a more performant event-loop implementation. (>=0.1)",
+        "ext-libevent"                       : "Similar to the event extension, it allows for a more performant event loop implementation. (>=0.1)",
         "ext-libev"                          : "Allows for use of a more performant event-loop implementation. (~1.0)",
-        "ext-event"                          : "Allows for use of a more performant event-loop implementation. (*)"
+        "ext-event"                          : "Allows for the most performant event loop implementation.. (*)"
     },
     "minimum-stability"                      : "dev",
     "prefer-stable"                          : true

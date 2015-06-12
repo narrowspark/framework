@@ -17,7 +17,6 @@ namespace Brainwave\Loop;
 
 use Brainwave\Contracts\Loop\Adapter as AdapterContract;
 
-
 /**
  * Repository.
  *
@@ -35,6 +34,13 @@ class Repository extends AnotherClass
     protected $adapter;
 
     /**
+     * Loop driver supported.
+     *
+     * @var bool
+     */
+    protected static $supported = false;
+
+    /**
      * Create a new loop repository instance.
      *
      * @param \Brainwave\Contracts\Loop\Adapter
@@ -42,5 +48,17 @@ class Repository extends AnotherClass
     public function __construct(AdapterContract $adapter)
     {
         $this->adapter = $adapter;
+
+        self::$supported = $driver::isSupported();
+    }
+
+    /**
+     * Check if the cache driver is supported.
+     *
+     * @return bool
+     */
+    public static function isSupported()
+    {
+        return static::$supported;
     }
 }
