@@ -25,18 +25,21 @@ namespace Brainwave\Contracts\Loop;
 interface Loop
 {
     /**
-     * Determines if the necessary components for the loop class are available.
-     *
-     * @return bool
-     */
-    public static function enabled();
-
-    /**
      * Executes a single tick, processing callbacks and handling any available I/O.
      *
      * @param bool $blocking Determines if the tick should block and wait for I/O if no other tasks are scheduled.
      */
     public function tick($blocking = true);
+
+    /**
+     * Schedules a callback to be executed immediately in the next tick.
+     *
+     * This function should be used when a callback needs to be executed later,
+     * but needs to do so before any more event callbacks are invoked.
+     *
+     * @param callable $callback
+     */
+    public function nextTick(callable $callback);
 
     /**
      * Schedules a callback to be executed in the future.
@@ -95,7 +98,7 @@ interface Loop
      * Define a callback function to be run after all I/O has been handled in the current tick.
      * Callbacks are called in the order defined.
      *
-     * @param callable $callback
+     * @param callable     $callback
      * @param mixed[]|null $args Array of arguments to be passed to the callback function.
      */
     public function schedule(callable $callback, array $args = null);

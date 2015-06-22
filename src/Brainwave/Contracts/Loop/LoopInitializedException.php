@@ -16,13 +16,13 @@ namespace Brainwave\Contracts\Loop;
  */
 
 /**
- * InitializedException.
+ * LoopInitializedException.
  *
  * @author  Daniel Bannert
  *
  * @since   0.10-dev
  */
-class InitializedException extends LogicException
+class LoopInitializedException extends \LogicException
 {
 
 }
