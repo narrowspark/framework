@@ -17,7 +17,6 @@ namespace Brainwave\Support;
 
 use Brainwave\Contracts\Encrypter\Encrypter as EncrypterContract;
 use Brainwave\Contracts\Support\Arrayable;
-use Brainwave\Contracts\Support\Collection as CollectionContract;
 use Brainwave\Contracts\Support\Jsonable;
 
 /**
@@ -33,8 +32,7 @@ class Collection implements
     \Countable,
     \IteratorAggregate,
     Jsonable,
-    \JsonSerializable,
-    CollectionContract
+    \JsonSerializable
 {
     /**
      * Key-value array of data.
@@ -104,20 +102,35 @@ class Collection implements
     }
 
     /**
-     * Add data to set.
+     * Get the max value of a given key.
      *
-     * @param array $items Key-value array of data to append to this set
+     * @param string|null $key
+     *
+     * @return mixed
      */
-    public function replace(array $items)
+    public function max($key = null)
     {
-        //TODO
-        foreach ($this->data as $key => $item) {
-            if ($callback($item, $key) === false) {
-                break;
-            }
-        }
+        return $this->reduce(function ($result, $item) use ($key) {
+            $value = Arr::dataGet($item, $key);
 
-        return $this;
+            return is_null($result) || $item->{$key} > $result ? $item->{$key} : $result;
+        });
+    }
+
+    /**
+     * Get the min value of a given key.
+     *
+     * @param string|null $key
+     *
+     * @return mixed
+     */
+    public function min($key = null)
+    {
+        return $this->reduce(function ($result, $item) use ($key) {
+            $value = Arr::dataGet($item, $key);
+
+            return is_null($result) || $value < $result ? $value : $result;
+        });
     }
 
     /**

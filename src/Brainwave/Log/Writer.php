@@ -53,6 +53,13 @@ class Writer implements LogContract, PsrLoggerInterface
     protected $dispatcher;
 
     /**
+     * The permission mode for for new log files.
+     *
+     * @var int|null
+     */
+    protected $filePermission;
+
+    /**
      * Create a new log writer instance.
      *
      * @param \Monolog\Logger                                             $monolog
@@ -154,6 +161,27 @@ class Writer implements LogContract, PsrLoggerInterface
     public function getEventDispatcher()
     {
         return $this->dispatcher;
+    }
+
+    /**
+     * Set the file permission for newly created files
+     *
+     * @param  int|null  $filePermission
+     * @return void
+     */
+    public function setFilePermission($filePermission)
+    {
+        $this->filePermission = $filePermission;
+    }
+
+    /**
+     * Get the file permission for creating files
+     *
+     * @return int|null
+     */
+    public function getFilePermission()
+    {
+        return $this->filePermission;
     }
 
     /**

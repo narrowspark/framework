@@ -15,8 +15,8 @@ namespace Brainwave\Support;
  * @version     0.10.0-dev
  */
 
-use Stringy\StaticStringy;
 use RandomLib\Factory as RandomLib;
+use Stringy\StaticStringy;
 
 /**
  * Str.
@@ -306,35 +306,36 @@ class Str extends StaticStringy
     /**
      * Get the string between the given start and end in the given string.
      *
-     * @param  string  $string
-     * @param  string  $start
-     * @param  string  $end
+     * @param string $string
+     * @param string $start
+     * @param string $end
+     *
      * @return string
      */
     public static function between($string, $start, $end)
     {
-        if ($start == '' && $end == '') {
+        if ($start === '' && $end === '') {
             return $string;
         }
 
-        if ($start != '' && strpos($string, $start) === false) {
+        if ($start !== '' && strpos($string, $start) === false) {
             return '';
         }
 
-        if ($end != '' && strpos($string, $end) === false) {
+        if ($end !== '' && strpos($string, $end) === false) {
             return '';
         }
 
-        if ($start == '') {
+        if ($start === '') {
             return substr($string, 0, strpos($string, $end));
         }
 
-        if ($end == '') {
+        if ($end === '') {
             return substr($string, strpos($string, $start) + strlen($start));
         }
 
         $stringWithoutStart = explode($start, $string)[1];
-        $middle = explode($end, $stringWithoutStart)[0];
+        $middle             = explode($end, $stringWithoutStart)[0];
 
         return $middle;
     }
