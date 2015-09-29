@@ -59,7 +59,7 @@ class Dispatcher implements EventDispatcherInterface
     public function __construct(EventDispatcherInterface $eventDispatcher, ContainerContract $container)
     {
         $this->eventDispatcher = $eventDispatcher;
-        $this->container = $container;
+        $this->container       = $container;
     }
 
     /**
@@ -81,7 +81,7 @@ class Dispatcher implements EventDispatcherInterface
         $method = $callback[1];
 
         $closure = function (Event $events) use ($serviceId, $method) {
-            call_user_func([$this->container[$serviceId], $method], $events);
+            call_user_func([$this->container->get($serviceId), $method], $events);
         };
 
         $this->listenerIds[$eventName][] = [$callback, $closure];

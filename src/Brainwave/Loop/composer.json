@@ -1,10 +1,10 @@
 {
-    "name"       : "brainwave/events",
+    "name"       : "brainwave/loop",
     "type"       : "library",
     "description": "Narrowspark Framework for Creative People.",
-    "keywords"   : ["narrowspark", "brainwave", "events", "symfony", "event-loop", "asynchronous"],
+    "keywords"   : ["narrowspark", "brainwave", "loop", "symfony", "event-loop", "asynchronous"],
     "license"    : "MIT",
-    "homepage"   : "http://github.com/n-brainwave/events",
+    "homepage"   : "http://github.com/n-brainwave/loop",
     "support"    : {
         "issues": "https://github.com/narrowspark/framework/issues",
         "source": "https://github.com/narrowspark/framework"
@@ -18,20 +18,19 @@
         }
     ],
     "require": {
-        "php"                                : ">=5.5.9",
+        "php"                                : ">=5.4.0",
         "brainwave/cotracts"                 : "self.version",
         "brainwave/container"                : "self.version",
-        "container-interop/container-interop": "~1.0",
-        "symfony/event-dispatcher"           : "~2.7"
+        "container-interop/container-interop": "~1.0"
     },
     "autoload": {
         "psr-4": {
-            "Brainwave\\Events\\"            : ""
+            "Brainwave\\Loop\\"              : ""
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Brainwave\\Events\\Tests\\"     : "Tests/"
+            "Brainwave\\Loop\\Tests\\"       : "Tests/"
         }
     },
     "extra": {
@@ -40,9 +39,9 @@
         }
     },
     "suggest": {
-        "ext-libevent"                       : "Allows for use of a more performant event-loop implementation. (>=0.1)",
+        "ext-libevent"                       : "Similar to the event extension, it allows for a more performant event loop implementation. (>=0.1)",
         "ext-libev"                          : "Allows for use of a more performant event-loop implementation. (~1.0)",
-        "ext-event"                          : "Allows for use of a more performant event-loop implementation. (*)"
+        "ext-event"                          : "Allows for the most performant event loop implementation.. (*)"
     },
     "minimum-stability"                      : "dev",
     "prefer-stable"                          : true
