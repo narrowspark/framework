@@ -1,6 +1,6 @@
 <?php
 
-namespace Brainwave\Events;
+namespace Brainwave\Events\Adapter;
 
 /**
  * Narrowspark - a PHP 5 framework.
@@ -15,15 +15,14 @@ namespace Brainwave\Events;
  * @version     0.10.0-dev
  */
 
-use Brainwave\Contracts\Queue\Factory as FactoryContract;
-
 /**
- * QueueManager.
+ * SyncAdapter.
  *
  * @author  Daniel Bannert
  *
  * @since   0.10-dev
  */
-class QueueManager implements FactoryContract
+class SyncAdapter extends BaseAdapter
 {
+
 }

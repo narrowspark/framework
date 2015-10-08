@@ -28,11 +28,11 @@
         }
     },
     "autoload-dev": {
-        "psr-4": { "Brainwave\\Queue\\Test\\": "Tests/" }
+        "psr-4": { "Brainwave\\Queue\\Test\\" : "Tests/" }
     },
     "extra": {
         "branch-alias": {
-            "dev-master"                      : "0.9.7-dev"
+            "dev-master"                      : "0.10.0-dev"
         }
     },
     "minimum-stability"                       : "dev",
