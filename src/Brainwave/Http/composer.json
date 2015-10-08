@@ -24,8 +24,8 @@
         "brainwave/contracts"          : "self.version",
         "brainwave/session"            : "self.version",
         "stack/builder"                : "~1.0.3",
-        "symfony/http-foundation"      : "~2.7",
-        "symfony/http-kernel"          : "~2.7"
+        "symfony/http-foundation"      : "~2.8|~3.0",
+        "symfony/http-kernel"          : "~2.8|~3.0"
     },
     "autoload": {
         "psr-4": {
