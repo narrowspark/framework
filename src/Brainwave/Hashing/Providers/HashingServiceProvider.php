@@ -12,13 +12,12 @@ namespace Brainwave\Hashing\Providers;
  *
  * @license     http://www.narrowspark.com/license
  *
- * @version     0.9.8-dev
+ * @version     0.10.0-dev
  */
 
 use Brainwave\Application\ServiceProvider;
 use Brainwave\Hashing\Generator as HashGenerator;
 use Brainwave\Hashing\Password;
-use RandomLib\Factory as RandomLib;
 
 /**
  * HashingServiceProvider.
@@ -44,30 +43,7 @@ class HashingServiceProvider extends ServiceProvider
     protected function registerHashGenerator()
     {
         $this->app->singleton('hash', function ($app) {
-            return new HashGenerator($app->get('hash.rand.generator'));
-        });
-    }
-
-    protected function registerRand()
-    {
-        $this->app->singleton('hash.rand', function () {
-            return new RandomLib();
-        });
-    }
-
-    protected function registerRandGenerator()
-    {
-        $this->app->bind('hash.rand.generator', function ($app) {
-            $generatorStrength = ucfirst(
-                $app->get('config')->get(
-                    'app::hash.generator.strength',
-                    'Medium'
-                )
-            );
-
-            $generator = sprintf('get%sStrengthGenerator', $generatorStrength);
-
-            return $app->get('hash.rand')->$generator();
+            return new HashGenerator($app->get('rand.generator'));
         });
     }
 
@@ -76,11 +52,6 @@ class HashingServiceProvider extends ServiceProvider
         $this->app->singleton('password', function () {
             return new Password();
         });
-    }
-
-    public function aliases()
-    {
-        return ['hash.rand' => 'RandomLib\Factory'];
     }
 
     /**
@@ -92,8 +63,6 @@ class HashingServiceProvider extends ServiceProvider
     {
         return [
             'hash',
-            'hash.rand',
-            'hash.rand.generator',
             'password',
         ];
     }

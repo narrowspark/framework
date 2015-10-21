@@ -18,8 +18,8 @@
         }
     ],
     "require": {
-        "php"                          : ">=5.4.0",
-        "nesbot/carbon"                : "~1.18",
+        "php"                          : ">=5.5.9",
+        "nesbot/carbon"                : "~1.20",
         "brainwave/container"          : "self.version",
         "brainwave/config"             : "self.version",
         "brainwave/cotracts"           : "self.version"
@@ -39,7 +39,7 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-master"               : "0.9.8-dev"
+            "dev-master"               : "0.10.0-dev"
         }
     },
     "suggest": {

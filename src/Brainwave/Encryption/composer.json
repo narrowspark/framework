@@ -1,0 +1,46 @@
+{
+    "name"       : "brainwave/encrypter",
+    "type"       : "library",
+    "description": "Narrowspark Framework for Creative People.",
+    "keywords"   : ["narrowspark", "brainwave", "encrypter"],
+    "license"    : "MIT",
+    "homepage"   : "http://github.com/n-brainwave/encrypter",
+    "support"    : {
+        "issues": "https://github.com/narrowspark/framework/issues",
+        "source": "https://github.com/narrowspark/framework"
+    },
+    "authors"    : [
+        {
+          "name"    : "Daniel Bannert",
+          "email"   : "d.bannert@anolilab.de",
+          "homepage": "http://www.anolilab.de",
+          "role"    : "Developer"
+        }
+    ],
+    "require": {
+        "php"                                : ">=5.5.9",
+        "ext-openssl"                        : "*",
+        "brainwave/config"                   : "self.version",
+        "brainwave/contracts"                : "self.version",
+        "ircmaxell/random-lib"               : "~1.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "Brainwave\\Encrypter\\"         : ""
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Brainwave\\Encrypter\\Tests\\"  : "Tests/"
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master"                     : "0.10.0-dev"
+        }
+    },
+    "suggest": {
+    },
+    "minimum-stability"                      : "dev",
+    "prefer-stable"                          : true
+}

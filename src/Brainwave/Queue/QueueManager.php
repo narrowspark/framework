@@ -2,7 +2,7 @@
 
 namespace Brainwave\Events;
 
-/*
+/**
  * Narrowspark - a PHP 5 framework.
  *
  * @author      Daniel Bannert <info@anolilab.de>
@@ -12,7 +12,7 @@ namespace Brainwave\Events;
  *
  * @license     http://www.narrowspark.com/license
  *
- * @version     0.9.7-dev
+ * @version     0.10.0-dev
  */
 
 use Brainwave\Contracts\Queue\Factory as FactoryContract;
@@ -22,7 +22,7 @@ use Brainwave\Contracts\Queue\Factory as FactoryContract;
  *
  * @author  Daniel Bannert
  *
- * @since   0.9.7-dev
+ * @since   0.10-dev
  */
 class QueueManager implements FactoryContract
 {

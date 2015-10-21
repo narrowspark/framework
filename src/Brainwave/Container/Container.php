@@ -12,7 +12,7 @@ namespace Brainwave\Container;
  *
  * @license     http://www.narrowspark.com/license
  *
- * @version     0.9.8-dev
+ * @version     0.10.0-dev
  */
 
 use Brainwave\Container\Exception\BindingResolutionException;
@@ -423,6 +423,18 @@ class Container implements \ArrayAccess, ContainerInteropInterface, ContainerCon
     }
 
     /**
+     * Add a contextual binding to the container.
+     *
+     * @param string          $concrete
+     * @param string          $alias
+     * @param \Closure|string $implementation
+     */
+    public function addContextualBinding($concrete, $alias, $implementation)
+    {
+        $this->contextual[$concrete][$alias] = $implementation;
+    }
+
+    /**
      * Get the alias for an abstract if available.
      *
      * @param string $alias
@@ -459,18 +471,6 @@ class Container implements \ArrayAccess, ContainerInteropInterface, ContainerCon
         }
 
         return $object;
-    }
-
-    /**
-     * Add a contextual binding to the container.
-     *
-     * @param string          $concrete
-     * @param string          $alias
-     * @param \Closure|string $implementation
-     */
-    protected function addContextualBinding($concrete, $alias, $implementation)
-    {
-        $this->contextual[$concrete][$alias] = $implementation;
     }
 
     /**

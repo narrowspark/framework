@@ -25,7 +25,7 @@ namespace Brainwave\Contracts\Queue;
 interface Consumer
 {
     /**
-     * @param JobEvent $event
+     * @param $event
      */
-    public function consume(JobEvent $event);
+    public function consume($event);
 }

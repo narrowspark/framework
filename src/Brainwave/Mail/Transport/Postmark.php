@@ -12,10 +12,11 @@ namespace Brainwave\Mail\Transport;
  *
  * @license     http://www.narrowspark.com/license
  *
- * @version     0.9.8-dev
+ * @version     0.10.0-dev
  */
 
 use GuzzleHttp\Client;
+use GuzzleHttp\ClientInterface;
 
 /**
  * PostmarkTransport.
@@ -27,6 +28,13 @@ use GuzzleHttp\Client;
 class Postmark implements \Swift_Transport
 {
     /**
+     * Guzzle client instance.
+     *
+     * @var \GuzzleHttp\ClientInterface
+     */
+    protected $client;
+
+    /**
      * The Postmark Server Token key.
      *
      * @var string
@@ -36,10 +44,12 @@ class Postmark implements \Swift_Transport
     /**
      * Create a new Postmark transport instance.
      *
-     * @param string $serverToken
+     * @param \GuzzleHttp\ClientInterface $client
+     * @param string                      $serverToken
      */
-    public function __construct($serverToken)
+    public function __construct(ClientInterface $client, $serverToken)
     {
+        $this->client      = $client;
         $this->serverToken = $serverToken;
     }
 
@@ -72,14 +82,14 @@ class Postmark implements \Swift_Transport
      */
     public function send(\Swift_Mime_Message $message, &$failedRecipients = null)
     {
-        $client = $this->getHttpClient();
-
         return $client->post('https://api.postmarkapp.com/email', [
             'headers' => [
                 'X-Postmark-Server-Token' => $this->serverToken,
             ],
             'json' => $this->getMessagePayload($message),
         ]);
+
+        return $this->client->post($this->url, $options);
     }
 
     /**
@@ -264,16 +274,6 @@ class Postmark implements \Swift_Transport
     public function registerPlugin(\Swift_Events_EventListener $plugin)
     {
         //
-    }
-
-    /**
-     * Get a new HTTP client instance.
-     *
-     * @return \GuzzleHttp\Client
-     */
-    protected function getHttpClient()
-    {
-        return new Client();
     }
 
     /**

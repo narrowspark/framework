@@ -12,7 +12,7 @@ namespace Brainwave\Filesystem;
  *
  * @license     http://www.narrowspark.com/license
  *
- * @version     0.9.8-dev
+ * @version     0.10.0-dev
  */
 use Brainwave\Contracts\Filesystem\FileNotFoundException as ContractFileNotFoundException;
 use Brainwave\Contracts\Filesystem\Filesystem as CloudFilesystemContract;
@@ -134,7 +134,11 @@ class FilesystemAdapter implements CloudFilesystemContract
      */
     public function prepend($path, $data)
     {
-        return $this->put($path, $data.PHP_EOL.$this->get($path));
+        if ($this->exists($path)) {
+            return $this->put($path, $data.PHP_EOL.$this->get($path));
+        }
+
+        return $this->put($path, $data);
     }
 
     /**
@@ -147,7 +151,11 @@ class FilesystemAdapter implements CloudFilesystemContract
      */
     public function append($path, $data)
     {
-        return $this->put($path, $this->get($path).PHP_EOL.$data);
+         if ($this->exists($path)) {
+             return $this->put($path, $this->get($path).PHP_EOL.$data);
+         }
+
+         return $this->put($path, $data);
     }
 
     /**
@@ -307,15 +315,11 @@ class FilesystemAdapter implements CloudFilesystemContract
      */
     protected function filterContentsByType($contents, $type)
     {
-        $contents = Collection::make($contents);
-
-        $contents = $contents->filter(function ($value) use ($type) {
-            return $value['type'] === $type;
-        })->map(function ($value) {
-            return $value['path'];
-        });
-
-        return $contents->values()->all();
+        return Collection::make($contents)
+           ->where('type', $type)
+           ->pluck('path')
+           ->values()
+           ->all();
     }
 
     /**
@@ -326,6 +330,20 @@ class FilesystemAdapter implements CloudFilesystemContract
     public function getDriver()
     {
         return $this->driver;
+    }
+
+    /**
+     * Call a Flysystem driver plugin.
+     *
+     * @param  string  $method
+     * @param  array  $arguments
+     * @return mixed
+     *
+     * @throws \BadMethodCallException
+     */
+    public function __call($method, array $arguments)
+    {
+        return $this->driver->__call($method, $arguments);
     }
 
     /**

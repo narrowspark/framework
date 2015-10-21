@@ -12,7 +12,7 @@ namespace Brainwave\Log\Traits;
  *
  * @license     http://www.narrowspark.com/license
  *
- * @version     0.9.8-dev
+ * @version     0.10.0-dev
  */
 
 /**
@@ -30,16 +30,16 @@ trait FormatterTrait
      * @var array
      */
     protected $formatter = [
-        'line' => '\Monolog\Formatter\LineFormatter',
-        'html' => '\Monolog\Formatter\HtmlFormatter',
-        'normalizer' => '\Monolog\Formatter\NormalizerFormatter',
-        'scalar' => '\Monolog\Formatter\ScalarFormatter',
-        'json' => '\Monolog\Formatter\JsonFormatter',
-        'wildfire' => '\Monolog\Formatter\WildfireFormatter',
-        'chrome' => '\Monolog\Formatter\ChromePHPFormatter',
-        'gelf' => '\Monolog\Formatter\GelfFormatter',
-        'logstash' => '\Monolog\Formatter\LogstashFormatter',
-        'elastica' => '\Monolog\Formatter\ElasticaFormatter',
+        'line' => \Monolog\Formatter\LineFormatter::class,
+        'html' => \Monolog\Formatter\HtmlFormatter::class,
+        'normalizer' => \Monolog\Formatter\NormalizerFormatter::class,
+        'scalar' => \Monolog\Formatter\ScalarFormatter::class,
+        'json' => \Monolog\Formatter\JsonFormatter::class,
+        'wildfire' => \Monolog\Formatter\WildfireFormatter::class,
+        'chrome' => \Monolog\Formatter\ChromePHPFormatter::class,
+        'gelf' => \Monolog\Formatter\GelfFormatter::class,
+        'logstash' => \Monolog\Formatter\LogstashFormatter::class,
+        'elastica' => \Monolog\Formatter\ElasticaFormatter::class,
     ];
 
     /**

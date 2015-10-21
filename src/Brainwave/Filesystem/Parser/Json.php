@@ -12,7 +12,7 @@ namespace Brainwave\Filesystem\Parser;
  *
  * @license     http://www.narrowspark.com/license
  *
- * @version     0.9.8-dev
+ * @version     0.10.0-dev
  */
 
 use Brainwave\Contracts\Filesystem\LoadingException;
@@ -95,7 +95,7 @@ class Json implements ParserContract
      *
      * @param string $filename
      *
-     * @return array
+     * @return string|null
      */
     private function parseJson($filename)
     {

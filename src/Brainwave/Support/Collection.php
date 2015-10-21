@@ -12,12 +12,11 @@ namespace Brainwave\Support;
  *
  * @license     http://www.narrowspark.com/license
  *
- * @version     0.9.8-dev
+ * @version     0.10.0-dev
  */
 
 use Brainwave\Contracts\Encrypter\Encrypter as EncrypterContract;
 use Brainwave\Contracts\Support\Arrayable;
-use Brainwave\Contracts\Support\Collection as CollectionContract;
 use Brainwave\Contracts\Support\Jsonable;
 
 /**
@@ -33,8 +32,7 @@ class Collection implements
     \Countable,
     \IteratorAggregate,
     Jsonable,
-    \JsonSerializable,
-    CollectionContract
+    \JsonSerializable
 {
     /**
      * Key-value array of data.
@@ -50,9 +48,7 @@ class Collection implements
      */
     public function __construct($data = [])
     {
-        $data = !is_null($data) ? $this->getArrayableItems($data) : [];
-
-        $this->data = is_array($data) ? $data : (array) $data;
+        $this->data = is_array($data) ? $data : $this->getArrayableItems($data);
     }
 
     /**
@@ -106,20 +102,35 @@ class Collection implements
     }
 
     /**
-     * Add data to set.
+     * Get the max value of a given key.
      *
-     * @param array $items Key-value array of data to append to this set
+     * @param string|null $key
+     *
+     * @return mixed
      */
-    public function replace(array $items)
+    public function max($key = null)
     {
-        //TODO
-        foreach ($this->data as $key => $item) {
-            if ($callback($item, $key) === false) {
-                break;
-            }
-        }
+        return $this->reduce(function ($result, $item) use ($key) {
+            $value = Arr::dataGet($item, $key);
 
-        return $this;
+            return is_null($result) || $item->{$key} > $result ? $item->{$key} : $result;
+        });
+    }
+
+    /**
+     * Get the min value of a given key.
+     *
+     * @param string|null $key
+     *
+     * @return mixed
+     */
+    public function min($key = null)
+    {
+        return $this->reduce(function ($result, $item) use ($key) {
+            $value = Arr::dataGet($item, $key);
+
+            return is_null($result) || $value < $result ? $value : $result;
+        });
     }
 
     /**
@@ -158,10 +169,7 @@ class Collection implements
     /**
      * Diff the collection with the given items.
      *
-     * @param  \Brainwave\Support\Collection|
-     *         Arrayable|
-     *         array $items
-     * @param Collection $items
+     * @param mixed $items
      *
      * @return static
      */
@@ -189,27 +197,18 @@ class Collection implements
     }
 
     /**
-     * Fetch a nested element of the collection.
-     *
-     * @param string $key
-     *
-     * @return static
-     */
-    public function fetch($key)
-    {
-        return new static (array_fetch($this->data, $key));
-    }
-
-    /**
      * Run a filter over each of the items.
      *
-     * @param callable $callback
-     *
+     * @param  callable|null  $callback
      * @return static
      */
-    public function filter(callable $callback)
+    public function filter(callable $callback = null)
     {
-        return new static (array_filter($this->data, $callback));
+        if ($callback === null) {
+            return new static(array_filter($this->items));
+        }
+
+        return new static(array_filter($this->items, $callback));
     }
 
     /**
@@ -302,14 +301,21 @@ class Collection implements
         return new static(array_keys($this->data));
     }
 
-    /**
-     * Get the last item from the collection.
+    /* Get the last item from the collection.
      *
-     * @return mixed|null
+     * @param  callable|null  $callback
+     * @param  mixed  $default
+     * @return mixed
      */
-    public function last()
+    public function last(callable $callback = null, $default = null)
     {
         return count($this->data) > 0 ? end($this->data) : null;
+
+        if (is_null($callback)) {
+            return count($this->data) > 0 ? end($this->data) : Arr::value($default);
+        }
+
+        return Arr::last($this->data, $callback, $default);
     }
 
     /**
@@ -442,7 +448,10 @@ class Collection implements
      */
     public function map(callable $callback)
     {
-        return new static (array_map($callback, $this->data, array_keys($this->data)));
+        $keys = array_keys($this->data);
+        $data = array_map($callback, $this->data, $keys);
+
+        return new static(array_combine($keys, $data));
     }
 
     /**
@@ -476,9 +485,7 @@ class Collection implements
     /**
      * Merge the collection with the given items.
      *
-     * @param  \Brainwave\Support\Collection|
-     *         Arrayable|
-     *         array $items
+     * @param mixed $items
      *
      * @return static
      */
@@ -597,7 +604,7 @@ class Collection implements
     {
         $items = $this->data;
 
-        array_shuffle($items);
+        shuffle($items);
 
         return new static($items);
     }
@@ -711,7 +718,7 @@ class Collection implements
     public function splice($offset, $length = null, $replacement = [])
     {
         if (func_num_args() === 1) {
-            return new static(array_splice($this->items, $offset));
+            return new static(array_splice($this->data, $offset));
         }
 
         return new static (array_splice($this->data, $offset, $length, $replacement));
@@ -764,9 +771,7 @@ class Collection implements
      */
     public function transform(callable $callback)
     {
-        $keys = array_keys($this->items);
-
-        $this->data = array_combine($keys, array_map($callback, $this->data, $keys));
+        $this->data = $this->map($callback)->all();
 
         return $this;
     }
@@ -781,7 +786,7 @@ class Collection implements
     public function unique($key = null)
     {
         if (is_null($key)) {
-            return new static(array_unique($this->data));
+            return new static(array_unique($this->data, SORT_REGULAR));
         }
 
         $key = $this->valueRetriever($key);
@@ -819,7 +824,9 @@ class Collection implements
     public function random($amount = 1)
     {
         if ($amount > ($count = $this->count())) {
-            throw new \InvalidArgumentException(sprintf('You requested [%s] items, but there are only [%s] items in the collection', $amount, $count));
+            throw new \InvalidArgumentException(
+                sprintf('You requested [%s] items, but there are only [%s] items in the collection', $amount, $count)
+            );
         }
 
         $keys = array_rand($this->data, $amount);
@@ -960,10 +967,7 @@ class Collection implements
     /**
      * Intersect the collection with the given items.
      *
-     * @param  \Brainwave\Support\Collection|
-     *         Arrayable|
-     *         array $items
-     * @param Collection $items
+     * @param mixed $items
      *
      * @return static
      */
@@ -1047,6 +1051,26 @@ class Collection implements
     }
 
     /**
+     * Checks if the collection is associative.
+     *
+     * @return bool
+     */
+    public function isAssociative()
+    {
+        return !$this->isSequential();
+    }
+
+    /**
+     * Checks if the collection is sequential.
+     *
+     * @return bool
+     */
+    public function isSequential()
+    {
+        return $this->keys()->filter('is_string')->isEmpty();
+    }
+
+    /**
      * Get collection iterator.
      *
      * @return \ArrayIterator
@@ -1116,21 +1140,21 @@ class Collection implements
     /**
      * Results array of items from Collection or Arrayable.
      *
-     * @param  \Brainwave\Support\Collection|
-     *         Arrayable|
-     *         array $items
+     * @param mixed $items
      *
      * @return array
      */
     protected function getArrayableItems($items)
     {
         if ($items instanceof self) {
-            $items = $items->all();
+            return $items->all();
         } elseif ($items instanceof Arrayable) {
-            $items = $items->toArray();
+            return $items->toArray();
+        } elseif ($items instanceof Jsonable) {
+            return json_decode($items->toJson(), true);
         }
 
-        return $items;
+        return (array) $items;
     }
 
     /**
@@ -1147,7 +1171,7 @@ class Collection implements
         }
 
         return function ($item) use ($value) {
-            return Arr::get($item, $value);
+            return Arr::dataGet($item, $value);
         };
     }
 

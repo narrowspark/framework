@@ -12,7 +12,7 @@ namespace Brainwave\Cache;
  *
  * @license     http://www.narrowspark.com/license
  *
- * @version     0.9.8-dev
+ * @version     0.10.0-dev
  */
 
 use Brainwave\Contracts\Cache\Adapter as AdapterContract;
@@ -57,13 +57,14 @@ class Repository implements CacheContract, \ArrayAccess
     public function __construct(AdapterContract $driver = null)
     {
         $this->driver = $driver;
+
         self::$supported = $driver::isSupported();
     }
 
     /**
      * Check if the cache driver is supported.
      *
-     * @return bool Returns TRUE if supported or FALSE if not.
+     * @return bool
      */
     public static function isSupported()
     {

@@ -9,7 +9,7 @@ namespace Brainwave\Support\Test;
  * @copyright   2015 Daniel Bannert
  * @link        http://www.narrowspark.de
  * @license     http://www.narrowspark.com/license
- * @version     0.9.8-dev
+ * @version     0.10.0-dev
  * @package     Narrowspark/framework
  *
  * For the full copyright and license information, please view the LICENSE
@@ -128,5 +128,17 @@ class StrTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('narrowspark_php_framework', Str::snake('Narrowspark_ _Php_ _Framework'));
         $this->assertEquals('narrowspark_php_framework', Str::snake('Narrowspark     Php    Framework'));
         $this->assertEquals('narrowspaaaark_phppp_framewoooork!!!', Str::snake('Narrowspaaaark Phppp Framewoooork!!!'));
+    }
+
+    public function testBetween()
+    {
+        $this->assertEquals('Middle', Str::between('StartMiddleEnd', 'Start', 'End'));
+        $this->assertEquals('', Str::between('MiddleEnd', 'Start', 'End'));
+        $this->assertEquals('', Str::between('StartMiddle', 'Start', 'End'));
+        $this->assertEquals('', Str::between('StartMiddleEnd', 'End', 'Start'));
+        $this->assertEquals('Middle', Str::between('StartMiddleStart', 'Start', 'Start'));
+        $this->assertEquals('MiddleEnd', Str::between('StartMiddleEnd', 'Start', ''));
+        $this->assertEquals('StartMiddle', Str::between('StartMiddleEnd', '', 'End'));
+        $this->assertEquals('StartMiddleEnd', Str::between('StartMiddleEnd', '', ''));
     }
 }
