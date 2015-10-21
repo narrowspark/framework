@@ -18,7 +18,7 @@
         }
     ],
     "require": {
-        "php"                                : ">=5.5.9",
+        "php"                                : ">=5.6",
         "brainwave/contracts"                : "self.version",
         "brainwave/events"                   : "self.version",
         "brainwave/filesystem"               : "self.version",
@@ -30,7 +30,9 @@
         "league/plates"                      : "~3.1",
         "mthaml/mthaml"                      : "~1.6.0",
         "twig/twig"                          : "~1.16.3",
-        "pyrocms/lex"                        : "~2.2"
+        "pyrocms/lex"                        : "~2.2",
+        "fabpot/php-cs-fixer"                : "~1.10.1",
+        "phpunit/phpunit"                    : "~5.0.6"
     },
     "autoload": {
         "psr-4": {

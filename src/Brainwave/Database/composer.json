@@ -18,7 +18,7 @@
         }
     ],
     "require": {
-        "php"                                : ">=5.5.9",
+        "php"                                : ">=5.6",
         "ext-pdo"                            : "*",
         "brainwave/cache"                    : "self.version",
         "brainwave/config"                   : "self.version",
@@ -26,6 +26,10 @@
         "brainwave/contracts"                : "self.version",
         "brainwave/support"                  : "self.version",
         "psr/log"                            : "~1.0"
+    },
+    "require-dev": {
+        "fabpot/php-cs-fixer"                : "~1.10.1",
+        "phpunit/phpunit"                    : "~5.0.6"
     },
     "autoload": {
         "psr-4": {
