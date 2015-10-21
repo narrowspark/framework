@@ -18,7 +18,7 @@
         }
     ],
     "require": {
-        "php"                                : ">=5.5.9",
+        "php"                                : ">=5.6",
         "brainwave/contracts"                : "self.version",
         "container-interop/container-interop": "~1.0",
         "danielstjules/stringy"              : "~1.9",
@@ -26,7 +26,9 @@
         "ircmaxell/random-lib"               : "~1.1"
     },
     "require-dev": {
-        "mockery/mockery"                    : "~0.9.3"
+        "mockery/mockery"                    : "~0.9.3",
+        "fabpot/php-cs-fixer"                : "~1.10.1",
+        "phpunit/phpunit"                    : "~5.0.6"
     },
     "autoload": {
         "psr-4": {

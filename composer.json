@@ -18,24 +18,22 @@
         }
     ],
     "require": {
-        "php"                                : ">=5.5.9",
+        "php"                                : ">=5.6",
         "ext-curl"                           : "*",
         "ext-openssl"                        : "*",
         "ext-mbstring"                       : "*",
-        "classpreloader/classpreloader"      : "~1.4",
+        "classpreloader/classpreloader"      : "~2.0",
         "container-interop/container-interop": "~1.1",
-        "danielstjules/stringy"              : "~1.10",
+        "danielstjules/stringy"              : "~2.1.0",
         "filp/whoops"                        : "~1.1.7",
         "ircmaxell/random-lib"               : "~1.1",
         "league/flysystem"                   : "~1.0.15",
-        "monolog/monolog"                    : "~1.13.1",
+        "monolog/monolog"                    : "~1.17.2",
         "mpoiriert/invoker"                  : "~1.1",
         "nesbot/carbon"                      : "~1.20",
         "nikic/fast-route"                   : "~0.6",
-        "psy/psysh"                          : "~0.4.4",
-        "stecman/symfony-console-completion" : "~0.5.1",
-        "swiftmailer/swiftmailer"            : "~5.4",
-        "stack/builder"                      : "~1.0.3",
+        "psy/psysh"                          : "~0.5.2",
+        "stecman/symfony-console-completion" : "~0.6.0",
         "symfony/console"                    : "~2.8|~3.0",
         "symfony/debug"                      : "~2.8|~3.0",
         "symfony/event-dispatcher"           : "~2.8|~3.0",
@@ -43,6 +41,8 @@
         "symfony/http-foundation"            : "~2.8|~3.0",
         "symfony/http-kernel"                : "~2.8|~3.0",
         "symfony/var-dumper"                 : "~2.8|~3.0",
+        "swiftmailer/swiftmailer"            : "~5.4",
+        "stack/builder"                      : "~1.0.3",
         "vlucas/phpdotenv"                   : "~2.0.1"
     },
     "replace": {
@@ -69,11 +69,11 @@
     },
     "require-dev": {
         "aws/aws-sdk-php"                    : "~3.0",
-        "fabpot/php-cs-fixer"                : "~1.8.1",
+        "fabpot/php-cs-fixer"                : "~1.10.1",
         "mockery/mockery"                    : "~0.9.4",
-        "phpunit/phpunit"                    : "~4.6.9",
+        "phpunit/phpunit"                    : "~5.0.6",
         "predis/predis"                      : "~1.0.1",
-        "sensiolabs/security-checker"        : "~2.0.5",
+        "sensiolabs/security-checker"        : "~3.0.1",
         "fzaninotto/faker"                   : "~1.4"
     },
     "autoload": {
@@ -88,10 +88,10 @@
     },
     "scripts": {
         "post-install-cmd": [
-            "php vendor/bin/security-checker security:check --format=simple"
+            "sh vendor/bin/security-checker security:check --format=simple"
         ],
         "post-update-cmd": [
-            "php vendor/bin/security-checker security:check --format=simple"
+            "sh vendor/bin/security-checker security:check --format=simple"
         ]
     },
     "suggest": {
