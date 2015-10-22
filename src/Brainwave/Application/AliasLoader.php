@@ -32,11 +32,11 @@ class AliasLoader
     protected $aliases;
 
     /**
-     * Indicates if a loader has been registered.
+     * Whether or not the loader has been registered.
      *
      * @var bool
      */
-    protected $registered = false;
+    protected $isRegistered = false;
 
     /**
      * The singleton instance of the loader.
@@ -99,7 +99,14 @@ class AliasLoader
      */
     public function alias($class, $alias)
     {
+        // Ensure aliases are only added once
+        if (isset($this->aliases[$class])) {
+            throw new \RuntimeException("The alias, {$class}, has already been added and cannot be modified.");
+        }
+
         $this->aliases[$class] = $alias;
+
+        return $this;
     }
 
     /**
@@ -107,10 +114,10 @@ class AliasLoader
      */
     public function register()
     {
-        if (!$this->registered) {
+        if (!$this->isRegistered) {
             $this->prependToLoaderStack();
 
-            $this->registered = true;
+            $this->isRegistered = true;
         }
     }
 
@@ -149,7 +156,7 @@ class AliasLoader
      */
     public function isRegistered()
     {
-        return $this->registered;
+        return $this->isRegistered;
     }
 
     /**
@@ -159,7 +166,7 @@ class AliasLoader
      */
     public function setRegistered($value)
     {
-        $this->registered = $value;
+        $this->isRegistered = $value;
     }
 
     /**

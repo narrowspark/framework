@@ -24,6 +24,6 @@ use Interop\Container\Exception\ContainerException as InteropNotFoundException;
  *
  * @since   0.9.4-dev
  */
-class NotFoundException extends \Exception implements InteropNotFoundException
+class NotFoundException extends \InvalidArgumentException implements InteropNotFoundException
 {
 }

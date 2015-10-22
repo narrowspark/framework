@@ -62,11 +62,11 @@ class Container implements \ArrayAccess, ContainerInteropInterface, ContainerCon
     protected $singletons = [];
 
     /**
-     * Array containing frozen instances.
+     * Array containing immutable instances.
      *
      * @var array
      */
-    protected $frozen = [];
+    protected $immutable = [];
 
     /**
      * Array containing every non-object binding.
@@ -124,7 +124,7 @@ class Container implements \ArrayAccess, ContainerInteropInterface, ContainerCon
      */
     public function alias($alias, $abstract)
     {
-        $this->keys[$alias] = true;
+        $this->keys[$alias] =
         $this->keys[$abstract] = true;
         $this->aliases[$alias] = $abstract;
     }
@@ -142,7 +142,7 @@ class Container implements \ArrayAccess, ContainerInteropInterface, ContainerCon
      */
     public function bind($alias, $concrete = null, $singleton = false)
     {
-        $this->notFrozen($alias);
+        $this->notImmutable($alias);
 
         // If the given types are actually an array, we will assume an alias is being
         // defined and will grab this "real" abstract class name and register this
@@ -187,54 +187,59 @@ class Container implements \ArrayAccess, ContainerInteropInterface, ContainerCon
     /**
      * Resolve the given type from the container.
      *
-     * @param string $alias
+     * @param string $id
      * @param array  $args
      *
-     * @throws NotFoundException
+     * @throws NotFoundException  No entry was found for this identifier.
+     * @throws ContainerException Error while retrieving the entry.
      *
      * @return mixed
      */
-    public function make($alias, array $args = [])
+    public function make($id, array $args = [])
     {
-        $alias = $this->getAlias($alias);
+        $alias = $this->getAlias($id);
 
-        if (!$this->bound($alias)) {
-            throw new NotFoundException(sprintf('Binding [%s] does not exists in the container bindings', $alias));
-        }
+        if ($this->bound($alias)) {
+            try {
+                // If an instance of the type is currently being managed as a singleton we'll
+                // just return an existing instance instead of instantiating new instances
+                // so the developer can keep using the same objects instance every time.
+                if (isset($this->singletons[$alias])) {
+                    $this->immutable[$alias] = true;
 
-        // If an instance of the type is currently being managed as a singleton we'll
-        // just return an existing instance instead of instantiating new instances
-        // so the developer can keep using the same objects instance every time.
-        if (isset($this->singletons[$alias])) {
-            $this->frozen[$alias] = true;
+                    return $this->applyInflectors($this->singletons[$alias]);
+                }
 
-            return $this->applyInflectors($this->singletons[$alias]);
-        }
+                if (isset($this->values[$alias])) {
+                    $this->immutable[$alias] = true;
 
-        if (isset($this->values[$alias])) {
-            $this->frozen[$alias] = true;
+                    return $this->values[$alias];
+                }
 
-            return $this->values[$alias];
-        }
+                $concrete = $this->getConcrete($alias);
 
-        $concrete = $this->getConcrete($alias);
+                if ($this->isBuildable($concrete, $alias)) {
+                    $object = $this->build($concrete, $args);
+                } else {
+                    $object = $this->make($concrete, $args);
+                }
 
-        if ($this->isBuildable($concrete, $alias)) {
-            $object = $this->build($concrete, $args);
+                // If the requested type is registered as a singleton we'll want to cache off
+                // the instances in "memory" so we can return it later without creating an
+                // entirely new instance of an object on each subsequent request for it.
+                if ($this->isSingleton($alias)) {
+                    $this->singletons[$alias] = $object;
+                }
+
+                $this->immutable[$alias] = true;
+
+                return $this->applyInflectors($object);
+            } catch (\Exception $prev) {
+                throw new ContainerException("An error occured while fetching entry '".$id."'", 0, $prev);
+            }
         } else {
-            $object = $this->make($concrete, $args);
+            throw new NotFoundException(sprintf('No entry was found for this identifier [%s].', $alias));
         }
-
-        // If the requested type is registered as a singleton we'll want to cache off
-        // the instances in "memory" so we can return it later without creating an
-        // entirely new instance of an object on each subsequent request for it.
-        if ($this->isSingleton($alias)) {
-            $this->singletons[$alias] = $object;
-        }
-
-        $this->frozen[$alias] = true;
-
-        return $this->applyInflectors($object);
     }
 
     /**
@@ -515,16 +520,16 @@ class Container implements \ArrayAccess, ContainerInteropInterface, ContainerCon
     }
 
     /**
-     * Check if class is frozen.
+     * Check if class is immutable.
      *
      * @param string $concrete
      *
      * @throws ContainerException
      */
-    protected function notFrozen($concrete)
+    protected function notImmutable($concrete)
     {
-        if (isset($this->frozen[$concrete])) {
-            throw new ContainerException(sprintf('Cannot override frozen service [%s]', $concrete));
+        if (isset($this->immutable[$concrete])) {
+            throw new ContainerException(sprintf('Attempted overwrite of initialized component [%s]', $concrete));
         }
     }
 
@@ -590,7 +595,16 @@ class Container implements \ArrayAccess, ContainerInteropInterface, ContainerCon
     protected function shouldNotBeDefinitionObject($alias, $concrete)
     {
         return (
-            (is_string($alias) && (!is_object($concrete) && !$concrete instanceof \Closure && (is_string($concrete) || null !== $concrete)))
+            (
+                is_string($alias) &&
+                (
+                    !is_object($concrete) &&
+                    !$concrete instanceof \Closure &&
+                    (
+                        is_string($concrete) || null !== $concrete
+                    )
+                )
+            )
         );
     }
 
