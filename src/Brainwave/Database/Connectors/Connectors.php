@@ -15,8 +15,10 @@ namespace Brainwave\Database\Connectors;
  * @version     0.10.0-dev
  */
 
+use Brainwave\Database\Traits\DetectsLostConnections;
 use Brainwave\Support\Arr;
 use PDO;
+use Exception;
 
 /**
  * Connector.
@@ -27,17 +29,19 @@ use PDO;
  */
 class Connectors
 {
+    use DetectsLostConnections;
+
     /**
      * The default PDO connection options.
      *
      * @var array
      */
     protected $options = [
-        PDO::ATTR_CASE => PDO::CASE_NATURAL,
-        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-        PDO::ATTR_ORACLE_NULLS => PDO::NULL_NATURAL,
+        PDO::ATTR_CASE              => PDO::CASE_NATURAL,
+        PDO::ATTR_ERRMODE           => PDO::ERRMODE_EXCEPTION,
+        PDO::ATTR_ORACLE_NULLS      => PDO::NULL_NATURAL,
         PDO::ATTR_STRINGIFY_FETCHES => false,
-        PDO::ATTR_EMULATE_PREPARES => false,
+        PDO::ATTR_EMULATE_PREPARES  => false,
     ];
 
     /**
@@ -69,7 +73,19 @@ class Connectors
 
         $password = Arr::get($config, 'password');
 
-        return new PDO($dsn, $username, $password, $options);
+        try {
+            $pdo = new PDO($dsn, $username, $password, $options);
+        } catch (Exception $e) {
+            $pdo = $this->tryAgainIfCausedByLostConnection(
+                $e,
+                $dsn,
+                $username,
+                $password,
+                $options
+            );
+        }
+
+        return $pdo;
     }
 
     /**
@@ -90,5 +106,27 @@ class Connectors
     public function setDefaultOptions(array $options)
     {
         $this->options = $options;
+    }
+
+    /**
+     * Handle a exception that occurred during connect execution.
+     *
+     * @param \Exception $e
+     * @param string     $dsn
+     * @param string     $username
+     * @param string     $password
+     * @param array      $options
+     *
+     * @return \PDO
+     *
+     * @throws \Exception
+     */
+    protected function tryAgainIfCausedByLostConnection(Exception $e, $dsn, $username, $password, $options)
+    {
+        if ($this->causedByLostConnection($e)) {
+            return new PDO($dsn, $username, $password, $options);
+        }
+
+        throw $e;
     }
 }

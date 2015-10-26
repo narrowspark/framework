@@ -21,6 +21,7 @@ use Brainwave\Database\Connectors\MariaDBConnector;
 use Brainwave\Database\Connectors\MSSQLConnector;
 use Brainwave\Database\Connectors\MySqlConnector;
 use Brainwave\Database\Connectors\OracleConnector;
+use Brainwave\Database\Connectors\OdbcConnection;
 use Brainwave\Database\Connectors\PostgreSQLConnector;
 use Brainwave\Database\Connectors\SQLiteConnector;
 use Brainwave\Database\Connectors\SqlServerConnector;
@@ -107,12 +108,16 @@ class ConnectionFactory
      *
      * @throws \InvalidArgumentException
      *
-     * @return PostgreSQLConnector|MSSQLConnector|MySqlConnector|SybaseConnector|GoogleCloudConnector|SQLiteConnector|SqlServerConnector|OracleConnector|FirebirdConnector
+     * @return PostgreSQLConnector|MSSQLConnector|MySqlConnector|SybaseConnector|GoogleCloudConnector|SQLiteConnector|SqlServerConnector|OracleConnector|OdbcConnector|FirebirdConnector
      */
     public function createConnector(array $config)
     {
         if (!isset($config['driver'])) {
             throw new \InvalidArgumentException('A driver must be specified.');
+        }
+
+        if ($this->container->bound($key = "db.connector.{$config['driver']}")) {
+            return $this->container->make($key);
         }
 
         switch ($config['driver']) {
@@ -142,6 +147,9 @@ class ConnectionFactory
                 break;
             case 'oracle':
                 $connector = new OracleConnector();
+                break;
+            case 'odbc':
+                $connector = new OdbcConnector();
                 break;
             case 'firebird':
                 $connector = new FirebirdConnector();
