@@ -24,7 +24,7 @@ use GuzzleHttp\ClientInterface;
  *
  * @since   0.9.1-dev
  */
-class Mandrill implements \Swift_Transport
+class Mandrill extends Transport
 {
     /**
      * Guzzle client instance.
@@ -50,30 +50,6 @@ class Mandrill implements \Swift_Transport
     {
         $this->client = $client;
         $this->key = $key;
-    }
-
-    /**
-     * Is email sending started.
-     */
-    public function isStarted()
-    {
-        return true;
-    }
-
-    /**
-     * Start email sending.
-     */
-    public function start()
-    {
-        return true;
-    }
-
-    /**
-     * Stop email sending.
-     */
-    public function stop()
-    {
-        return true;
     }
 
     /**
@@ -122,13 +98,6 @@ class Mandrill implements \Swift_Transport
         return $to;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function registerPlugin(\Swift_Events_EventListener $plugin)
-    {
-        //
-    }
 
     /**
      * Get the API key being used by the transport.
