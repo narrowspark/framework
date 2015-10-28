@@ -29,7 +29,7 @@
         "ircmaxell/random-lib"               : "~1.1",
         "league/flysystem"                   : "~1.0.15",
         "monolog/monolog"                    : "~1.17.2",
-        "mpoiriert/invoker"                  : "~1.1",
+        "PHP-DI/invoker"                     : "~1.2",
         "nesbot/carbon"                      : "~1.20",
         "nikic/fast-route"                   : "~0.6",
         "psy/psysh"                          : "~0.5.2",

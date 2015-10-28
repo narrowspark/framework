@@ -1,6 +1,6 @@
 <?php
 
-namespace Brainwave\Contracts\Container;
+namespace Brainwave\Container\Interfaces;
 
 /**
  * Narrowspark - a PHP 5 framework.

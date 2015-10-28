@@ -15,6 +15,7 @@ namespace Brainwave\Container;
  * @version     0.10.0-dev
  */
 
+use Brainwave\Container\Definition\Definition;
 use Brainwave\Container\Exception\BindingResolutionException;
 use Brainwave\Container\Exception\ContainerException;
 use Brainwave\Container\Exception\NotFoundException;
@@ -22,8 +23,15 @@ use Brainwave\Container\Traits\ContainerArrayAccessTrait;
 use Brainwave\Container\Traits\ContainerResolverTraits;
 use Brainwave\Container\Traits\MockerContainerTrait;
 use Brainwave\Contracts\Container\Container as ContainerContract;
+use Brainwave\Contracts\Container\Factory as FactoryContract;
 use Interop\Container\ContainerInterface as ContainerInteropInterface;
-use Nucleus\Invoker\Invoker;
+use Invoker\Invoker;
+use Invoker\ParameterResolver\AssociativeArrayResolver;
+use Invoker\ParameterResolver\Container\TypeHintContainerResolver;
+use Invoker\ParameterResolver\DefaultValueResolver;
+use Invoker\ParameterResolver\NumericArrayResolver;
+use Invoker\ParameterResolver\ResolverChain;
+use InvalidArgumentException;
 
 /**
  * Container.
@@ -32,13 +40,18 @@ use Nucleus\Invoker\Invoker;
  *
  * @since   0.9.4-dev
  */
-class Container implements \ArrayAccess, ContainerInteropInterface, ContainerContract
+class Container implements \ArrayAccess, ContainerInteropInterface, ContainerContract, FactoryContract
 {
     /*
      * Array Access Support
      * Mock Support
      */
     use ContainerArrayAccessTrait, MockerContainerTrait, ContainerResolverTraits;
+
+    /**
+     * @var bool
+     */
+    private $useAutowiring = true;
 
     /**
      * The registered type aliases.
@@ -104,16 +117,47 @@ class Container implements \ArrayAccess, ContainerInteropInterface, ContainerCon
     /**
      * Invoker instance.
      *
-     * @var \Nucleus\Invoker\Invoker
+     * @var \Invoker\InvokerInterface|null
      */
     protected $invoker;
 
     /**
+     * Container that wraps this container. If none, points to $this.
      *
+     * @var ContainerInteropInterface
      */
-    public function __construct()
+    private $wrapperContainer;
+
+    /**
+     * Use the ContainerBuilder to ease constructing the Container.
+     *
+     * @param ContainerInteropInterface $wrapperContainer If the container is wrapped by another container.
+     */
+    public function __construct(ContainerInteropInterface $wrapperContainer = null)
     {
-        $this->invoker = new Invoker();
+        $this->wrapperContainer = $wrapperContainer ?: $this;
+
+        // Auto-register the container
+        $this->singleton('Brainwave\Container\Container', $this);
+        $this->singleton('Brainwave\Contracts\Container\Container', $this);
+        $this->singleton('Brainwave\Contracts\Container\Factory', $this);
+        $this->singleton('Interop\Container\ContainerInterface', $this->wrapperContainer);
+    }
+
+    /**
+     * Enable or disable the use of autowiring to guess injections.
+     *
+     * Enabled by default.
+     *
+     * @param bool $bool
+     *
+     * @return self
+     */
+    public function useAutowiring($bool)
+    {
+        $this->useAutowiring = $bool;
+
+        return $this;
     }
 
     /**
@@ -185,19 +229,18 @@ class Container implements \ArrayAccess, ContainerInteropInterface, ContainerCon
     }
 
     /**
-     * Resolve the given type from the container.
-     *
-     * @param string $id
-     * @param array  $args
-     *
-     * @throws NotFoundException  No entry was found for this identifier.
-     * @throws ContainerException Error while retrieving the entry.
-     *
-     * @return mixed
+     * {@inheritdoc}
      */
-    public function make($id, array $args = [])
+    public function make($name, array $parameters = [])
     {
-        $alias = $this->getAlias($id);
+        if (!is_string($name)) {
+            throw new InvalidArgumentException(sprintf(
+                'The name parameter must be of type string, %s given',
+                is_object($name) ? get_class($name) : gettype($name)
+            ));
+        }
+
+        $alias = $this->getAlias($name);
 
         if ($this->bound($alias)) {
             try {
@@ -219,9 +262,9 @@ class Container implements \ArrayAccess, ContainerInteropInterface, ContainerCon
                 $concrete = $this->getConcrete($alias);
 
                 if ($this->isBuildable($concrete, $alias)) {
-                    $object = $this->build($concrete, $args);
+                    $object = $this->build($concrete, $parameters);
                 } else {
-                    $object = $this->make($concrete, $args);
+                    $object = $this->make($concrete, $parameters);
                 }
 
                 // If the requested type is registered as a singleton we'll want to cache off
@@ -347,15 +390,15 @@ class Container implements \ArrayAccess, ContainerInteropInterface, ContainerCon
      * Call the given Closure and inject its dependencies.
      *
      * @param callable $callable
-     * @param array    $args
+     * @param array    $parameters
      *
      * @throws \RuntimeException
      *
      * @return mixed
      */
-    public function call($callable, array $args = [])
+    public function call($callable, array $parameters = [])
     {
-        return $this->invoker->invoke($callable, $args);
+        return $this->getInvoker()->call($callable, $parameters);
     }
 
     /**
@@ -370,7 +413,7 @@ class Container implements \ArrayAccess, ContainerInteropInterface, ContainerCon
     {
         $boundObject = $this->getRaw($binding);
 
-        if (null === $boundObject) {
+        if ($boundObject === null) {
             throw new ContainerException(
                 sprintf('Cannot extend %s because it has not yet been bound.', $binding)
             );
@@ -615,8 +658,27 @@ class Container implements \ArrayAccess, ContainerInteropInterface, ContainerCon
      *
      * @return string
      */
-    protected function absoluteClassName($className)
+    private function absoluteClassName($className)
     {
         return (substr($className, 0, 1) === '\\') ? $className : '\\'.$className;
+    }
+
+    /**
+     * @return \Invoker\InvokerInterface
+     */
+    private function getInvoker()
+    {
+        if (! $this->invoker) {
+            $parameterResolver = new ResolverChain([
+                new NumericArrayResolver,
+                new AssociativeArrayResolver,
+                new DefaultValueResolver,
+                new TypeHintContainerResolver($this->wrapperContainer),
+            ]);
+
+            $this->invoker = new Invoker($parameterResolver, $this);
+        }
+
+        return $this->invoker;
     }
 }

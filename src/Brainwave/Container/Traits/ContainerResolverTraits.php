@@ -129,7 +129,7 @@ trait ContainerResolverTraits
         }
 
         $this->buildStack[] = $concrete;
-        $constructor = $reflector->getConstructor();
+        $constructor        = $reflector->getConstructor();
 
         // If there are no constructors, that means there are no dependencies then
         // we can just resolve the instances of the objects right away, without

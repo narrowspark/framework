@@ -38,6 +38,8 @@ interface Container
      * @param string               $alias
      * @param \Closure|string|null $concrete
      * @param bool                 $singleton
+     *
+     * @throws ContainerException
      */
     public function bind($alias, $concrete = null, $singleton = false);
 
@@ -48,16 +50,6 @@ interface Container
      * @param \Closure|string|null $concrete
      */
     public function singleton($abstract, $concrete = null);
-
-    /**
-     * Resolve the given type from the container.
-     *
-     * @param string $alias
-     * @param array  $args
-     *
-     * @return mixed
-     */
-    public function make($alias, array $args = []);
 
     /**
      * Adds an entry to the container.
@@ -83,17 +75,6 @@ interface Container
      * @param string $id Identifier of the entry to remove
      */
     public function remove($id);
-
-    /**
-     * Allows for methods to be invoked on any object that is resolved of the tyoe
-     * provided.
-     *
-     * @param string        $type
-     * @param callable|null $callback
-     *
-     * @return \Brainwave\Container\Inflector|void
-     */
-    public function inflector($type, callable $callback = null);
 
     /**
      * Define a contextual binding.

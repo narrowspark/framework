@@ -1,6 +1,6 @@
 <?php
 
-namespace Brainwave\Container;
+namespace Brainwave\Container\Definition;
 
 /**
  * Narrowspark - a PHP 5 framework.
@@ -15,7 +15,7 @@ namespace Brainwave\Container;
  * @version     0.10.0-dev
  */
 
-use Brainwave\Contracts\Container\ContainerAware as ContainerAwareContract;
+use Brainwave\Container\Interfaces\ContainerAware as ContainerAwareContract;
 
 /**
  * Definition.
@@ -242,33 +242,5 @@ class Definition
                 $this->withMethodCalls($interface->getMethods());
             }
         }
-    }
-
-    /**
-     * Checks if class exists.
-     *
-     * @param string $className
-     *
-     * @return string|null
-     */
-    protected function resolveClassName($className)
-    {
-        if (class_exists($className)) {
-            return $this->absoluteClassName($className);
-        }
-
-        return;
-    }
-
-    /**
-     * Returns absolute class name - always with leading backslash.
-     *
-     * @param string $className
-     *
-     * @return string
-     */
-    protected function absoluteClassName($className)
-    {
-        return substr($className, 0, 1) === '\\' ? $className : '\\'.$className;
     }
 }

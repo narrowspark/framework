@@ -18,7 +18,7 @@ namespace Brainwave\Container\Test;
  */
 
 use Brainwave\Container\Container;
-use Brainwave\Container\Definition;
+use Brainwave\Container\Definition\Definition;
 
 /**
  * ContainerTest.

@@ -20,6 +20,7 @@ use Brainwave\Contracts\Database\Connection as ConnectionContract;
 use Brainwave\Database\Exception\ConnectException;
 use Brainwave\Database\Grammar\Builder;
 use Brainwave\Support\Arr;
+use Brainwave\Support\Str;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
@@ -292,7 +293,7 @@ class Connection implements ConnectionContract
     {
         $message = $exception->getPrevious()->getMessage();
 
-        return Str::contains($message, [
+        return Str::create($message)->containsAny([
             'server has gone away',
             'no connection to the server',
             'Lost connection',
