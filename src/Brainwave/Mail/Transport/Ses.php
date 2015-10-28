@@ -44,30 +44,6 @@ class Ses implements \Swift_Transport
     }
 
     /**
-     * Is email sending started.
-     */
-    public function isStarted()
-    {
-        return true;
-    }
-
-    /**
-     * Start email sending.
-     */
-    public function start()
-    {
-        return true;
-    }
-
-    /**
-     * Stop email sending.
-     */
-    public function stop()
-    {
-        return true;
-    }
-
-    /**
      * Send Email.
      *
      * @param \Swift_Mime_Message $message
@@ -84,14 +60,6 @@ class Ses implements \Swift_Transport
                 'Data' => (string) $message,
             ],
         ]);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function registerPlugin(\Swift_Events_EventListener $plugin)
-    {
-        //
     }
 
     /**

@@ -24,7 +24,7 @@ use GuzzleHttp\ClientInterface;
  *
  * @since   0.9.1-dev
  */
-class Mailgun implements \Swift_Transport
+class Mailgun extends Transport
 {
     /**
      * Guzzle client instance.
@@ -71,30 +71,6 @@ class Mailgun implements \Swift_Transport
     }
 
     /**
-     * Is email sending started.
-     */
-    public function isStarted()
-    {
-        return true;
-    }
-
-    /**
-     * Start email sending.
-     */
-    public function start()
-    {
-        return true;
-    }
-
-    /**
-     * Stop email sending.
-     */
-    public function stop()
-    {
-        return true;
-    }
-
-    /**
      * Send Email.
      *
      * @param \Swift_Mime_Message $message
@@ -104,20 +80,19 @@ class Mailgun implements \Swift_Transport
      */
     public function send(\Swift_Mime_Message $message, &$failedRecipients = null)
     {
-        $options = ['auth' => ['api', $this->key], 'multipart' => [
-            ['name' => 'to', 'contents' => $this->getTo($message)],
+        $this->beforeSendPerformed($message);
+
+        $options = ['auth' => ['api', $this->key]];
+
+        $to = $this->getTo($message);
+        $message->setBcc([]);
+
+        $options['multipart'] = [
+            ['name' => 'to', 'contents' => $to],
             ['name' => 'message', 'contents' => (string) $message, 'filename' => 'message.mime'],
-        ]];
+        ];
 
         return $this->client->post($this->url, $options);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function registerPlugin(\Swift_Events_EventListener $plugin)
-    {
-        //
     }
 
     /**
@@ -185,6 +160,8 @@ class Mailgun implements \Swift_Transport
      */
     public function setDomain($domain)
     {
+        $this->url = 'https://api.mailgun.net/v3/'.$domain.'/messages.mime';
+
         return $this->domain = $domain;
     }
 }

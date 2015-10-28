@@ -24,7 +24,7 @@ use Psr\Log\LoggerInterface;
  *
  * @since   0.9.1-dev
  */
-class Log implements \Swift_Transport
+class Log extends Transport
 {
     /**
      * The Logger instance.
@@ -41,30 +41,6 @@ class Log implements \Swift_Transport
     public function __construct(LoggerInterface $logger)
     {
         $this->logger = $logger;
-    }
-
-    /**
-     * Is email sending started.
-     */
-    public function isStarted()
-    {
-        return true;
-    }
-
-    /**
-     * Start email sending.
-     */
-    public function start()
-    {
-        return true;
-    }
-
-    /**
-     * Stop email sending.
-     */
-    public function stop()
-    {
-        return true;
     }
 
     /**
@@ -96,13 +72,5 @@ class Log implements \Swift_Transport
         }
 
         return $string;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function registerPlugin(\Swift_Events_EventListener $plugin)
-    {
-        //
     }
 }
