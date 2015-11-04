@@ -24,5 +24,4 @@ namespace Brainwave\Contracts\Loop;
  */
 class RunningException extends \LogicException
 {
-
 }

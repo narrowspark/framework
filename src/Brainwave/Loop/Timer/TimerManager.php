@@ -15,8 +15,8 @@ namespace Brainwave\Loop;
  * @version     0.10.0-dev
  */
 
-use Brainwave\Contracts\Loop\Timer as TimerContract;
 use Brainwave\Contracts\Loop\Loop as LoopContract;
+use Brainwave\Contracts\Loop\Timer as TimerContract;
 
 /**
  * TimerManager.

@@ -24,5 +24,4 @@ namespace Brainwave\Contracts\Loop;
  */
 class UnsupportedException extends \LogicException
 {
-
 }

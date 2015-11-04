@@ -25,13 +25,13 @@ use Brainwave\Container\Traits\MockerContainerTrait;
 use Brainwave\Contracts\Container\Container as ContainerContract;
 use Brainwave\Contracts\Container\Factory as FactoryContract;
 use Interop\Container\ContainerInterface as ContainerInteropInterface;
+use InvalidArgumentException;
 use Invoker\Invoker;
 use Invoker\ParameterResolver\AssociativeArrayResolver;
 use Invoker\ParameterResolver\Container\TypeHintContainerResolver;
 use Invoker\ParameterResolver\DefaultValueResolver;
 use Invoker\ParameterResolver\NumericArrayResolver;
 use Invoker\ParameterResolver\ResolverChain;
-use InvalidArgumentException;
 
 /**
  * Container.

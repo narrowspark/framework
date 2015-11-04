@@ -24,5 +24,4 @@ namespace Brainwave\Events\Adapter;
  */
 class SyncAdapter extends BaseAdapter
 {
-
 }

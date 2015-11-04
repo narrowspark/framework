@@ -15,8 +15,8 @@ namespace Brainwave\Database\Traits;
  * @version     0.10.0-dev
  */
 
-use Exception;
 use Brainwave\Support\Str;
+use Exception;
 
 /**
  * DetectsLostConnections.

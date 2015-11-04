@@ -17,8 +17,8 @@ namespace Brainwave\Database\Connectors;
 
 use Brainwave\Database\Traits\DetectsLostConnections;
 use Brainwave\Support\Arr;
-use PDO;
 use Exception;
+use PDO;
 
 /**
  * Connector.
@@ -117,9 +117,9 @@ class Connectors
      * @param string     $password
      * @param array      $options
      *
+     * @throws \Exception
      * @return \PDO
      *
-     * @throws \Exception
      */
     protected function tryAgainIfCausedByLostConnection(Exception $e, $dsn, $username, $password, $options)
     {

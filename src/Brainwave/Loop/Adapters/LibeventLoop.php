@@ -24,5 +24,4 @@ namespace Brainwave\Loop\Adapters;
  */
 class LibeventLoop
 {
-
 }

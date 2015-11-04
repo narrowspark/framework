@@ -2,7 +2,7 @@
     "name"       : "brainwave/container",
     "type"       : "library",
     "description": "Narrowspark Framework for Creative People.",
-    "keywords"   : ["framework", "narrowspark", "container", "container-interop", "di", "dependency", "injection", "dependency injection"],
+    "keywords"   : ["viserio", "framework", "narrowspark", "container", "container-interop", "di", "dependency", "injection", "dependency injection"],
     "license"    : "MIT",
     "homepage"   : "http://github.com/narrowspark/framework",
     "support"    : {
