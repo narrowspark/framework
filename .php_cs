@@ -20,11 +20,8 @@ return Symfony\CS\Config\Config::create()
     ->level(Symfony\CS\FixerInterface::PSR2_LEVEL)
     ->fixers(
         [
-            'header_comment',
-            'newline_after_open_tag',
-            '-no_empty_lines_after_phpdocs',
-            'phpdoc_order',
             '-psr0',
+            'phpdoc_order',
             'ordered_use',
             'short_array_syntax',
             'strict',

@@ -1,5 +1,4 @@
 <?php
-
 namespace Brainwave\Events\Adapter;
 
 /**
@@ -24,5 +23,4 @@ namespace Brainwave\Events\Adapter;
  */
 class AsyncAdapter extends SyncAdapter
 {
-
 }

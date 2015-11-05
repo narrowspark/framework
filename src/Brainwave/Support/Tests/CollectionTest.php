@@ -1,5 +1,4 @@
 <?php
-
 namespace Brainwave\Support\Test;
 
 /*
@@ -22,13 +21,13 @@ use Brainwave\Support\Collection;
 use Mockery as Mock;
 
 /**
- * SupportHelpersTest.
+ * CollectionTest.
  *
  * @author  Daniel Bannert
  *
  * @since   0.9.6-dev
  */
-class SupportCollectionTest extends \PHPUnit_Framework_TestCase
+class CollectionTest extends \PHPUnit_Framework_TestCase
 {
     public function testFirstReturnsFirstItemInCollection()
     {

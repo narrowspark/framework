@@ -1,5 +1,4 @@
 <?php
-
 namespace Brainwave\Support;
 
 /**
@@ -84,6 +83,8 @@ abstract class StaticalProxyManager
     {
         static::$resolvedInstance[$name] = $mock = static::createMockByName($name);
 
+        $mock->shouldAllowMockingProtectedMethods();
+
         if (isset(static::$app)) {
             static::$app[$name] = $mock;
         }
@@ -100,8 +101,7 @@ abstract class StaticalProxyManager
      */
     protected static function createMockByName($name)
     {
-        $staticClass = static::getMockableClass();
-        $class = $staticClass($name);
+        $class = static::getMockableClass($name);
 
         return $class ? \Mockery::mock($class) : \Mockery::mock();
     }
@@ -223,7 +223,11 @@ abstract class StaticalProxyManager
      */
     public static function __callStatic($method, $args)
     {
-        $instance = static::resolveFacadeInstance(static::getFacadeAccessor());
+        $instance = static::getFacadeRoot();
+
+        if (! $instance) {
+            throw new RuntimeException('A facade root has not been set.');
+        }
 
         switch (count($args)) {
             case 0:

@@ -1,5 +1,4 @@
 <?php
-
 namespace Brainwave\Loop;
 
 /**
@@ -35,7 +34,8 @@ class LoopManager extends Manager implements LoopContract
      *
      * @param string $name
      */
-    public function setDefaultDriver($name) {
+    public function setDefaultDriver($name)
+    {
         $this->config->bind('loop::driver', $name);
     }
 
@@ -44,7 +44,8 @@ class LoopManager extends Manager implements LoopContract
      *
      * @return string
      */
-    public function getDefaultDriver() {
+    public function getDefaultDriver()
+    {
         return $this->config->get('loop::driver', 'Brainwave\\Loop\\Adapters\\SelectLoop');
     }
 }

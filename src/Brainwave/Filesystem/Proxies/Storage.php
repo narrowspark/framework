@@ -1,5 +1,4 @@
 <?php
-
 namespace Brainwave\Filesystem\Proxies;
 
 /**

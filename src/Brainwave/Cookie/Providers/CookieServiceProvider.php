@@ -1,5 +1,4 @@
 <?php
-
 namespace Brainwave\Cookie\Providers;
 
 /**

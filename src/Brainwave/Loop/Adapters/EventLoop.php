@@ -1,5 +1,4 @@
 <?php
-
 namespace Brainwave\Loop\Adapters;
 
 /**
@@ -24,5 +23,4 @@ namespace Brainwave\Loop\Adapters;
  */
 class EventLoop
 {
-
 }

@@ -1,5 +1,4 @@
 <?php
-
 namespace Brainwave\Support\Test;
 
 /*
@@ -22,13 +21,13 @@ use Brainwave\Support\Helper;
 use Brainwave\Support\Str;
 
 /**
- * SupportHelpersTest.
+ * HelpersTest.
  *
  * @author  Daniel Bannert
  *
  * @since   0.9.5-dev
  */
-class SupportHelpersTest extends \PHPUnit_Framework_TestCase
+class HelpersTest extends \PHPUnit_Framework_TestCase
 {
     public function testArrayBuild()
     {

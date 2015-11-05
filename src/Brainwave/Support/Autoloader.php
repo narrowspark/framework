@@ -1,5 +1,4 @@
 <?php
-
 namespace Brainwave\Support;
 
 /**
@@ -83,7 +82,7 @@ class Autoloader
     {
         if (!self::$registered) {
             self::$registered = spl_autoload_register(
-                ['\Brainwave\Support\Autoloader', 'load']
+                [static::class, 'load']
             );
         }
     }

@@ -1,5 +1,4 @@
 <?php
-
 namespace Brainwave\Events\Test;
 
 /*
@@ -26,5 +25,4 @@ namespace Brainwave\Events\Test;
  */
 class LoopTest extends \PHPUnit_Framework_TestCase
 {
-
 }

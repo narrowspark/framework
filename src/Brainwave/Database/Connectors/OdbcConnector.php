@@ -1,5 +1,4 @@
 <?php
-
 namespace Brainwave\Database\Connectors;
 
 /**
@@ -26,7 +25,6 @@ use Brainwave\Contracts\Database\Connector as ConnectorContract;
  */
 class OdbcConnector extends Connectors implements ConnectorInterface
 {
-
     /**
      * Establish a database connection.
      *

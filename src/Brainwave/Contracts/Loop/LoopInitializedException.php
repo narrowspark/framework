@@ -1,5 +1,4 @@
 <?php
-
 namespace Brainwave\Contracts\Loop;
 
 /**
@@ -24,5 +23,4 @@ namespace Brainwave\Contracts\Loop;
  */
 class LoopInitializedException extends \LogicException
 {
-
 }

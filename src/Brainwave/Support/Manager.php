@@ -1,5 +1,4 @@
 <?php
-
 namespace Brainwave\Support;
 
 /**
@@ -15,8 +14,8 @@ namespace Brainwave\Support;
  * @version     0.10.0-dev
  */
 
-use Brainwave\Contracts\Config\Manager as ConfigManager;
 use Brainwave\Container\ContainerAwareTrait;
+use Brainwave\Contracts\Config\Manager as ConfigManager;
 
 /**
  * Manager.

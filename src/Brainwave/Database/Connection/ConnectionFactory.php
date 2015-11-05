@@ -1,5 +1,4 @@
 <?php
-
 namespace Brainwave\Database\Connection;
 
 /**
@@ -20,8 +19,8 @@ use Brainwave\Database\Connectors\GoogleCloudConnector;
 use Brainwave\Database\Connectors\MariaDBConnector;
 use Brainwave\Database\Connectors\MSSQLConnector;
 use Brainwave\Database\Connectors\MySqlConnector;
-use Brainwave\Database\Connectors\OracleConnector;
 use Brainwave\Database\Connectors\OdbcConnection;
+use Brainwave\Database\Connectors\OracleConnector;
 use Brainwave\Database\Connectors\PostgreSQLConnector;
 use Brainwave\Database\Connectors\SQLiteConnector;
 use Brainwave\Database\Connectors\SqlServerConnector;

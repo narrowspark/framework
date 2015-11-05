@@ -1,5 +1,4 @@
 <?php
-
 namespace Brainwave\Events\Test;
 
 /*

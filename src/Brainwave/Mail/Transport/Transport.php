@@ -1,5 +1,4 @@
 <?php
-
 namespace Brainwave\Mail\Transport;
 
 /**
@@ -15,10 +14,10 @@ namespace Brainwave\Mail\Transport;
  * @version     0.10.0-dev
  */
 
-use Swift_Transport;
-use Swift_Mime_Message;
-use Swift_Events_SendEvent;
 use Swift_Events_EventListener;
+use Swift_Events_SendEvent;
+use Swift_Mime_Message;
+use Swift_Transport;
 
 /**
  * Transport.

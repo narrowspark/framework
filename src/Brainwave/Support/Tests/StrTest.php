@@ -1,5 +1,4 @@
 <?php
-
 namespace Brainwave\Support\Test;
 
 /*
@@ -20,7 +19,7 @@ namespace Brainwave\Support\Test;
 use Brainwave\Support\Str;
 
 /**
- * MailMailerTest.
+ * StrTest.
  *
  * @author  Daniel Bannert
  *
