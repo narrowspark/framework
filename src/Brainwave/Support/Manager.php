@@ -16,7 +16,7 @@ namespace Brainwave\Support;
  */
 
 use Brainwave\Contracts\Config\Manager as ConfigManager;
-use Interop\Container\ContainerInterface as ContainerInteropInterface;
+use Brainwave\Container\ContainerAwareTrait;
 
 /**
  * Manager.
@@ -27,12 +27,7 @@ use Interop\Container\ContainerInterface as ContainerInteropInterface;
  */
 abstract class Manager
 {
-    /**
-     * The container instance.
-     *
-     * @var \Interop\Container\ContainerInterface
-     */
-    protected $container;
+    use ContainerAwareTrait;
 
     /**
      * The config instance.
@@ -61,30 +56,6 @@ abstract class Manager
      * @var array
      */
     protected $supportedDrivers = [];
-
-    /**
-     * Set a ContainerInteropInterface container
-     *
-     * @param ContainerInteropInterface $container
-     *
-     * @return self
-     */
-    public function setContainer(ContainerInteropInterface $container)
-    {
-        $this->container = $container;
-
-        return $this;
-    }
-
-    /**
-     * Get container
-     *
-     * @return ContainerInteropInterface
-     */
-    public function getContainer()
-    {
-        return $this->container;
-    }
 
     /**
      * Set a config manager
@@ -164,7 +135,7 @@ abstract class Manager
      */
     protected function createDriver($driver, array $options = [])
     {
-        $method = 'create'.ucfirst($driver).'Driver';
+        $method = 'create'.Str::studly($driver).'Driver';
         $options = array_filter($options);
 
         // We'll check to see if a creator method exists for the given driver. If not we

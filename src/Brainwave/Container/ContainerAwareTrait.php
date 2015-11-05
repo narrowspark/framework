@@ -15,6 +15,8 @@ namespace Brainwave\Container;
  * @version     0.10.0-dev
  */
 
+use Interop\Container\ContainerInterface as ContainerInteropInterface;
+
 /**
  * ContainerAwareTrait.
  *
@@ -34,7 +36,7 @@ trait ContainerAwareTrait
      *
      * @param \Interop\Container\ContainerInterface $container
      */
-    public function setContainer($container)
+    public function setContainer(ContainerInteropInterface $container)
     {
         $this->container = $container;
     }
