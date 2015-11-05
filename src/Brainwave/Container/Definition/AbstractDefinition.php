@@ -18,13 +18,13 @@ namespace Brainwave\Container\Definition;
 use Brainwave\Container\Interfaces\ContainerAware as ContainerAwareContract;
 
 /**
- * Definition.
+ * AbstractDefinition.
  *
  * @author  Daniel Bannert
  *
- * @since   0.9.6-dev
+ * @since   0.10.0-dev
  */
-class Definition
+class AbstractDefinition
 {
     /**
      * Array of arguments to pass to the class constructor.
@@ -217,6 +217,34 @@ class Definition
         }
 
         return $object;
+    }
+
+    /**
+     * Resolves all of the arguments.  If you do not send an array of arguments
+     * it will use the Definition Arguments.
+     *
+     * @param  array $args
+     *
+     * @return array
+     */
+    protected function resolveArguments($args = [])
+    {
+        $args = (empty($args)) ? $this->arguments : $args;
+        $resolvedArguments = [];
+
+        foreach ($args as $arg) {
+            if (
+                is_string($arg) &&
+                ($this->container->isRegistered($arg) || $this->container->isSingleton($arg) || class_exists($arg))
+            ) {
+                $resolvedArguments[] = $this->container->get($arg);
+                continue;
+            }
+
+            $resolvedArguments[] = $arg;
+        }
+
+        return $resolvedArguments;
     }
 
     /**
