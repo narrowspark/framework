@@ -87,7 +87,7 @@ class FilesystemAdapter implements CloudFilesystemContract
      */
     public function put($path, $contents, array $configs = [])
     {
-        $configs['visibility' => $this->parseVisibility(isset($configs['visibility']) ?: null)];
+        $configs['visibility'] = $this->parseVisibility(isset($configs['visibility']) ?: null);
 
         if (is_resource($contents)) {
             return $this->driver->putStream($path, $contents, $configs);
@@ -150,11 +150,11 @@ class FilesystemAdapter implements CloudFilesystemContract
      */
     public function append($path, $data)
     {
-         if ($this->exists($path)) {
-             return $this->put($path, $this->get($path).PHP_EOL.$data);
-         }
+        if ($this->exists($path)) {
+            return $this->put($path, $this->get($path).PHP_EOL.$data);
+        }
 
-         return $this->put($path, $data);
+        return $this->put($path, $data);
     }
 
     /**
