@@ -32,7 +32,7 @@
         "PHP-DI/invoker"                     : "~1.2",
         "nesbot/carbon"                      : "~1.21",
         "nikic/fast-route"                   : "~0.6",
-        "psy/psysh"                          : "~0.5.2",
+        "psy/psysh"                          : "~0.6.*",
         "stecman/symfony-console-completion" : "~0.6.1",
         "symfony/console"                    : "~2.8|~3.0",
         "symfony/debug"                      : "~2.8|~3.0",
