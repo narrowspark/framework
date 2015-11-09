@@ -318,7 +318,7 @@ class Collection implements
     }
 
     /**
-     * Get an array with the values of a given key.
+     * Get the values of a given key.
      *
      * @param string      $value
      * @param string|null $key
