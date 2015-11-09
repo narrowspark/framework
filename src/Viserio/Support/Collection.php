@@ -473,6 +473,28 @@ class Collection implements
     }
 
     /**
+     * Get all items except for those with the specified keys.
+     *
+     * @param  mixed  $keys
+     * @return static
+     */
+    public function except($keys)
+    {
+        return new static(Arr::except($this->items, $keys));
+    }
+
+    /**
+     * Get the items with the specified keys.
+     *
+     * @param  mixed  $keys
+     * @return static
+     */
+    public function only($keys)
+    {
+        return new static(Arr::only($this->items, $keys));
+    }
+
+    /**
      * Push an item onto the end of the collection.
      *
      * @param \Viserio\Support\Collection $value
