@@ -331,19 +331,6 @@ class Collection implements
     }
 
     /**
-     * Alias for the "pluck" method.
-     *
-     * @param string      $value
-     * @param string|null $key
-     *
-     * @return static
-     */
-    public function lists($value, $key = null)
-    {
-        return $this->pluck($value, $key);
-    }
-
-    /**
      * Does this set contain a key?
      *
      * @param string $key The data key
