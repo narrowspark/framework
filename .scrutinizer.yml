@@ -1,7 +1,7 @@
 
 filter:
-    paths: ['src/Brainwave/*']
-    excluded_paths: [src/Brainwave/*/Tests/*, vendor/*]
+    paths: ['src/Viserio/*']
+    excluded_paths: [src/Viserio/*/Tests/*, vendor/*]
 
 checks:
     php:
@@ -93,7 +93,7 @@ checks:
 
 build:
     environment:
-        php: '5.5.25'
+        php: '5.6'
     dependencies:
         override:
             - 'composer install'
@@ -110,14 +110,13 @@ tools:
         enabled:                 true
         extensions:
             - php
-        command:                 php-cs-fixer
         config:
             level:               all
         filter:
             excluded_paths:
                 - 'bin/*'
                 - 'vendor/*'
-                - 'src/Brainwave/*/Tests/*'
+                - 'src/Viserio/*/Tests/*'
 
     php_loc:
         enabled:                 true
@@ -128,7 +127,7 @@ tools:
             excluded_paths:
                 - bin
                 - vendor
-                - src/Brainwave/*/Tests/*
+                - src/Viserio/*/Tests/*
 
     php_mess_detector:
         enabled:                 true
@@ -139,7 +138,7 @@ tools:
             excluded_paths:
                 - 'bin/*'
                 - 'vendor/*'
-                - 'src/Brainwave/*/Tests/*'
+                - 'src/Viserio/*/Tests/*'
     php_cpd:
         enabled:                 false
 
@@ -151,7 +150,7 @@ tools:
             excluded_paths:
                 - 'bin/*'
                 - 'vendor/*'
-                - 'src/Brainwave/*/Tests/*'
+                - 'src/Viserio/*/Tests/*'
 
     php_pdepend:
         enabled:                 true
@@ -161,6 +160,6 @@ tools:
         excluded_dirs:
             - bin
             - vendor
-            - src/Brainwave/*/Tests/*
+            - src/Viserio/*/Tests/*
 
     sensiolabs_security_checker: true

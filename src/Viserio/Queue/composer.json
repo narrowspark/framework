@@ -1,0 +1,44 @@
+{
+    "name"       : "viserio/queue",
+    "type"       : "library",
+    "description": "Narrowspark Framework for Creative People.",
+    "keywords"   : ["narrowspark", "viserio", "queue", "symfony"],
+    "license"    : "MIT",
+    "homepage"   : "http://github.com/n-Viserio/queue",
+    "support"    : {
+        "issues": "https://github.com/narrowspark/framework/issues",
+        "source": "https://github.com/narrowspark/framework"
+    },
+    "authors"    : [
+        {
+          "name"    : "Daniel Bannert",
+          "email"   : "d.bannert@anolilab.de",
+          "homepage": "http://www.anolilab.de",
+          "role"    : "Developer"
+        }
+    ],
+    "require": {
+        "php"                                 : ">=5.6",
+        "viserio/cotracts"                  : "self.version",
+        "symfony/event-dispatcher"            : "~2.8|~3.0"
+    },
+    "require-dev": {
+        "fabpot/php-cs-fixer"                 : "~1.10.1",
+        "phpunit/phpunit"                     : "~5.0.6"
+    },
+    "autoload": {
+        "psr-4": {
+            "Viserio\\Queue\\"              : ""
+        }
+    },
+    "autoload-dev": {
+        "psr-4": { "Viserio\\Queue\\Test\\" : "Tests/" }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master"                      : "0.10.0-dev"
+        }
+    },
+    "minimum-stability"                       : "dev",
+    "prefer-stable"                           : true
+}

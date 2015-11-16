@@ -23,15 +23,15 @@
 
     <testsuites>
         <testsuite name="Narrowspark Test Suite">
-            <directory suffix="Test.php">./src/Brainwave/*/Tests/</directory>
+            <directory suffix="Test.php">./src/Viserio/*/Tests/</directory>
         </testsuite>
     </testsuites>
 
     <filter>
         <whitelist processUncoveredFilesFromWhitelist="true">
-            <directory suffix=".php">./src/Brainwave/</directory>
+            <directory suffix=".php">./src/Viserio/</directory>
             <exclude>
-                <directory>./src/Brainwave/*/Tests</directory>
+                <directory>./src/Viserio/*/Tests</directory>
             </exclude>
         </whitelist>
     </filter>
