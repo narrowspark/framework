@@ -1,0 +1,98 @@
+<?php
+namespace Viserio\Mail\Test;
+
+/*
+ * Narrowspark - a PHP 5 framework
+ *
+ * @author      Daniel Bannert <info@anolilab.de>
+ * @copyright   2015 Daniel Bannert
+ * @link        http://www.narrowspark.de
+ * @license     http://www.narrowspark.com/license
+ * @version     0.10.0-dev
+ * @package     Narrowspark/framework
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ *
+ */
+
+/**
+ * MailPostmarkTransportTest.
+ *
+ * @author  Daniel Bannert
+ *
+ * @since   0.9.5-dev
+ */
+class MailPostmarkTransportTest extends \PHPUnit_Framework_TestCase
+{
+    public function testSend()
+    {
+        $message = new \Swift_Message('Is alive!', 'Doo-wah-ditty.');
+        $message->setFrom('johnny5@example.com', 'Johnny #5');
+        $message->addTo('you@example.com', 'A. Friend');
+        $message->addTo('you+two@example.com');
+        $message->addCc('another+1@example.com');
+        $message->addCc('another+2@example.com', 'Extra 2');
+        $message->addBcc('another+3@example.com');
+        $message->addBcc('another+4@example.com', 'Extra 4');
+        $message->addPart('<q>Help me Rhonda</q>', 'text/html');
+        $message->attach(\Swift_Attachment::newInstance('This is the plain text attachment.', 'hello.txt', 'text/plain'));
+        $message->setPriority(1);
+
+        $headers = $message->getHeaders();
+        $messageId = $headers->get('Message-ID')->getId();
+
+        $transport = new \Viserio\Mail\Test\PostmarkTransportStub('TESTING_SERVER');
+
+        $client = $this->getMock('GuzzleHttp\Client', ['post']);
+        $transport->setHttpClient($client);
+
+        $client->expects($this->once())
+               ->method('post')
+               ->with($this->equalTo('https://api.postmarkapp.com/email'),
+                   $this->equalTo([
+                        'headers' => [
+                            'X-Postmark-Server-Token' => 'TESTING_SERVER',
+                        ],
+                        'json' => [
+                            'From' => '"Johnny #5" <johnny5@example.com>',
+                            'To' => '"A. Friend" <you@example.com>,you+two@example.com',
+                            'Cc' => 'another+1@example.com,"Extra 2" <another+2@example.com>',
+                            'Bcc' => 'another+3@example.com,"Extra 4" <another+4@example.com>',
+                            'Subject' => 'Is alive!',
+                            'TextBody' => 'Doo-wah-ditty.',
+                            'HtmlBody' => '<q>Help me Rhonda</q>',
+                            'Headers' => [
+                                ['Name' => 'Message-ID', 'Value' => '<'.$messageId.'>'],
+                                ['Name' => 'X-PM-KeepID', 'Value' => 'true'],
+                                ['Name' => 'X-Priority', 'Value' => '1 (Highest)'],
+                            ],
+                            'Attachments' => [
+                                [
+                                    'ContentType' => 'text/plain',
+                                    'Content' => 'VGhpcyBpcyB0aGUgcGxhaW4gdGV4dCBhdHRhY2htZW50Lg==',
+                                    'Name' => 'hello.txt',
+                                ],
+                            ],
+                        ],
+                    ])
+               );
+
+        $transport->send($message);
+    }
+}
+
+class PostmarkTransportStub extends \Viserio\Mail\Transport\Postmark
+{
+    protected $client;
+
+    protected function getHttpClient()
+    {
+        return $this->client;
+    }
+
+    public function setHttpClient($client)
+    {
+        $this->client = $client;
+    }
+}

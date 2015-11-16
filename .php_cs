@@ -21,9 +21,6 @@ return Symfony\CS\Config\Config::create()
     ->fixers(
         [
             '-psr0',
-            '-no_empty_lines_after_phpdocs',
-            '-newline_after_open_tag',
-            'header_comment',
             'phpdoc_order',
             'ordered_use',
             'short_array_syntax',
