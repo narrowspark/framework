@@ -29,12 +29,12 @@
     },
     "autoload": {
         "psr-4": {
-            "Viserio\\Container\\"         : ""
+            "Viserio\\Container\\"           : ""
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Viserio\\Container\\Tests\\"  : "Tests/"
+            "Viserio\\Container\\Tests\\"    : "Tests/"
         }
     },
     "extra": {
