@@ -1,0 +1,54 @@
+{
+    "name"       : "viserio/database",
+    "type"       : "library",
+    "description": "Narrowspark Framework for Creative People.",
+    "keywords"   : ["narrowspark", "viserio", "database", "SQL", "MySQL", "MSSQL", "SQLite", "Sybase", "Oracle", "Google Cloud SQL"],
+    "license"    : "MIT",
+    "homepage"   : "http://github.com/n-brainwave/database",
+    "support"    : {
+        "issues": "https://github.com/narrowspark/framework/issues",
+        "source": "https://github.com/narrowspark/framework"
+    },
+    "authors"    : [
+        {
+          "name"    : "Daniel Bannert",
+          "email"   : "d.bannert@anolilab.de",
+          "homepage": "http://www.anolilab.de",
+          "role"    : "Developer"
+        }
+    ],
+    "require": {
+        "php"                                : ">=5.6",
+        "ext-pdo"                            : "*",
+        "viserio/cache"                    : "self.version",
+        "viserio/config"                   : "self.version",
+        "viserio/container"                : "self.version",
+        "viserio/contracts"                : "self.version",
+        "viserio/support"                  : "self.version",
+        "psr/log"                            : "~1.0"
+    },
+    "require-dev": {
+        "fabpot/php-cs-fixer"                : "~1.10.1",
+        "phpunit/phpunit"                    : "~5.0.6"
+    },
+    "autoload": {
+        "psr-4": {
+            "Brainwave\\Database\\"          : ""
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master"                     : "0.10.0-dev"
+        }
+    },
+    "suggest": {
+        "ext-pdo-mysql"                      : "For MySQL or MariaDB databases",
+        "ext-pdo_sqlsrv"                     : "For MSSQL databases on Windows platform",
+        "ext-pdo_dblib"                      : "For MSSQL databases on Liunx/UNIX platform",
+        "ext-pdo-pqsql"                      : "For PostgreSQL databases",
+        "ext-pdo-sqlite"                     : "For SQLite databases",
+        "ext-pdo-firebird"                   : "For Firebird databases"
+    },
+    "minimum-stability"                      : "dev",
+    "prefer-stable"                          : true
+}

@@ -1,0 +1,61 @@
+{
+    "name"       : "viserio/cache",
+    "type"       : "library",
+    "description": "Narrowspark Framework for Creative People.",
+    "keywords"   : ["narrowspark", "viserio", "cache", "apc", "apcu", "redis", "mongo"],
+    "license"    : "MIT",
+    "homepage"   : "http://github.com/n-brainwave/cache",
+    "support"    : {
+        "issues": "https://github.com/narrowspark/framework/issues",
+        "source": "https://github.com/narrowspark/framework"
+    },
+    "authors"    : [
+        {
+          "name"    : "Daniel Bannert",
+          "email"   : "d.bannert@anolilab.de",
+          "homepage": "http://www.anolilab.de",
+          "role"    : "Developer"
+        }
+    ],
+    "require": {
+        "php"                          : ">=5.6",
+        "nesbot/carbon"                : "~1.20",
+        "viserio/container"          : "self.version",
+        "viserio/config"             : "self.version",
+        "viserio/cotracts"           : "self.version"
+    },
+    "require-dev": {
+        "predis/predis"                : "~1.0.1",
+        "fabpot/php-cs-fixer"          : "~1.10.1",
+        "phpunit/phpunit"              : "~5.0.6"
+    },
+    "autoload": {
+        "psr-4": {
+            "Brainwave\\Cache\\"       : ""
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Brainwave\\Cache\\Tests\\": "Tests/"
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master"               : "0.10.0-dev"
+        }
+    },
+    "suggest": {
+        "predis/predis"                : "Flexible and feature-complete PHP client library for Redis",
+        "ext-apc"                      : "*",
+        "ext-apcu"                     : "*",
+        "ext-redis"                    : "*",
+        "ext-mongo"                    : "*",
+        "ext-memcached"                : "*",
+        "ext-pdo"                      : "*",
+        "ext-pdo_sqlite"               : "*",
+        "ext-pdo_mysql"                : "*",
+        "ext-pdo_pgsql"                : "*"
+    },
+    "minimum-stability"                : "dev",
+    "prefer-stable"                    : true
+}

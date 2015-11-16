@@ -1,0 +1,55 @@
+{
+    "name"       : "viserio/console",
+    "type"       : "library",
+    "description": "Narrowspark Framework for Creative People.",
+    "keywords"   : ["framework", "narrowspark", "cli", "command", "viserio", "cerebro"],
+    "license"    : "MIT",
+    "homepage"   : "http://github.com/narrowspark/framework",
+    "support"    : {
+        "issues": "https://github.com/narrowspark/framework/issues",
+        "source": "https://github.com/narrowspark/framework"
+    },
+    "authors": [
+        {
+          "name"    : "Daniel Bannert",
+          "email"   : "d.bannert@anolilab.de",
+          "homepage": "http://www.anolilab.de",
+          "role"    : "Developer"
+        }
+    ],
+    "require": {
+        "php"                                : ">=5.6",
+        "viserio/cotracts"                 : "self.version",
+        "viserio/log"                      : "self.version",
+        "container-interop/container-interop": "~1.0",
+        "mpoiriert/invoker"                  : "~1.1",
+        "nesbot/carbon"                      : "~1.18",
+        "stecman/symfony-console-completion" : "~0.5.1",
+        "symfony/console"                    : "~2.8|~3.0"
+    },
+    "require-dev": {
+        "fabpot/php-cs-fixer"                : "~1.10.1",
+        "phpunit/phpunit"                    : "~5.0.6"
+    },
+    "autoload": {
+        "psr-4": {
+            "Brainwave\\Console\\"           : ""
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Brainwave\\Console\\Tests\\"    : "Tests/"
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master"                     : "0.10.0-dev"
+        }
+    },
+    "suggest": {
+        "symfony/process"                    : "Required to use scheduling component (~2.8|~3.0).",
+        "nesbot/carbon"                      : "Required to use scheduling component (~1.18)."
+    },
+    "minimum-stability"                      : "dev",
+    "prefer-stable"                          : true
+}

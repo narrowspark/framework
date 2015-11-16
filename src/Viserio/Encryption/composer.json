@@ -1,0 +1,50 @@
+{
+    "name"       : "viserio/encrypter",
+    "type"       : "library",
+    "description": "Narrowspark Framework for Creative People.",
+    "keywords"   : ["narrowspark", "viserio", "encrypter"],
+    "license"    : "MIT",
+    "homepage"   : "http://github.com/n-brainwave/encrypter",
+    "support"    : {
+        "issues": "https://github.com/narrowspark/framework/issues",
+        "source": "https://github.com/narrowspark/framework"
+    },
+    "authors"    : [
+        {
+          "name"    : "Daniel Bannert",
+          "email"   : "d.bannert@anolilab.de",
+          "homepage": "http://www.anolilab.de",
+          "role"    : "Developer"
+        }
+    ],
+    "require": {
+        "php"                                : ">=5.6",
+        "ext-openssl"                        : "*",
+        "viserio/config"                   : "self.version",
+        "viserio/contracts"                : "self.version",
+        "ircmaxell/random-lib"               : "~1.1"
+    },
+    "require-dev": {
+        "fabpot/php-cs-fixer"                : "~1.10.1",
+        "phpunit/phpunit"                    : "~5.0.6"
+    },
+    "autoload": {
+        "psr-4": {
+            "Brainwave\\Encrypter\\"         : ""
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Brainwave\\Encrypter\\Tests\\"  : "Tests/"
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master"                     : "0.10.0-dev"
+        }
+    },
+    "suggest": {
+    },
+    "minimum-stability"                      : "dev",
+    "prefer-stable"                          : true
+}

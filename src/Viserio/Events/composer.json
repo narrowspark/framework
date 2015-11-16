@@ -1,0 +1,53 @@
+{
+    "name"       : "viserio/events",
+    "type"       : "library",
+    "description": "Narrowspark Framework for Creative People.",
+    "keywords"   : ["narrowspark", "viserio", "events", "symfony", "event-loop", "asynchronous"],
+    "license"    : "MIT",
+    "homepage"   : "http://github.com/n-brainwave/events",
+    "support"    : {
+        "issues": "https://github.com/narrowspark/framework/issues",
+        "source": "https://github.com/narrowspark/framework"
+    },
+    "authors"    : [
+        {
+          "name"    : "Daniel Bannert",
+          "email"   : "d.bannert@anolilab.de",
+          "homepage": "http://www.anolilab.de",
+          "role"    : "Developer"
+        }
+    ],
+    "require": {
+        "php"                                : ">=5.6",
+        "viserio/cotracts"                 : "self.version",
+        "viserio/container"                : "self.version",
+        "container-interop/container-interop": "~1.0",
+        "symfony/event-dispatcher"           : "~2.8|~3.0"
+    },
+    "require-dev": {
+        "fabpot/php-cs-fixer"                : "~1.10.1",
+        "phpunit/phpunit"                    : "~5.0.6"
+    },
+    "autoload": {
+        "psr-4": {
+            "Brainwave\\Events\\"            : ""
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Brainwave\\Events\\Tests\\"     : "Tests/"
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master"                     : "0.10.0-dev"
+        }
+    },
+    "suggest": {
+        "ext-libevent"                       : "Allows for use of a more performant event-loop implementation. (>=0.1)",
+        "ext-libev"                          : "Allows for use of a more performant event-loop implementation. (~1.0)",
+        "ext-event"                          : "Allows for use of a more performant event-loop implementation. (*)"
+    },
+    "minimum-stability"                      : "dev",
+    "prefer-stable"                          : true
+}
