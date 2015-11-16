@@ -55,7 +55,7 @@ class FileCacheTest extends \PHPUnit_Framework_TestCase
         $files = $this->mockFilesystem();
         $contents = '0000000000';
         $files->expects($this->once())->method('get')->will($this->returnValue($contents));
-        $store = $this->getMock('Brainwave\Cache\Adapter\FileCache', ['forget'], [$files, __DIR__]);
+        $store = $this->getMock('Viserio\Cache\Adapter\FileCache', ['forget'], [$files, __DIR__]);
         $store->expects($this->once())->method('forget');
         $value = $store->get('foo');
         $this->assertNull($value);
@@ -74,7 +74,7 @@ class FileCacheTest extends \PHPUnit_Framework_TestCase
     public function testStoreItemProperlyStoresValues()
     {
         $files = $this->mockFilesystem();
-        $store = $this->getMock('Brainwave\Cache\Adapter\FileCache', ['expiration'], [$files, __DIR__]);
+        $store = $this->getMock('Viserio\Cache\Adapter\FileCache', ['expiration'], [$files, __DIR__]);
         $store->expects($this->once())->method('expiration')->with($this->equalTo(10))->will($this->returnValue(1111111111));
         $contents = '1111111111'.serialize('Hello World');
         $md5 = md5('foo');
@@ -141,6 +141,6 @@ class FileCacheTest extends \PHPUnit_Framework_TestCase
 
     protected function mockFilesystem()
     {
-        return $this->getMock('Brainwave\Filesystem\Filesystem');
+        return $this->getMock('Viserio\Filesystem\Filesystem');
     }
 }

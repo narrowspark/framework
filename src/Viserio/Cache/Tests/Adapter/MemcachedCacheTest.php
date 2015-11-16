@@ -93,7 +93,7 @@ class MemcachedCacheTest extends \PHPUnit_Framework_TestCase
 
     public function testServersAreAddedCorrectly()
     {
-        $connector = $this->getMock('Brainwave\Cache\Adapter\MemcachedCache', ['getMemcached']);
+        $connector = $this->getMock('Viserio\Cache\Adapter\MemcachedCache', ['getMemcached']);
 
         $memcached = Mock::mock('stdClass');
 
@@ -109,7 +109,7 @@ class MemcachedCacheTest extends \PHPUnit_Framework_TestCase
      */
     public function testExceptionThrownOnBadConnection()
     {
-        $connector = $this->getMock('Brainwave\Cache\Adapter\MemcachedCache', ['getMemcached']);
+        $connector = $this->getMock('Viserio\Cache\Adapter\MemcachedCache', ['getMemcached']);
 
         $memcached = Mock::mock('stdClass');
 

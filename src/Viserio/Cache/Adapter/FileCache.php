@@ -28,7 +28,7 @@ use Viserio\Support\Arr;
 class FileCache implements AdapterContract
 {
     /**
-     * The Brainwave Filesystem instance.
+     * The Viserio Filesystem instance.
      *
      * @var \Viserio\Filesystem\Filesystem
      */

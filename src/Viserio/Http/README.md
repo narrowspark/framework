@@ -1,4 +1,4 @@
-# Brainwave Http package
+# Viserio Http package
 
 This package is part of the [Narrowspark framework](http://github.com/narrowspark/framework).
 
@@ -24,7 +24,7 @@ PHP 5.5.9 or above
 Use [Composer](https://getcomposer.org/) to install this package:
 
 ```sh
-composer require brainwave/http
+composer require viserio/http
 ```
 
 ## Official Documentation

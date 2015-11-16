@@ -34,12 +34,12 @@
     },
     "autoload": {
         "psr-4": {
-            "Brainwave\\Mail\\"       : ""
+            "Viserio\\Mail\\"       : ""
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Brainwave\\Mail\\Tests\\": "Tests/"
+            "Viserio\\Mail\\Tests\\": "Tests/"
         }
     },
     "extra": {

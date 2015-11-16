@@ -46,6 +46,6 @@ class LoopManager extends Manager implements LoopContract
      */
     public function getDefaultDriver()
     {
-        return $this->config->get('loop::driver', 'Brainwave\\Loop\\Adapters\\SelectLoop');
+        return $this->config->get('loop::driver', 'Viserio\\Loop\\Adapters\\SelectLoop');
     }
 }

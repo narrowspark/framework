@@ -86,7 +86,7 @@ trait HttpHandlingTrait
      */
     public function down(\Closure $callback)
     {
-        $this->get('events')->addListenerService('brainwave.app.down', $callback);
+        $this->get('events')->addListenerService('Viserio.app.down', $callback);
     }
 
     /**

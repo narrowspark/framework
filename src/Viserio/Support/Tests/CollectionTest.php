@@ -138,9 +138,9 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
 
     public function testToArrayCallsToArrayOnEachItemInCollection()
     {
-        $item1 = Mock::mock('Brainwave\Contracts\Support\Arrayable');
+        $item1 = Mock::mock('Viserio\Contracts\Support\Arrayable');
         $item1->shouldReceive('toArray')->once()->andReturn('foo.array');
-        $item2 = Mock::mock('Brainwave\Contracts\Support\Arrayable');
+        $item2 = Mock::mock('Viserio\Contracts\Support\Arrayable');
         $item2->shouldReceive('toArray')->once()->andReturn('bar.array');
         $c = new Collection([$item1, $item2]);
         $results = $c->toArray();
@@ -150,7 +150,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
 
     public function testToJsonEncodesTheToArrayResult()
     {
-        $c = $this->getMock('Brainwave\Support\Collection', ['toArray']);
+        $c = $this->getMock('Viserio\Support\Collection', ['toArray']);
         $c->expects($this->once())->method('toArray')->will($this->returnValue('foo'));
         $results = $c->toJson();
 
@@ -344,8 +344,8 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $data = new Collection([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
         $data = $data->chunk(3);
 
-        $this->assertInstanceOf('Brainwave\Support\Collection', $data);
-        $this->assertInstanceOf('Brainwave\Support\Collection', $data[0]);
+        $this->assertInstanceOf('Viserio\Support\Collection', $data);
+        $this->assertInstanceOf('Viserio\Support\Collection', $data[0]);
         $this->assertEquals(4, $data->count());
         $this->assertEquals([1, 2, 3], $data[0]->toArray());
         $this->assertEquals([10], $data[3]->toArray());
@@ -426,7 +426,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $this->assertContains($random, $data->all());
 
         $random = $data->random(3);
-        $this->assertInstanceOf('Brainwave\Support\Collection', $random);
+        $this->assertInstanceOf('Viserio\Support\Collection', $random);
         $this->assertCount(3, $random);
     }
 
@@ -744,10 +744,10 @@ class TestAccessorEloquentTestStub
         $c = new Collection([1, 2, 3]);
         $c = $c->zip(new Collection([4, 5, 6]));
 
-        $this->assertInstanceOf('Brainwave\Support\Collection', $c);
-        $this->assertInstanceOf('Brainwave\Support\Collection', $c[0]);
-        $this->assertInstanceOf('Brainwave\Support\Collection', $c[1]);
-        $this->assertInstanceOf('Brainwave\Support\Collection', $c[2]);
+        $this->assertInstanceOf('Viserio\Support\Collection', $c);
+        $this->assertInstanceOf('Viserio\Support\Collection', $c[0]);
+        $this->assertInstanceOf('Viserio\Support\Collection', $c[1]);
+        $this->assertInstanceOf('Viserio\Support\Collection', $c[2]);
 
         $this->assertEquals(3, $c->count());
         $this->assertEquals([1, 4], $c[0]->all());

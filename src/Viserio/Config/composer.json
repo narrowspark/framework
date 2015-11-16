@@ -4,7 +4,7 @@
     "description": "Narrowspark Framework for Creative People.",
     "keywords"   : ["narrowspark", "viserio", "config", "configuration"],
     "license"    : "MIT",
-    "homepage"   : "http://github.com/n-brainwave/config",
+    "homepage"   : "http://github.com/n-Viserio/config",
     "support"    : {
         "issues": "https://github.com/narrowspark/framework/issues",
         "source": "https://github.com/narrowspark/framework"
@@ -29,12 +29,12 @@
     },
     "autoload": {
         "psr-4": {
-            "Brainwave\\Config\\"       : ""
+            "Viserio\\Config\\"       : ""
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Brainwave\\Config\\Tests\\": "Tests/"
+            "Viserio\\Config\\Tests\\": "Tests/"
         }
     },
     "extra": {

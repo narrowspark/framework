@@ -32,12 +32,12 @@
     },
     "autoload": {
         "psr-4": {
-            "Brainwave\\Routing\\"           : ""
+            "Viserio\\Routing\\"           : ""
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Brainwave\\Tests\\Routing\\"    : "Tests/"
+            "Viserio\\Tests\\Routing\\"    : "Tests/"
         }
     },
     "extra": {

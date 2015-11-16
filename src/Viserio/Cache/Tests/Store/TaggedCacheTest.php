@@ -91,8 +91,8 @@ class TaggedCacheTest extends \PHPUnit_Framework_TestCase
 
     public function testRedisCacheTagsPushForeverKeysCorrectly()
     {
-        $store = Mock::mock('Brainwave\Contracts\Cache\Store');
-        $tagSet = Mock::mock('Brainwave\Cache\Store\TagSet', [$store, ['foo', 'bar']]);
+        $store = Mock::mock('Viserio\Contracts\Cache\Store');
+        $tagSet = Mock::mock('Viserio\Cache\Store\TagSet', [$store, ['foo', 'bar']]);
         $tagSet->shouldReceive('getNamespace')->andReturn('foo|bar');
 
         $redis = new RedisTaggedCache($store, $tagSet);
@@ -106,8 +106,8 @@ class TaggedCacheTest extends \PHPUnit_Framework_TestCase
 
     public function testRedisCacheForeverTagsCanBeFlushed()
     {
-        $store = Mock::mock('Brainwave\Contracts\Cache\Store');
-        $tagSet = Mock::mock('Brainwave\Cache\Store\TagSet', [$store, ['foo', 'bar']]);
+        $store = Mock::mock('Viserio\Contracts\Cache\Store');
+        $tagSet = Mock::mock('Viserio\Cache\Store\TagSet', [$store, ['foo', 'bar']]);
         $tagSet->shouldReceive('getNamespace')->andReturn('foo|bar');
 
         $redis = new RedisTaggedCache($store, $tagSet);

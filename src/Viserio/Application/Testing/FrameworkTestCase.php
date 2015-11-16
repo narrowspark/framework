@@ -53,23 +53,23 @@ abstract class FrameworkTestCase extends \PHPUnit_Framework_TestCase
     protected function start()
     {
         $providers = [
-            'Brainwave\Cache\Providers\CacheServiceProvider' => [],
-            'Brainwave\Console\Providers\ConsoleServiceProvider' => [],
-            'Brainwave\Cookie\Providers\CookieServiceProvider' => [],
-            //'Brainwave\Database\Providers\DatabaseServiceProvider'               => [],
-            'Brainwave\Encrypter\Providers\EncrypterServiceProvider' => [],
-            'Brainwave\Events\Providers\EventsServiceProvider' => [],
-            'Brainwave\Hashing\Providers\HashingServiceProvider' => [],
-            'Brainwave\Log\Providers\LoggerServiceProvider' => [],
-            'Brainwave\Routing\Providers\RoutingServiceProvider' => [],
-            'Brainwave\Session\Providers\SessionServiceProvider' => [],
-            'Brainwave\Support\Providers\AutoloaderServiceProvider' => [],
-            'Brainwave\Support\Providers\SupportServiceProvider' => [],
-            'Brainwave\Support\Providers\DebugServiceProvider' => [],
-            'Brainwave\Translator\Providers\TranslatorServiceProvider' => [
+            'Viserio\Cache\Providers\CacheServiceProvider' => [],
+            'Viserio\Console\Providers\ConsoleServiceProvider' => [],
+            'Viserio\Cookie\Providers\CookieServiceProvider' => [],
+            //'Viserio\Database\Providers\DatabaseServiceProvider'               => [],
+            'Viserio\Encrypter\Providers\EncrypterServiceProvider' => [],
+            'Viserio\Events\Providers\EventsServiceProvider' => [],
+            'Viserio\Hashing\Providers\HashingServiceProvider' => [],
+            'Viserio\Log\Providers\LoggerServiceProvider' => [],
+            'Viserio\Routing\Providers\RoutingServiceProvider' => [],
+            'Viserio\Session\Providers\SessionServiceProvider' => [],
+            'Viserio\Support\Providers\AutoloaderServiceProvider' => [],
+            'Viserio\Support\Providers\SupportServiceProvider' => [],
+            'Viserio\Support\Providers\DebugServiceProvider' => [],
+            'Viserio\Translator\Providers\TranslatorServiceProvider' => [
                 'translator.path' => '',
             ],
-            'Brainwave\View\Providers\ViewServiceProvider' => [],
+            'Viserio\View\Providers\ViewServiceProvider' => [],
         ];
 
         foreach ($services as $provider => $arr) {

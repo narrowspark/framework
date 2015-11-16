@@ -16,7 +16,7 @@ namespace Viserio\Routing;
 
 use Viserio\Contracts\Routing\RouteCollector as RouteCollectorContract;
 use Viserio\Contracts\Routing\RouteStrategy as RouteStrategyContract;
-use Viserio\Routing\RouteParser as BrainwaveRouteParser;
+use Viserio\Routing\RouteParser as ViserioRouteParser;
 use FastRoute\DataGenerator;
 use FastRoute\RouteCollector;
 use FastRoute\RouteParser as FastRouteParser;
@@ -92,7 +92,7 @@ class RouteCollection extends RouteCollector implements RouteStrategyContract, R
         // by the dispatcher, otherwise we just throw the handler string at FastRoute
         if ($handler instanceof \Closure || (is_object($handler) && is_callable($handler))) {
             $callback = $handler;
-            $handler = uniqid('brainwave::route::', true);
+            $handler = uniqid('Viserio::route::', true);
 
             $this->routes[$handler]['callback'] = $callback;
         } elseif (is_object($handler)) {
@@ -106,8 +106,8 @@ class RouteCollection extends RouteCollector implements RouteStrategyContract, R
         //Check for a route alias starting with @
         $matches = [];
 
-        if (preg_match(BrainwaveRouteParser::ALIAS_REGEX, $route, $matches)) {
-            $route = preg_replace(BrainwaveRouteParser::ALIAS_REGEX, '', $route);
+        if (preg_match(ViserioRouteParser::ALIAS_REGEX, $route, $matches)) {
+            $route = preg_replace(ViserioRouteParser::ALIAS_REGEX, '', $route);
             $this->namedRoutes[$matches[0]] = $route;
 
             $handler = [

@@ -36,7 +36,7 @@ class ArrayCacheTest extends \PHPUnit_Framework_TestCase
 
     public function testStoreItemForeverProperlyStoresInArray()
     {
-        $mock = $this->getMock('Brainwave\Cache\Adapter\ArrayCache', ['put']);
+        $mock = $this->getMock('Viserio\Cache\Adapter\ArrayCache', ['put']);
         $mock->expects($this->once())->method('put')->with($this->equalTo('foo'), $this->equalTo('bar'), $this->equalTo(0));
         $mock->forever('foo', 'bar');
     }

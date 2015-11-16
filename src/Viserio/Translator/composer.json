@@ -4,7 +4,7 @@
     "description": "Narrowspark Framework for Creative People.",
     "keywords"   : ["narrowspark", "viserio", "translator"],
     "license"    : "MIT",
-    "homepage"   : "http://github.com/n-brainwave/translator",
+    "homepage"   : "http://github.com/n-Viserio/translator",
     "support"    : {
         "issues": "https://github.com/narrowspark/framework/issues",
         "source": "https://github.com/narrowspark/framework"
@@ -30,12 +30,12 @@
     },
     "autoload": {
         "psr-4": {
-            "Brainwave\\Translator\\"       : ""
+            "Viserio\\Translator\\"       : ""
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Brainwave\\Translator\\Tests\\": "tests/"
+            "Viserio\\Translator\\Tests\\": "tests/"
         }
     },
     "extra": {

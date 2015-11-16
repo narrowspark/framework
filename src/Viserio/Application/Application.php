@@ -37,7 +37,7 @@ use Symfony\Component\HttpKernel\HttpKernelInterface;
 class Application extends Container implements Foundation, HttpKernelInterface
 {
     /**
-     * The Brainwave framework version.
+     * The Viserio framework version.
      *
      * @var string
      */
@@ -92,15 +92,15 @@ class Application extends Container implements Foundation, HttpKernelInterface
      */
     protected function registerBaseServiceProviders()
     {
-        $this->register('Brainwave\Http\Providers\ResponseServiceProvider');
+        $this->register('Viserio\Http\Providers\ResponseServiceProvider');
 
-        $this->register('Brainwave\Http\Providers\RequestServiceProvider');
+        $this->register('Viserio\Http\Providers\RequestServiceProvider');
 
-        $this->register('Brainwave\Filesystem\Providers\FilesystemServiceProvider');
+        $this->register('Viserio\Filesystem\Providers\FilesystemServiceProvider');
 
-        $this->register('Brainwave\Application\Providers\ApplicationServiceProvider');
+        $this->register('Viserio\Application\Providers\ApplicationServiceProvider');
 
-        $this->register('Brainwave\Exception\Providers\ExceptionServiceProvider');
+        $this->register('Viserio\Exception\Providers\ExceptionServiceProvider');
     }
 
     /**

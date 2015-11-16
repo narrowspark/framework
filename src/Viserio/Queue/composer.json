@@ -4,7 +4,7 @@
     "description": "Narrowspark Framework for Creative People.",
     "keywords"   : ["narrowspark", "viserio", "queue", "symfony"],
     "license"    : "MIT",
-    "homepage"   : "http://github.com/n-brainwave/queue",
+    "homepage"   : "http://github.com/n-Viserio/queue",
     "support"    : {
         "issues": "https://github.com/narrowspark/framework/issues",
         "source": "https://github.com/narrowspark/framework"
@@ -28,11 +28,11 @@
     },
     "autoload": {
         "psr-4": {
-            "Brainwave\\Queue\\"              : ""
+            "Viserio\\Queue\\"              : ""
         }
     },
     "autoload-dev": {
-        "psr-4": { "Brainwave\\Queue\\Test\\" : "Tests/" }
+        "psr-4": { "Viserio\\Queue\\Test\\" : "Tests/" }
     },
     "extra": {
         "branch-alias": {

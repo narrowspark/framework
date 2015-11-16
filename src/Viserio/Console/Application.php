@@ -14,7 +14,7 @@ namespace Viserio\Console;
  * @version     0.10.0-dev
  */
 
-use Viserio\Console\Command\Command as BrainwaveCommand;
+use Viserio\Console\Command\Command as ViserioCommand;
 use Viserio\Console\Command\ExpressionParser as Parser;
 use Viserio\Console\Input\InputArgument;
 use Viserio\Console\Input\InputOption;
@@ -106,7 +106,7 @@ class Application extends SymfonyConsole
      */
     public function add(SymfonyCommand $command)
     {
-        if ($command instanceof BrainwaveCommand) {
+        if ($command instanceof ViserioCommand) {
             $command->setContainer($this->getContainer());
         }
 

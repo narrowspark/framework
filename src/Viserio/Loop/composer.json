@@ -4,7 +4,7 @@
     "description": "Narrowspark Framework for Creative People.",
     "keywords"   : ["narrowspark", "viserio", "loop", "symfony", "event-loop", "asynchronous"],
     "license"    : "MIT",
-    "homepage"   : "http://github.com/n-brainwave/loop",
+    "homepage"   : "http://github.com/n-Viserio/loop",
     "support"    : {
         "issues": "https://github.com/narrowspark/framework/issues",
         "source": "https://github.com/narrowspark/framework"
@@ -29,12 +29,12 @@
     },
     "autoload": {
         "psr-4": {
-            "Brainwave\\Loop\\"              : ""
+            "Viserio\\Loop\\"              : ""
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Brainwave\\Loop\\Tests\\"       : "Tests/"
+            "Viserio\\Loop\\Tests\\"       : "Tests/"
         }
     },
     "extra": {

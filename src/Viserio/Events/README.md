@@ -1,4 +1,4 @@
-# Brainwave Events package
+# Viserio Events package
 
 This package is part of the [Narrowspark framework](http://github.com/narrowspark/framework).
 
@@ -24,7 +24,7 @@ PHP 5.5.9 or above
 Use [Composer](https://getcomposer.org/) to install this package:
 
 ```sh
-composer require brainwave/events
+composer require viserio/events
 ```
 
 ## Official Documentation

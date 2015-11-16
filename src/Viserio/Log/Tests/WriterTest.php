@@ -68,7 +68,7 @@ class WriterTest extends \PHPUnit_Framework_TestCase
         $writer = new Writer($monolog = Mock::mock('Monolog\Logger'), $events);
         $monolog->shouldReceive('error')->once()->with('foo', []);
         // $events->listen(
-        //     'brainwave.log',
+        //     'Viserio.log',
         //     function ($level, $message, array $context = array()) {
         //         $_SERVER['__log.level']   = $level;
         //         $_SERVER['__log.message'] = $message;
@@ -106,7 +106,7 @@ class WriterTest extends \PHPUnit_Framework_TestCase
             return 'success';
         };
 
-        //$events->shouldReceive('listen')->with('brainwave.log', $callback)->once();
+        //$events->shouldReceive('listen')->with('Viserio.log', $callback)->once();
         //$writer->listen($callback);
     }
 
@@ -114,7 +114,7 @@ class WriterTest extends \PHPUnit_Framework_TestCase
     {
         return new Dispatcher(
             Mock::mock('Symfony\Component\EventDispatcher\EventDispatcher'),
-            Mock::mock('Brainwave\Container\Container')
+            Mock::mock('Viserio\Container\Container')
         );
     }
 }

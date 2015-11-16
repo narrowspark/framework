@@ -1,4 +1,4 @@
-# Brainwave Loop package
+# Viserio Loop package
 
 This package is part of the [Narrowspark framework](http://github.com/narrowspark/framework).
 
@@ -24,7 +24,7 @@ PHP 5.4.0 or above
 Use [Composer](https://getcomposer.org/) to install this package:
 
 ```sh
-composer require brainwave/loop
+composer require viserio/loop
 ```
 
 ## Official Documentation

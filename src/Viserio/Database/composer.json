@@ -4,7 +4,7 @@
     "description": "Narrowspark Framework for Creative People.",
     "keywords"   : ["narrowspark", "viserio", "database", "SQL", "MySQL", "MSSQL", "SQLite", "Sybase", "Oracle", "Google Cloud SQL"],
     "license"    : "MIT",
-    "homepage"   : "http://github.com/n-brainwave/database",
+    "homepage"   : "http://github.com/n-Viserio/database",
     "support"    : {
         "issues": "https://github.com/narrowspark/framework/issues",
         "source": "https://github.com/narrowspark/framework"
@@ -33,7 +33,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Brainwave\\Database\\"          : ""
+            "Viserio\\Database\\"          : ""
         }
     },
     "extra": {

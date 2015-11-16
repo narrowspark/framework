@@ -93,8 +93,8 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
 
     protected function getRepository()
     {
-        $dispatcher = new Dispatcher(Mock::mock('Symfony\Component\EventDispatcher\EventDispatcher'), Mock::mock('Brainwave\Container\Container'));
-        $repository = new Repository(Mock::mock('Brainwave\Contracts\Cache\Adapter'));
+        $dispatcher = new Dispatcher(Mock::mock('Symfony\Component\EventDispatcher\EventDispatcher'), Mock::mock('Viserio\Container\Container'));
+        $repository = new Repository(Mock::mock('Viserio\Contracts\Cache\Adapter'));
         //$repository->setEventDispatcher($dispatcher);
         return $repository;
     }

@@ -64,7 +64,7 @@ class Manager implements ManagerContract, \IteratorAggregate
     }
 
     /**
-     * Set Brainwave's defaults using the repository.
+     * Set Viserio's defaults using the repository.
      *
      * @param array $values
      */

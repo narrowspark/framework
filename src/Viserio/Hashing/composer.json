@@ -4,7 +4,7 @@
     "description": "Narrowspark Framework for Creative People.",
     "keywords"   : ["narrowspark", "viserio", "hashing", "password"],
     "license"    : "MIT",
-    "homepage"   : "http://github.com/n-brainwave/hashing",
+    "homepage"   : "http://github.com/n-Viserio/hashing",
     "support"    : {
         "issues": "https://github.com/narrowspark/framework/issues",
         "source": "https://github.com/narrowspark/framework"
@@ -28,12 +28,12 @@
     },
     "autoload": {
         "psr-4": {
-            "Brainwave\\Hashing\\"       : ""
+            "Viserio\\Hashing\\"       : ""
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Brainwave\\Hashing\\Tests\\": "Tests/"
+            "Viserio\\Hashing\\Tests\\": "Tests/"
         }
     },
     "extra": {

@@ -99,7 +99,7 @@ class ApplicationServiceProvider extends ServiceProvider
     {
         // Settings
         $this->app->register(
-            'Brainwave\Config\Providers\ConfigServiceProvider',
+            'Viserio\Config\Providers\ConfigServiceProvider',
             ['settings.path' => sprintf('%s', $this->app->configPath())]
         );
 

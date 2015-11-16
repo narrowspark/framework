@@ -386,7 +386,7 @@ class Request extends SymfonyRequest implements RequestContract, \ArrayAccess
     }
 
     /**
-     * Create an Brainwave request from a Symfony instance.
+     * Create an Viserio request from a Symfony instance.
      *
      * @param \Symfony\Component\HttpFoundation\Request $request
      *

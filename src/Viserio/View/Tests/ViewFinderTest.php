@@ -135,6 +135,6 @@ class ViewFinderTest extends \PHPUnit_Framework_TestCase
     }
     protected function getFinder()
     {
-        return new ViewFinder(Mock::mock('Brainwave\Filesystem\Filesystem'), [__DIR__]);
+        return new ViewFinder(Mock::mock('Viserio\Filesystem\Filesystem'), [__DIR__]);
     }
 }

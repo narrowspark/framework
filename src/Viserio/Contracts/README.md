@@ -1,4 +1,4 @@
-# Brainwave Contracts package
+# Viserio Contracts package
 
 This package is part of the [Narrowspark framework](http://github.com/narrowspark/framework).
 
@@ -24,7 +24,7 @@ PHP 5.5.9 or above
 Use [Composer](https://getcomposer.org/) to install this package:
 
 ```sh
-composer require brainwave/contracts
+composer require viserio/contracts
 ```
 
 ## Official Documentation

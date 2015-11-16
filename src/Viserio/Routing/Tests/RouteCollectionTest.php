@@ -134,7 +134,7 @@ class RouteCollectionTest extends \PHPUnit_Framework_TestCase
     public function testCollectionReturnsDispatcher()
     {
         $router = $this->getRouteCollection();
-        $this->assertInstanceOf('Brainwave\Routing\Dispatcher', $router->getDispatcher());
+        $this->assertInstanceOf('Viserio\Routing\Dispatcher', $router->getDispatcher());
         $this->assertInstanceOf('FastRoute\Dispatcher\GroupCountBased', $router->getDispatcher());
     }
 

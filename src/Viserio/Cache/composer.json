@@ -4,7 +4,7 @@
     "description": "Narrowspark Framework for Creative People.",
     "keywords"   : ["narrowspark", "viserio", "cache", "apc", "apcu", "redis", "mongo"],
     "license"    : "MIT",
-    "homepage"   : "http://github.com/n-brainwave/cache",
+    "homepage"   : "http://github.com/n-Viserio/cache",
     "support"    : {
         "issues": "https://github.com/narrowspark/framework/issues",
         "source": "https://github.com/narrowspark/framework"
@@ -31,12 +31,12 @@
     },
     "autoload": {
         "psr-4": {
-            "Brainwave\\Cache\\"       : ""
+            "Viserio\\Cache\\"       : ""
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Brainwave\\Cache\\Tests\\": "Tests/"
+            "Viserio\\Cache\\Tests\\": "Tests/"
         }
     },
     "extra": {

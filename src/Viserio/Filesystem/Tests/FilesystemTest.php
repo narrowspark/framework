@@ -157,7 +157,7 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException Brainwave\Contracts\Filesystem\FileNotFoundException
+     * @expectedException Viserio\Contracts\Filesystem\FileNotFoundException
      */
     public function testGetThrowsExceptionNonexisitingFile()
     {
@@ -174,7 +174,7 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException Brainwave\Contracts\Filesystem\FileNotFoundException
+     * @expectedException Viserio\Contracts\Filesystem\FileNotFoundException
      */
     public function testGetRequireThrowsExceptionNonexisitingFile()
     {

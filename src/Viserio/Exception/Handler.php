@@ -146,7 +146,7 @@ class Handler
      * Convert errors into ErrorException objects.
      *
      * This method catches PHP errors and converts them into ErrorException objects;
-     * these ErrorException objects are then thrown and caught by Brainwave's
+     * these ErrorException objects are then thrown and caught by Viserio's
      * built-in or custom error handlers.
      *
      * @param int    $level   The numeric type of the Error

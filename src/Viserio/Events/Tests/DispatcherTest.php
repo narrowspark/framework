@@ -23,13 +23,13 @@ use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
- * FilesystemTest.
+ * DispatcherTest.
  *
  * @author  Daniel Bannert
  *
  * @since   0.9.6-dev
  */
-class BrainwaveTest extends \PHPUnit_Framework_TestCase
+class DispatcherTest extends \PHPUnit_Framework_TestCase
 {
     public function setup()
     {
@@ -93,7 +93,7 @@ class BrainwaveTest extends \PHPUnit_Framework_TestCase
 
     public function testAddSubscriberService()
     {
-        $this->dispatcher->addSubscriberService('foo.service', 'Brainwave\Events\Test\FooService');
+        $this->dispatcher->addSubscriberService('foo.service', 'Viserio\Events\Test\FooService');
         $this->dispatcher->dispatch('foo', new Event());
         $this->assertEquals('foo', $this->container['foo.service']->string);
         $this->dispatcher->dispatch('bar', new Event());
@@ -112,11 +112,11 @@ class BrainwaveTest extends \PHPUnit_Framework_TestCase
 
     public function testRemoveSubscriberService()
     {
-        $this->dispatcher->addSubscriberService('foo.service', 'Brainwave\Events\Test\FooService');
+        $this->dispatcher->addSubscriberService('foo.service', 'Viserio\Events\Test\FooService');
         $this->assertTrue($this->dispatcher->hasListeners('foo'));
         $this->assertTrue($this->dispatcher->hasListeners('bar'));
         $this->assertTrue($this->dispatcher->hasListeners('buzz'));
-        $this->dispatcher->removeSubscriberService('foo.service', 'Brainwave\Events\Test\FooService');
+        $this->dispatcher->removeSubscriberService('foo.service', 'Viserio\Events\Test\FooService');
         $this->assertFalse($this->dispatcher->hasListeners('foo'));
         $this->assertFalse($this->dispatcher->hasListeners('bar'));
         $this->assertFalse($this->dispatcher->hasListeners('buzz'));
@@ -147,7 +147,7 @@ class BrainwaveTest extends \PHPUnit_Framework_TestCase
 
     public function testGetListeners()
     {
-        $this->dispatcher->addSubscriberService('foo.service', 'Brainwave\Events\Test\FooService');
+        $this->dispatcher->addSubscriberService('foo.service', 'Viserio\Events\Test\FooService');
         $this->assertEquals(2, count($this->dispatcher->getListeners('bar')));
         $this->assertEquals(3, count($this->dispatcher->getListeners()));
     }

@@ -34,11 +34,11 @@ class ViewTest extends \PHPUnit_Framework_TestCase
     }
     public function testDataCanBeSetOnView()
     {
-        $view = new View(Mock::mock('Brainwave\View\Factory'), Mock::mock('Brainwave\Contracts\View\Engine'), 'view', 'path', []);
+        $view = new View(Mock::mock('Viserio\View\Factory'), Mock::mock('Viserio\Contracts\View\Engine'), 'view', 'path', []);
         $view->with('foo', 'bar');
         $view->with(['baz' => 'boom']);
         $this->assertEquals(['foo' => 'bar', 'baz' => 'boom'], $view->getData());
-        $view = new View(Mock::mock('Brainwave\View\Factory'), Mock::mock('Brainwave\Contracts\View\Engine'), 'view', 'path', []);
+        $view = new View(Mock::mock('Viserio\View\Factory'), Mock::mock('Viserio\Contracts\View\Engine'), 'view', 'path', []);
         $view->withFoo('bar')->withBaz('boom');
         $this->assertEquals(['foo' => 'bar', 'baz' => 'boom'], $view->getData());
     }
@@ -60,9 +60,9 @@ class ViewTest extends \PHPUnit_Framework_TestCase
     }
     public function testRenderSectionsReturnsEnvironmentSections()
     {
-        $view = Mock::mock('Brainwave\View\View[render]', [
-            Mock::mock('Brainwave\View\Factory'),
-            Mock::mock('Brainwave\Contracts\View\Engine'),
+        $view = Mock::mock('Viserio\View\View[render]', [
+            Mock::mock('Viserio\View\Factory'),
+            Mock::mock('Viserio\Contracts\View\Engine'),
             'view',
             'path',
             [],
@@ -76,15 +76,15 @@ class ViewTest extends \PHPUnit_Framework_TestCase
         $view = $this->getView();
         $view->getFactory()->shouldReceive('make')->once()->with('foo', ['data']);
         $result = $view->nest('key', 'foo', ['data']);
-        $this->assertInstanceOf('Brainwave\View\View', $result);
+        $this->assertInstanceOf('Viserio\View\View', $result);
     }
     public function testViewAcceptsArrayableImplementations()
     {
-        $arrayable = Mock::mock('Brainwave\Contracts\Support\Arrayable');
+        $arrayable = Mock::mock('Viserio\Contracts\Support\Arrayable');
         $arrayable->shouldReceive('toArray')->once()->andReturn(['foo' => 'bar', 'baz' => ['qux', 'corge']]);
         $view = new View(
-            Mock::mock('Brainwave\View\Factory'),
-            Mock::mock('Brainwave\Contracts\View\Engine'),
+            Mock::mock('Viserio\View\Factory'),
+            Mock::mock('Viserio\Contracts\View\Engine'),
             'view',
             'path',
             $arrayable
@@ -140,7 +140,7 @@ class ViewTest extends \PHPUnit_Framework_TestCase
         $view->getEngine()->shouldReceive('get')->once()->andReturn('contents');
         $view->getFactory()->shouldReceive('decrementRender')->once()->ordered();
         $view->getFactory()->shouldReceive('flushSectionsIfDoneRendering')->once();
-        $view->renderable = Mock::mock('Brainwave\Contracts\Support\Renderable');
+        $view->renderable = Mock::mock('Viserio\Contracts\Support\Renderable');
         $view->renderable->shouldReceive('render')->once()->andReturn('text');
         $this->assertEquals('contents', $view->render());
     }
@@ -148,8 +148,8 @@ class ViewTest extends \PHPUnit_Framework_TestCase
     protected function getView()
     {
         return new View(
-            Mock::mock('Brainwave\View\Factory'),
-            Mock::mock('Brainwave\Contracts\View\Engine'),
+            Mock::mock('Viserio\View\Factory'),
+            Mock::mock('Viserio\Contracts\View\Engine'),
             'view',
             'path',
             ['foo' => 'bar']

@@ -4,7 +4,7 @@
     "description": "Narrowspark Framework for Creative People.",
     "keywords"   : ["narrowspark", "viserio", "monolog", "psr", "log"],
     "license"    : "MIT",
-    "homepage"   : "http://github.com/n-brainwave/log",
+    "homepage"   : "http://github.com/n-Viserio/log",
     "support"    : {
         "issues": "https://github.com/narrowspark/framework/issues",
         "source": "https://github.com/narrowspark/framework"
@@ -29,12 +29,12 @@
     },
     "autoload": {
         "psr-4": {
-            "Brainwave\\Log\\"       : ""
+            "Viserio\\Log\\"       : ""
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Brainwave\\Log\\Tests\\": "Tests/"
+            "Viserio\\Log\\Tests\\": "Tests/"
         }
     },
     "extra": {

@@ -4,7 +4,7 @@
     "description": "Narrowspark Framework for Creative People.",
     "keywords"   : ["narrowspark", "viserio", "encrypter"],
     "license"    : "MIT",
-    "homepage"   : "http://github.com/n-brainwave/encrypter",
+    "homepage"   : "http://github.com/n-Viserio/encrypter",
     "support"    : {
         "issues": "https://github.com/narrowspark/framework/issues",
         "source": "https://github.com/narrowspark/framework"
@@ -30,12 +30,12 @@
     },
     "autoload": {
         "psr-4": {
-            "Brainwave\\Encrypter\\"         : ""
+            "Viserio\\Encrypter\\"         : ""
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Brainwave\\Encrypter\\Tests\\"  : "Tests/"
+            "Viserio\\Encrypter\\Tests\\"  : "Tests/"
         }
     },
     "extra": {

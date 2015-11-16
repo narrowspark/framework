@@ -107,7 +107,7 @@ class RedisCacheTest extends \PHPUnit_Framework_TestCase
 
     protected function getRedis()
     {
-        $mock = Mock::mock('Brainwave\Cache\Adapter\RedisCache');
+        $mock = Mock::mock('Viserio\Cache\Adapter\RedisCache');
 
         return new RedisCache($mock::connect(null, []), 'prefix');
     }

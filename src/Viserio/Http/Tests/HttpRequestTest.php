@@ -508,7 +508,7 @@ class HttpRequestTest extends \PHPUnit_Framework_TestCase
 
     public function testHasRegexMethod()
     {
-        $request = Request::create('/', 'GET', ['name' => 'Brainwave', 'foo' => 'bar']);
+        $request = Request::create('/', 'GET', ['name' => 'Viserio', 'foo' => 'bar']);
         $this->assertFalse($request->hasRegex('/^utm_/'));
         $this->assertTrue($request->hasRegex('/name/'));
         $this->assertTrue($request->hasRegex('/^foo$/'));

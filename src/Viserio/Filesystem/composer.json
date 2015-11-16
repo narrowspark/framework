@@ -4,7 +4,7 @@
     "description": "Narrowspark Framework for Creative People.",
     "keywords"   : ["narrowspark", "viserio", "filesystem", "aws", "sftp", "ftp", "ZipArchive", "rackspace"],
     "license"    : "MIT",
-    "homepage"   : "http://github.com/n-brainwave/filesystem",
+    "homepage"   : "http://github.com/n-Viserio/filesystem",
     "support"    : {
         "issues": "https://github.com/narrowspark/framework/issues",
         "source": "https://github.com/narrowspark/framework"
@@ -41,12 +41,12 @@
     },
     "autoload": {
         "psr-4": {
-            "Brainwave\\Filesystem\\"       : ""
+            "Viserio\\Filesystem\\"       : ""
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Brainwave\\Filesystem\\Tests\\": "Tests/"
+            "Viserio\\Filesystem\\Tests\\": "Tests/"
         }
     },
     "extra": {

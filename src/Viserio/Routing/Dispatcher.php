@@ -148,7 +148,7 @@ class Dispatcher extends GroupCountBasedDispatcher implements RouteStrategyContr
         $traits = class_uses($strategy, true);
 
         // dispatch via strategy
-        if (isset($traits['Brainwave\Container\ContainerAwareTrait'])) {
+        if (isset($traits['Viserio\Container\ContainerAwareTrait'])) {
             $strategy->setContainer($this->container);
         }
 
@@ -254,7 +254,7 @@ class Dispatcher extends GroupCountBasedDispatcher implements RouteStrategyContr
         }
 
         throw new \RuntimeException(
-            'When using the Request -> Response Strategy your controller must return an instance of [Brainwave\Contracts\Http\Response]'
+            'When using the Request -> Response Strategy your controller must return an instance of [Viserio\Contracts\Http\Response]'
         );
     }
 
@@ -283,7 +283,7 @@ class Dispatcher extends GroupCountBasedDispatcher implements RouteStrategyContr
             }
 
             throw new \RuntimeException(
-                'Your controller action must return a valid response for the Restful Strategy Acceptable responses are of type: [Array], [ArrayObject] and [Brainwave\Http\JsonResponse]'
+                'Your controller action must return a valid response for the Restful Strategy Acceptable responses are of type: [Array], [ArrayObject] and [Viserio\Http\JsonResponse]'
             );
         } catch (HttpException $exception) {
             $body = [

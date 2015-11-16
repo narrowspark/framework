@@ -33,12 +33,12 @@
     },
     "autoload": {
         "psr-4": {
-            "Brainwave\\Console\\"           : ""
+            "Viserio\\Console\\"           : ""
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Brainwave\\Console\\Tests\\"    : "Tests/"
+            "Viserio\\Console\\Tests\\"    : "Tests/"
         }
     },
     "extra": {

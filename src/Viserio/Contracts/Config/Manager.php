@@ -24,7 +24,7 @@ namespace Viserio\Contracts\Config;
 interface Manager extends \ArrayAccess
 {
     /**
-     * Set Brainwave's defaults using the handler.
+     * Set Viserio's defaults using the handler.
      *
      * @param array $values
      */

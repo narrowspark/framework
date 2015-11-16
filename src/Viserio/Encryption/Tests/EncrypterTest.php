@@ -30,7 +30,7 @@ class EncrypterTest extends \PHPUnit_Framework_TestCase
 {
     public function testEncryption()
     {
-        $e = new Encrypter(Mock::mock('Brainwave\Contracts\Hashing\Generator'), Mock::mock('RandomLib\Generator'), str_repeat('a', 16));
+        $e = new Encrypter(Mock::mock('Viserio\Contracts\Hashing\Generator'), Mock::mock('RandomLib\Generator'), str_repeat('a', 16));
         $encrypted = $e->encrypt('foo');
         $this->assertNotEquals('foo', $encrypted);
         $this->assertEquals('foo', $e->decrypt($encrypted));
@@ -38,7 +38,7 @@ class EncrypterTest extends \PHPUnit_Framework_TestCase
 
     public function testWithCustomCipher()
     {
-        $e = new Encrypter(Mock::mock('Brainwave\Contracts\Hashing\Generator'), Mock::mock('RandomLib\Generator'), str_repeat('b', 32), 'AES-256', 'CBC');
+        $e = new Encrypter(Mock::mock('Viserio\Contracts\Hashing\Generator'), Mock::mock('RandomLib\Generator'), str_repeat('b', 32), 'AES-256', 'CBC');
         $encrypted = $e->encrypt('bar');
         $this->assertNotEquals('bar', $encrypted);
         $this->assertEquals('bar', $e->decrypt($encrypted));
@@ -46,7 +46,7 @@ class EncrypterTest extends \PHPUnit_Framework_TestCase
 
     public function testAllowLongerKeyForBC()
     {
-        $e = new Encrypter(Mock::mock('Brainwave\Contracts\Hashing\Generator'), Mock::mock('RandomLib\Generator'), str_repeat('z', 32));
+        $e = new Encrypter(Mock::mock('Viserio\Contracts\Hashing\Generator'), Mock::mock('RandomLib\Generator'), str_repeat('z', 32));
         $encrypted = $e->encrypt('baz');
         $this->assertNotEquals('baz', $encrypted);
         $this->assertEquals('baz', $e->decrypt($encrypted));
@@ -58,7 +58,7 @@ class EncrypterTest extends \PHPUnit_Framework_TestCase
      */
     public function testWithBadKeyLength()
     {
-        new Encrypter(Mock::mock('Brainwave\Contracts\Hashing\Generator'), Mock::mock('RandomLib\Generator'), str_repeat('a', 5));
+        new Encrypter(Mock::mock('Viserio\Contracts\Hashing\Generator'), Mock::mock('RandomLib\Generator'), str_repeat('a', 5));
     }
 
     /**
@@ -67,7 +67,7 @@ class EncrypterTest extends \PHPUnit_Framework_TestCase
      */
     public function testWithBadKeyLengthAlternativeCipher()
     {
-        new Encrypter(Mock::mock('Brainwave\Contracts\Hashing\Generator'), Mock::mock('RandomLib\Generator'), str_repeat('a', 16), 'AES-256', 'CFB8');
+        new Encrypter(Mock::mock('Viserio\Contracts\Hashing\Generator'), Mock::mock('RandomLib\Generator'), str_repeat('a', 16), 'AES-256', 'CFB8');
     }
 
     /**
@@ -76,29 +76,29 @@ class EncrypterTest extends \PHPUnit_Framework_TestCase
      */
     public function testWithUnsupportedCipher()
     {
-        $e = new Encrypter(Mock::mock('Brainwave\Contracts\Hashing\Generator'), Mock::mock('RandomLib\Generator'), str_repeat('c', 16), 'AES-256', 'CFB8');
+        $e = new Encrypter(Mock::mock('Viserio\Contracts\Hashing\Generator'), Mock::mock('RandomLib\Generator'), str_repeat('c', 16), 'AES-256', 'CFB8');
     }
 
     /**
-     * @expectedException Brainwave\Contracts\Encryption\DecryptException
+     * @expectedException Viserio\Contracts\Encryption\DecryptException
      * @expectedExceptionMessage The payload is invalid.
      */
     public function testExceptionThrownWhenPayloadIsInvalid()
     {
-        $e = new Encrypter(Mock::mock('Brainwave\Contracts\Hashing\Generator'), Mock::mock('RandomLib\Generator'), str_repeat('a', 16));
+        $e = new Encrypter(Mock::mock('Viserio\Contracts\Hashing\Generator'), Mock::mock('RandomLib\Generator'), str_repeat('a', 16));
         $payload = $e->encrypt('foo');
         $payload = str_shuffle($payload);
         $e->decrypt($payload);
     }
 
     /**
-     * @expectedException Brainwave\Contracts\Encryption\DecryptException
+     * @expectedException Viserio\Contracts\Encryption\DecryptException
      * @expectedExceptionMessage The MAC is invalid.
      */
     public function testExceptionThrownWithDifferentKey()
     {
-        $a = new Encrypter(Mock::mock('Brainwave\Contracts\Hashing\Generator'), Mock::mock('RandomLib\Generator'), str_repeat('a', 16));
-        $b = new Encrypter(Mock::mock('Brainwave\Contracts\Hashing\Generator'), Mock::mock('RandomLib\Generator'), str_repeat('b', 16));
+        $a = new Encrypter(Mock::mock('Viserio\Contracts\Hashing\Generator'), Mock::mock('RandomLib\Generator'), str_repeat('a', 16));
+        $b = new Encrypter(Mock::mock('Viserio\Contracts\Hashing\Generator'), Mock::mock('RandomLib\Generator'), str_repeat('b', 16));
         $b->decrypt($a->encrypt('baz'));
     }
 }

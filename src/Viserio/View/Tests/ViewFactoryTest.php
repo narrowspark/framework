@@ -38,7 +38,7 @@ class ViewFactoryTest extends \PHPUnit_Framework_TestCase
         unset($_SERVER['__test.view']);
         $factory = $this->getFactory();
         $factory->getFinder()->shouldReceive('find')->once()->with('view')->andReturn('path.php');
-        $factory->getEngineResolver()->shouldReceive('resolve')->once()->with('php')->andReturn($engine = Mock::mock('Brainwave\Contracts\View\Engine'));
+        $factory->getEngineResolver()->shouldReceive('resolve')->once()->with('php')->andReturn($engine = Mock::mock('Viserio\Contracts\View\Engine'));
         $factory->getFinder()->shouldReceive('addExtension')->once()->with('php');
         $factory->addExtension('php', 'php');
         $view = $factory->make('view', ['foo' => 'bar'], ['baz' => 'boom']);
@@ -58,7 +58,7 @@ class ViewFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testRenderEachCreatesViewForEachItemInArray()
     {
-        $factory = Mock::mock('Brainwave\View\Factory[make]', $this->getFactoryArgs());
+        $factory = Mock::mock('Viserio\View\Factory[make]', $this->getFactoryArgs());
         $factory->shouldReceive('make')->once()->with('foo', ['key' => 'bar', 'value' => 'baz'])->andReturn($mockView1 = Mock::mock('StdClass'));
         $factory->shouldReceive('make')->once()->with('foo', ['key' => 'breeze', 'value' => 'boom'])->andReturn($mockView2 = Mock::mock('StdClass'));
         $mockView1->shouldReceive('render')->once()->andReturn('dayle');
@@ -69,7 +69,7 @@ class ViewFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testEmptyViewsCanBeReturnedFromRenderEach()
     {
-        $factory = Mock::mock('Brainwave\View\Factory[make]', $this->getFactoryArgs());
+        $factory = Mock::mock('Viserio\View\Factory[make]', $this->getFactoryArgs());
         $factory->shouldReceive('make')->once()->with('foo')->andReturn($mockView = Mock::mock('StdClass'));
         $mockView->shouldReceive('render')->once()->andReturn('empty');
         $this->assertEquals('empty', $factory->renderEach('view', [], 'iterator', 'foo'));
@@ -86,7 +86,7 @@ class ViewFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $factory = $this->getFactory();
         $factory->getFinder()->shouldReceive('find')->once()->with('view')->andReturn('path.php');
-        $factory->getEngineResolver()->shouldReceive('resolve')->once()->with('php')->andReturn($engine = Mock::mock('Brainwave\Contracts\View\Engine'));
+        $factory->getEngineResolver()->shouldReceive('resolve')->once()->with('php')->andReturn($engine = Mock::mock('Viserio\Contracts\View\Engine'));
         $factory->getFinder()->shouldReceive('addExtension')->once()->with('php');
         $factory->addExtension('php', 'php');
         $factory->name('view', 'foo');
@@ -106,7 +106,7 @@ class ViewFactoryTest extends \PHPUnit_Framework_TestCase
         $factory->getFinder()->shouldReceive('addExtension')->once()->with('foo');
         $factory->getEngineResolver()->shouldReceive('register')->once()->with('bar', $resolver);
         $factory->getFinder()->shouldReceive('find')->once()->with('view')->andReturn('path.foo');
-        $factory->getEngineResolver()->shouldReceive('resolve')->once()->with('bar')->andReturn($engine = Mock::mock('Brainwave\Contracts\View\Engine'));
+        $factory->getEngineResolver()->shouldReceive('resolve')->once()->with('bar')->andReturn($engine = Mock::mock('Viserio\Contracts\View\Engine'));
         $factory->addExtension('foo', 'bar', $resolver);
         $view = $factory->make('view', ['data']);
         $this->assertSame($engine, $view->getEngine());
@@ -138,7 +138,7 @@ class ViewFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $factory = $this->getFactory();
         $factory->getFinder()->shouldReceive('find')->twice()->with('foo.bar')->andReturn('path.php');
-        $factory->getEngineResolver()->shouldReceive('resolve')->twice()->with('php')->andReturn(Mock::mock('Brainwave\Contracts\View\Engine'));
+        $factory->getEngineResolver()->shouldReceive('resolve')->twice()->with('php')->andReturn(Mock::mock('Viserio\Contracts\View\Engine'));
         $factory->make('foo/bar');
         $factory->make('foo.bar');
     }
@@ -148,7 +148,7 @@ class ViewFactoryTest extends \PHPUnit_Framework_TestCase
         $factory = $this->getFactory();
         $factory->alias('real', 'alias');
         $factory->getFinder()->shouldReceive('find')->once()->with('real')->andReturn('path.php');
-        $factory->getEngineResolver()->shouldReceive('resolve')->once()->with('php')->andReturn(Mock::mock('Brainwave\Contracts\View\Engine'));
+        $factory->getEngineResolver()->shouldReceive('resolve')->once()->with('php')->andReturn(Mock::mock('Viserio\Contracts\View\Engine'));
         $view = $factory->make('alias');
         $this->assertEquals('real', $view->getName());
     }
@@ -169,8 +169,8 @@ class ViewFactoryTest extends \PHPUnit_Framework_TestCase
     protected function getFactoryArgs()
     {
         return [
-            Mock::mock('Brainwave\View\Engines\EngineResolver'),
-            Mock::mock('Brainwave\Contracts\View\Finder'),
+            Mock::mock('Viserio\View\Engines\EngineResolver'),
+            Mock::mock('Viserio\Contracts\View\Finder'),
             Mock::mock('Symfony\Component\EventDispatcher\EventDispatcherInterface'),
         ];
     }

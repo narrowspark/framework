@@ -4,7 +4,7 @@
     "description": "Narrowspark Framework for Creative People.",
     "keywords"   : ["narrowspark", "viserio", "view", "plates", "php"],
     "license"    : "MIT",
-    "homepage"   : "http://github.com/n-brainwave/api",
+    "homepage"   : "http://github.com/n-Viserio/api",
     "support"    : {
         "issues": "https://github.com/narrowspark/framework/issues",
         "source": "https://github.com/narrowspark/framework"
@@ -36,12 +36,12 @@
     },
     "autoload": {
         "psr-4": {
-            "Brainwave\\View\\"              : ""
+            "Viserio\\View\\"              : ""
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Brainwave\\View\\Tests\\"       : "tests/"
+            "Viserio\\View\\Tests\\"       : "tests/"
         }
     },
     "suggest": {

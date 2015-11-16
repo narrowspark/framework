@@ -29,15 +29,15 @@ class StrTest extends \PHPUnit_Framework_TestCase
 {
     public function testStringCanBeLimitedByWords()
     {
-        $this->assertEquals('Narrowspark…', Str::words('Narrowspark Brainwave', 1));
-        $this->assertEquals('Narrowspark___', Str::words('Narrowspark Brainwave', 1, '___'));
-        $this->assertEquals('Narrowspark Brainwave', Str::words('Narrowspark Brainwave', 3));
+        $this->assertEquals('Narrowspark…', Str::words('Narrowspark Viserio', 1));
+        $this->assertEquals('Narrowspark___', Str::words('Narrowspark Viserio', 1, '___'));
+        $this->assertEquals('Narrowspark Viserio', Str::words('Narrowspark Viserio', 3));
     }
 
     public function testStringTrimmedOnlyWhereNecessary()
     {
-        $this->assertEquals(' Narrowspark Brainwave ', Str::words(' Narrowspark Brainwave ', 3));
-        $this->assertEquals(' Narrowspark...', Str::words(' Narrowspark Brainwave ', 1));
+        $this->assertEquals(' Narrowspark Viserio ', Str::words(' Narrowspark Viserio ', 3));
+        $this->assertEquals(' Narrowspark...', Str::words(' Narrowspark Viserio ', 1));
     }
 
     public function testStringWithoutWordsDoesntProduceError()

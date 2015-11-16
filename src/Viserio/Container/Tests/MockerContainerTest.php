@@ -54,7 +54,7 @@ class MockerContainerTest extends \PHPUnit_Framework_TestCase
      */
     public function tearDown()
     {
-        $reflection = new \ReflectionClass('Brainwave\Container\Container');
+        $reflection = new \ReflectionClass('Viserio\Container\Container');
 
         $property = $reflection->getProperty('mockedServices');
         $property->setAccessible(true);

@@ -4,7 +4,7 @@
     "description": "Narrowspark Framework for Creative People.",
     "keywords"   : ["narrowspark", "viserio", "http", "request", "response", "stack", "kernel"],
     "license"    : "MIT",
-    "homepage"   : "http://github.com/n-brainwave/http",
+    "homepage"   : "http://github.com/n-Viserio/http",
     "support"    : {
         "issues": "https://github.com/narrowspark/framework/issues",
         "source": "https://github.com/narrowspark/framework"
@@ -33,12 +33,12 @@
     },
     "autoload": {
         "psr-4": {
-            "Brainwave\\Http\\"        : ""
+            "Viserio\\Http\\"        : ""
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Brainwave\\Http\\Tests\\": "Tests/"
+            "Viserio\\Http\\Tests\\": "Tests/"
         }
     },
     "extra": {

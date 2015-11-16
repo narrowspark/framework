@@ -4,7 +4,7 @@
     "description": "Narrowspark Framework for Creative People.",
     "keywords": ["narrowspark", "viserio", "session"],
     "license": "MIT",
-    "homepage": "http://github.com/n-brainwave/session",
+    "homepage": "http://github.com/n-Viserio/session",
     "authors": [
         {
           "name"    : "Daniel Bannert",
@@ -27,12 +27,12 @@
     },
     "autoload": {
         "psr-4": {
-            "Brainwave\\Session\\"       : ""
+            "Viserio\\Session\\"       : ""
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Brainwave\\Session\\Tests\\": "Tests/"
+            "Viserio\\Session\\Tests\\": "Tests/"
         }
     },
     "extra": {

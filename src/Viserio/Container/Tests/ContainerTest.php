@@ -233,7 +233,7 @@ return $obj; });
     {
         // Since the dependency is ( D -> F -> E -> D ), the exception
         // message should state that the issue starts in class D
-        $this->setExpectedException('Brainwave\Container\CircularReferenceException', 'Circular reference found while resolving [ContainerCircularReferenceStubD].');
+        $this->setExpectedException('Viserio\Container\CircularReferenceException', 'Circular reference found while resolving [ContainerCircularReferenceStubD].');
         $container = $this->container;
         $parameters = [];
         $container->make('ContainerCircularReferenceStubD', $parameters);
@@ -243,7 +243,7 @@ return $obj; });
     {
         // Since the dependency is ( A -> B -> C -> B ), the exception
         // message should state that the issue starts in class B
-        $this->setExpectedException('Brainwave\Container\CircularReferenceException', 'Circular reference found while resolving [ContainerCircularReferenceStubB].');
+        $this->setExpectedException('Viserio\Container\CircularReferenceException', 'Circular reference found while resolving [ContainerCircularReferenceStubB].');
         $container = $this->container;
         $parameters = [];
         $container->make('ContainerCircularReferenceStubA', $parameters);

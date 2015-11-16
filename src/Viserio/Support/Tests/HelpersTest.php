@@ -47,11 +47,11 @@ class HelpersTest extends \PHPUnit_Framework_TestCase
 
     public function testArrayPluckWithNestedKeys()
     {
-        $array = [['user' => ['narrowspark', 'brainwave']], ['user' => ['dayle', 'rees']]];
+        $array = [['user' => ['narrowspark', 'Viserio']], ['user' => ['dayle', 'rees']]];
         $this->assertEquals(['narrowspark', 'dayle'], Arr::pluck($array, 'user.0'));
         $this->assertEquals(['narrowspark', 'dayle'], Arr::pluck($array, ['user', 0]));
-        $this->assertEquals(['narrowspark' => 'brainwave', 'dayle' => 'rees'], Arr::pluck($array, 'user.1', 'user.0'));
-        $this->assertEquals(['narrowspark' => 'brainwave', 'dayle' => 'rees'], Arr::pluck($array, ['user', 1], ['user', 0]));
+        $this->assertEquals(['narrowspark' => 'Viserio', 'dayle' => 'rees'], Arr::pluck($array, 'user.1', 'user.0'));
+        $this->assertEquals(['narrowspark' => 'Viserio', 'dayle' => 'rees'], Arr::pluck($array, ['user', 1], ['user', 0]));
     }
 
     public function testArrayGet()
@@ -108,9 +108,9 @@ class HelpersTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(['age' => 26], Arr::except($array, ['name']));
         $this->assertEquals(['age' => 26], Arr::except($array, 'name'));
 
-        $array = ['name' => 'narrowspark', 'framework' => ['language' => 'PHP', 'name' => 'brainwave']];
+        $array = ['name' => 'narrowspark', 'framework' => ['language' => 'PHP', 'name' => 'Viserio']];
         $this->assertEquals(['name' => 'narrowspark'], Arr::except($array, 'framework'));
-        $this->assertEquals(['name' => 'narrowspark', 'framework' => ['name' => 'brainwave']], Arr::except($array, 'framework.language'));
+        $this->assertEquals(['name' => 'narrowspark', 'framework' => ['name' => 'Viserio']], Arr::except($array, 'framework.language'));
         $this->assertEquals(['framework' => ['language' => 'PHP']], Arr::except($array, ['name', 'framework.name']));
     }
 
@@ -212,7 +212,7 @@ class HelpersTest extends \PHPUnit_Framework_TestCase
 
     public function testDataGet()
     {
-        $object = (object) ['users' => ['name' => ['daniel', 'Brainwave']]];
+        $object = (object) ['users' => ['name' => ['daniel', 'Viserio']]];
         $array = [(object) ['users' => [(object) ['name' => 'daniel']]]];
         $dottedArray = ['users' => ['first.name' => 'Daniel']];
 

@@ -50,7 +50,7 @@ class HttpResponseTest extends \PHPUnit_Framework_TestCase
 
     public function testRenderablesAreRendered()
     {
-        $mock = Mock::mock('Brainwave\Contracts\Support\Renderable');
+        $mock = Mock::mock('Viserio\Contracts\Support\Renderable');
         $mock->shouldReceive('render')->once()->andReturn('foo');
 
         $response = new Response($mock);
@@ -99,7 +99,7 @@ class HttpResponseTest extends \PHPUnit_Framework_TestCase
     {
         $response = new RedirectResponse('foo.bar');
         $response->setRequest(Request::create('/', 'GET', ['name' => 'Narrowspark', 'age' => 1]));
-        $response->setSession($session = Mock::mock('Brainwave\Session\Store'));
+        $response->setSession($session = Mock::mock('Viserio\Session\Store'));
         $session->shouldReceive('flashInput')->once()->with(['name' => 'Narrowspark']);
         $response->onlyInput('name');
     }
@@ -108,7 +108,7 @@ class HttpResponseTest extends \PHPUnit_Framework_TestCase
     {
         $response = new RedirectResponse('foo.bar');
         $response->setRequest(Request::create('/', 'GET', ['name' => 'Narrowspark', 'age' => 1]));
-        $response->setSession($session = Mock::mock('Brainwave\Session\Store'));
+        $response->setSession($session = Mock::mock('Viserio\Session\Store'));
         $session->shouldReceive('flashInput')->once()->with(['name' => 'Narrowspark']);
         $response->exceptInput('age');
     }
@@ -119,7 +119,7 @@ class HttpResponseTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($response->getRequest());
         $this->assertNull($response->getSession());
         $request = Request::create('/', 'GET');
-        $session = Mock::mock('Brainwave\Session\Store');
+        $session = Mock::mock('Viserio\Session\Store');
         $response->setRequest($request);
         $response->setSession($session);
         $this->assertSame($request, $response->getRequest());
@@ -130,7 +130,7 @@ class HttpResponseTest extends \PHPUnit_Framework_TestCase
     {
         $response = new RedirectResponse('foo.bar');
         $response->setRequest(Request::create('/', 'GET', ['name' => 'Narrowspark', 'age' => 1]));
-        $response->setSession($session = Mock::mock('Brainwave\Session\Store'));
+        $response->setSession($session = Mock::mock('Viserio\Session\Store'));
         $session->shouldReceive('flash')->once()->with('foo', 'bar');
         $response->withFoo('bar');
     }

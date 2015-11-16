@@ -1,4 +1,4 @@
-# Brainwave Exception package
+# Viserio Exception package
 
 This package is part of the [Narrowspark framework](http://github.com/narrowspark/framework).
 
@@ -24,7 +24,7 @@ PHP 5.5.9 or above
 Use [Composer](https://getcomposer.org/) to install this package:
 
 ```sh
-composer require brainwave/exception
+composer require viserio/exception
 ```
 
 ## Official Documentation

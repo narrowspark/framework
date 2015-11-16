@@ -4,7 +4,7 @@
     "description": "Narrowspark Framework for Creative People.",
     "keywords"   : ["narrowspark", "viserio", "exception", "debug", "Symfony"],
     "license"    : "MIT",
-    "homepage"   : "http://github.com/n-brainwave/session",
+    "homepage"   : "http://github.com/n-Viserio/session",
     "support"    : {
         "issues": "https://github.com/narrowspark/framework/issues",
         "source": "https://github.com/narrowspark/framework"
@@ -35,12 +35,12 @@
     },
     "autoload": {
         "psr-4": {
-            "Brainwave\\Exception\\"         : ""
+            "Viserio\\Exception\\"         : ""
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Brainwave\\Exception\\Tests\\"  : "Tests/"
+            "Viserio\\Exception\\Tests\\"  : "Tests/"
         }
     },
     "extra": {

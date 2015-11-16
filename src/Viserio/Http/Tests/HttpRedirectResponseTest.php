@@ -48,7 +48,7 @@ class HttpRedirectResponseTest extends \PHPUnit_Framework_TestCase
     {
         $response = new RedirectResponse('foo.bar');
         $response->setRequest(Request::create('/', 'GET', ['name' => 'Taylor', 'age' => 26]));
-        $response->setSession($session = Mock::mock('Brainwave\Session\Store'));
+        $response->setSession($session = Mock::mock('Viserio\Session\Store'));
         $session->shouldReceive('flash')->twice();
         $response->with(['name', 'age']);
     }
@@ -66,7 +66,7 @@ class HttpRedirectResponseTest extends \PHPUnit_Framework_TestCase
     {
         $response = new RedirectResponse('foo.bar');
         $response->setRequest(Request::create('/', 'GET', ['name' => 'Taylor', 'age' => 26]));
-        $response->setSession($session = Mock::mock('Brainwave\Session\Store'));
+        $response->setSession($session = Mock::mock('Viserio\Session\Store'));
         $session->shouldReceive('flashInput')->once()->with(['name' => 'Taylor', 'age' => 26]);
         $response->withInput();
     }
@@ -74,7 +74,7 @@ class HttpRedirectResponseTest extends \PHPUnit_Framework_TestCase
     {
         $response = new RedirectResponse('foo.bar');
         $response->setRequest(Request::create('/', 'GET', ['name' => 'Taylor', 'age' => 26]));
-        $response->setSession($session = Mock::mock('Brainwave\Session\Store'));
+        $response->setSession($session = Mock::mock('Viserio\Session\Store'));
         $session->shouldReceive('flashInput')->once()->with(['name' => 'Taylor']);
         $response->onlyInput('name');
     }
@@ -82,7 +82,7 @@ class HttpRedirectResponseTest extends \PHPUnit_Framework_TestCase
     {
         $response = new RedirectResponse('foo.bar');
         $response->setRequest(Request::create('/', 'GET', ['name' => 'Taylor', 'age' => 26]));
-        $response->setSession($session = Mock::mock('Brainwave\Session\Store'));
+        $response->setSession($session = Mock::mock('Viserio\Session\Store'));
         $session->shouldReceive('flashInput')->once()->with(['name' => 'Taylor']);
         $response->exceptInput('age');
     }
@@ -92,7 +92,7 @@ class HttpRedirectResponseTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($response->getRequest());
         $this->assertNull($response->getSession());
         $request = Request::create('/', 'GET');
-        $session = Mock::mock('Brainwave\Session\Store');
+        $session = Mock::mock('Viserio\Session\Store');
         $response->setRequest($request);
         $response->setSession($session);
         $this->assertSame($request, $response->getRequest());
@@ -102,7 +102,7 @@ class HttpRedirectResponseTest extends \PHPUnit_Framework_TestCase
     {
         $response = new RedirectResponse('foo.bar');
         $response->setRequest(Request::create('/', 'GET', ['name' => 'Taylor', 'age' => 26]));
-        $response->setSession($session = Mock::mock('Brainwave\Session\Store'));
+        $response->setSession($session = Mock::mock('Viserio\Session\Store'));
         $session->shouldReceive('flash')->once()->with('foo', 'bar');
         $response->withFoo('bar');
     }
