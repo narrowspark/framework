@@ -39,7 +39,7 @@ use Invoker\ParameterResolver\ResolverChain;
  */
 class Container implements \ArrayAccess, ContainerInteropInterface, ContainerContract, FactoryContract
 {
-    /*
+    /**
      * Array Access Support
      * Mock Support
      */
@@ -49,6 +49,12 @@ class Container implements \ArrayAccess, ContainerInteropInterface, ContainerCon
      * @var bool
      */
     private $useAutowiring = true;
+
+    /**
+     *
+     * @var array
+     */
+    protected $autowiringExcludes = [];
 
     /**
      * The registered type aliases.
@@ -93,11 +99,6 @@ class Container implements \ArrayAccess, ContainerInteropInterface, ContainerCon
     protected $keys = [];
 
     /**
-     * @var array
-     */
-    protected $inflectors = [];
-
-    /**
      * The contextual binding map.
      *
      * @var array
@@ -135,9 +136,9 @@ class Container implements \ArrayAccess, ContainerInteropInterface, ContainerCon
         $this->wrapperContainer = $wrapperContainer ?: $this;
 
         // Auto-register the container
-        $this->singleton('Brainwave\Container\Container', $this);
-        $this->singleton('Brainwave\Contracts\Container\Container', $this);
-        $this->singleton('Brainwave\Contracts\Container\Factory', $this);
+        $this->singleton('Viserio\Container\Container', $this);
+        $this->singleton('Viserio\Contracts\Container\Container', $this);
+        $this->singleton('Viserio\Contracts\Container\Factory', $this);
         $this->singleton('Interop\Container\ContainerInterface', $this->wrapperContainer);
     }
 
@@ -153,6 +154,20 @@ class Container implements \ArrayAccess, ContainerInteropInterface, ContainerCon
     public function useAutowiring($bool)
     {
         $this->useAutowiring = $bool;
+
+        return $this;
+    }
+
+    /**
+     * Exlude classes from autowiring.
+     *
+     * @param  array  $excludes [description]
+     *
+     * @return self
+     */
+    public function autowiringExclud(array $excludes = [])
+    {
+        $this->autowiringExcludes = $excludes;
 
         return $this;
     }
@@ -183,6 +198,9 @@ class Container implements \ArrayAccess, ContainerInteropInterface, ContainerCon
      */
     public function bind($alias, $concrete = null, $singleton = false)
     {
+        $alias    = $this->normalize($alias);
+        $concrete = $this->normalize($concrete);
+
         $this->notImmutable($alias);
 
         // If the given types are actually an array, we will assume an alias is being
@@ -228,16 +246,16 @@ class Container implements \ArrayAccess, ContainerInteropInterface, ContainerCon
     /**
      * {@inheritdoc}
      */
-    public function make($name, array $parameters = [])
+    public function make($abstract, array $parameters = [])
     {
-        if (!is_string($name)) {
+        if (!is_string($abstract)) {
             throw new InvalidArgumentException(sprintf(
                 'The name parameter must be of type string, %s given',
-                is_object($name) ? get_class($name) : gettype($name)
+                is_object($abstract) ? get_class($abstract) : gettype($abstract)
             ));
         }
 
-        $alias = $this->getAlias($name);
+        $alias = $this->getAlias($this->normalize($abstract));
 
         if ($this->bound($alias)) {
             try {
@@ -247,7 +265,7 @@ class Container implements \ArrayAccess, ContainerInteropInterface, ContainerCon
                 if (isset($this->singletons[$alias])) {
                     $this->immutable[$alias] = true;
 
-                    return $this->applyInflectors($this->singletons[$alias]);
+                    return $this->singletons[$alias];
                 }
 
                 if (isset($this->values[$alias])) {
@@ -273,7 +291,7 @@ class Container implements \ArrayAccess, ContainerInteropInterface, ContainerCon
 
                 $this->immutable[$alias] = true;
 
-                return $this->applyInflectors($object);
+                return $object;
             } catch (\Exception $prev) {
                 throw new ContainerException("An error occured while fetching entry '".$id."'", 0, $prev);
             }
@@ -309,27 +327,12 @@ class Container implements \ArrayAccess, ContainerInteropInterface, ContainerCon
     /**
      * {@inheritdoc}
      */
-    public function inflector($type, callable $callback = null)
-    {
-        if (is_null($callback)) {
-            $inflector = new Inflector();
-            $this->inflectors[$type] = $inflector;
-
-            return $inflector;
-        }
-
-        $this->inflectors[$type] = $callback;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function when($concrete)
     {
-        $contextualBindingBuilder = new ContextualBindingBuilder($concrete);
-        $contextualBindingBuilder->setContainer($this);
+        $builder = new ContextualBindingBuilder($this->normalize($concrete));
+        $builder->setContainer($this);
 
-        return $contextualBindingBuilder;
+        return $builder;
     }
 
     /**
@@ -337,7 +340,7 @@ class Container implements \ArrayAccess, ContainerInteropInterface, ContainerCon
      */
     public function isRegistered($alias)
     {
-        return isset($this->keys[$alias]);
+        return isset($this->keys[$this->normalize($alias)]);
     }
 
     /**
@@ -349,7 +352,7 @@ class Container implements \ArrayAccess, ContainerInteropInterface, ContainerCon
      */
     public function isAlias($name)
     {
-        return isset($this->aliases[$name]);
+        return isset($this->aliases[$this->normalize($name)]);
     }
 
     /**
@@ -357,6 +360,8 @@ class Container implements \ArrayAccess, ContainerInteropInterface, ContainerCon
      */
     public function isSingleton($alias)
     {
+        $alias = $this->normalize($alias);
+
         if (isset($this->bindings[$alias]['singleton'])) {
             $singleton = $this->bindings[$alias]['singleton'];
         } else {
@@ -375,6 +380,8 @@ class Container implements \ArrayAccess, ContainerInteropInterface, ContainerCon
      */
     public function bound($alias)
     {
+        $alias = $this->normalize($alias);
+
         return (
             isset($this->bindings[$alias]) ||
             $this->isSingleton($alias) ||
@@ -416,6 +423,8 @@ class Container implements \ArrayAccess, ContainerInteropInterface, ContainerCon
             );
         }
 
+        $binding = $this->normalize($binding);
+
         $this->bind($binding, function ($container) use ($closure, $boundObject) {
             return $closure($container, $boundObject($container));
         });
@@ -430,6 +439,8 @@ class Container implements \ArrayAccess, ContainerInteropInterface, ContainerCon
      */
     public function getRaw($binding)
     {
+        $binding = $this->normalize($binding);
+
         if (isset($this->bindings[$binding])) {
             return $this->bindings[$binding]['concrete'];
         }
@@ -476,7 +487,7 @@ class Container implements \ArrayAccess, ContainerInteropInterface, ContainerCon
      */
     public function addContextualBinding($concrete, $alias, $implementation)
     {
-        $this->contextual[$concrete][$alias] = $implementation;
+        $this->contextual[$this->normalize($concrete)][$this->normalize($alias)] = $this->normalize($implementation);
     }
 
     /**
@@ -488,34 +499,9 @@ class Container implements \ArrayAccess, ContainerInteropInterface, ContainerCon
      */
     protected function getAlias($alias)
     {
+        $alias = $this->normalize($alias);
+
         return isset($this->aliases[$alias]) ? $this->aliases[$alias] : $alias;
-    }
-
-    /**
-     * Apply any active inflectors to the resolved object.
-     *
-     * @param object $object
-     *
-     * @return object
-     */
-    protected function applyInflectors($object)
-    {
-        foreach ($this->inflectors as $type => $inflector) {
-            if (!$object instanceof $type) {
-                continue;
-            }
-
-            if ($inflector instanceof Inflector) {
-                $inflector->setContainer($this);
-                $inflector->inflect($object);
-                continue;
-            }
-
-            // must be dealing with a callable as the inflector
-            call_user_func_array($inflector, [$object]);
-        }
-
-        return $object;
     }
 
     /**
@@ -527,6 +513,8 @@ class Container implements \ArrayAccess, ContainerInteropInterface, ContainerCon
      */
     protected function getContextualConcrete($alias)
     {
+        $alias = $this->normalize($alias);
+
         if (isset($this->contextual[end($this->buildStack)][$alias])) {
             return $this->contextual[end($this->buildStack)][$alias];
         }
@@ -545,12 +533,14 @@ class Container implements \ArrayAccess, ContainerInteropInterface, ContainerCon
             return $concrete;
         }
 
+        $alias = $this->normalize($alias);
+
         // If we don't have a registered resolver or concrete for the type, we'll just
         // assume each type is a concrete name and will attempt to resolve it as is
         // since the container should be able to resolve concretes automatically.
         if (!isset($this->bindings[$alias])) {
-            if (isset($this->bindings[$this->absoluteClassName($alias)])) {
-                $alias = $this->absoluteClassName($alias);
+            if (isset($this->bindings[$this->normalize($alias)])) {
+                $alias = $this->normalize($alias);
             }
 
             return $alias;
@@ -649,15 +639,15 @@ class Container implements \ArrayAccess, ContainerInteropInterface, ContainerCon
     }
 
     /**
-     * Returns absolute class name - always with leading backslash.
+     * Normalize the given class name by removing leading slashes.
      *
-     * @param string $className
+     * @param mixed $service
      *
-     * @return string
+     * @return mixed
      */
-    private function absoluteClassName($className)
+    protected function normalize($service)
     {
-        return (substr($className, 0, 1) === '\\') ? $className : '\\'.$className;
+        return is_string($service) ? ltrim($service, '\\') : $service;
     }
 
     /**

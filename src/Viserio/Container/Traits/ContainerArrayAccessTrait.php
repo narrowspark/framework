@@ -116,6 +116,8 @@ trait ContainerArrayAccessTrait
      */
     public function offsetGet($id)
     {
+        $id = $this->normalize($id);
+
         if (isset($this->mockedServices['mock::'.$id])) {
             return $this->mockedServices['mock::'.$id];
         }
@@ -129,7 +131,7 @@ trait ContainerArrayAccessTrait
      * @param string $id
      * @param mixed  $value The value of the parameter or a closure to define an object
      *
-     * @return ContainerArrayAccessTrait|null
+     * @return self|null
      */
     public function offsetSet($id, $value)
     {
@@ -139,7 +141,7 @@ trait ContainerArrayAccessTrait
             };
         }
 
-        $this->bind($id, $value);
+        $this->bind($this->normalize($id), $value);
     }
 
     /**
@@ -151,6 +153,8 @@ trait ContainerArrayAccessTrait
      */
     public function offsetExists($id)
     {
+        $id = $this->normalize($id);
+
         if (isset($this->keys[$id]) || isset($this->mockedServices['mock::'.$id])) {
             return true;
         }
@@ -167,6 +171,8 @@ trait ContainerArrayAccessTrait
      */
     public function offsetUnset($id)
     {
+        $id = $this->normalize($id);
+
         if (isset($this->keys[$id])) {
             unset(
                 $this->aliases[$id],
@@ -181,21 +187,17 @@ trait ContainerArrayAccessTrait
     }
 
     /**
-     * Resolve the given type from the container.
-     *
-     * @param string $alias
-     * @param array  $args
-     *
-     * @return mixed
+     * {@inheritdoc}
+     */
+    abstract public function normalize($service);
+
+    /**
+     * {@inheritdoc}
      */
     abstract public function make($alias, array $args = []);
 
     /**
-     * Register a binding with the container.
-     *
-     * @param string        $alias
-     * @param \Closure|null $concrete
-     * @param bool          $singleton
+     * {@inheritdoc}
      */
     abstract public function bind($alias, $concrete = null, $singleton = false);
 }

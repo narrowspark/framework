@@ -16,13 +16,8 @@ namespace Viserio\Container\Test;
  *
  */
 
-<<<<<<< HEAD:src/Brainwave/Container/Tests/DefinitionTest.php
-use Brainwave\Container\Container;
-use Brainwave\Container\Definition\Definition;
-=======
 use Viserio\Container\Container;
 use Viserio\Container\Definition;
->>>>>>> develop:src/Viserio/Container/Tests/DefinitionTest.php
 
 /**
  * ContainerTest.

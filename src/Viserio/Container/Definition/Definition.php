@@ -15,6 +15,8 @@ namespace Viserio\Container;
  */
 
 use Viserio\Contracts\Container\ContainerAware as ContainerAwareContract;
+use ReflectionClass;
+use ReflectionMethod;
 
 /**
  * Definition.
@@ -199,7 +201,7 @@ class Definition
     {
         if (!empty($this->methods)) {
             foreach (array_reverse($this->methods) as $method => $args) {
-                $reflection = new \ReflectionMethod($object, $method);
+                $reflection = new ReflectionMethod($object, $method);
                 $arguments = [];
 
                 foreach ($args as $arg) {
@@ -223,7 +225,7 @@ class Definition
      */
     protected function mergeInheritedDependencies()
     {
-        $reflection = new \ReflectionClass($this->class);
+        $reflection = new ReflectionClass($this->class);
 
         $inheritance = $reflection->getInterfaceNames();
         $class = $reflection;

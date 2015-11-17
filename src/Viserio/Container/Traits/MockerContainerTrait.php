@@ -57,7 +57,7 @@ trait MockerContainerTrait
      */
     public function unmock($id)
     {
-        unset($this->mockedServices['mock::'.$id]);
+        unset($this->mockedServices['mock::'.$this->normalize($id)]);
     }
 
     /**
@@ -72,4 +72,9 @@ trait MockerContainerTrait
      * {@inheritdoc}
      */
     abstract public function has($id);
+
+    /**
+     * {@inheritdoc}
+     */
+    abstract public function normalize($service);
 }

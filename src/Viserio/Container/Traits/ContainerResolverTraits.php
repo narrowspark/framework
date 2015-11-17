@@ -38,9 +38,10 @@ trait ContainerResolverTraits
     public function resolve($binding, $alias = true)
     {
         $rawObject = $this->getRaw($binding);
+        $binding   = $this->normalize($binding);
 
         // If the abstract is not registered, do it now for easy resolution.
-        if (null === $rawObject) {
+        if ($rawObject === null) {
             // Pass $binding to both so it doesn't need to check if null again.
             $this->bind($binding, $binding);
             $rawObject = $this->getRaw($binding);
@@ -54,31 +55,19 @@ trait ContainerResolverTraits
     }
 
     /**
-     * Get the raw object prior to resolution.
-     *
-     * @param string $binding The $binding key to get the raw value from.
-     *
-     * @return Definition|\Closure|null Value of the $binding.
+     * {@inheritdoc}
      */
     abstract public function getRaw($binding);
 
     /**
-     * Register a binding with the container.
-     *
-     * @param string      $alias
-     * @param string|null $concrete
-     * @param bool        $singleton
+     * {@inheritdoc}
      */
     abstract public function bind($alias, $concrete = null, $singleton = false);
 
     /**
-     * Returns absolute class name - always with leading backslash.
-     *
-     * @param string $className
-     *
-     * @return string
+     * {@inheritdoc}
      */
-    abstract protected function absoluteClassName($className);
+    abstract public function normalize($service);
 
     /**
      * Checks if class exists.
@@ -89,8 +78,10 @@ trait ContainerResolverTraits
      */
     protected function resolveClassName($className)
     {
+        $className = $this->normalize($className);
+
         if (class_exists($className)) {
-            return $this->absoluteClassName($className);
+            return $className;
         }
 
         return;
@@ -110,6 +101,8 @@ trait ContainerResolverTraits
      */
     protected function reflect($concrete, array $parameters = [])
     {
+        $concrete = $this->normalize($concrete);
+
         // try to reflect on the class so we can build a definition
         $reflector = new \ReflectionClass($concrete);
 
