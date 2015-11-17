@@ -1142,19 +1142,6 @@ class Collection implements
     }
 
     /**
-     * Combine the collection with the given items using the collection as keys.
-     *
-     * @param mixed $items
-     * @param bool  $includeKeyDeprivedValues
-     *
-     * @return static
-     */
-    public function combine($items, $includeKeyDeprivedValues = true)
-    {
-        return new static(Arr::combine($this->items, $items, $includeKeyDeprivedValues));
-    }
-
-    /**
      * Results array of items from Collection or Arrayable.
      *
      * @param mixed $items

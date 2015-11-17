@@ -644,55 +644,6 @@ class Arr
     }
 
     /**
-     * Creates an array by using one array for keys and another for its values.
-     *
-     * @param array|\ArrayAccess $items
-     * @param bool               $includeKeyDeprivedValues
-     *
-     * @return array
-     */
-    public static function combine($keys, $values, $includeKeyDeprivedValues = true)
-    {
-        $combined = [];
-
-        if ($keys instanceof Collection) {
-            $keys = $keys->all();
-        }
-
-        if ($values instanceof Collection) {
-            $values = $values->all();
-        }
-
-        for ($i = 0; $i < count($values); $i++) {
-            if (isset($keys[$i]) && static::canBeString($keys[$i]) && (string) $keys[$i] !== '') {
-                static::set($combined, (string) $keys[$i], $values[$i]);
-            } elseif ($includeKeyDeprivedValues) {
-                array_push($combined, $values[$i]);
-            } else {
-                break;
-            }
-        }
-
-        return $combined;
-    }
-
-    /**
-     * Checks if an item can be cast to string.
-     *
-     * @param mixed $item
-     *
-     * @return bool
-     */
-    protected static function canBeString($item)
-    {
-        if ((is_object($item) && method_exists($item, '__toString'))) {
-            return true;
-        }
-
-        return is_scalar($item);
-    }
-
-    /**
      * @param array $result
      * @param array $toSave
      * @param array $keys
