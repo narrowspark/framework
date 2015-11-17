@@ -40,7 +40,7 @@ class Collection implements
      */
     protected $data = [];
 
-    /**
+    /**combine
      * Constructor.
      *
      * @param mixed $data Pre-populate collection with this key-value array
