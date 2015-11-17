@@ -40,7 +40,7 @@ class Collection implements
      */
     protected $data = [];
 
-    /**
+    /**combine
      * Constructor.
      *
      * @param mixed $data Pre-populate collection with this key-value array
@@ -1142,48 +1142,16 @@ class Collection implements
     }
 
     /**
-     * Combine the collection with the given items
-     * using the collection as keys.
+     * Combine the collection with the given items using the collection as keys.
      *
-     * @param  mixed  $items
-     * @param  bool
+     * @param mixed $items
+     * @param bool  $includeKeyDeprivedValues
+     *
      * @return static
      */
     public function combine($items, $includeKeyDeprivedValues = true)
     {
-        $combined = new static;
-        $values   = $this->getArrayableItems($items);
-
-        for ($i = 0; $i < count($values); $i++) {
-            if (
-                isset($this->items[$i]) &&
-                $this->canBeString($this->items[$i]) &&
-                (string) $this->items[$i] !== ''
-            ) {
-                $combined->put((string) $this->items[$i], $values[$i]);
-            } elseif ($includeKeyDeprivedValues) {
-                $combined->push($values[$i]);
-            } else {
-                break;
-            }
-        }
-
-        return $combined;
-    }
-
-    /**
-     * Checks if an item can be cast to string.
-     *
-     * @param  mixed $item
-     * @return bool
-     */
-    protected function canBeString($item)
-    {
-        if ((is_object($item) && method_exists($item, '__toString'))) {
-            return true;
-        }
-
-        return is_scalar($item);
+        return new static(Arr::combine($this->items, $items, $includeKeyDeprivedValues));
     }
 
     /**

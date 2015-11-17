@@ -164,4 +164,28 @@ class ArrTest extends \PHPUnit_Framework_TestCase
              Arr::getIndexedValues($this->testData, 'language', ['stars', 'rating'])
          );
     }
+
+    public function testCombine()
+    {
+        $c = new Collection(['foo']);
+        $this->assertEquals(['foo' => 'bar'], $c->combine(['bar'])->all());
+    }
+
+    public function testCombineNull()
+    {
+        $c = new Collection([null]);
+        $this->assertEquals(['foo'], $c->combine(['foo'])->all());
+
+        $c = new Collection([null]);
+        $this->assertEquals([], $c->combine(['foo'], false)->all());
+    }
+
+    public function testCombineMissingKey()
+    {
+        $c = new Collection(['foo']);
+        $this->assertEquals(['foo' => 'bar', 'baz'], $c->combine(['bar', 'baz'])->all());
+
+        $c = new Collection(['foo']);
+        $this->assertEquals(['foo' => 'bar'], $c->combine(['bar', 'baz'], false)->all());
+    }
 }
