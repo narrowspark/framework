@@ -739,6 +739,30 @@ class TestAccessorEloquentTestStub
         $this->assertEquals(['zero' => 0, 'one' => 1, 'two' => 2], $c->prepend(0, 'zero')->all());
     }
 
+    public function testCombine()
+    {
+        $c = new Collection(['foo']);
+        $this->assertEquals(['foo' => 'bar'], $c->combine(['bar'])->all());
+    }
+
+    public function testCombineNull()
+    {
+        $c = new Collection([null]);
+        $this->assertEquals(['foo'], $c->combine(['foo'])->all());
+
+        $c = new Collection([null]);
+        $this->assertEquals([], $c->combine(['foo'], false)->all());
+    }
+
+    public function testCombineMissingKey()
+    {
+        $c = new Collection(['foo']);
+        $this->assertEquals(['foo' => 'bar', 'baz'], $c->combine(['bar', 'baz'])->all());
+
+        $c = new Collection(['foo']);
+        $this->assertEquals(['foo' => 'bar'], $c->combine(['bar', 'baz'], false)->all());
+    }
+
     public function testZip()
     {
         $c = new Collection([1, 2, 3]);
