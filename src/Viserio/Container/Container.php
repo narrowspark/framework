@@ -28,6 +28,7 @@ use Interop\Container\ContainerInterface as ContainerInteropInterface;
 use InvalidArgumentException;
 use Invoker\Invoker;
 use Invoker\ParameterResolver\AssociativeArrayResolver;
+use Invoker\ParameterResolver\Container\TypeHintContainerResolver;
 use Invoker\ParameterResolver\DefaultValueResolver;
 use Invoker\ParameterResolver\NumericArrayResolver;
 use Invoker\ParameterResolver\ResolverChain;
@@ -626,11 +627,19 @@ class Container implements ArrayAccess, Serializable, ContainerInteropInterface,
     private function getInvoker()
     {
         if (!$this->invoker) {
-            $parameterResolver = new ResolverChain([
+            $container = [];
+
+            foreach ($this->delegates as $delegate) {
+                $container[] = new TypeHintContainerResolver($delegate);
+            }
+
+            $chain = [
                 new NumericArrayResolver,
                 new AssociativeArrayResolver,
                 new DefaultValueResolver
-            ]);
+            ];
+
+            $parameterResolver = new ResolverChain(array_merge($container, $chain));
 
             $this->invoker = new Invoker($parameterResolver, $this);
         }
