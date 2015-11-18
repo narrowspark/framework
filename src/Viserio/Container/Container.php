@@ -14,21 +14,25 @@ namespace Viserio\Container;
  * @version     0.10.0-dev
  */
 
+use ArrayAccess;
+use Closure;
 use Viserio\Container\Exception\BindingResolutionException;
 use Viserio\Container\Exception\ContainerException;
 use Viserio\Container\Exception\NotFoundException;
 use Viserio\Container\Traits\ContainerArrayAccessTrait;
 use Viserio\Container\Traits\ContainerResolverTraits;
 use Viserio\Container\Traits\MockerContainerTrait;
+use Viserio\Container\Traits\DelegateTrait;
 use Viserio\Contracts\Container\Container as ContainerContract;
 use Interop\Container\ContainerInterface as ContainerInteropInterface;
 use InvalidArgumentException;
 use Invoker\Invoker;
 use Invoker\ParameterResolver\AssociativeArrayResolver;
-use Invoker\ParameterResolver\Container\TypeHintContainerResolver;
 use Invoker\ParameterResolver\DefaultValueResolver;
 use Invoker\ParameterResolver\NumericArrayResolver;
 use Invoker\ParameterResolver\ResolverChain;
+use Serializable;
+use Opis\Closure\SerializableClosure;
 
 /**
  * Container.
@@ -37,24 +41,15 @@ use Invoker\ParameterResolver\ResolverChain;
  *
  * @since   0.9.4-dev
  */
-class Container implements \ArrayAccess, ContainerInteropInterface, ContainerContract, FactoryContract
+class Container implements ArrayAccess, Serializable, ContainerInteropInterface, ContainerContract
 {
     /**
      * Array Access Support
      * Mock Support
+     * Resolver
+     * Defining Sub/Nested Containers
      */
-    use ContainerArrayAccessTrait, MockerContainerTrait, ContainerResolverTraits;
-
-    /**
-     * @var bool
-     */
-    private $useAutowiring = true;
-
-    /**
-     *
-     * @var array
-     */
-    protected $autowiringExcludes = [];
+    use ContainerArrayAccessTrait, MockerContainerTrait, ContainerResolverTraits, DelegateTrait;
 
     /**
      * The registered type aliases.
@@ -120,56 +115,13 @@ class Container implements \ArrayAccess, ContainerInteropInterface, ContainerCon
     protected $invoker;
 
     /**
-     * Container that wraps this container. If none, points to $this.
-     *
-     * @var ContainerInteropInterface
+     * Construct.
      */
-    private $wrapperContainer;
-
-    /**
-     * Use the ContainerBuilder to ease constructing the Container.
-     *
-     * @param ContainerInteropInterface $wrapperContainer If the container is wrapped by another container.
-     */
-    public function __construct(ContainerInteropInterface $wrapperContainer = null)
+    public function __construct()
     {
-        $this->wrapperContainer = $wrapperContainer ?: $this;
-
-        // Auto-register the container
         $this->singleton('Viserio\Container\Container', $this);
         $this->singleton('Viserio\Contracts\Container\Container', $this);
-        $this->singleton('Viserio\Contracts\Container\Factory', $this);
-        $this->singleton('Interop\Container\ContainerInterface', $this->wrapperContainer);
-    }
-
-    /**
-     * Enable or disable the use of autowiring to guess injections.
-     *
-     * Enabled by default.
-     *
-     * @param bool $bool
-     *
-     * @return self
-     */
-    public function useAutowiring($bool)
-    {
-        $this->useAutowiring = $bool;
-
-        return $this;
-    }
-
-    /**
-     * Exlude classes from autowiring.
-     *
-     * @param  array  $excludes [description]
-     *
-     * @return self
-     */
-    public function autowiringExclud(array $excludes = [])
-    {
-        $this->autowiringExcludes = $excludes;
-
-        return $this;
+        $this->singleton('Interop\Container\ContainerInterface', $this);
     }
 
     /**
@@ -217,7 +169,7 @@ class Container implements \ArrayAccess, ContainerInteropInterface, ContainerCon
 
         // If the given type is actually an string, we will register this value
         // with the container so that it can be used.
-        if ($this->shouldNotBeDefinitionObject($alias, $concrete)) {
+        if ($this->isString($alias, $concrete)) {
             $this->values[$alias] = $concrete;
 
             return $concrete;
@@ -230,12 +182,6 @@ class Container implements \ArrayAccess, ContainerInteropInterface, ContainerCon
 
         if (null === $concrete) {
             $concrete = $alias;
-        }
-
-        // if the concrete is an already instantiated object, we just store it
-        // as a singleton
-        if ($this->shouldBeDefinitionObject($concrete)) {
-            $concrete = new Definition($this, $concrete);
         }
 
         $this->bindings[$alias] = compact('concrete', 'singleton');
@@ -315,7 +261,7 @@ class Container implements \ArrayAccess, ContainerInteropInterface, ContainerCon
         // If the concrete type is actually a Closure, we will just execute it and
         // hand back the results of the functions, which allows functions to be
         // used as resolvers for more fine-tuned resolution of these objects.
-        if ($concrete instanceof \Closure) {
+        if ($concrete instanceof Closure) {
             return $concrete($this, $args);
         }
 
@@ -491,6 +437,55 @@ class Container implements \ArrayAccess, ContainerInteropInterface, ContainerCon
     }
 
     /**
+     * Invokes the 'make' method
+     *
+     * @param string $abstract   Abstract type name
+     * @param array  $arguments  (optional) Arguments that will be passed to the constructor
+     *
+     * @return mixed
+     */
+
+    public function __invoke($abstract, array $arguments = array())
+    {
+        return $this->make($abstract, $arguments);
+    }
+
+    /**
+     * Serialize the container
+     *
+     * @access  public
+     *
+     * @return  string
+     */
+    public function serialize()
+    {
+        SerializableClosure::enterContext();
+
+        $object = serialize(array(
+            'bindings' => $this->bindings,
+            'aliases'  => $this->aliases,
+        ));
+
+        SerializableClosure::exitContext();
+
+        return $object;
+    }
+
+    /**
+     * Deserialize the container
+     *
+     * @access  public
+     *
+     * @param   string  Serialized data
+     */
+    public function unserialize($data)
+    {
+        $object = SerializableClosure::unserializeData($data);
+        $this->bindings = $object['bindings'];
+        $this->aliases  = $object['aliases'];
+    }
+
+    /**
      * Get the alias for an abstract if available.
      *
      * @param string $alias
@@ -583,7 +578,7 @@ class Container implements \ArrayAccess, ContainerInteropInterface, ContainerCon
      */
     protected function isBuildable($concrete, $alias)
     {
-        return $concrete === $alias || $concrete instanceof \Closure;
+        return $concrete === $alias || $concrete instanceof Closure;
     }
 
     /**
@@ -599,43 +594,18 @@ class Container implements \ArrayAccess, ContainerInteropInterface, ContainerCon
     }
 
     /**
-     * Check if the specified concrete definiton should be a
-     * definition object.
-     *
-     * @param string|object|\Closure $concrete The concrete definition
-     *
-     * @return bool
-     */
-    protected function shouldBeDefinitionObject($concrete)
-    {
-        return (
-            is_object($concrete) && !$concrete instanceof \Closure || is_string($concrete)
-        );
-    }
-
-    /**
-     * Check if the specified concrete definiton should be not a
-     * definition object.
+     * Check if the specified concrete and alias is a string.
      *
      * @param string|object|\Closure $alias
      * @param string|\Closure|null   $concrete
      *
      * @return bool
      */
-    protected function shouldNotBeDefinitionObject($alias, $concrete)
+    protected function isString($alias, $concrete)
     {
-        return (
-            (
-                is_string($alias) &&
-                (
-                    !is_object($concrete) &&
-                    !$concrete instanceof \Closure &&
-                    (
-                        is_string($concrete) || null !== $concrete
-                    )
-                )
-            )
-        );
+        $isNotObject = (is_string($alias) && (!is_object($concrete) && !$concrete instanceof Closure));
+
+        return ($isNotObject && (is_string($concrete) || null !== $concrete));
     }
 
     /**
@@ -655,12 +625,11 @@ class Container implements \ArrayAccess, ContainerInteropInterface, ContainerCon
      */
     private function getInvoker()
     {
-        if (! $this->invoker) {
+        if (!$this->invoker) {
             $parameterResolver = new ResolverChain([
                 new NumericArrayResolver,
                 new AssociativeArrayResolver,
-                new DefaultValueResolver,
-                new TypeHintContainerResolver($this->wrapperContainer),
+                new DefaultValueResolver
             ]);
 
             $this->invoker = new Invoker($parameterResolver, $this);

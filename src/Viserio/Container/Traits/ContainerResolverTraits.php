@@ -14,6 +14,8 @@ namespace Viserio\Container\Traits;
  * @version     0.10.0-dev
  */
 
+use ReflectionClass;
+use ReflectionMethod;
 use Viserio\Container\Exception\BindingResolutionException;
 use Viserio\Container\Exception\CircularReferenceException;
 use Viserio\Container\Exception\UnresolvableDependencyException;
@@ -104,7 +106,7 @@ trait ContainerResolverTraits
         $concrete = $this->normalize($concrete);
 
         // try to reflect on the class so we can build a definition
-        $reflector = new \ReflectionClass($concrete);
+        $reflector = new ReflectionClass($concrete);
 
         if (!$reflector->isInstantiable()) {
             throw new BindingResolutionException(
@@ -126,7 +128,7 @@ trait ContainerResolverTraits
         // If there are no constructors, that means there are no dependencies then
         // we can just resolve the instances of the objects right away, without
         // resolving any other types or dependencies out of these containers.
-        if (null === $constructor) {
+        if ($constructor === null) {
             array_pop($this->buildStack);
 
             return new $concrete();
@@ -160,7 +162,7 @@ trait ContainerResolverTraits
      *
      * @return array An array containing the method dependencies.
      */
-    protected function getDependencies(\ReflectionMethod $method, array $primitives = [])
+    protected function getDependencies(ReflectionMethod $method, array $primitives = [])
     {
         $dependencies = [];
 

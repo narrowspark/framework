@@ -26,12 +26,12 @@ trait ContainerArrayAccessTrait
     /**
      * Adds an entry to the container.
      *
-     * @param string    $id    Identifier of the entry to add
+     * @param string    $alias    Identifier of the entry to add
      * @param \stdClass $value The entry to add to the container
      */
-    public function set($id, $value)
+    public function set($alias, $value)
     {
-        $this->offsetSet($id, $value);
+        $this->offsetSet($alias, $value);
     }
 
     /**
@@ -55,85 +55,89 @@ trait ContainerArrayAccessTrait
     /**
      * Removes an entry from the container.
      *
-     * @param string $id Identifier of the entry to remove
+     * @param string $alias Identifier of the entry to remove
      */
-    public function remove($id)
+    public function remove($alias)
     {
-        $this->offsetUnset($id);
+        $this->offsetUnset($alias);
     }
 
     /**
      * Dynamically access application services.
      *
-     * @param string $id
+     * @param string $alias
      *
      * @return mixed
      */
-    public function __get($id)
+    public function __get($alias)
     {
-        return $this->offsetGet($id);
+        return $this->offsetGet($alias);
     }
 
     /**
      * Dynamically set application services.
      *
-     * @param string $id
+     * @param string $alias
      * @param mixed  $value
      */
-    public function __set($id, $value)
+    public function __set($alias, $value)
     {
-        $this->offsetSet($id, $value);
+        $this->offsetSet($alias, $value);
     }
 
     /**
      * Dynamically check if application services exists.
      *
-     * @param string $id
+     * @param string $alias
      *
      * @return bool
      */
-    public function __isset($id)
+    public function __isset($alias)
     {
-        return $this->offsetExists($id);
+        return $this->offsetExists($alias);
     }
 
     /**
      * Dynamically remove application services.
      *
-     * @param string $id
+     * @param string $alias
      */
-    public function __unset($id)
+    public function __unset($alias)
     {
-        $this->offsetUnset($id);
+        $this->offsetUnset($alias);
     }
 
     /**
      * Gets a parameter or an object.
      *
-     * @param string $id
+     * @param string $alias
      *
      * @return mixed The value of the parameter or an object
      */
-    public function offsetGet($id)
+    public function offsetGet($alias)
     {
-        $id = $this->normalize($id);
+        $alias = $this->normalize($alias);
 
-        if (isset($this->mockedServices['mock::'.$id])) {
-            return $this->mockedServices['mock::'.$id];
+        if (isset($this->mockedServices['mock::'.$alias])) {
+            return $this->mockedServices['mock::'.$alias];
         }
 
-        return $this->make($id);
+        if ($this->hasInDelegate($alias)) {
+            return $this->getFromDelegate($alias);
+        }
+
+        return $this->make($alias);
     }
 
     /**
      * Sets a parameter or an object.
      *
-     * @param string $id
+     * @param string $alias
      * @param mixed  $value The value of the parameter or a closure to define an object
      *
      * @return self|null
      */
-    public function offsetSet($id, $value)
+    public function offsetSet($alias, $value)
     {
         if (!$value instanceof \Closure) {
             $value = function () use ($value) {
@@ -141,47 +145,47 @@ trait ContainerArrayAccessTrait
             };
         }
 
-        $this->bind($this->normalize($id), $value);
+        $this->bind($this->normalize($alias), $value);
     }
 
     /**
      * Checks if a parameter or an object is set.
      *
-     * @param string $id
+     * @param string $alias
      *
      * @return bool
      */
-    public function offsetExists($id)
+    public function offsetExists($alias)
     {
-        $id = $this->normalize($id);
+        $alias = $this->normalize($alias);
 
-        if (isset($this->keys[$id]) || isset($this->mockedServices['mock::'.$id])) {
+        if (isset($this->keys[$alias]) || isset($this->mockedServices['mock::'.$alias])) {
             return true;
         }
 
-        return false;
+        return $this->hasInDelegate($alias);
     }
 
     /**
      * Unsets a parameter or an object.
      *
-     * @param string $id
+     * @param string $alias
      *
-     * @return string|null $id The unique identifier for the parameter or object
+     * @return string|null $alias The unique identifier for the parameter or object
      */
-    public function offsetUnset($id)
+    public function offsetUnset($alias)
     {
-        $id = $this->normalize($id);
+        $alias = $this->normalize($alias);
 
-        if (isset($this->keys[$id])) {
+        if (isset($this->keys[$alias])) {
             unset(
-                $this->aliases[$id],
-                $this->bindings[$id],
-                $this->singletons[$id],
-                $this->frozen[$id],
-                $this->values[$id],
-                $this->keys[$id],
-                $this->mockedServices['mock::'.$id]
+                $this->aliases[$alias],
+                $this->bindings[$alias],
+                $this->singletons[$alias],
+                $this->frozen[$alias],
+                $this->values[$alias],
+                $this->keys[$alias],
+                $this->mockedServices['mock::'.$alias]
             );
         }
     }

@@ -34,10 +34,14 @@ trait ContainerAwareTrait
      * Set a container.
      *
      * @param \Interop\Container\ContainerInterface $container
+     *
+     * @return self
      */
     public function setContainer(ContainerInteropInterface $container)
     {
         $this->container = $container;
+
+        return $this;
     }
     /**
      * Get the container.

@@ -59,7 +59,7 @@ trait ServiceProviderTrait
     /**
      * {@inheritdoc}
      */
-    public function register($provider, $options = [], $force = false)
+    public function provider($provider, $options = [], $force = false)
     {
         if ((!is_string($provider)) && (!$provider instanceof ServiceProvider)) {
             throw new \Exception(
@@ -139,7 +139,11 @@ trait ServiceProviderTrait
         }
 
         // We also add this to a lookup, which makes getProvider nice and fast.
-        $this->serviceProviderLookup = Arr::add($this->serviceProviderLookup, get_class($provider), get_class($provider));
+        $this->serviceProviderLookup = Arr::add(
+            $this->serviceProviderLookup,
+            get_class($provider),
+            get_class($provider)
+        );
 
         $this->markAsRegistered($provider);
     }
