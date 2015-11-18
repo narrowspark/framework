@@ -14,6 +14,8 @@ namespace Viserio\Contracts\Application;
  * @version     0.10.0-dev
  */
 
+use Viserio\Contracts\Container\ServiceProvider as ContainerServiceProvider;
+
 /**
  * ServiceProvider.
  *
@@ -21,35 +23,12 @@ namespace Viserio\Contracts\Application;
  *
  * @since   0.9.6-dev
  */
-interface ServiceProvider
+interface ServiceProvider extends ContainerServiceProvider
 {
-    /**
-     * Use the register method to register items with the container via the
-     * protected $this->app property.
-     */
-    public function register();
-
     /**
      * Subscribe events.
      *
      * @param array|null $commands
      */
     public function commands(array $commands = null);
-
-    /**
-     * Get the services provided by the provider.
-     *
-     * @return array
-     */
-    public function provides();
-
-    /**
-     * Dynamically handle missing method calls.
-     *
-     * @param string $method
-     * @param array  $parameters
-     *
-     * @return mixed
-     */
-    public function __call($method, $parameters);
 }
