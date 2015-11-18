@@ -1142,6 +1142,17 @@ class Collection implements
     }
 
     /**
+     * Map a collection and flatten the result by a single level.
+     *
+     * @param  callable  $callback
+     * @return static
+     */
+    public function flatMap(callable $callback)
+    {
+        return $this->map($callback)->collapse();
+    }
+
+    /**
      * Results array of items from Collection or Arrayable.
      *
      * @param mixed $items
