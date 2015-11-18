@@ -14,6 +14,7 @@ namespace Viserio\Application;
  * @version     0.10.0-dev
  */
 
+use Viserio\Container\ServiceProvider as ContainerServiceProvider;
 use Viserio\Contracts\Application\ServiceProvider as ServiceProviderContract;
 
 /**
@@ -23,43 +24,8 @@ use Viserio\Contracts\Application\ServiceProvider as ServiceProviderContract;
  *
  * @since   0.9.6-dev
  */
-abstract class ServiceProvider implements ServiceProviderContract
+abstract class ServiceProvider extends ContainerServiceProvider implements ServiceProviderContract
 {
-    /**
-     * @var array
-     */
-    protected $provides = [];
-
-    /**
-     * The application instance.
-     *
-     * @var \Viserio\Contracts\Application\Foundation
-     */
-    protected $app;
-
-    /**
-     * Create a new service provider instance.
-     *
-     * @param \Viserio\Contracts\Application\Foundation $app
-     */
-    public function __construct($app)
-    {
-        $this->app = $app;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    abstract public function register();
-
-    /**
-     * {@inheritdoc}
-     */
-    public function boot()
-    {
-        return;
-    }
-
     /**
      * Subscribe events.
      *
@@ -77,32 +43,7 @@ abstract class ServiceProvider implements ServiceProviderContract
      */
     protected function mergeConfigFrom($path, $key)
     {
-        $config = $this->app->get('config')->get($key, []);
-        $this->app->get('config')->set($key, array_merge(require $path, $config));
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function provides()
-    {
-        return [];
-    }
-
-    /**
-     * Dynamically handle missing method calls.
-     *
-     * @param string $method
-     * @param array  $parameters
-     *
-     * @return mixed
-     */
-    public function __call($method, $parameters)
-    {
-        if ($method === 'boot') {
-            return;
-        }
-
-        throw new \BadMethodCallException('Call to undefined method ['.sprintf('%s', $method).']');
+        $config = $this->container->get('config')->get($key, []);
+        $this->container->get('config')->set($key, array_merge(require $path, $config));
     }
 }

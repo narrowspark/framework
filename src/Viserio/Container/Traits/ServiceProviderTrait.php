@@ -1,5 +1,5 @@
 <?php
-namespace Viserio\Application\Traits;
+namespace Viserio\Container\Traits;
 
 /**
  * Narrowspark - a PHP 5 framework.
@@ -14,7 +14,7 @@ namespace Viserio\Application\Traits;
  * @version     0.10.0-dev
  */
 
-use Viserio\Application\ServiceProvider;
+use Viserio\Container\ServiceProvider;
 use Viserio\Support\Arr;
 
 /**
@@ -22,7 +22,7 @@ use Viserio\Support\Arr;
  *
  * @author  Daniel Bannert
  *
- * @since   0.9.7-dev
+ * @since   0.10.0-dev
  */
 trait ServiceProviderTrait
 {
@@ -73,7 +73,7 @@ trait ServiceProviderTrait
         }
 
         if (is_string($provider)) {
-            $provider = new $provider($this);
+            $provider = (new $provider())->setContainer($this);
         }
 
         // Only allow a service provider to be registered once.
