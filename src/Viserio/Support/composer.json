@@ -19,25 +19,26 @@
     ],
     "require": {
         "php"                                : ">=5.6",
-        "viserio/contracts"                : "self.version",
+        "ext-mbstring"                       : "*",
         "container-interop/container-interop": "~1.0",
         "danielstjules/stringy"              : "~1.9",
-        "ext-mbstring"                       : "*",
-        "ircmaxell/random-lib"               : "~1.1"
+        "ircmaxell/random-lib"               : "~1.1",
+        "viserio/contracts"                  : "self.version"
     },
     "require-dev": {
+        "cekurte/environment"                : "~0.0.9",
         "mockery/mockery"                    : "~0.9.3",
         "fabpot/php-cs-fixer"                : "~1.10.1",
         "phpunit/phpunit"                    : "~5.0.6"
     },
     "autoload": {
         "psr-4": {
-            "Viserio\\Support\\"           : ""
+            "Viserio\\Support\\"             : ""
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Viserio\\Support\\Tests\\"    : "tests/"
+            "Viserio\\Support\\Tests\\"      : "tests/"
         }
     },
     "extra": {
@@ -47,7 +48,7 @@
     },
     "suggest": {
         "symfony/var-dumper"                 : "Required to use the Helper::dd() (~2.8|~3.0).",
-        "vlucas/phpdotenv"                   : "Required to use the Helper::env() (~1.1)."
+        "cekurte/environment"                : "Required to use the Helper::env() (~0.0.9)."
     },
     "minimum-stability"                      : "dev",
     "prefer-stable"                          : true
