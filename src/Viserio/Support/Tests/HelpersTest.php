@@ -29,13 +29,6 @@ use Viserio\Support\Str;
  */
 class HelpersTest extends \PHPUnit_Framework_TestCase
 {
-    public function testArrayBuild()
-    {
-        $this->assertEquals(['foo' => 'bar'], Arr::build(['foo' => 'bar'], function ($key, $value) {
-            return [$key, $value];
-        }));
-    }
-
     public function testArrayDot()
     {
         $array = Arr::dot(['name' => 'daniel', 'languages' => ['php' => true]]);
