@@ -19,13 +19,17 @@ use Viserio\Console\Command\ExpressionParser as Parser;
 use Viserio\Console\Input\InputArgument;
 use Viserio\Console\Input\InputOption;
 use Interop\Container\ContainerInterface as ContainerContract;
-use Nucleus\Invoker\Invoker;
 use Symfony\Component\Console\Application as SymfonyConsole;
 use Symfony\Component\Console\Command\Command as SymfonyCommand;
 use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Invoker\Invoker;
+use Invoker\ParameterResolver\AssociativeArrayResolver;
+use Invoker\ParameterResolver\DefaultValueResolver;
+use Invoker\ParameterResolver\NumericArrayResolver;
+use Invoker\ParameterResolver\ResolverChain;
 
 /**
  * Application.
@@ -74,7 +78,7 @@ class Application extends SymfonyConsole
     /**
      * Invoker instance.
      *
-     * @var \Nucleus\Invoker\Invoker
+     * @var \Invoker\InvokerInterface|null
      */
     protected $invoker;
 
@@ -87,7 +91,6 @@ class Application extends SymfonyConsole
     public function __construct(ContainerContract $container, EventDispatcherInterface $events)
     {
         $this->expressionParser = new Parser();
-        $this->invoker = new Invoker();
 
         $this->container = $container;
         $this->events = $events;
@@ -165,7 +168,7 @@ class Application extends SymfonyConsole
                 $input->getOptions()
             );
 
-            $this->invoker->invoke($callable, $parameters);
+            $this->getInvoker()->call($callable, $parameters);
         };
 
         $command = $this->createCommand($expression, $commandFunction);
@@ -364,5 +367,25 @@ class Application extends SymfonyConsole
         if ($argument instanceof InputOption) {
             $argument->setDescription($description);
         }
+    }
+
+    /**
+     * @return \Invoker\InvokerInterface
+     */
+    private function getInvoker()
+    {
+        if (!$this->invoker) {
+            $chain = [
+                new NumericArrayResolver,
+                new AssociativeArrayResolver,
+                new DefaultValueResolver
+            ];
+
+            $parameterResolver = new ResolverChain($chain);
+
+            $this->invoker = new Invoker($parameterResolver, $this);
+        }
+
+        return $this->invoker;
     }
 }

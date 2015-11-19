@@ -24,7 +24,7 @@ use GuzzleHttp\ClientInterface;
  *
  * @since   0.9.6-dev
  */
-class Postmark implements \Swift_Transport
+class Postmark extends Transport
 {
     /**
      * Guzzle client instance.

@@ -75,15 +75,4 @@ interface Foundation extends Container
      * @return string
      */
     public function detectEnvironment(\Closure $callback);
-
-    /**
-     * Register a service provider with the application.
-     *
-     * @param string $provider
-     * @param array  $options
-     * @param bool   $force
-     *
-     * @return \Viserio\Contract\Application\ServiceProvider
-     */
-    public function register($provider, $options = [], $force = false);
 }

@@ -113,4 +113,15 @@ interface Container
      * @return mixed
      */
     public function call($callable, array $args = []);
+
+    /**
+     * Register a service provider with the application.
+     *
+     * @param string $provider
+     * @param array  $options
+     * @param bool   $force
+     *
+     * @return \Viserio\Contract\Application\ServiceProvider
+     */
+    public function provider($provider, $options = [], $force = false);
 }

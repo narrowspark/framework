@@ -23,6 +23,7 @@ use Viserio\Container\Traits\ContainerArrayAccessTrait;
 use Viserio\Container\Traits\ContainerResolverTraits;
 use Viserio\Container\Traits\MockerContainerTrait;
 use Viserio\Container\Traits\DelegateTrait;
+use Viserio\Container\Traits\ServiceProviderTrait;
 use Viserio\Contracts\Container\Container as ContainerContract;
 use Interop\Container\ContainerInterface as ContainerInteropInterface;
 use InvalidArgumentException;
@@ -49,8 +50,13 @@ class Container implements ArrayAccess, Serializable, ContainerInteropInterface,
      * Mock Support
      * Resolver
      * Defining Sub/Nested Containers
+     * ServiceProvider Support
      */
-    use ContainerArrayAccessTrait, MockerContainerTrait, ContainerResolverTraits, DelegateTrait;
+    use ContainerArrayAccessTrait,
+    MockerContainerTrait,
+    ContainerResolverTraits,
+    DelegateTrait,
+    ServiceProviderTrait;
 
     /**
      * The registered type aliases.
