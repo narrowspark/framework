@@ -24,6 +24,7 @@
         "ext-mbstring"                       : "*",
         "classpreloader/classpreloader"      : "~2.0|~3.0",
         "container-interop/container-interop": "~1.1",
+        "cekurte/environment"                : "~0.0.9",
         "danielstjules/stringy"              : "~2.1.0",
         "filp/whoops"                        : "~1.1.7",
         "ircmaxell/random-lib"               : "~1.1",

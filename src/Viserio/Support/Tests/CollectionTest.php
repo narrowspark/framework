@@ -786,6 +786,16 @@ class TestAccessorEloquentTestStub
         $c = new Collection([0 => 'bar', 1 => 'bar', 'baz']);
         $this->assertFalse($c->isAssociative());
     }
+
+    public function testFlatMap()
+    {
+        $data = new Collection([
+            ['name' => 'taylor', 'hobbies' => ['programming', 'basketball']],
+            ['name' => 'adam', 'hobbies' => ['music', 'powerlifting']],
+        ]);
+        $data = $data->flatMap(function ($person) { return $person['hobbies']; });
+        $this->assertEquals(['programming', 'basketball', 'music', 'powerlifting'], $data->all());
+    }
 }
 
 class TestArrayAccessImplementation implements \ArrayAccess

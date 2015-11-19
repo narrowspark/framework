@@ -14,6 +14,8 @@ namespace Viserio\Support;
  * @version     0.10.0-dev
  */
 
+use Cekurte\Environment\Environment;
+
 /**
  * Helper.
  *
@@ -239,35 +241,7 @@ class Helper
      */
     public static function env($key, $default = null)
     {
-        $value = \Dotenv::findEnvironmentVariable($key);
-
-        if ($value === false) {
-            return self::value($default);
-        }
-
-        switch (strtolower($value)) {
-            case 'true':
-            case '(true)':
-                return true;
-
-            case 'false':
-            case '(false)':
-                return false;
-
-            case 'null':
-            case '(null)':
-                return;
-
-            case 'empty':
-            case '(empty)':
-                return '';
-        }
-
-        if (Str::startsWith($value, '"') && Str::endsWith($value, '"')) {
-            return substr($value, 1, -1);
-        }
-
-        return $value;
+        return Environment::get($key);
     }
 
     /**
