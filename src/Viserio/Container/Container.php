@@ -127,8 +127,8 @@ class Container implements ArrayAccess, Serializable, ContainerInteropInterface,
     public function __construct()
     {
         $this->singleton('Viserio\Container\Container', $this);
-        $this->singleton('Viserio\Contracts\Container\Container', $this);
-        $this->singleton('Interop\Container\ContainerInterface', $this);
+        $this->singleton(ContainerContract::class, $this);
+        $this->singleton(ContainerInteropInterface::class, $this);
     }
 
     /**
