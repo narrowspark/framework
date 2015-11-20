@@ -14,10 +14,10 @@ namespace Viserio\Cache\Store;
  * @version     0.10.0-dev
  */
 
+use Carbon\Carbon;
 use Viserio\Contracts\Cache\Adapter;
 use Viserio\Contracts\Cache\Store as StoreContract;
 use Viserio\Support\Helper;
-use Carbon\Carbon;
 
 /**
  * TaggedCache.

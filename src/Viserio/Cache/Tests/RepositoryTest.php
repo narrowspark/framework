@@ -16,9 +16,9 @@ namespace Viserio\Cache\Test;
  *
  */
 
+use Mockery as Mock;
 use Viserio\Cache\Repository;
 use Viserio\Events\Dispatcher;
-use Mockery as Mock;
 
 /**
  * RedisCacheTest.

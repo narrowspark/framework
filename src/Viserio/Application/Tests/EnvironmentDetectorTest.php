@@ -14,8 +14,8 @@ namespace Viserio\Application\Test;
  * @version     0.10.0-dev
  */
 
-use Viserio\Application\EnvironmentDetector;
 use Mockery as Mock;
+use Viserio\Application\EnvironmentDetector;
 
 /**
  * EnvironmentDetectorTest.

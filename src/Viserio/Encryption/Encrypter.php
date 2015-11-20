@@ -14,6 +14,7 @@ namespace Viserio\Encryption;
  * @version     0.10.0-dev
  */
 
+use RandomLib\Generator as RandomLib;
 use Viserio\Contracts\Encryption\DecryptException;
 use Viserio\Contracts\Encryption\Encrypter as EncrypterContract;
 use Viserio\Contracts\Encryption\EncryptException;
@@ -21,7 +22,6 @@ use Viserio\Contracts\Encryption\InvalidKeyException;
 use Viserio\Contracts\Hashing\Generator as HashContract;
 use Viserio\Encryption\Adapter\OpenSsl;
 use Viserio\Support\Arr;
-use RandomLib\Generator as RandomLib;
 
 /**
  * Encrypter.

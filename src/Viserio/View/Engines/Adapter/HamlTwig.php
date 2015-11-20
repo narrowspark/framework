@@ -54,7 +54,7 @@ class HamlTwig implements EnginesContract
         if (!is_file($path)) {
             throw new \RuntimeException(
                 sprintf('Cannot render template [%s] because the template does not exist.
-                Make sure your view´s template directory is correct.', $path);
+                Make sure your view´s template directory is correct.', $path)
             );
         }
 

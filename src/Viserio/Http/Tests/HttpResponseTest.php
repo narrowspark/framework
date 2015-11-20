@@ -16,11 +16,11 @@ namespace Viserio\Http\Test;
  *
  */
 
+use Mockery as Mock;
 use Viserio\Contracts\Support\Jsonable;
 use Viserio\Http\RedirectResponse;
 use Viserio\Http\Request;
 use Viserio\Http\Response;
-use Mockery as Mock;
 
 /**
  * HttpResponseTest.

@@ -14,9 +14,9 @@ namespace Viserio\Cookie;
  * @version     0.10.0-dev
  */
 
+use Symfony\Component\HttpFoundation\Cookie;
 use Viserio\Contracts\Cookie\CookiesJar as JarContract;
 use Viserio\Support\Arr;
-use Symfony\Component\HttpFoundation\Cookie;
 
 /**
  * CookiesJar.

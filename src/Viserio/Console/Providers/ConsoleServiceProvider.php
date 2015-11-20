@@ -14,10 +14,10 @@ namespace Viserio\Console\Providers;
  * @version     0.10.0-dev
  */
 
+use Stecman\Component\Symfony\Console\BashCompletion\CompletionCommand;
 use Viserio\Application\ServiceProvider;
 use Viserio\Console\Application;
 use Viserio\Console\Command\CommandResolver;
-use Stecman\Component\Symfony\Console\BashCompletion\CompletionCommand;
 
 /**
  * ConsoleServiceProvider.

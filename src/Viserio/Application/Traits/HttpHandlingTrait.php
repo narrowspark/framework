@@ -14,10 +14,10 @@ namespace Viserio\Application\Traits;
  * @version     0.10.0-dev
  */
 
-use Viserio\Application\HttpKernel;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\StreamedResponse;
+use Viserio\Application\HttpKernel;
 
 /**
  * HttpHandlingTrait.

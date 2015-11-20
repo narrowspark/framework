@@ -14,17 +14,17 @@ namespace Viserio\Log;
  * @version     0.10.0-dev
  */
 
-use Viserio\Contracts\Logging\Log as LogContract;
-use Viserio\Log\Traits\FormatterTrait;
-use Viserio\Log\Traits\HandlerTrait;
-use Viserio\Log\Traits\ProcessorTrait;
-use Viserio\Log\Traits\PsrLoggerTrait;
 use Monolog\Handler\ErrorLogHandler;
 use Monolog\Handler\RotatingFileHandler;
 use Monolog\Logger as MonologLogger;
 use Monolog\Processor\PsrLogMessageProcessor;
 use Psr\Log\LoggerInterface as PsrLoggerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Viserio\Contracts\Logging\Log as LogContract;
+use Viserio\Log\Traits\FormatterTrait;
+use Viserio\Log\Traits\HandlerTrait;
+use Viserio\Log\Traits\ProcessorTrait;
+use Viserio\Log\Traits\PsrLoggerTrait;
 
 /**
  * Writer.

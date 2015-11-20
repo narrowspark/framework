@@ -24,7 +24,7 @@ use Viserio\Contracts\Loop\Timer as TimerContract;
  *
  * @since   0.10.0-dev
  */
-class TimerManager implements TimerContract
+class TimerManager
 {
     /**
      * The loop with which this timer is associated.

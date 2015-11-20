@@ -1,5 +1,5 @@
 <?php
-namespace Viserio\Events\Adapter;
+namespace Viserio\Queue\Adapter;
 
 /**
  * Narrowspark - a PHP 5 framework.
@@ -14,8 +14,8 @@ namespace Viserio\Events\Adapter;
  * @version     0.10.0-dev
  */
 
-use Viserio\Contracts\Queue\Adapter as AdapterContract;
 use Carbon\Carbon;
+use Viserio\Contracts\Queue\Adapter as AdapterContract;
 
 /**
  * BaseAdapter.
@@ -24,7 +24,7 @@ use Carbon\Carbon;
  *
  * @since   0.10-dev
  */
-abstract class BaseAdapter implements AdapterContract
+abstract class BaseAdapter
 {
     /**
      * Calculate the number of seconds with the given delay.

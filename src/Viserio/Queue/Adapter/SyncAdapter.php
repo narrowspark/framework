@@ -1,5 +1,5 @@
 <?php
-namespace Viserio\Events\Adapter;
+namespace Viserio\Queue\Adapter;
 
 /**
  * Narrowspark - a PHP 5 framework.

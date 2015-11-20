@@ -14,12 +14,12 @@ namespace Viserio\Filesystem\Parser;
  * @version     0.10.0-dev
  */
 
+use Symfony\Component\Yaml\Exception\ParseException;
+use Symfony\Component\Yaml\Parser;
 use Viserio\Contracts\Filesystem\LoadingException;
 use Viserio\Contracts\Filesystem\Parser as ParserContract;
 use Viserio\Filesystem\Filesystem;
 use Viserio\Filesystem\Parser\Traits\IsGroupTrait;
-use Symfony\Component\Yaml\Exception\ParseException;
-use Symfony\Component\Yaml\Parser;
 
 /**
  * YamlAdapter.

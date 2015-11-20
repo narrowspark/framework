@@ -14,9 +14,9 @@ namespace Viserio\Hashing;
  * @version     0.10.0-dev
  */
 
+use RandomLib\Generator as RandomLib;
 use Viserio\Contracts\Hashing\Generator as HashContract;
 use Viserio\Support\Helper;
-use RandomLib\Generator as RandomLib;
 
 /**
  * Generator.

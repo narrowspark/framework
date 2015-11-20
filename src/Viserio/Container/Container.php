@@ -14,6 +14,8 @@ namespace Viserio\Container;
  * @version     0.10.0-dev
  */
 
+use Interop\Container\ContainerInterface as ContainerInteropInterface;
+use Nucleus\Invoker\Invoker;
 use Viserio\Container\Exception\BindingResolutionException;
 use Viserio\Container\Exception\ContainerException;
 use Viserio\Container\Exception\NotFoundException;
@@ -21,8 +23,6 @@ use Viserio\Container\Traits\ContainerArrayAccessTrait;
 use Viserio\Container\Traits\ContainerResolverTraits;
 use Viserio\Container\Traits\MockerContainerTrait;
 use Viserio\Contracts\Container\Container as ContainerContract;
-use Interop\Container\ContainerInterface as ContainerInteropInterface;
-use Nucleus\Invoker\Invoker;
 
 /**
  * Container.

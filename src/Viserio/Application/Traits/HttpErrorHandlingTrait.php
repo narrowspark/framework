@@ -14,7 +14,6 @@ namespace Viserio\Application\Traits;
  * @version     0.10.0-dev
  */
 
-use Viserio\Http\Response;
 use Symfony\Component\Debug\Exception\FatalErrorException;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
@@ -31,6 +30,7 @@ use Symfony\Component\HttpKernel\Exception\ServiceUnavailableHttpException;
 use Symfony\Component\HttpKernel\Exception\TooManyRequestsHttpException;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 use Symfony\Component\HttpKernel\Exception\UnsupportedMediaTypeHttpException;
+use Viserio\Http\Response;
 
 /**
  * HttpErrorHandlingTrait.

@@ -14,12 +14,12 @@ namespace Viserio\Database\Connection;
  * @version     0.10.0-dev
  */
 
-use Viserio\Cache\Manager as CacheManager;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Viserio\Contracts\Cache\Factory as CacheContract;
 use Viserio\Contracts\Database\Connection as ConnectionContract;
 use Viserio\Database\Exception\ConnectException;
 use Viserio\Database\Grammar\Builder;
 use Viserio\Support\Arr;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Connection.
@@ -760,9 +760,9 @@ class Connection implements ConnectionContract
     /**
      * Set the cache manager instance on the connection.
      *
-     * @param CacheManager $cache
+     * @param CacheContract $cache
      */
-    public function setCacheManager(CacheManager $cache)
+    public function setCacheManager(CacheContract $cache)
     {
         $this->cache = $cache;
 

@@ -14,8 +14,8 @@ namespace Viserio\Support;
  * @version     0.10.0-dev
  */
 
-use Viserio\Application\Application;
 use Mockery\MockInterface;
+use Viserio\Application\Application;
 
 /**
  * StaticalProxyManager.

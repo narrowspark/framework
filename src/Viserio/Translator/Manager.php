@@ -14,6 +14,7 @@ namespace Viserio\Translator;
  * @version     0.10.0-dev
  */
 
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Viserio\Contracts\Cache\Factory as CacheContract;
 use Viserio\Contracts\Translator\MessageCatalogue as MessageCatalogueContract;
 use Viserio\Contracts\Translator\NotFoundResourceException;
@@ -23,7 +24,6 @@ use Viserio\Translator\Traits\FiltersTrait;
 use Viserio\Translator\Traits\HelpersTrait;
 use Viserio\Translator\Traits\ReplacementTrait;
 use Viserio\Translator\Traits\TranslateTrait;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * TranslatorManager.

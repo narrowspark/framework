@@ -16,9 +16,9 @@ namespace Viserio\Cache\Test\Store;
  *
  */
 
+use Mockery as Mock;
 use Viserio\Cache\Adapter\ArrayCache;
 use Viserio\Cache\Adapter\RedisTaggedCache;
-use Mockery as Mock;
 
 /**
  * RedisCacheTest.

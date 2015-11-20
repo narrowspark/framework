@@ -14,8 +14,8 @@ namespace Viserio\Session\Handler;
  * @version     0.10.0-dev
  */
 
-use Viserio\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
+use Viserio\Filesystem\Filesystem;
 
 /**
  * Session.

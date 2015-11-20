@@ -16,9 +16,9 @@ namespace Viserio\Cookie\Test;
  *
  */
 
-use Viserio\Cookie\CookieJar;
 use Mockery as Mock;
 use Symfony\Component\HttpFoundation\Request;
+use Viserio\Cookie\CookieJar;
 
 /**
  * CookieJarTest.

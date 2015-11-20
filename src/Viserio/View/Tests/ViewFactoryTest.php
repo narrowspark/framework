@@ -16,8 +16,8 @@ namespace Viserio\View\Test;
  *
  */
 
-use Viserio\View\Factory;
 use Mockery as Mock;
+use Viserio\View\Factory;
 
 /**
  * ViewTest.

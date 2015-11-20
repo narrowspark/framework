@@ -27,7 +27,7 @@ use Viserio\Support\Manager;
  *
  * @since   0.10.0-dev
  */
-class LoopManager extends Manager implements LoopContract
+class LoopManager extends Manager
 {
     /**
      * Set the default cache driver name.

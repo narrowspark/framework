@@ -14,10 +14,10 @@ namespace Viserio\Routing\Test;
  * @version     0.10.0-dev
  */
 
+use FastRoute\DataGenerator\GroupCountBased;
 use Viserio\Container\Container;
 use Viserio\Routing\RouteCollection;
 use Viserio\Routing\RouteParser;
-use FastRoute\DataGenerator\GroupCountBased;
 
 /**
  * DispatcherTest.

@@ -16,9 +16,9 @@ namespace Viserio\Support\Test;
  *
  */
 
+use Mockery as Mock;
 use Viserio\Application\Application;
 use Viserio\Support\StaticalProxyManager;
-use Mockery as Mock;
 
 /**
  * StaticalProxyManagerTest.

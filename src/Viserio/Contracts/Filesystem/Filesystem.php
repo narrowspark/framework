@@ -60,13 +60,13 @@ interface Filesystem
     /**
      * Write the contents of a file.
      *
-     * @param string          $path
-     * @param string|resource $contents
-     * @param string|null     $visibility
+     * @param string $path
+     * @param string $contents
+     * @param array  $configs
      *
      * @return bool
      */
-    public function put($path, $contents, $visibility = null);
+    public function put($path, $contents, array $configs = []);
 
     /**
      * Get the visibility for the given path.

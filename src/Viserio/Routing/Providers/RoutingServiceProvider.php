@@ -14,12 +14,12 @@ namespace Viserio\Routing\Providers;
  * @version     0.10.0-dev
  */
 
+use FastRoute\DataGenerator\GroupCountBased;
 use Viserio\Application\ServiceProvider;
 use Viserio\Routing\RouteCollection;
 use Viserio\Routing\RouteParser;
 use Viserio\Routing\UrlGenerator\GroupCountBasedDataGenerator;
 use Viserio\Routing\UrlGenerator\SimpleUrlGenerator;
-use FastRoute\DataGenerator\GroupCountBased;
 
 /**
  * RoutingServiceProvider.

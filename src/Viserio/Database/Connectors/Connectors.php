@@ -14,10 +14,10 @@ namespace Viserio\Database\Connectors;
  * @version     0.10.0-dev
  */
 
-use Viserio\Database\Traits\DetectsLostConnections;
-use Viserio\Support\Arr;
 use Exception;
 use PDO;
+use Viserio\Database\Traits\DetectsLostConnections;
+use Viserio\Support\Arr;
 
 /**
  * Connector.

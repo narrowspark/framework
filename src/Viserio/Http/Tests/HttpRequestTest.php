@@ -16,9 +16,9 @@ namespace Viserio\Http\Test;
  *
  */
 
-use Viserio\Http\Request;
 use Mockery as Mock;
 use Symfony\Component\HttpFoundation\Request as SymfonyRequest;
+use Viserio\Http\Request;
 
 /**
  * HttpRequestTest.

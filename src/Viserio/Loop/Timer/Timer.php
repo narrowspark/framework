@@ -23,7 +23,7 @@ use Viserio\Contracts\Loop\Timer as TimerContract;
  *
  * @since   0.10.0-dev
  */
-class Timer implements TimerContract
+class Timer
 {
     /**
      * [$time description]

@@ -16,12 +16,12 @@ namespace Viserio\Console\Test;
  *
  */
 
-use Viserio\Console\Application;
 use Mockery as Mock;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\StringInput;
 use Symfony\Component\Console\Output\Output as SymfonyOutput;
 use Symfony\Component\Console\Output\OutputInterface;
+use Viserio\Console\Application;
 
 /**
  * ApplicationTest.

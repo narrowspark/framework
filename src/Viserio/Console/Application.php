@@ -14,10 +14,6 @@ namespace Viserio\Console;
  * @version     0.10.0-dev
  */
 
-use Viserio\Console\Command\Command as ViserioCommand;
-use Viserio\Console\Command\ExpressionParser as Parser;
-use Viserio\Console\Input\InputArgument;
-use Viserio\Console\Input\InputOption;
 use Interop\Container\ContainerInterface as ContainerContract;
 use Nucleus\Invoker\Invoker;
 use Symfony\Component\Console\Application as SymfonyConsole;
@@ -26,6 +22,10 @@ use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Viserio\Console\Command\Command as ViserioCommand;
+use Viserio\Console\Command\ExpressionParser as Parser;
+use Viserio\Console\Input\InputArgument;
+use Viserio\Console\Input\InputOption;
 
 /**
  * Application.

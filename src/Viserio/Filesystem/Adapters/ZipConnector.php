@@ -14,9 +14,9 @@ namespace Viserio\Filesystem\Adapters;
  * @version     0.10.0-dev
  */
 
+use League\Flysystem\ZipArchive\ZipArchiveAdapter;
 use Viserio\Contracts\Filesystem\Connector as ConnectorContract;
 use Viserio\Support\Arr;
-use League\Flysystem\ZipArchive\ZipArchiveAdapter;
 
 /**
  * NullConnector.

@@ -14,12 +14,12 @@ namespace Viserio\Session;
  * @version     0.10.0-dev
  */
 
-use Viserio\Session\Handler\CookieSessionHandler;
-use Viserio\Session\Interfaces\SessionInterface;
-use Viserio\Support\Arr;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\SessionBagInterface;
 use Symfony\Component\HttpFoundation\Session\Storage\MetadataBag;
+use Viserio\Session\Handler\CookieSessionHandler;
+use Viserio\Session\Interfaces\SessionInterface;
+use Viserio\Support\Arr;
 
 /**
  * Store.

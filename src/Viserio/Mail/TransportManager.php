@@ -23,6 +23,25 @@ use Viserio\Support\Manager;
  *
  * @since   0.10.0-dev
  */
-// class TransportManager extends Manager
-// {
-// }
+class TransportManager extends Manager
+{
+    /**
+     * Set the default cache driver name.
+     *
+     * @param string $name
+     */
+    public function setDefaultDriver($name)
+    {
+
+    }
+
+    /**
+     * Get the default driver name.
+     *
+     * @return string
+     */
+    public function getDefaultDriver()
+    {
+
+    }
+}

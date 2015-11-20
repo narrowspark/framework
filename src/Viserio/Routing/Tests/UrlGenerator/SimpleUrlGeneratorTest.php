@@ -16,8 +16,8 @@ namespace Viserio\Routing\Test\UrlGenerator;
  *
  */
 
-use Viserio\Routing\UrlGenerator\SimpleUrlGenerator;
 use Symfony\Component\HttpFoundation\Request;
+use Viserio\Routing\UrlGenerator\SimpleUrlGenerator;
 
 /**
  * SimpleUrlGeneratorTest.

@@ -16,9 +16,9 @@ namespace Viserio\Log\Test;
  *
  */
 
+use Mockery as Mock;
 use Viserio\Events\Dispatcher;
 use Viserio\Log\Writer;
-use Mockery as Mock;
 
 /**
  * WriterTest.

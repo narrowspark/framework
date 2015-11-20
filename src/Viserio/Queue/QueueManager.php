@@ -1,5 +1,5 @@
 <?php
-namespace Viserio\Events;
+namespace Viserio\Queue;
 
 /**
  * Narrowspark - a PHP 5 framework.
@@ -23,6 +23,6 @@ use Viserio\Contracts\Queue\Factory as FactoryContract;
  *
  * @since   0.10-dev
  */
-class QueueManager implements FactoryContract
+class QueueManager
 {
 }

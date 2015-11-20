@@ -14,8 +14,6 @@ namespace Viserio\Container;
  * @version     0.10.0-dev
  */
 
-use Viserio\Contracts\Container\ContainerAware as ContainerAwareContract;
-
 /**
  * Inflector.
  *
@@ -23,7 +21,7 @@ use Viserio\Contracts\Container\ContainerAware as ContainerAwareContract;
  *
  * @since   0.9.6-dev
  */
-class Inflector implements ContainerAwareContract
+class Inflector
 {
     use ContainerAwareTrait;
 

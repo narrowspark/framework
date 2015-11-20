@@ -14,8 +14,8 @@ namespace Viserio\Database\Traits;
  * @version     0.10.0-dev
  */
 
-use Viserio\Support\Str;
 use Exception;
+use Viserio\Support\Str;
 
 /**
  * DetectsLostConnections.

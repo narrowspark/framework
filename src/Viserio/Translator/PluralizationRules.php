@@ -14,32 +14,32 @@ namespace Viserio\Translator;
  * @version     0.10.0-dev
  */
 
+use InvalidArgumentException;
 use Viserio\Translator\PluralCategorys\Arabic;
-use Viserio\Translator\PluralCategorys\One;
-use Viserio\Translator\PluralCategorys\French;
 use Viserio\Translator\PluralCategorys\Balkan;
-use Viserio\Translator\PluralCategorys\Maltese;
-use Viserio\Translator\PluralCategorys\Manx;
-use Viserio\Translator\PluralCategorys\Slovenian;
-use Viserio\Translator\PluralCategorys\Welsh;
-use Viserio\Translator\PluralCategorys\Tachelhit;
-use Viserio\Translator\PluralCategorys\Tamazight;
-use Viserio\Translator\PluralCategorys\Macedonian;
-use Viserio\Translator\PluralCategorys\Lithuanian;
-use Viserio\Translator\PluralCategorys\Hebrew;
+use Viserio\Translator\PluralCategorys\Breton;
+use Viserio\Translator\PluralCategorys\Colognian;
+use Viserio\Translator\PluralCategorys\Czech;
+use Viserio\Translator\PluralCategorys\French;
 use Viserio\Translator\PluralCategorys\Gaelic;
+use Viserio\Translator\PluralCategorys\Hebrew;
 use Viserio\Translator\PluralCategorys\Irish;
 use Viserio\Translator\PluralCategorys\Langi;
 use Viserio\Translator\PluralCategorys\Latvian;
-use Viserio\Translator\PluralCategorys\Breton;
-use Viserio\Translator\PluralCategorys\Colognian;
-use Viserio\Translator\PluralCategorys\Romanian;
-use Viserio\Translator\PluralCategorys\Two;
-use Viserio\Translator\PluralCategorys\Zero;
+use Viserio\Translator\PluralCategorys\Lithuanian;
+use Viserio\Translator\PluralCategorys\Macedonian;
+use Viserio\Translator\PluralCategorys\Maltese;
+use Viserio\Translator\PluralCategorys\Manx;
 use Viserio\Translator\PluralCategorys\None;
-use Viserio\Translator\PluralCategorys\Czech;
+use Viserio\Translator\PluralCategorys\One;
 use Viserio\Translator\PluralCategorys\Polish;
-use InvalidArgumentException;
+use Viserio\Translator\PluralCategorys\Romanian;
+use Viserio\Translator\PluralCategorys\Slovenian;
+use Viserio\Translator\PluralCategorys\Tachelhit;
+use Viserio\Translator\PluralCategorys\Tamazight;
+use Viserio\Translator\PluralCategorys\Two;
+use Viserio\Translator\PluralCategorys\Welsh;
+use Viserio\Translator\PluralCategorys\Zero;
 
 /**
  * PluralizationRules.

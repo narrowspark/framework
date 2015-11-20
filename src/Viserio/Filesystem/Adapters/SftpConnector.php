@@ -14,8 +14,8 @@ namespace Viserio\Filesystem\Adapters;
  * @version     0.10.0-dev
  */
 
-use Viserio\Contracts\Filesystem\Connector as ConnectorContract;
 use League\Flysystem\Sftp\SftpAdapter;
+use Viserio\Contracts\Filesystem\Connector as ConnectorContract;
 
 /**
  * NullConnector.

@@ -1,5 +1,5 @@
 <?php
-namespace Viserio\Events;
+namespace Viserio\Queue;
 
 /**
  * Narrowspark - a PHP 5 framework.
@@ -14,9 +14,9 @@ namespace Viserio\Events;
  * @version     0.10.0-dev
  */
 
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Viserio\Contracts\Queue\Adapter as AdapterContract;
 use Viserio\Contracts\Queue\Pushable as PushableContract;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Queue.

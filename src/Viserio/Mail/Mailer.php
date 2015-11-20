@@ -14,12 +14,12 @@ namespace Viserio\Mail;
  * @version     0.10.0-dev
  */
 
-use Viserio\Contracts\Mail\Mailer as MailerContract;
-use Viserio\Contracts\View\Factory;
-use Viserio\Support\Arr;
 use Psr\Log\LoggerInterface;
 use Swift_Mailer;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Viserio\Contracts\Mail\Mailer as MailerContract;
+use Viserio\Contracts\View\Factory;
+use Viserio\Support\Arr;
 
 /**
  * Mailer.
