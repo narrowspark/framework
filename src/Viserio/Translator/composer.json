@@ -19,23 +19,23 @@
     ],
     "require": {
         "php"                               : ">=5.6",
-        "viserio/contracts"               : "self.version",
-        "viserio/filesystem"              : "self.version"
+        "viserio/contracts"                 : "self.version",
+        "viserio/filesystem"                : "self.version"
     },
     "require-dev": {
-        "viserio/cache"                   : "self.version",
+        "viserio/cache"                     : "self.version",
         "symfony/event-dispatcher"          : "~2.8|~3.0",
         "fabpot/php-cs-fixer"               : "~1.10.1",
         "phpunit/phpunit"                   : "~5.0.6"
     },
     "autoload": {
         "psr-4": {
-            "Viserio\\Translator\\"       : ""
+            "Viserio\\Translator\\"         : ""
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Viserio\\Translator\\Tests\\": "tests/"
+            " Viserio\\Translator\\Tests\\" : "tests/"
         }
     },
     "extra": {

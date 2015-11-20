@@ -33,6 +33,6 @@ trait IntegerRuleTrait
      */
     public function isInteger($value)
     {
-        return is_numeric($value) && $value - intval($value) === 0;
+        return is_numeric($value) && $value - intval($value) == 0;
     }
 }

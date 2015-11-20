@@ -112,7 +112,7 @@ class Manager implements TranslatorContract
         PluralizationRules $pluralization,
         MessageSelector $messageSelector
     ) {
-        $this->loader = $fileloader;
+        $this->loader        = $fileloader;
         $this->pluralization = $pluralization;
 
         $messageSelector->setPluralization($pluralization);
