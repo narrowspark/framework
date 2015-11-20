@@ -23,7 +23,7 @@ use Aws\Ses\SesClient;
  *
  * @since   0.9.1-dev
  */
-class Ses implements \Swift_Transport
+class Ses extends Transport
 {
     /**
      * The Amazon SES instance.

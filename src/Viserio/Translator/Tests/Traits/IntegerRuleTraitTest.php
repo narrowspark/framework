@@ -1,5 +1,5 @@
 <?php
-namespace Viserio\Test\Translator\Traits;
+namespace Viserio\Translator\Tests\Traits;
 
 /*
  * Narrowspark - a PHP 5 framework
@@ -16,6 +16,8 @@ namespace Viserio\Test\Translator\Traits;
  *
  */
 
+use Viserio\Translator\Traits\IntegerRuleTrait;
+
 /**
  * IntegerRuleTraitTest.
  *
@@ -25,6 +27,8 @@ namespace Viserio\Test\Translator\Traits;
  */
 class IntegerRuleTraitTest extends \PHPUnit_Framework_TestCase
 {
+    use IntegerRuleTrait;
+
     protected $isInteger;
 
     protected $object;
@@ -34,7 +38,7 @@ class IntegerRuleTraitTest extends \PHPUnit_Framework_TestCase
      */
     public function testIsInt($value, $expected)
     {
-        $actual = $this->isInteger->invoke($this->object, $value);
+        $actual = $this->isInteger($value);
         $this->assertSame($expected, $actual);
     }
 
@@ -50,14 +54,5 @@ class IntegerRuleTraitTest extends \PHPUnit_Framework_TestCase
             'string 1.1' => ['1.1', false],
             'string z' => ['z', false],
         ];
-    }
-
-    public function setUp()
-    {
-        parent::setUp();
-        $this->object = $this->getMock(preg_replace('#Test$#', '', get_class($this)), ['category']);
-
-        $this->isInteger = new \ReflectionMethod($this->object, 'isInteger');
-        $this->isInteger->setAccessible(true);
     }
 }

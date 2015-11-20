@@ -1,5 +1,5 @@
 <?php
-namespace Viserio\Test\Translator\Traits;
+namespace Viserio\Translator\Tests\Traits;
 
 /*
  * Narrowspark - a PHP 5 framework

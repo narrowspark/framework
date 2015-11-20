@@ -359,11 +359,11 @@ class Arr
         // received from the developer. Then we'll return the final array form.
         if (is_null($key)) {
             foreach ($array as $item) {
-                $results[] = data_get($item, $value);
+                $results[] = self::dataGet($item, $value);
             }
         } else {
             foreach ($array as $item) {
-                $results[data_get($item, $key)] = data_get($item, $value);
+                $results[self::dataGet($item, $key)] = self::dataGet($item, $value);
             }
         }
 

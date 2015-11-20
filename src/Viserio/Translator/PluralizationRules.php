@@ -14,6 +14,33 @@ namespace Viserio\Translator;
  * @version     0.10.0-dev
  */
 
+use Viserio\Translator\PluralCategorys\Arabic;
+use Viserio\Translator\PluralCategorys\One;
+use Viserio\Translator\PluralCategorys\French;
+use Viserio\Translator\PluralCategorys\Balkan;
+use Viserio\Translator\PluralCategorys\Maltese;
+use Viserio\Translator\PluralCategorys\Manx;
+use Viserio\Translator\PluralCategorys\Slovenian;
+use Viserio\Translator\PluralCategorys\Welsh;
+use Viserio\Translator\PluralCategorys\Tachelhit;
+use Viserio\Translator\PluralCategorys\Tamazight;
+use Viserio\Translator\PluralCategorys\Macedonian;
+use Viserio\Translator\PluralCategorys\Lithuanian;
+use Viserio\Translator\PluralCategorys\Hebrew;
+use Viserio\Translator\PluralCategorys\Gaelic;
+use Viserio\Translator\PluralCategorys\Irish;
+use Viserio\Translator\PluralCategorys\Langi;
+use Viserio\Translator\PluralCategorys\Latvian;
+use Viserio\Translator\PluralCategorys\Breton;
+use Viserio\Translator\PluralCategorys\Colognian;
+use Viserio\Translator\PluralCategorys\Romanian;
+use Viserio\Translator\PluralCategorys\Two;
+use Viserio\Translator\PluralCategorys\Zero;
+use Viserio\Translator\PluralCategorys\None;
+use Viserio\Translator\PluralCategorys\Czech;
+use Viserio\Translator\PluralCategorys\Polish;
+use InvalidArgumentException;
+
 /**
  * PluralizationRules.
  *
@@ -52,13 +79,13 @@ class PluralizationRules
             $return = call_user_func($this->rules[$language], $count);
 
             if (!is_int($return) || $return < 0) {
-                return (new PluralCategorys\Zero())->category(0);
+                return (new Zero())->category(0);
             }
 
             return $return;
         }
 
-        return $this->getPlural($language)->category($count);
+        return $this->createRules($language)->category($count);
     }
 
     /**
@@ -72,12 +99,12 @@ class PluralizationRules
      *
      * @return PluralCategorys\Arabic|PluralCategorys\Czech|PluralCategorys\One|PluralCategorys\Polish|PluralCategorys\French|PluralCategorys\Balkan|PluralCategorys\Maltese|PluralCategorys\Manx|PluralCategorys\Slovenian|PluralCategorys\Welsh|PluralCategorys\Tachelhit|PluralCategorys\Tamazight|PluralCategorys\Macedonian|PluralCategorys\Lithuanian|PluralCategorys\Hebrew|PluralCategorys\Gaelic|PluralCategorys\Irish|PluralCategorys\Langi|PluralCategorys\Latvian|PluralCategorys\Breton|PluralCategorys\Colognian|PluralCategorys\Romanian|PluralCategorys\Two|PluralCategorys\Zero|PluralCategorys\None
      */
-    protected function getPlural($prefix)
+    protected function createRules($prefix)
     {
         if ($prefix === 'ar') {
-            return new PluralCategorys\Arabic();
+            return new Arabic();
         } elseif (in_array($prefix, ['cs', 'sk'], true)) {
-            return new PluralCategorys\Czech();
+            return new Czech();
         } elseif (in_array($prefix, [
             'en', 'ny', 'nr', 'no', 'om', 'os', 'ps', 'pa', 'nn', 'or', 'nl', 'lg', 'lb', 'ky', 'ml', 'mr',
             'ne', 'nd', 'nb', 'pt', 'rm', 'ts', 'tn', 'tk', 'ur', 'vo', 'zu', 'xh', 've', 'te', 'ta', 'sq',
@@ -86,58 +113,58 @@ class PluralizationRules
             'brx', 'mas', 'teo', 'chr', 'cgg', 'tig', 'wae', 'xog', 'ast', 'vun', 'bem', 'syr', 'bez', 'asa',
             'rof', 'ksb', 'rwk', 'haw', 'pap', 'gsw', 'fur', 'saq', 'seh', 'nyn', 'kcg', 'ssy', 'kaj', 'jmc',
             'nah', 'ckb', ], true)) {
-            return new PluralCategorys\One();
+            return new One();
         } elseif ($prefix === 'pl') {
-            return new PluralCategorys\Polish();
+            return new Polish();
         } elseif (in_array($prefix, ['fr', 'ff', 'kab'], true)) {
-            return new PluralCategorys\French();
+            return new French();
         } elseif (in_array($prefix, ['ru', 'sr', 'uk', 'sh', 'be', 'hr', 'bs'], true)) {
-            return new PluralCategorys\Balkan();
+            return new Balkan();
         } elseif ($prefix === 'mt') {
-            return new PluralCategorys\Maltese();
+            return new Maltese();
         } elseif ($prefix === 'gv') {
-            return new PluralCategorys\Manx();
+            return new Manx();
         } elseif ($prefix === 'sl') {
-            return new PluralCategorys\Slovenian();
+            return new Slovenian();
         } elseif ($prefix === 'cy') {
-            return new PluralCategorys\Welsh();
+            return new Welsh();
         } elseif ($prefix === 'shi') {
-            return new PluralCategorys\Tachelhit();
+            return new Tachelhit();
         } elseif ($prefix === 'tzm') {
-            return new PluralCategorys\Tamazight();
+            return new Tamazight();
         } elseif ($prefix === 'mk') {
-            return new PluralCategorys\Macedonian();
+            return new Macedonian();
         } elseif ($prefix === 'lt') {
-            return new PluralCategorys\Lithuanian();
+            return new Lithuanian();
         } elseif ($prefix === 'he') {
-            return new PluralCategorys\Hebrew();
+            return new Hebrew();
         } elseif ($prefix === 'gd') {
-            return new PluralCategorys\Gaelic();
+            return new Gaelic();
         } elseif ($prefix === 'ga') {
-            return new PluralCategorys\Irish();
+            return new Irish();
         } elseif ($prefix === 'lag') {
-            return new PluralCategorys\Langi();
+            return new Langi();
         } elseif ($prefix === 'lv') {
-            return new PluralCategorys\Latvian();
+            return new Latvian();
         } elseif ($prefix === 'br') {
-            return new PluralCategorys\Breton();
+            return new Breton();
         } elseif ($prefix === 'ksh') {
-            return new PluralCategorys\Colognian();
+            return new Colognian();
         } elseif (in_array($prefix, ['mo', 'ro'], true)) {
-            return new PluralCategorys\Romanian();
+            return new Romanian();
         } elseif (in_array($prefix, [
             'se', 'kw', 'iu', 'smn', 'sms', 'smj', 'sma', 'naq', 'smi', ], true)) {
-            return new PluralCategorys\Two();
+            return new Two();
         } elseif (in_array($prefix, [
             'hi', 'ln', 'mg', 'ak', 'tl', 'am', 'bh', 'wa', 'ti', 'guw', 'fil', 'nso', ], true)) {
-            return new PluralCategorys\Zero();
+            return new Zero();
         } elseif (in_array($prefix, [
             'my', 'sg', 'ms', 'lo', 'kn', 'ko', 'th', 'to', 'yo', 'zh', 'wo', 'vi', 'tr', 'az', 'km', 'id',
             'ig', 'fa', 'dz', 'bm', 'bo', 'ii', 'hu', 'ka', 'jv', 'ja', 'kde', 'ses', 'sah', 'kea', ], true)) {
-            return new PluralCategorys\None();
+            return new None();
         }
 
-        throw new \InvalidArgumentException('Unknown language prefix: '.$prefix.'.');
+        throw new InvalidArgumentException('Unknown language prefix: '.$prefix.'.');
     }
 
     /**

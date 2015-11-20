@@ -1,5 +1,5 @@
 <?php
-namespace Viserio\Test\Translator\PluralCategorys;
+namespace Viserio\Translator\Tests\PluralCategorys;
 
 /*
  * Narrowspark - a PHP 5 framework
@@ -16,6 +16,8 @@ namespace Viserio\Test\Translator\PluralCategorys;
  *
  */
 
+use Viserio\Translator\PluralCategorys\Tachelhit;
+
 /**
  * TachelhitTest.
  *
@@ -23,8 +25,25 @@ namespace Viserio\Test\Translator\PluralCategorys;
  *
  * @since   0.9.6-dev
  */
-class TachelhitTest extends AbstractPluralCategorysTest
+class TachelhitTest extends \PHPUnit_Framework_TestCase
 {
+    protected $object;
+
+    public function setUp()
+    {
+        parent::setUp();
+        $this->object = new Tachelhit();
+    }
+
+    /**
+     * @dataProvider category
+     */
+    public function testGetCategory($count, $expected)
+    {
+        $actual = $this->object->category($count);
+        $this->assertEquals($expected, $actual);
+    }
+
     public function category()
     {
         return [
