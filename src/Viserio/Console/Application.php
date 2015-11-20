@@ -14,10 +14,6 @@ namespace Viserio\Console;
  * @version     0.10.0-dev
  */
 
-use Viserio\Console\Command\Command as ViserioCommand;
-use Viserio\Console\Command\ExpressionParser as Parser;
-use Viserio\Console\Input\InputArgument;
-use Viserio\Console\Input\InputOption;
 use Interop\Container\ContainerInterface as ContainerContract;
 use Symfony\Component\Console\Application as SymfonyConsole;
 use Symfony\Component\Console\Command\Command as SymfonyCommand;
@@ -30,6 +26,10 @@ use Invoker\ParameterResolver\AssociativeArrayResolver;
 use Invoker\ParameterResolver\DefaultValueResolver;
 use Invoker\ParameterResolver\NumericArrayResolver;
 use Invoker\ParameterResolver\ResolverChain;
+use Viserio\Console\Command\Command as ViserioCommand;
+use Viserio\Console\Command\ExpressionParser as Parser;
+use Viserio\Console\Input\InputArgument;
+use Viserio\Console\Input\InputOption;
 
 /**
  * Application.

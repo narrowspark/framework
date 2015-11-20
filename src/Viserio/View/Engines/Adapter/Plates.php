@@ -14,13 +14,13 @@ namespace Viserio\View\Engines\Adapter;
  * @version     0.10.0-dev
  */
 
-use Viserio\Contracts\Config\Manager as ConfigContract;
-use Viserio\Contracts\View\Engine as EnginesContract;
 use Interop\Container\ContainerInterface as ContainerContract;
 use League\Plates\Engine;
 use League\Plates\Extension\Asset;
 use League\Plates\Extension\URI;
 use League\Plates\Template\Template;
+use Viserio\Contracts\Config\Manager as ConfigContract;
+use Viserio\Contracts\View\Engine as EnginesContract;
 
 /**
  * Plates.

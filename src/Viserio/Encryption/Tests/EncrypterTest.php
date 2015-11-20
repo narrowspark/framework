@@ -16,8 +16,8 @@ namespace Viserio\Encryption\Test;
  *
  */
 
-use Viserio\Encryption\Encrypter;
 use Mockery as Mock;
+use Viserio\Encryption\Encrypter;
 
 /**
  * EncrypterTest.

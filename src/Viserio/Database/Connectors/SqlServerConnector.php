@@ -14,8 +14,8 @@ namespace Viserio\Database\Connectors;
  * @version     0.10.0-dev
  */
 
-use Viserio\Contracts\Database\Connector as ConnectorContract;
 use PDO;
+use Viserio\Contracts\Database\Connector as ConnectorContract;
 
 /**
  * SqlServerConnector.

@@ -16,8 +16,8 @@ namespace Viserio\Cache\Test\Adapter;
  *
  */
 
-use Viserio\Cache\Adapter\RedisCache;
 use Mockery as Mock;
+use Viserio\Cache\Adapter\RedisCache;
 
 /**
  * RedisCacheTest.

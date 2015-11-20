@@ -14,9 +14,9 @@ namespace Viserio\Http\Providers;
  * @version     0.10.0-dev
  */
 
+use Symfony\Component\HttpFoundation\RequestStack;
 use Viserio\Application\ServiceProvider;
 use Viserio\Http\Request;
-use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
  * RequestServiceProvider.

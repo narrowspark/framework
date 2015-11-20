@@ -16,10 +16,10 @@ namespace Viserio\Routing\Test;
  *
  */
 
+use FastRoute\DataGenerator\GroupCountBased;
 use Viserio\Container\Container;
 use Viserio\Routing\RouteCollection;
 use Viserio\Routing\RouteParser;
-use FastRoute\DataGenerator\GroupCountBased;
 
 /**
  * RouteCollectionTest.

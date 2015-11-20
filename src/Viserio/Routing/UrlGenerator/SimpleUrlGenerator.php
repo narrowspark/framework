@@ -14,9 +14,9 @@ namespace Viserio\Routing\UrlGenerator;
  * @version     0.10.0-dev
  */
 
+use Symfony\Component\HttpFoundation\Request as SymfonyRequest;
 use Viserio\Contracts\Routing\DataGenerator as DataGeneratorContract;
 use Viserio\Contracts\Routing\UrlGenerator as UrlGeneratorContract;
-use Symfony\Component\HttpFoundation\Request as SymfonyRequest;
 
 /**
  * SimpleUrlGenerator.

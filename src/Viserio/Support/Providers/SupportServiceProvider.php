@@ -14,12 +14,12 @@ namespace Viserio\Support\Providers;
  * @version     0.10.0-dev
  */
 
+use RandomLib\Factory as RandomLib;
 use Viserio\Application\ServiceProvider;
 use Viserio\Support\Arr;
 use Viserio\Support\Helper;
 use Viserio\Support\StaticalProxyResolver;
 use Viserio\Support\Str;
-use RandomLib\Factory as RandomLib;
 
 /**
  * SupportServiceProvider.

@@ -16,7 +16,6 @@ namespace Viserio\Application\Testing;
 
 use Viserio\Application\Testing\Traits\ApplicationTrait;
 use Viserio\Contracts\Application\Test as TestCaseContract;
-use Viserio\Contracts\Application\Test as TestCaseContract;
 
 /**
  * TestCase.

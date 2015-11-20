@@ -14,11 +14,11 @@ namespace Viserio\Http;
  * @version     0.10.0-dev
  */
 
-use Viserio\Session\Store as SessionStore;
-use Viserio\Support\Str;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\File\UploadedFile as SymfonyUploadedFile;
 use Symfony\Component\HttpFoundation\RedirectResponse as SymfonyRedirectResponse;
+use Viserio\Session\Store as SessionStore;
+use Viserio\Support\Str;
 
 /**
  * RedirectResponse.

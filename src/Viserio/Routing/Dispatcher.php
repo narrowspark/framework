@@ -14,14 +14,14 @@ namespace Viserio\Routing;
  * @version     0.10.0-dev
  */
 
-use Viserio\Contracts\Http\Response as ResponseContract;
-use Viserio\Contracts\Routing\RouteStrategy as RouteStrategyContract;
-use Viserio\Http\JsonResponse;
-use Viserio\Http\Response;
 use FastRoute\Dispatcher as FastDispatcher;
 use FastRoute\Dispatcher\GroupCountBased as GroupCountBasedDispatcher;
 use Interop\Container\ContainerInterface as ContainerContract;
 use Symfony\Component\HttpKernel\Exception\HttpException;
+use Viserio\Contracts\Http\Response as ResponseContract;
+use Viserio\Contracts\Routing\RouteStrategy as RouteStrategyContract;
+use Viserio\Http\JsonResponse;
+use Viserio\Http\Response;
 
 /**
  * Dispatcher.

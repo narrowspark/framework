@@ -93,7 +93,7 @@ class CacheManager extends Manager implements FactoryContract
      *
      * @return mixed
      */
-    public function driver($driver, array $options = [])
+    public function driver($driver = null, array $options = [])
     {
         $class = parent::driver($driver, $options);
 
@@ -114,16 +114,6 @@ class CacheManager extends Manager implements FactoryContract
     public function getPrefix()
     {
         return $this->config->get('cache::prefix');
-    }
-
-    /**
-     * Set the cache "prefix" value.
-     *
-     * @param string $name
-     */
-    public function setPrefix($name)
-    {
-        $this->config->bind('cache::prefix', $name);
     }
 
     /**

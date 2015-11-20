@@ -14,11 +14,11 @@ namespace Viserio\Exception\Adapter;
  * @version     0.10.0-dev
  */
 
-use Viserio\Contracts\Exception\Adapter;
-use Viserio\Contracts\Http\HttpExceptionInterface;
 use Symfony\Component\Debug\ExceptionHandler;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Viserio\Contracts\Exception\Adapter;
+use Viserio\Contracts\Http\HttpExceptionInterface;
 
 /**
  * SymfonyDisplayer.

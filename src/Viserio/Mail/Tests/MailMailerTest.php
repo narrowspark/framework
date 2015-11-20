@@ -16,8 +16,8 @@ namespace Viserio\Mail\Test;
  *
  */
 
-use Viserio\Mail\Mailer;
 use Mockery as Mock;
+use Viserio\Mail\Mailer;
 
 /**
  * MailMailerTest.

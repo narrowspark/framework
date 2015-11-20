@@ -16,6 +16,7 @@ namespace Viserio\Container;
 
 use ArrayAccess;
 use Closure;
+use Interop\Container\ContainerInterface as ContainerInteropInterface;
 use Viserio\Container\Exception\BindingResolutionException;
 use Viserio\Container\Exception\ContainerException;
 use Viserio\Container\Exception\NotFoundException;

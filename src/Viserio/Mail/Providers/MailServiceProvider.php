@@ -16,6 +16,7 @@ namespace Viserio\Mail\Providers;
 
 use Aws\Sdk;
 use Aws\Ses\SesClient;
+use GuzzleHttp\Client as HttpClient;
 use Viserio\Application\ServiceProvider;
 use Viserio\Mail\Mailer;
 use Viserio\Mail\Transport\Log as LogTransport;
@@ -23,7 +24,6 @@ use Viserio\Mail\Transport\Mailgun as MailgunTransport;
 use Viserio\Mail\Transport\Mandrill as MandrillTransport;
 use Viserio\Mail\Transport\Postmark as PostmarkTransport;
 use Viserio\Mail\Transport\Ses as SesTransport;
-use GuzzleHttp\Client as HttpClient;
 
 /**
  * MailServiceProvider.

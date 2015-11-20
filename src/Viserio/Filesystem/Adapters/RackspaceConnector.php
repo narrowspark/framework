@@ -14,11 +14,11 @@ namespace Viserio\Filesystem\Adapters;
  * @version     0.10.0-dev
  */
 
-use Viserio\Contracts\Filesystem\Connector as ConnectorContract;
-use Viserio\Support\Arr;
 use League\Flysystem\Adapter\Rackspace;
 use OpenCloud\ObjectStore\Resource\Container;
 use OpenCloud\OpenStack;
+use Viserio\Contracts\Filesystem\Connector as ConnectorContract;
+use Viserio\Support\Arr;
 
 /**
  * ConnectionFactory.

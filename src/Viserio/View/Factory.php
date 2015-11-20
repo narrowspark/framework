@@ -14,6 +14,7 @@ namespace Viserio\View;
  * @version     0.10.0-dev
  */
 
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Viserio\Contracts\Cache\Factory as CacheContract;
 use Viserio\Contracts\Config\Manager as ConfigContract;
 use Viserio\Contracts\Support\Arrayable;
@@ -22,7 +23,6 @@ use Viserio\Contracts\View\Finder as FinderContract;
 use Viserio\Support\Arr;
 use Viserio\Support\Str;
 use Viserio\View\Engines\EngineResolver;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Factory.

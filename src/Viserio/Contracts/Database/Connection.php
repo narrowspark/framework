@@ -14,6 +14,8 @@ namespace Viserio\Contracts\Database;
  * @version     0.10.0-dev
  */
 
+use Viserio\Contracts\Cache\Factory as CacheContract;
+
 /**
  * Connection.
  *
@@ -238,7 +240,7 @@ interface Connection
     /**
      * Set the cache manager instance on the connection.
      *
-     * @param \Closure $cache
+     * @param \Viserio\Contracts\Cache\Factory $cache
      */
-    public function setCacheManager($cache);
+    public function setCacheManager(CacheContract $cache);
 }

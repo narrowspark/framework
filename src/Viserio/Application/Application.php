@@ -14,6 +14,8 @@ namespace Viserio\Application;
  * @version     0.10.0-dev
  */
 
+use Symfony\Component\HttpFoundation\Request as SymfonyRequest;
+use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Viserio\Application\Traits\BootableTrait;
 use Viserio\Application\Traits\EnvironmentTrait;
 use Viserio\Application\Traits\HttpErrorHandlingTrait;
@@ -23,8 +25,6 @@ use Viserio\Application\Traits\PathsTrait;
 use Viserio\Container\Container;
 use Viserio\Contracts\Application\Foundation;
 use Viserio\Support\StaticalProxyManager;
-use Symfony\Component\HttpFoundation\Request as SymfonyRequest;
-use Symfony\Component\HttpKernel\HttpKernelInterface;
 
 /**
  * Application.

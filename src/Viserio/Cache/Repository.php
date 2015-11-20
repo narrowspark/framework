@@ -14,9 +14,9 @@ namespace Viserio\Cache;
  * @version     0.10.0-dev
  */
 
+use Carbon\Carbon;
 use Viserio\Contracts\Cache\Adapter as AdapterContract;
 use Viserio\Contracts\Cache\Repository as CacheContract;
-use Carbon\Carbon;
 
 /**
  * Repository.

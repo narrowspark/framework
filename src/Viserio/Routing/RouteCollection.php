@@ -14,13 +14,13 @@ namespace Viserio\Routing;
  * @version     0.10.0-dev
  */
 
-use Viserio\Contracts\Routing\RouteCollector as RouteCollectorContract;
-use Viserio\Contracts\Routing\RouteStrategy as RouteStrategyContract;
-use Viserio\Routing\RouteParser as ViserioRouteParser;
 use FastRoute\DataGenerator;
 use FastRoute\RouteCollector;
 use FastRoute\RouteParser as FastRouteParser;
 use Interop\Container\ContainerInterface as ContainerContract;
+use Viserio\Contracts\Routing\RouteCollector as RouteCollectorContract;
+use Viserio\Contracts\Routing\RouteStrategy as RouteStrategyContract;
+use Viserio\Routing\RouteParser as ViserioRouteParser;
 
 /**
  * RouteCollection.

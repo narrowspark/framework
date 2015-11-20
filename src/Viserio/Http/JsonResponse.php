@@ -14,10 +14,10 @@ namespace Viserio\Http;
  * @version     0.10.0-dev
  */
 
+use Symfony\Component\HttpFoundation\JsonResponse as SymfonyJsonResponse;
 use Viserio\Contracts\Http\Response as ResponseContract;
 use Viserio\Contracts\Support\Jsonable;
 use Viserio\Http\Traits\ResponseParameterTrait;
-use Symfony\Component\HttpFoundation\JsonResponse as SymfonyJsonResponse;
 
 /**
  * JsonResponse.

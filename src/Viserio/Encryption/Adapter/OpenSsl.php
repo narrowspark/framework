@@ -14,9 +14,9 @@ namespace Viserio\Encryption\Adapter;
  * @version     0.10.0-dev
  */
 
+use RandomLib\Generator as RandomLib;
 use Viserio\Contracts\Encryption\Adapter as AdapterContract;
 use Viserio\Contracts\Hashing\Generator as HashContract;
-use RandomLib\Generator as RandomLib;
 
 /**
  * OpenSsl.

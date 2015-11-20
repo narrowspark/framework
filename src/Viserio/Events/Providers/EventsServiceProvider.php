@@ -14,9 +14,9 @@ namespace Viserio\Events\Providers;
  * @version     0.10.0-dev
  */
 
+use Symfony\Component\EventDispatcher\EventDispatcher;
 use Viserio\Application\ServiceProvider;
 use Viserio\Events\Dispatcher;
-use Symfony\Component\EventDispatcher\EventDispatcher;
 
 /**
  * EventsServiceProvider.

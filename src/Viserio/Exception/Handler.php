@@ -14,12 +14,12 @@ namespace Viserio\Exception;
  * @version     0.10.0-dev
  */
 
-use Viserio\Contracts\Http\HttpExceptionInterface;
-use Viserio\Http\Response;
 use Interop\Container\ContainerInterface as ContainerContract;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Debug\Exception\FatalErrorException;
 use Symfony\Component\Debug\Exception\FlattenException;
+use Viserio\Contracts\Http\HttpExceptionInterface;
+use Viserio\Http\Response;
 
 /**
  * ExceptionHandler.

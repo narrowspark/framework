@@ -16,9 +16,9 @@ namespace Viserio\Support\Test;
  *
  */
 
+use Mockery as Mock;
 use Viserio\Contracts\Support\Arrayable;
 use Viserio\Support\Collection;
-use Mockery as Mock;
 
 /**
  * CollectionTest.

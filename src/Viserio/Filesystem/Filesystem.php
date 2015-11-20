@@ -14,10 +14,10 @@ namespace Viserio\Filesystem;
  * @version     0.10.0-dev
  */
 
+use Symfony\Component\Finder\Finder;
 use Viserio\Contracts\Filesystem\FileNotFoundException;
 use Viserio\Filesystem\Traits\DirectoryTrait;
 use Viserio\Filesystem\Traits\MimetypeTrait;
-use Symfony\Component\Finder\Finder;
 
 /**
  * Filesystem.

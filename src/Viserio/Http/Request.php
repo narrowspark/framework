@@ -14,12 +14,12 @@ namespace Viserio\Http;
  * @version     0.10.0-dev
  */
 
+use Symfony\Component\HttpFoundation\ParameterBag;
+use Symfony\Component\HttpFoundation\Request as SymfonyRequest;
 use Viserio\Contracts\Http\Request as RequestContract;
 use Viserio\Http\Traits\RequestParameterTrait;
 use Viserio\Support\Arr;
 use Viserio\Support\Str;
-use Symfony\Component\HttpFoundation\ParameterBag;
-use Symfony\Component\HttpFoundation\Request as SymfonyRequest;
 
 /**
  * Request.

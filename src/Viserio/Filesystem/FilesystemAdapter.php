@@ -13,12 +13,12 @@ namespace Viserio\Filesystem;
  *
  * @version     0.10.0-dev
  */
-use Viserio\Contracts\Filesystem\FileNotFoundException as ContractFileNotFoundException;
-use Viserio\Contracts\Filesystem\Filesystem as CloudFilesystemContract;
-use Viserio\Support\Collection;
 use League\Flysystem\AdapterInterface;
 use League\Flysystem\Config as FlyConfig;
 use League\Flysystem\FileNotFoundException;
+use Viserio\Contracts\Filesystem\FileNotFoundException as ContractFileNotFoundException;
+use Viserio\Contracts\Filesystem\Filesystem as CloudFilesystemContract;
+use Viserio\Support\Collection;
 
 /**
  * FilesystemAdapter.
@@ -336,9 +336,9 @@ class FilesystemAdapter implements CloudFilesystemContract
      *
      * @param  string  $method
      * @param  array  $arguments
+     * @throws \BadMethodCallException
      * @return mixed
      *
-     * @throws \BadMethodCallException
      */
     public function __call($method, array $arguments)
     {

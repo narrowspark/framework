@@ -23,7 +23,7 @@ use Viserio\Contracts\Loop\Adapter as AdapterContract;
  *
  * @since   0.10.0-dev
  */
-class Repository extends AnotherClass
+class Repository
 {
     /**
      * The loop adapter implementation.

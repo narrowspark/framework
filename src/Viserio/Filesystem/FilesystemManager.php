@@ -14,10 +14,10 @@ namespace Viserio\Filesystem;
  * @version     0.10.0-dev
  */
 
+use League\Flysystem\AdapterInterface;
 use Viserio\Contracts\Config\Manager as ConfigContract;
 use Viserio\Contracts\Filesystem\FilesystemManager as Manager;
 use Viserio\Filesystem\Adapters\ConnectionFactory;
-use League\Flysystem\AdapterInterface;
 
 /**
  * FilesystemManager.

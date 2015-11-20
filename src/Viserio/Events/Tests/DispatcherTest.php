@@ -16,11 +16,11 @@ namespace Viserio\Events\Test;
  *
  */
 
-use Viserio\Container\Container;
-use Viserio\Events\Dispatcher;
 use Symfony\Component\EventDispatcher\Event;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Viserio\Container\Container;
+use Viserio\Events\Dispatcher;
 
 /**
  * DispatcherTest.

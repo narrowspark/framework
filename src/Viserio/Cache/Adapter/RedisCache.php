@@ -14,10 +14,10 @@ namespace Viserio\Cache\Adapter;
  * @version     0.10.0-dev
  */
 
-use Viserio\Cache\Store\TaggableStore;
-use Viserio\Contracts\Cache\Adapter as AdapterContract;
 use Predis\Client as Client;
 use Predis\Connection\ConnectionException;
+use Viserio\Cache\Store\TaggableStore;
+use Viserio\Contracts\Cache\Adapter as AdapterContract;
 
 /**
  * RedisCache.

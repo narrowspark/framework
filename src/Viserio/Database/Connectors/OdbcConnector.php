@@ -23,7 +23,7 @@ use Viserio\Contracts\Database\Connector as ConnectorContract;
  *
  * @since   0.10.0-dev
  */
-class OdbcConnector extends Connectors implements ConnectorInterface
+class OdbcConnector extends Connectors implements ConnectorContract
 {
     /**
      * Establish a database connection.

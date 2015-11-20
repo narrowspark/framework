@@ -14,12 +14,8 @@ namespace Viserio\Database\Traits;
  * @version     0.10.0-dev
  */
 
-<<<<<<< HEAD:src/Brainwave/Database/Traits/DetectsLostConnections.php
-use Brainwave\Support\Str;
-=======
-use Viserio\Support\Str;
->>>>>>> develop:src/Viserio/Database/Traits/DetectsLostConnections.php
 use Exception;
+use Viserio\Support\Str;
 
 /**
  * DetectsLostConnections.

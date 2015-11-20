@@ -14,14 +14,14 @@ namespace Viserio\Exception\Providers;
  * @version     0.10.0-dev
  */
 
+use Symfony\Component\Debug\ExceptionHandler as SymfonyExceptionHandler;
+use Symfony\Component\HttpFoundation\Request;
 use Viserio\Application\ServiceProvider;
 use Viserio\Exception\Adapter\ArrayDisplayer;
 use Viserio\Exception\Adapter\PlainDisplayer;
 use Viserio\Exception\Adapter\SymfonyDisplayer;
 use Viserio\Exception\Adapter\WhoopsDisplayer;
 use Viserio\Exception\Handler as ExceptionHandler;
-use Symfony\Component\Debug\ExceptionHandler as SymfonyExceptionHandler;
-use Symfony\Component\HttpFoundation\Request;
 use Whoops\Handler\JsonResponseHandler;
 use Whoops\Handler\PlainTextHandler;
 use Whoops\Handler\PrettyPageHandler;

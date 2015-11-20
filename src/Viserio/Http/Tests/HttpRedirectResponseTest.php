@@ -16,9 +16,9 @@ namespace Viserio\Http\Test;
  *
  */
 
+use Mockery as Mock;
 use Viserio\Http\RedirectResponse;
 use Viserio\Http\Request;
-use Mockery as Mock;
 
 /**
  * HttpRequestTest.

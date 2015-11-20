@@ -14,9 +14,9 @@ namespace Viserio\Log\Providers;
  * @version     0.10.0-dev
  */
 
+use Monolog\Logger;
 use Viserio\Application\ServiceProvider;
 use Viserio\Log\Writer as MonologWriter;
-use Monolog\Logger;
 
 /**
  * LoggerServiceProvider.
