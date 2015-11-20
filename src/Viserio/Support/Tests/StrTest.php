@@ -94,14 +94,6 @@ class StrTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('Narrowspark…', Str::limit('Narrowspark Framework for Creative People.', 11));
     }
 
-    public function testQuickRandom()
-    {
-        $randomInteger = mt_rand(1, 100);
-        $this->assertEquals($randomInteger, strlen(Str::quickRandom($randomInteger)));
-        $this->assertInternalType('string', Str::quickRandom());
-        $this->assertEquals(16, strlen(Str::quickRandom()));
-    }
-
     public function testRandom()
     {
         $this->assertEquals(16, strlen(Str::random()));

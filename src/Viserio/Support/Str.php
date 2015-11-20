@@ -226,22 +226,6 @@ class Str extends StaticStringy
     }
 
     /**
-     * Generate a "random" alpha-numeric string.
-     *
-     * Should not be considered sufficient for cryptography, etc.
-     *
-     * @param int $length
-     *
-     * @return string
-     */
-    public static function quickRandom($length = 16)
-    {
-        $pool = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-
-        return substr(str_shuffle(str_repeat($pool, 5)), 0, $length);
-    }
-
-    /**
      * Get all of the given string except for a specified string of items.
      *
      * @param string       $value
