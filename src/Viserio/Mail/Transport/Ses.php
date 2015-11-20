@@ -56,7 +56,7 @@ class Ses extends Transport
             'Source' => key($message->getSender()),
             'Destinations' => $this->getTo($message),
             'RawMessage' => [
-                'Data' => (string) $message,
+                'Data' => $message->toString(),
             ],
         ]);
     }
