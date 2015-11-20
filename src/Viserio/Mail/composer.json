@@ -18,19 +18,19 @@
         }
     ],
     "require": {
-        "php"                         : ">=5.6",
+        "php"                       : ">=5.6",
         "viserio/log"               : "self.version",
         "viserio/contracts"         : "self.version",
-        "psr/log"                     : "~1.0",
-        "swiftmailer/swiftmailer"     : "~5.4"
+        "psr/log"                   : "~1.0",
+        "swiftmailer/swiftmailer"   : "~5.4"
     },
     "require-dev": {
-        "guzzlehttp/guzzle"           : "~6.0",
-        "fabpot/php-cs-fixer"         : "~1.10.1",
+        "guzzlehttp/guzzle"         : "~6.0",
+        "fabpot/php-cs-fixer"       : "~1.10.1",
         "viserio/config"            : "self.version",
         "viserio/events"            : "self.version",
         "viserio/view"              : "self.version",
-        "phpunit/phpunit"             : "~5.0.6"
+        "phpunit/phpunit"           : "~5.0.6"
     },
     "autoload": {
         "psr-4": {
@@ -44,13 +44,13 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-master"              : "0.10.0-dev"
+            "dev-master"            : "0.10.0-dev"
         }
     },
     "suggest" : {
-        "aws/aws-sdk-php"             : "Required to use the SES mail driver (~3.0).",
-        "guzzlehttp/guzzle"           : "Required to use the Mailgun, Mandrill, and Postmark mail drivers (~6.0)."
+        "aws/aws-sdk-php"           : "Required to use the SES mail driver (~3.0).",
+        "guzzlehttp/guzzle"         : "Required to use the Mailgun, Mandrill, and Postmark mail drivers (~6.0)."
     },
-    "minimum-stability"               : "dev",
-    "prefer-stable"                   : true
+    "minimum-stability"             : "dev",
+    "prefer-stable"                 : true
 }

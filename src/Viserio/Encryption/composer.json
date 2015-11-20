@@ -18,33 +18,33 @@
         }
     ],
     "require": {
-        "php"                                : ">=5.6",
-        "ext-openssl"                        : "*",
-        "viserio/config"                   : "self.version",
-        "viserio/contracts"                : "self.version",
-        "ircmaxell/random-lib"               : "~1.1"
+        "php"                            : ">=5.6",
+        "ext-openssl"                    : "*",
+        "viserio/config"                 : "self.version",
+        "viserio/contracts"              : "self.version",
+        "ircmaxell/random-lib"           : "~1.1"
     },
     "require-dev": {
-        "fabpot/php-cs-fixer"                : "~1.10.1",
-        "phpunit/phpunit"                    : "~5.0.6"
+        "fabpot/php-cs-fixer"            : "~1.10.1",
+        "phpunit/phpunit"                : "~5.0.6"
     },
     "autoload": {
         "psr-4": {
-            "Viserio\\Encrypter\\"         : ""
+            "Viserio\\Encrypter\\"       : ""
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Viserio\\Encrypter\\Tests\\"  : "Tests/"
+            "Viserio\\Encrypter\\Tests\\": "Tests/"
         }
     },
     "extra": {
         "branch-alias": {
-            "dev-master"                     : "0.10.0-dev"
+            "dev-master"                 : "0.10.0-dev"
         }
     },
     "suggest": {
     },
-    "minimum-stability"                      : "dev",
-    "prefer-stable"                          : true
+    "minimum-stability"                  : "dev",
+    "prefer-stable"                      : true
 }

@@ -18,13 +18,13 @@
         }
     ],
     "require": {
-        "php"                            : ">=5.6",
+        "php"                          : ">=5.6",
         "viserio/support"              : "self.version",
         "viserio/contracts"            : "self.version"
     },
     "require-dev": {
-        "fabpot/php-cs-fixer"            : "~1.10.1",
-        "phpunit/phpunit"                : "~5.0.6"
+        "fabpot/php-cs-fixer"          : "~1.10.1",
+        "phpunit/phpunit"              : "~5.0.6"
     },
     "autoload": {
         "psr-4": {
@@ -38,9 +38,9 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-master"                 : "0.10.0-dev"
+            "dev-master"               : "0.10.0-dev"
         }
     },
-    "minimum-stability"                  : "dev",
-    "prefer-stable"                      : true
+    "minimum-stability"                : "dev",
+    "prefer-stable"                    : true
 }
