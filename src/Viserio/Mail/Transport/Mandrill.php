@@ -65,7 +65,7 @@ class Mandrill extends Transport
             'form_params' => [
                 'key' => $this->key,
                 'to' => $this->getToAddresses($message),
-                'raw_message' => (string) $message,
+                'raw_message' => $message->toString(),
                 'async' => false,
             ],
         ]);

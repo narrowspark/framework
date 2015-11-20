@@ -19,9 +19,9 @@
     ],
     "require": {
         "php"                                : ">=5.6",
-        "viserio/container"                : "self.version",
-        "viserio/contracts"                : "self.version",
-        "viserio/http"                     : "self.version",
+        "viserio/container"                  : "self.version",
+        "viserio/contracts"                  : "self.version",
+        "viserio/http"                       : "self.version",
         "container-interop/container-interop": "~1.0",
         "nikic/fast-route"                   : "~0.5",
         "symfony/http-kernel"                : "~2.8|~3.0"
@@ -32,12 +32,12 @@
     },
     "autoload": {
         "psr-4": {
-            "Viserio\\Routing\\"           : ""
+            "Viserio\\Routing\\"             : ""
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Viserio\\Tests\\Routing\\"    : "Tests/"
+            "Viserio\\Tests\\Routing\\"      : "Tests/"
         }
     },
     "extra": {

@@ -26,7 +26,7 @@
         "viserio/contracts"                  : "self.version"
     },
     "require-dev": {
-        "cekurte/environment"                : "~0.0.9",
+        "cekurte/environment"                : "~0.1",
         "mockery/mockery"                    : "~0.9.3",
         "fabpot/php-cs-fixer"                : "~1.10.1",
         "phpunit/phpunit"                    : "~5.0.6"
@@ -48,7 +48,7 @@
     },
     "suggest": {
         "symfony/var-dumper"                 : "Required to use the Helper::dd() (~2.8|~3.0).",
-        "cekurte/environment"                : "Required to use the Helper::env() (~0.0.9)."
+        "cekurte/environment"                : "Required to use the Helper::env() (~0.1)."
     },
     "minimum-stability"                      : "dev",
     "prefer-stable"                          : true
