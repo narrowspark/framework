@@ -80,7 +80,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Viserio\\"                    : "src/Viserio/"
+            "Viserio\\"                      : "src/Viserio/"
         }
     },
     "extra": {
