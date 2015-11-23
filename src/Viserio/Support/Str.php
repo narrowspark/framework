@@ -141,7 +141,7 @@ class Str extends StaticStringy
      */
     public static function parseCallback($callback, $default)
     {
-        return static::contains($callback, '@') ? explode('@', $callback, 2) : [$callback, $default];
+        return static::create($callback)->contains('@') ? explode('@', $callback, 2) : [$callback, $default];
     }
 
     /**
@@ -261,7 +261,7 @@ class Str extends StaticStringy
             $value = strtolower(preg_replace('/(.)(?=[A-Z])/', '$1'.$delimiter, $value));
         }
 
-        $value = preg_replace('/([ '.$delimiter.']+)/', $delimiter, $value);
+        $value = strtolower(preg_replace('/([^'.preg_quote($delimiter).'])(?=[A-Z])/', '$1'.$delimiter, $value));
 
         return static::$snakeCache[$key] = $value;
     }
@@ -284,42 +284,5 @@ class Str extends StaticStringy
         $value = ucwords(str_replace(['-', '_'], ' ', $value));
 
         return static::$studlyCache[$key] = str_replace(' ', '', $value);
-    }
-
-    /**
-     * Get the string between the given start and end in the given string.
-     *
-     * @param string $string
-     * @param string $start
-     * @param string $end
-     *
-     * @return string
-     */
-    public static function between($string, $start, $end)
-    {
-        if ($start === '' && $end === '') {
-            return $string;
-        }
-
-        if ($start !== '' && strpos($string, $start) === false) {
-            return '';
-        }
-
-        if ($end !== '' && strpos($string, $end) === false) {
-            return '';
-        }
-
-        if ($start === '') {
-            return substr($string, 0, strpos($string, $end));
-        }
-
-        if ($end === '') {
-            return substr($string, strpos($string, $start) + strlen($start));
-        }
-
-        $stringWithoutStart = explode($start, $string)[1];
-        $middle             = explode($end, $stringWithoutStart)[0];
-
-        return $middle;
     }
 }
