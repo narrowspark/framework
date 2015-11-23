@@ -20,7 +20,8 @@
     "require": {
         "php"                          : ">=5.6",
         "viserio/support"              : "self.version",
-        "viserio/contracts"            : "self.version"
+        "viserio/contracts"            : "self.version",
+        "paragonie/password_lock"      : "~1.1.0"
     },
     "require-dev": {
         "fabpot/php-cs-fixer"          : "~1.10.1",
