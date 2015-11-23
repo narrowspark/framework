@@ -55,7 +55,6 @@ class Repository implements RepositoryContract
      * Merge provided values with the defaults to ensure all required values are set.
      *
      * @param array $values
-     * @required
      */
     public function setArray(array $values = [])
     {
@@ -208,7 +207,7 @@ class Repository implements RepositoryContract
         $keys = $this->parseKey($key, $this->separator);
 
         while (count($keys) > 0 && $array !== null) {
-            $key = array_shift($keys);
+            $key   = array_shift($keys);
             $array = isset($array[$key]) ? $array[$key] : null;
         }
 

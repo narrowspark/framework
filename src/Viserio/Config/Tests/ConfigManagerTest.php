@@ -18,8 +18,6 @@ namespace Viserio\Config\Test;
 
 use Viserio\Config\Manager as ConfigManager;
 use Viserio\Config\Repository;
-use Viserio\Filesystem\FileLoader;
-use Viserio\Filesystem\Filesystem;
 
 /**
  * ConfigManagerTest.
@@ -60,9 +58,9 @@ class ConfigManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testGetDefaultValues()
     {
-        $config = $this->getConfig();
-
+        $config   = $this->getConfig();
         $defaults = $config->getDefaults();
+
         foreach ($this->defaults as $key => $value) {
             $this->assertEquals($defaults[$key], $value);
         }
@@ -74,19 +72,13 @@ class ConfigManagerTest extends \PHPUnit_Framework_TestCase
 
         $defaultKeys = array_keys($this->defaults);
         $defaultKeys = ksort($defaultKeys);
-        $configKeys = $config->callHandlerMethod('getKeys');
-        $configKeys = ksort($configKeys);
+        $configKeys  = $config->callHandlerMethod('getKeys');
+        $configKeys  = ksort($configKeys);
         $this->assertEquals($defaultKeys, $configKeys);
     }
 
     protected function getConfig()
     {
-        return new ConfigManager(
-                new Repository(),
-                new FileLoader(
-                    new Filesystem(),
-                    ''
-                )
-            );
+        return new ConfigManager(new Repository());
     }
 }

@@ -20,12 +20,12 @@
     "require": {
         "php"                         : ">=5.6",
         "viserio/support"             : "self.version",
-        "viserio/filesystem"          : "self.version",
         "viserio/cotracts"            : "self.version"
     },
     "require-dev": {
         "fabpot/php-cs-fixer"         : "~1.10.1",
-        "phpunit/phpunit"             : "~5.0.6"
+        "phpunit/phpunit"             : "~5.0.6",
+        "viserio/filesystem"          : "self.version"
     },
     "autoload": {
         "psr-4": {
