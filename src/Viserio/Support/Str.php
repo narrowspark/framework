@@ -141,7 +141,7 @@ class Str extends StaticStringy
      */
     public static function parseCallback($callback, $default)
     {
-        return static::create($callback)->contains('@') ? explode('@', $callback, 2) : [$callback, $default];
+        return static::contains($callback, '@') ? explode('@', $callback, 2) : [$callback, $default];
     }
 
     /**
