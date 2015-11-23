@@ -1,5 +1,5 @@
 <?php
-namespace Viserio\Application;
+namespace Viserio\Support;
 
 /**
  * Narrowspark - a PHP 5 framework.

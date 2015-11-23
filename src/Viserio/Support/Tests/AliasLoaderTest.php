@@ -1,5 +1,5 @@
 <?php
-namespace Viserio\Application\Test;
+namespace Viserio\Support\Tests;
 
 /**
  * Narrowspark - a PHP 5 framework.
@@ -14,7 +14,7 @@ namespace Viserio\Application\Test;
  * @version     0.10.0-dev
  */
 
-use Viserio\Application\AliasLoader;
+use Viserio\Support\AliasLoader;
 
 /**
  * AliasLoaderTest.

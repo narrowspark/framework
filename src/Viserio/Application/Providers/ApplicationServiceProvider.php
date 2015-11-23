@@ -14,7 +14,6 @@ namespace Viserio\Application\Providers;
  * @version     0.10.0-dev
  */
 
-use Viserio\Application\AliasLoader;
 use Viserio\Application\EnvironmentDetector;
 use Viserio\Application\ServiceProvider;
 
@@ -77,7 +76,6 @@ class ApplicationServiceProvider extends ServiceProvider
     public function register()
     {
         $this->registerConfig();
-        $this->registerAliasLoader();
         $this->registerEntvironment();
     }
 
@@ -85,13 +83,6 @@ class ApplicationServiceProvider extends ServiceProvider
     {
         $this->app->singleton('environment', function () {
             return new EnvironmentDetector();
-        });
-    }
-
-    protected function registerAliasLoader()
-    {
-        $this->app->singleton('alias', function () {
-            return new AliasLoader();
         });
     }
 
@@ -123,6 +114,7 @@ class ApplicationServiceProvider extends ServiceProvider
     {
         return [
             'environment',
+            'config',
             'alias',
         ];
     }
