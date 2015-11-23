@@ -90,6 +90,21 @@ abstract class ServiceProvider implements ServiceProviderContract
     }
 
     /**
+     * Alias a type to a shorter name.
+     *
+     * @param string $abstract
+     * @param string $alias
+     *
+     * @return void
+     */
+    protected function alias($abstract, $alias)
+    {
+        if ($alias) {
+            $this->app->alias($abstract, $alias);
+        }
+    }
+
+    /**
      * Dynamically handle missing method calls.
      *
      * @param string $method
