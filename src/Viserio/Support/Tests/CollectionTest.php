@@ -97,13 +97,21 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($c->isEmpty());
     }
 
-    public function testIsNotEmpty()
+    public function testAny()
     {
         $c = new Collection();
-        $this->assertFalse($c->isNotEmpty());
+        $this->assertFalse($c->any());
 
         $c = new Collection(['foo', 'bar']);
-        $this->assertTrue($c->isNotEmpty());
+        $this->assertTrue($c->any());
+
+        $this->assertTrue($c->any(function ($item, $key) {
+            return $item === 'foo' && $key === 0;
+        }));
+
+        $this->assertFalse($c->any(function ($item, $key) {
+            return $item === 'foo' && $key === 1;
+        }));
     }
 
     public function testEmptyCollectionIsConstructed()

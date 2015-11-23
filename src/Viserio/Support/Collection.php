@@ -1043,13 +1043,24 @@ class Collection implements
     }
 
     /**
-     * Determine if the collection is not empty.
+     * Determine if there are any data that pass a given truth test.
      *
+     * @param  callable|null  $callback
      * @return bool
      */
-    public function isNotEmpty()
+    public function any(callable $callback = null)
     {
-        return !$this->isEmpty();
+        if (is_null($callback)) {
+            return !$this->isEmpty();
+        }
+
+        foreach ($this->data as $key => $item) {
+            if ($callback($item, $key) === true) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
