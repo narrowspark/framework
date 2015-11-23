@@ -1049,7 +1049,7 @@ class Collection implements
      */
     public function isNotEmpty()
     {
-        return ! empty($this->items);
+        return !$this->isEmpty();
     }
 
     /**
