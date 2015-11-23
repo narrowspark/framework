@@ -1043,6 +1043,16 @@ class Collection implements
     }
 
     /**
+     * Determine if the collection is not empty.
+     *
+     * @return bool
+     */
+    public function isNotEmpty()
+    {
+        return ! empty($this->items);
+    }
+
+    /**
      * Get a CachingIterator instance.
      *
      * @param int $flags
