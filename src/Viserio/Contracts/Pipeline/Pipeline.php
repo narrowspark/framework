@@ -17,7 +17,7 @@ namespace Viserio\Contracts\Pipeline;
 use \Closure;
 
 /**
- * Pipeline .
+ * Pipeline.
  *
  * @author  Daniel Bannert
  *
