@@ -23,8 +23,7 @@
         "viserio/log"                        : "self.version",
         "container-interop/container-interop": "~1.0",
         "mpoiriert/invoker"                  : "~1.1",
-        "nesbot/carbon"                      : "~1.18",
-        "stecman/symfony-console-completion" : "~0.5.1",
+        "stecman/symfony-console-completion" : "~0.6.1",
         "symfony/console"                    : "~2.8|~3.0"
     },
     "require-dev": {
@@ -47,8 +46,7 @@
         }
     },
     "suggest": {
-        "symfony/process"                    : "Required to use scheduling component (~2.8|~3.0).",
-        "nesbot/carbon"                      : "Required to use scheduling component (~1.18)."
+        "symfony/process"                    : "Required to use scheduling component (~2.8|~3.0)."
     },
     "minimum-stability"                      : "dev",
     "prefer-stable"                          : true

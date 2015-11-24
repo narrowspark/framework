@@ -1,5 +1,5 @@
 <?php
-namespace Viserio\Console\Test;
+namespace Viserio\Console\Tests;
 
 /*
  * Narrowspark - a PHP 5 framework

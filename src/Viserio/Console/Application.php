@@ -87,10 +87,10 @@ class Application extends SymfonyConsole
     public function __construct(ContainerContract $container, EventDispatcherInterface $events)
     {
         $this->expressionParser = new Parser();
-        $this->invoker = new Invoker();
+        $this->invoker          = new Invoker();
 
         $this->container = $container;
-        $this->events = $events;
+        $this->events    = $events;
         $this->setAutoExit(false);
         $this->setCatchExceptions(false);
 
@@ -219,7 +219,7 @@ class Application extends SymfonyConsole
     }
 
     /**
-     * Get the Narrowspark application instance.
+     * Get a ContainerInterface instance.
      *
      * @return ContainerContract
      */

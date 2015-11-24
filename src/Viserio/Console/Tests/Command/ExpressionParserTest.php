@@ -1,5 +1,5 @@
 <?php
-namespace Viserio\Console\Test\Command;
+namespace Viserio\Console\Tests\Command;
 
 /*
  * Narrowspark - a PHP 5 framework
@@ -56,7 +56,7 @@ class ExpressionParserTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function itParses_mandatoryArguments()
+    public function itParsesMandatoryArguments()
     {
         $this->assertParsesTo('greet firstname lastname', [
             'name' => 'greet',

@@ -13,8 +13,14 @@ namespace Viserio\Console\Command;
  *
  * @version     0.10.0-dev
  */
+
+use Viserio\Contracts\Support\Arrayable;
 use Viserio\Container\ContainerAwareTrait;
 use Viserio\Console\Style\NarrowsparkStyle;
+use Symfony\Component\Console\Helper\Table;
+use Symfony\Component\Console\Input\ArrayInput;
+use Symfony\Component\Console\Output\NullOutput;
+use Symfony\Component\Console\Question\Question;
 use Symfony\Component\Console\Command\Command as BaseCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -61,6 +67,18 @@ abstract class Command extends BaseCommand
     protected $output;
 
     /**
+     * The mapping between human readable verbosity levels and Symfony's
+     * OutputInterface.
+     *
+     * @var int[]
+     */
+    protected $verbosity = [
+        'v'   => OutputInterface::VERBOSITY_VERBOSE,
+        'vv'  => OutputInterface::VERBOSITY_VERY_VERBOSE,
+        'vvv' => OutputInterface::VERBOSITY_DEBUG,
+    ];
+
+    /**
      * Create a new console command instance.
      */
     public function __construct()
@@ -94,6 +112,54 @@ abstract class Command extends BaseCommand
     public function getOutput()
     {
         return $this->output;
+    }
+
+    /**
+     * Check if verbosity level is in bounds.
+     *
+     * @param  string|int  $level
+     * @return bool
+     */
+    public function inVerbosity($level)
+    {
+        if (isset($this->verbosity[$level])) {
+            $level = $this->verbosity[$level];
+        } elseif (!is_int($level)) {
+            $level = OutputInterface::VERBOSITY_NORMAL;
+        }
+
+        return $this->getOutput()->getVerbosity() >= $level;
+    }
+
+    /**
+     * Call another console command.
+     *
+     * @param  string  $command
+     * @param  array   $arguments
+     * @return int
+     */
+    public function call($command, array $arguments = [])
+    {
+        $instance = $this->getApplication()->find($command);
+        $arguments['command'] = $command;
+
+        return $instance->run(new ArrayInput($arguments), $this->output);
+    }
+
+    /**
+     * Call another console command silently.
+     *
+     * @param string $command
+     * @param array  $arguments
+     *
+     * @return int
+     */
+    public function callSilent($command, array $arguments = [])
+    {
+        $instance = $this->getApplication()->find($command);
+        $arguments['command'] = $command;
+
+        return $instance->run(new ArrayInput($arguments), new NullOutput);
     }
 
     /**
@@ -157,6 +223,20 @@ abstract class Command extends BaseCommand
     /**
      * Prompt the user for input with auto completion.
      *
+     * @param string $question
+     * @param array  $choices
+     * @param string $default
+     *
+     * @return string
+     */
+    public function anticipate($question, array $choices, $default = null)
+    {
+        return $this->askWithCompletion($question, $choices, $default);
+    }
+
+    /**
+     * Prompt the user for input with auto completion.
+     *
      * @param string      $question
      * @param array       $choices
      * @param string|null $default
@@ -212,71 +292,92 @@ abstract class Command extends BaseCommand
     /**
      * Format input to textual table.
      *
-     * @param array $headers
-     * @param array $rows
+     * @param array                                      $headers
+     * @param array|\Viserio\Contracts\Support\Arrayable $rows
+     * @param string                                     $style
      */
-    public function table(array $headers, array $rows)
+    public function table(array $headers, $rows, $style = 'default')
     {
-        $this->output->table($headers, $rows);
+        $table = new Table($this->output);
+
+        if ($rows instanceof Arrayable) {
+            $rows = $rows->toArray();
+        }
+
+        $table->setHeaders($headers)->setRows($rows)->setStyle($style)->render();
     }
 
     /**
      * Write a string as information output.
      *
-     * @param string $string
-     * @param bool   $newline
+     * @param string     $string
+     * @param int|string $verbosityLevel
      */
-    public function info($string, $newline = true)
+    public function info($string, $verbosityLevel = OutputInterface::VERBOSITY_NORMAL)
     {
-        if ($newline) {
-            $this->output->writeln(sprintf('<info>%s</info>',$string));
-        } else {
-            $this->output->write(sprintf('<info>%s</info>',$string));
-        }
+        $this->line($string, 'info', $verbosityLevel);
     }
 
     /**
      * Write a string as standard output.
      *
-     * @param string $string
-     * @param bool   $newline
+     * @param string      $string
+     * @param string|null $style The output style of the string
+     * @param int|string  $verbosityLevel
      */
-    public function line($string, $newline = true)
+    public function line($string, $newline = true, $style = null, $verbosityLevel = OutputInterface::VERBOSITY_NORMAL)
     {
-        if ($newline) {
-            $this->output->writeln($string);
-        } else {
-            $this->output->write($string);
+        if ($this->inVerbosity($verbosityLevel)) {
+            $this->output->writeln($style ? "<$style>$string</$style>" : $string);
         }
     }
 
     /**
      * Write a string as comment output.
      *
-     * @param string $string
+     * @param string     $string
+     * @param int|string $verbosityLevel
      */
-    public function comment($string)
+    public function comment($string, $verbosityLevel = OutputInterface::VERBOSITY_NORMAL)
     {
-        $this->output->note($string);
+        $this->line($string, 'comment', $verbosityLevel);
     }
 
     /**
      * Write a string as question output.
      *
-     * @param string $string
+     * @param string     $string
+     * @param int|string $verbosityLevel
      */
-    public function question($string)
+    public function question($string, $verbosityLevel = OutputInterface::VERBOSITY_NORMAL)
     {
-        $this->output->writeln(sprintf('<question></question>', $string));
+        $this->line($string, 'question', $verbosityLevel);
     }
 
     /**
      * Write a string as error output.
      *
      * @param string $string
+     * @param int|string $verbosityLevel
      */
-    public function error($string)
+    public function error($string, $verbosityLevel = OutputInterface::VERBOSITY_NORMAL)
     {
-        $this->output->error($string);
+        $this->line($string, 'error', $verbosityLevel);
+    }
+
+    /**
+     * Write a string as warning output.
+     *
+     * @param string     $string
+     * @param int|string $verbosityLevel
+     *
+     * @return void
+     */
+    public function warn($string, $verbosityLevel = OutputInterface::VERBOSITY_NORMAL)
+    {
+        $style = new OutputFormatterStyle('yellow');
+
+        $this->output->getFormatter()->setStyle('warning', $style);
+        $this->line($string, 'warning', $verbosityLevel);
     }
 }
