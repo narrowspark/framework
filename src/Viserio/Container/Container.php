@@ -26,6 +26,7 @@ use Viserio\Container\Traits\MockerContainerTrait;
 use Viserio\Container\Traits\DelegateTrait;
 use Viserio\Container\Traits\ServiceProviderTrait;
 use Viserio\Contracts\Container\Container as ContainerContract;
+use Viserio\Contracts\Container\WritableContainer as WritableContainerContract;
 use Interop\Container\ContainerInterface as ContainerInteropInterface;
 use InvalidArgumentException;
 use Invoker\Invoker;
@@ -44,7 +45,7 @@ use Opis\Closure\SerializableClosure;
  *
  * @since   0.9.4-dev
  */
-class Container implements ArrayAccess, Serializable, ContainerInteropInterface, ContainerContract
+class Container implements ArrayAccess, Serializable, ContainerInteropInterface, ContainerContract, WritableContainerContract
 {
     /**
      * Array Access Support
@@ -127,9 +128,10 @@ class Container implements ArrayAccess, Serializable, ContainerInteropInterface,
      */
     public function __construct()
     {
-        $this->singleton('Viserio\Container\Container', $this);
-        $this->singleton(ContainerContract::class, $this);
-        $this->singleton(ContainerInteropInterface::class, $this);
+        $this->share('Viserio\Container\Container', $this);
+        $this->share(ContainerContract::class, $this);
+        $this->share(WritableContainerContract::class, $this);
+        $this->share(ContainerInteropInterface::class, $this);
     }
 
     /**
@@ -148,7 +150,7 @@ class Container implements ArrayAccess, Serializable, ContainerInteropInterface,
     /**
      * {@inheritdoc}
      */
-    public function singleton($alias, $concrete = null)
+    public function share(string $alias, mixed $concrete)
     {
         return $this->bind($alias, $concrete, true);
     }
@@ -156,28 +158,16 @@ class Container implements ArrayAccess, Serializable, ContainerInteropInterface,
     /**
      * {@inheritdoc}
      */
-    public function bind($alias, $concrete = null, $singleton = false)
+    public function bind(string $alias, mixed $concrete, $singleton = false)
     {
         $alias    = $this->normalize($alias);
         $concrete = $this->normalize($concrete);
 
         $this->notImmutable($alias);
 
-        // If the given types are actually an array, we will assume an alias is being
-        // defined and will grab this "real" abstract class name and register this
-        // alias with the container so that it can be used as a shortcut for it.
-        if (is_array($alias)) {
-            list($alias, $abstract) = $this->extractAlias($alias);
-            $this->alias($alias, $abstract);
-        }
-
-        if (!is_object($alias)) {
-            $this->keys[$alias] = true;
-        }
-
-        // If the given type is actually an string, we will register this value
+        // If the given type is actually an string or array, we will register this value
         // with the container so that it can be used.
-        if ($this->isString($alias, $concrete)) {
+        if ($this->isString($concrete) || is_array($concrete)) {
             $this->values[$alias] = $concrete;
 
             return $concrete;
@@ -604,14 +594,13 @@ class Container implements ArrayAccess, Serializable, ContainerInteropInterface,
     /**
      * Check if the specified concrete and alias is a string.
      *
-     * @param string|object|\Closure $alias
      * @param string|\Closure|null   $concrete
      *
      * @return bool
      */
-    protected function isString($alias, $concrete)
+    protected function isString($concrete)
     {
-        $isNotObject = (is_string($alias) && (!is_object($concrete) && !$concrete instanceof Closure));
+        $isNotObject = (!is_object($concrete) && !$concrete instanceof Closure);
 
         return ($isNotObject && (is_string($concrete) || null !== $concrete));
     }

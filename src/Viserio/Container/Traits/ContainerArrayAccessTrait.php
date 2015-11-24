@@ -24,14 +24,11 @@ namespace Viserio\Container\Traits;
 trait ContainerArrayAccessTrait
 {
     /**
-     * Adds an entry to the container.
-     *
-     * @param string    $alias    Identifier of the entry to add
-     * @param \stdClass $value The entry to add to the container
+     * {@inheritdoc}
      */
-    public function set($alias, $value)
+    public function set(string $alias, mixed $concrete)
     {
-        $this->offsetSet($alias, $value);
+        return $this->bind($alias, $concrete);
     }
 
     /**
@@ -78,11 +75,11 @@ trait ContainerArrayAccessTrait
      * Dynamically set application services.
      *
      * @param string $alias
-     * @param mixed  $value
+     * @param mixed  $concrete
      */
-    public function __set($alias, $value)
+    public function __set($alias, $concrete)
     {
-        $this->offsetSet($alias, $value);
+        $this->offsetSet($alias, $concrete);
     }
 
     /**
@@ -133,19 +130,19 @@ trait ContainerArrayAccessTrait
      * Sets a parameter or an object.
      *
      * @param string $alias
-     * @param mixed  $value The value of the parameter or a closure to define an object
+     * @param mixed  $concrete The value of the parameter or a closure to define an object
      *
      * @return self|null
      */
-    public function offsetSet($alias, $value)
+    public function offsetSet($alias, $concrete)
     {
-        if (!$value instanceof \Closure) {
-            $value = function () use ($value) {
-                return $value;
+        if (!$concrete instanceof \Closure) {
+            $concrete = function () use ($concrete) {
+                return $concrete;
             };
         }
 
-        $this->bind($this->normalize($alias), $value);
+        $this->bind($alias, $concrete);
     }
 
     /**

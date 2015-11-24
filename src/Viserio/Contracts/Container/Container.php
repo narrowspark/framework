@@ -32,33 +32,6 @@ interface Container
     public function alias($abstract, $alias);
 
     /**
-     * Register a binding with the container.
-     *
-     * @param string               $alias
-     * @param \Closure|string|null $concrete
-     * @param bool                 $singleton
-     *
-     * @throws ContainerException
-     */
-    public function bind($alias, $concrete = null, $singleton = false);
-
-    /**
-     * Register a shared binding in the container.
-     *
-     * @param string               $abstract
-     * @param \Closure|string|null $concrete
-     */
-    public function singleton($abstract, $concrete = null);
-
-    /**
-     * Adds an entry to the container.
-     *
-     * @param string    $id    Identifier of the entry to add
-     * @param \stdClass $value The entry to add to the container
-     */
-    public function set($id, $value);
-
-    /**
      * Extend an existing binding.
      *
      * @param string   $binding The name of the binding to extend.
