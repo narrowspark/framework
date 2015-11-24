@@ -1,10 +1,10 @@
 {
     "name"       : "viserio/config",
     "type"       : "library",
-    "description": "Narrowspark Framework for Creative People.",
+    "description": "The Viserio Config package.",
     "keywords"   : ["narrowspark", "viserio", "config", "configuration"],
     "license"    : "MIT",
-    "homepage"   : "http://github.com/n-Viserio/config",
+    "homepage"   : "http://github.com/Narrowspark/config",
     "support"    : {
         "issues": "https://github.com/narrowspark/framework/issues",
         "source": "https://github.com/narrowspark/framework"

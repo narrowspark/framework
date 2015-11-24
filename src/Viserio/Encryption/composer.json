@@ -1,10 +1,10 @@
 {
     "name"       : "viserio/encrypter",
     "type"       : "library",
-    "description": "Narrowspark Framework for Creative People.",
+    "description": "The Viserio Encrypter package.",
     "keywords"   : ["narrowspark", "viserio", "encrypter"],
     "license"    : "MIT",
-    "homepage"   : "http://github.com/n-Viserio/encrypter",
+    "homepage"   : "http://github.com/Narrowspark/encrypter",
     "support"    : {
         "issues": "https://github.com/narrowspark/framework/issues",
         "source": "https://github.com/narrowspark/framework"

@@ -1,10 +1,10 @@
 {
     "name"       : "viserio/cache",
     "type"       : "library",
-    "description": "Narrowspark Framework for Creative People.",
+    "description": "The Viserio Cache package.",
     "keywords"   : ["narrowspark", "viserio", "cache", "apc", "apcu", "redis", "mongo"],
     "license"    : "MIT",
-    "homepage"   : "http://github.com/n-Viserio/cache",
+    "homepage"   : "http://github.com/Narrowspark/cache",
     "support"    : {
         "issues": "https://github.com/narrowspark/framework/issues",
         "source": "https://github.com/narrowspark/framework"

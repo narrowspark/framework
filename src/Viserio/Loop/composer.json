@@ -1,10 +1,10 @@
 {
     "name"       : "viserio/loop",
     "type"       : "library",
-    "description": "Narrowspark Framework for Creative People.",
+    "description": "The Viserio Loop package.",
     "keywords"   : ["narrowspark", "viserio", "loop", "symfony", "event-loop", "asynchronous"],
     "license"    : "MIT",
-    "homepage"   : "http://github.com/n-Viserio/loop",
+    "homepage"   : "http://github.com/Narrowspark/loop",
     "support"    : {
         "issues": "https://github.com/narrowspark/framework/issues",
         "source": "https://github.com/narrowspark/framework"

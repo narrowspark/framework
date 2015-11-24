@@ -1,7 +1,7 @@
 {
     "name"       : "viserio/container",
     "type"       : "library",
-    "description": "Narrowspark Framework for Creative People.",
+    "description": "The Viserio Container package.",
     "keywords"   : ["framework", "narrowspark", "viserio", "container", "container-interop", "di", "dependency", "injection", "dependency injection"],
     "license"    : "MIT",
     "homepage"   : "http://github.com/narrowspark/framework",

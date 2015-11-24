@@ -1,8 +1,8 @@
 {
     "name"       : "viserio/mail",
     "type"       : "library",
-    "description": "Narrowspark Framework for Creative People.",
-    "keywords"   : ["framework", "narrowspark", "slim", "mail", "viserio"],
+    "description": "The Viserio Mail package.",
+    "keywords"   : ["framework", "narrowspark", "mail", "viserio"],
     "license"    : "MIT",
     "homepage"   : "http://github.com/narrowspark/framework",
     "support"    : {

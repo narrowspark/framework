@@ -1,7 +1,7 @@
 {
     "name"       : "viserio/support",
     "type"       : "library",
-    "description": "Narrowspark Framework for Creative People.",
+    "description": "The Viserio Support package.",
     "keywords"   : ["framework", "narrowspark", "support", "viserio", "env", "manager", "dumper"],
     "license"    : "MIT",
     "homepage"   : "http://github.com/narrowspark/framework",

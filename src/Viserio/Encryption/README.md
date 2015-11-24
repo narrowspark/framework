@@ -1,4 +1,4 @@
-# Viserio Encrypter package
+# Viserio Encryption package
 
 This package is part of the [Narrowspark framework](http://github.com/narrowspark/framework).
 
@@ -17,14 +17,14 @@ Thank you for considering contributing to the Narrowspark framework! The contrib
 
 ## Requirements
 
-PHP 5.5.9 or above
+PHP 5.6 or above
 
 ## Installation
 
 Use [Composer](https://getcomposer.org/) to install this package:
 
 ```sh
-composer require viserio/encrypter
+composer require viserio/encryption
 ```
 
 ## Official Documentation

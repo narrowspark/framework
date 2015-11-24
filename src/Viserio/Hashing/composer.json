@@ -1,10 +1,10 @@
 {
     "name"       : "viserio/hashing",
     "type"       : "library",
-    "description": "Narrowspark Framework for Creative People.",
+    "description": "The Viserio Hashing package.",
     "keywords"   : ["narrowspark", "viserio", "hashing", "password"],
     "license"    : "MIT",
-    "homepage"   : "http://github.com/n-Viserio/hashing",
+    "homepage"   : "http://github.com/Narrowspark/hashing",
     "support"    : {
         "issues": "https://github.com/narrowspark/framework/issues",
         "source": "https://github.com/narrowspark/framework"

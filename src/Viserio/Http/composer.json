@@ -1,10 +1,10 @@
 {
     "name"       : "viserio/http",
     "type"       : "library",
-    "description": "Narrowspark Framework for Creative People.",
+    "description": "The Viserio Http package.",
     "keywords"   : ["narrowspark", "viserio", "http", "request", "response", "stack", "kernel"],
     "license"    : "MIT",
-    "homepage"   : "http://github.com/n-Viserio/http",
+    "homepage"   : "http://github.com/Narrowspark/http",
     "support"    : {
         "issues": "https://github.com/narrowspark/framework/issues",
         "source": "https://github.com/narrowspark/framework"

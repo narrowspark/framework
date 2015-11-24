@@ -1,10 +1,10 @@
 {
     "name"       : "viserio/view",
     "type"       : "library",
-    "description": "Narrowspark Framework for Creative People.",
+    "description": "The Viserio View package.",
     "keywords"   : ["narrowspark", "viserio", "view", "plates", "php"],
     "license"    : "MIT",
-    "homepage"   : "http://github.com/n-Viserio/api",
+    "homepage"   : "http://github.com/Narrowspark/api",
     "support"    : {
         "issues": "https://github.com/narrowspark/framework/issues",
         "source": "https://github.com/narrowspark/framework"

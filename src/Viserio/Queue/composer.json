@@ -1,10 +1,10 @@
 {
     "name"       : "viserio/queue",
     "type"       : "library",
-    "description": "Narrowspark Framework for Creative People.",
+    "description": "The Viserio Queue package.",
     "keywords"   : ["narrowspark", "viserio", "queue", "symfony"],
     "license"    : "MIT",
-    "homepage"   : "http://github.com/n-Viserio/queue",
+    "homepage"   : "http://github.com/Narrowspark/queue",
     "support"    : {
         "issues": "https://github.com/narrowspark/framework/issues",
         "source": "https://github.com/narrowspark/framework"
