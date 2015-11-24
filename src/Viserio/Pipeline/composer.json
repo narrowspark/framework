@@ -2,7 +2,7 @@
     "name"       : "viserio/pipeline",
     "type"       : "library",
     "description": "The Viserio Pipeline package.",
-    "keywords"   : ["narrowspark", "viserio", "pipeline"],
+    "keywords"   : ["narrowspark", "viserio", "pipeline", "event"],
     "license"    : "MIT",
     "homepage"   : "http://github.com/Narrowspark/pipeline",
     "support"    : {
@@ -25,7 +25,8 @@
     },
     "require-dev": {
         "fabpot/php-cs-fixer"                : "~1.10.1",
-        "phpunit/phpunit"                    : "~5.0.6"
+        "phpunit/phpunit"                    : "~5.0.6",
+        "symfony/event-dispatcher"           : "~2.8|~3.0"
     },
     "autoload": {
         "psr-4": {
@@ -41,6 +42,9 @@
         "branch-alias": {
             "dev-master"                     : "0.10.0-dev"
         }
+    },
+    "suggest": {
+        "symfony/event-dispatcher"           : "To monitor the execution of each pipe (~2.8|~3.0).",
     },
     "minimum-stability"                      : "dev",
     "prefer-stable"                          : true

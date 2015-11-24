@@ -2,7 +2,17 @@
     "name"       : "narrowspark/framework",
     "type"       : "framework",
     "description": "Narrowspark Framework for Creative People.",
-    "keywords"   : ["framework", "narrowspark", "http", "request", "response", "viserio", "container"],
+    "keywords"   : [
+        "framework",
+        "narrowspark",
+        "http",
+        "request",
+        "response",
+        "viserio",
+        "container",
+        "pipeline",
+        "event"
+    ],
     "license"    : "MIT",
     "homepage"   : "https://github.com/narrowspark/framework",
     "support"    : {
@@ -64,6 +74,7 @@
         "viserio/http"                       : "self.version",
         "viserio/log"                        : "self.version",
         "viserio/mail"                       : "self.version",
+        "viserio/pipeline"                   : "self.version",
         "viserio/routing"                    : "self.version",
         "viserio/session"                    : "self.version",
         "viserio/support"                    : "self.version",
