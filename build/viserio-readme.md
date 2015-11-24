@@ -16,10 +16,6 @@ This package is part of the [Narrowspark framework](http://github.com/narrowspar
 Issues for this package shall be posted on [Narrowspark framework issues](http://github.com/narrowspark/framework/issues).
 Thank you for considering contributing to the Narrowspark framework! The contribution guide can be found in the [Narrowspark documentation](http://narrowspark.de/docs/contributions).
 
-## Requirements
-
-PHP 5.6 or above
-
 ## Installation
 
 Use [Composer](https://getcomposer.org/) to install this package:
