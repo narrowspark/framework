@@ -1,5 +1,5 @@
 <?php
-namespace Viserio\Console\Test\Command;
+namespace Viserio\Pipeline\Tests;
 
 /**
  * Narrowspark - a PHP 5 framework.
@@ -14,10 +14,13 @@ namespace Viserio\Console\Test\Command;
  * @version     0.10.0
  */
 
-/*
- * CommandTest.
+/**
+ * HubTest.
  *
  * @author  Daniel Bannert
  *
- * @since   0.9.6
+ * @since   0.10.0
  */
+class HubTest extends \PHPUnit_Framework_TestCase
+{
+}
