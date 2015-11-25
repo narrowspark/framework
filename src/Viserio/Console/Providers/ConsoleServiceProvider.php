@@ -11,7 +11,7 @@ namespace Viserio\Console\Providers;
  *
  * @license     http://www.narrowspark.com/license
  *
- * @version     0.10.0-dev
+ * @version     0.10.0
  */
 
 use Stecman\Component\Symfony\Console\BashCompletion\CompletionCommand;
@@ -24,7 +24,7 @@ use Viserio\Console\Command\CommandResolver;
  *
  * @author  Daniel Bannert
  *
- * @since   0.9.4-dev
+ * @since   0.9.4
  */
 class ConsoleServiceProvider extends ServiceProvider
 {

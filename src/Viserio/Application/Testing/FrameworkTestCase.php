@@ -11,7 +11,7 @@ namespace Viserio\Application\Testing;
  *
  * @license     http://www.narrowspark.com/license
  *
- * @version     0.10.0-dev
+ * @version     0.10.0
  */
 
 use Viserio\Application\Traits\ServiceProviderTrait;
@@ -22,7 +22,7 @@ use Viserio\Container\Container;
  *
  * @author  Daniel Bannert
  *
- * @since   0.9.8-dev
+ * @since   0.9.8
  */
 abstract class FrameworkTestCase extends \PHPUnit_Framework_TestCase
 {

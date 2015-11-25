@@ -11,7 +11,7 @@ namespace Viserio\Queue\Adapter;
  *
  * @license     http://www.narrowspark.com/license
  *
- * @version     0.10.0-dev
+ * @version     0.10.0
  */
 
 use Carbon\Carbon;
@@ -22,7 +22,7 @@ use Viserio\Contracts\Queue\Adapter as AdapterContract;
  *
  * @author  Daniel Bannert
  *
- * @since   0.10-dev
+ * @since   0.10.0
  */
 abstract class BaseAdapter
 {

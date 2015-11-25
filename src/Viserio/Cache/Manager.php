@@ -11,7 +11,7 @@ namespace Viserio\Cache;
  *
  * @license     http://www.narrowspark.com/license
  *
- * @version     0.10.0-dev
+ * @version     0.10.0
  */
 
 use Viserio\Cache\Adapter\ApcCache;
@@ -37,7 +37,7 @@ use Viserio\Support\Manager;
  *
  * @author  Daniel Bannert
  *
- * @since   0.8.0-dev
+ * @since   0.8.0
  */
 class CacheManager extends Manager implements FactoryContract
 {

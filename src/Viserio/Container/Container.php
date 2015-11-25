@@ -11,7 +11,7 @@ namespace Viserio\Container;
  *
  * @license     http://www.narrowspark.com/license
  *
- * @version     0.10.0-dev
+ * @version     0.10.0
  */
 
 use Interop\Container\ContainerInterface as ContainerInteropInterface;
@@ -29,7 +29,7 @@ use Viserio\Contracts\Container\Container as ContainerContract;
  *
  * @author  Daniel Bannert
  *
- * @since   0.9.4-dev
+ * @since   0.9.4
  */
 class Container implements \ArrayAccess, ContainerInteropInterface, ContainerContract
 {

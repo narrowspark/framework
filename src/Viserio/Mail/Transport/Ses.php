@@ -11,7 +11,7 @@ namespace Viserio\Mail\Transport;
  *
  * @license     http://www.narrowspark.com/license
  *
- * @version     0.10.0-dev
+ * @version     0.10.0
  */
 
 use Aws\Ses\SesClient;
@@ -21,7 +21,7 @@ use Aws\Ses\SesClient;
  *
  * @author  Daniel Bannert
  *
- * @since   0.9.1-dev
+ * @since   0.9.1
  */
 class Ses extends Transport
 {

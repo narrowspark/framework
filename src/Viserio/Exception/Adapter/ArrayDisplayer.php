@@ -11,7 +11,7 @@ namespace Viserio\Exception\Adapter;
  *
  * @license     http://www.narrowspark.com/license
  *
- * @version     0.10.0-dev
+ * @version     0.10.0
  */
 
 use Viserio\Contracts\Exception\Adapter;
@@ -22,7 +22,7 @@ use Viserio\Exception\Traits\ErrorHandlingTrait;
  *
  * @author  Daniel Bannert
  *
- * @since   0.9.5-dev
+ * @since   0.9.5
  */
 class ArrayDisplayer implements Adapter
 {

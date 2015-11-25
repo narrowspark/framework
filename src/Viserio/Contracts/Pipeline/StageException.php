@@ -11,7 +11,7 @@ namespace Viserio\Contracts\Pipeline;
  *
  * @license     http://www.narrowspark.com/license
  *
- * @version     0.10.0-dev
+ * @version     0.10.0
  */
 
 use Exception
@@ -21,30 +21,30 @@ use Exception
  *
  * @author  Daniel Bannert
  *
- * @since   0.10.0-dev
+ * @since   0.10.0
  */
 interface StageException
 {
     /**
-      * Set Exception
-      * An exception that halted this stage.
-      *
-      * @param \Exception $exception
-      */
+     * Set Exception
+     * An exception that halted this stage.
+     *
+     * @param \Exception $exception
+     */
     public function setException(Exception $exception);
 
     /**
-      * Get Exception
-      * An exception that halted this stage.
-      *
-      * @return \Exception
-      */
+     * Get Exception
+     * An exception that halted this stage.
+     *
+     * @return \Exception
+     */
     public function getException();
 
     /**
-      * Was the stage halted by a thrown Exception.
-      *
-      * @return bool
-      */
+     * Was the stage halted by a thrown Exception.
+     *
+     * @return bool
+     */
     public function isException();
 }

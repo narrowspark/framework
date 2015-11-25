@@ -11,7 +11,7 @@ namespace Viserio\Container\Exception;
  *
  * @license     http://www.narrowspark.com/license
  *
- * @version     0.10.0-dev
+ * @version     0.10.0
  */
 
 class CircularReferenceException extends \Exception

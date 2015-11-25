@@ -11,7 +11,7 @@ namespace Viserio\Contracts\Pipeline;
  *
  * @license     http://www.narrowspark.com/license
  *
- * @version     0.10.0-dev
+ * @version     0.10.0
  */
 
 use \Closure;
@@ -21,19 +21,10 @@ use \Closure;
  *
  * @author  Daniel Bannert
  *
- * @since   0.10.0-dev
+ * @since   0.10.0
  */
 interface Pipeline
 {
-    /**
-     * Create a new pipeline with an appended stage.
-     *
-     * @param callable $operation
-     *
-     * @return static
-     */
-    public function pipe(callable $operation);
-
     /**
      * Set the traveler object being sent on the pipeline.
      *
@@ -69,4 +60,18 @@ interface Pipeline
      * @return mixed
      */
     public function then(Closure $destination);
+
+    /**
+     * Indicates that all stages executed in the pipeline.
+     *
+     * @return bool
+     */
+    public function ended();
+
+    /**
+     * Get the last stage executed in the pipeline
+     *
+     * @return Stage
+     */
+    public function getLastStage();
 }

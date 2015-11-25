@@ -11,7 +11,7 @@ namespace Viserio\Cache\Adapter;
  *
  * @license     http://www.narrowspark.com/license
  *
- * @version     0.10.0-dev
+ * @version     0.10.0
  */
 
 use Viserio\Contracts\Cache\Adapter as AdapterContract;
@@ -23,7 +23,7 @@ use Viserio\Support\Arr;
  *
  * @author  Daniel Bannert
  *
- * @since   0.9.2-dev
+ * @since   0.9.2
  */
 class FileCache implements AdapterContract
 {

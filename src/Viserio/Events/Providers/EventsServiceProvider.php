@@ -11,7 +11,7 @@ namespace Viserio\Events\Providers;
  *
  * @license     http://www.narrowspark.com/license
  *
- * @version     0.10.0-dev
+ * @version     0.10.0
  */
 
 use Symfony\Component\EventDispatcher\EventDispatcher;
@@ -23,7 +23,7 @@ use Viserio\Events\Dispatcher;
  *
  * @author  Daniel Bannert
  *
- * @since   0.9.4-dev
+ * @since   0.9.4
  */
 class EventsServiceProvider extends ServiceProvider
 {

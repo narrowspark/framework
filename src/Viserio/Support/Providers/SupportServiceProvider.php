@@ -11,7 +11,7 @@ namespace Viserio\Support\Providers;
  *
  * @license     http://www.narrowspark.com/license
  *
- * @version     0.10.0-dev
+ * @version     0.10.0
  */
 
 use RandomLib\Factory as RandomLib;
@@ -27,7 +27,7 @@ use Viserio\Support\AliasLoader;
  *
  * @author  Daniel Bannert
  *
- * @since   0.9.2-dev
+ * @since   0.9.2
  */
 class SupportServiceProvider extends ServiceProvider
 {

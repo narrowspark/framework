@@ -11,43 +11,23 @@ namespace Viserio\Pipeline;
  *
  * @license     http://www.narrowspark.com/license
  *
- * @version     0.10.0-dev
+ * @version     0.10.0
  */
 
 use Closure;
 use Interop\Container\ContainerInterface as ContainerInteropInterface;
 use Viserio\Contracts\Pipeline\Pipeline as PipelineContract;
+use Viserio\Contracts\Pipeline\Stage as StageContract;
 
 /**
  * Pipeline.
  *
  * @author  Daniel Bannert
  *
- * @since   0.10-dev
+ * @since   0.10.0
  */
 class Pipeline implements PipelineContract
 {
-    /**
-      * The last Stage in the pipeline.
-      *
-      * @var null|object
-      */
-    protected $lastStage = null;
-
-    /**
-      * The last Stage that was executed.
-      *
-      * @var null|object
-      */
-    protected $current = null;
-
-    /**
-      * Did all the Stages run and succeded
-      *
-      * @var bool
-      */
-    protected $ended = false;
-
     /**
      * The array of class pipes.
      *
@@ -61,6 +41,34 @@ class Pipeline implements PipelineContract
      * @var string
      */
     protected $method = 'handle';
+
+    /**
+     * The first Stage in the pipeline.
+     *
+     * @var null|\Viserio\Contracts\Pipeline\Stage
+     */
+    protected $firstStage = null;
+
+    /**
+      * The last Stage in the pipeline.
+      *
+      * @var null|\Viserio\Contracts\Pipeline\Stage
+      */
+    protected $lastStage = null;
+
+    /**
+      * The last Stage that was executed.
+      *
+      * @var null|\Viserio\Contracts\Pipeline\Stage
+      */
+    protected $current = null;
+
+    /**
+      * Did all the Stages run and succeded
+      *
+      * @var bool
+      */
+    protected $ended = false;
 
     /**
      * The container implementation.
@@ -77,18 +85,6 @@ class Pipeline implements PipelineContract
     public function __construct(ContainerInteropInterface $container)
     {
         $this->container = $container;
-    }
-
-    /**
-     * Create a new pipeline with an appended stage.
-     *
-     * @param callable $operation
-     *
-     * @return static
-     */
-    public function pipe(callable $operation)
-    {
-
     }
 
     /**
@@ -144,9 +140,19 @@ class Pipeline implements PipelineContract
     }
 
     /**
+     * Indicates that all stages executed in the pipeline.
+     *
+     * @return bool
+     */
+    public function ended()
+    {
+        return $this->ended;
+    }
+
+    /**
      * Get the last stage executed in the pipeline
      *
-     * @return Stage
+     * @return StageContract
      */
     public function getLastStage()
     {

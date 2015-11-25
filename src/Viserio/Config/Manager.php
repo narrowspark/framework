@@ -11,7 +11,7 @@ namespace Viserio\Config;
  *
  * @license     http://www.narrowspark.com/license
  *
- * @version     0.10.0-dev
+ * @version     0.10.0
  */
 
 use Viserio\Contracts\Config\Manager as ManagerContract;
@@ -26,7 +26,7 @@ use Viserio\Contracts\Filesystem\Loader as LoaderContract;
  *
  * @author  Daniel Bannert
  *
- * @since   0.8.0-dev
+ * @since   0.8.0
  */
 class Manager implements ManagerContract, \IteratorAggregate
 {

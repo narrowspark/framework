@@ -11,7 +11,7 @@ namespace Viserio\Routing\Test;
  *
  * @license     http://www.narrowspark.com/license
  *
- * @version     0.10.0-dev
+ * @version     0.10.0
  */
 
 use FastRoute\DataGenerator\GroupCountBased;
@@ -24,7 +24,7 @@ use Viserio\Routing\RouteParser;
  *
  * @author  Daniel Bannert
  *
- * @since   0.9.7-dev
+ * @since   0.9.7
  */
 class DispatcherTest extends \PHPUnit_Framework_TestCase
 {

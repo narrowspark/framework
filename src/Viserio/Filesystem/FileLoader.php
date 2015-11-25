@@ -11,7 +11,7 @@ namespace Viserio\Filesystem;
  *
  * @license     http://www.narrowspark.com/license
  *
- * @version     0.10.0-dev
+ * @version     0.10.0
  */
 
 use Viserio\Contracts\Filesystem\Loader as LoaderContract;
@@ -22,7 +22,7 @@ use Viserio\Contracts\Filesystem\Parser as ParserContract;
  *
  * @author  Daniel Bannert
  *
- * @since   0.9.4-dev
+ * @since   0.9.4
  */
 class FileLoader implements LoaderContract
 {

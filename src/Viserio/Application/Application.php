@@ -11,7 +11,7 @@ namespace Viserio\Application;
  *
  * @license     http://www.narrowspark.com/license
  *
- * @version     0.10.0-dev
+ * @version     0.10.0
  */
 
 use Symfony\Component\HttpFoundation\Request as SymfonyRequest;
@@ -32,7 +32,7 @@ use Viserio\Support\StaticalProxyManager;
  *
  * @author  Daniel Bannert
  *
- * @since   0.9.4-dev
+ * @since   0.9.4
  */
 class Application extends Container implements Foundation, HttpKernelInterface
 {
@@ -41,7 +41,7 @@ class Application extends Container implements Foundation, HttpKernelInterface
      *
      * @var string
      */
-    const VERSION = '0.9.8-dev';
+    const VERSION = '0.9.8';
 
     // Register all needed Traits
     use BootableTrait;

@@ -11,7 +11,7 @@ namespace Viserio\Events\Providers;
  *
  * @license     http://www.narrowspark.com/license
  *
- * @version     0.10-dev
+ * @version     0.10.0
  */
 
 use Viserio\Application\ServiceProvider;
@@ -22,7 +22,7 @@ use Viserio\Loop\Loop;
  *
  * @author  Daniel Bannert
  *
- * @since   0.10-dev
+ * @since   0.10.0
  */
 class LoopServiceProvider extends ServiceProvider
 {

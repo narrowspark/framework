@@ -11,7 +11,7 @@ namespace Viserio\Routing\UrlGenerator;
  *
  * @license     http://www.narrowspark.com/license
  *
- * @version     0.10.0-dev
+ * @version     0.10.0
  */
 
 use Viserio\Contracts\Routing\DataGenerator as DataGeneratorContract;
@@ -22,7 +22,7 @@ use Viserio\Contracts\Routing\RouteCollector as RouteCollectorContract;
  *
  * @author  Daniel Bannert
  *
- * @since   0.9.5-dev
+ * @since   0.9.5
  */
 class GroupCountBasedDataGenerator implements DataGeneratorContract
 {

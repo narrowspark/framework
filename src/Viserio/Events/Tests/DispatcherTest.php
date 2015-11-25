@@ -8,7 +8,7 @@ namespace Viserio\Events\Test;
  * @copyright   2015 Daniel Bannert
  * @link        http://www.narrowspark.de
  * @license     http://www.narrowspark.com/license
- * @version     0.10.0-dev
+ * @version     0.10.0
  * @package     Narrowspark/framework
  *
  * For the full copyright and license information, please view the LICENSE
@@ -27,7 +27,7 @@ use Viserio\Events\Dispatcher;
  *
  * @author  Daniel Bannert
  *
- * @since   0.9.6-dev
+ * @since   0.9.6
  */
 class DispatcherTest extends \PHPUnit_Framework_TestCase
 {

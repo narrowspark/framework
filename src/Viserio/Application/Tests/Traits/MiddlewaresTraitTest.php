@@ -11,7 +11,7 @@ namespace Viserio\Application\Tests\Traits;
  *
  * @license     http://www.narrowspark.com/license
  *
- * @version     0.10.0-dev
+ * @version     0.10.0
  */
 
 /**
@@ -19,7 +19,7 @@ namespace Viserio\Application\Tests\Traits;
  *
  * @author  Daniel Bannert
  *
- * @since   0.9.8-dev
+ * @since   0.9.8
  */
 class MiddlewaresTraitTest extends \PHPUnit_Framework_TestCase
 {

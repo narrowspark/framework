@@ -11,7 +11,7 @@ namespace Viserio\Console\Input;
  *
  * @license     http://www.narrowspark.com/license
  *
- * @version     0.10.0-dev
+ * @version     0.10.0
  */
 
 use Symfony\Component\Console\Input\InputArgument as SymfonyInputArgument;
@@ -21,7 +21,7 @@ use Symfony\Component\Console\Input\InputArgument as SymfonyInputArgument;
  *
  * @author  Daniel Bannert
  *
- * @since   0.9.5-dev
+ * @since   0.9.5
  */
 class InputArgument extends SymfonyInputArgument
 {

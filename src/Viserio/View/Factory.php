@@ -11,7 +11,7 @@ namespace Viserio\View;
  *
  * @license     http://www.narrowspark.com/license
  *
- * @version     0.10.0-dev
+ * @version     0.10.0
  */
 
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -29,7 +29,7 @@ use Viserio\View\Engines\EngineResolver;
  *
  * @author  Daniel Bannert
  *
- * @since   0.9.5-dev
+ * @since   0.9.5
  */
 class Factory implements FactoryContract
 {
