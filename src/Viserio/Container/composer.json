@@ -2,7 +2,7 @@
     "name"       : "viserio/container",
     "type"       : "library",
     "description": "Narrowspark Framework for Creative People.",
-    "keywords"   : ["framework", "narrowspark", "viserio", "container", "container-interop", "di", "dependency", "injection", "dependency injection"],
+    "keywords"   : ["framework", "narrowspark", "viserio", "container", "container-interop", "di", "dependency", "injection", "dependency injection", "definition-interop"],
     "license"    : "MIT",
     "homepage"   : "http://github.com/narrowspark/framework",
     "support"    : {
@@ -18,32 +18,33 @@
         }
     ],
     "require": {
-        "php"                                : ">=5.6",
-        "container-interop/container-interop": "~1.0",
-        "PHP-DI/invoker"                     : "~1.2",
-        "opis/closure"                       : "^2.1",
-        "viserio/support"                    : "self.version"
+        "php"                                 : ">=5.6",
+        "container-interop/container-interop" : "~1.0",
+        "container-interop/definition-interop": "dev-master",
+        "PHP-DI/invoker"                      : "~1.2",
+        "opis/closure"                        : "^2.1",
+        "viserio/support"                     : "self.version"
     },
     "require-dev": {
-        "mockery/mockery"                    : "~0.9.3",
-        "fabpot/php-cs-fixer"                : "~1.10.1",
-        "phpunit/phpunit"                    : "~5.0.6"
+        "mockery/mockery"                     : "~0.9.3",
+        "fabpot/php-cs-fixer"                 : "~1.10.1",
+        "phpunit/phpunit"                     : "~5.0.6"
     },
     "autoload": {
         "psr-4": {
-            "Viserio\\Container\\"           : ""
+            "Viserio\\Container\\"            : ""
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Viserio\\Container\\Tests\\"    : "Tests/"
+            "Viserio\\Container\\Tests\\"     : "Tests/"
         }
     },
     "extra": {
         "branch-alias": {
-            "dev-master"                     : "0.10.0-dev"
+            "dev-master"                      : "0.10.0-dev"
         }
     },
-    "minimum-stability"                      : "dev",
-    "prefer-stable"                          : true
+    "minimum-stability"                       : "dev",
+    "prefer-stable"                           : true
 }
