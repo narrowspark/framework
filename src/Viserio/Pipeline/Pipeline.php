@@ -136,7 +136,8 @@ class Pipeline implements PipelineContract
      */
     public function then(Closure $destination)
     {
-
+        $current = $this->current = $this->firstTask;
+        $status  = true;
     }
 
     /**
