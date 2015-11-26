@@ -14,16 +14,20 @@ namespace Viserio\Container\Exception;
  * @version     0.10.0-dev
  */
 
-use Interop\Container\Exception\ContainerException as InteropNotFoundException;
-use InvalidArgumentException;
+use Exception;
+use Interop\Container\Exception\NotFoundException;
 
 /**
- * NotFoundException.
+ * EntryNotFound.
  *
  * @author  Daniel Bannert
  *
  * @since   0.9.4-dev
  */
-class NotFoundException extends InvalidArgumentException implements InteropNotFoundException
+class EntryNotFound extends Exception implements NotFoundException
 {
+    public static function fromId($id)
+    {
+        return new self(sprintf('The container entry "%s" was not found', $id));
+    }
 }

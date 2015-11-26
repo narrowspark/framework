@@ -14,39 +14,34 @@ namespace Viserio\Container\Definition;
  * @version     0.10.0-dev
  */
 
-use Interop\Container\Definition\AliasDefinitionInterface;
+use Interop\Container\Definition\ParameterDefinitionInterface;
 
 /**
- * AliasDefinition.
+ * ParameterDefinition.
  *
  * @author  Daniel Bannert
  *
  * @since   0.10.0-dev
  */
-class AliasDefinition extends NamedDefinition implements AliasDefinitionInterface
+class ParameterDefinition extends NamedDefinition implements ParameterDefinitionInterface
 {
     /**
      * @var string
      */
-    private $target;
+    private $value;
 
     /**
      * @param string $identifier
-     * @param string $target
+     * @param string $value
      */
-    public function __construct($identifier, $target)
+    public function __construct($identifier, $value)
     {
         parent::__construct($identifier);
-        $this->target = $target;
+        $this->value = $value;
     }
 
-    /**
-     * Returns the name of the target container entry.
-     *
-     * @return string
-     */
-    public function getTarget()
+    public function getValue()
     {
-        return $this->target;
+        return $this->value;
     }
 }

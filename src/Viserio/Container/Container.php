@@ -24,6 +24,7 @@ use Viserio\Container\Traits\ContainerArrayAccessTrait;
 use Viserio\Container\Traits\ContainerResolverTraits;
 use Viserio\Container\Traits\MockerContainerTrait;
 use Viserio\Container\Traits\DelegateTrait;
+use Viserio\Container\Traits\DefinitionTrait;
 use Viserio\Container\Traits\ServiceProviderTrait;
 use Viserio\Contracts\Container\Container as ContainerContract;
 use Viserio\Contracts\Container\WritableContainer as WritableContainerContract;
@@ -58,7 +59,8 @@ class Container implements ArrayAccess, Serializable, ContainerInteropInterface,
     MockerContainerTrait,
     ContainerResolverTraits,
     DelegateTrait,
-    ServiceProviderTrait;
+    ServiceProviderTrait,
+    DefinitionTrait;
 
     /**
      * The registered type aliases.

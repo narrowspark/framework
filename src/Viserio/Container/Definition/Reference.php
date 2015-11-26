@@ -17,29 +17,25 @@ namespace Viserio\Container\Definition;
 use Interop\Container\Definition\AliasDefinitionInterface;
 
 /**
- * AliasDefinition.
+ * Reference.
  *
  * @author  Daniel Bannert
  *
  * @since   0.10.0-dev
  */
-class AliasDefinition extends NamedDefinition implements AliasDefinitionInterface
+class Reference implements ReferenceInterface
 {
     /**
      * @var string
      */
     private $target;
-
     /**
-     * @param string $identifier
      * @param string $target
      */
-    public function __construct($identifier, $target)
+    public function __construct($target)
     {
-        parent::__construct($identifier);
         $this->target = $target;
     }
-
     /**
      * Returns the name of the target container entry.
      *
