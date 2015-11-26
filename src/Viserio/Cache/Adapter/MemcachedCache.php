@@ -107,7 +107,9 @@ class MemcachedCache extends TaggableStore implements AdapterContract
         if (!$memcached->getServerList()) {
             foreach ($servers as $server) {
                 $memcached->addServer(
-                    $server['host'], $server['port'], $server['weight']
+                    $server['host'],
+                    $server['port'],
+                    $server['weight']
                 );
             }
         }
@@ -173,6 +175,30 @@ class MemcachedCache extends TaggableStore implements AdapterContract
     }
 
     /**
+     * Retrieve multiple items from the cache by key,
+     * items not found in the cache will have a null value for the key.
+     *
+     * @param string[] $keys
+     *
+     * @return array
+     */
+    public function getMulti(array $keys)
+    {
+        $prefixedKeys = [];
+
+        foreach ($keys as $keyToPrefix) {
+            $prefixedKeys[] = $this->prefix.$keyToPrefix;
+        }
+
+        $cas = null;
+        $cacheValues = $this->memcached->getMulti($prefixedKeys, $cas, \Memcached::GET_PRESERVE_ORDER);
+
+        $returnValues = array_combine($keys, $cacheValues);
+
+        return $returnValues;
+    }
+
+    /**
      * Store an item in the cache for a given number of minutes.
      *
      * @param string $key
@@ -186,6 +212,25 @@ class MemcachedCache extends TaggableStore implements AdapterContract
         $this->minutes[$key] = $minutes;
 
         $this->memcached->set($this->prefix.$key, $value, $minutes * 60);
+    }
+
+    /**
+     * Store multiple items in the cache for a set number of minutes.
+     *
+     * @param array $values array of key => value pairs
+     * @param int   $minutes
+     *
+     * @return void
+     */
+    public function putMulti(array $values, $minutes)
+    {
+        $formattedKeyValues = [];
+
+        foreach ($values as $keyToPrefix => $singleValue) {
+            $formattedKeyValues[$this->prefix.$keyToPrefix] = $singleValue;
+        }
+
+        $this->memcached->setMulti($formattedKeyValues, $minutes * 60);
     }
 
     /**

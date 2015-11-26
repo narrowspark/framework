@@ -3,7 +3,6 @@
 [![Author](http://img.shields.io/badge/author-@anolilab-blue.svg?style=flat-square)](https://twitter.com/anolilab)
 [![Source Code](http://img.shields.io/badge/source-narrowspark/narrowspark-blue.svg?style=flat-square)](https://github.com/narrowspark/narrowspark)
 [![Latest Version](https://img.shields.io/packagist/v/narrowspark/framework.svg?style=flat-square)](https://github.com/narrowspark/framework/releases)
-[![Stories in Ready](https://badge.waffle.io/narrowspark/framework.svg?label=ready&title=Ready&style=flat-square)](http://waffle.io/narrowspark/framework)
 [![Minimum PHP Version](https://img.shields.io/badge/php-%3E%3D%205.6-8892BF.svg?style=flat-square)](https://php.net/)
 [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE)
 

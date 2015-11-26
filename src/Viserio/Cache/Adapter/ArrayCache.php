@@ -67,6 +67,25 @@ class ArrayCache extends TaggableStore implements AdapterContract
     }
 
     /**
+     * Retrieve multiple items from the cache by key,
+     * items not found in the cache will have a null value for the key.
+     *
+     * @param string[] $keys
+     *
+     * @return array
+     */
+    public function getMulti(array $keys)
+    {
+        $returnValues = [];
+
+        foreach ($keys as $singleKey) {
+            $returnValues[$singleKey] = $this->get($singleKey);
+        }
+
+        return $returnValues;
+    }
+
+    /**
      * Store an item in the cache for a given number of minutes.
      *
      * @param string $key
@@ -77,6 +96,21 @@ class ArrayCache extends TaggableStore implements AdapterContract
     {
         $this->minutes[$key] = $minutes;
         $this->storage[$key] = $value;
+    }
+
+    /**
+     * Store multiple items in the cache for a set number of minutes.
+     *
+     * @param array $values array of key => value pairs
+     * @param int   $minutes
+     *
+     * @return void
+     */
+    public function putMulti(array $values, $minutes)
+    {
+        foreach ($values as $key => $singleValue) {
+            $this->put($key, $singleValue, $minutes);
+        }
     }
 
     /**

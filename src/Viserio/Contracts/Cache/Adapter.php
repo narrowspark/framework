@@ -47,6 +47,16 @@ interface Adapter
     public function get($key);
 
     /**
+     * Retrieve multiple items from the cache by key,
+     * items not found in the cache will have a null value for the key.
+     *
+     * @param string[] $keys
+     *
+     * @return array
+     */
+    public function getMulti(array $keys);
+
+    /**
      * Store an item in the cache indefinitely.
      *
      * @param string $key
@@ -71,6 +81,16 @@ interface Adapter
      * @return null|bool
      */
     public function put($key, $value, $minutes);
+
+    /**
+     * Store multiple items in the cache for a set number of minutes.
+     *
+     * @param array $values array of key => value pairs
+     * @param int   $minutes
+     *
+     * @return void
+     */
+    public function putMulti(array $values, $minutes);
 
     /**
      * Increment the value of an item in the cache.
