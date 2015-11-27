@@ -1,5 +1,5 @@
 <?php
-namespace Viserio\Cache\Test\Adapter;
+namespace Viserio\Cache\Tests\Adapter;
 
 /**
  * Narrowspark - a PHP 5 framework.

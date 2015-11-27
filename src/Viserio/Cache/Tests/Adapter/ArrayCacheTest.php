@@ -1,5 +1,5 @@
 <?php
-namespace Viserio\Test\Http;
+namespace Viserio\Cache\Tests\Adapter;
 
 /**
  * Narrowspark - a PHP 5 framework.
@@ -49,7 +49,7 @@ class ArrayCacheTest extends \PHPUnit_Framework_TestCase
 
     public function testMultipleItemsCanBeSetAndRetrieved()
     {
-        $store = new ArrayStore;
+        $store = new ArrayCache;
         $store->put('foo', 'bar', 10);
         $store->putMultiple([
             'foobuu'  => 'buz',

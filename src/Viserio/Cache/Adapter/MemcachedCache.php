@@ -14,6 +14,7 @@ namespace Viserio\Cache\Adapter;
  * @version     0.10.0
  */
 
+use Memcached;
 use Viserio\Cache\Store\TaggableStore;
 use Viserio\Contracts\Cache\Adapter as AdapterContract;
 
@@ -97,7 +98,7 @@ class MemcachedCache extends TaggableStore implements AdapterContract
         // Set SASL auth data, requires binary protocol
         if (count($saslCredentials) === 2) {
             list($username, $password) = $saslCredentials;
-            $memcached->setOption(\Memcached::OPT_BINARY_PROTOCOL, true);
+            $memcached->setOption(Memcached::OPT_BINARY_PROTOCOL, true);
             $memcached->setSaslAuthData($username, $password);
         }
 
@@ -138,10 +139,10 @@ class MemcachedCache extends TaggableStore implements AdapterContract
     protected static function getMemcached($persistentConnectionId)
     {
         if (false !== $persistentConnectionId) {
-            return new \Memcached($persistentConnectionId);
+            return new Memcached($persistentConnectionId);
         }
 
-        return new \Memcached();
+        return new Memcached();
     }
 
     /**

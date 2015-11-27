@@ -1,5 +1,5 @@
 <?php
-namespace Viserio\Cache\Test\Adapter;
+namespace Viserio\Cache\Tests\Adapter;
 
 /**
  * Narrowspark - a PHP 5 framework.
@@ -34,7 +34,7 @@ class NullCacheTest extends \PHPUnit_Framework_TestCase
 
     public function testGetMultipleReturnsMultipleNulls()
     {
-        $store = new NullStore;
+        $store = new NullCache;
 
         $this->assertEquals([
             'foo'   => null,

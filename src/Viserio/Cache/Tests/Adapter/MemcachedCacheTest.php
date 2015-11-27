@@ -1,5 +1,5 @@
 <?php
-namespace Viserio\Cache\Test\Adapter;
+namespace Viserio\Cache\Tests\Adapter;
 
 /**
  * Narrowspark - a PHP 5 framework.
@@ -51,6 +51,10 @@ class MemcachedCacheTest extends \PHPUnit_Framework_TestCase
 
     public function testMemcacheGetMultiValuesAreReturnedWithCorrectKeys()
     {
+        if (! class_exists('Memcached')) {
+            $this->markTestSkipped('Memcached module not installed');
+        }
+
         $memcache = $this->getMock('StdClass', ['getMulti', 'getResultCode']);
         $memcache->expects($this->once())->method('getMulti')->with(
             ['foo:foo', 'foo:bar', 'foo:baz']
