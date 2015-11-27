@@ -29,6 +29,7 @@ class Reference implements ReferenceInterface
      * @var string
      */
     private $target;
+
     /**
      * @param string $target
      */
@@ -36,6 +37,7 @@ class Reference implements ReferenceInterface
     {
         $this->target = $target;
     }
+
     /**
      * Returns the name of the target container entry.
      *

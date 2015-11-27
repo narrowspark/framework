@@ -15,6 +15,7 @@ namespace Viserio\Container\Definition;
  */
 
 use Interop\Container\Definition\PropertyAssignmentInterface;
+use Interop\Container\Definition\ReferenceInterface;
 
 /**
  * PropertyAssignment.
@@ -31,13 +32,13 @@ class PropertyAssignment implements PropertyAssignmentInterface
     private $propertyName;
 
     /**
-     * @var scalar|\Interop\Container\Definition\ReferenceInterface
+     * @var string|number|bool|array|ReferenceInterface
      */
     private $value;
 
     /**
-     * @param string $propertyName
-     * @param scalar|\Interop\Container\Definition\ReferenceInterface $value
+     * @param string                                      $propertyName
+     * @param string|number|bool|array|ReferenceInterface $value
      */
     public function __construct($propertyName, $value)
     {

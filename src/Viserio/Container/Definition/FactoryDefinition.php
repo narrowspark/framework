@@ -27,7 +27,7 @@ use Interop\Container\Definition\ReferenceInterface;
 class FactoryDefinition extends NamedDefinition implements FactoryDefinitionInterface
 {
     /**
-     * @var \Interop\Container\Definition\ReferenceInterface
+     * @var ReferenceInterface
      */
     private $reference;
 
@@ -37,15 +37,31 @@ class FactoryDefinition extends NamedDefinition implements FactoryDefinitionInte
     private $methodName;
 
     /**
-     * @param string $identifier
-     * @param \Interop\Container\Definition\ReferenceInterface $reference
-     * @param string $methodName
+     * @param string             $identifier
+     * @param ReferenceInterface $reference
+     * @param string             $methodName
      */
     public function __construct($identifier, ReferenceInterface $reference, $methodName)
     {
         parent::__construct($identifier);
+
         $this->reference = $reference;
         $this->methodName = $methodName;
+    }
+
+    /**
+     * Set the arguments to pass when calling the factory.
+     *
+     * @param string|number|bool|array|ReferenceInterface $argument
+     *        Can be a scalar value or a reference to another entry.
+     *
+     * @return $this
+     */
+    public function setArguments($argument)
+    {
+        $this->arguments = func_get_args();
+
+        return $this;
     }
 
     public function getReference()
@@ -56,5 +72,10 @@ class FactoryDefinition extends NamedDefinition implements FactoryDefinitionInte
     public function getMethodName()
     {
         return $this->methodName;
+    }
+
+    public function getArguments()
+    {
+        return $this->arguments;
     }
 }

@@ -17,6 +17,7 @@ namespace Viserio\Container\Definition;
 use Interop\Container\Definition\InstanceDefinitionInterface;
 use Interop\Container\Definition\MethodCallInterface;
 use Interop\Container\Definition\PropertyAssignmentInterface;
+use Interop\Container\Definition\ReferenceInterface;
 
 /**
  * InstanceDefinition.
@@ -58,21 +59,61 @@ class InstanceDefinition extends NamedDefinition implements InstanceDefinitionIn
     }
 
     /**
-     * @param scalar|\Interop\Container\Definition\ReferenceInterface $argument
+     * @param string|number|bool|array|ReferenceInterface $argument
      */
     public function addConstructorArgument($argument)
     {
         $this->constructorArguments[] = $argument;
     }
 
-    public function addPropertyAssignment(PropertyAssignmentInterface $propertyAssignment)
+    /**
+     * Set constructor arguments. This method take as many parameters as necessary.
+     *
+     * @param string|number|bool|array|ReferenceInterface $argument
+     *        Can be a scalar value or a reference to another entry.
+     *
+     * @return $this
+     */
+    public function setConstructorArguments($argument)
     {
-        $this->propertyAssignments[] = $propertyAssignment;
+        $this->constructorArguments = func_get_args();
+
+        return $this;
     }
 
-    public function addMethodCall(MethodCallInterface $methodCall)
+    /**
+     * Set a value to assign to a property.
+     *
+     * @param string                                      $propertyName Name of the property to set.
+     * @param string|number|bool|array|ReferenceInterface $value Can be a scalar value or a reference to another entry.
+     *
+     * @return $this
+     */
+    public function addPropertyAssignment($propertyName, $value)
     {
-        $this->methodCalls[] = $methodCall;
+        $this->propertyAssignments[] = new PropertyAssignment($propertyName, $value);
+        return $this;
+    }
+
+    /**
+     * Set a method to be called after instantiating the class.
+     *
+     * After the $methodName parameter, this method take as many parameters as necessary.
+     *
+     * @param string                                      $methodName Name of the method to call.
+     * @param string|number|bool|array|ReferenceInterface...
+     *        Can be a scalar value or a reference to another entry.
+     *        See \Viserio\Container\Definition\MethodCall::__construct fore more informations.
+     *
+     * @return $this
+     */
+    public function addMethodCall($methodName)
+    {
+        $arguments = func_get_args();
+        array_shift($arguments);
+        $this->methodCalls[] = new MethodCall($methodName, $arguments);
+
+        return $this;
     }
 
     /**
