@@ -47,16 +47,6 @@ interface Adapter
     public function get($key);
 
     /**
-     * Retrieve multiple items from the cache by key,
-     * items not found in the cache will have a null value for the key.
-     *
-     * @param string[] $keys
-     *
-     * @return array
-     */
-    public function getMultiple(array $keys);
-
-    /**
      * Store an item in the cache indefinitely.
      *
      * @param string $key
