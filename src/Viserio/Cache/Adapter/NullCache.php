@@ -65,7 +65,13 @@ class NullCache extends TaggableStore implements AdapterContract
      */
     public function getMultiple(array $keys)
     {
-        //
+        $returnValues = [];
+
+        foreach ($keys as $singleKey) {
+            $returnValues[$singleKey] = null;
+        }
+
+        return $returnValues;
     }
 
     /**
@@ -90,7 +96,9 @@ class NullCache extends TaggableStore implements AdapterContract
      */
     public function putMultiple(array $values, $minutes)
     {
-        //
+        foreach ($values as $key => $singleValue) {
+            $this->put($key, $singleValue, $minutes);
+        }
     }
 
     /**
