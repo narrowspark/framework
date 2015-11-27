@@ -106,21 +106,14 @@ class Stage implements StageContract
     }
 
     /**
-     * Gets the next operation.
-     *
-     * @return Stage
-     */
-    protected function getNextOperation()
-    {
-        return $this->operation;
-    }
-
-    /**
      * Execute the task for this stage
      *
      * @param array $input the input param for this task
      *
      * @return boolean success status
      */
-    abstract protected function process(array $input);
+    abstract protected function process(array $input)
+    {
+
+    }
 }
