@@ -14,6 +14,7 @@ namespace Viserio\Cache\Adapter;
  * @version     0.10.0
  */
 
+use Viserio\Cache\Adapter\Traits\MultipleTrait;
 use Viserio\Cache\Store\TaggableStore;
 use Viserio\Contracts\Cache\Adapter as AdapterContract;
 
@@ -26,6 +27,8 @@ use Viserio\Contracts\Cache\Adapter as AdapterContract;
  */
 class WinCacheCache extends TaggableStore implements AdapterContract
 {
+    use MultipleTrait;
+
     /**
      * A string that should be prepended to keys.
      *
@@ -86,7 +89,7 @@ class WinCacheCache extends TaggableStore implements AdapterContract
      *
      * @return array
      */
-    public function getMulti(array $keys)
+    public function getMultiple(array $keys)
     {
         $returnValues = [];
 
@@ -121,7 +124,7 @@ class WinCacheCache extends TaggableStore implements AdapterContract
      *
      * @return void
      */
-    public function putMulti(array $values, $minutes)
+    public function putMultiple(array $values, $minutes)
     {
         foreach ($values as $key => $singleValue) {
             $this->put($key, $singleValue, $minutes);
