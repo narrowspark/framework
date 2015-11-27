@@ -175,10 +175,11 @@ class MemcachedCache extends TaggableStore implements AdapterContract
     }
 
     /**
-     * Retrieve multiple items from the cache by key,
-     * items not found in the cache will have a null value for the key.
+     * Retrieve multiple items from the cache by key.
      *
-     * @param string[] $keys
+     * Items not found in the cache will have a null value for the key.
+     *
+     * @param array $keys
      *
      * @return array
      */
@@ -191,7 +192,11 @@ class MemcachedCache extends TaggableStore implements AdapterContract
         }
 
         $cas = null;
-        $cacheValues = $this->memcached->getMultiple($prefixedKeys, $cas, \Memcached::GET_PRESERVE_ORDER);
+        $cacheValues = $this->memcached->getMulti($prefixedKeys, $cas, Memcached::GET_PRESERVE_ORDER);
+
+        if ($this->memcached->getResultCode() != 0) {
+            return array_fill_keys($keys, null);
+        }
 
         $returnValues = array_combine($keys, $cacheValues);
 
@@ -217,10 +222,8 @@ class MemcachedCache extends TaggableStore implements AdapterContract
     /**
      * Store multiple items in the cache for a set number of minutes.
      *
-     * @param array $values array of key => value pairs
+     * @param array $values
      * @param int   $minutes
-     *
-     * @return void
      */
     public function putMultiple(array $values, $minutes)
     {

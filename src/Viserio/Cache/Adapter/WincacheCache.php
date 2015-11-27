@@ -14,6 +14,7 @@ namespace Viserio\Cache\Adapter;
  * @version     0.10.0-dev
  */
 
+use Viserio\Cache\Adapter\Traits\MultipleTrait;
 use Viserio\Cache\Store\TaggableStore;
 use Viserio\Contracts\Cache\Adapter as AdapterContract;
 
@@ -26,6 +27,8 @@ use Viserio\Contracts\Cache\Adapter as AdapterContract;
  */
 class WinCacheCache extends TaggableStore implements AdapterContract
 {
+    use MultipleTrait;
+
     /**
      * A string that should be prepended to keys.
      *

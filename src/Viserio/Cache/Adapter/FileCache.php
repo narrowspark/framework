@@ -14,6 +14,7 @@ namespace Viserio\Cache\Adapter;
  * @version     0.10.0-dev
  */
 
+use Viserio\Cache\Adapter\Traits\MultipleTrait;
 use Viserio\Contracts\Cache\Adapter as AdapterContract;
 use Viserio\Filesystem\Filesystem;
 use Viserio\Support\Arr;
@@ -27,6 +28,8 @@ use Viserio\Support\Arr;
  */
 class FileCache implements AdapterContract
 {
+    use MultipleTrait;
+
     /**
      * The Viserio Filesystem instance.
      *
@@ -80,25 +83,6 @@ class FileCache implements AdapterContract
     public function get($key)
     {
         return Arr::get($this->getPayload($key), 'data', null);
-    }
-
-    /**
-     * Retrieve multiple items from the cache by key,
-     * items not found in the cache will have a null value for the key.
-     *
-     * @param string[] $keys
-     *
-     * @return array
-     */
-    public function getMultiple(array $keys)
-    {
-        $returnValues = [];
-
-        foreach ($keys as $singleKey) {
-            $returnValues[$singleKey] = $this->get($singleKey);
-        }
-
-        return $returnValues;
     }
 
     /**
@@ -159,21 +143,6 @@ class FileCache implements AdapterContract
         $this->createCacheDirectory($path = $this->path($key));
 
         $this->files->put($path, $value);
-    }
-
-    /**
-     * Store multiple items in the cache for a set number of minutes.
-     *
-     * @param array $values array of key => value pairs
-     * @param int   $minutes
-     *
-     * @return void
-     */
-    public function putMultiple(array $values, $minutes)
-    {
-        foreach ($values as $key => $singleValue) {
-            $this->put($key, $singleValue, $minutes);
-        }
     }
 
     /**
