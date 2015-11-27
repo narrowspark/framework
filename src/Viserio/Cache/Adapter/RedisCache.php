@@ -154,7 +154,7 @@ class RedisCache extends TaggableStore implements AdapterContract
      *
      * @return array
      */
-    public function getMulti(array $keys)
+    public function getMultiple(array $keys)
     {
         $returnValues = [];
         $prefixedKeys = [];
@@ -196,7 +196,7 @@ class RedisCache extends TaggableStore implements AdapterContract
      * @param int   $minutes
      * @return void
      */
-    public function putMulti(array $values, $minutes)
+    public function putMultiple(array $values, $minutes)
     {
         $this->connection()->multi();
 

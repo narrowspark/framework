@@ -86,7 +86,7 @@ class WinCacheCache extends TaggableStore implements AdapterContract
      *
      * @return array
      */
-    public function getMulti(array $keys)
+    public function getMultiple(array $keys)
     {
         $returnValues = [];
 
@@ -121,7 +121,7 @@ class WinCacheCache extends TaggableStore implements AdapterContract
      *
      * @return void
      */
-    public function putMulti(array $values, $minutes)
+    public function putMultiple(array $values, $minutes)
     {
         foreach ($values as $key => $singleValue) {
             $this->put($key, $singleValue, $minutes);

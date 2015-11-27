@@ -49,6 +49,23 @@ class ArrayCacheTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(2, $store->get('foo'));
     }
 
+    public function testMultipleItemsCanBeSetAndRetrieved()
+    {
+        $store = new ArrayStore;
+        $store->put('foo', 'bar', 10);
+        $store->putMultiple([
+            'foobuu'  => 'buz',
+            'quz'   => 'baz'
+        ], 10);
+
+        $this->assertEquals([
+            'foo'   => 'bar',
+            'foobuu'  => 'buz',
+            'quz'   => 'baz',
+            'foobar'  => null
+        ], $store->getMultiple(['foo', 'foobuu', 'quz','foobar']));
+    }
+
     public function testValuesCanBeDecremented()
     {
         $store = new ArrayCache();

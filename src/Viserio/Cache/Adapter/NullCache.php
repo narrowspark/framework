@@ -63,7 +63,7 @@ class NullCache extends TaggableStore implements AdapterContract
      *
      * @return array
      */
-    public function getMulti(array $keys)
+    public function getMultiple(array $keys)
     {
         //
     }
@@ -88,7 +88,7 @@ class NullCache extends TaggableStore implements AdapterContract
      *
      * @return void
      */
-    public function putMulti(array $values, $minutes)
+    public function putMultiple(array $values, $minutes)
     {
         //
     }

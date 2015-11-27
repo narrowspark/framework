@@ -54,7 +54,7 @@ interface Adapter
      *
      * @return array
      */
-    public function getMulti(array $keys);
+    public function getMultiple(array $keys);
 
     /**
      * Store an item in the cache indefinitely.
@@ -90,7 +90,7 @@ interface Adapter
      *
      * @return void
      */
-    public function putMulti(array $values, $minutes);
+    public function putMultiple(array $values, $minutes);
 
     /**
      * Increment the value of an item in the cache.

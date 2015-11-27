@@ -51,6 +51,27 @@ class MemcachedCacheTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('bar', $store->get('foo'));
     }
 
+    public function testMemcacheGetMultiValuesAreReturnedWithCorrectKeys()
+    {
+        $memcache = $this->getMock('StdClass', ['getMulti', 'getResultCode']);
+        $memcache->expects($this->once())->method('getMulti')->with(
+            ['foo:foo', 'foo:bar', 'foo:baz']
+        )->will($this->returnValue([
+            'foobuu', 'buzz', 'fiboo'
+        ]));
+
+        $memcache->expects($this->once())->method('getResultCode')->will($this->returnValue(0));
+        $store = new MemcachedCache($memcache,'foo');
+
+        $this->assertEquals([
+            'foo'   => 'foobuu',
+            'bar'   => 'buzz',
+            'baz'   => 'fiboo'
+        ], $store->getMultiple([
+            'foo', 'bar', 'baz'
+        ]));
+    }
+
     public function testSetMethodProperlyCallsMemcache()
     {
         $memcache = $this->getMock('Memcached', ['set']);

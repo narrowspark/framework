@@ -182,7 +182,7 @@ class MemcachedCache extends TaggableStore implements AdapterContract
      *
      * @return array
      */
-    public function getMulti(array $keys)
+    public function getMultiple(array $keys)
     {
         $prefixedKeys = [];
 
@@ -191,7 +191,7 @@ class MemcachedCache extends TaggableStore implements AdapterContract
         }
 
         $cas = null;
-        $cacheValues = $this->memcached->getMulti($prefixedKeys, $cas, \Memcached::GET_PRESERVE_ORDER);
+        $cacheValues = $this->memcached->getMultiple($prefixedKeys, $cas, \Memcached::GET_PRESERVE_ORDER);
 
         $returnValues = array_combine($keys, $cacheValues);
 
@@ -222,7 +222,7 @@ class MemcachedCache extends TaggableStore implements AdapterContract
      *
      * @return void
      */
-    public function putMulti(array $values, $minutes)
+    public function putMultiple(array $values, $minutes)
     {
         $formattedKeyValues = [];
 
