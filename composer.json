@@ -87,7 +87,6 @@
         "mockery/mockery"                    : "~0.9.4",
         "phpunit/phpunit"                    : "~5.0.9",
         "predis/predis"                      : "~1.0.1",
-        "sensiolabs/security-checker"        : "~3.0.2",
         "fzaninotto/faker"                   : "~1.4"
     },
     "autoload": {
@@ -99,14 +98,6 @@
         "branch-alias": {
             "dev-master"                     : "0.10.0-dev"
         }
-    },
-    "scripts": {
-        "post-install-cmd": [
-            "sh vendor/bin/security-checker security:check --format=simple"
-        ],
-        "post-update-cmd": [
-            "sh vendor/bin/security-checker security:check --format=simple"
-        ]
     },
     "suggest": {
         "aws/aws-sdk-php"                    : "Required to use the SQS queue driver and SES mail driver (~3.0).",
