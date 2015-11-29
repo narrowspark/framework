@@ -11,7 +11,7 @@ namespace Viserio\Contracts\Loop;
  *
  * @license     http://www.narrowspark.com/license
  *
- * @version     0.10-dev
+ * @version     0.10.0
  */
 
 /**
@@ -19,7 +19,7 @@ namespace Viserio\Contracts\Loop;
  *
  * @author  Daniel Bannert
  *
- * @since   0.10-dev
+ * @since   0.10.0
  */
 class UnsupportedException extends \LogicException
 {

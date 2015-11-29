@@ -1,0 +1,47 @@
+{
+    "name"       : "viserio/pipeline",
+    "type"       : "library",
+    "description": "The Viserio Pipeline package.",
+    "keywords"   : ["narrowspark", "viserio", "pipeline"],
+    "license"    : "MIT",
+    "homepage"   : "http://github.com/Narrowspark/pipeline",
+    "support"    : {
+        "issues": "https://github.com/narrowspark/framework/issues",
+        "source": "https://github.com/narrowspark/framework"
+    },
+    "authors"    : [
+        {
+          "name"    : "Daniel Bannert",
+          "email"   : "d.bannert@anolilab.de",
+          "homepage": "http://www.anolilab.de",
+          "role"    : "Developer"
+        }
+    ],
+    "require": {
+        "php"                                : ">=5.6",
+        "container-interop/container-interop": "~1.1",
+        "psr/log"                            : "~1.0",
+        "viserio/cotracts"                   : "self.version",
+    },
+    "require-dev": {
+        "fabpot/php-cs-fixer"                : "~1.10.1",
+        "phpunit/phpunit"                    : "~5.0.6"
+    },
+    "autoload": {
+        "psr-4": {
+            "Viserio\\Pipeline\\"            : ""
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Viserio\\Pipeline\\Tests\\"     : "Tests/"
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master"                     : "0.10.0-dev"
+        }
+    },
+    "minimum-stability"                      : "dev",
+    "prefer-stable"                          : true
+}

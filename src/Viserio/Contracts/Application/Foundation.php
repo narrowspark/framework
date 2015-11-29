@@ -11,7 +11,7 @@ namespace Viserio\Contracts\Application;
  *
  * @license     http://www.narrowspark.com/license
  *
- * @version     0.10.0-dev
+ * @version     0.10.0
  */
 
 use Viserio\Contracts\Container\Container;
@@ -21,7 +21,7 @@ use Viserio\Contracts\Container\Container;
  *
  * @author  Daniel Bannert
  *
- * @since   0.9.4-dev
+ * @since   0.9.4
  */
 interface Foundation extends Container
 {

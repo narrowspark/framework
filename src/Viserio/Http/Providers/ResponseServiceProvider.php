@@ -11,7 +11,7 @@ namespace Viserio\Http\Providers;
  *
  * @license     http://www.narrowspark.com/license
  *
- * @version     0.10.0-dev
+ * @version     0.10.0
  */
 
 use Viserio\Application\ServiceProvider;
@@ -22,7 +22,7 @@ use Viserio\Http\Response;
  *
  * @author  Daniel Bannert
  *
- * @since   0.8.0-dev
+ * @since   0.8.0
  */
 class ResponseServiceProvider extends ServiceProvider
 {

@@ -11,7 +11,7 @@ namespace Viserio\Mail;
  *
  * @license     http://www.narrowspark.com/license
  *
- * @version     0.10.0-dev
+ * @version     0.10.0
  */
 
 use Viserio\Support\Manager;
@@ -21,7 +21,7 @@ use Viserio\Support\Manager;
  *
  * @author  Daniel Bannert
  *
- * @since   0.10.0-dev
+ * @since   0.10.0
  */
 class TransportManager extends Manager
 {

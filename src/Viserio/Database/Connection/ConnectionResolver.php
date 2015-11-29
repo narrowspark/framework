@@ -11,7 +11,7 @@ namespace Viserio\Database\Connection;
  *
  * @license     http://www.narrowspark.com/license
  *
- * @version     0.10.0-dev
+ * @version     0.10.0
  */
 
 use Viserio\Contracts\Database\ConnectionResolver as ConnectionResolverContract;
@@ -21,7 +21,7 @@ use Viserio\Contracts\Database\ConnectionResolver as ConnectionResolverContract;
  *
  * @author  Daniel Bannert
  *
- * @since   0.9.2-dev
+ * @since   0.9.2
  */
 class ConnectionResolver implements ConnectionResolverContract
 {

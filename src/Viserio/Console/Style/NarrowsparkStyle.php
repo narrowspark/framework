@@ -11,7 +11,7 @@ namespace Viserio\Console\Style;
  *
  * @license     http://www.narrowspark.com/license
  *
- * @version     0.10.0-dev
+ * @version     0.10.0
  */
 
 use Symfony\Component\Console\Style\SymfonyStyle;
@@ -21,7 +21,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
  *
  * @author  Daniel Bannert
  *
- * @since   0.9.7-dev
+ * @since   0.9.7
  */
 class NarrowsparkStyle extends SymfonyStyle
 {

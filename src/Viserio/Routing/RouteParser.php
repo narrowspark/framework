@@ -11,7 +11,7 @@ namespace Viserio\Routing;
  *
  * @license     http://www.narrowspark.com/license
  *
- * @version     0.10.0-dev
+ * @version     0.10.0
  */
 
 use FastRoute\RouteParser as FastRouteParser;
@@ -22,7 +22,7 @@ use FastRoute\RouteParser\Std;
  *
  * @author  Daniel Bannert
  *
- * @since   0.9.4-dev
+ * @since   0.9.4
  */
 class RouteParser extends Std implements FastRouteParser
 {

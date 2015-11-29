@@ -11,7 +11,7 @@ namespace Viserio\Database\Traits;
  *
  * @license     http://www.narrowspark.com/license
  *
- * @version     0.10.0-dev
+ * @version     0.10.0
  */
 
 use Exception;
@@ -22,7 +22,7 @@ use Viserio\Support\Str;
  *
  * @author  Daniel Bannert
  *
- * @since   0.10.0-dev
+ * @since   0.10.0
  */
 trait DetectsLostConnections
 {

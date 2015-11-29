@@ -11,7 +11,7 @@ namespace Viserio\Filesystem\Adapters;
  *
  * @license     http://www.narrowspark.com/license
  *
- * @version     0.10.0-dev
+ * @version     0.10.0
  */
 
 use League\Flysystem\Adapter\Ftp;
@@ -22,7 +22,7 @@ use Viserio\Contracts\Filesystem\Connector as ConnectorContract;
  *
  * @author  Daniel Bannert
  *
- * @since   0.9.4-dev
+ * @since   0.9.4
  */
 class FtpConnector implements ConnectorContract
 {

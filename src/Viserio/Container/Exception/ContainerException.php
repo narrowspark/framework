@@ -11,7 +11,7 @@ namespace Viserio\Container\Exception;
  *
  * @license     http://www.narrowspark.com/license
  *
- * @version     0.10.0-dev
+ * @version     0.10.0
  */
 
 use Interop\Container\Exception\ContainerException as InteropContainerException;
@@ -21,7 +21,7 @@ use Interop\Container\Exception\ContainerException as InteropContainerException;
  *
  * @author  Daniel Bannert
  *
- * @since   0.9.4-dev
+ * @since   0.9.4
  */
 class ContainerException extends \Exception implements InteropContainerException
 {

@@ -11,7 +11,7 @@ namespace Viserio\Application;
  *
  * @license     http://www.narrowspark.com/license
  *
- * @version     0.10.0-dev
+ * @version     0.10.0
  */
 
 use Viserio\Contracts\Application\ServiceProvider as ServiceProviderContract;
@@ -21,7 +21,7 @@ use Viserio\Contracts\Application\ServiceProvider as ServiceProviderContract;
  *
  * @author  Daniel Bannert
  *
- * @since   0.9.6-dev
+ * @since   0.9.6
  */
 abstract class ServiceProvider implements ServiceProviderContract
 {

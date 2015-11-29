@@ -11,7 +11,7 @@ namespace Viserio\View;
  *
  * @license     http://www.narrowspark.com/license
  *
- * @version     0.10.0-dev
+ * @version     0.10.0
  */
 
 use Viserio\Contracts\View\Finder as FinderContract;
@@ -22,7 +22,7 @@ use Viserio\Filesystem\Filesystem;
  *
  * @author  Daniel Bannert
  *
- * @since   0.9.4-dev
+ * @since   0.9.4
  */
 class ViewFinder implements FinderContract
 {

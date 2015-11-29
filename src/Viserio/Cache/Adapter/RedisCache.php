@@ -11,7 +11,7 @@ namespace Viserio\Cache\Adapter;
  *
  * @license     http://www.narrowspark.com/license
  *
- * @version     0.10.0-dev
+ * @version     0.10.0
  */
 
 use Predis\Client as Client;
@@ -24,7 +24,7 @@ use Viserio\Contracts\Cache\Adapter as AdapterContract;
  *
  * @author  Daniel Bannert
  *
- * @since   0.8.0-dev
+ * @since   0.8.0
  */
 class RedisCache extends TaggableStore implements AdapterContract
 {

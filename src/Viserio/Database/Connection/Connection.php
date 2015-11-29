@@ -11,7 +11,7 @@ namespace Viserio\Database\Connection;
  *
  * @license     http://www.narrowspark.com/license
  *
- * @version     0.10.0-dev
+ * @version     0.10.0
  */
 
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -26,7 +26,7 @@ use Viserio\Support\Arr;
  *
  * @author  Daniel Bannert
  *
- * @since   0.9.2-dev
+ * @since   0.9.2
  */
 class Connection implements ConnectionContract
 {

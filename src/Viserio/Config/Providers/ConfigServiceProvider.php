@@ -11,7 +11,7 @@ namespace Viserio\Config\Providers;
  *
  * @license     http://www.narrowspark.com/license
  *
- * @version     0.10.0-dev
+ * @version     0.10.0
  */
 
 use Viserio\Application\ServiceProvider;
@@ -24,7 +24,7 @@ use Viserio\Filesystem\FileLoader;
  *
  * @author  Daniel Bannert
  *
- * @since   0.8.5-dev
+ * @since   0.8.5
  */
 class ConfigServiceProvider extends ServiceProvider
 {

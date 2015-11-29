@@ -11,7 +11,7 @@ namespace Viserio\Application\Traits;
  *
  * @license     http://www.narrowspark.com/license
  *
- * @version     0.10.0-dev
+ * @version     0.10.0
  */
 
 use Viserio\Application\ServiceProvider;
@@ -22,7 +22,7 @@ use Viserio\Support\Arr;
  *
  * @author  Daniel Bannert
  *
- * @since   0.9.7-dev
+ * @since   0.9.7
  */
 trait ServiceProviderTrait
 {

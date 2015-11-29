@@ -11,7 +11,7 @@ namespace Viserio\Exception\Providers;
  *
  * @license     http://www.narrowspark.com/license
  *
- * @version     0.10.0-dev
+ * @version     0.10.0
  */
 
 use Symfony\Component\Debug\ExceptionHandler as SymfonyExceptionHandler;
@@ -32,7 +32,7 @@ use Whoops\Run;
  *
  * @author  Daniel Bannert
  *
- * @since   0.9.2-dev
+ * @since   0.9.2
  */
 class ExceptionServiceProvider extends ServiceProvider
 {

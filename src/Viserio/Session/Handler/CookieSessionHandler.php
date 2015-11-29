@@ -11,7 +11,7 @@ namespace Viserio\Session\Handler;
  *
  * @license     http://www.narrowspark.com/license
  *
- * @version     0.10.0-dev
+ * @version     0.10.0
  */
 
 use Viserio\Contracts\Cookie\Factory as CookieContract;
@@ -22,7 +22,7 @@ use Viserio\Contracts\Http\Request as RequestContract;
  *
  * @author  Daniel Bannert
  *
- * @since   0.9.4-dev
+ * @since   0.9.4
  */
 class CookieSessionHandler implements \SessionHandlerInterface
 {

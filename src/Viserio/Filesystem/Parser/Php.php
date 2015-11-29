@@ -11,7 +11,7 @@ namespace Viserio\Filesystem\Parser;
  *
  * @license     http://www.narrowspark.com/license
  *
- * @version     0.10.0-dev
+ * @version     0.10.0
  */
 
 use Viserio\Contracts\Filesystem\LoadingException;
@@ -24,7 +24,7 @@ use Viserio\Filesystem\Parser\Traits\IsGroupTrait;
  *
  * @author  Daniel Bannert
  *
- * @since   0.9.4-dev
+ * @since   0.9.4
  */
 class Php implements ParserContract
 {

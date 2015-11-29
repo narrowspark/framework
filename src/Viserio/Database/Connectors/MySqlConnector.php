@@ -11,7 +11,7 @@ namespace Viserio\Database\Connectors;
  *
  * @license     http://www.narrowspark.com/license
  *
- * @version     0.10.0-dev
+ * @version     0.10.0
  */
 
 use Viserio\Contracts\Database\Connector as ConnectorContract;
@@ -21,7 +21,7 @@ use Viserio\Contracts\Database\Connector as ConnectorContract;
  *
  * @author  Daniel Bannert
  *
- * @since   0.9.2-dev
+ * @since   0.9.2
  */
 class MySqlConnector extends Connectors implements ConnectorContract
 {

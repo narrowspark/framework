@@ -11,7 +11,7 @@ namespace Viserio\Log;
  *
  * @license     http://www.narrowspark.com/license
  *
- * @version     0.10.0-dev
+ * @version     0.10.0
  */
 
 use Monolog\Handler\ErrorLogHandler;
@@ -31,7 +31,7 @@ use Viserio\Log\Traits\PsrLoggerTrait;
  *
  * @author  Daniel Bannert
  *
- * @since   0.8.0-dev
+ * @since   0.8.0
  */
 class Writer implements LogContract, PsrLoggerInterface
 {

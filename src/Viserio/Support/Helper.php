@@ -11,7 +11,7 @@ namespace Viserio\Support;
  *
  * @license     http://www.narrowspark.com/license
  *
- * @version     0.10.0-dev
+ * @version     0.10.0
  */
 
 use Cekurte\Environment\Environment;
@@ -21,7 +21,7 @@ use Cekurte\Environment\Environment;
  *
  * @author  Daniel Bannert
  *
- * @since   0.9.2-dev
+ * @since   0.9.2
  */
 class Helper
 {
