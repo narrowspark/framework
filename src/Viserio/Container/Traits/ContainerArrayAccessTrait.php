@@ -1,26 +1,6 @@
 <?php
 namespace Viserio\Container\Traits;
 
-/**
- * Narrowspark - a PHP 5 framework.
- *
- * @author      Daniel Bannert <info@anolilab.de>
- * @copyright   2015 Daniel Bannert
- *
- * @link        http://www.narrowspark.de
- *
- * @license     http://www.narrowspark.com/license
- *
- * @version     0.10.0
- */
-
-/**
- * ContainerArrayAccessTrait.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.6
- */
 trait ContainerArrayAccessTrait
 {
     /**
@@ -123,6 +103,10 @@ trait ContainerArrayAccessTrait
             return $this->getFromDelegate($alias);
         }
 
+        if (!$this->isSingleton($alias) && isset($this->interopDefinitions[$alias])) {
+            $this->singletons[$alias] = $this->resolveDefinition($this->interopDefinitions[$alias]);
+        }
+
         return $this->make($alias);
     }
 
@@ -156,7 +140,11 @@ trait ContainerArrayAccessTrait
     {
         $alias = $this->normalize($alias);
 
-        if (isset($this->keys[$alias]) || isset($this->mockedServices['mock::'.$alias])) {
+        if (
+            isset($this->keys[$alias]) ||
+            isset($this->mockedServices['mock::'.$alias]) ||
+            isset($this->interopDefinitions[$alias])
+        ) {
             return true;
         }
 

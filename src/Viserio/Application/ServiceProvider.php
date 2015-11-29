@@ -2,9 +2,8 @@
 namespace Viserio\Application;
 
 use Viserio\Container\ServiceProvider as ContainerServiceProvider;
-use Viserio\Contracts\Application\ServiceProvider as ServiceProviderContract;
 
-abstract class ServiceProvider extends ContainerServiceProvider implements ServiceProviderContract
+abstract class ServiceProvider implements ServiceProviderContract
 {
     /**
      * Subscribe events.

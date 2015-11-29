@@ -1,31 +1,25 @@
 <?php
 namespace Viserio\Container\Traits;
 
-use Viserio\Container\ServiceProvider;
+use Interop\Container\Definition\DefinitionProviderInterface;
+use Viserio\Container\Interfaces\ContainerAwareInterface;
 use Viserio\Support\Arr;
 
-trait ServiceProviderTrait
+trait DefinitionProviderTrait
 {
     /**
      * Array of all service providers, even those that aren't registered.
      *
      * @var array
      */
-    protected $serviceProviders = [];
-
-    /**
-     * Array of service providers that resolve instances in the container.
-     *
-     * @var array
-     */
-    protected $provides = [];
+    protected $definitionProviders = [];
 
     /**
      * The names of the loaded service providers.
      *
      * @var array
      */
-    protected $loadedProviders = [];
+    protected $loadedDefinitions = [];
 
     /**
      * A lookup of service providers by name.
@@ -34,26 +28,19 @@ trait ServiceProviderTrait
      *
      * @var array
      */
-    protected $serviceProviderLookup = [];
+    protected $definitionProviderLookup = [];
 
     /**
      * {@inheritdoc}
      */
     public function provider($provider, $options = [], $force = false)
     {
-        if ((!is_string($provider)) && (!$provider instanceof ServiceProvider)) {
-            throw new \Exception(
-                'When registering a service provider, you must provide either and instance of '.
-                '[\Viserio\Container\ServiceProvider] or a fully qualified class name'
-            );
-        }
-
         if (($registered = $this->getProvider($provider)) && !$force) {
             return $registered;
         }
 
-        if (is_string($provider)) {
-            $provider = (new $provider())->setContainer($this);
+        if ($provider instanceof ContainerAwareInterface) {
+            $provider = $provider->setContainer($this);
         }
 
         // Only allow a service provider to be registered once.
@@ -68,17 +55,25 @@ trait ServiceProviderTrait
     }
 
     /**
-     * Get the registered service provider instance if it exists.
+     * Get the registered definitions provider instance if it exists.
      *
-     * @param ServiceProvider|string $provider
+     * @param DefinitionProviderInterface|string $provider
      *
-     * @return ServiceProvider|null
+     * @return DefinitionProviderInterface|null
      */
-    public function getProvider($provider)
+    public function getDefinitionProvider($provider)
     {
         $name = is_string($provider) ? $provider : get_class($provider);
 
-        return isset($this->loadedProviders[$name]) ? $this->loadedProviders[$name] : null;
+        return isset($this->$loadedDefinitions[$name]) ? $this->$loadedDefinitions[$name] : null;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getDefinitionProviders()
+    {
+        return $this->definitionProviders;
     }
 
     /**
@@ -86,20 +81,20 @@ trait ServiceProviderTrait
      *
      * @return array
      */
-    public function getLoadedProviders()
+    public function getLoadedDefinitionProviders()
     {
-        return $this->loadedProviders;
+        return $this->$loadedDefinitions;
     }
 
     /**
      * Register a service provider.
      *
-     * @param ServiceProvider $provider The service provider object.
-     * @param array           $options
+     * @param DefinitionProviderInterface $provider The service provider object.
+     * @param array                       $options
      */
-    protected function registerProvider(ServiceProvider $provider, $options = [])
+    protected function registerProvider(DefinitionProviderInterface $provider, $options = [])
     {
-        if (in_array($provider, $this->loadedProviders, true)) {
+        if (in_array($provider, $this->$loadedDefinitions, true)) {
             return;
         }
 
@@ -137,13 +132,13 @@ trait ServiceProviderTrait
     {
         $class = get_class($provider);
         $this->serviceProviders[$class] = $provider;
-        $this->loadedProviders[$class] = true;
+        $this->$loadedDefinitions[$class] = true;
 
         $aliases = class_parents($class) + class_implements($class) + [$class];
 
         foreach ($aliases as $alias) {
-            if (!isset($this->loadedProviders[$alias])) {
-                $this->loadedProviders[$alias] = $provider;
+            if (!isset($this->$loadedDefinitions[$alias])) {
+                $this->$loadedDefinitions[$alias] = $provider;
             }
         }
     }

@@ -1,19 +1,6 @@
 <?php
 namespace Viserio\Container;
 
-/**
- * Narrowspark - a PHP 5 framework.
- *
- * @author      Daniel Bannert <info@anolilab.de>
- * @copyright   2015 Daniel Bannert
- *
- * @link        http://www.narrowspark.de
- *
- * @license     http://www.narrowspark.com/license
- *
- * @version     0.10.0
- */
-
 use ArrayAccess;
 use Closure;
 use Interop\Container\ContainerInterface as ContainerInteropInterface;
@@ -22,13 +9,11 @@ use Viserio\Container\Exception\ContainerException;
 use Viserio\Container\Exception\NotFoundException;
 use Viserio\Container\Traits\ContainerArrayAccessTrait;
 use Viserio\Container\Traits\ContainerResolverTraits;
-use Viserio\Container\Traits\MockerContainerTrait;
 use Viserio\Container\Traits\DelegateTrait;
-use Viserio\Container\Traits\DefinitionTrait;
-use Viserio\Container\Traits\ServiceProviderTrait;
+use Viserio\Container\Traits\DefinitionResolver;
+use Viserio\Container\Traits\DefinitionProviderTrait;
 use Viserio\Contracts\Container\Container as ContainerContract;
 use Viserio\Contracts\Container\WritableContainer as WritableContainerContract;
-use Interop\Container\ContainerInterface as ContainerInteropInterface;
 use InvalidArgumentException;
 use Invoker\Invoker;
 use Invoker\ParameterResolver\AssociativeArrayResolver;
@@ -36,17 +21,8 @@ use Invoker\ParameterResolver\Container\TypeHintContainerResolver;
 use Invoker\ParameterResolver\DefaultValueResolver;
 use Invoker\ParameterResolver\NumericArrayResolver;
 use Invoker\ParameterResolver\ResolverChain;
-use Serializable;
-use Opis\Closure\SerializableClosure;
 
-/**
- * Container.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.4
- */
-class Container implements ArrayAccess, Serializable, ContainerInteropInterface, ContainerContract, WritableContainerContract
+class Container implements ArrayAccess, ContainerInteropInterface, ContainerContract, WritableContainerContract
 {
     /**
      * Array Access Support
@@ -54,13 +30,13 @@ class Container implements ArrayAccess, Serializable, ContainerInteropInterface,
      * Resolver
      * Defining Sub/Nested Containers
      * ServiceProvider Support
+     * DefinitionResolver
      */
     use ContainerArrayAccessTrait,
-    MockerContainerTrait,
     ContainerResolverTraits,
     DelegateTrait,
-    ServiceProviderTrait,
-    DefinitionTrait;
+    DefinitionProviderTrait,
+    DefinitionResolver;
 
     /**
      * The registered type aliases.
@@ -451,41 +427,6 @@ class Container implements ArrayAccess, Serializable, ContainerInteropInterface,
     }
 
     /**
-     * Serialize the container
-     *
-     * @access  public
-     *
-     * @return  string
-     */
-    public function serialize()
-    {
-        SerializableClosure::enterContext();
-
-        $object = serialize(array(
-            'bindings' => $this->bindings,
-            'aliases'  => $this->aliases,
-        ));
-
-        SerializableClosure::exitContext();
-
-        return $object;
-    }
-
-    /**
-     * Deserialize the container
-     *
-     * @access  public
-     *
-     * @param   string  Serialized data
-     */
-    public function unserialize($data)
-    {
-        $object = SerializableClosure::unserializeData($data);
-        $this->bindings = $object['bindings'];
-        $this->aliases  = $object['aliases'];
-    }
-
-    /**
      * Get the alias for an abstract if available.
      *
      * @param string $alias
@@ -634,7 +575,7 @@ class Container implements ArrayAccess, Serializable, ContainerInteropInterface,
             $chain = [
                 new NumericArrayResolver,
                 new AssociativeArrayResolver,
-                new DefaultValueResolver
+                new DefaultValueResolver,
             ];
 
             $parameterResolver = new ResolverChain(array_merge($container, $chain));

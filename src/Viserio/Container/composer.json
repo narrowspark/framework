@@ -22,13 +22,14 @@
         "container-interop/container-interop" : "~1.1",
         "container-interop/definition-interop": "0.1.0",
         "PHP-DI/invoker"                      : "~1.2",
-        "opis/closure"                        : "^2.1",
+        "roave/better-reflection"             : "0.1.0",
         "viserio/support"                     : "self.version"
     },
     "require-dev": {
         "mockery/mockery"                     : "~0.9.3",
         "fabpot/php-cs-fixer"                 : "~1.10.1",
-        "phpunit/phpunit"                     : "~5.0.6"
+        "phpunit/phpunit"                     : "~5.0.6",
+        "league/container"                    : "~2.0.3"
     },
     "autoload": {
         "psr-4": {

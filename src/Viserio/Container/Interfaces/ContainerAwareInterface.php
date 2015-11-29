@@ -1,5 +1,5 @@
 <?php
-namespace Viserio\Container;
+namespace Viserio\Container\interfaces;
 
 use Interop\Container\ContainerInterface as ContainerInteropInterface;
 

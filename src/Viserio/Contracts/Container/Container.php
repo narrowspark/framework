@@ -88,13 +88,37 @@ interface Container
     public function call($callable, array $args = []);
 
     /**
-     * Register a service provider with the application.
+     * Get the definition providers to register.
+     *
+     * @return DefinitionProviderInterface[]
+     */
+    public function getDefinitionProviders();
+
+    /**
+     * Get a definition provider in particular.
      *
      * @param string $provider
-     * @param array  $options
-     * @param bool   $force
      *
-     * @return \Viserio\Contract\Application\ServiceProvider
+     * @return DefinitionProviderInterface
      */
-    public function provider($provider, $options = [], $force = false);
+    public function getDefinitionProvider($provider);
+
+    /**
+     * Set the definition providers to register.
+     *
+     * @param DefinitionProviderInterface[] $providers
+     *
+     * @return $this
+     */
+    public function setDefinitionProviders(array $providers = []);
+
+    /**
+     * Set a definition provider in particular.
+     *
+     * @param string                      $name
+     * @param DefinitionProviderInterface $provider
+     *
+     * @return $this
+     */
+    public function setDefinitionProvider($name, $provider);
 }

@@ -1,29 +1,9 @@
 <?php
 namespace Viserio\Container\Test;
 
-/**
- * Narrowspark - a PHP 5 framework.
- *
- * @author      Daniel Bannert <info@anolilab.de>
- * @copyright   2015 Daniel Bannert
- *
- * @link        http://www.narrowspark.de
- *
- * @license     http://www.narrowspark.com/license
- *
- * @version     0.10.0
- */
+use Viserio\Container\MockContainer as Container;
 
-use Viserio\Container\Container;
-
-/**
- * MockerContainerTest.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.8
- */
-class MockerContainerTest extends \PHPUnit_Framework_TestCase
+class MockContainerTest extends \PHPUnit_Framework_TestCase
 {
     private $container = null;
 
