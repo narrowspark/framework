@@ -11,7 +11,7 @@ namespace Viserio\Queue;
  *
  * @license     http://www.narrowspark.com/license
  *
- * @version     0.10.0-dev
+ * @version     0.10.0
  */
 
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -23,7 +23,7 @@ use Viserio\Contracts\Queue\Pushable as PushableContract;
  *
  * @author  Daniel Bannert
  *
- * @since   0.10-dev
+ * @since   0.10.0
  */
 abstract class Queue implements PushableContract
 {

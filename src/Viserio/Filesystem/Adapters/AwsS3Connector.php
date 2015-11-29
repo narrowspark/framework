@@ -11,7 +11,7 @@ namespace Viserio\Filesystem\Adapters;
  *
  * @license     http://www.narrowspark.com/license
  *
- * @version     0.10.0-dev
+ * @version     0.10.0
  */
 
 use Aws\S3\S3Client;
@@ -24,7 +24,7 @@ use Viserio\Support\Arr;
  *
  * @author  Daniel Bannert
  *
- * @since   0.9.3-dev
+ * @since   0.9.3
  */
 class AwsS3Connector implements ConnectorContract
 {

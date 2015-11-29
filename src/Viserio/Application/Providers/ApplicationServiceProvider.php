@@ -11,10 +11,9 @@ namespace Viserio\Application\Providers;
  *
  * @license     http://www.narrowspark.com/license
  *
- * @version     0.10.0-dev
+ * @version     0.10.0
  */
 
-use Viserio\Application\AliasLoader;
 use Viserio\Application\EnvironmentDetector;
 use Viserio\Application\ServiceProvider;
 
@@ -23,7 +22,7 @@ use Viserio\Application\ServiceProvider;
  *
  * @author  Daniel Bannert
  *
- * @since   0.9.4-dev
+ * @since   0.9.4
  */
 class ApplicationServiceProvider extends ServiceProvider
 {
@@ -77,7 +76,6 @@ class ApplicationServiceProvider extends ServiceProvider
     public function register()
     {
         $this->registerConfig();
-        $this->registerAliasLoader();
         $this->registerEntvironment();
     }
 
@@ -85,13 +83,6 @@ class ApplicationServiceProvider extends ServiceProvider
     {
         $this->app->singleton('environment', function () {
             return new EnvironmentDetector();
-        });
-    }
-
-    protected function registerAliasLoader()
-    {
-        $this->app->singleton('alias', function () {
-            return new AliasLoader();
         });
     }
 
@@ -123,6 +114,7 @@ class ApplicationServiceProvider extends ServiceProvider
     {
         return [
             'environment',
+            'config',
             'alias',
         ];
     }

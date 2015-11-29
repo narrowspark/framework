@@ -8,7 +8,7 @@ namespace Viserio\Support\Test;
  * @copyright   2015 Daniel Bannert
  * @link        http://www.narrowspark.de
  * @license     http://www.narrowspark.com/license
- * @version     0.9.6-dev
+ * @version     0.9.6
  * @package     Narrowspark/framework
  *
  * For the full copyright and license information, please view the LICENSE
@@ -25,7 +25,7 @@ use Viserio\Support\Collection;
  *
  * @author  Daniel Bannert
  *
- * @since   0.9.6-dev
+ * @since   0.9.6
  */
 class CollectionTest extends \PHPUnit_Framework_TestCase
 {
@@ -95,6 +95,23 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $c = new Collection();
 
         $this->assertTrue($c->isEmpty());
+    }
+
+    public function testAny()
+    {
+        $c = new Collection();
+        $this->assertFalse($c->any());
+
+        $c = new Collection(['foo', 'bar']);
+        $this->assertTrue($c->any());
+
+        $this->assertTrue($c->any(function ($item, $key) {
+            return $item === 'foo' && $key === 0;
+        }));
+
+        $this->assertFalse($c->any(function ($item, $key) {
+            return $item === 'foo' && $key === 1;
+        }));
     }
 
     public function testEmptyCollectionIsConstructed()

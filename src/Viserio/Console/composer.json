@@ -1,7 +1,7 @@
 {
     "name"       : "viserio/console",
     "type"       : "library",
-    "description": "Narrowspark Framework for Creative People.",
+    "description": "The Viserio Console package.",
     "keywords"   : ["framework", "narrowspark", "cli", "command", "viserio", "cerebro"],
     "license"    : "MIT",
     "homepage"   : "http://github.com/narrowspark/framework",

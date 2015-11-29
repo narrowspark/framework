@@ -11,7 +11,7 @@ namespace Viserio\Support;
  *
  * @license     http://www.narrowspark.com/license
  *
- * @version     0.10.0-dev
+ * @version     0.10.0
  */
 
 use Viserio\Contracts\Encrypter\Encrypter as EncrypterContract;
@@ -23,7 +23,7 @@ use Viserio\Contracts\Support\Jsonable;
  *
  * @author  Daniel Bannert
  *
- * @since   0.8.0-dev
+ * @since   0.8.0
  */
 class Collection implements
     \ArrayAccess,
@@ -1049,6 +1049,27 @@ class Collection implements
     public function isEmpty()
     {
         return empty($this->data);
+    }
+
+    /**
+     * Determine if there are any data that pass a given truth test.
+     *
+     * @param  callable|null  $callback
+     * @return bool
+     */
+    public function any(callable $callback = null)
+    {
+        if (is_null($callback)) {
+            return !$this->isEmpty();
+        }
+
+        foreach ($this->data as $key => $item) {
+            if ($callback($item, $key) === true) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**

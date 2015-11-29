@@ -11,7 +11,7 @@ namespace Viserio\Filesystem\Traits;
  *
  * @license     http://www.narrowspark.com/license
  *
- * @version     0.10.0-dev
+ * @version     0.10.0
  */
 
 use Symfony\Component\Finder\Finder;
@@ -21,7 +21,7 @@ use Symfony\Component\Finder\Finder;
  *
  * @author  Daniel Bannert
  *
- * @since   0.9.6-dev
+ * @since   0.9.6
  */
 trait DirectoryTrait
 {

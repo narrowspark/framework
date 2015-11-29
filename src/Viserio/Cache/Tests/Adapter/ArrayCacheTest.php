@@ -1,19 +1,17 @@
 <?php
-namespace Viserio\Test\Http;
+namespace Viserio\Cache\Tests\Adapter;
 
-/*
- * Narrowspark - a PHP 5 framework
+/**
+ * Narrowspark - a PHP 5 framework.
  *
  * @author      Daniel Bannert <info@anolilab.de>
  * @copyright   2015 Daniel Bannert
+ *
  * @link        http://www.narrowspark.de
+ *
  * @license     http://www.narrowspark.com/license
- * @version     0.10.0-dev
- * @package     Narrowspark/framework
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- *
+ * @version     0.10.0
  */
 
 use Viserio\Cache\Adapter\ArrayCache;
@@ -23,7 +21,7 @@ use Viserio\Cache\Adapter\ArrayCache;
  *
  * @author  Daniel Bannert
  *
- * @since   0.9.5-dev
+ * @since   0.9.5
  */
 class ArrayCacheTest extends \PHPUnit_Framework_TestCase
 {
@@ -47,6 +45,23 @@ class ArrayCacheTest extends \PHPUnit_Framework_TestCase
         $store->put('foo', 1, 10);
         $store->increment('foo');
         $this->assertEquals(2, $store->get('foo'));
+    }
+
+    public function testMultipleItemsCanBeSetAndRetrieved()
+    {
+        $store = new ArrayCache;
+        $store->put('foo', 'bar', 10);
+        $store->putMultiple([
+            'foobuu'  => 'buz',
+            'quz'   => 'baz'
+        ], 10);
+
+        $this->assertEquals([
+            'foo'   => 'bar',
+            'foobuu'  => 'buz',
+            'quz'   => 'baz',
+            'foobar'  => null
+        ], $store->getMultiple(['foo', 'foobuu', 'quz','foobar']));
     }
 
     public function testValuesCanBeDecremented()

@@ -11,7 +11,7 @@ namespace Viserio\Contracts\View;
  *
  * @license     http://www.narrowspark.com/license
  *
- * @version     0.10.0-dev
+ * @version     0.10.0
  */
 
 /**
@@ -19,7 +19,7 @@ namespace Viserio\Contracts\View;
  *
  * @author  Daniel Bannert
  *
- * @since   0.9.5-dev
+ * @since   0.9.5
  */
 interface Engine
 {

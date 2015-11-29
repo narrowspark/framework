@@ -11,7 +11,7 @@ namespace Viserio\Support\Debug;
  *
  * @license     http://www.narrowspark.com/license
  *
- * @version     0.10.0-dev
+ * @version     0.10.0
  */
 
 use Symfony\Component\VarDumper\Cloner\VarCloner;
@@ -22,7 +22,7 @@ use Symfony\Component\VarDumper\Dumper\CliDumper;
  *
  * @author  Daniel Bannert
  *
- * @since   0.9.5-dev
+ * @since   0.9.5
  */
 class Dumper
 {
@@ -35,8 +35,11 @@ class Dumper
      */
     public function dump($value)
     {
-        $cloner = new VarCloner();
-        $dumper = 'cli' === PHP_SAPI ? new CliDumper() : new HtmlDumper();
-        $dumper->dump($cloner->cloneVar($value));
+        if (class_exists(CliDumper::class)) {
+            $dumper = 'cli' === PHP_SAPI ? new CliDumper : new HtmlDumper;
+            $dumper->dump((new VarCloner)->cloneVar($value));
+        } else {
+            var_dump($value);
+        }
     }
 }

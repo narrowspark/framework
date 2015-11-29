@@ -11,7 +11,7 @@ namespace Viserio\Support\Providers;
  *
  * @license     http://www.narrowspark.com/license
  *
- * @version     0.10.0-dev
+ * @version     0.10.0
  */
 
 use RandomLib\Factory as RandomLib;
@@ -20,13 +20,14 @@ use Viserio\Support\Arr;
 use Viserio\Support\Helper;
 use Viserio\Support\StaticalProxyResolver;
 use Viserio\Support\Str;
+use Viserio\Support\AliasLoader;
 
 /**
  * SupportServiceProvider.
  *
  * @author  Daniel Bannert
  *
- * @since   0.9.2-dev
+ * @since   0.9.2
  */
 class SupportServiceProvider extends ServiceProvider
 {
@@ -39,6 +40,7 @@ class SupportServiceProvider extends ServiceProvider
         $this->registerArr();
         $this->registerStr();
         $this->registerStaticalProxyResolver();
+        $this->registerAliasLoader();
     }
 
     /**
@@ -114,6 +116,13 @@ class SupportServiceProvider extends ServiceProvider
             $generator = sprintf('get%sStrengthGenerator', $generatorStrength);
 
             return $app->get('rand')->$generator();
+        });
+    }
+
+    protected function registerAliasLoader()
+    {
+        $this->app->singleton('alias', function () {
+            return new AliasLoader();
         });
     }
 

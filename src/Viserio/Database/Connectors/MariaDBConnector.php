@@ -11,7 +11,7 @@ namespace Viserio\Database\Connectors;
  *
  * @license     http://www.narrowspark.com/license
  *
- * @version     0.10.0-dev
+ * @version     0.10.0
  */
 
 /**
@@ -19,7 +19,7 @@ namespace Viserio\Database\Connectors;
  *
  * @author  Daniel Bannert
  *
- * @since   0.9.2-dev
+ * @since   0.9.2
  */
 class MariaDBConnector extends MySqlConnector
 {

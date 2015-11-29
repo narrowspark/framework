@@ -11,7 +11,7 @@ namespace Viserio\Console\Command;
  *
  * @license     http://www.narrowspark.com/license
  *
- * @version     0.10.0-dev
+ * @version     0.10.0
  */
 use Viserio\Container\ContainerAwareTrait;
 use Viserio\Console\Style\NarrowsparkStyle;
@@ -26,7 +26,7 @@ use Symfony\Component\Console\Question\Question;
  *
  * @author  Daniel Bannert
  *
- * @since   0.9.4-dev
+ * @since   0.9.4
  */
 abstract class Command extends BaseCommand
 {

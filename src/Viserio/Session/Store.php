@@ -11,7 +11,7 @@ namespace Viserio\Session;
  *
  * @license     http://www.narrowspark.com/license
  *
- * @version     0.10.0-dev
+ * @version     0.10.0
  */
 
 use Symfony\Component\HttpFoundation\Request;
@@ -26,7 +26,7 @@ use Viserio\Support\Arr;
  *
  * @author  Daniel Bannert
  *
- * @since   0.9.4-dev
+ * @since   0.9.4
  */
 class Store implements SessionInterface
 {

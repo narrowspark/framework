@@ -11,7 +11,7 @@ namespace Viserio\Support;
  *
  * @license     http://www.narrowspark.com/license
  *
- * @version     0.10.0-dev
+ * @version     0.10.0
  */
 
 use Viserio\Container\ContainerAwareTrait;
@@ -22,7 +22,7 @@ use Viserio\Contracts\Config\Manager as ConfigManager;
  *
  * @author  Daniel Bannert
  *
- * @since   0.10.0-dev
+ * @since   0.10.0
  */
 abstract class Manager
 {

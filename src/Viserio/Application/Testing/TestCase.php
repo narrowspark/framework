@@ -11,7 +11,7 @@ namespace Viserio\Application\Testing;
  *
  * @license     http://www.narrowspark.com/license
  *
- * @version     0.10.0-dev
+ * @version     0.10.0
  */
 
 use Viserio\Application\Testing\Traits\ApplicationTrait;
@@ -22,7 +22,7 @@ use Viserio\Contracts\Application\Test as TestCaseContract;
  *
  * @author  Daniel Bannert
  *
- * @since   0.9.7-dev
+ * @since   0.9.7
  */
 abstract class TestCase extends \PHPUnit_Framework_TestCase implements TestCaseContract
 {

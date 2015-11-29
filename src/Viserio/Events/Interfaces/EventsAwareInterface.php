@@ -11,7 +11,7 @@ namespace Viserio\Events\Interfaces;
  *
  * @license     http://www.narrowspark.com/license
  *
- * @version     0.10.0-dev
+ * @version     0.10.0
  */
 
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -21,7 +21,7 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
  *
  * @author  Daniel Bannert
  *
- * @since   0.9.5-dev
+ * @since   0.9.5
  */
 interface EventsAwareInterface
 {

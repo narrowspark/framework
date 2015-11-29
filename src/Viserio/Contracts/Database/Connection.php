@@ -11,7 +11,7 @@ namespace Viserio\Contracts\Database;
  *
  * @license     http://www.narrowspark.com/license
  *
- * @version     0.10.0-dev
+ * @version     0.10.0
  */
 
 use Viserio\Contracts\Cache\Factory as CacheContract;
@@ -21,7 +21,7 @@ use Viserio\Contracts\Cache\Factory as CacheContract;
  *
  * @author  Daniel Bannert
  *
- * @since   0.9.4-dev
+ * @since   0.9.4
  */
 interface Connection
 {

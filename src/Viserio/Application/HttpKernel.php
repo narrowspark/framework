@@ -11,7 +11,7 @@ namespace Viserio\Application;
  *
  * @license     http://www.narrowspark.com/license
  *
- * @version     0.10.0-dev
+ * @version     0.10.0
  */
 
 use Symfony\Component\HttpFoundation\Request as SymfonyRequest;
@@ -31,7 +31,7 @@ use Symfony\Component\HttpKernel\TerminableInterface;
  *
  * @author  Daniel Bannert
  *
- * @since   0.9.5-dev
+ * @since   0.9.5
  */
 class HttpKernel implements HttpKernelInterface, TerminableInterface
 {

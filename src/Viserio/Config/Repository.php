@@ -11,7 +11,7 @@ namespace Viserio\Config;
  *
  * @license     http://www.narrowspark.com/license
  *
- * @version     0.10.0-dev
+ * @version     0.10.0
  */
 
 use Viserio\Contracts\Config\Repository as RepositoryContract;
@@ -25,7 +25,7 @@ use Viserio\Support\Arr;
  *
  * @author  Daniel Bannert
  *
- * @since   0.8.0-dev
+ * @since   0.8.0
  */
 class Repository implements RepositoryContract
 {
@@ -55,7 +55,6 @@ class Repository implements RepositoryContract
      * Merge provided values with the defaults to ensure all required values are set.
      *
      * @param array $values
-     * @required
      */
     public function setArray(array $values = [])
     {
@@ -208,7 +207,7 @@ class Repository implements RepositoryContract
         $keys = $this->parseKey($key, $this->separator);
 
         while (count($keys) > 0 && $array !== null) {
-            $key = array_shift($keys);
+            $key   = array_shift($keys);
             $array = isset($array[$key]) ? $array[$key] : null;
         }
 

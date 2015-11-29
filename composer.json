@@ -2,7 +2,17 @@
     "name"       : "narrowspark/framework",
     "type"       : "framework",
     "description": "Narrowspark Framework for Creative People.",
-    "keywords"   : ["framework", "narrowspark", "http", "request", "response", "viserio", "container"],
+    "keywords"   : [
+        "framework",
+        "narrowspark",
+        "http",
+        "request",
+        "response",
+        "viserio",
+        "container",
+        "pipeline",
+        "event"
+    ],
     "license"    : "MIT",
     "homepage"   : "https://github.com/narrowspark/framework",
     "support"    : {
@@ -24,7 +34,7 @@
         "ext-mbstring"                        : "*",
         "classpreloader/classpreloader"       : "~2.0|~3.0",
         "container-interop/container-interop" : "~1.1",
-        "container-interop/definition-interop": "dev-master",
+        "container-interop/definition-interop": "0.1.0r",
         "cekurte/environment"                 : "~0.1",
         "danielstjules/stringy"               : "~2.1.0",
         "filp/whoops"                         : "~1.1.7",
@@ -32,7 +42,6 @@
         "league/flysystem"                    : "~1.0.15",
         "monolog/monolog"                     : "~1.17.2",
         "PHP-DI/invoker"                      : "~1.2",
-        "opis/closure"                        : "^2.1",
         "nesbot/carbon"                       : "~1.21",
         "nikic/fast-route"                    : "~0.6",
         "psy/psysh"                           : "~0.6",
@@ -46,7 +55,9 @@
         "symfony/var-dumper"                  : "~2.8|~3.0",
         "swiftmailer/swiftmailer"             : "~5.4",
         "stack/builder"                       : "~1.0.3",
-        "vlucas/phpdotenv"                    : "~2.1.0"
+        "vlucas/phpdotenv"                   : "~2.1.0",
+        "symfony/polyfill-php70"             : "~1.0",
+        "paragonie/password_lock"            : "~1.1.0"
     },
     "replace": {
         "viserio/cache"                       : "self.version",
@@ -64,6 +75,7 @@
         "viserio/http"                        : "self.version",
         "viserio/log"                         : "self.version",
         "viserio/mail"                        : "self.version",
+        "viserio/pipeline"                    : "self.version",
         "viserio/routing"                     : "self.version",
         "viserio/session"                     : "self.version",
         "viserio/support"                     : "self.version",

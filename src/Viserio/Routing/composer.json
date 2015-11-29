@@ -1,7 +1,7 @@
 {
     "name"       : "viserio/routing",
     "type"       : "library",
-    "description": "Narrowspark Framework for Creative People.",
+    "description": "The Viserio Routing package.",
     "keywords"   : ["viserio", "narrowspark", "route", "FastRoute", "dispatcher"],
     "license"    : "MIT",
     "homepage"   : "http://github.com/narrowspark/framework",

@@ -11,7 +11,7 @@ namespace Viserio\Contracts\Queue;
  *
  * @license     http://www.narrowspark.com/license
  *
- * @version     0.9.7-dev
+ * @version     0.9.7
  */
 
 /**
@@ -19,7 +19,7 @@ namespace Viserio\Contracts\Queue;
  *
  * @author  Daniel Bannert
  *
- * @since   0.9.7-dev
+ * @since   0.9.7
  */
 interface Consumer
 {

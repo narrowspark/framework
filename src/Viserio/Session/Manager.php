@@ -11,7 +11,7 @@ namespace Viserio\Session;
  *
  * @license     http://www.narrowspark.com/license
  *
- * @version     0.10.0-dev
+ * @version     0.10.0
  */
 
 /**
@@ -19,7 +19,7 @@ namespace Viserio\Session;
  *
  * @author  Daniel Bannert
  *
- * @since   0.8.0-dev
+ * @since   0.8.0
  */
 class Manager
 {

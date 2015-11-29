@@ -11,7 +11,7 @@ namespace Viserio\Contracts\Cache;
  *
  * @license     http://www.narrowspark.com/license
  *
- * @version     0.10.0-dev
+ * @version     0.10.0
  */
 
 /**
@@ -19,7 +19,7 @@ namespace Viserio\Contracts\Cache;
  *
  * @author  Daniel Bannert
  *
- * @since   0.9.4-dev
+ * @since   0.9.4
  */
 interface Adapter
 {
@@ -71,6 +71,16 @@ interface Adapter
      * @return null|bool
      */
     public function put($key, $value, $minutes);
+
+    /**
+     * Store multiple items in the cache for a set number of minutes.
+     *
+     * @param array $values array of key => value pairs
+     * @param int   $minutes
+     *
+     * @return void
+     */
+    public function putMultiple(array $values, $minutes);
 
     /**
      * Increment the value of an item in the cache.

@@ -1,32 +1,28 @@
 <?php
 namespace Viserio\Config\Test;
 
-/*
- * Narrowspark - a PHP 5 framework
+/**
+ * Narrowspark - a PHP 5 framework.
  *
  * @author      Daniel Bannert <info@anolilab.de>
  * @copyright   2015 Daniel Bannert
+ *
  * @link        http://www.narrowspark.de
+ *
  * @license     http://www.narrowspark.com/license
- * @version     0.10.0-dev
- * @package     Narrowspark/framework
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- *
+ * @version     0.10.0
  */
 
 use Viserio\Config\Manager as ConfigManager;
 use Viserio\Config\Repository;
-use Viserio\Filesystem\FileLoader;
-use Viserio\Filesystem\Filesystem;
 
 /**
  * ConfigManagerTest.
  *
  * @author  Daniel Bannert
  *
- * @since   0.9.6-dev
+ * @since   0.9.6
  */
 class ConfigManagerTest extends \PHPUnit_Framework_TestCase
 {
@@ -60,9 +56,9 @@ class ConfigManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testGetDefaultValues()
     {
-        $config = $this->getConfig();
-
+        $config   = $this->getConfig();
         $defaults = $config->getDefaults();
+
         foreach ($this->defaults as $key => $value) {
             $this->assertEquals($defaults[$key], $value);
         }
@@ -74,19 +70,13 @@ class ConfigManagerTest extends \PHPUnit_Framework_TestCase
 
         $defaultKeys = array_keys($this->defaults);
         $defaultKeys = ksort($defaultKeys);
-        $configKeys = $config->callHandlerMethod('getKeys');
-        $configKeys = ksort($configKeys);
+        $configKeys  = $config->callHandlerMethod('getKeys');
+        $configKeys  = ksort($configKeys);
         $this->assertEquals($defaultKeys, $configKeys);
     }
 
     protected function getConfig()
     {
-        return new ConfigManager(
-                new Repository(),
-                new FileLoader(
-                    new Filesystem(),
-                    ''
-                )
-            );
+        return new ConfigManager(new Repository());
     }
 }

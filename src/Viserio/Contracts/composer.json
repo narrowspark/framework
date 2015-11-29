@@ -1,7 +1,7 @@
 {
-    "name"       : "narrowspark/contracts",
+    "name"       : "viserio/contracts",
     "type"       : "library",
-    "description": "Narrowspark Framework for Creative People.",
+    "description": "The Viserio Contracts package.",
     "keywords"   : ["framework", "narrowspark", "contracts", "interfaces"],
     "license"    : "MIT",
     "homepage"   : "http://github.com/narrowspark/framework",

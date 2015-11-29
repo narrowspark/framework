@@ -11,7 +11,7 @@ namespace Viserio\Translator\Providers;
  *
  * @license     http://www.narrowspark.com/license
  *
- * @version     0.10.0-dev
+ * @version     0.10.0
  */
 
 use Viserio\Application\ServiceProvider;
@@ -23,7 +23,7 @@ use Viserio\Translator\PluralizationRules;
  *
  * @author  Daniel Bannert
  *
- * @since   0.8.0-dev
+ * @since   0.8.0
  */
 class TranslatorServiceProvider extends ServiceProvider
 {

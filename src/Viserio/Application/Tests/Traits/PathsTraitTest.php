@@ -1,5 +1,5 @@
 <?php
-namespace Viserio\Application\Test\Traits;
+namespace Viserio\Application\Tests\Traits;
 
 /**
  * Narrowspark - a PHP 5 framework.
@@ -11,7 +11,7 @@ namespace Viserio\Application\Test\Traits;
  *
  * @license     http://www.narrowspark.com/license
  *
- * @version     0.10.0-dev
+ * @version     0.10.0
  */
 
 /**
@@ -19,7 +19,7 @@ namespace Viserio\Application\Test\Traits;
  *
  * @author  Daniel Bannert
  *
- * @since   0.9.8-dev
+ * @since   0.9.8
  */
 class PathsTraitTest extends \PHPUnit_Framework_TestCase
 {

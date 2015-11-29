@@ -1,11 +1,15 @@
 {
-    "name": "viserio/session",
-    "type": "library",
-    "description": "Narrowspark Framework for Creative People.",
-    "keywords": ["narrowspark", "viserio", "session"],
-    "license": "MIT",
-    "homepage": "http://github.com/n-Viserio/session",
-    "authors": [
+    "name"       : "viserio/session",
+    "type"       : "library",
+    "description": "The Viserio Session package.",
+    "keywords"   : ["narrowspark", "viserio", "cookie", "encrypter", "session"],
+    "license"    : "MIT",
+    "homepage"   : "http://github.com/Narrowspark/session",
+    "support"    : {
+        "issues": "https://github.com/narrowspark/framework/issues",
+        "source": "https://github.com/narrowspark/framework"
+    },
+    "authors"    : [
         {
           "name"    : "Daniel Bannert",
           "email"   : "d.bannert@anolilab.de",

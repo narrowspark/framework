@@ -11,12 +11,12 @@ namespace Viserio\Config;
  *
  * @license     http://www.narrowspark.com/license
  *
- * @version     0.10.0-dev
+ * @version     0.10.0
  */
 
 use Viserio\Contracts\Config\Manager as ManagerContract;
 use Viserio\Contracts\Config\Repository as RepositoryContract;
-use Viserio\Filesystem\FileLoader;
+use Viserio\Contracts\Filesystem\Loader as LoaderContract;
 
 /**
  * Manager.
@@ -26,7 +26,7 @@ use Viserio\Filesystem\FileLoader;
  *
  * @author  Daniel Bannert
  *
- * @since   0.8.0-dev
+ * @since   0.8.0
  */
 class Manager implements ManagerContract, \IteratorAggregate
 {
@@ -40,7 +40,7 @@ class Manager implements ManagerContract, \IteratorAggregate
     /**
      * Fileloader instance.
      *
-     * @var mixed
+     * @var \Viserio\Contracts\Filesystem\Loader
      */
     protected $loader;
 
@@ -55,12 +55,10 @@ class Manager implements ManagerContract, \IteratorAggregate
      * Constructor.
      *
      * @param RepositoryContract $repository
-     * @param FileLoader         $loader
      */
-    public function __construct(RepositoryContract $repository, FileLoader $loader)
+    public function __construct(RepositoryContract $repository)
     {
         $this->setHandler($repository);
-        $this->loader = $loader;
     }
 
     /**
@@ -96,7 +94,21 @@ class Manager implements ManagerContract, \IteratorAggregate
     /**
      * Get the configuration loader.
      *
-     * @return \Viserio\Filesystem\FileLoader
+     * @param \Viserio\Contracts\Filesystem\Loader $loader
+     *
+     * @return \Viserio\Contracts\Filesystem\Loader
+     */
+    public function setLoader(LoaderContract $loader)
+    {
+        $this->loader = $loader;
+
+        return $this;
+    }
+
+    /**
+     * Get the configuration loader.
+     *
+     * @return \Viserio\Contracts\Filesystem\Loader
      */
     public function getLoader()
     {
@@ -111,13 +123,15 @@ class Manager implements ManagerContract, \IteratorAggregate
      * @param string|null $environment
      * @param string|null $group
      *
-     * @return array|null
+     * @return self
      */
     public function bind($file, $group = null, $environment = null, $namespace = null)
     {
-        $config = $this->loader->load($file, $group, $environment, $namespace);
+        $config = $this->getLoader()->load($file, $group, $environment, $namespace);
 
         $this->setArray($config);
+
+        return $this;
     }
 
     /**
@@ -133,7 +147,7 @@ class Manager implements ManagerContract, \IteratorAggregate
      */
     public function cascadePackage($file, $package = null, $group = null, $env = null, $items = null)
     {
-        return $this->loader->cascadePackage($file, $package, $group, $env, $items);
+        return $this->getLoader()->cascadePackage($file, $package, $group, $env, $items);
     }
 
     /**
@@ -199,7 +213,7 @@ class Manager implements ManagerContract, \IteratorAggregate
     public function addPath($path)
     {
         $this->path = $path;
-        $this->loader->addDefaultPath($path);
+        $this->getLoader()->addDefaultPath($path);
 
         return $this;
     }

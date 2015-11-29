@@ -11,7 +11,7 @@ namespace Viserio\Exception\Adapter;
  *
  * @license     http://www.narrowspark.com/license
  *
- * @version     0.10.0-dev
+ * @version     0.10.0
  */
 
 use Symfony\Component\HttpFoundation\Response;
@@ -23,7 +23,7 @@ use Viserio\Contracts\Http\HttpExceptionInterface;
  *
  * @author  Daniel Bannert
  *
- * @since   0.9.4-dev
+ * @since   0.9.4
  */
 class PlainDisplayer implements Adapter
 {

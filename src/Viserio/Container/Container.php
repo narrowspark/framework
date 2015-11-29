@@ -11,7 +11,7 @@ namespace Viserio\Container;
  *
  * @license     http://www.narrowspark.com/license
  *
- * @version     0.10.0-dev
+ * @version     0.10.0
  */
 
 use ArrayAccess;
@@ -44,7 +44,7 @@ use Opis\Closure\SerializableClosure;
  *
  * @author  Daniel Bannert
  *
- * @since   0.9.4-dev
+ * @since   0.9.4
  */
 class Container implements ArrayAccess, Serializable, ContainerInteropInterface, ContainerContract, WritableContainerContract
 {

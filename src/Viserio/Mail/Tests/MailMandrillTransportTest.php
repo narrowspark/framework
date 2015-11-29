@@ -11,7 +11,7 @@ namespace Viserio\Mail\Test;
  *
  * @license     http://www.narrowspark.com/license
  *
- * @version     0.10.0-dev
+ * @version     0.10.0
  */
 
 use Viserio\Mail\Transport\Mandrill;
@@ -21,7 +21,7 @@ use Viserio\Mail\Transport\Mandrill;
  *
  * @author  Daniel Bannert
  *
- * @since   0.9.5-dev
+ * @since   0.9.5
  */
 class MailMandrillTransportTest extends \PHPUnit_Framework_TestCase
 {

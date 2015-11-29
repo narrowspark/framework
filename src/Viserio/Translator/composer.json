@@ -1,10 +1,10 @@
 {
     "name"       : "viserio/translator",
     "type"       : "library",
-    "description": "Narrowspark Framework for Creative People.",
+    "description": "The Viserio Translator package.",
     "keywords"   : ["narrowspark", "viserio", "translator"],
     "license"    : "MIT",
-    "homepage"   : "http://github.com/n-Viserio/translator",
+    "homepage"   : "http://github.com/Narrowspark/translator",
     "support"    : {
         "issues": "https://github.com/narrowspark/framework/issues",
         "source": "https://github.com/narrowspark/framework"

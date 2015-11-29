@@ -11,7 +11,7 @@ namespace Viserio\Test\Http\JsonResponse;
  *
  * @license     http://www.narrowspark.com/license
  *
- * @version     0.9.7-dev
+ * @version     0.9.7
  */
 
 use Viserio\Http\JsonResponse\RawJsonResponse;
@@ -21,7 +21,7 @@ use Viserio\Http\JsonResponse\RawJsonResponse;
  *
  * @author  Daniel Bannert
  *
- * @since   0.9.8-dev
+ * @since   0.9.8
  */
 class RawJsonResponseTest extends \PHPUnit_Framework_TestCase
 {

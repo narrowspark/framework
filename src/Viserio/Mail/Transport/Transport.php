@@ -11,7 +11,7 @@ namespace Viserio\Mail\Transport;
  *
  * @license     http://www.narrowspark.com/license
  *
- * @version     0.10.0-dev
+ * @version     0.10.0
  */
 
 use Swift_Events_EventListener;
@@ -24,7 +24,7 @@ use Swift_Transport;
  *
  * @author  Daniel Bannert
  *
- * @since   0.10.0-dev
+ * @since   0.10.0
  */
 abstract class Transport implements Swift_Transport
 {

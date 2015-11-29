@@ -11,7 +11,7 @@ namespace Viserio\Cache\Adapter;
  *
  * @license     http://www.narrowspark.com/license
  *
- * @version     0.10.0-dev
+ * @version     0.10.0
  */
 
 use Predis\Client as Client;
@@ -24,7 +24,7 @@ use Viserio\Contracts\Cache\Adapter as AdapterContract;
  *
  * @author  Daniel Bannert
  *
- * @since   0.8.0-dev
+ * @since   0.8.0
  */
 class RedisCache extends TaggableStore implements AdapterContract
 {
@@ -147,6 +147,33 @@ class RedisCache extends TaggableStore implements AdapterContract
     }
 
     /**
+     * Retrieve multiple items from the cache by key,
+     * items not found in the cache will have a null value for the key.
+     *
+     * @param string[] $keys
+     *
+     * @return array
+     */
+    public function getMultiple(array $keys)
+    {
+        $returnValues = [];
+        $prefixedKeys = [];
+
+        foreach ($keys as $keyToPrefix) {
+            $prefixedKeys[] = $this->prefix.$keyToPrefix;
+        }
+
+        $cacheValues = $this->connection()->mget($prefixedKeys);
+
+        foreach ($cacheValues as $i => $value) {
+            $key = $keys[$i];
+            $returnValues[$key] = is_numeric($value) ? $value : unserialize($value);
+        }
+
+        return $returnValues;
+    }
+
+    /**
      * Store an item in the cache for a given number of minutes.
      *
      * @param string $key
@@ -160,6 +187,24 @@ class RedisCache extends TaggableStore implements AdapterContract
         $value = is_numeric($value) ? $value : serialize($value);
 
         $this->connection()->setex($this->prefix.$key, $minutes * 60, $value);
+    }
+
+    /**
+     * Store multiple items in the cache for a set number of minutes.
+     *
+     * @param array $values array of key => value pairs
+     * @param int   $minutes
+     * @return void
+     */
+    public function putMultiple(array $values, $minutes)
+    {
+        $this->connection()->multi();
+
+        foreach ($values as $key => $singleValue) {
+            $this->put($key, $singleValue, $minutes);
+        }
+
+        $this->connection()->exec();
     }
 
     /**

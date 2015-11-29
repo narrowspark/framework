@@ -1,5 +1,5 @@
 <?php
-namespace Viserio\Application;
+namespace Viserio\Support;
 
 /**
  * Narrowspark - a PHP 5 framework.
@@ -11,7 +11,7 @@ namespace Viserio\Application;
  *
  * @license     http://www.narrowspark.com/license
  *
- * @version     0.10.0-dev
+ * @version     0.10.0
  */
 
 /**
@@ -19,7 +19,7 @@ namespace Viserio\Application;
  *
  * @author  Daniel Bannert
  *
- * @since   0.9.3-dev
+ * @since   0.9.3
  */
 class AliasLoader
 {

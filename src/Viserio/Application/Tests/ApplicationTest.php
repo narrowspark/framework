@@ -1,5 +1,5 @@
 <?php
-namespace Viserio\Application\Test;
+namespace Viserio\Application\Tests;
 
 /**
  * Narrowspark - a PHP 5 framework.
@@ -11,7 +11,7 @@ namespace Viserio\Application\Test;
  *
  * @license     http://www.narrowspark.com/license
  *
- * @version     0.10.0-dev
+ * @version     0.10.0
  */
 
 use Viserio\Application\Application;
@@ -21,7 +21,7 @@ use Viserio\Application\Application;
  *
  * @author  Daniel Bannert
  *
- * @since   0.9.5-dev
+ * @since   0.9.5
  */
 class ApplicationTest extends \PHPUnit_Framework_TestCase
 {

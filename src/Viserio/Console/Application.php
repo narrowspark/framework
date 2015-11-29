@@ -11,7 +11,7 @@ namespace Viserio\Console;
  *
  * @license     http://www.narrowspark.com/license
  *
- * @version     0.10.0-dev
+ * @version     0.10.0
  */
 
 use Interop\Container\ContainerInterface as ContainerContract;
@@ -36,7 +36,7 @@ use Viserio\Console\Input\InputOption;
  *
  * @author  Daniel Bannert
  *
- * @since   0.9.4-dev
+ * @since   0.9.4
  */
 class Application extends SymfonyConsole
 {

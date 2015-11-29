@@ -1,7 +1,7 @@
 {
     "name"       : "viserio/support",
     "type"       : "library",
-    "description": "Narrowspark Framework for Creative People.",
+    "description": "The Viserio Support package.",
     "keywords"   : ["framework", "narrowspark", "support", "viserio", "env", "manager", "dumper"],
     "license"    : "MIT",
     "homepage"   : "http://github.com/narrowspark/framework",
@@ -47,7 +47,7 @@
         }
     },
     "suggest": {
-        "symfony/var-dumper"                 : "Required to use the Helper::dd() (~2.8|~3.0).",
+        "symfony/var-dumper"                 : "Improves the Helper::dump() (~2.8|~3.0).",
         "cekurte/environment"                : "Required to use the Helper::env() (~0.1)."
     },
     "minimum-stability"                      : "dev",

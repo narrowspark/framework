@@ -11,7 +11,7 @@ namespace Viserio\Routing;
  *
  * @license     http://www.narrowspark.com/license
  *
- * @version     0.10.0-dev
+ * @version     0.10.0
  */
 
 use Viserio\Contracts\Routing\CustomStrategy;
@@ -21,7 +21,7 @@ use Viserio\Contracts\Routing\CustomStrategy;
  *
  * @author  Daniel Bannert
  *
- * @since   0.9.4-dev
+ * @since   0.9.4
  */
 trait RouteStrategyTrait
 {

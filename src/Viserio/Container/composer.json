@@ -20,7 +20,7 @@
     "require": {
         "php"                                 : ">=5.6",
         "container-interop/container-interop" : "~1.1",
-        "container-interop/definition-interop": "dev-master",
+        "container-interop/definition-interop": "0.1.0",
         "PHP-DI/invoker"                      : "~1.2",
         "opis/closure"                        : "^2.1",
         "viserio/support"                     : "self.version"

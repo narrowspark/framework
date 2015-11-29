@@ -11,7 +11,7 @@ namespace Viserio\Loop;
  *
  * @license     http://www.narrowspark.com/license
  *
- * @version     0.10.0-dev
+ * @version     0.10.0
  */
 
 use Viserio\Contracts\Loop\Loop as LoopContract;
@@ -25,7 +25,7 @@ use Viserio\Support\Manager;
  *
  * @author  Daniel Bannert
  *
- * @since   0.10.0-dev
+ * @since   0.10.0
  */
 class LoopManager extends Manager
 {
