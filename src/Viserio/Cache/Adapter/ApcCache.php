@@ -14,9 +14,9 @@ namespace Viserio\Cache\Adapter;
  * @version     0.10.0
  */
 
+use Viserio\Cache\Adapter\Traits\MultipleTrait;
 use Viserio\Cache\Store\TaggableStore;
 use Viserio\Contracts\Cache\Adapter as AdapterContract;
-use Viserio\Cache\Adapter\Traits\MultipleTrait;
 
 /**
  * ApcCache.

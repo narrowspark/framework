@@ -32,7 +32,6 @@ class TransportManager extends Manager
      */
     public function setDefaultDriver($name)
     {
-
     }
 
     /**
@@ -42,6 +41,5 @@ class TransportManager extends Manager
      */
     public function getDefaultDriver()
     {
-
     }
 }

@@ -14,10 +14,10 @@ namespace Viserio\View\Engines\Adapter;
  * @version     0.10.0
  */
 
-use Viserio\Contracts\View\Engine as EnginesContract;
 use MtHaml\Environment;
 use MtHaml\Support\Twig\Extension;
 use MtHaml\Support\Twig\Loader;
+use Viserio\Contracts\View\Engine as EnginesContract;
 
 /**
  * HamlTwig.
