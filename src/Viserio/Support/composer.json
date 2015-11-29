@@ -47,7 +47,7 @@
         }
     },
     "suggest": {
-        "symfony/var-dumper"                 : "Required to use the Helper::dd() (~2.8|~3.0).",
+        "symfony/var-dumper"                 : "Improves the Helper::dump() (~2.8|~3.0).",
         "cekurte/environment"                : "Required to use the Helper::env() (~0.1)."
     },
     "minimum-stability"                      : "dev",

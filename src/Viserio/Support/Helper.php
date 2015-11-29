@@ -241,7 +241,7 @@ class Helper
      */
     public static function env($key, $default = null)
     {
-        return Environment::get($key);
+        return Environment::get($key) ?: $default;
     }
 
     /**

@@ -35,8 +35,11 @@ class Dumper
      */
     public function dump($value)
     {
-        $cloner = new VarCloner();
-        $dumper = 'cli' === PHP_SAPI ? new CliDumper() : new HtmlDumper();
-        $dumper->dump($cloner->cloneVar($value));
+        if (class_exists(CliDumper::class)) {
+            $dumper = 'cli' === PHP_SAPI ? new CliDumper : new HtmlDumper;
+            $dumper->dump((new VarCloner)->cloneVar($value));
+        } else {
+            var_dump($value);
+        }
     }
 }
