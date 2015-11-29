@@ -47,4 +47,76 @@ class MockContainer extends Container
     {
         return $this->mockedServices;
     }
+
+    /**
+     * Gets a parameter or an object.
+     *
+     * @param string $alias
+     *
+     * @return mixed The value of the parameter or an object
+     */
+    public function offsetGet($alias)
+    {
+        $alias = $this->normalize($alias);
+
+        if (isset($this->mockedServices['mock::'.$alias])) {
+            return $this->mockedServices['mock::'.$alias];
+        }
+
+        if ($this->hasInDelegate($alias)) {
+            return $this->getFromDelegate($alias);
+        }
+
+        if (!$this->isSingleton($alias) && isset($this->interopDefinitions[$alias])) {
+            $this->singletons[$alias] = $this->resolveDefinition($this->interopDefinitions[$alias]);
+        }
+
+        return $this->make($alias);
+    }
+
+    /**
+     * Checks if a parameter or an object is set.
+     *
+     * @param string $alias
+     *
+     * @return bool
+     */
+    public function offsetExists($alias)
+    {
+        $alias = $this->normalize($alias);
+
+        if (
+            isset($this->keys[$alias]) ||
+            isset($this->mockedServices['mock::'.$alias]) ||
+            isset($this->interopDefinitions[$alias])
+        ) {
+            return true;
+        }
+
+        return $this->hasInDelegate($alias);
+    }
+
+    /**
+     * Unsets a parameter or an object.
+     *
+     * @param string $alias
+     *
+     * @return string|null $alias The unique identifier for the parameter or object
+     */
+    public function offsetUnset($alias)
+    {
+        $alias = $this->normalize($alias);
+
+        if (isset($this->keys[$alias])) {
+            unset(
+                $this->aliases[$alias],
+                $this->bindings[$alias],
+                $this->singletons[$alias],
+                $this->frozen[$alias],
+                $this->values[$alias],
+                $this->keys[$alias],
+                $this->mockedServices['mock::'.$alias]
+            );
+        }
+    }
 }

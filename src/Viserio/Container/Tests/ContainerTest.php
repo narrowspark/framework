@@ -1,5 +1,5 @@
 <?php
-namespace Viserio\Container\Test;
+namespace Viserio\Container\Tests;
 
 use Viserio\Container\Container;
 
@@ -234,79 +234,17 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
     public function testContextualBindingOnMethods()
     {
         $container = new Container;
-        $container->when("ContainerTestInterfaceStub")->needs("IContainerContractStub")->give("ContainerImplementationStub");
+        $container->when("Viserio\Container\Tests\Fixture\ContainerTestInterfaceStub")
+            ->needs("Viserio\Container\Tests\Fixture\ContainerContractStub")
+            ->give("Viserio\Container\Tests\Fixture\ContainerImplementationStub");
 
          // Works if using constructor
-        $constructor = $container->make('ContainerTestInterfaceStub');
+        $constructor = $container->make('Viserio\Container\Tests\Fixture\ContainerTestInterfaceStub');
         $result = $constructor->getStub();
-        $this->assertInstanceOf("ContainerImplementationStub", $result);
+        $this->assertInstanceOf("Viserio\Container\Tests\Fixture\ContainerImplementationStub", $result);
 
          // Doesn't work if using methods
-        $result = $container->call('ContainerTestInterfaceStub@go');
-        $this->assertInstanceOf("ContainerImplementationStub", $result);
-    }
-}
-
-class ContainerConcreteStub
-{
-}
-
-class ContainerCircularReferenceStubA
-{
-    public function __construct(ContainerCircularReferenceStubB $b)
-    {
-    }
-}
-
-class ContainerCircularReferenceStubB
-{
-    public function __construct(ContainerCircularReferenceStubC $c)
-    {
-    }
-}
-
-class ContainerCircularReferenceStubC
-{
-    public function __construct(ContainerCircularReferenceStubB $b)
-    {
-    }
-}
-
-class ContainerCircularReferenceStubD
-{
-    public function __construct(ContainerCircularReferenceStubE $e)
-    {
-    }
-}
-
-class ContainerCircularReferenceStubE
-{
-    public function __construct(ContainerCircularReferenceStubF $f)
-    {
-    }
-}
-
-class ContainerCircularReferenceStubF
-{
-    public function __construct(ContainerCircularReferenceStubD $d)
-    {
-    }
-}
-
-class ContainerTestInterfaceStub
-{
-    public function __construct(IContainerContractStub $stub)
-    {
-        $this->stub = $stub;
-    }
-
-    public function go(IContainerContractStub $stub)
-    {
-        return $stub;
-    }
-
-    public function getStub()
-    {
-        return $this->stub;
+        $result = $container->call('Viserio\Container\Tests\Fixture\ContainerTestInterfaceStub@go');
+        $this->assertInstanceOf("Viserio\Container\Tests\Fixture\ContainerImplementationStub", $result);
     }
 }

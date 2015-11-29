@@ -1,6 +1,7 @@
 <?php
-namespace Viserio\Container\Traits;
+namespace Viserio\Container;
 
+use Interop\Container\ContainerInterface;
 use Interop\Container\Definition\AliasDefinitionInterface;
 use Interop\Container\Definition\DefinitionInterface;
 use Interop\Container\Definition\DefinitionProviderInterface;
@@ -12,30 +13,16 @@ use Viserio\Container\Exception\EntryNotFound;
 use Viserio\Container\Exception\InvalidDefinition;
 use Viserio\Container\Exception\UnsupportedDefinition;
 
-trait DefinitionResolver
+class DefinitionResolver
 {
     /**
-     * @var DefinitionInterface[]
+     * @var ContainerInterface
      */
-    protected $interopDefinitions = [];
+    private $container;
 
-    /**
-     * @var ExtendDefinitionInterface[][]
-     */
-    protected $extensions = [];
-
-    /**
-     * @param DefinitionProviderInterface $provider
-     */
-    public function addDefinitionProvider(DefinitionProviderInterface $provider)
+    public function __construct(ContainerInterface $container)
     {
-        foreach ($provider->getDefinitions() as $definition) {
-            if ($definition instanceof ExtendDefinitionInterface) {
-                $this->extensions[$definition->getExtended()][] = $definition;
-            } else {
-                $this->interopDefinitions[$definition->getIdentifier()] = $definition;
-            }
-        }
+        $this->container = $container;
     }
 
     /**
@@ -48,7 +35,7 @@ trait DefinitionResolver
      * @throws UnsupportedDefinition
      * @throws EntryNotFound A dependency was not found.
      */
-    private function resolveDefinition(DefinitionInterface $definition)
+    public function resolveDefinition(DefinitionInterface $definition)
     {
         switch (true) {
             case $definition instanceof ParameterDefinitionInterface:
@@ -78,7 +65,7 @@ trait DefinitionResolver
                 return $service;
 
             case $definition instanceof AliasDefinitionInterface:
-                return $this->get($definition->getTarget());
+                return $this->container->get($definition->getTarget());
 
             case $definition instanceof FactoryCallDefinitionInterface:
                 $factory = $definition->getFactory();
@@ -89,7 +76,7 @@ trait DefinitionResolver
                 if (is_string($factory)) {
                     return call_user_func_array($factory. '::' .$methodName, $arguments);
                 } elseif ($factory instanceof ReferenceInterface) {
-                    $factory = $this->get($factory->getTarget());
+                    $factory = $this->container->get($factory->getTarget());
                     return call_user_func_array([$factory, $methodName], $arguments);
                 }
 
@@ -110,7 +97,7 @@ trait DefinitionResolver
     private function resolveReference($value)
     {
         if ($value instanceof ReferenceInterface) {
-            $value = $this->get($value->getTarget());
+            $value = $this->container->get($value->getTarget());
         }
 
         return $value;

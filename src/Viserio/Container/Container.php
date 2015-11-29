@@ -26,17 +26,14 @@ class Container implements ArrayAccess, ContainerInteropInterface, ContainerCont
 {
     /**
      * Array Access Support
-     * Mock Support
-     * Resolver
+     * Container Resolver
      * Defining Sub/Nested Containers
-     * ServiceProvider Support
-     * DefinitionResolver
+     * Definition Provider Support
      */
     use ContainerArrayAccessTrait,
     ContainerResolverTraits,
     DelegateTrait,
-    DefinitionProviderTrait,
-    DefinitionResolver;
+    DefinitionProviderTrait;
 
     /**
      * The registered type aliases.
@@ -102,10 +99,19 @@ class Container implements ArrayAccess, ContainerInteropInterface, ContainerCont
     protected $invoker;
 
     /**
+     * DefinitionResolver instance.
+     *
+     * @var \Viserio\Container\DefinitionResolver
+     */
+    protected $definitionResolver;
+
+    /**
      * Construct.
      */
     public function __construct()
     {
+        $this->definitionResolver = new DefinitionResolver($this);
+
         $this->share('Viserio\Container\Container', $this);
         $this->share(ContainerContract::class, $this);
         $this->share(WritableContainerContract::class, $this);

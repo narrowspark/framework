@@ -1,6 +1,8 @@
 <?php
 namespace Viserio\Container\Traits;
 
+use Closure;
+
 trait ContainerArrayAccessTrait
 {
     /**
@@ -95,10 +97,6 @@ trait ContainerArrayAccessTrait
     {
         $alias = $this->normalize($alias);
 
-        if (isset($this->mockedServices['mock::'.$alias])) {
-            return $this->mockedServices['mock::'.$alias];
-        }
-
         if ($this->hasInDelegate($alias)) {
             return $this->getFromDelegate($alias);
         }
@@ -120,7 +118,7 @@ trait ContainerArrayAccessTrait
      */
     public function offsetSet($alias, $concrete)
     {
-        if (!$concrete instanceof \Closure) {
+        if (!$concrete instanceof Closure) {
             $concrete = function () use ($concrete) {
                 return $concrete;
             };
@@ -142,7 +140,6 @@ trait ContainerArrayAccessTrait
 
         if (
             isset($this->keys[$alias]) ||
-            isset($this->mockedServices['mock::'.$alias]) ||
             isset($this->interopDefinitions[$alias])
         ) {
             return true;
@@ -169,8 +166,7 @@ trait ContainerArrayAccessTrait
                 $this->singletons[$alias],
                 $this->frozen[$alias],
                 $this->values[$alias],
-                $this->keys[$alias],
-                $this->mockedServices['mock::'.$alias]
+                $this->keys[$alias]
             );
         }
     }
