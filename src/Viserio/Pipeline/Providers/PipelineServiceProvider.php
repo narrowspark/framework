@@ -1,29 +1,9 @@
 <?php
 namespace Viserio\Pipeline\Providers;
 
-/**
- * Narrowspark - a PHP 5 framework.
- *
- * @author      Daniel Bannert <info@anolilab.de>
- * @copyright   2015 Daniel Bannert
- *
- * @link        http://www.narrowspark.de
- *
- * @license     http://www.narrowspark.com/license
- *
- * @version     0.10.0
- */
-
 use Viserio\Application\ServiceProvider;
-use Viserio\Pipeline\Hub;
+use Viserio\Pipeline\Pipeline;
 
-/**
- * PipelineServiceProvider.
- *
- * @author  Daniel Bannert
- *
- * @since   0.10.0
- */
 class PipelineServiceProvider extends ServiceProvider
 {
     /**
@@ -31,8 +11,8 @@ class PipelineServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->singleton('hub', function ($app) {
-            return new Hub($app);
+        $this->app->singleton('pipeline', function ($app) {
+            return new Pipeline($app);
         });
     }
 
@@ -44,7 +24,7 @@ class PipelineServiceProvider extends ServiceProvider
     public function provides()
     {
         return [
-            'hub',
+            Pipeline::class
         ];
     }
 }

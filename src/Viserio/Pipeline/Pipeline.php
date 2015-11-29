@@ -1,68 +1,12 @@
 <?php
 namespace Viserio\Pipeline;
 
-/**
- * Narrowspark - a PHP 5 framework.
- *
- * @author      Daniel Bannert <info@anolilab.de>
- * @copyright   2015 Daniel Bannert
- *
- * @link        http://www.narrowspark.de
- *
- * @license     http://www.narrowspark.com/license
- *
- * @version     0.10.0
- */
-
 use Closure;
-use Interop\Container\ContainerInterface as ContainerInteropInterface;
+use Interop\Container\ContainerInterface;
 use Viserio\Contracts\Pipeline\Pipeline as PipelineContract;
-use Viserio\Contracts\Pipeline\Stage as StageContract;
 
-/**
- * Pipeline.
- *
- * @author  Daniel Bannert
- *
- * @since   0.10.0
- */
 class Pipeline implements PipelineContract
 {
-    /**
-     * The array of class pipes.
-     *
-     * @var array
-     */
-    protected $pipes = [];
-
-    /**
-     * The method to call on each pipe.
-     *
-     * @var string
-     */
-    protected $method = 'handle';
-
-    /**
-     * The first Stage in the pipeline.
-     *
-     * @var null|\Viserio\Contracts\Pipeline\Stage
-     */
-    protected $firstStage = null;
-
-    /**
-      * The last Stage in the pipeline.
-      *
-      * @var null|\Viserio\Contracts\Pipeline\Stage
-      */
-    protected $lastStage = null;
-
-    /**
-      * The last Stage that was executed.
-      *
-      * @var null|\Viserio\Contracts\Pipeline\Stage
-      */
-    protected $current = null;
-
     /**
       * Did all the Stages run and succeded
       *
@@ -78,17 +22,38 @@ class Pipeline implements PipelineContract
     protected $container;
 
     /**
+     * The object being passed through the pipeline.
+     *
+     * @var mixed
+     */
+    protected $traveler;
+
+    /**
+     * The method to call on each stage.
+     *
+     * @var string
+     */
+    protected $method = 'handle';
+
+    /**
+     * The array of class pipes.
+     *
+     * @var array
+     */
+    protected $stages = [];
+
+    /**
      * Create a new class instance.
      *
      * @param \Interop\Container\ContainerInterface $container
      */
-    public function __construct(ContainerInteropInterface $container)
+    public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
     }
 
     /**
-     * Set the traveler object being sent on the pipeline.
+     * Set the object being sent through the pipeline.
      *
      * @param mixed $traveler
      *
@@ -96,25 +61,27 @@ class Pipeline implements PipelineContract
      */
     public function send($traveler)
     {
-
-    }
-
-    /**
-     * Set the array of pipes.
-     *
-     * @param array|mixed $pipes
-     *
-     * @return $this
-     */
-    public function through($pipes)
-    {
-        $this->pipes = is_array($pipes) ? $pipes : func_get_args();
+        $this->traveler = $traveler;
 
         return $this;
     }
 
     /**
-     * Set the method to call on the pipes.
+     * Set the array of stages.
+     *
+     * @param array|mixed $stages
+     *
+     * @return self
+     */
+    public function through($stages)
+    {
+        $this->stages = is_array($stages) ? $stages : func_get_args();
+
+        return $this;
+    }
+
+    /**
+     * Set the method to call on the stages.
      *
      * @param string $method
      *
@@ -136,27 +103,75 @@ class Pipeline implements PipelineContract
      */
     public function then(Closure $destination)
     {
-        $current = $this->current = $this->firstTask;
-        $status  = true;
+        $firstSlice = $this->getInitialSlice($destination);
+
+        $stages = array_reverse($this->stages);
+
+        return call_user_func(
+            array_reduce($stages, $this->getSlice(), $firstSlice), $this->traveler
+        );
     }
 
     /**
-     * Indicates that all stages executed in the pipeline.
+     * Get a Closure that represents a slice of the application onion.
      *
-     * @return bool
+     * @return \Closure
      */
-    public function ended()
+    protected function getSlice()
     {
-        return $this->ended;
+        return function ($stack, $stage) {
+            return function ($traveler) use ($stack, $stage) {
+                // If the $stage is an instance of a Closure, we will just call it directly.
+                if ($stage instanceof Closure) {
+                    return call_user_func($stage, $traveler, $stack);
+
+                // Otherwise we'll resolve the stages out of the container and call it with
+                // the appropriate method and arguments, returning the results back out.
+                } else {
+                    list($name, $parameters) = $this->parseStageString($stage);
+                    $merge = array_merge([$traveler, $stack], $parameters);
+
+                    return call_user_func_array(
+                        [
+                            $this->container->get($name),
+                            $this->method
+                        ],
+                        $merge
+                    );
+                }
+            };
+        };
     }
 
     /**
-     * Get the last stage executed in the pipeline
+     * Get the initial slice to begin the stack call.
      *
-     * @return StageContract
+     * @param \Closure $destination
+     *
+     * @return \Closure
      */
-    public function getLastStage()
+    protected function getInitialSlice(Closure $destination)
     {
-        return $this->current;
+        return function ($traveler) use ($destination) {
+            return call_user_func($destination, $traveler);
+        };
+    }
+
+    /**
+     * Parse full pipe string to get name and parameters.
+     *
+     * @param string $stage
+     *
+     * @return array
+     */
+    protected function parseStageString($stage)
+    {
+        list($name, $parameters) = array_pad(explode(':', $stage, 2), 2, []);
+
+        if (is_string($parameters)) {
+            $parameters = explode(',', $parameters);
+        }
+
+        return [$name, $parameters];
     }
 }

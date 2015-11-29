@@ -1,28 +1,8 @@
 <?php
 namespace Viserio\Contracts\Pipeline;
 
-/**
- * Narrowspark - a PHP 5 framework.
- *
- * @author      Daniel Bannert <info@anolilab.de>
- * @copyright   2015 Daniel Bannert
- *
- * @link        http://www.narrowspark.de
- *
- * @license     http://www.narrowspark.com/license
- *
- * @version     0.10.0
- */
+use Closure;
 
-use \Closure;
-
-/**
- * Pipeline.
- *
- * @author  Daniel Bannert
- *
- * @since   0.10.0
- */
 interface Pipeline
 {
     /**
@@ -35,43 +15,29 @@ interface Pipeline
     public function send($traveler);
 
     /**
-     * Set the stops of the pipeline.
+     * Set the array of stages.
      *
-     * @param dynamic|array $stops
+     * @param array|mixed $stages
      *
-     * @return $this
+     * @return self
      */
-    public function through($stops);
-
-    /**
-     * Set the method to call on the stops.
-     *
-     * @param string $method
-     *
-     * @return $this
-     */
-    public function via($method);
+    public function through($stages);
 
     /**
      * Run the pipeline with a final destination callback.
      *
-     * @param \Closure $destination
+     * @param callable $destination
      *
      * @return mixed
      */
     public function then(Closure $destination);
 
     /**
-     * Indicates that all stages executed in the pipeline.
+     * Set the method to call on the stages.
      *
-     * @return bool
-     */
-    public function ended();
-
-    /**
-     * Get the last stage executed in the pipeline
+     * @param string $method
      *
-     * @return Stage
+     * @return $this
      */
-    public function getLastStage();
+    public function via($method);
 }
