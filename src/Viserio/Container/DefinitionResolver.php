@@ -30,10 +30,10 @@ class DefinitionResolver
      *
      * @param DefinitionInterface $definition
      *
-     * @return mixed
-     *
      * @throws UnsupportedDefinition
      * @throws EntryNotFound A dependency was not found.
+     * @return mixed
+     *
      */
     public function resolveDefinition(DefinitionInterface $definition)
     {
@@ -91,8 +91,8 @@ class DefinitionResolver
      * Resolve a variable that can be a reference.
      *
      * @param ReferenceInterface|mixed $value
-     * @return mixed
      * @throws EntryNotFound The dependency was not found.
+     * @return mixed
      */
     private function resolveReference($value)
     {

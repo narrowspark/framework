@@ -1,9 +1,9 @@
 <?php
 namespace Viserio\Container\Tests;
 
-use Viserio\Container\DefinitionTypes\AliasDefinition;
 use Viserio\Container\Container;
 use Viserio\Container\DefinitionResolver;
+use Viserio\Container\DefinitionTypes\AliasDefinition;
 use Viserio\Container\DefinitionTypes\FactoryCallDefinition;
 use Viserio\Container\DefinitionTypes\ObjectDefinition;
 use Viserio\Container\DefinitionTypes\ParameterDefinition;

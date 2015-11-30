@@ -1192,7 +1192,7 @@ class Collection implements
     protected function getArrayableItems($items)
     {
         if (is_array($items)) {
-           return $items;
+            return $items;
         } elseif ($items instanceof self) {
             return $items->all();
         } elseif ($items instanceof Arrayable) {

@@ -1,12 +1,12 @@
 <?php
 namespace Viserio\Container\DefinitionTypes;
 
-use Viserio\Container\ObjectInitializer\MethodCall;
-use Viserio\Container\ObjectInitializer\PropertyAssignment;
 use Interop\Container\Definition\ObjectDefinitionInterface;
 use Interop\Container\Definition\ObjectInitializer\MethodCallInterface;
 use Interop\Container\Definition\ObjectInitializer\PropertyAssignmentInterface;
 use Interop\Container\Definition\ReferenceInterface;
+use Viserio\Container\ObjectInitializer\MethodCall;
+use Viserio\Container\ObjectInitializer\PropertyAssignment;
 
 class ObjectDefinition extends NamedDefinition implements ObjectDefinitionInterface
 {

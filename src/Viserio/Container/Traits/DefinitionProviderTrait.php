@@ -2,8 +2,8 @@
 namespace Viserio\Container\Traits;
 
 use Interop\Container\Definition\DefinitionProviderInterface;
-use Viserio\Container\Interfaces\ExtendDefinitionInterface;
 use Viserio\Container\Interfaces\ContainerAwareInterface;
+use Viserio\Container\Interfaces\ExtendDefinitionInterface;
 use Viserio\Support\Arr;
 
 trait DefinitionProviderTrait

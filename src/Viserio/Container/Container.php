@@ -4,16 +4,6 @@ namespace Viserio\Container;
 use ArrayAccess;
 use Closure;
 use Interop\Container\ContainerInterface as ContainerInteropInterface;
-use Viserio\Container\Exception\BindingResolutionException;
-use Viserio\Container\Exception\ContainerException;
-use Viserio\Container\Exception\NotFoundException;
-use Viserio\Container\Traits\ContainerArrayAccessTrait;
-use Viserio\Container\Traits\ContainerResolverTraits;
-use Viserio\Container\Traits\DelegateTrait;
-use Viserio\Container\Traits\DefinitionResolver;
-use Viserio\Container\Traits\DefinitionProviderTrait;
-use Viserio\Contracts\Container\Container as ContainerContract;
-use Viserio\Contracts\Container\WritableContainer as WritableContainerContract;
 use InvalidArgumentException;
 use Invoker\Invoker;
 use Invoker\ParameterResolver\AssociativeArrayResolver;
@@ -21,6 +11,16 @@ use Invoker\ParameterResolver\Container\TypeHintContainerResolver;
 use Invoker\ParameterResolver\DefaultValueResolver;
 use Invoker\ParameterResolver\NumericArrayResolver;
 use Invoker\ParameterResolver\ResolverChain;
+use Viserio\Container\Exception\BindingResolutionException;
+use Viserio\Container\Exception\ContainerException;
+use Viserio\Container\Exception\NotFoundException;
+use Viserio\Container\Traits\ContainerArrayAccessTrait;
+use Viserio\Container\Traits\ContainerResolverTraits;
+use Viserio\Container\Traits\DefinitionProviderTrait;
+use Viserio\Container\Traits\DefinitionResolver;
+use Viserio\Container\Traits\DelegateTrait;
+use Viserio\Contracts\Container\Container as ContainerContract;
+use Viserio\Contracts\Container\WritableContainer as WritableContainerContract;
 
 class Container implements ArrayAccess, ContainerInteropInterface, ContainerContract, WritableContainerContract
 {
@@ -427,7 +427,7 @@ class Container implements ArrayAccess, ContainerInteropInterface, ContainerCont
      * @return mixed
      */
 
-    public function __invoke($abstract, array $arguments = array())
+    public function __invoke($abstract, array $arguments = [])
     {
         return $this->make($abstract, $arguments);
     }

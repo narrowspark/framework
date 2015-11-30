@@ -28,9 +28,9 @@ class FactoryDefinition extends NamedDefinition implements FactoryDefinitionInte
     */
     public function __construct($identifier, $factory, $methodName)
     {
-       parent::__construct($identifier);
-       $this->factory = $factory;
-       $this->methodName = $methodName;
+        parent::__construct($identifier);
+        $this->factory = $factory;
+        $this->methodName = $methodName;
     }
 
     /**
@@ -43,22 +43,22 @@ class FactoryDefinition extends NamedDefinition implements FactoryDefinitionInte
     */
     public function setArguments($argument)
     {
-       $this->arguments = func_get_args();
-       return $this;
+        $this->arguments = func_get_args();
+        return $this;
     }
 
     public function getFactory()
     {
-       return $this->factory;
+        return $this->factory;
     }
 
     public function getMethodName()
     {
-       return $this->methodName;
+        return $this->methodName;
     }
 
     public function getArguments()
     {
-       return $this->arguments;
+        return $this->arguments;
     }
 }
