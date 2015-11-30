@@ -1,29 +1,17 @@
 <?php
 namespace Viserio\Mail\Transport;
 
-/**
- * Narrowspark - a PHP 5 framework.
- *
- * @author      Daniel Bannert <info@anolilab.de>
- * @copyright   2015 Daniel Bannert
- *
- * @link        http://www.narrowspark.de
- *
- * @license     http://www.narrowspark.com/license
- *
- * @version     0.10.0
- */
-
 use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
+use Swift_Mime_Attachment;
+use Swift_Mime_Headers_DateHeader;
+use Swift_Mime_Headers_IdentificationHeader;
+use Swift_Mime_Headers_OpenDKIMHeader;
+use Swift_Mime_Headers_ParameterizedHeader;
+use Swift_Mime_Headers_PathHeader;
+use Swift_Mime_Headers_UnstructuredHeader;
+use Swift_Mime_Message;
 
-/**
- * PostmarkTransport.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.6
- */
 class Postmark extends Transport
 {
     /**
@@ -55,7 +43,7 @@ class Postmark extends Transport
     /**
      * {@inheritdoc}
      */
-    public function send(\Swift_Mime_Message $message, &$failedRecipients = null)
+    public function send(Swift_Mime_Message $message, &$failedRecipients = null)
     {
         return $client->post('https://api.postmarkapp.com/email', [
             'headers' => [
@@ -97,10 +85,10 @@ class Postmark extends Transport
      *
      * @return \Swift_Mime_MimeEntity|null
      */
-    private function getMIMEPart(\Swift_Mime_Message $message, $mimeType)
+    private function getMIMEPart(Swift_Mime_Message $message, $mimeType)
     {
         foreach ($message->getChildren() as $part) {
-            if (strpos($part->getContentType(), $mimeType) === 0 &&  !($part instanceof \Swift_Mime_Attachment)) {
+            if (strpos($part->getContentType(), $mimeType) === 0 &&  !($part instanceof Swift_Mime_Attachment)) {
                 return $part;
             }
         }
@@ -113,7 +101,7 @@ class Postmark extends Transport
      *
      * @return array
      */
-    private function getMessagePayload(\Swift_Mime_Message $message)
+    private function getMessagePayload(Swift_Mime_Message $message)
     {
         $payload = [];
         $this->processRecipients($payload, $message);
@@ -187,7 +175,7 @@ class Postmark extends Transport
         if ($message->getChildren()) {
             $payload['Attachments'] = [];
             foreach ($message->getChildren() as $attachment) {
-                if (is_object($attachment) && $attachment instanceof \Swift_Mime_Attachment) {
+                if (is_object($attachment) && $attachment instanceof Swift_Mime_Attachment) {
                     $payload['Attachments'][] = [
                         'Name' => $attachment->getFilename(),
                         'Content' => base64_encode($attachment->getBody()),
@@ -215,16 +203,16 @@ class Postmark extends Transport
             $excludedHeaders = ['Subject', 'Content-Type', 'MIME-Version', 'Date'];
 
             if (!in_array($fieldName, $excludedHeaders, true)) {
-                if ($value instanceof \Swift_Mime_Headers_UnstructuredHeader ||
-                    $value instanceof \Swift_Mime_Headers_OpenDKIMHeader) {
+                if ($value instanceof Swift_Mime_Headers_UnstructuredHeader ||
+                    $value instanceof Swift_Mime_Headers_OpenDKIMHeader) {
                     array_push($headers, [
                         'Name' => $fieldName,
                         'Value' => $value->getValue(),
                     ]);
-                } elseif ($value instanceof \Swift_Mime_Headers_DateHeader ||
-                    $value instanceof \Swift_Mime_Headers_IdentificationHeader ||
-                    $value instanceof \Swift_Mime_Headers_ParameterizedHeader ||
-                    $value instanceof \Swift_Mime_Headers_PathHeader) {
+                } elseif ($value instanceof Swift_Mime_Headers_DateHeader ||
+                    $value instanceof Swift_Mime_Headers_IdentificationHeader ||
+                    $value instanceof Swift_Mime_Headers_ParameterizedHeader ||
+                    $value instanceof Swift_Mime_Headers_PathHeader) {
                     array_push($headers, [
                         'Name' => $fieldName,
                         'Value' => $value->getFieldBody(),

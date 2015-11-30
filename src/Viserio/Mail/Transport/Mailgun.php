@@ -1,28 +1,12 @@
 <?php
 namespace Viserio\Mail\Transport;
 
-/**
- * Narrowspark - a PHP 5 framework.
- *
- * @author      Daniel Bannert <info@anolilab.de>
- * @copyright   2015 Daniel Bannert
- *
- * @link        http://www.narrowspark.de
- *
- * @license     http://www.narrowspark.com/license
- *
- * @version     0.10.0
- */
-
 use GuzzleHttp\ClientInterface;
+use GuzzleHttp\Post\PostFile;
+use Swift_Events_EventListener;
+use Swift_Mime_Message;
+use Swift_Transport;
 
-/**
- * Mailgun.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.1
- */
 class Mailgun extends Transport
 {
     /**
@@ -77,7 +61,7 @@ class Mailgun extends Transport
      *
      * @return Log|null
      */
-    public function send(\Swift_Mime_Message $message, &$failedRecipients = null)
+    public function send(Swift_Mime_Message $message, &$failedRecipients = null)
     {
         $this->beforeSendPerformed($message);
 
@@ -86,10 +70,17 @@ class Mailgun extends Transport
         $to = $this->getTo($message);
         $message->setBcc([]);
 
-        $options['multipart'] = [
-            ['name' => 'to', 'contents' => $to],
-            ['name' => 'message', 'contents' => $message->toString(), 'filename' => 'message.mime'],
-        ];
+        if (version_compare(ClientInterface::VERSION, '6') === 1) {
+            $options['multipart'] = [
+                ['name' => 'to', 'contents' => $to],
+                ['name' => 'message', 'contents' => $message->toString(), 'filename' => 'message.mime'],
+            ];
+        } else {
+            $options['body'] = [
+                'to' => $to,
+                'message' => new PostFile('message', $message->toString()),
+            ];
+        }
 
         return $this->client->post($this->url, $options);
     }
@@ -101,7 +92,7 @@ class Mailgun extends Transport
      *
      * @return string
      */
-    protected function getTo(\Swift_Mime_Message $message)
+    protected function getTo(Swift_Mime_Message $message)
     {
         $formatted = [];
 

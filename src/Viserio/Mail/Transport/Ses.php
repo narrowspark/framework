@@ -1,28 +1,9 @@
 <?php
 namespace Viserio\Mail\Transport;
 
-/**
- * Narrowspark - a PHP 5 framework.
- *
- * @author      Daniel Bannert <info@anolilab.de>
- * @copyright   2015 Daniel Bannert
- *
- * @link        http://www.narrowspark.de
- *
- * @license     http://www.narrowspark.com/license
- *
- * @version     0.10.0
- */
-
 use Aws\Ses\SesClient;
+use Swift_Mime_Message;
 
-/**
- * Ses.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.1
- */
 class Ses extends Transport
 {
     /**
@@ -50,7 +31,7 @@ class Ses extends Transport
      *
      * @return Log|null
      */
-    public function send(\Swift_Mime_Message $message, &$failedRecipients = null)
+    public function send(Swift_Mime_Message $message, &$failedRecipients = null)
     {
         return $this->ses->sendRawEmail([
             'Source' => key($message->getSender()),
@@ -68,7 +49,7 @@ class Ses extends Transport
      *
      * @return array
      */
-    protected function getTo(\Swift_Mime_Message $message)
+    protected function getTo(Swift_Mime_Message $message)
     {
         $destinations = [];
         $contacts = array_merge(
