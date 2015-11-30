@@ -16,11 +16,11 @@ namespace Viserio\Support\Providers;
 
 use RandomLib\Factory as RandomLib;
 use Viserio\Application\ServiceProvider;
+use Viserio\Support\AliasLoader;
 use Viserio\Support\Arr;
 use Viserio\Support\Helper;
 use Viserio\Support\StaticalProxyResolver;
 use Viserio\Support\Str;
-use Viserio\Support\AliasLoader;
 
 /**
  * SupportServiceProvider.

@@ -52,7 +52,6 @@ class PipelineTest extends \PHPUnit_Framework_TestCase
 
     public function testPipelineViaChangesTheMethodBeingCalledOnThePipes()
     {
-
         $result = (new Pipeline($this->getMockContainer(new PipelineTestPipeOne)))->send('data')
             ->through('PipelineTestPipeOne')
             ->via('differentMethod')

@@ -14,9 +14,9 @@ namespace Viserio\View\Engines\Adapter;
  * @version     0.10.0
  */
 
-use Viserio\Contracts\View\Engine as EnginesContract;
 use MtHaml\Environment;
 use MtHaml\Support\Php\Executor;
+use Viserio\Contracts\View\Engine as EnginesContract;
 
 /**
  * Haml.

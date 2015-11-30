@@ -61,7 +61,7 @@ class ArrayCacheTest extends \PHPUnit_Framework_TestCase
             'foobuu'  => 'buz',
             'quz'   => 'baz',
             'foobar'  => null
-        ], $store->getMultiple(['foo', 'foobuu', 'quz','foobar']));
+        ], $store->getMultiple(['foo', 'foobuu', 'quz', 'foobar']));
     }
 
     public function testValuesCanBeDecremented()

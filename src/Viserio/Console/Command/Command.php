@@ -13,13 +13,13 @@ namespace Viserio\Console\Command;
  *
  * @version     0.10.0
  */
-use Viserio\Container\ContainerAwareTrait;
-use Viserio\Console\Style\NarrowsparkStyle;
 use Symfony\Component\Console\Command\Command as BaseCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ChoiceQuestion;
 use Symfony\Component\Console\Question\Question;
+use Viserio\Console\Style\NarrowsparkStyle;
+use Viserio\Container\ContainerAwareTrait;
 
 /**
  * Command.
@@ -229,9 +229,9 @@ abstract class Command extends BaseCommand
     public function info($string, $newline = true)
     {
         if ($newline) {
-            $this->output->writeln(sprintf('<info>%s</info>',$string));
+            $this->output->writeln(sprintf('<info>%s</info>', $string));
         } else {
-            $this->output->write(sprintf('<info>%s</info>',$string));
+            $this->output->write(sprintf('<info>%s</info>', $string));
         }
     }
 

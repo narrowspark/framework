@@ -63,7 +63,7 @@ class MemcachedCacheTest extends \PHPUnit_Framework_TestCase
         ]));
 
         $memcache->expects($this->once())->method('getResultCode')->will($this->returnValue(0));
-        $store = new MemcachedCache($memcache,'foo');
+        $store = new MemcachedCache($memcache, 'foo');
 
         $this->assertEquals([
             'foo'   => 'foobuu',

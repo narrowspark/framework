@@ -1,5 +1,6 @@
 <?php
 namespace Viserio\Cache\Adapter\Traits;
+
 /**
  * Narrowspark - a PHP 5 framework.
  *

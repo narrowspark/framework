@@ -195,7 +195,7 @@ class MemcachedCache extends TaggableStore implements AdapterContract
         $cas = null;
         $cacheValues = $this->memcached->getMulti($prefixedKeys, $cas, Memcached::GET_PRESERVE_ORDER);
 
-        if ($this->memcached->getResultCode() != 0) {
+        if ($this->memcached->getResultCode() !== 0) {
             return array_fill_keys($keys, null);
         }
 

@@ -38,7 +38,7 @@
         "roave/better-reflection"             : "0.1.0",
         "cekurte/environment"                 : "~0.1",
         "danielstjules/stringy"               : "~2.1.0",
-        "filp/whoops"                         : "~1.1.7",
+        "filp/whoops"                         : "~1.1.9",
         "ircmaxell/random-lib"                : "~1.1",
         "league/flysystem"                    : "~1.0.15",
         "monolog/monolog"                     : "~1.17.2",
@@ -102,14 +102,6 @@
         "branch-alias": {
             "dev-master"                      : "0.10.0-dev"
         }
-    },
-    "scripts": {
-        "post-install-cmd": [
-            "sh vendor/bin/security-checker security:check --format=simple"
-        ],
-        "post-update-cmd": [
-            "sh vendor/bin/security-checker security:check --format=simple"
-        ]
     },
     "suggest": {
         "aws/aws-sdk-php"                     : "Required to use the SQS queue driver and SES mail driver (~3.0).",

@@ -14,8 +14,8 @@ namespace Viserio\View\Engines\Adapter;
  * @version     0.10.0
  */
 
-use Viserio\Contracts\View\Engine as EnginesContract;
 use Lex\Parser;
+use Viserio\Contracts\View\Engine as EnginesContract;
 
 /**
  * Lex.
