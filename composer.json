@@ -102,7 +102,7 @@
     "suggest": {
         "aws/aws-sdk-php"                    : "Required to use the SQS queue driver and SES mail driver (~3.0).",
         "ext-curl"                           : "Required to use for guzzle (*)",
-        "guzzlehttp/guzzle"                  : "Required to use the Mailgun, Mandrill, and Postmark mail drivers (~6.0).",
+        "guzzlehttp/guzzle"                  : "Required to use the Mailgun, Mandrill, and Postmark mail drivers (~5.3|~6.0).",
         "league/flysystem-aws-s3-v3"         : "Required to use the Flysystem S3 driver for SDK3 (~1.0).",
         "league/flysystem-rackspace"         : "Required to use the Flysystem Rackspace driver (~1.0).",
         "predis/predis"                      : "Required to use the redis cache and queue drivers (~1.0.1)."
