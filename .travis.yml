@@ -9,6 +9,13 @@ php:
 env:
   global:
     - setup=basic
+    - MONGO_VERSION=1.2.12
+
+services:
+  - mongodb
+  - mysql
+  - memcached
+  - redis-server
 
 matrix:
   include:
@@ -31,6 +38,8 @@ cache:
     - $HOME/.composer/cache
 
 before_install:
+  - mysql -e 'create database narrowspark_test;'
+  - echo "extension = mongo.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
   - composer self-update
   - travis_retry composer install --prefer-source --no-interaction
   - OCULAR_ENV='5.6'
