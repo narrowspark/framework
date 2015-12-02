@@ -1,39 +1,18 @@
 <?php
 namespace Viserio\Console\Command;
 
-/**
- * Narrowspark - a PHP 5 framework.
- *
- * @author      Daniel Bannert <info@anolilab.de>
- * @copyright   2015 Daniel Bannert
- *
- * @link        http://www.narrowspark.de
- *
- * @license     http://www.narrowspark.com/license
- *
- * @version     0.10.0-dev
- */
-
 use Viserio\Contracts\Support\Arrayable;
 use Viserio\Container\ContainerAwareTrait;
 use Viserio\Console\Style\NarrowsparkStyle;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\NullOutput;
-use Symfony\Component\Console\Question\Question;
 use Symfony\Component\Console\Command\Command as BaseCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ChoiceQuestion;
 use Symfony\Component\Console\Question\Question;
 
-/**
- * Command.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.4-dev
- */
 abstract class Command extends BaseCommand
 {
     use ContainerAwareTrait;
@@ -73,9 +52,10 @@ abstract class Command extends BaseCommand
      * @var int[]
      */
     protected $verbosity = [
-        'v'   => OutputInterface::VERBOSITY_VERBOSE,
-        'vv'  => OutputInterface::VERBOSITY_VERY_VERBOSE,
-        'vvv' => OutputInterface::VERBOSITY_DEBUG,
+        'v'     => OutputInterface::VERBOSITY_VERBOSE,
+        'vv'    => OutputInterface::VERBOSITY_VERY_VERBOSE,
+        'vvv'   => OutputInterface::VERBOSITY_DEBUG,
+        'quiet' => OutputInterface::VERBOSITY_QUIET,
     ];
 
     /**
@@ -117,7 +97,8 @@ abstract class Command extends BaseCommand
     /**
      * Check if verbosity level is in bounds.
      *
-     * @param  string|int  $level
+     * @param  string|int $level
+     *
      * @return bool
      */
     public function inVerbosity($level)
@@ -375,9 +356,11 @@ abstract class Command extends BaseCommand
      */
     public function warn($string, $verbosityLevel = OutputInterface::VERBOSITY_NORMAL)
     {
-        $style = new OutputFormatterStyle('yellow');
+        if (!$this->output->getFormatter()->hasStyle('warning')) {
+            $style = new OutputFormatterStyle('yellow');
+            $this->output->getFormatter()->setStyle('warning', $style);
+        }
 
-        $this->output->getFormatter()->setStyle('warning', $style);
         $this->line($string, 'warning', $verbosityLevel);
     }
 }
