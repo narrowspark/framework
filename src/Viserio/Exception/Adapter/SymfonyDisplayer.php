@@ -7,13 +7,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Viserio\Contracts\Exception\Adapter;
 use Viserio\Contracts\Http\HttpExceptionInterface;
 
-/**
- * SymfonyDisplayer.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.4
- */
 class SymfonyDisplayer implements Adapter
 {
     /**

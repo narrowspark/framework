@@ -4,13 +4,6 @@ namespace Viserio\Queue\Adapter;
 use Carbon\Carbon;
 use Viserio\Contracts\Queue\Adapter as AdapterContract;
 
-/**
- * BaseAdapter.
- *
- * @author  Daniel Bannert
- *
- * @since   0.10.0
- */
 abstract class BaseAdapter
 {
     /**

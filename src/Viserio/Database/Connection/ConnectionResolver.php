@@ -3,13 +3,6 @@ namespace Viserio\Database\Connection;
 
 use Viserio\Contracts\Database\ConnectionResolver as ConnectionResolverContract;
 
-/**
- * ConnectionResolver.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.2
- */
 class ConnectionResolver implements ConnectionResolverContract
 {
     /**

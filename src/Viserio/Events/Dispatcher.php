@@ -6,13 +6,6 @@ use Symfony\Component\EventDispatcher\Event;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
-/**
- * Dispatcher.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.5
- */
 class Dispatcher implements EventDispatcherInterface
 {
     /**

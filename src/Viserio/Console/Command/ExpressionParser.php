@@ -6,13 +6,6 @@ use Viserio\Console\Input\InputOption;
 use Viserio\Contracts\Console\InvalidCommandExpression;
 use Viserio\Support\Str;
 
-/**
- * ExpressionParser.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.5
- */
 class ExpressionParser
 {
     /**

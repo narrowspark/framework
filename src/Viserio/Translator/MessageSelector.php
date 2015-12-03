@@ -3,13 +3,6 @@ namespace Viserio\Translator;
 
 use Viserio\Translator\Traits\IntervalTrait;
 
-/**
- * MessageSelector.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.6
- */
 class MessageSelector
 {
     use IntervalTrait;

@@ -3,13 +3,6 @@ namespace Viserio\Mail\Test;
 
 use Mockery as Mock;
 
-/**
- * MailMessageTest.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.5
- */
 class MailMessageTest extends \PHPUnit_Framework_TestCase
 {
     public function tearDown()

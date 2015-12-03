@@ -3,13 +3,6 @@ namespace Viserio\Session\Handler;
 
 use Viserio\Contracts\Cache\Repository as CacheContract;
 
-/**
- * CacheBasedSessionHandler.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.4
- */
 class CacheBasedSessionHandler implements \SessionHandlerInterface
 {
     /**

@@ -7,13 +7,6 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Viserio\Container\Container;
 use Viserio\Events\Dispatcher;
 
-/**
- * DispatcherTest.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.6
- */
 class DispatcherTest extends \PHPUnit_Framework_TestCase
 {
     public function setup()

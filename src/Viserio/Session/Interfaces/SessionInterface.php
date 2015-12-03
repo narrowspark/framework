@@ -4,13 +4,6 @@ namespace Viserio\Session\Interfaces;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\SessionInterface as BaseSessionInterface;
 
-/**
- * SessionInterface.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.4
- */
 interface SessionInterface extends BaseSessionInterface
 {
     /**

@@ -6,13 +6,6 @@ use League\Flysystem\AwsS3v3\AwsS3Adapter as AwsS3v3;
 use Viserio\Contracts\Filesystem\Connector as ConnectorContract;
 use Viserio\Support\Arr;
 
-/**
- * AwsS3Connector.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.3
- */
 class AwsS3Connector implements ConnectorContract
 {
     /**

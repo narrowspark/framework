@@ -3,13 +3,6 @@ namespace Viserio\Database\Connectors;
 
 use Viserio\Contracts\Database\Connector as ConnectorContract;
 
-/**
- * GoogleCloudConnector.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.2
- */
 class GoogleCloudConnector extends Connectors implements ConnectorContract
 {
     /**

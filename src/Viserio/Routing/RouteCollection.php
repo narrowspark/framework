@@ -9,13 +9,6 @@ use Viserio\Contracts\Routing\RouteCollector as RouteCollectorContract;
 use Viserio\Contracts\Routing\RouteStrategy as RouteStrategyContract;
 use Viserio\Routing\RouteParser as ViserioRouteParser;
 
-/**
- * RouteCollection.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.4
- */
 class RouteCollection extends RouteCollector implements RouteStrategyContract, RouteCollectorContract
 {
     /*

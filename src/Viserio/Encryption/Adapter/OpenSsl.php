@@ -5,13 +5,6 @@ use RandomLib\Generator as RandomLib;
 use Viserio\Contracts\Encryption\Adapter as AdapterContract;
 use Viserio\Contracts\Hashing\Generator as HashContract;
 
-/**
- * OpenSsl.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.7
- */
 class OpenSsl implements AdapterContract
 {
     /**

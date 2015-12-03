@@ -4,13 +4,6 @@ namespace Viserio\Session\Handler;
 use Symfony\Component\Finder\Finder;
 use Viserio\Filesystem\Filesystem;
 
-/**
- * Session.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.4
- */
 class FileSessionHandler implements \SessionHandlerInterface
 {
     /**

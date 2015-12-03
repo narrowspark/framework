@@ -5,13 +5,6 @@ use Mockery as Mock;
 use Viserio\Events\Dispatcher;
 use Viserio\Log\Writer;
 
-/**
- * WriterTest.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.5
- */
 class WriterTest extends \PHPUnit_Framework_TestCase
 {
     public function tearDown()

@@ -3,13 +3,6 @@ namespace Viserio\Database\Exception;
 
 use Viserio\Support\Helper;
 
-/**
- * ConnectException.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.2
- */
 class ConnectException extends \PDOException
 {
     /**

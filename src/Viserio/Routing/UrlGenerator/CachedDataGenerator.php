@@ -4,13 +4,6 @@ namespace Viserio\Routing\UrlGenerator;
 use Viserio\Contracts\Routing\DataGenerator as DataGeneratorContract;
 use Viserio\Filesystem\Filesystem;
 
-/**
- * CachedDataGenerator.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.5
- */
 class CachedDataGenerator implements DataGeneratorContract
 {
     /**

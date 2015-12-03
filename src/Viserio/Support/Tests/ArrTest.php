@@ -3,13 +3,6 @@ namespace Viserio\Support\Test;
 
 use Viserio\Support\Arr;
 
-/**
- * ArrTest.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.5
- */
 class ArrTest extends \PHPUnit_Framework_TestCase
 {
     protected $testData = [

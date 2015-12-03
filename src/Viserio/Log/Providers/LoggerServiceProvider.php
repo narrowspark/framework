@@ -5,13 +5,6 @@ use Monolog\Logger;
 use Viserio\Application\ServiceProvider;
 use Viserio\Log\Writer as MonologWriter;
 
-/**
- * LoggerServiceProvider.
- *
- * @author  Daniel Bannert
- *
- * @since   0.8.0
- */
 class LoggerServiceProvider extends ServiceProvider
 {
     /**

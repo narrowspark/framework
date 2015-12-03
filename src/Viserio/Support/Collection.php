@@ -5,13 +5,6 @@ use Viserio\Contracts\Encrypter\Encrypter as EncrypterContract;
 use Viserio\Contracts\Support\Arrayable;
 use Viserio\Contracts\Support\Jsonable;
 
-/**
- * Collection.
- *
- * @author  Daniel Bannert
- *
- * @since   0.8.0
- */
 class Collection implements
     \ArrayAccess,
     Arrayable,

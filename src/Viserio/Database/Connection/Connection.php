@@ -8,13 +8,6 @@ use Viserio\Database\Exception\ConnectException;
 use Viserio\Database\Grammar\Builder;
 use Viserio\Support\Arr;
 
-/**
- * Connection.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.2
- */
 class Connection implements ConnectionContract
 {
     /**

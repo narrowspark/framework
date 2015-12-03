@@ -4,13 +4,6 @@ namespace Viserio\Http\Providers;
 use Viserio\Application\ServiceProvider;
 use Viserio\Http\Response;
 
-/**
- * ResponseServiceProvider.
- *
- * @author  Daniel Bannert
- *
- * @since   0.8.0
- */
 class ResponseServiceProvider extends ServiceProvider
 {
     /**

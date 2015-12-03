@@ -1,13 +1,6 @@
 <?php
 namespace Viserio\Support;
 
-/**
- * AliasLoader.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.3
- */
 class AliasLoader
 {
     /**

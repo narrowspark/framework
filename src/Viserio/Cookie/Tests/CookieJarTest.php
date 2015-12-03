@@ -5,13 +5,6 @@ use Mockery as Mock;
 use Symfony\Component\HttpFoundation\Request;
 use Viserio\Cookie\CookieJar;
 
-/**
- * CookieJarTest.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.5
- */
 class CookieJarTest extends \PHPUnit_Framework_TestCase
 {
     public function tearDown()

@@ -4,13 +4,6 @@ namespace Viserio\Support;
 use Mockery\MockInterface;
 use Viserio\Application\Application;
 
-/**
- * StaticalProxyManager.
- *
- * @author  Daniel Bannert
- *
- * @since   0.8.0
- */
 abstract class StaticalProxyManager
 {
     /**

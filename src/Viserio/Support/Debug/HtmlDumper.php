@@ -3,13 +3,6 @@ namespace Viserio\Support\Debug;
 
 use Symfony\Component\VarDumper\Dumper\HtmlDumper as SymfonyHtmlDumper;
 
-/**
- * HtmlDumper.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.5
- */
 class HtmlDumper extends SymfonyHtmlDumper
 {
     /**

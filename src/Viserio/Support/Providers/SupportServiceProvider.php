@@ -9,13 +9,6 @@ use Viserio\Support\Helper;
 use Viserio\Support\StaticalProxyResolver;
 use Viserio\Support\Str;
 
-/**
- * SupportServiceProvider.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.2
- */
 class SupportServiceProvider extends ServiceProvider
 {
     /**

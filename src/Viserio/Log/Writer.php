@@ -13,13 +13,6 @@ use Viserio\Log\Traits\HandlerTrait;
 use Viserio\Log\Traits\ProcessorTrait;
 use Viserio\Log\Traits\PsrLoggerTrait;
 
-/**
- * Writer.
- *
- * @author  Daniel Bannert
- *
- * @since   0.8.0
- */
 class Writer implements LogContract, PsrLoggerInterface
 {
     use FormatterTrait, HandlerTrait, ProcessorTrait, PsrLoggerTrait;

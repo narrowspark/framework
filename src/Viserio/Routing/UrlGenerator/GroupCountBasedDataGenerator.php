@@ -4,13 +4,6 @@ namespace Viserio\Routing\UrlGenerator;
 use Viserio\Contracts\Routing\DataGenerator as DataGeneratorContract;
 use Viserio\Contracts\Routing\RouteCollector as RouteCollectorContract;
 
-/**
- * GroupCountBasedDataGenerator.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.5
- */
 class GroupCountBasedDataGenerator implements DataGeneratorContract
 {
     /**

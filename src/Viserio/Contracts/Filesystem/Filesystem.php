@@ -1,13 +1,6 @@
 <?php
 namespace Viserio\Contracts\Filesystem;
 
-/**
- * Filesystem.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.4
- */
 interface Filesystem
 {
     /**

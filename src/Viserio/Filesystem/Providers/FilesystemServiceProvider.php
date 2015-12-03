@@ -7,13 +7,6 @@ use Viserio\Filesystem\FileLoader;
 use Viserio\Filesystem\Filesystem;
 use Viserio\Filesystem\FilesystemManager;
 
-/**
- * FilesystemServiceProvider.
- *
- * @author  Daniel Bannert
- *
- * @since   0.8.0
- */
 class FilesystemServiceProvider extends ServiceProvider
 {
     /**

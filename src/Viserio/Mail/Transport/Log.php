@@ -3,13 +3,6 @@ namespace Viserio\Mail\Transport;
 
 use Psr\Log\LoggerInterface;
 
-/**
- * Log.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.1
- */
 class Log extends Transport
 {
     /**

@@ -3,13 +3,6 @@ namespace Viserio\Translator;
 
 use Viserio\Contracts\Translator\MessageCatalogue as MessageCatalogueContract;
 
-/**
- * MessageCatalogue.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.6
- */
 class MessageCatalogue implements MessageCatalogueContract
 {
     /**

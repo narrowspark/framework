@@ -3,13 +3,6 @@ namespace Viserio\Routing\Test;
 
 use Viserio\Routing\RouteParser;
 
-/**
- * RouteCollectionTest.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.7
- */
 class RouteParserTest extends \PHPUnit_Framework_TestCase
 {
     /**

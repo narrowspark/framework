@@ -5,13 +5,6 @@ use Viserio\Application\ServiceProvider;
 use Viserio\Hashing\Generator as HashGenerator;
 use Viserio\Hashing\Password;
 
-/**
- * HashingServiceProvider.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.4
- */
 class HashingServiceProvider extends ServiceProvider
 {
     /**

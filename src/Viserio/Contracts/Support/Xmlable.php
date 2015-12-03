@@ -1,13 +1,6 @@
 <?php
 namespace Viserio\Contracts\Support;
 
-/**
- * Xmlable.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.8
- */
 interface Xmlable
 {
     /**

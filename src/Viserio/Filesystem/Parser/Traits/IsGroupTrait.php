@@ -1,13 +1,6 @@
 <?php
 namespace Viserio\Filesystem\Parser\Traits;
 
-/**
- * IsGroupTrait.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.6
- */
 trait IsGroupTrait
 {
     /**

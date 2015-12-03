@@ -1,13 +1,6 @@
 <?php
 namespace Viserio\Contracts\Console;
 
-/**
- * Application.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.7
- */
 interface Application
 {
     /**

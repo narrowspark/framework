@@ -4,16 +4,6 @@ namespace Viserio\Config;
 use Viserio\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Support\Arr;
 
-/**
- * Repository.
- *
- * A default Configuration class which provides app configuration values stored as nested arrays,
- * which can be accessed and stored using dot separated keys.
- *
- * @author  Daniel Bannert
- *
- * @since   0.8.0
- */
 class Repository implements RepositoryContract
 {
     /**

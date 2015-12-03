@@ -1,13 +1,6 @@
 <?php
 namespace Viserio\Routing;
 
-/**
- * Redirect.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.5
- */
 class Redirect
 {
     /**

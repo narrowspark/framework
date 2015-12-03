@@ -7,13 +7,6 @@ use Viserio\Contracts\Filesystem\FileNotFoundException as ContractFileNotFoundEx
 use Viserio\Contracts\Filesystem\Filesystem as CloudFilesystemContract;
 use Viserio\Support\Collection;
 
-/**
- * FilesystemAdapter.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.3
- */
 class FilesystemAdapter implements CloudFilesystemContract
 {
     /**

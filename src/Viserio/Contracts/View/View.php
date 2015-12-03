@@ -3,13 +3,6 @@ namespace Viserio\Contracts\View;
 
 use Viserio\Contracts\Support\Renderable;
 
-/**
- * View.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.4
- */
 interface View extends Renderable
 {
     /**

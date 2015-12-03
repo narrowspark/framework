@@ -4,13 +4,6 @@ namespace Viserio\Support\Providers;
 use Viserio\Application\ServiceProvider;
 use Viserio\Support\Autoloader;
 
-/**
- * AutoloaderServiceProvider.
- *
- * @author  Daniel Bannert
- *
- * @since   0.8.0
- */
 class AutoloaderServiceProvider extends ServiceProvider
 {
     /**

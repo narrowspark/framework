@@ -5,13 +5,6 @@ use Viserio\Application\ServiceProvider;
 use Viserio\Translator\Manager;
 use Viserio\Translator\PluralizationRules;
 
-/**
- * TranslatorServiceProvider.
- *
- * @author  Daniel Bannert
- *
- * @since   0.8.0
- */
 class TranslatorServiceProvider extends ServiceProvider
 {
     /**

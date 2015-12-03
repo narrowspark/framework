@@ -3,13 +3,6 @@ namespace Viserio\Mail;
 
 use Viserio\Support\Manager;
 
-/**
- * TransportManager.
- *
- * @author  Daniel Bannert
- *
- * @since   0.10.0
- */
 class TransportManager extends Manager
 {
     /**

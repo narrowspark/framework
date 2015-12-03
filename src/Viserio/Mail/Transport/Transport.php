@@ -6,13 +6,6 @@ use Swift_Events_SendEvent;
 use Swift_Mime_Message;
 use Swift_Transport;
 
-/**
- * Transport.
- *
- * @author  Daniel Bannert
- *
- * @since   0.10.0
- */
 abstract class Transport implements Swift_Transport
 {
     /**

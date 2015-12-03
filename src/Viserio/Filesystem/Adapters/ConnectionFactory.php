@@ -1,13 +1,6 @@
 <?php
 namespace Viserio\Filesystem\Adapters;
 
-/**
- * ConnectionFactory.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.3
- */
 class ConnectionFactory
 {
     protected $defaultDriver = [

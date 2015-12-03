@@ -3,13 +3,6 @@ namespace Viserio\Http\Test;
 
 use Viserio\Http\JsonResponse;
 
-/**
- * HttpRequestTest.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.5
- */
 class HttpJsonResponseTest extends \PHPUnit_Framework_TestCase
 {
     public function testSetAndRetrieveData()

@@ -6,13 +6,6 @@ use Viserio\Container\Container;
 use Viserio\Routing\RouteCollection;
 use Viserio\Routing\RouteParser;
 
-/**
- * RouteCollectionTest.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.5
- */
 class RouteCollectionTest extends \PHPUnit_Framework_TestCase
 {
     /**

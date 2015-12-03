@@ -1,13 +1,6 @@
 <?php
 namespace Viserio\Contracts\Support;
 
-/**
- * ArrayableInterface.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.4
- */
 interface Arrayable
 {
     /**

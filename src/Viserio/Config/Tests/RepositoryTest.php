@@ -3,13 +3,6 @@ namespace Viserio\Config\Test;
 
 use Viserio\Config\Repository;
 
-/**
- * RepositoryTest.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.6
- */
 class RepositoryTest extends \PHPUnit_Framework_TestCase
 {
     public function testFlattenArray()

@@ -3,13 +3,6 @@ namespace Viserio\Support\Tests;
 
 use Viserio\Support\AliasLoader;
 
-/**
- * AliasLoaderTest.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.5
- */
 class AliasLoaderTest extends \PHPUnit_Framework_TestCase
 {
     public function testLoaderCanBeCreatedAndRegisteredOnce()

@@ -4,13 +4,6 @@ namespace Viserio\Encryption\Test;
 use Mockery as Mock;
 use Viserio\Encryption\Encrypter;
 
-/**
- * EncrypterTest.
- *
- * @author  Daniel Bannert
- *
- * @since   0.10.0
- */
 class EncrypterTest extends \PHPUnit_Framework_TestCase
 {
     public function testEncryption()

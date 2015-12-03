@@ -7,13 +7,6 @@ use Viserio\Loop\Adapters\LibeventLoop;
 use Viserio\Loop\Adapters\SelectLoop;
 use Viserio\Support\Manager;
 
-/**
- * LoopManager.
- *
- * @author  Daniel Bannert
- *
- * @since   0.10.0
- */
 class LoopManager extends Manager
 {
     /**

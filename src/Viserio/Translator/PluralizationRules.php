@@ -28,13 +28,6 @@ use Viserio\Translator\PluralCategorys\Two;
 use Viserio\Translator\PluralCategorys\Welsh;
 use Viserio\Translator\PluralCategorys\Zero;
 
-/**
- * PluralizationRules.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.6
- */
 class PluralizationRules
 {
     /**

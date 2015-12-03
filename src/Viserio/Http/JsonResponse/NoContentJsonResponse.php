@@ -3,13 +3,6 @@ namespace Viserio\Http\JsonResponse;
 
 use Viserio\Http\JsonResponse;
 
-/**
- * NoContentJsonResponse.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.4
- */
 class NoContentJsonResponse extends JsonResponse
 {
     /**

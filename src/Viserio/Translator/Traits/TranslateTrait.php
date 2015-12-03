@@ -1,13 +1,6 @@
 <?php
 namespace Viserio\Translator\Traits;
 
-/**
- * TranslateTrait.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.6
- */
 trait TranslateTrait
 {
     /**

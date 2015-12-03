@@ -5,13 +5,6 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Viserio\Contracts\Queue\Adapter as AdapterContract;
 use Viserio\Contracts\Queue\Pushable as PushableContract;
 
-/**
- * Queue.
- *
- * @author  Daniel Bannert
- *
- * @since   0.10.0
- */
 abstract class Queue implements PushableContract
 {
     /**

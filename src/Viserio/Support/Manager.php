@@ -4,13 +4,6 @@ namespace Viserio\Support;
 use Viserio\Container\ContainerAwareTrait;
 use Viserio\Contracts\Config\Manager as ConfigManager;
 
-/**
- * Manager.
- *
- * @author  Daniel Bannert
- *
- * @since   0.10.0
- */
 abstract class Manager
 {
     use ContainerAwareTrait;

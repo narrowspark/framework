@@ -3,13 +3,6 @@ namespace Viserio\Contracts\Application;
 
 use Viserio\Contracts\Container\Container;
 
-/**
- * Foundation.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.4
- */
 interface Foundation extends Container
 {
     /**

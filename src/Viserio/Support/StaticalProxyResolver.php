@@ -1,13 +1,6 @@
 <?php
 namespace Viserio\Support;
 
-/**
- * StaticalProxyResolver.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.1
- */
 class StaticalProxyResolver
 {
     /**

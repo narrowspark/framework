@@ -7,13 +7,6 @@ use Viserio\Mail\Transport\Ses as SesTransport;
 use Viserio\Mail\TransportManager;
 use Viserio\Support\Collection;
 
-/**
- * MailSesTransportTest.
- *
- * @author  Daniel Bannert
- *
- * @since   0.10.0
- */
 class MailSesTransportTest extends \PHPUnit_Framework_TestCase
 {
     // public function testGetTransport()

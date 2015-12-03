@@ -5,13 +5,6 @@ use Symfony\Component\HttpFoundation\Request as SymfonyRequest;
 use Viserio\Contracts\Routing\DataGenerator as DataGeneratorContract;
 use Viserio\Contracts\Routing\UrlGenerator as UrlGeneratorContract;
 
-/**
- * SimpleUrlGenerator.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.5
- */
 class SimpleUrlGenerator implements UrlGeneratorContract
 {
     /**

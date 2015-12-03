@@ -5,13 +5,6 @@ use League\Flysystem\ZipArchive\ZipArchiveAdapter;
 use Viserio\Contracts\Filesystem\Connector as ConnectorContract;
 use Viserio\Support\Arr;
 
-/**
- * NullConnector.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.3
- */
 class ZipConnector implements ConnectorContract
 {
     /**

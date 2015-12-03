@@ -14,13 +14,6 @@ use Viserio\Database\Connectors\SqlServerConnector;
 use Viserio\Database\Connectors\SybaseConnector;
 use Viserio\Support\Arr;
 
-/**
- * ConnectionFactory.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.2
- */
 class ConnectionFactory
 {
     /**

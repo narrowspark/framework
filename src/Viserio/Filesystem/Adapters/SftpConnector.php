@@ -4,13 +4,6 @@ namespace Viserio\Filesystem\Adapters;
 use League\Flysystem\Sftp\SftpAdapter;
 use Viserio\Contracts\Filesystem\Connector as ConnectorContract;
 
-/**
- * NullConnector.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.3
- */
 class SftpConnector implements ConnectorContract
 {
     /**

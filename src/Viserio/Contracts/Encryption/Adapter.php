@@ -1,13 +1,6 @@
 <?php
 namespace Viserio\Contracts\Encryption;
 
-/**
- * Adapter.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.7
- */
 interface Adapter
 {
     /**

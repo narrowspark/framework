@@ -4,13 +4,6 @@ namespace Viserio\Cookie\Providers;
 use Viserio\Application\ServiceProvider;
 use Viserio\Cookie\Cookie;
 
-/**
- * CookieServiceProvider.
- *
- * @author  Daniel Bannert
- *
- * @since   0.8.0
- */
 class CookieServiceProvider extends ServiceProvider
 {
     /**

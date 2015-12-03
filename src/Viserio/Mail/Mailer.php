@@ -8,13 +8,6 @@ use Viserio\Contracts\Mail\Mailer as MailerContract;
 use Viserio\Contracts\View\Factory;
 use Viserio\Support\Arr;
 
-/**
- * Mailer.
- *
- * @author  Daniel Bannert
- *
- * @since   0.8.0
- */
 class Mailer implements MailerContract
 {
     /**

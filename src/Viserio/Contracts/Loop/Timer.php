@@ -1,13 +1,6 @@
 <?php
 namespace Viserio\Contracts\Loop;
 
-/**
- * Timer.
- *
- * @author  Daniel Bannert
- *
- * @since   0.10.0
- */
 interface Timer
 {
     /**

@@ -5,13 +5,6 @@ use Symfony\Component\EventDispatcher\EventDispatcher;
 use Viserio\Application\ServiceProvider;
 use Viserio\Events\Dispatcher;
 
-/**
- * EventsServiceProvider.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.4
- */
 class EventsServiceProvider extends ServiceProvider
 {
     /**

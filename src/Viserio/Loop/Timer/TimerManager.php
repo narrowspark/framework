@@ -4,13 +4,6 @@ namespace Viserio\Loop;
 use Viserio\Contracts\Loop\Loop as LoopContract;
 use Viserio\Contracts\Loop\Timer as TimerContract;
 
-/**
- * TimerManager.
- *
- * @author  Daniel Bannert
- *
- * @since   0.10.0
- */
 class TimerManager
 {
     /**

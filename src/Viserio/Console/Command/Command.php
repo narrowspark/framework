@@ -8,13 +8,6 @@ use Symfony\Component\Console\Question\Question;
 use Viserio\Console\Style\NarrowsparkStyle;
 use Viserio\Container\ContainerAwareTrait;
 
-/**
- * Command.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.4
- */
 abstract class Command extends BaseCommand
 {
     use ContainerAwareTrait;

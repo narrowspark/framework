@@ -1,13 +1,8 @@
 <?php
 namespace Viserio\Contracts\Exception;
 
-/**
- * Adapter.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.4
- */
+use Exception;
+
 interface Adapter
 {
     /**
@@ -16,5 +11,5 @@ interface Adapter
      * @param \Exception $exception
      * @param int        $code
      */
-    public function display(\Exception $exception, $code);
+    public function display(Exception $exception, $code);
 }

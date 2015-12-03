@@ -3,13 +3,6 @@ namespace Viserio\Mail\Test;
 
 use Viserio\Mail\Transport\Mandrill;
 
-/**
- * MailMandrillTransportTest.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.5
- */
 class MailMandrillTransportTest extends \PHPUnit_Framework_TestCase
 {
     public function testSend()

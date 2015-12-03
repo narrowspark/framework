@@ -1,13 +1,6 @@
 <?php
 namespace Viserio\Http\Traits;
 
-/**
- * RequestParameterTrait.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.4
- */
 trait RequestParameterTrait
 {
     /**

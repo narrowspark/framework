@@ -5,13 +5,6 @@ use Mockery as Mock;
 use Viserio\Http\RedirectResponse;
 use Viserio\Http\Request;
 
-/**
- * HttpRequestTest.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.5
- */
 class HttpRedirectResponseTest extends \PHPUnit_Framework_TestCase
 {
     public function tearDown()

@@ -4,13 +4,6 @@ namespace Viserio\Support\Providers;
 use Viserio\Application\ServiceProvider;
 use Viserio\Support\Debug\Dumper;
 
-/**
- * DebugServiceProvider.
- *
- * @author  Daniel Bannert
- *
- * @since   0.8.0
- */
 class DebugServiceProvider extends ServiceProvider
 {
     /**

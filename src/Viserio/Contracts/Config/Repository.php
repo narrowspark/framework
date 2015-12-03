@@ -1,14 +1,9 @@
 <?php
 namespace Viserio\Contracts\Config;
 
-/**
- * Repository.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.4
- */
-interface Repository extends \ArrayAccess
+use ArrayAccess;
+
+interface Repository extends ArrayAccess
 {
     /**
      * Set an array of configuration options

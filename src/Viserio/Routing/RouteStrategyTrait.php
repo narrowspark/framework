@@ -3,13 +3,6 @@ namespace Viserio\Routing;
 
 use Viserio\Contracts\Routing\CustomStrategy;
 
-/**
- * RouteStrategyTrait.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.4
- */
 trait RouteStrategyTrait
 {
     /**

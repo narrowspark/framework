@@ -2,14 +2,8 @@
 namespace Viserio\Contracts\Database;
 
 use Viserio\Contracts\Cache\Factory as CacheContract;
+use Closure;
 
-/**
- * Connection.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.4
- */
 interface Connection
 {
     /**
@@ -42,7 +36,7 @@ interface Connection
      *
      * @return mixed
      */
-    public function run($query, $bindings, \Closure $callback);
+    public function run($query, $bindings, Closure $callback);
 
     /**
      * Set the reconnect instance on the connection.
@@ -70,7 +64,7 @@ interface Connection
      *
      * @return mixed
      */
-    public function transaction(\Closure $callback);
+    public function transaction(Closure $callback);
 
     /**
      * Start a new database transaction.
@@ -140,7 +134,7 @@ interface Connection
      *
      * @return array
      */
-    public function pretend(\Closure $callback);
+    public function pretend(Closure $callback);
 
     /**
      * Determine if the connection in a "dry run".

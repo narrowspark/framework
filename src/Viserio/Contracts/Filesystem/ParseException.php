@@ -1,14 +1,9 @@
 <?php
 namespace Viserio\Contracts\Filesystem;
 
-/**
- * ParseException.
- *
- * @author  Daniel Bannert
- *
- * @since   0.10.0
- */
-class ParseException extends \ErrorException
+use ErrorException;
+
+class ParseException extends ErrorException
 {
     public function __construct(array $error)
     {

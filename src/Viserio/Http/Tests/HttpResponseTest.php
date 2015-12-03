@@ -7,13 +7,6 @@ use Viserio\Http\RedirectResponse;
 use Viserio\Http\Request;
 use Viserio\Http\Response;
 
-/**
- * HttpResponseTest.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.5
- */
 class HttpResponseTest extends \PHPUnit_Framework_TestCase
 {
     public function tearDown()

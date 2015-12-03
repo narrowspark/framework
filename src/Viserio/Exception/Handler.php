@@ -8,13 +8,6 @@ use Symfony\Component\Debug\Exception\FlattenException;
 use Viserio\Contracts\Http\HttpExceptionInterface;
 use Viserio\Http\Response;
 
-/**
- * ExceptionHandler.
- *
- * @author  Daniel Bannert
- *
- * @since   0.8.0
- */
 class Handler
 {
     /**

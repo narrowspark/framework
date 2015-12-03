@@ -4,13 +4,6 @@ namespace Viserio\Routing;
 use FastRoute\RouteParser as FastRouteParser;
 use FastRoute\RouteParser\Std;
 
-/**
- * RouteCollection.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.4
- */
 class RouteParser extends Std implements FastRouteParser
 {
     /**

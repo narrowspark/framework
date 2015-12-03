@@ -6,13 +6,6 @@ use Viserio\Application\ServiceProvider;
 use Viserio\Console\Application;
 use Viserio\Console\Command\CommandResolver;
 
-/**
- * ConsoleServiceProvider.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.4
- */
 class ConsoleServiceProvider extends ServiceProvider
 {
     /**

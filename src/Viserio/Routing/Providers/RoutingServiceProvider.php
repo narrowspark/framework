@@ -8,13 +8,6 @@ use Viserio\Routing\RouteParser;
 use Viserio\Routing\UrlGenerator\GroupCountBasedDataGenerator;
 use Viserio\Routing\UrlGenerator\SimpleUrlGenerator;
 
-/**
- * RoutingServiceProvider.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.4
- */
 class RoutingServiceProvider extends ServiceProvider
 {
     /**

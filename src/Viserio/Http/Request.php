@@ -8,13 +8,6 @@ use Viserio\Http\Traits\RequestParameterTrait;
 use Viserio\Support\Arr;
 use Viserio\Support\Str;
 
-/**
- * Request.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.4
- */
 class Request extends SymfonyRequest implements RequestContract, \ArrayAccess
 {
     /*

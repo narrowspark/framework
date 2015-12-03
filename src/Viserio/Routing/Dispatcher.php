@@ -10,13 +10,6 @@ use Viserio\Contracts\Routing\RouteStrategy as RouteStrategyContract;
 use Viserio\Http\JsonResponse;
 use Viserio\Http\Response;
 
-/**
- * Dispatcher.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.4
- */
 class Dispatcher extends GroupCountBasedDispatcher implements RouteStrategyContract
 {
     /*

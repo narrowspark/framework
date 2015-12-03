@@ -3,13 +3,6 @@ namespace Viserio\Loop;
 
 use Viserio\Contracts\Loop\Timer as TimerContract;
 
-/**
- * Timer.
- *
- * @author  Daniel Bannert
- *
- * @since   0.10.0
- */
 class Timer
 {
     /**

@@ -3,13 +3,6 @@ namespace Viserio\Console\Command;
 
 use Viserio\Contracts\Container\Container as ContainerContract;
 
-/**
- * Command.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.4
- */
 class CommandResolver
 {
     /**

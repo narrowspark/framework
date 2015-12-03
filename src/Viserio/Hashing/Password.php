@@ -3,13 +3,6 @@ namespace Viserio\Hashing;
 
 use Viserio\Contracts\Hashing\Password as PasswordContract;
 
-/**
- * Password.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.4
- */
 class Password implements PasswordContract
 {
     /**

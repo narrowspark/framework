@@ -4,13 +4,6 @@ namespace Viserio\Session\Handler;
 use Viserio\Contracts\Cookie\Factory as CookieContract;
 use Viserio\Contracts\Http\Request as RequestContract;
 
-/**
- * Session.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.4
- */
 class CookieSessionHandler implements \SessionHandlerInterface
 {
     /**

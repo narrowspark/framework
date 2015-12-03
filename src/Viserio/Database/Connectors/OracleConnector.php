@@ -3,13 +3,6 @@ namespace Viserio\Database\Connectors;
 
 use Viserio\Contracts\Database\Connector as ConnectorContract;
 
-/**
- * OracleConnector.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.2
- */
 class OracleConnector extends Connectors implements ConnectorContract
 {
     /**

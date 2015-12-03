@@ -5,13 +5,6 @@ use Viserio\Console\Command\ExpressionParser;
 use Viserio\Console\Input\InputArgument;
 use Viserio\Console\Input\InputOption;
 
-/**
- * ApplicationTest.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.5
- */
 class ExpressionParserTest extends \PHPUnit_Framework_TestCase
 {
     /**

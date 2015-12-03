@@ -1,13 +1,6 @@
 <?php
 namespace Viserio\Translator\Traits;
 
-/**
- * IntervalTrait.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.6
- */
 trait IntervalTrait
 {
     /**

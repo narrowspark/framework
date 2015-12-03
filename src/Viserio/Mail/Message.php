@@ -4,13 +4,6 @@ namespace Viserio\Mail;
 use Swift_Attachment;
 use Swift_Image;
 
-/**
- * Message.
- *
- * @author  Daniel Bannert
- *
- * @since   0.8.0
- */
 class Message
 {
     /**

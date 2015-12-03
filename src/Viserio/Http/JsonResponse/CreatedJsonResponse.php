@@ -3,13 +3,6 @@ namespace Viserio\Http\JsonResponse;
 
 use Viserio\Http\JsonResponse;
 
-/**
- * CreatedJsonResponse.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.4
- */
 class CreatedJsonResponse extends JsonResponse
 {
     /**

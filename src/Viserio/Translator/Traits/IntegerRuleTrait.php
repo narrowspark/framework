@@ -1,13 +1,6 @@
 <?php
 namespace Viserio\Translator\Traits;
 
-/**
- * IntegerRuleTrait.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.6
- */
 trait IntegerRuleTrait
 {
     /**

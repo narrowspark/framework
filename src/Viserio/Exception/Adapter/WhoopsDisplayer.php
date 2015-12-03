@@ -6,13 +6,6 @@ use Viserio\Contracts\Exception\Adapter;
 use Viserio\Contracts\Http\HttpExceptionInterface;
 use Whoops\Run;
 
-/**
- * WhoopsDisplayer.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.4
- */
 class WhoopsDisplayer implements Adapter
 {
     /**

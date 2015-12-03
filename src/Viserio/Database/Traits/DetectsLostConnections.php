@@ -4,13 +4,6 @@ namespace Viserio\Database\Traits;
 use Exception;
 use Viserio\Support\Str;
 
-/**
- * DetectsLostConnections.
- *
- * @author  Daniel Bannert
- *
- * @since   0.10.0
- */
 trait DetectsLostConnections
 {
     /**

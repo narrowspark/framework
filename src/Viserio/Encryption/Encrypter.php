@@ -10,13 +10,6 @@ use Viserio\Contracts\Hashing\Generator as HashContract;
 use Viserio\Encryption\Adapter\OpenSsl;
 use Viserio\Support\Arr;
 
-/**
- * Encrypter.
- *
- * @author  Daniel Bannert
- *
- * @since   0.8.0
- */
 class Encrypter implements EncrypterContract
 {
     /**
@@ -77,10 +70,10 @@ class Encrypter implements EncrypterContract
      * Constructor.
      *
      * @param \Viserio\Contracts\Hashing\Generator $hash
-     * @param \RandomLib\Generator                   $rand
-     * @param string                                 $key
-     * @param string                                 $cipher
-     * @param string                                 $mode
+     * @param \RandomLib\Generator                 $rand
+     * @param string                               $key
+     * @param string                               $cipher
+     * @param string                               $mode
      */
     public function __construct(HashContract $hash, RandomLib $rand, $key, $cipher = 'AES-256', $mode = 'CBC')
     {

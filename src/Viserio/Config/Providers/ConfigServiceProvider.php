@@ -6,13 +6,6 @@ use Viserio\Config\Manager as ConfigManager;
 use Viserio\Config\Repository;
 use Viserio\Filesystem\FileLoader;
 
-/**
- * ConfigServiceProvider.
- *
- * @author  Daniel Bannert
- *
- * @since   0.8.5
- */
 class ConfigServiceProvider extends ServiceProvider
 {
     /**

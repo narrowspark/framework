@@ -4,13 +4,6 @@ namespace Viserio\Events\Providers;
 use Viserio\Application\ServiceProvider;
 use Viserio\Loop\Loop;
 
-/**
- * LoopServiceProvider.
- *
- * @author  Daniel Bannert
- *
- * @since   0.10.0
- */
 class LoopServiceProvider extends ServiceProvider
 {
     /**

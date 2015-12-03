@@ -14,13 +14,6 @@ use Whoops\Handler\PlainTextHandler;
 use Whoops\Handler\PrettyPageHandler;
 use Whoops\Run;
 
-/**
- * ExceptionServiceProvider.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.2
- */
 class ExceptionServiceProvider extends ServiceProvider
 {
     /**

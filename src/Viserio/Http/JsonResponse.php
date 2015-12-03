@@ -6,13 +6,6 @@ use Viserio\Contracts\Http\Response as ResponseContract;
 use Viserio\Contracts\Support\Jsonable;
 use Viserio\Http\Traits\ResponseParameterTrait;
 
-/**
- * JsonResponse.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.4
- */
 class JsonResponse extends SymfonyJsonResponse implements ResponseContract
 {
     /*

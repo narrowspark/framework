@@ -4,13 +4,6 @@ namespace Viserio\Database\Connectors;
 use PDO;
 use Viserio\Contracts\Database\Connector as ConnectorContract;
 
-/**
- * SqlServerConnector.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.2
- */
 class SqlServerConnector extends Connectors implements ConnectorContract
 {
     /**

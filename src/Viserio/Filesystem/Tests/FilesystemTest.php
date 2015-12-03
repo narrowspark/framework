@@ -3,13 +3,6 @@ namespace Viserio\Filesystem\Test;
 
 use Viserio\Filesystem\Filesystem;
 
-/**
- * FilesystemTest.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.6
- */
 class FilesystemTest extends \PHPUnit_Framework_TestCase
 {
     public function testGetRetrievesFiles()

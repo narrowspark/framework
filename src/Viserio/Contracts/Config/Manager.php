@@ -1,14 +1,9 @@
 <?php
 namespace Viserio\Contracts\Config;
 
-/**
- * Manager.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.4
- */
-interface Manager extends \ArrayAccess
+use ArrayAccess;
+
+interface Manager extends ArrayAccess
 {
     /**
      * Set Viserio's defaults using the handler.

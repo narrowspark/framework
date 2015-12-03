@@ -3,13 +3,6 @@ namespace Viserio\Http\Traits;
 
 use Symfony\Component\HttpFoundation\Cookie;
 
-/**
- * ResponseParameterTrait.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.4
- */
 trait ResponseParameterTrait
 {
     /**

@@ -14,13 +14,6 @@ use Viserio\Console\Command\ExpressionParser as Parser;
 use Viserio\Console\Input\InputArgument;
 use Viserio\Console\Input\InputOption;
 
-/**
- * Application.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.4
- */
 class Application extends SymfonyConsole
 {
     /**

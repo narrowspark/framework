@@ -1,13 +1,6 @@
 <?php
 namespace Viserio\Contracts\View;
 
-/**
- * Finder.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.5
- */
 interface Finder
 {
     /**

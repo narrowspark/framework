@@ -6,13 +6,6 @@ use Viserio\Contracts\Config\Manager as ConfigContract;
 use Viserio\Contracts\Filesystem\FilesystemManager as Manager;
 use Viserio\Filesystem\Adapters\ConnectionFactory;
 
-/**
- * FilesystemManager.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.3
- */
 class FilesystemManager implements Manager
 {
     /**

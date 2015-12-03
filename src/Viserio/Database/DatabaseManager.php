@@ -8,13 +8,6 @@ use Viserio\Contracts\Database\ConnectionResolver as ConnectionResolverContract;
 use Viserio\Database\Connection\ConnectionFactory;
 use Viserio\Support\Arr;
 
-/**
- * DatabaseManager.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.2
- */
 class DatabaseManager implements ConnectionResolverContract
 {
     /**

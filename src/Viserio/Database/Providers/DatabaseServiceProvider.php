@@ -6,13 +6,6 @@ use Viserio\Database\Connection\ConnectionFactory;
 use Viserio\Database\DatabaseManager;
 use Viserio\Database\Query;
 
-/**
- * Database ServiceProvider.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.1
- */
 class DatabaseServiceProvider extends ServiceProvider
 {
     /**

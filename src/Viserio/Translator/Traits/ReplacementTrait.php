@@ -1,13 +1,6 @@
 <?php
 namespace Viserio\Translator\Traits;
 
-/**
- * ReplacementTrait.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.6
- */
 trait ReplacementTrait
 {
     /**

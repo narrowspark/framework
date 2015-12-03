@@ -1,13 +1,6 @@
 <?php
 namespace Viserio\Contracts\Translator;
 
-/**
- * MessageCatalogue.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.6
- */
 interface MessageCatalogue
 {
     /**

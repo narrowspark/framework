@@ -6,13 +6,6 @@ use Viserio\Contracts\Filesystem\FileNotFoundException;
 use Viserio\Filesystem\Traits\DirectoryTrait;
 use Viserio\Filesystem\Traits\MimetypeTrait;
 
-/**
- * Filesystem.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.2
- */
 class Filesystem
 {
     use DirectoryTrait, MimetypeTrait;

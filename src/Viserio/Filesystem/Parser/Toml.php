@@ -7,13 +7,6 @@ use Viserio\Filesystem\Filesystem;
 use Viserio\Filesystem\Parser\Traits\IsGroupTrait;
 use Yosymfony\Toml\Toml as TomlParser;
 
-/**
- * Toml.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.4
- */
 class Toml implements ParserContract
 {
     use IsGroupTrait;

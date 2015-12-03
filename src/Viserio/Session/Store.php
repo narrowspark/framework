@@ -8,13 +8,6 @@ use Viserio\Session\Handler\CookieSessionHandler;
 use Viserio\Session\Interfaces\SessionInterface;
 use Viserio\Support\Arr;
 
-/**
- * Store.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.4
- */
 class Store implements SessionInterface
 {
     /**

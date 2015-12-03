@@ -3,13 +3,6 @@ namespace Viserio\Console\Input;
 
 use Symfony\Component\Console\Input\InputArgument as SymfonyInputArgument;
 
-/**
- * InputArgument.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.5
- */
 class InputArgument extends SymfonyInputArgument
 {
     protected $description;

@@ -3,13 +3,6 @@ namespace Viserio\Http\JsonResponse;
 
 use Viserio\Http\JsonResponse;
 
-/**
- * RawJsonResponse.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.8
- */
 class RawJsonResponse extends JsonResponse
 {
     /**

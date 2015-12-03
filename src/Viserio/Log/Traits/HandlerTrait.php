@@ -3,13 +3,6 @@ namespace Viserio\Log\Traits;
 
 use Monolog\Logger as MonologLogger;
 
-/**
- * HandlerTrait.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.5
- */
 trait HandlerTrait
 {
     /**

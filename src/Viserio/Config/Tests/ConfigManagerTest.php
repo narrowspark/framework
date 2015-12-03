@@ -4,13 +4,6 @@ namespace Viserio\Config\Test;
 use Viserio\Config\Manager as ConfigManager;
 use Viserio\Config\Repository;
 
-/**
- * ConfigManagerTest.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.6
- */
 class ConfigManagerTest extends \PHPUnit_Framework_TestCase
 {
     public $defaults = [

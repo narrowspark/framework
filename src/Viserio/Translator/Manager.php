@@ -12,13 +12,6 @@ use Viserio\Translator\Traits\HelpersTrait;
 use Viserio\Translator\Traits\ReplacementTrait;
 use Viserio\Translator\Traits\TranslateTrait;
 
-/**
- * TranslatorManager.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.6
- */
 class Manager implements TranslatorContract
 {
     //Register all needed traits

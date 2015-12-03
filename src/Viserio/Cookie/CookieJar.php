@@ -5,13 +5,6 @@ use Symfony\Component\HttpFoundation\Cookie;
 use Viserio\Contracts\Cookie\CookiesJar as JarContract;
 use Viserio\Support\Arr;
 
-/**
- * CookiesJar.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.4
- */
 class CookieJar implements JarContract
 {
     /**

@@ -1,13 +1,6 @@
 <?php
 namespace Viserio\Log\Traits;
 
-/**
- * FormatterTrait.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.5
- */
 trait FormatterTrait
 {
     /**

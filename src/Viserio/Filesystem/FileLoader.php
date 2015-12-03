@@ -4,13 +4,6 @@ namespace Viserio\Filesystem;
 use Viserio\Contracts\Filesystem\Loader as LoaderContract;
 use Viserio\Contracts\Filesystem\Parser as ParserContract;
 
-/**
- * FileLoader.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.4
- */
 class FileLoader implements LoaderContract
 {
     /**

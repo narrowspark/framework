@@ -12,13 +12,6 @@ use Viserio\Mail\Transport\Mandrill as MandrillTransport;
 use Viserio\Mail\Transport\Postmark as PostmarkTransport;
 use Viserio\Mail\Transport\Ses as SesTransport;
 
-/**
- * MailServiceProvider.
- *
- * @author  Daniel Bannert
- *
- * @since   0.8.0
- */
 class MailServiceProvider extends ServiceProvider
 {
     /**

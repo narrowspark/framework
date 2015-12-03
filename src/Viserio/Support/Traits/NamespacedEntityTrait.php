@@ -1,13 +1,6 @@
 <?php
 namespace Viserio\Support\Traits;
 
-/**
- * NamespacedEntityTrait.
- *
- * @author  Daniel Bannert
- *
- * @since   0.10.0
- */
 trait NamespacedEntityTrait
 {
     /**

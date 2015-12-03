@@ -5,13 +5,6 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Viserio\Application\ServiceProvider;
 use Viserio\Http\Request;
 
-/**
- * RequestServiceProvider.
- *
- * @author  Daniel Bannert
- *
- * @since   0.8.0
- */
 class RequestServiceProvider extends ServiceProvider
 {
     /**

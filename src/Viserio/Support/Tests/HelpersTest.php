@@ -5,13 +5,6 @@ use Viserio\Support\Arr;
 use Viserio\Support\Helper;
 use Viserio\Support\Str;
 
-/**
- * HelpersTest.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.5
- */
 class HelpersTest extends \PHPUnit_Framework_TestCase
 {
     public function testArrayDot()

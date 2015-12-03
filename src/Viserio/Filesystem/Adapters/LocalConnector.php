@@ -5,13 +5,6 @@ use League\Flysystem\Adapter\Local;
 use Viserio\Contracts\Filesystem\Connector as ConnectorContract;
 use Viserio\Support\Arr;
 
-/**
- * ConnectionFactory.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.3
- */
 class LocalConnector implements ConnectorContract
 {
     /**

@@ -4,13 +4,6 @@ namespace Viserio\Encryption\Providers;
 use Viserio\Application\ServiceProvider;
 use Viserio\Encryption\Encrypter;
 
-/**
- * EncrypterServiceProvider.
- *
- * @author  Daniel Bannert
- *
- * @since   0.8.0
- */
 class EncrypterServiceProvider extends ServiceProvider
 {
     /**

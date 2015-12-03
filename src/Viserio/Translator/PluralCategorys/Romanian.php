@@ -4,13 +4,6 @@ namespace Viserio\Translator\PluralCategorys;
 use Viserio\Contracts\Translator\PluralCategory as CategoryContract;
 use Viserio\Translator\Traits\IntegerRuleTrait;
 
-/**
- * Romanian.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.6
- */
 class Romanian implements CategoryContract
 {
     use IntegerRuleTrait;

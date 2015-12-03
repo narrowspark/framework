@@ -4,13 +4,6 @@ namespace Viserio\Routing\Test\UrlGenerator;
 use Viserio\Filesystem\Filesystem;
 use Viserio\Routing\UrlGenerator\CachedDataGenerator;
 
-/**
- * CachedDataGeneratorTest.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.5
- */
 class CachedDataGeneratorTest extends \PHPUnit_Framework_TestCase
 {
     /**

@@ -3,13 +3,6 @@ namespace Viserio\Database\Connectors;
 
 use Viserio\Contracts\Database\Connector as ConnectorContract;
 
-/**
- * MSSQLConnector.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.2
- */
 class MSSQLConnector extends Connectors implements ConnectorContract
 {
     /**

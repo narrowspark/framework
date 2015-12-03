@@ -1,13 +1,6 @@
 <?php
 namespace Viserio\Contracts\Application;
 
-/**
- * ServiceProvider.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.6
- */
 interface ServiceProvider
 {
     /**

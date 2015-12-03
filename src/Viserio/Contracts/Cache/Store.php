@@ -1,13 +1,6 @@
 <?php
 namespace Viserio\Contracts\Cache;
 
-/**
- * Store.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.5
- */
 interface Store
 {
     /**

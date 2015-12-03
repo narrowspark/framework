@@ -5,13 +5,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Viserio\Contracts\Exception\Adapter;
 use Viserio\Contracts\Http\HttpExceptionInterface;
 
-/**
- * PlainDisplayer.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.4
- */
 class PlainDisplayer implements Adapter
 {
     /**

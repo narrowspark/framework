@@ -8,13 +8,6 @@ use Symfony\Component\Console\Output\Output as SymfonyOutput;
 use Symfony\Component\Console\Output\OutputInterface;
 use Viserio\Console\Application;
 
-/**
- * ApplicationTest.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.5
- */
 class ApplicationTest extends \PHPUnit_Framework_TestCase
 {
     /**

@@ -5,13 +5,6 @@ use Mockery as Mock;
 use Viserio\Application\Application;
 use Viserio\Support\StaticalProxyManager;
 
-/**
- * StaticalProxyManagerTest.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.5
- */
 class StaticalProxyManagerTest extends \PHPUnit_Framework_TestCase
 {
     public function setUp()

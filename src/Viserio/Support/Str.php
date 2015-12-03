@@ -4,13 +4,6 @@ namespace Viserio\Support;
 use RandomLib\Factory as RandomLib;
 use Stringy\StaticStringy;
 
-/**
- * Str.
- *
- * @author  Daniel Bannert
- *
- * @since   0.8.0
- */
 class Str extends StaticStringy
 {
     /**

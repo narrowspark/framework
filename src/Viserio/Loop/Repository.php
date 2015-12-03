@@ -3,13 +3,6 @@ namespace Viserio\Loop;
 
 use Viserio\Contracts\Loop\Adapter as AdapterContract;
 
-/**
- * Repository.
- *
- * @author  Daniel Bannert
- *
- * @since   0.10.0
- */
 class Repository
 {
     /**

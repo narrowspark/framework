@@ -3,13 +3,6 @@ namespace Viserio\Translator\PluralCategorys;
 
 use Viserio\Contracts\Translator\PluralCategory as CategoryContract;
 
-/**
- * Welsh.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.6
- */
 class Welsh implements CategoryContract
 {
     /**

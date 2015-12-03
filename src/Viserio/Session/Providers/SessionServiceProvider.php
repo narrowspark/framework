@@ -3,13 +3,6 @@ namespace Viserio\Session\Providers;
 
 use Viserio\Application\ServiceProvider;
 
-/**
- * SessionServiceProvider.
- *
- * @author  Daniel Bannert
- *
- * @since   0.8.0
- */
 class SessionServiceProvider extends ServiceProvider
 {
     /**

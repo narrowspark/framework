@@ -1,13 +1,6 @@
 <?php
 namespace Viserio\Mail\Test;
 
-/**
- * MailPostmarkTransportTest.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.5
- */
 class MailPostmarkTransportTest extends \PHPUnit_Framework_TestCase
 {
     public function testSend()

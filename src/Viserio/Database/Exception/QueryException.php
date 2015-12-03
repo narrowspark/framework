@@ -1,13 +1,6 @@
 <?php
 namespace Viserio\Database\Exception;
 
-/**
- * QueryException.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.8
- */
 class QueryException extends \PDOException
 {
     /**

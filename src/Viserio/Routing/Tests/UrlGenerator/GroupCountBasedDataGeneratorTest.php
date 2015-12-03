@@ -3,13 +3,6 @@ namespace Viserio\Routing\Test\UrlGenerator;
 
 use Viserio\Routing\UrlGenerator\GroupCountBasedDataGenerator;
 
-/**
- * GroupCountBasedDataGeneratorTest.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.5
- */
 class GroupCountBasedDataGeneratorTest extends \PHPUnit_Framework_TestCase
 {
     /**

@@ -5,13 +5,6 @@ use Mockery as Mock;
 use Symfony\Component\HttpFoundation\Request as SymfonyRequest;
 use Viserio\Http\Request;
 
-/**
- * HttpRequestTest.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.5
- */
 class HttpRequestTest extends \PHPUnit_Framework_TestCase
 {
     /**

@@ -7,13 +7,6 @@ use Symfony\Component\HttpFoundation\RedirectResponse as SymfonyRedirectResponse
 use Viserio\Session\Store as SessionStore;
 use Viserio\Support\Str;
 
-/**
- * RedirectResponse.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.5
- */
 class RedirectResponse extends SymfonyRedirectResponse
 {
     /**

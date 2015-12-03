@@ -3,13 +3,6 @@ namespace Viserio\Support;
 
 use Cekurte\Environment\Environment;
 
-/**
- * Helper.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.2
- */
 class Helper
 {
     /**

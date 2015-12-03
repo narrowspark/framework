@@ -5,16 +5,6 @@ use Viserio\Contracts\Config\Manager as ManagerContract;
 use Viserio\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Contracts\Filesystem\Loader as LoaderContract;
 
-/**
- * Manager.
- *
- * Uses a ConfigurationHandler class to parse configuration data,
- * accessed as an array.
- *
- * @author  Daniel Bannert
- *
- * @since   0.8.0
- */
 class Manager implements ManagerContract, \IteratorAggregate
 {
     /**

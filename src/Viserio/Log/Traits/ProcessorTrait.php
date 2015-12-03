@@ -1,13 +1,6 @@
 <?php
 namespace Viserio\Log\Traits;
 
-/**
- * ProcessorTrait.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.5
- */
 trait ProcessorTrait
 {
     /**

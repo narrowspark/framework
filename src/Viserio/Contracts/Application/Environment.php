@@ -1,13 +1,8 @@
 <?php
 namespace Viserio\Contracts\Application;
 
-/**
- * Environment.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.4
- */
+use Closure;
+
 interface Environment
 {
     /**
@@ -18,7 +13,7 @@ interface Environment
      *
      * @return string
      */
-    public function detect(\Closure $callback, $consoleArgs = null);
+    public function detect(Closure $callback, $consoleArgs = null);
 
     /**
      * Returns true when the runtime used is HHVM or

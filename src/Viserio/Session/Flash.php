@@ -1,13 +1,6 @@
 <?php
 namespace Viserio\Session;
 
-/**
- * Flash.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.4
- */
 class Flash
 {
     /**

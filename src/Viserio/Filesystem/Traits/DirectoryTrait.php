@@ -3,13 +3,6 @@ namespace Viserio\Filesystem\Traits;
 
 use Symfony\Component\Finder\Finder;
 
-/**
- * MimetypeTrait.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.6
- */
 trait DirectoryTrait
 {
     /**

@@ -3,13 +3,6 @@ namespace Viserio\Support\Test;
 
 use Viserio\Support\Str;
 
-/**
- * StrTest.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.5
- */
 class StrTest extends \PHPUnit_Framework_TestCase
 {
     public function testStringCanBeLimitedByWords()

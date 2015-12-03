@@ -6,13 +6,6 @@ use PDO;
 use Viserio\Database\Traits\DetectsLostConnections;
 use Viserio\Support\Arr;
 
-/**
- * Connector.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.2
- */
 class Connectors
 {
     use DetectsLostConnections;

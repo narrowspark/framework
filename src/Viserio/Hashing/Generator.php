@@ -5,13 +5,6 @@ use RandomLib\Generator as RandomLib;
 use Viserio\Contracts\Hashing\Generator as HashContract;
 use Viserio\Support\Helper;
 
-/**
- * Generator.
- *
- * @author  Daniel Bannert
- *
- * @since   0.8.0
- */
 class Generator implements HashContract
 {
     /**

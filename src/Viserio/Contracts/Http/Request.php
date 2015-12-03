@@ -1,13 +1,6 @@
 <?php
 namespace Viserio\Contracts\Http;
 
-/**
- * Request.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.4
- */
 interface Request
 {
     /**
