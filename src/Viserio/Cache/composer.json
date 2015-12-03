@@ -29,6 +29,12 @@
         "fabpot/php-cs-fixer"        : "~1.10.1",
         "phpunit/phpunit"            : "~5.0.6"
     },
+    "provide": {
+        "psr/cache-implementation"   : "1.0.0"
+    },
+    "replace": {
+        "psr/cache"                  : "1.0.0"
+    },
     "autoload": {
         "psr-4": {
             "Viserio\\Cache\\"       : ""
@@ -46,6 +52,7 @@
     },
     "suggest": {
         "predis/predis"              : "Flexible and feature-complete PHP client library for Redis",
+        "ext-couchbase"              : "*",
         "ext-apc"                    : "*",
         "ext-apcu"                   : "*",
         "ext-redis"                  : "*",
@@ -54,7 +61,8 @@
         "ext-pdo"                    : "*",
         "ext-pdo_sqlite"             : "*",
         "ext-pdo_mysql"              : "*",
-        "ext-pdo_pgsql"              : "*"
+        "ext-pdo_pgsql"              : "*",
+        "league/flysystem"           : ""
     },
     "minimum-stability"              : "dev",
     "prefer-stable"                  : true
