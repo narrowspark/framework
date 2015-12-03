@@ -51,7 +51,7 @@ abstract class Command extends BaseCommand
      * The mapping between human readable verbosity levels and Symfony's
      * OutputInterface.
      *
-     * @var int[]
+     * @var array
      */
     protected $verbosity = [
         'v'     => OutputInterface::VERBOSITY_VERBOSE,
@@ -103,7 +103,7 @@ abstract class Command extends BaseCommand
      *
      * @return bool
      */
-    public function inVerbosity($level)
+    public function getVerbosityLevel($level)
     {
         if (isset($this->verbosity[$level])) {
             $level = $this->verbosity[$level];
@@ -310,7 +310,7 @@ abstract class Command extends BaseCommand
      */
     public function line($string, $newline = true, $style = null, $verbosityLevel = OutputInterface::VERBOSITY_NORMAL)
     {
-        if ($this->inVerbosity($verbosityLevel)) {
+        if ($this->getVerbosityLevel($verbosityLevel)) {
             $this->output->writeln($style ? "<$style>$string</$style>" : $string);
         }
     }
