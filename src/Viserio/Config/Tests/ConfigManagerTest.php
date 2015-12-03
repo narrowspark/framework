@@ -1,29 +1,9 @@
 <?php
 namespace Viserio\Config\Test;
 
-/**
- * Narrowspark - a PHP 5 framework.
- *
- * @author      Daniel Bannert <info@anolilab.de>
- * @copyright   2015 Daniel Bannert
- *
- * @link        http://www.narrowspark.de
- *
- * @license     http://www.narrowspark.com/license
- *
- * @version     0.10.0
- */
-
 use Viserio\Config\Manager as ConfigManager;
 use Viserio\Config\Repository;
 
-/**
- * ConfigManagerTest.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.6
- */
 class ConfigManagerTest extends \PHPUnit_Framework_TestCase
 {
     public $defaults = [

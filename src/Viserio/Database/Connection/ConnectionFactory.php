@@ -1,19 +1,6 @@
 <?php
 namespace Viserio\Database\Connection;
 
-/**
- * Narrowspark - a PHP 5 framework.
- *
- * @author      Daniel Bannert <info@anolilab.de>
- * @copyright   2015 Daniel Bannert
- *
- * @link        http://www.narrowspark.de
- *
- * @license     http://www.narrowspark.com/license
- *
- * @version     0.10.0
- */
-
 use Viserio\Contracts\Container\Container as ContainerContract;
 use Viserio\Database\Connectors\GoogleCloudConnector;
 use Viserio\Database\Connectors\MariaDBConnector;
@@ -27,13 +14,6 @@ use Viserio\Database\Connectors\SqlServerConnector;
 use Viserio\Database\Connectors\SybaseConnector;
 use Viserio\Support\Arr;
 
-/**
- * ConnectionFactory.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.2
- */
 class ConnectionFactory
 {
     /**

@@ -1,30 +1,10 @@
 <?php
 namespace Viserio\Cache;
 
-/**
- * Narrowspark - a PHP 5 framework.
- *
- * @author      Daniel Bannert <info@anolilab.de>
- * @copyright   2015 Daniel Bannert
- *
- * @link        http://www.narrowspark.de
- *
- * @license     http://www.narrowspark.com/license
- *
- * @version     0.10.0
- */
-
 use Carbon\Carbon;
 use Viserio\Contracts\Cache\Adapter as AdapterContract;
 use Viserio\Contracts\Cache\Repository as CacheContract;
 
-/**
- * Repository.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.2
- */
 class Repository implements CacheContract, \ArrayAccess
 {
     /**

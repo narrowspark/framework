@@ -1,19 +1,6 @@
 <?php
 namespace Viserio\Console\Test;
 
-/**
- * Narrowspark - a PHP 5 framework.
- *
- * @author      Daniel Bannert <info@anolilab.de>
- * @copyright   2015 Daniel Bannert
- *
- * @link        http://www.narrowspark.de
- *
- * @license     http://www.narrowspark.com/license
- *
- * @version     0.10.0
- */
-
 use Mockery as Mock;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\StringInput;
@@ -21,13 +8,6 @@ use Symfony\Component\Console\Output\Output as SymfonyOutput;
 use Symfony\Component\Console\Output\OutputInterface;
 use Viserio\Console\Application;
 
-/**
- * ApplicationTest.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.5
- */
 class ApplicationTest extends \PHPUnit_Framework_TestCase
 {
     /**

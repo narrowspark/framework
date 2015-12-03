@@ -1,26 +1,6 @@
 <?php
 namespace Viserio\Filesystem\Traits;
 
-/**
- * Narrowspark - a PHP 5 framework.
- *
- * @author      Daniel Bannert <info@anolilab.de>
- * @copyright   2015 Daniel Bannert
- *
- * @link        http://www.narrowspark.de
- *
- * @license     http://www.narrowspark.com/license
- *
- * @version     0.10.0
- */
-
-/**
- * MimetypeTrait.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.6
- */
 trait MimetypeTrait
 {
     /**
@@ -29,28 +9,28 @@ trait MimetypeTrait
      * @var array
      */
     protected $mimetypes = [
-        'txt' => 'text/plain',
-        'htm' => 'text/html',
+        'txt'  => 'text/plain',
+        'htm'  => 'text/html',
         'html' => 'text/html',
-        'php' => 'text/html',
-        'css' => 'text/css',
-        'js' => 'application/javascript',
+        'php'  => 'text/html',
+        'css'  => 'text/css',
+        'js'   => 'application/javascript',
         'json' => 'application/json',
-        'xml' => 'application/xml',
-        'swf' => 'application/x-shockwave-flash',
-        'flv' => 'video/x-flv',
+        'xml'  => 'application/xml',
+        'swf'  => 'application/x-shockwave-flash',
+        'flv'  => 'video/x-flv',
 
         // images
-        'png' => 'image/png',
-        'jpe' => 'image/jpeg',
+        'png'  => 'image/png',
+        'jpe'  => 'image/jpeg',
         'jpeg' => 'image/jpeg',
-        'jpg' => 'image/jpeg',
-        'gif' => 'image/gif',
-        'bmp' => 'image/bmp',
-        'ico' => 'image/vnd.microsoft.icon',
+        'jpg'  => 'image/jpeg',
+        'gif'  => 'image/gif',
+        'bmp'  => 'image/bmp',
+        'ico'  => 'image/vnd.microsoft.icon',
         'tiff' => 'image/tiff',
-        'tif' => 'image/tiff',
-        'svg' => 'image/svg+xml',
+        'tif'  => 'image/tiff',
+        'svg'  => 'image/svg+xml',
         'svgz' => 'image/svg+xml',
 
         // archives
@@ -62,15 +42,15 @@ trait MimetypeTrait
 
         // audio/video
         'mp3' => 'audio/mpeg',
-        'qt' => 'video/quicktime',
+        'qt'  => 'video/quicktime',
         'mov' => 'video/quicktime',
 
         // adobe
         'pdf' => 'application/pdf',
         'psd' => 'image/vnd.adobe.photoshop',
-        'ai' => 'application/postscript',
+        'ai'  => 'application/postscript',
         'eps' => 'application/postscript',
-        'ps' => 'application/postscript',
+        'ps'  => 'application/postscript',
 
         // ms office
         'doc' => 'application/msword',
