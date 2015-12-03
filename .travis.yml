@@ -7,19 +7,20 @@ php:
   - nightly
 
 env:
-  - MONGO_VERSION=1.2.12
-  - ADAPTER=MemoryStore
-  - ADAPTER=Apc
-  - ADAPTER=Memcached
-  - ADAPTER=Redis
-  - ADAPTER=Couchbase
-  - ADAPTER=MySQL
-  - ADAPTER=SQLite
-  - ADAPTER=PostgreSQL
-  - ADAPTER=Filesystem
-  - ADAPTER=Flysystem
   global:
     - setup=basic
+  matrix:
+    - ADAPTER=MemoryStore
+    - ADAPTER=Apc
+    - ADAPTER=Memcached
+    - ADAPTER=Redis
+    - ADAPTER=Couchbase
+    - ADAPTER=MySQL
+    - ADAPTER=SQLite
+    - ADAPTER=PostgreSQL
+    - ADAPTER=Filesystem
+    - ADAPTER=Flysystem
+    - MONGO_VERSION=1.2.12
 
 services:
   - mongodb
