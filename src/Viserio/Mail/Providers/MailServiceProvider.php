@@ -1,19 +1,6 @@
 <?php
 namespace Viserio\Mail\Providers;
 
-/**
- * Narrowspark - a PHP 5 framework.
- *
- * @author      Daniel Bannert <info@anolilab.de>
- * @copyright   2015 Daniel Bannert
- *
- * @link        http://www.narrowspark.de
- *
- * @license     http://www.narrowspark.com/license
- *
- * @version     0.10.0-dev
- */
-
 use Aws\Sdk;
 use Aws\Ses\SesClient;
 use GuzzleHttp\Client as HttpClient;
@@ -25,13 +12,6 @@ use Viserio\Mail\Transport\Mandrill as MandrillTransport;
 use Viserio\Mail\Transport\Postmark as PostmarkTransport;
 use Viserio\Mail\Transport\Ses as SesTransport;
 
-/**
- * MailServiceProvider.
- *
- * @author  Daniel Bannert
- *
- * @since   0.8.0-dev
- */
 class MailServiceProvider extends ServiceProvider
 {
     /**

@@ -1,19 +1,6 @@
 <?php
 namespace Viserio\Container;
 
-/**
- * Narrowspark - a PHP 5 framework.
- *
- * @author      Daniel Bannert <info@anolilab.de>
- * @copyright   2015 Daniel Bannert
- *
- * @link        http://www.narrowspark.de
- *
- * @license     http://www.narrowspark.com/license
- *
- * @version     0.10.0-dev
- */
-
 use Interop\Container\ContainerInterface as ContainerInteropInterface;
 use Nucleus\Invoker\Invoker;
 use Viserio\Container\Exception\BindingResolutionException;
@@ -29,7 +16,7 @@ use Viserio\Contracts\Container\Container as ContainerContract;
  *
  * @author  Daniel Bannert
  *
- * @since   0.9.4-dev
+ * @since   0.9.4
  */
 class Container implements \ArrayAccess, ContainerInteropInterface, ContainerContract
 {

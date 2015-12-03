@@ -1,29 +1,10 @@
 <?php
 namespace Viserio\Cache\Adapter;
 
-/**
- * Narrowspark - a PHP 5 framework.
- *
- * @author      Daniel Bannert <info@anolilab.de>
- * @copyright   2015 Daniel Bannert
- *
- * @link        http://www.narrowspark.de
- *
- * @license     http://www.narrowspark.com/license
- *
- * @version     0.10.0-dev
- */
-
+use Memcached;
 use Viserio\Cache\Store\TaggableStore;
 use Viserio\Contracts\Cache\Adapter as AdapterContract;
 
-/**
- * MemcachedCache.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.2-dev
- */
 class MemcachedCache extends TaggableStore implements AdapterContract
 {
     /**
@@ -97,7 +78,7 @@ class MemcachedCache extends TaggableStore implements AdapterContract
         // Set SASL auth data, requires binary protocol
         if (count($saslCredentials) === 2) {
             list($username, $password) = $saslCredentials;
-            $memcached->setOption(\Memcached::OPT_BINARY_PROTOCOL, true);
+            $memcached->setOption(Memcached::OPT_BINARY_PROTOCOL, true);
             $memcached->setSaslAuthData($username, $password);
         }
 
@@ -107,7 +88,9 @@ class MemcachedCache extends TaggableStore implements AdapterContract
         if (!$memcached->getServerList()) {
             foreach ($servers as $server) {
                 $memcached->addServer(
-                    $server['host'], $server['port'], $server['weight']
+                    $server['host'],
+                    $server['port'],
+                    $server['weight']
                 );
             }
         }
@@ -136,10 +119,10 @@ class MemcachedCache extends TaggableStore implements AdapterContract
     protected static function getMemcached($persistentConnectionId)
     {
         if (false !== $persistentConnectionId) {
-            return new \Memcached($persistentConnectionId);
+            return new Memcached($persistentConnectionId);
         }
 
-        return new \Memcached();
+        return new Memcached();
     }
 
     /**
@@ -173,6 +156,35 @@ class MemcachedCache extends TaggableStore implements AdapterContract
     }
 
     /**
+     * Retrieve multiple items from the cache by key.
+     *
+     * Items not found in the cache will have a null value for the key.
+     *
+     * @param array $keys
+     *
+     * @return array
+     */
+    public function getMultiple(array $keys)
+    {
+        $prefixedKeys = [];
+
+        foreach ($keys as $keyToPrefix) {
+            $prefixedKeys[] = $this->prefix.$keyToPrefix;
+        }
+
+        $cas = null;
+        $cacheValues = $this->memcached->getMulti($prefixedKeys, $cas, Memcached::GET_PRESERVE_ORDER);
+
+        if ($this->memcached->getResultCode() !== 0) {
+            return array_fill_keys($keys, null);
+        }
+
+        $returnValues = array_combine($keys, $cacheValues);
+
+        return $returnValues;
+    }
+
+    /**
      * Store an item in the cache for a given number of minutes.
      *
      * @param string $key
@@ -186,6 +198,23 @@ class MemcachedCache extends TaggableStore implements AdapterContract
         $this->minutes[$key] = $minutes;
 
         $this->memcached->set($this->prefix.$key, $value, $minutes * 60);
+    }
+
+    /**
+     * Store multiple items in the cache for a set number of minutes.
+     *
+     * @param array $values
+     * @param int   $minutes
+     */
+    public function putMultiple(array $values, $minutes)
+    {
+        $formattedKeyValues = [];
+
+        foreach ($values as $keyToPrefix => $singleValue) {
+            $formattedKeyValues[$this->prefix.$keyToPrefix] = $singleValue;
+        }
+
+        $this->memcached->setMulti($formattedKeyValues, $minutes * 60);
     }
 
     /**

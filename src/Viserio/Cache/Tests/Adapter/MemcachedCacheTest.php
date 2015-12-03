@@ -1,31 +1,9 @@
 <?php
-namespace Viserio\Cache\Test\Adapter;
-
-/*
- * Narrowspark - a PHP 5 framework
- *
- * @author      Daniel Bannert <info@anolilab.de>
- * @copyright   2015 Daniel Bannert
- * @link        http://www.narrowspark.de
- * @license     http://www.narrowspark.com/license
- * @version     0.10.0-dev
- * @package     Narrowspark/framework
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- *
- */
+namespace Viserio\Cache\Tests\Adapter;
 
 use Mockery as Mock;
 use Viserio\Cache\Adapter\MemcachedCache;
 
-/**
- * MemcachedCacheTest.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.5-dev
- */
 class MemcachedCacheTest extends \PHPUnit_Framework_TestCase
 {
     public function tearDown()
@@ -49,6 +27,31 @@ class MemcachedCacheTest extends \PHPUnit_Framework_TestCase
         $memcache->expects($this->once())->method('getResultCode')->will($this->returnValue(0));
         $store = new MemcachedCache($memcache);
         $this->assertEquals('bar', $store->get('foo'));
+    }
+
+    public function testMemcacheGetMultiValuesAreReturnedWithCorrectKeys()
+    {
+        if (! class_exists('Memcached')) {
+            $this->markTestSkipped('Memcached module not installed');
+        }
+
+        $memcache = $this->getMock('StdClass', ['getMulti', 'getResultCode']);
+        $memcache->expects($this->once())->method('getMulti')->with(
+            ['foo:foo', 'foo:bar', 'foo:baz']
+        )->will($this->returnValue([
+            'foobuu', 'buzz', 'fiboo'
+        ]));
+
+        $memcache->expects($this->once())->method('getResultCode')->will($this->returnValue(0));
+        $store = new MemcachedCache($memcache, 'foo');
+
+        $this->assertEquals([
+            'foo'   => 'foobuu',
+            'bar'   => 'buzz',
+            'baz'   => 'fiboo'
+        ], $store->getMultiple([
+            'foo', 'bar', 'baz'
+        ]));
     }
 
     public function testSetMethodProperlyCallsMemcache()

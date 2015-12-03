@@ -1,19 +1,6 @@
 <?php
 namespace Viserio\Mail;
 
-/**
- * Narrowspark - a PHP 5 framework.
- *
- * @author      Daniel Bannert <info@anolilab.de>
- * @copyright   2015 Daniel Bannert
- *
- * @link        http://www.narrowspark.de
- *
- * @license     http://www.narrowspark.com/license
- *
- * @version     0.10.0-dev
- */
-
 use Psr\Log\LoggerInterface;
 use Swift_Mailer;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -21,13 +8,6 @@ use Viserio\Contracts\Mail\Mailer as MailerContract;
 use Viserio\Contracts\View\Factory;
 use Viserio\Support\Arr;
 
-/**
- * Mailer.
- *
- * @author  Daniel Bannert
- *
- * @since   0.8.0-dev
- */
 class Mailer implements MailerContract
 {
     /**

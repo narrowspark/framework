@@ -1,19 +1,6 @@
 <?php
 namespace Viserio\Container\Traits;
 
-/**
- * Narrowspark - a PHP 5 framework.
- *
- * @author      Daniel Bannert <info@anolilab.de>
- * @copyright   2015 Daniel Bannert
- *
- * @link        http://www.narrowspark.de
- *
- * @license     http://www.narrowspark.com/license
- *
- * @version     0.10.0-dev
- */
-
 use Viserio\Container\Exception\BindingResolutionException;
 use Viserio\Container\Exception\CircularReferenceException;
 use Viserio\Container\Exception\UnresolvableDependencyException;
@@ -23,7 +10,7 @@ use Viserio\Container\Exception\UnresolvableDependencyException;
  *
  * @author  Daniel Bannert
  *
- * @since   0.9.6-dev
+ * @since   0.9.6
  */
 trait ContainerResolverTraits
 {

@@ -1,32 +1,12 @@
 <?php
 namespace Viserio\Http;
 
-/**
- * Narrowspark - a PHP 5 framework.
- *
- * @author      Daniel Bannert <info@anolilab.de>
- * @copyright   2015 Daniel Bannert
- *
- * @link        http://www.narrowspark.de
- *
- * @license     http://www.narrowspark.com/license
- *
- * @version     0.10.0-dev
- */
-
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\File\UploadedFile as SymfonyUploadedFile;
 use Symfony\Component\HttpFoundation\RedirectResponse as SymfonyRedirectResponse;
 use Viserio\Session\Store as SessionStore;
 use Viserio\Support\Str;
 
-/**
- * RedirectResponse.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.5-dev
- */
 class RedirectResponse extends SymfonyRedirectResponse
 {
     /**

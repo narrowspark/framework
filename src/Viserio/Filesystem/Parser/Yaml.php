@@ -1,19 +1,6 @@
 <?php
 namespace Viserio\Filesystem\Parser;
 
-/**
- * Narrowspark - a PHP 5 framework.
- *
- * @author      Daniel Bannert <info@anolilab.de>
- * @copyright   2015 Daniel Bannert
- *
- * @link        http://www.narrowspark.de
- *
- * @license     http://www.narrowspark.com/license
- *
- * @version     0.10.0-dev
- */
-
 use Symfony\Component\Yaml\Exception\ParseException;
 use Symfony\Component\Yaml\Parser;
 use Viserio\Contracts\Filesystem\LoadingException;
@@ -21,13 +8,6 @@ use Viserio\Contracts\Filesystem\Parser as ParserContract;
 use Viserio\Filesystem\Filesystem;
 use Viserio\Filesystem\Parser\Traits\IsGroupTrait;
 
-/**
- * YamlAdapter.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.4-dev
- */
 class Yaml implements ParserContract
 {
     use IsGroupTrait;

@@ -1,19 +1,6 @@
 <?php
 namespace Viserio\Cache;
 
-/**
- * Narrowspark - a PHP 5 framework.
- *
- * @author      Daniel Bannert <info@anolilab.de>
- * @copyright   2015 Daniel Bannert
- *
- * @link        http://www.narrowspark.de
- *
- * @license     http://www.narrowspark.com/license
- *
- * @version     0.10.0-dev
- */
-
 use Viserio\Cache\Adapter\ApcCache;
 use Viserio\Cache\Adapter\ArrayCache;
 use Viserio\Cache\Adapter\FileCache;
@@ -32,13 +19,6 @@ use Viserio\Filesystem\Filesystem;
 use Viserio\Support\Arr;
 use Viserio\Support\Manager;
 
-/**
- * CacheManager.
- *
- * @author  Daniel Bannert
- *
- * @since   0.8.0-dev
- */
 class CacheManager extends Manager implements FactoryContract
 {
     /**

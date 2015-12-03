@@ -1,28 +1,9 @@
 <?php
 namespace Viserio\Mail\Transport;
 
-/**
- * Narrowspark - a PHP 5 framework.
- *
- * @author      Daniel Bannert <info@anolilab.de>
- * @copyright   2015 Daniel Bannert
- *
- * @link        http://www.narrowspark.de
- *
- * @license     http://www.narrowspark.com/license
- *
- * @version     0.10.0-dev
- */
-
 use GuzzleHttp\ClientInterface;
+use Swift_Mime_Message;
 
-/**
- * Mandrill.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.1-dev
- */
 class Mandrill extends Transport
 {
     /**
@@ -42,8 +23,8 @@ class Mandrill extends Transport
     /**
      * Create a new Mandrill transport instance.
      *
-     * @param  \GuzzleHttp\ClientInterface $client
-     * @param string                       $key
+     * @param \GuzzleHttp\ClientInterface $client
+     * @param string                      $key
      */
     public function __construct(ClientInterface $client, $key)
     {
@@ -59,16 +40,24 @@ class Mandrill extends Transport
      *
      * @return Log|null
      */
-    public function send(\Swift_Mime_Message $message, &$failedRecipients = null)
+    public function send(Swift_Mime_Message $message, &$failedRecipients = null)
     {
-        return $this->client->post('https://mandrillapp.com/api/1.0/messages/send-raw.json', [
-            'form_params' => [
-                'key' => $this->key,
-                'to' => $this->getToAddresses($message),
-                'raw_message' => $message->toString(),
-                'async' => false,
-            ],
-        ]);
+        $this->beforeSendPerformed($message);
+
+        $data = [
+            'key' => $this->key,
+            'to' => $this->getToAddresses($message),
+            'raw_message' => $message->toString(),
+            'async' => false,
+        ];
+
+        if (version_compare(ClientInterface::VERSION, '6') === 1) {
+            $options = ['form_params' => $data];
+        } else {
+            $options = ['body' => $data];
+        }
+
+        return $this->client->post('https://mandrillapp.com/api/1.0/messages/send-raw.json', $options);
     }
 
     /**

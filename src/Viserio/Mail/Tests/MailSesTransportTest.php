@@ -1,34 +1,12 @@
 <?php
 namespace Viserio\Mail\Test;
 
-/*
- * Narrowspark - a PHP 5 framework
- *
- * @author      Daniel Bannert <info@anolilab.de>
- * @copyright   2015 Daniel Bannert
- * @link        http://www.narrowspark.de
- * @license     http://www.narrowspark.com/license
- * @version     0.10.0-dev
- * @package     Narrowspark/framework
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- *
- */
-
 use Aws\Ses\SesClient;
 use Viserio\Application\Application;
 use Viserio\Mail\Transport\Ses as SesTransport;
 use Viserio\Mail\TransportManager;
 use Viserio\Support\Collection;
 
-/**
- * MailSesTransportTest.
- *
- * @author  Daniel Bannert
- *
- * @since   0.10.0-dev
- */
 class MailSesTransportTest extends \PHPUnit_Framework_TestCase
 {
     // public function testGetTransport()

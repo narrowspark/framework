@@ -1,19 +1,6 @@
 <?php
 namespace Viserio\View;
 
-/**
- * Narrowspark - a PHP 5 framework.
- *
- * @author      Daniel Bannert <info@anolilab.de>
- * @copyright   2015 Daniel Bannert
- *
- * @link        http://www.narrowspark.de
- *
- * @license     http://www.narrowspark.com/license
- *
- * @version     0.10.0-dev
- */
-
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Viserio\Contracts\Cache\Factory as CacheContract;
 use Viserio\Contracts\Config\Manager as ConfigContract;
@@ -29,7 +16,7 @@ use Viserio\View\Engines\EngineResolver;
  *
  * @author  Daniel Bannert
  *
- * @since   0.9.5-dev
+ * @since   0.9.5
  */
 class Factory implements FactoryContract
 {

@@ -1,29 +1,9 @@
 <?php
 namespace Viserio\Cache\Adapter;
 
-/**
- * Narrowspark - a PHP 5 framework.
- *
- * @author      Daniel Bannert <info@anolilab.de>
- * @copyright   2015 Daniel Bannert
- *
- * @link        http://www.narrowspark.de
- *
- * @license     http://www.narrowspark.com/license
- *
- * @version     0.10.0-dev
- */
-
 use Viserio\Cache\Store\TaggableStore;
 use Viserio\Contracts\Cache\Adapter as AdapterContract;
 
-/**
- * NullCache.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.2-dev
- */
 class NullCache extends TaggableStore implements AdapterContract
 {
     /**
@@ -56,6 +36,25 @@ class NullCache extends TaggableStore implements AdapterContract
     }
 
     /**
+     * Retrieve multiple items from the cache by key,
+     * items not found in the cache will have a null value for the key.
+     *
+     * @param string[] $keys
+     *
+     * @return array
+     */
+    public function getMultiple(array $keys)
+    {
+        $returnValues = [];
+
+        foreach ($keys as $singleKey) {
+            $returnValues[$singleKey] = null;
+        }
+
+        return $returnValues;
+    }
+
+    /**
      * Store an item in the cache for a given number of minutes.
      *
      * @param string $key
@@ -65,6 +64,21 @@ class NullCache extends TaggableStore implements AdapterContract
     public function put($key, $value, $minutes)
     {
         //
+    }
+
+    /**
+     * Store multiple items in the cache for a set number of minutes.
+     *
+     * @param array $values array of key => value pairs
+     * @param int   $minutes
+     *
+     * @return void
+     */
+    public function putMultiple(array $values, $minutes)
+    {
+        foreach ($values as $key => $singleValue) {
+            $this->put($key, $singleValue, $minutes);
+        }
     }
 
     /**

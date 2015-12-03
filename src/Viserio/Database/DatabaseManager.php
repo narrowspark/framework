@@ -1,19 +1,6 @@
 <?php
 namespace Viserio\Database;
 
-/**
- * Narrowspark - a PHP 5 framework.
- *
- * @author      Daniel Bannert <info@anolilab.de>
- * @copyright   2015 Daniel Bannert
- *
- * @link        http://www.narrowspark.de
- *
- * @license     http://www.narrowspark.com/license
- *
- * @version     0.10.0-dev
- */
-
 use Viserio\Contracts\Cache\Manager as CacheContract;
 use Viserio\Contracts\Config\Manager as ConfigContract;
 use Viserio\Contracts\Database\Connection as ConnectionContract;
@@ -21,13 +8,6 @@ use Viserio\Contracts\Database\ConnectionResolver as ConnectionResolverContract;
 use Viserio\Database\Connection\ConnectionFactory;
 use Viserio\Support\Arr;
 
-/**
- * DatabaseManager.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.2-dev
- */
 class DatabaseManager implements ConnectionResolverContract
 {
     /**

@@ -1,32 +1,10 @@
 <?php
 namespace Viserio\Cache\Test\Store;
 
-/*
- * Narrowspark - a PHP 5 framework
- *
- * @author      Daniel Bannert <info@anolilab.de>
- * @copyright   2015 Daniel Bannert
- * @link        http://www.narrowspark.de
- * @license     http://www.narrowspark.com/license
- * @version     0.10.0-dev
- * @package     Narrowspark/framework
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- *
- */
-
 use Mockery as Mock;
 use Viserio\Cache\Adapter\ArrayCache;
 use Viserio\Cache\Adapter\RedisTaggedCache;
 
-/**
- * RedisCacheTest.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.5-dev
- */
 class TaggedCacheTest extends \PHPUnit_Framework_TestCase
 {
     public function tearDown()

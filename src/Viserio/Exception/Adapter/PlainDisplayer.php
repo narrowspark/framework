@@ -1,30 +1,10 @@
 <?php
 namespace Viserio\Exception\Adapter;
 
-/**
- * Narrowspark - a PHP 5 framework.
- *
- * @author      Daniel Bannert <info@anolilab.de>
- * @copyright   2015 Daniel Bannert
- *
- * @link        http://www.narrowspark.de
- *
- * @license     http://www.narrowspark.com/license
- *
- * @version     0.10.0-dev
- */
-
 use Symfony\Component\HttpFoundation\Response;
 use Viserio\Contracts\Exception\Adapter;
 use Viserio\Contracts\Http\HttpExceptionInterface;
 
-/**
- * PlainDisplayer.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.4-dev
- */
 class PlainDisplayer implements Adapter
 {
     /**

@@ -1,18 +1,5 @@
 <?php
 namespace Viserio\Filesystem;
-
-/**
- * Narrowspark - a PHP 5 framework.
- *
- * @author      Daniel Bannert <info@anolilab.de>
- * @copyright   2015 Daniel Bannert
- *
- * @link        http://www.narrowspark.de
- *
- * @license     http://www.narrowspark.com/license
- *
- * @version     0.10.0-dev
- */
 use League\Flysystem\AdapterInterface;
 use League\Flysystem\Config as FlyConfig;
 use League\Flysystem\FileNotFoundException;
@@ -20,13 +7,6 @@ use Viserio\Contracts\Filesystem\FileNotFoundException as ContractFileNotFoundEx
 use Viserio\Contracts\Filesystem\Filesystem as CloudFilesystemContract;
 use Viserio\Support\Collection;
 
-/**
- * FilesystemAdapter.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.3-dev
- */
 class FilesystemAdapter implements CloudFilesystemContract
 {
     /**

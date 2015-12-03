@@ -1,31 +1,11 @@
 <?php
 namespace Viserio\Filesystem;
 
-/**
- * Narrowspark - a PHP 5 framework.
- *
- * @author      Daniel Bannert <info@anolilab.de>
- * @copyright   2015 Daniel Bannert
- *
- * @link        http://www.narrowspark.de
- *
- * @license     http://www.narrowspark.com/license
- *
- * @version     0.10.0-dev
- */
-
 use League\Flysystem\AdapterInterface;
 use Viserio\Contracts\Config\Manager as ConfigContract;
 use Viserio\Contracts\Filesystem\FilesystemManager as Manager;
 use Viserio\Filesystem\Adapters\ConnectionFactory;
 
-/**
- * FilesystemManager.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.3-dev
- */
 class FilesystemManager implements Manager
 {
     /**

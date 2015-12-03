@@ -1,19 +1,6 @@
 <?php
 namespace Viserio\Application\Testing;
 
-/**
- * Narrowspark - a PHP 5 framework.
- *
- * @author      Daniel Bannert <info@anolilab.de>
- * @copyright   2015 Daniel Bannert
- *
- * @link        http://www.narrowspark.de
- *
- * @license     http://www.narrowspark.com/license
- *
- * @version     0.10.0-dev
- */
-
 use Viserio\Application\Traits\ServiceProviderTrait;
 use Viserio\Container\Container;
 
@@ -22,7 +9,7 @@ use Viserio\Container\Container;
  *
  * @author  Daniel Bannert
  *
- * @since   0.9.8-dev
+ * @since   0.9.8
  */
 abstract class FrameworkTestCase extends \PHPUnit_Framework_TestCase
 {

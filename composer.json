@@ -2,7 +2,17 @@
     "name"       : "narrowspark/framework",
     "type"       : "framework",
     "description": "Narrowspark Framework for Creative People.",
-    "keywords"   : ["framework", "narrowspark", "http", "request", "response", "viserio", "container"],
+    "keywords"   : [
+        "framework",
+        "narrowspark",
+        "http",
+        "request",
+        "response",
+        "viserio",
+        "container",
+        "pipeline",
+        "event"
+    ],
     "license"    : "MIT",
     "homepage"   : "https://github.com/narrowspark/framework",
     "support"    : {
@@ -64,6 +74,7 @@
         "viserio/http"                       : "self.version",
         "viserio/log"                        : "self.version",
         "viserio/mail"                       : "self.version",
+        "viserio/pipeline"                   : "self.version",
         "viserio/routing"                    : "self.version",
         "viserio/session"                    : "self.version",
         "viserio/support"                    : "self.version",
@@ -76,7 +87,6 @@
         "mockery/mockery"                    : "~0.9.4",
         "phpunit/phpunit"                    : "~5.0.9",
         "predis/predis"                      : "~1.0.1",
-        "sensiolabs/security-checker"        : "~3.0.2",
         "fzaninotto/faker"                   : "~1.4"
     },
     "autoload": {
@@ -89,18 +99,10 @@
             "dev-master"                     : "0.10.0-dev"
         }
     },
-    "scripts": {
-        "post-install-cmd": [
-            "sh vendor/bin/security-checker security:check --format=simple"
-        ],
-        "post-update-cmd": [
-            "sh vendor/bin/security-checker security:check --format=simple"
-        ]
-    },
     "suggest": {
         "aws/aws-sdk-php"                    : "Required to use the SQS queue driver and SES mail driver (~3.0).",
         "ext-curl"                           : "Required to use for guzzle (*)",
-        "guzzlehttp/guzzle"                  : "Required to use the Mailgun, Mandrill, and Postmark mail drivers (~6.0).",
+        "guzzlehttp/guzzle"                  : "Required to use the Mailgun and Mandrill mail drivers and the ping methods on schedules (~5.3|~6.0).",
         "league/flysystem-aws-s3-v3"         : "Required to use the Flysystem S3 driver for SDK3 (~1.0).",
         "league/flysystem-rackspace"         : "Required to use the Flysystem Rackspace driver (~1.0).",
         "predis/predis"                      : "Required to use the redis cache and queue drivers (~1.0.1)."

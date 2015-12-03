@@ -1,32 +1,15 @@
 <?php
 namespace Viserio\Cache\Adapter;
 
-/**
- * Narrowspark - a PHP 5 framework.
- *
- * @author      Daniel Bannert <info@anolilab.de>
- * @copyright   2015 Daniel Bannert
- *
- * @link        http://www.narrowspark.de
- *
- * @license     http://www.narrowspark.com/license
- *
- * @version     0.10.0-dev
- */
-
+use Viserio\Cache\Adapter\Traits\MultipleTrait;
 use Viserio\Contracts\Cache\Adapter as AdapterContract;
 use Viserio\Filesystem\Filesystem;
 use Viserio\Support\Arr;
 
-/**
- * FileCache.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.2-dev
- */
 class FileCache implements AdapterContract
 {
+    use MultipleTrait;
+
     /**
      * The Viserio Filesystem instance.
      *
