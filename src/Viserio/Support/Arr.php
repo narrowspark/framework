@@ -141,8 +141,13 @@ class Arr
     public static function forget(&$array, $keys)
     {
         $original = &$array;
+        $keys     = (array) $keys;
 
-        foreach ((array) $keys as $key) {
+        if (count($keys) === 0) {
+            return;
+        }
+
+        foreach ($keys as $key) {
             $parts = explode('.', $key);
 
             while (count($parts) > 1) {
