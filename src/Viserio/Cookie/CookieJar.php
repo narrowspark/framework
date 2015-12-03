@@ -22,11 +22,18 @@ class CookieJar implements JarContract
     protected $domain = null;
 
     /**
-     * The default secure setting (defaults to false).
+     * The default secure setting.
      *
      * @var bool
      */
     protected $secure = false;
+
+    /**
+     * All of the cookies queued for sending.
+     *
+     * @var array
+     */
+    protected $queued = [];
 
     /**
      * Create a new cookie instance.
