@@ -1,32 +1,12 @@
 <?php
 namespace Viserio\Cache\Store;
 
-/**
- * Narrowspark - a PHP 5 framework.
- *
- * @author      Daniel Bannert <info@anolilab.de>
- * @copyright   2015 Daniel Bannert
- *
- * @link        http://www.narrowspark.de
- *
- * @license     http://www.narrowspark.com/license
- *
- * @version     0.10.0
- */
-
 use Carbon\Carbon;
 use Viserio\Cache\Adapter\Traits\MultipleTrait;
 use Viserio\Contracts\Cache\Adapter;
 use Viserio\Contracts\Cache\Store as StoreContract;
 use Viserio\Support\Helper;
 
-/**
- * TaggedCache.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.2
- */
 class TaggedCache implements StoreContract
 {
     use MultipleTrait;

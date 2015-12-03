@@ -1,19 +1,6 @@
 <?php
 namespace Viserio\Mail\Transport;
 
-/**
- * Narrowspark - a PHP 5 framework.
- *
- * @author      Daniel Bannert <info@anolilab.de>
- * @copyright   2015 Daniel Bannert
- *
- * @link        http://www.narrowspark.de
- *
- * @license     http://www.narrowspark.com/license
- *
- * @version     0.10.0
- */
-
 use Swift_Events_EventListener;
 use Swift_Events_SendEvent;
 use Swift_Mime_Message;

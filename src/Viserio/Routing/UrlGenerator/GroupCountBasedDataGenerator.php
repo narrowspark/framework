@@ -1,19 +1,6 @@
 <?php
 namespace Viserio\Routing\UrlGenerator;
 
-/**
- * Narrowspark - a PHP 5 framework.
- *
- * @author      Daniel Bannert <info@anolilab.de>
- * @copyright   2015 Daniel Bannert
- *
- * @link        http://www.narrowspark.de
- *
- * @license     http://www.narrowspark.com/license
- *
- * @version     0.10.0
- */
-
 use Viserio\Contracts\Routing\DataGenerator as DataGeneratorContract;
 use Viserio\Contracts\Routing\RouteCollector as RouteCollectorContract;
 
