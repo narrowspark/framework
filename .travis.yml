@@ -7,7 +7,8 @@ php:
   - nightly
 
 env:
-  matrix:
+  global:
+    - setup=basic
     - ADAPTER=MemoryStore
     - ADAPTER=Apc
     - ADAPTER=Memcached
@@ -18,8 +19,6 @@ env:
     - ADAPTER=PostgreSQL
     - ADAPTER=Filesystem
     - ADAPTER=Flysystem
-  global:
-    - setup=basic
     - MONGO_VERSION=1.2.12
 
 services:
