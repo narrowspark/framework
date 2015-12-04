@@ -1,20 +1,30 @@
 <?php
 namespace Viserio\Console;
 
+use RuntimeException;
 use Interop\Container\ContainerInterface as ContainerContract;
-use Nucleus\Invoker\Invoker;
+use Invoker\Exception\InvocationException;
+use Invoker\Invoker;
+use Invoker\InvokerInterface;
+use Invoker\ParameterResolver\AssociativeArrayResolver;
+use Invoker\ParameterResolver\Container\ParameterNameContainerResolver;
+use Invoker\ParameterResolver\Container\TypeHintContainerResolver;
+use Invoker\ParameterResolver\ResolverChain;
+use Invoker\ParameterResolver\NumericArrayResolver;
+use Invoker\ParameterResolver\DefaultValueResolver;
 use Symfony\Component\Console\Application as SymfonyConsole;
 use Symfony\Component\Console\Command\Command as SymfonyCommand;
 use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Viserio\Contracts\Console\Application as ApplicationContract;
 use Viserio\Console\Command\Command as ViserioCommand;
 use Viserio\Console\Command\ExpressionParser as Parser;
 use Viserio\Console\Input\InputArgument;
 use Viserio\Console\Input\InputOption;
 
-class Application extends SymfonyConsole
+class Application extends SymfonyConsole implements ApplicationContract
 {
     /**
      * Console name.
@@ -54,23 +64,39 @@ class Application extends SymfonyConsole
     /**
      * Invoker instance.
      *
-     * @var \Nucleus\Invoker\Invoker
+     * @var InvokerInterface
      */
     protected $invoker;
+
+    /**
+     * The output from the previous command.
+     *
+     * @var \Symfony\Component\Console\Output\BufferedOutput
+     */
+    protected $lastOutput;
 
     /**
      * Create a new Cerebro console application.
      *
      * @param ContainerContract                                           $container
      * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $events
+     * @param string                                                      $version
+     * @param string                                                      $name
      */
-    public function __construct(ContainerContract $container, EventDispatcherInterface $events)
-    {
-        $this->expressionParser = new Parser();
-        $this->invoker          = new Invoker();
-
+    public function __construct(
+        ContainerContract $container,
+        EventDispatcherInterface $events,
+        $version,
+        $name = 'Narrowspark Framework'
+    ) {
+        $this->name      = $name;
+        $this->version   = $version;
         $this->container = $container;
         $this->events    = $events;
+
+        $this->expressionParser = new Parser();
+        $this->initInvoker();
+
         $this->setAutoExit(false);
         $this->setCatchExceptions(false);
 
@@ -91,36 +117,6 @@ class Application extends SymfonyConsole
         }
 
         return parent::add($command);
-    }
-
-    /**
-     * Add a command, resolving through the application.
-     *
-     * @param string $command
-     *
-     * @return \Symfony\Component\Console\Command\Command|null
-     */
-    public function resolve($command)
-    {
-        return $this->add($this->getContainer()->make($command));
-    }
-
-    /**
-     * Resolve an array of commands through the application.
-     *
-     * @param array|mixed $commands
-     *
-     * @return $this
-     */
-    public function resolveCommands($commands)
-    {
-        $commands = is_array($commands) ? $commands : func_get_args();
-
-        foreach ($commands as $command) {
-            $this->resolve($command);
-        }
-
-        return $this;
     }
 
     /**
@@ -145,38 +141,22 @@ class Application extends SymfonyConsole
                 $input->getOptions()
             );
 
-            $this->invoker->invoke($callable, $parameters);
+            try {
+                $this->invoker->call($callable, $parameters);
+            } catch (InvocationException $e) {
+                throw new RuntimeException(sprintf(
+                    "Impossible to call the '%s' command: %s",
+                    $input->getFirstArgument(),
+                    $e->getMessage()
+                ), 0, $e);
+            }
         };
 
         $command = $this->createCommand($expression, $commandFunction);
 
         $this->add($command);
-    }
 
-    /**
-     * Define descriptions for the command and it's arguments/options.
-     *
-     * @param string $commandName                   Name of the command.
-     * @param string $description                   Description of the command.
-     * @param array  $argumentAndOptionDescriptions Descriptions of the arguments and options.
-     *
-     * @api
-     */
-    public function descriptions($commandName, $description, array $argumentAndOptionDescriptions = [])
-    {
-        $command = $this->get($commandName);
-        $commandDefinition = $command->getDefinition();
-
-        $command->setDescription($description);
-
-        foreach ($argumentAndOptionDescriptions as $name => $value) {
-            if (strpos($name, '--') === 0) {
-                $name = substr($name, 2);
-                $this->setOptionDescription($commandDefinition, $name, $value);
-            } else {
-                $this->setArgumentDescription($commandDefinition, $name, $value);
-            }
-        }
+        return $command;
     }
 
     /**
@@ -184,8 +164,6 @@ class Application extends SymfonyConsole
      *
      * @param string $commandName      Name of the command.
      * @param array  $argumentDefaults Default argument values.
-     *
-     * @api
      */
     public function defaults($commandName, array $argumentDefaults = [])
     {
@@ -199,7 +177,7 @@ class Application extends SymfonyConsole
     }
 
     /**
-     * Get a ContainerInterface instance.
+     * Get the container instance.
      *
      * @return ContainerContract
      */
@@ -214,27 +192,13 @@ class Application extends SymfonyConsole
      * This is a convenience method used to retrieve an element from the Application container without having to assign
      * the results of the getContainer() method in every call.
      *
-     * @param string $name Name of the service.
-     *
-     * @see self::getContainer()
-     *
-     * @api
+     * @param string $name
      *
      * @return mixed|null
      */
     public function getService($name)
     {
-        return isset($this->container[$name]) ? $this->container[$name] : null;
-    }
-
-    /**
-     * Set console version.
-     *
-     * @param string $version
-     */
-    public function setVersion($version)
-    {
-        $this->version = $version;
+        return $this->getContainer()->has($name) ? $this->getContainer()->get($name) : null;
     }
 
     /**
@@ -245,16 +209,6 @@ class Application extends SymfonyConsole
     public function getVersion()
     {
         return $this->version;
-    }
-
-    /**
-     * Set console name.
-     *
-     * @param string $name
-     */
-    public function setName($name)
-    {
-        $this->name = $name;
     }
 
     /**
@@ -315,34 +269,22 @@ class Application extends SymfonyConsole
     }
 
     /**
-     * [setArgumentDescription description].
-     *
-     * @param InputDefinition $definition
-     * @param string          $name
-     * @param string          $description
+     * @return \Invoker\InvokerInterface
      */
-    protected function setArgumentDescription(InputDefinition $definition, $name, $description)
+    private function initInvoker()
     {
-        $argument = $definition->getArgument($name);
-
-        if ($argument instanceof InputArgument) {
-            $argument->setDescription($description);
+        if (!$this->invoker) {
+            $chain = [
+                new TypeHintContainerResolver($this->getContainer()),
+                new ParameterNameContainerResolver($this->getContainer()),
+                new NumericArrayResolver,
+                new AssociativeArrayResolver,
+                new DefaultValueResolver,
+            ];
+            $parameterResolver = new ResolverChain($chain);
+            $this->invoker = new Invoker($parameterResolver, $this->getContainer());
         }
-    }
 
-    /**
-     * [setOptionDescription description].
-     *
-     * @param InputDefinition $definition
-     * @param string          $name
-     * @param string          $description
-     */
-    protected function setOptionDescription(InputDefinition $definition, $name, $description)
-    {
-        $argument = $definition->getOption($name);
-
-        if ($argument instanceof InputOption) {
-            $argument->setDescription($description);
-        }
+        return $this->invoker;
     }
 }

@@ -23,7 +23,7 @@
 
     <testsuites>
         <testsuite name="Narrowspark Test Suite">
-            <directory suffix="Test.php">./src/Viserio/*/Tests/</directory>
+            <directory suffix="ApplicationTest.php">./src/Viserio/*/Tests/</directory>
         </testsuite>
     </testsuites>
 

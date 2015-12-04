@@ -2,8 +2,6 @@
 namespace Viserio\Console\Command;
 
 use Viserio\Contracts\Support\Arrayable;
-use Viserio\Container\ContainerAwareTrait;
-use Viserio\Console\Style\NarrowsparkStyle;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\NullOutput;
@@ -13,25 +11,16 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ChoiceQuestion;
 use Symfony\Component\Console\Question\Question;
 use Viserio\Console\Style\NarrowsparkStyle;
-use Viserio\Container\ContainerAwareTrait;
+use Interop\Container\ContainerInterface as ContainerInteropInterface;
 
 abstract class Command extends BaseCommand
 {
-    use ContainerAwareTrait;
-
     /**
      * The console command name.
      *
      * @var string
      */
     protected $name;
-
-    /**
-     * The console command description.
-     *
-     * @var string
-     */
-    protected $description;
 
     /**
      * The console command input.
@@ -61,13 +50,97 @@ abstract class Command extends BaseCommand
     ];
 
     /**
+     * The console command description.
+     *
+     * @var string
+     */
+    protected $description;
+
+    /**
+     * The name and signature of the console command.
+     *
+     * @var string
+     */
+    protected $signature;
+
+    /**
+     * @var \Interop\Container\ContainerInterface
+     */
+    protected $container;
+
+    /**
      * Create a new console command instance.
      */
     public function __construct()
     {
-        parent::__construct($this->name);
+        // We will go ahead and set the name, description, and parameters on console
+        // commands just to make things a little easier on the developer. This is
+        // so they don't have to all be manually specified in the constructors.
+        if (isset($this->signature)) {
+            $this->configureUsingFluentDefinition();
+        } else {
+            parent::__construct($this->name);
+        }
 
         $this->setDescription($this->description);
+
+        if (!isset($this->signature)) {
+            $this->specifyParameters();
+        }
+    }
+
+    /**
+     * Configure the console command using a fluent definition.
+     */
+    protected function configureUsingFluentDefinition()
+    {
+        list($name, $arguments, $options) = (new ExpressionParser())->parse($this->signature);
+
+        parent::__construct($name);
+
+        foreach ($arguments as $argument) {
+            $this->getDefinition()->addArgument($argument);
+        }
+        foreach ($options as $option) {
+            $this->getDefinition()->addOption($option);
+        }
+    }
+
+    /**
+     * Set a container.
+     *
+     * @param \Interop\Container\ContainerInterface $container
+     */
+    public function setContainer(ContainerInteropInterface $container)
+    {
+        $this->container = $container;
+    }
+    /**
+     * Get the container.
+     *
+     * @return \Interop\Container\ContainerInterface
+     */
+    public function getContainer()
+    {
+        return $this->container;
+    }
+
+    /**
+     * Specify the arguments and options on the command.
+     *
+     * @return void
+     */
+    protected function specifyParameters()
+    {
+        // We will loop through all of the arguments and options for the command and
+        // set them all on the base command instance. This specifies what can get
+        // passed into these commands as "parameters" to control the execution.
+        foreach ($this->getArguments() as $arguments) {
+            call_user_func_array([$this, 'addArgument'], $arguments);
+        }
+        foreach ($this->getOptions() as $options) {
+            call_user_func_array([$this, 'addOption'], $options);
+        }
     }
 
     /**
@@ -364,5 +437,25 @@ abstract class Command extends BaseCommand
         }
 
         $this->line($string, 'warning', $verbosityLevel);
+    }
+
+    /**
+     * Get the console command arguments.
+     *
+     * @return array
+     */
+    protected function getArguments()
+    {
+        return [];
+    }
+
+    /**
+     * Get the console command options.
+     *
+     * @return array
+     */
+    protected function getOptions()
+    {
+        return [];
     }
 }

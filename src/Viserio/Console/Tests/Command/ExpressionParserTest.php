@@ -7,10 +7,7 @@ use Viserio\Console\Input\InputOption;
 
 class ExpressionParserTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @test
-     */
-    public function itParsesCommandNames()
+    public function testItParsesCommandNames()
     {
         $this->assertParsesTo('greet', [
             'name' => 'greet',
@@ -19,10 +16,7 @@ class ExpressionParserTest extends \PHPUnit_Framework_TestCase
         ]);
     }
 
-    /**
-     * @test
-     */
-    public function itParsesCommandNamesContainingNamespaces()
+    public function testItParsesCommandNamesContainingNamespaces()
     {
         $this->assertParsesTo('demo:greet', [
             'name' => 'demo:greet',
@@ -31,10 +25,7 @@ class ExpressionParserTest extends \PHPUnit_Framework_TestCase
         ]);
     }
 
-    /**
-     * @test
-     */
-    public function itParsesMandatoryArguments()
+    public function testItParsesMandatoryArguments()
     {
         $this->assertParsesTo('greet firstname lastname', [
             'name' => 'greet',
@@ -46,10 +37,7 @@ class ExpressionParserTest extends \PHPUnit_Framework_TestCase
         ]);
     }
 
-    /**
-     * @test
-     */
-    public function itParsesOptionalArguments()
+    public function testItParsesOptionalArguments()
     {
         $this->assertParsesTo('greet [firstname] [lastname]', [
             'name' => 'greet',
@@ -61,10 +49,7 @@ class ExpressionParserTest extends \PHPUnit_Framework_TestCase
         ]);
     }
 
-    /**
-     * @test
-     */
-    public function itParsesArrayArguments()
+    public function testItParsesArrayArguments()
     {
         $this->assertParsesTo('greet [names]*', [
             'name' => 'greet',
@@ -75,10 +60,7 @@ class ExpressionParserTest extends \PHPUnit_Framework_TestCase
         ]);
     }
 
-    /**
-     * @test
-     */
-    public function itParsesArrayArgumentsWithAtLeastOneValue()
+    public function testItParsesArrayArgumentsWithAtLeastOneValue()
     {
         $this->assertParsesTo('greet names*', [
             'name' => 'greet',
@@ -89,10 +71,7 @@ class ExpressionParserTest extends \PHPUnit_Framework_TestCase
         ]);
     }
 
-    /**
-     * @test
-     */
-    public function itParsesOptions()
+    public function testItParsesOptions()
     {
         $this->assertParsesTo('greet [--yell]', [
             'name' => 'greet',
@@ -103,10 +82,7 @@ class ExpressionParserTest extends \PHPUnit_Framework_TestCase
         ]);
     }
 
-    /**
-     * @test
-     */
-    public function itParsesOptionsWithMandatoryValues()
+    public function testItParsesOptionsWithMandatoryValues()
     {
         $this->assertParsesTo('greet [--iterations=]', [
             'name' => 'greet',
@@ -117,10 +93,7 @@ class ExpressionParserTest extends \PHPUnit_Framework_TestCase
         ]);
     }
 
-    /**
-     * @test
-     */
-    public function itParsesOptionsWithMultipleValues()
+    public function testItParsesOptionsWithMultipleValues()
     {
         $this->assertParsesTo('greet [--name=]*', [
             'name' => 'greet',
@@ -131,10 +104,7 @@ class ExpressionParserTest extends \PHPUnit_Framework_TestCase
         ]);
     }
 
-    /**
-     * @test
-     */
-    public function itParsesOptionsWithShortcuts()
+    public function testItParsesOptionsWithShortcuts()
     {
         $this->assertParsesTo('greet [-y|--yell] [-it|--iterations=] [-n|--name=]*', [
             'name' => 'greet',
@@ -148,17 +118,16 @@ class ExpressionParserTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @test
      * @expectedException \Viserio\Contracts\Console\Command\InvalidCommandExpression
      * @expectedExceptionMessage An option must be enclosed by brackets: [--option]
      */
-    public function itProvidesAnErrorMessageOnOptionsMissingBrackets()
+    public function testItProvidesAnErrorMessageOnOptionsMissingBrackets()
     {
         $parser = new ExpressionParser();
         $parser->parse('greet --yell');
     }
 
-    public function assertParsesTo($expression, $expected)
+    public function testAssertParsesTo($expression, $expected)
     {
         $parser = new ExpressionParser();
         $this->assertEquals($expected, $parser->parse($expression));

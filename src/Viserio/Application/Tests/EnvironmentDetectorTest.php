@@ -4,13 +4,6 @@ namespace Viserio\Application\Tests;
 use Mockery as Mock;
 use Viserio\Application\EnvironmentDetector;
 
-/**
- * EnvironmentDetectorTest.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.5
- */
 class EnvironmentDetectorTest extends \PHPUnit_Framework_TestCase
 {
     /**
