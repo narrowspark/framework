@@ -34,7 +34,7 @@
         "ext-mbstring"                        : "*",
         "classpreloader/classpreloader"       : "~2.0|~3.0",
         "container-interop/container-interop" : "~1.1",
-        "container-interop/definition-interop": "0.1.0",
+        "container-interop/definition-interop": "0.2.0",
         "roave/better-reflection"             : "0.1.0",
         "cekurte/environment"                 : "~0.1",
         "danielstjules/stringy"               : "~2.1.0",
@@ -61,7 +61,6 @@
         "paragonie/password_lock"             : "~1.1.0"
     },
     "replace": {
-<<<<<<< HEAD
         "viserio/cache"                       : "self.version",
         "viserio/conifg"                      : "self.version",
         "viserio/console"                     : "self.version",
@@ -82,30 +81,8 @@
         "viserio/session"                     : "self.version",
         "viserio/support"                     : "self.version",
         "viserio/translator"                  : "self.version",
-        "viserio/view"                        : "self.version"
-=======
-        "viserio/cache"                      : "self.version",
-        "viserio/conifg"                     : "self.version",
-        "viserio/console"                    : "self.version",
-        "viserio/container"                  : "self.version",
-        "viserio/contracts"                  : "self.version",
-        "viserio/cookie"                     : "self.version",
-        "viserio/database"                   : "self.version",
-        "viserio/encrypter"                  : "self.version",
-        "viserio/events"                     : "self.version",
-        "viserio/exception"                  : "self.version",
-        "viserio/filessystem"                : "self.version",
-        "viserio/hashing"                    : "self.version",
-        "viserio/http"                       : "self.version",
-        "viserio/log"                        : "self.version",
-        "viserio/mail"                       : "self.version",
-        "viserio/pipeline"                   : "self.version",
-        "viserio/routing"                    : "self.version",
-        "viserio/session"                    : "self.version",
-        "viserio/support"                    : "self.version",
-        "viserio/translator"                 : "self.version",
-        "viserio/view"                       : "self.version",
-        "psr/cache"                          : "1.0.0"
+        "viserio/view"                        : "self.version",
+        "psr/cache"                           : "1.0.0"
     },
     "provide": {
         "psr/cache-implementation"           : "1.0.0",
@@ -113,7 +90,6 @@
         "psr/http-message"                   : "~1.0",
         "psr/log-implementation"             : "1.0.0",
         "psr/http-message-implementation"    : "1.0"
->>>>>>> develop
     },
     "require-dev": {
         "aws/aws-sdk-php"                     : "~3.0",
@@ -123,7 +99,7 @@
         "predis/predis"                       : "~1.0.1",
         "fzaninotto/faker"                    : "~1.4",
         "league/container"                    : "~2.0.3",
-        "container-interop/definition-interop-compiler-test-suite": "~0.1.0"
+        "container-interop/definition-interop-compiler-test-suite": "dev-master"
     },
     "autoload": {
         "psr-4": {
@@ -136,22 +112,13 @@
         }
     },
     "suggest": {
-<<<<<<< HEAD
         "aws/aws-sdk-php"                     : "Required to use the SQS queue driver and SES mail driver (~3.0).",
         "ext-curl"                            : "Required to use for guzzle (*)",
-        "guzzlehttp/guzzle"                   : "Required to use the Mailgun, Mandrill, and Postmark mail drivers (~5.3|~6.0).",
+        "guzzlehttp/guzzle"                   : "Required to use the Mailgun and Mandrill mail drivers and the ping methods on schedules (~5.3|~6.0).",
         "league/flysystem-aws-s3-v3"          : "Required to use the Flysystem S3 driver for SDK3 (~1.0).",
         "league/flysystem-rackspace"          : "Required to use the Flysystem Rackspace driver (~1.0).",
-        "predis/predis"                       : "Required to use the redis cache and queue drivers (~1.0.1)."
-=======
-        "aws/aws-sdk-php"                    : "Required to use the SQS queue driver and SES mail driver (~3.0).",
-        "ext-curl"                           : "Required to use for guzzle (*)",
-        "guzzlehttp/guzzle"                  : "Required to use the Mailgun and Mandrill mail drivers and the ping methods on schedules (~5.3|~6.0).",
-        "league/flysystem-aws-s3-v3"         : "Required to use the Flysystem S3 driver for SDK3 (~1.0).",
-        "league/flysystem-rackspace"         : "Required to use the Flysystem Rackspace driver (~1.0).",
-        "predis/predis"                      : "Required to use the redis cache and queue drivers (~1.0.1).",
-        "ext-ev"                             : "Provides an event loop with better performance."
->>>>>>> develop
+        "predis/predis"                       : "Required to use the redis cache and queue drivers (~1.0.1).",
+        "ext-ev"                              : "Provides an event loop with better performance."
     },
     "minimum-stability"                       : "dev",
     "prefer-stable"                           : true
