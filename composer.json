@@ -114,7 +114,7 @@
         "league/flysystem-aws-s3-v3"         : "Required to use the Flysystem S3 driver for SDK3 (~1.0).",
         "league/flysystem-rackspace"         : "Required to use the Flysystem Rackspace driver (~1.0).",
         "predis/predis"                      : "Required to use the redis cache and queue drivers (~1.0.1).",
-        "ext-ev"                             : "Provides an event loop with better performance.",
+        "ext-ev"                             : "Provides an event loop with better performance."
     },
     "minimum-stability"                      : "dev",
     "prefer-stable"                          : true
