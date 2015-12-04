@@ -77,7 +77,6 @@ install:
     popd;
     echo "extension=ev.so" >> "$(php -r 'echo php_ini_loaded_file();')";
   - curl http://get.sensiolabs.org/php-cs-fixer.phar -o php-cs-fixer.phar
-  - composer self-update
   - if [[ $setup = 'basic' ]]; then travis_retry composer install --no-interaction --prefer-source; fi
   - if [[ $setup = 'stable' ]]; then travis_retry composer update --prefer-source --no-interaction --prefer-stable; fi
   - if [[ $setup = 'lowest' ]]; then travis_retry composer update --prefer-source --no-interaction --prefer-lowest --prefer-stable; fi
