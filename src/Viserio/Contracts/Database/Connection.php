@@ -1,8 +1,8 @@
 <?php
 namespace Viserio\Contracts\Database;
 
-use Viserio\Contracts\Cache\Factory as CacheContract;
 use Closure;
+use Viserio\Contracts\Cache\Factory as CacheContract;
 
 interface Connection
 {
