@@ -1,18 +1,6 @@
 <?php
 namespace Viserio\Console\Command;
 
-/**
- * Narrowspark - a PHP 5 framework.
- *
- * @author      Daniel Bannert <info@anolilab.de>
- * @copyright   2015 Daniel Bannert
- *
- * @link        http://www.narrowspark.de
- *
- * @license     http://www.narrowspark.com/license
- *
- * @version     0.10.0
- */
 use Symfony\Component\Console\Command\Command as BaseCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -21,13 +9,6 @@ use Symfony\Component\Console\Question\Question;
 use Viserio\Console\Style\NarrowsparkStyle;
 use Viserio\Container\ContainerAwareTrait;
 
-/**
- * Command.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.4
- */
 abstract class Command extends BaseCommand
 {
     use ContainerAwareTrait;

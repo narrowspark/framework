@@ -1,29 +1,9 @@
 <?php
 namespace Viserio\Filesystem\Adapters;
 
-/**
- * Narrowspark - a PHP 5 framework.
- *
- * @author      Daniel Bannert <info@anolilab.de>
- * @copyright   2015 Daniel Bannert
- *
- * @link        http://www.narrowspark.de
- *
- * @license     http://www.narrowspark.com/license
- *
- * @version     0.10.0
- */
-
 use League\Flysystem\Adapter\Ftp;
 use Viserio\Contracts\Filesystem\Connector as ConnectorContract;
 
-/**
- * FtpConnector.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.4
- */
 class FtpConnector implements ConnectorContract
 {
     /**

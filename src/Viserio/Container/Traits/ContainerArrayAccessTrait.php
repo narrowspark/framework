@@ -1,8 +1,18 @@
 <?php
 namespace Viserio\Container\Traits;
 
+<<<<<<< HEAD
 use Closure;
 
+=======
+/**
+ * ContainerArrayAccessTrait.
+ *
+ * @author  Daniel Bannert
+ *
+ * @since   0.9.6
+ */
+>>>>>>> develop
 trait ContainerArrayAccessTrait
 {
     /**

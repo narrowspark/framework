@@ -1,19 +1,6 @@
 <?php
 namespace Viserio\Console;
 
-/**
- * Narrowspark - a PHP 5 framework.
- *
- * @author      Daniel Bannert <info@anolilab.de>
- * @copyright   2015 Daniel Bannert
- *
- * @link        http://www.narrowspark.de
- *
- * @license     http://www.narrowspark.com/license
- *
- * @version     0.10.0
- */
-
 use Interop\Container\ContainerInterface as ContainerContract;
 use Invoker\Invoker;
 use Invoker\ParameterResolver\AssociativeArrayResolver;
@@ -31,13 +18,6 @@ use Viserio\Console\Command\ExpressionParser as Parser;
 use Viserio\Console\Input\InputArgument;
 use Viserio\Console\Input\InputOption;
 
-/**
- * Application.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.4
- */
 class Application extends SymfonyConsole
 {
     /**

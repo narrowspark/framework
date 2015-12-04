@@ -1,31 +1,11 @@
 <?php
 namespace Viserio\Console\Providers;
 
-/**
- * Narrowspark - a PHP 5 framework.
- *
- * @author      Daniel Bannert <info@anolilab.de>
- * @copyright   2015 Daniel Bannert
- *
- * @link        http://www.narrowspark.de
- *
- * @license     http://www.narrowspark.com/license
- *
- * @version     0.10.0
- */
-
 use Stecman\Component\Symfony\Console\BashCompletion\CompletionCommand;
 use Viserio\Application\ServiceProvider;
 use Viserio\Console\Application;
 use Viserio\Console\Command\CommandResolver;
 
-/**
- * ConsoleServiceProvider.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.4
- */
 class ConsoleServiceProvider extends ServiceProvider
 {
     /**

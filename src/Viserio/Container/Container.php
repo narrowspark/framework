@@ -1,8 +1,11 @@
 <?php
 namespace Viserio\Container;
 
+<<<<<<< HEAD
 use ArrayAccess;
 use Closure;
+=======
+>>>>>>> develop
 use Interop\Container\ContainerInterface as ContainerInteropInterface;
 use InvalidArgumentException;
 use Invoker\Invoker;

@@ -1,5 +1,9 @@
 <?php
+<<<<<<< HEAD
 namespace Viserio\Container\Tests;
+=======
+namespace Viserio\Container\Test;
+>>>>>>> develop
 
 use Viserio\Container\Container;
 

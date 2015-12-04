@@ -1,28 +1,8 @@
 <?php
 namespace Viserio\Support\Test;
 
-/**
- * Narrowspark - a PHP 5 framework.
- *
- * @author      Daniel Bannert <info@anolilab.de>
- * @copyright   2015 Daniel Bannert
- *
- * @link        http://www.narrowspark.de
- *
- * @license     http://www.narrowspark.com/license
- *
- * @version     0.10.0
- */
-
 use Viserio\Support\Arr;
 
-/**
- * ArrTest.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.5
- */
 class ArrTest extends \PHPUnit_Framework_TestCase
 {
     protected $testData = [
@@ -161,5 +141,40 @@ class ArrTest extends \PHPUnit_Framework_TestCase
              ],
              Arr::getIndexedValues($this->testData, 'language', ['stars', 'rating'])
          );
+    }
+
+    public function testForget()
+    {
+        $array = ['products' => ['desk' => ['price' => 100]]];
+        Arr::forget($array, null);
+        $this->assertEquals(['products' => ['desk' => ['price' => 100]]], $array);
+
+        $array = ['products' => ['desk' => ['price' => 100]]];
+        Arr::forget($array, []);
+        $this->assertEquals(['products' => ['desk' => ['price' => 100]]], $array);
+
+        $array = ['products' => ['desk' => ['price' => 100]]];
+        Arr::forget($array, 'products.desk');
+        $this->assertEquals(['products' => []], $array);
+
+        $array = ['products' => ['desk' => ['price' => 100]]];
+        Arr::forget($array, 'products.desk.price');
+        $this->assertEquals(['products' => ['desk' => []]], $array);
+
+        $array = ['products' => ['desk' => ['price' => 100]]];
+        Arr::forget($array, 'products.final.price');
+        $this->assertEquals(['products' => ['desk' => ['price' => 100]]], $array);
+
+        $array = ['shop' => ['cart' => [150 => 0]]];
+        Arr::forget($array, 'shop.final.cart');
+        $this->assertEquals(['shop' => ['cart' => [150 => 0]]], $array);
+
+        $array = ['products' => ['desk' => ['price' => ['original' => 50, 'taxes' => 60]]]];
+        Arr::forget($array, 'products.desk.price.taxes');
+        $this->assertEquals(['products' => ['desk' => ['price' => ['original' => 50]]]], $array);
+
+        $array = ['products' => ['desk' => ['price' => ['original' => 50, 'taxes' => 60]]]];
+        Arr::forget($array, 'products.desk.final.taxes');
+        $this->assertEquals(['products' => ['desk' => ['price' => ['original' => 50, 'taxes' => 60]]]], $array);
     }
 }

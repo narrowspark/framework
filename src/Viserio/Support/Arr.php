@@ -1,26 +1,6 @@
 <?php
 namespace Viserio\Support;
 
-/**
- * Narrowspark - a PHP 5 framework.
- *
- * @author      Daniel Bannert <info@anolilab.de>
- * @copyright   2015 Daniel Bannert
- *
- * @link        http://www.narrowspark.de
- *
- * @license     http://www.narrowspark.com/license
- *
- * @version     0.10.0
- */
-
-/**
- * Arr.
- *
- * @author  Daniel Bannert
- *
- * @since   0.8.0
- */
 class Arr
 {
     /**
@@ -161,8 +141,13 @@ class Arr
     public static function forget(&$array, $keys)
     {
         $original = &$array;
+        $keys     = (array) $keys;
 
-        foreach ((array) $keys as $key) {
+        if (count($keys) === 0) {
+            return;
+        }
+
+        foreach ($keys as $key) {
             $parts = explode('.', $key);
 
             while (count($parts) > 1) {

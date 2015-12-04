@@ -1,33 +1,10 @@
 <?php
 namespace Viserio\Config;
 
-/**
- * Narrowspark - a PHP 5 framework.
- *
- * @author      Daniel Bannert <info@anolilab.de>
- * @copyright   2015 Daniel Bannert
- *
- * @link        http://www.narrowspark.de
- *
- * @license     http://www.narrowspark.com/license
- *
- * @version     0.10.0
- */
-
 use Viserio\Contracts\Config\Manager as ManagerContract;
 use Viserio\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Contracts\Filesystem\Loader as LoaderContract;
 
-/**
- * Manager.
- *
- * Uses a ConfigurationHandler class to parse configuration data,
- * accessed as an array.
- *
- * @author  Daniel Bannert
- *
- * @since   0.8.0
- */
 class Manager implements ManagerContract, \IteratorAggregate
 {
     /**

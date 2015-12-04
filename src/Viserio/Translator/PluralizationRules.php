@@ -1,19 +1,6 @@
 <?php
 namespace Viserio\Translator;
 
-/**
- * Narrowspark - a PHP 5 framework.
- *
- * @author      Daniel Bannert <info@anolilab.de>
- * @copyright   2015 Daniel Bannert
- *
- * @link        http://www.narrowspark.de
- *
- * @license     http://www.narrowspark.com/license
- *
- * @version     0.10.0
- */
-
 use InvalidArgumentException;
 use Viserio\Translator\PluralCategorys\Arabic;
 use Viserio\Translator\PluralCategorys\Balkan;
@@ -41,13 +28,6 @@ use Viserio\Translator\PluralCategorys\Two;
 use Viserio\Translator\PluralCategorys\Welsh;
 use Viserio\Translator\PluralCategorys\Zero;
 
-/**
- * PluralizationRules.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.6
- */
 class PluralizationRules
 {
     /**

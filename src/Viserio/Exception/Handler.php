@@ -1,19 +1,6 @@
 <?php
 namespace Viserio\Exception;
 
-/**
- * Narrowspark - a PHP 5 framework.
- *
- * @author      Daniel Bannert <info@anolilab.de>
- * @copyright   2015 Daniel Bannert
- *
- * @link        http://www.narrowspark.de
- *
- * @license     http://www.narrowspark.com/license
- *
- * @version     0.10.0
- */
-
 use Interop\Container\ContainerInterface as ContainerContract;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Debug\Exception\FatalErrorException;
@@ -21,13 +8,6 @@ use Symfony\Component\Debug\Exception\FlattenException;
 use Viserio\Contracts\Http\HttpExceptionInterface;
 use Viserio\Http\Response;
 
-/**
- * ExceptionHandler.
- *
- * @author  Daniel Bannert
- *
- * @since   0.8.0
- */
 class Handler
 {
     /**

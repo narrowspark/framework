@@ -1,8 +1,11 @@
 <?php
 namespace Viserio\Container\Traits;
 
+<<<<<<< HEAD
 use ReflectionClass;
 use ReflectionMethod;
+=======
+>>>>>>> develop
 use Viserio\Container\Exception\BindingResolutionException;
 use Viserio\Container\Exception\CircularReferenceException;
 use Viserio\Container\Exception\UnresolvableDependencyException;

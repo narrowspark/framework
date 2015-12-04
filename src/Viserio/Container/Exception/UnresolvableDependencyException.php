@@ -1,6 +1,8 @@
 <?php
 namespace Viserio\Container\Exception;
 
-class UnresolvableDependencyException extends \Exception
+use Exception;
+
+class UnresolvableDependencyException extends Exception
 {
 }

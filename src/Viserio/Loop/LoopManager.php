@@ -1,32 +1,12 @@
 <?php
 namespace Viserio\Loop;
 
-/**
- * Narrowspark - a PHP 5 framework.
- *
- * @author      Daniel Bannert <info@anolilab.de>
- * @copyright   2015 Daniel Bannert
- *
- * @link        http://www.narrowspark.de
- *
- * @license     http://www.narrowspark.com/license
- *
- * @version     0.10.0
- */
-
 use Viserio\Contracts\Loop\Loop as LoopContract;
 use Viserio\Loop\Adapters\EventLoop;
 use Viserio\Loop\Adapters\LibeventLoop;
 use Viserio\Loop\Adapters\SelectLoop;
 use Viserio\Support\Manager;
 
-/**
- * LoopManager.
- *
- * @author  Daniel Bannert
- *
- * @since   0.10.0
- */
 class LoopManager extends Manager
 {
     /**

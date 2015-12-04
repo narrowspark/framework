@@ -9,6 +9,24 @@ php:
 env:
   global:
     - setup=basic
+  matrix:
+    - ADAPTER=MemoryStore
+    - ADAPTER=Apc
+    - ADAPTER=Memcached
+    - ADAPTER=Redis
+    - ADAPTER=Couchbase
+    - ADAPTER=MySQL
+    - ADAPTER=SQLite
+    - ADAPTER=PostgreSQL
+    - ADAPTER=Filesystem
+    - ADAPTER=Flysystem
+    - MONGO_VERSION=1.2.12
+
+services:
+  - mongodb
+  - mysql
+  - memcached
+  - redis-server
 
 matrix:
   include:
@@ -20,6 +38,18 @@ matrix:
     - env: setup=lowest
     - env: setup=stable
     - php: 7.0
+    - php: 7.0
+      env: ADAPTER=Apc
+    - php: 7.0
+      env: ADAPTER=Memcached
+    - php: 7.0
+      env: ADAPTER=Redis
+    - php: 7.0
+      env: ADAPTER=Couchbase
+    - php: hhvm
+      env: ADAPTER=Couchbase
+    - php: hhvm
+      env: ADAPTER=PostgreSQL
     - php: nightly
     - php: hhvm
   fast_finish: true
@@ -31,29 +61,13 @@ cache:
     - $HOME/.composer/cache
 
 before_install:
+  - mysql -e 'create database narrowspark_test;'
+  - echo "extension = mongo.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
   - composer self-update
   - travis_retry composer install --prefer-source --no-interaction
   - OCULAR_ENV='5.6'
 
 install:
-  - if ["$TRAVIS_PHP_VERSION" != "hhvm" || "$TRAVIS_PHP_VERSION" != "7.0" ]; then
-    curl -LS https://pecl.php.net/get/event | tar -xz;
-    pushd event-*;
-    phpize;
-    ./configure;
-    make;
-    make install;
-    popd;
-    echo "extension=event.so" >> "$(php -r 'echo php_ini_loaded_file();')";
-    curl -LS https://pecl.php.net/get/libevent | tar -xz;
-    pushd libevent-*;
-    phpize;
-    ./configure;
-    make;
-    make install;
-    popd;
-    echo "extension=libevent.so" >> "$(php -r 'echo php_ini_loaded_file();')";
-    fi
   - curl -LS https://pecl.php.net/get/ev | tar -xz;
     pushd ev-*;
     phpize;
@@ -63,11 +77,9 @@ install:
     popd;
     echo "extension=ev.so" >> "$(php -r 'echo php_ini_loaded_file();')";
   - curl http://get.sensiolabs.org/php-cs-fixer.phar -o php-cs-fixer.phar
-  - composer self-update
   - if [[ $setup = 'basic' ]]; then travis_retry composer install --no-interaction --prefer-source; fi
   - if [[ $setup = 'stable' ]]; then travis_retry composer update --prefer-source --no-interaction --prefer-stable; fi
   - if [[ $setup = 'lowest' ]]; then travis_retry composer update --prefer-source --no-interaction --prefer-lowest --prefer-stable; fi
-
 
 script:
   - php -n php-cs-fixer.phar fix -v --dry-run

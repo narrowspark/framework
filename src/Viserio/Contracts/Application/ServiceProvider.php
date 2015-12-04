@@ -1,6 +1,7 @@
 <?php
 namespace Viserio\Contracts\Application;
 
+<<<<<<< HEAD
 /**
  * Narrowspark - a PHP 5 framework.
  *
@@ -24,6 +25,9 @@ use Viserio\Contracts\Container\ServiceProvider as ContainerServiceProvider;
  * @since   0.9.6
  */
 interface ServiceProvider extends ContainerServiceProvider
+=======
+interface ServiceProvider
+>>>>>>> develop
 {
     /**
      * Subscribe events.
