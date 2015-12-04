@@ -1,17 +1,17 @@
 <?php
 namespace Viserio\Console\Command;
 
-use Viserio\Contracts\Support\Arrayable;
+use Interop\Container\ContainerInterface as ContainerInteropInterface;
+use Symfony\Component\Console\Command\Command as BaseCommand;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\ArrayInput;
-use Symfony\Component\Console\Output\NullOutput;
-use Symfony\Component\Console\Command\Command as BaseCommand;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\NullOutput;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ChoiceQuestion;
 use Symfony\Component\Console\Question\Question;
 use Viserio\Console\Style\NarrowsparkStyle;
-use Interop\Container\ContainerInterface as ContainerInteropInterface;
+use Viserio\Contracts\Support\Arrayable;
 
 abstract class Command extends BaseCommand
 {

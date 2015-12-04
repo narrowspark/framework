@@ -1,18 +1,18 @@
 <?php
 namespace Viserio\Console\Tests;
 
-use stdClass;
 use Mockery as Mock;
+use stdClass;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\StringInput;
 use Symfony\Component\Console\Output\Output as SymfonyOutput;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Viserio\Console\Application;
 use Viserio\Console\Tests\Fixture\SpyOutput;
-use Viserio\Console\Tests\Mock\Container as MockContainer;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Viserio\Console\Tests\Fixture\StdClassClone;
 use Viserio\Console\Tests\Fixture\ViserioCommand;
+use Viserio\Console\Tests\Mock\Container as MockContainer;
 
 class ApplicationTest extends \PHPUnit_Framework_TestCase
 {
@@ -34,7 +34,7 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
         $stdClass2->foo = 'nope!';
 
         $container = new MockContainer([
-            'command.greet' => function(OutputInterface $output) {
+            'command.greet' => function (OutputInterface $output) {
                 $output->write('hello');
             },
             'stdClass'          => $stdClass,
@@ -68,7 +68,7 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
 
     public function testAllowsToDefineCommands()
     {
-        $command = $this->application->command('foo', function() {
+        $command = $this->application->command('foo', function () {
             return 1;
         });
 
@@ -77,7 +77,7 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
 
     public function testAllowsToDefineDefaultValues()
     {
-        $this->application->command('greet [firstname] [lastname]', function($firstname, $lastname, Outputinterface $output) {});
+        $this->application->command('greet [firstname] [lastname]', function ($firstname, $lastname, Outputinterface $output) {});
         $this->application->defaults('greet', [
             'firstname' => 'John',
             'lastname' => 'Doe',
@@ -91,7 +91,7 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
 
     public function testItShouldRunSimpleCommand()
     {
-        $this->application->command('greet', function(OutputInterface $output) {
+        $this->application->command('greet', function (OutputInterface $output) {
             $output->write('hello');
         });
 
@@ -100,7 +100,7 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
 
     public function testItShouldRunACommandWithAnArgument()
     {
-        $this->application->command('greet name', function($name, OutputInterface $output) {
+        $this->application->command('greet name', function ($name, OutputInterface $output) {
             $output->write('hello '.$name);
         });
 
@@ -109,7 +109,7 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
 
     public function testItShouldRunACommandWithAnOptionalArgument()
     {
-        $this->application->command('greet [name]', function($name, OutputInterface $output) {
+        $this->application->command('greet [name]', function ($name, OutputInterface $output) {
             $output->write('hello '.$name);
         });
 
@@ -119,7 +119,7 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
 
     public function testItShouldRunACommandWithAFlag()
     {
-        $this->application->command('greet [-y|--yell]', function($yell, OutputInterface $output) {
+        $this->application->command('greet [-y|--yell]', function ($yell, OutputInterface $output) {
             $output->write(var_export($yell, true));
         });
 
@@ -130,7 +130,7 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
 
     public function testItShouldRunACommandWithAnOption()
     {
-        $this->application->command('greet [-i|--iterations=]', function($iterations, OutputInterface $output) {
+        $this->application->command('greet [-i|--iterations=]', function ($iterations, OutputInterface $output) {
             $output->write($iterations === null ? 'null' : $iterations);
         });
 
@@ -141,7 +141,7 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
 
     public function testItShouldRunACommandWitMultipleOptions()
     {
-        $this->application->command('greet [-d|--dir=]*', function($dir, OutputInterface $output) {
+        $this->application->command('greet [-d|--dir=]*', function ($dir, OutputInterface $output) {
             $output->write('['.implode(', ', $dir).']');
         });
 
@@ -153,7 +153,7 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
 
     public function testItShouldInjectTypeHintInPriority()
     {
-        $this->application->command('greet', function(OutputInterface $output, stdClass $param) {
+        $this->application->command('greet', function (OutputInterface $output, stdClass $param) {
             $output->write($param->foo);
         });
 
@@ -194,7 +194,7 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
      */
     public function testItShouldThrowIfAParameterCannotBeResolved()
     {
-        $this->application->command('greet', function($fbo) {});
+        $this->application->command('greet', function ($fbo) {});
         $this->assertOutputIs('greet', '');
     }
 

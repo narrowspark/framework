@@ -1,5 +1,6 @@
 <?php
 namespace Viserio\Filesystem;
+
 use League\Flysystem\AdapterInterface;
 use League\Flysystem\Config as FlyConfig;
 use League\Flysystem\FileNotFoundException;

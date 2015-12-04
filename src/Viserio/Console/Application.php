@@ -1,7 +1,6 @@
 <?php
 namespace Viserio\Console;
 
-use RuntimeException;
 use Interop\Container\ContainerInterface as ContainerContract;
 use Invoker\Exception\InvocationException;
 use Invoker\Invoker;
@@ -9,20 +8,21 @@ use Invoker\InvokerInterface;
 use Invoker\ParameterResolver\AssociativeArrayResolver;
 use Invoker\ParameterResolver\Container\ParameterNameContainerResolver;
 use Invoker\ParameterResolver\Container\TypeHintContainerResolver;
-use Invoker\ParameterResolver\ResolverChain;
-use Invoker\ParameterResolver\NumericArrayResolver;
 use Invoker\ParameterResolver\DefaultValueResolver;
+use Invoker\ParameterResolver\NumericArrayResolver;
+use Invoker\ParameterResolver\ResolverChain;
+use RuntimeException;
 use Symfony\Component\Console\Application as SymfonyConsole;
 use Symfony\Component\Console\Command\Command as SymfonyCommand;
 use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Viserio\Contracts\Console\Application as ApplicationContract;
 use Viserio\Console\Command\Command as ViserioCommand;
 use Viserio\Console\Command\ExpressionParser as Parser;
 use Viserio\Console\Input\InputArgument;
 use Viserio\Console\Input\InputOption;
+use Viserio\Contracts\Console\Application as ApplicationContract;
 
 class Application extends SymfonyConsole implements ApplicationContract
 {
