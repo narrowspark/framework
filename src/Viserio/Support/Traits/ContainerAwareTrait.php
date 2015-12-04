@@ -1,19 +1,14 @@
 <?php
-namespace Viserio\Container;
+namespace Viserio\Support\Traits;
 
 use Interop\Container\ContainerInterface as ContainerInteropInterface;
 
-/**
- * ContainerAwareTrait.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.6
- */
 trait ContainerAwareTrait
 {
     /**
-     * @var \Interop\Container\ContainerInterface
+     * Container instance.
+     *
+     * @var \Interop\Container\ContainerInterface|null
      */
     protected $container;
 
@@ -21,11 +16,16 @@ trait ContainerAwareTrait
      * Set a container.
      *
      * @param \Interop\Container\ContainerInterface $container
+     *
+     * @return self
      */
     public function setContainer(ContainerInteropInterface $container)
     {
         $this->container = $container;
+
+        return $this;
     }
+
     /**
      * Get the container.
      *

@@ -3,14 +3,6 @@ namespace Viserio\Console;
 
 use Interop\Container\ContainerInterface as ContainerContract;
 use Invoker\Exception\InvocationException;
-use Invoker\Invoker;
-use Invoker\InvokerInterface;
-use Invoker\ParameterResolver\AssociativeArrayResolver;
-use Invoker\ParameterResolver\Container\ParameterNameContainerResolver;
-use Invoker\ParameterResolver\Container\TypeHintContainerResolver;
-use Invoker\ParameterResolver\DefaultValueResolver;
-use Invoker\ParameterResolver\NumericArrayResolver;
-use Invoker\ParameterResolver\ResolverChain;
 use RuntimeException;
 use Symfony\Component\Console\Application as SymfonyConsole;
 use Symfony\Component\Console\Command\Command as SymfonyCommand;
@@ -23,9 +15,13 @@ use Viserio\Console\Command\ExpressionParser as Parser;
 use Viserio\Console\Input\InputArgument;
 use Viserio\Console\Input\InputOption;
 use Viserio\Contracts\Console\Application as ApplicationContract;
+use Viserio\Support\Traits\ContainerAwareTrait;
+use Viserio\Support\Invoker;
 
 class Application extends SymfonyConsole implements ApplicationContract
 {
+    use ContainerAwareTrait;
+
     /**
      * Console name.
      *
@@ -39,13 +35,6 @@ class Application extends SymfonyConsole implements ApplicationContract
      * @var string
      */
     public $version = 'UNKNOWN';
-
-    /**
-     * The Container instance.
-     *
-     * @var \Interop\Container\ContainerInterface
-     */
-    protected $container;
 
     /**
      * The event dispatcher implementation.
@@ -62,18 +51,18 @@ class Application extends SymfonyConsole implements ApplicationContract
     protected $expressionParser;
 
     /**
-     * Invoker instance.
-     *
-     * @var InvokerInterface
-     */
-    protected $invoker;
-
-    /**
      * The output from the previous command.
      *
      * @var \Symfony\Component\Console\Output\BufferedOutput
      */
     protected $lastOutput;
+
+    /**
+     * Invoker instance.
+     *
+     * @var \Viserio\Support\Invoker
+     */
+    protected $invoker;
 
     /**
      * Create a new Cerebro console application.
@@ -91,11 +80,11 @@ class Application extends SymfonyConsole implements ApplicationContract
     ) {
         $this->name      = $name;
         $this->version   = $version;
-        $this->container = $container;
         $this->events    = $events;
 
+        $this->setContainer($container);
         $this->expressionParser = new Parser();
-        $this->initInvoker();
+        $this->setInvoker();
 
         $this->setAutoExit(false);
         $this->setCatchExceptions(false);
@@ -142,7 +131,7 @@ class Application extends SymfonyConsole implements ApplicationContract
             );
 
             try {
-                $this->invoker->call($callable, $parameters);
+                $this->getInvoker()->call($callable, $parameters);
             } catch (InvocationException $e) {
                 throw new RuntimeException(sprintf(
                     "Impossible to call the '%s' command: %s",
@@ -174,31 +163,6 @@ class Application extends SymfonyConsole implements ApplicationContract
             $argument = $commandDefinition->getArgument($name);
             $argument->setDefault($default);
         }
-    }
-
-    /**
-     * Get the container instance.
-     *
-     * @return ContainerContract
-     */
-    public function getContainer()
-    {
-        return $this->container;
-    }
-
-    /**
-     * Returns a service contained in the application container or null if none is found with that name.
-     *
-     * This is a convenience method used to retrieve an element from the Application container without having to assign
-     * the results of the getContainer() method in every call.
-     *
-     * @param string $name
-     *
-     * @return mixed|null
-     */
-    public function getService($name)
-    {
-        return $this->getContainer()->has($name) ? $this->getContainer()->get($name) : null;
     }
 
     /**
@@ -269,22 +233,23 @@ class Application extends SymfonyConsole implements ApplicationContract
     }
 
     /**
-     * @return \Invoker\InvokerInterface
+     * Set configured invoker.
      */
-    private function initInvoker()
+    protected function setInvoker()
     {
-        if (!$this->invoker) {
-            $chain = [
-                new TypeHintContainerResolver($this->getContainer()),
-                new ParameterNameContainerResolver($this->getContainer()),
-                new NumericArrayResolver,
-                new AssociativeArrayResolver,
-                new DefaultValueResolver,
-            ];
-            $parameterResolver = new ResolverChain($chain);
-            $this->invoker = new Invoker($parameterResolver, $this->getContainer());
-        }
+        $this->invoker = (new Invoker())
+            ->injectByTypeHint(true)
+            ->injectByParameterName(true)
+            ->setContainer($this->getContainer());
+    }
 
+    /**
+     * Get configured invoker.
+     *
+     * @return \Viserio\Support\Invoker
+     */
+    protected function getInvoker()
+    {
         return $this->invoker;
     }
 }

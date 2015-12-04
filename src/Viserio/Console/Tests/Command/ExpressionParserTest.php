@@ -127,7 +127,7 @@ class ExpressionParserTest extends \PHPUnit_Framework_TestCase
         $parser->parse('greet --yell');
     }
 
-    public function testAssertParsesTo($expression, $expected)
+    public function assertParsesTo($expression, $expected)
     {
         $parser = new ExpressionParser();
         $this->assertEquals($expected, $parser->parse($expression));

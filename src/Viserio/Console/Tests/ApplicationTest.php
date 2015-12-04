@@ -47,17 +47,6 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
         $this->application = new Application($container, $events, '1.0.0');
     }
 
-    public function testGetServiceFromContainer()
-    {
-        $service = $this->application->getService('param');
-
-        $this->assertSame($service, 'bob');
-
-        $service = $this->application->getService('parama');
-
-        $this->assertNotSame($service, 'bob');
-    }
-
     public function testAllowsToDefineViserioCommand()
     {
         $viserioCommand = new ViserioCommand();
