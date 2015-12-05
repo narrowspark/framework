@@ -34,7 +34,7 @@ abstract class Command extends BaseCommand implements CompletionAwareInterface
      *
      * @var \Symfony\Component\Console\Input\InputInterface
      */
-     protected $input;
+    protected $input;
 
     /**
      * The console command output.
@@ -167,9 +167,9 @@ abstract class Command extends BaseCommand implements CompletionAwareInterface
     public function getVerbosity($level = null)
     {
         if (isset($this->verbosityMap[$level])) {
-            $level = $this->verbosityMap[$level];
+            return $this->verbosityMap[$level];
         } elseif (!is_int($level)) {
-            $level = $this->verbosity;
+            return $this->verbosity;
         }
 
         return $level;

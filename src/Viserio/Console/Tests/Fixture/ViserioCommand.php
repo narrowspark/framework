@@ -32,10 +32,10 @@ class ViserioCommand extends Command
         );
 
         $this->addOption(
-           '--yell',
-           null,
-           InputOption::VALUE_NONE,
-           'If set, the task will yell in uppercase letters'
+            '--yell',
+            null,
+            InputOption::VALUE_NONE,
+            'If set, the task will yell in uppercase letters'
         );
     }
 }
