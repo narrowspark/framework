@@ -1,15 +1,24 @@
 <?php
 namespace Viserio\Console\Command;
 
+use Interop\Container\ContainerInterface as ContainerInteropInterface;
+use Stecman\Component\Symfony\Console\BashCompletion\Completion\CompletionAwareInterface;
+use Stecman\Component\Symfony\Console\BashCompletion\CompletionContext;
 use Symfony\Component\Console\Command\Command as BaseCommand;
+use Symfony\Component\Console\Formatter\OutputFormatterStyle;
+use Symfony\Component\Console\Helper\Table;
+use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\NullOutput;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ChoiceQuestion;
 use Symfony\Component\Console\Question\Question;
 use Viserio\Console\Style\NarrowsparkStyle;
-use Viserio\Container\ContainerAwareTrait;
+use Viserio\Contracts\Support\Arrayable;
+use Viserio\Support\Invoker;
+use Viserio\Support\Traits\ContainerAwareTrait;
 
-abstract class Command extends BaseCommand
+abstract class Command extends BaseCommand implements CompletionAwareInterface
 {
     use ContainerAwareTrait;
 
@@ -19,13 +28,6 @@ abstract class Command extends BaseCommand
      * @var string
      */
     protected $name;
-
-    /**
-     * The console command description.
-     *
-     * @var string
-     */
-    protected $description;
 
     /**
      * The console command input.
@@ -42,13 +44,66 @@ abstract class Command extends BaseCommand
     protected $output;
 
     /**
+     * The mapping between human readable verbosity levels and Symfony's
+     * OutputInterface.
+     *
+     * @var array
+     */
+    protected $verbosityMap = [
+        'v'      => OutputInterface::VERBOSITY_VERBOSE,
+        'vv'     => OutputInterface::VERBOSITY_VERY_VERBOSE,
+        'vvv'    => OutputInterface::VERBOSITY_DEBUG,
+        'quiet'  => OutputInterface::VERBOSITY_QUIET,
+        'normal' => OutputInterface::VERBOSITY_NORMAL,
+    ];
+
+    /**
+     * The default verbosity of output commands.
+     *
+     * @var int
+     */
+    protected $verbosity = OutputInterface::VERBOSITY_NORMAL;
+
+    /**
+     * The console command description.
+     *
+     * @var string
+     */
+    protected $description;
+
+    /**
+     * The name and signature of the console command.
+     *
+     * @var string
+     */
+    protected $signature;
+
+    /**
+     * Invoker instance.
+     *
+     * @var \Viserio\Support\Invoker
+     */
+    protected $invoker;
+
+    /**
      * Create a new console command instance.
      */
     public function __construct()
     {
-        parent::__construct($this->name);
+        // We will go ahead and set the name, description, and parameters on console
+        // commands just to make things a little easier on the developer. This is
+        // so they don't have to all be manually specified in the constructors.
+        if (isset($this->signature)) {
+            $this->configureUsingFluentDefinition();
+        } else {
+            parent::__construct($this->name);
+        }
 
         $this->setDescription($this->description);
+
+        if (!isset($this->signature)) {
+            $this->specifyParameters();
+        }
     }
 
     /**
@@ -61,10 +116,25 @@ abstract class Command extends BaseCommand
      */
     public function run(InputInterface $input, OutputInterface $output)
     {
-        $this->input = $input;
+        $this->input  = $input;
         $this->output = new NarrowsparkStyle($input, $output);
 
         return parent::run($input, $output);
+    }
+
+    /**
+     * Execute the console command.
+     *
+     * @param \Symfony\Component\Console\Input\InputInterface   $input
+     * @param \Symfony\Component\Console\Output\OutputInterface $output
+     *
+     * @return mixed
+     */
+    protected function execute(InputInterface $input, OutputInterface $output)
+    {
+        $method = method_exists($this, 'handle') ? 'handle' : 'fire';
+
+        return $this->getInvoker()->call([$this, $method]);
     }
 
     /**
@@ -75,6 +145,66 @@ abstract class Command extends BaseCommand
     public function getOutput()
     {
         return $this->output;
+    }
+
+    /**
+     * Set the verbosity level.
+     *
+     * @param string|int $level
+     */
+    public function setVerbosity($level)
+    {
+        $this->verbosity = $this->getVerbosity($level);
+    }
+
+    /**
+     * Get the verbosity level in terms of Symfony's OutputInterface level.
+     *
+     * @param null|string|int $level
+     *
+     * @return int
+     */
+    public function getVerbosity($level = null)
+    {
+        if (isset($this->verbosityMap[$level])) {
+            return $this->verbosityMap[$level];
+        } elseif (!is_int($level)) {
+            return $this->verbosity;
+        }
+
+        return $level;
+    }
+
+    /**
+     * Call another console command.
+     *
+     * @param string $command
+     * @param array  $arguments
+     *
+     * @return int
+     */
+    public function call($command, array $arguments = [])
+    {
+        $instance = $this->getApplication()->find($command);
+        $arguments['command'] = $command;
+
+        return $instance->run(new ArrayInput($arguments), $this->output);
+    }
+
+    /**
+     * Call another console command silently.
+     *
+     * @param string $command
+     * @param array  $arguments
+     *
+     * @return int
+     */
+    public function callSilent($command, array $arguments = [])
+    {
+        $instance = $this->getApplication()->find($command);
+        $arguments['command'] = $command;
+
+        return $instance->run(new ArrayInput($arguments), new NullOutput);
     }
 
     /**
@@ -109,6 +239,16 @@ abstract class Command extends BaseCommand
         return $this->input->getOption($key);
     }
 
+    public function completeOptionValues($optionName, CompletionContext $context)
+    {
+        //
+    }
+
+    public function completeArgumentValues($argumentName, CompletionContext $context)
+    {
+        //
+    }
+
     /**
      * Confirm a question with the user.
      *
@@ -133,6 +273,20 @@ abstract class Command extends BaseCommand
     public function ask($question, $default = null)
     {
         return $this->output->ask($question, $default);
+    }
+
+    /**
+     * Prompt the user for input with auto completion.
+     *
+     * @param string $question
+     * @param array  $choices
+     * @param string $default
+     *
+     * @return string
+     */
+    public function anticipate($question, array $choices, $default = null)
+    {
+        return $this->askWithCompletion($question, $choices, $default);
     }
 
     /**
@@ -193,71 +347,166 @@ abstract class Command extends BaseCommand
     /**
      * Format input to textual table.
      *
-     * @param array $headers
-     * @param array $rows
+     * @param array                                      $headers
+     * @param array|\Viserio\Contracts\Support\Arrayable $rows
+     * @param string                                     $style
      */
-    public function table(array $headers, array $rows)
+    public function table(array $headers, $rows, $style = 'default')
     {
-        $this->output->table($headers, $rows);
-    }
+        $table = new Table($this->output);
 
-    /**
-     * Write a string as information output.
-     *
-     * @param string $string
-     * @param bool   $newline
-     */
-    public function info($string, $newline = true)
-    {
-        if ($newline) {
-            $this->output->writeln(sprintf('<info>%s</info>', $string));
-        } else {
-            $this->output->write(sprintf('<info>%s</info>', $string));
+        if ($rows instanceof Arrayable) {
+            $rows = $rows->toArray();
         }
+
+        $table->setHeaders($headers)->setRows($rows)->setStyle($style)->render();
     }
 
     /**
      * Write a string as standard output.
      *
-     * @param string $string
-     * @param bool   $newline
+     * @param string           $string
+     * @param string|null      $style The output style of the string
+     * @param null|int|string  $verbosityLevel
      */
-    public function line($string, $newline = true)
+    public function line($string, $style = null, $verbosityLevel = null)
     {
-        if ($newline) {
-            $this->output->writeln($string);
-        } else {
-            $this->output->write($string);
-        }
+        $styledString = $style ? "<$style>$string</$style>" : $string;
+        $this->output->writeln($styledString, $this->getVerbosity($verbosityLevel));
+    }
+
+    /**
+     * Write a string as information output.
+     *
+     * @param string          $string
+     * @param null|int|string $verbosityLevel
+     */
+    public function info($string, $verbosityLevel = null)
+    {
+        $this->line($string, 'info', $verbosityLevel);
     }
 
     /**
      * Write a string as comment output.
      *
-     * @param string $string
+     * @param string          $string
+     * @param null|int|string $verbosityLevel
      */
-    public function comment($string)
+    public function comment($string, $verbosityLevel = null)
     {
-        $this->output->note($string);
+        $this->line($string, 'comment', $verbosityLevel);
     }
 
     /**
      * Write a string as question output.
      *
-     * @param string $string
+     * @param string          $string
+     * @param null|int|string $verbosityLevel
      */
-    public function question($string)
+    public function question($string, $verbosityLevel = null)
     {
-        $this->output->writeln(sprintf('<question></question>', $string));
+        $this->line($string, 'question', $verbosityLevel);
     }
 
     /**
      * Write a string as error output.
      *
-     * @param string $string
+     * @param string          $string
+     * @param null|int|string $verbosityLevel
      */
-    public function error($string)
+    public function error($string, $verbosityLevel = null)
     {
-        $this->output->error($string);
+        $this->line($string, 'error', $verbosityLevel);
+    }
+
+    /**
+     * Write a string as warning output.
+     *
+     * @param string          $string
+     * @param null|int|string $verbosityLevel
+     */
+    public function warn($string, $verbosityLevel = null)
+    {
+        if (!$this->output->getFormatter()->hasStyle('warning')) {
+            $style = new OutputFormatterStyle('yellow');
+            $this->output->getFormatter()->setStyle('warning', $style);
+        }
+
+        $this->line($string, 'warning', $verbosityLevel);
+    }
+
+    /**
+     * Set invoker.
+     *
+     * @param \Viserio\Support\Invoker
+     */
+    public function setInvoker(Invoker $invoker)
+    {
+        $this->invoker = $invoker;
+    }
+
+    /**
+     * Get the console command arguments.
+     *
+     * @return array
+     */
+    protected function getArguments()
+    {
+        return [];
+    }
+
+    /**
+     * Get the console command options.
+     *
+     * @return array
+     */
+    protected function getOptions()
+    {
+        return [];
+    }
+
+    /**
+     * Configure the console command using a fluent definition.
+     */
+    protected function configureUsingFluentDefinition()
+    {
+        list($name, $arguments, $options) = (new ExpressionParser())->parse($this->signature);
+
+        parent::__construct($name);
+
+        foreach ($arguments as $argument) {
+            $this->getDefinition()->addArgument($argument);
+        }
+        foreach ($options as $option) {
+            $this->getDefinition()->addOption($option);
+        }
+    }
+
+    /**
+     * Specify the arguments and options on the command.
+     *
+     * @return void
+     */
+    protected function specifyParameters()
+    {
+        // We will loop through all of the arguments and options for the command and
+        // set them all on the base command instance. This specifies what can get
+        // passed into these commands as "parameters" to control the execution.
+        foreach ($this->getArguments() as $arguments) {
+            call_user_func_array([$this, 'addArgument'], $arguments);
+        }
+        foreach ($this->getOptions() as $options) {
+            call_user_func_array([$this, 'addOption'], $options);
+        }
+    }
+
+    /**
+     * Get configured invoker.
+     *
+     * @return \Viserio\Support\Invoker
+     */
+    protected function getInvoker()
+    {
+        return $this->invoker;
     }
 }

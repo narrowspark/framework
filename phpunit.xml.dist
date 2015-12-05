@@ -27,6 +27,10 @@
         </testsuite>
     </testsuites>
 
+    <listeners>
+        <listener class="JohnKary\PHPUnit\Listener\SpeedTrapListener" />
+    </listeners>
+
     <filter>
         <whitelist processUncoveredFilesFromWhitelist="true">
             <directory suffix=".php">./src/Viserio/</directory>
@@ -41,5 +45,4 @@
         <log type="testdox-html" target="build/logs/testdox-html.html" logIncompleteSkipped="false"/>
         <log type="junit" target="build/logs/logfile.xml" logIncompleteSkipped="false"/>
     </logging>
-
 </phpunit>
