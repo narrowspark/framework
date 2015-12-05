@@ -34,7 +34,7 @@ abstract class Command extends BaseCommand implements CompletionAwareInterface
      *
      * @var \Symfony\Component\Console\Input\InputInterface
      */
-    protected $input;
+     protected $input;
 
     /**
      * The console command output.
@@ -152,10 +152,10 @@ abstract class Command extends BaseCommand implements CompletionAwareInterface
      *
      * @param string|int $level
      */
-     public function setVerbosity($level)
-     {
-         $this->verbosity = $this->getVerbosity($level);
-     }
+    public function setVerbosity($level)
+    {
+        $this->verbosity = $this->getVerbosity($level);
+    }
 
     /**
      * Get the verbosity level in terms of Symfony's OutputInterface level.

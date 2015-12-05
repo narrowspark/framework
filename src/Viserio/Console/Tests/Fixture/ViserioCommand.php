@@ -25,18 +25,17 @@ class ViserioCommand extends Command
 
     public function handle()
     {
-        $this
-            ->addArgument(
-                'name',
-                InputArgument::OPTIONAL,
-                'Who do you want to greet?'
-            )
-            ->addOption(
-               '--yell',
-               null,
-               InputOption::VALUE_NONE,
-               'If set, the task will yell in uppercase letters'
-            )
-        ;
+        $this->addArgument(
+            'name',
+            InputArgument::OPTIONAL,
+            'Who do you want to greet?'
+        );
+
+        $this->addOption(
+           '--yell',
+           null,
+           InputOption::VALUE_NONE,
+           'If set, the task will yell in uppercase letters'
+        );
     }
 }

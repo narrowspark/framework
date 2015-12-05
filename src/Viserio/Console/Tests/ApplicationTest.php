@@ -66,7 +66,9 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
 
     public function testAllowsToDefineDefaultValues()
     {
-        $this->application->command('greet [firstname] [lastname]', function ($firstname, $lastname, Outputinterface $output) {});
+        $this->application->command('greet [firstname] [lastname]', function ($firstname, $lastname, Outputinterface $output) {
+
+        });
         $this->application->defaults('greet', [
             'firstname' => 'John',
             'lastname' => 'Doe',
@@ -183,7 +185,9 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
      */
     public function testItShouldThrowIfAParameterCannotBeResolved()
     {
-        $this->application->command('greet', function ($fbo) {});
+        $this->application->command('greet', function ($fbo) {
+
+        });
         $this->assertOutputIs('greet', '');
     }
 
