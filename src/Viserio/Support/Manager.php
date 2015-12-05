@@ -1,8 +1,8 @@
 <?php
 namespace Viserio\Support;
 
-use Viserio\Container\ContainerAwareTrait;
 use Viserio\Contracts\Config\Manager as ConfigManager;
+use Viserio\Support\Traits\ContainerAwareTrait;
 
 abstract class Manager
 {

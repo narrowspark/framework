@@ -15,8 +15,8 @@ use Viserio\Console\Command\ExpressionParser as Parser;
 use Viserio\Console\Input\InputArgument;
 use Viserio\Console\Input\InputOption;
 use Viserio\Contracts\Console\Application as ApplicationContract;
-use Viserio\Support\Traits\ContainerAwareTrait;
 use Viserio\Support\Invoker;
+use Viserio\Support\Traits\ContainerAwareTrait;
 
 class Application extends SymfonyConsole implements ApplicationContract
 {
@@ -103,6 +103,7 @@ class Application extends SymfonyConsole implements ApplicationContract
     {
         if ($command instanceof ViserioCommand) {
             $command->setContainer($this->getContainer());
+            $command->setInvoker($this->getInvoker());
         }
 
         return parent::add($command);

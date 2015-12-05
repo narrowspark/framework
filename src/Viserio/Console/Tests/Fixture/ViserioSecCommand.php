@@ -7,7 +7,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Viserio\Console\Command\Command;
 
-class ViserioCommand extends Command
+class ViserioSecCommand extends Command
 {
     /**
      * The console command name.

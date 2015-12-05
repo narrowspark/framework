@@ -96,7 +96,8 @@
         "mockery/mockery"                    : "~0.9.4",
         "phpunit/phpunit"                    : "~5.0.9",
         "predis/predis"                      : "~1.0.1",
-        "fzaninotto/faker"                   : "~1.4"
+        "fzaninotto/faker"                   : "~1.4",
+        "johnkary/phpunit-speedtrap"         : "^1.0"
     },
     "autoload": {
         "psr-4": {

@@ -75,7 +75,6 @@ class Invoker implements InvokerInterface
     private function getInvoker()
     {
         if ($this->invoker === null && $this->container !== null) {
-
             $container = $this->getContainer();
 
             $resolvers = [

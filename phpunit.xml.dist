@@ -23,9 +23,13 @@
 
     <testsuites>
         <testsuite name="Narrowspark Test Suite">
-            <directory suffix="Test.php">./src/Viserio/*/Tests/</directory>
+            <directory suffix="ApplicationTest.php">./src/Viserio/*/Tests/</directory>
         </testsuite>
     </testsuites>
+
+    <listeners>
+        <listener class="JohnKary\PHPUnit\Listener\SpeedTrapListener" />
+    </listeners>
 
     <filter>
         <whitelist processUncoveredFilesFromWhitelist="true">
@@ -41,5 +45,4 @@
         <log type="testdox-html" target="build/logs/testdox-html.html" logIncompleteSkipped="false"/>
         <log type="junit" target="build/logs/logfile.xml" logIncompleteSkipped="false"/>
     </logging>
-
 </phpunit>

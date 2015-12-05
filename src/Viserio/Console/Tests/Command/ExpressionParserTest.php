@@ -118,13 +118,23 @@ class ExpressionParserTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Viserio\Contracts\Console\Command\InvalidCommandExpression
+     * @expectedException \Viserio\Contracts\Console\InvalidCommandExpression
      * @expectedExceptionMessage An option must be enclosed by brackets: [--option]
      */
     public function testItProvidesAnErrorMessageOnOptionsMissingBrackets()
     {
         $parser = new ExpressionParser();
         $parser->parse('greet --yell');
+    }
+
+    /**
+     * @expectedException \Viserio\Contracts\Console\InvalidCommandExpression
+     * @expectedExceptionMessage The expression was empty
+     */
+    public function testItProvidesAnErrorMessageOnEmpty()
+    {
+        $parser = new ExpressionParser();
+        $parser->parse('');
     }
 
     public function assertParsesTo($expression, $expected)
