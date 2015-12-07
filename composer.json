@@ -34,7 +34,7 @@
         "ext-mbstring"                       : "*",
         "classpreloader/classpreloader"      : "~2.0|~3.0",
         "container-interop/container-interop": "~1.1",
-        "cekurte/environment"                : "~0.1",
+        "cekurte/environment"                : "~0.1.2",
         "danielstjules/stringy"              : "~2.1.0",
         "filp/whoops"                        : "~1.1.9",
         "ircmaxell/random-lib"               : "~1.1",
@@ -84,11 +84,11 @@
         "psr/cache"                          : "1.0.0"
     },
     "provide": {
-        "psr/cache-implementation"           : "1.0.0",
+        "psr/cache-implementation"           : "~1.0",
         "container-interop/container-interop": "~1.1",
         "psr/http-message"                   : "~1.0",
-        "psr/log-implementation"             : "1.0.0",
-        "psr/http-message-implementation"    : "1.0"
+        "psr/log-implementation"             : "~1.0",
+        "psr/http-message-implementation"    : "~1.0"
     },
     "require-dev": {
         "aws/aws-sdk-php"                    : "~3.0",
@@ -97,7 +97,7 @@
         "phpunit/phpunit"                    : "~5.0.9",
         "predis/predis"                      : "~1.0.1",
         "fzaninotto/faker"                   : "~1.4",
-        "johnkary/phpunit-speedtrap"         : "^1.0"
+        "johnkary/phpunit-speedtrap"         : "~1.0"
     },
     "autoload": {
         "psr-4": {
