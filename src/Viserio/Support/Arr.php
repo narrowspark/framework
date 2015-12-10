@@ -1,6 +1,8 @@
 <?php
 namespace Viserio\Support;
 
+use ReflectionFunction:
+
 class Arr
 {
     /**
@@ -109,8 +111,14 @@ class Arr
      */
     public static function first($array, callable $callback, $default = null)
     {
+        $reflection = new ReflectionFunction($callback);
+        $valueOnlyCallback = $reflection->getNumberOfParameters() == 1;
+
         foreach ($array as $key => $value) {
-            if (call_user_func($callback, $key, $value)) {
+            if (
+                ($valueOnlyCallback && call_user_func($callback, $value)) ||
+                (! $valueOnlyCallback && call_user_func($callback, $key, $value))
+            ) {
                 return $value;
             }
         }

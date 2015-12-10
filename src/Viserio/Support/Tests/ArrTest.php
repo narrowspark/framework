@@ -143,6 +143,17 @@ class ArrTest extends \PHPUnit_Framework_TestCase
          );
     }
 
+    public function testFirstValueOnlyCallback()
+    {
+        $array = [100, 200, 300];
+
+        $value = Arr::first($array, function ($value) {
+            return $value >= 150;
+        });
+
+        $this->assertEquals(200, $value);
+    }
+
     public function testForget()
     {
         $array = ['products' => ['desk' => ['price' => 100]]];
