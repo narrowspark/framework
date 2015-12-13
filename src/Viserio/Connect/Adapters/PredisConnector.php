@@ -2,7 +2,7 @@
 namespace Viserio\Connect\Adapters;
 
 use Predis\Client;
-use RuntimeException;
+use InvalidArgumentException;
 use Viserio\Contracts\Connect\Connector as ConnectorContract;
 
 class PredisConnector implements ConnectorContract
@@ -13,7 +13,7 @@ class PredisConnector implements ConnectorContract
     public function connect(array $config)
     {
         if (!isset($config['servers'])) {
-            throw new RuntimeException('servers config dont exist.');
+            throw new InvalidArgumentException('servers config don\'t exist.');
         }
 
         $parameters = $config['servers'];

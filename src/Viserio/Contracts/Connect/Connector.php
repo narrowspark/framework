@@ -8,7 +8,7 @@ interface Connector
      *
      * @param array $config
      *
-     * @throws \RuntimeException
+     * @throws \RuntimeException|\InvalidArgumentException
      *
      * @return object
      */
