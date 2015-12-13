@@ -1,8 +1,8 @@
 <?php
 namespace Viserio\Connect\Adapters;
 
-use Predis\Client;
 use InvalidArgumentException;
+use Predis\Client;
 use Viserio\Contracts\Connect\Connector as ConnectorContract;
 
 class PredisConnector implements ConnectorContract
