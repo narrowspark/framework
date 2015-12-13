@@ -1,55 +1,41 @@
 <?php
-namespace Viserio\Database\Connectors;
+namespace Viserio\Connect\Adapters\Database;
 
-use PDO;
-use Viserio\Contracts\Database\Connector as ConnectorContract;
-
-class PostgreSQLConnector extends Connectors implements ConnectorContract
+class PostgreSQLConnector extends AbstractDatabaseConnector
 {
     /**
-     * The default PDO connection options.
-     *
-     * @var array
-     */
-    protected $options = [
-            PDO::ATTR_CASE => PDO::CASE_NATURAL,
-            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-            PDO::ATTR_ORACLE_NULLS => PDO::NULL_NATURAL,
-            PDO::ATTR_STRINGIFY_FETCHES => false,
-    ];
-
-    /**
-     * Establish a database connection.
-     *
-     * @param array $config
-     *
-     * @return \PDO
+     * {@inheritdoc}
      */
     public function connect(array $config)
     {
         // First we'll create the basic DSN and connection instance connecting to the
         // using the configuration option specified by the developer. We will also
         // set the default character set on the connections to UTF-8 by default.
-        $dsn = $this->getDsn($config);
+        $connection = $this->createConnection(
+            $this->getDsn($config),
+            $config,
+            $this->getOptions($config)
+        );
 
-        $connection = $this->createConnection($dsn, $config, $this->getOptions($config));
-
-        $charset = $config['charset'];
-
-        $connection->prepare(sprintf('set names %s', $charset))->execute();
+        $connection->prepare(sprintf('set names \'%s\'', $config['charset']))->execute();
 
         if (isset($config['timezone'])) {
-            $timezone = $config['timezone'];
-            $connection->prepare(sprintf('set timezone=%s', $timezone))->execute();
+            $connection->prepare(sprintf('set timezone=\'%s\'', $config['timezone']))->execute();
         }
 
         // Unlike MySQL, Postgres allows the concept of "schema" and a default schema
         // may have been specified on the connections. If that is the case we will
         // set the default schema search paths to the specified database schema.
         if (isset($config['schema'])) {
-            $schema = $config['schema'];
+            $schema = $this->formatSchema($config['schema']);
+            $connection->prepare(sprintf('set search_path to %s', $schema))->execute();
+        }
 
-            $connection->prepare(sprintf('set search_path to \"%s\"', $schema))->execute();
+        // Postgres allows an application_name to be set by the user and this name is
+        // used to when monitoring the application with pg_stat_activity. So we'll
+        // determine if the option has been specified and run a statement if so.
+        if (isset($config['application_name'])) {
+            $connection->prepare(sprintf('set application_name to \'%s\'', $config['application_name']))->execute();
         }
 
         return $connection;
@@ -71,7 +57,7 @@ class PostgreSQLConnector extends Connectors implements ConnectorContract
 
         $server = isset($server) ? sprintf('host=%s;', $server) : '';
 
-        $dsn = sprintf('pgsql:%sdbname=%s', $server, $dbname);
+        $dsn = sprintf('pgsql:%sdbname=%s', $server, $database);
 
         // If a port was specified, we will add it to this Postgres DSN connections
         // format. Once we have done that we are ready to return this connection
@@ -85,5 +71,20 @@ class PostgreSQLConnector extends Connectors implements ConnectorContract
         }
 
         return $dsn;
+    }
+
+    /**
+     * Format the schema for the DSN.
+     *
+     * @param  array|string  $schema
+     * @return string
+     */
+    protected function formatSchema($schema)
+    {
+        if (is_array($schema)) {
+            return '\''.implode('\', \'', $schema).'\'';
+        } else {
+            return '\''.$schema.'\'';
+        }
     }
 }

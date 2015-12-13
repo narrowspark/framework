@@ -1,4 +1,4 @@
-# Viserio Console package
+# Viserio Connectors package
 
 This package is part of the [Narrowspark framework](http://github.com/narrowspark/framework).
 
@@ -21,7 +21,7 @@ Thank you for considering contributing to the Narrowspark framework! The contrib
 Use [Composer](https://getcomposer.org/) to install this package:
 
 ```sh
-composer require viserio/console
+composer require viserio/connectors
 ```
 
 ## Official Documentation

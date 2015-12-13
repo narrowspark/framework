@@ -1,23 +1,12 @@
 <?php
-namespace Viserio\Database\Connectors;
+namespace Viserio\Connect\Adapters\Database;
 
-use Viserio\Contracts\Database\Connector as ConnectorContract;
+use InvalidArgumentException;
 
-/**
- * FirebirdConnector.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.8
- */
-class FirebirdConnector extends Connectors implements ConnectorContract
+class FirebirdConnector extends AbstractDatabaseConnector
 {
     /**
-     * Establish a database connection.
-     *
-     * @param array $config
-     *
-     * @return \PDO
+     * {@inheritdoc}
      */
     public function connect(array $config)
     {
@@ -26,16 +15,14 @@ class FirebirdConnector extends Connectors implements ConnectorContract
         // need to establish the PDO connections and return them back for use.
         extract($config);
 
-        $path = realpath($database);
-
         // Here we'll verify that the Firebird database exists before going any further
         // as the developer probably wants to know if the database exists and this
-        // SQLite driver will not throw any exception if it does not by default.
-        if ($path === false) {
-            throw new \InvalidArgumentException('Database does not exist.');
+        // Firebird driver will not throw any exception if it does not by default.
+        if (empty($database)) {
+            throw new InvalidArgumentException('Database does not exist.');
         }
 
-        $dsn = sprintf('firebird:dbname=%s:%s', $server, $path);
+        $dsn = sprintf('firebird:dbname=%s:%s', $server, $database);
 
         // We need to grab the PDO options that should be used while making the brand
         // new connection instance. The PDO options control various aspects of the

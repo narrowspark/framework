@@ -18,7 +18,7 @@
         }
     ],
     "require": {
-        "php"                                : ">=5.6.4",
+        "php"                                : ">=5.6",
         "viserio/cotracts"                   : "self.version",
         "container-interop/container-interop": "~1.1",
         "php-di/invoker"                     : "~1.2",

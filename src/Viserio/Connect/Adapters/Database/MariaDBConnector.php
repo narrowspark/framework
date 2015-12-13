@@ -1,5 +1,5 @@
 <?php
-namespace Viserio\Database\Connectors;
+namespace Viserio\Connect\Adapters\Database;
 
 class MariaDBConnector extends MySqlConnector
 {

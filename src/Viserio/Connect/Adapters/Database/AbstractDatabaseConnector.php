@@ -1,12 +1,13 @@
 <?php
-namespace Viserio\Database\Connectors;
+namespace Viserio\Connect\Adapters\Database;
 
-use Exception;
 use PDO;
-use Viserio\Database\Traits\DetectsLostConnections;
+use PDOException;
+use Viserio\Connect\Traits\DetectsLostConnections;
+use Viserio\Contracts\Connect\Connector as ConnectorContract;
 use Viserio\Support\Arr;
 
-class Connectors
+abstract class AbstractDatabaseConnector implements ConnectorContract
 {
     use DetectsLostConnections;
 
@@ -34,8 +35,13 @@ class Connectors
     {
         $options = Arr::get($config, 'options', []);
 
-        return array_diff_key($this->options, $options) + $options;
+        return array_diff_key($this->getDefaultOptions(), $options) + $options;
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    abstract public function connect(array $config);
 
     /**
      * Create a new PDO connection.
@@ -44,22 +50,20 @@ class Connectors
      * @param array  $config
      * @param array  $options
      *
+     * @throws \PDOException
+     *
      * @return \PDO
      */
     public function createConnection($dsn, array $config, array $options)
     {
-        $username = Arr::get($config, 'username');
-
-        $password = Arr::get($config, 'password');
-
         try {
-            $pdo = new PDO($dsn, $username, $password, $options);
-        } catch (Exception $e) {
+            $pdo = new PDO($dsn, $config['username'], $config['password'], $options);
+        } catch (PDOException $exception) {
             $pdo = $this->tryAgainIfCausedByLostConnection(
-                $e,
+                $exception,
                 $dsn,
-                $username,
-                $password,
+                $config['username'],
+                $config['password'],
                 $options
             );
         }
@@ -90,22 +94,22 @@ class Connectors
     /**
      * Handle a exception that occurred during connect execution.
      *
-     * @param \Exception $e
-     * @param string     $dsn
-     * @param string     $username
-     * @param string     $password
-     * @param array      $options
+     * @param \PDOException $exception
+     * @param string        $dsn
+     * @param string        $username
+     * @param string        $password
+     * @param array         $options
      *
-     * @throws \Exception
+     * @throws \PDOException
+     *
      * @return \PDO
-     *
      */
-    protected function tryAgainIfCausedByLostConnection(Exception $e, $dsn, $username, $password, $options)
+    protected function tryAgainIfCausedByLostConnection(PDOException $exception, $dsn, $username, $password, $options)
     {
-        if ($this->causedByLostConnection($e)) {
+        if ($this->causedByLostConnection($exception)) {
             return new PDO($dsn, $username, $password, $options);
         }
 
-        throw $e;
+        throw $exception;
     }
 }

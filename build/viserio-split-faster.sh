@@ -31,6 +31,7 @@ split()
 
 split cache        src/Viserio/Cache:git@github.com:n-viserio/cache.git            "master 0.10.0"
 split config       src/Viserio/Config:git@github.com:n-viserio/config.git          "master 0.10.0"
+split connect      src/Viserio/Connect:git@github.com:n-viserio/connect.git        "master 0.10.0"
 split console      src/Viserio/Console:git@github.com:n-viserio/console.git        "master 0.10.0"
 split container    src/Viserio/Container:git@github.com:n-viserio/container.git    "master 0.10.0"
 split contracts    src/Viserio/Contracts:git@github.com:n-viserio/contracts.git    "master 0.10.0"

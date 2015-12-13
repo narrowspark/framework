@@ -1,27 +1,21 @@
 <?php
-namespace Viserio\Database\Connectors;
+namespace Viserio\Connect\Adapters\Database;
 
-use Viserio\Contracts\Database\Connector as ConnectorContract;
-
-class MySqlConnector extends Connectors implements ConnectorContract
+class MySqlConnector extends AbstractDatabaseConnector
 {
     /**
-     * Establish a database connection.
-     *
-     * @param array $config
-     *
-     * @return \PDO
+     * {@inheritdoc}
      */
     public function connect(array $config)
     {
-        $dsn = $this->getDsn($config);
-
-        extract($config);
-
         // We need to grab the PDO options that should be used while making the brand
         // new connection instance. The PDO options control various aspects of the
         // connection's behavior, and some might be specified by the developers.
-        $connection = $this->createConnection($dsn, $config, $this->getOptions($config));
+        $connection = $this->createConnection(
+            $this->getDsn($config),
+            $config,
+            $this->getOptions($config)
+        );
 
         if (isset($config['unix_socket'])) {
             $connection->exec(sprintf('use %s', $config['database']));
@@ -30,24 +24,26 @@ class MySqlConnector extends Connectors implements ConnectorContract
         // Next we will set the "names" and "collation" on the clients connections so
         // a correct character set will be used by this client. The collation also
         // is set on the server but needs to be set here on this client objects.
-        $collate = ($collation !== null ? sprintf(' collate %s', $collation) : '');
+        $collate = ($config['collation'] !== null ? sprintf(' collate \'%s\'', $config['collation']) : '');
 
-        $connection->prepare(sprintf('set names %s %s', $charset, $collate))->execute();
+        $connection->prepare(sprintf('set names \'%s\'%s', $config['charset'], $collate))->execute();
 
         // Next, we will check to see if a timezone has been specified in this config
         // and if it has we will issue a statement to modify the timezone with the
         // database. Setting this DB timezone is an optional configuration item.
         if (isset($config['timezone'])) {
             $connection->prepare(
-                sprintf('set time_zone=%s', $config['timezone'])
+                sprintf('set time_zone=\'%s\'', $config['timezone'])
             )->execute();
         }
 
         // If the "strict" option has been configured for the connection we'll enable
         // strict mode on all of these tables. This enforces some extra rules when
         // using the MySQL database system and is a quicker way to enforce them.
-        if (isset($config['strict']) && $config['strict']) {
-            $connection->prepare("set session sql_mode='STRICT_ALL_TABLES'")->execute();
+        if (isset($config['strict'])) {
+            $connection->prepare('set session sql_mode=\'STRICT_ALL_TABLES\'')->execute();
+        } else {
+            $connection->prepare('set session sql_mode=\'\'')->execute();
         }
 
         return $connection;
@@ -101,8 +97,8 @@ class MySqlConnector extends Connectors implements ConnectorContract
     {
         extract($config);
 
-        return isset($port) ?
-        sprintf('mysql:host=%s;port=%s;dbname=%s', $server, $port, $dbname) :
-        sprintf('mysql:host=%s;dbname=%s', $server, $port);
+        return array_key_exists('port', $config) ?
+        sprintf('mysql:host=%s;port=%s;dbname=%s', $server, $port, $database) :
+        sprintf('mysql:host=%s;dbname=%s', $server, $database);
     }
 }
