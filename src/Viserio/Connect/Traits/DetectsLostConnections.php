@@ -1,5 +1,5 @@
 <?php
-namespace Viserio\Database\Traits;
+namespace Viserio\Connect\Traits;
 
 use Exception;
 use Viserio\Support\Str;
@@ -17,12 +17,13 @@ trait DetectsLostConnections
     {
         $message = $e->getMessage();
 
-        return Str::contains($message, [
+        return Str::containsAny($message, [
             'server has gone away',
             'no connection to the server',
             'Lost connection',
             'is dead or not enabled',
             'Error while sending',
+            'Operation in progress',
         ]);
     }
 }

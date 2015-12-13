@@ -10,22 +10,12 @@ env:
   global:
     - setup=basic
   matrix:
-    - ADAPTER=MemoryStore
     - ADAPTER=Apc
-    - ADAPTER=Memcached
-    - ADAPTER=Redis
-    - ADAPTER=Couchbase
-    - ADAPTER=MySQL
-    - ADAPTER=SQLite
-    - ADAPTER=PostgreSQL
-    - ADAPTER=Filesystem
-    - ADAPTER=Flysystem
-    - MONGO_VERSION=1.2.12
+    - ADAPTER=Ev
 
 services:
-  - mongodb
-  - mysql
   - memcached
+  - mongodb
   - redis-server
 
 matrix:
@@ -34,30 +24,27 @@ matrix:
       env: setup=lowest
     - php: 5.6
       env: setup=stable
+  allow_failures:
+    - php: nightly
   fast_finish: true
-
-sudo: false
 
 cache:
   directories:
     - $HOME/.composer/cache
 
+before_script:
+  - sleep 15
+  - mongo mydb_test --eval 'db.addUser("travis", "test");'
+  - if [[ $ADAPTER = 'Apc' ]]; then chmod a+x ./build/travis/Apc.sh; ./build/travis/Apc.sh; fi
+  - if [[ $ADAPTER = 'Ev' ]]; then chmod a+x ./build/travis/ev.sh; ./build/travis/ev.sh; fi
+  - if [[ $PHP_VERSION != 'hhvm' ]]; then echo "extension = memcached.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini; fi
+
 before_install:
-  - mysql -e 'create database narrowspark_test;'
-  - echo "extension = mongo.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
   - composer self-update
   - travis_retry composer install --prefer-source --no-interaction
   - OCULAR_ENV='5.6'
 
 install:
-  - curl -LS https://pecl.php.net/get/ev | tar -xz;
-    pushd ev-*;
-    phpize;
-    ./configure;
-    make;
-    make install;
-    popd;
-    echo "extension=ev.so" >> "$(php -r 'echo php_ini_loaded_file();')";
   - curl http://get.sensiolabs.org/php-cs-fixer.phar -o php-cs-fixer.phar
   - if [[ $setup = 'basic' ]]; then travis_retry composer install --no-interaction --prefer-source; fi
   - if [[ $setup = 'stable' ]]; then travis_retry composer update --prefer-source --no-interaction --prefer-stable; fi
@@ -70,3 +57,5 @@ script:
 
 after_script:
   - php vendor/bin/coveralls -v
+
+sudo: false

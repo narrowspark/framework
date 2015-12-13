@@ -1,31 +1,27 @@
 <?php
-namespace Viserio\Database\Connectors;
+namespace Viserio\Connect\Adapters\Database;
 
-use Viserio\Contracts\Database\Connector as ConnectorContract;
+use Viserio\Support\Str;
 
-class MSSQLConnector extends Connectors implements ConnectorContract
+class MSSQLConnector extends AbstractDatabaseConnector
 {
     /**
-     * Establish a database connection.
-     *
-     * @param array $config
-     *
-     * @return \PDO
+     * {@inheritdoc}
      */
     public function connect(array $config)
     {
-        $dsn = $this->getDsn($config);
-
         // We need to grab the PDO options that should be used while making the brand
         // new connection instance. The PDO options control various aspects of the
         // connection's behavior, and some might be specified by the developers.
-        $connection = $this->createConnection($dsn, $config, $this->getOptions($config));
+        $connection = $this->createConnection(
+            $this->getDsn($config),
+            $config,
+            $this->getOptions($config)
+        );
 
         // Next we will set the "names" on the clients connections so
         // a correct character set will be used by this client.
-        $charset = $config['charset'];
-
-        $connection->prepare(sprintf('set names %s', $charset))->execute();
+        $connection->prepare(sprintf('set names \'%s\'', $config['charset']))->execute();
 
         // Keep MSSQL QUOTED_IDENTIFIER is ON for standard quoting
         $connection->prepare('set quoted_identifier on')->execute();
@@ -52,7 +48,11 @@ class MSSQLConnector extends Connectors implements ConnectorContract
      */
     protected function configIsWin()
     {
-        return (strstr(PHP_OS, 'WIN')) ? true : false;
+        return Str::containsAny(PHP_OS, [
+            'WIN32',
+            'WINNT',
+            'Windows'
+        ]);
     }
 
     /**
@@ -67,8 +67,8 @@ class MSSQLConnector extends Connectors implements ConnectorContract
         extract($config);
 
         return isset($config['port']) ?
-        sprintf('sqlsrv:server=%s,%s;database=%s', $server, $port, $dbname) :
-        sprintf('sqlsrv:server=%s;database=%s', $server, $dbname);
+        sprintf('sqlsrv:server=%s,%s;database=%s', $server, $port, $database) :
+        sprintf('sqlsrv:server=%s;database=%s', $server, $database);
     }
 
     /**
@@ -83,7 +83,7 @@ class MSSQLConnector extends Connectors implements ConnectorContract
         extract($config);
 
         return isset($config['port']) ?
-        sprintf('dblib:host=%s:%s;database=%s', $server, $port, $dbname) :
-        sprintf('dblib:host=%s;database=%s', $server, $dbname);
+        sprintf('dblib:host=%s:%s;database=%s', $server, $port, $database) :
+        sprintf('dblib:host=%s;database=%s', $server, $database);
     }
 }

@@ -1,29 +1,12 @@
 <?php
-namespace Viserio\Database\Connectors;
+namespace Viserio\Connect\Adapters\Database;
 
 use PDO;
-use Viserio\Contracts\Database\Connector as ConnectorContract;
 
-class SqlServerConnector extends Connectors implements ConnectorContract
+class SqlServerConnector extends AbstractDatabaseConnector
 {
     /**
-     * The PDO connection options.
-     *
-     * @var array
-     */
-    protected $options = [
-            PDO::ATTR_CASE => PDO::CASE_NATURAL,
-            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-            PDO::ATTR_ORACLE_NULLS => PDO::NULL_NATURAL,
-            PDO::ATTR_STRINGIFY_FETCHES => false,
-    ];
-
-    /**
-     * Establish a database connection.
-     *
-     * @param array $config
-     *
-     * @return \PDO
+     * {@inheritdoc}
      */
     public function connect(array $config)
     {

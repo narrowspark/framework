@@ -1,18 +1,12 @@
 <?php
-namespace Viserio\Database\Connectors;
+namespace Viserio\Connect\Adapters\Database;
 
-use Viserio\Contracts\Database\Connector as ConnectorContract;
+use InvalidArgumentException;
 
-class SQLiteConnector extends Connectors implements ConnectorContract
+class SQLiteConnector extends AbstractDatabaseConnector
 {
     /**
-     * Establish a database connection.
-     *
-     * @param array $config
-     *
-     * @throws \InvalidArgumentException
-     *
-     * @return \PDO
+     * {@inheritdoc}
      */
     public function connect(array $config)
     {
@@ -29,7 +23,7 @@ class SQLiteConnector extends Connectors implements ConnectorContract
         // as the developer probably wants to know if the database exists and this
         // SQLite driver will not throw any exception if it does not by default.
         if ($path === false) {
-            throw new \InvalidArgumentException('Database does not exist.');
+            throw new InvalidArgumentException('Database does not exist.');
         }
 
         return $this->createConnection(sprintf('sqlite:%s', $path), $config, $this->getOptions($config));
