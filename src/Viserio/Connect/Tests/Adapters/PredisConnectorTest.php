@@ -21,8 +21,8 @@ class PredisConnectorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage servers config dont exist.
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage servers config don't exist.
      */
     public function testConnectThrowExeption()
     {
