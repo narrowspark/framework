@@ -3,8 +3,8 @@ namespace Viserio\Connect\Tests;
 
 use Mockery as Mock;
 use Viserio\Connect\Adapters\MemcachedConnector;
-use Viserio\Connect\ConnectionFactory;
 use Viserio\Connect\Adapters\PredisConnector;
+use Viserio\Connect\ConnectionFactory;
 
 class ConnectionFactoryTest extends \PHPUnit_Framework_TestCase
 {
