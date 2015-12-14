@@ -19,9 +19,9 @@ class DblibConnectorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @dataProvider mySqlConnectProvider
+     * @dataProvider dblibConnectProvider
      */
-    public function testFirebirdDatabasesMayBeConnectedTo($dsn, $config)
+    public function testDblibDatabasesMayBeConnectedTo($dsn, $config)
     {
         $connection = Mock::mock('stdClass');
         $connector  = $this->getMock(
@@ -40,7 +40,7 @@ class DblibConnectorTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($connector->connect($config), $connection);
     }
 
-    public function mySqlConnectProvider()
+    public function dblibConnectProvider()
     {
         return [
             [
