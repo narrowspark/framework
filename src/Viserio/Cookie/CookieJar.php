@@ -1,7 +1,6 @@
 <?php
 namespace Viserio\Cookie;
 
-use Symfony\Component\HttpFoundation\Cookie;
 use Viserio\Contracts\Cookie\CookiesJar as JarContract;
 use Viserio\Support\Arr;
 
@@ -46,7 +45,7 @@ class CookieJar implements JarContract
      * @param bool        $secure
      * @param bool        $httpOnly
      *
-     * @return \Symfony\Component\HttpFoundation\Cookie
+     * @return Cookie
      */
     public function make($name, $value, $minutes = 0, $path = null, $domain = null, $secure = false, $httpOnly = true)
     {
@@ -67,7 +66,7 @@ class CookieJar implements JarContract
      * @param bool        $secure
      * @param bool        $httpOnly
      *
-     * @return \Symfony\Component\HttpFoundation\Cookie
+     * @return Cookie
      */
     public function forever($name, $value, $path = null, $domain = null, $secure = false, $httpOnly = true)
     {
@@ -81,7 +80,7 @@ class CookieJar implements JarContract
      * @param string|null $path
      * @param string|null $domain
      *
-     * @return \Symfony\Component\HttpFoundation\Cookie
+     * @return Cookie
      */
     public function forget($name, $path = null, $domain = null)
     {
@@ -106,7 +105,7 @@ class CookieJar implements JarContract
      * @param string     $key
      * @param mixed|null $default
      *
-     * @return \Symfony\Component\HttpFoundation\Cookie
+     * @return Cookie
      */
     public function queued($key, $default = null)
     {
