@@ -1,15 +1,14 @@
 <?php
 namespace Viserio\Connect;
 
-use InvalidArgumentException;
 use PDO;
 use RuntimeException;
 use Viserio\Connect\Adapters\Database\DblibConnector;
 use Viserio\Connect\Adapters\Database\Firebirdconnector;
 use Viserio\Connect\Adapters\Database\GoogleCloudSQLConnector;
+use Viserio\Connect\Adapters\Database\MSSQLConnector;
 use Viserio\Connect\Adapters\Database\MariaDBConnector;
 use Viserio\Connect\Adapters\Database\MongoConnector;
-use Viserio\Connect\Adapters\Database\MSSQLConnector;
 use Viserio\Connect\Adapters\Database\MySqlConnector;
 use Viserio\Connect\Adapters\Database\OdbcConnection;
 use Viserio\Connect\Adapters\Database\OracleConnector;
@@ -154,7 +153,7 @@ class ConnectionFactory implements ConnectionFactoryContract
     /**
      * All supported PDO drivers.
      *
-     * @return array
+     * @return string[]
      */
     public function supportedPDODrivers()
     {

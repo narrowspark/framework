@@ -23,6 +23,7 @@ interface ConnectionFactory
 
     /**
      * Disconnect from the given connection.
+     * @return void
      */
     public function disconnect();
 
@@ -41,7 +42,8 @@ interface ConnectionFactory
      * Register an extension connection resolver.
      *
      * @param Connector $name
-     * @param callable   $resolver
+     * @param Connector   $resolver
+     * @return void
      */
     public function extend($name, Connector $resolver);
 

@@ -1,9 +1,8 @@
 <?php
 namespace Viserio\Console\Command;
 
-use Interop\Container\ContainerInterface as ContainerInteropInterface;
-use Stecman\Component\Symfony\Console\BashCompletion\Completion\CompletionAwareInterface;
 use Stecman\Component\Symfony\Console\BashCompletion\CompletionContext;
+use Stecman\Component\Symfony\Console\BashCompletion\Completion\CompletionAwareInterface;
 use Symfony\Component\Console\Command\Command as BaseCommand;
 use Symfony\Component\Console\Formatter\OutputFormatterStyle;
 use Symfony\Component\Console\Helper\Table;
