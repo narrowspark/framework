@@ -12,7 +12,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Viserio\Console\Command\Command as ViserioCommand;
 use Viserio\Console\Command\ExpressionParser as Parser;
-use Viserio\Console\Input\InputArgument;
 use Viserio\Console\Input\InputOption;
 use Viserio\Contracts\Console\Application as ApplicationContract;
 use Viserio\Support\Invoker;
@@ -117,7 +116,7 @@ class Application extends SymfonyConsole implements ApplicationContract
      *                                          When using a container, this can be a "pseudo-callable"
      *                                          i.e. the name of the container entry to invoke.
      *
-     * @return SymfonyCommand|null
+     * @return SymfonyCommand
      */
     public function command($expression, $callable)
     {
