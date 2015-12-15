@@ -38,7 +38,7 @@ class Timer
     /**
      * [updateTime description]
      *
-     * @return string
+     * @return double
      */
     public function updateTime()
     {
