@@ -688,51 +688,6 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $c = new Collection(['name' => 'narrowspark', 'framework' => 'narrowspark']);
         $this->assertEquals(['name', 'framework'], $c->keys()->all());
     }
-}
-
-class TestAccessorEloquentTestStub
-{
-    protected $attributes = [];
-
-    public function __construct($attributes)
-    {
-        $this->attributes = $attributes;
-    }
-
-    public function __get($attribute)
-    {
-        $accessor = 'get'.lcfirst($attribute).'Attribute';
-        if (method_exists($this, $accessor)) {
-            return $this->$accessor();
-        }
-
-        return $this->$attribute;
-    }
-
-    public function __isset($attribute)
-    {
-        $accessor = 'get'.lcfirst($attribute).'Attribute';
-
-        if (method_exists($this, $accessor)) {
-            return !is_null($this->$accessor());
-        }
-
-        return isset($this->$attribute);
-    }
-
-    public function getSomeAttribute()
-    {
-        return $this->attributes['some'];
-    }
-
-    public function testPrepend()
-    {
-        $c = new Collection(['one', 'two', 'three', 'four']);
-        $this->assertEquals(['zero', 'one', 'two', 'three', 'four'], $c->prepend('zero')->all());
-
-        $c = new Collection(['one' => 1, 'two' => 2]);
-        $this->assertEquals(['zero' => 0, 'one' => 1, 'two' => 2], $c->prepend(0, 'zero')->all());
-    }
 
     public function testZip()
     {
@@ -785,11 +740,104 @@ class TestAccessorEloquentTestStub
     public function testFlatMap()
     {
         $data = new Collection([
-            ['name' => 'taylor', 'hobbies' => ['programming', 'basketball']],
-            ['name' => 'adam', 'hobbies' => ['music', 'powerlifting']],
+            ['name' => 'narrowspark', 'hobbies' => ['programming', 'running']],
+            ['name' => 'bob', 'hobbies' => ['music', 'powerlifting']],
         ]);
-        $data = $data->flatMap(function ($person) { return $person['hobbies']; });
-        $this->assertEquals(['programming', 'basketball', 'music', 'powerlifting'], $data->all());
+        $data = $data->flatMap(function ($person) {
+            return $person['hobbies'];
+        });
+        $this->assertEquals(['programming', 'running', 'music', 'powerlifting'], $data->all());
+    }
+
+    public function testArrayAccessOffsetExists()
+    {
+        $c = new Collection(['foo', 'bar']);
+        $this->assertTrue($c->offsetExists(0));
+        $this->assertTrue($c->offsetExists(1));
+        $this->assertFalse($c->offsetExists(1000));
+    }
+
+    public function testArrayAccessOffsetGet()
+    {
+        $c = new Collection(['foo', 'bar']);
+        $this->assertEquals('foo', $c->offsetGet(0));
+        $this->assertEquals('bar', $c->offsetGet(1));
+    }
+
+    /**
+     * @expectedException PHPUnit_Framework_Error_Notice
+     */
+    public function testArrayAccessOffsetGetOnNonExist()
+    {
+        $c = new Collection(['foo', 'bar']);
+        $c->offsetGet(1000);
+    }
+
+    public function testArrayAccessOffsetSet()
+    {
+        $c = new Collection(['foo', 'foo']);
+
+        $c->offsetSet(1, 'bar');
+        $this->assertEquals('bar', $c[1]);
+
+        $c->offsetSet(null, 'qux');
+        $this->assertEquals('qux', $c[2]);
+    }
+
+    /**
+     * @expectedException PHPUnit_Framework_Error_Notice
+     */
+    public function testArrayAccessOffsetUnset()
+    {
+        $c = new Collection(['foo', 'bar']);
+
+        $c->offsetUnset(1);
+        $c[1];
+    }
+}
+
+class TestAccessorEloquentTestStub
+{
+    protected $attributes = [];
+
+    public function __construct($attributes)
+    {
+        $this->attributes = $attributes;
+    }
+
+    public function __get($attribute)
+    {
+        $accessor = 'get'.lcfirst($attribute).'Attribute';
+        if (method_exists($this, $accessor)) {
+            return $this->$accessor();
+        }
+
+        return $this->$attribute;
+    }
+
+    public function __isset($attribute)
+    {
+        $accessor = 'get'.lcfirst($attribute).'Attribute';
+
+        if (method_exists($this, $accessor)) {
+            return !is_null($this->$accessor());
+        }
+
+        return isset($this->$attribute);
+    }
+
+    public function getSomeAttribute()
+    {
+        return $this->attributes['some'];
+    }
+
+    public function testPrepend()
+    {
+        $c = new Collection(['one', 'two', 'three', 'four']);
+        $this->assertEquals(['zero', 'one', 'two', 'three', 'four'], $c->prepend('zero')->all());
+
+        $c = new Collection(['one' => 1, 'two' => 2]);
+        $this->assertEquals(['zero' => 0, 'one' => 1, 'two' => 2], $c->prepend(0, 'zero')->all());
     }
 }
 
