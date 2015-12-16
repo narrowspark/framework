@@ -1,11 +1,11 @@
 <?php
 namespace Viserio\Cookie;
 
-use InvalidArgumentException;
 use DateTime;
+use InvalidArgumentException;
 use Viserio\Contracts\Support\Stringable;
 
-class Cookie implements Stringable
+final class Cookie implements Stringable
 {
     /**
      * @var string
@@ -25,7 +25,7 @@ class Cookie implements Stringable
     /**
      * @var int|\DateTime
      */
-    protected $expire;
+    protected $expires;
 
     /**
      * @var integer|null
@@ -48,13 +48,16 @@ class Cookie implements Stringable
     protected $httpOnly;
 
     /**
-     * @param string            $name       The name of the cookie
-     * @param string|null       $value      The value of the cookie
-     * @param integer|\DateTime $expiration The time the cookie expires
-     * @param string|null       $domain     The domain that the cookie is available to
-     * @param string|null       $path       The path on the server in which the cookie will be available on
-     * @param boolean           $secure     Whether the cookie should only be transmitted over a secure HTTPS connection from the client
-     * @param boolean           $httpOnly   Whether the cookie will be made accessible only through the HTTP protocol
+     * @param string            $name       The name of the cookie.
+     * @param string|null       $value      The value of the cookie.
+     * @param integer|\DateTime $expiration The time the cookie expires.
+     * @param string|null       $domain     The domain that the cookie is available to.
+     * @param string|null       $path       The path on the server in which the cookie will
+     *                                      be available on.
+     * @param boolean           $secure     Whether the cookie should only be transmitted
+     *                                      over a secure HTTPS connection from the client.
+     * @param boolean           $httpOnly   Whether the cookie will be made accessible only.
+     *                                      through the HTTP protocol.
      *
      * @throws \InvalidArgumentException
      */
@@ -245,7 +248,9 @@ class Cookie implements Stringable
      */
     public function match(Cookie $cookie)
     {
-        return $this->name === $cookie->name && $this->domain === $cookie->domain and $this->path === $cookie->path;
+        return $this->name === $cookie->name &&
+            $this->domain === $cookie->domain &&
+            $this->path === $cookie->path;
     }
 
     /**
@@ -290,8 +295,8 @@ class Cookie implements Stringable
             }
         }
 
-        if ($this->path) {
-            $str .= '; path='.$this->path;
+        if ($this->getPath()) {
+            $str .= '; path='.$this->getPath();
         }
 
         if ($this->getDomain()) {
@@ -343,7 +348,12 @@ class Cookie implements Stringable
     {
         if (isset($value)) {
             if (preg_match('/[^\x21\x23-\x2B\x2D-\x3A\x3C-\x5B\x5D-\x7E]/', $value)) {
-                throw new InvalidArgumentException(sprintf('The cookie value "%s" contains invalid characters.', $value));
+                throw new InvalidArgumentException(
+                    sprintf(
+                        'The cookie value "%s" contains invalid characters.',
+                        $value
+                    )
+                );
             }
         }
     }
@@ -353,7 +363,7 @@ class Cookie implements Stringable
      *
      * @param string|null $domain
      *
-     * @return string
+     * @return string|null
      *
      * @see http://tools.ietf.org/html/rfc6265#section-4.1.2.3
      * @see http://tools.ietf.org/html/rfc6265#section-5.1.3
@@ -382,7 +392,7 @@ class Cookie implements Stringable
     {
         $path = rtrim($path, '/');
 
-        if (empty($path) or substr($path, 0, 1) !== '/') {
+        if (empty($path) || substr($path, 0, 1) !== '/') {
             $path = '/';
         }
 
