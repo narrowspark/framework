@@ -94,6 +94,23 @@ final class Cookie implements Stringable
     }
 
     /**
+     * Sets the value
+     *
+     * @param string|null $value
+     *
+     * @return self
+     */
+    public function withValue($value)
+    {
+        $this->validateValue($value);
+
+        $new = clone $this;
+        $new->value = $value;
+
+        return $new;
+    }
+
+    /**
      * Returns the value
      *
      * @return string|null
@@ -114,6 +131,21 @@ final class Cookie implements Stringable
     }
 
     /**
+     * Sets the max age
+     *
+     * @param integer|null $maxAge
+     *
+     * @return self
+     */
+    public function withMaxAge($maxAge)
+    {
+        $new = clone $this;
+        $new->maxAge = is_int($maxAge) ? $maxAge : null;
+
+        return $new;
+    }
+
+    /**
      * Returns the max age
      *
      * @return integer|null
@@ -131,6 +163,37 @@ final class Cookie implements Stringable
     public function hasMaxAge()
     {
         return $this->maxAge !== null;
+    }
+
+    /**
+     * Sets both the max age and the expires attributes
+     *
+     * @param integer|\DateTime|null $expiration
+     *
+     * @return self
+     */
+    public function withExpiration($expiration)
+    {
+        $new = clone $this;
+        $new->maxAge = is_int($expiration) ? $expiration : null;
+        $new->expires = $this->normalizeExpires($expiration);
+
+        return $new;
+    }
+
+    /**
+     * Sets the expires
+     *
+     * @param \DateTime|null $expires
+     *
+     * @return self
+     */
+    public function withExpires(\DateTime $expires)
+    {
+        $new = clone $this;
+        $new->expires = $expires;
+
+        return $new;
     }
 
     /**
@@ -164,6 +227,21 @@ final class Cookie implements Stringable
     }
 
     /**
+     * Sets the domain
+     *
+     * @param string|null $domain
+     *
+     * @return self
+     */
+    public function withDomain($domain)
+    {
+        $new = clone $this;
+        $new->domain = $this->normalizeDomain($domain);
+
+        return $new;
+    }
+
+    /**
      * Returns the domain
      *
      * @return string|null
@@ -184,6 +262,21 @@ final class Cookie implements Stringable
     }
 
     /**
+     * Sets the path
+     *
+     * @param string|null $path
+     *
+     * @return self
+     */
+    public function withPath($path)
+    {
+        $new = clone $this;
+        $new->path = $this->normalizePath($path);
+
+        return $new;
+    }
+
+    /**
      * Returns the path
      *
      * @return string
@@ -194,6 +287,21 @@ final class Cookie implements Stringable
     }
 
     /**
+     * Sets the secure
+     *
+     * @param boolean $secure
+     *
+     * @return self
+     */
+    public function withSecure($secure)
+    {
+        $new = clone $this;
+        $new->secure = (bool) $secure;
+
+        return $new;
+    }
+
+    /**
      * Checks if HTTPS is required
      *
      * @return boolean
@@ -201,6 +309,21 @@ final class Cookie implements Stringable
     public function isSecure()
     {
         return $this->secure;
+    }
+
+    /**
+     * Sets the HTTP Only
+     *
+     * @param boolean $httpOnly
+     *
+     * @return self
+     */
+    public function withHttpOnly($httpOnly)
+    {
+        $new = clone $this;
+        $new->httpOnly = (bool) $httpOnly;
+
+        return $new;
     }
 
     /**
