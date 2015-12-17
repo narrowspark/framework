@@ -13,12 +13,12 @@ final class Cookie implements Stringable
     protected $name;
 
     /**
-     * @var string
+     * @var string|null
      */
     protected $value;
 
     /**
-     * @var string
+     * @var string|null
      */
     protected $domain;
 
@@ -73,24 +73,10 @@ final class Cookie implements Stringable
         $this->validateName($name);
         $this->validateValue($value);
 
-        $maxAge = $expires = null;
-
-        if (is_int($expiration)) {
-            $maxAge = $expiration;
-            $expires = new DateTime(sprintf('%d seconds', $maxAge));
-
-            // According to RFC 2616 date should be set to earliest representable date
-            if ($maxAge <= 0) {
-                $expires->setTimestamp(-PHP_INT_MAX);
-            }
-        } elseif ($expiration instanceof DateTime) {
-            $expires = $expiration;
-        }
-
         $this->name     = $name;
         $this->value    = $value;
-        $this->maxAge   = $maxAge;
-        $this->expires  = $expires;
+        $this->maxAge   = is_int($expiration) ? $expiration : null;;
+        $this->expires  = $this->normalizeExpires($expiration);
         $this->domain   = $this->normalizeDomain($domain);
         $this->path     = $this->normalizePath($path);
         $this->secure   = (bool) $secure;
@@ -124,7 +110,7 @@ final class Cookie implements Stringable
      */
     public function hasValue()
     {
-        return isset($this->value);
+        return !empty($this->value);
     }
 
     /**
@@ -144,7 +130,7 @@ final class Cookie implements Stringable
      */
     public function hasMaxAge()
     {
-        return isset($this->maxAge);
+        return $this->maxAge !== null;
     }
 
     /**
@@ -164,7 +150,7 @@ final class Cookie implements Stringable
      */
     public function hasExpires()
     {
-        return isset($this->expires);
+        return $this->expires !== 0;
     }
 
     /**
@@ -174,7 +160,7 @@ final class Cookie implements Stringable
      */
     public function isExpired()
     {
-        return isset($this->expires) && $this->expires < new DateTime();
+        return $this->expires !== 0 && $this->expires < new DateTime();
     }
 
     /**
@@ -194,7 +180,7 @@ final class Cookie implements Stringable
      */
     public function hasDomain()
     {
-        return isset($this->domain);
+        return $this->domain !== null;
     }
 
     /**
@@ -206,19 +192,7 @@ final class Cookie implements Stringable
     {
         return $this->path;
     }
-    /**
-     * It matches a path
-     *
-     * @param string $path
-     *
-     * @return boolean
-     *
-     * @see http://tools.ietf.org/html/rfc6265#section-5.1.4
-     */
-    public function matchPath($path)
-    {
-        return $this->path === $path || (strpos($path, $this->path.'/') === 0);
-    }
+
     /**
      * Checks if HTTPS is required
      *
@@ -240,17 +214,31 @@ final class Cookie implements Stringable
     }
 
     /**
+     * It matches a path
+     *
+     * @param string $path
+     *
+     * @return boolean
+     *
+     * @see http://tools.ietf.org/html/rfc6265#section-5.1.4
+     */
+    public function matchPath($path)
+    {
+        return $this->path === $path || (strpos($path, $this->path.'/') === 0);
+    }
+
+    /**
      * Checks if it matches with another cookie
      *
      * @param Cookie $cookie
      *
      * @return boolean
      */
-    public function match(Cookie $cookie)
+    public function matchCookie(Cookie $cookie)
     {
-        return $this->name === $cookie->name &&
-            $this->domain === $cookie->domain &&
-            $this->path === $cookie->path;
+        return $this->getName() === $cookie->getName() &&
+            $this->getDomain() === $cookie->getDomain() &&
+            $this->getPath() === $cookie->getPath();
     }
 
     /**
@@ -265,7 +253,7 @@ final class Cookie implements Stringable
     public function matchDomain($domain)
     {
         // Domain is not set or exact match
-        if (!$this->hasDomain() || strcasecmp($domain, $this->domain) === 0) {
+        if (!$this->hasDomain() || strcasecmp($domain, $this->getDomain()) === 0) {
             return true;
         }
 
@@ -274,7 +262,7 @@ final class Cookie implements Stringable
             return false;
         }
 
-        return (bool) preg_match('/\b' . preg_quote($this->domain) . '$/i', $domain);
+        return (bool) preg_match('/\b' . preg_quote($this->getDomain()) . '$/i', $domain);
     }
 
     /**
@@ -290,8 +278,8 @@ final class Cookie implements Stringable
             $str .= 'deleted; expires='.gmdate('D, d-M-Y H:i:s T', time() - 31536001);
         } else {
             $str .= urlencode($this->getValue());
-            if ($this->getExpiresTime() !== 0) {
-                $str .= '; expires='.gmdate('D, d-M-Y H:i:s T', $this->getExpiresTime());
+            if ($this->getExpiresTime()->format('s') !== 0) {
+                $str .= '; expires='.$this->getExpiresTime()->format('D, d-M-Y H:i:s T');
             }
         }
 
@@ -308,7 +296,7 @@ final class Cookie implements Stringable
         }
 
         if ($this->isHttpOnly() === true) {
-            $str .= '; httponly';
+            $str .= '; HttpOnly';
         }
 
         return $str;
@@ -356,6 +344,30 @@ final class Cookie implements Stringable
                 );
             }
         }
+    }
+
+    /**
+     * Normalizes the expiration value
+     *
+     * @param integer|\DateTime|null $expiration
+     *
+     * @return \DateTime|null
+     */
+    private function normalizeExpires($expiration)
+    {
+        $expires = null;
+
+        if (is_int($expiration)) {
+            $expires = new \DateTime(sprintf('%d seconds', $expiration));
+            // According to RFC 2616 date should be set to earliest representable date
+            if ($expiration <= 0) {
+                $expires->setTimestamp(-PHP_INT_MAX);
+            }
+        } elseif ($expiration instanceof DateTime) {
+            $expires = $expiration;
+        }
+
+        return $expires;
     }
 
     /**
