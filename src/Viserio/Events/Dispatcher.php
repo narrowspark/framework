@@ -197,4 +197,12 @@ class Dispatcher implements EventDispatcherInterface
     {
         return $this->eventDispatcher->hasListeners($eventName);
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getListenerPriority($eventName, $listener)
+    {
+        return $this->dispatcher->getListenerPriority($eventName, $listener);
+    }
 }
