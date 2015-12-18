@@ -49,6 +49,33 @@ class CookieJarTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('/path', $c->getPath());
     }
 
+    public function testQueuedCookies()
+    {
+        $cookie = $this->getCreator();
+        $this->assertEmpty($cookie->getQueuedCookies());
+        $this->assertFalse($cookie->hasQueued('foo'));
+
+        $cookie->queue($cookie->make('foo', 'bar'));
+        $this->assertArrayHasKey('foo', $cookie->getQueuedCookies());
+        $this->assertTrue($cookie->hasQueued('foo'));
+        $this->assertInstanceOf('Viserio\Cookie\Cookie', $cookie->queued('foo'));
+
+        $cookie->queue('qu', 'ux');
+        $this->assertArrayHasKey('qu', $cookie->getQueuedCookies());
+        $this->assertTrue($cookie->hasQueued('qu'));
+        $this->assertInstanceOf('Viserio\Cookie\Cookie', $cookie->queued('qu'));
+    }
+
+    public function testUnqueue()
+    {
+        $cookie = $this->getCreator();
+        $cookie->queue($cookie->make('foo', 'bar'));
+        $this->assertArrayHasKey('foo', $cookie->getQueuedCookies());
+
+        $cookie->unqueue('foo');
+        $this->assertEmpty($cookie->getQueuedCookies());
+    }
+
     public function getCreator()
     {
         return new CookieJar(Request::create('/foo', 'GET'), [

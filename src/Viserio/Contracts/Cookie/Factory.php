@@ -1,7 +1,7 @@
 <?php
 namespace Viserio\Contracts\Cookie;
 
-interface CookiesJar
+interface Factory
 {
     /**
      * Create a new cookie instance.

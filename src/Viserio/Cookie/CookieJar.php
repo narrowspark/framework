@@ -1,7 +1,10 @@
 <?php
 namespace Viserio\Cookie;
 
-use Viserio\Contracts\Cookie\CookiesJar as JarContract;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use Viserio\Contracts\Cookie\Cookie as CookieContract;
+use Viserio\Contracts\Cookie\QueueingFactory as JarContract;
 use Viserio\Support\Arr;
 
 class CookieJar implements JarContract
@@ -85,6 +88,40 @@ class CookieJar implements JarContract
     public function forget($name, $path = null, $domain = null)
     {
         return $this->make($name, null, -2628000, $path, $domain);
+    }
+
+    /**
+     * @param \Psr\Http\Message\ServerRequestInterface $request
+     *
+     * @return \Viserio\Contracts\Cookie\Cookie
+     */
+    public function fromServerRequest(ServerRequestInterface $request)
+    {
+        list ($cookieName, $cookieValue) = $this->splitCookiePair($request->getCookieParams());
+
+        /** @var Cookie $cookie */
+        $cookie = new Cookie($cookieName);
+
+        if (!is_null($cookieValue)) {
+            $cookie = $cookie->withValue($cookieValue);
+        }
+
+        return $cookie;
+    }
+
+    /**
+     * @param \Viserio\Contracts\Cookie\Cookie    $cookieJar
+     * @param \Psr\Http\Message\ResponseInterface $response
+     *
+     * @return \Psr\Http\Message\ResponseInterface
+     */
+    public function toResponse(CookieContract $cookieJar, ResponseInterface $response)
+    {
+        foreach ($cookieJar as $cookie) {
+            $response = $response->withAddedHeader('Set-Cookie', $cookie->__toString());
+        }
+
+        return $response;
     }
 
     /**
@@ -175,5 +212,18 @@ class CookieJar implements JarContract
     public function getQueuedCookies()
     {
         return $this->queued;
+    }
+
+    protected function splitCookiePair($string)
+    {
+        $pairParts = explode('=', $string, 2);
+
+        if (count($pairParts) === 1) {
+            $pairParts[1] = '';
+        }
+
+        return array_map(function ($part) {
+            return urldecode($part);
+        }, $pairParts);
     }
 }
