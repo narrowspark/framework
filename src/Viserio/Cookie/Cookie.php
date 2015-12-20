@@ -1,8 +1,8 @@
 <?php
 namespace Viserio\Cookie;
 
-use InvalidArgumentException;
 use DateTime;
+use InvalidArgumentException;
 use Viserio\Contracts\Support\Stringable;
 
 class Cookie implements Stringable

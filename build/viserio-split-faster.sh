@@ -45,6 +45,7 @@ split hashing      src/Viserio/Hashing:git@github.com:n-viserio/hashing.git     
 split http         src/Viserio/Http:git@github.com:n-viserio/http.git              "master 0.10.0"
 split log          src/Viserio/Log:git@github.com:n-viserio/log.git                "master 0.10.0"
 split mail         src/Viserio/Mail:git@github.com:n-viserio/mail.git              "master 0.10.0"
+split middleware   src/Viserio/Middleware:git@github.com:n-viserio/middleware.git  "master 0.10.0"
 split pipeline     src/Viserio/Mail:git@github.com:n-viserio/pipeline.git          "0.10.0"
 split queue        src/Viserio/Queue:git@github.com:n-viserio/queue.git            "0.10.0"
 split routing      src/Viserio/Routing:git@github.com:n-viserio/routing.git        "master 0.10.0"

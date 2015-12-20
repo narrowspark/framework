@@ -15,6 +15,7 @@ git subsplit publish src/Viserio/Hashing:git@github.com:n-viserio/hashing.git
 git subsplit publish src/Viserio/Http:git@github.com:n-viserio/http.git
 git subsplit publish src/Viserio/Log:git@github.com:n-viserio/log.git
 git subsplit publish src/Viserio/Mail:git@github.com:n-viserio/mail.git
+git subsplit publish src/Viserio/Middleware:git@github.com:n-viserio/middleware.git
 git subsplit publish src/Viserio/Pipeline:git@github.com:n-viserio/pipeline.git
 git subsplit publish src/Viserio/Queue:git@github.com:n-viserio/queue.git
 git subsplit publish src/Viserio/Routing:git@github.com:n-viserio/routing.git
