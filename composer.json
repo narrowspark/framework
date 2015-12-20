@@ -76,6 +76,7 @@
         "viserio/http"                       : "self.version",
         "viserio/log"                        : "self.version",
         "viserio/mail"                       : "self.version",
+        "viserio/middleware"                 : "self.version",
         "viserio/pipeline"                   : "self.version",
         "viserio/routing"                    : "self.version",
         "viserio/session"                    : "self.version",
@@ -100,6 +101,7 @@
         "predis/predis"                                     : "~1.0.1",
         "fzaninotto/faker"                                  : "~1.4",
         "johnkary/phpunit-speedtrap"                        : "~1.0",
+        "helmich/phpunit-psr7-assert"                       : "~1.0",
         "roave/security-advisories"                         : "dev-master"
     },
     "autoload": {

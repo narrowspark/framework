@@ -1,8 +1,8 @@
 <?php
 namespace Viserio\Contracts\Middleware;
 
-use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
+use Psr\Http\Message\ServerRequestInterface as Request;
 
 interface Dispatcher
 {
@@ -14,14 +14,13 @@ interface Dispatcher
      * callable. A middleware WILL be called with three parameters:
      * Request, Response and Next.
      *
-     * @throws \RuntimeException when adding middleware to the stack to late
      *
      * @param callable $middleware
+     * @throws \RuntimeException when adding middleware to the stack to late
      */
     public function pipe(callable $middleware);
 
     /**
-     *
      * Dispatches to a new Runner.
      *
      * @param RequestInterface $request The request.

@@ -1,22 +1,19 @@
 <?php
-namespace Relay;
+namespace Viserio\Middleware\Tests\Fixture;
 
-use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Contracts\Middleware\Middleware as MiddlewareContract;
 
 class FakeMiddleware implements MiddlewareContract
 {
-    public static $count = 0;
-
     public function __invoke(
-        RequestInterface $request,
+        ServerRequestInterface $request,
         ResponseInterface $response,
         callable $next
     ) {
-        $response->getBody()->write(++ static::$count);
-        $response = $next($request, $response);
-        $response->getBody()->write(++ static::$count);
+        $response = $response->withAddedHeader('X-Foo', 'modified');
+        $response = $next($request, $response, $next);
 
         return $response;
     }

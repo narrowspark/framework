@@ -1,22 +1,26 @@
 <?php
 namespace Viserio\Middleware;
 
-use RuntimeException;
 use Interop\Container\ContainerInterface;
+use Psr\Http\Message\ResponseInterface as Response;
+use Psr\Http\Message\ServerRequestInterface as Request;
+use RuntimeException;
+use SplQueue;
+use Viserio\Contracts\Container\ContainerAware;
 
 class Dispatcher
 {
     /**
      * All of the short-hand keys for middlewares.
      *
-     * @var array
+     * @var SplQueue
      */
-    protected $middleware = [];
+    protected $middleware;
 
     /**
-     * The container implementation.
+     * Container instance.
      *
-     * @var \Interop\Container\ContainerInterface
+     * @var \Interop\Container\ContainerInterface|null
      */
     protected $container;
 
@@ -29,12 +33,34 @@ class Dispatcher
 
     /**
      * Create a new class instance.
+     */
+    public function __construct()
+    {
+        $this->middleware = new SplQueue();
+    }
+
+    /**
+     * Set a container.
      *
      * @param \Interop\Container\ContainerInterface $container
+     *
+     * @return self
      */
-    public function __construct(ContainerInterface $container)
+    public function setContainer(ContainerInterface $container)
     {
         $this->container = $container;
+
+        return $this;
+    }
+
+    /**
+     * Get the container.
+     *
+     * @return \Interop\Container\ContainerInterface
+     */
+    public function getContainer()
+    {
+        return $this->container;
     }
 
     /**
@@ -47,7 +73,11 @@ class Dispatcher
             throw new RuntimeException('Middleware can’t be added once the stack is dequeuing');
         }
 
-        $this->middleware = $middleware;
+        if ($middleware instanceof ContainerAware || method_exists($middleware, 'setContainer')) {
+            $middleware->setContainer($this->getContainer());
+        }
+
+        $this->middleware->enqueue($middleware);
 
         return $this;
     }
@@ -60,19 +90,15 @@ class Dispatcher
         // Lock the pipeline
         $this->locked = true;
 
-        return (new Pipeline($this->container))
-            ->send($request)
-            ->through($this->middleware)
-            ->then(function ($request, $response) {
-                return $request;
-            });
-    }
+        // Check if the pipe-line is broken or if we are at the end of the queue
+        if (!$this->middleware->isEmpty()) {
+            // Pick the next middleware from the queue
+            $next = $this->middleware->dequeue();
+            // Call the next middleware (if callable)
+            return (is_callable($next)) ? $next($request, $response, $this) : $response;
+        }
 
-    /**
-     * @method ResponseInterface __invoke(RequestInterface $request, ResponseInterface $response)
-     */
-    public function dispatch(RequestInterface $request, ResponseInterface $response)
-    {
-        return $this($request, $response);
+        // Nothing left to do, return the response
+        return $response;
     }
 }
