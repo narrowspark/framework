@@ -1,7 +1,6 @@
 <?php
 namespace Viserio\Mail\Providers;
 
-use Aws\Sdk;
 use Aws\Ses\SesClient;
 use GuzzleHttp\Client as HttpClient;
 use Viserio\Application\ServiceProvider;

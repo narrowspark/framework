@@ -1,7 +1,6 @@
 <?php
 namespace Viserio\Mail\Transport;
 
-use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
 use Swift_Mime_Attachment;
 use Swift_Mime_Headers_DateHeader;
