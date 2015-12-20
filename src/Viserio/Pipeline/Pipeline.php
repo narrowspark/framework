@@ -8,13 +8,6 @@ use Viserio\Contracts\Pipeline\Pipeline as PipelineContract;
 class Pipeline implements PipelineContract
 {
     /**
-      * Did all the Stages run and succeded
-      *
-      * @var bool
-      */
-    protected $ended = false;
-
-    /**
      * The container implementation.
      *
      * @var \Interop\Container\ContainerInterface
@@ -108,7 +101,12 @@ class Pipeline implements PipelineContract
         $stages = array_reverse($this->stages);
 
         return call_user_func(
-            array_reduce($stages, $this->getSlice(), $firstSlice), $this->traveler
+            array_reduce(
+                $stages,
+                $this->getSlice(),
+                $firstSlice
+            ),
+            $this->traveler
         );
     }
 

@@ -15,6 +15,7 @@ git subsplit publish --heads="master 0.10.0-dev" --no-tags src/Viserio/Hashing:g
 git subsplit publish --heads="master 0.10.0-dev" --no-tags src/Viserio/Http:git@github.com:n-viserio/http.git
 git subsplit publish --heads="master 0.10.0-dev" --no-tags src/Viserio/Log:git@github.com:n-viserio/log.git
 git subsplit publish --heads="master 0.10.0-dev" --no-tags src/Viserio/Mail:git@github.com:n-viserio/mail.git
+git subsplit publish --heads="master 0.10.0-dev" --no-tags src/Viserio/Middleware:git@github.com:n-viserio/middleware.git
 git subsplit publish --heads="0.10.0-dev" --no-tags src/Viserio/Pipeline:git@github.com:n-viserio/pipeline.git
 git subsplit publish --heads="0.10.0-dev" --no-tags src/Viserio/Queue:git@github.com:n-viserio/queue.git
 git subsplit publish --heads="master 0.10.0-dev" --no-tags src/Viserio/Routing:git@github.com:n-viserio/routing.git

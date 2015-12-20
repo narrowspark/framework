@@ -21,7 +21,7 @@
         "php"                             : ">=5.6.4",
         "viserio/contracts"               : "self.version",
         "viserio/support"                 : "self.version",
-        "symfony/finder"                  : "~2.8|~3.0"
+        "symfony/finder"                  : "~2.8.*|~3.0.*"
     },
     "require-dev": {
         "league/flysystem"                : "~1.0.3",
