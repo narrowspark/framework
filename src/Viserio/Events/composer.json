@@ -22,7 +22,7 @@
         "viserio/cotracts"                   : "self.version",
         "viserio/container"                  : "self.version",
         "container-interop/container-interop": "~1.0",
-        "symfony/event-dispatcher"           : "~2.8|~3.0"
+        "symfony/event-dispatcher"           : "~2.8.*|~3.0.*"
     },
     "require-dev": {
         "fabpot/php-cs-fixer"                : "~1.10.1",

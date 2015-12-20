@@ -23,7 +23,7 @@
         "viserio/encrypter"            : "self.version",
         "viserio/support"              : "self.version",
         "nesbot/carbon"                : "~1.18",
-        "symfony/http-foundation"      : "~2.8|~3.0"
+        "symfony/http-foundation"      : "~2.8.*|~3.0.*"
     },
     "require-dev": {
         "fabpot/php-cs-fixer"          : "~1.10.1",

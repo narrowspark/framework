@@ -24,7 +24,7 @@
         "viserio/http"                       : "self.version",
         "container-interop/container-interop": "~1.0",
         "nikic/fast-route"                   : "~0.5",
-        "symfony/http-kernel"                : "~2.8|~3.0"
+        "symfony/http-kernel"                : "~2.8.*|~3.0.*"
     },
     "require-dev": {
         "fabpot/php-cs-fixer"                : "~1.10.1",

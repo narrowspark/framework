@@ -24,7 +24,7 @@
     },
     "require-dev": {
         "viserio/cache"                    : "self.version",
-        "symfony/event-dispatcher"         : "~2.8|~3.0",
+        "symfony/event-dispatcher"         : "~2.8.*|~3.0.*",
         "fabpot/php-cs-fixer"              : "~1.10.1",
         "phpunit/phpunit"                  : "~5.0.6"
     },
