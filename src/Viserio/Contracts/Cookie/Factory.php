@@ -16,7 +16,7 @@ interface Factory
      *
      * @return \Viserio\Cookie\Cookie
      */
-    public function make(
+    public function create(
         $name,
         $value,
         $minutes = 0,

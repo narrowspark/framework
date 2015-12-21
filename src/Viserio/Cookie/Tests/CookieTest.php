@@ -87,7 +87,10 @@ class CookieTest extends \PHPUnit_Framework_TestCase
         $cookie = new Cookie('foo', 'bar', '/');
 
         $this->assertTrue($cookie->matchPath('/'), '->matchPath() returns true if the paths match');
-        $this->assertFalse($cookie->matchPath('/path/to/somewhere'), '->matchPath() returns false if the paths not match');
+        $this->assertFalse(
+            $cookie->matchPath('/path/to/somewhere'),
+            '->matchPath() returns false if the paths not match'
+        );
     }
 
     public function testMatchCookie()
@@ -96,7 +99,10 @@ class CookieTest extends \PHPUnit_Framework_TestCase
         $cookie2 = new Cookie('bar', 'foo', '/');
 
         $this->assertTrue($cookie->matchCookie($cookie), '->matchCookie() returns true if both cookies are identical');
-        $this->assertFalse($cookie->matchCookie($cookie2), '->matchCookie() returns false if both cookies are not identical');
+        $this->assertFalse(
+            $cookie->matchCookie($cookie2),
+            '->matchCookie() returns false if both cookies are not identical'
+        );
     }
 
     public function testHasAndGetMaxAge()
@@ -106,7 +112,11 @@ class CookieTest extends \PHPUnit_Framework_TestCase
 
         $cookie = new Cookie('Cookie', 'Value', new DateTime(3600));
         $this->assertFalse($cookie->hasMaxAge(), '->hasMaxAge() returns false if max age is empty');
-        $this->assertEquals(null, $cookie->getMaxAge(), '->getMaxAge() returns max age null if time is a DateTime object');
+        $this->assertEquals(
+            null,
+            $cookie->getMaxAge(),
+            '->getMaxAge() returns max age null if time is a DateTime object'
+        );
 
         $cookie = new Cookie('Cookie', 'Value', 3600);
         $this->assertEquals(3600, $cookie->getMaxAge(), '->getMaxAge() returns max age value if is set');
@@ -125,7 +135,11 @@ class CookieTest extends \PHPUnit_Framework_TestCase
         $cookie = new Cookie('foo', 'bar', $time);
 
         $this->assertInstanceOf('DateTime', $cookie->getExpiresTime(), '->getExpiresTime() returns \DateTime');
-        $this->assertEquals($time->format('s'), $cookie->getExpiresTime()->format('s'), '->getExpiresTime() returns the expire date');
+        $this->assertEquals(
+            $time->format('s'),
+            $cookie->getExpiresTime()->format('s'),
+            '->getExpiresTime() returns the expire date'
+        );
     }
 
     public function testWithExpiration()
@@ -145,7 +159,11 @@ class CookieTest extends \PHPUnit_Framework_TestCase
         $cookie = $cookie->withExpires($expire);
 
         $this->assertInstanceOf('DateTime', $cookie->getExpiresTime(), '->getExpiresTime() returns \DateTime');
-        $this->assertEquals($expire->format('U'), $cookie->getExpiresTime()->format('U'), '->getExpiresTime() returns the expire date');
+        $this->assertEquals(
+            $expire->format('U'),
+            $cookie->getExpiresTime()->format('U'),
+            '->getExpiresTime() returns the expire date'
+        );
     }
 
     public function testConstructorWithDateTime()
@@ -154,7 +172,11 @@ class CookieTest extends \PHPUnit_Framework_TestCase
         $cookie = new Cookie('foo', 'bar', $expire);
 
         $this->assertInstanceOf('DateTime', $cookie->getExpiresTime(), '->getExpiresTime() returns \DateTime');
-        $this->assertEquals($expire->format('U'), $cookie->getExpiresTime()->format('U'), '->getExpiresTime() returns the expire date');
+        $this->assertEquals(
+            $expire->format('U'),
+            $cookie->getExpiresTime()->format('U'),
+            '->getExpiresTime() returns the expire date'
+        );
     }
 
     public function testGetExpiresTimeWithStringValue()
@@ -163,7 +185,12 @@ class CookieTest extends \PHPUnit_Framework_TestCase
         $cookie = new Cookie('foo', 'bar', new DateTime($value));
         $expire = strtotime($value);
 
-        $this->assertEquals($expire, $cookie->getExpiresTime()->format('U'), '->getExpiresTime() returns the expire date', 1);
+        $this->assertEquals(
+            $expire,
+            $cookie->getExpiresTime()->format('U'),
+            '->getExpiresTime() returns the expire date',
+            1
+        );
     }
 
     public function testWithDomain()
@@ -199,8 +226,14 @@ class CookieTest extends \PHPUnit_Framework_TestCase
     {
         $cookie = new Cookie('foo', 'bar', 0, '/', '.MyFooDoMaiN.com');
 
-        $this->assertTrue($cookie->matchDomain('myfoodomain.com'), '->matchDomain() returns true if both cookies are identical');
-        $this->assertTrue($cookie->matchDomain('www.myfoodomain.com'), '->matchDomain() returns true if both cookies are identical');
+        $this->assertTrue(
+            $cookie->matchDomain('myfoodomain.com'),
+            '->matchDomain() returns true if both cookies are identical'
+        );
+        $this->assertTrue(
+            $cookie->matchDomain('www.myfoodomain.com'),
+            '->matchDomain() returns true if both cookies are identical'
+        );
     }
 
     public function testMatchDomainToReturnFalseIfIp()
@@ -240,7 +273,7 @@ class CookieTest extends \PHPUnit_Framework_TestCase
 
     public function testCookieIsNotExpired()
     {
-        $cookie = new Cookie('foo', 'bar', new DateTime(time() + 3600 * 24));
+        $cookie = new Cookie('foo', 'bar', new DateTime('+360 day'));
 
         $this->assertFalse($cookie->isExpired(), '->isExpired() returns false if the cookie did not expire yet');
         $this->assertTrue($cookie->hasExpires(), '->hasExpires() returns true if the cookie has a expire time set');

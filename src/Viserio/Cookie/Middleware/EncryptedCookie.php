@@ -1,12 +1,13 @@
 <?php
 namespace Viserio\Cookie\Middleware;
 
-use Visero\Contracts\Encryption\Encrypter as EncrypterContract;
-use Visero\Contracts\Encryption\DecryptException;
-use Psr\Http\Message\RequestInterface as RequestContract;
 use Psr\Http\Message\ResponseInterface as ResponseContract;
+use Psr\Http\Message\ServerRequestInterface as RequestContract;
+use Viserio\Contracts\Encryption\DecryptException;
+use Viserio\Contracts\Encryption\Encrypter as EncrypterContract;
+use Viserio\Contracts\Middleware\Middleware as MiddlewareContract;
 
-class EncryptCookies
+class EncryptCookies implements MiddlewareContract
 {
     /**
      * The encrypter instance.
@@ -80,6 +81,14 @@ class EncryptCookies
     public function isDisabled($name)
     {
         return in_array($name, $this->except);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function __invoke(RequestContract $request, ResponseContract $response, callable $next)
+    {
+        return $this->encrypt($next($this->decrypt($request)));
     }
 
     /**

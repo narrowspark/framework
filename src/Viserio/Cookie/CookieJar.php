@@ -1,8 +1,9 @@
 <?php
 namespace Viserio\Cookie;
 
-use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\ServerRequestInterface;
+use DateTime;
+use Psr\Http\Message\ResponseInterface as ResponseContract;
+use Psr\Http\Message\ServerRequestInterface as RequestContract;
 use Viserio\Contracts\Cookie\Cookie as CookieContract;
 use Viserio\Contracts\Cookie\QueueingFactory as JarContract;
 use Viserio\Support\Arr;
@@ -50,7 +51,7 @@ class CookieJar implements JarContract
      *
      * @return Cookie
      */
-    public function make($name, $value, $minutes = 0, $path = null, $domain = null, $secure = false, $httpOnly = true)
+    public function create($name, $value, $minutes = 0, $path = null, $domain = null, $secure = false, $httpOnly = true)
     {
         list($path, $domain, $secure) = $this->getPathAndDomain($path, $domain, $secure);
 
@@ -73,7 +74,7 @@ class CookieJar implements JarContract
      */
     public function forever($name, $value, $path = null, $domain = null, $secure = false, $httpOnly = true)
     {
-        return $this->make($name, $value, 2628000, $path, $domain, $secure, $httpOnly);
+        return $this->create($name, $value, 2628000, $path, $domain, $secure, $httpOnly);
     }
 
     /**
@@ -87,26 +88,19 @@ class CookieJar implements JarContract
      */
     public function forget($name, $path = null, $domain = null)
     {
-        return $this->make($name, null, -2628000, $path, $domain);
+        return $this->create($name, null, -2628000, $path, $domain);
     }
 
     /**
+     * Creates a Cookie instance from a Set-Cookie header value.
+     *
      * @param \Psr\Http\Message\ServerRequestInterface $request
      *
      * @return \Viserio\Contracts\Cookie\Cookie
      */
-    public function fromServerRequest(ServerRequestInterface $request)
+    public function fromServerRequest(RequestContract $request)
     {
-        list ($cookieName, $cookieValue) = $this->splitCookiePair($request->getCookieParams());
-
-        /** @var Cookie $cookie */
-        $cookie = new Cookie($cookieName);
-
-        if (!is_null($cookieValue)) {
-            $cookie = $cookie->withValue($cookieValue);
-        }
-
-        return $cookie;
+        return $this->fromStringCookie($request->getHeader('Set-Cookie'));
     }
 
     /**
@@ -118,7 +112,7 @@ class CookieJar implements JarContract
     public function toResponse(CookieContract $cookieJar, ResponseInterface $response)
     {
         foreach ($cookieJar as $cookie) {
-            $response = $response->withAddedHeader('Set-Cookie', $cookie->__toString());
+            $response = $response->withHeader('Cookie', $cookie->__toString());
         }
 
         return $response;
@@ -156,10 +150,12 @@ class CookieJar implements JarContract
      */
     public function queue()
     {
-        if (head(func_get_args()) instanceof Cookie) {
-            $cookie = head(func_get_args());
+        $args = func_get_args();
+
+        if (reset($args) instanceof Cookie) {
+            $cookie = reset($args);
         } else {
-            $cookie = call_user_func_array([$this, 'make'], func_get_args());
+            $cookie = call_user_func_array([$this, 'create'], $args);
         }
 
         $this->queued[$cookie->getName()] = $cookie;
@@ -173,20 +169,6 @@ class CookieJar implements JarContract
     public function unqueue($name)
     {
         unset($this->queued[$name]);
-    }
-
-    /**
-     * Get the path and domain, or the default values.
-     *
-     * @param string $path
-     * @param string $domain
-     * @param bool   $secure
-     *
-     * @return string[]
-     */
-    protected function getPathAndDomain($path, $domain, $secure = false)
-    {
-        return [$path ?: $this->path, $domain ?: $this->domain, $secure ?: $this->secure];
     }
 
     /**
@@ -214,6 +196,78 @@ class CookieJar implements JarContract
         return $this->queued;
     }
 
+    /**
+     * Creates a Cookie instance from a Set-Cookie header value.
+     *
+     * @param string $request
+     *
+     * @return \Viserio\Contracts\Cookie\Cookie
+     */
+    protected function fromStringCookie($string)
+    {
+        $rawAttributes = $this->splitOnAttributeDelimiter($string);
+
+        list ($cookieName, $cookieValue) = $this->splitCookiePair($rawAttributes[0]);
+
+        /** @var Cookie $cookie */
+        $cookie = new Cookie($cookieName);
+
+        if (!is_null($cookieValue)) {
+            $cookie = $cookie->withValue($cookieValue);
+        }
+
+        foreach ($rawAttributes as $value) {
+            $rawAttributePair = explode('=', $value, 2);
+            $attributeKey     = $rawAttributePair[0];
+            $attributeValue   = count($rawAttributePair) > 1 ? $rawAttributePair[1] : null;
+            $attributeKey     = strtolower($attributeKey);
+
+            switch ($attributeKey) {
+                case 'expires':
+                    $cookie = $cookie->withExpires(new DateTime($attributeValue));
+                    break;
+                case 'max-age':
+                    $cookie = $cookie->withMaxAge($attributeValue);
+                    break;
+                case 'domain':
+                    $cookie = $cookie->withDomain($attributeValue);
+                    break;
+                case 'path':
+                    $cookie = $cookie->withPath($attributeValue);
+                    break;
+                case 'secure':
+                    $cookie = $cookie->withSecure(true);
+                    break;
+                case 'httponly':
+                    $cookie = $cookie->withHttpOnly(true);
+                    break;
+            }
+        }
+
+        return $cookie;
+    }
+
+    /**
+     * Get the path and domain, or the default values.
+     *
+     * @param string $path
+     * @param string $domain
+     * @param bool   $secure
+     *
+     * @return string[]
+     */
+    protected function getPathAndDomain($path, $domain, $secure = false)
+    {
+        return [$path ?: $this->path, $domain ?: $this->domain, $secure ?: $this->secure];
+    }
+
+    /**
+     * Split a string to array.
+     *
+     * @param string $string
+     *
+     * @return array
+     */
     protected function splitCookiePair($string)
     {
         $pairParts = explode('=', $string, 2);
@@ -222,8 +276,21 @@ class CookieJar implements JarContract
             $pairParts[1] = '';
         }
 
+
         return array_map(function ($part) {
             return urldecode($part);
         }, $pairParts);
+    }
+
+    /**
+     * spplit string on attributes delimiter to array.
+     *
+     * @param string $string
+     *
+     * @return array
+     */
+    protected function splitOnAttributeDelimiter($string)
+    {
+        return array_filter(preg_split('@\s*[;]\s*@', $string));
     }
 }

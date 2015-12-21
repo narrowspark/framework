@@ -77,68 +77,6 @@ final class Cookie extends AbstractCookie
         return implode('; ', $cookieStringParts);
     }
 
-    private function appendFormattedNameAndValuePartIfSet(array $cookieStringParts)
-    {
-        $name = urlencode($this->name).'=';
-
-        if ((string) $this->getValue() === '') {
-            $cookieStringParts[] .= $name.'deleted; Expires='.gmdate('D, d-M-Y H:i:s T', time() - 31536001);
-        } else {
-            $cookieStringParts[] .= $name.urlencode($this->getValue());
-
-            if ($this->getExpiresTime()->format('s') !== 0) {
-                $cookieStringParts[] .= 'Expires='.$this->getExpiresTime()->format('D, d-M-Y H:i:s T');
-            }
-        }
-
-        return $cookieStringParts;
-    }
-
-    private function appendFormattedDomainPartIfSet(array $cookieStringParts)
-    {
-        if ($this->domain) {
-            $cookieStringParts[] = sprintf("Domain=%s", $this->domain);
-        }
-
-        return $cookieStringParts;
-    }
-
-    private function appendFormattedPathPartIfSet(array $cookieStringParts)
-    {
-        if ($this->path) {
-            $cookieStringParts[] = sprintf("Path=%s", $this->path);
-        }
-
-        return $cookieStringParts;
-    }
-
-    private function appendFormattedMaxAgePartIfSet(array $cookieStringParts)
-    {
-        if ($this->maxAge) {
-            $cookieStringParts[] = sprintf("Max-Age=%s", $this->maxAge);
-        }
-
-        return $cookieStringParts;
-    }
-
-    private function appendFormattedSecurePartIfSet(array $cookieStringParts)
-    {
-        if ($this->secure) {
-            $cookieStringParts[] = 'Secure';
-        }
-
-        return $cookieStringParts;
-    }
-
-    private function appendFormattedHttpOnlyPartIfSet(array $cookieStringParts)
-    {
-        if ($this->httpOnly) {
-            $cookieStringParts[] = 'HttpOnly';
-        }
-
-        return $cookieStringParts;
-    }
-
     /**
      * Validates the name attribute
      *

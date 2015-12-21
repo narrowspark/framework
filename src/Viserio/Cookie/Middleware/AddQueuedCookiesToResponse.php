@@ -1,11 +1,12 @@
 <?php
 namespace Viserio\Cookie\Middleware;
 
-use Closure;
+use Psr\Http\Message\ResponseInterface as ResponseContract;
+use Psr\Http\Message\ServerRequestInterface as RequestContract;
 use Viserio\Contracts\Cookie\QueueingFactory as CookieJar;
-use Psr\Http\Message\RequestInterface as RequestContract;
+use Viserio\Contracts\Middleware\Middleware as MiddlewareContract;
 
-class AddQueuedCookiesToResponse
+class AddQueuedCookiesToResponse implements MiddlewareContract
 {
     /**
      * The cookie jar instance.
@@ -27,19 +28,14 @@ class AddQueuedCookiesToResponse
     }
 
     /**
-     * Handle an incoming request.
-     *
-     * @param \Psr\Http\Message\RequestInterface $request
-     * @param \Closure $next
-     *
-     * @return mixed
+     * {@inheritdoc}
      */
-    public function handle(RequestContract $request, Closure $next)
+    public function __invoke(RequestContract $request, ResponseContract $response, callable $next)
     {
-        $response = $next($request);
+        $response = $next($request, $response, null);
 
         foreach ($this->cookies->getQueuedCookies() as $cookie) {
-            $response->headers->setCookie($cookie);
+            $response->withHeader('Cookie', $cookie);
         }
 
         return $response;
