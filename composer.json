@@ -123,11 +123,6 @@
         "predis/predis"                                     : "Required to use the redis cache and queue drivers (~1.0.1).",
         "ext-ev"                                            : "Provides an event loop with better performance."
     },
-    "scripts": {
-        "test"                                              : "sh vendor/bin/phpunit",
-        "check-cs"                                          : "sh vendor/bin/php-cs-fixer fix -v --dry-run",
-        "fix-cs"                                            : "sh vendor/bin/php-cs-fixer fix"
-    },
     "minimum-stability"                                     : "dev",
     "prefer-stable"                                         : true
 }
