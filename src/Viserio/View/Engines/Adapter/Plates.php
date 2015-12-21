@@ -138,7 +138,7 @@ class Plates implements EnginesContract
         $template = new Template($engine, $path);
 
         if (!$engine->exists($path)) {
-            throw new \Exception('Template "'.$path.'" dont exist!');
+            throw new \Exception('Template "' . $path . '" dont exist!');
         }
 
         // We'll evaluate the contents of the view inside a try/catch block so we can

@@ -1,8 +1,6 @@
 <?php
 namespace Viserio\Support;
 
-use Interop\Container\ContainerInterface as ContainerContract;
-use Invoker\Exception\InvocationException;
 use Invoker\Invoker as DiInvoker;
 use Invoker\InvokerInterface;
 use Invoker\ParameterResolver\AssociativeArrayResolver;
@@ -78,9 +76,9 @@ class Invoker implements InvokerInterface
             $container = $this->getContainer();
 
             $resolvers = [
-                new NumericArrayResolver,
-                new AssociativeArrayResolver,
-                new DefaultValueResolver,
+                new NumericArrayResolver(),
+                new AssociativeArrayResolver(),
+                new DefaultValueResolver(),
             ];
 
             if (isset($this->inject['type'])) {

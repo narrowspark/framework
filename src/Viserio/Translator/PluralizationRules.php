@@ -144,7 +144,7 @@ class PluralizationRules
             return new None();
         }
 
-        throw new InvalidArgumentException('Unknown language prefix: '.$prefix.'.');
+        throw new InvalidArgumentException('Unknown language prefix: ' . $prefix . '.');
     }
 
     /**

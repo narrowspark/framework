@@ -15,10 +15,11 @@ class PipelineTest extends \PHPUnit_Framework_TestCase
     {
         $pipeTwo = function ($piped, $next) {
             $_SERVER['__test.pipe.two'] = $piped;
+
             return $next($piped);
         };
 
-        $result = (new Pipeline($this->getMockContainer(new PipelineTestPipeOne)))
+        $result = (new Pipeline($this->getMockContainer(new PipelineTestPipeOne())))
             ->send('foo')
             ->through(['PipelineTestPipeOne', $pipeTwo])
             ->then(function ($piped) {
@@ -37,9 +38,9 @@ class PipelineTest extends \PHPUnit_Framework_TestCase
     {
         $parameters = ['one', 'two'];
 
-        $result = (new Pipeline($this->getMockContainer(new PipelineTestParameterPipe)))
+        $result = (new Pipeline($this->getMockContainer(new PipelineTestParameterPipe())))
             ->send('foo')
-            ->through('PipelineTestParameterPipe:'.implode(',', $parameters))
+            ->through('PipelineTestParameterPipe:' . implode(',', $parameters))
             ->then(function ($piped) {
                 return $piped;
             });
@@ -52,7 +53,7 @@ class PipelineTest extends \PHPUnit_Framework_TestCase
 
     public function testPipelineViaChangesTheMethodBeingCalledOnThePipes()
     {
-        $result = (new Pipeline($this->getMockContainer(new PipelineTestPipeOne)))->send('data')
+        $result = (new Pipeline($this->getMockContainer(new PipelineTestPipeOne())))->send('data')
             ->through('PipelineTestPipeOne')
             ->via('differentMethod')
             ->then(function ($piped) {
@@ -73,12 +74,12 @@ class PipelineTest extends \PHPUnit_Framework_TestCase
     }
 }
 
-
 class PipelineTestPipeOne
 {
     public function handle($piped, $next)
     {
         $_SERVER['__test.pipe.one'] = $piped;
+
         return $next($piped);
     }
 
@@ -93,6 +94,7 @@ class PipelineTestParameterPipe
     public function handle($piped, $next, $parameter1 = null, $parameter2 = null)
     {
         $_SERVER['__test.pipe.parameters'] = [$parameter1, $parameter2];
+
         return $next($piped);
     }
 }

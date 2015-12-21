@@ -2,7 +2,6 @@
 namespace Viserio\Connect\Tests\Adapter\Database;
 
 use Mockery as Mock;
-use Viserio\Connect\Adapters\Database\DblibConnector;
 
 class DblibConnectorTest extends \PHPUnit_Framework_TestCase
 {
@@ -48,8 +47,8 @@ class DblibConnectorTest extends \PHPUnit_Framework_TestCase
                 [
                     'server' => 'foo',
                     'database' => 'bar',
-                    'charset' => 'utf8'
-                ]
+                    'charset' => 'utf8',
+                ],
             ],
             [
                 'dblib:host=foo:11221;dbname=bar;charset=\'utf8\'',
@@ -58,16 +57,16 @@ class DblibConnectorTest extends \PHPUnit_Framework_TestCase
                     'database' => 'bar',
                     'port' => '11221',
                     'charset' => 'utf8',
-                    'strict' => true
-                ]
+                    'strict' => true,
+                ],
             ],
             [
                 'dblib:host=foo;dbname=bar',
                 [
                     'server' => 'foo',
                     'database' => 'bar',
-                    'strict' => true
-                ]
+                    'strict' => true,
+                ],
             ],
         ];
     }

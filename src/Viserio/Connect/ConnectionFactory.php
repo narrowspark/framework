@@ -193,11 +193,11 @@ class ConnectionFactory implements ConnectionFactoryContract
     protected function makeConnection($name, array $config)
     {
         if (array_key_exists($name, $this->connectors)) {
-            return (new $this->connectors[$name])->connect($config);
+            return (new $this->connectors[$name]())->connect($config);
         } elseif (array_key_exists($name, $this->extensions)) {
-            return (new $this->extensions[$name])->connect($config);
+            return (new $this->extensions[$name]())->connect($config);
         }
 
-        throw new RuntimeException($name.' connector dont exist.');
+        throw new RuntimeException($name . ' connector dont exist.');
     }
 }

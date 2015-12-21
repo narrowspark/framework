@@ -50,7 +50,7 @@ trait FormatterTrait
         $format .= sprintf('%s[UID:%extra.uid%]', $color['blue']);
         $format .= sprintf('%s[PID:%extra.process_id%]', $color['purple']);
         $format .= sprintf('%s:%s', $color['reset'], PHP_EOL);
-        $format .= '%message%'.PHP_EOL;
+        $format .= '%message%' . PHP_EOL;
         $format .= sprintf('%s%s%s%s', $color['gray'], $separator, $color['reset'], PHP_EOL);
 
         return $format;

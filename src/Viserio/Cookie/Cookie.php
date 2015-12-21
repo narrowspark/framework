@@ -28,7 +28,7 @@ class Cookie implements Stringable
     protected $expire;
 
     /**
-     * @var integer|null
+     * @var int|null
      */
     protected $maxAge;
 
@@ -48,13 +48,13 @@ class Cookie implements Stringable
     protected $httpOnly;
 
     /**
-     * @param string            $name       The name of the cookie
-     * @param string|null       $value      The value of the cookie
-     * @param integer|\DateTime $expiration The time the cookie expires
-     * @param string|null       $domain     The domain that the cookie is available to
-     * @param string|null       $path       The path on the server in which the cookie will be available on
-     * @param boolean           $secure     Whether the cookie should only be transmitted over a secure HTTPS connection from the client
-     * @param boolean           $httpOnly   Whether the cookie will be made accessible only through the HTTP protocol
+     * @param string        $name       The name of the cookie
+     * @param string|null   $value      The value of the cookie
+     * @param int|\DateTime $expiration The time the cookie expires
+     * @param string|null   $domain     The domain that the cookie is available to
+     * @param string|null   $path       The path on the server in which the cookie will be available on
+     * @param bool          $secure     Whether the cookie should only be transmitted over a secure HTTPS connection from the client
+     * @param bool          $httpOnly   Whether the cookie will be made accessible only through the HTTP protocol
      *
      * @throws \InvalidArgumentException
      */
@@ -117,7 +117,7 @@ class Cookie implements Stringable
     /**
      * Checks if there is a value
      *
-     * @return boolean
+     * @return bool
      */
     public function hasValue()
     {
@@ -127,7 +127,7 @@ class Cookie implements Stringable
     /**
      * Returns the max age
      *
-     * @return integer|null
+     * @return int|null
      */
     public function getMaxAge()
     {
@@ -137,7 +137,7 @@ class Cookie implements Stringable
     /**
      * Checks if there is a max age
      *
-     * @return boolean
+     * @return bool
      */
     public function hasMaxAge()
     {
@@ -157,7 +157,7 @@ class Cookie implements Stringable
     /**
      * Checks if there is an expiration time
      *
-     * @return boolean
+     * @return bool
      */
     public function hasExpires()
     {
@@ -167,7 +167,7 @@ class Cookie implements Stringable
     /**
      * Checks if the cookie is expired
      *
-     * @return boolean
+     * @return bool
      */
     public function isExpired()
     {
@@ -187,7 +187,7 @@ class Cookie implements Stringable
     /**
      * Checks if there is a domain
      *
-     * @return boolean
+     * @return bool
      */
     public function hasDomain()
     {
@@ -203,23 +203,25 @@ class Cookie implements Stringable
     {
         return $this->path;
     }
+
     /**
      * It matches a path
      *
      * @param string $path
      *
-     * @return boolean
+     * @return bool
      *
      * @see http://tools.ietf.org/html/rfc6265#section-5.1.4
      */
     public function matchPath($path)
     {
-        return $this->path === $path || (strpos($path, $this->path.'/') === 0);
+        return $this->path === $path || (strpos($path, $this->path . '/') === 0);
     }
+
     /**
      * Checks if HTTPS is required
      *
-     * @return boolean
+     * @return bool
      */
     public function isSecure()
     {
@@ -229,7 +231,7 @@ class Cookie implements Stringable
     /**
      * Checks if it is HTTP-only
      *
-     * @return boolean
+     * @return bool
      */
     public function isHttpOnly()
     {
@@ -241,7 +243,7 @@ class Cookie implements Stringable
      *
      * @param Cookie $cookie
      *
-     * @return boolean
+     * @return bool
      */
     public function match(Cookie $cookie)
     {
@@ -253,7 +255,7 @@ class Cookie implements Stringable
      *
      * @param string $domain
      *
-     * @return boolean
+     * @return bool
      *
      * @see http://tools.ietf.org/html/rfc6265#section-5.1.3
      */
@@ -279,23 +281,23 @@ class Cookie implements Stringable
      */
     public function __toString()
     {
-        $str = urlencode($this->getName()).'=';
+        $str = urlencode($this->getName()) . '=';
 
         if ((string) $this->getValue() === '') {
-            $str .= 'deleted; expires='.gmdate('D, d-M-Y H:i:s T', time() - 31536001);
+            $str .= 'deleted; expires=' . gmdate('D, d-M-Y H:i:s T', time() - 31536001);
         } else {
             $str .= urlencode($this->getValue());
             if ($this->getExpiresTime() !== 0) {
-                $str .= '; expires='.gmdate('D, d-M-Y H:i:s T', $this->getExpiresTime());
+                $str .= '; expires=' . gmdate('D, d-M-Y H:i:s T', $this->getExpiresTime());
             }
         }
 
         if ($this->path) {
-            $str .= '; path='.$this->path;
+            $str .= '; path=' . $this->path;
         }
 
         if ($this->getDomain()) {
-            $str .= '; domain='.$this->getDomain();
+            $str .= '; domain=' . $this->getDomain();
         }
 
         if ($this->isSecure() === true) {
@@ -348,7 +350,7 @@ class Cookie implements Stringable
         }
     }
 
-        /**
+    /**
      * Remove the leading '.' and lowercase the domain as per spec in RFC 6265
      *
      * @param string|null $domain

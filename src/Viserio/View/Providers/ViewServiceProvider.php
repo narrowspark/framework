@@ -39,7 +39,7 @@ class ViewServiceProvider extends ServiceProvider
             // environment can resolve the engines it needs for various views based
             // on the extension of view files. We call a method for each engines.
             foreach (['php' => 'php', 'json' => 'json', 'phtml' => 'php'] as $engineName => $engineClass) {
-                $this->{'register'.ucfirst($engineClass).'Engine'}($resolver);
+                $this->{'register' . ucfirst($engineClass) . 'Engine'}($resolver);
             }
 
             if (($compilers = $app->get('config')->get('view::compilers')) !== null) {
@@ -61,8 +61,8 @@ class ViewServiceProvider extends ServiceProvider
     /**
      * Register custom engine implementation.
      *
-     * @param string                                 $engineName
-     * @param string                                 $engineClass
+     * @param string                               $engineName
+     * @param string                               $engineClass
      * @param \Viserio\View\Engines\EngineResolver $engines
      */
     protected function registercustomEngine($engineName, $engineClass, $engines)

@@ -103,8 +103,8 @@ trait ContainerArrayAccessTrait
      */
     public function offsetGet($id)
     {
-        if (isset($this->mockedServices['mock::'.$id])) {
-            return $this->mockedServices['mock::'.$id];
+        if (isset($this->mockedServices['mock::' . $id])) {
+            return $this->mockedServices['mock::' . $id];
         }
 
         return $this->make($id);
@@ -138,7 +138,7 @@ trait ContainerArrayAccessTrait
      */
     public function offsetExists($id)
     {
-        if (isset($this->keys[$id]) || isset($this->mockedServices['mock::'.$id])) {
+        if (isset($this->keys[$id]) || isset($this->mockedServices['mock::' . $id])) {
             return true;
         }
 
@@ -162,7 +162,7 @@ trait ContainerArrayAccessTrait
                 $this->frozen[$id],
                 $this->values[$id],
                 $this->keys[$id],
-                $this->mockedServices['mock::'.$id]
+                $this->mockedServices['mock::' . $id]
             );
         }
     }

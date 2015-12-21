@@ -33,8 +33,8 @@ class CachedDataGenerator implements DataGeneratorContract
      *
      * @param \Viserio\Filesystem\Filesystem           $files
      * @param \Viserio\Contracts\Routing\DataGenerator $wrappedGenerator
-     * @param string                                     $cacheFile
-     * @param bool                                       $debug
+     * @param string                                   $cacheFile
+     * @param bool                                     $debug
      */
     public function __construct(
         Filesystem $files,
@@ -61,7 +61,7 @@ class CachedDataGenerator implements DataGeneratorContract
 
         if (!$files->exists($cache) || !$this->debug) {
             $routes = $this->wrappedGenerator->getData();
-            $files->put($cache, '<?php return '.var_export($routes, true).';');
+            $files->put($cache, '<?php return ' . var_export($routes, true) . ';');
         }
 
         return (array) $files->getRequire($this->cacheFile);

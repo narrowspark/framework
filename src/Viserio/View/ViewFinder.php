@@ -52,8 +52,8 @@ class ViewFinder implements FinderContract
      * Create a new file view loader instance.
      *
      * @param \Viserio\Filesystem\Filesystem $files
-     * @param array                            $paths
-     * @param null|array                       $extensions
+     * @param array                          $paths
+     * @param null|array                     $extensions
      */
     public function __construct(Filesystem $files, array $paths, array $extensions = null)
     {
@@ -137,7 +137,7 @@ class ViewFinder implements FinderContract
     {
         foreach ((array) $paths as $path) {
             foreach ($this->getPossibleViewFiles($name) as $file) {
-                if ($this->files->exists($viewPath = $path.'/'.$file)) {
+                if ($this->files->exists($viewPath = $path . '/' . $file)) {
                     return $viewPath;
                 }
             }
@@ -156,7 +156,7 @@ class ViewFinder implements FinderContract
     protected function getPossibleViewFiles($name)
     {
         return array_map(function ($extension) use ($name) {
-            return str_replace('.', '/', $name).'.'.$extension;
+            return str_replace('.', '/', $name) . '.' . $extension;
 
         }, $this->extensions);
     }

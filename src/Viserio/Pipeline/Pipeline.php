@@ -132,7 +132,7 @@ class Pipeline implements PipelineContract
                     return call_user_func_array(
                         [
                             $this->container->get($name),
-                            $this->method
+                            $this->method,
                         ],
                         $merge
                     );

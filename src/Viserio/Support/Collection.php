@@ -25,6 +25,7 @@ class Collection implements
      *
      * @param mixed $data Pre-populate collection with this key-value array
      */
+
     public function __construct($data = [])
     {
         $this->data = is_array($data) ? $data : $this->getArrayableItems($data);
@@ -178,7 +179,8 @@ class Collection implements
     /**
      * Run a filter over each of the items.
      *
-     * @param  callable|null  $callback
+     * @param callable|null $callback
+     *
      * @return static
      */
     public function filter(callable $callback = null)
@@ -286,6 +288,7 @@ class Collection implements
      * @param  mixed  $default
      * @return mixed
      */
+
     public function last(callable $callback = null, $default = null)
     {
         return count($this->data) > 0 ? end($this->data) : null;
@@ -1025,7 +1028,8 @@ class Collection implements
     /**
      * Determine if there are any data that pass a given truth test.
      *
-     * @param  callable|null  $callback
+     * @param callable|null $callback
+     *
      * @return bool
      */
     public function any(callable $callback = null)
@@ -1145,7 +1149,8 @@ class Collection implements
     /**
      * Map a collection and flatten the result by a single level.
      *
-     * @param  callable  $callback
+     * @param callable $callback
+     *
      * @return static
      */
     public function flatMap(callable $callback)

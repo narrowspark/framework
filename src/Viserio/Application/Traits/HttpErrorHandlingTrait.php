@@ -143,7 +143,7 @@ trait HttpErrorHandlingTrait
      */
     public function isDownForMaintenance()
     {
-        return file_exists($this->storagePath().'/framework/down');
+        return file_exists($this->storagePath() . '/framework/down');
     }
 
     /**

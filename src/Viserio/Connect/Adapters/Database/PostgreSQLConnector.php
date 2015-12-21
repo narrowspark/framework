@@ -76,15 +76,16 @@ class PostgreSQLConnector extends AbstractDatabaseConnector
     /**
      * Format the schema for the DSN.
      *
-     * @param  array|string  $schema
+     * @param array|string $schema
+     *
      * @return string
      */
     protected function formatSchema($schema)
     {
         if (is_array($schema)) {
-            return '\''.implode('\', \'', $schema).'\'';
+            return '\'' . implode('\', \'', $schema) . '\'';
         } else {
-            return '\''.$schema.'\'';
+            return '\'' . $schema . '\'';
         }
     }
 }

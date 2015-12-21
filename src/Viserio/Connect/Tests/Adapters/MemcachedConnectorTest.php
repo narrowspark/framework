@@ -18,9 +18,9 @@ class MemcachedConnectorTest extends \PHPUnit_Framework_TestCase
                 [
                     'host' => 'localhost',
                     'port' => 11211,
-                    'weight' => 100
-                ]
-            ]
+                    'weight' => 100,
+                ],
+            ],
         ];
 
         $memcached = Mock::mock('stdClass');
@@ -45,9 +45,9 @@ class MemcachedConnectorTest extends \PHPUnit_Framework_TestCase
                 [
                     'host' => 'localhost',
                     'port' => 11211,
-                    'weight' => 100
-                ]
-            ]
+                    'weight' => 100,
+                ],
+            ],
         ];
 
         $memcached = Mock::mock('stdClass');
@@ -79,9 +79,9 @@ class MemcachedConnectorTest extends \PHPUnit_Framework_TestCase
                 [
                     'host' => 'localhost',
                     'port' => 11211,
-                    'weight' => 100
-                ]
-            ]
+                    'weight' => 100,
+                ],
+            ],
         ];
 
         $connector = (new MemcachedConnector())->connect($config);
@@ -115,9 +115,9 @@ class MemcachedConnectorTest extends \PHPUnit_Framework_TestCase
                 [
                     'host' => 'localhost',
                     'port' => 11211,
-                    'weight' => 100
-                ]
-            ]
+                    'weight' => 100,
+                ],
+            ],
         ];
 
         $connector = (new MemcachedConnector())->connect($config);

@@ -74,9 +74,9 @@ class Arr
 
         foreach ($array as $key => $value) {
             if (is_array($value)) {
-                $results = array_merge($results, self::dot($value, $prepend.$key.'.'));
+                $results = array_merge($results, self::dot($value, $prepend . $key . '.'));
             } else {
-                $results[$prepend.$key] = $value;
+                $results[$prepend . $key] = $value;
             }
         }
 
@@ -537,9 +537,9 @@ class Arr
 
         foreach ($array as $key => $value) {
             if (is_array($value)) {
-                $flattened = array_merge($flattened, static::flatten($value, $separator, $prepend.$key.$separator));
+                $flattened = array_merge($flattened, static::flatten($value, $separator, $prepend . $key . $separator));
             } else {
-                $flattened[$prepend.$key] = $value;
+                $flattened[$prepend . $key] = $value;
             }
         }
 
@@ -600,9 +600,10 @@ class Arr
     /**
      * Converts array of arrays to one-dimensional array, where key is $keyName and value is $valueName.
      *
-     * @param  array  $array
-     * @param  string  $keyName
-     * @param  string|array  $valueName
+     * @param array        $array
+     * @param string       $keyName
+     * @param string|array $valueName
+     *
      * @return array
      */
     public static function getIndexedValues(array $array, $keyName, $valueName)
@@ -611,10 +612,9 @@ class Arr
     }
 
     /**
-     * @param array $result
-     * @param array $toSave
-     * @param array $keys
-     *
+     * @param array     $result
+     * @param array     $toSave
+     * @param array     $keys
      * @param bool|true $unique
      */
     protected static function indexByKeys(array &$result, array $toSave, array $keys, $unique = true)

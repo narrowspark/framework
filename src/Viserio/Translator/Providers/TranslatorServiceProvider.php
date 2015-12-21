@@ -43,7 +43,7 @@ class TranslatorServiceProvider extends ServiceProvider
         if (($langFiles = $this->app->get('config')->get('app::language.files')) !== null) {
             foreach ($langFiles as $file => $lang) {
                 $this->app->get('translator')->bind(
-                    $file.'.'.$lang['ext'],
+                    $file . '.' . $lang['ext'],
                     $lang['group'],
                     $lang['env'],
                     $lang['namespace']

@@ -254,9 +254,9 @@ class Handler
     protected function formatException(\Exception $exception)
     {
         if ($this->debug) {
-            $location = $exception->getMessage().' in '.$exception->getFile().':'.$exception->getLine();
+            $location = $exception->getMessage() . ' in ' . $exception->getFile() . ':' . $exception->getLine();
 
-            return 'Error in exception handler: '.$location;
+            return 'Error in exception handler: ' . $location;
         }
 
         return 'Error in exception handler.';

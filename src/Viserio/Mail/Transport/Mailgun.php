@@ -3,9 +3,7 @@ namespace Viserio\Mail\Transport;
 
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Post\PostFile;
-use Swift_Events_EventListener;
 use Swift_Mime_Message;
-use Swift_Transport;
 
 class Mailgun extends Transport
 {
@@ -50,7 +48,7 @@ class Mailgun extends Transport
         $this->client = $client;
         $this->key = $key;
         $this->domain = $domain;
-        $this->url = $base.$this->domain.'/messages.mime';
+        $this->url = $base . $this->domain . '/messages.mime';
     }
 
     /**
@@ -103,7 +101,7 @@ class Mailgun extends Transport
         );
 
         foreach ($contacts as $address => $display) {
-            $formatted[] = $display ? $display.sprintf('<%s>', $address) : $address;
+            $formatted[] = $display ? $display . sprintf('<%s>', $address) : $address;
         }
 
         return implode(',', $formatted);
@@ -150,7 +148,7 @@ class Mailgun extends Transport
      */
     public function setDomain($domain)
     {
-        $this->url = 'https://api.mailgun.net/v3/'.$domain.'/messages.mime';
+        $this->url = 'https://api.mailgun.net/v3/' . $domain . '/messages.mime';
 
         return $this->domain = $domain;
     }

@@ -151,7 +151,7 @@ class Dispatcher implements EventDispatcherInterface
     }
 
     /**
-     * {@inheritdocs}.
+     * {@inheritdoc}.
      */
     public function dispatch($eventName, Event $event = null)
     {
@@ -159,7 +159,7 @@ class Dispatcher implements EventDispatcherInterface
     }
 
     /**
-     * {@inheritdocs}.
+     * {@inheritdoc}.
      */
     public function addListener($eventName, $listener, $priority = 0)
     {
@@ -167,7 +167,7 @@ class Dispatcher implements EventDispatcherInterface
     }
 
     /**
-     * {@inheritdocs}.
+     * {@inheritdoc}.
      */
     public function addSubscriber(EventSubscriberInterface $subscriber)
     {
@@ -175,7 +175,7 @@ class Dispatcher implements EventDispatcherInterface
     }
 
     /**
-     * {@inheritdocs}.
+     * {@inheritdoc}.
      */
     public function removeSubscriber(EventSubscriberInterface $subscriber)
     {
@@ -183,7 +183,7 @@ class Dispatcher implements EventDispatcherInterface
     }
 
     /**
-     * {@inheritdocs}.
+     * {@inheritdoc}.
      */
     public function getListeners($eventName = null)
     {
@@ -191,7 +191,7 @@ class Dispatcher implements EventDispatcherInterface
     }
 
     /**
-     * {@inheritdocs}.
+     * {@inheritdoc}.
      */
     public function hasListeners($eventName = null)
     {

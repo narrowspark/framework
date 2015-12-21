@@ -72,7 +72,7 @@ class Message
      *
      * @param string|array $address
      * @param string|null  $name
-     * @param bool         $override  Will force ignoring the previous recipients
+     * @param bool         $override Will force ignoring the previous recipients
      *
      * @return \Viserio\Mail\Message
      */

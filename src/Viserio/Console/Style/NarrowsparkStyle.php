@@ -17,8 +17,8 @@ class NarrowsparkStyle extends SymfonyStyle
     /**
      * Create a new Console OutputStyle instance.
      *
-     * @param  \Symfony\Component\Console\Input\InputInterface   $input
-     * @param  \Symfony\Component\Console\Output\OutputInterface $output
+     * @param \Symfony\Component\Console\Input\InputInterface   $input
+     * @param \Symfony\Component\Console\Output\OutputInterface $output
      */
     public function __construct(InputInterface $input, OutputInterface $output)
     {

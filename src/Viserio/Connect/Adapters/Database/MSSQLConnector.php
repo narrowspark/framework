@@ -51,7 +51,7 @@ class MSSQLConnector extends AbstractDatabaseConnector
         return Str::containsAny(PHP_OS, [
             'WIN32',
             'WINNT',
-            'Windows'
+            'Windows',
         ]);
     }
 

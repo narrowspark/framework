@@ -26,7 +26,7 @@ class MSSQLConnectorTest extends \PHPUnit_Framework_TestCase
         $contain = Str::containsAny(PHP_OS, [
             'WIN32',
             'WINNT',
-            'Windows'
+            'Windows',
         ]);
 
         if (!$contain) {
@@ -48,7 +48,6 @@ class MSSQLConnectorTest extends \PHPUnit_Framework_TestCase
             ->with($this->equalTo($dsn), $this->equalTo($config), $this->equalTo(['options']))
             ->will($this->returnValue($connection));
 
-
         $connection->shouldReceive('prepare')->once()->with('set names \'utf8\'')->andReturn($connection);
         $connection->shouldReceive('prepare')->once()->with('set quoted_identifier on')->andReturn($connection);
         $connection->shouldReceive('execute')->twice();
@@ -64,8 +63,8 @@ class MSSQLConnectorTest extends \PHPUnit_Framework_TestCase
                 [
                     'server' => 'foo',
                     'database' => 'bar',
-                    'charset' => 'utf8'
-                ]
+                    'charset' => 'utf8',
+                ],
             ],
             [
                 'sqlsrv:server=foo,111;database=bar',
@@ -73,8 +72,8 @@ class MSSQLConnectorTest extends \PHPUnit_Framework_TestCase
                     'server' => 'foo',
                     'database' => 'bar',
                     'port' => 111,
-                    'charset' => 'utf8'
-                ]
+                    'charset' => 'utf8',
+                ],
             ],
         ];
     }
@@ -87,7 +86,7 @@ class MSSQLConnectorTest extends \PHPUnit_Framework_TestCase
         $contain = Str::containsAny(PHP_OS, [
             'WIN32',
             'WINNT',
-            'Windows'
+            'Windows',
         ]);
 
         if ($contain) {
@@ -109,7 +108,6 @@ class MSSQLConnectorTest extends \PHPUnit_Framework_TestCase
             ->with($this->equalTo($dsn), $this->equalTo($config), $this->equalTo(['options']))
             ->will($this->returnValue($connection));
 
-
         $connection->shouldReceive('prepare')->once()->with('set names \'utf8\'')->andReturn($connection);
         $connection->shouldReceive('prepare')->once()->with('set quoted_identifier on')->andReturn($connection);
         $connection->shouldReceive('execute')->twice();
@@ -125,8 +123,8 @@ class MSSQLConnectorTest extends \PHPUnit_Framework_TestCase
                 [
                     'server' => 'foo',
                     'database' => 'bar',
-                    'charset' => 'utf8'
-                ]
+                    'charset' => 'utf8',
+                ],
             ],
             [
                 'dblib:host=foo:111;database=bar',
@@ -134,8 +132,8 @@ class MSSQLConnectorTest extends \PHPUnit_Framework_TestCase
                     'server' => 'foo',
                     'database' => 'bar',
                     'port' => 111,
-                    'charset' => 'utf8'
-                ]
+                    'charset' => 'utf8',
+                ],
             ],
         ];
     }

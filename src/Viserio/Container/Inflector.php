@@ -133,10 +133,10 @@ class Inflector
      */
     protected function bound($arg)
     {
-        return (
+        return
             $this->getContainer()->isRegistered($arg) ||
             $this->getContainer()->isSingleton($arg) ||
             $this->getContainer()->resolveClassName($arg)
-        );
+        ;
     }
 }

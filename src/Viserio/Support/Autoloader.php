@@ -29,7 +29,7 @@ class Autoloader
         $class = self::normalizeClass($class);
 
         foreach (self::getDirectories() as $directory) {
-            if (file_exists($path = $directory.DIRECTORY_SEPARATOR.$class)) {
+            if (file_exists($path = $directory . DIRECTORY_SEPARATOR . $class)) {
                 require_once $path;
 
                 return true;
@@ -52,7 +52,7 @@ class Autoloader
             $class = substr($class, 1);
         }
 
-        return str_replace(['\\', '_'], DIRECTORY_SEPARATOR, $class).'.php';
+        return str_replace(['\\', '_'], DIRECTORY_SEPARATOR, $class) . '.php';
     }
 
     /**

@@ -17,6 +17,7 @@ class FtpConnector implements ConnectorContract
     {
         return $this->getAdapter($config);
     }
+
     /**
      * Get the ftp adapter.
      *

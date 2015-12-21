@@ -20,7 +20,7 @@ class StrTest extends \PHPUnit_Framework_TestCase
 
     public function testStringWithoutWordsDoesntProduceError()
     {
-        $nbsp = chr(0xC2).chr(0xA0);
+        $nbsp = chr(0xC2) . chr(0xA0);
         $this->assertEquals(' ', Str::words(' '));
         $this->assertEquals($nbsp, Str::words($nbsp));
     }

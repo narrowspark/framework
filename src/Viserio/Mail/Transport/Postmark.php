@@ -67,7 +67,7 @@ class Postmark extends Transport
         $convertedEmails = [];
         foreach ($emails as $email => $name) {
             $convertedEmails[] = $name
-            ? '"'.str_replace('"', '\\"', $name).sprintf('\ <%s>', $email)
+            ? '"' . str_replace('"', '\\"', $name) . sprintf('\ <%s>', $email)
             : $email;
         }
 

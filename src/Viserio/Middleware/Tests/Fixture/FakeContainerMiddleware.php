@@ -8,7 +8,6 @@ use Viserio\Contracts\Middleware\Middleware as MiddlewareContract;
 
 class FakeContainerMiddleware implements MiddlewareContract
 {
-
     /**
      * Container instance.
      *

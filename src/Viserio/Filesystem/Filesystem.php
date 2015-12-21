@@ -95,7 +95,7 @@ class Filesystem
     public function prepend($path, $data)
     {
         if ($this->exists($path)) {
-            return $this->put($path, $data.$this->get($path));
+            return $this->put($path, $data . $this->get($path));
         } else {
             return $this->put($path, $data);
         }
@@ -216,10 +216,10 @@ class Filesystem
 
         // No actual extension in path
         if (empty($actualExtension)) {
-            return $path.('.' === substr($path, -1) ? '' : '.').$extension;
+            return $path . ('.' === substr($path, -1) ? '' : '.') . $extension;
         }
 
-        return substr($path, 0, -strlen($actualExtension)).$extension;
+        return substr($path, 0, -strlen($actualExtension)) . $extension;
     }
 
     /**
@@ -325,7 +325,7 @@ class Filesystem
      */
     public function files($directory)
     {
-        $glob = glob($directory.'/*');
+        $glob = glob($directory . '/*');
 
         if ($glob === false) {
             return [];

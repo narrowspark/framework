@@ -1,15 +1,13 @@
 <?php
 namespace Viserio\Queue\Adapter;
 
-use Carbon\Carbon;
-use Viserio\Contracts\Queue\Adapter as AdapterContract;
-
 abstract class BaseAdapter
 {
     /**
      * Calculate the number of seconds with the given delay.
      *
-     * @param  \DateTime|int  $delay
+     * @param \DateTime|int $delay
+     *
      * @return int
      */
     protected function getSeconds($delay)

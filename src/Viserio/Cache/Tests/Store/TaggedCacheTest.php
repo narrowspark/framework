@@ -76,9 +76,9 @@ class TaggedCacheTest extends \PHPUnit_Framework_TestCase
         $redis = new RedisTaggedCache($store, $tagSet);
         $store->shouldReceive('getPrefix')->andReturn('prefix:');
         $store->shouldReceive('connection')->andReturn($conn = Mock::mock('StdClass'));
-        $conn->shouldReceive('lpush')->once()->with('prefix:foo:forever', 'prefix:'.sha1('foo|bar').':key1');
-        $conn->shouldReceive('lpush')->once()->with('prefix:bar:forever', 'prefix:'.sha1('foo|bar').':key1');
-        $store->shouldReceive('forever')->with(sha1('foo|bar').':key1', 'key1:value');
+        $conn->shouldReceive('lpush')->once()->with('prefix:foo:forever', 'prefix:' . sha1('foo|bar') . ':key1');
+        $conn->shouldReceive('lpush')->once()->with('prefix:bar:forever', 'prefix:' . sha1('foo|bar') . ':key1');
+        $store->shouldReceive('forever')->with(sha1('foo|bar') . ':key1', 'key1:value');
         $redis->forever('key1', 'key1:value');
     }
 

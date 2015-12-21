@@ -261,6 +261,7 @@ interface BarInterface
 class Bar implements BarInterface
 {
     public $qux;
+
     public function __construct(Qux $qux)
     {
         $this->qux = $qux;
@@ -277,10 +278,12 @@ class Baz implements BazInterface
     {
         return true;
     }
+
     public function noTypeHint($arg = 'baz')
     {
         return $arg;
     }
+
     public function noTypeHintOrDefaultValue($arg)
     {
         return $arg;
@@ -290,16 +293,19 @@ class Baz implements BazInterface
 interface CorgeInterface
 {
     public function __construct($int = null);
+
     public function setInt($int);
 }
 
 class Corge implements CorgeInterface
 {
     public $int;
+
     public function __construct($int = null)
     {
         $this->int = $int;
     }
+
     public function setInt($int)
     {
         $this->int = $int;
@@ -309,6 +315,7 @@ class Corge implements CorgeInterface
 class Qux
 {
     public $bar;
+
     public function setBar(BarInterface $bar)
     {
         $this->bar = $bar;
@@ -319,6 +326,7 @@ class Foo
 {
     public $bar;
     public $baz;
+
     public function __construct(BarInterface $bar, BazInterface $baz)
     {
         $this->bar = $bar;

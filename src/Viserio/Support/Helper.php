@@ -42,7 +42,7 @@ class Helper
      */
     public static function appPath($path = '')
     {
-        return self::app('path').($path ? '/'.$path : $path);
+        return self::app('path') . ($path ? '/' . $path : $path);
     }
 
     /**
@@ -54,7 +54,7 @@ class Helper
      */
     public static function storagePath($path = '')
     {
-        return self::app('path.storage').($path ? '/'.$path : $path);
+        return self::app('path.storage') . ($path ? '/' . $path : $path);
     }
 
     /**
@@ -83,7 +83,7 @@ class Helper
     public static function strReplaceArray($search, array $replace, $subject)
     {
         foreach ($replace as $value) {
-            $subject = preg_replace('/'.$search.'/', $value, $subject, 1);
+            $subject = preg_replace('/' . $search . '/', $value, $subject, 1);
         }
 
         return $subject;

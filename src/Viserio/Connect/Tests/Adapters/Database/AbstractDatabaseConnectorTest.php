@@ -47,7 +47,7 @@ class AbstractDatabaseConnectorTest extends \PHPUnit_Framework_TestCase
         $config = [
             'options' => [
                 PDO::ATTR_EMULATE_PREPARES  => true,
-            ]
+            ],
         ];
 
         $this->assertTrue(is_array($connector->getOptions($config)));
@@ -61,7 +61,7 @@ class AbstractDatabaseConnectorTest extends \PHPUnit_Framework_TestCase
         $connector = new DatabaseConnector();
         $config = [
             'username' => '',
-            'password' => ''
+            'password' => '',
         ];
 
         $this->assertSame('PDO', $connector->createConnection('mysql:dbname=narrowspark;host=fails', $config, []));

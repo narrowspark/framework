@@ -304,7 +304,7 @@ class Container implements \ArrayAccess, ContainerInteropInterface, ContainerCon
             $singleton = false;
         }
 
-        return (isset($this->singletons[$alias]) || $singleton === true);
+        return isset($this->singletons[$alias]) || $singleton === true;
     }
 
     /**
@@ -316,12 +316,12 @@ class Container implements \ArrayAccess, ContainerInteropInterface, ContainerCon
      */
     public function bound($alias)
     {
-        return (
+        return
             isset($this->bindings[$alias]) ||
             $this->isSingleton($alias) ||
             $this->isAlias($alias) ||
             isset($this->values[$alias])
-        );
+        ;
     }
 
     /**
@@ -559,9 +559,9 @@ class Container implements \ArrayAccess, ContainerInteropInterface, ContainerCon
      */
     protected function shouldBeDefinitionObject($concrete)
     {
-        return (
+        return
             is_object($concrete) && !$concrete instanceof \Closure || is_string($concrete)
-        );
+        ;
     }
 
     /**
@@ -575,9 +575,9 @@ class Container implements \ArrayAccess, ContainerInteropInterface, ContainerCon
      */
     protected function shouldNotBeDefinitionObject($alias, $concrete)
     {
-        return (
-            (is_string($alias) && (!is_object($concrete) && !$concrete instanceof \Closure && (is_string($concrete) || null !== $concrete)))
-        );
+        return
+            is_string($alias) && (!is_object($concrete) && !$concrete instanceof \Closure && (is_string($concrete) || null !== $concrete))
+        ;
     }
 
     /**
@@ -589,6 +589,6 @@ class Container implements \ArrayAccess, ContainerInteropInterface, ContainerCon
      */
     protected function absoluteClassName($className)
     {
-        return (substr($className, 0, 1) === '\\') ? $className : '\\'.$className;
+        return (substr($className, 0, 1) === '\\') ? $className : '\\' . $className;
     }
 }

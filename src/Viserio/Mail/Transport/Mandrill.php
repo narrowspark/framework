@@ -86,7 +86,6 @@ class Mandrill extends Transport
         return $to;
     }
 
-
     /**
      * Get the API key being used by the transport.
      *

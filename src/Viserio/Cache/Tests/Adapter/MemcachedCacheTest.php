@@ -39,7 +39,7 @@ class MemcachedCacheTest extends \PHPUnit_Framework_TestCase
         $memcache->expects($this->once())->method('getMulti')->with(
             ['foo:foo', 'foo:bar', 'foo:baz']
         )->will($this->returnValue([
-            'foobuu', 'buzz', 'fiboo'
+            'foobuu', 'buzz', 'fiboo',
         ]));
 
         $memcache->expects($this->once())->method('getResultCode')->will($this->returnValue(0));
@@ -48,9 +48,9 @@ class MemcachedCacheTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals([
             'foo'   => 'foobuu',
             'bar'   => 'buzz',
-            'baz'   => 'fiboo'
+            'baz'   => 'fiboo',
         ], $store->getMultiple([
-            'foo', 'bar', 'baz'
+            'foo', 'bar', 'baz',
         ]));
     }
 

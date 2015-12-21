@@ -2,7 +2,6 @@
 namespace Viserio\Connect\Adapters\Database;
 
 use Mongo;
-use MongoClient;
 use MongoConnectionException;
 use Viserio\Connect\Traits\DetectsLostConnections;
 use Viserio\Contracts\Connect\Connector as ConnectorContract;
@@ -115,6 +114,7 @@ class MongoConnector implements ConnectorContract
     {
         if ($this->causedByLostConnection($exception)) {
             $class = $this->getMongoClass();
+
             return new $class($dsn, $options);
         }
 

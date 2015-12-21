@@ -232,7 +232,7 @@ class TaggedCache implements StoreContract
      */
     public function taggedItemKey($key)
     {
-        return sha1($this->tags->getNamespace()).':'.$key;
+        return sha1($this->tags->getNamespace()) . ':' . $key;
     }
 
     /**

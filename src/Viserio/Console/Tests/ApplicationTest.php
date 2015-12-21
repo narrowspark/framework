@@ -3,14 +3,10 @@ namespace Viserio\Console\Tests;
 
 use Mockery as Mock;
 use stdClass;
-use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\StringInput;
-use Symfony\Component\Console\Output\Output as SymfonyOutput;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Viserio\Console\Application;
 use Viserio\Console\Tests\Fixture\SpyOutput;
-use Viserio\Console\Tests\Fixture\StdClassClone;
 use Viserio\Console\Tests\Fixture\ViserioCommand;
 use Viserio\Console\Tests\Mock\Container as MockContainer;
 
@@ -40,7 +36,7 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
             'stdClass'          => $stdClass,
             'param'             => 'bob',
             'stdClass2'         => $stdClass2,
-            'command.arr.greet' => [$this, 'foo']
+            'command.arr.greet' => [$this, 'foo'],
         ]);
         $events = Mock::mock('Symfony\Component\EventDispatcher\EventDispatcherInterface', ['addListener' => null]);
 
@@ -92,7 +88,7 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
     public function testItShouldRunACommandWithAnArgument()
     {
         $this->application->command('greet name', function ($name, OutputInterface $output) {
-            $output->write('hello '.$name);
+            $output->write('hello ' . $name);
         });
 
         $this->assertOutputIs('greet john', 'hello john');
@@ -101,7 +97,7 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
     public function testItShouldRunACommandWithAnOptionalArgument()
     {
         $this->application->command('greet [name]', function ($name, OutputInterface $output) {
-            $output->write('hello '.$name);
+            $output->write('hello ' . $name);
         });
 
         $this->assertOutputIs('greet', 'hello ');
@@ -133,7 +129,7 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
     public function testItShouldRunACommandWitMultipleOptions()
     {
         $this->application->command('greet [-d|--dir=]*', function ($dir, OutputInterface $output) {
-            $output->write('['.implode(', ', $dir).']');
+            $output->write('[' . implode(', ', $dir) . ']');
         });
 
         $this->assertOutputIs('greet', '[]');

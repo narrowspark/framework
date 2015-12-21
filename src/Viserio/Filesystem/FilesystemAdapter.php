@@ -115,7 +115,7 @@ class FilesystemAdapter implements CloudFilesystemContract
     public function prepend($path, $data)
     {
         if ($this->exists($path)) {
-            return $this->put($path, $data.PHP_EOL.$this->get($path));
+            return $this->put($path, $data . PHP_EOL . $this->get($path));
         }
 
         return $this->put($path, $data);
@@ -132,7 +132,7 @@ class FilesystemAdapter implements CloudFilesystemContract
     public function append($path, $data)
     {
         if ($this->exists($path)) {
-            return $this->put($path, $this->get($path).PHP_EOL.$data);
+            return $this->put($path, $this->get($path) . PHP_EOL . $data);
         }
 
         return $this->put($path, $data);
@@ -315,11 +315,12 @@ class FilesystemAdapter implements CloudFilesystemContract
     /**
      * Call a Flysystem driver plugin.
      *
-     * @param  string  $method
-     * @param  array  $arguments
-     * @throws \BadMethodCallException
-     * @return mixed
+     * @param string $method
+     * @param array  $arguments
      *
+     * @throws \BadMethodCallException
+     *
+     * @return mixed
      */
     public function __call($method, array $arguments)
     {
@@ -349,6 +350,6 @@ class FilesystemAdapter implements CloudFilesystemContract
                 return AdapterInterface::VISIBILITY_PRIVATE;
         }
 
-        throw new \InvalidArgumentException('Unknown visibility: '.$visibility);
+        throw new \InvalidArgumentException('Unknown visibility: ' . $visibility);
     }
 }

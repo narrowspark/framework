@@ -76,8 +76,8 @@ class MySqlConnectorTest extends \PHPUnit_Framework_TestCase
                     'server' => 'foo',
                     'database' => 'bar',
                     'collation' => 'utf8_unicode_ci',
-                    'charset' => 'utf8'
-                ]
+                    'charset' => 'utf8',
+                ],
             ],
             [
                 'mysql:host=foo;dbname=bar',
@@ -86,8 +86,8 @@ class MySqlConnectorTest extends \PHPUnit_Framework_TestCase
                     'database' => 'bar',
                     'collation' => 'utf8_unicode_ci',
                     'charset' => 'utf8',
-                    'strict' => true
-                ]
+                    'strict' => true,
+                ],
             ],
             [
                 'mysql:host=foo;port=111;dbname=bar',
@@ -96,19 +96,8 @@ class MySqlConnectorTest extends \PHPUnit_Framework_TestCase
                     'database' => 'bar',
                     'port' => 111,
                     'collation' => 'utf8_unicode_ci',
-                    'charset' => 'utf8'
-                ]
-            ],
-            [
-                'mysql:unix_socket=baz;dbname=bar',
-                [
-                    'server' => 'foo',
-                    'database' => 'bar',
-                    'port' => 111,
-                    'unix_socket' => 'baz',
-                    'collation' => 'utf8_unicode_ci',
-                    'charset' => 'utf8'
-                ]
+                    'charset' => 'utf8',
+                ],
             ],
             [
                 'mysql:unix_socket=baz;dbname=bar',
@@ -119,8 +108,19 @@ class MySqlConnectorTest extends \PHPUnit_Framework_TestCase
                     'unix_socket' => 'baz',
                     'collation' => 'utf8_unicode_ci',
                     'charset' => 'utf8',
-                    'timezone' => 'Europe/London'
-                ]
+                ],
+            ],
+            [
+                'mysql:unix_socket=baz;dbname=bar',
+                [
+                    'server' => 'foo',
+                    'database' => 'bar',
+                    'port' => 111,
+                    'unix_socket' => 'baz',
+                    'collation' => 'utf8_unicode_ci',
+                    'charset' => 'utf8',
+                    'timezone' => 'Europe/London',
+                ],
             ],
         ];
     }

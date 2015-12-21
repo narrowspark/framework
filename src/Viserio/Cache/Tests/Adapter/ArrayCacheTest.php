@@ -29,18 +29,18 @@ class ArrayCacheTest extends \PHPUnit_Framework_TestCase
 
     public function testMultipleItemsCanBeSetAndRetrieved()
     {
-        $store = new ArrayCache;
+        $store = new ArrayCache();
         $store->put('foo', 'bar', 10);
         $store->putMultiple([
             'foobuu'  => 'buz',
-            'quz'   => 'baz'
+            'quz'   => 'baz',
         ], 10);
 
         $this->assertEquals([
             'foo'   => 'bar',
             'foobuu'  => 'buz',
             'quz'   => 'baz',
-            'foobar'  => null
+            'foobar'  => null,
         ], $store->getMultiple(['foo', 'foobuu', 'quz', 'foobar']));
     }
 

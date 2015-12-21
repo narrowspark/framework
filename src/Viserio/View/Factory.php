@@ -97,8 +97,8 @@ class Factory implements FactoryContract
     /**
      * Constructor.
      *
-     * @param \Viserio\View\Engines\EngineResolver                      $engines
-     * @param \Viserio\Contracts\View\Finder                            $finder
+     * @param \Viserio\View\Engines\EngineResolver                        $engines
+     * @param \Viserio\Contracts\View\Finder                              $finder
      * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $events
      */
     public function __construct(
@@ -319,7 +319,7 @@ class Factory implements FactoryContract
      */
     public function callCreator(View $view)
     {
-        $this->events->addListener('creating: '.$view->getName(), [$view]);
+        $this->events->addListener('creating: ' . $view->getName(), [$view]);
     }
 
     /**
@@ -504,7 +504,7 @@ class Factory implements FactoryContract
 
         list($namespace, $name) = explode($delimiter, $name);
 
-        return $namespace.$delimiter.str_replace('/', '.', $name);
+        return $namespace . $delimiter . str_replace('/', '.', $name);
     }
 
     /**

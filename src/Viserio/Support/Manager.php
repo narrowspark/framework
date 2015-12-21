@@ -77,7 +77,7 @@ abstract class Manager
     /**
      * Builder.
      *
-     * @param string|null $driver The cache driver to use
+     * @param string|null $driver  The cache driver to use
      * @param array       $options
      *
      * @throws CacheException
@@ -114,7 +114,7 @@ abstract class Manager
      */
     protected function createDriver($driver, array $options = [])
     {
-        $method = 'create'.Str::studly($driver).'Driver';
+        $method = 'create' . Str::studly($driver) . 'Driver';
         $options = array_filter($options);
 
         // We'll check to see if a creator method exists for the given driver. If not we

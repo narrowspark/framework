@@ -1,8 +1,6 @@
 <?php
 namespace Viserio\Loop;
 
-use Viserio\Contracts\Loop\Timer as TimerContract;
-
 class Timer
 {
     /**
@@ -38,7 +36,7 @@ class Timer
     /**
      * [updateTime description]
      *
-     * @return double
+     * @return float
      */
     public function updateTime()
     {

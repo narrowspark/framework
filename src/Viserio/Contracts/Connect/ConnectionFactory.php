@@ -23,7 +23,6 @@ interface ConnectionFactory
 
     /**
      * Disconnect from the given connection.
-     * @return void
      */
     public function disconnect();
 
@@ -33,8 +32,8 @@ interface ConnectionFactory
      * @param string $name
      *
      * @throws \InvalidArgumentException
-     * @return array
      *
+     * @return array
      */
     public function getConnectionConfig($name);
 
@@ -42,8 +41,7 @@ interface ConnectionFactory
      * Register an extension connection resolver.
      *
      * @param Connector $name
-     * @param Connector   $resolver
-     * @return void
+     * @param Connector $resolver
      */
     public function extend($name, Connector $resolver);
 

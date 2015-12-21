@@ -67,14 +67,14 @@ class SqlServerConnectorTest extends \PHPUnit_Framework_TestCase
     {
         extract($config);
         if (in_array('dblib', PDO::getAvailableDrivers(), true)) {
-            $port = isset($config['port']) ? ':'.$port : '';
-            $appname = isset($config['appname']) ? ';appname='.$config['appname'] : '';
-            $charset = isset($config['charset']) ? ';charset='.$config['charset'] : '';
+            $port = isset($config['port']) ? ':' . $port : '';
+            $appname = isset($config['appname']) ? ';appname=' . $config['appname'] : '';
+            $charset = isset($config['charset']) ? ';charset=' . $config['charset'] : '';
 
             return "dblib:host={$host}{$port};dbname={$database}{$appname}{$charset}";
         } else {
-            $port = isset($config['port']) ? ','.$port : '';
-            $appname = isset($config['appname']) ? ';APP='.$config['appname'] : '';
+            $port = isset($config['port']) ? ',' . $port : '';
+            $appname = isset($config['appname']) ? ';APP=' . $config['appname'] : '';
 
             return "sqlsrv:Server={$host}{$port};Database={$database}{$appname}";
         }

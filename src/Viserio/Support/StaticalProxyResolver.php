@@ -62,6 +62,6 @@ class StaticalProxyResolver
      */
     private function isUppercase($string)
     {
-        return (strtoupper($string) === $string);
+        return strtoupper($string) === $string;
     }
 }

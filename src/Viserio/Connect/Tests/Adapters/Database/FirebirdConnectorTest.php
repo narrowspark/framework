@@ -28,7 +28,7 @@ class FirebirdConnectorTest extends \PHPUnit_Framework_TestCase
             'server'   => '',
             'database' => 'stc\Connect\Tests\Fixture\employee.fdb',
             'username' => '',
-            'password' => ''
+            'password' => '',
         ];
 
         $this->assertSame('PDO', $connector->connect($config));
@@ -58,7 +58,7 @@ class FirebirdConnectorTest extends \PHPUnit_Framework_TestCase
             'server' => 'localhost',
             'database' => 'stc\Connect\Tests\Fixture\employee.fdb',
             'username' => '',
-            'password' => ''
+            'password' => '',
         ];
         $connection = Mock::mock('stdClass');
 

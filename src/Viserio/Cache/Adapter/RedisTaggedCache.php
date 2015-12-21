@@ -15,7 +15,7 @@ class RedisTaggedCache extends TaggedCache
     {
         $this->pushForeverKeys($namespace = $this->tags->getNamespace(), $key);
 
-        $this->store->forever(sha1($namespace).':'.$key, $value);
+        $this->store->forever(sha1($namespace) . ':' . $key, $value);
     }
 
     /**
@@ -36,7 +36,7 @@ class RedisTaggedCache extends TaggedCache
      */
     protected function pushForeverKeys($namespace, $key)
     {
-        $fullKey = $this->getPrefix().sha1($namespace).':'.$key;
+        $fullKey = $this->getPrefix() . sha1($namespace) . ':' . $key;
 
         foreach (explode('|', $namespace) as $segment) {
             $this->store->connection()->lpush($this->foreverKey($segment), $fullKey);
@@ -78,6 +78,6 @@ class RedisTaggedCache extends TaggedCache
      */
     protected function foreverKey($segment)
     {
-        return $this->getPrefix().$segment.':forever';
+        return $this->getPrefix() . $segment . ':forever';
     }
 }

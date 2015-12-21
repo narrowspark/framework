@@ -218,7 +218,7 @@ class HelpersTest extends \PHPUnit_Framework_TestCase
     {
         $array = [['account' => 'a', 'users' => [
             ['first' => 'foo', 'last' => 'bar', 'email' => 'foobar@test.com'],
-        ]],['account' => 'b', 'users' => [
+        ]], ['account' => 'b', 'users' => [
             ['first' => 'abigail', 'last' => 'bar'],
             ['first' => 'dayle', 'last' => 'rees'],
         ]]];
@@ -311,22 +311,27 @@ class SupportTestClassTwo extends SupportTestClassOne
 class SupportTestArrayAccess implements \ArrayAccess
 {
     protected $attributes = [];
+
     public function __construct($attributes = [])
     {
         $this->attributes = $attributes;
     }
+
     public function offsetExists($offset)
     {
         return isset($this->attributes[$offset]);
     }
+
     public function offsetGet($offset)
     {
         return $this->attributes[$offset];
     }
+
     public function offsetSet($offset, $value)
     {
         $this->attributes[$offset] = $value;
     }
+
     public function offsetUnset($offset)
     {
         unset($this->attributes[$offset]);

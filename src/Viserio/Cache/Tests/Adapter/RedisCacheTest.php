@@ -35,15 +35,15 @@ class RedisCacheTest extends \PHPUnit_Framework_TestCase
             ->andReturn([
                 serialize('bar'),
                 serialize('buzz'),
-                serialize('quz')
+                serialize('quz'),
             ]);
 
         $this->assertEquals([
             'foo'   => 'bar',
             'fuuboo'  => 'buzz',
-            'fiboo'  => 'quz'
+            'fiboo'  => 'quz',
         ], $redis->getMultiple([
-            'foo', 'fuuboo', 'fiboo'
+            'foo', 'fuuboo', 'fiboo',
         ]));
     }
 
@@ -70,7 +70,7 @@ class RedisCacheTest extends \PHPUnit_Framework_TestCase
         $redis->putMultiple([
             'foo' => 'bar',
             'baz' => 'qux',
-            'bar' => 'fiibuu'
+            'bar' => 'fiibuu',
         ], 60);
     }
 
