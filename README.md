@@ -16,14 +16,12 @@
 [![Quality Score](https://img.shields.io/scrutinizer/g/narrowspark/framework.svg?style=flat-square)](https://scrutinizer-ci.com/g/narrowspark/framework/code-structure/master)
 [![Build Status](https://api.travis-ci.org/narrowspark/framework.svg?branch=master&style=flat-square)](https://travis-ci.org/narrowspark/framework)
 [![Dependency Status](https://www.versioneye.com/user/projects/5559f43153da1f2ba400042c/badge.svg?style=flat)](https://www.versioneye.com/user/projects/5559f43153da1f2ba400042c)
-[![Coverage Status](https://img.shields.io/coveralls/narrowspark/framework/master.svg?style=flat-square)](https://coveralls.io/r/narrowspark/framework)
 
 ## Develop
 
 [![Quality Score](https://img.shields.io/scrutinizer/g/narrowspark/framework/develop.svg?style=flat-square)](https://scrutinizer-ci.com/g/narrowspark/framework/code-structure/develop)
 [![Build Status](https://travis-ci.org/narrowspark/framework.svg?branch=develop&style=flat-square)](https://travis-ci.org/narrowspark/framework)
 [![Dependency Status](https://www.versioneye.com/user/projects/5559f479c0f259745500008b/badge.svg?style=flat)](https://www.versioneye.com/user/projects/5559f479c0f259745500008b)
-[![Coverage Status](https://img.shields.io/coveralls/narrowspark/framework/develop.svg?style=flat-square)](https://coveralls.io/r/narrowspark/framework)
 
 ## Official Documentation
 
