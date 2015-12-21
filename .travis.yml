@@ -31,6 +31,7 @@ matrix:
 cache:
   directories:
     - $HOME/.composer/cache
+    - $HOME/.php-cs-fixer
 
 before_script:
   - sleep 15
@@ -42,20 +43,19 @@ before_script:
 before_install:
   - composer self-update
   - travis_retry composer install --prefer-source --no-interaction
-  - OCULAR_ENV='5.6'
 
 install:
-  - curl http://get.sensiolabs.org/php-cs-fixer.phar -o php-cs-fixer.phar
   - if [[ $setup = 'basic' ]]; then travis_retry composer install --no-interaction --prefer-source; fi
   - if [[ $setup = 'stable' ]]; then travis_retry composer update --prefer-source --no-interaction --prefer-stable; fi
   - if [[ $setup = 'lowest' ]]; then travis_retry composer update --prefer-source --no-interaction --prefer-lowest --prefer-stable; fi
 
 script:
-  - php -n php-cs-fixer.phar fix -v --dry-run
-  - vendor/bin/phpunit --verbose --coverage-clover clover-data
-  - if [ $(phpenv version-name) = $OCULAR_ENV ]; then wget https://scrutinizer-ci.com/ocular.phar; php ocular.phar code-coverage:upload --format=php-clover clover-data; fi
+  - mkdir -p build/logs
+  - vendor/bin/php-cs-fixer fix --config-file=.php_cs --verbose --diff --dry-run
+  - vendor/bin/phpunit -c phpunit.xml.dist --verbose
 
 after_script:
-  - php vendor/bin/coveralls -v
+  - wget https://scrutinizer-ci.com/ocular.phar
+  - php ocular.phar code-coverage:upload --format=php-clover build/logs/coverage.clover
 
 sudo: false

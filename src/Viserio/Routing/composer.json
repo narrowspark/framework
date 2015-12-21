@@ -27,7 +27,7 @@
         "symfony/http-kernel"                : "~2.8.*|~3.0.*"
     },
     "require-dev": {
-        "fabpot/php-cs-fixer"                : "~1.10.1",
+        "fabpot/php-cs-fixer"                : "dev-master",
         "phpunit/phpunit"                    : "~5.0.6"
     },
     "autoload": {

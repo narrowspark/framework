@@ -29,7 +29,7 @@
         "league/flysystem-rackspace"      : "~1.0",
         "league/flysystem-sftp"           : "~1.0",
         "league/flysystem-ziparchive"     : "~1.0",
-        "fabpot/php-cs-fixer"             : "~1.10.1",
+        "fabpot/php-cs-fixer"             : "dev-master",
         "phpunit/phpunit"                 : "~5.0.6"
     },
     "suggest": {
