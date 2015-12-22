@@ -2,7 +2,7 @@
     "name"       : "viserio/cookie",
     "type"       : "library",
     "description": "The Viserio Cache package.",
-    "keywords"   : ["narrowspark", "viserio", "cookie"],
+    "keywords"   : ["narrowspark", "viserio", "cookie", "RFC6896", "RFC", "psr7"],
     "license"    : "MIT",
     "homepage"   : "http://github.com/Narrowspark/cookie",
     "support"    : {

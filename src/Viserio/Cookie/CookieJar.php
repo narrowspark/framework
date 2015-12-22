@@ -104,15 +104,14 @@ class CookieJar implements JarContract
     }
 
     /**
-     * @param \Viserio\Contracts\Cookie\Cookie    $cookieJar
      * @param \Psr\Http\Message\ResponseInterface $response
      *
      * @return \Psr\Http\Message\ResponseInterface
      */
-    public function toResponse(CookieContract $cookieJar, ResponseInterface $response)
+    public function toResponse(ResponseInterface $response)
     {
-        foreach ($cookieJar as $cookie) {
-            $response = $response->withHeader('Cookie', $cookie->__toString());
+        foreach ($this->queued as $cookie) {
+            $response = $response->withAddedHeader('Set-Cookie', $cookie->__toString());
         }
 
         return $response;
@@ -227,7 +226,8 @@ class CookieJar implements JarContract
                     $cookie = $cookie->withExpires(new DateTime($attributeValue));
                     break;
                 case 'max-age':
-                    $cookie = $cookie->withMaxAge($attributeValue);
+                    $age = is_numeric($attributeValue) ? (int) $attributeValue : null;
+                    $cookie = $cookie->withMaxAge($age);
                     break;
                 case 'domain':
                     $cookie = $cookie->withDomain($attributeValue);

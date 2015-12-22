@@ -86,7 +86,7 @@ class CookieJarTest extends \PHPUnit_Framework_TestCase
         $request = Mock::mock(Request::class);
         $request->shouldReceive('getHeader')->with('Set-Cookie')->andReturn($cookieString);
 
-        $cookie = $this->getCreator();
+        $cookie    = $this->getCreator();
         $setCookie = $cookie->fromServerRequest($request);
 
         $this->assertEquals($expectedCookie, $setCookie);
@@ -146,50 +146,49 @@ class CookieJarTest extends \PHPUnit_Framework_TestCase
                     ->withDomain('.example.com')
                     ->withHttpOnly(true)
             ],
-            // TODO test MaxAge
-            // [
-            //     'lu=Rg3vHJZnehYLjVg7qi3bZjzg; Domain=.example.com; Path=/; Max-Age=500; Secure; HttpOnly',
-            //     (new Cookie('lu'))
-            //         ->withValue('Rg3vHJZnehYLjVg7qi3bZjzg')
-            //         ->withMaxAge(500)
-            //         ->withPath('/')
-            //         ->withDomain('.example.com')
-            //         ->withSecure(true)
-            //         ->withHttpOnly(true)
-            // ],
-            // [
-            //     'lu=Rg3vHJZnehYLjVg7qi3bZjzg; Domain=.example.com; Path=/; Expires=Tue, 15 Jan 2013 21:47:38 GMT; Max-Age=500; Secure; HttpOnly',
-            //     (new Cookie('lu'))
-            //         ->withValue('Rg3vHJZnehYLjVg7qi3bZjzg')
-            //         ->withExpires(new DateTime('Tue, 15-Jan-2013 21:47:38 GMT'))
-            //         ->withMaxAge(500)
-            //         ->withPath('/')
-            //         ->withDomain('.example.com')
-            //         ->withSecure(true)
-            //         ->withHttpOnly(true)
-            // ],
-            // [
-            //     'lu=Rg3vHJZnehYLjVg7qi3bZjzg; Domain=.example.com; Path=/; Expires=Tue, 15 Jan 2013 21:47:38 GMT; Max-Age=500; Secure; HttpOnly',
-            //     (new Cookie('lu'))
-            //         ->withValue('Rg3vHJZnehYLjVg7qi3bZjzg')
-            //         ->withExpires(new DateTime(1358286458))
-            //         ->withMaxAge(500)
-            //         ->withPath('/')
-            //         ->withDomain('.example.com')
-            //         ->withSecure(true)
-            //         ->withHttpOnly(true)
-            // ],
-            // [
-            //     'lu=Rg3vHJZnehYLjVg7qi3bZjzg; Domain=.example.com; Path=/; Expires=Tue, 15 Jan 2013 21:47:38 GMT; Max-Age=500; Secure; HttpOnly',
-            //     (new Cookie('lu'))
-            //         ->withValue('Rg3vHJZnehYLjVg7qi3bZjzg')
-            //         ->withExpires(new DateTime('Tue, 15-Jan-2013 21:47:38 GMT'))
-            //         ->withMaxAge(500)
-            //         ->withPath('/')
-            //         ->withDomain('.example.com')
-            //         ->withSecure(true)
-            //         ->withHttpOnly(true)
-            // ],
+            [
+                'lu=Rg3vHJZnehYLjVg7qi3bZjzg; Domain=.example.com; Path=/; Max-Age=500; Secure; HttpOnly',
+                (new Cookie('lu'))
+                    ->withValue('Rg3vHJZnehYLjVg7qi3bZjzg')
+                    ->withMaxAge(500)
+                    ->withPath('/')
+                    ->withDomain('.example.com')
+                    ->withSecure(true)
+                    ->withHttpOnly(true)
+            ],
+            [
+                'lu=Rg3vHJZnehYLjVg7qi3bZjzg; Domain=.example.com; Path=/; Expires=Tue, 15 Jan 2013 21:47:38 GMT; Max-Age=500; Secure; HttpOnly',
+                (new Cookie('lu'))
+                    ->withValue('Rg3vHJZnehYLjVg7qi3bZjzg')
+                    ->withExpires(new DateTime('Tue, 15-Jan-2013 21:47:38 GMT'))
+                    ->withMaxAge(500)
+                    ->withPath('/')
+                    ->withDomain('.example.com')
+                    ->withSecure(true)
+                    ->withHttpOnly(true)
+            ],
+            [
+                'lu=Rg3vHJZnehYLjVg7qi3bZjzg; Domain=.example.com; Path=/; Expires=Tue, 15 Jan 2013 21:47:38 GMT; Max-Age=500; Secure; HttpOnly',
+                (new Cookie('lu'))
+                    ->withValue('Rg3vHJZnehYLjVg7qi3bZjzg')
+                    ->withExpires(new DateTime('Tue, 15 Jan 2013 21:47:38 GMT'))
+                    ->withMaxAge(500)
+                    ->withPath('/')
+                    ->withDomain('.example.com')
+                    ->withSecure(true)
+                    ->withHttpOnly(true)
+            ],
+            [
+                'lu=Rg3vHJZnehYLjVg7qi3bZjzg; Domain=.example.com; Path=/; Expires=Tue, 15 Jan 2013 21:47:38 GMT; Max-Age=500; Secure; HttpOnly',
+                (new Cookie('lu'))
+                    ->withValue('Rg3vHJZnehYLjVg7qi3bZjzg')
+                    ->withExpires(new DateTime('Tue, 15-Jan-2013 21:47:38 GMT'))
+                    ->withMaxAge(500)
+                    ->withPath('/')
+                    ->withDomain('.example.com')
+                    ->withSecure(true)
+                    ->withHttpOnly(true)
+            ],
         ];
     }
 }
