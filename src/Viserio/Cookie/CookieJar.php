@@ -2,9 +2,7 @@
 namespace Viserio\Cookie;
 
 use DateTime;
-use Psr\Http\Message\ResponseInterface as ResponseContract;
 use Psr\Http\Message\ServerRequestInterface as RequestContract;
-use Viserio\Contracts\Cookie\Cookie as CookieContract;
 use Viserio\Contracts\Cookie\QueueingFactory as JarContract;
 use Viserio\Support\Arr;
 
@@ -198,8 +196,8 @@ class CookieJar implements JarContract
     /**
      * Creates a Cookie instance from a Set-Cookie header value.
      *
-     * @param string $request
      *
+     * @param string[] $string
      * @return \Viserio\Contracts\Cookie\Cookie
      */
     protected function fromStringCookie($string)
