@@ -238,6 +238,17 @@ abstract class Command extends BaseCommand implements CompletionAwareInterface
         return $this->input->getOption($key);
     }
 
+    /**
+     * Check if a command option is set.
+     *
+     * @param  string  $key
+     * @return string|array
+     */
+    public function hasOption($key)
+    {
+        return $this->input->hasParameterOption('--' . $key);
+    }
+
     public function completeOptionValues($optionName, CompletionContext $context)
     {
         //
