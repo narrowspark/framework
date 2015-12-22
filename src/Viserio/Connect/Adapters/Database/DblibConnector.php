@@ -1,8 +1,6 @@
 <?php
 namespace Viserio\Connect\Adapters\Database;
 
-use InvalidArgumentException;
-
 class DblibConnector extends AbstractDatabaseConnector
 {
     /**

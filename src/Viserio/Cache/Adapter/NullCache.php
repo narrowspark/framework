@@ -69,10 +69,8 @@ class NullCache extends TaggableStore implements AdapterContract
     /**
      * Store multiple items in the cache for a set number of minutes.
      *
-     * @param array $values array of key => value pairs
+     * @param array $values  array of key => value pairs
      * @param int   $minutes
-     *
-     * @return void
      */
     public function putMultiple(array $values, $minutes)
     {

@@ -36,7 +36,6 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(3, $result);
     }
 
-
     public function testLastWithCallbackAndDefault()
     {
         $data = new Collection(['foo', 'bar']);
@@ -106,19 +105,19 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $collection = new Collection(null);
         $this->assertSame([], $collection->all());
 
-        $collection = new Collection;
+        $collection = new Collection();
         $this->assertSame([], $collection->all());
     }
 
     public function testGetArrayableItems()
     {
-        $collection = new Collection;
+        $collection = new Collection();
 
         $class  = new \ReflectionClass($collection);
         $method = $class->getMethod('getArrayableItems');
         $method->setAccessible(true);
 
-        $items = new TestArrayableObject;
+        $items = new TestArrayableObject();
         $array = $method->invokeArgs($collection, [$items]);
         $this->assertSame(['foo' => 'bar'], $array);
 
@@ -240,7 +239,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             1 => ['id' => 1, 'first' => 'Narrowspark', 'last' => 'Sparkel'],
             3 => ['id' => 3, 'first' => 'Rising', 'last' => 'Sparkel'],
             5 => ['id' => 5, 'first' => 'Narrowspark', 'last' => 'Swift'],
-        ], $c->unique(function ($item) { return $item['first'].$item['last']; })->all());
+        ], $c->unique(function ($item) { return $item['first'] . $item['last']; })->all());
     }
 
     public function testMergeCollection()
@@ -544,7 +543,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     public function testMap()
     {
         $data = new Collection(['first' => 'narrowspark', 'last' => 'sparkel']);
-        $data = $data->map(function ($item, $key) { return $key.'-'.strrev($item); });
+        $data = $data->map(function ($item, $key) { return $key . '-' . strrev($item); });
         $this->assertEquals(['first' => 'first-rolyat', 'last' => 'last-llewto'], $data->all());
     }
 
@@ -552,7 +551,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     {
         $data = new Collection(['narrowspark', 'colin', 'shawn']);
         $data = new Collection(['first' => 'narrowspark', 'last' => 'sparkel']);
-        $data->transform(function ($item, $key) { return $key.'-'.strrev($item); });
+        $data->transform(function ($item, $key) { return $key . '-' . strrev($item); });
         $this->assertEquals(['first' => 'first-rolyat', 'last' => 'last-llewto'], $data->all());
     }
 
@@ -807,7 +806,7 @@ class TestAccessorEloquentTestStub
 
     public function __get($attribute)
     {
-        $accessor = 'get'.lcfirst($attribute).'Attribute';
+        $accessor = 'get' . lcfirst($attribute) . 'Attribute';
         if (method_exists($this, $accessor)) {
             return $this->$accessor();
         }
@@ -817,7 +816,7 @@ class TestAccessorEloquentTestStub
 
     public function __isset($attribute)
     {
-        $accessor = 'get'.lcfirst($attribute).'Attribute';
+        $accessor = 'get' . lcfirst($attribute) . 'Attribute';
 
         if (method_exists($this, $accessor)) {
             return !is_null($this->$accessor());

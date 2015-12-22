@@ -27,7 +27,7 @@ class MongoConnectorTest extends \PHPUnit_Framework_TestCase
         $options = [
             'replicaSet' => false,
             'persist'    => false,
-            'connect'    => false
+            'connect'    => false,
         ];
 
         $connector = new MongoConnector();
@@ -43,7 +43,7 @@ class MongoConnectorTest extends \PHPUnit_Framework_TestCase
         $config = [
             'options' => [
                 'connect' => true,
-            ]
+            ],
         ];
 
         $this->assertTrue(is_array($connector->getOptions($config)));
@@ -57,7 +57,7 @@ class MongoConnectorTest extends \PHPUnit_Framework_TestCase
             'port'   => '27017',
             'options' => [
                 'connect' => true,
-            ]
+            ],
         ];
         $connection = Mock::mock('stdClass');
 
@@ -87,7 +87,7 @@ class MongoConnectorTest extends \PHPUnit_Framework_TestCase
             'password' => 'test',
             'options' => [
                 'connect' => true,
-            ]
+            ],
         ];
         $connection = Mock::mock('stdClass');
 

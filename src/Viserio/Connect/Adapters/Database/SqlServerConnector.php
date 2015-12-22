@@ -80,7 +80,7 @@ class SqlServerConnector extends AbstractDatabaseConnector
             return sprintf('%s=%s', $key, $arguments[$key]);
         }, array_keys($arguments));
 
-        return $driver.':'.implode(';', $connectStringOptions);
+        return $driver . ':' . implode(';', $connectStringOptions);
     }
 
     /**
@@ -89,7 +89,7 @@ class SqlServerConnector extends AbstractDatabaseConnector
     private function buildHostString(array $config, $separator)
     {
         if (isset($config['port'])) {
-            return $config['host'].$separator.$config['port'];
+            return $config['host'] . $separator . $config['port'];
         }
 
         return $config['host'];

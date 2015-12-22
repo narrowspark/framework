@@ -32,7 +32,7 @@ class Str extends StaticStringy
     {
         $quoted = preg_quote($cap, '/');
 
-        return preg_replace('/(?:'.$quoted.')+$/', '', $value).$cap;
+        return preg_replace('/(?:' . $quoted . ')+$/', '', $value) . $cap;
     }
 
     /**
@@ -54,9 +54,9 @@ class Str extends StaticStringy
         // Asterisks are translated into zero-or-more regular expression wildcards
         // to make it convenient to check if the strings starts with the given
         // pattern such as "library/*", making any string check convenient.
-        $pattern = str_replace('\*', '.*', $pattern).'\z';
+        $pattern = str_replace('\*', '.*', $pattern) . '\z';
 
-        return (bool) preg_match('#^'.$pattern.'#', $value);
+        return (bool) preg_match('#^' . $pattern . '#', $value);
     }
 
     /**
@@ -83,12 +83,12 @@ class Str extends StaticStringy
                 $spacePos = strrpos($value, ' ');
 
                 if ($spacePos !== false) {
-                    return rtrim(mb_substr($value, 0, $spacePos, 'UTF-8')).$end;
+                    return rtrim(mb_substr($value, 0, $spacePos, 'UTF-8')) . $end;
                 }
             }
         }
 
-        return rtrim(mb_substr($value, 0, $limit, 'UTF-8')).$end;
+        return rtrim(mb_substr($value, 0, $limit, 'UTF-8')) . $end;
     }
 
     /**
@@ -102,13 +102,13 @@ class Str extends StaticStringy
      */
     public static function words($value, $words = 100, $end = '…')
     {
-        preg_match('/^\s*+(?:\S++\s*+){1,'.$words.'}/u', $value, $matches);
+        preg_match('/^\s*+(?:\S++\s*+){1,' . $words . '}/u', $value, $matches);
 
         if (!isset($matches[0]) || strlen($value) === strlen($matches[0])) {
             return $value;
         }
 
-        return rtrim($matches[0]).$end;
+        return rtrim($matches[0]) . $end;
     }
 
     /**
@@ -158,7 +158,7 @@ class Str extends StaticStringy
                 break;
         }
 
-        $factory   = new RandomLib;
+        $factory   = new RandomLib();
         $generator = $factory->getMediumStrengthGenerator();
 
         return $generator->generateString($length, $pool);
@@ -172,8 +172,9 @@ class Str extends StaticStringy
      *
      * This method is adapted from Symfony\Component\Security\Core\Util\StringUtils.
      *
-     * @param  string  $knownString
-     * @param  string  $userInput
+     * @param string $knownString
+     * @param string $userInput
+     *
      * @return bool
      */
     public static function equals($knownString, $userInput)
@@ -231,17 +232,17 @@ class Str extends StaticStringy
      */
     public static function snake($value, $delimiter = '_')
     {
-        $key = $value.$delimiter;
+        $key = $value . $delimiter;
 
         if (isset(static::$snakeCache[$key])) {
             return static::$snakeCache[$key];
         }
 
         if (!ctype_lower($value)) {
-            $value = strtolower(preg_replace('/(.)(?=[A-Z])/', '$1'.$delimiter, $value));
+            $value = strtolower(preg_replace('/(.)(?=[A-Z])/', '$1' . $delimiter, $value));
         }
 
-        $value = strtolower(preg_replace('/([^'.preg_quote($delimiter).'])(?=[A-Z])/', '$1'.$delimiter, $value));
+        $value = strtolower(preg_replace('/([^' . preg_quote($delimiter) . '])(?=[A-Z])/', '$1' . $delimiter, $value));
 
         return static::$snakeCache[$key] = $value;
     }

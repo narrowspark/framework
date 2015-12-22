@@ -162,7 +162,6 @@ class MailMailerTest extends \PHPUnit_Framework_TestCase
         $this->setSwiftMailer($mailermailer);
     }
 
-
     public function getTransport()
     {
         $transport = Mock::mock('\Swift_Transport');

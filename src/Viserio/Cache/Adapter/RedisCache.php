@@ -66,7 +66,7 @@ class RedisCache extends TaggableStore implements AdapterContract
         try {
             $client->connect();
         } catch (ConnectionException $exception) {
-            throw new \RuntimeException("Couldn't connected to Redis: ".$exception->getMessage());
+            throw new \RuntimeException("Couldn't connected to Redis: " . $exception->getMessage());
         }
 
         return $client;
@@ -106,7 +106,7 @@ class RedisCache extends TaggableStore implements AdapterContract
     {
         $this->redis = $redis;
         $this->connection = $connection;
-        $this->prefix = strlen($prefix) > 0 ? $prefix.':' : '';
+        $this->prefix = strlen($prefix) > 0 ? $prefix . ':' : '';
     }
 
     /**
@@ -118,7 +118,7 @@ class RedisCache extends TaggableStore implements AdapterContract
      */
     public function get($key)
     {
-        $value = $this->connection()->get($this->prefix.$key);
+        $value = $this->connection()->get($this->prefix . $key);
         if ($value !== null) {
             return is_numeric($value) ? $value : unserialize($value);
         }
@@ -140,7 +140,7 @@ class RedisCache extends TaggableStore implements AdapterContract
         $prefixedKeys = [];
 
         foreach ($keys as $keyToPrefix) {
-            $prefixedKeys[] = $this->prefix.$keyToPrefix;
+            $prefixedKeys[] = $this->prefix . $keyToPrefix;
         }
 
         $cacheValues = $this->connection()->mget($prefixedKeys);
@@ -166,15 +166,14 @@ class RedisCache extends TaggableStore implements AdapterContract
 
         $value = is_numeric($value) ? $value : serialize($value);
 
-        $this->connection()->setex($this->prefix.$key, $minutes * 60, $value);
+        $this->connection()->setex($this->prefix . $key, $minutes * 60, $value);
     }
 
     /**
      * Store multiple items in the cache for a set number of minutes.
      *
-     * @param array $values array of key => value pairs
+     * @param array $values  array of key => value pairs
      * @param int   $minutes
-     * @return void
      */
     public function putMultiple(array $values, $minutes)
     {
@@ -197,7 +196,7 @@ class RedisCache extends TaggableStore implements AdapterContract
      */
     public function increment($key, $value = 1)
     {
-        return $this->connection()->incrby($this->prefix.$key, $value);
+        return $this->connection()->incrby($this->prefix . $key, $value);
     }
 
     /**
@@ -210,7 +209,7 @@ class RedisCache extends TaggableStore implements AdapterContract
      */
     public function decrement($key, $value = 1)
     {
-        return $this->connection()->decrby($this->prefix.$key, $value);
+        return $this->connection()->decrby($this->prefix . $key, $value);
     }
 
     /**
@@ -223,7 +222,7 @@ class RedisCache extends TaggableStore implements AdapterContract
     {
         $value = is_numeric($value) ? $value : serialize($value);
 
-        $this->connection()->put($this->prefix.$key, $value);
+        $this->connection()->put($this->prefix . $key, $value);
     }
 
     /**
@@ -235,7 +234,7 @@ class RedisCache extends TaggableStore implements AdapterContract
      */
     public function forget($key)
     {
-        return (bool) $this->connection()->del($this->prefix.$key);
+        return (bool) $this->connection()->del($this->prefix . $key);
     }
 
     /**

@@ -48,15 +48,15 @@ class OdbcConnectorTest extends \PHPUnit_Framework_TestCase
                 [
                     'DRIVER' => '{SQL Server}',
                     'SERVER' => 'foo',
-                    'DATABASE' => 'bar'
-                ]
+                    'DATABASE' => 'bar',
+                ],
             ],
             [
                 'odbc:server=foo;DATABASE=bar',
                 [
                     'server' => 'foo',
-                    'DATABASE' => 'bar'
-                ]
+                    'DATABASE' => 'bar',
+                ],
             ],
         ];
     }

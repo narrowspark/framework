@@ -71,7 +71,7 @@ trait ReplacementTrait
 
         foreach ($replacements as $countame => $value) {
             if ($value !== false) {
-                $message = preg_replace('~%'.$countame.'%~', $value, $message);
+                $message = preg_replace('~%' . $countame . '%~', $value, $message);
             }
         }
 

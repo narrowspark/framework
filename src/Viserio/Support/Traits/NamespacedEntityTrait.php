@@ -17,8 +17,6 @@ trait NamespacedEntityTrait
      * Sets the entity namespace.
      *
      * @param string $namespace
-     *
-     * @return void
      */
     public static function setEntityNamespace($namespace)
     {

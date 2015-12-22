@@ -46,7 +46,7 @@ class OpenSsl implements AdapterContract
     /**
      * A "sliding" Initialization Vector.
      *
-     * @var String
+     * @var string
      */
     protected $encryptIV;
 
@@ -89,7 +89,7 @@ class OpenSsl implements AdapterContract
     public function encrypt($data)
     {
         $ivLength = openssl_cipher_iv_length($this
-        ->cipher.'-'.$this->mode);
+        ->cipher . '-' . $this->mode);
         $this->encryptIV = openssl_random_pseudo_bytes($ivLength);
 
         // Prepeare the array with data.
@@ -141,7 +141,7 @@ class OpenSsl implements AdapterContract
         $cdata = base64_encode($this->doEncrypt($serializedData, $this->encryptIV));
         // The message authentication code. Used to make sure the
         // message is valid when decrypted.
-        $mac = base64_encode($this->hash->make($cdata.$this->key, 'pbkdf2'));
+        $mac = base64_encode($this->hash->make($cdata . $this->key, 'pbkdf2'));
 
         return compact('padding', 'algo', 'mode', 'iv', 'cdata', 'mac');
     }
@@ -156,7 +156,7 @@ class OpenSsl implements AdapterContract
      */
     protected function doEncrypt($value, $iv)
     {
-        return openssl_encrypt($value, $this->cipher.'-'.$this->mode, $this->key, OPENSSL_RAW_DATA, $iv);
+        return openssl_encrypt($value, $this->cipher . '-' . $this->mode, $this->key, OPENSSL_RAW_DATA, $iv);
     }
 
     /**
@@ -169,7 +169,7 @@ class OpenSsl implements AdapterContract
      */
     protected function doDecrypt($value, $iv)
     {
-        return openssl_decrypt($value, $this->cipher.'-'.$this->mode, $this->key, OPENSSL_RAW_DATA, $iv);
+        return openssl_decrypt($value, $this->cipher . '-' . $this->mode, $this->key, OPENSSL_RAW_DATA, $iv);
     }
 
     /**
@@ -205,7 +205,7 @@ class OpenSsl implements AdapterContract
         $pad = ord($data[(strlen($data)) - 1]);
 
         // Check that what we have at the end of the string really is padding, and if it is remove it.
-        if ($pad && $pad < $block && preg_match('/'.chr($pad).'{'.$pad.'}$/', $data)) {
+        if ($pad && $pad < $block && preg_match('/' . chr($pad) . '{' . $pad . '}$/', $data)) {
             return substr($data, 0, -$pad);
         }
 

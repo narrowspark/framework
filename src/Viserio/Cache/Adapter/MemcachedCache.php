@@ -134,7 +134,7 @@ class MemcachedCache extends TaggableStore implements AdapterContract
     public function __construct($memcached, $prefix = '')
     {
         $this->memcached = $memcached;
-        $this->prefix = strlen($prefix) > 0 ? $prefix.':' : '';
+        $this->prefix = strlen($prefix) > 0 ? $prefix . ':' : '';
     }
 
     /**
@@ -146,7 +146,7 @@ class MemcachedCache extends TaggableStore implements AdapterContract
      */
     public function get($key)
     {
-        $value = $this->memcached->get($this->prefix.$key);
+        $value = $this->memcached->get($this->prefix . $key);
 
         if ($this->memcached->getResultCode() === 0) {
             return $value;
@@ -169,7 +169,7 @@ class MemcachedCache extends TaggableStore implements AdapterContract
         $prefixedKeys = [];
 
         foreach ($keys as $keyToPrefix) {
-            $prefixedKeys[] = $this->prefix.$keyToPrefix;
+            $prefixedKeys[] = $this->prefix . $keyToPrefix;
         }
 
         $cas = null;
@@ -197,7 +197,7 @@ class MemcachedCache extends TaggableStore implements AdapterContract
     {
         $this->minutes[$key] = $minutes;
 
-        $this->memcached->set($this->prefix.$key, $value, $minutes * 60);
+        $this->memcached->set($this->prefix . $key, $value, $minutes * 60);
     }
 
     /**
@@ -211,7 +211,7 @@ class MemcachedCache extends TaggableStore implements AdapterContract
         $formattedKeyValues = [];
 
         foreach ($values as $keyToPrefix => $singleValue) {
-            $formattedKeyValues[$this->prefix.$keyToPrefix] = $singleValue;
+            $formattedKeyValues[$this->prefix . $keyToPrefix] = $singleValue;
         }
 
         $this->memcached->setMulti($formattedKeyValues, $minutes * 60);
@@ -227,7 +227,7 @@ class MemcachedCache extends TaggableStore implements AdapterContract
      */
     public function increment($key, $value = 1)
     {
-        return $this->memcached->increment($this->prefix.$key, $value);
+        return $this->memcached->increment($this->prefix . $key, $value);
     }
 
     /**
@@ -240,7 +240,7 @@ class MemcachedCache extends TaggableStore implements AdapterContract
      */
     public function decrement($key, $value = 1)
     {
-        return $this->memcached->decrement($this->prefix.$key, $value);
+        return $this->memcached->decrement($this->prefix . $key, $value);
     }
 
     /**
@@ -263,7 +263,7 @@ class MemcachedCache extends TaggableStore implements AdapterContract
      */
     public function forget($key)
     {
-        $this->memcached->delete($this->prefix.$key);
+        $this->memcached->delete($this->prefix . $key);
     }
 
     /**

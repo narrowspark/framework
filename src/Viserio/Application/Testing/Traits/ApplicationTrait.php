@@ -69,7 +69,7 @@ trait ApplicationTrait
             $path = $selected->getFileName();
 
             // return the filepath one up from the folder the selected class is saved in
-            return realpath(dirname($path).'/../bootstrap/paths.php');
+            return realpath(dirname($path) . '/../bootstrap/paths.php');
         }
 
         return $this->path;

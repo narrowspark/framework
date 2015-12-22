@@ -13,8 +13,8 @@ class MemcachedConnector implements ConnectorContract
      * @param array $config
      *
      * @throws \RuntimeException
-     * @return \Memcached
      *
+     * @return \Memcached
      */
     public function connect(array $config)
     {

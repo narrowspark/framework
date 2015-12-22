@@ -37,7 +37,7 @@ class ConnectionFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $config = Mock::mock('Viserio\Contracts\Config\Manager');
         $config->shouldReceive('get')->once()->with('predis', [])->andReturn([
-            'servers' => 'localhost'
+            'servers' => 'localhost',
         ]);
         $factory = new ConnectionFactory($config);
 
@@ -49,7 +49,7 @@ class ConnectionFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $config = Mock::mock('Viserio\Contracts\Config\Manager');
         $config->shouldReceive('get')->once()->with('predis2', [])->andReturn([
-            'servers' => 'localhost'
+            'servers' => 'localhost',
         ]);
         $factory = new ConnectionFactory($config);
         $factory->extend('predis2', new PredisConnector());

@@ -23,7 +23,7 @@ class SQLiteConnectorTest extends \PHPUnit_Framework_TestCase
      */
     public function testSQLiteDatabaseNotFound()
     {
-        $config = ['database' => __DIR__.'notfound.db'];
+        $config = ['database' => __DIR__ . 'notfound.db'];
         $connection = $this->getMock('stdClass');
 
         $connector = $this->getMock(
@@ -36,7 +36,7 @@ class SQLiteConnectorTest extends \PHPUnit_Framework_TestCase
 
     public function testSQLiteFileDatabasesMayBeConnectedTo()
     {
-        $dsn = 'sqlite:'.__DIR__;
+        $dsn = 'sqlite:' . __DIR__;
         $config = ['database' => __DIR__];
         $connection = Mock::mock('stdClass');
 

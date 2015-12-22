@@ -15,7 +15,6 @@ class OdbcConnector extends AbstractDatabaseConnector
         );
     }
 
-
     /**
      * Get the DSN string for a Odbc connection.
      *
@@ -29,6 +28,6 @@ class OdbcConnector extends AbstractDatabaseConnector
             return sprintf('%s=%s', $key, $config[$key]);
         }, array_keys($config));
 
-        return 'odbc:'.implode(';', $options);
+        return 'odbc:' . implode(';', $options);
     }
 }

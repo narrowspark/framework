@@ -54,7 +54,7 @@ class PostgreSQLConnectorTest extends \PHPUnit_Framework_TestCase
             'database' => 'bar',
             'port' => 111,
             'charset' => 'utf8',
-            'timezone' => 'Europe/London'
+            'timezone' => 'Europe/London',
         ];
         $connection = Mock::mock('stdClass');
 
@@ -85,7 +85,7 @@ class PostgreSQLConnectorTest extends \PHPUnit_Framework_TestCase
             'database' => 'bar',
             'port' => 111,
             'charset' => 'utf8',
-            'sslmode' => 'verify-ca'
+            'sslmode' => 'verify-ca',
         ];
 
         $connection = Mock::mock('stdClass');
@@ -140,7 +140,7 @@ class PostgreSQLConnectorTest extends \PHPUnit_Framework_TestCase
             'server' => 'foo',
             'database' => 'bar',
             'schema' => ['public', 'user'],
-            'charset' => 'utf8'
+            'charset' => 'utf8',
         ];
         $connection = Mock::mock('stdClass');
 
@@ -177,7 +177,7 @@ class PostgreSQLConnectorTest extends \PHPUnit_Framework_TestCase
             'server' => 'foo',
             'database' => 'bar',
             'charset' => 'utf8',
-            'application_name' => 'Narrowspark'
+            'application_name' => 'Narrowspark',
         ];
         $connection = Mock::mock('stdClass');
 

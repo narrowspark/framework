@@ -49,7 +49,7 @@ class Ini implements ParserContract
             return $data;
         }
 
-        throw new LoadingException('Unable to load config '.$filename);
+        throw new LoadingException('Unable to load config ' . $filename);
     }
 
     /**
@@ -94,12 +94,12 @@ class Ini implements ParserContract
                 //merge all the sections into one array...
                 $sec = array_merge($parent, $k);
                 //add section information to the output
-                $out .= '['.implode('.', $sec).']'.PHP_EOL;
+                $out .= '[' . implode('.', $sec) . ']' . PHP_EOL;
                 //recursively traverse deeper
                 $out .= $this->iniFormat($v, $sec);
             } else {
                 //plain key->value case
-                $out .= sprintf('%s=%s', $k, $v).PHP_EOL;
+                $out .= sprintf('%s=%s', $k, $v) . PHP_EOL;
             }
         }
 

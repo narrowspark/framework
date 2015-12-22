@@ -31,10 +31,10 @@ trait MockerContainerTrait
         }
 
         if (!array_key_exists($id, $this->mockedServices)) {
-            $this->mockedServices['mock::'.$id] = call_user_func_array(['Mockery', 'mock'], $arguments);
+            $this->mockedServices['mock::' . $id] = call_user_func_array(['Mockery', 'mock'], $arguments);
         }
 
-        return $this->mockedServices['mock::'.$id];
+        return $this->mockedServices['mock::' . $id];
     }
 
     /**
@@ -44,7 +44,7 @@ trait MockerContainerTrait
      */
     public function unmock($id)
     {
-        unset($this->mockedServices['mock::'.$id]);
+        unset($this->mockedServices['mock::' . $id]);
     }
 
     /**

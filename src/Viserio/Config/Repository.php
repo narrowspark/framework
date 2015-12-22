@@ -231,7 +231,7 @@ class Repository implements RepositoryContract
             $next = array_shift($args);
 
             foreach ($next as $k => $v) {
-                if (is_integer($k)) {
+                if (is_int($k)) {
                     if (isset($merged[$k])) {
                         $merged[] = $v;
                     } else {

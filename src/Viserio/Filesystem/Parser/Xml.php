@@ -50,7 +50,7 @@ class Xml implements ParserContract
             return $data;
         }
 
-        throw new LoadingException('Unable to load config '.$filename);
+        throw new LoadingException('Unable to load config ' . $filename);
     }
 
     /**

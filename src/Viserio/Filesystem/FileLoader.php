@@ -78,7 +78,7 @@ class FileLoader implements LoaderContract
         $this->exists($file, $group, $environment, $namespace);
 
         // Get checked data file
-        $dataFile = $this->exists[preg_replace('[/]', '', $namespace.$group.$file)];
+        $dataFile = $this->exists[preg_replace('[/]', '', $namespace . $group . $file)];
 
         // Set the right Parser for data
         $parser = $this->parser($this->files->extension($file), $dataFile);
@@ -92,11 +92,11 @@ class FileLoader implements LoaderContract
         $env = sprintf('/%s/%s', $environment, $file);
 
         // Get checked env data file
-        $envdataFile = $this->exists[preg_replace('[/]', '', $namespace.$environment.$group.$file)];
+        $envdataFile = $this->exists[preg_replace('[/]', '', $namespace . $environment . $group . $file)];
 
         if ($this->files->exists($envdataFile)) {
             // Set the right parser for environment data
-            $envParser = $this->parser($this->files->extension($file), $path.$env);
+            $envParser = $this->parser($this->files->extension($file), $path . $env);
 
             // Return data array
             $envItems = $envParser->load($envdataFile, $group);
@@ -120,10 +120,10 @@ class FileLoader implements LoaderContract
      */
     public function exists($file, $group = null, $environment = null, $namespace = null)
     {
-        $envKey = $namespace.$environment.$group.$file;
+        $envKey = $namespace . $environment . $group . $file;
         $envKey = preg_replace('[/]', '', $envKey);
 
-        $key = $namespace.$group.$file;
+        $key = $namespace . $group . $file;
         $key = preg_replace('[/]', '', $key);
 
         // We'll first check to see if we have determined if this namespace and
@@ -139,11 +139,11 @@ class FileLoader implements LoaderContract
         // To check if a group exists, we will simply get the path based on the
         // namespace, and then check to see if this files exists within that
         // namespace. False is returned if no path exists for a namespace.
-        if ($path.$file === null) {
+        if ($path . $file === null) {
             return $this->exists[$key] = false;
         }
 
-        if ($path.$environment.$file === null) {
+        if ($path . $environment . $file === null) {
             $this->exists[$envKey] = false;
         }
 
@@ -188,7 +188,7 @@ class FileLoader implements LoaderContract
             $items = $this->dataMerge(
                 $items,
                 $this->files->get(
-                    $this->exists[preg_replace('[/]', '', $namespace.$packages.$env.$group.$file)]
+                    $this->exists[preg_replace('[/]', '', $namespace . $packages . $env . $group . $file)]
                 )
             );
         }
@@ -221,7 +221,7 @@ class FileLoader implements LoaderContract
         $file = sprintf('packages/%s/%s/%s/%s', $package, $env, $group, $file);
         $file = preg_replace('[//]', '/', $file);
 
-        return $this->getPath($namespace).$file;
+        return $this->getPath($namespace) . $file;
     }
 
     /**

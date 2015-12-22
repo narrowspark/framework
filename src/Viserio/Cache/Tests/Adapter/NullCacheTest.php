@@ -14,7 +14,7 @@ class NullCacheTest extends \PHPUnit_Framework_TestCase
 
     public function testGetMultipleReturnsMultipleNulls()
     {
-        $store = new NullCache;
+        $store = new NullCache();
 
         $this->assertEquals([
             'foo'   => null,

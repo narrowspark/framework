@@ -45,7 +45,7 @@ class FileCache implements AdapterContract
      * Create a new file cache store instance.
      *
      * @param \Viserio\Filesystem\Filesystem $files
-     * @param string                           $directory
+     * @param string                         $directory
      */
     public function __construct(Filesystem $files, $directory)
     {
@@ -118,7 +118,7 @@ class FileCache implements AdapterContract
     {
         $this->minutes[$key] = $minutes;
 
-        $value = $this->expiration($minutes).serialize($value);
+        $value = $this->expiration($minutes) . serialize($value);
 
         $this->createCacheDirectory($path = $this->path($key));
 
@@ -225,7 +225,7 @@ class FileCache implements AdapterContract
     {
         $parts = array_slice(str_split($hash = md5($key), 2), 0, 2);
 
-        return $this->directory.'/'.implode('/', $parts).'/'.$hash;
+        return $this->directory . '/' . implode('/', $parts) . '/' . $hash;
     }
 
     /**

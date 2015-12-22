@@ -255,6 +255,6 @@ class Definition
      */
     protected function absoluteClassName($className)
     {
-        return substr($className, 0, 1) === '\\' ? $className : '\\'.$className;
+        return substr($className, 0, 1) === '\\' ? $className : '\\' . $className;
     }
 }

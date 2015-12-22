@@ -20,14 +20,14 @@
     "require": {
         "php"                                : ">=5.6.4",
         "container-interop/container-interop": "~1.0",
-        "danielstjules/stringy"              : "~1.9",
+        "danielstjules/stringy"              : "~2.2",
         "ext-mbstring"                       : "*",
         "ircmaxell/random-lib"               : "~1.1",
         "viserio/contracts"                  : "self.version"
     },
     "require-dev": {
         "cekurte/environment"                : "~0.1.2",
-        "fabpot/php-cs-fixer"                : "~1.10.1",
+        "fabpot/php-cs-fixer"                : "dev-master",
         "mockery/mockery"                    : "~0.9.3",
         "phpunit/phpunit"                    : "~5.0.6"
     },

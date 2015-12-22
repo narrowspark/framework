@@ -23,6 +23,6 @@ class PlainDisplayer implements Adapter
 
         $headers = $exception instanceof HttpExceptionInterface ? $exception->getHeaders() : [];
 
-        return new Response(file_get_contents(__DIR__.'/../Resources/plain.html'), $status, $headers);
+        return new Response(file_get_contents(__DIR__ . '/../Resources/plain.html'), $status, $headers);
     }
 }

@@ -239,9 +239,9 @@ class Connection implements ConnectionContract
      * Handle a query exception that occurred during query execution.
      *
      * @param \Viserio\Database\Exception\ConnectException $exception
-     * @param string                                         $query
+     * @param string                                       $query
      * @param $bindings
-     * @param \Closure                                       $callback
+     * @param \Closure $callback
      *
      * @return mixed
      */
@@ -369,7 +369,7 @@ class Connection implements ConnectionContract
         if ($this->transactions === 1) {
             $this->pdo->beginTransaction();
         } elseif ($this->transactions > 1) {
-            $this->pdo->exec('SAVEPOINT trans'.$this->transactions);
+            $this->pdo->exec('SAVEPOINT trans' . $this->transactions);
         }
     }
 
@@ -395,7 +395,7 @@ class Connection implements ConnectionContract
 
             $this->pdo->rollBack();
         } elseif ($this->transactions > 1) {
-            $this->pdo->exec('ROLLBACK TO SAVEPOINT trans'.$this->transactions);
+            $this->pdo->exec('ROLLBACK TO SAVEPOINT trans' . $this->transactions);
         }
 
         --$this->transactions;
@@ -633,7 +633,7 @@ class Connection implements ConnectionContract
 
         if ($time === null) {
             $date = new \DateTime();
-            $query = $date->format('Y-m-d H:i:s:u').$query;
+            $query = $date->format('Y-m-d H:i:s:u') . $query;
         }
 
         $this->queryLog[] = compact('query', 'bindings', 'time');
@@ -809,7 +809,7 @@ class Connection implements ConnectionContract
         $output = array_merge($pdoInfo, $output);
 
         foreach ($output as $key => $value) {
-            $output[$key] = $this->pdo->getAttribute(constant('PDO::ATTR_'.$value));
+            $output[$key] = $this->pdo->getAttribute(constant('PDO::ATTR_' . $value));
         }
 
         return $output;

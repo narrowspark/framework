@@ -203,7 +203,7 @@ abstract class Command extends BaseCommand implements CompletionAwareInterface
         $instance = $this->getApplication()->find($command);
         $arguments['command'] = $command;
 
-        return $instance->run(new ArrayInput($arguments), new NullOutput);
+        return $instance->run(new ArrayInput($arguments), new NullOutput());
     }
 
     /**
@@ -364,9 +364,9 @@ abstract class Command extends BaseCommand implements CompletionAwareInterface
     /**
      * Write a string as standard output.
      *
-     * @param string           $string
-     * @param string|null      $style The output style of the string
-     * @param null|int|string  $verbosityLevel
+     * @param string          $string
+     * @param string|null     $style          The output style of the string
+     * @param null|int|string $verbosityLevel
      */
     public function line($string, $style = null, $verbosityLevel = null)
     {
@@ -483,8 +483,6 @@ abstract class Command extends BaseCommand implements CompletionAwareInterface
 
     /**
      * Specify the arguments and options on the command.
-     *
-     * @return void
      */
     protected function specifyParameters()
     {

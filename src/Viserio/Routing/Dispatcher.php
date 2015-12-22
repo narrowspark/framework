@@ -104,9 +104,9 @@ class Dispatcher extends GroupCountBasedDispatcher implements RouteStrategyContr
     /**
      * Handle dispatching of a found route.
      *
-     * @param string|\Closure                                 $handler
+     * @param string|\Closure                               $handler
      * @param int|\Viserio\Contracts\Routing\CustomStrategy $strategy
-     * @param array                                           $vars
+     * @param array                                         $vars
      *
      * @throws \RuntimeException
      *
@@ -121,7 +121,7 @@ class Dispatcher extends GroupCountBasedDispatcher implements RouteStrategyContr
         $controller = $this->isController($handler);
 
         // handle getting of response based on strategy
-        if (is_integer($strategy)) {
+        if (is_int($strategy)) {
             return $this->getResponseOnStrategy($controller, $strategy, $vars);
         }
 
@@ -170,8 +170,8 @@ class Dispatcher extends GroupCountBasedDispatcher implements RouteStrategyContr
      * Handle getting of response based on strategy.
      *
      * @param \Viserio\Contracts\Http\Response $controller
-     * @param int                                $strategy
-     * @param array                              $vars
+     * @param int                              $strategy
+     * @param array                            $vars
      *
      * @return ResponseContract
      */

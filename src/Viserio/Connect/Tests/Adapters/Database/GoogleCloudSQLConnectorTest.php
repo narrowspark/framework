@@ -29,7 +29,7 @@ class GoogleCloudSQLConnectorTest extends \PHPUnit_Framework_TestCase
             'database' => '',
             'username' => '',
             'password' => '',
-            'charset'  => 'utf-8'
+            'charset'  => 'utf-8',
         ];
 
         $this->assertSame('PDO', $connector->connect($config));

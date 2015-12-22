@@ -115,7 +115,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
         $container = $this->container;
         $container['foo'] = 'foo';
         $container->extend('foo', function ($old, $container) {
-            return $old.'bar';
+            return $old . 'bar';
         });
 
         $this->assertEquals('foobar', $container->make('foo'));
@@ -142,11 +142,11 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
         $container['foo'] = 'foo';
 
         $container->extend('foo', function ($old, $container) {
-            return $old.'bar';
+            return $old . 'bar';
         });
 
         $container->extend('foo', function ($old, $container) {
-            return $old.'baz';
+            return $old . 'baz';
         });
 
         $this->assertEquals('foobarbaz', $container->make('foo'));
@@ -174,7 +174,7 @@ return $obj; });
     {
         $container = $this->container;
         $container->extend('foo', function ($old, $container) {
-            return $old.'bar';
+            return $old . 'bar';
         });
         $container['foo'] = 'foo';
         $this->assertEquals('foobar', $container->make('foo'));
@@ -235,21 +235,21 @@ return $obj; });
     }
 
     /**
-      * Methods should using contextual binding
-      */
+     * Methods should using contextual binding
+     */
     public function testContextualBindingOnMethods()
     {
-        $container = new Container;
-        $container->when("ContainerTestInterfaceStub")->needs("IContainerContractStub")->give("ContainerImplementationStub");
+        $container = new Container();
+        $container->when('ContainerTestInterfaceStub')->needs('IContainerContractStub')->give('ContainerImplementationStub');
 
          // Works if using constructor
         $constructor = $container->make('ContainerTestInterfaceStub');
         $result = $constructor->getStub();
-        $this->assertInstanceOf("ContainerImplementationStub", $result);
+        $this->assertInstanceOf('ContainerImplementationStub', $result);
 
          // Doesn't work if using methods
         $result = $container->call('ContainerTestInterfaceStub@go');
-        $this->assertInstanceOf("ContainerImplementationStub", $result);
+        $this->assertInstanceOf('ContainerImplementationStub', $result);
     }
 }
 

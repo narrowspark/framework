@@ -50,7 +50,7 @@ trait ServiceProviderTrait
     {
         if ((!is_string($provider)) && (!$provider instanceof ServiceProvider)) {
             throw new \Exception(
-                'When registering a service provider, you must provide either and instance of '.
+                'When registering a service provider, you must provide either and instance of ' .
                 '[\Viserio\Container\ServiceProvider] or a fully qualified class name'
             );
         }

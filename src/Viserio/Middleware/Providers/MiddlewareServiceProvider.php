@@ -24,7 +24,7 @@ class MiddlewareServiceProvider extends ServiceProvider
     public function provides()
     {
         return [
-            Dispatcher::class
+            Dispatcher::class,
         ];
     }
 }

@@ -77,7 +77,7 @@ class Mailer implements MailerContract
      * Create a new Mailer instance.
      *
      * @param \Swift_Mailer                                               $swift
-     * @param \Viserio\Contracts\View\Factory                           $view
+     * @param \Viserio\Contracts\View\Factory                             $view
      * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $events
      */
     public function __construct(
@@ -114,9 +114,8 @@ class Mailer implements MailerContract
     /**
      * Set the global to address and name.
      *
-     * @param  string  $address
-     * @param  string|null  $name
-     * @return void
+     * @param string      $address
+     * @param string|null $name
      */
     public function alwaysTo($address, $name = null)
     {
@@ -323,10 +322,10 @@ class Mailer implements MailerContract
      * Add the content to a given message.
      *
      * @param \Viserio\Mail\Message $message
-     * @param string                  $view
-     * @param string                  $plain
-     * @param string                  $raw
-     * @param array                   $data
+     * @param string                $view
+     * @param string                $plain
+     * @param string                $raw
+     * @param array                 $data
      *
      * @method setBody()
      * @method addPart()
@@ -410,7 +409,7 @@ class Mailer implements MailerContract
     /**
      * Call the provided message builder.
      *
-     * @param \Closure|string         $callback
+     * @param \Closure|string       $callback
      * @param \Viserio\Mail\Message $message
      *
      * @throws \InvalidArgumentException

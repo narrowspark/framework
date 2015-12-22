@@ -16,6 +16,7 @@ interface Dispatcher
      *
      *
      * @param callable $middleware
+     *
      * @throws \RuntimeException when adding middleware to the stack to late
      */
     public function pipe(callable $middleware);
@@ -23,12 +24,10 @@ interface Dispatcher
     /**
      * Dispatches to a new Runner.
      *
-     * @param RequestInterface $request The request.
-     *
+     * @param RequestInterface  $request  The request.
      * @param ResponseInterface $response The response.
      *
      * @return ResponseInterface
-     *
      */
     public function __invoke(Request $request, Response $response);
 }

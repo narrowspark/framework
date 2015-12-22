@@ -5,7 +5,6 @@ use RandomLib\Generator as RandomLib;
 use Viserio\Contracts\Encryption\DecryptException;
 use Viserio\Contracts\Encryption\Encrypter as EncrypterContract;
 use Viserio\Contracts\Encryption\EncryptException;
-use Viserio\Contracts\Encryption\InvalidKeyException;
 use Viserio\Contracts\Hashing\Generator as HashContract;
 use Viserio\Encryption\Adapter\OpenSsl;
 use Viserio\Support\Arr;
@@ -177,15 +176,14 @@ class Encrypter implements EncrypterContract
      * @param string $cipher
      * @param string mode
      * @param string $key
-     * @throws \RuntimeException
-     * @return void
      *
+     * @throws \RuntimeException
      */
     public function ensureValid($cipher, $mode, $key)
     {
         $length = mb_strlen($key, '8bit');
 
-        if (isset($this->lengths[$cipher.'-'.$mode]) && in_array($length, $this->lengths[$cipher.'-'.$mode], true)) {
+        if (isset($this->lengths[$cipher . '-' . $mode]) && in_array($length, $this->lengths[$cipher . '-' . $mode], true)) {
             return;
         }
 

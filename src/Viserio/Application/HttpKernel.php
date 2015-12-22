@@ -35,7 +35,7 @@ class HttpKernel implements HttpKernelInterface, TerminableInterface
     protected $requests;
 
     /**
-     * @param \Viserio\Application\Application             $app
+     * @param \Viserio\Application\Application               $app
      * @param \Symfony\Component\HttpFoundation\RequestStack $requests
      */
     public function __construct(Application $app, SymfonyStackRequest $requests)

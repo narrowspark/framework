@@ -17,6 +17,7 @@ class ViewTest extends \PHPUnit_Framework_TestCase
     {
         Mock::close();
     }
+
     public function testDataCanBeSetOnView()
     {
         $view = new View(Mock::mock('Viserio\View\Factory'), Mock::mock('Viserio\Contracts\View\Engine'), 'view', 'path', []);
@@ -27,6 +28,7 @@ class ViewTest extends \PHPUnit_Framework_TestCase
         $view->withFoo('bar')->withBaz('boom');
         $this->assertEquals(['foo' => 'bar', 'baz' => 'boom'], $view->getData());
     }
+
     public function testRenderProperlyRendersView()
     {
         $view = $this->getView();
@@ -43,6 +45,7 @@ class ViewTest extends \PHPUnit_Framework_TestCase
         };
         $this->assertEquals('contents', $view->render($callback));
     }
+
     public function testRenderSectionsReturnsEnvironmentSections()
     {
         $view = Mock::mock('Viserio\View\View[render]', [
@@ -63,6 +66,7 @@ class ViewTest extends \PHPUnit_Framework_TestCase
         $result = $view->nest('key', 'foo', ['data']);
         $this->assertInstanceOf('Viserio\View\View', $result);
     }
+
     public function testViewAcceptsArrayableImplementations()
     {
         $arrayable = Mock::mock('Viserio\Contracts\Support\Arrayable');
@@ -77,6 +81,7 @@ class ViewTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('bar', $view->foo);
         $this->assertEquals(['qux', 'corge'], $view->baz);
     }
+
     public function testViewGettersSetters()
     {
         $view = $this->getView();
@@ -87,6 +92,7 @@ class ViewTest extends \PHPUnit_Framework_TestCase
         $view->setPath('newPath');
         $this->assertEquals($view->getPath(), 'newPath');
     }
+
     public function testViewArrayAccess()
     {
         $view = $this->getView();
@@ -98,6 +104,7 @@ class ViewTest extends \PHPUnit_Framework_TestCase
         $view->offsetUnset('foo');
         $this->assertFalse($view->offsetExists('foo'));
     }
+
     public function testViewMagicMethods()
     {
         $view = $this->getView();
@@ -110,12 +117,14 @@ class ViewTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse(isset($view->foo));
         $this->assertFalse($view->offsetExists('foo'));
     }
+
     public function testViewBadMethod()
     {
         $this->setExpectedException('BadMethodCallException');
         $view = $this->getView();
         $view->badMethodCall();
     }
+
     public function testViewGatherDataWithRenderable()
     {
         $view = $this->getView();

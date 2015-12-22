@@ -145,8 +145,7 @@ class Writer implements LogContract, PsrLoggerInterface
     /**
      * Set the file permission for newly created files
      *
-     * @param  int|null  $filePermission
-     * @return void
+     * @param int|null $filePermission
      */
     public function setFilePermission($filePermission)
     {

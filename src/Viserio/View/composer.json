@@ -31,7 +31,7 @@
         "mthaml/mthaml"                      : "~1.6.0",
         "twig/twig"                          : "~1.16.3",
         "pyrocms/lex"                        : "~2.2",
-        "fabpot/php-cs-fixer"                : "~1.10.1",
+        "fabpot/php-cs-fixer"                : "dev-master",
         "phpunit/phpunit"                    : "~5.0.6"
     },
     "autoload": {

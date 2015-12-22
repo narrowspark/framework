@@ -53,16 +53,16 @@ class OracleConnectorTest extends \PHPUnit_Framework_TestCase
                     'server' => 'foo',
                     'port' => 111,
                     'database' => 'bar',
-                    'charset' => 'utf8'
-                ]
+                    'charset' => 'utf8',
+                ],
             ],
             [
                 'oci:host=foo;dbname=bar',
                 [
                     'server' => 'foo',
                     'database' => 'bar',
-                    'charset' => 'utf8'
-                ]
+                    'charset' => 'utf8',
+                ],
             ],
         ];
     }

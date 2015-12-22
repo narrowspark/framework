@@ -11,6 +11,7 @@ class HttpRedirectResponseTest extends \PHPUnit_Framework_TestCase
     {
         Mock::close();
     }
+
     public function testHeaderOnRedirect()
     {
         $response = new RedirectResponse('foo.bar');
@@ -22,6 +23,7 @@ class HttpRedirectResponseTest extends \PHPUnit_Framework_TestCase
         $response->header('foo', 'baz');
         $this->assertEquals('baz', $response->headers->get('foo'));
     }
+
     public function testWithOnRedirect()
     {
         $response = new RedirectResponse('foo.bar');
@@ -30,6 +32,7 @@ class HttpRedirectResponseTest extends \PHPUnit_Framework_TestCase
         $session->shouldReceive('flash')->twice();
         $response->with(['name', 'age']);
     }
+
     public function testWithCookieOnRedirect()
     {
         $response = new RedirectResponse('foo.bar');
@@ -40,6 +43,7 @@ class HttpRedirectResponseTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('foo', $cookies[0]->getName());
         $this->assertEquals('bar', $cookies[0]->getValue());
     }
+
     public function testInputOnRedirect()
     {
         $response = new RedirectResponse('foo.bar');
@@ -48,6 +52,7 @@ class HttpRedirectResponseTest extends \PHPUnit_Framework_TestCase
         $session->shouldReceive('flashInput')->once()->with(['name' => 'Taylor', 'age' => 26]);
         $response->withInput();
     }
+
     public function testOnlyInputOnRedirect()
     {
         $response = new RedirectResponse('foo.bar');
@@ -56,6 +61,7 @@ class HttpRedirectResponseTest extends \PHPUnit_Framework_TestCase
         $session->shouldReceive('flashInput')->once()->with(['name' => 'Taylor']);
         $response->onlyInput('name');
     }
+
     public function testExceptInputOnRedirect()
     {
         $response = new RedirectResponse('foo.bar');
@@ -64,6 +70,7 @@ class HttpRedirectResponseTest extends \PHPUnit_Framework_TestCase
         $session->shouldReceive('flashInput')->once()->with(['name' => 'Taylor']);
         $response->exceptInput('age');
     }
+
     public function testSettersGettersOnRequest()
     {
         $response = new RedirectResponse('foo.bar');
@@ -76,6 +83,7 @@ class HttpRedirectResponseTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($request, $response->getRequest());
         $this->assertSame($session, $response->getSession());
     }
+
     public function testMagicCall()
     {
         $response = new RedirectResponse('foo.bar');
@@ -84,6 +92,7 @@ class HttpRedirectResponseTest extends \PHPUnit_Framework_TestCase
         $session->shouldReceive('flash')->once()->with('foo', 'bar');
         $response->withFoo('bar');
     }
+
     public function testMagicCallException()
     {
         $this->setExpectedException('BadMethodCallException');

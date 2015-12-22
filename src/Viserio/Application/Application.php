@@ -107,7 +107,7 @@ class Application extends Container implements Foundation, HttpKernelInterface
      * @param string      $text         The input text to be escaped
      * @param int         $flags        The flags (@see htmlspecialchars)
      * @param string|null $charset      The charset
-     * @param Boolean     $doubleEncode Whether to try to avoid double escaping or not
+     * @param bool        $doubleEncode Whether to try to avoid double escaping or not
      *
      * @return string Escaped text
      */

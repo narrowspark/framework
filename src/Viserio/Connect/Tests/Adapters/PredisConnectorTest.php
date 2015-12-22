@@ -10,11 +10,11 @@ class PredisConnectorTest extends \PHPUnit_Framework_TestCase
         $connector = new PredisConnector();
         $config    = [
             'servers' => [
-                'server' => 'narrowspark'
+                'server' => 'narrowspark',
             ],
             'options' => [
-                'server' => 'narrowspark'
-            ]
+                'server' => 'narrowspark',
+            ],
         ];
 
         $this->assertInstanceOf('Predis\Client', $connector->connect($config));

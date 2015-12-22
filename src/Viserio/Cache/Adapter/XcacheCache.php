@@ -52,7 +52,7 @@ class XcacheCache extends TaggableStore implements AdapterContract
      */
     public function get($key)
     {
-        $value = xcache_get($this->prefix.$key);
+        $value = xcache_get($this->prefix . $key);
 
         if (isset($value)) {
             return $value;
@@ -93,16 +93,14 @@ class XcacheCache extends TaggableStore implements AdapterContract
     {
         $this->minutes[$key] = $minutes;
 
-        xcache_set($this->prefix.$key, $value, $minutes * 60);
+        xcache_set($this->prefix . $key, $value, $minutes * 60);
     }
 
     /**
      * Store multiple items in the cache for a set number of minutes.
      *
-     * @param array $values array of key => value pairs
+     * @param array $values  array of key => value pairs
      * @param int   $minutes
-     *
-     * @return void
      */
     public function putMultiple(array $values, $minutes)
     {
@@ -121,7 +119,7 @@ class XcacheCache extends TaggableStore implements AdapterContract
      */
     public function increment($key, $value = 1)
     {
-        return xcache_inc($this->prefix.$key, $value);
+        return xcache_inc($this->prefix . $key, $value);
     }
 
     /**
@@ -134,7 +132,7 @@ class XcacheCache extends TaggableStore implements AdapterContract
      */
     public function decrement($key, $value = 1)
     {
-        return xcache_dec($this->prefix.$key, $value);
+        return xcache_dec($this->prefix . $key, $value);
     }
 
     /**
@@ -157,7 +155,7 @@ class XcacheCache extends TaggableStore implements AdapterContract
      */
     public function forget($key)
     {
-        xcache_unset($this->prefix.$key);
+        xcache_unset($this->prefix . $key);
     }
 
     /**

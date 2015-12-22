@@ -6,7 +6,6 @@ use Viserio\Database\Connectors\GoogleCloudConnector;
 use Viserio\Database\Connectors\MariaDBConnector;
 use Viserio\Database\Connectors\MSSQLConnector;
 use Viserio\Database\Connectors\MySqlConnector;
-use Viserio\Database\Connectors\OdbcConnection;
 use Viserio\Database\Connectors\OracleConnector;
 use Viserio\Database\Connectors\PostgreSQLConnector;
 use Viserio\Database\Connectors\SQLiteConnector;

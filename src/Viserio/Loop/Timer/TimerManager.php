@@ -2,7 +2,6 @@
 namespace Viserio\Loop;
 
 use Viserio\Contracts\Loop\Loop as LoopContract;
-use Viserio\Contracts\Loop\Timer as TimerContract;
 
 class TimerManager
 {
@@ -47,7 +46,7 @@ class TimerManager
      * @param LoopContract $loop
      * @param float        $interval
      * @param callable     $callback
-     * @param boolean      $periodic
+     * @param bool         $periodic
      */
     public function __construct(LoopContract $loop, $interval, callable $callback, $periodic = false)
     {
@@ -64,6 +63,7 @@ class TimerManager
     {
         return $this->loop;
     }
+
     /**
      * {@inheritdoc}
      */
@@ -71,6 +71,7 @@ class TimerManager
     {
         return $this->interval;
     }
+
     /**
      * {@inheritdoc}
      */
@@ -78,6 +79,7 @@ class TimerManager
     {
         return $this->callback;
     }
+
     /**
      * {@inheritdoc}
      */
@@ -85,6 +87,7 @@ class TimerManager
     {
         $this->data = $data;
     }
+
     /**
      * {@inheritdoc}
      */
@@ -92,6 +95,7 @@ class TimerManager
     {
         return $this->data;
     }
+
     /**
      * {@inheritdoc}
      */
@@ -99,6 +103,7 @@ class TimerManager
     {
         return $this->periodic;
     }
+
     /**
      * {@inheritdoc}
      */
@@ -106,6 +111,7 @@ class TimerManager
     {
         return $this->loop->isTimerActive($this);
     }
+
     /**
      * {@inheritdoc}
      */

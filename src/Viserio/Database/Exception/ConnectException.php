@@ -59,7 +59,7 @@ class ConnectException extends \PDOException
      */
     protected function formatMessage($sql, $bindings, $previous)
     {
-        return $previous->getMessage().' (SQL: '.Helper::strReplaceArray('\?', $bindings, $sql).')';
+        return $previous->getMessage() . ' (SQL: ' . Helper::strReplaceArray('\?', $bindings, $sql) . ')';
     }
 
     /**

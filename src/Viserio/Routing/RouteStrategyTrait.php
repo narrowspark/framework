@@ -18,7 +18,7 @@ trait RouteStrategyTrait
      */
     public function setStrategy($strategy)
     {
-        if (is_integer($strategy) || $strategy instanceof CustomStrategy) {
+        if (is_int($strategy) || $strategy instanceof CustomStrategy) {
             $this->strategy = $strategy;
 
             return;
