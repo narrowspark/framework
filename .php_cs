@@ -1,6 +1,5 @@
 <?php
 use Narrowspark\CS\Config\Config;
-use Symfony\CS\Fixer;
 
 $config = new Config();
 $config->getFinder()
