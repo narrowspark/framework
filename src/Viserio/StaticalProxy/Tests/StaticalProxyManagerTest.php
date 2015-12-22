@@ -1,9 +1,9 @@
 <?php
-namespace Viserio\Support\Test;
+namespace Viserio\StaticalProxy\Tests;
 
 use Mockery as Mock;
 use Viserio\Application\Application;
-use Viserio\Support\StaticalProxyManager;
+use Viserio\StaticalProxy\StaticalProxyManager;
 
 class StaticalProxyManagerTest extends \PHPUnit_Framework_TestCase
 {

@@ -1,5 +1,5 @@
 <?php
-namespace Viserio\Support;
+namespace Viserio\StaticalProxy;
 
 use Mockery\MockInterface;
 use Viserio\Application\Application;

@@ -1,0 +1,45 @@
+{
+    "name"       : "viserio/statical-proxy",
+    "type"       : "library",
+    "description": "The Viserio Statical Proxy package.",
+    "keywords"   : ["narrowspark", "viserio", "static", "facade", "static proxy", "static interface", "statical"],
+    "license"    : "MIT",
+    "homepage"   : "http://github.com/viserio/statical-proxy",
+    "support"    : {
+        "issues": "https://github.com/narrowspark/framework/issues",
+        "source": "https://github.com/narrowspark/framework"
+    },
+    "authors"    : [
+        {
+          "name"    : "Daniel Bannert",
+          "email"   : "d.bannert@anolilab.de",
+          "homepage": "http://www.anolilab.de",
+          "role"    : "Developer"
+        }
+    ],
+    "require": {
+        "php"                                 : ">=5.6.4",
+        "container-interop/container-interop" : "~1.1",
+        "viserio/cotracts"                    : "self.version"
+    },
+    "require-dev": {
+        "phpunit/phpunit"                     : "~5.0.6"
+    },
+    "autoload": {
+        "psr-4": {
+            "Viserio\\StaticalProxy\\"        : ""
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Viserio\\StaticalProxy\\Tests\\" : "Tests/"
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master"                      : "0.10.0-dev"
+        }
+    },
+    "minimum-stability"                       : "dev",
+    "prefer-stable"                           : true
+}

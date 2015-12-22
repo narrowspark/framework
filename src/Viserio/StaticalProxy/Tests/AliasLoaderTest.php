@@ -1,7 +1,7 @@
 <?php
-namespace Viserio\Support\Tests;
+namespace Viserio\StaticalProxy\Tests;
 
-use Viserio\Support\AliasLoader;
+use Viserio\StaticalProxy\AliasLoader;
 
 class AliasLoaderTest extends \PHPUnit_Framework_TestCase
 {
