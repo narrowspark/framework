@@ -24,8 +24,8 @@ interface Dispatcher
     /**
      * Dispatches to a new Runner.
      *
-     * @param RequestInterface  $request  The request.
-     * @param ResponseInterface $response The response.
+     * @param Request  $request  The request.
+     * @param Response $response The response.
      *
      * @return ResponseInterface
      */
