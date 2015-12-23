@@ -1,17 +1,19 @@
 <?php
 namespace Viserio\StaticalProxy;
 
+use Interop\Container\ContainerInterface;
+use RuntimeException;
+use Mockery;
 use Mockery\MockInterface;
-use Viserio\Application\Application;
 
 abstract class StaticalProxyManager
 {
     /**
      * The application instance being facaded.
      *
-     * @var \Viserio\Application\Application
+     * @var \Interop\Container\ContainerInterface
      */
-    protected static $app;
+    protected static $container;
 
     /**
      * The resolved object instances.
@@ -29,7 +31,7 @@ abstract class StaticalProxyManager
     {
         static::$resolvedInstance[static::getFacadeAccessor()] = $instance;
 
-        static::$app[static::getFacadeAccessor()] = $instance;
+        static::$container[static::getFacadeAccessor()] = $instance;
     }
 
     /**
@@ -65,8 +67,8 @@ abstract class StaticalProxyManager
 
         $mock->shouldAllowMockingProtectedMethods();
 
-        if (isset(static::$app)) {
-            static::$app[$name] = $mock;
+        if (isset(static::$container)) {
+            static::$container[$name] = $mock;
         }
 
         return $mock;
@@ -83,7 +85,7 @@ abstract class StaticalProxyManager
     {
         $class = static::getMockableClass($name);
 
-        return $class ? \Mockery::mock($class) : \Mockery::mock();
+        return $class ? Mockery::mock($class) : Mockery::mock();
     }
 
     /**
@@ -132,7 +134,7 @@ abstract class StaticalProxyManager
      */
     protected static function getFacadeAccessor()
     {
-        throw new \RuntimeException('Facade does not implement getFacadeAccessor method.');
+        throw new RuntimeException('Facade does not implement getFacadeAccessor method.');
     }
 
     /**
@@ -152,7 +154,7 @@ abstract class StaticalProxyManager
             return static::$resolvedInstance[$name];
         }
 
-        return static::$resolvedInstance[$name] = static::$app[$name];
+        return static::$resolvedInstance[$name] = static::$container->get($name);
     }
 
     /**
@@ -176,21 +178,21 @@ abstract class StaticalProxyManager
     /**
      * Get the application instance behind the facade.
      *
-     * @return \Viserio\Application\Application
+     * @return \Interop\Container\ContainerInterface
      */
     public static function getFacadeApplication()
     {
-        return static::$app;
+        return static::$container;
     }
 
     /**
      * Set the application instance.
      *
-     * @param \Viserio\Application\Application $app
+     * @param \Interop\Container\ContainerInterface $container
      */
-    public static function setFacadeApplication(Application $app)
+    public static function setFacadeApplication(ContainerInterface $container)
     {
-        self::$app = $app;
+        self::$container = $container;
     }
 
     /**

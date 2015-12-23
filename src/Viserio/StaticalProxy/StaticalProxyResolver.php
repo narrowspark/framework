@@ -15,7 +15,11 @@ class StaticalProxyResolver
         if ($this->isFacade($this->getFacadeNameFromInput($facade))) {
             $rootClass = get_class($facade::getFacadeRoot());
 
-            return sprintf('The registered facade [%s] maps to [%s]', $this->getFacadeNameFromInput($facade), $rootClass);
+            return sprintf(
+                'The registered facade [%s] maps to [%s]',
+                $this->getFacadeNameFromInput($facade),
+                $rootClass
+            );
         }
 
         return 'Facade not found';

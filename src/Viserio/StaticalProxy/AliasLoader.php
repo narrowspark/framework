@@ -1,28 +1,50 @@
 <?php
 namespace Viserio\StaticalProxy;
 
-class AliasLoader
+use Viserio\StaticalProxy\Traits\ExistTrait;
+use Viserio\Contracts\StaticalProxy\AliasLoader as AliasLoaderContract;
+
+class AliasLoader implements AliasLoaderContract
 {
+    use ExistTrait;
+
     /**
-     * The array of class aliases.
+     * Array of class aliases.
      *
      * @var array
      */
-    protected $aliases;
+    private $aliases = [];
+
+    /**
+     * @var Resolver[]
+     */
+    private $patterns = [];
+
+    /**
+     * Array of namespaces aliases.
+     *
+     * @var array
+     */
+    private $namespaces = [];
 
     /**
      * Indicates if a loader has been registered.
      *
      * @var bool
      */
-    protected $registered = false;
+    private $registered = false;
 
     /**
-     * The singleton instance of the loader.
+     * All cached resolved aliases.
      *
-     * @var \Viserio\Application\AliasLoader
+     * @var array
      */
-    protected static $instance;
+    private $cache = [];
+
+    /**
+     * @var array
+     */
+    private $resolving = [];
 
     /**
      * Create a new AliasLoader instance.
@@ -35,70 +57,204 @@ class AliasLoader
     }
 
     /**
-     * Get or create the singleton alias loader instance.
-     *
-     * @param array $aliases
-     *
-     * @return \Viserio\Application\AliasLoader
-     */
-    public static function getInstance(array $aliases = [])
-    {
-        if (static::$instance === null) {
-            return static::$instance = new static($aliases);
-        }
-
-        $aliases = array_merge(static::$instance->getAliases(), $aliases);
-
-        static::$instance->setAliases($aliases);
-
-        return static::$instance;
-    }
-
-    /**
-     * Load a class alias if it is registered.
+     * Resolves an alias.
      *
      * @param string $alias
      *
      * @return bool|null
      */
-    public function load($alias)
+    public function resolve($alias)
     {
-        if (isset($this->aliases[$alias])) {
-            return class_alias($this->aliases[$alias], $alias);
+        // Skip recursive aliases if defined
+        if (in_array($alias, $this->resolving)) {
+            return false;
         }
 
-        return;
+        // Set it as the resolving class for when
+        // we want to block recursive resolving
+        $this->resolving[] = $alias;
+
+        if (isset($this->cache[$alias])) {
+            // If we already have the alias in the cache don't bother resolving again
+            $class = $this->cache[$alias];
+        } elseif ($class = $this->resolveAlias($alias)) {
+            // We've got a plain alias, now we can skip the others as this
+            // is the most powerful one.
+        } elseif ($class = $this->resolveNamespaceAlias($alias)) {
+            // We've got a namespace alias, we can skip pattern matching.
+        } elseif (!$class = $this->resolvePatternAlias($alias)) {
+            // Lastly we'll try to resolve it through pattern matching. This is the most
+            // expensive match type. Caching is recommended if you use this.
+            return false;
+        }
+
+        // Remove the resolving class
+        array_pop($this->resolving);
+
+        if (!$this->exists($class)) {
+            return false;
+        }
+
+        // Create the actual alias
+        class_alias($class, $alias);
+
+        if (!isset($this->cache[$alias])) {
+            $this->cache[$alias] = $class;
+        }
+
+        return true;
     }
 
     /**
      * Add an alias to the loader.
      *
-     * @param string $class
-     * @param string $alias
+     * @param string|string[] $class
+     * @param string|null     $alias
+     *
+     * @return self
      */
-    public function alias($class, $alias)
+    public function alias($class, $alias = null)
     {
-        $this->aliases[$class] = $alias;
+        if (is_array($class)) {
+            $this->aliases = array_merge($this->aliases, $class);
+
+            return $this;
+        }
+
+        $this->aliases[$class] = $this->cache[$class] = $alias;
+
+        return $this;
     }
 
     /**
-     * Register the loader on the auto-loader stack.
+     * Removes an alias.
+     *
+     * @param string|string[] $class
      */
-    public function register()
+    public function removeAlias()
     {
-        if (!$this->registered) {
-            $this->prependToLoaderStack();
+        $class = func_get_args();
 
-            $this->registered = true;
+        foreach ($class as $alias) {
+            if (isset($this->aliases[$alias])) {
+                unset($this->aliases[$alias], $this->cache[$alias]);
+            }
         }
     }
 
     /**
-     * Prepend the load method to the auto-loader stack.
+     * Resolves a plain alias.
+     *
+     * @param string $alias
+     *
+     * @return string|boolean
      */
-    protected function prependToLoaderStack()
+    public function resolveAlias($alias)
     {
-        spl_autoload_register([$this, 'load'], true, true);
+        if (
+            isset($this->aliases[$alias]) &&
+            $this->exists($this->aliases[$alias], true)
+        ) {
+            return $this->aliases[$alias];
+        }
+
+        return false;
+    }
+
+    /**
+     * Registers a class alias.
+     *
+     * @param string|string[] $pattern
+     * @param string|null     $translation
+     */
+    public function aliasPattern($pattern, $translation = null)
+    {
+        if (!is_array($pattern)) {
+            $pattern = [$pattern => $translation];
+        }
+
+        foreach ($pattern as $patternKey => $resolver) {
+            if (!$resolver instanceof Resolver) {
+                $resolver = new Resolver($patternKey, $resolver);
+            }
+
+            $this->patterns[$patternKey] = $resolver;
+        }
+    }
+
+    /**
+     * Removes an alias pattern.
+     *
+     * @param string $pattern
+     * @param string $translation
+     */
+    public function removeAliasPattern($pattern, $translation = null)
+    {
+        foreach (array_keys($this->patterns) as $patternKey) {
+            if ($this->patterns[$patternKey]->matches($pattern, $translation)) {
+                unset($this->patterns[$patternKey]);
+            }
+        }
+    }
+
+    /**
+     * Adds a namespace alias.
+     *
+     * @param string $class
+     * @param string $alias
+     */
+    public function aliasNamespace($class, $alias)
+    {
+        $class = trim($class, '\\');
+        $alias = trim($alias, '\\');
+
+        $this->namespaces[] = [$class, $alias];
+    }
+
+    /**
+     * Resolves a namespace alias.
+     *
+     * @param string $alias Alias
+     *
+     * @return string|boolean Class name when resolved
+     */
+    public function resolveNamespaceAlias($alias)
+    {
+        foreach ($this->namespaces as $namespace) {
+            list($nsClass, $nsAlias) = $namespace;
+
+            if (!$nsAlias || strpos($alias, strval($nsAlias)) === 0) {
+                if ($nsAlias) {
+                    $alias = substr($alias, strlen($nsAlias) + 1);
+                }
+
+                $class = $nsClass.'\\'.$alias;
+                $this->resolving[] = $class;
+
+                if ($this->exists($class, true)) {
+                    array_pop($this->resolving);
+
+                    return $class;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Removes a namespace alias.
+     *
+     * @param string $class
+     */
+    public function removeNamespaceAlias()
+    {
+        $class = func_get_args();
+        $filter = function ($namespace) use ($class) {
+            return !in_array($namespace[0], $class);
+        };
+
+        $this->namespaces = array_filter($this->namespaces, $filter);
     }
 
     /**
@@ -122,6 +278,30 @@ class AliasLoader
     }
 
     /**
+     * Register the loader on the auto-loader stack.
+     */
+    public function register()
+    {
+        if (!$this->registered) {
+            spl_autoload_register([$this, 'resolve'], true, true);
+
+            $this->registered = true;
+        }
+    }
+
+    /**
+     * Unregisters the autoloader function.
+     */
+    public function unregister()
+    {
+        if ($this->registered) {
+            spl_autoload_unregister([$this, 'resolve']);
+
+            $this->registered = false;
+        }
+    }
+
+    /**
      * Indicates if the loader has been registered.
      *
      * @return bool
@@ -132,30 +312,24 @@ class AliasLoader
     }
 
     /**
-     * Set the "registered" state of the loader.
+     * Resolves pattern aliases.
      *
-     * @param bool $value
-     */
-    public function setRegistered($value)
-    {
-        $this->registered = $value;
-    }
-
-    /**
-     * Set the value of the singleton alias loader.
+     * @param string $alias
      *
-     * @param \Viserio\Application\AliasLoader $loader
+     * @return string|boolean
      */
-    public static function setInstance($loader)
+    protected function resolvePatternAlias($alias)
     {
-        static::$instance = $loader;
-    }
+        if (isset($this->patterns[$alias]) && $class = $this->patterns[$alias]->resolve($alias)) {
+            return $class;
+        }
 
-    /**
-     * Clone method.
-     */
-    private function __clone()
-    {
-        //
+        foreach ($this->patterns as $resolver) {
+            if ($class = $resolver->resolve($alias)) {
+                return $class;
+            }
+        }
+
+        return false;
     }
 }
