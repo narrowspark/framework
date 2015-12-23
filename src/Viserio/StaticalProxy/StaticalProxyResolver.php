@@ -4,20 +4,20 @@ namespace Viserio\StaticalProxy;
 class StaticalProxyResolver
 {
     /**
-     * Resolve a facade quickly to its root class.
+     * Resolve a static proxy quickly to its root class.
      *
-     * @param string $facade
+     * @param string $static
      *
      * @return string
      */
-    public function resolve($facade)
+    public function resolve($static)
     {
-        if ($this->isFacade($this->getFacadeNameFromInput($facade))) {
-            $rootClass = get_class($facade::getFacadeRoot());
+        if ($this->isStaticProxy($this->getStaticProxyNameFromInput($static))) {
+            $rootClass = get_class($static::getStaticProxyRoot());
 
             return sprintf(
                 'The registered facade [%s] maps to [%s]',
-                $this->getFacadeNameFromInput($facade),
+                $this->getStaticProxyNameFromInput($static),
                 $rootClass
             );
         }
@@ -28,30 +28,30 @@ class StaticalProxyResolver
     /**
      * Create a uppercase facade name if is not already.
      *
-     * @param string $facadeName
+     * @param string $staticName
      *
      * @return string
      */
-    public function getFacadeNameFromInput($facadeName)
+    public function getStaticProxyNameFromInput($staticName)
     {
-        if ($this->isUppercase($facadeName)) {
-            return $facadeName;
+        if ($this->isUppercase($staticName)) {
+            return $staticName;
         }
 
-        return ucfirst(Str::camelize(strtolower($facadeName)));
+        return ucfirst(Str::camelize(strtolower($staticName)));
     }
 
     /**
-     * Checking if facade is a really facade of StaticalProxyManager.
+     * Checking if static proxy is a really static proxy of StaticProxy.
      *
-     * @param string $facade
+     * @param string $static
      *
      * @return bool
      */
-    public function isFacade($facade)
+    public function isStaticProxy($static)
     {
-        if (class_exists($facade)) {
-            return array_key_exists('Viserio\Application\StaticalProxyManager', class_parents($facade));
+        if (class_exists($static)) {
+            return array_key_exists(StaticProxy::class, class_parents($static));
         }
 
         return false;
