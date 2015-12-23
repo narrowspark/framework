@@ -2,6 +2,7 @@
 namespace Viserio\StaticalProxy\Tests;
 
 use Mockery as Mock;
+use StdClass;
 use Viserio\StaticalProxy\StaticalProxy;
 use Viserio\StaticalProxy\Tests\Fixture\FacadeStub;
 
@@ -9,7 +10,7 @@ class StaticalProxyTest extends \PHPUnit_Framework_TestCase
 {
     public function setUp()
     {
-        StaticalProxyManager::clearResolvedInstances();
+        StaticalProxy::clearResolvedInstances();
 
         $container = Mock::mock('Interop\Container\ContainerInterface');
         FacadeStub::setContainer($container);
@@ -23,7 +24,7 @@ class StaticalProxyTest extends \PHPUnit_Framework_TestCase
     public function testFacadeCallsUnderlyingApplication()
     {
         $container = Mock::mock('Interop\Container\ContainerInterface');
-        $mock = Mock::mock('StdClass')]);
+        $mock = Mock::mock('StdClass');
         $mock->shouldReceive('bar')->once()->andReturn('baz');
         $container->shouldReceive('get')->once()->andReturn($mock);
 
