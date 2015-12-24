@@ -2,7 +2,6 @@
 namespace Viserio\Cookie;
 
 use DateTime;
-use DateTimeInterface;
 use Viserio\Contracts\Cookie\Cookie as CookieContract;
 use Viserio\Contracts\Support\Stringable;
 
@@ -125,7 +124,7 @@ abstract class AbstractCookie implements Stringable, CookieContract
     /**
      * Sets both the max age and the expires attributes
      *
-     * @param integer|\DateTimeInterface|null $expiration
+     * @param integer|null $expiration
      *
      * @return self
      */
@@ -141,11 +140,11 @@ abstract class AbstractCookie implements Stringable, CookieContract
     /**
      * Sets the expires
      *
-     * @param DateTimeInterface $expires
+     * @param \DateTime $expires
      *
      * @return self
      */
-    public function withExpires(DateTimeInterface $expires)
+    public function withExpires(DateTime $expires)
     {
         $new = clone $this;
         $new->expires = $expires;
@@ -156,7 +155,7 @@ abstract class AbstractCookie implements Stringable, CookieContract
     /**
      * Returns the expiration time
      *
-     * @return \DateTimeInterface|null
+     * @return integer|DateTime
      */
     public function getExpiresTime()
     {
@@ -370,7 +369,7 @@ abstract class AbstractCookie implements Stringable, CookieContract
             if ($expiration <= 0) {
                 $expires->setTimestamp(-PHP_INT_MAX);
             }
-        } elseif ($expiration instanceof DateTime || $expiration instanceof DateTimeInterface) {
+        } elseif ($expiration instanceof DateTime) {
             $expires = $expiration;
         }
 
@@ -438,7 +437,7 @@ abstract class AbstractCookie implements Stringable, CookieContract
     protected function appendFormattedDomainPartIfSet(array $cookieStringParts)
     {
         if ($this->domain) {
-            $cookieStringParts[] = sprintf("Domain=%s", $this->domain);
+            $cookieStringParts[] = sprintf('Domain=%s', $this->domain);
         }
 
         return $cookieStringParts;
@@ -447,7 +446,7 @@ abstract class AbstractCookie implements Stringable, CookieContract
     protected function appendFormattedPathPartIfSet(array $cookieStringParts)
     {
         if ($this->path) {
-            $cookieStringParts[] = sprintf("Path=%s", $this->path);
+            $cookieStringParts[] = sprintf('Path=%s', $this->path);
         }
 
         return $cookieStringParts;
@@ -456,7 +455,7 @@ abstract class AbstractCookie implements Stringable, CookieContract
     protected function appendFormattedMaxAgePartIfSet(array $cookieStringParts)
     {
         if ($this->maxAge) {
-            $cookieStringParts[] = sprintf("Max-Age=%s", $this->maxAge);
+            $cookieStringParts[] = sprintf('Max-Age=%s', $this->maxAge);
         }
 
         return $cookieStringParts;

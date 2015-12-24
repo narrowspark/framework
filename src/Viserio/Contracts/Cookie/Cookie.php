@@ -1,7 +1,7 @@
 <?php
 namespace Viserio\Contracts\Cookie;
 
-use DateTimeInterface;
+use DateTime;
 
 interface Cookie
 {
@@ -61,7 +61,7 @@ interface Cookie
     /**
      * Sets both the max age and the expires attributes
      *
-     * @param integer|\DateTimeInterface|null $expiration
+     * @param integer|\DateTime|null $expiration
      *
      * @return self
      */
@@ -70,16 +70,16 @@ interface Cookie
     /**
      * Sets the expires
      *
-     * @param DateTimeInterface $expires
+     * @param \DateTime $expires
      *
      * @return self
      */
-    public function withExpires(DateTimeInterface $expires);
+    public function withExpires(DateTime $expires);
 
     /**
      * Returns the expiration time
      *
-     * @return \DateTimeInterface|null
+     * @return integer|\DateTime
      */
     public function getExpiresTime();
 

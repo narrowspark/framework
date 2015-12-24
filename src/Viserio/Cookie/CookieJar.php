@@ -102,11 +102,11 @@ class CookieJar implements JarContract
     }
 
     /**
-     * @param \Psr\Http\Message\ResponseInterface $response
+     * @param \Psr\Http\Message\ServerRequestInterface $response
      *
-     * @return \Psr\Http\Message\ResponseInterface
+     * @return \Psr\Http\Message\ServerRequestInterface
      */
-    public function toResponse(ResponseInterface $response)
+    public function toResponse(ServerRequestInterface $response)
     {
         foreach ($this->queued as $cookie) {
             $response = $response->withAddedHeader('Set-Cookie', $cookie->__toString());
@@ -173,6 +173,7 @@ class CookieJar implements JarContract
      *
      * @param string $path
      * @param string $domain
+     * @param bool   $secure
      *
      * @return $this
      */
@@ -196,8 +197,8 @@ class CookieJar implements JarContract
     /**
      * Creates a Cookie instance from a Set-Cookie header value.
      *
+     * @param string $string
      *
-     * @param string[] $string
      * @return \Viserio\Contracts\Cookie\Cookie
      */
     protected function fromStringCookie($string)

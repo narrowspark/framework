@@ -3,9 +3,12 @@ namespace Viserio\Cookie\Middleware;
 
 use Psr\Http\Message\ResponseInterface as ResponseContract;
 use Psr\Http\Message\ServerRequestInterface as RequestContract;
+use Viserio\Cookie\Cookie;
 use Viserio\Contracts\Encryption\DecryptException;
 use Viserio\Contracts\Encryption\Encrypter as EncrypterContract;
 use Viserio\Contracts\Middleware\Middleware as MiddlewareContract;
+use Viserio\Contracts\Cookie\Cookie as CookieContract;
+
 
 class EncryptCookies implements MiddlewareContract
 {
@@ -27,8 +30,6 @@ class EncryptCookies implements MiddlewareContract
      * Create a new CookieGuard instance.
      *
      * @param \Viserio\Contracts\Encryption\Encrypter $encrypter
-     *
-     * @return void
      */
     public function __construct(EncrypterContract $encrypter)
     {
@@ -54,12 +55,12 @@ class EncryptCookies implements MiddlewareContract
     /**
      * Duplicate a cookie with a new value.
      *
-     * @param \Viserio\Cookie\Cookie $cookie
-     * @param string $value
+     * @param CookieContract $cookie
+     * @param string         $value
      *
-     * @return \Viserio\Cookie\Cookie
+     * @return CookieContract
      */
-    protected function duplicate(Cookie $cookie, $value)
+    protected function duplicate(CookieContract $cookie, $value)
     {
         return new Cookie(
             $cookie->getName(),
@@ -94,9 +95,9 @@ class EncryptCookies implements MiddlewareContract
     /**
      * Decrypt the cookies on the request.
      *
-     * @param \Psr\Http\Message\RequestInterface $request
+     * @param RequestContract $request
      *
-     * @return \Psr\Http\Message\RequestInterface
+     * @return RequestContract
      */
     protected function decrypt(RequestContract $request)
     {
@@ -151,9 +152,9 @@ class EncryptCookies implements MiddlewareContract
     /**
      * Encrypt the cookies on an outgoing response.
      *
-     * @param \Psr\Http\Message\ResponseInterface $response
+     * @param ResponseContract $response
      *
-     * @return \Psr\Http\Message\ResponseInterface
+     * @return ResponseContract
      */
     protected function encrypt(ResponseContract $response)
     {
