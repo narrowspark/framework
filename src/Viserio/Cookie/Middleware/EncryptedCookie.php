@@ -55,7 +55,7 @@ class EncryptCookies implements MiddlewareContract
      * Duplicate a cookie with a new value.
      *
      * @param \Viserio\Cookie\Cookie $cookie
-     * @param mixed $value
+     * @param string $value
      *
      * @return \Viserio\Cookie\Cookie
      */
