@@ -1,8 +1,8 @@
 <?php
 namespace Viserio\StaticalProxy;
 
-use Viserio\StaticalProxy\Traits\ExistTrait;
 use Viserio\Contracts\StaticalProxy\AliasLoader as AliasLoaderContract;
+use Viserio\StaticalProxy\Traits\ExistTrait;
 
 class AliasLoader implements AliasLoaderContract
 {

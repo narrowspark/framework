@@ -3,9 +3,9 @@ namespace Viserio\StaticalProxy;
 
 use BadMethodCallException;
 use Interop\Container\ContainerInterface;
-use RuntimeException;
 use Mockery;
 use Mockery\MockInterface;
+use RuntimeException;
 
 abstract class StaticalProxy
 {
@@ -187,7 +187,6 @@ abstract class StaticalProxy
     /**
      * Create a fresh mock instance for the given class.
      *
-     * @param string $name
      *
      * @return \Mockery\MockInterface
      */
