@@ -41,8 +41,8 @@ interface AliasLoader
     /**
      * Removes an alias pattern.
      *
-     * @param string $pattern
-     * @param string $translation
+     * @param string      $pattern
+     * @param string|null $translation
      * @return void
      */
     public function removeAliasPattern($pattern, $translation = null);

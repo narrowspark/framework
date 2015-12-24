@@ -184,8 +184,8 @@ class AliasLoader implements AliasLoaderContract
     /**
      * Removes an alias pattern.
      *
-     * @param string $pattern
-     * @param string $translation
+     * @param string      $pattern
+     * @param string|null $translation
      */
     public function removeAliasPattern($pattern, $translation = null)
     {

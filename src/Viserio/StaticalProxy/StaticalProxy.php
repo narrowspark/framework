@@ -46,7 +46,7 @@ abstract class StaticalProxy
      *
      * @throws \BadMethodCallException if the method has not been implemented by a subclass
      *
-     * @return string
+     * @return NoType
      */
     public static function getInstanceIdentifier()
     {

@@ -66,7 +66,7 @@ class Resolver
         }
 
         // Check wether the class exists
-        if ($class and $this->exists($class, true)) {
+        if ($class && $this->exists($class, true)) {
             return $class;
         }
 
@@ -76,8 +76,8 @@ class Resolver
     /**
      * Checks whether the resolver matches a given pattern and optional translation
      *
-     * @param string          $pattern
-     * @param string|callable $translation
+     * @param string        $pattern
+     * @param callable|null $translation
      *
      * @return boolean
      */
