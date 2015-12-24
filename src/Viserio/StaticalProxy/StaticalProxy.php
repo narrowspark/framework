@@ -1,6 +1,7 @@
 <?php
 namespace Viserio\StaticalProxy;
 
+use BadMethodCallException;
 use Interop\Container\ContainerInterface;
 use RuntimeException;
 use Mockery;
@@ -18,14 +19,7 @@ abstract class StaticalProxy
      *
      * @var array
      */
-    protected static $resolvedInstance;
-
-    /**
-     * All mocked instances.
-     *
-     * @var array
-     */
-    protected static $mockContainer = [];
+    protected static $resolvedInstance = [];
 
     /**
      * Sets the Container that will be used to retrieve the Proxy Subject.
@@ -40,16 +34,10 @@ abstract class StaticalProxy
     /**
      * Retrieves the instance of the Proxy Subject from the Container that the Static Proxy is associated with
      *
-     * @throws \RuntimeException if the Container has not been set
-     *
      * @return mixed
      */
     public static function getInstance()
     {
-        if (!(static::$container instanceof ContainerInterface)) {
-            throw new RuntimeException('The Proxy Subject cannot be retrieved because the Container is not set.');
-        }
-
         return static::$container->get(static::getInstanceIdentifier());
     }
 
@@ -62,7 +50,7 @@ abstract class StaticalProxy
      */
     public static function getInstanceIdentifier()
     {
-        throw new BadMethodCallException('The' . __METHOD__ . ' method must be implemented by a subclass.');
+        throw new BadMethodCallException('The ' . __METHOD__ . ' method must be implemented by a subclass.');
     }
 
     /**
@@ -100,9 +88,9 @@ abstract class StaticalProxy
      *
      * @return mixed
      */
-    public static function getSaticalProxyRoot()
+    public static function getStaticalProxyRoot()
     {
-        return static::resolveFacadeInstance(static::getInstanceIdentifier());
+        return static::resolveStaticalProxyInstance(static::getInstanceIdentifier());
     }
 
     /**
@@ -133,10 +121,10 @@ abstract class StaticalProxy
      */
     public static function __callStatic($method, $args)
     {
-        $instance = static::getSaticalProxyRoot();
+        $instance = static::getStaticalProxyRoot();
 
-        if (! $instance) {
-            throw new RuntimeException('A facade root has not been set.');
+        if (!$instance) {
+            throw new RuntimeException('A statical proxy root has not been set.');
         }
 
         switch (count($args)) {
@@ -161,13 +149,13 @@ abstract class StaticalProxy
     }
 
     /**
-     * Resolve the facade root instance from the app.
+     * Resolve the statical proxy root instance from the app.
      *
      * @param string $name
      *
      * @return mixed
      */
-    protected static function resolveFacadeInstance($name)
+    protected static function resolveStaticalProxyInstance($name)
     {
         if (is_object($name)) {
             return $name;
@@ -189,13 +177,9 @@ abstract class StaticalProxy
      */
     protected static function createFreshMockInstance($name)
     {
-        static::$resolvedInstance[$name] = $mock = static::createMockByName($name);
+        static::$resolvedInstance[$name] = $mock = static::createMock();
 
         $mock->shouldAllowMockingProtectedMethods();
-
-        if (isset(static::$mockContainer)) {
-            static::$mockContainer[$name] = $mock;
-        }
 
         return $mock;
     }
@@ -207,9 +191,9 @@ abstract class StaticalProxy
      *
      * @return \Mockery\MockInterface
      */
-    protected static function createMockByName($name)
+    protected static function createMock()
     {
-        $class = static::getMockableClass($name);
+        $class = static::getMockableClass();
 
         return $class ? Mockery::mock($class) : Mockery::mock();
     }
@@ -230,14 +214,12 @@ abstract class StaticalProxy
     /**
      * Get the mockable class for the bound instance.
      *
-     * @return string
+     * @return string|null
      */
     protected static function getMockableClass()
     {
-        if ($root = static::getSaticalProxyRoot()) {
+        if ($root = static::getStaticalProxyRoot()) {
             return get_class($root);
         }
-
-        return '';
     }
 }

@@ -56,12 +56,13 @@ class AliasLoaderTest extends \PHPUnit_Framework_TestCase
     public function testRemoveloadr()
     {
         $aliasloader = new AliasLoader();
-        $aliasloader->alias([
+        $aliasloader->setAliases([
             'Resolvable'      => Foo::class,
             'ResolvableTwo'   => Foo::class,
             'ResolvableThree' => Foo::class,
             'ResolvableFour'  => Foo::class,
         ]);
+        $this->assertTrue(is_array($aliasloader->getAliases()));
         $this->assertTrue($aliasloader->load('Resolvable'));
 
         $aliasloader->removeAlias('ResolvableTwo');
@@ -108,9 +109,11 @@ class AliasLoaderTest extends \PHPUnit_Framework_TestCase
 
         $aliasloader->register();
         $this->assertTrue(class_exists('Second\Autoloaded\Foo', true));
+        $this->assertTrue($aliasloader->isRegistered());
 
         $aliasloader->unregister();
         $this->assertFalse(class_exists('Third\Autoloaded\Foo', true));
+        $this->assertFalse($aliasloader->isRegistered());
     }
 
     public function testStopRecursion()

@@ -12,7 +12,7 @@ use Viserio\Application\Traits\PathsTrait;
 use Viserio\Application\Traits\ServiceProviderTrait;
 use Viserio\Container\Container;
 use Viserio\Contracts\Application\Foundation;
-use Viserio\Support\StaticalProxyManager;
+use Viserio\StaticalProxy\StaticalProxy;
 
 /**
  * Application.
@@ -97,8 +97,8 @@ class Application extends Container implements Foundation, HttpKernelInterface
      */
     public function registerFacade()
     {
-        StaticalProxyManager::setFacadeApplication($this);
-        StaticalProxyManager::clearResolvedInstances();
+        StaticalProxy::setFacadeApplication($this);
+        StaticalProxy::clearResolvedInstances();
     }
 
     /**

@@ -16,13 +16,13 @@ class StaticalProxyResolver
             $rootClass = get_class($static::getStaticProxyRoot());
 
             return sprintf(
-                'The registered facade [%s] maps to [%s]',
+                'The registered static proxy [%s] maps to [%s]',
                 $this->getStaticProxyNameFromInput($static),
                 $rootClass
             );
         }
 
-        return 'Facade not found';
+        return 'No static proxy found!';
     }
 
     /**

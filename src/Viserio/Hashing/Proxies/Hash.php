@@ -1,7 +1,7 @@
 <?php
 namespace Viserio\Crypter\Proxies;
 
-use Viserio\Support\StaticalProxyManager;
+use Viserio\StaticalProxy\StaticalProxy;
 
 /**
  * Hash.
@@ -10,7 +10,7 @@ use Viserio\Support\StaticalProxyManager;
  *
  * @since   0.9.4
  */
-class Hash extends StaticalProxyManager
+class Hash extends StaticalProxy
 {
     protected static function getFacadeAccessor()
     {

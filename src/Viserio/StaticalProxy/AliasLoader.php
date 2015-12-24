@@ -63,7 +63,7 @@ class AliasLoader implements AliasLoaderContract
      *
      * @return bool|null
      */
-    public function resolve($alias)
+    public function load($alias)
     {
         // Skip recursive aliases if defined
         if (in_array($alias, $this->resolving)) {
@@ -283,7 +283,7 @@ class AliasLoader implements AliasLoaderContract
     public function register()
     {
         if (!$this->registered) {
-            spl_autoload_register([$this, 'resolve'], true, true);
+            spl_autoload_register([$this, 'load'], true, true);
 
             $this->registered = true;
         }
@@ -295,7 +295,7 @@ class AliasLoader implements AliasLoaderContract
     public function unregister()
     {
         if ($this->registered) {
-            spl_autoload_unregister([$this, 'resolve']);
+            spl_autoload_unregister([$this, 'load']);
 
             $this->registered = false;
         }
