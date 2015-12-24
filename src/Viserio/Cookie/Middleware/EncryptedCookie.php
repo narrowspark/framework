@@ -3,11 +3,11 @@ namespace Viserio\Cookie\Middleware;
 
 use Psr\Http\Message\ResponseInterface as ResponseContract;
 use Psr\Http\Message\ServerRequestInterface as RequestContract;
-use Viserio\Cookie\Cookie;
+use Viserio\Contracts\Cookie\Cookie as CookieContract;
 use Viserio\Contracts\Encryption\DecryptException;
 use Viserio\Contracts\Encryption\Encrypter as EncrypterContract;
 use Viserio\Contracts\Middleware\Middleware as MiddlewareContract;
-use Viserio\Contracts\Cookie\Cookie as CookieContract;
+use Viserio\Cookie\Cookie;
 
 
 class EncryptCookies implements MiddlewareContract
