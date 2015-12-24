@@ -1,9 +1,9 @@
 <?php
 namespace Viserio\Console\Proxies;
 
-use Viserio\Support\StaticalProxyManager;
+use Viserio\StaticalProxy\StaticalProxy;
 
-class Console extends StaticalProxyManager
+class Console extends StaticalProxy
 {
     protected static function getFacadeAccessor()
     {

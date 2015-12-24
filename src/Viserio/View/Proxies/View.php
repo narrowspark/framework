@@ -1,7 +1,7 @@
 <?php
 namespace Viserio\View\Proxies;
 
-use Viserio\Support\StaticalProxyManager;
+use Viserio\StaticalProxy\StaticalProxy;
 
 /**
  * View.
@@ -10,7 +10,7 @@ use Viserio\Support\StaticalProxyManager;
  *
  * @since   0.8.0
  */
-class View extends StaticalProxyManager
+class View extends StaticalProxy
 {
     protected static function getFacadeAccessor()
     {

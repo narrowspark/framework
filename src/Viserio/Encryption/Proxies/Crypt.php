@@ -1,9 +1,9 @@
 <?php
 namespace Viserio\Encryption\Proxies;
 
-use Viserio\Support\StaticalProxyManager;
+use Viserio\StaticalProxy\StaticalProxy;
 
-class Crypt extends StaticalProxyManager
+class Crypt extends StaticalProxy
 {
     protected static function getFacadeAccessor()
     {

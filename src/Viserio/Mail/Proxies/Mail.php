@@ -1,9 +1,9 @@
 <?php
 namespace Viserio\Mail\Proxies;
 
-use Viserio\Support\StaticalProxyManager;
+use Viserio\StaticalProxy\StaticalProxy;
 
-class Mail extends StaticalProxyManager
+class Mail extends StaticalProxy
 {
     protected static function getFacadeAccessor()
     {

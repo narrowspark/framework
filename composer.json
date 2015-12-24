@@ -81,6 +81,7 @@
         "viserio/pipeline"                                  : "self.version",
         "viserio/routing"                                   : "self.version",
         "viserio/session"                                   : "self.version",
+        "viserio/statical-proxy"                            : "self.version",
         "viserio/support"                                   : "self.version",
         "viserio/translator"                                : "self.version",
         "viserio/view"                                      : "self.version",
