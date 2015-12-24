@@ -1,6 +1,8 @@
 <?php
 namespace Viserio\StaticalProxy;
 
+use Viserio\Support\Str;
+
 class StaticalProxyResolver
 {
     /**
@@ -13,7 +15,7 @@ class StaticalProxyResolver
     public function resolve($static)
     {
         if ($this->isStaticProxy($this->getStaticProxyNameFromInput($static))) {
-            $rootClass = get_class($static::getStaticProxyRoot());
+            $rootClass = get_class($static::getStaticalProxyRoot());
 
             return sprintf(
                 'The registered static proxy [%s] maps to [%s]',
@@ -42,7 +44,7 @@ class StaticalProxyResolver
     }
 
     /**
-     * Checking if static proxy is a really static proxy of StaticProxy.
+     * Checking if static proxy is a really static proxy of StaticalProxy.
      *
      * @param string $static
      *
@@ -51,7 +53,7 @@ class StaticalProxyResolver
     public function isStaticProxy($static)
     {
         if (class_exists($static)) {
-            return array_key_exists(StaticProxy::class, class_parents($static));
+            return array_key_exists(StaticalProxy::class, class_parents($static));
         }
 
         return false;
