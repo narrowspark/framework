@@ -30,7 +30,7 @@ class Helper
             return self::app()->make($make);
         }
 
-        return StaticalProxyManager::getFacadeApplication();
+        return StaticalProxy::getFacadeApplication();
     }
 
     /**

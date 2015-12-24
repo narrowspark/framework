@@ -1,9 +1,9 @@
 <?php
 namespace Viserio\Cookie\Proxies;
 
-use Viserio\Support\StaticalProxyManager;
+use Viserio\StaticalProxy\StaticalProxy;
 
-class Cookie extends StaticalProxyManager
+class Cookie extends StaticalProxy
 {
     protected static function getFacadeAccessor()
     {

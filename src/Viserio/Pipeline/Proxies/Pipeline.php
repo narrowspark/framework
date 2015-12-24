@@ -1,9 +1,9 @@
 <?php
 namespace Viserio\Pipeline\Proxies;
 
-use Viserio\Support\StaticalProxyManager;
+use Viserio\StaticalProxy\StaticalProxy;
 
-class Pipeline extends StaticalProxyManager
+class Pipeline extends StaticalProxy
 {
     protected static function getFacadeAccessor()
     {
