@@ -44,7 +44,7 @@ class Resolver
      *
      * @param string $alias
      *
-     * @return string|boolean
+     * @return boolean
      */
     public function resolve($alias)
     {
