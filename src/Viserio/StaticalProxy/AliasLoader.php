@@ -61,7 +61,7 @@ class AliasLoader implements AliasLoaderContract
      *
      * @param string $alias
      *
-     * @return bool|null
+     * @return boolean
      */
     public function load($alias)
     {
@@ -129,7 +129,6 @@ class AliasLoader implements AliasLoaderContract
     /**
      * Removes an alias.
      *
-     * @param string|string[] $class
      */
     public function removeAlias()
     {
@@ -216,7 +215,7 @@ class AliasLoader implements AliasLoaderContract
      *
      * @param string $alias Alias
      *
-     * @return string|boolean Class name when resolved
+     * @return string|false Class name when resolved
      */
     public function resolveNamespaceAlias($alias)
     {
@@ -245,7 +244,6 @@ class AliasLoader implements AliasLoaderContract
     /**
      * Removes a namespace alias.
      *
-     * @param string $class
      */
     public function removeNamespaceAlias()
     {
@@ -316,7 +314,7 @@ class AliasLoader implements AliasLoaderContract
      *
      * @param string $alias
      *
-     * @return string|boolean
+     * @return boolean
      */
     protected function resolvePatternAlias($alias)
     {
