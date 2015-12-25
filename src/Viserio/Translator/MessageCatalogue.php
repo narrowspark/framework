@@ -1,6 +1,7 @@
 <?php
 namespace Viserio\Translator;
 
+use LogicException;
 use Viserio\Contracts\Translator\MessageCatalogue as MessageCatalogueContract;
 
 class MessageCatalogue implements MessageCatalogueContract
@@ -182,7 +183,7 @@ class MessageCatalogue implements MessageCatalogueContract
     public function addCatalogue(MessageCatalogueContract $catalogue)
     {
         if ($catalogue->getLocale() !== $this->locale) {
-            throw new \LogicException(sprintf('Cannot add a catalogue for locale "%s" as the current locale for this catalogue is "%s"', $catalogue->getLocale(), $this->locale));
+            throw new LogicException(sprintf('Cannot add a catalogue for locale "%s" as the current locale for this catalogue is "%s"', $catalogue->getLocale(), $this->locale));
         }
 
         foreach ($catalogue->all() as $domain => $messages) {
@@ -202,7 +203,7 @@ class MessageCatalogue implements MessageCatalogueContract
 
         do {
             if ($c->getLocale() === $catalogue->getLocale()) {
-                throw new \LogicException(sprintf('Circular reference detected when adding a fallback catalogue for locale "%s".', $catalogue->getLocale()));
+                throw new LogicException(sprintf('Circular reference detected when adding a fallback catalogue for locale "%s".', $catalogue->getLocale()));
             }
         } while ($c = $c->parent);
 

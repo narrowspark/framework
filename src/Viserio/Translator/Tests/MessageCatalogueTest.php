@@ -19,7 +19,10 @@ class MessageCatalogueTest extends \PHPUnit_Framework_TestCase
 
     public function testAll()
     {
-        $catalogue = new MessageCatalogue('en', $messages = ['domain1' => ['foo' => 'foo'], 'domain2' => ['bar' => 'bar']]);
+        $catalogue = new MessageCatalogue('en', $messages = [
+            'domain1' => ['foo' => 'foo'],
+            'domain2' => ['bar' => 'bar']
+        ]);
         $this->assertEquals(['foo' => 'foo'], $catalogue->all('domain1'));
         $this->assertEquals([], $catalogue->all('domain88'));
         $this->assertEquals($messages, $catalogue->all());
@@ -27,7 +30,10 @@ class MessageCatalogueTest extends \PHPUnit_Framework_TestCase
 
     public function testHas()
     {
-        $catalogue = new MessageCatalogue('en', ['domain1' => ['foo' => 'foo'], 'domain2' => ['bar' => 'bar']]);
+        $catalogue = new MessageCatalogue('en', [
+            'domain1' => ['foo' => 'foo'],
+            'domain2' => ['bar' => 'bar']
+        ]);
         $this->assertTrue($catalogue->has('foo', 'domain1'));
         $this->assertFalse($catalogue->has('bar', 'domain1'));
         $this->assertFalse($catalogue->has('foo', 'domain88'));
@@ -35,7 +41,10 @@ class MessageCatalogueTest extends \PHPUnit_Framework_TestCase
 
     public function testGetSet()
     {
-        $catalogue = new MessageCatalogue('en', ['domain1' => ['foo' => 'foo'], 'domain2' => ['bar' => 'bar']]);
+        $catalogue = new MessageCatalogue('en', [
+            'domain1' => ['foo' => 'foo'],
+            'domain2' => ['bar' => 'bar']
+        ]);
         $catalogue->set('foo1', 'foo1', 'domain1');
         $this->assertEquals('foo', $catalogue->get('foo', 'domain1'));
         $this->assertEquals('foo1', $catalogue->get('foo1', 'domain1'));
@@ -43,7 +52,10 @@ class MessageCatalogueTest extends \PHPUnit_Framework_TestCase
 
     public function testAdd()
     {
-        $catalogue = new MessageCatalogue('en', ['domain1' => ['foo' => 'foo'], 'domain2' => ['bar' => 'bar']]);
+        $catalogue = new MessageCatalogue('en', [
+            'domain1' => ['foo' => 'foo'],
+            'domain2' => ['bar' => 'bar']
+        ]);
         $catalogue->add(['foo1' => 'foo1'], 'domain1');
         $this->assertEquals('foo', $catalogue->get('foo', 'domain1'));
         $this->assertEquals('foo1', $catalogue->get('foo1', 'domain1'));
@@ -56,14 +68,20 @@ class MessageCatalogueTest extends \PHPUnit_Framework_TestCase
 
     public function testReplace()
     {
-        $catalogue = new MessageCatalogue('en', ['domain1' => ['foo' => 'foo'], 'domain2' => ['bar' => 'bar']]);
+        $catalogue = new MessageCatalogue('en', [
+            'domain1' => ['foo' => 'foo'],
+            'domain2' => ['bar' => 'bar']
+        ]);
         $catalogue->replace($messages = ['foo1' => 'foo1'], 'domain1');
         $this->assertEquals($messages, $catalogue->all('domain1'));
     }
 
     public function testAddCatalogue()
     {
-        $catalogue = new MessageCatalogue('en', ['domain1' => ['foo' => 'foo'], 'domain2' => ['bar' => 'bar']]);
+        $catalogue = new MessageCatalogue('en', [
+            'domain1' => ['foo' => 'foo'],
+            'domain2' => ['bar' => 'bar']
+        ]);
         $catalogue1 = new MessageCatalogue('en', ['domain1' => ['foo1' => 'foo1']]);
         $catalogue->addCatalogue($catalogue1);
         $this->assertEquals('foo', $catalogue->get('foo', 'domain1'));
@@ -72,7 +90,10 @@ class MessageCatalogueTest extends \PHPUnit_Framework_TestCase
 
     public function testAddFallbackCatalogue()
     {
-        $catalogue = new MessageCatalogue('en_US', ['domain1' => ['foo' => 'foo'], 'domain2' => ['bar' => 'bar']]);
+        $catalogue = new MessageCatalogue('en_US', [
+            'domain1' => ['foo' => 'foo'],
+            'domain2' => ['bar' => 'bar']
+        ]);
         $catalogue1 = new MessageCatalogue('en', ['domain1' => ['foo' => 'bar', 'foo1' => 'foo1']]);
         $catalogue->addFallbackCatalogue($catalogue1);
         $this->assertEquals('foo', $catalogue->get('foo', 'domain1'));

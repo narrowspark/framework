@@ -15,7 +15,7 @@ trait IntervalTrait
      *
      * @return bool
      */
-    public function test($number, $interval)
+    public function intervalTest($number, $interval)
     {
         $interval = trim($interval);
 
@@ -25,7 +25,7 @@ trait IntervalTrait
 
         if ($matches[1]) {
             foreach (explode(',', $matches[2]) as $n) {
-                if ($number === $n) {
+                if ($number === intval($n)) {
                     return true;
                 }
             }
@@ -53,7 +53,9 @@ trait IntervalTrait
         ({\s*
             (\-?\d+(\.\d+)?[\s*,\s*\-?\d+(\.\d+)?]*)
         \s*})
+
             |
+
         (?P<left_delimiter>[\[\]])
             \s*
             (?P<left>-Inf|\-?\d+(\.\d+)?)
@@ -73,9 +75,9 @@ EOF;
      */
     protected function convertNumber($number)
     {
-        if ('-Inf' == $number) {
+        if ('-Inf' === $number) {
             return log(0);
-        } elseif ('+Inf' == $number || 'Inf' == $number) {
+        } elseif ('+Inf' === $number || 'Inf' === $number) {
             return -log(0);
         }
 

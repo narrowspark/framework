@@ -1,6 +1,7 @@
 <?php
 namespace Viserio\Translator\Tests;
 
+use ReflectionMethod;
 use Viserio\Translator\PluralizationRules;
 
 class PluralizationRulesTest extends \PHPUnit_Framework_TestCase
@@ -171,7 +172,7 @@ class PluralizationRulesTest extends \PHPUnit_Framework_TestCase
     {
         parent::setUp();
         $this->object = new PluralizationRules();
-        $this->createRules = new \ReflectionMethod($this->object, 'createRules');
+        $this->createRules = new ReflectionMethod($this->object, 'createRules');
         $this->createRules->setAccessible(true);
     }
 }

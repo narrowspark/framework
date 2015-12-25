@@ -70,6 +70,7 @@ class MessageSelector
 
         foreach ($parts as $part) {
             $part = trim($part);
+
             if (
                 preg_match('/^(?P<interval>' . $this->getIntervalRegexp() . ')\s*(?P<message>.*?)$/x', $part, $matches)
             ) {
@@ -83,7 +84,7 @@ class MessageSelector
 
         // try to match an explicit rule, then fallback to the standard ones
         foreach ($explicitRules as $interval => $m) {
-            if ($this->test($number, $interval)) {
+            if ($this->intervalTest($number, $interval)) {
                 return $m;
             }
         }

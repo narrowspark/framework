@@ -10,9 +10,9 @@ class IntervalTraitTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider getTests
      */
-    public function testTest($expected, $number, $interval)
+    public function testIntervalTest($expected, $number, $interval)
     {
-        $this->assertEquals($expected, $this->test($number, $interval));
+        $this->assertEquals($expected, $this->intervalTest($number, $interval));
     }
 
     /**
@@ -20,14 +20,14 @@ class IntervalTraitTest extends \PHPUnit_Framework_TestCase
      */
     public function testTestException()
     {
-        $this->test(1, 'foobar');
+        $this->intervalTest(1, 'foobar');
     }
 
     public function getTests()
     {
         return [
-            [true, 3, '{1,2, 3 ,4}'],
-            [false, 10, '{1,2, 3 ,4}'],
+            [true, 3, '{1,2,3,4}'],
+            [false, 10, '{1,2,3,4}'],
             [false, 3, '[1,2]'],
             [true, 1, '[1,2]'],
             [true, 2, '[1,2]'],

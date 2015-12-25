@@ -23,10 +23,11 @@
         "viserio/filesystem"               : "self.version"
     },
     "require-dev": {
-        "viserio/cache"                    : "self.version",
-        "symfony/event-dispatcher"         : "~2.8.*|~3.0.*",
         "fabpot/php-cs-fixer"              : "dev-master",
-        "phpunit/phpunit"                  : "~5.0.6"
+        "narrowspark/php-cs-fixer-config"  : "~1.1.4",
+        "phpunit/phpunit"                  : "~5.0.6",
+        "symfony/event-dispatcher"         : "~2.8.*|~3.0.*",
+        "viserio/cache"                    : "self.version"
     },
     "autoload": {
         "psr-4": {
