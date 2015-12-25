@@ -6,6 +6,7 @@ use Viserio\Translator\PluralizationRules;
 class PluralizationRulesTest extends \PHPUnit_Framework_TestCase
 {
     protected $createRules;
+
     protected $object;
 
     /**

@@ -25,9 +25,10 @@ class IntegerRuleTraitTest extends \PHPUnit_Framework_TestCase
         return [
             'integer 0' => [0, true],
             'integer 1' => [1, true],
-            'float 1.0' => [1.0, true],
+            'integer 2' => [2, true],
+            'float 1.0' => [1.0, false],
             'string 1' => ['1', true],
-            'string 1.0' => ['1.0', true],
+            'string 1.0' => ['1.0', false],
             'float 1.1' => [1.1, false],
             'string 1.1' => ['1.1', false],
             'string z' => ['z', false],

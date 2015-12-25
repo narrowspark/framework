@@ -1,6 +1,7 @@
 <?php
 namespace Viserio\Translator;
 
+use InvalidArgumentException;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Viserio\Contracts\Cache\Factory as CacheContract;
 use Viserio\Contracts\Translator\MessageCatalogue as MessageCatalogueContract;
@@ -11,8 +12,9 @@ use Viserio\Translator\Traits\FiltersTrait;
 use Viserio\Translator\Traits\HelpersTrait;
 use Viserio\Translator\Traits\ReplacementTrait;
 use Viserio\Translator\Traits\TranslateTrait;
+use Viserio\Support\Manager as SupportManager;
 
-class Manager implements TranslatorContract
+class Manager extends SupportManager implements TranslatorContract
 {
     //Register all needed traits
     use HelpersTrait, FiltersTrait, ReplacementTrait, TranslateTrait;
@@ -335,7 +337,7 @@ class Manager implements TranslatorContract
     protected function assertValidLocale($locale)
     {
         if (1 !== preg_match('/^[a-z0-9@_\\.\\-]*$/i', $locale)) {
-            throw new \InvalidArgumentException(sprintf('Invalid "%s" locale.', $locale));
+            throw new InvalidArgumentException(sprintf('Invalid "%s" locale.', $locale));
         }
     }
 }
