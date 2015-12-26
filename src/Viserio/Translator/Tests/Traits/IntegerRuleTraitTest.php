@@ -7,10 +7,6 @@ class IntegerRuleTraitTest extends \PHPUnit_Framework_TestCase
 {
     use IntegerRuleTrait;
 
-    protected $isInteger;
-
-    protected $object;
-
     /**
      * @dataProvider provideIsInteger
      */

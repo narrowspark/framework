@@ -2,9 +2,12 @@
 namespace Viserio\Translator\PluralCategorys;
 
 use Viserio\Contracts\Translator\PluralCategory as CategoryContract;
+use Viserio\Translator\Traits\NormalizeIntegerValueTrait;
 
 class Langi implements CategoryContract
 {
+    use NormalizeIntegerValueTrait;
+
     /**
      * Returns category key by count.
      *
@@ -24,9 +27,13 @@ class Langi implements CategoryContract
      */
     public function category($count)
     {
+        $count = $this->normalizeInteger($count);
+
         if ($count === 0) {
             return 'zero';
-        } elseif ($count > 0 && $count < 2) {
+        } elseif (
+            ($count > 0 && $count < 2)
+        ) {
             return 'one';
         }
 

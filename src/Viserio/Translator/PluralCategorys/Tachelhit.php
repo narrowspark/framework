@@ -2,11 +2,11 @@
 namespace Viserio\Translator\PluralCategorys;
 
 use Viserio\Contracts\Translator\PluralCategory as CategoryContract;
-use Viserio\Translator\Traits\IntegerRuleTrait;
+use Viserio\Translator\Traits\NormalizeIntegerValueTrait;
 
 class Tachelhit implements CategoryContract
 {
-    use IntegerRuleTrait;
+    use NormalizeIntegerValueTrait;
 
     /**
      * Returns category key by count.
@@ -27,9 +27,13 @@ class Tachelhit implements CategoryContract
      */
     public function category($count)
     {
-        if ($count >= 0 && $count <= 1) {
+        $count = $this->normalizeInteger($count);
+
+        if (!is_float($count) && $count >= 0 && $count <= 1) {
             return 'one';
-        } elseif ($this->isInteger($count) && $count >= 2 && $count <= 10) {
+        } elseif (
+            !is_float($count) && $count >= 2 && $count <= 10
+        ) {
             return 'few';
         }
 

@@ -9,7 +9,6 @@ class RomanianTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        parent::setUp();
         $this->object = new Romanian();
     }
 
@@ -64,8 +63,8 @@ class RomanianTest extends \PHPUnit_Framework_TestCase
             [200, 'other'],
             [220, 'other'],
             [300, 'other'],
-            [1.31, 'other'],
-            [2.31, 'other'],
+            [1.31, 'one'],
+            [2.31, 'few'],
             [20.31, 'other'],
         ];
     }

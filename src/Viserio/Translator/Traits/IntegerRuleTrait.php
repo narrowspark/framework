@@ -7,7 +7,7 @@ trait IntegerRuleTrait
      * Returns TRUE if the value has only integer part and no decimal digits,
      * regardless of the actual type.
      *
-     * @param mixed $value
+     * @param int|string|double $value
      *
      * @return bool
      */

@@ -9,7 +9,6 @@ class TamazightTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        parent::setUp();
         $this->object = new Tamazight();
     }
 
@@ -56,7 +55,7 @@ class TamazightTest extends \PHPUnit_Framework_TestCase
             [1.2, 'other'],
             [2.07, 'other'],
             [3.31, 'other'],
-            [11.31, 'other'],
+            [11.31, 'one'],
             [100.31, 'other'],
         ];
     }

@@ -80,12 +80,15 @@ class MessageSelector
             } else {
                 $standardRules[] = $part;
             }
+
         }
 
         // try to match an explicit rule, then fallback to the standard ones
-        foreach ($explicitRules as $interval => $m) {
-            if ($this->intervalTest($number, $interval)) {
-                return $m;
+        if (!empty($explicitRules)) {
+            foreach ($explicitRules as $interval => $m) {
+                if ($this->intervalTest($number, $interval)) {
+                    return $m;
+                }
             }
         }
 

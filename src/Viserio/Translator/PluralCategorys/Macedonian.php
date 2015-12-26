@@ -2,11 +2,11 @@
 namespace Viserio\Translator\PluralCategorys;
 
 use Viserio\Contracts\Translator\PluralCategory as CategoryContract;
-use Viserio\Translator\Traits\IntegerRuleTrait;
+use Viserio\Translator\Traits\NormalizeIntegerValueTrait;
 
 class Macedonian implements CategoryContract
 {
-    use IntegerRuleTrait;
+    use NormalizeIntegerValueTrait;
 
     /**
      * Returns category key by count.
@@ -26,7 +26,9 @@ class Macedonian implements CategoryContract
      */
     public function category($count)
     {
-        if ($this->isInteger($count) && $count % 10 === 1 && $count !== 11) {
+        $count = $this->normalizeInteger($count);
+
+        if (!is_float($count) && $count % 10 === 1 && $count !== 11) {
             return 'one';
         }
 

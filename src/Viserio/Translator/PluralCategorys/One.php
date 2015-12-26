@@ -2,9 +2,12 @@
 namespace Viserio\Translator\PluralCategorys;
 
 use Viserio\Contracts\Translator\PluralCategory as CategoryContract;
+use Viserio\Translator\Traits\NormalizeIntegerValueTrait;
 
 class One implements CategoryContract
 {
+    use NormalizeIntegerValueTrait;
+
     /**
      * Returns category key by count.
      *
@@ -119,6 +122,8 @@ class One implements CategoryContract
      */
     public function category($count)
     {
+        $count = $this->normalizeInteger($count);
+
         return $count === 1 ? 'one' : 'other';
     }
 }

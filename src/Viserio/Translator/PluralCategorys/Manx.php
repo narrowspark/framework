@@ -2,11 +2,11 @@
 namespace Viserio\Translator\PluralCategorys;
 
 use Viserio\Contracts\Translator\PluralCategory as CategoryContract;
-use Viserio\Translator\Traits\IntegerRuleTrait;
+use Viserio\Translator\Traits\NormalizeIntegerValueTrait;
 
 class Manx implements CategoryContract
 {
-    use IntegerRuleTrait;
+    use NormalizeIntegerValueTrait;
 
     /**
      * Returns category key by count.
@@ -26,7 +26,15 @@ class Manx implements CategoryContract
      */
     public function category($count)
     {
-        if ($this->isInteger($count) && (in_array($count % 10, [1, 2], true) || ($count % 20 === 0))) {
+        $count = $this->normalizeInteger($count);
+
+        if (
+            !is_float($count) &&
+            (
+                in_array($count % 10, [1, 2], true) ||
+                ($count % 20 === 0)
+            )
+        ) {
             return 'one';
         }
 

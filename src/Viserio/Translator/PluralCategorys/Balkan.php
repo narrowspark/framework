@@ -2,11 +2,11 @@
 namespace Viserio\Translator\PluralCategorys;
 
 use Viserio\Contracts\Translator\PluralCategory as CategoryContract;
-use Viserio\Translator\Traits\IntegerRuleTrait;
+use Viserio\Translator\Traits\NormalizeIntegerValueTrait;
 
 class Balkan implements CategoryContract
 {
-    use IntegerRuleTrait;
+    use NormalizeIntegerValueTrait;
 
     /**
      * Returns category key by count.
@@ -34,13 +34,26 @@ class Balkan implements CategoryContract
      */
     public function category($count)
     {
-        $isInteger = $this->isInteger($count);
+        $count = $this->normalizeInteger($count);
 
-        if ($isInteger && $count % 10 === 1 && $count % 100 !== 11) {
+        if (
+            !is_float($count) &&
+            $count % 10 === 1 &&
+            $count % 100 !== 11
+        ) {
             return 'one';
-        } elseif ($isInteger && ($i = $count % 10) >= 2 && $i <= 4 && !(($i = $count % 100) >= 12 && $i <= 14)) {
+        } elseif (
+            !is_float($count) &&
+            ($i = $count % 10) >= 2 &&
+            $i <= 4 &&
+            !(($i = $count % 100) >= 12 && $i <= 14)
+        ) {
             return 'few';
-        } elseif ($isInteger && (($i = $count % 10) === 0 || ($i >= 5 && $i <= 9) || (($i = $count % 100) >= 11 && $i <= 14))) {
+        } elseif (
+            !is_float($count) &&
+            ($i = $count % 10) === 0 ||
+            ($i >= 5 && $i <= 9) || (($i = $count % 100) >= 11 && $i <= 14)
+        ) {
             return 'many';
         }
 

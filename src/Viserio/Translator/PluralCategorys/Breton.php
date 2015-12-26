@@ -2,11 +2,11 @@
 namespace Viserio\Translator\PluralCategorys;
 
 use Viserio\Contracts\Translator\PluralCategory as CategoryContract;
-use Viserio\Translator\Traits\IntegerRuleTrait;
+use Viserio\Translator\Traits\NormalizeIntegerValueTrait;
 
 class Breton implements CategoryContract
 {
-    use IntegerRuleTrait;
+    use NormalizeIntegerValueTrait;
 
     /**
      * Returns category key by count.
@@ -29,13 +29,21 @@ class Breton implements CategoryContract
      */
     public function category($count)
     {
-        $isInteger = $this->isInteger($count);
+        $count = $this->normalizeInteger($count);
 
-        if ($isInteger && $count % 10 === 1 && !in_array($count % 100, [11, 71, 91], true)) {
+        if (!is_float($count) && $count % 10 === 1 && !in_array($count % 100, [11, 71, 91], true)) {
             return 'one';
-        } elseif ($isInteger && $count % 10 === 2 && !in_array($count % 100, [12, 72, 92], true)) {
+        } elseif (!is_float($count) && $count % 10 === 2 && !in_array($count % 100, [12, 72, 92], true)) {
             return 'two';
-        } elseif ($isInteger && in_array($count % 10, [3, 4, 9], true) && !((($i = $count % 100) >= 10 && $i <= 19) || ($i >= 70 && $i <= 79) || ($i >= 90 && $i <= 99))) {
+        } elseif (
+            !is_float($count) &&
+            in_array($count % 10, [3, 4, 9], true) &&
+            !(
+                (($i = $count % 100) >= 10 && $i <= 19) ||
+                ($i >= 70 && $i <= 79) ||
+                ($i >= 90 && $i <= 99)
+            )
+        ) {
             return 'few';
         } elseif ($count !== 0 && $count % 1000000 === 0) {
             return 'many';

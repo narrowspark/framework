@@ -2,11 +2,11 @@
 namespace Viserio\Translator\PluralCategorys;
 
 use Viserio\Contracts\Translator\PluralCategory as CategoryContract;
-use Viserio\Translator\Traits\IntegerRuleTrait;
+use Viserio\Translator\Traits\NormalizeIntegerValueTrait;
 
 class Tamazight implements CategoryContract
 {
-    use IntegerRuleTrait;
+    use NormalizeIntegerValueTrait;
 
     /**
      * Returns category key by count.
@@ -27,7 +27,13 @@ class Tamazight implements CategoryContract
      */
     public function category($count)
     {
-        if ($this->isInteger($count) && ($count === 0 || $count === 1 || ($count >= 11 && $count <= 99))) {
+        $count = $this->normalizeInteger($count);
+
+        if (
+            $count === 0 ||
+            $count === 1 ||
+            ($count >= 11 && $count <= 99)
+        ) {
             return 'one';
         }
 

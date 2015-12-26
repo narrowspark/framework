@@ -2,9 +2,12 @@
 namespace Viserio\Translator\PluralCategorys;
 
 use Viserio\Contracts\Translator\PluralCategory as CategoryContract;
+use Viserio\Translator\Traits\NormalizeIntegerValueTrait;
 
 class None implements CategoryContract
 {
+    use NormalizeIntegerValueTrait;
+
     /**
      * Returns category key by count.
      *

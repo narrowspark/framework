@@ -2,11 +2,11 @@
 namespace Viserio\Translator\PluralCategorys;
 
 use Viserio\Contracts\Translator\PluralCategory as CategoryContract;
-use Viserio\Translator\Traits\IntegerRuleTrait;
+use Viserio\Translator\Traits\NormalizeIntegerValueTrait;
 
 class Gaelic implements CategoryContract
 {
-    use IntegerRuleTrait;
+    use NormalizeIntegerValueTrait;
 
     /**
      * Returns category key by count.
@@ -28,11 +28,19 @@ class Gaelic implements CategoryContract
      */
     public function category($count)
     {
+        $count = $this->normalizeInteger($count);
+
         if ($count === 1 || $count === 11) {
             return 'one';
         } elseif ($count === 2 || $count === 12) {
             return 'two';
-        } elseif ($this->isInteger($count) && (($count >= 3 && $count <= 10) || ($count >= 13 && $count <= 19))) {
+        } elseif (
+            !is_float($count) &&
+            (
+                ($count >= 3 && $count <= 10) ||
+                ($count >= 13 && $count <= 19)
+            )
+        ) {
             return 'few';
         }
 
