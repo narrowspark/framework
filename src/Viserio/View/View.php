@@ -1,13 +1,16 @@
 <?php
 namespace Viserio\View;
 
+use ArrayAccess;
+use BadMethodCallException;
+use Closure;
 use Viserio\Contracts\Support\Arrayable;
 use Viserio\Contracts\Support\Renderable;
 use Viserio\Contracts\View\Engine as EngineContract;
 use Viserio\Contracts\View\View as ViewContract;
 use Viserio\Support\Str;
 
-class View implements \ArrayAccess, ViewContract
+class View implements ArrayAccess, ViewContract
 {
     /**
      * The view factory instance.
@@ -70,7 +73,7 @@ class View implements \ArrayAccess, ViewContract
      *
      * @return string
      */
-    public function render(\Closure $callback = null)
+    public function render(Closure $callback = null)
     {
         $contents = $this->getContents();
         $response = isset($callback) ? $callback($this, $contents) : null;
@@ -317,7 +320,7 @@ class View implements \ArrayAccess, ViewContract
             return $this->with(Str::snake(substr($method, 4)), $parameters[0]);
         }
 
-        throw new \BadMethodCallException(sprintf('Method [%s] does not exist on view.', $method));
+        throw new BadMethodCallException(sprintf('Method [%s] does not exist on view.', $method));
     }
 
     /**

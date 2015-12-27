@@ -1,6 +1,7 @@
 <?php
 namespace Viserio\View;
 
+use InvalidArgumentException;
 use Viserio\Contracts\View\Finder as FinderContract;
 use Viserio\Filesystem\Filesystem;
 
@@ -106,11 +107,11 @@ class ViewFinder implements FinderContract
         $segments = explode(static::HINT_PATH_DELIMITER, $name);
 
         if (count($segments) !== 2) {
-            throw new \InvalidArgumentException(sprintf('View %s has an invalid name.', $name));
+            throw new InvalidArgumentException(sprintf('View %s has an invalid name.', $name));
         }
 
         if (!isset($this->hints[$segments[0]])) {
-            throw new \InvalidArgumentException(sprintf('No hint path defined for [%s].', $segments[0]));
+            throw new InvalidArgumentException(sprintf('No hint path defined for [%s].', $segments[0]));
         }
 
         return $segments;
@@ -136,7 +137,7 @@ class ViewFinder implements FinderContract
             }
         }
 
-        throw new \InvalidArgumentException(sprintf('View [%s] not found.', $name));
+        throw new InvalidArgumentException(sprintf('View [%s] not found.', $name));
     }
 
     /**
