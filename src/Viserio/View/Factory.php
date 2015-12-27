@@ -1,6 +1,7 @@
 <?php
 namespace Viserio\View;
 
+use InvalidArgumentException;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Viserio\Contracts\Cache\Factory as CacheContract;
 use Viserio\Contracts\Config\Manager as ConfigContract;
@@ -198,7 +199,7 @@ class Factory implements FactoryContract
     {
         try {
             $this->finder->find($view);
-        } catch (\InvalidArgumentException $exception) {
+        } catch (InvalidArgumentException $exception) {
             return false;
         }
 
@@ -280,7 +281,7 @@ class Factory implements FactoryContract
     public function getEngineFromPath($path)
     {
         if (!$extension = $this->getExtension($path)) {
-            throw new \InvalidArgumentException(sprintf('Unrecognized extension in file: [%s]', $path));
+            throw new InvalidArgumentException(sprintf('Unrecognized extension in file: [%s]', $path));
         }
 
         $engine = $this->extensions[$extension];

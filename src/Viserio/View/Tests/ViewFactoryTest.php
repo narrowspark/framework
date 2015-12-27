@@ -252,6 +252,7 @@ class ViewFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $event = Mock::mock('Symfony\Component\EventDispatcher\EventDispatcherInterface');
         $event->shouldReceive('addListener');
+
         return new Factory(
             Mock::mock('Viserio\View\Engines\EngineResolver'),
             Mock::mock('Viserio\Contracts\View\Finder'),
