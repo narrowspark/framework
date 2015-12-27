@@ -7,13 +7,6 @@ use Viserio\Contracts\View\Engine as EngineContract;
 use Viserio\Contracts\View\View as ViewContract;
 use Viserio\Support\Str;
 
-/**
- * View.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.5
- */
 class View implements \ArrayAccess, ViewContract
 {
     /**

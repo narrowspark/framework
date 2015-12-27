@@ -11,13 +11,6 @@ use Viserio\Support\Arr;
 use Viserio\Support\Str;
 use Viserio\View\Engines\EngineResolver;
 
-/**
- * Factory.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.5
- */
 class Factory implements FactoryContract
 {
     /**

@@ -4,13 +4,6 @@ namespace Viserio\View\Test;
 use Mockery as Mock;
 use Viserio\View\ViewFinder;
 
-/**
- * ViewTest.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.5
- */
 class ViewFinderTest extends \PHPUnit_Framework_TestCase
 {
     public function tearDown()
@@ -21,33 +14,65 @@ class ViewFinderTest extends \PHPUnit_Framework_TestCase
     public function testBasicViewFinding()
     {
         $finder = $this->getFinder();
-        $finder->getFilesystem()->shouldReceive('exists')->once()->with(__DIR__ . '/foo.plates.php')->andReturn(true);
+        $finder->getFilesystem()
+            ->shouldReceive('exists')
+            ->once()
+            ->with(__DIR__ . '/foo.plates.php')
+            ->andReturn(true);
+
         $this->assertEquals(__DIR__ . '/foo.plates.php', $finder->find('foo'));
     }
 
     public function testCascadingFileLoading()
     {
         $finder = $this->getFinder();
-        $finder->getFilesystem()->shouldReceive('exists')->once()->with(__DIR__ . '/foo.plates.php')->andReturn(false);
-        $finder->getFilesystem()->shouldReceive('exists')->once()->with(__DIR__ . '/foo.php')->andReturn(true);
+        $finder->getFilesystem()
+            ->shouldReceive('exists')
+            ->once()
+            ->with(__DIR__ . '/foo.plates.php')
+            ->andReturn(false);
+        $finder->getFilesystem()
+            ->shouldReceive('exists')
+            ->once()
+            ->with(__DIR__ . '/foo.php')
+            ->andReturn(true);
+
         $this->assertEquals(__DIR__ . '/foo.php', $finder->find('foo'));
     }
 
     public function testDirectoryCascadingFileLoading()
     {
         $finder = $this->getFinder();
-        $finder->addLocation(__DIR__ . '/nested');
-        $finder->getFilesystem()->shouldReceive('exists')->once()->with(__DIR__ . '/foo.plates.php')->andReturn(false);
-        $finder->getFilesystem()->shouldReceive('exists')->once()->with(__DIR__ . '/foo.php')->andReturn(false);
-        $finder->getFilesystem()->shouldReceive('exists')->once()->with(__DIR__ . '/nested/foo.plates.php')->andReturn(true);
-        $this->assertEquals(__DIR__ . '/nested/foo.plates.php', $finder->find('foo'));
+        $finder->addLocation(__DIR__ . '/Nested');
+        $finder->getFilesystem()
+            ->shouldReceive('exists')
+            ->once()
+            ->with(__DIR__ . '/foo.plates.php')
+            ->andReturn(false);
+        $finder->getFilesystem()
+            ->shouldReceive('exists')
+            ->once()
+            ->with(__DIR__ . '/foo.php')
+            ->andReturn(false);
+        $finder->getFilesystem()
+            ->shouldReceive('exists')
+            ->once()
+            ->with(__DIR__ . '/Nested/foo.plates.php')
+            ->andReturn(true);
+
+        $this->assertEquals(__DIR__ . '/Nested/foo.plates.php', $finder->find('foo'));
     }
 
     public function testNamespacedBasicFileLoading()
     {
         $finder = $this->getFinder();
         $finder->addNamespace('foo', __DIR__ . '/foo');
-        $finder->getFilesystem()->shouldReceive('exists')->once()->with(__DIR__ . '/foo/bar/baz.plates.php')->andReturn(true);
+        $finder->getFilesystem()
+            ->shouldReceive('exists')
+            ->once()
+            ->with(__DIR__ . '/foo/bar/baz.plates.php')
+            ->andReturn(true);
+
         $this->assertEquals(__DIR__ . '/foo/bar/baz.plates.php', $finder->find('foo::bar.baz'));
     }
 
@@ -55,8 +80,17 @@ class ViewFinderTest extends \PHPUnit_Framework_TestCase
     {
         $finder = $this->getFinder();
         $finder->addNamespace('foo', __DIR__ . '/foo');
-        $finder->getFilesystem()->shouldReceive('exists')->once()->with(__DIR__ . '/foo/bar/baz.plates.php')->andReturn(false);
-        $finder->getFilesystem()->shouldReceive('exists')->once()->with(__DIR__ . '/foo/bar/baz.php')->andReturn(true);
+        $finder->getFilesystem()
+            ->shouldReceive('exists')
+            ->once()
+            ->with(__DIR__ . '/foo/bar/baz.plates.php')
+            ->andReturn(false);
+        $finder->getFilesystem()
+            ->shouldReceive('exists')
+            ->once()
+            ->with(__DIR__ . '/foo/bar/baz.php')
+            ->andReturn(true);
+
         $this->assertEquals(__DIR__ . '/foo/bar/baz.php', $finder->find('foo::bar.baz'));
     }
 
@@ -64,9 +98,22 @@ class ViewFinderTest extends \PHPUnit_Framework_TestCase
     {
         $finder = $this->getFinder();
         $finder->addNamespace('foo', [__DIR__ . '/foo', __DIR__ . '/bar']);
-        $finder->getFilesystem()->shouldReceive('exists')->once()->with(__DIR__ . '/foo/bar/baz.plates.php')->andReturn(false);
-        $finder->getFilesystem()->shouldReceive('exists')->once()->with(__DIR__ . '/foo/bar/baz.php')->andReturn(false);
-        $finder->getFilesystem()->shouldReceive('exists')->once()->with(__DIR__ . '/bar/bar/baz.plates.php')->andReturn(true);
+        $finder->getFilesystem()
+            ->shouldReceive('exists')
+            ->once()
+            ->with(__DIR__ . '/foo/bar/baz.plates.php')
+            ->andReturn(false);
+        $finder->getFilesystem()
+            ->shouldReceive('exists')
+            ->once()
+            ->with(__DIR__ . '/foo/bar/baz.php')
+            ->andReturn(false);
+        $finder->getFilesystem()
+            ->shouldReceive('exists')
+            ->once()
+            ->with(__DIR__ . '/bar/bar/baz.plates.php')
+            ->andReturn(true);
+
         $this->assertEquals(__DIR__ . '/bar/bar/baz.plates.php', $finder->find('foo::bar.baz'));
     }
 
@@ -76,8 +123,15 @@ class ViewFinderTest extends \PHPUnit_Framework_TestCase
     public function testExceptionThrownWhenViewNotFound()
     {
         $finder = $this->getFinder();
-        $finder->getFilesystem()->shouldReceive('exists')->once()->with(__DIR__ . '/foo.plates.php')->andReturn(false);
-        $finder->getFilesystem()->shouldReceive('exists')->once()->with(__DIR__ . '/foo.php')->andReturn(false);
+        $finder->getFilesystem()
+            ->shouldReceive('exists')
+            ->once()
+            ->with(__DIR__ . '/foo.plates.php')->andReturn(false);
+        $finder->getFilesystem()
+            ->shouldReceive('exists')
+            ->once()
+            ->with(__DIR__ . '/foo.php')
+            ->andReturn(false);
         $finder->find('foo');
     }
 

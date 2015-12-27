@@ -4,13 +4,6 @@ namespace Viserio\View;
 use Viserio\Contracts\View\Finder as FinderContract;
 use Viserio\Filesystem\Filesystem;
 
-/**
- * ViewFinder.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.4
- */
 class ViewFinder implements FinderContract
 {
     /**
