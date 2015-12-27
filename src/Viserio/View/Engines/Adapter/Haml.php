@@ -5,13 +5,6 @@ use MtHaml\Environment;
 use MtHaml\Support\Php\Executor;
 use Viserio\Contracts\View\Engine as EnginesContract;
 
-/**
- * Haml.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.5
- */
 class Haml implements EnginesContract
 {
     /**

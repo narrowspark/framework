@@ -9,13 +9,6 @@ use League\Plates\Template\Template;
 use Viserio\Contracts\Config\Manager as ConfigContract;
 use Viserio\Contracts\View\Engine as EnginesContract;
 
-/**
- * Plates.
- *
- * @author  Daniel Bannert
- *
- * @since   0.8.0
- */
 class Plates implements EnginesContract
 {
     /**

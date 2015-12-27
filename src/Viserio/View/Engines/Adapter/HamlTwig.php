@@ -6,13 +6,6 @@ use MtHaml\Support\Twig\Extension;
 use MtHaml\Support\Twig\Loader;
 use Viserio\Contracts\View\Engine as EnginesContract;
 
-/**
- * HamlTwig.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.5
- */
 class HamlTwig implements EnginesContract
 {
     /**

@@ -3,13 +3,6 @@ namespace Viserio\View\Engines\Adapter;
 
 use Viserio\Contracts\View\Engine as EnginesContract;
 
-/**
- * Php.
- *
- * @author  Daniel Bannert
- *
- * @since   0.8.0
- */
 class Php implements EnginesContract
 {
     /**

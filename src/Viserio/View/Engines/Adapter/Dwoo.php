@@ -5,13 +5,6 @@ use Dwoo\Core;
 use Dwoo\Template\File;
 use Viserio\Contracts\View\Engine as EnginesContract;
 
-/**
- * Dwoo.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.5
- */
 class Dwoo implements EnginesContract
 {
     /**

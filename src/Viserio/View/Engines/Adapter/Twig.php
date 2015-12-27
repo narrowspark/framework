@@ -3,13 +3,6 @@ namespace Viserio\View\Engines\Adapter;
 
 use Viserio\Contracts\View\Engine as EnginesContract;
 
-/**
- * Twig.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.5
- */
 class Twig implements EnginesContract
 {
     /**

@@ -8,13 +8,6 @@ use Viserio\View\Engines\EngineResolver;
 use Viserio\View\Factory;
 use Viserio\View\ViewFinder;
 
-/**
- * ViewServiceProvider.
- *
- * @author  Daniel Bannert
- *
- * @since   0.8.0
- */
 class ViewServiceProvider extends ServiceProvider
 {
     /**

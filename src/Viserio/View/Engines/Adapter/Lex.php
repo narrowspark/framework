@@ -4,13 +4,6 @@ namespace Viserio\View\Engines\Adapter;
 use Lex\Parser;
 use Viserio\Contracts\View\Engine as EnginesContract;
 
-/**
- * Lex.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.5
- */
 class Lex implements EnginesContract
 {
     /**
