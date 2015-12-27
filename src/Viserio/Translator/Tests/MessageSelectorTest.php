@@ -50,34 +50,34 @@ class MessageSelectorTest extends \PHPUnit_Framework_TestCase
             [
                 'There are no apples',
                 '{0} There are no apples|{1} There is one apple|]1,Inf] There are %count% apples',
-                0
+                0,
             ],
             [
                 'There are no apples',
                 '{0}     There are no apples|{1} There is one apple|]1,Inf] There are %count% apples',
-                0
+                0,
             ],
             [
                 'There are no apples',
                 '{0}There are no apples|{1} There is one apple|]1,Inf] There are %count% apples',
-                0
+                0,
             ],
             [
                 'There is one apple',
-                '{0} There are no apples|{1} There is one apple|]1,Inf] There are %count% apples', 1
+                '{0} There are no apples|{1} There is one apple|]1,Inf] There are %count% apples', 1,
             ],
             [
                 'There are %count% apples',
-                '{0} There are no apples|{1} There is one apple|]1,Inf] There are %count% apples', 10
+                '{0} There are no apples|{1} There is one apple|]1,Inf] There are %count% apples', 10,
             ],
             [
                 'There are %count% apples',
-                '{0} There are no apples|{1} There is one apple|]1,Inf]There are %count% apples', 10
+                '{0} There are no apples|{1} There is one apple|]1,Inf]There are %count% apples', 10,
             ],
             [
                 'There are %count% apples',
                 '{0} There are no apples|{1} There is one apple|]1,Inf]     There are %count% apples',
-                10
+                10,
             ],
             ['There are %count% apples', 'There is one apple|There are %count% apples', 0],
             // ['There is one apple', 'There is one apple|There are %count% apples', 1],

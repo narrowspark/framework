@@ -8,11 +8,11 @@ use Viserio\Contracts\Translator\MessageCatalogue as MessageCatalogueContract;
 use Viserio\Contracts\Translator\NotFoundResourceException;
 use Viserio\Contracts\Translator\Translator as TranslatorContract;
 use Viserio\Filesystem\FileLoader;
+use Viserio\Support\Manager as SupportManager;
 use Viserio\Translator\Traits\FiltersTrait;
 use Viserio\Translator\Traits\HelpersTrait;
 use Viserio\Translator\Traits\ReplacementTrait;
 use Viserio\Translator\Traits\TranslateTrait;
-use Viserio\Support\Manager as SupportManager;
 
 class Manager extends SupportManager implements TranslatorContract
 {

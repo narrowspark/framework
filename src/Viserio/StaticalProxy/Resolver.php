@@ -13,17 +13,17 @@ class Resolver
     protected $regex;
 
     /**
-     * @var string $pattern
+     * @var string
      */
     protected $pattern;
 
     /**
-     * @var string|callable $translation
+     * @var string|callable
      */
     protected $translation;
 
     /**
-     * @var boolean
+     * @var bool
      */
     protected $active = false;
 
@@ -34,7 +34,7 @@ class Resolver
     public function __construct($pattern, $translation)
     {
         $regex             = preg_quote($pattern, '#');
-        $this->regex       = '#^'.str_replace('\\*', '(.*)', $regex).'$#uD';
+        $this->regex       = '#^' . str_replace('\\*', '(.*)', $regex) . '$#uD';
         $this->pattern     = $pattern;
         $this->translation = $translation;
     }
@@ -44,7 +44,7 @@ class Resolver
      *
      * @param string $alias
      *
-     * @return boolean
+     * @return bool
      */
     public function resolve($alias)
     {
@@ -79,7 +79,7 @@ class Resolver
      * @param string        $pattern
      * @param callable|null $translation
      *
-     * @return boolean
+     * @return bool
      */
     public function matches($pattern, $translation = null)
     {

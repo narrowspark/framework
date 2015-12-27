@@ -80,7 +80,6 @@ class MessageSelector
             } else {
                 $standardRules[] = $part;
             }
-
         }
 
         // try to match an explicit rule, then fallback to the standard ones

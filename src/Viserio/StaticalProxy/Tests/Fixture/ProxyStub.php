@@ -1,7 +1,6 @@
 <?php
 namespace Viserio\StaticalProxy\Tests\Fixture;
 
-use StdClass;
 use Viserio\StaticalProxy\StaticalProxy;
 
 class ProxyStub extends StaticalProxy
