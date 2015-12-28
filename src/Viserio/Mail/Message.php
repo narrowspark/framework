@@ -1,9 +1,9 @@
 <?php
 namespace Viserio\Mail;
 
-use Swift_Message;
 use Swift_Attachment;
 use Swift_Image;
+use Swift_Message;
 
 class Message
 {

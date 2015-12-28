@@ -4,7 +4,6 @@ namespace Viserio\Application;
 use SplPriorityQueue;
 use Symfony\Component\HttpFoundation\Request as SymfonyRequest;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
-use Viserio\Application\Application;
 use Viserio\Application\Traits\BootableTrait;
 use Viserio\Application\Traits\EnvironmentTrait;
 use Viserio\Application\Traits\HttpErrorHandlingTrait;

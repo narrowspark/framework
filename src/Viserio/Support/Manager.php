@@ -2,8 +2,8 @@
 namespace Viserio\Support;
 
 use Closure;
-use RuntimeException;
 use InvalidArgumentException;
+use RuntimeException;
 use Viserio\Contracts\Config\Manager as ConfigManager;
 use Viserio\Support\Traits\ContainerAwareTrait;
 

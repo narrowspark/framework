@@ -1,9 +1,9 @@
 <?php
 namespace Viserio\Mail\Transport;
 
-use Swift_Mime_MimeEntity;
-use Swift_Mime_Message;
 use Psr\Log\LoggerInterface;
+use Swift_Mime_Message;
+use Swift_Mime_MimeEntity;
 
 class Log extends Transport
 {

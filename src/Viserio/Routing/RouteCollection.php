@@ -2,13 +2,13 @@
 namespace Viserio\Routing;
 
 use Closure;
-use RuntimeException;
-use LogicException;
-use InvalidArgumentException;
 use FastRoute\DataGenerator;
 use FastRoute\RouteCollector;
 use FastRoute\RouteParser as FastRouteParser;
 use Interop\Container\ContainerInterface as ContainerContract;
+use InvalidArgumentException;
+use LogicException;
+use RuntimeException;
 use Viserio\Contracts\Routing\RouteCollector as RouteCollectorContract;
 use Viserio\Contracts\Routing\RouteStrategy as RouteStrategyContract;
 use Viserio\Routing\RouteParser as ViserioRouteParser;

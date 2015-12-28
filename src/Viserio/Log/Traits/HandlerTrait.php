@@ -2,21 +2,19 @@
 namespace Viserio\Log\Traits;
 
 use InvalidArgumentException;
-use Monolog\Handler\StreamHandler;
 use Monolog\Handler\AmqpHandler;
-use Monolog\Handler\GelfHandler;
-use Monolog\Handler\CubeHandler;
-use Monolog\Handler\RavenHandler;
-use Monolog\Handler\ZendMonitorHandler;
-use Monolog\Handler\NewRelicHandler;
-use Monolog\Handler\ErrorLogHandler;
-use Monolog\Handler\LogglyHandler;
-use Monolog\Handler\SyslogUdpHandler;
 use Monolog\Handler\BrowserConsoleHandler;
-use Monolog\Handler\FirePHPHandler;
 use Monolog\Handler\ChromePHPHandler;
-
-
+use Monolog\Handler\CubeHandler;
+use Monolog\Handler\ErrorLogHandler;
+use Monolog\Handler\FirePHPHandler;
+use Monolog\Handler\GelfHandler;
+use Monolog\Handler\LogglyHandler;
+use Monolog\Handler\NewRelicHandler;
+use Monolog\Handler\RavenHandler;
+use Monolog\Handler\StreamHandler;
+use Monolog\Handler\SyslogUdpHandler;
+use Monolog\Handler\ZendMonitorHandler;
 use Monolog\Logger as MonologLogger;
 
 trait HandlerTrait

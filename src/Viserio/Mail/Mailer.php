@@ -1,13 +1,13 @@
 <?php
 namespace Viserio\Mail;
 
-use Swift_Message;
 use Closure;
 use Exception;
 use InvalidArgumentException;
-use Swift_Transport_AbstractSmtpTransport;
 use Psr\Log\LoggerInterface;
 use Swift_Mailer;
+use Swift_Message;
+use Swift_Transport_AbstractSmtpTransport;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Viserio\Contracts\Mail\Mailer as MailerContract;
 use Viserio\Contracts\View\Factory;

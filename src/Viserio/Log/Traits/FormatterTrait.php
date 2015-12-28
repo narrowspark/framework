@@ -1,17 +1,17 @@
 <?php
 namespace Viserio\Log\Traits;
 
-use Monolog\Formatter\LineFormatter;
-use Monolog\Formatter\HtmlFormatter;
-use Monolog\Formatter\ScalarFormatter;
-use Monolog\Formatter\NormalizerFormatter;
-use Monolog\Formatter\JsonFormatter;
-use \Monolog\Formatter\WildfireFormatter;
-use \Monolog\Formatter\ChromePHPFormatter;
-use \Monolog\Formatter\GelfFormatter;
-use \Monolog\Formatter\LogstashFormatter;
-use \Monolog\Formatter\ElasticaFormatter;
 use InvalidArgumentException;
+use Monolog\Formatter\ChromePHPFormatter;
+use Monolog\Formatter\ElasticaFormatter;
+use Monolog\Formatter\GelfFormatter;
+use Monolog\Formatter\HtmlFormatter;
+use Monolog\Formatter\JsonFormatter;
+use Monolog\Formatter\LineFormatter;
+use Monolog\Formatter\LogstashFormatter;
+use Monolog\Formatter\NormalizerFormatter;
+use Monolog\Formatter\ScalarFormatter;
+use Monolog\Formatter\WildfireFormatter;
 
 trait FormatterTrait
 {

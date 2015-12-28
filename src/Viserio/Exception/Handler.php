@@ -2,11 +2,11 @@
 namespace Viserio\Exception;
 
 use Closure;
-use Exception;
 use ErrorException;
-use ReflectionFunction;
+use Exception;
 use Interop\Container\ContainerInterface as ContainerContract;
 use Psr\Log\LoggerInterface;
+use ReflectionFunction;
 use Symfony\Component\Debug\Exception\FatalErrorException;
 use Symfony\Component\Debug\Exception\FlattenException;
 use Viserio\Contracts\Http\HttpExceptionInterface;

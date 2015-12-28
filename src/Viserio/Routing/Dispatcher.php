@@ -3,10 +3,10 @@ namespace Viserio\Routing;
 
 use Closure;
 use Exception;
-use RuntimeException;
 use FastRoute\Dispatcher as FastDispatcher;
 use FastRoute\Dispatcher\GroupCountBased as GroupCountBasedDispatcher;
 use Interop\Container\ContainerInterface as ContainerContract;
+use RuntimeException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Viserio\Contracts\Http\Response as ResponseContract;
 use Viserio\Contracts\Routing\RouteStrategy as RouteStrategyContract;

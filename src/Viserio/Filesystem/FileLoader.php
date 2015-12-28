@@ -2,14 +2,14 @@
 namespace Viserio\Filesystem;
 
 use RuntimeException;
-use Viserio\Filesystem\Parser\Php as PhpParser;
-use Viserio\Filesystem\Parser\Ini as IniParser;
-use Viserio\Filesystem\Parser\Xml as XmlParser;
-use Viserio\Filesystem\Parser\Json as JsonParser;
-use Viserio\Filesystem\Parser\Yaml as YamlParser;
-use Viserio\Filesystem\Parser\Toml as TomlParser;
 use Viserio\Contracts\Filesystem\Loader as LoaderContract;
 use Viserio\Contracts\Filesystem\Parser as ParserContract;
+use Viserio\Filesystem\Parser\Ini as IniParser;
+use Viserio\Filesystem\Parser\Json as JsonParser;
+use Viserio\Filesystem\Parser\Php as PhpParser;
+use Viserio\Filesystem\Parser\Toml as TomlParser;
+use Viserio\Filesystem\Parser\Xml as XmlParser;
+use Viserio\Filesystem\Parser\Yaml as YamlParser;
 
 class FileLoader implements LoaderContract
 {
