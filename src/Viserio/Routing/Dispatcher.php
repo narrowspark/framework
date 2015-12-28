@@ -1,6 +1,9 @@
 <?php
 namespace Viserio\Routing;
 
+use Closure;
+use Exception;
+use RuntimeException;
 use FastRoute\Dispatcher as FastDispatcher;
 use FastRoute\Dispatcher\GroupCountBased as GroupCountBasedDispatcher;
 use Interop\Container\ContainerInterface as ContainerContract;
@@ -150,7 +153,7 @@ class Dispatcher extends GroupCountBasedDispatcher implements RouteStrategyContr
         $controller = null;
 
         // figure out what the controller is
-        if (($handler instanceof \Closure) || is_callable($handler)) {
+        if (($handler instanceof Closure) || is_callable($handler)) {
             $controller = $handler;
         }
 
@@ -160,7 +163,7 @@ class Dispatcher extends GroupCountBasedDispatcher implements RouteStrategyContr
 
         // if controller method wasn't specified, throw exception.
         if (!$controller) {
-            throw new \RuntimeException('A class method must be provided as a controller. ClassName::methodName');
+            throw new RuntimeException('A class method must be provided as a controller. ClassName::methodName');
         }
 
         return $controller;
@@ -233,7 +236,7 @@ class Dispatcher extends GroupCountBasedDispatcher implements RouteStrategyContr
             return $response;
         }
 
-        throw new \RuntimeException(
+        throw new RuntimeException(
             'When using the Request -> Response Strategy your controller must return an instance of [Viserio\Contracts\Http\Response]'
         );
     }
@@ -262,7 +265,7 @@ class Dispatcher extends GroupCountBasedDispatcher implements RouteStrategyContr
                 return new JsonResponse($response);
             }
 
-            throw new \RuntimeException(
+            throw new RuntimeException(
                 'Your controller action must return a valid response for the Restful Strategy Acceptable responses are of type: [Array], [ArrayObject] and [Viserio\Http\JsonResponse]'
             );
         } catch (HttpException $exception) {
@@ -293,8 +296,8 @@ class Dispatcher extends GroupCountBasedDispatcher implements RouteStrategyContr
 
         try {
             $response = new Response($response);
-        } catch (\Exception $exception) {
-            throw new \RuntimeException('Unable to build Response from controller return value', 0, $exception);
+        } catch (Exception $exception) {
+            throw new RuntimeException('Unable to build Response from controller return value', 0, $exception);
         }
 
         return $response;

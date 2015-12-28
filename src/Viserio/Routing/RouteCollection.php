@@ -1,6 +1,10 @@
 <?php
 namespace Viserio\Routing;
 
+use Closure;
+use RuntimeException;
+use LogicException;
+use InvalidArgumentException;
 use FastRoute\DataGenerator;
 use FastRoute\RouteCollector;
 use FastRoute\RouteParser as FastRouteParser;
@@ -70,13 +74,13 @@ class RouteCollection extends RouteCollector implements RouteStrategyContract, R
 
         // if the handler is an anonymous function, we need to store it for later use
         // by the dispatcher, otherwise we just throw the handler string at FastRoute
-        if ($handler instanceof \Closure || (is_object($handler) && is_callable($handler))) {
+        if ($handler instanceof Closure || (is_object($handler) && is_callable($handler))) {
             $callback = $handler;
             $handler = uniqid('Viserio::route::', true);
 
             $this->routes[$handler]['callback'] = $callback;
         } elseif (is_object($handler)) {
-            throw new \RuntimeException('Object controllers must be callable.');
+            throw new RuntimeException('Object controllers must be callable.');
         }
 
         $this->routes[$handler]['strategy'] = $strategy;
@@ -298,7 +302,7 @@ class RouteCollection extends RouteCollector implements RouteStrategyContract, R
     {
         if ($name) {
             if (array_key_exists($name, $this->filters)) {
-                throw new \LogicException(sprintf('Filter with name %s already defined', $name));
+                throw new LogicException(sprintf('Filter with name %s already defined', $name));
             }
 
             $this->filters[$name] = $name;
@@ -317,7 +321,7 @@ class RouteCollection extends RouteCollector implements RouteStrategyContract, R
     protected function getFilter($name)
     {
         if (!array_key_exists($name, $this->filters)) {
-            throw new \InvalidArgumentException(sprintf('Filter with name %s is not defined', $name));
+            throw new InvalidArgumentException(sprintf('Filter with name %s is not defined', $name));
         }
 
         return $this->filters[$name];
