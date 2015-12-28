@@ -10,9 +10,12 @@ use Viserio\Contracts\View\Finder as FinderContract;
 use Viserio\Support\Arr;
 use Viserio\Support\Str;
 use Viserio\View\Engines\EngineResolver;
+use Viserio\View\Traits\NormalizeNameTrait;
 
 class Factory implements FactoryContract
 {
+    use NormalizeNameTrait;
+
     /**
      * Cache instance.
      *
@@ -465,26 +468,6 @@ class Factory implements FactoryContract
     public function getNames()
     {
         return $this->names;
-    }
-
-    /**
-     * Normalize a view name.
-     *
-     * @param string $name
-     *
-     * @return string
-     */
-    protected function normalizeName($name)
-    {
-        $delimiter = FinderContract::HINT_PATH_DELIMITER;
-
-        if (strpos($name, $delimiter) === false) {
-            return str_replace('/', '.', $name);
-        }
-
-        list($namespace, $name) = explode($delimiter, $name);
-
-        return $namespace . $delimiter . str_replace('/', '.', $name);
     }
 
     /**

@@ -1,10 +1,19 @@
 <?php
 namespace Viserio\View;
 
+use Closure;
 use InvalidArgumentException;
+use Interop\Container\ContainerInterface as ContainerInteropInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Viserio\Support\Invoker;
+use Viserio\Support\Traits\ContainerAwareTrait;
+use Viserio\View\Traits\NormalizeNameTrait;
 
 class Virtuoso
 {
+    use ContainerAwareTrait;
+    use NormalizeNameTrait;
+
     /**
      * The view composer events.
      *
@@ -34,12 +43,37 @@ class Virtuoso
     protected $events;
 
     /**
-     * Set the event dispatcher instance.
+     * The number of active rendering operations.
      *
+     * @var int
+     */
+    protected $renderCount = 0;
+
+    /**
+     * Invoker instance.
+     *
+     * @var \Viserio\Support\Invoker
+     */
+    protected $invoker;
+
+    /**
+     * Construct.
+     *
+     * @param Interop\Container\ContainerInterface                        $container
      * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $events
      */
-    public function setDispatcher(EventDispatcherInterface $events) {
-        $this->events  = $events;
+    public function __construct(
+        ContainerInteropInterface $container,
+        EventDispatcherInterface $events
+    ) {
+        $this->events = $events;
+
+        $this->setContainer($container);
+
+        $this->invoker = (new Invoker())
+            ->injectByTypeHint(true)
+            ->injectByParameterName(true)
+            ->setContainer($this->getContainer());
     }
 
     /**
@@ -156,12 +190,15 @@ class Virtuoso
         if (empty($this->sectionStack)) {
             throw new InvalidArgumentException('Cannot end a section without first starting one.');
         }
+
         $last = array_pop($this->sectionStack);
+
         if (isset($this->sections[$last])) {
             $this->sections[$last] .= ob_get_clean();
         } else {
             $this->sections[$last] = ob_get_clean();
         }
+
         return $last;
     }
 
@@ -182,6 +219,34 @@ class Virtuoso
         if ($this->doneRendering()) {
             $this->flushSections();
         }
+    }
+
+    /**
+     * Increment the rendering counter.
+     *
+     * @return void
+     */
+    public function incrementRender()
+    {
+        $this->renderCount++;
+    }
+    /**
+     * Decrement the rendering counter.
+     *
+     * @return void
+     */
+    public function decrementRender()
+    {
+        $this->renderCount--;
+    }
+    /**
+     * Check if there are no active render operations.
+     *
+     * @return bool
+     */
+    public function doneRendering()
+    {
+        return $this->renderCount == 0;
     }
 
     /**
@@ -220,5 +285,117 @@ class Virtuoso
         }
 
         $this->sections[$section] = $content;
+    }
+
+    /**
+     * Add an event for a given view.
+     *
+     * @param string          $view
+     * @param \Closure|string $callback
+     * @param string          $prefix
+     * @param int|null        $priority
+     *
+     * @return \Closure|null
+     */
+    protected function addViewEvent($view, $callback, $prefix = 'composing: ', $priority = null)
+    {
+        $view = $this->normalizeName($view);
+
+        if ($callback instanceof Closure) {
+            $this->addEventListener($prefix.$view, $callback, $priority);
+
+            return $callback;
+        } elseif (is_string($callback)) {
+            return $this->addClassEvent($view, $callback, $prefix, $priority);
+        }
+    }
+
+    /**
+     * Register a class based view composer.
+     *
+     * @param string    $view
+     * @param string    $class
+     * @param string    $prefix
+     * @param int|null  $priority
+     *
+     * @return \Closure
+     */
+    protected function addClassEvent($view, $class, $prefix, $priority = null)
+    {
+        $name = $prefix.$view;
+        // When registering a class based view "composer", we will simply resolve the
+        // classes from the application IoC container then call the compose method
+        // on the instance. This allows for convenient, testable view composers.
+        $callback = $this->buildClassEventCallback($class, $prefix);
+        $this->addEventListener($name, $callback, $priority);
+
+        return $callback;
+    }
+
+    /**
+     * Add a listener to the event dispatcher.
+     *
+     * @param string   $name
+     * @param \Closure $callback
+     * @param int|null $priority
+     *
+     */
+    protected function addEventListener($name, $callback, $priority = null)
+    {
+        if (is_null($priority)) {
+            $this->events->listen($name, $callback);
+        } else {
+            $this->events->listen($name, $callback, $priority);
+        }
+    }
+
+    /**
+     * Build a class based container callback Closure.
+     *
+     * @param string $class
+     * @param string $prefix
+     *
+     * @return \Closure
+     */
+    protected function buildClassEventCallback($class, $prefix)
+    {
+        list($class, $method) = $this->parseClassEvent($class, $prefix);
+
+        // Once we have the class and method name, we can build the Closure to resolve
+        // the instance out of the IoC container and call the method on it with the
+        // given arguments that are passed to the Closure as the composer's data.
+        return function () use ($class, $method) {
+            $callable = [$this->getInvoker()->call($class), $method];
+            return call_user_func_array($callable, func_get_args());
+        };
+    }
+
+    /**
+     * Parse a class based composer name.
+     *
+     * @param string $class
+     * @param string $prefix
+     *
+     * @return array
+     */
+    protected function parseClassEvent($class, $prefix)
+    {
+        if (Str::contains($class, '::')) {
+            return explode('::', $class);
+        }
+
+        $method = Str::contains($prefix, 'composing') ? 'compose' : 'create';
+
+        return [$class, $method];
+    }
+
+    /**
+     * Get configured invoker.
+     *
+     * @return \Viserio\Support\Invoker
+     */
+    protected function getInvoker()
+    {
+        return $this->invoker;
     }
 }
