@@ -167,16 +167,6 @@ class View implements ArrayAccess, ViewContract
      *
      * @return string
      */
-    public function name()
-    {
-        return $this->getName();
-    }
-
-    /**
-     * Get the name of the view.
-     *
-     * @return string
-     */
     public function getName()
     {
         return $this->view;

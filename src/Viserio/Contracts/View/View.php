@@ -10,7 +10,7 @@ interface View extends Renderable
      *
      * @return string
      */
-    public function name();
+    public function getName();
 
     /**
      * Add a piece of data to the view.
