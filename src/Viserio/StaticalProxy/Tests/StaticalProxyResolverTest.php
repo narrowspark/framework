@@ -1,8 +1,8 @@
 <?php
 namespace Viserio\StaticalProxy\Tests;
 
-use StdClass;
 use Mockery as Mock;
+use StdClass;
 use Viserio\StaticalProxy\StaticalProxy;
 use Viserio\StaticalProxy\StaticalProxyResolver;
 use Viserio\StaticalProxy\Tests\Fixture\FacadeStub;

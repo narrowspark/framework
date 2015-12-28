@@ -19,13 +19,6 @@ use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 use Symfony\Component\HttpKernel\Exception\UnsupportedMediaTypeHttpException;
 use Viserio\Http\Response;
 
-/**
- * HttpErrorHandlingTrait.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.4
- */
 trait HttpErrorHandlingTrait
 {
     /**

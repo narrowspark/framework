@@ -1,6 +1,7 @@
 <?php
 namespace Viserio\Filesystem;
 
+use InvalidArgumentException;
 use League\Flysystem\AdapterInterface;
 use League\Flysystem\Config as FlyConfig;
 use League\Flysystem\FileNotFoundException;
@@ -350,6 +351,6 @@ class FilesystemAdapter implements CloudFilesystemContract
                 return AdapterInterface::VISIBILITY_PRIVATE;
         }
 
-        throw new \InvalidArgumentException('Unknown visibility: ' . $visibility);
+        throw new InvalidArgumentException('Unknown visibility: ' . $visibility);
     }
 }

@@ -6,10 +6,10 @@ trait ExistTrait
     /**
      * Checks various object types for existence
      *
-     * @param  mixed   $object
-     * @param  boolean $autoload
+     * @param mixed $object
+     * @param bool  $autoload
      *
-     * @return boolean
+     * @return bool
      */
     protected function exists($object, $autoload = true)
     {

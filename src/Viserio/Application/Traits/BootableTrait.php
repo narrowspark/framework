@@ -1,13 +1,6 @@
 <?php
 namespace Viserio\Application\Traits;
 
-/**
- * BootableTrait.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.4
- */
 trait BootableTrait
 {
     /**

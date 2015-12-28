@@ -4,6 +4,7 @@ namespace Viserio\Support;
 use Viserio\Contracts\Encrypter\Encrypter as EncrypterContract;
 use Viserio\Contracts\Support\Arrayable;
 use Viserio\Contracts\Support\Jsonable;
+use Viserio\Support\Traits\ValueTrait;
 
 class Collection implements
     \ArrayAccess,
@@ -13,6 +14,8 @@ class Collection implements
     Jsonable,
     \JsonSerializable
 {
+    use ValueTrait;
+
     /**
      * Key-value array of data.
      *
@@ -294,7 +297,7 @@ class Collection implements
         return count($this->data) > 0 ? end($this->data) : null;
 
         if (is_null($callback)) {
-            return count($this->data) > 0 ? end($this->data) : Arr::value($default);
+            return count($this->data) > 0 ? end($this->data) : self::value($default);
         }
 
         return Arr::last($this->data, $callback, $default);

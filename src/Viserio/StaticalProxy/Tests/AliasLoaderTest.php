@@ -18,9 +18,9 @@ class AliasLoaderTest extends \PHPUnit_Framework_TestCase
     public function testMatchedLiteral()
     {
         $aliasloader = new AliasLoader();
-        $aliasloader->aliasPattern(array(
+        $aliasloader->aliasPattern([
             'Tester\*' => Foo::class,
-        ));
+        ]);
 
         $this->assertTrue($aliasloader->load('Tester\ThisClass'));
         $this->assertFalse($aliasloader->load('Unknown\ThisClass'));
@@ -29,9 +29,9 @@ class AliasLoaderTest extends \PHPUnit_Framework_TestCase
     public function testMatchedReplacement()
     {
         $aliasloader = new AliasLoader();
-        $aliasloader->aliasPattern(array(
+        $aliasloader->aliasPattern([
             'Test\*' => 'Viserio\StaticalProxy\Tests\Fixture\$1',
-        ));
+        ]);
 
         $this->assertTrue($aliasloader->load('Test\Foo'));
         $this->assertFalse($aliasloader->load('Test\Unknown'));
@@ -119,9 +119,9 @@ class AliasLoaderTest extends \PHPUnit_Framework_TestCase
     public function testStopRecursion()
     {
         $aliasloader = new AliasLoader();
-        $aliasloader->aliasPattern(array(
+        $aliasloader->aliasPattern([
             '*\*' => '$2\\$1',
-        ));
+        ]);
         $aliasloader->aliasPattern('*', '$1');
         $aliasloader->register();
 

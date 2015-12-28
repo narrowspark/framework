@@ -1,6 +1,7 @@
 <?php
 namespace Viserio\Application;
 
+use SplPriorityQueue;
 use Symfony\Component\HttpFoundation\Request as SymfonyRequest;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Viserio\Application\Traits\BootableTrait;
@@ -14,13 +15,6 @@ use Viserio\Container\Container;
 use Viserio\Contracts\Application\Foundation;
 use Viserio\StaticalProxy\StaticalProxy;
 
-/**
- * Application.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.4
- */
 class Application extends Container implements Foundation, HttpKernelInterface
 {
     /**
@@ -28,7 +22,7 @@ class Application extends Container implements Foundation, HttpKernelInterface
      *
      * @var string
      */
-    const VERSION = '0.9.8';
+    const VERSION = '0.10.0';
 
     // Register all needed Traits
     use BootableTrait;
@@ -62,7 +56,7 @@ class Application extends Container implements Foundation, HttpKernelInterface
         // App setting
         $this->bind('env', '');
 
-        $this->middlewares = new \SplPriorityQueue();
+        $this->middlewares = new SplPriorityQueue();
 
         $this->registerCoreContainerAliases();
         $this->registerBaseBindings();
@@ -161,7 +155,7 @@ class Application extends Container implements Foundation, HttpKernelInterface
     {
         $aliasList = [
             'app' => [
-                \Viserio\Application\Application::class,
+                Application::class,
                 \Viserio\Contracts\Container\Container::class,
                 \Viserio\Contracts\Application\Foundation::class,
             ],

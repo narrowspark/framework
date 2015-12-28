@@ -5,11 +5,12 @@ use Carbon\Carbon;
 use Viserio\Cache\Adapter\Traits\MultipleTrait;
 use Viserio\Contracts\Cache\Adapter;
 use Viserio\Contracts\Cache\Store as StoreContract;
-use Viserio\Support\Helper;
+use Viserio\Support\Traits\ValueTrait;
 
 class TaggedCache implements StoreContract
 {
     use MultipleTrait;
+    use ValueTrait;
 
     /**
      * The cache store implementation.
@@ -68,7 +69,7 @@ class TaggedCache implements StoreContract
     {
         $value = $this->store->get($this->taggedItemKey($key));
 
-        return ($value !== null) ? $value : Helper::value($default);
+        return ($value !== null) ? $value : self::value($default);
     }
 
     /**

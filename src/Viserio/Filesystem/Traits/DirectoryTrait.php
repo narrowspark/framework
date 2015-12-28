@@ -1,6 +1,7 @@
 <?php
 namespace Viserio\Filesystem\Traits;
 
+use FilesystemIterator;
 use Symfony\Component\Finder\Finder;
 
 trait DirectoryTrait
@@ -56,7 +57,7 @@ trait DirectoryTrait
             return false;
         }
 
-        $options = $options ?: \FilesystemIterator::SKIP_DOTS;
+        $options = $options ?: FilesystemIterator::SKIP_DOTS;
 
         // If the destination directory does not actually exist, we will go ahead and
         // create it recursively, which just gets the destination prepared to copy
@@ -65,7 +66,7 @@ trait DirectoryTrait
             $this->makeDirectory($destination, 0777, true);
         }
 
-        $items = new \FilesystemIterator($directory, $options);
+        $items = new FilesystemIterator($directory, $options);
 
         foreach ($items as $item) {
             // As we spin through items, we will check to see if the current file is actually
@@ -109,7 +110,7 @@ trait DirectoryTrait
             return false;
         }
 
-        $items = new \FilesystemIterator($directory);
+        $items = new FilesystemIterator($directory);
 
         foreach ($items as $item) {
             // If the item is a directory, we can just recurse into the function and

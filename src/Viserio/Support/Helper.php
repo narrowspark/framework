@@ -2,9 +2,12 @@
 namespace Viserio\Support;
 
 use Cekurte\Environment\Environment;
+use Viserio\Support\Traits\ValueTrait;
 
 class Helper
 {
+    use ValueTrait;
+
     /**
      * Escape HTML entities in a string.
      *
@@ -256,17 +259,5 @@ class Helper
         }
 
         return true;
-    }
-
-    /**
-     * Return the default value of the given value.
-     *
-     * @param mixed $value
-     *
-     * @return mixed
-     */
-    public static function value($value)
-    {
-        return $value instanceof \Closure ? $value() : $value;
     }
 }
