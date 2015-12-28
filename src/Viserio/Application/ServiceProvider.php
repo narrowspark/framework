@@ -3,13 +3,6 @@ namespace Viserio\Application;
 
 use Viserio\Contracts\Application\ServiceProvider as ServiceProviderContract;
 
-/**
- * ServiceProvider.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.6
- */
 abstract class ServiceProvider implements ServiceProviderContract
 {
     /**

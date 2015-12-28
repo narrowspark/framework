@@ -13,13 +13,6 @@ use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\HttpKernel\TerminableInterface;
 
-/**
- * HttpKernel.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.5
- */
 class HttpKernel implements HttpKernelInterface, TerminableInterface
 {
     /**

@@ -1,11 +1,13 @@
 <?php
 namespace Viserio\Config;
 
+use ArrayIterator;
+use IteratorAggregate;
 use Viserio\Contracts\Config\Manager as ManagerContract;
 use Viserio\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Contracts\Filesystem\Loader as LoaderContract;
 
-class Manager implements ManagerContract, \IteratorAggregate
+class Manager implements ManagerContract, IteratorAggregate
 {
     /**
      * Handler for Configuration values.
@@ -270,6 +272,6 @@ class Manager implements ManagerContract, \IteratorAggregate
      */
     public function getIterator()
     {
-        return new \ArrayIterator($this->repository->getAllNested());
+        return new ArrayIterator($this->repository->getAllNested());
     }
 }

@@ -18,30 +18,31 @@
         }
     ],
     "require": {
-        "php"                          : ">=5.6.4",
-        "viserio/support"              : "self.version",
-        "viserio/contracts"            : "self.version",
-        "paragonie/password_lock"      : "~1.1.0"
+        "php"                             : ">=5.6.4",
+        "viserio/support"                 : "self.version",
+        "viserio/contracts"               : "self.version",
+        "paragonie/password_lock"         : "~1.1.0"
     },
     "require-dev": {
-        "fabpot/php-cs-fixer"          : "dev-master",
-        "phpunit/phpunit"              : "~5.0.6"
+        "fabpot/php-cs-fixer"             : "dev-master",
+        "narrowspark/php-cs-fixer-config" : "~1.1.4",
+        "phpunit/phpunit"                 : "~5.0.6"
     },
     "autoload": {
         "psr-4": {
-            "Viserio\\Hashing\\"       : ""
+            "Viserio\\Hashing\\"          : ""
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Viserio\\Hashing\\Tests\\": "Tests/"
+            "Viserio\\Hashing\\Tests\\"   : "Tests/"
         }
     },
     "extra": {
         "branch-alias": {
-            "dev-master"               : "0.10.0-dev"
+            "dev-master"                  : "0.10.0-dev"
         }
     },
-    "minimum-stability"                : "dev",
-    "prefer-stable"                    : true
+    "minimum-stability"                   : "dev",
+    "prefer-stable"                       : true
 }

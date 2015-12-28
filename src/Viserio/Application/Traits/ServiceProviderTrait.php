@@ -4,13 +4,6 @@ namespace Viserio\Application\Traits;
 use Viserio\Application\ServiceProvider;
 use Viserio\Support\Arr;
 
-/**
- * ServiceProviderTrait.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.7
- */
 trait ServiceProviderTrait
 {
     /**

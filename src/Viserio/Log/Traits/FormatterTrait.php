@@ -1,6 +1,18 @@
 <?php
 namespace Viserio\Log\Traits;
 
+use Monolog\Formatter\LineFormatter;
+use Monolog\Formatter\HtmlFormatter;
+use Monolog\Formatter\ScalarFormatter;
+use Monolog\Formatter\NormalizerFormatter;
+use Monolog\Formatter\JsonFormatter;
+use \Monolog\Formatter\WildfireFormatter;
+use \Monolog\Formatter\ChromePHPFormatter;
+use \Monolog\Formatter\GelfFormatter;
+use \Monolog\Formatter\LogstashFormatter;
+use \Monolog\Formatter\ElasticaFormatter;
+use InvalidArgumentException;
+
 trait FormatterTrait
 {
     /**
@@ -9,16 +21,16 @@ trait FormatterTrait
      * @var array
      */
     protected $formatter = [
-        'line' => \Monolog\Formatter\LineFormatter::class,
-        'html' => \Monolog\Formatter\HtmlFormatter::class,
-        'normalizer' => \Monolog\Formatter\NormalizerFormatter::class,
-        'scalar' => \Monolog\Formatter\ScalarFormatter::class,
-        'json' => \Monolog\Formatter\JsonFormatter::class,
-        'wildfire' => \Monolog\Formatter\WildfireFormatter::class,
-        'chrome' => \Monolog\Formatter\ChromePHPFormatter::class,
-        'gelf' => \Monolog\Formatter\GelfFormatter::class,
-        'logstash' => \Monolog\Formatter\LogstashFormatter::class,
-        'elastica' => \Monolog\Formatter\ElasticaFormatter::class,
+        'line'       => LineFormatter::class,
+        'html'       => HtmlFormatter::class,
+        'normalizer' => NormalizerFormatter::class,
+        'scalar'     => ScalarFormatter::class,
+        'json'       => JsonFormatter::class,
+        'wildfire'   => WildfireFormatter::class,
+        'chrome'     => ChromePHPFormatter::class,
+        'gelf'       => GelfFormatter::class,
+        'logstash'   => LogstashFormatter::class,
+        'elastica'   => ElasticaFormatter::class,
     ];
 
     /**
@@ -104,7 +116,7 @@ trait FormatterTrait
                 break;
 
             default:
-                throw new \InvalidArgumentException('Invalid formatter.');
+                throw new InvalidArgumentException('Invalid formatter.');
         }
 
         return new $format();

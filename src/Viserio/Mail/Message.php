@@ -1,6 +1,7 @@
 <?php
 namespace Viserio\Mail;
 
+use Swift_Message;
 use Swift_Attachment;
 use Swift_Image;
 
@@ -18,7 +19,7 @@ class Message
      *
      * @param \Swift_Message $swift
      */
-    public function __construct(\Swift_Message $swift)
+    public function __construct(Swift_Message $swift)
     {
         $this->swift = $swift;
     }
@@ -266,7 +267,7 @@ class Message
      *
      * @return \Viserio\Mail\Message
      */
-    protected function prepAttachment(\Swift_Attachment $attachment, $options = [])
+    protected function prepAttachment(Swift_Attachment $attachment, $options = [])
     {
         // First we will check for a MIME type on the message, which instructs the
         // mail client on what type of attachment the file is so that it may be

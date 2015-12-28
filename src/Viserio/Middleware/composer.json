@@ -18,29 +18,30 @@
         }
     ],
     "require": {
-        "php"                                               : ">=5.6.4",
-        "container-interop/container-interop"               : "~1.1",
-        "psr/http-message"                                  : "~1.0",
-        "viserio/cotracts"                                  : "self.version"
+        "php"                                                : ">=5.6.4",
+        "container-interop/container-interop"                : "~1.1",
+        "psr/http-message"                                   : "~1.0",
+        "viserio/cotracts"                                   : "self.version"
     },
     "require-dev": {
-        "fabpot/php-cs-fixer"                               : "dev-master",
-        "phpunit/phpunit"                                   : "~5.0.6"
+        "fabpot/php-cs-fixer"                                : "dev-master",
+        "narrowspark/php-cs-fixer-config"                    : "~1.1.4",
+        "phpunit/phpunit"                                    : "~5.0.6"
     },
     "autoload": {
         "psr-4": {
-            "Viserio\\Middleware\\"                         : ""
+            "Viserio\\Middleware\\"                          : ""
         }
     },
     "extra": {
         "branch-alias": {
-            "dev-master"                                    : "0.10.0-dev"
+            "dev-master"                                     : "0.10.0-dev"
         }
     },
     "provide": {
-        "container-interop/container-interop-implementation": "~1.1",
-        "psr/http-message-implementation"                   : "~1.0"
+        "container-interop/container-interop-implementation" : "~1.1",
+        "psr/http-message-implementation"                    : "~1.0"
     },
-    "minimum-stability"                                     : "dev",
-    "prefer-stable"                                         : true
+    "minimum-stability"                                      : "dev",
+    "prefer-stable"                                          : true
 }

@@ -31,6 +31,7 @@
     },
     "require-dev": {
         "fabpot/php-cs-fixer"                : "dev-master",
+        "narrowspark/php-cs-fixer-config"    : "~1.1.4",
         "phpunit/phpunit"                    : "~5.0.6"
     },
     "autoload": {

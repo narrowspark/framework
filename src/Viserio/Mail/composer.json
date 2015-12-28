@@ -25,6 +25,7 @@
         "swiftmailer/swiftmailer"   : "~5.4"
     },
     "require-dev": {
+        "aws/aws-sdk-php"           : "~3.0",
         "guzzlehttp/guzzle"         : "~5.3|~6.0",
         "fabpot/php-cs-fixer"       : "dev-master",
         "viserio/config"            : "self.version",

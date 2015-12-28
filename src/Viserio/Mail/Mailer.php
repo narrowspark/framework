@@ -1,6 +1,11 @@
 <?php
 namespace Viserio\Mail;
 
+use Swift_Message;
+use Closure;
+use Exception;
+use InvalidArgumentException;
+use Swift_Transport_AbstractSmtpTransport;
 use Psr\Log\LoggerInterface;
 use Swift_Mailer;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -152,13 +157,13 @@ class Mailer implements MailerContract
     /**
      * Send a new message using a view.
      *
-     * @param string|array   $view
-     * @param array          $data
-     * @param Closure|string $callback
+     * @param string|array $view
+     * @param array        $data
+     * @param \Closure     $callback
      *
      * @return int
      */
-    public function send($view, array $data, $callback)
+    public function send($view, array $data, Closure $callback)
     {
         $this->forceReconnection();
 
@@ -242,7 +247,7 @@ class Mailer implements MailerContract
      *
      * @param \Swift_Mailer $swift
      */
-    public function setSwiftMailer(\Swift_Mailer $swift)
+    public function setSwiftMailer(Swift_Mailer $swift)
     {
         $this->swift = $swift;
     }
@@ -303,7 +308,7 @@ class Mailer implements MailerContract
             ];
         }
 
-        throw new \InvalidArgumentException('Invalid view.');
+        throw new InvalidArgumentException('Invalid view.');
     }
 
     /**
@@ -394,7 +399,7 @@ class Mailer implements MailerContract
      */
     protected function createMessage()
     {
-        $message = new Message(new \Swift_Message());
+        $message = new Message(new Swift_Message());
 
         // If a global from address has been specified we will set it on every message
         // instances so the developer does not have to repeat themselves every time
@@ -409,20 +414,20 @@ class Mailer implements MailerContract
     /**
      * Call the provided message builder.
      *
-     * @param \Closure|string       $callback
+     * @param \Closure              $callback
      * @param \Viserio\Mail\Message $message
      *
      * @throws \InvalidArgumentException
      *
      * @return mixed
      */
-    protected function callMessageBuilder($callback, $message)
+    protected function callMessageBuilder(Closure $callback, $message)
     {
-        if ($callback instanceof \Closure) {
+        if ($callback instanceof Closure) {
             return call_user_func($callback, $message);
         }
 
-        throw new \InvalidArgumentException('Callback is not valid.');
+        throw new InvalidArgumentException('Callback is not valid.');
     }
 
     /**
@@ -449,10 +454,10 @@ class Mailer implements MailerContract
 
         try {
             // Send RESET to restart the SMTP status and check if it's ready for running
-            if ($transport instanceof \Swift_Transport_AbstractSmtpTransport) {
+            if ($transport instanceof Swift_Transport_AbstractSmtpTransport) {
                 $transport->reset();
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->tryResetSwiftTransport($transport);
         }
     }
@@ -466,7 +471,7 @@ class Mailer implements MailerContract
     {
         try {
             $transport->stop();
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             // Just start it then...
         }
 

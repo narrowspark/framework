@@ -1,6 +1,13 @@
 <?php
 namespace Viserio\Filesystem;
 
+use RuntimeException;
+use Viserio\Filesystem\Parser\Php as PhpParser;
+use Viserio\Filesystem\Parser\Ini as IniParser;
+use Viserio\Filesystem\Parser\Xml as XmlParser;
+use Viserio\Filesystem\Parser\Json as JsonParser;
+use Viserio\Filesystem\Parser\Yaml as YamlParser;
+use Viserio\Filesystem\Parser\Toml as TomlParser;
 use Viserio\Contracts\Filesystem\Loader as LoaderContract;
 use Viserio\Contracts\Filesystem\Parser as ParserContract;
 
@@ -40,12 +47,12 @@ class FileLoader implements LoaderContract
      * @var array
      */
     protected $parser = [
-        'php' => '\Viserio\Filesystem\Parser\Php',
-        'ini' => '\Viserio\Filesystem\Parser\Ini',
-        'xml' => '\Viserio\Filesystem\Parser\Xml',
-        'json' => '\Viserio\Filesystem\Parser\Json',
-        'yaml' => '\Viserio\Filesystem\Parser\Yaml',
-        'toml' => '\Viserio\Filesystem\Parser\Toml',
+        'php'  => PhpParser::class,
+        'ini'  => IniParser::class,
+        'xml'  => XmlParser::class,
+        'json' => JsonParser::class,
+        'yaml' => YamlParser::class,
+        'toml' => TomlParser::class,
     ];
 
     /**
@@ -355,7 +362,7 @@ class FileLoader implements LoaderContract
             }
         }
 
-        throw new \RuntimeException(
+        throw new RuntimeException(
             sprintf('Unable to find the right Parser for [%s]', $ext)
         );
     }

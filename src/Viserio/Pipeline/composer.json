@@ -18,30 +18,34 @@
         }
     ],
     "require": {
-        "php"                                : ">=5.6.4",
-        "container-interop/container-interop": "~1.1",
-        "psr/log"                            : "~1.0",
-        "viserio/cotracts"                   : "self.version"
+        "php"                                               : ">=5.6.4",
+        "container-interop/container-interop"               : "~1.1",
+        "psr/log"                                           : "~1.0",
+        "viserio/cotracts"                                  : "self.version"
     },
     "require-dev": {
-        "fabpot/php-cs-fixer"                : "dev-master",
-        "phpunit/phpunit"                    : "~5.0.6"
+        "fabpot/php-cs-fixer"                               : "dev-master",
+        "narrowspark/php-cs-fixer-config"                   : "~1.1.4",
+        "phpunit/phpunit"                                   : "~5.0.6"
     },
     "autoload": {
         "psr-4": {
-            "Viserio\\Pipeline\\"            : ""
+            "Viserio\\Pipeline\\"                           : ""
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Viserio\\Pipeline\\Tests\\"     : "Tests/"
+            "Viserio\\Pipeline\\Tests\\"                    : "Tests/"
         }
+    },
+    "provide": {
+        "container-interop/container-interop-implementation" : "~1.1"
     },
     "extra": {
         "branch-alias": {
-            "dev-master"                     : "0.10.0-dev"
+            "dev-master"                                     : "0.10.0-dev"
         }
     },
-    "minimum-stability"                      : "dev",
-    "prefer-stable"                          : true
+    "minimum-stability"                                      : "dev",
+    "prefer-stable"                                          : true
 }

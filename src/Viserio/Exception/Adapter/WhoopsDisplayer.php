@@ -1,6 +1,7 @@
 <?php
 namespace Viserio\Exception\Adapter;
 
+use Exception;
 use Symfony\Component\HttpFoundation\Response;
 use Viserio\Contracts\Exception\Adapter;
 use Viserio\Contracts\Http\HttpExceptionInterface;
@@ -42,7 +43,7 @@ class WhoopsDisplayer implements Adapter
      *
      * @return Response
      */
-    public function display(\Exception $exception, $code)
+    public function display(Exception $exception, $code)
     {
         $status = $exception instanceof HttpExceptionInterface ?
                 $exception->getStatusCode() :
