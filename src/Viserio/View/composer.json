@@ -21,7 +21,8 @@
         "php"                             : ">=5.6.4",
         "viserio/contracts"               : "self.version",
         "viserio/events"                  : "self.version",
-        "viserio/filesystem"              : "self.version"
+        "viserio/filesystem"              : "self.version",
+        "viserio/support"                 : "self.version"
     },
     "require-dev": {
         "fabpot/php-cs-fixer"             : "dev-master",

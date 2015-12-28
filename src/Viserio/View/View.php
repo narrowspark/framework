@@ -78,7 +78,7 @@ class View implements ArrayAccess, ViewContract
         $contents = $this->getContents();
         $response = isset($callback) ? $callback($this, $contents) : null;
 
-        return $response ?: $contents;
+        return $response !== null ? $response : $contents;
     }
 
     /**
@@ -254,7 +254,7 @@ class View implements ArrayAccess, ViewContract
      *
      * @return mixed
      */
-    public function __get($key)
+    public function &__get($key)
     {
         return $this->data[$key];
     }
