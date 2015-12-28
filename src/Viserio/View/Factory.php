@@ -4,7 +4,6 @@ namespace Viserio\View;
 use InvalidArgumentException;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Viserio\Contracts\Cache\Factory as CacheContract;
-use Viserio\Contracts\Config\Manager as ConfigContract;
 use Viserio\Contracts\Support\Arrayable;
 use Viserio\Contracts\View\Factory as FactoryContract;
 use Viserio\Contracts\View\Finder as FinderContract;
@@ -14,13 +13,6 @@ use Viserio\View\Engines\EngineResolver;
 
 class Factory implements FactoryContract
 {
-    /**
-     * Config instance.
-     *
-     * @var \Viserio\Config\Manager
-     */
-    protected $config;
-
     /**
      * Cache instance.
      *
@@ -76,9 +68,9 @@ class Factory implements FactoryContract
      * @var array
      */
     protected $extensions = [
-        'php' => 'php',
+        'php'   => 'php',
         'phtml' => 'php',
-        'html' => 'html',
+        'html'  => 'html',
     ];
 
     /**
@@ -101,14 +93,10 @@ class Factory implements FactoryContract
         EventDispatcherInterface $events
     ) {
         $this->engines = $engines;
-        $this->finder = $finder;
-        $this->events = $events;
+        $this->finder  = $finder;
+        $this->events  = $events;
 
         $this->share('__env', $this);
-
-        if ($this->config && ($items = $this->getConfig()->get('view::items')) !== null) {
-            $this->shared = array_merge($items, $this->shared);
-        }
     }
 
     /**
@@ -209,10 +197,11 @@ class Factory implements FactoryContract
     /**
      * Cache or return content from a content section.
      *
-     * @param string $key
-     * @param bool   $condition
+     * @param string        $key
+     * @param bool          $condition
+     * @param callable|null $callable
      */
-    public function cache($key, $condition = true, callable $callable)
+    public function cache($key, $condition = true, callable $callable = null)
     {
         if (!$condition) {
             return $callable();
@@ -221,7 +210,9 @@ class Factory implements FactoryContract
         if (!$content = $this->getCache()->get($key)) {
             ob_start();
 
-            $callable();
+            if ($callable !== null) {
+                $callable();
+            }
 
             $content = ob_get_contents();
 
@@ -406,26 +397,6 @@ class Factory implements FactoryContract
     public function getDispatcher()
     {
         return $this->events;
-    }
-
-    /**
-     * Get the config manager instance.
-     *
-     * @return \Viserio\Contracts\Config\Manager
-     */
-    public function getConfig()
-    {
-        return $this->config;
-    }
-
-    /**
-     * Set the config manager instance.
-     *
-     * @param \Viserio\Contracts\Config\Manager $config
-     */
-    public function setConfig(ConfigContract $config)
-    {
-        $this->config = $config;
     }
 
     /**

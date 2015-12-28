@@ -50,20 +50,20 @@ class View implements ArrayAccess, ViewContract
     /**
      * Create a new view instance.
      *
-     * @param \Viserio\View\Factory          $factory
-     * @param \Viserio\Contracts\View\Engine $engine
-     * @param string                         $view
-     * @param string                         $path
-     * @param array                          $data
+     * @param \Viserio\View\Factory                      $factory
+     * @param \Viserio\Contracts\View\Engine             $engine
+     * @param string                                     $view
+     * @param string                                     $path
+     * @param array|\Viserio\Contracts\Support\Arrayable $data
      */
     public function __construct(Factory $factory, EngineContract $engine, $view, $path, $data = [])
     {
-        $this->view = $view;
-        $this->path = $path;
-        $this->engine = $engine;
+        $this->view    = $view;
+        $this->path    = $path;
+        $this->engine  = $engine;
         $this->factory = $factory;
 
-        $this->data = $data instanceof Arrayable ? $data->toArray() : (array) $data;
+        $this->data    = $data instanceof Arrayable ? $data->toArray() : (array) $data;
     }
 
     /**
@@ -264,7 +264,7 @@ class View implements ArrayAccess, ViewContract
      *
      * @return mixed
      */
-    public function &__get($key)
+    public function __get($key)
     {
         return $this->data[$key];
     }

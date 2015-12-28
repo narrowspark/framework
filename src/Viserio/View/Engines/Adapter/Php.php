@@ -1,6 +1,7 @@
 <?php
 namespace Viserio\View\Engines\Adapter;
 
+use Exception;
 use Viserio\Contracts\View\Engine as EnginesContract;
 
 class Php implements EnginesContract
@@ -39,7 +40,7 @@ class Php implements EnginesContract
             require_once $path;
             // Return temporary output buffer content, destroy output buffer
             return ltrim(ob_get_clean());
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             // Return temporary output buffer content, destroy output buffer
             $this->handleViewException($exception);
         }
