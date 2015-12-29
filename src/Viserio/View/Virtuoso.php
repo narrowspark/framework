@@ -293,16 +293,16 @@ class Virtuoso
      * @param string          $view
      * @param \Closure|string $callback
      * @param string          $prefix
-     * @param int|null        $priority
+     * @param int             $priority
      *
      * @return \Closure|null
      */
-    protected function addViewEvent($view, $callback, $prefix = 'composing: ', $priority = null)
+    protected function addViewEvent($view, $callback, $prefix = 'composing: ', $priority = 0)
     {
         $view = $this->normalizeName($view);
 
         if ($callback instanceof Closure) {
-            $this->addEventListener($prefix.$view, $callback, $priority);
+            $this->events->addListener($prefix.$view, $callback, $priority);
 
             return $callback;
         } elseif (is_string($callback)) {
@@ -313,40 +313,23 @@ class Virtuoso
     /**
      * Register a class based view composer.
      *
-     * @param string    $view
-     * @param string    $class
-     * @param string    $prefix
-     * @param int|null  $priority
+     * @param string $view
+     * @param string $class
+     * @param string $prefix
+     * @param int    $priority
      *
      * @return \Closure
      */
-    protected function addClassEvent($view, $class, $prefix, $priority = null)
+    protected function addClassEvent($view, $class, $prefix, $priority = 0)
     {
         $name = $prefix.$view;
         // When registering a class based view "composer", we will simply resolve the
         // classes from the application IoC container then call the compose method
         // on the instance. This allows for convenient, testable view composers.
         $callback = $this->buildClassEventCallback($class, $prefix);
-        $this->addEventListener($name, $callback, $priority);
+        $this->events->addListener($name, $callback, $priority);
 
         return $callback;
-    }
-
-    /**
-     * Add a listener to the event dispatcher.
-     *
-     * @param string   $name
-     * @param \Closure $callback
-     * @param int|null $priority
-     *
-     */
-    protected function addEventListener($name, $callback, $priority = null)
-    {
-        if (is_null($priority)) {
-            $this->events->listen($name, $callback);
-        } else {
-            $this->events->listen($name, $callback, $priority);
-        }
     }
 
     /**

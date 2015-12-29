@@ -17,10 +17,10 @@ class ViewFinderTest extends \PHPUnit_Framework_TestCase
         $finder->getFilesystem()
             ->shouldReceive('exists')
             ->once()
-            ->with(__DIR__ . '/foo.plates.php')
+            ->with(__DIR__ . '/foo.php')
             ->andReturn(true);
 
-        $this->assertEquals(__DIR__ . '/foo.plates.php', $finder->find('foo'));
+        $this->assertEquals(__DIR__ . '/foo.php', $finder->find('foo'));
     }
 
     public function testCascadingFileLoading()
@@ -29,7 +29,7 @@ class ViewFinderTest extends \PHPUnit_Framework_TestCase
         $finder->getFilesystem()
             ->shouldReceive('exists')
             ->once()
-            ->with(__DIR__ . '/foo.plates.php')
+            ->with(__DIR__ . '/foo.php')
             ->andReturn(false);
         $finder->getFilesystem()
             ->shouldReceive('exists')
@@ -47,7 +47,7 @@ class ViewFinderTest extends \PHPUnit_Framework_TestCase
         $finder->getFilesystem()
             ->shouldReceive('exists')
             ->once()
-            ->with(__DIR__ . '/foo.plates.php')
+            ->with(__DIR__ . '/foo.php')
             ->andReturn(false);
         $finder->getFilesystem()
             ->shouldReceive('exists')
@@ -57,10 +57,10 @@ class ViewFinderTest extends \PHPUnit_Framework_TestCase
         $finder->getFilesystem()
             ->shouldReceive('exists')
             ->once()
-            ->with(__DIR__ . '/Nested/foo.plates.php')
+            ->with(__DIR__ . '/Nested/foo.php')
             ->andReturn(true);
 
-        $this->assertEquals(__DIR__ . '/Nested/foo.plates.php', $finder->find('foo'));
+        $this->assertEquals(__DIR__ . '/Nested/foo.php', $finder->find('foo'));
     }
 
     public function testNamespacedBasicFileLoading()
@@ -70,10 +70,10 @@ class ViewFinderTest extends \PHPUnit_Framework_TestCase
         $finder->getFilesystem()
             ->shouldReceive('exists')
             ->once()
-            ->with(__DIR__ . '/foo/bar/baz.plates.php')
+            ->with(__DIR__ . '/foo/bar/baz.php')
             ->andReturn(true);
 
-        $this->assertEquals(__DIR__ . '/foo/bar/baz.plates.php', $finder->find('foo::bar.baz'));
+        $this->assertEquals(__DIR__ . '/foo/bar/baz.php', $finder->find('foo::bar.baz'));
     }
 
     public function testCascadingNamespacedFileLoading()
@@ -83,7 +83,7 @@ class ViewFinderTest extends \PHPUnit_Framework_TestCase
         $finder->getFilesystem()
             ->shouldReceive('exists')
             ->once()
-            ->with(__DIR__ . '/foo/bar/baz.plates.php')
+            ->with(__DIR__ . '/foo/bar/baz.php')
             ->andReturn(false);
         $finder->getFilesystem()
             ->shouldReceive('exists')
@@ -101,7 +101,7 @@ class ViewFinderTest extends \PHPUnit_Framework_TestCase
         $finder->getFilesystem()
             ->shouldReceive('exists')
             ->once()
-            ->with(__DIR__ . '/foo/bar/baz.plates.php')
+            ->with(__DIR__ . '/foo/bar/baz.php')
             ->andReturn(false);
         $finder->getFilesystem()
             ->shouldReceive('exists')
@@ -111,10 +111,10 @@ class ViewFinderTest extends \PHPUnit_Framework_TestCase
         $finder->getFilesystem()
             ->shouldReceive('exists')
             ->once()
-            ->with(__DIR__ . '/bar/bar/baz.plates.php')
+            ->with(__DIR__ . '/bar/bar/baz.php')
             ->andReturn(true);
 
-        $this->assertEquals(__DIR__ . '/bar/bar/baz.plates.php', $finder->find('foo::bar.baz'));
+        $this->assertEquals(__DIR__ . '/bar/bar/baz.php', $finder->find('foo::bar.baz'));
     }
 
     /**
@@ -126,7 +126,7 @@ class ViewFinderTest extends \PHPUnit_Framework_TestCase
         $finder->getFilesystem()
             ->shouldReceive('exists')
             ->once()
-            ->with(__DIR__ . '/foo.plates.php')->andReturn(false);
+            ->with(__DIR__ . '/foo.php')->andReturn(false);
         $finder->getFilesystem()
             ->shouldReceive('exists')
             ->once()

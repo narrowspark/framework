@@ -41,15 +41,6 @@ class ViewTest extends \PHPUnit_Framework_TestCase
     {
         $view = $this->getView();
         $view->getFactory()
-            ->shouldReceive('incrementRender')
-            ->once()
-            ->ordered();
-        $view->getFactory()
-            ->shouldReceive('callComposer')
-            ->once()
-            ->ordered()
-            ->with($view);
-        $view->getFactory()
             ->shouldReceive('getShared')
             ->once()
             ->andReturn(['shared' => 'foo']);
@@ -58,13 +49,6 @@ class ViewTest extends \PHPUnit_Framework_TestCase
             ->once()
             ->with('path', ['foo' => 'bar', 'shared' => 'foo'])
             ->andReturn('contents');
-        $view->getFactory()
-            ->shouldReceive('decrementRender')
-            ->once()
-            ->ordered();
-        $view->getFactory()
-            ->shouldReceive('flushSectionsIfDoneRendering')
-            ->once();
 
         $me = $this;
 
@@ -74,23 +58,6 @@ class ViewTest extends \PHPUnit_Framework_TestCase
         };
 
         $this->assertEquals('contents', $view->render($callback));
-    }
-
-    public function testRenderSectionsReturnsEnvironmentSections()
-    {
-        $view = Mock::mock('Viserio\View\View[render]', [
-            Mock::mock('Viserio\View\Factory'),
-            Mock::mock('Viserio\Contracts\View\Engine'),
-            'view',
-            'path',
-            [],
-        ]);
-        $view->shouldReceive('render')
-            ->with(Mock::type('Closure'))
-            ->once()
-            ->andReturn($sections = ['foo' => 'bar']);
-
-        $this->assertEquals($sections, $view->renderSections());
     }
 
     public function testViewNestBindsASubView()
@@ -183,16 +150,13 @@ class ViewTest extends \PHPUnit_Framework_TestCase
     public function testViewGatherDataWithRenderable()
     {
         $view = $this->getView();
-        $view->getFactory()->shouldReceive('incrementRender')->once()->ordered();
-        $view->getFactory()->shouldReceive('callComposer')->once()->ordered()->with($view);
-        $view->getFactory()->shouldReceive('getShared')->once()->andReturn(['shared' => 'foo']);
-        $view->getEngine()->shouldReceive('get')->once()->andReturn('contents');
-        $view->getFactory()->shouldReceive('decrementRender')->once()->ordered();
-        $view->getFactory()->shouldReceive('flushSectionsIfDoneRendering')->once();
+        $view->getFactory()->shouldReceive('getShared')->twice()->andReturn(['shared' => 'foo']);
+        $view->getEngine()->shouldReceive('get')->twice()->andReturn('contents');
         $view->renderable = Mock::mock('Viserio\Contracts\Support\Renderable');
-        $view->renderable->shouldReceive('render')->once()->andReturn('text');
+        $view->renderable->shouldReceive('render')->twice()->andReturn('text');
 
         $this->assertEquals('contents', $view->render());
+        $this->assertEquals('contents', $view->__toString());
     }
 
     protected function getView()
