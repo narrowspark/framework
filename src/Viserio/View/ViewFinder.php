@@ -54,7 +54,7 @@ class ViewFinder implements FinderContract
         $this->files = $files;
         $this->paths = $paths;
 
-        if (isset($extensions)) {
+        if ($extensions !== null) {
             $this->extensions = $extensions;
         }
     }
@@ -77,82 +77,6 @@ class ViewFinder implements FinderContract
         }
 
         return $this->views[$name] = $this->findInPaths($name, $this->paths);
-    }
-
-    /**
-     * Get the path to a template with a named path.
-     *
-     * @param string $name
-     *
-     * @return string
-     */
-    protected function findNamedPathView($name)
-    {
-        list($namespace, $view) = $this->getNamespaceSegments($name);
-
-        return $this->findInPaths($view, $this->hints[$namespace]);
-    }
-
-    /**
-     * Get the segments of a template with a named path.
-     *
-     * @param string $name
-     *
-     * @throws \InvalidArgumentException
-     *
-     * @return array
-     */
-    protected function getNamespaceSegments($name)
-    {
-        $segments = explode(static::HINT_PATH_DELIMITER, $name);
-
-        if (count($segments) !== 2) {
-            throw new InvalidArgumentException(sprintf('View %s has an invalid name.', $name));
-        }
-
-        if (!isset($this->hints[$segments[0]])) {
-            throw new InvalidArgumentException(sprintf('No hint path defined for [%s].', $segments[0]));
-        }
-
-        return $segments;
-    }
-
-    /**
-     * Find the given view in the list of paths.
-     *
-     * @param string $name
-     * @param array  $paths
-     *
-     * @throws \InvalidArgumentException
-     *
-     * @return string
-     */
-    protected function findInPaths($name, $paths)
-    {
-        foreach ((array) $paths as $path) {
-            foreach ($this->getPossibleViewFiles($name) as $file) {
-                if ($this->files->exists($viewPath = $path . '/' . $file)) {
-                    return $viewPath;
-                }
-            }
-        }
-
-        throw new InvalidArgumentException(sprintf('View [%s] not found.', $name));
-    }
-
-    /**
-     * Get an array of possible view files.
-     *
-     * @param string $name
-     *
-     * @return array
-     */
-    protected function getPossibleViewFiles($name)
-    {
-        return array_map(function ($extension) use ($name) {
-            return str_replace('.', '/', $name) . '.' . $extension;
-
-        }, $this->extensions);
     }
 
     /**
@@ -246,6 +170,18 @@ class ViewFinder implements FinderContract
     }
 
     /**
+     * Set the active view paths.
+     *
+     * @param  array  $paths
+     *
+     * @return array
+     */
+    public function setPaths(array $paths)
+    {
+        $this->paths = $paths;
+    }
+
+    /**
      * Get the namespace to file path hints.
      *
      * @return array
@@ -263,5 +199,81 @@ class ViewFinder implements FinderContract
     public function getExtensions()
     {
         return $this->extensions;
+    }
+
+    /**
+     * Get the path to a template with a named path.
+     *
+     * @param string $name
+     *
+     * @return string
+     */
+    protected function findNamedPathView($name)
+    {
+        list($namespace, $view) = $this->getNamespaceSegments($name);
+
+        return $this->findInPaths($view, $this->hints[$namespace]);
+    }
+
+    /**
+     * Get the segments of a template with a named path.
+     *
+     * @param string $name
+     *
+     * @throws \InvalidArgumentException
+     *
+     * @return array
+     */
+    protected function getNamespaceSegments($name)
+    {
+        $segments = explode(static::HINT_PATH_DELIMITER, $name);
+
+        if (count($segments) !== 2) {
+            throw new InvalidArgumentException(sprintf('View %s has an invalid name.', $name));
+        }
+
+        if (!isset($this->hints[$segments[0]])) {
+            throw new InvalidArgumentException(sprintf('No hint path defined for [%s].', $segments[0]));
+        }
+
+        return $segments;
+    }
+
+    /**
+     * Find the given view in the list of paths.
+     *
+     * @param string $name
+     * @param array  $paths
+     *
+     * @throws \InvalidArgumentException
+     *
+     * @return string
+     */
+    protected function findInPaths($name, $paths)
+    {
+        foreach ((array) $paths as $path) {
+            foreach ($this->getPossibleViewFiles($name) as $file) {
+                if ($this->files->exists($viewPath = $path . '/' . $file)) {
+                    return $viewPath;
+                }
+            }
+        }
+
+        throw new InvalidArgumentException(sprintf('View [%s] not found.', $name));
+    }
+
+    /**
+     * Get an array of possible view files.
+     *
+     * @param string $name
+     *
+     * @return array
+     */
+    protected function getPossibleViewFiles($name)
+    {
+        return array_map(function ($extension) use ($name) {
+            return str_replace('.', '/', $name) . '.' . $extension;
+
+        }, $this->extensions);
     }
 }
