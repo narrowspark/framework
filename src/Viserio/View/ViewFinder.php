@@ -232,7 +232,7 @@ class ViewFinder implements FinderContract
         $segments = explode(FinderContract::HINT_PATH_DELIMITER, $name);
 
         if (count($segments) !== 2) {
-            throw new InvalidArgumentException(sprintf('View %s has an invalid name.', $name));
+            throw new InvalidArgumentException(sprintf('View [%s] has an invalid name.', $name));
         }
 
         if (!isset($this->hints[$segments[0]])) {

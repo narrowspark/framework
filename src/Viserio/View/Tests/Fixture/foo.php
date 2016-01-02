@@ -1,2 +1,1 @@
-<?php
-return 'content';
+<?php echo $__env->getVirtuoso()->yieldContent('content'); ?>

@@ -17,13 +17,6 @@ class Factory implements FactoryContract
     use NormalizeNameTrait;
 
     /**
-     * Cache instance.
-     *
-     * @var \Viserio\Contracts\Cache\Factory
-     */
-    protected $cache;
-
-    /**
      * The engines instance.
      *
      * @var \Viserio\View\Engines\EngineResolver
@@ -71,7 +64,7 @@ class Factory implements FactoryContract
      * @var array
      */
     protected $extensions = [
-        'php'   => 'php',
+        'php' => 'php',
     ];
 
     /**
@@ -232,36 +225,6 @@ class Factory implements FactoryContract
         }
 
         return true;
-    }
-
-    /**
-     * Cache or return content from a content section.
-     *
-     * @param string        $key
-     * @param bool          $condition
-     * @param callable|null $callable
-     */
-    public function cache($key, $condition = true, callable $callable = null)
-    {
-        if (!$condition) {
-            return $callable();
-        }
-
-        if (!$content = $this->getCache()->get($key)) {
-            ob_start();
-
-            if ($callable !== null) {
-                $callable();
-            }
-
-            $content = ob_get_contents();
-
-            ob_end_clean();
-
-            $this->getCache()->forever($key, $content);
-        }
-
-        return $content;
     }
 
     /**
@@ -431,26 +394,6 @@ class Factory implements FactoryContract
     public function getDispatcher()
     {
         return $this->events;
-    }
-
-    /**
-     * Get the cache manager instance.
-     *
-     * @return \Viserio\Contracts\Cache\Factory
-     */
-    public function getCache()
-    {
-        return $this->cahce;
-    }
-
-    /**
-     * Set the cache manager instance.
-     *
-     * @param \Viserio\Contracts\Cache\Factory $cache
-     */
-    public function setCache(CacheContract $cache)
-    {
-        $this->cahce = $cahce;
     }
 
     /**

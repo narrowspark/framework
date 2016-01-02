@@ -159,6 +159,49 @@ class Virtuoso
     }
 
     /**
+     * Stop injecting content into a section and return its contents.
+     *
+     * @return string
+     */
+    public function yieldSection()
+    {
+        if (empty($this->sectionStack)) {
+            return '';
+        }
+
+        return $this->yieldContent($this->stopSection());
+    }
+
+    /**
+     * Get the string contents of a section.
+     *
+     * @param string $section
+     * @param string $default
+     *
+     * @return string
+     */
+    public function yieldContent($section, $default = '')
+    {
+        $sectionContent = $default;
+
+        if (isset($this->sections[$section])) {
+            $sectionContent = $this->sections[$section];
+        }
+
+        $sectionContent = str_replace(
+            '@@parent',
+            '--parent--holder--',
+            $sectionContent
+        );
+
+        return str_replace(
+            '--parent--holder--',
+            '@parent',
+            str_replace('@parent', '', $sectionContent)
+        );
+    }
+
+    /**
      * Start injecting content into a section.
      *
      * @param string $section
@@ -173,6 +216,19 @@ class Virtuoso
         } else {
             $this->extendSection($section, $content);
         }
+    }
+
+    /**
+     * Inject inline content into a section.
+     *
+     * @param string $section
+     * @param string $content
+     *
+     * @return void
+     */
+    public function inject($section, $content)
+    {
+        return $this->startSection($section, $content);
     }
 
     /**

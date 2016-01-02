@@ -95,7 +95,6 @@
     },
     "require-dev": {
         "aws/aws-sdk-php"                                    : "~3.0",
-        "fabpot/php-cs-fixer"                                : "dev-master",
         "fzaninotto/faker"                                   : "~1.4",
         "helmich/phpunit-psr7-assert"                        : "~1.0",
         "johnkary/phpunit-speedtrap"                         : "~1.0",

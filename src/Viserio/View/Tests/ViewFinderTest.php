@@ -30,6 +30,10 @@ class ViewFinderTest extends \PHPUnit_Framework_TestCase
             $path,
             $finder->find('foo')
         );
+        $this->assertEquals(
+            $path,
+            $finder->find('foo')
+        );
     }
 
     public function testCascadingFileLoading()
@@ -137,9 +141,13 @@ class ViewFinderTest extends \PHPUnit_Framework_TestCase
         $finder->addNamespace(
             'foo',
             [
-                $this->getPath() . '/' . 'foo',
-                $this->getPath() . '/' . 'bar',
+                $this->getDirectorySeparator($this->getPath() . '/' . 'foo'),
+                $this->getDirectorySeparator($this->getPath() . '/' . 'bar'),
             ]
+        );
+        $finder->addNamespace(
+            'foo',
+            $this->getDirectorySeparator($this->getPath() . '/' . 'baz')
         );
         $finder->getFilesystem()
             ->shouldReceive('exists')
@@ -163,8 +171,17 @@ class ViewFinderTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    public function testSetAndGetPaths()
+    {
+        $finder = $this->getFinder();
+        $finder->setPaths(['test', 'foo']);
+
+        $this->assertCount(2, $finder->getPaths());
+    }
+
     /**
      * @expectedException InvalidArgumentException
+     * @expectedExceptionMessage View [foo] not found.
      */
     public function testExceptionThrownWhenViewNotFound()
     {
@@ -186,6 +203,30 @@ class ViewFinderTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException InvalidArgumentException
+     * @expectedExceptionMessage View [foo::foo::] has an invalid name.
+     */
+    public function testExceptionThrownWhenViewHasAInvalidName()
+    {
+        $path = $this->getDirectorySeparator($this->getPath() . '/' . 'foo.php');
+
+        $finder = $this->getFinder();
+        $finder->getFilesystem()
+            ->shouldReceive('exists')
+            ->once()
+            ->with($path)
+            ->andReturn(true);
+
+        $this->assertEquals(
+            $path,
+            $finder->find('foo')
+        );
+
+        $finder->find('foo::foo::');
+    }
+
+    /**
+     * @expectedException InvalidArgumentException
+     * @expectedExceptionMessage No hint path defined for [name].
      */
     public function testExceptionThrownOnInvalidViewName()
     {
@@ -195,6 +236,7 @@ class ViewFinderTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException InvalidArgumentException
+     * @expectedExceptionMessage No hint path defined for [name].
      */
     public function testExceptionThrownWhenNoHintPathIsRegistered()
     {
@@ -207,6 +249,7 @@ class ViewFinderTest extends \PHPUnit_Framework_TestCase
         $finder = $this->getFinder();
         $finder->addExtension('baz');
         $extensions = $finder->getExtensions();
+
         $this->assertEquals('baz', reset($extensions));
     }
 
@@ -215,7 +258,18 @@ class ViewFinderTest extends \PHPUnit_Framework_TestCase
         $finder = $this->getFinder();
         $finder->addExtension('baz');
         $finder->addExtension('baz');
+
         $this->assertCount(3, $finder->getExtensions());
+    }
+
+    public function testPrependNamespace()
+    {
+        $finder = $this->getFinder();
+        $finder->prependNamespace('test', 'foo');
+        $finder->prependNamespace('testb', 'baz');
+        $finder->prependNamespace('test', 'baa');
+
+        $this->assertCount(2, $finder->getHints());
     }
 
     public function testPassingViewWithHintReturnsTrue()
@@ -243,6 +297,6 @@ class ViewFinderTest extends \PHPUnit_Framework_TestCase
 
     protected function getFinder()
     {
-        return new ViewFinder(Mock::mock(Filesystem::class), [$this->getPath()]);
+        return new ViewFinder(Mock::mock(Filesystem::class), [$this->getPath()], ['php', 'phtml']);
     }
 }

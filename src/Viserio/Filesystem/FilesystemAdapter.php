@@ -110,13 +110,14 @@ class FilesystemAdapter implements CloudFilesystemContract
      *
      * @param string $path
      * @param string $data
+     * @param string $separator
      *
      * @return bool
      */
-    public function prepend($path, $data)
+    public function prepend($path, $data, $separator = PHP_EOL)
     {
         if ($this->exists($path)) {
-            return $this->put($path, $data . PHP_EOL . $this->get($path));
+            return $this->put($path, $data . $separator . $this->get($path));
         }
 
         return $this->put($path, $data);
@@ -127,13 +128,14 @@ class FilesystemAdapter implements CloudFilesystemContract
      *
      * @param string $path
      * @param string $data
+     * @param string $separator
      *
      * @return bool
      */
-    public function append($path, $data)
+    public function append($path, $data, $separator = PHP_EOL)
     {
         if ($this->exists($path)) {
-            return $this->put($path, $this->get($path) . PHP_EOL . $data);
+            return $this->put($path, $this->get($path) . $separator . $data);
         }
 
         return $this->put($path, $data);
