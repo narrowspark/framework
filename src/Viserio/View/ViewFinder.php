@@ -4,9 +4,12 @@ namespace Viserio\View;
 use InvalidArgumentException;
 use Viserio\Contracts\View\Finder as FinderContract;
 use Viserio\Filesystem\Filesystem;
+use Viserio\Support\Traits\DirectorySeparatorTrait;
 
 class ViewFinder implements FinderContract
 {
+    use DirectorySeparatorTrait;
+
     /**
      * The filesystem instance.
      *
@@ -40,7 +43,7 @@ class ViewFinder implements FinderContract
      *
      * @var array
      */
-    protected $extensions = ['php', 'phtml', 'html'];
+    protected $extensions = ['php', 'phtml'];
 
     /**
      * Create a new file view loader instance.
@@ -146,7 +149,7 @@ class ViewFinder implements FinderContract
      */
     public function hasHintInformation($name)
     {
-        return strpos($name, static::HINT_PATH_DELIMITER) > 0;
+        return strpos($name, FinderContract::HINT_PATH_DELIMITER) > 0;
     }
 
     /**
@@ -226,7 +229,7 @@ class ViewFinder implements FinderContract
      */
     protected function getNamespaceSegments($name)
     {
-        $segments = explode(static::HINT_PATH_DELIMITER, $name);
+        $segments = explode(FinderContract::HINT_PATH_DELIMITER, $name);
 
         if (count($segments) !== 2) {
             throw new InvalidArgumentException(sprintf('View %s has an invalid name.', $name));
@@ -253,7 +256,11 @@ class ViewFinder implements FinderContract
     {
         foreach ((array) $paths as $path) {
             foreach ($this->getPossibleViewFiles($name) as $file) {
-                if ($this->files->exists($viewPath = $path . '/' . $file)) {
+                if (
+                    $this->files->exists(
+                        $viewPath = $this->getDirectorySeparator($path . '/' . $file)
+                    )
+                ) {
                     return $viewPath;
                 }
             }
@@ -272,7 +279,7 @@ class ViewFinder implements FinderContract
     protected function getPossibleViewFiles($name)
     {
         return array_map(function ($extension) use ($name) {
-            return str_replace('.', '/', $name) . '.' . $extension;
+            return str_replace('.', DIRECTORY_SEPARATOR, $name) . '.' . $extension;
 
         }, $this->extensions);
     }

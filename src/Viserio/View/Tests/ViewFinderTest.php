@@ -4,9 +4,12 @@ namespace Viserio\View\Test;
 use Mockery as Mock;
 use Viserio\View\ViewFinder;
 use Viserio\Filesystem\Filesystem;
+use Viserio\Support\Traits\DirectorySeparatorTrait;
 
 class ViewFinderTest extends \PHPUnit_Framework_TestCase
 {
+    use DirectorySeparatorTrait;
+
     public function tearDown()
     {
         Mock::close();
@@ -14,108 +17,150 @@ class ViewFinderTest extends \PHPUnit_Framework_TestCase
 
     public function testBasicViewFinding()
     {
+        $path = $this->getDirectorySeparator($this->getPath() . '/' . 'foo.php');
+
         $finder = $this->getFinder();
         $finder->getFilesystem()
             ->shouldReceive('exists')
             ->once()
-            ->with($this->getPath() . '/foo.php')
+            ->with($path)
             ->andReturn(true);
 
-        $this->assertEquals($this->getPath() . '/foo.php', $finder->find('foo'));
+        $this->assertEquals(
+            $path,
+            $finder->find('foo')
+        );
     }
 
     public function testCascadingFileLoading()
     {
+        $path = $this->getDirectorySeparator($this->getPath() . '/' . 'foo.phtml');
+        $path2 = $this->getDirectorySeparator($this->getPath() . '/' . 'foo.php');
+
         $finder = $this->getFinder();
         $finder->getFilesystem()
             ->shouldReceive('exists')
             ->once()
-            ->with($this->getPath() . '/foo.php')
-            ->andReturn(false);
+            ->with($path)
+            ->andReturn(true);
         $finder->getFilesystem()
             ->shouldReceive('exists')
             ->once()
-            ->with($this->getPath() . '/foo.php')
-            ->andReturn(true);
+            ->with($path2)
+            ->andReturn(false);
 
-        $this->assertEquals($this->getPath() . '/foo.php', $finder->find('foo'));
+        $this->assertEquals(
+            $path,
+            $finder->find('foo')
+        );
     }
 
     public function testDirectoryCascadingFileLoading()
     {
+        $path  = $this->getDirectorySeparator($this->getPath() . '/' . 'foo.php');
+        $path2 = $this->getDirectorySeparator($this->getPath() . '/' . 'Nested/foo.php');
+        $path3 = $this->getDirectorySeparator($this->getPath() . '/' . 'foo.phtml');
+
         $finder = $this->getFinder();
-        $finder->addLocation($this->getPath() . '/Nested');
+        $finder->addLocation($this->getPath() . '/' . 'Nested');
         $finder->getFilesystem()
             ->shouldReceive('exists')
             ->once()
-            ->with($this->getPath() . '/foo.php')
+            ->with($path)
             ->andReturn(false);
         $finder->getFilesystem()
             ->shouldReceive('exists')
             ->once()
-            ->with($this->getPath() . '/foo.php')
+            ->with($path3)
             ->andReturn(false);
         $finder->getFilesystem()
             ->shouldReceive('exists')
             ->once()
-            ->with($this->getPath() . '/Nested/foo.php')
+            ->with($path2)
             ->andReturn(true);
 
-        $this->assertEquals($this->getPath() . '/Nested/foo.php', $finder->find('foo'));
+        $this->assertEquals(
+            $path2,
+            $finder->find('foo')
+        );
     }
 
     public function testNamespacedBasicFileLoading()
     {
+        $path = $this->getDirectorySeparator($this->getPath() . '/' . 'foo/bar/baz.php');
+
         $finder = $this->getFinder();
-        $finder->addNamespace('foo', $this->getPath() . '/foo');
+        $finder->addNamespace(
+            'foo',
+            $this->getDirectorySeparator($this->getPath() . '/' . 'foo')
+        );
         $finder->getFilesystem()
             ->shouldReceive('exists')
             ->once()
-            ->with($this->getPath() . '/foo/bar/baz.php')
+            ->with($path)
             ->andReturn(true);
 
-        $this->assertEquals($this->getPath() . '/foo/bar/baz.php', $finder->find('foo::bar.baz'));
+        $this->assertEquals(
+            $path,
+            $finder->find('foo::bar.baz')
+        );
     }
 
     public function testCascadingNamespacedFileLoading()
     {
+        $path  = $this->getDirectorySeparator($this->getPath() . '/' . 'foo/bar/baz.php');
+
         $finder = $this->getFinder();
-        $finder->addNamespace('foo', $this->getPath() . '/foo');
+        $finder->addNamespace(
+            'foo',
+            $this->getDirectorySeparator($this->getPath() . '/' . 'foo')
+        );
         $finder->getFilesystem()
             ->shouldReceive('exists')
             ->once()
-            ->with($this->getPath() . '/foo/bar/baz.php')
-            ->andReturn(false);
-        $finder->getFilesystem()
-            ->shouldReceive('exists')
-            ->once()
-            ->with($this->getPath() . '/foo/bar/baz.php')
+            ->with($path)
             ->andReturn(true);
 
-        $this->assertEquals($this->getPath() . '/foo/bar/baz.php', $finder->find('foo::bar.baz'));
+        $this->assertEquals(
+            $path,
+            $finder->find('foo::bar.baz')
+        );
     }
 
     public function testDirectoryCascadingNamespacedFileLoading()
     {
+        $path  = $this->getDirectorySeparator($this->getPath() . '/' . 'foo/bar/baz.php');
+        $path2 = $this->getDirectorySeparator($this->getPath() . '/' . 'bar/bar/baz.php');
+        $path3 = $this->getDirectorySeparator($this->getPath() . '/' . 'foo/bar/baz.phtml');
+
         $finder = $this->getFinder();
-        $finder->addNamespace('foo', [$this->getPath() . '/foo', $this->getPath() . '/bar']);
+        $finder->addNamespace(
+            'foo',
+            [
+                $this->getPath() . '/' . 'foo',
+                $this->getPath() . '/' . 'bar'
+            ]
+        );
         $finder->getFilesystem()
             ->shouldReceive('exists')
             ->once()
-            ->with($this->getPath() . '/foo/bar/baz.php')
+            ->with($path)
             ->andReturn(false);
         $finder->getFilesystem()
             ->shouldReceive('exists')
             ->once()
-            ->with($this->getPath() . '/foo/bar/baz.php')
+            ->with($path3)
             ->andReturn(false);
         $finder->getFilesystem()
             ->shouldReceive('exists')
             ->once()
-            ->with($this->getPath() . '/bar/bar/baz.php')
+            ->with($path2)
             ->andReturn(true);
 
-        $this->assertEquals($this->getPath() . '/bar/bar/baz.php', $finder->find('foo::bar.baz'));
+        $this->assertEquals(
+            $path2,
+            $finder->find('foo::bar.baz')
+        );
     }
 
     /**
@@ -123,15 +168,18 @@ class ViewFinderTest extends \PHPUnit_Framework_TestCase
      */
     public function testExceptionThrownWhenViewNotFound()
     {
+        $path = $this->getDirectorySeparator($this->getPath() . '/' . 'foo.php');
+
         $finder = $this->getFinder();
         $finder->getFilesystem()
             ->shouldReceive('exists')
             ->once()
-            ->with($this->getPath() . '/foo.php')->andReturn(false);
+            ->with($path)
+            ->andReturn(false);
         $finder->getFilesystem()
             ->shouldReceive('exists')
             ->once()
-            ->with($this->getPath() . '/foo.php')
+            ->with($this->getDirectorySeparator($this->getPath() . '/' . 'foo.phtml'))
             ->andReturn(false);
         $finder->find('foo');
     }
@@ -190,11 +238,11 @@ class ViewFinderTest extends \PHPUnit_Framework_TestCase
 
     protected function getPath()
     {
-        return __DIR__ .  '/Fixture';
+        return $this->getDirectorySeparator(__DIR__ . '/' . 'Fixture');
     }
 
     protected function getFinder()
     {
-        return new ViewFinder(Mock::mock(Filesystem::class), [__DIR__]);
+        return new ViewFinder(Mock::mock(Filesystem::class), [$this->getPath()]);
     }
 }

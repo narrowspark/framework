@@ -3,6 +3,10 @@ namespace Viserio\View\Test;
 
 use Mockery as Mock;
 use Viserio\View\View;
+use Viserio\View\Factory;
+use Viserio\Contracts\View\Engine;
+use Viserio\Contracts\Support\Arrayable;
+use Viserio\Contracts\Support\Renderable;
 
 class ViewTest extends \PHPUnit_Framework_TestCase
 {
@@ -14,8 +18,8 @@ class ViewTest extends \PHPUnit_Framework_TestCase
     public function testDataCanBeSetOnView()
     {
         $view = new View(
-            Mock::mock('Viserio\View\Factory'),
-            Mock::mock('Viserio\Contracts\View\Engine'),
+            Mock::mock(Factory::class),
+            Mock::mock(Engine::class),
             'view',
             'path',
             []
@@ -26,8 +30,8 @@ class ViewTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(['foo' => 'bar', 'baz' => 'boom'], $view->getData());
 
         $view = new View(
-            Mock::mock('Viserio\View\Factory'),
-            Mock::mock('Viserio\Contracts\View\Engine'),
+            Mock::mock(Factory::class),
+            Mock::mock(Engine::class),
             'view',
             'path',
             []
@@ -72,12 +76,12 @@ class ViewTest extends \PHPUnit_Framework_TestCase
 
     public function testViewAcceptsArrayableImplementations()
     {
-        $arrayable = Mock::mock('Viserio\Contracts\Support\Arrayable');
+        $arrayable = Mock::mock(Arrayable::class);
         $arrayable->shouldReceive('toArray')->once()->andReturn(['foo' => 'bar', 'baz' => ['qux', 'corge']]);
 
         $view = new View(
-            Mock::mock('Viserio\View\Factory'),
-            Mock::mock('Viserio\Contracts\View\Engine'),
+            Mock::mock(Factory::class),
+            Mock::mock(Engine::class),
             'view',
             'path',
             $arrayable
@@ -152,7 +156,7 @@ class ViewTest extends \PHPUnit_Framework_TestCase
         $view = $this->getView();
         $view->getFactory()->shouldReceive('getShared')->twice()->andReturn(['shared' => 'foo']);
         $view->getEngine()->shouldReceive('get')->twice()->andReturn('contents');
-        $view->renderable = Mock::mock('Viserio\Contracts\Support\Renderable');
+        $view->renderable = Mock::mock(Renderable::class);
         $view->renderable->shouldReceive('render')->twice()->andReturn('text');
 
         $this->assertEquals('contents', $view->render());
@@ -162,8 +166,8 @@ class ViewTest extends \PHPUnit_Framework_TestCase
     protected function getView()
     {
         return new View(
-            Mock::mock('Viserio\View\Factory'),
-            Mock::mock('Viserio\Contracts\View\Engine'),
+            Mock::mock(Factory::class),
+            Mock::mock(Engine::class),
             'view',
             'path',
             ['foo' => 'bar']

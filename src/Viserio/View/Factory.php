@@ -72,8 +72,6 @@ class Factory implements FactoryContract
      */
     protected $extensions = [
         'php'   => 'php',
-        'phtml' => 'php',
-        'html'  => 'html',
     ];
 
     /**
@@ -82,6 +80,13 @@ class Factory implements FactoryContract
      * @var array
      */
     protected $shared = [];
+
+    /**
+     * Virtuoso instance.
+     *
+     * @var Virtuoso
+     */
+    protected $virtuoso;
 
     /**
      * Constructor.
@@ -103,6 +108,28 @@ class Factory implements FactoryContract
     }
 
     /**
+     * Set virtuoso.
+     *
+     * @param Virtuoso $virtuoso
+     */
+    public function setVirtuoso(Virtuoso $virtuoso)
+    {
+        $this->virtuoso = $virtuoso;
+
+        return $this;
+    }
+
+    /**
+     * Get virtuoso.
+     *
+     * @return Virtuoso
+     */
+    public function getVirtuoso()
+    {
+        return $this->virtuoso;
+    }
+
+    /**
      * Get the evaluated view contents for the given view.
      *
      * @param string $path
@@ -113,17 +140,16 @@ class Factory implements FactoryContract
      */
     public function file($path, $data = [], $mergeData = [])
     {
-        $data = array_merge($mergeData, $this->parseData($data));
+        $data   = array_merge($mergeData, $this->parseData($data));
+        $engine = $this->getEngineFromPath($path);
 
-        $this->callCreator($view = new View(
-            $this,
-            $this->getEngineFromPath($path),
-            $path,
-            $path,
-            $data
-        ));
+        if ($this->virtuoso !== null) {
+            $this->virtuoso->callCreator($view = new VirtuosoView($this, $engine, $path, $path, $data));
 
-        return $view;
+            return $view;
+        }
+
+        return new View($this, $engine, $path, $path, $data);
     }
 
     /**
@@ -141,19 +167,18 @@ class Factory implements FactoryContract
             $view = $this->aliases[$view];
         }
 
-        $view = $this->normalizeName($view);
-        $path = $this->finder->find($view);
-        $data = array_merge($mergeData, $this->parseData($data));
+        $view   = $this->normalizeName($view);
+        $path   = $this->finder->find($view);
+        $data   = array_merge($mergeData, $this->parseData($data));
+        $engine = $this->getEngineFromPath($path);
 
-        $this->callCreator($view = new View(
-            $this,
-            $this->getEngineFromPath($path),
-            $view,
-            $path,
-            $data
-        ));
+        if ($this->virtuoso !== null) {
+            $this->virtuoso->callCreator($view = new VirtuosoView($this, $engine, $view, $path, $data));
 
-        return $view;
+            return $view;
+        }
+
+        return new View($this, $engine, $view, $path, $data);
     }
 
     /**
@@ -252,6 +277,7 @@ class Factory implements FactoryContract
     public function renderEach($view, array $data, $iterator, $empty = 'raw|')
     {
         $result = '';
+
         // If is actually data in the array, we will loop through the data and append
         // an instance of the partial view to the final result HTML passing in the
         // iterated value of this data array, allowing the views to access them.
@@ -313,16 +339,6 @@ class Factory implements FactoryContract
         foreach ($key as $innerKey => $innerValue) {
             $this->share($innerKey, $innerValue);
         }
-    }
-
-    /**
-     * Call the creator for a given view.
-     *
-     * @param \Viserio\View\View $view
-     */
-    public function callCreator(View $view)
-    {
-        $this->events->addListener('creating: ' . $view->getName(), [$view]);
     }
 
     /**

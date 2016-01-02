@@ -3,7 +3,6 @@ namespace Viserio\View;
 
 use ArrayAccess;
 use BadMethodCallException;
-use Closure;
 use Viserio\Contracts\Support\Arrayable;
 use Viserio\Contracts\Support\Renderable;
 use Viserio\Contracts\View\Engine as EngineContract;
@@ -69,44 +68,17 @@ class View implements ArrayAccess, ViewContract
     /**
      * Get the string contents of the view.
      *
-     * @param null|\Closure $callback
+     * @param callable|null $callback
      *
      * @return string
      */
-    public function render(Closure $callback = null)
+    public function render(callable $callback = null)
     {
         $contents = $this->getContents();
-        $response = isset($callback) ? $callback($this, $contents) : null;
+
+        $response = isset($callback) ? call_user_func($callback, $this, $contents) : null;
 
         return $response !== null ? $response : $contents;
-    }
-
-    /**
-     * Get the evaluated contents of the view.
-     *
-     * @return string
-     */
-    protected function getContents()
-    {
-        return $this->engine->get($this->path, $this->gatherData());
-    }
-
-    /**
-     * Get the data bound to the view instance.
-     *
-     * @return array
-     */
-    protected function gatherData()
-    {
-        $data = array_merge($this->factory->getShared(), $this->data);
-
-        foreach ($data as $key => $value) {
-            if ($value instanceof Renderable) {
-                $data[$key] = $value->render();
-            }
-        }
-
-        return $data;
     }
 
     /**
@@ -321,5 +293,33 @@ class View implements ArrayAccess, ViewContract
     public function __toString()
     {
         return $this->render();
+    }
+
+    /**
+     * Get the evaluated contents of the view.
+     *
+     * @return string
+     */
+    protected function getContents()
+    {
+        return $this->engine->get($this->path, $this->gatherData());
+    }
+
+    /**
+     * Get the data bound to the view instance.
+     *
+     * @return array
+     */
+    protected function gatherData()
+    {
+        $data = array_merge($this->factory->getShared(), $this->data);
+
+        foreach ($data as $key => $value) {
+            if ($value instanceof Renderable) {
+                $data[$key] = $value->render();
+            }
+        }
+
+        return $data;
     }
 }

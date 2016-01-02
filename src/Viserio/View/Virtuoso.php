@@ -3,9 +3,11 @@ namespace Viserio\View;
 
 use Closure;
 use InvalidArgumentException;
-use Interop\Container\ContainerInterface as ContainerInteropInterface;
+use Interop\Container\ContainerInterface;
+use Symfony\Component\EventDispatcher\GenericEvent;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Viserio\Support\Invoker;
+use Viserio\Support\Str;
 use Viserio\Support\Traits\ContainerAwareTrait;
 use Viserio\View\Traits\NormalizeNameTrait;
 
@@ -13,13 +15,6 @@ class Virtuoso
 {
     use ContainerAwareTrait;
     use NormalizeNameTrait;
-
-    /**
-     * The view composer events.
-     *
-     * @var array
-     */
-    protected $composers = [];
 
     /**
      * All of the finished, captured sections.
@@ -63,7 +58,7 @@ class Virtuoso
      * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $events
      */
     public function __construct(
-        ContainerInteropInterface $container,
+        ContainerInterface $container,
         EventDispatcherInterface $events
     ) {
         $this->events = $events;
@@ -73,7 +68,7 @@ class Virtuoso
         $this->invoker = (new Invoker())
             ->injectByTypeHint(true)
             ->injectByParameterName(true)
-            ->setContainer($this->getContainer());
+            ->setContainer($container);
     }
 
     /**
@@ -87,13 +82,42 @@ class Virtuoso
     }
 
     /**
+     * Register a view creator event.
+     *
+     * @param array|string    $views
+     * @param \Closure|string $callback
+     *
+     * @return array
+     */
+    public function creator($views, $callback)
+    {
+        $creators = [];
+
+        foreach ((array) $views as $view) {
+            $creators[] = $this->addViewEvent($view, $callback, 'creating: ');
+        }
+
+        return $creators;
+    }
+
+    /**
+     * Call the creator for a given view.
+     *
+     * @param \Viserio\View\View $view
+     */
+    public function callCreator(View $view)
+    {
+        $this->events->dispatch('creating: '.$view->getName(), new GenericEvent($view));
+    }
+
+    /**
      * Call the composer for a given view.
      *
-     * @param  \Viserio\View\View $view
+     * @param \Viserio\View\View $view
      */
     public function callComposer(View $view)
     {
-        $this->events->addListener('composing: '.$view->getName(), [$view]);
+        $this->events->dispatch('composing: ' . $view->getName(), new GenericEvent($view));
     }
 
     /**
@@ -113,6 +137,7 @@ class Virtuoso
 
         return $registered;
     }
+
     /**
      * Register a view composer event.
      *
@@ -138,8 +163,6 @@ class Virtuoso
      *
      * @param string $section
      * @param string $content
-     *
-     * @return void
      */
     public function startSection($section, $content = '')
     {
@@ -223,8 +246,6 @@ class Virtuoso
 
     /**
      * Increment the rendering counter.
-     *
-     * @return void
      */
     public function incrementRender()
     {
@@ -232,8 +253,6 @@ class Virtuoso
     }
     /**
      * Decrement the rendering counter.
-     *
-     * @return void
      */
     public function decrementRender()
     {
@@ -275,8 +294,6 @@ class Virtuoso
      *
      * @param string $section
      * @param string $content
-     *
-     * @return void
      */
     protected function extendSection($section, $content)
     {
@@ -322,7 +339,8 @@ class Virtuoso
      */
     protected function addClassEvent($view, $class, $prefix, $priority = 0)
     {
-        $name = $prefix.$view;
+        $name = $prefix . $view;
+
         // When registering a class based view "composer", we will simply resolve the
         // classes from the application IoC container then call the compose method
         // on the instance. This allows for convenient, testable view composers.
