@@ -3,7 +3,6 @@ namespace Viserio\View;
 
 use InvalidArgumentException;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Viserio\Contracts\Cache\Factory as CacheContract;
 use Viserio\Contracts\Support\Arrayable;
 use Viserio\Contracts\View\Factory as FactoryContract;
 use Viserio\Contracts\View\Finder as FinderContract;
