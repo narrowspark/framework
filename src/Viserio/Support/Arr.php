@@ -104,6 +104,26 @@ class Arr
     }
 
     /**
+     * Push an item onto the beginning of an array.
+     *
+     * @param array $array
+     * @param mixed $value
+     * @param mixed $key
+     *
+     * @return array
+     */
+    public static function prepend($array, $value, $key = null)
+    {
+        if (is_null($key)) {
+            array_unshift($array, $value);
+        } else {
+            $array = [$key => $value] + $array;
+        }
+
+        return $array;
+    }
+
+    /**
      * Return the first element in an array passing a given truth test.
      *
      * @param array    $array
