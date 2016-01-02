@@ -2,9 +2,9 @@
 namespace Viserio\View\Test;
 
 use Mockery as Mock;
-use Viserio\View\ViewFinder;
 use Viserio\Filesystem\Filesystem;
 use Viserio\Support\Traits\DirectorySeparatorTrait;
+use Viserio\View\ViewFinder;
 
 class ViewFinderTest extends \PHPUnit_Framework_TestCase
 {
@@ -138,7 +138,7 @@ class ViewFinderTest extends \PHPUnit_Framework_TestCase
             'foo',
             [
                 $this->getPath() . '/' . 'foo',
-                $this->getPath() . '/' . 'bar'
+                $this->getPath() . '/' . 'bar',
             ]
         );
         $finder->getFilesystem()

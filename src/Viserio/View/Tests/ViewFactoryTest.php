@@ -1,14 +1,14 @@
 <?php
 namespace Viserio\View\Test;
 
+use Interop\Container\ContainerInterface;
 use Mockery as Mock;
+use Symfony\Component\EventDispatcher\EventDispatcher;
+use Viserio\Contracts\View\Engine;
+use Viserio\Contracts\View\Finder;
+use Viserio\View\Engines\EngineResolver;
 use Viserio\View\Factory;
 use Viserio\View\Virtuoso;
-use Viserio\Contracts\View\Engine;
-use Viserio\View\Engines\EngineResolver;
-use Viserio\Contracts\View\Finder;
-use Symfony\Component\EventDispatcher\EventDispatcher;
-use Interop\Container\ContainerInterface;
 
 class ViewFactoryTest extends \PHPUnit_Framework_TestCase
 {

@@ -2,11 +2,11 @@
 namespace Viserio\View\Test;
 
 use Mockery as Mock;
-use Viserio\View\View;
-use Viserio\View\Factory;
-use Viserio\Contracts\View\Engine;
 use Viserio\Contracts\Support\Arrayable;
 use Viserio\Contracts\Support\Renderable;
+use Viserio\Contracts\View\Engine;
+use Viserio\View\Factory;
+use Viserio\View\View;
 
 class ViewTest extends \PHPUnit_Framework_TestCase
 {

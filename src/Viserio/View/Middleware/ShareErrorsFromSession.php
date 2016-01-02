@@ -25,7 +25,7 @@ class ShareErrorsFromSession implements MiddlewareContract
         $this->view = $view;
     }
 
-     public function __invoke(
+    public function __invoke(
         ServerRequestInterface $request,
         ResponseInterface $response,
         callable $next

@@ -1,9 +1,9 @@
 <?php
 namespace Viserio\Events;
 
+use Interop\Container\ContainerInterface as ContainerContract;
 use InvalidArgumentException;
 use ReflectionClass;
-use Interop\Container\ContainerInterface as ContainerContract;
 use Symfony\Component\EventDispatcher\Event;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;

@@ -2,10 +2,10 @@
 namespace Viserio\View;
 
 use Closure;
-use InvalidArgumentException;
 use Interop\Container\ContainerInterface;
-use Symfony\Component\EventDispatcher\GenericEvent;
+use InvalidArgumentException;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\EventDispatcher\GenericEvent;
 use Viserio\Support\Invoker;
 use Viserio\Support\Str;
 use Viserio\Support\Traits\ContainerAwareTrait;
@@ -107,7 +107,7 @@ class Virtuoso
      */
     public function callCreator(View $view)
     {
-        $this->events->dispatch('creating: '.$view->getName(), new GenericEvent($view));
+        $this->events->dispatch('creating: ' . $view->getName(), new GenericEvent($view));
     }
 
     /**
@@ -178,7 +178,7 @@ class Virtuoso
     /**
      * Stop injecting content into a section.
      *
-     * @param  bool $overwrite
+     * @param bool $overwrite
      *
      * @throws \InvalidArgumentException
      *
@@ -251,6 +251,7 @@ class Virtuoso
     {
         $this->renderCount++;
     }
+
     /**
      * Decrement the rendering counter.
      */
@@ -258,6 +259,7 @@ class Virtuoso
     {
         $this->renderCount--;
     }
+
     /**
      * Check if there are no active render operations.
      *
@@ -279,6 +281,7 @@ class Virtuoso
     {
         return array_key_exists($name, $this->sections);
     }
+
     /**
      * Get the entire array of sections.
      *
@@ -319,7 +322,7 @@ class Virtuoso
         $view = $this->normalizeName($view);
 
         if ($callback instanceof Closure) {
-            $this->events->addListener($prefix.$view, $callback, $priority);
+            $this->events->addListener($prefix . $view, $callback, $priority);
 
             return $callback;
         } elseif (is_string($callback)) {
@@ -367,6 +370,7 @@ class Virtuoso
         // given arguments that are passed to the Closure as the composer's data.
         return function () use ($class, $method) {
             $callable = [$this->getInvoker()->call($class), $method];
+
             return call_user_func_array($callable, func_get_args());
         };
     }

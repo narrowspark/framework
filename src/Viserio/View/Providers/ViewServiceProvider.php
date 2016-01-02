@@ -30,7 +30,7 @@ class ViewServiceProvider extends ServiceProvider
             // Next we will register the various engines with the engines so that the
             // environment can resolve the engines it needs for various views based
             // on the extension of view files. We call a method for each engines.
-            foreach (['php' => 'php','phtml' => 'php'] as $engineName => $engineClass) {
+            foreach (['php' => 'php', 'phtml' => 'php'] as $engineName => $engineClass) {
                 $this->{'register' . ucfirst($engineClass) . 'Engine'}($resolver);
             }
 
