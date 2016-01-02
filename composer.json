@@ -58,7 +58,7 @@
         "symfony/var-dumper"                                 : "~2.8|~3.0",
         "swiftmailer/swiftmailer"                            : "~5.4",
         "stack/builder"                                      : "~1.0.3",
-        "vlucas/phpdotenv"                                   : "~2.1"
+        "vlucas/phpdotenv"                                   : "~2.2"
     },
     "replace": {
         "viserio/cache"                                      : "self.version",

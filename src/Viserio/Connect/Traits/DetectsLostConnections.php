@@ -24,6 +24,7 @@ trait DetectsLostConnections
             'is dead or not enabled',
             'Error while sending',
             'Operation in progress',
+            'decryption failed or bad record mac',
         ]);
     }
 }
