@@ -110,8 +110,6 @@ class ViewServiceProvider extends ServiceProvider
                 $app->get('events')
             );
 
-            //$view->setCache($app->get('cache.store'));
-
             $view->share('app', $app);
 
             return $view;

@@ -175,9 +175,7 @@ class ViewFinder implements FinderContract
     /**
      * Set the active view paths.
      *
-     * @param array $paths
-     *
-     * @return array
+     * @param array<String> $paths
      */
     public function setPaths(array $paths)
     {

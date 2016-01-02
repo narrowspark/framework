@@ -101,28 +101,6 @@ class Factory implements FactoryContract
     }
 
     /**
-     * Set virtuoso.
-     *
-     * @param Virtuoso $virtuoso
-     */
-    public function setVirtuoso(Virtuoso $virtuoso)
-    {
-        $this->virtuoso = $virtuoso;
-
-        return $this;
-    }
-
-    /**
-     * Get virtuoso.
-     *
-     * @return Virtuoso
-     */
-    public function getVirtuoso()
-    {
-        return $this->virtuoso;
-    }
-
-    /**
      * Get the evaluated view contents for the given view.
      *
      * @param string $path
@@ -136,13 +114,7 @@ class Factory implements FactoryContract
         $data   = array_merge($mergeData, $this->parseData($data));
         $engine = $this->getEngineFromPath($path);
 
-        if ($this->virtuoso !== null) {
-            $this->virtuoso->callCreator($view = new VirtuosoView($this, $engine, $path, $path, $data));
-
-            return $view;
-        }
-
-        return new View($this, $engine, $path, $path, $data);
+        return $this->getView($this, $engine, $path, $path, $data);
     }
 
     /**
@@ -165,13 +137,7 @@ class Factory implements FactoryContract
         $data   = array_merge($mergeData, $this->parseData($data));
         $engine = $this->getEngineFromPath($path);
 
-        if ($this->virtuoso !== null) {
-            $this->virtuoso->callCreator($view = new VirtuosoView($this, $engine, $view, $path, $data));
-
-            return $view;
-        }
-
-        return new View($this, $engine, $view, $path, $data);
+        return $this->getView($this, $engine, $view, $path, $data);
     }
 
     /**
@@ -397,6 +363,30 @@ class Factory implements FactoryContract
     }
 
     /**
+     * Set virtuoso.
+     *
+     * @param Virtuoso $virtuoso
+     */
+    public function setVirtuoso(Virtuoso $virtuoso)
+    {
+        $this->virtuoso = $virtuoso;
+
+        $this->share('__virtuoso', $virtuoso);
+
+        return $this;
+    }
+
+    /**
+     * Get virtuoso.
+     *
+     * @return Virtuoso
+     */
+    public function getVirtuoso()
+    {
+        return $this->virtuoso;
+    }
+
+    /**
      * Get an item from the shared data.
      *
      * @param string $key
@@ -455,5 +445,27 @@ class Factory implements FactoryContract
         return Arr::first($extensions, function ($key, $value) use ($path) {
             return Str::endsWith($path, $value);
         });
+    }
+
+    /**
+     * Get the right view object.
+     *
+     * @param \Viserio\View\Factory                      $factory
+     * @param \Viserio\Contracts\View\Engine             $engine
+     * @param string                                     $view
+     * @param string                                     $path
+     * @param array|\Viserio\Contracts\Support\Arrayable $data
+     *
+     * @return \Viserio\View\View|\Viserio\View\VirtuosoView
+     */
+    protected function getView($factory, $engine, $view, $path, $data = [])
+    {
+        if ($this->virtuoso !== null) {
+            $this->virtuoso->callCreator($view = new VirtuosoView($factory, $engine, $view, $path, $data));
+
+            return $view;
+        }
+
+        return new View($this, $engine, $view, $path, $data);
     }
 }
