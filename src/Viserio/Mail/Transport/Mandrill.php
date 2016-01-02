@@ -68,7 +68,7 @@ class Mandrill extends Transport
      *
      * @return array
      */
-    protected function getToAddresses(\Swift_Mime_Message $message)
+    protected function getToAddresses(Swift_Mime_Message $message)
     {
         $to = [];
         if ($message->getTo()) {

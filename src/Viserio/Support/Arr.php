@@ -1,8 +1,13 @@
 <?php
 namespace Viserio\Support;
 
+use ArrayAccess;
+use Viserio\Support\Traits\ValueTrait;
+
 class Arr
 {
+    use ValueTrait;
+
     /**
      * Dotted array cache.
      *
@@ -94,6 +99,26 @@ class Arr
     public static function except($array, $keys)
     {
         static::forget($array, $keys);
+
+        return $array;
+    }
+
+    /**
+     * Push an item onto the beginning of an array.
+     *
+     * @param array $array
+     * @param mixed $value
+     * @param mixed $key
+     *
+     * @return array
+     */
+    public static function prepend($array, $value, $key = null)
+    {
+        if (is_null($key)) {
+            array_unshift($array, $value);
+        } else {
+            $array = [$key => $value] + $array;
+        }
 
         return $array;
     }
@@ -251,7 +276,7 @@ class Arr
 
         while (($segment = array_shift($key)) !== null) {
             if ($segment === '*') {
-                if (!is_array($target) && !$target instanceof \ArrayAccess) {
+                if (!is_array($target) && !$target instanceof ArrayAccess) {
                     return $default;
                 }
 
@@ -266,7 +291,7 @@ class Arr
                 }
 
                 $target = $target[$segment];
-            } elseif ($target instanceof \ArrayAccess) {
+            } elseif ($target instanceof ArrayAccess) {
                 if (!isset($target[$segment])) {
                     return value($default);
                 }
@@ -644,17 +669,5 @@ class Arr
     protected static function with($object)
     {
         return $object;
-    }
-
-    /**
-     * Return the default value of the given value.
-     *
-     * @param mixed $value
-     *
-     * @return mixed
-     */
-    public static function value($value)
-    {
-        return $value instanceof \Closure ? $value() : $value;
     }
 }

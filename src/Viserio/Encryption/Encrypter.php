@@ -2,6 +2,7 @@
 namespace Viserio\Encryption;
 
 use RandomLib\Generator as RandomLib;
+use RuntimeException;
 use Viserio\Contracts\Encryption\DecryptException;
 use Viserio\Contracts\Encryption\Encrypter as EncrypterContract;
 use Viserio\Contracts\Encryption\EncryptException;
@@ -183,12 +184,15 @@ class Encrypter implements EncrypterContract
     {
         $length = mb_strlen($key, '8bit');
 
-        if (isset($this->lengths[$cipher . '-' . $mode]) && in_array($length, $this->lengths[$cipher . '-' . $mode], true)) {
+        if (
+            isset($this->lengths[$cipher . '-' . $mode]) &&
+            in_array($length, $this->lengths[$cipher . '-' . $mode], true)
+        ) {
             return;
         }
 
         $validCiphers = implode(', ', array_keys($this->lengths));
 
-        throw new \RuntimeException("The only supported ciphers are [$validCiphers] with the correct key lengths.");
+        throw new RuntimeException("The only supported ciphers are [$validCiphers] with the correct key lengths.");
     }
 }

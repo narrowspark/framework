@@ -1,38 +1,19 @@
 <?php
 namespace Viserio\View;
 
+use InvalidArgumentException;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Viserio\Contracts\Cache\Factory as CacheContract;
-use Viserio\Contracts\Config\Manager as ConfigContract;
 use Viserio\Contracts\Support\Arrayable;
 use Viserio\Contracts\View\Factory as FactoryContract;
 use Viserio\Contracts\View\Finder as FinderContract;
 use Viserio\Support\Arr;
 use Viserio\Support\Str;
 use Viserio\View\Engines\EngineResolver;
+use Viserio\View\Traits\NormalizeNameTrait;
 
-/**
- * Factory.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.5
- */
 class Factory implements FactoryContract
 {
-    /**
-     * Config instance.
-     *
-     * @var \Viserio\Config\Manager
-     */
-    protected $config;
-
-    /**
-     * Cache instance.
-     *
-     * @var \Viserio\Contracts\Cache\Factory
-     */
-    protected $cache;
+    use NormalizeNameTrait;
 
     /**
      * The engines instance.
@@ -83,8 +64,6 @@ class Factory implements FactoryContract
      */
     protected $extensions = [
         'php' => 'php',
-        'phtml' => 'php',
-        'html' => 'html',
     ];
 
     /**
@@ -93,6 +72,13 @@ class Factory implements FactoryContract
      * @var array
      */
     protected $shared = [];
+
+    /**
+     * Virtuoso instance.
+     *
+     * @var Virtuoso
+     */
+    protected $virtuoso;
 
     /**
      * Constructor.
@@ -107,14 +93,10 @@ class Factory implements FactoryContract
         EventDispatcherInterface $events
     ) {
         $this->engines = $engines;
-        $this->finder = $finder;
-        $this->events = $events;
+        $this->finder  = $finder;
+        $this->events  = $events;
 
         $this->share('__env', $this);
-
-        if ($this->config && ($items = $this->getConfig()->get('view::items')) !== null) {
-            $this->shared = array_merge($items, $this->shared);
-        }
     }
 
     /**
@@ -128,14 +110,10 @@ class Factory implements FactoryContract
      */
     public function file($path, $data = [], $mergeData = [])
     {
-        $data = array_merge($mergeData, $this->parseData($data));
+        $data   = array_merge($mergeData, $this->parseData($data));
+        $engine = $this->getEngineFromPath($path);
 
-        $engine = explode('|', $path);
-        $viewEngine = isset($engine[1]) ? $this->getEngineFromPath($engine[1]) : $this->getEngineFromPath($path);
-
-        $this->callCreator($view = new View($this, $viewEngine, $path, $path, $data));
-
-        return $view;
+        return $this->getView($this, $engine, $path, $path, $data);
     }
 
     /**
@@ -153,10 +131,12 @@ class Factory implements FactoryContract
             $view = $this->aliases[$view];
         }
 
-        $view = $this->normalizeName($view);
-        $path = $this->finder->find($view);
+        $view   = $this->normalizeName($view);
+        $path   = $this->finder->find($view);
+        $data   = array_merge($mergeData, $this->parseData($data));
+        $engine = $this->getEngineFromPath($path);
 
-        return $this->file($path, $data, $mergeData);
+        return $this->getView($this, $engine, $view, $path, $data);
     }
 
     /**
@@ -205,38 +185,11 @@ class Factory implements FactoryContract
     {
         try {
             $this->finder->find($view);
-        } catch (\InvalidArgumentException $exception) {
+        } catch (InvalidArgumentException $exception) {
             return false;
         }
 
         return true;
-    }
-
-    /**
-     * Cache or return content from a content section.
-     *
-     * @param string $key
-     * @param bool   $condition
-     */
-    public function cache($key, $condition = true, callable $callable)
-    {
-        if (!$condition) {
-            return $callable();
-        }
-
-        if (!$content = $this->getCache()->get($key)) {
-            ob_start();
-
-            $callable();
-
-            $content = ob_get_contents();
-
-            ob_end_clean();
-
-            $this->getCache()->forever($key, $content);
-        }
-
-        return $content;
     }
 
     /**
@@ -252,6 +205,7 @@ class Factory implements FactoryContract
     public function renderEach($view, array $data, $iterator, $empty = 'raw|')
     {
         $result = '';
+
         // If is actually data in the array, we will loop through the data and append
         // an instance of the partial view to the final result HTML passing in the
         // iterated value of this data array, allowing the views to access them.
@@ -286,8 +240,11 @@ class Factory implements FactoryContract
      */
     public function getEngineFromPath($path)
     {
+        $engine = explode('|', $path);
+        $path   = isset($engine[1]) ? $engine[1] : $path;
+
         if (!$extension = $this->getExtension($path)) {
-            throw new \InvalidArgumentException(sprintf('Unrecognized extension in file: [%s]', $path));
+            throw new InvalidArgumentException(sprintf('Unrecognized extension in file: [%s]', $path));
         }
 
         $engine = $this->extensions[$extension];
@@ -310,16 +267,6 @@ class Factory implements FactoryContract
         foreach ($key as $innerKey => $innerValue) {
             $this->share($innerKey, $innerValue);
         }
-    }
-
-    /**
-     * Call the creator for a given view.
-     *
-     * @param \Viserio\View\View $view
-     */
-    public function callCreator(View $view)
-    {
-        $this->events->addListener('creating: ' . $view->getName(), [$view]);
     }
 
     /**
@@ -415,43 +362,27 @@ class Factory implements FactoryContract
     }
 
     /**
-     * Get the config manager instance.
+     * Set virtuoso.
      *
-     * @return \Viserio\Contracts\Config\Manager
+     * @param Virtuoso $virtuoso
      */
-    public function getConfig()
+    public function setVirtuoso(Virtuoso $virtuoso)
     {
-        return $this->config;
+        $this->virtuoso = $virtuoso;
+
+        $this->share('__virtuoso', $virtuoso);
+
+        return $this;
     }
 
     /**
-     * Set the config manager instance.
+     * Get virtuoso.
      *
-     * @param \Viserio\Contracts\Config\Manager $config
+     * @return Virtuoso
      */
-    public function setConfig(ConfigContract $config)
+    public function getVirtuoso()
     {
-        $this->config = $config;
-    }
-
-    /**
-     * Get the cache manager instance.
-     *
-     * @return \Viserio\Contracts\Cache\Factory
-     */
-    public function getCache()
-    {
-        return $this->cahce;
-    }
-
-    /**
-     * Set the cache manager instance.
-     *
-     * @param \Viserio\Contracts\Cache\Factory $cache
-     */
-    public function setCache(CacheContract $cache)
-    {
-        $this->cahce = $cahce;
+        return $this->virtuoso;
     }
 
     /**
@@ -488,26 +419,6 @@ class Factory implements FactoryContract
     }
 
     /**
-     * Normalize a view name.
-     *
-     * @param string $name
-     *
-     * @return string
-     */
-    protected function normalizeName($name)
-    {
-        $delimiter = FinderContract::HINT_PATH_DELIMITER;
-
-        if (strpos($name, $delimiter) === false) {
-            return str_replace('/', '.', $name);
-        }
-
-        list($namespace, $name) = explode($delimiter, $name);
-
-        return $namespace . $delimiter . str_replace('/', '.', $name);
-    }
-
-    /**
      * Parse the given data into a raw array.
      *
      * @param mixed $data
@@ -533,5 +444,27 @@ class Factory implements FactoryContract
         return Arr::first($extensions, function ($key, $value) use ($path) {
             return Str::endsWith($path, $value);
         });
+    }
+
+    /**
+     * Get the right view object.
+     *
+     * @param \Viserio\View\Factory                      $factory
+     * @param \Viserio\Contracts\View\Engine             $engine
+     * @param string                                     $view
+     * @param string                                     $path
+     * @param array|\Viserio\Contracts\Support\Arrayable $data
+     *
+     * @return \Viserio\View\View|\Viserio\View\VirtuosoView
+     */
+    protected function getView($factory, $engine, $view, $path, $data = [])
+    {
+        if ($this->virtuoso !== null) {
+            $this->virtuoso->callCreator($view = new VirtuosoView($factory, $engine, $view, $path, $data));
+
+            return $view;
+        }
+
+        return new View($this, $engine, $view, $path, $data);
     }
 }

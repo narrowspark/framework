@@ -1,8 +1,12 @@
 <?php
 namespace Viserio\Exception;
 
+use Closure;
+use ErrorException;
+use Exception;
 use Interop\Container\ContainerInterface as ContainerContract;
 use Psr\Log\LoggerInterface;
+use ReflectionFunction;
 use Symfony\Component\Debug\Exception\FatalErrorException;
 use Symfony\Component\Debug\Exception\FlattenException;
 use Viserio\Contracts\Http\HttpExceptionInterface;
@@ -64,7 +68,7 @@ class Handler
      *
      * @param \Exception $exception
      */
-    public function report(\Exception $exception)
+    public function report(Exception $exception)
     {
         $this->log->error((string) $exception);
     }
@@ -140,7 +144,7 @@ class Handler
     public function handleError($level, $message, $file = '', $line = 0, $context = null)
     {
         if ($level & error_reporting()) {
-            throw new \ErrorException($message, 0, $level, $file, $line);
+            throw new ErrorException($message, 0, $level, $file, $line);
         }
     }
 
@@ -193,7 +197,7 @@ class Handler
             // at least some errors, and avoid errors with no data or not log writes.
             try {
                 $response = $handler($exception, $code, $fromConsole);
-            } catch (\Exception $exception) {
+            } catch (Exception $exception) {
                 $response = $this->formatException($exception);
             }
 
@@ -251,7 +255,7 @@ class Handler
      *
      * @return string
      */
-    protected function formatException(\Exception $exception)
+    protected function formatException(Exception $exception)
     {
         if ($this->debug) {
             $location = $exception->getMessage() . ' in ' . $exception->getFile() . ':' . $exception->getLine();
@@ -267,7 +271,7 @@ class Handler
      *
      * @param \Closure $callback
      */
-    public function error(\Closure $callback)
+    public function error(Closure $callback)
     {
         array_unshift($this->handlers, $callback);
     }
@@ -277,7 +281,7 @@ class Handler
      *
      * @param \Closure $callback
      */
-    public function pushError(\Closure $callback)
+    public function pushError(Closure $callback)
     {
         $this->handlers[] = $callback;
     }
@@ -366,9 +370,9 @@ class Handler
      *
      * @return bool
      */
-    protected function handlesException(\Closure $handler, $exception)
+    protected function handlesException(Closure $handler, $exception)
     {
-        $reflection = new \ReflectionFunction($handler);
+        $reflection = new ReflectionFunction($handler);
 
         return $reflection->getNumberOfParameters() === 0 || $this->hints($reflection, $exception);
     }
@@ -381,7 +385,7 @@ class Handler
      *
      * @return bool
      */
-    protected function hints(\ReflectionFunction $reflection, $exception)
+    protected function hints(ReflectionFunction $reflection, $exception)
     {
         $parameters = $reflection->getParameters();
 

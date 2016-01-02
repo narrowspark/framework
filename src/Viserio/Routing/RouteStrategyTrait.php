@@ -1,6 +1,7 @@
 <?php
 namespace Viserio\Routing;
 
+use InvalidArgumentException;
 use Viserio\Contracts\Routing\CustomStrategy;
 
 trait RouteStrategyTrait
@@ -24,7 +25,7 @@ trait RouteStrategyTrait
             return;
         }
 
-        throw new \InvalidArgumentException(
+        throw new InvalidArgumentException(
             'Provided strategy must be an integer or an instance of [\Viserio\Contracts\Routing\CustomStrategy]'
         );
     }

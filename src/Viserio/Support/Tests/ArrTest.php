@@ -108,39 +108,48 @@ class ArrTest extends \PHPUnit_Framework_TestCase
     public function testGetIndexedValuesString()
     {
         $this->assertEquals(
-             [
-                 'php'   => 5,
-                 'js'    => 6,
-                 'css'   => 4,
-                 'scss'  => 4,
-             ],
-             Arr::getIndexedValues($this->testData, 'language', 'stars')
-         );
+            [
+                'php'   => 5,
+                'js'    => 6,
+                'css'   => 4,
+                'scss'  => 4,
+            ],
+            Arr::getIndexedValues($this->testData, 'language', 'stars')
+        );
+    }
+
+    public function testArrayPrepend()
+    {
+        $array = Arr::prepend(['one', 'two', 'three', 'four'], 'zero');
+        $this->assertEquals(['zero', 'one', 'two', 'three', 'four'], $array);
+
+        $array = Arr::prepend(['one' => 1, 'two' => 2], 0, 'zero');
+        $this->assertEquals(['zero' => 0, 'one' => 1, 'two' => 2], $array);
     }
 
     public function testGetIndexedValuesArray()
     {
         $this->assertEquals(
-             [
-                 'php' => [
-                     'rating'    => 5,
-                     'stars'     => 5,
-                 ],
-                 'js' => [
-                     'rating'    => 5,
-                     'stars'     => 6,
-                 ],
-                 'css' => [
-                     'rating'    => 4,
-                     'stars'     => 4,
-                 ],
-                 'scss' => [
-                     'rating'    => 4,
-                     'stars'     => 4,
-                 ],
-             ],
-             Arr::getIndexedValues($this->testData, 'language', ['stars', 'rating'])
-         );
+            [
+                'php' => [
+                    'rating'    => 5,
+                    'stars'     => 5,
+                ],
+                'js' => [
+                    'rating'    => 5,
+                    'stars'     => 6,
+                ],
+                'css' => [
+                    'rating'    => 4,
+                    'stars'     => 4,
+                ],
+                'scss' => [
+                    'rating'    => 4,
+                    'stars'     => 4,
+                ],
+            ],
+            Arr::getIndexedValues($this->testData, 'language', ['stars', 'rating'])
+        );
     }
 
     public function testForget()
