@@ -54,7 +54,7 @@ class Virtuoso
     /**
      * Construct.
      *
-     * @param Interop\Container\ContainerInterface                        $container
+     * @param ContainerInterface                        $container
      * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $events
      */
     public function __construct(
