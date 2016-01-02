@@ -3,9 +3,12 @@ namespace Viserio\Filesystem\Traits;
 
 use FilesystemIterator;
 use Symfony\Component\Finder\Finder;
+use Viserio\Support\Traits\DirectorySeparatorTrait;
 
 trait DirectoryTrait
 {
+    use DirectorySeparatorTrait;
+
     /**
      * Get all of the directories within a given directory.
      *
@@ -72,7 +75,7 @@ trait DirectoryTrait
             // As we spin through items, we will check to see if the current file is actually
             // a directory or a file. When it is actually a directory we will need to call
             // back into this function recursively to keep copying these nested folders.
-            $target = $destination . '/' . $item->getBasename();
+            $target = $this->getDirectorySeparator($destination . '/' . $item->getBasename());
 
             if ($item->isDir()) {
                 $path = $item->getPathname();

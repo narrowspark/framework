@@ -2,10 +2,12 @@
 namespace Viserio\View;
 
 use Closure;
+use Interop\Container\ContainerInterface;
 use InvalidArgumentException;
-use Interop\Container\ContainerInterface as ContainerInteropInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\EventDispatcher\GenericEvent;
 use Viserio\Support\Invoker;
+use Viserio\Support\Str;
 use Viserio\Support\Traits\ContainerAwareTrait;
 use Viserio\View\Traits\NormalizeNameTrait;
 
@@ -13,13 +15,6 @@ class Virtuoso
 {
     use ContainerAwareTrait;
     use NormalizeNameTrait;
-
-    /**
-     * The view composer events.
-     *
-     * @var array
-     */
-    protected $composers = [];
 
     /**
      * All of the finished, captured sections.
@@ -59,11 +54,11 @@ class Virtuoso
     /**
      * Construct.
      *
-     * @param Interop\Container\ContainerInterface                        $container
+     * @param ContainerInterface                        $container
      * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $events
      */
     public function __construct(
-        ContainerInteropInterface $container,
+        ContainerInterface $container,
         EventDispatcherInterface $events
     ) {
         $this->events = $events;
@@ -73,7 +68,7 @@ class Virtuoso
         $this->invoker = (new Invoker())
             ->injectByTypeHint(true)
             ->injectByParameterName(true)
-            ->setContainer($this->getContainer());
+            ->setContainer($container);
     }
 
     /**
@@ -87,13 +82,42 @@ class Virtuoso
     }
 
     /**
+     * Register a view creator event.
+     *
+     * @param array|string    $views
+     * @param \Closure|string $callback
+     *
+     * @return array
+     */
+    public function creator($views, $callback)
+    {
+        $creators = [];
+
+        foreach ((array) $views as $view) {
+            $creators[] = $this->addViewEvent($view, $callback, 'creating: ');
+        }
+
+        return $creators;
+    }
+
+    /**
+     * Call the creator for a given view.
+     *
+     * @param \Viserio\View\View $view
+     */
+    public function callCreator(View $view)
+    {
+        $this->events->dispatch('creating: ' . $view->getName(), new GenericEvent($view));
+    }
+
+    /**
      * Call the composer for a given view.
      *
-     * @param  \Viserio\View\View $view
+     * @param \Viserio\View\View $view
      */
     public function callComposer(View $view)
     {
-        $this->events->addListener('composing: '.$view->getName(), [$view]);
+        $this->events->dispatch('composing: ' . $view->getName(), new GenericEvent($view));
     }
 
     /**
@@ -113,6 +137,7 @@ class Virtuoso
 
         return $registered;
     }
+
     /**
      * Register a view composer event.
      *
@@ -134,12 +159,53 @@ class Virtuoso
     }
 
     /**
+     * Stop injecting content into a section and return its contents.
+     *
+     * @return string
+     */
+    public function yieldSection()
+    {
+        if (empty($this->sectionStack)) {
+            return '';
+        }
+
+        return $this->yieldContent($this->stopSection());
+    }
+
+    /**
+     * Get the string contents of a section.
+     *
+     * @param string $section
+     * @param string $default
+     *
+     * @return string
+     */
+    public function yieldContent($section, $default = '')
+    {
+        $sectionContent = $default;
+
+        if (isset($this->sections[$section])) {
+            $sectionContent = $this->sections[$section];
+        }
+
+        $sectionContent = str_replace(
+            '@@parent',
+            '--parent--holder--',
+            $sectionContent
+        );
+
+        return str_replace(
+            '--parent--holder--',
+            '@parent',
+            str_replace('@parent', '', $sectionContent)
+        );
+    }
+
+    /**
      * Start injecting content into a section.
      *
      * @param string $section
      * @param string $content
-     *
-     * @return void
      */
     public function startSection($section, $content = '')
     {
@@ -153,9 +219,22 @@ class Virtuoso
     }
 
     /**
+     * Inject inline content into a section.
+     *
+     * @param string $section
+     * @param string $content
+     *
+     * @return void
+     */
+    public function inject($section, $content)
+    {
+        return $this->startSection($section, $content);
+    }
+
+    /**
      * Stop injecting content into a section.
      *
-     * @param  bool $overwrite
+     * @param bool $overwrite
      *
      * @throws \InvalidArgumentException
      *
@@ -223,22 +302,20 @@ class Virtuoso
 
     /**
      * Increment the rendering counter.
-     *
-     * @return void
      */
     public function incrementRender()
     {
         $this->renderCount++;
     }
+
     /**
      * Decrement the rendering counter.
-     *
-     * @return void
      */
     public function decrementRender()
     {
         $this->renderCount--;
     }
+
     /**
      * Check if there are no active render operations.
      *
@@ -260,6 +337,7 @@ class Virtuoso
     {
         return array_key_exists($name, $this->sections);
     }
+
     /**
      * Get the entire array of sections.
      *
@@ -275,8 +353,6 @@ class Virtuoso
      *
      * @param string $section
      * @param string $content
-     *
-     * @return void
      */
     protected function extendSection($section, $content)
     {
@@ -302,7 +378,7 @@ class Virtuoso
         $view = $this->normalizeName($view);
 
         if ($callback instanceof Closure) {
-            $this->events->addListener($prefix.$view, $callback, $priority);
+            $this->events->addListener($prefix . $view, $callback, $priority);
 
             return $callback;
         } elseif (is_string($callback)) {
@@ -322,7 +398,8 @@ class Virtuoso
      */
     protected function addClassEvent($view, $class, $prefix, $priority = 0)
     {
-        $name = $prefix.$view;
+        $name = $prefix . $view;
+
         // When registering a class based view "composer", we will simply resolve the
         // classes from the application IoC container then call the compose method
         // on the instance. This allows for convenient, testable view composers.
@@ -349,6 +426,7 @@ class Virtuoso
         // given arguments that are passed to the Closure as the composer's data.
         return function () use ($class, $method) {
             $callable = [$this->getInvoker()->call($class), $method];
+
             return call_user_func_array($callable, func_get_args());
         };
     }
