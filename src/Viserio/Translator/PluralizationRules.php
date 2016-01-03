@@ -40,17 +40,13 @@ class PluralizationRules
     /**
      * Returns the plural position to use for the given locale and number.
      *
-     * @param int|null    $count
-     * @param string|null $language
+     * @param string $language
+     * @param int    $count
      *
      * @return mixed
      */
-    public function get($count = null, $language = null)
+    public function get($count, $language)
     {
-        if (null === $count) {
-            return '';
-        }
-
         if (strlen($language) > 3) {
             $language = substr($language, 0, -strlen(strrchr($language, '_')));
         }
@@ -69,6 +65,21 @@ class PluralizationRules
     }
 
     /**
+     * Overrides the default plural rule for a given locale.
+     *
+     * @param callable $rule
+     * @param string   $language
+     */
+    public function set(callable $rule, $language)
+    {
+        if (strlen($language) > 3) {
+            $language = substr($language, 0, -strlen(strrchr($language, '_')));
+        }
+
+        $this->rules[$language] = $rule;
+    }
+
+    /**
      * Returns the plural definition to use.
      *
      * The plural rules are derived from code of the Zend Framework (2010-09-25),
@@ -77,7 +88,13 @@ class PluralizationRules
      *
      * @param string $prefix Locale to use
      *
-     * @return PluralCategorys\Arabic|PluralCategorys\Czech|PluralCategorys\One|PluralCategorys\Polish|PluralCategorys\French|PluralCategorys\Balkan|PluralCategorys\Maltese|PluralCategorys\Manx|PluralCategorys\Slovenian|PluralCategorys\Welsh|PluralCategorys\Tachelhit|PluralCategorys\Tamazight|PluralCategorys\Macedonian|PluralCategorys\Lithuanian|PluralCategorys\Hebrew|PluralCategorys\Gaelic|PluralCategorys\Irish|PluralCategorys\Langi|PluralCategorys\Latvian|PluralCategorys\Breton|PluralCategorys\Colognian|PluralCategorys\Romanian|PluralCategorys\Two|PluralCategorys\Zero|PluralCategorys\None
+     * @return PluralCategorys\Arabic|PluralCategorys\Czech|PluralCategorys\One|PluralCategorys\Polish|
+     *         PluralCategorys\French|PluralCategorys\Balkan|PluralCategorys\Maltese|PluralCategorys\Manx|
+     *         PluralCategorys\Slovenian|PluralCategorys\Welsh|PluralCategorys\Tachelhit|
+     *         PluralCategorys\Tamazight|PluralCategorys\Macedonian|PluralCategorys\Lithuanian|
+     *         PluralCategorys\Hebrew|PluralCategorys\Gaelic|PluralCategorys\Irish|PluralCategorys\Langi|
+     *         PluralCategorys\Latvian|PluralCategorys\Breton|PluralCategorys\Colognian|PluralCategorys\Romanian|
+     *         PluralCategorys\Two|PluralCategorys\Zero|PluralCategorys\None
      */
     protected function createRules($prefix)
     {
@@ -145,22 +162,5 @@ class PluralizationRules
         }
 
         throw new InvalidArgumentException('Unknown language prefix: ' . $prefix . '.');
-    }
-
-    /**
-     * Overrides the default plural rule for a given locale.
-     *
-     * @param callable $rule
-     * @param string   $language
-     *
-     * @throws \LogicException
-     */
-    public function set(callable $rule, $language)
-    {
-        if (strlen($language) > 3) {
-            $language = substr($language, 0, -strlen(strrchr($language, '_')));
-        }
-
-        $this->rules[$language] = $rule;
     }
 }

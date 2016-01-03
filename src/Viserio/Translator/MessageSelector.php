@@ -65,22 +65,8 @@ class MessageSelector
     {
         $parts = explode('|', $message);
 
-        $explicitRules = [];
-        $standardRules = [];
-
-        foreach ($parts as $part) {
-            $part = trim($part);
-
-            if (
-                preg_match('/^(?P<interval>' . $this->getIntervalRegexp() . ')\s*(?P<message>.*?)$/x', $part, $matches)
-            ) {
-                $explicitRules[$matches['interval']] = $matches['message'];
-            } elseif (preg_match('/^\w+\:\s*(.*?)$/', $part, $matches)) {
-                $standardRules[] = $matches[1];
-            } else {
-                $standardRules[] = $part;
-            }
-        }
+        $explicitRules = $this->getExplicitRules($parts);
+        $standardRules = $this->getStandardRules($parts);
 
         // try to match an explicit rule, then fallback to the standard ones
         if (!empty($explicitRules)) {
@@ -91,8 +77,7 @@ class MessageSelector
             }
         }
 
-        $pluralization = $this->getPluralization();
-        $position      = $pluralization->get($number, $locale);
+        $position = $this->getPluralization()->get($number, $locale);
 
         if (!isset($standardRules[$position])) {
             // when there's exactly one rule given, and that rule is a standard
@@ -103,7 +88,9 @@ class MessageSelector
 
             throw new InvalidArgumentException(
                 sprintf(
-                    'Unable to choose a translation for "%s" with locale "%s" for value "%d". Double check that this translation has the correct plural options (e.g. "There is one apple|There are %%count%% apples").',
+                    'Unable to choose a translation for "%s" with locale "%s" for value "%d".' .
+                    ' Double check that this translation has the correct plural options' .
+                    '(e.g. "There is one apple|There are %%count%% apples").',
                     $message,
                     $locale,
                     $number
@@ -112,5 +99,53 @@ class MessageSelector
         }
 
         return $standardRules[$position];
+    }
+
+    /**
+     * Get explicit rules for sting.
+     *
+     * @param array $parts
+     *
+     * @return array
+     */
+    private function getExplicitRules(array $parts)
+    {
+        $explicitRules = [];
+
+        foreach ($parts as $part) {
+            $part = trim($part);
+
+            if (
+                preg_match('/^(?P<interval>' . $this->getIntervalRegexp() . ')\s*(?P<message>.*?)$/x', $part, $matches)
+            ) {
+                $explicitRules[$matches['interval']] = $matches['message'];
+            }
+        }
+
+        return $explicitRules;
+    }
+
+    /**
+     * Get standard rules for sting.
+     *
+     * @param array $parts
+     *
+     * @return array
+     */
+    private function getStandardRules(array $parts)
+    {
+        $standardRules = [];
+
+        foreach ($parts as $part) {
+            $part = trim($part);
+
+            if (preg_match('/^\w+\:\s*(.*?)$/', $part, $matches)) {
+                $standardRules[] = $matches[1];
+            } else {
+                $standardRules[] = $part;
+            }
+        }
+
+        return $standardRules;
     }
 }

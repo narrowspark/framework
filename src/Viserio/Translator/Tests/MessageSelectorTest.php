@@ -16,33 +16,33 @@ class MessageSelectorTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $selector->choose($id, $number, 'en'));
     }
 
-    // public function testReturnMessageIfExactlyOneStandardRuleIsGiven()
-    // {
-    //     $selector = new MessageSelector();
-    //     $selector->setPluralization(new PluralizationRules());
-    //     $this->assertEquals('There are two apples', $selector->choose('There are two apples', 2, 'en'));
-    // }
+    public function testReturnMessageIfExactlyOneStandardRuleIsGiven()
+    {
+        $selector = new MessageSelector();
+        $selector->setPluralization(new PluralizationRules());
+        $this->assertEquals('There are two apples', $selector->choose('There are two apples', 2, 'en'));
+    }
 
-    // /**
-    //  * @dataProvider getNonMatchingMessages
-    //  * @expectedException \InvalidArgumentException
-    //  */
-    // public function testThrowExceptionIfMatchingMessageCannotBeFound($id, $number)
-    // {
-    //     $selector = new MessageSelector();
-    //     $selector->setPluralization(new PluralizationRules());
-    //     $selector->choose($id, $number, 'en');
-    // }
+    /**
+     * @dataProvider getNonMatchingMessages
+     * @expectedException \InvalidArgumentException
+     */
+    public function testThrowExceptionIfMatchingMessageCannotBeFound($id, $number)
+    {
+        $selector = new MessageSelector();
+        $selector->setPluralization(new PluralizationRules());
+        $selector->choose($id, $number, 'en');
+    }
 
-    // public function getNonMatchingMessages()
-    // {
-    //     return [
-    //         ['{0} There are no apples|{1} There is one apple', 2],
-    //         ['{1} There is one apple|]1,Inf] There are %count% apples', 0],
-    //         ['{1} There is one apple|]2,Inf] There are %count% apples', 2],
-    //         ['{0} There are no apples|There is one apple', 2],
-    //     ];
-    // }
+    public function getNonMatchingMessages()
+    {
+        return [
+            ['{0} There are no apples|{1} There is one apple', 2],
+            ['{1} There is one apple|]1,Inf] There are %count% apples', 0],
+            ['{1} There is one apple|]2,Inf] There are %count% apples', 2],
+            ['{0} There are no apples|There is one apple', 2],
+        ];
+    }
 
     public function getChooseTests()
     {

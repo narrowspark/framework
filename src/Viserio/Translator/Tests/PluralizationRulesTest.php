@@ -3,12 +3,48 @@ namespace Viserio\Translator\Tests;
 
 use ReflectionMethod;
 use Viserio\Translator\PluralizationRules;
+use Viserio\Translator\PluralCategorys\Arabic;
+use Viserio\Translator\PluralCategorys\Balkan;
+use Viserio\Translator\PluralCategorys\Breton;
+use Viserio\Translator\PluralCategorys\Colognian;
+use Viserio\Translator\PluralCategorys\Czech;
+use Viserio\Translator\PluralCategorys\French;
+use Viserio\Translator\PluralCategorys\Gaelic;
+use Viserio\Translator\PluralCategorys\Hebrew;
+use Viserio\Translator\PluralCategorys\Irish;
+use Viserio\Translator\PluralCategorys\Langi;
+use Viserio\Translator\PluralCategorys\Latvian;
+use Viserio\Translator\PluralCategorys\Lithuanian;
+use Viserio\Translator\PluralCategorys\Macedonian;
+use Viserio\Translator\PluralCategorys\Maltese;
+use Viserio\Translator\PluralCategorys\Manx;
+use Viserio\Translator\PluralCategorys\None;
+use Viserio\Translator\PluralCategorys\One;
+use Viserio\Translator\PluralCategorys\Polish;
+use Viserio\Translator\PluralCategorys\Romanian;
+use Viserio\Translator\PluralCategorys\Slovenian;
+use Viserio\Translator\PluralCategorys\Tachelhit;
+use Viserio\Translator\PluralCategorys\Tamazight;
+use Viserio\Translator\PluralCategorys\Two;
+use Viserio\Translator\PluralCategorys\Welsh;
+use Viserio\Translator\PluralCategorys\Zero;
 
 class PluralizationRulesTest extends \PHPUnit_Framework_TestCase
 {
     protected $createRules;
 
     protected $object;
+
+    public function setUp()
+    {
+
+        $this->object      = new PluralizationRules();
+
+        $createRules = new ReflectionMethod($this->object, 'createRules');
+        $createRules->setAccessible(true);
+
+        $this->createRules = $createRules;
+    }
 
     /**
      * @dataProvider  provideCreateRules
@@ -42,116 +78,116 @@ class PluralizationRulesTest extends \PHPUnit_Framework_TestCase
                     'lb', 'ml', 'mr', 'nah', 'ne', 'om', 'or', 'pa', 'pap', 'ps', 'so', 'sq', 'sw', 'ta', 'te',
                     'tk', 'ur', 'zu', 'mn', 'gsw', 'chr', 'rm', 'pt',
                 ],
-                '\Viserio\Translator\PluralCategorys\One',
+                One::class,
             ],
             [
                 ['cs', 'sk'],
-                '\Viserio\Translator\PluralCategorys\Czech',
+                Czech::class,
             ],
             [
                 ['ff', 'fr', 'kab'],
-                '\Viserio\Translator\PluralCategorys\French',
+                French::class,
             ],
             [
                 ['hr', 'ru', 'sr', 'uk', 'be', 'bs', 'sh'],
-                '\Viserio\Translator\PluralCategorys\Balkan',
+                Balkan::class,
             ],
             [
                 ['lv'],
-                '\Viserio\Translator\PluralCategorys\Latvian',
+                Latvian::class,
             ],
             [
                 ['lt'],
-                '\Viserio\Translator\PluralCategorys\Lithuanian',
+                Lithuanian::class,
             ],
             [
                 ['pl'],
-                '\Viserio\Translator\PluralCategorys\Polish',
+                Polish::class,
             ],
             [
                 ['ro', 'mo'],
-                '\Viserio\Translator\PluralCategorys\Romanian',
+                Romanian::class,
             ],
             [
                 ['sl'],
-                '\Viserio\Translator\PluralCategorys\Slovenian',
+                Slovenian::class,
             ],
             [
                 ['ar'],
-                '\Viserio\Translator\PluralCategorys\Arabic',
+                Arabic::class,
             ],
             [
                 ['mk'],
-                '\Viserio\Translator\PluralCategorys\Macedonian',
+                Macedonian::class,
             ],
             [
                 ['cy'],
-                '\Viserio\Translator\PluralCategorys\Welsh',
+                Welsh::class,
             ],
             [
                 ['br'],
-                '\Viserio\Translator\PluralCategorys\Breton',
+                Breton::class,
             ],
             [
                 ['lag'],
-                '\Viserio\Translator\PluralCategorys\Langi',
+                Langi::class,
             ],
             [
                 ['shi'],
-                '\Viserio\Translator\PluralCategorys\Tachelhit',
+                Tachelhit::class,
             ],
             [
                 ['mt'],
-                '\Viserio\Translator\PluralCategorys\Maltese',
+                Maltese::class,
             ],
             [
                 ['he'],
-                '\Viserio\Translator\PluralCategorys\Hebrew',
+                Hebrew::class,
             ],
             [
                 ['ga'],
-                '\Viserio\Translator\PluralCategorys\Irish',
+                Irish::class,
             ],
             [
                 ['gd'],
-                '\Viserio\Translator\PluralCategorys\Gaelic',
+                Gaelic::class,
             ],
             [
                 ['gv'],
-                '\Viserio\Translator\PluralCategorys\Manx',
+                Manx::class,
             ],
             [
                 ['tzm'],
-                '\Viserio\Translator\PluralCategorys\Tamazight',
+                Tamazight::class,
             ],
             [
                 ['ksh'],
-                '\Viserio\Translator\PluralCategorys\Colognian',
+                Colognian::class,
             ],
             [
                 ['se', 'sma', 'smi', 'smj', 'smn', 'sms'],
-                '\Viserio\Translator\PluralCategorys\Two',
+                Two::class,
             ],
             [
                 ['ak', 'am', 'bh', 'fil', 'tl', 'guw', 'hi', 'ln', 'mg', 'nso', 'ti', 'wa'],
-                '\Viserio\Translator\PluralCategorys\Zero',
+                Zero::class,
             ],
             [
                 [
                     'az', 'bm', 'fa', 'ig', 'hu', 'ja', 'kde', 'kea', 'ko', 'my', 'ses', 'sg', 'to',
                     'tr', 'vi', 'wo', 'yo', 'zh', 'bo', 'dz', 'id', 'jv', 'ka', 'km', 'kn', 'ms', 'th',
                 ],
-                '\Viserio\Translator\PluralCategorys\None',
+                None::class,
             ],
         ];
     }
 
     /**
-     * @dataProvider  provideInvalidPluralRules
+     * @dataProvider provideInvalidPluralRules
+     * @expectedException InvalidArgumentException
      */
     public function testInvalidInstance($lang)
     {
-        $this->setExpectedException('\InvalidArgumentException');
         $this->createRules->invoke($this->object, $lang);
     }
 
@@ -166,13 +202,5 @@ class PluralizationRulesTest extends \PHPUnit_Framework_TestCase
             [100],
             [-3.14],
         ];
-    }
-
-    public function setUp()
-    {
-        parent::setUp();
-        $this->object = new PluralizationRules();
-        $this->createRules = new ReflectionMethod($this->object, 'createRules');
-        $this->createRules->setAccessible(true);
     }
 }
