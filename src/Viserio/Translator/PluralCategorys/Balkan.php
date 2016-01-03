@@ -30,7 +30,7 @@ class Balkan implements CategoryContract
      *
      * @param int $count
      *
-     * @return string
+     * @return int
      */
     public function category($count)
     {
@@ -41,22 +41,22 @@ class Balkan implements CategoryContract
             $count % 10 === 1 &&
             $count % 100 !== 11
         ) {
-            return 'one';
+            return 0;
         } elseif (
             !is_float($count) &&
             ($i = $count % 10) >= 2 &&
             $i <= 4 &&
             !(($i = $count % 100) >= 12 && $i <= 14)
         ) {
-            return 'few';
+            return 1;
         } elseif (
             !is_float($count) &&
             ($i = $count % 10) === 0 ||
             ($i >= 5 && $i <= 9) || (($i = $count % 100) >= 11 && $i <= 14)
         ) {
-            return 'many';
+            return 2;
         }
 
-        return 'other';
+        return 3;
     }
 }

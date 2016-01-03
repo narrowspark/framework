@@ -26,24 +26,24 @@ class Arabic implements CategoryContract
      *
      * @param int $count
      *
-     * @return string
+     * @return int
      */
     public function category($count)
     {
         $count = $this->normalizeInteger($count);
 
         if ($count === 0) {
-            return 'zero';
+            return 0;
         } elseif ($count === 1) {
-            return 'one';
+            return 1;
         } elseif ($count === 2) {
-            return 'two';
+            return 2;
         } elseif (!is_float($count) && ($i = $count % 100) >= 3 && $i <= 10) {
-            return 'few';
+            return 3;
         } elseif (!is_float($count) && ($i = $count % 100) >= 11 && $i <= 99) {
-            return 'many';
+            return 4;
         }
 
-        return 'other';
+        return 5;
     }
 }

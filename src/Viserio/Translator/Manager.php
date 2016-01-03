@@ -247,7 +247,7 @@ class Manager
      */
     protected function assertValidLocale($locale)
     {
-        if (1 !== preg_match('/^[a-z0-9@_\\.\\-]*$/i', $locale)) {
+        if (preg_match('/^[a-z0-9@_\\.\\-]*$/i', $locale) !== 1) {
             throw new InvalidArgumentException(sprintf('Invalid "%s" locale.', $locale));
         }
     }

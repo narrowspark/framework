@@ -25,16 +25,16 @@ class Breton implements CategoryContract
      *
      * @param int $count
      *
-     * @return string
+     * @return int
      */
     public function category($count)
     {
         $count = $this->normalizeInteger($count);
 
         if (!is_float($count) && $count % 10 === 1 && !in_array($count % 100, [11, 71, 91], true)) {
-            return 'one';
+            return 0;
         } elseif (!is_float($count) && $count % 10 === 2 && !in_array($count % 100, [12, 72, 92], true)) {
-            return 'two';
+            return 1;
         } elseif (
             !is_float($count) &&
             in_array($count % 10, [3, 4, 9], true) &&
@@ -44,11 +44,11 @@ class Breton implements CategoryContract
                 ($i >= 90 && $i <= 99)
             )
         ) {
-            return 'few';
+            return 2;
         } elseif ($count !== 0 && $count % 1000000 === 0) {
-            return 'many';
+            return 3;
         }
 
-        return 'other';
+        return 4;
     }
 }

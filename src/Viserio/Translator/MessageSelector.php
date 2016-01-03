@@ -70,9 +70,9 @@ class MessageSelector
 
         // try to match an explicit rule, then fallback to the standard ones
         if (!empty($explicitRules)) {
-            foreach ($explicitRules as $interval => $m) {
+            foreach ($explicitRules as $interval => $string) {
                 if ($this->intervalTest($number, $interval)) {
-                    return $m;
+                    return $string;
                 }
             }
         }

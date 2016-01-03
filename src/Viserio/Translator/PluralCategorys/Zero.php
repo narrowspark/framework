@@ -32,16 +32,16 @@ class Zero implements CategoryContract
      *
      * @param int $count
      *
-     * @return string
+     * @return int
      */
     public function category($count)
     {
         $count = $this->normalizeInteger($count);
 
         if ($count === 0 || $count === 1) {
-            return 'one';
+            return 0;
         }
 
-        return 'other';
+        return 1;
     }
 }

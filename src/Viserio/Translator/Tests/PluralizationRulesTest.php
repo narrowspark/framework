@@ -38,9 +38,9 @@ class PluralizationRulesTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
 
-        $this->object      = new PluralizationRules();
+        $this->object = new PluralizationRules();
 
-        $createRules = new ReflectionMethod($this->object, 'createRules');
+        $createRules  = new ReflectionMethod($this->object, 'createRules');
         $createRules->setAccessible(true);
 
         $this->createRules = $createRules;

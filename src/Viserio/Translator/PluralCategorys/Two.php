@@ -31,18 +31,18 @@ class Two implements CategoryContract
      *
      * @param int $count
      *
-     * @return string
+     * @return int
      */
     public function category($count)
     {
         $count = $this->normalizeInteger($count);
 
         if ($count === 1) {
-            return 'one';
+            return 0;
         } elseif ($count === 2) {
-            return 'two';
+            return 1;
         }
 
-        return 'other';
+        return 2;
     }
 }

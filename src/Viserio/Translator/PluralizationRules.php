@@ -109,7 +109,7 @@ class PluralizationRules
             'dv', 'bg', 'af', 'bn', 'ca', 'de', 'da', 'gl', 'es', 'it', 'is', 'ks', 'ha', 'kk', 'kl', 'gu',
             'brx', 'mas', 'teo', 'chr', 'cgg', 'tig', 'wae', 'xog', 'ast', 'vun', 'bem', 'syr', 'bez', 'asa',
             'rof', 'ksb', 'rwk', 'haw', 'pap', 'gsw', 'fur', 'saq', 'seh', 'nyn', 'kcg', 'ssy', 'kaj', 'jmc',
-            'nah', 'ckb', ], true)) {
+            'nah', 'ckb'], true)) {
             return new One();
         } elseif ($prefix === 'pl') {
             return new Polish();
@@ -150,14 +150,14 @@ class PluralizationRules
         } elseif (in_array($prefix, ['mo', 'ro'], true)) {
             return new Romanian();
         } elseif (in_array($prefix, [
-            'se', 'kw', 'iu', 'smn', 'sms', 'smj', 'sma', 'naq', 'smi', ], true)) {
+            'se', 'kw', 'iu', 'smn', 'sms', 'smj', 'sma', 'naq', 'smi'], true)) {
             return new Two();
         } elseif (in_array($prefix, [
-            'hi', 'ln', 'mg', 'ak', 'tl', 'am', 'bh', 'wa', 'ti', 'guw', 'fil', 'nso', ], true)) {
+            'hi', 'ln', 'mg', 'ak', 'tl', 'am', 'bh', 'wa', 'ti', 'guw', 'fil', 'nso'], true)) {
             return new Zero();
         } elseif (in_array($prefix, [
             'my', 'sg', 'ms', 'lo', 'kn', 'ko', 'th', 'to', 'yo', 'zh', 'wo', 'vi', 'tr', 'az', 'km', 'id',
-            'ig', 'fa', 'dz', 'bm', 'bo', 'ii', 'hu', 'ka', 'jv', 'ja', 'kde', 'ses', 'sah', 'kea', ], true)) {
+            'ig', 'fa', 'dz', 'bm', 'bo', 'ii', 'hu', 'ka', 'jv', 'ja', 'kde', 'ses', 'sah', 'kea'], true)) {
             return new None();
         }
 

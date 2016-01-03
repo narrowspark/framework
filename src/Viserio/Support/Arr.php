@@ -321,13 +321,14 @@ class Arr
      */
     public static function has(array $array, $key)
     {
-        if ($array === '' || $key === null) {
+        if (empty($array) || $key === null) {
             return false;
         }
 
         if (array_key_exists($key, $array)) {
             return true;
         }
+
         foreach (explode('.', $key) as $segment) {
             if (!is_array($array) || !array_key_exists($segment, $array)) {
                 return false;
@@ -381,23 +382,6 @@ class Arr
         }
 
         return $results;
-    }
-
-    /**
-     * Explode the "value" and "key" arguments passed to "pluck".
-     *
-     * @param string      $value
-     * @param string|null $key
-     *
-     * @return array
-     */
-    protected static function explodePluckParameters($value, $key)
-    {
-        $value = is_array($value) ? $value : explode('.', $value);
-
-        $key = is_null($key) || is_array($key) ? $key : explode('.', $key);
-
-        return [$value, $key];
     }
 
     /**
@@ -669,5 +653,22 @@ class Arr
     protected static function with($object)
     {
         return $object;
+    }
+
+    /**
+     * Explode the "value" and "key" arguments passed to "pluck".
+     *
+     * @param string      $value
+     * @param string|null $key
+     *
+     * @return array
+     */
+    protected static function explodePluckParameters($value, $key)
+    {
+        $value = is_array($value) ? $value : explode('.', $value);
+
+        $key = is_null($key) || is_array($key) ? $key : explode('.', $key);
+
+        return [$value, $key];
     }
 }

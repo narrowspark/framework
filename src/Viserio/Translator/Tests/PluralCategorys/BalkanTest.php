@@ -5,20 +5,13 @@ use Viserio\Translator\PluralCategorys\Balkan;
 
 class BalkanTest extends \PHPUnit_Framework_TestCase
 {
-    protected $object;
-
-    public function setUp()
-    {
-        $this->object = new Balkan();
-    }
-
     /**
      * @dataProvider category
      */
     public function testGetCategory($count, $expected)
     {
-        $actual = $this->object->category($count);
-        $this->assertEquals($expected, $actual);
+        $actual = (new Balkan())->category($count);
+        $this->assertEquals($expected, $this->intToString($actual));
     }
 
     public function category()
@@ -72,5 +65,25 @@ class BalkanTest extends \PHPUnit_Framework_TestCase
             [2.31, 'other'],
             [5.31, 'other'],
         ];
+    }
+
+    protected function intToString($int)
+    {
+        switch ($int) {
+            case 0:
+                $actual = 'one';
+                break;
+            case 1:
+                $actual = 'few';
+                break;
+            case 2:
+                $actual = 'many';
+                break;
+            case 3:
+                $actual = 'other';
+                break;
+        }
+
+        return $actual;
     }
 }

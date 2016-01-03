@@ -36,7 +36,7 @@ class Romanian implements CategoryContract
         ) {
             return 'one';
         } elseif (
-            ($count === 0 || $count === 0.0) ||
+            $count === 0 ||
             (($i = $count % 100) >= 1 && $i <= 19)
         ) {
             return 'few';

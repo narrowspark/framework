@@ -30,10 +30,8 @@ class Manx implements CategoryContract
 
         if (
             !is_float($count) &&
-            (
-                in_array($count % 10, [1, 2], true) ||
-                ($count % 20 === 0)
-            )
+            in_array($count % 10, [1, 2], true) ||
+            ($count % 20 === 0)
         ) {
             return 'one';
         }
