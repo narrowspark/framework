@@ -5,20 +5,13 @@ use Viserio\Translator\PluralCategorys\Irish;
 
 class IrishTest extends \PHPUnit_Framework_TestCase
 {
-    protected $object;
-
-    public function setUp()
-    {
-        $this->object = new Irish();
-    }
-
     /**
      * @dataProvider category
      */
     public function testGetCategory($count, $expected)
     {
-        $actual = $this->object->category($count);
-        $this->assertEquals($expected, $actual);
+        $actual = (new Irish())->category($count);
+        $this->assertEquals($expected, $this->intToString($actual));
     }
 
     public function category()
@@ -57,5 +50,28 @@ class IrishTest extends \PHPUnit_Framework_TestCase
             [7.81, 'other'],
             [11.68, 'other'],
         ];
+    }
+
+    protected function intToString($int)
+    {
+        switch ($int) {
+            case 0:
+                $actual = 'one';
+                break;
+            case 1:
+                $actual = 'two';
+                break;
+            case 2:
+                $actual = 'few';
+                break;
+            case 3:
+                $actual = 'many';
+                break;
+            case 4:
+                $actual = 'other';
+                break;
+        }
+
+        return $actual;
     }
 }

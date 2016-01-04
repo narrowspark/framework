@@ -54,6 +54,6 @@ class None implements CategoryContract
      */
     public function category($count)
     {
-        return 'other';
+        return 0;
     }
 }

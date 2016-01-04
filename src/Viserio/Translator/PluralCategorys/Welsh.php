@@ -33,17 +33,17 @@ class Welsh implements CategoryContract
         $count = $this->normalizeInteger($count);
 
         if ($count === 0) {
-            return 'zero';
+            return 0;
         } elseif ($count === 1) {
-            return 'one';
+            return 1;
         } elseif ($count === 2) {
-            return 'two';
+            return 2;
         } elseif ($count === 3) {
-            return 'few';
+            return 3;
         } elseif ($count === 6) {
-            return 'many';
+            return 4;
         }
 
-        return 'other';
+        return 5;
     }
 }

@@ -55,7 +55,7 @@ class One implements CategoryContract
      * - Tyap (kcg)
      * - Kazakh (kk)
      * - Kalaallisut (kl)
-     * - ? (ks)
+     * - Kirgistan (ks)
      * - Shambala (ksb)
      * - Kurdish (ku)
      * - ? (ky)
@@ -124,6 +124,6 @@ class One implements CategoryContract
     {
         $count = $this->normalizeInteger($count);
 
-        return $count === 1 ? 'one' : 'other';
+        return $count === 1 ? 0 : 1;
     }
 }

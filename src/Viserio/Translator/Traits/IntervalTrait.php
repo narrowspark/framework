@@ -5,6 +5,8 @@ use InvalidArgumentException;
 
 trait IntervalTrait
 {
+    use NormalizeIntegerValueTrait;
+
     /**
      * Tests if the given number is in the math interval.
      *
@@ -18,24 +20,25 @@ trait IntervalTrait
     public function intervalTest($number, $interval)
     {
         $interval = trim($interval);
+        $number   = $this->normalizeInteger($number);
 
         if (!preg_match('/^' . $this->getIntervalRegexp() . '$/x', $interval, $matches)) {
             throw new InvalidArgumentException(sprintf('"%s" is not a valid interval.', $interval));
         }
 
         if ($matches[1]) {
-            foreach (explode(',', $matches[2]) as $n) {
-                if ($number === intval($n)) {
+            foreach (explode(',', $matches[2]) as $matchedNumber) {
+                if ($number === $this->normalizeInteger($matchedNumber)) {
                     return true;
                 }
             }
         } else {
-            $leftNumber = $this->convertNumber($matches['left']);
+            $leftNumber  = $this->convertNumber($matches['left']);
             $rightNumber = $this->convertNumber($matches['right']);
 
             return
-                ('[' === $matches['left_delimiter'] ? $number >= $leftNumber : $number > $leftNumber)
-                && (']' === $matches['right_delimiter'] ? $number <= $rightNumber : $number < $rightNumber)
+                ('[' === $matches['left_delimiter'] ? $number >= $leftNumber : $number > $leftNumber) &&
+                (']' === $matches['right_delimiter'] ? $number <= $rightNumber : $number < $rightNumber)
             ;
         }
 

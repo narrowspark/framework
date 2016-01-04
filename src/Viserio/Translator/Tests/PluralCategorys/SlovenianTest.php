@@ -5,20 +5,13 @@ use Viserio\Translator\PluralCategorys\Slovenian;
 
 class SlovenianTest extends \PHPUnit_Framework_TestCase
 {
-    protected $object;
-
-    public function setUp()
-    {
-        $this->object = new Slovenian();
-    }
-
     /**
      * @dataProvider category
      */
     public function testGetCategory($count, $expected)
     {
-        $actual = $this->object->category($count);
-        $this->assertEquals($expected, $actual);
+        $actual = (new Slovenian())->category($count);
+        $this->assertEquals($expected, $this->intToString($actual));
     }
 
     public function category()
@@ -71,5 +64,25 @@ class SlovenianTest extends \PHPUnit_Framework_TestCase
             [3.31, 'other'],
             [5.31, 'other'],
         ];
+    }
+
+    protected function intToString($int)
+    {
+        switch ($int) {
+            case 0:
+                $actual = 'one';
+                break;
+            case 1:
+                $actual = 'two';
+                break;
+            case 2:
+                $actual = 'few';
+                break;
+            case 3:
+                $actual = 'other';
+                break;
+        }
+
+        return $actual;
     }
 }

@@ -30,13 +30,13 @@ class Tachelhit implements CategoryContract
         $count = $this->normalizeInteger($count);
 
         if (!is_float($count) && $count >= 0 && $count <= 1) {
-            return 'one';
+            return 0;
         } elseif (
             !is_float($count) && $count >= 2 && $count <= 10
         ) {
-            return 'few';
+            return 1;
         }
 
-        return 'other';
+        return 2;
     }
 }

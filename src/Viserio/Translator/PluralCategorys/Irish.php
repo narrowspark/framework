@@ -32,15 +32,15 @@ class Irish implements CategoryContract
         $count = $this->normalizeInteger($count);
 
         if ($count === 1) {
-            return 'one';
+            return 0;
         } elseif ($count === 2) {
-            return 'two';
+            return 1;
         } elseif (!is_float($count) && $count >= 3 && $count <= 6) {
-            return 'few';
+            return 2;
         } elseif (!is_float($count) && $count >= 7 && $count <= 10) {
-            return 'many';
+            return 3;
         }
 
-        return 'other';
+        return 4;
     }
 }

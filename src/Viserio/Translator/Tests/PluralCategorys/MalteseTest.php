@@ -5,20 +5,13 @@ use Viserio\Translator\PluralCategorys\Maltese;
 
 class MalteseTest extends \PHPUnit_Framework_TestCase
 {
-    protected $object;
-
-    public function setUp()
-    {
-        $this->object = new Maltese();
-    }
-
     /**
      * @dataProvider category
      */
     public function testGetCategory($count, $expected)
     {
-        $actual = $this->object->category($count);
-        $this->assertEquals($expected, $actual);
+        $actual = (new Maltese())->category($count);
+        $this->assertEquals($expected, $this->intToString($actual));
     }
 
     public function category()
@@ -83,5 +76,25 @@ class MalteseTest extends \PHPUnit_Framework_TestCase
             [11.31, 'other'],
             [20.31, 'other'],
         ];
+    }
+
+    protected function intToString($int)
+    {
+        switch ($int) {
+            case 0:
+                $actual = 'one';
+                break;
+            case 1:
+                $actual = 'few';
+                break;
+            case 2:
+                $actual = 'many';
+                break;
+            case 3:
+                $actual = 'other';
+                break;
+        }
+
+        return $actual;
     }
 }

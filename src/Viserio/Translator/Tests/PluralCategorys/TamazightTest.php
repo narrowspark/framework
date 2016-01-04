@@ -5,20 +5,13 @@ use Viserio\Translator\PluralCategorys\Tamazight;
 
 class TamazightTest extends \PHPUnit_Framework_TestCase
 {
-    protected $object;
-
-    public function setUp()
-    {
-        $this->object = new Tamazight();
-    }
-
     /**
      * @dataProvider category
      */
     public function testGetCategory($count, $expected)
     {
-        $actual = $this->object->category($count);
-        $this->assertEquals($expected, $actual);
+        $actual = (new Tamazight())->category($count);
+        $this->assertEquals($expected, $this->intToString($actual));
     }
 
     public function category()
@@ -58,5 +51,19 @@ class TamazightTest extends \PHPUnit_Framework_TestCase
             [11.31, 'one'],
             [100.31, 'other'],
         ];
+    }
+
+    protected function intToString($int)
+    {
+        switch ($int) {
+            case 0:
+                $actual = 'one';
+                break;
+            case 1:
+                $actual = 'other';
+                break;
+        }
+
+        return $actual;
     }
 }

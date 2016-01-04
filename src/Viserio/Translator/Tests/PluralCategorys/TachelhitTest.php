@@ -5,20 +5,13 @@ use Viserio\Translator\PluralCategorys\Tachelhit;
 
 class TachelhitTest extends \PHPUnit_Framework_TestCase
 {
-    protected $object;
-
-    public function setUp()
-    {
-        $this->object = new Tachelhit();
-    }
-
     /**
      * @dataProvider category
      */
     public function testGetCategory($count, $expected)
     {
-        $actual = $this->object->category($count);
-        $this->assertEquals($expected, $actual);
+        $actual = (new Tachelhit())->category($count);
+        $this->assertEquals($expected, $this->intToString($actual));
     }
 
     public function category()
@@ -47,5 +40,22 @@ class TachelhitTest extends \PHPUnit_Framework_TestCase
             [2.31, 'other'],
             [11.31, 'other'],
         ];
+    }
+
+    protected function intToString($int)
+    {
+        switch ($int) {
+            case 0:
+                $actual = 'one';
+                break;
+            case 1:
+                $actual = 'few';
+                break;
+            case 2:
+                $actual = 'other';
+                break;
+        }
+
+        return $actual;
     }
 }

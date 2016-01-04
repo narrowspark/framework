@@ -1,15 +1,13 @@
 <?php
-namespace Viserio\Filesystem\Parser;
+namespace Viserio\Translator\Parser;
 
-use LogicException;
-use Symfony\Component\Yaml\Exception\ParseException;
-use Symfony\Component\Yaml\Parser;
+use Exception;
 use Viserio\Contracts\Filesystem\LoadingException;
 use Viserio\Contracts\Filesystem\Parser as ParserContract;
 use Viserio\Filesystem\Filesystem;
 use Viserio\Filesystem\Parser\Traits\IsGroupTrait;
 
-class Yaml implements ParserContract
+class Mo implements ParserContract
 {
     use IsGroupTrait;
 
@@ -31,25 +29,20 @@ class Yaml implements ParserContract
     }
 
     /**
-     * Loads a YAML file and gets its' contents as an array.
+     * Loads a MO file and gets its' contents as an array.
      *
      * @param string      $filename
      * @param string|null $group
      *
-     * @throws \LogicException
      * @throws \LoadingException
      *
      * @return array|string|null
      */
     public function load($filename, $group = null)
     {
-        if (!class_exists('Symfony\\Component\\Yaml\\Yaml')) {
-            throw new LogicException('Loading translations from the YAML format requires the Symfony Yaml component.');
-        }
-
         try {
             if ($this->files->exists($filename)) {
-                $data = (new Parser())->parse($this->files->get($filename));
+                $data = [];
 
                 if ($group !== null) {
                     return $this->isGroup($group, (array) $data);
@@ -57,8 +50,8 @@ class Yaml implements ParserContract
 
                 return $data;
             }
-        } catch (ParseException $exception) {
-            throw new LoadingException(sprintf('Unable to parse the YAML string: [%s]', $exception->getMessage()));
+        } catch (Exception $exception) {
+            throw new LoadingException(sprintf('Unable to parse the Mo string: [%s]', $exception->getMessage()));
         }
     }
 
@@ -71,11 +64,11 @@ class Yaml implements ParserContract
      */
     public function supports($filename)
     {
-        return (bool) preg_match('#\.ya?ml(\.dist)?$#', $filename);
+        return (bool) preg_match('#\.mo?$#', $filename);
     }
 
     /**
-     * Format a yaml file for saving.
+     * Format a MO file for saving.
      *
      * @param array $data data
      *
@@ -83,6 +76,6 @@ class Yaml implements ParserContract
      */
     public function format(array $data)
     {
-        return YamlParser::dump($data);
+        //
     }
 }

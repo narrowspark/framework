@@ -30,13 +30,13 @@ class Langi implements CategoryContract
         $count = $this->normalizeInteger($count);
 
         if ($count === 0) {
-            return 'zero';
+            return 0;
         } elseif (
             ($count > 0 && $count < 2)
         ) {
-            return 'one';
+            return 1;
         }
 
-        return 'other';
+        return 2;
     }
 }

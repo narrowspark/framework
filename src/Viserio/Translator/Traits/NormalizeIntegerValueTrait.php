@@ -5,7 +5,7 @@ trait NormalizeIntegerValueTrait
 {
     public function normalizeInteger($inter)
     {
-        $inter = (string) $inter;
+        $inter = trim((string) $inter);
         $dot   = explode('.', $inter);
 
         if (isset($dot[1]) && $dot[1] === '0') {

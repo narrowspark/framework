@@ -5,20 +5,13 @@ use Viserio\Translator\PluralCategorys\Breton;
 
 class BretonTest extends \PHPUnit_Framework_TestCase
 {
-    protected $object;
-
-    public function setUp()
-    {
-        $this->object = new Breton();
-    }
-
     /**
      * @dataProvider category
      */
     public function testGetCategory($count, $expected)
     {
-        $actual = $this->object->category($count);
-        $this->assertEquals($expected, $actual);
+        $actual = (new Breton())->category($count);
+        $this->assertEquals($expected, $this->intToString($actual));
     }
 
     public function category()
@@ -93,5 +86,28 @@ class BretonTest extends \PHPUnit_Framework_TestCase
             [3.94, 'other'],
             [5.81, 'other'],
         ];
+    }
+
+    protected function intToString($int)
+    {
+        switch ($int) {
+            case 0:
+                $actual = 'one';
+                break;
+            case 1:
+                $actual = 'two';
+                break;
+            case 2:
+                $actual = 'few';
+                break;
+            case 3:
+                $actual = 'many';
+                break;
+            case 4:
+                $actual = 'other';
+                break;
+        }
+
+        return $actual;
     }
 }

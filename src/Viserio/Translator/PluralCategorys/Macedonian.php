@@ -29,9 +29,9 @@ class Macedonian implements CategoryContract
         $count = $this->normalizeInteger($count);
 
         if (!is_float($count) && $count % 10 === 1 && $count !== 11) {
-            return 'one';
+            return 0;
         }
 
-        return 'other';
+        return 1;
     }
 }

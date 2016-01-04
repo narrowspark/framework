@@ -5,20 +5,13 @@ use Viserio\Translator\PluralCategorys\Langi;
 
 class LangiTest extends \PHPUnit_Framework_TestCase
 {
-    protected $object;
-
-    public function setUp()
-    {
-        $this->object = new Langi();
-    }
-
     /**
      * @dataProvider category
      */
     public function testGetCategory($count, $expected)
     {
-        $actual = $this->object->category($count);
-        $this->assertEquals($expected, $actual);
+        $actual = (new Langi())->category($count);
+        $this->assertEquals($expected, $this->intToString($actual));
     }
 
     public function category()
@@ -49,5 +42,22 @@ class LangiTest extends \PHPUnit_Framework_TestCase
             [999, 'other'],
             [2.31, 'other'],
         ];
+    }
+
+    protected function intToString($int)
+    {
+        switch ($int) {
+            case 0:
+                $actual = 'zero';
+                break;
+            case 1:
+                $actual = 'one';
+                break;
+            case 2:
+                $actual = 'other';
+                break;
+        }
+
+        return $actual;
     }
 }

@@ -33,13 +33,13 @@ class Polish implements CategoryContract
         $i   = $count % 100;
 
         if ($count === 1) {
-            return 'one';
+            return 0;
         } elseif (
             !is_float($count) && $i10 >= 2 && $i10 <= 4 && !($i >= 12 && $i <= 14) && !($i >= 22 && $i <= 24)
         ) {
-            return 'few';
+            return 1;
         }
 
-        return 'other';
+        return 2;
     }
 }

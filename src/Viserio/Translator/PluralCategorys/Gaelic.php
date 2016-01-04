@@ -31,9 +31,9 @@ class Gaelic implements CategoryContract
         $count = $this->normalizeInteger($count);
 
         if ($count === 1 || $count === 11) {
-            return 'one';
+            return 0;
         } elseif ($count === 2 || $count === 12) {
-            return 'two';
+            return 1;
         } elseif (
             !is_float($count) &&
             (
@@ -41,9 +41,9 @@ class Gaelic implements CategoryContract
                 ($count >= 13 && $count <= 19)
             )
         ) {
-            return 'few';
+            return 2;
         }
 
-        return 'other';
+        return 3;
     }
 }

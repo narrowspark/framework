@@ -5,20 +5,13 @@ use Viserio\Translator\PluralCategorys\Colognian;
 
 class ColognianTest extends \PHPUnit_Framework_TestCase
 {
-    protected $object;
-
-    public function setUp()
-    {
-        $this->object = new Colognian();
-    }
-
     /**
      * @dataProvider category
      */
     public function testGetCategory($count, $expected)
     {
-        $actual = $this->object->category($count);
-        $this->assertEquals($expected, $actual);
+        $actual = (new Colognian())->category($count);
+        $this->assertEquals($expected, $this->intToString($actual));
     }
 
     public function category()
@@ -51,5 +44,22 @@ class ColognianTest extends \PHPUnit_Framework_TestCase
             [1.07, 'other'],
             [2.94, 'other'],
         ];
+    }
+
+    protected function intToString($int)
+    {
+        switch ($int) {
+            case 0:
+                $actual = 'zero';
+                break;
+            case 1:
+                $actual = 'one';
+                break;
+            case 2:
+                $actual = 'other';
+                break;
+        }
+
+        return $actual;
     }
 }

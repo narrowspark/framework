@@ -52,7 +52,7 @@ interface Translator
      */
     public function has($message, $language = null);
 
-    /**
+        /**
      * Add helper.
      *
      * @param string   $name

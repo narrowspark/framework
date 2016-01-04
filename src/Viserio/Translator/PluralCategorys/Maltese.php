@@ -33,16 +33,16 @@ class Maltese implements CategoryContract
         $i = $count % 100;
 
         if ($count === 1) {
-            return 'one';
+            return 0;
         } elseif (
             $count === 0 ||
             !is_float($count) && $i >= 2 && $i <= 10
         ) {
-            return 'few';
+            return 1;
         } elseif (!is_float($count) && $i >= 11 && $i <= 19) {
-            return 'many';
+            return 2;
         }
 
-        return 'other';
+        return 3;
     }
 }

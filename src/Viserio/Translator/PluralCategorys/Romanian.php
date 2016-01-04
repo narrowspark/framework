@@ -34,14 +34,14 @@ class Romanian implements CategoryContract
             $count === 1 ||
             ($count >= 1 && $count <= 1.9)
         ) {
-            return 'one';
+            return 0;
         } elseif (
             $count === 0 ||
             (($i = $count % 100) >= 1 && $i <= 19)
         ) {
-            return 'few';
+            return 1;
         }
 
-        return 'other';
+        return 2;
     }
 }

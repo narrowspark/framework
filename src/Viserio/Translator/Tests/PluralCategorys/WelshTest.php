@@ -5,20 +5,13 @@ use Viserio\Translator\PluralCategorys\Welsh;
 
 class WelshTest extends \PHPUnit_Framework_TestCase
 {
-    protected $object;
-
-    public function setUp()
-    {
-        $this->object = new Welsh();
-    }
-
     /**
      * @dataProvider category
      */
     public function testGetCategory($count, $expected)
     {
-        $actual = $this->object->category($count);
-        $this->assertEquals($expected, $actual);
+        $actual = (new Welsh())->category($count);
+        $this->assertEquals($expected, $this->intToString($actual));
     }
 
     public function category()
@@ -61,5 +54,31 @@ class WelshTest extends \PHPUnit_Framework_TestCase
             [8.31, 'other'],
             [11.31, 'other'],
         ];
+    }
+
+    protected function intToString($int)
+    {
+        switch ($int) {
+            case 0:
+                $actual = 'zero';
+                break;
+            case 1:
+                $actual = 'one';
+                break;
+            case 2:
+                $actual = 'two';
+                break;
+            case 3:
+                $actual = 'few';
+                break;
+            case 4:
+                $actual = 'many';
+                break;
+            case 5:
+                $actual = 'other';
+                break;
+        }
+
+        return $actual;
     }
 }

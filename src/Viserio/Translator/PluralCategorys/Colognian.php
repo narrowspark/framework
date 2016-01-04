@@ -30,11 +30,11 @@ class Colognian implements CategoryContract
         $count = $this->normalizeInteger($count);
 
         if ($count === 0) {
-            return 'zero';
+            return 0;
         } elseif ($count === 1) {
-            return 'one';
+            return 1;
         }
 
-        return 'other';
+        return 2;
     }
 }

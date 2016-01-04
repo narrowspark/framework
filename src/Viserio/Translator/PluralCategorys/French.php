@@ -31,9 +31,9 @@ class French implements CategoryContract
         $count = $this->normalizeInteger($count);
 
         if ($count >= 0 && $count < 2) {
-            return 'one';
+            return 0;
         }
 
-        return 'other';
+        return 1;
     }
 }

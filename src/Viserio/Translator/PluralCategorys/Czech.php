@@ -31,11 +31,11 @@ class Czech implements CategoryContract
         $count = $this->normalizeInteger($count);
 
         if ($count === 1) {
-            return 'one';
+            return 0;
         } elseif (!is_float($count) && $count >= 2 && $count <= 4) {
-            return 'few';
+            return 1;
         }
 
-        return 'other';
+        return 2;
     }
 }

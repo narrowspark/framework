@@ -31,13 +31,13 @@ class Hebrew implements CategoryContract
         $count = $this->normalizeInteger($count);
 
         if ($count === 1) {
-            return 'one';
+            return 0;
         } elseif ($count === 2) {
-            return 'two';
+            return 1;
         } elseif ($count !== 0 && ($count % 10) === 0) {
-            return 'many';
+            return 2;
         }
 
-        return 'other';
+        return 3;
     }
 }

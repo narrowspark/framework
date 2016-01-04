@@ -26,6 +26,7 @@ class IntervalTraitTest extends \PHPUnit_Framework_TestCase
     public function getTests()
     {
         return [
+            [true, 0, '{0}'],
             [true, 3, '{1,2, 3 ,4}'],
             [false, 10, '{1,2, 3 ,4}'],
             [false, 3, '[1,2]'],

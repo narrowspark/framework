@@ -5,20 +5,13 @@ use Viserio\Translator\PluralCategorys\French;
 
 class FrenchTest extends \PHPUnit_Framework_TestCase
 {
-    protected $object;
-
-    public function setUp()
-    {
-        $this->object = new French();
-    }
-
     /**
      * @dataProvider category
      */
     public function testGetCategory($count, $expected)
     {
-        $actual = $this->object->category($count);
-        $this->assertEquals($expected, $actual);
+        $actual = (new French())->category($count);
+        $this->assertEquals($expected, $this->intToString($actual));
     }
 
     public function category()
@@ -46,5 +39,19 @@ class FrenchTest extends \PHPUnit_Framework_TestCase
             [2.31, 'other'],
             [5.31, 'other'],
         ];
+    }
+
+    protected function intToString($int)
+    {
+        switch ($int) {
+            case 0:
+                $actual = 'one';
+                break;
+            case 1:
+                $actual = 'other';
+                break;
+        }
+
+        return $actual;
     }
 }

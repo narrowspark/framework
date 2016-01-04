@@ -5,20 +5,13 @@ use Viserio\Translator\PluralCategorys\Lithuanian;
 
 class LithuanianTest extends \PHPUnit_Framework_TestCase
 {
-    protected $object;
-
-    public function setUp()
-    {
-        $this->object = new Lithuanian();
-    }
-
     /**
      * @dataProvider category
      */
     public function testGetCategory($count, $expected)
     {
-        $actual = $this->object->category($count);
-        $this->assertEquals($expected, $actual);
+        $actual = (new Lithuanian())->category($count);
+        $this->assertEquals($expected, $this->intToString($actual));
     }
 
     public function category()
@@ -66,5 +59,22 @@ class LithuanianTest extends \PHPUnit_Framework_TestCase
             [1.31, 'other'],
             [1.99, 'other'],
         ];
+    }
+
+    protected function intToString($int)
+    {
+        switch ($int) {
+            case 0:
+                $actual = 'one';
+                break;
+            case 1:
+                $actual = 'few';
+                break;
+            case 2:
+                $actual = 'other';
+                break;
+        }
+
+        return $actual;
     }
 }

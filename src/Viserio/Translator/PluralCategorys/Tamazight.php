@@ -34,9 +34,9 @@ class Tamazight implements CategoryContract
             $count === 1 ||
             ($count >= 11 && $count <= 99)
         ) {
-            return 'one';
+            return 0;
         }
 
-        return 'other';
+        return 1;
     }
 }

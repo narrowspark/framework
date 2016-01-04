@@ -79,6 +79,8 @@ class MessageSelector
 
         $position = $this->getPluralization()->get($number, $locale);
 
+        // var_dump($number, $position, $standardRules);
+
         if (!isset($standardRules[$position])) {
             // when there's exactly one rule given, and that rule is a standard
             // rule, use this rule
@@ -141,7 +143,9 @@ class MessageSelector
 
             if (preg_match('/^\w+\:\s*(.*?)$/', $part, $matches)) {
                 $standardRules[] = $matches[1];
-            } else {
+            } elseif (
+                !preg_match('/^(?P<interval>' . $this->getIntervalRegexp() . ')\s*(?P<message>.*?)$/x', $part)
+            ) {
                 $standardRules[] = $part;
             }
         }

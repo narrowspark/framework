@@ -5,20 +5,13 @@ use Viserio\Translator\PluralCategorys\Hebrew;
 
 class HebrewTest extends \PHPUnit_Framework_TestCase
 {
-    protected $object;
-
-    public function setUp()
-    {
-        $this->object = new Hebrew();
-    }
-
     /**
      * @dataProvider category
      */
     public function testGetCategory($count, $expected)
     {
-        $actual = $this->object->category($count);
-        $this->assertEquals($expected, $actual);
+        $actual = (new Hebrew())->category($count);
+        $this->assertEquals($expected, $this->intToString($actual));
     }
 
     public function category()
@@ -47,5 +40,25 @@ class HebrewTest extends \PHPUnit_Framework_TestCase
             [1.31, 'other'],
             [5.45, 'other'],
         ];
+    }
+
+    protected function intToString($int)
+    {
+        switch ($int) {
+            case 0:
+                $actual = 'one';
+                break;
+            case 1:
+                $actual = 'two';
+                break;
+            case 2:
+                $actual = 'many';
+                break;
+            case 3:
+                $actual = 'other';
+                break;
+        }
+
+        return $actual;
     }
 }

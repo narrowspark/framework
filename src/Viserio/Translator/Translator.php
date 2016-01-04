@@ -5,7 +5,7 @@ use InvalidArgumentException;
 use RuntimeException;
 use Viserio\Contracts\Translator\Translator as TranslatorContract;
 
-class Translator implements TranslatorContract
+class Translator
 {
     /**
      * All added replacements.
@@ -51,6 +51,48 @@ class Translator implements TranslatorContract
         }
 
         return empty($values) ? $string : strtr($string, $values);
+    }
+
+    /**
+     * Returns the translation from the first reader where it exists, or the input string
+     * if no translation is available.
+     *
+     * @param string $string
+     * @param string $locale
+     *
+     * @return string
+     */
+    public function get($string, $locale)
+    {
+        $fallbackLocale = $this->getFallbackLocale();
+
+        if (null !== $fallbackLocale && $locale !== $fallbackLocale) {
+        }
+    }
+
+    /**
+     * Check if translation exists.
+     *
+     * @param string      $message
+     * @param null|string $language
+     *
+     * @return bool
+     */
+    public function has($message, $language = null)
+    {
+        if (null === $language) {
+            $language = $this->getLanguage();
+        }
+
+        $this->assertValidLocale($language);
+
+        $found = 'TODO';
+
+        if ($found) {
+            return null !== $found;
+        }
+
+        return flase;
     }
 
     /**
@@ -101,48 +143,6 @@ class Translator implements TranslatorContract
 
         // Return the translation for that form
         return $this->form($string, $form, $locale);
-    }
-
-    /**
-     * Returns the translation from the first reader where it exists, or the input string
-     * if no translation is available.
-     *
-     * @param string $string
-     * @param string $locale
-     *
-     * @return string
-     */
-    public function get($string, $locale)
-    {
-        $fallbackLocale = $this->getFallbackLocale();
-
-        if (null !== $fallbackLocale && $locale !== $fallbackLocale) {
-        }
-    }
-
-    /**
-     * Check if translation exists.
-     *
-     * @param string      $message
-     * @param null|string $language
-     *
-     * @return bool
-     */
-    public function has($message, $language = null)
-    {
-        if (null === $language) {
-            $language = $this->getLanguage();
-        }
-
-        $this->assertValidLocale($language);
-
-        $found = 'TODO';
-
-        if ($found) {
-            return null !== $found;
-        }
-
-        return flase;
     }
 
     /**

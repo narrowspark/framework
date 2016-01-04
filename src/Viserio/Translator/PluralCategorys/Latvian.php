@@ -30,11 +30,11 @@ class Latvian implements CategoryContract
         $count = $this->normalizeInteger($count);
 
         if ($count === 0) {
-            return 'zero';
+            return 0;
         } elseif (!is_float($count) && $count % 10 === 1 && $count % 100 !== 11) {
-            return 'one';
+            return 1;
         }
 
-        return 'other';
+        return 2;
     }
 }
