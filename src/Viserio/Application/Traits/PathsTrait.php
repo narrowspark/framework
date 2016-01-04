@@ -3,13 +3,6 @@ namespace Viserio\Application\Traits;
 
 use Viserio\Support\Arr;
 
-/**
- * PathsTrait.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.4
- */
 trait PathsTrait
 {
     /**

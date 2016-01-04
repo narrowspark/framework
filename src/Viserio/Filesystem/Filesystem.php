@@ -1,6 +1,7 @@
 <?php
 namespace Viserio\Filesystem;
 
+use ErrorException;
 use Symfony\Component\Finder\Finder;
 use Viserio\Contracts\Filesystem\FileNotFoundException;
 use Viserio\Filesystem\Traits\DirectoryTrait;
@@ -131,7 +132,7 @@ class Filesystem
                 if (!@unlink($path)) {
                     $success = false;
                 }
-            } catch (\ErrorException $e) {
+            } catch (ErrorException $e) {
                 $success = false;
             }
         }

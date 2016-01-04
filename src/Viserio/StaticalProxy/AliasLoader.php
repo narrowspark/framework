@@ -61,7 +61,7 @@ class AliasLoader implements AliasLoaderContract
      *
      * @param string $alias
      *
-     * @return boolean
+     * @return bool
      */
     public function load($alias)
     {
@@ -128,7 +128,6 @@ class AliasLoader implements AliasLoaderContract
 
     /**
      * Removes an alias.
-     *
      */
     public function removeAlias()
     {
@@ -146,7 +145,7 @@ class AliasLoader implements AliasLoaderContract
      *
      * @param string $alias
      *
-     * @return string|boolean
+     * @return string|bool
      */
     public function resolveAlias($alias)
     {
@@ -227,7 +226,7 @@ class AliasLoader implements AliasLoaderContract
                     $alias = substr($alias, strlen($nsAlias) + 1);
                 }
 
-                $class = $nsClass.'\\'.$alias;
+                $class = $nsClass . '\\' . $alias;
                 $this->resolving[] = $class;
 
                 if ($this->exists($class, true)) {
@@ -243,7 +242,6 @@ class AliasLoader implements AliasLoaderContract
 
     /**
      * Removes a namespace alias.
-     *
      */
     public function removeNamespaceAlias()
     {
@@ -314,7 +312,7 @@ class AliasLoader implements AliasLoaderContract
      *
      * @param string $alias
      *
-     * @return boolean
+     * @return bool
      */
     protected function resolvePatternAlias($alias)
     {

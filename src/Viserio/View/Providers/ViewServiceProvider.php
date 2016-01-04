@@ -2,19 +2,11 @@
 namespace Viserio\View\Providers;
 
 use Viserio\Application\ServiceProvider;
-use Viserio\View\Engines\Adapter\Json as JsonEngine;
 use Viserio\View\Engines\Adapter\Php as PhpEngine;
 use Viserio\View\Engines\EngineResolver;
 use Viserio\View\Factory;
 use Viserio\View\ViewFinder;
 
-/**
- * ViewServiceProvider.
- *
- * @author  Daniel Bannert
- *
- * @since   0.8.0
- */
 class ViewServiceProvider extends ServiceProvider
 {
     /**
@@ -38,7 +30,7 @@ class ViewServiceProvider extends ServiceProvider
             // Next we will register the various engines with the engines so that the
             // environment can resolve the engines it needs for various views based
             // on the extension of view files. We call a method for each engines.
-            foreach (['php' => 'php', 'json' => 'json', 'phtml' => 'php'] as $engineName => $engineClass) {
+            foreach (['php' => 'php', 'phtml' => 'php'] as $engineName => $engineClass) {
                 $this->{'register' . ucfirst($engineClass) . 'Engine'}($resolver);
             }
 
@@ -97,18 +89,6 @@ class ViewServiceProvider extends ServiceProvider
     }
 
     /**
-     * Register the Json engine implementation.
-     *
-     * @param \Viserio\View\Engines\EngineResolver $engines
-     */
-    protected function registerJsonEngine($engines)
-    {
-        $engines->register('json', function () {
-            return new JsonEngine($this->app, $this);
-        });
-    }
-
-    /**
      * Register the view finder implementation.
      */
     protected function registerViewFinder()
@@ -129,9 +109,6 @@ class ViewServiceProvider extends ServiceProvider
                 $app->get('view.finder'),
                 $app->get('events')
             );
-
-            $view->setConfig($app->get('config'));
-            //$view->setCache($app->get('cache.store'));
 
             $view->share('app', $app);
 

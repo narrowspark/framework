@@ -1,6 +1,7 @@
 <?php
 namespace Viserio\Config;
 
+use ArrayIterator;
 use Viserio\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Support\Arr;
 
@@ -255,6 +256,6 @@ class Repository implements RepositoryContract
      */
     public function getIterator()
     {
-        return new \ArrayIterator($this->getAllNested());
+        return new ArrayIterator($this->getAllNested());
     }
 }

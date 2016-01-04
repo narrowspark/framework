@@ -2,6 +2,8 @@
 namespace Viserio\Events;
 
 use Interop\Container\ContainerInterface as ContainerContract;
+use InvalidArgumentException;
+use ReflectionClass;
 use Symfony\Component\EventDispatcher\Event;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -53,7 +55,7 @@ class Dispatcher implements EventDispatcherInterface
     public function addListenerService($eventName, $callback, $priority = 0)
     {
         if (!is_array($callback) || 2 !== count($callback)) {
-            throw new \InvalidArgumentException('Expected an [service", "method"] argument');
+            throw new InvalidArgumentException('Expected an [service", "method"] argument');
         }
 
         $serviceId = $callback[0];
@@ -77,6 +79,7 @@ class Dispatcher implements EventDispatcherInterface
     {
         foreach ($this->listenerIds[$eventName] as $i => $parts) {
             list($callback, $closure) = $parts;
+
             if ($listener === $callback) {
                 $listener = $closure;
                 break;
@@ -103,7 +106,11 @@ class Dispatcher implements EventDispatcherInterface
                 $this->addListenerService($eventName, [$serviceId, $params[0]], isset($params[1]) ? $params[1] : 0);
             } else {
                 foreach ($params as $listener) {
-                    $this->addListenerService($eventName, [$serviceId, $listener[0]], isset($listener[1]) ? $listener[1] : 0);
+                    $this->addListenerService(
+                        $eventName,
+                        [$serviceId, $listener[0]],
+                        isset($listener[1]) ? $listener[1] : 0
+                    );
                 }
             }
         }
@@ -129,24 +136,6 @@ class Dispatcher implements EventDispatcherInterface
                     $this->removeListener($eventName, [$serviceId, $listener[0]]);
                 }
             }
-        }
-    }
-
-    /**
-     * Checking if class has EventSubscriberInterface.
-     *
-     * @param string $class The service's class name (which must implement EventSubscriberInterface)
-     *
-     * @throws \InvalidArgumentException
-     */
-    protected function checkForInterface($class)
-    {
-        $rfc = new \ReflectionClass($class);
-
-        if (!$rfc->implementsInterface('Symfony\Component\EventDispatcher\EventSubscriberInterface')) {
-            throw new \InvalidArgumentException(
-                sprintf('%s must implement Symfony\Component\EventDispatcher\EventSubscriberInterface', $class)
-            );
         }
     }
 
@@ -204,5 +193,23 @@ class Dispatcher implements EventDispatcherInterface
     public function getListenerPriority($eventName, $listener)
     {
         return $this->dispatcher->getListenerPriority($eventName, $listener);
+    }
+
+    /**
+     * Checking if class has EventSubscriberInterface.
+     *
+     * @param string $class The service's class name (which must implement EventSubscriberInterface)
+     *
+     * @throws \InvalidArgumentException
+     */
+    protected function checkForInterface($class)
+    {
+        $rfc = new ReflectionClass($class);
+
+        if (!$rfc->implementsInterface('Symfony\Component\EventDispatcher\EventSubscriberInterface')) {
+            throw new InvalidArgumentException(
+                sprintf('%s must implement Symfony\Component\EventDispatcher\EventSubscriberInterface', $class)
+            );
+        }
     }
 }

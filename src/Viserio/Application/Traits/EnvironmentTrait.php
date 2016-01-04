@@ -3,13 +3,6 @@ namespace Viserio\Application\Traits;
 
 use Viserio\Application\EnvironmentDetector;
 
-/**
- * EnvironmentTrait.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.4
- */
 trait EnvironmentTrait
 {
     /**

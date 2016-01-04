@@ -4,10 +4,10 @@ namespace Viserio\StaticalProxy\Tests;
 use Mockery as Mock;
 use StdClass;
 use Viserio\StaticalProxy\StaticalProxy;
+use Viserio\StaticalProxy\Tests\Fixture\ExceptionFacadeStub;
+use Viserio\StaticalProxy\Tests\Fixture\FacadeObjectStub;
 use Viserio\StaticalProxy\Tests\Fixture\FacadeStub;
 use Viserio\StaticalProxy\Tests\Fixture\ProxyStub;
-use Viserio\StaticalProxy\Tests\Fixture\FacadeObjectStub;
-use Viserio\StaticalProxy\Tests\Fixture\ExceptionFacadeStub;
 
 class StaticalProxyTest extends \PHPUnit_Framework_TestCase
 {

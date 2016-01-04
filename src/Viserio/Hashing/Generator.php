@@ -1,6 +1,7 @@
 <?php
 namespace Viserio\Hashing;
 
+use InvalidArgumentException;
 use RandomLib\Generator as RandomLib;
 use Viserio\Contracts\Hashing\Generator as HashContract;
 use Viserio\Support\Helper;
@@ -13,12 +14,12 @@ class Generator implements HashContract
      * @var array
      */
     protected $registeredMethods = [
-        'pbkdf2' => '$pbkdf2$',
-        'bcrypt' => '$2y$',
+        'pbkdf2'    => '$pbkdf2$',
+        'bcrypt'    => '$2y$',
         'bcrypt.bc' => '$2a$',
-        'sha256' => '$5$',
-        'sha512' => '$6$',
-        'drupal' => '$S$',
+        'sha256'    => '$5$',
+        'sha512'    => '$6$',
+        'drupal'    => '$S$',
     ];
 
     /**
@@ -109,7 +110,7 @@ class Generator implements HashContract
     public function make($str, $method = 'bcrypt')
     {
         if (!isset($this->registeredMethods[$method])) {
-            throw new \InvalidArgumentException('Method {$method} dont exist.');
+            throw new InvalidArgumentException('Method {$method} dont exist.');
         }
 
         $hash = '';
@@ -248,7 +249,7 @@ class Generator implements HashContract
 
         // Step 1. Check dkLen.
         if ($dkLen > (2 ^ 32 - 1) * $hLen) {
-            throw new \InvalidArgumentException('Derived key too long');
+            throw new InvalidArgumentException('Derived key too long');
         }
 
         for ($block = 1; $block <= $length; $block++) {

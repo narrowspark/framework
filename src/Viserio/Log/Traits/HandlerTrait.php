@@ -1,6 +1,20 @@
 <?php
 namespace Viserio\Log\Traits;
 
+use InvalidArgumentException;
+use Monolog\Handler\AmqpHandler;
+use Monolog\Handler\BrowserConsoleHandler;
+use Monolog\Handler\ChromePHPHandler;
+use Monolog\Handler\CubeHandler;
+use Monolog\Handler\ErrorLogHandler;
+use Monolog\Handler\FirePHPHandler;
+use Monolog\Handler\GelfHandler;
+use Monolog\Handler\LogglyHandler;
+use Monolog\Handler\NewRelicHandler;
+use Monolog\Handler\RavenHandler;
+use Monolog\Handler\StreamHandler;
+use Monolog\Handler\SyslogUdpHandler;
+use Monolog\Handler\ZendMonitorHandler;
 use Monolog\Logger as MonologLogger;
 
 trait HandlerTrait
@@ -11,21 +25,21 @@ trait HandlerTrait
      * @var array
      */
     protected $handler = [
-        'stream' => \Monolog\Handler\StreamHandler::class,
-        'amqp' => \Monolog\Handler\AmqpHandler::class,
-        'gelf' => \Monolog\Handler\GelfHandler::class,
-        'cube' => \Monolog\Handler\CubeHandler::class,
-        'raven' => \Monolog\Handler\RavenHandler::class,
-        'zendMonitor' => \Monolog\Handler\ZendMonitorHandler::class,
-        'newRelic' => \Monolog\Handler\NewRelicHandler::class,
+        'stream'      => StreamHandler::class,
+        'amqp'        => AmqpHandler::class,
+        'gelf'        => GelfHandler::class,
+        'cube'        => CubeHandler::class,
+        'raven'       => RavenHandler::class,
+        'zendMonitor' => ZendMonitorHandler::class,
+        'newRelic'    => NewRelicHandler::class,
         //Log
-        'errorLog' => \Monolog\Handler\ErrorLogHandler::class,
-        'loggly' => \Monolog\Handler\LogglyHandler::class,
-        'syslogUdp' => \Monolog\Handler\SyslogUdpHandler::class,
+        'errorLog'    => ErrorLogHandler::class,
+        'loggly'      => LogglyHandler::class,
+        'syslogUdp'   => SyslogUdpHandler::class,
         //Browser
-        'browser' => \Monolog\Handler\BrowserConsoleHandler::class,
-        'firePHP' => \Monolog\Handler\FirePHPHandler::class,
-        'chromePHP' => \Monolog\Handler\ChromePHPHandler::class,
+        'browser'     => BrowserConsoleHandler::class,
+        'firePHP'     => FirePHPHandler::class,
+        'chromePHP'   => ChromePHPHandler::class,
     ];
 
     /**
@@ -34,13 +48,13 @@ trait HandlerTrait
      * @var array
      */
     protected $levels = [
-        'debug' => MonologLogger::DEBUG,
-        'info' => MonologLogger::INFO,
-        'notice' => MonologLogger::NOTICE,
-        'warning' => MonologLogger::WARNING,
-        'error' => MonologLogger::ERROR,
-        'critical' => MonologLogger::CRITICAL,
-        'alert' => MonologLogger::ALERT,
+        'debug'     => MonologLogger::DEBUG,
+        'info'      => MonologLogger::INFO,
+        'notice'    => MonologLogger::NOTICE,
+        'warning'   => MonologLogger::WARNING,
+        'error'     => MonologLogger::ERROR,
+        'critical'  => MonologLogger::CRITICAL,
+        'alert'     => MonologLogger::ALERT,
         'emergency' => MonologLogger::EMERGENCY,
     ];
 
@@ -91,7 +105,7 @@ trait HandlerTrait
             return $this->levels[$level];
         }
 
-        throw new \InvalidArgumentException('Invalid log level.');
+        throw new InvalidArgumentException('Invalid log level.');
     }
 
     /**

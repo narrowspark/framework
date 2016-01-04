@@ -1,6 +1,9 @@
 <?php
 namespace Viserio\Support;
 
+use Closure;
+use InvalidArgumentException;
+use RuntimeException;
 use Viserio\Contracts\Config\Manager as ConfigManager;
 use Viserio\Support\Traits\ContainerAwareTrait;
 
@@ -89,7 +92,7 @@ abstract class Manager
         $driver = $driver ?: $this->getDefaultDriver();
 
         if (!$this->hasDriver($driver)) {
-            throw new \Exception(
+            throw new RuntimeException(
                 sprintf('The driver [%s] is not supported by the bundle.', $driver)
             );
         }
@@ -126,7 +129,7 @@ abstract class Manager
             return empty($options) ? $this->$method() : $this->$method($options);
         }
 
-        throw new \InvalidArgumentException(sprintf('Driver [%s] not supported.', $driver));
+        throw new InvalidArgumentException(sprintf('Driver [%s] not supported.', $driver));
     }
 
     /**
@@ -150,7 +153,7 @@ abstract class Manager
      *
      * @return $this
      */
-    public function extend($driver, \Closure $callback)
+    public function extend($driver, Closure $callback)
     {
         $this->customCreators[$driver] = $callback;
 
