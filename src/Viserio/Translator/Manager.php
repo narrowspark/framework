@@ -4,6 +4,7 @@ namespace Viserio\Translator;
 use InvalidArgumentException;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Viserio\Contracts\Cache\Factory as CacheContract;
+use Psr\Log\LoggerInterface as PsrLoggerInterface;
 use Viserio\Contracts\Translator\MessageCatalogue as MessageCatalogueContract;
 use Viserio\Contracts\Translator\NotFoundResourceException;
 use Viserio\Filesystem\FileLoader;
@@ -60,6 +61,13 @@ class Manager
     protected $cache;
 
     /**
+     * Translation logger.
+     *
+     * @var \Psr\Log\LoggerInterface
+     */
+    protected $logger;
+
+    /**
      * Event manager for triggering translator events.
      *
      * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
@@ -70,18 +78,16 @@ class Manager
      * Creat new Translator instance.
      *
      * @param FileLoader         $fileloader
-     * @param PluralizationRules $pluralization
      * @param MessageSelector    $messageSelector
      */
     public function __construct(
         FileLoader $fileloader,
-        PluralizationRules $pluralization,
         MessageSelector $messageSelector
     ) {
         $this->loader        = $fileloader;
-        $this->pluralization = $pluralization;
+        $this->pluralization = new PluralizationRules();
 
-        $messageSelector->setPluralization($pluralization);
+        $messageSelector->setPluralization($this->pluralization);
         $this->messageSelector = $messageSelector;
     }
 
@@ -164,6 +170,30 @@ class Manager
     public function getCache()
     {
         return $this->cache;
+    }
+
+    /**
+     * Sets logger.
+     *
+     * @param PsrLoggerInterface $cache
+     *
+     * @return self
+     */
+    public function setLogger(PsrLoggerInterface $logger)
+    {
+        $this->logger = $logger;
+
+        return $this;
+    }
+
+    /**
+     * Returns the set logger.
+     *
+     * @return PsrLoggerInterface
+     */
+    public function getLogger()
+    {
+        return $this->logger;
     }
 
     /**
