@@ -1,16 +1,13 @@
 <?php
-namespace Viserio\Translator\Parser;
+namespace Viserio\Translator\Parsers;
 
 use Exception;
 use Viserio\Contracts\Filesystem\LoadingException;
 use Viserio\Contracts\Filesystem\Parser as ParserContract;
 use Viserio\Filesystem\Filesystem;
-use Viserio\Filesystem\Parser\Traits\IsGroupTrait;
 
 class Mo implements ParserContract
 {
-    use IsGroupTrait;
-
     /**
      * The filesystem instance.
      *
@@ -42,13 +39,7 @@ class Mo implements ParserContract
     {
         try {
             if ($this->files->exists($filename)) {
-                $data = [];
-
-                if ($group !== null) {
-                    return $this->isGroup($group, (array) $data);
-                }
-
-                return $data;
+                return '';
             }
         } catch (Exception $exception) {
             throw new LoadingException(sprintf('Unable to parse the Mo string: [%s]', $exception->getMessage()));
