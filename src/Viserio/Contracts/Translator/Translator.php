@@ -15,48 +15,48 @@ interface Translator
      *
      * @param string $defaultLang A string representing the default language to translate into. (e.g. 'en').
      *
+     * @throws \InvalidArgumentException If the locale contains invalid characters
+     *
      * @return self
      */
     public function setLocale($defaultLang);
 
     /**
-     * Translation/internationalization function with context support.
+     * Translates the given message.
      *
-     * @param string      $string  String to translate
-     * @param mixed       $context String form or numeric count
-     * @param array       $values  Param values to insert
-     * @param string|null $locale  Target localeuage
+     * @param string      $id         The message id (may also be an object that can be cast to string)
+     * @param array       $parameters An array of parameters for the message
+     * @param string|null $domain     The domain for the message or null to use the default
+     * @param string|null $locale     The locale or null to use the default
      *
-     * @return string
+     * @throws \InvalidArgumentException If the locale contains invalid characters
+     *
+     * @return string The translated string
      */
-    public function translate($string, $context, $values, $locale = null);
+    public function trans($id, array $parameters = [], $domain = null, $locale = null);
 
     /**
-     * Returns the translation from the first reader where it exists, or the input string
-     * if no translation is available.
+     * Translates the given choice message by choosing a translation according to a number.
      *
-     * @param string $string
-     * @param string $locale
+     * @param string      $id         The message id (may also be an object that can be cast to string)
+     * @param int         $number     The number to use to find the indice of the message
+     * @param array       $parameters An array of parameters for the message
+     * @param string|null $domain     The domain for the message or null to use the default
+     * @param string|null $locale     The locale or null to use the default
      *
-     * @return string
+     * @throws \InvalidArgumentException If the locale contains invalid characters
+     *
+     * @return string The translated string
      */
-    public function get($string, $locale);
+    public function transChoice($id, $number, array $parameters = [], $domain = null, $locale = null);
 
     /**
-     * Check if translation exists.
-     *
-     * @param string      $message
-     * @param null|string $language
-     *
-     * @return bool
-     */
-    public function has($message, $language = null);
-
-        /**
      * Add helper.
      *
      * @param string   $name
      * @param callable $helper
+     *
+     * @return self
      */
     public function addHelper($name, callable $helper);
 
@@ -68,7 +68,7 @@ interface Translator
      *
      * @throws \Exception
      *
-     * @return mixed
+     * @return self
      */
     public function applyHelpers($translation, array $helpers);
 
@@ -84,7 +84,7 @@ interface Translator
      * @param array        $filters
      * @param string|array $translation
      *
-     * @return array
+     * @return self
      */
     public function applyFilters($translation, array $filters);
 }

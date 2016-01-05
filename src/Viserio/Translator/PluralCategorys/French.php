@@ -22,9 +22,9 @@ class French implements CategoryContract
      *  one   → n within 0..2 and n is not 2;
      *  other → everything else
      *
-     * @param int $count
+     * @param integer $count
      *
-     * @return string
+     * @return integereger
      */
     public function category($count)
     {

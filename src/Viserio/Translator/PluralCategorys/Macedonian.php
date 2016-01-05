@@ -20,9 +20,9 @@ class Macedonian implements CategoryContract
      *  one   → n mod 10 is 1 and n is not 11;
      *  other → everything else
      *
-     * @param int $count
+     * @param integer $count
      *
-     * @return string
+     * @return integereger
      */
     public function category($count)
     {

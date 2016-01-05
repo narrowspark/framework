@@ -23,9 +23,9 @@ class Breton implements CategoryContract
      *  many  → n mod 1000000 is 0 and n is not 0;
      *  other → everything else
      *
-     * @param int $count
+     * @param integer $count
      *
-     * @return int
+     * @return integer
      */
     public function category($count)
     {

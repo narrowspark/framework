@@ -8,9 +8,12 @@ use Psr\Log\LoggerInterface as PsrLoggerInterface;
 use Viserio\Contracts\Translator\MessageCatalogue as MessageCatalogueContract;
 use Viserio\Contracts\Translator\NotFoundResourceException;
 use Viserio\Filesystem\FileLoader;
+use Viserio\Translator\Traits\ValidateLocaleTrait;
 
 class Manager
 {
+    use ValidateLocaleTrait;
+
     /**
      * Messages loaded by the translator.
      *
@@ -79,15 +82,17 @@ class Manager
      *
      * @param FileLoader         $fileloader
      * @param MessageSelector    $messageSelector
+     * @param PluralizationRules $pluralization
      */
     public function __construct(
         FileLoader $fileloader,
         MessageSelector $messageSelector
+        PluralizationRules $pluralization
     ) {
         $this->loader        = $fileloader;
-        $this->pluralization = new PluralizationRules();
+        $this->pluralization = $pluralization;
 
-        $messageSelector->setPluralization($this->pluralization);
+        $messageSelector->setPluralization($pluralization);
         $this->messageSelector = $messageSelector;
     }
 
@@ -114,12 +119,16 @@ class Manager
      * @param string|null $group
      * @param string|null $environment
      * @param string|null $namespace
+     *
+     * @return self
      */
     public function bind($file, $group = null, $environment = null, $namespace = null)
     {
         $langFile = $this->loader->load($file, $group, $environment, $namespace);
 
         $this->addMessage(new MessageCatalogue($langFile['lang'], (array) $langFile), $langFile['lang']);
+
+        return $this;
     }
 
     /**
@@ -269,16 +278,38 @@ class Manager
     }
 
     /**
-     * Asserts that the locale is valid, throws an Exception if not.
+     * Logs for missing translations.
      *
-     * @param string $locale Locale to tests
+     * @param string      $id
+     * @param string|null $domain
+     * @param string|null $locale
      *
-     * @throws \InvalidArgumentException If the locale contains invalid characters
+     * @return void
      */
-    protected function assertValidLocale($locale)
+    protected function log($id, $domain, $locale)
     {
-        if (preg_match('/^[a-z0-9@_\\.\\-]*$/i', $locale) !== 1) {
-            throw new InvalidArgumentException(sprintf('Invalid "%s" locale.', $locale));
+        if ($domain === null) {
+            $domain = 'messages';
+        }
+
+        $id = (string) $id;
+
+        $catalogue = $this->translator->getCatalogue($locale);
+
+        if ($catalogue->defines($id, $domain)) {
+            return;
+        }
+
+        if ($catalogue->has($id, $domain)) {
+            $this->logger->debug(
+                'Translation use fallback catalogue.',
+                ['id' => $id, 'domain' => $domain, 'locale' => $catalogue->getLocale()]
+            );
+        } else {
+            $this->logger->warning(
+                'Translation not found.',
+                ['id' => $id, 'domain' => $domain, 'locale' => $catalogue->getLocale()]
+            );
         }
     }
 }

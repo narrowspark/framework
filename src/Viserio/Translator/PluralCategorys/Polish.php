@@ -21,9 +21,9 @@ class Polish implements CategoryContract
      *  few   → n mod 10 in 2..4 and n mod 100 not in 12..14 and n mod 100 not in 22..24;
      *  other → everything else (fractions)
      *
-     * @param int $count
+     * @param integer $count
      *
-     * @return string
+     * @return integereger
      */
     public function category($count)
     {

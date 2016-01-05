@@ -22,9 +22,9 @@ class Maltese implements CategoryContract
      *  many  → n mod 100 in 11..19;
      *  other → everything else
      *
-     * @param int $count
+     * @param integer $count
      *
-     * @return string
+     * @return integereger
      */
     public function category($count)
     {

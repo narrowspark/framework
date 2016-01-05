@@ -4,9 +4,12 @@ namespace Viserio\Translator;
 use InvalidArgumentException;
 use RuntimeException;
 use Viserio\Contracts\Translator\Translator as TranslatorContract;
+use Viserio\Translator\Traits\ValidateLocaleTrait;
 
 class Translator
 {
+    use ValidateLocaleTrait;
+
     /**
      * All added replacements.
      *
@@ -29,16 +32,9 @@ class Translator
     private $helpers = [];
 
     /**
-     * Translation/internationalization function with context support.
-     *
-     * @param string      $string  String to translate
-     * @param mixed       $context String form or numeric count
-     * @param array       $values  Param values to insert
-     * @param string|null $locale  Target localeuage
-     *
-     * @return string
+     * {@inheritdoc}
      */
-    public function translate($string, $context, $values, $locale = null)
+    public function trans($id, array $parameters = [], $domain = null, $locale = null)
     {
         $locale = (null !== $locale) ? $this->assertValidLocale($locale) : $this->getLocale();
 
@@ -54,74 +50,11 @@ class Translator
     }
 
     /**
-     * Returns the translation from the first reader where it exists, or the input string
-     * if no translation is available.
-     *
-     * @param string $string
-     * @param string $locale
-     *
-     * @return string
+     * {@inheritdoc}
      */
-    public function get($string, $locale)
-    {
-        $fallbackLocale = $this->getFallbackLocale();
-
-        if (null !== $fallbackLocale && $locale !== $fallbackLocale) {
-        }
-    }
-
-    /**
-     * Check if translation exists.
-     *
-     * @param string      $message
-     * @param null|string $language
-     *
-     * @return bool
-     */
-    public function has($message, $language = null)
-    {
-        if (null === $language) {
-            $language = $this->getLanguage();
-        }
-
-        $this->assertValidLocale($language);
-
-        $found = 'TODO';
-
-        if ($found) {
-            return null !== $found;
-        }
-
-        return flase;
-    }
-
-    /**
-     * Returns specified form of a string translation. If no translation exists, the original string will be
-     * returned. No parameters are replaced.
-     *
-     * @param string      $string
-     * @param string|null $form   if null, looking for 'other' form, else the very first form
-     * @param string|null $locale
-     *
-     * @return string
-     */
-    public function form($string, $form = null, $locale = null)
+    public function transChoice($id, $number, array $parameters = [], $domain = null, $locale = null)
     {
         $this->assertValidLocale($locale);
-
-        $translation = $this->get($string, $locale);
-
-        if (is_array($translation)) {
-            if (array_key_exists($form, $translation)) {
-                return $translation[$form];
-            } elseif (array_key_exists('other', $translation)) {
-                return $translation['other'];
-            }
-
-            return reset($translation);
-        }
-
-        return $translation;
     }
 
     /**

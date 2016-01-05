@@ -20,9 +20,9 @@ class Manx implements CategoryContract
      *  one   → n mod 10 in 1..2 or n mod 20 is 0;  0-2, 11, 12, 20-22...
      *  other → everything else                     3-10, 13-19, 23-30...; 1.2, 3.07...
      *
-     * @param int $count
+     * @param integer $count
      *
-     * @return string
+     * @return integereger
      */
     public function category($count)
     {

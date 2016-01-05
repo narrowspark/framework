@@ -1,8 +1,12 @@
 <?php
 namespace Viserio\Translator;
 
+use Viserio\Translator\Traits\ValidateLocaleTrait;
+
 class FallbackResolver
 {
+    use ValidateLocaleTrait;
+
     /**
      * Locale to use as fallback if there is no translation.
      *
@@ -27,7 +31,7 @@ class FallbackResolver
      *
      * @throws \InvalidArgumentException If a locale contains invalid characters
      *
-     * @api
+     * @return self
      */
     public function setFallbackLocales(array $locales)
     {
@@ -36,6 +40,8 @@ class FallbackResolver
         }
 
         $this->fallbackLocales = $locales;
+
+        return $this;
     }
 
     /**
@@ -48,6 +54,7 @@ class FallbackResolver
     protected function computeFallbackLocales($locale)
     {
         $locales = [];
+
         foreach ($this->fallbackLocales as $fallback) {
             if ($fallback === $locale) {
                 continue;
