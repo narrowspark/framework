@@ -77,7 +77,7 @@ class MessageSelector
             }
         }
 
-        $position = $this->getPluralization()->get($number, $locale);
+        $position = $this->pluralization->get($number, $locale);
 
         // var_dump($number, $position, $standardRules);
 

@@ -3,9 +3,12 @@ namespace Viserio\Translator;
 
 use LogicException;
 use Viserio\Contracts\Translator\MessageCatalogue as MessageCatalogueContract;
+use Viserio\Translator\Traits\ValidateLocaleTrait;
 
 class MessageCatalogue implements MessageCatalogueContract
 {
+    use ValidateLocaleTrait;
+
     /**
      * Messages.
      *
@@ -42,6 +45,8 @@ class MessageCatalogue implements MessageCatalogueContract
      */
     public function __construct($locale, array $messages = [])
     {
+        $this->assertValidLocale($locale);
+
         $this->locale = $locale;
 
         if (isset($messages['lang'])) {
@@ -53,8 +58,6 @@ class MessageCatalogue implements MessageCatalogueContract
 
     /**
      * {@inheritdoc}
-     *
-     * @api
      */
     public function getLocale()
     {
@@ -63,8 +66,6 @@ class MessageCatalogue implements MessageCatalogueContract
 
     /**
      * {@inheritdoc}
-     *
-     * @api
      */
     public function getDomains()
     {
@@ -73,8 +74,6 @@ class MessageCatalogue implements MessageCatalogueContract
 
     /**
      * {@inheritdoc}
-     *
-     * @api
      */
     public function all($domain = null)
     {
@@ -87,8 +86,6 @@ class MessageCatalogue implements MessageCatalogueContract
 
     /**
      * {@inheritdoc}
-     *
-     * @api
      */
     public function set($id, $translation, $domain = 'messages')
     {
@@ -97,8 +94,6 @@ class MessageCatalogue implements MessageCatalogueContract
 
     /**
      * {@inheritdoc}
-     *
-     * @api
      */
     public function has($id, $domain = 'messages')
     {
@@ -106,7 +101,7 @@ class MessageCatalogue implements MessageCatalogueContract
             return true;
         }
 
-        if (null !== $this->fallbackCatalogue) {
+        if ($this->fallbackCatalogue !== null) {
             return $this->fallbackCatalogue->has($id, $domain);
         }
 
@@ -123,8 +118,6 @@ class MessageCatalogue implements MessageCatalogueContract
 
     /**
      * {@inheritdoc}
-     *
-     * @api
      */
     public function get($id, $domain = 'messages')
     {
@@ -132,7 +125,7 @@ class MessageCatalogue implements MessageCatalogueContract
             return $this->messages[$domain][$id];
         }
 
-        if (null !== $this->fallbackCatalogue) {
+        if ($this->fallbackCatalogue !== null) {
             return $this->fallbackCatalogue->get($id, $domain);
         }
 
@@ -141,8 +134,6 @@ class MessageCatalogue implements MessageCatalogueContract
 
     /**
      * {@inheritdoc}
-     *
-     * @api
      */
     public function replace($messages, $domain = 'messages')
     {
@@ -163,8 +154,6 @@ class MessageCatalogue implements MessageCatalogueContract
 
     /**
      * {@inheritdoc}
-     *
-     * @api
      */
     public function add($messages, $domain = 'messages')
     {
@@ -177,8 +166,6 @@ class MessageCatalogue implements MessageCatalogueContract
 
     /**
      * {@inheritdoc}
-     *
-     * @api
      */
     public function addCatalogue(MessageCatalogueContract $catalogue)
     {
@@ -197,22 +184,20 @@ class MessageCatalogue implements MessageCatalogueContract
 
     /**
      * {@inheritdoc}
-     *
-     * @api
      */
     public function addFallbackCatalogue(MessageCatalogueContract $catalogue)
     {
         // detect circular references
-        $c = $this;
+        $circular = $this;
 
         do {
-            if ($c->getLocale() === $catalogue->getLocale()) {
+            if ($circular->getLocale() === $catalogue->getLocale()) {
                 throw new LogicException(sprintf(
                     'Circular reference detected when adding a fallback catalogue for locale "%s".',
                     $catalogue->getLocale()
                 ));
             }
-        } while ($c = $c->parent);
+        } while ($circular = $circular->parent);
 
         $catalogue->setParent($this);
 
@@ -235,8 +220,6 @@ class MessageCatalogue implements MessageCatalogueContract
 
     /**
      * {@inheritdoc}
-     *
-     * @api
      */
     public function getFallbackCatalogue()
     {
