@@ -28,7 +28,7 @@ abstract class AbstractCookie implements Stringable, CookieContract
     protected $expires;
 
     /**
-     * @var integer|null
+     * @var int|null
      */
     protected $maxAge;
 
@@ -79,7 +79,7 @@ abstract class AbstractCookie implements Stringable, CookieContract
     /**
      * Checks if there is a value
      *
-     * @return boolean
+     * @return bool
      */
     public function hasValue()
     {
@@ -89,7 +89,7 @@ abstract class AbstractCookie implements Stringable, CookieContract
     /**
      * Sets the max age
      *
-     * @param integer|null $maxAge
+     * @param int|null $maxAge
      *
      * @return self
      */
@@ -104,7 +104,7 @@ abstract class AbstractCookie implements Stringable, CookieContract
     /**
      * Returns the max age
      *
-     * @return integer|null
+     * @return int|null
      */
     public function getMaxAge()
     {
@@ -114,7 +114,7 @@ abstract class AbstractCookie implements Stringable, CookieContract
     /**
      * Checks if there is a max age
      *
-     * @return boolean
+     * @return bool
      */
     public function hasMaxAge()
     {
@@ -124,7 +124,7 @@ abstract class AbstractCookie implements Stringable, CookieContract
     /**
      * Sets both the max age and the expires attributes
      *
-     * @param integer|null $expiration
+     * @param int|null $expiration
      *
      * @return self
      */
@@ -155,7 +155,7 @@ abstract class AbstractCookie implements Stringable, CookieContract
     /**
      * Returns the expiration time
      *
-     * @return integer|DateTime
+     * @return int|DateTime
      */
     public function getExpiresTime()
     {
@@ -165,7 +165,7 @@ abstract class AbstractCookie implements Stringable, CookieContract
     /**
      * Checks if there is an expiration time
      *
-     * @return boolean
+     * @return bool
      */
     public function hasExpires()
     {
@@ -175,7 +175,7 @@ abstract class AbstractCookie implements Stringable, CookieContract
     /**
      * Checks if the cookie is expired
      *
-     * @return boolean
+     * @return bool
      */
     public function isExpired()
     {
@@ -210,7 +210,7 @@ abstract class AbstractCookie implements Stringable, CookieContract
     /**
      * Checks if there is a domain
      *
-     * @return boolean
+     * @return bool
      */
     public function hasDomain()
     {
@@ -245,7 +245,7 @@ abstract class AbstractCookie implements Stringable, CookieContract
     /**
      * Sets the secure
      *
-     * @param boolean $secure
+     * @param bool $secure
      *
      * @return self
      */
@@ -260,7 +260,7 @@ abstract class AbstractCookie implements Stringable, CookieContract
     /**
      * Checks if HTTPS is required
      *
-     * @return boolean
+     * @return bool
      */
     public function isSecure()
     {
@@ -270,7 +270,7 @@ abstract class AbstractCookie implements Stringable, CookieContract
     /**
      * Sets the HTTP Only
      *
-     * @param boolean $httpOnly
+     * @param bool $httpOnly
      *
      * @return self
      */
@@ -285,7 +285,7 @@ abstract class AbstractCookie implements Stringable, CookieContract
     /**
      * Checks if it is HTTP-only
      *
-     * @return boolean
+     * @return bool
      */
     public function isHttpOnly()
     {
@@ -297,13 +297,13 @@ abstract class AbstractCookie implements Stringable, CookieContract
      *
      * @param string $path
      *
-     * @return boolean
+     * @return bool
      *
      * @see http://tools.ietf.org/html/rfc6265#section-5.1.4
      */
     public function matchPath($path)
     {
-        return $this->path === $path || (strpos($path, $this->path.'/') === 0);
+        return $this->path === $path || (strpos($path, $this->path . '/') === 0);
     }
 
     /**
@@ -311,7 +311,7 @@ abstract class AbstractCookie implements Stringable, CookieContract
      *
      * @param \Viserio\Contracts\Cookie\Cookie $cookie
      *
-     * @return boolean
+     * @return bool
      */
     public function matchCookie(CookieContract $cookie)
     {
@@ -325,7 +325,7 @@ abstract class AbstractCookie implements Stringable, CookieContract
      *
      * @param string $domain
      *
-     * @return boolean
+     * @return bool
      *
      * @see http://tools.ietf.org/html/rfc6265#section-5.1.3
      */
@@ -354,7 +354,7 @@ abstract class AbstractCookie implements Stringable, CookieContract
     /**
      * Normalizes the expiration value
      *
-     * @param integer|\DateTime|null $expiration
+     * @param int|\DateTime|null $expiration
      *
      * @return \DateTime|null
      */
@@ -419,15 +419,15 @@ abstract class AbstractCookie implements Stringable, CookieContract
 
     protected function appendFormattedNameAndValuePartIfSet(array $cookieStringParts)
     {
-        $name = urlencode($this->name).'=';
+        $name = urlencode($this->name) . '=';
 
         if ((string) $this->getValue() === '') {
-            $cookieStringParts[] .= $name.'deleted; Expires='.gmdate('D, d-M-Y H:i:s T', time() - 31536001);
+            $cookieStringParts[] .= $name . 'deleted; Expires=' . gmdate('D, d-M-Y H:i:s T', time() - 31536001);
         } else {
-            $cookieStringParts[] .= $name.urlencode($this->getValue());
+            $cookieStringParts[] .= $name . urlencode($this->getValue());
 
             if ($this->getExpiresTime()->format('s') !== 0) {
-                $cookieStringParts[] .= 'Expires='.$this->getExpiresTime()->format('D, d-M-Y H:i:s T');
+                $cookieStringParts[] .= 'Expires=' . $this->getExpiresTime()->format('D, d-M-Y H:i:s T');
             }
         }
 

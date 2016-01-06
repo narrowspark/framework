@@ -8,17 +8,17 @@ class CookieTest extends \PHPUnit_Framework_TestCase
 {
     public function invalidNames()
     {
-        return array(
-            array(''),
-            array(',MyName'),
-            array(';MyName'),
-            array(' MyName'),
-            array("\tMyName"),
-            array("\rMyName"),
-            array("\nMyName"),
-            array("\013MyName"),
-            array("\014MyName"),
-        );
+        return [
+            [''],
+            [',MyName'],
+            [';MyName'],
+            [' MyName'],
+            ["\tMyName"],
+            ["\rMyName"],
+            ["\nMyName"],
+            ["\013MyName"],
+            ["\014MyName"],
+        ];
     }
 
     /**
@@ -32,16 +32,16 @@ class CookieTest extends \PHPUnit_Framework_TestCase
 
     public function invalidValues()
     {
-        return array(
-            array(',Value'),
-            array(';Value'),
-            array(' Value'),
-            array("\tValue"),
-            array("\rValue"),
-            array("\nValue"),
-            array("\013Value"),
-            array("\014Value"),
-        );
+        return [
+            [',Value'],
+            [';Value'],
+            [' Value'],
+            ["\tValue"],
+            ["\rValue"],
+            ["\nValue"],
+            ["\013Value"],
+            ["\014Value"],
+        ];
     }
 
     /**
@@ -298,10 +298,10 @@ class CookieTest extends \PHPUnit_Framework_TestCase
 
         $cookie = new Cookie('foo', null, 1, '/admin/', '.myfoodomain.com', false, true);
         $this->assertEquals(
-            'foo=deleted; Expires='.gmdate(
+            'foo=deleted; Expires=' . gmdate(
                 'D, d-M-Y H:i:s T',
                 time() - 31536001
-            ).'; Path=/admin; Domain=myfoodomain.com; Max-Age=1; HttpOnly',
+            ) . '; Path=/admin; Domain=myfoodomain.com; Max-Age=1; HttpOnly',
             $cookie->__toString(),
             '->__toString() returns string representation of a cleared cookie if value is NULL'
         );

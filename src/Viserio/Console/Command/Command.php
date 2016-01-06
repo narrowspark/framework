@@ -241,9 +241,9 @@ abstract class Command extends BaseCommand implements CompletionAwareInterface
     /**
      * Check if a command option is set.
      *
-     * @param  string  $key
+     * @param string $key
      *
-     * @return boolean
+     * @return bool
      */
     public function hasOption($key)
     {

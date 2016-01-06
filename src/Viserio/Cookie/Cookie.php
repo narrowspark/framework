@@ -6,16 +6,16 @@ use InvalidArgumentException;
 final class Cookie extends AbstractCookie
 {
     /**
-     * @param string                      $name       The name of the cookie.
-     * @param string|null                 $value      The value of the cookie.
-     * @param integer|\DateTimeInterface $expiration The time the cookie expires.
-     * @param string|null                 $path       The path on the server in which the cookie will
-     *                                                be available on.
-     * @param string|null                 $domain     The domain that the cookie is available to.
-     * @param boolean                     $secure     Whether the cookie should only be transmitted
-     *                                                over a secure HTTPS connection from the client.
-     * @param boolean                     $httpOnly   Whether the cookie will be made accessible only.
-     *                                                through the HTTP protocol.
+     * @param string                 $name       The name of the cookie.
+     * @param string|null            $value      The value of the cookie.
+     * @param int|\DateTimeInterface $expiration The time the cookie expires.
+     * @param string|null            $path       The path on the server in which the cookie will
+     *                                           be available on.
+     * @param string|null            $domain     The domain that the cookie is available to.
+     * @param bool                   $secure     Whether the cookie should only be transmitted
+     *                                           over a secure HTTPS connection from the client.
+     * @param bool                   $httpOnly   Whether the cookie will be made accessible only.
+     *                                           through the HTTP protocol.
      *
      * @throws \InvalidArgumentException
      */

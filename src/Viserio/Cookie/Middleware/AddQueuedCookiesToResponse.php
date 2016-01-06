@@ -19,8 +19,6 @@ class AddQueuedCookiesToResponse implements MiddlewareContract
      * Create a new CookieQueue instance.
      *
      * @param \Viserio\Contracts\Cookie\QueueingFactory $cookies
-     *
-     * @return void
      */
     public function __construct(CookieJar $cookies)
     {

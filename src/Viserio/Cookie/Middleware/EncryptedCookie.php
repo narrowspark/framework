@@ -1,14 +1,13 @@
 <?php
 namespace Viserio\Cookie\Middleware;
 
-use Psr\Http\Message\ResponseInterface as ResponseContract;
-use Psr\Http\Message\ServerRequestInterface as RequestContract;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Contracts\Cookie\Cookie as CookieContract;
 use Viserio\Contracts\Encryption\DecryptException;
 use Viserio\Contracts\Encryption\Encrypter as EncrypterContract;
 use Viserio\Contracts\Middleware\Middleware as MiddlewareContract;
 use Viserio\Cookie\Cookie;
-
 
 class EncryptCookies implements MiddlewareContract
 {
@@ -40,8 +39,6 @@ class EncryptCookies implements MiddlewareContract
      * Disable encryption for the given cookie name(s).
      *
      * @param string|array $cookieName
-     *
-     * @return void
      */
     public function disableFor($cookieName)
     {
@@ -72,6 +69,7 @@ class EncryptCookies implements MiddlewareContract
             $cookie->isHttpOnly()
         );
     }
+
     /**
      * Determine whether encryption has been disabled for the given cookie.
      *
@@ -87,7 +85,7 @@ class EncryptCookies implements MiddlewareContract
     /**
      * {@inheritdoc}
      */
-    public function __invoke(RequestContract $request, ResponseContract $response, callable $next)
+    public function __invoke(ServerRequestInterface $request, ResponseInterface $response, callable $next)
     {
         return $this->encrypt($next($this->decrypt($request)));
     }
@@ -95,11 +93,11 @@ class EncryptCookies implements MiddlewareContract
     /**
      * Decrypt the cookies on the request.
      *
-     * @param RequestContract $request
+     * @param ServerRequestInterface $request
      *
-     * @return RequestContract
+     * @return ServerRequestInterface
      */
-    protected function decrypt(RequestContract $request)
+    protected function decrypt(ServerRequestInterface $request)
     {
         foreach ($request->cookies as $key => $c) {
             if ($this->isDisabled($key)) {
@@ -129,6 +127,7 @@ class EncryptCookies implements MiddlewareContract
             $this->decryptArray($cookie) :
             $this->encrypter->decrypt($cookie);
     }
+
     /**
      * Decrypt an array based cookie.
      *
@@ -152,11 +151,11 @@ class EncryptCookies implements MiddlewareContract
     /**
      * Encrypt the cookies on an outgoing response.
      *
-     * @param ResponseContract $response
+     * @param ResponseInterface $response
      *
-     * @return ResponseContract
+     * @return ResponseInterface
      */
-    protected function encrypt(ResponseContract $response)
+    protected function encrypt(ResponseInterface $response)
     {
         foreach ($response->headers->getCookies() as $cookie) {
             if ($this->isDisabled($cookie->getName())) {

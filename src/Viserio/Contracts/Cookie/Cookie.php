@@ -31,14 +31,14 @@ interface Cookie
     /**
      * Checks if there is a value
      *
-     * @return boolean
+     * @return bool
      */
     public function hasValue();
 
     /**
      * Sets the max age
      *
-     * @param integer|null $maxAge
+     * @param int|null $maxAge
      *
      * @return self
      */
@@ -47,21 +47,21 @@ interface Cookie
     /**
      * Returns the max age
      *
-     * @return integer|null
+     * @return int|null
      */
     public function getMaxAge();
 
     /**
      * Checks if there is a max age
      *
-     * @return boolean
+     * @return bool
      */
     public function hasMaxAge();
 
     /**
      * Sets both the max age and the expires attributes
      *
-     * @param integer|\DateTime|null $expiration
+     * @param int|\DateTime|null $expiration
      *
      * @return self
      */
@@ -79,21 +79,21 @@ interface Cookie
     /**
      * Returns the expiration time
      *
-     * @return integer|\DateTime
+     * @return int|\DateTime
      */
     public function getExpiresTime();
 
     /**
      * Checks if there is an expiration time
      *
-     * @return boolean
+     * @return bool
      */
     public function hasExpires();
 
     /**
      * Checks if the cookie is expired
      *
-     * @return boolean
+     * @return bool
      */
     public function isExpired();
 
@@ -116,7 +116,7 @@ interface Cookie
     /**
      * Checks if there is a domain
      *
-     * @return boolean
+     * @return bool
      */
     public function hasDomain();
 
@@ -139,7 +139,7 @@ interface Cookie
     /**
      * Sets the secure
      *
-     * @param boolean $secure
+     * @param bool $secure
      *
      * @return self
      */
@@ -148,14 +148,14 @@ interface Cookie
     /**
      * Checks if HTTPS is required
      *
-     * @return boolean
+     * @return bool
      */
     public function isSecure();
 
     /**
      * Sets the HTTP Only
      *
-     * @param boolean $httpOnly
+     * @param bool $httpOnly
      *
      * @return self
      */
@@ -164,7 +164,7 @@ interface Cookie
     /**
      * Checks if it is HTTP-only
      *
-     * @return boolean
+     * @return bool
      */
     public function isHttpOnly();
 
@@ -173,7 +173,7 @@ interface Cookie
      *
      * @param string $path
      *
-     * @return boolean
+     * @return bool
      *
      * @see http://tools.ietf.org/html/rfc6265#section-5.1.4
      */
@@ -184,7 +184,7 @@ interface Cookie
      *
      * @param \Viserio\Contracts\Cookie\Cookie $cookie
      *
-     * @return boolean
+     * @return bool
      */
     public function matchCookie(Cookie $cookie);
 
@@ -193,7 +193,7 @@ interface Cookie
      *
      * @param string $domain
      *
-     * @return boolean
+     * @return bool
      *
      * @see http://tools.ietf.org/html/rfc6265#section-5.1.3
      */
