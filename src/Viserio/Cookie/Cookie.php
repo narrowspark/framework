@@ -1,60 +1,21 @@
 <?php
 namespace Viserio\Cookie;
 
-use DateTime;
 use InvalidArgumentException;
-use Viserio\Contracts\Support\Stringable;
 
-class Cookie implements Stringable
+final class Cookie extends AbstractCookie
 {
     /**
-     * @var string
-     */
-    protected $name;
-
-    /**
-     * @var string
-     */
-    protected $value;
-
-    /**
-     * @var string
-     */
-    protected $domain;
-
-    /**
-     * @var int|\DateTime
-     */
-    protected $expire;
-
-    /**
-     * @var int|null
-     */
-    protected $maxAge;
-
-    /**
-     * @var string
-     */
-    protected $path;
-
-    /**
-     * @var bool
-     */
-    protected $secure;
-
-    /**
-     * @var bool
-     */
-    protected $httpOnly;
-
-    /**
-     * @param string        $name       The name of the cookie
-     * @param string|null   $value      The value of the cookie
-     * @param int|\DateTime $expiration The time the cookie expires
-     * @param string|null   $domain     The domain that the cookie is available to
-     * @param string|null   $path       The path on the server in which the cookie will be available on
-     * @param bool          $secure     Whether the cookie should only be transmitted over a secure HTTPS connection from the client
-     * @param bool          $httpOnly   Whether the cookie will be made accessible only through the HTTP protocol
+     * @param string                 $name       The name of the cookie.
+     * @param string|null            $value      The value of the cookie.
+     * @param int|\DateTimeInterface $expiration The time the cookie expires.
+     * @param string|null            $path       The path on the server in which the cookie will
+     *                                           be available on.
+     * @param string|null            $domain     The domain that the cookie is available to.
+     * @param bool                   $secure     Whether the cookie should only be transmitted
+     *                                           over a secure HTTPS connection from the client.
+     * @param bool                   $httpOnly   Whether the cookie will be made accessible only.
+     *                                           through the HTTP protocol.
      *
      * @throws \InvalidArgumentException
      */
@@ -62,216 +23,39 @@ class Cookie implements Stringable
         $name,
         $value = null,
         $expiration = 0,
-        $domain = null,
         $path = null,
+        $domain = null,
         $secure = false,
         $httpOnly = false
     ) {
         $this->validateName($name);
         $this->validateValue($value);
 
-        $maxAge = $expires = null;
-
-        if (is_int($expiration)) {
-            $maxAge = $expiration;
-            $expires = new DateTime(sprintf('%d seconds', $maxAge));
-
-            // According to RFC 2616 date should be set to earliest representable date
-            if ($maxAge <= 0) {
-                $expires->setTimestamp(-PHP_INT_MAX);
-            }
-        } elseif ($expiration instanceof DateTime) {
-            $expires = $expiration;
-        }
-
         $this->name     = $name;
         $this->value    = $value;
-        $this->maxAge   = $maxAge;
-        $this->expires  = $expires;
+        $this->maxAge   = is_int($expiration) ? $expiration : null;
+        $this->expires  = $this->normalizeExpires($expiration);
         $this->domain   = $this->normalizeDomain($domain);
         $this->path     = $this->normalizePath($path);
-        $this->secure   = (bool) $secure;
-        $this->httpOnly = (bool) $httpOnly;
+        $this->secure   = filter_var($secure, FILTER_VALIDATE_BOOLEAN);
+        $this->httpOnly = filter_var($httpOnly, FILTER_VALIDATE_BOOLEAN);
     }
 
     /**
-     * Returns the name
+     * Sets the value
      *
-     * @return string
+     * @param string|null $value
+     *
+     * @return self
      */
-    public function getName()
+    public function withValue($value)
     {
-        return $this->name;
-    }
+        $this->validateValue($value);
 
-    /**
-     * Returns the value
-     *
-     * @return string|null
-     */
-    public function getValue()
-    {
-        return $this->value;
-    }
+        $new = clone $this;
+        $new->value = $value;
 
-    /**
-     * Checks if there is a value
-     *
-     * @return bool
-     */
-    public function hasValue()
-    {
-        return isset($this->value);
-    }
-
-    /**
-     * Returns the max age
-     *
-     * @return int|null
-     */
-    public function getMaxAge()
-    {
-        return $this->maxAge;
-    }
-
-    /**
-     * Checks if there is a max age
-     *
-     * @return bool
-     */
-    public function hasMaxAge()
-    {
-        return isset($this->maxAge);
-    }
-
-    /**
-     * Returns the expiration time
-     *
-     * @return \DateTime|null
-     */
-    public function getExpiresTime()
-    {
-        return $this->expires;
-    }
-
-    /**
-     * Checks if there is an expiration time
-     *
-     * @return bool
-     */
-    public function hasExpires()
-    {
-        return isset($this->expires);
-    }
-
-    /**
-     * Checks if the cookie is expired
-     *
-     * @return bool
-     */
-    public function isExpired()
-    {
-        return isset($this->expires) && $this->expires < new DateTime();
-    }
-
-    /**
-     * Returns the domain
-     *
-     * @return string|null
-     */
-    public function getDomain()
-    {
-        return $this->domain;
-    }
-
-    /**
-     * Checks if there is a domain
-     *
-     * @return bool
-     */
-    public function hasDomain()
-    {
-        return isset($this->domain);
-    }
-
-    /**
-     * Returns the path
-     *
-     * @return string
-     */
-    public function getPath()
-    {
-        return $this->path;
-    }
-
-    /**
-     * It matches a path
-     *
-     * @param string $path
-     *
-     * @return bool
-     *
-     * @see http://tools.ietf.org/html/rfc6265#section-5.1.4
-     */
-    public function matchPath($path)
-    {
-        return $this->path === $path || (strpos($path, $this->path . '/') === 0);
-    }
-
-    /**
-     * Checks if HTTPS is required
-     *
-     * @return bool
-     */
-    public function isSecure()
-    {
-        return $this->secure;
-    }
-
-    /**
-     * Checks if it is HTTP-only
-     *
-     * @return bool
-     */
-    public function isHttpOnly()
-    {
-        return $this->httpOnly;
-    }
-
-    /**
-     * Checks if it matches with another cookie
-     *
-     * @param Cookie $cookie
-     *
-     * @return bool
-     */
-    public function match(Cookie $cookie)
-    {
-        return $this->name === $cookie->name && $this->domain === $cookie->domain and $this->path === $cookie->path;
-    }
-
-    /**
-     * Matches a domain
-     *
-     * @param string $domain
-     *
-     * @return bool
-     *
-     * @see http://tools.ietf.org/html/rfc6265#section-5.1.3
-     */
-    public function matchDomain($domain)
-    {
-        // Domain is not set or exact match
-        if (!$this->hasDomain() || strcasecmp($domain, $this->domain) === 0) {
-            return true;
-        }
-
-        // Domain is not an IP address
-        if (filter_var($domain, FILTER_VALIDATE_IP)) {
-            return false;
-        }
-
-        return (bool) preg_match('/\b' . preg_quote($this->domain) . '$/i', $domain);
+        return $new;
     }
 
     /**
@@ -281,34 +65,16 @@ class Cookie implements Stringable
      */
     public function __toString()
     {
-        $str = urlencode($this->getName()) . '=';
+        $cookieStringParts = [];
 
-        if ((string) $this->getValue() === '') {
-            $str .= 'deleted; expires=' . gmdate('D, d-M-Y H:i:s T', time() - 31536001);
-        } else {
-            $str .= urlencode($this->getValue());
-            if ($this->getExpiresTime() !== 0) {
-                $str .= '; expires=' . gmdate('D, d-M-Y H:i:s T', $this->getExpiresTime());
-            }
-        }
+        $cookieStringParts = $this->appendFormattedNameAndValuePartIfSet($cookieStringParts);
+        $cookieStringParts = $this->appendFormattedPathPartIfSet($cookieStringParts);
+        $cookieStringParts = $this->appendFormattedDomainPartIfSet($cookieStringParts);
+        $cookieStringParts = $this->appendFormattedMaxAgePartIfSet($cookieStringParts);
+        $cookieStringParts = $this->appendFormattedSecurePartIfSet($cookieStringParts);
+        $cookieStringParts = $this->appendFormattedHttpOnlyPartIfSet($cookieStringParts);
 
-        if ($this->path) {
-            $str .= '; path=' . $this->path;
-        }
-
-        if ($this->getDomain()) {
-            $str .= '; domain=' . $this->getDomain();
-        }
-
-        if ($this->isSecure() === true) {
-            $str .= '; secure';
-        }
-
-        if ($this->isHttpOnly() === true) {
-            $str .= '; httponly';
-        }
-
-        return $str;
+        return implode('; ', $cookieStringParts);
     }
 
     /**
@@ -345,49 +111,13 @@ class Cookie implements Stringable
     {
         if (isset($value)) {
             if (preg_match('/[^\x21\x23-\x2B\x2D-\x3A\x3C-\x5B\x5D-\x7E]/', $value)) {
-                throw new InvalidArgumentException(sprintf('The cookie value "%s" contains invalid characters.', $value));
+                throw new InvalidArgumentException(
+                    sprintf(
+                        'The cookie value "%s" contains invalid characters.',
+                        $value
+                    )
+                );
             }
         }
-    }
-
-    /**
-     * Remove the leading '.' and lowercase the domain as per spec in RFC 6265
-     *
-     * @param string|null $domain
-     *
-     * @return string
-     *
-     * @see http://tools.ietf.org/html/rfc6265#section-4.1.2.3
-     * @see http://tools.ietf.org/html/rfc6265#section-5.1.3
-     * @see http://tools.ietf.org/html/rfc6265#section-5.2.3
-     */
-    private function normalizeDomain($domain)
-    {
-        if (isset($domain)) {
-            $domain = ltrim(strtolower($domain), '.');
-        }
-
-        return $domain;
-    }
-
-    /**
-     * Processes path as per spec in RFC 6265
-     *
-     * @param string|null $path
-     *
-     * @return string
-     *
-     * @see http://tools.ietf.org/html/rfc6265#section-5.1.4
-     * @see http://tools.ietf.org/html/rfc6265#section-5.2.4
-     */
-    private function normalizePath($path)
-    {
-        $path = rtrim($path, '/');
-
-        if (empty($path) or substr($path, 0, 1) !== '/') {
-            $path = '/';
-        }
-
-        return $path;
     }
 }

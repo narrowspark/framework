@@ -54,7 +54,7 @@ class Virtuoso
     /**
      * Construct.
      *
-     * @param ContainerInterface                        $container
+     * @param ContainerInterface                                          $container
      * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $events
      */
     public function __construct(
@@ -223,8 +223,6 @@ class Virtuoso
      *
      * @param string $section
      * @param string $content
-     *
-     * @return void
      */
     public function inject($section, $content)
     {
