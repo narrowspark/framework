@@ -102,10 +102,10 @@ class Translator
     public function applyHelpers($translation, array $helpers)
     {
         if (is_array($translation)) {
-            $manager = $this;
+            $translator = $this;
 
-            return array_map(function ($trans) use ($manager, $helpers) {
-                return $manager->applyHelpers($trans, $helpers);
+            return array_map(function ($trans) use ($translator, $helpers) {
+                return $translator->applyHelpers($trans, $helpers);
             }, $translation);
         }
 
@@ -134,18 +134,18 @@ class Translator
     }
 
     /**
-     * @param array        $filters
      * @param string|array $translation
+     * @param array        $filters
      *
      * @return array
      */
     public function applyFilters($translation, array $filters)
     {
         if (is_array($translation)) {
-            $manager = $this;
+            $translator = $this;
 
-            return array_map(function ($t) use ($manager) {
-                return $manager->applyFilters($t);
+            return array_map(function ($translation) use ($translator) {
+                return $translator->applyFilters($translation);
             }, $translation);
         }
 

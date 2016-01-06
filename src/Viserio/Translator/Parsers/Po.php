@@ -45,7 +45,6 @@ class Po implements ParserContract
 
         try {
             if ($this->files->exists($filename)) {
-
                 return (new PoParser())->parseFile($filename);
             }
         } catch (Exception $exception) {

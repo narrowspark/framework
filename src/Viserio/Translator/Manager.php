@@ -15,13 +15,6 @@ class Manager
     use ValidateLocaleTrait;
 
     /**
-     * Messages loaded by the translator.
-     *
-     * @var array
-     */
-    protected $messages = [];
-
-    /**
      * FileLoader instance.
      *
      * @var \Viserio\Filesystem\FileLoader
@@ -48,13 +41,6 @@ class Manager
      * @var string
      */
     protected $locale = 'en';
-
-    /**
-     * Catalogues.
-     *
-     * @var MessageCatalogueInterface[]
-     */
-    protected $catalogues = [];
 
     /**
      * Translation cache.
@@ -86,7 +72,7 @@ class Manager
      */
     public function __construct(
         FileLoader $fileloader,
-        MessageSelector $messageSelector
+        MessageSelector $messageSelector,
         PluralizationRules $pluralization
     ) {
         $this->loader        = $fileloader;
@@ -107,7 +93,10 @@ class Manager
     public function addMessage(MessageCatalogueContract $messageCatalogue, $locale = null)
     {
         $locale = $locale === null ? $messageCatalogue->getLocale() : $locale;
-        $this->messages[$locale] = $messageCatalogue;
+
+        $translation = new Translator($messageCatalogue);
+
+        $this->translations[$locale] = $translation;
 
         return $this;
     }
@@ -237,44 +226,6 @@ class Manager
     public function getPluralization()
     {
         return $this->pluralization;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getCatalogue($locale = null)
-    {
-        if (null === $locale) {
-            $locale = $this->getLocale();
-        }
-
-        if (!isset($this->catalogues[$locale])) {
-            $this->initializeCatalogue($locale);
-        }
-
-        return $this->catalogues[$locale];
-    }
-
-    /**
-     * Initialize catalogue.
-     *
-     * @param string $locale
-     *
-     * @throws NotFoundResourceException
-     */
-    protected function initializeCatalogue($locale)
-    {
-        $this->assertValidLocale($locale);
-
-        try {
-            //ToDo add fallback
-        } catch (NotFoundResourceException $e) {
-            if (!$this->computeFallbackLocales($locale)) {
-                throw $e;
-            }
-        }
-
-        $this->loadFallbackCatalogues($locale);
     }
 
     /**
