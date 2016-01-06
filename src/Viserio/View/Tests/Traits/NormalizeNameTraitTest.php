@@ -20,9 +20,9 @@ class NormalizeNameTraitTest extends \PHPUnit_Framework_TestCase
     public function getMatchingNames()
     {
         return [
-            ['test/foo', 'test.foo',],
-            ['path::test/foo', 'path::test.foo',],
-            ['deep/path::test/foo', 'deep/path::test.foo',],
+            ['test/foo', 'test.foo'],
+            ['path::test/foo', 'path::test.foo'],
+            ['deep/path::test/foo', 'deep/path::test.foo'],
         ];
     }
 }

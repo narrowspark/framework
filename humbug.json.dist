@@ -1,0 +1,16 @@
+{
+    "source": {
+        "directories": [
+            "src\/Viserio"
+        ],
+        "excludes": [
+            "vendor",
+            "Tests"
+        ]
+    },
+    "timeout": 10,
+    "logs": {
+        "text": "build\/logs\/humbuglog.txt",
+        "json": "build\/logs\/humbuglog.json"
+    }
+}

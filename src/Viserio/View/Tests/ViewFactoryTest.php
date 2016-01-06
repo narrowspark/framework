@@ -8,10 +8,10 @@ use Symfony\Component\EventDispatcher\EventDispatcher;
 use Viserio\Contracts\View\Engine;
 use Viserio\Contracts\View\Finder;
 use Viserio\Support\Traits\DirectorySeparatorTrait;
+use Viserio\View\Engines\Adapter\Php;
 use Viserio\View\Engines\EngineResolver;
 use Viserio\View\Factory;
 use Viserio\View\Virtuoso;
-use Viserio\View\Engines\Adapter\Php;
 
 class ViewFactoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -155,12 +155,12 @@ class ViewFactoryTest extends \PHPUnit_Framework_TestCase
             ->shouldReceive('find')
             ->once()
             ->with('layout')
-            ->andReturn($this->getDirectorySeparator(__DIR__.'/Fixture/foo.php'));
+            ->andReturn($this->getDirectorySeparator(__DIR__ . '/Fixture/foo.php'));
         $factory->getFinder()
             ->shouldReceive('find')
             ->once()
             ->with('view')
-            ->andReturn($this->getDirectorySeparator(__DIR__.'/Fixture/bar/foo/baz.php'));
+            ->andReturn($this->getDirectorySeparator(__DIR__ . '/Fixture/bar/foo/baz.php'));
 
         $virtuoso = new Virtuoso(
             Mock::mock(ContainerInterface::class),

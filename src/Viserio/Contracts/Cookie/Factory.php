@@ -1,7 +1,7 @@
 <?php
 namespace Viserio\Contracts\Cookie;
 
-interface CookiesJar
+interface Factory
 {
     /**
      * Create a new cookie instance.
@@ -14,9 +14,17 @@ interface CookiesJar
      * @param bool        $secure
      * @param bool        $httpOnly
      *
-     * @return \Symfony\Component\HttpFoundation\Cookie
+     * @return \Viserio\Cookie\Cookie
      */
-    public function make($name, $value, $minutes = 0, $path = null, $domain = null, $secure = false, $httpOnly = true);
+    public function create(
+        $name,
+        $value,
+        $minutes = 0,
+        $path = null,
+        $domain = null,
+        $secure = false,
+        $httpOnly = true
+    );
 
     /**
      * Create a cookie that lasts "forever" (five years).
@@ -28,9 +36,16 @@ interface CookiesJar
      * @param bool        $secure
      * @param bool        $httpOnly
      *
-     * @return \Symfony\Component\HttpFoundation\Cookie
+     * @return \Viserio\Cookie\Cookie
      */
-    public function forever($name, $value, $path = null, $domain = null, $secure = false, $httpOnly = true);
+    public function forever(
+        $name,
+        $value,
+        $path = null,
+        $domain = null,
+        $secure = false,
+        $httpOnly = true
+    );
 
     /**
      * Expire the given cookie.
@@ -39,7 +54,11 @@ interface CookiesJar
      * @param string|null $path
      * @param string|null $domain
      *
-     * @return \Symfony\Component\HttpFoundation\Cookie
+     * @return \Viserio\Cookie\Cookie
      */
-    public function forget($name, $path = null, $domain = null);
+    public function forget(
+        $name,
+        $path = null,
+        $domain = null
+    );
 }

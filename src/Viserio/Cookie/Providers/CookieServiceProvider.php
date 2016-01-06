@@ -3,6 +3,7 @@ namespace Viserio\Cookie\Providers;
 
 use Viserio\Application\ServiceProvider;
 use Viserio\Cookie\Cookie;
+use Viserio\Cookie\RequestCookie;
 
 class CookieServiceProvider extends ServiceProvider
 {
@@ -13,6 +14,10 @@ class CookieServiceProvider extends ServiceProvider
     {
         $this->app->singleton('cookie', function () {
             return new Cookie();
+        });
+
+        $this->app->singleton('request-cookie', function () {
+            return new RequestCookie();
         });
     }
 
@@ -25,6 +30,7 @@ class CookieServiceProvider extends ServiceProvider
     {
         return [
             'cookie',
+            'request-cookie',
         ];
     }
 }

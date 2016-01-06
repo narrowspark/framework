@@ -243,7 +243,7 @@ abstract class Command extends BaseCommand implements CompletionAwareInterface
      *
      * @param string $key
      *
-     * @return string|array
+     * @return bool
      */
     public function hasOption($key)
     {

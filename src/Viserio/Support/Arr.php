@@ -277,7 +277,7 @@ class Arr
         while (($segment = array_shift($key)) !== null) {
             if ($segment === '*') {
                 if (!is_array($target) && !$target instanceof ArrayAccess) {
-                    return $default;
+                    return value($default);
                 }
 
                 $result = self::pluck($target, $key);
