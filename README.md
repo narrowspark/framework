@@ -29,7 +29,7 @@
 
 Documentation for the entire framework can be found on the [Narrowspark website](http://narrowspark.de).
 
-## (Contributing)[CONTRIBUTING.md]
+## [Contributing](CONTRIBUTING.md)
 
 If you would like to help take a look at the [list of issues](http://github.com/narrowspark/framework/issues).
 
