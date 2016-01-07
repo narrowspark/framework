@@ -1,18 +1,22 @@
 <?php
 namespace Viserio\Filesystem;
 
-use RuntimeException;
+use Narrowspark\Arr\StaticArr as Arr;
+use Viserio\Contracts\Filesystem\Exception\UnsupportedFormatException;
 use Viserio\Contracts\Filesystem\Loader as LoaderContract;
 use Viserio\Contracts\Filesystem\Parser as ParserContract;
-use Viserio\Filesystem\Parser\Ini as IniParser;
-use Viserio\Filesystem\Parser\Json as JsonParser;
-use Viserio\Filesystem\Parser\Php as PhpParser;
-use Viserio\Filesystem\Parser\Toml as TomlParser;
-use Viserio\Filesystem\Parser\Xml as XmlParser;
-use Viserio\Filesystem\Parser\Yaml as YamlParser;
+use Viserio\Filesystem\Parsers\IniParser;
+use Viserio\Filesystem\Parsers\JsonParser;
+use Viserio\Filesystem\Parsers\PhpParser;
+use Viserio\Filesystem\Parsers\TomlParser;
+use Viserio\Filesystem\Parsers\XmlParser;
+use Viserio\Filesystem\Parsers\YamlParser;
+use Viserio\Support\Traits\DirectorySeparatorTrait;
 
 class FileLoader implements LoaderContract
 {
+    use DirectorySeparatorTrait;
+
     /**
      * The filesystem instance.
      *
@@ -21,11 +25,11 @@ class FileLoader implements LoaderContract
     protected $files;
 
     /**
-     * The default data path.
+     * All directories to look for a file.
      *
-     * @var string
+     * @var array
      */
-    protected $defaultPath;
+    protected $directories;
 
     /**
      * All of the named path hints.
@@ -47,24 +51,64 @@ class FileLoader implements LoaderContract
      * @var array
      */
     protected $parser = [
-        'php'  => PhpParser::class,
         'ini'  => IniParser::class,
-        'xml'  => XmlParser::class,
         'json' => JsonParser::class,
-        'yaml' => YamlParser::class,
+        'php'  => PhpParser::class,
         'toml' => TomlParser::class,
+        'xml'  => XmlParser::class,
+        'yaml' => YamlParser::class,
     ];
 
     /**
      * Create a new file data loader.
      *
      * @param Filesystem $files
-     * @param string     $defaultPath
+     * @param array      $directories
      */
-    public function __construct(Filesystem $files, $defaultPath)
+    public function __construct(Filesystem $files, array $directories)
     {
-        $this->files = $files;
-        $this->defaultPath = $defaultPath;
+        $this->files       = $files;
+        $this->directories = $directories;
+    }
+
+    /**
+     * Get directories
+     *
+     * @return array
+     */
+    public function getDirectories()
+    {
+        return $this->directories;
+    }
+
+    /**
+     * Set directories
+     *
+     * @param array $directories
+     *
+     * @return FileLoader
+     */
+    public function setDirectories(array $directories)
+    {
+        $this->directories = $directories;
+
+        return $this;
+    }
+
+    /**
+     * Add directory
+     *
+     * @param string $directory
+     *
+     * @return FileLoader
+     */
+    public function addDirectory($directory)
+    {
+        if (!in_array($directory, $this->directories)) {
+            $this->directories[] = $directory;
+        }
+
+        return $this;
     }
 
     /**
@@ -79,37 +123,15 @@ class FileLoader implements LoaderContract
      */
     public function load($file, $group = null, $environment = null, $namespace = null)
     {
-        $path = $this->getPath($namespace);
-
         // Determine if the given file exists.
-        $this->exists($file, $group, $environment, $namespace);
+        $dataFile = $this->exists($file, $group, $environment, $namespace);
 
-        // Get checked data file
-        $dataFile = $this->exists[preg_replace('[/]', '', $namespace . $group . $file)];
+        // Set the right Parser for data and return data array
+        $items    = $this->parser($file)->parse($dataFile, $group);
 
-        // Set the right Parser for data
-        $parser = $this->parser($this->files->extension($file), $dataFile);
-
-        // return data array
-        $items = $parser->load($dataFile, $group);
-
-        // Finally we're ready to check for the environment specific data
-        // file which will be merged on top of the main arrays so that they get
-        // precedence over them if we are currently in an environments setup.
-        $env = sprintf('/%s/%s', $environment, $file);
-
-        // Get checked env data file
-        $envdataFile = $this->exists[preg_replace('[/]', '', $namespace . $environment . $group . $file)];
-
-        if ($this->files->exists($envdataFile)) {
-            // Set the right parser for environment data
-            $envParser = $this->parser($this->files->extension($file), $path . $env);
-
-            // Return data array
-            $envItems = $envParser->load($envdataFile, $group);
-
+        if ($envItems = $this->getEnvFileData($file, $group, $environment, $namespace)) {
             // Merege env data and data
-            $items = $this->dataMerge($items, $envItems);
+            return Arr::merge($items, $envItems);
         }
 
         return $items;
@@ -123,22 +145,22 @@ class FileLoader implements LoaderContract
      * @param string|null $environment
      * @param string|null $namespace
      *
-     * @return bool|array
+     * @return bool|string
      */
     public function exists($file, $group = null, $environment = null, $namespace = null)
     {
-        $envKey = $namespace . $environment . $group . $file;
-        $envKey = preg_replace('[/]', '', $envKey);
-
-        $key = $namespace . $group . $file;
-        $key = preg_replace('[/]', '', $key);
+        $envKey = preg_replace('[/]', '', $namespace . $environment . $group . $file);
+        $key    = preg_replace('[/]', '', $namespace . $group . $file);
 
         // We'll first check to see if we have determined if this namespace and
         // group combination have been checked before. If they have, we will
         // just return the cached result so we don't have to hit the disk.
+        if (isset($this->exists[$key]) && $environment === null) {
+            return $this->exists[$key];
+        }
 
-        if (isset($this->exists[$envKey]) || isset($this->exists[$key])) {
-            return $this->exists;
+        if (isset($this->exists[$envKey])) {
+            return $this->exists[$envKey];
         }
 
         $path = $this->getPath($namespace);
@@ -151,21 +173,20 @@ class FileLoader implements LoaderContract
         }
 
         if ($path . $environment . $file === null) {
-            $this->exists[$envKey] = false;
+            return $this->exists[$envKey] = false;
         }
 
         // Finally, we can simply check if this file exists. We will also cache
         // the value in an array so we don't have to go through this process
         // again on subsequent checks for the existing of the data file.
-        $file = sprintf('%s/%s', $path, $file);
-
+        $file    = sprintf('%s/%s', $path, $file);
         $envFile = sprintf('%s/%s/%s', $path, $environment, $file);
 
-        if ($this->files->exists($envFile)) {
-            $this->exists[$envKey] = $envFile;
+        if ($this->files->has($envFile)) {
+            return $this->exists[$envKey] = $this->getDirectorySeparator($envFile);
         }
 
-        return $this->exists[$key] = $file;
+        return $this->exists[$key] = $this->getDirectorySeparator($file);
     }
 
     /**
@@ -174,8 +195,8 @@ class FileLoader implements LoaderContract
      * @param string      $file
      * @param string|null $packages
      * @param string|null $group
-     * @param string|null $env
-     * @param array|null  $items
+     * @param string|null $environment
+     * @param array       $items
      * @param string      $namespace
      *
      * @return array|null
@@ -184,69 +205,27 @@ class FileLoader implements LoaderContract
         $file,
         $packages = null,
         $group = null,
-        $env = null,
-        $items = null,
+        $environment = null,
+        $items = [],
         $namespace = 'packages'
     ) {
         // First we will look for a data file in the packages data
         // folder. If it exists, we will load it and merge it with these original
         // options so that we will easily 'cascade' a package's datas.
-        if ($this->exists($file, sprintf('%s/%s/%s', $namespace, $packages, $env), null, $group)) {
-            $items = $this->dataMerge(
-                $items,
-                $this->files->get(
-                    $this->exists[preg_replace('[/]', '', $namespace . $packages . $env . $group . $file)]
-                )
-            );
+        if ($data = $this->exists($file, sprintf('%s/%s/%s', $namespace, $packages, $environment), null, $group)) {
+            $items = Arr::merge($items, $data);
         }
 
         // Once we have merged the regular package data we need to look for
         // an environment specific data file. If one exists, we will get
         // the contents and merge them on top of this array of options we have.
-        $path = $this->getPackagePath($env, $packages, $group, $file, $namespace);
+        $path = $this->getPackagePath($environment, $packages, $group, $file, $namespace);
 
-        if ($this->exists($path)) {
-            $items = $this->dataMerge($items, $this->files->get($path));
+        if ($data = $this->exists($path)) {
+            $items = Arr::merge($items, $data);
         }
 
         return $items;
-    }
-
-    /**
-     * Get the package path for an environment and group.
-     *
-     * @param string      $env
-     * @param string      $package
-     * @param string      $group
-     * @param string|null $namespace
-     * @param string      $file
-     *
-     * @return string
-     */
-    protected function getPackagePath($env, $package, $group, $file, $namespace = null)
-    {
-        $file = sprintf('packages/%s/%s/%s/%s', $package, $env, $group, $file);
-        $file = preg_replace('[//]', '/', $file);
-
-        return $this->getPath($namespace) . $file;
-    }
-
-    /**
-     * Get the data path for a namespace.
-     *
-     * @param string $namespace
-     *
-     * @return string
-     */
-    protected function getPath($namespace)
-    {
-        if ($namespace === null) {
-            return $this->defaultPath;
-        } elseif (isset($this->hints[$namespace])) {
-            return $this->hints[$namespace];
-        }
-
-        return '';
     }
 
     /**
@@ -254,10 +233,14 @@ class FileLoader implements LoaderContract
      *
      * @param string $namespace
      * @param string $hint
+     *
+     * @return self
      */
     public function addNamespace($namespace, $hint)
     {
         $this->hints[$namespace] = $hint;
+
+        return $this;
     }
 
     /**
@@ -276,10 +259,14 @@ class FileLoader implements LoaderContract
      *
      * @param string         $format The format of the parser
      * @param ParserContract $parser The parser
+     *
+     * @return self
      */
     public function addParser($format, ParserContract $parser)
     {
         $this->parser[$format] = $parser;
+
+        return $this;
     }
 
     /**
@@ -287,47 +274,9 @@ class FileLoader implements LoaderContract
      *
      * @return array
      */
-    public function getFormats()
+    public function getParsers()
     {
         return array_keys($this->parser);
-    }
-
-    /**
-     * Sensibly merge data arrays.
-     *
-     * @param dynamic array
-     *
-     * @return string
-     */
-    protected function dataMerge()
-    {
-        $result = [];
-
-        foreach (func_get_args() as $arg) {
-            foreach ($arg as $key => $value) {
-                if (is_numeric($key)) {
-                    $result[] = $value;
-                } elseif (array_key_exists($key, $result) && is_array($result[$key]) && is_array($value)) {
-                    $result[$key] = $this->dataMerge($result[$key], $value);
-                } else {
-                    $result[$key] = $value;
-                }
-            }
-        }
-
-        return (array) $result;
-    }
-
-    /**
-     * Get a file's contents by requiring it.
-     *
-     * @param string $path
-     *
-     * @return string|null
-     */
-    protected function getRequire($path)
-    {
-        return $this->files->getRequire($path);
     }
 
     /**
@@ -343,27 +292,88 @@ class FileLoader implements LoaderContract
     /**
      * Get the right Parser for data file.
      *
-     * @param string $ext  file extension
-     * @param string $path file path
+     * @param string $ext file extension
      *
-     * @throws \RuntimeException
+     * @throws \Viserio\Contracts\Filesystem\Exception\UnsupportedFormatException
      *
      * @return object
      */
-    protected function parser($ext, $path)
+    protected function parser($ext)
     {
+        $ext = $this->files->extension($ext);
+
         if (isset($this->parser[$ext])) {
-            $class = $this->parser[$ext];
-
-            $parser = new $class($this->getFilesystem());
-
-            if ($parser->supports($path)) {
-                return $parser;
-            }
+            return new $this->parser[$ext]($this->getFilesystem());
         }
 
-        throw new RuntimeException(
-            sprintf('Unable to find the right Parser for [%s]', $ext)
+        throw new UnsupportedFormatException(
+            sprintf('Unable to find the right Parser for [%s].', $ext)
         );
+    }
+
+    /**
+     * Get the package path for an environment and group.
+     *
+     * @param string      $env
+     * @param string      $package
+     * @param string      $group
+     * @param string|null $namespace
+     * @param string      $file
+     *
+     * @return string
+     */
+    protected function getPackagePath($env, $package, $group, $file, $namespace = null)
+    {
+        $file = sprintf('packages/%s/%s/%s/%s', $package, $env, $group, $file);
+        $file = preg_replace('[//]', '/', $file);
+
+        return $this->getDirectorySeparator($this->getPath($namespace) . $file);
+    }
+
+    /**
+     * Get the data path for a namespace.
+     *
+     * @param string $namespace
+     *
+     * @return string
+     */
+    protected function getPath($namespace)
+    {
+        if (isset($this->hints[$namespace])) {
+            return $this->getDirectorySeparator($this->hints[$namespace]);
+        }
+
+        return $this->getDirectorySeparator($this->defaultPath);
+    }
+
+    /**
+     * @param string      $file
+     * @param string|null $group
+     * @param string|null $environment
+     * @param string|null $namespace
+     *
+     * @return array|null
+     */
+    protected function getEnvFileData($file, $group = null, $environment = null, $namespace = null)
+    {
+        $path        = $this->getPath($namespace);
+        $envFilePath = '';
+
+        // Finally we're ready to check for the environment specific data
+        // file which will be merged on top of the main arrays so that they get
+        // precedence over them if we are currently in an environments setup.
+        $env         = sprintf('/%s/%s', $environment, $file);
+
+        // Get checked env data file
+        if (isset($this->exists[preg_replace('[/]', '', $namespace . $environment . $group . $file)])) {
+            $envFilePath = $this->exists[preg_replace('[/]', '', $namespace . $environment . $group . $file)];
+        }
+
+        if ($this->files->exists($envFilePath)) {
+            // Set the right parser for environment data and return data array
+            return $this->parser($envFilePath)->parse($envFilePath, $group);
+        }
+
+        return;
     }
 }

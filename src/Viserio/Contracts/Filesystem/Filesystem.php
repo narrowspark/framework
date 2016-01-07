@@ -18,35 +18,48 @@ interface Filesystem
     const VISIBILITY_PRIVATE = 'private';
 
     /**
-     * Determine if a file exists.
+     * Check whether a file exists.
      *
      * @param string $path
-     *
-     * @return array|bool|null
-     */
-    public function exists($path);
-
-    /**
-     * Get the contents of a file.
-     *
-     * @param string $path
-     *
-     * @throws FileNotFoundException
-     *
-     * @return array|false
-     */
-    public function get($path);
-
-    /**
-     * Write the contents of a file.
-     *
-     * @param string $path
-     * @param string $contents
-     * @param array  $configs
      *
      * @return bool
      */
-    public function put($path, $contents, array $configs = []);
+    public function has($path);
+
+    /**
+     * Read a file.
+     *
+     * @param string $path The path to the file.
+     *
+     * @throws \League\Flysystem\FileNotFoundException
+     *
+     * @return string|false The file contents or false on failure.
+     */
+    public function read($path);
+
+    /**
+     * Write a new file.
+     *
+     * @param string $path     The path of the new file.
+     * @param string $contents The file contents.
+     * @param array  $config   An optional configuration array.
+     *
+     * @return bool True on success, false on failure.
+     */
+    public function write($path, $contents, array $config = []);
+
+    /**
+     * Update an existing file.
+     *
+     * @param string $path     The path of the existing file.
+     * @param string $contents The file contents.
+     * @param array  $config   An optional configuration array.
+     *
+     * @throws \League\Flysystem\FileNotFoundException
+     *
+     * @return bool True on success, false on failure.
+     */
+    public function update($path, $contents, array $config = []);
 
     /**
      * Get the visibility for the given path.
@@ -66,43 +79,20 @@ interface Filesystem
     public function setVisibility($path, $visibility);
 
     /**
-     * Prepend to a file.
+     * Copies a file.
      *
-     * @param string $path
-     * @param string $data
+     * This method only copies the file if the origin file is newer than the target file.
      *
-     * @return bool
+     * By default, if the target already exists, it is not overridden.
+     *
+     * @param string $originFile The original filename
+     * @param string $targetFile The target filename
+     * @param bool   $override   Whether to override an existing file or not
+     *
+     * @throws \Symfony\Component\Filesystem\Exception\FileNotFoundException When originFile doesn't exist
+     * @throws \Symfony\Component\Filesystem\Exception\IOException           When copy fails
      */
-    public function prepend($path, $data);
-
-    /**
-     * Append to a file.
-     *
-     * @param string $path
-     * @param string $data
-     *
-     * @return bool
-     */
-    public function append($path, $data);
-
-    /**
-     * Delete the file at a given path.
-     *
-     * @param string|array $paths
-     *
-     * @return bool
-     */
-    public function delete($paths);
-
-    /**
-     * Copy a file to a new location.
-     *
-     * @param string $from
-     * @param string $to
-     *
-     * @return bool
-     */
-    public function copy($from, $to);
+    public function copy($originFile, $targetFile, $override = false);
 
     /**
      * Move a file to a new location.
@@ -115,51 +105,81 @@ interface Filesystem
     public function move($from, $to);
 
     /**
-     * Get the file size of a given file.
+     * Get a file's size.
      *
-     * @param string $path
+     * @param string $path The path to the file.
      *
-     * @return array|false
+     * @return int|false The file size or false on failure.
      */
-    public function size($path);
+    public function getSize($path);
 
     /**
-     * Get the file's last modification time.
+     * Get a file's mime-type.
+     *
+     * @param string $path The path to the file.
+     *
+     * @throws \League\Flysystem\FileNotFoundException
+     *
+     * @return string|false The file mime-type or false on failure.
+     */
+    public function getMimetype($path);
+
+    /**
+     * Returns a string containing the file extension,
+     * or an empty string if the file has no extension.
      *
      * @param string $path
      *
-     * @return array|false
+     * @return string
      */
-    public function lastModified($path);
+    public function extension($path);
+
+    /**
+     * Get a file's timestamp.
+     *
+     * @param string $path The path to the file.
+     *
+     * @throws \League\Flysystem\FileNotFoundException
+     *
+     * @return string|false The timestamp or false on failure.
+     */
+    public function getTimestamp($path);
+
+    /**
+     * Delete the file at a given path.
+     *
+     * @param string|array $paths
+     *
+     * @return bool
+     */
+    public function delete($paths);
 
     /**
      * Get an array of all files in a directory.
      *
-     * @param string|null $directory
-     * @param bool        $recursive
+     * @param string $directory
      *
      * @return array
      */
-    public function files($directory = null, $recursive = false);
+    public function files($directory);
 
     /**
      * Get all of the files from the given directory (recursive).
      *
-     * @param string|null $directory
+     * @param string $directory
      *
      * @return array
      */
-    public function allFiles($directory = null);
+    public function allFiles($directory);
 
     /**
      * Get all of the directories within a given directory.
      *
-     * @param string|null $directory
-     * @param bool        $recursive
+     * @param string $directory
      *
      * @return array
      */
-    public function directories($directory = null, $recursive = false);
+    public function directories($directory);
 
     /**
      * Get all (recursive) of the directories within a given directory.
@@ -168,14 +188,41 @@ interface Filesystem
      *
      * @return array
      */
-    public function allDirectories($directory = null);
+    public function allDirectories($directory);
+
+    /**
+     * Recursively create a directory.
+     *
+     * @param string $dirname
+     *
+     * @return bool
+     */
+    public function createDirectory($dirname);
 
     /**
      * Recursively delete a directory.
      *
-     * @param string $directory
+     * @param string $dirname
      *
      * @return bool
      */
-    public function deleteDirectory($directory);
+    public function deleteDirectory($dirname);
+
+    /**
+     * Empty the specified directory of all files and folders.
+     *
+     * @param string $dirname
+     *
+     * @return bool
+     */
+    public function cleanDirectory($dirname);
+
+    /**
+     * Determine if the given path is a directory.
+     *
+     * @param string $dirname
+     *
+     * @return bool
+     */
+    public function isDirectory($dirname);
 }

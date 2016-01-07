@@ -9,7 +9,7 @@ use Viserio\Contracts\Filesystem\FileNotFoundException as ContractFileNotFoundEx
 use Viserio\Contracts\Filesystem\Filesystem as CloudFilesystemContract;
 use Viserio\Support\Collection;
 
-class FilesystemAdapter implements CloudFilesystemContract
+class FilesystemAdapter
 {
     /**
      * The Flysystem filesystem implementation.
@@ -160,16 +160,11 @@ class FilesystemAdapter implements CloudFilesystemContract
     }
 
     /**
-     * Copy a file to a new location.
-     *
-     * @param string $from
-     * @param string $to
-     *
-     * @return bool
+     * {@inheritdoc}
      */
-    public function copy($from, $to)
+    public function copy($originFile, $targetFile, $override = false)
     {
-        return $this->driver->copy($from, $to);
+        return $this->driver->copy($originFile, $targetFile);
     }
 
     /**
@@ -289,23 +284,6 @@ class FilesystemAdapter implements CloudFilesystemContract
     }
 
     /**
-     * Filter directory contents by type.
-     *
-     * @param array  $contents
-     * @param string $type
-     *
-     * @return array
-     */
-    protected function filterContentsByType($contents, $type)
-    {
-        return Collection::make($contents)
-           ->where('type', $type)
-           ->pluck('path')
-           ->values()
-           ->all();
-    }
-
-    /**
      * Get the Flysystem driver.
      *
      * @return AdapterInterface
@@ -328,6 +306,23 @@ class FilesystemAdapter implements CloudFilesystemContract
     public function __call($method, array $arguments)
     {
         return $this->driver->__call($method, $arguments);
+    }
+
+    /**
+     * Filter directory contents by type.
+     *
+     * @param array  $contents
+     * @param string $type
+     *
+     * @return array
+     */
+    protected function filterContentsByType($contents, $type)
+    {
+        // return Collection::make($contents)
+        //    ->where('type', $type)
+        //    ->pluck('path')
+        //    ->values()
+        //    ->all();
     }
 
     /**

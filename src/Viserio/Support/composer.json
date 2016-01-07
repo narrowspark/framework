@@ -18,7 +18,7 @@
         }
     ],
     "require": {
-        "php"                                 : ">=5.6.4",
+        "php"                                 : "^5.6|^7.0",
         "container-interop/container-interop" : "~1.1",
         "danielstjules/stringy"               : "~2.2",
         "ext-mbstring"                        : "*",
@@ -26,9 +26,8 @@
         "viserio/contracts"                   : "self.version"
     },
     "require-dev": {
-        "cekurte/environment"                 : "~0.1.2",
         "narrowspark/php-cs-fixer-config"     : "~1.1.5",
-        "narrowspark/testing-helper"          : "~1.1",
+        "narrowspark/testing-helper"          : "~1.5",
         "mockery/mockery"                     : "~0.9.3",
         "phpunit/phpunit"                     : "~5.1.3"
     },
@@ -39,7 +38,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Viserio\\Support\\Tests\\"       : "tests/"
+            "Viserio\\Support\\Tests\\"       : "Tests/"
         }
     },
     "extra": {
@@ -48,8 +47,8 @@
         }
     },
     "suggest": {
-        "symfony/var-dumper"                  : "Improves the Helper::dump() (~2.8|~3.0).",
-        "cekurte/environment"                 : "Required to use Helper::env() (~0.1.2)."
+        "symfony/var-dumper"                  : "Improves the Dumper::dump() (~2.8|~3.0).",
+        "php-di/invoker"                      : "Required to use the Invoker Class (~1.2)"
     },
     "minimum-stability"                       : "dev",
     "prefer-stable"                           : true

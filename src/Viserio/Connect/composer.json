@@ -18,46 +18,50 @@
         }
     ],
     "require": {
-        "php"                             : ">=5.6.4.4",
-        "viserio/contracts"               : "self.version",
-        "viserio/config"                  : "self.version",
-        "viserio/support"                 : "self.version"
+        "php"                                                : "^5.6|^7.0",
+        "container-interop/container-interop"                : "~1.1",
+        "narrowspark/arr"                                    : "~1.0",
+        "viserio/contracts"                                  : "self.version",
+        "viserio/support"                                    : "self.version"
     },
     "require-dev": {
-        "narrowspark/php-cs-fixer-config" : "~1.1.5",
-        "narrowspark/testing-helper"      : "~1.1",
-        "phpunit/phpunit"                 : "~5.1.3",
-        "predis/predis"                   : "~1.0.1"
+        "narrowspark/php-cs-fixer-config"                    : "~1.1.5",
+        "narrowspark/testing-helper"                         : "~1.5",
+        "phpunit/phpunit"                                    : "~5.1.3",
+        "predis/predis"                                      : "~1.0.1"
     },
     "autoload": {
         "psr-4": {
-            "Viserio\\Connect\\"          : ""
+            "Viserio\\Connect\\"                             : ""
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Viserio\\Connect\\Tests\\"   : "Tests/"
+            "Viserio\\Connect\\Tests\\"                      : "Tests/"
         }
     },
     "extra": {
         "branch-alias": {
-            "dev-master"                  : "1.0-dev"
+            "dev-master"                                     : "1.0-dev"
         }
     },
-    "suggest": {
-        "ext-apc"                         : "Required to use apc",
-        "ext-memcached"                   : "Required to use memcached",
-        "ext-mongo"                       : "Required to use mongo",
-        "ext-pdo"                         : "Required to use PDO adapters",
-        "ext-pdo_dblib"                   : "Required to use MSSQL databases on Liunx/UNIX platform",
-        "ext-pdo-firebird"                : "Required to use Firebird databases",
-        "ext-pdo-mysql"                   : "Required to use MySQL or MariaDB databases",
-        "ext-pdo-pqsql"                   : "Required to use PostgreSQL databases",
-        "ext-pdo-sqlite"                  : "Required to use SQLite databases",
-        "ext-pdo_sqlsrv"                  : "Required to use MSSQL databases on Windows platform",
-        "ext-pdo_oci"                     : "Required to use oracle databases",
-        "predis/predis"                   : "Required to use the redis cache and queue drivers (~1.0.3)."
+    "provide": {
+        "container-interop/container-interop-implementation" : "~1.1"
     },
-    "minimum-stability"                   : "dev",
-    "prefer-stable"                       : true
+    "suggest": {
+        "ext-apc"                                            : "Required to use apc",
+        "ext-memcached"                                      : "Required to use memcached",
+        "ext-mongo"                                          : "Required to use mongo",
+        "ext-pdo"                                            : "Required to use PDO adapters",
+        "ext-pdo_dblib"                                      : "Required to use MSSQL databases on Liunx/UNIX platform",
+        "ext-pdo-firebird"                                   : "Required to use Firebird databases",
+        "ext-pdo-mysql"                                      : "Required to use MySQL or MariaDB databases",
+        "ext-pdo-pqsql"                                      : "Required to use PostgreSQL databases",
+        "ext-pdo-sqlite"                                     : "Required to use SQLite databases",
+        "ext-pdo_sqlsrv"                                     : "Required to use MSSQL databases on Windows platform",
+        "ext-pdo_oci"                                        : "Required to use oracle databases",
+        "predis/predis"                                      : "Required to use the redis cache and queue drivers (~1.0.3)."
+    },
+    "minimum-stability"                                      : "dev",
+    "prefer-stable"                                          : true
 }

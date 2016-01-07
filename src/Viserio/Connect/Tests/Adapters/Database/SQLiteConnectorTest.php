@@ -1,20 +1,17 @@
 <?php
 namespace Viserio\Connect\Tests\Adapter\Database;
 
-use Mockery as Mock;
+use Narrowspark\TestingHelper\Traits\MockeryTrait;
 
 class SQLiteConnectorTest extends \PHPUnit_Framework_TestCase
 {
-    protected function setUp()
+    use MockeryTrait;
+
+    public function setUp()
     {
         if (!class_exists('PDO')) {
-            $this->markTestSkipped('PDO module not installed');
+            $this->markTestSkipped('PDO module is not installed.');
         }
-    }
-
-    protected function tearDown()
-    {
-        Mock::close();
     }
 
     /**
@@ -38,7 +35,7 @@ class SQLiteConnectorTest extends \PHPUnit_Framework_TestCase
     {
         $dsn = 'sqlite:' . __DIR__;
         $config = ['database' => __DIR__];
-        $connection = Mock::mock('stdClass');
+        $connection = $this->mock('stdClass');
 
         $connector = $this->getMock(
             'Viserio\Connect\Adapters\Database\SQLiteConnector',
@@ -60,7 +57,7 @@ class SQLiteConnectorTest extends \PHPUnit_Framework_TestCase
     {
         $dsn = 'sqlite::memory:';
         $config = ['database' => ':memory:'];
-        $connection = Mock::mock('stdClass');
+        $connection = $this->mock('stdClass');
 
         $connector = $this->getMock(
             'Viserio\Connect\Adapters\Database\SQLiteConnector',

@@ -9,7 +9,7 @@ class AbstractDatabaseConnectorTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         if (!class_exists('PDO')) {
-            $this->markTestSkipped('PDO module not installed');
+            $this->markTestSkipped('PDO module is not installed.');
         }
     }
 
@@ -64,6 +64,6 @@ class AbstractDatabaseConnectorTest extends \PHPUnit_Framework_TestCase
             'password' => '',
         ];
 
-        $this->assertSame('PDO', $connector->createConnection('mysql:dbname=narrowspark;host=fails', $config, []));
+        $connector->createConnection('mysql:dbname=narrowspark;host=fails', $config, []);
     }
 }

@@ -4,14 +4,16 @@ namespace Viserio\Contracts\Filesystem;
 interface Parser
 {
     /**
-     * Loads a file and gets its' contents as an array.
+     * Loads a file and output content as array.
      *
      * @param string      $filename
      * @param string|null $group
      *
+     * @throws \Viserio\Contracts\Filesystem\Exception\LoadingException
+     *
      * @return array|string|null
      */
-    public function load($filename, $group = null);
+    public function parse($filename, $group = null);
 
     /**
      * Checking if file ist supported.
@@ -25,9 +27,9 @@ interface Parser
     /**
      * Format a data file for saving.
      *
-     * @param array $data data
+     * @param array $data
      *
      * @return string|false data export
      */
-    public function format(array $data);
+    public function dump(array $data);
 }

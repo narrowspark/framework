@@ -1,7 +1,7 @@
 <?php
 namespace Viserio\Application\Traits;
 
-use Viserio\Support\Arr;
+use Narrowspark\Arr\StaticArr as Arr;
 
 trait PathsTrait
 {
