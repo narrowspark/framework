@@ -27,7 +27,7 @@
     },
     "require-dev": {
         "cekurte/environment"                 : "~0.1.2",
-        "fabpot/php-cs-fixer"                 : "dev-master",
+        "php-di/invoker"                      : "~1.2",
         "narrowspark/php-cs-fixer-config"     : "~1.1.4",
         "mockery/mockery"                     : "~0.9.3",
         "phpunit/phpunit"                     : "~5.1.3"
@@ -49,7 +49,8 @@
     },
     "suggest": {
         "symfony/var-dumper"                  : "Improves the Helper::dump() (~2.8|~3.0).",
-        "cekurte/environment"                 : "Required to use Helper::env() (~0.1.2)."
+        "cekurte/environment"                 : "Required to use Helper::env() (~0.1.2).",
+        "php-di/invoker"                      : "Required to use the Invoker Class (~1.2)"
     },
     "minimum-stability"                       : "dev",
     "prefer-stable"                           : true

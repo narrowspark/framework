@@ -1,8 +1,10 @@
 <?php
 namespace Viserio\Support;
 
+use ReflectionClass;
 use Cekurte\Environment\Environment;
 use Viserio\Support\Traits\ValueTrait;
+use Viserio\StaticalProxy\StaticalProxy;
 
 class Helper
 {
@@ -33,7 +35,7 @@ class Helper
             return self::app()->make($make);
         }
 
-        return StaticalProxy::getFacadeApplication();
+        return StaticalProxy::getInstance();
     }
 
     /**
@@ -155,7 +157,7 @@ class Helper
      */
     public static function callPrivateMethod($object, $method, array $args = [])
     {
-        $reflection = new \ReflectionClass(get_class($object));
+        $reflection = new ReflectionClass(get_class($object));
         $closure = $reflection->getMethod($method)->getClosure($object);
 
         return call_user_func_array($closure, $args);

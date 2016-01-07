@@ -1,5 +1,5 @@
 <?php
-namespace Viserio\Support\Test;
+namespace Viserio\Support\Tests;
 
 use Viserio\Support\Arr;
 
