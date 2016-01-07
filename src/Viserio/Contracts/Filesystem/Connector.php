@@ -8,7 +8,9 @@ interface Connector
      *
      * @param array $config
      *
-     * @return object
+     * @throws \RuntimeException|\InvalidArgumentException
+     *
+     * @return \League\Flysystem\AdapterInterface
      */
     public function connect(array $config);
 }

@@ -1,21 +1,18 @@
 <?php
 namespace Viserio\Connect\Tests\Adapter\Database;
 
-use Mockery as Mock;
+use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use Viserio\Support\Str;
 
 class MSSQLConnectorTest extends \PHPUnit_Framework_TestCase
 {
-    protected function setUp()
+    use MockeryTrait;
+
+    public function setUp()
     {
         if (!class_exists('PDO')) {
-            $this->markTestSkipped('PDO module not installed');
+            $this->markTestSkipped('PDO module is not installed.');
         }
-    }
-
-    protected function tearDown()
-    {
-        Mock::close();
     }
 
     /**
@@ -33,7 +30,7 @@ class MSSQLConnectorTest extends \PHPUnit_Framework_TestCase
             $this->markTestSkipped('Can only run on windows.');
         }
 
-        $connection = Mock::mock('stdClass');
+        $connection = $this->mock('stdClass');
 
         $connector = $this->getMock(
             'Viserio\Connect\Adapters\Database\MSSQLConnector',
@@ -93,7 +90,7 @@ class MSSQLConnectorTest extends \PHPUnit_Framework_TestCase
             $this->markTestSkipped('Can\'t run on windows.');
         }
 
-        $connection = Mock::mock('stdClass');
+        $connection = $this->mock('stdClass');
 
         $connector = $this->getMock(
             'Viserio\Connect\Adapters\Database\MSSQLConnector',
