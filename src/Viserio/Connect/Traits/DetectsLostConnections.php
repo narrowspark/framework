@@ -25,6 +25,7 @@ trait DetectsLostConnections
             'Error while sending',
             'Operation in progress',
             'decryption failed or bad record mac',
+            'SSL connection has been closed unexpectedly',
         ]);
     }
 }
