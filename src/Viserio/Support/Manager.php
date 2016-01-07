@@ -140,7 +140,9 @@ abstract class Manager
      */
     public function hasDriver($driver)
     {
-        return isset($this->supportedDrivers[$driver]) || isset($this->customCreators[$driver]);
+        return isset($this->supportedDrivers[$driver]) ||
+            in_array($driver, $this->supportedDrivers, true) ||
+            isset($this->customCreators[$driver]);
     }
 
     /**
@@ -178,6 +180,8 @@ abstract class Manager
             return $this->callCustomCreator($driver, $options);
         } elseif (method_exists($this, $method)) {
             return empty($options) ? $this->$method() : $this->$method($options);
+        } elseif (isset($this->supportedDrivers[$driver]) && class_exists($this->supportedDrivers[$driver])) {
+            return new $this->supportedDrivers[$driver]();
         }
 
         throw new RuntimeException(sprintf('Driver [%s] not supported.', $driver));

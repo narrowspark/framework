@@ -1,6 +1,7 @@
 <?php
 namespace Viserio\Connect;
 
+use Interop\Container\ContainerInterface;
 use PDO;
 use RuntimeException;
 use Viserio\Connect\Adapters\Database\DblibConnector;
@@ -17,7 +18,6 @@ use Viserio\Connect\Adapters\Database\SQLiteConnector;
 use Viserio\Connect\Adapters\Database\SqlServerConnector;
 use Viserio\Connect\Adapters\MemcachedConnector;
 use Viserio\Connect\Adapters\PredisConnector;
-use Viserio\Contracts\Config\Manager as ConfigManager;
 use Viserio\Contracts\Connect\ConnectionFactory as ConnectionFactoryContract;
 use Viserio\Contracts\Connect\Connector as ConnectorContract;
 
@@ -63,16 +63,16 @@ class ConnectionFactory implements ConnectionFactoryContract
     /**
      * Conifg instace.
      *
-     * @var ConfigManager
+     * @var \Interop\Container\ContainerInterface
      */
-    protected $config;
+    protected $container;
 
     /**
-     * @param ConfigManager $config
+     * @param \Interop\Container\ContainerInterface $container
      */
-    public function __construct(ConfigManager $config)
+    public function __construct(ContainerInterface $container)
     {
-        $this->config = $config;
+        $this->container = $container;
     }
 
     /**
@@ -113,7 +113,7 @@ class ConnectionFactory implements ConnectionFactoryContract
      */
     public function getConnectionConfig($name)
     {
-        return $this->getConfig()->get($name, []);
+        return $this->container->get($name, []);
     }
 
     /**
@@ -141,13 +141,13 @@ class ConnectionFactory implements ConnectionFactoryContract
     }
 
     /**
-     * Get the config instance.
+     * Get the container instance.
      *
-     * @return \Viserio\Contracts\Config\Manager
+     * @return \Interop\Container\ContainerInterface
      */
-    public function getConfig()
+    public function getContainer()
     {
-        return $this->config;
+        return $this->container;
     }
 
     /**

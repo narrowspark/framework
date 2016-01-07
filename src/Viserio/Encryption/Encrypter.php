@@ -158,6 +158,27 @@ class Encrypter implements EncrypterContract
     }
 
     /**
+     * Compare two encrypted values.
+     *
+     * @param mixed $e1
+     * @param mixed $e2
+     * @param bool  $loose
+     *
+     * @return bool
+     */
+    public function compare($encrypted1, $encrypted2, $loose = false)
+    {
+        $encrypt1 = $this->getCompareValue($encrypted1);
+        $encrypt2 = $this->getCompareValue($encrypted2);
+
+        if ($loose) {
+            return $encrypt1 == $encrypt2;
+        }
+
+        return $encrypt1 === $encrypt2;
+    }
+
+    /**
      * Get generator.
      *
      * @return \Viserio\Contracts\Encryption\Adapter
@@ -194,5 +215,21 @@ class Encrypter implements EncrypterContract
         $validCiphers = implode(', ', array_keys($this->lengths));
 
         throw new RuntimeException("The only supported ciphers are [$validCiphers] with the correct key lengths.");
+    }
+
+    /**
+     * Get the decrypted value of a possibly encrypted variable.
+     *
+     * @param mixed $encrypted
+     *
+     * @return mixed
+     */
+    protected function getCompareValue($encrypted)
+    {
+        try {
+            return $this->decrypt($encrypted);
+        } catch (DecryptException $e) {
+            return $encrypted;
+        }
     }
 }

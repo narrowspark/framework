@@ -1,21 +1,18 @@
 <?php
 namespace Viserio\Connect\Tests\Adapter\Database;
 
-use Mockery as Mock;
+use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use PDO;
 
 class SqlServerConnectorTest extends \PHPUnit_Framework_TestCase
 {
-    protected function setUp()
+    use MockeryTrait;
+
+    public function setUp()
     {
         if (!class_exists('PDO')) {
-            $this->markTestSkipped('PDO module not installed');
+            $this->markTestSkipped('PDO module is not installed.');
         }
-    }
-
-    protected function tearDown()
-    {
-        Mock::close();
     }
 
     public function testSqlServerConnectCallsCreateConnectionWithProperArguments()
@@ -23,7 +20,7 @@ class SqlServerConnectorTest extends \PHPUnit_Framework_TestCase
         $config = ['host' => 'foo', 'database' => 'bar'];
 
         $dsn = $this->getDsn($config);
-        $connection = Mock::mock('stdClass');
+        $connection = $this->mock('stdClass');
 
         $connector = $this->getMock(
             'Viserio\Connect\Adapters\Database\SqlServerConnector',
@@ -46,7 +43,7 @@ class SqlServerConnectorTest extends \PHPUnit_Framework_TestCase
         $config = ['host' => 'foo', 'database' => 'bar', 'port' => 111, 'appname' => 'baz', 'charset' => 'utf-8'];
         $dsn = $this->getDsn($config);
 
-        $connection = Mock::mock('stdClass');
+        $connection = $this->mock('stdClass');
         $connector = $this->getMock(
             'Viserio\Connect\Adapters\Database\SqlServerConnector',
             ['createConnection', 'getOptions']
