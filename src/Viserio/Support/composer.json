@@ -27,8 +27,8 @@
     },
     "require-dev": {
         "cekurte/environment"                 : "~0.1.2",
-        "fabpot/php-cs-fixer"                 : "dev-master",
-        "narrowspark/php-cs-fixer-config"     : "~1.1.4",
+        "narrowspark/php-cs-fixer-config"     : "~1.1.5",
+        "narrowspark/testing-helper"          : "~1.1",
         "mockery/mockery"                     : "~0.9.3",
         "phpunit/phpunit"                     : "~5.1.3"
     },
