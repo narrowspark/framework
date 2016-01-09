@@ -2,7 +2,7 @@
 namespace Viserio\Support\Tests;
 
 use Viserio\Support\Invoker;
-use Viserio\Support\Tests\Fixture\MockContainer;
+use Narrowspark\TestingHelper\ArrayContainer;
 
 class InvokerTest extends \PHPUnit_Framework_TestCase
 {
@@ -11,7 +11,7 @@ class InvokerTest extends \PHPUnit_Framework_TestCase
         $invoker = (new Invoker())
             ->injectByTypeHint(true)
             ->injectByParameterName(true)
-            ->setContainer(new MockContainer());
+            ->setContainer(new ArrayContainer());
 
         $call =  $invoker->call(function ($name) {
             return 'Hello ' . $name;

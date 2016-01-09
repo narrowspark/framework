@@ -1,16 +1,15 @@
 <?php
 namespace Viserio\Cache\Store;
 
+use Closure;
 use Carbon\Carbon;
 use Viserio\Cache\Adapter\Traits\MultipleTrait;
 use Viserio\Contracts\Cache\Adapter;
 use Viserio\Contracts\Cache\Store as StoreContract;
-use Viserio\Support\Traits\ValueTrait;
 
 class TaggedCache implements StoreContract
 {
     use MultipleTrait;
-    use ValueTrait;
 
     /**
      * The cache store implementation.
@@ -68,6 +67,8 @@ class TaggedCache implements StoreContract
     public function get($key, $default = null)
     {
         $value = $this->store->get($this->taggedItemKey($key));
+
+        $value = $value instanceof Closure ? $value() : $value;
 
         return ($value !== null) ? $value : self::value($default);
     }

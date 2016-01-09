@@ -12,18 +12,18 @@ trait DirectorySeparatorTrait
      */
     protected function getDirectorySeparator($paths)
     {
-        $separators = DIRECTORY_SEPARATOR !== '/';
+        if (DIRECTORY_SEPARATOR !== '/') {
+            if (is_string($paths)) {
+                return str_replace(['/'], DIRECTORY_SEPARATOR, $paths);
+            } elseif (is_array($paths)) {
+                $newPaths = [];
 
-        if (is_string($paths) && $separators) {
-            return str_replace(['/'], DIRECTORY_SEPARATOR, $paths);
-        } elseif (is_array($paths) && $separators) {
-            $newPaths = [];
+                foreach ($paths as $path) {
+                    $newPaths[] = str_replace(['/'], DIRECTORY_SEPARATOR, $path);
+                }
 
-            foreach ($paths as $path) {
-                $newPaths[] = str_replace(['/'], DIRECTORY_SEPARATOR, $path);
+                return $newPaths;
             }
-
-            return $newPaths;
         }
 
         return $paths;

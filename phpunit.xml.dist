@@ -41,7 +41,7 @@
     </filter>
 
     <logging>
-        <log type="coverage-html" target="build/logs/report" lowUpperBound="35" highLowerBound="70"/>
-        <log type="coverage-clover" target="build/logs/coverage.clover"/>
+        <!-- <log type="coverage-html" target="build/logs/report" lowUpperBound="35" highLowerBound="70"/>
+        <log type="coverage-clover" target="build/logs/coverage.clover"/> -->
     </logging>
 </phpunit>

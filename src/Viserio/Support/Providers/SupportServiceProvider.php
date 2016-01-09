@@ -5,8 +5,6 @@ use RandomLib\Factory as RandomLib;
 use Viserio\Application\ServiceProvider;
 use Viserio\Support\AliasLoader;
 use Viserio\Support\Arr;
-use Viserio\Support\Helper;
-use Viserio\Support\StaticalProxyResolver;
 use Viserio\Support\Str;
 
 class SupportServiceProvider extends ServiceProvider
@@ -16,23 +14,10 @@ class SupportServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->registerHelper();
         $this->registerArr();
         $this->registerStr();
         $this->registerStaticalProxyResolver();
         $this->registerAliasLoader();
-    }
-
-    /**
-     * Register Helpers.
-     *
-     * @return \Viserio\Support\Helper|null
-     */
-    protected function registerHelper()
-    {
-        $this->app->singleton('helper', function () {
-            return new Helper();
-        });
     }
 
     /**
@@ -56,13 +41,6 @@ class SupportServiceProvider extends ServiceProvider
     {
         $this->app->singleton('str', function () {
             return new Str();
-        });
-    }
-
-    protected function registerStaticalProxyResolver()
-    {
-        $this->app->singleton('statical.resolver', function () {
-            return new StaticalProxyResolver();
         });
     }
 

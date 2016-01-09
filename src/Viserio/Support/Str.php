@@ -65,30 +65,15 @@ class Str extends StaticStringy
      * @param string $value
      * @param int    $limit
      * @param string $end
-     * @param bool   $preserveWords
      *
      * @return string
      */
-    public static function limit($value, $limit = 100, $end = '...', $preserveWords = false)
+    public static function limit($value, $limit = 100, $end = '...')
     {
-        if (mb_strlen($value) <= $limit) {
+        if (mb_strwidth($value, 'UTF-8') <= $limit) {
             return $value;
         }
-
-        if ($preserveWords) {
-            $cutArea = mb_substr($value, $limit - 1, 2, 'UTF-8');
-
-            if (strpos($cutArea, ' ') === false) {
-                $value = mb_substr($value, 0, $limit, 'UTF-8');
-                $spacePos = strrpos($value, ' ');
-
-                if ($spacePos !== false) {
-                    return rtrim(mb_substr($value, 0, $spacePos, 'UTF-8')) . $end;
-                }
-            }
-        }
-
-        return rtrim(mb_substr($value, 0, $limit, 'UTF-8')) . $end;
+        return rtrim(mb_strimwidth($value, 0, $limit, '', 'UTF-8')).$end;
     }
 
     /**
@@ -100,9 +85,9 @@ class Str extends StaticStringy
      *
      * @return string
      */
-    public static function words($value, $words = 100, $end = '…')
+    public static function words($value, $words = 100, $end = '...')
     {
-        preg_match('/^\s*+(?:\S++\s*+){1,' . $words . '}/u', $value, $matches);
+        preg_match('/^\s*+(?:\S++\s*+){1,'.$words.'}/u', $value, $matches);
 
         if (!isset($matches[0]) || strlen($value) === strlen($matches[0])) {
             return $value;
@@ -232,17 +217,28 @@ class Str extends StaticStringy
      */
     public static function snake($value, $delimiter = '_')
     {
-        $key = $value . $delimiter;
+        $key = $value.$delimiter;
 
         if (isset(static::$snakeCache[$key])) {
             return static::$snakeCache[$key];
         }
 
-        if (!ctype_lower($value)) {
-            $value = strtolower(preg_replace('/(.)(?=[A-Z])/', '$1' . $delimiter, $value));
-        }
+        $value    = preg_replace('/\s+/', '', $value);
+        $value[0] = strtolower($value[0]);
+        $len      = strlen($value);
 
-        $value = strtolower(preg_replace('/([^' . preg_quote($delimiter) . '])(?=[A-Z])/', '$1' . $delimiter, $value));
+        for ($i = 0; $i < $len; ++$i) {
+            // See if we have an uppercase character and replace; ord A = 65, Z = 90.
+            if (ord($value[$i]) > 64 && ord($value[$i]) < 91) {
+                // Replace uppercase of with underscore and lowercase.
+                $replace = $delimiter . strtolower($value[$i]);
+                $value   = substr_replace($value, $replace, $i, 1);
+
+                // Increase length of class and position since we made the string longer.
+                ++$len;
+                ++$i;
+            }
+        }
 
         return static::$snakeCache[$key] = $value;
     }
