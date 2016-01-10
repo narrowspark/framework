@@ -73,7 +73,8 @@ class Str extends StaticStringy
         if (mb_strwidth($value, 'UTF-8') <= $limit) {
             return $value;
         }
-        return rtrim(mb_strimwidth($value, 0, $limit, '', 'UTF-8')).$end;
+
+        return rtrim(mb_strimwidth($value, 0, $limit, '', 'UTF-8')) . $end;
     }
 
     /**
@@ -87,7 +88,7 @@ class Str extends StaticStringy
      */
     public static function words($value, $words = 100, $end = '...')
     {
-        preg_match('/^\s*+(?:\S++\s*+){1,'.$words.'}/u', $value, $matches);
+        preg_match('/^\s*+(?:\S++\s*+){1,' . $words . '}/u', $value, $matches);
 
         if (!isset($matches[0]) || strlen($value) === strlen($matches[0])) {
             return $value;
@@ -217,7 +218,7 @@ class Str extends StaticStringy
      */
     public static function snake($value, $delimiter = '_')
     {
-        $key = $value.$delimiter;
+        $key = $value . $delimiter;
 
         if (isset(static::$snakeCache[$key])) {
             return static::$snakeCache[$key];

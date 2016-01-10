@@ -5,5 +5,4 @@ use Viserio\Support\Manager;
 
 class TestManager extends Manager
 {
-
 }

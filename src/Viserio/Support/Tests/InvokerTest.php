@@ -1,8 +1,8 @@
 <?php
 namespace Viserio\Support\Tests;
 
-use Viserio\Support\Invoker;
 use Narrowspark\TestingHelper\ArrayContainer;
+use Viserio\Support\Invoker;
 
 class InvokerTest extends \PHPUnit_Framework_TestCase
 {
