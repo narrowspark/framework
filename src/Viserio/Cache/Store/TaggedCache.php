@@ -1,8 +1,8 @@
 <?php
 namespace Viserio\Cache\Store;
 
-use Closure;
 use Carbon\Carbon;
+use Closure;
 use Viserio\Cache\Adapter\Traits\MultipleTrait;
 use Viserio\Contracts\Cache\Adapter;
 use Viserio\Contracts\Cache\Store as StoreContract;
