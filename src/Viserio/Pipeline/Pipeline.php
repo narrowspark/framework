@@ -31,7 +31,6 @@ class Pipeline implements PipelineContract
      */
     protected $stages = [];
 
-
     /**
      * Set the object being sent through the pipeline.
      *

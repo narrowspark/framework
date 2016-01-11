@@ -3,8 +3,8 @@ namespace Viserio\Pipeline\Tests;
 
 use Narrowspark\TestingHelper\ArrayContainer;
 use Viserio\Pipeline\Pipeline;
-use Viserio\Pipeline\Tests\Fixture\PipelineTestPipeOne;
 use Viserio\Pipeline\Tests\Fixture\PipelineTestParameterPipe;
+use Viserio\Pipeline\Tests\Fixture\PipelineTestPipeOne;
 
 class PipelineTest extends \PHPUnit_Framework_TestCase
 {
