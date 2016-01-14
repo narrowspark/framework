@@ -1,10 +1,10 @@
 <?php
 namespace Viserio\Cache\Adapter;
 
+use Narrowspark\Arr\StaticArr as Arr;
 use Viserio\Cache\Adapter\Traits\MultipleTrait;
 use Viserio\Contracts\Cache\Adapter as AdapterContract;
 use Viserio\Filesystem\Filesystem;
-use Narrowspark\Arr\StaticArr as Arr;
 
 class FileCache implements AdapterContract
 {

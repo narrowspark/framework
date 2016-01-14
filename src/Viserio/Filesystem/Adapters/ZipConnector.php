@@ -2,8 +2,8 @@
 namespace Viserio\Filesystem\Adapters;
 
 use League\Flysystem\ZipArchive\ZipArchiveAdapter;
-use Viserio\Contracts\Filesystem\Connector as ConnectorContract;
 use Narrowspark\Arr\StaticArr as Arr;
+use Viserio\Contracts\Filesystem\Connector as ConnectorContract;
 
 class ZipConnector implements ConnectorContract
 {

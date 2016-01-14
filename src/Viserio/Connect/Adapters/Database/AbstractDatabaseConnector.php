@@ -1,11 +1,11 @@
 <?php
 namespace Viserio\Connect\Adapters\Database;
 
+use Narrowspark\Arr\StaticArr as Arr;
 use PDO;
 use PDOException;
 use Viserio\Connect\Traits\DetectsLostConnections;
 use Viserio\Contracts\Connect\Connector as ConnectorContract;
-use Narrowspark\Arr\StaticArr as Arr;
 
 abstract class AbstractDatabaseConnector implements ConnectorContract
 {

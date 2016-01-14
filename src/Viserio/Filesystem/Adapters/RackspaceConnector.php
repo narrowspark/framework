@@ -2,10 +2,10 @@
 namespace Viserio\Filesystem\Adapters;
 
 use League\Flysystem\Adapter\Rackspace;
+use Narrowspark\Arr\StaticArr as Arr;
 use OpenCloud\ObjectStore\Resource\Container;
 use OpenCloud\OpenStack;
 use Viserio\Contracts\Filesystem\Connector as ConnectorContract;
-use Narrowspark\Arr\StaticArr as Arr;
 
 class RackspaceConnector implements ConnectorContract
 {

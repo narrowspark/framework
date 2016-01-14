@@ -3,8 +3,8 @@ namespace Viserio\Filesystem\Adapters;
 
 use Aws\S3\S3Client;
 use League\Flysystem\AwsS3v3\AwsS3Adapter as AwsS3v3;
-use Viserio\Contracts\Filesystem\Connector as ConnectorContract;
 use Narrowspark\Arr\StaticArr as Arr;
+use Viserio\Contracts\Filesystem\Connector as ConnectorContract;
 
 class AwsS3Connector implements ConnectorContract
 {
