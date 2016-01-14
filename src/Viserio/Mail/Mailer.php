@@ -4,6 +4,7 @@ namespace Viserio\Mail;
 use Closure;
 use Exception;
 use InvalidArgumentException;
+use Narrowspark\Arr\StaticArr as Arr;
 use Psr\Log\LoggerInterface;
 use Swift_Mailer;
 use Swift_Message;
@@ -11,7 +12,6 @@ use Swift_Transport_AbstractSmtpTransport;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Viserio\Contracts\Mail\Mailer as MailerContract;
 use Viserio\Contracts\View\Factory;
-use Narrowspark\Arr\StaticArr as Arr;
 
 class Mailer implements MailerContract
 {

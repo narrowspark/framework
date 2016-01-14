@@ -3,9 +3,9 @@ namespace Viserio\Connect\Adapters\Database;
 
 use Mongo;
 use MongoConnectionException;
+use Narrowspark\Arr\StaticArr as Arr;
 use Viserio\Connect\Traits\DetectsLostConnections;
 use Viserio\Contracts\Connect\Connector as ConnectorContract;
-use Narrowspark\Arr\StaticArr as Arr;
 
 class MongoConnector implements ConnectorContract
 {

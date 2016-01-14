@@ -1,10 +1,10 @@
 <?php
 namespace Viserio\Support\Providers;
 
+use Narrowspark\Arr\StaticArr as Arr;
 use RandomLib\Factory as RandomLib;
 use Viserio\Application\ServiceProvider;
 use Viserio\Support\AliasLoader;
-use Narrowspark\Arr\StaticArr as Arr;
 use Viserio\Support\Str;
 
 class SupportServiceProvider extends ServiceProvider

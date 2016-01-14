@@ -1,12 +1,12 @@
 <?php
 namespace Viserio\Database;
 
+use Narrowspark\Arr\StaticArr as Arr;
 use Viserio\Contracts\Cache\Manager as CacheContract;
 use Viserio\Contracts\Config\Manager as ConfigContract;
 use Viserio\Contracts\Database\Connection as ConnectionContract;
 use Viserio\Contracts\Database\ConnectionResolver as ConnectionResolverContract;
 use Viserio\Database\Connection\ConnectionFactory;
-use Narrowspark\Arr\StaticArr as Arr;
 
 class DatabaseManager implements ConnectionResolverContract
 {

@@ -5,10 +5,10 @@ use Carbon\Carbon;
 use Closure;
 use DateTime;
 use Exception;
+use Narrowspark\Arr\Traits\ValueTrait;
 use Viserio\Cache\Adapter\Traits\MultipleTrait;
 use Viserio\Contracts\Cache\Adapter;
 use Viserio\Contracts\Cache\Store as StoreContract;
-use Narrowspark\Arr\Traits\ValueTrait;
 
 class TaggedCache implements StoreContract
 {
