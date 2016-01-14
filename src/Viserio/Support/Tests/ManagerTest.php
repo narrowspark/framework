@@ -1,10 +1,10 @@
 <?php
 namespace Viserio\Support\Tests;
 
-use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use Narrowspark\TestingHelper\ArrayContainer;
-use Viserio\Support\Tests\Fixture\TestManager;
+use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use Viserio\Contracts\Config\Manager as ConfigContract;
+use Viserio\Support\Tests\Fixture\TestManager;
 
 class ManagerTest extends \PHPUnit_Framework_TestCase
 {

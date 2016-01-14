@@ -10,7 +10,7 @@ class TestManager extends Manager
     protected $supportedDrivers = [
         'test'   => 'test',
         'config' => 'config',
-        'throw'  => 'throw'
+        'throw'  => 'throw',
     ];
 
     /**
