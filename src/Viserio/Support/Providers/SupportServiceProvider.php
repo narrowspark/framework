@@ -4,7 +4,7 @@ namespace Viserio\Support\Providers;
 use RandomLib\Factory as RandomLib;
 use Viserio\Application\ServiceProvider;
 use Viserio\Support\AliasLoader;
-use Viserio\Support\Arr;
+use Narrowspark\Arr\StaticArr as Arr;
 use Viserio\Support\Str;
 
 class SupportServiceProvider extends ServiceProvider
@@ -23,7 +23,7 @@ class SupportServiceProvider extends ServiceProvider
     /**
      * Register Arr.
      *
-     * @return \Viserio\Support\Arr|null
+     * @return \Narrowspark\Arr\StaticArr as Arr|null
      */
     protected function registerArr()
     {

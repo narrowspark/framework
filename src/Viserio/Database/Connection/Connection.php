@@ -6,7 +6,7 @@ use Viserio\Contracts\Cache\Factory as CacheContract;
 use Viserio\Contracts\Database\Connection as ConnectionContract;
 use Viserio\Database\Exception\ConnectException;
 use Viserio\Database\Grammar\Builder;
-use Viserio\Support\Arr;
+use Narrowspark\Arr\StaticArr as Arr;
 
 class Connection implements ConnectionContract
 {

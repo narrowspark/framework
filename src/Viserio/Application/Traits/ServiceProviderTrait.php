@@ -2,7 +2,7 @@
 namespace Viserio\Application\Traits;
 
 use Viserio\Application\ServiceProvider;
-use Viserio\Support\Arr;
+use Narrowspark\Arr\StaticArr as Arr;
 
 trait ServiceProviderTrait
 {

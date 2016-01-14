@@ -3,7 +3,7 @@ namespace Viserio\Filesystem\Adapters;
 
 use League\Flysystem\Adapter\Local;
 use Viserio\Contracts\Filesystem\Connector as ConnectorContract;
-use Viserio\Support\Arr;
+use Narrowspark\Arr\StaticArr as Arr;
 
 class LocalConnector implements ConnectorContract
 {

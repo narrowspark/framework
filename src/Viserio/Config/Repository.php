@@ -3,7 +3,7 @@ namespace Viserio\Config;
 
 use ArrayIterator;
 use Viserio\Contracts\Config\Repository as RepositoryContract;
-use Viserio\Support\Arr;
+use Narrowspark\Arr\StaticArr as Arr;
 
 class Repository implements RepositoryContract
 {

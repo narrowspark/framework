@@ -6,7 +6,7 @@ use Symfony\Component\HttpFoundation\Session\SessionBagInterface;
 use Symfony\Component\HttpFoundation\Session\Storage\MetadataBag;
 use Viserio\Session\Handler\CookieSessionHandler;
 use Viserio\Session\Interfaces\SessionInterface;
-use Viserio\Support\Arr;
+use Narrowspark\Arr\StaticArr as Arr;
 
 class Store implements SessionInterface
 {
@@ -272,7 +272,7 @@ class Store implements SessionInterface
      */
     public function pull($key, $default = null)
     {
-        return Arr::arrayPull($this->attributes, $key, $default);
+        return Arr::pull($this->attributes, $key, $default);
     }
 
     /**

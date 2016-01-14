@@ -11,7 +11,7 @@ use Viserio\Database\Connectors\PostgreSQLConnector;
 use Viserio\Database\Connectors\SQLiteConnector;
 use Viserio\Database\Connectors\SqlServerConnector;
 use Viserio\Database\Connectors\SybaseConnector;
-use Viserio\Support\Arr;
+use Narrowspark\Arr\StaticArr as Arr;
 
 class ConnectionFactory
 {

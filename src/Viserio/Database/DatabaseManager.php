@@ -6,7 +6,7 @@ use Viserio\Contracts\Config\Manager as ConfigContract;
 use Viserio\Contracts\Database\Connection as ConnectionContract;
 use Viserio\Contracts\Database\ConnectionResolver as ConnectionResolverContract;
 use Viserio\Database\Connection\ConnectionFactory;
-use Viserio\Support\Arr;
+use Narrowspark\Arr\StaticArr as Arr;
 
 class DatabaseManager implements ConnectionResolverContract
 {

@@ -5,7 +5,7 @@ use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\Request as SymfonyRequest;
 use Viserio\Contracts\Http\Request as RequestContract;
 use Viserio\Http\Traits\RequestParameterTrait;
-use Viserio\Support\Arr;
+use Narrowspark\Arr\StaticArr as Arr;
 use Viserio\Support\Str;
 
 class Request extends SymfonyRequest implements RequestContract, \ArrayAccess

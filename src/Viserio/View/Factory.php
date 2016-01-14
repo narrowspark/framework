@@ -6,7 +6,7 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Viserio\Contracts\Support\Arrayable;
 use Viserio\Contracts\View\Factory as FactoryContract;
 use Viserio\Contracts\View\Finder as FinderContract;
-use Viserio\Support\Arr;
+use Narrowspark\Arr\StaticArr as Arr;
 use Viserio\Support\Str;
 use Viserio\View\Engines\EngineResolver;
 use Viserio\View\Traits\NormalizeNameTrait;

@@ -2,7 +2,7 @@
 namespace Viserio\Application;
 
 use Viserio\Contracts\Application\Environment as EnvironmentContract;
-use Viserio\Support\Arr;
+use Narrowspark\Arr\StaticArr as Arr;
 use Viserio\Support\Str;
 
 class EnvironmentDetector implements EnvironmentContract
