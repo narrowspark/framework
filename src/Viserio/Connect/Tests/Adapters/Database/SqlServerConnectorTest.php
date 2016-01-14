@@ -21,6 +21,7 @@ class SqlServerConnectorTest extends \PHPUnit_Framework_TestCase
     public function testSqlServerConnectCallsCreateConnectionWithProperArguments()
     {
         $config = ['host' => 'foo', 'database' => 'bar'];
+
         $dsn = $this->getDsn($config);
         $connection = Mock::mock('stdClass');
 
@@ -65,7 +66,7 @@ class SqlServerConnectorTest extends \PHPUnit_Framework_TestCase
 
     protected function getDsn(array $config)
     {
-        extract($config);
+        extract($config, EXTR_SKIP);
         if (in_array('dblib', PDO::getAvailableDrivers(), true)) {
             $port = isset($config['port']) ? ':' . $port : '';
             $appname = isset($config['appname']) ? ';appname=' . $config['appname'] : '';

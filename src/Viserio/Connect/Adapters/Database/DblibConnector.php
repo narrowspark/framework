@@ -34,7 +34,7 @@ class DblibConnector extends AbstractDatabaseConnector
      */
     protected function getDsn(array $config)
     {
-        extract($config);
+        extract($config, EXTR_SKIP);
 
         return isset($config['port']) ?
         sprintf('dblib:host=%s:%s;dbname=%s', $server, $port, $database) :
