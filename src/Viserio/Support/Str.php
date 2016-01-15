@@ -36,30 +36,6 @@ class Str extends StaticStringy
     }
 
     /**
-     * Determine if a given string matches a given pattern.
-     *
-     * @param string $pattern
-     * @param string $value
-     *
-     * @return bool
-     */
-    public static function is($pattern, $value)
-    {
-        if ($pattern === $value) {
-            return true;
-        }
-
-        $pattern = preg_quote($pattern, '#');
-
-        // Asterisks are translated into zero-or-more regular expression wildcards
-        // to make it convenient to check if the strings starts with the given
-        // pattern such as "library/*", making any string check convenient.
-        $pattern = str_replace('\*', '.*', $pattern) . '\z';
-
-        return (bool) preg_match('#^' . $pattern . '#', $value);
-    }
-
-    /**
      * Limit the number of characters in a string.
      *
      * @param string $value
@@ -148,64 +124,6 @@ class Str extends StaticStringy
         $generator = $factory->getMediumStrengthGenerator();
 
         return $generator->generateString($length, $pool);
-    }
-
-    /**
-     * Compares two strings.
-     *
-     * This method implements a constant-time algorithm to compare strings.
-     * Regardless of the used implementation, it will leak length information.
-     *
-     * This method is adapted from Symfony\Component\Security\Core\Util\StringUtils.
-     *
-     * @param string $knownString
-     * @param string $userInput
-     *
-     * @return bool
-     */
-    public static function equals($knownString, $userInput)
-    {
-        if (!is_string($knownString)) {
-            $knownString = (string) $knownString;
-        }
-
-        if (!is_string($userInput)) {
-            $userInput = (string) $userInput;
-        }
-
-        if (function_exists('hash_equals')) {
-            return hash_equals($knownString, $userInput);
-        }
-
-        $knownLength = mb_strlen($knownString);
-
-        if (mb_strlen($userInput) !== $knownLength) {
-            return false;
-        }
-
-        $result = 0;
-
-        for ($i = 0; $i < $knownLength; ++$i) {
-            $result |= (ord($knownString[$i]) ^ ord($userInput[$i]));
-        }
-
-        return 0 === $result;
-    }
-
-    /**
-     * Get all of the given string except for a specified string of items.
-     *
-     * @param string       $value
-     * @param string|array $except
-     * @param bool         $trim
-     *
-     * @return string
-     */
-    public static function except($value, $except, $trim = true)
-    {
-        $value = str_replace($except, '', $value);
-
-        return ($trim === false) ? $value : trim($value);
     }
 
     /**
