@@ -38,7 +38,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Viserio\\View\\Tests\\"                         : "tests/"
+            "Viserio\\View\\Tests\\"                         : "Tests/"
         }
     },
     "provide": {
