@@ -82,7 +82,7 @@ class Application extends SymfonyConsole implements ApplicationContract
 
         $this->setContainer($container);
         $this->expressionParser = new Parser();
-        $this->setInvoker();
+        $this->initInvoker();
 
         $this->setAutoExit(false);
         $this->setCatchExceptions(false);
@@ -234,7 +234,7 @@ class Application extends SymfonyConsole implements ApplicationContract
     /**
      * Set configured invoker.
      */
-    protected function setInvoker()
+    protected function initInvoker()
     {
         $this->invoker = (new Invoker())
             ->injectByTypeHint(true)

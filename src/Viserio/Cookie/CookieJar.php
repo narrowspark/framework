@@ -1,10 +1,10 @@
 <?php
 namespace Viserio\Cookie;
 
+use Narrowspark\Arr\StaticArr as Arr;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Contracts\Cookie\QueueingFactory as JarContract;
-use Viserio\Support\Arr;
 
 class CookieJar implements JarContract
 {

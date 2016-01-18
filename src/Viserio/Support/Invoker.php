@@ -62,7 +62,9 @@ class Invoker implements InvokerInterface
      */
     public function call($callable, array $parameters = [])
     {
-        $this->getInvoker()->call($callable, $parameters);
+        $this->getInvoker();
+
+        return $this->invoker->call($callable, $parameters);
     }
 
     /**
@@ -73,7 +75,7 @@ class Invoker implements InvokerInterface
     private function getInvoker()
     {
         if ($this->invoker === null && $this->container !== null) {
-            $container = $this->getContainer();
+            $container = $this->container;
 
             $resolvers = [
                 new NumericArrayResolver(),

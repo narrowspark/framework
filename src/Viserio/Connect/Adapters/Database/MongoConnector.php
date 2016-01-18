@@ -3,9 +3,9 @@ namespace Viserio\Connect\Adapters\Database;
 
 use Mongo;
 use MongoConnectionException;
+use Narrowspark\Arr\StaticArr as Arr;
 use Viserio\Connect\Traits\DetectsLostConnections;
 use Viserio\Contracts\Connect\Connector as ConnectorContract;
-use Viserio\Support\Arr;
 
 class MongoConnector implements ConnectorContract
 {
@@ -147,7 +147,7 @@ class MongoConnector implements ConnectorContract
         // First we will create the basic DSN setup as well as the port if it is in
         // in the configuration options. This will give us the basic DSN we will
         // need to establish the PDO connections and return them back for use.
-        extract($config);
+        extract($config, EXTR_SKIP);
 
         if (isset($config['username']) && isset($config['password'])) {
             $dsn = sprintf('mongodb://%s:%s@%s:%s', $username, $password, $server, $port);

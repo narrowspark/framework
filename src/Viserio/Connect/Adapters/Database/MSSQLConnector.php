@@ -64,7 +64,7 @@ class MSSQLConnector extends AbstractDatabaseConnector
      */
     protected function getSqlsrvDsn(array $config)
     {
-        extract($config);
+        extract($config, EXTR_SKIP);
 
         return isset($config['port']) ?
         sprintf('sqlsrv:server=%s,%s;database=%s', $server, $port, $database) :
@@ -80,7 +80,7 @@ class MSSQLConnector extends AbstractDatabaseConnector
      */
     protected function getDblibDsn(array $config)
     {
-        extract($config);
+        extract($config, EXTR_SKIP);
 
         return isset($config['port']) ?
         sprintf('dblib:host=%s:%s;database=%s', $server, $port, $database) :

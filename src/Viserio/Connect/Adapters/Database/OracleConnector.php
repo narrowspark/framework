@@ -35,7 +35,7 @@ class OracleConnector extends AbstractDatabaseConnector
      */
     protected function getDsn(array $config)
     {
-        extract($config);
+        extract($config, EXTR_SKIP);
 
         return isset($config['port']) ?
         sprintf('oci:host=%s;port=%s;dbname=%s', $server, $port, $database) :

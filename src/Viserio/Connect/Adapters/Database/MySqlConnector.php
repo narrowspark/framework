@@ -95,7 +95,7 @@ class MySqlConnector extends AbstractDatabaseConnector
      */
     protected function getHostDsn(array $config)
     {
-        extract($config);
+        extract($config, EXTR_SKIP);
 
         return array_key_exists('port', $config) ?
         sprintf('mysql:host=%s;port=%s;dbname=%s', $server, $port, $database) :

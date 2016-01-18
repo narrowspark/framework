@@ -1,8 +1,8 @@
 <?php
 namespace Viserio\Application\Traits;
 
+use Narrowspark\Arr\StaticArr as Arr;
 use Viserio\Application\ServiceProvider;
-use Viserio\Support\Arr;
 
 trait ServiceProviderTrait
 {
