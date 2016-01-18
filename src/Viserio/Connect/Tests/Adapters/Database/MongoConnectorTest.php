@@ -1,15 +1,12 @@
 <?php
 namespace Viserio\Connect\Tests\Adapter\Database;
 
-use Mockery as Mock;
+use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use Viserio\Connect\Adapters\Database\MongoConnector;
 
 class MongoConnectorTest extends \PHPUnit_Framework_TestCase
 {
-    protected function tearDown()
-    {
-        Mock::close();
-    }
+    use MockeryTrait;
 
     public function testGetDefaultOption()
     {
@@ -59,7 +56,7 @@ class MongoConnectorTest extends \PHPUnit_Framework_TestCase
                 'connect' => true,
             ],
         ];
-        $connection = Mock::mock('stdClass');
+        $connection = $this->mock('stdClass');
 
         $connector = $this->getMock(
             'Viserio\Connect\Adapters\Database\MongoConnector',
@@ -89,7 +86,7 @@ class MongoConnectorTest extends \PHPUnit_Framework_TestCase
                 'connect' => true,
             ],
         ];
-        $connection = Mock::mock('stdClass');
+        $connection = $this->mock('stdClass');
 
         $connector = $this->getMock(
             'Viserio\Connect\Adapters\Database\MongoConnector',

@@ -4,7 +4,7 @@ namespace Viserio\Cache\Tests\Adapter;
 use Viserio\Cache\Adapter\FileCache;
 use Viserio\Contracts\Filesystem\FileNotFoundException;
 
-class FileCacheTest extends \PHPUnit_Framework_TestCase
+class FileCachePoolTest extends \PHPUnit_Framework_TestCase
 {
     public function testNullIsReturnedIfFileDoesntExist()
     {

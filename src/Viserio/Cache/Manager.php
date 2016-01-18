@@ -2,15 +2,6 @@
 namespace Viserio\Cache;
 
 use Narrowspark\Arr\StaticArr as Arr;
-use Viserio\Cache\Adapter\ApcCache;
-use Viserio\Cache\Adapter\ArrayCache;
-use Viserio\Cache\Adapter\FileCache;
-use Viserio\Cache\Adapter\MemcacheCache;
-use Viserio\Cache\Adapter\MemcachedCache;
-use Viserio\Cache\Adapter\NullCache;
-use Viserio\Cache\Adapter\RedisCache;
-use Viserio\Cache\Adapter\WinCacheCache;
-use Viserio\Cache\Adapter\XCacheCache;
 use Viserio\Cache\Exception\CacheException;
 use Viserio\Contracts\Cache\Adapter as AdapterContract;
 use Viserio\Contracts\Cache\Factory as FactoryContract;
@@ -60,29 +51,6 @@ class CacheManager extends Manager implements FactoryContract
         $this->config           = $config;
         $this->files            = $files;
         $this->supportedDrivers = $supportedDrivers;
-    }
-
-    /**
-     * Builder.
-     *
-     * @param string $driver  The cache driver to use
-     * @param array  $options
-     *
-     * @throws CacheException
-     *
-     * @return mixed
-     */
-    public function driver($driver = null, array $options = [])
-    {
-        $class = parent::driver($driver, $options);
-
-        if (!$class::isSupported()) {
-            throw new CacheException(
-                sprintf('The driver [%s] is not supported by your running setting duration.', $driver)
-            );
-        }
-
-        return $class;
     }
 
     /**
@@ -182,13 +150,6 @@ class CacheManager extends Manager implements FactoryContract
         $customOptions = Arr::get($config, 'options', []);
         $saslCredentials = array_filter(Arr::get($config, 'sasl', []));
 
-        $memcached = MemcachedCache::connect(
-            $servers,
-            $persistentConnectionId,
-            $customOptions,
-            $saslCredentials
-        );
-
         return $this->repository(new MemcachedCache($memcached, $this->getPrefix()));
     }
 
@@ -207,8 +168,6 @@ class CacheManager extends Manager implements FactoryContract
         $this->config->get('cache::memcache') :
         $config['memcache'];
 
-        $memcache = MemcacheCache::connect($servers);
-
         return $this->repository(new MemcacheCache($memcache, $this->getPrefix()));
     }
 
@@ -226,50 +185,6 @@ class CacheManager extends Manager implements FactoryContract
         $servers = $settings->get('cache::redis.parameters') !== null ? $settings->get('cache::redis.parameters') : $config['parameters'];
         $options = $settings->get('cache::redis.options') !== null ? $settings->get('cache::redis.options') : $config['options'];
 
-        $redis = RedisCache::connect($servers, $options);
-
         return $this->repository(new RedisCache($redis, $this->getPrefix()));
-    }
-
-    /**
-     * Create an instance of the Null cache driver.
-     *
-     * @return Repository
-     */
-    protected function createNullDriver()
-    {
-        return $this->repository(new NullCache());
-    }
-
-    /**
-     * Create an instance of the WinCache cache driver.
-     *
-     * @return Repository
-     */
-    protected function createWincacheDriver()
-    {
-        return $this->repository(new WinCacheCache($this->getPrefix()));
-    }
-
-    /**
-     * Create an instance of the XCache cache driver.
-     *
-     * @return Repository
-     */
-    protected function createXcacheDriver()
-    {
-        return $this->repository(new XCacheCache($this->getPrefix()));
-    }
-
-    /**
-     * Create a new cache repository with the given implementation.
-     *
-     * @param AdapterContract $Cache
-     *
-     * @return \Viserio\Cache\Repository
-     */
-    protected function repository(AdapterContract $Cache)
-    {
-        return new Repository($Cache);
     }
 }
