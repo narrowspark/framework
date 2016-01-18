@@ -2,17 +2,17 @@
 namespace Viserio\Translator;
 
 use InvalidArgumentException;
-use Psr\Log\LoggerInterface as PsrLoggerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Viserio\Contracts\Cache\Factory as CacheContract;
 use Viserio\Contracts\Translator\MessageCatalogue as MessageCatalogueContract;
 use Viserio\Contracts\Translator\NotFoundResourceException;
 use Viserio\Filesystem\FileLoader;
 use Viserio\Translator\Traits\ValidateLocaleTrait;
+use Viserio\Support\LoggerAwareTrait;
 
 class Manager
 {
-    use ValidateLocaleTrait;
+    use ValidateLocaleTrait, LoggerAwareTrait;
 
     /**
      * FileLoader instance.
@@ -48,13 +48,6 @@ class Manager
      * @var \Viserio\Contracts\Cache\Factory
      */
     protected $cache;
-
-    /**
-     * Translation logger.
-     *
-     * @var \Psr\Log\LoggerInterface
-     */
-    protected $logger;
 
     /**
      * Event manager for triggering translator events.
@@ -168,30 +161,6 @@ class Manager
     public function getCache()
     {
         return $this->cache;
-    }
-
-    /**
-     * Sets logger.
-     *
-     * @param PsrLoggerInterface $cache
-     *
-     * @return self
-     */
-    public function setLogger(PsrLoggerInterface $logger)
-    {
-        $this->logger = $logger;
-
-        return $this;
-    }
-
-    /**
-     * Returns the set logger.
-     *
-     * @return PsrLoggerInterface
-     */
-    public function getLogger()
-    {
-        return $this->logger;
     }
 
     /**
