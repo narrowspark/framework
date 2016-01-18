@@ -22,7 +22,7 @@ class Slovenian implements CategoryContract
      *  few   → n mod 100 in 3..4;
      *  other → everything else
      *
-     * @param integer $count
+     * @param int $count
      *
      * @return integereger
      */

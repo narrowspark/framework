@@ -22,7 +22,7 @@ class Romanian implements CategoryContract
      *  few   → n is 0 OR n is not 1 AND n mod 100 in 1..19;
      *  other → everything else
      *
-     * @param integer $count
+     * @param int $count
      *
      * @return integereger
      */

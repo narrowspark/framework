@@ -21,7 +21,7 @@ class Lithuanian implements CategoryContract
      *  few   → n mod 10 in 2..9 and n mod 100 not in 11..19;
      *  other → everything else
      *
-     * @param integer $count
+     * @param int $count
      *
      * @return integereger
      */

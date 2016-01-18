@@ -24,9 +24,9 @@ class Arabic implements CategoryContract
      *  many  → n mod 100 in 11..99;
      *  other → everything else
      *
-     * @param integer $count
+     * @param int $count
      *
-     * @return integer
+     * @return int
      */
     public function category($count)
     {

@@ -22,7 +22,7 @@ class Maltese implements CategoryContract
      *  many  → n mod 100 in 11..19;
      *  other → everything else
      *
-     * @param integer $count
+     * @param int $count
      *
      * @return integereger
      */

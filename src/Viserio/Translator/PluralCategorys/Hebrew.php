@@ -22,7 +22,7 @@ class Hebrew implements CategoryContract
      *  many  → n is not 0 and n mod 10 is 0;
      *  other → everything else
      *
-     * @param integer $count
+     * @param int $count
      *
      * @return integereger
      */

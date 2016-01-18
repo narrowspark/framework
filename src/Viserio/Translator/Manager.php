@@ -2,9 +2,9 @@
 namespace Viserio\Translator;
 
 use InvalidArgumentException;
+use Psr\Log\LoggerInterface as PsrLoggerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Viserio\Contracts\Cache\Factory as CacheContract;
-use Psr\Log\LoggerInterface as PsrLoggerInterface;
 use Viserio\Contracts\Translator\MessageCatalogue as MessageCatalogueContract;
 use Viserio\Contracts\Translator\NotFoundResourceException;
 use Viserio\Filesystem\FileLoader;
@@ -234,8 +234,6 @@ class Manager
      * @param string      $id
      * @param string|null $domain
      * @param string|null $locale
-     *
-     * @return void
      */
     protected function log($id, $domain, $locale)
     {

@@ -21,7 +21,7 @@ class Tachelhit implements CategoryContract
      *  few   → n in 2..10;
      *  other → everything else
      *
-     * @param integer $count
+     * @param int $count
      *
      * @return integereger
      */

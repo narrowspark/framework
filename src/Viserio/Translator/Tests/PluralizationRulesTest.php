@@ -2,7 +2,6 @@
 namespace Viserio\Translator\Tests;
 
 use ReflectionMethod;
-use Viserio\Translator\PluralizationRules;
 use Viserio\Translator\PluralCategorys\Arabic;
 use Viserio\Translator\PluralCategorys\Balkan;
 use Viserio\Translator\PluralCategorys\Breton;
@@ -28,6 +27,7 @@ use Viserio\Translator\PluralCategorys\Tamazight;
 use Viserio\Translator\PluralCategorys\Two;
 use Viserio\Translator\PluralCategorys\Welsh;
 use Viserio\Translator\PluralCategorys\Zero;
+use Viserio\Translator\PluralizationRules;
 
 class PluralizationRulesTest extends \PHPUnit_Framework_TestCase
 {
@@ -37,7 +37,6 @@ class PluralizationRulesTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-
         $this->object = new PluralizationRules();
 
         $createRules  = new ReflectionMethod($this->object, 'createRules');

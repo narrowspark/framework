@@ -22,7 +22,7 @@ class French implements CategoryContract
      *  one   → n within 0..2 and n is not 2;
      *  other → everything else
      *
-     * @param integer $count
+     * @param int $count
      *
      * @return integereger
      */

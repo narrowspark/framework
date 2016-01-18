@@ -32,7 +32,7 @@ class NormalizeIntegerValueTraitTest extends \PHPUnit_Framework_TestCase
             ['1.1', 1.1],
             [14.31, 14.31],
             ['14.31', 14.31],
-            [100.432, 100.432]
+            [100.432, 100.432],
         ];
     }
 }
