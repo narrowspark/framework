@@ -30,9 +30,9 @@ class Zero implements CategoryContract
      *  one   → n in 0..1;
      *  other → everything else
      *
-     * @param integer $count
+     * @param int $count
      *
-     * @return integer
+     * @return int
      */
     public function category($count)
     {

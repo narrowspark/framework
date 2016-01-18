@@ -21,7 +21,7 @@ class Colognian implements CategoryContract
      *  one   → n is 1;
      *  other → everything else
      *
-     * @param integer $count
+     * @param int $count
      *
      * @return integereger
      */

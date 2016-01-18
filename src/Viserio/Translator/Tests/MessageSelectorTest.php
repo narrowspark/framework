@@ -88,17 +88,17 @@ class MessageSelectorTest extends \PHPUnit_Framework_TestCase
             [
                 'There are no apples',
                 '{0} There are no apples|one: There is one apple|more: There are %count% apples',
-                0
+                0,
             ],
             [
                 'There is one apple',
                 '{0} There are no apples|one: There is one apple|more: There are %count% apples',
-                1
+                1,
             ],
             [
                 'There are %count% apples',
                 '{0} There are no apples|one: There is one apple|more: There are %count% apples',
-                10
+                10,
             ],
             ['', '{0}|{1} There is one apple|]1,Inf] There are %count% apples', 0],
             ['', '{0} There are no apples|{1}|]1,Inf] There are %count% apples', 1],
@@ -112,32 +112,32 @@ class MessageSelectorTest extends \PHPUnit_Framework_TestCase
             [
                 'There is almost one apple',
                 '{0} There are no apples|]0,1[ There is almost one apple|{1} There is one apple|[1,Inf] There is more than one apple',
-                0.7
+                0.7,
             ],
             [
                 'There is one apple',
                 '{0} There are no apples|]0,1[There are %count% apples|{1} There is one apple|[1,Inf] There is more than one apple',
-                1
+                1,
             ],
             [
                 'There is more than one apple',
                 '{0} There are no apples|]0,1[There are %count% apples|{1} There is one apple|[1,Inf] There is more than one apple',
-                1.7
+                1.7,
             ],
             [
                 'There are no apples',
                 '{0} There are no apples|]0,1[There are %count% apples|{1} There is one apple|[1,Inf] There is more than one apple',
-                0
+                0,
             ],
             [
                 'There are no apples',
                 '{0} There are no apples|]0,1[There are %count% apples|{1} There is one apple|[1,Inf] There is more than one apple',
-                0.0
+                0.0,
             ],
             [
                 'There are no apples',
                 '{0.0} There are no apples|]0,1[There are %count% apples|{1} There is one apple|[1,Inf] There is more than one apple',
-                0
+                0,
             ],
         ];
     }

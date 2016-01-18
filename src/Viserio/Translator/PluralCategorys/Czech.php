@@ -22,7 +22,7 @@ class Czech implements CategoryContract
      *  few   → n in 2..4;
      *  other → everything else
      *
-     * @param integer $count
+     * @param int $count
      *
      * @return integereger
      */

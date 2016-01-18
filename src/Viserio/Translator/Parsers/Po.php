@@ -2,8 +2,8 @@
 namespace Viserio\Translator\Parsers;
 
 use Exception;
-use Sepia\PoParser;
 use Sepia\FileHandler;
+use Sepia\PoParser;
 use Viserio\Contracts\Filesystem\LoadingException;
 use Viserio\Contracts\Filesystem\Parser as ParserContract;
 use Viserio\Filesystem\Filesystem;

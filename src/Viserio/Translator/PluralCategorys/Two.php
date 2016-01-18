@@ -29,9 +29,9 @@ class Two implements CategoryContract
      *  two   → n is 2;
      *  other → everything else
      *
-     * @param integer $count
+     * @param int $count
      *
-     * @return integer
+     * @return int
      */
     public function category($count)
     {

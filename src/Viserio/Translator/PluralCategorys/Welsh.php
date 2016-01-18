@@ -24,7 +24,7 @@ class Welsh implements CategoryContract
      *  many  → n is 6;
      *  other → everything else
      *
-     * @param integer $count
+     * @param int $count
      *
      * @return integereger
      */

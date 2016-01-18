@@ -23,7 +23,7 @@ class Irish implements CategoryContract
      *  many  → n in 7..10;
      *  other → everything else
      *
-     * @param integer $count
+     * @param int $count
      *
      * @return integereger
      */

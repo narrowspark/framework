@@ -22,7 +22,7 @@ class Gaelic implements CategoryContract
      *  few → n in 3..10,13..19;
      *  other → everything else
      *
-     * @param integer $count
+     * @param int $count
      *
      * @return integereger
      */
