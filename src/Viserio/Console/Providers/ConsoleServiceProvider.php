@@ -21,10 +21,12 @@ class ConsoleServiceProvider extends ServiceProvider
             $app->bind('console.app.name', 'Narrowspark Cerebro');
             $app->bind('console.app.version', $app->getVersion());
 
-            $console = new Application($app, $app->get('events'));
-
-            $console->setName($app->get('console.app.name'));
-            $console->setVersion($app->get('console.app.version'));
+            $console = new Application(
+                $app,
+                $app->get('events'),
+                $app->get('console.app.version'),
+                $app->get('console.app.name')
+            );
 
             // Add auto-complete for Symfony Console application
             $console->add(new CompletionCommand());

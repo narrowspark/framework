@@ -4,28 +4,17 @@ php:
   - 5.6
   - 7.0
   - hhvm
-  - nightly
 
 env:
   global:
     - setup=basic
   matrix:
-    - ADAPTER=MemoryStore
     - ADAPTER=Apc
-    - ADAPTER=Memcached
-    - ADAPTER=Redis
-    - ADAPTER=Couchbase
-    - ADAPTER=MySQL
-    - ADAPTER=SQLite
-    - ADAPTER=PostgreSQL
-    - ADAPTER=Filesystem
-    - ADAPTER=Flysystem
-    - MONGO_VERSION=1.2.12
+    - ADAPTER=Ev
 
 services:
-  - mongodb
-  - mysql
   - memcached
+  - mongodb
   - redis-server
 
 matrix:
@@ -34,77 +23,37 @@ matrix:
       env: setup=lowest
     - php: 5.6
       env: setup=stable
-  allow_failures:
-    - env: setup=lowest
-    - env: setup=stable
-    - php: 7.0
-    - php: 7.0
-      env: ADAPTER=Apc
-    - php: 7.0
-      env: ADAPTER=Memcached
-    - php: 7.0
-      env: ADAPTER=Redis
-    - php: 7.0
-      env: ADAPTER=Couchbase
-    - php: hhvm
-      env: ADAPTER=Couchbase
-    - php: hhvm
-      env: ADAPTER=PostgreSQL
-    - php: nightly
-    - php: hhvm
   fast_finish: true
-
-sudo: false
 
 cache:
   directories:
     - $HOME/.composer/cache
+    - $HOME/.php-cs-fixer
+
+before_script:
+  - sleep 15
+  - mongo mydb_test --eval 'db.addUser("travis", "test");'
+  - if [[ $ADAPTER = 'Apc' ]]; then chmod a+x ./build/travis/Apc.sh; ./build/travis/Apc.sh; fi
+  - if [[ $ADAPTER = 'Ev' ]]; then chmod a+x ./build/travis/ev.sh; ./build/travis/ev.sh; fi
+  - if [[ $PHP_VERSION != 'hhvm' ]]; then echo "extension = memcached.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini; fi
 
 before_install:
-  - mysql -e 'create database narrowspark_test;'
-  - echo "extension = mongo.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
   - composer self-update
   - travis_retry composer install --prefer-source --no-interaction
-  - OCULAR_ENV='5.6'
 
 install:
-  - if ["$TRAVIS_PHP_VERSION" != "hhvm" || "$TRAVIS_PHP_VERSION" != "7.0" ]; then
-    curl -LS https://pecl.php.net/get/event | tar -xz;
-    pushd event-*;
-    phpize;
-    ./configure;
-    make;
-    make install;
-    popd;
-    echo "extension=event.so" >> "$(php -r 'echo php_ini_loaded_file();')";
-    curl -LS https://pecl.php.net/get/libevent | tar -xz;
-    pushd libevent-*;
-    phpize;
-    ./configure;
-    make;
-    make install;
-    popd;
-    echo "extension=libevent.so" >> "$(php -r 'echo php_ini_loaded_file();')";
-    fi
-  - curl -LS https://pecl.php.net/get/ev | tar -xz;
-    pushd ev-*;
-    phpize;
-    ./configure;
-    make;
-    make install;
-    popd;
-    echo "extension=ev.so" >> "$(php -r 'echo php_ini_loaded_file();')";
-  - curl http://get.sensiolabs.org/php-cs-fixer.phar -o php-cs-fixer.phar
-  - composer self-update
   - if [[ $setup = 'basic' ]]; then travis_retry composer install --no-interaction --prefer-source; fi
   - if [[ $setup = 'stable' ]]; then travis_retry composer update --prefer-source --no-interaction --prefer-stable; fi
   - if [[ $setup = 'lowest' ]]; then travis_retry composer update --prefer-source --no-interaction --prefer-lowest --prefer-stable; fi
 
-
 script:
-  - php -n php-cs-fixer.phar fix -v --dry-run
-  - vendor/bin/phpunit --verbose --coverage-clover clover-data
-  - if [ $(phpenv version-name) = $OCULAR_ENV ]; then wget https://scrutinizer-ci.com/ocular.phar; php ocular.phar code-coverage:upload --format=php-clover clover-data; fi
+  - mkdir -p build/logs
+  - vendor/bin/php-cs-fixer fix --config-file=.php_cs --verbose --diff --dry-run
+  - vendor/bin/phpunit -c phpunit.xml.dist --verbose --coverage-text
+  - vendor/bin/humbug
 
 after_script:
-  - php vendor/bin/coveralls -v
+  - wget https://scrutinizer-ci.com/ocular.phar
+  - php ocular.phar code-coverage:upload --format=php-clover build/logs/coverage.clover
+
+sudo: false

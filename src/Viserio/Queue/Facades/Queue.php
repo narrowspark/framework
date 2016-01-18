@@ -1,9 +1,9 @@
 <?php
 namespace Viserio\Queue\Facades;
 
-use Viserio\Support\StaticalProxyManager;
+use Viserio\StaticalProxy\StaticalProxy;
 
-class Queue extends StaticalProxyManager
+class Queue extends StaticalProxy
 {
     protected static function getFacadeAccessor()
     {

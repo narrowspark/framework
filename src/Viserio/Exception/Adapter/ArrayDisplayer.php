@@ -1,6 +1,7 @@
 <?php
 namespace Viserio\Exception\Adapter;
 
+use Exception;
 use Viserio\Contracts\Exception\Adapter;
 use Viserio\Exception\Traits\ErrorHandlingTrait;
 
@@ -16,7 +17,7 @@ class ArrayDisplayer implements Adapter
      *
      * @return array
      */
-    public function display(\Exception $exception, $code)
+    public function display(Exception $exception, $code)
     {
         $message = $this->message($code, $exception->getMessage());
 

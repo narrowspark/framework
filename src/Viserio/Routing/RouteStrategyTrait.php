@@ -1,6 +1,7 @@
 <?php
 namespace Viserio\Routing;
 
+use InvalidArgumentException;
 use Viserio\Contracts\Routing\CustomStrategy;
 
 trait RouteStrategyTrait
@@ -18,13 +19,13 @@ trait RouteStrategyTrait
      */
     public function setStrategy($strategy)
     {
-        if (is_integer($strategy) || $strategy instanceof CustomStrategy) {
+        if (is_int($strategy) || $strategy instanceof CustomStrategy) {
             $this->strategy = $strategy;
 
             return;
         }
 
-        throw new \InvalidArgumentException(
+        throw new InvalidArgumentException(
             'Provided strategy must be an integer or an instance of [\Viserio\Contracts\Routing\CustomStrategy]'
         );
     }

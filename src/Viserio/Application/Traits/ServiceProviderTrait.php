@@ -1,16 +1,9 @@
 <?php
 namespace Viserio\Application\Traits;
 
+use Narrowspark\Arr\StaticArr as Arr;
 use Viserio\Application\ServiceProvider;
-use Viserio\Support\Arr;
 
-/**
- * ServiceProviderTrait.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.7
- */
 trait ServiceProviderTrait
 {
     /**
@@ -50,7 +43,7 @@ trait ServiceProviderTrait
     {
         if ((!is_string($provider)) && (!$provider instanceof ServiceProvider)) {
             throw new \Exception(
-                'When registering a service provider, you must provide either and instance of '.
+                'When registering a service provider, you must provide either and instance of ' .
                 '[\Viserio\Container\ServiceProvider] or a fully qualified class name'
             );
         }

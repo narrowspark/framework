@@ -1,6 +1,7 @@
 <?php
 namespace Viserio\Hashing;
 
+use RuntimeException;
 use Viserio\Contracts\Hashing\Password as PasswordContract;
 
 class Password implements PasswordContract
@@ -28,7 +29,7 @@ class Password implements PasswordContract
         $hash = password_hash($value, PASSWORD_BCRYPT, ['cost' => $cost]);
 
         if ($hash === false) {
-            throw new \RuntimeException('Bcrypt hashing not supported.');
+            throw new RuntimeException('Bcrypt hashing not supported.');
         }
 
         return $hash;

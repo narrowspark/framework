@@ -32,31 +32,7 @@ class Str extends StaticStringy
     {
         $quoted = preg_quote($cap, '/');
 
-        return preg_replace('/(?:'.$quoted.')+$/', '', $value).$cap;
-    }
-
-    /**
-     * Determine if a given string matches a given pattern.
-     *
-     * @param string $pattern
-     * @param string $value
-     *
-     * @return bool
-     */
-    public static function is($pattern, $value)
-    {
-        if ($pattern === $value) {
-            return true;
-        }
-
-        $pattern = preg_quote($pattern, '#');
-
-        // Asterisks are translated into zero-or-more regular expression wildcards
-        // to make it convenient to check if the strings starts with the given
-        // pattern such as "library/*", making any string check convenient.
-        $pattern = str_replace('\*', '.*', $pattern).'\z';
-
-        return (bool) preg_match('#^'.$pattern.'#', $value);
+        return preg_replace('/(?:' . $quoted . ')+$/', '', $value) . $cap;
     }
 
     /**
@@ -65,30 +41,16 @@ class Str extends StaticStringy
      * @param string $value
      * @param int    $limit
      * @param string $end
-     * @param bool   $preserveWords
      *
      * @return string
      */
-    public static function limit($value, $limit = 100, $end = '...', $preserveWords = false)
+    public static function limit($value, $limit = 100, $end = '...')
     {
-        if (mb_strlen($value) <= $limit) {
+        if (mb_strwidth($value, 'UTF-8') <= $limit) {
             return $value;
         }
 
-        if ($preserveWords) {
-            $cutArea = mb_substr($value, $limit - 1, 2, 'UTF-8');
-
-            if (strpos($cutArea, ' ') === false) {
-                $value = mb_substr($value, 0, $limit, 'UTF-8');
-                $spacePos = strrpos($value, ' ');
-
-                if ($spacePos !== false) {
-                    return rtrim(mb_substr($value, 0, $spacePos, 'UTF-8')).$end;
-                }
-            }
-        }
-
-        return rtrim(mb_substr($value, 0, $limit, 'UTF-8')).$end;
+        return rtrim(mb_strimwidth($value, 0, $limit, '', 'UTF-8')) . $end;
     }
 
     /**
@@ -100,15 +62,15 @@ class Str extends StaticStringy
      *
      * @return string
      */
-    public static function words($value, $words = 100, $end = '…')
+    public static function words($value, $words = 100, $end = '...')
     {
-        preg_match('/^\s*+(?:\S++\s*+){1,'.$words.'}/u', $value, $matches);
+        preg_match('/^\s*+(?:\S++\s*+){1,' . $words . '}/u', $value, $matches);
 
         if (!isset($matches[0]) || strlen($value) === strlen($matches[0])) {
             return $value;
         }
 
-        return rtrim($matches[0]).$end;
+        return rtrim($matches[0]) . $end;
     }
 
     /**
@@ -158,67 +120,10 @@ class Str extends StaticStringy
                 break;
         }
 
-        $factory   = new RandomLib;
+        $factory   = new RandomLib();
         $generator = $factory->getMediumStrengthGenerator();
 
         return $generator->generateString($length, $pool);
-    }
-
-    /**
-     * Compares two strings.
-     *
-     * This method implements a constant-time algorithm to compare strings.
-     * Regardless of the used implementation, it will leak length information.
-     *
-     * This method is adapted from Symfony\Component\Security\Core\Util\StringUtils.
-     *
-     * @param  string  $knownString
-     * @param  string  $userInput
-     * @return bool
-     */
-    public static function equals($knownString, $userInput)
-    {
-        if (!is_string($knownString)) {
-            $knownString = (string) $knownString;
-        }
-
-        if (!is_string($userInput)) {
-            $userInput = (string) $userInput;
-        }
-
-        if (function_exists('hash_equals')) {
-            return hash_equals($knownString, $userInput);
-        }
-
-        $knownLength = mb_strlen($knownString);
-
-        if (mb_strlen($userInput) !== $knownLength) {
-            return false;
-        }
-
-        $result = 0;
-
-        for ($i = 0; $i < $knownLength; ++$i) {
-            $result |= (ord($knownString[$i]) ^ ord($userInput[$i]));
-        }
-
-        return 0 === $result;
-    }
-
-    /**
-     * Get all of the given string except for a specified string of items.
-     *
-     * @param string       $value
-     * @param string|array $except
-     * @param bool         $trim
-     *
-     * @return string
-     */
-    public static function except($value, $except, $trim = true)
-    {
-        $value = str_replace($except, '', $value);
-
-        return ($trim === false) ? $value : trim($value);
     }
 
     /**
@@ -231,17 +136,28 @@ class Str extends StaticStringy
      */
     public static function snake($value, $delimiter = '_')
     {
-        $key = $value.$delimiter;
+        $key = $value . $delimiter;
 
         if (isset(static::$snakeCache[$key])) {
             return static::$snakeCache[$key];
         }
 
-        if (!ctype_lower($value)) {
-            $value = strtolower(preg_replace('/(.)(?=[A-Z])/', '$1'.$delimiter, $value));
-        }
+        $value    = preg_replace('/\s+/', '', $value);
+        $value[0] = strtolower($value[0]);
+        $len      = strlen($value);
 
-        $value = strtolower(preg_replace('/([^'.preg_quote($delimiter).'])(?=[A-Z])/', '$1'.$delimiter, $value));
+        for ($i = 0; $i < $len; ++$i) {
+            // See if we have an uppercase character and replace; ord A = 65, Z = 90.
+            if (ord($value[$i]) > 64 && ord($value[$i]) < 91) {
+                // Replace uppercase of with underscore and lowercase.
+                $replace = $delimiter . strtolower($value[$i]);
+                $value   = substr_replace($value, $replace, $i, 1);
+
+                // Increase length of class and position since we made the string longer.
+                ++$len;
+                ++$i;
+            }
+        }
 
         return static::$snakeCache[$key] = $value;
     }

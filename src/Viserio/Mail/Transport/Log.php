@@ -2,6 +2,8 @@
 namespace Viserio\Mail\Transport;
 
 use Psr\Log\LoggerInterface;
+use Swift_Mime_Message;
+use Swift_Mime_MimeEntity;
 
 class Log extends Transport
 {
@@ -30,7 +32,7 @@ class Log extends Transport
      *
      * @return Log|null
      */
-    public function send(\Swift_Mime_Message $message, &$failedRecipients = null)
+    public function send(Swift_Mime_Message $message, &$failedRecipients = null)
     {
         $this->logger->debug($this->getMimeEntityString($message));
     }
@@ -42,12 +44,12 @@ class Log extends Transport
      *
      * @return string
      */
-    protected function getMimeEntityString(\Swift_Mime_MimeEntity $entity)
+    protected function getMimeEntityString(Swift_Mime_MimeEntity $entity)
     {
-        $string = (string) $entity->getHeaders().PHP_EOL.$entity->getBody();
+        $string = (string) $entity->getHeaders() . PHP_EOL . $entity->getBody();
 
         foreach ($entity->getChildren() as $children) {
-            $string .= PHP_EOL.PHP_EOL.$this->getMimeEntityString($children);
+            $string .= PHP_EOL . PHP_EOL . $this->getMimeEntityString($children);
         }
 
         return $string;

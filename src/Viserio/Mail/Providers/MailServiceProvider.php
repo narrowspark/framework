@@ -1,7 +1,6 @@
 <?php
 namespace Viserio\Mail\Providers;
 
-use Aws\Sdk;
 use Aws\Ses\SesClient;
 use GuzzleHttp\Client as HttpClient;
 use Viserio\Application\ServiceProvider;
@@ -216,7 +215,7 @@ class MailServiceProvider extends ServiceProvider
      */
     protected function registerMailgunTransport($config)
     {
-        $client = new HttpClient;
+        $client = new HttpClient();
         $mailgun = $config['mail::services.mailgun'];
 
         $$this->app->bind('swift.transport', function () use ($mailgun) {
@@ -233,7 +232,7 @@ class MailServiceProvider extends ServiceProvider
      */
     protected function registerMandrillTransport($config)
     {
-        $client = new HttpClient;
+        $client = new HttpClient();
         $mandrill = $config['mail::services.mandrill'];
 
         $this->app->bind('swift.transport', function () use ($mandrill) {

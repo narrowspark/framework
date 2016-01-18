@@ -13,7 +13,7 @@ interface Translator
     /**
      * Sets the string dictating the default language to translate into. (e.g. 'en').
      *
-     * @param String $defaultLang A string representing the default language to translate into. (e.g. 'en').
+     * @param string $defaultLang A string representing the default language to translate into. (e.g. 'en').
      *
      * @return self
      */

@@ -10,7 +10,7 @@ interface View extends Renderable
      *
      * @return string
      */
-    public function name();
+    public function getName();
 
     /**
      * Add a piece of data to the view.
@@ -21,4 +21,13 @@ interface View extends Renderable
      * @return $this
      */
     public function with($key, $value = null);
+
+    /**
+     * Get the string contents of the view.
+     *
+     * @param callable|null $callback
+     *
+     * @return string
+     */
+    public function render(callable $callback = null);
 }

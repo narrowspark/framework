@@ -26,7 +26,7 @@ interface Pipeline
     /**
      * Run the pipeline with a final destination callback.
      *
-     * @param callable $destination
+     * @param Closure $destination
      *
      * @return mixed
      */

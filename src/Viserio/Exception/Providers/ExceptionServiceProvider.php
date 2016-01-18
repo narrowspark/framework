@@ -247,7 +247,7 @@ class ExceptionServiceProvider extends ServiceProvider
     {
         $base = $this->app->basePath();
 
-        return $base.'/vendor/narrowspark/framework/src/Viserio/Exception/Resources';
+        return $base . '/vendor/narrowspark/framework/src/Viserio/Exception/Resources';
     }
 
     /**

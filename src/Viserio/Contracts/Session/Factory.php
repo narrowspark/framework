@@ -43,10 +43,12 @@ interface Factory
      * @return mixed The flash value itself.
      */
     public function getFlash($key, $alt = null);
+
     /**
      * Clears flash values for *only* the next request.
      */
     public function clearFlash();
+
     /**
      * Gets the flash value for a key in the *next* request.
      *

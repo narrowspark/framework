@@ -1,11 +1,11 @@
 <?php
 namespace Viserio\Http;
 
+use Narrowspark\Arr\StaticArr as Arr;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\Request as SymfonyRequest;
 use Viserio\Contracts\Http\Request as RequestContract;
 use Viserio\Http\Traits\RequestParameterTrait;
-use Viserio\Support\Arr;
 use Viserio\Support\Str;
 
 class Request extends SymfonyRequest implements RequestContract, \ArrayAccess
@@ -81,7 +81,7 @@ class Request extends SymfonyRequest implements RequestContract, \ArrayAccess
      */
     public function root()
     {
-        return rtrim($this->getSchemeAndHttpHost().$this->getBaseUrl(), '/');
+        return rtrim($this->getSchemeAndHttpHost() . $this->getBaseUrl(), '/');
     }
 
     /**
@@ -103,7 +103,7 @@ class Request extends SymfonyRequest implements RequestContract, \ArrayAccess
     {
         $query = $this->getQueryString();
 
-        return $query ? $this->url().'?'.$query : $this->url();
+        return $query ? $this->url() . '?' . $query : $this->url();
     }
 
     /**
@@ -161,11 +161,12 @@ class Request extends SymfonyRequest implements RequestContract, \ArrayAccess
     }
 
     /**
-    * Determines whether the current requests accepts a given content type.
-    *
-    * @param  string  $contentTypes
-    * @return bool
-    */
+     * Determines whether the current requests accepts a given content type.
+     *
+     * @param string $contentTypes
+     *
+     * @return bool
+     */
     public function accepts($contentTypes)
     {
         $accepts = $this->getAcceptableContentTypes();
@@ -176,13 +177,13 @@ class Request extends SymfonyRequest implements RequestContract, \ArrayAccess
             }
 
             foreach ((array) $contentTypes as $type) {
-                if ($accept === $type || $accept === strtok('/', $type).'/*') {
+                if ($accept === $type || $accept === strtok('/', $type) . '/*') {
                     return true;
                 }
 
                 $split = explode('/', $accept);
 
-                if (preg_match('/'.$split[0].'\/.+\+'.$split[1].'/', $type)) {
+                if (preg_match('/' . $split[0] . '\/.+\+' . $split[1] . '/', $type)) {
                     return true;
                 }
             }
@@ -398,7 +399,8 @@ class Request extends SymfonyRequest implements RequestContract, \ArrayAccess
     /**
      * Get the data format expected in the response.
      *
-     * @param  string  $default
+     * @param string $default
+     *
      * @return string
      */
     public function format($default = 'html')
@@ -408,6 +410,7 @@ class Request extends SymfonyRequest implements RequestContract, \ArrayAccess
                 return $format;
             }
         }
+
         return $default;
     }
 

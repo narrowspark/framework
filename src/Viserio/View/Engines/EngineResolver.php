@@ -1,13 +1,9 @@
 <?php
 namespace Viserio\View\Engines;
 
-/**
- * EngineResolver.
- *
- * @author  Daniel Bannert
- *
- * @since   0.8.0
- */
+use Closure;
+use InvalidArgumentException;
+
 class EngineResolver
 {
     /**
@@ -31,7 +27,7 @@ class EngineResolver
      * @param string   $engine
      * @param \Closure $resolver
      */
-    public function register($engine, \Closure $resolver)
+    public function register($engine, Closure $resolver)
     {
         unset($this->resolved[$engine]);
         $this->resolvers[$engine] = $resolver;
@@ -46,10 +42,14 @@ class EngineResolver
      */
     public function resolve($engine)
     {
-        if (!isset($this->resolved[$engine])) {
-            $this->resolved[$engine] = call_user_func($this->resolvers[$engine]);
+        if (isset($this->resolved[$engine])) {
+            return $this->resolved[$engine];
         }
 
-        return $this->resolved[$engine];
+        if (isset($this->resolvers[$engine])) {
+            return $this->resolved[$engine] = call_user_func($this->resolvers[$engine]);
+        }
+
+        throw new InvalidArgumentException('Engine ' . $engine . ' not found.');
     }
 }

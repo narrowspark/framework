@@ -54,7 +54,7 @@ class Json implements ParserContract
             return $data;
         }
 
-        throw new LoadingException('Unable to load config '.$filename);
+        throw new LoadingException('Unable to load config ' . $filename);
     }
 
     /**

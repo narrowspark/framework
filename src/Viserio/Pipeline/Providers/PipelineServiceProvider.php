@@ -24,7 +24,7 @@ class PipelineServiceProvider extends ServiceProvider
     public function provides()
     {
         return [
-            Pipeline::class
+            Pipeline::class,
         ];
     }
 }

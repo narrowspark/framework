@@ -52,7 +52,7 @@ class WinCacheCache extends TaggableStore implements AdapterContract
      */
     public function get($key)
     {
-        $value = wincache_ucache_get($this->prefix.$key);
+        $value = wincache_ucache_get($this->prefix . $key);
 
         if ($value !== false) {
             return $value;
@@ -93,16 +93,14 @@ class WinCacheCache extends TaggableStore implements AdapterContract
     {
         $this->minutes[$key] = $minutes;
 
-        wincache_ucache_set($this->prefix.$key, $value, $minutes * 60);
+        wincache_ucache_set($this->prefix . $key, $value, $minutes * 60);
     }
 
     /**
      * Store multiple items in the cache for a set number of minutes.
      *
-     * @param array $values array of key => value pairs
+     * @param array $values  array of key => value pairs
      * @param int   $minutes
-     *
-     * @return void
      */
     public function putMultiple(array $values, $minutes)
     {
@@ -121,7 +119,7 @@ class WinCacheCache extends TaggableStore implements AdapterContract
      */
     public function increment($key, $value = 1)
     {
-        return wincache_ucache_inc($this->prefix.$key, $value);
+        return wincache_ucache_inc($this->prefix . $key, $value);
     }
 
     /**
@@ -134,7 +132,7 @@ class WinCacheCache extends TaggableStore implements AdapterContract
      */
     public function decrement($key, $value = 1)
     {
-        return wincache_ucache_dec($this->prefix.$key, $value);
+        return wincache_ucache_dec($this->prefix . $key, $value);
     }
 
     /**
@@ -157,7 +155,7 @@ class WinCacheCache extends TaggableStore implements AdapterContract
      */
     public function forget($key)
     {
-        wincache_ucache_delete($this->prefix.$key);
+        wincache_ucache_delete($this->prefix . $key);
     }
 
     /**

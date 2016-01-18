@@ -38,7 +38,7 @@ class FileSessionHandler implements \SessionHandlerInterface
      * Create a new file driven handler instance.
      *
      * @param \Viserio\Filesystem\Filesystem $files
-     * @param string                           $path
+     * @param string                         $path
      */
     public function __construct(Filesystem $files, $path)
     {
@@ -47,14 +47,14 @@ class FileSessionHandler implements \SessionHandlerInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function open($savePath, $sessionName)
     {
         // close any open files before opening something new
         $this->close();
 
-        $path = $this->path.'/'.$sessionName;
+        $path = $this->path . '/' . $sessionName;
 
         $this->currentId = $sessionName;
         $this->fp = fopen($path, 'c+b');
@@ -74,7 +74,7 @@ class FileSessionHandler implements \SessionHandlerInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function close()
     {
@@ -90,7 +90,7 @@ class FileSessionHandler implements \SessionHandlerInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function read($sessionId)
     {
@@ -113,7 +113,7 @@ class FileSessionHandler implements \SessionHandlerInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function write($sessionId, $data)
     {
@@ -131,15 +131,15 @@ class FileSessionHandler implements \SessionHandlerInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function destroy($sessionId)
     {
-        $this->files->delete($this->path.'/'.$sessionId);
+        $this->files->delete($this->path . '/' . $sessionId);
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function gc($lifetime)
     {
@@ -157,7 +157,7 @@ class FileSessionHandler implements \SessionHandlerInterface
                     ->in($this->path)
                     ->files()
                     ->ignoreDotFiles(true)
-                    ->date('<= now - '.$lifetime.' seconds');
+                    ->date('<= now - ' . $lifetime . ' seconds');
 
                 foreach ($files as $file) {
                     $this->files->delete($file->getRealPath());

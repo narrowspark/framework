@@ -1,6 +1,7 @@
 <?php
 namespace Viserio\Cache;
 
+use Narrowspark\Arr\StaticArr as Arr;
 use Viserio\Cache\Adapter\ApcCache;
 use Viserio\Cache\Adapter\ArrayCache;
 use Viserio\Cache\Adapter\FileCache;
@@ -11,12 +12,10 @@ use Viserio\Cache\Adapter\RedisCache;
 use Viserio\Cache\Adapter\WinCacheCache;
 use Viserio\Cache\Adapter\XCacheCache;
 use Viserio\Cache\Exception\CacheException;
-use Viserio\Cache\Exception\InvalidArgumentException as InvalidCacheArgumentException;
 use Viserio\Contracts\Cache\Adapter as AdapterContract;
 use Viserio\Contracts\Cache\Factory as FactoryContract;
 use Viserio\Contracts\Config\Manager as ConfigContract;
 use Viserio\Filesystem\Filesystem;
-use Viserio\Support\Arr;
 use Viserio\Support\Manager;
 
 class CacheManager extends Manager implements FactoryContract

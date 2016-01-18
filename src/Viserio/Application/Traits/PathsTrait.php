@@ -1,15 +1,8 @@
 <?php
 namespace Viserio\Application\Traits;
 
-use Viserio\Support\Arr;
+use Narrowspark\Arr\StaticArr as Arr;
 
-/**
- * PathsTrait.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.4
- */
 trait PathsTrait
 {
     /**

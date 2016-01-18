@@ -3,13 +3,6 @@ namespace Viserio\Application;
 
 use Viserio\Contracts\Application\ServiceProvider as ServiceProviderContract;
 
-/**
- * ServiceProvider.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.6
- */
 abstract class ServiceProvider implements ServiceProviderContract
 {
     /**
@@ -81,8 +74,6 @@ abstract class ServiceProvider implements ServiceProviderContract
      *
      * @param string $abstract
      * @param string $alias
-     *
-     * @return void
      */
     protected function alias($abstract, $alias)
     {
@@ -105,6 +96,6 @@ abstract class ServiceProvider implements ServiceProviderContract
             return;
         }
 
-        throw new \BadMethodCallException('Call to undefined method ['.sprintf('%s', $method).']');
+        throw new \BadMethodCallException('Call to undefined method [' . sprintf('%s', $method) . ']');
     }
 }

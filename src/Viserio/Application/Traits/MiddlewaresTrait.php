@@ -3,13 +3,6 @@ namespace Viserio\Application\Traits;
 
 use Stack\Builder as StackBuilder;
 
-/**
- * MiddlewaresTrait.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.4
- */
 trait MiddlewaresTrait
 {
     /**

@@ -61,8 +61,8 @@ class ApcCache extends TaggableStore implements AdapterContract
     public function get($key)
     {
         $value = $this->apcu ?
-        apcu_fetch($this->prefix.$key) :
-        apc_fetch($this->prefix.$key);
+        apcu_fetch($this->prefix . $key) :
+        apc_fetch($this->prefix . $key);
 
         if ($value !== false) {
             return $value;
@@ -83,8 +83,8 @@ class ApcCache extends TaggableStore implements AdapterContract
         $this->minutes[$key] = $minutes;
 
         $this->apcu ?
-        apcu_store($this->prefix.$key, $value, $minutes * 60) :
-        apc_store($this->prefix.$key, $value, $minutes * 60);
+        apcu_store($this->prefix . $key, $value, $minutes * 60) :
+        apc_store($this->prefix . $key, $value, $minutes * 60);
     }
 
     /**
@@ -98,8 +98,8 @@ class ApcCache extends TaggableStore implements AdapterContract
     public function increment($key, $value = 1)
     {
         return $this->apcu ?
-        apcu_inc($this->prefix.$key, $value) :
-        apc_inc($this->prefix.$key, $value);
+        apcu_inc($this->prefix . $key, $value) :
+        apc_inc($this->prefix . $key, $value);
     }
 
     /**
@@ -113,8 +113,8 @@ class ApcCache extends TaggableStore implements AdapterContract
     public function decrement($key, $value = 1)
     {
         return $this->apcu ?
-        apcu_dec($this->prefix.$key, $value) :
-        apc_dec($this->prefix.$key, $value);
+        apcu_dec($this->prefix . $key, $value) :
+        apc_dec($this->prefix . $key, $value);
     }
 
     /**
@@ -140,8 +140,8 @@ class ApcCache extends TaggableStore implements AdapterContract
     public function forget($key)
     {
         return $this->apcu ?
-        apcu_delete($this->prefix.$key) :
-        apc_delete($this->prefix.$key);
+        apcu_delete($this->prefix . $key) :
+        apc_delete($this->prefix . $key);
     }
 
     /**

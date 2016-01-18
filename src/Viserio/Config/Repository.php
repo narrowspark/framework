@@ -1,8 +1,9 @@
 <?php
 namespace Viserio\Config;
 
+use ArrayIterator;
+use Narrowspark\Arr\StaticArr as Arr;
 use Viserio\Contracts\Config\Repository as RepositoryContract;
-use Viserio\Support\Arr;
 
 class Repository implements RepositoryContract
 {
@@ -231,7 +232,7 @@ class Repository implements RepositoryContract
             $next = array_shift($args);
 
             foreach ($next as $k => $v) {
-                if (is_integer($k)) {
+                if (is_int($k)) {
                     if (isset($merged[$k])) {
                         $merged[] = $v;
                     } else {
@@ -255,6 +256,6 @@ class Repository implements RepositoryContract
      */
     public function getIterator()
     {
-        return new \ArrayIterator($this->getAllNested());
+        return new ArrayIterator($this->getAllNested());
     }
 }

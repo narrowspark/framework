@@ -1,6 +1,7 @@
 <?php
 namespace Viserio\Exception\Adapter;
 
+use Exception;
 use Symfony\Component\Debug\ExceptionHandler;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -43,7 +44,7 @@ class SymfonyDisplayer implements Adapter
      *
      * @return JsonResponse|null
      */
-    public function display(\Exception $exception, $code)
+    public function display(Exception $exception, $code)
     {
         $status = $exception instanceof HttpExceptionInterface ?
                 $exception->getStatusCode() :

@@ -6,13 +6,6 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use Viserio\Application\HttpKernel;
 
-/**
- * HttpHandlingTrait.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.4
- */
 trait HttpHandlingTrait
 {
     /**

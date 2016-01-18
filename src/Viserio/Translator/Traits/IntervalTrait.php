@@ -9,15 +9,15 @@ trait IntervalTrait
      * @param int    $number   A number
      * @param string $interval An interval
      *
-     * @return bool
-     *
      * @throws \InvalidArgumentException
+     *
+     * @return bool
      */
     public function test($number, $interval)
     {
         $interval = trim($interval);
 
-        if (!preg_match('/^'.$this->getIntervalRegexp().'$/x', $interval, $matches)) {
+        if (!preg_match('/^' . $this->getIntervalRegexp() . '$/x', $interval, $matches)) {
             throw new \InvalidArgumentException(sprintf('"%s" is not a valid interval.', $interval));
         }
 
@@ -67,7 +67,7 @@ EOF;
      *
      * @param int $number
      *
-     * @return double
+     * @return float
      */
     protected function convertNumber($number)
     {

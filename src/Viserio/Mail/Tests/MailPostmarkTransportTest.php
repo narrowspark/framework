@@ -41,7 +41,7 @@ class MailPostmarkTransportTest extends \PHPUnit_Framework_TestCase
                             'TextBody' => 'Doo-wah-ditty.',
                             'HtmlBody' => '<q>Help me Rhonda</q>',
                             'Headers' => [
-                                ['Name' => 'Message-ID', 'Value' => '<'.$messageId.'>'],
+                                ['Name' => 'Message-ID', 'Value' => '<' . $messageId . '>'],
                                 ['Name' => 'X-PM-KeepID', 'Value' => 'true'],
                                 ['Name' => 'X-Priority', 'Value' => '1 (Highest)'],
                             ],

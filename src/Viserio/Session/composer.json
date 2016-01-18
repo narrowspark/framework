@@ -18,32 +18,33 @@
         }
     ],
     "require": {
-        "php"                          : ">=5.6",
-        "viserio/cookie"               : "self.version",
-        "viserio/encrypter"            : "self.version",
-        "viserio/support"              : "self.version",
-        "nesbot/carbon"                : "~1.18",
-        "symfony/http-foundation"      : "~2.8|~3.0"
+        "php"                             : ">=5.6.4",
+        "viserio/cookie"                  : "self.version",
+        "viserio/encrypter"               : "self.version",
+        "viserio/support"                 : "self.version",
+        "nesbot/carbon"                   : "~1.18",
+        "symfony/http-foundation"         : "~2.8.*|~3.0.*"
     },
     "require-dev": {
-        "fabpot/php-cs-fixer"          : "~1.10.1",
-        "phpunit/phpunit"              : "~5.0.6"
+        "narrowspark/php-cs-fixer-config" : "~1.1.5",
+        "narrowspark/testing-helper"      : "~1.1",
+        "phpunit/phpunit"                 : "~5.1.3"
     },
     "autoload": {
         "psr-4": {
-            "Viserio\\Session\\"       : ""
+            "Viserio\\Session\\"          : ""
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Viserio\\Session\\Tests\\": "Tests/"
+            "Viserio\\Session\\Tests\\"   : "Tests/"
         }
     },
     "extra": {
         "branch-alias": {
-            "dev-master"               : "0.10.0-dev"
+            "dev-master"                  : "1.0-dev"
         }
     },
-    "minimum-stability"                : "dev",
-    "prefer-stable"                    : true
+    "minimum-stability"                   : "dev",
+    "prefer-stable"                       : true
 }

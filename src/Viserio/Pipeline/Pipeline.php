@@ -4,22 +4,11 @@ namespace Viserio\Pipeline;
 use Closure;
 use Interop\Container\ContainerInterface;
 use Viserio\Contracts\Pipeline\Pipeline as PipelineContract;
+use Viserio\Support\Traits\ContainerAwareTrait;
 
 class Pipeline implements PipelineContract
 {
-    /**
-      * Did all the Stages run and succeded
-      *
-      * @var bool
-      */
-    protected $ended = false;
-
-    /**
-     * The container implementation.
-     *
-     * @var \Interop\Container\ContainerInterface
-     */
-    protected $container;
+    use ContainerAwareTrait;
 
     /**
      * The object being passed through the pipeline.
@@ -41,16 +30,6 @@ class Pipeline implements PipelineContract
      * @var array
      */
     protected $stages = [];
-
-    /**
-     * Create a new class instance.
-     *
-     * @param \Interop\Container\ContainerInterface $container
-     */
-    public function __construct(ContainerInterface $container)
-    {
-        $this->container = $container;
-    }
 
     /**
      * Set the object being sent through the pipeline.
@@ -108,7 +87,12 @@ class Pipeline implements PipelineContract
         $stages = array_reverse($this->stages);
 
         return call_user_func(
-            array_reduce($stages, $this->getSlice(), $firstSlice), $this->traveler
+            array_reduce(
+                $stages,
+                $this->getSlice(),
+                $firstSlice
+            ),
+            $this->traveler
         );
     }
 
@@ -127,18 +111,30 @@ class Pipeline implements PipelineContract
 
                 // Otherwise we'll resolve the stages out of the container and call it with
                 // the appropriate method and arguments, returning the results back out.
-                } else {
+                } elseif ($this->container) {
                     list($name, $parameters) = $this->parseStageString($stage);
-                    $merge = array_merge([$traveler, $stack], $parameters);
+
+                    if ($this->container->has($name)) {
+                        $merge = array_merge([$traveler, $stack], $parameters);
+
+                        return call_user_func_array(
+                            [
+                                $this->container->get($name),
+                                $this->method,
+                            ],
+                            $merge
+                        );
+                    }
+                } elseif (is_array($stage)) {
+                    $reflectionClass = new ReflectionClass(array_shift($stage));
 
                     return call_user_func_array(
-                        [
-                            $this->container->get($name),
-                            $this->method
-                        ],
-                        $merge
+                        $reflectionClass->newInstanceArgs($pipe),
+                        [$traveler, $stack]
                     );
                 }
+
+                return call_user_func_array(new $stage(), [$traveler, $stack]);
             };
         };
     }

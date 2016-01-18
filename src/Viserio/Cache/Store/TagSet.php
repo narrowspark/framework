@@ -23,7 +23,7 @@ class TagSet
      * Create a new TagSet instance.
      *
      * @param \Viserio\Contracts\Cache\Adapter $store
-     * @param array                              $names
+     * @param array                            $names
      */
     public function __construct(AdapterContract $store, array $names = [])
     {
@@ -94,6 +94,6 @@ class TagSet
      */
     public function tagKey($name)
     {
-        return 'tag:'.$name.':key';
+        return 'tag:' . $name . ':key';
     }
 }

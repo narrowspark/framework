@@ -1,13 +1,8 @@
 <?php
 namespace Viserio\Container;
 
-/**
- * Inflector.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.6
- */
+use Viserio\Support\Traits\ContainerAwareTrait;
+
 class Inflector
 {
     use ContainerAwareTrait;
@@ -138,10 +133,10 @@ class Inflector
      */
     protected function bound($arg)
     {
-        return (
+        return
             $this->getContainer()->isRegistered($arg) ||
             $this->getContainer()->isSingleton($arg) ||
             $this->getContainer()->resolveClassName($arg)
-        );
+        ;
     }
 }

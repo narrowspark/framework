@@ -13,13 +13,6 @@ use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\HttpKernel\TerminableInterface;
 
-/**
- * HttpKernel.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.5
- */
 class HttpKernel implements HttpKernelInterface, TerminableInterface
 {
     /**
@@ -35,7 +28,7 @@ class HttpKernel implements HttpKernelInterface, TerminableInterface
     protected $requests;
 
     /**
-     * @param \Viserio\Application\Application             $app
+     * @param \Viserio\Application\Application               $app
      * @param \Symfony\Component\HttpFoundation\RequestStack $requests
      */
     public function __construct(Application $app, SymfonyStackRequest $requests)
