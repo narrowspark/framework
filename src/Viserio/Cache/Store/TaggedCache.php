@@ -2,15 +2,17 @@
 namespace Viserio\Cache\Store;
 
 use Carbon\Carbon;
+use Closure;
+use DateTime;
+use Exception;
+use Narrowspark\Arr\Traits\ValueTrait;
 use Viserio\Cache\Adapter\Traits\MultipleTrait;
 use Viserio\Contracts\Cache\Adapter;
 use Viserio\Contracts\Cache\Store as StoreContract;
-use Viserio\Support\Traits\ValueTrait;
 
 class TaggedCache implements StoreContract
 {
-    use MultipleTrait;
-    use ValueTrait;
+    use MultipleTrait, ValueTrait;
 
     /**
      * The cache store implementation.
@@ -41,7 +43,7 @@ class TaggedCache implements StoreContract
         if ($store instanceof Adapter) {
             $this->store = $store;
         } else {
-            throw new \Exception(sprintf('%s is not a instance of "\Viserio\Contracts\Cache\Adapter"', $store));
+            throw new Exception(sprintf('%s is not a instance of "\Viserio\Contracts\Cache\Adapter"', $store));
         }
     }
 
@@ -69,7 +71,7 @@ class TaggedCache implements StoreContract
     {
         $value = $this->store->get($this->taggedItemKey($key));
 
-        return ($value !== null) ? $value : self::value($default);
+        return ($value !== null) ? $this->value($value) : $this->value($default);
     }
 
     /**
@@ -186,7 +188,7 @@ class TaggedCache implements StoreContract
      *
      * @return mixed
      */
-    public function remember($key, $minutes, \Closure $callback)
+    public function remember($key, $minutes, Closure $callback)
     {
         // If the item exists in the cache we will just return this immediately
         // otherwise we will execute the given Closure and cache the result
@@ -209,7 +211,7 @@ class TaggedCache implements StoreContract
      *
      * @return mixed
      */
-    public function rememberForever($key, \Closure $callback)
+    public function rememberForever($key, Closure $callback)
     {
         // If the item exists in the cache we will just return this immediately
         // otherwise we will execute the given Closure and cache the result
@@ -255,7 +257,7 @@ class TaggedCache implements StoreContract
      */
     protected function getMinutes($duration)
     {
-        if ($duration instanceof \DateTime) {
+        if ($duration instanceof DateTime) {
             $fromNow = Carbon::instance($duration)->diffInMinutes();
 
             return $fromNow > 0 ? $fromNow : null;

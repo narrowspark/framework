@@ -36,7 +36,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            " Viserio\\Translator\\Tests\\" : "tests/"
+            " Viserio\\Translator\\Tests\\" : "Tests/"
         }
     },
     "extra": {
