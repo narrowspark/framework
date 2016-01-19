@@ -1,7 +1,6 @@
 <?php
 namespace Viserio\Connect\Tests\Adapter\Database;
 
-
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use Viserio\Connect\Adapters\Database\FirebirdConnector;
 

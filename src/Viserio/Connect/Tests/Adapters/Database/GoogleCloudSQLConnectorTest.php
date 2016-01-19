@@ -1,7 +1,6 @@
 <?php
 namespace Viserio\Connect\Tests\Adapter\Database;
 
-
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use Viserio\Connect\Adapters\Database\GoogleCloudSQLConnector;
 
@@ -45,7 +44,8 @@ class GoogleCloudSQLConnectorTest extends \PHPUnit_Framework_TestCase
         );
         $connector->expects($this->once())
             ->method('getOptions')
-            ->with($this->equalTo($config))->will($this->returnValue(['options']));
+            ->with($this->equalTo($config))
+            ->will($this->returnValue(['options']));
         $connector->expects($this->once())
             ->method('createConnection')
             ->with($this->equalTo($dsn), $this->equalTo($config), $this->equalTo(['options']))

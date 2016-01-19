@@ -1,15 +1,16 @@
 <?php
 namespace Viserio\Connect\Tests\Adapter\Database;
 
-
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 
 class PostgreSQLConnectorTest extends \PHPUnit_Framework_TestCase
 {
     use MockeryTrait;
 
-    protected function setUp()
+    public function setUp()
     {
+        $this->allowMockingNonExistentMethods(true);
+
         if (!class_exists('PDO')) {
             $this->markTestSkipped('PDO module not installed');
         }

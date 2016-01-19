@@ -1,13 +1,21 @@
 <?php
 namespace Viserio\Connect\Tests\Adapters;
 
-use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use Memcached;
+use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use Viserio\Connect\Adapters\MemcachedConnector;
 
 class MemcachedConnectorTest extends \PHPUnit_Framework_TestCase
 {
     use MockeryTrait;
+
+    /**
+     * @return bool
+     */
+    public function allowMockingNonExistentMethods()
+    {
+        return true;
+    }
 
     public function testConnect()
     {
