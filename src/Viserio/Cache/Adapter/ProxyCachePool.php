@@ -1,9 +1,9 @@
 <?php
 namespace Viserio\Cache\Adapter;
 
-use Psr\Cache\CacheItemPoolInterface;
 use Cache\Adapter\Common\AbstractCachePool;
 use Psr\Cache\CacheItemInterface;
+use Psr\Cache\CacheItemPoolInterface;
 
 class XCacheCachePool extends AbstractCachePool
 {
