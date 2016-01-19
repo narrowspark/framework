@@ -1,7 +1,6 @@
 <?php
 namespace Viserio\Connect\Tests\Adapter\Database;
 
-
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 
 class PostgreSQLConnectorTest extends \PHPUnit_Framework_TestCase
