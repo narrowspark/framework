@@ -45,7 +45,6 @@
     "require": {
         "php"                                 : ">=5.6.4",
         "cache/adapter-common"                : "~0.1.4",
-        "cache/array-adapter"                 : "~0.2",
         "cache/void-adapter"                  : "~0.2",
         "cache/hierarchical-cache"            : "~0.1",
         "cache/taggable-cache"                : "~0.3.1",
@@ -85,6 +84,7 @@
     "suggest": {
         "cache/apc-adapter"                   : "Required to use the Apc cache (~0.1).",
         "cache/apcu-adapter"                  : "Required to use the Apcu cache (~0.1).",
+        "cache/array-adapter"                 : "Required to use the Array cache (~0.2)",
         "cache/filesystem-adapter"            : "Required to use the Predis cache (~0.1).",
         "cache/memcache-adapter"              : "Required to use the Memcache cache (~0.1).",
         "cache/memcached-adapter"             : "Required to use the Memcached cache (~0.1).",
