@@ -1,10 +1,13 @@
 <?php
 namespace Viserio\Connect\Tests\Adapter\Database;
 
-use Mockery as Mock;
+
+use Narrowspark\TestingHelper\Traits\MockeryTrait;
 
 class OdbcConnectorTest extends \PHPUnit_Framework_TestCase
 {
+    use MockeryTrait;
+
     protected function setUp()
     {
         if (!class_exists('PDO')) {
@@ -12,17 +15,12 @@ class OdbcConnectorTest extends \PHPUnit_Framework_TestCase
         }
     }
 
-    protected function tearDown()
-    {
-        Mock::close();
-    }
-
     /**
      * @dataProvider odbcConnectProvider
      */
     public function testConnect($dsn, $config)
     {
-        $connection = Mock::mock('stdClass');
+        $connection = $this->mock('stdClass');
 
         $connector = $this->getMock(
             'Viserio\Connect\Adapters\Database\OdbcConnector',

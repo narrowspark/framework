@@ -1,15 +1,13 @@
 <?php
 namespace Viserio\Connect\Tests\Adapters;
 
-use Mockery as Mock;
+use Narrowspark\TestingHelper\Traits\MockeryTrait;
+use Memcached;
 use Viserio\Connect\Adapters\MemcachedConnector;
 
 class MemcachedConnectorTest extends \PHPUnit_Framework_TestCase
 {
-    protected function tearDown()
-    {
-        Mock::close();
-    }
+    use MockeryTrait;
 
     public function testConnect()
     {
@@ -23,7 +21,7 @@ class MemcachedConnectorTest extends \PHPUnit_Framework_TestCase
             ],
         ];
 
-        $memcached = Mock::mock('stdClass');
+        $memcached = $this->mock('stdClass');
         $memcached->shouldReceive('addServer')->once()->with('localhost', 11211, 100);
         $memcached->shouldReceive('getServerList')->once()->andReturn(null);
         $memcached->shouldReceive('getVersion')->once()->andReturn([]);
@@ -50,7 +48,7 @@ class MemcachedConnectorTest extends \PHPUnit_Framework_TestCase
             ],
         ];
 
-        $memcached = Mock::mock('stdClass');
+        $memcached = $this->mock('stdClass');
         $memcached->shouldReceive('addServer')->once()->with('localhost', 11211, 100);
         $memcached->shouldReceive('getServerList')->once()->andReturn(null);
         $memcached->shouldReceive('getVersion')->once()->andReturn(['255.255.255']);
@@ -86,11 +84,11 @@ class MemcachedConnectorTest extends \PHPUnit_Framework_TestCase
 
         $connector = (new MemcachedConnector())->connect($config);
 
-        $this->assertSame(1, $connector->getOption(\Memcached::OPT_NO_BLOCK));
-        $this->assertSame(1, $connector->getOption(\Memcached::OPT_AUTO_EJECT_HOSTS));
-        $this->assertSame(2000, $connector->getOption(\Memcached::OPT_CONNECT_TIMEOUT));
-        $this->assertSame(2000, $connector->getOption(\Memcached::OPT_POLL_TIMEOUT));
-        $this->assertSame(2, $connector->getOption(\Memcached::OPT_RETRY_TIMEOUT));
+        $this->assertSame(1, $connector->getOption(Memcached::OPT_NO_BLOCK));
+        $this->assertSame(1, $connector->getOption(Memcached::OPT_AUTO_EJECT_HOSTS));
+        $this->assertSame(2000, $connector->getOption(Memcached::OPT_CONNECT_TIMEOUT));
+        $this->assertSame(2000, $connector->getOption(Memcached::OPT_POLL_TIMEOUT));
+        $this->assertSame(2, $connector->getOption(Memcached::OPT_RETRY_TIMEOUT));
     }
 
     /**
@@ -122,7 +120,7 @@ class MemcachedConnectorTest extends \PHPUnit_Framework_TestCase
 
         $connector = (new MemcachedConnector())->connect($config);
 
-        $this->assertSame(1, $connector->getOption(\Memcached::OPT_BINARY_PROTOCOL));
+        $this->assertSame(1, $connector->getOption(Memcached::OPT_BINARY_PROTOCOL));
     }
 
     /**
@@ -133,7 +131,7 @@ class MemcachedConnectorTest extends \PHPUnit_Framework_TestCase
     {
         $config = [];
 
-        $memcached = Mock::mock('stdClass');
+        $memcached = $this->mock('stdClass');
         $memcached->shouldReceive('getVersion')->once()->andReturn('');
         $memcached->shouldReceive('getServerList')->once()->andReturn($config);
 
