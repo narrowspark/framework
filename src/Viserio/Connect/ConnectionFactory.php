@@ -4,7 +4,6 @@ namespace Viserio\Connect;
 use Interop\Container\ContainerInterface;
 use PDO;
 use RuntimeException;
-use Interop\Container\ContainerInterface;
 use Viserio\Connect\Adapters\Database\DblibConnector;
 use Viserio\Connect\Adapters\Database\Firebirdconnector;
 use Viserio\Connect\Adapters\Database\GoogleCloudSQLConnector;
