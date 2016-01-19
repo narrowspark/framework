@@ -26,14 +26,17 @@ class XCacheCachePool extends AbstractCachePool
 
     protected function fetchObjectFromCache($key)
     {
+        return $this->pool->getItem($key);
     }
 
     protected function clearAllObjectsFromCache()
     {
+        return $this->pool->clear();
     }
 
     protected function clearOneObjectFromCache($key)
     {
+        return $this->pool->deleteItem($key);
     }
 
     protected function storeItemInCache($key, CacheItemInterface $item, $ttl)
