@@ -51,11 +51,12 @@ install:
 script:
   - mkdir -p build/logs
   - vendor/bin/php-cs-fixer fix --config-file=.php_cs --verbose --diff --dry-run
-  - vendor/bin/phpunit -c phpunit.xml.dist --verbose --coverage-text
+  - vendor/bin/phpunit -c phpunit.xml.dist --verbose --coverage-text --coverage-clover=coverage.xml
   - vendor/bin/humbug
 
-after_script:
+after_success:
   - wget https://scrutinizer-ci.com/ocular.phar
   - php ocular.phar code-coverage:upload --format=php-clover build/logs/coverage.clover
+  - bash <(curl -s https://codecov.io/bash)
 
 sudo: false

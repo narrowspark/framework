@@ -1,20 +1,19 @@
 <?php
 namespace Viserio\Connect\Tests\Adapter\Database;
 
-use Mockery as Mock;
+use Narrowspark\TestingHelper\Traits\MockeryTrait;
 
 class MySqlConnectorTest extends \PHPUnit_Framework_TestCase
 {
-    protected function setUp()
+    use MockeryTrait;
+
+    public function setUp()
     {
+        $this->allowMockingNonExistentMethods(true);
+
         if (!class_exists('PDO')) {
             $this->markTestSkipped('PDO module not installed');
         }
-    }
-
-    protected function tearDown()
-    {
-        Mock::close();
     }
 
     /**
@@ -22,7 +21,7 @@ class MySqlConnectorTest extends \PHPUnit_Framework_TestCase
      */
     public function testMySqlConnectCallsCreateConnectionWithProperArguments($dsn, $config)
     {
-        $connection = Mock::mock('stdClass');
+        $connection = $this->mock('stdClass');
 
         $connector = $this->getMock(
             'Viserio\Connect\Adapters\Database\MySqlConnector',

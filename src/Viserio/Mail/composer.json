@@ -28,7 +28,7 @@
         "aws/aws-sdk-php"                 : "~3.0",
         "guzzlehttp/guzzle"               : "~5.3|~6.0",
         "narrowspark/php-cs-fixer-config" : "~1.1.5",
-        "narrowspark/testing-helper"      : "~1.1",
+        "narrowspark/testing-helper"      : "~1.5",
         "viserio/config"                  : "self.version",
         "viserio/events"                  : "self.version",
         "viserio/view"                    : "self.version",
