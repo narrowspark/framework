@@ -18,7 +18,8 @@ class GoogleCloudSQLConnector extends AbstractDatabaseConnector
         // Next we will set the "names" on the clients connections so
         // a correct character set will be used by this client. The collation also
         // is set on the server but needs to be set here on this client objects.
-        $connection->prepare(sprintf('set names \'%s\'', $config['charset']))->execute();
+        $charset = isset($config['charset']) ? $config['charset'] : 'utf8';
+        $connection->prepare(sprintf('set names \'%s\'', $charset))->execute();
 
         $connection->prepare("set sql_mode='ANSI_QUOTES'")->execute();
 

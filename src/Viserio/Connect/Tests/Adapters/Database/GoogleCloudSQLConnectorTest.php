@@ -1,21 +1,18 @@
 <?php
 namespace Viserio\Connect\Tests\Adapter\Database;
 
-use Mockery as Mock;
+use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use Viserio\Connect\Adapters\Database\GoogleCloudSQLConnector;
 
 class GoogleCloudSQLConnectorTest extends \PHPUnit_Framework_TestCase
 {
+    use MockeryTrait;
+
     protected function setUp()
     {
         if (!class_exists('PDO')) {
             $this->markTestSkipped('PDO module not installed');
         }
-    }
-
-    protected function tearDown()
-    {
-        Mock::close();
     }
 
     /**
@@ -39,7 +36,7 @@ class GoogleCloudSQLConnectorTest extends \PHPUnit_Framework_TestCase
     {
         $dsn = 'mysql:unix_socket=/cloudsql/foo;dbname=bar';
         $config = ['server' => 'foo', 'database' => 'bar', 'charset' => 'utf8'];
-        $connection = Mock::mock('stdClass');
+        $connection = $this->mock('stdClass');
 
         $connector = $this->getMock(
             'Viserio\Connect\Adapters\Database\GoogleCloudSQLConnector',
@@ -47,7 +44,8 @@ class GoogleCloudSQLConnectorTest extends \PHPUnit_Framework_TestCase
         );
         $connector->expects($this->once())
             ->method('getOptions')
-            ->with($this->equalTo($config))->will($this->returnValue(['options']));
+            ->with($this->equalTo($config))
+            ->will($this->returnValue(['options']));
         $connector->expects($this->once())
             ->method('createConnection')
             ->with($this->equalTo($dsn), $this->equalTo($config), $this->equalTo(['options']))

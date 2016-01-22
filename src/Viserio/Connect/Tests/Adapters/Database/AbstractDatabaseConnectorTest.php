@@ -64,6 +64,6 @@ class AbstractDatabaseConnectorTest extends \PHPUnit_Framework_TestCase
             'password' => '',
         ];
 
-        $this->assertSame('PDO', $connector->createConnection('mysql:dbname=narrowspark;host=fails', $config, []));
+        $connector->createConnection('mysql:dbname=narrowspark;host=fails', $config, []);
     }
 }
