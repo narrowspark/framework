@@ -23,7 +23,7 @@
 
     <testsuites>
         <testsuite name="Narrowspark Test Suite">
-            <directory suffix="ConnectorTest.php">./src/Viserio/*/Tests/</directory>
+            <directory suffix="Test.php">./src/Viserio/*/Tests/</directory>
         </testsuite>
     </testsuites>
 
@@ -41,6 +41,6 @@
     </filter>
 
     <logging>
-        <!-- <log type="coverage-html" target="build/logs/report" lowUpperBound="35" highLowerBound="70"/> -->
+        <log type="coverage-html" target="build/logs/report" lowUpperBound="35" highLowerBound="70"/>
     </logging>
 </phpunit>
