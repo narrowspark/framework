@@ -11,7 +11,7 @@ class MSSQLConnectorTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         if (!class_exists('PDO')) {
-            $this->markTestSkipped('PDO module not installed');
+            $this->markTestSkipped('PDO module is not installed.');
         }
     }
 

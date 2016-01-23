@@ -49,6 +49,7 @@
         "nesbot/carbon"                                      : "~1.21",
         "nikic/fast-route"                                   : "~0.6",
         "paragonie/password_lock"                            : "~1.1",
+        "psr/cache"                                          : "~1.0",
         "psr/log"                                            : "~1.0",
         "psy/psysh"                                          : "~0.6.1",
         "stecman/symfony-console-completion"                 : "~0.6.1",
@@ -88,8 +89,7 @@
         "viserio/statical-proxy"                             : "self.version",
         "viserio/support"                                    : "self.version",
         "viserio/translator"                                 : "self.version",
-        "viserio/view"                                       : "self.version",
-        "psr/cache"                                          : "1.0.0"
+        "viserio/view"                                       : "self.version"
     },
     "provide": {
         "container-interop/container-interop-implementation" : "~1.1",

@@ -9,7 +9,6 @@ use Viserio\Filesystem\Filesystem;
 
 class FileCachePool extends AbstractCachePool
 {
-
     /**
      * The Viserio Filesystem instance.
      *
@@ -45,7 +44,7 @@ class FileCachePool extends AbstractCachePool
     {
         if ($this->files->isDirectory($this->directory)) {
             foreach ($this->files->directories($this->directory) as $directory) {
-                this->files->deleteDirectory($directory);
+                $this->files->deleteDirectory($directory);
             }
         }
     }

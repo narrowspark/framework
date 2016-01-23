@@ -8,9 +8,11 @@ class TestManager extends Manager
     protected $defaultDriver;
 
     protected $supportedDrivers = [
-        'test'   => 'test',
-        'config' => 'config',
-        'throw'  => 'throw',
+        'value',
+        'test'        => 'test',
+        'config'      => 'config',
+        'throw'       => 'throw',
+        'testmanager' => TestManager::class
     ];
 
     /**
@@ -39,6 +41,11 @@ class TestManager extends Manager
     }
 
     protected function createConfigDriver($config)
+    {
+        return $config;
+    }
+
+    protected function createValueDriver($config)
     {
         return $config;
     }
