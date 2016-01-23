@@ -1,8 +1,8 @@
 <?php
 namespace Viserio\Cache\Adapter;
 
-use Exception;
 use Cache\Adapter\Common\AbstractCachePool;
+use Exception;
 use Narrowspark\Arr\StaticArr as Arr;
 use Psr\Cache\CacheItemInterface;
 use Viserio\Filesystem\Filesystem;
@@ -56,7 +56,6 @@ class FileCachePool extends AbstractCachePool
         if ($this->files->exists($file)) {
             return $this->files->delete($file);
         }
-
     }
 
     protected function storeItemInCache($key, CacheItemInterface $item, $ttl)

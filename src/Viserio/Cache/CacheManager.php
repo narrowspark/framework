@@ -1,28 +1,28 @@
 <?php
 namespace Viserio\Cache;
 
-use Memcache;
-use Memcached;
-use Predis\Client as PredisClient;
-use Cache\Adapter\Void\VoidCachePool;
-use Cache\Adapter\Predis\PredisCachePool;
 use Cache\Adapter\Apc\ApcCachePool;
 use Cache\Adapter\Apcu\ApcuCachePool;
-use Cache\Adapter\PHPArray\ArrayCachePool;
 use Cache\Adapter\Filesystem\FilesystemCachePool;
 use Cache\Adapter\Memcache\MemcacheCachePool;
 use Cache\Adapter\Memcached\MemcachedCachePool;
 use Cache\Adapter\MongoDB\MongoDBCachePool;
-use League\Flysystem\Filesystem as Flysystem;
+use Cache\Adapter\PHPArray\ArrayCachePool;
+use Cache\Adapter\Predis\PredisCachePool;
+use Cache\Adapter\Void\VoidCachePool;
 use League\Flysystem\AdapterInterface;
+use League\Flysystem\Filesystem as Flysystem;
+use Memcache;
+use Memcached;
+use MongoDB\Driver\Manager as MongoDBManager;
 use Narrowspark\Arr\StaticArr as Arr;
+use Predis\Client as PredisClient;
 use Viserio\Cache\Exception\CacheException;
 use Viserio\Contracts\Cache\Adapter as AdapterContract;
 use Viserio\Contracts\Cache\Factory as FactoryContract;
 use Viserio\Contracts\Config\Manager as ConfigContract;
 use Viserio\Filesystem\Filesystem;
 use Viserio\Support\Manager;
-use MongoDB\Driver\Manager as MongoDBManager;
 
 class CacheManager extends Manager implements FactoryContract
 {
@@ -47,7 +47,7 @@ class CacheManager extends Manager implements FactoryContract
         'memcached',
         'mongodb',
         'predis',
-        'void'         => VoidCachePool::class
+        'void'         => VoidCachePool::class,
     ];
 
     /**
