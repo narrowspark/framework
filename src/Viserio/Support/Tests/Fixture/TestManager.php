@@ -12,7 +12,7 @@ class TestManager extends Manager
         'test'        => 'test',
         'config'      => 'config',
         'throw'       => 'throw',
-        'testmanager' => TestManager::class
+        'testmanager' => TestManager::class,
     ];
 
     /**
