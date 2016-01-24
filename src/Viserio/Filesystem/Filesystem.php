@@ -1,27 +1,18 @@
 <?php
 namespace Viserio\Filesystem;
 
+use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
 use ErrorException;
 use Symfony\Component\Finder\Finder;
 use Viserio\Contracts\Filesystem\FileNotFoundException;
 use Viserio\Filesystem\Traits\DirectoryTrait;
 use Viserio\Filesystem\Traits\MimetypeTrait;
+use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
 
-class Filesystem
+class Filesystem extends SymfonyFilesystem
 {
     use DirectoryTrait, MimetypeTrait;
-
-    /**
-     * Determine if a file exists.
-     *
-     * @param string $path
-     *
-     * @return bool
-     */
-    public function exists($path)
-    {
-        return file_exists($path);
-    }
 
     /**
      * Get the contents of a file.
@@ -116,57 +107,6 @@ class Filesystem
     }
 
     /**
-     * Delete the file at a given path.
-     *
-     * @param string|array $paths
-     *
-     * @return bool
-     */
-    public function delete($paths)
-    {
-        $paths   = is_array($paths) ? $paths : func_get_args();
-        $success = true;
-
-        foreach ($paths as $path) {
-            try {
-                if (!@unlink($path)) {
-                    $success = false;
-                }
-            } catch (ErrorException $e) {
-                $success = false;
-            }
-        }
-
-        return $success;
-    }
-
-    /**
-     * Move a file to a new location.
-     *
-     * @param string $path
-     * @param string $target
-     *
-     * @return bool
-     */
-    public function move($path, $target)
-    {
-        return rename($path, $target);
-    }
-
-    /**
-     * Copy a file to a new location.
-     *
-     * @param string $path
-     * @param string $target
-     *
-     * @return bool
-     */
-    public function copy($path, $target)
-    {
-        return copy($path, $target);
-    }
-
-    /**
      * Extract the file extension from a file path.
      *
      * @param string $path
@@ -189,7 +129,7 @@ class Filesystem
      */
     public function withoutExtension($path, $extension = null)
     {
-        if (null !== $extension) {
+        if ($extension !== null) {
             // remove extension and trailing dot
             return rtrim(basename($path, $extension), '.');
         }
@@ -211,13 +151,13 @@ class Filesystem
         $extension = ltrim($extension, '.');
 
         // No extension for paths
-        if ('/' === substr($path, -1)) {
+        if (substr($path, -1) === '/') {
             return $path;
         }
 
         // No actual extension in path
         if (empty($actualExtension)) {
-            return $path . ('.' === substr($path, -1) ? '' : '.') . $extension;
+            return $path . (substr($path, -1) === '.' ? '' : '.') . $extension;
         }
 
         return substr($path, 0, -strlen($actualExtension)) . $extension;
@@ -233,27 +173,6 @@ class Filesystem
     public function type($path)
     {
         return filetype($path);
-    }
-
-    /**
-     * Get the mime-type of a given file.
-     *
-     * @param string $path
-     * @param bool   $withencoding
-     *
-     * @return string|false
-     */
-    public function mimeType($path, $withencoding = false)
-    {
-        if (function_exists('finfo_file')) {
-            $finfo = finfo_open($withencoding ? FILEINFO_MIME : FILEINFO_MIME_TYPE);
-            $mimetype = finfo_file($finfo, $path);
-            finfo_close($finfo);
-
-            return $mimetype;
-        }
-
-        return $this->fallbackMimeType($path);
     }
 
     /**
@@ -327,11 +246,9 @@ class Filesystem
     public function files($directory)
     {
         $glob = glob($directory . '/*');
-
         if ($glob === false) {
             return [];
         }
-
         // To get the appropriate files, we'll simply glob the directory and filter
         // out any "files" that are not truly files so we do not end up with any
         // directories in our list, but only true files within the directory.
@@ -343,13 +260,56 @@ class Filesystem
     /**
      * Get all of the files from the given directory (recursive).
      *
-     * @param string $directory
+     * @param string   $directory
+     * @param string[] $type      Files types
      *
      * @return array
      */
-    public function allFiles($directory)
+    public function allFiles($directory, $type = null)
     {
-        return iterator_to_array(Finder::create()->files()->in($directory), false);
+        $files = [];
+
+        if (is_dir($directory)) {
+            $iterator = new RecursiveDirectoryIterator($directory);
+
+            foreach (new RecursiveIteratorIterator($iterator) as $file) {
+                if ($type !== null) {
+                    if (is_array($type)) {
+                        $file_ext = substr(strrchr($file->getFilename(), '.'), 1);
+
+                        if (in_array($file_ext, $type)) {
+                            if (strpos($file->getFilename(), $file_ext, 1)) {
+                                if ($file_path) {
+                                    $files[] = $file->getPathName();
+                                } else {
+                                    $files[] = $file->getFilename();
+                                }
+                            }
+                        }
+                    } else {
+                        if (strpos($file->getFilename(), $type, 1)) {
+                            if ($file_path) {
+                                $files[] = $file->getPathName();
+                            } else {
+                                $files[] = $file->getFilename();
+                            }
+                        }
+                    }
+                } else {
+                    if ($file->getFilename() !== '.' && $file->getFilename() !== '..') {
+                        if ($file_path) {
+                            $files[] = $file->getPathName();
+                        } else {
+                            $files[] = $file->getFilename();
+                        }
+                    }
+                }
+            }
+
+            return $files;
+        }
+
+        return [];
     }
 
     /**

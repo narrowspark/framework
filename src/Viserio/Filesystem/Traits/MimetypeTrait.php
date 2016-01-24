@@ -64,6 +64,27 @@ trait MimetypeTrait
     ];
 
     /**
+     * Get the mime-type of a given file.
+     *
+     * @param string $path
+     * @param bool   $withencoding
+     *
+     * @return string|false
+     */
+    public function mimeType($path, $withencoding = false)
+    {
+        if (function_exists('finfo_file')) {
+            $finfo    = finfo_open($withencoding ? FILEINFO_MIME : FILEINFO_MIME_TYPE);
+            $mimetype = finfo_file($finfo, $path);
+            finfo_close($finfo);
+
+            return $mimetype;
+        }
+
+        return $this->fallbackMimeType($path);
+    }
+
+    /**
      * Fallback for mimeType.
      *
      * @param string $path

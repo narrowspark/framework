@@ -2,7 +2,6 @@
 namespace Viserio\Filesystem\Traits;
 
 use FilesystemIterator;
-use Symfony\Component\Finder\Finder;
 use Viserio\Support\Traits\DirectorySeparatorTrait;
 
 trait DirectoryTrait
@@ -18,30 +17,16 @@ trait DirectoryTrait
      */
     public function directories($directory)
     {
-        $directories = [];
-        foreach (Finder::create()->in($directory)->directories()->depth(0) as $dir) {
-            $directories[] = $dir->getPathname();
-        }
+        if (is_dir($directory) && $dh = opendir($directory)) {
+            $directories = array();
 
-        return $directories;
-    }
+            while ($fn = readdir($dh)) {
+                if ($fn !== '.' && $fn !== '..' && is_dir($directory.'/'.$fn)) {
+                    $directories[] = $fn;
+                }
+            }
 
-    /**
-     * Create a directory.
-     *
-     * @param string $path
-     * @param int    $mode
-     * @param bool   $recursive
-     * @param bool   $force
-     *
-     * @return bool
-     */
-    public function makeDirectory($path, $mode = 0755, $recursive = false, $force = false)
-    {
-        if ($force) {
-            return @mkdir($path, $mode, $recursive);
-        } else {
-            return mkdir($path, $mode, $recursive);
+            return $directories;
         }
     }
 
@@ -159,6 +144,29 @@ trait DirectoryTrait
     public function isDirectory($directory)
     {
         return is_dir($directory);
+    }
+
+    /**
+     * Check if a directory is writable.
+     *
+     * @param string $path The path to check.
+     *
+     * @return booleans
+     */
+    public static function writable($path)
+    {
+        // Create temporary file
+        $file = tempnam($path, 'writable');
+
+        // File has been created
+        if ($file !== false) {
+            // Remove temporary file
+            $this->remove($file);
+
+            return true;
+        }
+
+        return false;
     }
 
     /**
