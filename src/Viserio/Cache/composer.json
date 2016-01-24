@@ -10,7 +10,6 @@
         "redis",
         "mongodb",
         "mongo",
-        "pdo",
         "sqlite",
         "mysql",
         "postgres",
@@ -53,7 +52,8 @@
         "narrowspark/php-cs-fixer-config"     : "~1.1.5",
         "narrowspark/testing-helper"          : "~1.5",
         "phpunit/phpunit"                     : "~5.1.3",
-        "viserio/connect"                     : "self.version"
+        "viserio/connect"                     : "self.version",
+        "viserio/encryption"                  : "self.version"
     },
     "provide": {
         "psr/cache-implementation"            : "1.0.0"
@@ -77,15 +77,16 @@
         "cache/apc-adapter"                   : "Required to use the Apc cache (~0.1).",
         "cache/apcu-adapter"                  : "Required to use the Apcu cache (~0.1).",
         "cache/array-adapter"                 : "Required to use the Array cache (~0.2)",
-        "cache/filesystem-adapter"            : "Required to use the Filesystem cache (~0.1).",
+        "cache/filesystem-adapter"            : "Required to use the Filesystem/Local cache (~0.1).",
         "cache/memcache-adapter"              : "Required to use the Memcache cache (~0.1).",
         "cache/memcached-adapter"             : "Required to use the Memcached cache (~0.1).",
         "cache/mongodb-adapter"               : "Required to use the Mongodb cache (~0.1).",
         "cache/predis-adapter"                : "Required to use the Predis cache (~0.3).",
+        "php-cache/session-handler"           : "Required to use the Session cache (~0.1).",
         "cache/void-adapter"                  : "Required to use the Void cache (~0.2).",
         "ext-wincache"                        : "Required to use the WinCache cache.",
-        "viserio/connect"                     : "Alternative for PDO/Predis connection (self.version).",
-        "viserio/filesystem"                  : "Required to use the File cache (self.version).",
+        "viserio/connect"                     : "Alternative for Predis connection (self.version).",
+        "viserio/encryption"                  : "Required to use the Encrypter cache. (self.version)",
         "ext-xcache"                          : "Required to use the xCache cache."
     },
     "minimum-stability"                       : "dev",

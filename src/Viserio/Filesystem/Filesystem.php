@@ -124,7 +124,7 @@ class Filesystem
      */
     public function delete($paths)
     {
-        $paths = is_array($paths) ? $paths : func_get_args();
+        $paths   = is_array($paths) ? $paths : func_get_args();
         $success = true;
 
         foreach ($paths as $path) {
