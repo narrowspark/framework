@@ -18,10 +18,10 @@ trait DirectoryTrait
     public function directories($directory)
     {
         if (is_dir($directory) && $dh = opendir($directory)) {
-            $directories = array();
+            $directories = [];
 
             while ($fn = readdir($dh)) {
-                if ($fn !== '.' && $fn !== '..' && is_dir($directory.'/'.$fn)) {
+                if ($fn !== '.' && $fn !== '..' && is_dir($directory . '/' . $fn)) {
                     $directories[] = $fn;
                 }
             }
