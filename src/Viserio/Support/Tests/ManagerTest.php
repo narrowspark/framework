@@ -35,7 +35,9 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
 
         $this->assertTrue($manager->driver('test'));
         $this->assertEquals($setting, $manager->driver('config', $setting));
-        $this->assertEquals(['test' => true, 'config' => $setting], $manager->getDrivers());
+        $this->assertEquals($setting, $manager->driver('value', $setting));
+        $this->assertEquals(['test' => true, 'config' => $setting, 'value' => $setting], $manager->getDrivers());
+        $this->assertInstanceOf('Viserio\Support\Tests\Fixture\TestManager', $manager->driver('testmanager'));
     }
 
     public function testCustomeDriver()
