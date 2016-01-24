@@ -1,14 +1,14 @@
 <?php
 namespace Viserio\Filesystem;
 
+use ErrorException;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
-use ErrorException;
+use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
 use Symfony\Component\Finder\Finder;
 use Viserio\Contracts\Filesystem\FileNotFoundException;
 use Viserio\Filesystem\Traits\DirectoryTrait;
 use Viserio\Filesystem\Traits\MimetypeTrait;
-use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
 
 class Filesystem extends SymfonyFilesystem
 {
