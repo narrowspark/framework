@@ -22,7 +22,6 @@ class FilesystemManager extends Manager
      */
     protected $factory;
 
-
     /**
      * The registered custom driver creators.
      *

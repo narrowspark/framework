@@ -1,9 +1,9 @@
 <?php
 namespace Viserio\Filesystem;
 
-use Viserio\Contracts\Filesystem\UnsupportedFormatException;
 use Viserio\Contracts\Filesystem\Loader as LoaderContract;
 use Viserio\Contracts\Filesystem\Parser as ParserContract;
+use Viserio\Contracts\Filesystem\UnsupportedFormatException;
 use Viserio\Filesystem\Parser\Ini as IniParser;
 use Viserio\Filesystem\Parser\Json as JsonParser;
 use Viserio\Filesystem\Parser\Php as PhpParser;
