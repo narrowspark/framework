@@ -1,8 +1,8 @@
 <?php
 namespace Viserio\Contracts\Filesystem;
 
-use Exception;
+use RuntimeException;
 
-class EmptyDirectoryException extends Exception
+class EmptyDirectoryException extends RuntimeException
 {
 }

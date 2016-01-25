@@ -1,8 +1,8 @@
 <?php
 namespace Viserio\Contracts\Filesystem;
 
-use Exception;
+use RuntimeException;
 
-class UnsupportedFormatException extends Exception
+class UnsupportedFormatException extends RuntimeException
 {
 }

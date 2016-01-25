@@ -2,9 +2,12 @@
 namespace Viserio\Filesystem\Test;
 
 use Viserio\Filesystem\Filesystem;
+use Viserio\Support\Traits\DirectorySeparatorTrait;
 
 class FilesystemTest extends \PHPUnit_Framework_TestCase
 {
+    use DirectorySeparatorTrait;
+
     public function testGetRetrievesFiles()
     {
         file_put_contents(__DIR__ . '/file.txt', 'Hello World');
@@ -256,7 +259,7 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($file->isImage(__DIR__ . '/foo.txt'));
         @unlink(__DIR__ . '/foo.txt');
 
-        $path = realpath(__DIR__ . '/fixtures') . '/test-image.png';
+        $path = realpath(__DIR__ . '/Fixture') . '/test-image.png';
         $file = new Filesystem();
         $this->assertTrue($file->isImage($path));
     }

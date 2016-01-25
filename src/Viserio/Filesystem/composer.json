@@ -14,7 +14,7 @@
         "flysystem",
         "ftp",
         "local",
-        "gridfs"
+        "gridfs",
         "s3",
         "sftp",
         "rackspace",
@@ -38,7 +38,6 @@
     ],
     "require": {
         "php"                                : ">=5.6.4",
-        "viserio/connect"                    : "self.version",
         "viserio/contracts"                  : "self.version",
         "viserio/support"                    : "self.version",
         "symfony/filesystem"                 : "~2.8|~3.0"

@@ -3,10 +3,10 @@ namespace Viserio\Filesystem;
 
 use League\Flysystem\AdapterInterface;
 use Viserio\Contracts\Config\Manager as ConfigContract;
-use Viserio\Contracts\Filesystem\FilesystemManager as Manager;
 use Viserio\Filesystem\Adapters\ConnectionFactory;
+use Viserio\Support\Manager;
 
-class FilesystemManager implements Manager
+class FilesystemManager extends Manager
 {
     /**
      * Container instance.
@@ -22,12 +22,6 @@ class FilesystemManager implements Manager
      */
     protected $factory;
 
-    /**
-     * The array of resolved filesystem drivers.
-     *
-     * @var array
-     */
-    protected $disks = [];
 
     /**
      * The registered custom driver creators.
@@ -44,52 +38,30 @@ class FilesystemManager implements Manager
      */
     public function __construct(ConfigContract $config, ConnectionFactory $factory)
     {
-        $this->config = $config;
+        $this->config  = $config;
         $this->factory = $factory;
     }
 
     /**
-     * Get an OAuth provider implementation.
+     * Set the default cache driver name.
      *
-     * @param string|null $name
-     *
-     * @return \Viserio\Contracts\Filesystem\Filesystem
+     * @param string $name
      */
-    public function disk($name = null)
+    public function setDefaultDriver($name)
     {
-        $name = $name ?: $this->getDefaultDriver();
+        $this->config->set('filesystems::default', $name);
 
-        return $this->disks[$name] = $this->get($name);
+        return $this;
     }
 
     /**
-     * Attempt to get the disk from the local cache.
+     * Get the default driver name.
      *
-     * @param string $name
-     *
-     * @return \Viserio\Contracts\Filesystem\Filesystem
+     * @return string
      */
-    protected function get($name)
+    public function getDefaultDriver()
     {
-        return isset($this->disks[$name]) ? $this->disks[$name] : $this->resolve($name);
-    }
-
-    /**
-     * Resolve the given disk.
-     *
-     * @param string $name
-     *
-     * @return FilesystemAdapter
-     */
-    protected function resolve($name)
-    {
-        $config = $this->getConfig($name);
-
-        if (isset($this->customCreators[$config['driver']])) {
-            return $this->callCustomCreator($config);
-        } else {
-            return $this->adapt($this->factory->make($config));
-        }
+        return $this->config->get('filesystems::default', '');
     }
 
     /**
@@ -102,60 +74,5 @@ class FilesystemManager implements Manager
     protected function adapt(AdapterInterface $filesystem)
     {
         return new FilesystemAdapter($filesystem);
-    }
-
-    /**
-     * Get the filesystem connection configuration.
-     *
-     * @param string $name
-     *
-     * @return array
-     */
-    protected function getConfig($name)
-    {
-        return $this->config->get(sprintf('filesystems::disks.%s', $name));
-    }
-
-    /**
-     * Get the default driver name.
-     *
-     * @return string
-     */
-    public function getDefaultDriver()
-    {
-        return $this->config->get('filesystems::default');
-    }
-
-    /**
-     * Call a custom driver creator.
-     *
-     * @param array $config
-     *
-     * @return \Viserio\Contracts\Filesystem\Filesystem
-     */
-    protected function callCustomCreator(array $config)
-    {
-        $driver = $this->customCreators[$config['driver']]($config);
-
-        if ($driver instanceof AdapterInterface) {
-            return $this->adapt($driver);
-        } else {
-            return $driver;
-        }
-    }
-
-    /**
-     * Register a custom driver creator Closure.
-     *
-     * @param string   $driver
-     * @param \Closure $callback
-     *
-     * @return $this
-     */
-    public function extend($driver, \Closure $callback)
-    {
-        $this->customCreators[$driver] = $callback;
-
-        return $this;
     }
 }

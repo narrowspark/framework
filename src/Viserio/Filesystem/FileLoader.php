@@ -1,7 +1,7 @@
 <?php
 namespace Viserio\Filesystem;
 
-use RuntimeException;
+use Viserio\Contracts\Filesystem\UnsupportedFormatException;
 use Viserio\Contracts\Filesystem\Loader as LoaderContract;
 use Viserio\Contracts\Filesystem\Parser as ParserContract;
 use Viserio\Filesystem\Parser\Ini as IniParser;
@@ -63,7 +63,7 @@ class FileLoader implements LoaderContract
      */
     public function __construct(Filesystem $files, $defaultPath)
     {
-        $this->files = $files;
+        $this->files       = $files;
         $this->defaultPath = $defaultPath;
     }
 
@@ -88,15 +88,15 @@ class FileLoader implements LoaderContract
         $dataFile = $this->exists[preg_replace('[/]', '', $namespace . $group . $file)];
 
         // Set the right Parser for data
-        $parser = $this->parser($this->files->extension($file), $dataFile);
+        $parser   = $this->parser($this->files->extension($file), $dataFile);
 
         // return data array
-        $items = $parser->load($dataFile, $group);
+        $items    = $parser->load($dataFile, $group);
 
         // Finally we're ready to check for the environment specific data
         // file which will be merged on top of the main arrays so that they get
         // precedence over them if we are currently in an environments setup.
-        $env = sprintf('/%s/%s', $environment, $file);
+        $env         = sprintf('/%s/%s', $environment, $file);
 
         // Get checked env data file
         $envdataFile = $this->exists[preg_replace('[/]', '', $namespace . $environment . $group . $file)];
@@ -106,7 +106,7 @@ class FileLoader implements LoaderContract
             $envParser = $this->parser($this->files->extension($file), $path . $env);
 
             // Return data array
-            $envItems = $envParser->load($envdataFile, $group);
+            $envItems  = $envParser->load($envdataFile, $group);
 
             // Merege env data and data
             $items = $this->dataMerge($items, $envItems);
@@ -157,7 +157,7 @@ class FileLoader implements LoaderContract
         // Finally, we can simply check if this file exists. We will also cache
         // the value in an array so we don't have to go through this process
         // again on subsequent checks for the existing of the data file.
-        $file = sprintf('%s/%s', $path, $file);
+        $file    = sprintf('%s/%s', $path, $file);
 
         $envFile = sprintf('%s/%s/%s', $path, $environment, $file);
 
@@ -346,15 +346,14 @@ class FileLoader implements LoaderContract
      * @param string $ext  file extension
      * @param string $path file path
      *
-     * @throws \RuntimeException
+     * @throws \Viserio\Contracts\Filesystem\UnsupportedFormatException
      *
      * @return object
      */
     protected function parser($ext, $path)
     {
         if (isset($this->parser[$ext])) {
-            $class = $this->parser[$ext];
-
+            $class  = $this->parser[$ext];
             $parser = new $class($this->getFilesystem());
 
             if ($parser->supports($path)) {
@@ -362,7 +361,7 @@ class FileLoader implements LoaderContract
             }
         }
 
-        throw new RuntimeException(
+        throw new UnsupportedFormatException(
             sprintf('Unable to find the right Parser for [%s]', $ext)
         );
     }

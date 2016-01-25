@@ -1,8 +1,8 @@
 <?php
 namespace Viserio\Contracts\Filesystem;
 
-use Exception;
+use RuntimeException;
 
-class FileNotFoundException extends Exception
+class FileNotFoundException extends RuntimeException
 {
 }
