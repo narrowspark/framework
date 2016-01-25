@@ -34,9 +34,12 @@ before_script:
   - sleep 15
   - mongo mydb_test --eval 'db.addUser("travis", "test");'
   - if [[ $TRAVIS_PHP_VERSION = 5.* ]]; then (echo yes | pecl install -f apcu-4.0.10 && echo apc.enable_cli = 1 >> $INI_FILE); fi;
+  - if [[ $TRAVIS_PHP_VERSION = 5.* ] && [ $ADAPTER = Libevent]]; then (echo yes | pecl install "channel://pecl.php.net/libevent-0.1.0"); fi;
+  - if [[ $TRAVIS_PHP_VERSION = 5.* ] && [ $ADAPTER = Ev]]; then (echo yes | pecl install ev); fi;
   - if [[ $TRAVIS_PHP_VERSION = 7.* ]]; then (echo yes | pecl install -f apcu-5.1.2 && echo apc.enable_cli = 1 >> $INI_FILE); fi;
+  - if [[ $TRAVIS_PHP_VERSION = 7.* ] && [ $ADAPTER = Libuv]]; then ((mkdir libuv && (curl -L https://github.com/libuv/libuv/archive/v1.6.1.tar.gz | tar xzf -) && cd libuv-1.6.1 && ./autogen.sh && ./configure --prefix=$(readlink -f `pwd`/../libuv) && make && make install && cd ..)
+  - if [[ $TRAVIS_PHP_VERSION = 7.* ] && [ $ADAPTER = Uv]]; then ((git clone https://github.com/bwoebi/php-uv && cd php-uv && phpize && ./configure --with-uv=$(readlink -f `pwd`/../libuv) && make install && (echo "extension = uv.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini) && cd ..)
   - if [[ $TRAVIS_PHP_VERSION != hhvm ]]; then phpenv config-rm xdebug.ini; fi;
-  - if [[ $ADAPTER = 'Ev' ] && [ $PHP_VERSION != 'hhvm' ]]; then chmod a+x ./build/travis/ev.sh; ./build/travis/ev.sh; fi
   - if [[ $PHP_VERSION != 'hhvm' ]]; then echo "extension = memcached.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini; fi
 
 before_install:
