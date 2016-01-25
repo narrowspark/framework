@@ -9,12 +9,9 @@ class MemcachedConnectorTest extends \PHPUnit_Framework_TestCase
 {
     use MockeryTrait;
 
-    /**
-     * @return bool
-     */
-    public function allowMockingNonExistentMethods()
+    public function setUp()
     {
-        return true;
+        $this->allowMockingNonExistentMethods(true);
     }
 
     public function testConnect()
