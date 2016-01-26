@@ -4,8 +4,8 @@ namespace Viserio\Filesystem;
 use FilesystemIterator;
 use League\Flysystem\FileNotFoundException;
 use League\Flysystem\Util\MimeType;
-use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
 use Symfony\Component\Filesystem\Exception\IOException;
+use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
 use Viserio\Contracts\Filesystem\Filesystem as FilesystemContract;
 use Viserio\Support\Traits\DirectorySeparatorTrait;
 
@@ -24,7 +24,7 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract
         'dir' => [
             'public'  => 0755,
             'private' => 0700,
-        ]
+        ],
     ];
 
     /**
@@ -79,7 +79,6 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract
 
         return file_put_contents($path, $contents, FILE_APPEND);
     }
-
 
     /**
      * {@inheritdoc}
@@ -166,7 +165,6 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract
     public function getTimestamp($path)
     {
         $path = $this->getDirectorySeparator($path);
-
     }
 
     /**
@@ -191,7 +189,6 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract
     public function files($directory = null, $recursive = false)
     {
         $directory = $this->getDirectorySeparator($directory);
-
     }
 
     /**
@@ -200,7 +197,6 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract
     public function allFiles($directory = null, $recursive = false)
     {
         $directory = $this->getDirectorySeparator($directory);
-
     }
 
     /**
@@ -225,7 +221,6 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract
     public function directories($directory = null, $recursive = false)
     {
         $directory = $this->getDirectorySeparator($directory);
-
     }
 
     /**
@@ -234,7 +229,6 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract
     public function allDirectories($directory = null)
     {
         $directory = $this->getDirectorySeparator($directory);
-
     }
 
     /**
