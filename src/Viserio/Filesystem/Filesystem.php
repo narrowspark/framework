@@ -92,11 +92,12 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract
     {
         $path = $this->getDirectorySeparator($path);
 
-        if (is_file($path)) {
-            $type = 'file';
-        } elseif (is_dir($path)) {
-            $type = 'dir';
-        }
+        clearstatcache(false, $path);
+        $permissions = octdec(substr(sprintf('%o', fileperms($path)), -4));
+
+        return $permissions & 0044 ?
+            FilesystemContract::VISIBILITY_PUBLIC :
+            FilesystemContract::VISIBILITY_PRIVATE;
     }
 
     /**
@@ -107,7 +108,13 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract
         $path = $this->getDirectorySeparator($path);
         $visibility = $this->parseVisibility($visibility);
 
-        $this->chmod($path, $visibility);
+        try {
+            $this->chmod($path, $visibility);
+        } catch (IOException $exception) {
+            return false;
+        }
+
+        return true;
     }
 
     /**
