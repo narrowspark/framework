@@ -1,9 +1,9 @@
 <?php
 namespace Viserio\Filesystem\Test;
 
+use org\bovigo\vfs\content\LargeFileContent;
 use org\bovigo\vfs\vfsStream;
 use org\bovigo\vfs\vfsStreamDirectory;
-use org\bovigo\vfs\content\LargeFileContent;
 use Viserio\Filesystem\Filesystem;
 use Viserio\Support\Traits\DirectorySeparatorTrait;
 
@@ -23,13 +23,11 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Setup the environment.
-     *
-     * @return void
      */
     public function setUp()
     {
         $this->root = vfsStream::setup();
-        $this->files = new Filesystem;
+        $this->files = new Filesystem();
     }
 
     public function testReadRetrievesFiles()
