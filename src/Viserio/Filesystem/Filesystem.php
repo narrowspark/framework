@@ -60,7 +60,7 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract
         $lock = isset($config['lock']) ? LOCK_EX : 0;
 
         if (file_put_contents($path, $contents, $lock) === false) {
-            return false
+            return false;
         }
 
         if (isset($config['visibility'])) {
@@ -119,7 +119,7 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract
     public function copy($from, $to)
     {
         $from = $this->getDirectorySeparator($from);
-        $to = $this->getDirectorySeparator($to);
+        $to   = $this->getDirectorySeparator($to);
 
         return parent::copy($from, $to);
     }
@@ -130,7 +130,7 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract
     public function move($from, $to)
     {
         $from = $this->getDirectorySeparator($from);
-        $to = $this->getDirectorySeparator($to);
+        $to   = $this->getDirectorySeparator($to);
 
         return rename($from, $to);
     }
@@ -150,8 +150,7 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract
      */
     public function getMimetype($path)
     {
-        $path = $this->getDirectorySeparator($path);
-
+        $path    = $this->getDirectorySeparator($path);
         $explode = explode('.', $path);
 
         if ($extension = end($explode)) {
@@ -178,7 +177,7 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract
         $paths = $this->getDirectorySeparator($paths);
 
         try {
-            $this->remove($directories)
+            $this->remove($directories);
         } catch (IOException $exception) {
             return false;
         }
@@ -250,7 +249,7 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract
         }
 
         try {
-            $this->remove($dirname)
+            $this->remove($dirname);
         } catch (IOException $exception) {
             return false;
         }

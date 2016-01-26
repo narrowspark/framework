@@ -5,12 +5,9 @@ use org\bovigo\vfs\content\LargeFileContent;
 use org\bovigo\vfs\vfsStream;
 use org\bovigo\vfs\vfsStreamDirectory;
 use Viserio\Filesystem\Filesystem;
-use Viserio\Support\Traits\DirectorySeparatorTrait;
 
 class FilesystemTest extends \PHPUnit_Framework_TestCase
 {
-    use DirectorySeparatorTrait;
-
     /**
      * @var org\bovigo\vfs\vfsStreamDirectory
      */
