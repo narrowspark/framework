@@ -31,7 +31,7 @@ interface Filesystem
      *
      * @param string $path The path to the file.
      *
-     * @throws FileNotFoundException
+     * @throws \League\Flysystem\FileNotFoundException
      *
      * @return string|false The file contents or false on failure.
      */
@@ -57,32 +57,11 @@ interface Filesystem
      * @param string $contents The file contents.
      * @param array  $config   An optional configuration array.
      *
-     * @throws FileNotFoundException
+     * @throws \League\Flysystem\FileNotFoundException
      *
      * @return bool True on success, false on failure.
      */
     public function update($path, $contents, array $config = []);
-
-    /**
-     * Create a file or update if exists.
-     *
-     * @param string $path     The path to the file.
-     * @param string $contents The file contents.
-     * @param array  $config   An optional configuration array.
-     *
-     * @return bool True on success, false on failure.
-     */
-    public function put($path, $contents, array $config = []);
-
-    /**
-     * Get a file/directory handler.
-     *
-     * @param string  $path    The path to the file.
-     * @param Handler $handler An optional existing handler to populate.
-     *
-     * @return Handler Either a file or directory handler.
-     */
-    public function get($path, Handler $handler = null);
 
     /**
      * Get the visibility for the given path.
@@ -135,7 +114,7 @@ interface Filesystem
      *
      * @param string $path The path to the file.
      *
-     * @throws FileNotFoundException
+     * @throws \League\Flysystem\FileNotFoundException
      *
      * @return string|false The file mime-type or false on failure.
      */
@@ -146,11 +125,20 @@ interface Filesystem
      *
      * @param string $path The path to the file.
      *
-     * @throws FileNotFoundException
+     * @throws \League\Flysystem\FileNotFoundException
      *
      * @return string|false The timestamp or false on failure.
      */
     public function getTimestamp($path);
+
+    /**
+     * Delete the file at a given path.
+     *
+     * @param string|array $paths
+     *
+     * @return bool
+     */
+    public function delete($paths);
 
     /**
      * Get an array of all files in a directory.
@@ -191,13 +179,13 @@ interface Filesystem
     public function allDirectories($directory = null);
 
     /**
-     * Delete the file at a given path.
+     * Recursively create a directory.
      *
-     * @param string|array $paths
+     * @param string $dirname
      *
      * @return bool
      */
-    public function delete($paths);
+    public function createDirectory($dirname);
 
     /**
      * Recursively delete a directory.
@@ -211,18 +199,18 @@ interface Filesystem
     /**
      * Empty the specified directory of all files and folders.
      *
-     * @param string $directory
+     * @param string $dirname
      *
      * @return bool
      */
-    public function cleanDirectory($directory);
+    public function cleanDirectory($dirname);
 
     /**
      * Determine if the given path is a directory.
      *
-     * @param string $directory
+     * @param string $dirname
      *
      * @return bool
      */
-    public function isDirectory($directory);
+    public function isDirectory($dirname);
 }

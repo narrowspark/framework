@@ -54,11 +54,20 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract
     /**
      * {@inheritdoc}
      */
-    public function write($path, $contents, $lock = false)
+    public function write($path, $contents, array $config = [])
     {
         $path = $this->getDirectorySeparator($path);
+        $lock = isset($config['lock']) ? LOCK_EX : 0;
 
-        return file_put_contents($path, $contents, $lock ? LOCK_EX : 0);
+        if (file_put_contents($path, $contents, $lock) === false) {
+            return false
+        }
+
+        if (isset($config['visibility'])) {
+            $this->setVisibility($path, $config['visibility']);
+        }
+
+        return true;
     }
 
     /**
@@ -66,24 +75,11 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract
      */
     public function update($path, $contents, array $config = [])
     {
+        $path = $this->getDirectorySeparator($path);
 
+        return file_put_contents($path, $contents, FILE_APPEND);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function put($path, $contents, array $config = [])
-    {
-
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function get($path, Handler $handler = null)
-    {
-
-    }
 
     /**
      * {@inheritdoc}
@@ -122,6 +118,9 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract
      */
     public function copy($from, $to)
     {
+        $from = $this->getDirectorySeparator($from);
+        $to = $this->getDirectorySeparator($to);
+
         return parent::copy($from, $to);
     }
 
@@ -130,7 +129,10 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract
      */
     public function move($from, $to)
     {
+        $from = $this->getDirectorySeparator($from);
+        $to = $this->getDirectorySeparator($to);
 
+        return rename($from, $to);
     }
 
     /**
@@ -138,6 +140,8 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract
      */
     public function getSize($path)
     {
+        $path = $this->getDirectorySeparator($path);
+
         return filesize($path);
     }
 
@@ -146,6 +150,8 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract
      */
     public function getMimetype($path)
     {
+        $path = $this->getDirectorySeparator($path);
+
         $explode = explode('.', $path);
 
         if ($extension = end($explode)) {
@@ -160,38 +166,7 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract
      */
     public function getTimestamp($path)
     {
-
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function files($directory = null, $recursive = false)
-    {
-
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function allFiles($directory = null, $recursive = false)
-    {
-
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function directories($directory = null, $recursive = false)
-    {
-
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function allDirectories($directory = null)
-    {
+        $path = $this->getDirectorySeparator($path);
 
     }
 
@@ -200,6 +175,8 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract
      */
     public function delete($paths)
     {
+        $paths = $this->getDirectorySeparator($paths);
+
         try {
             $this->remove($directories)
         } catch (IOException $exception) {
@@ -207,6 +184,58 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract
         }
 
         return true;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function files($directory = null, $recursive = false)
+    {
+        $directory = $this->getDirectorySeparator($directory);
+
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function allFiles($directory = null, $recursive = false)
+    {
+        $directory = $this->getDirectorySeparator($directory);
+
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function createDirectory($dirname)
+    {
+        $dirname = $this->getDirectorySeparator($dirname);
+
+        try {
+            $this->mkdir($dirname);
+        } catch (IOException $exception) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function directories($directory = null, $recursive = false)
+    {
+        $directory = $this->getDirectorySeparator($directory);
+
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function allDirectories($directory = null)
+    {
+        $directory = $this->getDirectorySeparator($directory);
+
     }
 
     /**
@@ -214,12 +243,14 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract
      */
     public function deleteDirectory($dirname)
     {
-        if (!$this->isDirectory($directory)) {
+        $dirname = $this->getDirectorySeparator($dirname);
+
+        if (!$this->isDirectory($dirname)) {
             return false;
         }
 
         try {
-            $this->remove($directories)
+            $this->remove($dirname)
         } catch (IOException $exception) {
             return false;
         }
@@ -230,16 +261,18 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract
     /**
      * {@inheritdoc}
      */
-    public function cleanDirectory($directory)
+    public function cleanDirectory($dirname)
     {
-        if (!$this->isDirectory($directory)) {
+        $dirname = $this->getDirectorySeparator($dirname);
+
+        if (!$this->isDirectory($dirname)) {
             return false;
         }
 
-        $directories = new FilesystemIterator($directory);
+        $directories = new FilesystemIterator($dirname);
 
-        foreach ($directories as $directory) {
-            @rmdir($directory);
+        foreach ($directories as $dirname) {
+            @rmdir($dirname);
         }
 
         return true;
@@ -248,9 +281,11 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract
     /**
      * {@inheritdoc}
      */
-    public function isDirectory($directory)
+    public function isDirectory($dirname)
     {
-        return is_dir($directory);
+        $dirname = $this->getDirectorySeparator($dirname);
+
+        return is_dir($dirname);
     }
 
     /**
@@ -264,6 +299,8 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract
      */
     public function getRequire($path)
     {
+        $path = $this->getDirectorySeparator($path);
+
         if ($this->isFile($path) && $this->has($path)) {
             return require $path;
         }
@@ -280,6 +317,8 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract
      */
     public function requireOnce($file)
     {
+        $path = $this->getDirectorySeparator($path);
+
         if ($this->isFile($path) && $this->has($path)) {
             require_once $file;
         }
@@ -296,6 +335,8 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract
      */
     public function isWritable($path)
     {
+        $path = $this->getDirectorySeparator($path);
+
         return is_writable($path);
     }
 
@@ -308,6 +349,8 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract
      */
     public function isFile($file)
     {
+        $file = $this->getDirectorySeparator($file);
+
         return is_file($file);
     }
 
@@ -335,6 +378,8 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract
      */
     public function withoutExtension($path, $extension = null)
     {
+        $path = $this->getDirectorySeparator($path);
+
         if ($extension !== null) {
             // remove extension and trailing dot
             return rtrim(basename($path, $extension), '.');
