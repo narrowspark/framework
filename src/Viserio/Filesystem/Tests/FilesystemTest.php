@@ -96,13 +96,13 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
     public function testMoveMovesFiles()
     {
         $file = vfsStream::newFile('pop.txt')->withContent('pop')->at($this->root);
-        $rock = $this->root->url().'/rock.txt';
+        $rock = $this->root->url() . '/rock.txt';
 
         $this->files->move($file->url(), $rock);
 
         $this->assertFileExists($rock);
         $this->assertStringEqualsFile($rock, 'pop');
-        $this->assertFileNotExists($this->root->url().'/pop.txt');
+        $this->assertFileNotExists($this->root->url() . '/pop.txt');
     }
 
     public function testGetExtensionReturnsExtension()
@@ -118,7 +118,6 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
     public function testGetMimeTypeOutputsMimeType()
     {
         $file = vfsStream::newFile('foo.txt')->withContent('foo')->at($this->root);
-
 
         $this->assertEquals('text/plain', $this->files->getMimetype($file->url()));
     }
@@ -164,16 +163,16 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
 
     public function testGlobFindsFiles()
     {
-        file_put_contents(__DIR__.'/foo.txt', 'foo');
-        file_put_contents(__DIR__.'/bar.txt', 'bar');
+        file_put_contents(__DIR__ . '/foo.txt', 'foo');
+        file_put_contents(__DIR__ . '/bar.txt', 'bar');
 
-        $glob = $this->files->glob(__DIR__.'/*.txt');
+        $glob = $this->files->glob(__DIR__ . '/*.txt');
 
-        $this->assertContains(__DIR__.'/foo.txt', $glob);
-        $this->assertContains(__DIR__.'/bar.txt', $glob);
+        $this->assertContains(__DIR__ . '/foo.txt', $glob);
+        $this->assertContains(__DIR__ . '/bar.txt', $glob);
 
-        @unlink(__DIR__.'/foo.txt');
-        @unlink(__DIR__.'/bar.txt');
+        @unlink(__DIR__ . '/foo.txt');
+        @unlink(__DIR__ . '/bar.txt');
     }
 
     public function testAllFilesFindsFiles()
