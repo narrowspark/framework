@@ -44,8 +44,6 @@ interface Filesystem
      * @param string $contents The file contents.
      * @param array  $config   An optional configuration array.
      *
-     * @throws FileExistsException
-     *
      * @return bool True on success, false on failure.
      */
     public function write($path, $contents, array $config = []);

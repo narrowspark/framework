@@ -368,6 +368,18 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract
     }
 
     /**
+     * Extract the file extension from a file path.
+     *
+     * @param string $path
+     *
+     * @return string
+     */
+    public function getExtension($path)
+    {
+        return pathinfo($path, PATHINFO_EXTENSION);
+    }
+
+    /**
      * Returns the filename without the extension from a file path.
      *
      * @param string      $path      The path string
