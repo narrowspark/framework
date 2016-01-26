@@ -79,14 +79,20 @@ interface Filesystem
     public function setVisibility($path, $visibility);
 
     /**
-     * Copy a file to a new location.
+     * Copies a file.
      *
-     * @param string $from
-     * @param string $to
+     * This method only copies the file if the origin file is newer than the target file.
      *
-     * @return bool
+     * By default, if the target already exists, it is not overridden.
+     *
+     * @param string $originFile The original filename
+     * @param string $targetFile The target filename
+     * @param bool   $override   Whether to override an existing file or not
+     *
+     * @throws \Symfony\Component\Filesystem\Exception\FileNotFoundException When originFile doesn't exist
+     * @throws \Symfony\Component\Filesystem\Exception\IOException           When copy fails
      */
-    public function copy($from, $to);
+    public function copy($originFile, $targetFile, $override = false);
 
     /**
      * Move a file to a new location.

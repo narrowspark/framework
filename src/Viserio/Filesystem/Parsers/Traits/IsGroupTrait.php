@@ -1,5 +1,5 @@
 <?php
-namespace Viserio\Filesystem\Parser\Traits;
+namespace Viserio\Filesystem\Parsers\Traits;
 
 trait IsGroupTrait
 {

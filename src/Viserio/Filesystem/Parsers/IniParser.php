@@ -1,12 +1,13 @@
 <?php
-namespace Viserio\Filesystem\Parser;
+namespace Viserio\Filesystem\Parsers;
 
-use Viserio\Contracts\Filesystem\LoadingException;
+use League\Flysystem\FileNotFoundException;
+use Viserio\Contracts\Filesystem\Exception\LoadingException;
+use Viserio\Contracts\Filesystem\Filesystem as FilesystemContract;
 use Viserio\Contracts\Filesystem\Parser as ParserContract;
-use Viserio\Filesystem\Filesystem;
-use Viserio\Filesystem\Parser\Traits\IsGroupTrait;
+use Viserio\Filesystem\Parsers\Traits\IsGroupTrait;
 
-class Ini implements ParserContract
+class IniParser implements ParserContract
 {
     use IsGroupTrait;
 
@@ -20,26 +21,19 @@ class Ini implements ParserContract
     /**
      * Create a new file filesystem loader.
      *
-     * @param \Viserio\Filesystem\Filesystem $files
+     * @param \Viserio\Contracts\Filesystem\Filesystem $files
      */
-    public function __construct(Filesystem $files)
+    public function __construct(FilesystemContract $files)
     {
         $this->files = $files;
     }
 
     /**
-     * Loads a INI file and gets its' contents as an array.
-     *
-     * @param string      $filename
-     * @param string|null $group
-     *
-     * @throws \Exception
-     *
-     * @return array|string|null
+     * {@inheritdoc}
      */
-    public function load($filename, $group = null)
+    public function parse($filename, $group = null)
     {
-        if ($this->files->exists($filename)) {
+        if ($this->files->has($filename)) {
             $data = parse_ini_file($filename, true);
 
             if ($group !== null) {
@@ -49,19 +43,15 @@ class Ini implements ParserContract
             return $data;
         }
 
-        throw new LoadingException('Unable to load config ' . $filename);
+        throw new FileNotFoundException($filename);
     }
 
     /**
-     * Checking if file ist supported.
-     *
-     * @param string $filename
-     *
-     * @return bool
+     * {@inheritdoc}
      */
     public function supports($filename)
     {
-        return (bool) preg_match('#\.ini(\.dist)?$#', $filename);
+        return (bool) preg_match('/(\.ini)(\.dist)?/', $filename);
     }
 
     /**
@@ -71,18 +61,13 @@ class Ini implements ParserContract
      *
      * @return false|string|void
      */
-    public function format(array $data)
+    public function dump(array $data)
     {
-        $this->iniFormat((array) $data);
+        $this->iniFormat($data);
     }
 
     /**
-     * Format a ini file.
-     *
-     * @param array $data
-     * @param array $parent
-     *
-     * @return string data export
+     * {@inheritdoc}
      */
     private function iniFormat(array $data, array $parent = [])
     {

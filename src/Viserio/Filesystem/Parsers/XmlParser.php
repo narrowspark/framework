@@ -1,12 +1,14 @@
 <?php
-namespace Viserio\Filesystem\Parser;
+namespace Viserio\Filesystem\Parsers;
 
-use Viserio\Contracts\Filesystem\LoadingException;
+use League\Flysystem\FileNotFoundException;
+use SimpleXMLElement;
+use Viserio\Contracts\Filesystem\Exception\LoadingException;
+use Viserio\Contracts\Filesystem\Filesystem as FilesystemContract;
 use Viserio\Contracts\Filesystem\Parser as ParserContract;
-use Viserio\Filesystem\Filesystem;
-use Viserio\Filesystem\Parser\Traits\IsGroupTrait;
+use Viserio\Filesystem\Parsers\Traits\IsGroupTrait;
 
-class Xml implements ParserContract
+class XmlParser implements ParserContract
 {
     use IsGroupTrait;
 
@@ -20,26 +22,19 @@ class Xml implements ParserContract
     /**
      * Create a new file filesystem loader.
      *
-     * @param \Viserio\Filesystem\Filesystem $files
+     * @param \Viserio\Contracts\Filesystem\Filesystem $files
      */
-    public function __construct(Filesystem $files)
+    public function __construct(FilesystemContract $files)
     {
         $this->files = $files;
     }
 
     /**
-     * Loads a XML file and gets its' contents as an array.
-     *
-     * @param string      $filename
-     * @param string|null $group
-     *
-     * @throws \Exception
-     *
-     * @return array|string|null
+     * {@inheritdoc}
      */
-    public function load($filename, $group = null)
+    public function parse($filename, $group = null)
     {
-        if ($this->files->exists($filename)) {
+        if ($this->files->has($filename)) {
             $data = simplexml_load_file($filename);
             $data = unserialize(serialize(json_decode(json_encode((array) $data), true)));
 
@@ -47,35 +42,27 @@ class Xml implements ParserContract
                 return $this->isGroup($group, (array) $data);
             }
 
-            return $data;
+            return (array) $data;
         }
 
-        throw new LoadingException('Unable to load config ' . $filename);
+        throw new FileNotFoundException($filename);
     }
 
     /**
-     * Checking if file ist supported.
-     *
-     * @param string $filename
-     *
-     * @return bool
+     * {@inheritdoc}
      */
     public function supports($filename)
     {
-        return (bool) preg_match('#\.xml(\.dist)?$#', $filename);
+        return (bool) preg_match('/(\.xml)(\.dist)?/', $filename);
     }
 
     /**
-     * Format a xml file for saving.
-     *
-     * @param array $data data
-     *
-     * @return string|false data export
+     * {@inheritdoc}
      */
-    public function format(array $data)
+    public function dump(array $data)
     {
         // creating object of SimpleXMLElement
-        $xml = new \SimpleXMLElement('<?xml version="1.0"?><config></config>');
+        $xml = new SimpleXMLElement('<?xml version="1.0"?><config></config>');
 
         // function call to convert array to xml
         $this->arrayToXml($data, $xml);
@@ -91,7 +78,7 @@ class Xml implements ParserContract
      *
      * @return string|null
      */
-    private function arrayToXml($data, \SimpleXMLElement & $xml)
+    private function arrayToXml($data, SimpleXMLElement &$xml)
     {
         foreach ($data as $key => $value) {
             if (is_array($value)) {
