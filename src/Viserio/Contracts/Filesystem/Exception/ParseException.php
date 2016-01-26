@@ -1,5 +1,5 @@
 <?php
-namespace Viserio\Contracts\Filesystem;
+namespace Viserio\Contracts\Filesystem\Exception;
 
 use ErrorException;
 

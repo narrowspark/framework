@@ -289,23 +289,6 @@ class FilesystemAdapter implements CloudFilesystemContract
     }
 
     /**
-     * Filter directory contents by type.
-     *
-     * @param array  $contents
-     * @param string $type
-     *
-     * @return array
-     */
-    protected function filterContentsByType($contents, $type)
-    {
-        // return Collection::make($contents)
-        //    ->where('type', $type)
-        //    ->pluck('path')
-        //    ->values()
-        //    ->all();
-    }
-
-    /**
      * Get the Flysystem driver.
      *
      * @return AdapterInterface
@@ -328,6 +311,23 @@ class FilesystemAdapter implements CloudFilesystemContract
     public function __call($method, array $arguments)
     {
         return $this->driver->__call($method, $arguments);
+    }
+
+    /**
+     * Filter directory contents by type.
+     *
+     * @param array  $contents
+     * @param string $type
+     *
+     * @return array
+     */
+    protected function filterContentsByType($contents, $type)
+    {
+        // return Collection::make($contents)
+        //    ->where('type', $type)
+        //    ->pluck('path')
+        //    ->values()
+        //    ->all();
     }
 
     /**
