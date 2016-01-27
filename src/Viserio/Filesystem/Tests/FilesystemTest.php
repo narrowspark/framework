@@ -1,5 +1,5 @@
 <?php
-namespace Viserio\Filesystem\Test;
+namespace Viserio\Filesystem\Tests;
 
 use org\bovigo\vfs\content\LargeFileContent;
 use org\bovigo\vfs\vfsStream;

@@ -4,12 +4,12 @@ namespace Viserio\Filesystem;
 use Viserio\Contracts\Filesystem\Loader as LoaderContract;
 use Viserio\Contracts\Filesystem\Parser as ParserContract;
 use Viserio\Contracts\Filesystem\UnsupportedFormatException;
-use Viserio\Filesystem\Parser\Ini as IniParser;
-use Viserio\Filesystem\Parser\Json as JsonParser;
-use Viserio\Filesystem\Parser\Php as PhpParser;
-use Viserio\Filesystem\Parser\Toml as TomlParser;
-use Viserio\Filesystem\Parser\Xml as XmlParser;
-use Viserio\Filesystem\Parser\Yaml as YamlParser;
+use Viserio\Filesystem\Parsers\IniParser;
+use Viserio\Filesystem\Parsers\JsonParser;
+use Viserio\Filesystem\Parsers\PhpParser;
+use Viserio\Filesystem\Parsers\TomlParser;
+use Viserio\Filesystem\Parsers\XmlParser;
+use Viserio\Filesystem\Parsers\YamlParser;
 
 class FileLoader implements LoaderContract
 {
@@ -85,31 +85,25 @@ class FileLoader implements LoaderContract
         $this->exists($file, $group, $environment, $namespace);
 
         // Get checked data file
-        $dataFile = $this->exists[preg_replace('[/]', '', $namespace . $group . $file)];
-
+        $dataFile    = $this->exists[preg_replace('[/]', '', $namespace . $group . $file)];
         // Set the right Parser for data
-        $parser   = $this->parser($this->files->extension($file), $dataFile);
-
+        $parser      = $this->parser($this->files->extension($file), $dataFile);
         // return data array
-        $items    = $parser->load($dataFile, $group);
-
+        $items       = $parser->load($dataFile, $group);
         // Finally we're ready to check for the environment specific data
         // file which will be merged on top of the main arrays so that they get
         // precedence over them if we are currently in an environments setup.
         $env         = sprintf('/%s/%s', $environment, $file);
-
         // Get checked env data file
         $envdataFile = $this->exists[preg_replace('[/]', '', $namespace . $environment . $group . $file)];
 
         if ($this->files->exists($envdataFile)) {
             // Set the right parser for environment data
             $envParser = $this->parser($this->files->extension($file), $path . $env);
-
             // Return data array
             $envItems  = $envParser->load($envdataFile, $group);
-
             // Merege env data and data
-            $items = $this->dataMerge($items, $envItems);
+            $items     = $this->dataMerge($items, $envItems);
         }
 
         return $items;
@@ -127,11 +121,8 @@ class FileLoader implements LoaderContract
      */
     public function exists($file, $group = null, $environment = null, $namespace = null)
     {
-        $envKey = $namespace . $environment . $group . $file;
-        $envKey = preg_replace('[/]', '', $envKey);
-
-        $key = $namespace . $group . $file;
-        $key = preg_replace('[/]', '', $key);
+        $envKey = preg_replace('[/]', '', $namespace . $environment . $group . $file);
+        $key    = preg_replace('[/]', '', $namespace . $group . $file);
 
         // We'll first check to see if we have determined if this namespace and
         // group combination have been checked before. If they have, we will
@@ -158,7 +149,6 @@ class FileLoader implements LoaderContract
         // the value in an array so we don't have to go through this process
         // again on subsequent checks for the existing of the data file.
         $file    = sprintf('%s/%s', $path, $file);
-
         $envFile = sprintf('%s/%s/%s', $path, $environment, $file);
 
         if ($this->files->exists($envFile)) {

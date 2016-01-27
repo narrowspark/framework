@@ -6,7 +6,7 @@ use Viserio\Contracts\Filesystem\Parser as ParserContract;
 use Viserio\Filesystem\Filesystem;
 use Viserio\Filesystem\Parser\Traits\IsGroupTrait;
 
-class Ini implements ParserContract
+class IniParser implements ParserContract
 {
     use IsGroupTrait;
 
