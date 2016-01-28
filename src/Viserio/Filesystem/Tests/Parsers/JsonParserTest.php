@@ -31,7 +31,7 @@ class JsonParserTest extends \PHPUnit_Framework_TestCase
         $parsed = $this->parser->parse($file);
 
         $this->assertTrue(is_array($parsed));
-        $this->assertSame(['a' => 1, 'b' => 2, 'c' => 3, 'd' => 4, 'e' => 5,], $parsed);
+        $this->assertSame(['a' => 1, 'b' => 2, 'c' => 3, 'd' => 4, 'e' => 5], $parsed);
     }
 
     /**
