@@ -4,7 +4,7 @@ namespace Viserio\Contracts\Filesystem;
 interface Parser
 {
     /**
-     * Loads a file and gets its' contents as an array.
+     * Loads a file and output content as array.
      *
      * @param string      $filename
      * @param string|null $group
@@ -13,7 +13,7 @@ interface Parser
      *
      * @return array|string|null
      */
-    public function load($filename, $group = null);
+    public function parse($filename, $group = null);
 
     /**
      * Checking if file ist supported.

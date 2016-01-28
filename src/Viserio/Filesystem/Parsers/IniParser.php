@@ -28,16 +28,9 @@ class IniParser implements ParserContract
     }
 
     /**
-     * Loads a INI file and gets its' contents as an array.
-     *
-     * @param string      $filename
-     * @param string|null $group
-     *
-     * @throws \Viserio\Contracts\Filesystem\Exception\LoadingException
-     *
-     * @return array|string|null
+     * {@inheritdoc}
      */
-    public function load($filename, $group = null)
+    public function parse($filename, $group = null)
     {
         if ($this->files->exists($filename)) {
             $data = parse_ini_file($filename, true);
@@ -57,7 +50,7 @@ class IniParser implements ParserContract
      */
     public function supports($filename)
     {
-        return (bool) preg_match('#\.ini(\.dist)?$#', $filename);
+        return (bool) preg_match(/(\.ini)(\.dist)?/, $filename);
     }
 
     /**

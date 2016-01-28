@@ -29,16 +29,9 @@ class Xml implements ParserContract
     }
 
     /**
-     * Loads a XML file and gets its' contents as an array.
-     *
-     * @param string      $filename
-     * @param string|null $group
-     *
-     * @throws \Viserio\Contracts\Filesystem\Exception\LoadingException
-     *
-     * @return array|string|null
+     * {@inheritdoc}
      */
-    public function load($filename, $group = null)
+    public function parse($filename, $group = null)
     {
         if ($this->files->exists($filename)) {
             $data = simplexml_load_file($filename);
@@ -51,7 +44,7 @@ class Xml implements ParserContract
             return $data;
         }
 
-        throw new LoadingException('Unable to load config ' . $filename);
+        throw new LoadingException('Unable to parse file ' . $filename);
     }
 
     /**
@@ -59,7 +52,7 @@ class Xml implements ParserContract
      */
     public function supports($filename)
     {
-        return (bool) preg_match('#\.xml(\.dist)?$#', $filename);
+        return (bool) preg_match(/(\.xml)(\.dist)?/, $filename);
     }
 
     /**

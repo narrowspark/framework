@@ -9,7 +9,7 @@ use Viserio\Filesystem\Filesystem;
 class FilesystemTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var org\bovigo\vfs\vfsStreamDirectory
+     * @var \org\bovigo\vfs\vfsStreamDirectory
      */
     private $root;
 
@@ -23,7 +23,7 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
-        $this->root = vfsStream::setup();
+        $this->root  = vfsStream::setup();
         $this->files = new Filesystem();
     }
 

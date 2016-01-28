@@ -29,16 +29,9 @@ class Toml implements ParserContract
     }
 
     /**
-     * Loads a TOML file and gets its' contents as an array.
-     *
-     * @param string      $filename
-     * @param string|null $group
-     *
-     * @throws \Viserio\Contracts\Filesystem\Exception\LoadingException
-     *
-     * @return array|string|null
+     * {@inheritdoc}
      */
-    public function load($filename, $group = null)
+    public function parse($filename, $group = null)
     {
         if (!class_exists('Yosymfony\\Toml\\Toml')) {
             throw new \RuntimeException('Unable to read toml, the Toml Parser is not installed.');
@@ -54,7 +47,7 @@ class Toml implements ParserContract
             return $data;
         }
 
-        throw new LoadingException('Unable to load config ' . $filename);
+        throw new LoadingException('Unable to parse file ' . $filename);
     }
 
     /**
@@ -66,7 +59,7 @@ class Toml implements ParserContract
      */
     public function supports($filename)
     {
-        return (bool) preg_match('#\.toml(\.dist)?$#', $filename);
+        return (bool) preg_match(/(\.toml)(\.dist)?/, $filename);
     }
 
     /**

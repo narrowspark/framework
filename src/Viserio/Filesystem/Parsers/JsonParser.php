@@ -28,30 +28,25 @@ class Json implements ParserContract
     }
 
     /**
-     * Loads a JSON file and gets its' contents as an array.
-     *
-     * @param string      $filename
-     * @param string|null $group
-     *
-     * @throws \Viserio\Contracts\Filesystem\Exception\LoadingException
-     *
-     * @return array|string|null
+     * {@inheritdoc}
      */
-    public function load($filename, $group = null)
+    public function parse($filename, $group = null)
     {
-        $data = $this->parseJson($filename);
+        if ($this->files->exists($filename)) {
+            $data = $this->parseJson($filename);
 
-        if (JSON_ERROR_NONE !== json_last_error()) {
-            $jsonError = $this->getJsonError(json_last_error());
-            throw new \RuntimeException(
-                sprintf('Invalid JSON provided "%s" in "%s"', $jsonError, $filename)
-            );
-        }
+            if (JSON_ERROR_NONE !== json_last_error()) {
+                $jsonError = $this->getJsonError(json_last_error());
+                throw new LoadingException(
+                    sprintf('Invalid JSON provided "%s" in "%s"', $jsonError, $filename)
+                );
+            }
 
-        if ($group !== null) {
-            return $this->isGroup($group, (array) $data);
-        } else {
-            return $data;
+            if ($group !== null) {
+                return $this->isGroup($group, (array) $data);
+            } else {
+                return $data;
+            }
         }
 
         throw new LoadingException('Unable to load config ' . $filename);
@@ -62,7 +57,7 @@ class Json implements ParserContract
      */
     public function supports($filename)
     {
-        return (bool) preg_match('#\.json(\.dist)?$#', $filename);
+        return (bool) preg_match(/(\.json)(\.dist)?/, $filename);
     }
 
     /**
@@ -70,7 +65,7 @@ class Json implements ParserContract
      */
     private function parseJson($filename)
     {
-        $json = $this->files->get($filename);
+        $json = $this->files->read($filename);
 
         return json_decode($json, true);
     }

@@ -28,16 +28,9 @@ class Php implements ParserContract
     }
 
     /**
-     * Loads a PHP file and gets its' contents as an array.
-     *
-     * @param string      $filename
-     * @param string|null $group
-     *
-     * @throws \Viserio\Contracts\Filesystem\Exception\LoadingException
-     *
-     * @return array|string|null
+     * {@inheritdoc}
      */
-    public function load($filename, $group = null)
+    public function parse($filename, $group = null)
     {
         $data = $this->files->getRequire($filename);
 
@@ -55,7 +48,7 @@ class Php implements ParserContract
      */
     public function supports($filename)
     {
-        return (bool) preg_match('#\.php(\.dist)?$#', $filename);
+        return (bool) preg_match(/(\.php)?/, $filename);
     }
 
     /**

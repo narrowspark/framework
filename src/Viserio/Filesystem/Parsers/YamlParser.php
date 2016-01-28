@@ -31,16 +31,9 @@ class Yaml implements ParserContract
     }
 
     /**
-     * Loads a YAML file and gets its' contents as an array.
-     *
-     * @param string      $filename
-     * @param string|null $group
-     *
-     * @throws \Viserio\Contracts\Filesystem\Exception\LoadingException|\RuntimeException
-     *
-     * @return array|string|null
+     * {@inheritdoc}
      */
-    public function load($filename, $group = null)
+    public function parse($filename, $group = null)
     {
         if (!class_exists('Symfony\\Component\\Yaml\\Yaml')) {
             throw new RuntimeException('Unable to read yaml as the Symfony Yaml Component is not installed.');
@@ -48,7 +41,7 @@ class Yaml implements ParserContract
 
         try {
             if ($this->files->exists($filename)) {
-                $data = (new Parser())->parse($this->files->get($filename));
+                $data = (new Parser())->parse($this->files->read($filename));
 
                 if ($group !== null) {
                     return $this->isGroup($group, (array) $data);
@@ -66,7 +59,7 @@ class Yaml implements ParserContract
      */
     public function supports($filename)
     {
-        return (bool) preg_match('#\.ya?ml(\.dist)?$#', $filename);
+        return (bool) preg_match(/(\.ya?ml)(\.dist)?/, $filename);
     }
 
     /**
