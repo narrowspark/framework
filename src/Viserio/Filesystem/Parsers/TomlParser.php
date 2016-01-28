@@ -1,7 +1,7 @@
 <?php
 namespace Viserio\Filesystem\Parser;
 
-use Viserio\Contracts\Filesystem\LoadingException;
+use Viserio\Contracts\Filesystem\Exception\LoadingException;
 use Viserio\Contracts\Filesystem\Parser as ParserContract;
 use Viserio\Filesystem\Filesystem;
 use Viserio\Filesystem\Parser\Traits\IsGroupTrait;
@@ -34,7 +34,7 @@ class Toml implements ParserContract
      * @param string      $filename
      * @param string|null $group
      *
-     * @throws \Exception
+     * @throws \Viserio\Contracts\Filesystem\Exception\LoadingException
      *
      * @return array|string|null
      */
@@ -74,12 +74,10 @@ class Toml implements ParserContract
      *
      * @param array $data data
      *
-     * @throws \Exception
-     *
      * @return string data export
      */
-    public function format(array $data)
+    public function dump(array $data)
     {
-        throw new \Exception('Toml export is not available right now.');
+        return '';
     }
 }

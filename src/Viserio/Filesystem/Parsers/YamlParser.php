@@ -1,9 +1,10 @@
 <?php
 namespace Viserio\Filesystem\Parser;
 
+use RuntimeException;
 use Symfony\Component\Yaml\Exception\ParseException;
 use Symfony\Component\Yaml\Parser;
-use Viserio\Contracts\Filesystem\LoadingException;
+use Viserio\Contracts\Filesystem\Exception\LoadingException;
 use Viserio\Contracts\Filesystem\Parser as ParserContract;
 use Viserio\Filesystem\Filesystem;
 use Viserio\Filesystem\Parser\Traits\IsGroupTrait;
@@ -35,14 +36,14 @@ class Yaml implements ParserContract
      * @param string      $filename
      * @param string|null $group
      *
-     * @throws \Exception
+     * @throws \Viserio\Contracts\Filesystem\Exception\LoadingException|\RuntimeException
      *
      * @return array|string|null
      */
     public function load($filename, $group = null)
     {
         if (!class_exists('Symfony\\Component\\Yaml\\Yaml')) {
-            throw new \RuntimeException('Unable to read yaml as the Symfony Yaml Component is not installed.');
+            throw new RuntimeException('Unable to read yaml as the Symfony Yaml Component is not installed.');
         }
 
         try {
@@ -61,11 +62,7 @@ class Yaml implements ParserContract
     }
 
     /**
-     * Checking if file ist supported.
-     *
-     * @param string $filename
-     *
-     * @return bool
+     * {@inheritdoc}
      */
     public function supports($filename)
     {
@@ -73,13 +70,9 @@ class Yaml implements ParserContract
     }
 
     /**
-     * Format a yaml file for saving.
-     *
-     * @param array $data data
-     *
-     * @return string data export
+     * {@inheritdoc}
      */
-    public function format(array $data)
+    public function dump(array $data)
     {
         return YamlParser::dump($data);
     }

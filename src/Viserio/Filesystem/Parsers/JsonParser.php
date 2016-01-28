@@ -1,7 +1,7 @@
 <?php
 namespace Viserio\Filesystem\Parser;
 
-use Viserio\Contracts\Filesystem\LoadingException;
+use Viserio\Contracts\Filesystem\Exception\LoadingException;
 use Viserio\Contracts\Filesystem\Parser as ParserContract;
 use Viserio\Filesystem\Filesystem;
 use Viserio\Filesystem\Parser\Traits\IsGroupTrait;
@@ -33,7 +33,7 @@ class Json implements ParserContract
      * @param string      $filename
      * @param string|null $group
      *
-     * @throws \Exception
+     * @throws \Viserio\Contracts\Filesystem\Exception\LoadingException
      *
      * @return array|string|null
      */
@@ -58,11 +58,7 @@ class Json implements ParserContract
     }
 
     /**
-     * Checking if file ist supported.
-     *
-     * @param string $filename
-     *
-     * @return bool
+     * {@inheritdoc}
      */
     public function supports($filename)
     {
@@ -70,11 +66,7 @@ class Json implements ParserContract
     }
 
     /**
-     * Parse the json file.
-     *
-     * @param string $filename
-     *
-     * @return string|null
+     * {@inheritdoc}
      */
     private function parseJson($filename)
     {

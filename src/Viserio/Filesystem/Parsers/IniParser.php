@@ -1,7 +1,7 @@
 <?php
 namespace Viserio\Filesystem\Parser;
 
-use Viserio\Contracts\Filesystem\LoadingException;
+use Viserio\Contracts\Filesystem\Exception\LoadingException;
 use Viserio\Contracts\Filesystem\Parser as ParserContract;
 use Viserio\Filesystem\Filesystem;
 use Viserio\Filesystem\Parser\Traits\IsGroupTrait;
@@ -33,7 +33,7 @@ class IniParser implements ParserContract
      * @param string      $filename
      * @param string|null $group
      *
-     * @throws \Exception
+     * @throws \Viserio\Contracts\Filesystem\Exception\LoadingException
      *
      * @return array|string|null
      */
@@ -53,11 +53,7 @@ class IniParser implements ParserContract
     }
 
     /**
-     * Checking if file ist supported.
-     *
-     * @param string $filename
-     *
-     * @return bool
+     * {@inheritdoc}
      */
     public function supports($filename)
     {
@@ -71,18 +67,13 @@ class IniParser implements ParserContract
      *
      * @return false|string|void
      */
-    public function format(array $data)
+    public function dump(array $data)
     {
-        $this->iniFormat((array) $data);
+        $this->iniFormat($data);
     }
 
     /**
-     * Format a ini file.
-     *
-     * @param array $data
-     * @param array $parent
-     *
-     * @return string data export
+     * {@inheritdoc}
      */
     private function iniFormat(array $data, array $parent = [])
     {

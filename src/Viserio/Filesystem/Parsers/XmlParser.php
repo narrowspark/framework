@@ -1,7 +1,8 @@
 <?php
 namespace Viserio\Filesystem\Parser;
 
-use Viserio\Contracts\Filesystem\LoadingException;
+use SimpleXMLElement;
+use Viserio\Contracts\Filesystem\Exception\LoadingException;
 use Viserio\Contracts\Filesystem\Parser as ParserContract;
 use Viserio\Filesystem\Filesystem;
 use Viserio\Filesystem\Parser\Traits\IsGroupTrait;
@@ -33,7 +34,7 @@ class Xml implements ParserContract
      * @param string      $filename
      * @param string|null $group
      *
-     * @throws \Exception
+     * @throws \Viserio\Contracts\Filesystem\Exception\LoadingException
      *
      * @return array|string|null
      */
@@ -54,11 +55,7 @@ class Xml implements ParserContract
     }
 
     /**
-     * Checking if file ist supported.
-     *
-     * @param string $filename
-     *
-     * @return bool
+     * {@inheritdoc}
      */
     public function supports($filename)
     {
@@ -66,16 +63,12 @@ class Xml implements ParserContract
     }
 
     /**
-     * Format a xml file for saving.
-     *
-     * @param array $data data
-     *
-     * @return string|false data export
+     * {@inheritdoc}
      */
-    public function format(array $data)
+    public function dump(array $data)
     {
         // creating object of SimpleXMLElement
-        $xml = new \SimpleXMLElement('<?xml version="1.0"?><config></config>');
+        $xml = new SimpleXMLElement('<?xml version="1.0"?><config></config>');
 
         // function call to convert array to xml
         $this->arrayToXml($data, $xml);
@@ -91,7 +84,7 @@ class Xml implements ParserContract
      *
      * @return string|null
      */
-    private function arrayToXml($data, \SimpleXMLElement & $xml)
+    private function arrayToXml($data, SimpleXMLElement &$xml)
     {
         foreach ($data as $key => $value) {
             if (is_array($value)) {

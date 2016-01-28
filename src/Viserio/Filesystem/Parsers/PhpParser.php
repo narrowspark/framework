@@ -1,7 +1,7 @@
 <?php
 namespace Viserio\Filesystem\Parser;
 
-use Viserio\Contracts\Filesystem\LoadingException;
+use Viserio\Contracts\Filesystem\Exception\LoadingException;
 use Viserio\Contracts\Filesystem\Parser as ParserContract;
 use Viserio\Filesystem\Filesystem;
 use Viserio\Filesystem\Parser\Traits\IsGroupTrait;
@@ -33,7 +33,7 @@ class Php implements ParserContract
      * @param string      $filename
      * @param string|null $group
      *
-     * @throws \Exception
+     * @throws \Viserio\Contracts\Filesystem\Exception\LoadingException
      *
      * @return array|string|null
      */
@@ -51,11 +51,7 @@ class Php implements ParserContract
     }
 
     /**
-     * Checking if file ist supported.
-     *
-     * @param string $filename
-     *
-     * @return bool
+     * {@inheritdoc}
      */
     public function supports($filename)
     {
@@ -63,13 +59,9 @@ class Php implements ParserContract
     }
 
     /**
-     * Format a php file for saving.
-     *
-     * @param array $data data
-     *
-     * @return string data export
+     * {@inheritdoc}
      */
-    public function format(array $data)
+    public function dump(array $data)
     {
         $data = var_export($data, true);
 
