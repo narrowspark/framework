@@ -78,7 +78,7 @@ interface Filesystem
      */
     public function setVisibility($path, $visibility);
 
-     /**
+    /**
      * Copies a file.
      *
      * This method only copies the file if the origin file is newer than the target file.
