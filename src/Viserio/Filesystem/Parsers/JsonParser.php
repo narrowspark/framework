@@ -1,12 +1,13 @@
 <?php
-namespace Viserio\Filesystem\Parser;
+namespace Viserio\Filesystem\Parsers;
 
+use League\Flysystem\FileNotFoundException;
 use Viserio\Contracts\Filesystem\Exception\LoadingException;
 use Viserio\Contracts\Filesystem\Parser as ParserContract;
-use Viserio\Filesystem\Filesystem;
-use Viserio\Filesystem\Parser\Traits\IsGroupTrait;
+use Viserio\Contracts\Filesystem\Filesystem as FilesystemContract;
+use Viserio\Filesystem\Parsers\Traits\IsGroupTrait;
 
-class Json implements ParserContract
+class JsonParser implements ParserContract
 {
     use IsGroupTrait;
 
@@ -20,9 +21,9 @@ class Json implements ParserContract
     /**
      * Create a new file filesystem loader.
      *
-     * @param \Viserio\Filesystem\Filesystem $files
+     * @param \Viserio\Contracts\Filesystem\Filesystem $files
      */
-    public function __construct(Filesystem $files)
+    public function __construct(FilesystemContract $files)
     {
         $this->files = $files;
     }
@@ -32,7 +33,7 @@ class Json implements ParserContract
      */
     public function parse($filename, $group = null)
     {
-        if ($this->files->exists($filename)) {
+        if ($this->files->has($filename)) {
             $data = $this->parseJson($filename);
 
             if (JSON_ERROR_NONE !== json_last_error()) {
@@ -45,11 +46,11 @@ class Json implements ParserContract
             if ($group !== null) {
                 return $this->isGroup($group, (array) $data);
             } else {
-                return $data;
+                return (array) $data;
             }
         }
 
-        throw new LoadingException('Unable to load config ' . $filename);
+        throw new FileNotFoundException($filename);
     }
 
     /**
@@ -57,7 +58,19 @@ class Json implements ParserContract
      */
     public function supports($filename)
     {
-        return (bool) preg_match(/(\.json)(\.dist)?/, $filename);
+        return (bool) preg_match('/(\.json)(\.dist)?/', $filename);
+    }
+
+    /**
+     * Format a json file for saving.
+     *
+     * @param array $data data
+     *
+     * @return string data export
+     */
+    public function dump(array $data)
+    {
+        return json_encode($data);
     }
 
     /**
@@ -88,17 +101,5 @@ class Json implements ParserContract
         ];
 
         return isset($errorMessages[$code]) ? $errorMessages[$code] : 'Unknown';
-    }
-
-    /**
-     * Format a json file for saving.
-     *
-     * @param array $data data
-     *
-     * @return string data export
-     */
-    public function format(array $data)
-    {
-        return json_encode($data);
     }
 }

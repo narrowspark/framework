@@ -1,13 +1,14 @@
 <?php
-namespace Viserio\Filesystem\Parser;
+namespace Viserio\Filesystem\Parsers;
 
+use League\Flysystem\FileNotFoundException;
 use SimpleXMLElement;
 use Viserio\Contracts\Filesystem\Exception\LoadingException;
 use Viserio\Contracts\Filesystem\Parser as ParserContract;
-use Viserio\Filesystem\Filesystem;
-use Viserio\Filesystem\Parser\Traits\IsGroupTrait;
+use Viserio\Contracts\Filesystem\Filesystem as FilesystemContract;
+use Viserio\Filesystem\Parsers\Traits\IsGroupTrait;
 
-class Xml implements ParserContract
+class XmlParser implements ParserContract
 {
     use IsGroupTrait;
 
@@ -21,9 +22,9 @@ class Xml implements ParserContract
     /**
      * Create a new file filesystem loader.
      *
-     * @param \Viserio\Filesystem\Filesystem $files
+     * @param \Viserio\Contracts\Filesystem\Filesystem $files
      */
-    public function __construct(Filesystem $files)
+    public function __construct(FilesystemContract $files)
     {
         $this->files = $files;
     }
@@ -33,7 +34,7 @@ class Xml implements ParserContract
      */
     public function parse($filename, $group = null)
     {
-        if ($this->files->exists($filename)) {
+        if ($this->files->has($filename)) {
             $data = simplexml_load_file($filename);
             $data = unserialize(serialize(json_decode(json_encode((array) $data), true)));
 
@@ -41,10 +42,10 @@ class Xml implements ParserContract
                 return $this->isGroup($group, (array) $data);
             }
 
-            return $data;
+            return (array) $data;
         }
 
-        throw new LoadingException('Unable to parse file ' . $filename);
+        throw new FileNotFoundException($filename);
     }
 
     /**
@@ -52,7 +53,7 @@ class Xml implements ParserContract
      */
     public function supports($filename)
     {
-        return (bool) preg_match(/(\.xml)(\.dist)?/, $filename);
+        return (bool) preg_match('/(\.xml)(\.dist)?/', $filename);
     }
 
     /**

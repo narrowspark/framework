@@ -2,12 +2,11 @@
 namespace Viserio\Filesystem\Tests\Parsers;
 
 use org\bovigo\vfs\vfsStream;
-use Viserio\Filesystem\Parser\YamlParser;
+use Viserio\Filesystem\Filesystem;
+use Viserio\Filesystem\Parsers\YamlParser;
 
 class YamlParserTest extends \PHPUnit_Framework_TestCase
 {
-    use MockeryTrait;
-
     /**
      * @var \org\bovigo\vfs\vfsStreamDirectory
      */
@@ -28,18 +27,21 @@ class YamlParserTest extends \PHPUnit_Framework_TestCase
     {
         $file = vfsStream::newFile('temp.yaml')->withContent(
             '
-                - escapedCharacters
-                - sfComments
+preset: psr2
+
+risky: false
+
+linting: true
             '
         )->at($this->root);
 
-        $parsed = $this->parser->parse($file);
+        $parsed = $this->parser->parse($file->url());
 
         $this->assertTrue(is_array($parsed));
     }
 
     /**
-     * @expectedException Viserio\Contracts\Filesystem\Exception\LoadingException
+     * @expectedException League\Flysystem\FileNotFoundException
      * #@expectedExceptionMessage
      */
     public function testParseToThrowException()
@@ -47,27 +49,27 @@ class YamlParserTest extends \PHPUnit_Framework_TestCase
         $this->parser->parse('nonexistfile');
     }
 
-    public function testSupport()
+    public function testSupports()
     {
         $file = vfsStream::newFile('temp.yaml')->at($this->root);
 
-        $this->assertTrue($this->parser->supports($file));
+        $this->assertTrue($this->parser->supports($file->url()));
 
         $file = vfsStream::newFile('temp.yaml.dist')->at($this->root);
 
-        $this->assertTrue($this->parser->supports($file));
+        $this->assertTrue($this->parser->supports($file->url()));
 
-        $file = vfsStream::newFile('temp.yal')->at($this->root);
+        $file = vfsStream::newFile('temp.yml')->at($this->root);
 
-        $this->assertTrue($this->parser->supports($file));
+        $this->assertTrue($this->parser->supports($file->url()));
 
-        $file = vfsStream::newFile('temp.yal.dist')->at($this->root);
+        $file = vfsStream::newFile('temp.yml.dist')->at($this->root);
 
-        $this->assertTrue($this->parser->supports($file));
+        $this->assertTrue($this->parser->supports($file->url()));
 
         $file = vfsStream::newFile('temp.notsupported')->at($this->root);
 
-        $this->assertFalse($this->parser->supports($file));
+        $this->assertFalse($this->parser->supports($file->url()));
     }
 
     public function testDump()

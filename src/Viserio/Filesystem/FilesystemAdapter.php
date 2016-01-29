@@ -9,7 +9,7 @@ use Viserio\Contracts\Filesystem\FileNotFoundException as ContractFileNotFoundEx
 use Viserio\Contracts\Filesystem\Filesystem as CloudFilesystemContract;
 use Viserio\Support\Collection;
 
-class FilesystemAdapter implements CloudFilesystemContract
+class FilesystemAdapter
 {
     /**
      * The Flysystem filesystem implementation.
@@ -160,16 +160,11 @@ class FilesystemAdapter implements CloudFilesystemContract
     }
 
     /**
-     * Copy a file to a new location.
-     *
-     * @param string $from
-     * @param string $to
-     *
-     * @return bool
+     * {@inheritdoc}
      */
-    public function copy($from, $to)
+    public function copy($originFile, $targetFile, $override = false)
     {
-        return $this->driver->copy($from, $to);
+        return $this->driver->copy($originFile, $targetFile);
     }
 
     /**

@@ -2,12 +2,11 @@
 namespace Viserio\Filesystem\Tests\Parsers;
 
 use org\bovigo\vfs\vfsStream;
-use Viserio\Filesystem\Parser\IniParser;
+use Viserio\Filesystem\Filesystem;
+use Viserio\Filesystem\Parsers\PhpParser;
 
 class PhpParserTest extends \PHPUnit_Framework_TestCase
 {
-    use MockeryTrait;
-
     /**
      * @var \org\bovigo\vfs\vfsStreamDirectory
      */
@@ -32,14 +31,14 @@ class PhpParserTest extends \PHPUnit_Framework_TestCase
             '
         )->at($this->root);
 
-        $parsed = $this->parser->parse($file);
+        $parsed = $this->parser->parse($file->url());
 
         $this->assertTrue(is_array($parsed));
         $this->assertSame(['a' => 1, 'b' => 2, 'c' => 3, 'd' => 4, 'e' => 5], $parsed);
     }
 
     /**
-     * @expectedException Viserio\Contracts\Filesystem\Exception\LoadingException
+     * @expectedException League\Flysystem\FileNotFoundException
      * #@expectedExceptionMessage
      */
     public function testParseToThrowException()
@@ -47,15 +46,15 @@ class PhpParserTest extends \PHPUnit_Framework_TestCase
         $this->parser->parse('nonexistfile');
     }
 
-    public function testSupport()
+    public function testSupports()
     {
         $file = vfsStream::newFile('temp.php')->at($this->root);
 
-        $this->assertTrue($this->parser->supports($file));
+        $this->assertTrue($this->parser->supports($file->url()));
 
         $file = vfsStream::newFile('temp.notsupported')->at($this->root);
 
-        $this->assertFalse($this->parser->supports($file));
+        $this->assertFalse($this->parser->supports($file->url()));
     }
 
     public function testDump()

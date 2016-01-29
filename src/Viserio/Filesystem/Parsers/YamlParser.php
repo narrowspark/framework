@@ -1,15 +1,16 @@
 <?php
-namespace Viserio\Filesystem\Parser;
+namespace Viserio\Filesystem\Parsers;
 
+use League\Flysystem\FileNotFoundException;
 use RuntimeException;
 use Symfony\Component\Yaml\Exception\ParseException;
 use Symfony\Component\Yaml\Parser;
 use Viserio\Contracts\Filesystem\Exception\LoadingException;
 use Viserio\Contracts\Filesystem\Parser as ParserContract;
-use Viserio\Filesystem\Filesystem;
-use Viserio\Filesystem\Parser\Traits\IsGroupTrait;
+use Viserio\Contracts\Filesystem\Filesystem as FilesystemContract;
+use Viserio\Filesystem\Parsers\Traits\IsGroupTrait;
 
-class Yaml implements ParserContract
+class YamlParser implements ParserContract
 {
     use IsGroupTrait;
 
@@ -23,9 +24,9 @@ class Yaml implements ParserContract
     /**
      * Create a new file filesystem loader.
      *
-     * @param \Viserio\Filesystem\Filesystem $files
+     * @param \Viserio\Contracts\Filesystem\Filesystem $files
      */
-    public function __construct(Filesystem $files)
+    public function __construct(FilesystemContract $files)
     {
         $this->files = $files;
     }
@@ -39,19 +40,21 @@ class Yaml implements ParserContract
             throw new RuntimeException('Unable to read yaml as the Symfony Yaml Component is not installed.');
         }
 
-        try {
-            if ($this->files->exists($filename)) {
+        if ($this->files->has($filename)) {
+            try {
                 $data = (new Parser())->parse($this->files->read($filename));
 
                 if ($group !== null) {
                     return $this->isGroup($group, (array) $data);
                 }
 
-                return $data;
+                return (array) $data;
+            } catch (ParseException $exception) {
+                throw new LoadingException(sprintf('Unable to parse the YAML string: [%s]', $exception->getMessage()));
             }
-        } catch (ParseException $exception) {
-            throw new LoadingException(sprintf('Unable to parse the YAML string: [%s]', $exception->getMessage()));
         }
+
+        throw new FileNotFoundException($filename);
     }
 
     /**
@@ -59,7 +62,7 @@ class Yaml implements ParserContract
      */
     public function supports($filename)
     {
-        return (bool) preg_match(/(\.ya?ml)(\.dist)?/, $filename);
+        return (bool) preg_match('/(\.ya?ml)(\.dist)?/', $filename);
     }
 
     /**

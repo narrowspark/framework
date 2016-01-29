@@ -1,13 +1,14 @@
 <?php
-namespace Viserio\Filesystem\Parser;
+namespace Viserio\Filesystem\Parsers;
 
+use League\Flysystem\FileNotFoundException;
 use Viserio\Contracts\Filesystem\Exception\LoadingException;
 use Viserio\Contracts\Filesystem\Parser as ParserContract;
-use Viserio\Filesystem\Filesystem;
-use Viserio\Filesystem\Parser\Traits\IsGroupTrait;
-use Yosymfony\Toml\Toml as TomlParser;
+use Viserio\Contracts\Filesystem\Filesystem as FilesystemContract;
+use Viserio\Filesystem\Parsers\Traits\IsGroupTrait;
+use Yosymfony\Toml\Toml;
 
-class Toml implements ParserContract
+class TomlParser implements ParserContract
 {
     use IsGroupTrait;
 
@@ -21,9 +22,9 @@ class Toml implements ParserContract
     /**
      * Create a new file filesystem loader.
      *
-     * @param \Viserio\Filesystem\Filesystem $files
+     * @param \Viserio\Contracts\Filesystem\Filesystem $files
      */
-    public function __construct(Filesystem $files)
+    public function __construct(FilesystemContract $files)
     {
         $this->files = $files;
     }
@@ -37,17 +38,17 @@ class Toml implements ParserContract
             throw new \RuntimeException('Unable to read toml, the Toml Parser is not installed.');
         }
 
-        if ($this->files->exists($filename)) {
-            $data = TomlParser::Parse($filename);
+        if ($this->files->has($filename)) {
+            $data = Toml::Parse($filename);
 
             if ($group !== null) {
                 return $this->isGroup($group, (array) $data);
             }
 
-            return $data;
+            return (array) $data;
         }
 
-        throw new LoadingException('Unable to parse file ' . $filename);
+        throw new FileNotFoundException($filename);
     }
 
     /**
@@ -59,7 +60,7 @@ class Toml implements ParserContract
      */
     public function supports($filename)
     {
-        return (bool) preg_match(/(\.toml)(\.dist)?/, $filename);
+        return (bool) preg_match('/(\.toml)(\.dist)?/', $filename);
     }
 
     /**

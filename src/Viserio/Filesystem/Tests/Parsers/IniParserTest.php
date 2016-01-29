@@ -2,12 +2,11 @@
 namespace Viserio\Filesystem\Tests\Parsers;
 
 use org\bovigo\vfs\vfsStream;
-use Viserio\Filesystem\Parser\IniParser;
+use Viserio\Filesystem\Filesystem;
+use Viserio\Filesystem\Parsers\IniParser;
 
 class IniParserTest extends \PHPUnit_Framework_TestCase
 {
-    use MockeryTrait;
-
     /**
      * @var org\bovigo\vfs\vfsStreamDirectory
      */
@@ -29,35 +28,21 @@ class IniParserTest extends \PHPUnit_Framework_TestCase
         $file = vfsStream::newFile('temp.ini')->withContent(
             '
                 ; This is a sample configuration file
-                ; Comments start with ';', as in php.ini
+                ; Comments start with ";", as in php.ini
 
-                [first_section]
                 one = 1
                 five = 5
                 animal = BIRD
-
-                [second_section]
-                path = "/usr/local/bin"
-                URL = "http://www.example.com/~username"
-
-                [third_section]
-                phpversion[] = "5.0"
-                phpversion[] = "5.1"
-                phpversion[] = "5.2"
-                phpversion[] = "5.3"
-
-                urls[svn] = "http://svn.php.net"
-                urls[git] = "http://git.php.net"
             '
         )->at($this->root);
 
-        $parsed = $this->parser->parse($file);
+        $parsed = $this->parser->parse($file->url());
 
         $this->assertTrue(is_array($parsed));
     }
 
     /**
-     * @expectedException Viserio\Contracts\Filesystem\Exception\LoadingException
+     * @expectedException League\Flysystem\FileNotFoundException
      * #@expectedExceptionMessage
      */
     public function testParseToThrowException()
@@ -65,19 +50,19 @@ class IniParserTest extends \PHPUnit_Framework_TestCase
         $this->parser->parse('nonexistfile');
     }
 
-    public function testSupport()
+    public function testSupports()
     {
         $file = vfsStream::newFile('temp.ini')->at($this->root);
 
-        $this->assertTrue($this->parser->supports($file));
+        $this->assertTrue($this->parser->supports($file->url()));
 
         $file = vfsStream::newFile('temp.ini.dist')->at($this->root);
 
-        $this->assertTrue($this->parser->supports($file));
+        $this->assertTrue($this->parser->supports($file->url()));
 
         $file = vfsStream::newFile('temp.notsupported')->at($this->root);
 
-        $this->assertFalse($this->parser->supports($file));
+        $this->assertFalse($this->parser->supports($file->url()));
     }
 
     public function testDump()
