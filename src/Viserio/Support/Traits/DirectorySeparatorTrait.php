@@ -14,7 +14,7 @@ trait DirectorySeparatorTrait
     {
         if (DIRECTORY_SEPARATOR !== '/') {
             if (is_string($paths)) {
-                if (preg_match('/vfs/', $paths)) {
+                if (preg_match('/vfs:/', $paths)) {
                     return $paths;
                 }
 
@@ -23,7 +23,7 @@ trait DirectorySeparatorTrait
                 $newPaths = [];
 
                 foreach ($paths as $path) {
-                    if (preg_match('/vfs/', $path)) {
+                    if (preg_match('/vfs:/', $path)) {
                         $newPaths[] = $path;
                     }
 
