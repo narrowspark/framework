@@ -115,12 +115,12 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract
     /**
      * {@inheritdoc}
      */
-    public function copy($from, $to)
+    public function copy($originFile, $targetFile, $override = false)
     {
-        $from = $this->getDirectorySeparator($from);
-        $to   = $this->getDirectorySeparator($to);
+        $from = $this->getDirectorySeparator($originFile);
+        $to   = $this->getDirectorySeparator($targetFile);
 
-        return parent::copy($from, $to);
+        return parent::copy($from, $to, $override);
     }
 
     /**
