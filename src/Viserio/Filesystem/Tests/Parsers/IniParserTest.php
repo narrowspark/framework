@@ -27,9 +27,6 @@ class IniParserTest extends \PHPUnit_Framework_TestCase
     {
         $file = vfsStream::newFile('temp.ini')->withContent(
             '
-                ; This is a sample configuration file
-                ; Comments start with ";", as in php.ini
-
                 one = 1
                 five = 5
                 animal = BIRD
@@ -39,6 +36,23 @@ class IniParserTest extends \PHPUnit_Framework_TestCase
         $parsed = $this->parser->parse($file->url());
 
         $this->assertTrue(is_array($parsed));
+        $this->assertSame(['one' => '1', 'five' => '5', 'animal' => 'BIRD'], $parsed);
+    }
+
+    public function testParseGroup()
+    {
+        $file = vfsStream::newFile('temp.ini')->withContent(
+            '
+                one = 1
+                five = 5
+                animal = BIRD
+            '
+        )->at($this->root);
+
+        $parsed = $this->parser->parse($file->url(), 'foo');
+
+        $this->assertTrue(is_array($parsed));
+        $this->assertSame(['foo::one' => '1', 'foo::five' => '5', 'foo::animal' => 'BIRD'], $parsed);
     }
 
     /**

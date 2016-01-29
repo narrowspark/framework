@@ -37,6 +37,20 @@ class TomlParserTest extends \PHPUnit_Framework_TestCase
         $this->assertSame(['backspace' => 'This string has a \b backspace character.'], $parsed);
     }
 
+    public function testParseGroup()
+    {
+        $file = vfsStream::newFile('temp.toml')->withContent(
+            "
+                backspace = 'This string has a \b backspace character.'
+            "
+        )->at($this->root);
+
+        $parsed = $this->parser->parse($file->url(), 'foo');
+
+        $this->assertTrue(is_array($parsed));
+        $this->assertSame(['foo::backspace' => 'This string has a \b backspace character.'], $parsed);
+    }
+
     /**
      * @expectedException League\Flysystem\FileNotFoundException
      * #@expectedExceptionMessage

@@ -38,6 +38,25 @@ linting: true
         $parsed = $this->parser->parse($file->url());
 
         $this->assertTrue(is_array($parsed));
+        $this->assertSame(['preset' => 'psr2', 'risky' => false, 'linting' => true], $parsed);
+    }
+
+    public function testParseGroup()
+    {
+        $file = vfsStream::newFile('temp.yaml')->withContent(
+            '
+preset: psr2
+
+risky: false
+
+linting: true
+            '
+        )->at($this->root);
+
+        $parsed = $this->parser->parse($file->url(), 'foo');
+
+        $this->assertTrue(is_array($parsed));
+        $this->assertSame(['foo::preset' => 'psr2', 'foo::risky' => false, 'foo::linting' => true], $parsed);
     }
 
     /**
