@@ -86,6 +86,14 @@ class JsonParserTest extends \PHPUnit_Framework_TestCase
 
     public function testDump()
     {
-        # code...
+        $book = [
+            'title'   => 'bar',
+            'author'  => 'foo',
+            'edition' => 6
+        ];
+
+        $dump = $this->parser->dump($book);
+
+        $this->assertEquals('{"title": "bar","author": "foo","edition": 6}', $dump);
     }
 }

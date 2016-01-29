@@ -2,6 +2,7 @@
 namespace Viserio\Filesystem\Parsers;
 
 use League\Flysystem\FileNotFoundException;
+use RuntimeException;
 use Viserio\Contracts\Filesystem\Exception\LoadingException;
 use Viserio\Contracts\Filesystem\Filesystem as FilesystemContract;
 use Viserio\Contracts\Filesystem\Parser as ParserContract;
@@ -35,7 +36,7 @@ class TomlParser implements ParserContract
     public function parse($filename, $group = null)
     {
         if (!class_exists('Yosymfony\\Toml\\Toml')) {
-            throw new \RuntimeException('Unable to read toml, the Toml Parser is not installed.');
+            throw new RuntimeException('Unable to read toml, the Toml Parser is not installed.');
         }
 
         if ($this->files->has($filename)) {
@@ -72,6 +73,6 @@ class TomlParser implements ParserContract
      */
     public function dump(array $data)
     {
-        return '';
+        return 'Not supported';
     }
 }

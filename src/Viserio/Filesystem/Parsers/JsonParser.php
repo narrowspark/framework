@@ -70,7 +70,7 @@ class JsonParser implements ParserContract
      */
     public function dump(array $data)
     {
-        return json_encode($data);
+        return json_encode($data, JSON_PRETTY_PRINT);
     }
 
     /**
