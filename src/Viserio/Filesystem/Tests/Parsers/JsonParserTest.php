@@ -89,7 +89,7 @@ class JsonParserTest extends \PHPUnit_Framework_TestCase
         $book = [
             'title'   => 'bar',
             'author'  => 'foo',
-            'edition' => 6
+            'edition' => 6,
         ];
 
         $dump = $this->parser->dump($book);
