@@ -17,7 +17,7 @@ split()
 
         pushd $HEAD
 
-        git subsplit init git@github.com:laravel/framework.git
+        git subsplit init git@github.com:viserio/framework.git
         git subsplit update
 
         time git subsplit publish --heads="$HEAD" --no-tags "$SPLIT"
