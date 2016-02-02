@@ -1,6 +1,9 @@
 <?php
 namespace Viserio\View;
 
+use Exception;
+use Throwable;
+
 class VirtuosoView extends View
 {
     /**
@@ -12,16 +15,26 @@ class VirtuosoView extends View
      */
     public function render(callable $callback = null)
     {
-        $contents = $this->renderContents();
+        try {
+            $contents = $this->renderContents();
 
-        $response = isset($callback) ? call_user_func($callback, $this, $contents) : null;
+            $response = isset($callback) ? call_user_func($callback, $this, $contents) : null;
 
-        // Once we have the contents of the view, we will flush the sections if we are
-        // done rendering all views so that there is nothing left hanging over when
-        // another view gets rendered in the future by the application developer.
-        $this->factory->getVirtuoso()->flushSectionsIfDoneRendering();
+            // Once we have the contents of the view, we will flush the sections if we are
+            // done rendering all views so that there is nothing left hanging over when
+            // another view gets rendered in the future by the application developer.
+            $this->factory->getVirtuoso()->flushSectionsIfDoneRendering();
 
-        return $response !== null ? $response : $contents;
+            return ! is_null($response) ? $response : $contents;
+        } catch (Exception $e) {
+            $this->factory->getVirtuoso()->flushSections();
+
+            throw $e;
+        } catch (Throwable $e) {
+            $this->factory->getVirtuoso()->flushSections();
+
+            throw $e;
+        }
     }
 
     /**

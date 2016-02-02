@@ -3,8 +3,8 @@ language: php
 sudo: false
 
 addons:
-    apt_packages:
-        - parallel
+  apt_packages:
+    - parallel
 
 services:
   - memcached
@@ -20,17 +20,17 @@ matrix:
     - php: 5.6
       env: SETUP=stable
     - php: 5.6
-      env: ADAPTER=Libevent
+      env: SETUP=basic ADAPTER=Libevent
     - php: 5.6
-      env: ADAPTER=Ev
+      env: SETUP=basic ADAPTER=Ev
     - php: 7.0
       env: SETUP=lowest
     - php: 7.0
-      env: ADAPTER=Libuv
+      env: SETUP=basic ADAPTER=Libuv
     - php: 7.0
-      env: ADAPTER=Uv
+      env: SETUP=basic ADAPTER=Uv
     - php: 5.6
-      env: CHECK_CS=true SEND_COVERAGE=true
+      env: SETUP=basic CHECK_CS=true SEND_COVERAGE=true
   fast_finish: true
 
 cache:
@@ -38,8 +38,10 @@ cache:
     - $HOME/.composer/cache
 
 before_install:
+  - mkdir -p ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d
+  - if [ -f build/travis/php/$TRAVIS_PHP_VERSION.sh]; then ./build/travis/php/$TRAVIS_PHP_VERSION.sh; fi
   - travis_retry composer self-update # Run allways composer update
-  - composer global require hirak/prestissimo # Now composer can install components parallel
+  - if [ "$TRAVIS_PHP_VERSION" = hhvm ]; then composer global require hirak/prestissimo; fi # Now composer can install components parallel
 
 install:
   - if [ "$SETUP" = 'basic' ]; then travis_retry composer install --no-interaction --prefer-source --no-progress --profile; fi
@@ -47,13 +49,13 @@ install:
   - if [ "$SETUP" = 'lowest' ]; then travis_retry composer update --prefer-source --no-interaction --prefer-lowest --prefer-stable --no-progress --profile; fi
 
 before_script:
-  - chmod +x ./build/travis/5.x.sh && chmod +x ./build/travis/7.x.sh && chmod +x ./build/travis/hhvm.sh && chmod +x ./build/travis/script.sh && chmod +x ./build/travis/after_success.sh
+  - chmod +x ./build/travis/php/5.x.sh && chmod +x ./build/travis/php/7.x.sh && chmod +x ./build/travis/php/hhvm.sh && chmod +x ./build/travis/script.sh && chmod +x ./build/travis/after_success.sh
   - sleep 15
   - mongo mydb_test --eval 'db.addUser("travis", "test");'
   - ./build/travis/all.sh
-  - if [ "$TRAVIS_PHP_VERSION" = 5.* ]; then ./build/travis/5.x.sh; fi
-  - if [ "$TRAVIS_PHP_VERSION" = 7.* ]; then ./build/travis/7.x.sh; fi
-  - if [ "$TRAVIS_PHP_VERSION" = hhvm ]; then ./build/travis/hhvm.sh; fi
+  - if [ "$TRAVIS_PHP_VERSION" = 5.* ]; then ./build/travis/php/5.x.sh; fi
+  - if [ "$TRAVIS_PHP_VERSION" = 7.* ]; then ./build/travis/php/7.x.sh; fi
+  - if [ "$TRAVIS_PHP_VERSION" = hhvm ]; then ./build/travis/php/hhvm.sh; fi
 
 script:
   - ./build/travis/script.sh

@@ -2,8 +2,8 @@
 namespace Viserio\Filesystem\Tests;
 
 use org\bovigo\vfs\vfsStream;
-use Viserio\Filesystem\FileLoader;
 use Viserio\Filesystem\Filesystem;
+use Viserio\Filesystem\FileLoader;
 use Viserio\Filesystem\Parsers\IniParser;
 
 class FileLoaderTest extends \PHPUnit_Framework_TestCase
@@ -21,7 +21,7 @@ class FileLoaderTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->root       = vfsStream::setup();
-        $this->fileloader = new FileLoader(new Filesystem(), __DIR__ . '/Fixture');
+        $this->fileloader = new FileLoader(new Filesystem(), __DIR__.'/Fixture');
     }
 
     public function testLoad()
@@ -59,5 +59,10 @@ class FileLoaderTest extends \PHPUnit_Framework_TestCase
             'yaml',
             'ini.dist',
         ], $this->fileloader->getParsers());
+    }
+
+    public function testGetFilesystem()
+    {
+        $this->fileloader->getFilesystem();
     }
 }

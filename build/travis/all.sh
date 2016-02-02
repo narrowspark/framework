@@ -4,4 +4,4 @@
 if [[ "$TRAVIS_PHP_VERSION" != hhvm && "$CHECK_CS" != true && "$SEND_COVERAGE" != true ]]; then phpenv config-rm xdebug.ini; fi
 
 # Doing something with phpenv
-if [ "$TRAVIS_PHP_VERSION" != hhvm ]; then phpenv config-add ./build/php.ini; fi
+if [ "$TRAVIS_PHP_VERSION" != hhvm ]; then phpenv config-add ./build/travis/php/php.ini; fi
