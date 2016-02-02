@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-SLUG=$(grep -Pho 'cache/[A-Za-z-\.]+' $1/composer.json | xargs | awk '{print $1}')
+SLUG=$(grep -Pho 'viserio/[A-Za-z-\.]+' $1/composer.json | xargs | awk '{print $1}')
 printf "\n\n************ Running tests for $SLUG ************\n\n"
 
 cd $1

@@ -17,6 +17,6 @@ if [ $? > 0 ]; then exit $?; fi
 
 # Run for main repo. Generate coverage
 COVERAGE=coverage.xml
-if [ -f $COVERAGE ]; then rm $COVERAGE; fi
+if [[ -f $COVERAGE && "$CHECK_CS" = true && "$SEND_COVERAGE" = true ]]; then rm $COVERAGE; fi
 
 ./build/travis/runTest.sh ./ --coverage-clover=$COVERAGE
