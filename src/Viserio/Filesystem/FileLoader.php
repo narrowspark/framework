@@ -1,9 +1,10 @@
 <?php
 namespace Viserio\Filesystem;
 
+use Narrowspark\Arr\StaticArr as Arr;
+use Viserio\Contracts\Filesystem\Exception\UnsupportedFormatException;
 use Viserio\Contracts\Filesystem\Loader as LoaderContract;
 use Viserio\Contracts\Filesystem\Parser as ParserContract;
-use Viserio\Contracts\Filesystem\Exception\UnsupportedFormatException;
 use Viserio\Filesystem\Parsers\IniParser;
 use Viserio\Filesystem\Parsers\JsonParser;
 use Viserio\Filesystem\Parsers\PhpParser;
@@ -11,7 +12,6 @@ use Viserio\Filesystem\Parsers\TomlParser;
 use Viserio\Filesystem\Parsers\XmlParser;
 use Viserio\Filesystem\Parsers\YamlParser;
 use Viserio\Support\Traits\DirectorySeparatorTrait;
-use Narrowspark\Arr\StaticArr as Arr;
 
 class FileLoader implements LoaderContract
 {
@@ -78,6 +78,7 @@ class FileLoader implements LoaderContract
     {
         return $this->directories;
     }
+
     /**
      * Set directories
      *
@@ -88,8 +89,10 @@ class FileLoader implements LoaderContract
     public function setDirectories(array $directories)
     {
         $this->directories = $directories;
+
         return $this;
     }
+
     /**
      * Add directory
      *
@@ -102,6 +105,7 @@ class FileLoader implements LoaderContract
         if (!in_array($directory, $this->directories)) {
             $this->directories[] = $directory;
         }
+
         return $this;
     }
 
@@ -286,7 +290,7 @@ class FileLoader implements LoaderContract
     /**
      * Get the right Parser for data file.
      *
-     * @param string $ext  file extension
+     * @param string $ext file extension
      *
      * @throws \Viserio\Contracts\Filesystem\Exception\UnsupportedFormatException
      *
@@ -341,7 +345,6 @@ class FileLoader implements LoaderContract
     }
 
     /**
-     *
      * @param string      $file
      * @param string|null $group
      * @param string|null $environment
@@ -369,6 +372,6 @@ class FileLoader implements LoaderContract
             return $this->parser($envFilePath)->parse($envFilePath, $group);
         }
 
-        return null;
+        return;
     }
 }

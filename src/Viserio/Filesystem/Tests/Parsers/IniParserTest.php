@@ -88,7 +88,7 @@ value=5
 
     public function testDump()
     {
-        $dump = $this->parser->dump(array('test' => array('value' => true, 'five' => 5)));
+        $dump = $this->parser->dump(['test' => ['value' => true, 'five' => 5]]);
         $expected = <<<EOT
 [test]
 value=true

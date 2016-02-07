@@ -2,11 +2,11 @@
 namespace Viserio\Filesystem;
 
 use FilesystemIterator;
-use RecursiveIteratorIterator;
-use RecursiveDirectoryIterator;
-use SplFileInfo;
 use League\Flysystem\FileNotFoundException;
 use League\Flysystem\Util\MimeType;
+use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
+use SplFileInfo;
 use Symfony\Component\Filesystem\Exception\IOException;
 use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
 use Viserio\Contracts\Filesystem\Filesystem as FilesystemContract;

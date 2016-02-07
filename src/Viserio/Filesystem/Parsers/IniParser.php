@@ -85,7 +85,7 @@ class IniParser implements ParserContract
                 $output .= str_replace('=', '_', $key) . '=';
 
                 if (is_string($value)) {
-                    $output .= '"' . addslashes($value) .'"';
+                    $output .= '"' . addslashes($value) . '"';
                 } elseif (is_bool($value)) {
                     $output .= $value ? 'true' : 'false';
                 } else {
