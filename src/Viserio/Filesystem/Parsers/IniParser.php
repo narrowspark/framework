@@ -63,31 +63,47 @@ class IniParser implements ParserContract
      */
     public function dump(array $data)
     {
-        $this->iniFormat($data);
+        $output = '';
+
+        foreach ($data as $section => $array) {
+            $output .= $this->writeSection($section, $array);
+        }
+
+        return $output;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    private function iniFormat(array $data, array $parent = [])
+    protected function writeSection($section, $array)
     {
-        $out = '';
+        $subsections = [];
+        $output = "[$section]\n";
 
-        foreach ($data as $k => $v) {
-            if (is_array($v)) {
-                //subsection case
-                //merge all the sections into one array...
-                $sec = array_merge($parent, $k);
-                //add section information to the output
-                $out .= '[' . implode('.', $sec) . ']' . PHP_EOL;
-                //recursively traverse deeper
-                $out .= $this->iniFormat($v, $sec);
+        foreach ($array as $key => $value) {
+            if (is_array($value) || is_object($value)) {
+                $key = $section . '.' . $key;
+                $subsections[$key] = (array) $value;
             } else {
-                //plain key->value case
-                $out .= sprintf('%s=%s', $k, $v) . PHP_EOL;
+                $output .= str_replace('=', '_', $key) . '=';
+
+                if (is_string($value)) {
+                    $output .= '"' . addslashes($value) .'"';
+                } elseif (is_bool($value)) {
+                    $output .= $value ? 'true' : 'false';
+                } else {
+                    $output .= $value;
+                }
+
+                $output .= "\n";
             }
         }
 
-        return $out;
+        if ($subsections) {
+            $output .= "\n";
+
+            foreach ($subsections as $section => $array) {
+                $output .= $this->writeSection($section, $array);
+            }
+        }
+
+        return $output;
     }
 }

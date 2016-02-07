@@ -27,13 +27,13 @@ class JsonParserTest extends \PHPUnit_Framework_TestCase
     {
         $file = vfsStream::newFile('temp.json')->withContent(
             '
-                {
-                    "a":1,
-                    "b":2,
-                    "c":3,
-                    "d":4,
-                    "e":5
-                }
+{
+    "a":1,
+    "b":2,
+    "c":3,
+    "d":4,
+    "e":5
+}
             '
         )->at($this->root);
 
@@ -47,10 +47,10 @@ class JsonParserTest extends \PHPUnit_Framework_TestCase
     {
         $file = vfsStream::newFile('temp.json')->withContent(
             '
-                {
-                    "a":1,
-                    "e":5
-                }
+{
+    "a":1,
+    "e":5
+}
             '
         )->at($this->root);
 
@@ -94,6 +94,10 @@ class JsonParserTest extends \PHPUnit_Framework_TestCase
 
         $dump = $this->parser->dump($book);
 
-        $this->assertEquals('{"title": "bar","author": "foo","edition": 6}', $dump);
+        $this->assertEquals('{
+    "title": "bar",
+    "author": "foo",
+    "edition": 6
+}', $dump);
     }
 }

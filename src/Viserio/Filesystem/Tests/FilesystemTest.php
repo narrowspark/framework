@@ -158,20 +158,6 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($this->files->isDirectory($file->url()));
     }
 
-    public function testGlobFindsFiles()
-    {
-        file_put_contents(__DIR__ . '/foo.txt', 'foo');
-        file_put_contents(__DIR__ . '/bar.txt', 'bar');
-
-        $glob = $this->files->glob(__DIR__ . '/*.txt');
-
-        $this->assertContains(__DIR__ . '/foo.txt', $glob);
-        $this->assertContains(__DIR__ . '/bar.txt', $glob);
-
-        @unlink(__DIR__ . '/foo.txt');
-        @unlink(__DIR__ . '/bar.txt');
-    }
-
     public function testAllFilesFindsFiles()
     {
         $this->root->addChild(new vfsStreamDirectory('languages'));
@@ -183,7 +169,7 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
         $allFiles = [];
 
         foreach ($this->files->allFiles($dir->url()) as $file) {
-            $allFiles[] = $file->getFilename();
+            $allFiles[] = $file;
         }
 
         $this->assertContains($file1->getName(), $allFiles);
@@ -199,6 +185,8 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
         $dir2 = $this->root->getChild('music');
 
         $directories = $this->files->directories($this->root->url());
+
+        var_dump($directories);
 
         $this->assertContains($dir1->url(), $directories);
         $this->assertContains($dir2->url(), $directories);

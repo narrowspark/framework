@@ -18,7 +18,7 @@
         }
     ],
     "require": {
-        "php"                                                : ">=5.6.4",
+        "php"                                                : "^5.6|^7.0",
         "container-interop/container-interop"                : "~1.1",
         "narrowspark/arr"                                    : "~1.0",
         "viserio/contracts"                                  : "self.version",

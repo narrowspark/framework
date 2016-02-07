@@ -27,9 +27,9 @@ class IniParserTest extends \PHPUnit_Framework_TestCase
     {
         $file = vfsStream::newFile('temp.ini')->withContent(
             '
-                one = 1
-                five = 5
-                animal = BIRD
+one = 1
+five = 5
+animal = BIRD
             '
         )->at($this->root);
 
@@ -43,16 +43,23 @@ class IniParserTest extends \PHPUnit_Framework_TestCase
     {
         $file = vfsStream::newFile('temp.ini')->withContent(
             '
-                one = 1
-                five = 5
-                animal = BIRD
+[main]
+
+explore=true
+[main.sub]
+
+[main.sub.sub]
+value=5
             '
         )->at($this->root);
 
         $parsed = $this->parser->parse($file->url(), 'foo');
 
         $this->assertTrue(is_array($parsed));
-        $this->assertSame(['foo::one' => '1', 'foo::five' => '5', 'foo::animal' => 'BIRD'], $parsed);
+        $this->assertSame(
+            ['foo::main' => ['explore' => '1'], 'foo::main.sub' => [], 'foo::main.sub.sub' => ['value' => '5']],
+            $parsed
+        );
     }
 
     /**
@@ -81,6 +88,14 @@ class IniParserTest extends \PHPUnit_Framework_TestCase
 
     public function testDump()
     {
-        # code...
+        $dump = $this->parser->dump(array('test' => array('value' => true, 'five' => 5)));
+        $expected = <<<EOT
+[test]
+value=true
+five=5
+
+EOT;
+
+        $this->assertEquals($expected, $dump);
     }
 }

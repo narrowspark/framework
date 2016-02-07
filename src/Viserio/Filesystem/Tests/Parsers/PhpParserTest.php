@@ -27,7 +27,7 @@ class PhpParserTest extends \PHPUnit_Framework_TestCase
     {
         $file = vfsStream::newFile('temp.php')->withContent(
             '<?php
-                return ["a" => 1, "b" => 2, "c" => 3, "d" => 4, "e" => 5,];
+return ["a" => 1, "b" => 2, "c" => 3, "d" => 4, "e" => 5,];
             '
         )->at($this->root);
 
@@ -41,7 +41,7 @@ class PhpParserTest extends \PHPUnit_Framework_TestCase
     {
         $file = vfsStream::newFile('temp.php')->withContent(
             '<?php
-                return ["a" => 1, "e" => 5,];
+return ["a" => 1, "e" => 5,];
             '
         )->at($this->root);
 

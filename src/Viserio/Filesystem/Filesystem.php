@@ -2,6 +2,9 @@
 namespace Viserio\Filesystem;
 
 use FilesystemIterator;
+use RecursiveIteratorIterator;
+use RecursiveDirectoryIterator;
+use SplFileInfo;
 use League\Flysystem\FileNotFoundException;
 use League\Flysystem\Util\MimeType;
 use Symfony\Component\Filesystem\Exception\IOException;
@@ -162,6 +165,16 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract
     /**
      * {@inheritdoc}
      */
+    public function extension($path)
+    {
+        $path    = $this->getDirectorySeparator($path);
+
+        return (new SplFileInfo($path))->getExtension();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getTimestamp($path)
     {
         $path = $this->getDirectorySeparator($path);
@@ -175,7 +188,7 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract
         $paths = $this->getDirectorySeparator($paths);
 
         try {
-            $this->remove($directories);
+            $this->remove($paths);
         } catch (IOException $exception) {
             return false;
         }
@@ -186,17 +199,36 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract
     /**
      * {@inheritdoc}
      */
-    public function files($directory = null, $recursive = false)
+    public function files($directory)
     {
         $directory = $this->getDirectorySeparator($directory);
+
+        return array_diff(scandir($directory), ['..', '.']);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function allFiles($directory = null, $recursive = false)
+    public function allFiles($directory)
     {
         $directory = $this->getDirectorySeparator($directory);
+        $recursive = new RecursiveIteratorIterator(
+            new RecursiveDirectoryIterator($directory, RecursiveDirectoryIterator::SKIP_DOTS),
+            RecursiveIteratorIterator::SELF_FIRST,
+            RecursiveIteratorIterator::CATCH_GET_CHILD // Ignore "Permission denied"
+        );
+
+        $files = [];
+
+        foreach ($recursive as $file) {
+            if ($file->isDir()) {
+                continue;
+            }
+
+            $files[] = $file->getFilename();
+        }
+
+        return $files;
     }
 
     /**
@@ -218,17 +250,40 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract
     /**
      * {@inheritdoc}
      */
-    public function directories($directory = null, $recursive = false)
+    public function directories($directory)
     {
         $directory = $this->getDirectorySeparator($directory);
+
+        $dirs = [];
+
+        foreach (glob($directory, GLOB_ONLYDIR) as $dir) {
+            $dirs[] = $this->getDirectorySeparator($dir);
+        }
+
+        return $dirs;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function allDirectories($directory = null)
+    public function allDirectories($directory)
     {
         $directory = $this->getDirectorySeparator($directory);
+        $recursive = new RecursiveIteratorIterator(
+            new RecursiveDirectoryIterator($directory, RecursiveDirectoryIterator::SKIP_DOTS),
+            RecursiveIteratorIterator::SELF_FIRST,
+            RecursiveIteratorIterator::CATCH_GET_CHILD // Ignore "Permission denied"
+        );
+
+        $dirs = [];
+
+        foreach ($recursive as $dir) {
+            if ($dir->isDir()) {
+                $dirs[] = $this->getDirectorySeparator($dir->getRealpath());
+            }
+        }
+
+        return $dirs;
     }
 
     /**
@@ -345,19 +400,6 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract
         $file = $this->getDirectorySeparator($file);
 
         return is_file($file);
-    }
-
-    /**
-     * Find path names matching a given pattern.
-     *
-     * @param string $pattern
-     * @param int    $flags
-     *
-     * @return array
-     */
-    public function glob($pattern, $flags = 0)
-    {
-        return glob($pattern, $flags);
     }
 
     /**

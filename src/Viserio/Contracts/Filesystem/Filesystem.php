@@ -125,6 +125,16 @@ interface Filesystem
     public function getMimetype($path);
 
     /**
+     * Returns a string containing the file extension,
+     * or an empty string if the file has no extension.
+     *
+     * @param string $path
+     *
+     * @return string
+     */
+    public function extension($path);
+
+    /**
      * Get a file's timestamp.
      *
      * @param string $path The path to the file.
@@ -147,31 +157,29 @@ interface Filesystem
     /**
      * Get an array of all files in a directory.
      *
-     * @param string|null $directory
-     * @param bool        $recursive
+     * @param string $directory
      *
      * @return array
      */
-    public function files($directory = null, $recursive = false);
+    public function files($directory);
 
     /**
      * Get all of the files from the given directory (recursive).
      *
-     * @param string|null $directory
+     * @param string $directory
      *
      * @return array
      */
-    public function allFiles($directory = null);
+    public function allFiles($directory);
 
     /**
      * Get all of the directories within a given directory.
      *
-     * @param string|null $directory
-     * @param bool        $recursive
+     * @param string $directory
      *
      * @return array
      */
-    public function directories($directory = null, $recursive = false);
+    public function directories($directory);
 
     /**
      * Get all (recursive) of the directories within a given directory.
@@ -180,7 +188,7 @@ interface Filesystem
      *
      * @return array
      */
-    public function allDirectories($directory = null);
+    public function allDirectories($directory);
 
     /**
      * Recursively create a directory.

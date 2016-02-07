@@ -5,9 +5,12 @@ use org\bovigo\vfs\vfsStream;
 use Viserio\Filesystem\FileLoader;
 use Viserio\Filesystem\Filesystem;
 use Viserio\Filesystem\Parsers\IniParser;
+use Viserio\Support\Traits\DirectorySeparatorTrait;
 
 class FileLoaderTest extends \PHPUnit_Framework_TestCase
 {
+    use DirectorySeparatorTrait;
+
     /**
      * @var org\bovigo\vfs\vfsStreamDirectory
      */
@@ -26,12 +29,40 @@ class FileLoaderTest extends \PHPUnit_Framework_TestCase
 
     public function testLoad()
     {
-        # code...
+        $data = $this->fileloader->load('test.ini');
+
+        $this->assertSame(['one' => '1', 'five' => '5', 'animal' => 'BIRD'], $data);
     }
 
-    public function testExists()
+    /**
+     * @expectedException Viserio\Contracts\Filesystem\Exception\UnsupportedFormatException
+     * @expectedExceptionMessage Unable to find the right Parser for [inia].
+     */
+    public function testLoadToThrowException()
     {
-        # code...
+        $this->fileloader->load('test.inia');
+    }
+
+    public function testLoadwithGroup()
+    {
+        $data = $this->fileloader->load('test.ini', 'Test');
+
+        $this->assertSame(['Test::one' => '1', 'Test::five' => '5', 'Test::animal' => 'BIRD'], $data);
+    }
+
+    public function testExistswithEnvironment()
+    {
+        $exist = $this->fileloader->exists('test.ini', null, 'production', null);
+        $this->assertSame($this->getDirectorySeparator(__DIR__ . '/Fixture/production/test.ini'), $exist);
+    }
+
+    public function testExistsWithCache()
+    {
+        $exist = $this->fileloader->exists('test.ini');
+        $this->assertSame($this->getDirectorySeparator(__DIR__ . '/Fixture/test.ini'), $exist);
+
+        $exist2 = $this->fileloader->exists('test.ini');
+        $this->assertSame($this->getDirectorySeparator(__DIR__ . '/Fixture/test.ini'), $exist2);
     }
 
     public function testCascadePackage()
@@ -43,12 +74,12 @@ class FileLoaderTest extends \PHPUnit_Framework_TestCase
     {
         $this->fileloader->addNamespace('foo', 'barr');
 
-        $this->assertSame('barr', $this->fileloader->getNamespaces('foo'));
+        $this->assertContains('barr', $this->fileloader->getNamespaces());
     }
 
     public function testParser()
     {
-        $this->fileloader->addNamespace('ini.dist', new IniParser(new Filesystem()));
+        $this->fileloader->addParser('ini.dist', new IniParser(new Filesystem()));
 
         $this->assertEquals([
             'ini',
@@ -63,6 +94,6 @@ class FileLoaderTest extends \PHPUnit_Framework_TestCase
 
     public function testGetFilesystem()
     {
-        $this->fileloader->getFilesystem();
+        $this->assertInstanceOf(Filesystem::class, $this->fileloader->getFilesystem());
     }
 }
