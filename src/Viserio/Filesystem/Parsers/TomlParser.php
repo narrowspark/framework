@@ -6,13 +6,10 @@ use RuntimeException;
 use Viserio\Contracts\Filesystem\Exception\LoadingException;
 use Viserio\Contracts\Filesystem\Filesystem as FilesystemContract;
 use Viserio\Contracts\Filesystem\Parser as ParserContract;
-use Viserio\Filesystem\Parsers\Traits\IsGroupTrait;
 use Yosymfony\Toml\Toml;
 
 class TomlParser implements ParserContract
 {
-    use IsGroupTrait;
-
     /**
      * The filesystem instance.
      *

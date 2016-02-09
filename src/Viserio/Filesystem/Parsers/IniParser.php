@@ -5,12 +5,9 @@ use League\Flysystem\FileNotFoundException;
 use Viserio\Contracts\Filesystem\Exception\LoadingException;
 use Viserio\Contracts\Filesystem\Filesystem as FilesystemContract;
 use Viserio\Contracts\Filesystem\Parser as ParserContract;
-use Viserio\Filesystem\Parsers\Traits\IsGroupTrait;
 
 class IniParser implements ParserContract
 {
-    use IsGroupTrait;
-
     /**
      * The filesystem instance.
      *

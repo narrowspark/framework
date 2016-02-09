@@ -116,21 +116,20 @@ class FileLoader implements LoaderContract
      * Load the given data group.
      *
      * @param string      $file
-     * @param string|null $group
      * @param string|null $environment
      * @param string|null $namespace
      *
      * @return array
      */
-    public function load($file, $group = null, $environment = null, $namespace = null)
+    public function load($file, $environment = null, $namespace = null)
     {
         // Determine if the given file exists.
-        $dataFile = $this->exists($file, $group, $environment, $namespace);
+        $dataFile = $this->exists($file, $environment, $namespace);
 
         // Set the right Parser for data and return data array
-        $items    = $this->parser($file)->parse($dataFile, $group);
+        $items    = $this->parser($file)->parse($dataFile);
 
-        if ($envItems = $this->getEnvFileData($file, $group, $environment, $namespace)) {
+        if ($envItems = $this->getEnvFileData($file, $environment, $namespace)) {
             // Merege env data and data
             return Arr::merge($items, $envItems);
         }
@@ -142,19 +141,18 @@ class FileLoader implements LoaderContract
      * Determine if the given file exists.
      *
      * @param string      $file
-     * @param string|null $group
      * @param string|null $environment
      * @param string|null $namespace
      *
      * @return bool|string
      */
-    public function exists($file, $group = null, $environment = null, $namespace = null)
+    public function exists($file, $environment = null, $namespace = null)
     {
-        $key    = str_replace('/', '', $namespace . $group . $file);
-        $envKey = str_replace('/', '', $namespace . $environment . $group . $file);
+        $key    = str_replace('/', '', $namespace . $file);
+        $envKey = str_replace('/', '', $namespace . $environment . $file);
 
-        // We'll first check to see if we have determined if this namespace and
-        // group combination have been checked before. If they have, we will
+        // We'll first check to see if we have determined if this namespace
+        // combination have been checked before. If they have, we will
         // just return the cached result so we don't have to hit the disk.
         if (isset($this->exists[$key]) && $environment === null) {
             return $this->exists[$key];
@@ -174,8 +172,6 @@ class FileLoader implements LoaderContract
             str_replace('//', '/', sprintf('%s/%s', $path, $file))
         );
 
-        // To check if a group exists, we will simply get the path based on the
-        // namespace, and then check to see if this files exists within that namespace.
         if ($this->files->has($envFile) && $environment !== null) {
             return $this->exists[$envKey] = $envFile;
         } elseif ($this->files->has($file)) {
@@ -187,45 +183,6 @@ class FileLoader implements LoaderContract
         $this->exists[$envKey] = false;
 
         return false;
-    }
-
-    /**
-     * Apply any cascades to an array of package options.
-     *
-     * @param string      $file
-     * @param string|null $packages
-     * @param string|null $group
-     * @param string|null $environment
-     * @param array       $items
-     * @param string      $namespace
-     *
-     * @return array|null
-     */
-    public function cascadePackage(
-        $file,
-        $packages = null,
-        $group = null,
-        $environment = null,
-        $items = [],
-        $namespace = 'packages'
-    ) {
-        // First we will look for a data file in the packages data
-        // folder. If it exists, we will load it and merge it with these original
-        // options so that we will easily 'cascade' a package's datas.
-        if ($data = $this->exists($file, $group, sprintf('%s/%s', $packages, $environment), $namespace)) {
-            $items = Arr::merge($items, $data);
-        }
-
-        // Once we have merged the regular package data we need to look for
-        // an environment specific data file. If one exists, we will get
-        // the contents and merge them on top of this array of options we have.
-        $path = $this->getPackagePath($environment, $packages, $group, $file, $namespace);
-
-        if ($data = $this->exists($path)) {
-            $items = Arr::merge($items, $data);
-        }
-
-        return $items;
     }
 
     /**
@@ -312,24 +269,6 @@ class FileLoader implements LoaderContract
     }
 
     /**
-     * Get the package path for an environment and group.
-     *
-     * @param string      $environment
-     * @param string      $package
-     * @param string      $group
-     * @param string|null $namespace
-     * @param string      $file
-     *
-     * @return string
-     */
-    protected function getPackagePath($environment, $package, $group, $file, $namespace = null)
-    {
-        $file = sprintf('packages/%s/%s/%s/%s', $package, $environment, $group, $file);
-
-        return $this->getDirectorySeparator($this->getPath($namespace, $file) . '/' . $file);
-    }
-
-    /**
      * Get the data path for a namespace.
      *
      * @param string $namespace
@@ -354,20 +293,19 @@ class FileLoader implements LoaderContract
 
     /**
      * @param string      $file
-     * @param string|null $group
      * @param string|null $environment
      * @param string|null $namespace
      *
      * @return array|null
      */
-    protected function getEnvFileData($file, $group = null, $environment = null, $namespace = null)
+    protected function getEnvFileData($file, $environment = null, $namespace = null)
     {
         if ($environment === null) {
             return;
         }
 
         // Get checked env data file
-        $envFileName = str_replace('/', '', $namespace . $environment . $group . $file);
+        $envFileName = str_replace('/', '', $namespace . $environment . $file);
 
         // Finally we're ready to check for the environment specific data
         // file which will be merged on top of the main arrays so that they get
@@ -380,7 +318,7 @@ class FileLoader implements LoaderContract
 
             if ($this->files->exists($envFilePath)) {
                 // Set the right parser for environment data and return data array
-                return $this->parser($envFilePath)->parse($envFilePath, $group);
+                return $this->parser($envFilePath)->parse($envFilePath);
             }
         }
 

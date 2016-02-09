@@ -5,12 +5,9 @@ use League\Flysystem\FileNotFoundException;
 use Viserio\Contracts\Filesystem\Exception\LoadingException;
 use Viserio\Contracts\Filesystem\Filesystem as FilesystemContract;
 use Viserio\Contracts\Filesystem\Parser as ParserContract;
-use Viserio\Filesystem\Parsers\Traits\IsGroupTrait;
 
 class PhpParser implements ParserContract
 {
-    use IsGroupTrait;
-
     /**
      * The filesystem instance.
      *
@@ -34,9 +31,7 @@ class PhpParser implements ParserContract
     public function parse($filename)
     {
         if ($this->files->has($filename)) {
-            $data = $this->files->getRequire($filename);
-
-            return (array) $data;
+            return (array) $this->files->getRequire($filename);
         }
 
         throw new FileNotFoundException($filename);
