@@ -24,7 +24,7 @@ class FileLoaderTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->root       = vfsStream::setup();
-        $this->fileloader = new FileLoader(new Filesystem(), __DIR__ . '/Fixture');
+        $this->fileloader = new FileLoader(new Filesystem(), [__DIR__ . '/Fixture']);
     }
 
     public function testLoad()
@@ -58,11 +58,17 @@ class FileLoaderTest extends \PHPUnit_Framework_TestCase
 
     public function testExistsWithCache()
     {
-        $exist = $this->fileloader->exists('test.ini');
-        $this->assertSame($this->getDirectorySeparator(__DIR__ . '/Fixture/test.ini'), $exist);
+        $exist = $this->fileloader->exists('test.json');
+        $this->assertSame($this->getDirectorySeparator(__DIR__ . '/Fixture/test.json'), $exist);
 
-        $exist2 = $this->fileloader->exists('test.ini');
-        $this->assertSame($this->getDirectorySeparator(__DIR__ . '/Fixture/test.ini'), $exist2);
+        $exist2 = $this->fileloader->exists('test.json');
+        $this->assertSame($this->getDirectorySeparator(__DIR__ . '/Fixture/test.json'), $exist2);
+
+        $envExist1 = $this->fileloader->exists('test.ini', null, 'production', null);
+        $this->assertSame($this->getDirectorySeparator(__DIR__ . '/Fixture/production/test.ini'), $envExist1);
+
+        $envExist2 = $this->fileloader->exists('test.ini', null, 'production', null);
+        $this->assertSame($this->getDirectorySeparator(__DIR__ . '/Fixture/production/test.ini'), $envExist2);
     }
 
     public function testCascadePackage()
