@@ -3,5 +3,4 @@ namespace Viserio\Filesystem;
 
 class ClassFinder
 {
-
 }
