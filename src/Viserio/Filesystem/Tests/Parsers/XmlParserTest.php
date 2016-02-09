@@ -41,24 +41,6 @@ class XmlParserTest extends \PHPUnit_Framework_TestCase
         $this->assertSame(['to' => 'Tove', 'from' => 'Jani', 'heading' => 'Reminder'], $parsed);
     }
 
-    public function testParseGroup()
-    {
-        $file = vfsStream::newFile('temp.xml')->withContent(
-            '<?xml version="1.0"?>
-<note>
-  <to>Tove</to>
-  <from>Jani</from>
-  <heading>Reminder</heading>
-</note>
-            '
-        )->at($this->root);
-
-        $parsed = $this->parser->parse($file->url(), 'foo');
-
-        $this->assertTrue(is_array($parsed));
-        $this->assertSame(['foo::to' => 'Tove', 'foo::from' => 'Jani', 'foo::heading' => 'Reminder'], $parsed);
-    }
-
     /**
      * @expectedException League\Flysystem\FileNotFoundException
      * #@expectedExceptionMessage

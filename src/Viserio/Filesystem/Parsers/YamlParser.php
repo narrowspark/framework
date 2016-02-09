@@ -34,7 +34,7 @@ class YamlParser implements ParserContract
     /**
      * {@inheritdoc}
      */
-    public function parse($filename, $group = null)
+    public function parse($filename)
     {
         if (!class_exists('Symfony\\Component\\Yaml\\Yaml')) {
             throw new RuntimeException('Unable to read yaml as the Symfony Yaml Component is not installed.');
@@ -43,10 +43,6 @@ class YamlParser implements ParserContract
         if ($this->files->has($filename)) {
             try {
                 $data = (new Parser())->parse($this->files->read($filename));
-
-                if ($group !== null) {
-                    return $this->isGroup($group, (array) $data);
-                }
 
                 return (array) $data;
             } catch (ParseException $exception) {

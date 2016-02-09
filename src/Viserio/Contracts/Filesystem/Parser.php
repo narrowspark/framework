@@ -6,14 +6,13 @@ interface Parser
     /**
      * Loads a file and output content as array.
      *
-     * @param string      $filename
-     * @param string|null $group
+     * @param string $filename
      *
      * @throws \Viserio\Contracts\Filesystem\Exception\LoadingException
      *
      * @return array|string|null
      */
-    public function parse($filename, $group = null);
+    public function parse($filename);
 
     /**
      * Checking if file ist supported.

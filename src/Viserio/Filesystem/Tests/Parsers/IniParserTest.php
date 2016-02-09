@@ -39,7 +39,7 @@ animal = BIRD
         $this->assertSame(['one' => '1', 'five' => '5', 'animal' => 'BIRD'], $parsed);
     }
 
-    public function testParseGroup()
+    public function testParseWithSection()
     {
         $file = vfsStream::newFile('temp.ini')->withContent(
             '
@@ -53,11 +53,11 @@ value=5
             '
         )->at($this->root);
 
-        $parsed = $this->parser->parse($file->url(), 'foo');
+        $parsed = $this->parser->parse($file->url());
 
         $this->assertTrue(is_array($parsed));
         $this->assertSame(
-            ['foo::main' => ['explore' => '1'], 'foo::main.sub' => [], 'foo::main.sub.sub' => ['value' => '5']],
+            ['main' => ['explore' => '1'], 'main.sub' => [], 'main.sub.sub' => ['value' => '5']],
             $parsed
         );
     }

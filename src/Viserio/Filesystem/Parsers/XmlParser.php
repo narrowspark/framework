@@ -32,15 +32,11 @@ class XmlParser implements ParserContract
     /**
      * {@inheritdoc}
      */
-    public function parse($filename, $group = null)
+    public function parse($filename)
     {
         if ($this->files->has($filename)) {
             $data = simplexml_load_file($filename);
             $data = unserialize(serialize(json_decode(json_encode((array) $data), true)));
-
-            if ($group !== null) {
-                return $this->isGroup($group, (array) $data);
-            }
 
             return (array) $data;
         }

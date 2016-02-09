@@ -31,16 +31,10 @@ class IniParser implements ParserContract
     /**
      * {@inheritdoc}
      */
-    public function parse($filename, $group = null)
+    public function parse($filename)
     {
         if ($this->files->has($filename)) {
-            $data = parse_ini_file($filename, true);
-
-            if ($group !== null) {
-                return $this->isGroup($group, (array) $data);
-            }
-
-            return $data;
+            return parse_ini_file($filename, true);
         }
 
         throw new FileNotFoundException($filename);

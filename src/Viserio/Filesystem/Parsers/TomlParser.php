@@ -33,7 +33,7 @@ class TomlParser implements ParserContract
     /**
      * {@inheritdoc}
      */
-    public function parse($filename, $group = null)
+    public function parse($filename)
     {
         if (!class_exists('Yosymfony\\Toml\\Toml')) {
             throw new RuntimeException('Unable to read toml, the Toml Parser is not installed.');
@@ -41,10 +41,6 @@ class TomlParser implements ParserContract
 
         if ($this->files->has($filename)) {
             $data = Toml::Parse($filename);
-
-            if ($group !== null) {
-                return $this->isGroup($group, (array) $data);
-            }
 
             return (array) $data;
         }

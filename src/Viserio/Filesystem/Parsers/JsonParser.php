@@ -31,23 +31,20 @@ class JsonParser implements ParserContract
     /**
      * {@inheritdoc}
      */
-    public function parse($filename, $group = null)
+    public function parse($filename)
     {
         if ($this->files->has($filename)) {
             $data = $this->parseJson($filename);
 
             if (JSON_ERROR_NONE !== json_last_error()) {
                 $jsonError = $this->getJsonError(json_last_error());
+
                 throw new LoadingException(
                     sprintf('Invalid JSON provided "%s" in "%s"', $jsonError, $filename)
                 );
             }
 
-            if ($group !== null) {
-                return $this->isGroup($group, (array) $data);
-            } else {
-                return (array) $data;
-            }
+            return (array) $data;
         }
 
         throw new FileNotFoundException($filename);

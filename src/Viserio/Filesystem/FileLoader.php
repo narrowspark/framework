@@ -3,6 +3,7 @@ namespace Viserio\Filesystem;
 
 use Narrowspark\Arr\StaticArr as Arr;
 use Viserio\Contracts\Filesystem\Exception\UnsupportedFormatException;
+use Viserio\Contracts\Filesystem\Filesystem as FilesystemContract;
 use Viserio\Contracts\Filesystem\Loader as LoaderContract;
 use Viserio\Contracts\Filesystem\Parser as ParserContract;
 use Viserio\Filesystem\Parsers\IniParser;
@@ -20,7 +21,7 @@ class FileLoader implements LoaderContract
     /**
      * The filesystem instance.
      *
-     * @var \Viserio\Filesystem\Filesystem
+     * @var FilesystemContract
      */
     protected $files;
 
@@ -60,12 +61,12 @@ class FileLoader implements LoaderContract
     ];
 
     /**
-     * Create a new file data loader.
+     * Create a new fileloader.
      *
-     * @param Filesystem $files
-     * @param array      $directories
+     * @param FilesystemContract $files
+     * @param array              $directories
      */
-    public function __construct(Filesystem $files, array $directories)
+    public function __construct(FilesystemContract $files, array $directories)
     {
         $this->files       = $files;
         $this->directories = $directories;

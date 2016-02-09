@@ -37,20 +37,6 @@ return ["a" => 1, "b" => 2, "c" => 3, "d" => 4, "e" => 5,];
         $this->assertSame(['a' => 1, 'b' => 2, 'c' => 3, 'd' => 4, 'e' => 5], $parsed);
     }
 
-    public function testParseGroup()
-    {
-        $file = vfsStream::newFile('temp.php')->withContent(
-            '<?php
-return ["a" => 1, "e" => 5,];
-            '
-        )->at($this->root);
-
-        $parsed = $this->parser->parse($file->url(), 'foo');
-
-        $this->assertTrue(is_array($parsed));
-        $this->assertSame(['foo::a' => 1, 'foo::e' => 5], $parsed);
-    }
-
     /**
      * @expectedException League\Flysystem\FileNotFoundException
      * #@expectedExceptionMessage

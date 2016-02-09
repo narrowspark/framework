@@ -31,16 +31,12 @@ class PhpParser implements ParserContract
     /**
      * {@inheritdoc}
      */
-    public function parse($filename, $group = null)
+    public function parse($filename)
     {
         if ($this->files->has($filename)) {
             $data = $this->files->getRequire($filename);
 
-            if ($group !== null) {
-                return $this->isGroup($group, (array) $data);
-            } else {
-                return (array) $data;
-            }
+            return (array) $data;
         }
 
         throw new FileNotFoundException($filename);
