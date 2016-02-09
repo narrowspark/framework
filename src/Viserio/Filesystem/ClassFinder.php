@@ -48,7 +48,6 @@ class ClassFinder
         $tokens = token_get_all(file_get_contents($path));
 
         foreach ($tokens as $key => $token) {
-
         }
     }
 }
