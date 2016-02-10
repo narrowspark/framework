@@ -2,8 +2,8 @@
 namespace Viserio\Parsers;
 
 use League\Flysystem\FileNotFoundException;
-use Viserio\Contracts\Filesystem\Exception\LoadingException;
 use Viserio\Contracts\Filesystem\Exception\DumpException;
+use Viserio\Contracts\Filesystem\Exception\LoadingException;
 use Viserio\Contracts\Filesystem\Filesystem as FilesystemContract;
 use Viserio\Contracts\Filesystem\Parser as ParserContract;
 

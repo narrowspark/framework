@@ -2,9 +2,9 @@
 namespace Viserio\Config;
 
 use Narrowspark\Arr\StaticArr as Arr;
+use Viserio\Contracts\Config\Loader as LoaderContract;
 use Viserio\Contracts\Filesystem\Exception\UnsupportedFormatException;
 use Viserio\Contracts\Filesystem\Filesystem as FilesystemContract;
-use Viserio\Contracts\Config\Loader as LoaderContract;
 use Viserio\Contracts\Filesystem\Parser as ParserContract;
 use Viserio\Filesystem\Parsers\IniParser;
 use Viserio\Filesystem\Parsers\JsonParser;
