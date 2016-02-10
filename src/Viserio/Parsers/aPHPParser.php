@@ -6,7 +6,7 @@ use Viserio\Contracts\Filesystem\Exception\LoadingException;
 use Viserio\Contracts\Filesystem\Filesystem as FilesystemContract;
 use Viserio\Contracts\Filesystem\Parser as ParserContract;
 
-class PhpParser implements ParserContract
+class PHPParser implements ParserContract
 {
     /**
      * The filesystem instance.

@@ -29,7 +29,8 @@
     ],
     "require": {
         "php"                             : "^5.6|^7.0",
-        "viserio/contracts"               : "self.version"
+        "viserio/contracts"               : "self.version",
+        "viserio/filesystem"              : "self.version"
     },
     "require-dev": {
         "mikey179/vfsStream"              : "^1.6",
@@ -40,7 +41,8 @@
         "yosymfony/toml"                  : "^0.3"
     },
     "suggest": {
-        "symfony/yaml"                    : "Required to use the Yaml parser (~2.8|~3.0).",
+        "symfony/yaml"                    : "Required to use the yaml parser (~2.8|~3.0).",
+        "viserio/statical-proxy"          : "Required to use all classes as satic classes (self.version).",
         "yosymfony/toml"                  : "Required to use the TOML parser (^0.3)."
     },
     "autoload": {

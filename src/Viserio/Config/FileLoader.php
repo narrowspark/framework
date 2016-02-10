@@ -6,12 +6,12 @@ use Viserio\Contracts\Config\Loader as LoaderContract;
 use Viserio\Contracts\Filesystem\Exception\UnsupportedFormatException;
 use Viserio\Contracts\Filesystem\Filesystem as FilesystemContract;
 use Viserio\Contracts\Filesystem\Parser as ParserContract;
-use Viserio\Filesystem\Parsers\IniParser;
-use Viserio\Filesystem\Parsers\JsonParser;
-use Viserio\Filesystem\Parsers\PhpParser;
-use Viserio\Filesystem\Parsers\TomlParser;
-use Viserio\Filesystem\Parsers\XmlParser;
-use Viserio\Filesystem\Parsers\YamlParser;
+use Viserio\Parsers\IniParser;
+use Viserio\Parsers\JsonParser;
+use Viserio\Parsers\PHPParser;
+use Viserio\Parsers\TomlParser;
+use Viserio\Parsers\XmlParser;
+use Viserio\Parsers\YamlParser;
 use Viserio\Support\Traits\DirectorySeparatorTrait;
 
 class FileLoader implements LoaderContract
@@ -54,7 +54,7 @@ class FileLoader implements LoaderContract
     protected $parser = [
         'ini'  => IniParser::class,
         'json' => JsonParser::class,
-        'php'  => PhpParser::class,
+        'php'  => PHPParser::class,
         'toml' => TomlParser::class,
         'xml'  => XmlParser::class,
         'yaml' => YamlParser::class,
