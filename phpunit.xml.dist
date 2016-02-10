@@ -82,6 +82,9 @@
         <testsuite name="Narrowspark Middleware Component Test Suite">
             <directory>./src/Viserio/Middleware/Tests</directory>
         </testsuite>
+        <testsuite name="Narrowspark Parsers Component Test Suite">
+            <directory>./src/Viserio/Parsers/Tests</directory>
+        </testsuite>
         <testsuite name="Narrowspark Pipeline Component Test Suite">
             <directory>./src/Viserio/Pipeline/Tests</directory>
         </testsuite>

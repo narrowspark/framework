@@ -1,10 +1,10 @@
 <?php
-namespace Viserio\Filesystem;
+namespace Viserio\Config;
 
 use Narrowspark\Arr\StaticArr as Arr;
 use Viserio\Contracts\Filesystem\Exception\UnsupportedFormatException;
 use Viserio\Contracts\Filesystem\Filesystem as FilesystemContract;
-use Viserio\Contracts\Filesystem\Loader as LoaderContract;
+use Viserio\Contracts\Config\Loader as LoaderContract;
 use Viserio\Contracts\Filesystem\Parser as ParserContract;
 use Viserio\Filesystem\Parsers\IniParser;
 use Viserio\Filesystem\Parsers\JsonParser;
@@ -113,7 +113,7 @@ class FileLoader implements LoaderContract
     }
 
     /**
-     * Load the given data group.
+     * Load the given file path.
      *
      * @param string      $file
      * @param string|null $environment

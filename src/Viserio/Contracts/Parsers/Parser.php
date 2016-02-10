@@ -1,14 +1,14 @@
 <?php
-namespace Viserio\Contracts\Filesystem;
+namespace Viserio\Contracts\Parsers;
 
 interface Parser
 {
     /**
-     * Loads a file and output content as array.
+     * Loads a file and output it content as array.
      *
      * @param string $filename
      *
-     * @throws \Viserio\Contracts\Filesystem\Exception\LoadingException
+     * @throws \Viserio\Contracts\Parsers\Exception\LoadingException
      *
      * @return array|string|null
      */
@@ -24,11 +24,13 @@ interface Parser
     public function supports($filename);
 
     /**
-     * Format a data file for saving.
+     * Dumps a array into a string.
      *
      * @param array $data
      *
-     * @return string|false data export
+     * @throws \Viserio\Contracts\Parsers\Exception\DumpException If dumping fails
+     *
+     * @return string|false
      */
     public function dump(array $data);
 }

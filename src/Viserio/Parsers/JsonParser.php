@@ -1,8 +1,9 @@
 <?php
-namespace Viserio\Filesystem\Parsers;
+namespace Viserio\Parsers;
 
 use League\Flysystem\FileNotFoundException;
 use Viserio\Contracts\Filesystem\Exception\LoadingException;
+use Viserio\Contracts\Filesystem\Exception\DumpException;
 use Viserio\Contracts\Filesystem\Filesystem as FilesystemContract;
 use Viserio\Contracts\Filesystem\Parser as ParserContract;
 
@@ -33,7 +34,7 @@ class JsonParser implements ParserContract
         if ($this->files->has($filename)) {
             $data = $this->parseJson($filename);
 
-            if (JSON_ERROR_NONE !== json_last_error()) {
+            if (json_last_error() !== JSON_ERROR_NONE) {
                 $jsonError = $this->getJsonError(json_last_error());
 
                 throw new LoadingException(
@@ -56,15 +57,22 @@ class JsonParser implements ParserContract
     }
 
     /**
-     * Format a json file for saving.
-     *
-     * @param array $data data
-     *
-     * @return string data export
+     * {@inheritdoc}
      */
     public function dump(array $data)
     {
-        return json_encode($data, JSON_PRETTY_PRINT);
+        $json = json_encode($data, JSON_PRETTY_PRINT);
+
+        if ($json === false) {
+            $jsonError = $this->getJsonError(json_last_error());
+
+            throw new DumpException('JSON dumping failed: ' . $jsonError);
+        }
+
+        $json = preg_replace('/\[\s+\]/', '[]', $json);
+        $json = preg_replace('/\{\s+\}/', '{}', $json);
+
+        return $json;
     }
 
     /**
@@ -87,13 +95,13 @@ class JsonParser implements ParserContract
     private function getJsonError($code)
     {
         $errorMessages = [
-            JSON_ERROR_DEPTH => 'The maximum stack depth has been exceeded',
+            JSON_ERROR_DEPTH          => 'The maximum stack depth has been exceeded',
             JSON_ERROR_STATE_MISMATCH => 'Invalid or malformed JSON',
-            JSON_ERROR_CTRL_CHAR => 'Control character error, possibly incorrectly encoded',
-            JSON_ERROR_SYNTAX => 'Syntax error',
-            JSON_ERROR_UTF8 => 'Malformed UTF-8 characters, possibly incorrectly encoded',
+            JSON_ERROR_CTRL_CHAR      => 'Control character error, possibly incorrectly encoded',
+            JSON_ERROR_SYNTAX         => 'Syntax error',
+            JSON_ERROR_UTF8           => 'Malformed UTF-8 characters, possibly incorrectly encoded',
         ];
 
-        return isset($errorMessages[$code]) ? $errorMessages[$code] : 'Unknown';
+        return isset($errorMessages[$code]) ? $errorMessages[$code] : 'Unknown error';
     }
 }

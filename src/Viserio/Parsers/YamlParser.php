@@ -1,5 +1,5 @@
 <?php
-namespace Viserio\Filesystem\Parsers;
+namespace Viserio\Parsers;
 
 use League\Flysystem\FileNotFoundException;
 use RuntimeException;
@@ -19,13 +19,25 @@ class YamlParser implements ParserContract
     protected $files;
 
     /**
+     * The filesystem instance.
+     *
+     * @var \Symfony\Component\Yaml\Parser
+     */
+    protected $parser;
+
+    /**
      * Create a new file filesystem loader.
      *
      * @param \Viserio\Contracts\Filesystem\Filesystem $files
      */
     public function __construct(FilesystemContract $files)
     {
-        $this->files = $files;
+        if (!class_exists('Symfony\\Component\\Yaml\\Yaml')) {
+            throw new RuntimeException('Unable to read yaml as the Symfony Yaml Component is not installed.');
+        }
+
+        $this->files  = $files;
+        $this->parser = new Parser();
     }
 
     /**
@@ -33,13 +45,9 @@ class YamlParser implements ParserContract
      */
     public function parse($filename)
     {
-        if (!class_exists('Symfony\\Component\\Yaml\\Yaml')) {
-            throw new RuntimeException('Unable to read yaml as the Symfony Yaml Component is not installed.');
-        }
-
         if ($this->files->has($filename)) {
             try {
-                $data = (new Parser())->parse($this->files->read($filename));
+                $data = $this->parser->parse($this->files->read($filename));
 
                 return (array) $data;
             } catch (ParseException $exception) {
@@ -63,6 +71,6 @@ class YamlParser implements ParserContract
      */
     public function dump(array $data)
     {
-        return YamlParser::dump($data);
+        return $this->parser->dump($data);
     }
 }

@@ -1,5 +1,5 @@
 <?php
-namespace Viserio\Filesystem\Parsers;
+namespace Viserio\Parsers;
 
 use Viserio\Contracts\Filesystem\Parser as ParserContract;
 use Viserio\Contracts\Filesystem\TaggableParser as TaggableParserContract;

@@ -62,7 +62,8 @@
         "symfony/var-dumper"                                 : "^2.8|^3.0",
         "swiftmailer/swiftmailer"                            : "^5.4",
         "stack/builder"                                      : "^1.0",
-        "vlucas/phpdotenv"                                   : "^2.2"
+        "vlucas/phpdotenv"                                   : "^2.2",
+        "webmozart/glob"                                     : "^4.1",
     },
     "replace": {
         "viserio/cache"                                      : "self.version",
@@ -82,6 +83,7 @@
         "viserio/log"                                        : "self.version",
         "viserio/mail"                                       : "self.version",
         "viserio/middleware"                                 : "self.version",
+        "viserio/parsers"                                    : "self.version",
         "viserio/pipeline"                                   : "self.version",
         "viserio/routing"                                    : "self.version",
         "viserio/session"                                    : "self.version",

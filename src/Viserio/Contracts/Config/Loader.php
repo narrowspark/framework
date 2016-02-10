@@ -1,5 +1,5 @@
 <?php
-namespace Viserio\Contracts\Filesystem;
+namespace Viserio\Contracts\Config;
 
 interface Loader
 {
@@ -26,25 +26,4 @@ interface Loader
      * @return bool|array
      */
     public function exists($file, $group = null, $environment = null, $namespace = null);
-
-    /**
-     * Apply any cascades to an array of package options.
-     *
-     * @param string      $file
-     * @param string|null $packages
-     * @param string|null $group
-     * @param string|null $env
-     * @param array|null  $items
-     * @param string      $namespace
-     *
-     * @return array
-     */
-    public function cascadePackage(
-        $file,
-        $packages = null,
-        $group = null,
-        $env = null,
-        $items = null,
-        $namespace = 'packages'
-    );
 }

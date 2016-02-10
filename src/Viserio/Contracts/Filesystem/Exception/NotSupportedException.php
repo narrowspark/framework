@@ -3,6 +3,6 @@ namespace Viserio\Contracts\Filesystem\Exception;
 
 use RuntimeException;
 
-class UnsupportedFormatException extends RuntimeException
+class NotSupportedException extends RuntimeException
 {
 }

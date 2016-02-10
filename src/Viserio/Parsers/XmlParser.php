@@ -1,5 +1,5 @@
 <?php
-namespace Viserio\Filesystem\Parsers;
+namespace Viserio\Parsers;
 
 use League\Flysystem\FileNotFoundException;
 use SimpleXMLElement;

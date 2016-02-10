@@ -1,5 +1,5 @@
 <?php
-namespace Viserio\Contracts\Filesystem;
+namespace Viserio\Contracts\Parsers;
 
 interface TaggableParser
 {
@@ -16,7 +16,7 @@ interface TaggableParser
      * @param string       $filename
      * @param string|array $group
      *
-     * @throws \Viserio\Contracts\Filesystem\Exception\LoadingException
+     * @throws \Viserio\Contracts\Parsers\Exception\LoadingException
      *
      * @return array|string|null
      */
@@ -35,6 +35,8 @@ interface TaggableParser
      * Format a data file for saving.
      *
      * @param array $data
+     *
+     * @throws \Viserio\Contracts\Parsers\Exception\DumpException If dumping fails
      *
      * @return string|false data export
      */

@@ -1,5 +1,5 @@
 <?php
-namespace Viserio\Contracts\Filesystem\Exception;
+namespace Viserio\Contracts\Parsers\Exception;
 
 use ErrorException;
 
