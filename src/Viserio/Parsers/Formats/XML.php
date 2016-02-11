@@ -1,8 +1,8 @@
 <?php
 namespace Viserio\Parsers\Formats;
 
-use League\Flysystem\FileNotFoundException;
 use Exception;
+use League\Flysystem\FileNotFoundException;
 use SimpleXMLElement;
 use Viserio\Contracts\Parser\Exception\ParseException;
 use Viserio\Contracts\Parsers\Format as FormatContract;

@@ -1,14 +1,14 @@
 <?php
 namespace Viserio\Parsers\Formats;
 
+use Viserio\Contracts\Filesystem\Filesystem as FilesystemContract;
 use Viserio\Contracts\Parser\Exception\DumpException;
 use Viserio\Contracts\Parser\Exception\ParseException;
-use Viserio\Contracts\Filesystem\Filesystem as FilesystemContract;
 use Viserio\Contracts\Parsers\Format as FormatContract;
 
 class QueryStr implements FormatContract
 {
-        /**
+    /**
      * {@inheritdoc}
      */
     public function parse($payload)

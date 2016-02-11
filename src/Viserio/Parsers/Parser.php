@@ -30,7 +30,7 @@ class Parser
         'application/x-yaml'                => 'yaml',
       // MISC
         'application/vnd.php.serialized'    => 'serialize',
-        'application/x-www-form-urlencoded' => 'querystr'
+        'application/x-www-form-urlencoded' => 'querystr',
     ];
 
     private $supportedFileFormats = [

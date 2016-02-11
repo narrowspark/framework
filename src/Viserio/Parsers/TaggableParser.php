@@ -1,8 +1,8 @@
 <?php
 namespace Viserio\Parsers;
 
-use Viserio\Contracts\Parsers as ParserContract;
 use Viserio\Contracts\Filesystem\TaggableParser as TaggableParserContract;
+use Viserio\Contracts\Parsers as ParserContract;
 
 class TaggableParser implements TaggableParserContract
 {
