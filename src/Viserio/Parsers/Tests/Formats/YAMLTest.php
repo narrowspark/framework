@@ -1,11 +1,10 @@
 <?php
-namespace Viserio\Parsers\Tests;
+namespace Viserio\Parsers\Tests\Formats;
 
 use org\bovigo\vfs\vfsStream;
-use Viserio\Filesystem\Filesystem;
-use Viserio\Parsers\YamlParser;
+use Viserio\Parsers\Formats\YAML;
 
-class YamlParserTest extends \PHPUnit_Framework_TestCase
+class YAMlTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var \org\bovigo\vfs\vfsStreamDirectory
@@ -13,14 +12,13 @@ class YamlParserTest extends \PHPUnit_Framework_TestCase
     private $root;
 
     /**
-     * @var \Viserio\Filesystem\Parser\YamlParser
+     * @var \Viserio\Parsers\Formats\YAML
      */
-    private $parser;
+    private $format;
 
     public function setUp()
     {
-        $this->root   = vfsStream::setup();
-        $this->parser = new YamlParser(new Filesystem());
+        $this->parser = new YAML();
     }
 
     public function testParse()

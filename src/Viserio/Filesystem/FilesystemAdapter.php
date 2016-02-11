@@ -2,9 +2,11 @@
 namespace Viserio\Filesystem;
 
 use InvalidArgumentException;
+use RuntimeException;
 use League\Flysystem\AdapterInterface;
 use League\Flysystem\Config as FlyConfig;
 use League\Flysystem\FileNotFoundException;
+use League\Flysystem\AwsS3v3\AwsS3Adapter;
 use Viserio\Contracts\Filesystem\FileNotFoundException as ContractFileNotFoundException;
 use Viserio\Contracts\Filesystem\Filesystem as CloudFilesystemContract;
 use Viserio\Support\Collection;
@@ -38,6 +40,24 @@ class FilesystemAdapter
     public function exists($path)
     {
         return $this->driver->has($path);
+    }
+
+    /**
+     * Get the URL for the file at the given path.
+     *
+     * @param string $path
+     *
+     * @return string
+     */
+    public function url($path)
+    {
+        if (! $this->driver->getAdapter() instanceof AwsS3Adapter) {
+            throw new RuntimeException('This driver does not support retrieving URLs.');
+        }
+
+        $bucket = $this->driver->getAdapter()->getBucket();
+
+        return $this->driver->getAdapter()->getClient()->getObjectUrl($bucket, $path);
     }
 
     /**

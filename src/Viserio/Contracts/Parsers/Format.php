@@ -1,27 +1,18 @@
 <?php
 namespace Viserio\Contracts\Parsers;
 
-interface Parser
+interface Format
 {
     /**
      * Loads a file and output it content as array.
      *
-     * @param string $filename
+     * @param string $payload
      *
-     * @throws \Viserio\Contracts\Parsers\Exception\LoadingException
+     * @throws \Viserio\Contracts\Parsers\Exception\ParseException
      *
      * @return array|string|null
      */
-    public function parse($filename);
-
-    /**
-     * Checking if file ist supported.
-     *
-     * @param string $filename
-     *
-     * @return bool
-     */
-    public function supports($filename);
+    public function parse($payload);
 
     /**
      * Dumps a array into a string.

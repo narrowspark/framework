@@ -1,11 +1,10 @@
 <?php
-namespace Viserio\Parsers\Tests;
+namespace Viserio\Parsers\Tests\Formats;
 
 use org\bovigo\vfs\vfsStream;
-use Viserio\Filesystem\Filesystem;
-use Viserio\Parsers\PhpParser;
+use Viserio\Parsers\Formats\XML;
 
-class PhpParserTest extends \PHPUnit_Framework_TestCase
+class XMLTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var \org\bovigo\vfs\vfsStreamDirectory
@@ -13,28 +12,32 @@ class PhpParserTest extends \PHPUnit_Framework_TestCase
     private $root;
 
     /**
-     * @var \Viserio\Filesystem\Parser\PhpParser
+     * @var \Viserio\Parsers\Formats\XML
      */
-    private $parser;
+    private $format;
 
     public function setUp()
     {
         $this->root   = vfsStream::setup();
-        $this->parser = new PhpParser(new Filesystem());
+        $this->parser = new XML();
     }
 
     public function testParse()
     {
-        $file = vfsStream::newFile('temp.php')->withContent(
-            '<?php
-return ["a" => 1, "b" => 2, "c" => 3, "d" => 4, "e" => 5,];
+        $file = vfsStream::newFile('temp.xml')->withContent(
+            '<?xml version="1.0"?>
+<note>
+  <to>Tove</to>
+  <from>Jani</from>
+  <heading>Reminder</heading>
+</note>
             '
         )->at($this->root);
 
         $parsed = $this->parser->parse($file->url());
 
         $this->assertTrue(is_array($parsed));
-        $this->assertSame(['a' => 1, 'b' => 2, 'c' => 3, 'd' => 4, 'e' => 5], $parsed);
+        $this->assertSame(['to' => 'Tove', 'from' => 'Jani', 'heading' => 'Reminder'], $parsed);
     }
 
     /**
@@ -48,7 +51,11 @@ return ["a" => 1, "b" => 2, "c" => 3, "d" => 4, "e" => 5,];
 
     public function testSupports()
     {
-        $file = vfsStream::newFile('temp.php')->at($this->root);
+        $file = vfsStream::newFile('temp.xml')->at($this->root);
+
+        $this->assertTrue($this->parser->supports($file->url()));
+
+        $file = vfsStream::newFile('temp.xml.dist')->at($this->root);
 
         $this->assertTrue($this->parser->supports($file->url()));
 

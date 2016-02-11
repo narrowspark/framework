@@ -1,11 +1,10 @@
 <?php
-namespace Viserio\Parsers\Tests;
+namespace Viserio\Parsers\Tests\Formats\Formats;
 
 use org\bovigo\vfs\vfsStream;
-use Viserio\Filesystem\Filesystem;
-use Viserio\Parsers\IniParser;
+use Viserio\Parsers\Formats\INI;
 
-class IniParserTest extends \PHPUnit_Framework_TestCase
+class INITest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var org\bovigo\vfs\vfsStreamDirectory
@@ -13,14 +12,14 @@ class IniParserTest extends \PHPUnit_Framework_TestCase
     private $root;
 
     /**
-     * @var \Viserio\Filesystem\Parser\IniParser
+     * @var \Viserio\Parsers\Formats\INI
      */
-    private $parser;
+    private $format;
 
     public function setUp()
     {
         $this->root   = vfsStream::setup();
-        $this->parser = new IniParser(new Filesystem());
+        $this->parser = new INI();
     }
 
     public function testParse()

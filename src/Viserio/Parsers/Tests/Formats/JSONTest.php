@@ -1,11 +1,10 @@
 <?php
-namespace Viserio\Parsers\Tests;
+namespace Viserio\Parsers\Tests\Formats;
 
 use org\bovigo\vfs\vfsStream;
-use Viserio\Filesystem\Filesystem;
-use Viserio\Parsers\TomlParser;
+use Viserio\Parsers\Formats\JSON;
 
-class TomlParserTest extends \PHPUnit_Framework_TestCase
+class JSONTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var \org\bovigo\vfs\vfsStreamDirectory
@@ -13,28 +12,34 @@ class TomlParserTest extends \PHPUnit_Framework_TestCase
     private $root;
 
     /**
-     * @var \Viserio\Filesystem\Parser\TomlParser
+     * @var \Viserio\Parsers\Formats\JSON
      */
-    private $parser;
+    private $format;
 
     public function setUp()
     {
         $this->root   = vfsStream::setup();
-        $this->parser = new TomlParser(new Filesystem());
+        $this->parser = new JSON();
     }
 
-    public function testParses()
+    public function testParse()
     {
-        $file = vfsStream::newFile('temp.toml')->withContent(
-            "
-                backspace = 'This string has a \b backspace character.'
-            "
+        $file = vfsStream::newFile('temp.json')->withContent(
+            '
+{
+    "a":1,
+    "b":2,
+    "c":3,
+    "d":4,
+    "e":5
+}
+            '
         )->at($this->root);
 
         $parsed = $this->parser->parse($file->url());
 
         $this->assertTrue(is_array($parsed));
-        $this->assertSame(['backspace' => 'This string has a \b backspace character.'], $parsed);
+        $this->assertSame(['a' => 1, 'b' => 2, 'c' => 3, 'd' => 4, 'e' => 5], $parsed);
     }
 
     /**
@@ -48,11 +53,11 @@ class TomlParserTest extends \PHPUnit_Framework_TestCase
 
     public function testSupports()
     {
-        $file = vfsStream::newFile('temp.toml')->at($this->root);
+        $file = vfsStream::newFile('temp.json')->at($this->root);
 
         $this->assertTrue($this->parser->supports($file->url()));
 
-        $file = vfsStream::newFile('temp.toml.dist')->at($this->root);
+        $file = vfsStream::newFile('temp.json.dist')->at($this->root);
 
         $this->assertTrue($this->parser->supports($file->url()));
 
@@ -63,6 +68,18 @@ class TomlParserTest extends \PHPUnit_Framework_TestCase
 
     public function testDump()
     {
-        # code...
+        $book = [
+            'title'   => 'bar',
+            'author'  => 'foo',
+            'edition' => 6,
+        ];
+
+        $dump = $this->parser->dump($book);
+
+        $this->assertEquals('{
+    "title": "bar",
+    "author": "foo",
+    "edition": 6
+}', $dump);
     }
 }

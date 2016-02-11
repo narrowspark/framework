@@ -1,56 +1,30 @@
 <?php
-namespace Viserio\Parsers;
+namespace Viserio\Parsers\Formats;
 
-use League\Flysystem\FileNotFoundException;
-use Viserio\Contracts\Filesystem\Exception\LoadingException;
-use Viserio\Contracts\Filesystem\Filesystem as FilesystemContract;
-use Viserio\Contracts\Filesystem\Parser as ParserContract;
+use Viserio\Contracts\Parser\Exception\DumpException;
+use Viserio\Contracts\Parsers\Exception\ParseException;
+use Viserio\Contracts\Parsers\Format as FormatContract;
 
-class IniParser implements ParserContract
+class INI implements FormatContract
 {
     /**
-     * The filesystem instance.
-     *
-     * @var \Viserio\Filesystem\Filesystem
-     */
-    protected $files;
-
-    /**
-     * Create a new file filesystem loader.
-     *
-     * @param \Viserio\Contracts\Filesystem\Filesystem $files
-     */
-    public function __construct(FilesystemContract $files)
-    {
-        $this->files = $files;
-    }
-
-    /**
      * {@inheritdoc}
      */
-    public function parse($filename)
+    public function parse($payload)
     {
-        if ($this->files->has($filename)) {
-            return parse_ini_file($filename, true);
+        $ini = parse_ini_string($payload, true);
+
+        if (!$ini) {
+            throw new ParseException(
+                sprintf('Invalid JSON provided "%s" in "%s"', $jsonError)
+            );
         }
 
-        throw new FileNotFoundException($filename);
+        return $ini;
     }
 
     /**
      * {@inheritdoc}
-     */
-    public function supports($filename)
-    {
-        return (bool) preg_match('/(\.ini)(\.dist)?/', $filename);
-    }
-
-    /**
-     * Format a file for saving.
-     *
-     * @param array $data data
-     *
-     * @return false|string|void
      */
     public function dump(array $data)
     {

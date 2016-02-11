@@ -1,7 +1,7 @@
 <?php
 namespace Viserio\Parsers;
 
-use Viserio\Contracts\Filesystem\Parser as ParserContract;
+use Viserio\Contracts\Parsers as ParserContract;
 use Viserio\Contracts\Filesystem\TaggableParser as TaggableParserContract;
 
 class TaggableParser implements TaggableParserContract
@@ -26,19 +26,11 @@ class TaggableParser implements TaggableParserContract
     /**
      * {@inheritdoc}
      */
-    public function parse($filename, $taggedKey)
+    public function parse($payload, $taggedKey)
     {
-        $data = $this->parser->parse($filename);
+        $data = $this->parser->parse($payload);
 
-        return $this->isGroup($taggedKey, $data);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function supports($filename)
-    {
-        return $this->parser->supports($filename);
+        return $this->group($taggedKey, $data);
     }
 
     /**
@@ -61,7 +53,7 @@ class TaggableParser implements TaggableParserContract
      *
      * @return array
      */
-    protected function isGroup($taggedKey, array $data)
+    protected function group($taggedKey, array $data)
     {
         $taggedData = [];
 
