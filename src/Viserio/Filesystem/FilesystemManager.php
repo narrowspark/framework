@@ -29,6 +29,16 @@ class FilesystemManager extends Manager
      */
     protected $customCreators = [];
 
+    protected $defaultDriver = [
+        'awss3'     => 'AwsS3',
+        'ftp'       => 'Ftp',
+        'local'     => 'Local',
+        'null'      => 'Null',
+        'rackspace' => 'Rackspace',
+        'sftp'      => 'Sftp',
+        'zip'       => 'Zip',
+    ];
+
     /**
      * Create a new filesystem manager instance.
      *
@@ -73,5 +83,27 @@ class FilesystemManager extends Manager
     protected function adapt(AdapterInterface $filesystem)
     {
         return new FilesystemAdapter($filesystem);
+    }
+
+    /**
+     * Create a connector instance based on the configuration.
+     *
+     * @param array $config
+     *
+     * @throws \InvalidArgumentException
+     *
+     * @return string
+     */
+    protected function createConnector(array $config)
+    {
+        if (!isset($config['driver'])) {
+            throw new InvalidArgumentException('A driver must be specified.');
+        }
+
+        if (isset($this->defaultDriver[$config['driver']])) {
+            return $this->defaultDriver[$config['driver']] . 'Connector';
+        }
+
+        throw new InvalidArgumentException(sprintf('Unsupported driver [%s]', $config['driver']));
     }
 }

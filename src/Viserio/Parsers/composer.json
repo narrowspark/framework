@@ -36,9 +36,13 @@
         "narrowspark/php-cs-fixer-config" : "^1.1",
         "narrowspark/testing-helper"      : "^1.5",
         "phpunit/phpunit"                 : "^5.1",
+        "psr/http-message"                : "^1.0",
         "symfony/yaml"                    : "^2.8|^3.0",
         "viserio/filesystem"              : "self.version",
         "yosymfony/toml"                  : "^0.3"
+    },
+    "provide": {
+        "psr/http-message-implementation" : "^1.0",
     },
     "suggest": {
         "symfony/yaml"                    : "Required to use the yaml parser (~2.8|~3.0).",

@@ -1,8 +1,16 @@
 <?php
 namespace Viserio\Contracts\Filesystem;
 
-use Viserio\Contracts\Connect\Connector as ConnectConnector;
-
-interface Connector extends ConnectConnector
+interface Connector
 {
+    /**
+     * Establish a connection.
+     *
+     * @param array $config
+     *
+     * @throws \RuntimeException|\InvalidArgumentException
+     *
+     * @return \League\Flysystem\AdapterInterface
+     */
+    public function connect(array $config);
 }
