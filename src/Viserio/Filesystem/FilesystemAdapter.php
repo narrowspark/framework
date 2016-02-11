@@ -7,9 +7,9 @@ use League\Flysystem\AwsS3v3\AwsS3Adapter;
 use League\Flysystem\Config as FlyConfig;
 use League\Flysystem\FileNotFoundException as FlyFileNotFoundException;
 use RuntimeException;
+use Viserio\Contracts\Filesystem\Directorysystem as DirectorysystemContract;
 use Viserio\Contracts\Filesystem\FileNotFoundException;
 use Viserio\Contracts\Filesystem\Filesystem as FilesystemContract;
-use Viserio\Contracts\Filesystem\Directorysystem as DirectorysystemContract;
 use Viserio\Support\Collection;
 
 class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
@@ -70,7 +70,6 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
      */
     public function update($path, $contents, array $config = [])
     {
-
     }
 
     /**
@@ -122,7 +121,6 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
      */
     public function getMimetype($path)
     {
-
     }
 
     /**
@@ -130,7 +128,6 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
      */
     public function extension($path)
     {
-
     }
 
     /**
@@ -180,7 +177,6 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
      */
     public function withoutExtension($path, $extension = null)
     {
-
     }
 
     /**
@@ -188,7 +184,6 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
      */
     public function changeExtension($path, $extension)
     {
-
     }
 
     /**
