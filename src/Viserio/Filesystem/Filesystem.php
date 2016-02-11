@@ -2,18 +2,18 @@
 namespace Viserio\Filesystem;
 
 use FilesystemIterator;
-use Viserio\Contracts\Filesystem\Exception\FileNotFoundException;
-use Viserio\Contracts\Filesystem\Exception\IOException;
 use League\Flysystem\Util\MimeType;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use SplFileInfo;
+use Symfony\Component\Filesystem\Exception\FileNotFoundException as SymfonyFileNotFoundException;
 use Symfony\Component\Filesystem\Exception\IOException as SymfonyIOException;
 use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
-use Viserio\Contracts\Filesystem\Filesystem as FilesystemContract;
 use Viserio\Contracts\Filesystem\Directorysystem as DirectorysystemContract;
+use Viserio\Contracts\Filesystem\Exception\FileNotFoundException;
+use Viserio\Contracts\Filesystem\Exception\IOException;
+use Viserio\Contracts\Filesystem\Filesystem as FilesystemContract;
 use Viserio\Filesystem\Traits\FilesystemHelperTrait;
-use Symfony\Component\Filesystem\Exception\FileNotFoundException as SymfonyFileNotFoundException;
 
 class Filesystem extends SymfonyFilesystem implements FilesystemContract, DirectorysystemContract
 {
@@ -198,7 +198,6 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract, Direct
         if (!$this->isFile($path) && !$this->has($path)) {
             throw new FileNotFoundException($path);
         }
-
     }
 
     /**
