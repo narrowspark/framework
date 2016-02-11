@@ -2,19 +2,22 @@
 namespace Viserio\Filesystem;
 
 use FilesystemIterator;
-use League\Flysystem\FileNotFoundException;
+use Viserio\Contracts\Filesystem\Exception\FileNotFoundException;
+use Viserio\Contracts\Filesystem\Exception\IOException;
 use League\Flysystem\Util\MimeType;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use SplFileInfo;
-use Symfony\Component\Filesystem\Exception\IOException;
+use Symfony\Component\Filesystem\Exception\IOException as SymfonyIOException;
 use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
 use Viserio\Contracts\Filesystem\Filesystem as FilesystemContract;
-use Viserio\Support\Traits\DirectorySeparatorTrait;
+use Viserio\Contracts\Filesystem\Directorysystem as DirectorysystemContract;
+use Viserio\Filesystem\Traits\FilesystemHelperTrait;
+use Symfony\Component\Filesystem\Exception\FileNotFoundException as SymfonyFileNotFoundException;
 
-class Filesystem extends SymfonyFilesystem implements FilesystemContract
+class Filesystem extends SymfonyFilesystem implements FilesystemContract, DirectorysystemContract
 {
-    use DirectorySeparatorTrait;
+    use FilesystemHelperTrait;
 
     /**
      * @var array
@@ -81,6 +84,8 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract
         $path = $this->getDirectorySeparator($path);
 
         return file_put_contents($path, $contents, FILE_APPEND);
+
+        // @TODO throw new FileNotFoundException($path);
     }
 
     /**
@@ -108,7 +113,7 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract
 
         try {
             $this->chmod($path, $visibility);
-        } catch (IOException $exception) {
+        } catch (SymfonyIOException $exception) {
             return false;
         }
 
@@ -123,7 +128,13 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract
         $from = $this->getDirectorySeparator($originFile);
         $to   = $this->getDirectorySeparator($targetFile);
 
-        return parent::copy($from, $to, $override);
+        try {
+            return parent::copy($from, $to, $override);
+        } catch (SymfonyFileNotFoundException $exception) {
+            throw FileNotFoundException();
+        } catch (SymfonyIOException $exception) {
+            throw IOException();
+        }
     }
 
     /**
@@ -152,7 +163,12 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract
      */
     public function getMimetype($path)
     {
-        $path    = $this->getDirectorySeparator($path);
+        $path = $this->getDirectorySeparator($path);
+
+        if (!$this->isFile($path) && !$this->has($path)) {
+            throw new FileNotFoundException($path);
+        }
+
         $explode = explode('.', $path);
 
         if ($extension = end($explode)) {
@@ -167,7 +183,7 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract
      */
     public function extension($path)
     {
-        $path    = $this->getDirectorySeparator($path);
+        $path = $this->getDirectorySeparator($path);
 
         return (new SplFileInfo($path))->getExtension();
     }
@@ -178,6 +194,11 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract
     public function getTimestamp($path)
     {
         $path = $this->getDirectorySeparator($path);
+
+        if (!$this->isFile($path) && !$this->has($path)) {
+            throw new FileNotFoundException($path);
+        }
+
     }
 
     /**
@@ -189,7 +210,7 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract
 
         try {
             $this->remove($paths);
-        } catch (IOException $exception) {
+        } catch (SymfonyIOException $exception) {
             return false;
         }
 
@@ -240,7 +261,7 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract
 
         try {
             $this->mkdir($dirname);
-        } catch (IOException $exception) {
+        } catch (SymfonyIOException $exception) {
             return false;
         }
 
@@ -299,7 +320,7 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract
 
         try {
             $this->remove($dirname);
-        } catch (IOException $exception) {
+        } catch (SymfonyIOException $exception) {
             return false;
         }
 
@@ -337,77 +358,7 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract
     }
 
     /**
-     * Get the returned value of a file.
-     *
-     * @param string $path
-     *
-     * @throws \Viserio\Contracts\Filesystem\FileNotFoundException
-     *
-     * @return string|null
-     */
-    public function getRequire($path)
-    {
-        $path = $this->getDirectorySeparator($path);
-
-        if ($this->isFile($path) && $this->has($path)) {
-            return require $path;
-        }
-
-        throw new FileNotFoundException($path);
-    }
-
-    /**
-     * Require the given file once.
-     *
-     * @param string $file
-     *
-     * @return mixed
-     */
-    public function requireOnce($file)
-    {
-        $path = $this->getDirectorySeparator($path);
-
-        if ($this->isFile($path) && $this->has($path)) {
-            require_once $file;
-        }
-
-        throw new FileNotFoundException($path);
-    }
-
-    /**
-     * Determine if the given path is writable.
-     *
-     * @param string $path
-     *
-     * @return bool
-     */
-    public function isWritable($path)
-    {
-        $path = $this->getDirectorySeparator($path);
-
-        return is_writable($path);
-    }
-
-    /**
-     * Determine if the given path is a file.
-     *
-     * @param string $file
-     *
-     * @return bool
-     */
-    public function isFile($file)
-    {
-        $file = $this->getDirectorySeparator($file);
-
-        return is_file($file);
-    }
-
-    /**
-     * Extract the file extension from a file path.
-     *
-     * @param string $path
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function getExtension($path)
     {
@@ -415,13 +366,7 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract
     }
 
     /**
-     * Returns the filename without the extension from a file path.
-     *
-     * @param string      $path      The path string
-     * @param string|null $extension If specified, only that extension is cut off
-     *                               (may contain leading dot)
-     *
-     * @return string Filename without extension
+     * {@inheritdoc}
      */
     public function withoutExtension($path, $extension = null)
     {
@@ -436,12 +381,7 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract
     }
 
     /**
-     * Changes the extension of a path string.
-     *
-     * @param string $path      The path string with filename.ext to change
-     * @param string $extension New extension (with or without leading dot)
-     *
-     * @return string The path string with new file extension
+     * {@inheritdoc}
      */
     public function changeExtension($path, $extension)
     {

@@ -5,13 +5,14 @@ use InvalidArgumentException;
 use League\Flysystem\AdapterInterface;
 use League\Flysystem\AwsS3v3\AwsS3Adapter;
 use League\Flysystem\Config as FlyConfig;
-use League\Flysystem\FileNotFoundException;
+use League\Flysystem\FileNotFoundException as FlyFileNotFoundException;
 use RuntimeException;
-use Viserio\Contracts\Filesystem\FileNotFoundException as ContractFileNotFoundException;
-use Viserio\Contracts\Filesystem\Filesystem as CloudFilesystemContract;
+use Viserio\Contracts\Filesystem\FileNotFoundException;
+use Viserio\Contracts\Filesystem\Filesystem as FilesystemContract;
+use Viserio\Contracts\Filesystem\Directorysystem as DirectorysystemContract;
 use Viserio\Support\Collection;
 
-class FilesystemAdapter
+class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
 {
     /**
      * The Flysystem filesystem implementation.
@@ -31,63 +32,29 @@ class FilesystemAdapter
     }
 
     /**
-     * Determine if a file exists.
-     *
-     * @param string $path
-     *
-     * @return array|bool|null
+     * {@inheritdoc}
      */
-    public function exists($path)
+    public function has($path)
     {
         return $this->driver->has($path);
     }
 
     /**
-     * Get the URL for the file at the given path.
-     *
-     * @param string $path
-     *
-     * @return string
+     * {@inheritdoc}
      */
-    public function url($path)
-    {
-        if (! $this->driver->getAdapter() instanceof AwsS3Adapter) {
-            throw new RuntimeException('This driver does not support retrieving URLs.');
-        }
-
-        $bucket = $this->driver->getAdapter()->getBucket();
-
-        return $this->driver->getAdapter()->getClient()->getObjectUrl($bucket, $path);
-    }
-
-    /**
-     * Get the contents of a file.
-     *
-     * @param string $path
-     *
-     * @throws \Viserio\Contracts\Filesystem\FileNotFoundException;
-     *
-     * @return array|false
-     */
-    public function get($path)
+    public function read($path)
     {
         try {
             return $this->driver->read($path);
-        } catch (FileNotFoundException $exception) {
-            throw new ContractFileNotFoundException($path, $exception->getCode(), $exception);
+        } catch (FlyFileNotFoundException $exception) {
+            throw new FileNotFoundException($path, $exception->getCode(), $exception);
         }
     }
 
     /**
-     * Write the contents of a file.
-     *
-     * @param string $path
-     * @param string $contents
-     * @param array  $configs
-     *
-     * @return bool
+     * {@inheritdoc}
      */
-    public function put($path, $contents, array $configs = [])
+    public function write($path, $contents, array $config = [])
     {
         $configs['visibility'] = $this->parseVisibility(isset($configs['visibility']) ?: null);
 
@@ -99,26 +66,27 @@ class FilesystemAdapter
     }
 
     /**
-     * Get the visibility for the given path.
-     *
-     * @param string $path
-     *
-     * @return string
+     * {@inheritdoc}
+     */
+    public function update($path, $contents, array $config = [])
+    {
+
+    }
+
+    /**
+     * {@inheritdoc}
      */
     public function getVisibility($path)
     {
         if ($this->driver->getVisibility($path) === AdapterInterface::VISIBILITY_PUBLIC) {
-            return CloudFilesystemContract::VISIBILITY_PUBLIC;
+            return FilesystemContract::VISIBILITY_PUBLIC;
         }
 
-        return CloudFilesystemContract::VISIBILITY_PRIVATE;
+        return FilesystemContract::VISIBILITY_PRIVATE;
     }
 
     /**
-     * Set the visibility for the given path.
-     *
-     * @param string $path
-     * @param string $visibility
+     * {@inheritdoc}
      */
     public function setVisibility($path, $visibility)
     {
@@ -126,47 +94,55 @@ class FilesystemAdapter
     }
 
     /**
-     * Prepend to a file.
-     *
-     * @param string $path
-     * @param string $data
-     * @param string $separator
-     *
-     * @return bool
+     * {@inheritdoc}
      */
-    public function prepend($path, $data, $separator = PHP_EOL)
+    public function copy($originFile, $targetFile, $override = false)
     {
-        if ($this->exists($path)) {
-            return $this->put($path, $data . $separator . $this->get($path));
-        }
-
-        return $this->put($path, $data);
+        return $this->driver->copy($originFile, $targetFile);
     }
 
     /**
-     * Append to a file.
-     *
-     * @param string $path
-     * @param string $data
-     * @param string $separator
-     *
-     * @return bool
+     * {@inheritdoc}
      */
-    public function append($path, $data, $separator = PHP_EOL)
+    public function move($from, $to)
     {
-        if ($this->exists($path)) {
-            return $this->put($path, $this->get($path) . $separator . $data);
-        }
-
-        return $this->put($path, $data);
+        $this->driver->rename($from, $to);
     }
 
     /**
-     * Delete the file at a given path.
-     *
-     * @param string|array $paths
-     *
-     * @return bool
+     * {@inheritdoc}
+     */
+    public function getSize($path)
+    {
+        return $this->driver->getSize($path);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getMimetype($path)
+    {
+
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function extension($path)
+    {
+
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getTimestamp($path)
+    {
+        return $this->driver->getTimestamp($path);
+    }
+
+    /**
+     * {@inheritdoc}
      */
     public function delete($paths)
     {
@@ -182,73 +158,37 @@ class FilesystemAdapter
     /**
      * {@inheritdoc}
      */
-    public function copy($originFile, $targetFile, $override = false)
+    public function files($directory)
     {
-        return $this->driver->copy($originFile, $targetFile);
-    }
-
-    /**
-     * Move a file to a new location.
-     *
-     * @param string $from
-     * @param string $to
-     *
-     * @return bool|null
-     */
-    public function move($from, $to)
-    {
-        $this->driver->rename($from, $to);
-    }
-
-    /**
-     * Get the file size of a given file.
-     *
-     * @param string $path
-     *
-     * @return array|false
-     */
-    public function size($path)
-    {
-        return $this->driver->getSize($path);
-    }
-
-    /**
-     * Get the file's last modification time.
-     *
-     * @param string $path
-     *
-     * @return array|false
-     */
-    public function lastModified($path)
-    {
-        return $this->driver->getTimestamp($path);
-    }
-
-    /**
-     * Get an array of all files in a directory.
-     *
-     * @param string|null $directory
-     * @param bool        $recursive
-     *
-     * @return array
-     */
-    public function files($directory = null, $recursive = false)
-    {
-        $contents = $this->driver->listContents($directory, $recursive);
+        $contents = $this->driver->listContents($directory, false);
 
         return $this->filterContentsByType($contents, 'file');
     }
 
     /**
-     * Get all of the files from the given directory (recursive).
-     *
-     * @param string|null $directory
-     *
-     * @return array
+     * {@inheritdoc}
      */
-    public function allFiles($directory = null)
+    public function allFiles($directory)
     {
-        return $this->files($directory, true);
+        $contents = $this->driver->listContents($directory, true);
+
+        return $this->filterContentsByType($contents, 'file');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function withoutExtension($path, $extension = null)
+    {
+
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function changeExtension($path, $extension)
+    {
+
     }
 
     /**
@@ -259,9 +199,9 @@ class FilesystemAdapter
      *
      * @return array
      */
-    public function directories($directory = null, $recursive = false)
+    public function directories($directory)
     {
-        $contents = $this->driver->listContents($directory, $recursive);
+        $contents = $this->driver->listContents($directory, false);
 
         return $this->filterContentsByType($contents, 'dir');
     }
@@ -273,9 +213,11 @@ class FilesystemAdapter
      *
      * @return array
      */
-    public function allDirectories($directory = null)
+    public function allDirectories($directory)
     {
-        return $this->directories($directory, true);
+        $contents = $this->driver->listContents($directory, true);
+
+        return $this->filterContentsByType($contents, 'dir');
     }
 
     /**
@@ -311,6 +253,26 @@ class FilesystemAdapter
     public function getDriver()
     {
         return $this->driver;
+    }
+
+    /**
+     * Get the URL for the file at the given path.
+     *
+     * @param string $path
+     *
+     * @return string
+     */
+    public function url($path)
+    {
+        $driver = $this->driver->getAdapter();
+
+        if (!$driver instanceof AwsS3Adapter) {
+            throw new RuntimeException('This driver does not support retrieving URLs.');
+        }
+
+        $bucket = $driver->getBucket();
+
+        return $driver->getClient()->getObjectUrl($bucket, $path);
     }
 
     /**
@@ -361,10 +323,10 @@ class FilesystemAdapter
         }
 
         switch ($visibility) {
-            case CloudFilesystemContract::VISIBILITY_PUBLIC:
+            case FilesystemContract::VISIBILITY_PUBLIC:
                 return AdapterInterface::VISIBILITY_PUBLIC;
 
-            case CloudFilesystemContract::VISIBILITY_PRIVATE:
+            case FilesystemContract::VISIBILITY_PRIVATE:
                 return AdapterInterface::VISIBILITY_PRIVATE;
         }
 

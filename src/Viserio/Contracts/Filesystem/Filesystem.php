@@ -31,7 +31,7 @@ interface Filesystem
      *
      * @param string $path The path to the file.
      *
-     * @throws \League\Flysystem\FileNotFoundException
+     * @throws \Viserio\Contracts\Filesystem\FileNotFoundException
      *
      * @return string|false The file contents or false on failure.
      */
@@ -55,7 +55,7 @@ interface Filesystem
      * @param string $contents The file contents.
      * @param array  $config   An optional configuration array.
      *
-     * @throws \League\Flysystem\FileNotFoundException
+     * @throws \Viserio\Contracts\Filesystem\FileNotFoundException
      *
      * @return bool True on success, false on failure.
      */
@@ -89,8 +89,8 @@ interface Filesystem
      * @param string $targetFile The target filename
      * @param bool   $override   Whether to override an existing file or not
      *
-     * @throws \Symfony\Component\Filesystem\Exception\FileNotFoundException When originFile doesn't exist
-     * @throws \Symfony\Component\Filesystem\Exception\IOException           When copy fails
+     * @throws \Viserio\Contracts\Filesystem\Exception\FileNotFoundException When originFile doesn't exist
+     * @throws \Viserio\Contracts\Filesystem\Exception\IOException           When copy fails
      */
     public function copy($originFile, $targetFile, $override = false);
 
@@ -118,7 +118,7 @@ interface Filesystem
      *
      * @param string $path The path to the file.
      *
-     * @throws \League\Flysystem\FileNotFoundException
+     * @throws \Viserio\Contracts\Filesystem\Exception\FileNotFoundException
      *
      * @return string|false The file mime-type or false on failure.
      */
@@ -139,7 +139,7 @@ interface Filesystem
      *
      * @param string $path The path to the file.
      *
-     * @throws \League\Flysystem\FileNotFoundException
+     * @throws \Viserio\Contracts\Filesystem\Exception\FileNotFoundException
      *
      * @return string|false The timestamp or false on failure.
      */
@@ -173,56 +173,32 @@ interface Filesystem
     public function allFiles($directory);
 
     /**
-     * Get all of the directories within a given directory.
+     * Extract the file extension from a file path.
      *
-     * @param string $directory
+     * @param string $path
      *
-     * @return array
+     * @return string
      */
-    public function directories($directory);
+    public function getExtension($path);
 
     /**
-     * Get all (recursive) of the directories within a given directory.
+     * Returns the filename without the extension from a file path.
      *
-     * @param string|null $directory
+     * @param string      $path      The path string
+     * @param string|null $extension If specified, only that extension is cut off
+     *                               (may contain leading dot)
      *
-     * @return array
+     * @return string Filename without extension
      */
-    public function allDirectories($directory);
+    public function withoutExtension($path, $extension = null);
 
     /**
-     * Recursively create a directory.
+     * Changes the extension of a path string.
      *
-     * @param string $dirname
+     * @param string $path      The path string with filename.ext to change
+     * @param string $extension New extension (with or without leading dot)
      *
-     * @return bool
+     * @return string The path string with new file extension
      */
-    public function createDirectory($dirname);
-
-    /**
-     * Recursively delete a directory.
-     *
-     * @param string $dirname
-     *
-     * @return bool
-     */
-    public function deleteDirectory($dirname);
-
-    /**
-     * Empty the specified directory of all files and folders.
-     *
-     * @param string $dirname
-     *
-     * @return bool
-     */
-    public function cleanDirectory($dirname);
-
-    /**
-     * Determine if the given path is a directory.
-     *
-     * @param string $dirname
-     *
-     * @return bool
-     */
-    public function isDirectory($dirname);
+    public function changeExtension($path, $extension);
 }
