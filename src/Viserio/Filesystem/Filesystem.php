@@ -5,7 +5,6 @@ use FilesystemIterator;
 use League\Flysystem\Util\MimeType;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
-use SplFileInfo;
 use Symfony\Component\Filesystem\Exception\FileNotFoundException as SymfonyFileNotFoundException;
 use Symfony\Component\Filesystem\Exception\IOException as SymfonyIOException;
 use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
@@ -13,11 +12,15 @@ use Viserio\Contracts\Filesystem\Directorysystem as DirectorysystemContract;
 use Viserio\Contracts\Filesystem\Exception\FileNotFoundException;
 use Viserio\Contracts\Filesystem\Exception\IOException;
 use Viserio\Contracts\Filesystem\Filesystem as FilesystemContract;
+use Viserio\Filesystem\Traits\FilesystemExtensionTrait;
 use Viserio\Filesystem\Traits\FilesystemHelperTrait;
+use Viserio\Support\Traits\DirectorySeparatorTrait;
 
 class Filesystem extends SymfonyFilesystem implements FilesystemContract, DirectorysystemContract
 {
-    use FilesystemHelperTrait;
+    use DirectorySeparatorTrait,
+        FilesystemHelperTrait,
+        FilesystemExtensionTrait;
 
     /**
      * @var array
@@ -176,16 +179,6 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract, Direct
         }
 
         return MimeType::detectByFileExtension($extension);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function extension($path)
-    {
-        $path = $this->getDirectorySeparator($path);
-
-        return (new SplFileInfo($path))->getExtension();
     }
 
     /**
@@ -354,56 +347,6 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract, Direct
         $dirname = $this->getDirectorySeparator($dirname);
 
         return is_dir($dirname);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getExtension($path)
-    {
-        return pathinfo($path, PATHINFO_EXTENSION);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function withoutExtension($path, $extension = null)
-    {
-        $path = $this->getDirectorySeparator($path);
-
-        if ($extension !== null) {
-            // remove extension and trailing dot
-            return rtrim(basename($path, $extension), '.');
-        }
-
-        return pathinfo($path, PATHINFO_FILENAME);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function changeExtension($path, $extension)
-    {
-        $path    = $this->getDirectorySeparator($path);
-        $explode = explode('.', $path);
-
-        if ($actualExtension = end($explode)) {
-            $actualExtension = strtolower($extension);
-        }
-
-        $extension = ltrim($extension, '.');
-
-        // No extension for paths
-        if (substr($path, -1) === '/') {
-            return $path;
-        }
-
-        // No actual extension in path
-        if (empty($actualExtension)) {
-            return $path . (substr($path, -1) === '.' ? '' : '.') . $extension;
-        }
-
-        return substr($path, 0, -strlen($actualExtension)) . $extension;
     }
 
     /**

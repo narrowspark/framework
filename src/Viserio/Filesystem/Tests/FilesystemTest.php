@@ -109,11 +109,12 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('csv', $this->files->getExtension($file->url()));
     }
 
-    /**
-     * @requires extension fileinfo
-     */
     public function testGetMimeTypeOutputsMimeType()
     {
+        if (!class_exists('Finfo')) {
+            $this->markTestSkipped('The PHP extension fileinfo is not installed.');
+        }
+
         $file = vfsStream::newFile('foo.txt')->withContent('foo')->at($this->root);
 
         $this->assertEquals('text/plain', $this->files->getMimetype($file->url()));

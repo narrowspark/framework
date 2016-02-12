@@ -63,8 +63,7 @@
         "symfony/var-dumper"                                 : "^2.8|^3.0",
         "swiftmailer/swiftmailer"                            : "^5.4",
         "stack/builder"                                      : "^1.0",
-        "vlucas/phpdotenv"                                   : "^2.2",
-        "webmozart/glob"                                     : "^4.1"
+        "vlucas/phpdotenv"                                   : "^2.2"
     },
     "replace": {
         "viserio/cache"                                      : "self.version",
@@ -107,7 +106,6 @@
         "humbug/humbug"                                      : "dev-master",
         "johnkary/phpunit-speedtrap"                         : "^1.0",
         "league/flysystem-aws-s3-v3"                         : "^1.0",
-        "league/flysystem-azure"                             : "^1.0",
         "league/flysystem-cached-adapter"                    : "^1.0",
         "league/flysystem-dropbox"                           : "^1.0",
         "league/flysystem-gridfs"                            : "^1.0",

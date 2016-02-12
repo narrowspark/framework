@@ -125,16 +125,6 @@ interface Filesystem
     public function getMimetype($path);
 
     /**
-     * Returns a string containing the file extension,
-     * or an empty string if the file has no extension.
-     *
-     * @param string $path
-     *
-     * @return string
-     */
-    public function extension($path);
-
-    /**
      * Get a file's timestamp.
      *
      * @param string $path The path to the file.

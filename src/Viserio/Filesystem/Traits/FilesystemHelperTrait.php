@@ -2,12 +2,9 @@
 namespace Viserio\Filesystem\Traits;
 
 use Viserio\Contracts\Filesystem\Exception\FileNotFoundException;
-use Viserio\Support\Traits\DirectorySeparatorTrait;
 
 trait FilesystemHelperTrait
 {
-    use DirectorySeparatorTrait;
-
     /**
      * {@inheritdoc}
      */
@@ -55,4 +52,13 @@ trait FilesystemHelperTrait
 
         return is_file($file);
     }
+
+    /**
+     * Fix directory separators for windows and linux
+     *
+     * @param string|array $paths
+     *
+     * @return string|array
+     */
+    abstract protected function getDirectorySeparator($paths);
 }

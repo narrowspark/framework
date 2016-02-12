@@ -10,10 +10,12 @@ use RuntimeException;
 use Viserio\Contracts\Filesystem\Directorysystem as DirectorysystemContract;
 use Viserio\Contracts\Filesystem\FileNotFoundException;
 use Viserio\Contracts\Filesystem\Filesystem as FilesystemContract;
-use Viserio\Support\Collection;
+use Viserio\Filesystem\Traits\FilesystemExtensionTrait;
 
 class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
 {
+    use FilesystemExtensionTrait;
+
     /**
      * The Flysystem filesystem implementation.
      *
@@ -56,13 +58,15 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
      */
     public function write($path, $contents, array $config = [])
     {
-        $configs['visibility'] = $this->parseVisibility(isset($configs['visibility']) ?: null);
+        $visibility = isset($configs['visibility']) ? $configs['visibility'] : null;
+
+        $configs['visibility'] = $this->parseVisibility($visibility);
 
         if (is_resource($contents)) {
-            return $this->driver->putStream($path, $contents, $configs);
+            return $this->driver->writeStream($path, $contents, $configs);
         }
 
-        return $this->driver->put($path, $contents, $configs);
+        return $this->driver->write($path, $contents, $configs);
     }
 
     /**
@@ -70,6 +74,7 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
      */
     public function update($path, $contents, array $config = [])
     {
+        return $this->upload($path, $contents, $config);
     }
 
     /**
@@ -121,13 +126,7 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
      */
     public function getMimetype($path)
     {
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function extension($path)
-    {
+        return $this->getMimetype($path);
     }
 
     /**
@@ -170,20 +169,6 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
         $contents = $this->driver->listContents($directory, true);
 
         return $this->filterContentsByType($contents, 'file');
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function withoutExtension($path, $extension = null)
-    {
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function changeExtension($path, $extension)
-    {
     }
 
     /**
@@ -248,26 +233,6 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
     public function getDriver()
     {
         return $this->driver;
-    }
-
-    /**
-     * Get the URL for the file at the given path.
-     *
-     * @param string $path
-     *
-     * @return string
-     */
-    public function url($path)
-    {
-        $driver = $this->driver->getAdapter();
-
-        if (!$driver instanceof AwsS3Adapter) {
-            throw new RuntimeException('This driver does not support retrieving URLs.');
-        }
-
-        $bucket = $driver->getBucket();
-
-        return $driver->getClient()->getObjectUrl($bucket, $path);
     }
 
     /**
