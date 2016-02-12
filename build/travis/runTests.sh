@@ -2,6 +2,7 @@
 
 # Run for each components
 COMPONENTS=$(find src/Viserio/ -mindepth 3 -type f -name phpunit.xml.dist -printf '%h\n')
+
 if [ command -v parallel >/dev/null 2>&1 ]
 then
     # Exists

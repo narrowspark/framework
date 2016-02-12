@@ -9,7 +9,7 @@ composer install --no-interaction --prefer-source --ignore-platform-reqs --quiet
 TEST="./vendor/bin/phpunit $2"
 
 printf "Command: $TEST\n\n"
-if [ "$TRAVIS_PHP_VERSION" == '7.0' ]
+if [ "$TRAVIS_PHP_VERSION" == "7.0" ]
 then
     phpdbg -qrr $TEST
 else
