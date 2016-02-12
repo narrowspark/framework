@@ -45,7 +45,7 @@ install:
   - if [ "$SETUP" = 'lowest' ]; then travis_retry composer update --prefer-source --no-interaction --prefer-lowest --prefer-stable --no-progress --profile; fi
 
 before_script:
-  - chmod a+x ./build/travis/runTest.sh && chmod a+x ./build/travis/runTests.sh && chmod a+x ./build/travis/all.sh && chmod a+x ./build/travis/php/5.x.sh && chmod a+x ./build/travis/php/7.x.sh && chmod a+x ./build/travis/php/hhvm.sh && chmod a+x ./build/travis/script.sh && chmod a+x ./build/travis/after_success.sh
+  - chmod a+x ./build/travis/all.sh && chmod a+x ./build/travis/php/5.x.sh && chmod a+x ./build/travis/php/7.x.sh && chmod a+x ./build/travis/php/hhvm.sh && chmod a+x ./build/travis/script.sh && chmod a+x ./build/travis/after_success.sh
   - sleep 15
   - mongo mydb_test --eval 'db.addUser("travis", "test");'
   - ./build/travis/all.sh
