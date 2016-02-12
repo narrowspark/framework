@@ -1,11 +1,6 @@
 language: php
 
 sudo: false
-dist: precise
-
-addons:
-  apt_packages:
-    - parallel
 
 services:
   - memcached
@@ -42,7 +37,7 @@ before_install:
   - mkdir -p ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d
   - if [ -f build/travis/php/$TRAVIS_PHP_VERSION.sh]; then ./build/travis/php/$TRAVIS_PHP_VERSION.sh; fi
   - travis_retry composer self-update # Run allways composer update
-  - if [ "$TRAVIS_PHP_VERSION" = hhvm ]; then composer global require hirak/prestissimo; fi # Now composer can install components parallel
+  - if [ "$TRAVIS_PHP_VERSION" != "hhvm" ]; then composer global require hirak/prestissimo; fi # Now composer can install components parallel
 
 install:
   - if [ "$SETUP" = 'basic' ]; then travis_retry composer install --no-interaction --prefer-source --no-progress --profile; fi

@@ -3,6 +3,6 @@
 # Create logs dir
 mkdir -p build/logs
 
-./build/travis/runTests.sh
+vendor/bin/phpunit -c phpunit.xml.dist --verbose
 
 if [[ "$TRAVIS_PHP_VERSION" != "hhvm" && "$CHECK_CS" != true && "$SEND_COVERAGE" != true ]]; then vendor/bin/humbug; fi
