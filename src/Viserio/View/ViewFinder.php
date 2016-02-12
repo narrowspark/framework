@@ -4,11 +4,11 @@ namespace Viserio\View;
 use InvalidArgumentException;
 use Viserio\Contracts\View\Finder as FinderContract;
 use Viserio\Filesystem\Filesystem;
-use Viserio\Support\Traits\DirectorySeparatorTrait;
+use Viserio\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
 class ViewFinder implements FinderContract
 {
-    use DirectorySeparatorTrait;
+    use NormalizePathAndDirectorySeparatorTrait;
 
     /**
      * The filesystem instance.
@@ -256,7 +256,7 @@ class ViewFinder implements FinderContract
             foreach ($this->getPossibleViewFiles($name) as $file) {
                 if (
                     $this->files->exists(
-                        $viewPath = $this->getDirectorySeparator($path . '/' . $file)
+                        $viewPath = $this->normalizeDirectorySeparator($path . '/' . $file)
                     )
                 ) {
                     return $viewPath;

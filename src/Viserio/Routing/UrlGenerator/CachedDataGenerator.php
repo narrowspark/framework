@@ -61,7 +61,7 @@ class CachedDataGenerator implements DataGeneratorContract
 
         if (!$files->exists($cache) || !$this->debug) {
             $routes = $this->wrappedGenerator->getData();
-            $files->put($cache, '<?php return ' . var_export($routes, true) . ';');
+            $files->write($cache, '<?php return ' . var_export($routes, true) . ';');
         }
 
         return (array) $files->getRequire($this->cacheFile);
