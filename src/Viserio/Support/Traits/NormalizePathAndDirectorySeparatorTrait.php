@@ -3,7 +3,7 @@ namespace Viserio\Support\Traits;
 
 use LogicException;
 
-trait NormalizePathAndNormalizePathAndDirectorySeparatorTrait
+trait NormalizePathAndDirectorySeparatorTrait
 {
     /**
      * Fix directory separators for windows, linux and normalize path.     *

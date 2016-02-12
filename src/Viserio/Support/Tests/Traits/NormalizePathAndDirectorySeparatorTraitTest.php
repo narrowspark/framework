@@ -1,11 +1,11 @@
 <?php
 namespace Viserio\Support\Tests;
 
-use Viserio\Support\Traits\NormalizePathAndNormalizePathAndDirectorySeparatorTrait;
+use Viserio\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
-class NormalizePathAndNormalizePathAndDirectorySeparatorTraitTest extends \PHPUnit_Framework_TestCase
+class NormalizePathAndDirectorySeparatorTraitTest extends \PHPUnit_Framework_TestCase
 {
-    use NormalizePathAndNormalizePathAndDirectorySeparatorTrait;
+    use NormalizePathAndDirectorySeparatorTrait;
 
     public function testNormalizeDirectorySeparator()
     {

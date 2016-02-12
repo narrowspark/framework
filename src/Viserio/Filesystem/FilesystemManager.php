@@ -19,7 +19,6 @@ class FilesystemManager extends Manager
      */
     protected $supportedDrivers = [
         'awss3',
-        'azure',
         'dropbox',
         'ftp',
         'gridfs',
@@ -100,7 +99,7 @@ class FilesystemManager extends Manager
     {
         $name = $name ?: $this->getDefaultDriver();
 
-        $connections = $this->config->get($this->getConfigName());
+        $connections = $this->config->get('filesystem');
 
         if (!is_array($config = Arr::get($connections, $name)) && !$config) {
             throw new InvalidArgumentException("Adapter [$name] not configured.");
@@ -116,16 +115,6 @@ class FilesystemManager extends Manager
     }
 
     /**
-     * Get the configuration name.
-     *
-     * @return string
-     */
-    protected function getConfigName()
-    {
-        return 'filesystem';
-    }
-
-    /**
      * Get the cache configuration.
      *
      * @param string $name
@@ -136,7 +125,7 @@ class FilesystemManager extends Manager
      */
     protected function getCacheConfig($name)
     {
-        $cache = $this->config->get($this->getConfigName() . '.cache');
+        $cache = $this->config->get('filesystem.cache');
 
         if (!is_array($config = Arr::get($cache, $name)) && !$config) {
             throw new InvalidArgumentException("Cache [$name] not configured.");
@@ -164,11 +153,6 @@ class FilesystemManager extends Manager
         return (new Adapters\AwsS3Connector())->connect($options);
     }
 
-    protected function createAzureDriver(array $options)
-    {
-        return (new Adapters\AzureConnector())->connect($options);
-    }
-
     protected function createDropboxDriver(array $options)
     {
         return (new Adapters\DropboxConnector())->connect($options);
@@ -189,9 +173,9 @@ class FilesystemManager extends Manager
         return (new Adapters\LocalConnector())->connect($options);
     }
 
-    protected function createNullDriver(array $options)
+    protected function createNullDriver()
     {
-        return (new Adapters\NullConnector())->connect($options);
+        return (new Adapters\NullConnector())->connect([]);
     }
 
     protected function createRackspaceDriver(array $options)
