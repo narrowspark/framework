@@ -6,7 +6,6 @@
         "narrowspark",
         "viserio",
         "aws",
-        "azure",
         "cached",
         "copy",
         "dropbox",
@@ -18,7 +17,6 @@
         "s3",
         "sftp",
         "rackspace",
-        "replicate",
         "webdav",
         "ziparchive"
     ],
