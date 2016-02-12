@@ -1,14 +1,14 @@
 <?php
 namespace Viserio\Filesystem;
 
-use RuntimeException;
+use InvalidArgumentException;
 use League\Flysystem\AdapterInterface;
+use Narrowspark\Arr\StaticArr as Arr;
+use RuntimeException;
 use Viserio\Contracts\Config\Manager as ConfigContract;
+use Viserio\Filesystem\Adapters;
 use Viserio\Filesystem\Adapters\ConnectionFactory;
 use Viserio\Support\Manager;
-use Viserio\Filesystem\Adapters;
-use InvalidArgumentException;
-use Narrowspark\Arr\StaticArr as Arr;
 
 class FilesystemManager extends Manager
 {
@@ -136,7 +136,7 @@ class FilesystemManager extends Manager
      */
     protected function getCacheConfig($name)
     {
-        $cache = $this->config->get($this->getConfigName().'.cache');
+        $cache = $this->config->get($this->getConfigName() . '.cache');
 
         if (!is_array($config = Arr::get($cache, $name)) && !$config) {
             throw new InvalidArgumentException("Cache [$name] not configured.");
@@ -161,61 +161,61 @@ class FilesystemManager extends Manager
 
     protected function createAwss3Driver(array $options)
     {
-        return (new Adapters\AwsS3Connector)->connect($options);
+        return (new Adapters\AwsS3Connector())->connect($options);
     }
 
     protected function createAzureDriver(array $options)
     {
-        return (new Adapters\AzureConnector)->connect($options);
+        return (new Adapters\AzureConnector())->connect($options);
     }
 
     protected function createDropboxDriver(array $options)
     {
-        return (new Adapters\DropboxConnector)->connect($options);
+        return (new Adapters\DropboxConnector())->connect($options);
     }
 
     protected function createFtpDriver(array $options)
     {
-        return (new Adapters\FtpConnector)->connect($options);
+        return (new Adapters\FtpConnector())->connect($options);
     }
 
     protected function createGridfsDriver(array $options)
     {
-        return (new Adapters\GridFSConnector)->connect($options);
+        return (new Adapters\GridFSConnector())->connect($options);
     }
 
     protected function createLocalDriver(array $options)
     {
-        return (new Adapters\LocalConnector)->connect($options);
+        return (new Adapters\LocalConnector())->connect($options);
     }
 
     protected function createNullDriver(array $options)
     {
-        return (new Adapters\NullConnector)->connect($options);
+        return (new Adapters\NullConnector())->connect($options);
     }
 
     protected function createRackspaceDriver(array $options)
     {
-        return (new Adapters\RackspaceConnector)->connect($options);
+        return (new Adapters\RackspaceConnector())->connect($options);
     }
 
     protected function createSftpDriver(array $options)
     {
-        return (new Adapters\SftpConnector)->connect($options);
+        return (new Adapters\SftpConnector())->connect($options);
     }
 
     protected function createVfsDriver(array $options)
     {
-        return (new Adapters\VfsConnector)->connect($options);
+        return (new Adapters\VfsConnector())->connect($options);
     }
 
     protected function createWebdavDriver(array $options)
     {
-        return (new Adapters\WebDavConnector)->connect($options);
+        return (new Adapters\WebDavConnector())->connect($options);
     }
 
     protected function createZipDriver(array $options)
     {
-        return (new Adapters\ZipConnector)->connect($options);
+        return (new Adapters\ZipConnector())->connect($options);
     }
 }

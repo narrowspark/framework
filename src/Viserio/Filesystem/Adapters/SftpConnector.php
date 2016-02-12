@@ -20,7 +20,7 @@ class SftpConnector implements ConnectorContract
         return $this->getAdapter($config);
     }
 
-     /**
+    /**
      * {@inheritdoc}
      */
     protected function getConfig(array $config)
