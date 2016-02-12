@@ -1,7 +1,7 @@
 <?php
-namespace Viserio\Filesystem;
+namespace Viserio\Filesystem\Traits;
 
-use Viserio\Contracts\Filesystem\FileNotFoundException;
+use Viserio\Contracts\Filesystem\Exception\FileNotFoundException;
 use Viserio\Support\Traits\DirectorySeparatorTrait;
 
 trait FilesystemHelperTrait

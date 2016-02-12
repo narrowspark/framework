@@ -9,13 +9,7 @@ use Narrowspark\Arr\StaticArr as Arr;
 class AwsS3Connector extends AbstractConnector
 {
     /**
-     * Get the authentication data.
-     *
-     * @param array $config
-     *
-     * @throws \InvalidArgumentException
-     *
-     * @return string[]
+     * {@inheritdoc}
      */
     protected function getAuth(array $config)
     {
@@ -47,11 +41,7 @@ class AwsS3Connector extends AbstractConnector
     }
 
     /**
-     * Get the awss3 client.
-     *
-     * @param string[] $auth
-     *
-     * @return \Aws\S3\S3Client
+     * {@inheritdoc}
      */
     protected function getClient(array $auth)
     {
@@ -59,13 +49,7 @@ class AwsS3Connector extends AbstractConnector
     }
 
     /**
-     * Get the configuration.
-     *
-     * @param array $config
-     *
-     * @throws \InvalidArgumentException
-     *
-     * @return string[]
+     * {@inheritdoc}
      */
     protected function getConfig(array $config)
     {
@@ -85,12 +69,7 @@ class AwsS3Connector extends AbstractConnector
     }
 
     /**
-     * Get the awss3 adapter.
-     *
-     * @param object   $client
-     * @param string[] $config
-     *
-     * @return \League\Flysystem\AwsS3v3\AwsS3Adapter
+     * {@inheritdoc}
      */
     protected function getAdapter($client, array $config)
     {

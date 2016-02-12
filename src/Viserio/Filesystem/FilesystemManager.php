@@ -1,54 +1,45 @@
 <?php
 namespace Viserio\Filesystem;
 
+use RuntimeException;
 use League\Flysystem\AdapterInterface;
 use Viserio\Contracts\Config\Manager as ConfigContract;
 use Viserio\Filesystem\Adapters\ConnectionFactory;
 use Viserio\Support\Manager;
+use Viserio\Filesystem\Adapters;
+use InvalidArgumentException;
+use Narrowspark\Arr\StaticArr as Arr;
 
 class FilesystemManager extends Manager
 {
     /**
-     * Container instance.
-     *
-     * @var \Viserio\Contracts\Config\Manager
-     */
-    protected $config;
-
-    /**
-     * The factory instance.
-     *
-     * @var \Viserio\Filesystem\Adapters\ConnectionFactory
-     */
-    protected $factory;
-
-    /**
-     * The registered custom driver creators.
+     * All supported drivers.
      *
      * @var array
      */
-    protected $customCreators = [];
-
-    protected $defaultDriver = [
-        'awss3'     => 'AwsS3',
-        'ftp'       => 'Ftp',
-        'local'     => 'Local',
-        'null'      => 'Null',
-        'rackspace' => 'Rackspace',
-        'sftp'      => 'Sftp',
-        'zip'       => 'Zip',
+    protected $supportedDrivers = [
+        'awss3',
+        'azure',
+        'dropbox',
+        'ftp',
+        'gridfs',
+        'local',
+        'null',
+        'rackspace',
+        'sftp',
+        'vfs',
+        'webdav',
+        'zip',
     ];
 
     /**
      * Create a new filesystem manager instance.
      *
-     * @param \Viserio\Contracts\Config\Manager              $config
-     * @param \Viserio\Filesystem\Adapters\ConnectionFactory $factory
+     * @param \Viserio\Contracts\Config\Manager $config
      */
-    public function __construct(ConfigContract $config, ConnectionFactory $factory)
+    public function __construct(ConfigContract $config)
     {
         $this->config  = $config;
-        $this->factory = $factory;
     }
 
     /**
@@ -74,6 +65,89 @@ class FilesystemManager extends Manager
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function driver($driver = null, array $options = [])
+    {
+        $driver = $driver ?: $this->getDefaultDriver();
+
+        if (!$this->hasDriver($driver)) {
+            throw new RuntimeException(
+                sprintf('The driver [%s] is not supported.', $driver)
+            );
+        }
+
+        // If the given driver has not been created before, we will create the instances
+        // here and cache it so we can return it next time very quickly. If there is
+        // already a driver created by this name, we'll just return that instance.
+        if (!isset($this->drivers[$driver])) {
+            $this->drivers[$driver] = $this->adapt($this->createDriver($driver, $options));
+        }
+
+        return $this->drivers[$driver];
+    }
+
+    /**
+     * Get the configuration for a connection.
+     *
+     * @param string $name
+     *
+     * @throws \InvalidArgumentException
+     *
+     * @return array
+     */
+    public function getConnectionConfig($name)
+    {
+        $name = $name ?: $this->getDefaultDriver();
+
+        $connections = $this->config->get($this->getConfigName());
+
+        if (!is_array($config = Arr::get($connections, $name)) && !$config) {
+            throw new InvalidArgumentException("Adapter [$name] not configured.");
+        }
+
+        if (is_string($cache = Arr::get($config, 'cache'))) {
+            $config['cache'] = $this->getCacheConfig($cache);
+        }
+
+        $config['name'] = $name;
+
+        return $config;
+    }
+
+    /**
+     * Get the configuration name.
+     *
+     * @return string
+     */
+    protected function getConfigName()
+    {
+        return 'filesystem';
+    }
+
+    /**
+     * Get the cache configuration.
+     *
+     * @param string $name
+     *
+     * @throws \InvalidArgumentException
+     *
+     * @return array
+     */
+    protected function getCacheConfig($name)
+    {
+        $cache = $this->config->get($this->getConfigName().'.cache');
+
+        if (!is_array($config = Arr::get($cache, $name)) && !$config) {
+            throw new InvalidArgumentException("Cache [$name] not configured.");
+        }
+
+        $config['name'] = $name;
+
+        return $config;
+    }
+
+    /**
      * Adapt the filesystem implementation.
      *
      * @param \League\Flysystem\AdapterInterface $filesystem
@@ -85,25 +159,63 @@ class FilesystemManager extends Manager
         return new FilesystemAdapter($filesystem);
     }
 
-    /**
-     * Create a connector instance based on the configuration.
-     *
-     * @param array $config
-     *
-     * @throws \InvalidArgumentException
-     *
-     * @return string
-     */
-    protected function createConnector(array $config)
+    protected function createAwss3Driver(array $options)
     {
-        if (!isset($config['driver'])) {
-            throw new InvalidArgumentException('A driver must be specified.');
-        }
+        return (new Adapters\AwsS3Connector)->connect($options);
+    }
 
-        if (isset($this->defaultDriver[$config['driver']])) {
-            return $this->defaultDriver[$config['driver']] . 'Connector';
-        }
+    protected function createAzureDriver(array $options)
+    {
+        return (new Adapters\AzureConnector)->connect($options);
+    }
 
-        throw new InvalidArgumentException(sprintf('Unsupported driver [%s]', $config['driver']));
+    protected function createDropboxDriver(array $options)
+    {
+        return (new Adapters\DropboxConnector)->connect($options);
+    }
+
+    protected function createFtpDriver(array $options)
+    {
+        return (new Adapters\FtpConnector)->connect($options);
+    }
+
+    protected function createGridfsDriver(array $options)
+    {
+        return (new Adapters\GridFSConnector)->connect($options);
+    }
+
+    protected function createLocalDriver(array $options)
+    {
+        return (new Adapters\LocalConnector)->connect($options);
+    }
+
+    protected function createNullDriver(array $options)
+    {
+        return (new Adapters\NullConnector)->connect($options);
+    }
+
+    protected function createRackspaceDriver(array $options)
+    {
+        return (new Adapters\RackspaceConnector)->connect($options);
+    }
+
+    protected function createSftpDriver(array $options)
+    {
+        return (new Adapters\SftpConnector)->connect($options);
+    }
+
+    protected function createVfsDriver(array $options)
+    {
+        return (new Adapters\VfsConnector)->connect($options);
+    }
+
+    protected function createWebdavDriver(array $options)
+    {
+        return (new Adapters\WebDavConnector)->connect($options);
+    }
+
+    protected function createZipDriver(array $options)
+    {
+        return (new Adapters\ZipConnector)->connect($options);
     }
 }

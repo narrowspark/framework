@@ -33,7 +33,7 @@ abstract class AbstractConnector implements ConnectorContract
      *
      * @param string[] $auth
      *
-     * @return \Aws\S3\S3Client
+     * @return object
      */
     abstract protected function getClient(array $auth);
 
@@ -54,7 +54,7 @@ abstract class AbstractConnector implements ConnectorContract
      * @param object   $client
      * @param string[] $config
      *
-     * @return \League\Flysystem\AwsS3v3\AwsS3Adapter
+     * @return \League\Flysystem\AdapterInterface
      */
     abstract protected function getAdapter($client, array $config);
 }

@@ -10,13 +10,7 @@ use WindowsAzure\Common\ServicesBuilder;
 class AzureConnector extends AbstractConnector
 {
     /**
-     * Get the authentication data.
-     *
-     * @param string[] $config
-     *
-     * @throws \InvalidArgumentException
-     *
-     * @return string[]
+     * {@inheritdoc}
      */
     protected function getAuth(array $config)
     {
@@ -28,11 +22,7 @@ class AzureConnector extends AbstractConnector
     }
 
     /**
-     * Get the azure client.
-     *
-     * @param string[] $auth
-     *
-     * @return \WindowsAzure\Blob\Internal\IBlob
+     * {@inheritdoc}
      */
     protected function getClient(array $auth)
     {
@@ -46,11 +36,7 @@ class AzureConnector extends AbstractConnector
     }
 
     /**
-     * Get the configuration.
-     *
-     * @param string[] $config
-     *
-     * @return string[]
+     * {@inheritdoc}
      */
     protected function getConfig(array $config)
     {
@@ -66,14 +52,9 @@ class AzureConnector extends AbstractConnector
     }
 
     /**
-     * Get the container adapter.
-     *
-     * @param \WindowsAzure\Blob\Internal\IBlob $client
-     * @param string[]                          $config
-     *
-     * @return \League\Flysystem\Azure\AzureAdapter
+     * {@inheritdoc}
      */
-    protected function getAdapter(IBlob $client, array $config)
+    protected function getAdapter($client, array $config)
     {
         return new AzureAdapter($client, $config['container'], $config['prefix']);
     }
