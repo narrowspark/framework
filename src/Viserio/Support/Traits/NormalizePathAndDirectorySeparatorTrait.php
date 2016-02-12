@@ -3,7 +3,7 @@ namespace Viserio\Support\Traits;
 
 use LogicException;
 
-trait DirectorySeparatorTrait
+trait NormalizePathAndNormalizePathAndDirectorySeparatorTrait
 {
     /**
      * Fix directory separators for windows, linux and normalize path.     *
@@ -12,41 +12,17 @@ trait DirectorySeparatorTrait
      *
      * @return string|array
      */
-    public function getDirectorySeparator($paths)
+    public function normalizeDirectorySeparator($paths)
     {
-        if (DIRECTORY_SEPARATOR !== '/') {
-            if (is_string($paths)) {
-                if (strpos('vfs:', $paths) !== false) {
-                    return $this->normalizePath($paths);
-                }
-
-                return $this->normalizePath(str_replace('/', DIRECTORY_SEPARATOR, $paths));
-            } elseif (is_array($paths)) {
-                $newPaths = [];
-
-                foreach ($paths as $path) {
-                    if (strpos('vfs:', $path) !== false) {
-                        $newPaths[] = $this->normalizePath($path);
-                    }
-
-                    $newPaths[] = $this->normalizePath(str_replace('/', DIRECTORY_SEPARATOR, $path));
-                }
-
-                return $newPaths;
-            }
-        }
-
         if (is_array($paths)) {
-            $normalizedPaths = [];
-
-            foreach ($paths as $path) {
-                $normalizedPaths[] = $this->normalizePath($path);
-            }
-
-            return $normalizedPaths;
+            return $this->normalizeAndAddDirectorySeparatorOnArray($paths);
         }
 
-        return $this->normalizePath($paths);
+        if (strpos($paths, 'vfs:') !== false) {
+            return $paths;
+        }
+
+        return $this->normalizePath(str_replace('\\', '/', $paths));
     }
 
     /**
@@ -96,5 +72,20 @@ trait DirectorySeparatorTrait
         }
 
         return $path;
+    }
+
+    private function normalizeAndAddDirectorySeparatorOnArray(array $paths)
+    {
+        $newPaths = [];
+
+        foreach ($paths as $path) {
+            if (strpos($path, 'vfs:') !== false) {
+                $newPaths[] = $path;
+            } else {
+                $newPaths[] = $this->normalizePath(str_replace('\\', '/', $path));
+            }
+        }
+
+        return $newPaths;
     }
 }

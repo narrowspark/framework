@@ -14,11 +14,11 @@ use Viserio\Contracts\Filesystem\Exception\IOException;
 use Viserio\Contracts\Filesystem\Filesystem as FilesystemContract;
 use Viserio\Filesystem\Traits\FilesystemExtensionTrait;
 use Viserio\Filesystem\Traits\FilesystemHelperTrait;
-use Viserio\Support\Traits\DirectorySeparatorTrait;
+use Viserio\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
 class Filesystem extends SymfonyFilesystem implements FilesystemContract, DirectorysystemContract
 {
-    use DirectorySeparatorTrait,
+    use NormalizePathAndDirectorySeparatorTrait,
         FilesystemHelperTrait,
         FilesystemExtensionTrait;
 
@@ -41,7 +41,7 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract, Direct
      */
     public function has($path)
     {
-        $path = $this->getDirectorySeparator($path);
+        $path = $this->normalizeDirectorySeparator($path);
 
         return $this->exists($path);
     }
@@ -51,7 +51,7 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract, Direct
      */
     public function read($path)
     {
-        $path = $this->getDirectorySeparator($path);
+        $path = $this->normalizeDirectorySeparator($path);
 
         if ($this->isFile($path) && $this->has($path)) {
             return file_get_contents($path);
@@ -65,7 +65,7 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract, Direct
      */
     public function write($path, $contents, array $config = [])
     {
-        $path = $this->getDirectorySeparator($path);
+        $path = $this->normalizeDirectorySeparator($path);
         $lock = isset($config['lock']) ? LOCK_EX : 0;
 
         if (file_put_contents($path, $contents, $lock) === false) {
@@ -84,7 +84,7 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract, Direct
      */
     public function update($path, $contents, array $config = [])
     {
-        $path = $this->getDirectorySeparator($path);
+        $path = $this->normalizeDirectorySeparator($path);
 
         return file_put_contents($path, $contents, FILE_APPEND);
 
@@ -96,7 +96,7 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract, Direct
      */
     public function getVisibility($path)
     {
-        $path = $this->getDirectorySeparator($path);
+        $path = $this->normalizeDirectorySeparator($path);
 
         clearstatcache(false, $path);
         $permissions = octdec(substr(sprintf('%o', fileperms($path)), -4));
@@ -111,7 +111,7 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract, Direct
      */
     public function setVisibility($path, $visibility)
     {
-        $path = $this->getDirectorySeparator($path);
+        $path = $this->normalizeDirectorySeparator($path);
         $visibility = $this->parseVisibility($visibility);
 
         try {
@@ -128,8 +128,8 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract, Direct
      */
     public function copy($originFile, $targetFile, $override = false)
     {
-        $from = $this->getDirectorySeparator($originFile);
-        $to   = $this->getDirectorySeparator($targetFile);
+        $from = $this->normalizeDirectorySeparator($originFile);
+        $to   = $this->normalizeDirectorySeparator($targetFile);
 
         try {
             return parent::copy($from, $to, $override);
@@ -145,8 +145,8 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract, Direct
      */
     public function move($from, $to)
     {
-        $from = $this->getDirectorySeparator($from);
-        $to   = $this->getDirectorySeparator($to);
+        $from = $this->normalizeDirectorySeparator($from);
+        $to   = $this->normalizeDirectorySeparator($to);
 
         return rename($from, $to);
     }
@@ -156,7 +156,7 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract, Direct
      */
     public function getSize($path)
     {
-        $path = $this->getDirectorySeparator($path);
+        $path = $this->normalizeDirectorySeparator($path);
 
         return filesize($path);
     }
@@ -166,7 +166,7 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract, Direct
      */
     public function getMimetype($path)
     {
-        $path = $this->getDirectorySeparator($path);
+        $path = $this->normalizeDirectorySeparator($path);
 
         if (!$this->isFile($path) && !$this->has($path)) {
             throw new FileNotFoundException($path);
@@ -186,7 +186,7 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract, Direct
      */
     public function getTimestamp($path)
     {
-        $path = $this->getDirectorySeparator($path);
+        $path = $this->normalizeDirectorySeparator($path);
 
         if (!$this->isFile($path) && !$this->has($path)) {
             throw new FileNotFoundException($path);
@@ -198,7 +198,7 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract, Direct
      */
     public function delete($paths)
     {
-        $paths = $this->getDirectorySeparator($paths);
+        $paths = $this->normalizeDirectorySeparator($paths);
 
         try {
             $this->remove($paths);
@@ -214,7 +214,7 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract, Direct
      */
     public function files($directory)
     {
-        $directory = $this->getDirectorySeparator($directory);
+        $directory = $this->normalizeDirectorySeparator($directory);
 
         return array_diff(scandir($directory), ['..', '.']);
     }
@@ -224,7 +224,7 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract, Direct
      */
     public function allFiles($directory)
     {
-        $directory = $this->getDirectorySeparator($directory);
+        $directory = $this->normalizeDirectorySeparator($directory);
         $recursive = new RecursiveIteratorIterator(
             new RecursiveDirectoryIterator($directory, RecursiveDirectoryIterator::SKIP_DOTS),
             RecursiveIteratorIterator::SELF_FIRST,
@@ -249,7 +249,7 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract, Direct
      */
     public function createDirectory($dirname)
     {
-        $dirname = $this->getDirectorySeparator($dirname);
+        $dirname = $this->normalizeDirectorySeparator($dirname);
 
         try {
             $this->mkdir($dirname);
@@ -265,12 +265,12 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract, Direct
      */
     public function directories($directory)
     {
-        $directory = $this->getDirectorySeparator($directory);
+        $directory = $this->normalizeDirectorySeparator($directory);
 
         $dirs = [];
 
         foreach (glob($directory, GLOB_ONLYDIR) as $dir) {
-            $dirs[] = $this->getDirectorySeparator($dir);
+            $dirs[] = $this->normalizeDirectorySeparator($dir);
         }
 
         return $dirs;
@@ -281,7 +281,7 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract, Direct
      */
     public function allDirectories($directory)
     {
-        $directory = $this->getDirectorySeparator($directory);
+        $directory = $this->normalizeDirectorySeparator($directory);
         $recursive = new RecursiveIteratorIterator(
             new RecursiveDirectoryIterator($directory, RecursiveDirectoryIterator::SKIP_DOTS),
             RecursiveIteratorIterator::SELF_FIRST,
@@ -292,7 +292,7 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract, Direct
 
         foreach ($recursive as $dir) {
             if ($dir->isDir()) {
-                $dirs[] = $this->getDirectorySeparator($dir->getRealpath());
+                $dirs[] = $this->normalizeDirectorySeparator($dir->getRealpath());
             }
         }
 
@@ -304,7 +304,7 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract, Direct
      */
     public function deleteDirectory($dirname)
     {
-        $dirname = $this->getDirectorySeparator($dirname);
+        $dirname = $this->normalizeDirectorySeparator($dirname);
 
         if (!$this->isDirectory($dirname)) {
             return false;
@@ -324,7 +324,7 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract, Direct
      */
     public function cleanDirectory($dirname)
     {
-        $dirname = $this->getDirectorySeparator($dirname);
+        $dirname = $this->normalizeDirectorySeparator($dirname);
 
         if (!$this->isDirectory($dirname)) {
             return false;
@@ -344,7 +344,7 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract, Direct
      */
     public function isDirectory($dirname)
     {
-        $dirname = $this->getDirectorySeparator($dirname);
+        $dirname = $this->normalizeDirectorySeparator($dirname);
 
         return is_dir($dirname);
     }

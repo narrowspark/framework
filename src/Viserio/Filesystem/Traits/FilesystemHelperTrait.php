@@ -10,7 +10,7 @@ trait FilesystemHelperTrait
      */
     public function getRequire($path)
     {
-        $path = $this->getDirectorySeparator($path);
+        $path = $this->normalizeDirectorySeparator($path);
 
         if ($this->isFile($path) && file_exists($path)) {
             return require $path;
@@ -24,7 +24,7 @@ trait FilesystemHelperTrait
      */
     public function requireOnce($file)
     {
-        $path = $this->getDirectorySeparator($path);
+        $path = $this->normalizeDirectorySeparator($path);
 
         if ($this->isFile($path) && file_exists($path)) {
             require_once $file;
@@ -38,7 +38,7 @@ trait FilesystemHelperTrait
      */
     public function isWritable($path)
     {
-        $path = $this->getDirectorySeparator($path);
+        $path = $this->normalizeDirectorySeparator($path);
 
         return is_writable($path);
     }
@@ -48,7 +48,7 @@ trait FilesystemHelperTrait
      */
     public function isFile($file)
     {
-        $file = $this->getDirectorySeparator($file);
+        $file = $this->normalizeDirectorySeparator($file);
 
         return is_file($file);
     }
@@ -60,5 +60,5 @@ trait FilesystemHelperTrait
      *
      * @return string|array
      */
-    abstract protected function getDirectorySeparator($paths);
+    abstract protected function normalizeDirectorySeparator($paths);
 }

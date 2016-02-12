@@ -5,11 +5,11 @@ use org\bovigo\vfs\vfsStream;
 use Viserio\Filesystem\FileLoader;
 use Viserio\Filesystem\Filesystem;
 use Viserio\Filesystem\Parsers\IniParser;
-use Viserio\Support\Traits\DirectorySeparatorTrait;
+use Viserio\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
 class FileLoaderTest extends \PHPUnit_Framework_TestCase
 {
-    use DirectorySeparatorTrait;
+    use NormalizePathAndDirectorySeparatorTrait;
 
     /**
      * @var org\bovigo\vfs\vfsStreamDirectory
@@ -53,22 +53,22 @@ class FileLoaderTest extends \PHPUnit_Framework_TestCase
     public function testExistswithEnvironment()
     {
         $exist = $this->fileloader->exists('test.ini', null, 'production', null);
-        $this->assertSame($this->getDirectorySeparator(__DIR__ . '/Fixture/production/test.ini'), $exist);
+        $this->assertSame($this->normalizeDirectorySeparator(__DIR__ . '/Fixture/production/test.ini'), $exist);
     }
 
     public function testExistsWithCache()
     {
         $exist = $this->fileloader->exists('test.json');
-        $this->assertSame($this->getDirectorySeparator(__DIR__ . '/Fixture/test.json'), $exist);
+        $this->assertSame($this->normalizeDirectorySeparator(__DIR__ . '/Fixture/test.json'), $exist);
 
         $exist2 = $this->fileloader->exists('test.json');
-        $this->assertSame($this->getDirectorySeparator(__DIR__ . '/Fixture/test.json'), $exist2);
+        $this->assertSame($this->normalizeDirectorySeparator(__DIR__ . '/Fixture/test.json'), $exist2);
 
         $envExist1 = $this->fileloader->exists('test.ini', null, 'production', null);
-        $this->assertSame($this->getDirectorySeparator(__DIR__ . '/Fixture/production/test.ini'), $envExist1);
+        $this->assertSame($this->normalizeDirectorySeparator(__DIR__ . '/Fixture/production/test.ini'), $envExist1);
 
         $envExist2 = $this->fileloader->exists('test.ini', null, 'production', null);
-        $this->assertSame($this->getDirectorySeparator(__DIR__ . '/Fixture/production/test.ini'), $envExist2);
+        $this->assertSame($this->normalizeDirectorySeparator(__DIR__ . '/Fixture/production/test.ini'), $envExist2);
     }
 
     public function testCascadePackage()

@@ -1,27 +1,29 @@
 <?php
 namespace Viserio\Support\Tests;
 
-use Viserio\Support\Traits\DirectorySeparatorTrait;
+use Viserio\Support\Traits\NormalizePathAndNormalizePathAndDirectorySeparatorTrait;
 
-class DirectorySeparatorTraitTest extends \PHPUnit_Framework_TestCase
+class NormalizePathAndNormalizePathAndDirectorySeparatorTraitTest extends \PHPUnit_Framework_TestCase
 {
-    use DirectorySeparatorTrait;
+    use NormalizePathAndNormalizePathAndDirectorySeparatorTrait;
 
-    public function testGetDirectorySeparator()
+    public function testNormalizeDirectorySeparator()
     {
-        $path = $this->getDirectorySeparator('path/to/test');
-        $paths = $this->getDirectorySeparator(['path/to/test', 'path/to/test']);
-
         if (DIRECTORY_SEPARATOR !== '/') {
-            $this->assertSame('path\to\test', $path);
-            $this->assertSame(['path\to\test', 'path\to\test'], $paths);
+            $this->assertSame('path/to/test', $this->normalizeDirectorySeparator('path\to\test'));
+
+            $paths = $this->normalizeDirectorySeparator(['path\to\test', 'path\to\test', 'vfs://path/to/test']);
+            $this->assertSame(['path/to/test', 'path/to/test', 'vfs://path/to/test'], $paths);
         }
 
-        $this->assertSame('path\to\test', $this->getDirectorySeparator('path\to\test'));
-        $this->assertSame(
-            ['path\to\test', 'path\to\test'],
-            $this->getDirectorySeparator(['path\to\test', 'path\to\test'])
-        );
+        if (DIRECTORY_SEPARATOR === '/') {
+            $this->assertSame('path/to/test', $this->normalizeDirectorySeparator('path/to/test'));
+            $this->assertSame('vfs://path/to/test', $this->normalizeDirectorySeparator('vfs://path/to/test'));
+            $this->assertSame(
+                ['path/to/test', 'path/to/test'],
+                $this->normalizeDirectorySeparator(['path/to/test', 'path/to/test'])
+            );
+        }
     }
 
     /**
@@ -30,6 +32,7 @@ class DirectorySeparatorTraitTest extends \PHPUnit_Framework_TestCase
     public function testNormalizePath($input, $expected)
     {
         $result = $this->normalizePath($input);
+
         $this->assertEquals($expected, $result);
     }
 

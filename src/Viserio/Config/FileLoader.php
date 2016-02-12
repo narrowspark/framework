@@ -12,11 +12,11 @@ use Viserio\Parsers\PHPParser;
 use Viserio\Parsers\TomlParser;
 use Viserio\Parsers\XmlParser;
 use Viserio\Parsers\YamlParser;
-use Viserio\Support\Traits\DirectorySeparatorTrait;
+use Viserio\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
 class FileLoader implements LoaderContract
 {
-    use DirectorySeparatorTrait;
+    use NormalizePathAndDirectorySeparatorTrait;
 
     /**
      * The filesystem instance.
@@ -165,10 +165,10 @@ class FileLoader implements LoaderContract
         // Finally, we can simply check if this file exists. We will also cache
         // the value in an array so we don't have to go through this process
         // again on subsequent checks for the existing of the data file.
-        $envFile = $this->getDirectorySeparator(
+        $envFile = $this->normalizeDirectorySeparator(
             str_replace('//', '/', sprintf('%s/%s/%s', $path, $environment, $file))
         );
-        $file    = $this->getDirectorySeparator(
+        $file    = $this->normalizeDirectorySeparator(
             str_replace('//', '/', sprintf('%s/%s', $path, $file))
         );
 
@@ -279,14 +279,14 @@ class FileLoader implements LoaderContract
     protected function getPath($namespace, $file)
     {
         if (isset($this->hints[$namespace])) {
-            return $this->getDirectorySeparator($this->hints[$namespace]);
+            return $this->normalizeDirectorySeparator($this->hints[$namespace]);
         }
 
         foreach ($this->directories as $directory) {
-            $file = $this->getDirectorySeparator($directory . '/' . $file);
+            $file = $this->normalizeDirectorySeparator($directory . '/' . $file);
 
             if ($this->files->has($file)) {
-                return $this->getDirectorySeparator($directory);
+                return $this->normalizeDirectorySeparator($directory);
             }
         }
     }
