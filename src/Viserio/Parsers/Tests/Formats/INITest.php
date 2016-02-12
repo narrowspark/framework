@@ -70,21 +70,6 @@ value=5
         $this->parser->parse('nonexistfile');
     }
 
-    public function testSupports()
-    {
-        $file = vfsStream::newFile('temp.ini')->at($this->root);
-
-        $this->assertTrue($this->parser->supports($file->url()));
-
-        $file = vfsStream::newFile('temp.ini.dist')->at($this->root);
-
-        $this->assertTrue($this->parser->supports($file->url()));
-
-        $file = vfsStream::newFile('temp.notsupported')->at($this->root);
-
-        $this->assertFalse($this->parser->supports($file->url()));
-    }
-
     public function testDump()
     {
         $dump = $this->parser->dump(['test' => ['value' => true, 'five' => 5]]);
