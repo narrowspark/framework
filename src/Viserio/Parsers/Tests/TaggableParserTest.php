@@ -4,9 +4,9 @@ namespace Viserio\Parsers\Formats\Tests\Formats;
 use org\bovigo\vfs\vfsStream;
 use Viserio\Filesystem\Filesystem;
 use Viserio\Parsers\Formats\Php;
-use Viserio\Parsers\Formats\Taggable;
+use Viserio\Parsers\TaggableParser;
 
-class TaggableTest extends \PHPUnit_Framework_TestCase
+class TaggableParserTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var \org\bovigo\vfs\vfsStreamDirectory
@@ -14,14 +14,14 @@ class TaggableTest extends \PHPUnit_Framework_TestCase
     private $root;
 
     /**
-     * @var \Viserio\Filesystem\Parser\TaggableParser
+     * @var \Viserio\Parsers\TaggableParser
      */
     private $format;
 
     public function setUp()
     {
         $this->root   = vfsStream::setup();
-        $this->parser = new TaggableParser(new PhpParser(new Filesystem()));
+        $this->parser = new TaggableParser(new Php());
     }
 
     public function testParseGroup()
