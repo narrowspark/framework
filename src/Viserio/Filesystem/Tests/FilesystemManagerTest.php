@@ -1,9 +1,9 @@
 <?php
 namespace Viserio\Filesystem\Tests;
 
-use Viserio\Filesystem\FilesystemManager;
-use Viserio\Filesystem\Adapters;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
+use Viserio\Filesystem\Adapters;
+use Viserio\Filesystem\FilesystemManager;
 
 class FilesystemManagerTest extends \PHPUnit_Framework_TestCase
 {
