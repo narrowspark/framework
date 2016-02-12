@@ -3,8 +3,8 @@ namespace Viserio\Filesystem\Adapters;
 
 use InvalidArgumentException;
 use League\Flysystem\WebDAV\WebDAVAdapter;
-use Sabre\DAV\Client;
 use Narrowspark\Arr\StaticArr as Arr;
+use Sabre\DAV\Client;
 
 class WebDavConnector extends AbstractConnector
 {

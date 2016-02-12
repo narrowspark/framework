@@ -3,8 +3,8 @@ namespace Viserio\Filesystem\Adapters;
 
 use InvalidArgumentException;
 use League\Flysystem\Vfs\VfsAdapter;
-use VirtualFileSystem\FileSystem;
 use Narrowspark\Arr\StaticArr as Arr;
+use VirtualFileSystem\FileSystem;
 
 class VfsConnector extends AbstractConnector
 {
