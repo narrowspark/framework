@@ -22,13 +22,13 @@
     </php>
 
     <testsuites>
-<!--         <testsuite name="Narrowspark Application Component Test Suite">
+        <testsuite name="Narrowspark Application Component Test Suite">
             <directory>./src/Viserio/Application/Tests</directory>
-        </testsuite> -->
-        <!-- <testsuite name="Narrowspark Bus Component Test Suite">
+        </testsuite>
+        <testsuite name="Narrowspark Bus Component Test Suite">
             <directory>./src/Viserio/Bus/Tests</directory>
-        </testsuite> -->
-<!--         <testsuite name="Narrowspark Cache Component Test Suite">
+        </testsuite>
+        <testsuite name="Narrowspark Cache Component Test Suite">
             <directory>./src/Viserio/Cache/Tests</directory>
         </testsuite>
         <testsuite name="Narrowspark Config Component Test Suite">
@@ -64,7 +64,7 @@
         <testsuite name="Narrowspark Filesystem Component Test Suite">
             <directory>./src/Viserio/Filesystem/Tests</directory>
         </testsuite>
-        <!-- <testsuite name="Narrowspark Hashing Component Test Suite">
+        <testsuite name="Narrowspark Hashing Component Test Suite">
             <directory>./src/Viserio/Hashing/Tests</directory>
         </testsuite>
         <testsuite name="Narrowspark Http Component Test Suite">
@@ -99,16 +99,16 @@
         </testsuite>
         <testsuite name="Narrowspark SaticalProxy Component Test Suite">
             <directory>./src/Viserio/SaticalProxy/Tests</directory>
-        </testsuite> -->
+        </testsuite>
         <testsuite name="Narrowspark Support Component Test Suite">
             <directory>./src/Viserio/Support/Tests</directory>
         </testsuite>
-        <!-- <testsuite name="Narrowspark Translator Component Test Suite">
+        <testsuite name="Narrowspark Translator Component Test Suite">
             <directory>./src/Viserio/Translator/Tests</directory>
         </testsuite>
         <testsuite name="Narrowspark View Component Test Suite">
             <directory>./src/Viserio/View/Tests</directory>
-        </testsuite> -->
+        </testsuite>
     </testsuites>
 
     <listeners>
@@ -125,8 +125,8 @@
     </filter>
 
     <logging>
-      <!--   <log type="coverage-text" target="php://stdout"/>
+        <log type="coverage-text" target="php://stdout"/>
         <log type="coverage-html" target="build/logs/report" lowUpperBound="35" highLowerBound="70"/>
-        <log type="coverage-clover" target="build/logs/coverage.xml"/> -->
+        <log type="coverage-clover" target="build/logs/coverage.xml"/>
     </logging>
 </phpunit>
