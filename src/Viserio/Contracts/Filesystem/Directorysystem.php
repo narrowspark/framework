@@ -47,13 +47,4 @@ interface Directorysystem
      * @return bool
      */
     public function cleanDirectory($dirname);
-
-    /**
-     * Determine if the given path is a directory.
-     *
-     * @param string $dirname
-     *
-     * @return bool
-     */
-    public function isDirectory($dirname);
 }

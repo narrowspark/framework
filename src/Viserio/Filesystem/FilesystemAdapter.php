@@ -201,28 +201,27 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
     }
 
     /**
-     * Create a directory.
-     *
-     * @param string    $path
-     * @param FlyConfig $config
-     *
-     * @return array|false
+     * {@inheritdoc}
      */
-    public function makeDirectory($path, FlyConfig $config)
+    public function createDirectory($path)
     {
-        return $this->driver->createDir($path, $config);
+        return $this->driver->createDir($path);
     }
 
     /**
-     * Recursively delete a directory.
-     *
-     * @param string $directory
-     *
-     * @return bool
+     * {@inheritdoc}
      */
     public function deleteDirectory($directory)
     {
         return $this->driver->deleteDir($directory);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function cleanDirectory($dirname)
+    {
+
     }
 
     /**

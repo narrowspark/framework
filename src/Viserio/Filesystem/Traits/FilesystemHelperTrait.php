@@ -54,6 +54,20 @@ trait FilesystemHelperTrait
     }
 
     /**
+     * Determine if the given path is a directory.
+     *
+     * @param string $dirname
+     *
+     * @return bool
+     */
+    public function isDirectory($dirname)
+    {
+        $dirname = $this->normalizeDirectorySeparator($dirname);
+
+        return is_dir($dirname);
+    }
+
+    /**
      * Fix directory separators for windows and linux
      *
      * @param string|array $paths

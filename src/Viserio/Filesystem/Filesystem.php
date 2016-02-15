@@ -340,16 +340,6 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract, Direct
     }
 
     /**
-     * {@inheritdoc}
-     */
-    public function isDirectory($dirname)
-    {
-        $dirname = $this->normalizeDirectorySeparator($dirname);
-
-        return is_dir($dirname);
-    }
-
-    /**
      * Parse the given visibility value.
      *
      * @param string      $path
