@@ -221,7 +221,6 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
      */
     public function cleanDirectory($dirname)
     {
-
     }
 
     /**
