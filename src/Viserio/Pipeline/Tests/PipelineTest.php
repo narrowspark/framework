@@ -65,7 +65,7 @@ class PipelineTest extends \PHPUnit_Framework_TestCase
      */
     public function testPipelineThrowsExceptionOnResolveWithoutContainer()
     {
-        (new Pipeline)->send('data')
+        (new Pipeline())->send('data')
             ->through('PipelineTestPipeOne')
             ->then(function ($piped) {
                 return $piped;
@@ -80,7 +80,7 @@ class PipelineTest extends \PHPUnit_Framework_TestCase
             ->setContainer($this->container)
             ->send('foo')
             ->through([
-                [new PipelineTestParameterPipe, 'one', 'two'],
+                [new PipelineTestParameterPipe(), 'one', 'two'],
             ])
             ->then(function ($piped) {
                 return $piped;
