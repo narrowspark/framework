@@ -29,9 +29,9 @@ trait ContainerAwareTrait
     /**
      * Get the container.
      *
-     * @return \Interop\Container\ContainerInterface
-     *
      * @throws \RuntimeException
+     *
+     * @return \Interop\Container\ContainerInterface
      */
     public function getContainer()
     {
