@@ -26,6 +26,7 @@ class ObjectDefinition extends NamedDefinition implements ObjectDefinitionInterf
      * @var MethodCallInterface[]
      */
     private $methodCalls = [];
+
     /**
      * @param string $identifier
      * @param string $className
@@ -35,6 +36,7 @@ class ObjectDefinition extends NamedDefinition implements ObjectDefinitionInterf
         parent::__construct($identifier);
         $this->className = $className;
     }
+
     /**
      * @param string|number|bool|array|ReferenceInterface $argument
      *
@@ -43,8 +45,10 @@ class ObjectDefinition extends NamedDefinition implements ObjectDefinitionInterf
     public function addConstructorArgument($argument)
     {
         $this->constructorArguments[] = $argument;
+
         return $this;
     }
+
     /**
      * Set constructor arguments. This method take as many parameters as necessary.
      *
@@ -56,21 +60,25 @@ class ObjectDefinition extends NamedDefinition implements ObjectDefinitionInterf
     public function setConstructorArguments($argument)
     {
         $this->constructorArguments = func_get_args();
+
         return $this;
     }
+
     /**
      * Set a value to assign to a property.
      *
-     * @param string $propertyName Name of the property to set.
-     * @param string|number|bool|array|ReferenceInterface $value Can be a scalar value or a reference to another entry.
+     * @param string                                      $propertyName Name of the property to set.
+     * @param string|number|bool|array|ReferenceInterface $value        Can be a scalar value or a reference to another entry.
      *
      * @return $this
      */
     public function addPropertyAssignment($propertyName, $value)
     {
         $this->propertyAssignments[] = new PropertyAssignment($propertyName, $value);
+
         return $this;
     }
+
     /**
      * Set a method to be called after instantiating the class.
      *
@@ -87,8 +95,10 @@ class ObjectDefinition extends NamedDefinition implements ObjectDefinitionInterf
         $arguments = func_get_args();
         array_shift($arguments);
         $this->methodCalls[] = new MethodCall($methodName, $arguments);
+
         return $this;
     }
+
     /**
      * @return string
      */
@@ -96,6 +106,7 @@ class ObjectDefinition extends NamedDefinition implements ObjectDefinitionInterf
     {
         return $this->className;
     }
+
     /**
      * @return array
      */
@@ -103,6 +114,7 @@ class ObjectDefinition extends NamedDefinition implements ObjectDefinitionInterf
     {
         return $this->constructorArguments;
     }
+
     /**
      * @return PropertyAssignmentInterface[]
      */
@@ -110,6 +122,7 @@ class ObjectDefinition extends NamedDefinition implements ObjectDefinitionInterf
     {
         return $this->propertyAssignments;
     }
+
     /**
      * @return MethodCallInterface[]
      */

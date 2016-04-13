@@ -17,7 +17,7 @@ class PropertyAssignment implements PropertyAssignmentInterface
     private $value;
 
     /**
-     * @param string $propertyName
+     * @param string                                      $propertyName
      * @param string|number|bool|array|ReferenceInterface $value
      */
     public function __construct($propertyName, $value)

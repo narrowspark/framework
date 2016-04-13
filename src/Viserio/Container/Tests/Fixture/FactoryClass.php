@@ -7,10 +7,12 @@ class FactoryClass
     {
         return 'Hello';
     }
+
     public function returnsParameters($param1, $param2)
     {
         return $param1 . $param2;
     }
+
     public static function staticCreate()
     {
         return 'Hello';
