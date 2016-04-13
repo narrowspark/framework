@@ -36,6 +36,7 @@
         "cache/taggable-cache"                               : "^0.3",
         "classpreloader/classpreloader"                      : "^3.0",
         "container-interop/container-interop"                : "^1.1",
+        "ocramius/proxy-manager"                             : "^1.0",
         "cekurte/environment"                                : "^0.1",
         "danielstjules/stringy"                              : "^2.2",
         "filp/whoops"                                        : "^2.0",
@@ -52,6 +53,7 @@
         "psr/log"                                            : "^1.0",
         "psr/http-message"                                   : "^1.0",
         "psy/psysh"                                          : "^0.6",
+        "roave/better-reflection"                            : "^1.0.1",
         "stecman/symfony-console-completion"                 : "^0.6",
         "symfony/console"                                    : "^2.8|^3.0",
         "symfony/debug"                                      : "^2.8|^3.0",
@@ -97,8 +99,8 @@
         "psr/cache-implementation"                           : "^1.0",
         "psr/http-message"                                   : "~1.0",
         "psr/http-message-implementation"                    : "^1.0",
-        "psr/log-implementation"                             : "^1.0"
-        "psr/http-message-implementation"                    : "1.0"
+        "psr/log-implementation"                             : "^1.0",
+        "psr/http-message-implementation"                    : "^1.0"
     },
     "require-dev": {
         "aws/aws-sdk-php"                                    : "^3.0",
