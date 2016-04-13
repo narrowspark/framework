@@ -30,7 +30,7 @@ trait DelegateTrait
      *
      * @param string $alias
      *
-     * @return boolean
+     * @return bool
      */
     public function hasInDelegate($alias)
     {
@@ -39,8 +39,10 @@ trait DelegateTrait
                 return true;
             }
         }
+
         return false;
     }
+
     /**
      * Attempt to get a service from the stack of delegated backup containers.
      *

@@ -241,7 +241,7 @@ class Connection implements ConnectionContract
      * @param \Viserio\Database\Exception\ConnectException $exception
      * @param string                                       $query
      * @param $bindings
-     * @param \Closure                                     $callback
+     * @param \Closure $callback
      *
      * @return mixed
      */

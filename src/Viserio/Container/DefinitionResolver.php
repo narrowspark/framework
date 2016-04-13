@@ -31,9 +31,9 @@ class DefinitionResolver
      * @param DefinitionInterface $definition
      *
      * @throws UnsupportedDefinition
-     * @throws EntryNotFound A dependency was not found.
-     * @return mixed
+     * @throws EntryNotFound         A dependency was not found.
      *
+     * @return mixed
      */
     public function resolveDefinition(DefinitionInterface $definition)
     {
@@ -74,9 +74,10 @@ class DefinitionResolver
                 $arguments = array_map([$this, 'resolveReference'], $arguments);
 
                 if (is_string($factory)) {
-                    return call_user_func_array($factory. '::' .$methodName, $arguments);
+                    return call_user_func_array($factory . '::' . $methodName, $arguments);
                 } elseif ($factory instanceof ReferenceInterface) {
                     $factory = $this->container->get($factory->getTarget());
+
                     return call_user_func_array([$factory, $methodName], $arguments);
                 }
 
@@ -91,7 +92,9 @@ class DefinitionResolver
      * Resolve a variable that can be a reference.
      *
      * @param ReferenceInterface|mixed $value
+     *
      * @throws EntryNotFound The dependency was not found.
+     *
      * @return mixed
      */
     private function resolveReference($value)

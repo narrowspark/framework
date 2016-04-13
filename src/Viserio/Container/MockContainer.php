@@ -24,10 +24,10 @@ class MockContainer extends Container
         }
 
         if (!array_key_exists($id, $this->mockedServices)) {
-            $this->mockedServices['mock::'.$id] = call_user_func_array(['Mockery', 'mock'], $arguments);
+            $this->mockedServices['mock::' . $id] = call_user_func_array(['Mockery', 'mock'], $arguments);
         }
 
-        return $this->mockedServices['mock::'.$id];
+        return $this->mockedServices['mock::' . $id];
     }
 
     /**
@@ -37,7 +37,7 @@ class MockContainer extends Container
      */
     public function unmock($id)
     {
-        unset($this->mockedServices['mock::'.$this->normalize($id)]);
+        unset($this->mockedServices['mock::' . $this->normalize($id)]);
     }
 
     /**
@@ -59,8 +59,8 @@ class MockContainer extends Container
     {
         $alias = $this->normalize($alias);
 
-        if (isset($this->mockedServices['mock::'.$alias])) {
-            return $this->mockedServices['mock::'.$alias];
+        if (isset($this->mockedServices['mock::' . $alias])) {
+            return $this->mockedServices['mock::' . $alias];
         }
 
         if ($this->hasInDelegate($alias)) {
@@ -87,7 +87,7 @@ class MockContainer extends Container
 
         if (
             isset($this->keys[$alias]) ||
-            isset($this->mockedServices['mock::'.$alias]) ||
+            isset($this->mockedServices['mock::' . $alias]) ||
             isset($this->interopDefinitions[$alias])
         ) {
             return true;
@@ -115,7 +115,7 @@ class MockContainer extends Container
                 $this->frozen[$alias],
                 $this->values[$alias],
                 $this->keys[$alias],
-                $this->mockedServices['mock::'.$alias]
+                $this->mockedServices['mock::' . $alias]
             );
         }
     }

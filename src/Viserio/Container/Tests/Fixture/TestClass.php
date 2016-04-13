@@ -14,7 +14,7 @@ class TestClass
         $this->constructorParam1 = $param1;
         $this->constructorParam2 = $param2;
     }
-    
+
     public function setSomething($param1, $param2)
     {
         $this->setterParam1 = $param1;

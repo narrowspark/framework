@@ -1,7 +1,7 @@
 <?php
 namespace Viserio\Container\Exception;
 
-/**
+/*
  * Narrowspark - a PHP 5 framework.
  *
  * @author      Daniel Bannert <info@anolilab.de>
