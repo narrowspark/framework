@@ -1,6 +1,7 @@
 <?php
 namespace Viserio\Hashing;
 
+use InvalidArgumentException;
 use RandomLib\Generator as RandomLib;
 use Viserio\Contracts\Hashing\Generator as HashContract;
 use Viserio\Support\Helper;
@@ -13,12 +14,12 @@ class Generator implements HashContract
      * @var array
      */
     protected $registeredMethods = [
-        'pbkdf2' => '$pbkdf2$',
-        'bcrypt' => '$2y$',
+        'pbkdf2'    => '$pbkdf2$',
+        'bcrypt'    => '$2y$',
         'bcrypt.bc' => '$2a$',
-        'sha256' => '$5$',
-        'sha512' => '$6$',
-        'drupal' => '$S$',
+        'sha256'    => '$5$',
+        'sha512'    => '$6$',
+        'drupal'    => '$S$',
     ];
 
     /**
@@ -109,7 +110,7 @@ class Generator implements HashContract
     public function make($str, $method = 'bcrypt')
     {
         if (!isset($this->registeredMethods[$method])) {
-            throw new \InvalidArgumentException('Method {$method} dont exist.');
+            throw new InvalidArgumentException('Method {$method} dont exist.');
         }
 
         $hash = '';
@@ -248,12 +249,12 @@ class Generator implements HashContract
 
         // Step 1. Check dkLen.
         if ($dkLen > (2 ^ 32 - 1) * $hLen) {
-            throw new \InvalidArgumentException('Derived key too long');
+            throw new InvalidArgumentException('Derived key too long');
         }
 
         for ($block = 1; $block <= $length; $block++) {
             // Initial hash for this block.
-            $iniBlock = $hashBlock = hash_hmac($hashalgo, $salt.pack('N', $block), $password, true);
+            $iniBlock = $hashBlock = hash_hmac($hashalgo, $salt . pack('N', $block), $password, true);
             // Do block iterations.
             for ($i = 1; $i < $count; $i++) {
                 // XOR iteration.
@@ -276,10 +277,10 @@ class Generator implements HashContract
     {
         $hex = bin2hex($this->randomLib->generate(32));
         $str = substr($hex, 0, 16);
-        $str .= '-'.substr($hex, 16, 8);
-        $str .= '-'.substr($hex, 24, 8);
-        $str .= '-'.substr($hex, 32, 8);
-        $str .= '-'.substr($hex, 40, 24);
+        $str .= '-' . substr($hex, 16, 8);
+        $str .= '-' . substr($hex, 24, 8);
+        $str .= '-' . substr($hex, 32, 8);
+        $str .= '-' . substr($hex, 40, 24);
 
         return $str;
     }
@@ -468,14 +469,14 @@ class Generator implements HashContract
         $setting = substr($setting, 0, 12);
         $salt = substr($setting, 4, 8);
         $count = 1 << strpos($this->charsets['itoa64'], $setting[3]);
-        $hash = hash($method, $salt.$password, true);
+        $hash = hash($method, $salt . $password, true);
 
         do {
-            $hash = hash($method, $hash.$password, true);
+            $hash = hash($method, $hash . $password, true);
         } while (--$count);
 
         $len = strlen($hash);
-        $output = $setting.$this->b64Encode($hash, $len);
+        $output = $setting . $this->b64Encode($hash, $len);
         $expected = 12 + ceil((8 * $len) / 6);
 
         return substr($output, 0, $expected);

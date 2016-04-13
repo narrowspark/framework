@@ -16,38 +16,28 @@
 [![Quality Score](https://img.shields.io/scrutinizer/g/narrowspark/framework.svg?style=flat-square)](https://scrutinizer-ci.com/g/narrowspark/framework/code-structure/master)
 [![Build Status](https://api.travis-ci.org/narrowspark/framework.svg?branch=master&style=flat-square)](https://travis-ci.org/narrowspark/framework)
 [![Dependency Status](https://www.versioneye.com/user/projects/5559f43153da1f2ba400042c/badge.svg?style=flat)](https://www.versioneye.com/user/projects/5559f43153da1f2ba400042c)
-[![Coverage Status](https://img.shields.io/coveralls/narrowspark/framework/master.svg?style=flat-square)](https://coveralls.io/r/narrowspark/framework)
+[![Scrutinizer Coverage](https://img.shields.io/scrutinizer/coverage/g/narrowspark/framework/master.svg?style=flat-square)](https://scrutinizer-ci.com/g/narrowspark/framework)
 
 ## Develop
 
 [![Quality Score](https://img.shields.io/scrutinizer/g/narrowspark/framework/develop.svg?style=flat-square)](https://scrutinizer-ci.com/g/narrowspark/framework/code-structure/develop)
 [![Build Status](https://travis-ci.org/narrowspark/framework.svg?branch=develop&style=flat-square)](https://travis-ci.org/narrowspark/framework)
 [![Dependency Status](https://www.versioneye.com/user/projects/5559f479c0f259745500008b/badge.svg?style=flat)](https://www.versioneye.com/user/projects/5559f479c0f259745500008b)
-[![Coverage Status](https://img.shields.io/coveralls/narrowspark/framework/develop.svg?style=flat-square)](https://coveralls.io/r/narrowspark/framework)
+[![Scrutinizer Coverage](https://img.shields.io/scrutinizer/coverage/g/narrowspark/framework/develop.svg?style=flat-square)](https://scrutinizer-ci.com/g/narrowspark/framework)
 
 ## Official Documentation
 
 Documentation for the entire framework can be found on the [Narrowspark website](http://narrowspark.de).
 
-## Contributing
-
-All code contributions - including those of people having commit access -
-must go through a pull request and approved by a core developer before being
-merged. This is to ensure proper review of all the code.
-
-Fork the project, create a feature branch, and send us a pull request.
-
-To ensure a consistent code base, you should make sure the code follows
-the [Coding Standards](http://symfony.com/doc/current/contributing/code/standards.html)
-which we borrowed from Symfony.
-
-The easiest way to do make sure you're following the coding standard is to run `vendor/bin/php-cs-fixer fix` before committing.
+## [Contributing](CONTRIBUTING.md)
 
 If you would like to help take a look at the [list of issues](http://github.com/narrowspark/framework/issues).
 
 ## Authors
 
 Daniel Bannert - <d.bannert@anolilab.de> - <http://www.anolilab.de><br />
+
+> **Note:** Please note that this project is released with a Contributor Code of Conduct. By participating in this project you agree to abide by its terms.
 
 ### License
 

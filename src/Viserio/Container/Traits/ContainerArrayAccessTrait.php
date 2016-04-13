@@ -1,10 +1,8 @@
 <?php
 namespace Viserio\Container\Traits;
 
-<<<<<<< HEAD
 use Closure;
 
-=======
 /**
  * ContainerArrayAccessTrait.
  *
@@ -12,15 +10,14 @@ use Closure;
  *
  * @since   0.9.6
  */
->>>>>>> develop
 trait ContainerArrayAccessTrait
 {
     /**
      * {@inheritdoc}
      */
-    public function set(string $alias, mixed $concrete)
+    public function set($alias, $concrete)
     {
-        return $this->bind($alias, $concrete);
+        $this->offsetSet($alias, $concrete);
     }
 
     /**

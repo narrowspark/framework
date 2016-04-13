@@ -126,7 +126,7 @@ class Redirect
     {
         switch ($this->mode) {
             case 'redirect':
-                header('Location: '.$this->location);
+                header('Location: ' . $this->location);
                 break;
 
             case 'named':
@@ -162,6 +162,6 @@ class Redirect
             return true;
         }
 
-        throw new \Exception('Invalid callback: '.$callback);
+        throw new \Exception('Invalid callback: ' . $callback);
     }
 }

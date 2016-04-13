@@ -18,34 +18,38 @@
         }
     ],
     "require": {
-        "php"                         : ">=5.6",
-        "viserio/support"             : "self.version",
-        "viserio/cotracts"            : "self.version"
+        "php"                             : "^5.6|^7.0",
+        "viserio/cotracts"                : "self.version",
+        "viserio/parsers"                 : "self.version",
+        "viserio/support"                 : "self.version"
     },
     "require-dev": {
-        "fabpot/php-cs-fixer"         : "~1.10.1",
-        "phpunit/phpunit"             : "~5.0.6",
-        "viserio/filesystem"          : "self.version"
+        "phpunit/phpunit"                 : "~5.1.3",
+        "mikey179/vfsStream"              : "^1.6",
+        "narrowspark/php-cs-fixer-config" : "~1.1.5",
+        "narrowspark/testing-helper"      : "~1.5",
+        "viserio/filesystem"              : "self.version"
     },
     "autoload": {
         "psr-4": {
-            "Viserio\\Config\\"       : ""
+            "Viserio\\Config\\"           : ""
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Viserio\\Config\\Tests\\": "Tests/"
+            "Viserio\\Config\\Tests\\"    : "Tests/"
         }
     },
     "extra": {
         "branch-alias": {
-            "dev-master"              : "0.10.0-dev"
+            "dev-master"                  : "1.0-dev"
         }
     },
     "suggest": {
-        "yosymfony/toml"              : "Narrowspark has support for TOML config",
-        "symfony/yaml"                : "Narrowspark has support for YML config"
+        "yosymfony/toml"                  : "Narrowspark config has support for TOML config",
+        "symfony/yaml"                    : "Narrowspark config has support for YML config",
+        "viserio/filesystem"              : "Required to use bind or cascadePackage function (0.10)"
     },
-    "minimum-stability"               : "dev",
-    "prefer-stable"                   : true
+    "minimum-stability"                   : "dev",
+    "prefer-stable"                       : true
 }

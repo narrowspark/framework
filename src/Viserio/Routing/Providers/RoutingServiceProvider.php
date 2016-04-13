@@ -44,7 +44,7 @@ class RoutingServiceProvider extends ServiceProvider
 
     public function boot()
     {
-        require $this->app->path().'/Http/routes.php';
+        require $this->app->path() . '/Http/routes.php';
     }
 
     /**

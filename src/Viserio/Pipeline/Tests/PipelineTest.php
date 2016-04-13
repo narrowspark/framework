@@ -1,24 +1,33 @@
 <?php
 namespace Viserio\Pipeline\Tests;
 
-use Mockery as Mock;
+use Narrowspark\TestingHelper\ArrayContainer;
 use Viserio\Pipeline\Pipeline;
+use Viserio\Pipeline\Tests\Fixture\PipelineTestParameterPipe;
+use Viserio\Pipeline\Tests\Fixture\PipelineTestPipeOne;
 
 class PipelineTest extends \PHPUnit_Framework_TestCase
 {
-    public function tearDown()
+    protected $container;
+
+    public function setUp()
     {
-        Mock::close();
+        $this->container = new ArrayContainer([
+            'PipelineTestPipeOne'       => new PipelineTestPipeOne(),
+            'PipelineTestParameterPipe' => new PipelineTestParameterPipe(),
+        ]);
     }
 
     public function testPipelineBasicUsage()
     {
         $pipeTwo = function ($piped, $next) {
             $_SERVER['__test.pipe.two'] = $piped;
+
             return $next($piped);
         };
 
-        $result = (new Pipeline($this->getMockContainer(new PipelineTestPipeOne)))
+        $result = (new Pipeline())
+            ->setContainer($this->container)
             ->send('foo')
             ->through(['PipelineTestPipeOne', $pipeTwo])
             ->then(function ($piped) {
@@ -37,9 +46,42 @@ class PipelineTest extends \PHPUnit_Framework_TestCase
     {
         $parameters = ['one', 'two'];
 
-        $result = (new Pipeline($this->getMockContainer(new PipelineTestParameterPipe)))
+        $result = (new Pipeline())
+            ->setContainer($this->container)
             ->send('foo')
-            ->through('PipelineTestParameterPipe:'.implode(',', $parameters))
+            ->through('PipelineTestParameterPipe:' . implode(',', $parameters))
+            ->then(function ($piped) {
+                return $piped;
+            });
+
+        $this->assertEquals('foo', $result);
+        $this->assertEquals($parameters, $_SERVER['__test.pipe.parameters']);
+
+        unset($_SERVER['__test.pipe.parameters']);
+    }
+
+    /**
+     * @expectedException \RuntimeException
+     */
+    public function testPipelineThrowsExceptionOnResolveWithoutContainer()
+    {
+        (new Pipeline())->send('data')
+            ->through('PipelineTestPipeOne')
+            ->then(function ($piped) {
+                return $piped;
+            });
+    }
+
+    public function testPipelineUsageWithArrayParameters()
+    {
+        $parameters = ['one', 'two'];
+
+        $result = (new Pipeline())
+            ->setContainer($this->container)
+            ->send('foo')
+            ->through([
+                [new PipelineTestParameterPipe(), 'one', 'two'],
+            ])
             ->then(function ($piped) {
                 return $piped;
             });
@@ -52,7 +94,9 @@ class PipelineTest extends \PHPUnit_Framework_TestCase
 
     public function testPipelineViaChangesTheMethodBeingCalledOnThePipes()
     {
-        $result = (new Pipeline($this->getMockContainer(new PipelineTestPipeOne)))->send('data')
+        $result = (new Pipeline())
+            ->setContainer($this->container)
+            ->send('data')
             ->through('PipelineTestPipeOne')
             ->via('differentMethod')
             ->then(function ($piped) {
@@ -60,39 +104,5 @@ class PipelineTest extends \PHPUnit_Framework_TestCase
             });
 
         $this->assertEquals('data', $result);
-    }
-
-    public function getMockContainer($class)
-    {
-        $mock = Mock::mock('\Interop\Container\ContainerInterface');
-        $mock->shouldReceive('get')
-            ->andReturn($class)
-            ->mock();
-
-        return $mock;
-    }
-}
-
-
-class PipelineTestPipeOne
-{
-    public function handle($piped, $next)
-    {
-        $_SERVER['__test.pipe.one'] = $piped;
-        return $next($piped);
-    }
-
-    public function differentMethod($piped, $next)
-    {
-        return $next($piped);
-    }
-}
-
-class PipelineTestParameterPipe
-{
-    public function handle($piped, $next, $parameter1 = null, $parameter2 = null)
-    {
-        $_SERVER['__test.pipe.parameters'] = [$parameter1, $parameter2];
-        return $next($piped);
     }
 }

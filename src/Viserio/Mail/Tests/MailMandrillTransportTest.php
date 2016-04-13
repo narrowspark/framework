@@ -23,8 +23,8 @@ class MailMandrillTransportTest extends \PHPUnit_Framework_TestCase
                         'key'         => 'testkey',
                         'raw_message' => $message->toString(),
                         'async'       => false,
-                        'to'          => ['me@example.com', 'you@example.com']
-                    ]
+                        'to'          => ['me@example.com', 'you@example.com'],
+                    ],
                 ])
             );
 

@@ -84,7 +84,7 @@ class ApplicationServiceProvider extends ServiceProvider
         //Load config files
         foreach ($this->config as $file => $setting) {
             $this->app->get('config')->bind(
-                $file.'.'.$setting['ext'],
+                $file . '.' . $setting['ext'],
                 $setting['group'],
                 null,
                 null

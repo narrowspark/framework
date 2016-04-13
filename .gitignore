@@ -1,8 +1,9 @@
-*.phar
-/vendor
-/report
+.DS_Store
+.php_cs.cache
+
 composer.phar
 composer.lock
-.php_cs.cache
-.DS_Store
 Thumbs.db
+
+/build/logs
+/vendor

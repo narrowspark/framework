@@ -1,20 +1,17 @@
 <?php
 namespace Viserio\View;
 
+use ArrayAccess;
+use BadMethodCallException;
+use Exception;
+use Throwable;
 use Viserio\Contracts\Support\Arrayable;
 use Viserio\Contracts\Support\Renderable;
 use Viserio\Contracts\View\Engine as EngineContract;
 use Viserio\Contracts\View\View as ViewContract;
 use Viserio\Support\Str;
 
-/**
- * View.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.5
- */
-class View implements \ArrayAccess, ViewContract
+class View implements ArrayAccess, ViewContract
 {
     /**
      * The view factory instance.
@@ -54,63 +51,42 @@ class View implements \ArrayAccess, ViewContract
     /**
      * Create a new view instance.
      *
-     * @param \Viserio\View\Factory          $factory
-     * @param \Viserio\Contracts\View\Engine $engine
-     * @param string                           $view
-     * @param string                           $path
-     * @param array                            $data
+     * @param \Viserio\View\Factory                      $factory
+     * @param \Viserio\Contracts\View\Engine             $engine
+     * @param string                                     $view
+     * @param string                                     $path
+     * @param array|\Viserio\Contracts\Support\Arrayable $data
      */
     public function __construct(Factory $factory, EngineContract $engine, $view, $path, $data = [])
     {
-        $this->view = $view;
-        $this->path = $path;
-        $this->engine = $engine;
+        $this->view    = $view;
+        $this->path    = $path;
+        $this->engine  = $engine;
         $this->factory = $factory;
 
-        $this->data = $data instanceof Arrayable ? $data->toArray() : (array) $data;
+        $this->data    = $data instanceof Arrayable ? $data->toArray() : (array) $data;
     }
 
     /**
      * Get the string contents of the view.
      *
-     * @param null|\Closure $callback
+     * @param callable|null $callback
      *
      * @return string
      */
-    public function render(\Closure $callback = null)
+    public function render(callable $callback = null)
     {
-        $contents = $this->getContents();
-        $response = isset($callback) ? $callback($this, $contents) : null;
+        try {
+            $contents = $this->getContents();
 
-        return $response ?: $contents;
-    }
+            $response = isset($callback) ? call_user_func($callback, $this, $contents) : null;
 
-    /**
-     * Get the evaluated contents of the view.
-     *
-     * @return string
-     */
-    protected function getContents()
-    {
-        return $this->engine->get($this->path, $this->gatherData());
-    }
-
-    /**
-     * Get the data bound to the view instance.
-     *
-     * @return array
-     */
-    protected function gatherData()
-    {
-        $data = array_merge($this->factory->getShared(), $this->data);
-
-        foreach ($data as $key => $value) {
-            if ($value instanceof Renderable) {
-                $data[$key] = $value->render();
-            }
+            return $response !== null ? $response : $contents;
+        } catch (Exception $exception) {
+            throw $exception;
+        } catch (Throwable $exception) {
+            throw $exception;
         }
-
-        return $data;
     }
 
     /**
@@ -164,16 +140,6 @@ class View implements \ArrayAccess, ViewContract
     public function getEngine()
     {
         return $this->engine;
-    }
-
-    /**
-     * Get the name of the view.
-     *
-     * @return string
-     */
-    public function name()
-    {
-        return $this->getName();
     }
 
     /**
@@ -324,7 +290,7 @@ class View implements \ArrayAccess, ViewContract
             return $this->with(Str::snake(substr($method, 4)), $parameters[0]);
         }
 
-        throw new \BadMethodCallException(sprintf('Method [%s] does not exist on view.', $method));
+        throw new BadMethodCallException(sprintf('Method [%s] does not exist on view.', $method));
     }
 
     /**
@@ -335,5 +301,33 @@ class View implements \ArrayAccess, ViewContract
     public function __toString()
     {
         return $this->render();
+    }
+
+    /**
+     * Get the evaluated contents of the view.
+     *
+     * @return string
+     */
+    protected function getContents()
+    {
+        return $this->engine->get($this->path, $this->gatherData());
+    }
+
+    /**
+     * Get the data bound to the view instance.
+     *
+     * @return array
+     */
+    protected function gatherData()
+    {
+        $data = array_merge($this->factory->getShared(), $this->data);
+
+        foreach ($data as $key => $value) {
+            if ($value instanceof Renderable) {
+                $data[$key] = $value->render();
+            }
+        }
+
+        return $data;
     }
 }

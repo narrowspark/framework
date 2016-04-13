@@ -1,8 +1,10 @@
 <?php
 namespace Viserio\Support;
 
-use Viserio\Container\ContainerAwareTrait;
-use Viserio\Contracts\Config\Manager as ConfigManager;
+use Closure;
+use RuntimeException;
+use Viserio\Contracts\Config\Manager as ConfigContract;
+use Viserio\Support\Traits\ContainerAwareTrait;
 
 abstract class Manager
 {
@@ -11,7 +13,7 @@ abstract class Manager
     /**
      * The config instance.
      *
-     * @var ConfigManager
+     * @var ConfigContract
      */
     protected $config;
 
@@ -39,11 +41,11 @@ abstract class Manager
     /**
      * Set a config manager
      *
-     * @param ConfigManager $config
+     * @param ConfigContract $config
      *
      * @return self
      */
-    public function setConfig(ConfigManager $config)
+    public function setConfig(ConfigContract $config)
     {
         $this->config = $config;
 
@@ -53,7 +55,7 @@ abstract class Manager
     /**
      * Get config
      *
-     * @return ConfigManager
+     * @return ConfigContract
      */
     public function getConfig()
     {
@@ -77,10 +79,10 @@ abstract class Manager
     /**
      * Builder.
      *
-     * @param string|null $driver The cache driver to use
+     * @param string|null $driver  The cache driver to use
      * @param array       $options
      *
-     * @throws CacheException
+     * @throws \RuntimeException
      *
      * @return mixed
      */
@@ -89,8 +91,8 @@ abstract class Manager
         $driver = $driver ?: $this->getDefaultDriver();
 
         if (!$this->hasDriver($driver)) {
-            throw new \Exception(
-                sprintf('The driver [%s] is not supported by the bundle.', $driver)
+            throw new RuntimeException(
+                sprintf('The driver [%s] is not supported.', $driver)
             );
         }
 
@@ -105,44 +107,6 @@ abstract class Manager
     }
 
     /**
-     * Create a new driver instance.
-     *
-     * @param string $driver
-     * @param array  $options
-     *
-     * @return mixed
-     */
-    protected function createDriver($driver, array $options = [])
-    {
-        $method = 'create'.Str::studly($driver).'Driver';
-        $options = array_filter($options);
-
-        // We'll check to see if a creator method exists for the given driver. If not we
-        // will check for a custom driver creator, which allows developers to create
-        // drivers using their own customized driver creator Closure to create it.
-        if (isset($this->customCreators[$driver])) {
-            return $this->callCustomCreator($driver, $options);
-        } elseif (method_exists($this, $method)) {
-            return empty($options) ? $this->$method() : $this->$method($options);
-        }
-
-        throw new \InvalidArgumentException(sprintf('Driver [%s] not supported.', $driver));
-    }
-
-    /**
-     * Call a custom driver creator.
-     *
-     * @param string $driver
-     * @param array  $options
-     *
-     * @return mixed
-     */
-    protected function callCustomCreator($driver, array $options = [])
-    {
-        return $this->customCreators[$driver]($options);
-    }
-
-    /**
      * Register a custom driver creator Closure.
      *
      * @param string   $driver
@@ -150,7 +114,7 @@ abstract class Manager
      *
      * @return $this
      */
-    public function extend($driver, \Closure $callback)
+    public function extend($driver, Closure $callback)
     {
         $this->customCreators[$driver] = $callback;
 
@@ -176,7 +140,9 @@ abstract class Manager
      */
     public function hasDriver($driver)
     {
-        return isset($this->supportedDrivers[$driver]);
+        return isset($this->supportedDrivers[$driver]) ||
+            in_array($driver, $this->supportedDrivers, true) ||
+            isset($this->customCreators[$driver]);
     }
 
     /**
@@ -190,5 +156,47 @@ abstract class Manager
     public function __call($method, $parameters)
     {
         return call_user_func_array([$this->driver(), $method], $parameters);
+    }
+
+    /**
+     * Create a new driver instance.
+     *
+     * @param string $driver
+     * @param array  $options
+     *
+     * @throws \RuntimeException
+     *
+     * @return mixed
+     */
+    protected function createDriver($driver, array $options)
+    {
+        $method = 'create' . Str::studly($driver) . 'Driver';
+        $options = array_filter($options);
+
+        // We'll check to see if a creator method exists for the given driver. If not we
+        // will check for a custom driver creator, which allows developers to create
+        // drivers using their own customized driver creator Closure to create it.
+        if (isset($this->customCreators[$driver])) {
+            return $this->callCustomCreator($driver, $options);
+        } elseif (method_exists($this, $method)) {
+            return empty($options) ? $this->$method() : $this->$method($options);
+        } elseif (isset($this->supportedDrivers[$driver]) && class_exists($this->supportedDrivers[$driver])) {
+            return new $this->supportedDrivers[$driver]();
+        }
+
+        throw new RuntimeException(sprintf('Driver [%s] not supported.', $driver));
+    }
+
+    /**
+     * Call a custom driver creator.
+     *
+     * @param string $driver
+     * @param array  $options
+     *
+     * @return mixed
+     */
+    protected function callCustomCreator($driver, array $options = [])
+    {
+        return $this->customCreators[$driver]($options);
     }
 }

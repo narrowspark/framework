@@ -1,10 +1,6 @@
 <?php
 namespace Viserio\Loop;
 
-use Viserio\Contracts\Loop\Loop as LoopContract;
-use Viserio\Loop\Adapters\EventLoop;
-use Viserio\Loop\Adapters\LibeventLoop;
-use Viserio\Loop\Adapters\SelectLoop;
 use Viserio\Support\Manager;
 
 class LoopManager extends Manager

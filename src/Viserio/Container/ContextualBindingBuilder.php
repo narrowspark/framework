@@ -2,6 +2,7 @@
 namespace Viserio\Container;
 
 use Viserio\Contracts\Container\ContextualBindingBuilder as ContextualBindingBuilderContract;
+use Viserio\Support\Traits\ContainerAwareTrait;
 
 class ContextualBindingBuilder implements ContextualBindingBuilderContract
 {

@@ -1,90 +1,60 @@
 language: php
 
-php:
-  - 5.6
-  - 7.0
-  - hhvm
-  - nightly
-
-env:
-  global:
-    - setup=basic
-  matrix:
-    - ADAPTER=MemoryStore
-    - ADAPTER=Apc
-    - ADAPTER=Memcached
-    - ADAPTER=Redis
-    - ADAPTER=Couchbase
-    - ADAPTER=MySQL
-    - ADAPTER=SQLite
-    - ADAPTER=PostgreSQL
-    - ADAPTER=Filesystem
-    - ADAPTER=Flysystem
-    - MONGO_VERSION=1.2.12
+sudo: false
 
 services:
-  - mongodb
-  - mysql
   - memcached
+  - mongodb
   - redis-server
 
 matrix:
   include:
+    - php: hhvm
+      env: SETUP=basic
     - php: 5.6
-      env: setup=lowest
+      env: SETUP=basic
     - php: 5.6
-      env: setup=stable
-  allow_failures:
-    - env: setup=lowest
-    - env: setup=stable
+      env: SETUP=stable
+    - php: 5.6
+      env: SETUP=basic ADAPTER=Libevent
+    - php: 5.6
+      env: SETUP=basic ADAPTER=Ev
     - php: 7.0
+      env: SETUP=lowest
     - php: 7.0
-      env: ADAPTER=Apc
+      env: SETUP=basic ADAPTER=Libuv
     - php: 7.0
-      env: ADAPTER=Memcached
-    - php: 7.0
-      env: ADAPTER=Redis
-    - php: 7.0
-      env: ADAPTER=Couchbase
-    - php: hhvm
-      env: ADAPTER=Couchbase
-    - php: hhvm
-      env: ADAPTER=PostgreSQL
-    - php: nightly
-    - php: hhvm
+      env: SETUP=basic ADAPTER=Uv
+    - php: 5.6
+      env: SETUP=basic CHECK_CS=true SEND_COVERAGE=true
   fast_finish: true
-
-sudo: false
 
 cache:
   directories:
     - $HOME/.composer/cache
 
 before_install:
-  - mysql -e 'create database narrowspark_test;'
-  - echo "extension = mongo.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
-  - composer self-update
-  - travis_retry composer install --prefer-source --no-interaction
-  - OCULAR_ENV='5.6'
+  - mkdir -p ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d
+  - if [ -f build/travis/php/$TRAVIS_PHP_VERSION.sh]; then ./build/travis/php/$TRAVIS_PHP_VERSION.sh; fi
+  - travis_retry composer self-update # Run allways composer update
+  - if [ "$TRAVIS_PHP_VERSION" != "hhvm" ]; then composer global require hirak/prestissimo; fi # Now composer can install components parallel
 
 install:
-  - curl -LS https://pecl.php.net/get/ev | tar -xz;
-    pushd ev-*;
-    phpize;
-    ./configure;
-    make;
-    make install;
-    popd;
-    echo "extension=ev.so" >> "$(php -r 'echo php_ini_loaded_file();')";
-  - curl http://get.sensiolabs.org/php-cs-fixer.phar -o php-cs-fixer.phar
-  - if [[ $setup = 'basic' ]]; then travis_retry composer install --no-interaction --prefer-source; fi
-  - if [[ $setup = 'stable' ]]; then travis_retry composer update --prefer-source --no-interaction --prefer-stable; fi
-  - if [[ $setup = 'lowest' ]]; then travis_retry composer update --prefer-source --no-interaction --prefer-lowest --prefer-stable; fi
+  - if [ "$SETUP" = 'basic' ]; then travis_retry composer install --no-interaction --prefer-source --no-progress --profile; fi
+  - if [ "$SETUP" = 'stable' ]; then travis_retry composer update --prefer-source --no-interaction --prefer-stable --no-progress --profile; fi
+  - if [ "$SETUP" = 'lowest' ]; then travis_retry composer update --prefer-source --no-interaction --prefer-lowest --prefer-stable --no-progress --profile; fi
+
+before_script:
+  - chmod a+x ./build/travis/all.sh && chmod a+x ./build/travis/php/5.x.sh && chmod a+x ./build/travis/php/7.x.sh && chmod a+x ./build/travis/php/hhvm.sh && chmod a+x ./build/travis/script.sh && chmod a+x ./build/travis/after_success.sh
+  - sleep 15
+  - mongo mydb_test --eval 'db.addUser("travis", "test");'
+  - ./build/travis/all.sh
+  - if [ "$TRAVIS_PHP_VERSION" = "5.6" ]; then ./build/travis/php/5.x.sh; fi
+  - if [ "$TRAVIS_PHP_VERSION" = "7.0" ]; then ./build/travis/php/7.x.sh; fi
+  - if [ "$TRAVIS_PHP_VERSION" = "hhvm" ]; then ./build/travis/php/hhvm.sh; fi
 
 script:
-  - php -n php-cs-fixer.phar fix -v --dry-run
-  - vendor/bin/phpunit --verbose --coverage-clover clover-data
-  - if [ $(phpenv version-name) = $OCULAR_ENV ]; then wget https://scrutinizer-ci.com/ocular.phar; php ocular.phar code-coverage:upload --format=php-clover clover-data; fi
+  - ./build/travis/script.sh
 
-after_script:
-  - php vendor/bin/coveralls -v
+after_success:
+  - ./build/travis/after_success.sh

@@ -68,7 +68,7 @@ class Mandrill extends Transport
      *
      * @return array
      */
-    protected function getToAddresses(\Swift_Mime_Message $message)
+    protected function getToAddresses(Swift_Mime_Message $message)
     {
         $to = [];
         if ($message->getTo()) {
@@ -85,7 +85,6 @@ class Mandrill extends Transport
 
         return $to;
     }
-
 
     /**
      * Get the API key being used by the transport.

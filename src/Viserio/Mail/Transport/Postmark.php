@@ -1,7 +1,6 @@
 <?php
 namespace Viserio\Mail\Transport;
 
-use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
 use Swift_Mime_Attachment;
 use Swift_Mime_Headers_DateHeader;
@@ -68,7 +67,7 @@ class Postmark extends Transport
         $convertedEmails = [];
         foreach ($emails as $email => $name) {
             $convertedEmails[] = $name
-            ? '"'.str_replace('"', '\\"', $name).sprintf('\ <%s>', $email)
+            ? '"' . str_replace('"', '\\"', $name) . sprintf('\ <%s>', $email)
             : $email;
         }
 

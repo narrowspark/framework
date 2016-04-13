@@ -1,4 +1,3 @@
-
 filter:
     paths: ['src/Viserio/*']
     excluded_paths: [src/Viserio/*/Tests/*, vendor/*]
@@ -10,7 +9,7 @@ checks:
         remove_php_closing_tag: true
         remove_trailing_whitespace: true
         fix_use_statements:
-            remove_unused: false
+            remove_unused: true
             preserve_multiple: false
             preserve_blanklines: true
             order_alphabetically: true
@@ -99,67 +98,6 @@ build:
             - 'composer install'
 
 tools:
-    external_code_coverage:      true
-    php_changetracking:          true
-
-    php_code_sniffer:
-        config:
-            standard:            PSR-2
-
-    php_cs_fixer:
-        enabled:                 true
-        extensions:
-            - php
-        config:
-            level:               all
-        filter:
-            excluded_paths:
-                - 'bin/*'
-                - 'vendor/*'
-                - 'src/Viserio/*/Tests/*'
-
-    php_loc:
-        enabled:                 true
-        extensions:
-            - php
-        command:                 phploc
-        filter:
-            excluded_paths:
-                - bin
-                - vendor
-                - src/Viserio/*/Tests/*
-
-    php_mess_detector:
-        enabled:                 true
-        extensions:
-            - php
-        command:                 phpmd
-        filter:
-            excluded_paths:
-                - 'bin/*'
-                - 'vendor/*'
-                - 'src/Viserio/*/Tests/*'
-    php_cpd:
-        enabled:                 false
-
-    php_analyzer:
-        enabled:                 true
-        extensions:
-            - php
-        filter:
-            excluded_paths:
-                - 'bin/*'
-                - 'vendor/*'
-                - 'src/Viserio/*/Tests/*'
-
-    php_pdepend:
-        enabled:                 true
-        suffixes:
-            - php
-        command:                 pdepend
-        excluded_dirs:
-            - bin
-            - vendor
-            - src/Viserio/*/Tests/*
-
-    sensiolabs_security_checker: true
+    external_code_coverage:
+      timeout: 600
+      runs: 3

@@ -1,17 +1,10 @@
 <?php
 namespace Viserio\Application;
 
+use Narrowspark\Arr\StaticArr as Arr;
 use Viserio\Contracts\Application\Environment as EnvironmentContract;
-use Viserio\Support\Arr;
 use Viserio\Support\Str;
 
-/**
- * EnvironmentDetector.
- *
- * @author  Daniel Bannert
- *
- * @since   0.8.0
- */
 class EnvironmentDetector implements EnvironmentContract
 {
     /**

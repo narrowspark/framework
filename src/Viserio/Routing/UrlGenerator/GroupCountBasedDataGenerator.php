@@ -69,7 +69,7 @@ class GroupCountBasedDataGenerator implements DataGeneratorContract
             $path = $parts[$matchIndex - 1];
 
             foreach ($parameters as $parameter) {
-                $path = $this->replaceOnce('([^/]+)', '{'.$parameter.'}', $path);
+                $path = $this->replaceOnce('([^/]+)', '{' . $parameter . '}', $path);
             }
 
             $path = rtrim($path, '()$~');

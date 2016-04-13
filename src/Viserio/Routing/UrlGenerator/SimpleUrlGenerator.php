@@ -1,6 +1,7 @@
 <?php
 namespace Viserio\Routing\UrlGenerator;
 
+use RuntimeException;
 use Symfony\Component\HttpFoundation\Request as SymfonyRequest;
 use Viserio\Contracts\Routing\DataGenerator as DataGeneratorContract;
 use Viserio\Contracts\Routing\UrlGenerator as UrlGeneratorContract;
@@ -46,7 +47,7 @@ class SimpleUrlGenerator implements UrlGeneratorContract
             $this->initialize();
         }
 
-        $alias = strpos($name, '@') === false ? '@'.$name : $name;
+        $alias = strpos($name, '@') === false ? '@' . $name : $name;
 
         $path = $this->routes[$alias];
 
@@ -56,17 +57,19 @@ class SimpleUrlGenerator implements UrlGeneratorContract
 
             foreach ($params as $param) {
                 if (!isset($parameters[$param])) {
-                    throw new \RuntimeException('Missing required parameter "'.$param.'". Optional parameters not currently supported');
+                    throw new RuntimeException(
+                        'Missing required parameter "' . $param . '". Optional parameters not currently supported'
+                    );
                 }
 
-                $path = str_replace('{'.$param.'}', $parameters[$param], $path);
+                $path = str_replace('{' . $param . '}', $parameters[$param], $path);
             }
         }
 
         if ($this->request) {
-            $path = $this->request->getBaseUrl().$path;
+            $path = $this->request->getBaseUrl() . $path;
             if ($absolute) {
-                $path = $this->request->getSchemeAndHttpHost().$path;
+                $path = $this->request->getSchemeAndHttpHost() . $path;
             }
         }
 
