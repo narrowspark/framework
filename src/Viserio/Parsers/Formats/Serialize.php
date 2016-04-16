@@ -2,9 +2,8 @@
 namespace Viserio\Parsers\Formats;
 
 use Exception;
-use Viserio\Contracts\Filesystem\Filesystem as FilesystemContract;
-use Viserio\Contracts\Parser\Exception\DumpException;
-use Viserio\Contracts\Parser\Exception\ParseException;
+use Viserio\Contracts\Parsers\Exception\DumpException;
+use Viserio\Contracts\Parsers\Exception\ParseException;
 use Viserio\Contracts\Parsers\Format as FormatContract;
 
 class Serialize implements FormatContract

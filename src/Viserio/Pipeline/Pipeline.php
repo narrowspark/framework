@@ -105,21 +105,29 @@ class Pipeline implements PipelineContract
     {
         return function ($stack, $stage) {
             return function ($traveler) use ($stack, $stage) {
+                $parameters = [$traveler, $stack];
+
+                if (is_array($pipe)) {
+                    $pipe = array_values($pipe);
+                    $parameters = array_merge($parameters, array_splice($pipe, 1));
+                    list($pipe) = $pipe;
+                }
+
                 // If the $stage is an instance of a Closure, we will just call it directly.
                 if ($stage instanceof Closure) {
-                    return call_user_func($stage, $traveler, $stack);
+                    return call_user_func_array($pipe, $parameters);
 
                 // Otherwise we'll resolve the stages out of the container and call it with
                 // the appropriate method and arguments, returning the results back out.
                 } elseif ($this->container) {
-                    list($name, $parameters) = $this->parseStageString($stage);
+                    list($name, $additional) = $this->parseStageString($stage);
 
-                    if ($this->container->has($name)) {
-                        $merge = array_merge([$traveler, $stack], $parameters);
+                    if ($this->getContainer()->has($name)) {
+                        $merge = array_merge($parameters, $additional);
 
                         return call_user_func_array(
                             [
-                                $this->container->get($name),
+                                $this->getContainer()->get($name),
                                 $this->method,
                             ],
                             $merge
@@ -134,6 +142,9 @@ class Pipeline implements PipelineContract
                     );
                 }
 
+                // If the pipe is already an object we'll just make a callable and pass it to
+                // the pipe as-is. There is no need to do any extra parsing and formatting
+                // since the object we're given was already a fully instantiated object.
                 return call_user_func_array(new $stage(), [$traveler, $stack]);
             };
         };
