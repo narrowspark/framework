@@ -3,6 +3,8 @@ namespace Viserio\View;
 
 use ArrayAccess;
 use BadMethodCallException;
+use Exception;
+use Throwable;
 use Viserio\Contracts\Support\Arrayable;
 use Viserio\Contracts\Support\Renderable;
 use Viserio\Contracts\View\Engine as EngineContract;
@@ -74,11 +76,17 @@ class View implements ArrayAccess, ViewContract
      */
     public function render(callable $callback = null)
     {
-        $contents = $this->getContents();
+        try {
+            $contents = $this->getContents();
 
-        $response = isset($callback) ? call_user_func($callback, $this, $contents) : null;
+            $response = isset($callback) ? call_user_func($callback, $this, $contents) : null;
 
-        return $response !== null ? $response : $contents;
+            return $response !== null ? $response : $contents;
+        } catch (Exception $exception) {
+            throw $exception;
+        } catch (Throwable $exception) {
+            throw $exception;
+        }
     }
 
     /**

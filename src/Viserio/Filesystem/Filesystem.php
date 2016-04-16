@@ -1,129 +1,102 @@
 <?php
 namespace Viserio\Filesystem;
 
-use ErrorException;
-use Symfony\Component\Finder\Finder;
-use Viserio\Contracts\Filesystem\FileNotFoundException;
-use Viserio\Filesystem\Traits\DirectoryTrait;
-use Viserio\Filesystem\Traits\MimetypeTrait;
+use FilesystemIterator;
+use League\Flysystem\Util\MimeType;
+use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
+use Symfony\Component\Filesystem\Exception\FileNotFoundException as SymfonyFileNotFoundException;
+use Symfony\Component\Filesystem\Exception\IOException as SymfonyIOException;
+use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
+use Viserio\Contracts\Filesystem\Directorysystem as DirectorysystemContract;
+use Viserio\Contracts\Filesystem\Exception\FileNotFoundException;
+use Viserio\Contracts\Filesystem\Exception\IOException;
+use Viserio\Contracts\Filesystem\Filesystem as FilesystemContract;
+use Viserio\Filesystem\Traits\FilesystemExtensionTrait;
+use Viserio\Filesystem\Traits\FilesystemHelperTrait;
+use Viserio\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
-class Filesystem
+class Filesystem extends SymfonyFilesystem implements FilesystemContract, DirectorysystemContract
 {
-    use DirectoryTrait, MimetypeTrait;
+    use NormalizePathAndDirectorySeparatorTrait,
+        FilesystemHelperTrait,
+        FilesystemExtensionTrait;
 
     /**
-     * Determine if a file exists.
-     *
-     * @param string $path
-     *
-     * @return bool
+     * @var array
      */
-    public function exists($path)
+    protected $permissions = [
+        'file' => [
+            'public'  => 0744,
+            'private' => 0700,
+        ],
+        'dir' => [
+            'public'  => 0755,
+            'private' => 0700,
+        ],
+    ];
+
+    /**
+     * {@inheritdoc}
+     */
+    public function has($path)
     {
-        return file_exists($path);
+        $path = $this->normalizeDirectorySeparator($path);
+
+        return $this->exists($path);
     }
 
     /**
-     * Get the contents of a file.
-     *
-     * @param string $path
-     *
-     * @throws \Viserio\Contracts\Filesystem\FileNotFoundException
-     *
-     * @return string
+     * {@inheritdoc}
      */
-    public function get($path)
+    public function read($path)
     {
-        if ($this->isFile($path)) {
+        $path = $this->normalizeDirectorySeparator($path);
+
+        if ($this->isFile($path) && $this->has($path)) {
             return file_get_contents($path);
         }
 
-        throw new FileNotFoundException(sprintf('File does not exist at path %s', $path));
+        throw new FileNotFoundException($path);
     }
 
     /**
-     * Get the returned value of a file.
-     *
-     * @param string $path
-     *
-     * @throws \Viserio\Contracts\Filesystem\FileNotFoundException
-     *
-     * @return string|null
+     * {@inheritdoc}
      */
-    public function getRequire($path)
+    public function write($path, $contents, array $config = [])
     {
-        if ($this->isFile($path)) {
-            return require $path;
+        $path = $this->normalizeDirectorySeparator($path);
+        $lock = isset($config['lock']) ? LOCK_EX : 0;
+
+        if (file_put_contents($path, $contents, $lock) === false) {
+            return false;
         }
 
-        throw new FileNotFoundException(sprintf('File does not exist at path %s', $path));
-    }
-
-    /**
-     * Require the given file once.
-     *
-     * @param string $file
-     *
-     * @return mixed
-     */
-    public function requireOnce($file)
-    {
-        require_once $file;
-    }
-
-    /**
-     * Write the contents of a file.
-     *
-     * @param string $path
-     * @param string $contents
-     * @param bool   $lock
-     *
-     * @return int
-     */
-    public function put($path, $contents, $lock = false)
-    {
-        return file_put_contents($path, $contents, $lock ? LOCK_EX : 0);
-    }
-
-    /**
-     * Prepend to a file.
-     *
-     * @param string $path
-     * @param string $data
-     *
-     * @return int
-     */
-    public function prepend($path, $data)
-    {
-        if ($this->exists($path)) {
-            return $this->put($path, $data . $this->get($path));
-        } else {
-            return $this->put($path, $data);
+        if (isset($config['visibility'])) {
+            $this->setVisibility($path, $config['visibility']);
         }
+
+        return true;
     }
 
     /**
-     * Append to a file.
-     *
-     * @param string $path
-     * @param string $data
-     *
-     * @return int
+     * {@inheritdoc}
      */
-    public function append($path, $data)
+    public function update($path, $contents, array $config = [])
     {
-        return file_put_contents($path, $data, FILE_APPEND);
+        $path = $this->normalizeDirectorySeparator($path);
+
+        return file_put_contents($path, $contents, FILE_APPEND);
+
+        // @TODO throw new FileNotFoundException($path);
     }
 
     /**
-     * Delete the file at a given path.
-     *
-     * @param string|array $paths
-     *
-     * @return bool
+     * {@inheritdoc}
      */
-    public function delete($paths)
+    public function getVisibility($path)
     {
+<<<<<<< HEAD
         $paths   = is_array($paths) ? $paths : func_get_args();
         $success = true;
 
@@ -136,237 +109,283 @@ class Filesystem
                 $success = false;
             }
         }
+=======
+        $path = $this->normalizeDirectorySeparator($path);
+>>>>>>> origin/develop
 
-        return $success;
+        clearstatcache(false, $path);
+        $permissions = octdec(substr(sprintf('%o', fileperms($path)), -4));
+
+        return $permissions & 0044 ?
+            FilesystemContract::VISIBILITY_PUBLIC :
+            FilesystemContract::VISIBILITY_PRIVATE;
     }
 
     /**
-     * Move a file to a new location.
-     *
-     * @param string $path
-     * @param string $target
-     *
-     * @return bool
+     * {@inheritdoc}
      */
-    public function move($path, $target)
+    public function setVisibility($path, $visibility)
     {
-        return rename($path, $target);
-    }
+        $path = $this->normalizeDirectorySeparator($path);
+        $visibility = $this->parseVisibility($visibility);
 
-    /**
-     * Copy a file to a new location.
-     *
-     * @param string $path
-     * @param string $target
-     *
-     * @return bool
-     */
-    public function copy($path, $target)
-    {
-        return copy($path, $target);
-    }
-
-    /**
-     * Extract the file extension from a file path.
-     *
-     * @param string $path
-     *
-     * @return string
-     */
-    public function extension($path)
-    {
-        return pathinfo($path, PATHINFO_EXTENSION);
-    }
-
-    /**
-     * Returns the filename without the extension from a file path.
-     *
-     * @param string      $path      The path string
-     * @param string|null $extension If specified, only that extension is cut off
-     *                               (may contain leading dot)
-     *
-     * @return string Filename without extension
-     */
-    public function withoutExtension($path, $extension = null)
-    {
-        if (null !== $extension) {
-            // remove extension and trailing dot
-            return rtrim(basename($path, $extension), '.');
-        }
-
-        return pathinfo($path, PATHINFO_FILENAME);
-    }
-
-    /**
-     * Changes the extension of a path string.
-     *
-     * @param string $path      The path string with filename.ext to change
-     * @param string $extension New extension (with or without leading dot)
-     *
-     * @return string The path string with new file extension
-     */
-    public function changeExtension($path, $extension)
-    {
-        $actualExtension = $this->extension($path);
-        $extension = ltrim($extension, '.');
-
-        // No extension for paths
-        if ('/' === substr($path, -1)) {
-            return $path;
-        }
-
-        // No actual extension in path
-        if (empty($actualExtension)) {
-            return $path . ('.' === substr($path, -1) ? '' : '.') . $extension;
-        }
-
-        return substr($path, 0, -strlen($actualExtension)) . $extension;
-    }
-
-    /**
-     * Get the file type of a given file.
-     *
-     * @param string $path
-     *
-     * @return string
-     */
-    public function type($path)
-    {
-        return filetype($path);
-    }
-
-    /**
-     * Get the mime-type of a given file.
-     *
-     * @param string $path
-     * @param bool   $withencoding
-     *
-     * @return string|false
-     */
-    public function mimeType($path, $withencoding = false)
-    {
-        if (function_exists('finfo_file')) {
-            $finfo = finfo_open($withencoding ? FILEINFO_MIME : FILEINFO_MIME_TYPE);
-            $mimetype = finfo_file($finfo, $path);
-            finfo_close($finfo);
-
-            return $mimetype;
-        }
-
-        return $this->fallbackMimeType($path);
-    }
-
-    /**
-     * Get the file size of a given file.
-     *
-     * @param string $path
-     *
-     * @return int
-     */
-    public function size($path)
-    {
-        return filesize($path);
-    }
-
-    /**
-     * Get the file's last modification time.
-     *
-     * @param string $path
-     *
-     * @return int
-     */
-    public function lastModified($path)
-    {
-        return filemtime($path);
-    }
-
-    /**
-     * Determine if the given path is writable.
-     *
-     * @param string $path
-     *
-     * @return bool
-     */
-    public function isWritable($path)
-    {
-        return is_writable($path);
-    }
-
-    /**
-     * Determine if the given path is a file.
-     *
-     * @param string $file
-     *
-     * @return bool
-     */
-    public function isFile($file)
-    {
-        return is_file($file);
-    }
-
-    /**
-     * Find path names matching a given pattern.
-     *
-     * @param string $pattern
-     * @param int    $flags
-     *
-     * @return array
-     */
-    public function glob($pattern, $flags = 0)
-    {
-        return glob($pattern, $flags);
-    }
-
-    /**
-     * Get an array of all files in a directory.
-     *
-     * @param string $directory
-     *
-     * @return array
-     */
-    public function files($directory)
-    {
-        $glob = glob($directory . '/*');
-
-        if ($glob === false) {
-            return [];
-        }
-
-        // To get the appropriate files, we'll simply glob the directory and filter
-        // out any "files" that are not truly files so we do not end up with any
-        // directories in our list, but only true files within the directory.
-        return array_filter($glob, function ($file) {
-            return filetype($file) === 'file';
-        });
-    }
-
-    /**
-     * Get all of the files from the given directory (recursive).
-     *
-     * @param string $directory
-     *
-     * @return array
-     */
-    public function allFiles($directory)
-    {
-        return iterator_to_array(Finder::create()->files()->in($directory), false);
-    }
-
-    /**
-     * Is file an image?
-     *
-     * @param string $path
-     *
-     * @return bool
-     */
-    public function isImage($path)
-    {
-        $data = @getimagesize($path);
-
-        if (!$data || !$data[0] || !$data[1]) {
+        try {
+            $this->chmod($path, $visibility);
+        } catch (SymfonyIOException $exception) {
             return false;
         }
 
         return true;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function copy($originFile, $targetFile, $override = false)
+    {
+        $from = $this->normalizeDirectorySeparator($originFile);
+        $to   = $this->normalizeDirectorySeparator($targetFile);
+
+        try {
+            return parent::copy($from, $to, $override);
+        } catch (SymfonyFileNotFoundException $exception) {
+            throw FileNotFoundException();
+        } catch (SymfonyIOException $exception) {
+            throw IOException();
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function move($from, $to)
+    {
+        $from = $this->normalizeDirectorySeparator($from);
+        $to   = $this->normalizeDirectorySeparator($to);
+
+        return rename($from, $to);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getSize($path)
+    {
+        $path = $this->normalizeDirectorySeparator($path);
+
+        return filesize($path);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getMimetype($path)
+    {
+        $path = $this->normalizeDirectorySeparator($path);
+
+        if (!$this->isFile($path) && !$this->has($path)) {
+            throw new FileNotFoundException($path);
+        }
+
+        $explode = explode('.', $path);
+
+        if ($extension = end($explode)) {
+            $extension = strtolower($extension);
+        }
+
+        return MimeType::detectByFileExtension($extension);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getTimestamp($path)
+    {
+        $path = $this->normalizeDirectorySeparator($path);
+
+        if (!$this->isFile($path) && !$this->has($path)) {
+            throw new FileNotFoundException($path);
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function delete($paths)
+    {
+        $paths = $this->normalizeDirectorySeparator($paths);
+
+        try {
+            $this->remove($paths);
+        } catch (SymfonyIOException $exception) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function files($directory)
+    {
+        $directory = $this->normalizeDirectorySeparator($directory);
+
+        return array_diff(scandir($directory), ['..', '.']);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function allFiles($directory)
+    {
+        $directory = $this->normalizeDirectorySeparator($directory);
+        $recursive = new RecursiveIteratorIterator(
+            new RecursiveDirectoryIterator($directory, RecursiveDirectoryIterator::SKIP_DOTS),
+            RecursiveIteratorIterator::SELF_FIRST,
+            RecursiveIteratorIterator::CATCH_GET_CHILD // Ignore "Permission denied"
+        );
+
+        $files = [];
+
+        foreach ($recursive as $file) {
+            if ($file->isDir()) {
+                continue;
+            }
+
+            $files[] = $file->getFilename();
+        }
+
+        return $files;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function createDirectory($dirname)
+    {
+        $dirname = $this->normalizeDirectorySeparator($dirname);
+
+        try {
+            $this->mkdir($dirname);
+        } catch (SymfonyIOException $exception) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function directories($directory)
+    {
+        $directory = $this->normalizeDirectorySeparator($directory);
+
+        $dirs = [];
+
+        foreach (glob($directory, GLOB_ONLYDIR) as $dir) {
+            $dirs[] = $this->normalizeDirectorySeparator($dir);
+        }
+
+        return $dirs;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function allDirectories($directory)
+    {
+        $directory = $this->normalizeDirectorySeparator($directory);
+        $recursive = new RecursiveIteratorIterator(
+            new RecursiveDirectoryIterator($directory, RecursiveDirectoryIterator::SKIP_DOTS),
+            RecursiveIteratorIterator::SELF_FIRST,
+            RecursiveIteratorIterator::CATCH_GET_CHILD // Ignore "Permission denied"
+        );
+
+        $dirs = [];
+
+        foreach ($recursive as $dir) {
+            if ($dir->isDir()) {
+                $dirs[] = $this->normalizeDirectorySeparator($dir->getRealpath());
+            }
+        }
+
+        return $dirs;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function deleteDirectory($dirname)
+    {
+        $dirname = $this->normalizeDirectorySeparator($dirname);
+
+        if (!$this->isDirectory($dirname)) {
+            return false;
+        }
+
+        try {
+            $this->remove($dirname);
+        } catch (SymfonyIOException $exception) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function cleanDirectory($dirname)
+    {
+        $dirname = $this->normalizeDirectorySeparator($dirname);
+
+        if (!$this->isDirectory($dirname)) {
+            return false;
+        }
+
+        $directories = new FilesystemIterator($dirname);
+
+        foreach ($directories as $dirname) {
+            @rmdir($dirname);
+        }
+
+        return true;
+    }
+
+    /**
+     * Parse the given visibility value.
+     *
+     * @param string      $path
+     * @param string|null $visibility
+     *
+     * @throws \InvalidArgumentException
+     *
+     * @return int
+     */
+    private function parseVisibility($path, $visibility)
+    {
+        $type = '';
+
+        if (is_file($path)) {
+            $type = 'file';
+        } elseif (is_dir($path)) {
+            $type = 'dir';
+        }
+
+        if ($visibility === null || $type === '') {
+            return;
+        }
+
+        switch ($visibility) {
+            case FilesystemContract::VISIBILITY_PUBLIC:
+                return $this->permissions[$type][$visibility];
+
+            case FilesystemContract::VISIBILITY_PRIVATE:
+                return $this->permissions[$type][$visibility];
+        }
+
+        throw new InvalidArgumentException('Unknown visibility: ' . $visibility);
     }
 }

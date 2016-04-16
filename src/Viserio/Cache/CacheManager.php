@@ -18,13 +18,10 @@ use MongoDB\Driver\Manager as MongoDBManager;
 use Narrowspark\Arr\StaticArr as Arr;
 use Predis\Client as PredisClient;
 use Psr\Cache\CacheItemPoolInterface;
-use Viserio\Cache\Exception\CacheException;
-use Viserio\Contracts\Cache\Adapter as AdapterContract;
-use Viserio\Contracts\Cache\Factory as FactoryContract;
 use Viserio\Contracts\Config\Manager as ConfigContract;
 use Viserio\Support\Manager;
 
-class CacheManager extends Manager implements FactoryContract
+class CacheManager extends Manager
 {
     /**
      * Config instance.
@@ -69,7 +66,7 @@ class CacheManager extends Manager implements FactoryContract
      */
     public function getDefaultDriver()
     {
-        return $this->config->get('cache::driver');
+        return $this->config->get('cache::driver', '');
     }
 
     /**
