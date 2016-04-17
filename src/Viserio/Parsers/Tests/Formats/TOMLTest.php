@@ -2,6 +2,7 @@
 namespace Viserio\Parsers\Tests\Formats;
 
 use org\bovigo\vfs\vfsStream;
+use Viserio\Filesystem\Filesystem;
 use Viserio\Parsers\Formats\TOML;
 
 class TOMLTest extends \PHPUnit_Framework_TestCase
@@ -14,10 +15,16 @@ class TOMLTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \Viserio\Parsers\Formats\TOML
      */
-    private $format;
+    private $parser;
+
+    /**
+     * @var \Viserio\Contracts\Filesystem\Filesystem
+     */
+    private $file;
 
     public function setUp()
     {
+        $this->file = new Filesystem();
         $this->root   = vfsStream::setup();
         $this->parser = new TOML();
     }
@@ -30,15 +37,14 @@ class TOMLTest extends \PHPUnit_Framework_TestCase
             "
         )->at($this->root);
 
-        $parsed = $this->parser->parse($file->url());
+        $parsed = $this->parser->parse($this->file->read($file->url()));
 
         $this->assertTrue(is_array($parsed));
         $this->assertSame(['backspace' => 'This string has a \b backspace character.'], $parsed);
     }
 
     /**
-     * @expectedException League\Flysystem\FileNotFoundException
-     * #@expectedExceptionMessage
+     * @expectedException Viserio\Contracts\Parsers\Exception\ParseException
      */
     public function testParseToThrowException()
     {

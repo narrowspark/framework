@@ -111,10 +111,6 @@
         </testsuite> -->
     </testsuites>
 
-    <listeners>
-        <listener class="JohnKary\PHPUnit\Listener\SpeedTrapListener" />
-    </listeners>
-
     <filter>
         <whitelist processUncoveredFilesFromWhitelist="true">
             <directory suffix=".php">./src/Viserio/</directory>
@@ -123,10 +119,4 @@
             </exclude>
         </whitelist>
     </filter>
-
-    <logging>
-        <log type="coverage-text" target="php://stdout"/>
-        <log type="coverage-html" target="build/logs/report" lowUpperBound="35" highLowerBound="70"/>
-        <log type="coverage-clover" target="build/logs/coverage.xml"/>
-    </logging>
 </phpunit>

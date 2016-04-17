@@ -7,6 +7,11 @@ services:
   - mongodb
   - redis-server
 
+addons:
+  apt:
+    packages:
+      - parallel
+
 matrix:
   include:
     - php: hhvm
@@ -19,14 +24,21 @@ matrix:
       env: SETUP=basic ADAPTER=Libevent
     - php: 5.6
       env: SETUP=basic ADAPTER=Ev
+    - php: 5.6
+      env: SETUP=basic CHECK_CS=true SEND_COVERAGE=true
+    - php: 5.6
+      env: SETUP=basic HUMBUG=true
     - php: 7.0
       env: SETUP=lowest
     - php: 7.0
       env: SETUP=basic ADAPTER=Libuv
     - php: 7.0
       env: SETUP=basic ADAPTER=Uv
-    - php: 5.6
-      env: SETUP=basic CHECK_CS=true SEND_COVERAGE=true
+    - php: 7.0
+      env: SETUP=stable
+  allow_failures:
+    - env: SETUP=basic HUMBUG=true
+      php: 5.6
   fast_finish: true
 
 cache:
@@ -38,6 +50,8 @@ before_install:
   - if [ -f build/travis/php/$TRAVIS_PHP_VERSION.sh]; then ./build/travis/php/$TRAVIS_PHP_VERSION.sh; fi
   - travis_retry composer self-update # Run allways composer update
   - if [ "$TRAVIS_PHP_VERSION" != "hhvm" ]; then composer global require hirak/prestissimo; fi # Now composer can install components parallel
+  - git config --global user.name travis-ci
+  - git config --global user.email travis@example.com
 
 install:
   - if [ "$SETUP" = 'basic' ]; then travis_retry composer install --no-interaction --prefer-source --no-progress --profile; fi

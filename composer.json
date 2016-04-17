@@ -104,7 +104,6 @@
         "fzaninotto/faker"                                   : "^1.4",
         "helmich/phpunit-psr7-assert"                        : "^1.0",
         "humbug/humbug"                                      : "dev-master",
-        "johnkary/phpunit-speedtrap"                         : "^1.0",
         "league/flysystem-aws-s3-v3"                         : "^1.0",
         "league/flysystem-cached-adapter"                    : "^1.0",
         "league/flysystem-dropbox"                           : "^1.0",

@@ -2,6 +2,7 @@
 namespace Viserio\Parsers\Tests\Formats;
 
 use org\bovigo\vfs\vfsStream;
+use Viserio\Filesystem\Filesystem;
 use Viserio\Parsers\Formats\PHP;
 
 class PHPTest extends \PHPUnit_Framework_TestCase
@@ -14,7 +15,7 @@ class PHPTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \Viserio\Parsers\Formats\PHP
      */
-    private $format;
+    private $parser;
 
     public function setUp()
     {
@@ -37,8 +38,7 @@ return ["a" => 1, "b" => 2, "c" => 3, "d" => 4, "e" => 5,];
     }
 
     /**
-     * @expectedException League\Flysystem\FileNotFoundException
-     * #@expectedExceptionMessage
+     * @expectedException Viserio\Contracts\Parsers\Exception\ParseException
      */
     public function testParseToThrowException()
     {

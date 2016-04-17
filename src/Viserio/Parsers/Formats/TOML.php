@@ -40,8 +40,6 @@ class TOML implements FormatContract
      */
     public function dump(array $data)
     {
-        $tb = new TomlBuilder();
-
         return 'Not supported';
     }
 }
