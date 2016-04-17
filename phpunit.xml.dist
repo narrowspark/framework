@@ -22,7 +22,7 @@
     </php>
 
     <testsuites>
-        <testsuite name="Narrowspark Application Component Test Suite">
+<!--         <testsuite name="Narrowspark Application Component Test Suite">
             <directory>./src/Viserio/Application/Tests</directory>
         </testsuite>
         <testsuite name="Narrowspark Bus Component Test Suite">
@@ -60,7 +60,7 @@
         </testsuite>
         <testsuite name="Narrowspark Exception Component Test Suite">
             <directory>./src/Viserio/Exception/Tests</directory>
-        </testsuite> -->
+        </testsuite>
         <testsuite name="Narrowspark Filesystem Component Test Suite">
             <directory>./src/Viserio/Filesystem/Tests</directory>
         </testsuite>
@@ -81,11 +81,11 @@
         </testsuite>
         <testsuite name="Narrowspark Middleware Component Test Suite">
             <directory>./src/Viserio/Middleware/Tests</directory>
-        </testsuite>
+        </testsuite> -->
         <testsuite name="Narrowspark Parsers Component Test Suite">
             <directory>./src/Viserio/Parsers/Tests</directory>
         </testsuite>
-        <testsuite name="Narrowspark Pipeline Component Test Suite">
+<!--        <testsuite name="Narrowspark Pipeline Component Test Suite">
             <directory>./src/Viserio/Pipeline/Tests</directory>
         </testsuite>
         <testsuite name="Narrowspark Queue Component Test Suite">
@@ -108,7 +108,7 @@
         </testsuite>
         <testsuite name="Narrowspark View Component Test Suite">
             <directory>./src/Viserio/View/Tests</directory>
-        </testsuite>
+        </testsuite> -->
     </testsuites>
 
     <listeners>

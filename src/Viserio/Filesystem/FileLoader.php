@@ -1,5 +1,5 @@
 <?php
-namespace Viserio\Config;
+namespace Viserio\Filesystem;
 
 use Narrowspark\Arr\StaticArr as Arr;
 use Viserio\Contracts\Config\Loader as LoaderContract;
@@ -257,7 +257,7 @@ class FileLoader implements LoaderContract
      */
     protected function parser($ext)
     {
-        $ext = $this->files->extension($ext);
+        $ext = $this->files->getMimetype($ext);
 
         if (isset($this->parser[$ext])) {
             return new $this->parser[$ext]($this->getFilesystem());

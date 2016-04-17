@@ -62,27 +62,12 @@ value=5
     }
 
     /**
-     * @expectedException League\Flysystem\FileNotFoundException
-     * #@expectedExceptionMessage
+     * @expectedException Viserio\Contracts\Parsers\Exception\ParseException
+     * #@expectedExceptionMessage Invalid INI provided.
      */
     public function testParseToThrowException()
     {
         $this->parser->parse('nonexistfile');
-    }
-
-    public function testSupports()
-    {
-        $file = vfsStream::newFile('temp.ini')->at($this->root);
-
-        $this->assertTrue($this->parser->supports($file->url()));
-
-        $file = vfsStream::newFile('temp.ini.dist')->at($this->root);
-
-        $this->assertTrue($this->parser->supports($file->url()));
-
-        $file = vfsStream::newFile('temp.notsupported')->at($this->root);
-
-        $this->assertFalse($this->parser->supports($file->url()));
     }
 
     public function testDump()

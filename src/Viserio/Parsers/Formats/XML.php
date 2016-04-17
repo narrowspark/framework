@@ -4,7 +4,7 @@ namespace Viserio\Parsers\Formats;
 use Exception;
 use League\Flysystem\FileNotFoundException;
 use SimpleXMLElement;
-use Viserio\Contracts\Parser\Exception\ParseException;
+use Viserio\Contracts\Parsers\Exception\ParseException;
 use Viserio\Contracts\Parsers\Format as FormatContract;
 
 class XML implements FormatContract
@@ -22,7 +22,9 @@ class XML implements FormatContract
 
             return $data;
         } catch (Exception $ex) {
-            throw new ParseException('Failed To Parse XML');
+            throw new ParseException([
+                'message' => 'Failed To Parse XML'
+            ]);
         }
     }
 

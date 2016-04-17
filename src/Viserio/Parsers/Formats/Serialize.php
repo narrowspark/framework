@@ -3,8 +3,8 @@ namespace Viserio\Parsers\Formats;
 
 use Exception;
 use Viserio\Contracts\Filesystem\Filesystem as FilesystemContract;
-use Viserio\Contracts\Parser\Exception\DumpException;
-use Viserio\Contracts\Parser\Exception\ParseException;
+use Viserio\Contracts\Parsers\Exception\DumpException;
+use Viserio\Contracts\Parsers\Exception\ParseException;
 use Viserio\Contracts\Parsers\Format as FormatContract;
 
 class Serialize implements FormatContract
@@ -17,7 +17,9 @@ class Serialize implements FormatContract
         try {
             return unserialize(trim($payload));
         } catch (Exception $exception) {
-            throw new ParseException('Failed to parse serialized Data');
+            throw new ParseException([
+                'message' => 'Failed to parse serialized Data'
+            ]);
         }
     }
 

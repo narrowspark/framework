@@ -39,7 +39,10 @@ class YAML implements FormatContract
                 trim(preg_replace('/\t+/', '', $payload))
             );
         } catch (YamlParseException $exception) {
-            throw new ParseException(sprintf('Unable to parse the YAML string: [%s]', $exception->getMessage()));
+            throw new ParseException([
+                'message' => 'Unable to parse the YAML string',
+                'line' => $exception->getMessage(),
+            ]);
         }
     }
 

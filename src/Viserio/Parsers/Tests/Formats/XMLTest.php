@@ -49,21 +49,6 @@ class XMLTest extends \PHPUnit_Framework_TestCase
         $this->parser->parse('nonexistfile');
     }
 
-    public function testSupports()
-    {
-        $file = vfsStream::newFile('temp.xml')->at($this->root);
-
-        $this->assertTrue($this->parser->supports($file->url()));
-
-        $file = vfsStream::newFile('temp.xml.dist')->at($this->root);
-
-        $this->assertTrue($this->parser->supports($file->url()));
-
-        $file = vfsStream::newFile('temp.notsupported')->at($this->root);
-
-        $this->assertFalse($this->parser->supports($file->url()));
-    }
-
     public function testDump()
     {
         # code...
