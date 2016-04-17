@@ -3,6 +3,7 @@ namespace Viserio\Parsers\Tests\Formats;
 
 use org\bovigo\vfs\vfsStream;
 use Viserio\Parsers\Formats\XML;
+use Viserio\Filesystem\Filesystem;
 
 class XMLTest extends \PHPUnit_Framework_TestCase
 {
@@ -16,8 +17,14 @@ class XMLTest extends \PHPUnit_Framework_TestCase
      */
     private $format;
 
+    /**
+     * @var \Viserio\Contracts\Filesystem\Filesystem
+     */
+    private $file;
+
     public function setUp()
     {
+        $this->file = new Filesystem();
         $this->root   = vfsStream::setup();
         $this->parser = new XML();
     }
@@ -41,8 +48,7 @@ class XMLTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException League\Flysystem\FileNotFoundException
-     * #@expectedExceptionMessage
+     * @expectedException Viserio\Contracts\Parsers\Exception\ParseException
      */
     public function testParseToThrowException()
     {

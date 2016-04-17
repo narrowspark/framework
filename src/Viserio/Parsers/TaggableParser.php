@@ -1,48 +1,37 @@
 <?php
 namespace Viserio\Parsers;
 
-use Viserio\Contracts\Parsers as ParserContract;
 use Viserio\Contracts\Parsers\TaggableParser as TaggableParserContract;
+use Exception;
 
-class TaggableParser implements TaggableParserContract
+class TaggableParser extends Parser implements TaggableParserContract
 {
     /**
-     * All parser.
+     * Tagged key for grouping.
      *
-     * @var TaggableParserContract
+     * @var String
      */
-    protected $parser;
+    private $taggedKey;
 
     /**
-     * Create a new taggable parser.
+     * Set tag key.
      *
-     * @param ParserContract $parser
+     * @param String $key
      */
-    public function __construct(ParserContract $parser)
+    public function setTag($key)
     {
-        $this->parser = $parser;
+        $this->taggedKey = $key;
+
+        return $this;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function parse($payload, $taggedKey)
+    public function parse($payload)
     {
-        $data = $this->parser->parse($payload);
+        if (!$this->taggedKey) {
+            throw new Exception('You need to use setTag() first');
+        }
 
-        return $this->group($taggedKey, $data);
-    }
-
-    /**
-     * Format a json file for saving.
-     *
-     * @param array $data data
-     *
-     * @return string data export
-     */
-    public function dump(array $data)
-    {
-        return $this->parser->dump($data);
+        return $this->group($this->taggedKey, parent::parse($payload));
     }
 
     /**
@@ -60,7 +49,7 @@ class TaggableParser implements TaggableParserContract
         foreach ($data as $key => $value) {
             $name             = sprintf(
                 '%s' . TaggableParserContract::TAG_DELIMITER . '%s',
-                $group,
+                $taggedKey,
                 $key
             );
 

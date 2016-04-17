@@ -39,8 +39,7 @@ class YAML implements FormatContract
             );
         } catch (YamlParseException $exception) {
             throw new ParseException([
-                'message' => 'Unable to parse the YAML string',
-                'line' => $exception->getMessage(),
+                'message' => $exception->getMessage(),
             ]);
         }
     }
