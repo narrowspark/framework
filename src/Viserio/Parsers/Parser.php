@@ -1,6 +1,8 @@
 <?php
 namespace Viserio\Parsers;
 
+use Viserio\Contracts\Filesystem\Filesystem;
+use Viserio\Contracts\Parsers\Exception\NotSupportedException;
 use Viserio\Parsers\Formats\INI;
 use Viserio\Parsers\Formats\JSON;
 use Viserio\Parsers\Formats\PHP;
@@ -9,8 +11,6 @@ use Viserio\Parsers\Formats\Serialize;
 use Viserio\Parsers\Formats\TOML;
 use Viserio\Parsers\Formats\XML;
 use Viserio\Parsers\Formats\YAML;
-use Viserio\Contracts\Parsers\Exception\NotSupportedException;
-use Viserio\Contracts\Filesystem\Filesystem;
 
 class Parser
 {
@@ -142,9 +142,9 @@ class Parser
         $supportedFileFormats = array_flip($this->supportedFileFormats);
 
         if (isset($supportedFileFormats[$type])) {
-            return new $this->supportedParsers[$type];
-        } else if (isset($this->supportedFormats[$type])) {
-            return new $this->supportedParsers[$this->supportedFormats[$type]];
+            return new $this->supportedParsers[$type]();
+        } elseif (isset($this->supportedFormats[$type])) {
+            return new $this->supportedParsers[$this->supportedFormats[$type]]();
         }
 
         throw new NotSupportedException(sprintf('Format [%s] from string/file is not supported.', $type));

@@ -2,8 +2,8 @@
 namespace Viserio\Parsers\Tests\Formats;
 
 use org\bovigo\vfs\vfsStream;
-use Viserio\Parsers\Formats\XML;
 use Viserio\Filesystem\Filesystem;
+use Viserio\Parsers\Formats\XML;
 
 class XMLTest extends \PHPUnit_Framework_TestCase
 {

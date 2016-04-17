@@ -2,8 +2,8 @@
 namespace Viserio\Parsers\Tests\Formats;
 
 use org\bovigo\vfs\vfsStream;
-use Viserio\Parsers\Formats\TOML;
 use Viserio\Filesystem\Filesystem;
+use Viserio\Parsers\Formats\TOML;
 
 class TOMLTest extends \PHPUnit_Framework_TestCase
 {

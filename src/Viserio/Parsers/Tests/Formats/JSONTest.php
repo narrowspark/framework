@@ -2,8 +2,8 @@
 namespace Viserio\Parsers\Tests\Formats;
 
 use org\bovigo\vfs\vfsStream;
-use Viserio\Parsers\Formats\JSON;
 use Viserio\Filesystem\Filesystem;
+use Viserio\Parsers\Formats\JSON;
 
 class JSONTest extends \PHPUnit_Framework_TestCase
 {

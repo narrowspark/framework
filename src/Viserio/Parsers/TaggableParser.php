@@ -1,22 +1,22 @@
 <?php
 namespace Viserio\Parsers;
 
-use Viserio\Contracts\Parsers\TaggableParser as TaggableParserContract;
 use Exception;
+use Viserio\Contracts\Parsers\TaggableParser as TaggableParserContract;
 
 class TaggableParser extends Parser implements TaggableParserContract
 {
     /**
      * Tagged key for grouping.
      *
-     * @var String
+     * @var string
      */
     private $taggedKey;
 
     /**
      * Set tag key.
      *
-     * @param String $key
+     * @param string $key
      */
     public function setTag($key)
     {
