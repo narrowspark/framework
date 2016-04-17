@@ -16,7 +16,7 @@ class INI implements FormatContract
 
         if (!$ini) {
             throw new ParseException([
-                'message' => 'Invalid INI provided.'
+                'message' => 'Invalid INI provided.',
             ]);
         }
 

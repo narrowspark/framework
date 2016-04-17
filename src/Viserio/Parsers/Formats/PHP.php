@@ -15,7 +15,7 @@ class PHP implements FormatContract
     {
         if (!file_exists($payload)) {
             throw new ParseException([
-                'message' => 'File does not exist.'
+                'message' => 'File does not exist.',
             ]);
         }
 

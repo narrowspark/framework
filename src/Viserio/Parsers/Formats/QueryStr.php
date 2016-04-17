@@ -18,7 +18,7 @@ class QueryStr implements FormatContract
             return $querystr;
         } catch (Exception $exception) {
             throw new ParseException([
-                'message' => 'Failed to parse query string data'
+                'message' => 'Failed to parse query string data',
             ]);
         }
     }

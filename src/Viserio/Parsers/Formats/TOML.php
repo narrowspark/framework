@@ -30,7 +30,7 @@ class TOML implements FormatContract
         } catch (TomlParseException $exception) {
             throw new ParseException([
                 'message' => 'Unable to parse the TOML string',
-                'line' => $exception->getParsedLine()
+                'line' => $exception->getParsedLine(),
             ]);
         }
     }
