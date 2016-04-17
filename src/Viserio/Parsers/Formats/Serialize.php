@@ -17,7 +17,7 @@ class Serialize implements FormatContract
             return unserialize(trim($payload));
         } catch (Exception $exception) {
             throw new ParseException([
-                'message' => 'Failed to parse serialized Data'
+                'message' => 'Failed to parse serialized Data',
             ]);
         }
     }

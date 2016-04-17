@@ -22,7 +22,7 @@ class XML implements FormatContract
             return $data;
         } catch (Exception $ex) {
             throw new ParseException([
-                'message' => 'Failed To Parse XML'
+                'message' => 'Failed To Parse XML',
             ]);
         }
     }
