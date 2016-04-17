@@ -2,7 +2,6 @@
 namespace Viserio\Parsers\Formats;
 
 use Exception;
-use League\Flysystem\FileNotFoundException;
 use SimpleXMLElement;
 use Viserio\Contracts\Parsers\Exception\ParseException;
 use Viserio\Contracts\Parsers\Format as FormatContract;

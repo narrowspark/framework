@@ -6,7 +6,7 @@ use Viserio\Filesystem\Filesystem;
 use Viserio\Parsers\Formats\Php;
 use Viserio\Parsers\TaggableParser;
 
-class TaggableTest extends \PHPUnit_Framework_TestCase
+class TaggableParserTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var \org\bovigo\vfs\vfsStreamDirectory
@@ -14,7 +14,7 @@ class TaggableTest extends \PHPUnit_Framework_TestCase
     private $root;
 
     /**
-     * @var \Viserio\Filesystem\Parsers\TaggableParser
+     * @var \Viserio\Parsers\TaggableParser
      */
     private $format;
 

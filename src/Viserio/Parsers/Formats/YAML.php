@@ -1,7 +1,6 @@
 <?php
 namespace Viserio\Parsers\Formats;
 
-use League\Flysystem\FileNotFoundException;
 use RuntimeException;
 use Symfony\Component\Yaml\Exception\ParseException as YamlParseException;
 use Symfony\Component\Yaml\Parser;
