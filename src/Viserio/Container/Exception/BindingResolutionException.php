@@ -1,6 +1,8 @@
 <?php
 namespace Viserio\Container\Exception;
 
+<<<<<<< HEAD
+=======
 /**
  * BindingResolutionException.
  *
@@ -8,6 +10,7 @@ namespace Viserio\Container\Exception;
  *
  * @since   0.9.4
  */
+>>>>>>> develop
 class BindingResolutionException extends \Exception
 {
 }

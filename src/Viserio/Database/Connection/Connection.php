@@ -271,7 +271,7 @@ class Connection implements ConnectionContract
     {
         $message = $exception->getPrevious()->getMessage();
 
-        return Str::contains($message, [
+        return Str::create($message)->containsAny([
             'server has gone away',
             'no connection to the server',
             'Lost connection',

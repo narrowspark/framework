@@ -1,15 +1,12 @@
 <?php
+<<<<<<< HEAD
+namespace Viserio\Container\Tests;
+=======
 namespace Viserio\Container\Test;
+>>>>>>> develop
 
 use Viserio\Container\Container;
 
-/**
- * ContainerTest.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.5
- */
 class ContainerTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -37,182 +34,183 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
         }
     }
 
-    public function testClosureResolution()
-    {
-        $container = $this->container;
-        $container->bind('name', function () { return 'Taylor'; });
-        $this->assertEquals('Taylor', $container->make('name'));
-    }
+    // public function testClosureResolution()
+    // {
+    //     $container = $this->container;
+    //     $container->bind('name', function () { return 'Viserio'; });
+    //     $this->assertEquals('Viserio', $container->make('name'));
+    // }
 
-    public function testSharedClosureResolution()
-    {
-        $container = $this->container;
-        $class = new \stdClass();
-        $container->singleton('class', function () use ($class) { return $class; });
-        $this->assertSame($class, $container->make('class'));
-    }
+    // public function testSharedClosureResolution()
+    // {
+    //     $container = $this->container;
+    //     $class = new \stdClass();
+    //     $container->singleton('class', function () use ($class) { return $class; });
+    //     $this->assertSame($class, $container->make('class'));
+    // }
 
-    public function testAutoConcreteResolution()
-    {
-        $container = $this->container;
-        $this->assertInstanceOf('ContainerConcreteStub', $container->make('ContainerConcreteStub'));
-    }
+    // public function testAutoConcreteResolution()
+    // {
+    //     $container = $this->container;
+    //     $this->assertInstanceOf('ContainerConcreteStub', $container->make('ContainerConcreteStub'));
+    // }
 
-    public function testSharedConcreteResolution()
-    {
-        $container = $this->container;
-        $container->singleton('ContainerConcreteStub');
-        $bindings = $container->getBindings();
-        $var1 = $container->make('ContainerConcreteStub');
-        $var2 = $container->make('ContainerConcreteStub');
-        $this->assertSame($var1, $var2);
-    }
+    // public function testSharedConcreteResolution()
+    // {
+    //     $container = $this->container;
+    //     $container->singleton('ContainerConcreteStub');
+    //     $bindings = $container->getBindings();
+    //     $var1 = $container->make('ContainerConcreteStub');
+    //     $var2 = $container->make('ContainerConcreteStub');
+    //     $this->assertSame($var1, $var2);
+    // }
 
-    public function testContainerIsPassedToResolvers()
-    {
-        $container = $this->container;
-        $container->bind('something', function ($c) { return $c; });
-        $c = $container->make('something');
-        $this->assertSame($c, $container);
-    }
+    // public function testContainerIsPassedToResolvers()
+    // {
+    //     $container = $this->container;
+    //     $container->bind('something', function ($c) { return $c; });
+    //     $c = $container->make('something');
+    //     $this->assertSame($c, $container);
+    // }
 
-    public function testArrayAccess()
-    {
-        $container = $this->container;
-        $container['something'] = function () { return 'foo'; };
-        $this->assertTrue(isset($container['something']));
-        $this->assertEquals('foo', $container['something']);
-        unset($container['something']);
-        $this->assertFalse(isset($container['something']));
-    }
+    // public function testArrayAccess()
+    // {
+    //     $container = $this->container;
+    //     $container['something'] = function () { return 'foo'; };
+    //     $this->assertTrue(isset($container['something']));
+    //     $this->assertEquals('foo', $container['something']);
+    //     unset($container['something']);
+    //     $this->assertFalse(isset($container['something']));
+    // }
 
-    public function testAliases()
-    {
-        $container = $this->container;
-        $container['foo'] = 'bar';
-        $container->alias('foo', 'baz');
-        $this->assertEquals('bar', $container->make('foo'));
-        $this->assertEquals('bar', $container->make('baz'));
-        $container->bind(['bam' => 'boom'], function () { return 'pow'; });
-        $this->assertEquals('pow', $container->make('bam'));
-        $this->assertEquals('pow', $container->make('boom'));
-        $container->singleton(['zoom' => 'zing'], 'wow');
-        $this->assertEquals('wow', $container->make('zoom'));
-        $this->assertEquals('wow', $container->make('zing'));
-    }
+    // public function testAliases()
+    // {
+    //     $container = $this->container;
+    //     $container['foo'] = 'bar';
+    //     $container->alias('foo', 'baz');
+    //     $this->assertEquals('bar', $container->make('foo'));
+    //     $this->assertEquals('bar', $container->make('baz'));
+    //     $container->bind(['bam' => 'boom'], function () { return 'pow'; });
+    //     $this->assertEquals('pow', $container->make('bam'));
+    //     $this->assertEquals('pow', $container->make('boom'));
+    //     $container->singleton(['zoom' => 'zing'], 'wow');
+    //     $this->assertEquals('wow', $container->make('zoom'));
+    //     $this->assertEquals('wow', $container->make('zing'));
+    // }
 
-    public function testBindingsCanBeOverridden()
-    {
-        $container = $this->container;
-        $container['foo'] = 'bar';
-        $foo = $container['foo'];
-        $container['foo'] = 'baz';
-        $this->assertEquals('baz', $container['foo']);
-    }
+    // public function testBindingsCanBeOverridden()
+    // {
+    //     $container = $this->container;
+    //     $container['foo'] = 'bar';
+    //     $foo = $container['foo'];
+    //     $container['foo'] = 'baz';
+    //     $this->assertEquals('baz', $container['foo']);
+    // }
 
-    public function testExtendedBindings()
-    {
-        $container = $this->container;
-        $container['foo'] = 'foo';
-        $container->extend('foo', function ($old, $container) {
-            return $old . 'bar';
-        });
+    // public function testExtendedBindings()
+    // {
+    //     $container = $this->container;
+    //     $container['foo'] = 'foo';
+    //     $container->extend('foo', function ($old, $container) {
+    //         return $old.'bar';
+    //     });
 
-        $this->assertEquals('foobar', $container->make('foo'));
-        $container = $this->container;
-        $container['foo'] = function () {
-            return (object) ['name' => 'narrowspark'];
-        };
+    //     $this->assertEquals('foobar', $container->make('foo'));
+    //     $container = $this->container;
+    //     $container['foo'] = function () {
+    //         return (object) ['name' => 'narrowspark'];
+    //     };
 
-        $container->extend('foo', function ($old, $container) {
-            $old->age = 26;
+    //     $container->extend('foo', function ($old, $container) {
+    //         $old->age = 26;
 
-            return $old;
-        });
+    //         return $old;
+    //     });
 
-        $result = $container->make('foo');
-        $this->assertEquals('narrowspark', $result->name);
-        $this->assertEquals(26, $result->age);
-        $this->assertSame($result, $container->make('foo'));
-    }
+    //     $result = $container->make('foo');
+    //     $this->assertEquals('narrowspark', $result->name);
+    //     $this->assertEquals(26, $result->age);
+    //     $this->assertSame($result, $container->make('foo'));
+    // }
 
-    public function testMultipleExtends()
-    {
-        $container = $this->container;
-        $container['foo'] = 'foo';
+    // public function testMultipleExtends()
+    // {
+    //     $container = $this->container;
+    //     $container['foo'] = 'foo';
 
-        $container->extend('foo', function ($old, $container) {
-            return $old . 'bar';
-        });
+    //     $container->extend('foo', function ($old, $container) {
+    //         return $old.'bar';
+    //     });
 
-        $container->extend('foo', function ($old, $container) {
-            return $old . 'baz';
-        });
+    //     $container->extend('foo', function ($old, $container) {
+    //         return $old.'baz';
+    //     });
 
-        $this->assertEquals('foobarbaz', $container->make('foo'));
-    }
+    //     $this->assertEquals('foobarbaz', $container->make('foo'));
+    // }
 
-    public function testExtendInstancesArePreserved()
-    {
-        $container = $this->container;
-        $container->bind('foo', function () { $obj = new \StdClass(); $obj->foo = 'bar';
+    // public function testExtendInstancesArePreserved()
+    // {
+    //     $container = $this->container;
+    //     $container->bind('foo', function () { $obj = new \StdClass(); $obj->foo = 'bar';
+    //         return $obj;
+    //     });
+    //     $obj = new \StdClass();
+    //     $obj->foo = 'foo';
+    //     $container->singleton('foo', $obj);
+    //     $container->extend('foo', function ($obj, $container) { $obj->bar = 'baz';
+    //         return $obj;
+    //     });
 
-return $obj; });
-        $obj = new \StdClass();
-        $obj->foo = 'foo';
-        $container->singleton('foo', $obj);
-        $container->extend('foo', function ($obj, $container) { $obj->bar = 'baz';
+    //     $container->extend('foo', function ($obj, $container) { $obj->baz = 'foo';
+    //         return $obj;
+    //     });
+    //     $this->assertEquals('foo', $container->make('foo')->foo);
+    // }
 
-return $obj; });
-        $container->extend('foo', function ($obj, $container) { $obj->baz = 'foo';
+    // public function testExtendCanBeCalledBeforeBind()
+    // {
+    //     $container = $this->container;
+    //     $container->extend('foo', function ($old, $container) {
+    //         return $old.'bar';
+    //     });
+    //     $container['foo'] = 'foo';
+    //     $this->assertEquals('foobar', $container->make('foo'));
+    // }
 
-return $obj; });
-        $this->assertEquals('foo', $container->make('foo')->foo);
-    }
+    // public function testParametersCanBePassedThroughToClosure()
+    // {
+    //     $container = $this->container;
+    //     $container->bind('foo', function ($c, $parameters) {
+    //         return $parameters;
+    //     });
+    //     $this->assertEquals([1, 2, 3], $container->make('foo', [1, 2, 3]));
+    // }
 
-    public function testExtendCanBeCalledBeforeBind()
-    {
-        $container = $this->container;
-        $container->extend('foo', function ($old, $container) {
-            return $old . 'bar';
-        });
-        $container['foo'] = 'foo';
-        $this->assertEquals('foobar', $container->make('foo'));
-    }
-
-    public function testParametersCanBePassedThroughToClosure()
-    {
-        $container = $this->container;
-        $container->bind('foo', function ($c, $parameters) {
-            return $parameters;
-        });
-        $this->assertEquals([1, 2, 3], $container->make('foo', [1, 2, 3]));
-    }
-
-    public function testCallWithDependencies()
-    {
-        $container = $this->container;
-        $result = $container->call(function (\StdClass $foo, $bar = []) {
-            return func_get_args();
-        });
-        $this->assertInstanceOf('stdClass', $result[0]);
-        $this->assertEquals([], $result[1]);
-        $result = $container->call(function (\StdClass $foo, $bar = []) {
-            return func_get_args();
-        }, ['bar' => 'taylor']);
-        $this->assertInstanceOf('stdClass', $result[0]);
-        $this->assertEquals('taylor', $result[1]);
-        /*
-         * Wrap a function...
-         */
-        $result = $container->wrap(function (\StdClass $foo, $bar = []) {
-            return func_get_args();
-        }, ['bar' => 'taylor']);
-        $this->assertInstanceOf('Closure', $result);
-        $result = $result();
-        $this->assertInstanceOf('stdClass', $result[0]);
-        $this->assertEquals('taylor', $result[1]);
-    }
+    // public function testCallWithDependencies()
+    // {
+    //     $container = $this->container;
+    //     $result = $container->call(function (\StdClass $foo, $bar = []) {
+    //         return func_get_args();
+    //     });
+    //     $this->assertInstanceOf('stdClass', $result[0]);
+    //     $this->assertEquals([], $result[1]);
+    //     $result = $container->call(function (\StdClass $foo, $bar = []) {
+    //         return func_get_args();
+    //     }, ['bar' => 'viserio']);
+    //     $this->assertInstanceOf('stdClass', $result[0]);
+    //     $this->assertEquals('viserio', $result[1]);
+    //     /*
+    //      * Wrap a function...
+    //      */
+    //     $result = $container->wrap(function (\StdClass $foo, $bar = []) {
+    //         return func_get_args();
+    //     }, ['bar' => 'viserio']);
+    //     $this->assertInstanceOf('Closure', $result);
+    //     $result = $result();
+    //     $this->assertInstanceOf('stdClass', $result[0]);
+    //     $this->assertEquals('viserio', $result[1]);
+    // }
 
     public function testCircularReferenceCheck()
     {
@@ -235,84 +233,22 @@ return $obj; });
     }
 
     /**
-     * Methods should using contextual binding
-     */
+      * Methods should using contextual binding
+      */
     public function testContextualBindingOnMethods()
     {
-        $container = new Container();
-        $container->when('ContainerTestInterfaceStub')->needs('IContainerContractStub')->give('ContainerImplementationStub');
+        $container = new Container;
+        $container->when("Viserio\Container\Tests\Fixture\ContainerTestInterfaceStub")
+            ->needs("Viserio\Container\Tests\Fixture\ContainerContractStub")
+            ->give("Viserio\Container\Tests\Fixture\ContainerImplementationStub");
 
          // Works if using constructor
-        $constructor = $container->make('ContainerTestInterfaceStub');
+        $constructor = $container->make('Viserio\Container\Tests\Fixture\ContainerTestInterfaceStub');
         $result = $constructor->getStub();
-        $this->assertInstanceOf('ContainerImplementationStub', $result);
+        $this->assertInstanceOf("Viserio\Container\Tests\Fixture\ContainerImplementationStub", $result);
 
          // Doesn't work if using methods
-        $result = $container->call('ContainerTestInterfaceStub@go');
-        $this->assertInstanceOf('ContainerImplementationStub', $result);
-    }
-}
-
-class ContainerConcreteStub
-{
-}
-
-class ContainerCircularReferenceStubA
-{
-    public function __construct(ContainerCircularReferenceStubB $b)
-    {
-    }
-}
-
-class ContainerCircularReferenceStubB
-{
-    public function __construct(ContainerCircularReferenceStubC $c)
-    {
-    }
-}
-
-class ContainerCircularReferenceStubC
-{
-    public function __construct(ContainerCircularReferenceStubB $b)
-    {
-    }
-}
-
-class ContainerCircularReferenceStubD
-{
-    public function __construct(ContainerCircularReferenceStubE $e)
-    {
-    }
-}
-
-class ContainerCircularReferenceStubE
-{
-    public function __construct(ContainerCircularReferenceStubF $f)
-    {
-    }
-}
-
-class ContainerCircularReferenceStubF
-{
-    public function __construct(ContainerCircularReferenceStubD $d)
-    {
-    }
-}
-
-class ContainerTestInterfaceStub
-{
-    public function __construct(IContainerContractStub $stub)
-    {
-        $this->stub = $stub;
-    }
-
-    public function go(IContainerContractStub $stub)
-    {
-        return $stub;
-    }
-
-    public function getStub()
-    {
-        return $this->stub;
+        $result = $container->call('Viserio\Container\Tests\Fixture\ContainerTestInterfaceStub@go');
+        $this->assertInstanceOf("Viserio\Container\Tests\Fixture\ContainerImplementationStub", $result);
     }
 }

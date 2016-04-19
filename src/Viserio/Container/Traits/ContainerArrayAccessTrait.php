@@ -1,6 +1,8 @@
 <?php
 namespace Viserio\Container\Traits;
 
+use Closure;
+
 /**
  * ContainerArrayAccessTrait.
  *
@@ -11,14 +13,11 @@ namespace Viserio\Container\Traits;
 trait ContainerArrayAccessTrait
 {
     /**
-     * Adds an entry to the container.
-     *
-     * @param string    $id    Identifier of the entry to add
-     * @param \stdClass $value The entry to add to the container
+     * {@inheritdoc}
      */
-    public function set($id, $value)
+    public function set($alias, $concrete)
     {
-        $this->offsetSet($id, $value);
+        $this->offsetSet($alias, $concrete);
     }
 
     /**
@@ -42,147 +41,155 @@ trait ContainerArrayAccessTrait
     /**
      * Removes an entry from the container.
      *
-     * @param string $id Identifier of the entry to remove
+     * @param string $alias Identifier of the entry to remove
      */
-    public function remove($id)
+    public function remove($alias)
     {
-        $this->offsetUnset($id);
+        $this->offsetUnset($alias);
     }
 
     /**
      * Dynamically access application services.
      *
-     * @param string $id
+     * @param string $alias
      *
      * @return mixed
      */
-    public function __get($id)
+    public function __get($alias)
     {
-        return $this->offsetGet($id);
+        return $this->offsetGet($alias);
     }
 
     /**
      * Dynamically set application services.
      *
-     * @param string $id
-     * @param mixed  $value
+     * @param string $alias
+     * @param mixed  $concrete
      */
-    public function __set($id, $value)
+    public function __set($alias, $concrete)
     {
-        $this->offsetSet($id, $value);
+        $this->offsetSet($alias, $concrete);
     }
 
     /**
      * Dynamically check if application services exists.
      *
-     * @param string $id
+     * @param string $alias
      *
      * @return bool
      */
-    public function __isset($id)
+    public function __isset($alias)
     {
-        return $this->offsetExists($id);
+        return $this->offsetExists($alias);
     }
 
     /**
      * Dynamically remove application services.
      *
-     * @param string $id
+     * @param string $alias
      */
-    public function __unset($id)
+    public function __unset($alias)
     {
-        $this->offsetUnset($id);
+        $this->offsetUnset($alias);
     }
 
     /**
      * Gets a parameter or an object.
      *
-     * @param string $id
+     * @param string $alias
      *
      * @return mixed The value of the parameter or an object
      */
-    public function offsetGet($id)
+    public function offsetGet($alias)
     {
-        if (isset($this->mockedServices['mock::' . $id])) {
-            return $this->mockedServices['mock::' . $id];
+        $alias = $this->normalize($alias);
+
+        if ($this->hasInDelegate($alias)) {
+            return $this->getFromDelegate($alias);
         }
 
-        return $this->make($id);
+        if (!$this->isSingleton($alias) && isset($this->interopDefinitions[$alias])) {
+            $this->singletons[$alias] = $this->resolveDefinition($this->interopDefinitions[$alias]);
+        }
+
+        return $this->make($alias);
     }
 
     /**
      * Sets a parameter or an object.
      *
-     * @param string $id
-     * @param mixed  $value The value of the parameter or a closure to define an object
+     * @param string $alias
+     * @param mixed  $concrete The value of the parameter or a closure to define an object
      *
-     * @return ContainerArrayAccessTrait|null
+     * @return self|null
      */
-    public function offsetSet($id, $value)
+    public function offsetSet($alias, $concrete)
     {
-        if (!$value instanceof \Closure) {
-            $value = function () use ($value) {
-                return $value;
+        if (!$concrete instanceof Closure) {
+            $concrete = function () use ($concrete) {
+                return $concrete;
             };
         }
 
-        $this->bind($id, $value);
+        $this->bind($alias, $concrete);
     }
 
     /**
      * Checks if a parameter or an object is set.
      *
-     * @param string $id
+     * @param string $alias
      *
      * @return bool
      */
-    public function offsetExists($id)
+    public function offsetExists($alias)
     {
-        if (isset($this->keys[$id]) || isset($this->mockedServices['mock::' . $id])) {
+        $alias = $this->normalize($alias);
+
+        if (
+            isset($this->keys[$alias]) ||
+            isset($this->interopDefinitions[$alias])
+        ) {
             return true;
         }
 
-        return false;
+        return $this->hasInDelegate($alias);
     }
 
     /**
      * Unsets a parameter or an object.
      *
-     * @param string $id
+     * @param string $alias
      *
-     * @return string|null $id The unique identifier for the parameter or object
+     * @return string|null $alias The unique identifier for the parameter or object
      */
-    public function offsetUnset($id)
+    public function offsetUnset($alias)
     {
-        if (isset($this->keys[$id])) {
+        $alias = $this->normalize($alias);
+
+        if (isset($this->keys[$alias])) {
             unset(
-                $this->aliases[$id],
-                $this->bindings[$id],
-                $this->singletons[$id],
-                $this->frozen[$id],
-                $this->values[$id],
-                $this->keys[$id],
-                $this->mockedServices['mock::' . $id]
+                $this->aliases[$alias],
+                $this->bindings[$alias],
+                $this->singletons[$alias],
+                $this->frozen[$alias],
+                $this->values[$alias],
+                $this->keys[$alias]
             );
         }
     }
 
     /**
-     * Resolve the given type from the container.
-     *
-     * @param string $alias
-     * @param array  $args
-     *
-     * @return mixed
+     * {@inheritdoc}
+     */
+    abstract public function normalize($service);
+
+    /**
+     * {@inheritdoc}
      */
     abstract public function make($alias, array $args = []);
 
     /**
-     * Register a binding with the container.
-     *
-     * @param string        $alias
-     * @param \Closure|null $concrete
-     * @param bool          $singleton
+     * {@inheritdoc}
      */
     abstract public function bind($alias, $concrete = null, $singleton = false);
 }

@@ -22,6 +22,10 @@ class LoopManager extends Manager
      */
     public function getDefaultDriver()
     {
+<<<<<<< HEAD:src/Brainwave/Loop/LoopManager.php
+        return $this->config->get('loop::driver', 'Brainwave\\Loop\\Adapters\\SelectLoop');
+=======
         return $this->config->get('loop::driver', 'Viserio\\Loop\\Adapters\\SelectLoop');
+>>>>>>> develop:src/Viserio/Loop/LoopManager.php
     }
 }

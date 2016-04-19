@@ -2,14 +2,8 @@
 namespace Viserio\Container\Exception;
 
 use Interop\Container\Exception\ContainerException as InteropNotFoundException;
+use InvalidArgumentException;
 
-/**
- * NotFoundException.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.4
- */
-class NotFoundException extends \Exception implements InteropNotFoundException
+class NotFoundException extends InvalidArgumentException implements InteropNotFoundException
 {
 }

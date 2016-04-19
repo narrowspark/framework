@@ -1,30 +1,42 @@
 <?php
 namespace Viserio\Container;
 
+<<<<<<< HEAD
+use ArrayAccess;
+use Closure;
+=======
+>>>>>>> develop
 use Interop\Container\ContainerInterface as ContainerInteropInterface;
-use Nucleus\Invoker\Invoker;
+use InvalidArgumentException;
+use Invoker\Invoker;
+use Invoker\ParameterResolver\AssociativeArrayResolver;
+use Invoker\ParameterResolver\Container\TypeHintContainerResolver;
+use Invoker\ParameterResolver\DefaultValueResolver;
+use Invoker\ParameterResolver\NumericArrayResolver;
+use Invoker\ParameterResolver\ResolverChain;
 use Viserio\Container\Exception\BindingResolutionException;
 use Viserio\Container\Exception\ContainerException;
 use Viserio\Container\Exception\NotFoundException;
 use Viserio\Container\Traits\ContainerArrayAccessTrait;
 use Viserio\Container\Traits\ContainerResolverTraits;
-use Viserio\Container\Traits\MockerContainerTrait;
+use Viserio\Container\Traits\DefinitionProviderTrait;
+use Viserio\Container\Traits\DefinitionResolver;
+use Viserio\Container\Traits\DelegateTrait;
 use Viserio\Contracts\Container\Container as ContainerContract;
+use Viserio\Contracts\Container\WritableContainer as WritableContainerContract;
 
-/**
- * Container.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.4
- */
-class Container implements \ArrayAccess, ContainerInteropInterface, ContainerContract
+class Container implements ArrayAccess, ContainerInteropInterface, ContainerContract, WritableContainerContract
 {
-    /*
+    /**
      * Array Access Support
-     * Mock Support
+     * Container Resolver
+     * Defining Sub/Nested Containers
+     * Definition Provider Support
      */
-    use ContainerArrayAccessTrait, MockerContainerTrait, ContainerResolverTraits;
+    use ContainerArrayAccessTrait,
+    ContainerResolverTraits,
+    DelegateTrait,
+    DefinitionProviderTrait;
 
     /**
      * The registered type aliases.
@@ -48,11 +60,11 @@ class Container implements \ArrayAccess, ContainerInteropInterface, ContainerCon
     protected $singletons = [];
 
     /**
-     * Array containing frozen instances.
+     * Array containing immutable instances.
      *
      * @var array
      */
-    protected $frozen = [];
+    protected $immutable = [];
 
     /**
      * Array containing every non-object binding.
@@ -67,11 +79,6 @@ class Container implements \ArrayAccess, ContainerInteropInterface, ContainerCon
      * @var array
      */
     protected $keys = [];
-
-    /**
-     * @var array
-     */
-    protected $inflectors = [];
 
     /**
      * The contextual binding map.
@@ -90,16 +97,28 @@ class Container implements \ArrayAccess, ContainerInteropInterface, ContainerCon
     /**
      * Invoker instance.
      *
-     * @var \Nucleus\Invoker\Invoker
+     * @var \Invoker\InvokerInterface|null
      */
     protected $invoker;
 
     /**
+     * DefinitionResolver instance.
      *
+     * @var \Viserio\Container\DefinitionResolver
+     */
+    protected $definitionResolver;
+
+    /**
+     * Construct.
      */
     public function __construct()
     {
-        $this->invoker = new Invoker();
+        $this->definitionResolver = new DefinitionResolver($this);
+
+        $this->share('Viserio\Container\Container', $this);
+        $this->share(ContainerContract::class, $this);
+        $this->share(WritableContainerContract::class, $this);
+        $this->share(ContainerInteropInterface::class, $this);
     }
 
     /**
@@ -110,7 +129,7 @@ class Container implements \ArrayAccess, ContainerInteropInterface, ContainerCon
      */
     public function alias($alias, $abstract)
     {
-        $this->keys[$alias] = true;
+        $this->keys[$alias] =
         $this->keys[$abstract] = true;
         $this->aliases[$alias] = $abstract;
     }
@@ -118,7 +137,7 @@ class Container implements \ArrayAccess, ContainerInteropInterface, ContainerCon
     /**
      * {@inheritdoc}
      */
-    public function singleton($alias, $concrete = null)
+    public function share(string $alias, mixed $concrete)
     {
         return $this->bind($alias, $concrete, true);
     }
@@ -126,25 +145,16 @@ class Container implements \ArrayAccess, ContainerInteropInterface, ContainerCon
     /**
      * {@inheritdoc}
      */
-    public function bind($alias, $concrete = null, $singleton = false)
+    public function bind(string $alias, mixed $concrete, $singleton = false)
     {
-        $this->notFrozen($alias);
+        $alias    = $this->normalize($alias);
+        $concrete = $this->normalize($concrete);
 
-        // If the given types are actually an array, we will assume an alias is being
-        // defined and will grab this "real" abstract class name and register this
-        // alias with the container so that it can be used as a shortcut for it.
-        if (is_array($alias)) {
-            list($alias, $abstract) = $this->extractAlias($alias);
-            $this->alias($alias, $abstract);
-        }
+        $this->notImmutable($alias);
 
-        if (!is_object($alias)) {
-            $this->keys[$alias] = true;
-        }
-
-        // If the given type is actually an string, we will register this value
+        // If the given type is actually an string or array, we will register this value
         // with the container so that it can be used.
-        if ($this->shouldNotBeDefinitionObject($alias, $concrete)) {
+        if ($this->isString($concrete) || is_array($concrete)) {
             $this->values[$alias] = $concrete;
 
             return $concrete;
@@ -159,68 +169,66 @@ class Container implements \ArrayAccess, ContainerInteropInterface, ContainerCon
             $concrete = $alias;
         }
 
-        // if the concrete is an already instantiated object, we just store it
-        // as a singleton
-        if ($this->shouldBeDefinitionObject($concrete)) {
-            $concrete = new Definition($this, $concrete);
-        }
-
         $this->bindings[$alias] = compact('concrete', 'singleton');
 
         return $this->bindings[$alias]['concrete'];
     }
 
     /**
-     * Resolve the given type from the container.
-     *
-     * @param string $alias
-     * @param array  $args
-     *
-     * @throws NotFoundException
-     *
-     * @return mixed
+     * {@inheritdoc}
      */
-    public function make($alias, array $args = [])
+    public function make($abstract, array $parameters = [])
     {
-        $alias = $this->getAlias($alias);
-
-        if (!$this->bound($alias)) {
-            throw new NotFoundException(sprintf('Binding [%s] does not exists in the container bindings', $alias));
+        if (!is_string($abstract)) {
+            throw new InvalidArgumentException(sprintf(
+                'The name parameter must be of type string, %s given',
+                is_object($abstract) ? get_class($abstract) : gettype($abstract)
+            ));
         }
 
-        // If an instance of the type is currently being managed as a singleton we'll
-        // just return an existing instance instead of instantiating new instances
-        // so the developer can keep using the same objects instance every time.
-        if (isset($this->singletons[$alias])) {
-            $this->frozen[$alias] = true;
+        $alias = $this->getAlias($this->normalize($abstract));
 
-            return $this->applyInflectors($this->singletons[$alias]);
-        }
+        if ($this->bound($alias)) {
+            try {
+                // If an instance of the type is currently being managed as a singleton we'll
+                // just return an existing instance instead of instantiating new instances
+                // so the developer can keep using the same objects instance every time.
+                if (isset($this->singletons[$alias])) {
+                    $this->immutable[$alias] = true;
 
-        if (isset($this->values[$alias])) {
-            $this->frozen[$alias] = true;
+                    return $this->singletons[$alias];
+                }
 
-            return $this->values[$alias];
-        }
+                if (isset($this->values[$alias])) {
+                    $this->immutable[$alias] = true;
 
-        $concrete = $this->getConcrete($alias);
+                    return $this->values[$alias];
+                }
 
-        if ($this->isBuildable($concrete, $alias)) {
-            $object = $this->build($concrete, $args);
+                $concrete = $this->getConcrete($alias);
+
+                if ($this->isBuildable($concrete, $alias)) {
+                    $object = $this->build($concrete, $parameters);
+                } else {
+                    $object = $this->make($concrete, $parameters);
+                }
+
+                // If the requested type is registered as a singleton we'll want to cache off
+                // the instances in "memory" so we can return it later without creating an
+                // entirely new instance of an object on each subsequent request for it.
+                if ($this->isSingleton($alias)) {
+                    $this->singletons[$alias] = $object;
+                }
+
+                $this->immutable[$alias] = true;
+
+                return $object;
+            } catch (\Exception $prev) {
+                throw new ContainerException("An error occured while fetching entry '".$id."'", 0, $prev);
+            }
         } else {
-            $object = $this->make($concrete, $args);
+            throw new NotFoundException(sprintf('No entry was found for this identifier [%s].', $alias));
         }
-
-        // If the requested type is registered as a singleton we'll want to cache off
-        // the instances in "memory" so we can return it later without creating an
-        // entirely new instance of an object on each subsequent request for it.
-        if ($this->isSingleton($alias)) {
-            $this->singletons[$alias] = $object;
-        }
-
-        $this->frozen[$alias] = true;
-
-        return $this->applyInflectors($object);
     }
 
     /**
@@ -238,7 +246,7 @@ class Container implements \ArrayAccess, ContainerInteropInterface, ContainerCon
         // If the concrete type is actually a Closure, we will just execute it and
         // hand back the results of the functions, which allows functions to be
         // used as resolvers for more fine-tuned resolution of these objects.
-        if ($concrete instanceof \Closure) {
+        if ($concrete instanceof Closure) {
             return $concrete($this, $args);
         }
 
@@ -250,27 +258,12 @@ class Container implements \ArrayAccess, ContainerInteropInterface, ContainerCon
     /**
      * {@inheritdoc}
      */
-    public function inflector($type, callable $callback = null)
-    {
-        if (is_null($callback)) {
-            $inflector = new Inflector();
-            $this->inflectors[$type] = $inflector;
-
-            return $inflector;
-        }
-
-        $this->inflectors[$type] = $callback;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function when($concrete)
     {
-        $contextualBindingBuilder = new ContextualBindingBuilder($concrete);
-        $contextualBindingBuilder->setContainer($this);
+        $builder = new ContextualBindingBuilder($this->normalize($concrete));
+        $builder->setContainer($this);
 
-        return $contextualBindingBuilder;
+        return $builder;
     }
 
     /**
@@ -278,7 +271,7 @@ class Container implements \ArrayAccess, ContainerInteropInterface, ContainerCon
      */
     public function isRegistered($alias)
     {
-        return isset($this->keys[$alias]);
+        return isset($this->keys[$this->normalize($alias)]);
     }
 
     /**
@@ -290,7 +283,7 @@ class Container implements \ArrayAccess, ContainerInteropInterface, ContainerCon
      */
     public function isAlias($name)
     {
-        return isset($this->aliases[$name]);
+        return isset($this->aliases[$this->normalize($name)]);
     }
 
     /**
@@ -298,13 +291,15 @@ class Container implements \ArrayAccess, ContainerInteropInterface, ContainerCon
      */
     public function isSingleton($alias)
     {
+        $alias = $this->normalize($alias);
+
         if (isset($this->bindings[$alias]['singleton'])) {
             $singleton = $this->bindings[$alias]['singleton'];
         } else {
             $singleton = false;
         }
 
-        return isset($this->singletons[$alias]) || $singleton === true;
+        return (isset($this->singletons[$alias]) || $singleton === true);
     }
 
     /**
@@ -316,27 +311,29 @@ class Container implements \ArrayAccess, ContainerInteropInterface, ContainerCon
      */
     public function bound($alias)
     {
-        return
+        $alias = $this->normalize($alias);
+
+        return (
             isset($this->bindings[$alias]) ||
             $this->isSingleton($alias) ||
             $this->isAlias($alias) ||
             isset($this->values[$alias])
-        ;
+        );
     }
 
     /**
      * Call the given Closure and inject its dependencies.
      *
      * @param callable $callable
-     * @param array    $args
+     * @param array    $parameters
      *
      * @throws \RuntimeException
      *
      * @return mixed
      */
-    public function call($callable, array $args = [])
+    public function call($callable, array $parameters = [])
     {
-        return $this->invoker->invoke($callable, $args);
+        return $this->getInvoker()->call($callable, $parameters);
     }
 
     /**
@@ -351,11 +348,13 @@ class Container implements \ArrayAccess, ContainerInteropInterface, ContainerCon
     {
         $boundObject = $this->getRaw($binding);
 
-        if (null === $boundObject) {
+        if ($boundObject === null) {
             throw new ContainerException(
                 sprintf('Cannot extend %s because it has not yet been bound.', $binding)
             );
         }
+
+        $binding = $this->normalize($binding);
 
         $this->bind($binding, function ($container) use ($closure, $boundObject) {
             return $closure($container, $boundObject($container));
@@ -371,6 +370,8 @@ class Container implements \ArrayAccess, ContainerInteropInterface, ContainerCon
      */
     public function getRaw($binding)
     {
+        $binding = $this->normalize($binding);
+
         if (isset($this->bindings[$binding])) {
             return $this->bindings[$binding]['concrete'];
         }
@@ -417,7 +418,21 @@ class Container implements \ArrayAccess, ContainerInteropInterface, ContainerCon
      */
     public function addContextualBinding($concrete, $alias, $implementation)
     {
-        $this->contextual[$concrete][$alias] = $implementation;
+        $this->contextual[$this->normalize($concrete)][$this->normalize($alias)] = $this->normalize($implementation);
+    }
+
+    /**
+     * Invokes the 'make' method
+     *
+     * @param string $abstract   Abstract type name
+     * @param array  $arguments  (optional) Arguments that will be passed to the constructor
+     *
+     * @return mixed
+     */
+
+    public function __invoke($abstract, array $arguments = [])
+    {
+        return $this->make($abstract, $arguments);
     }
 
     /**
@@ -429,34 +444,9 @@ class Container implements \ArrayAccess, ContainerInteropInterface, ContainerCon
      */
     protected function getAlias($alias)
     {
+        $alias = $this->normalize($alias);
+
         return isset($this->aliases[$alias]) ? $this->aliases[$alias] : $alias;
-    }
-
-    /**
-     * Apply any active inflectors to the resolved object.
-     *
-     * @param object $object
-     *
-     * @return object
-     */
-    protected function applyInflectors($object)
-    {
-        foreach ($this->inflectors as $type => $inflector) {
-            if (!$object instanceof $type) {
-                continue;
-            }
-
-            if ($inflector instanceof Inflector) {
-                $inflector->setContainer($this);
-                $inflector->inflect($object);
-                continue;
-            }
-
-            // must be dealing with a callable as the inflector
-            call_user_func_array($inflector, [$object]);
-        }
-
-        return $object;
     }
 
     /**
@@ -468,6 +458,8 @@ class Container implements \ArrayAccess, ContainerInteropInterface, ContainerCon
      */
     protected function getContextualConcrete($alias)
     {
+        $alias = $this->normalize($alias);
+
         if (isset($this->contextual[end($this->buildStack)][$alias])) {
             return $this->contextual[end($this->buildStack)][$alias];
         }
@@ -486,12 +478,14 @@ class Container implements \ArrayAccess, ContainerInteropInterface, ContainerCon
             return $concrete;
         }
 
+        $alias = $this->normalize($alias);
+
         // If we don't have a registered resolver or concrete for the type, we'll just
         // assume each type is a concrete name and will attempt to resolve it as is
         // since the container should be able to resolve concretes automatically.
         if (!isset($this->bindings[$alias])) {
-            if (isset($this->bindings[$this->absoluteClassName($alias)])) {
-                $alias = $this->absoluteClassName($alias);
+            if (isset($this->bindings[$this->normalize($alias)])) {
+                $alias = $this->normalize($alias);
             }
 
             return $alias;
@@ -501,16 +495,16 @@ class Container implements \ArrayAccess, ContainerInteropInterface, ContainerCon
     }
 
     /**
-     * Check if class is frozen.
+     * Check if class is immutable.
      *
      * @param string $concrete
      *
      * @throws ContainerException
      */
-    protected function notFrozen($concrete)
+    protected function notImmutable($concrete)
     {
-        if (isset($this->frozen[$concrete])) {
-            throw new ContainerException(sprintf('Cannot override frozen service [%s]', $concrete));
+        if (isset($this->immutable[$concrete])) {
+            throw new ContainerException(sprintf('Attempted overwrite of initialized component [%s]', $concrete));
         }
     }
 
@@ -534,7 +528,7 @@ class Container implements \ArrayAccess, ContainerInteropInterface, ContainerCon
      */
     protected function isBuildable($concrete, $alias)
     {
-        return $concrete === $alias || $concrete instanceof \Closure;
+        return $concrete === $alias || $concrete instanceof Closure;
     }
 
     /**
@@ -550,45 +544,54 @@ class Container implements \ArrayAccess, ContainerInteropInterface, ContainerCon
     }
 
     /**
-     * Check if the specified concrete definiton should be a
-     * definition object.
+     * Check if the specified concrete and alias is a string.
      *
-     * @param string|object|\Closure $concrete The concrete definition
-     *
-     * @return bool
-     */
-    protected function shouldBeDefinitionObject($concrete)
-    {
-        return
-            is_object($concrete) && !$concrete instanceof \Closure || is_string($concrete)
-        ;
-    }
-
-    /**
-     * Check if the specified concrete definiton should be not a
-     * definition object.
-     *
-     * @param string|object|\Closure $alias
      * @param string|\Closure|null   $concrete
      *
      * @return bool
      */
-    protected function shouldNotBeDefinitionObject($alias, $concrete)
+    protected function isString($concrete)
     {
-        return
-            is_string($alias) && (!is_object($concrete) && !$concrete instanceof \Closure && (is_string($concrete) || null !== $concrete))
-        ;
+        $isNotObject = (!is_object($concrete) && !$concrete instanceof Closure);
+
+        return ($isNotObject && (is_string($concrete) || null !== $concrete));
     }
 
     /**
-     * Returns absolute class name - always with leading backslash.
+     * Normalize the given class name by removing leading slashes.
      *
-     * @param string $className
+     * @param mixed $service
      *
-     * @return string
+     * @return mixed
      */
-    protected function absoluteClassName($className)
+    protected function normalize($service)
     {
-        return (substr($className, 0, 1) === '\\') ? $className : '\\' . $className;
+        return is_string($service) ? ltrim($service, '\\') : $service;
+    }
+
+    /**
+     * @return \Invoker\InvokerInterface
+     */
+    private function getInvoker()
+    {
+        if (!$this->invoker) {
+            $container = [];
+
+            foreach ($this->delegates as $delegate) {
+                $container[] = new TypeHintContainerResolver($delegate);
+            }
+
+            $chain = [
+                new NumericArrayResolver,
+                new AssociativeArrayResolver,
+                new DefaultValueResolver,
+            ];
+
+            $parameterResolver = new ResolverChain(array_merge($container, $chain));
+
+            $this->invoker = new Invoker($parameterResolver, $this);
+        }
+
+        return $this->invoker;
     }
 }

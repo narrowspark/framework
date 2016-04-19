@@ -1,6 +1,11 @@
 <?php
-namespace Viserio\Container\Test;
+namespace Viserio\Container\Tests;
 
+<<<<<<< HEAD:src/Viserio/Container/Tests/MockContainerTest.php
+use Viserio\Container\MockContainer as Container;
+
+class MockContainerTest extends \PHPUnit_Framework_TestCase
+=======
 use Viserio\Container\Container;
 
 /**
@@ -11,6 +16,7 @@ use Viserio\Container\Container;
  * @since   0.9.8
  */
 class MockerContainerTest extends \PHPUnit_Framework_TestCase
+>>>>>>> develop:src/Viserio/Container/Tests/MockerContainerTest.php
 {
     private $container = null;
 

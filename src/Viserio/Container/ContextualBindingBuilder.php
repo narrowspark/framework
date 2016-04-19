@@ -4,13 +4,6 @@ namespace Viserio\Container;
 use Viserio\Contracts\Container\ContextualBindingBuilder as ContextualBindingBuilderContract;
 use Viserio\Support\Traits\ContainerAwareTrait;
 
-/**
- * ContextualBindingBuilder.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.6
- */
 class ContextualBindingBuilder implements ContextualBindingBuilderContract
 {
     use ContainerAwareTrait;

@@ -1,17 +1,15 @@
 <?php
 namespace Viserio\Container\Traits;
 
+<<<<<<< HEAD
+use ReflectionClass;
+use ReflectionMethod;
+=======
+>>>>>>> develop
 use Viserio\Container\Exception\BindingResolutionException;
 use Viserio\Container\Exception\CircularReferenceException;
 use Viserio\Container\Exception\UnresolvableDependencyException;
 
-/**
- * ContainerResolverTraut.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.6
- */
 trait ContainerResolverTraits
 {
     /**
@@ -25,9 +23,10 @@ trait ContainerResolverTraits
     public function resolve($binding, $alias = true)
     {
         $rawObject = $this->getRaw($binding);
+        $binding   = $this->normalize($binding);
 
         // If the abstract is not registered, do it now for easy resolution.
-        if (null === $rawObject) {
+        if ($rawObject === null) {
             // Pass $binding to both so it doesn't need to check if null again.
             $this->bind($binding, $binding);
             $rawObject = $this->getRaw($binding);
@@ -41,31 +40,19 @@ trait ContainerResolverTraits
     }
 
     /**
-     * Get the raw object prior to resolution.
-     *
-     * @param string $binding The $binding key to get the raw value from.
-     *
-     * @return Definition|\Closure|null Value of the $binding.
+     * {@inheritdoc}
      */
     abstract public function getRaw($binding);
 
     /**
-     * Register a binding with the container.
-     *
-     * @param string      $alias
-     * @param string|null $concrete
-     * @param bool        $singleton
+     * {@inheritdoc}
      */
     abstract public function bind($alias, $concrete = null, $singleton = false);
 
     /**
-     * Returns absolute class name - always with leading backslash.
-     *
-     * @param string $className
-     *
-     * @return string
+     * {@inheritdoc}
      */
-    abstract protected function absoluteClassName($className);
+    abstract public function normalize($service);
 
     /**
      * Checks if class exists.
@@ -76,8 +63,10 @@ trait ContainerResolverTraits
      */
     protected function resolveClassName($className)
     {
+        $className = $this->normalize($className);
+
         if (class_exists($className)) {
-            return $this->absoluteClassName($className);
+            return $className;
         }
 
         return;
@@ -97,8 +86,10 @@ trait ContainerResolverTraits
      */
     protected function reflect($concrete, array $parameters = [])
     {
+        $concrete = $this->normalize($concrete);
+
         // try to reflect on the class so we can build a definition
-        $reflector = new \ReflectionClass($concrete);
+        $reflector = new ReflectionClass($concrete);
 
         if (!$reflector->isInstantiable()) {
             throw new BindingResolutionException(
@@ -115,12 +106,12 @@ trait ContainerResolverTraits
         }
 
         $this->buildStack[] = $concrete;
-        $constructor = $reflector->getConstructor();
+        $constructor        = $reflector->getConstructor();
 
         // If there are no constructors, that means there are no dependencies then
         // we can just resolve the instances of the objects right away, without
         // resolving any other types or dependencies out of these containers.
-        if (null === $constructor) {
+        if ($constructor === null) {
             array_pop($this->buildStack);
 
             return new $concrete();
@@ -154,7 +145,7 @@ trait ContainerResolverTraits
      *
      * @return array An array containing the method dependencies.
      */
-    protected function getDependencies(\ReflectionMethod $method, array $primitives = [])
+    protected function getDependencies(ReflectionMethod $method, array $primitives = [])
     {
         $dependencies = [];
 
