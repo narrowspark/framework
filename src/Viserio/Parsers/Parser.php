@@ -3,16 +3,16 @@ namespace Viserio\Parsers;
 
 use Viserio\Contracts\Filesystem\Filesystem;
 use Viserio\Contracts\Parsers\Exception\NotSupportedException;
+use Viserio\Parsers\Formats\BSON;
 use Viserio\Parsers\Formats\INI;
 use Viserio\Parsers\Formats\JSON;
+use Viserio\Parsers\Formats\MSGPack;
 use Viserio\Parsers\Formats\PHP;
 use Viserio\Parsers\Formats\QueryStr;
 use Viserio\Parsers\Formats\Serialize;
 use Viserio\Parsers\Formats\TOML;
 use Viserio\Parsers\Formats\XML;
 use Viserio\Parsers\Formats\YAML;
-use Viserio\Parsers\Formats\MSGPack;
-use Viserio\Parsers\Formats\BSON;
 
 class Parser
 {
