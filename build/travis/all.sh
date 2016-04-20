@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # Disable xdebug when hhvm or when SEND_COVERAGE is false
-if [[ "$TRAVIS_PHP_VERSION" != "hhvm" && (("$CHECK_CS" != true && "$SEND_COVERAGE" != true && "$HUMBUG" != true) || ("$CHECK_CS" != true && "$SEND_COVERAGE" != true)) ]]; then
+if [[ "$TRAVIS_PHP_VERSION" != "hhvm" && "$DISABLE_XDEBUG" = true ]]; then
   phpenv config-rm xdebug.ini;
 fi
 
