@@ -1,10 +1,10 @@
 <?php
 namespace Viserio\Parsers\Formats;
 
+use RuntimeException;
 use Viserio\Contracts\Parsers\Exception\DumpException;
 use Viserio\Contracts\Parsers\Exception\ParseException;
 use Viserio\Contracts\Parsers\Format as FormatContract;
-use RuntimeException;
 
 class MSGPack implements FormatContract
 {
@@ -18,7 +18,7 @@ class MSGPack implements FormatContract
 
             if (!$msg) {
                 throw new ParseException([
-                    'message' => 'Failed To Parse MSGPack'
+                    'message' => 'Failed To Parse MSGPack',
                 ]);
             }
 
