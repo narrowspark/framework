@@ -41,7 +41,7 @@ class XMLTest extends \PHPUnit_Framework_TestCase
             '
         )->at($this->root);
 
-        $parsed = $this->parser->parse($file->url());
+        $parsed = $this->parser->parse($this->file->read($file->url()));
 
         $this->assertTrue(is_array($parsed));
         $this->assertSame(['to' => 'Tove', 'from' => 'Jani', 'heading' => 'Reminder'], $parsed);

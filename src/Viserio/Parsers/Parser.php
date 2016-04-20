@@ -11,6 +11,8 @@ use Viserio\Parsers\Formats\Serialize;
 use Viserio\Parsers\Formats\TOML;
 use Viserio\Parsers\Formats\XML;
 use Viserio\Parsers\Formats\YAML;
+use Viserio\Parsers\Formats\MSGPack;
+use Viserio\Parsers\Formats\BSON;
 
 class Parser
 {
@@ -34,6 +36,11 @@ class Parser
         'text/javascript'                   => 'json',
         'text/x-javascript'                 => 'json',
         'text/x-json'                       => 'json',
+        // BSON
+        'application/bson'                  => 'bson',
+        // MSGPACK
+        'application/msgpack'               => 'msgpack',
+        'application/x-msgpack'             => 'msgpack',
         // YAML
         'text/yaml'                         => 'yaml',
         'text/x-yaml'                       => 'yaml',
@@ -62,6 +69,8 @@ class Parser
         'yaml'      => YAML::class,
         'serialize' => Serialize::class,
         'querystr'  => QueryStr::class,
+        'msgpack'   => MSGPack::class,
+        'bson'      => BSON::class,
     ];
 
     /**
@@ -91,7 +100,7 @@ class Parser
      *
      * @return string Return the short format code (xml, json, ...).
      */
-    public function getFormat($format)
+    public function getFormat($format = null)
     {
         $format  = strtolower($format);
         $fsystem = $this->filesystem;
@@ -112,14 +121,18 @@ class Parser
      *
      * @throws \Viserio\Contracts\Parsers\Exception\ParseException
      *
-     * @return array|string|null
+     * @return array
      */
     public function parse($payload)
     {
+        if (!$payload) {
+            return [];
+        }
+
         $format  = $this->getFormat($payload);
         $fsystem = $this->filesystem;
 
-        if ($format !== 'php' || $format !== 'xml') {
+        if ($format !== 'php') {
             if ($fsystem->isFile($payload)) {
                 $payload = $fsystem->read($payload);
             }

@@ -14,7 +14,7 @@ class XML implements FormatContract
     public function parse($payload)
     {
         try {
-            $data = simplexml_load_file($payload, 'SimpleXMLElement', LIBXML_NOCDATA);
+            $data = simplexml_load_string($payload, 'SimpleXMLElement', LIBXML_NOCDATA);
             $data = json_decode(json_encode((array) $data), true); // Work around to accept xml input
             $data = str_replace(':{}', ':null', $data);
             $data = str_replace(':[]', ':null', $data);

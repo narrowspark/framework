@@ -10,7 +10,7 @@ interface Format
      *
      * @throws \Viserio\Contracts\Parsers\Exception\ParseException
      *
-     * @return array|string|null
+     * @return array
      */
     public function parse($payload);
 
