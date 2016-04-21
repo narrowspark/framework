@@ -60,12 +60,12 @@ class XMLTest extends \PHPUnit_Framework_TestCase
         $array = [
             'Good guy' => [
                 'name' => 'Luke Skywalker',
-                'weapon' => 'Lightsaber'
+                'weapon' => 'Lightsaber',
             ],
             'Bad guy' => [
                 'name' => 'Sauron',
-                'weapon' => 'Evil Eye'
-            ]
+                'weapon' => 'Evil Eye',
+            ],
         ];
 
         $file = vfsStream::newFile('temp.xml')->withContent(

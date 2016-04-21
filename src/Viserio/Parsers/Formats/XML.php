@@ -1,8 +1,8 @@
 <?php
 namespace Viserio\Parsers\Formats;
 
-use Exception;
 use DOMException;
+use Exception;
 use RuntimeException;
 use Spatie\ArrayToXml\ArrayToXml;
 use Viserio\Contracts\Parsers\Exception\DumpException;
@@ -41,7 +41,7 @@ class XML implements FormatContract
 
         try {
             return ArrayToXml::convert($data);
-        } catch(DOMException $exception) {
+        } catch (DOMException $exception) {
             throw new DumpException($exception->getMessage());
         }
     }
