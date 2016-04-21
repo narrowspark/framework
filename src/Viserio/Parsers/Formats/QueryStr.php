@@ -13,6 +13,7 @@ class QueryStr implements FormatContract
     public function parse($payload)
     {
         parse_str(trim($payload), $querystr);
+
         return $querystr;
     }
 
