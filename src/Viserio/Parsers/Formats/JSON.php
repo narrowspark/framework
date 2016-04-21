@@ -2,8 +2,8 @@
 namespace Viserio\Parsers\Formats;
 
 use Viserio\Contracts\Filesystem\Filesystem as FilesystemContract;
-use Viserio\Contracts\Parser\Exception\DumpException;
-use Viserio\Contracts\Parser\Exception\ParseException;
+use Viserio\Contracts\Parsers\Exception\DumpException;
+use Viserio\Contracts\Parsers\Exception\ParseException;
 use Viserio\Contracts\Parsers\Format as FormatContract;
 
 class JSON implements FormatContract
@@ -16,10 +16,8 @@ class JSON implements FormatContract
         $json = json_decode(trim($payload), true);
 
         if (json_last_error() !== JSON_ERROR_NONE) {
-            $jsonError = $this->getJsonError(json_last_error());
-
             throw new ParseException(
-                sprintf('Invalid JSON provided "%s" in "%s"', $jsonError)
+                ['message' => $this->getJsonError(json_last_error())]
             );
         }
 

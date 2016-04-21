@@ -18,7 +18,7 @@
         }
     ],
     "require": {
-        "php"                                               : "^5.6|^7.0",
+        "php"                                               : "^5.6 || ^7.0",
         "container-interop/container-interop"               : "~1.1",
         "viserio/cotracts"                                  : "self.version",
         "viserio/support"                                   : "self.version"

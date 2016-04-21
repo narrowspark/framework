@@ -1,7 +1,7 @@
 <?php
 namespace Viserio\Parsers\Formats;
 
-use Viserio\Contracts\Parser\Exception\DumpException;
+use Viserio\Contracts\Parsers\Exception\DumpException;
 use Viserio\Contracts\Parsers\Exception\ParseException;
 use Viserio\Contracts\Parsers\Format as FormatContract;
 
@@ -15,9 +15,9 @@ class INI implements FormatContract
         $ini = parse_ini_string($payload, true);
 
         if (!$ini) {
-            throw new ParseException(
-                sprintf('Invalid JSON provided "%s" in "%s"', $jsonError)
-            );
+            throw new ParseException([
+                'message' => 'Invalid INI provided.',
+            ]);
         }
 
         return $ini;
@@ -40,7 +40,7 @@ class INI implements FormatContract
     protected function writeSection($section, $array)
     {
         $subsections = [];
-        $output = "[$section]\n";
+        $output = '[' . $section . ']' . PHP_EOL;
 
         foreach ($array as $key => $value) {
             if (is_array($value) || is_object($value)) {
@@ -57,12 +57,12 @@ class INI implements FormatContract
                     $output .= $value;
                 }
 
-                $output .= "\n";
+                $output .= PHP_EOL;
             }
         }
 
         if ($subsections) {
-            $output .= "\n";
+            $output .= PHP_EOL;
 
             foreach ($subsections as $section => $array) {
                 $output .= $this->writeSection($section, $array);

@@ -2,6 +2,7 @@
 namespace Viserio\Parsers\Tests\Formats\Formats;
 
 use org\bovigo\vfs\vfsStream;
+use Viserio\Filesystem\Filesystem;
 use Viserio\Parsers\Formats\INI;
 
 class INITest extends \PHPUnit_Framework_TestCase
@@ -14,10 +15,16 @@ class INITest extends \PHPUnit_Framework_TestCase
     /**
      * @var \Viserio\Parsers\Formats\INI
      */
-    private $format;
+    private $parser;
+
+    /**
+     * @var \Viserio\Contracts\Filesystem\Filesystem
+     */
+    private $file;
 
     public function setUp()
     {
+        $this->file = new Filesystem();
         $this->root   = vfsStream::setup();
         $this->parser = new INI();
     }
@@ -32,7 +39,7 @@ animal = BIRD
             '
         )->at($this->root);
 
-        $parsed = $this->parser->parse($file->url());
+        $parsed = $this->parser->parse($this->file->read($file->url()));
 
         $this->assertTrue(is_array($parsed));
         $this->assertSame(['one' => '1', 'five' => '5', 'animal' => 'BIRD'], $parsed);
@@ -52,7 +59,7 @@ value=5
             '
         )->at($this->root);
 
-        $parsed = $this->parser->parse($file->url());
+        $parsed = $this->parser->parse($this->file->read($file->url()));
 
         $this->assertTrue(is_array($parsed));
         $this->assertSame(
@@ -62,27 +69,11 @@ value=5
     }
 
     /**
-     * @expectedException League\Flysystem\FileNotFoundException
-     * #@expectedExceptionMessage
+     * @expectedException Viserio\Contracts\Parsers\Exception\ParseException
      */
     public function testParseToThrowException()
     {
         $this->parser->parse('nonexistfile');
-    }
-
-    public function testSupports()
-    {
-        $file = vfsStream::newFile('temp.ini')->at($this->root);
-
-        $this->assertTrue($this->parser->supports($file->url()));
-
-        $file = vfsStream::newFile('temp.ini.dist')->at($this->root);
-
-        $this->assertTrue($this->parser->supports($file->url()));
-
-        $file = vfsStream::newFile('temp.notsupported')->at($this->root);
-
-        $this->assertFalse($this->parser->supports($file->url()));
     }
 
     public function testDump()

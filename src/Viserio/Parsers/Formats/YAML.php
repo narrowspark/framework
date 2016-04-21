@@ -1,7 +1,6 @@
 <?php
 namespace Viserio\Parsers\Formats;
 
-use League\Flysystem\FileNotFoundException;
 use RuntimeException;
 use Symfony\Component\Yaml\Exception\ParseException as YamlParseException;
 use Symfony\Component\Yaml\Parser;
@@ -39,7 +38,9 @@ class YAML implements FormatContract
                 trim(preg_replace('/\t+/', '', $payload))
             );
         } catch (YamlParseException $exception) {
-            throw new ParseException(sprintf('Unable to parse the YAML string: [%s]', $exception->getMessage()));
+            throw new ParseException([
+                'message' => $exception->getMessage(),
+            ]);
         }
     }
 
