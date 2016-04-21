@@ -17,8 +17,14 @@ class PHPTest extends \PHPUnit_Framework_TestCase
      */
     private $parser;
 
+    /**
+     * @var \Viserio\Contracts\Filesystem\Filesystem
+     */
+    private $file;
+
     public function setUp()
     {
+        $this->file = new Filesystem();
         $this->root   = vfsStream::setup();
         $this->parser = new PHP();
     }
@@ -27,7 +33,7 @@ class PHPTest extends \PHPUnit_Framework_TestCase
     {
         $file = vfsStream::newFile('temp.php')->withContent(
             '<?php
-return ["a" => 1, "b" => 2, "c" => 3, "d" => 4, "e" => 5,];
+return [\'a\' => 1, "b" => 2, "c" => 3, "d" => 4, "e" => 5,];
             '
         )->at($this->root);
 
@@ -47,6 +53,20 @@ return ["a" => 1, "b" => 2, "c" => 3, "d" => 4, "e" => 5,];
 
     public function testDump()
     {
-        # code...
+        $file = vfsStream::newFile('temp.php')->withContent(
+            '<?php
+
+return array (
+\'a\' => 1,
+\'b\' => 2,
+\'c\' => 3,
+\'d\' => 4,
+\'e\' => 5,
+);'
+        )->at($this->root);
+
+        $dump = $this->parser->dump(['a' => 1, 'b' => 2, 'c' => 3, 'd' => 4, 'e' => 5]);
+
+        $this->assertSame($this->file->read($file->url()), $dump);
     }
 }

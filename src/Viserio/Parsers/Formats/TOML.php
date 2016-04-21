@@ -40,6 +40,6 @@ class TOML implements FormatContract
      */
     public function dump(array $data)
     {
-        return 'Not supported';
+        return 'Not supported.';
     }
 }

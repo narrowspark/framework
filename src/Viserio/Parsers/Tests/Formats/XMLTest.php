@@ -33,11 +33,11 @@ class XMLTest extends \PHPUnit_Framework_TestCase
     {
         $file = vfsStream::newFile('temp.xml')->withContent(
             '<?xml version="1.0"?>
-<note>
+<data>
   <to>Tove</to>
   <from>Jani</from>
   <heading>Reminder</heading>
-</note>
+</data>
             '
         )->at($this->root);
 
@@ -57,6 +57,33 @@ class XMLTest extends \PHPUnit_Framework_TestCase
 
     public function testDump()
     {
-        # code...
+        $array = [
+            'Good guy' => [
+                'name' => 'Luke Skywalker',
+                'weapon' => 'Lightsaber'
+            ],
+            'Bad guy' => [
+                'name' => 'Sauron',
+                'weapon' => 'Evil Eye'
+            ]
+        ];
+
+        $file = vfsStream::newFile('temp.xml')->withContent(
+            '<?xml version="1.0"?>
+<root><Good_guy><name>Luke Skywalker</name><weapon>Lightsaber</weapon></Good_guy><Bad_guy><name>Sauron</name><weapon>Evil Eye</weapon></Bad_guy></root>
+'
+        )->at($this->root);
+
+        $dump = $this->parser->dump($array);
+
+        $this->assertEquals($this->file->read($file->url()), $dump);
+    }
+
+    /**
+     * @expectedException Viserio\Contracts\Parsers\Exception\DumpException
+     */
+    public function testDumpToThrowException()
+    {
+        $this->parser->dump(['one', 'two', 'three']);
     }
 }

@@ -27,6 +27,10 @@ class Serialize implements FormatContract
      */
     public function dump(array $data)
     {
-        return serialize($data);
+        try {
+            return serialize($data);
+        } catch (Exception $exception) {
+            throw new DumpException($exception->getMessage());
+        }
     }
 }

@@ -121,6 +121,7 @@
         "predis/predis"                                      : "^1.0",
         "roave/security-advisories"                          : "dev-master",
         "symfony/yaml"                                       : "^2.8 || ^3.0",
+        "spatie/array-to-xml"                                : "^2.1.1",
         "yosymfony/toml"                                     : "^0.3"
     },
     "autoload": {

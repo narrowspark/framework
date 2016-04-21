@@ -53,6 +53,6 @@ class TOMLTest extends \PHPUnit_Framework_TestCase
 
     public function testDump()
     {
-        # code...
+        $this->assertSame('Not supported.', $this->parser->dump([]));
     }
 }

@@ -12,15 +12,8 @@ class QueryStr implements FormatContract
      */
     public function parse($payload)
     {
-        try {
-            parse_str(trim($payload), $querystr);
-
-            return $querystr;
-        } catch (Exception $exception) {
-            throw new ParseException([
-                'message' => 'Failed to parse query string data',
-            ]);
-        }
+        parse_str(trim($payload), $querystr);
+        return $querystr;
     }
 
     /**

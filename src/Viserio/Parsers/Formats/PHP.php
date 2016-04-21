@@ -31,7 +31,7 @@ class PHP implements FormatContract
 
         $formatted = str_replace(
             ['  ', '['],
-            ["\t", '['],
+            ['', '['],
             $data
         );
 

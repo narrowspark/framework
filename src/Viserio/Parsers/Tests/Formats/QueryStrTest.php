@@ -18,11 +18,18 @@ class QueryStrTest extends \PHPUnit_Framework_TestCase
 
     public function testParse()
     {
-        // $parsed = $this->parser->parse(
-        //     'to=Jack Smith&from=Jane Doe&subject=Hello World&body=Hello, whats going on...'
-        // );
+        $parsed = $this->parser->parse('status=123&message=hello world');
 
-        // $this->assertTrue(is_array($parsed));
-        // $this->assertSame(['a' => 1, 'b' => 2, 'c' => 3, 'd' => 4, 'e' => 5], $parsed);
+        $this->assertTrue(is_array($parsed));
+        $this->assertSame(['status' => '123', 'message' => 'hello world'], $parsed);
+    }
+
+    public function testDump()
+    {
+        $expected = ['status' => 123, 'message' => 'hello world'];
+        $payload  = http_build_query($expected);
+        $dump     = $this->parser->dump($expected);
+
+        $this->assertEquals($payload, $dump);
     }
 }
