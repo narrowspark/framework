@@ -33,5 +33,12 @@ class BSON implements FormatContract
      */
     public function dump(array $data)
     {
+        $bson = bson_encode($data);
+
+        if (!$bson) {
+            throw new DumpException('BSON dumping failed.');
+        }
+
+        return $bson;
     }
 }

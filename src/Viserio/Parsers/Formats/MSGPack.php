@@ -33,5 +33,12 @@ class MSGPack implements FormatContract
      */
     public function dump(array $data)
     {
+        $msg = msgpack_pack($data);
+
+        if (!$msg) {
+            throw new DumpException('MSGPack dumping failed.');
+        }
+
+        return $msg;
     }
 }

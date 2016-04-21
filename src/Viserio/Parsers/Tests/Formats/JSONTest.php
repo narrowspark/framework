@@ -67,7 +67,7 @@ class JSONTest extends \PHPUnit_Framework_TestCase
 
         $dump = $this->parser->dump($book);
 
-        $this->assertEquals('{
+        $this->assertJsonStringEqualsJsonString('{
     "title": "bar",
     "author": "foo",
     "edition": 6
