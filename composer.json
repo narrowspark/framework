@@ -153,6 +153,7 @@
         "league/flysystem-ziparchive"                        : "Required to use the Flysystem ZipArchive adapter.",
         "predis/predis"                                      : "Required to use the redis cache and queue drivers (^1.0).",
         "symfony/yaml"                                       : "Required to use the Yaml parser (^2.8 || ^3.0).",
+        "spatie/array-to-xml"                                : "Required to use the XML dump (^2.1.1).",
         "yosymfony/toml"                                     : "Required to use the TOML parser (^0.3)."
     },
     "minimum-stability"                                      : "dev",

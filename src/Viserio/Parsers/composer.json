@@ -49,7 +49,7 @@
         "viserio/statical-proxy"          : "Required to use the proxies (self.version).",
         "viserio/filesystem"              : "Required to use parser with file load (self.version).",
         "yosymfony/toml"                  : "Required to use the TOML parser (^0.3).",
-        "spatie/array-to-xml"             : "Required to use the XML dump (^2.1.1).",
+        "spatie/array-to-xml"             : "Required to use the XML dump (^2.1.1)."
     },
     "autoload": {
         "psr-4": {
