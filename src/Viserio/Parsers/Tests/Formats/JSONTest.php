@@ -2,6 +2,7 @@
 namespace Viserio\Parsers\Tests\Formats;
 
 use org\bovigo\vfs\vfsStream;
+use Viserio\Filesystem\Filesystem;
 use Viserio\Parsers\Formats\JSON;
 
 class JSONTest extends \PHPUnit_Framework_TestCase
@@ -14,10 +15,16 @@ class JSONTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \Viserio\Parsers\Formats\JSON
      */
-    private $format;
+    private $parser;
+
+    /**
+     * @var \Viserio\Contracts\Filesystem\Filesystem
+     */
+    private $file;
 
     public function setUp()
     {
+        $this->file = new Filesystem();
         $this->root   = vfsStream::setup();
         $this->parser = new JSON();
     }
@@ -36,15 +43,14 @@ class JSONTest extends \PHPUnit_Framework_TestCase
             '
         )->at($this->root);
 
-        $parsed = $this->parser->parse($file->url());
+        $parsed = $this->parser->parse($this->file->read($file->url()));
 
         $this->assertTrue(is_array($parsed));
         $this->assertSame(['a' => 1, 'b' => 2, 'c' => 3, 'd' => 4, 'e' => 5], $parsed);
     }
 
     /**
-     * @expectedException League\Flysystem\FileNotFoundException
-     * #@expectedExceptionMessage
+     * @expectedException Viserio\Contracts\Parsers\Exception\ParseException
      */
     public function testParseToThrowException()
     {
@@ -61,10 +67,18 @@ class JSONTest extends \PHPUnit_Framework_TestCase
 
         $dump = $this->parser->dump($book);
 
-        $this->assertEquals('{
+        $this->assertJsonStringEqualsJsonString('{
     "title": "bar",
     "author": "foo",
     "edition": 6
 }', $dump);
     }
+
+    // /**
+    //  * @expectedException Viserio\Contracts\Parsers\Exception\DumpException
+    //  */
+    // public function testDumpToThrowException()
+    // {
+    //     $this->parser->dump([]);
+    // }
 }

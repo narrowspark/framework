@@ -16,7 +16,9 @@ class Serialize implements FormatContract
         try {
             return unserialize(trim($payload));
         } catch (Exception $exception) {
-            throw new ParseException('Failed to parse serialized Data');
+            throw new ParseException([
+                'message' => 'Failed to parse serialized Data',
+            ]);
         }
     }
 
@@ -25,6 +27,10 @@ class Serialize implements FormatContract
      */
     public function dump(array $data)
     {
-        return serialize($data);
+        try {
+            return serialize($data);
+        } catch (Exception $exception) {
+            throw new DumpException($exception->getMessage());
+        }
     }
 }

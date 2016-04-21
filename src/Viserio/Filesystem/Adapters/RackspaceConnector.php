@@ -5,7 +5,6 @@ use League\Flysystem\Rackspace\RackspaceAdapter;
 use Narrowspark\Arr\StaticArr as Arr;
 use OpenCloud\ObjectStore\Resource\Container;
 use OpenCloud\OpenStack;
-use Viserio\Contracts\Filesystem\Connector as ConnectorContract;
 
 class RackspaceConnector extends AbstractConnector
 {

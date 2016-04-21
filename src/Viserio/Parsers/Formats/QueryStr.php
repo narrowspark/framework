@@ -12,13 +12,9 @@ class QueryStr implements FormatContract
      */
     public function parse($payload)
     {
-        try {
-            parse_str(trim($payload), $querystr);
+        parse_str(trim($payload), $querystr);
 
-            return $querystr;
-        } catch (Exception $exception) {
-            throw new ParseException('Failed to parse query string data');
-        }
+        return $querystr;
     }
 
     /**
