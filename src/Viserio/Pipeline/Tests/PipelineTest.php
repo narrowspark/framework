@@ -66,7 +66,7 @@ class PipelineTest extends \PHPUnit_Framework_TestCase
     public function testPipelineThrowsExceptionOnResolveWithoutContainer()
     {
         (new Pipeline())->send('data')
-            ->through('PipelineTestPipeOne')
+            ->through('\Viserio\Pipeline\Tests\Fixture\PipelineTestPipeOne')
             ->then(function ($piped) {
                 return $piped;
             });
