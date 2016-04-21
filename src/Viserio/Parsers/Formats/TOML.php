@@ -28,7 +28,10 @@ class TOML implements FormatContract
         try {
             return YosymfonyToml::Parse($payload);
         } catch (TomlParseException $exception) {
-            throw new ParseException(sprintf('Unable to parse the TOML string: [%s]', $exception->getParsedLine()));
+            throw new ParseException([
+                'message' => 'Unable to parse the TOML string',
+                'line' => $exception->getParsedLine(),
+            ]);
         }
     }
 
@@ -37,8 +40,6 @@ class TOML implements FormatContract
      */
     public function dump(array $data)
     {
-        $tb = new TomlBuilder();
-
-        return 'Not supported';
+        return 'Not supported.';
     }
 }
