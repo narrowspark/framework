@@ -40,7 +40,7 @@ class INI implements FormatContract
     protected function writeSection($section, $array)
     {
         $subsections = [];
-        $output = '['.$section.']'.PHP_EOL;
+        $output = '[' . $section . ']' . PHP_EOL;
 
         foreach ($array as $key => $value) {
             if (is_array($value) || is_object($value)) {
