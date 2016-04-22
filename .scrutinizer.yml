@@ -1,15 +1,17 @@
 filter:
-    paths: ['src/Viserio/*']
-    excluded_paths: ['src/Viserio/*/Tests/*', 'vendor/*']
+  paths: ["src/Viserio/*"]
+  excluded_paths:
+    - "src/Viserio/*/Tests/*"
+    - "vendor/*"
 
 build:
-    environment:
-        php: '5.6'
-    dependencies:
-        override:
-            - 'composer install'
+  environment:
+      php: '5.6'
+  dependencies:
+      override:
+        - 'composer install'
 
 tools:
-    external_code_coverage:
-      timeout: 600
-      runs: 3
+  external_code_coverage:
+    timeout: 600
+    runs: 3
