@@ -54,8 +54,7 @@ return [\'a\' => 1, "b" => 2, "c" => 3, "d" => 4, "e" => 5,];
     public function testDump()
     {
         $file = vfsStream::newFile('temp.php')->withContent(
-            '<?php
-return array (
+            '<?php return array (
 \'a\' => 1,
 \'b\' => 2,
 \'c\' => 3,
