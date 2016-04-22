@@ -2,8 +2,8 @@
 namespace Viserio\Pipeline;
 
 use Closure;
-use ReflectionClass;
 use Interop\Container\ContainerInterface;
+use ReflectionClass;
 use Viserio\Contracts\Pipeline\Pipeline as PipelineContract;
 use Viserio\Support\Traits\ContainerAwareTrait;
 
@@ -164,9 +164,9 @@ class Pipeline implements PipelineContract
     }
 
     /**
-     * @param  [type] $traveler [description]
-     * @param  [type] $stack    [description]
-     * @param  [type] $stage    [description]
+     * @param [type] $traveler [description]
+     * @param [type] $stack    [description]
+     * @param [type] $stage    [description]
      *
      * @return \Closure
      */
