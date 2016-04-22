@@ -394,9 +394,7 @@ class ViewFactoryTest extends \PHPUnit_Framework_TestCase
             Mock::mock(Finder::class),
             new EventDispatcher(),
         ];
-   }
-
-
+    }
 
     protected function getPath()
     {
