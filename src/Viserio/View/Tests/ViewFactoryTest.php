@@ -156,7 +156,7 @@ class ViewFactoryTest extends \PHPUnit_Framework_TestCase
         $factory->getFinder()
             ->shouldReceive('find')
             ->with('view')
-            ->andReturn($this->normalizeDirectorySeparator(__DIR__ . '/Fixture/bar/foo/baz.php'));
+            ->andReturn($this->normalizeDirectorySeparator(__DIR__ . '/Fixture/bar/foo/fi.php'));
 
         $virtuoso = new Virtuoso(
             Mock::mock(ContainerInterface::class),
