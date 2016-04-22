@@ -37,7 +37,6 @@ class PHP implements FormatContract
 
         $output = <<<EOF
 <?php
-
 return {$formatted};
 EOF;
 

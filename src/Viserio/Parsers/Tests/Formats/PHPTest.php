@@ -55,7 +55,6 @@ return [\'a\' => 1, "b" => 2, "c" => 3, "d" => 4, "e" => 5,];
     {
         $file = vfsStream::newFile('temp.php')->withContent(
             '<?php
-
 return array (
 \'a\' => 1,
 \'b\' => 2,
