@@ -97,8 +97,8 @@
         <testsuite name="Narrowspark Session Component Test Suite">
             <directory>./src/Viserio/Session/Tests</directory>
         </testsuite> -->
-        <testsuite name="Narrowspark SaticalProxy Component Test Suite">
-            <directory>./src/Viserio/SaticalProxy/Tests</directory>
+        <testsuite name="Narrowspark StaticalProxy Component Test Suite">
+            <directory>./src/Viserio/StaticalProxy/Tests</directory>
         </testsuite>
         <testsuite name="Narrowspark Support Component Test Suite">
             <directory>./src/Viserio/Support/Tests</directory>
