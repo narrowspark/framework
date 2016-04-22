@@ -67,6 +67,6 @@ return array (
 
         $dump = $this->parser->dump(['a' => 1, 'b' => 2, 'c' => 3, 'd' => 4, 'e' => 5]);
 
-        $this->assertSame($this->file->read($file->url()), $dump);
+        $this->assertSame(rtrim($this->file->read($file->url())), rtrim($dump));
     }
 }

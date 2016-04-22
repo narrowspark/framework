@@ -35,11 +35,11 @@ class PHP implements FormatContract
             $data
         );
 
-        $output = <<<CONF
+        $output = <<<EOF
 <?php
 
 return {$formatted};
-CONF;
+EOF;
 
         return $output;
     }

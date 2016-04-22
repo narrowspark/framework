@@ -60,7 +60,7 @@ class Repository implements RepositoryContract
      */
     public function getSeparator()
     {
-        $this->separator;
+        return $this->separator;
     }
 
     /**

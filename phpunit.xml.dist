@@ -30,7 +30,7 @@
         </testsuite>
         <testsuite name="Narrowspark Cache Component Test Suite">
             <directory>./src/Viserio/Cache/Tests</directory>
-        </testsuite>
+        </testsuite> -->
         <testsuite name="Narrowspark Config Component Test Suite">
             <directory>./src/Viserio/Config/Tests</directory>
         </testsuite>
@@ -40,7 +40,7 @@
         <testsuite name="Narrowspark Console Component Test Suite">
             <directory>./src/Viserio/Console/Tests</directory>
         </testsuite>
-        <testsuite name="Narrowspark Container Component Test Suite">
+<!--        <testsuite name="Narrowspark Container Component Test Suite">
             <directory>./src/Viserio/Container/Tests</directory>
         </testsuite>
         <testsuite name="Narrowspark Contracts Component Test Suite">
@@ -78,10 +78,10 @@
         </testsuite>
         <testsuite name="Narrowspark Mail Component Test Suite">
             <directory>./src/Viserio/Mail/Tests</directory>
-        </testsuite>
+        </testsuite> -->
         <testsuite name="Narrowspark Middleware Component Test Suite">
             <directory>./src/Viserio/Middleware/Tests</directory>
-        </testsuite> -->
+        </testsuite>
         <testsuite name="Narrowspark Parsers Component Test Suite">
             <directory>./src/Viserio/Parsers/Tests</directory>
         </testsuite>
@@ -96,19 +96,19 @@
         </testsuite>
         <testsuite name="Narrowspark Session Component Test Suite">
             <directory>./src/Viserio/Session/Tests</directory>
-        </testsuite>
+        </testsuite> -->
         <testsuite name="Narrowspark SaticalProxy Component Test Suite">
             <directory>./src/Viserio/SaticalProxy/Tests</directory>
         </testsuite>
         <testsuite name="Narrowspark Support Component Test Suite">
             <directory>./src/Viserio/Support/Tests</directory>
         </testsuite>
-        <testsuite name="Narrowspark Translator Component Test Suite">
+<!--        <testsuite name="Narrowspark Translator Component Test Suite">
             <directory>./src/Viserio/Translator/Tests</directory>
-        </testsuite>
+        </testsuite> -->
         <testsuite name="Narrowspark View Component Test Suite">
             <directory>./src/Viserio/View/Tests</directory>
-        </testsuite> -->
+        </testsuite>
     </testsuites>
 
     <filter>

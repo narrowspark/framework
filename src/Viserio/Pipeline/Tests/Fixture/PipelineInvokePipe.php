@@ -14,15 +14,9 @@ class PipelineInvokePipe
         $this->arg = $arg;
     }
 
-    public function __invoke($piped, Closure $next)
+    public function __invoke($piped, $next)
     {
-        $run = self::$run;
-
-        if ($this->arg) {
-            $run($piped, $this->arg);
-        } else {
-            $run($piped);
-        }
+        $_SERVER['__test.pipe.parameters'] = $this->arg;
 
         return $next($piped);
     }
