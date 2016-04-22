@@ -306,9 +306,9 @@ class CookieTest extends \PHPUnit_Framework_TestCase
             '->__toString() returns string representation of a cleared cookie if value is NULL'
         );
 
-        $cookie = new Cookie('foo', 'bar', 0, '/', '');
+        $cookie = new Cookie('foo');
         $this->assertEquals(
-            'foo=bar; Expires=Fri, 13-Dec-1901 12:45:53 LMT; Path=/',
+            'foo=deleted; Expires=' . gmdate('D, d-M-Y H:i:s T', time() - 31536001) . '; Path=/',
             $cookie->__toString()
         );
     }
