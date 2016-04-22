@@ -35,7 +35,7 @@ class PHP implements FormatContract
             $data
         );
 
-        $output = '<?php return '. $formatted . ';';
+        $output = '<?php return ' . $formatted . ';';
 
         return $output;
     }
