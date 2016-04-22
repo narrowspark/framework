@@ -40,7 +40,7 @@ class Php implements EnginesContract
         extract($phpData, EXTR_PREFIX_SAME, 'narrowspark');
 
         try {
-            require_once $phpPath;
+            require $phpPath;
             // Return temporary output buffer content, destroy output buffer
             return ltrim(ob_get_clean());
         } catch (Exception $exception) {

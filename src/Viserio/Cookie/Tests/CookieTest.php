@@ -308,7 +308,7 @@ class CookieTest extends \PHPUnit_Framework_TestCase
 
         $cookie = new Cookie('foo', 'bar', 0, '/', '');
         $this->assertEquals(
-            'foo=bar; Expires=Fri, 13-Dec-1901 20:45:53 UTC; Path=/',
+            'foo=bar; Expires=Fri, 13-Dec-1901 12:45:53 LMT; Path=/',
             $cookie->__toString()
         );
     }
