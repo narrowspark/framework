@@ -101,7 +101,6 @@
     "require-dev": {
         "aws/aws-sdk-php"                                    : "^3.0",
         "cache/integration-tests"                            : "^0.7",
-        "codacy/coverage"                                    : "dev-master",
         "fzaninotto/faker"                                   : "^1.4",
         "helmich/phpunit-psr7-assert"                        : "^1.0",
         "humbug/humbug"                                      : "dev-master",
