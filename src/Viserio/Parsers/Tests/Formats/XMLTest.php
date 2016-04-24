@@ -83,7 +83,7 @@ class XMLTest extends \PHPUnit_Framework_TestCase
      */
     public function testDumpToThrowException()
     {
-        if (!defined('HHVM_VERSION')) {
+        if (defined('HHVM_VERSION')) {
             $this->markTestSkipped('@TODO find error.');
         }
 
