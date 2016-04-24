@@ -90,7 +90,7 @@ class MemcachedConnectorTest extends \PHPUnit_Framework_TestCase
             $config = array_merge($config, [
                 'options' => [
                     'OPT_AUTO_EJECT_HOSTS' => true,
-                ]
+                ],
             ]);
         }
 
