@@ -39,6 +39,7 @@ matrix:
   allow_failures:
     - env: SETUP=basic HUMBUG=true
       php: 5.6
+    - php: hhvm
   fast_finish: true
 
 cache:
