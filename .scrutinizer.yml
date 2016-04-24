@@ -11,6 +11,9 @@ build:
   dependencies:
       override:
         - 'composer install'
+  tests:
+        override:
+          - command: ''
 
 tools:
   external_code_coverage:
