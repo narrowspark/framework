@@ -99,6 +99,7 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract, Direct
         $path = $this->normalizeDirectorySeparator($path);
         clearstatcache(false, $path);
         $permissions = octdec(substr(sprintf('%o', fileperms($path)), -4));
+
         return $permissions & 0044 ?
             FilesystemContract::VISIBILITY_PUBLIC :
             FilesystemContract::VISIBILITY_PRIVATE;
