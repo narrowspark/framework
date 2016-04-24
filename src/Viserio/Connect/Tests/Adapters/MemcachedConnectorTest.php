@@ -89,8 +89,13 @@ class MemcachedConnectorTest extends \PHPUnit_Framework_TestCase
 
         $connector = (new MemcachedConnector())->connect($config);
 
+        if (defined('HHVM_VERSION')) {
+            $this->markTestSkipped('Don´t check on hhvm');
+        } else {
+            $this->assertSame(1, $connector->getOption(Memcached::OPT_AUTO_EJECT_HOSTS));
+        }
+
         $this->assertSame(1, $connector->getOption(Memcached::OPT_NO_BLOCK));
-        $this->assertSame(1, $connector->getOption(Memcached::OPT_AUTO_EJECT_HOSTS));
         $this->assertSame(2000, $connector->getOption(Memcached::OPT_CONNECT_TIMEOUT));
         $this->assertSame(2000, $connector->getOption(Memcached::OPT_POLL_TIMEOUT));
         $this->assertSame(2, $connector->getOption(Memcached::OPT_RETRY_TIMEOUT));
