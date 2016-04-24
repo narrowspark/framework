@@ -3,6 +3,7 @@ filter:
   excluded_paths:
     - "src/Viserio/*/Tests/*"
     - "vendor/*"
+    - "src/Viserio/*/phpunit.xml.dist"
 
 build:
   environment:
