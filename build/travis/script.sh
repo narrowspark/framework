@@ -15,5 +15,5 @@ bash -e <<TRY
     if [[ "$TRAVIS_PHP_VERSION" != "hhvm" && "$HUMBUG" = true ]]; then vendor/bin/humbug; fi
 TRY
 if [ $? -ne 0 ]; then
-  echo exit(1)
+  exit 1
 fi
