@@ -54,9 +54,7 @@ return [\'a\' => 1, "b" => 2, "c" => 3, "d" => 4, "e" => 5,];
     public function testDump()
     {
         $file = vfsStream::newFile('temp.php')->withContent(
-            '<?php
-
-return array (
+            '<?php return array (
 \'a\' => 1,
 \'b\' => 2,
 \'c\' => 3,
@@ -67,6 +65,6 @@ return array (
 
         $dump = $this->parser->dump(['a' => 1, 'b' => 2, 'c' => 3, 'd' => 4, 'e' => 5]);
 
-        $this->assertSame($this->file->read($file->url()), $dump);
+        $this->assertSame(rtrim($this->file->read($file->url())), rtrim($dump));
     }
 }

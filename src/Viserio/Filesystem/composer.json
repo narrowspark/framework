@@ -56,7 +56,8 @@
         "narrowspark/php-cs-fixer-config"    : "^1.1",
         "narrowspark/testing-helper"         : "^1.5",
         "phpunit/phpunit"                    : "^5.1",
-        "viserio/cache"                      : "self.version"
+        "viserio/cache"                      : "self.version",
+        "viserio/parsers"                    : "self.version"
     },
     "suggest": {
         "league/flysystem"                   : "Required to use the Flysystem Local and FTP adapters (^1.0).",
@@ -70,6 +71,7 @@
         "league/flysystem-webdav"            : "Required to use the Flysystem WebDav adapter (^1.0).",
         "league/flysystem-vfs"               : "Required to use the Flysystem VFS adapter (^1.0).",
         "league/flysystem-ziparchive"        : "Required to use the Flysystem ZipArchive adapter (^1.0).",
+        "viserio/parsers"                    : "Required to use FileLoader class (self.version).",
         "viserio/statical-proxy"             : "Required to use all classes as satic classes (self.version)."
     },
     "autoload": {

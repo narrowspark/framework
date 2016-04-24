@@ -96,23 +96,7 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract, Direct
      */
     public function getVisibility($path)
     {
-<<<<<<< HEAD
-        $paths   = is_array($paths) ? $paths : func_get_args();
-        $success = true;
-
-        foreach ($paths as $path) {
-            try {
-                if (!@unlink($path)) {
-                    $success = false;
-                }
-            } catch (ErrorException $e) {
-                $success = false;
-            }
-        }
-=======
         $path = $this->normalizeDirectorySeparator($path);
->>>>>>> origin/develop
-
         clearstatcache(false, $path);
         $permissions = octdec(substr(sprintf('%o', fileperms($path)), -4));
 

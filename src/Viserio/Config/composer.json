@@ -46,9 +46,8 @@
         }
     },
     "suggest": {
-        "yosymfony/toml"                  : "Narrowspark config has support for TOML config",
-        "symfony/yaml"                    : "Narrowspark config has support for YML config",
-        "viserio/filesystem"              : "Required to use bind or cascadePackage function (0.10)"
+        "viserio/filesystem"              : "Required to use bind or cascadePackage function (0.10)",
+        "viserio/parsers"                 : "Required to use FileLoader class (self.version)."
     },
     "minimum-stability"                   : "dev",
     "prefer-stable"                       : true

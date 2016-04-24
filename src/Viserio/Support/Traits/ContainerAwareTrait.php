@@ -35,7 +35,7 @@ trait ContainerAwareTrait
      */
     public function getContainer()
     {
-        if (! $this->container) {
+        if (!$this->container) {
             throw new RuntimeException('Container is not set up.');
         }
 

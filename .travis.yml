@@ -17,28 +17,31 @@ matrix:
     - php: hhvm
       env: SETUP=basic DISABLE_XDEBUG=true
     - php: 5.6
-      env: SETUP=basic DISABLE_XDEBUG=true
+      env: SETUP=basic
     - php: 5.6
-      env: SETUP=stable DISABLE_XDEBUG=true
+      env: SETUP=stable
     - php: 5.6
-      env: SETUP=basic ADAPTER=Libevent DISABLE_XDEBUG=true
+      env: SETUP=basic ADAPTER=Libevent
     - php: 5.6
-      env: SETUP=basic ADAPTER=Ev DISABLE_XDEBUG=true
+      env: SETUP=basic ADAPTER=Ev
     - php: 5.6
       env: SETUP=basic CHECK_CS=true SEND_COVERAGE=true
     - php: 5.6
       env: SETUP=basic HUMBUG=true
     - php: 7.0
-      env: SETUP=lowest DISABLE_XDEBUG=true
+      env: SETUP=lowest
     - php: 7.0
-      env: SETUP=basic ADAPTER=Libuv DISABLE_XDEBUG=true
+      env: SETUP=basic ADAPTER=Libuv
     - php: 7.0
-      env: SETUP=basic ADAPTER=Uv DISABLE_XDEBUG=true
+      env: SETUP=basic ADAPTER=Uv
     - php: 7.0
-      env: SETUP=stable DISABLE_XDEBUG=true
+      env: SETUP=stable
   allow_failures:
     - env: SETUP=basic HUMBUG=true
       php: 5.6
+    - php: hhvm
+    - env: SETUP=lowest
+      php: 7.0
   fast_finish: true
 
 cache:
@@ -54,9 +57,9 @@ before_install:
   - git config --global user.email travis@example.com
 
 install:
-  - if [ "$SETUP" = 'basic' ]; then travis_retry composer install --no-interaction --prefer-dist --no-progress --profile; fi
-  - if [ "$SETUP" = 'stable' ]; then travis_retry composer update --prefer-dist --no-interaction --prefer-stable --no-progress --profile; fi
-  - if [ "$SETUP" = 'lowest' ]; then travis_retry composer update --prefer-dist --no-interaction --prefer-lowest --prefer-stable --no-progress --profile; fi
+  - if [[ "$SETUP" = 'basic' ]]; then travis_retry composer install --no-interaction --prefer-dist --no-progress --profile; fi
+  - if [[ "$SETUP" = 'stable' ]]; then travis_retry composer update --prefer-dist --no-interaction --prefer-stable --no-progress --profile; fi
+  - if [[ "$SETUP" = 'lowest' ]]; then travis_retry composer update --prefer-dist --no-interaction --prefer-lowest --prefer-stable --no-progress --profile; fi
 
 before_script:
   - chmod a+x ./build/travis/all.sh && chmod a+x ./build/travis/php/5.x.sh && chmod a+x ./build/travis/php/7.x.sh && chmod a+x ./build/travis/php/hhvm.sh && chmod a+x ./build/travis/script.sh && chmod a+x ./build/travis/after_success.sh

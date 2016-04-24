@@ -34,7 +34,7 @@ class MSGPackTest extends \PHPUnit_Framework_TestCase
      */
     public function testParseToThrowException()
     {
-        $this->parser->parse('asdgfg<<-.<fsdw|df>24hg2=');
+        $this->parser->parse('asdgfg<-.<fsdw|df>24hg2=');
     }
 
     public function testDump()
@@ -51,6 +51,6 @@ class MSGPackTest extends \PHPUnit_Framework_TestCase
      */
     public function testDumpToThrowException()
     {
-        $this->parser->dump('asdgfg<<-.<fsdw|df>24hg2=');
+        $this->parser->dump('asdgfg<-.<fsdw|df>24hg2=');
     }
 }
