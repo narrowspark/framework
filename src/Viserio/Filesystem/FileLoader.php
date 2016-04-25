@@ -146,7 +146,7 @@ class FileLoader implements LoaderContract
         // the value in an array so we don't have to go through this process
         // again on subsequent checks for the existing of the data file.
         $path = $this->getPath($namespace, $file);
-        $file = $this->normalizeDirectorySeparator($path.$file);
+        $file = $this->normalizeDirectorySeparator($path . $file);
 
         if ($this->parser->getFilesystem()->has($file)) {
             return $this->exists[$key] = $file;
@@ -195,14 +195,14 @@ class FileLoader implements LoaderContract
     protected function getPath($namespace, $file)
     {
         if (isset($this->hints[$namespace])) {
-            return $this->normalizeDirectorySeparator($this->hints[$namespace]. '/');
+            return $this->normalizeDirectorySeparator($this->hints[$namespace] . '/');
         }
 
         foreach ($this->directories as $directory) {
             $file = $this->normalizeDirectorySeparator($directory . '/' . $file);
 
             if ($this->parser->getFilesystem()->has($file)) {
-                return $this->normalizeDirectorySeparator($directory. '/');
+                return $this->normalizeDirectorySeparator($directory . '/');
             }
         }
 
