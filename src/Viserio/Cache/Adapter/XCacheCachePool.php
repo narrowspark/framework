@@ -25,8 +25,8 @@ class XCacheCachePool extends AbstractCachePool
         return true;
     }
 
-    protected function storeItemInCache($key, CacheItemInterface $item, $ttl)
+    protected function storeItemInCache(CacheItemInterface $item, $ttl)
     {
-        return xcache_set($key, $item, $ttl);
+        return xcache_set($item->getKey(), $item, $ttl);
     }
 }
