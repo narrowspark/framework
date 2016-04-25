@@ -22,7 +22,8 @@ interface Manager extends ArrayAccess
      */
 
     /**
-     * Determine if the given configuration value exists.
+     * Checking if configuration values exist, using
+     * either simple or nested keys.
      *
      * @param string $key
      *
@@ -31,7 +32,7 @@ interface Manager extends ArrayAccess
     public function has($key);
 
     /**
-     * Get a value.
+     * Gets a configuration setting using a simple or nested key.
      *
      * @param string $key
      * @param $default
@@ -41,7 +42,8 @@ interface Manager extends ArrayAccess
     public function get($key, $default = null);
 
     /**
-     * Set a value.
+     * Setting configuration values, using
+     * either simple or nested keys.
      *
      * @param string $key
      * @param string $value

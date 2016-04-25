@@ -47,7 +47,7 @@ class TaggableParser extends Parser implements TaggableParserContract
         $taggedData = [];
 
         foreach ($data as $key => $value) {
-            $name             = sprintf(
+            $name = sprintf(
                 '%s' . TaggableParserContract::TAG_DELIMITER . '%s',
                 $taggedKey,
                 $key

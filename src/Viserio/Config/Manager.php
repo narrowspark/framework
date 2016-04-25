@@ -106,7 +106,7 @@ class Manager implements ManagerContract, IteratorAggregate
      */
     public function bind($file, $group = null, $environment = null, $namespace = null)
     {
-        $config = $this->getLoader()->load($file, $group, $environment, $namespace);
+        $config = $this->loader->load($file, $group, $environment, $namespace);
 
         $this->setArray($config);
 
@@ -126,7 +126,7 @@ class Manager implements ManagerContract, IteratorAggregate
      */
     public function cascadePackage($file, $package = null, $group = null, $env = null, $items = null)
     {
-        return $this->getLoader()->cascadePackage($file, $package, $group, $env, $items);
+        return $this->loader->cascadePackage($file, $package, $group, $env, $items);
     }
 
     /**
@@ -192,7 +192,7 @@ class Manager implements ManagerContract, IteratorAggregate
     public function addPath($path)
     {
         $this->path = $path;
-        $this->getLoader()->addDefaultPath($path);
+        $this->loader->addDefaultPath($path);
 
         return $this;
     }

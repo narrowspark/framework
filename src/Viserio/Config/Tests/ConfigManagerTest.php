@@ -6,15 +6,6 @@ use Viserio\Config\Repository;
 
 class ConfigManagerTest extends \PHPUnit_Framework_TestCase
 {
-    public $defaults = [
-        'cookies.encrypt' => false,
-        'cookies.lifetime' => '20 minutes',
-        'cookies.path' => '/',
-        'cookies.domain' => null,
-        'cookies.secure' => false,
-        'cookies.httponly' => false,
-    ];
-
     public function testConstructorInjection()
     {
         $values = ['param' => 'value'];

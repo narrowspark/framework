@@ -4,7 +4,7 @@ namespace Viserio\Filesystem\Tests;
 use org\bovigo\vfs\vfsStream;
 use Viserio\Filesystem\FileLoader;
 use Viserio\Filesystem\Filesystem;
-use Viserio\Filesystem\Parsers\IniParser;
+use Viserio\Parsers\Parser;
 use Viserio\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
 class FileLoaderTest extends \PHPUnit_Framework_TestCase
@@ -24,14 +24,26 @@ class FileLoaderTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->root       = vfsStream::setup();
-        $this->fileloader = new FileLoader(new Filesystem(), [__DIR__ . '/Fixture']);
+        $this->fileloader = new FileLoader(new Parser(new Filesystem()), []);
     }
 
     public function testLoad()
     {
-        $data = $this->fileloader->load('test.ini');
+        $file = vfsStream::newFile('temp.json')->withContent(
+            '
+{
+    "a":1,
+    "b":2,
+    "c":3,
+    "d":4,
+    "e":5
+}
+            '
+        )->at($this->root);
 
-        $this->assertSame(['one' => '1', 'five' => '5', 'animal' => 'BIRD'], $data);
+        $data = $this->fileloader->load($file->url());
+
+        $this->assertSame(['a' => 1, 'b' => 2, 'c' => 3, 'd' => 4, 'e' => 5], $data);
     }
 
     /**
@@ -83,23 +95,8 @@ class FileLoaderTest extends \PHPUnit_Framework_TestCase
         $this->assertContains('barr', $this->fileloader->getNamespaces());
     }
 
-    public function testParser()
+    public function testGetParser()
     {
-        $this->fileloader->addParser('ini.dist', new IniParser(new Filesystem()));
-
-        $this->assertEquals([
-            'ini',
-            'json',
-            'php',
-            'toml',
-            'xml',
-            'yaml',
-            'ini.dist',
-        ], $this->fileloader->getParsers());
-    }
-
-    public function testGetFilesystem()
-    {
-        $this->assertInstanceOf(Filesystem::class, $this->fileloader->getFilesystem());
+        $this->assertInstanceOf(Parser::class, $this->fileloader->getParser());
     }
 }
