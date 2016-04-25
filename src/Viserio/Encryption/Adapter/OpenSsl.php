@@ -2,6 +2,7 @@
 namespace Viserio\Encryption\Adapter;
 
 use RandomLib\Generator as RandomLib;
+use ParagonIE\ConstantTime\Encoding;
 use Viserio\Contracts\Encryption\Adapter as AdapterContract;
 use Viserio\Contracts\Hashing\Generator as HashContract;
 
@@ -88,8 +89,7 @@ class OpenSsl implements AdapterContract
      */
     public function encrypt($data)
     {
-        $ivLength = openssl_cipher_iv_length($this
-        ->cipher . '-' . $this->mode);
+        $ivLength = openssl_cipher_iv_length($this->cipher . '-' . $this->mode);
         $this->encryptIV = openssl_random_pseudo_bytes($ivLength);
 
         // Prepeare the array with data.
@@ -112,9 +112,9 @@ class OpenSsl implements AdapterContract
         // We'll go ahead and remove the PKCS7 padding from the encrypted value before
         // we decrypt it. Once we have the de-padded value, we will grab the vector
         // and decrypt the data, passing back the unserialized from of the value.
-        $value = base64_decode($data['cdata'], true);
+        $value = Encoding::base64Decode($data['cdata'], true);
 
-        $iv = base64_decode($data['iv'], true);
+        $iv = Encoding::base64Decode($data['iv'], true);
 
         return rtrim($this->stripPadding(16, $this->doDecrypt($value, $iv)));
     }
@@ -136,12 +136,12 @@ class OpenSsl implements AdapterContract
         // Algorithm mode.
         $mode = $this->mode;
         // Initialization vector, just a bunch of randomness.
-        $iv = base64_encode($this->encryptIV);
+        $iv = Encoding::base64Encode($this->encryptIV);
         // The encrypted data.
-        $cdata = base64_encode($this->doEncrypt($serializedData, $this->encryptIV));
+        $cdata = Encoding::base64Encode($this->doEncrypt($serializedData, $this->encryptIV));
         // The message authentication code. Used to make sure the
         // message is valid when decrypted.
-        $mac = base64_encode($this->hash->make($cdata . $this->key, 'pbkdf2'));
+        $mac = Encoding::base64Encode($this->hash->make($cdata . $this->key, 'pbkdf2'));
 
         return compact('padding', 'algo', 'mode', 'iv', 'cdata', 'mac');
     }
