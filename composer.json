@@ -49,7 +49,7 @@
         "mpoiriert/invoker"                                  : "^1.1",
         "nesbot/carbon"                                      : "^1.21",
         "nikic/fast-route"                                   : "^0.6",
-        "paragonie/constant_time_encoding"                   : "~1.0",
+        "paragonie/constant_time_encoding"                   : "^1|^2",
         "paragonie/password_lock"                            : "^1.1",
         "psr/cache"                                          : "^1.0",
         "psr/log"                                            : "^1.0",
