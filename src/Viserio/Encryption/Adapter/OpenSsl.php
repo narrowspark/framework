@@ -1,8 +1,8 @@
 <?php
 namespace Viserio\Encryption\Adapter;
 
-use RandomLib\Generator as RandomLib;
 use ParagonIE\ConstantTime\Encoding;
+use RandomLib\Generator as RandomLib;
 use Viserio\Contracts\Encryption\Adapter as AdapterContract;
 use Viserio\Contracts\Hashing\Generator as HashContract;
 
