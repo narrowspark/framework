@@ -1,9 +1,9 @@
 <?php
 namespace Viserio\Parsers\Formats\Tests\Formats;
 
+use org\bovigo\vfs\vfsStream;
 use Viserio\Filesystem\Filesystem;
 use Viserio\Parsers\TaggableParser;
-use org\bovigo\vfs\vfsStream;
 
 class TaggableParserTest extends \PHPUnit_Framework_TestCase
 {
