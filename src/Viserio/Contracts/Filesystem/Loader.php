@@ -18,7 +18,7 @@ interface Loader
      *
      * @param string $file
      *
-     * @return boolean|string
+     * @return bool|string
      */
     public function exists($file);
 }

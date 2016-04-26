@@ -80,7 +80,7 @@ class MemcachedConnector implements ConnectorContract
      * Set custom memcached options.
      *
      * @param Memcached $memcached
-     * @param array  $config
+     * @param array     $config
      *
      * @throws \RuntimeException
      *
