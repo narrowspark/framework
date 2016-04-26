@@ -1,8 +1,6 @@
 <?php
 namespace Viserio\Pipeline\Tests\Fixture;
 
-use Closure;
-
 class PipelineInvokePipe
 {
     public static $run;
