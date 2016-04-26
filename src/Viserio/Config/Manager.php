@@ -3,9 +3,9 @@ namespace Viserio\Config;
 
 use ArrayIterator;
 use IteratorAggregate;
+use Viserio\Contracts\Config\Loader as LoaderContract;
 use Viserio\Contracts\Config\Manager as ManagerContract;
 use Viserio\Contracts\Config\Repository as RepositoryContract;
-use Viserio\Contracts\Config\Loader as LoaderContract;
 
 class Manager implements ManagerContract, IteratorAggregate
 {

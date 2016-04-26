@@ -93,11 +93,11 @@ class FileLoaderTest extends \PHPUnit_Framework_TestCase
 
         $this->fileloader->setDirectories([
             'foo/bar',
-            __DIR__.'/Fixture',
+            __DIR__ . '/Fixture',
         ]);
 
         $exist = $this->fileloader->exists('foo.json');
-        $this->assertSame($this->normalizeDirectorySeparator(__DIR__.'/Fixture/foo.json'), $exist);
+        $this->assertSame($this->normalizeDirectorySeparator(__DIR__ . '/Fixture/foo.json'), $exist);
     }
 
     public function testGetParser()
