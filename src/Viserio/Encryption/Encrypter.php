@@ -5,8 +5,8 @@ use Narrowspark\Arr\StaticArr as Arr;
 use RandomLib\Generator as RandomLib;
 use RuntimeException;
 use Viserio\Contracts\Encryption\DecryptException;
-use Viserio\Contracts\Encryption\Encrypter as EncrypterContract;
 use Viserio\Contracts\Encryption\EncryptException;
+use Viserio\Contracts\Encryption\Encrypter as EncrypterContract;
 use Viserio\Contracts\Hashing\Generator as HashContract;
 use Viserio\Encryption\Adapter\OpenSsl;
 
@@ -113,7 +113,7 @@ class Encrypter implements EncrypterContract
      *   'mac'   => 'Message Authentication Code'
      * ]
      *
-     * @param mixed $data Data to encrypt.
+     * @param string $data Data to encrypt.
      *
      * @return string Serialized array containing the encrypted data
      *                along with some meta data.
@@ -160,9 +160,9 @@ class Encrypter implements EncrypterContract
     /**
      * Compare two encrypted values.
      *
-     * @param mixed $e1
-     * @param mixed $e2
      * @param bool  $loose
+     * @param string $encrypted1
+     * @param string $encrypted2
      *
      * @return bool
      */
@@ -198,6 +198,7 @@ class Encrypter implements EncrypterContract
      * @param string $cipher
      * @param string mode
      * @param string $key
+     * @param string $mode
      *
      * @throws \RuntimeException
      */

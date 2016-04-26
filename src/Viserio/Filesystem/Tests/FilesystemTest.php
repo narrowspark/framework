@@ -1,10 +1,10 @@
 <?php
 namespace Viserio\Filesystem\Tests;
 
+use Viserio\Filesystem\Filesystem;
 use org\bovigo\vfs\content\LargeFileContent;
 use org\bovigo\vfs\vfsStream;
 use org\bovigo\vfs\vfsStreamDirectory;
-use Viserio\Filesystem\Filesystem;
 
 class FilesystemTest extends \PHPUnit_Framework_TestCase
 {

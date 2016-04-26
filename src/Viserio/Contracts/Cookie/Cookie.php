@@ -79,7 +79,7 @@ interface Cookie
     /**
      * Returns the expiration time
      *
-     * @return int|\DateTime
+     * @return integer
      */
     public function getExpiresTime();
 

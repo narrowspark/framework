@@ -56,7 +56,7 @@ class Repository implements RepositoryContract
     /**
      * Get Separator.
      *
-     * @return string|null
+     * @return string
      */
     public function getSeparator()
     {

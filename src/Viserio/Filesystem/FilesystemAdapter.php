@@ -3,10 +3,7 @@ namespace Viserio\Filesystem;
 
 use InvalidArgumentException;
 use League\Flysystem\AdapterInterface;
-use League\Flysystem\AwsS3v3\AwsS3Adapter;
-use League\Flysystem\Config as FlyConfig;
 use League\Flysystem\FileNotFoundException as FlyFileNotFoundException;
-use RuntimeException;
 use Viserio\Contracts\Filesystem\Directorysystem as DirectorysystemContract;
 use Viserio\Contracts\Filesystem\FileNotFoundException;
 use Viserio\Contracts\Filesystem\Filesystem as FilesystemContract;
@@ -175,7 +172,6 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
      * Get all of the directories within a given directory.
      *
      * @param string|null $directory
-     * @param bool        $recursive
      *
      * @return array
      */

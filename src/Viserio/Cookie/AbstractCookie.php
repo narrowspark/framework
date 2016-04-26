@@ -354,7 +354,7 @@ abstract class AbstractCookie implements Stringable, CookieContract
     /**
      * Normalizes the expiration value
      *
-     * @param int|\DateTime|null $expiration
+     * @param integer|null $expiration
      *
      * @return \DateTime|null
      */

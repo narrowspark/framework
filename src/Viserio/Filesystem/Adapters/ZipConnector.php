@@ -13,7 +13,7 @@ class ZipConnector implements ConnectorContract
      *
      * @param string[] $config
      *
-     * @return object
+     * @return ZipArchiveAdapter
      */
     public function connect(array $config)
     {
