@@ -1,5 +1,5 @@
 <?php
-namespace Viserio\Contracts\Filesystem;
+namespace Viserio\Contracts\Config;
 
 interface Loader
 {

@@ -1,8 +1,8 @@
 <?php
-namespace Viserio\Filesystem;
+namespace Viserio\Config;
 
 use Narrowspark\Arr\StaticArr as Arr;
-use Viserio\Contracts\Filesystem\Loader as LoaderContract;
+use Viserio\Contracts\Config\Loader as LoaderContract;
 use Viserio\Contracts\Parsers\TaggableParser as TaggableParserContract;
 use Viserio\Parsers\IniParser;
 use Viserio\Parsers\JsonParser;
@@ -15,6 +15,13 @@ use Viserio\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 class FileLoader implements LoaderContract
 {
     use NormalizePathAndDirectorySeparatorTrait;
+
+    /**
+     * The filesystem instance.
+     *
+     * @var \Viserio\Filesystem\Filesystem
+     */
+    private $filesystem;
 
     /**
      * The parser instance.
@@ -47,6 +54,7 @@ class FileLoader implements LoaderContract
     public function __construct(TaggableParserContract $parser, array $directories)
     {
         $this->parser      = $parser;
+        $this->filesystem  = $parser->getFilesystem();
         $this->directories = $directories;
     }
 
@@ -65,11 +73,13 @@ class FileLoader implements LoaderContract
      *
      * @param array $directories
      *
-     * @return FileLoader
+     * @return self
      */
     public function setDirectories(array $directories)
     {
-        $this->directories = $directories;
+        foreach ($directories as $directory) {
+            $this->addDirectory($directory);
+        }
 
         return $this;
     }
@@ -94,7 +104,7 @@ class FileLoader implements LoaderContract
     public function addDirectory($directory)
     {
         if (!in_array($directory, $this->directories)) {
-            $this->directories[] = $directory;
+            $this->directories[] = $this->normalizeDirectorySeparator($directory);
         }
 
         return $this;
@@ -131,7 +141,7 @@ class FileLoader implements LoaderContract
         $path = $this->getPath($file);
         $file = $this->normalizeDirectorySeparator($path . $file);
 
-        if ($this->parser->getFilesystem()->has($file)) {
+        if ($this->filesystem->has($file)) {
             return $this->exists[$key] = $file;
         }
 
@@ -151,10 +161,10 @@ class FileLoader implements LoaderContract
     protected function getPath($file)
     {
         foreach ($this->directories as $directory) {
-            $file = $this->normalizeDirectorySeparator($directory . '/' . $file);
+            $dirFile = $this->normalizeDirectorySeparator($directory . '/' . $file);
 
-            if ($this->parser->getFilesystem()->has($file)) {
-                return $this->normalizeDirectorySeparator($directory . '/');
+            if ($this->filesystem->has($dirFile)) {
+                return $this->normalizeDirectorySeparator($directory) . '/';
             }
         }
 

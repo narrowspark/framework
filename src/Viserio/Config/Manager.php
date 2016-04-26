@@ -5,7 +5,7 @@ use ArrayIterator;
 use IteratorAggregate;
 use Viserio\Contracts\Config\Manager as ManagerContract;
 use Viserio\Contracts\Config\Repository as RepositoryContract;
-use Viserio\Contracts\Filesystem\Loader as LoaderContract;
+use Viserio\Contracts\Config\Loader as LoaderContract;
 
 class Manager implements ManagerContract, IteratorAggregate
 {
@@ -19,7 +19,7 @@ class Manager implements ManagerContract, IteratorAggregate
     /**
      * Fileloader instance.
      *
-     * @var \Viserio\Contracts\Filesystem\Loader
+     * @var \Viserio\Contracts\Config\Loader
      */
     protected $loader;
 
@@ -37,7 +37,7 @@ class Manager implements ManagerContract, IteratorAggregate
      */
     public function __construct(RepositoryContract $repository)
     {
-        $this->setHandler($repository);
+        $this->repository = $repository;
     }
 
     /**
@@ -48,16 +48,6 @@ class Manager implements ManagerContract, IteratorAggregate
     public function setArray(array $values)
     {
         $this->repository->setArray($values);
-    }
-
-    /**
-     * Set a configuration repository and provide it some defaults.
-     *
-     * @param RepositoryContract $repository
-     */
-    public function setHandler(RepositoryContract $repository)
-    {
-        $this->repository = $repository;
     }
 
     /**
@@ -73,9 +63,9 @@ class Manager implements ManagerContract, IteratorAggregate
     /**
      * Get the configuration loader.
      *
-     * @param \Viserio\Contracts\Filesystem\Loader $loader
+     * @param \Viserio\Contracts\Config\Loader $loader
      *
-     * @return \Viserio\Contracts\Filesystem\Loader
+     * @return \Viserio\Contracts\Config\Loader
      */
     public function setLoader(LoaderContract $loader)
     {
@@ -87,7 +77,7 @@ class Manager implements ManagerContract, IteratorAggregate
     /**
      * Get the configuration loader.
      *
-     * @return \Viserio\Contracts\Filesystem\Loader
+     * @return \Viserio\Contracts\Config\Loader
      */
     public function getLoader()
     {
@@ -98,35 +88,17 @@ class Manager implements ManagerContract, IteratorAggregate
      * Load the given configuration group.
      *
      * @param string      $file
-     * @param string|null $namespace
-     * @param string|null $environment
      * @param string|null $group
      *
      * @return self
      */
-    public function bind($file, $group = null, $environment = null, $namespace = null)
+    public function bind($file, $group = null)
     {
-        $config = $this->loader->load($file, $group, $environment, $namespace);
+        $config = $this->loader->load($file, $group);
 
         $this->setArray($config);
 
         return $this;
-    }
-
-    /**
-     * Apply any cascades to an array of package options.
-     *
-     * @param string      $file
-     * @param string|null $package
-     * @param string|null $group
-     * @param string|null $env
-     * @param array|null  $items
-     *
-     * @return array
-     */
-    public function cascadePackage($file, $package = null, $group = null, $env = null, $items = null)
-    {
-        return $this->loader->cascadePackage($file, $package, $group, $env, $items);
     }
 
     /**
@@ -165,10 +137,14 @@ class Manager implements ManagerContract, IteratorAggregate
      *
      * @param string $key
      * @param mixed  $value
+     *
+     * @return self
      */
     public function set($key, $value)
     {
         $this->repository[$key] = $value;
+
+        return $this;
     }
 
     /**
@@ -176,35 +152,14 @@ class Manager implements ManagerContract, IteratorAggregate
      *
      * @param string       $key
      * @param string|array $items
+     *
+     * @return self
      */
     public function push($key, $items)
     {
         array_push($this->repository[$key], $items);
-    }
-
-    /**
-     * Set path to config folder.
-     *
-     * @param string $path
-     *
-     * @return self
-     */
-    public function addPath($path)
-    {
-        $this->path = $path;
-        $this->loader->addDefaultPath($path);
 
         return $this;
-    }
-
-    /**
-     * Get config folder path.
-     *
-     * @return string
-     */
-    public function getPath()
-    {
-        return $this->path;
     }
 
     /**
@@ -217,6 +172,10 @@ class Manager implements ManagerContract, IteratorAggregate
      */
     public function __call($method, array $params = [])
     {
+        if ($this->loader && method_exists($this->loader, $method)) {
+            return call_user_func_array([$this->loader, $method], $params);
+        }
+
         return call_user_func_array([$this->repository, $method], $params);
     }
 

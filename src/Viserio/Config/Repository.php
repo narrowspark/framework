@@ -146,7 +146,7 @@ class Repository implements RepositoryContract
             $key = array_shift($keys);
 
             if (!isset($array[$key]) || !is_array($array[$key])) {
-                return;
+                break;
             }
 
             $array = &$array[$key];

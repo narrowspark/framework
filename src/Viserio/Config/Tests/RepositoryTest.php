@@ -170,5 +170,21 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
         unset($repository['param'], $repository['service']);
         $this->assertFalse(isset($repository['param']));
         $this->assertFalse(isset($repository['service']));
+
+        $repository['foo.bar'] = 'baz';
+
+        $repository->offsetUnset('foo.bar');
+
+        $this->assertFalse(isset($repository['foo.bar']));
+
+        $repository->offsetUnset('foo');
+        $this->assertFalse(isset($repository['foo']));
+    }
+
+    public function testGetIterator()
+    {
+        $repository = new Repository();
+
+        $this->assertInstanceOf('ArrayIterator', $repository->getIterator());
     }
 }

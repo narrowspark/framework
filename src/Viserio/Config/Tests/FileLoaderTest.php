@@ -1,8 +1,8 @@
 <?php
-namespace Viserio\Filesystem\Tests;
+namespace Viserio\Config\Tests;
 
 use org\bovigo\vfs\vfsStream;
-use Viserio\Filesystem\FileLoader;
+use Viserio\Config\FileLoader;
 use Viserio\Filesystem\Filesystem;
 use Viserio\Parsers\TaggableParser;
 use Viserio\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
@@ -86,8 +86,41 @@ class FileLoaderTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($this->normalizeDirectorySeparator($file->url()), $exist2);
     }
 
+    public function testExistsWithFalsePath()
+    {
+        $exist = $this->fileloader->exists('no/file.php');
+        $this->assertFalse($exist);
+
+        $this->fileloader->setDirectories([
+            'foo/bar',
+            __DIR__.'/Fixture',
+        ]);
+
+        $exist = $this->fileloader->exists('foo.json');
+        $this->assertSame($this->normalizeDirectorySeparator(__DIR__.'/Fixture/foo.json'), $exist);
+    }
+
     public function testGetParser()
     {
         $this->assertInstanceOf(TaggableParser::class, $this->fileloader->getParser());
+    }
+
+    public function testGetSetAndAddDirectories()
+    {
+        $this->fileloader->setDirectories([
+            'foo/bar/',
+            'bar/foo/',
+        ]);
+
+        $directory = $this->fileloader->getDirectories();
+
+        $this->assertSame('foo/bar', $directory[0]);
+        $this->assertSame('bar/foo', $directory[1]);
+
+        $this->fileloader->addDirectory('added/directory');
+
+        $directory = $this->fileloader->getDirectories();
+
+        $this->assertSame('added/directory', $directory[2]);
     }
 }
