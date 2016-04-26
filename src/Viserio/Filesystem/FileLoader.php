@@ -3,7 +3,7 @@ namespace Viserio\Filesystem;
 
 use Narrowspark\Arr\StaticArr as Arr;
 use Viserio\Contracts\Filesystem\Loader as LoaderContract;
-use Viserio\Contracts\Parsers\Parser as ParserContract;
+use Viserio\Contracts\Parsers\TaggableParser as TaggableParserContract;
 use Viserio\Parsers\IniParser;
 use Viserio\Parsers\JsonParser;
 use Viserio\Parsers\PHPParser;
@@ -19,7 +19,7 @@ class FileLoader implements LoaderContract
     /**
      * The parser instance.
      *
-     * @var ParserContract
+     * @var TaggableParserContract
      */
     protected $parser;
 
@@ -31,13 +31,6 @@ class FileLoader implements LoaderContract
     protected $directories;
 
     /**
-     * All of the named path hints.
-     *
-     * @var array
-     */
-    protected $hints = [];
-
-    /**
      * A cache of whether namespaces and groups exists.
      *
      * @var array
@@ -47,11 +40,11 @@ class FileLoader implements LoaderContract
     /**
      * Create a new fileloader.
      *
-     * @param FilesystemContract $files
-     * @param ParserContract     $parser
-     * @param array              $directories
+     * @param FilesystemContract     $files
+     * @param TaggableParserContract $parser
+     * @param array                  $directories
      */
-    public function __construct(ParserContract $parser, array $directories)
+    public function __construct(TaggableParserContract $parser, array $directories)
     {
         $this->parser      = $parser;
         $this->directories = $directories;
@@ -108,43 +101,34 @@ class FileLoader implements LoaderContract
     }
 
     /**
-     * Load the given file path.
-     *
-     * @param string $file
-     *
-     * @return array
+     * {@inheritdoc}
      */
-    public function load($file)
+    public function load($file, $tag = null)
     {
         // Determine if the given file exists.
         $path  = $this->exists($file);
 
+        $parser = $this->parser;
+
+        if ($tag !== null) {
+            $parser->setTag($tag);
+        }
+
         // Set the right Parser for data and return data array
-        return $this->parser->parse($path);
+        return $parser->parse($path);
     }
 
     /**
-     * Determine if the given file exists.
-     *
-     * @param string $file
-     *
-     * @return bool|string
+     * {@inheritdoc}
      */
     public function exists($file)
     {
-        $key = str_replace('/', '', $namespace . $file);
-
-        // We'll first check to see if we have determined if this namespace
-        // combination have been checked before. If they have, we will
-        // just return the cached result so we don't have to hit the disk.
-        if (isset($this->exists[$envKey])) {
-            return $this->exists[$envKey];
-        }
+        $key = str_replace('/', '', $file);
 
         // Finally, we can simply check if this file exists. We will also cache
         // the value in an array so we don't have to go through this process
         // again on subsequent checks for the existing of the data file.
-        $path = $this->getPath($namespace, $file);
+        $path = $this->getPath($file);
         $file = $this->normalizeDirectorySeparator($path . $file);
 
         if ($this->parser->getFilesystem()->has($file)) {
@@ -158,45 +142,14 @@ class FileLoader implements LoaderContract
     }
 
     /**
-     * Add a new namespace to the loader.
+     * Get the data path for a file.
      *
-     * @param string $namespace
-     * @param string $hint
-     *
-     * @return self
-     */
-    public function addNamespace($namespace, $hint)
-    {
-        $this->hints[$namespace] = $hint;
-
-        return $this;
-    }
-
-    /**
-     * Returns all registered namespaces with the data
-     * loader.
-     *
-     * @return array
-     */
-    public function getNamespaces()
-    {
-        return $this->hints;
-    }
-
-    /**
-     * Get the data path for a namespace.
-     *
-     * @param string $namespace
      * @param string $file
      *
      * @return string
      */
-    protected function getPath($namespace, $file)
+    protected function getPath($file)
     {
-        if (isset($this->hints[$namespace])) {
-            return $this->normalizeDirectorySeparator($this->hints[$namespace] . '/');
-        }
-
         foreach ($this->directories as $directory) {
             $file = $this->normalizeDirectorySeparator($directory . '/' . $file);
 

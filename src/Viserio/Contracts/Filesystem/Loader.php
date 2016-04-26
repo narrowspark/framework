@@ -4,13 +4,14 @@ namespace Viserio\Contracts\Filesystem;
 interface Loader
 {
     /**
-     * Load the given configuration group.
+     * Load the given file path.
      *
      * @param string $file
+     * @param string $tag
      *
      * @return array
      */
-    public function load($file);
+    public function load($file, $tag = null);
 
     /**
      * Determine if the given file exists.

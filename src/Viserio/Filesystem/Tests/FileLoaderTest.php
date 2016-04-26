@@ -4,7 +4,7 @@ namespace Viserio\Filesystem\Tests;
 use org\bovigo\vfs\vfsStream;
 use Viserio\Filesystem\FileLoader;
 use Viserio\Filesystem\Filesystem;
-use Viserio\Parsers\Parser;
+use Viserio\Parsers\TaggableParser;
 use Viserio\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
 class FileLoaderTest extends \PHPUnit_Framework_TestCase
@@ -24,7 +24,7 @@ class FileLoaderTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->root       = vfsStream::setup();
-        $this->fileloader = new FileLoader(new Parser(new Filesystem()), []);
+        $this->fileloader = new FileLoader(new TaggableParser(new Filesystem()), []);
     }
 
     public function testLoad()
@@ -46,57 +46,48 @@ class FileLoaderTest extends \PHPUnit_Framework_TestCase
         $this->assertSame(['a' => 1, 'b' => 2, 'c' => 3, 'd' => 4, 'e' => 5], $data);
     }
 
-    /**
-     * @expectedException Viserio\Contracts\Filesystem\Exception\UnsupportedFormatException
-     * @expectedExceptionMessage Unable to find the right Parser for [inia].
-     */
-    public function testLoadToThrowException()
-    {
-        $this->fileloader->load('test.inia');
-    }
-
     public function testLoadwithGroup()
     {
-        $data = $this->fileloader->load('test.ini', 'Test');
+        $file = vfsStream::newFile('temp.json')->withContent(
+            '
+{
+    "a":1,
+    "b":2,
+    "c":3,
+    "d":4,
+    "e":5
+}
+            '
+        )->at($this->root);
 
-        $this->assertSame(['Test::one' => '1', 'Test::five' => '5', 'Test::animal' => 'BIRD'], $data);
-    }
+        $data = $this->fileloader->load($file->url(), 'Test');
 
-    public function testExistswithEnvironment()
-    {
-        $exist = $this->fileloader->exists('test.ini', null, 'production', null);
-        $this->assertSame($this->normalizeDirectorySeparator(__DIR__ . '/Fixture/production/test.ini'), $exist);
+        $this->assertSame(['Test::a' => 1, 'Test::b' => 2, 'Test::c' => 3, 'Test::d' => 4, 'Test::e' => 5], $data);
     }
 
     public function testExistsWithCache()
     {
-        $exist = $this->fileloader->exists('test.json');
-        $this->assertSame($this->normalizeDirectorySeparator(__DIR__ . '/Fixture/test.json'), $exist);
+        $file = vfsStream::newFile('temp.json')->withContent(
+            '
+{
+    "a":1,
+    "b":2,
+    "c":3,
+    "d":4,
+    "e":5
+}
+            '
+        )->at($this->root);
 
-        $exist2 = $this->fileloader->exists('test.json');
-        $this->assertSame($this->normalizeDirectorySeparator(__DIR__ . '/Fixture/test.json'), $exist2);
+        $exist = $this->fileloader->exists($file->url());
+        $this->assertSame($this->normalizeDirectorySeparator($file->url()), $exist);
 
-        $envExist1 = $this->fileloader->exists('test.ini', null, 'production', null);
-        $this->assertSame($this->normalizeDirectorySeparator(__DIR__ . '/Fixture/production/test.ini'), $envExist1);
-
-        $envExist2 = $this->fileloader->exists('test.ini', null, 'production', null);
-        $this->assertSame($this->normalizeDirectorySeparator(__DIR__ . '/Fixture/production/test.ini'), $envExist2);
-    }
-
-    public function testCascadePackage()
-    {
-        # code...
-    }
-
-    public function testNamespace()
-    {
-        $this->fileloader->addNamespace('foo', 'barr');
-
-        $this->assertContains('barr', $this->fileloader->getNamespaces());
+        $exist2 = $this->fileloader->exists($file->url());
+        $this->assertSame($this->normalizeDirectorySeparator($file->url()), $exist2);
     }
 
     public function testGetParser()
     {
-        $this->assertInstanceOf(Parser::class, $this->fileloader->getParser());
+        $this->assertInstanceOf(TaggableParser::class, $this->fileloader->getParser());
     }
 }
