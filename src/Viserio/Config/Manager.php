@@ -1,7 +1,6 @@
 <?php
 namespace Viserio\Config;
 
-use ArrayIterator;
 use IteratorAggregate;
 use Viserio\Contracts\Config\Loader as LoaderContract;
 use Viserio\Contracts\Config\Manager as ManagerContract;
@@ -48,16 +47,6 @@ class Manager implements ManagerContract, IteratorAggregate
     public function setArray(array $values)
     {
         $this->repository->setArray($values);
-    }
-
-    /**
-     * Get the configuration repository for access.
-     *
-     * @return RepositoryContract
-     */
-    public function getHandler()
-    {
-        return $this->repository;
     }
 
     /**
@@ -110,7 +99,7 @@ class Manager implements ManagerContract, IteratorAggregate
      */
     public function has($key)
     {
-        return $this->get($key) !== null;
+        return $this->offsetExists($key);
     }
 
     /**
@@ -123,7 +112,7 @@ class Manager implements ManagerContract, IteratorAggregate
      */
     public function get($key, $default = null)
     {
-        if ($this->repository[$key] === null) {
+        if (!$this->offsetExists($key)) {
             return $default;
         }
 
@@ -142,7 +131,7 @@ class Manager implements ManagerContract, IteratorAggregate
      */
     public function set($key, $value)
     {
-        $this->repository[$key] = $value;
+        $this->offsetSet($key, $value);
 
         return $this;
     }
@@ -163,6 +152,65 @@ class Manager implements ManagerContract, IteratorAggregate
     }
 
     /**
+     * Get a value.
+     *
+     * @param string $key
+     *
+     * @return mixed
+     */
+    public function offsetGet($key)
+    {
+        return $this->repository->offsetGet($key);
+    }
+
+    /**
+     * Set a value.
+     *
+     * @param string $key
+     * @param mixed  $value
+     *
+     * @return self
+     */
+    public function offsetSet($key, $value)
+    {
+        $this->repository->offsetSet($key, $value);
+
+        return $this;
+    }
+
+    /**
+     * Check a value exists.
+     *
+     * @param string $key
+     *
+     * @return bool
+     */
+    public function offsetExists($key)
+    {
+        return $this->repository->offsetExists($key);
+    }
+
+    /**
+     * Remove a value.
+     *
+     * @param string $key
+     */
+    public function offsetUnset($key)
+    {
+        $this->repository->offsetUnset($key);
+    }
+
+    /**
+     * Get an ArrayIterator for the stored items.
+     *
+     * @return \ArrayIterator
+     */
+    public function getIterator()
+    {
+        return $this->repository->getIterator();
+    }
+
+    /**
      * Call a method from repository.
      *
      * @param string $method
@@ -177,60 +225,5 @@ class Manager implements ManagerContract, IteratorAggregate
         }
 
         return call_user_func_array([$this->repository, $method], $params);
-    }
-
-    /**
-     * Get a value.
-     *
-     * @param string $key
-     *
-     * @return mixed
-     */
-    public function offsetGet($key)
-    {
-        return $this->repository[$key];
-    }
-
-    /**
-     * Set a value.
-     *
-     * @param string $key
-     * @param mixed  $value
-     */
-    public function offsetSet($key, $value)
-    {
-        $this->repository[$key] = $value;
-    }
-
-    /**
-     * Check a value exists.
-     *
-     * @param string $key
-     *
-     * @return bool
-     */
-    public function offsetExists($key)
-    {
-        return isset($this->repository[$key]);
-    }
-
-    /**
-     * Remove a value.
-     *
-     * @param string $key
-     */
-    public function offsetUnset($key)
-    {
-        unset($this->repository[$key]);
-    }
-
-    /**
-     * Get an ArrayIterator for the stored items.
-     *
-     * @return \ArrayIterator
-     */
-    public function getIterator()
-    {
-        return new ArrayIterator($this->repository->getAllNested());
     }
 }

@@ -19,48 +19,21 @@ class Repository implements RepositoryContract
      *
      * @var array
      */
-    protected $values = [];
-
-    /**
-     * Expected nested key separator.
-     *
-     * @var string
-     */
-    protected $separator = '.';
+    protected $data = [];
 
     /**
      * Set an array of configuration options
      * Merge provided values with the defaults to ensure all required values are set.
      *
      * @param array $values
+     *
+     * @return self
      */
     public function setArray(array $values = [])
     {
-        $this->values = $this->mergeArrays($this->values, $values);
-    }
-
-    /**
-     * Set Separator.
-     *
-     * @param string $separator
-     *
-     * @return \Viserio\Config\Repository
-     */
-    public function setSeparator($separator)
-    {
-        $this->separator = $separator;
+        $this->data = Arr::merge($this->data, $values);
 
         return $this;
-    }
-
-    /**
-     * Get Separator.
-     *
-     * @return string
-     */
-    public function getSeparator()
-    {
-        return $this->separator;
     }
 
     /**
@@ -70,7 +43,7 @@ class Repository implements RepositoryContract
      */
     public function getAllNested()
     {
-        return $this->values;
+        return $this->data;
     }
 
     /**
@@ -80,19 +53,17 @@ class Repository implements RepositoryContract
      */
     public function getAllFlat()
     {
-        return Arr::flatten($this->values, $this->separator);
+        return Arr::flatten($this->data, '.');
     }
 
     /**
-     * Get all flattened array keys.
+     * Get all as flattened array keys.
      *
      * @return array
      */
     public function getKeys()
     {
-        $flattened = Arr::flatten($this->values, $this->separator);
-
-        return array_keys($flattened);
+        return array_keys(Arr::flatten($this->data, '.'));
     }
 
     /**
@@ -104,7 +75,7 @@ class Repository implements RepositoryContract
      */
     public function offsetGet($key)
     {
-        return $this->getValue($key, $this->values);
+        return Arr::get($this->data, $key);
     }
 
     /**
@@ -113,11 +84,13 @@ class Repository implements RepositoryContract
      * @param string $key
      * @param mixed  $value
      *
-     * @return array|null
+     * @return self
      */
     public function offsetSet($key, $value)
     {
-        $this->setValue($key, $value, $this->values);
+        $this->data = Arr::set($this->data, $key, $value);
+
+        return $this;
     }
 
     /**
@@ -129,7 +102,7 @@ class Repository implements RepositoryContract
      */
     public function offsetExists($key)
     {
-        return (bool) $this->getValue($key, $this->values);
+        return Arr::has($this->data, $key);
     }
 
     /**
@@ -139,114 +112,7 @@ class Repository implements RepositoryContract
      */
     public function offsetUnset($key)
     {
-        $keys = $this->parseKey($key, $this->separator);
-        $array = &$this->values;
-
-        while (count($keys) > 1) {
-            $key = array_shift($keys);
-
-            if (!isset($array[$key]) || !is_array($array[$key])) {
-                break;
-            }
-
-            $array = &$array[$key];
-        }
-
-        unset($array[array_shift($keys)]);
-    }
-
-    /**
-     * Parse a separated key and cache the result.
-     *
-     * @param string $key
-     * @param string $separator
-     *
-     * @return array
-     */
-    protected function parseKey($key, $separator)
-    {
-        if (!isset($this->keys[$key])) {
-            $this->keys[$key] = explode($separator, $key);
-        }
-
-        return $this->keys[$key];
-    }
-
-    /**
-     * Get a value from a nested array based on a separated key.
-     *
-     * @param string $key
-     * @param array  $array
-     *
-     * @return mixed
-     */
-    protected function getValue($key, array $array = [])
-    {
-        $keys = $this->parseKey($key, $this->separator);
-
-        while (count($keys) > 0 && $array !== null) {
-            $key   = array_shift($keys);
-            $array = isset($array[$key]) ? $array[$key] : null;
-        }
-
-        return $array;
-    }
-
-    /**
-     * Set nested array values based on a separated key.
-     *
-     * @param string $key
-     * @param mixed  $value
-     * @param array  $array
-     *
-     * @return array
-     */
-    protected function setValue($key, $value, array &$array = [])
-    {
-        $keys = $this->parseKey($key, $this->separator);
-        $pointer = &$array;
-
-        while (count($keys) > 0) {
-            $key = array_shift($keys);
-            $pointer[$key] = (isset($pointer[$key]) ? $pointer[$key] : []);
-            $pointer = &$pointer[$key];
-        }
-
-        $pointer = $value;
-
-        return $array;
-    }
-
-    /**
-     * Merge arrays with nested keys into the values store
-     * Usage: $this->mergeArrays(array $array [, array $...]).
-     *
-     * @return array
-     */
-    protected function mergeArrays()
-    {
-        $args = func_get_args();
-        $merged = array_shift($args);
-
-        while (!empty($args)) {
-            $next = array_shift($args);
-
-            foreach ($next as $k => $v) {
-                if (is_int($k)) {
-                    if (isset($merged[$k])) {
-                        $merged[] = $v;
-                    } else {
-                        $merged[$k] = $v;
-                    }
-                } elseif (is_array($v) && isset($merged[$k]) && is_array($merged[$k])) {
-                    $merged[$k] = $this->mergeArrays($merged[$k], $v);
-                } else {
-                    $this->setValue($k, $v, $merged);
-                }
-            }
-        }
-
-        return $merged;
+        $this->data = Arr::forget($this->data, $key);
     }
 
     /**

@@ -16,7 +16,6 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
                 ],
             ],
         ]);
-
         $this->assertArrayHasKey('123.456.789', $repository->getAllFlat());
     }
 
@@ -104,14 +103,6 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($repository['foo'], 'bar');
     }
 
-    public function testSetAndGetSeparator()
-    {
-        $repository = new Repository();
-
-        $repository->setSeparator('-');
-        $this->assertEquals($repository->getSeparator(), '-');
-    }
-
     public function testSetAndGet()
     {
         $repository = new Repository();
@@ -121,16 +112,20 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($repository['foo'], 'bar');
     }
 
-    public function testKeys()
+    public function testGetKeys()
     {
         $repository = new Repository();
 
         $repository->setArray([
             'foo' => 'bar',
+            'bar' => [
+                'baz' => 'narrowspark'
+            ]
         ]);
         $keys = $repository->getKeys();
 
         $this->assertEquals($keys[0], 'foo');
+        $this->assertEquals($keys[1], 'bar.baz');
     }
 
     public function testWithNamespacedKey()
