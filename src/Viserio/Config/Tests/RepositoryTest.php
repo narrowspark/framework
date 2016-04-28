@@ -119,8 +119,8 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
         $repository->setArray([
             'foo' => 'bar',
             'bar' => [
-                'baz' => 'narrowspark'
-            ]
+                'baz' => 'narrowspark',
+            ],
         ]);
         $keys = $repository->getKeys();
 
