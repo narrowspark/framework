@@ -88,16 +88,18 @@ class FileLoaderTest extends \PHPUnit_Framework_TestCase
 
     public function testExistsWithFalsePath()
     {
-        $exist = $this->fileloader->exists('no/file.php');
+        $exist = $this->fileloader->exists('no/file');
         $this->assertFalse($exist);
+
+        $file = vfsStream::newFile('temp.json')->withContent('{"a":1 }')->at($this->root);
 
         $this->fileloader->setDirectories([
             'foo/bar',
-            __DIR__ . '/Fixture',
+            vfsStream::url('root'),
         ]);
 
-        $exist = $this->fileloader->exists('foo.json');
-        $this->assertSame($this->normalizeDirectorySeparator(__DIR__ . '/Fixture/foo.json'), $exist);
+        $exist = $this->fileloader->exists('temp.json');
+        $this->assertSame($this->normalizeDirectorySeparator($file->url()), $exist);
     }
 
     public function testGetParser()
