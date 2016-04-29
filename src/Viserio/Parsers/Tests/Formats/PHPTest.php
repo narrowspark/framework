@@ -60,14 +60,13 @@ return [\'a\' => 1, "b" => 2, "c" => 3, "d" => 4, "e" => 5,];
 \'c\' => 3,
 \'d\' => 4,
 \'e\' => 5,
-);'
-        )->at($this->root);
+);')->at($this->root);
 
         $dump = $this->parser->dump(['a' => 1, 'b' => 2, 'c' => 3, 'd' => 4, 'e' => 5]);
 
         $this->assertSame(
-            str_replace(['\r\n', '\r', '~(*BSR_ANYCRLF)\R~'], "\r\n", $this->file->read($file->url())),
-            str_replace(['\r\n', '\r', '~(*BSR_ANYCRLF)\R~'], "\r\n", $dump)
+            str_replace(["\r\n", "\r", '~(*BSR_ANYCRLF)\R~'], "\r\n", $this->file->read($file->url())),
+            str_replace(["\r\n", "\r", '~(*BSR_ANYCRLF)\R~'], "\r\n", $dump)
         );
     }
 }
