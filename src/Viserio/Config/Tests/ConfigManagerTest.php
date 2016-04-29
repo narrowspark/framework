@@ -1,9 +1,9 @@
 <?php
 namespace Viserio\Config\Test;
 
+use Viserio\Config\FileLoader;
 use Viserio\Config\Manager as ConfigManager;
 use Viserio\Config\Repository;
-use Viserio\Config\FileLoader;
 use Viserio\Filesystem\Filesystem;
 use Viserio\Parsers\TaggableParser;
 
