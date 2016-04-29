@@ -162,5 +162,8 @@ class ConfigManagerTest extends \PHPUnit_Framework_TestCase
         $config->set('foo', 'bar');
 
         $this->assertSame(1, count($config->getKeys()));
+        $config->setLoader($this->fileloader);
+
+        $this->assertInstanceOf(TaggableParser::class, $config->getParser());
     }
 }
