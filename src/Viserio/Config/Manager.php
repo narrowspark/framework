@@ -42,11 +42,11 @@ class Manager implements ManagerContract, IteratorAggregate
     /**
      * Set Viserio's defaults using the repository.
      *
-     * @param array $values
+     * @param array $array
      */
-    public function setArray(array $values)
+    public function setArray(array $array)
     {
-        $this->repository->setArray($values);
+        $this->repository->setArray($array);
     }
 
     /**
@@ -74,60 +74,25 @@ class Manager implements ManagerContract, IteratorAggregate
     }
 
     /**
-     * Load the given configuration group.
+     * Import configuation from file.
+     * Can be grouped together.
      *
      * @param string      $file
      * @param string|null $group
      *
      * @return self
      */
-    public function bind($file, $group = null)
+    public function import($file, $group = null)
     {
         $config = $this->loader->load($file, $group);
 
-        $this->setArray($config);
+        $this->repository->setArray($config);
 
         return $this;
     }
 
     /**
-     * Determine if the given configuration value exists.
-     *
-     * @param string $key
-     *
-     * @return bool
-     */
-    public function has($key)
-    {
-        return $this->offsetExists($key);
-    }
-
-    /**
-     * Get a value.
-     *
-     * @param string            $key
-     * @param string|array|null $default
-     *
-     * @return mixed The value of a setting
-     */
-    public function get($key, $default = null)
-    {
-        if (!$this->offsetExists($key)) {
-            return $default;
-        }
-
-        return is_callable($this->repository[$key]) ?
-            call_user_func($this->repository[$key]) :
-            $this->repository[$key];
-    }
-
-    /**
-     * Set a value.
-     *
-     * @param string $key
-     * @param mixed  $value
-     *
-     * @return self
+     * {@inheritdoc}
      */
     public function set($key, $value)
     {
@@ -137,18 +102,33 @@ class Manager implements ManagerContract, IteratorAggregate
     }
 
     /**
-     * Push a value / array in a multidimensional array.
-     *
-     * @param string       $key
-     * @param string|array $items
-     *
-     * @return self
+     * {@inheritdoc}
      */
-    public function push($key, $items)
+    public function get($key, $default = null)
     {
-        array_push($this->repository[$key], $items);
+        if (!$this->offsetExists($key)) {
+            return $default;
+        }
 
-        return $this;
+        return is_callable($this->offsetGet($key)) ?
+            call_user_func($this->offsetGet($key)) :
+            $this->offsetGet($key);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function has($key)
+    {
+        return $this->offsetExists($key);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function forget($key)
+    {
+        $this->offsetUnset($key);
     }
 
     /**
