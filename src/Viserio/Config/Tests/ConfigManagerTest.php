@@ -1,12 +1,12 @@
 <?php
 namespace Viserio\Config\Test;
 
+use org\bovigo\vfs\vfsStream;
 use Viserio\Config\FileLoader;
 use Viserio\Config\Manager as ConfigManager;
 use Viserio\Config\Repository;
 use Viserio\Filesystem\Filesystem;
 use Viserio\Parsers\TaggableParser;
-use org\bovigo\vfs\vfsStream;
 
 class ConfigManagerTest extends \PHPUnit_Framework_TestCase
 {
@@ -116,7 +116,7 @@ class ConfigManagerTest extends \PHPUnit_Framework_TestCase
             'foo'  => 'bar',
             'func' => function () {
                 return 'func';
-            }
+            },
         ]);
 
         $this->assertSame('bar', $config->get('foo'));
