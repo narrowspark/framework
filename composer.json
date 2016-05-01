@@ -39,7 +39,7 @@
         "classpreloader/classpreloader"                      : "^3.0",
         "container-interop/container-interop"                : "^1.1",
         "cekurte/environment"                                : "^0.1",
-        "danielstjules/stringy"                              : "^2.2",
+        "danielstjules/stringy"                              : "^2.3",
         "filp/whoops"                                        : "^2.0",
         "ircmaxell/random-lib"                               : "^1.1",
         "league/flysystem"                                   : "^1.0",
@@ -104,7 +104,7 @@
     "require-dev": {
         "aws/aws-sdk-php"                                    : "^3.0",
         "cache/integration-tests"                            : "^0.10",
-        "fzaninotto/faker"                                   : "^1.4",
+        "fzaninotto/faker"                                   : "^1.6",
         "helmich/phpunit-psr7-assert"                        : "^1.0",
         "humbug/humbug"                                      : "dev-master",
         "league/flysystem-aws-s3-v3"                         : "^1.0",
