@@ -28,7 +28,7 @@ class TaggableParser extends Parser implements TaggableParserContract
     public function parse($payload)
     {
         if (!$this->taggedKey) {
-            throw new Exception('You need to use setTag() first');
+            return parent::parse($payload);
         }
 
         return $this->group($this->taggedKey, parent::parse($payload));
@@ -47,7 +47,7 @@ class TaggableParser extends Parser implements TaggableParserContract
         $taggedData = [];
 
         foreach ($data as $key => $value) {
-            $name             = sprintf(
+            $name = sprintf(
                 '%s' . TaggableParserContract::TAG_DELIMITER . '%s',
                 $taggedKey,
                 $key

@@ -113,7 +113,7 @@ class Encrypter implements EncrypterContract
      *   'mac'   => 'Message Authentication Code'
      * ]
      *
-     * @param mixed $data Data to encrypt.
+     * @param string $data Data to encrypt.
      *
      * @return string Serialized array containing the encrypted data
      *                along with some meta data.
@@ -160,9 +160,9 @@ class Encrypter implements EncrypterContract
     /**
      * Compare two encrypted values.
      *
-     * @param mixed $e1
-     * @param mixed $e2
-     * @param bool  $loose
+     * @param bool   $loose
+     * @param string $encrypted1
+     * @param string $encrypted2
      *
      * @return bool
      */
@@ -198,6 +198,7 @@ class Encrypter implements EncrypterContract
      * @param string $cipher
      * @param string mode
      * @param string $key
+     * @param string $mode
      *
      * @throws \RuntimeException
      */

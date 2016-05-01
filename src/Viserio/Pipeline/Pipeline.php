@@ -35,7 +35,7 @@ class Pipeline implements PipelineContract
     /**
      * Set the object being sent through the pipeline.
      *
-     * @param mixed $traveler
+     * @param string $traveler
      *
      * @return $this
      */

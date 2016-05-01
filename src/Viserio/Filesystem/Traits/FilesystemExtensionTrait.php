@@ -1,8 +1,6 @@
 <?php
 namespace Viserio\Filesystem\Traits;
 
-use Viserio\Contracts\Filesystem\Exception\FileNotFoundException;
-
 trait FilesystemExtensionTrait
 {
     /**

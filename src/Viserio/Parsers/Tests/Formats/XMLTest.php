@@ -75,7 +75,10 @@ class XMLTest extends \PHPUnit_Framework_TestCase
 
         $dump = $this->parser->dump($array);
 
-        $this->assertEquals(rtrim($this->file->read($file->url())), rtrim($dump));
+        $this->assertEquals(
+            str_replace(["\r\n", "\r", '~(*BSR_ANYCRLF)\R~'], "\r\n", $this->file->read($file->url())),
+            str_replace(["\r\n", "\r", '~(*BSR_ANYCRLF)\R~'], "\r\n", $dump)
+        );
     }
 
     public function testDumpToThrowException()

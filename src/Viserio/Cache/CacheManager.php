@@ -15,7 +15,6 @@ use League\Flysystem\Filesystem as Flysystem;
 use Memcache;
 use Memcached;
 use MongoDB\Driver\Manager as MongoDBManager;
-use Narrowspark\Arr\StaticArr as Arr;
 use Predis\Client as PredisClient;
 use Psr\Cache\CacheItemPoolInterface;
 use Viserio\Contracts\Config\Manager as ConfigContract;
@@ -82,7 +81,7 @@ class CacheManager extends Manager
     /**
      * Create an instance of the Flysystem cache driver.
      *
-     * @return \Psr\Cache\CacheItemPoolInterface|null
+     * @return FilesystemCachePool|null
      */
     protected function createFilesystemDriver(array $options)
     {
@@ -102,9 +101,8 @@ class CacheManager extends Manager
     /**
      * Create an instance of the Memcached cache driver.
      *
-     * @param array $config
      *
-     * @return \Psr\Cache\CacheItemPoolInterface|null
+     * @return MemcachedCachePool|null
      */
     protected function createMemcachedDriver(array $options)
     {
@@ -124,7 +122,7 @@ class CacheManager extends Manager
      *
      * @param array $options
      *
-     * @return \Psr\Cache\CacheItemPoolInterface|null
+     * @return MemcacheCachePool|null
      */
     protected function createMemcacheDriver(array $options)
     {
@@ -144,7 +142,7 @@ class CacheManager extends Manager
      *
      * @param array $options
      *
-     * @return \Psr\Cache\CacheItemPoolInterface|null
+     * @return MongoDBCachePool|null
      */
     public function createMongodbDriver(array $options)
     {
@@ -164,7 +162,7 @@ class CacheManager extends Manager
      *
      * @param array $options
      *
-     * @return \Psr\Cache\CacheItemPoolInterface|null
+     * @return PredisCachePool|null
      */
     public function createPredisDriver(array $options)
     {
@@ -184,7 +182,7 @@ class CacheManager extends Manager
      *
      * @param array $options
      *
-     * @return \Psr\Cache\CacheItemPoolInterface|null
+     * @return FilesystemCachePool|null
      */
     protected function createLocalDriver(array $options)
     {
@@ -204,7 +202,7 @@ class CacheManager extends Manager
      *
      * @param array $options
      *
-     * @return \Psr\Cache\CacheItemPoolInterface|null
+     * @return Psr6SessionHandler|null
      */
     protected function createSessionDriver(array $options)
     {

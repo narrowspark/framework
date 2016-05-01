@@ -75,6 +75,8 @@ interface Filesystem
      *
      * @param string $path
      * @param string $visibility
+     *
+     * @return bool|null
      */
     public function setVisibility($path, $visibility);
 
@@ -91,6 +93,8 @@ interface Filesystem
      *
      * @throws \Viserio\Contracts\Filesystem\Exception\FileNotFoundException When originFile doesn't exist
      * @throws \Viserio\Contracts\Filesystem\Exception\IOException           When copy fails
+     *
+     * @return null|bool
      */
     public function copy($originFile, $targetFile, $override = false);
 
