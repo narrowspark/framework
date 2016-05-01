@@ -58,6 +58,4 @@ test_script:
   - SET X=0
   - copy /Y c:\php\php.ini-min c:\php\php.ini
   - bash vendor/bin/phpunit -c phpunit.xml.dist -v || SET X=!errorlevel!
-  - copy /Y c:\php\php.ini-min c:\php\php.ini
-  - bash vendor/bin/phpunit -c phpunit.xml.dist -v || SET X=!errorlevel!
   - exit %X%
