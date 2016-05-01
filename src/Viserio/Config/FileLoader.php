@@ -47,7 +47,6 @@ class FileLoader implements LoaderContract
     /**
      * Create a new fileloader.
      *
-     * @param FilesystemContract     $files
      * @param TaggableParserContract $parser
      * @param array                  $directories
      */
@@ -61,7 +60,7 @@ class FileLoader implements LoaderContract
     /**
      * Get parser.
      *
-     * @return array
+     * @return TaggableParserContract
      */
     public function getParser()
     {

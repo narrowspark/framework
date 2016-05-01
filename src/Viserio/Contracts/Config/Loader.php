@@ -6,8 +6,8 @@ interface Loader
     /**
      * Load the given file path.
      *
-     * @param string $file
-     * @param string $tag
+     * @param string      $file
+     * @param string|null $tag
      *
      * @return array
      */

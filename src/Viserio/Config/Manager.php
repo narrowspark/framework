@@ -54,7 +54,7 @@ class Manager implements ManagerContract, IteratorAggregate
      *
      * @param \Viserio\Contracts\Config\Loader $loader
      *
-     * @return \Viserio\Contracts\Config\Loader
+     * @return self
      */
     public function setLoader(LoaderContract $loader)
     {

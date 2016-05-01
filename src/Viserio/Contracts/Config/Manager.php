@@ -38,6 +38,8 @@ interface Manager extends ArrayAccess
      * Forget a key and all his values.
      *
      * @param string $key
+     *
+     * @return void
      */
     public function forget($key);
 }
