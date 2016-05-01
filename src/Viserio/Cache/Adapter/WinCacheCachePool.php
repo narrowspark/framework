@@ -25,8 +25,8 @@ class WinCacheCachePool extends AbstractCachePool
         return true;
     }
 
-    protected function storeItemInCache($key, CacheItemInterface $item, $ttl)
+    protected function storeItemInCache(CacheItemInterface $item, $ttl)
     {
-        return wincache_ucache_set($key, $item, $ttl);
+        return wincache_ucache_set($item->getKey(), $item, $ttl);
     }
 }

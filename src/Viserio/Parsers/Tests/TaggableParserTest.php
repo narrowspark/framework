@@ -39,12 +39,4 @@ class TaggableParserTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue(is_array($parsed));
         $this->assertSame(['foo::a' => 1, 'foo::e' => 5], $parsed);
     }
-
-    /**
-     * @expectedException Exception
-     */
-    public function testParseGroupToThrowException()
-    {
-        $this->parser->parse('nonexistfile');
-    }
 }

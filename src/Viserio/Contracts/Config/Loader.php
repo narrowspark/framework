@@ -4,24 +4,21 @@ namespace Viserio\Contracts\Config;
 interface Loader
 {
     /**
-     * Load the given configuration group.
+     * Load the given file path.
      *
      * @param string      $file
-     * @param string|null $environment
-     * @param string|null $namespace
+     * @param string|null $tag
      *
      * @return array
      */
-    public function load($file, $environment = null, $namespace = null);
+    public function load($file, $tag = null);
 
     /**
      * Determine if the given file exists.
      *
-     * @param string      $file
-     * @param string|null $namespace
-     * @param string|null $environment
+     * @param string $file
      *
-     * @return bool|array
+     * @return bool|string
      */
-    public function exists($file, $environment = null, $namespace = null);
+    public function exists($file);
 }

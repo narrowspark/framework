@@ -26,14 +26,14 @@ class VirtuosoView extends View
             $this->factory->getVirtuoso()->flushSectionsIfDoneRendering();
 
             return ! is_null($response) ? $response : $contents;
-        } catch (Exception $e) {
+        } catch (Exception $exception) {
             $this->factory->getVirtuoso()->flushSections();
 
-            throw $e;
-        } catch (Throwable $e) {
+            throw $exception;
+        } catch (Throwable $exception) {
             $this->factory->getVirtuoso()->flushSections();
 
-            throw $e;
+            throw $exception;
         }
     }
 

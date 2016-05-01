@@ -65,7 +65,7 @@ class FilesystemServiceProvider extends ServiceProvider
         $this->app->singleton('file.loader', function ($app) {
             $app->bind('files.path', '');
 
-            return new FileLoader($app->get('files'), $app->get('files.path'));
+            return new FileLoader($app->get('parser'), $app->get('files.path'));
         });
     }
 

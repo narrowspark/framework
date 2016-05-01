@@ -35,8 +35,7 @@ class INITest extends \PHPUnit_Framework_TestCase
             '
 one = 1
 five = 5
-animal = BIRD
-            '
+animal = BIRD'
         )->at($this->root);
 
         $parsed = $this->parser->parse($this->file->read($file->url()));
@@ -55,8 +54,7 @@ explore=true
 [main.sub]
 
 [main.sub.sub]
-value=5
-            '
+value=5'
         )->at($this->root);
 
         $parsed = $this->parser->parse($this->file->read($file->url()));
@@ -79,13 +77,11 @@ value=5
     public function testDump()
     {
         $dump = $this->parser->dump(['test' => ['value' => true, 'five' => 5]]);
-        $expected = <<<EOT
-[test]
+        $file = vfsStream::newFile('temp.ini')->withContent(
+'[test]
 value=true
-five=5
+five=5')->at($this->root);
 
-EOT;
-
-        $this->assertEquals($expected, $dump);
+        $this->assertEquals(preg_replace('/^\s+|\n|\r|\s+$/m', '', $this->file->read($file->url())), preg_replace('/^\s+|\n|\r|\s+$/m', '', $dump));
     }
 }

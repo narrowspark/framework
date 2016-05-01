@@ -3,6 +3,7 @@ namespace Viserio\Parsers;
 
 use Viserio\Contracts\Filesystem\Filesystem;
 use Viserio\Contracts\Parsers\Exception\NotSupportedException;
+use Viserio\Contracts\Parsers\Parser as ParserContract;
 use Viserio\Parsers\Formats\BSON;
 use Viserio\Parsers\Formats\INI;
 use Viserio\Parsers\Formats\JSON;
@@ -14,7 +15,7 @@ use Viserio\Parsers\Formats\TOML;
 use Viserio\Parsers\Formats\XML;
 use Viserio\Parsers\Formats\YAML;
 
-class Parser
+class Parser implements ParserContract
 {
     /**
      * The filesystem instance.
@@ -115,13 +116,7 @@ class Parser
     }
 
     /**
-     * Loads a file and output it content as array.
-     *
-     * @param string $payload
-     *
-     * @throws \Viserio\Contracts\Parsers\Exception\ParseException
-     *
-     * @return array
+     * {@inheritdoc}
      */
     public function parse($payload)
     {

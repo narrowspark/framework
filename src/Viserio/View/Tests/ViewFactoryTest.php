@@ -142,25 +142,21 @@ class ViewFactoryTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException Exception
-     * @expectedExceptionMessage section exception message
      */
     public function testExceptionsInSectionsAreThrown()
     {
         $factory = $this->getFactory();
         $factory->getEngineResolver()
             ->shouldReceive('resolve')
-            ->twice()
             ->andReturn(new Php());
         $factory->getFinder()
             ->shouldReceive('find')
-            ->once()
             ->with('layout')
-            ->andReturn($this->normalizeDirectorySeparator(__DIR__ . '/Fixture/foo.php'));
+            ->andReturn($this->normalizeDirectorySeparator($this->getPath() . '/foo.php'));
         $factory->getFinder()
             ->shouldReceive('find')
-            ->once()
             ->with('view')
-            ->andReturn($this->normalizeDirectorySeparator(__DIR__ . '/Fixture/bar/foo/baz.php'));
+            ->andReturn($this->normalizeDirectorySeparator($this->getPath() . '/bar/foo/fi.php'));
 
         $virtuoso = new Virtuoso(
             Mock::mock(ContainerInterface::class),
@@ -398,5 +394,10 @@ class ViewFactoryTest extends \PHPUnit_Framework_TestCase
             Mock::mock(Finder::class),
             new EventDispatcher(),
         ];
+    }
+
+    protected function getPath()
+    {
+        return $this->normalizeDirectorySeparator(dirname(__FILE__) . '/' . 'Fixture');
     }
 }

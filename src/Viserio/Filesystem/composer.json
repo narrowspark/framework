@@ -56,7 +56,8 @@
         "narrowspark/php-cs-fixer-config"    : "^1.1",
         "narrowspark/testing-helper"         : "^1.5",
         "phpunit/phpunit"                    : "^5.1",
-        "viserio/cache"                      : "self.version"
+        "viserio/cache"                      : "self.version",
+        "viserio/parsers"                    : "self.version"
     },
     "suggest": {
         "league/flysystem"                   : "Required to use the Flysystem Local and FTP adapters (^1.0).",

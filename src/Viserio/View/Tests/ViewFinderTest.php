@@ -292,7 +292,7 @@ class ViewFinderTest extends \PHPUnit_Framework_TestCase
 
     protected function getPath()
     {
-        return $this->normalizeDirectorySeparator(__DIR__ . '/' . 'Fixture');
+        return $this->normalizeDirectorySeparator(dirname(__FILE__) . '/' . 'Fixture');
     }
 
     protected function getFinder()
