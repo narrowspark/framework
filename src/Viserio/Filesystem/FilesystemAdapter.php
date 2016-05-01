@@ -3,12 +3,12 @@ namespace Viserio\Filesystem;
 
 use InvalidArgumentException;
 use League\Flysystem\AdapterInterface;
+use League\Flysystem\Config as FlyConfig;
 use League\Flysystem\FileNotFoundException as FlyFileNotFoundException;
 use Viserio\Contracts\Filesystem\Directorysystem as DirectorysystemContract;
 use Viserio\Contracts\Filesystem\FileNotFoundException;
 use Viserio\Contracts\Filesystem\Filesystem as FilesystemContract;
 use Viserio\Filesystem\Traits\FilesystemExtensionTrait;
-use League\Flysystem\Config as FlyConfig;
 
 class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
 {
@@ -170,7 +170,7 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function directories($directory)
     {
@@ -180,7 +180,7 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function allDirectories($directory)
     {
@@ -190,7 +190,7 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function createDirectory($path, array $config = [])
     {
@@ -200,7 +200,7 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function deleteDirectory($directory)
     {
@@ -208,7 +208,7 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function cleanDirectory($dirname)
     {
@@ -226,7 +226,7 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function isDirectory($dirname)
     {
