@@ -8,6 +8,7 @@ use Viserio\Contracts\Filesystem\Directorysystem as DirectorysystemContract;
 use Viserio\Contracts\Filesystem\FileNotFoundException;
 use Viserio\Contracts\Filesystem\Filesystem as FilesystemContract;
 use Viserio\Filesystem\Traits\FilesystemExtensionTrait;
+use League\Flysystem\Config as FlyConfig;
 
 class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
 {
@@ -123,7 +124,7 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
      */
     public function getMimetype($path)
     {
-        return $this->getMimetype($path);
+        return $this->driver->getMimetype($path);
     }
 
     /**
@@ -169,11 +170,7 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
     }
 
     /**
-     * Get all of the directories within a given directory.
-     *
-     * @param string|null $directory
-     *
-     * @return array
+     * @inheritdoc
      */
     public function directories($directory)
     {
@@ -183,11 +180,7 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
     }
 
     /**
-     * Get all (recursive) of the directories within a given directory.
-     *
-     * @param string|null $directory
-     *
-     * @return array
+     * @inheritdoc
      */
     public function allDirectories($directory)
     {
@@ -197,28 +190,47 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
     }
 
     /**
-     * Create a directory.
-     *
-     * @param string    $path
-     * @param FlyConfig $config
-     *
-     * @return array|false
+     * @inheritdoc
      */
-    public function makeDirectory($path, FlyConfig $config)
+    public function createDirectory($path, array $config = [])
     {
-        return $this->driver->createDir($path, $config);
+        $flyConfig = new FlyConfig($config);
+
+        return $this->driver->createDir($path, $flyConfig);
     }
 
     /**
-     * Recursively delete a directory.
-     *
-     * @param string $directory
-     *
-     * @return bool
+     * @inheritdoc
      */
     public function deleteDirectory($directory)
     {
         return $this->driver->deleteDir($directory);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function cleanDirectory($dirname)
+    {
+        if (!$this->isDirectory($dirname)) {
+            return false;
+        }
+
+        $directories = $this->allDirectories($dirname);
+
+        foreach ($directories as $dirname) {
+            @rmdir($dirname);
+        }
+
+        return true;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function isDirectory($dirname)
+    {
+        return $this->dirver->getMetadata($dirname)['type'] === 'dir';
     }
 
     /**

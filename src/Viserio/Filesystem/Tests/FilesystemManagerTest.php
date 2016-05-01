@@ -11,11 +11,8 @@ class FilesystemManagerTest extends \PHPUnit_Framework_TestCase
 
     protected function getManager($arr)
     {
-        $config  = $this->mock('Viserio\Contracts\Config\Manager')
-            ->shouldReceive('get')
-            ->once()
-            ->with('filesystems')
-            ->andReturn($arr);
+        $config = $this->mock('Viserio\Contracts\Config\Manager');
+        $config->shouldReceive('get')->once()->with('filesystems')->andReturn($arr);
 
         return new FilesystemManager($config);
     }

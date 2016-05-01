@@ -25,10 +25,11 @@ interface Directorysystem
      * Recursively create a directory.
      *
      * @param string $dirname
+     * @param array  $config
      *
      * @return bool
      */
-    public function createDirectory($dirname);
+    public function createDirectory($dirname, array $config = []);
 
     /**
      * Recursively delete a directory.

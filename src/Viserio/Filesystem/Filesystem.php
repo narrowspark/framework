@@ -246,12 +246,17 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract, Direct
     /**
      * {@inheritdoc}
      */
-    public function createDirectory($dirname)
+    public function createDirectory($dirname, array $config = [])
     {
         $dirname = $this->normalizeDirectorySeparator($dirname);
+        $mode    = 0777;
+
+        if (isset($config['visibility'])) {
+            $mode = $this->parseVisibility($dirname, $config['visibility']);
+        }
 
         try {
-            $this->mkdir($dirname);
+            $this->mkdir($dirname, $mode);
         } catch (SymfonyIOException $exception) {
             return false;
         }
