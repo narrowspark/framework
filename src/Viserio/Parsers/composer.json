@@ -38,7 +38,7 @@
         "narrowspark/testing-helper"      : "^1.5",
         "phpunit/phpunit"                 : "^5.1",
         "psr/http-message"                : "^1.0",
-        "symfony/yaml"                    : "^2.8|^3.0",
+        "symfony/yaml"                    : "^2.8 || ^3.0",
         "yosymfony/toml"                  : "^0.3"
     },
     "provide": {
