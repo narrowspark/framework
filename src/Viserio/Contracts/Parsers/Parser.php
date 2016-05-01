@@ -1,7 +1,7 @@
 <?php
 namespace Viserio\Contracts\Parsers;
 
-Interface Parser
+interface Parser
 {
     /**
      * Loads a file and output it content as array.
