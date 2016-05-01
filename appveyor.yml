@@ -48,10 +48,9 @@ install:
   - cd c:\projects\narrowspark
   - mkdir %APPDATA%\Composer
   - composer global require hirak/prestissimo --no-progress --ansi
-  - composer global install --no-progress --ansi
-  - php phpunit install
   - IF %APPVEYOR_REPO_BRANCH%==master (SET COMPOSER_ROOT_VERSION=dev-master) ELSE (SET COMPOSER_ROOT_VERSION=%APPVEYOR_REPO_BRANCH%.x-dev)
-  - composer update --no-progress --ansi
+  - cd c:\projects\narrowspark
+  - composer install --no-progress --ansi
 
 test_script:
   - cd c:\projects\narrowspark
