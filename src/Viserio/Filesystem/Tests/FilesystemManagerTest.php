@@ -94,7 +94,7 @@ class FilesystemManagerTest extends \PHPUnit_Framework_TestCase
                 'local',
                 [
                     'driver' => 'local',
-                    'path' => __DIR__
+                    'path' => __DIR__,
                 ]
             )
         );
