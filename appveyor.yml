@@ -46,8 +46,8 @@ install:
   - IF %PHP%==1 appveyor DownloadFile https://getcomposer.org/download/1.0.2/composer.phar
   - copy /Y php.ini-max php.ini
   - mkdir %APPDATA%\Composer
-  - composer global require hirak/prestissimo --no-progress --ansi
   - composer self-update --no-progress --ansi
+  - composer global require hirak/prestissimo --no-progress --ansi
   - php phpunit install
   - IF %APPVEYOR_REPO_BRANCH%==master (SET COMPOSER_ROOT_VERSION=dev-master) ELSE (SET COMPOSER_ROOT_VERSION=%APPVEYOR_REPO_BRANCH%.x-dev)
   - cd c:\projects\narrowspark
