@@ -3,6 +3,7 @@ namespace Viserio\Filesystem\Adapters;
 
 use InvalidArgumentException;
 use League\Flysystem\Sftp\SftpAdapter;
+use Narrowspark\Arr\StaticArr as Arr;
 use Viserio\Contracts\Filesystem\Connector as ConnectorContract;
 
 class SftpConnector implements ConnectorContract

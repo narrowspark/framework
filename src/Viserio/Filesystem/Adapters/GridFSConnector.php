@@ -3,7 +3,6 @@ namespace Viserio\Filesystem\Adapters;
 
 use InvalidArgumentException;
 use League\Flysystem\GridFS\GridFSAdapter;
-use MongoClient;
 use Narrowspark\Arr\StaticArr as Arr;
 
 class GridFSConnector extends AbstractConnector
@@ -25,7 +24,9 @@ class GridFSConnector extends AbstractConnector
      */
     protected function getClient(array $auth)
     {
-        return new MongoClient($auth['server']);
+        $mongo = $this->getMongoClass();
+
+        return new $mongo($auth['server']);
     }
 
     /**
@@ -46,5 +47,19 @@ class GridFSConnector extends AbstractConnector
     protected function getAdapter($client, array $config)
     {
         return new GridFSAdapter($client->selectDB($config['database'])->getGridFS());
+    }
+
+    /**
+     * Returns the valid Mongo class client for the current php driver.
+     *
+     * @return string
+     */
+    protected function getMongoClass()
+    {
+        if (class_exists('\MongoClient')) {
+            return '\MongoClient';
+        }
+
+        return '\Mongo';
     }
 }
