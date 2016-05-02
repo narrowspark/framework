@@ -43,21 +43,21 @@
         "cache/hierarchical-cache"            : "^0.2.1",
         "cache/taggable-cache"                : "^0.4",
         "cache/namespaced-cache"              : "^0.1",
-        "container-interop/container-interop" : "~1.1",
-        "psr/cache"                           : "~1.0",
+        "container-interop/container-interop" : "^1.1",
+        "psr/cache"                           : "^1.0",
         "viserio/config"                      : "self.version",
         "viserio/cotracts"                    : "self.version"
     },
     "require-dev": {
         "cache/integration-tests"             : "^0.10",
-        "narrowspark/php-cs-fixer-config"     : "~1.1.5",
-        "narrowspark/testing-helper"          : "~1.5",
-        "phpunit/phpunit"                     : "~5.1.3",
+        "narrowspark/php-cs-fixer-config"     : "^1.1",
+        "narrowspark/testing-helper"          : "^1.5",
+        "phpunit/phpunit"                     : "^5.1",
         "viserio/connect"                     : "self.version",
         "viserio/encryption"                  : "self.version"
     },
     "provide": {
-        "psr/cache-implementation"            : "1.0.0"
+        "psr/cache-implementation"            : "^1.0"
     },
     "autoload": {
         "psr-4": {
