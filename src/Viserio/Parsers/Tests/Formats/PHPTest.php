@@ -65,9 +65,14 @@ return [\'a\' => 1, "b" => 2, "c" => 3, "d" => 4, "e" => 5,];
 
         $dump = $this->parser->dump(['a' => 1, 'b' => 2, 'c' => 3, 'd' => 4, 'e' => 5]);
 
-        $this->assertSame(
-            str_replace(["\r\n", "\r", '~(*BSR_ANYCRLF)\R~'], "\r\n", $this->file->read($file->url())),
-            str_replace(["\r\n", "\r", '~(*BSR_ANYCRLF)\R~'], "\r\n", $dump)
-        );
+        $expected = $this->removeEnding($this->file->read($file->url()));
+        $actual   = $this->removeEnding($dump);
+
+        $this->assertSame($expected, $actual);
+    }
+
+    private function removeEnding($string)
+    {
+        return str_replace(["\r\n", "\r", '~(*BSR_ANYCRLF)\R~'], "\r\n", $string);
     }
 }

@@ -2,7 +2,7 @@
 namespace Viserio\Filesystem\Tests;
 
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
-use Viserio\Filesystem\Adapters;
+use Viserio\Filesystem\FilesystemAdapter;
 use Viserio\Filesystem\FilesystemManager;
 
 class FilesystemManagerTest extends \PHPUnit_Framework_TestCase
@@ -21,28 +21,28 @@ class FilesystemManagerTest extends \PHPUnit_Framework_TestCase
     {
         $manager = $this->getManager([]);
 
-        $this->assertInstanceOf(Adapters\AwsS3Connector::class, $manager->driver('awss3', []));
+        $this->assertInstanceOf(FilesystemAdapter::class, $manager->driver('awss3', ['host' => 'localhost']));
     }
 
     public function testDropboxConnectorDriver()
     {
         $manager = $this->getManager([]);
 
-        $this->assertInstanceOf(Adapters\DropboxConnector::class, $manager->driver('dropbox', []));
+        $this->assertInstanceOf(FilesystemAdapter::class, $manager->driver('dropbox', ['host' => 'localhost']));
     }
 
     public function testFtpConnectorDriver()
     {
         $manager = $this->getManager([]);
 
-        $this->assertInstanceOf(Adapters\FtpConnector::class, $manager->driver('ftp', []));
+        $this->assertInstanceOf(FilesystemAdapter::class, $manager->driver('ftp', ['host' => 'localhost']));
     }
 
     public function testGridFSConnectorDriver()
     {
         $manager = $this->getManager([]);
 
-        $this->assertInstanceOf(Adapters\GridFSConnector::class, $manager->driver('gridfs', []));
+        $this->assertInstanceOf(FilesystemAdapter::class, $manager->driver('gridfs', ['host' => 'localhost']));
     }
 
     public function testLocalConnectorDriver()
@@ -51,48 +51,48 @@ class FilesystemManagerTest extends \PHPUnit_Framework_TestCase
 
         $manager = $this->getManager([]);
 
-        $this->assertInstanceOf(Adapters\LocalConnector::class, $manager->driver('local', $config));
+        $this->assertInstanceOf(FilesystemAdapter::class, $manager->driver('local', $config));
     }
 
     public function testNullConnectorDriver()
     {
         $manager = $this->getManager([]);
 
-        $this->assertInstanceOf(Adapters\NullConnector::class, $manager->driver('null', []));
+        $this->assertInstanceOf(FilesystemAdapter::class, $manager->driver('null', ['host' => 'localhost']));
     }
 
     public function testRackspaceConnectorDriver()
     {
         $manager = $this->getManager([]);
 
-        $this->assertInstanceOf(Adapters\RackspaceConnector::class, $manager->driver('rackspace', []));
+        $this->assertInstanceOf(FilesystemAdapter::class, $manager->driver('rackspace', ['host' => 'localhost']));
     }
 
     public function testSftpConnectorDriver()
     {
         $manager = $this->getManager([]);
 
-        $this->assertInstanceOf(Adapters\SftpConnector::class, $manager->driver('sftp', []));
+        $this->assertInstanceOf(FilesystemAdapter::class, $manager->driver('sftp', ['host' => 'localhost']));
     }
 
     public function testVfsConnectorDriver()
     {
         $manager = $this->getManager([]);
 
-        $this->assertInstanceOf(Adapters\VfsConnector::class, $manager->driver('vfs', []));
+        $this->assertInstanceOf(FilesystemAdapter::class, $manager->driver('vfs', ['host' => 'localhost']));
     }
 
     public function testWebDavConnectorDriver()
     {
         $manager = $this->getManager([]);
 
-        $this->assertInstanceOf(Adapters\WebDavConnector::class, $manager->driver('webdav', []));
+        $this->assertInstanceOf(FilesystemAdapter::class, $manager->driver('webdav', ['host' => 'localhost']));
     }
 
     public function testZipConnectorDriver()
     {
         $manager = $this->getManager([]);
 
-        $this->assertInstanceOf(Adapters\ZipConnector::class, $manager->driver('zip', []));
+        $this->assertInstanceOf(FilesystemAdapter::class, $manager->driver('zip', ['host' => 'localhost']));
     }
 }

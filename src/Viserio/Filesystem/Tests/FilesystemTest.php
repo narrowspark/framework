@@ -83,7 +83,7 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException League\Flysystem\FileNotFoundException
+     * @expectedException Viserio\Contracts\Filesystem\Exception\FileNotFoundException
      */
     public function testGetRequireThrowsExceptionNonexisitingFile()
     {

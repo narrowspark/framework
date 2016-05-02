@@ -1,6 +1,7 @@
 <?php
 namespace Viserio\Filesystem\Adapters;
 
+use InvalidArgumentException;
 use League\Flysystem\Adapter\Ftp;
 use Viserio\Contracts\Filesystem\Connector as ConnectorContract;
 

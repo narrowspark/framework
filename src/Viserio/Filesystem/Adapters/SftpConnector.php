@@ -1,6 +1,7 @@
 <?php
 namespace Viserio\Filesystem\Adapters;
 
+use InvalidArgumentException;
 use League\Flysystem\Sftp\SftpAdapter;
 use Viserio\Contracts\Filesystem\Connector as ConnectorContract;
 

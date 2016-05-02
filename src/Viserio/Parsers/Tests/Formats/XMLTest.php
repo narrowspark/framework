@@ -75,10 +75,10 @@ class XMLTest extends \PHPUnit_Framework_TestCase
 
         $dump = $this->parser->dump($array);
 
-        $this->assertEquals(
-            str_replace(["\r\n", "\r", '~(*BSR_ANYCRLF)\R~'], "\r\n", $this->file->read($file->url())),
-            str_replace(["\r\n", "\r", '~(*BSR_ANYCRLF)\R~'], "\r\n", $dump)
-        );
+        $expected = $this->removeEnding($this->file->read($file->url()));
+        $actual   = $this->removeEnding($dump);
+
+        $this->assertSame($expected, $actual);
     }
 
     public function testDumpToThrowException()
@@ -89,5 +89,10 @@ class XMLTest extends \PHPUnit_Framework_TestCase
 
         $this->expectException('Viserio\Contracts\Parsers\Exception\DumpException');
         $this->parser->dump(['one', 'two', 'three']);
+    }
+
+    private function removeEnding($string)
+    {
+        return str_replace(["\r\n", "\r", '~(*BSR_ANYCRLF)\R~'], "\r\n", $string);
     }
 }
