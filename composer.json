@@ -39,7 +39,7 @@
         "classpreloader/classpreloader"                      : "^3.0",
         "container-interop/container-interop"                : "^1.1",
         "cekurte/environment"                                : "^0.1",
-        "danielstjules/stringy"                              : "^2.3",
+        "danielstjules/stringy"                              : "^2.3.2",
         "filp/whoops"                                        : "^2.0",
         "ircmaxell/random-lib"                               : "^1.1",
         "league/flysystem"                                   : "^1.0",
