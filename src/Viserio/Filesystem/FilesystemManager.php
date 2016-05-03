@@ -47,7 +47,7 @@ class FilesystemManager extends Manager
      */
     public function setDefaultDriver($name)
     {
-        $this->config->set('filesystems::default', $name);
+        $this->config->set('filesystems.default', $name);
 
         return $this;
     }
@@ -59,7 +59,7 @@ class FilesystemManager extends Manager
      */
     public function getDefaultDriver()
     {
-        return $this->config->get('filesystems::default', '');
+        return $this->config->get('filesystems.default', '');
     }
 
     /**

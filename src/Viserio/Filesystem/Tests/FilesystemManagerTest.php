@@ -13,6 +13,7 @@ class FilesystemManagerTest extends \PHPUnit_Framework_TestCase
     {
         $config = $this->mock('Viserio\Contracts\Config\Manager');
         $config->shouldReceive('get')->once()->with('filesystems')->andReturn($arr);
+        $config->shouldReceive('get')->once()->with('filesystems.default')->andReturn('');
 
         return new FilesystemManager($config);
     }

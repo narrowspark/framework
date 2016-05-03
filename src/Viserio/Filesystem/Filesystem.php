@@ -18,9 +18,9 @@ use Viserio\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
 class Filesystem extends SymfonyFilesystem implements FilesystemContract, DirectorysystemContract
 {
-    use NormalizePathAndDirectorySeparatorTrait,
-        FilesystemHelperTrait,
-        FilesystemExtensionTrait;
+    use NormalizePathAndDirectorySeparatorTrait;
+    use FilesystemHelperTrait;
+    use FilesystemExtensionTrait;
 
     /**
      * @var array
