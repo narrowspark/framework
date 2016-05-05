@@ -79,4 +79,16 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(ArrayContainer::class, $driver);
         $this->assertFalse($manager->has('test'));
     }
+
+    public function testCustomDriverClosureBoundObjectIsCacheManager()
+    {
+        $manager = new TestManager();
+
+        $driver = function () {
+            return $this;
+        };
+        $manager->extend(__CLASS__, $driver);
+
+        $this->assertEquals($manager, $manager->driver(__CLASS__));
+    }
 }

@@ -64,7 +64,7 @@ return [\'a\' => 1, "b" => 2, "c" => 3, "d" => 4, "e" => 5,];
         )->at($this->root);
 
         $dump = $this->parser->dump(['a' => 1, 'b' => 2, 'c' => 3, 'd' => 4, 'e' => 5]);
-
+        var_dump($dump);
         $expected = $this->removeEnding($this->file->read($file->url()));
         $actual   = $this->removeEnding($dump);
 

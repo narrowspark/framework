@@ -58,7 +58,7 @@ class AwsS3Connector extends AbstractConnector
         }
 
         if (!array_key_exists('bucket', $config)) {
-            throw new InvalidArgumentException('The awss3 connector requires a bucket.');
+            throw new InvalidArgumentException('The awss3 connector requires a bucket configuration.');
         }
 
         if (!array_key_exists('options', $config)) {

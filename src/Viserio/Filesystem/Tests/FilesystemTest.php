@@ -68,7 +68,7 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
         $this->files->cleanDirectory($dir->url());
 
         $this->assertTrue(is_dir($dir->url()));
-        $this->assertFileNotExists($file->url());
+        $this->assertFalse(file_exists($file->url()));
     }
 
     public function testDeleteRemovesFiles()
@@ -186,8 +186,6 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
         $dir2 = $this->root->getChild('music');
 
         $directories = $this->files->directories($this->root->url());
-
-        var_dump($directories);
 
         $this->assertContains($dir1->url(), $directories);
         $this->assertContains($dir2->url(), $directories);

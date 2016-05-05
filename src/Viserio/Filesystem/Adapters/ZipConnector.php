@@ -5,6 +5,7 @@ use InvalidArgumentException;
 use League\Flysystem\ZipArchive\ZipArchiveAdapter;
 use Narrowspark\Arr\StaticArr as Arr;
 use Viserio\Contracts\Filesystem\Connector as ConnectorContract;
+use ZipArchive;
 
 class ZipConnector implements ConnectorContract
 {
@@ -34,14 +35,18 @@ class ZipConnector implements ConnectorContract
     protected function getConfig(array $config)
     {
         if (!array_key_exists('path', $config)) {
-            throw new InvalidArgumentException('The zip connector requires a path.');
+            throw new InvalidArgumentException('The zip connector requires path configuration.');
+        }
+
+        if (!array_key_exists('archive', $config)) {
+            $config['archive'] = new ZipArchive();
         }
 
         if (!array_key_exists('prefix', $config)) {
             $config['prefix'] = null;
         }
 
-        return Arr::only($config, ['path', 'prefix']);
+        return Arr::only($config, ['path', 'archive', 'prefix']);
     }
 
     /**
@@ -53,6 +58,6 @@ class ZipConnector implements ConnectorContract
      */
     protected function getAdapter(array $config)
     {
-        return new ZipArchiveAdapter($config['path'], $config['prefix']);
+        return new ZipArchiveAdapter($config['path'], $config['archive'], $config['prefix']);
     }
 }
