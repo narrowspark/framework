@@ -1,8 +1,8 @@
 <?php
 namespace Viserio\Filesystem\Tests\Adapters;
 
-use Viserio\Filesystem\Adapters\SftpConnector;
 use League\Flysystem\Sftp\SftpAdapter;
+use Viserio\Filesystem\Adapters\SftpConnector;
 
 class SftpConnectorTest extends \PHPUnit_Framework_TestCase
 {
@@ -40,7 +40,7 @@ class SftpConnectorTest extends \PHPUnit_Framework_TestCase
         $connector = new SftpConnector();
 
         $connector->connect([
-            'host'     => 'ftp.example.com'
+            'host'     => 'ftp.example.com',
         ]);
     }
 

@@ -1,14 +1,14 @@
 <?php
 namespace Viserio\Filesystem\Tests;
 
+use Guzzle\Http\Exception\ClientErrorResponseException;
+use Guzzle\Http\Exception\CurlException;
+use MongoConnectionException;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use Viserio\Contracts\Config\Manager as ConfigManger;
 use Viserio\Contracts\Filesystem\Filesystem as FilesystemContract;
 use Viserio\Filesystem\FilesystemAdapter;
 use Viserio\Filesystem\FilesystemManager;
-use MongoConnectionException;
-use Guzzle\Http\Exception\CurlException;
-use Guzzle\Http\Exception\ClientErrorResponseException;
 
 class FilesystemManagerTest extends \PHPUnit_Framework_TestCase
 {
@@ -154,7 +154,7 @@ class FilesystemManagerTest extends \PHPUnit_Framework_TestCase
             $manager->driver(
                 'local',
                 [
-                    'path' => __DIR__
+                    'path' => __DIR__,
                 ]
             )
         );
@@ -253,7 +253,7 @@ class FilesystemManagerTest extends \PHPUnit_Framework_TestCase
             $manager->driver(
                 'zip',
                 [
-                    'path' => __DIR__.'\stubs\test.zip'
+                    'path' => __DIR__ . '\stubs\test.zip',
                 ]
             )
         );

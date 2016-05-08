@@ -47,7 +47,7 @@ class FilesystemManager extends Manager
      */
     public function setDefaultDriver($name)
     {
-        $this->config->set($this->getConfigName().'::default', $name);
+        $this->config->set($this->getConfigName() . '::default', $name);
 
         return $this;
     }
@@ -59,7 +59,7 @@ class FilesystemManager extends Manager
      */
     public function getDefaultDriver()
     {
-        return $this->config->get($this->getConfigName().'::default', 'local');
+        return $this->config->get($this->getConfigName() . '::default', 'local');
     }
 
     /**
@@ -98,7 +98,7 @@ class FilesystemManager extends Manager
     {
         $name = $name ?: $this->getDefaultDriver();
 
-        $connections = $this->config->get($this->getConfigName().'::connections');
+        $connections = $this->config->get($this->getConfigName() . '::connections');
 
         if (!is_array($config = Arr::get($connections, $name)) && !$config) {
             throw new InvalidArgumentException("Adapter [$name] not configured.");
@@ -124,7 +124,7 @@ class FilesystemManager extends Manager
      */
     protected function getCacheConfig($name)
     {
-        $cache = $this->config->get($this->getConfigName().'::cache');
+        $cache = $this->config->get($this->getConfigName() . '::cache');
 
         if (!is_array($config = Arr::get($cache, $name)) && !$config) {
             throw new InvalidArgumentException("Cache [$name] not configured.");

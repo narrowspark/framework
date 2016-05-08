@@ -3,9 +3,9 @@ namespace Viserio\Filesystem\Adapters;
 
 use InvalidArgumentException;
 use League\Flysystem\GridFS\GridFSAdapter;
-use Narrowspark\Arr\StaticArr as Arr;
-use MongoClient;
 use Mongo;
+use MongoClient;
+use Narrowspark\Arr\StaticArr as Arr;
 
 class GridFSConnector extends AbstractConnector
 {

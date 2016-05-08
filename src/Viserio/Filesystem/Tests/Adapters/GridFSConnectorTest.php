@@ -1,11 +1,11 @@
 <?php
 namespace Viserio\Filesystem\Tests\Adapters;
 
-use Viserio\Filesystem\Adapters\GridFSConnector;
 use League\Flysystem\GridFS\GridFSAdapter;
-use MongoClient;
 use Mongo;
+use MongoClient;
 use MongoConnectionException;
+use Viserio\Filesystem\Adapters\GridFSConnector;
 
 class GridFSConnectorTest extends \PHPUnit_Framework_TestCase
 {
@@ -15,7 +15,7 @@ class GridFSConnectorTest extends \PHPUnit_Framework_TestCase
             $this->markTestSkipped('The MongoClient class does not exist');
         }
 
-        $connector = new GridFSConnector;
+        $connector = new GridFSConnector();
 
         try {
             $return = $connector->connect([
@@ -35,7 +35,7 @@ class GridFSConnectorTest extends \PHPUnit_Framework_TestCase
      */
     public function testConnectWithoutDatabase()
     {
-        $connector = new GridFSConnector;
+        $connector = new GridFSConnector();
 
         $connector->connect(['server' => 'mongodb://localhost:27017']);
     }
@@ -46,7 +46,7 @@ class GridFSConnectorTest extends \PHPUnit_Framework_TestCase
      */
     public function testConnectWithoutServer()
     {
-        $connector = new GridFSConnector;
+        $connector = new GridFSConnector();
 
         $connector->connect(['database' => 'your-database']);
     }
