@@ -39,11 +39,7 @@ class FilesystemManagerTest extends \PHPUnit_Framework_TestCase
             ->with('flysystem::default')->withArgs(['localfly']);
 
         $manager->getConfig()->shouldReceive('get')->once()
-            ->with('flysystem::default')->andReturn(
-                function () {
-                    return 'localfly';
-                }
-            );
+            ->with('flysystem::default')->andReturn('localfly');
 
         $manager->setDefaultDriver('localfly');
 
@@ -55,7 +51,7 @@ class FilesystemManagerTest extends \PHPUnit_Framework_TestCase
         $manager = $this->getManager();
 
         $manager->getConfig()->shouldReceive('get')->once()
-            ->with('flysystem::default')->andReturn('local');
+            ->with('flysystem::default')->withArgs(['local'])->andReturn('local');
 
         $this->assertSame('local', $manager->getDefaultDriver());
     }

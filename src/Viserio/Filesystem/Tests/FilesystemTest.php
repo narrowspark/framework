@@ -182,8 +182,8 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
             $allFiles[] = $file;
         }
 
-        $this->assertContains($file1->getName(), $allFiles);
-        $this->assertContains($file2->getName(), $allFiles);
+        $this->assertContains($file1->getName(), $allFiles[0]);
+        $this->assertContains($file2->getName(), $allFiles[1]);
     }
 
     public function testDirectoriesFindsDirectories()
@@ -194,9 +194,9 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
         $dir1 = $this->root->getChild('languages');
         $dir2 = $this->root->getChild('music');
 
-        $directories = $this->files->directories($this->root->url());
+        $directories = $this->files->directories($this->root->url().'/');
 
-        $this->assertContains($dir1->url(), $directories);
-        $this->assertContains($dir2->url(), $directories);
+        $this->assertContains($dir1->url(), $directories[0]);
+        $this->assertContains($dir2->url(), $directories[1]);
     }
 }
