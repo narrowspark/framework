@@ -49,4 +49,14 @@ class TestManager extends Manager
     {
         return $config;
     }
+
+    /**
+     * Get the configuration name.
+     *
+     * @return string
+     */
+    protected function getConfigName()
+    {
+        return 'test';
+    }
 }

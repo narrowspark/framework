@@ -90,6 +90,15 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
         $this->files->getRequire(vfsStream::url('foo/bar/tmp/file.php'));
     }
 
+    public function testGetRequire()
+    {
+        $file = vfsStream::newFile('pop.php')->withContent('<?php return "pop"; ?>')->at($this->root);
+
+        $pop = $this->files->getRequire($file->url());
+
+        $this->assertSame('pop', $pop);
+    }
+
     public function testMoveMovesFiles()
     {
         $file = vfsStream::newFile('pop.txt')->withContent('pop')->at($this->root);

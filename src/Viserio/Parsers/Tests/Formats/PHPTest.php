@@ -63,16 +63,10 @@ return [\'a\' => 1, "b" => 2, "c" => 3, "d" => 4, "e" => 5,];
 );'
         )->at($this->root);
 
-        $dump = $this->parser->dump(['a' => 1, 'b' => 2, 'c' => 3, 'd' => 4, 'e' => 5]);
-        var_dump($dump);
-        $expected = $this->removeEnding($this->file->read($file->url()));
-        $actual   = $this->removeEnding($dump);
+        $dump =  vfsStream::newFile('temp.php')->withContent(
+            $this->parser->dump(['a' => 1, 'b' => 2, 'c' => 3, 'd' => 4, 'e' => 5])
+        )->at($this->root);
 
-        $this->assertSame($expected, $actual);
-    }
-
-    private function removeEnding($string)
-    {
-        return str_replace(["\r\n", "\r", '~(*BSR_ANYCRLF)\R~'], "\r\n", $string);
+        $this->assertSame($this->file->read($file->url()), $this->file->read($dump->url()));
     }
 }

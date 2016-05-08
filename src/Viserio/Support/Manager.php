@@ -198,4 +198,11 @@ abstract class Manager
     {
         return $this->customCreators[$driver]($options);
     }
+
+    /**
+     * Get the configuration name.
+     *
+     * @return string
+     */
+    abstract protected function getConfigName();
 }
