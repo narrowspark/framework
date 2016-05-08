@@ -194,7 +194,7 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
         $dir1 = $this->root->getChild('languages');
         $dir2 = $this->root->getChild('music');
 
-        $directories = $this->files->directories($this->root->url().'/');
+        $directories = $this->files->directories($this->root->url() . '/');
 
         $this->assertContains($dir1->url(), $directories[0]);
         $this->assertContains($dir2->url(), $directories[1]);
