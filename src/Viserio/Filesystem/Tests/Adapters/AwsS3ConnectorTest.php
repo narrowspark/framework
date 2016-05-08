@@ -1,12 +1,11 @@
 <?php
 namespace Viserio\Filesystem\Tests\Adapters;
 
-use Viserio\Filesystem\Adapters\AwsS3Connector;
 use League\Flysystem\AwsS3v3\AwsS3Adapter;
+use Viserio\Filesystem\Adapters\AwsS3Connector;
 
 class AwsS3ConnectorTest extends \PHPUnit_Framework_TestCase
 {
-
     protected function setUp()
     {
         if (defined('HHVM_VERSION') && version_compare(HHVM_VERSION, '3.9.0') < 0) {

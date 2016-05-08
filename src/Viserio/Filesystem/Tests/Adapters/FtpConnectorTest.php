@@ -44,7 +44,7 @@ class FtpConnectorTest extends \PHPUnit_Framework_TestCase
         $connector = new FtpConnector();
 
         $connector->connect([
-            'host'     => 'ftp.example.com'
+            'host'     => 'ftp.example.com',
         ]);
     }
 

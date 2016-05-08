@@ -1,8 +1,8 @@
 <?php
 namespace Viserio\Filesystem\Tests\Adapters;
 
-use Viserio\Filesystem\Adapters\WebDavConnector;
 use League\Flysystem\WebDAV\WebDAVAdapter;
+use Viserio\Filesystem\Adapters\WebDavConnector;
 
 class WebDavConnectorTest extends \PHPUnit_Framework_TestCase
 {

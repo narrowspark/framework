@@ -1,8 +1,8 @@
 <?php
 namespace Viserio\Filesystem\Tests\Adapters;
 
-use Viserio\Filesystem\Adapters\RackspaceConnector;
 use Guzzle\Http\Exception\CurlException;
+use Viserio\Filesystem\Adapters\RackspaceConnector;
 
 class RackspaceConnectorTest extends \PHPUnit_Framework_TestCase
 {

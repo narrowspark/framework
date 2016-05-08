@@ -1,8 +1,8 @@
 <?php
 namespace Viserio\Filesystem\Tests\Adapters;
 
-use Viserio\Filesystem\Adapters\VfsConnector;
 use League\Flysystem\Vfs\VfsAdapter;
+use Viserio\Filesystem\Adapters\VfsConnector;
 
 class VfsConnectorTest extends \PHPUnit_Framework_TestCase
 {
