@@ -205,12 +205,12 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
 
     public function testCreateDirectory()
     {
-        $this->files->createDirectory($this->root->url().'/test');
+        $this->files->createDirectory($this->root->url() . '/test');
 
         $this->assertTrue(is_dir(vfsStream::url('root/test')));
         $this->assertEquals(0755, $this->root->getChild('test')->getPermissions());
 
-        $this->files->createDirectory($this->root->url().'/test2', ['visibility' => 'private']);
+        $this->files->createDirectory($this->root->url() . '/test2', ['visibility' => 'private']);
 
         $this->assertEquals(0700, $this->root->getChild('test2')->getPermissions());
     }
@@ -227,14 +227,14 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
             ->at($dir);
 
         $this->files->copy(
-            $dir->url().'/copy.txt',
-            $this->root->getChild('copy2')->url().'/copy.txt'
+            $dir->url() . '/copy.txt',
+            $this->root->getChild('copy2')->url() . '/copy.txt'
         );
 
         $this->assertSame(
             'copy1',
             $this->files->read(
-                $this->root->getChild('copy2')->url().'/copy.txt'
+                $this->root->getChild('copy2')->url() . '/copy.txt'
             )
         );
     }
@@ -253,7 +253,7 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
             ->at($dir);
 
         $this->files->copy(
-            $dir->url().'/copy.txt',
+            $dir->url() . '/copy.txt',
             $this->root->getChild('copy')->url()
         );
     }
