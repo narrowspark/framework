@@ -39,6 +39,7 @@
         "league/flysystem"                   : "^1.0",
         "narrowspark/arr"                    : "^1.0",
         "symfony/filesystem"                 : "^3.0 || ^2.8",
+        "symfony/finder"                     : "^3.0 || ^2.8",
         "viserio/contracts"                  : "self.version",
         "viserio/support"                    : "self.version"
     },

@@ -8,9 +8,10 @@ use RecursiveIteratorIterator;
 use Symfony\Component\Filesystem\Exception\FileNotFoundException as SymfonyFileNotFoundException;
 use Symfony\Component\Filesystem\Exception\IOException as SymfonyIOException;
 use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
+use Symfony\Component\Finder\Finder;
 use Viserio\Contracts\Filesystem\Directorysystem as DirectorysystemContract;
 use Viserio\Contracts\Filesystem\Exception\FileNotFoundException;
-use Viserio\Contracts\Filesystem\Exception\IOException;
+use Viserio\Contracts\Filesystem\Exception\IOException as ViserioIOException;
 use Viserio\Contracts\Filesystem\Filesystem as FilesystemContract;
 use Viserio\Filesystem\Traits\FilesystemExtensionTrait;
 use Viserio\Filesystem\Traits\FilesystemHelperTrait;
@@ -111,7 +112,7 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract, Direct
     public function setVisibility($path, $visibility)
     {
         $path = $this->normalizeDirectorySeparator($path);
-        $visibility = $this->parseVisibility($visibility);
+        $visibility = $this->parseVisibility($path, $visibility);
 
         try {
             $this->chmod($path, $visibility);
@@ -133,9 +134,9 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract, Direct
         try {
             return parent::copy($from, $to, $override);
         } catch (SymfonyFileNotFoundException $exception) {
-            throw FileNotFoundException();
+            throw new FileNotFoundException($exception->getMessage());
         } catch (SymfonyIOException $exception) {
-            throw IOException();
+            throw new ViserioIOException($exception->getMessage());
         }
     }
 
@@ -223,21 +224,10 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract, Direct
      */
     public function allFiles($directory)
     {
-        $directory = $this->normalizeDirectorySeparator($directory);
-        $recursive = new RecursiveIteratorIterator(
-            new RecursiveDirectoryIterator($directory, RecursiveDirectoryIterator::SKIP_DOTS),
-            RecursiveIteratorIterator::SELF_FIRST,
-            RecursiveIteratorIterator::CATCH_GET_CHILD // Ignore "Permission denied"
-        );
-
         $files = [];
 
-        foreach ($recursive as $file) {
-            if ($file->isDir()) {
-                continue;
-            }
-
-            $files[] = $file->getFilename();
+        foreach (Finder::create()->files()->in($directory) as $dir) {
+            $files[] = $this->normalizeDirectorySeparator($dir->getPathname());
         }
 
         return $files;
@@ -249,10 +239,10 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract, Direct
     public function createDirectory($dirname, array $config = [])
     {
         $dirname = $this->normalizeDirectorySeparator($dirname);
-        $mode    = 0777;
+        $mode    = $this->permissions['dir']['public'];
 
         if (isset($config['visibility'])) {
-            $mode = $this->parseVisibility($dirname, $config['visibility']);
+            $mode = $this->permissions['dir'][$config['visibility']];
         }
 
         try {
@@ -269,15 +259,13 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract, Direct
      */
     public function directories($directory)
     {
-        $directory = $this->normalizeDirectorySeparator($directory);
+        $directories = [];
 
-        $dirs = [];
-
-        foreach (glob($directory, GLOB_ONLYDIR) as $dir) {
-            $dirs[] = $this->normalizeDirectorySeparator($dir);
+        foreach (Finder::create()->in($directory)->directories()->depth(0) as $dir) {
+            $directories[] = $this->normalizeDirectorySeparator($dir->getPathname());
         }
 
-        return $dirs;
+        return $directories;
     }
 
     /**
@@ -285,22 +273,7 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract, Direct
      */
     public function allDirectories($directory)
     {
-        $directory = $this->normalizeDirectorySeparator($directory);
-        $recursive = new RecursiveIteratorIterator(
-            new RecursiveDirectoryIterator($directory, RecursiveDirectoryIterator::SKIP_DOTS),
-            RecursiveIteratorIterator::SELF_FIRST,
-            RecursiveIteratorIterator::CATCH_GET_CHILD // Ignore "Permission denied"
-        );
-
-        $dirs = [];
-
-        foreach ($recursive as $dir) {
-            if ($dir->isDir()) {
-                $dirs[] = $this->normalizeDirectorySeparator($dir->getRealpath());
-            }
-        }
-
-        return $dirs;
+        return iterator_to_array(Finder::create()->directories()->in($directory), false);
     }
 
     /**
@@ -314,11 +287,7 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract, Direct
             return false;
         }
 
-        try {
-            $this->remove($dirname);
-        } catch (SymfonyIOException $exception) {
-            return false;
-        }
+        $this->remove($dirname);
 
         return true;
     }
@@ -334,10 +303,18 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract, Direct
             return false;
         }
 
-        $directories = new FilesystemIterator($dirname);
+        $items = new FilesystemIterator($dirname);
 
-        foreach ($directories as $dirname) {
-            @rmdir($dirname);
+        foreach ($items as $item) {
+            if ($item->isDir() && !$item->isLink()) {
+                $this->cleanDirectory($item->getPathname());
+            } else {
+                try {
+                    $this->remove($item->getPathname());
+                } catch (SymfonyIOException $exception) {
+                    return false;
+                }
+            }
         }
 
         return true;

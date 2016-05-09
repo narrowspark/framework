@@ -4,6 +4,7 @@ namespace Viserio\Filesystem\Tests;
 use org\bovigo\vfs\content\LargeFileContent;
 use org\bovigo\vfs\vfsStream;
 use org\bovigo\vfs\vfsStreamDirectory;
+use org\bovigo\vfs\visitor\vfsStreamStructureVisitor;
 use Viserio\Filesystem\Filesystem;
 
 class FilesystemTest extends \PHPUnit_Framework_TestCase
@@ -51,24 +52,26 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
         $file = vfsStream::newFile('bar.txt')->withContent('bar')->at($dir);
 
         $this->assertTrue(is_dir($dir->url()));
+        $this->assertFalse($this->files->deleteDirectory($file->url()));
 
         $this->files->deleteDirectory($dir->url());
 
-        $this->assertFalse(is_dir($dir->url()));
+        $this->assertFalse(is_dir(vfsStream::url('root/temp')));
         $this->assertFileNotExists($file->url());
     }
 
     public function testCleanDirectory()
     {
-        $this->root->addChild(new vfsStreamDirectory('party'));
+        $this->root->addChild(new vfsStreamDirectory('tempdir'));
 
-        $dir  = $this->root->getChild('party');
-        $file = vfsStream::newFile('soda.txt')->withContent('party')->at($dir);
+        $dir  = $this->root->getChild('tempdir');
+        $file = vfsStream::newFile('tempfoo.txt')->withContent('tempfoo')->at($dir);
 
+        $this->assertFalse($this->files->cleanDirectory($file->url()));
         $this->files->cleanDirectory($dir->url());
 
-        $this->assertTrue(is_dir($dir->url()));
-        $this->assertFalse(file_exists($file->url()));
+        $this->assertTrue(is_dir(vfsStream::url('root/tempdir')));
+        $this->assertFileNotExists($file->url());
     }
 
     public function testDeleteRemovesFiles()
@@ -194,9 +197,77 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
         $dir1 = $this->root->getChild('languages');
         $dir2 = $this->root->getChild('music');
 
-        $directories = $this->files->directories($this->root->url() . '/');
+        $directories = $this->files->directories($this->root->url());
 
-        $this->assertContains($dir1->url(), $directories[0]);
-        $this->assertContains($dir2->url(), $directories[1]);
+        $this->assertContains('vfs://root\languages', $directories[0]);
+        $this->assertContains('vfs://root\music', $directories[1]);
+    }
+
+    public function testCreateDirectory()
+    {
+        $this->files->createDirectory($this->root->url().'/test');
+
+        $this->assertTrue(is_dir(vfsStream::url('root/test')));
+        $this->assertEquals(0755, $this->root->getChild('test')->getPermissions());
+
+        $this->files->createDirectory($this->root->url().'/test2', ['visibility' => 'private']);
+
+        $this->assertEquals(0700, $this->root->getChild('test2')->getPermissions());
+    }
+
+    public function testCopy()
+    {
+        $this->root->addChild(new vfsStreamDirectory('copy'));
+        $this->root->addChild(new vfsStreamDirectory('copy2'));
+
+        $dir = $this->root->getChild('copy');
+
+        $file = vfsStream::newFile('copy.txt')
+            ->withContent('copy1')
+            ->at($dir);
+
+        $this->files->copy(
+            $dir->url().'/copy.txt',
+            $this->root->getChild('copy2')->url().'/copy.txt'
+        );
+
+        $this->assertSame(
+            'copy1',
+            $this->files->read(
+                $this->root->getChild('copy2')->url().'/copy.txt'
+            )
+        );
+    }
+
+    /**
+     * @expectedException Viserio\Contracts\Filesystem\Exception\IOException
+     */
+    public function testCopyToThrowIOException()
+    {
+        $this->root->addChild(new vfsStreamDirectory('copy'));
+
+        $dir = $this->root->getChild('copy');
+
+        $file = vfsStream::newFile('copy.txt')
+            ->withContent('copy1')
+            ->at($dir);
+
+        $this->files->copy(
+            $dir->url().'/copy.txt',
+            $this->root->getChild('copy')->url()
+        );
+    }
+
+    /**
+     * @expectedException Viserio\Contracts\Filesystem\Exception\FileNotFoundException
+     */
+    public function testCopyToThrowFileNotFoundException()
+    {
+        $this->root->addChild(new vfsStreamDirectory('copy'));
+
+        $this->files->copy(
+            '/copy.txt',
+            $this->root->getChild('copy')->url()
+        );
     }
 }
