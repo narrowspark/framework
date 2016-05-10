@@ -215,8 +215,8 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
 
         $directories = $this->files->directories($this->root->url());
 
-        $this->assertContains('vfs://root\languages', $directories[0]);
-        $this->assertContains('vfs://root\music', $directories[1]);
+        $this->assertContains('vfs://root'.DIRECTORY_SEPARATOR.'languages', $directories[0]);
+        $this->assertContains('vfs://root'.DIRECTORY_SEPARATOR.'music', $directories[1]);
     }
 
     public function testCreateDirectory()
