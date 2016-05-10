@@ -6,7 +6,6 @@ use Guzzle\Http\Exception\CurlException;
 use MongoConnectionException;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use Viserio\Contracts\Config\Manager as ConfigManger;
-use Viserio\Contracts\Filesystem\Filesystem as FilesystemContract;
 use Viserio\Filesystem\FilesystemAdapter;
 use Viserio\Filesystem\FilesystemManager;
 

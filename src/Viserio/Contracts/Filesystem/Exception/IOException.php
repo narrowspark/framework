@@ -8,6 +8,9 @@ class IOException extends RuntimeException
 {
     private $path;
 
+    /**
+     * @param string $message
+     */
     public function __construct($message, $code = 0, Exception $previous = null, $path = null)
     {
         $this->path = $path;
