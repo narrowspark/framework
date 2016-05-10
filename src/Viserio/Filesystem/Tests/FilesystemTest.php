@@ -34,6 +34,7 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals('Foo Bar', $this->files->read($file->url()));
     }
+
     /**
      * @expectedException Viserio\Contracts\Filesystem\Exception\FileNotFoundException
      */

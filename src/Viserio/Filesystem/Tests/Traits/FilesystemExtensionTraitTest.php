@@ -1,9 +1,9 @@
 <?php
 namespace Viserio\Filesystem\Tests\Traits;
 
-use Viserio\Filesystem\Traits\FilesystemExtensionTrait;
 use org\bovigo\vfs\vfsStream;
 use org\bovigo\vfs\vfsStreamDirectory;
+use Viserio\Filesystem\Traits\FilesystemExtensionTrait;
 
 class FilesystemExtensionTraitTest extends \PHPUnit_Framework_TestCase
 {

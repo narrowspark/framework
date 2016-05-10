@@ -1,8 +1,8 @@
 <?php
 namespace Viserio\Filesystem;
 
-use InvalidArgumentException;
 use FilesystemIterator;
+use InvalidArgumentException;
 use League\Flysystem\Util\MimeType;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
