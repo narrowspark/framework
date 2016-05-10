@@ -34,6 +34,13 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals('Foo Bar', $this->files->read($file->url()));
     }
+    /**
+     * @expectedException Viserio\Contracts\Filesystem\Exception\FileNotFoundException
+     */
+    public function testReadToThrowException()
+    {
+        $this->files->read(vfsStream::url('foo/bar/tmp/file.php'));
+    }
 
     public function testUpdateStoresFiles()
     {
@@ -42,6 +49,14 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
         $this->files->update($file->url(), 'Hello World');
 
         $this->assertStringEqualsFile($file->url(), 'Hello World');
+    }
+
+    /**
+     * @expectedException Viserio\Contracts\Filesystem\Exception\FileNotFoundException
+     */
+    public function testUpdateToThrowException()
+    {
+        $this->files->update(vfsStream::url('foo/bar/tmp/file.php'), 'Hello World');
     }
 
     public function testDeleteDirectory()
@@ -88,7 +103,7 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException Viserio\Contracts\Filesystem\Exception\FileNotFoundException
      */
-    public function testGetRequireThrowsExceptionNonexisitingFile()
+    public function testGetRequireThrowsExceptionOnexisitingFile()
     {
         $this->files->getRequire(vfsStream::url('foo/bar/tmp/file.php'));
     }
@@ -269,5 +284,103 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
             '/copy.txt',
             $this->root->getChild('copy')->url()
         );
+    }
+
+    public function testGetAndSetVisibility()
+    {
+        $this->root->addChild(new vfsStreamDirectory('copy'));
+
+        $dir = $this->root->getChild('copy');
+
+        $file = vfsStream::newFile('copy.txt')
+            ->withContent('copy')
+            ->at($dir);
+
+        $this->assertSame('public', $this->files->getVisibility($dir->url()));
+        $this->assertSame('public', $this->files->getVisibility($file->url()));
+
+        $this->files->setVisibility($file->url(), 'private');
+        $this->files->setVisibility($dir->url(), 'private');
+
+        $this->assertSame('private', $this->files->getVisibility($dir->url()));
+        $this->assertSame('private', $this->files->getVisibility($file->url()));
+
+        $this->files->setVisibility($file->url(), 'public');
+
+        $this->assertSame('public', $this->files->getVisibility($file->url()));
+    }
+
+    /**
+     * @expectedException InvalidArgumentException
+     */
+    public function testSetVisibilityToThrowInvalidArgumentException()
+    {
+        $this->root->addChild(new vfsStreamDirectory('copy'));
+
+        $dir = $this->root->getChild('copy');
+
+        $this->files->setVisibility($dir->url(), 'exception');
+    }
+
+    public function testWrite()
+    {
+        $this->root->addChild(new vfsStreamDirectory('copy'));
+
+        $dir = $this->root->getChild('copy');
+
+        $file = vfsStream::newFile('copy.txt')
+            ->withContent('copy')
+            ->at($dir);
+
+        $this->files->write($file->url(), 'copy new');
+
+        $this->assertSame('copy new', $this->files->read($file->url()));
+
+        $this->files->write($file->url(), 'copy new visibility', ['visibility' => 'private']);
+
+        $this->assertSame('copy new visibility', $this->files->read($file->url()));
+        $this->assertSame('private', $this->files->getVisibility($file->url()));
+    }
+
+    public function testGetMimetype()
+    {
+        $this->root->addChild(new vfsStreamDirectory('copy'));
+
+        $dir = $this->root->getChild('copy');
+
+        $file = vfsStream::newFile('copy.txt')
+            ->withContent('copy')
+            ->at($dir);
+
+        $this->assertSame('text/plain', $this->files->getMimetype($file->url()));
+    }
+
+    /**
+     * @expectedException Viserio\Contracts\Filesystem\Exception\FileNotFoundException
+     */
+    public function testGetMimetypeToThrowFileNotFoundException()
+    {
+        $this->files->getMimetype(vfsStream::url('foo/bar/tmp/file.php'));
+    }
+
+    public function testGetTimestamp()
+    {
+        $this->root->addChild(new vfsStreamDirectory('copy'));
+
+        $dir = $this->root->getChild('copy');
+
+        $file = vfsStream::newFile('copy.txt')
+            ->withContent('copy')
+            ->at($dir);
+
+        $this->assertSame(date('F d Y H:i:s', filemtime($file->url())), $this->files->getTimestamp($file->url()));
+    }
+
+    /**
+     * @expectedException Viserio\Contracts\Filesystem\Exception\FileNotFoundException
+     */
+    public function testGetTimestampToThrowFileNotFoundException()
+    {
+        $this->files->getTimestamp(vfsStream::url('foo/bar/tmp/file.php'));
     }
 }

@@ -1,6 +1,7 @@
 <?php
 namespace Viserio\Filesystem;
 
+use InvalidArgumentException;
 use FilesystemIterator;
 use League\Flysystem\Util\MimeType;
 use RecursiveDirectoryIterator;
@@ -87,9 +88,11 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract, Direct
     {
         $path = $this->normalizeDirectorySeparator($path);
 
-        return file_put_contents($path, $contents, FILE_APPEND);
+        if (!$this->exists($path)) {
+            throw new FileNotFoundException($path);
+        }
 
-        // @TODO throw new FileNotFoundException($path);
+        return file_put_contents($path, $contents, FILE_APPEND);
     }
 
     /**
@@ -191,6 +194,8 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract, Direct
         if (!$this->isFile($path) && !$this->has($path)) {
             throw new FileNotFoundException($path);
         }
+
+        return date('F d Y H:i:s', filemtime($path));
     }
 
     /**
@@ -338,7 +343,7 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract, Direct
      *
      * @throws \InvalidArgumentException
      *
-     * @return int
+     * @return int|null
      */
     private function parseVisibility($path, $visibility)
     {

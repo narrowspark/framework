@@ -29,22 +29,24 @@ trait FilesystemExtensionTrait
      */
     public function changeExtension($path, $extension)
     {
-        $explode = explode('.', $path);
-
-        if ($actualExtension = end($explode)) {
-            $actualExtension = strtolower($extension);
-        }
-
-        $extension = ltrim($extension, '.');
+        $explode    = explode('.', $path);
+        $substrPath = substr($path, -1);
 
         // No extension for paths
-        if (substr($path, -1) === '/') {
+        if ($substrPath === '/' || is_dir($path)) {
             return $path;
         }
 
+        $actualExtension = null;
+        $extension       = ltrim($extension, '.');
+
+        if (count($explode) >= 2 && !is_dir($path)) {
+            $actualExtension = strtolower($extension);
+        }
+
         // No actual extension in path
-        if (empty($actualExtension)) {
-            return $path . (substr($path, -1) === '.' ? '' : '.') . $extension;
+        if ($actualExtension === null) {
+            return $path . ($substrPath === '.' ? '' : '.') . $extension;
         }
 
         return substr($path, 0, -strlen($actualExtension)) . $extension;
