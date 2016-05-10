@@ -4,8 +4,6 @@ namespace Viserio\Filesystem;
 use FilesystemIterator;
 use InvalidArgumentException;
 use League\Flysystem\Util\MimeType;
-use RecursiveDirectoryIterator;
-use RecursiveIteratorIterator;
 use Symfony\Component\Filesystem\Exception\FileNotFoundException as SymfonyFileNotFoundException;
 use Symfony\Component\Filesystem\Exception\IOException as SymfonyIOException;
 use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
