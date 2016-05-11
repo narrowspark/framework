@@ -104,23 +104,6 @@ class FilesystemAdapterTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($this->files->exists($file->url()));
     }
 
-    /**
-     * @expectedException Viserio\Contracts\Filesystem\Exception\FileNotFoundException
-     */
-    public function testGetRequireThrowsExceptionOnexisitingFile()
-    {
-        $this->files->getRequire(vfsStream::url('foo/bar/tmp/file.php'));
-    }
-
-    public function testGetRequire()
-    {
-        $file = vfsStream::newFile('pop.php')->withContent('<?php return "pop"; ?>')->at($this->root);
-
-        $pop = $this->files->getRequire($file->url());
-
-        $this->assertSame('pop', $pop);
-    }
-
     public function testMoveMovesFiles()
     {
         $file = vfsStream::newFile('pop.txt')->withContent('pop')->at($this->root);
@@ -157,37 +140,6 @@ class FilesystemAdapterTest extends \PHPUnit_Framework_TestCase
         $file    = vfsStream::newFile('2kb.txt')->withContent($content)->at($this->root);
 
         $this->assertEquals($file->size(), $this->files->getSize($file->url()));
-    }
-
-    public function testIsWritable()
-    {
-        $file = vfsStream::newFile('foo.txt', 0444)->withContent('foo')->at($this->root);
-
-        $this->assertFalse($this->files->isWritable($file->url()));
-
-        $file->chmod(0777);
-
-        $this->assertTrue($this->files->isWritable($file->url()));
-    }
-
-    public function testIsFile()
-    {
-        $this->root->addChild(new vfsStreamDirectory('assets'));
-        $dir  = $this->root->getChild('assets');
-        $file = vfsStream::newFile('foo.txt')->withContent('foo')->at($this->root);
-
-        $this->assertFalse($this->files->isFile($dir->url()));
-        $this->assertTrue($this->files->isFile($file->url()));
-    }
-
-    public function testIsDirectory()
-    {
-        $this->root->addChild(new vfsStreamDirectory('assets'));
-        $dir  = $this->root->getChild('assets');
-        $file = vfsStream::newFile('foo.txt')->withContent('foo')->at($this->root);
-
-        $this->assertTrue($this->files->isDirectory($dir->url()));
-        $this->assertFalse($this->files->isDirectory($file->url()));
     }
 
     public function testAllFilesFindsFiles()

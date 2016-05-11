@@ -6,7 +6,7 @@ use League\Flysystem\AdapterInterface;
 use League\Flysystem\Config as FlyConfig;
 use League\Flysystem\FileNotFoundException as FlyFileNotFoundException;
 use Viserio\Contracts\Filesystem\Directorysystem as DirectorysystemContract;
-use Viserio\Contracts\Filesystem\FileNotFoundException;
+use Viserio\Contracts\Filesystem\Exception\FileNotFoundException;
 use Viserio\Contracts\Filesystem\Filesystem as FilesystemContract;
 use Viserio\Filesystem\Traits\FilesystemExtensionTrait;
 
