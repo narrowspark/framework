@@ -97,11 +97,11 @@ class FilesystemAdapterTest extends \PHPUnit_Framework_TestCase
     {
         $file = vfsStream::newFile('unlucky.txt')->withContent('So sad')->at($this->root);
 
-        $this->assertTrue($this->files->exists($file->url()));
+        $this->assertTrue($this->files->has($file->url()));
 
         $this->files->delete($file->url());
 
-        $this->assertFalse($this->files->exists($file->url()));
+        $this->assertFalse($this->files->has($file->url()));
     }
 
     public function testMoveMovesFiles()
