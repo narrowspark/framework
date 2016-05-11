@@ -72,7 +72,7 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
      */
     public function update($path, $contents, array $config = [])
     {
-        return $this->upload($path, $contents, $config);
+        return $this->driver->update($path, $contents, $config);
     }
 
     /**
@@ -230,7 +230,7 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
      */
     public function isDirectory($dirname)
     {
-        return $this->dirver->getMetadata($dirname)['type'] === 'dir';
+        return $this->driver->getMetadata($dirname)['type'] === 'dir';
     }
 
     /**
