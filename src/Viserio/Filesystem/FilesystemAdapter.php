@@ -58,7 +58,7 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
     {
         $visibility = isset($configs['visibility']) ? $configs['visibility'] : null;
 
-        $configs['visibility'] = $this->parseVisibility($visibility) ? : [];
+        $configs['visibility'] = $this->parseVisibility($visibility) ?: [];
 
         if (is_resource($contents)) {
             return $this->driver->writeStream($path, $contents, $configs);
