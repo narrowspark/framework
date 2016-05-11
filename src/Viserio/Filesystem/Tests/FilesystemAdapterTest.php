@@ -5,8 +5,8 @@ use org\bovigo\vfs\content\LargeFileContent;
 use org\bovigo\vfs\vfsStream;
 use org\bovigo\vfs\vfsStreamDirectory;
 use org\bovigo\vfs\visitor\vfsStreamStructureVisitor;
-use Viserio\Filesystem\FilesystemAdapter;
 use Viserio\Filesystem\Adapters\VfsConnector;
+use Viserio\Filesystem\FilesystemAdapter;
 
 class FilesystemAdapterTest extends \PHPUnit_Framework_TestCase
 {
@@ -218,8 +218,8 @@ class FilesystemAdapterTest extends \PHPUnit_Framework_TestCase
 
         $directories = $this->files->directories($this->root->url());
 
-        $this->assertContains('vfs://root'.DIRECTORY_SEPARATOR.'languages', $directories[0]);
-        $this->assertContains('vfs://root'.DIRECTORY_SEPARATOR.'music', $directories[1]);
+        $this->assertContains('vfs://root' . DIRECTORY_SEPARATOR . 'languages', $directories[0]);
+        $this->assertContains('vfs://root' . DIRECTORY_SEPARATOR . 'music', $directories[1]);
     }
 
     public function testCreateDirectory()
