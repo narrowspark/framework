@@ -58,7 +58,7 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
     {
         $visibility = isset($configs['visibility']) ? $configs['visibility'] : null;
 
-        $configs['visibility'] = $this->parseVisibility($visibility);
+        $configs['visibility'] = $this->parseVisibility($visibility) ? : [];
 
         if (is_resource($contents)) {
             return $this->driver->writeStream($path, $contents, $configs);
@@ -143,7 +143,11 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
         $paths = is_array($paths) ? $paths : func_get_args();
 
         foreach ($paths as $path) {
-            $this->driver->delete($path);
+            try {
+                $this->driver->delete($path);
+            } catch (FlyFileNotFoundException $exception) {
+                return false;
+            }
         }
 
         return true;
@@ -164,9 +168,7 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
      */
     public function allFiles($directory)
     {
-        $contents = $this->driver->listContents($directory, true);
-
-        return $this->filterContentsByType($contents, 'file');
+        return $this->files($directory, true);
     }
 
     /**
@@ -184,9 +186,7 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
      */
     public function allDirectories($directory)
     {
-        $contents = $this->driver->listContents($directory, true);
-
-        return $this->filterContentsByType($contents, 'dir');
+        return $this->directories($directory, true);
     }
 
     /**
@@ -255,7 +255,7 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
      */
     public function __call($method, array $arguments)
     {
-        return $this->driver->__call($method, $arguments);
+        return call_user_func_array([$this->driver, $method], $arguments);
     }
 
     /**
