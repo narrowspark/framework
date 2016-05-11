@@ -72,7 +72,13 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
      */
     public function update($path, $contents, array $config = [])
     {
-        return $this->driver->update($path, $contents, $config);
+        if (!$this->has($path)) {
+            throw new FileNotFoundException($path);
+        }
+
+        $flyConfig = new FlyConfig($config);
+
+        return $this->driver->update($path, $contents, $flyConfig);
     }
 
     /**
