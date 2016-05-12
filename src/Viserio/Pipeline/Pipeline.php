@@ -3,6 +3,7 @@ namespace Viserio\Pipeline;
 
 use Closure;
 use Interop\Container\ContainerInterface;
+use ReflectionClass;
 use Viserio\Contracts\Pipeline\Pipeline as PipelineContract;
 use Viserio\Support\Traits\ContainerAwareTrait;
 
@@ -34,7 +35,7 @@ class Pipeline implements PipelineContract
     /**
      * Set the object being sent through the pipeline.
      *
-     * @param mixed $traveler
+     * @param string $traveler
      *
      * @return $this
      */
@@ -111,30 +112,21 @@ class Pipeline implements PipelineContract
 
                 // Otherwise we'll resolve the stages out of the container and call it with
                 // the appropriate method and arguments, returning the results back out.
-                } elseif ($this->container) {
-                    list($name, $parameters) = $this->parseStageString($stage);
-
-                    if ($this->container->has($name)) {
-                        $merge = array_merge([$traveler, $stack], $parameters);
-
-                        return call_user_func_array(
-                            [
-                                $this->container->get($name),
-                                $this->method,
-                            ],
-                            $merge
-                        );
-                    }
+                } elseif ($this->container && !is_object($stage)) {
+                    return $this->sliceThroughContainer($traveler, $stack, $stage);
                 } elseif (is_array($stage)) {
                     $reflectionClass = new ReflectionClass(array_shift($stage));
 
                     return call_user_func_array(
-                        $reflectionClass->newInstanceArgs($pipe),
+                        $reflectionClass->newInstanceArgs($stage),
                         [$traveler, $stack]
                     );
                 }
 
-                return call_user_func_array(new $stage(), [$traveler, $stack]);
+                // If the pipe is already an object we'll just make a callable and pass it to
+                // the pipe as-is. There is no need to do any extra parsing and formatting
+                // since the object we're given was already a fully instantiated object.
+                return call_user_func_array([$stage, $this->method], [$traveler, $stack]);
             };
         };
     }
@@ -169,5 +161,29 @@ class Pipeline implements PipelineContract
         }
 
         return [$name, $parameters];
+    }
+
+    /**
+     * @param [type] $traveler [description]
+     * @param [type] $stack    [description]
+     * @param [type] $stage    [description]
+     *
+     * @return \Closure
+     */
+    protected function sliceThroughContainer($traveler, $stack, $stage)
+    {
+        list($name, $parameters) = $this->parseStageString($stage);
+
+        if ($this->container->has($name)) {
+            $merge = array_merge([$traveler, $stack], $parameters);
+
+            return call_user_func_array(
+                [
+                    $this->container->get($name),
+                    $this->method,
+                ],
+                $merge
+            );
+        }
     }
 }

@@ -18,14 +18,17 @@
         }
     ],
     "require": {
-        "php"                             : ">=5.6.4",
-        "viserio/support"                 : "self.version",
-        "viserio/cotracts"                : "self.version"
+        "php"                             : "^5.6 || ^7.0",
+        "narrowspark/arr"                 : "^1.0",
+        "viserio/cotracts"                : "self.version",
+        "viserio/support"                 : "self.version"
     },
     "require-dev": {
         "phpunit/phpunit"                 : "~5.1.3",
+        "mikey179/vfsStream"              : "^1.6",
         "narrowspark/php-cs-fixer-config" : "~1.1.5",
-        "narrowspark/testing-helper"      : "~1.1",
+        "narrowspark/testing-helper"      : "~1.5",
+        "viserio/parsers"                 : "self.version",
         "viserio/filesystem"              : "self.version"
     },
     "autoload": {
@@ -44,9 +47,8 @@
         }
     },
     "suggest": {
-        "yosymfony/toml"                  : "Narrowspark config has support for TOML config",
-        "symfony/yaml"                    : "Narrowspark config has support for YML config",
-        "viserio/filesystem"              : "Required to use bind or cascadePackage function (0.10)"
+        "viserio/filesystem"              : "Required to use bind or cascadePackage function (0.10)",
+        "viserio/parsers"                 : "Required to use FileLoader class (self.version)."
     },
     "minimum-stability"                   : "dev",
     "prefer-stable"                       : true

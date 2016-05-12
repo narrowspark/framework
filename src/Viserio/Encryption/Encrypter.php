@@ -113,7 +113,7 @@ class Encrypter implements EncrypterContract
      *   'mac'   => 'Message Authentication Code'
      * ]
      *
-     * @param mixed $data Data to encrypt.
+     * @param string $data Data to encrypt.
      *
      * @return string Serialized array containing the encrypted data
      *                along with some meta data.
@@ -158,6 +158,27 @@ class Encrypter implements EncrypterContract
     }
 
     /**
+     * Compare two encrypted values.
+     *
+     * @param bool   $loose
+     * @param string $encrypted1
+     * @param string $encrypted2
+     *
+     * @return bool
+     */
+    public function compare($encrypted1, $encrypted2, $loose = false)
+    {
+        $encrypt1 = $this->getCompareValue($encrypted1);
+        $encrypt2 = $this->getCompareValue($encrypted2);
+
+        if ($loose) {
+            return $encrypt1 == $encrypt2;
+        }
+
+        return $encrypt1 === $encrypt2;
+    }
+
+    /**
      * Get generator.
      *
      * @return \Viserio\Contracts\Encryption\Adapter
@@ -177,6 +198,7 @@ class Encrypter implements EncrypterContract
      * @param string $cipher
      * @param string mode
      * @param string $key
+     * @param string $mode
      *
      * @throws \RuntimeException
      */
@@ -194,5 +216,21 @@ class Encrypter implements EncrypterContract
         $validCiphers = implode(', ', array_keys($this->lengths));
 
         throw new RuntimeException("The only supported ciphers are [$validCiphers] with the correct key lengths.");
+    }
+
+    /**
+     * Get the decrypted value of a possibly encrypted variable.
+     *
+     * @param mixed $encrypted
+     *
+     * @return mixed
+     */
+    protected function getCompareValue($encrypted)
+    {
+        try {
+            return $this->decrypt($encrypted);
+        } catch (DecryptException $e) {
+            return $encrypted;
+        }
     }
 }

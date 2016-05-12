@@ -1,11 +1,10 @@
 <?php
 namespace Viserio\Config;
 
-use ArrayIterator;
 use IteratorAggregate;
+use Viserio\Contracts\Config\Loader as LoaderContract;
 use Viserio\Contracts\Config\Manager as ManagerContract;
 use Viserio\Contracts\Config\Repository as RepositoryContract;
-use Viserio\Contracts\Filesystem\Loader as LoaderContract;
 
 class Manager implements ManagerContract, IteratorAggregate
 {
@@ -19,7 +18,7 @@ class Manager implements ManagerContract, IteratorAggregate
     /**
      * Fileloader instance.
      *
-     * @var \Viserio\Contracts\Filesystem\Loader
+     * @var \Viserio\Contracts\Config\Loader
      */
     protected $loader;
 
@@ -37,45 +36,25 @@ class Manager implements ManagerContract, IteratorAggregate
      */
     public function __construct(RepositoryContract $repository)
     {
-        $this->setHandler($repository);
+        $this->repository = $repository;
     }
 
     /**
      * Set Viserio's defaults using the repository.
      *
-     * @param array $values
+     * @param array $array
      */
-    public function setArray(array $values)
+    public function setArray(array $array)
     {
-        $this->repository->setArray($values);
-    }
-
-    /**
-     * Set a configuration repository and provide it some defaults.
-     *
-     * @param RepositoryContract $repository
-     */
-    public function setHandler(RepositoryContract $repository)
-    {
-        $this->repository = $repository;
-    }
-
-    /**
-     * Get the configuration repository for access.
-     *
-     * @return RepositoryContract
-     */
-    public function getHandler()
-    {
-        return $this->repository;
+        $this->repository->setArray($array);
     }
 
     /**
      * Get the configuration loader.
      *
-     * @param \Viserio\Contracts\Filesystem\Loader $loader
+     * @param \Viserio\Contracts\Config\Loader $loader
      *
-     * @return \Viserio\Contracts\Filesystem\Loader
+     * @return self
      */
     public function setLoader(LoaderContract $loader)
     {
@@ -87,7 +66,7 @@ class Manager implements ManagerContract, IteratorAggregate
     /**
      * Get the configuration loader.
      *
-     * @return \Viserio\Contracts\Filesystem\Loader
+     * @return \Viserio\Contracts\Config\Loader
      */
     public function getLoader()
     {
@@ -95,69 +74,73 @@ class Manager implements ManagerContract, IteratorAggregate
     }
 
     /**
-     * Load the given configuration group.
+     * Import configuation from file.
+     * Can be grouped together.
      *
      * @param string      $file
-     * @param string|null $namespace
-     * @param string|null $environment
      * @param string|null $group
      *
      * @return self
      */
-    public function bind($file, $group = null, $environment = null, $namespace = null)
+    public function import($file, $group = null)
     {
-        $config = $this->getLoader()->load($file, $group, $environment, $namespace);
+        $config = $this->loader->load($file, $group);
 
-        $this->setArray($config);
+        $this->repository->setArray($config);
 
         return $this;
     }
 
     /**
-     * Apply any cascades to an array of package options.
-     *
-     * @param string      $file
-     * @param string|null $package
-     * @param string|null $group
-     * @param string|null $env
-     * @param array|null  $items
-     *
-     * @return array
+     * {@inheritdoc}
      */
-    public function cascadePackage($file, $package = null, $group = null, $env = null, $items = null)
+    public function set($key, $value)
     {
-        return $this->getLoader()->cascadePackage($file, $package, $group, $env, $items);
+        $this->offsetSet($key, $value);
+
+        return $this;
     }
 
     /**
-     * Determine if the given configuration value exists.
-     *
-     * @param string $key
-     *
-     * @return bool
+     * {@inheritdoc}
+     */
+    public function get($key, $default = null)
+    {
+        if (!$this->offsetExists($key)) {
+            return $default;
+        }
+
+        return is_callable($this->offsetGet($key)) ?
+            call_user_func($this->offsetGet($key)) :
+            $this->offsetGet($key);
+    }
+
+    /**
+     * {@inheritdoc}
      */
     public function has($key)
     {
-        return $this->get($key) !== null;
+        return $this->offsetExists($key);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function forget($key)
+    {
+        $this->offsetUnset($key);
     }
 
     /**
      * Get a value.
      *
-     * @param string            $key
-     * @param string|array|null $default
+     * @param string $key
      *
-     * @return mixed The value of a setting
+     * @return mixed
      */
-    public function get($key, $default = null)
+    public function offsetGet($key)
     {
-        if ($this->repository[$key] === null) {
-            return $default;
-        }
-
-        return is_callable($this->repository[$key]) ?
-            call_user_func($this->repository[$key]) :
-            $this->repository[$key];
+        return $this->repository->offsetGet($key);
     }
 
     /**
@@ -165,46 +148,46 @@ class Manager implements ManagerContract, IteratorAggregate
      *
      * @param string $key
      * @param mixed  $value
-     */
-    public function set($key, $value)
-    {
-        $this->repository[$key] = $value;
-    }
-
-    /**
-     * Push a value / array in a multidimensional array.
-     *
-     * @param string       $key
-     * @param string|array $items
-     */
-    public function push($key, $items)
-    {
-        array_push($this->repository[$key], $items);
-    }
-
-    /**
-     * Set path to config folder.
-     *
-     * @param string $path
      *
      * @return self
      */
-    public function addPath($path)
+    public function offsetSet($key, $value)
     {
-        $this->path = $path;
-        $this->getLoader()->addDefaultPath($path);
+        $this->repository->offsetSet($key, $value);
 
         return $this;
     }
 
     /**
-     * Get config folder path.
+     * Check a value exists.
      *
-     * @return string
+     * @param string $key
+     *
+     * @return bool
      */
-    public function getPath()
+    public function offsetExists($key)
     {
-        return $this->path;
+        return $this->repository->offsetExists($key);
+    }
+
+    /**
+     * Remove a value.
+     *
+     * @param string $key
+     */
+    public function offsetUnset($key)
+    {
+        $this->repository->offsetUnset($key);
+    }
+
+    /**
+     * Get an ArrayIterator for the stored items.
+     *
+     * @return \ArrayIterator
+     */
+    public function getIterator()
+    {
+        return $this->repository->getIterator();
     }
 
     /**
@@ -217,61 +200,10 @@ class Manager implements ManagerContract, IteratorAggregate
      */
     public function __call($method, array $params = [])
     {
+        if ($this->loader && method_exists($this->loader, $method)) {
+            return call_user_func_array([$this->loader, $method], $params);
+        }
+
         return call_user_func_array([$this->repository, $method], $params);
-    }
-
-    /**
-     * Get a value.
-     *
-     * @param string $key
-     *
-     * @return mixed
-     */
-    public function offsetGet($key)
-    {
-        return $this->repository[$key];
-    }
-
-    /**
-     * Set a value.
-     *
-     * @param string $key
-     * @param mixed  $value
-     */
-    public function offsetSet($key, $value)
-    {
-        $this->repository[$key] = $value;
-    }
-
-    /**
-     * Check a value exists.
-     *
-     * @param string $key
-     *
-     * @return bool
-     */
-    public function offsetExists($key)
-    {
-        return isset($this->repository[$key]);
-    }
-
-    /**
-     * Remove a value.
-     *
-     * @param string $key
-     */
-    public function offsetUnset($key)
-    {
-        unset($this->repository[$key]);
-    }
-
-    /**
-     * Get an ArrayIterator for the stored items.
-     *
-     * @return \ArrayIterator
-     */
-    public function getIterator()
-    {
-        return new ArrayIterator($this->repository->getAllNested());
     }
 }

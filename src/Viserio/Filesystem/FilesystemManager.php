@@ -1,95 +1,138 @@
 <?php
 namespace Viserio\Filesystem;
 
+use InvalidArgumentException;
 use League\Flysystem\AdapterInterface;
+use Narrowspark\Arr\StaticArr as Arr;
+use RuntimeException;
 use Viserio\Contracts\Config\Manager as ConfigContract;
-use Viserio\Contracts\Filesystem\FilesystemManager as Manager;
-use Viserio\Filesystem\Adapters\ConnectionFactory;
+use Viserio\Filesystem\Adapters;
+use Viserio\Support\Manager;
 
-class FilesystemManager implements Manager
+class FilesystemManager extends Manager
 {
     /**
-     * Container instance.
-     *
-     * @var \Viserio\Contracts\Config\Manager
-     */
-    protected $config;
-
-    /**
-     * The factory instance.
-     *
-     * @var \Viserio\Filesystem\Adapters\ConnectionFactory
-     */
-    protected $factory;
-
-    /**
-     * The array of resolved filesystem drivers.
+     * All supported drivers.
      *
      * @var array
      */
-    protected $disks = [];
-
-    /**
-     * The registered custom driver creators.
-     *
-     * @var array
-     */
-    protected $customCreators = [];
+    protected $supportedDrivers = [
+        'awss3',
+        'dropbox',
+        'ftp',
+        'gridfs',
+        'local',
+        'null',
+        'rackspace',
+        'sftp',
+        'vfs',
+        'webdav',
+        'zip',
+    ];
 
     /**
      * Create a new filesystem manager instance.
      *
-     * @param \Viserio\Contracts\Config\Manager              $config
-     * @param \Viserio\Filesystem\Adapters\ConnectionFactory $factory
+     * @param \Viserio\Contracts\Config\Manager $config
      */
-    public function __construct(ConfigContract $config, ConnectionFactory $factory)
+    public function __construct(ConfigContract $config)
     {
-        $this->config = $config;
-        $this->factory = $factory;
+        $this->config  = $config;
     }
 
     /**
-     * Get an OAuth provider implementation.
+     * Set the default cache driver name.
      *
-     * @param string|null $name
-     *
-     * @return \Viserio\Contracts\Filesystem\Filesystem
+     * @param string $name
      */
-    public function disk($name = null)
+    public function setDefaultDriver($name)
+    {
+        $this->config->set('filesystems::default', $name);
+
+        return $this;
+    }
+
+    /**
+     * Get the default driver name.
+     *
+     * @return string
+     */
+    public function getDefaultDriver()
+    {
+        return $this->config->get('filesystems::default', '');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function driver($driver = null, array $options = [])
+    {
+        $driver = $driver ?: $this->getDefaultDriver();
+
+        if (!$this->hasDriver($driver)) {
+            throw new RuntimeException(
+                sprintf('The driver [%s] is not supported.', $driver)
+            );
+        }
+
+        // If the given driver has not been created before, we will create the instances
+        // here and cache it so we can return it next time very quickly. If there is
+        // already a driver created by this name, we'll just return that instance.
+        if (!isset($this->drivers[$driver])) {
+            $this->drivers[$driver] = $this->adapt($this->createDriver($driver, $options));
+        }
+
+        return $this->drivers[$driver];
+    }
+
+    /**
+     * Get the configuration for a connection.
+     *
+     * @param string $name
+     *
+     * @throws \InvalidArgumentException
+     *
+     * @return array
+     */
+    public function getConnectionConfig($name)
     {
         $name = $name ?: $this->getDefaultDriver();
 
-        return $this->disks[$name] = $this->get($name);
-    }
+        $connections = $this->config->get('filesystem');
 
-    /**
-     * Attempt to get the disk from the local cache.
-     *
-     * @param string $name
-     *
-     * @return \Viserio\Contracts\Filesystem\Filesystem
-     */
-    protected function get($name)
-    {
-        return isset($this->disks[$name]) ? $this->disks[$name] : $this->resolve($name);
-    }
-
-    /**
-     * Resolve the given disk.
-     *
-     * @param string $name
-     *
-     * @return FilesystemAdapter
-     */
-    protected function resolve($name)
-    {
-        $config = $this->getConfig($name);
-
-        if (isset($this->customCreators[$config['driver']])) {
-            return $this->callCustomCreator($config);
-        } else {
-            return $this->adapt($this->factory->make($config));
+        if (!is_array($config = Arr::get($connections, $name)) && !$config) {
+            throw new InvalidArgumentException("Adapter [$name] not configured.");
         }
+
+        if (is_string($cache = Arr::get($config, 'cache'))) {
+            $config['cache'] = $this->getCacheConfig($cache);
+        }
+
+        $config['name'] = $name;
+
+        return $config;
+    }
+
+    /**
+     * Get the cache configuration.
+     *
+     * @param string $name
+     *
+     * @throws \InvalidArgumentException
+     *
+     * @return array
+     */
+    protected function getCacheConfig($name)
+    {
+        $cache = $this->config->get('filesystem.cache');
+
+        if (!is_array($config = Arr::get($cache, $name)) && !$config) {
+            throw new InvalidArgumentException("Cache [$name] not configured.");
+        }
+
+        $config['name'] = $name;
+
+        return $config;
     }
 
     /**
@@ -104,58 +147,58 @@ class FilesystemManager implements Manager
         return new FilesystemAdapter($filesystem);
     }
 
-    /**
-     * Get the filesystem connection configuration.
-     *
-     * @param string $name
-     *
-     * @return array
-     */
-    protected function getConfig($name)
+    protected function createAwss3Driver(array $options)
     {
-        return $this->config->get(sprintf('filesystems::disks.%s', $name));
+        return (new Adapters\AwsS3Connector())->connect($options);
     }
 
-    /**
-     * Get the default driver name.
-     *
-     * @return string
-     */
-    public function getDefaultDriver()
+    protected function createDropboxDriver(array $options)
     {
-        return $this->config->get('filesystems::default');
+        return (new Adapters\DropboxConnector())->connect($options);
     }
 
-    /**
-     * Call a custom driver creator.
-     *
-     * @param array $config
-     *
-     * @return \Viserio\Contracts\Filesystem\Filesystem
-     */
-    protected function callCustomCreator(array $config)
+    protected function createFtpDriver(array $options)
     {
-        $driver = $this->customCreators[$config['driver']]($config);
-
-        if ($driver instanceof AdapterInterface) {
-            return $this->adapt($driver);
-        } else {
-            return $driver;
-        }
+        return (new Adapters\FtpConnector())->connect($options);
     }
 
-    /**
-     * Register a custom driver creator Closure.
-     *
-     * @param string   $driver
-     * @param \Closure $callback
-     *
-     * @return $this
-     */
-    public function extend($driver, \Closure $callback)
+    protected function createGridfsDriver(array $options)
     {
-        $this->customCreators[$driver] = $callback;
+        return (new Adapters\GridFSConnector())->connect($options);
+    }
 
-        return $this;
+    protected function createLocalDriver(array $options)
+    {
+        return (new Adapters\LocalConnector())->connect($options);
+    }
+
+    protected function createNullDriver()
+    {
+        return (new Adapters\NullConnector())->connect([]);
+    }
+
+    protected function createRackspaceDriver(array $options)
+    {
+        return (new Adapters\RackspaceConnector())->connect($options);
+    }
+
+    protected function createSftpDriver(array $options)
+    {
+        return (new Adapters\SftpConnector())->connect($options);
+    }
+
+    protected function createVfsDriver(array $options)
+    {
+        return (new Adapters\VfsConnector())->connect($options);
+    }
+
+    protected function createWebdavDriver(array $options)
+    {
+        return (new Adapters\WebDavConnector())->connect($options);
+    }
+
+    protected function createZipDriver(array $options)
+    {
+        return (new Adapters\ZipConnector())->connect($options);
     }
 }

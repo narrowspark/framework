@@ -1,7 +1,7 @@
 <?php
 namespace Viserio\Connect\Tests;
 
-use Mockery as Mock;
+use Narrowspark\TestingHelper\ArrayContainer;
 use Viserio\Connect\Adapters\MemcachedConnector;
 use Viserio\Connect\Adapters\PredisConnector;
 use Viserio\Connect\ConnectionFactory;
@@ -10,8 +10,7 @@ class ConnectionFactoryTest extends \PHPUnit_Framework_TestCase
 {
     public function testExtend()
     {
-        $config = Mock::mock('Viserio\Contracts\Config\Manager');
-        $factory = new ConnectionFactory($config);
+        $factory = new ConnectionFactory(new ArrayContainer());
         $factory->extend('memcached', new MemcachedConnector());
 
         $this->assertTrue(is_array($factory->getExtensions()));
@@ -23,20 +22,19 @@ class ConnectionFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testConnectionToThrowRuntimeException()
     {
-        $config = Mock::mock('Viserio\Contracts\Config\Manager');
-        $config->shouldReceive('get')->once()->with('fail', [])->andReturn([
-            'fail' => [
+        $config = new ArrayContainer();
+        $config->set('fail', [
                 'server' => 'localhost',
-            ],
         ]);
+
         $factory = new ConnectionFactory($config);
         $factory->connection('fail');
     }
 
     public function testConnection()
     {
-        $config = Mock::mock('Viserio\Contracts\Config\Manager');
-        $config->shouldReceive('get')->once()->with('predis', [])->andReturn([
+        $config = new ArrayContainer();
+        $config->set('predis', [
             'servers' => 'localhost',
         ]);
         $factory = new ConnectionFactory($config);
@@ -47,8 +45,8 @@ class ConnectionFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testExtensionsConnection()
     {
-        $config = Mock::mock('Viserio\Contracts\Config\Manager');
-        $config->shouldReceive('get')->once()->with('predis2', [])->andReturn([
+        $config = new ArrayContainer();
+        $config->set('predis2', [
             'servers' => 'localhost',
         ]);
         $factory = new ConnectionFactory($config);
@@ -62,32 +60,29 @@ class ConnectionFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testSupportedPDODrivers()
     {
-        $config = Mock::mock('Viserio\Contracts\Config\Manager');
-        $factory = new ConnectionFactory($config);
+        $factory = new ConnectionFactory(new ArrayContainer());
 
         $this->assertTrue(is_array($factory->supportedPDODrivers()));
     }
 
     public function testGetAvailableDrivers()
     {
-        $config = Mock::mock('Viserio\Contracts\Config\Manager');
-        $factory = new ConnectionFactory($config);
+        $factory = new ConnectionFactory(new ArrayContainer());
 
         $this->assertTrue(is_array($factory->getAvailableDrivers()));
     }
 
     public function testGetConfig()
     {
-        $config = Mock::mock('Viserio\Contracts\Config\Manager');
-        $factory = new ConnectionFactory($config);
+        $factory = new ConnectionFactory(new ArrayContainer());
 
-        $this->assertInstanceOf('Viserio\Contracts\Config\Manager', $factory->getConfig());
+        $this->assertInstanceOf('Interop\Container\ContainerInterface', $factory->getContainer());
     }
 
     public function testGetConnectionConfig()
     {
-        $config = Mock::mock('Viserio\Contracts\Config\Manager');
-        $config->shouldReceive('get')->once()->with('pdo', [])->andReturn([
+        $config = new ArrayContainer();
+        $config->set('pdo', [
             'pdo' => [
                 'server' => 'localhost',
             ],

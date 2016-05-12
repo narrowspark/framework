@@ -7,7 +7,7 @@ use StdClass;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Viserio\Contracts\View\Engine;
 use Viserio\Contracts\View\Finder;
-use Viserio\Support\Traits\DirectorySeparatorTrait;
+use Viserio\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 use Viserio\View\Engines\Adapter\Php;
 use Viserio\View\Engines\EngineResolver;
 use Viserio\View\Factory;
@@ -15,7 +15,7 @@ use Viserio\View\Virtuoso;
 
 class ViewFactoryTest extends \PHPUnit_Framework_TestCase
 {
-    use DirectorySeparatorTrait;
+    use NormalizePathAndDirectorySeparatorTrait;
 
     public function tearDown()
     {
@@ -142,25 +142,21 @@ class ViewFactoryTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException Exception
-     * @expectedExceptionMessage section exception message
      */
     public function testExceptionsInSectionsAreThrown()
     {
         $factory = $this->getFactory();
         $factory->getEngineResolver()
             ->shouldReceive('resolve')
-            ->twice()
             ->andReturn(new Php());
         $factory->getFinder()
             ->shouldReceive('find')
-            ->once()
             ->with('layout')
-            ->andReturn($this->getDirectorySeparator(__DIR__ . '/Fixture/foo.php'));
+            ->andReturn($this->normalizeDirectorySeparator($this->getPath() . '/foo.php'));
         $factory->getFinder()
             ->shouldReceive('find')
-            ->once()
             ->with('view')
-            ->andReturn($this->getDirectorySeparator(__DIR__ . '/Fixture/bar/foo/baz.php'));
+            ->andReturn($this->normalizeDirectorySeparator($this->getPath() . '/bar/foo/fi.php'));
 
         $virtuoso = new Virtuoso(
             Mock::mock(ContainerInterface::class),
@@ -398,5 +394,10 @@ class ViewFactoryTest extends \PHPUnit_Framework_TestCase
             Mock::mock(Finder::class),
             new EventDispatcher(),
         ];
+    }
+
+    protected function getPath()
+    {
+        return $this->normalizeDirectorySeparator(dirname(__FILE__) . '/' . 'Fixture');
     }
 }

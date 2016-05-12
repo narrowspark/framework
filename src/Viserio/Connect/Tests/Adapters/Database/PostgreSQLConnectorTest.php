@@ -1,20 +1,19 @@
 <?php
 namespace Viserio\Connect\Tests\Adapter\Database;
 
-use Mockery as Mock;
+use Narrowspark\TestingHelper\Traits\MockeryTrait;
 
 class PostgreSQLConnectorTest extends \PHPUnit_Framework_TestCase
 {
-    protected function setUp()
-    {
-        if (!class_exists('PDO')) {
-            $this->markTestSkipped('PDO module not installed');
-        }
-    }
+    use MockeryTrait;
 
-    protected function tearDown()
+    public function setUp()
     {
-        Mock::close();
+        $this->allowMockingNonExistentMethods(true);
+
+        if (!class_exists('PDO')) {
+            $this->markTestSkipped('PDO module is not installed.');
+        }
     }
 
     public function testPostgresConnectCallsCreateConnectionWithProperArguments()
@@ -26,7 +25,7 @@ class PostgreSQLConnectorTest extends \PHPUnit_Framework_TestCase
             'port' => 111,
             'charset' => 'utf8',
         ];
-        $connection = Mock::mock('stdClass');
+        $connection = $this->mock('stdClass');
 
         $connector = $this->getMock(
             'Viserio\Connect\Adapters\Database\PostgreSQLConnector',
@@ -56,7 +55,7 @@ class PostgreSQLConnectorTest extends \PHPUnit_Framework_TestCase
             'charset' => 'utf8',
             'timezone' => 'Europe/London',
         ];
-        $connection = Mock::mock('stdClass');
+        $connection = $this->mock('stdClass');
 
         $connector = $this->getMock(
             'Viserio\Connect\Adapters\Database\PostgreSQLConnector',
@@ -88,7 +87,7 @@ class PostgreSQLConnectorTest extends \PHPUnit_Framework_TestCase
             'sslmode' => 'verify-ca',
         ];
 
-        $connection = Mock::mock('stdClass');
+        $connection = $this->mock('stdClass');
         $connector = $this->getMock(
             'Viserio\Connect\Adapters\Database\PostgreSQLConnector',
             ['createConnection', 'getOptions']
@@ -111,7 +110,7 @@ class PostgreSQLConnectorTest extends \PHPUnit_Framework_TestCase
     {
         $dsn = 'pgsql:host=foo;dbname=bar';
         $config = ['server' => 'foo', 'database' => 'bar', 'schema' => 'public', 'charset' => 'utf8'];
-        $connection = Mock::mock('stdClass');
+        $connection = $this->mock('stdClass');
 
         $connector = $this->getMock(
             'Viserio\Connect\Adapters\Database\PostgreSQLConnector',
@@ -142,7 +141,7 @@ class PostgreSQLConnectorTest extends \PHPUnit_Framework_TestCase
             'schema' => ['public', 'user'],
             'charset' => 'utf8',
         ];
-        $connection = Mock::mock('stdClass');
+        $connection = $this->mock('stdClass');
 
         $connector = $this->getMock(
             'Viserio\Connect\Adapters\Database\PostgreSQLConnector',
@@ -179,7 +178,7 @@ class PostgreSQLConnectorTest extends \PHPUnit_Framework_TestCase
             'charset' => 'utf8',
             'application_name' => 'Narrowspark',
         ];
-        $connection = Mock::mock('stdClass');
+        $connection = $this->mock('stdClass');
 
         $connector = $this->getMock(
             'Viserio\Connect\Adapters\Database\PostgreSQLConnector',

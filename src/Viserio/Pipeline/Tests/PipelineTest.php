@@ -3,6 +3,7 @@ namespace Viserio\Pipeline\Tests;
 
 use Narrowspark\TestingHelper\ArrayContainer;
 use Viserio\Pipeline\Pipeline;
+use Viserio\Pipeline\Tests\Fixture\PipelineInvokePipe;
 use Viserio\Pipeline\Tests\Fixture\PipelineTestParameterPipe;
 use Viserio\Pipeline\Tests\Fixture\PipelineTestPipeOne;
 
@@ -72,5 +73,37 @@ class PipelineTest extends \PHPUnit_Framework_TestCase
             });
 
         $this->assertEquals('data', $result);
+    }
+
+    public function testPipelineViaObject()
+    {
+        $result = (new Pipeline())
+            ->send('foo')
+            ->through([new PipelineTestPipeOne()])
+            ->then(function ($piped) {
+                return $piped;
+            });
+
+        $this->assertEquals('foo', $result);
+        $this->assertEquals('foo', $_SERVER['__test.pipe.one']);
+
+        unset($_SERVER['__test.pipe.one']);
+    }
+
+    public function testPipelineInvoke()
+    {
+        $parameters = ['one', 'two'];
+
+        $result = (new Pipeline())
+            ->send('foo')
+            ->through([[PipelineInvokePipe::class, $parameters]])
+            ->then(function ($piped) {
+                return $piped;
+            });
+
+        // $this->assertEquals('foo', $result);
+        $this->assertEquals($parameters, $_SERVER['__test.pipe.parameters']);
+
+        unset($_SERVER['__test.pipe.one']);
     }
 }
