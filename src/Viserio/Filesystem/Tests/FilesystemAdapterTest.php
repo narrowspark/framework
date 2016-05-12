@@ -21,7 +21,7 @@ class FilesystemAdapterTest extends \PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
-        $this->root = __DIR__.'/stubs/';
+        $this->root = __DIR__ . '/stubs/';
 
         $connector = new LocalConnector();
 
@@ -30,7 +30,7 @@ class FilesystemAdapterTest extends \PHPUnit_Framework_TestCase
 
     public function testReadRetrievesFiles()
     {
-        $this->assertEquals('Hello World', $this->adapter->read($this->root.'test.txt'));
+        $this->assertEquals('Hello World', $this->adapter->read($this->root . 'test.txt'));
     }
 
     /**
@@ -43,7 +43,7 @@ class FilesystemAdapterTest extends \PHPUnit_Framework_TestCase
 
     public function testUpdateStoresFiles()
     {
-        $file = $this->root.'test.txt';
+        $file = $this->root . 'test.txt';
 
         $this->adapter->update($file, 'Hello World');
 
@@ -55,7 +55,7 @@ class FilesystemAdapterTest extends \PHPUnit_Framework_TestCase
      */
     public function testUpdateToThrowException()
     {
-        $this->adapter->update($this->root.'TestDontExists.txt', 'Hello World');
+        $this->adapter->update($this->root . 'TestDontExists.txt', 'Hello World');
     }
 
     public function testDeleteDirectory()
@@ -292,7 +292,7 @@ class FilesystemAdapterTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetMimetypeToThrowFileNotFoundException()
     {
-        $this->adapter->getMimetype($this->root.'/DontExist');
+        $this->adapter->getMimetype($this->root . '/DontExist');
     }
 
     public function testGetTimestamp()
@@ -311,6 +311,6 @@ class FilesystemAdapterTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetTimestampToThrowFileNotFoundException()
     {
-        $this->adapter->getTimestamp($this->root.'/DontExist');
+        $this->adapter->getTimestamp($this->root . '/DontExist');
     }
 }
