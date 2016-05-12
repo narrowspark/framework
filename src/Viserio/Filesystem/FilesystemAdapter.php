@@ -60,11 +60,13 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
 
         $configs['visibility'] = $this->parseVisibility($visibility) ?: [];
 
+        $flyConfig = new FlyConfig($configs);
+
         if (is_resource($contents)) {
-            return $this->driver->writeStream($path, $contents, $configs);
+            return $this->driver->writeStream($path, $contents, $flyConfig);
         }
 
-        return $this->driver->write($path, $contents, $configs);
+        return $this->driver->write($path, $contents, $flyConfig);
     }
 
     /**
@@ -130,6 +132,10 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
      */
     public function getMimetype($path)
     {
+        if (!$this->has($path)) {
+            throw new FileNotFoundException($path);
+        }
+
         return $this->driver->getMimetype($path);
     }
 

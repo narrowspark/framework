@@ -1,41 +1,36 @@
 <?php
 namespace Viserio\Filesystem\Tests;
 
-use org\bovigo\vfs\content\LargeFileContent;
-use org\bovigo\vfs\vfsStream;
-use org\bovigo\vfs\vfsStreamDirectory;
-use org\bovigo\vfs\visitor\vfsStreamStructureVisitor;
-use Viserio\Filesystem\Adapters\VfsConnector;
+use Viserio\Filesystem\Adapters\LocalConnector;
 use Viserio\Filesystem\FilesystemAdapter;
 
 class FilesystemAdapterTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \org\bovigo\vfs\vfsStreamDirectory
+     * @var string
      */
     private $root;
 
     /**
      * @var Viserio\Filesystem\FilesystemAdapter
      */
-    private $files;
+    private $adapter;
 
     /**
      * Setup the environment.
      */
     public function setUp()
     {
-        $this->root = vfsStream::setup();
+        $this->root = __DIR__.'/stubs/';
 
-        $connector = new VfsConnector();
+        $connector = new LocalConnector();
 
-        $this->files = new FilesystemAdapter($connector->connect([]));
+        $this->adapter = new FilesystemAdapter($connector->connect(['path' => $this->root]));
     }
 
     public function testReadRetrievesFiles()
     {
-        $file = vfsStream::newFile('temp.txt')->withContent('Foo Bar')->at($this->root);
-        $this->assertEquals('Foo Bar', $this->files->read($file->url()));
+        $this->assertEquals('Hello World', $this->adapter->read($this->root.'test.txt'));
     }
 
     /**
@@ -43,16 +38,16 @@ class FilesystemAdapterTest extends \PHPUnit_Framework_TestCase
      */
     public function testReadToThrowException()
     {
-        $this->files->read(vfsStream::url('foo/bar/tmp/file.php'));
+        // $this->adapter->read('');
     }
 
     public function testUpdateStoresFiles()
     {
-        $file = vfsStream::newFile('temp.txt')->at($this->root);
+        $file = $this->root.'test.txt';
 
-        $this->files->update($file->url(), 'Hello World');
+        $this->adapter->update($file, 'Hello World');
 
-        $this->assertStringEqualsFile($file->url(), 'Hello World');
+        $this->assertStringEqualsFile($file, 'Hello World');
     }
 
     /**
@@ -60,154 +55,137 @@ class FilesystemAdapterTest extends \PHPUnit_Framework_TestCase
      */
     public function testUpdateToThrowException()
     {
-        $this->files->update(vfsStream::url('foo/bar/tmp/file.php'), 'Hello World');
+        $this->adapter->update($this->root.'TestDontExists.txt', 'Hello World');
     }
 
     public function testDeleteDirectory()
     {
-        $this->root->addChild(new vfsStreamDirectory('temp'));
+        // $this->root->addChild(new vfsStreamDirectory('temp'));
 
-        $dir  = $this->root->getChild('temp');
-        $file = vfsStream::newFile('bar.txt')->withContent('bar')->at($dir);
+        // $dir  = $this->root->getChild('temp');
+        // $file = vfsStream::newFile('bar.txt')->withContent('bar')->at($dir);
 
-        $this->assertTrue(is_dir($dir->url()));
-        $this->assertFalse($this->files->deleteDirectory($file->url()));
+        // $this->assertTrue(is_dir($dir->url()));
+        // $this->assertFalse($this->adapter->deleteDirectory($file->url()));
 
-        $this->files->deleteDirectory($dir->url());
+        // $this->adapter->deleteDirectory($dir->url());
 
-        $this->assertFalse(is_dir(vfsStream::url('root/temp')));
-        $this->assertFileNotExists($file->url());
+        // $this->assertFalse(is_dir(vfsStream::url('root/temp')));
+        // $this->assertFileNotExists($file->url());
     }
 
     public function testCleanDirectory()
     {
-        $this->root->addChild(new vfsStreamDirectory('tempdir'));
+        // $this->root->addChild(new vfsStreamDirectory('tempdir'));
 
-        $dir  = $this->root->getChild('tempdir');
-        $file = vfsStream::newFile('tempfoo.txt')->withContent('tempfoo')->at($dir);
+        // $dir  = $this->root->getChild('tempdir');
+        // $file = vfsStream::newFile('tempfoo.txt')->withContent('tempfoo')->at($dir);
 
-        $this->assertFalse($this->files->cleanDirectory($file->url()));
-        $this->files->cleanDirectory($dir->url());
+        // $this->assertFalse($this->adapter->cleanDirectory($file->url()));
+        // $this->adapter->cleanDirectory($dir->url());
 
-        $this->assertTrue(is_dir(vfsStream::url('root/tempdir')));
-        $this->assertFileNotExists($file->url());
+        // $this->assertTrue(is_dir(vfsStream::url('root/tempdir')));
+        // $this->assertFileNotExists($file->url());
     }
 
     public function testDeleteRemovesFiles()
     {
-        $file = vfsStream::newFile('unlucky.txt')->withContent('So sad')->at($this->root);
+        // $file = vfsStream::newFile('unlucky.txt')->withContent('So sad')->at($this->root);
 
-        $this->assertTrue($this->files->has($file->url()));
+        // $this->assertTrue($this->adapter->has($file->url()));
 
-        $this->files->delete($file->url());
+        // $this->adapter->delete($file->url());
 
-        $this->assertFalse($this->files->has($file->url()));
+        // $this->assertFalse($this->adapter->has($file->url()));
     }
 
     public function testMoveMovesFiles()
     {
-        $file = vfsStream::newFile('pop.txt')->withContent('pop')->at($this->root);
-        $rock = $this->root->url() . '/rock.txt';
+        // $file = vfsStream::newFile('pop.txt')->withContent('pop')->at($this->root);
+        // $rock = $this->root->url() . '/rock.txt';
 
-        $this->files->move($file->url(), $rock);
+        // $this->adapter->move($file->url(), $rock);
 
-        $this->assertFileExists($rock);
-        $this->assertStringEqualsFile($rock, 'pop');
-        $this->assertFileNotExists($this->root->url() . '/pop.txt');
-    }
-
-    public function testGetExtensionReturnsExtension()
-    {
-        $file = vfsStream::newFile('rock.csv')->withContent('pop,rock')->at($this->root);
-
-        $this->assertEquals('csv', $this->files->getExtension($file->url()));
+        // $this->assertFileExists($rock);
+        // $this->assertStringEqualsFile($rock, 'pop');
+        // $this->assertFileNotExists($this->root->url() . '/pop.txt');
     }
 
     public function testGetMimeTypeOutputsMimeType()
     {
-        if (!class_exists('Finfo')) {
-            $this->markTestSkipped('The PHP extension fileinfo is not installed.');
-        }
+        // if (!class_exists('Finfo')) {
+        //     $this->markTestSkipped('The PHP extension fileinfo is not installed.');
+        // }
 
-        $file = vfsStream::newFile('foo.txt')->withContent('foo')->at($this->root);
+        // $file = vfsStream::newFile('foo.txt')->withContent('foo')->at($this->root);
 
-        $this->assertEquals('text/plain', $this->files->getMimetype($file->url()));
+        // $this->assertEquals('text/plain', $this->adapter->getMimetype($file->url()));
     }
 
     public function testGetSizeOutputsSize()
     {
-        $content = LargeFileContent::withKilobytes(2);
-        $file    = vfsStream::newFile('2kb.txt')->withContent($content)->at($this->root);
+        // $content = LargeFileContent::withKilobytes(2);
+        // $file    = vfsStream::newFile('2kb.txt')->withContent($content)->at($this->root);
 
-        $this->assertEquals($file->size(), $this->files->getSize($file->url()));
+        // $this->assertEquals($file->size(), $this->adapter->getSize($file->url()));
     }
 
     public function testAllFilesFindsFiles()
     {
-        $this->root->addChild(new vfsStreamDirectory('languages'));
+        // $this->root->addChild(new vfsStreamDirectory('languages'));
 
-        $dir   = $this->root->getChild('languages');
-        $file1 = vfsStream::newFile('php.txt')->withContent('PHP')->at($dir);
-        $file2 = vfsStream::newFile('c.txt')->withContent('C')->at($dir);
+        // $dir   = $this->root->getChild('languages');
+        // $file1 = vfsStream::newFile('php.txt')->withContent('PHP')->at($dir);
+        // $file2 = vfsStream::newFile('c.txt')->withContent('C')->at($dir);
 
-        $allFiles = [];
+        // $allFiles = [];
 
-        foreach ($this->files->allFiles($dir->url()) as $file) {
-            $allFiles[] = $file;
-        }
+        // foreach ($this->adapter->allFiles($dir->url()) as $file) {
+        //     $allFiles[] = $file;
+        // }
 
-        $this->assertContains($file1->getName(), $allFiles[0]);
-        $this->assertContains($file2->getName(), $allFiles[1]);
+        // $this->assertContains($file1->getName(), $allFiles[0]);
+        // $this->assertContains($file2->getName(), $allFiles[1]);
     }
 
     public function testDirectoriesFindsDirectories()
     {
-        $this->root->addChild(new vfsStreamDirectory('languages'));
-        $this->root->addChild(new vfsStreamDirectory('music'));
+        // $this->root->addChild(new vfsStreamDirectory('languages'));
+        // $this->root->addChild(new vfsStreamDirectory('music'));
 
-        $dir1 = $this->root->getChild('languages');
-        $dir2 = $this->root->getChild('music');
+        // $dir1 = $this->root->getChild('languages');
+        // $dir2 = $this->root->getChild('music');
 
-        $directories = $this->files->directories($this->root->url());
+        // $directories = $this->adapter->directories($this->root->url());
 
-        $this->assertContains('vfs://root' . DIRECTORY_SEPARATOR . 'languages', $directories[0]);
-        $this->assertContains('vfs://root' . DIRECTORY_SEPARATOR . 'music', $directories[1]);
+        // $this->assertContains('vfs://root' . DIRECTORY_SEPARATOR . 'languages', $directories[0]);
+        // $this->assertContains('vfs://root' . DIRECTORY_SEPARATOR . 'music', $directories[1]);
     }
 
     public function testCreateDirectory()
     {
-        $this->files->createDirectory($this->root->url() . '/test');
+        $this->adapter->createDirectory('test-dir');
 
-        $this->assertTrue(is_dir(vfsStream::url('root/test')));
-        $this->assertEquals(0755, $this->root->getChild('test')->getPermissions());
+        $output = $this->adapter->getVisibility('test-dir');
 
-        $this->files->createDirectory($this->root->url() . '/test2', ['visibility' => 'private']);
+        $this->assertInternalType('array', $output);
+        $this->assertArrayHasKey('visibility', $output);
+        $this->assertEquals('public', $output['visibility']);
 
-        $this->assertEquals(0700, $this->root->getChild('test2')->getPermissions());
+        $this->adapter->deleteDir('test-dir');
     }
 
     public function testCopy()
     {
-        $this->root->addChild(new vfsStreamDirectory('copy'));
-        $this->root->addChild(new vfsStreamDirectory('copy2'));
+        $adapter = $this->adapter;
 
-        $dir = $this->root->getChild('copy');
+        $adapter->write('file.ext', 'content', ['visibility' => 'public']);
 
-        $file = vfsStream::newFile('copy.txt')
-            ->withContent('copy1')
-            ->at($dir);
+        $this->assertTrue($adapter->copy('file.ext', 'new.ext'));
+        $this->assertTrue($adapter->has('new.ext'));
 
-        $this->files->copy(
-            $dir->url() . '/copy.txt',
-            $this->root->getChild('copy2')->url() . '/copy.txt'
-        );
-
-        $this->assertSame(
-            'copy1',
-            $this->files->read(
-                $this->root->getChild('copy2')->url() . '/copy.txt'
-            )
-        );
+        $adapter->delete('file.ext');
+        $adapter->delete('new.ext');
     }
 
     /**
@@ -215,18 +193,18 @@ class FilesystemAdapterTest extends \PHPUnit_Framework_TestCase
      */
     public function testCopyToThrowIOException()
     {
-        $this->root->addChild(new vfsStreamDirectory('copy'));
+        // $this->root->addChild(new vfsStreamDirectory('copy'));
 
-        $dir = $this->root->getChild('copy');
+        // $dir = $this->root->getChild('copy');
 
-        $file = vfsStream::newFile('copy.txt')
-            ->withContent('copy1')
-            ->at($dir);
+        // $file = vfsStream::newFile('copy.txt')
+        //     ->withContent('copy1')
+        //     ->at($dir);
 
-        $this->files->copy(
-            $dir->url() . '/copy.txt',
-            $this->root->getChild('copy')->url()
-        );
+        // $this->adapter->copy(
+        //     $dir->url() . '/copy.txt',
+        //     $this->root->getChild('copy')->url()
+        // );
     }
 
     /**
@@ -234,36 +212,36 @@ class FilesystemAdapterTest extends \PHPUnit_Framework_TestCase
      */
     public function testCopyToThrowFileNotFoundException()
     {
-        $this->root->addChild(new vfsStreamDirectory('copy'));
+        // $this->root->addChild(new vfsStreamDirectory('copy'));
 
-        $this->files->copy(
-            '/copy.txt',
-            $this->root->getChild('copy')->url()
-        );
+        // $this->adapter->copy(
+        //     '/copy.txt',
+        //     $this->root->getChild('copy')->url()
+        // );
     }
 
     public function testGetAndSetVisibility()
     {
-        $this->root->addChild(new vfsStreamDirectory('copy'));
+        // $this->root->addChild(new vfsStreamDirectory('copy'));
 
-        $dir = $this->root->getChild('copy');
+        // $dir = $this->root->getChild('copy');
 
-        $file = vfsStream::newFile('copy.txt')
-            ->withContent('copy')
-            ->at($dir);
+        // $file = vfsStream::newFile('copy.txt')
+        //     ->withContent('copy')
+        //     ->at($dir);
 
-        $this->assertSame('public', $this->files->getVisibility($dir->url()));
-        $this->assertSame('public', $this->files->getVisibility($file->url()));
+        // $this->assertSame('public', $this->adapter->getVisibility($dir->url()));
+        // $this->assertSame('public', $this->adapter->getVisibility($file->url()));
 
-        $this->files->setVisibility($file->url(), 'private');
-        $this->files->setVisibility($dir->url(), 'private');
+        // $this->adapter->setVisibility($file->url(), 'private');
+        // $this->adapter->setVisibility($dir->url(), 'private');
 
-        $this->assertSame('private', $this->files->getVisibility($dir->url()));
-        $this->assertSame('private', $this->files->getVisibility($file->url()));
+        // $this->assertSame('private', $this->adapter->getVisibility($dir->url()));
+        // $this->assertSame('private', $this->adapter->getVisibility($file->url()));
 
-        $this->files->setVisibility($file->url(), 'public');
+        // $this->adapter->setVisibility($file->url(), 'public');
 
-        $this->assertSame('public', $this->files->getVisibility($file->url()));
+        // $this->assertSame('public', $this->adapter->getVisibility($file->url()));
     }
 
     /**
@@ -271,44 +249,42 @@ class FilesystemAdapterTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetVisibilityToThrowInvalidArgumentException()
     {
-        $this->root->addChild(new vfsStreamDirectory('copy'));
+        // $this->root->addChild(new vfsStreamDirectory('copy'));
 
-        $dir = $this->root->getChild('copy');
+        // $dir = $this->root->getChild('copy');
 
-        $this->files->setVisibility($dir->url(), 'exception');
+        // $this->adapter->setVisibility($dir->url(), 'exception');
     }
 
     public function testWrite()
     {
-        $this->root->addChild(new vfsStreamDirectory('copy'));
+        // $this->root->addChild(new vfsStreamDirectory('copy'));
 
-        $dir = $this->root->getChild('copy');
+        // $dir = $this->root->getChild('copy');
 
-        $file = vfsStream::newFile('copy.txt')
-            ->withContent('copy')
-            ->at($dir);
+        // $file = vfsStream::newFile('copy.txt')
+        //     ->withContent('copy')
+        //     ->at($dir);
 
-        $this->files->write($file->url(), 'copy new');
+        // $this->adapter->write($file->url(), 'copy new');
 
-        $this->assertSame('copy new', $this->files->read($file->url()));
+        // $this->assertSame('copy new', $this->adapter->read($file->url()));
 
-        $this->files->write($file->url(), 'copy new visibility', ['visibility' => 'private']);
+        // $this->adapter->write($file->url(), 'copy new visibility', ['visibility' => 'private']);
 
-        $this->assertSame('copy new visibility', $this->files->read($file->url()));
-        $this->assertSame('private', $this->files->getVisibility($file->url()));
+        // $this->assertSame('copy new visibility', $this->adapter->read($file->url()));
+        // $this->assertSame('private', $this->adapter->getVisibility($file->url()));
     }
 
     public function testGetMimetype()
     {
-        $this->root->addChild(new vfsStreamDirectory('copy'));
+        $this->adapter->write('text.txt', 'contents', []);
 
-        $dir = $this->root->getChild('copy');
+        $result = $this->adapter->getMimetype('text.txt');
 
-        $file = vfsStream::newFile('copy.txt')
-            ->withContent('copy')
-            ->at($dir);
-
-        $this->assertSame('text/plain', $this->files->getMimetype($file->url()));
+        $this->assertInternalType('array', $result);
+        $this->assertArrayHasKey('mimetype', $result);
+        $this->assertEquals('text/plain', $result['mimetype']);
     }
 
     /**
@@ -316,20 +292,18 @@ class FilesystemAdapterTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetMimetypeToThrowFileNotFoundException()
     {
-        $this->files->getMimetype(vfsStream::url('foo/bar/tmp/file.php'));
+        $this->adapter->getMimetype($this->root.'/DontExist');
     }
 
     public function testGetTimestamp()
     {
-        $this->root->addChild(new vfsStreamDirectory('copy'));
+        $this->adapter->write('dummy.txt', '1234', []);
 
-        $dir = $this->root->getChild('copy');
+        $result = $this->adapter->getTimestamp('dummy.txt');
 
-        $file = vfsStream::newFile('copy.txt')
-            ->withContent('copy')
-            ->at($dir);
-
-        $this->assertSame(date('F d Y H:i:s', filemtime($file->url())), $this->files->getTimestamp($file->url()));
+        $this->assertInternalType('array', $result);
+        $this->assertArrayHasKey('timestamp', $result);
+        $this->assertInternalType('int', $result['timestamp']);
     }
 
     /**
@@ -337,6 +311,6 @@ class FilesystemAdapterTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetTimestampToThrowFileNotFoundException()
     {
-        $this->files->getTimestamp(vfsStream::url('foo/bar/tmp/file.php'));
+        $this->adapter->getTimestamp($this->root.'/DontExist');
     }
 }

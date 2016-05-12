@@ -19,7 +19,7 @@ class ZipConnectorTest extends \PHPUnit_Framework_TestCase
     {
         $connector = new ZipConnector();
 
-        $return = $connector->connect(['path' => __DIR__ . '\stubs\test.zip', 'prefix' => 'your-prefix']);
+        $return = $connector->connect(['path' => __DIR__ . '\..\stubs\test.zip', 'prefix' => 'your-prefix']);
 
         $this->assertInstanceOf(ZipArchiveAdapter::class, $return);
     }

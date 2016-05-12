@@ -33,6 +33,13 @@ class FilesystemExtensionTraitTest extends \PHPUnit_Framework_TestCase
         $this->assertSame('temp', $this->withoutExtension($file->url()));
     }
 
+    public function testGetExtensionReturnsExtension()
+    {
+        $file = vfsStream::newFile('rock.csv')->withContent('pop,rock')->at($this->root);
+
+        $this->assertEquals('csv', $this->files->getExtension($file->url()));
+    }
+
     public function testChangeExtension()
     {
         $file = vfsStream::newFile('temp.txt')->withContent('Foo Bar')->at($this->root);
