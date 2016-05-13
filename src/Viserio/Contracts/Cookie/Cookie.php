@@ -61,7 +61,7 @@ interface Cookie
     /**
      * Sets both the max age and the expires attributes
      *
-     * @param int|\DateTime|null $expiration
+     * @param int|\DateTimeInterface|null $expiration
      *
      * @return self
      */
@@ -70,11 +70,11 @@ interface Cookie
     /**
      * Sets the expires
      *
-     * @param \DateTime $expires
+     * @param \DateTimeInterface $expires
      *
      * @return self
      */
-    public function withExpires(DateTime $expires);
+    public function withExpires(DateTimeInterface $expires);
 
     /**
      * Returns the expiration time

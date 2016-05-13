@@ -140,11 +140,11 @@ abstract class AbstractCookie implements Stringable, CookieContract
     /**
      * Sets the expires
      *
-     * @param \DateTime $expires
+     * @param \DateTimeInterface $expires
      *
      * @return self
      */
-    public function withExpires(DateTime $expires)
+    public function withExpires(DateTimeInterface $expires)
     {
         $new = clone $this;
         $new->expires = $expires;
@@ -155,7 +155,7 @@ abstract class AbstractCookie implements Stringable, CookieContract
     /**
      * Returns the expiration time
      *
-     * @return int|DateTime
+     * @return int|DateTimeInterface
      */
     public function getExpiresTime()
     {
