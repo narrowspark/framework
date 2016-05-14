@@ -51,7 +51,7 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
 
         $content = $this->driver->read($path);
 
-        return !$content ? : $content['contents'];
+        return !$content ?: $content['contents'];
     }
 
     /**
@@ -126,7 +126,7 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
         }
 
         // Stream context created to allow files overwrite when using FTP stream wrapper - disabled by default
-        if (@fopen($target, 'w', null, stream_context_create(array('ftp' => array('overwrite' => true)))) === false) {
+        if (@fopen($target, 'w', null, stream_context_create(['ftp' => ['overwrite' => true]])) === false) {
             throw new ViserioIOException(sprintf('Failed to copy "%s" to "%s" because target file could not be opened for writing.', $orginal, $target), 0, null, $orginal);
         }
 
@@ -166,7 +166,7 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
 
         $mimetype = $this->driver->getMimetype($path);
 
-        return !$mimetype ? : $mimetype['mimetype'];
+        return !$mimetype ?: $mimetype['mimetype'];
     }
 
     /**
@@ -180,7 +180,7 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
 
         $getTimestamp = $this->driver->getTimestamp($path);
 
-        return !$getTimestamp ? : $getTimestamp['timestamp'];
+        return !$getTimestamp ?: $getTimestamp['timestamp'];
     }
 
     /**

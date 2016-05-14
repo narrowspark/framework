@@ -271,11 +271,12 @@ class FilesystemAdapterTest extends \PHPUnit_Framework_TestCase
         $this->adapter->getTimestamp('/DontExist');
     }
 
-    private function delTree($dir) {
-        $files = array_diff(scandir($dir), array('.','..'));
+    private function delTree($dir)
+    {
+        $files = array_diff(scandir($dir), ['.', '..']);
 
         foreach ($files as $file) {
-          (is_dir("$dir/$file")) ? $this->delTree("$dir/$file") : unlink("$dir/$file");
+            (is_dir("$dir/$file")) ? $this->delTree("$dir/$file") : unlink("$dir/$file");
         }
 
         return rmdir($dir);

@@ -1,8 +1,8 @@
 <?php
 namespace Viserio\Cookie;
 
-use DateTimeInterface;
 use DateTime;
+use DateTimeInterface;
 use Viserio\Contracts\Cookie\Cookie as CookieContract;
 use Viserio\Contracts\Support\Stringable;
 
