@@ -7,6 +7,7 @@ use League\Flysystem\Config as FlyConfig;
 use League\Flysystem\FileNotFoundException as FlyFileNotFoundException;
 use Viserio\Contracts\Filesystem\Directorysystem as DirectorysystemContract;
 use Viserio\Contracts\Filesystem\Exception\FileNotFoundException;
+use Viserio\Contracts\Filesystem\Exception\IOException as ViserioIOException;
 use Viserio\Contracts\Filesystem\Filesystem as FilesystemContract;
 use Viserio\Filesystem\Traits\FilesystemExtensionTrait;
 
@@ -44,11 +45,13 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
      */
     public function read($path)
     {
-        try {
-            return $this->driver->read($path);
-        } catch (FlyFileNotFoundException $exception) {
-            throw new FileNotFoundException($path, $exception->getCode(), $exception);
+        if (!$this->has($path)) {
+            throw new FileNotFoundException($path);
         }
+
+        $content = $this->driver->read($path);
+
+        return !$content ? : $content['contents'];
     }
 
     /**
@@ -88,7 +91,9 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
      */
     public function getVisibility($path)
     {
-        if ($this->driver->getVisibility($path) === AdapterInterface::VISIBILITY_PUBLIC) {
+        $visibility = $this->driver->getVisibility($path);
+
+        if (isset($visibility['visibility']) && $visibility['visibility'] === AdapterInterface::VISIBILITY_PUBLIC) {
             return FilesystemContract::VISIBILITY_PUBLIC;
         }
 
@@ -108,7 +113,30 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
      */
     public function copy($originFile, $targetFile, $override = false)
     {
-        return $this->driver->copy($originFile, $targetFile);
+        if (!$this->has($originFile)) {
+            throw new FileNotFoundException($originFile);
+        }
+
+        $orginal = $this->driver->applyPathPrefix($originFile);
+        $target  = $this->driver->applyPathPrefix($targetFile);
+
+        // https://bugs.php.net/bug.php?id=64634
+        if (@fopen($orginal, 'r') === false) {
+            throw new ViserioIOException(sprintf('Failed to copy "%s" to "%s" because source file could not be opened for reading.', $orginal, $target), 0, null, $orginal);
+        }
+
+        // Stream context created to allow files overwrite when using FTP stream wrapper - disabled by default
+        if (@fopen($target, 'w', null, stream_context_create(array('ftp' => array('overwrite' => true)))) === false) {
+            throw new ViserioIOException(sprintf('Failed to copy "%s" to "%s" because target file could not be opened for writing.', $orginal, $target), 0, null, $orginal);
+        }
+
+        $this->driver->copy($originFile, $targetFile);
+
+        if (!is_file($target)) {
+            throw new ViserioIOException(sprintf('Failed to copy "%s" to "%s".', $originFile, $target), 0, null, $originFile);
+        }
+
+        return true;
     }
 
     /**
@@ -136,7 +164,9 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
             throw new FileNotFoundException($path);
         }
 
-        return $this->driver->getMimetype($path);
+        $mimetype = $this->driver->getMimetype($path);
+
+        return !$mimetype ? : $mimetype['mimetype'];
     }
 
     /**
@@ -144,7 +174,13 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
      */
     public function getTimestamp($path)
     {
-        return $this->driver->getTimestamp($path);
+        if (!$this->has($path)) {
+            throw new FileNotFoundException($path);
+        }
+
+        $getTimestamp = $this->driver->getTimestamp($path);
+
+        return !$getTimestamp ? : $getTimestamp['timestamp'];
     }
 
     /**
@@ -154,12 +190,13 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
     {
         $paths = is_array($paths) ? $paths : func_get_args();
 
+        $deletes = [];
         foreach ($paths as $path) {
-            try {
-                $this->driver->delete($path);
-            } catch (FlyFileNotFoundException $exception) {
-                return false;
-            }
+            $deletes[] = $this->driver->delete($path);
+        }
+
+        if (in_array('false', $deletes, true)) {
+            return false;
         }
 
         return true;
@@ -206,9 +243,7 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
      */
     public function createDirectory($path, array $config = [])
     {
-        $flyConfig = new FlyConfig($config);
-
-        return $this->driver->createDir($path, $flyConfig);
+        return $this->driver->createDir($path, new FlyConfig($config));
     }
 
     /**

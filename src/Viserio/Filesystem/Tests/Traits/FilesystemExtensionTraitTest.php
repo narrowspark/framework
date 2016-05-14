@@ -37,7 +37,7 @@ class FilesystemExtensionTraitTest extends \PHPUnit_Framework_TestCase
     {
         $file = vfsStream::newFile('rock.csv')->withContent('pop,rock')->at($this->root);
 
-        $this->assertEquals('csv', $this->files->getExtension($file->url()));
+        $this->assertEquals('csv', $this->getExtension($file->url()));
     }
 
     public function testChangeExtension()

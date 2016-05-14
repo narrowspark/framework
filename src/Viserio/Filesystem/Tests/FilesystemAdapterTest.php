@@ -28,9 +28,21 @@ class FilesystemAdapterTest extends \PHPUnit_Framework_TestCase
         $this->adapter = new FilesystemAdapter($connector->connect(['path' => $this->root]));
     }
 
+    public function tearDown()
+    {
+        $this->delTree($this->root);
+    }
+
+    public function testGetDriver()
+    {
+        $this->assertInstanceOf('\League\Flysystem\AdapterInterface', $this->adapter->getDriver());
+    }
+
     public function testReadRetrievesFiles()
     {
-        $this->assertEquals('Hello World', $this->adapter->read($this->root . 'test.txt'));
+        $this->adapter->write('test.txt', 'Hello World');
+
+        $this->assertEquals('Hello World', $this->adapter->read('test.txt'));
     }
 
     /**
@@ -38,16 +50,16 @@ class FilesystemAdapterTest extends \PHPUnit_Framework_TestCase
      */
     public function testReadToThrowException()
     {
-        // $this->adapter->read('');
+        $this->adapter->read('test2.txt');
     }
 
     public function testUpdateStoresFiles()
     {
-        $file = $this->root . 'test.txt';
+        $this->adapter->write('test.txt', 'test');
 
-        $this->adapter->update($file, 'Hello World');
+        $this->adapter->update('test.txt', 'Hello World');
 
-        $this->assertStringEqualsFile($file, 'Hello World');
+        $this->assertEquals('Hello World', $this->adapter->read('test.txt'));
     }
 
     /**
@@ -164,15 +176,11 @@ class FilesystemAdapterTest extends \PHPUnit_Framework_TestCase
 
     public function testCreateDirectory()
     {
-        $this->adapter->createDirectory('test-dir');
+        $adapter = $this->adapter;
 
-        $output = $this->adapter->getVisibility('test-dir');
+        $adapter->createDirectory('test-dir');
 
-        $this->assertInternalType('array', $output);
-        $this->assertArrayHasKey('visibility', $output);
-        $this->assertEquals('public', $output['visibility']);
-
-        $this->adapter->deleteDir('test-dir');
+        $this->assertSame('public', $adapter->getVisibility('test-dir'));
     }
 
     public function testCopy()
@@ -183,9 +191,6 @@ class FilesystemAdapterTest extends \PHPUnit_Framework_TestCase
 
         $this->assertTrue($adapter->copy('file.ext', 'new.ext'));
         $this->assertTrue($adapter->has('new.ext'));
-
-        $adapter->delete('file.ext');
-        $adapter->delete('new.ext');
     }
 
     /**
@@ -193,18 +198,11 @@ class FilesystemAdapterTest extends \PHPUnit_Framework_TestCase
      */
     public function testCopyToThrowIOException()
     {
-        // $this->root->addChild(new vfsStreamDirectory('copy'));
+        $adapter = $this->adapter;
 
-        // $dir = $this->root->getChild('copy');
+        $adapter->write('file.ext', 'content', ['visibility' => 'private']);
 
-        // $file = vfsStream::newFile('copy.txt')
-        //     ->withContent('copy1')
-        //     ->at($dir);
-
-        // $this->adapter->copy(
-        //     $dir->url() . '/copy.txt',
-        //     $this->root->getChild('copy')->url()
-        // );
+        $adapter->copy('file.ext', '/test/');
     }
 
     /**
@@ -212,36 +210,22 @@ class FilesystemAdapterTest extends \PHPUnit_Framework_TestCase
      */
     public function testCopyToThrowFileNotFoundException()
     {
-        // $this->root->addChild(new vfsStreamDirectory('copy'));
+        $adapter = $this->adapter;
 
-        // $this->adapter->copy(
-        //     '/copy.txt',
-        //     $this->root->getChild('copy')->url()
-        // );
+        $adapter->copy('notexist.test', 'copy');
     }
 
     public function testGetAndSetVisibility()
     {
-        // $this->root->addChild(new vfsStreamDirectory('copy'));
+        $adapter = $this->adapter;
 
-        // $dir = $this->root->getChild('copy');
+        $adapter->write('copy.txt', 'content');
 
-        // $file = vfsStream::newFile('copy.txt')
-        //     ->withContent('copy')
-        //     ->at($dir);
+        $this->assertSame('public', $this->adapter->getVisibility('copy.txt'));
 
-        // $this->assertSame('public', $this->adapter->getVisibility($dir->url()));
-        // $this->assertSame('public', $this->adapter->getVisibility($file->url()));
+        $this->adapter->setVisibility('copy.txt', 'public');
 
-        // $this->adapter->setVisibility($file->url(), 'private');
-        // $this->adapter->setVisibility($dir->url(), 'private');
-
-        // $this->assertSame('private', $this->adapter->getVisibility($dir->url()));
-        // $this->assertSame('private', $this->adapter->getVisibility($file->url()));
-
-        // $this->adapter->setVisibility($file->url(), 'public');
-
-        // $this->assertSame('public', $this->adapter->getVisibility($file->url()));
+        $this->assertSame('public', $this->adapter->getVisibility('copy.txt'));
     }
 
     /**
@@ -249,42 +233,17 @@ class FilesystemAdapterTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetVisibilityToThrowInvalidArgumentException()
     {
-        // $this->root->addChild(new vfsStreamDirectory('copy'));
+        $adapter = $this->adapter;
 
-        // $dir = $this->root->getChild('copy');
-
-        // $this->adapter->setVisibility($dir->url(), 'exception');
-    }
-
-    public function testWrite()
-    {
-        // $this->root->addChild(new vfsStreamDirectory('copy'));
-
-        // $dir = $this->root->getChild('copy');
-
-        // $file = vfsStream::newFile('copy.txt')
-        //     ->withContent('copy')
-        //     ->at($dir);
-
-        // $this->adapter->write($file->url(), 'copy new');
-
-        // $this->assertSame('copy new', $this->adapter->read($file->url()));
-
-        // $this->adapter->write($file->url(), 'copy new visibility', ['visibility' => 'private']);
-
-        // $this->assertSame('copy new visibility', $this->adapter->read($file->url()));
-        // $this->assertSame('private', $this->adapter->getVisibility($file->url()));
+        $adapter->createDirectory('test-dir');
+        $adapter->setVisibility('test-dir', 'exception');
     }
 
     public function testGetMimetype()
     {
         $this->adapter->write('text.txt', 'contents', []);
 
-        $result = $this->adapter->getMimetype('text.txt');
-
-        $this->assertInternalType('array', $result);
-        $this->assertArrayHasKey('mimetype', $result);
-        $this->assertEquals('text/plain', $result['mimetype']);
+        $this->assertEquals('text/plain', $this->adapter->getMimetype('text.txt'));
     }
 
     /**
@@ -297,13 +256,11 @@ class FilesystemAdapterTest extends \PHPUnit_Framework_TestCase
 
     public function testGetTimestamp()
     {
-        $this->adapter->write('dummy.txt', '1234', []);
+        $adapter = $this->adapter;
 
-        $result = $this->adapter->getTimestamp('dummy.txt');
+        $adapter->write('dummy.txt', '1234');
 
-        $this->assertInternalType('array', $result);
-        $this->assertArrayHasKey('timestamp', $result);
-        $this->assertInternalType('int', $result['timestamp']);
+        $this->assertInternalType('int', $adapter->getTimestamp('dummy.txt'));
     }
 
     /**
@@ -311,6 +268,16 @@ class FilesystemAdapterTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetTimestampToThrowFileNotFoundException()
     {
-        $this->adapter->getTimestamp($this->root . '/DontExist');
+        $this->adapter->getTimestamp('/DontExist');
+    }
+
+    private function delTree($dir) {
+        $files = array_diff(scandir($dir), array('.','..'));
+
+        foreach ($files as $file) {
+          (is_dir("$dir/$file")) ? $this->delTree("$dir/$file") : unlink("$dir/$file");
+        }
+
+        return rmdir($dir);
     }
 }

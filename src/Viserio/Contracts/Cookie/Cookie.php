@@ -1,7 +1,7 @@
 <?php
 namespace Viserio\Contracts\Cookie;
 
-use DateTime;
+use DateTimeInterface;
 
 interface Cookie
 {

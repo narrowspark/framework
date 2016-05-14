@@ -133,12 +133,14 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract, Direct
         $to   = $this->normalizeDirectorySeparator($targetFile);
 
         try {
-            return parent::copy($from, $to, $override);
+            parent::copy($from, $to, $override);
         } catch (SymfonyFileNotFoundException $exception) {
             throw new FileNotFoundException($exception->getMessage());
         } catch (SymfonyIOException $exception) {
             throw new ViserioIOException($exception->getMessage());
         }
+
+        return true;
     }
 
     /**
