@@ -38,11 +38,22 @@ class FilesystemAdapterTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('\League\Flysystem\AdapterInterface', $this->adapter->getDriver());
     }
 
+    public function testIsDir()
+    {
+        $adapter = $this->adapter;
+
+        $adapter->createDirectory('test-dir');
+
+        $this->assertTrue($adapter->isDirectory('test-dir'));
+    }
+
     public function testReadRetrievesFiles()
     {
-        $this->adapter->write('test.txt', 'Hello World');
+        $adapter = $this->adapter;
 
-        $this->assertEquals('Hello World', $this->adapter->read('test.txt'));
+        $adapter->write('test.txt', 'Hello World');
+
+        $this->assertEquals('Hello World', $adapter->read('test.txt'));
     }
 
     /**
@@ -55,11 +66,13 @@ class FilesystemAdapterTest extends \PHPUnit_Framework_TestCase
 
     public function testUpdateStoresFiles()
     {
-        $this->adapter->write('test.txt', 'test');
+        $adapter = $this->adapter;
 
-        $this->adapter->update('test.txt', 'Hello World');
+        $adapter->write('test.txt', 'test');
 
-        $this->assertEquals('Hello World', $this->adapter->read('test.txt'));
+        $adapter->update('test.txt', 'Hello World');
+
+        $this->assertEquals('Hello World', $adapter->read('test.txt'));
     }
 
     /**
@@ -72,18 +85,18 @@ class FilesystemAdapterTest extends \PHPUnit_Framework_TestCase
 
     public function testDeleteDirectory()
     {
-        // $this->root->addChild(new vfsStreamDirectory('temp'));
+        $adapter = $this->adapter;
 
-        // $dir  = $this->root->getChild('temp');
-        // $file = vfsStream::newFile('bar.txt')->withContent('bar')->at($dir);
+        $adapter->createDirectory('delete-dir');
+        $adapter->write('/delete-dir/delete.txt', 'delete');
 
-        // $this->assertTrue(is_dir($dir->url()));
-        // $this->assertFalse($this->adapter->deleteDirectory($file->url()));
+        $this->assertTrue(is_dir($this->root.'/delete-dir'));
+        $this->assertFalse($adapter->deleteDirectory($this->root.'/delete-dir/delete.txt'));
 
-        // $this->adapter->deleteDirectory($dir->url());
+        $adapter->deleteDirectory('delete-dir');
 
-        // $this->assertFalse(is_dir(vfsStream::url('root/temp')));
-        // $this->assertFileNotExists($file->url());
+        $this->assertFalse(is_dir($this->root.'/delete-dir'));
+        $this->assertFileNotExists($this->root.'/delete-dir/delete.txt');
     }
 
     public function testCleanDirectory()
@@ -93,7 +106,7 @@ class FilesystemAdapterTest extends \PHPUnit_Framework_TestCase
         // $dir  = $this->root->getChild('tempdir');
         // $file = vfsStream::newFile('tempfoo.txt')->withContent('tempfoo')->at($dir);
 
-        // $this->assertFalse($this->adapter->cleanDirectory($file->url()));
+        // $this->assertFalse($adapter->cleanDirectory($file->url()));
         // $this->adapter->cleanDirectory($dir->url());
 
         // $this->assertTrue(is_dir(vfsStream::url('root/tempdir')));
@@ -102,13 +115,15 @@ class FilesystemAdapterTest extends \PHPUnit_Framework_TestCase
 
     public function testDeleteRemovesFiles()
     {
-        // $file = vfsStream::newFile('unlucky.txt')->withContent('So sad')->at($this->root);
+        $adapter = $this->adapter;
 
-        // $this->assertTrue($this->adapter->has($file->url()));
+        $adapter->write('unlucky.txt', 'delete');
 
-        // $this->adapter->delete($file->url());
+        $this->assertTrue($adapter->has('unlucky.txt'));
 
-        // $this->assertFalse($this->adapter->has($file->url()));
+        $adapter->delete('unlucky.txt');
+
+        $this->assertFalse($adapter->has('unlucky.txt'));
     }
 
     public function testMoveMovesFiles()
