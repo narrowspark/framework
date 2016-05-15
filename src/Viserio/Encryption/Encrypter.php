@@ -5,8 +5,8 @@ use Narrowspark\Arr\StaticArr as Arr;
 use RandomLib\Generator as RandomLib;
 use RuntimeException;
 use Viserio\Contracts\Encryption\DecryptException;
-use Viserio\Contracts\Encryption\EncryptException;
 use Viserio\Contracts\Encryption\Encrypter as EncrypterContract;
+use Viserio\Contracts\Encryption\EncryptException;
 use Viserio\Contracts\Hashing\Generator as HashContract;
 use Viserio\Encryption\Adapter\OpenSsl;
 
