@@ -34,7 +34,7 @@ install:
   - IF %PHP%==1 echo extension_dir=ext >> php.ini-min
   - IF %PHP%==1 copy /Y php.ini-min php.ini-max
   - IF %PHP%==1 echo extension=php_openssl.dll >> php.ini-max
-  - IF %PHP%==1 echo extension=php_apcu.dll >> php.ini-max
+  # - IF %PHP%==1 echo extension=php_apcu.dll >> php.ini-max
   - IF %PHP%==1 echo apc.enable_cli=1 >> php.ini-max
   - IF %PHP%==1 echo extension=php_memcache.dll >> php.ini-max
   - IF %PHP%==1 echo extension=php_intl.dll >> php.ini-max
@@ -48,7 +48,6 @@ install:
   - mkdir %APPDATA%\Composer
   - composer self-update --no-progress --ansi
   - composer global require hirak/prestissimo:dev-master --no-progress --ansi
-  - php phpunit install
   - IF %APPVEYOR_REPO_BRANCH%==master (SET COMPOSER_ROOT_VERSION=dev-master) ELSE (SET COMPOSER_ROOT_VERSION=%APPVEYOR_REPO_BRANCH%.x-dev)
   - cd c:\projects\narrowspark
   - composer install --no-progress --ansi
