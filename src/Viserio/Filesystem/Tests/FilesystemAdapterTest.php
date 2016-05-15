@@ -169,8 +169,8 @@ class FilesystemAdapterTest extends \PHPUnit_Framework_TestCase
 
         $allFiles = $this->adapter->allFiles('languages');
 
-        $this->assertContains('languages/c.txt', $allFiles[0]);
-        $this->assertContains('languages/php.txt', $allFiles[1]);
+        $this->assertTrue(in_array('languages/c.txt', $allFiles));
+        $this->assertTrue(in_array('languages/php.txt', $allFiles));
     }
 
     public function testDirectoriesFindsDirectories()
