@@ -50,7 +50,7 @@ trait FilesystemHelperTrait
      *
      * @param string $path
      *
-     * @return boolean
+     * @return bool
      */
     public function isWritable($path)
     {
