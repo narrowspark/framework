@@ -90,13 +90,13 @@ class FilesystemAdapterTest extends \PHPUnit_Framework_TestCase
         $adapter->createDirectory('delete-dir');
         $adapter->write('/delete-dir/delete.txt', 'delete');
 
-        $this->assertTrue(is_dir($this->root.'/delete-dir'));
-        $this->assertFalse($adapter->deleteDirectory($this->root.'/delete-dir/delete.txt'));
+        $this->assertTrue(is_dir($this->root . '/delete-dir'));
+        $this->assertFalse($adapter->deleteDirectory($this->root . '/delete-dir/delete.txt'));
 
         $adapter->deleteDirectory('delete-dir');
 
-        $this->assertFalse(is_dir($this->root.'/delete-dir'));
-        $this->assertFileNotExists($this->root.'/delete-dir/delete.txt');
+        $this->assertFalse(is_dir($this->root . '/delete-dir'));
+        $this->assertFileNotExists($this->root . '/delete-dir/delete.txt');
     }
 
     public function testCleanDirectory()
