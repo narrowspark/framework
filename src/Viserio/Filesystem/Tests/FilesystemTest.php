@@ -157,11 +157,7 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
         $file1 = vfsStream::newFile('php.txt')->withContent('PHP')->at($dir);
         $file2 = vfsStream::newFile('c.txt')->withContent('C')->at($dir);
 
-        $allFiles = [];
-
-        foreach ($this->files->allFiles($dir->url()) as $file) {
-            $allFiles[] = $file;
-        }
+        $allFiles = $this->files->allFiles($dir->url());
 
         $this->assertContains($file1->getName(), $allFiles[0]);
         $this->assertContains($file2->getName(), $allFiles[1]);

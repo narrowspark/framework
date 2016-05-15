@@ -2,6 +2,7 @@
 namespace Viserio\Filesystem;
 
 use InvalidArgumentException;
+use Narrowspark\Arr\StaticArr as Arr;
 use League\Flysystem\AdapterInterface;
 use League\Flysystem\Config as FlyConfig;
 use Viserio\Contracts\Filesystem\Directorysystem as DirectorysystemContract;
@@ -151,7 +152,9 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
      */
     public function getSize($path)
     {
-        return $this->driver->getSize($path);
+        $size = $this->driver->getSize($path);
+
+        return !$size ? : $size['size'];
     }
 
     /**
@@ -206,9 +209,7 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
      */
     public function files($directory)
     {
-        $contents = $this->driver->listContents($directory, false);
-
-        return $this->filterContentsByType($contents, 'file');
+        return $this->getContents($directory, 'file');
     }
 
     /**
@@ -216,7 +217,7 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
      */
     public function allFiles($directory)
     {
-        return $this->files($directory, true);
+        return $this->getContents($directory, 'file', true);
     }
 
     /**
@@ -226,7 +227,7 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
     {
         $contents = $this->driver->listContents($directory, false);
 
-        return $this->filterContentsByType($contents, 'dir');
+        return $this->getContents($directory, 'dir');
     }
 
     /**
@@ -234,7 +235,7 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
      */
     public function allDirectories($directory)
     {
-        return $this->directories($directory, true);
+        return $this->getContents($directory, 'dir', true);
     }
 
     /**
@@ -314,11 +315,17 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
      */
     protected function filterContentsByType($contents, $type)
     {
-        // return Collection::make($contents)
-        //    ->where('type', $type)
-        //    ->pluck('path')
-        //    ->values()
-        //    ->all();
+        $return   = [];
+
+        foreach ($contents as $key => $value) {
+            if (Arr::get($contents, $key) === $value) {
+                if (isset($value['path'])) {
+                    $return[$key] = $value['path'];
+                }
+            }
+        }
+
+        return array_values($return);
     }
 
     /**
@@ -330,7 +337,7 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
      *
      * @return null|string
      */
-    protected function parseVisibility($visibility)
+    private function parseVisibility($visibility)
     {
         if ($visibility === null) {
             return;
@@ -345,5 +352,21 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
         }
 
         throw new InvalidArgumentException('Unknown visibility: ' . $visibility);
+    }
+
+    /**
+     * Get content from a dir.
+     *
+     * @param string  $directory
+     * @param string  $typ
+     * @param boolean $recursive
+     *
+     * @return array
+     */
+    private function getContents($directory, $typ, $recursive = false)
+    {
+        $contents = $this->driver->listContents($directory, $recursive);
+
+        return $this->filterContentsByType($contents, $typ);
     }
 }

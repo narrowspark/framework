@@ -1,6 +1,7 @@
 <?php
 namespace Viserio\Filesystem\Tests;
 
+use org\bovigo\vfs\content\LargeFileContent;
 use Viserio\Filesystem\Adapters\LocalConnector;
 use Viserio\Filesystem\FilesystemAdapter;
 
@@ -101,16 +102,16 @@ class FilesystemAdapterTest extends \PHPUnit_Framework_TestCase
 
     public function testCleanDirectory()
     {
-        // $this->root->addChild(new vfsStreamDirectory('tempdir'));
+        $adapter = $this->adapter;
 
-        // $dir  = $this->root->getChild('tempdir');
-        // $file = vfsStream::newFile('tempfoo.txt')->withContent('tempfoo')->at($dir);
+        $adapter->createDirectory('tempdir');
+        $adapter->write('tempdir/tempfoo.txt', 'tempfoo');
 
-        // $this->assertFalse($adapter->cleanDirectory($file->url()));
-        // $this->adapter->cleanDirectory($dir->url());
+        $this->assertFalse($adapter->cleanDirectory('tempdir/tempfoo.txt'));
+        $this->adapter->cleanDirectory('tempdir');
 
-        // $this->assertTrue(is_dir(vfsStream::url('root/tempdir')));
-        // $this->assertFileNotExists($file->url());
+        $this->assertTrue(is_dir($this->root.'/tempdir'));
+        $this->assertFileNotExists($this->root.'/tempfoo.txt');
     }
 
     public function testDeleteRemovesFiles()
@@ -128,65 +129,62 @@ class FilesystemAdapterTest extends \PHPUnit_Framework_TestCase
 
     public function testMoveMovesFiles()
     {
-        // $file = vfsStream::newFile('pop.txt')->withContent('pop')->at($this->root);
-        // $rock = $this->root->url() . '/rock.txt';
+        $adapter = $this->adapter;
 
-        // $this->adapter->move($file->url(), $rock);
+        $adapter->write('pop.txt', 'delete');
 
-        // $this->assertFileExists($rock);
-        // $this->assertStringEqualsFile($rock, 'pop');
-        // $this->assertFileNotExists($this->root->url() . '/pop.txt');
+        $adapter->move('pop.txt', 'rock.txt');
+
+        $this->assertFileExists($this->root.'/rock.txt');
+        $this->assertStringEqualsFile($this->root.'/rock.txt', 'delete');
+        $this->assertFileNotExists('pop.txt');
     }
 
     public function testGetMimeTypeOutputsMimeType()
     {
-        // if (!class_exists('Finfo')) {
-        //     $this->markTestSkipped('The PHP extension fileinfo is not installed.');
-        // }
+        $adapter = $this->adapter;
 
-        // $file = vfsStream::newFile('foo.txt')->withContent('foo')->at($this->root);
+        $adapter->write('foo.txt', 'test');
 
-        // $this->assertEquals('text/plain', $this->adapter->getMimetype($file->url()));
+        $this->assertEquals('text/plain', $adapter->getMimetype('foo.txt'));
     }
 
     public function testGetSizeOutputsSize()
     {
-        // $content = LargeFileContent::withKilobytes(2);
-        // $file    = vfsStream::newFile('2kb.txt')->withContent($content)->at($this->root);
+        $content = LargeFileContent::withKilobytes(2);
+        $adapter = $this->adapter;
 
-        // $this->assertEquals($file->size(), $this->adapter->getSize($file->url()));
+        $adapter->write('2kb.txt', $content);
+
+        $this->assertEquals(filesize($this->root.'2kb.txt'), $adapter->getSize('2kb.txt'));
     }
 
     public function testAllFilesFindsFiles()
     {
-        // $this->root->addChild(new vfsStreamDirectory('languages'));
+        $adapter = $this->adapter;
 
-        // $dir   = $this->root->getChild('languages');
-        // $file1 = vfsStream::newFile('php.txt')->withContent('PHP')->at($dir);
-        // $file2 = vfsStream::newFile('c.txt')->withContent('C')->at($dir);
+        $adapter->createDirectory('languages');
+        $adapter->write('languages/php.txt', 'php');
+        $adapter->write('languages/c.txt', 'c');
 
-        // $allFiles = [];
+        $allFiles = $this->adapter->allFiles('languages');
 
-        // foreach ($this->adapter->allFiles($dir->url()) as $file) {
-        //     $allFiles[] = $file;
-        // }
-
-        // $this->assertContains($file1->getName(), $allFiles[0]);
-        // $this->assertContains($file2->getName(), $allFiles[1]);
+        $this->assertContains('languages/c.txt', $allFiles[0]);
+        $this->assertContains('languages/php.txt', $allFiles[1]);
     }
 
     public function testDirectoriesFindsDirectories()
     {
-        // $this->root->addChild(new vfsStreamDirectory('languages'));
-        // $this->root->addChild(new vfsStreamDirectory('music'));
+        $adapter = $this->adapter;
 
-        // $dir1 = $this->root->getChild('languages');
-        // $dir2 = $this->root->getChild('music');
+        $adapter->createDirectory('test');
+        $adapter->createDirectory('test/languages');
+        $adapter->createDirectory('test/music');
 
-        // $directories = $this->adapter->directories($this->root->url());
+        $directories = $adapter->directories('test');
 
-        // $this->assertContains('vfs://root' . DIRECTORY_SEPARATOR . 'languages', $directories[0]);
-        // $this->assertContains('vfs://root' . DIRECTORY_SEPARATOR . 'music', $directories[1]);
+        $this->assertContains('test/languages', $directories[0]);
+        $this->assertContains('test/music', $directories[1]);
     }
 
     public function testCreateDirectory()

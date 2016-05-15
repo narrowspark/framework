@@ -56,5 +56,5 @@ test_script:
   - cd c:\projects\narrowspark
   - SET X=0
   - copy /Y c:\php\php.ini-min c:\php\php.ini
-  - php phpunit -c phpunit.xml.dist -v || SET X=!errorlevel!
+  - sh vendor/bin/phpunit -c phpunit.xml.dist -v --coverage-text="php://stdout" || SET X=!errorlevel!
   - exit %X%
