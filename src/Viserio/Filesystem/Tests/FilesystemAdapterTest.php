@@ -110,8 +110,8 @@ class FilesystemAdapterTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($adapter->cleanDirectory('tempdir/tempfoo.txt'));
         $this->adapter->cleanDirectory('tempdir');
 
-        $this->assertTrue(is_dir($this->root.'/tempdir'));
-        $this->assertFileNotExists($this->root.'/tempfoo.txt');
+        $this->assertTrue(is_dir($this->root . '/tempdir'));
+        $this->assertFileNotExists($this->root . '/tempfoo.txt');
     }
 
     public function testDeleteRemovesFiles()
@@ -135,8 +135,8 @@ class FilesystemAdapterTest extends \PHPUnit_Framework_TestCase
 
         $adapter->move('pop.txt', 'rock.txt');
 
-        $this->assertFileExists($this->root.'/rock.txt');
-        $this->assertStringEqualsFile($this->root.'/rock.txt', 'delete');
+        $this->assertFileExists($this->root . '/rock.txt');
+        $this->assertStringEqualsFile($this->root . '/rock.txt', 'delete');
         $this->assertFileNotExists('pop.txt');
     }
 
@@ -156,7 +156,7 @@ class FilesystemAdapterTest extends \PHPUnit_Framework_TestCase
 
         $adapter->write('2kb.txt', $content);
 
-        $this->assertEquals(filesize($this->root.'2kb.txt'), $adapter->getSize('2kb.txt'));
+        $this->assertEquals(filesize($this->root . '2kb.txt'), $adapter->getSize('2kb.txt'));
     }
 
     public function testAllFilesFindsFiles()
