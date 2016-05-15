@@ -24,4 +24,14 @@ class LoopManager extends Manager
     {
         return $this->config->get('loop::driver', 'Viserio\\Loop\\Adapters\\SelectLoop');
     }
+
+    /**
+     * Get the configuration name.
+     *
+     * @return string
+     */
+    protected function getConfigName()
+    {
+        return 'loop';
+    }
 }

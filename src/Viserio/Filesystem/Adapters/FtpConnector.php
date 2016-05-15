@@ -1,7 +1,9 @@
 <?php
 namespace Viserio\Filesystem\Adapters;
 
+use InvalidArgumentException;
 use League\Flysystem\Adapter\Ftp;
+use Narrowspark\Arr\StaticArr as Arr;
 use Viserio\Contracts\Filesystem\Connector as ConnectorContract;
 
 class FtpConnector implements ConnectorContract

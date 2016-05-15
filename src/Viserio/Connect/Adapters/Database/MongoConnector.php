@@ -2,6 +2,7 @@
 namespace Viserio\Connect\Adapters\Database;
 
 use Mongo;
+use MongoClient;
 use MongoConnectionException;
 use Narrowspark\Arr\StaticArr as Arr;
 use Viserio\Connect\Traits\DetectsLostConnections;
@@ -128,11 +129,11 @@ class MongoConnector implements ConnectorContract
      */
     protected function getMongoClass()
     {
-        if (class_exists('\MongoClient')) {
-            return '\MongoClient';
+        if (class_exists(MongoClient::class)) {
+            return MongoClient::class;
         }
 
-        return '\Mongo';
+        return Mongo::class;
     }
 
     /**

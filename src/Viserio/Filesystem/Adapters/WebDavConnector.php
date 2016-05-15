@@ -5,42 +5,44 @@ use InvalidArgumentException;
 use League\Flysystem\WebDAV\WebDAVAdapter;
 use Narrowspark\Arr\StaticArr as Arr;
 use Sabre\DAV\Client;
+use Viserio\Contracts\Filesystem\Connector as ConnectorContract;
 
-class WebDavConnector extends AbstractConnector
+class WebDavConnector implements ConnectorContract
 {
+    /**
+     * Establish an adapter connection.
+     *
+     * @param string[] $config
+     *
+     * @return WebDAVAdapter
+     */
+    public function connect(array $config)
+    {
+        $client = $this->getClient($config);
+
+        return $this->getAdapter($client);
+    }
+
     /**
      * {@inheritdoc}
      */
     protected function getClient(array $config)
     {
-        return new Client($config);
-    }
+        if (!array_key_exists('baseUri', $config)) {
+            throw new InvalidArgumentException('The WebDav connector requires baseUri configuration.');
+        }
 
-    protected function getAuth(array $config)
-    {
-        return $config;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getConfig(array $config)
-    {
         if (!array_key_exists('prefix', $config)) {
             $config['prefix'] = null;
         }
 
-        if (!array_key_exists('baseUri', $config)) {
-            throw new InvalidArgumentException('The sftp connector requires baseUri configuration.');
-        }
-
-        return Arr::only($config, ['prefix', 'baseUri']);
+        return new Client(Arr::only($config, ['prefix', 'baseUri']));
     }
 
     /**
      * {@inheritdoc}
      */
-    protected function getAdapter($client, array $config)
+    protected function getAdapter($client)
     {
         return new WebDAVAdapter($client);
     }

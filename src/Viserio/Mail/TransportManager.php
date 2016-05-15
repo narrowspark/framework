@@ -22,4 +22,14 @@ class TransportManager extends Manager
     public function getDefaultDriver()
     {
     }
+
+    /**
+     * Get the configuration name.
+     *
+     * @return string
+     */
+    protected function getConfigName()
+    {
+        return 'mail';
+    }
 }

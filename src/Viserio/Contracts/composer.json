@@ -45,9 +45,9 @@
         }
     },
     "provide": {
-        "container-interop/container-interop-implementation" : "~1.1",
-        "psr/http-message-implementation"                    : "~1.0",
-        "psr/log-implementation"                             : "~1.0"
+        "container-interop/container-interop-implementation" : "^1.1",
+        "psr/http-message-implementation"                    : "^1.0",
+        "psr/log-implementation"                             : "^1.0"
     },
     "minimum-stability"                                      : "dev",
     "prefer-stable"                                          : true

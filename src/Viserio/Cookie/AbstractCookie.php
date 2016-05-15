@@ -2,6 +2,7 @@
 namespace Viserio\Cookie;
 
 use DateTime;
+use DateTimeInterface;
 use Viserio\Contracts\Cookie\Cookie as CookieContract;
 use Viserio\Contracts\Support\Stringable;
 
@@ -23,7 +24,7 @@ abstract class AbstractCookie implements Stringable, CookieContract
     protected $domain;
 
     /**
-     * @var int|\DateTime
+     * @var int|\DateTimeInterface
      */
     protected $expires;
 
@@ -140,11 +141,11 @@ abstract class AbstractCookie implements Stringable, CookieContract
     /**
      * Sets the expires
      *
-     * @param \DateTime $expires
+     * @param \DateTimeInterface $expires
      *
      * @return self
      */
-    public function withExpires(DateTime $expires)
+    public function withExpires(DateTimeInterface $expires)
     {
         $new = clone $this;
         $new->expires = $expires;
@@ -155,7 +156,7 @@ abstract class AbstractCookie implements Stringable, CookieContract
     /**
      * Returns the expiration time
      *
-     * @return int|DateTime
+     * @return int|DateTimeInterface
      */
     public function getExpiresTime()
     {

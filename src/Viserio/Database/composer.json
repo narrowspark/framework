@@ -25,11 +25,11 @@
         "viserio/container"      : "self.version",
         "viserio/contracts"      : "self.version",
         "viserio/support"        : "self.version",
-        "psr/log"                : "~1.0"
+        "psr/log"                : "^1.0"
     },
     "require-dev": {
         "fabpot/php-cs-fixer"    : "dev-master",
-        "phpunit/phpunit"        : "~5.1.3"
+        "phpunit/phpunit"        : "^5.1"
     },
     "autoload": {
         "psr-4": {

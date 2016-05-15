@@ -25,10 +25,11 @@ interface Directorysystem
      * Recursively create a directory.
      *
      * @param string $dirname
+     * @param array  $config
      *
      * @return bool
      */
-    public function createDirectory($dirname);
+    public function createDirectory($dirname, array $config = []);
 
     /**
      * Recursively delete a directory.
@@ -47,4 +48,13 @@ interface Directorysystem
      * @return bool
      */
     public function cleanDirectory($dirname);
+
+    /**
+     * Determine if the given path is a directory.
+     *
+     * @param string $dirname
+     *
+     * @return bool
+     */
+    public function isDirectory($dirname);
 }

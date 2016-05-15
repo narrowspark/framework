@@ -6,7 +6,13 @@ use Viserio\Contracts\Filesystem\Exception\FileNotFoundException;
 trait FilesystemHelperTrait
 {
     /**
-     * {@inheritdoc}
+     * Require file.
+     *
+     * @param string $file
+     *
+     * @throws Viserio\Contracts\Filesystem\Exception\FileNotFoundException
+     *
+     * @return mixed
      */
     public function getRequire($path)
     {
@@ -20,7 +26,13 @@ trait FilesystemHelperTrait
     }
 
     /**
-     * {@inheritdoc}
+     * Require file once.
+     *
+     * @param string $file
+     *
+     * @throws Viserio\Contracts\Filesystem\Exception\FileNotFoundException
+     *
+     * @return mixed
      */
     public function requireOnce($file)
     {
@@ -34,7 +46,11 @@ trait FilesystemHelperTrait
     }
 
     /**
-     * {@inheritdoc}
+     * Check if path is writable.
+     *
+     * @param string $path
+     *
+     * @return bool
      */
     public function isWritable($path)
     {
@@ -44,27 +60,17 @@ trait FilesystemHelperTrait
     }
 
     /**
-     * {@inheritdoc}
+     * Check if path is a file.
+     *
+     * @param string $file
+     *
+     * @return bool
      */
     public function isFile($file)
     {
         $file = $this->normalizeDirectorySeparator($file);
 
         return is_file($file);
-    }
-
-    /**
-     * Determine if the given path is a directory.
-     *
-     * @param string $dirname
-     *
-     * @return bool
-     */
-    public function isDirectory($dirname)
-    {
-        $dirname = $this->normalizeDirectorySeparator($dirname);
-
-        return is_dir($dirname);
     }
 
     /**

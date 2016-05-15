@@ -1,7 +1,6 @@
 <?php
 namespace Viserio\Filesystem\Adapters;
 
-use InvalidArgumentException;
 use League\Flysystem\Vfs\VfsAdapter;
 use Narrowspark\Arr\StaticArr as Arr;
 use VirtualFileSystem\FileSystem;

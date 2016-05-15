@@ -73,12 +73,9 @@ class XMLTest extends \PHPUnit_Framework_TestCase
 <root><Good_guy><name>Luke Skywalker</name><weapon>Lightsaber</weapon></Good_guy><Bad_guy><name>Sauron</name><weapon>Evil Eye</weapon></Bad_guy></root>
 ')->at($this->root);
 
-        $dump = $this->parser->dump($array);
+        $dump = vfsStream::newFile('dump.xml')->withContent($this->parser->dump($array))->at($this->root);
 
-        $this->assertEquals(
-            str_replace(["\r\n", "\r", '~(*BSR_ANYCRLF)\R~'], "\r\n", $this->file->read($file->url())),
-            str_replace(["\r\n", "\r", '~(*BSR_ANYCRLF)\R~'], "\r\n", $dump)
-        );
+        $this->assertSame($this->file->read($file->url()), $this->file->read($dump->url()));
     }
 
     public function testDumpToThrowException()

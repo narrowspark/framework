@@ -4,7 +4,11 @@ namespace Viserio\Filesystem\Traits;
 trait FilesystemExtensionTrait
 {
     /**
-     * {@inheritdoc}
+     * Extract the file extension from a file path.
+     *
+     * @param string $path
+     *
+     * @return string
      */
     public function getExtension($path)
     {
@@ -12,7 +16,13 @@ trait FilesystemExtensionTrait
     }
 
     /**
-     * {@inheritdoc}
+     * Returns the filename without the extension from a file path.
+     *
+     * @param string      $path      The path string
+     * @param string|null $extension If specified, only that extension is cut off
+     *                               (may contain leading dot)
+     *
+     * @return string Filename without extension
      */
     public function withoutExtension($path, $extension = null)
     {
@@ -25,26 +35,33 @@ trait FilesystemExtensionTrait
     }
 
     /**
-     * {@inheritdoc}
+     * Changes the extension of a path string.
+     *
+     * @param string $path      The path string with filename.ext to change
+     * @param string $extension New extension (with or without leading dot)
+     *
+     * @return string The path string with new file extension
      */
     public function changeExtension($path, $extension)
     {
-        $explode = explode('.', $path);
-
-        if ($actualExtension = end($explode)) {
-            $actualExtension = strtolower($extension);
-        }
-
-        $extension = ltrim($extension, '.');
+        $explode    = explode('.', $path);
+        $substrPath = substr($path, -1);
 
         // No extension for paths
-        if (substr($path, -1) === '/') {
+        if ($substrPath === '/' || is_dir($path)) {
             return $path;
         }
 
+        $actualExtension = null;
+        $extension       = ltrim($extension, '.');
+
+        if (count($explode) >= 2 && !is_dir($path)) {
+            $actualExtension = strtolower($extension);
+        }
+
         // No actual extension in path
-        if (empty($actualExtension)) {
-            return $path . (substr($path, -1) === '.' ? '' : '.') . $extension;
+        if ($actualExtension === null) {
+            return $path . ($substrPath === '.' ? '' : '.') . $extension;
         }
 
         return substr($path, 0, -strlen($actualExtension)) . $extension;
