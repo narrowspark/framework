@@ -2,9 +2,9 @@
 namespace Viserio\Filesystem;
 
 use InvalidArgumentException;
-use Narrowspark\Arr\StaticArr as Arr;
 use League\Flysystem\AdapterInterface;
 use League\Flysystem\Config as FlyConfig;
+use Narrowspark\Arr\StaticArr as Arr;
 use Viserio\Contracts\Filesystem\Directorysystem as DirectorysystemContract;
 use Viserio\Contracts\Filesystem\Exception\FileNotFoundException;
 use Viserio\Contracts\Filesystem\Exception\IOException as ViserioIOException;
@@ -154,7 +154,7 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
     {
         $size = $this->driver->getSize($path);
 
-        return !$size ? : $size['size'];
+        return !$size ?: $size['size'];
     }
 
     /**
@@ -357,9 +357,9 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
     /**
      * Get content from a dir.
      *
-     * @param string  $directory
-     * @param string  $typ
-     * @param boolean $recursive
+     * @param string $directory
+     * @param string $typ
+     * @param bool   $recursive
      *
      * @return array
      */
