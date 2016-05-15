@@ -313,7 +313,7 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
      *
      * @return array
      */
-    protected function filterContentsByType($contents, $type)
+    private function filterContentsByType($contents, $type)
     {
         $return   = [];
 
