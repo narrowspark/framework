@@ -227,11 +227,12 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract, Direct
     /**
      * {@inheritdoc}
      */
-    public function allFiles($directory)
+    public function allFiles($directory, $showHiddenFiles = false)
     {
-        $files = [];
+        $files  = [];
+        $finder = Finder::create()->files()->ignoreDotFiles(!$showHiddenFiles)->in($directory);
 
-        foreach (Finder::create()->files()->in($directory) as $dir) {
+        foreach ($finder as $dir) {
             $files[] = $this->normalizeDirectorySeparator($dir->getPathname());
         }
 
