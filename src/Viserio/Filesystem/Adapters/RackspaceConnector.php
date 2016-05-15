@@ -1,10 +1,11 @@
 <?php
 namespace Viserio\Filesystem\Adapters;
 
+use InvalidArgumentException;
 use League\Flysystem\Rackspace\RackspaceAdapter;
 use Narrowspark\Arr\StaticArr as Arr;
 use OpenCloud\ObjectStore\Resource\Container;
-use OpenCloud\OpenStack;
+use OpenCloud\Rackspace;
 
 class RackspaceConnector extends AbstractConnector
 {
@@ -45,7 +46,7 @@ class RackspaceConnector extends AbstractConnector
      */
     protected function getClient(array $auth)
     {
-        $client = new OpenStackRackspace($auth['endpoint'], [
+        $client = new Rackspace($auth['endpoint'], [
             'username' => $auth['username'],
             'apiKey'   => $auth['apiKey'],
         ]);
@@ -60,6 +61,6 @@ class RackspaceConnector extends AbstractConnector
      */
     protected function getAdapter($client, array $config)
     {
-        return new Rackspace($client);
+        return new RackspaceAdapter($client);
     }
 }

@@ -116,7 +116,7 @@ abstract class Manager
      */
     public function extend($driver, Closure $callback)
     {
-        $this->customCreators[$driver] = $callback;
+        $this->customCreators[$driver] = $callback->bindTo($this, $this);
 
         return $this;
     }
@@ -171,7 +171,6 @@ abstract class Manager
     protected function createDriver($driver, array $options)
     {
         $method = 'create' . Str::studly($driver) . 'Driver';
-        $options = array_filter($options);
 
         // We'll check to see if a creator method exists for the given driver. If not we
         // will check for a custom driver creator, which allows developers to create
@@ -179,7 +178,7 @@ abstract class Manager
         if (isset($this->customCreators[$driver])) {
             return $this->callCustomCreator($driver, $options);
         } elseif (method_exists($this, $method)) {
-            return empty($options) ? $this->$method() : $this->$method($options);
+            return $this->$method($options);
         } elseif (isset($this->supportedDrivers[$driver]) && class_exists($this->supportedDrivers[$driver])) {
             return new $this->supportedDrivers[$driver]();
         }
@@ -199,4 +198,11 @@ abstract class Manager
     {
         return $this->customCreators[$driver]($options);
     }
+
+    /**
+     * Get the configuration name.
+     *
+     * @return string
+     */
+    abstract protected function getConfigName();
 }

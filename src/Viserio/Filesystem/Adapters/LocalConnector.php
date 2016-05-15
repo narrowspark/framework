@@ -34,10 +34,22 @@ class LocalConnector implements ConnectorContract
     protected function getConfig(array $config)
     {
         if (!array_key_exists('path', $config)) {
-            throw new InvalidArgumentException('The local connector requires a path.');
+            throw new InvalidArgumentException('The local connector requires path configuration.');
         }
 
-        return Arr::only($config, ['path']);
+        if (!array_key_exists('write_flags', $config)) {
+            $config['write_flags'] = LOCK_EX;
+        }
+
+        if (!array_key_exists('link_handling', $config)) {
+            $config['link_handling'] = Local::DISALLOW_LINKS;
+        }
+
+        if (!array_key_exists('permissions', $config)) {
+            $config['permissions'] = [];
+        }
+
+        return Arr::only($config, ['path', 'write_flags', 'link_handling', 'permissions']);
     }
 
     /**
@@ -49,6 +61,6 @@ class LocalConnector implements ConnectorContract
      */
     protected function getAdapter(array $config)
     {
-        return new Local($config['path']);
+        return new Local($config['path'], $config['write_flags'], $config['link_handling'], $config['permissions']);
     }
 }

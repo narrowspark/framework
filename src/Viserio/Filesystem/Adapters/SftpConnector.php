@@ -1,7 +1,9 @@
 <?php
 namespace Viserio\Filesystem\Adapters;
 
+use InvalidArgumentException;
 use League\Flysystem\Sftp\SftpAdapter;
+use Narrowspark\Arr\StaticArr as Arr;
 use Viserio\Contracts\Filesystem\Connector as ConnectorContract;
 
 class SftpConnector implements ConnectorContract
@@ -37,8 +39,10 @@ class SftpConnector implements ConnectorContract
             throw new InvalidArgumentException('The sftp connector requires username configuration.');
         }
 
-        if (!array_key_exists('password', $config) || !array_key_exists('privateKey', $config)) {
-            throw new InvalidArgumentException('The sftp connector requires password or privateKey configuration.');
+        if ($pw = !array_key_exists('password', $config)) {
+            if (!array_key_exists('privateKey', $config) && $pw) {
+                throw new InvalidArgumentException('The sftp connector requires password or privateKey configuration.');
+            }
         }
 
         return Arr::only($config, ['host', 'port', 'username', 'password', 'privateKey']);

@@ -63,11 +63,10 @@ return [\'a\' => 1, "b" => 2, "c" => 3, "d" => 4, "e" => 5,];
 );'
         )->at($this->root);
 
-        $dump = $this->parser->dump(['a' => 1, 'b' => 2, 'c' => 3, 'd' => 4, 'e' => 5]);
+        $dump =  vfsStream::newFile('temp.php')->withContent(
+            $this->parser->dump(['a' => 1, 'b' => 2, 'c' => 3, 'd' => 4, 'e' => 5])
+        )->at($this->root);
 
-        $this->assertSame(
-            str_replace(["\r\n", "\r", '~(*BSR_ANYCRLF)\R~'], "\r\n", $this->file->read($file->url())),
-            str_replace(["\r\n", "\r", '~(*BSR_ANYCRLF)\R~'], "\r\n", $dump)
-        );
+        $this->assertSame($this->file->read($file->url()), $this->file->read($dump->url()));
     }
 }

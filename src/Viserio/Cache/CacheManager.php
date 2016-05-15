@@ -220,4 +220,14 @@ class CacheManager extends Manager
 
         return;
     }
+
+    /**
+     * Get the configuration name.
+     *
+     * @return string
+     */
+    protected function getConfigName()
+    {
+        return 'cache';
+    }
 }
