@@ -161,10 +161,11 @@ interface Filesystem
      * Get all of the files from the given directory (recursive).
      *
      * @param string $directory
+     * @param bool   $showHiddenFiles
      *
      * @return array
      */
-    public function allFiles($directory);
+    public function allFiles($directory, $showHiddenFiles = false);
 
     /**
      * Extract the file extension from a file path.

@@ -215,7 +215,7 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
     /**
      * {@inheritdoc}
      */
-    public function allFiles($directory)
+    public function allFiles($directory, $showHiddenFiles = false)
     {
         return $this->getContents($directory, 'file', true);
     }
