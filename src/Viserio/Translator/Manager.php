@@ -7,7 +7,7 @@ use Viserio\Contracts\Cache\Factory as CacheContract;
 use Viserio\Contracts\Translator\MessageCatalogue as MessageCatalogueContract;
 use Viserio\Contracts\Translator\NotFoundResourceException;
 use Viserio\Filesystem\FileLoader;
-use Viserio\Support\LoggerAwareTrait;
+use Viserio\Support\Traits\LoggerAwareTrait;
 use Viserio\Translator\Traits\ValidateLocaleTrait;
 
 class Manager
