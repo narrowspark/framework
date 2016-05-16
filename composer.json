@@ -126,8 +126,8 @@
         "roave/security-advisories"                          : "dev-master",
         "symfony/yaml"                                       : "^3.0 || ^2.8",
         "spatie/array-to-xml"                                : "^2.1",
+        "sepia/po-parser"                                    : "^4.2",
         "yosymfony/toml"                                     : "^0.3"
-        "sepia/po-parser"                                    : "^4.2"
     },
     "autoload": {
         "psr-4": {
