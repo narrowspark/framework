@@ -16,35 +16,30 @@ init:
 install:
   - IF EXIST c:\php (SET PHP=0) ELSE (mkdir c:\php)
   - cd c:\php
-  - IF %PHP%==1 appveyor DownloadFile https://curl.haxx.se/ca/cacert.pem
-  - IF %PHP%==1 appveyor DownloadFile http://windows.php.net/downloads/releases/php-5.6.21-nts-Win32-VC11-x86.zip
-  - IF %PHP%==1 7z x php-5.6.21-nts-Win32-VC11-x86.zip -y >nul
+  - IF %PHP%==1 appveyor DownloadFile https://raw.githubusercontent.com/symfony/binary-utils/master/cacert.pem
+  - IF %PHP%==1 appveyor DownloadFile http://windows.php.net/downloads/releases/archives/php-5.6.9-nts-Win32-VC11-x86.zip
+  - IF %PHP%==1 7z x php-5.6.9-nts-Win32-VC11-x86.zip -y >nul
   - IF %PHP%==1 del /Q *.zip
   - IF %PHP%==1 cd ext
-  - IF %PHP%==1 appveyor DownloadFile http://windows.php.net/downloads/pecl/releases/apcu/5.1.0/php_apcu-5.1.0-7.0-nts-vc14-x86.zip
-  - IF %PHP%==1 7z x php_apcu-5.1.0-7.0-nts-vc14-x86.zip -y >nul
   - IF %PHP%==1 appveyor DownloadFile http://windows.php.net/downloads/pecl/releases/memcache/3.0.8/php_memcache-3.0.8-5.6-nts-vc11-x86.zip
   - IF %PHP%==1 7z x php_memcache-3.0.8-5.6-nts-vc11-x86.zip -y >nul
   - IF %PHP%==1 del /Q *.zip
   - IF %PHP%==1 cd ..
   - IF %PHP%==1 echo @php %%~dp0composer.phar %%* > composer.bat
-  - IF %PHP%==1 copy /Y php.ini-development php.ini-min
-  - IF %PHP%==1 echo max_execution_time=1200 >> php.ini-min
-  - IF %PHP%==1 echo date.timezone="UTC" >> php.ini-min
-  - IF %PHP%==1 echo extension_dir=ext >> php.ini-min
-  - IF %PHP%==1 copy /Y php.ini-min php.ini-max
-  - IF %PHP%==1 echo extension=php_openssl.dll >> php.ini-max
-  # - IF %PHP%==1 echo extension=php_apcu.dll >> php.ini-max
-  - IF %PHP%==1 echo apc.enable_cli=1 >> php.ini-max
-  - IF %PHP%==1 echo extension=php_memcache.dll >> php.ini-max
-  - IF %PHP%==1 echo extension=php_intl.dll >> php.ini-max
-  - IF %PHP%==1 echo extension=php_mbstring.dll >> php.ini-max
-  - IF %PHP%==1 echo extension=php_fileinfo.dll >> php.ini-max
-  - IF %PHP%==1 echo extension=php_pdo_sqlite.dll >> php.ini-max
-  - IF %PHP%==1 echo extension=php_curl.dll >> php.ini-max
-  - IF %PHP%==1 echo curl.cainfo=c:\php\cacert.pem >> php.ini-max
+  - IF %PHP%==1 copy /Y php.ini-development php.ini
+  - IF %PHP%==1 echo max_execution_time=1200 >> php.ini
+  - IF %PHP%==1 echo date.timezone="UTC" >> php.ini
+  - IF %PHP%==1 echo extension_dir=ext >> php.ini
+  - IF %PHP%==1 echo extension=php_openssl.dll >> php.ini
+  - IF %PHP%==1 echo apc.enable_cli=1 >> php.ini
+  - IF %PHP%==1 echo extension=php_memcache.dll >> php.ini
+  - IF %PHP%==1 echo extension=php_intl.dll >> php.ini
+  - IF %PHP%==1 echo extension=php_mbstring.dll >> php.ini
+  - IF %PHP%==1 echo extension=php_fileinfo.dll >> php.ini
+  - IF %PHP%==1 echo extension=php_pdo_sqlite.dll >> php.ini
+  - IF %PHP%==1 echo extension=php_curl.dll >> php.ini
+  - IF %PHP%==1 echo curl.cainfo=c:\php\cacert.pem >> php.ini
   - IF %PHP%==1 appveyor DownloadFile https://getcomposer.org/download/1.1.0/composer.phar
-  - copy /Y php.ini-max php.ini
   - mkdir %APPDATA%\Composer
   - composer self-update --no-progress --ansi
   - composer global require hirak/prestissimo:dev-master --no-progress --ansi
@@ -55,6 +50,5 @@ install:
 test_script:
   - cd c:\projects\narrowspark
   - SET X=0
-  - copy /Y c:\php\php.ini-min c:\php\php.ini
   - sh vendor/bin/phpunit -c phpunit.xml.dist -v --coverage-text="php://stdout" || SET X=!errorlevel!
   - exit %X%
