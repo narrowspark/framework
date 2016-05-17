@@ -44,6 +44,5 @@ class Mo implements FormatContract
      */
     public function dump(array $data)
     {
-
     }
 }
