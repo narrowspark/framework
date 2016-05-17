@@ -1,14 +1,14 @@
 <?php
-namespace Viserio\Translator\Parsers;
+namespace Viserio\Parsers\Formats;
 
 use Exception;
 use Sepia\FileHandler;
 use Sepia\PoParser;
 use Viserio\Contracts\Filesystem\LoadingException;
-use Viserio\Contracts\Filesystem\Parser as ParserContract;
+use Viserio\Contracts\Parsers\Format as FormatContract;
 use Viserio\Filesystem\Filesystem;
 
-class Po implements ParserContract
+class Po implements FormatContract
 {
     /**
      * The filesystem instance.
@@ -28,16 +28,9 @@ class Po implements ParserContract
     }
 
     /**
-     * Loads a MO file and gets its' contents as an array.
-     *
-     * @param string      $filename
-     * @param string|null $group
-     *
-     * @throws \LoadingException
-     *
-     * @return array|string|null
+     * {@inheritdoc}
      */
-    public function load($filename, $group = null)
+    public function parse($payload)
     {
         if (!class_exists('Sepia\\PoParser')) {
             throw new LogicException('Loading translations from the Po format requires the Sepia PoParser component.');
@@ -53,25 +46,9 @@ class Po implements ParserContract
     }
 
     /**
-     * Checking if file ist supported.
-     *
-     * @param string $filename
-     *
-     * @return bool
+     * {@inheritdoc}
      */
-    public function supports($filename)
-    {
-        return (bool) preg_match('#\.po?$#', $filename);
-    }
-
-    /**
-     * Format a MO file for saving.
-     *
-     * @param array $data data
-     *
-     * @return string data export
-     */
-    public function format(array $data)
+    public function dump(array $data)
     {
         //
     }

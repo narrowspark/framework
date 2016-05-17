@@ -1,12 +1,12 @@
 <?php
-namespace Viserio\Translator\Parsers;
+namespace Viserio\Parsers\Formats;
 
 use Exception;
 use Viserio\Contracts\Filesystem\LoadingException;
-use Viserio\Contracts\Filesystem\Parser as ParserContract;
+use Viserio\Contracts\Parsers\Format as FormatContract;
 use Viserio\Filesystem\Filesystem;
 
-class Csv implements ParserContract
+class Csv implements FormatContract
 {
     /**
      * The filesystem instance.
@@ -26,16 +26,9 @@ class Csv implements ParserContract
     }
 
     /**
-     * Loads a MO file and gets its' contents as an array.
-     *
-     * @param string      $filename
-     * @param string|null $group
-     *
-     * @throws \LoadingException
-     *
-     * @return array|string|null
+     * {@inheritdoc}
      */
-    public function load($filename, $group = null)
+    public function parse($payload)
     {
         try {
             if ($this->files->exists($filename)) {
@@ -47,25 +40,9 @@ class Csv implements ParserContract
     }
 
     /**
-     * Checking if file ist supported.
-     *
-     * @param string $filename
-     *
-     * @return bool
+     * {@inheritdoc}
      */
-    public function supports($filename)
-    {
-        return (bool) preg_match('#\.csv?$#', $filename);
-    }
-
-    /**
-     * Format a MO file for saving.
-     *
-     * @param array $data data
-     *
-     * @return string data export
-     */
-    public function format(array $data)
+    public function dump(array $data)
     {
         //
     }
