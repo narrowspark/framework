@@ -9,8 +9,9 @@ use Viserio\Contracts\Translator\NotFoundResourceException;
 use Viserio\Filesystem\FileLoader;
 use Viserio\Support\Traits\LoggerAwareTrait;
 use Viserio\Translator\Traits\ValidateLocaleTrait;
+use Viserio\Support\Manager;
 
-class Manager
+class TranslatorManager extends Manager
 {
     use ValidateLocaleTrait, LoggerAwareTrait;
 
@@ -59,16 +60,13 @@ class Manager
     /**
      * Creat new Translator instance.
      *
-     * @param FileLoader         $fileloader
      * @param MessageSelector    $messageSelector
      * @param PluralizationRules $pluralization
      */
     public function __construct(
-        FileLoader $fileloader,
         MessageSelector $messageSelector,
         PluralizationRules $pluralization
     ) {
-        $this->loader        = $fileloader;
         $this->pluralization = $pluralization;
 
         $messageSelector->setPluralization($pluralization);
@@ -195,6 +193,11 @@ class Manager
     public function getPluralization()
     {
         return $this->pluralization;
+    }
+
+    protected function getConfigName()
+    {
+        return 'translator';
     }
 
     /**

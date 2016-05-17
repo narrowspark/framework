@@ -77,7 +77,7 @@ class MessageCatalogue implements MessageCatalogueContract
      */
     public function all($domain = null)
     {
-        if (null === $domain) {
+        if ($domain === null) {
             return $this->messages;
         }
 
