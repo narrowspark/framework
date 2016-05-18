@@ -90,7 +90,7 @@ class CacheManager extends Manager
             $options['flysystem'];
 
         if ($adapter instanceof AdapterInterface) {
-            $filesystem = new Flysystem($options['connection']);
+            $filesystem = new Flysystem($adapter['connection']);
 
             return new FilesystemCachePool($filesystem);
         }
@@ -211,11 +211,11 @@ class CacheManager extends Manager
             $options['session'];
 
         if (
-            isset($options['local']['pool'], $options['local']['config']) &&
-            $options['local']['pool'] instanceof CacheItemPoolInterface &&
-            is_array($options['local']['config'])
+            isset($adapter['local']['pool'], $adapter['local']['config']) &&
+            $adapter['local']['pool'] instanceof CacheItemPoolInterface &&
+            is_array($adapter['local']['config'])
         ) {
-            return new Psr6SessionHandler($options['local']['pool'], $options['local']['config']);
+            return new Psr6SessionHandler($adapter['local']['pool'], $adapter['local']['config']);
         }
 
         return;
