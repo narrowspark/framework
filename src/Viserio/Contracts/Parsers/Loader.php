@@ -1,5 +1,5 @@
 <?php
-namespace Viserio\Contracts\Config;
+namespace Viserio\Contracts\Parsers;
 
 interface Loader
 {

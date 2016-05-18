@@ -89,12 +89,12 @@ class PluralizationRules
      * @param string $prefix Locale to use
      *
      * @return PluralCategorys\Arabic|PluralCategorys\Czech|PluralCategorys\One|PluralCategorys\Polish|
-     *                                                                                                  PluralCategorys\French|PluralCategorys\Balkan|PluralCategorys\Maltese|PluralCategorys\Manx|
-     *                                                                                                  PluralCategorys\Slovenian|PluralCategorys\Welsh|PluralCategorys\Tachelhit|
-     *                                                                                                  PluralCategorys\Tamazight|PluralCategorys\Macedonian|PluralCategorys\Lithuanian|
-     *                                                                                                  PluralCategorys\Hebrew|PluralCategorys\Gaelic|PluralCategorys\Irish|PluralCategorys\Langi|
-     *                                                                                                  PluralCategorys\Latvian|PluralCategorys\Breton|PluralCategorys\Colognian|PluralCategorys\Romanian|
-     *                                                                                                  PluralCategorys\Two|PluralCategorys\Zero|PluralCategorys\None
+     *         PluralCategorys\French|PluralCategorys\Balkan|PluralCategorys\Maltese|PluralCategorys\Manx|
+     *         PluralCategorys\Slovenian|PluralCategorys\Welsh|PluralCategorys\Tachelhit|
+     *         PluralCategorys\Tamazight|PluralCategorys\Macedonian|PluralCategorys\Lithuanian|
+     *         PluralCategorys\Hebrew|PluralCategorys\Gaelic|PluralCategorys\Irish|PluralCategorys\Langi|
+     *         PluralCategorys\Latvian|PluralCategorys\Breton|PluralCategorys\Colognian|PluralCategorys\Romanian|
+     *         PluralCategorys\Two|PluralCategorys\Zero|PluralCategorys\None
      */
     protected function createRules($prefix)
     {

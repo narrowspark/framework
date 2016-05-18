@@ -1,8 +1,8 @@
 <?php
-namespace Viserio\Config;
+namespace Viserio\Parsers;
 
 use Narrowspark\Arr\StaticArr as Arr;
-use Viserio\Contracts\Config\Loader as LoaderContract;
+use Viserio\Contracts\Parsers\Loader as LoaderContract;
 use Viserio\Contracts\Parsers\TaggableParser as TaggableParserContract;
 use Viserio\Parsers\IniParser;
 use Viserio\Parsers\JsonParser;

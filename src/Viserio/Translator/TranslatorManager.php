@@ -2,7 +2,6 @@
 namespace Viserio\Translator;
 
 use InvalidArgumentException;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Viserio\Contracts\Cache\Factory as CacheContract;
 use Viserio\Contracts\Translator\MessageCatalogue as MessageCatalogueContract;
 use Viserio\Contracts\Translator\NotFoundResourceException;
@@ -10,17 +9,15 @@ use Viserio\Filesystem\FileLoader;
 use Viserio\Support\Manager;
 use Viserio\Support\Traits\LoggerAwareTrait;
 use Viserio\Translator\Traits\ValidateLocaleTrait;
+use Viserio\Parsers\Traits\FileLoaderAwareTrait;
+use Viserio\Events\Traits\EventAwareTrait;
 
 class TranslatorManager extends Manager
 {
-    use ValidateLocaleTrait, LoggerAwareTrait;
-
-    /**
-     * FileLoader instance.
-     *
-     * @var \Viserio\Filesystem\FileLoader
-     */
-    protected $loader;
+    use ValidateLocaleTrait;
+    use LoggerAwareTrait;
+    use FileLoaderAwareTrait;
+    use EventAwareTrait;
 
     /**
      * PluralizationRules instance.
@@ -51,13 +48,6 @@ class TranslatorManager extends Manager
     protected $cache;
 
     /**
-     * Event manager for triggering translator events.
-     *
-     * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
-     */
-    protected $events;
-
-    /**
      * Creat new Translator instance.
      *
      * @param MessageSelector    $messageSelector
@@ -71,6 +61,26 @@ class TranslatorManager extends Manager
 
         $messageSelector->setPluralization($pluralization);
         $this->messageSelector = $messageSelector;
+    }
+
+    /**
+     * Set the default cache driver name.
+     *
+     * @param string $name
+     */
+    public function setDefaultDriver($name)
+    {
+
+    }
+
+    /**
+     * Get the default driver name.
+     *
+     * @return string
+     */
+    public function getDefaultDriver()
+    {
+
     }
 
     /**
@@ -93,20 +103,19 @@ class TranslatorManager extends Manager
     }
 
     /**
-     * Load the given configuration group.
+     * Import language from file.
+     * Can be grouped together.
      *
      * @param string      $file
      * @param string|null $group
-     * @param string|null $environment
-     * @param string|null $namespace
      *
      * @return self
      */
-    public function bind($file, $group = null, $environment = null, $namespace = null)
+    public function import($file, $group = null)
     {
-        $langFile = $this->loader->load($file, $group, $environment, $namespace);
+        $langFile = $this->loader->load($file, $group);
 
-        $this->addMessage(new MessageCatalogue($langFile['lang'], (array) $langFile), $langFile['lang']);
+        $this->addMessage(new MessageCatalogue($langFile['lang'], $langFile), $langFile['lang']);
 
         return $this;
     }
@@ -162,30 +171,6 @@ class TranslatorManager extends Manager
     }
 
     /**
-     * Sets a event.
-     *
-     * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $event
-     *
-     * @return self
-     */
-    public function setEvent(EventDispatcherInterface $event)
-    {
-        $this->events = $event;
-
-        return $this;
-    }
-
-    /**
-     * Returns the event instance.
-     *
-     * @return \Symfony\Component\EventDispatcher\EventDispatcherInterface
-     */
-    public function getEvent()
-    {
-        return $this->events;
-    }
-
-    /**
      * Returns the pluralization instance.
      *
      * @return \Viserio\Translator\PluralizationRules
@@ -195,6 +180,9 @@ class TranslatorManager extends Manager
         return $this->pluralization;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     protected function getConfigName()
     {
         return 'translator';

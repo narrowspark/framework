@@ -2,25 +2,20 @@
 namespace Viserio\Config;
 
 use IteratorAggregate;
-use Viserio\Contracts\Config\Loader as LoaderContract;
 use Viserio\Contracts\Config\Manager as ManagerContract;
 use Viserio\Contracts\Config\Repository as RepositoryContract;
+use Viserio\Parsers\Traits\FileLoaderAwareTrait;
 
 class Manager implements ManagerContract, IteratorAggregate
 {
+    use FileLoaderAwareTrait;
+
     /**
      * Handler for Configuration values.
      *
      * @var mixed
      */
     protected $repository;
-
-    /**
-     * Fileloader instance.
-     *
-     * @var \Viserio\Contracts\Config\Loader
-     */
-    protected $loader;
 
     /**
      * Config folder path.
@@ -47,30 +42,6 @@ class Manager implements ManagerContract, IteratorAggregate
     public function setArray(array $array)
     {
         $this->repository->setArray($array);
-    }
-
-    /**
-     * Get the configuration loader.
-     *
-     * @param \Viserio\Contracts\Config\Loader $loader
-     *
-     * @return self
-     */
-    public function setLoader(LoaderContract $loader)
-    {
-        $this->loader = $loader;
-
-        return $this;
-    }
-
-    /**
-     * Get the configuration loader.
-     *
-     * @return \Viserio\Contracts\Config\Loader
-     */
-    public function getLoader()
-    {
-        return $this->loader;
     }
 
     /**
