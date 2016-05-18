@@ -5,12 +5,12 @@ use InvalidArgumentException;
 use Viserio\Contracts\Cache\Factory as CacheContract;
 use Viserio\Contracts\Translator\MessageCatalogue as MessageCatalogueContract;
 use Viserio\Contracts\Translator\NotFoundResourceException;
+use Viserio\Events\Traits\EventAwareTrait;
 use Viserio\Filesystem\FileLoader;
+use Viserio\Parsers\Traits\FileLoaderAwareTrait;
 use Viserio\Support\Manager;
 use Viserio\Support\Traits\LoggerAwareTrait;
 use Viserio\Translator\Traits\ValidateLocaleTrait;
-use Viserio\Parsers\Traits\FileLoaderAwareTrait;
-use Viserio\Events\Traits\EventAwareTrait;
 
 class TranslatorManager extends Manager
 {
@@ -70,7 +70,6 @@ class TranslatorManager extends Manager
      */
     public function setDefaultDriver($name)
     {
-
     }
 
     /**
@@ -80,7 +79,6 @@ class TranslatorManager extends Manager
      */
     public function getDefaultDriver()
     {
-
     }
 
     /**
