@@ -12,18 +12,7 @@ class HashingServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->registerRand();
-        $this->registerRandGenerator();
-        $this->registerHashGenerator();
-
         $this->registerPassword();
-    }
-
-    protected function registerHashGenerator()
-    {
-        $this->app->singleton('hash', function ($app) {
-            return new HashGenerator($app->get('rand.generator'));
-        });
     }
 
     protected function registerPassword()
@@ -41,7 +30,6 @@ class HashingServiceProvider extends ServiceProvider
     public function provides()
     {
         return [
-            'hash',
             'password',
         ];
     }

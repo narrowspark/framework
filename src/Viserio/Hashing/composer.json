@@ -21,7 +21,7 @@
         "php"                             : "^5.6 || ^7.0",
         "viserio/support"                 : "self.version",
         "viserio/contracts"               : "self.version",
-        "paragonie/password_lock"         : "^1.1"
+        "paragonie/password_lock"         : "^2.0",
     },
     "require-dev": {
         "narrowspark/php-cs-fixer-config" : "^1.1",
