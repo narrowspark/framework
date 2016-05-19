@@ -2,7 +2,7 @@
 namespace Viserio\Config\Test;
 
 use org\bovigo\vfs\vfsStream;
-use Viserio\Config\FileLoader;
+use Viserio\Parsers\FileLoader;
 use Viserio\Config\Manager as ConfigManager;
 use Viserio\Config\Repository;
 use Viserio\Filesystem\Filesystem;
@@ -16,7 +16,7 @@ class ConfigManagerTest extends \PHPUnit_Framework_TestCase
     private $root;
 
     /**
-     * @var \Viserio\Filesystem\FileLoader
+     * @var \Viserio\Parsers\FileLoader
      */
     private $fileloader;
 

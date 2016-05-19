@@ -55,7 +55,7 @@ class Manager implements ManagerContract, IteratorAggregate
      */
     public function import($file, $group = null)
     {
-        $config = $this->loader->load($file, $group);
+        $config = $this->fileLoader->load($file, $group);
 
         $this->repository->setArray($config);
 
@@ -171,8 +171,8 @@ class Manager implements ManagerContract, IteratorAggregate
      */
     public function __call($method, array $params = [])
     {
-        if ($this->loader && method_exists($this->loader, $method)) {
-            return call_user_func_array([$this->loader, $method], $params);
+        if ($this->fileLoader && method_exists($this->fileLoader, $method)) {
+            return call_user_func_array([$this->fileLoader, $method], $params);
         }
 
         return call_user_func_array([$this->repository, $method], $params);
