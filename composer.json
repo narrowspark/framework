@@ -11,7 +11,8 @@
         "viserio",
         "container",
         "pipeline",
-        "event"
+        "event",
+        "translation"
     ],
     "license"    : "MIT",
     "homepage"   : "https://github.com/narrowspark/framework",
