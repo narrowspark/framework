@@ -2,7 +2,7 @@
 namespace Viserio\Hashing;
 
 use Defuse\Crypto\Key;
-use \ParagonIE\PasswordLock\PasswordLock;
+use ParagonIE\PasswordLock\PasswordLock;
 use Viserio\Contracts\Hashing\Password as PasswordContract;
 
 class Password implements PasswordContract

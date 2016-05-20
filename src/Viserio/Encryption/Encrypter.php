@@ -1,8 +1,8 @@
 <?php
 namespace Viserio\Encryption;
 
-use Defuse\Crypto\Key;
 use Defuse\Crypto\Crypto;
+use Defuse\Crypto\Key;
 use Viserio\Contracts\Encryption\Encrypter as EncrypterContract;
 
 class Encrypter implements EncrypterContract

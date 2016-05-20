@@ -9,14 +9,14 @@ interface Password
      *
      * @param string $password
      *
-     * @return string
-     *
      * @throws \Exception
      * @throws \InvalidArgumentException
+     *
+     * @return string
      */
     public function create($password);
 
-     /**
+    /**
      * 1. VerifyHMAC-then-Decrypt the ciphertext to get the hash
      * 2. Verify that the password matches the hash
      *
