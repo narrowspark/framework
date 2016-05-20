@@ -1,8 +1,8 @@
 <?php
 namespace Viserio\Translator;
 
-use RuntimeException;
 use InvalidArgumentException;
+use RuntimeException;
 use Viserio\Contracts\Cache\Factory as CacheContract;
 use Viserio\Contracts\Translator\MessageCatalogue as MessageCatalogueContract;
 use Viserio\Contracts\Translator\NotFoundResourceException;
@@ -176,7 +176,7 @@ class TranslatorManager
             return $this->langFallback[$lang];
         }
 
-        return null;
+        return;
     }
 
     /**
