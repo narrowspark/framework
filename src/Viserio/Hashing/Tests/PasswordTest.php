@@ -13,20 +13,22 @@ class PasswordTest extends \PHPUnit_Framework_TestCase
         $this->password = new Password(Key::createNewRandomKey());
     }
 
-    function testCreate(){
+    public function testCreate()
+    {
         $hash = $this->password->create('totally-insecure-but-lengthy-password');
 
         $this->assertEquals(288, strlen($hash));
     }
 
-    function testVerify(){
+    public function testVerify()
+    {
         $password      = 'totally-insecure-but-lengthy-password';
         $otherPassword = 'totally-awesome-password';
 
         $hash = $this->password->create($password);
 
         $this->assertEquals(false, $this->password->verify($otherPassword, $hash));
-        $this->assertEquals(true,  $this->password->verify($password, $hash));
+        $this->assertEquals(true, $this->password->verify($password, $hash));
     }
 
     public function testShouldRecreate()
