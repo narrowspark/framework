@@ -2,7 +2,7 @@
     "name"       : "viserio/encrypter",
     "type"       : "library",
     "description": "The Viserio Encrypter package.",
-    "keywords"   : ["narrowspark", "viserio", "encrypter", "openssl"],
+    "keywords"   : ["narrowspark", "viserio", "encrypter", "security", "encryption", "AES", "openssl", "cipher", "cryptography", "symmetric key cryptography", "crypto", "encrypt", "authenticated encryption"],
     "license"    : "MIT",
     "homepage"   : "http://github.com/Narrowspark/encrypter",
     "support"    : {
@@ -19,11 +19,9 @@
     ],
     "require": {
         "php"                              : "^5.6 || ^7.0",
+        "defuse/php-encryption"            : "^2.0",
         "ext-openssl"                      : "*",
-        "viserio/config"                   : "self.version",
-        "viserio/contracts"                : "self.version",
-        "paragonie/constant_time_encoding" : "^1 || ^2",
-        "ircmaxell/random-lib"             : "^1.1"
+        "viserio/contracts"                : "self.version"
     },
     "require-dev": {
         "narrowspark/php-cs-fixer-config"  : "^1.1",

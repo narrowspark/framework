@@ -2,7 +2,7 @@
     "name"       : "viserio/hashing",
     "type"       : "library",
     "description": "The Viserio Hashing package.",
-    "keywords"   : ["narrowspark", "viserio", "hashing", "password"],
+    "keywords"   : ["narrowspark", "viserio", "hashing", "password", "hash"],
     "license"    : "MIT",
     "homepage"   : "http://github.com/Narrowspark/hashing",
     "support"    : {
@@ -19,9 +19,9 @@
     ],
     "require": {
         "php"                             : "^5.6 || ^7.0",
-        "viserio/support"                 : "self.version",
-        "viserio/contracts"               : "self.version",
-        "paragonie/password_lock"         : "^1.1"
+        "defuse/php-encryption"           : "^2.0",
+        "paragonie/password_lock"         : "^2.0 || ^3.0",
+        "viserio/contracts"               : "self.version"
     },
     "require-dev": {
         "narrowspark/php-cs-fixer-config" : "^1.1",

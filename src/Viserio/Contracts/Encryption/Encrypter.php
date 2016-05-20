@@ -4,32 +4,20 @@ namespace Viserio\Contracts\Encryption;
 interface Encrypter
 {
     /**
-     * Encrypt data returning a JSON encoded array safe for storage in a database
-     * or file. The array has the following structure before it is encoded:.
+     * Encrypts a plaintext string using a secret key.
      *
-     * [
-     *   'cdata' => 'Encrypted data, Base 64 encoded',
-     *   'iv'    => 'Base64 encoded IV',
-     *   'algo'  => 'Algorythm used',
-     *   'mode'  => 'Mode used',
-     *   'mac'   => 'Message Authentication Code'
-     * ]
+     * @param string $plaintext
      *
-     * @param mixed $data Data to encrypt.
-     *
-     * @return string Serialized array containing the encrypted data
-     *                along with some meta data.
+     * @return string
      */
-    public function encrypt($data);
+    public function encrypt($plaintext);
 
     /**
-     * Strip PKCS7 padding and decrypt
-     * data encrypted by encrypt().
+     * Decrypts a ciphertext string using a secret key.
      *
-     * @param string $data JSON string containing the encrypted data and meta information in the
-     *                     excact format as returned by encrypt().
+     * @param string $ciphertext
      *
-     * @return string Decrypted data in it's original form.
+     * @return string
      */
-    public function decrypt($data);
+    public function decrypt($ciphertext);
 }
