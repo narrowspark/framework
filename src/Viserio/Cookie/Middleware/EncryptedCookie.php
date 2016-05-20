@@ -3,8 +3,9 @@ namespace Viserio\Cookie\Middleware;
 
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Defuse\Crypto\Exception\EnvironmentIsBrokenException;
+use Defuse\Crypto\Exception\WrongKeyOrModifiedCiphertextException;
 use Viserio\Contracts\Cookie\Cookie as CookieContract;
-use Viserio\Contracts\Encryption\DecryptException;
 use Viserio\Contracts\Encryption\Encrypter as EncrypterContract;
 use Viserio\Contracts\Middleware\Middleware as MiddlewareContract;
 use Viserio\Cookie\Cookie;
@@ -106,7 +107,9 @@ class EncryptCookies implements MiddlewareContract
 
             try {
                 $request->cookies->set($key, $this->decryptCookie($c));
-            } catch (DecryptException $e) {
+            } catch (EnvironmentIsBrokenException $e) {
+                $request->cookies->set($key, null);
+            } catch (WrongKeyOrModifiedCiphertextException $e) {
                 $request->cookies->set($key, null);
             }
         }

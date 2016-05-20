@@ -46,7 +46,7 @@ class Password implements PasswordContract
      * @param string             $hashedValue
      * @param \Defuse\Crypto\Key $newKey
      *
-     * @return bool
+     * @return string
      */
     public function shouldRecreate($hashedValue, Key $newKey)
     {
