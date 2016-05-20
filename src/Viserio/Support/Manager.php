@@ -39,7 +39,7 @@ abstract class Manager
     protected $supportedDrivers = [];
 
     /**
-     * Set a config manager
+     * Set a config manager.
      *
      * @param ConfigContract $config
      *
@@ -53,7 +53,7 @@ abstract class Manager
     }
 
     /**
-     * Get config
+     * Get a config manager instance.
      *
      * @return ConfigContract
      */
@@ -63,7 +63,7 @@ abstract class Manager
     }
 
     /**
-     * Set the default cache driver name.
+     * Set the default driver name.
      *
      * @param string $name
      */
@@ -79,7 +79,7 @@ abstract class Manager
     /**
      * Builder.
      *
-     * @param string|null $driver  The cache driver to use
+     * @param string|null $driver  The driver to use
      * @param array       $options
      *
      * @throws \RuntimeException

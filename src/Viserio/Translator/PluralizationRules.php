@@ -67,10 +67,10 @@ class PluralizationRules
     /**
      * Overrides the default plural rule for a given locale.
      *
-     * @param callable $rule
      * @param string   $language
+     * @param callable $rule
      */
-    public function set(callable $rule, $language)
+    public function set($language, callable $rule)
     {
         if (strlen($language) > 3) {
             $language = substr($language, 0, -strlen(strrchr($language, '_')));
@@ -88,13 +88,31 @@ class PluralizationRules
      *
      * @param string $prefix Locale to use
      *
-     * @return PluralCategorys\Arabic|PluralCategorys\Czech|PluralCategorys\One|PluralCategorys\Polish|
-     *                                                                                                  PluralCategorys\French|PluralCategorys\Balkan|PluralCategorys\Maltese|PluralCategorys\Manx|
-     *                                                                                                  PluralCategorys\Slovenian|PluralCategorys\Welsh|PluralCategorys\Tachelhit|
-     *                                                                                                  PluralCategorys\Tamazight|PluralCategorys\Macedonian|PluralCategorys\Lithuanian|
-     *                                                                                                  PluralCategorys\Hebrew|PluralCategorys\Gaelic|PluralCategorys\Irish|PluralCategorys\Langi|
-     *                                                                                                  PluralCategorys\Latvian|PluralCategorys\Breton|PluralCategorys\Colognian|PluralCategorys\Romanian|
-     *                                                                                                  PluralCategorys\Two|PluralCategorys\Zero|PluralCategorys\None
+     * @return PluralCategorys\Arabic|
+     *                                 PluralCategorys\Czech|
+     *                                 PluralCategorys\One|
+     *                                 PluralCategorys\Polish|
+     *                                 PluralCategorys\French|
+     *                                 PluralCategorys\Balkan|
+     *                                 PluralCategorys\Maltese|
+     *                                 PluralCategorys\Manx|
+     *                                 PluralCategorys\Slovenian|
+     *                                 PluralCategorys\Welsh|
+     *                                 PluralCategorys\Tachelhit|
+     *                                 PluralCategorys\Tamazight|
+     *                                 PluralCategorys\Macedonian|
+     *                                 PluralCategorys\Lithuanian|
+     *                                 PluralCategorys\Hebrew|
+     *                                 PluralCategorys\Gaelic|
+     *                                 PluralCategorys\Irish|
+     *                                 PluralCategorys\Langi|
+     *                                 PluralCategorys\Latvian|
+     *                                 PluralCategorys\Breton|
+     *                                 PluralCategorys\Colognian|
+     *                                 PluralCategorys\Romanian|
+     *                                 PluralCategorys\Two|
+     *                                 PluralCategorys\Zero|
+     *                                 PluralCategorys\None
      */
     protected function createRules($prefix)
     {

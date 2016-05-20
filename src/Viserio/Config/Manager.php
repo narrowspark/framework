@@ -4,7 +4,7 @@ namespace Viserio\Config;
 use IteratorAggregate;
 use Viserio\Contracts\Config\Manager as ManagerContract;
 use Viserio\Contracts\Config\Repository as RepositoryContract;
-use Viserio\Parsers\Traits\FileLoaderAwareTrait;
+use Viserio\Support\Traits\FileLoaderAwareTrait;
 
 class Manager implements ManagerContract, IteratorAggregate
 {

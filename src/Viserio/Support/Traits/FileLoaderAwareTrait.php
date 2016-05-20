@@ -1,5 +1,5 @@
 <?php
-namespace Viserio\Parsers\Traits;
+namespace Viserio\Support\Traits;
 
 use Viserio\Contracts\Parsers\Loader as LoaderContract;
 

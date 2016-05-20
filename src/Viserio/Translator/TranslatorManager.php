@@ -1,18 +1,17 @@
 <?php
 namespace Viserio\Translator;
 
+use RuntimeException;
 use InvalidArgumentException;
 use Viserio\Contracts\Cache\Factory as CacheContract;
 use Viserio\Contracts\Translator\MessageCatalogue as MessageCatalogueContract;
 use Viserio\Contracts\Translator\NotFoundResourceException;
-use Viserio\Events\Traits\EventAwareTrait;
-use Viserio\Filesystem\FileLoader;
-use Viserio\Parsers\Traits\FileLoaderAwareTrait;
-use Viserio\Support\Manager;
+use Viserio\Support\Traits\EventAwareTrait;
+use Viserio\Support\Traits\FileLoaderAwareTrait;
 use Viserio\Support\Traits\LoggerAwareTrait;
 use Viserio\Translator\Traits\ValidateLocaleTrait;
 
-class TranslatorManager extends Manager
+class TranslatorManager
 {
     use ValidateLocaleTrait;
     use LoggerAwareTrait;
@@ -48,6 +47,20 @@ class TranslatorManager extends Manager
     protected $cache;
 
     /**
+     * Default fallback for all languages.
+     *
+     * @var MessageCatalogueContract
+     */
+    protected $defaultFallback;
+
+    /**
+     * Fallbacks for speziall languages.
+     *
+     * @var array
+     */
+    protected $langFallback = [];
+
+    /**
      * Creat new Translator instance.
      *
      * @param MessageSelector    $messageSelector
@@ -61,24 +74,6 @@ class TranslatorManager extends Manager
 
         $messageSelector->setPluralization($pluralization);
         $this->messageSelector = $messageSelector;
-    }
-
-    /**
-     * Set the default cache driver name.
-     *
-     * @param string $name
-     */
-    public function setDefaultDriver($name)
-    {
-    }
-
-    /**
-     * Get the default driver name.
-     *
-     * @return string
-     */
-    public function getDefaultDriver()
-    {
     }
 
     /**
@@ -104,18 +99,84 @@ class TranslatorManager extends Manager
      * Import language from file.
      * Can be grouped together.
      *
-     * @param string      $file
-     * @param string|null $group
+     * @param string $file
      *
      * @return self
      */
-    public function import($file, $group = null)
+    public function import($file)
     {
-        $langFile = $this->loader->load($file, $group);
+        $langFile = $this->loader->load($file);
 
-        $this->addMessage(new MessageCatalogue($langFile['lang'], $langFile), $langFile['lang']);
+        if (!isset($langFile['lang'])) {
+            throw new RuntimeException(sprintf('File [%s] cant be imported.', $file));
+        }
+
+        $message = new MessageCatalogue($langFile['lang'], $langFile);
+
+        if ($fallback = $this->getLanguageFallback($message->getLocale())) {
+            $message->addFallbackCatalogue($fallback);
+        } elseif ($fallback = $this->defaultFallback) {
+            $message->addFallbackCatalogue($fallback);
+        }
+
+        $this->addMessage($message, $langFile['lang']);
 
         return $this;
+    }
+
+    /**
+     * Set default fallback for all languages.
+     *
+     * @param MessageCatalogueContract $fallback
+     *
+     * @return self
+     */
+    public function setDefaultFallback(MessageCatalogueContract $fallback)
+    {
+        $this->defaultFallback = $fallback;
+
+        return $this;
+    }
+
+    /**
+     * Get default fallback.
+     *
+     * @return MessageCatalogueContract|null
+     */
+    public function getDefaultFallback()
+    {
+        return $this->defaultFallback;
+    }
+
+    /**
+     * Set fallback for a language.
+     *
+     * @param stirng                   $lang
+     * @param MessageCatalogueContract $fallback
+     *
+     * @return self
+     */
+    public function setLanguageFallback($lang, MessageCatalogueContract $fallback)
+    {
+        $this->langFallback[$lang] = $fallback;
+
+        return $this;
+    }
+
+    /**
+     * Get fallback for a language.
+     *
+     * @param stirng $lang
+     *
+     * @return MessageCatalogueContract|null
+     */
+    public function getLanguageFallback($lang)
+    {
+        if (isset($this->langFallback[$lang])) {
+            return $this->langFallback[$lang];
+        }
+
+        return null;
     }
 
     /**

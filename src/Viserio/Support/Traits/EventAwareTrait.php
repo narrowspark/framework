@@ -1,5 +1,5 @@
 <?php
-namespace Viserio\Events\Traits;
+namespace Viserio\Support\Traits;
 
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
