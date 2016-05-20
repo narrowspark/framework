@@ -64,10 +64,10 @@
         <testsuite name="Narrowspark Filesystem Component Test Suite">
             <directory>./src/Viserio/Filesystem/Tests</directory>
         </testsuite>
-<!--        <testsuite name="Narrowspark Hashing Component Test Suite">
+        <testsuite name="Narrowspark Hashing Component Test Suite">
             <directory>./src/Viserio/Hashing/Tests</directory>
         </testsuite>
-        <testsuite name="Narrowspark Http Component Test Suite">
+<!--    <testsuite name="Narrowspark Http Component Test Suite">
             <directory>./src/Viserio/Http/Tests</directory>
         </testsuite>
         <testsuite name="Narrowspark Log Component Test Suite">

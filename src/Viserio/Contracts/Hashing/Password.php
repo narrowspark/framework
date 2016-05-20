@@ -4,35 +4,26 @@ namespace Viserio\Contracts\Hashing;
 interface Password
 {
     /**
-     * Hash the given value.
+     * 1. Hash password using bcrypt-base64-SHA256
+     * 2. Encrypt-then-MAC the hash
      *
-     * @param string $value
-     * @param array  $options
-     *
-     * @throws \RuntimeException
+     * @param string $password
      *
      * @return string
-     */
-    public function make($value, array $options = []);
-
-    /**
-     * Check the given plain value against a hash.
      *
-     * @param string $value
+     * @throws \Exception
+     * @throws \InvalidArgumentException
+     */
+    public function create($password);
+
+     /**
+     * 1. VerifyHMAC-then-Decrypt the ciphertext to get the hash
+     * 2. Verify that the password matches the hash
+     *
+     * @param string $password
      * @param string $hashedValue
-     * @param array  $options
      *
      * @return bool
      */
-    public function check($value, $hashedValue, array $options = []);
-
-    /**
-     * Check if the given hash has been hashed using the given options.
-     *
-     * @param string $hashedValue
-     * @param array  $options
-     *
-     * @return bool
-     */
-    public function needsRehash($hashedValue, array $options = []);
+    public function verify($password, $hashedValue);
 }

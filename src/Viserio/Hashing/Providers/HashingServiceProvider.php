@@ -1,6 +1,7 @@
 <?php
 namespace Viserio\Hashing\Providers;
 
+use Defuse\Crypto\Key;
 use Viserio\Application\ServiceProvider;
 use Viserio\Hashing\Generator as HashGenerator;
 use Viserio\Hashing\Password;
@@ -18,7 +19,13 @@ class HashingServiceProvider extends ServiceProvider
     protected function registerPassword()
     {
         $this->app->singleton('password', function () {
-            return new Password();
+            $config = $app->get('config');
+
+            return new Password(
+                Key::loadFromAsciiSafeString(
+                    $config->get('app::key')
+                )
+            );
         });
     }
 
