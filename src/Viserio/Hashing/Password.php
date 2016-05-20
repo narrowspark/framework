@@ -1,66 +1,55 @@
 <?php
 namespace Viserio\Hashing;
 
-use RuntimeException;
+use Defuse\Crypto\Key;
+use ParagonIE\PasswordLock\PasswordLock;
 use Viserio\Contracts\Hashing\Password as PasswordContract;
 
 class Password implements PasswordContract
 {
     /**
-     * Default crypt cost factor.
+     * Encryption key.
      *
-     * @var int
+     * @var \Defuse\Crypto\Key
      */
-    protected $rounds = 10;
+    protected $key;
 
     /**
-     * Hash the given value.
+     * Create a new Password instance.
      *
-     * @param string $value
-     * @param array  $options
-     *
-     * @throws \RuntimeException
-     *
-     * @return null|string
+     * @param \Defuse\Crypto\Key $key
      */
-    public function make($value, array $options = [])
+    public function __construct(Key $key)
     {
-        $cost = isset($options['rounds']) ? $options['rounds'] : $this->rounds;
-        $hash = password_hash($value, PASSWORD_BCRYPT, ['cost' => $cost]);
-
-        if ($hash === false) {
-            throw new RuntimeException('Bcrypt hashing not supported.');
-        }
-
-        return $hash;
+        $this->key = $key;
     }
 
     /**
-     * Check the given plain value against a hash.
-     *
-     * @param string $value
-     * @param string $hashedValue
-     * @param array  $options
-     *
-     * @return bool
+     * {@inheritdoc}
      */
-    public function check($value, $hashedValue, array $options = [])
+    public function create($password)
     {
-        return password_verify($value, $hashedValue);
+        return PasswordLock::hashAndEncrypt($password, $this->key);
     }
 
     /**
-     * Check if the given hash has been hashed using the given options.
-     *
-     * @param string $hashedValue
-     * @param array  $options
-     *
-     * @return bool
+     * {@inheritdoc}
      */
-    public function needsRehash($hashedValue, array $options = [])
+    public function verify($password, $hashedValue)
     {
-        $cost = isset($options['rounds']) ? $options['rounds'] : $this->rounds;
+        return PasswordLock::decryptAndVerify($password, $hashedValue, $this->key);
+    }
 
-        return password_needs_rehash($hashedValue, PASSWORD_BCRYPT, ['cost' => $cost]);
+    /**
+     * Key rotation method -- decrypt with your old key then re-encrypt with your new key
+     *
+     * @param string             $hashedValue
+     * @param \Defuse\Crypto\Key $newKey
+     *
+     * @return string
+     */
+    public function shouldRecreate($hashedValue, Key $newKey)
+    {
+        return PasswordLock::rotateKey($hashedValue, $this->key, $newKey);
     }
 }

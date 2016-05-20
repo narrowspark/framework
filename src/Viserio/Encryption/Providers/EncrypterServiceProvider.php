@@ -1,6 +1,7 @@
 <?php
 namespace Viserio\Encryption\Providers;
 
+use Defuse\Crypto\Key;
 use Viserio\Application\ServiceProvider;
 use Viserio\Encryption\Encrypter;
 
@@ -15,11 +16,9 @@ class EncrypterServiceProvider extends ServiceProvider
             $config = $app->get('config');
 
             $encrypt = new Encrypter(
-                $app->get('hash'),
-                $app->get('hash.rand.generator'),
-                $config->get('app::crypt.key'),
-                $config->get('app::crypt.cipher'),
-                $config->get('app::crypt.mode')
+                Key::loadFromAsciiSafeString(
+                    $config->get('app::key')
+                )
             );
 
             return $encrypt;
