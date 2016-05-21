@@ -248,7 +248,7 @@ class FilesystemManagerTest extends \PHPUnit_Framework_TestCase
             $manager->driver(
                 'zip',
                 [
-                    'path' => __DIR__ . '\stubs\test.zip',
+                    'path' => __DIR__ . '\Adapters\stubs\test.zip',
                 ]
             )
         );

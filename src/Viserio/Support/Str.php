@@ -1,7 +1,7 @@
 <?php
 namespace Viserio\Support;
 
-use RandomLib\Factory as RandomLib;
+use Defuse\Crypto\Core as DefuseCore;
 use Stringy\StaticStringy;
 
 class Str extends StaticStringy
@@ -89,41 +89,13 @@ class Str extends StaticStringy
     /**
      * Generate a more truly "random" alpha-numeric string.
      *
-     * @param int    $length
-     * @param string $type
+     * @param int $length
      *
      * @return string
      */
-    public static function random($length = 16, $type = 'alnum')
+    public static function random($length = 16)
     {
-        switch ($type) {
-            case 'alnum':
-                $pool = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-                break;
-            case 'alpha':
-                $pool = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-                break;
-            case 'hexdec':
-                $pool = '0123456789abcdef';
-                break;
-            case 'numeric':
-                $pool = '0123456789';
-                break;
-            case 'nozero':
-                $pool = '123456789';
-                break;
-            case 'distinct':
-                $pool = '2345679ACDEFHJKLMNPRSTUVWXYZ';
-                break;
-            default:
-                $pool = (string) $type;
-                break;
-        }
-
-        $factory   = new RandomLib();
-        $generator = $factory->getMediumStrengthGenerator();
-
-        return $generator->generateString($length, $pool);
+        return DefuseCore::secureRandom($length);
     }
 
     /**

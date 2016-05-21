@@ -68,13 +68,6 @@ class StrTest extends \PHPUnit_Framework_TestCase
         $result = Str::random(20);
         $this->assertTrue(is_string($result));
         $this->assertEquals(20, strlen($result));
-
-        $this->assertTrue(ctype_alnum(Str::random(16, 'alpha')));
-        $this->assertTrue(ctype_xdigit(Str::random(16, 'hexdec')));
-        $this->assertTrue(is_numeric(Str::random(16, 'numeric')));
-        $this->assertEquals(16, strlen(Str::random(16, 'nozero')));
-        $this->assertEquals(16, strlen(Str::random(16, 'distinct')));
-        $this->assertEquals('aaaaaaaaaaaaaaaa', Str::random(16, 'aaaaaaaaaaa'));
     }
 
     public function testSnake()
