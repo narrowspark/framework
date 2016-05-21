@@ -18,7 +18,7 @@
         }
     ],
     "require": {
-        "php"                              : "^5.6 || ^7.0",
+        "php"                              : "^7.0",
         "defuse/php-encryption"            : "^2.0",
         "ext-openssl"                      : "*",
         "viserio/contracts"                : "self.version"
