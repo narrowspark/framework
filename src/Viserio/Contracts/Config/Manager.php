@@ -11,8 +11,10 @@ interface Manager extends ArrayAccess
      *
      * @param string $key
      * @param mixed  $value
+     *
+     * @return self
      */
-    public function set($key, $value);
+    public function set($key, $value): Manager;
 
     /**
      * Gets a configuration setting using a simple or nested key.
@@ -32,7 +34,7 @@ interface Manager extends ArrayAccess
      *
      * @return bool
      */
-    public function has($key);
+    public function has($key): bool;
 
     /**
      * Forget a key and all his values.

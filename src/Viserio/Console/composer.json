@@ -23,7 +23,7 @@
         "container-interop/container-interop" : "^1.1",
         "php-di/invoker"                      : "~1.2",
         "stecman/symfony-console-completion"  : "^0.6",
-        "symfony/console"                     : "^3.0 || ^2.8"
+        "symfony/console"                     : "^3.1"
     },
     "require-dev": {
         "narrowspark/php-cs-fixer-config"     : "^1.1",
@@ -46,7 +46,7 @@
         }
     },
     "suggest": {
-        "symfony/process"                     : "Required to use scheduling component (^3.0 || ^2.8)."
+        "symfony/process"                     : "Required to use scheduling component (^3.1)."
     },
     "minimum-stability"                       : "dev",
     "prefer-stable"                           : true

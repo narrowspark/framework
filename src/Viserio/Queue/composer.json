@@ -20,7 +20,7 @@
     "require": {
         "php"                             : "^7.0",
         "viserio/cotracts"                : "self.version",
-        "symfony/event-dispatcher"        : "^3.0 || ^2.8"
+        "symfony/event-dispatcher"        : "^3.1"
     },
     "require-dev": {
         "narrowspark/php-cs-fixer-config" : "^1.1",

@@ -117,7 +117,7 @@
         "mikey179/vfsStream"                                 : "^1.6",
         "narrowspark/php-cs-fixer-config"                    : "^1.1",
         "narrowspark/testing-helper"                         : "^1.5",
-        "mockery/mockery"                                    : "^0.9",
+        "mockery/mockery"                                    : "dev-master",
         "phpunit/phpunit"                                    : "^5.1",
         "predis/predis"                                      : "^1.0",
         "roave/security-advisories"                          : "dev-master",

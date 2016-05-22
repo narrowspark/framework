@@ -24,8 +24,8 @@
         "viserio/contracts"         : "self.version",
         "viserio/session"           : "self.version",
         "stack/builder"             : "^1.0.3",
-        "symfony/http-foundation"   : "^3.0 || ^2.8",
-        "symfony/http-kernel"       : "^3.0 || ^2.8"
+        "symfony/http-foundation"   : "^3.1",
+        "symfony/http-kernel"       : "^3.1"
     },
     "require-dev": {
         "fabpot/php-cs-fixer"       : "dev-master",

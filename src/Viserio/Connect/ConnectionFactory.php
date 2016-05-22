@@ -111,7 +111,7 @@ class ConnectionFactory implements ConnectionFactoryContract
     /**
      * {@inheritdoc}
      */
-    public function getConnectionConfig($name)
+    public function getConnectionConfig($name): array
     {
         return $this->container->get($name, []);
     }
@@ -119,15 +119,17 @@ class ConnectionFactory implements ConnectionFactoryContract
     /**
      * {@inheritdoc}
      */
-    public function extend($name, ConnectorContract $resolver)
+    public function extend($name, ConnectorContract $resolver): ConnectionFactoryContract
     {
         $this->extensions[$name] = $resolver;
+
+        return $this;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getExtensions()
+    public function getExtensions(): array
     {
         return $this->extensions;
     }
@@ -145,7 +147,7 @@ class ConnectionFactory implements ConnectionFactoryContract
      *
      * @return \Interop\Container\ContainerInterface
      */
-    public function getContainer()
+    public function getContainer(): ContainerInterface
     {
         return $this->container;
     }
@@ -155,7 +157,7 @@ class ConnectionFactory implements ConnectionFactoryContract
      *
      * @return string[]
      */
-    public function supportedPDODrivers()
+    public function supportedPDODrivers(): array
     {
         return ['mysql', 'pgsql', 'sqlite', 'sqlsrv', 'dblib'];
     }
@@ -165,7 +167,7 @@ class ConnectionFactory implements ConnectionFactoryContract
      *
      * @return array
      */
-    public function getAvailableDrivers()
+    public function getAvailableDrivers(): array
     {
         $drivers = [];
         $pdoDrivers = array_intersect(

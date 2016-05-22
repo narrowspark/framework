@@ -23,13 +23,6 @@ use Viserio\Support\Manager;
 class CacheManager extends Manager
 {
     /**
-     * Config instance.
-     *
-     * @var \Viserio\Contracts\Config\Manager
-     */
-    protected $config;
-
-    /**
      * All supported drivers.
      *
      * @var array
@@ -85,17 +78,11 @@ class CacheManager extends Manager
      */
     protected function createFilesystemDriver(array $options)
     {
-        $adapter = empty($options) ?
-            $this->config->get('cache::flysystem') :
-            $options['flysystem'];
+        $adapter = $this->config->get('cache::flysystem', $options['flysystem']);
 
-        if ($adapter instanceof AdapterInterface) {
-            $filesystem = new Flysystem($options['connection']);
+        $filesystem = new Flysystem($adapter['connection']);
 
-            return new FilesystemCachePool($filesystem);
-        }
-
-        return;
+        return new FilesystemCachePool($filesystem);
     }
 
     /**

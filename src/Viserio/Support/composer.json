@@ -46,7 +46,7 @@
         }
     },
     "suggest": {
-        "symfony/var-dumper"                  : "Improves the Dumper::dump() (^3.0 || ^2.8).",
+        "symfony/var-dumper"                  : "Improves the Dumper::dump() (^3.1).",
         "php-di/invoker"                      : "Required to use the Invoker Class (~1.2)"
     },
     "minimum-stability"                       : "dev",

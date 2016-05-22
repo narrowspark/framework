@@ -24,7 +24,7 @@
         "viserio/http"                        : "self.version",
         "container-interop/container-interop" : "^1.0",
         "nikic/fast-route"                    : "^0.5",
-        "symfony/http-kernel"                 : "^3.0 || ^2.8"
+        "symfony/http-kernel"                 : "^3.1"
     },
     "require-dev": {
         "narrowspark/php-cs-fixer-config"     : "^1.1",
