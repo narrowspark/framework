@@ -2,6 +2,7 @@
 namespace Viserio\Cookie;
 
 use InvalidArgumentException;
+use Viserio\Contracts\Cookie\Cookie as CookieContract;
 
 final class Cookie extends AbstractCookie
 {
@@ -20,10 +21,10 @@ final class Cookie extends AbstractCookie
      * @throws \InvalidArgumentException
      */
     public function __construct(
-        $name,
-        $value = null,
+        string $name,
+        string $value = null,
         $expiration = 0,
-        $path = null,
+        string $path = null,
         $domain = null,
         $secure = false,
         $httpOnly = false
@@ -48,7 +49,7 @@ final class Cookie extends AbstractCookie
      *
      * @return self
      */
-    public function withValue($value)
+    public function withValue(string $value = null): CookieContract
     {
         $this->validateValue($value);
 
@@ -63,7 +64,7 @@ final class Cookie extends AbstractCookie
      *
      * @return string The cookie
      */
-    public function __toString()
+    public function __toString(): string
     {
         $cookieStringParts = [];
 
@@ -84,9 +85,9 @@ final class Cookie extends AbstractCookie
      *
      * @throws \InvalidArgumentException
      *
-     * @see http://tools.ietf.org/search/rfc2616#section-2.2
+     * @link http://tools.ietf.org/search/rfc2616#section-2.2
      */
-    private function validateName($name)
+    private function validateName(string $name)
     {
         if (strlen($name) < 1) {
             throw new InvalidArgumentException('The name cannot be empty');
@@ -105,9 +106,9 @@ final class Cookie extends AbstractCookie
      *
      * @throws \InvalidArgumentException
      *
-     * @see http://tools.ietf.org/html/rfc6265#section-4.1.1
+     * @link http://tools.ietf.org/html/rfc6265#section-4.1.1
      */
-    private function validateValue($value)
+    private function validateValue(string $value = null)
     {
         if (isset($value)) {
             if (preg_match('/[^\x21\x23-\x2B\x2D-\x3A\x3C-\x5B\x5D-\x7E]/', $value)) {

@@ -52,7 +52,7 @@ class Dispatcher implements EventDispatcherInterface
      * @param int      $priority  The higher this value, the earlier an event listener
      *                            will be triggered in the chain. Defaults to 0.
      */
-    public function addListenerService($eventName, $callback, $priority = 0)
+    public function addListenerService(string $eventName, array $callback, int $priority = 0)
     {
         if (!is_array($callback) || 2 !== count($callback)) {
             throw new InvalidArgumentException('Expected an [service", "method"] argument');
@@ -75,7 +75,7 @@ class Dispatcher implements EventDispatcherInterface
      * @param string   $eventName Event for which the listener is added
      * @param string[] $listener
      */
-    public function removeListener($eventName, $listener)
+    public function removeListener(string $eventName, array $listener)
     {
         foreach ($this->listenerIds[$eventName] as $i => $parts) {
             list($callback, $closure) = $parts;
@@ -95,7 +95,7 @@ class Dispatcher implements EventDispatcherInterface
      * @param string $serviceId The service ID of the subscriber service
      * @param string $class     The service's class name
      */
-    public function addSubscriberService($serviceId, $class)
+    public function addSubscriberService(string $serviceId, string $class)
     {
         $this->checkForInterface($class);
 
@@ -122,7 +122,7 @@ class Dispatcher implements EventDispatcherInterface
      * @param string $serviceId The service ID of the subscriber service
      * @param string $class     The service's class name
      */
-    public function removeSubscriberService($serviceId, $class)
+    public function removeSubscriberService(string $serviceId, string $class)
     {
         $this->checkForInterface($class);
 
@@ -202,7 +202,7 @@ class Dispatcher implements EventDispatcherInterface
      *
      * @throws \InvalidArgumentException
      */
-    protected function checkForInterface($class)
+    protected function checkForInterface(string $class)
     {
         $rfc = new ReflectionClass($class);
 

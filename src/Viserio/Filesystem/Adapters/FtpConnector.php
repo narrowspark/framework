@@ -49,7 +49,7 @@ class FtpConnector implements ConnectorContract
      *
      * @return \League\Flysystem\Adapter\Ftp
      */
-    protected function getAdapter(array $config)
+    protected function getAdapter(array $config): \League\Flysystem\Adapter\Ftp
     {
         return new Ftp($config);
     }

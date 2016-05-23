@@ -28,7 +28,7 @@ class JsonResponse extends SymfonyJsonResponse implements ResponseContract
      * @param array $headers
      * @param int   $options
      */
-    public function __construct($data = null, $status = 200, $headers = [], $options = 0)
+    public function __construct($data = null, $status = 200, array $headers = [], int $options = 0)
     {
         $this->jsonOptions = $options;
         parent::__construct($data, $status, $headers);
@@ -42,7 +42,7 @@ class JsonResponse extends SymfonyJsonResponse implements ResponseContract
      *
      * @return mixed
      */
-    public function getData($assoc = false, $depth = 512)
+    public function getData(bool $assoc = false, $depth = 512)
     {
         return json_decode($this->data, $assoc, $depth);
     }
@@ -64,7 +64,7 @@ class JsonResponse extends SymfonyJsonResponse implements ResponseContract
      *
      * @return int
      */
-    public function getJsonOptions()
+    public function getJsonOptions(): int
     {
         return $this->jsonOptions;
     }
@@ -76,7 +76,7 @@ class JsonResponse extends SymfonyJsonResponse implements ResponseContract
      *
      * @return SymfonyJsonResponse
      */
-    public function setJsonOptions($options)
+    public function setJsonOptions(int $options): \Symfony\Component\HttpFoundation\JsonResponse
     {
         $this->jsonOptions = $options;
 

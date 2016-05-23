@@ -22,7 +22,7 @@ class FakeContainerMiddleware implements MiddlewareContract
      *
      * @return self
      */
-    public function setContainer(ContainerInterface $container)
+    public function setContainer(ContainerInterface $container): self
     {
         $this->container = $container;
 
@@ -34,7 +34,7 @@ class FakeContainerMiddleware implements MiddlewareContract
      *
      * @return \Interop\Container\ContainerInterface
      */
-    public function getContainer()
+    public function getContainer(): \Interop\Container\ContainerInterface
     {
         return $this->container;
     }

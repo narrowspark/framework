@@ -16,12 +16,12 @@ interface RouteStrategy
      *
      * @param int $strategy
      */
-    public function setStrategy($strategy);
+    public function setStrategy(int $strategy);
 
     /**
      * Gets global strategy.
      *
      * @return int
      */
-    public function getStrategy();
+    public function getStrategy(): int;
 }

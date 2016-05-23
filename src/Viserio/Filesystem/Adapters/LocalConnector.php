@@ -15,7 +15,7 @@ class LocalConnector implements ConnectorContract
      *
      * @return Local
      */
-    public function connect(array $config)
+    public function connect(array $config): \League\Flysystem\Adapter\Local
     {
         $config = $this->getConfig($config);
 
@@ -31,7 +31,7 @@ class LocalConnector implements ConnectorContract
      *
      * @return string[]
      */
-    protected function getConfig(array $config)
+    protected function getConfig(array $config): array
     {
         if (!array_key_exists('path', $config)) {
             throw new InvalidArgumentException('The local connector requires path configuration.');
@@ -59,7 +59,7 @@ class LocalConnector implements ConnectorContract
      *
      * @return \League\Flysystem\Adapter\Local
      */
-    protected function getAdapter(array $config)
+    protected function getAdapter(array $config): \League\Flysystem\Adapter\Local
     {
         return new Local($config['path'], $config['write_flags'], $config['link_handling'], $config['permissions']);
     }

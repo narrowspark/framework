@@ -28,7 +28,7 @@ class Response extends SymfonyResponse implements ResponseContract
      *
      * @return \Viserio\Http\Response
      */
-    public function setContent($content)
+    public function setContent($content): \Viserio\Http\Response
     {
         $this->original = $content;
 
@@ -65,7 +65,7 @@ class Response extends SymfonyResponse implements ResponseContract
      *
      * @return string
      */
-    protected function morphToJson($content)
+    protected function morphToJson($content): string
     {
         if ($content instanceof Jsonable) {
             return $content->toJson();
@@ -81,7 +81,7 @@ class Response extends SymfonyResponse implements ResponseContract
      *
      * @return bool
      */
-    protected function shouldBeJson($content)
+    protected function shouldBeJson($content): bool
     {
         return $content instanceof Jsonable ||
                $content instanceof \ArrayObject ||

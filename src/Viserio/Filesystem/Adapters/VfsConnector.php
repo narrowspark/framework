@@ -15,7 +15,7 @@ class VfsConnector extends AbstractConnector
         return new FileSystem();
     }
 
-    protected function getAuth(array $config)
+    protected function getAuth(array $config): array
     {
         return $config;
     }
@@ -23,7 +23,7 @@ class VfsConnector extends AbstractConnector
     /**
      * {@inheritdoc}
      */
-    protected function getConfig(array $config)
+    protected function getConfig(array $config): array
     {
         return $config;
     }
@@ -31,7 +31,7 @@ class VfsConnector extends AbstractConnector
     /**
      * {@inheritdoc}
      */
-    protected function getAdapter($client, array $config)
+    protected function getAdapter($client, array $config): \League\Flysystem\AdapterInterface
     {
         return new VfsAdapter($client);
     }

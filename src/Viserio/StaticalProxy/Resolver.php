@@ -31,7 +31,7 @@ class Resolver
      * @param string          $pattern
      * @param string|callable $translation
      */
-    public function __construct($pattern, $translation)
+    public function __construct(string $pattern, $translation)
     {
         $regex             = preg_quote($pattern, '#');
         $this->regex       = '#^' . str_replace('\\*', '(.*)', $regex) . '$#uD';
@@ -46,7 +46,7 @@ class Resolver
      *
      * @return bool
      */
-    public function resolve($alias)
+    public function resolve(string $alias): bool
     {
         // Check wether the alias matches the pattern
         if (!preg_match($this->regex, $alias, $matches)) {
@@ -81,7 +81,7 @@ class Resolver
      *
      * @return bool
      */
-    public function matches($pattern, $translation = null)
+    public function matches(string $pattern, callable $translation = null): bool
     {
         return $this->pattern === $pattern && (!$translation || $translation === $this->translation);
     }

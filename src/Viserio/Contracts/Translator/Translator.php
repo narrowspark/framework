@@ -8,7 +8,7 @@ interface Translator
      *
      * @return string
      */
-    public function getLocale();
+    public function getLocale(): string;
 
     /**
      * Sets the string dictating the default language to translate into. (e.g. 'en').
@@ -17,5 +17,5 @@ interface Translator
      *
      * @return self
      */
-    public function setLocale($defaultLang);
+    public function setLocale(string $defaultLang): self;
 }

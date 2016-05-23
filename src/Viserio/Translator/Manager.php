@@ -105,7 +105,7 @@ class Manager implements TranslatorContract
      * @param MessageCatalogueContract $messageCatalogue
      * @param string|null              $locale
      *
-     * @return $this
+     * @return self
      */
     public function addMessage(MessageCatalogueContract $messageCatalogue, $locale = null)
     {

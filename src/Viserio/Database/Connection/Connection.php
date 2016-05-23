@@ -291,7 +291,7 @@ class Connection implements ConnectionContract
      *
      * @param callable $reconnector
      *
-     * @return $this
+     * @return self
      */
     public function setReconnector(callable $reconnector)
     {
@@ -438,7 +438,7 @@ class Connection implements ConnectionContract
      *
      * @param \PDO|null $pdo
      *
-     * @return $this
+     * @return self
      */
     public function setPdo($pdo)
     {

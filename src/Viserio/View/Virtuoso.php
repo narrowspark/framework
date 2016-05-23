@@ -76,7 +76,7 @@ class Virtuoso
      *
      * @return \Symfony\Component\EventDispatcher\EventDispatcherInterface
      */
-    public function getDispatcher()
+    public function getDispatcher(): \Symfony\Component\EventDispatcher\EventDispatcherInterface
     {
         return $this->events;
     }
@@ -89,7 +89,7 @@ class Virtuoso
      *
      * @return array
      */
-    public function creator($views, $callback)
+    public function creator($views, $callback): array
     {
         $creators = [];
 
@@ -127,7 +127,7 @@ class Virtuoso
      *
      * @return array
      */
-    public function composers(array $composers)
+    public function composers(array $composers): array
     {
         $registered = [];
 
@@ -147,7 +147,7 @@ class Virtuoso
      *
      * @return array
      */
-    public function composer($views, $callback, $priority = null)
+    public function composer($views, $callback, int $priority = null): array
     {
         $composers = [];
 
@@ -163,7 +163,7 @@ class Virtuoso
      *
      * @return string
      */
-    public function yieldSection()
+    public function yieldSection(): string
     {
         if (empty($this->sectionStack)) {
             return '';
@@ -180,7 +180,7 @@ class Virtuoso
      *
      * @return string
      */
-    public function yieldContent($section, $default = '')
+    public function yieldContent($section, string $default = ''): string
     {
         $sectionContent = $default;
 
@@ -207,7 +207,7 @@ class Virtuoso
      * @param string $section
      * @param string $content
      */
-    public function startSection($section, $content = '')
+    public function startSection(string $section, string $content = '')
     {
         if ($content === '') {
             if (ob_start()) {
@@ -224,7 +224,7 @@ class Virtuoso
      * @param string $section
      * @param string $content
      */
-    public function inject($section, $content)
+    public function inject(string $section, string $content)
     {
         return $this->startSection($section, $content);
     }
@@ -238,7 +238,7 @@ class Virtuoso
      *
      * @return string
      */
-    public function stopSection($overwrite = false)
+    public function stopSection(bool $overwrite = false): string
     {
         if (empty($this->sectionStack)) {
             throw new InvalidArgumentException('Cannot end a section without first starting one.');
@@ -262,7 +262,7 @@ class Virtuoso
      *
      * @return string
      */
-    public function appendSection()
+    public function appendSection(): string
     {
         if (empty($this->sectionStack)) {
             throw new InvalidArgumentException('Cannot end a section without first starting one.');
@@ -319,7 +319,7 @@ class Virtuoso
      *
      * @return bool
      */
-    public function doneRendering()
+    public function doneRendering(): bool
     {
         return $this->renderCount == 0;
     }
@@ -331,7 +331,7 @@ class Virtuoso
      *
      * @return bool
      */
-    public function hasSection($name)
+    public function hasSection($name): bool
     {
         return array_key_exists($name, $this->sections);
     }
@@ -341,7 +341,7 @@ class Virtuoso
      *
      * @return array
      */
-    public function getSections()
+    public function getSections(): array
     {
         return $this->sections;
     }
@@ -352,7 +352,7 @@ class Virtuoso
      * @param string $section
      * @param string $content
      */
-    protected function extendSection($section, $content)
+    protected function extendSection(string $section, string $content)
     {
         if (isset($this->sections[$section])) {
             $content = str_replace('@parent', $content, $this->sections[$section]);
@@ -371,7 +371,7 @@ class Virtuoso
      *
      * @return \Closure|null
      */
-    protected function addViewEvent($view, $callback, $prefix = 'composing: ', $priority = 0)
+    protected function addViewEvent(string $view, $callback, string $prefix = 'composing: ', int $priority = 0)
     {
         $view = $this->normalizeName($view);
 
@@ -394,7 +394,7 @@ class Virtuoso
      *
      * @return \Closure
      */
-    protected function addClassEvent($view, $class, $prefix, $priority = 0)
+    protected function addClassEvent(string $view, string $class, string $prefix, int $priority = 0): \Closure
     {
         $name = $prefix . $view;
 
@@ -415,7 +415,7 @@ class Virtuoso
      *
      * @return \Closure
      */
-    protected function buildClassEventCallback($class, $prefix)
+    protected function buildClassEventCallback(string $class, string $prefix): \Closure
     {
         list($class, $method) = $this->parseClassEvent($class, $prefix);
 
@@ -437,7 +437,7 @@ class Virtuoso
      *
      * @return array
      */
-    protected function parseClassEvent($class, $prefix)
+    protected function parseClassEvent(string $class, string $prefix): array
     {
         if (Str::contains($class, '::')) {
             return explode('::', $class);
@@ -453,7 +453,7 @@ class Virtuoso
      *
      * @return \Viserio\Support\Invoker
      */
-    protected function getInvoker()
+    protected function getInvoker(): \Viserio\Support\Invoker
     {
         return $this->invoker;
     }

@@ -34,7 +34,7 @@ class HashingServiceProvider extends ServiceProvider
      *
      * @return string[]
      */
-    public function provides()
+    public function provides(): array
     {
         return [
             'password',

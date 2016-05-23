@@ -16,7 +16,7 @@ class PlainDisplayer implements Adapter
      *
      * @return Response
      */
-    public function display(Exception $exception, $code)
+    public function display(Exception $exception, int $code): \Symfony\Component\HttpFoundation\Response
     {
         $status = $exception instanceof HttpExceptionInterface ?
                 $exception->getStatusCode() :

@@ -85,7 +85,7 @@ class Manager implements ManagerContract, IteratorAggregate
      *
      * @return self
      */
-    public function import($file, $group = null): ManagerContract
+    public function import(string $file, string $group = null): ManagerContract
     {
         $config = $this->loader->load($file, $group);
 
@@ -141,7 +141,7 @@ class Manager implements ManagerContract, IteratorAggregate
      *
      * @return mixed
      */
-    public function offsetGet($key)
+    public function offsetGet(string $key)
     {
         return $this->repository->offsetGet($key);
     }
@@ -154,7 +154,7 @@ class Manager implements ManagerContract, IteratorAggregate
      *
      * @return self
      */
-    public function offsetSet($key, $value): ManagerContract
+    public function offsetSet(string $key, $value): ManagerContract
     {
         $this->repository->offsetSet($key, $value);
 
@@ -168,7 +168,7 @@ class Manager implements ManagerContract, IteratorAggregate
      *
      * @return bool
      */
-    public function offsetExists($key): bool
+    public function offsetExists(string $key): bool
     {
         return $this->repository->offsetExists($key);
     }
@@ -178,7 +178,7 @@ class Manager implements ManagerContract, IteratorAggregate
      *
      * @param string $key
      */
-    public function offsetUnset($key)
+    public function offsetUnset(string $key)
     {
         $this->repository->offsetUnset($key);
     }
@@ -201,7 +201,7 @@ class Manager implements ManagerContract, IteratorAggregate
      *
      * @return mixed
      */
-    public function __call($method, array $params = [])
+    public function __call(string $method, array $params = [])
     {
         if ($this->loader && method_exists($this->loader, $method)) {
             return call_user_func_array([$this->loader, $method], $params);

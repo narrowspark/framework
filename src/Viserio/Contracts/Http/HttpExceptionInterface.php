@@ -8,19 +8,19 @@ interface HttpExceptionInterface
      *
      * @return int
      */
-    public function getStatusCode();
+    public function getStatusCode(): int;
 
     /**
      * Return an array of headers provided when the exception was thrown.
      *
      * @return array
      */
-    public function getHeaders();
+    public function getHeaders(): array;
 
     /**
      * Returns a response built from the thrown exception.
      *
      * @return \Viserio\Http\JsonResponse
      */
-    public function getJsonResponse();
+    public function getJsonResponse(): \Viserio\Http\JsonResponse;
 }

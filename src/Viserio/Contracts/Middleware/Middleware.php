@@ -32,5 +32,5 @@ interface Middleware
      *
      * @return \Psr\Http\Message\ResponseInterface
      */
-    public function __invoke(Request $request, Response $response, callable $next);
+    public function __invoke(Request $request, Response $response, callable $next): \Psr\Http\Message\ResponseInterface;
 }

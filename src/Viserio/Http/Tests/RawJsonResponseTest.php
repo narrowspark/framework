@@ -45,7 +45,7 @@ class RawJsonResponseTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array
      */
-    public function getRawJsonData()
+    public function getRawJsonData(): array
     {
         $data = [
             'property' => 1,

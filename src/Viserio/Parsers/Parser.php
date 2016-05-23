@@ -97,11 +97,11 @@ class Parser implements ParserContract
     /**
      * Autodetect the payload data type using content-type value.
      *
-     * @param string $format
+     * @param string|null $format
      *
      * @return string Return the short format code (xml, json, ...).
      */
-    public function getFormat($format = null)
+    public function getFormat(string $format = null)
     {
         $format  = strtolower($format);
         $fsystem = $this->filesystem;
@@ -118,7 +118,7 @@ class Parser implements ParserContract
     /**
      * {@inheritdoc}
      */
-    public function parse($payload)
+    public function parse(string $payload): array
     {
         if (!$payload) {
             return [];

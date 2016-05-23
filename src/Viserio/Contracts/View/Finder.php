@@ -17,14 +17,14 @@ interface Finder
      *
      * @return string
      */
-    public function find($view);
+    public function find(string $view): string;
 
     /**
      * Add a location to the finder.
      *
      * @param string $location
      */
-    public function addLocation($location);
+    public function addLocation(string $location);
 
     /**
      * Add a namespace hint to the finder.
@@ -32,7 +32,7 @@ interface Finder
      * @param string       $namespace
      * @param string|array $hints
      */
-    public function addNamespace($namespace, $hints);
+    public function addNamespace(string $namespace, $hints);
 
     /**
      * Prepend a namespace hint to the finder.
@@ -40,12 +40,12 @@ interface Finder
      * @param string       $namespace
      * @param string|array $hints
      */
-    public function prependNamespace($namespace, $hints);
+    public function prependNamespace(string $namespace, $hints);
 
     /**
      * Add a valid view extension to the finder.
      *
      * @param string $extension
      */
-    public function addExtension($extension);
+    public function addExtension(string $extension);
 }

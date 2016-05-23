@@ -11,7 +11,7 @@ interface Factory
      *
      * @return mixed
      */
-    public function get($key, $alt = null);
+    public function get(string $key, $alt = null);
 
     /**
      * Sets the value of a key in the segment.
@@ -32,7 +32,7 @@ interface Factory
      * @param string $key The key for the flash value.
      * @param mixed  $val The flash value itself.
      */
-    public function setFlash($key, $val);
+    public function setFlash(string $key, $val);
 
     /**
      * Gets the flash value for a key in the *current* request.
@@ -42,7 +42,7 @@ interface Factory
      *
      * @return mixed The flash value itself.
      */
-    public function getFlash($key, $alt = null);
+    public function getFlash(string $key, $alt = null);
 
     /**
      * Clears flash values for *only* the next request.

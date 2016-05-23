@@ -27,7 +27,7 @@ class EngineResolver
      * @param string   $engine
      * @param \Closure $resolver
      */
-    public function register($engine, Closure $resolver)
+    public function register(string $engine, Closure $resolver)
     {
         unset($this->resolved[$engine]);
         $this->resolvers[$engine] = $resolver;
@@ -40,7 +40,7 @@ class EngineResolver
      *
      * @return \Viserio\Contracts\View\Engines
      */
-    public function resolve($engine)
+    public function resolve(string $engine): \Viserio\Contracts\View\Engines
     {
         if (isset($this->resolved[$engine])) {
             return $this->resolved[$engine];

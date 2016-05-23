@@ -10,7 +10,7 @@ class INI implements FormatContract
     /**
      * {@inheritdoc}
      */
-    public function parse($payload)
+    public function parse(string $payload): array
     {
         $ini = parse_ini_string($payload, true);
 
@@ -26,7 +26,7 @@ class INI implements FormatContract
     /**
      * {@inheritdoc}
      */
-    public function dump(array $data)
+    public function dump(array $data): string
     {
         $output = '';
 

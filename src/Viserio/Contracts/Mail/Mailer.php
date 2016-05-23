@@ -13,7 +13,7 @@ interface Mailer
      *
      * @return int
      */
-    public function raw($text, $callback);
+    public function raw(string $text, $callback): int;
 
     /**
      * Send a new message using a view.
@@ -24,12 +24,12 @@ interface Mailer
      *
      * @return int
      */
-    public function send($view, array $data, Closure $callback);
+    public function send($view, array $data, Closure $callback): int;
 
     /**
      * Get the array of failed recipients.
      *
      * @return array
      */
-    public function failures();
+    public function failures(): array;
 }

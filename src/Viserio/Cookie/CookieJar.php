@@ -4,6 +4,7 @@ namespace Viserio\Cookie;
 use Narrowspark\Arr\StaticArr as Arr;
 use Psr\Http\Message\ResponseInterface;
 use Viserio\Contracts\Cookie\QueueingFactory as JarContract;
+use Viserio\Contracts\Cookie\Cookie as CookieContract;
 
 class CookieJar implements JarContract
 {
@@ -48,8 +49,15 @@ class CookieJar implements JarContract
      *
      * @return Cookie
      */
-    public function create($name, $value, $minutes = 0, $path = null, $domain = null, $secure = false, $httpOnly = true)
-    {
+    public function create(
+        string $name,
+        string $value,
+        int $minutes = 0,
+        string $path = null,
+        string $domain = null,
+        bool $secure = false,
+        bool $httpOnly = true
+    ): CookieContract {
         list($path, $domain, $secure) = $this->getPathAndDomain($path, $domain, $secure);
 
         $time = ($minutes === 0) ? 0 : time() + ($minutes * 60);
@@ -69,7 +77,7 @@ class CookieJar implements JarContract
      *
      * @return Cookie
      */
-    public function forever($name, $value, $path = null, $domain = null, $secure = false, $httpOnly = true)
+    public function forever(string $name, string $value, string $path = null, string $domain = null, bool $secure = false, bool $httpOnly = true): CookieContract
     {
         return $this->create($name, $value, 2628000, $path, $domain, $secure, $httpOnly);
     }
@@ -83,7 +91,7 @@ class CookieJar implements JarContract
      *
      * @return Cookie
      */
-    public function forget($name, $path = null, $domain = null)
+    public function forget(string $name, string $path = null, string $domain = null): CookieContract
     {
         return $this->create($name, null, -2628000, $path, $domain);
     }
@@ -95,7 +103,7 @@ class CookieJar implements JarContract
      *
      * @return \Psr\Http\Message\ResponseInterface
      */
-    public function renderIntoSetCookieHeader(ResponseInterface $response)
+    public function renderIntoSetCookieHeader(ResponseInterface $response): ResponseInterface
     {
         $response = $response->withoutHeader('Set-Cookie');
 
@@ -113,7 +121,7 @@ class CookieJar implements JarContract
      *
      * @return \Psr\Http\Message\RequestInterface
      */
-    public function renderIntoCookieHeader(RequestInterface $request)
+    public function renderIntoCookieHeader(RequestInterface $request): RequestInterface
     {
         $cookieString = implode('; ', $this->queued);
 
@@ -129,7 +137,7 @@ class CookieJar implements JarContract
      *
      * @return bool
      */
-    public function hasQueued($key)
+    public function hasQueued(string $key): bool
     {
         return $this->queued($key) !== null;
     }
@@ -140,9 +148,9 @@ class CookieJar implements JarContract
      * @param string     $key
      * @param mixed|null $default
      *
-     * @return Cookie
+     * @return CookieContract
      */
-    public function queued($key, $default = null)
+    public function queued(string $key, $default = null): CookieContract
     {
         return Arr::get($this->queued, $key, $default);
     }
@@ -156,7 +164,7 @@ class CookieJar implements JarContract
     {
         $args = func_get_args();
 
-        if (reset($args) instanceof Cookie) {
+        if (reset($args) instanceof CookieContract) {
             $cookie = reset($args);
         } else {
             $cookie = call_user_func_array([$this, 'create'], $args);
@@ -170,7 +178,7 @@ class CookieJar implements JarContract
      *
      * @param string $name
      */
-    public function unqueue($name)
+    public function unqueue(string $name)
     {
         unset($this->queued[$name]);
     }
@@ -182,9 +190,9 @@ class CookieJar implements JarContract
      * @param string $domain
      * @param bool   $secure
      *
-     * @return $this
+     * @return self
      */
-    public function setDefaultPathAndDomain($path, $domain, $secure = false)
+    public function setDefaultPathAndDomain(string $path, string $domain, bool $secure = false): self
     {
         list($this->path, $this->domain, $this->secure) = [$path, $domain, $secure];
 
@@ -196,7 +204,7 @@ class CookieJar implements JarContract
      *
      * @return array
      */
-    public function getQueuedCookies()
+    public function getQueuedCookies(): array
     {
         return $this->queued;
     }
@@ -210,7 +218,7 @@ class CookieJar implements JarContract
      *
      * @return string[]
      */
-    protected function getPathAndDomain($path, $domain, $secure = false)
+    protected function getPathAndDomain(string $path, string $domain, bool $secure = false): array
     {
         return [$path ?: $this->path, $domain ?: $this->domain, $secure ?: $this->secure];
     }

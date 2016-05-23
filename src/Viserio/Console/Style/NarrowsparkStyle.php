@@ -42,7 +42,7 @@ class NarrowsparkStyle extends SymfonyStyle
      *
      * @return bool
      */
-    public function isQuiet()
+    public function isQuiet(): bool
     {
         return $this->output->isQuiet();
     }
@@ -52,7 +52,7 @@ class NarrowsparkStyle extends SymfonyStyle
      *
      * @return bool
      */
-    public function isVerbose()
+    public function isVerbose(): bool
     {
         return $this->output->isVerbose();
     }
@@ -62,7 +62,7 @@ class NarrowsparkStyle extends SymfonyStyle
      *
      * @return bool
      */
-    public function isVeryVerbose()
+    public function isVeryVerbose(): bool
     {
         return $this->output->isVeryVerbose();
     }
@@ -72,7 +72,7 @@ class NarrowsparkStyle extends SymfonyStyle
      *
      * @return bool
      */
-    public function isDebug()
+    public function isDebug(): bool
     {
         return $this->output->isDebug();
     }

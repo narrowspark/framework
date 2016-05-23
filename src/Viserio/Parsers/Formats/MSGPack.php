@@ -11,7 +11,7 @@ class MSGPack implements FormatContract
     /**
      * {@inheritdoc}
      */
-    public function parse($payload)
+    public function parse(string $payload): array
     {
         if (function_exists('msgpack_unpack')) {
             $msg = msgpack_unpack(trim($payload));
@@ -31,7 +31,7 @@ class MSGPack implements FormatContract
     /**
      * {@inheritdoc}
      */
-    public function dump(array $data)
+    public function dump(array $data): string
     {
         $msg = msgpack_pack($data);
 

@@ -48,7 +48,7 @@ abstract class StaticalProxy
      *
      * @return NoType
      */
-    public static function getInstanceIdentifier()
+    public static function getInstanceIdentifier(): \Viserio\StaticalProxy\NoType
     {
         throw new BadMethodCallException('The ' . __METHOD__ . ' method must be implemented by a subclass.');
     }
@@ -70,7 +70,7 @@ abstract class StaticalProxy
      *
      * @return \Mockery\Expectation
      */
-    public static function shouldReceive()
+    public static function shouldReceive(): \Mockery\Expectation
     {
         $name = static::getInstanceIdentifier();
 
@@ -98,7 +98,7 @@ abstract class StaticalProxy
      *
      * @param string $name
      */
-    public static function clearResolvedInstance($name)
+    public static function clearResolvedInstance(string $name)
     {
         unset(static::$resolvedInstance[$name]);
     }
@@ -119,7 +119,7 @@ abstract class StaticalProxy
      *
      * @return mixed
      */
-    public static function __callStatic($method, $args)
+    public static function __callStatic(string $method, array $args)
     {
         $instance = static::getStaticalProxyRoot();
 
@@ -137,7 +137,7 @@ abstract class StaticalProxy
      *
      * @return mixed
      */
-    protected static function resolveStaticalProxyInstance($name)
+    protected static function resolveStaticalProxyInstance(string $name)
     {
         if (is_object($name)) {
             return $name;
@@ -157,7 +157,7 @@ abstract class StaticalProxy
      *
      * @return \Mockery\MockInterface
      */
-    protected static function createFreshMockInstance($name)
+    protected static function createFreshMockInstance(string $name): \Mockery\MockInterface
     {
         static::$resolvedInstance[$name] = $mock = static::createMock();
 
@@ -172,7 +172,7 @@ abstract class StaticalProxy
      *
      * @return \Mockery\MockInterface
      */
-    protected static function createMock()
+    protected static function createMock(): \Mockery\MockInterface
     {
         $class = static::getMockableClass();
 
@@ -184,7 +184,7 @@ abstract class StaticalProxy
      *
      * @return bool
      */
-    protected static function isMock()
+    protected static function isMock(): bool
     {
         $name = static::getInstanceIdentifier();
 

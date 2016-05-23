@@ -48,7 +48,7 @@ class Password implements PasswordContract
      *
      * @return string
      */
-    public function shouldRecreate($hashedValue, Key $newKey)
+    public function shouldRecreate(string $hashedValue, Key $newKey): string
     {
         return PasswordLock::rotateKey($hashedValue, $this->key, $newKey);
     }

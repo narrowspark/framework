@@ -57,7 +57,7 @@ class View implements ArrayAccess, ViewContract
      * @param string                                     $path
      * @param array|\Viserio\Contracts\Support\Arrayable $data
      */
-    public function __construct(Factory $factory, EngineContract $engine, $view, $path, $data = [])
+    public function __construct(Factory $factory, EngineContract $engine, string $view, string $path, $data = [])
     {
         $this->view    = $view;
         $this->path    = $path;
@@ -74,7 +74,7 @@ class View implements ArrayAccess, ViewContract
      *
      * @return string
      */
-    public function render(callable $callback = null)
+    public function render(callable $callback = null): string
     {
         try {
             $contents = $this->getContents();
@@ -95,9 +95,9 @@ class View implements ArrayAccess, ViewContract
      * @param string $key
      * @param mixed  $value
      *
-     * @return $this
+     * @return self
      */
-    public function with($key, $value = null)
+    public function with($key, $value = null): self
     {
         if (is_array($key)) {
             $this->data = array_merge($this->data, $key);
@@ -115,9 +115,9 @@ class View implements ArrayAccess, ViewContract
      * @param string $view
      * @param array  $data
      *
-     * @return $this
+     * @return self
      */
-    public function nest($key, $view, array $data = [])
+    public function nest($key, string $view, array $data = []): self
     {
         return $this->with($key, $this->factory->make($view, $data));
     }
@@ -127,7 +127,7 @@ class View implements ArrayAccess, ViewContract
      *
      * @return \Viserio\View\Factory
      */
-    public function getFactory()
+    public function getFactory(): \Viserio\View\Factory
     {
         return $this->factory;
     }
@@ -137,7 +137,7 @@ class View implements ArrayAccess, ViewContract
      *
      * @return EngineContract
      */
-    public function getEngine()
+    public function getEngine(): \Viserio\Contracts\View\Engine
     {
         return $this->engine;
     }
@@ -147,7 +147,7 @@ class View implements ArrayAccess, ViewContract
      *
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return $this->view;
     }
@@ -157,7 +157,7 @@ class View implements ArrayAccess, ViewContract
      *
      * @return array
      */
-    public function getData()
+    public function getData(): array
     {
         return $this->data;
     }
@@ -167,7 +167,7 @@ class View implements ArrayAccess, ViewContract
      *
      * @return string
      */
-    public function getPath()
+    public function getPath(): string
     {
         return $this->path;
     }
@@ -177,7 +177,7 @@ class View implements ArrayAccess, ViewContract
      *
      * @param string $path
      */
-    public function setPath($path)
+    public function setPath(string $path)
     {
         $this->path = $path;
     }
@@ -189,7 +189,7 @@ class View implements ArrayAccess, ViewContract
      *
      * @return bool
      */
-    public function offsetExists($key)
+    public function offsetExists(string $key): bool
     {
         return array_key_exists($key, $this->data);
     }
@@ -201,7 +201,7 @@ class View implements ArrayAccess, ViewContract
      *
      * @return mixed
      */
-    public function offsetGet($key)
+    public function offsetGet(string $key)
     {
         return $this->data[$key];
     }
@@ -212,7 +212,7 @@ class View implements ArrayAccess, ViewContract
      * @param string $key
      * @param mixed  $value
      */
-    public function offsetSet($key, $value)
+    public function offsetSet(string $key, $value)
     {
         $this->with($key, $value);
     }
@@ -222,7 +222,7 @@ class View implements ArrayAccess, ViewContract
      *
      * @param string $key
      */
-    public function offsetUnset($key)
+    public function offsetUnset(string $key)
     {
         unset($this->data[$key]);
     }
@@ -234,7 +234,7 @@ class View implements ArrayAccess, ViewContract
      *
      * @return mixed
      */
-    public function &__get($key)
+    public function &__get(string $key)
     {
         return $this->data[$key];
     }
@@ -245,7 +245,7 @@ class View implements ArrayAccess, ViewContract
      * @param string $key
      * @param mixed  $value
      */
-    public function __set($key, $value)
+    public function __set(string $key, $value)
     {
         $this->with($key, $value);
     }
@@ -257,7 +257,7 @@ class View implements ArrayAccess, ViewContract
      *
      * @return bool
      */
-    public function __isset($key)
+    public function __isset(string $key): bool
     {
         return isset($this->data[$key]);
     }
@@ -269,7 +269,7 @@ class View implements ArrayAccess, ViewContract
      *
      * @return bool|null
      */
-    public function __unset($key)
+    public function __unset(string $key)
     {
         unset($this->data[$key]);
     }
@@ -284,7 +284,7 @@ class View implements ArrayAccess, ViewContract
      *
      * @return \Viserio\View\View
      */
-    public function __call($method, $parameters)
+    public function __call(string $method, array $parameters): \Viserio\View\View
     {
         if (Str::startsWith($method, 'with')) {
             return $this->with(Str::snake(substr($method, 4)), $parameters[0]);
@@ -298,7 +298,7 @@ class View implements ArrayAccess, ViewContract
      *
      * @return string
      */
-    public function __toString()
+    public function __toString(): string
     {
         return $this->render();
     }
@@ -308,7 +308,7 @@ class View implements ArrayAccess, ViewContract
      *
      * @return string
      */
-    protected function getContents()
+    protected function getContents(): string
     {
         return $this->engine->get($this->path, $this->gatherData());
     }
@@ -318,7 +318,7 @@ class View implements ArrayAccess, ViewContract
      *
      * @return array
      */
-    protected function gatherData()
+    protected function gatherData(): array
     {
         $data = array_merge($this->factory->getShared(), $this->data);
 

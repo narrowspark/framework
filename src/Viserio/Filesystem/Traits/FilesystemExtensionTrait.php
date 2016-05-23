@@ -10,7 +10,7 @@ trait FilesystemExtensionTrait
      *
      * @return string
      */
-    public function getExtension($path)
+    public function getExtension(string $path): string
     {
         return pathinfo($path, PATHINFO_EXTENSION);
     }
@@ -24,7 +24,7 @@ trait FilesystemExtensionTrait
      *
      * @return string Filename without extension
      */
-    public function withoutExtension($path, $extension = null)
+    public function withoutExtension(string $path, string $extension = null): string
     {
         if ($extension !== null) {
             // remove extension and trailing dot
@@ -42,7 +42,7 @@ trait FilesystemExtensionTrait
      *
      * @return string The path string with new file extension
      */
-    public function changeExtension($path, $extension)
+    public function changeExtension($path, string $extension): string
     {
         $explode    = explode('.', $path);
         $substrPath = substr($path, -1);

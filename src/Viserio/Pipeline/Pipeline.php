@@ -37,9 +37,9 @@ class Pipeline implements PipelineContract
      *
      * @param string $traveler
      *
-     * @return $this
+     * @return self
      */
-    public function send($traveler)
+    public function send(string $traveler): self
     {
         $this->traveler = $traveler;
 
@@ -53,7 +53,7 @@ class Pipeline implements PipelineContract
      *
      * @return self
      */
-    public function through($stages)
+    public function through($stages): self
     {
         $this->stages = is_array($stages) ? $stages : func_get_args();
 
@@ -65,9 +65,9 @@ class Pipeline implements PipelineContract
      *
      * @param string $method
      *
-     * @return $this
+     * @return self
      */
-    public function via($method)
+    public function via(string $method): self
     {
         $this->method = $method;
 
@@ -102,7 +102,7 @@ class Pipeline implements PipelineContract
      *
      * @return \Closure
      */
-    protected function getSlice()
+    protected function getSlice(): \Closure
     {
         return function ($stack, $stage) {
             return function ($traveler) use ($stack, $stage) {
@@ -138,7 +138,7 @@ class Pipeline implements PipelineContract
      *
      * @return \Closure
      */
-    protected function getInitialSlice(Closure $destination)
+    protected function getInitialSlice(Closure $destination): \Closure
     {
         return function ($traveler) use ($destination) {
             return call_user_func($destination, $traveler);
@@ -152,7 +152,7 @@ class Pipeline implements PipelineContract
      *
      * @return array
      */
-    protected function parseStageString($stage)
+    protected function parseStageString(string $stage): array
     {
         list($name, $parameters) = array_pad(explode(':', $stage, 2), 2, []);
 
@@ -164,13 +164,9 @@ class Pipeline implements PipelineContract
     }
 
     /**
-     * @param [type] $traveler [description]
-     * @param [type] $stack    [description]
-     * @param [type] $stage    [description]
-     *
      * @return \Closure
      */
-    protected function sliceThroughContainer($traveler, $stack, $stage)
+    protected function sliceThroughContainer($traveler, $stack, $stage): \Closure
     {
         list($name, $parameters) = $this->parseStageString($stage);
 

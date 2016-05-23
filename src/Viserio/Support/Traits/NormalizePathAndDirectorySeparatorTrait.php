@@ -34,7 +34,7 @@ trait NormalizePathAndDirectorySeparatorTrait
      *
      * @return string
      */
-    public function normalizePath($path)
+    public function normalizePath(string $path): string
     {
         // Remove any kind of funky unicode whitespace
         $normalized = preg_replace('#\p{C}+|^\./#u', '', $path);
@@ -59,7 +59,7 @@ trait NormalizePathAndDirectorySeparatorTrait
      *
      * @return string
      */
-    public function normalizeRelativePath($path)
+    public function normalizeRelativePath(string $path): string
     {
         // Path remove self referring paths ("/./").
         $path = preg_replace('#/\.(?=/)|^\./|/\./?$#', '', $path);

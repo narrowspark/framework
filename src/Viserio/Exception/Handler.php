@@ -56,7 +56,7 @@ class Handler
      * @param \Psr\Log\LoggerInterface $log
      * @param bool                     $debug
      */
-    public function __construct(ContainerContract $container, LoggerInterface $log, $debug = true)
+    public function __construct(ContainerContract $container, LoggerInterface $log, bool $debug = true)
     {
         $this->container = $container;
         $this->log = $log;
@@ -141,7 +141,7 @@ class Handler
      *
      * @throws \ErrorException
      */
-    public function handleError($level, $message, $file = '', $line = 0, $context = null)
+    public function handleError(int $level, string $message, string $file = '', int $line = 0, $context = null)
     {
         if ($level & error_reporting()) {
             throw new ErrorException($message, 0, $level, $file, $line);
@@ -165,7 +165,7 @@ class Handler
      *
      * @return string
      */
-    public function handleConsole($exception)
+    public function handleConsole(\Exception $exception): string
     {
         return $this->callCustomHandlers($exception, true);
     }
@@ -178,7 +178,7 @@ class Handler
      *
      * @return string
      */
-    protected function callCustomHandlers($exception, $fromConsole = false)
+    protected function callCustomHandlers(\Exception $exception, bool $fromConsole = false): string
     {
         foreach ($this->handlers as $handler) {
             // If this exception handler does not handle the given exception, we will just
@@ -237,7 +237,7 @@ class Handler
      *
      * @return FatalErrorException
      */
-    protected function fatalExceptionFromError(array $error)
+    protected function fatalExceptionFromError(array $error): \Symfony\Component\Debug\Exception\FatalErrorException
     {
         return new FatalErrorException(
             $error['message'],
@@ -255,7 +255,7 @@ class Handler
      *
      * @return string
      */
-    protected function formatException(Exception $exception)
+    protected function formatException(Exception $exception): string
     {
         if ($this->debug) {
             $location = $exception->getMessage() . ' in ' . $exception->getFile() . ':' . $exception->getLine();
@@ -329,7 +329,7 @@ class Handler
      *
      * @return bool
      */
-    protected function isFatal($type)
+    protected function isFatal(int $type): bool
     {
         return in_array($type, [E_ERROR, E_CORE_ERROR, E_COMPILE_ERROR, E_PARSE], true);
     }
@@ -341,7 +341,7 @@ class Handler
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    protected function renderHttpResponse($exception)
+    protected function renderHttpResponse(string $exception): \Symfony\Component\HttpFoundation\Response
     {
         return (new Response(
             $exception,
@@ -357,7 +357,7 @@ class Handler
      *
      * @return \Symfony\Component\Debug\Exception\FlattenException
      */
-    protected function flattenException($exception)
+    protected function flattenException(\Exception $exception): \Symfony\Component\Debug\Exception\FlattenException
     {
         return FlattenException::create($exception);
     }
@@ -370,7 +370,7 @@ class Handler
      *
      * @return bool
      */
-    protected function handlesException(Closure $handler, $exception)
+    protected function handlesException(Closure $handler, \Exception $exception): bool
     {
         $reflection = new ReflectionFunction($handler);
 
@@ -385,7 +385,7 @@ class Handler
      *
      * @return bool
      */
-    protected function hints(ReflectionFunction $reflection, $exception)
+    protected function hints(ReflectionFunction $reflection, \Exception $exception): bool
     {
         $parameters = $reflection->getParameters();
 

@@ -36,7 +36,7 @@ class TimerManager
     /**
      * Arbitrary data associated with timer.
      *
-     * @var [type]
+     * @var array
      */
     protected $data;
 

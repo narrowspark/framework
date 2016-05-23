@@ -24,7 +24,7 @@ interface Filesystem
      *
      * @return bool
      */
-    public function has($path);
+    public function has(string $path): bool;
 
     /**
      * Read a file.
@@ -35,7 +35,7 @@ interface Filesystem
      *
      * @return string|false The file contents or false on failure.
      */
-    public function read($path);
+    public function read(string $path);
 
     /**
      * Write a new file.
@@ -46,7 +46,7 @@ interface Filesystem
      *
      * @return bool True on success, false on failure.
      */
-    public function write($path, $contents, array $config = []);
+    public function write(string $path, string $contents, array $config = []): bool;
 
     /**
      * Update an existing file.
@@ -59,7 +59,7 @@ interface Filesystem
      *
      * @return bool True on success, false on failure.
      */
-    public function update($path, $contents, array $config = []);
+    public function update(string $path, string $contents, array $config = []): bool;
 
     /**
      * Get the visibility for the given path.
@@ -68,7 +68,7 @@ interface Filesystem
      *
      * @return string
      */
-    public function getVisibility($path);
+    public function getVisibility(string $path): string;
 
     /**
      * Set the visibility for the given path.
@@ -78,7 +78,7 @@ interface Filesystem
      *
      * @return bool|null
      */
-    public function setVisibility($path, $visibility);
+    public function setVisibility(string $path, string $visibility);
 
     /**
      * Copies a file.
@@ -96,7 +96,7 @@ interface Filesystem
      *
      * @return null|bool
      */
-    public function copy($originFile, $targetFile, $override = false);
+    public function copy(string $originFile, string $targetFile, bool $override = false);
 
     /**
      * Move a file to a new location.
@@ -106,7 +106,7 @@ interface Filesystem
      *
      * @return bool
      */
-    public function move($from, $to);
+    public function move($from, string $to): bool;
 
     /**
      * Get a file's size.
@@ -115,7 +115,7 @@ interface Filesystem
      *
      * @return int|false The file size or false on failure.
      */
-    public function getSize($path);
+    public function getSize(string $path);
 
     /**
      * Get a file's mime-type.
@@ -126,7 +126,7 @@ interface Filesystem
      *
      * @return string|false The file mime-type or false on failure.
      */
-    public function getMimetype($path);
+    public function getMimetype(string $path);
 
     /**
      * Get a file's timestamp.
@@ -137,7 +137,7 @@ interface Filesystem
      *
      * @return string|false The timestamp or false on failure.
      */
-    public function getTimestamp($path);
+    public function getTimestamp(string $path);
 
     /**
      * Delete the file at a given path.
@@ -146,7 +146,7 @@ interface Filesystem
      *
      * @return bool
      */
-    public function delete($paths);
+    public function delete($paths): bool;
 
     /**
      * Get an array of all files in a directory.
@@ -155,7 +155,7 @@ interface Filesystem
      *
      * @return array
      */
-    public function files($directory);
+    public function files(string $directory): array;
 
     /**
      * Get all of the files from the given directory (recursive).
@@ -165,7 +165,7 @@ interface Filesystem
      *
      * @return array
      */
-    public function allFiles($directory, $showHiddenFiles = false);
+    public function allFiles(string $directory, bool $showHiddenFiles = false): array;
 
     /**
      * Extract the file extension from a file path.
@@ -174,7 +174,7 @@ interface Filesystem
      *
      * @return string
      */
-    public function getExtension($path);
+    public function getExtension($path): string;
 
     /**
      * Returns the filename without the extension from a file path.
@@ -185,7 +185,7 @@ interface Filesystem
      *
      * @return string Filename without extension
      */
-    public function withoutExtension($path, $extension = null);
+    public function withoutExtension(string $path, string $extension = null): string;
 
     /**
      * Changes the extension of a path string.
@@ -195,5 +195,5 @@ interface Filesystem
      *
      * @return string The path string with new file extension
      */
-    public function changeExtension($path, $extension);
+    public function changeExtension($path, string $extension): string;
 }

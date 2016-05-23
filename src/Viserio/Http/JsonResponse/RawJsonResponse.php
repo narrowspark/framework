@@ -12,7 +12,7 @@ class RawJsonResponse extends JsonResponse
      * @param int         $status  The status code (defaults to 200)
      * @param array       $headers An array of response headers
      */
-    public function __construct($data = null, $status = 200, array $headers = [])
+    public function __construct(string $data = null, $status = 200, array $headers = [])
     {
         parent::__construct('', $status, $headers);
         $this->setData($data);

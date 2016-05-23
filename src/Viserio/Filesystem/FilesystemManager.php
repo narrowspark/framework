@@ -45,7 +45,7 @@ class FilesystemManager extends Manager
      *
      * @param string $name
      */
-    public function setDefaultDriver($name)
+    public function setDefaultDriver(string $name)
     {
         $this->config->set($this->getConfigName() . '::default', $name);
 
@@ -57,7 +57,7 @@ class FilesystemManager extends Manager
      *
      * @return string
      */
-    public function getDefaultDriver()
+    public function getDefaultDriver(): string
     {
         return $this->config->get($this->getConfigName() . '::default', 'local');
     }
@@ -94,7 +94,7 @@ class FilesystemManager extends Manager
      *
      * @return array
      */
-    public function getConnectionConfig($name)
+    public function getConnectionConfig(string $name): array
     {
         $name = $name ?: $this->getDefaultDriver();
 
@@ -122,7 +122,7 @@ class FilesystemManager extends Manager
      *
      * @return array
      */
-    protected function getCacheConfig($name)
+    protected function getCacheConfig(string $name): array
     {
         $cache = $this->config->get($this->getConfigName() . '::cache');
 
@@ -140,7 +140,7 @@ class FilesystemManager extends Manager
      *
      * @return string
      */
-    protected function getConfigName()
+    protected function getConfigName(): string
     {
         return 'flysystem';
     }
@@ -152,7 +152,7 @@ class FilesystemManager extends Manager
      *
      * @return \Viserio\Contracts\Filesystem\Filesystem
      */
-    protected function adapt(AdapterInterface $filesystem)
+    protected function adapt(AdapterInterface $filesystem): \Viserio\Contracts\Filesystem\Filesystem
     {
         return new FilesystemAdapter($filesystem);
     }

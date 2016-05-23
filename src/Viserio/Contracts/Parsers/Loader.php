@@ -1,5 +1,5 @@
 <?php
-namespace Viserio\Contracts\Config;
+namespace Viserio\Contracts\Parsers;
 
 interface Loader
 {
@@ -11,7 +11,7 @@ interface Loader
      *
      * @return array
      */
-    public function load($file, $tag = null);
+    public function load(string $file, string $tag = null): array;
 
     /**
      * Determine if the given file exists.
@@ -20,5 +20,5 @@ interface Loader
      *
      * @return bool
      */
-    public function exists($file);
+    public function exists(string $file): bool;
 }

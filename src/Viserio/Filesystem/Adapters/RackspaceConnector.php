@@ -12,7 +12,7 @@ class RackspaceConnector extends AbstractConnector
     /**
      * {@inheritdoc}
      */
-    protected function getAuth(array $config)
+    protected function getAuth(array $config): array
     {
         if (!array_key_exists('username', $config) || !array_key_exists('apiKey', $config)) {
             throw new InvalidArgumentException('The rackspace connector requires authentication.');
@@ -36,7 +36,7 @@ class RackspaceConnector extends AbstractConnector
     /**
      * {@inheritdoc}
      */
-    protected function getConfig(array $config)
+    protected function getConfig(array $config): array
     {
         return $config;
     }
@@ -59,7 +59,7 @@ class RackspaceConnector extends AbstractConnector
     /**
      * {@inheritdoc}
      */
-    protected function getAdapter($client, array $config)
+    protected function getAdapter($client, array $config): \League\Flysystem\AdapterInterface
     {
         return new RackspaceAdapter($client);
     }

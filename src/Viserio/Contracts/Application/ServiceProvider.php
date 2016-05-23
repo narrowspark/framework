@@ -21,7 +21,7 @@ interface ServiceProvider
      *
      * @return array
      */
-    public function provides();
+    public function provides(): array;
 
     /**
      * Dynamically handle missing method calls.
@@ -31,5 +31,5 @@ interface ServiceProvider
      *
      * @return mixed
      */
-    public function __call($method, $parameters);
+    public function __call($method, array $parameters);
 }

@@ -8,5 +8,5 @@ interface Xmlable
      *
      * @return string
      */
-    public function toXml();
+    public function toXml(): string;
 }

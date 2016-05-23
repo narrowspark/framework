@@ -11,7 +11,7 @@ trait ErrorHandlingTrait
      *
      * @return array
      */
-    protected function message($code, $msg)
+    protected function message(int $code, string $msg): array
     {
         switch ($code) {
             case 400:

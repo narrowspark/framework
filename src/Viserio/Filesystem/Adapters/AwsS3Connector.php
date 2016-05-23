@@ -11,7 +11,7 @@ class AwsS3Connector extends AbstractConnector
     /**
      * {@inheritdoc}
      */
-    protected function getAuth(array $config)
+    protected function getAuth(array $config): array
     {
         $this->checkForKeyinConfigArray($config);
 
@@ -51,7 +51,7 @@ class AwsS3Connector extends AbstractConnector
     /**
      * {@inheritdoc}
      */
-    protected function getConfig(array $config)
+    protected function getConfig(array $config): array
     {
         if (!array_key_exists('prefix', $config)) {
             $config['prefix'] = null;
@@ -71,7 +71,7 @@ class AwsS3Connector extends AbstractConnector
     /**
      * {@inheritdoc}
      */
-    protected function getAdapter($client, array $config)
+    protected function getAdapter($client, array $config): \League\Flysystem\AdapterInterface
     {
         return new AwsS3v3($client, $config['bucket'], $config['prefix'], $config['options']);
     }

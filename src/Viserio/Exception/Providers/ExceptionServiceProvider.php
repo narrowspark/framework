@@ -194,7 +194,7 @@ class ExceptionServiceProvider extends ServiceProvider
      *
      * @return bool
      */
-    protected function shouldReturnJson()
+    protected function shouldReturnJson(): bool
     {
         return $this->app->get('environment')->runningInConsole() || $this->requestWantsJson();
     }
@@ -204,7 +204,7 @@ class ExceptionServiceProvider extends ServiceProvider
      *
      * @return bool
      */
-    protected function requestWantsJson()
+    protected function requestWantsJson(): bool
     {
         return $this->app->get('request')->ajax() || $this->app->get('request')->wantsJson();
     }
@@ -243,7 +243,7 @@ class ExceptionServiceProvider extends ServiceProvider
      *
      * @return string
      */
-    protected function getResourcePath()
+    protected function getResourcePath(): string
     {
         $base = $this->app->basePath();
 
@@ -297,7 +297,7 @@ class ExceptionServiceProvider extends ServiceProvider
      *
      * @return string[]
      */
-    public function provides()
+    public function provides(): array
     {
         return [
             'exception.debug',

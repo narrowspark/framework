@@ -14,7 +14,7 @@ interface Manager extends ArrayAccess
      *
      * @return self
      */
-    public function set($key, $value): Manager;
+    public function set(string $key, $value): Manager;
 
     /**
      * Gets a configuration setting using a simple or nested key.
@@ -24,7 +24,7 @@ interface Manager extends ArrayAccess
      *
      * @return mixed The value of a setting
      */
-    public function get($key, $default = null);
+    public function get(string $key, string $default = null);
 
     /**
      * Checking if configuration values exist, using
@@ -41,5 +41,5 @@ interface Manager extends ArrayAccess
      *
      * @param string $key
      */
-    public function forget($key);
+    public function forget(string $key);
 }

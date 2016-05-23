@@ -16,7 +16,7 @@ class WebDavConnector implements ConnectorContract
      *
      * @return WebDAVAdapter
      */
-    public function connect(array $config)
+    public function connect(array $config): \League\Flysystem\WebDAV\WebDAVAdapter
     {
         $client = $this->getClient($config);
 

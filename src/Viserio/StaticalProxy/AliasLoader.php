@@ -63,7 +63,7 @@ class AliasLoader implements AliasLoaderContract
      *
      * @return bool
      */
-    public function load($alias)
+    public function load(string $alias): bool
     {
         // Skip recursive aliases if defined
         if (in_array($alias, $this->resolving)) {
@@ -113,7 +113,7 @@ class AliasLoader implements AliasLoaderContract
      *
      * @return self
      */
-    public function alias($class, $alias = null)
+    public function alias($class, string $alias = null): self
     {
         if (is_array($class)) {
             $this->aliases = array_merge($this->aliases, $class);
@@ -165,7 +165,7 @@ class AliasLoader implements AliasLoaderContract
      * @param string|string[] $pattern
      * @param string|null     $translation
      */
-    public function aliasPattern($pattern, $translation = null)
+    public function aliasPattern($pattern, string $translation = null)
     {
         if (!is_array($pattern)) {
             $pattern = [$pattern => $translation];
@@ -186,7 +186,7 @@ class AliasLoader implements AliasLoaderContract
      * @param string      $pattern
      * @param string|null $translation
      */
-    public function removeAliasPattern($pattern, $translation = null)
+    public function removeAliasPattern($pattern, string $translation = null)
     {
         foreach (array_keys($this->patterns) as $patternKey) {
             if ($this->patterns[$patternKey]->matches($pattern, $translation)) {
@@ -201,7 +201,7 @@ class AliasLoader implements AliasLoaderContract
      * @param string $class
      * @param string $alias
      */
-    public function aliasNamespace($class, $alias)
+    public function aliasNamespace($class, string $alias)
     {
         $class = trim($class, '\\');
         $alias = trim($alias, '\\');
@@ -216,7 +216,7 @@ class AliasLoader implements AliasLoaderContract
      *
      * @return string|false Class name when resolved
      */
-    public function resolveNamespaceAlias($alias)
+    public function resolveNamespaceAlias(string $alias)
     {
         foreach ($this->namespaces as $namespace) {
             list($nsClass, $nsAlias) = $namespace;
@@ -258,7 +258,7 @@ class AliasLoader implements AliasLoaderContract
      *
      * @return array
      */
-    public function getAliases()
+    public function getAliases(): array
     {
         return $this->aliases;
     }
@@ -302,7 +302,7 @@ class AliasLoader implements AliasLoaderContract
      *
      * @return bool
      */
-    public function isRegistered()
+    public function isRegistered(): bool
     {
         return $this->registered;
     }
@@ -314,7 +314,7 @@ class AliasLoader implements AliasLoaderContract
      *
      * @return bool
      */
-    protected function resolvePatternAlias($alias)
+    protected function resolvePatternAlias(string $alias): bool
     {
         if (isset($this->patterns[$alias]) && $class = $this->patterns[$alias]->resolve($alias)) {
             return $class;

@@ -1,8 +1,8 @@
 <?php
-namespace Viserio\Config\Tests;
+namespace Viserio\Parsers\Tests;
 
 use org\bovigo\vfs\vfsStream;
-use Viserio\Config\FileLoader;
+use Viserio\Parsers\FileLoader;
 use Viserio\Filesystem\Filesystem;
 use Viserio\Parsers\TaggableParser;
 use Viserio\Support\Traits\NormalizePathAndDirectorySeparatorTrait;

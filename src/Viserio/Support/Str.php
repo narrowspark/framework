@@ -28,7 +28,7 @@ class Str extends StaticStringy
      *
      * @return string
      */
-    public static function finish($value, $cap)
+    public static function finish(string $value, string $cap): string
     {
         $quoted = preg_quote($cap, '/');
 
@@ -44,7 +44,7 @@ class Str extends StaticStringy
      *
      * @return string
      */
-    public static function limit($value, $limit = 100, $end = '...')
+    public static function limit(string $value, int $limit = 100, string $end = '...'): string
     {
         if (mb_strwidth($value, 'UTF-8') <= $limit) {
             return $value;
@@ -62,7 +62,7 @@ class Str extends StaticStringy
      *
      * @return string
      */
-    public static function words($value, $words = 100, $end = '...')
+    public static function words(string $value, int $words = 100, string $end = '...'): string
     {
         preg_match('/^\s*+(?:\S++\s*+){1,' . $words . '}/u', $value, $matches);
 
@@ -81,7 +81,7 @@ class Str extends StaticStringy
      *
      * @return array
      */
-    public static function parseCallback($callback, $default)
+    public static function parseCallback(string $callback, string $default): array
     {
         return static::contains($callback, '@') ? explode('@', $callback, 2) : [$callback, $default];
     }
@@ -93,7 +93,7 @@ class Str extends StaticStringy
      *
      * @return string
      */
-    public static function random($length = 16)
+    public static function random(int $length = 16): string
     {
         return DefuseCore::secureRandom($length);
     }
@@ -106,7 +106,7 @@ class Str extends StaticStringy
      *
      * @return string
      */
-    public static function snake($value, $delimiter = '_')
+    public static function snake(string $value, string $delimiter = '_'): string
     {
         $key = $value . $delimiter;
 
@@ -141,7 +141,7 @@ class Str extends StaticStringy
      *
      * @return string
      */
-    public static function studly($value)
+    public static function studly(string $value): string
     {
         $key = $value;
 

@@ -11,7 +11,7 @@ class BSON implements FormatContract
     /**
      * {@inheritdoc}
      */
-    public function parse($payload)
+    public function parse(string $payload): array
     {
         if (function_exists('bson_decode')) {
             $bson = bson_decode(trim($payload));
@@ -31,7 +31,7 @@ class BSON implements FormatContract
     /**
      * {@inheritdoc}
      */
-    public function dump(array $data)
+    public function dump(array $data): string
     {
         $bson = bson_encode($data);
 

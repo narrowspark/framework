@@ -10,7 +10,7 @@ interface Directorysystem
      *
      * @return array
      */
-    public function directories($directory);
+    public function directories(string $directory): array;
 
     /**
      * Get all (recursive) of the directories within a given directory.
@@ -19,7 +19,7 @@ interface Directorysystem
      *
      * @return array
      */
-    public function allDirectories($directory);
+    public function allDirectories(string $directory = null): array;
 
     /**
      * Recursively create a directory.
@@ -29,7 +29,7 @@ interface Directorysystem
      *
      * @return bool
      */
-    public function createDirectory($dirname, array $config = []);
+    public function createDirectory(string $dirname, array $config = []): bool;
 
     /**
      * Recursively delete a directory.
@@ -38,7 +38,7 @@ interface Directorysystem
      *
      * @return bool
      */
-    public function deleteDirectory($dirname);
+    public function deleteDirectory(string $dirname): bool;
 
     /**
      * Empty the specified directory of all files and folders.
@@ -47,7 +47,7 @@ interface Directorysystem
      *
      * @return bool
      */
-    public function cleanDirectory($dirname);
+    public function cleanDirectory(string $dirname): bool;
 
     /**
      * Determine if the given path is a directory.
@@ -56,5 +56,5 @@ interface Directorysystem
      *
      * @return bool
      */
-    public function isDirectory($dirname);
+    public function isDirectory(string $dirname): bool;
 }

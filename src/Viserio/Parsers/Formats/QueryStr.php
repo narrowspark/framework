@@ -10,7 +10,7 @@ class QueryStr implements FormatContract
     /**
      * {@inheritdoc}
      */
-    public function parse($payload)
+    public function parse(string $payload): array
     {
         parse_str(trim($payload), $querystr);
 
@@ -20,7 +20,7 @@ class QueryStr implements FormatContract
     /**
      * {@inheritdoc}
      */
-    public function dump(array $data)
+    public function dump(array $data): string
     {
         return http_build_query($data);
     }

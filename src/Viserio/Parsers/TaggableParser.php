@@ -18,7 +18,7 @@ class TaggableParser extends Parser implements TaggableParserContract
      *
      * @param string $key
      */
-    public function setTag($key)
+    public function setTag(string $key)
     {
         $this->taggedKey = $key;
 
@@ -42,7 +42,7 @@ class TaggableParser extends Parser implements TaggableParserContract
      *
      * @return array
      */
-    protected function group($taggedKey, array $data)
+    protected function group($taggedKey, array $data): array
     {
         $taggedData = [];
 

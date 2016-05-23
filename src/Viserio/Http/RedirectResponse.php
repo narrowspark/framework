@@ -30,9 +30,9 @@ class RedirectResponse extends SymfonyRedirectResponse
      * @param string $value
      * @param bool   $replace
      *
-     * @return $this
+     * @return self
      */
-    public function header($key, $value, $replace = true)
+    public function header(string $key, string $value, bool $replace = true): self
     {
         $this->headers->set($key, $value, $replace);
 
@@ -47,7 +47,7 @@ class RedirectResponse extends SymfonyRedirectResponse
      *
      * @return \Viserio\Http\RedirectResponse
      */
-    public function with($key, $value = null)
+    public function with($key, $value = null): \Viserio\Http\RedirectResponse
     {
         $key = is_array($key) ? $key : [$key => $value];
 
@@ -63,9 +63,9 @@ class RedirectResponse extends SymfonyRedirectResponse
      *
      * @param \Symfony\Component\HttpFoundation\Cookie $cookie
      *
-     * @return $this
+     * @return self
      */
-    public function withCookie(Cookie $cookie)
+    public function withCookie(Cookie $cookie): self
     {
         $this->headers->setCookie($cookie);
 
@@ -77,9 +77,9 @@ class RedirectResponse extends SymfonyRedirectResponse
      *
      * @param array $cookies
      *
-     * @return $this
+     * @return self
      */
-    public function withCookies(array $cookies)
+    public function withCookies(array $cookies): self
     {
         foreach ($cookies as $cookie) {
             $this->headers->setCookie($cookie);
@@ -93,9 +93,9 @@ class RedirectResponse extends SymfonyRedirectResponse
      *
      * @param array|null $input
      *
-     * @return $this
+     * @return self
      */
-    public function withInput(array $input = null)
+    public function withInput(array $input = null): self
     {
         $input = $input ?: $this->request->input();
         $this->session->flashInput(array_filter($input, function ($value) {
@@ -110,9 +110,9 @@ class RedirectResponse extends SymfonyRedirectResponse
      *
      * @param  mixed string
      *
-     * @return $this
+     * @return self
      */
-    public function onlyInput()
+    public function onlyInput(): self
     {
         return $this->withInput($this->request->only(func_get_args()));
     }
@@ -124,7 +124,7 @@ class RedirectResponse extends SymfonyRedirectResponse
      *
      * @return \Viserio\Http\RedirectResponse
      */
-    public function exceptInput()
+    public function exceptInput(): \Viserio\Http\RedirectResponse
     {
         return $this->withInput($this->request->except(func_get_args()));
     }
@@ -134,7 +134,7 @@ class RedirectResponse extends SymfonyRedirectResponse
      *
      * @return \Viserio\Http\Request
      */
-    public function getRequest()
+    public function getRequest(): \Viserio\Http\Request
     {
         return $this->request;
     }
@@ -156,7 +156,7 @@ class RedirectResponse extends SymfonyRedirectResponse
      *
      * @return \Viserio\Session\Store
      */
-    public function getSession()
+    public function getSession(): \Viserio\Session\Store
     {
         return $this->session;
     }
@@ -181,7 +181,7 @@ class RedirectResponse extends SymfonyRedirectResponse
      *
      * @return RedirectResponse
      */
-    public function __call($method, $parameters)
+    public function __call(string $method, array $parameters): \Viserio\Http\RedirectResponse
     {
         if (Str::startsWith($method, 'with')) {
             return $this->with(Str::snake(substr($method, 4)), $parameters[0]);

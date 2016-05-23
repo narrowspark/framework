@@ -25,7 +25,7 @@ class SupportServiceProvider extends ServiceProvider
      *
      * @return \Narrowspark\Arr\StaticArr as Arr|null
      */
-    protected function registerArr()
+    protected function registerArr(): \Narrowspark\Arr\StaticArr
     {
         $this->app->singleton('arr', function () {
             return new Arr();
@@ -94,7 +94,7 @@ class SupportServiceProvider extends ServiceProvider
      *
      * @return string[]
      */
-    public function provides()
+    public function provides(): array
     {
         return [
             'arr',

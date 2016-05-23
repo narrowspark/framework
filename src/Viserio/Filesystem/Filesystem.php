@@ -346,7 +346,7 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract, Direct
      *
      * @return int|null
      */
-    private function parseVisibility($path, $visibility)
+    private function parseVisibility(string $path, string $visibility = null)
     {
         $type = '';
 

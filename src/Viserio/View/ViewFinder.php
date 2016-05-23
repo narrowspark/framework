@@ -69,7 +69,7 @@ class ViewFinder implements FinderContract
      *
      * @return string
      */
-    public function find($name)
+    public function find($name): string
     {
         if (isset($this->views[$name])) {
             return $this->views[$name];
@@ -87,7 +87,7 @@ class ViewFinder implements FinderContract
      *
      * @param string $location
      */
-    public function addLocation($location)
+    public function addLocation(string $location)
     {
         $this->paths[] = $location;
     }
@@ -98,7 +98,7 @@ class ViewFinder implements FinderContract
      * @param string       $namespace
      * @param string|array $hints
      */
-    public function addNamespace($namespace, $hints)
+    public function addNamespace(string $namespace, $hints)
     {
         $hints = (array) $hints;
 
@@ -115,7 +115,7 @@ class ViewFinder implements FinderContract
      * @param string       $namespace
      * @param string|array $hints
      */
-    public function prependNamespace($namespace, $hints)
+    public function prependNamespace(string $namespace, $hints)
     {
         $hints = (array) $hints;
 
@@ -131,7 +131,7 @@ class ViewFinder implements FinderContract
      *
      * @param string $extension
      */
-    public function addExtension($extension)
+    public function addExtension(string $extension)
     {
         if (($index = array_search($extension, $this->extensions, true)) !== false) {
             unset($this->extensions[$index]);
@@ -147,7 +147,7 @@ class ViewFinder implements FinderContract
      *
      * @return bool
      */
-    public function hasHintInformation($name)
+    public function hasHintInformation(string $name): bool
     {
         return strpos($name, FinderContract::HINT_PATH_DELIMITER) > 0;
     }
@@ -157,7 +157,7 @@ class ViewFinder implements FinderContract
      *
      * @return \Viserio\Filesystem\Filesystem
      */
-    public function getFilesystem()
+    public function getFilesystem(): \Viserio\Filesystem\Filesystem
     {
         return $this->files;
     }
@@ -167,7 +167,7 @@ class ViewFinder implements FinderContract
      *
      * @return array
      */
-    public function getPaths()
+    public function getPaths(): array
     {
         return $this->paths;
     }
@@ -175,7 +175,7 @@ class ViewFinder implements FinderContract
     /**
      * Set the active view paths.
      *
-     * @param array<String> $paths
+     * @param string[] $paths
      */
     public function setPaths(array $paths)
     {
@@ -187,7 +187,7 @@ class ViewFinder implements FinderContract
      *
      * @return array
      */
-    public function getHints()
+    public function getHints(): array
     {
         return $this->hints;
     }
@@ -197,7 +197,7 @@ class ViewFinder implements FinderContract
      *
      * @return array
      */
-    public function getExtensions()
+    public function getExtensions(): array
     {
         return $this->extensions;
     }
@@ -209,7 +209,7 @@ class ViewFinder implements FinderContract
      *
      * @return string
      */
-    protected function findNamedPathView($name)
+    protected function findNamedPathView(string $name): string
     {
         list($namespace, $view) = $this->getNamespaceSegments($name);
 
@@ -225,7 +225,7 @@ class ViewFinder implements FinderContract
      *
      * @return array
      */
-    protected function getNamespaceSegments($name)
+    protected function getNamespaceSegments(string $name): array
     {
         $segments = explode(FinderContract::HINT_PATH_DELIMITER, $name);
 
@@ -250,7 +250,7 @@ class ViewFinder implements FinderContract
      *
      * @return string
      */
-    protected function findInPaths($name, $paths)
+    protected function findInPaths(string $name, array $paths): string
     {
         foreach ((array) $paths as $path) {
             foreach ($this->getPossibleViewFiles($name) as $file) {
@@ -274,7 +274,7 @@ class ViewFinder implements FinderContract
      *
      * @return array
      */
-    protected function getPossibleViewFiles($name)
+    protected function getPossibleViewFiles(string $name): array
     {
         return array_map(function ($extension) use ($name) {
             return str_replace('.', DIRECTORY_SEPARATOR, $name) . '.' . $extension;

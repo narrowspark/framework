@@ -8,5 +8,5 @@ interface Composer
      *
      * @param string $view
      */
-    public function compose($view);
+    public function compose(string $view);
 }

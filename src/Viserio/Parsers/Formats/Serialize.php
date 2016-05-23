@@ -11,7 +11,7 @@ class Serialize implements FormatContract
     /**
      * {@inheritdoc}
      */
-    public function parse($payload)
+    public function parse(string $payload): array
     {
         try {
             return unserialize(trim($payload));
@@ -25,7 +25,7 @@ class Serialize implements FormatContract
     /**
      * {@inheritdoc}
      */
-    public function dump(array $data)
+    public function dump(array $data): string
     {
         try {
             return serialize($data);

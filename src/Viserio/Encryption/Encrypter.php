@@ -27,7 +27,7 @@ class Encrypter implements EncrypterContract
     /**
      * {@inheritdoc}
      */
-    public function encrypt($plaintext)
+    public function encrypt(string $plaintext): string
     {
         return Crypto::encrypt($plaintext, $this->key);
     }
@@ -35,7 +35,7 @@ class Encrypter implements EncrypterContract
     /**
      * {@inheritdoc}
      */
-    public function decrypt($ciphertext)
+    public function decrypt(string $ciphertext): string
     {
         return Crypto::decrypt($ciphertext, $this->key);
     }
@@ -49,7 +49,7 @@ class Encrypter implements EncrypterContract
      *
      * @return bool
      */
-    public function compare($encrypted1, $encrypted2, $loose = false)
+    public function compare(string $encrypted1, string $encrypted2, bool $loose = false): bool
     {
         $encrypt1 = $this->decrypt($encrypted1);
         $encrypt2 = $this->decrypt($encrypted2);

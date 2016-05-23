@@ -57,7 +57,7 @@ class ViewServiceProvider extends ServiceProvider
      * @param string                               $engineClass
      * @param \Viserio\View\Engines\EngineResolver $engines
      */
-    protected function registercustomEngine($engineName, $engineClass, $engines)
+    protected function registercustomEngine(string $engineName, string $engineClass, \Viserio\View\Engines\EngineResolver $engines)
     {
         $engines->register($engineName, function () use ($engineClass) {
             return $engineClass;
@@ -69,7 +69,7 @@ class ViewServiceProvider extends ServiceProvider
      *
      * @param \Viserio\View\Engines\EngineResolver $engines
      */
-    protected function registerPhpEngine($engines)
+    protected function registerPhpEngine(\Viserio\View\Engines\EngineResolver $engines)
     {
         $engines->register('php', function () {
             return new PhpEngine();
@@ -121,7 +121,7 @@ class ViewServiceProvider extends ServiceProvider
      *
      * @return string[]
      */
-    public function provides()
+    public function provides(): array
     {
         return [
             'view',

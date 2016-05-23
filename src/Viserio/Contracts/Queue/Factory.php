@@ -10,5 +10,5 @@ interface Factory
      *
      * @return \Viserio\Contracts\Queue\Queue
      */
-    public function connection($name = null);
+    public function connection(string $name = null): \Viserio\Contracts\Queue\Queue;
 }
