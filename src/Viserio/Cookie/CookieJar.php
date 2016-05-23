@@ -3,8 +3,8 @@ namespace Viserio\Cookie;
 
 use Narrowspark\Arr\StaticArr as Arr;
 use Psr\Http\Message\ResponseInterface;
-use Viserio\Contracts\Cookie\QueueingFactory as JarContract;
 use Viserio\Contracts\Cookie\Cookie as CookieContract;
+use Viserio\Contracts\Cookie\QueueingFactory as JarContract;
 
 class CookieJar implements JarContract
 {
