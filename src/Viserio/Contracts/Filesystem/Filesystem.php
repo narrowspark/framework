@@ -76,9 +76,9 @@ interface Filesystem
      * @param string $path
      * @param string $visibility
      *
-     * @return bool|null
+     * @return bool
      */
-    public function setVisibility(string $path, string $visibility);
+    public function setVisibility(string $path, string $visibility): bool;
 
     /**
      * Copies a file.
@@ -94,9 +94,9 @@ interface Filesystem
      * @throws \Viserio\Contracts\Filesystem\Exception\FileNotFoundException When originFile doesn't exist
      * @throws \Viserio\Contracts\Filesystem\Exception\IOException           When copy fails
      *
-     * @return null|bool
+     * @return bool
      */
-    public function copy(string $originFile, string $targetFile, bool $override = false);
+    public function copy($originFile, $targetFile, $override = false);
 
     /**
      * Move a file to a new location.
@@ -106,7 +106,7 @@ interface Filesystem
      *
      * @return bool
      */
-    public function move($from, string $to): bool;
+    public function move(string $from, string $to): bool;
 
     /**
      * Get a file's size.
@@ -142,11 +142,11 @@ interface Filesystem
     /**
      * Delete the file at a given path.
      *
-     * @param string|array $paths
+     * @param array $paths
      *
      * @return bool
      */
-    public function delete($paths): bool;
+    public function delete(array $paths): bool;
 
     /**
      * Get an array of all files in a directory.
@@ -174,7 +174,7 @@ interface Filesystem
      *
      * @return string
      */
-    public function getExtension($path): string;
+    public function getExtension(string $path): string;
 
     /**
      * Returns the filename without the extension from a file path.
@@ -195,5 +195,5 @@ interface Filesystem
      *
      * @return string The path string with new file extension
      */
-    public function changeExtension($path, string $extension): string;
+    public function changeExtension(string $path, string $extension): string;
 }

@@ -3,7 +3,7 @@ namespace Viserio\Config;
 
 use ArrayIterator;
 use IteratorAggregate;
-use Viserio\Contracts\Config\Loader as LoaderContract;
+use Viserio\Contracts\Parsers\Loader as LoaderContract;
 use Viserio\Contracts\Config\Manager as ManagerContract;
 use Viserio\Contracts\Config\Repository as RepositoryContract;
 
@@ -55,7 +55,7 @@ class Manager implements ManagerContract, IteratorAggregate
     /**
      * Get the configuration loader.
      *
-     * @param \Viserio\Contracts\Config\Loader $loader
+     * @param \Viserio\Contracts\Parsers\Loader $loader
      *
      * @return self
      */
@@ -69,7 +69,7 @@ class Manager implements ManagerContract, IteratorAggregate
     /**
      * Get the configuration loader.
      *
-     * @return \Viserio\Contracts\Config\Loader
+     * @return \Viserio\Contracts\Parsers\Loader
      */
     public function getLoader(): LoaderContract
     {
@@ -97,7 +97,7 @@ class Manager implements ManagerContract, IteratorAggregate
     /**
      * {@inheritdoc}
      */
-    public function set($key, $value): ManagerContract
+    public function set(string $key, $value): ManagerContract
     {
         $this->offsetSet($key, $value);
 
@@ -107,7 +107,7 @@ class Manager implements ManagerContract, IteratorAggregate
     /**
      * {@inheritdoc}
      */
-    public function get($key, $default = null)
+    public function get(string $key, $default = null)
     {
         if (!$this->offsetExists($key)) {
             return $default;
@@ -121,7 +121,7 @@ class Manager implements ManagerContract, IteratorAggregate
     /**
      * {@inheritdoc}
      */
-    public function has($key): bool
+    public function has(string $key): bool
     {
         return $this->offsetExists($key);
     }
@@ -129,7 +129,7 @@ class Manager implements ManagerContract, IteratorAggregate
     /**
      * {@inheritdoc}
      */
-    public function forget($key)
+    public function forget(string $key)
     {
         $this->offsetUnset($key);
     }
@@ -141,7 +141,7 @@ class Manager implements ManagerContract, IteratorAggregate
      *
      * @return mixed
      */
-    public function offsetGet(string $key)
+    public function offsetGet($key)
     {
         return $this->repository->offsetGet($key);
     }
@@ -154,7 +154,7 @@ class Manager implements ManagerContract, IteratorAggregate
      *
      * @return self
      */
-    public function offsetSet(string $key, $value): ManagerContract
+    public function offsetSet($key, $value)
     {
         $this->repository->offsetSet($key, $value);
 
@@ -168,7 +168,7 @@ class Manager implements ManagerContract, IteratorAggregate
      *
      * @return bool
      */
-    public function offsetExists(string $key): bool
+    public function offsetExists($key)
     {
         return $this->repository->offsetExists($key);
     }
@@ -178,7 +178,7 @@ class Manager implements ManagerContract, IteratorAggregate
      *
      * @param string $key
      */
-    public function offsetUnset(string $key)
+    public function offsetUnset($key)
     {
         $this->repository->offsetUnset($key);
     }

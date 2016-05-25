@@ -7,11 +7,10 @@ use Viserio\Contracts\Middleware\Middleware as MiddlewareContract;
 
 class FakeMiddleware implements MiddlewareContract
 {
-    public function __invoke(
+    public function handle(
         ServerRequestInterface $request,
-        ResponseInterface $response,
-        callable $next
-    ) {
+        ResponseInterface $response
+    ): ResponseInterface {
         $response = $response->withAddedHeader('X-Foo', 'modified');
         $response = $next($request, $response, $next);
 

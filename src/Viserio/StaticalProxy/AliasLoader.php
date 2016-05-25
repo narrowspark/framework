@@ -57,11 +57,7 @@ class AliasLoader implements AliasLoaderContract
     }
 
     /**
-     * Resolves an alias.
-     *
-     * @param string $alias
-     *
-     * @return bool
+     * {@inheritdoc}
      */
     public function load(string $alias): bool
     {
@@ -106,28 +102,23 @@ class AliasLoader implements AliasLoaderContract
     }
 
     /**
-     * Add an alias to the loader.
-     *
-     * @param string|string[] $class
-     * @param string|null     $alias
-     *
-     * @return self
+     * {@inheritdoc}
      */
-    public function alias($class, string $alias = null): self
+    public function alias($classes, string $alias = null): AliasLoaderContract
     {
-        if (is_array($class)) {
-            $this->aliases = array_merge($this->aliases, $class);
+        if (is_array($classes)) {
+            $this->aliases = array_merge($this->aliases, $classes);
 
             return $this;
         }
 
-        $this->aliases[$class] = $this->cache[$class] = $alias;
+        $this->aliases[$classes] = $this->cache[$classes] = $alias;
 
         return $this;
     }
 
     /**
-     * Removes an alias.
+     * {@inheritdoc}
      */
     public function removeAlias()
     {
@@ -141,13 +132,9 @@ class AliasLoader implements AliasLoaderContract
     }
 
     /**
-     * Resolves a plain alias.
-     *
-     * @param string $alias
-     *
-     * @return string|bool
+     * {@inheritdoc}
      */
-    public function resolveAlias($alias)
+    public function resolveAlias(string $alias)
     {
         if (
             isset($this->aliases[$alias]) &&
@@ -160,18 +147,15 @@ class AliasLoader implements AliasLoaderContract
     }
 
     /**
-     * Registers a class alias.
-     *
-     * @param string|string[] $pattern
-     * @param string|null     $translation
+     * {@inheritdoc}
      */
-    public function aliasPattern($pattern, string $translation = null)
+    public function aliasPattern($patterns, string $translation = null)
     {
-        if (!is_array($pattern)) {
-            $pattern = [$pattern => $translation];
+        if (!is_array($patterns)) {
+            $patterns = [$patterns => $translation];
         }
 
-        foreach ($pattern as $patternKey => $resolver) {
+        foreach ($patterns as $patternKey => $resolver) {
             if (!$resolver instanceof Resolver) {
                 $resolver = new Resolver($patternKey, $resolver);
             }
@@ -181,12 +165,9 @@ class AliasLoader implements AliasLoaderContract
     }
 
     /**
-     * Removes an alias pattern.
-     *
-     * @param string      $pattern
-     * @param string|null $translation
+     * {@inheritdoc}
      */
-    public function removeAliasPattern($pattern, string $translation = null)
+    public function removeAliasPattern(string $pattern, string $translation = null)
     {
         foreach (array_keys($this->patterns) as $patternKey) {
             if ($this->patterns[$patternKey]->matches($pattern, $translation)) {
@@ -196,12 +177,9 @@ class AliasLoader implements AliasLoaderContract
     }
 
     /**
-     * Adds a namespace alias.
-     *
-     * @param string $class
-     * @param string $alias
+     * {@inheritdoc}
      */
-    public function aliasNamespace($class, string $alias)
+    public function aliasNamespace(string $class, string $alias)
     {
         $class = trim($class, '\\');
         $alias = trim($alias, '\\');
@@ -210,11 +188,7 @@ class AliasLoader implements AliasLoaderContract
     }
 
     /**
-     * Resolves a namespace alias.
-     *
-     * @param string $alias Alias
-     *
-     * @return string|false Class name when resolved
+     * {@inheritdoc}
      */
     public function resolveNamespaceAlias(string $alias)
     {
@@ -241,7 +215,7 @@ class AliasLoader implements AliasLoaderContract
     }
 
     /**
-     * Removes a namespace alias.
+     * {@inheritdoc}
      */
     public function removeNamespaceAlias()
     {
@@ -254,27 +228,7 @@ class AliasLoader implements AliasLoaderContract
     }
 
     /**
-     * Get the registered aliases.
-     *
-     * @return array
-     */
-    public function getAliases(): array
-    {
-        return $this->aliases;
-    }
-
-    /**
-     * Set the registered aliases.
-     *
-     * @param array $aliases
-     */
-    public function setAliases(array $aliases)
-    {
-        $this->aliases = $aliases;
-    }
-
-    /**
-     * Register the loader on the auto-loader stack.
+     * {@inheritdoc}
      */
     public function register()
     {
@@ -286,7 +240,7 @@ class AliasLoader implements AliasLoaderContract
     }
 
     /**
-     * Unregisters the autoloader function.
+     * {@inheritdoc}
      */
     public function unregister()
     {
@@ -298,13 +252,27 @@ class AliasLoader implements AliasLoaderContract
     }
 
     /**
-     * Indicates if the loader has been registered.
-     *
-     * @return bool
+     * {@inheritdoc}
      */
     public function isRegistered(): bool
     {
         return $this->registered;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getAliases(): array
+    {
+        return $this->aliases;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setAliases(array $aliases)
+    {
+        $this->aliases = $aliases;
     }
 
     /**

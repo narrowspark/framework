@@ -15,11 +15,11 @@ interface Directorysystem
     /**
      * Get all (recursive) of the directories within a given directory.
      *
-     * @param string|null $directory
+     * @param string $directory
      *
      * @return array
      */
-    public function allDirectories(string $directory = null): array;
+    public function allDirectories(string $directory): array;
 
     /**
      * Recursively create a directory.

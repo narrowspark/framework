@@ -20,7 +20,7 @@ class TestManager extends Manager
      *
      * @param string $name
      */
-    public function setDefaultDriver($name)
+    public function setDefaultDriver(string $name)
     {
         $this->defaultDriver = $name;
     }
@@ -30,7 +30,7 @@ class TestManager extends Manager
      *
      * @return string
      */
-    public function getDefaultDriver()
+    public function getDefaultDriver(): string
     {
         return $this->defaultDriver;
     }
@@ -55,7 +55,7 @@ class TestManager extends Manager
      *
      * @return string
      */
-    protected function getConfigName()
+    protected function getConfigName(): string
     {
         return 'test';
     }

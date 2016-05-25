@@ -20,11 +20,11 @@ interface Manager extends ArrayAccess
      * Gets a configuration setting using a simple or nested key.
      *
      * @param string      $key
-     * @param string|null $default
+     * @param mixed|null $default
      *
      * @return mixed The value of a setting
      */
-    public function get(string $key, string $default = null);
+    public function get(string $key, $default = null);
 
     /**
      * Checking if configuration values exist, using
@@ -34,7 +34,7 @@ interface Manager extends ArrayAccess
      *
      * @return bool
      */
-    public function has($key): bool;
+    public function has(string $key): bool;
 
     /**
      * Forget a key and all his values.

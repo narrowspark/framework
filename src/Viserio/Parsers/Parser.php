@@ -1,7 +1,7 @@
 <?php
 namespace Viserio\Parsers;
 
-use Viserio\Contracts\Filesystem\Filesystem;
+use Viserio\Contracts\Filesystem\Filesystem as FilesystemContract;
 use Viserio\Contracts\Parsers\Exception\NotSupportedException;
 use Viserio\Contracts\Parsers\Parser as ParserContract;
 use Viserio\Parsers\Formats\BSON;
@@ -14,6 +14,7 @@ use Viserio\Parsers\Formats\Serialize;
 use Viserio\Parsers\Formats\TOML;
 use Viserio\Parsers\Formats\XML;
 use Viserio\Parsers\Formats\YAML;
+use Viserio\Contracts\Parsers\Format as FormatContract;
 
 class Parser implements ParserContract
 {
@@ -79,7 +80,7 @@ class Parser implements ParserContract
      *
      * @param \Viserio\Contracts\Filesystem\Filesystem $filesystem
      */
-    public function __construct(Filesystem $filesystem)
+    public function __construct(FilesystemContract $filesystem)
     {
         $this->filesystem = $filesystem;
     }
@@ -89,7 +90,7 @@ class Parser implements ParserContract
      *
      * @return \Viserio\Contracts\Filesystem\Filesystem
      */
-    public function getFilesystem()
+    public function getFilesystem(): FilesystemContract
     {
         return $this->filesystem;
     }
@@ -101,7 +102,7 @@ class Parser implements ParserContract
      *
      * @return string Return the short format code (xml, json, ...).
      */
-    public function getFormat(string $format = null)
+    public function getFormat($format = null)
     {
         $format  = strtolower($format);
         $fsystem = $this->filesystem;
@@ -110,9 +111,7 @@ class Parser implements ParserContract
             return $fsystem->getExtension($format);
         }
 
-        $httpContent = $_SERVER['HTTP_CONTENT_TYPE'];
-
-        return isset($httpContent) ? $httpContent : $format;
+        return $_SERVER['HTTP_CONTENT_TYPE'] ?? $format;
     }
 
     /**
@@ -145,7 +144,7 @@ class Parser implements ParserContract
      *
      * @return \Viserio\Contracts\Parsers\Format
      */
-    public function getParser($type)
+    public function getParser($type): FormatContract
     {
         $supportedFileFormats = array_flip($this->supportedFileFormats);
 

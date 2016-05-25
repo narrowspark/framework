@@ -6,12 +6,21 @@ interface AliasLoader
     /**
      * Add an alias to the loader.
      *
-     * @param string|string[] $class
+     * @param string|string[] $classes
      * @param string|null     $alias
      *
      * @return self
      */
-    public function alias($class, string $alias = null): self;
+    public function alias($classes, string $alias = null): AliasLoader;
+
+    /**
+     * Resolves an alias.
+     *
+     * @param string $alias
+     *
+     * @return bool
+     */
+    public function load(string $alias): bool;
 
     /**
      * Removes an alias.
@@ -25,7 +34,7 @@ interface AliasLoader
      *
      * @return string|bool
      */
-    public function resolveAlias($alias);
+    public function resolveAlias(string $alias);
 
     /**
      * Registers a class alias.
@@ -33,7 +42,7 @@ interface AliasLoader
      * @param string|string[] $pattern
      * @param string|null     $translation
      */
-    public function aliasPattern($pattern, string $translation = null);
+    public function aliasPattern($patterns, string $translation = null);
 
     /**
      * Removes an alias pattern.
@@ -41,7 +50,7 @@ interface AliasLoader
      * @param string      $pattern
      * @param string|null $translation
      */
-    public function removeAliasPattern($pattern, string $translation = null);
+    public function removeAliasPattern(string $pattern, string $translation = null);
 
     /**
      * Adds a namespace alias.
@@ -49,7 +58,7 @@ interface AliasLoader
      * @param string $class
      * @param string $alias
      */
-    public function aliasNamespace($class, string $alias);
+    public function aliasNamespace(string $class, string $alias);
 
     /**
      * Resolves a namespace alias.

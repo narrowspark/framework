@@ -46,9 +46,9 @@ abstract class StaticalProxy
      *
      * @throws \BadMethodCallException if the method has not been implemented by a subclass
      *
-     * @return NoType
+     * @return mixed
      */
-    public static function getInstanceIdentifier(): \Viserio\StaticalProxy\NoType
+    public static function getInstanceIdentifier()
     {
         throw new BadMethodCallException('The ' . __METHOD__ . ' method must be implemented by a subclass.');
     }
@@ -66,11 +66,9 @@ abstract class StaticalProxy
     /**
      * Initiate a mock expectation on the facade.
      *
-     * @param  dynamic
-     *
-     * @return \Mockery\Expectation
+     * @return object
      */
-    public static function shouldReceive(): \Mockery\Expectation
+    public static function shouldReceive()
     {
         $name = static::getInstanceIdentifier();
 
@@ -133,11 +131,11 @@ abstract class StaticalProxy
     /**
      * Resolve the statical proxy root instance from the app.
      *
-     * @param string $name
+     * @param object $name
      *
      * @return mixed
      */
-    protected static function resolveStaticalProxyInstance(string $name)
+    protected static function resolveStaticalProxyInstance($name)
     {
         if (is_object($name)) {
             return $name;
@@ -155,9 +153,9 @@ abstract class StaticalProxy
      *
      * @param string $name
      *
-     * @return \Mockery\MockInterface
+     * @return object
      */
-    protected static function createFreshMockInstance(string $name): \Mockery\MockInterface
+    protected static function createFreshMockInstance(string $name)
     {
         static::$resolvedInstance[$name] = $mock = static::createMock();
 
@@ -169,10 +167,9 @@ abstract class StaticalProxy
     /**
      * Create a fresh mock instance for the given class.
      *
-     *
-     * @return \Mockery\MockInterface
+     * @return object
      */
-    protected static function createMock(): \Mockery\MockInterface
+    protected static function createMock()
     {
         $class = static::getMockableClass();
 

@@ -42,7 +42,7 @@ trait FilesystemExtensionTrait
      *
      * @return string The path string with new file extension
      */
-    public function changeExtension($path, string $extension): string
+    public function changeExtension(string $path, string $extension): string
     {
         $explode    = explode('.', $path);
         $substrPath = substr($path, -1);

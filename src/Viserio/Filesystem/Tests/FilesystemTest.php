@@ -96,7 +96,7 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
 
         $this->assertTrue($this->files->has($file->url()));
 
-        $this->files->delete($file->url());
+        $this->files->delete([$file->url()]);
 
         $this->assertFalse($this->files->has($file->url()));
     }

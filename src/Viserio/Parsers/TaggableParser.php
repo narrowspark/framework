@@ -25,7 +25,10 @@ class TaggableParser extends Parser implements TaggableParserContract
         return $this;
     }
 
-    public function parse($payload)
+    /**
+     * {@inheritdoc}
+     */
+    public function parse(string $payload): array
     {
         if (!$this->taggedKey) {
             return parent::parse($payload);

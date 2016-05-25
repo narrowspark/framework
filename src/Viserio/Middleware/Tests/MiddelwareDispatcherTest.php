@@ -41,33 +41,6 @@ class MiddelwareDispatcherTest extends \PHPUnit_Framework_TestCase
         $this->assertSame(500, $response->getStatusCode());
     }
 
-    /**
-     * @expectedException RuntimeException
-     * @expectedExceptionMessage Middleware can’t be added once the stack is dequeuing
-     */
-    public function testPipeThrowRuntimeException()
-    {
-        $request = Mock::mock(Request::class);
-
-        $response = Mock::mock(Response::class);
-        $response->shouldReceive('withAddedHeader')->withAnyArgs()->andReturnSelf();
-
-        $dispatcher = new Dispatcher();
-        $dispatcher->pipe(new FakeMiddleware());
-        $dispatcher->pipe(function ($request, $response, $next) use ($dispatcher) {
-            $dispatcher->pipe(new FakeMiddleware());
-
-            $response = $next($request, $response, $next);
-
-            return $response->withStatus(500);
-        });
-
-        $response = $dispatcher(
-            $request,
-            $response
-        );
-    }
-
     public function testPipeAddContainer()
     {
         $request = Mock::mock(Request::class);

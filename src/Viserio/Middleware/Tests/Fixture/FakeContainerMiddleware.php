@@ -22,7 +22,7 @@ class FakeContainerMiddleware implements MiddlewareContract
      *
      * @return self
      */
-    public function setContainer(ContainerInterface $container): self
+    public function setContainer(ContainerInterface $container): ContainerInterface
     {
         $this->container = $container;
 
@@ -34,16 +34,15 @@ class FakeContainerMiddleware implements MiddlewareContract
      *
      * @return \Interop\Container\ContainerInterface
      */
-    public function getContainer(): \Interop\Container\ContainerInterface
+    public function getContainer(): ContainerInterface
     {
         return $this->container;
     }
 
-    public function __invoke(
+    public function handle(
         ServerRequestInterface $request,
-        ResponseInterface $response,
-        callable $next
-    ) {
+        ResponseInterface $response
+    ): ResponseInterface {
         $response = $response->withAddedHeader('X-Foo', $this->getcontainer()->get('doo'));
         $response = $next($request, $response, $next);
 

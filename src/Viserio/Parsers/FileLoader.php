@@ -55,7 +55,7 @@ class FileLoader implements LoaderContract
      *
      * @return TaggableParserContract
      */
-    public function getParser(): \Viserio\Contracts\Parsers\TaggableParser
+    public function getParser(): TaggableParserContract
     {
         return $this->parser;
     }
@@ -123,7 +123,7 @@ class FileLoader implements LoaderContract
     /**
      * {@inheritdoc}
      */
-    public function exists(string $file): bool
+    public function exists(string $file)
     {
         $key = str_replace('/', '', $file);
 

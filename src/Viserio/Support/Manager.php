@@ -45,7 +45,7 @@ abstract class Manager
      *
      * @return self
      */
-    public function setConfig(ConfigContract $config): self
+    public function setConfig(ConfigContract $config): Manager
     {
         $this->config = $config;
 
@@ -57,7 +57,7 @@ abstract class Manager
      *
      * @return ConfigContract
      */
-    public function getConfig(): \Viserio\Contracts\Config\Manager
+    public function getConfig(): ConfigContract
     {
         return $this->config;
     }
@@ -114,7 +114,7 @@ abstract class Manager
      *
      * @return self
      */
-    public function extend(string $driver, Closure $callback): self
+    public function extend(string $driver, Closure $callback): Manager
     {
         $this->customCreators[$driver] = $callback->bindTo($this, $this);
 

@@ -65,7 +65,7 @@ class FilesystemManager extends Manager
     /**
      * {@inheritdoc}
      */
-    public function driver($driver = null, array $options = [])
+    public function driver(string $driver = null, array $options = [])
     {
         $driver = $driver ?: $this->getDefaultDriver();
 

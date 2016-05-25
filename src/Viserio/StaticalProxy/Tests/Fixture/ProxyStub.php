@@ -5,7 +5,7 @@ use Viserio\StaticalProxy\StaticalProxy;
 
 class ProxyStub extends StaticalProxy
 {
-    public static function getInstanceIdentifier(): \Viserio\StaticalProxy\NoType
+    public static function getInstanceIdentifier()
     {
         return 'baz';
     }

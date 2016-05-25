@@ -44,9 +44,9 @@ class Resolver
      *
      * @param string $alias
      *
-     * @return bool
+     * @return bool|object
      */
-    public function resolve(string $alias): bool
+    public function resolve(string $alias)
     {
         // Check wether the alias matches the pattern
         if (!preg_match($this->regex, $alias, $matches)) {
@@ -76,12 +76,12 @@ class Resolver
     /**
      * Checks whether the resolver matches a given pattern and optional translation
      *
-     * @param string        $pattern
-     * @param callable|null $translation
+     * @param string      $pattern
+     * @param string|null $translation
      *
      * @return bool
      */
-    public function matches(string $pattern, callable $translation = null): bool
+    public function matches(string $pattern, string $translation = null): bool
     {
         return $this->pattern === $pattern && (!$translation || $translation === $this->translation);
     }

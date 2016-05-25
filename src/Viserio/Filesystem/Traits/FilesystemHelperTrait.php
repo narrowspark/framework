@@ -14,7 +14,7 @@ trait FilesystemHelperTrait
      *
      * @return mixed
      */
-    public function getRequire($path)
+    public function getRequire(string $path)
     {
         $path = $this->normalizeDirectorySeparator($path);
 

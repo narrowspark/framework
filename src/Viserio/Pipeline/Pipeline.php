@@ -33,13 +33,9 @@ class Pipeline implements PipelineContract
     protected $stages = [];
 
     /**
-     * Set the object being sent through the pipeline.
-     *
-     * @param string $traveler
-     *
-     * @return self
+     * {@inheritdoc}
      */
-    public function send(string $traveler): self
+    public function send(string $traveler): PipelineContract
     {
         $this->traveler = $traveler;
 
@@ -47,13 +43,9 @@ class Pipeline implements PipelineContract
     }
 
     /**
-     * Set the array of stages.
-     *
-     * @param array|mixed $stages
-     *
-     * @return self
+     * {@inheritdoc}
      */
-    public function through($stages): self
+    public function through($stages): PipelineContract
     {
         $this->stages = is_array($stages) ? $stages : func_get_args();
 
@@ -61,13 +53,9 @@ class Pipeline implements PipelineContract
     }
 
     /**
-     * Set the method to call on the stages.
-     *
-     * @param string $method
-     *
-     * @return self
+     * {@inheritdoc}
      */
-    public function via(string $method): self
+    public function via(string $method): PipelineContract
     {
         $this->method = $method;
 
@@ -75,11 +63,7 @@ class Pipeline implements PipelineContract
     }
 
     /**
-     * Run the pipeline with a final destination callback.
-     *
-     * @param \Closure $destination
-     *
-     * @return mixed
+     * {@inheritdoc}
      */
     public function then(Closure $destination)
     {
@@ -102,7 +86,7 @@ class Pipeline implements PipelineContract
      *
      * @return \Closure
      */
-    protected function getSlice(): \Closure
+    protected function getSlice(): Closure
     {
         return function ($stack, $stage) {
             return function ($traveler) use ($stack, $stage) {
@@ -138,7 +122,7 @@ class Pipeline implements PipelineContract
      *
      * @return \Closure
      */
-    protected function getInitialSlice(Closure $destination): \Closure
+    protected function getInitialSlice(Closure $destination): Closure
     {
         return function ($traveler) use ($destination) {
             return call_user_func($destination, $traveler);
@@ -163,10 +147,7 @@ class Pipeline implements PipelineContract
         return [$name, $parameters];
     }
 
-    /**
-     * @return \Closure
-     */
-    protected function sliceThroughContainer($traveler, $stack, $stage): \Closure
+    protected function sliceThroughContainer($traveler, $stack, $stage)
     {
         list($name, $parameters) = $this->parseStageString($stage);
 

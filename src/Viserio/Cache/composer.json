@@ -85,10 +85,8 @@
         "cache/predis-adapter"                : "Required to use the Predis cache (~0.3).",
         "php-cache/session-handler"           : "Required to use the Session cache (~0.1).",
         "cache/void-adapter"                  : "Required to use the Void cache (~0.2).",
-        "ext-wincache"                        : "Required to use the WinCache cache.",
         "viserio/connect"                     : "Alternative for Predis connection (self.version).",
         "viserio/encryption"                  : "Required to use the Encrypter cache. (self.version)",
-        "ext-xcache"                          : "Required to use the xCache cache."
     },
     "minimum-stability"                       : "dev",
     "prefer-stable"                           : true
