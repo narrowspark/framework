@@ -48,10 +48,10 @@ interface Container
     /**
      * Adds an entry to the container.
      *
-     * @param string    $id    Identifier of the entry to add
-     * @param \stdClass $value The entry to add to the container
+     * @param string $id    Identifier of the entry to add
+     * @param mixed  $value The entry to add to the container
      */
-    public function set(string $id, \stdClass $value);
+    public function set(string $id, $value);
 
     /**
      * Extend an existing binding.

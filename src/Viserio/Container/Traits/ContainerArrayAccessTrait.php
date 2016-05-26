@@ -58,10 +58,10 @@ trait ContainerArrayAccessTrait
     /**
      * Adds an entry to the container.
      *
-     * @param string    $id    Identifier of the entry to add
-     * @param \stdClass $value The entry to add to the container
+     * @param string $id    Identifier of the entry to add
+     * @param mixed  $value The entry to add to the container
      */
-    public function set($id, $value)
+    public function set(string $id, $value)
     {
         $this->offsetSet($id, $value);
     }

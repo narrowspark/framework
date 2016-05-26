@@ -108,7 +108,7 @@ class Container implements \ArrayAccess, ContainerInteropInterface, ContainerCon
      * @param string $alias
      * @param string $abstract
      */
-    public function alias($alias, $abstract)
+    public function alias(string $alias, string $abstract)
     {
         $this->keys[$alias] = true;
         $this->keys[$abstract] = true;
@@ -126,7 +126,7 @@ class Container implements \ArrayAccess, ContainerInteropInterface, ContainerCon
     /**
      * {@inheritdoc}
      */
-    public function bind($alias, $concrete = null, $singleton = false)
+    public function bind(string $alias, $concrete = null, $singleton = false)
     {
         $this->notFrozen($alias);
 

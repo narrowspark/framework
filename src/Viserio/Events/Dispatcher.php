@@ -70,12 +70,9 @@ class Dispatcher implements EventDispatcherInterface
     }
 
     /**
-     * Remove listener.
-     *
-     * @param string   $eventName Event for which the listener is added
-     * @param string[] $listener
+     * {@inheritdoc}
      */
-    public function removeListener(string $eventName, array $listener)
+    public function removeListener($eventName, $listener)
     {
         foreach ($this->listenerIds[$eventName] as $i => $parts) {
             list($callback, $closure) = $parts;

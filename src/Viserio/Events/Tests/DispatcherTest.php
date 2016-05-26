@@ -1,24 +1,24 @@
 <?php
-namespace Viserio\Events\Test;
+namespace Viserio\Events\Tests;
 
 use Symfony\Component\EventDispatcher\Event;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Viserio\Container\Container;
+use Narrowspark\TestingHelper\ArrayContainer;
 use Viserio\Events\Dispatcher;
+use Viserio\Events\Tests\Fixture\FooService;
 
 class DispatcherTest extends \PHPUnit_Framework_TestCase
 {
     public function setup()
     {
-        $this->container = new Container();
-        $this->container['foo.service'] = function () {
-            return new FooService();
-        };
+        $this->container = new ArrayContainer([
+            'foo.service' => function () {
+                return new FooService();
+            }
+        ]);
 
-        $dispatcher = new EventDispatcher();
-
-        $this->dispatcher = new Dispatcher($dispatcher, $this->container);
+        $this->dispatcher = new Dispatcher(new EventDispatcher(), $this->container);
     }
 
     /**
@@ -39,9 +39,10 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase
 
     public function testAddListener()
     {
-        $this->dispatcher->addListener('foo', [$this->container['foo.service'], 'onFoo']);
+        $this->dispatcher->addListener('foo', [$this->container->get('foo.service'), 'onFoo']);
         $this->dispatcher->dispatch('foo', new Event());
-        $this->assertEquals('foo', $this->container['foo.service']->string);
+
+        $this->assertEquals('foo', $this->container->get('foo.service')->string);
     }
 
     public function testAddListenerService()
@@ -49,7 +50,8 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase
         $this->dispatcher->addListenerService('foo', ['foo.service', 'onFoo'], 5);
         $this->dispatcher->addListenerService('foo', ['foo.service', 'onBar1']);
         $this->dispatcher->dispatch('foo', new Event());
-        $this->assertEquals('foobar1', $this->container['foo.service']->string);
+
+        $this->assertEquals('foobar1', $this->container->get('foo.service')->string);
     }
 
     public function testRemoveListener()
@@ -58,7 +60,8 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase
         $this->dispatcher->addListenerService('foo', ['foo.service', 'onBar1']);
         $this->dispatcher->removeListener('foo', ['foo.service', 'onFoo']);
         $this->dispatcher->dispatch('foo', new Event());
-        $this->assertEquals('bar1', $this->container['foo.service']->string);
+
+        $this->assertEquals('bar1', $this->container->get('foo.service')->string);
     }
 
     /**
@@ -73,11 +76,13 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase
     {
         $this->dispatcher->addSubscriberService('foo.service', 'Viserio\Events\Test\FooService');
         $this->dispatcher->dispatch('foo', new Event());
-        $this->assertEquals('foo', $this->container['foo.service']->string);
+        $this->assertEquals('foo', $this->container->get('foo.service')->string);
+
         $this->dispatcher->dispatch('bar', new Event());
-        $this->assertEquals('foobar2bar1', $this->container['foo.service']->string);
+        $this->assertEquals('foobar2bar1', $this->container->get('foo.service')->string);
+
         $this->dispatcher->dispatch('buzz', new Event());
-        $this->assertEquals('foobar2bar1buzz', $this->container['foo.service']->string);
+        $this->assertEquals('foobar2bar1buzz', $this->container->get('foo.service')->string);
     }
 
     /**
@@ -94,6 +99,7 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($this->dispatcher->hasListeners('foo'));
         $this->assertTrue($this->dispatcher->hasListeners('bar'));
         $this->assertTrue($this->dispatcher->hasListeners('buzz'));
+
         $this->dispatcher->removeSubscriberService('foo.service', 'Viserio\Events\Test\FooService');
         $this->assertFalse($this->dispatcher->hasListeners('foo'));
         $this->assertFalse($this->dispatcher->hasListeners('bar'));
@@ -102,22 +108,25 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase
 
     public function testAddSubscriber()
     {
-        $this->dispatcher->addSubscriber($this->container['foo.service']);
+        $this->dispatcher->addSubscriber($this->container->get('foo.service'));
         $this->dispatcher->dispatch('foo', new Event());
-        $this->assertEquals('foo', $this->container['foo.service']->string);
+        $this->assertEquals('foo', $this->container->get('foo.service')->string);
+
         $this->dispatcher->dispatch('bar', new Event());
-        $this->assertEquals('foobar2bar1', $this->container['foo.service']->string);
+        $this->assertEquals('foobar2bar1', $this->container->get('foo.service')->string);
+
         $this->dispatcher->dispatch('buzz', new Event());
-        $this->assertEquals('foobar2bar1buzz', $this->container['foo.service']->string);
+        $this->assertEquals('foobar2bar1buzz', $this->container->get('foo.service')->string);
     }
 
     public function testRemoveSubscriber()
     {
-        $this->dispatcher->addSubscriber($this->container['foo.service']);
+        $this->dispatcher->addSubscriber($this->container->get('foo.service'));
         $this->assertTrue($this->dispatcher->hasListeners('foo'));
         $this->assertTrue($this->dispatcher->hasListeners('bar'));
         $this->assertTrue($this->dispatcher->hasListeners('buzz'));
-        $this->dispatcher->removeSubscriber($this->container['foo.service']);
+
+        $this->dispatcher->removeSubscriber($this->container->get('foo.service'));
         $this->assertFalse($this->dispatcher->hasListeners('foo'));
         $this->assertFalse($this->dispatcher->hasListeners('bar'));
         $this->assertFalse($this->dispatcher->hasListeners('buzz'));
@@ -128,42 +137,5 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase
         $this->dispatcher->addSubscriberService('foo.service', 'Viserio\Events\Test\FooService');
         $this->assertEquals(2, count($this->dispatcher->getListeners('bar')));
         $this->assertEquals(3, count($this->dispatcher->getListeners()));
-    }
-}
-
-class FooService implements EventSubscriberInterface
-{
-    public $string = '';
-
-    public function onFoo(Event $e)
-    {
-        $this->string .= 'foo';
-    }
-
-    public function onBar1(Event $e)
-    {
-        $this->string .= 'bar1';
-    }
-
-    public function onBar2(Event $e)
-    {
-        $this->string .= 'bar2';
-    }
-
-    public function onBuzz(Event $e)
-    {
-        $this->string .= 'buzz';
-    }
-
-    public static function getSubscribedEvents()
-    {
-        return [
-            'foo' => 'onFoo',
-            'bar' => [
-                ['onBar1'],
-                ['onBar2', 10],
-            ],
-            'buzz' => ['onBuzz', 5],
-        ];
     }
 }
