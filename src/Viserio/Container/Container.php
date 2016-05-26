@@ -27,6 +27,13 @@ class Container implements \ArrayAccess, ContainerInteropInterface, ContainerCon
     use ContainerArrayAccessTrait, MockerContainerTrait, ContainerResolverTraits;
 
     /**
+     * The contextual binding map.
+     *
+     * @var array
+     */
+    public $contextual = [];
+
+    /**
      * The registered type aliases.
      *
      * @var array
@@ -72,13 +79,6 @@ class Container implements \ArrayAccess, ContainerInteropInterface, ContainerCon
      * @var array
      */
     protected $inflectors = [];
-
-    /**
-     * The contextual binding map.
-     *
-     * @var array
-     */
-    public $contextual = [];
 
     /**
      * The stack of concretions being current built.
@@ -138,7 +138,7 @@ class Container implements \ArrayAccess, ContainerInteropInterface, ContainerCon
             $this->alias($alias, $abstract);
         }
 
-        if (!is_object($alias)) {
+        if (! is_object($alias)) {
             $this->keys[$alias] = true;
         }
 
@@ -184,7 +184,7 @@ class Container implements \ArrayAccess, ContainerInteropInterface, ContainerCon
     {
         $alias = $this->getAlias($alias);
 
-        if (!$this->bound($alias)) {
+        if (! $this->bound($alias)) {
             throw new NotFoundException(sprintf('Binding [%s] does not exists in the container bindings', $alias));
         }
 
@@ -374,8 +374,6 @@ class Container implements \ArrayAccess, ContainerInteropInterface, ContainerCon
         if (isset($this->bindings[$binding])) {
             return $this->bindings[$binding]['concrete'];
         }
-
-        return;
     }
 
     /**
@@ -442,7 +440,7 @@ class Container implements \ArrayAccess, ContainerInteropInterface, ContainerCon
     protected function applyInflectors($object)
     {
         foreach ($this->inflectors as $type => $inflector) {
-            if (!$object instanceof $type) {
+            if (! $object instanceof $type) {
                 continue;
             }
 
@@ -489,7 +487,7 @@ class Container implements \ArrayAccess, ContainerInteropInterface, ContainerCon
         // If we don't have a registered resolver or concrete for the type, we'll just
         // assume each type is a concrete name and will attempt to resolve it as is
         // since the container should be able to resolve concretes automatically.
-        if (!isset($this->bindings[$alias])) {
+        if (! isset($this->bindings[$alias])) {
             if (isset($this->bindings[$this->absoluteClassName($alias)])) {
                 $alias = $this->absoluteClassName($alias);
             }
@@ -560,7 +558,7 @@ class Container implements \ArrayAccess, ContainerInteropInterface, ContainerCon
     protected function shouldBeDefinitionObject($concrete)
     {
         return
-            is_object($concrete) && !$concrete instanceof \Closure || is_string($concrete)
+            is_object($concrete) && ! $concrete instanceof \Closure || is_string($concrete)
         ;
     }
 
@@ -576,7 +574,7 @@ class Container implements \ArrayAccess, ContainerInteropInterface, ContainerCon
     protected function shouldNotBeDefinitionObject($alias, $concrete)
     {
         return
-            is_string($alias) && (!is_object($concrete) && !$concrete instanceof \Closure && (is_string($concrete) || null !== $concrete))
+            is_string($alias) && (! is_object($concrete) && ! $concrete instanceof \Closure && (is_string($concrete) || null !== $concrete))
         ;
     }
 

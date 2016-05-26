@@ -19,7 +19,7 @@ interface Manager extends ArrayAccess
     /**
      * Gets a configuration setting using a simple or nested key.
      *
-     * @param string      $key
+     * @param string     $key
      * @param mixed|null $default
      *
      * @return mixed The value of a setting

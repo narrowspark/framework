@@ -23,6 +23,22 @@ class Request extends SymfonyRequest implements RequestContract, \ArrayAccess
     protected $json;
 
     /**
+     * Get an input element from the request.
+     *
+     * @param string $key
+     *
+     * @return string|null
+     */
+    public function __get(string $key)
+    {
+        $all = $this->all();
+
+        if (array_key_exists($key, $all)) {
+            return $all[$key];
+        }
+    }
+
+    /**
      * Get the JSON payload for the request.
      *
      * @param string|null $key
@@ -32,7 +48,7 @@ class Request extends SymfonyRequest implements RequestContract, \ArrayAccess
      */
     public function json(string $key = null, $default = null)
     {
-        if (!isset($this->json)) {
+        if (! isset($this->json)) {
             $this->json = new ParameterBag((array) json_decode($this->getContent(), true));
         }
 
@@ -320,7 +336,7 @@ class Request extends SymfonyRequest implements RequestContract, \ArrayAccess
         $input = $this->all();
 
         foreach ($keys as $value) {
-            if (!array_key_exists($value, $input)) {
+            if (! array_key_exists($value, $input)) {
                 return false;
             }
         }
@@ -338,7 +354,7 @@ class Request extends SymfonyRequest implements RequestContract, \ArrayAccess
     public function hasRegex(string $pattern): bool
     {
         foreach ($this->all() as $key => $value) {
-            if (!$this->isEmptyString($key) && preg_match($pattern, $key)) {
+            if (! $this->isEmptyString($key) && preg_match($pattern, $key)) {
                 return true;
             }
         }
@@ -430,7 +446,7 @@ class Request extends SymfonyRequest implements RequestContract, \ArrayAccess
         foreach ($keys as $key) {
             $value = Arr::get($input, $key);
 
-            if (!is_null($value)) {
+            if (! is_null($value)) {
                 Arr::set($results, $key, $value);
             }
         }
@@ -500,24 +516,6 @@ class Request extends SymfonyRequest implements RequestContract, \ArrayAccess
     }
 
     /**
-     * Get an input element from the request.
-     *
-     * @param string $key
-     *
-     * @return string|null
-     */
-    public function __get(string $key)
-    {
-        $all = $this->all();
-
-        if (array_key_exists($key, $all)) {
-            return $all[$key];
-        }
-
-        return;
-    }
-
-    /**
      * Get the input source for the request.
      *
      * @return \Symfony\Component\HttpFoundation\ParameterBag
@@ -542,6 +540,6 @@ class Request extends SymfonyRequest implements RequestContract, \ArrayAccess
     {
         $boolOrArray = is_bool($this->input($key)) || is_array($this->input($key));
 
-        return !$boolOrArray && trim((string) $this->input($key)) === '';
+        return ! $boolOrArray && trim((string) $this->input($key)) === '';
     }
 }

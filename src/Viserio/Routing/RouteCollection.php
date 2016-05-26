@@ -293,6 +293,26 @@ class RouteCollection extends RouteCollector implements RouteStrategyContract, R
     }
 
     /**
+     * Redirect instance.
+     *
+     * @return \Viserio\Routing\Redirect
+     */
+    public function redirect()
+    {
+        return new Redirect($this);
+    }
+
+    /**
+     * Returns the array of registered named routes (starting with @).
+     *
+     * @return array
+     */
+    public function getNamedRoutes()
+    {
+        return $this->namedRoutes;
+    }
+
+    /**
      * @param string|null $name
      * @param callable    $handler
      * @param string      $when
@@ -320,31 +340,11 @@ class RouteCollection extends RouteCollector implements RouteStrategyContract, R
      */
     protected function getFilter($name)
     {
-        if (!array_key_exists($name, $this->filters)) {
+        if (! array_key_exists($name, $this->filters)) {
             throw new InvalidArgumentException(sprintf('Filter with name %s is not defined', $name));
         }
 
         return $this->filters[$name];
-    }
-
-    /**
-     * Redirect instance.
-     *
-     * @return \Viserio\Routing\Redirect
-     */
-    public function redirect()
-    {
-        return new Redirect($this);
-    }
-
-    /**
-     * Returns the array of registered named routes (starting with @).
-     *
-     * @return array
-     */
-    public function getNamedRoutes()
-    {
-        return $this->namedRoutes;
     }
 
     /**

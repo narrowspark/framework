@@ -1,8 +1,6 @@
 <?php
 namespace Viserio\Parsers\Formats;
 
-use Viserio\Contracts\Filesystem\Filesystem as FilesystemContract;
-use Viserio\Contracts\Parsers\Exception\DumpException;
 use Viserio\Contracts\Parsers\Exception\ParseException;
 use Viserio\Contracts\Parsers\Format as FormatContract;
 
@@ -13,7 +11,7 @@ class PHP implements FormatContract
      */
     public function parse(string $payload): array
     {
-        if (!file_exists($payload)) {
+        if (! file_exists($payload)) {
             throw new ParseException([
                 'message' => 'File does not exist.',
             ]);

@@ -34,6 +34,20 @@ class DatabaseServiceProvider extends ServiceProvider
         }
     }
 
+    /**
+     * Get the services provided by the provider.
+     *
+     * @return string[]
+     */
+    public function provides()
+    {
+        return [
+            'db',
+            'db.factory',
+            'db.query',
+        ];
+    }
+
     protected function registerDatabaseQuery()
     {
         $type = $this->app->get('db')->getConnections();
@@ -57,19 +71,5 @@ class DatabaseServiceProvider extends ServiceProvider
         $this->app->singleton('db.factory', function ($app) {
             return new ConnectionFactory($app);
         });
-    }
-
-    /**
-     * Get the services provided by the provider.
-     *
-     * @return string[]
-     */
-    public function provides()
-    {
-        return [
-            'db',
-            'db.factory',
-            'db.query',
-        ];
     }
 }

@@ -84,30 +84,6 @@ class Mailgun extends Transport
     }
 
     /**
-     * Get the "to" payload field for the API request.
-     *
-     * @param \Swift_Mime_Message $message
-     *
-     * @return string
-     */
-    protected function getTo(Swift_Mime_Message $message)
-    {
-        $formatted = [];
-
-        $contacts = array_merge(
-            (array) $message->getTo(),
-            (array) $message->getCc(),
-            (array) $message->getBcc()
-        );
-
-        foreach ($contacts as $address => $display) {
-            $formatted[] = $display ? $display . sprintf('<%s>', $address) : $address;
-        }
-
-        return implode(',', $formatted);
-    }
-
-    /**
      * Get the API key being used by the transport.
      *
      * @return string
@@ -151,5 +127,29 @@ class Mailgun extends Transport
         $this->url = 'https://api.mailgun.net/v3/' . $domain . '/messages.mime';
 
         return $this->domain = $domain;
+    }
+
+    /**
+     * Get the "to" payload field for the API request.
+     *
+     * @param \Swift_Mime_Message $message
+     *
+     * @return string
+     */
+    protected function getTo(Swift_Mime_Message $message)
+    {
+        $formatted = [];
+
+        $contacts = array_merge(
+            (array) $message->getTo(),
+            (array) $message->getCc(),
+            (array) $message->getBcc()
+        );
+
+        foreach ($contacts as $address => $display) {
+            $formatted[] = $display ? $display . sprintf('<%s>', $address) : $address;
+        }
+
+        return implode(',', $formatted);
     }
 }

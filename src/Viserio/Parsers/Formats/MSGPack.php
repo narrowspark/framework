@@ -16,7 +16,7 @@ class MSGPack implements FormatContract
         if (function_exists('msgpack_unpack')) {
             $msg = msgpack_unpack(trim($payload));
 
-            if (!$msg) {
+            if (! $msg) {
                 throw new ParseException([
                     'message' => 'Failed To Parse MSGPack',
                 ]);
@@ -35,7 +35,7 @@ class MSGPack implements FormatContract
     {
         $msg = msgpack_pack($data);
 
-        if (!$msg) {
+        if (! $msg) {
             throw new DumpException('MSGPack dumping failed.');
         }
 

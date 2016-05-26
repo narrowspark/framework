@@ -86,7 +86,7 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract, Direct
     {
         $path = $this->normalizeDirectorySeparator($path);
 
-        if (!$this->exists($path)) {
+        if (! $this->exists($path)) {
             throw new FileNotFoundException($path);
         }
 
@@ -130,7 +130,7 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract, Direct
     public function copy($originFile, $targetFile, $override = false): bool
     {
         $from = $this->normalizeDirectorySeparator($originFile);
-        $to   = $this->normalizeDirectorySeparator($targetFile);
+        $to = $this->normalizeDirectorySeparator($targetFile);
 
         try {
             parent::copy($from, $to, $override);
@@ -149,7 +149,7 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract, Direct
     public function move(string $from, string $to): bool
     {
         $from = $this->normalizeDirectorySeparator($from);
-        $to   = $this->normalizeDirectorySeparator($to);
+        $to = $this->normalizeDirectorySeparator($to);
 
         return rename($from, $to);
     }
@@ -171,7 +171,7 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract, Direct
     {
         $path = $this->normalizeDirectorySeparator($path);
 
-        if (!$this->isFile($path) && !$this->has($path)) {
+        if (! $this->isFile($path) && ! $this->has($path)) {
             throw new FileNotFoundException($path);
         }
 
@@ -191,7 +191,7 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract, Direct
     {
         $path = $this->normalizeDirectorySeparator($path);
 
-        if (!$this->isFile($path) && !$this->has($path)) {
+        if (! $this->isFile($path) && ! $this->has($path)) {
             throw new FileNotFoundException($path);
         }
 
@@ -229,8 +229,8 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract, Direct
      */
     public function allFiles(string $directory, bool $showHiddenFiles = false): array
     {
-        $files  = [];
-        $finder = Finder::create()->files()->ignoreDotFiles(!$showHiddenFiles)->in($directory);
+        $files = [];
+        $finder = Finder::create()->files()->ignoreDotFiles(! $showHiddenFiles)->in($directory);
 
         foreach ($finder as $dir) {
             $files[] = $this->normalizeDirectorySeparator($dir->getPathname());
@@ -245,7 +245,7 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract, Direct
     public function createDirectory(string $dirname, array $config = []): bool
     {
         $dirname = $this->normalizeDirectorySeparator($dirname);
-        $mode    = $this->permissions['dir']['public'];
+        $mode = $this->permissions['dir']['public'];
 
         if (isset($config['visibility'])) {
             $mode = $this->permissions['dir'][$config['visibility']];
@@ -289,7 +289,7 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract, Direct
     {
         $dirname = $this->normalizeDirectorySeparator($dirname);
 
-        if (!$this->isDirectory($dirname)) {
+        if (! $this->isDirectory($dirname)) {
             return false;
         }
 
@@ -305,14 +305,14 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract, Direct
     {
         $dirname = $this->normalizeDirectorySeparator($dirname);
 
-        if (!$this->isDirectory($dirname)) {
+        if (! $this->isDirectory($dirname)) {
             return false;
         }
 
         $items = new FilesystemIterator($dirname);
 
         foreach ($items as $item) {
-            if ($item->isDir() && !$item->isLink()) {
+            if ($item->isDir() && ! $item->isLink()) {
                 $this->cleanDirectory($item->getPathname());
             } else {
                 try {

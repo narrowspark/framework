@@ -32,31 +32,14 @@ final class Cookie extends AbstractCookie
         $this->validateName($name);
         $this->validateValue($value);
 
-        $this->name     = $name;
-        $this->value    = $value;
-        $this->maxAge   = is_int($expiration) ? $expiration : null;
-        $this->expires  = $this->normalizeExpires($expiration);
-        $this->domain   = $this->normalizeDomain($domain);
-        $this->path     = $this->normalizePath($path);
-        $this->secure   = filter_var($secure, FILTER_VALIDATE_BOOLEAN);
+        $this->name = $name;
+        $this->value = $value;
+        $this->maxAge = is_int($expiration) ? $expiration : null;
+        $this->expires = $this->normalizeExpires($expiration);
+        $this->domain = $this->normalizeDomain($domain);
+        $this->path = $this->normalizePath($path);
+        $this->secure = filter_var($secure, FILTER_VALIDATE_BOOLEAN);
         $this->httpOnly = filter_var($httpOnly, FILTER_VALIDATE_BOOLEAN);
-    }
-
-    /**
-     * Sets the value
-     *
-     * @param string|null $value
-     *
-     * @return self
-     */
-    public function withValue($value = null): CookieContract
-    {
-        $this->validateValue($value);
-
-        $new = clone $this;
-        $new->value = $value;
-
-        return $new;
     }
 
     /**
@@ -76,6 +59,23 @@ final class Cookie extends AbstractCookie
         $cookieStringParts = $this->appendFormattedHttpOnlyPartIfSet($cookieStringParts);
 
         return implode('; ', $cookieStringParts);
+    }
+
+    /**
+     * Sets the value
+     *
+     * @param string|null $value
+     *
+     * @return self
+     */
+    public function withValue($value = null): CookieContract
+    {
+        $this->validateValue($value);
+
+        $new = clone $this;
+        $new->value = $value;
+
+        return $new;
     }
 
     /**

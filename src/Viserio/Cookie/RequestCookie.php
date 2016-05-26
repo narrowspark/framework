@@ -45,15 +45,15 @@ class RequestCookie
 
         $cookie = new Cookie($cookieName);
 
-        if (!is_null($cookieValue)) {
+        if (! is_null($cookieValue)) {
             $cookie = $cookie->withValue($cookieValue);
         }
 
         foreach ($rawAttributes as $value) {
             $rawAttributePair = explode('=', $value, 2);
-            $attributeKey     = $rawAttributePair[0];
-            $attributeValue   = count($rawAttributePair) > 1 ? $rawAttributePair[1] : null;
-            $attributeKey     = strtolower($attributeKey);
+            $attributeKey = $rawAttributePair[0];
+            $attributeValue = count($rawAttributePair) > 1 ? $rawAttributePair[1] : null;
+            $attributeKey = strtolower($attributeKey);
 
             switch ($attributeKey) {
                 case 'expires':

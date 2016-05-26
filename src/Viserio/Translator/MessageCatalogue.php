@@ -167,7 +167,7 @@ class MessageCatalogue implements MessageCatalogueContract
      */
     public function add($messages, $domain = 'messages')
     {
-        if (!isset($this->messages[$domain])) {
+        if (! isset($this->messages[$domain])) {
             $this->messages[$domain] = $messages;
         } else {
             $this->messages[$domain] = array_replace($this->messages[$domain], $messages);

@@ -28,6 +28,23 @@ abstract class ServiceProvider implements ServiceProviderContract
     }
 
     /**
+     * Dynamically handle missing method calls.
+     *
+     * @param string $method
+     * @param array  $parameters
+     *
+     * @return mixed
+     */
+    public function __call($method, $parameters)
+    {
+        if ($method === 'boot') {
+            return;
+        }
+
+        throw new \BadMethodCallException('Call to undefined method [' . sprintf('%s', $method) . ']');
+    }
+
+    /**
      * {@inheritdoc}
      */
     abstract public function register();
@@ -37,7 +54,6 @@ abstract class ServiceProvider implements ServiceProviderContract
      */
     public function boot()
     {
-        return;
     }
 
     /**
@@ -47,6 +63,14 @@ abstract class ServiceProvider implements ServiceProviderContract
      */
     public function commands(array $commands = null)
     {
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function provides()
+    {
+        return [];
     }
 
     /**
@@ -62,14 +86,6 @@ abstract class ServiceProvider implements ServiceProviderContract
     }
 
     /**
-     * {@inheritdoc}
-     */
-    public function provides()
-    {
-        return [];
-    }
-
-    /**
      * Alias a type to a shorter name.
      *
      * @param string $abstract
@@ -80,22 +96,5 @@ abstract class ServiceProvider implements ServiceProviderContract
         if ($alias) {
             $this->app->alias($abstract, $alias);
         }
-    }
-
-    /**
-     * Dynamically handle missing method calls.
-     *
-     * @param string $method
-     * @param array  $parameters
-     *
-     * @return mixed
-     */
-    public function __call($method, $parameters)
-    {
-        if ($method === 'boot') {
-            return;
-        }
-
-        throw new \BadMethodCallException('Call to undefined method [' . sprintf('%s', $method) . ']');
     }
 }

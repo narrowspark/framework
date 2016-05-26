@@ -24,6 +24,25 @@ class RedirectResponse extends SymfonyRedirectResponse
     protected $session;
 
     /**
+     * Dynamically bind flash data in the session.
+     *
+     * @param string $method
+     * @param array  $parameters
+     *
+     * @throws \BadMethodCallException
+     *
+     * @return RedirectResponse
+     */
+    public function __call(string $method, array $parameters): \Viserio\Http\RedirectResponse
+    {
+        if (Str::startsWith($method, 'with')) {
+            return $this->with(Str::snake(substr($method, 4)), $parameters[0]);
+        }
+
+        throw new \BadMethodCallException(sprintf('Method [%s] does not exist on Redirect.', $method));
+    }
+
+    /**
      * Set a header on the Response.
      *
      * @param string $key
@@ -99,7 +118,7 @@ class RedirectResponse extends SymfonyRedirectResponse
     {
         $input = $input ?: $this->request->input();
         $this->session->flashInput(array_filter($input, function ($value) {
-            return !$value instanceof SymfonyUploadedFile;
+            return ! $value instanceof SymfonyUploadedFile;
         }));
 
         return $this;
@@ -169,24 +188,5 @@ class RedirectResponse extends SymfonyRedirectResponse
     public function setSession(SessionStore $session)
     {
         $this->session = $session;
-    }
-
-    /**
-     * Dynamically bind flash data in the session.
-     *
-     * @param string $method
-     * @param array  $parameters
-     *
-     * @throws \BadMethodCallException
-     *
-     * @return RedirectResponse
-     */
-    public function __call(string $method, array $parameters): \Viserio\Http\RedirectResponse
-    {
-        if (Str::startsWith($method, 'with')) {
-            return $this->with(Str::snake(substr($method, 4)), $parameters[0]);
-        }
-
-        throw new \BadMethodCallException(sprintf('Method [%s] does not exist on Redirect.', $method));
     }
 }

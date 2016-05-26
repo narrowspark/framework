@@ -93,8 +93,8 @@ class Factory implements FactoryContract
         EventDispatcherInterface $events
     ) {
         $this->engines = $engines;
-        $this->finder  = $finder;
-        $this->events  = $events;
+        $this->finder = $finder;
+        $this->events = $events;
 
         $this->share('__env', $this);
     }
@@ -110,7 +110,7 @@ class Factory implements FactoryContract
      */
     public function file(string $path, array $data = [], array $mergeData = []): \Viserio\View\View
     {
-        $data   = array_merge($mergeData, $this->parseData($data));
+        $data = array_merge($mergeData, $this->parseData($data));
         $engine = $this->getEngineFromPath($path);
 
         return $this->getView($this, $engine, $path, $path, $data);
@@ -131,9 +131,9 @@ class Factory implements FactoryContract
             $view = $this->aliases[$view];
         }
 
-        $view   = $this->normalizeName($view);
-        $path   = $this->finder->find($view);
-        $data   = array_merge($mergeData, $this->parseData($data));
+        $view = $this->normalizeName($view);
+        $path = $this->finder->find($view);
+        $data = array_merge($mergeData, $this->parseData($data));
         $engine = $this->getEngineFromPath($path);
 
         return $this->getView($this, $engine, $view, $path, $data);
@@ -241,9 +241,9 @@ class Factory implements FactoryContract
     public function getEngineFromPath(string $path): \Viserio\Contracts\View\Engine
     {
         $engine = explode('|', $path);
-        $path   = isset($engine[1]) ? $engine[1] : $path;
+        $path = isset($engine[1]) ? $engine[1] : $path;
 
-        if (!$extension = $this->getExtension($path)) {
+        if (! $extension = $this->getExtension($path)) {
             throw new InvalidArgumentException(sprintf('Unrecognized extension in file: [%s]', $path));
         }
 
@@ -260,7 +260,7 @@ class Factory implements FactoryContract
      */
     public function share(string $key, $value = null)
     {
-        if (!is_array($key)) {
+        if (! is_array($key)) {
             return $this->shared[$key] = $value;
         }
 

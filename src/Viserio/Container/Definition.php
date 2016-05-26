@@ -184,7 +184,7 @@ class Definition
      */
     protected function callMethods($object)
     {
-        if (!empty($this->methods)) {
+        if (! empty($this->methods)) {
             foreach (array_reverse($this->methods) as $method => $args) {
                 $reflection = new \ReflectionMethod($object, $method);
                 $arguments = [];
@@ -242,8 +242,6 @@ class Definition
         if (class_exists($className)) {
             return $this->absoluteClassName($className);
         }
-
-        return;
     }
 
     /**

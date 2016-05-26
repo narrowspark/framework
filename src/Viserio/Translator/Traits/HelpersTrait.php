@@ -42,7 +42,7 @@ trait HelpersTrait
         }
 
         foreach ($helpers as $helper) {
-            if (!isset($this->helpers[$helper['name']])) {
+            if (! isset($this->helpers[$helper['name']])) {
                 throw new \Exception('Helper ' . $helper['name'] . ' is not registered.');
             }
 

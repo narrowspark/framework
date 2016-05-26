@@ -20,6 +20,20 @@ class ViewServiceProvider extends ServiceProvider
     }
 
     /**
+     * Get the services provided by the provider.
+     *
+     * @return string[]
+     */
+    public function provides(): array
+    {
+        return [
+            'view',
+            'view.finder',
+            'view.engine.resolver',
+        ];
+    }
+
+    /**
      * Register the engine engines instance.
      */
     protected function registerEngineResolver()
@@ -114,19 +128,5 @@ class ViewServiceProvider extends ServiceProvider
 
             return $view;
         });
-    }
-
-    /**
-     * Get the services provided by the provider.
-     *
-     * @return string[]
-     */
-    public function provides(): array
-    {
-        return [
-            'view',
-            'view.finder',
-            'view.engine.resolver',
-        ];
     }
 }

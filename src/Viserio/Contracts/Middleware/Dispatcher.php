@@ -21,8 +21,8 @@ interface Dispatcher
     public function pipe($middleware): Dispatcher;
 
     /**
-     * @param  ServerRequestInterface $request
-     * @param  callable               $default
+     * @param ServerRequestInterface $request
+     * @param callable               $default
      *
      * @return ResponseInterface
      */

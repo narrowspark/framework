@@ -1,7 +1,6 @@
 <?php
 namespace Viserio\Parsers\Tests\Formats;
 
-use org\bovigo\vfs\vfsStream;
 use Viserio\Parsers\Formats\Serialize;
 
 class SerializeTest extends \PHPUnit_Framework_TestCase

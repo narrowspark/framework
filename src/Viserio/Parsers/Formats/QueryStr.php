@@ -1,8 +1,6 @@
 <?php
 namespace Viserio\Parsers\Formats;
 
-use Viserio\Contracts\Parsers\Exception\DumpException;
-use Viserio\Contracts\Parsers\Exception\ParseException;
 use Viserio\Contracts\Parsers\Format as FormatContract;
 
 class QueryStr implements FormatContract

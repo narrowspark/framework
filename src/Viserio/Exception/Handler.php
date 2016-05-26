@@ -95,30 +95,6 @@ class Handler
     }
 
     /**
-     * Register the PHP error handler.
-     */
-    protected function registerErrorHandler()
-    {
-        set_error_handler([$this, 'handleError']);
-    }
-
-    /**
-     * Register the PHP exception handler.
-     */
-    protected function registerExceptionHandler()
-    {
-        set_exception_handler([$this, 'handleUncaughtException']);
-    }
-
-    /**
-     * Register the PHP shutdown handler.
-     */
-    protected function registerShutdownHandler()
-    {
-        register_shutdown_function([$this, 'handleShutdown']);
-    }
-
-    /**
      * Unregister the PHP error handler.
      */
     public function unregister()
@@ -171,46 +147,6 @@ class Handler
     }
 
     /**
-     * Handle the given exception.
-     *
-     * @param \Exception $exception
-     * @param bool       $fromConsole
-     *
-     * @return string
-     */
-    protected function callCustomHandlers(\Exception $exception, bool $fromConsole = false): string
-    {
-        foreach ($this->handlers as $handler) {
-            // If this exception handler does not handle the given exception, we will just
-            // go the next one. A handler may type-hint an exception that it handles so
-            //  we can have more granularity on the error handling for the developer.
-            if (!$this->handlesException($handler, $exception)) {
-                continue;
-            } elseif ($exception instanceof HttpExceptionInterface) {
-                $code = $this->flattenException($exception)->getStatusCode();
-            } else {
-                $code = Response::HTTP_INTERNAL_SERVER_ERROR;
-            }
-
-            // We will wrap this handler in a try / catch and avoid white screens of death
-            // if any exceptions are thrown from a handler itself. This way we will get
-            // at least some errors, and avoid errors with no data or not log writes.
-            try {
-                $response = $handler($exception, $code, $fromConsole);
-            } catch (Exception $exception) {
-                $response = $this->formatException($exception);
-            }
-
-            // If this handler returns a "non-null" response, we will return it so it will
-            // get sent back to the browsers. Once the handler returns a valid response
-            // we will cease iterating through them and calling these other handlers.
-            if (isset($response) && $response !== null) {
-                return $response;
-            }
-        }
-    }
-
-    /**
      * Handle the PHP shutdown event.
      */
     public function handleShutdown()
@@ -222,48 +158,12 @@ class Handler
         if ($error !== null && $this->isFatal($error['type'])) {
             extract($error);
 
-            if (!$this->isFatal($type)) {
+            if (! $this->isFatal($type)) {
                 return;
             }
 
             $this->handleException($this->fatalExceptionFromError($error));
         }
-    }
-
-    /**
-     * Create a new fatal exception instance from an error array.
-     *
-     * @param array $error
-     *
-     * @return FatalErrorException
-     */
-    protected function fatalExceptionFromError(array $error): \Symfony\Component\Debug\Exception\FatalErrorException
-    {
-        return new FatalErrorException(
-            $error['message'],
-            $error['type'],
-            0,
-            $error['file'],
-            $error['line']
-        );
-    }
-
-    /**
-     * Format an exception thrown by a handler.
-     *
-     * @param \Exception $exception
-     *
-     * @return string
-     */
-    protected function formatException(Exception $exception): string
-    {
-        if ($this->debug) {
-            $location = $exception->getMessage() . ' in ' . $exception->getFile() . ':' . $exception->getLine();
-
-            return 'Error in exception handler: ' . $location;
-        }
-
-        return 'Error in exception handler.';
     }
 
     /**
@@ -308,6 +208,106 @@ class Handler
         // default exception displayer for the current application context and let
         // it show the exception to the user / developer based on the situation.
         return $this->displayException($exception);
+    }
+
+    /**
+     * Register the PHP error handler.
+     */
+    protected function registerErrorHandler()
+    {
+        set_error_handler([$this, 'handleError']);
+    }
+
+    /**
+     * Register the PHP exception handler.
+     */
+    protected function registerExceptionHandler()
+    {
+        set_exception_handler([$this, 'handleUncaughtException']);
+    }
+
+    /**
+     * Register the PHP shutdown handler.
+     */
+    protected function registerShutdownHandler()
+    {
+        register_shutdown_function([$this, 'handleShutdown']);
+    }
+
+    /**
+     * Handle the given exception.
+     *
+     * @param \Exception $exception
+     * @param bool       $fromConsole
+     *
+     * @return string
+     */
+    protected function callCustomHandlers(\Exception $exception, bool $fromConsole = false): string
+    {
+        foreach ($this->handlers as $handler) {
+            // If this exception handler does not handle the given exception, we will just
+            // go the next one. A handler may type-hint an exception that it handles so
+            //  we can have more granularity on the error handling for the developer.
+            if (! $this->handlesException($handler, $exception)) {
+                continue;
+            } elseif ($exception instanceof HttpExceptionInterface) {
+                $code = $this->flattenException($exception)->getStatusCode();
+            } else {
+                $code = Response::HTTP_INTERNAL_SERVER_ERROR;
+            }
+
+            // We will wrap this handler in a try / catch and avoid white screens of death
+            // if any exceptions are thrown from a handler itself. This way we will get
+            // at least some errors, and avoid errors with no data or not log writes.
+            try {
+                $response = $handler($exception, $code, $fromConsole);
+            } catch (Exception $exception) {
+                $response = $this->formatException($exception);
+            }
+
+            // If this handler returns a "non-null" response, we will return it so it will
+            // get sent back to the browsers. Once the handler returns a valid response
+            // we will cease iterating through them and calling these other handlers.
+            if (isset($response) && $response !== null) {
+                return $response;
+            }
+        }
+    }
+
+    /**
+     * Create a new fatal exception instance from an error array.
+     *
+     * @param array $error
+     *
+     * @return FatalErrorException
+     */
+    protected function fatalExceptionFromError(array $error): \Symfony\Component\Debug\Exception\FatalErrorException
+    {
+        return new FatalErrorException(
+            $error['message'],
+            $error['type'],
+            0,
+            $error['file'],
+            $error['line']
+        );
+    }
+
+    /**
+     * Format an exception thrown by a handler.
+     *
+     * @param \Exception $exception
+     *
+     * @return string
+     */
+    protected function formatException(Exception $exception): string
+    {
+        if ($this->debug) {
+            $location = $exception->getMessage() . ' in ' . $exception->getFile() . ':' . $exception->getLine();
+
+            return 'Error in exception handler: ' . $location;
+        }
+
+        return 'Error in exception handler.';
     }
 
     /**
@@ -391,6 +391,6 @@ class Handler
 
         $expected = $parameters[0];
 
-        return !$expected->getClass() || $expected->getClass()->isInstance($exception);
+        return ! $expected->getClass() || $expected->getClass()->isInstance($exception);
     }
 }

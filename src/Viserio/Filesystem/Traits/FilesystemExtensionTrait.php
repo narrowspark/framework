@@ -44,7 +44,7 @@ trait FilesystemExtensionTrait
      */
     public function changeExtension(string $path, string $extension): string
     {
-        $explode    = explode('.', $path);
+        $explode = explode('.', $path);
         $substrPath = substr($path, -1);
 
         // No extension for paths
@@ -53,9 +53,9 @@ trait FilesystemExtensionTrait
         }
 
         $actualExtension = null;
-        $extension       = ltrim($extension, '.');
+        $extension = ltrim($extension, '.');
 
-        if (count($explode) >= 2 && !is_dir($path)) {
+        if (count($explode) >= 2 && ! is_dir($path)) {
             $actualExtension = strtolower($extension);
         }
 

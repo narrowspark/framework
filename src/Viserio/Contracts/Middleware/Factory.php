@@ -2,8 +2,8 @@
 namespace Viserio\Contracts\Middleware;
 
 use Psr\Http\Message\RequestInterface;
-use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\UploadedFileInterface;
 use Psr\Http\Message\UriInterface;
@@ -27,7 +27,7 @@ interface FactoryInterface
         $body = null
     ): RequestInterface;
 
-     /**
+    /**
      * Create a PSR-7 ServerRequest object
      *
      * @param UriInterface? $uri     The URI for the request
@@ -47,9 +47,9 @@ interface FactoryInterface
     /**
      * Create a PSR-7 Response Object
      *
-     * @param int   $status The HTTP status code for the response
+     * @param int   $status  The HTTP status code for the response
      * @param array $headers The parsed headers for the response
-     * @param mixed $body The body for the response
+     * @param mixed $body    The body for the response
      *
      * @return Psr\Http\Message\ResponseInterface The generated response
      */
@@ -71,7 +71,7 @@ interface FactoryInterface
     /**
      * Create a PSR-7 Uri Object.
      *
-     * @param  string $uri
+     * @param string $uri
      *
      * @return Psr\Http\Message\UriInterface
      */
@@ -80,11 +80,11 @@ interface FactoryInterface
     /**
      * Create a PSR-7 Uploaded Object.
      *
-     * @param  StreamInterface|string|resource $data
-     * @param  int                             $size
-     * @param  int                             $error
-     * @param  string                          $clientFile
-     * @param  string                          $clientMediaType
+     * @param StreamInterface|string|resource $data
+     * @param int                             $size
+     * @param int                             $error
+     * @param string                          $clientFile
+     * @param string                          $clientMediaType
      *
      * @return Psr\Http\Message\UploadedFileInterface
      */

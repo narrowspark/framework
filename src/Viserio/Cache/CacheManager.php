@@ -72,6 +72,42 @@ class CacheManager extends Manager
     }
 
     /**
+     * Create an instance of the MongoDB cache driver.
+     *
+     * @param array $options
+     *
+     * @return MongoDBCachePool|null
+     */
+    public function createMongodbDriver(array $options)
+    {
+        $servers = empty($options) ?
+            $this->config->get('cache::mongodb') :
+            $options['mongodb'];
+
+        if ($servers instanceof MongoDBManager) {
+            return new MongoDBCachePool($servers);
+        }
+    }
+
+    /**
+     * Create an instance of the Predis cache driver.
+     *
+     * @param array $options
+     *
+     * @return PredisCachePool|null
+     */
+    public function createPredisDriver(array $options)
+    {
+        $servers = empty($options) ?
+            $this->config->get('cache::predis') :
+            $options['predis'];
+
+        if ($servers instanceof PredisClient) {
+            return new PredisCachePool($servers);
+        }
+    }
+
+    /**
      * Create an instance of the Flysystem cache driver.
      *
      * @return FilesystemCachePool|null
@@ -100,8 +136,6 @@ class CacheManager extends Manager
         if ($servers instanceof Memcached) {
             return new MemcachedCachePool($servers);
         }
-
-        return;
     }
 
     /**
@@ -120,48 +154,6 @@ class CacheManager extends Manager
         if ($servers instanceof Memcache) {
             return new MemcacheCachePool($servers);
         }
-
-        return;
-    }
-
-    /**
-     * Create an instance of the MongoDB cache driver.
-     *
-     * @param array $options
-     *
-     * @return MongoDBCachePool|null
-     */
-    public function createMongodbDriver(array $options)
-    {
-        $servers = empty($options) ?
-            $this->config->get('cache::mongodb') :
-            $options['mongodb'];
-
-        if ($servers instanceof MongoDBManager) {
-            return new MongoDBCachePool($servers);
-        }
-
-        return;
-    }
-
-    /**
-     * Create an instance of the Predis cache driver.
-     *
-     * @param array $options
-     *
-     * @return PredisCachePool|null
-     */
-    public function createPredisDriver(array $options)
-    {
-        $servers = empty($options) ?
-            $this->config->get('cache::predis') :
-            $options['predis'];
-
-        if ($servers instanceof PredisClient) {
-            return new PredisCachePool($servers);
-        }
-
-        return;
     }
 
     /**
@@ -180,8 +172,6 @@ class CacheManager extends Manager
         if ($adapter instanceof Local) {
             return new FilesystemCachePool($adapter);
         }
-
-        return;
     }
 
     /**
@@ -204,8 +194,6 @@ class CacheManager extends Manager
         ) {
             return new Psr6SessionHandler($options['local']['pool'], $options['local']['config']);
         }
-
-        return;
     }
 
     /**

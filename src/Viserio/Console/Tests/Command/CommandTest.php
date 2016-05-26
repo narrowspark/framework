@@ -22,11 +22,6 @@ class CommandTest extends \PHPUnit_Framework_TestCase
      */
     private $invoker;
 
-    public function tearDown()
-    {
-        Mock::close();
-    }
-
     public function setUp()
     {
         $container = new MockContainer([
@@ -42,6 +37,11 @@ class CommandTest extends \PHPUnit_Framework_TestCase
             ->injectByTypeHint(true)
             ->injectByParameterName(true)
             ->setContainer($this->application->getContainer());
+    }
+
+    public function tearDown()
+    {
+        Mock::close();
     }
 
     public function testGetNormalVerbosity()

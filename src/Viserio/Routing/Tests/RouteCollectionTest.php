@@ -45,14 +45,30 @@ class RouteCollectionTest extends \PHPUnit_Framework_TestCase
     {
         $router = $this->getRouteCollection();
 
-        $router->get('/route/{wildcard}', function () { return 'get'; });
-        $router->post('/route/{wildcard}', function () { return 'post'; });
-        $router->put('/route/{wildcard}', function () { return 'put'; });
-        $router->patch('/route/{wildcard}', function () { return 'patch'; });
-        $router->delete('/route/{wildcard}', function () { return 'delete'; });
-        $router->head('/route/{wildcard}', function () { return 'head'; });
-        $router->options('/route/{wildcard}', function () { return 'options'; });
-        $router->any('/route/{wildcard}', function () { return 'any'; });
+        $router->get('/route/{wildcard}', function () {
+            return 'get';
+        });
+        $router->post('/route/{wildcard}', function () {
+            return 'post';
+        });
+        $router->put('/route/{wildcard}', function () {
+            return 'put';
+        });
+        $router->patch('/route/{wildcard}', function () {
+            return 'patch';
+        });
+        $router->delete('/route/{wildcard}', function () {
+            return 'delete';
+        });
+        $router->head('/route/{wildcard}', function () {
+            return 'head';
+        });
+        $router->options('/route/{wildcard}', function () {
+            return 'options';
+        });
+        $router->any('/route/{wildcard}', function () {
+            return 'any';
+        });
 
         $routes = (new \ReflectionClass($router))->getProperty('routes');
         $routes->setAccessible(true);

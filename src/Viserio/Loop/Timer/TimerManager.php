@@ -50,7 +50,7 @@ class TimerManager
      */
     public function __construct(LoopContract $loop, $interval, callable $callback, $periodic = false)
     {
-        $this->loop     = $loop;
+        $this->loop = $loop;
         $this->interval = (float) floatval($interval);
         $this->callback = $callback;
         $this->periodic = (bool) $periodic;

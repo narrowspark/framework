@@ -66,7 +66,7 @@ class MemcachedConnectorTest extends \PHPUnit_Framework_TestCase
 
     public function testAddMemcachedOptions()
     {
-        if (!extension_loaded('memcached')) {
+        if (! extension_loaded('memcached')) {
             $this->markTestSkipped('Memcached is not loaded.');
         }
 
@@ -86,7 +86,7 @@ class MemcachedConnectorTest extends \PHPUnit_Framework_TestCase
                 ],
             ];
 
-        if (!defined('HHVM_VERSION')) {
+        if (! defined('HHVM_VERSION')) {
             $config = array_merge($config, [
                 'options' => [
                     'OPT_AUTO_EJECT_HOSTS' => true,
@@ -96,7 +96,7 @@ class MemcachedConnectorTest extends \PHPUnit_Framework_TestCase
 
         $connector = (new MemcachedConnector())->connect($config);
 
-        if (!defined('HHVM_VERSION')) {
+        if (! defined('HHVM_VERSION')) {
             $this->assertSame(1, $connector->getOption(Memcached::OPT_AUTO_EJECT_HOSTS));
         }
 
@@ -111,7 +111,7 @@ class MemcachedConnectorTest extends \PHPUnit_Framework_TestCase
      */
     public function testAddSaslAuth()
     {
-        if (!extension_loaded('memcached')) {
+        if (! extension_loaded('memcached')) {
             $this->markTestSkipped('Memcached is not loaded.');
         }
 
@@ -162,7 +162,7 @@ class MemcachedConnectorTest extends \PHPUnit_Framework_TestCase
      */
     public function testAddBadMemcachedOptionsToThrowExeption()
     {
-        if (!extension_loaded('memcached')) {
+        if (! extension_loaded('memcached')) {
             $this->markTestSkipped('Memcached is not loaded.');
         }
 

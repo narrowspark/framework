@@ -12,13 +12,13 @@ use Viserio\StaticalProxy\StaticalProxy;
  */
 class App extends StaticalProxy
 {
-    protected static function getFacadeAccessor()
-    {
-        return self::$container;
-    }
-
     public static function make($key)
     {
         return self::$container[$key];
+    }
+
+    protected static function getFacadeAccessor()
+    {
+        return self::$container;
     }
 }

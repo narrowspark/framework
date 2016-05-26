@@ -4,7 +4,6 @@ namespace Viserio\Filesystem\Tests;
 use org\bovigo\vfs\content\LargeFileContent;
 use org\bovigo\vfs\vfsStream;
 use org\bovigo\vfs\vfsStreamDirectory;
-use org\bovigo\vfs\visitor\vfsStreamStructureVisitor;
 use Viserio\Filesystem\Filesystem;
 
 class FilesystemTest extends \PHPUnit_Framework_TestCase
@@ -24,7 +23,7 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
-        $this->root  = vfsStream::setup();
+        $this->root = vfsStream::setup();
         $this->files = new Filesystem();
     }
 
@@ -64,7 +63,7 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
     {
         $this->root->addChild(new vfsStreamDirectory('temp'));
 
-        $dir  = $this->root->getChild('temp');
+        $dir = $this->root->getChild('temp');
         $file = vfsStream::newFile('bar.txt')->withContent('bar')->at($dir);
 
         $this->assertTrue(is_dir($dir->url()));
@@ -80,7 +79,7 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
     {
         $this->root->addChild(new vfsStreamDirectory('tempdir'));
 
-        $dir  = $this->root->getChild('tempdir');
+        $dir = $this->root->getChild('tempdir');
         $file = vfsStream::newFile('tempfoo.txt')->withContent('tempfoo')->at($dir);
 
         $this->assertFalse($this->files->cleanDirectory($file->url()));
@@ -122,7 +121,7 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
 
     public function testGetMimeTypeOutputsMimeType()
     {
-        if (!class_exists('Finfo')) {
+        if (! class_exists('Finfo')) {
             $this->markTestSkipped('The PHP extension fileinfo is not installed.');
         }
 
@@ -134,7 +133,7 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
     public function testGetSizeOutputsSize()
     {
         $content = LargeFileContent::withKilobytes(2);
-        $file    = vfsStream::newFile('2kb.txt')->withContent($content)->at($this->root);
+        $file = vfsStream::newFile('2kb.txt')->withContent($content)->at($this->root);
 
         $this->assertEquals($file->size(), $this->files->getSize($file->url()));
     }
@@ -142,7 +141,7 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
     public function testIsDirectory()
     {
         $this->root->addChild(new vfsStreamDirectory('assets'));
-        $dir  = $this->root->getChild('assets');
+        $dir = $this->root->getChild('assets');
         $file = vfsStream::newFile('foo.txt')->withContent('foo')->at($this->root);
 
         $this->assertTrue($this->files->isDirectory($dir->url()));
@@ -153,7 +152,7 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
     {
         $this->root->addChild(new vfsStreamDirectory('languages'));
 
-        $dir   = $this->root->getChild('languages');
+        $dir = $this->root->getChild('languages');
         $file1 = vfsStream::newFile('php.txt')->withContent('PHP')->at($dir);
         $file2 = vfsStream::newFile('c.txt')->withContent('C')->at($dir);
 

@@ -3,6 +3,7 @@ namespace Viserio\Parsers;
 
 use Viserio\Contracts\Filesystem\Filesystem as FilesystemContract;
 use Viserio\Contracts\Parsers\Exception\NotSupportedException;
+use Viserio\Contracts\Parsers\Format as FormatContract;
 use Viserio\Contracts\Parsers\Parser as ParserContract;
 use Viserio\Parsers\Formats\BSON;
 use Viserio\Parsers\Formats\INI;
@@ -14,7 +15,6 @@ use Viserio\Parsers\Formats\Serialize;
 use Viserio\Parsers\Formats\TOML;
 use Viserio\Parsers\Formats\XML;
 use Viserio\Parsers\Formats\YAML;
-use Viserio\Contracts\Parsers\Format as FormatContract;
 
 class Parser implements ParserContract
 {
@@ -104,7 +104,7 @@ class Parser implements ParserContract
      */
     public function getFormat($format = null)
     {
-        $format  = strtolower($format);
+        $format = strtolower($format);
         $fsystem = $this->filesystem;
 
         if ($fsystem->isFile($format)) {
@@ -119,11 +119,11 @@ class Parser implements ParserContract
      */
     public function parse(string $payload): array
     {
-        if (!$payload) {
+        if (! $payload) {
             return [];
         }
 
-        $format  = $this->getFormat($payload);
+        $format = $this->getFormat($payload);
         $fsystem = $this->filesystem;
 
         if ($format !== 'php') {

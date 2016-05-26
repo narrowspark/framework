@@ -13,13 +13,6 @@ class FilesystemManagerTest extends \PHPUnit_Framework_TestCase
 {
     use MockeryTrait;
 
-    protected function getManager()
-    {
-        $config = $this->mock(ConfigManger::class);
-
-        return new FilesystemManager($config);
-    }
-
     /**
      * @expectedException \RuntimeException
      * @expectedExceptionMessage The driver [notfound] is not supported.
@@ -96,7 +89,7 @@ class FilesystemManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testFtpConnectorDriver()
     {
-        if (!defined('FTP_BINARY')) {
+        if (! defined('FTP_BINARY')) {
             $this->markTestSkipped('The FTP_BINARY constant is not defined');
         }
 
@@ -118,7 +111,7 @@ class FilesystemManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testGridFSConnectorDriver()
     {
-        if (!class_exists(MongoClient::class) || !class_exists(Mongo::class)) {
+        if (! class_exists(MongoClient::class) || ! class_exists(Mongo::class)) {
             $this->markTestSkipped('The MongoClient class does not exist');
         }
 
@@ -252,5 +245,12 @@ class FilesystemManagerTest extends \PHPUnit_Framework_TestCase
                 ]
             )
         );
+    }
+
+    protected function getManager()
+    {
+        $config = $this->mock(ConfigManger::class);
+
+        return new FilesystemManager($config);
     }
 }

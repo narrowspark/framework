@@ -87,6 +87,13 @@ trait HandlerTrait
     }
 
     /**
+     * FormatterTrait function.
+     *
+     * @param string|object $formatter
+     */
+    abstract public function parseFormatter($formatter);
+
+    /**
      * Parse the string level into a Monolog constant.
      *
      * @param string $level
@@ -107,13 +114,6 @@ trait HandlerTrait
 
         throw new InvalidArgumentException('Invalid log level.');
     }
-
-    /**
-     * FormatterTrait function.
-     *
-     * @param string|object $formatter
-     */
-    abstract public function parseFormatter($formatter);
 
     /**
      * Parse Processor.

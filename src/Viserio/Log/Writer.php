@@ -46,7 +46,7 @@ class Writer implements LogContract, PsrLoggerInterface
      */
     public function __construct(MonologLogger $monolog, EventDispatcherInterface $dispatcher)
     {
-        # PSR 3 log message formatting for all handlers
+        // PSR 3 log message formatting for all handlers
         $monolog->pushProcessor(new PsrLogMessageProcessor());
 
         $this->monolog = $monolog;

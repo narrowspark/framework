@@ -11,45 +11,6 @@ namespace Viserio\Container\Traits;
 trait ContainerArrayAccessTrait
 {
     /**
-     * Adds an entry to the container.
-     *
-     * @param string    $id    Identifier of the entry to add
-     * @param \stdClass $value The entry to add to the container
-     */
-    public function set($id, $value)
-    {
-        $this->offsetSet($id, $value);
-    }
-
-    /**
-     * {@inheritdoc}
-     *
-     * @param string $id
-     */
-    public function get($id)
-    {
-        return $this->offsetGet($id);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function has($id)
-    {
-        return $this->offsetExists($id);
-    }
-
-    /**
-     * Removes an entry from the container.
-     *
-     * @param string $id Identifier of the entry to remove
-     */
-    public function remove($id)
-    {
-        $this->offsetUnset($id);
-    }
-
-    /**
      * Dynamically access application services.
      *
      * @param string $id
@@ -95,6 +56,45 @@ trait ContainerArrayAccessTrait
     }
 
     /**
+     * Adds an entry to the container.
+     *
+     * @param string    $id    Identifier of the entry to add
+     * @param \stdClass $value The entry to add to the container
+     */
+    public function set($id, $value)
+    {
+        $this->offsetSet($id, $value);
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @param string $id
+     */
+    public function get($id)
+    {
+        return $this->offsetGet($id);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function has($id)
+    {
+        return $this->offsetExists($id);
+    }
+
+    /**
+     * Removes an entry from the container.
+     *
+     * @param string $id Identifier of the entry to remove
+     */
+    public function remove($id)
+    {
+        $this->offsetUnset($id);
+    }
+
+    /**
      * Gets a parameter or an object.
      *
      * @param string $id
@@ -120,7 +120,7 @@ trait ContainerArrayAccessTrait
      */
     public function offsetSet($id, $value)
     {
-        if (!$value instanceof \Closure) {
+        if (! $value instanceof \Closure) {
             $value = function () use ($value) {
                 return $value;
             };

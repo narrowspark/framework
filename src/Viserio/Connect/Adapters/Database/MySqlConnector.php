@@ -71,7 +71,7 @@ class MySqlConnector extends AbstractDatabaseConnector
      */
     protected function configHasSocket(array $config)
     {
-        return isset($config['unix_socket']) && !empty($config['unix_socket']);
+        return isset($config['unix_socket']) && ! empty($config['unix_socket']);
     }
 
     /**

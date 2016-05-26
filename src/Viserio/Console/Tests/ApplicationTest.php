@@ -17,11 +17,6 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
      */
     private $application;
 
-    public function tearDown()
-    {
-        Mock::close();
-    }
-
     public function setUp()
     {
         $stdClass = new stdClass();
@@ -41,6 +36,11 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
         $events = Mock::mock('Symfony\Component\EventDispatcher\EventDispatcherInterface', ['addListener' => null]);
 
         $this->application = new Application($container, $events, '1.0.0');
+    }
+
+    public function tearDown()
+    {
+        Mock::close();
     }
 
     public function testAllowsToDefineViserioCommand()
@@ -63,7 +63,6 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
     public function testAllowsToDefineDefaultValues()
     {
         $this->application->command('greet [firstname] [lastname]', function ($firstname, $lastname, Outputinterface $output) {
-
         });
         $this->application->defaults('greet', [
             'firstname' => 'John',
@@ -182,7 +181,6 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
     public function testItShouldThrowIfAParameterCannotBeResolved()
     {
         $this->application->command('greet', function ($fbo) {
-
         });
         $this->assertOutputIs('greet', '');
     }

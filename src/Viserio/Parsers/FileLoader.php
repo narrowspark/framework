@@ -10,13 +10,6 @@ class FileLoader implements LoaderContract
     use NormalizePathAndDirectorySeparatorTrait;
 
     /**
-     * The filesystem instance.
-     *
-     * @var \Viserio\Filesystem\Filesystem
-     */
-    private $filesystem;
-
-    /**
      * The parser instance.
      *
      * @var TaggableParserContract
@@ -38,6 +31,13 @@ class FileLoader implements LoaderContract
     protected $exists = [];
 
     /**
+     * The filesystem instance.
+     *
+     * @var \Viserio\Filesystem\Filesystem
+     */
+    private $filesystem;
+
+    /**
      * Create a new fileloader.
      *
      * @param TaggableParserContract $parser
@@ -45,8 +45,8 @@ class FileLoader implements LoaderContract
      */
     public function __construct(TaggableParserContract $parser, array $directories)
     {
-        $this->parser      = $parser;
-        $this->filesystem  = $parser->getFilesystem();
+        $this->parser = $parser;
+        $this->filesystem = $parser->getFilesystem();
         $this->directories = $directories;
     }
 
@@ -95,7 +95,7 @@ class FileLoader implements LoaderContract
      */
     public function addDirectory(string $directory): LoaderContract
     {
-        if (!in_array($directory, $this->directories)) {
+        if (! in_array($directory, $this->directories)) {
             $this->directories[] = $this->normalizeDirectorySeparator($directory);
         }
 
@@ -108,7 +108,7 @@ class FileLoader implements LoaderContract
     public function load(string $file, string $tag = null): array
     {
         // Determine if the given file exists.
-        $path  = $this->exists($file);
+        $path = $this->exists($file);
 
         $parser = $this->parser;
 

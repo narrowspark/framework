@@ -42,7 +42,7 @@ trait MiddlewaresTrait
         $this->stack = new StackBuilder();
 
         foreach ($this->middlewares as $middleware) {
-            if (!is_array($middleware)) {
+            if (! is_array($middleware)) {
                 $middleware = [$middleware];
             }
 

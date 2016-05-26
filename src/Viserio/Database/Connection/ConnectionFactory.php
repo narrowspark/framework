@@ -48,38 +48,6 @@ class ConnectionFactory
     }
 
     /**
-     * Parse and prepare the database configuration.
-     *
-     * @param array  $config
-     * @param string $name
-     *
-     * @return array
-     */
-    protected function parseConfig(array $config, $name)
-    {
-        return Arr::add(Arr::add($config, 'prefix', ''), 'name', $name);
-    }
-
-    /**
-     * Create a single database connection instance.
-     *
-     * @param array $config
-     *
-     * @return Connection
-     */
-    protected function createSingleConnection(array $config)
-    {
-        $pdo = $this->createConnector($config)->connect($config);
-
-        return $this->createConnection(
-            $pdo,
-            $config['dbname'],
-            $config['prefix'],
-            $config
-        );
-    }
-
-    /**
      * Create a connector instance based on the configuration.
      *
      * @param array $config
@@ -90,7 +58,7 @@ class ConnectionFactory
      */
     public function createConnector(array $config)
     {
-        if (!isset($config['driver'])) {
+        if (! isset($config['driver'])) {
             throw new \InvalidArgumentException('A driver must be specified.');
         }
 
@@ -141,6 +109,38 @@ class ConnectionFactory
         });
 
         return $connector;
+    }
+
+    /**
+     * Parse and prepare the database configuration.
+     *
+     * @param array  $config
+     * @param string $name
+     *
+     * @return array
+     */
+    protected function parseConfig(array $config, $name)
+    {
+        return Arr::add(Arr::add($config, 'prefix', ''), 'name', $name);
+    }
+
+    /**
+     * Create a single database connection instance.
+     *
+     * @param array $config
+     *
+     * @return Connection
+     */
+    protected function createSingleConnection(array $config)
+    {
+        $pdo = $this->createConnector($config)->connect($config);
+
+        return $this->createConnection(
+            $pdo,
+            $config['dbname'],
+            $config['prefix'],
+            $config
+        );
     }
 
     /**

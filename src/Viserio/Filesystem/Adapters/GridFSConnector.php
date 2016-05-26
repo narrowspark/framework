@@ -14,7 +14,7 @@ class GridFSConnector extends AbstractConnector
      */
     protected function getAuth(array $config): array
     {
-        if (!array_key_exists('server', $config)) {
+        if (! array_key_exists('server', $config)) {
             throw new InvalidArgumentException('The gridfs connector requires server configuration.');
         }
 
@@ -36,7 +36,7 @@ class GridFSConnector extends AbstractConnector
      */
     protected function getConfig(array $config): array
     {
-        if (!array_key_exists('database', $config)) {
+        if (! array_key_exists('database', $config)) {
             throw new InvalidArgumentException('The gridfs connector requires database configuration.');
         }
 

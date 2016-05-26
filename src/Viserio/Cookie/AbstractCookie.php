@@ -49,6 +49,13 @@ abstract class AbstractCookie implements Stringable, CookieContract
     protected $httpOnly;
 
     /**
+     * Returns the cookie as a string.
+     *
+     * @return string The cookie
+     */
+    abstract public function __toString(): string;
+
+    /**
      * Returns the name
      *
      * @return string
@@ -84,7 +91,7 @@ abstract class AbstractCookie implements Stringable, CookieContract
      */
     public function hasValue(): bool
     {
-        return !empty($this->value);
+        return ! empty($this->value);
     }
 
     /**
@@ -333,7 +340,7 @@ abstract class AbstractCookie implements Stringable, CookieContract
     public function matchDomain(string $domain): bool
     {
         // Domain is not set or exact match
-        if (!$this->hasDomain() || strcasecmp($domain, $this->getDomain()) === 0) {
+        if (! $this->hasDomain() || strcasecmp($domain, $this->getDomain()) === 0) {
             return true;
         }
 
@@ -344,13 +351,6 @@ abstract class AbstractCookie implements Stringable, CookieContract
 
         return (bool) preg_match('/\b' . preg_quote($this->getDomain()) . '$/i', $domain);
     }
-
-    /**
-     * Returns the cookie as a string.
-     *
-     * @return string The cookie
-     */
-    abstract public function __toString(): string;
 
     /**
      * Normalizes the expiration value

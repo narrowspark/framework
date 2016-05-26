@@ -38,7 +38,7 @@ class Balkan implements CategoryContract
 
         if ($isInteger && $count % 10 === 1 && $count % 100 !== 11) {
             return 'one';
-        } elseif ($isInteger && ($i = $count % 10) >= 2 && $i <= 4 && !(($i = $count % 100) >= 12 && $i <= 14)) {
+        } elseif ($isInteger && ($i = $count % 10) >= 2 && $i <= 4 && ! (($i = $count % 100) >= 12 && $i <= 14)) {
             return 'few';
         } elseif ($isInteger && (($i = $count % 10) === 0 || ($i >= 5 && $i <= 9) || (($i = $count % 100) >= 11 && $i <= 14))) {
             return 'many';

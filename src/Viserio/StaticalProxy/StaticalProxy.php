@@ -22,6 +22,25 @@ abstract class StaticalProxy
     protected static $resolvedInstance = [];
 
     /**
+     * Handle dynamic, static calls to the object.
+     *
+     * @param string $method
+     * @param array  $args
+     *
+     * @return mixed
+     */
+    public static function __callStatic(string $method, array $args)
+    {
+        $instance = static::getStaticalProxyRoot();
+
+        if (! $instance) {
+            throw new RuntimeException('A statical proxy root has not been set.');
+        }
+
+        return $instance->$method(...$args);
+    }
+
+    /**
      * Sets the Container that will be used to retrieve the Proxy Subject.
      *
      * @param ContainerInterface $container The Container that provides the real Proxy Subject
@@ -107,25 +126,6 @@ abstract class StaticalProxy
     public static function clearResolvedInstances()
     {
         static::$resolvedInstance = [];
-    }
-
-    /**
-     * Handle dynamic, static calls to the object.
-     *
-     * @param string $method
-     * @param array  $args
-     *
-     * @return mixed
-     */
-    public static function __callStatic(string $method, array $args)
-    {
-        $instance = static::getStaticalProxyRoot();
-
-        if (!$instance) {
-            throw new RuntimeException('A statical proxy root has not been set.');
-        }
-
-        return $instance->$method(...$args);
     }
 
     /**

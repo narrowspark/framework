@@ -16,7 +16,7 @@ class BSON implements FormatContract
         if (function_exists('bson_decode')) {
             $bson = bson_decode(trim($payload));
 
-            if (!$bson) {
+            if (! $bson) {
                 throw new ParseException([
                     'message' => 'Failed To Parse BSON',
                 ]);
@@ -35,7 +35,7 @@ class BSON implements FormatContract
     {
         $bson = bson_encode($data);
 
-        if (!$bson) {
+        if (! $bson) {
             throw new DumpException('BSON dumping failed.');
         }
 

@@ -33,9 +33,9 @@ class Resolver
      */
     public function __construct(string $pattern, $translation)
     {
-        $regex             = preg_quote($pattern, '#');
-        $this->regex       = '#^' . str_replace('\\*', '(.*)', $regex) . '$#uD';
-        $this->pattern     = $pattern;
+        $regex = preg_quote($pattern, '#');
+        $this->regex = '#^' . str_replace('\\*', '(.*)', $regex) . '$#uD';
+        $this->pattern = $pattern;
         $this->translation = $translation;
     }
 
@@ -49,7 +49,7 @@ class Resolver
     public function resolve(string $alias)
     {
         // Check wether the alias matches the pattern
-        if (!preg_match($this->regex, $alias, $matches)) {
+        if (! preg_match($this->regex, $alias, $matches)) {
             return false;
         }
 
@@ -83,6 +83,6 @@ class Resolver
      */
     public function matches(string $pattern, string $translation = null): bool
     {
-        return $this->pattern === $pattern && (!$translation || $translation === $this->translation);
+        return $this->pattern === $pattern && (! $translation || $translation === $this->translation);
     }
 }

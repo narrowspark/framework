@@ -40,7 +40,9 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
     public function testClosureResolution()
     {
         $container = $this->container;
-        $container->bind('name', function () { return 'Taylor'; });
+        $container->bind('name', function () {
+            return 'Taylor';
+        });
         $this->assertEquals('Taylor', $container->make('name'));
     }
 
@@ -48,7 +50,9 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
     {
         $container = $this->container;
         $class = new \stdClass();
-        $container->singleton('class', function () use ($class) { return $class; });
+        $container->singleton('class', function () use ($class) {
+            return $class;
+        });
         $this->assertSame($class, $container->make('class'));
     }
 
@@ -71,7 +75,9 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
     public function testContainerIsPassedToResolvers()
     {
         $container = $this->container;
-        $container->bind('something', function ($c) { return $c; });
+        $container->bind('something', function ($c) {
+            return $c;
+        });
         $c = $container->make('something');
         $this->assertSame($c, $container);
     }
@@ -79,7 +85,9 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
     public function testArrayAccess()
     {
         $container = $this->container;
-        $container['something'] = function () { return 'foo'; };
+        $container['something'] = function () {
+            return 'foo';
+        };
         $this->assertTrue(isset($container['something']));
         $this->assertEquals('foo', $container['something']);
         unset($container['something']);
@@ -93,7 +101,9 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
         $container->alias('foo', 'baz');
         $this->assertEquals('bar', $container->make('foo'));
         $this->assertEquals('bar', $container->make('baz'));
-        $container->bind(['bam' => 'boom'], function () { return 'pow'; });
+        $container->bind(['bam' => 'boom'], function () {
+            return 'pow';
+        });
         $this->assertEquals('pow', $container->make('bam'));
         $this->assertEquals('pow', $container->make('boom'));
         $container->singleton(['zoom' => 'zing'], 'wow');
@@ -155,18 +165,25 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
     public function testExtendInstancesArePreserved()
     {
         $container = $this->container;
-        $container->bind('foo', function () { $obj = new \StdClass(); $obj->foo = 'bar';
+        $container->bind('foo', function () {
+            $obj = new \StdClass();
+            $obj->foo = 'bar';
 
-return $obj; });
+            return $obj;
+        });
         $obj = new \StdClass();
         $obj->foo = 'foo';
         $container->singleton('foo', $obj);
-        $container->extend('foo', function ($obj, $container) { $obj->bar = 'baz';
+        $container->extend('foo', function ($obj, $container) {
+            $obj->bar = 'baz';
 
-return $obj; });
-        $container->extend('foo', function ($obj, $container) { $obj->baz = 'foo';
+            return $obj;
+        });
+        $container->extend('foo', function ($obj, $container) {
+            $obj->baz = 'foo';
 
-return $obj; });
+            return $obj;
+        });
         $this->assertEquals('foo', $container->make('foo')->foo);
     }
 

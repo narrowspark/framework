@@ -60,7 +60,7 @@ class Autoloader
      */
     public static function register()
     {
-        if (!self::$registered) {
+        if (! self::$registered) {
             self::$registered = spl_autoload_register(
                 [static::class, 'load']
             );

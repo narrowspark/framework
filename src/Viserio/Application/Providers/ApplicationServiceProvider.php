@@ -66,6 +66,20 @@ class ApplicationServiceProvider extends ServiceProvider
         $this->registerEntvironment();
     }
 
+    /**
+     * Get the services provided by the provider.
+     *
+     * @return string[]
+     */
+    public function provides()
+    {
+        return [
+            'environment',
+            'config',
+            'alias',
+        ];
+    }
+
     protected function registerEntvironment()
     {
         $this->app->singleton('environment', function () {
@@ -90,19 +104,5 @@ class ApplicationServiceProvider extends ServiceProvider
                 null
             );
         }
-    }
-
-    /**
-     * Get the services provided by the provider.
-     *
-     * @return string[]
-     */
-    public function provides()
-    {
-        return [
-            'environment',
-            'config',
-            'alias',
-        ];
     }
 }

@@ -8,6 +8,14 @@ class PluralizationRulesTest extends \PHPUnit_Framework_TestCase
     protected $createRules;
     protected $object;
 
+    public function setUp()
+    {
+        parent::setUp();
+        $this->object = new PluralizationRules();
+        $this->createRules = new \ReflectionMethod($this->object, 'createRules');
+        $this->createRules->setAccessible(true);
+    }
+
     /**
      * @dataProvider  provideCreateRules
      */
@@ -164,13 +172,5 @@ class PluralizationRulesTest extends \PHPUnit_Framework_TestCase
             [100],
             [-3.14],
         ];
-    }
-
-    public function setUp()
-    {
-        parent::setUp();
-        $this->object = new PluralizationRules();
-        $this->createRules = new \ReflectionMethod($this->object, 'createRules');
-        $this->createRules->setAccessible(true);
     }
 }

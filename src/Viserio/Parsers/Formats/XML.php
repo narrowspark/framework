@@ -35,7 +35,7 @@ class XML implements FormatContract
      */
     public function dump(array $data): string
     {
-        if (!class_exists('Spatie\\ArrayToXml\\ArrayToXml')) {
+        if (! class_exists('Spatie\\ArrayToXml\\ArrayToXml')) {
             throw new RuntimeException('Unable to dump XML, the ArrayToXml dumper is not installed.');
         }
 

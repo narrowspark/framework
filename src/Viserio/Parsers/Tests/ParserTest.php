@@ -1,7 +1,6 @@
 <?php
 namespace Viserio\Parsers\Tests;
 
-use org\bovigo\vfs\vfsStream;
 use Viserio\Filesystem\Filesystem;
 use Viserio\Parsers\Parser;
 

@@ -16,8 +16,8 @@ abstract class Queue implements PushableContract
      */
     public function __construct(AdapterContract $adapter, EventDispatcherInterface $dispatcher, $failUnknown = false)
     {
-        $this->adapter     = $adapter;
-        $this->dispatcher  = $dispatcher;
+        $this->adapter = $adapter;
+        $this->dispatcher = $dispatcher;
         $this->failUnknown = $failUnknown;
     }
 }

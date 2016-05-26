@@ -51,8 +51,8 @@ trait FormatterTrait
             'reset' => "\033[0m",
         ];
 
-        $width = getenv('COLUMNS') ?: 60; # Console width from env, or 60 chars.
-        $separator = str_repeat('━', $width); # A nice separator line
+        $width = getenv('COLUMNS') ?: 60; // Console width from env, or 60 chars.
+        $separator = str_repeat('━', $width); // A nice separator line
 
         $format = sprintf('%s', $color['bold']);
         $format .= sprintf('%s[%datetime%]', $color['green']);

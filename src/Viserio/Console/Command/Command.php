@@ -100,7 +100,7 @@ abstract class Command extends BaseCommand implements CompletionAwareInterface
 
         $this->setDescription($this->description);
 
-        if (!isset($this->signature)) {
+        if (! isset($this->signature)) {
             $this->specifyParameters();
         }
     }
@@ -115,25 +115,10 @@ abstract class Command extends BaseCommand implements CompletionAwareInterface
      */
     public function run(InputInterface $input, OutputInterface $output): int
     {
-        $this->input  = $input;
+        $this->input = $input;
         $this->output = new NarrowsparkStyle($input, $output);
 
         return parent::run($input, $output);
-    }
-
-    /**
-     * Execute the console command.
-     *
-     * @param \Symfony\Component\Console\Input\InputInterface   $input
-     * @param \Symfony\Component\Console\Output\OutputInterface $output
-     *
-     * @return mixed
-     */
-    protected function execute(InputInterface $input, OutputInterface $output)
-    {
-        $method = method_exists($this, 'handle') ? 'handle' : 'fire';
-
-        return $this->getInvoker()->call([$this, $method]);
     }
 
     /**
@@ -167,7 +152,7 @@ abstract class Command extends BaseCommand implements CompletionAwareInterface
     {
         if (isset($this->verbosityMap[$level])) {
             return $this->verbosityMap[$level];
-        } elseif (!is_int($level)) {
+        } elseif (! is_int($level)) {
             return $this->verbosity;
         }
 
@@ -438,7 +423,7 @@ abstract class Command extends BaseCommand implements CompletionAwareInterface
      */
     public function warn($string, $verbosityLevel = null)
     {
-        if (!$this->output->getFormatter()->hasStyle('warning')) {
+        if (! $this->output->getFormatter()->hasStyle('warning')) {
             $style = new OutputFormatterStyle('yellow');
             $this->output->getFormatter()->setStyle('warning', $style);
         }
@@ -454,6 +439,21 @@ abstract class Command extends BaseCommand implements CompletionAwareInterface
     public function setInvoker(Invoker $invoker)
     {
         $this->invoker = $invoker;
+    }
+
+    /**
+     * Execute the console command.
+     *
+     * @param \Symfony\Component\Console\Input\InputInterface   $input
+     * @param \Symfony\Component\Console\Output\OutputInterface $output
+     *
+     * @return mixed
+     */
+    protected function execute(InputInterface $input, OutputInterface $output)
+    {
+        $method = method_exists($this, 'handle') ? 'handle' : 'fire';
+
+        return $this->getInvoker()->call([$this, $method]);
     }
 
     /**

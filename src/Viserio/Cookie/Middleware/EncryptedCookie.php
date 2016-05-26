@@ -37,6 +37,14 @@ class EncryptCookies implements MiddlewareContract
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function __invoke(ServerRequestInterface $request, ResponseInterface $response, callable $next)
+    {
+        return $this->encrypt($next($this->decrypt($request)));
+    }
+
+    /**
      * Disable encryption for the given cookie name(s).
      *
      * @param string|array $cookieName
@@ -48,6 +56,18 @@ class EncryptCookies implements MiddlewareContract
         }
 
         $this->except[] = $cookieName;
+    }
+
+    /**
+     * Determine whether encryption has been disabled for the given cookie.
+     *
+     * @param string $name
+     *
+     * @return bool
+     */
+    public function isDisabled(string $name): bool
+    {
+        return in_array($name, $this->except);
     }
 
     /**
@@ -69,26 +89,6 @@ class EncryptCookies implements MiddlewareContract
             $cookie->isSecure(),
             $cookie->isHttpOnly()
         );
-    }
-
-    /**
-     * Determine whether encryption has been disabled for the given cookie.
-     *
-     * @param string $name
-     *
-     * @return bool
-     */
-    public function isDisabled(string $name): bool
-    {
-        return in_array($name, $this->except);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function __invoke(ServerRequestInterface $request, ResponseInterface $response, callable $next)
-    {
-        return $this->encrypt($next($this->decrypt($request)));
     }
 
     /**

@@ -33,6 +33,21 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
     }
 
     /**
+     * Call a Flysystem driver plugin.
+     *
+     * @param string $method
+     * @param array  $arguments
+     *
+     * @throws \BadMethodCallException
+     *
+     * @return mixed
+     */
+    public function __call(string $method, array $arguments)
+    {
+        return call_user_func_array([$this->driver, $method], $arguments);
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function has(string $path): bool
@@ -45,13 +60,13 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
      */
     public function read(string $path): string
     {
-        if (!$this->has($path)) {
+        if (! $this->has($path)) {
             throw new FileNotFoundException($path);
         }
 
         $content = $this->driver->read($path);
 
-        return !$content ?: $content['contents'];
+        return ! $content ?: $content['contents'];
     }
 
     /**
@@ -71,7 +86,7 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
 
         $write = $this->driver->write($path, $contents, $flyConfig);
 
-        return !$write ? : false;
+        return ! $write ?: false;
     }
 
     /**
@@ -79,7 +94,7 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
      */
     public function update(string $path, string $contents, array $config = []): bool
     {
-        if (!$this->has($path)) {
+        if (! $this->has($path)) {
             throw new FileNotFoundException($path);
         }
 
@@ -87,7 +102,7 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
 
         $update = $this->driver->update($path, $contents, $flyConfig);
 
-        return !$update ? : false;
+        return ! $update ?: false;
     }
 
     /**
@@ -111,7 +126,7 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
     {
         $visible = $this->driver->setVisibility($path, $this->parseVisibility($visibility));
 
-        return !$visible ? : false;
+        return ! $visible ?: false;
     }
 
     /**
@@ -119,12 +134,12 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
      */
     public function copy($originFile, $targetFile, $override = false)
     {
-        if (!$this->has($originFile)) {
+        if (! $this->has($originFile)) {
             throw new FileNotFoundException($originFile);
         }
 
         $orginal = $this->driver->applyPathPrefix($originFile);
-        $target  = $this->driver->applyPathPrefix($targetFile);
+        $target = $this->driver->applyPathPrefix($targetFile);
 
         // https://bugs.php.net/bug.php?id=64634
         if (@fopen($orginal, 'r') === false) {
@@ -138,7 +153,7 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
 
         $this->driver->copy($originFile, $targetFile);
 
-        if (!is_file($target)) {
+        if (! is_file($target)) {
             throw new ViserioIOException(sprintf('Failed to copy "%s" to "%s".', $originFile, $target), 0, null, $originFile);
         }
 
@@ -160,7 +175,7 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
     {
         $size = $this->driver->getSize($path);
 
-        return !$size ?: $size['size'];
+        return ! $size ?: $size['size'];
     }
 
     /**
@@ -168,13 +183,13 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
      */
     public function getMimetype(string $path)
     {
-        if (!$this->has($path)) {
+        if (! $this->has($path)) {
             throw new FileNotFoundException($path);
         }
 
         $mimetype = $this->driver->getMimetype($path);
 
-        return !$mimetype ?: $mimetype['mimetype'];
+        return ! $mimetype ?: $mimetype['mimetype'];
     }
 
     /**
@@ -182,13 +197,13 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
      */
     public function getTimestamp(string $path)
     {
-        if (!$this->has($path)) {
+        if (! $this->has($path)) {
             throw new FileNotFoundException($path);
         }
 
         $getTimestamp = $this->driver->getTimestamp($path);
 
-        return !$getTimestamp ?: $getTimestamp['timestamp'];
+        return ! $getTimestamp ?: $getTimestamp['timestamp'];
     }
 
     /**
@@ -250,7 +265,7 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
     {
         $dir = $this->driver->createDir($path, new FlyConfig($config));
 
-        return !$dir ? : false;
+        return ! $dir ?: false;
     }
 
     /**
@@ -266,7 +281,7 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
      */
     public function cleanDirectory(string $dirname): bool
     {
-        if (!$this->isDirectory($dirname)) {
+        if (! $this->isDirectory($dirname)) {
             return false;
         }
 
@@ -298,21 +313,6 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
     }
 
     /**
-     * Call a Flysystem driver plugin.
-     *
-     * @param string $method
-     * @param array  $arguments
-     *
-     * @throws \BadMethodCallException
-     *
-     * @return mixed
-     */
-    public function __call(string $method, array $arguments)
-    {
-        return call_user_func_array([$this->driver, $method], $arguments);
-    }
-
-    /**
      * Filter directory contents by type.
      *
      * @param array  $contents
@@ -322,7 +322,7 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
      */
     private function filterContentsByType(array $contents, string $type): array
     {
-        $return   = [];
+        $return = [];
 
         foreach ($contents as $key => $value) {
             if (Arr::get($contents, $key) === $value) {

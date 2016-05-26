@@ -40,7 +40,7 @@ class Dispatcher implements EventDispatcherInterface
     public function __construct(EventDispatcherInterface $eventDispatcher, ContainerContract $container)
     {
         $this->eventDispatcher = $eventDispatcher;
-        $this->container       = $container;
+        $this->container = $container;
     }
 
     /**
@@ -54,7 +54,7 @@ class Dispatcher implements EventDispatcherInterface
      */
     public function addListenerService(string $eventName, array $callback, int $priority = 0)
     {
-        if (!is_array($callback) || 2 !== count($callback)) {
+        if (! is_array($callback) || 2 !== count($callback)) {
             throw new InvalidArgumentException('Expected an [service", "method"] argument');
         }
 
@@ -206,7 +206,7 @@ class Dispatcher implements EventDispatcherInterface
     {
         $rfc = new ReflectionClass($class);
 
-        if (!$rfc->implementsInterface('Symfony\Component\EventDispatcher\EventSubscriberInterface')) {
+        if (! $rfc->implementsInterface('Symfony\Component\EventDispatcher\EventSubscriberInterface')) {
             throw new InvalidArgumentException(
                 sprintf('%s must implement Symfony\Component\EventDispatcher\EventSubscriberInterface', $class)
             );

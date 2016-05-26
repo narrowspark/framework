@@ -303,7 +303,7 @@ class Virtuoso
      */
     public function incrementRender()
     {
-        $this->renderCount++;
+        ++$this->renderCount;
     }
 
     /**
@@ -311,7 +311,7 @@ class Virtuoso
      */
     public function decrementRender()
     {
-        $this->renderCount--;
+        --$this->renderCount;
     }
 
     /**

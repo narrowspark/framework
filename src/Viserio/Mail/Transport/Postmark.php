@@ -35,7 +35,7 @@ class Postmark extends Transport
      */
     public function __construct(ClientInterface $client, $serverToken)
     {
-        $this->client      = $client;
+        $this->client = $client;
         $this->serverToken = $serverToken;
     }
 
@@ -52,6 +52,28 @@ class Postmark extends Transport
         ]);
 
         return $this->client->post($this->url, $options);
+    }
+
+    /**
+     * Get the API key being used by the transport.
+     *
+     * @return string
+     */
+    public function getServerToken()
+    {
+        return $this->serverToken;
+    }
+
+    /**
+     * Set the API Server Token being used by the transport.
+     *
+     * @param string $serverToken
+     *
+     * @return string
+     */
+    public function setServerToken($serverToken)
+    {
+        return $this->serverToken = $serverToken;
     }
 
     /**
@@ -87,7 +109,7 @@ class Postmark extends Transport
     private function getMIMEPart(Swift_Mime_Message $message, $mimeType)
     {
         foreach ($message->getChildren() as $part) {
-            if (strpos($part->getContentType(), $mimeType) === 0 &&  !($part instanceof Swift_Mime_Attachment)) {
+            if (strpos($part->getContentType(), $mimeType) === 0 &&  ! ($part instanceof Swift_Mime_Attachment)) {
                 return $part;
             }
         }
@@ -201,7 +223,7 @@ class Postmark extends Transport
             $fieldName = $value->getFieldName();
             $excludedHeaders = ['Subject', 'Content-Type', 'MIME-Version', 'Date'];
 
-            if (!in_array($fieldName, $excludedHeaders, true)) {
+            if (! in_array($fieldName, $excludedHeaders, true)) {
                 if ($value instanceof Swift_Mime_Headers_UnstructuredHeader ||
                     $value instanceof Swift_Mime_Headers_OpenDKIMHeader) {
                     array_push($headers, [
@@ -228,27 +250,5 @@ class Postmark extends Transport
         }
 
         $payload['Headers'] = $headers;
-    }
-
-    /**
-     * Get the API key being used by the transport.
-     *
-     * @return string
-     */
-    public function getServerToken()
-    {
-        return $this->serverToken;
-    }
-
-    /**
-     * Set the API Server Token being used by the transport.
-     *
-     * @param string $serverToken
-     *
-     * @return string
-     */
-    public function setServerToken($serverToken)
-    {
-        return $this->serverToken = $serverToken;
     }
 }

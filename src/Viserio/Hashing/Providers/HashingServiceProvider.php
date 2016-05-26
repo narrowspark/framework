@@ -3,7 +3,6 @@ namespace Viserio\Hashing\Providers;
 
 use Defuse\Crypto\Key;
 use Viserio\Application\ServiceProvider;
-use Viserio\Hashing\Generator as HashGenerator;
 use Viserio\Hashing\Password;
 
 class HashingServiceProvider extends ServiceProvider
@@ -14,6 +13,18 @@ class HashingServiceProvider extends ServiceProvider
     public function register()
     {
         $this->registerPassword();
+    }
+
+    /**
+     * Get the services provided by the provider.
+     *
+     * @return string[]
+     */
+    public function provides(): array
+    {
+        return [
+            'password',
+        ];
     }
 
     protected function registerPassword()
@@ -27,17 +38,5 @@ class HashingServiceProvider extends ServiceProvider
                 )
             );
         });
-    }
-
-    /**
-     * Get the services provided by the provider.
-     *
-     * @return string[]
-     */
-    public function provides(): array
-    {
-        return [
-            'password',
-        ];
     }
 }

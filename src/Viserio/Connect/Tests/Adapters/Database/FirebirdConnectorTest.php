@@ -10,7 +10,7 @@ class FirebirdConnectorTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        if (!class_exists('PDO')) {
+        if (! class_exists('PDO')) {
             $this->markTestSkipped('PDO module is not installed.');
         }
     }
@@ -21,7 +21,7 @@ class FirebirdConnectorTest extends \PHPUnit_Framework_TestCase
     public function testConnectThrowPDOException()
     {
         $connector = new FirebirdConnector();
-        $config    = [
+        $config = [
             'server'   => '',
             'database' => 'stc\Connect\Tests\Fixture\employee.fdb',
             'username' => '',

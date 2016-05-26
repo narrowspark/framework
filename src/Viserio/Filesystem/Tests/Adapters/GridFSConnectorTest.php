@@ -11,7 +11,7 @@ class GridFSConnectorTest extends \PHPUnit_Framework_TestCase
 {
     public function testConnectStandard()
     {
-        if (!class_exists(MongoClient::class) || !class_exists(Mongo::class)) {
+        if (! class_exists(MongoClient::class) || ! class_exists(Mongo::class)) {
             $this->markTestSkipped('The MongoClient class does not exist');
         }
 

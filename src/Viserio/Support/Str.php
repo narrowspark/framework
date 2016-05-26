@@ -66,7 +66,7 @@ class Str extends StaticStringy
     {
         preg_match('/^\s*+(?:\S++\s*+){1,' . $words . '}/u', $value, $matches);
 
-        if (!isset($matches[0]) || strlen($value) === strlen($matches[0])) {
+        if (! isset($matches[0]) || strlen($value) === strlen($matches[0])) {
             return $value;
         }
 
@@ -114,16 +114,16 @@ class Str extends StaticStringy
             return static::$snakeCache[$key];
         }
 
-        $value    = preg_replace('/\s+/', '', $value);
+        $value = preg_replace('/\s+/', '', $value);
         $value[0] = strtolower($value[0]);
-        $len      = strlen($value);
+        $len = strlen($value);
 
         for ($i = 0; $i < $len; ++$i) {
             // See if we have an uppercase character and replace; ord A = 65, Z = 90.
             if (ord($value[$i]) > 64 && ord($value[$i]) < 91) {
                 // Replace uppercase of with underscore and lowercase.
                 $replace = $delimiter . strtolower($value[$i]);
-                $value   = substr_replace($value, $replace, $i, 1);
+                $value = substr_replace($value, $replace, $i, 1);
 
                 // Increase length of class and position since we made the string longer.
                 ++$len;

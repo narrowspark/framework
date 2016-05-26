@@ -6,7 +6,6 @@ use League\Flysystem\AdapterInterface;
 use Narrowspark\Arr\StaticArr as Arr;
 use RuntimeException;
 use Viserio\Contracts\Config\Manager as ConfigContract;
-use Viserio\Filesystem\Adapters;
 use Viserio\Support\Manager;
 
 class FilesystemManager extends Manager
@@ -69,7 +68,7 @@ class FilesystemManager extends Manager
     {
         $driver = $driver ?: $this->getDefaultDriver();
 
-        if (!$this->hasDriver($driver)) {
+        if (! $this->hasDriver($driver)) {
             throw new RuntimeException(
                 sprintf('The driver [%s] is not supported.', $driver)
             );
@@ -78,7 +77,7 @@ class FilesystemManager extends Manager
         // If the given driver has not been created before, we will create the instances
         // here and cache it so we can return it next time very quickly. If there is
         // already a driver created by this name, we'll just return that instance.
-        if (!isset($this->drivers[$driver])) {
+        if (! isset($this->drivers[$driver])) {
             $this->drivers[$driver] = $this->adapt($this->createDriver($driver, $options));
         }
 
@@ -100,7 +99,7 @@ class FilesystemManager extends Manager
 
         $connections = $this->config->get($this->getConfigName() . '::connections');
 
-        if (!is_array($config = Arr::get($connections, $name)) && !$config) {
+        if (! is_array($config = Arr::get($connections, $name)) && ! $config) {
             throw new InvalidArgumentException("Adapter [$name] not configured.");
         }
 
@@ -126,7 +125,7 @@ class FilesystemManager extends Manager
     {
         $cache = $this->config->get($this->getConfigName() . '::cache');
 
-        if (!is_array($config = Arr::get($cache, $name)) && !$config) {
+        if (! is_array($config = Arr::get($cache, $name)) && ! $config) {
             throw new InvalidArgumentException("Cache [$name] not configured.");
         }
 

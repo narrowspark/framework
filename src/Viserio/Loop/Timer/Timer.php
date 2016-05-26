@@ -29,7 +29,7 @@ class Timer
      */
     public function __construct()
     {
-        $this->timers    = new \SplObjectStorage();
+        $this->timers = new \SplObjectStorage();
         $this->scheduler = new \SplPriorityQueue();
     }
 

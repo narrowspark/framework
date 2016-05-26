@@ -3,9 +3,9 @@ namespace Viserio\Config;
 
 use ArrayIterator;
 use IteratorAggregate;
-use Viserio\Contracts\Parsers\Loader as LoaderContract;
 use Viserio\Contracts\Config\Manager as ManagerContract;
 use Viserio\Contracts\Config\Repository as RepositoryContract;
+use Viserio\Contracts\Parsers\Loader as LoaderContract;
 
 class Manager implements ManagerContract, IteratorAggregate
 {
@@ -38,6 +38,23 @@ class Manager implements ManagerContract, IteratorAggregate
     public function __construct(RepositoryContract $repository)
     {
         $this->repository = $repository;
+    }
+
+    /**
+     * Call a method from repository.
+     *
+     * @param string $method
+     * @param array  $params
+     *
+     * @return mixed
+     */
+    public function __call(string $method, array $params = [])
+    {
+        if ($this->loader && method_exists($this->loader, $method)) {
+            return call_user_func_array([$this->loader, $method], $params);
+        }
+
+        return call_user_func_array([$this->repository, $method], $params);
     }
 
     /**
@@ -109,7 +126,7 @@ class Manager implements ManagerContract, IteratorAggregate
      */
     public function get(string $key, $default = null)
     {
-        if (!$this->offsetExists($key)) {
+        if (! $this->offsetExists($key)) {
             return $default;
         }
 
@@ -191,22 +208,5 @@ class Manager implements ManagerContract, IteratorAggregate
     public function getIterator(): ArrayIterator
     {
         return $this->repository->getIterator();
-    }
-
-    /**
-     * Call a method from repository.
-     *
-     * @param string $method
-     * @param array  $params
-     *
-     * @return mixed
-     */
-    public function __call(string $method, array $params = [])
-    {
-        if ($this->loader && method_exists($this->loader, $method)) {
-            return call_user_func_array([$this->loader, $method], $params);
-        }
-
-        return call_user_func_array([$this->repository, $method], $params);
     }
 }

@@ -1,8 +1,6 @@
 <?php
 namespace Viserio\Cookie\Test;
 
-use DateTime;
-use Viserio\Cookie\Cookie;
 use Viserio\Cookie\CookieJar;
 
 class CookieJarTest extends \PHPUnit_Framework_TestCase

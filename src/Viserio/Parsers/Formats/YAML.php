@@ -21,7 +21,7 @@ class YAML implements FormatContract
      */
     public function __construct()
     {
-        if (!class_exists('Symfony\\Component\\Yaml\\Yaml')) {
+        if (! class_exists('Symfony\\Component\\Yaml\\Yaml')) {
             throw new RuntimeException('Unable to read yaml as the Symfony Yaml Component is not installed.');
         }
 

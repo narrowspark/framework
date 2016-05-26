@@ -43,7 +43,7 @@ class SimpleUrlGenerator implements UrlGeneratorContract
      */
     public function generate($name, array $parameters = [], $absolute = false)
     {
-        if (!$this->initialized) {
+        if (! $this->initialized) {
             $this->initialize();
         }
 
@@ -56,7 +56,7 @@ class SimpleUrlGenerator implements UrlGeneratorContract
             $path = $path['path'];
 
             foreach ($params as $param) {
-                if (!isset($parameters[$param])) {
+                if (! isset($parameters[$param])) {
                     throw new RuntimeException(
                         'Missing required parameter "' . $param . '". Optional parameters not currently supported'
                     );

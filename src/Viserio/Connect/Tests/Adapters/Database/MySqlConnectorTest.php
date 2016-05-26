@@ -11,7 +11,7 @@ class MySqlConnectorTest extends \PHPUnit_Framework_TestCase
     {
         $this->allowMockingNonExistentMethods(true);
 
-        if (!class_exists('PDO')) {
+        if (! class_exists('PDO')) {
             $this->markTestSkipped('PDO module is not installed.');
         }
     }

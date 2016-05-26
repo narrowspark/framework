@@ -7,9 +7,9 @@ interface Job
 
     const STATUS_REQUEUE = 1;
 
-    const STATUS_FAILED  = 2;
+    const STATUS_FAILED = 2;
 
-    const STATUS_DELETE  = 3;
+    const STATUS_DELETE = 3;
 
     /**
      * @return mixed

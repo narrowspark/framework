@@ -22,7 +22,7 @@ class PasswordTest extends \PHPUnit_Framework_TestCase
 
     public function testVerify()
     {
-        $password      = 'totally-insecure-but-lengthy-password';
+        $password = 'totally-insecure-but-lengthy-password';
         $otherPassword = 'totally-awesome-password';
 
         $hash = $this->password->create($password);

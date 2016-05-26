@@ -76,9 +76,9 @@ class Application extends SymfonyConsole implements ApplicationContract
         string $version,
         string $name = 'Narrowspark Framework'
     ) {
-        $this->name      = $name;
-        $this->version   = $version;
-        $this->events    = $events;
+        $this->name = $name;
+        $this->version = $version;
+        $this->events = $events;
 
         $this->setContainer($container);
         $this->expressionParser = new Parser();

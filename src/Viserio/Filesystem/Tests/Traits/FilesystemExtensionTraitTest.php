@@ -2,7 +2,6 @@
 namespace Viserio\Filesystem\Tests\Traits;
 
 use org\bovigo\vfs\vfsStream;
-use org\bovigo\vfs\vfsStreamDirectory;
 use Viserio\Filesystem\Traits\FilesystemExtensionTrait;
 
 class FilesystemExtensionTraitTest extends \PHPUnit_Framework_TestCase
