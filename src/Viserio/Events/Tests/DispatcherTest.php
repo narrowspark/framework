@@ -1,10 +1,10 @@
 <?php
 namespace Viserio\Events\Tests;
 
+use Narrowspark\TestingHelper\ArrayContainer;
 use Symfony\Component\EventDispatcher\Event;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Narrowspark\TestingHelper\ArrayContainer;
 use Viserio\Events\Dispatcher;
 use Viserio\Events\Tests\Fixture\FooService;
 
@@ -15,7 +15,7 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase
         $this->container = new ArrayContainer([
             'foo.service' => function () {
                 return new FooService();
-            }
+            },
         ]);
 
         $this->dispatcher = new Dispatcher(new EventDispatcher(), $this->container);
