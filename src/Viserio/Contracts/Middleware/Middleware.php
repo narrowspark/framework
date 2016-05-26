@@ -12,7 +12,7 @@ interface Middleware
      * Accepts a server-side request and a response instance, and does
      * something with them.
      *
-     * @param \Psr\Http\Message\ServerRequestInterface $request  the request
+     * @param \Psr\Http\Message\ServerRequestInterface $request the request
      * @param \Viserio\Contracts\Middleware\Frame      $frame
      *
      * @return \Psr\Http\Message\ResponseInterface
