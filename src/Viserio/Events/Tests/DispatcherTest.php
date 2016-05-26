@@ -13,20 +13,10 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase
     public function setup()
     {
         $this->container = new ArrayContainer([
-            'foo.service' => function () {
-                return new FooService();
-            },
+            'foo.service' => new FooService()
         ]);
 
         $this->dispatcher = new Dispatcher(new EventDispatcher(), $this->container);
-    }
-
-    /**
-     * @expectedException InvalidArgumentException
-     */
-    public function testAddListenerServiceThrowsIfCallbackNotArray()
-    {
-        $this->dispatcher->addListenerService('foo', 'onBar');
     }
 
     /**
@@ -74,7 +64,7 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase
 
     public function testAddSubscriberService()
     {
-        $this->dispatcher->addSubscriberService('foo.service', 'Viserio\Events\Test\FooService');
+        $this->dispatcher->addSubscriberService('foo.service', 'Viserio\Events\Tests\Fixture\FooService');
         $this->dispatcher->dispatch('foo', new Event());
         $this->assertEquals('foo', $this->container->get('foo.service')->string);
 
@@ -95,12 +85,12 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase
 
     public function testRemoveSubscriberService()
     {
-        $this->dispatcher->addSubscriberService('foo.service', 'Viserio\Events\Test\FooService');
+        $this->dispatcher->addSubscriberService('foo.service', 'Viserio\Events\Tests\Fixture\FooService');
         $this->assertTrue($this->dispatcher->hasListeners('foo'));
         $this->assertTrue($this->dispatcher->hasListeners('bar'));
         $this->assertTrue($this->dispatcher->hasListeners('buzz'));
 
-        $this->dispatcher->removeSubscriberService('foo.service', 'Viserio\Events\Test\FooService');
+        $this->dispatcher->removeSubscriberService('foo.service', 'Viserio\Events\Tests\Fixture\FooService');
         $this->assertFalse($this->dispatcher->hasListeners('foo'));
         $this->assertFalse($this->dispatcher->hasListeners('bar'));
         $this->assertFalse($this->dispatcher->hasListeners('buzz'));
@@ -134,7 +124,7 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase
 
     public function testGetListeners()
     {
-        $this->dispatcher->addSubscriberService('foo.service', 'Viserio\Events\Test\FooService');
+        $this->dispatcher->addSubscriberService('foo.service', 'Viserio\Events\Tests\Fixture\FooService');
         $this->assertEquals(2, count($this->dispatcher->getListeners('bar')));
         $this->assertEquals(3, count($this->dispatcher->getListeners()));
     }

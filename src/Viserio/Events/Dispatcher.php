@@ -54,7 +54,7 @@ class Dispatcher implements EventDispatcherInterface
      */
     public function addListenerService(string $eventName, array $callback, int $priority = 0)
     {
-        if (! is_array($callback) || 2 !== count($callback)) {
+        if (! is_array($callback) || count($callback) !== 2) {
             throw new InvalidArgumentException('Expected an [service", "method"] argument');
         }
 
