@@ -1,212 +1,160 @@
 <?php
 namespace Viserio\Events;
 
-use Interop\Container\ContainerInterface as ContainerContract;
-use InvalidArgumentException;
-use ReflectionClass;
-use Symfony\Component\EventDispatcher\Event;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Viserio\Support\Str;
+use Viserio\Support\Traits\ContainerAwareTrait;
+use Viserio\Contracts\Events\Dispatcher as DispatcherContract;
 
-class Dispatcher implements EventDispatcherInterface
+class Dispatcher implements DispatcherContract
 {
-    /**
-     * Event dispatcher.
-     *
-     * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
-     */
-    protected $eventDispatcher;
+    use ContainerAwareTrait;
 
     /**
-     * Container instance.
-     *
-     * @var \Interop\Container\ContainerInterface
-     */
-    protected $container;
-
-    /**
-     * Listener list.
+     * The registered event listeners.
      *
      * @var array
      */
-    protected $listenerIds = [];
+    protected $listeners = [];
 
     /**
-     * Constructor.
+     * The wildcard listeners.
      *
-     * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $eventDispatcher
-     * @param ContainerContract                                           $container
+     * @var array
      */
-    public function __construct(EventDispatcherInterface $eventDispatcher, ContainerContract $container)
+    protected $wildcards = [];
+
+    /**
+     * The sorted event listeners.
+     *
+     * @var array
+     */
+    protected $sorted = [];
+
+    /**
+     * {@inhertidoc}
+     */
+    function on(string $eventName, $listener, int $priority = 100)
     {
-        $this->eventDispatcher = $eventDispatcher;
-        $this->container = $container;
+        if ($this->hasWildcards($eventName)) {
+
+        } else {
+
+        }
     }
 
     /**
-     * Adds a service as event listener.
-     *
-     * @param string   $eventName Event for which the listener is added
-     * @param string[] $callback  The service ID of the listener service & the method
-     *                            name that has to be called
-     * @param int      $priority  The higher this value, the earlier an event listener
-     *                            will be triggered in the chain. Defaults to 0.
+     * {@inhertidoc}
      */
-    public function addListenerService(string $eventName, array $callback, int $priority = 0)
+    function once(string $eventName, $listener, int $priority = 100)
     {
-        if (! is_array($callback) || count($callback) !== 2) {
-            throw new InvalidArgumentException('Expected an [service", "method"] argument');
+
+    }
+
+    /**
+     * {@inhertidoc}
+     */
+    function emit(string $eventName, array $arguments = [], callable $continueCallback = null): bool
+    {
+
+    }
+
+    /**
+     * {@inhertidoc}
+     */
+    function getListeners(string $eventName): array
+    {
+
+    }
+
+    /**
+     * {@inhertidoc}
+     */
+    function off(string $eventName, callable $listener): bool
+    {
+
+    }
+
+    /**
+     * {@inhertidoc}
+     */
+    function removeAllListeners($eventName = null)
+    {
+
+    }
+
+    /**
+     * Checks whether a string contains any wildcard characters.
+     *
+     * @param string $subject
+     *
+     * @return bool
+     */
+    protected function hasWildcards($subject): bool
+    {
+        return Str::contains($subject, '*') || Str::contains($subject, '#');
+    }
+
+    /**
+     * Binds all patterns that match the specified event name.
+     *
+     * @param string $eventName
+     */
+    protected function bindPatterns(string $eventName)
+    {
+        if (isset($this->wildcards[$eventName])) {
+            return;
         }
 
-        $serviceId = $callback[0];
-        $method = $callback[1];
-
-        $closure = function (Event $events) use ($serviceId, $method) {
-            call_user_func([$this->container->get($serviceId), $method], $events);
-        };
-
-        $this->listenerIds[$eventName][] = [$callback, $closure];
-        $this->eventDispatcher->addListener($eventName, $closure, $priority);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function removeListener($eventName, $listener)
-    {
-        foreach ($this->listenerIds[$eventName] as $i => $parts) {
-            list($callback, $closure) = $parts;
-
-            if ($listener === $callback) {
-                $listener = $closure;
-                break;
-            }
-        }
-
-        $this->eventDispatcher->removeListener($eventName, $listener);
-    }
-
-    /**
-     * Adds a service as event subscriber.
-     *
-     * @param string $serviceId The service ID of the subscriber service
-     * @param string $class     The service's class name
-     */
-    public function addSubscriberService(string $serviceId, string $class)
-    {
-        $this->checkForInterface($class);
-
-        foreach ($class::getSubscribedEvents() as $eventName => $params) {
-            if (is_string($params)) {
-                $this->addListenerService($eventName, [$serviceId, $params], 0);
-            } elseif (is_string($params[0])) {
-                $this->addListenerService($eventName, [$serviceId, $params[0]], isset($params[1]) ? $params[1] : 0);
-            } else {
-                foreach ($params as $listener) {
-                    $this->addListenerService(
-                        $eventName,
-                        [$serviceId, $listener[0]],
-                        isset($listener[1]) ? $listener[1] : 0
-                    );
+        foreach ($this->patterns as $eventPattern => $patterns) {
+            foreach ($patterns as $pattern) {
+                if ($pattern->test($eventName)) {
+                    $pattern->bind($this->dispatcher, $eventName);
                 }
             }
         }
+
+        $this->wildcards[$eventName] = true;
     }
-
     /**
-     * Remove subscriber service.
+     * Adds an event listener for all events matching the specified pattern.
      *
-     * @param string $serviceId The service ID of the subscriber service
-     * @param string $class     The service's class name
+     * This method will lazily register the listener when a matching event is
+     * dispatched.
+     *
+     * @param ListenerPattern $pattern
      */
-    public function removeSubscriberService(string $serviceId, string $class)
+    protected function addListenerPattern(ListenerPattern $pattern)
     {
-        $this->checkForInterface($class);
+        $this->patterns[$pattern->getEventPattern()][] = $pattern;
 
-        foreach ($class::getSubscribedEvents() as $eventName => $params) {
-            if (is_string($params)) {
-                $this->removeListener($eventName, [$serviceId, $params]);
-            } elseif (is_string($params[0])) {
-                $this->removeListener($eventName, [$serviceId, $params[0]]);
-            } else {
-                foreach ($params as $listener) {
-                    $this->removeListener($eventName, [$serviceId, $listener[0]]);
-                }
+        foreach ($this->wildcards as $eventName => $value) {
+            if ($pattern->test($eventName)) {
+                unset($this->wildcards[$eventName]);
             }
         }
     }
-
     /**
-     * {@inheritdoc}.
-     */
-    public function dispatch($eventName, Event $event = null)
-    {
-        return $this->eventDispatcher->dispatch($eventName, $event);
-    }
-
-    /**
-     * {@inheritdoc}.
-     */
-    public function addListener($eventName, $listener, $priority = 0)
-    {
-        return $this->eventDispatcher->addListener($eventName, $listener, $priority);
-    }
-
-    /**
-     * {@inheritdoc}.
-     */
-    public function addSubscriber(EventSubscriberInterface $subscriber)
-    {
-        return $this->eventDispatcher->addSubscriber($subscriber);
-    }
-
-    /**
-     * {@inheritdoc}.
-     */
-    public function removeSubscriber(EventSubscriberInterface $subscriber)
-    {
-        return $this->eventDispatcher->removeSubscriber($subscriber);
-    }
-
-    /**
-     * {@inheritdoc}.
-     */
-    public function getListeners($eventName = null)
-    {
-        return $this->eventDispatcher->getListeners($eventName);
-    }
-
-    /**
-     * {@inheritdoc}.
-     */
-    public function hasListeners($eventName = null)
-    {
-        return $this->eventDispatcher->hasListeners($eventName);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getListenerPriority($eventName, $listener)
-    {
-        return $this->dispatcher->getListenerPriority($eventName, $listener);
-    }
-
-    /**
-     * Checking if class has EventSubscriberInterface.
+     * Removes an event listener from any events to which it was applied due to
+     * pattern matching.
      *
-     * @param string $class The service's class name (which must implement EventSubscriberInterface)
+     * This method cannot be used to remove a listener from a pattern that was
+     * never registered.
      *
-     * @throws \InvalidArgumentException
+     * @param string   $eventPattern
+     * @param callback $listener
      */
-    protected function checkForInterface(string $class)
+    protected function removeListenerPattern(string $eventPattern, callback $listener)
     {
-        $rfc = new ReflectionClass($class);
+        if (!isset($this->patterns[$eventPattern])) {
+            return;
+        }
 
-        if (! $rfc->implementsInterface('Symfony\Component\EventDispatcher\EventSubscriberInterface')) {
-            throw new InvalidArgumentException(
-                sprintf('%s must implement Symfony\Component\EventDispatcher\EventSubscriberInterface', $class)
-            );
+        foreach ($this->patterns[$eventPattern] as $key => $pattern) {
+            if ($listener == $pattern->getListener()) {
+                $pattern->unbind($this->dispatcher);
+
+                unset($this->patterns[$eventPattern][$key]);
+            }
         }
     }
 }
