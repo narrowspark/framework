@@ -98,7 +98,7 @@ class Dispatcher implements DispatcherContract
         if ($middleware instanceof MiddlewareContract) {
             return $this->isContainerAware($middleware);
         } elseif (is_callable($middleware)) {
-            return (new class implements MiddlewareContract
+            return new class implements MiddlewareContract
             {
                 private $callback;
 
@@ -113,7 +113,7 @@ class Dispatcher implements DispatcherContract
                 {
                     return ($this->callback)($request, $frame);
                 }
-            });
+            };
         }
 
         throw new InvalidArgumentException('Invalid Middleware Detected.');
