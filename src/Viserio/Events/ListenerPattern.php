@@ -75,7 +75,7 @@ class ListenerPattern
     public function __construct(string $eventPattern, $listener, int $priority = 0)
     {
         $this->eventPattern     = $eventPattern;
-        $this->listenerProvider = function() use($listener) {
+        $this->listenerProvider = function () use ($listener) {
             return $listener;
         };
         $this->priority         = $priority;
@@ -112,7 +112,7 @@ class ListenerPattern
      * Adds this pattern's listener to an event.
      *
      * @param DispatcherContract $dispatcher
-     * @param string                   $eventName
+     * @param string             $eventName
      */
     public function bind(DispatcherContract $dispatcher, $eventName)
     {
@@ -146,7 +146,7 @@ class ListenerPattern
      *
      * @return bool
      */
-    public final function test(string $eventName): bool
+    final public function test(string $eventName): bool
     {
         return preg_match($this->regex, $eventName);
     }

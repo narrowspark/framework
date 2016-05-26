@@ -13,7 +13,7 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase
     public function setup()
     {
         $this->container = new ArrayContainer([
-            'foo.service' => new FooService()
+            'foo.service' => new FooService(),
         ]);
 
         $this->dispatcher = new Dispatcher(new EventDispatcher(), $this->container);
