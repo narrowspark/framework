@@ -2,14 +2,14 @@
 namespace Viserio\Middleware\Tests;
 
 use Interop\Container\ContainerInterface;
+use Narrowspark\TestingHelper\ArrayContainer;
+use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
+use Viserio\Contracts\Middleware\Factory as FactoryContracts;
 use Viserio\Middleware\Dispatcher;
 use Viserio\Middleware\Tests\Fixture\FakeContainerMiddleware;
 use Viserio\Middleware\Tests\Fixture\FakeMiddleware;
-use Narrowspark\TestingHelper\Traits\MockeryTrait;
-use Viserio\Contracts\Middleware\Factory as FactoryContracts;
-use Narrowspark\TestingHelper\ArrayContainer;
 
 class MiddelwareDispatcherTest extends \PHPUnit_Framework_TestCase
 {
@@ -38,7 +38,7 @@ class MiddelwareDispatcherTest extends \PHPUnit_Framework_TestCase
             return $response->withStatus(500);
         });
 
-        $default = function($request) use ($factory) {
+        $default = function ($request) use ($factory) {
             // Default to a 404 NOT FOUND response
             return $factory->createResponse(404, [], 'Not Found');
         };
@@ -67,7 +67,7 @@ class MiddelwareDispatcherTest extends \PHPUnit_Framework_TestCase
         $dispatcher->setContainer($container);
         $dispatcher->pipe(new FakeContainerMiddleware());
 
-        $default = function($request) use ($factory) {
+        $default = function ($request) use ($factory) {
             // Default to a 404 NOT FOUND response
             return $factory->createResponse(404, [], 'Not Found');
         };
