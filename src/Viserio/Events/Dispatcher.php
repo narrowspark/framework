@@ -1,9 +1,9 @@
 <?php
 namespace Viserio\Events;
 
+use Viserio\Contracts\Events\Dispatcher as DispatcherContract;
 use Viserio\Support\Str;
 use Viserio\Support\Traits\ContainerAwareTrait;
-use Viserio\Contracts\Events\Dispatcher as DispatcherContract;
 
 class Dispatcher implements DispatcherContract
 {
@@ -33,53 +33,46 @@ class Dispatcher implements DispatcherContract
     /**
      * {@inhertidoc}
      */
-    function on(string $eventName, $listener, int $priority = 100)
+    public function on(string $eventName, $listener, int $priority = 100)
     {
         if ($this->hasWildcards($eventName)) {
-
         } else {
-
         }
     }
 
     /**
      * {@inhertidoc}
      */
-    function once(string $eventName, $listener, int $priority = 100)
+    public function once(string $eventName, $listener, int $priority = 100)
     {
-
     }
 
     /**
      * {@inhertidoc}
      */
-    function emit(string $eventName, array $arguments = [], callable $continueCallback = null): bool
+    public function emit(string $eventName, array $arguments = [], callable $continueCallback = null): bool
     {
-
     }
 
     /**
      * {@inhertidoc}
      */
-    function getListeners(string $eventName): array
+    public function getListeners(string $eventName): array
     {
-
     }
 
     /**
      * {@inhertidoc}
      */
-    function off(string $eventName, callable $listener): bool
+    public function off(string $eventName, callable $listener): bool
     {
-
     }
 
     /**
      * {@inhertidoc}
      */
-    function removeAllListeners($eventName = null)
+    public function removeAllListeners($eventName = null)
     {
-
     }
 
     /**
@@ -115,6 +108,7 @@ class Dispatcher implements DispatcherContract
 
         $this->wildcards[$eventName] = true;
     }
+
     /**
      * Adds an event listener for all events matching the specified pattern.
      *
@@ -133,6 +127,7 @@ class Dispatcher implements DispatcherContract
             }
         }
     }
+
     /**
      * Removes an event listener from any events to which it was applied due to
      * pattern matching.

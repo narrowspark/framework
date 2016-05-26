@@ -9,10 +9,8 @@ interface Dispatcher
      * @param string $eventName
      * @param mixed  $listener
      * @param int    $priority
-     *
-     * @return void
      */
-    function on(string $eventName, $listener, int $priority = 0);
+    public function on(string $eventName, $listener, int $priority = 0);
 
     /**
      * Subscribe to an event exactly once.
@@ -20,10 +18,8 @@ interface Dispatcher
      * @param string $eventName
      * @param mixed  $listener
      * @param int    $priority
-     *
-     * @return void
      */
-    function once(string $eventName, $listener, int $priority = 0);
+    public function once(string $eventName, $listener, int $priority = 0);
 
     /**
      * Emits an event.
@@ -52,7 +48,7 @@ interface Dispatcher
      *
      * @return bool
      */
-    function emit(string $eventName, array $arguments = [], callable $continueCallback = null): bool;
+    public function emit(string $eventName, array $arguments = [], callable $continueCallback = null): bool;
 
     /**
      * Returns the list of listeners for an event.
@@ -64,7 +60,7 @@ interface Dispatcher
      *
      * @return callable[]
      */
-    function getListeners(string $eventName): array;
+    public function getListeners(string $eventName): array;
 
     /**
      * Removes a specific listener from an event.
@@ -77,7 +73,7 @@ interface Dispatcher
      *
      * @return bool
      */
-    function off(string $eventName, callable $listener): bool;
+    public function off(string $eventName, callable $listener): bool;
 
     /**
      * Removes all listeners.
@@ -87,8 +83,6 @@ interface Dispatcher
      * removed.
      *
      * @param string $eventName
-     *
-     * @return void
      */
-    function removeAllListeners($eventName = null);
+    public function removeAllListeners($eventName = null);
 }
