@@ -46,9 +46,9 @@
         <testsuite name="Narrowspark Contracts Component Test Suite">
             <directory>./src/Viserio/Contracts/Tests</directory>
         </testsuite>
-<!--         <testsuite name="Narrowspark Cookie Component Test Suite">
+        <testsuite name="Narrowspark Cookie Component Test Suite">
             <directory>./src/Viserio/Cookie/Tests</directory>
-        </testsuite> -->
+        </testsuite>
 <!--        <testsuite name="Narrowspark Database Component Test Suite">
             <directory>./src/Viserio/Database/Tests</directory>
         </testsuite> -->

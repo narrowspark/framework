@@ -7,7 +7,7 @@ interface Factory
      * Create a new cookie instance.
      *
      * @param string      $name
-     * @param string      $value
+     * @param string|null $value
      * @param int         $minutes
      * @param string|null $path
      * @param string|null $domain
@@ -18,10 +18,10 @@ interface Factory
      */
     public function create(
         string $name,
-        string $value,
+        $value,
         int $minutes = 0,
-        string $path = null,
-        string $domain = null,
+        $path = null,
+        $domain = null,
         bool $secure = false,
         bool $httpOnly = true
     ): Cookie;
@@ -41,8 +41,8 @@ interface Factory
     public function forever(
         string $name,
         string $value,
-        string $path = null,
-        string $domain = null,
+        $path = null,
+        $domain = null,
         bool $secure = false,
         bool $httpOnly = true
     ): Cookie;
@@ -58,7 +58,7 @@ interface Factory
      */
     public function forget(
         string $name,
-        string $path = null,
-        string $domain = null
+        $path = null,
+        $domain = null
     ): Cookie;
 }

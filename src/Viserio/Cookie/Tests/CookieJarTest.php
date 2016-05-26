@@ -2,18 +2,11 @@
 namespace Viserio\Cookie\Test;
 
 use DateTime;
-use Mockery as Mock;
-use Psr\Http\Message\ServerRequestInterface as Request;
 use Viserio\Cookie\Cookie;
 use Viserio\Cookie\CookieJar;
 
 class CookieJarTest extends \PHPUnit_Framework_TestCase
 {
-    public function tearDown()
-    {
-        Mock::close();
-    }
-
     public function testCookiesAreCreatedWithProperOptions()
     {
         $cookie = $this->getCreator();
@@ -65,7 +58,7 @@ class CookieJarTest extends \PHPUnit_Framework_TestCase
         $cookie->queue('qu', 'ux');
         $this->assertArrayHasKey('qu', $cookie->getQueuedCookies());
         $this->assertTrue($cookie->hasQueued('qu'));
-        $this->assertInstanceOf('Viserio\Cookie\Cookie', $cookie->queued('qu'));
+        $this->assertInstanceOf('Viserio\Contracts\Cookie\Cookie', $cookie->queued('qu'));
     }
 
     public function testUnqueue()

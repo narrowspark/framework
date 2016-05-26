@@ -22,9 +22,9 @@ final class Cookie extends AbstractCookie
      */
     public function __construct(
         string $name,
-        string $value = null,
+        $value = null,
         $expiration = 0,
-        string $path = null,
+        $path = null,
         $domain = null,
         $secure = false,
         $httpOnly = false
@@ -49,7 +49,7 @@ final class Cookie extends AbstractCookie
      *
      * @return self
      */
-    public function withValue(string $value = null): CookieContract
+    public function withValue($value = null): CookieContract
     {
         $this->validateValue($value);
 

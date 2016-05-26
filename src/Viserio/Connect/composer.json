@@ -49,7 +49,6 @@
         "container-interop/container-interop-implementation" : "~1.1"
     },
     "suggest": {
-        "ext-apc"                                            : "Required to use apc",
         "ext-memcached"                                      : "Required to use memcached",
         "ext-mongo"                                          : "Required to use mongo",
         "ext-pdo"                                            : "Required to use PDO adapters",

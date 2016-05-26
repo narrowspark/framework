@@ -40,7 +40,7 @@ class CookieJar implements JarContract
      * Create a new cookie instance.
      *
      * @param string      $name
-     * @param string      $value
+     * @param string|null $value
      * @param int         $minutes
      * @param string|null $path
      * @param string|null $domain
@@ -51,10 +51,10 @@ class CookieJar implements JarContract
      */
     public function create(
         string $name,
-        string $value,
+        $value,
         int $minutes = 0,
-        string $path = null,
-        string $domain = null,
+        $path = null,
+        $domain = null,
         bool $secure = false,
         bool $httpOnly = true
     ): CookieContract {
@@ -77,8 +77,14 @@ class CookieJar implements JarContract
      *
      * @return Cookie
      */
-    public function forever(string $name, string $value, string $path = null, string $domain = null, bool $secure = false, bool $httpOnly = true): CookieContract
-    {
+    public function forever(
+        string $name,
+        string $value,
+        $path = null,
+        $domain = null,
+        bool $secure = false,
+        bool $httpOnly = true
+    ): CookieContract {
         return $this->create($name, $value, 2628000, $path, $domain, $secure, $httpOnly);
     }
 
@@ -91,7 +97,7 @@ class CookieJar implements JarContract
      *
      * @return Cookie
      */
-    public function forget(string $name, string $path = null, string $domain = null): CookieContract
+    public function forget(string $name, $path = null, $domain = null): CookieContract
     {
         return $this->create($name, null, -2628000, $path, $domain);
     }
@@ -148,9 +154,9 @@ class CookieJar implements JarContract
      * @param string     $key
      * @param mixed|null $default
      *
-     * @return CookieContract
+     * @return CookieContract|null
      */
-    public function queued(string $key, $default = null): CookieContract
+    public function queued(string $key, $default = null)
     {
         return Arr::get($this->queued, $key, $default);
     }
@@ -192,7 +198,7 @@ class CookieJar implements JarContract
      *
      * @return self
      */
-    public function setDefaultPathAndDomain(string $path, string $domain, bool $secure = false): self
+    public function setDefaultPathAndDomain(string $path, string $domain, bool $secure = false): JarContract
     {
         list($this->path, $this->domain, $this->secure) = [$path, $domain, $secure];
 
@@ -212,13 +218,13 @@ class CookieJar implements JarContract
     /**
      * Get the path and domain, or the default values.
      *
-     * @param string $path
-     * @param string $domain
-     * @param bool   $secure
+     * @param string|null $path
+     * @param string|null $domain
+     * @param bool        $secure
      *
      * @return string[]
      */
-    protected function getPathAndDomain(string $path, string $domain, bool $secure = false): array
+    protected function getPathAndDomain($path, $domain, bool $secure = false): array
     {
         return [$path ?: $this->path, $domain ?: $this->domain, $secure ?: $this->secure];
     }

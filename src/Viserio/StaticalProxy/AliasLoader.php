@@ -280,9 +280,9 @@ class AliasLoader implements AliasLoaderContract
      *
      * @param string $alias
      *
-     * @return bool
+     * @return bool|string
      */
-    protected function resolvePatternAlias(string $alias): bool
+    protected function resolvePatternAlias(string $alias)
     {
         if (isset($this->patterns[$alias]) && $class = $this->patterns[$alias]->resolve($alias)) {
             return $class;

@@ -19,7 +19,7 @@ interface Cookie
      *
      * @return self
      */
-    public function withValue(string $value = null): Cookie;
+    public function withValue($value = null): Cookie;
 
     /**
      * Returns the value.
@@ -42,7 +42,7 @@ interface Cookie
      *
      * @return self
      */
-    public function withMaxAge(int $maxAge = null): Cookie;
+    public function withMaxAge($maxAge = null): Cookie;
 
     /**
      * Returns the max age.
@@ -65,7 +65,7 @@ interface Cookie
      *
      * @return self
      */
-    public function withExpiration(int $expiration = null): Cookie;
+    public function withExpiration($expiration = null): Cookie;
 
     /**
      * Sets the expires
@@ -104,7 +104,7 @@ interface Cookie
      *
      * @return self
      */
-    public function withDomain(string $domain = null): Cookie;
+    public function withDomain($domain = null): Cookie;
 
     /**
      * Returns the domain.
@@ -127,7 +127,7 @@ interface Cookie
      *
      * @return self
      */
-    public function withPath(string $path = null): Cookie;
+    public function withPath($path = null): Cookie;
 
     /**
      * Returns the path.

@@ -65,7 +65,7 @@ abstract class AbstractCookie implements Stringable, CookieContract
      *
      * @return self
      */
-    abstract public function withValue(string $value = null): CookieContract;
+    abstract public function withValue($value = null): CookieContract;
 
     /**
      * Returns the value
@@ -94,7 +94,7 @@ abstract class AbstractCookie implements Stringable, CookieContract
      *
      * @return self
      */
-    public function withMaxAge(int $maxAge = null): CookieContract
+    public function withMaxAge($maxAge = null): CookieContract
     {
         $new = clone $this;
         $new->maxAge = is_int($maxAge) ? $maxAge : null;
@@ -129,7 +129,7 @@ abstract class AbstractCookie implements Stringable, CookieContract
      *
      * @return self
      */
-    public function withExpiration(int $expiration = null): CookieContract
+    public function withExpiration($expiration = null): CookieContract
     {
         $new = clone $this;
         $new->maxAge = is_int($expiration) ? $expiration : null;
@@ -190,7 +190,7 @@ abstract class AbstractCookie implements Stringable, CookieContract
      *
      * @return self
      */
-    public function withDomain(string $domain = null): CookieContract
+    public function withDomain($domain = null): CookieContract
     {
         $new = clone $this;
         $new->domain = $this->normalizeDomain($domain);
@@ -225,7 +225,7 @@ abstract class AbstractCookie implements Stringable, CookieContract
      *
      * @return self
      */
-    public function withPath(string $path = null): CookieContract
+    public function withPath($path = null): CookieContract
     {
         $new = clone $this;
         $new->path = $this->normalizePath($path);
