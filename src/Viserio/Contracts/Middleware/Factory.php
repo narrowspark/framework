@@ -8,7 +8,7 @@ use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\UploadedFileInterface;
 use Psr\Http\Message\UriInterface;
 
-interface FactoryInterface
+interface Factory
 {
     /**
      * Create a PSR-7 Request object

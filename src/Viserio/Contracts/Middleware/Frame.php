@@ -1,17 +1,20 @@
 <?php
 namespace Viserio\Contracts\Middleware;
 
-interface ServerFrameInterface
+use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Message\ResponseInterface;
+
+interface Frame
 {
     /**
      * @param ServerRequestInterface $request [description]
      *
-     * @return function [description]
+     * @return ResponseInterface
      */
     public function next(ServerRequestInterface $request): ResponseInterface;
 
     /**
-     * @return [type] [description]
+     * @return Factory
      */
-    public function factory(): FactoryInterface;
+    public function factory(): Factory;
 }

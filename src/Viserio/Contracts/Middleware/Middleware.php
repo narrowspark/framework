@@ -13,9 +13,9 @@ interface Middleware
      * something with them.
      *
      * @param \Psr\Http\Message\ServerRequestInterface $request  the request
-     * @param \Psr\Http\Message\ResponseInterface      $response the response
+     * @param \Viserio\Contracts\Middleware\Frame      $frame
      *
      * @return \Psr\Http\Message\ResponseInterface
      */
-    public function handle(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface;
+    public function handle(ServerRequestInterface $request, Frame $frame): ResponseInterface;
 }

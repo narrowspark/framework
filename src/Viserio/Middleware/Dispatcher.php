@@ -7,6 +7,7 @@ use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Contracts\Container\ContainerAware;
 use Viserio\Support\Traits\ContainerAwareTrait;
 use Viserio\Contracts\Middleware\Factory as FactoryContract;
+use Viserio\Contracts\Middleware\Frame as FrameContract;
 use Viserio\Contracts\Middleware\Middleware as MiddlewareContract;
 use Viserio\Contracts\Middleware\Dispatcher as DispatcherContract;
 
@@ -44,7 +45,7 @@ class Dispatcher implements DispatcherContract
      */
     public function run(ServerRequestInterface $request, callable $default): ResponseInterface
     {
-        return (new class($this->middlewares, $this->factory, $default) implements ServerFrameInterface
+        return (new class($this->middlewares, $this->factory, $default) implements FrameContract
         {
             private $middlewares;
 
@@ -54,7 +55,7 @@ class Dispatcher implements DispatcherContract
 
             private $default;
 
-            public function __construct(array $middleware, FactoryInterface $factory, callable $default) {
+            public function __construct(array $middleware, FactoryContract $factory, callable $default) {
                 $this->middlewares = $middleware;
                 $this->factory     = $factory;
                 $this->default     = $default;
@@ -98,11 +99,11 @@ class Dispatcher implements DispatcherContract
         if ($middleware instanceof MiddlewareContract) {
             return $this->isContainerAware($middleware);
         } elseif (is_callable($middleware)) {
-            return new class implements MiddlewareContract
+            return new class($middleware) implements MiddlewareContract
             {
                 private $callback;
 
-                public function __construct(callable $middleware) {
+                public function __construct($middleware) {
                     $this->callback = $middleware;
                 }
 
