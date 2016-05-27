@@ -22,6 +22,7 @@
         "container-interop/container-interop" : "^1.1",
         "danielstjules/stringy"               : "^2.3",
         "ext-mbstring"                        : "*",
+        "php-di/invoker"                      : "^1.2",
         "ircmaxell/random-lib"                : "^1.1",
         "viserio/contracts"                   : "self.version"
     },

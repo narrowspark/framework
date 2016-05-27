@@ -19,11 +19,11 @@
     ],
     "require": {
         "php"                                 : "^7.0.7",
-        "viserio/cotracts"                    : "self.version",
         "container-interop/container-interop" : "^1.1",
-        "php-di/invoker"                      : "~1.2",
         "stecman/symfony-console-completion"  : "^0.6",
-        "symfony/console"                     : "^3.1"
+        "symfony/console"                     : "^3.1",
+        "viserio/cotracts"                    : "self.version",
+        "viserio/support"                     : "self.version"
     },
     "require-dev": {
         "narrowspark/php-cs-fixer-config"     : "^1.1",

@@ -247,7 +247,7 @@ class Application extends SymfonyConsole implements ApplicationContract
      *
      * @return \Viserio\Support\Invoker
      */
-    protected function getInvoker(): \Viserio\Support\Invoker
+    protected function getInvoker(): Invoker
     {
         return $this->invoker;
     }

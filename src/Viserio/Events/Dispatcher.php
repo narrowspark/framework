@@ -1,8 +1,11 @@
 <?php
 namespace Viserio\Events;
 
+use RuntimeException;
+use Interop\Container\ContainerInterface as ContainerContract;
 use Viserio\Contracts\Events\Dispatcher as DispatcherContract;
 use Viserio\Support\Str;
+use Viserio\Support\Invoker;
 use Viserio\Support\Traits\ContainerAwareTrait;
 
 class Dispatcher implements DispatcherContract
@@ -31,6 +34,19 @@ class Dispatcher implements DispatcherContract
     protected $sorted = [];
 
     /**
+     * Invoker instance.
+     *
+     * @var \Viserio\Support\Invoker
+     */
+    protected $invoker;
+
+    public function __construct(ContainerContract $container)
+    {
+        $this->setContainer($container);
+        $this->initInvoker();
+    }
+
+    /**
      * {@inhertidoc}
      */
     public function on(string $eventName, $listener, int $priority = 100)
@@ -52,6 +68,15 @@ class Dispatcher implements DispatcherContract
      */
     public function emit(string $eventName, array $arguments = [], callable $continueCallback = null): bool
     {
+        try {
+            $this->getInvoker()->call($callable, $parameters);
+        } catch (InvocationException $e) {
+            throw new RuntimeException(sprintf(
+                "Impossible to call the '%s' command: %s",
+                $input->getFirstArgument(),
+                $e->getMessage()
+            ), 0, $e);
+        }
     }
 
     /**
@@ -151,5 +176,26 @@ class Dispatcher implements DispatcherContract
                 unset($this->patterns[$eventPattern][$key]);
             }
         }
+    }
+
+    /**
+     * Set configured invoker.
+     */
+    protected function initInvoker()
+    {
+        $this->invoker = (new Invoker())
+            ->injectByTypeHint(true)
+            ->injectByParameterName(true)
+            ->setContainer($this->getContainer());
+    }
+
+    /**
+     * Get configured invoker.
+     *
+     * @return \Viserio\Support\Invoker
+     */
+    protected function getInvoker(): Invoker
+    {
+        return $this->invoker;
     }
 }
