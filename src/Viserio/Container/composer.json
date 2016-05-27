@@ -18,7 +18,7 @@
         }
     ],
     "require": {
-        "php"                                : "^7.0",
+        "php"                                : "^7.0.7",
         "container-interop/container-interop": "^1.0",
         "mpoiriert/invoker"                  : "~1.1"
     },
