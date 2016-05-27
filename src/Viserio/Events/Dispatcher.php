@@ -1,11 +1,11 @@
 <?php
 namespace Viserio\Events;
 
-use RuntimeException;
 use Interop\Container\ContainerInterface as ContainerContract;
+use RuntimeException;
 use Viserio\Contracts\Events\Dispatcher as DispatcherContract;
-use Viserio\Support\Str;
 use Viserio\Support\Invoker;
+use Viserio\Support\Str;
 use Viserio\Support\Traits\ContainerAwareTrait;
 
 class Dispatcher implements DispatcherContract
