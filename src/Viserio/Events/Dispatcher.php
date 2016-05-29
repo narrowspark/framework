@@ -40,10 +40,25 @@ class Dispatcher implements DispatcherContract
      */
     protected $invoker;
 
+    /**
+     * [$patterns description]
+     *
+     * @var array
+     */
+    private $patterns = [];
+
+    /**
+     * Create a new event dispatcher instance.
+     *
+     * @param ContainerContract $container
+     */
     public function __construct(ContainerContract $container)
     {
         $this->setContainer($container);
-        $this->initInvoker();
+        $this->invoker = (new Invoker())
+            ->injectByTypeHint(true)
+            ->injectByParameterName(true)
+            ->setContainer($container);
     }
 
     /**
@@ -52,7 +67,10 @@ class Dispatcher implements DispatcherContract
     public function on(string $eventName, $listener, int $priority = 100)
     {
         if ($this->hasWildcards($eventName)) {
+            $this->addListenerPattern(new ListenerPattern($eventName, $listener, $priority));
         } else {
+            $this->listeners[$eventName][$priority][] = $listener;
+            unset($this->sorted[$eventName]);
         }
     }
 
@@ -61,6 +79,14 @@ class Dispatcher implements DispatcherContract
      */
     public function once(string $eventName, $listener, int $priority = 100)
     {
+        $wrapper = null;
+        $wrapper = function () use ($eventName, $listener, &$wrapper) {
+            $this->off($eventName, $wrapper);
+
+            return $this->call($listener, func_get_args());
+        };
+
+        $this->on($eventName, $wrapper, $priority);
     }
 
     /**
@@ -68,15 +94,39 @@ class Dispatcher implements DispatcherContract
      */
     public function emit(string $eventName, array $arguments = [], callable $continueCallback = null): bool
     {
-        try {
-            $this->getInvoker()->call($callable, $parameters);
-        } catch (InvocationException $e) {
-            throw new RuntimeException(sprintf(
-                "Impossible to call the '%s' command: %s",
-                $input->getFirstArgument(),
-                $e->getMessage()
-            ), 0, $e);
+        $this->bindPatterns($eventName);
+
+        if ($continueCallback === null) {
+            foreach ($this->getListeners($eventName) as $listener) {
+                $result = $this->call($listener, $arguments);
+                // var_dump($result);
+                if ($result === null) {
+                    return false;
+                }
+            }
+
+            return true;
         }
+
+        $listeners = $this->getListeners($eventName);
+        $counter = count($listeners);
+
+        foreach ($listeners as $listener) {
+            --$counter;
+            $result = $this->call($listener, $arguments);
+
+            if ($result === null) {
+                return false;
+            }
+
+            if ($counter > 0) {
+                if (! $this->call($continueCallback)) {
+                    break;
+                }
+            }
+        }
+
+        return true;
     }
 
     /**
@@ -84,6 +134,17 @@ class Dispatcher implements DispatcherContract
      */
     public function getListeners(string $eventName): array
     {
+        if (! isset($this->listeners[$eventName])) {
+            return [];
+        }
+
+        $this->bindPatterns($eventName);
+
+        if (! isset($this->sorted[$eventName])) {
+            $this->sortListeners($eventName);
+        }
+
+        return $this->sorted[$eventName];
     }
 
     /**
@@ -91,6 +152,25 @@ class Dispatcher implements DispatcherContract
      */
     public function off(string $eventName, callable $listener): bool
     {
+        if (! isset($this->listeners[$eventName]) || ! isset($this->wildcards[$eventName])) {
+            return false;
+        }
+
+        if ($this->hasWildcards($eventName)) {
+            $this->removeListenerPattern(new ListenerPattern($eventName, $listener, $priority));
+
+            return true;
+        }
+
+        foreach ($this->listeners[$eventName] as $priority => $listeners) {
+            if (($key = array_search($listener, $listeners, true)) !== false) {
+                unset($this->listeners[$eventName][$priority][$key], $this->sorted[$eventName]);
+
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
@@ -98,6 +178,45 @@ class Dispatcher implements DispatcherContract
      */
     public function removeAllListeners($eventName = null)
     {
+        if ($eventName !== null) {
+            unset($this->listeners[$eventName], $this->wildcards[$eventName]);
+        } else {
+            $this->listeners = $this->wildcards = [];
+        }
+    }
+
+    /**
+     * Determine if a given event has listeners.
+     *
+     * @param string $eventName
+     *
+     * @return bool
+     */
+    public function hasListeners($eventName)
+    {
+        return isset($this->listeners[$eventName]) || isset($this->wildcards[$eventName]);
+    }
+
+    /**
+     * Sort the listeners for a given event by priority.
+     *
+     * @param string $eventName
+     *
+     * @return array
+     */
+    protected function sortListeners($eventName)
+    {
+        $this->sorted[$eventName] = [];
+
+        // If listeners exist for the given event, we will sort them by the priority
+        // so that we can call them in the correct order. We will cache off these
+        // sorted event listeners so we do not have to re-sort on every events.
+        if (isset($this->listeners[$eventName])) {
+            krsort($this->listeners[$eventName]);
+            $this->sorted[$eventName] = call_user_func_array(
+                'array_merge', $this->listeners[$eventName]
+            );
+        }
     }
 
     /**
@@ -126,7 +245,7 @@ class Dispatcher implements DispatcherContract
         foreach ($this->patterns as $eventPattern => $patterns) {
             foreach ($patterns as $pattern) {
                 if ($pattern->test($eventName)) {
-                    $pattern->bind($this->dispatcher, $eventName);
+                    $pattern->bind($this, $eventName);
                 }
             }
         }
@@ -165,13 +284,13 @@ class Dispatcher implements DispatcherContract
      */
     protected function removeListenerPattern(string $eventPattern, callback $listener)
     {
-        if (!isset($this->patterns[$eventPattern])) {
+        if (! isset($this->patterns[$eventPattern])) {
             return;
         }
 
         foreach ($this->patterns[$eventPattern] as $key => $pattern) {
             if ($listener == $pattern->getListener()) {
-                $pattern->unbind($this->dispatcher);
+                $pattern->unbind($this);
 
                 unset($this->patterns[$eventPattern][$key]);
             }
@@ -179,23 +298,23 @@ class Dispatcher implements DispatcherContract
     }
 
     /**
-     * Set configured invoker.
-     */
-    protected function initInvoker()
-    {
-        $this->invoker = (new Invoker())
-            ->injectByTypeHint(true)
-            ->injectByParameterName(true)
-            ->setContainer($this->getContainer());
-    }
-
-    /**
-     * Get configured invoker.
+     * callable invoker.
      *
-     * @return \Viserio\Support\Invoker
+     * @param callback|array $callable
+     * @param array          $parameters
+     *
+     * @return mixed
      */
-    protected function getInvoker(): Invoker
+    protected function call($callable, array $parameters = [])
     {
-        return $this->invoker;
+        try {
+            return $this->invoker->call($callable, $parameters);
+        } catch (InvocationException $e) {
+            throw new RuntimeException(sprintf(
+                "Impossible to call the '%s' command: %s",
+                $input->getFirstArgument(),
+                $e->getMessage()
+            ), 0, $e);
+        }
     }
 }

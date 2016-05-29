@@ -2,6 +2,7 @@
 namespace Viserio\Support\Traits;
 
 use Interop\Container\ContainerInterface as ContainerInteropInterface;
+use RuntimeException;
 
 trait ContainerAwareTrait
 {

@@ -6,24 +6,6 @@ use Viserio\Contracts\Events\Dispatcher as DispatcherContract;
 class ListenerPattern
 {
     /**
-     * Wildcards separators.
-     *
-     * @var array
-     */
-    private $wildcardsSeparators = [
-        // Trailing single-wildcard with separator prefix
-        '/\\\\\.\\\\\*$/'     => '(?:\.\w+)?',
-        // Single-wildcard with separator prefix
-        '/\\\\\.\\\\\*/'      => '(?:\.\w+)',
-        // Single-wildcard without separator prefix
-        '/(?<!\\\\\.)\\\\\*/' => '(?:\w+)',
-        // Multi-wildcard with separator prefix
-        '/\\\\\.#/'           => '(?:\.\w+)*',
-        // Multi-wildcard without separator prefix
-        '/(?<!\\\\\.)#/'      => '(?:|\w+(?:\.\w+)*)',
-    ];
-
-    /**
      * The event priority.
      *
      * @var array
@@ -64,6 +46,23 @@ class ListenerPattern
      * @var array
      */
     protected $events = [];
+    /**
+     * Wildcards separators.
+     *
+     * @var array
+     */
+    private $wildcardsSeparators = [
+        // Trailing single-wildcard with separator prefix
+        '/\\\\\.\\\\\*$/'     => '(?:\.\w+)?',
+        // Single-wildcard with separator prefix
+        '/\\\\\.\\\\\*/'      => '(?:\.\w+)',
+        // Single-wildcard without separator prefix
+        '/(?<!\\\\\.)\\\\\*/' => '(?:\w+)',
+        // Multi-wildcard with separator prefix
+        '/\\\\\.#/'           => '(?:\.\w+)*',
+        // Multi-wildcard without separator prefix
+        '/(?<!\\\\\.)#/'      => '(?:|\w+(?:\.\w+)*)',
+    ];
 
     /**
      * Constructor.
@@ -74,13 +73,13 @@ class ListenerPattern
      */
     public function __construct(string $eventPattern, $listener, int $priority = 0)
     {
-        $this->eventPattern     = $eventPattern;
+        $this->eventPattern = $eventPattern;
         $this->listenerProvider = function () use ($listener) {
             return $listener;
         };
-        $this->priority         = $priority;
+        $this->priority = $priority;
 
-        $this->regex            = $this->createRegex($eventPattern);
+        $this->regex = $this->createRegex($eventPattern);
     }
 
     /**
@@ -100,7 +99,7 @@ class ListenerPattern
      */
     public function getListener()
     {
-        if (!isset($this->listener) && isset($this->listenerProvider)) {
+        if (! isset($this->listener) && isset($this->listenerProvider)) {
             $this->listener = call_user_func($this->listenerProvider);
             unset($this->listenerProvider);
         }

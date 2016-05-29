@@ -45,45 +45,44 @@ class Dispatcher implements DispatcherContract
      */
     public function run(ServerRequestInterface $request, callable $default): ResponseInterface
     {
-        return (new class($this->middlewares, $this->factory, $default) implements FrameContract
- {
-     private $middlewares;
+        return (new class($this->middlewares, $this->factory, $default) implements FrameContract {
+            private $middlewares;
 
-     private $index = 0;
+            private $index = 0;
 
-     private $factory;
+            private $factory;
 
-     private $default;
+            private $default;
 
-     public function __construct(array $middleware, FactoryContract $factory, callable $default)
-     {
-         $this->middlewares = $middleware;
-         $this->factory     = $factory;
-         $this->default     = $default;
-     }
+            public function __construct(array $middleware, FactoryContract $factory, callable $default)
+            {
+                $this->middlewares = $middleware;
+                $this->factory = $factory;
+                $this->default = $default;
+            }
 
-     public function next(ServerRequestInterface $request): ResponseInterface
-     {
-         if (!isset($this->middlewares[$this->index])) {
-             return ($this->default)($request);
-         }
+            public function next(ServerRequestInterface $request): ResponseInterface
+            {
+                if (! isset($this->middlewares[$this->index])) {
+                    return ($this->default)($request);
+                }
 
-         return $this->middlewares[$this->index]->handle($request, $this->nextFrame());
-     }
+                return $this->middlewares[$this->index]->handle($request, $this->nextFrame());
+            }
 
-     public function factory(): FactoryContract
-     {
-         return $this->factory;
-     }
+            public function factory(): FactoryContract
+            {
+                return $this->factory;
+            }
 
-     private function nextFrame()
-     {
-         $new = clone $this;
-         $new->index++;
+            private function nextFrame()
+            {
+                $new = clone $this;
+                ++$new->index;
 
-         return $new;
-     }
- }
+                return $new;
+            }
+        }
         )->next($request);
     }
 
@@ -101,14 +100,13 @@ class Dispatcher implements DispatcherContract
         if ($middleware instanceof MiddlewareContract) {
             return $this->isContainerAware($middleware);
         } elseif (is_callable($middleware)) {
-            return new class($middleware) implements MiddlewareContract
- {
-     private $callback;
+            return new class($middleware) implements MiddlewareContract {
+                private $callback;
 
-     public function __construct($middleware)
-     {
-         $this->callback = $middleware;
-     }
+                public function __construct($middleware)
+                {
+                    $this->callback = $middleware;
+                }
 
                 /**
                  *  {@inheritdoc}
@@ -117,7 +115,7 @@ class Dispatcher implements DispatcherContract
                 {
                     return ($this->callback)($request, $frame);
                 }
- };
+            };
         }
 
         throw new InvalidArgumentException('Invalid Middleware Detected.');

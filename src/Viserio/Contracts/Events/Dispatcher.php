@@ -58,9 +58,9 @@ interface Dispatcher
      *
      * @param string $eventName
      *
-     * @return callable[]
+     * @return array
      */
-    public function getListeners(string $eventName): array;
+    public function getListeners(string $eventName);
 
     /**
      * Removes a specific listener from an event.

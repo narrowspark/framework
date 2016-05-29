@@ -28,7 +28,7 @@
         }
     ],
     "require": {
-        "php"                                                : "^7.0.7",
+        "php"                                                : "^7.0",
         "ext-curl"                                           : "*",
         "ext-openssl"                                        : "*",
         "ext-mbstring"                                       : "*",
@@ -119,6 +119,7 @@
         "narrowspark/testing-helper"                         : "^1.5",
         "mockery/mockery"                                    : "^0.9.5",
         "phpunit/phpunit"                                    : "^5.1",
+        "phpbench/phpbench"                                  : "^0.11",
         "predis/predis"                                      : "^1.0",
         "roave/security-advisories"                          : "dev-master",
         "symfony/yaml"                                       : "^3.1",

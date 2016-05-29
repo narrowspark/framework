@@ -1,7 +1,6 @@
 <?php
 namespace Viserio\Middleware\Tests;
 
-use Interop\Container\ContainerInterface;
 use Narrowspark\TestingHelper\ArrayContainer;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use Psr\Http\Message\ResponseInterface as Response;
