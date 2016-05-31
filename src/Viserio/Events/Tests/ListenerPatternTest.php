@@ -6,25 +6,6 @@ use Viserio\Events\ListenerPattern;
 
 class ListenerPatternTest extends \PHPUnit_Framework_TestCase
 {
-    public function testLazyListenerInitialization()
-    {
-        $listenerProviderInvoked = 0;
-
-        $listenerProvider = function () use (&$listenerProviderInvoked) {
-            ++$listenerProviderInvoked;
-
-            return 'callback';
-        };
-
-        $pattern = new ListenerPattern('*', $listenerProvider);
-
-        $this->assertEquals(0, $listenerProviderInvoked, 'The listener provider should not be invoked until the listener is requested');
-        $this->assertEquals('callback', $pattern->getListener());
-        $this->assertEquals(1, $listenerProviderInvoked, 'The listener provider should be invoked when the listener is requested');
-        $this->assertEquals('callback', $pattern->getListener());
-        $this->assertEquals(1, $listenerProviderInvoked, 'The listener provider should only be invoked once');
-    }
-
     /**
      * @dataProvider providePatternsAndMatches
      */
@@ -33,11 +14,17 @@ class ListenerPatternTest extends \PHPUnit_Framework_TestCase
         $pattern = new ListenerPattern($eventPattern, null);
 
         foreach ($expectedMatches as $eventName) {
-            $this->assertTrue($pattern->test($eventName), sprintf('Pattern "%s" should match event "%s"', $eventPattern, $eventName));
+            $this->assertTrue(
+                $pattern->test($eventName),
+                sprintf('Pattern "%s" should match event "%s"', $eventPattern, $eventName)
+            );
         }
 
         foreach ($expectedMisses as $eventName) {
-            $this->assertFalse($pattern->test($eventName), sprintf('Pattern "%s" should not match event "%s"', $eventPattern, $eventName));
+            $this->assertFalse(
+                $pattern->test($eventName),
+                sprintf('Pattern "%s" should not match event "%s"', $eventPattern, $eventName)
+            );
         }
     }
 
@@ -94,7 +81,13 @@ class ListenerPatternTest extends \PHPUnit_Framework_TestCase
         $dispatcher = $this->getMock(Dispatcher::class);
         $dispatcher->expects($this->once())
             ->method('on')
-            ->with('core.request', $listener, $priority);
+            ->with(
+                'core.request',
+                function () use ($listener) {
+                    return $listener;
+                },
+                $priority
+            );
 
         $pattern->bind($dispatcher, 'core.request');
         // bind() should avoid adding the listener multiple times to the same event

@@ -1,6 +1,7 @@
 <?php
 namespace Viserio\Events;
 
+use Closure;
 use Viserio\Contracts\Events\Dispatcher as DispatcherContract;
 
 class ListenerPattern
@@ -22,16 +23,16 @@ class ListenerPattern
     /**
      * The event.
      *
-     * @var callback
+     * @var mixed
      */
     protected $listener;
 
     /**
-     * The event.
+     * The listener provider.
      *
-     * @var callback
+     * @var mixed
      */
-    protected $listenerProvider;
+    protected $provider;
 
     /**
      * Pattern for the event.
@@ -46,6 +47,7 @@ class ListenerPattern
      * @var array
      */
     protected $events = [];
+
     /**
      * Wildcards separators.
      *
@@ -73,19 +75,17 @@ class ListenerPattern
      */
     public function __construct(string $eventPattern, $listener, int $priority = 0)
     {
-        $this->eventPattern = $eventPattern;
-
-        if (is_callable($listener)) {
-            $this->listenerProvider = $listener;
+        if (is_callable($listener) || $listener instanceof Closure || is_array($listener)) {
+            $this->provider = $listener;
         } else {
-            $this->listenerProvider = function () use ($listener) {
+            $this->provider = function () use ($listener) {
                 return $listener;
             };
         }
 
-        $this->priority = $priority;
-
-        $this->regex = $this->createRegex($eventPattern);
+        $this->eventPattern = $eventPattern;
+        $this->priority     = $priority;
+        $this->regex        = $this->createRegex($eventPattern);
     }
 
     /**
@@ -105,9 +105,9 @@ class ListenerPattern
      */
     public function getListener()
     {
-        if (! isset($this->listener) && isset($this->listenerProvider)) {
-            $this->listener = call_user_func($this->listenerProvider);
-            unset($this->listenerProvider);
+        if (!isset($this->listener) && isset($this->provider)) {
+            $this->listener = $this->provider;
+            $this->provider = null;
         }
 
         return $this->listener;
@@ -138,7 +138,7 @@ class ListenerPattern
     public function unbind(DispatcherContract $dispatcher)
     {
         foreach ($this->events as $eventName => $value) {
-            $dispatcher->removeListener($eventName, $this->getListener());
+            $dispatcher->off($eventName, $this->getListener());
         }
 
         $this->events = [];

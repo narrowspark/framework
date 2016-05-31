@@ -19,11 +19,11 @@ class Dispatcher implements DispatcherContract
     protected $listeners = [];
 
     /**
-     * The wildcard listeners.
+     * The synced events.
      *
      * @var array
      */
-    protected $wildcards = [];
+    protected $syncedEvents = [];
 
     /**
      * The sorted event listeners.
@@ -54,16 +54,19 @@ class Dispatcher implements DispatcherContract
     public function __construct(ContainerContract $container)
     {
         $this->setContainer($container);
-        $this->invoker = (new Invoker())
-            ->injectByTypeHint(true)
+
+        $invoker = new Invoker();
+        $invoker->injectByTypeHint(true)
             ->injectByParameterName(true)
             ->setContainer($container);
+
+        $this->invoker = $invoker;
     }
 
     /**
      * {@inhertidoc}
      */
-    public function on(string $eventName, $listener, int $priority = 100)
+    public function on(string $eventName, $listener, int $priority = 0)
     {
         if ($this->hasWildcards($eventName)) {
             $this->addListenerPattern(new ListenerPattern($eventName, $listener, $priority));
@@ -76,7 +79,7 @@ class Dispatcher implements DispatcherContract
     /**
      * {@inhertidoc}
      */
-    public function once(string $eventName, $listener, int $priority = 100)
+    public function once(string $eventName, $listener, int $priority = 0)
     {
         $wrapper = null;
         $wrapper = function () use ($eventName, $listener, &$wrapper) {
@@ -91,10 +94,12 @@ class Dispatcher implements DispatcherContract
     /**
      * {@inhertidoc}
      */
-    public function emit(string $eventName, array $arguments = [], callable $continueCallback = null): bool
+    public function emit(string $eventName, array $arguments = [], $continue = null): bool
     {
-        if ($continueCallback === null) {
-            foreach ($this->getListeners($eventName) as $listener) {
+        $listeners = $this->getListeners($eventName);
+
+        if ($continue === null) {
+            foreach ($listeners as $listener) {
                 $result = false;
 
                 if ($listener !== null) {
@@ -109,7 +114,6 @@ class Dispatcher implements DispatcherContract
             return true;
         }
 
-        $listeners = $this->getListeners($eventName);
         $counter = count($listeners);
 
         foreach ($listeners as $listener) {
@@ -125,7 +129,7 @@ class Dispatcher implements DispatcherContract
             }
 
             if ($counter > 0) {
-                $repeater = $this->invoker->call($continueCallback);
+                $repeater = $this->invoker->call($continue);
 
                 if (! $repeater) {
                     break;
@@ -141,11 +145,11 @@ class Dispatcher implements DispatcherContract
      */
     public function getListeners(string $eventName): array
     {
+        $this->bindPatterns($eventName);
+
         if (! isset($this->listeners[$eventName])) {
             return [];
         }
-
-        $this->bindPatterns($eventName);
 
         if (! isset($this->sorted[$eventName])) {
             $this->sortListeners($eventName);
@@ -159,14 +163,14 @@ class Dispatcher implements DispatcherContract
      */
     public function off(string $eventName, $listener): bool
     {
-        if (! isset($this->listeners[$eventName]) || ! isset($this->wildcards[$eventName])) {
-            return false;
-        }
-
         if ($this->hasWildcards($eventName)) {
-            $this->removeListenerPattern(new ListenerPattern($eventName, $listener, $priority));
+            $this->removeListenerPattern($eventName, $listener);
 
             return true;
+        }
+
+        if (! $this->hasListeners($eventName)) {
+            return false;
         }
 
         foreach ($this->listeners[$eventName] as $priority => $listeners) {
@@ -186,9 +190,9 @@ class Dispatcher implements DispatcherContract
     public function removeAllListeners($eventName = null)
     {
         if ($eventName !== null) {
-            unset($this->listeners[$eventName], $this->wildcards[$eventName]);
+            unset($this->listeners[$eventName], $this->syncedEvents[$eventName]);
         } else {
-            $this->listeners = $this->wildcards = [];
+            $this->listeners = $this->syncedEvents = [];
         }
     }
 
@@ -199,9 +203,9 @@ class Dispatcher implements DispatcherContract
      *
      * @return bool
      */
-    public function hasListeners($eventName)
+    public function hasListeners(string $eventName): bool
     {
-        return isset($this->listeners[$eventName]) || isset($this->wildcards[$eventName]);
+        return count($this->getListeners($eventName));
     }
 
     /**
@@ -247,7 +251,7 @@ class Dispatcher implements DispatcherContract
      */
     protected function bindPatterns(string $eventName)
     {
-        if (isset($this->wildcards[$eventName])) {
+        if (isset($this->syncedEvents[$eventName])) {
             return;
         }
 
@@ -259,7 +263,7 @@ class Dispatcher implements DispatcherContract
             }
         }
 
-        $this->wildcards[$eventName] = true;
+        $this->syncedEvents[$eventName] = true;
     }
 
     /**
@@ -274,9 +278,9 @@ class Dispatcher implements DispatcherContract
     {
         $this->patterns[$pattern->getEventPattern()][] = $pattern;
 
-        foreach ($this->wildcards as $eventName => $value) {
+        foreach ($this->syncedEvents as $eventName => $value) {
             if ($pattern->test($eventName)) {
-                unset($this->wildcards[$eventName]);
+                unset($this->syncedEvents[$eventName]);
             }
         }
     }
@@ -288,10 +292,10 @@ class Dispatcher implements DispatcherContract
      * This method cannot be used to remove a listener from a pattern that was
      * never registered.
      *
-     * @param string   $eventPattern
-     * @param callback $listener
+     * @param string $eventPattern
+     * @param mixed  $listener
      */
-    protected function removeListenerPattern(string $eventPattern, callback $listener)
+    protected function removeListenerPattern(string $eventPattern, $listener)
     {
         if (! isset($this->patterns[$eventPattern])) {
             return;
@@ -300,7 +304,6 @@ class Dispatcher implements DispatcherContract
         foreach ($this->patterns[$eventPattern] as $key => $pattern) {
             if ($listener == $pattern->getListener()) {
                 $pattern->unbind($this);
-
                 unset($this->patterns[$eventPattern][$key]);
             }
         }
