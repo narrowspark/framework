@@ -60,7 +60,7 @@ interface Dispatcher
      *
      * @return array
      */
-    public function getListeners(string $eventName);
+    public function getListeners(string $eventName): array;
 
     /**
      * Removes a specific listener from an event.
@@ -73,7 +73,7 @@ interface Dispatcher
      *
      * @return bool
      */
-    public function off(string $eventName, callable $listener): bool;
+    public function off(string $eventName, $listener): bool;
 
     /**
      * Removes all listeners.

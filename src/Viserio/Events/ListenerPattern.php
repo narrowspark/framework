@@ -67,16 +67,22 @@ class ListenerPattern
     /**
      * Constructor.
      *
-     * @param string   $eventPattern
-     * @param callback $listener
-     * @param int      $priority
+     * @param string $eventPattern
+     * @param mixed  $listener
+     * @param int    $priority
      */
     public function __construct(string $eventPattern, $listener, int $priority = 0)
     {
         $this->eventPattern = $eventPattern;
-        $this->listenerProvider = function () use ($listener) {
-            return $listener;
-        };
+
+        if (is_callable($listener)) {
+            $this->listenerProvider = $listener;
+        } else {
+            $this->listenerProvider = function () use ($listener) {
+                return $listener;
+            };
+        }
+
         $this->priority = $priority;
 
         $this->regex = $this->createRegex($eventPattern);
@@ -113,7 +119,7 @@ class ListenerPattern
      * @param DispatcherContract $dispatcher
      * @param string             $eventName
      */
-    public function bind(DispatcherContract $dispatcher, $eventName)
+    public function bind(DispatcherContract $dispatcher, string $eventName)
     {
         if (isset($this->events[$eventName])) {
             return;

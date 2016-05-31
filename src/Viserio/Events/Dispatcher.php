@@ -2,7 +2,6 @@
 namespace Viserio\Events;
 
 use Interop\Container\ContainerInterface as ContainerContract;
-use RuntimeException;
 use Viserio\Contracts\Events\Dispatcher as DispatcherContract;
 use Viserio\Support\Invoker;
 use Viserio\Support\Str;
@@ -41,7 +40,7 @@ class Dispatcher implements DispatcherContract
     protected $invoker;
 
     /**
-     * [$patterns description]
+     * Wildcard patterns.
      *
      * @var array
      */
@@ -83,7 +82,7 @@ class Dispatcher implements DispatcherContract
         $wrapper = function () use ($eventName, $listener, &$wrapper) {
             $this->off($eventName, $wrapper);
 
-            return $this->call($listener, func_get_args());
+            return $this->invoker->call($listener, func_get_args());
         };
 
         $this->on($eventName, $wrapper, $priority);
@@ -94,13 +93,15 @@ class Dispatcher implements DispatcherContract
      */
     public function emit(string $eventName, array $arguments = [], callable $continueCallback = null): bool
     {
-        $this->bindPatterns($eventName);
-
         if ($continueCallback === null) {
             foreach ($this->getListeners($eventName) as $listener) {
-                $result = $this->call($listener, $arguments);
-                // var_dump($result);
-                if ($result === null) {
+                $result = false;
+
+                if ($listener !== null) {
+                    $result = $this->invoker->call($listener, $arguments);
+                }
+
+                if ($result === false) {
                     return false;
                 }
             }
@@ -113,14 +114,20 @@ class Dispatcher implements DispatcherContract
 
         foreach ($listeners as $listener) {
             --$counter;
-            $result = $this->call($listener, $arguments);
+            $result = false;
 
-            if ($result === null) {
+            if ($listener !== null) {
+                $result = $this->invoker->call($listener, $arguments);
+            }
+
+            if ($result === false) {
                 return false;
             }
 
             if ($counter > 0) {
-                if (! $this->call($continueCallback)) {
+                $repeater = $this->invoker->call($continueCallback);
+
+                if (! $repeater) {
                     break;
                 }
             }
@@ -150,7 +157,7 @@ class Dispatcher implements DispatcherContract
     /**
      * {@inhertidoc}
      */
-    public function off(string $eventName, callable $listener): bool
+    public function off(string $eventName, $listener): bool
     {
         if (! isset($this->listeners[$eventName]) || ! isset($this->wildcards[$eventName])) {
             return false;
@@ -211,10 +218,12 @@ class Dispatcher implements DispatcherContract
         // If listeners exist for the given event, we will sort them by the priority
         // so that we can call them in the correct order. We will cache off these
         // sorted event listeners so we do not have to re-sort on every events.
+
         if (isset($this->listeners[$eventName])) {
             krsort($this->listeners[$eventName]);
             $this->sorted[$eventName] = call_user_func_array(
-                'array_merge', $this->listeners[$eventName]
+                'array_merge',
+                $this->listeners[$eventName]
             );
         }
     }
@@ -235,6 +244,8 @@ class Dispatcher implements DispatcherContract
      * Binds all patterns that match the specified event name.
      *
      * @param string $eventName
+     *
+     * @return null
      */
     protected function bindPatterns(string $eventName)
     {
@@ -294,27 +305,6 @@ class Dispatcher implements DispatcherContract
 
                 unset($this->patterns[$eventPattern][$key]);
             }
-        }
-    }
-
-    /**
-     * callable invoker.
-     *
-     * @param callback|array $callable
-     * @param array          $parameters
-     *
-     * @return mixed
-     */
-    protected function call($callable, array $parameters = [])
-    {
-        try {
-            return $this->invoker->call($callable, $parameters);
-        } catch (InvocationException $e) {
-            throw new RuntimeException(sprintf(
-                "Impossible to call the '%s' command: %s",
-                $input->getFirstArgument(),
-                $e->getMessage()
-            ), 0, $e);
         }
     }
 }
