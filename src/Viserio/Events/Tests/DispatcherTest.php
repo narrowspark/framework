@@ -403,8 +403,8 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase
      * Asserts the number of listeners added for a specific event or all events
      * in total.
      *
-     * @param integer $expected
-     * @param string  $eventName
+     * @param int    $expected
+     * @param string $eventName
      *
      * @return int
      */

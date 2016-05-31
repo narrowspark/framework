@@ -244,8 +244,6 @@ class Dispatcher implements DispatcherContract
      * Binds all patterns that match the specified event name.
      *
      * @param string $eventName
-     *
-     * @return null
      */
     protected function bindPatterns(string $eventName)
     {
