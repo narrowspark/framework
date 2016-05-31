@@ -397,12 +397,10 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase
      *
      * @return int
      */
-    private function assertNumberListenersAdded($expected, $eventName = null): int
+    private function assertNumberListenersAdded(int $expected, string $eventName): int
     {
         $ee = $this->dispatcher;
 
-        return $eventName !== null
-            ? $this->assertEquals($expected, count($ee->getListeners($eventName)))
-            : $this->assertEquals($expected, array_sum(array_map('count', $ee->getListeners())));
+        return this->assertEquals($expected, count($ee->getListeners($eventName)));
     }
 }
