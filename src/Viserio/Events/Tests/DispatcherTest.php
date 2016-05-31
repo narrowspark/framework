@@ -3,7 +3,7 @@ namespace Viserio\Events\Tests;
 
 use Narrowspark\TestingHelper\ArrayContainer;
 use Viserio\Events\Dispatcher;
-use Viserio\Events\Tests\Fixture\TestEventListener;
+use Viserio\Events\Tests\Fixture\EventListener;
 
 class DispatcherTest extends \PHPUnit_Framework_TestCase
 {
@@ -18,7 +18,7 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase
     public function setup()
     {
         $this->dispatcher = new Dispatcher(new ArrayContainer([]));
-        $this->listener   = new TestEventListener();
+        $this->listener   = new EventListener();
     }
 
     public function testInitialState()
