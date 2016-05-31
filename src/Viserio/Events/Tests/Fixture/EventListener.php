@@ -1,7 +1,7 @@
 <?php
 namespace Viserio\Events\Tests\Fixture;
 
-class TestEventListener
+class EventListener
 {
     public $onAnyInvoked = 0;
     public $onCoreInvoked = 0;

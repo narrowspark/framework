@@ -3,6 +3,7 @@ namespace Viserio\Events\Tests;
 
 use Narrowspark\TestingHelper\ArrayContainer;
 use Viserio\Events\Dispatcher;
+use Viserio\Events\Tests\Fixture\TestEventListener;
 
 class DispatcherTest extends \PHPUnit_Framework_TestCase
 {
@@ -11,9 +12,23 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase
     const apiRequest    = 'api.request';
     const apiException  = 'api.exception';
 
+    private $dispatcher;
+    private $listener;
+
     public function setup()
     {
         $this->dispatcher = new Dispatcher(new ArrayContainer([]));
+        $this->listener   = new TestEventListener();
+    }
+
+    public function testInitialState()
+    {
+        $ee = $this->dispatcher;
+
+        $this->assertFalse($ee->hasListeners(self::coreRequest));
+        $this->assertFalse($ee->hasListeners(self::coreException));
+        $this->assertFalse($ee->hasListeners(self::apiRequest));
+        $this->assertFalse($ee->hasListeners(self::apiException));
     }
 
     public function testListeners()
@@ -291,6 +306,99 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(2, $argResult);
     }
 
+    public function testAddingAndRemovingWildcardListeners()
+    {
+        $ee = $this->dispatcher;
+
+        $ee->on('#', [$this->listener, 'onAny']);
+        $ee->on('core.*', [$this->listener, 'onCore']);
+        $ee->on('*.exception', [$this->listener, 'onException']);
+        $ee->on(self::coreRequest, [$this->listener, 'onCoreRequest']);
+
+        $this->assertNumberListenersAdded(3, self::coreRequest);
+        $this->assertNumberListenersAdded(3, self::coreException);
+        $this->assertNumberListenersAdded(1, self::apiRequest);
+        $this->assertNumberListenersAdded(2, self::apiException);
+        $this->assertNumberListenersAdded(9);
+
+        $ee->removeListener('#', [$this->listener, 'onAny']);
+
+        $this->assertNumberListenersAdded(2, self::coreRequest);
+        $this->assertNumberListenersAdded(2, self::coreException);
+        $this->assertNumberListenersAdded(0, self::apiRequest);
+        $this->assertNumberListenersAdded(1, self::apiException);
+        $this->assertNumberListenersAdded(5);
+
+        $ee->removeListener('core.*', [$this->listener, 'onCore']);
+
+        $this->assertNumberListenersAdded(1, self::coreRequest);
+        $this->assertNumberListenersAdded(1, self::coreException);
+        $this->assertNumberListenersAdded(0, self::apiRequest);
+        $this->assertNumberListenersAdded(1, self::apiException);
+        $this->assertNumberListenersAdded(3);
+
+        $ee->removeListener('*.exception', [$this->listener, 'onException']);
+
+        $this->assertNumberListenersAdded(1, self::coreRequest);
+        $this->assertNumberListenersAdded(0, self::coreException);
+        $this->assertNumberListenersAdded(0, self::apiRequest);
+        $this->assertNumberListenersAdded(0, self::apiException);
+        $this->assertNumberListenersAdded(1);
+
+        $ee->removeListener(self::coreRequest, [$this->listener, 'onCoreRequest']);
+
+        $this->assertNumberListenersAdded(0, self::coreRequest);
+        $this->assertNumberListenersAdded(0, self::coreException);
+        $this->assertNumberListenersAdded(0, self::apiRequest);
+        $this->assertNumberListenersAdded(0, self::apiException);
+        $this->assertNumberListenersAdded(0);
+    }
+
+    public function testAddedListenersWithWildcardsAreRegisteredLazily()
+    {
+        $ee = $this->dispatcher;
+
+        $ee->on('#', [$this->listener, 'onAny']);
+
+        $this->assertNumberListenersAdded(0);
+
+        $this->assertTrue($ee->hasListeners(self::coreRequest));
+        $this->assertNumberListenersAdded(1, self::coreRequest);
+        $this->assertNumberListenersAdded(1);
+
+        $this->assertTrue($ee->hasListeners(self::coreException));
+        $this->assertNumberListenersAdded(1, self::coreException);
+        $this->assertNumberListenersAdded(2);
+
+        $this->assertTrue($ee->hasListeners(self::apiRequest));
+        $this->assertNumberListenersAdded(1, self::apiRequest);
+        $this->assertNumberListenersAdded(3);
+
+        $this->assertTrue($ee->hasListeners(self::apiException));
+        $this->assertNumberListenersAdded(1, self::apiException);
+        $this->assertNumberListenersAdded(4);
+    }
+
+    public function testDispatch()
+    {
+        $ee = $this->dispatcher;
+
+        $ee->addListener('#', [$this->listener, 'onAny']);
+        $ee->addListener('core.*', [$this->listener, 'onCore']);
+        $ee->addListener('*.exception', [$this->listener, 'onException']);
+        $ee->addListener(self::coreRequest, [$this->listener, 'onCoreRequest']);
+
+        $ee->dispatch(self::coreRequest);
+        $ee->dispatch(self::coreException);
+        $ee->dispatch(self::apiRequest);
+        $ee->dispatch(self::apiException);
+
+        $this->assertEquals(4, $this->listener->onAnyInvoked);
+        $this->assertEquals(2, $this->listener->onCoreInvoked);
+        $this->assertEquals(1, $this->listener->onCoreRequestInvoked);
+        $this->assertEquals(2, $this->listener->onExceptionInvoked);
+    }
+
     /**
      * Asserts the number of listeners added for a specific event or all events
      * in total.
@@ -302,8 +410,10 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase
      */
     private function assertNumberListenersAdded($expected, $eventName = null): int
     {
+        $ee = $this->dispatcher;
+
         return $eventName !== null
-            ? $this->assertEquals($expected, count($this->dispatcher->getListeners($eventName)))
-            : $this->assertEquals($expected, array_sum(array_map('count', $this->dispatcher->getListeners())));
+            ? $this->assertEquals($expected, count($ee->getListeners($eventName)))
+            : $this->assertEquals($expected, array_sum(array_map('count', $ee->getListeners())));
     }
 }
