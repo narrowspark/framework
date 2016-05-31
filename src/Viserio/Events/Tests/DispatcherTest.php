@@ -319,7 +319,6 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase
         $this->assertNumberListenersAdded(3, self::coreException);
         $this->assertNumberListenersAdded(1, self::apiRequest);
         $this->assertNumberListenersAdded(2, self::apiException);
-        $this->assertNumberListenersAdded(9);
 
         $ee->removeListener('#', [$this->listener, 'onAny']);
 
@@ -327,7 +326,6 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase
         $this->assertNumberListenersAdded(2, self::coreException);
         $this->assertNumberListenersAdded(0, self::apiRequest);
         $this->assertNumberListenersAdded(1, self::apiException);
-        $this->assertNumberListenersAdded(5);
 
         $ee->removeListener('core.*', [$this->listener, 'onCore']);
 
@@ -335,7 +333,6 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase
         $this->assertNumberListenersAdded(1, self::coreException);
         $this->assertNumberListenersAdded(0, self::apiRequest);
         $this->assertNumberListenersAdded(1, self::apiException);
-        $this->assertNumberListenersAdded(3);
 
         $ee->removeListener('*.exception', [$this->listener, 'onException']);
 
@@ -343,7 +340,6 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase
         $this->assertNumberListenersAdded(0, self::coreException);
         $this->assertNumberListenersAdded(0, self::apiRequest);
         $this->assertNumberListenersAdded(0, self::apiException);
-        $this->assertNumberListenersAdded(1);
 
         $ee->removeListener(self::coreRequest, [$this->listener, 'onCoreRequest']);
 
@@ -351,7 +347,6 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase
         $this->assertNumberListenersAdded(0, self::coreException);
         $this->assertNumberListenersAdded(0, self::apiRequest);
         $this->assertNumberListenersAdded(0, self::apiException);
-        $this->assertNumberListenersAdded(0);
     }
 
     public function testAddedListenersWithWildcardsAreRegisteredLazily()
@@ -360,33 +355,27 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase
 
         $ee->on('#', [$this->listener, 'onAny']);
 
-        $this->assertNumberListenersAdded(0);
-
         $this->assertTrue($ee->hasListeners(self::coreRequest));
         $this->assertNumberListenersAdded(1, self::coreRequest);
-        $this->assertNumberListenersAdded(1);
 
         $this->assertTrue($ee->hasListeners(self::coreException));
         $this->assertNumberListenersAdded(1, self::coreException);
-        $this->assertNumberListenersAdded(2);
 
         $this->assertTrue($ee->hasListeners(self::apiRequest));
         $this->assertNumberListenersAdded(1, self::apiRequest);
-        $this->assertNumberListenersAdded(3);
 
         $this->assertTrue($ee->hasListeners(self::apiException));
         $this->assertNumberListenersAdded(1, self::apiException);
-        $this->assertNumberListenersAdded(4);
     }
 
     public function testDispatch()
     {
         $ee = $this->dispatcher;
 
-        $ee->addListener('#', [$this->listener, 'onAny']);
-        $ee->addListener('core.*', [$this->listener, 'onCore']);
-        $ee->addListener('*.exception', [$this->listener, 'onException']);
-        $ee->addListener(self::coreRequest, [$this->listener, 'onCoreRequest']);
+        $ee->on('#', [$this->listener, 'onAny']);
+        $ee->on('core.*', [$this->listener, 'onCore']);
+        $ee->on('*.exception', [$this->listener, 'onException']);
+        $ee->on(self::coreRequest, [$this->listener, 'onCoreRequest']);
 
         $ee->dispatch(self::coreRequest);
         $ee->dispatch(self::coreException);
