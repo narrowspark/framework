@@ -14,8 +14,6 @@ addons:
 
 matrix:
   include:
-    - php: hhvm
-      env: SETUP=basic DISABLE_XDEBUG=true
     - php: 7.0
       env: SETUP=basic CHECK_CS=true SEND_COVERAGE=true
     - php: 7.0
@@ -29,7 +27,6 @@ matrix:
   allow_failures:
     - env: SETUP=basic HUMBUG=true
       php: 7.0
-    - php: hhvm
     - env: SETUP=lowest
       php: 7.0
   fast_finish: true
