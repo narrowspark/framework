@@ -401,6 +401,6 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase
     {
         $ee = $this->dispatcher;
 
-        return this->assertEquals($expected, count($ee->getListeners($eventName)));
+        return $this->assertEquals($expected, count($ee->getListeners($eventName)));
     }
 }
