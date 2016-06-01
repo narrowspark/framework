@@ -39,7 +39,7 @@ trait ServiceProviderTrait
     /**
      * {@inheritdoc}
      */
-    public function register($provider, $options = [], $force = false)
+    public function register(string $provider, array $options = [], bool $force = false): \Viserio\Contract\Application\ServiceProvider
     {
         if ((! is_string($provider)) && (! $provider instanceof ServiceProvider)) {
             throw new \Exception(

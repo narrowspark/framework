@@ -68,7 +68,7 @@ abstract class ServiceProvider implements ServiceProviderContract
     /**
      * {@inheritdoc}
      */
-    public function provides()
+    public function provides(): array
     {
         return [];
     }

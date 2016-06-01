@@ -15,7 +15,7 @@ class EnvironmentDetector implements EnvironmentContract
      *
      * @return string
      */
-    public function detect(\Closure $callback, $consoleArgs = null)
+    public function detect(\Closure $callback, array $consoleArgs = null): string
     {
         if ($consoleArgs) {
             return $this->detectConsoleEnvironment($callback, $consoleArgs);
@@ -30,7 +30,7 @@ class EnvironmentDetector implements EnvironmentContract
      *
      * @return bool
      */
-    public function canCollectCodeCoverage()
+    public function canCollectCodeCoverage(): bool
     {
         return $this->isHHVM() || $this->hasXdebug();
     }
@@ -40,7 +40,7 @@ class EnvironmentDetector implements EnvironmentContract
      *
      * @return string
      */
-    public function getVersion()
+    public function getVersion(): string
     {
         if ($this->isHHVM()) {
             return HHVM_VERSION;
@@ -54,7 +54,7 @@ class EnvironmentDetector implements EnvironmentContract
      *
      * @return bool
      */
-    public function hasXdebug()
+    public function hasXdebug(): bool
     {
         return $this->isPHP() && extension_loaded('xdebug');
     }
@@ -64,7 +64,7 @@ class EnvironmentDetector implements EnvironmentContract
      *
      * @return bool
      */
-    public function isHHVM()
+    public function isHHVM(): bool
     {
         return defined('HHVM_VERSION');
     }
@@ -74,7 +74,7 @@ class EnvironmentDetector implements EnvironmentContract
      *
      * @return bool
      */
-    public function isPHP()
+    public function isPHP(): bool
     {
         return ! $this->isHHVM();
     }
@@ -84,7 +84,7 @@ class EnvironmentDetector implements EnvironmentContract
      *
      * @return bool
      */
-    public function runningInConsole()
+    public function runningInConsole(): bool
     {
         return substr(PHP_SAPI, 0, 3) === 'cgi';
     }
