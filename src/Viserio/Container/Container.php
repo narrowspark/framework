@@ -296,7 +296,7 @@ class Container implements \ArrayAccess, ContainerInteropInterface, ContainerCon
     /**
      * {@inheritdoc}
      */
-    public function isSingleton(alias $alias): bool
+    public function isSingleton(string $alias): bool
     {
         if (isset($this->bindings[$alias]['singleton'])) {
             $singleton = $this->bindings[$alias]['singleton'];
