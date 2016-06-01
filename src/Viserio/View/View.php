@@ -73,7 +73,7 @@ class View implements ArrayAccess, ViewContract
      * @param string $key
      * @param mixed  $value
      */
-    public function __set(string $key, $value)
+    public function __set($key, $value)
     {
         $this->with($key, $value);
     }
@@ -85,7 +85,7 @@ class View implements ArrayAccess, ViewContract
      *
      * @return bool
      */
-    public function __isset(string $key): bool
+    public function __isset($key): bool
     {
         return isset($this->data[$key]);
     }
@@ -97,7 +97,7 @@ class View implements ArrayAccess, ViewContract
      *
      * @return bool|null
      */
-    public function __unset(string $key)
+    public function __unset($key)
     {
         unset($this->data[$key]);
     }
@@ -112,7 +112,7 @@ class View implements ArrayAccess, ViewContract
      *
      * @return \Viserio\View\View
      */
-    public function __call(string $method, array $parameters): \Viserio\View\View
+    public function __call(string $method, array $parameters): ViewContract
     {
         if (Str::startsWith($method, 'with')) {
             return $this->with(Str::snake(substr($method, 4)), $parameters[0]);
@@ -191,7 +191,7 @@ class View implements ArrayAccess, ViewContract
      *
      * @return \Viserio\View\Factory
      */
-    public function getFactory(): \Viserio\View\Factory
+    public function getFactory(): Factory
     {
         return $this->factory;
     }
@@ -201,7 +201,7 @@ class View implements ArrayAccess, ViewContract
      *
      * @return EngineContract
      */
-    public function getEngine(): \Viserio\Contracts\View\Engine
+    public function getEngine(): EngineContract
     {
         return $this->engine;
     }
@@ -253,7 +253,7 @@ class View implements ArrayAccess, ViewContract
      *
      * @return bool
      */
-    public function offsetExists(string $key): bool
+    public function offsetExists($key): bool
     {
         return array_key_exists($key, $this->data);
     }
@@ -265,7 +265,7 @@ class View implements ArrayAccess, ViewContract
      *
      * @return mixed
      */
-    public function offsetGet(string $key)
+    public function offsetGet($key)
     {
         return $this->data[$key];
     }
@@ -276,7 +276,7 @@ class View implements ArrayAccess, ViewContract
      * @param string $key
      * @param mixed  $value
      */
-    public function offsetSet(string $key, $value)
+    public function offsetSet($key, $value)
     {
         $this->with($key, $value);
     }
@@ -286,7 +286,7 @@ class View implements ArrayAccess, ViewContract
      *
      * @param string $key
      */
-    public function offsetUnset(string $key)
+    public function offsetUnset($key)
     {
         unset($this->data[$key]);
     }
@@ -298,7 +298,7 @@ class View implements ArrayAccess, ViewContract
      *
      * @return mixed
      */
-    public function &__get(string $key)
+    public function &__get($key)
     {
         return $this->data[$key];
     }
