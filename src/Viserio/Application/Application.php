@@ -216,7 +216,7 @@ class Application extends Container implements Foundation, HttpKernelInterface
      *
      * @return string
      */
-    public function getVersion()
+    public function getVersion(): string
     {
         return self::VERSION;
     }
