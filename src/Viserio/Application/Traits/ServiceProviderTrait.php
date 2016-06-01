@@ -94,7 +94,7 @@ trait ServiceProviderTrait
     /**
      * {@inheritdoc}
      */
-    abstract public function bind($alias, $concrete = null, $singleton = false);
+    abstract public function bind(string $alias, $concrete = null, $singleton = false);
 
     /**
      * Register a service provider.

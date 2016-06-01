@@ -103,7 +103,7 @@ trait PathsTrait
      * @param string $concrete
      * @param string $alias
      */
-    abstract public function bind($alias, $concrete = null, $singleton = false);
+    abstract public function bind(string $alias, $concrete = null, $singleton = false);
 
     /**
      * {@inheritdoc}
