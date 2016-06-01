@@ -28,6 +28,9 @@
         "narrowspark/testing-helper"      : "^1.6",
         "phpunit/phpunit"                 : "^5.1"
     },
+    "provide": {
+        "psr/http-message-implementation" : "^1.0"
+    },
     "autoload": {
         "psr-4": {
             "Viserio\\Http\\"             : ""
