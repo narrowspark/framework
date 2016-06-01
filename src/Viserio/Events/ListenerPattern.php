@@ -75,8 +75,7 @@ class ListenerPattern
      */
     public function __construct(string $eventPattern, $listener, int $priority = 0)
     {
-        if (
-            is_callable($listener) ||
+        if (is_callable($listener) ||
             $listener instanceof Closure ||
             is_array($listener) ||
             is_string($listener)
