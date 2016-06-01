@@ -81,7 +81,7 @@ class EncryptCookies implements MiddlewareContract
      *
      * @return CookieContract
      */
-    protected function duplicate(CookieContract $cookie, string $value): \Viserio\Contracts\Cookie\Cookie
+    protected function duplicate(CookieContract $cookie, string $value): CookieContract
     {
         return new Cookie(
             $cookie->getName(),
@@ -101,7 +101,7 @@ class EncryptCookies implements MiddlewareContract
      *
      * @return ServerRequestInterface
      */
-    protected function decrypt(ServerRequestInterface $request): \Psr\Http\Message\ServerRequestInterface
+    protected function decrypt(ServerRequestInterface $request): ServerRequestInterface
     {
         foreach ($request->cookies as $key => $c) {
             if ($this->isDisabled($key)) {
@@ -161,7 +161,7 @@ class EncryptCookies implements MiddlewareContract
      *
      * @return ResponseInterface
      */
-    protected function encrypt(ResponseInterface $response): \Psr\Http\Message\ResponseInterface
+    protected function encrypt(ResponseInterface $response): ResponseInterface
     {
         foreach ($response->headers->getCookies() as $cookie) {
             if ($this->isDisabled($cookie->getName())) {
