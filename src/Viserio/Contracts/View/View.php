@@ -20,7 +20,7 @@ interface View extends Renderable
      *
      * @return self
      */
-    public function with($key, $value = null): self;
+    public function with($key, $value = null): View;
 
     /**
      * Get the string contents of the view.

@@ -161,7 +161,7 @@ class View implements ArrayAccess, ViewContract
      *
      * @return self
      */
-    public function with($key, $value = null): self
+    public function with($key, $value = null): ViewContract
     {
         if (is_array($key)) {
             $this->data = array_merge($this->data, $key);
