@@ -8,7 +8,7 @@ interface Response
      *
      * @return \Viserio\Http\Response
      */
-    public function send(): \Viserio\Http\Response;
+    public function send();
 
     /**
      * Set the content on the response.
@@ -17,5 +17,5 @@ interface Response
      *
      * @return \Viserio\Http\Response
      */
-    public function setContent($content): \Viserio\Http\Response;
+    public function setContent($content);
 }

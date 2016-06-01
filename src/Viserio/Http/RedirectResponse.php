@@ -33,7 +33,7 @@ class RedirectResponse extends SymfonyRedirectResponse
      *
      * @return RedirectResponse
      */
-    public function __call(string $method, array $parameters): \Viserio\Http\RedirectResponse
+    public function __call(string $method, array $parameters)
     {
         if (Str::startsWith($method, 'with')) {
             return $this->with(Str::snake(substr($method, 4)), $parameters[0]);
@@ -51,7 +51,7 @@ class RedirectResponse extends SymfonyRedirectResponse
      *
      * @return self
      */
-    public function header(string $key, string $value, bool $replace = true): self
+    public function header(string $key, string $value, bool $replace = true)
     {
         $this->headers->set($key, $value, $replace);
 
@@ -66,7 +66,7 @@ class RedirectResponse extends SymfonyRedirectResponse
      *
      * @return \Viserio\Http\RedirectResponse
      */
-    public function with($key, $value = null): \Viserio\Http\RedirectResponse
+    public function with($key, $value = null)
     {
         $key = is_array($key) ? $key : [$key => $value];
 
@@ -84,7 +84,7 @@ class RedirectResponse extends SymfonyRedirectResponse
      *
      * @return self
      */
-    public function withCookie(Cookie $cookie): self
+    public function withCookie(Cookie $cookie)
     {
         $this->headers->setCookie($cookie);
 
@@ -98,7 +98,7 @@ class RedirectResponse extends SymfonyRedirectResponse
      *
      * @return self
      */
-    public function withCookies(array $cookies): self
+    public function withCookies(array $cookies)
     {
         foreach ($cookies as $cookie) {
             $this->headers->setCookie($cookie);
@@ -114,7 +114,7 @@ class RedirectResponse extends SymfonyRedirectResponse
      *
      * @return self
      */
-    public function withInput(array $input = null): self
+    public function withInput(array $input = null)
     {
         $input = $input ?: $this->request->input();
         $this->session->flashInput(array_filter($input, function ($value) {
@@ -131,7 +131,7 @@ class RedirectResponse extends SymfonyRedirectResponse
      *
      * @return self
      */
-    public function onlyInput(): self
+    public function onlyInput()
     {
         return $this->withInput($this->request->only(func_get_args()));
     }
@@ -143,7 +143,7 @@ class RedirectResponse extends SymfonyRedirectResponse
      *
      * @return \Viserio\Http\RedirectResponse
      */
-    public function exceptInput(): \Viserio\Http\RedirectResponse
+    public function exceptInput()
     {
         return $this->withInput($this->request->except(func_get_args()));
     }
@@ -153,7 +153,7 @@ class RedirectResponse extends SymfonyRedirectResponse
      *
      * @return \Viserio\Http\Request
      */
-    public function getRequest(): \Viserio\Http\Request
+    public function getRequest()
     {
         return $this->request;
     }
@@ -175,7 +175,7 @@ class RedirectResponse extends SymfonyRedirectResponse
      *
      * @return \Viserio\Session\Store
      */
-    public function getSession(): \Viserio\Session\Store
+    public function getSession()
     {
         return $this->session;
     }

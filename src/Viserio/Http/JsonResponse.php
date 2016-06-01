@@ -76,7 +76,7 @@ class JsonResponse extends SymfonyJsonResponse implements ResponseContract
      *
      * @return SymfonyJsonResponse
      */
-    public function setJsonOptions(int $options): \Symfony\Component\HttpFoundation\JsonResponse
+    public function setJsonOptions(int $options)
     {
         $this->jsonOptions = $options;
 

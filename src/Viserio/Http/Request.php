@@ -95,7 +95,7 @@ class Request extends SymfonyRequest implements RequestContract, \ArrayAccess
      *
      * @return string
      */
-    public function root(): string
+    public function root()
     {
         return rtrim($this->getSchemeAndHttpHost() . $this->getBaseUrl(), '/');
     }
@@ -105,7 +105,7 @@ class Request extends SymfonyRequest implements RequestContract, \ArrayAccess
      *
      * @return string
      */
-    public function url(): string
+    public function url()
     {
         return rtrim(preg_replace('/\?.*/', '', $this->getUri()), '/');
     }
@@ -115,7 +115,7 @@ class Request extends SymfonyRequest implements RequestContract, \ArrayAccess
      *
      * @return string
      */
-    public function fullUrl(): string
+    public function fullUrl()
     {
         $query = $this->getQueryString();
 
@@ -127,7 +127,7 @@ class Request extends SymfonyRequest implements RequestContract, \ArrayAccess
      *
      * @return string
      */
-    public function path(): string
+    public function path()
     {
         $pattern = trim($this->getPathInfo(), '/');
 
@@ -139,7 +139,7 @@ class Request extends SymfonyRequest implements RequestContract, \ArrayAccess
      *
      * @return string
      */
-    public function decodedPath(): string
+    public function decodedPath()
     {
         return rawurldecode($this->path());
     }
@@ -152,7 +152,7 @@ class Request extends SymfonyRequest implements RequestContract, \ArrayAccess
      *
      * @return string
      */
-    public function segment($index, $default = null): string
+    public function segment($index, $default = null)
     {
         return Arr::get($this->segments(), $index - 1, $default);
     }
@@ -162,7 +162,7 @@ class Request extends SymfonyRequest implements RequestContract, \ArrayAccess
      *
      * @return array
      */
-    public function segments(): array
+    public function segments()
     {
         $segments = explode('/', $this->path());
 
@@ -183,7 +183,7 @@ class Request extends SymfonyRequest implements RequestContract, \ArrayAccess
      *
      * @return bool
      */
-    public function accepts(string $contentTypes): bool
+    public function accepts(string $contentTypes)
     {
         $accepts = $this->getAcceptableContentTypes();
 
@@ -213,7 +213,7 @@ class Request extends SymfonyRequest implements RequestContract, \ArrayAccess
      *
      * @return bool
      */
-    public function acceptsJson(): bool
+    public function acceptsJson()
     {
         return $this->accepts('application/json');
     }
@@ -223,7 +223,7 @@ class Request extends SymfonyRequest implements RequestContract, \ArrayAccess
      *
      * @return bool
      */
-    public function acceptsHtml(): bool
+    public function acceptsHtml()
     {
         return $this->accepts('text/html');
     }
@@ -233,7 +233,7 @@ class Request extends SymfonyRequest implements RequestContract, \ArrayAccess
      *
      * @return self
      */
-    public function instance(): self
+    public function instance()
     {
         return $this;
     }
@@ -243,7 +243,7 @@ class Request extends SymfonyRequest implements RequestContract, \ArrayAccess
      *
      * @return bool
      */
-    public function ajax(): bool
+    public function ajax()
     {
         return $this->isXmlHttpRequest();
     }
@@ -253,7 +253,7 @@ class Request extends SymfonyRequest implements RequestContract, \ArrayAccess
      *
      * @return bool
      */
-    public function isPjax(): bool
+    public function isPjax()
     {
         return $this->headers->get('X-PJAX') === true;
     }
@@ -263,7 +263,7 @@ class Request extends SymfonyRequest implements RequestContract, \ArrayAccess
      *
      * @return bool
      */
-    public function isJson(): bool
+    public function isJson()
     {
         return Str::contains($this->headers('CONTENT_TYPE'), '/json');
     }
@@ -273,7 +273,7 @@ class Request extends SymfonyRequest implements RequestContract, \ArrayAccess
      *
      * @return bool
      */
-    public function wantsJson(): bool
+    public function wantsJson()
     {
         $acceptable = $this->getAcceptableContentTypes();
 
@@ -287,7 +287,7 @@ class Request extends SymfonyRequest implements RequestContract, \ArrayAccess
      *
      * @return bool
      */
-    public function is(): bool
+    public function is()
     {
         foreach (func_get_args() as $pattern) {
             if (Str::is($pattern, urldecode($this->path()))) {
@@ -306,7 +306,7 @@ class Request extends SymfonyRequest implements RequestContract, \ArrayAccess
      *
      * @return string
      */
-    public function input(string $key = null, $default = null): string
+    public function input(string $key = null, $default = null)
     {
         $input = $this->getInputSource()->all() + $this->query->all();
 
@@ -318,7 +318,7 @@ class Request extends SymfonyRequest implements RequestContract, \ArrayAccess
      *
      * @return array
      */
-    public function all(): array
+    public function all()
     {
         return array_replace_recursive($this->input(), $this->files->all());
     }
@@ -330,7 +330,7 @@ class Request extends SymfonyRequest implements RequestContract, \ArrayAccess
      *
      * @return bool
      */
-    public function exists($key): bool
+    public function exists($key)
     {
         $keys = is_array($key) ? $key : func_get_args();
         $input = $this->all();
@@ -351,7 +351,7 @@ class Request extends SymfonyRequest implements RequestContract, \ArrayAccess
      *
      * @return bool
      */
-    public function hasRegex(string $pattern): bool
+    public function hasRegex(string $pattern)
     {
         foreach ($this->all() as $key => $value) {
             if (! $this->isEmptyString($key) && preg_match($pattern, $key)) {
@@ -369,7 +369,7 @@ class Request extends SymfonyRequest implements RequestContract, \ArrayAccess
      *
      * @return bool
      */
-    public function has($key): bool
+    public function has($key)
     {
         $keys = is_array($key) ? $key : func_get_args();
 
@@ -389,7 +389,7 @@ class Request extends SymfonyRequest implements RequestContract, \ArrayAccess
      *
      * @return \Viserio\Http\Request
      */
-    public static function createFromBase(SymfonyRequest $request): \Viserio\Http\Request
+    public static function createFromBase(SymfonyRequest $request)
     {
         if ($request instanceof static) {
             return $request;
@@ -419,7 +419,7 @@ class Request extends SymfonyRequest implements RequestContract, \ArrayAccess
      *
      * @return string
      */
-    public function format(string $default = 'html'): string
+    public function format(string $default = 'html')
     {
         foreach ($this->getAcceptableContentTypes() as $type) {
             if ($format = $this->getFormat($type)) {
@@ -437,7 +437,7 @@ class Request extends SymfonyRequest implements RequestContract, \ArrayAccess
      *
      * @return array
      */
-    public function only(array $keys): array
+    public function only(array $keys)
     {
         $keys = is_array($keys) ? $keys : func_get_args();
         $results = [];
@@ -461,7 +461,7 @@ class Request extends SymfonyRequest implements RequestContract, \ArrayAccess
      *
      * @return array
      */
-    public function except(array $keys): array
+    public function except(array $keys)
     {
         $keys = is_array($keys) ? $keys : func_get_args();
         $results = $this->all();
@@ -477,7 +477,7 @@ class Request extends SymfonyRequest implements RequestContract, \ArrayAccess
      *
      * @return bool
      */
-    public function offsetExists(string $offset): bool
+    public function offsetExists(string $offset)
     {
         return array_key_exists($offset, $this->all());
     }
@@ -520,7 +520,7 @@ class Request extends SymfonyRequest implements RequestContract, \ArrayAccess
      *
      * @return \Symfony\Component\HttpFoundation\ParameterBag
      */
-    protected function getInputSource(): \Symfony\Component\HttpFoundation\ParameterBag
+    protected function getInputSource()
     {
         if ($this->isJson()) {
             return $this->json();
@@ -536,7 +536,7 @@ class Request extends SymfonyRequest implements RequestContract, \ArrayAccess
      *
      * @return bool
      */
-    protected function isEmptyString(string $key): bool
+    protected function isEmptyString(string $key)
     {
         $boolOrArray = is_bool($this->input($key)) || is_array($this->input($key));
 

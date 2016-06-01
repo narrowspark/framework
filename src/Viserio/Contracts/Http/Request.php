@@ -61,7 +61,7 @@ interface Request
      *
      * @return string
      */
-    public function headers($key = null, $default = null): string;
+    public function headers($key = null, $default = null);
 
     /**
      * Get a segment from the URI string.
@@ -71,21 +71,21 @@ interface Request
      *
      * @return string
      */
-    public function uriSegment($index, string $default = null): string;
+    public function uriSegment($index, string $default = null);
 
     /**
      * Determine if the request is the result of an AJAX call.
      *
      * @return bool
      */
-    public function ajax(): bool;
+    public function ajax();
 
     /**
      * Determine if the current request is asking for JSON in return.
      *
      * @return bool
      */
-    public function wantsJson(): bool;
+    public function wantsJson();
 
     /**
      * Determine if a cookie is set on the request.
@@ -94,5 +94,5 @@ interface Request
      *
      * @return bool
      */
-    public function hasCookie($key): bool;
+    public function hasCookie($key);
 }
