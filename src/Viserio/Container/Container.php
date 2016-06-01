@@ -250,7 +250,7 @@ class Container implements \ArrayAccess, ContainerInteropInterface, ContainerCon
     /**
      * {@inheritdoc}
      */
-    public function inflector($type, callable $callback = null)
+    public function inflector(string $type, callable $callback = null)
     {
         if (is_null($callback)) {
             $inflector = new Inflector();
@@ -265,7 +265,7 @@ class Container implements \ArrayAccess, ContainerInteropInterface, ContainerCon
     /**
      * {@inheritdoc}
      */
-    public function when($concrete)
+    public function when($concrete): ContextualBindingBuilder
     {
         $contextualBindingBuilder = new ContextualBindingBuilder($concrete);
         $contextualBindingBuilder->setContainer($this);
@@ -296,7 +296,7 @@ class Container implements \ArrayAccess, ContainerInteropInterface, ContainerCon
     /**
      * {@inheritdoc}
      */
-    public function isSingleton($alias)
+    public function isSingleton(alias $alias): bool
     {
         if (isset($this->bindings[$alias]['singleton'])) {
             $singleton = $this->bindings[$alias]['singleton'];
@@ -314,7 +314,7 @@ class Container implements \ArrayAccess, ContainerInteropInterface, ContainerCon
      *
      * @return bool
      */
-    public function bound($alias)
+    public function bound(string $alias): bool
     {
         return
             isset($this->bindings[$alias]) ||
@@ -334,7 +334,7 @@ class Container implements \ArrayAccess, ContainerInteropInterface, ContainerCon
      *
      * @return mixed
      */
-    public function call($callable, array $args = [])
+    public function call(callable $callable, array $args = [])
     {
         return $this->invoker->invoke($callable, $args);
     }
@@ -347,7 +347,7 @@ class Container implements \ArrayAccess, ContainerInteropInterface, ContainerCon
      *
      * @throws ContainerException
      */
-    public function extend($binding, \Closure $closure)
+    public function extend(string $binding, \Closure $closure)
     {
         $boundObject = $this->getRaw($binding);
 

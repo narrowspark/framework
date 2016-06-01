@@ -22,5 +22,5 @@ interface ContainerAware
      *
      * @return \Viserio\Contracts\Container\Container
      */
-    public function getContainer(): \Viserio\Contracts\Container\Container;
+    public function getContainer(): Container;
 }

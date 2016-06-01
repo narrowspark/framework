@@ -89,7 +89,7 @@ trait ContainerArrayAccessTrait
      *
      * @param string $id Identifier of the entry to remove
      */
-    public function remove($id)
+    public function remove(string $id)
     {
         $this->offsetUnset($id);
     }
@@ -184,5 +184,5 @@ trait ContainerArrayAccessTrait
      * @param \Closure|null $concrete
      * @param bool          $singleton
      */
-    abstract public function bind($alias, $concrete = null, $singleton = false);
+    abstract public function bind(string $alias, $concrete = null, $singleton = false);
 }
