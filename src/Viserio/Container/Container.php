@@ -265,7 +265,7 @@ class Container implements \ArrayAccess, ContainerInteropInterface, ContainerCon
     /**
      * {@inheritdoc}
      */
-    public function when($concrete): ContextualBindingBuilder
+    public function when($concrete): \Viserio\Contracts\Container\ContextualBindingBuilder
     {
         $contextualBindingBuilder = new ContextualBindingBuilder($concrete);
         $contextualBindingBuilder->setContainer($this);
