@@ -7,6 +7,8 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Viserio\Contracts\Support\Arrayable;
 use Viserio\Contracts\View\Factory as FactoryContract;
 use Viserio\Contracts\View\Finder as FinderContract;
+use Viserio\View\View as ViewContract;
+use Viserio\Contracts\View\Engine as EngineContract;
 use Viserio\Support\Str;
 use Viserio\View\Engines\EngineResolver;
 use Viserio\View\Traits\NormalizeNameTrait;
@@ -108,7 +110,7 @@ class Factory implements FactoryContract
      *
      * @return \Viserio\View\View
      */
-    public function file(string $path, array $data = [], array $mergeData = []): \Viserio\View\View
+    public function file(string $path, array $data = [], array $mergeData = []): ViewContract
     {
         $data = array_merge($mergeData, $this->parseData($data));
         $engine = $this->getEngineFromPath($path);
@@ -125,7 +127,7 @@ class Factory implements FactoryContract
      *
      * @return \Viserio\View\View
      */
-    public function make(string $view, array $data = [], array $mergeData = []): \Viserio\View\View
+    public function make(string $view, array $data = [], array $mergeData = []): ViewContract
     {
         if (isset($this->aliases[$view])) {
             $view = $this->aliases[$view];
@@ -147,7 +149,7 @@ class Factory implements FactoryContract
      *
      * @return \Viserio\View\View
      */
-    public function of(string $view, array $data = []): \Viserio\View\View
+    public function of(string $view, array $data = []): ViewContract
     {
         return $this->make($this->names[$view], $data);
     }
@@ -336,7 +338,7 @@ class Factory implements FactoryContract
      *
      * @return \Viserio\View\Engines\EngineResolver
      */
-    public function getEngineResolver(): \Viserio\View\Engines\EngineResolver
+    public function getEngineResolver(): EngineResolver
     {
         return $this->engines;
     }
@@ -346,7 +348,7 @@ class Factory implements FactoryContract
      *
      * @return \Viserio\Contracts\View\Finder
      */
-    public function getFinder(): \Viserio\Contracts\View\Finder
+    public function getFinder(): FinderContract
     {
         return $this->finder;
     }
@@ -380,7 +382,7 @@ class Factory implements FactoryContract
      *
      * @return Virtuoso
      */
-    public function getVirtuoso(): \Viserio\View\Virtuoso
+    public function getVirtuoso(): Virtuoso
     {
         return $this->virtuoso;
     }
@@ -457,7 +459,7 @@ class Factory implements FactoryContract
      *
      * @return \Viserio\View\View|\Viserio\View\VirtuosoView
      */
-    protected function getView(\Viserio\View\Factory $factory, \Viserio\Contracts\View\Engine $engine, string $view, string $path, $data = [])
+    protected function getView(Factory $factory, EngineContract $engine, string $view, string $path, $data = [])
     {
         if ($this->virtuoso !== null) {
             $this->virtuoso->callCreator($view = new VirtuosoView($factory, $engine, $view, $path, $data));

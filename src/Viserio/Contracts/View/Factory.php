@@ -21,7 +21,7 @@ interface Factory
      *
      * @return \Viserio\View\View
      */
-    public function file(string $path, array $data = [], array $mergeData = []): \Viserio\View\View;
+    public function file(string $path, array $data = [], array $mergeData = []): View;
 
     /**
      * Get the evaluated view contents for the given view.
@@ -32,7 +32,7 @@ interface Factory
      *
      * @return \Viserio\View\View
      */
-    public function make(string $view, array $data = [], array $mergeData = []): \Viserio\View\View;
+    public function make(string $view, array $data = [], array $mergeData = []): View;
 
     /**
      * Add a piece of shared data to the environment.
@@ -48,5 +48,5 @@ interface Factory
      * @param string       $namespace
      * @param string|array $hints
      */
-    public function addNamespace($namespace, $hints);
+    public function addNamespace(string $namespace, $hints);
 }
