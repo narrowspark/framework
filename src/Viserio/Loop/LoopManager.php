@@ -10,7 +10,7 @@ class LoopManager extends Manager
      *
      * @param string $name
      */
-    public function setDefaultDriver($name)
+    public function setDefaultDriver(string $name)
     {
         $this->config->bind('loop::driver', $name);
     }
@@ -20,7 +20,7 @@ class LoopManager extends Manager
      *
      * @return string
      */
-    public function getDefaultDriver()
+    public function getDefaultDriver(): string
     {
         return $this->config->get('loop::driver', 'Viserio\\Loop\\Adapters\\SelectLoop');
     }
@@ -30,7 +30,7 @@ class LoopManager extends Manager
      *
      * @return string
      */
-    protected function getConfigName()
+    protected function getConfigName(): string
     {
         return 'loop';
     }
