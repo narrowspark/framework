@@ -1,8 +1,8 @@
 <?php
 namespace Viserio\Contracts\Http;
 
-use Psr\Http\Message\StreamInterface;
 use InvalidArgumentException;
+use Psr\Http\Message\StreamInterface;
 use RuntimeException;
 
 interface StreamFactory
@@ -12,10 +12,10 @@ interface StreamFactory
      *
      * @param string|resource|StreamInterface|null $body
      *
-     * @return StreamInterface
-     *
      * @throws InvalidArgumentException If the stream body is invalid.
      * @throws RuntimeException         If creating the stream from $body fails.
+     *
+     * @return StreamInterface
      */
     public function createStream($body = null): StreamInterface;
 }
