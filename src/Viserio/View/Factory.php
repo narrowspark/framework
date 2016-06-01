@@ -11,7 +11,8 @@ use Viserio\Contracts\View\Finder as FinderContract;
 use Viserio\Support\Str;
 use Viserio\View\Engines\EngineResolver;
 use Viserio\View\Traits\NormalizeNameTrait;
-use Viserio\View\View as ViewContract;
+use Viserio\View\View;
+use Viserio\Contracts\View\View as ViewContract;
 
 class Factory implements FactoryContract
 {
