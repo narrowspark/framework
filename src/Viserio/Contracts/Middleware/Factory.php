@@ -69,11 +69,13 @@ interface Factory
     public function createStream($data = null): StreamInterface;
 
     /**
-     * Create a PSR-7 Uri Object.
+     * Creates an PSR-7 URI.
      *
-     * @param string $uri
+     * @param string|UriInterface $uri
      *
      * @return UriInterface
+     *
+     * @throws \InvalidArgumentException If the $uri argument can not be converted into a valid URI.
      */
     public function createUri(string $uri = ''): UriInterface;
 

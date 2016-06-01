@@ -32,6 +32,8 @@
         "ext-curl"                                           : "*",
         "ext-openssl"                                        : "*",
         "ext-mbstring"                                       : "*",
+        "ext-intl"                                           : "*",
+        "ext-fileinfo"                                       : "*",
         "cache/adapter-common"                               : "^0.3.2",
         "cache/hierarchical-cache"                           : "^0.2.1",
         "cache/taggable-cache"                               : "^0.4",
@@ -62,8 +64,7 @@
         "symfony/filesystem"                                 : "^3.1",
         "symfony/var-dumper"                                 : "^3.1",
         "swiftmailer/swiftmailer"                            : "^5.4",
-        "vlucas/phpdotenv"                                   : "^2.2",
-        "zendframework/zend-diactoros"                       : "^1.3"
+        "vlucas/phpdotenv"                                   : "^2.2"
     },
     "replace": {
         "viserio/cache"                                      : "self.version",
