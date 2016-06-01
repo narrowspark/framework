@@ -35,7 +35,7 @@ abstract class ServiceProvider implements ServiceProviderContract
      *
      * @return mixed
      */
-    public function __call($method, $parameters)
+    public function __call($method, array $parameters)
     {
         if ($method === 'boot') {
             return;
