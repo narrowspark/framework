@@ -40,6 +40,7 @@ before_install:
   - if [ -f build/travis/php/$TRAVIS_PHP_VERSION.sh]; then ./build/travis/php/$TRAVIS_PHP_VERSION.sh; fi
   - travis_retry composer self-update # Run allways composer update
   - composer global require hirak/prestissimo # Now composer can install components parallel
+  - if [[ "$HUMBUG" = 'true' ]]; then composer require humbug/humbug; fi
   - git config --global user.name travis-ci
   - git config --global user.email travis@example.com
 

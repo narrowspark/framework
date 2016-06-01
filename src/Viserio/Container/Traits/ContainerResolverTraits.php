@@ -56,7 +56,7 @@ trait ContainerResolverTraits
      * @param string|null $concrete
      * @param bool        $singleton
      */
-    abstract public function bind($alias, $concrete = null, $singleton = false);
+    abstract public function bind(string $alias, $concrete = null, $singleton = false);
 
     /**
      * Returns absolute class name - always with leading backslash.
