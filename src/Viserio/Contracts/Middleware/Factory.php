@@ -73,9 +73,9 @@ interface Factory
      *
      * @param string|UriInterface $uri
      *
-     * @return UriInterface
-     *
      * @throws \InvalidArgumentException If the $uri argument can not be converted into a valid URI.
+     *
+     * @return UriInterface
      */
     public function createUri(string $uri = ''): UriInterface;
 

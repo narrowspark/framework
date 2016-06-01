@@ -1,9 +1,9 @@
 <?php
 namespace Viserio\Contracts\Http;
 
-use Psr\Http\Message\UriInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\StreamInterface;
+use Psr\Http\Message\UriInterface;
 
 interface RequestFactory
 {
