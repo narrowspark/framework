@@ -39,7 +39,7 @@ before_install:
   - mkdir -p ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d
   - if [ -f build/travis/php/$TRAVIS_PHP_VERSION.sh]; then ./build/travis/php/$TRAVIS_PHP_VERSION.sh; fi
   - travis_retry composer self-update # Run allways composer update
-  - if [ "$TRAVIS_PHP_VERSION" != "hhvm" ]; then composer global require hirak/prestissimo; fi # Now composer can install components parallel
+  - composer global require hirak/prestissimo # Now composer can install components parallel
   - git config --global user.name travis-ci
   - git config --global user.email travis@example.com
 
@@ -49,7 +49,7 @@ install:
   - if [[ "$SETUP" = 'lowest' ]]; then travis_retry composer update --prefer-dist --no-interaction --prefer-lowest --prefer-stable --no-progress --profile; fi
 
 before_script:
-  - chmod a+x ./build/travis/all.sh && chmod a+x ./build/travis/php/7.x.sh && chmod a+x ./build/travis/php/hhvm.sh && chmod a+x ./build/travis/script.sh && chmod a+x ./build/travis/after_success.sh
+  - chmod a+x ./build/travis/all.sh && chmod a+x ./build/travis/php/7.x.sh && chmod a+x ./build/travis/script.sh && chmod a+x ./build/travis/after_success.sh
   - sleep 15
   - mongo mydb_test --eval 'db.addUser("travis", "test");'
   - ./build/travis/all.sh
