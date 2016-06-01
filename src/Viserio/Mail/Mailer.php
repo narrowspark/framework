@@ -135,7 +135,7 @@ class Mailer implements MailerContract
      *
      * @return int
      */
-    public function raw($text, $callback)
+    public function raw(string $text, $callback): int
     {
         return $this->send(['raw' => $text], [], $callback);
     }
@@ -163,7 +163,7 @@ class Mailer implements MailerContract
      *
      * @return int
      */
-    public function send($view, array $data, Closure $callback)
+    public function send($view, array $data, Closure $callback): int
     {
         $this->forceReconnection();
 
@@ -197,7 +197,7 @@ class Mailer implements MailerContract
      *
      * @return array
      */
-    public function failures()
+    public function failures(): array
     {
         return $this->failedRecipients;
     }
