@@ -25,7 +25,7 @@ class Polish implements CategoryContract
      *
      * @return string
      */
-    public function category($count)
+    public function category(int $count): string
     {
         $i10 = $count % 10;
         $i = $count % 100;

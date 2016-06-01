@@ -30,7 +30,7 @@ class Two implements CategoryContract
      *
      * @return string
      */
-    public function category($count)
+    public function category(int $count): string
     {
         if ($count === 1) {
             return 'one';

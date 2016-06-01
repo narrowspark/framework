@@ -24,7 +24,7 @@ class Macedonian implements CategoryContract
      *
      * @return string
      */
-    public function category($count)
+    public function category(int $count): string
     {
         if ($this->isInteger($count) && $count % 10 === 1 && $count !== 11) {
             return 'one';

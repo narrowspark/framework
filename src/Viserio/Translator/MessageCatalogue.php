@@ -55,7 +55,7 @@ class MessageCatalogue implements MessageCatalogueContract
      *
      * @api
      */
-    public function getLocale()
+    public function getLocale(): string
     {
         return $this->locale;
     }
@@ -65,7 +65,7 @@ class MessageCatalogue implements MessageCatalogueContract
      *
      * @api
      */
-    public function getDomains()
+    public function getDomains(): array
     {
         return array_keys($this->messages);
     }
@@ -75,7 +75,7 @@ class MessageCatalogue implements MessageCatalogueContract
      *
      * @api
      */
-    public function all($domain = null)
+    public function all($domain = null): array
     {
         if (null === $domain) {
             return $this->messages;
@@ -89,7 +89,7 @@ class MessageCatalogue implements MessageCatalogueContract
      *
      * @api
      */
-    public function set($id, $translation, $domain = 'messages')
+    public function set($id, string $translation, string $domain = 'messages')
     {
         $this->add([$id => $translation], $domain);
     }
@@ -99,7 +99,7 @@ class MessageCatalogue implements MessageCatalogueContract
      *
      * @api
      */
-    public function has($id, $domain = 'messages')
+    public function has(string $id, string $domain = 'messages'): bool
     {
         if (isset($this->messages[$domain][$id])) {
             return true;
@@ -115,7 +115,7 @@ class MessageCatalogue implements MessageCatalogueContract
     /**
      * {@inheritdoc}
      */
-    public function defines($id, $domain = 'messages')
+    public function defines(string $id, string $domain = 'messages'): bool
     {
         return isset($this->messages[$domain][$id]);
     }
@@ -125,7 +125,7 @@ class MessageCatalogue implements MessageCatalogueContract
      *
      * @api
      */
-    public function get($id, $domain = 'messages')
+    public function get(string $id, string $domain = 'messages'): string
     {
         if (isset($this->messages[$domain][$id])) {
             return $this->messages[$domain][$id];
@@ -143,7 +143,7 @@ class MessageCatalogue implements MessageCatalogueContract
      *
      * @api
      */
-    public function replace($messages, $domain = 'messages')
+    public function replace(array $messages, string $domain = 'messages')
     {
         $this->messages[$domain] = [];
         $this->add($messages, $domain);
@@ -155,7 +155,7 @@ class MessageCatalogue implements MessageCatalogueContract
      * @param string|array $messages
      * @param string       $domain
      */
-    public function remove($messages, $domain = 'messages')
+    public function remove(array $messages, string $domain = 'messages')
     {
         unset($this->messages[$domain][$messages]);
     }
@@ -165,7 +165,7 @@ class MessageCatalogue implements MessageCatalogueContract
      *
      * @api
      */
-    public function add($messages, $domain = 'messages')
+    public function add(array $messages, string $domain = 'messages')
     {
         if (! isset($this->messages[$domain])) {
             $this->messages[$domain] = $messages;
@@ -227,8 +227,6 @@ class MessageCatalogue implements MessageCatalogueContract
 
     /**
      * {@inheritdoc}
-     *
-     * @api
      */
     public function getFallbackCatalogue()
     {

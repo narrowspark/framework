@@ -23,7 +23,7 @@ class French implements CategoryContract
      *
      * @return string
      */
-    public function category($count)
+    public function category(int $count): string
     {
         if ($count >= 0 && $count < 2) {
             return 'one';

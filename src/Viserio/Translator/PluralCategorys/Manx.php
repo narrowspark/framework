@@ -24,7 +24,7 @@ class Manx implements CategoryContract
      *
      * @return string
      */
-    public function category($count)
+    public function category(int $count): string
     {
         if ($this->isInteger($count) && (in_array($count % 10, [1, 2], true) || ($count % 20 === 0))) {
             return 'one';
