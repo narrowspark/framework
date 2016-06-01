@@ -9,19 +9,4 @@ interface RouteStrategy
     const REQUEST_RESPONSE_STRATEGY = 0;
     const RESTFUL_STRATEGY = 1;
     const URI_STRATEGY = 2;
-
-    /**
-     * Tells the implementor which strategy to use, this should override any higher
-     * level setting of strategies, such as on specific routes.
-     *
-     * @param int $strategy
-     */
-    public function setStrategy(int $strategy);
-
-    /**
-     * Gets global strategy.
-     *
-     * @return int
-     */
-    public function getStrategy(): int;
 }

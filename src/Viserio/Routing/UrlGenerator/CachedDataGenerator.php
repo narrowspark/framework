@@ -54,7 +54,7 @@ class CachedDataGenerator implements DataGeneratorContract
      *
      * @return array
      */
-    public function getData()
+    public function getData(): array
     {
         $files = $this->files;
         $cache = $this->cacheFile;

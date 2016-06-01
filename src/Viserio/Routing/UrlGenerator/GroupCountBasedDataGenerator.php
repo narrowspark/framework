@@ -26,7 +26,7 @@ class GroupCountBasedDataGenerator implements DataGeneratorContract
      *
      * @return array
      */
-    public function getData()
+    public function getData(): array
     {
         $routes = $this->routeCollector->getData();
         $data = [];

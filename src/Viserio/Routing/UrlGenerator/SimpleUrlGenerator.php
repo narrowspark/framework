@@ -41,7 +41,7 @@ class SimpleUrlGenerator implements UrlGeneratorContract
      *
      * @return string
      */
-    public function generate($name, array $parameters = [], $absolute = false)
+    public function generate($name, array $parameters = [], $absolute = false): string
     {
         if (! $this->initialized) {
             $this->initialize();
