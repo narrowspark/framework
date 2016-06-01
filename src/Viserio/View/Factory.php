@@ -3,7 +3,7 @@ namespace Viserio\View;
 
 use InvalidArgumentException;
 use Narrowspark\Arr\StaticArr as Arr;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Viserio\Contracts\Events\Dispatcher as DispatcherContract;
 use Viserio\Contracts\Support\Arrayable;
 use Viserio\Contracts\View\Engine as EngineContract;
 use Viserio\Contracts\View\Factory as FactoryContract;
@@ -35,7 +35,7 @@ class Factory implements FactoryContract
     /**
      * The event dispatcher instance.
      *
-     * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
+     * @var \Viserio\Contracts\Events\Dispatcher
      */
     protected $events;
 
@@ -86,14 +86,14 @@ class Factory implements FactoryContract
     /**
      * Constructor.
      *
-     * @param \Viserio\View\Engines\EngineResolver                        $engines
-     * @param \Viserio\Contracts\View\Finder                              $finder
-     * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $events
+     * @param \Viserio\View\Engines\EngineResolver $engines
+     * @param \Viserio\Contracts\View\Finder       $finder
+     * @param \Viserio\Contracts\Events\Dispatcher $events
      */
     public function __construct(
         EngineResolver $engines,
         FinderContract $finder,
-        EventDispatcherInterface $events
+        DispatcherContract $events
     ) {
         $this->engines = $engines;
         $this->finder = $finder;
@@ -357,9 +357,9 @@ class Factory implements FactoryContract
     /**
      * Get the event dispatcher instance.
      *
-     * @return \Symfony\Component\EventDispatcher\EventDispatcherInterface
+     * @return \Viserio\Contracts\Events\Dispatcher
      */
-    public function getDispatcher(): \Symfony\Component\EventDispatcher\EventDispatcherInterface
+    public function getDispatcher(): DispatcherContract
     {
         return $this->events;
     }

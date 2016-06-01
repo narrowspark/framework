@@ -6,7 +6,7 @@ use Monolog\Handler\RotatingFileHandler;
 use Monolog\Logger as MonologLogger;
 use Monolog\Processor\PsrLogMessageProcessor;
 use Psr\Log\LoggerInterface as PsrLoggerInterface;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Viserio\Contracts\Events\Dispatcher as DispatcherContract;
 use Viserio\Contracts\Logging\Log as LogContract;
 use Viserio\Log\Traits\FormatterTrait;
 use Viserio\Log\Traits\HandlerTrait;
@@ -27,7 +27,7 @@ class Writer implements LogContract, PsrLoggerInterface
     /**
      * The Events Dispatcher instance.
      *
-     * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
+     * @var \Viserio\Contracts\Events\Dispatcher
      */
     protected $dispatcher;
 
@@ -41,10 +41,10 @@ class Writer implements LogContract, PsrLoggerInterface
     /**
      * Create a new log writer instance.
      *
-     * @param \Monolog\Logger                                             $monolog
-     * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $dispatcher
+     * @param \Monolog\Logger                      $monolog
+     * @param \Viserio\Contracts\Events\Dispatcher $dispatcher
      */
-    public function __construct(MonologLogger $monolog, EventDispatcherInterface $dispatcher)
+    public function __construct(MonologLogger $monolog, DispatcherContract $dispatcher)
     {
         // PSR 3 log message formatting for all handlers
         $monolog->pushProcessor(new PsrLogMessageProcessor());
@@ -117,7 +117,7 @@ class Writer implements LogContract, PsrLoggerInterface
      *
      * @return \Monolog\Logger
      */
-    public function getMonolog()
+    public function getMonolog(): MonologLogger
     {
         return $this->monolog;
     }
@@ -125,9 +125,9 @@ class Writer implements LogContract, PsrLoggerInterface
     /**
      * Set the event dispatcher instance.
      *
-     * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface
+     * @param \Viserio\Contracts\Events\Dispatcher
      */
-    public function setEventDispatcher(EventDispatcherInterface $dispatcher)
+    public function setEventDispatcher(DispatcherContract $dispatcher)
     {
         $this->dispatcher = $dispatcher;
     }
@@ -135,9 +135,9 @@ class Writer implements LogContract, PsrLoggerInterface
     /**
      * Get the event dispatcher instance.
      *
-     * @return \Symfony\Component\EventDispatcher\EventDispatcherInterface
+     * @return \Viserio\Contracts\Events\Dispatcher
      */
-    public function getEventDispatcher()
+    public function getEventDispatcher(): DispatcherContract
     {
         return $this->dispatcher;
     }

@@ -24,8 +24,8 @@
     },
     "require-dev": {
         "mockery/mockery"                 : "^0.9",
-        "narrowspark/php-cs-fixer-config" : "^1.1",
-        "narrowspark/testing-helper"      : "^1.5",
+        "narrowspark/php-cs-fixer-config" : "^1.4",
+        "narrowspark/testing-helper"      : "^1.6",
         "phpunit/phpunit"                 : "^5.1"
     },
     "autoload": {

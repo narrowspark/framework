@@ -8,7 +8,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Viserio\Console\Application;
 use Viserio\Console\Tests\Fixture\SpyOutput;
 use Viserio\Console\Tests\Fixture\ViserioCommand;
-use Viserio\Console\Tests\Mock\Container as MockContainer;
+use Narrowspark\TestingHelper\ArrayContainer;
 
 class ApplicationTest extends \PHPUnit_Framework_TestCase
 {
@@ -24,7 +24,7 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
         $stdClass2 = new stdClass();
         $stdClass2->foo = 'nope!';
 
-        $container = new MockContainer([
+        $container = new ArrayContainer([
             'command.greet' => function (OutputInterface $output) {
                 $output->write('hello');
             },
@@ -33,9 +33,8 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
             'stdClass2'         => $stdClass2,
             'command.arr.greet' => [$this, 'foo'],
         ]);
-        $events = Mock::mock('Symfony\Component\EventDispatcher\EventDispatcherInterface', ['addListener' => null]);
 
-        $this->application = new Application($container, $events, '1.0.0');
+        $this->application = new Application($container, '1.0.0');
     }
 
     public function tearDown()

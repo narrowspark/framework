@@ -45,7 +45,7 @@ class WriterTest extends \PHPUnit_Framework_TestCase
         $events = $this->getEventsDispatcher();
         $writer = new Writer($monolog = Mock::mock('Monolog\Logger'), $events);
         $monolog->shouldReceive('error')->once()->with('foo', []);
-        // $events->listen(
+        // $events->on(
         //     'Viserio.log',
         //     function ($level, $message, array $context = array()) {
         //         $_SERVER['__log.level']   = $level;
@@ -71,21 +71,21 @@ class WriterTest extends \PHPUnit_Framework_TestCase
     public function testListenShortcutFailsWithNoDispatcher()
     {
         $writer = new Writer($monolog = Mock::mock('Monolog\Logger'), $this->getEventsDispatcher());
-        // $writer->listen(function () {
+        // $writer->on(function () {
 
         // });
     }
 
     public function testListenShortcut()
     {
-        $writer = new Writer($monolog = Mock::mock('Monolog\Logger'), $events = Mock::mock('Symfony\Component\EventDispatcher\EventDispatcherInterface'));
+        $writer = new Writer($monolog = Mock::mock('Monolog\Logger'), $events = Mock::mock('Viserio\Contracts\Events\Dispatcher'));
 
         $callback = function () {
             return 'success';
         };
 
         //$events->shouldReceive('listen')->with('Viserio.log', $callback)->once();
-        //$writer->listen($callback);
+        //$writer->on($callback);
     }
 
     protected function getEventsDispatcher()

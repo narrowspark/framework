@@ -1,7 +1,7 @@
 <?php
 namespace Viserio\Translator;
 
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Viserio\Contracts\Events\Dispatcher as DispatcherContract;
 use Viserio\Contracts\Cache\Factory as CacheContract;
 use Viserio\Contracts\Translator\MessageCatalogue as MessageCatalogueContract;
 use Viserio\Contracts\Translator\NotFoundResourceException;
@@ -76,7 +76,7 @@ class Manager implements TranslatorContract
     /**
      * Event manager for triggering translator events.
      *
-     * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
+     * @var \Viserio\Contracts\Events\Dispatcher
      */
     protected $events;
 
@@ -211,11 +211,11 @@ class Manager implements TranslatorContract
     /**
      * Sets a event.
      *
-     * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $event
+     * @param \Viserio\Contracts\Events\Dispatcher $event
      *
      * @return self
      */
-    public function setEvent(EventDispatcherInterface $event)
+    public function setEvent(DispatcherContract $event)
     {
         $this->events = $event;
 
@@ -225,9 +225,9 @@ class Manager implements TranslatorContract
     /**
      * Returns the event instance.
      *
-     * @return \Symfony\Component\EventDispatcher\EventDispatcherInterface
+     * @return \Viserio\Contracts\Events\Dispatcher
      */
-    public function getEvent()
+    public function getEvent(): DispatcherContract
     {
         return $this->events;
     }

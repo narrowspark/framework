@@ -181,12 +181,12 @@ class MailMailerTest extends \PHPUnit_Framework_TestCase
 
     protected function getMailer()
     {
-        return new Mailer(Mock::mock('\Swift_Mailer'), Mock::mock('\Viserio\Contracts\View\Factory'), Mock::mock('\Symfony\Component\EventDispatcher\EventDispatcherInterface'));
+        return new Mailer(Mock::mock('\Swift_Mailer'), Mock::mock('\Viserio\Contracts\View\Factory'), Mock::mock('\Viserio\Contracts\Events\Dispatcher'));
     }
 
     protected function getMocks()
     {
-        return [Mock::mock('\Swift_Mailer'), Mock::mock('\Viserio\Contracts\View\Factory'), Mock::mock('\Symfony\Component\EventDispatcher\EventDispatcherInterface')];
+        return [Mock::mock('\Swift_Mailer'), Mock::mock('\Viserio\Contracts\View\Factory'), Mock::mock('\Viserio\Contracts\Events\Dispatcher')];
     }
 }
 

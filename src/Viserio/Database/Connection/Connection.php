@@ -2,7 +2,7 @@
 namespace Viserio\Database\Connection;
 
 use Narrowspark\Arr\StaticArr as Arr;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Viserio\Contracts\Events\Dispatcher;
 use Viserio\Contracts\Cache\Factory as CacheContract;
 use Viserio\Contracts\Database\Connection as ConnectionContract;
 use Viserio\Database\Exception\ConnectException;
@@ -20,7 +20,7 @@ class Connection
     /**
      * The event dispatcher instance.
      *
-     * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
+     * @var \Viserio\Contracts\Events\Dispatcher
      */
     protected $events;
 
@@ -666,7 +666,7 @@ class Connection
     /**
      * Get the event dispatcher used by the connection.
      *
-     * @return \Symfony\Component\EventDispatcher\EventDispatcherInterface
+     * @return \Viserio\Contracts\Events\Dispatcher
      */
     public function getEventDispatcher()
     {
@@ -676,7 +676,7 @@ class Connection
     /**
      * Set the event dispatcher instance on the connection.
      *
-     * @param  \Symfony\Component\EventDispatcher\EventDispatcherInterface
+     * @param  \Viserio\Contracts\Events\Dispatcher
      */
     public function setEventDispatcher(EventDispatcherInterface $events)
     {
