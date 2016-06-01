@@ -477,7 +477,7 @@ class Request extends SymfonyRequest implements \ArrayAccess
      *
      * @return bool
      */
-    public function offsetExists(string $offset)
+    public function offsetExists($offset)
     {
         return array_key_exists($offset, $this->all());
     }
@@ -489,7 +489,7 @@ class Request extends SymfonyRequest implements \ArrayAccess
      *
      * @return string|null
      */
-    public function offsetGet(string $offset)
+    public function offsetGet($offset)
     {
         return Arr::get($this->all(), $offset, null);
     }
@@ -500,7 +500,7 @@ class Request extends SymfonyRequest implements \ArrayAccess
      * @param string $offset
      * @param mixed  $value
      */
-    public function offsetSet(string $offset, $value)
+    public function offsetSet($offset, $value)
     {
         $this->getInputSource()->set($offset, $value);
     }
@@ -510,7 +510,7 @@ class Request extends SymfonyRequest implements \ArrayAccess
      *
      * @param string $offset
      */
-    public function offsetUnset(string $offset)
+    public function offsetUnset($offset)
     {
         $this->getInputSource()->remove($offset);
     }
