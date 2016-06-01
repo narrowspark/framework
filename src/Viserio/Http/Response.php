@@ -7,7 +7,7 @@ use Viserio\Contracts\Support\Jsonable;
 use Viserio\Contracts\Support\Renderable;
 use Viserio\Http\Traits\ResponseParameterTrait;
 
-class Response extends SymfonyResponse implements ResponseContract
+class Response extends SymfonyResponse
 {
     /*
      * Parameter encapsulation

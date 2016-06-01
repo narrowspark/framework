@@ -8,7 +8,7 @@ use Viserio\Contracts\Http\Request as RequestContract;
 use Viserio\Http\Traits\RequestParameterTrait;
 use Viserio\Support\Str;
 
-class Request extends SymfonyRequest implements RequestContract, \ArrayAccess
+class Request extends SymfonyRequest implements \ArrayAccess
 {
     /*
      * Parameter encapsulation
