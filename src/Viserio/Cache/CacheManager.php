@@ -52,23 +52,23 @@ class CacheManager extends Manager
     }
 
     /**
-     * Get the default cache driver name.
-     *
-     * @return string
-     */
-    public function getDefaultDriver()
-    {
-        return $this->config->get('cache::driver', '');
-    }
-
-    /**
      * Set the default cache driver name.
      *
      * @param string $name
      */
-    public function setDefaultDriver($name)
+    public function setDefaultDriver(string $name)
     {
         $this->config->bind('cache::driver', $name);
+    }
+
+    /**
+     * Get the default cache driver name.
+     *
+     * @return string
+     */
+    public function getDefaultDriver(): string
+    {
+        return $this->config->get('cache::driver', '');
     }
 
     /**
@@ -201,7 +201,7 @@ class CacheManager extends Manager
      *
      * @return string
      */
-    protected function getConfigName()
+    protected function getConfigName(): string
     {
         return 'cache';
     }
