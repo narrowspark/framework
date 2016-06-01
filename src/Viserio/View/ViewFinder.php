@@ -69,7 +69,7 @@ class ViewFinder implements FinderContract
      *
      * @return string
      */
-    public function find($name): string
+    public function find(string $name): string
     {
         if (isset($this->views[$name])) {
             return $this->views[$name];
