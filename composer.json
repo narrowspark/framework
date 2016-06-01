@@ -99,7 +99,6 @@
     },
     "require-dev": {
         "aws/aws-sdk-php"                                    : "^3.0",
-        "cache/integration-tests"                            : "^0.10",
         "fzaninotto/faker"                                   : "^1.6",
         "helmich/phpunit-psr7-assert"                        : "^1.0",
         "league/flysystem-aws-s3-v3"                         : "^1.0",
