@@ -39,9 +39,11 @@ class EncryptCookies implements MiddlewareContract
     /**
      * {@inheritdoc}
      */
-    public function __invoke(ServerRequestInterface $request, ResponseInterface $response, callable $next)
-    {
-        return $this->encrypt($next($this->decrypt($request)));
+    public function handle(
+        ServerRequestInterface $request,
+        FrameContract $frame
+    ): ResponseInterface {
+        return $this->encrypt($frame->next($this->decrypt($request)));
     }
 
     /**

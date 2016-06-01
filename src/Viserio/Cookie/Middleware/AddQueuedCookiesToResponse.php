@@ -28,9 +28,11 @@ class AddQueuedCookiesToResponse implements MiddlewareContract
     /**
      * {@inheritdoc}
      */
-    public function __invoke(RequestContract $request, ResponseContract $response, callable $next)
-    {
-        $response = $next($request, $response, null);
+    public function handle(
+        ServerRequestInterface $request,
+        FrameContract $frame
+    ): ResponseInterface {
+        $response = $frame->next($request);
 
         foreach ($this->cookies->getQueuedCookies() as $cookie) {
             $response->withHeader('Cookie', $cookie);
