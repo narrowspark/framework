@@ -8,7 +8,7 @@ use Viserio\Contracts\Database\Connection as ConnectionContract;
 use Viserio\Contracts\Database\ConnectionResolver as ConnectionResolverContract;
 use Viserio\Database\Connection\ConnectionFactory;
 
-class DatabaseManager implements ConnectionResolverContract
+class DatabaseManager
 {
     /**
      * The application instance.

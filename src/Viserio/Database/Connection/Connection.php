@@ -8,7 +8,7 @@ use Viserio\Contracts\Database\Connection as ConnectionContract;
 use Viserio\Database\Exception\ConnectException;
 use Viserio\Database\Grammar\Builder;
 
-class Connection implements ConnectionContract
+class Connection
 {
     /**
      * The active PDO connection.
