@@ -18,7 +18,7 @@ interface Factory
      * @param array         $headers The parsed headers for the request
      * @param mixed         $body    The body for the request
      *
-     * @return Psr\Http\Message\RequestInterface The generated request
+     * @return RequestInterface The generated request
      */
     public function createRequest(
         UriInterface $uri = null,
@@ -35,7 +35,7 @@ interface Factory
      * @param array         $headers The parsed headers for the request
      * @param mixed         $body    The body for the request
      *
-     * @return Psr\Http\Message\ServerRequestInterface The generated request
+     * @return ServerRequestInterface The generated request
      */
     public function createServerRequest(
         UriInterface $uri = null,
@@ -51,7 +51,7 @@ interface Factory
      * @param array $headers The parsed headers for the response
      * @param mixed $body    The body for the response
      *
-     * @return Psr\Http\Message\ResponseInterface The generated response
+     * @return ResponseInterface The generated response
      */
     public function createResponse(
         int $status = 200,
@@ -64,7 +64,7 @@ interface Factory
      *
      * @param resource|string|null|int|float|bool|StreamInterface|callable $data
      *
-     * @return Psr\Http\Message\StreamInterface
+     * @return StreamInterface
      */
     public function createStream($data = null): StreamInterface;
 
@@ -73,7 +73,7 @@ interface Factory
      *
      * @param string $uri
      *
-     * @return Psr\Http\Message\UriInterface
+     * @return UriInterface
      */
     public function createUri(string $uri = ''): UriInterface;
 
@@ -86,7 +86,7 @@ interface Factory
      * @param string                          $clientFile
      * @param string                          $clientMediaType
      *
-     * @return Psr\Http\Message\UploadedFileInterface
+     * @return UploadedFileInterface
      */
     public function createUploadedFile(
         $data,
