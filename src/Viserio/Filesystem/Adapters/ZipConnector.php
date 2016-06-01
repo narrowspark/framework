@@ -16,7 +16,7 @@ class ZipConnector implements ConnectorContract
      *
      * @return ZipArchiveAdapter
      */
-    public function connect(array $config)
+    public function connect(array $config): \League\Flysystem\ZipArchive\ZipArchiveAdapter
     {
         $config = $this->getConfig($config);
 
@@ -32,17 +32,17 @@ class ZipConnector implements ConnectorContract
      *
      * @return string[]
      */
-    protected function getConfig(array $config)
+    protected function getConfig(array $config): array
     {
-        if (!array_key_exists('path', $config)) {
+        if (! array_key_exists('path', $config)) {
             throw new InvalidArgumentException('The zip connector requires path configuration.');
         }
 
-        if (!array_key_exists('archive', $config)) {
+        if (! array_key_exists('archive', $config)) {
             $config['archive'] = new ZipArchive();
         }
 
-        if (!array_key_exists('prefix', $config)) {
+        if (! array_key_exists('prefix', $config)) {
             $config['prefix'] = null;
         }
 
@@ -56,7 +56,7 @@ class ZipConnector implements ConnectorContract
      *
      * @return \League\Flysystem\ZipArchive\ZipArchiveAdapter
      */
-    protected function getAdapter(array $config)
+    protected function getAdapter(array $config): \League\Flysystem\ZipArchive\ZipArchiveAdapter
     {
         return new ZipArchiveAdapter($config['path'], $config['archive'], $config['prefix']);
     }

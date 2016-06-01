@@ -20,6 +20,20 @@ class ViewServiceProvider extends ServiceProvider
     }
 
     /**
+     * Get the services provided by the provider.
+     *
+     * @return string[]
+     */
+    public function provides(): array
+    {
+        return [
+            'view',
+            'view.finder',
+            'view.engine.resolver',
+        ];
+    }
+
+    /**
      * Register the engine engines instance.
      */
     protected function registerEngineResolver()
@@ -57,7 +71,7 @@ class ViewServiceProvider extends ServiceProvider
      * @param string                               $engineClass
      * @param \Viserio\View\Engines\EngineResolver $engines
      */
-    protected function registercustomEngine($engineName, $engineClass, $engines)
+    protected function registercustomEngine(string $engineName, string $engineClass, \Viserio\View\Engines\EngineResolver $engines)
     {
         $engines->register($engineName, function () use ($engineClass) {
             return $engineClass;
@@ -69,7 +83,7 @@ class ViewServiceProvider extends ServiceProvider
      *
      * @param \Viserio\View\Engines\EngineResolver $engines
      */
-    protected function registerPhpEngine($engines)
+    protected function registerPhpEngine(\Viserio\View\Engines\EngineResolver $engines)
     {
         $engines->register('php', function () {
             return new PhpEngine();
@@ -114,19 +128,5 @@ class ViewServiceProvider extends ServiceProvider
 
             return $view;
         });
-    }
-
-    /**
-     * Get the services provided by the provider.
-     *
-     * @return string[]
-     */
-    public function provides()
-    {
-        return [
-            'view',
-            'view.finder',
-            'view.engine.resolver',
-        ];
     }
 }

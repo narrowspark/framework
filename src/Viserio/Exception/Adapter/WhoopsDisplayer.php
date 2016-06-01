@@ -29,7 +29,7 @@ class WhoopsDisplayer implements Adapter
      * @param \Whoops\Run $whoops
      * @param bool        $runningInConsole
      */
-    public function __construct(Run $whoops, $runningInConsole)
+    public function __construct(Run $whoops, bool $runningInConsole)
     {
         $this->whoops = $whoops;
         $this->runningInConsole = $runningInConsole;
@@ -43,7 +43,7 @@ class WhoopsDisplayer implements Adapter
      *
      * @return Response
      */
-    public function display(Exception $exception, $code)
+    public function display(Exception $exception, int $code): \Symfony\Component\HttpFoundation\Response
     {
         $status = $exception instanceof HttpExceptionInterface ?
                 $exception->getStatusCode() :

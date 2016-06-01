@@ -25,7 +25,7 @@ class XMLTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->file = new Filesystem();
-        $this->root   = vfsStream::setup();
+        $this->root = vfsStream::setup();
         $this->parser = new XML();
     }
 
@@ -75,7 +75,7 @@ class XMLTest extends \PHPUnit_Framework_TestCase
 
         $dump = vfsStream::newFile('dump.xml')->withContent($this->parser->dump($array))->at($this->root);
 
-        $this->assertSame($this->file->read($file->url()), $this->file->read($dump->url()));
+        $this->assertEquals($this->file->read($file->url()), $this->file->read($dump->url()));
     }
 
     public function testDumpToThrowException()

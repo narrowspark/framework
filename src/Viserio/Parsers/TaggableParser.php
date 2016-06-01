@@ -1,7 +1,6 @@
 <?php
 namespace Viserio\Parsers;
 
-use Exception;
 use Viserio\Contracts\Parsers\TaggableParser as TaggableParserContract;
 
 class TaggableParser extends Parser implements TaggableParserContract
@@ -18,16 +17,19 @@ class TaggableParser extends Parser implements TaggableParserContract
      *
      * @param string $key
      */
-    public function setTag($key)
+    public function setTag(string $key)
     {
         $this->taggedKey = $key;
 
         return $this;
     }
 
-    public function parse($payload)
+    /**
+     * {@inheritdoc}
+     */
+    public function parse(string $payload): array
     {
-        if (!$this->taggedKey) {
+        if (! $this->taggedKey) {
             return parent::parse($payload);
         }
 
@@ -42,7 +44,7 @@ class TaggableParser extends Parser implements TaggableParserContract
      *
      * @return array
      */
-    protected function group($taggedKey, array $data)
+    protected function group($taggedKey, array $data): array
     {
         $taggedData = [];
 

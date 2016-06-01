@@ -49,11 +49,18 @@ abstract class AbstractCookie implements Stringable, CookieContract
     protected $httpOnly;
 
     /**
+     * Returns the cookie as a string.
+     *
+     * @return string The cookie
+     */
+    abstract public function __toString(): string;
+
+    /**
      * Returns the name
      *
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
@@ -65,7 +72,7 @@ abstract class AbstractCookie implements Stringable, CookieContract
      *
      * @return self
      */
-    abstract public function withValue($value);
+    abstract public function withValue($value = null): CookieContract;
 
     /**
      * Returns the value
@@ -82,9 +89,9 @@ abstract class AbstractCookie implements Stringable, CookieContract
      *
      * @return bool
      */
-    public function hasValue()
+    public function hasValue(): bool
     {
-        return !empty($this->value);
+        return ! empty($this->value);
     }
 
     /**
@@ -94,7 +101,7 @@ abstract class AbstractCookie implements Stringable, CookieContract
      *
      * @return self
      */
-    public function withMaxAge($maxAge)
+    public function withMaxAge($maxAge = null): CookieContract
     {
         $new = clone $this;
         $new->maxAge = is_int($maxAge) ? $maxAge : null;
@@ -117,7 +124,7 @@ abstract class AbstractCookie implements Stringable, CookieContract
      *
      * @return bool
      */
-    public function hasMaxAge()
+    public function hasMaxAge(): bool
     {
         return $this->maxAge !== null;
     }
@@ -129,7 +136,7 @@ abstract class AbstractCookie implements Stringable, CookieContract
      *
      * @return self
      */
-    public function withExpiration($expiration)
+    public function withExpiration($expiration = null): CookieContract
     {
         $new = clone $this;
         $new->maxAge = is_int($expiration) ? $expiration : null;
@@ -145,7 +152,7 @@ abstract class AbstractCookie implements Stringable, CookieContract
      *
      * @return self
      */
-    public function withExpires(DateTimeInterface $expires)
+    public function withExpires(DateTimeInterface $expires): CookieContract
     {
         $new = clone $this;
         $new->expires = $expires;
@@ -156,9 +163,9 @@ abstract class AbstractCookie implements Stringable, CookieContract
     /**
      * Returns the expiration time
      *
-     * @return int|DateTimeInterface
+     * @return DateTimeInterface
      */
-    public function getExpiresTime()
+    public function getExpiresTime(): DateTimeInterface
     {
         return $this->expires;
     }
@@ -168,7 +175,7 @@ abstract class AbstractCookie implements Stringable, CookieContract
      *
      * @return bool
      */
-    public function hasExpires()
+    public function hasExpires(): bool
     {
         return $this->expires !== 0;
     }
@@ -178,7 +185,7 @@ abstract class AbstractCookie implements Stringable, CookieContract
      *
      * @return bool
      */
-    public function isExpired()
+    public function isExpired(): bool
     {
         return $this->expires !== 0 && $this->expires < new DateTime();
     }
@@ -190,7 +197,7 @@ abstract class AbstractCookie implements Stringable, CookieContract
      *
      * @return self
      */
-    public function withDomain($domain)
+    public function withDomain($domain = null): CookieContract
     {
         $new = clone $this;
         $new->domain = $this->normalizeDomain($domain);
@@ -213,7 +220,7 @@ abstract class AbstractCookie implements Stringable, CookieContract
      *
      * @return bool
      */
-    public function hasDomain()
+    public function hasDomain(): bool
     {
         return $this->domain !== null;
     }
@@ -225,7 +232,7 @@ abstract class AbstractCookie implements Stringable, CookieContract
      *
      * @return self
      */
-    public function withPath($path)
+    public function withPath($path = null): CookieContract
     {
         $new = clone $this;
         $new->path = $this->normalizePath($path);
@@ -238,7 +245,7 @@ abstract class AbstractCookie implements Stringable, CookieContract
      *
      * @return string
      */
-    public function getPath()
+    public function getPath(): string
     {
         return $this->path;
     }
@@ -250,7 +257,7 @@ abstract class AbstractCookie implements Stringable, CookieContract
      *
      * @return self
      */
-    public function withSecure($secure)
+    public function withSecure(bool $secure): CookieContract
     {
         $new = clone $this;
         $new->secure = filter_var($secure, FILTER_VALIDATE_BOOLEAN);
@@ -263,7 +270,7 @@ abstract class AbstractCookie implements Stringable, CookieContract
      *
      * @return bool
      */
-    public function isSecure()
+    public function isSecure(): bool
     {
         return $this->secure;
     }
@@ -275,7 +282,7 @@ abstract class AbstractCookie implements Stringable, CookieContract
      *
      * @return self
      */
-    public function withHttpOnly($httpOnly)
+    public function withHttpOnly(bool $httpOnly): CookieContract
     {
         $new = clone $this;
         $new->httpOnly = filter_var($httpOnly, FILTER_VALIDATE_BOOLEAN);
@@ -288,7 +295,7 @@ abstract class AbstractCookie implements Stringable, CookieContract
      *
      * @return bool
      */
-    public function isHttpOnly()
+    public function isHttpOnly(): bool
     {
         return $this->httpOnly;
     }
@@ -300,9 +307,9 @@ abstract class AbstractCookie implements Stringable, CookieContract
      *
      * @return bool
      *
-     * @see http://tools.ietf.org/html/rfc6265#section-5.1.4
+     * @link http://tools.ietf.org/html/rfc6265#section-5.1.4
      */
-    public function matchPath($path)
+    public function matchPath(string $path): bool
     {
         return $this->path === $path || (strpos($path, $this->path . '/') === 0);
     }
@@ -314,7 +321,7 @@ abstract class AbstractCookie implements Stringable, CookieContract
      *
      * @return bool
      */
-    public function matchCookie(CookieContract $cookie)
+    public function matchCookie(CookieContract $cookie): bool
     {
         return $this->getName() === $cookie->getName() &&
             $this->getDomain() === $cookie->getDomain() &&
@@ -328,12 +335,12 @@ abstract class AbstractCookie implements Stringable, CookieContract
      *
      * @return bool
      *
-     * @see http://tools.ietf.org/html/rfc6265#section-5.1.3
+     * @link http://tools.ietf.org/html/rfc6265#section-5.1.3
      */
-    public function matchDomain($domain)
+    public function matchDomain(string $domain): bool
     {
         // Domain is not set or exact match
-        if (!$this->hasDomain() || strcasecmp($domain, $this->getDomain()) === 0) {
+        if (! $this->hasDomain() || strcasecmp($domain, $this->getDomain()) === 0) {
             return true;
         }
 
@@ -346,20 +353,13 @@ abstract class AbstractCookie implements Stringable, CookieContract
     }
 
     /**
-     * Returns the cookie as a string.
-     *
-     * @return string The cookie
-     */
-    abstract public function __toString();
-
-    /**
      * Normalizes the expiration value
      *
-     * @param int|null $expiration
+     * @param int|\DateTimeInterface $expiration
      *
      * @return \DateTime|null
      */
-    protected function normalizeExpires($expiration)
+    protected function normalizeExpires($expiration = null)
     {
         $expires = null;
 
@@ -384,11 +384,11 @@ abstract class AbstractCookie implements Stringable, CookieContract
      *
      * @return string|null
      *
-     * @see http://tools.ietf.org/html/rfc6265#section-4.1.2.3
-     * @see http://tools.ietf.org/html/rfc6265#section-5.1.3
-     * @see http://tools.ietf.org/html/rfc6265#section-5.2.3
+     * @link http://tools.ietf.org/html/rfc6265#section-4.1.2.3
+     * @link http://tools.ietf.org/html/rfc6265#section-5.1.3
+     * @link http://tools.ietf.org/html/rfc6265#section-5.2.3
      */
-    protected function normalizeDomain($domain)
+    protected function normalizeDomain(string $domain = null)
     {
         if (isset($domain)) {
             $domain = ltrim(strtolower($domain), '.');
@@ -404,10 +404,10 @@ abstract class AbstractCookie implements Stringable, CookieContract
      *
      * @return string
      *
-     * @see http://tools.ietf.org/html/rfc6265#section-5.1.4
-     * @see http://tools.ietf.org/html/rfc6265#section-5.2.4
+     * @link http://tools.ietf.org/html/rfc6265#section-5.1.4
+     * @link http://tools.ietf.org/html/rfc6265#section-5.2.4
      */
-    protected function normalizePath($path)
+    protected function normalizePath(string $path = null): string
     {
         $path = rtrim($path, '/');
 

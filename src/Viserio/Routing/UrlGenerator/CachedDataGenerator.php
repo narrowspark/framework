@@ -54,12 +54,12 @@ class CachedDataGenerator implements DataGeneratorContract
      *
      * @return array
      */
-    public function getData()
+    public function getData(): array
     {
         $files = $this->files;
         $cache = $this->cacheFile;
 
-        if (!$files->exists($cache) || !$this->debug) {
+        if (! $files->exists($cache) || ! $this->debug) {
             $routes = $this->wrappedGenerator->getData();
             $files->write($cache, '<?php return ' . var_export($routes, true) . ';');
         }

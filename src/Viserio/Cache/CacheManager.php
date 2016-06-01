@@ -23,13 +23,6 @@ use Viserio\Support\Manager;
 class CacheManager extends Manager
 {
     /**
-     * Config instance.
-     *
-     * @var \Viserio\Contracts\Config\Manager
-     */
-    protected $config;
-
-    /**
      * All supported drivers.
      *
      * @var array
@@ -59,82 +52,23 @@ class CacheManager extends Manager
     }
 
     /**
-     * Get the default cache driver name.
-     *
-     * @return string
-     */
-    public function getDefaultDriver()
-    {
-        return $this->config->get('cache::driver', '');
-    }
-
-    /**
      * Set the default cache driver name.
      *
      * @param string $name
      */
-    public function setDefaultDriver($name)
+    public function setDefaultDriver(string $name)
     {
         $this->config->bind('cache::driver', $name);
     }
 
     /**
-     * Create an instance of the Flysystem cache driver.
+     * Get the default cache driver name.
      *
-     * @return FilesystemCachePool|null
+     * @return string
      */
-    protected function createFilesystemDriver(array $options)
+    public function getDefaultDriver(): string
     {
-        $adapter = empty($options) ?
-            $this->config->get('cache::flysystem') :
-            $options['flysystem'];
-
-        if ($adapter instanceof AdapterInterface) {
-            $filesystem = new Flysystem($options['connection']);
-
-            return new FilesystemCachePool($filesystem);
-        }
-
-        return;
-    }
-
-    /**
-     * Create an instance of the Memcached cache driver.
-     *
-     *
-     * @return MemcachedCachePool|null
-     */
-    protected function createMemcachedDriver(array $options)
-    {
-        $servers = empty($options) ?
-            $this->config->get('cache::memcached') :
-            $options['memcached'];
-
-        if ($servers instanceof Memcached) {
-            return new MemcachedCachePool($servers);
-        }
-
-        return;
-    }
-
-    /**
-     * Create an instance of the Memcache cache driver.
-     *
-     * @param array $options
-     *
-     * @return MemcacheCachePool|null
-     */
-    protected function createMemcacheDriver(array $options)
-    {
-        $servers = empty($options) ?
-            $this->config->get('cache::memcache') :
-            $options['memcache'];
-
-        if ($servers instanceof Memcache) {
-            return new MemcacheCachePool($servers);
-        }
-
-        return;
+        return $this->config->get('cache::driver', '');
     }
 
     /**
@@ -153,8 +87,6 @@ class CacheManager extends Manager
         if ($servers instanceof MongoDBManager) {
             return new MongoDBCachePool($servers);
         }
-
-        return;
     }
 
     /**
@@ -173,8 +105,55 @@ class CacheManager extends Manager
         if ($servers instanceof PredisClient) {
             return new PredisCachePool($servers);
         }
+    }
 
-        return;
+    /**
+     * Create an instance of the Flysystem cache driver.
+     *
+     * @return FilesystemCachePool|null
+     */
+    protected function createFilesystemDriver(array $options)
+    {
+        $adapter = $this->config->get('cache::flysystem', $options['flysystem']);
+
+        $filesystem = new Flysystem($adapter['connection']);
+
+        return new FilesystemCachePool($filesystem);
+    }
+
+    /**
+     * Create an instance of the Memcached cache driver.
+     *
+     *
+     * @return MemcachedCachePool|null
+     */
+    protected function createMemcachedDriver(array $options)
+    {
+        $servers = empty($options) ?
+            $this->config->get('cache::memcached') :
+            $options['memcached'];
+
+        if ($servers instanceof Memcached) {
+            return new MemcachedCachePool($servers);
+        }
+    }
+
+    /**
+     * Create an instance of the Memcache cache driver.
+     *
+     * @param array $options
+     *
+     * @return MemcacheCachePool|null
+     */
+    protected function createMemcacheDriver(array $options)
+    {
+        $servers = empty($options) ?
+            $this->config->get('cache::memcache') :
+            $options['memcache'];
+
+        if ($servers instanceof Memcache) {
+            return new MemcacheCachePool($servers);
+        }
     }
 
     /**
@@ -193,8 +172,6 @@ class CacheManager extends Manager
         if ($adapter instanceof Local) {
             return new FilesystemCachePool($adapter);
         }
-
-        return;
     }
 
     /**
@@ -217,8 +194,6 @@ class CacheManager extends Manager
         ) {
             return new Psr6SessionHandler($options['local']['pool'], $options['local']['config']);
         }
-
-        return;
     }
 
     /**
@@ -226,7 +201,7 @@ class CacheManager extends Manager
      *
      * @return string
      */
-    protected function getConfigName()
+    protected function getConfigName(): string
     {
         return 'cache';
     }

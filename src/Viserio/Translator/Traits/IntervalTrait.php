@@ -17,7 +17,7 @@ trait IntervalTrait
     {
         $interval = trim($interval);
 
-        if (!preg_match('/^' . $this->getIntervalRegexp() . '$/x', $interval, $matches)) {
+        if (! preg_match('/^' . $this->getIntervalRegexp() . '$/x', $interval, $matches)) {
             throw new \InvalidArgumentException(sprintf('"%s" is not a valid interval.', $interval));
         }
 

@@ -26,7 +26,7 @@ class ConnectionFactory implements ConnectionFactoryContract
     /**
      * All supported connectors.
      *
-     * @var array;
+     * @var array
      */
     protected $connectors = [
         'dblib'          => DblibConnector::class,
@@ -78,7 +78,7 @@ class ConnectionFactory implements ConnectionFactoryContract
     /**
      * {@inheritdoc}
      */
-    public function connection($name)
+    public function connection(string $name)
     {
         if ($this->connection === null) {
             $this->connection = $this->makeConnection(
@@ -93,7 +93,7 @@ class ConnectionFactory implements ConnectionFactoryContract
     /**
      * {@inheritdoc}
      */
-    public function reconnect($name)
+    public function reconnect(string $name)
     {
         $this->disconnect();
 
@@ -111,7 +111,7 @@ class ConnectionFactory implements ConnectionFactoryContract
     /**
      * {@inheritdoc}
      */
-    public function getConnectionConfig($name)
+    public function getConnectionConfig(string $name): array
     {
         return $this->container->get($name, []);
     }
@@ -119,15 +119,17 @@ class ConnectionFactory implements ConnectionFactoryContract
     /**
      * {@inheritdoc}
      */
-    public function extend($name, ConnectorContract $resolver)
+    public function extend(string $name, ConnectorContract $resolver): ConnectionFactoryContract
     {
         $this->extensions[$name] = $resolver;
+
+        return $this;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getExtensions()
+    public function getExtensions(): array
     {
         return $this->extensions;
     }
@@ -145,7 +147,7 @@ class ConnectionFactory implements ConnectionFactoryContract
      *
      * @return \Interop\Container\ContainerInterface
      */
-    public function getContainer()
+    public function getContainer(): ContainerInterface
     {
         return $this->container;
     }
@@ -155,7 +157,7 @@ class ConnectionFactory implements ConnectionFactoryContract
      *
      * @return string[]
      */
-    public function supportedPDODrivers()
+    public function supportedPDODrivers(): array
     {
         return ['mysql', 'pgsql', 'sqlite', 'sqlsrv', 'dblib'];
     }
@@ -165,7 +167,7 @@ class ConnectionFactory implements ConnectionFactoryContract
      *
      * @return array
      */
-    public function getAvailableDrivers()
+    public function getAvailableDrivers(): array
     {
         $drivers = [];
         $pdoDrivers = array_intersect(
@@ -188,7 +190,7 @@ class ConnectionFactory implements ConnectionFactoryContract
      *
      * @throws \RuntimeException
      *
-     * @return ConnectorContract
+     * @return object
      */
     protected function makeConnection($name, array $config)
     {

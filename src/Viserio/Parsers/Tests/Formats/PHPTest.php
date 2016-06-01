@@ -25,7 +25,7 @@ class PHPTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->file = new Filesystem();
-        $this->root   = vfsStream::setup();
+        $this->root = vfsStream::setup();
         $this->parser = new PHP();
     }
 
@@ -63,7 +63,7 @@ return [\'a\' => 1, "b" => 2, "c" => 3, "d" => 4, "e" => 5,];
 );'
         )->at($this->root);
 
-        $dump =  vfsStream::newFile('temp.php')->withContent(
+        $dump = vfsStream::newFile('temp.php')->withContent(
             $this->parser->dump(['a' => 1, 'b' => 2, 'c' => 3, 'd' => 4, 'e' => 5])
         )->at($this->root);
 

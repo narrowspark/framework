@@ -72,6 +72,16 @@ class SqlServerConnector extends AbstractDatabaseConnector
     }
 
     /**
+     * Get the available PDO drivers.
+     *
+     * @return array
+     */
+    protected function getAvailableDrivers()
+    {
+        return PDO::getAvailableDrivers();
+    }
+
+    /**
      * @param string $driver
      */
     private function buildConnectString($driver, array $arguments)
@@ -106,15 +116,5 @@ class SqlServerConnector extends AbstractDatabaseConnector
         }
 
         return $arguments;
-    }
-
-    /**
-     * Get the available PDO drivers.
-     *
-     * @return array
-     */
-    protected function getAvailableDrivers()
-    {
-        return PDO::getAvailableDrivers();
     }
 }

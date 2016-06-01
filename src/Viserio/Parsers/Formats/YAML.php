@@ -21,7 +21,7 @@ class YAML implements FormatContract
      */
     public function __construct()
     {
-        if (!class_exists('Symfony\\Component\\Yaml\\Yaml')) {
+        if (! class_exists('Symfony\\Component\\Yaml\\Yaml')) {
             throw new RuntimeException('Unable to read yaml as the Symfony Yaml Component is not installed.');
         }
 
@@ -31,7 +31,7 @@ class YAML implements FormatContract
     /**
      * {@inheritdoc}
      */
-    public function parse($payload)
+    public function parse(string $payload): array
     {
         try {
             return $this->parser->parse(
@@ -47,7 +47,7 @@ class YAML implements FormatContract
     /**
      * {@inheritdoc}
      */
-    public function dump(array $data)
+    public function dump(array $data): string
     {
         return $this->parser->dump($data);
     }

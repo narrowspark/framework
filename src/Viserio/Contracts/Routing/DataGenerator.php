@@ -8,5 +8,5 @@ interface DataGenerator
      *
      * @return array
      */
-    public function getData();
+    public function getData(): array;
 }

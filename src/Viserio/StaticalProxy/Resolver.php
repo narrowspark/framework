@@ -31,11 +31,11 @@ class Resolver
      * @param string          $pattern
      * @param string|callable $translation
      */
-    public function __construct($pattern, $translation)
+    public function __construct(string $pattern, $translation)
     {
-        $regex             = preg_quote($pattern, '#');
-        $this->regex       = '#^' . str_replace('\\*', '(.*)', $regex) . '$#uD';
-        $this->pattern     = $pattern;
+        $regex = preg_quote($pattern, '#');
+        $this->regex = '#^' . str_replace('\\*', '(.*)', $regex) . '$#uD';
+        $this->pattern = $pattern;
         $this->translation = $translation;
     }
 
@@ -44,12 +44,12 @@ class Resolver
      *
      * @param string $alias
      *
-     * @return bool
+     * @return bool|object
      */
-    public function resolve($alias)
+    public function resolve(string $alias)
     {
         // Check wether the alias matches the pattern
-        if (!preg_match($this->regex, $alias, $matches)) {
+        if (! preg_match($this->regex, $alias, $matches)) {
             return false;
         }
 
@@ -76,13 +76,13 @@ class Resolver
     /**
      * Checks whether the resolver matches a given pattern and optional translation
      *
-     * @param string        $pattern
-     * @param callable|null $translation
+     * @param string      $pattern
+     * @param string|null $translation
      *
      * @return bool
      */
-    public function matches($pattern, $translation = null)
+    public function matches(string $pattern, string $translation = null): bool
     {
-        return $this->pattern === $pattern && (!$translation || $translation === $this->translation);
+        return $this->pattern === $pattern && (! $translation || $translation === $this->translation);
     }
 }

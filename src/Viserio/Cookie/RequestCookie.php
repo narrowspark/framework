@@ -13,7 +13,7 @@ class RequestCookie
      *
      * @return \Viserio\Contracts\Cookie\Cookie
      */
-    public function fromSetCookieHeader(ServerRequestInterface $request)
+    public function fromSetCookieHeader(ServerRequestInterface $request): \Viserio\Contracts\Cookie\Cookie
     {
         return $this->fromStringCookie($request->getHeader('Set-Cookie'));
     }
@@ -25,7 +25,7 @@ class RequestCookie
      *
      * @return \Viserio\Contracts\Cookie\Cookie
      */
-    public function fromCookieHeader(ServerRequestInterface $request)
+    public function fromCookieHeader(ServerRequestInterface $request): \Viserio\Contracts\Cookie\Cookie
     {
         return $this->fromStringCookie($request->getHeaderLine('Cookie'));
     }
@@ -37,7 +37,7 @@ class RequestCookie
      *
      * @return \Viserio\Contracts\Cookie\Cookie
      */
-    protected function fromStringCookie($string)
+    protected function fromStringCookie(string $string): \Viserio\Contracts\Cookie\Cookie
     {
         $rawAttributes = $this->splitOnAttributeDelimiter($string);
 
@@ -45,15 +45,15 @@ class RequestCookie
 
         $cookie = new Cookie($cookieName);
 
-        if (!is_null($cookieValue)) {
+        if (! is_null($cookieValue)) {
             $cookie = $cookie->withValue($cookieValue);
         }
 
         foreach ($rawAttributes as $value) {
             $rawAttributePair = explode('=', $value, 2);
-            $attributeKey     = $rawAttributePair[0];
-            $attributeValue   = count($rawAttributePair) > 1 ? $rawAttributePair[1] : null;
-            $attributeKey     = strtolower($attributeKey);
+            $attributeKey = $rawAttributePair[0];
+            $attributeValue = count($rawAttributePair) > 1 ? $rawAttributePair[1] : null;
+            $attributeKey = strtolower($attributeKey);
 
             switch ($attributeKey) {
                 case 'expires':
@@ -88,7 +88,7 @@ class RequestCookie
      *
      * @return array
      */
-    protected function splitOnAttributeDelimiter($string)
+    protected function splitOnAttributeDelimiter(string $string): array
     {
         return array_filter(preg_split('@\s*[;]\s*@', $string));
     }
@@ -100,7 +100,7 @@ class RequestCookie
      *
      * @return array
      */
-    protected function splitCookiePair($string)
+    protected function splitCookiePair(string $string): array
     {
         $pairParts = explode('=', $string, 2);
 

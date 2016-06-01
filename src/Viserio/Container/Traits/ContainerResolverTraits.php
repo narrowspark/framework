@@ -56,7 +56,7 @@ trait ContainerResolverTraits
      * @param string|null $concrete
      * @param bool        $singleton
      */
-    abstract public function bind($alias, $concrete = null, $singleton = false);
+    abstract public function bind(string $alias, $concrete = null, $singleton = false);
 
     /**
      * Returns absolute class name - always with leading backslash.
@@ -79,8 +79,6 @@ trait ContainerResolverTraits
         if (class_exists($className)) {
             return $this->absoluteClassName($className);
         }
-
-        return;
     }
 
     /**
@@ -100,7 +98,7 @@ trait ContainerResolverTraits
         // try to reflect on the class so we can build a definition
         $reflector = new \ReflectionClass($concrete);
 
-        if (!$reflector->isInstantiable()) {
+        if (! $reflector->isInstantiable()) {
             throw new BindingResolutionException(
                 sprintf(
                     'Unable to reflect on the class [%s], does the class exist and is it properly autoloaded?',

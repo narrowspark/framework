@@ -21,7 +21,6 @@ class TranslatorServiceProvider extends ServiceProvider
         });
 
         $this->app->singleton('translator', function ($app) {
-
             $translator = new Manager(
                 $app->get('files'),
                 $app->get('translator.pluralization.rules'),
@@ -57,7 +56,7 @@ class TranslatorServiceProvider extends ServiceProvider
      *
      * @return string[]
      */
-    public function provides()
+    public function provides(): array
     {
         return [
             'translator',

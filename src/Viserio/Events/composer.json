@@ -2,7 +2,7 @@
     "name"       : "viserio/events",
     "type"       : "library",
     "description": "The Viserio Events package.",
-    "keywords"   : ["narrowspark", "viserio", "events", "symfony", "event-loop", "asynchronous"],
+    "keywords"   : ["narrowspark", "viserio", "events"],
     "license"    : "MIT",
     "homepage"   : "http://github.com/Narrowspark/events",
     "support"    : {
@@ -18,37 +18,33 @@
         }
     ],
     "require": {
-        "php"                                : "^5.6 || ^7.0",
-        "viserio/cotracts"                   : "self.version",
-        "viserio/container"                  : "self.version",
-        "container-interop/container-interop": "^1.0",
-        "symfony/event-dispatcher"           : "^3.0 || ^2.8"
+        "php"                                                : "^7.0.7",
+        "viserio/cotracts"                                   : "self.version",
+        "viserio/support"                                    : "self.version"
     },
     "require-dev": {
-        "narrowspark/php-cs-fixer-config"    : "^1.1",
-        "narrowspark/testing-helper"         : "^1.5",
-        "phpunit/phpunit"                    : "^5.1"
+        "narrowspark/php-cs-fixer-config"                    : "^1.1",
+        "narrowspark/testing-helper"                         : "^1.5",
+        "phpunit/phpunit"                                    : "^5.1"
+    },
+    "provide": {
+        "container-interop/container-interop-implementation" : "^1.1",
     },
     "autoload": {
         "psr-4": {
-            "Viserio\\Events\\"              : ""
+            "Viserio\\Events\\"                              : ""
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Viserio\\Events\\Tests\\"       : "Tests/"
+            "Viserio\\Events\\Tests\\"                       : "Tests/"
         }
     },
     "extra": {
         "branch-alias": {
-            "dev-master"                     : "1.0-dev"
+            "dev-master"                                     : "1.0-dev"
         }
     },
-    "suggest": {
-        "ext-libevent"                       : "Allows for use of a more performant event-loop implementation. (>=0.1)",
-        "ext-libev"                          : "Allows for use of a more performant event-loop implementation. (^1.0)",
-        "ext-event"                          : "Allows for use of a more performant event-loop implementation. (*)"
-    },
-    "minimum-stability"                      : "dev",
-    "prefer-stable"                          : true
+    "minimum-stability"                                      : "dev",
+    "prefer-stable"                                          : true
 }

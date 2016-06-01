@@ -8,7 +8,7 @@ use Viserio\Contracts\Http\Request as RequestContract;
 use Viserio\Http\Traits\RequestParameterTrait;
 use Viserio\Support\Str;
 
-class Request extends SymfonyRequest implements RequestContract, \ArrayAccess
+class Request extends SymfonyRequest implements \ArrayAccess
 {
     /*
      * Parameter encapsulation
@@ -23,6 +23,22 @@ class Request extends SymfonyRequest implements RequestContract, \ArrayAccess
     protected $json;
 
     /**
+     * Get an input element from the request.
+     *
+     * @param string $key
+     *
+     * @return string|null
+     */
+    public function __get(string $key)
+    {
+        $all = $this->all();
+
+        if (array_key_exists($key, $all)) {
+            return $all[$key];
+        }
+    }
+
+    /**
      * Get the JSON payload for the request.
      *
      * @param string|null $key
@@ -30,9 +46,9 @@ class Request extends SymfonyRequest implements RequestContract, \ArrayAccess
      *
      * @return mixed
      */
-    public function json($key = null, $default = null)
+    public function json(string $key = null, $default = null)
     {
-        if (!isset($this->json)) {
+        if (! isset($this->json)) {
             $this->json = new ParameterBag((array) json_decode($this->getContent(), true));
         }
 
@@ -167,7 +183,7 @@ class Request extends SymfonyRequest implements RequestContract, \ArrayAccess
      *
      * @return bool
      */
-    public function accepts($contentTypes)
+    public function accepts(string $contentTypes)
     {
         $accepts = $this->getAcceptableContentTypes();
 
@@ -215,7 +231,7 @@ class Request extends SymfonyRequest implements RequestContract, \ArrayAccess
     /**
      * Return the Request instance.
      *
-     * @return $this
+     * @return self
      */
     public function instance()
     {
@@ -290,7 +306,7 @@ class Request extends SymfonyRequest implements RequestContract, \ArrayAccess
      *
      * @return string
      */
-    public function input($key = null, $default = null)
+    public function input(string $key = null, $default = null)
     {
         $input = $this->getInputSource()->all() + $this->query->all();
 
@@ -320,7 +336,7 @@ class Request extends SymfonyRequest implements RequestContract, \ArrayAccess
         $input = $this->all();
 
         foreach ($keys as $value) {
-            if (!array_key_exists($value, $input)) {
+            if (! array_key_exists($value, $input)) {
                 return false;
             }
         }
@@ -335,10 +351,10 @@ class Request extends SymfonyRequest implements RequestContract, \ArrayAccess
      *
      * @return bool
      */
-    public function hasRegex($pattern)
+    public function hasRegex(string $pattern)
     {
         foreach ($this->all() as $key => $value) {
-            if (!$this->isEmptyString($key) && preg_match($pattern, $key)) {
+            if (! $this->isEmptyString($key) && preg_match($pattern, $key)) {
                 return true;
             }
         }
@@ -403,7 +419,7 @@ class Request extends SymfonyRequest implements RequestContract, \ArrayAccess
      *
      * @return string
      */
-    public function format($default = 'html')
+    public function format(string $default = 'html')
     {
         foreach ($this->getAcceptableContentTypes() as $type) {
             if ($format = $this->getFormat($type)) {
@@ -421,7 +437,7 @@ class Request extends SymfonyRequest implements RequestContract, \ArrayAccess
      *
      * @return array
      */
-    public function only($keys)
+    public function only(array $keys)
     {
         $keys = is_array($keys) ? $keys : func_get_args();
         $results = [];
@@ -430,7 +446,7 @@ class Request extends SymfonyRequest implements RequestContract, \ArrayAccess
         foreach ($keys as $key) {
             $value = Arr::get($input, $key);
 
-            if (!is_null($value)) {
+            if (! is_null($value)) {
                 Arr::set($results, $key, $value);
             }
         }
@@ -445,7 +461,7 @@ class Request extends SymfonyRequest implements RequestContract, \ArrayAccess
      *
      * @return array
      */
-    public function except($keys)
+    public function except(array $keys)
     {
         $keys = is_array($keys) ? $keys : func_get_args();
         $results = $this->all();
@@ -500,24 +516,6 @@ class Request extends SymfonyRequest implements RequestContract, \ArrayAccess
     }
 
     /**
-     * Get an input element from the request.
-     *
-     * @param string $key
-     *
-     * @return string|null
-     */
-    public function __get($key)
-    {
-        $all = $this->all();
-
-        if (array_key_exists($key, $all)) {
-            return $all[$key];
-        }
-
-        return;
-    }
-
-    /**
      * Get the input source for the request.
      *
      * @return \Symfony\Component\HttpFoundation\ParameterBag
@@ -538,10 +536,10 @@ class Request extends SymfonyRequest implements RequestContract, \ArrayAccess
      *
      * @return bool
      */
-    protected function isEmptyString($key)
+    protected function isEmptyString(string $key)
     {
         $boolOrArray = is_bool($this->input($key)) || is_array($this->input($key));
 
-        return !$boolOrArray && trim((string) $this->input($key)) === '';
+        return ! $boolOrArray && trim((string) $this->input($key)) === '';
     }
 }

@@ -57,14 +57,78 @@ class View implements ArrayAccess, ViewContract
      * @param string                                     $path
      * @param array|\Viserio\Contracts\Support\Arrayable $data
      */
-    public function __construct(Factory $factory, EngineContract $engine, $view, $path, $data = [])
+    public function __construct(Factory $factory, EngineContract $engine, string $view, string $path, $data = [])
     {
-        $this->view    = $view;
-        $this->path    = $path;
-        $this->engine  = $engine;
+        $this->view = $view;
+        $this->path = $path;
+        $this->engine = $engine;
         $this->factory = $factory;
 
-        $this->data    = $data instanceof Arrayable ? $data->toArray() : (array) $data;
+        $this->data = $data instanceof Arrayable ? $data->toArray() : (array) $data;
+    }
+
+    /**
+     * Set a piece of data on the view.
+     *
+     * @param string $key
+     * @param mixed  $value
+     */
+    public function __set($key, $value)
+    {
+        $this->with($key, $value);
+    }
+
+    /**
+     * Check if a piece of data is bound to the view.
+     *
+     * @param string $key
+     *
+     * @return bool
+     */
+    public function __isset($key): bool
+    {
+        return isset($this->data[$key]);
+    }
+
+    /**
+     * Remove a piece of bound data from the view.
+     *
+     * @param string $key
+     *
+     * @return bool|null
+     */
+    public function __unset($key)
+    {
+        unset($this->data[$key]);
+    }
+
+    /**
+     * Dynamically bind parameters to the view.
+     *
+     * @param string $method
+     * @param array  $parameters
+     *
+     * @throws \BadMethodCallException
+     *
+     * @return \Viserio\View\View
+     */
+    public function __call(string $method, array $parameters): ViewContract
+    {
+        if (Str::startsWith($method, 'with')) {
+            return $this->with(Str::snake(substr($method, 4)), $parameters[0]);
+        }
+
+        throw new BadMethodCallException(sprintf('Method [%s] does not exist on view.', $method));
+    }
+
+    /**
+     * Get the string contents of the view.
+     *
+     * @return string
+     */
+    public function __toString(): string
+    {
+        return $this->render();
     }
 
     /**
@@ -74,7 +138,7 @@ class View implements ArrayAccess, ViewContract
      *
      * @return string
      */
-    public function render(callable $callback = null)
+    public function render(callable $callback = null): string
     {
         try {
             $contents = $this->getContents();
@@ -95,9 +159,9 @@ class View implements ArrayAccess, ViewContract
      * @param string $key
      * @param mixed  $value
      *
-     * @return $this
+     * @return self
      */
-    public function with($key, $value = null)
+    public function with($key, $value = null): ViewContract
     {
         if (is_array($key)) {
             $this->data = array_merge($this->data, $key);
@@ -115,9 +179,9 @@ class View implements ArrayAccess, ViewContract
      * @param string $view
      * @param array  $data
      *
-     * @return $this
+     * @return self
      */
-    public function nest($key, $view, array $data = [])
+    public function nest($key, string $view, array $data = []): self
     {
         return $this->with($key, $this->factory->make($view, $data));
     }
@@ -127,7 +191,7 @@ class View implements ArrayAccess, ViewContract
      *
      * @return \Viserio\View\Factory
      */
-    public function getFactory()
+    public function getFactory(): Factory
     {
         return $this->factory;
     }
@@ -137,7 +201,7 @@ class View implements ArrayAccess, ViewContract
      *
      * @return EngineContract
      */
-    public function getEngine()
+    public function getEngine(): EngineContract
     {
         return $this->engine;
     }
@@ -147,7 +211,7 @@ class View implements ArrayAccess, ViewContract
      *
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return $this->view;
     }
@@ -157,7 +221,7 @@ class View implements ArrayAccess, ViewContract
      *
      * @return array
      */
-    public function getData()
+    public function getData(): array
     {
         return $this->data;
     }
@@ -167,7 +231,7 @@ class View implements ArrayAccess, ViewContract
      *
      * @return string
      */
-    public function getPath()
+    public function getPath(): string
     {
         return $this->path;
     }
@@ -177,7 +241,7 @@ class View implements ArrayAccess, ViewContract
      *
      * @param string $path
      */
-    public function setPath($path)
+    public function setPath(string $path)
     {
         $this->path = $path;
     }
@@ -189,7 +253,7 @@ class View implements ArrayAccess, ViewContract
      *
      * @return bool
      */
-    public function offsetExists($key)
+    public function offsetExists($key): bool
     {
         return array_key_exists($key, $this->data);
     }
@@ -240,75 +304,11 @@ class View implements ArrayAccess, ViewContract
     }
 
     /**
-     * Set a piece of data on the view.
-     *
-     * @param string $key
-     * @param mixed  $value
-     */
-    public function __set($key, $value)
-    {
-        $this->with($key, $value);
-    }
-
-    /**
-     * Check if a piece of data is bound to the view.
-     *
-     * @param string $key
-     *
-     * @return bool
-     */
-    public function __isset($key)
-    {
-        return isset($this->data[$key]);
-    }
-
-    /**
-     * Remove a piece of bound data from the view.
-     *
-     * @param string $key
-     *
-     * @return bool|null
-     */
-    public function __unset($key)
-    {
-        unset($this->data[$key]);
-    }
-
-    /**
-     * Dynamically bind parameters to the view.
-     *
-     * @param string $method
-     * @param array  $parameters
-     *
-     * @throws \BadMethodCallException
-     *
-     * @return \Viserio\View\View
-     */
-    public function __call($method, $parameters)
-    {
-        if (Str::startsWith($method, 'with')) {
-            return $this->with(Str::snake(substr($method, 4)), $parameters[0]);
-        }
-
-        throw new BadMethodCallException(sprintf('Method [%s] does not exist on view.', $method));
-    }
-
-    /**
-     * Get the string contents of the view.
-     *
-     * @return string
-     */
-    public function __toString()
-    {
-        return $this->render();
-    }
-
-    /**
      * Get the evaluated contents of the view.
      *
      * @return string
      */
-    protected function getContents()
+    protected function getContents(): string
     {
         return $this->engine->get($this->path, $this->gatherData());
     }
@@ -318,7 +318,7 @@ class View implements ArrayAccess, ViewContract
      *
      * @return array
      */
-    protected function gatherData()
+    protected function gatherData(): array
     {
         $data = array_merge($this->factory->getShared(), $this->data);
 

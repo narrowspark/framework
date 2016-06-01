@@ -1,10 +1,11 @@
 <?php
 namespace Viserio\Config;
 
+use ArrayIterator;
 use IteratorAggregate;
-use Viserio\Contracts\Config\Loader as LoaderContract;
 use Viserio\Contracts\Config\Manager as ManagerContract;
 use Viserio\Contracts\Config\Repository as RepositoryContract;
+use Viserio\Contracts\Parsers\Loader as LoaderContract;
 
 class Manager implements ManagerContract, IteratorAggregate
 {
@@ -40,23 +41,42 @@ class Manager implements ManagerContract, IteratorAggregate
     }
 
     /**
+     * Call a method from repository.
+     *
+     * @param string $method
+     * @param array  $params
+     *
+     * @return mixed
+     */
+    public function __call(string $method, array $params = [])
+    {
+        if ($this->loader && method_exists($this->loader, $method)) {
+            return call_user_func_array([$this->loader, $method], $params);
+        }
+
+        return call_user_func_array([$this->repository, $method], $params);
+    }
+
+    /**
      * Set Viserio's defaults using the repository.
      *
      * @param array $array
      */
-    public function setArray(array $array)
+    public function setArray(array $array): ManagerContract
     {
         $this->repository->setArray($array);
+
+        return $this;
     }
 
     /**
      * Get the configuration loader.
      *
-     * @param \Viserio\Contracts\Config\Loader $loader
+     * @param \Viserio\Contracts\Parsers\Loader $loader
      *
      * @return self
      */
-    public function setLoader(LoaderContract $loader)
+    public function setLoader(LoaderContract $loader): ManagerContract
     {
         $this->loader = $loader;
 
@@ -66,9 +86,9 @@ class Manager implements ManagerContract, IteratorAggregate
     /**
      * Get the configuration loader.
      *
-     * @return \Viserio\Contracts\Config\Loader
+     * @return \Viserio\Contracts\Parsers\Loader
      */
-    public function getLoader()
+    public function getLoader(): LoaderContract
     {
         return $this->loader;
     }
@@ -82,7 +102,7 @@ class Manager implements ManagerContract, IteratorAggregate
      *
      * @return self
      */
-    public function import($file, $group = null)
+    public function import(string $file, string $group = null): ManagerContract
     {
         $config = $this->loader->load($file, $group);
 
@@ -94,7 +114,7 @@ class Manager implements ManagerContract, IteratorAggregate
     /**
      * {@inheritdoc}
      */
-    public function set($key, $value)
+    public function set(string $key, $value): ManagerContract
     {
         $this->offsetSet($key, $value);
 
@@ -104,9 +124,9 @@ class Manager implements ManagerContract, IteratorAggregate
     /**
      * {@inheritdoc}
      */
-    public function get($key, $default = null)
+    public function get(string $key, $default = null)
     {
-        if (!$this->offsetExists($key)) {
+        if (! $this->offsetExists($key)) {
             return $default;
         }
 
@@ -118,7 +138,7 @@ class Manager implements ManagerContract, IteratorAggregate
     /**
      * {@inheritdoc}
      */
-    public function has($key)
+    public function has(string $key): bool
     {
         return $this->offsetExists($key);
     }
@@ -126,7 +146,7 @@ class Manager implements ManagerContract, IteratorAggregate
     /**
      * {@inheritdoc}
      */
-    public function forget($key)
+    public function forget(string $key)
     {
         $this->offsetUnset($key);
     }
@@ -185,25 +205,8 @@ class Manager implements ManagerContract, IteratorAggregate
      *
      * @return \ArrayIterator
      */
-    public function getIterator()
+    public function getIterator(): ArrayIterator
     {
         return $this->repository->getIterator();
-    }
-
-    /**
-     * Call a method from repository.
-     *
-     * @param string $method
-     * @param array  $params
-     *
-     * @return mixed
-     */
-    public function __call($method, array $params = [])
-    {
-        if ($this->loader && method_exists($this->loader, $method)) {
-            return call_user_func_array([$this->loader, $method], $params);
-        }
-
-        return call_user_func_array([$this->repository, $method], $params);
     }
 }

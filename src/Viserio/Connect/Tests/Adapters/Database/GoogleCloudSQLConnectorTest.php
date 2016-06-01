@@ -10,7 +10,7 @@ class GoogleCloudSQLConnectorTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        if (!class_exists('PDO')) {
+        if (! class_exists('PDO')) {
             $this->markTestSkipped('PDO module is not installed.');
         }
     }
@@ -21,7 +21,7 @@ class GoogleCloudSQLConnectorTest extends \PHPUnit_Framework_TestCase
     public function testConnectThrowPDOException()
     {
         $connector = new GoogleCloudSQLConnector();
-        $config    = [
+        $config = [
             'server'   => '',
             'database' => '',
             'username' => '',

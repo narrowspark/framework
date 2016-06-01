@@ -73,12 +73,12 @@ class Application extends SymfonyConsole implements ApplicationContract
     public function __construct(
         ContainerContract $container,
         EventDispatcherInterface $events,
-        $version,
-        $name = 'Narrowspark Framework'
+        string $version,
+        string $name = 'Narrowspark Framework'
     ) {
-        $this->name      = $name;
-        $this->version   = $version;
-        $this->events    = $events;
+        $this->name = $name;
+        $this->version = $version;
+        $this->events = $events;
 
         $this->setContainer($container);
         $this->expressionParser = new Parser();
@@ -117,7 +117,7 @@ class Application extends SymfonyConsole implements ApplicationContract
      *
      * @return SymfonyCommand
      */
-    public function command($expression, $callable)
+    public function command(string $expression, $callable): \Symfony\Component\Console\Command\Command
     {
         $commandFunction = function (InputInterface $input, OutputInterface $output) use ($callable) {
             $parameters = array_merge(
@@ -153,7 +153,7 @@ class Application extends SymfonyConsole implements ApplicationContract
      * @param string $commandName      Name of the command.
      * @param array  $argumentDefaults Default argument values.
      */
-    public function defaults($commandName, array $argumentDefaults = [])
+    public function defaults(string $commandName, array $argumentDefaults = [])
     {
         $command = $this->get($commandName);
         $commandDefinition = $command->getDefinition();
@@ -169,7 +169,7 @@ class Application extends SymfonyConsole implements ApplicationContract
      *
      * @return string
      */
-    public function getVersion()
+    public function getVersion(): string
     {
         return $this->version;
     }
@@ -179,7 +179,7 @@ class Application extends SymfonyConsole implements ApplicationContract
      *
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
@@ -191,7 +191,7 @@ class Application extends SymfonyConsole implements ApplicationContract
      *
      * @return \Symfony\Component\Console\Input\InputDefinition
      */
-    protected function getDefaultInputDefinition()
+    protected function getDefaultInputDefinition(): \Symfony\Component\Console\Input\InputDefinition
     {
         $definition = parent::getDefaultInputDefinition();
         $definition->addOption($this->getEnvironmentOption());
@@ -204,7 +204,7 @@ class Application extends SymfonyConsole implements ApplicationContract
      *
      * @return \Viserio\Console\Input\InputOption
      */
-    protected function getEnvironmentOption()
+    protected function getEnvironmentOption(): \Viserio\Console\Input\InputOption
     {
         $message = 'The environment the command should run under.';
 
@@ -219,7 +219,7 @@ class Application extends SymfonyConsole implements ApplicationContract
      *
      * @return SymfonyCommand
      */
-    protected function createCommand($expression, callable $callable)
+    protected function createCommand(string $expression, callable $callable): \Symfony\Component\Console\Command\Command
     {
         $result = $this->expressionParser->parse($expression);
 
@@ -247,7 +247,7 @@ class Application extends SymfonyConsole implements ApplicationContract
      *
      * @return \Viserio\Support\Invoker
      */
-    protected function getInvoker()
+    protected function getInvoker(): Invoker
     {
         return $this->invoker;
     }

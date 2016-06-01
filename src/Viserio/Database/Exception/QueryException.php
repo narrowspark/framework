@@ -40,20 +40,6 @@ class QueryException extends \PDOException
     }
 
     /**
-     * Format the SQL error message.
-     *
-     * @param string     $sql
-     * @param array      $bindings
-     * @param \Exception $previous
-     *
-     * @return string
-     */
-    protected function formatMessage($sql, $bindings, $previous)
-    {
-        return $previous->getMessage() . ' (SQL: ' . str_replace_array('\?', $bindings, $sql) . ')';
-    }
-
-    /**
      * Get the SQL for the query.
      *
      * @return string
@@ -71,5 +57,19 @@ class QueryException extends \PDOException
     public function getBindings()
     {
         return $this->bindings;
+    }
+
+    /**
+     * Format the SQL error message.
+     *
+     * @param string     $sql
+     * @param array      $bindings
+     * @param \Exception $previous
+     *
+     * @return string
+     */
+    protected function formatMessage($sql, $bindings, $previous)
+    {
+        return $previous->getMessage() . ' (SQL: ' . str_replace_array('\?', $bindings, $sql) . ')';
     }
 }

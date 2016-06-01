@@ -6,7 +6,6 @@ use League\Flysystem\AdapterInterface;
 use Narrowspark\Arr\StaticArr as Arr;
 use RuntimeException;
 use Viserio\Contracts\Config\Manager as ConfigContract;
-use Viserio\Filesystem\Adapters;
 use Viserio\Support\Manager;
 
 class FilesystemManager extends Manager
@@ -45,7 +44,7 @@ class FilesystemManager extends Manager
      *
      * @param string $name
      */
-    public function setDefaultDriver($name)
+    public function setDefaultDriver(string $name)
     {
         $this->config->set($this->getConfigName() . '::default', $name);
 
@@ -57,7 +56,7 @@ class FilesystemManager extends Manager
      *
      * @return string
      */
-    public function getDefaultDriver()
+    public function getDefaultDriver(): string
     {
         return $this->config->get($this->getConfigName() . '::default', 'local');
     }
@@ -65,11 +64,11 @@ class FilesystemManager extends Manager
     /**
      * {@inheritdoc}
      */
-    public function driver($driver = null, array $options = [])
+    public function driver(string $driver = null, array $options = [])
     {
         $driver = $driver ?: $this->getDefaultDriver();
 
-        if (!$this->hasDriver($driver)) {
+        if (! $this->hasDriver($driver)) {
             throw new RuntimeException(
                 sprintf('The driver [%s] is not supported.', $driver)
             );
@@ -78,7 +77,7 @@ class FilesystemManager extends Manager
         // If the given driver has not been created before, we will create the instances
         // here and cache it so we can return it next time very quickly. If there is
         // already a driver created by this name, we'll just return that instance.
-        if (!isset($this->drivers[$driver])) {
+        if (! isset($this->drivers[$driver])) {
             $this->drivers[$driver] = $this->adapt($this->createDriver($driver, $options));
         }
 
@@ -94,13 +93,13 @@ class FilesystemManager extends Manager
      *
      * @return array
      */
-    public function getConnectionConfig($name)
+    public function getConnectionConfig(string $name): array
     {
         $name = $name ?: $this->getDefaultDriver();
 
         $connections = $this->config->get($this->getConfigName() . '::connections');
 
-        if (!is_array($config = Arr::get($connections, $name)) && !$config) {
+        if (! is_array($config = Arr::get($connections, $name)) && ! $config) {
             throw new InvalidArgumentException("Adapter [$name] not configured.");
         }
 
@@ -122,11 +121,11 @@ class FilesystemManager extends Manager
      *
      * @return array
      */
-    protected function getCacheConfig($name)
+    protected function getCacheConfig(string $name): array
     {
         $cache = $this->config->get($this->getConfigName() . '::cache');
 
-        if (!is_array($config = Arr::get($cache, $name)) && !$config) {
+        if (! is_array($config = Arr::get($cache, $name)) && ! $config) {
             throw new InvalidArgumentException("Cache [$name] not configured.");
         }
 
@@ -140,7 +139,7 @@ class FilesystemManager extends Manager
      *
      * @return string
      */
-    protected function getConfigName()
+    protected function getConfigName(): string
     {
         return 'flysystem';
     }
@@ -152,7 +151,7 @@ class FilesystemManager extends Manager
      *
      * @return \Viserio\Contracts\Filesystem\Filesystem
      */
-    protected function adapt(AdapterInterface $filesystem)
+    protected function adapt(AdapterInterface $filesystem): \Viserio\Contracts\Filesystem\Filesystem
     {
         return new FilesystemAdapter($filesystem);
     }

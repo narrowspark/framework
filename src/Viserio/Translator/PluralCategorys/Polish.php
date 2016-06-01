@@ -25,7 +25,7 @@ class Polish implements CategoryContract
      *
      * @return string
      */
-    public function category($count)
+    public function category(int $count): string
     {
         $i10 = $count % 10;
         $i = $count % 100;
@@ -33,7 +33,7 @@ class Polish implements CategoryContract
         if ($count === 1) {
             return 'one';
         } elseif (
-            $this->isInteger($count) && ($i10) >= 2 && $i10 <= 4 && !(($i) >= 12 && $i <= 14) && !($i >= 22 && $i <= 24)
+            $this->isInteger($count) && ($i10) >= 2 && $i10 <= 4 && ! (($i) >= 12 && $i <= 14) && ! ($i >= 22 && $i <= 24)
         ) {
             return 'few';
         }

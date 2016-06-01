@@ -1,9 +1,9 @@
 <?php
-namespace Viserio\Config\Tests;
+namespace Viserio\Parsers\Tests;
 
 use org\bovigo\vfs\vfsStream;
-use Viserio\Config\FileLoader;
 use Viserio\Filesystem\Filesystem;
+use Viserio\Parsers\FileLoader;
 use Viserio\Parsers\TaggableParser;
 use Viserio\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
@@ -23,7 +23,7 @@ class FileLoaderTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->root       = vfsStream::setup();
+        $this->root = vfsStream::setup();
         $this->fileloader = new FileLoader(new TaggableParser(new Filesystem()), []);
     }
 

@@ -3,7 +3,7 @@ namespace Viserio\Database\Connection;
 
 use Viserio\Contracts\Database\ConnectionResolver as ConnectionResolverContract;
 
-class ConnectionResolver implements ConnectionResolverContract
+class ConnectionResolver
 {
     /**
      * All of the registered connections.

@@ -8,7 +8,7 @@ class PredisConnectorTest extends \PHPUnit_Framework_TestCase
     public function testConnect()
     {
         $connector = new PredisConnector();
-        $config    = [
+        $config = [
             'servers' => [
                 'server' => 'narrowspark',
             ],
@@ -27,7 +27,7 @@ class PredisConnectorTest extends \PHPUnit_Framework_TestCase
     public function testConnectThrowExeption()
     {
         $connector = new PredisConnector();
-        $config    = [];
+        $config = [];
 
         $this->assertInstanceOf('Predis\Client', $connector->connect($config));
     }

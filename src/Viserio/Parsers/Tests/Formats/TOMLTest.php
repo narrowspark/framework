@@ -25,7 +25,7 @@ class TOMLTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->file = new Filesystem();
-        $this->root   = vfsStream::setup();
+        $this->root = vfsStream::setup();
         $this->parser = new TOML();
     }
 

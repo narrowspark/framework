@@ -8,7 +8,7 @@ use Viserio\Contracts\Database\Connection as ConnectionContract;
 use Viserio\Contracts\Database\ConnectionResolver as ConnectionResolverContract;
 use Viserio\Database\Connection\ConnectionFactory;
 
-class DatabaseManager implements ConnectionResolverContract
+class DatabaseManager
 {
     /**
      * The application instance.
@@ -58,6 +58,19 @@ class DatabaseManager implements ConnectionResolverContract
     }
 
     /**
+     * Dynamically pass methods to the default connection.
+     *
+     * @param string $method
+     * @param array  $parameters
+     *
+     * @return mixed
+     */
+    public function __call($method, $parameters)
+    {
+        return call_user_func_array([$this->connection(), $method], $parameters);
+    }
+
+    /**
      * Set a cache instance.
      *
      * @param \Viserio\Contracts\Cache\Manager $cache
@@ -83,7 +96,7 @@ class DatabaseManager implements ConnectionResolverContract
         // If we haven't created this connection, we'll create it based on the config
         // provided in the application. Once we've created the connections we will
         // set the "fetch mode" for PDO which determines the query return types.
-        if (!isset($this->connections[$name])) {
+        if (! isset($this->connections[$name])) {
             $connection = $this->makeConnection($name);
 
             $this->connections[$name] = $this->prepare($connection);
@@ -127,11 +140,52 @@ class DatabaseManager implements ConnectionResolverContract
     {
         $this->disconnect($name = $name ?: $this->getDefaultConnection());
 
-        if (!isset($this->connections[$name])) {
+        if (! isset($this->connections[$name])) {
             return $this->connection($name);
         } else {
             return $this->refreshPdoConnections($name);
         }
+    }
+
+    /**
+     * Get the default connection name.
+     *
+     * @return string
+     */
+    public function getDefaultConnection()
+    {
+        return $this->config->get('database::default');
+    }
+
+    /**
+     * Set the default connection name.
+     *
+     * @param string $name
+     */
+    public function setDefaultConnection($name)
+    {
+        $this->config->set('database::default', $name);
+    }
+
+    /**
+     * Register an extension connection resolver.
+     *
+     * @param string   $name
+     * @param callable $resolver
+     */
+    public function extend($name, callable $resolver)
+    {
+        $this->extensions[$name] = $resolver;
+    }
+
+    /**
+     * Return all of the created connections.
+     *
+     * @return array
+     */
+    public function getConnections()
+    {
+        return $this->connections;
     }
 
     /**
@@ -230,59 +284,5 @@ class DatabaseManager implements ConnectionResolverContract
         }
 
         return $config;
-    }
-
-    /**
-     * Get the default connection name.
-     *
-     * @return string
-     */
-    public function getDefaultConnection()
-    {
-        return $this->config->get('database::default');
-    }
-
-    /**
-     * Set the default connection name.
-     *
-     * @param string $name
-     */
-    public function setDefaultConnection($name)
-    {
-        $this->config->set('database::default', $name);
-    }
-
-    /**
-     * Register an extension connection resolver.
-     *
-     * @param string   $name
-     * @param callable $resolver
-     */
-    public function extend($name, callable $resolver)
-    {
-        $this->extensions[$name] = $resolver;
-    }
-
-    /**
-     * Return all of the created connections.
-     *
-     * @return array
-     */
-    public function getConnections()
-    {
-        return $this->connections;
-    }
-
-    /**
-     * Dynamically pass methods to the default connection.
-     *
-     * @param string $method
-     * @param array  $parameters
-     *
-     * @return mixed
-     */
-    public function __call($method, $parameters)
-    {
-        return call_user_func_array([$this->connection(), $method], $parameters);
     }
 }

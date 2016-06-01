@@ -13,7 +13,7 @@ trait ResponseParameterTrait
      *
      * @return mixed
      */
-    public function cookie($key = null, $default = null)
+    public function cookie(string $key = null, $default = null)
     {
         if (null === $key) {
             return $this->headers->getCookies();
@@ -27,9 +27,9 @@ trait ResponseParameterTrait
      *
      * @param \Symfony\Component\HttpFoundation\Cookie $cookie
      *
-     * @return $this
+     * @return self
      */
-    public function withCookie(Cookie $cookie)
+    public function withCookie(Cookie $cookie): self
     {
         $this->headers->setCookie($cookie);
 
@@ -44,7 +44,7 @@ trait ResponseParameterTrait
      *
      * @return mixed
      */
-    public function headers($key = null, $default = null)
+    public function headers(string $key = null, $default = null)
     {
         if (null === $key) {
             return $this->headers;

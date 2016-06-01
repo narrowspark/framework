@@ -12,9 +12,9 @@ class GridFSConnector extends AbstractConnector
     /**
      * {@inheritdoc}
      */
-    protected function getAuth(array $config)
+    protected function getAuth(array $config): array
     {
-        if (!array_key_exists('server', $config)) {
+        if (! array_key_exists('server', $config)) {
             throw new InvalidArgumentException('The gridfs connector requires server configuration.');
         }
 
@@ -34,9 +34,9 @@ class GridFSConnector extends AbstractConnector
     /**
      * {@inheritdoc}
      */
-    protected function getConfig(array $config)
+    protected function getConfig(array $config): array
     {
-        if (!array_key_exists('database', $config)) {
+        if (! array_key_exists('database', $config)) {
             throw new InvalidArgumentException('The gridfs connector requires database configuration.');
         }
 
@@ -46,7 +46,7 @@ class GridFSConnector extends AbstractConnector
     /**
      * {@inheritdoc}
      */
-    protected function getAdapter($client, array $config)
+    protected function getAdapter($client, array $config): \League\Flysystem\AdapterInterface
     {
         return new GridFSAdapter($client->selectDB($config['database'])->getGridFS());
     }
@@ -56,7 +56,7 @@ class GridFSConnector extends AbstractConnector
      *
      * @return string
      */
-    protected function getMongoClass()
+    protected function getMongoClass(): string
     {
         if (class_exists(MongoClient::class)) {
             return MongoClient::class;

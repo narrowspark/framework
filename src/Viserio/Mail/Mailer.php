@@ -135,7 +135,7 @@ class Mailer implements MailerContract
      *
      * @return int
      */
-    public function raw($text, $callback)
+    public function raw(string $text, $callback): int
     {
         return $this->send(['raw' => $text], [], $callback);
     }
@@ -163,7 +163,7 @@ class Mailer implements MailerContract
      *
      * @return int
      */
-    public function send($view, array $data, Closure $callback)
+    public function send($view, array $data, Closure $callback): int
     {
         $this->forceReconnection();
 
@@ -193,21 +193,11 @@ class Mailer implements MailerContract
     }
 
     /**
-     * Force the transport to re-connect.
-     *
-     * This will prevent errors in daemon queue situations.
-     */
-    protected function forceReconnection()
-    {
-        $this->getSwiftMailer()->getTransport()->stop();
-    }
-
-    /**
      * Get the array of failed recipients.
      *
      * @return array
      */
-    public function failures()
+    public function failures(): array
     {
         return $this->failedRecipients;
     }
@@ -274,6 +264,16 @@ class Mailer implements MailerContract
         $this->logger = $logger;
 
         return $this;
+    }
+
+    /**
+     * Force the transport to re-connect.
+     *
+     * This will prevent errors in daemon queue situations.
+     */
+    protected function forceReconnection()
+    {
+        $this->getSwiftMailer()->getTransport()->stop();
     }
 
     /**
@@ -363,7 +363,7 @@ class Mailer implements MailerContract
             $this->events->addListener('mailer.sending', [$message]);
         }
 
-        if (!$this->pretending) {
+        if (! $this->pretending) {
             if ($this->resetSwift) {
                 // Fail-safe restart before email TXN
                 // Required for queued mail sending using daemon
@@ -404,7 +404,7 @@ class Mailer implements MailerContract
         // If a global from address has been specified we will set it on every message
         // instances so the developer does not have to repeat themselves every time
         // they create a new message. We will just go ahead and push the address.
-        if (!empty($this->from['address'])) {
+        if (! empty($this->from['address'])) {
             $message->from($this->from['address'], $this->from['name']);
         }
 
@@ -448,7 +448,7 @@ class Mailer implements MailerContract
      */
     protected function resetSwiftTransport()
     {
-        if (!$transport = $this->getSwiftMailerTransport()) {
+        if (! $transport = $this->getSwiftMailerTransport()) {
             return;
         }
 

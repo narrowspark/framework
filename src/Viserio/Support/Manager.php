@@ -39,13 +39,26 @@ abstract class Manager
     protected $supportedDrivers = [];
 
     /**
+     * Dynamically call the default driver instance.
+     *
+     * @param string $method
+     * @param array  $parameters
+     *
+     * @return mixed
+     */
+    public function __call(string $method, array $parameters)
+    {
+        return call_user_func_array([$this->driver(), $method], $parameters);
+    }
+
+    /**
      * Set a config manager
      *
      * @param ConfigContract $config
      *
      * @return self
      */
-    public function setConfig(ConfigContract $config)
+    public function setConfig(ConfigContract $config): Manager
     {
         $this->config = $config;
 
@@ -57,7 +70,7 @@ abstract class Manager
      *
      * @return ConfigContract
      */
-    public function getConfig()
+    public function getConfig(): ConfigContract
     {
         return $this->config;
     }
@@ -67,14 +80,14 @@ abstract class Manager
      *
      * @param string $name
      */
-    abstract public function setDefaultDriver($name);
+    abstract public function setDefaultDriver(string $name);
 
     /**
      * Get the default driver name.
      *
      * @return string
      */
-    abstract public function getDefaultDriver();
+    abstract public function getDefaultDriver(): string;
 
     /**
      * Builder.
@@ -86,11 +99,11 @@ abstract class Manager
      *
      * @return mixed
      */
-    public function driver($driver = null, array $options = [])
+    public function driver(string $driver = null, array $options = [])
     {
         $driver = $driver ?: $this->getDefaultDriver();
 
-        if (!$this->hasDriver($driver)) {
+        if (! $this->hasDriver($driver)) {
             throw new RuntimeException(
                 sprintf('The driver [%s] is not supported.', $driver)
             );
@@ -99,7 +112,7 @@ abstract class Manager
         // If the given driver has not been created before, we will create the instances
         // here and cache it so we can return it next time very quickly. If there is
         // already a driver created by this name, we'll just return that instance.
-        if (!isset($this->drivers[$driver])) {
+        if (! isset($this->drivers[$driver])) {
             $this->drivers[$driver] = $this->createDriver($driver, $options);
         }
 
@@ -112,9 +125,9 @@ abstract class Manager
      * @param string   $driver
      * @param \Closure $callback
      *
-     * @return $this
+     * @return self
      */
-    public function extend($driver, Closure $callback)
+    public function extend(string $driver, Closure $callback): Manager
     {
         $this->customCreators[$driver] = $callback->bindTo($this, $this);
 
@@ -126,7 +139,7 @@ abstract class Manager
      *
      * @return array
      */
-    public function getDrivers()
+    public function getDrivers(): array
     {
         return $this->drivers;
     }
@@ -138,24 +151,11 @@ abstract class Manager
      *
      * @return bool
      */
-    public function hasDriver($driver)
+    public function hasDriver(string $driver): bool
     {
         return isset($this->supportedDrivers[$driver]) ||
             in_array($driver, $this->supportedDrivers, true) ||
             isset($this->customCreators[$driver]);
-    }
-
-    /**
-     * Dynamically call the default driver instance.
-     *
-     * @param string $method
-     * @param array  $parameters
-     *
-     * @return mixed
-     */
-    public function __call($method, $parameters)
-    {
-        return call_user_func_array([$this->driver(), $method], $parameters);
     }
 
     /**
@@ -168,7 +168,7 @@ abstract class Manager
      *
      * @return mixed
      */
-    protected function createDriver($driver, array $options)
+    protected function createDriver(string $driver, array $options)
     {
         $method = 'create' . Str::studly($driver) . 'Driver';
 
@@ -194,7 +194,7 @@ abstract class Manager
      *
      * @return mixed
      */
-    protected function callCustomCreator($driver, array $options = [])
+    protected function callCustomCreator(string $driver, array $options = [])
     {
         return $this->customCreators[$driver]($options);
     }
@@ -204,5 +204,5 @@ abstract class Manager
      *
      * @return string
      */
-    abstract protected function getConfigName();
+    abstract protected function getConfigName(): string;
 }

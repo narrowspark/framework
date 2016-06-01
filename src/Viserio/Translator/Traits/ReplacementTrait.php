@@ -36,7 +36,7 @@ trait ReplacementTrait
      */
     public function removeReplacement($search)
     {
-        if (!isset($this->replacements[$search])) {
+        if (! isset($this->replacements[$search])) {
             throw new \InvalidArgumentException(sprintf('Replacement [%s] was not found.', $search));
         }
 

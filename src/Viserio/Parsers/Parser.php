@@ -1,8 +1,9 @@
 <?php
 namespace Viserio\Parsers;
 
-use Viserio\Contracts\Filesystem\Filesystem;
+use Viserio\Contracts\Filesystem\Filesystem as FilesystemContract;
 use Viserio\Contracts\Parsers\Exception\NotSupportedException;
+use Viserio\Contracts\Parsers\Format as FormatContract;
 use Viserio\Contracts\Parsers\Parser as ParserContract;
 use Viserio\Parsers\Formats\BSON;
 use Viserio\Parsers\Formats\INI;
@@ -79,7 +80,7 @@ class Parser implements ParserContract
      *
      * @param \Viserio\Contracts\Filesystem\Filesystem $filesystem
      */
-    public function __construct(Filesystem $filesystem)
+    public function __construct(FilesystemContract $filesystem)
     {
         $this->filesystem = $filesystem;
     }
@@ -89,7 +90,7 @@ class Parser implements ParserContract
      *
      * @return \Viserio\Contracts\Filesystem\Filesystem
      */
-    public function getFilesystem()
+    public function getFilesystem(): FilesystemContract
     {
         return $this->filesystem;
     }
@@ -97,34 +98,32 @@ class Parser implements ParserContract
     /**
      * Autodetect the payload data type using content-type value.
      *
-     * @param string $format
+     * @param string|null $format
      *
      * @return string Return the short format code (xml, json, ...).
      */
     public function getFormat($format = null)
     {
-        $format  = strtolower($format);
+        $format = strtolower($format);
         $fsystem = $this->filesystem;
 
         if ($fsystem->isFile($format)) {
             return $fsystem->getExtension($format);
         }
 
-        $httpContent = $_SERVER['HTTP_CONTENT_TYPE'];
-
-        return isset($httpContent) ? $httpContent : $format;
+        return $_SERVER['HTTP_CONTENT_TYPE'] ?? $format;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function parse($payload)
+    public function parse(string $payload): array
     {
-        if (!$payload) {
+        if (! $payload) {
             return [];
         }
 
-        $format  = $this->getFormat($payload);
+        $format = $this->getFormat($payload);
         $fsystem = $this->filesystem;
 
         if ($format !== 'php') {
@@ -145,7 +144,7 @@ class Parser implements ParserContract
      *
      * @return \Viserio\Contracts\Parsers\Format
      */
-    public function getParser($type)
+    public function getParser($type): FormatContract
     {
         $supportedFileFormats = array_flip($this->supportedFileFormats);
 

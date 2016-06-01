@@ -11,24 +11,15 @@ class SessionServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->singleton('session', function () {
-
         });
 
         $this->registerCsrf();
         $this->registerFlash();
     }
 
-    protected function registerFlash()
-    {
-        $this->app->singleton('flash', function () {
-
-        });
-    }
-
     public function registerCsrf()
     {
         $this->app->singleton('csrf', function () {
-
         });
     }
 
@@ -37,12 +28,18 @@ class SessionServiceProvider extends ServiceProvider
      *
      * @return string[]
      */
-    public function provides()
+    public function provides(): array
     {
         return [
             'session',
             'flash',
             'csrf',
         ];
+    }
+
+    protected function registerFlash()
+    {
+        $this->app->singleton('flash', function () {
+        });
     }
 }

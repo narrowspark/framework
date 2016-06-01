@@ -2,6 +2,7 @@
 namespace Viserio\Support\Traits;
 
 use Interop\Container\ContainerInterface as ContainerInteropInterface;
+use RuntimeException;
 
 trait ContainerAwareTrait
 {
@@ -19,7 +20,7 @@ trait ContainerAwareTrait
      *
      * @return self
      */
-    public function setContainer(ContainerInteropInterface $container)
+    public function setContainer(ContainerInteropInterface $container): self
     {
         $this->container = $container;
 
@@ -33,9 +34,9 @@ trait ContainerAwareTrait
      *
      * @return \Interop\Container\ContainerInterface
      */
-    public function getContainer()
+    public function getContainer(): \Interop\Container\ContainerInterface
     {
-        if (!$this->container) {
+        if (! $this->container) {
             throw new RuntimeException('Container is not set up.');
         }
 

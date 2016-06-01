@@ -27,7 +27,7 @@ class Irish implements CategoryContract
      *
      * @return string
      */
-    public function category($count)
+    public function category(int $count): string
     {
         $isInteger = $this->isInteger($count);
 

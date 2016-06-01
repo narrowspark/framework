@@ -27,6 +27,31 @@ trait ApplicationTrait
     protected $path = '';
 
     /**
+     * Set base path.
+     *
+     * @var string|array
+     */
+    public function setBasePath($path)
+    {
+        $this->path = $path;
+    }
+
+    /**
+     * Creates the application.
+     *
+     * Needs to be implemented by subclasses.
+     *
+     * @return \Viserio\Application\Application
+     */
+    public function createApplication()
+    {
+        $app = $this->resolveApplication();
+        $this->resolveApplicationCore($app);
+
+        return $app;
+    }
+
+    /**
      * Refresh the application instance.
      */
     protected function refreshApplication()
@@ -73,31 +98,6 @@ trait ApplicationTrait
         }
 
         return $this->path;
-    }
-
-    /**
-     * Set base path.
-     *
-     * @var string|array
-     */
-    public function setBasePath($path)
-    {
-        $this->path = $path;
-    }
-
-    /**
-     * Creates the application.
-     *
-     * Needs to be implemented by subclasses.
-     *
-     * @return \Viserio\Application\Application
-     */
-    public function createApplication()
-    {
-        $app = $this->resolveApplication();
-        $this->resolveApplicationCore($app);
-
-        return $app;
     }
 
     /**

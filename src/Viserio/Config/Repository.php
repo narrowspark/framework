@@ -29,7 +29,7 @@ class Repository implements RepositoryContract
      *
      * @return self
      */
-    public function setArray(array $values = [])
+    public function setArray(array $values = []): RepositoryContract
     {
         $this->data = Arr::merge($this->data, $values);
 
@@ -41,7 +41,7 @@ class Repository implements RepositoryContract
      *
      * @return array
      */
-    public function getAllNested()
+    public function getAllNested(): array
     {
         return $this->data;
     }
@@ -51,7 +51,7 @@ class Repository implements RepositoryContract
      *
      * @return array
      */
-    public function getAllFlat()
+    public function getAllFlat(): array
     {
         return Arr::flatten($this->data, '.');
     }
@@ -61,7 +61,7 @@ class Repository implements RepositoryContract
      *
      * @return array
      */
-    public function getKeys()
+    public function getKeys(): array
     {
         return array_keys(Arr::flatten($this->data, '.'));
     }
@@ -86,7 +86,7 @@ class Repository implements RepositoryContract
      *
      * @return self
      */
-    public function offsetSet($key, $value)
+    public function offsetSet($key, $value): RepositoryContract
     {
         $this->data = Arr::set($this->data, $key, $value);
 
@@ -100,7 +100,7 @@ class Repository implements RepositoryContract
      *
      * @return bool
      */
-    public function offsetExists($key)
+    public function offsetExists($key): bool
     {
         return Arr::has($this->data, $key);
     }
@@ -120,7 +120,7 @@ class Repository implements RepositoryContract
      *
      * @return \ArrayIterator
      */
-    public function getIterator()
+    public function getIterator(): ArrayIterator
     {
         return new ArrayIterator($this->getAllNested());
     }

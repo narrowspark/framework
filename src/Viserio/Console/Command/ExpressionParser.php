@@ -13,7 +13,7 @@ class ExpressionParser
      *
      * @return array
      */
-    public function parse($expression)
+    public function parse(string $expression): array
     {
         $tokens = explode(' ', $expression);
         $tokens = array_map('trim', $tokens);

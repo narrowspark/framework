@@ -13,5 +13,5 @@ interface Application
      *
      * @return SymfonyCommand|null
      */
-    public function command($expression, $callable);
+    public function command(string $expression, $callable);
 }

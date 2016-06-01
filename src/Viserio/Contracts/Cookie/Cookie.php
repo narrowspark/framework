@@ -6,196 +6,196 @@ use DateTimeInterface;
 interface Cookie
 {
     /**
-     * Returns the name
+     * Returns the name.
      *
      * @return string
      */
-    public function getName();
+    public function getName(): string;
 
     /**
-     * Sets the value
+     * Sets the value.
      *
      * @param string|null $value
      *
      * @return self
      */
-    public function withValue($value);
+    public function withValue($value = null): Cookie;
 
     /**
-     * Returns the value
+     * Returns the value.
      *
      * @return string|null
      */
     public function getValue();
 
     /**
-     * Checks if there is a value
+     * Checks if there is a value.
      *
      * @return bool
      */
-    public function hasValue();
+    public function hasValue(): bool;
 
     /**
-     * Sets the max age
+     * Sets the max age.
      *
      * @param int|null $maxAge
      *
      * @return self
      */
-    public function withMaxAge($maxAge);
+    public function withMaxAge($maxAge = null): Cookie;
 
     /**
-     * Returns the max age
+     * Returns the max age.
      *
      * @return int|null
      */
     public function getMaxAge();
 
     /**
-     * Checks if there is a max age
+     * Checks if there is a max age.
      *
      * @return bool
      */
-    public function hasMaxAge();
+    public function hasMaxAge(): bool;
 
     /**
-     * Sets both the max age and the expires attributes
+     * Sets both the max age and the expires attributes.
      *
      * @param int|\DateTimeInterface|null $expiration
      *
      * @return self
      */
-    public function withExpiration($expiration);
+    public function withExpiration($expiration = null): Cookie;
 
     /**
      * Sets the expires
      *
-     * @param \DateTimeInterface $expires
+     * @param \DateTimeInterface $expires.
      *
      * @return self
      */
-    public function withExpires(DateTimeInterface $expires);
+    public function withExpires(DateTimeInterface $expires): Cookie;
 
     /**
-     * Returns the expiration time
+     * Returns the expiration time.
      *
-     * @return int
+     * @return \DateTimeInterface
      */
-    public function getExpiresTime();
+    public function getExpiresTime(): DateTimeInterface;
 
     /**
-     * Checks if there is an expiration time
-     *
-     * @return bool
-     */
-    public function hasExpires();
-
-    /**
-     * Checks if the cookie is expired
+     * Checks if there is an expiration time.
      *
      * @return bool
      */
-    public function isExpired();
+    public function hasExpires(): bool;
 
     /**
-     * Sets the domain
+     * Checks if the cookie is expired.
+     *
+     * @return bool
+     */
+    public function isExpired(): bool;
+
+    /**
+     * Sets the domain.
      *
      * @param string|null $domain
      *
      * @return self
      */
-    public function withDomain($domain);
+    public function withDomain($domain = null): Cookie;
 
     /**
-     * Returns the domain
+     * Returns the domain.
      *
      * @return string|null
      */
     public function getDomain();
 
     /**
-     * Checks if there is a domain
+     * Checks if there is a domain.
      *
      * @return bool
      */
-    public function hasDomain();
+    public function hasDomain(): bool;
 
     /**
-     * Sets the path
+     * Sets the path.
      *
      * @param string|null $path
      *
      * @return self
      */
-    public function withPath($path);
+    public function withPath($path = null): Cookie;
 
     /**
-     * Returns the path
+     * Returns the path.
      *
      * @return string
      */
-    public function getPath();
+    public function getPath(): string;
 
     /**
-     * Sets the secure
+     * Sets the secure.
      *
      * @param bool $secure
      *
      * @return self
      */
-    public function withSecure($secure);
+    public function withSecure(bool $secure): Cookie;
 
     /**
-     * Checks if HTTPS is required
+     * Checks if HTTPS is required.
      *
      * @return bool
      */
-    public function isSecure();
+    public function isSecure(): bool;
 
     /**
-     * Sets the HTTP Only
+     * Sets the HTTP Only.
      *
      * @param bool $httpOnly
      *
      * @return self
      */
-    public function withHttpOnly($httpOnly);
+    public function withHttpOnly(bool $httpOnly): Cookie;
 
     /**
-     * Checks if it is HTTP-only
+     * Checks if it is HTTP-only.
      *
      * @return bool
      */
-    public function isHttpOnly();
+    public function isHttpOnly(): bool;
 
     /**
-     * It matches a path
+     * It matches a path.
      *
      * @param string $path
      *
      * @return bool
      *
-     * @see http://tools.ietf.org/html/rfc6265#section-5.1.4
+     * @link http://tools.ietf.org/html/rfc6265#section-5.1.4
      */
-    public function matchPath($path);
+    public function matchPath(string $path): bool;
 
     /**
-     * Checks if it matches with another cookie
+     * Checks if it matches with another cookie.
      *
      * @param \Viserio\Contracts\Cookie\Cookie $cookie
      *
      * @return bool
      */
-    public function matchCookie(Cookie $cookie);
+    public function matchCookie(Cookie $cookie): bool;
 
     /**
-     * Matches a domain
+     * Matches a domain.
      *
      * @param string $domain
      *
      * @return bool
      *
-     * @see http://tools.ietf.org/html/rfc6265#section-5.1.3
+     * @link http://tools.ietf.org/html/rfc6265#section-5.1.3
      */
-    public function matchDomain($domain);
+    public function matchDomain(string $domain): bool;
 }

@@ -7,43 +7,23 @@ use Viserio\Http\Request;
 
 class HttpRequestTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * [tearDown description].
-     *
-     * @return [type] [description]
-     */
     public function tearDown()
     {
         Mock::close();
     }
 
-    /**
-     * [testInstanceMethod description].
-     *
-     * @return [type] [description]
-     */
     public function testInstanceMethod()
     {
         $request = Request::create('', 'GET');
         $this->assertSame($request, $request->instance());
     }
 
-    /**
-     * [testRootMethod description].
-     *
-     * @return [type] [description]
-     */
     public function testRootMethod()
     {
         $request = Request::create('http://example.com/foo/bar/script.php?test');
         $this->assertEquals('http://example.com', $request->root());
     }
 
-    /**
-     * [testPathMethod description].
-     *
-     * @return [type] [description]
-     */
     public function testPathMethod()
     {
         $request = Request::create('', 'GET');
@@ -52,11 +32,6 @@ class HttpRequestTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('foo/bar', $request->path());
     }
 
-    /**
-     * [testDecodedPathMethod description].
-     *
-     * @return [type] [description]
-     */
     public function testDecodedPathMethod()
     {
         $request = Request::create('/foo%20bar');
@@ -72,11 +47,6 @@ class HttpRequestTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $request->segment($segment, 'default'));
     }
 
-    /**
-     * [segmentProvider description].
-     *
-     * @return [type] [description]
-     */
     public function segmentProvider()
     {
         return [
@@ -98,11 +68,6 @@ class HttpRequestTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(['foo', 'bar'], $request->segments());
     }
 
-    /**
-     * [segmentsProvider description].
-     *
-     * @return [type] [description]
-     */
     public function segmentsProvider()
     {
         return [
@@ -113,11 +78,6 @@ class HttpRequestTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
-    /**
-     * [testUrlMethod description].
-     *
-     * @return [type] [description]
-     */
     public function testUrlMethod()
     {
         $request = Request::create('http://foo.com/foo/bar?name=Narrowspark', 'GET');
@@ -126,11 +86,6 @@ class HttpRequestTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('http://foo.com/foo/bar', $request->url());
     }
 
-    /**
-     * [testFullUrlMethod description].
-     *
-     * @return [type] [description]
-     */
     public function testFullUrlMethod()
     {
         $request = Request::create('http://foo.com/foo/bar?name=Narrowspark', 'GET');
@@ -139,11 +94,6 @@ class HttpRequestTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('https://foo.com', $request->fullUrl());
     }
 
-    /**
-     * [testIsMethod description].
-     *
-     * @return [type] [description]
-     */
     public function testIsMethod()
     {
         $request = Request::create('/foo/bar', 'GET');
@@ -156,11 +106,6 @@ class HttpRequestTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($request->is('/'));
     }
 
-    /**
-     * [testAjaxMethod description].
-     *
-     * @return [type] [description]
-     */
     public function testAjaxMethod()
     {
         $request = Request::create('/', 'GET');
@@ -260,11 +205,6 @@ class HttpRequestTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($request->isPjax());
     }
 
-    /**
-     * [testSecureMethod description].
-     *
-     * @return [type] [description]
-     */
     public function testSecureMethod()
     {
         $request = Request::create('http://example.com', 'GET');
@@ -274,11 +214,6 @@ class HttpRequestTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($request->isSecure());
     }
 
-    /**
-     * [testHasMethod description].
-     *
-     * @return [type] [description]
-     */
     public function testHasMethod()
     {
         $request = Request::create('/', 'GET', ['name' => 'Narrowspark']);
@@ -293,11 +228,6 @@ class HttpRequestTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($request->has('foo'));
     }
 
-    /**
-     * [testInputMethod description].
-     *
-     * @return [type] [description]
-     */
     public function testInputMethod()
     {
         $request = Request::create('/', 'GET', ['name' => 'Narrowspark']);
@@ -305,11 +235,6 @@ class HttpRequestTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('Dani', $request->input('foo', 'Dani'));
     }
 
-    /**
-     * [testOnlyMethod description].
-     *
-     * @return [type] [description]
-     */
     public function testOnlyMethod()
     {
         $request = Request::create('/', 'GET', ['name' => 'Narrowspark', 'age' => 25]);
@@ -320,11 +245,6 @@ class HttpRequestTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(['developer' => ['name' => 'Narrowspark'], 'test' => null], $request->only('developer.name', 'test'));
     }
 
-    /**
-     * [testExceptMethod description].
-     *
-     * @return [type] [description]
-     */
     public function testExceptMethod()
     {
         $request = Request::create('/', 'GET', ['name' => 'Narrowspark', 'age' => 25]);
@@ -332,11 +252,6 @@ class HttpRequestTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals([], $request->except('age', 'name'));
     }
 
-    /**
-     * [testQueryMethod description].
-     *
-     * @return [type] [description]
-     */
     public function testQueryMethod()
     {
         $request = Request::create('/', 'GET', ['name' => 'Narrowspark']);
@@ -346,11 +261,6 @@ class HttpRequestTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('Narrowspark', $all['name']);
     }
 
-    /**
-     * [testCookieMethod description].
-     *
-     * @return [type] [description]
-     */
     public function testCookieMethod()
     {
         $request = Request::create('/', 'GET', [], ['name' => 'Narrowspark']);
@@ -360,11 +270,6 @@ class HttpRequestTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('Narrowspark', $all['name']);
     }
 
-    /**
-     * [testHasCookieMethod description].
-     *
-     * @return [type] [description]
-     */
     public function testHasCookieMethod()
     {
         $request = Request::create('/', 'GET', [], ['foo' => 'bar']);
@@ -372,11 +277,6 @@ class HttpRequestTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($request->hasCookie('qu'));
     }
 
-    /**
-     * [testFileMethod description].
-     *
-     * @return [type] [description]
-     */
     public function testFileMethod()
     {
         $files = [
@@ -392,11 +292,6 @@ class HttpRequestTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Symfony\Component\HttpFoundation\File\UploadedFile', $request->files('foo'));
     }
 
-    /**
-     * [testHasFileMethod description].
-     *
-     * @return [type] [description]
-     */
     public function testHasFileMethod()
     {
         $request = Request::create('/', 'GET', [], [], []);
@@ -414,11 +309,6 @@ class HttpRequestTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($request->hasfiles('foo'));
     }
 
-    /**
-     * [testServerMethod description].
-     *
-     * @return [type] [description]
-     */
     public function testServerMethod()
     {
         $request = Request::create('/', 'GET', [], [], [], ['foo' => 'bar']);
@@ -428,11 +318,6 @@ class HttpRequestTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('bar', $all['foo']);
     }
 
-    /**
-     * [testMergeMethod description].
-     *
-     * @return [type] [description]
-     */
     public function testMergeMethod()
     {
         $request = Request::create('/', 'GET', ['name' => 'Narrowspark']);
@@ -442,11 +327,6 @@ class HttpRequestTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('Dayle', $request->input('buddy'));
     }
 
-    /**
-     * [testReplaceMethod description].
-     *
-     * @return [type] [description]
-     */
     public function testReplaceMethod()
     {
         $request = Request::create('/', 'GET', ['name' => 'Narrowspark']);
@@ -456,11 +336,6 @@ class HttpRequestTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('Dayle', $request->input('buddy'));
     }
 
-    /**
-     * [testHeaderMethod description].
-     *
-     * @return [type] [description]
-     */
     public function testHeaderMethod()
     {
         $request = Request::create('/', 'GET', [], [], [], ['HTTP_DO_THIS' => 'foo']);
@@ -469,11 +344,6 @@ class HttpRequestTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('foo', $all['do-this'][0]);
     }
 
-    /**
-     * [testJSONMethod description].
-     *
-     * @return [type] [description]
-     */
     public function testJSONMethod()
     {
         $payload = ['name' => 'Narrowspark'];
@@ -497,11 +367,6 @@ class HttpRequestTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($request->hasRegex('/name/'));
     }
 
-    /**
-     * [testJSONEmulatingPHPBuiltInServer description].
-     *
-     * @return [type] [description]
-     */
     public function testJSONEmulatingPHPBuiltInServer()
     {
         $payload = ['name' => 'Narrowspark'];
@@ -516,11 +381,6 @@ class HttpRequestTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($payload, $data);
     }
 
-    /**
-     * [testAllInputReturnsInputAndFiles description].
-     *
-     * @return [type] [description]
-     */
     public function testAllInputReturnsInputAndFiles()
     {
         $file = $this->getMock('Symfony\Component\HttpFoundation\File\UploadedFile', null, [__FILE__, 'photo.jpg']);
@@ -528,11 +388,6 @@ class HttpRequestTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(['foo' => 'bar', 'baz' => $file, 'boom' => 'breeze'], $request->all());
     }
 
-    /**
-     * [testAllInputReturnsNestedInputAndFiles description].
-     *
-     * @return [type] [description]
-     */
     public function testAllInputReturnsNestedInputAndFiles()
     {
         $file = $this->getMock('Symfony\Component\HttpFoundation\File\UploadedFile', null, [__FILE__, 'photo.jpg']);
@@ -540,11 +395,6 @@ class HttpRequestTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(['foo' => ['bar' => 'baz', 'photo' => $file], 'boom' => 'breeze'], $request->all());
     }
 
-    /**
-     * [testAllInputReturnsInputAfterReplace description].
-     *
-     * @return [type] [description]
-     */
     public function testAllInputReturnsInputAfterReplace()
     {
         $request = Request::create('/?boom=breeze', 'GET', ['foo' => ['bar' => 'baz']]);
@@ -552,11 +402,6 @@ class HttpRequestTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(['foo' => ['bar' => 'baz'], 'boom' => 'breeze'], $request->all());
     }
 
-    /**
-     * [testAllInputWithNumericKeysReturnsInputAfterReplace description].
-     *
-     * @return [type] [description]
-     */
     public function testAllInputWithNumericKeysReturnsInputAfterReplace()
     {
         $request1 = Request::create('/', 'POST', [0 => 'A', 1 => 'B', 2 => 'C']);
@@ -567,11 +412,6 @@ class HttpRequestTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals([1 => 'A', 2 => 'B', 3 => 'C'], $request2->all());
     }
 
-    /**
-     * [testInputWithEmptyFilename description].
-     *
-     * @return [type] [description]
-     */
     public function testInputWithEmptyFilename()
     {
         $invalidFiles = [
@@ -589,11 +429,6 @@ class HttpRequestTest extends \PHPUnit_Framework_TestCase
         $request = Request::createFromBase($baseRequest);
     }
 
-    /**
-     * [testExistsMethod description].
-     *
-     * @return [type] [description]
-     */
     public function testExistsMethod()
     {
         $request = Request::create('/', 'GET', ['name' => 'Taylor']);
@@ -613,11 +448,6 @@ class HttpRequestTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($request->exists('bar'));
     }
 
-    /**
-     * [testCreateFromBase description].
-     *
-     * @return [type] [description]
-     */
     public function testCreateFromBase()
     {
         $body = [

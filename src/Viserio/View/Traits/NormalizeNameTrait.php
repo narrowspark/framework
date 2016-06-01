@@ -12,7 +12,7 @@ trait NormalizeNameTrait
      *
      * @return string
      */
-    protected function normalizeName($name)
+    protected function normalizeName(string $name): string
     {
         $delimiter = FinderContract::HINT_PATH_DELIMITER;
 

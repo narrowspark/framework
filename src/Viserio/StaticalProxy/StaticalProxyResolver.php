@@ -12,7 +12,7 @@ class StaticalProxyResolver
      *
      * @return string
      */
-    public function resolve($static)
+    public function resolve(string $static): string
     {
         if ($this->isStaticProxy($this->getStaticProxyNameFromInput($static))) {
             $rootClass = get_class($static::getStaticalProxyRoot());
@@ -34,7 +34,7 @@ class StaticalProxyResolver
      *
      * @return string
      */
-    public function getStaticProxyNameFromInput($staticName)
+    public function getStaticProxyNameFromInput(string $staticName): string
     {
         if ($this->isUppercase($staticName)) {
             return $staticName;
@@ -50,7 +50,7 @@ class StaticalProxyResolver
      *
      * @return bool
      */
-    public function isStaticProxy($static)
+    public function isStaticProxy(string $static): bool
     {
         if (class_exists($static)) {
             return array_key_exists(StaticalProxy::class, class_parents($static));

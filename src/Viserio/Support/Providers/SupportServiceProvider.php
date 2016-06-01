@@ -20,12 +20,34 @@ class SupportServiceProvider extends ServiceProvider
         $this->registerAliasLoader();
     }
 
+    public function aliases()
+    {
+        return ['rand' => 'RandomLib\Factory'];
+    }
+
+    /**
+     * Get the services provided by the provider.
+     *
+     * @return string[]
+     */
+    public function provides(): array
+    {
+        return [
+            'arr',
+            'helper',
+            'rand',
+            'rand.generator',
+            'str',
+            'statical.resolver',
+        ];
+    }
+
     /**
      * Register Arr.
      *
      * @return \Narrowspark\Arr\StaticArr as Arr|null
      */
-    protected function registerArr()
+    protected function registerArr(): \Narrowspark\Arr\StaticArr
     {
         $this->app->singleton('arr', function () {
             return new Arr();
@@ -82,27 +104,5 @@ class SupportServiceProvider extends ServiceProvider
         $this->app->singleton('alias', function () {
             return new AliasLoader();
         });
-    }
-
-    public function aliases()
-    {
-        return ['rand' => 'RandomLib\Factory'];
-    }
-
-    /**
-     * Get the services provided by the provider.
-     *
-     * @return string[]
-     */
-    public function provides()
-    {
-        return [
-            'arr',
-            'helper',
-            'rand',
-            'rand.generator',
-            'str',
-            'statical.resolver',
-        ];
     }
 }

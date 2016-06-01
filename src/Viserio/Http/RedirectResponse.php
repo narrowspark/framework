@@ -24,15 +24,34 @@ class RedirectResponse extends SymfonyRedirectResponse
     protected $session;
 
     /**
+     * Dynamically bind flash data in the session.
+     *
+     * @param string $method
+     * @param array  $parameters
+     *
+     * @throws \BadMethodCallException
+     *
+     * @return RedirectResponse
+     */
+    public function __call(string $method, array $parameters)
+    {
+        if (Str::startsWith($method, 'with')) {
+            return $this->with(Str::snake(substr($method, 4)), $parameters[0]);
+        }
+
+        throw new \BadMethodCallException(sprintf('Method [%s] does not exist on Redirect.', $method));
+    }
+
+    /**
      * Set a header on the Response.
      *
      * @param string $key
      * @param string $value
      * @param bool   $replace
      *
-     * @return $this
+     * @return self
      */
-    public function header($key, $value, $replace = true)
+    public function header(string $key, string $value, bool $replace = true)
     {
         $this->headers->set($key, $value, $replace);
 
@@ -63,7 +82,7 @@ class RedirectResponse extends SymfonyRedirectResponse
      *
      * @param \Symfony\Component\HttpFoundation\Cookie $cookie
      *
-     * @return $this
+     * @return self
      */
     public function withCookie(Cookie $cookie)
     {
@@ -77,7 +96,7 @@ class RedirectResponse extends SymfonyRedirectResponse
      *
      * @param array $cookies
      *
-     * @return $this
+     * @return self
      */
     public function withCookies(array $cookies)
     {
@@ -93,13 +112,13 @@ class RedirectResponse extends SymfonyRedirectResponse
      *
      * @param array|null $input
      *
-     * @return $this
+     * @return self
      */
     public function withInput(array $input = null)
     {
         $input = $input ?: $this->request->input();
         $this->session->flashInput(array_filter($input, function ($value) {
-            return !$value instanceof SymfonyUploadedFile;
+            return ! $value instanceof SymfonyUploadedFile;
         }));
 
         return $this;
@@ -110,7 +129,7 @@ class RedirectResponse extends SymfonyRedirectResponse
      *
      * @param  mixed string
      *
-     * @return $this
+     * @return self
      */
     public function onlyInput()
     {
@@ -169,24 +188,5 @@ class RedirectResponse extends SymfonyRedirectResponse
     public function setSession(SessionStore $session)
     {
         $this->session = $session;
-    }
-
-    /**
-     * Dynamically bind flash data in the session.
-     *
-     * @param string $method
-     * @param array  $parameters
-     *
-     * @throws \BadMethodCallException
-     *
-     * @return RedirectResponse
-     */
-    public function __call($method, $parameters)
-    {
-        if (Str::startsWith($method, 'with')) {
-            return $this->with(Str::snake(substr($method, 4)), $parameters[0]);
-        }
-
-        throw new \BadMethodCallException(sprintf('Method [%s] does not exist on Redirect.', $method));
     }
 }

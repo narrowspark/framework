@@ -10,7 +10,7 @@ abstract class AbstractConnector implements ConnectorContract
      */
     public function connect(array $config)
     {
-        $auth   = $this->getAuth($config);
+        $auth = $this->getAuth($config);
         $client = $this->getClient($auth);
         $config = $this->getConfig($config);
 
@@ -26,7 +26,7 @@ abstract class AbstractConnector implements ConnectorContract
      *
      * @return string[]
      */
-    abstract protected function getAuth(array $config);
+    abstract protected function getAuth(array $config): array;
 
     /**
      * Get the awss3 client.
@@ -46,7 +46,7 @@ abstract class AbstractConnector implements ConnectorContract
      *
      * @return string[]
      */
-    abstract protected function getConfig(array $config);
+    abstract protected function getConfig(array $config): array;
 
     /**
      * Get the awss3 adapter.
@@ -54,7 +54,7 @@ abstract class AbstractConnector implements ConnectorContract
      * @param object   $client
      * @param string[] $config
      *
-     * @return \League\Flysystem\AdapterInterface
+     * @return object
      */
     abstract protected function getAdapter($client, array $config);
 }

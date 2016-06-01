@@ -6,7 +6,6 @@ use Viserio\Contracts\Parsers\Exception\ParseException;
 use Viserio\Contracts\Parsers\Format as FormatContract;
 use Yosymfony\Toml\Exception\ParseException as TomlParseException;
 use Yosymfony\Toml\Toml as YosymfonyToml;
-use Yosymfony\Toml\TomlBuilder;
 
 class TOML implements FormatContract
 {
@@ -15,7 +14,7 @@ class TOML implements FormatContract
      */
     public function __construct()
     {
-        if (!class_exists('Yosymfony\\Toml\\Toml')) {
+        if (! class_exists('Yosymfony\\Toml\\Toml')) {
             throw new RuntimeException('Unable to read toml, the Toml Parser is not installed.');
         }
     }
@@ -23,10 +22,10 @@ class TOML implements FormatContract
     /**
      * {@inheritdoc}
      */
-    public function parse($payload)
+    public function parse(string $payload): array
     {
         try {
-            return YosymfonyToml::Parse($payload);
+            return YosymfonyToml::parse($payload);
         } catch (TomlParseException $exception) {
             throw new ParseException([
                 'message' => 'Unable to parse the TOML string',
@@ -38,7 +37,7 @@ class TOML implements FormatContract
     /**
      * {@inheritdoc}
      */
-    public function dump(array $data)
+    public function dump(array $data): string
     {
         return 'Not supported.';
     }

@@ -35,14 +35,14 @@ class MemcachedConnector implements ConnectorContract
         // Only add servers if we need to. If using a persistent connection
         // the servers must only be added the first time otherwise connections
         // are duplicated.
-        if (!$memcached->getServerList() && isset($config['servers'])) {
+        if (! $memcached->getServerList() && isset($config['servers'])) {
             $memcached = $this->addMemcachedServers($memcached, $config['servers']);
         }
 
         // Verify connection
         $memcachedStatus = $memcached->getVersion();
 
-        if (!is_array($memcachedStatus)) {
+        if (! is_array($memcachedStatus)) {
             throw new RuntimeException('No Memcached servers added.');
         }
 
@@ -92,7 +92,7 @@ class MemcachedConnector implements ConnectorContract
             function ($option) {
                 $constant = "Memcached::{$option}";
 
-                if (!defined($constant)) {
+                if (! defined($constant)) {
                     throw new RuntimeException("Invalid Memcached option: [{$constant}]");
                 }
 

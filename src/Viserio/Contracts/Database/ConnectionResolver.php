@@ -10,14 +10,14 @@ interface ConnectionResolver
      *
      * @return \Viserio\Database\Connection
      */
-    public function connection($name = null);
+    public function connection(string $name = null): \Viserio\Database\Connection;
 
     /**
      * Get the default connection name.
      *
      * @return string
      */
-    public function getDefaultConnection();
+    public function getDefaultConnection(): string;
 
     /**
      * Set the default connection name.

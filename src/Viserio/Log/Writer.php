@@ -46,7 +46,7 @@ class Writer implements LogContract, PsrLoggerInterface
      */
     public function __construct(MonologLogger $monolog, EventDispatcherInterface $dispatcher)
     {
-        # PSR 3 log message formatting for all handlers
+        // PSR 3 log message formatting for all handlers
         $monolog->pushProcessor(new PsrLogMessageProcessor());
 
         $this->monolog = $monolog;
@@ -64,7 +64,7 @@ class Writer implements LogContract, PsrLoggerInterface
      * @param object|null $processor
      * @param object|null $formatter
      */
-    public function useFiles($path, $level = 'debug', $processor = null, $formatter = null)
+    public function useFiles(string $path, string $level = 'debug', $processor = null, $formatter = null)
     {
         $this->parseHandler('stream', $path, $level, $processor, $formatter);
     }
@@ -78,7 +78,7 @@ class Writer implements LogContract, PsrLoggerInterface
      * @param object|null $processor
      * @param object|null $formatter
      */
-    public function useDailyFiles($path, $days = 0, $level = 'debug', $processor = null, $formatter = null)
+    public function useDailyFiles($path, int $days = 0, string $level = 'debug', $processor = null, $formatter = null)
     {
         $this->parseHandler(
             new RotatingFileHandler($path, $days, $this->parseLevel($level)),

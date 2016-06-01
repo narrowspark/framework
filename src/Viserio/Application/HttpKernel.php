@@ -54,13 +54,25 @@ class HttpKernel implements HttpKernelInterface, TerminableInterface
         try {
             return $this->innerHandle($request, $type);
         } catch (\Exception $exception) {
-            if (!$catch || $this->app->runningUnitTests()) {
+            if (! $catch || $this->app->runningUnitTests()) {
                 $this->finishRequest($request, $type);
                 throw $exception;
             }
 
             return $this->handleException($exception, $request, $type);
         }
+    }
+
+    /**
+     * Terminates a request/response cycle.
+     *
+     * @param \Symfony\Component\HttpFoundation\Request  $request
+     * @param \Symfony\Component\HttpFoundation\Response $response
+     */
+    public function terminate(SymfonyRequest $request, SymfonyResponse $response)
+    {
+        $event = new PostResponseEvent($this, $request, $response);
+        $this->app['events']->dispatch(KernelEvents::TERMINATE, $event);
     }
 
     /**
@@ -139,17 +151,5 @@ class HttpKernel implements HttpKernelInterface, TerminableInterface
         $this->app['events']->dispatch(KernelEvents::FINISH_REQUEST, $event);
 
         $this->requests->pop();
-    }
-
-    /**
-     * Terminates a request/response cycle.
-     *
-     * @param \Symfony\Component\HttpFoundation\Request  $request
-     * @param \Symfony\Component\HttpFoundation\Response $response
-     */
-    public function terminate(SymfonyRequest $request, SymfonyResponse $response)
-    {
-        $event = new PostResponseEvent($this, $request, $response);
-        $this->app['events']->dispatch(KernelEvents::TERMINATE, $event);
     }
 }

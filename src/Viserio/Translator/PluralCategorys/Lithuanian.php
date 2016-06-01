@@ -25,13 +25,13 @@ class Lithuanian implements CategoryContract
      *
      * @return string
      */
-    public function category($count)
+    public function category(int $count): string
     {
         $isInteger = $this->isInteger($count);
 
-        if ($isInteger && $count % 10 === 1 && !(($i = $count % 100) >= 11 && $i <= 19)) {
+        if ($isInteger && $count % 10 === 1 && ! (($i = $count % 100) >= 11 && $i <= 19)) {
             return 'one';
-        } elseif ($isInteger && ($i = $count % 10) >= 2 && $i <= 9 && !(($i = $count % 100) >= 11 && $i <= 19)) {
+        } elseif ($isInteger && ($i = $count % 10) >= 2 && $i <= 9 && ! (($i = $count % 100) >= 11 && $i <= 19)) {
             return 'few';
         }
 

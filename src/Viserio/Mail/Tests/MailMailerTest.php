@@ -27,7 +27,9 @@ class MailMailerTest extends \PHPUnit_Framework_TestCase
 
         $message->shouldReceive('getSwiftMessage')->once()->andReturn($message);
         $mailer->getSwiftMailer()->shouldReceive('send')->once()->with($message, []);
-        $mailer->send('foo', ['data'], function ($m) { $_SERVER['__mailer.test'] = $m; });
+        $mailer->send('foo', ['data'], function ($m) {
+            $_SERVER['__mailer.test'] = $m;
+        });
         unset($_SERVER['__mailer.test']);
     }
 
@@ -49,7 +51,9 @@ class MailMailerTest extends \PHPUnit_Framework_TestCase
 
         $message->shouldReceive('getSwiftMessage')->once()->andReturn($message);
         $mailer->getSwiftMailer()->shouldReceive('send')->once()->with($message, []);
-        $mailer->send(['foo', 'bar'], ['data'], function ($m) { $_SERVER['__mailer.test'] = $m; });
+        $mailer->send(['foo', 'bar'], ['data'], function ($m) {
+            $_SERVER['__mailer.test'] = $m;
+        });
         unset($_SERVER['__mailer.test']);
     }
 
@@ -71,7 +75,9 @@ class MailMailerTest extends \PHPUnit_Framework_TestCase
 
         $message->shouldReceive('getSwiftMessage')->once()->andReturn($message);
         $mailer->getSwiftMailer()->shouldReceive('send')->once()->with($message, []);
-        $mailer->send(['html' => 'foo', 'text' => 'bar'], ['data'], function ($m) { $_SERVER['__mailer.test'] = $m; });
+        $mailer->send(['html' => 'foo', 'text' => 'bar'], ['data'], function ($m) {
+            $_SERVER['__mailer.test'] = $m;
+        });
         unset($_SERVER['__mailer.test']);
     }
 
@@ -95,7 +101,8 @@ class MailMailerTest extends \PHPUnit_Framework_TestCase
         $logger->shouldReceive('info')->once()->with('Pretending to mail message to: info@narrowspark.de');
         $mailer->setLogger($logger);
         $mailer->pretend();
-        $mailer->send('foo', ['data'], function ($m) {});
+        $mailer->send('foo', ['data'], function ($m) {
+        });
     }
 
     public function testMailerCanResolveMailerClasses()
@@ -134,7 +141,8 @@ class MailMailerTest extends \PHPUnit_Framework_TestCase
         $mailer->getSwiftMailer()->shouldReceive('send')->once()->with(Mock::type('\Swift_Message'), [])->andReturnUsing(function ($message) use ($me) {
             $me->assertEquals(['info@narrowspark.de' => 'Daniel Bannert'], $message->getFrom());
         });
-        $mailer->send('foo', ['data'], function ($m) {});
+        $mailer->send('foo', ['data'], function ($m) {
+        });
     }
 
     public function testFailedRecipientsAreAppendedAndCanBeRetrieved()
@@ -148,7 +156,8 @@ class MailMailerTest extends \PHPUnit_Framework_TestCase
         $view->shouldReceive('render')->once()->andReturn('rendered.view');
         $swift = new \Viserio\Mail\Test\FailingSwiftMailerStub();
 
-        $this->setSwiftMailer($mailersend('foo', ['data'], function ($m) {}));
+        $this->setSwiftMailer($mailersend('foo', ['data'], function ($m) {
+        }));
 
         $this->assertEquals(['info@narrowspark.de'], $mailer->failures());
     }

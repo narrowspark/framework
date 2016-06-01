@@ -17,13 +17,6 @@ use Viserio\StaticalProxy\StaticalProxy;
 
 class Application extends Container implements Foundation, HttpKernelInterface
 {
-    /**
-     * The Viserio framework version.
-     *
-     * @var string
-     */
-    const VERSION = '0.10.0';
-
     // Register all needed Traits
     use BootableTrait;
     use EnvironmentTrait;
@@ -32,6 +25,12 @@ class Application extends Container implements Foundation, HttpKernelInterface
     use MiddlewaresTrait;
     use PathsTrait;
     use ServiceProviderTrait;
+    /**
+     * The Viserio framework version.
+     *
+     * @var string
+     */
+    const VERSION = '0.10.0';
 
     /**
      * Instantiate a new Application.
@@ -66,22 +65,6 @@ class Application extends Container implements Foundation, HttpKernelInterface
         foreach ($this->get('config')->get('services::providers') as $provider => $arr) {
             $this->register(new $provider($this), $arr);
         }
-    }
-
-    /**
-     * Register all of the base service providers.
-     */
-    protected function registerBaseServiceProviders()
-    {
-        $this->register('Viserio\Http\Providers\ResponseServiceProvider');
-
-        $this->register('Viserio\Http\Providers\RequestServiceProvider');
-
-        $this->register('Viserio\Filesystem\Providers\FilesystemServiceProvider');
-
-        $this->register('Viserio\Application\Providers\ApplicationServiceProvider');
-
-        $this->register('Viserio\Exception\Providers\ExceptionServiceProvider');
     }
 
     /**
@@ -134,18 +117,6 @@ class Application extends Container implements Foundation, HttpKernelInterface
         $this->get('translator')->setLocale($locale);
 
         return $this;
-    }
-
-    /**
-     * Register the basic bindings into the container.
-     */
-    protected function registerBaseBindings()
-    {
-        $this->singleton('app', function () {
-            return $this;
-        });
-
-        $this->bind('\Viserio\Container\Container');
     }
 
     /**
@@ -245,7 +216,7 @@ class Application extends Container implements Foundation, HttpKernelInterface
      *
      * @return string
      */
-    public function getVersion()
+    public function getVersion(): string
     {
         return self::VERSION;
     }
@@ -274,7 +245,7 @@ class Application extends Container implements Foundation, HttpKernelInterface
      */
     public function handle(SymfonyRequest $request, $type = HttpKernelInterface::MASTER_REQUEST, $catch = true)
     {
-        if (!$this->booted) {
+        if (! $this->booted) {
             $this->boot();
         }
 
@@ -287,5 +258,33 @@ class Application extends Container implements Foundation, HttpKernelInterface
     public function shutdown()
     {
         $this->get('exception')->unregister();
+    }
+
+    /**
+     * Register all of the base service providers.
+     */
+    protected function registerBaseServiceProviders()
+    {
+        $this->register('Viserio\Http\Providers\ResponseServiceProvider');
+
+        $this->register('Viserio\Http\Providers\RequestServiceProvider');
+
+        $this->register('Viserio\Filesystem\Providers\FilesystemServiceProvider');
+
+        $this->register('Viserio\Application\Providers\ApplicationServiceProvider');
+
+        $this->register('Viserio\Exception\Providers\ExceptionServiceProvider');
+    }
+
+    /**
+     * Register the basic bindings into the container.
+     */
+    protected function registerBaseBindings()
+    {
+        $this->singleton('app', function () {
+            return $this;
+        });
+
+        $this->bind('\Viserio\Container\Container');
     }
 }

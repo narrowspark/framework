@@ -15,12 +15,12 @@ interface QueueingFactory extends Factory
      *
      * @param string $name
      */
-    public function unqueue($name);
+    public function unqueue(string $name);
 
     /**
      * Get the cookies which have been queued for the next request.
      *
      * @return array
      */
-    public function getQueuedCookies();
+    public function getQueuedCookies(): array;
 }

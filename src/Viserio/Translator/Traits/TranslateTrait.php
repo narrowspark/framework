@@ -79,23 +79,6 @@ trait TranslateTrait
     }
 
     /**
-     * Returns the translation from the first reader where it exists, or the input string
-     * if no translation is available.
-     *
-     * @param string $string
-     * @param string $locale
-     *
-     * @return string
-     */
-    protected function get($string, $locale)
-    {
-        $fallbackLocale = $this->getFallbackLocale();
-
-        if (null !== $fallbackLocale && $locale !== $fallbackLocale) {
-        }
-    }
-
-    /**
      * Check if translation exists.
      *
      * @param string      $message
@@ -132,6 +115,30 @@ trait TranslateTrait
     }
 
     /**
+     * Returns the pluralization instance.
+     *
+     * @return \Viserio\Translator\PluralizationRules
+     */
+    abstract public function getPluralization();
+
+    /**
+     * Returns the translation from the first reader where it exists, or the input string
+     * if no translation is available.
+     *
+     * @param string $string
+     * @param string $locale
+     *
+     * @return string
+     */
+    protected function get($string, $locale)
+    {
+        $fallbackLocale = $this->getFallbackLocale();
+
+        if (null !== $fallbackLocale && $locale !== $fallbackLocale) {
+        }
+    }
+
+    /**
      * Asserts that the locale is valid, throws an Exception if not.
      *
      * @param string $locale Locale to tests
@@ -139,11 +146,4 @@ trait TranslateTrait
      * @throws \InvalidArgumentException If the locale contains invalid characters
      */
     abstract protected function assertValidLocale($locale);
-
-    /**
-     * Returns the pluralization instance.
-     *
-     * @return \Viserio\Translator\PluralizationRules
-     */
-    abstract public function getPluralization();
 }

@@ -5,7 +5,6 @@ use DateTime;
 use Mockery as Mock;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Viserio\Cookie\Cookie;
-use Viserio\Cookie\CookieJar;
 use Viserio\Cookie\RequestCookie;
 
 class RequestCookieTest extends \PHPUnit_Framework_TestCase
@@ -23,7 +22,7 @@ class RequestCookieTest extends \PHPUnit_Framework_TestCase
         $request = Mock::mock(Request::class);
         $request->shouldReceive('getHeader')->with('Set-Cookie')->andReturn($cookieString);
 
-        $cookie    = new RequestCookie();
+        $cookie = new RequestCookie();
         $setCookie = $cookie->fromSetCookieHeader($request);
 
         $this->assertEquals($expectedCookie, $setCookie);
@@ -37,7 +36,7 @@ class RequestCookieTest extends \PHPUnit_Framework_TestCase
         $request = Mock::mock(Request::class);
         $request->shouldReceive('getHeaderLine')->with('Cookie')->andReturn($cookieString);
 
-        $cookie    = new RequestCookie();
+        $cookie = new RequestCookie();
         $setCookie = $cookie->fromCookieHeader($request);
 
         $this->assertEquals($expectedCookie, $setCookie);

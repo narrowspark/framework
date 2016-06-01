@@ -64,13 +64,13 @@ class PostmarkTransportStub extends \Viserio\Mail\Transport\Postmark
 {
     protected $client;
 
-    protected function getHttpClient()
-    {
-        return $this->client;
-    }
-
     public function setHttpClient($client)
     {
         $this->client = $client;
+    }
+
+    protected function getHttpClient()
+    {
+        return $this->client;
     }
 }

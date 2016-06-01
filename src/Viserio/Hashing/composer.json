@@ -18,7 +18,7 @@
         }
     ],
     "require": {
-        "php"                             : "^5.6 || ^7.0",
+        "php"                             : "^7.0.7",
         "defuse/php-encryption"           : "^2.0",
         "paragonie/password_lock"         : "^2.0 || ^3.0",
         "viserio/contracts"               : "self.version"

@@ -92,7 +92,7 @@ class Manager implements TranslatorContract
         PluralizationRules $pluralization,
         MessageSelector $messageSelector
     ) {
-        $this->loader        = $fileloader;
+        $this->loader = $fileloader;
         $this->pluralization = $pluralization;
 
         $messageSelector->setPluralization($pluralization);
@@ -105,7 +105,7 @@ class Manager implements TranslatorContract
      * @param MessageCatalogueContract $messageCatalogue
      * @param string|null              $locale
      *
-     * @return $this
+     * @return self
      */
     public function addMessage(MessageCatalogueContract $messageCatalogue, $locale = null)
     {
@@ -135,7 +135,7 @@ class Manager implements TranslatorContract
      *
      * @return string
      */
-    public function getLocale()
+    public function getLocale(): string
     {
         return $this->locale;
     }
@@ -147,7 +147,7 @@ class Manager implements TranslatorContract
      *
      * @return self
      */
-    public function setLocale($locale)
+    public function setLocale(string $locale): TranslatorContract
     {
         $this->assertValidLocale($locale);
 
@@ -251,7 +251,7 @@ class Manager implements TranslatorContract
             $locale = $this->getLocale();
         }
 
-        if (!isset($this->catalogues[$locale])) {
+        if (! isset($this->catalogues[$locale])) {
             $this->initializeCatalogue($locale);
         }
 
@@ -273,31 +273,12 @@ class Manager implements TranslatorContract
         try {
             //ToDo add fallback
         } catch (NotFoundResourceException $e) {
-            if (!$this->computeFallbackLocales($locale)) {
+            if (! $this->computeFallbackLocales($locale)) {
                 throw $e;
             }
         }
 
         $this->loadFallbackCatalogues($locale);
-    }
-
-    /**
-     * Load fallback catalogues.
-     *
-     * @param string $locale
-     */
-    private function loadFallbackCatalogues($locale)
-    {
-        $current = $this->catalogues[$locale];
-
-        foreach ($this->computeFallbackLocales($locale) as $fallback) {
-            if (!isset($this->catalogues[$fallback])) {
-                //ToDo add fallback
-            }
-
-            $current->addFallbackCatalogue($this->catalogues[$fallback]);
-            $current = $this->catalogues[$fallback];
-        }
     }
 
     /**
@@ -336,6 +317,25 @@ class Manager implements TranslatorContract
     {
         if (1 !== preg_match('/^[a-z0-9@_\\.\\-]*$/i', $locale)) {
             throw new \InvalidArgumentException(sprintf('Invalid "%s" locale.', $locale));
+        }
+    }
+
+    /**
+     * Load fallback catalogues.
+     *
+     * @param string $locale
+     */
+    private function loadFallbackCatalogues($locale)
+    {
+        $current = $this->catalogues[$locale];
+
+        foreach ($this->computeFallbackLocales($locale) as $fallback) {
+            if (! isset($this->catalogues[$fallback])) {
+                //ToDo add fallback
+            }
+
+            $current->addFallbackCatalogue($this->catalogues[$fallback]);
+            $current = $this->catalogues[$fallback];
         }
     }
 }

@@ -13,7 +13,7 @@ interface Environment
      *
      * @return string
      */
-    public function detect(Closure $callback, $consoleArgs = null);
+    public function detect(Closure $callback, array $consoleArgs = null): string;
 
     /**
      * Returns true when the runtime used is HHVM or
@@ -21,40 +21,40 @@ interface Environment
      *
      * @return bool
      */
-    public function canCollectCodeCoverage();
+    public function canCollectCodeCoverage(): bool;
 
     /**
      * Returns the running php/HHVM version.
      *
      * @return string
      */
-    public function getVersion();
+    public function getVersion(): string;
 
     /**
      * Returns true when the runtime used is PHP and Xdebug is loaded.
      *
      * @return bool
      */
-    public function hasXdebug();
+    public function hasXdebug(): bool;
 
     /**
      * Returns true when the runtime used is HHVM.
      *
      * @return bool
      */
-    public function isHHVM();
+    public function isHHVM(): bool;
 
     /**
      * Returns true when the runtime used is PHP.
      *
      * @return bool
      */
-    public function isPHP();
+    public function isPHP(): bool;
 
     /**
      * Returns true when the runtime used is Console.
      *
      * @return bool
      */
-    public function runningInConsole();
+    public function runningInConsole(): bool;
 }

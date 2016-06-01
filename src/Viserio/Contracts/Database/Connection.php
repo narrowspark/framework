@@ -14,7 +14,7 @@ interface Connection
      *
      * @return bool
      */
-    public function setAlias($table, $alias);
+    public function setAlias(string $table, string $alias): bool;
 
     /**
      * Get alias for table.
@@ -23,7 +23,7 @@ interface Connection
      *
      * @return string|array
      */
-    public function getAlias($table);
+    public function getAlias(string $table);
 
     /**
      * Run a SQL statement and log its execution context.
@@ -36,16 +36,16 @@ interface Connection
      *
      * @return mixed
      */
-    public function run($query, $bindings, Closure $callback);
+    public function run(string $query, array $bindings, Closure $callback);
 
     /**
      * Set the reconnect instance on the connection.
      *
      * @param callable $reconnector
      *
-     * @return $this
+     * @return self
      */
-    public function setReconnector(callable $reconnector);
+    public function setReconnector(callable $reconnector): self;
 
     /**
      * Reconnect to the database.
@@ -86,23 +86,23 @@ interface Connection
      *
      * @return int
      */
-    public function transactionLevel();
+    public function transactionLevel(): int;
 
     /**
      * Set the PDO connection.
      *
      * @param \PDO|null $pdo
      *
-     * @return $this
+     * @return self
      */
-    public function setPdo($pdo);
+    public function setPdo(\PDO $pdo = null): self;
 
     /**
      * Get the current PDO connection.
      *
      * @return \PDO
      */
-    public function getPdo();
+    public function getPdo(): \PDO;
 
     /**
      * Get the database connection name.
@@ -118,14 +118,14 @@ interface Connection
      *
      * @return mixed
      */
-    public function getConfig($option);
+    public function getConfig(string $option);
 
     /**
      * Get the PDO driver name.
      *
      * @return string
      */
-    public function getDriverName();
+    public function getDriverName(): string;
 
     /**
      * Execute the given callback in "dry run" mode.
@@ -134,14 +134,14 @@ interface Connection
      *
      * @return array
      */
-    public function pretend(Closure $callback);
+    public function pretend(Closure $callback): array;
 
     /**
      * Determine if the connection in a "dry run".
      *
      * @return bool
      */
-    public function pretending();
+    public function pretending(): bool;
 
     /**
      * Log a query in the connection's query log.
@@ -150,14 +150,14 @@ interface Connection
      * @param array      $bindings
      * @param float|null $time
      */
-    public function logQuery($query, $bindings, $time = null);
+    public function logQuery(string $query, array $bindings, float $time = null);
 
     /**
      * Get the connection query log.
      *
      * @return array
      */
-    public function getQueryLog();
+    public function getQueryLog(): array;
 
     /**
      * Clear the query log.
@@ -179,14 +179,14 @@ interface Connection
      *
      * @return bool
      */
-    public function logging();
+    public function logging(): bool;
 
     /**
      * Get the name of the connected database.
      *
      * @return string
      */
-    public function getDatabaseName();
+    public function getDatabaseName(): string;
 
     /**
      * Set the name of the connected database.
@@ -195,21 +195,21 @@ interface Connection
      *
      * @return string
      */
-    public function setDatabaseName($database);
+    public function setDatabaseName($database): string;
 
     /**
      * Get the table prefix for the connection.
      *
      * @return string
      */
-    public function getTablePrefix();
+    public function getTablePrefix(): string;
 
     /**
      * Set the table prefix in use by the connection.
      *
      * @param string $prefix
      */
-    public function setTablePrefix($prefix);
+    public function setTablePrefix(string $prefix);
 
     /**
      * Get the cache manager instance.

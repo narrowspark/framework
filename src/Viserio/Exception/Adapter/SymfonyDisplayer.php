@@ -30,7 +30,7 @@ class SymfonyDisplayer implements Adapter
      * @param \Symfony\Component\Debug\ExceptionHandler $symfony
      * @param bool                                      $returnJson
      */
-    public function __construct(ExceptionHandler $symfony, $returnJson = false)
+    public function __construct(ExceptionHandler $symfony, bool $returnJson = false)
     {
         $this->symfony = $symfony;
         $this->returnJson = $returnJson;
@@ -44,7 +44,7 @@ class SymfonyDisplayer implements Adapter
      *
      * @return JsonResponse|null
      */
-    public function display(Exception $exception, $code)
+    public function display(Exception $exception, int $code)
     {
         $status = $exception instanceof HttpExceptionInterface ?
                 $exception->getStatusCode() :

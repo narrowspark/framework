@@ -36,7 +36,7 @@ trait BootableTrait
             return;
         }
 
-        if (!$this->booted) {
+        if (! $this->booted) {
             $this->booted = true;
 
             foreach ($this->serviceProviders as $provider) {
@@ -51,21 +51,6 @@ trait BootableTrait
 
         $this->resolveStack();
         $this->bootApplication();
-    }
-
-    /**
-     * Boot the application and fire app callbacks.
-     */
-    protected function bootApplication()
-    {
-        // Once the application has booted we will also fire some "booted" callbacks
-        // for any listeners that need to do work after this initial booting gets
-        // finished. This is useful when ordering the boot-up processes we run.
-        $this->fireAppCallbacks($this->bootingCallbacks);
-
-        $this->booted = true;
-
-        $this->fireAppCallbacks($this->bootedCallbacks);
     }
 
     /**
@@ -103,6 +88,28 @@ trait BootableTrait
     }
 
     /**
+     * Resolve stack middlewares.
+     *
+     * @return \Stack\Builder
+     */
+    abstract public function resolveStack();
+
+    /**
+     * Boot the application and fire app callbacks.
+     */
+    protected function bootApplication()
+    {
+        // Once the application has booted we will also fire some "booted" callbacks
+        // for any listeners that need to do work after this initial booting gets
+        // finished. This is useful when ordering the boot-up processes we run.
+        $this->fireAppCallbacks($this->bootingCallbacks);
+
+        $this->booted = true;
+
+        $this->fireAppCallbacks($this->bootedCallbacks);
+    }
+
+    /**
      * Call the booting callbacks for the application.
      *
      * @param array $callbacks
@@ -113,11 +120,4 @@ trait BootableTrait
             call_user_func($callback, $this);
         }
     }
-
-    /**
-     * Resolve stack middlewares.
-     *
-     * @return \Stack\Builder
-     */
-    abstract public function resolveStack();
 }

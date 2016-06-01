@@ -33,7 +33,7 @@ class DblibConnector extends AbstractDatabaseConnector
      *
      * @return string
      */
-    protected function getDsn(array $config)
+    protected function getDsn(array $config): string
     {
         extract($config, EXTR_SKIP);
 

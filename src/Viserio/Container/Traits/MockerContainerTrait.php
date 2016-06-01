@@ -26,11 +26,11 @@ trait MockerContainerTrait
         $arguments = func_get_args();
         $id = array_shift($arguments);
 
-        if (!$this->has($id)) {
+        if (! $this->has($id)) {
             throw new \InvalidArgumentException(sprintf('Cannot mock a non-existent service: "%s"', $id));
         }
 
-        if (!array_key_exists($id, $this->mockedServices)) {
+        if (! array_key_exists($id, $this->mockedServices)) {
             $this->mockedServices['mock::' . $id] = call_user_func_array(['Mockery', 'mock'], $arguments);
         }
 

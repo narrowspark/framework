@@ -24,7 +24,7 @@ class Autoloader
      *
      * @return bool
      */
-    public static function load($class)
+    public static function load(string $class): bool
     {
         $class = self::normalizeClass($class);
 
@@ -46,7 +46,7 @@ class Autoloader
      *
      * @return string
      */
-    public static function normalizeClass($class)
+    public static function normalizeClass(string $class): string
     {
         if ($class[0] === '\\') {
             $class = substr($class, 1);
@@ -60,7 +60,7 @@ class Autoloader
      */
     public static function register()
     {
-        if (!self::$registered) {
+        if (! self::$registered) {
             self::$registered = spl_autoload_register(
                 [static::class, 'load']
             );

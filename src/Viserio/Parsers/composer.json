@@ -28,7 +28,7 @@
         }
     ],
     "require": {
-        "php"                             : "^5.6 || ^7.0",
+        "php"                             : "^7.0.7",
         "viserio/contracts"               : "self.version",
         "viserio/filesystem"              : "self.version"
     },
@@ -38,14 +38,14 @@
         "narrowspark/testing-helper"      : "^1.5",
         "phpunit/phpunit"                 : "^5.1",
         "psr/http-message"                : "^1.0",
-        "symfony/yaml"                    : "^3.0 || ^2.8",
+        "symfony/yaml"                    : "^3.1",
         "yosymfony/toml"                  : "^0.3"
     },
     "provide": {
         "psr/http-message-implementation" : "^1.0",
     },
     "suggest": {
-        "symfony/yaml"                    : "Required to use the yaml parser (^3.0 || ^2.8).",
+        "symfony/yaml"                    : "Required to use the yaml parser (^3.1).",
         "viserio/statical-proxy"          : "Required to use the proxies (self.version).",
         "yosymfony/toml"                  : "Required to use the TOML parser (^0.3).",
         "spatie/array-to-xml"             : "Required to use the XML dump (^2.1.1)."

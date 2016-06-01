@@ -58,7 +58,7 @@ class PluralizationRules
         if (isset($this->rules[$language])) {
             $return = call_user_func($this->rules[$language], $count);
 
-            if (!is_int($return) || $return < 0) {
+            if (! is_int($return) || $return < 0) {
                 return (new Zero())->category(0);
             }
 
@@ -66,6 +66,23 @@ class PluralizationRules
         }
 
         return $this->createRules($language)->category($count);
+    }
+
+    /**
+     * Overrides the default plural rule for a given locale.
+     *
+     * @param callable $rule
+     * @param string   $language
+     *
+     * @throws \LogicException
+     */
+    public function set(callable $rule, $language)
+    {
+        if (strlen($language) > 3) {
+            $language = substr($language, 0, -strlen(strrchr($language, '_')));
+        }
+
+        $this->rules[$language] = $rule;
     }
 
     /**
@@ -145,22 +162,5 @@ class PluralizationRules
         }
 
         throw new InvalidArgumentException('Unknown language prefix: ' . $prefix . '.');
-    }
-
-    /**
-     * Overrides the default plural rule for a given locale.
-     *
-     * @param callable $rule
-     * @param string   $language
-     *
-     * @throws \LogicException
-     */
-    public function set(callable $rule, $language)
-    {
-        if (strlen($language) > 3) {
-            $language = substr($language, 0, -strlen(strrchr($language, '_')));
-        }
-
-        $this->rules[$language] = $rule;
     }
 }

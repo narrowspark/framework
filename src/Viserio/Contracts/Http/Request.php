@@ -11,7 +11,7 @@ interface Request
      *
      * @return mixed
      */
-    public function query($key = null, $default = null);
+    public function query(string $key = null, $default = null);
 
     /**
      * Return array or single key from $_POST.
@@ -71,7 +71,7 @@ interface Request
      *
      * @return string
      */
-    public function uriSegment($index, $default = null);
+    public function uriSegment($index, string $default = null);
 
     /**
      * Determine if the request is the result of an AJAX call.

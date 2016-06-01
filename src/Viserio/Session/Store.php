@@ -87,46 +87,11 @@ class Store implements SessionInterface
     public function start()
     {
         $this->loadSession();
-        if (!$this->has('_token')) {
+        if (! $this->has('_token')) {
             $this->regenerateToken();
         }
 
         return $this->started = true;
-    }
-
-    /**
-     * Load the session data from the handler.
-     */
-    protected function loadSession()
-    {
-        $this->attributes = $this->readFromHandler();
-
-        foreach (array_merge($this->bags, [$this->metaBag]) as $bag) {
-            $this->initializeLocalBag($bag);
-            $bag->initialize($this->bagData[$bag->getStorageKey()]);
-        }
-    }
-
-    /**
-     * Read the session data from the handler.
-     *
-     * @return array
-     */
-    protected function readFromHandler()
-    {
-        $data = $this->handler->read($this->getId());
-
-        return $data ? unserialize($data) : [];
-    }
-
-    /**
-     * Initialize a bag in storage if it doesn't exist.
-     *
-     * @param \Symfony\Component\HttpFoundation\Session\SessionBagInterface $bag
-     */
-    protected function initializeLocalBag($bag)
-    {
-        $this->bagData[$bag->getStorageKey()] = $this->pull($bag->getStorageKey(), []);
     }
 
     /**
@@ -142,7 +107,7 @@ class Store implements SessionInterface
      */
     public function setId($id)
     {
-        if (!$this->isValidId($id)) {
+        if (! $this->isValidId($id)) {
             $id = $this->generateSessionId();
         }
 
@@ -159,16 +124,6 @@ class Store implements SessionInterface
     public function isValidId($id)
     {
         return is_string($id) && preg_match('/^[a-f0-9]{40}$/', $id);
-    }
-
-    /**
-     * Get a new, random session ID.
-     *
-     * @return string
-     */
-    protected function generateSessionId()
-    {
-        return sha1(uniqid('', true) . str_random(25) . microtime(true));
     }
 
     /**
@@ -234,16 +189,6 @@ class Store implements SessionInterface
         $this->ageFlashData();
         $this->handler->write($this->getId(), serialize($this->attributes));
         $this->started = false;
-    }
-
-    /**
-     * Merge all of the bag data into the session.
-     */
-    protected function addBagDataToSession()
-    {
-        foreach (array_merge($this->bags, [$this->metaBag]) as $bag) {
-            $this->put($bag->getStorageKey(), $this->bagData[$bag->getStorageKey()]);
-        }
     }
 
     /**
@@ -323,7 +268,7 @@ class Store implements SessionInterface
      */
     public function put($key, $value = null)
     {
-        if (!is_array($key)) {
+        if (! is_array($key)) {
             $key = [$key => $value];
         }
         foreach ($key as $arrayKey => $arrayValue) {
@@ -514,6 +459,61 @@ class Store implements SessionInterface
     {
         if ($this->handlerNeedsRequest()) {
             $this->handler->setRequest($request);
+        }
+    }
+
+    /**
+     * Load the session data from the handler.
+     */
+    protected function loadSession()
+    {
+        $this->attributes = $this->readFromHandler();
+
+        foreach (array_merge($this->bags, [$this->metaBag]) as $bag) {
+            $this->initializeLocalBag($bag);
+            $bag->initialize($this->bagData[$bag->getStorageKey()]);
+        }
+    }
+
+    /**
+     * Read the session data from the handler.
+     *
+     * @return array
+     */
+    protected function readFromHandler()
+    {
+        $data = $this->handler->read($this->getId());
+
+        return $data ? unserialize($data) : [];
+    }
+
+    /**
+     * Initialize a bag in storage if it doesn't exist.
+     *
+     * @param \Symfony\Component\HttpFoundation\Session\SessionBagInterface $bag
+     */
+    protected function initializeLocalBag($bag)
+    {
+        $this->bagData[$bag->getStorageKey()] = $this->pull($bag->getStorageKey(), []);
+    }
+
+    /**
+     * Get a new, random session ID.
+     *
+     * @return string
+     */
+    protected function generateSessionId()
+    {
+        return sha1(uniqid('', true) . str_random(25) . microtime(true));
+    }
+
+    /**
+     * Merge all of the bag data into the session.
+     */
+    protected function addBagDataToSession()
+    {
+        foreach (array_merge($this->bags, [$this->metaBag]) as $bag) {
+            $this->put($bag->getStorageKey(), $this->bagData[$bag->getStorageKey()]);
         }
     }
 }

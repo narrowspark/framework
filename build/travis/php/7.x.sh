@@ -6,5 +6,8 @@ if [ "$ADAPTER" = "Libuv" ]; then (mkdir libuv && (curl -L https://github.com/li
 # Install Uv
 if [ "$ADAPTER" = "Uv" ]; then (git clone https://github.com/bwoebi/php-uv && cd php-uv && phpize && ./configure --with-uv=$(readlink -f `pwd`/../libuv) && make install && (echo "extension = uv.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini) && cd ..); fi
 
+# Install ev
+if [ "$ADAPTER" = "Ev" ]; then (echo "yes" | pecl install ev); fi
+
 # Remove flysystem-azure
 composer remove league/flysystem-azure --dev --no-update

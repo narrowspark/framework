@@ -13,7 +13,7 @@ class VirtuosoView extends View
      *
      * @return string
      */
-    public function render(callable $callback = null)
+    public function render(callable $callback = null): string
     {
         try {
             $contents = $this->renderContents();
@@ -42,7 +42,7 @@ class VirtuosoView extends View
      *
      * @return string
      */
-    public function renderSections()
+    public function renderSections(): string
     {
         return $this->render(function () {
             return $this->factory->getVirtuoso()->getSections();
@@ -54,7 +54,7 @@ class VirtuosoView extends View
      *
      * @return string
      */
-    protected function renderContents()
+    protected function renderContents(): string
     {
         // We will keep track of the amount of views being rendered so we can flush
         // the section after the complete rendering operation is done. This will

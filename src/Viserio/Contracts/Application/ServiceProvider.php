@@ -4,6 +4,16 @@ namespace Viserio\Contracts\Application;
 interface ServiceProvider
 {
     /**
+     * Dynamically handle missing method calls.
+     *
+     * @param string $method
+     * @param array  $parameters
+     *
+     * @return mixed
+     */
+    public function __call($method, array $parameters);
+
+    /**
      * Use the register method to register items with the container via the
      * protected $this->app property.
      */
@@ -21,15 +31,5 @@ interface ServiceProvider
      *
      * @return array
      */
-    public function provides();
-
-    /**
-     * Dynamically handle missing method calls.
-     *
-     * @param string $method
-     * @param array  $parameters
-     *
-     * @return mixed
-     */
-    public function __call($method, $parameters);
+    public function provides(): array;
 }

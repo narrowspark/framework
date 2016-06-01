@@ -25,7 +25,7 @@ class Tamazight implements CategoryContract
      *
      * @return string
      */
-    public function category($count)
+    public function category(int $count): string
     {
         if ($this->isInteger($count) && ($count === 0 || $count === 1 || ($count >= 11 && $count <= 99))) {
             return 'one';

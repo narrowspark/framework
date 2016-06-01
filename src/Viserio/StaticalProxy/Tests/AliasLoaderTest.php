@@ -53,7 +53,7 @@ class AliasLoaderTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($aliasloader->load('FakeFoo::class'));
     }
 
-    public function testRemoveloadr()
+    public function testRemoveloader()
     {
         $aliasloader = new AliasLoader();
         $aliasloader->setAliases([

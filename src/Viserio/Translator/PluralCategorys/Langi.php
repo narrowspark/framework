@@ -22,7 +22,7 @@ class Langi implements CategoryContract
      *
      * @return string
      */
-    public function category($count)
+    public function category(int $count): string
     {
         if ($count === 0) {
             return 'zero';

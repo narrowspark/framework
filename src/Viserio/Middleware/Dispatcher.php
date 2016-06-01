@@ -1,104 +1,139 @@
 <?php
 namespace Viserio\Middleware;
 
-use Interop\Container\ContainerInterface;
-use Psr\Http\Message\ResponseInterface as Response;
-use Psr\Http\Message\ServerRequestInterface as Request;
-use RuntimeException;
-use SplQueue;
+use InvalidArgumentException;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Contracts\Container\ContainerAware;
+use Viserio\Contracts\Middleware\Dispatcher as DispatcherContract;
+use Viserio\Contracts\Middleware\Factory as FactoryContract;
+use Viserio\Contracts\Middleware\Frame as FrameContract;
+use Viserio\Contracts\Middleware\Middleware as MiddlewareContract;
+use Viserio\Support\Traits\ContainerAwareTrait;
 
-class Dispatcher
+class Dispatcher implements DispatcherContract
 {
+    use ContainerAwareTrait;
+
     /**
      * All of the short-hand keys for middlewares.
      *
-     * @var SplQueue
+     * @var array
      */
-    protected $middleware;
+    protected $middlewares = [];
 
     /**
-     * Container instance.
-     *
-     * @var \Interop\Container\ContainerInterface|null
+     * Create a new dispatcher instance.
      */
-    protected $container;
-
-    /**
-     * Lock status of the pipeline
-     *
-     * @var bool
-     */
-    protected $locked = false;
-
-    /**
-     * Create a new class instance.
-     */
-    public function __construct()
+    public function __construct(FactoryContract $factory)
     {
-        $this->middleware = new SplQueue();
-    }
-
-    /**
-     * Set a container.
-     *
-     * @param \Interop\Container\ContainerInterface $container
-     *
-     * @return self
-     */
-    public function setContainer(ContainerInterface $container)
-    {
-        $this->container = $container;
-
-        return $this;
-    }
-
-    /**
-     * Get the container.
-     *
-     * @return \Interop\Container\ContainerInterface
-     */
-    public function getContainer()
-    {
-        return $this->container;
+        $this->factory = $factory;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function pipe(callable $middleware)
+    public function pipe($middleware): DispatcherContract
     {
-        // Check if the pipeline is locked
-        if ($this->locked) {
-            throw new RuntimeException('Middleware can’t be added once the stack is dequeuing');
+        $this->middlewares[] = $this->normalize($middleware);
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function run(ServerRequestInterface $request, callable $default): ResponseInterface
+    {
+        return (new class($this->middlewares, $this->factory, $default) implements FrameContract {
+            private $middlewares;
+
+            private $index = 0;
+
+            private $factory;
+
+            private $default;
+
+            public function __construct(array $middleware, FactoryContract $factory, callable $default)
+            {
+                $this->middlewares = $middleware;
+                $this->factory = $factory;
+                $this->default = $default;
+            }
+
+            public function next(ServerRequestInterface $request): ResponseInterface
+            {
+                if (! isset($this->middlewares[$this->index])) {
+                    return ($this->default)($request);
+                }
+
+                return $this->middlewares[$this->index]->handle($request, $this->nextFrame());
+            }
+
+            public function factory(): FactoryContract
+            {
+                return $this->factory;
+            }
+
+            private function nextFrame()
+            {
+                $new = clone $this;
+                ++$new->index;
+
+                return $new;
+            }
+        }
+        )->next($request);
+    }
+
+    /**
+     * Check if middleware is a callable or has MiddlewareContract.
+     *
+     * @param MiddlewareContract|callable(RequestInterface,FrameInterface):ResponseInterface $middleware
+     *
+     * @throws \InvalidArgumentException when adding a invalid middleware to the stack
+     *
+     * @return MiddlewareContract
+     */
+    private function normalize($middleware): MiddlewareContract
+    {
+        if ($middleware instanceof MiddlewareContract) {
+            return $this->isContainerAware($middleware);
+        } elseif (is_callable($middleware)) {
+            return new class($middleware) implements MiddlewareContract {
+                private $callback;
+
+                public function __construct($middleware)
+                {
+                    $this->callback = $middleware;
+                }
+
+                /**
+                 *  {@inheritdoc}
+                 */
+                public function handle(ServerRequestInterface $request, FrameContract $frame): ResponseInterface
+                {
+                    return ($this->callback)($request, $frame);
+                }
+            };
         }
 
+        throw new InvalidArgumentException('Invalid Middleware Detected.');
+    }
+
+    /**
+     *  Check if middleware is aware of Interop\Container\ContainerInterface.
+     *
+     * @param MiddlewareContract $middleware
+     *
+     * @return MiddlewareContract
+     */
+    private function isContainerAware($middleware): MiddlewareContract
+    {
         if ($middleware instanceof ContainerAware || method_exists($middleware, 'setContainer')) {
             $middleware->setContainer($this->getContainer());
         }
 
-        $this->middleware->enqueue($middleware);
-
-        return $this;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function __invoke(Request $request, Response $response)
-    {
-        // Lock the pipeline
-        $this->locked = true;
-
-        // Check if the pipe-line is broken or if we are at the end of the queue
-        if (!$this->middleware->isEmpty()) {
-            // Pick the next middleware from the queue
-            $next = $this->middleware->dequeue();
-            // Call the next middleware (if callable)
-            return (is_callable($next)) ? $next($request, $response, $this) : $response;
-        }
-
-        // Nothing left to do, return the response
-        return $response;
+        return $middleware;
     }
 }

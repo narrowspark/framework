@@ -43,7 +43,6 @@ enabled:
   - phpdoc_type_to_var
   - phpdoc_var_without_name
   - remove_leading_slash_use
-  - remove_lines_between_uses
   - return
   - short_bool_cast
   - single_array_no_trailing_comma

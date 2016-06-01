@@ -10,7 +10,7 @@ interface Foundation extends Container
      *
      * @return string
      */
-    public function getVersion();
+    public function getVersion(): string;
 
     /**
      * Get or check the current application environment.
@@ -19,14 +19,14 @@ interface Foundation extends Container
      *
      * @return string
      */
-    public function environment();
+    public function environment(): string;
 
     /**
      * Determine if the application is currently down for maintenance.
      *
      * @return bool
      */
-    public function isDownForMaintenance();
+    public function isDownForMaintenance(): bool;
 
     /**
      * Boot the application's service providers.
@@ -54,7 +54,7 @@ interface Foundation extends Container
      *
      * @return string
      */
-    public function detectEnvironment(\Closure $callback);
+    public function detectEnvironment(\Closure $callback): string;
 
     /**
      * Register a service provider with the application.
@@ -65,5 +65,5 @@ interface Foundation extends Container
      *
      * @return \Viserio\Contract\Application\ServiceProvider
      */
-    public function register($provider, $options = [], $force = false);
+    public function register(string $provider, array $options = [], bool $force = false): \Viserio\Contract\Application\ServiceProvider;
 }

@@ -7,13 +7,6 @@ use Viserio\Filesystem\Filesystem;
 class FileSessionHandler implements \SessionHandlerInterface
 {
     /**
-     * The current session ID that's open.
-     *
-     * @var string
-     */
-    private $currentId;
-
-    /**
      * The filesystem instance.
      *
      * @var \Viserio\Filesystem\Filesystem
@@ -33,6 +26,12 @@ class FileSessionHandler implements \SessionHandlerInterface
      * @var string
      */
     protected $path;
+    /**
+     * The current session ID that's open.
+     *
+     * @var string
+     */
+    private $currentId;
 
     /**
      * Create a new file driven handler instance.
@@ -62,7 +61,7 @@ class FileSessionHandler implements \SessionHandlerInterface
         // Obtain a write lock - must explicitly perform this because
         // the underlying OS may be advisory as opposed to mandatory
         $locked = flock($this->fp, LOCK_EX);
-        if (!$locked) {
+        if (! $locked) {
             fclose($this->fp);
             $this->fp = null;
             $this->currentId = null;
@@ -95,8 +94,8 @@ class FileSessionHandler implements \SessionHandlerInterface
     public function read($sessionId)
     {
         // if the proper session file isn't open, open it
-        if ($sessionId !== $this->currentId || !$this->fp) {
-            if (!$this->open($this->path, $sessionId)) {
+        if ($sessionId !== $this->currentId || ! $this->fp) {
+            if (! $this->open($this->path, $sessionId)) {
                 throw new \Exception('Could not open session file');
             }
         } else {
@@ -105,7 +104,7 @@ class FileSessionHandler implements \SessionHandlerInterface
         }
 
         $data = '';
-        while (!feof($this->fp)) {
+        while (! feof($this->fp)) {
             $data .= fread($this->fp, 8192);
         }
 
@@ -117,8 +116,8 @@ class FileSessionHandler implements \SessionHandlerInterface
      */
     public function write($sessionId, $data)
     {
-        if ($sessionId !== $this->currentId || !$this->fp) {
-            if (!$this->open($this->path, $sessionId)) {
+        if ($sessionId !== $this->currentId || ! $this->fp) {
+            if (! $this->open($this->path, $sessionId)) {
                 throw new \Exception('Could not open session file');
             }
         }
@@ -151,7 +150,7 @@ class FileSessionHandler implements \SessionHandlerInterface
         // 5 retries
         $retries = 5;
 
-        for ($i = 0; $i < $retries; $i++) {
+        for ($i = 0; $i < $retries; ++$i) {
             try {
                 $files = Finder::create()
                     ->in($this->path)

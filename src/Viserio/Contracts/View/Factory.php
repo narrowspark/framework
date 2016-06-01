@@ -10,7 +10,7 @@ interface Factory
      *
      * @return bool
      */
-    public function exists($view);
+    public function exists(string $view): bool;
 
     /**
      * Get the evaluated view contents for the given path.
@@ -21,7 +21,7 @@ interface Factory
      *
      * @return \Viserio\View\View
      */
-    public function file($path, $data = [], $mergeData = []);
+    public function file(string $path, array $data = [], array $mergeData = []): View;
 
     /**
      * Get the evaluated view contents for the given view.
@@ -32,7 +32,7 @@ interface Factory
      *
      * @return \Viserio\View\View
      */
-    public function make($view, $data = [], $mergeData = []);
+    public function make(string $view, array $data = [], array $mergeData = []): View;
 
     /**
      * Add a piece of shared data to the environment.
@@ -40,7 +40,7 @@ interface Factory
      * @param string $key
      * @param mixed  $value
      */
-    public function share($key, $value = null);
+    public function share(string $key, $value = null);
 
     /**
      * Add a new namespace to the loader.
@@ -48,5 +48,5 @@ interface Factory
      * @param string       $namespace
      * @param string|array $hints
      */
-    public function addNamespace($namespace, $hints);
+    public function addNamespace(string $namespace, $hints);
 }

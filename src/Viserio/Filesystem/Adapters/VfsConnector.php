@@ -2,7 +2,6 @@
 namespace Viserio\Filesystem\Adapters;
 
 use League\Flysystem\Vfs\VfsAdapter;
-use Narrowspark\Arr\StaticArr as Arr;
 use VirtualFileSystem\FileSystem;
 
 class VfsConnector extends AbstractConnector
@@ -15,7 +14,7 @@ class VfsConnector extends AbstractConnector
         return new FileSystem();
     }
 
-    protected function getAuth(array $config)
+    protected function getAuth(array $config): array
     {
         return $config;
     }
@@ -23,7 +22,7 @@ class VfsConnector extends AbstractConnector
     /**
      * {@inheritdoc}
      */
-    protected function getConfig(array $config)
+    protected function getConfig(array $config): array
     {
         return $config;
     }
@@ -31,7 +30,7 @@ class VfsConnector extends AbstractConnector
     /**
      * {@inheritdoc}
      */
-    protected function getAdapter($client, array $config)
+    protected function getAdapter($client, array $config): \League\Flysystem\AdapterInterface
     {
         return new VfsAdapter($client);
     }

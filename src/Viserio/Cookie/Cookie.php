@@ -2,6 +2,7 @@
 namespace Viserio\Cookie;
 
 use InvalidArgumentException;
+use Viserio\Contracts\Cookie\Cookie as CookieContract;
 
 final class Cookie extends AbstractCookie
 {
@@ -20,7 +21,7 @@ final class Cookie extends AbstractCookie
      * @throws \InvalidArgumentException
      */
     public function __construct(
-        $name,
+        string $name,
         $value = null,
         $expiration = 0,
         $path = null,
@@ -31,31 +32,14 @@ final class Cookie extends AbstractCookie
         $this->validateName($name);
         $this->validateValue($value);
 
-        $this->name     = $name;
-        $this->value    = $value;
-        $this->maxAge   = is_int($expiration) ? $expiration : null;
-        $this->expires  = $this->normalizeExpires($expiration);
-        $this->domain   = $this->normalizeDomain($domain);
-        $this->path     = $this->normalizePath($path);
-        $this->secure   = filter_var($secure, FILTER_VALIDATE_BOOLEAN);
+        $this->name = $name;
+        $this->value = $value;
+        $this->maxAge = is_int($expiration) ? $expiration : null;
+        $this->expires = $this->normalizeExpires($expiration);
+        $this->domain = $this->normalizeDomain($domain);
+        $this->path = $this->normalizePath($path);
+        $this->secure = filter_var($secure, FILTER_VALIDATE_BOOLEAN);
         $this->httpOnly = filter_var($httpOnly, FILTER_VALIDATE_BOOLEAN);
-    }
-
-    /**
-     * Sets the value
-     *
-     * @param string|null $value
-     *
-     * @return self
-     */
-    public function withValue($value)
-    {
-        $this->validateValue($value);
-
-        $new = clone $this;
-        $new->value = $value;
-
-        return $new;
     }
 
     /**
@@ -63,7 +47,7 @@ final class Cookie extends AbstractCookie
      *
      * @return string The cookie
      */
-    public function __toString()
+    public function __toString(): string
     {
         $cookieStringParts = [];
 
@@ -78,15 +62,32 @@ final class Cookie extends AbstractCookie
     }
 
     /**
+     * Sets the value
+     *
+     * @param string|null $value
+     *
+     * @return self
+     */
+    public function withValue($value = null): CookieContract
+    {
+        $this->validateValue($value);
+
+        $new = clone $this;
+        $new->value = $value;
+
+        return $new;
+    }
+
+    /**
      * Validates the name attribute
      *
      * @param string $name
      *
      * @throws \InvalidArgumentException
      *
-     * @see http://tools.ietf.org/search/rfc2616#section-2.2
+     * @link http://tools.ietf.org/search/rfc2616#section-2.2
      */
-    private function validateName($name)
+    private function validateName(string $name)
     {
         if (strlen($name) < 1) {
             throw new InvalidArgumentException('The name cannot be empty');
@@ -105,9 +106,9 @@ final class Cookie extends AbstractCookie
      *
      * @throws \InvalidArgumentException
      *
-     * @see http://tools.ietf.org/html/rfc6265#section-4.1.1
+     * @link http://tools.ietf.org/html/rfc6265#section-4.1.1
      */
-    private function validateValue($value)
+    private function validateValue(string $value = null)
     {
         if (isset($value)) {
             if (preg_match('/[^\x21\x23-\x2B\x2D-\x3A\x3C-\x5B\x5D-\x7E]/', $value)) {

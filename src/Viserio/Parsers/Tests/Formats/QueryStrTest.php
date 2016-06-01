@@ -1,7 +1,6 @@
 <?php
 namespace Viserio\Parsers\Tests\Formats;
 
-use org\bovigo\vfs\vfsStream;
 use Viserio\Parsers\Formats\QueryStr;
 
 class QueryStrTest extends \PHPUnit_Framework_TestCase
@@ -27,8 +26,8 @@ class QueryStrTest extends \PHPUnit_Framework_TestCase
     public function testDump()
     {
         $expected = ['status' => 123, 'message' => 'hello world'];
-        $payload  = http_build_query($expected);
-        $dump     = $this->parser->dump($expected);
+        $payload = http_build_query($expected);
+        $dump = $this->parser->dump($expected);
 
         $this->assertEquals($payload, $dump);
     }

@@ -11,7 +11,7 @@ trait RequestParameterTrait
      *
      * @return mixed
      */
-    public function query($key = null, $default = null)
+    public function query(string $key = null, $default = null)
     {
         if ($key === null) {
             return $this->query->all();
@@ -61,7 +61,7 @@ trait RequestParameterTrait
      *
      * @return bool
      */
-    public function hasServer($key)
+    public function hasServer($key): bool
     {
         return $this->server->has($key);
     }
@@ -74,7 +74,7 @@ trait RequestParameterTrait
      *
      * @return mixed
      */
-    public function files($key = null, $default = null)
+    public function files(string $key = null, $default = null)
     {
         if ($key === null) {
             return $this->files->all();
@@ -90,7 +90,7 @@ trait RequestParameterTrait
      *
      * @return bool
      */
-    public function hasFiles($key)
+    public function hasFiles($key): bool
     {
         return $this->files->has($key);
     }
@@ -103,7 +103,7 @@ trait RequestParameterTrait
      *
      * @return mixed
      */
-    public function getCookie($key = null, $default = null)
+    public function getCookie(string $key = null, $default = null)
     {
         if ($key === null) {
             return $this->cookies->all();
@@ -119,7 +119,7 @@ trait RequestParameterTrait
      *
      * @return bool
      */
-    public function hasCookie($key)
+    public function hasCookie($key): bool
     {
         return $this->cookies->has($key);
     }
@@ -132,7 +132,7 @@ trait RequestParameterTrait
      *
      * @return string
      */
-    public function headers($key = null, $default = null)
+    public function headers(string $key = null, $default = null): string
     {
         if ($key === null) {
             return $this->headers->all();
@@ -148,7 +148,7 @@ trait RequestParameterTrait
      *
      * @return bool
      */
-    public function hasHeaders($key)
+    public function hasHeaders($key): bool
     {
         return $this->headers->has($key);
     }
