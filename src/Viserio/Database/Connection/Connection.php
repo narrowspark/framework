@@ -2,9 +2,9 @@
 namespace Viserio\Database\Connection;
 
 use Narrowspark\Arr\StaticArr as Arr;
-use Viserio\Contracts\Events\Dispatcher;
 use Viserio\Contracts\Cache\Factory as CacheContract;
 use Viserio\Contracts\Database\Connection as ConnectionContract;
+use Viserio\Contracts\Events\Dispatcher;
 use Viserio\Database\Exception\ConnectException;
 use Viserio\Database\Grammar\Builder;
 

@@ -4,11 +4,11 @@ namespace Viserio\View;
 use Closure;
 use Interop\Container\ContainerInterface;
 use InvalidArgumentException;
+use Viserio\Contracts\Events\Dispatcher as DispatcherContract;
 use Viserio\Support\Invoker;
 use Viserio\Support\Str;
 use Viserio\Support\Traits\ContainerAwareTrait;
 use Viserio\View\Traits\NormalizeNameTrait;
-use Viserio\Contracts\Events\Dispatcher as DispatcherContract;
 
 class Virtuoso
 {
@@ -56,7 +56,8 @@ class Virtuoso
      * @param ContainerInterface                   $container
      * @param \Viserio\Contracts\Events\Dispatcher $events
      */
-    public function __construct(ContainerInterface $container, DispatcherContract $events) {
+    public function __construct(ContainerInterface $container, DispatcherContract $events)
+    {
         $this->events = $events;
 
         $this->setContainer($container);

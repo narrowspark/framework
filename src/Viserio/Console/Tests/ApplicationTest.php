@@ -2,13 +2,13 @@
 namespace Viserio\Console\Tests;
 
 use Mockery as Mock;
+use Narrowspark\TestingHelper\ArrayContainer;
 use stdClass;
 use Symfony\Component\Console\Input\StringInput;
 use Symfony\Component\Console\Output\OutputInterface;
 use Viserio\Console\Application;
 use Viserio\Console\Tests\Fixture\SpyOutput;
 use Viserio\Console\Tests\Fixture\ViserioCommand;
-use Narrowspark\TestingHelper\ArrayContainer;
 
 class ApplicationTest extends \PHPUnit_Framework_TestCase
 {

@@ -1,8 +1,8 @@
 <?php
 namespace Viserio\Translator;
 
-use Viserio\Contracts\Events\Dispatcher as DispatcherContract;
 use Viserio\Contracts\Cache\Factory as CacheContract;
+use Viserio\Contracts\Events\Dispatcher as DispatcherContract;
 use Viserio\Contracts\Translator\MessageCatalogue as MessageCatalogueContract;
 use Viserio\Contracts\Translator\NotFoundResourceException;
 use Viserio\Contracts\Translator\Translator as TranslatorContract;

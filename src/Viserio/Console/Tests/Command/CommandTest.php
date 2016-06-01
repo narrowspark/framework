@@ -2,10 +2,10 @@
 namespace Viserio\Console\Tests\Command;
 
 use Mockery as Mock;
+use Narrowspark\TestingHelper\ArrayContainer;
 use Symfony\Component\Console\Input\StringInput;
 use Symfony\Component\Console\Output\NullOutput;
 use Symfony\Component\Console\Output\OutputInterface;
-use Narrowspark\TestingHelper\ArrayContainer;
 use Viserio\Console\Application;
 use Viserio\Console\Tests\Fixture\ViserioSecCommand as ViserioCommand;
 use Viserio\Support\Invoker;
