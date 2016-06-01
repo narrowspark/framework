@@ -1,8 +1,9 @@
 <?php
 namespace Viserio\Cookie\Middleware;
 
-use Psr\Http\Message\ResponseInterface as ResponseContract;
-use Psr\Http\Message\ServerRequestInterface as RequestContract;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use Viserio\Contracts\Middleware\Frame as FrameContract;
 use Viserio\Contracts\Cookie\QueueingFactory as CookieJar;
 use Viserio\Contracts\Middleware\Middleware as MiddlewareContract;
 
