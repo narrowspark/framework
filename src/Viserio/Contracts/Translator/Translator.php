@@ -17,5 +17,5 @@ interface Translator
      *
      * @return self
      */
-    public function setLocale(string $defaultLang): self;
+    public function setLocale(string $defaultLang): Translator;
 }

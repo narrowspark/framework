@@ -135,7 +135,7 @@ class Manager implements TranslatorContract
      *
      * @return string
      */
-    public function getLocale()
+    public function getLocale(): string
     {
         return $this->locale;
     }
@@ -147,7 +147,7 @@ class Manager implements TranslatorContract
      *
      * @return self
      */
-    public function setLocale($locale)
+    public function setLocale(string $locale): TranslatorContract
     {
         $this->assertValidLocale($locale);
 
