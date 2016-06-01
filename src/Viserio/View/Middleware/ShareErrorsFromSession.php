@@ -3,6 +3,7 @@ namespace Viserio\View\Middleware;
 
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Viserio\Contracts\Middleware\Frame as FrameContract;
 use Viserio\Contracts\Middleware\Middleware as MiddlewareContract;
 use Viserio\Contracts\View\Factory as ViewFactory;
 
@@ -25,11 +26,10 @@ class ShareErrorsFromSession implements MiddlewareContract
         $this->view = $view;
     }
 
-    public function __invoke(
+    public function handle(
         ServerRequestInterface $request,
-        ResponseInterface $response,
-        callable $next
-    ) {
+        FrameContract $frame
+    ): ResponseInterface {
         // If the current session has an "errors" variable bound to it, we will share
         // its value with all view instances so the views can easily access errors
         // without having to bind. An empty bag is set when there aren't errors.
@@ -40,6 +40,6 @@ class ShareErrorsFromSession implements MiddlewareContract
         // Putting the errors in the view for every view allows the developer to just
         // assume that some errors are always available, which is convenient since
         // they don't have to continually run checks for the presence of errors.
-        return $next($request);
+        return $frame->next($request);
     }
 }
