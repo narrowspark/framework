@@ -75,7 +75,7 @@ class MessageCatalogue implements MessageCatalogueContract
      *
      * @api
      */
-    public function all($domain = null): array
+    public function all(string $domain = null): array
     {
         if (null === $domain) {
             return $this->messages;
