@@ -76,7 +76,7 @@ class MailServiceProvider extends ServiceProvider
      *
      * @return string[]
      */
-    public function provides()
+    public function provides(): array
     {
         return [
             'mailer',
