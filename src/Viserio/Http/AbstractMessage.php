@@ -261,6 +261,7 @@ abstract class AbstractMessage implements MessageInterface
      * Assert that the provided header values are valid.
      *
      * @see http://tools.ietf.org/html/rfc7230#section-3.2
+     *
      * @param string[] $values
      *
      * @throws InvalidArgumentException
@@ -280,8 +281,9 @@ abstract class AbstractMessage implements MessageInterface
      * @param resource|string|null|int|float|bool|StreamInterface|callable $resource Entity body data
      * @param array                                                        $options  Additional options
      *
-     * @return Stream
      * @throws \InvalidArgumentException if the $resource arg is not valid.
+     *
+     * @return Stream
      */
     private function getStream($resource = '', array $options = []): StreamInterface
     {
@@ -340,7 +342,7 @@ abstract class AbstractMessage implements MessageInterface
     private function checkHeader($header, $value): array
     {
         if (is_string($value)) {
-            $value = [ $value ];
+            $value = [$value];
         }
 
         if (! is_array($value) || ! $this->arrayContainsOnlyStrings($value)) {
@@ -367,10 +369,11 @@ abstract class AbstractMessage implements MessageInterface
     private function arrayContainsOnlyStrings(array $array): bool
     {
         // Test if a value is a string.
-        $filterStringValue  = function(bool $carry, $item) {
+        $filterStringValue  = function (bool $carry, $item) {
             if (! is_string($item)) {
                 return false;
             }
+
             return $carry;
         };
 
