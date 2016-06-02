@@ -7,5 +7,4 @@ use RuntimeException;
 
 class Stream implements StreamInterface
 {
-
 }
