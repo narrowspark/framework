@@ -372,7 +372,7 @@ abstract class AbstractMessage implements MessageInterface
                 return false;
             }
             return $carry;
-        }: bool;
+        };
 
         return array_reduce($array, $filterStringValue, true);
     }
