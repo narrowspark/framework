@@ -54,10 +54,12 @@ class Response extends AbstractMessage implements ResponseInterface
 
         return $new;
     }
+
     /**
      * Validate a status code.
      *
      * @param int|string $code
+     *
      * @throws InvalidArgumentException on an invalid status code.
      */
     private function setStatusCode($code)

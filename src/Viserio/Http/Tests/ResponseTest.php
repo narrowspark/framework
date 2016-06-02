@@ -45,7 +45,7 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
     public function testCanConstructWithHeadersAsArray()
     {
         $r = new Response(200, [
-            'Foo' => ['baz', 'bar']
+            'Foo' => ['baz', 'bar'],
         ]);
         $this->assertSame(['Foo' => ['baz', 'bar']], $r->getHeaders());
         $this->assertSame('baz, bar', $r->getHeaderLine('Foo'));
