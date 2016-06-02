@@ -14,6 +14,11 @@ addons:
 
 matrix:
   include:
+    # Use the newer stack for HHVM as HHVM does not support Precise anymore since a long time and so Precise has an outdated version
+    - php: hhvm
+      sudo: required
+      dist: trusty
+      group: edge
     - php: 7.0
       env: SETUP=basic CHECK_CS=true SEND_COVERAGE=true
     - php: 7.0
@@ -39,15 +44,15 @@ before_install:
   - mkdir -p ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d
   - if [ -f build/travis/php/$TRAVIS_PHP_VERSION.sh]; then ./build/travis/php/$TRAVIS_PHP_VERSION.sh; fi
   - travis_retry composer self-update # Run allways composer update
-  - composer global require hirak/prestissimo # Now composer can install components parallel
-  - if [[ "$HUMBUG" = 'true' ]]; then composer require humbug/humbug; fi
+  - if [[ "$PHP" != hhvm* ]]; then composer global require hirak/prestissimo; fi # Now composer can install components parallel
+  - if [[ "$HUMBUG" = "true" ]]; then composer require humbug/humbug; fi
   - git config --global user.name travis-ci
   - git config --global user.email travis@example.com
 
 install:
-  - if [[ "$SETUP" = 'basic' ]]; then travis_retry composer install --no-interaction --prefer-dist --no-progress --profile; fi
-  - if [[ "$SETUP" = 'stable' ]]; then travis_retry composer update --prefer-dist --no-interaction --prefer-stable --no-progress --profile; fi
-  - if [[ "$SETUP" = 'lowest' ]]; then travis_retry composer update --prefer-dist --no-interaction --prefer-lowest --prefer-stable --no-progress --profile; fi
+  - if [[ "$SETUP" = "basic" ]]; then travis_retry composer install --no-interaction --prefer-dist --no-progress --profile; fi
+  - if [[ "$SETUP" = "stable" ]]; then travis_retry composer update --prefer-dist --no-interaction --prefer-stable --no-progress --profile; fi
+  - if [[ "$SETUP" = "lowest" ]]; then travis_retry composer update --prefer-dist --no-interaction --prefer-lowest --prefer-stable --no-progress --profile; fi
 
 before_script:
   - chmod a+x ./build/travis/all.sh && chmod a+x ./build/travis/php/7.x.sh && chmod a+x ./build/travis/script.sh && chmod a+x ./build/travis/after_success.sh
