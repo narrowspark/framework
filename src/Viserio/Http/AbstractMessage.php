@@ -39,7 +39,9 @@ abstract class AbstractMessage implements MessageInterface
      */
     private $headerNames = [];
 
-    /** @var StreamInterface */
+    /**
+     * @var StreamInterface
+     */
     private $stream;
 
     /**
@@ -94,8 +96,8 @@ abstract class AbstractMessage implements MessageInterface
 
         $header = strtolower($header);
         $header = $this->headerNames[$header];
-        $value  = $this->headers[$header];
-        $value  = is_array($value) ? $value : [$value];
+        $value = $this->headers[$header];
+        $value = is_array($value) ? $value : [$value];
 
         return $value;
     }
@@ -105,7 +107,7 @@ abstract class AbstractMessage implements MessageInterface
      */
     public function getHeaderLine($header)
     {
-        $value = $this->getHeader($name);
+        $value = $this->getHeader($header);
 
         if (empty($value)) {
             return '';
@@ -144,7 +146,7 @@ abstract class AbstractMessage implements MessageInterface
     {
         $this->checkHeader($header, $value);
 
-        if (!$this->hasHeader($header)) {
+        if (! $this->hasHeader($header)) {
             return $this->withHeader($header, $value);
         }
 
@@ -167,11 +169,12 @@ abstract class AbstractMessage implements MessageInterface
      */
     public function withoutHeader($header)
     {
-        if (!isset($this->headerNames[$normalized])) {
+        $normalized = strtolower($header);
+
+        if (! isset($this->headerNames[$normalized])) {
             return $this;
         }
 
-        $normalized = strtolower($header);
         $header = $this->headerNames[$normalized];
         $new = clone $this;
 
@@ -185,8 +188,8 @@ abstract class AbstractMessage implements MessageInterface
      */
     public function getBody()
     {
-        if (!$this->stream) {
-            $this->stream = $this->getStream('');
+        if (! $this->stream) {
+            $this->stream = Util::getStream('');
         }
 
         return $this->stream;
@@ -208,16 +211,16 @@ abstract class AbstractMessage implements MessageInterface
     }
 
     /**
-     * [setHeaders description]
-     *
      * @param array $headers
      */
-    private function setHeaders(array $headers)
+    protected function setHeaders(array $headers)
     {
+        $this->assertHeaders($headers);
+
         $this->headerNames = $this->headers = [];
 
         foreach ($headers as $header => $value) {
-            if (!is_array($value)) {
+            if (! is_array($value)) {
                 $value = [$value];
             }
 
@@ -249,86 +252,12 @@ abstract class AbstractMessage implements MessageInterface
             ));
         }
 
-        if (!isset(self::$validProtocolVersions[$version])) {
+        if (! isset(self::$validProtocolVersions[$version])) {
             throw new InvalidArgumentException(
                 'Invalid HTTP version. Must be one of: '
                 . implode(', ', array_keys(self::$validProtocolVersions))
             );
         }
-    }
-
-    /**
-     * Assert that the provided header values are valid.
-     *
-     * @see http://tools.ietf.org/html/rfc7230#section-3.2
-     *
-     * @param string[] $values
-     *
-     * @throws InvalidArgumentException
-     */
-    private static function assertValidHeaderValue(array $values)
-    {
-        array_walk($values, __NAMESPACE__ . '\HeaderSecurity::assertValid');
-    }
-
-    /**
-     * Create a new stream based on the input type.
-     *
-     * Options is an associative array that can contain the following keys:
-     * - metadata: Array of custom metadata.
-     * - size: Size of the stream.
-     *
-     * @param resource|string|null|int|float|bool|StreamInterface|callable $resource Entity body data
-     * @param array                                                        $options  Additional options
-     *
-     * @throws \InvalidArgumentException if the $resource arg is not valid.
-     *
-     * @return Stream
-     */
-    private function getStream($resource = '', array $options = []): StreamInterface
-    {
-        if (is_scalar($resource)) {
-            $stream = fopen('php://temp', 'r+');
-
-            if ($resource !== '') {
-                fwrite($stream, $resource);
-                fseek($stream, 0);
-            }
-
-            return new Stream($stream, $options);
-        }
-
-        switch (gettype($resource)) {
-            case 'resource':
-                return new Stream($resource, $options);
-            case 'object':
-                if ($resource instanceof StreamInterface) {
-                    return $resource;
-                } elseif ($resource instanceof \Iterator) {
-                    return new PumpStream(function () use ($resource) {
-                        if (!$resource->valid()) {
-                            return false;
-                        }
-
-                        $result = $resource->current();
-                        $resource->next();
-
-                        return $result;
-                    }, $options);
-                } elseif (method_exists($resource, '__toString')) {
-                    return $this->getStream((string) $resource, $options);
-                }
-
-                break;
-            case 'NULL':
-                return new Stream(fopen('php://temp', 'r+'), $options);
-        }
-
-        if (is_callable($resource)) {
-            return new PumpStream($resource, $options);
-        }
-
-        throw new InvalidArgumentException('Invalid resource type: ' . gettype($resource));
     }
 
     /**
@@ -351,9 +280,7 @@ abstract class AbstractMessage implements MessageInterface
             );
         }
 
-        $header = trim($header);
-
-        HeaderSecurity::assertValidName($header);
+        HeaderSecurity::assertValidName(trim($header));
         self::assertValidHeaderValue($value);
 
         return $value;
@@ -369,7 +296,7 @@ abstract class AbstractMessage implements MessageInterface
     private function arrayContainsOnlyStrings(array $array): bool
     {
         // Test if a value is a string.
-        $filterStringValue  = function (bool $carry, $item) {
+        $filterStringValue = function (bool $carry, $item) {
             if (! is_string($item)) {
                 return false;
             }
@@ -378,5 +305,55 @@ abstract class AbstractMessage implements MessageInterface
         };
 
         return array_reduce($array, $filterStringValue, true);
+    }
+
+    /**
+     * Trims whitespace from the header values.
+     *
+     * Spaces and tabs ought to be excluded by parsers when extracting the field value from a header field.
+     *
+     * header-field = field-name ":" OWS field-value OWS
+     * OWS          = *( SP / HTAB )
+     *
+     * @param string[] $values Header values
+     *
+     * @return string[] Trimmed header values
+     *
+     * @see https://tools.ietf.org/html/rfc7230#section-3.2.4
+     */
+    private function trimHeaderValues(array $values)
+    {
+        return array_map(function ($value) {
+            return trim($value, " \t");
+        }, $values);
+    }
+
+    /**
+     * Ensure header names and values are valid.
+     *
+     * @param array $headers
+     *
+     * @throws InvalidArgumentException
+     */
+    private function assertHeaders(array $headers)
+    {
+        foreach ($headers as $name => $headerValues) {
+            HeaderSecurity::assertValidName($name);
+            self::assertValidHeaderValue($headerValues);
+        }
+    }
+
+    /**
+     * Assert that the provided header values are valid.
+     *
+     * @see http://tools.ietf.org/html/rfc7230#section-3.2
+     *
+     * @param string[] $values
+     *
+     * @throws InvalidArgumentException
+     */
+    private static function assertValidHeaderValue(array $values)
+    {
+        array_walk($values, __NAMESPACE__ . '\HeaderSecurity::assertValid');
     }
 }

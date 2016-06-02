@@ -12,7 +12,6 @@ use Viserio\Contracts\View\View as ViewContract;
 use Viserio\Support\Str;
 use Viserio\View\Engines\EngineResolver;
 use Viserio\View\Traits\NormalizeNameTrait;
-use Viserio\View\View;
 
 class Factory implements FactoryContract
 {

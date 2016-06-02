@@ -48,6 +48,7 @@
         "league/uri"                                         : "^4.1",
         "monolog/monolog"                                    : "^1.17",
         "narrowspark/arr"                                    : "^1.0",
+        "narrowspark/http-status"                            : "^1.1",
         "php-di/invoker"                                     : "^1.2",
         "mpoiriert/invoker"                                  : "^1.1",
         "nesbot/carbon"                                      : "^1.21",

@@ -19,8 +19,9 @@
     ],
     "require": {
         "php"                             : "^7.0.7",
-        "viserio/contracts"               : "self.version",
-        "league/uri"                      : "^4.1"
+        "league/uri"                      : "^4.1",
+        "narrowspark/http-status"         : "^1.1",
+        "viserio/contracts"               : "self.version"
     },
     "require-dev": {
         "mockery/mockery"                 : "^0.9",

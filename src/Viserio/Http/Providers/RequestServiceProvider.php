@@ -1,7 +1,6 @@
 <?php
 namespace Viserio\Http\Providers;
 
-use Symfony\Component\HttpFoundation\RequestStack;
 use Viserio\Application\ServiceProvider;
 use Viserio\Http\Request;
 
