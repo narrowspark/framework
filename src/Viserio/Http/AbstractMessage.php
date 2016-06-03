@@ -215,14 +215,14 @@ abstract class AbstractMessage implements MessageInterface
      */
     protected function setHeaders(array $headers)
     {
-        $this->assertHeaders($headers);
-
         $this->headerNames = $this->headers = [];
 
         foreach ($headers as $header => $value) {
             if (! is_array($value)) {
                 $value = [$value];
             }
+
+            $this->assertHeaders($headers);
 
             $value = $this->trimHeaderValues($value);
             $normalized = strtolower($header);
@@ -274,14 +274,14 @@ abstract class AbstractMessage implements MessageInterface
             $value = [$value];
         }
 
-        if (! is_array($value) || ! $this->arrayContainsOnlyStrings($value)) {
+        if (! $this->arrayContainsOnlyStrings($value)) {
             throw new InvalidArgumentException(
                 'Invalid header value; must be a string or array of strings'
             );
         }
 
         HeaderSecurity::assertValidName(trim($header));
-        self::assertValidHeaderValue($value);
+        $this->assertValidHeaderValue($value);
 
         return $value;
     }
@@ -339,7 +339,7 @@ abstract class AbstractMessage implements MessageInterface
     {
         foreach ($headers as $name => $headerValues) {
             HeaderSecurity::assertValidName($name);
-            self::assertValidHeaderValue($headerValues);
+            $this->assertValidHeaderValue($headerValues);
         }
     }
 
@@ -352,7 +352,7 @@ abstract class AbstractMessage implements MessageInterface
      *
      * @throws InvalidArgumentException
      */
-    private static function assertValidHeaderValue(array $values)
+    private function assertValidHeaderValue(array $values)
     {
         array_walk($values, __NAMESPACE__ . '\HeaderSecurity::assertValid');
     }
