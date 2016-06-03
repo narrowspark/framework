@@ -23,10 +23,9 @@ class OracleConnectorTest extends \PHPUnit_Framework_TestCase
     {
         $connection = $this->mock('stdClass');
 
-        $connector = $this->createMock(
-            'Viserio\Connect\Adapters\Database\OracleConnector',
-            ['createConnection', 'getOptions']
-        );
+        $connector = $this->getMockBuilder('Viserio\Connect\Adapters\Database\OracleConnector')
+            ->setMethods(['createConnection', 'getOptions'])
+            ->getMock();
         $connector->expects($this->once())
             ->method('getOptions')
             ->with($this->equalTo($config))

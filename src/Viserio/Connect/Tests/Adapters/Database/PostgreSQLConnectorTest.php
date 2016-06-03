@@ -27,10 +27,9 @@ class PostgreSQLConnectorTest extends \PHPUnit_Framework_TestCase
         ];
         $connection = $this->mock('stdClass');
 
-        $connector = $this->createMock(
-            'Viserio\Connect\Adapters\Database\PostgreSQLConnector',
-            ['createConnection', 'getOptions']
-        );
+        $connector = $this->getMockBuilder('Viserio\Connect\Adapters\Database\PostgreSQLConnector')
+            ->setMethods(['createConnection', 'getOptions'])
+            ->getMock();
         $connector->expects($this->once())
             ->method('getOptions')
             ->with($this->equalTo($config))
@@ -57,10 +56,9 @@ class PostgreSQLConnectorTest extends \PHPUnit_Framework_TestCase
         ];
         $connection = $this->mock('stdClass');
 
-        $connector = $this->createMock(
-            'Viserio\Connect\Adapters\Database\PostgreSQLConnector',
-            ['createConnection', 'getOptions']
-        );
+        $connector = $this->getMockBuilder('Viserio\Connect\Adapters\Database\PostgreSQLConnector')
+            ->setMethods(['createConnection', 'getOptions'])
+            ->getMock();
         $connector->expects($this->once())
             ->method('getOptions')
             ->with($this->equalTo($config))
@@ -88,10 +86,9 @@ class PostgreSQLConnectorTest extends \PHPUnit_Framework_TestCase
         ];
 
         $connection = $this->mock('stdClass');
-        $connector = $this->createMock(
-            'Viserio\Connect\Adapters\Database\PostgreSQLConnector',
-            ['createConnection', 'getOptions']
-        );
+        $connector = $this->getMockBuilder('Viserio\Connect\Adapters\Database\PostgreSQLConnector')
+            ->setMethods(['createConnection', 'getOptions'])
+            ->getMock();
         $connector->expects($this->once())
             ->method('getOptions')
             ->with($this->equalTo($config))
@@ -112,10 +109,9 @@ class PostgreSQLConnectorTest extends \PHPUnit_Framework_TestCase
         $config = ['server' => 'foo', 'database' => 'bar', 'schema' => 'public', 'charset' => 'utf8'];
         $connection = $this->mock('stdClass');
 
-        $connector = $this->createMock(
-            'Viserio\Connect\Adapters\Database\PostgreSQLConnector',
-            ['createConnection', 'getOptions']
-        );
+        $connector = $this->getMockBuilder('Viserio\Connect\Adapters\Database\PostgreSQLConnector')
+            ->setMethods(['createConnection', 'getOptions'])
+            ->getMock();
         $connector->expects($this->once())
             ->method('getOptions')
             ->with($this->equalTo($config))
@@ -143,10 +139,9 @@ class PostgreSQLConnectorTest extends \PHPUnit_Framework_TestCase
         ];
         $connection = $this->mock('stdClass');
 
-        $connector = $this->createMock(
-            'Viserio\Connect\Adapters\Database\PostgreSQLConnector',
-            ['createConnection', 'getOptions']
-        );
+        $connector = $this->getMockBuilder('Viserio\Connect\Adapters\Database\PostgreSQLConnector')
+            ->setMethods(['createConnection', 'getOptions'])
+            ->getMock();
         $connector->expects($this->once())
             ->method('getOptions')
             ->with($this->equalTo($config))
@@ -180,10 +175,9 @@ class PostgreSQLConnectorTest extends \PHPUnit_Framework_TestCase
         ];
         $connection = $this->mock('stdClass');
 
-        $connector = $this->createMock(
-            'Viserio\Connect\Adapters\Database\PostgreSQLConnector',
-            ['createConnection', 'getOptions']
-        );
+        $connector = $this->getMockBuilder('Viserio\Connect\Adapters\Database\PostgreSQLConnector')
+            ->setMethods(['createConnection', 'getOptions'])
+            ->getMock();
         $connector->expects($this->once())
             ->method('getOptions')
             ->with($this->equalTo($config))

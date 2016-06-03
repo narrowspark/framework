@@ -32,10 +32,9 @@ class MSSQLConnectorTest extends \PHPUnit_Framework_TestCase
 
         $connection = $this->mock('stdClass');
 
-        $connector = $this->createMock(
-            'Viserio\Connect\Adapters\Database\MSSQLConnector',
-            ['createConnection', 'getOptions']
-        );
+        $connector = $this->getMockBuilder('Viserio\Connect\Adapters\Database\MSSQLConnector')
+             ->setMethods(['createConnection', 'getOptions'])
+             ->getMock();
         $connector->expects($this->once())
             ->method('getOptions')
             ->with($this->equalTo($config))
@@ -92,10 +91,9 @@ class MSSQLConnectorTest extends \PHPUnit_Framework_TestCase
 
         $connection = $this->mock('stdClass');
 
-        $connector = $this->createMock(
-            'Viserio\Connect\Adapters\Database\MSSQLConnector',
-            ['createConnection', 'getOptions']
-        );
+        $connector = $this->getMockBuilder('Viserio\Connect\Adapters\Database\MSSQLConnector')
+             ->setMethods(['createConnection', 'getOptions'])
+             ->getMock();
         $connector->expects($this->once())
             ->method('getOptions')
             ->with($this->equalTo($config))

@@ -28,7 +28,7 @@
         }
     ],
     "require": {
-        "php"                                                : "^7.0",
+        "php"                                                : "^7.0.7",
         "ext-curl"                                           : "*",
         "ext-openssl"                                        : "*",
         "ext-mbstring"                                       : "*",

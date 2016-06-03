@@ -12,7 +12,9 @@ class MailMandrillTransportTest extends \PHPUnit_Framework_TestCase
         $message->setBcc('you@example.com');
 
         $transport = new MandrillTransportStub('testkey');
-        $client = $this->createMock('GuzzleHttp\Client', ['post']);
+        $client = $this->getMockBuilder('GuzzleHttp\Client')
+            ->setMethods(['post'])
+            ->getMock();
         $transport->setHttpClient($client);
 
         $client->expects($this->once())

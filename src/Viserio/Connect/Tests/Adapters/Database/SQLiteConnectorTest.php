@@ -23,12 +23,11 @@ class SQLiteConnectorTest extends \PHPUnit_Framework_TestCase
         $config = ['database' => __DIR__ . 'notfound.db'];
         $connection = $this->createMock('stdClass');
 
-        $connector = $this->createMock(
-            'Viserio\Connect\Adapters\Database\SQLiteConnector',
-            ['createConnection', 'getOptions']
-        );
+        $connector = $this->getMockBuilder('Viserio\Connect\Adapters\Database\SQLiteConnector')
+            ->setMethods(['createConnection', 'getOptions'])
+            ->getMock();
 
-        $this->assertSame($connector->connect($config), $connection);
+        $connector->connect($config);
     }
 
     public function testSQLiteFileDatabasesMayBeConnectedTo()
@@ -37,10 +36,9 @@ class SQLiteConnectorTest extends \PHPUnit_Framework_TestCase
         $config = ['database' => __DIR__];
         $connection = $this->mock('stdClass');
 
-        $connector = $this->createMock(
-            'Viserio\Connect\Adapters\Database\SQLiteConnector',
-            ['createConnection', 'getOptions']
-        );
+        $connector = $this->getMockBuilder('Viserio\Connect\Adapters\Database\SQLiteConnector')
+            ->setMethods(['createConnection', 'getOptions'])
+            ->getMock();
         $connector->expects($this->once())
             ->method('getOptions')
             ->with($this->equalTo($config))
@@ -59,10 +57,9 @@ class SQLiteConnectorTest extends \PHPUnit_Framework_TestCase
         $config = ['database' => ':memory:'];
         $connection = $this->mock('stdClass');
 
-        $connector = $this->createMock(
-            'Viserio\Connect\Adapters\Database\SQLiteConnector',
-            ['createConnection', 'getOptions']
-        );
+        $connector = $this->getMockBuilder('Viserio\Connect\Adapters\Database\SQLiteConnector')
+            ->setMethods(['createConnection', 'getOptions'])
+            ->getMock();
         $connector->expects($this->once())
             ->method('getOptions')
             ->with($this->equalTo($config))
