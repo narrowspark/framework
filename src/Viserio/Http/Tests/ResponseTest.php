@@ -5,11 +5,16 @@ use Psr\Http\Message\StreamInterface;
 use Viserio\Http\Response;
 use Viserio\Http\Util;
 
-class ResponseTest extends \PHPUnit_Framework_TestCase
+class ResponseTest extends AbstractMessageTest
 {
+    public function createDefaultMessage()
+    {
+        return new Response();
+    }
+
     public function testDefaultConstructor()
     {
-        $r = new Response();
+        $r = $this->createDefaultMessage();
 
         $this->assertSame(200, $r->getStatusCode());
         $this->assertSame('1.1', $r->getProtocolVersion());
@@ -22,6 +27,7 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
     public function testCanConstructWithStatusCode()
     {
         $r = new Response(404);
+
         $this->assertSame(404, $r->getStatusCode());
         $this->assertSame('Not Found', $r->getReasonPhrase());
     }
@@ -84,6 +90,7 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
     public function testWithStatusCodeAndNoReason()
     {
         $r = (new Response())->withStatus(201);
+
         $this->assertSame(201, $r->getStatusCode());
         $this->assertSame('Created', $r->getReasonPhrase());
     }
@@ -91,10 +98,12 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
     public function testWithStatusCodeAndReason()
     {
         $r = (new Response())->withStatus(201, 'Foo');
+
         $this->assertSame(201, $r->getStatusCode());
         $this->assertSame('Foo', $r->getReasonPhrase());
 
         $r = (new Response())->withStatus(201, '0');
+
         $this->assertSame(201, $r->getStatusCode());
         $this->assertSame('0', $r->getReasonPhrase(), 'Falsey reason works');
     }
@@ -111,6 +120,7 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
     public function testSameInstanceWhenSameProtocol()
     {
         $r = new Response();
+
         $this->assertSame($r, $r->withProtocolVersion('1.1'));
     }
 
@@ -118,6 +128,7 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
     {
         $b = Util::getStream('0');
         $r = (new Response())->withBody($b);
+
         $this->assertInstanceOf(StreamInterface::class, $r->getBody());
         $this->assertSame('0', (string) $r->getBody());
     }
@@ -125,6 +136,7 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
     public function testSameInstanceWhenSameBody()
     {
         $r = new Response();
+
         $b = $r->getBody();
         $this->assertSame($r, $r->withBody($b));
     }
@@ -132,6 +144,7 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
     public function testWithHeader()
     {
         $r = new Response(200, ['Foo' => 'Bar']);
+
         $r2 = $r->withHeader('baZ', 'Bam');
         $this->assertSame(['Foo' => ['Bar']], $r->getHeaders());
         $this->assertSame(['Foo' => ['Bar'], 'baZ' => ['Bam']], $r2->getHeaders());
@@ -142,6 +155,7 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
     public function testWithHeaderAsArray()
     {
         $r = new Response(200, ['Foo' => 'Bar']);
+
         $r2 = $r->withHeader('baZ', ['Bam', 'Bar']);
         $this->assertSame(['Foo' => ['Bar']], $r->getHeaders());
         $this->assertSame(['Foo' => ['Bar'], 'baZ' => ['Bam', 'Bar']], $r2->getHeaders());
@@ -152,6 +166,7 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
     public function testWithHeaderReplacesDifferentCase()
     {
         $r = new Response(200, ['Foo' => 'Bar']);
+
         $r2 = $r->withHeader('foO', 'Bam');
         $this->assertSame(['Foo' => ['Bar']], $r->getHeaders());
         $this->assertSame(['foO' => ['Bam']], $r2->getHeaders());
@@ -162,6 +177,7 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
     public function testWithAddedHeader()
     {
         $r = new Response(200, ['Foo' => 'Bar']);
+
         $r2 = $r->withAddedHeader('foO', 'Baz');
         $this->assertSame(['Foo' => ['Bar']], $r->getHeaders());
         $this->assertSame(['Foo' => ['Bar', 'Baz']], $r2->getHeaders());
@@ -172,6 +188,7 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
     public function testWithAddedHeaderAsArray()
     {
         $r = new Response(200, ['Foo' => 'Bar']);
+
         $r2 = $r->withAddedHeader('foO', ['Baz', 'Bam']);
         $this->assertSame(['Foo' => ['Bar']], $r->getHeaders());
         $this->assertSame(['Foo' => ['Bar', 'Baz', 'Bam']], $r2->getHeaders());
@@ -182,6 +199,7 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
     public function testWithAddedHeaderThatDoesNotExist()
     {
         $r = new Response(200, ['Foo' => 'Bar']);
+
         $r2 = $r->withAddedHeader('nEw', 'Baz');
         $this->assertSame(['Foo' => ['Bar']], $r->getHeaders());
         $this->assertSame(['Foo' => ['Bar'], 'nEw' => ['Baz']], $r2->getHeaders());
@@ -192,6 +210,7 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
     public function testWithoutHeaderThatExists()
     {
         $r = new Response(200, ['Foo' => 'Bar', 'Baz' => 'Bam']);
+
         $r2 = $r->withoutHeader('foO');
         $this->assertTrue($r->hasHeader('foo'));
         $this->assertSame(['Foo' => ['Bar'], 'Baz' => ['Bam']], $r->getHeaders());
@@ -202,6 +221,7 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
     public function testWithoutHeaderThatDoesNotExist()
     {
         $r = new Response(200, ['Baz' => 'Bam']);
+
         $r2 = $r->withoutHeader('foO');
         $this->assertSame($r, $r2);
         $this->assertFalse($r2->hasHeader('foo'));
@@ -211,6 +231,7 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
     public function testSameInstanceWhenRemovingMissingHeader()
     {
         $r = new Response();
+
         $this->assertSame($r, $r->withoutHeader('foo'));
     }
 
@@ -219,6 +240,7 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
         $r1 = new Response(200, ['OWS' => " \t \tFoo\t \t "]);
         $r2 = (new Response())->withHeader('OWS', " \t \tFoo\t \t ");
         $r3 = (new Response())->withAddedHeader('OWS', " \t \tFoo\t \t ");
+
         foreach ([$r1, $r2, $r3] as $r) {
             $this->assertSame(['OWS' => ['Foo']], $r->getHeaders());
             $this->assertSame('Foo', $r->getHeaderLine('OWS'));

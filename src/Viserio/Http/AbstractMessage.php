@@ -105,9 +105,9 @@ abstract class AbstractMessage implements MessageInterface
     /**
      * {@inheritdoc}
      */
-    public function getHeaderLine($header)
+    public function getHeaderLine($name)
     {
-        $value = $this->getHeader($header);
+        $value = $this->getHeader($name);
 
         if (empty($value)) {
             return '';
