@@ -1,7 +1,7 @@
 <?php
 namespace Viserio\Http\Tests;
 
-/**
+/*
  * Zend Framework (http://framework.zend.com/)
  *
  * @see       http://github.com/zendframework/zend-diactoros for the canonical source repository
@@ -28,17 +28,17 @@ class HeaderSecurityTest extends \PHPUnit_Framework_TestCase
     public function getFilterValues()
     {
         return [
-            ["This is a\n test", "This is a test"],
-            ["This is a\r test", "This is a test"],
-            ["This is a\n\r test", "This is a test"],
+            ["This is a\n test", 'This is a test'],
+            ["This is a\r test", 'This is a test'],
+            ["This is a\n\r test", 'This is a test'],
             ["This is a\r\n  test", "This is a\r\n  test"],
-            ["This is a \r\ntest", "This is a test"],
-            ["This is a \r\n\n test", "This is a  test"],
-            ["This is a\n\n test", "This is a test"],
-            ["This is a\r\r test", "This is a test"],
+            ["This is a \r\ntest", 'This is a test'],
+            ["This is a \r\n\n test", 'This is a  test'],
+            ["This is a\n\n test", 'This is a test'],
+            ["This is a\r\r test", 'This is a test'],
             ["This is a \r\r\n test", "This is a \r\n test"],
-            ["This is a \r\n\r\ntest", "This is a test"],
-            ["This is a \r\n\n\r\n test", "This is a \r\n test"]
+            ["This is a \r\n\r\ntest", 'This is a test'],
+            ["This is a \r\n\n\r\n test", "This is a \r\n test"],
         ];
     }
 
@@ -79,6 +79,7 @@ class HeaderSecurityTest extends \PHPUnit_Framework_TestCase
     {
         $this->{$assertion}(HeaderSecurity::isValid($value));
     }
+
     public function assertValues()
     {
         return [
@@ -91,7 +92,7 @@ class HeaderSecurityTest extends \PHPUnit_Framework_TestCase
             ["This is a\r\r test"],
             ["This is a \r\r\n test"],
             ["This is a \r\n\r\ntest"],
-            ["This is a \r\n\n\r\n test"]
+            ["This is a \r\n\n\r\n test"],
         ];
     }
 
