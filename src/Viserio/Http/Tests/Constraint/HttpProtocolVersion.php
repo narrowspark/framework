@@ -36,6 +36,7 @@ class HttpProtocolVersion extends \PHPUnit_Framework_Constraint
         if (!is_string($other)) {
             return false;
         }
+
         return in_array($other, $this->validHttpProtocolVersion, true);
     }
 

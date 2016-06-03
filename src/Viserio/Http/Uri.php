@@ -1,8 +1,6 @@
 <?php
 namespace Viserio\Http;
 
-use Psr\Http\Message\UriInterface;
-use League\Uri\Schemes\Generic\AbstractUri;
 use League\Uri\Components\Fragment;
 use League\Uri\Components\HierarchicalPath as Path;
 use League\Uri\Components\Host;
@@ -19,11 +17,13 @@ use League\Uri\Interfaces\Port as PortInterface;
 use League\Uri\Interfaces\Query as QueryInterface;
 use League\Uri\Interfaces\Scheme as SchemeInterface;
 use League\Uri\Interfaces\UserInfo as UserInfoInterface;
+use League\Uri\Schemes\Generic\AbstractUri;
 use League\Uri\UriParser;
+use Psr\Http\Message\UriInterface;
 
 class Uri extends AbstractUri implements UriInterface
 {
-     /**
+    /**
      * @param string $uri
      */
     public function __construct(string $uri = '')
@@ -59,7 +59,7 @@ class Uri extends AbstractUri implements UriInterface
         $this->scheme = (string) new Scheme($components['scheme']);
         $this->userInfo = (string) new UserInfo(new User($components['user']), new Pass($components['pass']));
         $this->host = (string) new Host($components['host']);
-        $this->port= (string) new Port($components['port']);
+        $this->port = (string) new Port($components['port']);
         $this->path = (string) new Path($components['path']);
         $this->query = (string) new Query($components['query']);
         $this->fragment = (string) new Fragment($components['fragment']);

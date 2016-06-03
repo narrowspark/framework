@@ -34,7 +34,7 @@ class Immutable extends \PHPUnit_Framework_Constraint
             return false;
         }
 
-        return ($other !== $this->new);
+        return $other !== $this->new;
     }
 
     protected function failureDescription($other)

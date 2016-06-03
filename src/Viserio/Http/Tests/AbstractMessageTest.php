@@ -3,9 +3,9 @@ namespace Viserio\Http\Tests;
 
 use Psr\Http\Message\MessageInterface;
 use Psr\Http\Message\StreamInterface;
-use Viserio\Http\Util;
 use Viserio\Http\Tests\Constraint\HttpProtocolVersion;
 use Viserio\Http\Tests\Constraint\Immutable;
+use Viserio\Http\Util;
 
 abstract class AbstractMessageTest extends \PHPUnit_Framework_TestCase
 {
@@ -75,8 +75,6 @@ abstract class AbstractMessageTest extends \PHPUnit_Framework_TestCase
      * @dataProvider validProtocolVersionProvider
      *
      * @param string $expectedVersion
-     *
-     * @return void
      */
     public function testValidWithProtocolVersion($expectedVersion)
     {
@@ -105,11 +103,9 @@ abstract class AbstractMessageTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider validHeaderProvider
      *
-     * @param string $headerName
+     * @param string          $headerName
      * @param string|string[] $headerValue
-     * @param string[] $expectedHeaderValue
-     *
-     * @return void
+     * @param string[]        $expectedHeaderValue
      */
     public function testValidWithHeader($headerName, $headerValue, $expectedHeaderValue)
     {
@@ -129,11 +125,9 @@ abstract class AbstractMessageTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider validHeaderProvider
      *
-     * @param string $headerName
+     * @param string          $headerName
      * @param string|string[] $headerValue
-     * @param string[] $expectedHeaderValue
-     *
-     * @return void
+     * @param string[]        $expectedHeaderValue
      */
     public function testValidWithAddedHeader($headerName, $headerValue, $expectedHeaderValue)
     {
@@ -152,10 +146,8 @@ abstract class AbstractMessageTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider validHeaderProvider
      *
-     * @param string $headerName
+     * @param string          $headerName
      * @param string|string[] $headerValue
-     *
-     * @return void
      */
     public function testHasHeader($headerName, $headerValue)
     {
@@ -171,12 +163,10 @@ abstract class AbstractMessageTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider validHeaderProvider
      *
-     * @param string $headerName
+     * @param string          $headerName
      * @param string|string[] $headerValue
-     * @param string[] $expectedHeaderValue
-     * @param string $expectedHeaderLine
-     *
-     * @return void
+     * @param string[]        $expectedHeaderValue
+     * @param string          $expectedHeaderLine
      */
     public function testGetHeaderLine($headerName, $headerValue, $expectedHeaderValue, $expectedHeaderLine)
     {
@@ -189,11 +179,9 @@ abstract class AbstractMessageTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider validHeaderProvider
      *
-     * @param string $headerName
+     * @param string          $headerName
      * @param string|string[] $headerValue
-     * @param string[] $expectedHeaderValue
-     *
-     * @return void
+     * @param string[]        $expectedHeaderValue
      */
     public function testGetHeaders($headerName, $headerValue, $expectedHeaderValue)
     {
@@ -206,10 +194,8 @@ abstract class AbstractMessageTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider validHeaderProvider
      *
-     * @param string $headerName
+     * @param string          $headerName
      * @param string|string[] $headerValue
-     *
-     * @return void
      */
     public function testWithoutHeader($headerName, $headerValue)
     {
@@ -225,6 +211,7 @@ abstract class AbstractMessageTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($newMessage->hasHeader($headerName));
         $this->assertEquals($message, $newMessage);
     }
+
     public function validHeaderProvider()
     {
         return [
@@ -234,6 +221,7 @@ abstract class AbstractMessageTest extends \PHPUnit_Framework_TestCase
             'two value' => ['Basic', ['value1', 'value2'], ['value1', 'value2'], 'value1,value2'],
         ];
     }
+
     public function testWithBody()
     {
         $message = $this->createDefaultMessage();
@@ -254,8 +242,6 @@ abstract class AbstractMessageTest extends \PHPUnit_Framework_TestCase
      * DRY Assert header values.
      *
      * @param string[] $values
-     *
-     * @return void
      */
     protected function assertValidHeaderValue($values)
     {
@@ -267,8 +253,6 @@ abstract class AbstractMessageTest extends \PHPUnit_Framework_TestCase
      * @param object $messageClone
      * @param object $message
      * @param object $newMessage
-     *
-     * @return void
      */
     protected function assertImmutable($messageClone, $message, $newMessage)
     {
