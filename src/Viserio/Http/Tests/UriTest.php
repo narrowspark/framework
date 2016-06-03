@@ -1,9 +1,9 @@
 <?php
 namespace Viserio\Http\Tests;
 
-use Viserio\Http\Uri;
 use Psr\Http\Message\UriInterface;
 use Viserio\Http\Tests\Constraint\Immutable;
+use Viserio\Http\Uri;
 
 class UriTest extends \PHPUnit_Framework_TestCase
 {
@@ -48,8 +48,6 @@ class UriTest extends \PHPUnit_Framework_TestCase
      * @param UriInterface $uriClone
      * @param UriInterface $uri
      * @param UriInterface $newUri
-     *
-     * @return void
      */
     protected function assertImmutable($uri, $uriClone, $newUri)
     {
