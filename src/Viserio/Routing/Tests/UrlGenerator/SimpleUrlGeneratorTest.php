@@ -78,7 +78,7 @@ class SimpleUrlGeneratorTest extends \PHPUnit_Framework_TestCase
 
     private function getGenerator(array $routes = ['home' => '/'])
     {
-        $dataGenerator = $this->createMockForAbstractClass('Viserio\Contracts\Routing\DataGenerator');
+        $dataGenerator = $this->getMockForAbstractClass('Viserio\Contracts\Routing\DataGenerator');
         $dataGenerator->expects($this->once())
             ->method('getData')
             ->will($this->returnValue($routes));

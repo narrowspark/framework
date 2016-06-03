@@ -10,7 +10,7 @@ class GroupCountBasedDataGeneratorTest extends \PHPUnit_Framework_TestCase
      */
     public function testFunctionality()
     {
-        $collector = $this->createMockForAbstractClass('Viserio\Contracts\Routing\RouteCollector');
+        $collector = $this->getMockForAbstractClass('Viserio\Contracts\Routing\RouteCollector');
         $collector->expects($this->once())
             ->method('getData')
             ->will($this->returnValue([
@@ -62,7 +62,7 @@ class GroupCountBasedDataGeneratorTest extends \PHPUnit_Framework_TestCase
      */
     public function testInvalidData()
     {
-        $collector = $this->createMockForAbstractClass('Viserio\Contracts\Routing\RouteCollector');
+        $collector = $this->getMockForAbstractClass('Viserio\Contracts\Routing\RouteCollector');
         $collector->expects($this->once())
             ->method('getData')
             ->will($this->returnValue([

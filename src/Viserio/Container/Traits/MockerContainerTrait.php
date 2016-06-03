@@ -50,7 +50,7 @@ trait MockerContainerTrait
     /**
      * @return array
      */
-    public function createMockedServices()
+    public function getMockedServices()
     {
         return $this->mockedServices;
     }
