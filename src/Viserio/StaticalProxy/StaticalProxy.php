@@ -171,7 +171,7 @@ abstract class StaticalProxy
      */
     protected static function createMock()
     {
-        $class = static::getMockableClass();
+        $class = static::createMockableClass();
 
         return $class ? Mockery::mock($class) : Mockery::mock();
     }
@@ -194,7 +194,7 @@ abstract class StaticalProxy
      *
      * @return string|null
      */
-    protected static function getMockableClass()
+    protected static function createMockableClass()
     {
         if ($root = static::getStaticalProxyRoot()) {
             return get_class($root);

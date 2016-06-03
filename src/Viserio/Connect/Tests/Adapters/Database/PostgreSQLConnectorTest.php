@@ -27,7 +27,7 @@ class PostgreSQLConnectorTest extends \PHPUnit_Framework_TestCase
         ];
         $connection = $this->mock('stdClass');
 
-        $connector = $this->getMock(
+        $connector = $this->createMock(
             'Viserio\Connect\Adapters\Database\PostgreSQLConnector',
             ['createConnection', 'getOptions']
         );
@@ -57,7 +57,7 @@ class PostgreSQLConnectorTest extends \PHPUnit_Framework_TestCase
         ];
         $connection = $this->mock('stdClass');
 
-        $connector = $this->getMock(
+        $connector = $this->createMock(
             'Viserio\Connect\Adapters\Database\PostgreSQLConnector',
             ['createConnection', 'getOptions']
         );
@@ -88,7 +88,7 @@ class PostgreSQLConnectorTest extends \PHPUnit_Framework_TestCase
         ];
 
         $connection = $this->mock('stdClass');
-        $connector = $this->getMock(
+        $connector = $this->createMock(
             'Viserio\Connect\Adapters\Database\PostgreSQLConnector',
             ['createConnection', 'getOptions']
         );
@@ -112,7 +112,7 @@ class PostgreSQLConnectorTest extends \PHPUnit_Framework_TestCase
         $config = ['server' => 'foo', 'database' => 'bar', 'schema' => 'public', 'charset' => 'utf8'];
         $connection = $this->mock('stdClass');
 
-        $connector = $this->getMock(
+        $connector = $this->createMock(
             'Viserio\Connect\Adapters\Database\PostgreSQLConnector',
             ['createConnection', 'getOptions']
         );
@@ -143,7 +143,7 @@ class PostgreSQLConnectorTest extends \PHPUnit_Framework_TestCase
         ];
         $connection = $this->mock('stdClass');
 
-        $connector = $this->getMock(
+        $connector = $this->createMock(
             'Viserio\Connect\Adapters\Database\PostgreSQLConnector',
             ['createConnection', 'getOptions']
         );
@@ -180,7 +180,7 @@ class PostgreSQLConnectorTest extends \PHPUnit_Framework_TestCase
         ];
         $connection = $this->mock('stdClass');
 
-        $connector = $this->getMock(
+        $connector = $this->createMock(
             'Viserio\Connect\Adapters\Database\PostgreSQLConnector',
             ['createConnection', 'getOptions']
         );

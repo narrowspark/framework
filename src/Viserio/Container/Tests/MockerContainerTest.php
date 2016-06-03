@@ -87,7 +87,7 @@ class MockerContainerTest extends \PHPUnit_Framework_TestCase
     {
         $mock1 = $this->container->mock('test.service_1', 'stdClass');
         $mock2 = $this->container->mock('test.service_2', 'stdClass');
-        $mockedServices = $this->container->getMockedServices();
+        $mockedServices = $this->container->createMockedServices();
         $this->assertEquals(['test.service_1' => $mock1, 'test.service_2' => $mock2], $mockedServices);
     }
 

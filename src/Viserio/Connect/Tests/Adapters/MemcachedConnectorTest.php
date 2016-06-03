@@ -31,7 +31,7 @@ class MemcachedConnectorTest extends \PHPUnit_Framework_TestCase
         $memcached->shouldReceive('getServerList')->once()->andReturn(null);
         $memcached->shouldReceive('getVersion')->once()->andReturn([]);
 
-        $connector = $this->getMock('Viserio\Connect\Adapters\MemcachedConnector', ['getMemcached']);
+        $connector = $this->createMock('Viserio\Connect\Adapters\MemcachedConnector', ['getMemcached']);
         $connector->expects($this->once())->method('getMemcached')->will($this->returnValue($memcached));
 
         $this->assertSame($connector->connect($config), $memcached);
@@ -58,7 +58,7 @@ class MemcachedConnectorTest extends \PHPUnit_Framework_TestCase
         $memcached->shouldReceive('getServerList')->once()->andReturn(null);
         $memcached->shouldReceive('getVersion')->once()->andReturn(['255.255.255']);
 
-        $connector = $this->getMock('Viserio\Connect\Adapters\MemcachedConnector', ['getMemcached']);
+        $connector = $this->createMock('Viserio\Connect\Adapters\MemcachedConnector', ['getMemcached']);
         $connector->expects($this->once())->method('getMemcached')->will($this->returnValue($memcached));
 
         $connector->connect($config);
@@ -150,7 +150,7 @@ class MemcachedConnectorTest extends \PHPUnit_Framework_TestCase
         $memcached->shouldReceive('getVersion')->once()->andReturn('');
         $memcached->shouldReceive('getServerList')->once()->andReturn($config);
 
-        $connector = $this->getMock('Viserio\Connect\Adapters\MemcachedConnector', ['getMemcached']);
+        $connector = $this->createMock('Viserio\Connect\Adapters\MemcachedConnector', ['getMemcached']);
         $connector->expects($this->once())->method('getMemcached')->will($this->returnValue($memcached));
 
         $connector->connect($config);

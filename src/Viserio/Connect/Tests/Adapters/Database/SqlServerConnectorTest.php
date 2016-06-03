@@ -22,7 +22,7 @@ class SqlServerConnectorTest extends \PHPUnit_Framework_TestCase
         $dsn = $this->getDsn($config);
         $connection = $this->mock('stdClass');
 
-        $connector = $this->getMock(
+        $connector = $this->createMock(
             'Viserio\Connect\Adapters\Database\SqlServerConnector',
             ['createConnection', 'getOptions']
         );
@@ -44,7 +44,7 @@ class SqlServerConnectorTest extends \PHPUnit_Framework_TestCase
         $dsn = $this->getDsn($config);
 
         $connection = $this->mock('stdClass');
-        $connector = $this->getMock(
+        $connector = $this->createMock(
             'Viserio\Connect\Adapters\Database\SqlServerConnector',
             ['createConnection', 'getOptions']
         );

@@ -23,7 +23,7 @@ class DblibConnectorTest extends \PHPUnit_Framework_TestCase
     {
         $connection = $this->mock('stdClass');
 
-        $connector = $this->getMock(
+        $connector = $this->createMock(
             'Viserio\Connect\Adapters\Database\DblibConnector',
             ['createConnection', 'getOptions']
         );

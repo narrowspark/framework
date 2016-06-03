@@ -222,7 +222,7 @@ abstract class AbstractMessage implements MessageInterface
                 $value = [$value];
             }
 
-            $this->assertHeaders($headers);
+            $this->assertHeaders($value);
 
             $value = $this->trimHeaderValues($value);
             $normalized = strtolower($header);

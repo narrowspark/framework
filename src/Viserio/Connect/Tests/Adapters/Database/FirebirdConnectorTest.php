@@ -40,7 +40,7 @@ class FirebirdConnectorTest extends \PHPUnit_Framework_TestCase
         $config = ['server' => 'localhost', 'database' => null, 'username' => '', 'password' => ''];
         $connection = $this->mock('stdClass');
 
-        $connector = $this->getMock(
+        $connector = $this->createMock(
             'Viserio\Connect\Adapters\Database\FirebirdConnector',
             ['createConnection', 'getOptions']
         );
@@ -59,7 +59,7 @@ class FirebirdConnectorTest extends \PHPUnit_Framework_TestCase
         ];
         $connection = $this->mock('stdClass');
 
-        $connector = $this->getMock(
+        $connector = $this->createMock(
             'Viserio\Connect\Adapters\Database\FirebirdConnector',
             ['createConnection', 'getOptions']
         );

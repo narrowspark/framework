@@ -13,7 +13,7 @@ class MailMessageTest extends \PHPUnit_Framework_TestCase
     public function testBasicAttachment()
     {
         $swift = new \Swift_Mailer();
-        $message = $this->getMock('Viserio\Mail\Message', ['createAttachmentFromPath'], [$swift]);
+        $message = $this->createMock('Viserio\Mail\Message', ['createAttachmentFromPath'], [$swift]);
         $attachment = Mock::mock('StdClass');
         $message->expects($this->once())->method('createAttachmentFromPath')->with($this->equalTo('foo.jpg'))->will($this->returnValue($attachment));
         $swift->shouldReceive('attach')->once()->with($attachment);
@@ -25,7 +25,7 @@ class MailMessageTest extends \PHPUnit_Framework_TestCase
     public function testDataAttachment()
     {
         $swift = new \Swift_Mailer();
-        $message = $this->getMock('Viserio\Mail\Message', ['createAttachmentFromData'], [$swift]);
+        $message = $this->createMock('Viserio\Mail\Message', ['createAttachmentFromData'], [$swift]);
         $attachment = Mock::mock('StdClass');
         $message->expects($this->once())->method('createAttachmentFromData')->with($this->equalTo('foo'), $this->equalTo('name'))->will($this->returnValue($attachment));
         $swift->shouldReceive('attach')->once()->with($attachment);

@@ -103,7 +103,7 @@ class StaticalProxyTest extends \PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf(
             'Mockery\MockInterface',
-            FacadeStub::shouldReceive('foo')->with('bar')->andReturn('baz')->getMock()
+            FacadeStub::shouldReceive('foo')->with('bar')->andReturn('baz')->createMock()
         );
     }
 
@@ -116,11 +116,11 @@ class StaticalProxyTest extends \PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf(
             'Mockery\MockInterface',
-            $mock = FacadeStub::shouldReceive('foo')->with('bar')->andReturn('baz')->getMock()
+            $mock = FacadeStub::shouldReceive('foo')->with('bar')->andReturn('baz')->createMock()
         );
         $this->assertInstanceOf(
             'Mockery\MockInterface',
-            $mock = FacadeStub::shouldReceive('foo2')->with('bar2')->andReturn('baz2')->getMock()
+            $mock = FacadeStub::shouldReceive('foo2')->with('bar2')->andReturn('baz2')->createMock()
         );
     }
 

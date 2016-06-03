@@ -82,7 +82,7 @@ class ListenerPatternTest extends \PHPUnit_Framework_TestCase
 
         $pattern = new ListenerPattern('core.*', $listener, $priority = 0);
 
-        $dispatcher = $this->getMock(Dispatcher::class);
+        $dispatcher = $this->createMock(Dispatcher::class);
         $dispatcher->expects($this->once())
             ->method('on')
             ->with(

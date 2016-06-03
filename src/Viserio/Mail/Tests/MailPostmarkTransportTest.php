@@ -22,7 +22,7 @@ class MailPostmarkTransportTest extends \PHPUnit_Framework_TestCase
 
         $transport = new \Viserio\Mail\Test\PostmarkTransportStub('TESTING_SERVER');
 
-        $client = $this->getMock('GuzzleHttp\Client', ['post']);
+        $client = $this->createMock('GuzzleHttp\Client', ['post']);
         $transport->setHttpClient($client);
 
         $client->expects($this->once())

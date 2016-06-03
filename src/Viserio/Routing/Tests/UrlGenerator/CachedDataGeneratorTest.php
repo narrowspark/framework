@@ -52,7 +52,7 @@ class CachedDataGeneratorTest extends \PHPUnit_Framework_TestCase
      */
     protected function getGenerator($filename, $expects = null, $routes = [])
     {
-        $generator = $this->getMockForAbstractClass('Viserio\Contracts\Routing\DataGenerator');
+        $generator = $this->createMockForAbstractClass('Viserio\Contracts\Routing\DataGenerator');
         $generator->expects($expects ?: $this->any())
             ->method('getData')
             ->will($this->returnValue($routes));

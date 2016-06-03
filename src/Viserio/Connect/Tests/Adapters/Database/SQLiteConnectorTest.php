@@ -21,9 +21,9 @@ class SQLiteConnectorTest extends \PHPUnit_Framework_TestCase
     public function testSQLiteDatabaseNotFound()
     {
         $config = ['database' => __DIR__ . 'notfound.db'];
-        $connection = $this->getMock('stdClass');
+        $connection = $this->createMock('stdClass');
 
-        $connector = $this->getMock(
+        $connector = $this->createMock(
             'Viserio\Connect\Adapters\Database\SQLiteConnector',
             ['createConnection', 'getOptions']
         );
@@ -37,7 +37,7 @@ class SQLiteConnectorTest extends \PHPUnit_Framework_TestCase
         $config = ['database' => __DIR__];
         $connection = $this->mock('stdClass');
 
-        $connector = $this->getMock(
+        $connector = $this->createMock(
             'Viserio\Connect\Adapters\Database\SQLiteConnector',
             ['createConnection', 'getOptions']
         );
@@ -59,7 +59,7 @@ class SQLiteConnectorTest extends \PHPUnit_Framework_TestCase
         $config = ['database' => ':memory:'];
         $connection = $this->mock('stdClass');
 
-        $connector = $this->getMock(
+        $connector = $this->createMock(
             'Viserio\Connect\Adapters\Database\SQLiteConnector',
             ['createConnection', 'getOptions']
         );

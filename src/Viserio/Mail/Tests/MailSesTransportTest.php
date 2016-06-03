@@ -39,10 +39,10 @@ class MailSesTransportTest extends \PHPUnit_Framework_TestCase
         $message->setTo('me@example.com');
         $message->setBcc('you@example.com');
 
-        $client = $this->getMockBuilder('Aws\Ses\SesClient')
+        $client = $this->createMockBuilder('Aws\Ses\SesClient')
             ->setMethods(['sendRawEmail'])
             ->disableOriginalConstructor()
-            ->getMock();
+            ->createMock();
         $transport = new SesTransport($client);
 
         $client->expects($this->once())
