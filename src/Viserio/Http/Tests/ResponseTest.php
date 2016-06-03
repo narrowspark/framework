@@ -53,7 +53,7 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
         ]);
 
         $this->assertSame(['Foo' => ['baz', 'bar']], $r->getHeaders());
-        $this->assertSame('baz, bar', $r->getHeaderLine('Foo'));
+        $this->assertSame('baz,bar', $r->getHeaderLine('Foo'));
         $this->assertSame(['baz', 'bar'], $r->getHeader('Foo'));
     }
 
@@ -81,14 +81,6 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
         $this->assertSame('0', (string) $r->getBody());
     }
 
-    public function testCanConstructWithReason()
-    {
-        $r = new Response(200, [], null, '1.1', 'bar');
-        $this->assertSame('bar', $r->getReasonPhrase());
-        $r = new Response(200, [], null, '1.1', '0');
-        $this->assertSame('0', $r->getReasonPhrase(), 'Falsey reason works');
-    }
-
     public function testWithStatusCodeAndNoReason()
     {
         $r = (new Response())->withStatus(201);
@@ -101,6 +93,7 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
         $r = (new Response())->withStatus(201, 'Foo');
         $this->assertSame(201, $r->getStatusCode());
         $this->assertSame('Foo', $r->getReasonPhrase());
+
         $r = (new Response())->withStatus(201, '0');
         $this->assertSame(201, $r->getStatusCode());
         $this->assertSame('0', $r->getReasonPhrase(), 'Falsey reason works');
@@ -152,7 +145,7 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
         $r2 = $r->withHeader('baZ', ['Bam', 'Bar']);
         $this->assertSame(['Foo' => ['Bar']], $r->getHeaders());
         $this->assertSame(['Foo' => ['Bar'], 'baZ' => ['Bam', 'Bar']], $r2->getHeaders());
-        $this->assertSame('Bam, Bar', $r2->getHeaderLine('baz'));
+        $this->assertSame('Bam,Bar', $r2->getHeaderLine('baz'));
         $this->assertSame(['Bam', 'Bar'], $r2->getHeader('baz'));
     }
 
@@ -172,7 +165,7 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
         $r2 = $r->withAddedHeader('foO', 'Baz');
         $this->assertSame(['Foo' => ['Bar']], $r->getHeaders());
         $this->assertSame(['Foo' => ['Bar', 'Baz']], $r2->getHeaders());
-        $this->assertSame('Bar, Baz', $r2->getHeaderLine('foo'));
+        $this->assertSame('Bar,Baz', $r2->getHeaderLine('foo'));
         $this->assertSame(['Bar', 'Baz'], $r2->getHeader('foo'));
     }
 
@@ -182,7 +175,7 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
         $r2 = $r->withAddedHeader('foO', ['Baz', 'Bam']);
         $this->assertSame(['Foo' => ['Bar']], $r->getHeaders());
         $this->assertSame(['Foo' => ['Bar', 'Baz', 'Bam']], $r2->getHeaders());
-        $this->assertSame('Bar, Baz, Bam', $r2->getHeaderLine('foo'));
+        $this->assertSame('Bar,Baz,Bam', $r2->getHeaderLine('foo'));
         $this->assertSame(['Bar', 'Baz', 'Bam'], $r2->getHeader('foo'));
     }
 

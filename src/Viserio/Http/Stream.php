@@ -81,11 +81,9 @@ class Stream implements StreamInterface
     protected $size;
 
     /**
-     * Is this stream a pipe?
-     *
-     * @var bool
+     * @var string
      */
-    protected $isPipe;
+    protected $uri;
 
     /**
      * This constructor accepts an associative array of options.
@@ -111,7 +109,7 @@ class Stream implements StreamInterface
             $this->size = $options['size'];
         }
 
-        $this->customMetadata = isset($options['metadata'])
+        $this->meta = isset($options['metadata'])
             ? $options['metadata']
             : [];
 
@@ -138,6 +136,7 @@ class Stream implements StreamInterface
         if ($name == 'stream') {
             throw new RuntimeException('The stream is detached');
         }
+
         throw new BadMethodCallException('No value for ' . $name);
     }
 
@@ -168,6 +167,7 @@ class Stream implements StreamInterface
             if (is_resource($this->stream)) {
                 fclose($this->stream);
             }
+
             $this->detach();
         }
     }
@@ -177,6 +177,7 @@ class Stream implements StreamInterface
         if (! isset($this->stream)) {
             return;
         }
+
         $result = $this->stream;
         unset($this->stream);
         $this->size = $this->uri = null;
@@ -190,14 +191,18 @@ class Stream implements StreamInterface
         if ($this->size !== null) {
             return $this->size;
         }
+
         if (! isset($this->stream)) {
             return;
         }
+
         // Clear the stat cache if the stream has a URI
         if ($this->uri) {
             clearstatcache(true, $this->uri);
         }
+
         $stats = fstat($this->stream);
+
         if (isset($stats['size'])) {
             $this->size = $stats['size'];
 
@@ -228,6 +233,7 @@ class Stream implements StreamInterface
     public function tell()
     {
         $result = ftell($this->stream);
+
         if ($result === false) {
             throw new RuntimeException('Unable to determine stream position');
         }
@@ -264,9 +270,11 @@ class Stream implements StreamInterface
         if (! $this->writable) {
             throw new RuntimeException('Cannot write to a non-writable stream');
         }
+
         // We can't know the size after writing anything
         $this->size = null;
         $result = fwrite($this->stream, $string);
+
         if ($result === false) {
             throw new RuntimeException('Unable to write to stream');
         }
@@ -279,10 +287,11 @@ class Stream implements StreamInterface
         if (! isset($this->stream)) {
             return $key ? null : [];
         } elseif (! $key) {
-            return $this->customMetadata + stream_get_meta_data($this->stream);
-        } elseif (isset($this->customMetadata[$key])) {
-            return $this->customMetadata[$key];
+            return $this->meta + stream_get_meta_data($this->stream);
+        } elseif (isset($this->meta[$key])) {
+            return $this->meta[$key];
         }
+
         $meta = stream_get_meta_data($this->stream);
 
         return isset($meta[$key]) ? $meta[$key] : null;

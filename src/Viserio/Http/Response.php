@@ -19,16 +19,25 @@ class Response extends AbstractMessage implements ResponseInterface
     private $statusCode = 200;
 
     /**
-     * @param string|resource|StreamInterface $body    Stream identifier and/or actual stream resource
      * @param int                             $status  Status code for the response, if any.
      * @param array                           $headers Headers for the response, if any.
-     *
+     * @param string|resource|StreamInterface $body    Stream identifier and/or actual stream resource
+     * @param string                          $version Protocol version.
+
      * @throws InvalidArgumentException on any invalid element.
      */
-    public function __construct(int $status = 200, array $headers = [], $body = 'php://memory', $version = '1.1')
-    {
+    public function __construct(
+        int $status = 200,
+        array $headers = [],
+        $body = null,
+        $version = '1.1'
+    ) {
         $this->statusCode = HttpStatus::filterStatusCode($status);
-        $this->stream = Util::getStream($body);
+
+        if ($body !== null) {
+            $this->stream = Util::getStream($body);
+        }
+
         $this->setHeaders($headers);
         $this->protocol = $version;
     }
@@ -46,7 +55,7 @@ class Response extends AbstractMessage implements ResponseInterface
      */
     public function getReasonPhrase()
     {
-        if (! $this->reasonPhrase) {
+        if ($this->reasonPhrase == '') {
             $this->reasonPhrase = HttpStatus::getReasonPhrase($this->statusCode);
         }
 

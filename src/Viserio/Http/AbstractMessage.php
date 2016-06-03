@@ -30,19 +30,19 @@ abstract class AbstractMessage implements MessageInterface
      *
      * @var array
      */
-    private $headers = [];
+    protected $headers = [];
 
     /**
      * Map of lowercase header name => original name at registration.
      *
      * @var array
      */
-    private $headerNames = [];
+    protected $headerNames = [];
 
     /**
      * @var StreamInterface
      */
-    private $stream;
+    protected $stream;
 
     /**
      * {@inheritdoc}
@@ -121,8 +121,9 @@ abstract class AbstractMessage implements MessageInterface
      */
     public function withHeader($header, $value)
     {
-        $this->checkHeader($header, $value);
+        $value = $this->checkHeaderData($header, $value);
 
+        $value = $this->trimHeaderValues($value);
         $header = trim($header);
         $normalized = strtolower($header);
         $new = clone $this;
@@ -144,12 +145,7 @@ abstract class AbstractMessage implements MessageInterface
      */
     public function withAddedHeader($header, $value)
     {
-        $this->checkHeader($header, $value);
-
-        if (! $this->hasHeader($header)) {
-            return $this->withHeader($header, $value);
-        }
-
+        $value = $this->checkHeaderData($header, $value);
         $normalized = strtolower($header);
         $new = clone $this;
 
@@ -215,6 +211,10 @@ abstract class AbstractMessage implements MessageInterface
      */
     protected function setHeaders(array $headers)
     {
+        if (empty($headers)) {
+            return;
+        }
+
         $this->headerNames = $this->headers = [];
 
         foreach ($headers as $header => $value) {
@@ -222,9 +222,7 @@ abstract class AbstractMessage implements MessageInterface
                 $value = [$value];
             }
 
-            $this->assertHeaders($value);
-
-            $value = $this->trimHeaderValues($value);
+            $value = $this->trimHeaderValues($this->filterHeaderValue($value));
             $normalized = strtolower($header);
 
             if (isset($this->headerNames[$normalized])) {
@@ -244,7 +242,7 @@ abstract class AbstractMessage implements MessageInterface
      *
      * @throws InvalidArgumentException on invalid HTTP protocol version
      */
-    private function validateProtocolVersion($version)
+    private function validateProtocolVersion(string $version)
     {
         if (empty($version)) {
             throw new InvalidArgumentException(sprintf(
@@ -268,7 +266,7 @@ abstract class AbstractMessage implements MessageInterface
      *
      * @return array
      */
-    private function checkHeader($header, $value): array
+    private function checkHeaderData($header, $value): array
     {
         if (is_string($value)) {
             $value = [$value];
@@ -282,6 +280,8 @@ abstract class AbstractMessage implements MessageInterface
 
         HeaderSecurity::assertValidName(trim($header));
         $this->assertValidHeaderValue($value);
+
+        $value = $this->trimHeaderValues($value);
 
         return $value;
     }
@@ -305,27 +305,6 @@ abstract class AbstractMessage implements MessageInterface
         };
 
         return array_reduce($array, $filterStringValue, true);
-    }
-
-    /**
-     * Trims whitespace from the header values.
-     *
-     * Spaces and tabs ought to be excluded by parsers when extracting the field value from a header field.
-     *
-     * header-field = field-name ":" OWS field-value OWS
-     * OWS          = *( SP / HTAB )
-     *
-     * @param string[] $values Header values
-     *
-     * @return string[] Trimmed header values
-     *
-     * @see https://tools.ietf.org/html/rfc7230#section-3.2.4
-     */
-    private function trimHeaderValues(array $values)
-    {
-        return array_map(function ($value) {
-            return trim($value, " \t");
-        }, $values);
     }
 
     /**
@@ -355,5 +334,34 @@ abstract class AbstractMessage implements MessageInterface
     private function assertValidHeaderValue(array $values)
     {
         array_walk($values, __NAMESPACE__ . '\HeaderSecurity::assertValid');
+    }
+
+    /**
+     * @param array $value
+     */
+    private function filterHeaderValue(array $values)
+    {
+        return array_map([HeaderSecurity::class, 'filter'], $values);
+    }
+
+    /**
+     * Trims whitespace from the header values.
+     *
+     * Spaces and tabs ought to be excluded by parsers when extracting the field value from a header field.
+     *
+     * header-field = field-name ":" OWS field-value OWS
+     * OWS          = *( SP / HTAB )
+     *
+     * @param string[] $values Header values
+     *
+     * @return string[] Trimmed header values
+     *
+     * @see https://tools.ietf.org/html/rfc7230#section-3.2.4
+     */
+    private function trimHeaderValues(array $values)
+    {
+        return array_map(function ($value) {
+            return trim($value, " \t");
+        }, $values);
     }
 }
