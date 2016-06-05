@@ -1,10 +1,9 @@
 <?php
 namespace Viserio\Application;
 
-use SplPriorityQueue;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
-use Viserio\Http\ServerRequest;
+use SplPriorityQueue;
 use Viserio\Application\Traits\BootableTrait;
 use Viserio\Application\Traits\EnvironmentTrait;
 use Viserio\Application\Traits\HttpErrorHandlingTrait;
@@ -14,6 +13,7 @@ use Viserio\Application\Traits\PathsTrait;
 use Viserio\Application\Traits\ServiceProviderTrait;
 use Viserio\Container\Container;
 use Viserio\Contracts\Application\Foundation;
+use Viserio\Http\ServerRequest;
 use Viserio\StaticalProxy\StaticalProxy;
 
 class Application extends Container implements Foundation
