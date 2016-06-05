@@ -2,19 +2,74 @@
 namespace Viserio\Http\Tests;
 
 use Psr\Http\Message\StreamInterface;
+use Psr\Http\Message\ResponseInterface;
 use Viserio\Http\Response;
 use Viserio\Http\Util;
 
 class ResponseTest extends AbstractMessageTest
 {
-    public function createDefaultMessage()
+    public function setUP()
     {
-        return new Response();
+        $this->classToTest = new Response();
+    }
+
+    public function testResponseImplementsInterface()
+    {
+        $this->assertInstanceOf(ResponseInterface::class, $this->classToTest);
+    }
+
+    public function testValidDefaultStatusCode()
+    {
+        $message = $this->classToTest;
+        $statusCode = $message->getStatusCode();
+        $this->assertInternalType('integer', $statusCode, 'getStatusCode must return an integer');
+    }
+
+    public function testValidDefaultReasonPhrase()
+    {
+        $message = $this->classToTest;
+        $reasonPhrase = $message->getReasonPhrase();
+        $this->assertInternalType('string', $reasonPhrase, 'getReasonPhrase must return a string');
+    }
+
+    // Test methods for change instances status
+    public function testValidWithStatusDefaultReasonPhrase()
+    {
+        $message = $this->classToTest;
+        $messageClone = clone $message;
+        $statusCode = 100;
+        $newMessage = $message->withStatus($statusCode);
+        $this->assertImmutable($messageClone, $message, $newMessage);
+        $this->assertEquals(
+            $statusCode,
+            $newMessage->getStatusCode(),
+            'getStatusCode does not match code set in withStatus'
+        );
+    }
+
+    public function testValidWithStatusCustomReasonPhrase()
+    {
+        $message = $this->classToTest;
+        $messageClone = clone $message;
+        $statusCode = 100;
+        $reasonPhrase = 'example';
+        $newMessage = $message->withStatus($statusCode, $reasonPhrase);
+        $this->assertImmutable($messageClone, $message, $newMessage);
+        $this->assertEquals(
+            $statusCode,
+            $newMessage->getStatusCode(),
+            'getStatusCode does not match code set in withStatus'
+        );
+        $this->assertEquals(
+            $reasonPhrase,
+            $newMessage->getReasonPhrase(),
+            'getReasonPhrase does not match code set in withStatus'
+        );
     }
 
     public function testDefaultConstructor()
     {
-        $r = $this->createDefaultMessage();
+        $r = $this->classToTest;
 
         $this->assertSame(200, $r->getStatusCode());
         $this->assertSame('1.1', $r->getProtocolVersion());

@@ -19,8 +19,10 @@
     ],
     "require": {
         "php"                             : "^7.0.7",
-        "league/uri"                      : "^4.1",
+        "jeremykendall/php-domain-parser" : "^4.0",
         "narrowspark/http-status"         : "^1.1",
+        "symfony/polyfill-intl-icu"       : "^1.0",
+        "symfony/polyfill-mbstring"       : "^1.0",
         "viserio/contracts"               : "self.version"
     },
     "require-dev": {

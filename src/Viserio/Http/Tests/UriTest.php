@@ -4,506 +4,366 @@ namespace Viserio\Http\Tests;
 use Psr\Http\Message\UriInterface;
 use Viserio\Http\Tests\Constraint\Immutable;
 use Viserio\Http\Uri;
+use Viserio\Http\Tests\Fixture\ExtendingClassTest;
 
 class UriTest extends \PHPUnit_Framework_TestCase
 {
-    public function createDefaultUri()
+    const RFC3986_BASE = 'http://a/b/c/d;p?q';
+
+    public function testParsesProvidedUri()
     {
-        return new Uri();
+        $uri = new Uri('https://user:pass@example.com:8080/path/123?q=abc#test');
+
+        $this->assertSame('https', $uri->getScheme());
+        $this->assertSame('user:pass@example.com:8080', $uri->getAuthority());
+        $this->assertSame('user:pass', $uri->getUserInfo());
+        $this->assertSame('example.com', $uri->getHost());
+        $this->assertSame(8080, $uri->getPort());
+        $this->assertSame('/path/123', $uri->getPath());
+        $this->assertSame('q=abc', $uri->getQuery());
+        $this->assertSame('test', $uri->getFragment());
+        $this->assertSame('https://user:pass@example.com:8080/path/123?q=abc#test', (string) $uri);
     }
 
-    public function testUriImplementsInterface()
+    public function testCanTransformAndRetrievePartsIndividually()
     {
-        $this->assertInstanceOf(UriInterface::class, $this->createDefaultUri());
-    }
-
-    public function testGetSchemeReturnsString()
-    {
-        $uri = $this->createDefaultUri();
-        $this->assertInternalType('string', $uri->getScheme(), 'getScheme returns a string');
+        $uri = (new Uri())
+            ->withScheme('https')
+            ->withUserInfo('user', 'pass')
+            ->withHost('example.com')
+            ->withPort(8080)
+            ->withPath('/path/123')
+            ->withQuery('q=abc')
+            ->withFragment('test');
+        $this->assertSame('https', $uri->getScheme());
+        $this->assertSame('user:pass@example.com:8080', $uri->getAuthority());
+        $this->assertSame('user:pass', $uri->getUserInfo());
+        $this->assertSame('example.com', $uri->getHost());
+        $this->assertSame(8080, $uri->getPort());
+        $this->assertSame('/path/123', $uri->getPath());
+        $this->assertSame('q=abc', $uri->getQuery());
+        $this->assertSame('test', $uri->getFragment());
+        $this->assertSame('https://user:pass@example.com:8080/path/123?q=abc#test', (string) $uri);
     }
 
     /**
-     * @dataProvider schemeProvider
+     * @dataProvider getValidUris
      */
-    public function testGetScheme($scheme, $expected)
+    public function testValidUrisStayValid($input)
     {
-        $uri = $this->createDefaultUri();
-        $uriClone = clone $uri;
-        $newUri = $uri->withScheme($scheme);
-        $this->assertImmutable($uri, $uriClone, $newUri);
-        $this->assertEquals($expected, $newUri->getScheme(), 'Scheme must be normalized according to RFC3986');
+        $uri = new Uri($input);
+        $this->assertSame($input, (string) $uri);
     }
 
-    public function schemeProvider()
+    /**
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage The source URI string appears to be malformed
+     * @dataProvider getInvalidUris
+     */
+    public function testInvalidUrisThrowException($invalidUri)
+    {
+        new Uri($invalidUri);
+    }
+
+    public function getInvalidUris()
     {
         return [
-            'normalized scheme' => ['HtTpS', 'https'],
-            'simple scheme' => ['http',  'http'],
-            'no scheme' => ['', ''],
+            // parse_url() requires the host component which makes sense for http(s)
+            // but not when the scheme is not known or different. So '//' or '///' is
+            // currently invalid as well but should not according to RFC 3986.
+            ['http://'],
+            ['urn://host:with:colon'], // host cannot contain ":"
         ];
     }
-
     /**
-     * @param UriInterface $uriClone
-     * @param UriInterface $uri
-     * @param UriInterface $newUri
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage Invalid port: 100000. Must be between 1 and 65535
      */
-    protected function assertImmutable($uri, $uriClone, $newUri)
+    public function testPortMustBeValid()
     {
-        $this->assertEquals($uriClone, $uri, 'Original URI must be immutable');
-        Immutable::assertImmutable($uri, $newUri);
+        (new Uri())->withPort(100000);
     }
-
-    public function testGetUserInfoReturnsString()
-    {
-        $uri = $this->createDefaultUri();
-        $this->assertInternalType('string', $uri->getUserInfo(), 'getUserInfo returns a string');
-    }
-
     /**
-     * @dataProvider userInfoProvider
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage Invalid port: 0. Must be between 1 and 65535
      */
-    public function testGetUserInfo($user, $pass, $expected)
+    public function testWithPortCannotBeZero()
     {
-        $uri = $this->createDefaultUri();
-        $uriClone = clone $uri;
-        $newUri = $uri->withUserInfo($user, $pass);
-        $this->assertImmutable($uri, $uriClone, $newUri);
-        $this->assertEquals($expected, $newUri->getUserInfo());
+        (new Uri())->withPort(0);
+    }
+    /**
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage The source URI string appears to be malformed
+     */
+    public function testParseUriPortCannotBeZero()
+    {
+        new Uri('//example.com:0');
+    }
+    /**
+     * @expectedException \InvalidArgumentException
+     */
+    public function testSchemeMustHaveCorrectType()
+    {
+        (new Uri())->withScheme([]);
+    }
+    /**
+     * @expectedException \InvalidArgumentException
+     */
+    public function testHostMustHaveCorrectType()
+    {
+        (new Uri())->withHost([]);
+    }
+    /**
+     * @expectedException \InvalidArgumentException
+     */
+    public function testPathMustHaveCorrectType()
+    {
+        (new Uri())->withPath([]);
+    }
+    /**
+     * @expectedException \InvalidArgumentException
+     */
+    public function testQueryMustHaveCorrectType()
+    {
+        (new Uri())->withQuery([]);
+    }
+    /**
+     * @expectedException \InvalidArgumentException
+     */
+    public function testFragmentMustHaveCorrectType()
+    {
+        (new Uri())->withFragment([]);
     }
 
-    public function userInfoProvider()
+    public function testCanParseFalseyUriParts()
     {
+        $uri = new Uri('0://0:0@0/0?0#0');
+        $this->assertSame('0', $uri->getScheme());
+        var_dump($uri->__toString()); die();
+        $this->assertSame('0:0@0', $uri->getAuthority());
+        $this->assertSame('0:0', $uri->getUserInfo());
+        $this->assertSame('0', $uri->getHost());
+        $this->assertSame('/0', $uri->getPath());
+        $this->assertSame('0', $uri->getQuery());
+        $this->assertSame('0', $uri->getFragment());
+        $this->assertSame('0://0:0@0/0?0#0', (string) $uri);
+    }
+
+    public function testCanConstructFalseyUriParts()
+    {
+        $uri = (new Uri())
+            ->withScheme('0')
+            ->withUserInfo('0', '0')
+            ->withHost('0')
+            ->withPath('/0')
+            ->withQuery('0')
+            ->withFragment('0');
+        $this->assertSame('0', $uri->getScheme());
+        $this->assertSame('0:0@0', $uri->getAuthority());
+        $this->assertSame('0:0', $uri->getUserInfo());
+        $this->assertSame('0', $uri->getHost());
+        $this->assertSame('/0', $uri->getPath());
+        $this->assertSame('0', $uri->getQuery());
+        $this->assertSame('0', $uri->getFragment());
+        $this->assertSame('0://0:0@0/0?0#0', (string) $uri);
+    }
+
+    public function testSchemeIsNormalizedToLowercase()
+    {
+        $uri = new Uri('HTTP://example.com');
+        $this->assertSame('http', $uri->getScheme());
+        $this->assertSame('http://example.com', (string) $uri);
+        $uri = (new Uri('//example.com'))->withScheme('HTTP');
+        $this->assertSame('http', $uri->getScheme());
+        $this->assertSame('http://example.com', (string) $uri);
+    }
+
+    public function testHostIsNormalizedToLowercase()
+    {
+        $uri = new Uri('//eXaMpLe.CoM');
+        $this->assertSame('example.com', $uri->getHost());
+        $this->assertSame('//example.com', (string) $uri);
+        $uri = (new Uri())->withHost('eXaMpLe.CoM');
+        $this->assertSame('example.com', $uri->getHost());
+        $this->assertSame('//example.com', (string) $uri);
+    }
+
+    public function testPortIsNullIfStandardPortForScheme()
+    {
+        // HTTPS standard port
+        $uri = new Uri('https://example.com:443');
+        $this->assertNull($uri->getPort());
+        $this->assertSame('example.com', $uri->getAuthority());
+
+        $uri = (new Uri('https://example.com'))->withPort(443);
+        $this->assertNull($uri->getPort());
+        $this->assertSame('example.com', $uri->getAuthority());
+
+        // HTTP standard port
+        $uri = new Uri('http://example.com:80');
+        $this->assertNull($uri->getPort());
+        $this->assertSame('example.com', $uri->getAuthority());
+
+        $uri = (new Uri('http://example.com'))->withPort(80);
+        $this->assertNull($uri->getPort());
+        $this->assertSame('example.com', $uri->getAuthority());
+    }
+
+    public function testPortIsReturnedIfSchemeUnknown()
+    {
+        $uri = (new Uri('//example.com'))->withPort(80);
+        $this->assertSame(80, $uri->getPort());
+        $this->assertSame('example.com:80', $uri->getAuthority());
+    }
+
+    public function testStandardPortIsNullIfSchemeChanges()
+    {
+        $uri = new Uri('http://example.com:443');
+        $this->assertSame('http', $uri->getScheme());
+        $this->assertSame(443, $uri->getPort());
+        $uri = $uri->withScheme('https');
+        $this->assertNull($uri->getPort());
+    }
+
+    public function testPortPassedAsStringIsCastedToInt()
+    {
+        $uri = (new Uri('//example.com'))->withPort('8080');
+        $this->assertSame(8080, $uri->getPort(), 'Port is returned as integer');
+        $this->assertSame('example.com:8080', $uri->getAuthority());
+    }
+
+    public function testPortCanBeRemoved()
+    {
+        $uri = (new Uri('http://example.com:8080'))->withPort(null);
+        $this->assertNull($uri->getPort());
+        $this->assertSame('http://example.com', (string) $uri);
+    }
+
+    public function testAuthorityWithUserInfoButWithoutHost()
+    {
+        $uri = (new Uri())->withUserInfo('user', 'pass');
+        $this->assertSame('user:pass', $uri->getUserInfo());
+        $this->assertSame('', $uri->getAuthority());
+    }
+
+    public function uriComponentsEncodingProvider()
+    {
+        $unreserved = 'a-zA-Z0-9.-_~!$&\'()*+,;=:@';
         return [
-            'with userinfo' => ['iGoR', 'rAsMuZeN', 'iGoR:rAsMuZeN'],
-            'no userinfo' => ['', '', ''],
-            'no pass' => ['iGoR', '', 'iGoR'],
-            'pass is null' => ['iGoR', null, 'iGoR'],
+            // Percent encode spaces
+            ['/pa th?q=va lue#frag ment', '/pa%20th', 'q=va%20lue', 'frag%20ment', '/pa%20th?q=va%20lue#frag%20ment'],
+            // Percent encode multibyte
+            ['/€?€#€', '/%E2%82%AC', '%E2%82%AC', '%E2%82%AC', '/%E2%82%AC?%E2%82%AC#%E2%82%AC'],
+            // Don't encode something that's already encoded
+            ['/pa%20th?q=va%20lue#frag%20ment', '/pa%20th', 'q=va%20lue', 'frag%20ment', '/pa%20th?q=va%20lue#frag%20ment'],
+            // Percent encode invalid percent encodings
+            ['/pa%2-th?q=va%2-lue#frag%2-ment', '/pa%252-th', 'q=va%252-lue', 'frag%252-ment', '/pa%252-th?q=va%252-lue#frag%252-ment'],
+            // Don't encode path segments
+            ['/pa/th//two?q=va/lue#frag/ment', '/pa/th//two', 'q=va/lue', 'frag/ment', '/pa/th//two?q=va/lue#frag/ment'],
+            // Don't encode unreserved chars or sub-delimiters
+            ["/$unreserved?$unreserved#$unreserved", "/$unreserved", $unreserved, $unreserved, "/$unreserved?$unreserved#$unreserved"],
+            // Encoded unreserved chars are not decoded
+            ['/p%61th?q=v%61lue#fr%61gment', '/p%61th', 'q=v%61lue', 'fr%61gment', '/p%61th?q=v%61lue#fr%61gment'],
         ];
     }
-
-    public function testGetHostReturnsString()
-    {
-        $uri = $this->createDefaultUri();
-        $this->assertInternalType('string', $uri->getHost(), 'getHost returns a string');
-    }
-
     /**
-     * @dataProvider hostProvider
-     *
-     * Host MUST be normalized to lowercase if present
+     * @dataProvider uriComponentsEncodingProvider
      */
-    public function testGetHost($host, $expected)
+    public function testUriComponentsGetEncodedProperly($input, $path, $query, $fragment, $output)
     {
-        $uri = $this->createDefaultUri();
-        $uriClone = clone $uri;
-        $newUri = $uri->withHost($host);
-        $this->assertImmutable($uri, $uriClone, $newUri);
-        $this->assertEquals($expected, $newUri->getHost(), 'Host must be normalized according to RFC3986');
+        $uri = new Uri($input);
+        $this->assertSame($path, $uri->getPath());
+        $this->assertSame($query, $uri->getQuery());
+        $this->assertSame($fragment, $uri->getFragment());
+        $this->assertSame($output, (string) $uri);
     }
 
-    public function hostProvider()
+    public function testWithPathEncodesProperly()
     {
-        return [
-            'normalized host' => ['MaStEr.eXaMpLe.CoM', 'master.example.com'],
-            'simple host' => ['www.example.com', 'www.example.com'],
-            'IDN hostname' => ['مثال.إختبار', 'مثال.إختبار'],
-            'IPv6 Host' => ['[::1]', '[::1]'],
-        ];
+        $uri = (new Uri())->withPath('/baz?#€/b%61r');
+        // Query and fragment delimiters and multibyte chars are encoded.
+        $this->assertSame('/baz%3F%23%E2%82%AC/b%61r', $uri->getPath());
+        $this->assertSame('/baz%3F%23%E2%82%AC/b%61r', (string) $uri);
     }
 
-    public function testGetPortDefaultReturnsNull()
+    public function testWithQueryEncodesProperly()
     {
-        $uri = $this->createDefaultUri();
-        $this->assertInternalType('null', $uri->getPort(), 'getPort returns null');
+        $uri = (new Uri())->withQuery('?=#&€=/&b%61r');
+        // A query starting with a "?" is valid and must not be magically removed. Otherwise it would be impossible to
+        // construct such an URI. Also the "?" and "/" does not need to be encoded in the query.
+        $this->assertSame('?=%23&%E2%82%AC=/&b%61r', $uri->getQuery());
+        $this->assertSame('??=%23&%E2%82%AC=/&b%61r', (string) $uri);
     }
 
-    /**
-     * @dataProvider portProvider
-     *
-     * If no port is present and no scheme is present, this method MUST return a null value
-     * If no port is present but a scheme is present, this method MAY return the standard port, but SHOULD return null
-     */
-    public function testGetPort($port, $scheme, $host, $expected)
+    public function testWithFragmentEncodesProperly()
     {
-        $uri = $this->createDefaultUri();
-        $uriClone = clone $uri;
-        $newUri = $uri->withHost($host)->withScheme($scheme)->withPort($port);
-        $this->assertImmutable($uri, $uriClone, $newUri);
-        $this->assertEquals($expected, $newUri->getPort(), 'port must be an int or null');
+        $uri = (new Uri())->withFragment('#€?/b%61r');
+        // A fragment starting with a "#" is valid and must not be magically removed. Otherwise it would be impossible to
+        // construct such an URI. Also the "?" and "/" does not need to be encoded in the fragment.
+        $this->assertSame('%23%E2%82%AC?/b%61r', $uri->getFragment());
+        $this->assertSame('#%23%E2%82%AC?/b%61r', (string) $uri);
     }
 
-    public function portProvider()
+    public function testAllowsForRelativeUri()
     {
-        return [
-            'non standard string port' => ['443', 'http', 'localhost', 443],
-            'non standard int port' => [443, 'http', 'localhost', 443],
-            'no port' => [null, 'http', 'localhost', null],
-            'standard port' => [80, 'http', 'localhost', null],
-        ];
+        $uri = (new Uri)->withPath('foo');
+        $this->assertSame('foo', $uri->getPath());
+        $this->assertSame('foo', (string) $uri);
     }
 
-    public function testGetAuthorityReturnsString()
+    public function testAddsSlashForRelativeUriStringWithHost()
     {
-        $uri = $this->createDefaultUri();
-        $this->assertInternalType('string', $uri->getAuthority(), 'getAuthority returns a string');
+        // If the path is rootless and an authority is present, the path MUST
+        // be prefixed by "/".
+        $uri = (new Uri)->withPath('foo')->withHost('example.com');
+        $this->assertSame('foo', $uri->getPath());
+        // concatenating a relative path with a host doesn't work: "//example.comfoo" would be wrong
+        $this->assertSame('//example.com/foo', (string) $uri);
     }
 
-    /**
-     * @dataProvider authorityProvider
-     *
-     * If the port component is not set or is the standard port for the current
-     * scheme, it SHOULD NOT be included.
-     */
-    public function testGetAuthority($scheme, $user, $pass, $host, $port, $authority)
+    public function testRemoveExtraSlashesWihoutHost()
     {
-        $uri = $this->createDefaultUri();
-        $uriClone = clone $uri;
-        $newUri = $uri
-                ->withHost($host)
-                ->withScheme($scheme)
-                ->withUserInfo($user, $pass)
-                ->withPort($port);
-        $this->assertImmutable($uri, $uriClone, $newUri);
-        $this->assertEquals($authority, $newUri->getAuthority());
+        // If the path is starting with more than one "/" and no authority is
+        // present, the starting slashes MUST be reduced to one.
+        $uri = (new Uri)->withPath('//foo');
+        $this->assertSame('//foo', $uri->getPath());
+        // URI "//foo" would be interpreted as network reference and thus change the original path to the host
+        $this->assertSame('/foo', (string) $uri);
     }
 
-    public function authorityProvider()
+    public function testDefaultReturnValuesOfGetters()
     {
-        return [
-            'authority' => [
-                'scheme' => 'http',
-                'user' => 'iGoR',
-                'pass' => 'rAsMuZeN',
-                'host' => 'master.example.com',
-                'port' => 443,
-                'authority' => 'iGoR:rAsMuZeN@master.example.com:443',
-            ],
-            'without port' => [
-                'scheme' => 'http',
-                'user' => 'iGoR',
-                'pass' => 'rAsMuZeN',
-                'host' => 'master.example.com',
-                'port' => null,
-                'authority' => 'iGoR:rAsMuZeN@master.example.com',
-            ],
-            'with standard port' => [
-                'scheme' => 'http',
-                'user' => 'iGoR',
-                'pass' => 'rAsMuZeN',
-                'host' => 'master.example.com',
-                'port' => 80,
-                'authority' => 'iGoR:rAsMuZeN@master.example.com',
-            ],
-            'authority without pass' => [
-                'scheme' => 'http',
-                'user' => 'iGoR',
-                'pass' => '',
-                'host' => 'master.example.com',
-                'port' => null,
-                'authority' => 'iGoR@master.example.com',
-            ],
-            'authority without port and userinfo' => [
-                'scheme' => 'http',
-                'user' => '',
-                'pass' => '',
-                'host' => 'master.example.com',
-                'port' => null,
-                'authority' => 'master.example.com',
-            ],
-        ];
+        $uri = new Uri();
+        $this->assertSame('', $uri->getScheme());
+        $this->assertSame('', $uri->getAuthority());
+        $this->assertSame('', $uri->getUserInfo());
+        $this->assertSame('', $uri->getHost());
+        $this->assertNull($uri->getPort());
+        $this->assertSame('', $uri->getPath());
+        $this->assertSame('', $uri->getQuery());
+        $this->assertSame('', $uri->getFragment());
     }
 
-    public function testGetPathReturnsString()
+    public function testImmutability()
     {
-        $uri = $this->createDefaultUri();
-        $this->assertInternalType('string', $uri->getPath(), 'getPath returns a string');
+        $uri = new Uri();
+        $this->assertNotSame($uri, $uri->withScheme('https'));
+        $this->assertNotSame($uri, $uri->withUserInfo('user', 'pass'));
+        $this->assertNotSame($uri, $uri->withHost('example.com'));
+        $this->assertNotSame($uri, $uri->withPort(8080));
+        $this->assertNotSame($uri, $uri->withPath('/path/123'));
+        $this->assertNotSame($uri, $uri->withQuery('q=abc'));
+        $this->assertNotSame($uri, $uri->withFragment('test'));
     }
 
-    /**
-     * @dataProvider pathProvider
-     *
-     * The value returned MUST be percent-encoded, but MUST NOT double-encode
-     * any characters. To determine what characters to encode, please refer to
-     * RFC 3986, Sections 2 and 3.3.
-     */
-    public function testGetPath($path, $expected)
+    public function testExtendingClassesInstantiates()
     {
-        $uri = $this->createDefaultUri();
-        $uriClone = clone $uri;
-        $newUri = $uri->withPath($path);
-        $this->assertImmutable($uri, $uriClone, $newUri);
-        $this->assertEquals($expected, $newUri->getPath(), 'Path must be normalized according to RFC3986');
-    }
-
-    public function pathProvider()
-    {
-        return [
-            'normalized path' => ['/%7ejohndoe/%a1/index.php', '/~johndoe/%A1/index.php'],
-            'slash forward only path' => ['/', '/'],
-            'empty path' => ['', ''],
-        ];
-    }
-
-    public function testGetQueryReturnsString()
-    {
-        $uri = $this->createDefaultUri();
-        $this->assertInternalType('string', $uri->getQuery(), 'getQuery returns a string');
-    }
-
-    /**
-     * @dataProvider queryProvider
-     *
-     * The value returned MUST be percent-encoded, but MUST NOT double-encode
-     * any characters. To determine what characters to encode, please refer to
-     * RFC 3986, Sections 2 and 3.4.
-     */
-    public function testGetQuery($query, $expected)
-    {
-        $uri = $this->createDefaultUri();
-        $uriClone = clone $uri;
-        $newUri = $uri->withQuery($query);
-        $this->assertImmutable($uri, $uriClone, $newUri);
-        $this->assertEquals($expected, $newUri->getQuery(), 'Query must be normalized according to RFC3986');
-    }
-
-    public function queryProvider()
-    {
-        return [
-            'normalized query' => ['foo.bar=%7evalue', 'foo.bar=~value'],
-            'empty query' => ['', ''],
-            'same param query' => ['foo.bar=1&foo.bar=1', 'foo.bar=1&foo.bar=1'],
-            'query with delimiter' => ['?foo=1', '%3Ffoo=1'],
-        ];
-    }
-
-    public function testGetFragmentReturnsString()
-    {
-        $uri = $this->createDefaultUri();
-        $this->assertInternalType('string', $uri->getFragment(), 'getFragment returns a string');
-    }
-
-    /**
-     * @dataProvider fragmentProvider
-     *
-     * The value returned MUST be percent-encoded, but MUST NOT double-encode
-     * any characters. To determine what characters to encode, please refer to
-     * RFC 3986, Sections 2 and 3.5.
-     */
-    public function testGetFragment($fragment, $expected)
-    {
-        $uri = $this->createDefaultUri();
-        $uriClone = clone $uri;
-        $newUri = $uri->withFragment($fragment);
-        $this->assertImmutable($uri, $uriClone, $newUri);
-        $this->assertEquals($expected, $newUri->getFragment(), 'Fragment must be normalized according to RFC3986');
-    }
-
-    public function fragmentProvider()
-    {
-        return [
-            'simple fragment' => ['fragment', 'fragment'],
-            'fragment with delimiter' => ['#fragment', '%23fragment'],
-            'URI with non-encodable fragment' => ["azAZ0-9/?-._~!$&'()*+,;=:@", "azAZ0-9/?-._~!$&'()*+,;=:@"],
-        ];
-    }
-
-    /**
-     * @dataProvider stringProvider
-     *
-     * - If a scheme is present, it MUST be suffixed by ":".
-     * - If an authority is present, it MUST be prefixed by "//".
-     * - The path can be concatenated without delimiters. But there are two
-     *   cases where the path has to be adjusted to make the URI reference
-     *   valid as PHP does not allow to throw an exception in __toString():
-     *     - If the path is rootless and an authority is present, the path MUST
-     *       be prefixed by "/".
-     *     - If the path is starting with more than one "/" and no authority is
-     *       present, the starting slashes MUST be reduced to one.
-     * - If a query is present, it MUST be prefixed by "?".
-     * - If a fragment is present, it MUST be prefixed by "#".
-     */
-    public function testToString($scheme, $user, $pass, $host, $port, $path, $query, $fragment, $expected)
-    {
-        $uri = $this->createDefaultUri();
-        $uriClone = clone $uri;
-        $newUri = $uri
-                ->withHost($host)
-                ->withScheme($scheme)
-                ->withUserInfo($user, $pass)
-                ->withPort($port)
-                ->withPath($path)
-                ->withQuery($query)
-                ->withFragment($fragment);
-        $this->assertImmutable($uri, $uriClone, $newUri);
-        $this->assertEquals($expected, (string) $newUri, 'URI string must be normalized according to RFC3986 rules');
-    }
-
-    public function stringProvider()
-    {
-        return [
-            'URI normalized' => [
-                'scheme' => 'HtTps',
-                'user' => 'iGoR',
-                'pass' => 'rAsMuZeN',
-                'host' => 'MaStEr.eXaMpLe.CoM',
-                'port' => 443,
-                'path' => '/%7ejohndoe/%a1/index.php',
-                'query' => 'foo.bar=%7evalue',
-                'fragment' => 'fragment',
-                'uri' => 'https://iGoR:rAsMuZeN@master.example.com/~johndoe/%A1/index.php?foo.bar=~value#fragment',
-            ],
-            'URI without scheme' => [
-                'scheme' => '',
-                'user' => '',
-                'pass' => '',
-                'host' => 'www.example.com',
-                'port' => 443,
-                'path' => '/foo/bar',
-                'query' => 'param=value',
-                'fragment' => 'fragment',
-                'uri' => '//www.example.com:443/foo/bar?param=value#fragment',
-            ],
-            'URI with rootless path' => [
-                'scheme' => 'http',
-                'user' => '',
-                'pass' => '',
-                'host' => 'www.example.com',
-                'port' => null,
-                'path' => 'foo/bar',
-                'query' => '',
-                'fragment' => '',
-                'uri' => 'http://www.example.com/foo/bar',
-            ],
-            'URI without scheme and authority' => [
-                'scheme' => '',
-                'user' => '',
-                'pass' => '',
-                'host' => '',
-                'port' => null,
-                'path' => '//foo/bar',
-                'query' => '',
-                'fragment' => '',
-                'uri' => '/foo/bar',
-            ],
-        ];
-    }
-
-    /**
-     * @dataProvider withSchemeFailedProvider
-     * @expectedException InvalidArgumentException
-     */
-    public function testWithSchemeFailed($scheme)
-    {
-        $this->createDefaultUri()->withScheme($scheme);
-    }
-
-    public function withSchemeFailedProvider()
-    {
-        return [
-            'invalid char' => ['in,valid'],
-            'integer like string' => ['123'],
-            'float' => [1.2],
-            'array' => [['foo']],
-            'unknown scheme' => ['yolo'],
-        ];
-    }
-
-    /**
-     * @dataProvider withUserInfoFailedProvider
-     * @expectedException InvalidArgumentException
-     */
-    public function testWithUserInfoFailed($user, $pass)
-    {
-        $this->createDefaultUri()->withUserInfo($user, $pass);
-    }
-
-    public function withUserInfoFailedProvider()
-    {
-        return [
-            'invalid character in user :' => ['igo:r', 'rAsMuZeN'],
-            'invalid character in user @' => ['igo@r', 'rAsMuZeN'],
-            'invalid character in pass' => ['iGoR', 'rasmu@sen'],
-            'array in user' => [['iGoR'], 'rAsMuZeN'],
-            'array in pass' => ['iGoR', ['rAsMuZeN']],
-        ];
-    }
-
-    /**
-     * @dataProvider withHostFailedProvider
-     * @expectedException InvalidArgumentException
-     */
-    public function testWithHostFailed($host)
-    {
-        $this->createDefaultUri()->withHost($host);
-    }
-
-    public function withHostFailedProvider()
-    {
-        return [
-            'dot in front' => ['.example.com'],
-            'hyphen suffix' => ['host.com-'],
-            'multiple dot' => ['.......'],
-            'one dot' => ['.'],
-            'empty label' => ['tot.    .coucou.com'],
-            'space in the label' => ['re view'],
-            'underscore in label' => ['_bad.host.com'],
-            'label too long' => [implode('', array_fill(0, 12, 'banana')) . '.secure.example.com'],
-            'too many labels' => [implode('.', array_fill(0, 128, 'a'))],
-            'Invalid IP format' => ['[127.0.0.1]'],
-            'Invalid IPv6 format' => ['[[::1]]'],
-            'Incomplete IPv6 format' => ['[::1'],
-            'space character in starting label' => ['example. com'],
-            'invalid character in host label' => ["examp\0le.com"],
-            'invalid IP with scope' => ['[127.2.0.1%253]'],
-            'invalid scope IPv6' => ['[ab23::1234%251]'],
-            'invalid scope ID' => ['[fe80::1234%25?@]'],
-            'invalid scope ID with utf8 character' => ['[fe80::1234%25€]'],
-        ];
-    }
-
-    /**
-     * @dataProvider withPortFailedProvider
-     * @expectedException InvalidArgumentException
-     */
-    public function testWithPortFailed($port)
-    {
-        $this->createDefaultUri()->withPort($port);
-    }
-
-    public function withPortFailedProvider()
-    {
-        return [
-            'string' => ['toto'],
-            'invalid port number too low' => [0],
-            'invalid port number too high' => [65536],
-            'float' => [1.2],
-        ];
-    }
-
-    /**
-     * @dataProvider withPathFailedProvider
-     * @expectedException InvalidArgumentException
-     */
-    public function withPathFailed($path)
-    {
-        $this->createDefaultUri()->withPath($path);
-    }
-
-    public function withPathFailedProvider()
-    {
-        return [
-            'invalid ? character' => ['foo?bar'],
-            'invalid # character' => ['foo#bar'],
-        ];
-    }
-
-    /**
-     * @expectedException InvalidArgumentException
-     */
-    public function withQueryFailed()
-    {
-        $this->createDefaultUri()->withQuery('bar#toto');
+        // The non-standard port triggers a cascade of private methods which
+        //  should not use late static binding to access private static members.
+        // If they do, this will fatal.
+        $this->assertInstanceOf(
+            '\Viserio\Http\Tests\Fixture\ExtendingClassTest',
+            new ExtendingClassTest('http://h:9/')
+        );
     }
 }

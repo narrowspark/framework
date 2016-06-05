@@ -14,12 +14,12 @@ abstract class AbstractMessageTest extends \PHPUnit_Framework_TestCase
     // Test methods for default/empty instances
     public function testMessageImplementsInterface()
     {
-        $this->assertInstanceOf(MessageInterface::class, $this->createDefaultMessage());
+        $this->assertInstanceOf(MessageInterface::class, $this->classToTest);
     }
 
     public function testValidDefaultProtocolVersion()
     {
-        $message = $this->createDefaultMessage();
+        $message = $this->classToTest;
         $version = $message->getProtocolVersion();
 
         $this->assertInternalType('string', $version, 'getProtocolVersion must return a string');
@@ -28,7 +28,7 @@ abstract class AbstractMessageTest extends \PHPUnit_Framework_TestCase
 
     public function testValidDefaultHeaders()
     {
-        $message = $this->createDefaultMessage();
+        $message = $this->classToTest;
         $headers = $message->getHeaders();
 
         $this->assertInternalType('array', $headers, "getHeaders an associative array of the message's headers");
@@ -41,7 +41,7 @@ abstract class AbstractMessageTest extends \PHPUnit_Framework_TestCase
 
     public function testValidNonExistHeader()
     {
-        $message = $this->createDefaultMessage();
+        $message = $this->classToTest;
         $values = $message->getHeader('not exist');
 
         $this->assertValidHeaderValue($values);
@@ -49,7 +49,7 @@ abstract class AbstractMessageTest extends \PHPUnit_Framework_TestCase
 
     public function testValidNonExistHeaderLine()
     {
-        $message = $this->createDefaultMessage();
+        $message = $this->classToTest;
         $headerLine = $message->getHeaderLine('not exist');
 
         $this->assertInternalType('string', $headerLine, 'getHeaderLine must return a string');
@@ -61,7 +61,7 @@ abstract class AbstractMessageTest extends \PHPUnit_Framework_TestCase
 
     public function testValidDefaultBody()
     {
-        $message = $this->createDefaultMessage();
+        $message = $this->classToTest;
         $body = $message->getBody();
 
         $this->assertInstanceOf(
@@ -78,7 +78,7 @@ abstract class AbstractMessageTest extends \PHPUnit_Framework_TestCase
      */
     public function testValidWithProtocolVersion($expectedVersion)
     {
-        $message = $this->createDefaultMessage();
+        $message = $this->classToTest;
         $messageClone = clone $message;
         $newMessage = $message->withProtocolVersion($expectedVersion);
 
@@ -109,7 +109,7 @@ abstract class AbstractMessageTest extends \PHPUnit_Framework_TestCase
      */
     public function testValidWithHeader($headerName, $headerValue, $expectedHeaderValue)
     {
-        $message = $this->createDefaultMessage();
+        $message = $this->classToTest;
         $messageClone = clone $message;
 
         $newMessage = $message->withHeader($headerName, $headerValue);
@@ -131,7 +131,7 @@ abstract class AbstractMessageTest extends \PHPUnit_Framework_TestCase
      */
     public function testValidWithAddedHeader($headerName, $headerValue, $expectedHeaderValue)
     {
-        $message = $this->createDefaultMessage();
+        $message = $this->classToTest;
         $messageClone = clone $message;
         $newMessage = $message->withAddedHeader($headerName, $headerValue);
 
@@ -151,7 +151,7 @@ abstract class AbstractMessageTest extends \PHPUnit_Framework_TestCase
      */
     public function testHasHeader($headerName, $headerValue)
     {
-        $message = $this->createDefaultMessage();
+        $message = $this->classToTest;
 
         $this->assertFalse($message->hasHeader($headerName));
 
@@ -170,7 +170,7 @@ abstract class AbstractMessageTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetHeaderLine($headerName, $headerValue, $expectedHeaderValue, $expectedHeaderLine)
     {
-        $message = $this->createDefaultMessage();
+        $message = $this->classToTest;
         $newMessage = $message->withHeader($headerName, $headerValue);
 
         $this->assertEquals($expectedHeaderLine, $newMessage->getHeaderLine($headerName));
@@ -185,7 +185,7 @@ abstract class AbstractMessageTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetHeaders($headerName, $headerValue, $expectedHeaderValue)
     {
-        $message = $this->createDefaultMessage();
+        $message = $this->classToTest;
         $newMessage = $message->withHeader($headerName, $headerValue);
 
         $this->assertEquals([$headerName => $expectedHeaderValue], $newMessage->getHeaders());
@@ -199,7 +199,7 @@ abstract class AbstractMessageTest extends \PHPUnit_Framework_TestCase
      */
     public function testWithoutHeader($headerName, $headerValue)
     {
-        $message = $this->createDefaultMessage();
+        $message = $this->classToTest;
         $messageWithHeader = $message->withHeader($headerName, $headerValue);
         $messageClone = clone $messageWithHeader;
 
@@ -224,7 +224,7 @@ abstract class AbstractMessageTest extends \PHPUnit_Framework_TestCase
 
     public function testWithBody()
     {
-        $message = $this->createDefaultMessage();
+        $message = $this->classToTest;
         $messageClone = clone $message;
         /** @var StreamInterface $expectedBody */
         $expectedBody = $this->createMock(StreamInterface::class);
