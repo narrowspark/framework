@@ -19,8 +19,8 @@ interface RequestFactory
      * @return RequestInterface
      */
     public function createRequest(
-        $method,
         $uri,
+        $method,
         array $headers = [],
         $body = null,
         $protocolVersion = '1.1'

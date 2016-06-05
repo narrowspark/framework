@@ -3,7 +3,7 @@ namespace Viserio\Http\Tests;
 
 use Psr\Http\Message\UriInterface;
 use Viserio\Http\Tests\Constraint\Immutable;
-use Viserio\Http\Tests\Fixture\ExtendingClassTest;
+use Viserio\Http\Tests\Fixture\ExtendedUriTest;
 use Viserio\Http\Uri;
 
 class UriTest extends \PHPUnit_Framework_TestCase
@@ -104,7 +104,7 @@ class UriTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
+     * @expectedException \TypeError
      */
     public function testSchemeMustHaveCorrectType()
     {
@@ -112,7 +112,7 @@ class UriTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
+     * @expectedException \TypeError
      */
     public function testHostMustHaveCorrectType()
     {
@@ -120,7 +120,7 @@ class UriTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
+     * @expectedException \TypeError
      */
     public function testPathMustHaveCorrectType()
     {
@@ -128,7 +128,7 @@ class UriTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
+     * @expectedException \TypeError
      */
     public function testQueryMustHaveCorrectType()
     {
@@ -136,26 +136,24 @@ class UriTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
+     * @expectedException \TypeError
      */
     public function testFragmentMustHaveCorrectType()
     {
         (new Uri())->withFragment([]);
     }
 
-    public function testCanParseFalseyUriParts()
+    public function testCantParseFalseyUriParts()
     {
         $uri = new Uri('0://0:0@0/0?0#0');
-        $this->assertSame('0', $uri->getScheme());
-        var_dump($uri->__toString());
-        die();
-        $this->assertSame('0:0@0', $uri->getAuthority());
-        $this->assertSame('0:0', $uri->getUserInfo());
+        $this->assertSame('', $uri->getScheme());
+        $this->assertSame('0', $uri->getAuthority());
+        $this->assertSame('', $uri->getUserInfo());
         $this->assertSame('0', $uri->getHost());
-        $this->assertSame('/0', $uri->getPath());
+        $this->assertSame('//0:0@0/0', $uri->getPath());
         $this->assertSame('0', $uri->getQuery());
         $this->assertSame('0', $uri->getFragment());
-        $this->assertSame('0://0:0@0/0?0#0', (string) $uri);
+        $this->assertSame('//0//0:0@0/0?0#0', (string) $uri);
     }
 
     public function testCanConstructFalseyUriParts()
@@ -248,11 +246,41 @@ class UriTest extends \PHPUnit_Framework_TestCase
         $this->assertSame('http://example.com', (string) $uri);
     }
 
-    public function testAuthorityWithUserInfoButWithoutHost()
+    /**
+     * In RFC 8986 the host is optional and the authority can only
+     * consist of the user info and port.
+     */
+    public function testAuthorityWithUserInfoOrPortButWithoutHost()
     {
         $uri = (new Uri())->withUserInfo('user', 'pass');
         $this->assertSame('user:pass', $uri->getUserInfo());
-        $this->assertSame('', $uri->getAuthority());
+        $this->assertSame('user:pass@', $uri->getAuthority());
+
+        $uri = $uri->withPort(8080);
+        $this->assertSame(8080, $uri->getPort());
+        $this->assertSame('user:pass@:8080', $uri->getAuthority());
+        $this->assertSame('//user:pass@:8080', (string) $uri);
+
+        $uri = $uri->withUserInfo('');
+        $this->assertSame(':8080', $uri->getAuthority());
+    }
+
+    public function testHostInHttpUriDefaultsToLocalhost()
+    {
+        $uri = (new Uri())->withScheme('http');
+
+        $this->assertSame('localhost', $uri->getHost());
+        $this->assertSame('localhost', $uri->getAuthority());
+        $this->assertSame('http://localhost', (string) $uri);
+    }
+
+    public function testHostInHttpsUriDefaultsToLocalhost()
+    {
+        $uri = (new Uri())->withScheme('https');
+
+        $this->assertSame('localhost', $uri->getHost());
+        $this->assertSame('localhost', $uri->getAuthority());
+        $this->assertSame('https://localhost', (string) $uri);
     }
 
     public function uriComponentsEncodingProvider()
@@ -322,24 +350,53 @@ class UriTest extends \PHPUnit_Framework_TestCase
         $this->assertSame('foo', (string) $uri);
     }
 
-    public function testAddsSlashForRelativeUriStringWithHost()
+    public function testPathStartingWithTwoSlashes()
     {
-        // If the path is rootless and an authority is present, the path MUST
-        // be prefixed by "/".
-        $uri = (new Uri())->withPath('foo')->withHost('example.com');
-        $this->assertSame('foo', $uri->getPath());
-        // concatenating a relative path with a host doesn't work: "//example.comfoo" would be wrong
-        $this->assertSame('//example.com/foo', (string) $uri);
+        $uri = new Uri('http://example.org//path-not-host.com');
+        $this->assertSame('//path-not-host.com', $uri->getPath());
+
+        $uri = $uri->withScheme('');
+        $this->assertSame('//example.org//path-not-host.com', (string) $uri); // This is still valid
+        $this->setExpectedException('\InvalidArgumentException');
+        $uri->withHost(''); // Now it becomes invalid
     }
 
-    public function testRemoveExtraSlashesWihoutHost()
+    /**
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage The path of a URI with an authority must start with a slash "/" or be empty
+     */
+    public function testRelativePathAndAuhorityIsInvalid()
     {
-        // If the path is starting with more than one "/" and no authority is
-        // present, the starting slashes MUST be reduced to one.
-        $uri = (new Uri())->withPath('//foo');
-        $this->assertSame('//foo', $uri->getPath());
+        // concatenating a relative path with a host doesn't work: "//example.comfoo" would be wrong
+        (new Uri)->withPath('foo')->withHost('example.com');
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage The path of a URI without an authority must not start with two slashes "//"
+     */
+    public function testPathStartingWithTwoSlashesAndNoAuthorityIsInvalid()
+    {
         // URI "//foo" would be interpreted as network reference and thus change the original path to the host
-        $this->assertSame('/foo', (string) $uri);
+        (new Uri)->withPath('//foo');
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage A relative URI must not have a path beginning with a segment containing a colon
+     */
+    public function testRelativeUriWithPathBeginngWithColonSegmentIsInvalid()
+    {
+        (new Uri)->withPath('mailto:foo');
+    }
+
+    public function testRelativeUriWithPathHavingColonSegment()
+    {
+        $uri = (new Uri('urn:/mailto:foo'))->withScheme('');
+        $this->assertSame('/mailto:foo', $uri->getPath());
+
+        $this->setExpectedException('\InvalidArgumentException');
+        (new Uri('urn:mailto:foo'))->withScheme('');
     }
 
     public function testDefaultReturnValuesOfGetters()
@@ -370,11 +427,133 @@ class UriTest extends \PHPUnit_Framework_TestCase
     public function testExtendingClassesInstantiates()
     {
         // The non-standard port triggers a cascade of private methods which
-        //  should not use late static binding to access private static members.
+        // should not use late static binding to access private static members.
         // If they do, this will fatal.
         $this->assertInstanceOf(
-            '\Viserio\Http\Tests\Fixture\ExtendingClassTest',
-            new ExtendingClassTest('http://h:9/')
+            '\Viserio\Http\Tests\Fixture\ExtendedUriTest',
+            new ExtendedUriTest('http://h:9/')
         );
+    }
+
+    public function testProperlyTrimsLeadingSlashesToPreventXSS()
+    {
+        $url = 'http://example.org//anolilab.de';
+        $uri = new Uri($url);
+        $this->assertEquals('http://example.org/anolilab.de', (string) $uri);
+    }
+
+    /**
+     * As Per PSR7 UriInterface the host MUST be lowercased
+     *
+     * @group uriinterface
+     */
+    public function testHostnameMustBeLowerCasedAsPerPsr7Interface()
+    {
+        $url = 'http://WwW.ExAmPlE.CoM';
+        $uri = new Uri($url);
+        $this->assertEquals('www.example.com', $uri->getHost());
+    }
+
+    /**
+     * As Per PSR7 UriInterface the scheme MUST be lowercased
+     *
+     * @group uriinterface
+     */
+    public function testSchemeMustBeLowerCasedAsPerPsr7Interface()
+    {
+        $url = 'hTtp://www.example.com';
+        $uri = new Uri($url);
+        $this->assertEquals('http', $uri->getScheme());
+    }
+
+    /**
+     * As Per PSR7 UriInterface the path MUST be encoded following
+     * RFC3986 rules does it means that :
+     * - the encoding characters must be uppercased or not ?
+     * - the "~" character must not be encoded ?
+     *
+     * @group uriinterface
+     * @dataProvider pathProvider
+     */
+    public function testPathNormalizationPerPsr7Interface($url, $path)
+    {
+        $this->assertEquals($path, (new Uri($url))->getPath());
+    }
+
+    public function pathProvider()
+    {
+        return [
+            ['http://example.com/%a1/psr7/rocks', '/%A1/psr7/rocks'],
+            ['http://example.com/%7Epsr7/rocks', '/~psr7/rocks'],
+        ];
+    }
+
+    /**
+     * This assertion MAY need clarification as it is not stated in
+     * the interface if for the string representation indivual
+     * normalization MUST be applied prior to generate the string
+     * with the __toString() method
+     *
+     * @group uriinterface
+     */
+    public function testUrlStandardNormalization()
+    {
+        $url = 'hTtp://WwW.ExAmPlE.CoM/%a1/%7Epsr7/rocks';
+        $uri = new Uri($url);
+        $this->assertEquals('http://www.example.com/%A1/~psr7/rocks', (string) $uri);
+    }
+
+    /**
+     * Authority delimiter addition should follow PSR-7 interface
+     * in the following examples.
+     *
+     * Some of these example return invalid Url
+     *
+     * @group uriinterface
+     * @dataProvider authorityProvider
+     */
+    public function testAuthorityDelimiterPresence($url)
+    {
+        $this->assertEquals($url, (string) new Uri($url));
+    }
+
+    public function authorityProvider()
+    {
+        return [
+            ['//www.example.com'],
+            ['http:www.example.com'],
+            ['http:/www.example.com'],
+        ];
+    }
+
+    /**
+     * As Per PSR7 UriInterface the null value remove the port info
+     * no InvalidArgumentException should be thrown
+     *
+     * @group uriinterface
+     */
+    public function testWithPortWithNullValue()
+    {
+        $url = 'http://www.example.com:81';
+        $uri = new Uri($url);
+        $this->assertNull($uri->withPort(null)->getPort());
+    }
+
+    /**
+     * @dataProvider utf8PathsDataProvider
+     */
+    public function testUtf8Path($url, $result)
+    {
+        $uri = new Uri($url);
+
+        $this->assertEquals($result, $uri->getPath());
+    }
+
+    public function utf8PathsDataProvider()
+    {
+        return [
+            ['http://example.com/тестовый_путь/', '/тестовый_путь/'],
+            ['http://example.com/ουτοπία/', '/ουτοπία/']
+        ];
     }
 }

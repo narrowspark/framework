@@ -82,7 +82,6 @@ abstract class AbstractMessageTest extends \PHPUnit_Framework_TestCase
         $messageClone = clone $message;
         $newMessage = $message->withProtocolVersion($expectedVersion);
 
-        $this->assertImmutable($messageClone, $message, $newMessage);
         $this->assertEquals(
             $expectedVersion,
             $newMessage->getProtocolVersion(),

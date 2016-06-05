@@ -3,12 +3,15 @@ namespace Viserio\Http\Tests;
 
 use Psr\Http\Message\RequestInterface;
 use Viserio\Http\Request;
+use Viserio\Http\Uri;
+use Psr\Http\Message\UriInterface;
+use Psr\Http\Message\StreamInterface;
 
 class RequestTest extends AbstractMessageTest
 {
     public function setUp()
     {
-        $this->classToTest = new Request('GET', $this->getMock('Psr\Http\Message\UriInterface'));
+        $this->classToTest = new Request($this->getMock(UriInterface::class));
     }
 
     public function testRequestImplementsInterface()
@@ -40,7 +43,7 @@ class RequestTest extends AbstractMessageTest
         $message = $this->classToTest;
         $body = $message->getUri();
         $this->assertInstanceOf(
-            'Psr\Http\Message\UriInterface',
+            UriInterface::class,
             $body,
             'getUri must return instance of Psr\Http\Message\UriInterface'
         );
@@ -110,7 +113,7 @@ class RequestTest extends AbstractMessageTest
         $request = $this->classToTest;
         $requestClone = clone $request;
         /** @var UriInterface $uri */
-        $uri = $this->getMock('Psr\Http\Message\UriInterface');
+        $uri = $this->getMock(UriInterface::class);
         $newRequest = $request->withUri($uri);
         $this->assertImmutable($requestClone, $request, $newRequest);
         $this->assertEquals(
@@ -142,23 +145,23 @@ class RequestTest extends AbstractMessageTest
     {
         $emptyHostHeader = $this->classToTest;
         $defaultRequestHostHeader = $this->classToTest->withHeader('Host', 'foo.com');
-        $emptyUriHost = $this->getMock('Psr\Http\Message\UriInterface');
-        $defaultUriHost = $this->getMock('Psr\Http\Message\UriInterface');
-        $defaultUriHost->expects(TestCase::any())
+        $emptyUriHost = $this->getMock(UriInterface::class);
+        $defaultUriHost = $this->getMock(UriInterface::class);
+        $defaultUriHost->expects(self::any())
             ->method('getHost')
             ->willReturn('baz.com')
         ;
-        $defaultUriPort = $this->getMock('Psr\Http\Message\UriInterface');
-        $defaultUriPort->expects(TestCase::any())
+        $defaultUriPort = $this->getMock(UriInterface::class);
+        $defaultUriPort->expects(self::any())
             ->method('getPort')
             ->willReturn('8080')
         ;
-        $defaultUriHostAndPort = $this->getMock('Psr\Http\Message\UriInterface');
-        $defaultUriHostAndPort->expects(TestCase::any())
+        $defaultUriHostAndPort = $this->getMock(UriInterface::class);
+        $defaultUriHostAndPort->expects(self::any())
             ->method('getHost')
             ->willReturn('baz.com')
         ;
-        $defaultUriHostAndPort->expects(TestCase::any())
+        $defaultUriHostAndPort->expects(self::any())
             ->method('getPort')
             ->willReturn('8080')
         ;
@@ -227,5 +230,201 @@ class RequestTest extends AbstractMessageTest
                 'baz.com:8080',
             ],
         ];
+    }
+
+    public function testHostHeaderSetFromUriOnCreationIfNoHostHeaderSpecified()
+    {
+        $request = new Request('http://www.example.com');
+        $this->assertTrue($request->hasHeader('Host'));
+        $this->assertEquals('www.example.com', $request->getHeaderLine('host'));
+    }
+
+    public function testHostHeaderNotSetFromUriOnCreationIfHostHeaderSpecified()
+    {
+        $request = new Request('http://www.example.com', null, ['Host' => 'www.test.com'], 'php://memory');
+        $this->assertEquals('www.test.com', $request->getHeaderLine('host'));
+    }
+
+    public function testRequestUriMayBeString()
+    {
+        $r = new Request('', 'GET');
+        $this->assertEquals('/', (string) $r->getUri());
+    }
+
+    public function testRequestUriMayBeUri()
+    {
+        $uri = new Uri('/');
+        $r = new Request($uri, 'GET');
+        $this->assertSame($uri, $r->getUri());
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     */
+    public function testValidateRequestUri()
+    {
+        new Request('///', 'GET');
+    }
+
+    public function testCanConstructWithBody()
+    {
+        $r = new Request('/', 'GET', [], 'baz');
+        $this->assertInstanceOf(StreamInterface::class, $r->getBody());
+        $this->assertEquals('baz', (string) $r->getBody());
+    }
+
+    public function testNullBody()
+    {
+        $r = new Request('/', 'GET', [], null);
+        $this->assertInstanceOf(StreamInterface::class, $r->getBody());
+        $this->assertSame('', (string) $r->getBody());
+    }
+
+    public function testFalseyBody()
+    {
+        $r = new Request('/', 'GET', [], '0');
+        $this->assertInstanceOf(StreamInterface::class, $r->getBody());
+        $this->assertSame('0', (string) $r->getBody());
+    }
+
+    public function testCapitalizesMethod()
+    {
+        $r = new Request('/', 'get');
+        $this->assertEquals('GET', $r->getMethod());
+    }
+
+    public function testCapitalizesWithMethod()
+    {
+        $r = new Request('/', 'GET');
+        $this->assertEquals('PUT', $r->withMethod('put')->getMethod());
+    }
+
+    public function testWithUri()
+    {
+        $r1 = new Request('/', 'GET');
+        $u1 = $r1->getUri();
+
+        $u2 = new Uri('http://www.example.com');
+        $r2 = $r1->withUri($u2);
+
+        $this->assertNotSame($r1, $r2);
+        $this->assertSame($u2, $r2->getUri());
+        $this->assertSame($u1, $r1->getUri());
+    }
+
+    public function testSameInstanceWhenSameUri()
+    {
+        $r1 = new Request('http://foo.com', 'GET');
+        $r2 = $r1->withUri($r1->getUri());
+        $this->assertSame($r1, $r2);
+    }
+
+    public function testWithRequestTarget()
+    {
+        $r1 = new Request('/', 'GET');
+        $r2 = $r1->withRequestTarget('*');
+
+        $this->assertEquals('*', $r2->getRequestTarget());
+        $this->assertEquals('/', $r1->getRequestTarget());
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     */
+    public function testRequestTargetDoesNotAllowSpaces()
+    {
+        $r1 = new Request('/', 'GET');
+        $r1->withRequestTarget('/foo bar');
+    }
+
+    public function testRequestTargetDefaultsToSlash()
+    {
+        $r1 = new Request('', 'GET');
+        $this->assertEquals('/', $r1->getRequestTarget());
+
+        $r2 = new Request('*', 'GET');
+        $this->assertEquals('*', $r2->getRequestTarget());
+
+        $r3 = new Request('http://foo.com/bar baz/', 'GET');
+        $this->assertEquals('/bar%20baz/', $r3->getRequestTarget());
+    }
+
+    public function testBuildsRequestTarget()
+    {
+        $r1 = new Request('http://foo.com/baz?bar=bam', 'GET');
+        $this->assertEquals('/baz?bar=bam', $r1->getRequestTarget());
+    }
+
+    public function testBuildsRequestTargetWithFalseyQuery()
+    {
+        $r1 = new Request('http://foo.com/baz?0', 'GET');
+        $this->assertEquals('/baz?0', $r1->getRequestTarget());
+    }
+
+    public function testHostIsAddedFirst()
+    {
+        $r = new Request('http://foo.com/baz?bar=bam', 'GET', ['Foo' => 'Bar']);
+        $this->assertEquals([
+            'Host' => ['foo.com'],
+            'Foo'  => ['Bar']
+        ], $r->getHeaders());
+    }
+
+    public function testCanGetHeaderAsCsv()
+    {
+        $r = new Request('http://foo.com/baz?bar=bam', 'GET', [
+            'Foo' => ['a', 'b', 'c']
+        ]);
+
+        $this->assertEquals('a,b,c', $r->getHeaderLine('Foo'));
+        $this->assertEquals('', $r->getHeaderLine('Bar'));
+    }
+
+    public function testHostIsNotOverwrittenWhenPreservingHost()
+    {
+        $r = new Request('http://foo.com/baz?bar=bam', 'GET', ['Host' => 'a.com']);
+
+        $this->assertEquals(['Host' => ['a.com']], $r->getHeaders());
+
+        $r2 = $r->withUri(new Uri('http://www.foo.com/bar'), true);
+
+        $this->assertEquals('a.com', $r2->getHeaderLine('Host'));
+    }
+
+    public function testOverridesHostWithUri()
+    {
+        $r = new Request('http://foo.com/baz?bar=bam', 'GET');
+
+        $this->assertEquals(['Host' => ['foo.com']], $r->getHeaders());
+
+        $r2 = $r->withUri(new Uri('http://www.baz.com/bar'));
+
+        $this->assertEquals('www.baz.com', $r2->getHeaderLine('Host'));
+    }
+
+    public function testAggregatesHeaders()
+    {
+        $r = new Request('', 'GET', [
+            'ZOO' => 'zoobar',
+            'zoo' => ['foobar', 'zoobar']
+        ]);
+
+        $this->assertEquals(['ZOO' => ['zoobar', 'foobar', 'zoobar']], $r->getHeaders());
+        $this->assertEquals('zoobar,foobar,zoobar', $r->getHeaderLine('zoo'));
+    }
+
+    public function testAddsPortToHeader()
+    {
+        $r = new Request('http://foo.com:8124/bar', 'GET');
+
+        $this->assertEquals('foo.com:8124', $r->getHeaderLine('host'));
+    }
+
+    public function testAddsPortToHeaderAndReplacePreviousPort()
+    {
+        $r = new Request('http://foo.com:8124/bar', 'GET');
+        $r = $r->withUri(new Uri('http://foo.com:8125/bar'));
+
+        $this->assertEquals('foo.com:8125', $r->getHeaderLine('host'));
     }
 }
