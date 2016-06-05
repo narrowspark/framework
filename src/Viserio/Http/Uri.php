@@ -1,10 +1,10 @@
 <?php
 namespace Viserio\Http;
 
-use Psr\Http\Message\UriInterface;
-use Pdp\PublicSuffixListManager;
-use Pdp\Parser;
 use InvalidArgumentException;
+use Pdp\Parser;
+use Pdp\PublicSuffixListManager;
+use Psr\Http\Message\UriInterface;
 use Viserio\Support\Str;
 
 class Uri implements UriInterface
@@ -23,7 +23,7 @@ class Uri implements UriInterface
      */
     const CHAR_UNRESERVED = 'a-zA-Z0-9_\-\.~';
 
-     /**
+    /**
      * Supported Schemes.
      *
      * @var array
@@ -105,10 +105,10 @@ class Uri implements UriInterface
 
     /**
      * generated uri string cache
+     *
      * @var string|null
      */
     private $uriString;
-
 
     /**
      * @param string $uri
@@ -127,7 +127,7 @@ class Uri implements UriInterface
     {
         $scheme = $this->filterScheme($scheme);
 
-         if ($this->scheme === $scheme) {
+        if ($this->scheme === $scheme) {
             return $this;
         }
 
@@ -355,13 +355,13 @@ class Uri implements UriInterface
             '%28', '%29', '%3B', '%3A',
             '%40', '%26', '%3D', '%2B',
             '%24', '%2C', '%2F', '%3F',
-            '%25', '%23', '%5B', '%5D'
+            '%25', '%23', '%5B', '%5D',
         ])) {
             $components = parse_url($uri);
         } else {
             try {
                 $components = $this->getPdpParser()->parseUrl($uri)->toArray();
-            } catch(InvalidArgumentException $exception) {
+            } catch (InvalidArgumentException $exception) {
                 throw new InvalidArgumentException('The source URI string appears to be malformed');
             }
         }
@@ -396,9 +396,9 @@ class Uri implements UriInterface
     /**
      * @param string $value
      *
-     * @return string
-     *
      * @throws \InvalidArgumentException If the port is invalid.
+     *
+     * @return string
      */
     private function filterHost($host): string
     {
@@ -412,9 +412,9 @@ class Uri implements UriInterface
     /**
      * @param string $value
      *
-     * @return string
-     *
      * @throws \InvalidArgumentException If the port is invalid.
+     *
+     * @return string
      */
     private function filterScheme($scheme): string
     {
@@ -430,14 +430,14 @@ class Uri implements UriInterface
     /**
      * @param int|null $port
      *
-     * @return int|null
-     *
      * @throws \InvalidArgumentException If the port is invalid.
+     *
+     * @return int|null
      */
     private function filterPort($port)
     {
         if ($port === null) {
-            return null;
+            return;
         }
 
         $port = (int) $port;
@@ -454,9 +454,9 @@ class Uri implements UriInterface
     /**
      * @param string $value
      *
-     * @return string
-     *
      * @throws \InvalidArgumentException If the port is invalid.
+     *
+     * @return string
      */
     private function filterPath($path): string
     {
@@ -491,9 +491,9 @@ class Uri implements UriInterface
      *
      * @param string $value
      *
-     * @return string
-     *
      * @throws \InvalidArgumentException If Query or fragment is invalid.
+     *
+     * @return string
      */
     private function filterQueryOrFragment($value): string
     {
@@ -512,7 +512,7 @@ class Uri implements UriInterface
      * Is a given port non-standard for the current scheme?
      *
      * @param string $scheme
-     * @param int $port
+     * @param int    $port
      *
      * @return bool
      */
@@ -575,7 +575,7 @@ class Uri implements UriInterface
     /**
      * [rawurlencodeMatchZero description]
      *
-     * @param  array  $match [description]
+     * @param array $match [description]
      *
      * @return string
      */

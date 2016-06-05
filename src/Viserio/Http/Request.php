@@ -19,11 +19,11 @@ class Request extends AbstractMessage implements RequestInterface
     private $uri;
 
     /**
-     * @param string $method HTTP method for the request.
-     * @param string|UriInterface $uri URI for the request.
-     * @param array $headers Headers for the message.
-     * @param string|null|resource|StreamInterface $body Message body.
-     * @param string $protocolVersion HTTP protocol version.
+     * @param string                               $method          HTTP method for the request.
+     * @param string|UriInterface                  $uri             URI for the request.
+     * @param array                                $headers         Headers for the message.
+     * @param string|null|resource|StreamInterface $body            Message body.
+     * @param string                               $protocolVersion HTTP protocol version.
      */
     public function __construct(
         string $method,
@@ -119,7 +119,7 @@ class Request extends AbstractMessage implements RequestInterface
 
     public function withHeader($header, $value)
     {
-        /** @var Request $newInstance */
+        /* @var Request $newInstance */
         return parent::withHeader($header, $value);
     }
 

@@ -1,8 +1,8 @@
 <?php
 namespace Viserio\Http\Tests;
 
-use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\StreamInterface;
 use Viserio\Http\Response;
 use Viserio\Http\Util;
 
