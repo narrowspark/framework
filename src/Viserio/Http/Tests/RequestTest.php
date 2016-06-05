@@ -2,10 +2,10 @@
 namespace Viserio\Http\Tests;
 
 use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\StreamInterface;
+use Psr\Http\Message\UriInterface;
 use Viserio\Http\Request;
 use Viserio\Http\Uri;
-use Psr\Http\Message\UriInterface;
-use Psr\Http\Message\StreamInterface;
 
 class RequestTest extends AbstractMessageTest
 {
@@ -366,14 +366,14 @@ class RequestTest extends AbstractMessageTest
         $r = new Request('http://foo.com/baz?bar=bam', 'GET', ['Foo' => 'Bar']);
         $this->assertEquals([
             'Host' => ['foo.com'],
-            'Foo'  => ['Bar']
+            'Foo'  => ['Bar'],
         ], $r->getHeaders());
     }
 
     public function testCanGetHeaderAsCsv()
     {
         $r = new Request('http://foo.com/baz?bar=bam', 'GET', [
-            'Foo' => ['a', 'b', 'c']
+            'Foo' => ['a', 'b', 'c'],
         ]);
 
         $this->assertEquals('a,b,c', $r->getHeaderLine('Foo'));
@@ -406,7 +406,7 @@ class RequestTest extends AbstractMessageTest
     {
         $r = new Request('', 'GET', [
             'ZOO' => 'zoobar',
-            'zoo' => ['foobar', 'zoobar']
+            'zoo' => ['foobar', 'zoobar'],
         ]);
 
         $this->assertEquals(['ZOO' => ['zoobar', 'foobar', 'zoobar']], $r->getHeaders());

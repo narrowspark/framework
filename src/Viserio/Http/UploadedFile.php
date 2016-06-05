@@ -76,10 +76,10 @@ class UploadedFile implements UploadedFileInterface
 
     /**
      * @param StreamInterface|string|resource $streamOrFile
-     * @param int $size
-     * @param int $errorStatus
-     * @param string|null $clientFilename
-     * @param string|null $clientMediaType
+     * @param int                             $size
+     * @param int                             $errorStatus
+     * @param string|null                     $clientFilename
+     * @param string|null                     $clientMediaType
      */
     public function __construct(
         $streamOrFile,
@@ -98,8 +98,8 @@ class UploadedFile implements UploadedFileInterface
         }
     }
 
-     /**
-     * @return boolean
+    /**
+     * @return bool
      */
     public function isMoved()
     {
@@ -108,6 +108,7 @@ class UploadedFile implements UploadedFileInterface
 
     /**
      * {@inheritdoc}
+     *
      * @throws RuntimeException if the upload was not successful.
      */
     public function getStream()
@@ -145,6 +146,7 @@ class UploadedFile implements UploadedFileInterface
 
     /**
      * @param int $error
+     *
      * @throws InvalidArgumentException
      */
     private function setError($error)
@@ -175,7 +177,7 @@ class UploadedFile implements UploadedFileInterface
     /**
      * @param mixed $param
      *
-     * @return boolean
+     * @return bool
      */
     private function isStringOrNull($param): bool
     {
@@ -185,7 +187,7 @@ class UploadedFile implements UploadedFileInterface
     /**
      * @param mixed $param
      *
-     * @return boolean
+     * @return bool
      */
     private function isStringNotEmpty($param): bool
     {
@@ -210,6 +212,7 @@ class UploadedFile implements UploadedFileInterface
 
     /**
      * @param string|null $clientMediaType
+     *
      * @throws InvalidArgumentException
      */
     private function setClientMediaType($clientMediaType)
@@ -226,7 +229,7 @@ class UploadedFile implements UploadedFileInterface
     /**
      * Return true if there is no upload error
      *
-     * @return boolean
+     * @return bool
      */
     private function isOk()
     {

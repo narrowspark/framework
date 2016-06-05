@@ -368,7 +368,7 @@ class UriTest extends \PHPUnit_Framework_TestCase
     public function testRelativePathAndAuhorityIsInvalid()
     {
         // concatenating a relative path with a host doesn't work: "//example.comfoo" would be wrong
-        (new Uri)->withPath('foo')->withHost('example.com');
+        (new Uri())->withPath('foo')->withHost('example.com');
     }
 
     /**
@@ -378,7 +378,7 @@ class UriTest extends \PHPUnit_Framework_TestCase
     public function testPathStartingWithTwoSlashesAndNoAuthorityIsInvalid()
     {
         // URI "//foo" would be interpreted as network reference and thus change the original path to the host
-        (new Uri)->withPath('//foo');
+        (new Uri())->withPath('//foo');
     }
 
     /**
@@ -387,7 +387,7 @@ class UriTest extends \PHPUnit_Framework_TestCase
      */
     public function testRelativeUriWithPathBeginngWithColonSegmentIsInvalid()
     {
-        (new Uri)->withPath('mailto:foo');
+        (new Uri())->withPath('mailto:foo');
     }
 
     public function testRelativeUriWithPathHavingColonSegment()
@@ -553,7 +553,7 @@ class UriTest extends \PHPUnit_Framework_TestCase
     {
         return [
             ['http://example.com/тестовый_путь/', '/тестовый_путь/'],
-            ['http://example.com/ουτοπία/', '/ουτοπία/']
+            ['http://example.com/ουτοπία/', '/ουτοπία/'],
         ];
     }
 }

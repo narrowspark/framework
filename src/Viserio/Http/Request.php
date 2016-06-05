@@ -24,6 +24,7 @@ class Request extends AbstractMessage implements RequestInterface
 
     /**
      * Array of possible CSRF Header names
+     *
      * @var array
      */
     protected static $csrfHeaderNames = [
@@ -170,7 +171,7 @@ class Request extends AbstractMessage implements RequestInterface
      */
     private function updateHostFromUri()
     {
-       $host = $this->uri->getHost();
+        $host = $this->uri->getHost();
 
         if ($host == '') {
             return;
@@ -197,9 +198,9 @@ class Request extends AbstractMessage implements RequestInterface
      *
      * @param null|string $method
      *
-     * @return string
-     *
      * @throws InvalidArgumentException on invalid HTTP method.
+     *
+     * @return string
      */
     private function filterMethod($method): string
     {
@@ -227,7 +228,7 @@ class Request extends AbstractMessage implements RequestInterface
         return $method;
     }
 
-        /**
+    /**
      * Create and return a URI instance.
      *
      * If `$uri` is a already a `UriInterface` instance, returns it.
@@ -241,9 +242,9 @@ class Request extends AbstractMessage implements RequestInterface
      *
      * @param null|string|UriInterface $uri
      *
-     * @return UriInterface
-     *
      * @throws InvalidArgumentException
+     *
+     * @return UriInterface
      */
     private function createUri($uri): UriInterface
     {
@@ -263,5 +264,4 @@ class Request extends AbstractMessage implements RequestInterface
             'Invalid URI provided; must be null, a string, or a Psr\Http\Message\UriInterface instance'
         );
     }
-
 }
