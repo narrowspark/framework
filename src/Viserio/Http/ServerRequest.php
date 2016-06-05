@@ -2,9 +2,9 @@
 namespace Viserio\Http;
 
 use Psr\Http\Message\ServerRequestInterface;
-use Psr\Http\Message\UriInterface;
 use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\UploadedFileInterface;
+use Psr\Http\Message\UriInterface;
 use Viserio\Http\Stream\LazyOpenStream;
 
 class ServerRequest extends Request implements ServerRequestInterface
@@ -160,7 +160,7 @@ class ServerRequest extends Request implements ServerRequestInterface
         return $new;
     }
 
-     /**
+    /**
      * {@inheritdoc}
      */
     public function withParsedBody($data)
@@ -213,6 +213,7 @@ class ServerRequest extends Request implements ServerRequestInterface
      * Recursively validate the structure in an uploaded files array.
      *
      * @param array $uploadedFiles
+     *
      * @throws InvalidArgumentException if any leaf is not an UploadedFileInterface instance.
      */
     private function validateUploadedFiles(array $uploadedFiles)
