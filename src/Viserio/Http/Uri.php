@@ -409,9 +409,9 @@ class Uri implements UriInterface
     /**
      * @param string $value
      *
-     * @return string
-     *
      * @throws InvalidArgumentException
+     *
+     * @return string
      */
     private function filterHost(string $host): string
     {
@@ -472,9 +472,9 @@ class Uri implements UriInterface
     /**
      * @param int|null $port
      *
-     * @return int|null
-     *
      * @throws InvalidArgumentException
+     *
+     * @return int|null
      */
     private function filterPort($port)
     {
