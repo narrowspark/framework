@@ -3,8 +3,8 @@ namespace Viserio\Http\Tests;
 
 use Psr\Http\Message\UriInterface;
 use Viserio\Http\Tests\Constraint\Immutable;
-use Viserio\Http\Uri;
 use Viserio\Http\Tests\Fixture\ExtendingClassTest;
+use Viserio\Http\Uri;
 
 class UriTest extends \PHPUnit_Framework_TestCase
 {
@@ -75,6 +75,7 @@ class UriTest extends \PHPUnit_Framework_TestCase
             ['urn://host:with:colon'], // host cannot contain ":"
         ];
     }
+
     /**
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage Invalid port: 100000. Must be between 1 and 65535
@@ -83,6 +84,7 @@ class UriTest extends \PHPUnit_Framework_TestCase
     {
         (new Uri())->withPort(100000);
     }
+
     /**
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage Invalid port: 0. Must be between 1 and 65535
@@ -91,6 +93,7 @@ class UriTest extends \PHPUnit_Framework_TestCase
     {
         (new Uri())->withPort(0);
     }
+
     /**
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage The source URI string appears to be malformed
@@ -99,6 +102,7 @@ class UriTest extends \PHPUnit_Framework_TestCase
     {
         new Uri('//example.com:0');
     }
+
     /**
      * @expectedException \InvalidArgumentException
      */
@@ -106,6 +110,7 @@ class UriTest extends \PHPUnit_Framework_TestCase
     {
         (new Uri())->withScheme([]);
     }
+
     /**
      * @expectedException \InvalidArgumentException
      */
@@ -113,6 +118,7 @@ class UriTest extends \PHPUnit_Framework_TestCase
     {
         (new Uri())->withHost([]);
     }
+
     /**
      * @expectedException \InvalidArgumentException
      */
@@ -120,6 +126,7 @@ class UriTest extends \PHPUnit_Framework_TestCase
     {
         (new Uri())->withPath([]);
     }
+
     /**
      * @expectedException \InvalidArgumentException
      */
@@ -127,6 +134,7 @@ class UriTest extends \PHPUnit_Framework_TestCase
     {
         (new Uri())->withQuery([]);
     }
+
     /**
      * @expectedException \InvalidArgumentException
      */
@@ -139,7 +147,8 @@ class UriTest extends \PHPUnit_Framework_TestCase
     {
         $uri = new Uri('0://0:0@0/0?0#0');
         $this->assertSame('0', $uri->getScheme());
-        var_dump($uri->__toString()); die();
+        var_dump($uri->__toString());
+        die();
         $this->assertSame('0:0@0', $uri->getAuthority());
         $this->assertSame('0:0', $uri->getUserInfo());
         $this->assertSame('0', $uri->getHost());
@@ -249,6 +258,7 @@ class UriTest extends \PHPUnit_Framework_TestCase
     public function uriComponentsEncodingProvider()
     {
         $unreserved = 'a-zA-Z0-9.-_~!$&\'()*+,;=:@';
+
         return [
             // Percent encode spaces
             ['/pa th?q=va lue#frag ment', '/pa%20th', 'q=va%20lue', 'frag%20ment', '/pa%20th?q=va%20lue#frag%20ment'],
@@ -266,6 +276,7 @@ class UriTest extends \PHPUnit_Framework_TestCase
             ['/p%61th?q=v%61lue#fr%61gment', '/p%61th', 'q=v%61lue', 'fr%61gment', '/p%61th?q=v%61lue#fr%61gment'],
         ];
     }
+
     /**
      * @dataProvider uriComponentsEncodingProvider
      */
@@ -306,7 +317,7 @@ class UriTest extends \PHPUnit_Framework_TestCase
 
     public function testAllowsForRelativeUri()
     {
-        $uri = (new Uri)->withPath('foo');
+        $uri = (new Uri())->withPath('foo');
         $this->assertSame('foo', $uri->getPath());
         $this->assertSame('foo', (string) $uri);
     }
@@ -315,7 +326,7 @@ class UriTest extends \PHPUnit_Framework_TestCase
     {
         // If the path is rootless and an authority is present, the path MUST
         // be prefixed by "/".
-        $uri = (new Uri)->withPath('foo')->withHost('example.com');
+        $uri = (new Uri())->withPath('foo')->withHost('example.com');
         $this->assertSame('foo', $uri->getPath());
         // concatenating a relative path with a host doesn't work: "//example.comfoo" would be wrong
         $this->assertSame('//example.com/foo', (string) $uri);
@@ -325,7 +336,7 @@ class UriTest extends \PHPUnit_Framework_TestCase
     {
         // If the path is starting with more than one "/" and no authority is
         // present, the starting slashes MUST be reduced to one.
-        $uri = (new Uri)->withPath('//foo');
+        $uri = (new Uri())->withPath('//foo');
         $this->assertSame('//foo', $uri->getPath());
         // URI "//foo" would be interpreted as network reference and thus change the original path to the host
         $this->assertSame('/foo', (string) $uri);

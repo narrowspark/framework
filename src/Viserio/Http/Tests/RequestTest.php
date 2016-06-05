@@ -6,7 +6,7 @@ use Viserio\Http\Request;
 
 class RequestTest extends AbstractMessageTest
 {
-    function setUp()
+    public function setUp()
     {
         $this->classToTest = new Request('GET', $this->getMock('Psr\Http\Message\UriInterface'));
     }
@@ -47,12 +47,11 @@ class RequestTest extends AbstractMessageTest
     }
 
     // Test methods for change instances status
+
     /**
      * @dataProvider validRequestTargetProvider
      *
      * @param string $expectedRequestTarget
-     *
-     * @return void
      */
     public function testValidWithRequestTarget($expectedRequestTarget)
     {
@@ -79,8 +78,6 @@ class RequestTest extends AbstractMessageTest
      * @dataProvider validMethodProvider
      *
      * @param string $expectedMethod
-     *
-     * @return void
      */
     public function testValidWithMethod($expectedMethod)
     {
@@ -127,9 +124,9 @@ class RequestTest extends AbstractMessageTest
      * @dataProvider hostHeaderPreservationWhenUriIsSetProvider
      *
      * @param RequestInterface $request
-     * @param UriInterface $uri
-     * @param bool $preserveHost
-     * @param string[] $expectedHostHeaderLine
+     * @param UriInterface     $uri
+     * @param bool             $preserveHost
+     * @param string[]         $expectedHostHeaderLine
      */
     public function testHostHeaderPreservationWhenUriIsSet(
         RequestInterface $request,
