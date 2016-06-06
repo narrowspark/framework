@@ -9,6 +9,14 @@ use PHPUnit_Framework_Assert as Assert;
 class HttpProtocolVersion extends \PHPUnit_Framework_Constraint
 {
     /**
+     * @var string[]
+     */
+    protected $validHttpProtocolVersion = [
+        '1.0',
+        '1.1',
+    ];
+
+    /**
      * Asserts protocol version is valid.
      *
      * Protocol version MUST be:
@@ -23,25 +31,17 @@ class HttpProtocolVersion extends \PHPUnit_Framework_Constraint
         Assert::assertThat($protocolVersion, new self(), $message);
     }
 
-    /**
-     * @var string[]
-     */
-    protected $validHttpProtocolVersion = [
-        '1.0',
-        '1.1',
-    ];
+    public function toString()
+    {
+        return 'is a valid HTTP protocol version number';
+    }
 
     protected function matches($other)
     {
-        if (!is_string($other)) {
+        if (! is_string($other)) {
             return false;
         }
 
         return in_array($other, $this->validHttpProtocolVersion, true);
-    }
-
-    public function toString()
-    {
-        return 'is a valid HTTP protocol version number';
     }
 }

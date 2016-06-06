@@ -2,9 +2,9 @@
 namespace Viserio\Http;
 
 use InvalidArgumentException;
-use RuntimeException;
 use Iterator;
 use Psr\Http\Message\StreamInterface;
+use RuntimeException;
 use Viserio\Http\Stream\PumpStream;
 
 class Util
@@ -63,7 +63,7 @@ class Util
                         return $result;
                     }, $options);
                 } elseif (method_exists($resource, '__toString')) {
-                    return $this->getStream((string) $resource, $options);
+                    return self::getStream((string) $resource, $options);
                 }
 
                 break;
@@ -87,9 +87,9 @@ class Util
      * @param string $filename File to open
      * @param string $mode     Mode used to open the file
      *
-     * @return resource
-     *
      * @throws \RuntimeException if the file cannot be opened
+     *
+     * @return resource
      */
     public static function tryFopen($filename, $mode)
     {
@@ -108,7 +108,7 @@ class Util
         restore_error_handler();
 
         if ($ex) {
-            /** @var $ex \RuntimeException */
+            /* @var $ex \RuntimeException */
             throw $ex;
         }
 
@@ -122,16 +122,17 @@ class Util
      * @param StreamInterface $stream Stream to read
      * @param int             $maxLen Maximum number of bytes to read. Pass -1
      *                                to read the entire stream.
-     * @return string
      *
      * @throws \RuntimeException on error.
+     *
+     * @return string
      */
     public static function copyToString(StreamInterface $stream, $maxLen = -1): string
     {
         $buffer = '';
 
         if ($maxLen === -1) {
-            while (!$stream->eof()) {
+            while (! $stream->eof()) {
                 $buf = $stream->read(1048576);
                 // Using a loose equality here to match on '' and false.
                 if ($buf == null) {
@@ -139,12 +140,13 @@ class Util
                 }
                 $buffer .= $buf;
             }
+
             return $buffer;
         }
 
         $len = 0;
 
-        while (!$stream->eof() && $len < $maxLen) {
+        while (! $stream->eof() && $len < $maxLen) {
             $buf = $stream->read($maxLen - $len);
             // Using a loose equality here to match on '' and false.
             if ($buf == null) {
@@ -156,5 +158,49 @@ class Util
         }
 
         return $buffer;
+    }
+
+    /**
+     * Copy the contents of a stream into another stream until the given number
+     * of bytes have been read.
+     *
+     * @param StreamInterface $source Stream to read from
+     * @param StreamInterface $dest   Stream to write to
+     * @param int             $maxLen Maximum number of bytes to read. Pass -1
+     *                                to read the entire stream.
+     *
+     * @throws \RuntimeException on error.
+     */
+    public static function copyToStream(
+        StreamInterface $source,
+        StreamInterface $dest,
+        $maxLen = -1
+    ) {
+        if ($maxLen === -1) {
+            while (! $source->eof()) {
+                if (! $dest->write($source->read(1048576))) {
+                    break;
+                }
+            }
+
+            return;
+        }
+
+        $bytes = 0;
+
+        while (! $source->eof()) {
+            $buf = $source->read($maxLen - $bytes);
+
+            if (! ($len = strlen($buf))) {
+                break;
+            }
+
+            $bytes += $len;
+            $dest->write($buf);
+
+            if ($bytes == $maxLen) {
+                break;
+            }
+        }
     }
 }

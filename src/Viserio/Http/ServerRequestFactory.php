@@ -1,9 +1,6 @@
 <?php
 namespace Viserio\Http;
 
-use Psr\Http\Message\ServerRequestInterface;
-use Psr\Http\Message\UriInterface;
-
 class ServerRequestFactory
 {
     /**

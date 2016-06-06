@@ -2,27 +2,10 @@
 namespace Viserio\Http;
 
 use InvalidArgumentException;
-use Pdp\Parser;
-use Pdp\PublicSuffixListManager;
 use Psr\Http\Message\UriInterface;
-use Viserio\Support\Str;
 
-class Uri implements UriInterface
+class Uri extends UriHelper implements UriInterface
 {
-    /**
-     * Sub-delimiters used in query strings and fragments.
-     *
-     * @const string
-     */
-    const CHAR_SUB_DELIMS = '!\$&\'\(\)\*\+,;=';
-
-    /**
-     * Unreserved characters used in paths, query strings, and fragments.
-     *
-     * @const string
-     */
-    const CHAR_UNRESERVED = 'a-zA-Z0-9_\-\.~\pL';
-
     /**
      * Absolute http and https URIs require a host per RFC 7230 Section 2.7
      * but in generic URIs the host can be empty. So for http(s) URIs
@@ -39,14 +22,9 @@ class Uri implements UriInterface
     protected $allowedSchemes = [
         'http' => 80,
         'https' => 443,
+        'ftp'   => 21,
+        'sftp'  => 22,
     ];
-
-    /**
-     * Pdp Parser instance.
-     *
-     * @var \Pdp\Parser
-     */
-    protected $pdpParser;
 
     /**
      * Uri scheme (without "://" suffix).
@@ -105,6 +83,13 @@ class Uri implements UriInterface
     protected $query = '';
 
     /**
+     * Query variable hash.
+     *
+     * @var array
+     */
+    protected $queryVars = [];
+
+    /**
      * Uri fragment string (without "#" prefix).
      *
      * @var string
@@ -124,7 +109,7 @@ class Uri implements UriInterface
     public function __construct(string $uri = '')
     {
         if ($uri != '') {
-            $this->parseUri($uri);
+            $this->createFromComponents($this->parseUri($uri));
         }
     }
 
@@ -137,6 +122,26 @@ class Uri implements UriInterface
     public function __clone()
     {
         $this->uriString = null;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function __toString()
+    {
+        if ($this->uriString !== null) {
+            return $this->uriString;
+        }
+
+        $this->uriString = $this->createUriString(
+            $this->scheme,
+            $this->getAuthority(),
+            $this->path,
+            $this->getQuery(),
+            $this->fragment
+        );
+
+        return $this->uriString;
     }
 
     /**
@@ -246,6 +251,7 @@ class Uri implements UriInterface
         }
 
         $new = clone $this;
+        $new->queryVars = $this->parseQuery($query);
         $new->query = $query;
 
         return $new;
@@ -331,6 +337,11 @@ class Uri implements UriInterface
      */
     public function getQuery()
     {
+        // If the query is empty build it first
+        if (is_null($this->query)) {
+            $this->query = $this->buildQuery($this->queryVars);
+        }
+
         return $this->query;
     }
 
@@ -343,56 +354,17 @@ class Uri implements UriInterface
     }
 
     /**
-     * {@inheritdoc}
-     */
-    public function __toString()
-    {
-        if ($this->uriString !== null) {
-            return $this->uriString;
-        }
-
-        $this->uriString = static::createUriString(
-            $this->scheme,
-            $this->getAuthority(),
-            $this->path, // Absolute URIs should use a "/" for an empty path
-            $this->query,
-            $this->fragment
-        );
-
-        return $this->uriString;
-    }
-
-    /**
-     * Parse a URI into its parts, and set the properties
-     *
-     * @param string $uri
-     */
-    private function parseUri($uri)
-    {
-        if (!$this->pdpParser instanceof Parser) {
-            $this->pdpParser = new Parser((new PublicSuffixListManager())->getList());
-        }
-
-        try {
-            $components = $this->pdpParser->parseUrl($uri)->toArray();
-        } catch (InvalidArgumentException $exception) {
-            $components = parse_url($uri);
-        }
-
-        if ($components === false) {
-            throw new InvalidArgumentException('The source URI string appears to be malformed');
-        }
-
-        $this->createFromComponents($components);
-    }
-
-    /**
      * Create a new instance from a hash of parse_url parts
      *
      * @param array $components a hash representation of the URI similar to PHP parse_url function result
      */
     private function createFromComponents(array $components)
     {
+        // We need to replace &amp; with & for parse_str to work right...
+        if (isset($components['query']) && strpos($components['query'], '&amp;')) {
+            $components['query'] = str_replace('&amp;', '&', $components['query']);
+        }
+
         $this->scheme = isset($components['scheme']) ? $this->filterScheme($components['scheme']) : '';
         $this->userInfo = $components['user'] ?? '';
         $this->host = isset($components['host']) ? $this->filterHost($components['host']) : '';
@@ -404,214 +376,11 @@ class Uri implements UriInterface
         if (isset($components['pass']) != '') {
             $this->userInfo .= ':' . $components['pass'];
         }
-    }
 
-    /**
-     * @param string $value
-     *
-     * @throws InvalidArgumentException
-     *
-     * @return string
-     */
-    private function filterHost(string $host): string
-    {
-        if ($this->isValidHost($host)) {
-            return strtolower($host);
+        // Parse the query
+        if (isset($components['query'])) {
+            $this->queryVars = $this->parseQuery($components['query']);
         }
-
-        throw new InvalidArgumentException(
-            sprintf('Invalid host: %d.', $host)
-        );
-    }
-
-    /**
-     * Check if host is valid.
-     *
-     * @param string $host
-     *
-     * @return bool
-     */
-    private function isValidHost(string $host): bool
-    {
-        if (preg_match('#[\[\]]#', $host)) {
-            if (preg_match('#^\[(.+)\]$#', $host, $matches)) {
-                if (filter_var($matches[1], FILTER_VALIDATE_IP, FILTER_FLAG_IPV6)) {
-                    return true;
-                }
-
-                if (preg_match(
-                    '#^v[\da-fA-F]+\.[' . self::CHAR_UNRESERVED . self::CHAR_SUB_DELIMS . ']+$#',
-                    $matches[1]
-                )) {
-                    return true;
-                }
-            }
-
-            return false;
-        }
-
-        if (filter_var($host, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4)) {
-            return true;
-        }
-
-        return preg_match('#^([' . self::CHAR_UNRESERVED . self::CHAR_SUB_DELIMS . ']|(%[\da-fA-F]{2}))*$#', $host);
-    }
-
-    /**
-     * @param string $value
-     *
-     * @return string
-     */
-    private function filterScheme(string $scheme): string
-    {
-        $scheme = str_replace('#:(//)?$#', '', strtolower($scheme));
-
-        return $scheme;
-    }
-
-    /**
-     * @param int|null $port
-     *
-     * @throws InvalidArgumentException
-     *
-     * @return int|null
-     */
-    private function filterPort($port)
-    {
-        if ($port === null) {
-            return;
-        }
-
-        $port = (int) $port;
-
-        if (1 > $port || 0xffff < $port) {
-            throw new InvalidArgumentException(
-                sprintf('Invalid port: %d. Must be between 1 and 65535', $port)
-            );
-        }
-
-        return $this->isNonStandardPort($this->scheme, $port) ? $port : null;
-    }
-
-    /**
-     * @param string $value
-     *
-     * @return string
-     */
-    private function filterPath(string $path): string
-    {
-        $path = preg_replace_callback(
-            '/(?:[^' . self::CHAR_UNRESERVED . self::CHAR_SUB_DELIMS . ':@&=\+\$,\/;%]+|%(?![A-Fa-f0-9]{2}))/u',
-            [$this, 'rawurlencodeMatchZero'],
-            $path
-        );
-
-        if ($path != '') {
-            // No path
-            return $path;
-        }
-
-        if ($path[0] !== '/') {
-            // Relative path
-            return $path;
-        }
-
-        // Ensure only one leading slash, to prevent XSS attempts.
-        return '/' . ltrim($path, '/');
-    }
-
-    /**
-     * Filter a query string to ensure it is propertly encoded.
-     *
-     * Ensures that the values in the query string are properly urlencoded.
-     *
-     * @param string $query
-     *
-     * @return string
-     */
-    private function filterQuery(string $query): string
-    {
-        $parts = explode('&', $query);
-
-        foreach ($parts as $index => $part) {
-            list($key, $value) = $this->splitQueryValue($part);
-
-            if ($value === null) {
-                $parts[$index] = $this->filterQueryOrFragment($key);
-                continue;
-            }
-
-            $parts[$index] = sprintf(
-                '%s=%s',
-                $this->filterQueryOrFragment($key),
-                $this->filterQueryOrFragment($value)
-            );
-        }
-
-        return implode('&', $parts);
-    }
-
-    /**
-     * Split a query value into a key/value tuple.
-     *
-     * @param string $value
-     *
-     * @return array A value with exactly two elements, key and value
-     */
-    private function splitQueryValue(string $value): array
-    {
-        $data = explode('=', $value, 2);
-
-        if (1 === count($data)) {
-            $data[] = null;
-        }
-
-        return $data;
-    }
-
-    /**
-     * Filter a fragment value to ensure it is properly encoded.
-     *
-     * @param string $fragment
-     *
-     * @return string
-     */
-    private function filterFragment(string $fragment): string
-    {
-        if ($fragment != '' && strpos($fragment, '#') === 0) {
-            $fragment = '%23' . substr($fragment, 1);
-        }
-
-        return $this->filterQueryOrFragment($fragment);
-    }
-
-    /**
-     * Filter a query string key or value, or a fragment.
-     *
-     * @param string $str
-     *
-     * @return string
-     */
-    private function filterQueryOrFragment(string $str): string
-    {
-        return preg_replace_callback(
-            '/(?:[^' . self::CHAR_UNRESERVED . self::CHAR_SUB_DELIMS . '%:@\/\?]++|%(?![A-Fa-f0-9]{2}))/',
-            [$this, 'rawurlencodeMatchZero'],
-            $str
-        );
-    }
-
-    /**
-     * Is a given port non-standard for the current scheme?
-     *
-     * @param string $scheme
-     * @param int    $port
-     *
-     * @return bool
-     */
-    private function isNonStandardPort($scheme, $port): bool
-    {
-        return ! isset($this->allowedSchemes[$scheme]) || $this->allowedSchemes[$scheme] !== $port;
     }
 
     /**
@@ -653,16 +422,6 @@ class Uri implements UriInterface
         }
 
         return $uri;
-    }
-
-    /**
-     * @param array $match
-     *
-     * @return string
-     */
-    private function rawurlencodeMatchZero(array $match): string
-    {
-        return rawurlencode($match[0]);
     }
 
     /**

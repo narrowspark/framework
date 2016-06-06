@@ -1,11 +1,8 @@
 <?php
 namespace Viserio\Http;
 
-use Psr\Http\Message\ServerRequestInterface;
-use Psr\Http\Message\StreamInterface;
-use Psr\Http\Message\UploadedFileInterface;
-use Psr\Http\Message\UriInterface;
-use Viserio\Http\Stream\LazyOpenStream;
+use StreamInterface;
+use UploadedFileInterface;
 
 class ServerRequest extends Request implements ServerRequestInterface
 {
@@ -176,7 +173,7 @@ class ServerRequest extends Request implements ServerRequestInterface
      */
     public function getAttribute($attribute, $default = null)
     {
-        if (!array_key_exists($attribute, $this->attributes)) {
+        if (! array_key_exists($attribute, $this->attributes)) {
             return $default;
         }
 
@@ -199,7 +196,7 @@ class ServerRequest extends Request implements ServerRequestInterface
      */
     public function withoutAttribute($attribute)
     {
-        if (!array_key_exists($attribute, $this->attributes)) {
+        if (! array_key_exists($attribute, $this->attributes)) {
             return $this;
         }
 

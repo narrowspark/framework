@@ -3,9 +3,11 @@ namespace Viserio\Http;
 
 use InvalidArgumentException;
 use Narrowspark\HttpStatus\HttpStatus;
-use Psr\Http\Message\RequestInterface;
-use Psr\Http\Message\StreamInterface;
-use Psr\Http\Message\UriInterface;
+use Psr\Http\Message\{
+    RequestInterface,
+    StreamInterface,
+    UriInterface
+};
 
 class Request extends AbstractMessage implements RequestInterface
 {
@@ -61,7 +63,7 @@ class Request extends AbstractMessage implements RequestInterface
         $this->setHeaders($headers);
         $this->protocol = $version;
 
-        if (!$this->hasHeader('Host')) {
+        if (! $this->hasHeader('Host')) {
             $this->updateHostFromUri();
         }
 
@@ -150,7 +152,7 @@ class Request extends AbstractMessage implements RequestInterface
         $new = clone $this;
         $new->uri = $uri;
 
-        if (!$preserveHost) {
+        if (! $preserveHost) {
             $new->updateHostFromUri();
         }
 

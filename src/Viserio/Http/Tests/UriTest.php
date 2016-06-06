@@ -2,7 +2,6 @@
 namespace Viserio\Http\Tests;
 
 use Psr\Http\Message\UriInterface;
-use Viserio\Http\Tests\Constraint\Immutable;
 use Viserio\Http\Tests\Fixture\ExtendedUriTest;
 use Viserio\Http\Uri;
 

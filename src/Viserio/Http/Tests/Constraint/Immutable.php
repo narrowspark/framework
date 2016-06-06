@@ -28,9 +28,14 @@ class Immutable extends \PHPUnit_Framework_Constraint
         Assert::assertThat($new, new self($original), $message);
     }
 
+    public function toString()
+    {
+        return 'is immutable';
+    }
+
     protected function matches($other)
     {
-        if (!($other instanceof $this->new)) {
+        if (! ($other instanceof $this->new)) {
             return false;
         }
 
@@ -44,10 +49,5 @@ class Immutable extends \PHPUnit_Framework_Constraint
             get_class($this->new),
             get_class($other)
         );
-    }
-
-    public function toString()
-    {
-        return 'is immutable';
     }
 }

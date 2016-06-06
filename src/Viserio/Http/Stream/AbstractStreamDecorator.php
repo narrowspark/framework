@@ -3,8 +3,8 @@ namespace Viserio\Http\Stream;
 
 use BadMethodCallException;
 use Exception;
-use UnexpectedValueException;
 use Psr\Http\Message\StreamInterface;
+use UnexpectedValueException;
 use Viserio\Http\Util;
 
 abstract class AbstractStreamDecorator implements StreamInterface
@@ -15,6 +15,61 @@ abstract class AbstractStreamDecorator implements StreamInterface
     public function __construct(StreamInterface $stream)
     {
         $this->stream = $stream;
+    }
+
+    /**
+     * Magic method used to create a new stream if streams are not added in
+     * the constructor of a decorator (e.g., LazyOpenStream).
+     *
+     * @param string $name Name of the property (allows "stream" only).
+     *
+     * @return StreamInterface
+     */
+    public function __get($name)
+    {
+        if ($name == 'stream') {
+            $this->stream = $this->createStream();
+
+            return $this->stream;
+        }
+
+        throw new UnexpectedValueException("$name not found on class");
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function __toString()
+    {
+        try {
+            if ($this->isSeekable()) {
+                $this->seek(0);
+            }
+
+            return $this->getContents();
+        } catch (Exception $e) {
+            // Really, PHP? https://bugs.php.net/bug.php?id=53648
+            trigger_error('StreamDecorator::__toString exception: '
+                . (string) $e, E_USER_ERROR);
+
+            return '';
+        }
+    }
+
+    /**
+     * Allow decorators to implement custom methods
+     *
+     * @param string $method Missing method name
+     * @param array  $args   Method arguments
+     *
+     * @return mixed
+     */
+    public function __call($method, array $args)
+    {
+        $result = call_user_func_array([$this->stream, $method], $args);
+
+        // Always return the wrapped object if the result is a return $this
+        return $result === $this->stream ? $this : $result;
     }
 
     /**
@@ -127,64 +182,11 @@ abstract class AbstractStreamDecorator implements StreamInterface
     }
 
     /**
-     * Magic method used to create a new stream if streams are not added in
-     * the constructor of a decorator (e.g., LazyOpenStream).
-     *
-     * @param string $name Name of the property (allows "stream" only).
-     *
-     * @return StreamInterface
-     */
-    public function __get($name)
-    {
-        if ($name == 'stream') {
-            $this->stream = $this->createStream();
-            return $this->stream;
-        }
-
-        throw new UnexpectedValueException("$name not found on class");
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function __toString()
-    {
-        try {
-            if ($this->isSeekable()) {
-                $this->seek(0);
-            }
-
-            return $this->getContents();
-        } catch (Exception $e) {
-            // Really, PHP? https://bugs.php.net/bug.php?id=53648
-            trigger_error('StreamDecorator::__toString exception: '
-                . (string) $e, E_USER_ERROR);
-            return '';
-        }
-    }
-
-    /**
-     * Allow decorators to implement custom methods
-     *
-     * @param string $method Missing method name
-     * @param array  $args   Method arguments
-     *
-     * @return mixed
-     */
-    public function __call($method, array $args)
-    {
-        $result = call_user_func_array([$this->stream, $method], $args);
-
-        // Always return the wrapped object if the result is a return $this
-        return $result === $this->stream ? $this : $result;
-    }
-
-    /**
      * Implement in subclasses to dynamically create streams when requested.
      *
-     * @return StreamInterface
-     *
      * @throws \BadMethodCallException
+     *
+     * @return StreamInterface
      */
     protected function createStream(): StreamInterface
     {

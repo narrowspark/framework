@@ -16,7 +16,7 @@ class PhpInputStream extends AbstractStreamDecorator
     private $reachedEof = false;
 
     /**
-     * @param  string|resource $stream
+     * @param string|resource $stream
      */
     public function __construct($stream = 'php://input')
     {
@@ -72,7 +72,7 @@ class PhpInputStream extends AbstractStreamDecorator
             return $this->cache;
         }
 
-        $contents     = stream_get_contents($this->resource, $maxLength);
+        $contents = stream_get_contents($this->resource, $maxLength);
         $this->cache .= $contents;
 
         if ($maxLength === -1 || $this->eof()) {
