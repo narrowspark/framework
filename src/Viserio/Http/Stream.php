@@ -140,6 +140,9 @@ class Stream implements StreamInterface
         throw new BadMethodCallException('No value for ' . $name);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function __toString()
     {
         try {
@@ -151,9 +154,13 @@ class Stream implements StreamInterface
         }
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getContents()
     {
         $contents = stream_get_contents($this->stream);
+
         if ($contents === false) {
             throw new RuntimeException('Unable to read stream contents');
         }
@@ -161,6 +168,9 @@ class Stream implements StreamInterface
         return $contents;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function close()
     {
         if (isset($this->stream)) {
@@ -172,6 +182,9 @@ class Stream implements StreamInterface
         }
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function detach()
     {
         if (! isset($this->stream)) {
@@ -179,13 +192,18 @@ class Stream implements StreamInterface
         }
 
         $result = $this->stream;
+
         unset($this->stream);
+
         $this->size = $this->uri = null;
         $this->readable = $this->writable = $this->seekable = false;
 
         return $result;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getSize()
     {
         if ($this->size !== null) {
@@ -210,26 +228,41 @@ class Stream implements StreamInterface
         }
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function isReadable()
     {
         return $this->readable;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function isWritable()
     {
         return $this->writable;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function isSeekable()
     {
         return $this->seekable;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function eof()
     {
         return ! $this->stream || feof($this->stream);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function tell()
     {
         $result = ftell($this->stream);
@@ -241,11 +274,17 @@ class Stream implements StreamInterface
         return $result;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function rewind()
     {
         $this->seek(0);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function seek($offset, $whence = SEEK_SET)
     {
         if (! $this->seekable) {
@@ -256,6 +295,9 @@ class Stream implements StreamInterface
         }
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function read($length)
     {
         if (! $this->readable) {
@@ -265,6 +307,9 @@ class Stream implements StreamInterface
         return fread($this->stream, $length);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function write($string)
     {
         if (! $this->writable) {
@@ -282,6 +327,9 @@ class Stream implements StreamInterface
         return $result;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getMetadata($key = null)
     {
         if (! isset($this->stream)) {

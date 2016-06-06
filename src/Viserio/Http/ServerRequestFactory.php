@@ -16,7 +16,7 @@ class ServerRequestFactory
      *
      * @return ServerRequestInterface
      */
-    public static function createFromGlobals(): ServerRequestInterface
+    final public static function createFromGlobals(): ServerRequestInterface
     {
         $method = $_SERVER['REQUEST_METHOD'] ?? 'GET';
         $headers = function_exists('getallheaders') ? getallheaders() : [];
@@ -38,7 +38,7 @@ class ServerRequestFactory
      *
      * @return UriInterface
      */
-    public static function getUriFromGlobals(): UriInterface
+    final public static function getUriFromGlobals(): UriInterface
     {
         $uri = new Uri('');
 
