@@ -33,18 +33,6 @@ class Uri implements UriInterface
     protected static $CHAR_UNRESERVED = 'a-zA-Z0-9_\-\.~\pL';
 
     /**
-     * Supported Schemes.
-     *
-     * @var array
-     */
-    protected $allowedSchemes = [
-        'http' => 80,
-        'https' => 443,
-        'ftp'   => 21,
-        'sftp'  => 22,
-    ];
-
-    /**
      * Uri scheme (without "://" suffix).
      *
      * @var string
@@ -177,7 +165,7 @@ class Uri implements UriInterface
 
         $new = clone $this;
         $new->scheme = $scheme;
-        $new->port = $new->validatePort($new->port);
+        $new->port = $new->filterPort($new->port);
         $new->validateState();
 
         return $new;
@@ -210,6 +198,10 @@ class Uri implements UriInterface
      */
     public function withHost($host)
     {
+        if (!is_string($host)) {
+            throw new InvalidArgumentException('Host must be a string');
+        }
+
         $host = strtolower($host);
         $host = $this->filterHost($host);
 
@@ -229,7 +221,7 @@ class Uri implements UriInterface
      */
     public function withPort($port)
     {
-        $port = $this->validatePort($port);
+        $port = $this->filterPort($port);
 
         if ($this->port === $port) {
             return $this;
@@ -389,7 +381,7 @@ class Uri implements UriInterface
         $this->scheme = isset($components['scheme']) ? $this->filterScheme($components['scheme']) : '';
         $this->userInfo = $components['user'] ?? '';
         $this->host = isset($components['host']) ? strtolower($components['host']) : '';
-        $this->port = $components['port'] ?? null;
+        $this->port = isset($components['port']) ? $this->filterPort($components['port']) : null;
         $this->path = isset($components['path']) ? $this->filterPath($components['path']) : '';
         $this->query = isset($components['query']) ? $this->filterQuery($components['query']) : '';
         $this->fragment = isset($components['fragment']) ? $this->filterFragment($components['fragment']) : '';
@@ -473,17 +465,11 @@ class Uri implements UriInterface
         }
     }
 
-    /**
-     * Is a given port non-standard for the current scheme?
-     *
-     * @param string $scheme
-     * @param int    $port
-     *
-     * @return bool
-     */
-    protected function isNonStandardPort($scheme, $port): bool
+    protected function filterPort($port)
     {
-        return ! isset($this->allowedSchemes[$scheme]) || $this->allowedSchemes[$scheme] !== $port;
+        $port = $this->validatePort($port);
+
+        return $this->isNonStandardPort($this->scheme, $port) ? $port : null;
     }
 
     /**
@@ -493,17 +479,18 @@ class Uri implements UriInterface
      */
     protected function filterPath(string $path): string
     {
-        if (strpos($path, '?') !== false || strpos($path, '#') !== false) {
-            throw new InvalidArgumentException('Invalid path provided; Path should not contain `?` and `#` symbols.');
-        }
-
         $path = $this->cleanPath($path);
 
-        return preg_replace_callback(
+        $path = preg_replace_callback(
             '/(?:[^' . self::$CHAR_UNRESERVED . self::$CHAR_SUB_DELIMS . ':@&=\+\$,\/;%]+|%(?![A-Fa-f0-9]{2}))/u',
             [$this, 'rawurlencodeMatchZero'],
             $path
         );
+        $path = preg_replace_callback('/%[a-zA-Z0-9]{2}/', function($match) {
+            return strtoupper($match[0]);
+        }, $path);
+
+        return $path;
     }
 
     /**

@@ -9,6 +9,11 @@ class UriTest extends \PHPUnit_Framework_TestCase
 {
     const RFC3986_BASE = 'http://a/b/c/d;p?q';
 
+    public function testUriImplementsInterface()
+    {
+        $this->assertInstanceOf('Psr\Http\Message\UriInterface', new Uri());
+    }
+
     public function testParsesProvidedUri()
     {
         $uri = new Uri('https://user:pass@example.com:8080/path/123?q=abc#test');
@@ -56,7 +61,6 @@ class UriTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage The source URI string appears to be malformed
      * @dataProvider getInvalidUris
      */
     public function testInvalidUrisThrowException($invalidUri)
@@ -95,7 +99,6 @@ class UriTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage The source URI string appears to be malformed
      */
     public function testParseUriPortCannotBeZero()
     {
@@ -111,7 +114,7 @@ class UriTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \TypeError
+     * @expectedException \InvalidArgumentException
      */
     public function testHostMustHaveCorrectType()
     {
@@ -140,19 +143,6 @@ class UriTest extends \PHPUnit_Framework_TestCase
     public function testFragmentMustHaveCorrectType()
     {
         (new Uri())->withFragment([]);
-    }
-
-    public function testCantParseFalseyUriParts()
-    {
-        $uri = new Uri('0://0:0@0/0?0#0');
-        $this->assertSame('', $uri->getScheme());
-        $this->assertSame('0', $uri->getAuthority());
-        $this->assertSame('', $uri->getUserInfo());
-        $this->assertSame('0', $uri->getHost());
-        $this->assertSame('//0:0@0/0', $uri->getPath());
-        $this->assertSame('0', $uri->getQuery());
-        $this->assertSame('0', $uri->getFragment());
-        $this->assertSame('//0//0:0@0/0?0#0', (string) $uri);
     }
 
     public function testCanConstructFalseyUriParts()
@@ -443,8 +433,6 @@ class UriTest extends \PHPUnit_Framework_TestCase
 
     /**
      * As Per PSR7 UriInterface the host MUST be lowercased
-     *
-     * @group uriinterface
      */
     public function testHostnameMustBeLowerCasedAsPerPsr7Interface()
     {
@@ -455,8 +443,6 @@ class UriTest extends \PHPUnit_Framework_TestCase
 
     /**
      * As Per PSR7 UriInterface the scheme MUST be lowercased
-     *
-     * @group uriinterface
      */
     public function testSchemeMustBeLowerCasedAsPerPsr7Interface()
     {
@@ -471,7 +457,6 @@ class UriTest extends \PHPUnit_Framework_TestCase
      * - the encoding characters must be uppercased or not ?
      * - the "~" character must not be encoded ?
      *
-     * @group uriinterface
      * @dataProvider pathProvider
      */
     public function testPathNormalizationPerPsr7Interface($url, $path)
@@ -492,8 +477,6 @@ class UriTest extends \PHPUnit_Framework_TestCase
      * the interface if for the string representation indivual
      * normalization MUST be applied prior to generate the string
      * with the __toString() method
-     *
-     * @group uriinterface
      */
     public function testUrlStandardNormalization()
     {
@@ -507,8 +490,6 @@ class UriTest extends \PHPUnit_Framework_TestCase
      * in the following examples.
      *
      * Some of these example return invalid Url
-     *
-     * @group uriinterface
      * @dataProvider authorityProvider
      */
     public function testAuthorityDelimiterPresence($url)
@@ -528,14 +509,51 @@ class UriTest extends \PHPUnit_Framework_TestCase
     /**
      * As Per PSR7 UriInterface the null value remove the port info
      * no InvalidArgumentException should be thrown
-     *
-     * @group uriinterface
      */
     public function testWithPortWithNullValue()
     {
         $url = 'http://www.example.com:81';
         $uri = new Uri($url);
         $this->assertNull($uri->withPort(null)->getPort());
+    }
+
+    public function testToString()
+    {
+        $url = 'http://user:pass@local.example.com:8080/foo?bar=baz#quz';
+        $uri = new Uri($url);
+        $this->assertSame($url, (string) $uri);
+
+        $url = 'mailto:someone@example.com,someoneelse@example.com';
+        $uri = new Uri($url);
+        $this->assertSame($url, (string) $uri);
+
+        $url = 'http://local.example.com/foo?return=\'http://local.example.com:8080\'';
+        $uri = new Uri($url);
+        $this->assertSame($url, (string) $uri);
+
+        $url = 'https://local.example.com/login/\'https://local.example.com/admin\'';
+        $uri = new Uri($url);
+        $this->assertSame($url, (string) $uri);
+
+        $url = 'http://local.example.com/blog#news=last[month&tag=sport]';
+        $uri = new Uri($url);
+        $this->assertSame($url, (string) $uri);
+
+        $url = '../../book/catalog.xml';
+        $uri = new Uri($url);
+        $this->assertSame($url, (string) $uri);
+
+        $url = 'file:///C:/test.html';
+        $uri = new Uri($url);
+        $this->assertSame($url, (string) $uri);
+
+        $url = 'file://192.168.0.100/home/test.html';
+        $uri = new Uri($url);
+        $this->assertSame($url, (string) $uri);
+
+        $url = 'ftp://guest:qwerty@local.example.com/readme.txt';
+        $uri = new Uri($url);
+        $this->assertSame($url, (string) $uri);
     }
 
     /**

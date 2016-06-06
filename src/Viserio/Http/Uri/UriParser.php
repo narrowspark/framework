@@ -96,7 +96,7 @@ final class UriParser
             return $parts;
         }
 
-        $parts['path'] = $parts['scheme'].':'.$parts['authority'].$parts['path'];
+        $parts['path'] = $parts['scheme'] . ':' . $parts['authority'] . $parts['path'];
         $parts['scheme'] = '';
         $parts['authority'] = '';
 

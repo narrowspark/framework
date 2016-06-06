@@ -41,6 +41,18 @@ trait UriBuilderTrait
     protected static $local_link_prefix = '1111111010';
 
     /**
+     * Supported Schemes.
+     *
+     * @var array
+     */
+    protected $allowedSchemes = [
+        'http' => 80,
+        'https' => 443,
+        'ftp'   => 21,
+        'sftp'  => 22,
+    ];
+
+    /**
      * Validate a Port number
      *
      * @param mixed $port the port numberhast
@@ -59,18 +71,26 @@ trait UriBuilderTrait
             return null;
         }
 
-        $res = filter_var($port, FILTER_VALIDATE_INT, ['options' => [
-            'min_range' => 1,
-            'max_range' => 65535,
-        ]]);
-
-        if (!$res) {
+        if (1 > $port || 0xffff < $port) {
             throw new InvalidArgumentException(
                 sprintf('Invalid port: %d. Must be between 1 and 65535', $port)
             );
         }
 
-        return $res;
+        return (int) $port;
+    }
+
+    /**
+     * Is a given port non-standard for the current scheme?
+     *
+     * @param string $scheme
+     * @param int    $port
+     *
+     * @return bool
+     */
+    protected function isNonStandardPort($scheme, $port): bool
+    {
+        return ! isset($this->allowedSchemes[$scheme]) || $this->allowedSchemes[$scheme] !== $port;
     }
 
     /**
