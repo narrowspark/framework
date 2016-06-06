@@ -1,6 +1,10 @@
 <?php
 namespace Viserio\Http;
 
+use Psr\Http\Message\{
+    ResponseInterface,
+    StreamInterface
+};
 use Viserio\Contracts\Http\MessageFactory as MessageFactoryContract;
 
 final class MessageFactory implements MessageFactoryContract

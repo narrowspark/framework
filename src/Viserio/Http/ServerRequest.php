@@ -1,8 +1,11 @@
 <?php
 namespace Viserio\Http;
 
-use StreamInterface;
 use UploadedFileInterface;
+use Psr\Http\Message\{
+    UploadedFileInterface,
+    StreamInterface
+};
 
 class ServerRequest extends Request implements ServerRequestInterface
 {

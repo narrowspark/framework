@@ -4,6 +4,10 @@ namespace Viserio\Http;
 use InvalidArgumentException;
 use RuntimeException;
 use Viserio\Http\Stream\LazyOpenStream;
+use Psr\Http\Message\{
+    UploadedFileInterface,
+    StreamInterface
+};
 
 class UploadedFile implements UploadedFileInterface
 {

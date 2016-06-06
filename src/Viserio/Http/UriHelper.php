@@ -42,7 +42,7 @@ class UriHelper
         $components = [];
 
         foreach ($encodedParts as $key => $value) {
-            $components[$key] = rawurlencode(str_replace($replacements, $entities, $value));
+            $components[$key] = rawurlencode($value);
         }
 
         return $components;

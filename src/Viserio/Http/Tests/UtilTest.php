@@ -2,8 +2,10 @@
 namespace Viserio\Http\Tests;
 
 use ArrayIterator;
-use Viserio\Http\Stream\FnStream;
-use Viserio\Http\Stream\PumpStream;
+use Viserio\Http\Stream\{
+    FnStream,
+    PumpStream
+};
 use Viserio\Http\Tests\Fixture\HasToString;
 use Viserio\Http\Util;
 

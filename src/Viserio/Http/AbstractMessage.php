@@ -2,8 +2,10 @@
 namespace Viserio\Http;
 
 use InvalidArgumentException;
-use Psr\Http\Message\MessageInterface;
-use Psr\Http\Message\StreamInterface;
+use Psr\Http\Message\{
+    MessageInterface,
+    StreamInterface
+};
 
 abstract class AbstractMessage implements MessageInterface
 {

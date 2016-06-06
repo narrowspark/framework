@@ -1,10 +1,14 @@
 <?php
 namespace Viserio\Http\Tests;
 
-use Psr\Http\Message\MessageInterface;
-use Psr\Http\Message\StreamInterface;
-use Viserio\Http\Tests\Constraint\HttpProtocolVersion;
-use Viserio\Http\Tests\Constraint\Immutable;
+use Psr\Http\Message\{
+    MessageInterface,
+    StreamInterface
+};
+use Viserio\Http\Tests\Constraint\{
+    HttpProtocolVersion,
+    Immutable
+};
 
 abstract class AbstractMessageTest extends \PHPUnit_Framework_TestCase
 {

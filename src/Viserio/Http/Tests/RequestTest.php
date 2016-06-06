@@ -1,9 +1,11 @@
 <?php
 namespace Viserio\Http\Tests;
 
-use Psr\Http\Message\RequestInterface;
-use Psr\Http\Message\StreamInterface;
-use Psr\Http\Message\UriInterface;
+use Psr\Http\Message\{
+    RequestInterface,
+    StreamInterface,
+    UriInterface
+};
 use Viserio\Http\Request;
 use Viserio\Http\Uri;
 

@@ -2,7 +2,11 @@
 namespace Viserio\Http\Tests;
 
 use ReflectionProperty;
-use UploadedFile;
+use Viserio\Http\{
+    UploadedFile,
+    Stream,
+    Util
+};
 
 class UploadedFileTest extends \PHPUnit_Framework_TestCase
 {

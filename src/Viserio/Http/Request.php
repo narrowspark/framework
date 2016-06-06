@@ -2,7 +2,6 @@
 namespace Viserio\Http;
 
 use InvalidArgumentException;
-use Narrowspark\HttpStatus\HttpStatus;
 use Psr\Http\Message\{
     RequestInterface,
     StreamInterface,
