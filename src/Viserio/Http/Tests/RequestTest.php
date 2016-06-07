@@ -6,8 +6,12 @@ use Psr\Http\Message\{
     StreamInterface,
     UriInterface
 };
-use Viserio\Http\Request;
-use Viserio\Http\Uri;
+use Viserio\Http\{
+    Request,
+    Util,
+    Uri
+};
+use Viserio\Http\Stream\FnStream;
 
 class RequestTest extends AbstractMessageTest
 {
@@ -123,6 +127,22 @@ class RequestTest extends AbstractMessageTest
             $newRequest->getUri(),
             'getUri does not match request target set in withUri'
         );
+    }
+
+    public function testConstructorDoesNotReadStreamBody()
+    {
+        $streamIsRead = false;
+
+        $body = FnStream::decorate(Util::getStream(''), [
+            '__toString' => function () use (&$streamIsRead) {
+                $streamIsRead = true;
+                return '';
+            }
+        ]);
+
+        $r = new Request('GET', '/', [], $body);
+        $this->assertFalse($streamIsRead);
+        $this->assertSame($body, $r->getBody());
     }
 
     /**

@@ -387,6 +387,7 @@ class UriParserTest extends \PHPUnit_Framework_TestCase
     public function testInvalidURI()
     {
         return [
+            'invalid uri' => ['///'],
             'invalid port' => ['scheme://host:port/path?query#fragment'],
             'invalid host' => ['scheme://[127.0.0.1]/path?query#fragment'],
             'invalid ipv6 host' => ['scheme://[::1]./path?query#fragment'],

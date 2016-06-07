@@ -3,7 +3,7 @@ namespace Viserio\Http\Uri\Traits;
 
 use InvalidArgumentException;
 
-trait UriBuilderTrait
+trait HostValidateTrait
 {
     /**
      * Tells whether we have a IDN or not
@@ -41,66 +41,13 @@ trait UriBuilderTrait
     protected static $local_link_prefix = '1111111010';
 
     /**
-     * Supported Schemes.
-     *
-     * @var array
-     */
-    protected $allowedSchemes = [
-        'http' => 80,
-        'https' => 443,
-        'ftp'   => 21,
-        'sftp'  => 22,
-    ];
-
-    /**
-     * Validate a Port number
-     *
-     * @param mixed $port the port numberhast
-     *
-     * @throws InvalidArgumentException If the port number is invalid
-     *
-     * @return null|int
-     */
-    protected function validatePort($port)
-    {
-        if (is_bool($port)) {
-            throw new InvalidArgumentException('The submitted port is invalid');
-        }
-
-        if (in_array($port, [null, ''])) {
-            return null;
-        }
-
-        if (1 > $port || 0xffff < $port) {
-            throw new InvalidArgumentException(
-                sprintf('Invalid port: %d. Must be between 1 and 65535', $port)
-            );
-        }
-
-        return (int) $port;
-    }
-
-    /**
-     * Is a given port non-standard for the current scheme?
-     *
-     * @param string $scheme
-     * @param int    $port
-     *
-     * @return bool
-     */
-    protected function isNonStandardPort($scheme, $port): bool
-    {
-        return ! isset($this->allowedSchemes[$scheme]) || $this->allowedSchemes[$scheme] !== $port;
-    }
-
-    /**
      * validate the host component
      *
      * @param string $host
      *
      * @return string
      */
-    protected function filterHost($host)
+    protected function validateHost(string $host): string
     {
         if (empty($this->validateIpHost($host))) {
             $this->validateStringHost($host);
@@ -116,15 +63,16 @@ trait UriBuilderTrait
      *
      * @return array
      */
-    protected function validateStringHost($str)
+    protected function validateStringHost(string $str)
     {
-        if ('' === $str) {
+        if ($str === '') {
             return [];
         }
 
         $host = $this->lower($this->setIsAbsolute($str));
 
         $rawLabels = explode('.', $host);
+
         $labels = array_map(function ($value) {
             return idn_to_ascii($value);
         }, $rawLabels);

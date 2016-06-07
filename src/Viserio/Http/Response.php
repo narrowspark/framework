@@ -36,7 +36,7 @@ class Response extends AbstractMessage implements ResponseInterface
     ) {
         $this->statusCode = HttpStatus::filterStatusCode($status);
 
-        if ($body !== null) {
+        if ($body !== '' && $body !== null) {
             $this->stream = Util::getStream($body);
         }
 

@@ -84,7 +84,7 @@ class UploadedFile implements UploadedFileInterface
      */
     public function __construct(
         $streamOrFile,
-        int $size,
+        $size,
         $errorStatus,
         $clientFilename = null,
         $clientMediaType = null
@@ -254,8 +254,14 @@ class UploadedFile implements UploadedFileInterface
     /**
      * @param int $size
      */
-    private function setSize(int $size)
+    private function setSize($size)
     {
+        if (is_int($size) === false) {
+            throw new InvalidArgumentException(
+                'Upload file size must be an integer'
+            );
+        }
+
         $this->size = $size;
     }
 

@@ -2,7 +2,10 @@
 namespace Viserio\Http\Uri;
 
 use InvalidArgumentException;
-use Viserio\Http\Uri\Traits\UriBuilderTrait;
+use Viserio\Http\Uri\Traits\{
+    HostValidateTrait,
+    PortValidateTrait
+};
 
 /**
  * A class to parse a URI string according to RFC3986.
@@ -13,7 +16,8 @@ use Viserio\Http\Uri\Traits\UriBuilderTrait;
  */
 final class UriParser
 {
-    use UriBuilderTrait;
+    use HostValidateTrait;
+    use PortValidateTrait;
 
     const REGEXP_URI = ',^
         ((?<scheme>[^:/?\#]+):)?      # URI scheme component
@@ -154,7 +158,7 @@ final class UriParser
             $components['port'] = strrev($res['port']);
         }
 
-        $components['host'] = $this->filterHost($components['host']);
+        $components['host'] = $this->validateHost($components['host']);
         $components['port'] = $this->validatePort($components['port']);
 
         return $components;

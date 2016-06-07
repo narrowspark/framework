@@ -60,7 +60,7 @@ class UploadedFileTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider invalidSizes
-     * @expectedException \TypeError
+     * @expectedException \InvalidArgumentException
      */
     public function testRaisesExceptionOnInvalidSize($size)
     {

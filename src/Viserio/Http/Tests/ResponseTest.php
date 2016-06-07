@@ -5,8 +5,11 @@ use Psr\Http\Message\{
     ResponseInterface,
     StreamInterface
 };
-use Viserio\Http\Response;
-use Viserio\Http\Util;
+use Viserio\Http\{
+    Response,
+    Util
+};
+use Viserio\Http\Stream\FnStream;
 
 class ResponseTest extends AbstractMessageTest
 {
@@ -87,6 +90,21 @@ class ResponseTest extends AbstractMessageTest
 
         $this->assertSame(404, $r->getStatusCode());
         $this->assertSame('Not Found', $r->getReasonPhrase());
+    }
+
+    public function testConstructorDoesNotReadStreamBody()
+    {
+        $streamIsRead = false;
+        $body = FnStream::decorate(Util::getStream(''), [
+            '__toString' => function () use (&$streamIsRead) {
+                $streamIsRead = true;
+                return '';
+            }
+        ]);
+
+        $r = new Response(200, [], $body);
+        $this->assertFalse($streamIsRead);
+        $this->assertSame($body, $r->getBody());
     }
 
     public function testStatusCanBeNumericString()

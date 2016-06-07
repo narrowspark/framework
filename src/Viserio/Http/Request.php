@@ -66,7 +66,7 @@ class Request extends AbstractMessage implements RequestInterface
             $this->updateHostFromUri();
         }
 
-        if ($body != '') {
+        if ($body !== '' && $body !== null) {
             $this->stream = Util::getStream($body);
         }
     }
@@ -159,15 +159,6 @@ class Request extends AbstractMessage implements RequestInterface
     }
 
     /**
-     * {@inheritdoc}
-     */
-    public function withHeader($header, $value)
-    {
-        /* @var Request $newInstance */
-        return parent::withHeader($header, $value);
-    }
-
-    /**
      * Retrieve the host from the URI instance
      */
     private function updateHostFromUri()
@@ -243,11 +234,11 @@ class Request extends AbstractMessage implements RequestInterface
      *
      * @param null|string|UriInterface $uri
      *
-     * @throws InvalidArgumentException
-     *
      * @return UriInterface
+     *
+     * @throws InvalidArgumentException
      */
-    private function createUri($uri): UriInterface
+    private function createUri($uri)
     {
         if ($uri instanceof UriInterface) {
             return $uri;
