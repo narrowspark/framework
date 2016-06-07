@@ -16,7 +16,7 @@ trait TranscoderTrait
      *
      * @var string
      */
-    protected static $reservedCharactersRegex = "\!\$&'\(\)\*\+,;\=\:";
+    protected static $reservedCharactersRegex = "\!\$&'\(\)\*\+,;\=:";
 
     /**
      * Encode a string according to RFC3986 Rules
@@ -100,6 +100,23 @@ trait TranscoderTrait
         $formatter = function (array $matches) {
             return strtoupper($matches[0]);
         };
+
+        $subject = str_replace(
+            [
+                '%7E', '%21', '%2A', '%27',
+                '%28', '%29', '%3B', '%3A',
+                '%40', '%26', '%3D', '%2B',
+                '%24', '%2C', '%2F', '%3F',
+                '%25', '%23', '%5B', '%5D',
+            ], [
+                '~', '!', '*', "'",
+                "(", ")", ";", ":",
+                "@", "&", "=", "+",
+                "$", ",", "/", "?",
+                "%", "#", "[", "]",
+            ],
+            $subject
+        );
 
         $subject = preg_replace_callback($regexp, $encoder, $subject);
 

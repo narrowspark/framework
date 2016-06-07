@@ -39,9 +39,6 @@ class PathTest extends \PHPUnit_Framework_TestCase
             ['a/b/c', 'a/b/c'],
             ['a/b/c/.', 'a/b/c/'],
             ['/a/b/c', '/a/b/c'],
-            ['//a//b//c', '/a/b/c'],
-            ['a//b/c//', 'a/b/c/'],
-            ['/a/b/c//', '/a/b/c/'],
         ];
     }
 }

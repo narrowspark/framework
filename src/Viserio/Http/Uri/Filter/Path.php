@@ -30,7 +30,6 @@ class Path
             $newPath .= '/';
         }
 
-        $newPath = $this->withoutEmptySegments($newPath);
         $newPath = $this->upper($newPath);
         $newPath = $this->validate($newPath);
 
@@ -53,21 +52,6 @@ class Path
         $data = $this->decodePath($data);
 
         return array_filter(explode('/', $data), $filterSegment);
-    }
-
-
-    /**
-     * Returns an instance without duplicate delimiters
-     *
-     * This method MUST retain the state of the current instance, and return
-     * an instance that contains the path component normalized by removing
-     * multiple consecutive empty segment
-     *
-     * @return string
-     */
-    public function withoutEmptySegments(string $path): string
-    {
-        return preg_replace(',/+,', '/', $path);
     }
 
     /**
@@ -93,16 +77,6 @@ class Path
         }
 
         return $carry;
-    }
-
-    /**
-     * @param array $match
-     *
-     * @return string
-     */
-    protected function rawurlencodeMatchZero(array $match): string
-    {
-        return rawurlencode(trim($match[0]));
     }
 
     /**

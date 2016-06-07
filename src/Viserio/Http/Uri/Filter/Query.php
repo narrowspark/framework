@@ -30,7 +30,7 @@ class Query
             $pairs = array_merge($pairs, $this->buildPair($encoder, $value, $encoder($key)));
         }
 
-        return '?' . implode('&', $pairs);
+        return implode('&', $pairs);
     }
 
     /**
@@ -40,9 +40,9 @@ class Query
      * @param array    $value   The query string value
      * @param string   $key     The query string key
      *
-     * @return string
+     * @return array
      */
-    protected function buildPair(callable $encoder, array $value, $key)
+    protected function buildPair(callable $encoder, array $value, string $key): array
     {
         $reducer = function (array $carry, $data) use ($key, $encoder) {
             $pair = $key;

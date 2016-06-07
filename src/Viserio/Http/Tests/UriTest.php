@@ -441,13 +441,6 @@ class UriTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testProperlyTrimsLeadingSlashesToPreventXSS()
-    {
-        $url = 'http://example.org//anolilab.de';
-        $uri = new Uri($url);
-        $this->assertEquals('http://example.org/anolilab.de', (string) $uri);
-    }
-
     /**
      * As Per PSR7 UriInterface the host MUST be lowercased
      */
@@ -469,10 +462,9 @@ class UriTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * As Per PSR7 UriInterface the path MUST be encoded following
-     * RFC3986 rules does it means that :
-     * - the encoding characters must be uppercased or not ?
-     * - the "~" character must not be encoded ?
+     * The value returned MUST be percent-encoded, but MUST NOT double-encode
+     * any characters. To determine what characters to encode, please refer to
+     * RFC 3986, Sections 2 and 3.3.
      *
      * @dataProvider pathProvider
      */
@@ -486,6 +478,29 @@ class UriTest extends \PHPUnit_Framework_TestCase
         return [
             ['http://example.com/%a1/psr7/rocks', '/%A1/psr7/rocks'],
             ['http://example.com/%7Epsr7/rocks', '/~psr7/rocks'],
+        ];
+    }
+
+    /**
+     * @dataProvider queryProvider
+     *
+     * The value returned MUST be percent-encoded, but MUST NOT double-encode
+     * any characters. To determine what characters to encode, please refer to
+     * RFC 3986, Sections 2 and 3.4.
+     */
+    public function testGetQuery($query, $expected)
+    {
+        $uri = (new Uri())->withQuery($query);
+        $this->assertEquals($expected, $uri->getQuery(), 'Query must be normalized according to RFC3986');
+    }
+
+    public function queryProvider()
+    {
+        return [
+            'normalized query' => ['foo.bar=%7evalue', 'foo.bar=~value'],
+            'empty query'      => ['', ''],
+            'same param query' => ['foo.bar=1&foo.bar=1', 'foo.bar=1&foo.bar=1'],
+            'same param query' => ['?foo=1', '%3Ffoo=1'],
         ];
     }
 
@@ -534,43 +549,83 @@ class UriTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($uri->withPort(null)->getPort());
     }
 
-    public function testToString()
+    /**
+     * @dataProvider stringProvider
+     *
+     * - If a scheme is present, it MUST be suffixed by ":".
+     * - If an authority is present, it MUST be prefixed by "//".
+     * - The path can be concatenated without delimiters. But there are two
+     *   cases where the path has to be adjusted to make the URI reference
+     *   valid as PHP does not allow to throw an exception in __toString():
+     *     - If the path is rootless and an authority is present, the path MUST
+     *       be prefixed by "/".
+     *     - If the path is starting with more than one "/" and no authority is
+     *       present, the starting slashes MUST be reduced to one.
+     * - If a query is present, it MUST be prefixed by "?".
+     * - If a fragment is present, it MUST be prefixed by "#".
+     */
+    public function testToString($scheme, $user, $pass, $host, $port, $path, $query, $fragment, $expected)
     {
-        $url = 'http://user:pass@local.example.com:8080/foo?bar=baz#quz';
-        $uri = new Uri($url);
-        $this->assertSame($url, (string) $uri);
+        $uri = $this->createDefaultUri()
+                ->withHost($host)
+                ->withScheme($scheme)
+                ->withUserInfo($user, $pass)
+                ->withPort($port)
+                ->withPath($path)
+                ->withQuery($query)
+                ->withFragment($fragment);
 
-        $url = 'mailto:someone@example.com,someoneelse@example.com';
-        $uri = new Uri($url);
-        $this->assertSame($url, (string) $uri);
+        $this->assertEquals($expected, (string) $uri, 'URI string must be normalized according to RFC3986 rules');
+    }
 
-        $url = 'http://local.example.com/foo?return=\'http://local.example.com:8080\'';
-        $uri = new Uri($url);
-        $this->assertSame($url, (string) $uri);
-
-        $url = 'https://local.example.com/login/\'https://local.example.com/admin\'';
-        $uri = new Uri($url);
-        $this->assertSame($url, (string) $uri);
-
-        $url = 'http://local.example.com/blog#news=last[month&tag=sport]';
-        $uri = new Uri($url);
-        $this->assertSame($url, (string) $uri);
-
-        $url = '../../book/catalog.xml';
-        $uri = new Uri($url);
-        $this->assertSame($url, (string) $uri);
-
-        $url = 'file:///C:/test.html';
-        $uri = new Uri($url);
-        $this->assertSame($url, (string) $uri);
-
-        $url = 'file://192.168.0.100/home/test.html';
-        $uri = new Uri($url);
-        $this->assertSame($url, (string) $uri);
-
-        $url = 'ftp://guest:qwerty@local.example.com/readme.txt';
-        $uri = new Uri($url);
-        $this->assertSame($url, (string) $uri);
+    public function stringProvider()
+    {
+        return [
+            'URL normalized' => [
+                'scheme'   => 'HtTps',
+                'user'     => 'iGoR',
+                'pass'     => 'rAsMuZeN',
+                'host'     => 'MaStEr.eXaMpLe.CoM',
+                'port'     => 443,
+                'path'     => '/%7ejohndoe/%a1/index.php',
+                'query'    => 'foo.bar=%7evalue',
+                'fragment' => 'fragment',
+                'uri'      => 'https://iGoR:rAsMuZeN@master.example.com/~johndoe/%A1/index.php?foo.bar=~value#fragment'
+            ],
+            'URL without scheme' => [
+                'scheme'   => '',
+                'user'     => '',
+                'pass'     => '',
+                'host'     => 'www.example.com',
+                'port'     => 443,
+                'path'     => '/foo/bar',
+                'query'    => 'param=value',
+                'fragment' => 'fragment',
+                'uri'      => '//www.example.com:443/foo/bar?param=value#fragment',
+            ],
+            'URL without rootless path' => [
+                'scheme'   => 'http',
+                'user'     => '',
+                'pass'     => '',
+                'host'     => 'www.example.com',
+                'port'     => null,
+                'path'     => 'foo/bar',
+                'query'    => '',
+                'fragment' => '',
+                'uri'      => 'http://www.example.com/foo/bar',
+            ],
+            'URL without authority and scheme' => [
+                'scheme'   => '',
+                'user'     => '',
+                'pass'     => '',
+                'host'     => '',
+                'port'     => null,
+                'path'     => '//foo/bar',
+                'query'    => '',
+                'fragment' => '',
+                'uri'      => '/foo/bar',
+            ],
+        ];
     }
 
     /**
