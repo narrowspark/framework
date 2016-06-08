@@ -34,14 +34,26 @@ class Request extends AbstractMessage implements RequestInterface
         'X-XSRF-TOKEN',
     ];
 
-    /** @var string */
-    private $method;
+    /**
+     * The request method
+     *
+     * @var string
+     */
+    protected $method;
 
-    /** @var null|string */
-    private $requestTarget;
+    /**
+     * The request URI target (path + query string)
+     *
+     * @var string
+     */
+    protected $requestTarget;
 
-    /** @var null|UriInterface */
-    private $uri;
+   /**
+     * The request URI object
+     *
+     * @var \Psr\Http\Message\UriInterface|null
+     */
+    protected $uri;
 
     /**
      * @param null|string|UriInterface             $uri     URI for the request.

@@ -140,7 +140,7 @@ class RequestTest extends AbstractMessageTest
             }
         ]);
 
-        $r = new Request('GET', '/', [], $body);
+        $r = new Request('/', 'GET', [], $body);
         $this->assertFalse($streamIsRead);
         $this->assertSame($body, $r->getBody());
     }
@@ -269,7 +269,7 @@ class RequestTest extends AbstractMessageTest
 
     public function testRequestUriMayBeString()
     {
-        $r = new Request('', 'GET');
+        $r = new Request('/', 'GET');
         $this->assertEquals('/', (string) $r->getUri());
     }
 

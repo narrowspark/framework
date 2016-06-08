@@ -12,7 +12,6 @@ use Viserio\Http\Uri\Filter\{
     Scheme,
     Query
 };
-use TrueBV\Punycode;
 
 class Uri implements UriInterface
 {

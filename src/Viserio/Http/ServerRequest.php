@@ -1,20 +1,25 @@
 <?php
 namespace Viserio\Http;
 
-use UploadedFileInterface;
 use Psr\Http\Message\{
     UploadedFileInterface,
-    StreamInterface
+    StreamInterface,
+    ServerRequestInterface,
+    UriInterface
 };
 
 class ServerRequest extends Request implements ServerRequestInterface
 {
     /**
+     * The request attributes.
+     *
      * @var array
      */
     private $attributes = [];
 
     /**
+     * The request cookies params.
+     *
      * @var array
      */
     private $cookieParams = [];
@@ -24,18 +29,24 @@ class ServerRequest extends Request implements ServerRequestInterface
      */
     private $parsedBody;
 
-    /**
+   /**
+     * The request query string params.
+     *
      * @var array
      */
     private $queryParams = [];
 
     /**
+     * The server environment variables at the time the request was created.
+     *
      * @var array
      */
     private $serverParams;
 
     /**
-     * @var array
+     * List of uploaded files.
+     *
+     * @var UploadedFileInterface[]
      */
     private $uploadedFiles = [];
 
@@ -223,6 +234,7 @@ class ServerRequest extends Request implements ServerRequestInterface
                 $this->validateUploadedFiles($file);
                 continue;
             }
+
             if (! $file instanceof UploadedFileInterface) {
                 throw new InvalidArgumentException('Invalid leaf in uploaded files structure');
             }

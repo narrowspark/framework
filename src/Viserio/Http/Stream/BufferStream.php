@@ -2,6 +2,7 @@
 namespace Viserio\Http\Stream;
 
 use Psr\Http\Message\StreamInterface;
+use RuntimeException;
 
 /**
  * Provides a buffer stream that can be written to to fill a buffer, and read
@@ -78,7 +79,7 @@ class BufferStream implements StreamInterface
 
     public function seek($offset, $whence = SEEK_SET)
     {
-        throw new \RuntimeException('Cannot seek a BufferStream');
+        throw new RuntimeException('Cannot seek a BufferStream');
     }
 
     public function eof()
@@ -88,7 +89,7 @@ class BufferStream implements StreamInterface
 
     public function tell()
     {
-        throw new \RuntimeException('Cannot determine the position of a BufferStream');
+        throw new RuntimeException('Cannot determine the position of a BufferStream');
     }
 
     /**

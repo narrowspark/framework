@@ -7,7 +7,10 @@ use Viserio\Http\Stream\{
     PumpStream
 };
 use Viserio\Http\Tests\Fixture\HasToString;
-use Viserio\Http\Util;
+use Viserio\Http\{
+    Util,
+    UploadedFile
+};
 
 class UtilTest extends \PHPUnit_Framework_TestCase
 {
@@ -190,5 +193,267 @@ class UtilTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('3', $p->getContents());
         $this->assertTrue($p->eof());
         $this->assertEquals(9, $p->tell());
+    }
+
+    public function dataNormalizeFiles()
+    {
+        return [
+            'Single file' => [
+                [
+                    'file' => [
+                        'name' => 'MyFile.txt',
+                        'type' => 'text/plain',
+                        'tmp_name' => '/tmp/php/php1h4j1o',
+                        'error' => '0',
+                        'size' => '123'
+                    ]
+                ],
+                [
+                    'file' => new UploadedFile(
+                        '/tmp/php/php1h4j1o',
+                        123,
+                        UPLOAD_ERR_OK,
+                        'MyFile.txt',
+                        'text/plain'
+                    )
+                ]
+            ],
+            'Empty file' => [
+                [
+                    'image_file' => [
+                        'name' => '',
+                        'type' => '',
+                        'tmp_name' => '',
+                        'error' => '4',
+                        'size' => '0'
+                    ]
+                ],
+                [
+                    'image_file' => new UploadedFile(
+                        '',
+                        0,
+                        UPLOAD_ERR_NO_FILE,
+                        '',
+                        ''
+                    )
+                ]
+            ],
+            'Already Converted' => [
+                [
+                    'file' => new UploadedFile(
+                        '/tmp/php/php1h4j1o',
+                        123,
+                        UPLOAD_ERR_OK,
+                        'MyFile.txt',
+                        'text/plain'
+                    )
+                ],
+                [
+                    'file' => new UploadedFile(
+                        '/tmp/php/php1h4j1o',
+                        123,
+                        UPLOAD_ERR_OK,
+                        'MyFile.txt',
+                        'text/plain'
+                    )
+                ]
+            ],
+            'Already Converted array' => [
+                [
+                    'file' => [
+                        new UploadedFile(
+                            '/tmp/php/php1h4j1o',
+                            123,
+                            UPLOAD_ERR_OK,
+                            'MyFile.txt',
+                            'text/plain'
+                        ),
+                        new UploadedFile(
+                            '',
+                            0,
+                            UPLOAD_ERR_NO_FILE,
+                            '',
+                            ''
+                        )
+                    ],
+                ],
+                [
+                    'file' => [
+                        new UploadedFile(
+                            '/tmp/php/php1h4j1o',
+                            123,
+                            UPLOAD_ERR_OK,
+                            'MyFile.txt',
+                            'text/plain'
+                        ),
+                        new UploadedFile(
+                            '',
+                            0,
+                            UPLOAD_ERR_NO_FILE,
+                            '',
+                            ''
+                        )
+                    ],
+                ]
+            ],
+            'Multiple files' => [
+                [
+                    'text_file' => [
+                        'name' => 'MyFile.txt',
+                        'type' => 'text/plain',
+                        'tmp_name' => '/tmp/php/php1h4j1o',
+                        'error' => '0',
+                        'size' => '123'
+                    ],
+                    'image_file' => [
+                        'name' => '',
+                        'type' => '',
+                        'tmp_name' => '',
+                        'error' => '4',
+                        'size' => '0'
+                    ]
+                ],
+                [
+                    'text_file' => new UploadedFile(
+                        '/tmp/php/php1h4j1o',
+                        123,
+                        UPLOAD_ERR_OK,
+                        'MyFile.txt',
+                        'text/plain'
+                    ),
+                    'image_file' => new UploadedFile(
+                        '',
+                        0,
+                        UPLOAD_ERR_NO_FILE,
+                        '',
+                        ''
+                    )
+                ]
+            ],
+            'Nested files' => [
+                [
+                    'file' => [
+                        'name' => [
+                            0 => 'MyFile.txt',
+                            1 => 'Image.png',
+                        ],
+                        'type' => [
+                            0 => 'text/plain',
+                            1 => 'image/png',
+                        ],
+                        'tmp_name' => [
+                            0 => '/tmp/php/hp9hskjhf',
+                            1 => '/tmp/php/php1h4j1o',
+                        ],
+                        'error' => [
+                            0 => '0',
+                            1 => '0',
+                        ],
+                        'size' => [
+                            0 => '123',
+                            1 => '7349',
+                        ],
+                    ],
+                    'nested' => [
+                        'name' => [
+                            'other' => 'Flag.txt',
+                            'test' => [
+                                0 => 'Stuff.txt',
+                                1 => '',
+                            ],
+                        ],
+                        'type' => [
+                            'other' => 'text/plain',
+                            'test' => [
+                                0 => 'text/plain',
+                                1 => '',
+                            ],
+                        ],
+                        'tmp_name' => [
+                            'other' => '/tmp/php/hp9hskjhf',
+                            'test' => [
+                                0 => '/tmp/php/asifu2gp3',
+                                1 => '',
+                            ],
+                        ],
+                        'error' => [
+                            'other' => '0',
+                            'test' => [
+                                0 => '0',
+                                1 => '4',
+                            ],
+                        ],
+                        'size' => [
+                            'other' => '421',
+                            'test' => [
+                                0 => '32',
+                                1 => '0',
+                            ]
+                        ]
+                    ],
+                ],
+                [
+                    'file' => [
+                        0 => new UploadedFile(
+                            '/tmp/php/hp9hskjhf',
+                            123,
+                            UPLOAD_ERR_OK,
+                            'MyFile.txt',
+                            'text/plain'
+                        ),
+                        1 => new UploadedFile(
+                            '/tmp/php/php1h4j1o',
+                            7349,
+                            UPLOAD_ERR_OK,
+                            'Image.png',
+                            'image/png'
+                        ),
+                    ],
+                    'nested' => [
+                        'other' => new UploadedFile(
+                            '/tmp/php/hp9hskjhf',
+                            421,
+                            UPLOAD_ERR_OK,
+                            'Flag.txt',
+                            'text/plain'
+                        ),
+                        'test' => [
+                            0 => new UploadedFile(
+                                '/tmp/php/asifu2gp3',
+                                32,
+                                UPLOAD_ERR_OK,
+                                'Stuff.txt',
+                                'text/plain'
+                            ),
+                            1 => new UploadedFile(
+                                '',
+                                0,
+                                UPLOAD_ERR_NO_FILE,
+                                '',
+                                ''
+                            ),
+                        ]
+                    ]
+                ]
+            ]
+        ];
+    }
+
+    /**
+     * @dataProvider dataNormalizeFiles
+     */
+    public function testNormalizeFiles($files, $expected)
+    {
+        $result = Util::normalizeFiles($files);
+        $this->assertEquals($expected, $result);
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage Invalid value in files specification
+     */
+    public function testNormalizeFilesRaisesException()
+    {
+        Util::normalizeFiles(['test' => 'something']);
     }
 }

@@ -6,6 +6,9 @@ use Viserio\Contracts\Http\UploadedFileFactory as UploadedFileFactoryContract;
 
 final class UploadedFileFactory implements UploadedFileFactoryContract
 {
+    /**
+     * {@inheritdoc}
+     */
     public function createUploadedFile(
         $data,
         int $size,
