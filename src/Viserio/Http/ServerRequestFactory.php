@@ -17,7 +17,7 @@ class ServerRequestFactory
      * $_FILES
      * $_SERVER
      *
-     * @return ServerRequestInterface
+     * @return \Psr\Http\Message\ServerRequestInterface
      */
     final public static function createFromGlobals(): ServerRequestInterface
     {
@@ -40,7 +40,7 @@ class ServerRequestFactory
     /**
      * Get a Uri populated with values from $_SERVER.
      *
-     * @return UriInterface
+     * @return \Psr\Http\Message\UriInterface
      */
     final public static function getUriFromGlobals(): UriInterface
     {

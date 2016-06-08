@@ -10,7 +10,6 @@ interface ResponseFactory
      * Creates a new PSR-7 response.
      *
      * @param int                                  $statusCode
-     * @param string|null                          $reasonPhrase
      * @param array                                $headers
      * @param resource|string|StreamInterface|null $body
      * @param string                               $protocolVersion

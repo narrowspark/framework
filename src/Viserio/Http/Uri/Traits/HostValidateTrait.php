@@ -87,6 +87,8 @@ trait HostValidateTrait
 
     /**
      * @inheritdoc
+     * @param string $host
+     * @return string
      */
     protected function setIsAbsolute($host)
     {
