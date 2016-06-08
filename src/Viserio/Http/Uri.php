@@ -171,6 +171,8 @@ class Uri implements UriInterface
      */
     public function withScheme($scheme)
     {
+        $this->isValidString($scheme);
+
         $scheme = $this->filterClass['scheme']->filter($scheme);
 
         if ($this->scheme === $scheme) {
@@ -190,9 +192,13 @@ class Uri implements UriInterface
      */
     public function withUserInfo($user, $password = null)
     {
+        $this->isValidString($user);
+
         $info = $user;
 
         if ($password != '') {
+            $this->isValidString($password);
+
             $info .= ':' . $password;
         }
 
@@ -212,9 +218,7 @@ class Uri implements UriInterface
      */
     public function withHost($host)
     {
-        if (!is_string($host)) {
-            throw new InvalidArgumentException('Host must be a string');
-        }
+        $this->isValidString($host);
 
         $host = $this->filterClass['host']->filter($host);
 
@@ -252,6 +256,8 @@ class Uri implements UriInterface
      */
     public function withPath($path)
     {
+        $this->isValidString($path);
+
         $path = $this->filterClass['path']->filter($path);
 
         if ($this->path === $path) {
@@ -270,6 +276,8 @@ class Uri implements UriInterface
      */
     public function withQuery($query)
     {
+        $this->isValidString($query);
+
         if ($this->query === $query) {
             return $this;
         }
@@ -288,6 +296,8 @@ class Uri implements UriInterface
      */
     public function withFragment($fragment)
     {
+        $this->isValidString($fragment);
+
         $fragment = $this->filterClass['fragment']->filter($fragment);
 
         if ($this->fragment === $fragment) {
@@ -386,11 +396,6 @@ class Uri implements UriInterface
      */
     private function createFromComponents(array $components)
     {
-        // We need to replace &amp; with & for parse_str to work right...
-        if (isset($components['query']) && strpos($components['query'], '&amp;')) {
-            $components['query'] = str_replace('&amp;', '&', $components['query']);
-        }
-
         $queryFilter = $this->filterClass['query'];
 
         // Parse the query
@@ -455,6 +460,17 @@ class Uri implements UriInterface
         return $uri;
     }
 
+    private function isValidString($string)
+    {
+        if (! is_string($string)) {
+            throw new InvalidArgumentException(sprintf(
+                '%s expects a string argument; received %s',
+                __METHOD__,
+                (is_object($string) ? get_class($string) : gettype($string))
+            ));
+        }
+    }
+
     /**
      * @throws InvalidArgumentException
      */
@@ -466,14 +482,20 @@ class Uri implements UriInterface
 
         if ($this->getAuthority() === '') {
             if (strpos($this->path, '//') === 0) {
-                throw new InvalidArgumentException('The path of a URI without an authority must not start with two slashes "//"');
+                throw new InvalidArgumentException(
+                    'The path of a URI without an authority must not start with two slashes "//"'
+                );
             }
 
-            if ($this->scheme === '' && false !== strpos(explode('/', $this->path, 2)[0], ':')) {
-                throw new InvalidArgumentException('A relative URI must not have a path beginning with a segment containing a colon');
+            if ($this->scheme === '' && strpos(explode('/', $this->path, 2)[0], ':') !== false) {
+                throw new InvalidArgumentException(
+                    'A relative URI must not have a path beginning with a segment containing a colon'
+                );
             }
         } elseif (isset($this->path[0]) && $this->path[0] !== '/') {
-            throw new InvalidArgumentException('The path of a URI with an authority must start with a slash "/" or be empty');
+            throw new InvalidArgumentException(
+                'The path of a URI with an authority must start with a slash "/" or be empty'
+            );
         }
     }
 }

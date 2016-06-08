@@ -45,18 +45,21 @@ trait PortValidateTrait
             throw new InvalidArgumentException('The submitted port is invalid');
         }
 
-        if (in_array($port, [null, ''])) {
+        if ($port === null || $port === '') {
             return null;
         }
 
-        $port = (int) $port;
+        $res = filter_var($port, FILTER_VALIDATE_INT, ['options' => [
+            'min_range' => 1,
+            'max_range' => 65535,
+        ]]);
 
-        if (1 > $port || 0xffff < $port) {
+        if (!$res) {
             throw new InvalidArgumentException(
                 sprintf('Invalid port: %d. Must be between 1 and 65535', $port)
             );
         }
 
-        return $port;
+        return $res;
     }
 }

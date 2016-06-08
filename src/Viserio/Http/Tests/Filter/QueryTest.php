@@ -24,7 +24,7 @@ class QueryTest extends \PHPUnit_Framework_TestCase
             'string' => ['kingkong=toto', 'kingkong=toto'],
             'empty string' => ['', ''],
             'contains a reserved word #' => ['foo#bar', 'foo%23bar'],
-            'contains a delimiter ?' => ['foo#bar', '?foo%23bar'],
+            'contains a delimiter ?' => ['foo#bar', 'foo%23bar'],
             'key-only' => ['k^ey', 'k%5Eey'],
             'key-value' => ['k^ey=valu`', 'k%5Eey=valu%60'],
             'array-key-only' => ['key[]', 'key%5B%5D'],

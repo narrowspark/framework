@@ -111,7 +111,7 @@ class UriTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \TypeError
+     * @expectedException \InvalidArgumentException
      */
     public function testSchemeMustHaveCorrectType()
     {
@@ -127,7 +127,7 @@ class UriTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \TypeError
+     * @expectedException \InvalidArgumentException
      */
     public function testPathMustHaveCorrectType()
     {
@@ -135,7 +135,7 @@ class UriTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \TypeError
+     * @expectedException \InvalidArgumentException
      */
     public function testQueryMustHaveCorrectType()
     {
@@ -143,30 +143,11 @@ class UriTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \TypeError
+     * @expectedException \InvalidArgumentException
      */
     public function testFragmentMustHaveCorrectType()
     {
         $this->createDefaultUri()->withFragment([]);
-    }
-
-    public function testCanConstructFalseyUriParts()
-    {
-        $uri = $this->createDefaultUri()
-            ->withScheme('0')
-            ->withUserInfo('0', '0')
-            ->withHost('0')
-            ->withPath('/0')
-            ->withQuery('0')
-            ->withFragment('0');
-        $this->assertSame('0', $uri->getScheme());
-        $this->assertSame('0:0@0', $uri->getAuthority());
-        $this->assertSame('0:0', $uri->getUserInfo());
-        $this->assertSame('0', $uri->getHost());
-        $this->assertSame('/0', $uri->getPath());
-        $this->assertSame('0', $uri->getQuery());
-        $this->assertSame('0', $uri->getFragment());
-        $this->assertSame('0://0:0@0/0?0#0', (string) $uri);
     }
 
     public function testSchemeIsNormalizedToLowercase()
@@ -174,6 +155,7 @@ class UriTest extends \PHPUnit_Framework_TestCase
         $uri = new Uri('HTTP://example.com');
         $this->assertSame('http', $uri->getScheme());
         $this->assertSame('http://example.com', (string) $uri);
+
         $uri = (new Uri('//example.com'))->withScheme('HTTP');
         $this->assertSame('http', $uri->getScheme());
         $this->assertSame('http://example.com', (string) $uri);
@@ -325,10 +307,10 @@ class UriTest extends \PHPUnit_Framework_TestCase
 
     public function testWithPathEncodesProperly()
     {
-        $uri = $this->createDefaultUri()->withPath('/baz?#€/b%61r');
+        $uri = $this->createDefaultUri()->withPath('/baz?#€/b%61r^bar');
         // Query and fragment delimiters and multibyte chars are encoded.
-        $this->assertSame('/baz%3F%23%E2%82%AC/b%61r', $uri->getPath());
-        $this->assertSame('/baz%3F%23%E2%82%AC/b%61r', (string) $uri);
+        $this->assertSame('/baz%3F%23%E2%82%AC/b%61r%5Ebar', $uri->getPath());
+        $this->assertSame('/baz%3F%23%E2%82%AC/b%61r%5Ebar', (string) $uri);
     }
 
     public function testWithQueryEncodesProperly()
@@ -500,7 +482,6 @@ class UriTest extends \PHPUnit_Framework_TestCase
             'normalized query' => ['foo.bar=%7evalue', 'foo.bar=~value'],
             'empty query'      => ['', ''],
             'same param query' => ['foo.bar=1&foo.bar=1', 'foo.bar=1&foo.bar=1'],
-            'same param query' => ['?foo=1', '%3Ffoo=1'],
         ];
     }
 
@@ -603,6 +584,34 @@ class UriTest extends \PHPUnit_Framework_TestCase
                 'fragment' => 'fragment',
                 'uri'      => '//www.example.com:443/foo/bar?param=value#fragment',
             ],
+        ];
+    }
+
+    /**
+     * @dataProvider invalidStringProvider
+     * @expectedException \InvalidArgumentException
+     */
+    public function testInvalidToString($scheme, $user, $pass, $host, $port, $path, $query, $fragment, $expected)
+    {
+        $uri = $this->createDefaultUri()
+                ->withHost($host)
+                ->withScheme($scheme)
+                ->withUserInfo($user, $pass)
+                ->withPort($port)
+                ->withPath($path)
+                ->withQuery($query)
+                ->withFragment($fragment);
+
+        $this->assertEquals(
+            $expected,
+            (string) $uri,
+            'URI components cannot be recomposed to a valid URI reference which may even depend on the current URI scheme.'
+        );
+    }
+
+    public function invalidStringProvider()
+    {
+        return [
             'URL without rootless path' => [
                 'scheme'   => 'http',
                 'user'     => '',
@@ -646,6 +655,39 @@ class UriTest extends \PHPUnit_Framework_TestCase
             "simple host"     => ["www.example.com", "www.example.com"],
             "IDN hostname"    => ["مثال.إختبار", "مثال.إختبار"],
             "IPv6 Host"       => ["[::1]", "[::1]"],
+        ];
+    }
+
+    /**
+     * @dataProvider withHostFailedProvider
+     * @expectedException InvalidArgumentException
+     */
+    public function testWithHostFailed($host)
+    {
+        $this->createDefaultUri()->withHost($host);
+    }
+
+    public function withHostFailedProvider()
+    {
+        return [
+            'dot in front'                         => ['.example.com'],
+            'hyphen suffix'                        => ['host.com-'],
+            'multiple dot'                         => ['.......'],
+            'one dot'                              => ['.'],
+            'empty label'                          => ['tot.    .coucou.com'],
+            'space in the label'                   => ['re view'],
+            'underscore in label'                  => ['_bad.host.com'],
+            'label too long'                       => [implode('', array_fill(0, 12, 'banana')).'.secure.example.com'],
+            'too many labels'                      => [implode('.', array_fill(0, 128, 'a'))],
+            'Invalid IPv4 format'                  => ['[127.0.0.1]'],
+            'Invalid IPv6 format'                  => ['[[::1]]'],
+            'Invalid IPv6 format 2'                => ['[::1'],
+            'space character in starting label'    => ['example. com'],
+            'invalid character in host label'      => ["examp\0le.com"],
+            'invalid IP with scope'                => ['[127.2.0.1%253]'],
+            'invalid scope IPv6'                   => ['ab23::1234%251'],
+            'invalid scope ID'                     => ['fe80::1234%25?@'],
+            'invalid scope ID with utf8 character' => ['fe80::1234%25€'],
         ];
     }
 

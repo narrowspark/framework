@@ -48,7 +48,7 @@ final class UriParser
     {
         $parts = $this->extractUriParts($uri);
 
-        return $this->normalizeUriHash(array_merge(
+        $merged = array_merge(
             $this->parseAuthority($parts['authority']),
             [
                 'scheme' => '' === $parts['scheme'] ? null : $parts['scheme'],
@@ -56,7 +56,11 @@ final class UriParser
                 'query' => '' === $parts['query'] ? null : mb_substr($parts['query'], 1, null, 'UTF-8'),
                 'fragment' => '' === $parts['fragment'] ? null : mb_substr($parts['fragment'], 1, null, 'UTF-8'),
             ]
-        ));
+        );
+
+        $this->validate($merged);
+
+        return $this->normalizeUriHash($merged);
     }
 
     /**
@@ -67,7 +71,7 @@ final class UriParser
      *
      * @return array
      */
-    protected function normalizeUriHash(array $components)
+    private function normalizeUriHash(array $components)
     {
         return array_replace([
             'scheme' => null,
@@ -90,7 +94,7 @@ final class UriParser
      *
      * @return string[]
      */
-    protected function extractUriParts(string $uri)
+    private function extractUriParts(string $uri)
     {
         preg_match(self::REGEXP_URI, $uri, $parts);
 
@@ -114,7 +118,7 @@ final class UriParser
      *
      * @return array
      */
-    protected function parseAuthority(string $authority): array
+    private function parseAuthority(string $authority): array
     {
         $res = ['user' => null, 'pass' => null, 'host' => null, 'port' => null];
 
@@ -147,7 +151,7 @@ final class UriParser
      *
      * @return array
      */
-    protected function parseHostname(string $hostname): array
+    private function parseHostname(string $hostname): array
     {
         $components = ['host' => null, 'port' => null];
 
@@ -162,5 +166,17 @@ final class UriParser
         $components['port'] = $this->validatePort($components['port']);
 
         return $components;
+    }
+
+    /**
+     * Validate parsed uri.
+     *
+     * @param array $arr
+     *
+     * @throws InvalidArgumentException
+     */
+    private function validate(array $arr)
+    {
+
     }
 }
