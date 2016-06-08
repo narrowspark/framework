@@ -38,7 +38,7 @@ trait HostValidateTrait
      *
      * @var string
      */
-    protected static $local_link_prefix = '1111111010';
+    protected static $localLinkPrefix = '1111111010';
 
     /**
      * validate the host component
@@ -63,7 +63,7 @@ trait HostValidateTrait
      *
      * @return array
      */
-    protected function validateStringHost(string $str)
+    protected function validateStringHost(string $str): array
     {
         if ($str === '') {
             return [];
@@ -86,13 +86,13 @@ trait HostValidateTrait
     }
 
     /**
-     * @inheritdoc
      * @param string $host
+     *
      * @return string
      */
-    protected function setIsAbsolute($host)
+    protected function setIsAbsolute(string $host): string
     {
-        return ('.' == mb_substr($host, -1, 1, 'UTF-8')) ? mb_substr($host, 0, -1, 'UTF-8') : $host;
+        return (mb_substr($host, -1, 1, 'UTF-8') == '.') ? mb_substr($host, 0, -1, 'UTF-8') : $host;
     }
 
     /**
@@ -112,7 +112,7 @@ trait HostValidateTrait
      *
      * @return string
      */
-    protected function lower($str)
+    protected function lower(string $str): string
     {
         return preg_replace_callback('/[A-Z]+/', function ($matches) {
             return strtolower($matches[0]);
@@ -161,7 +161,7 @@ trait HostValidateTrait
      *
      * @return array
      */
-    protected function validateIpHost($str)
+    protected function validateIpHost(string $str): array
     {
         $res = $this->filterIpv6Host($str);
 
@@ -189,7 +189,7 @@ trait HostValidateTrait
      *
      * @return string|false
      */
-    protected function filterIpv6Host($str)
+    protected function filterIpv6Host(string $str)
     {
         preg_match(',^(?P<ldelim>[\[]?)(?P<ipv6>.*?)(?P<rdelim>[\]]?)$,', $str, $matches);
 
@@ -212,9 +212,9 @@ trait HostValidateTrait
      *
      * @param string $ip The ip to validate
      *
-     * @return string
+     * @return string|false
      */
-    protected function validateScopedIpv6($ip)
+    protected function validateScopedIpv6(string $ip)
     {
         $pos = strpos($ip, '%');
 
@@ -240,7 +240,7 @@ trait HostValidateTrait
      *
      * @return bool
      */
-    protected function isLocalLink($ipv6)
+    protected function isLocalLink($ipv6): bool
     {
         if (! filter_var($ipv6, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6)) {
             return false;
@@ -252,7 +252,7 @@ trait HostValidateTrait
 
         $res = array_reduce(str_split(unpack('A16', inet_pton($ipv6))[1]), $convert, '');
 
-        return substr($res, 0, 10) === self::$local_link_prefix;
+        return substr($res, 0, 10) === self::$localLinkPrefix;
     }
 
     /**
@@ -262,7 +262,7 @@ trait HostValidateTrait
      *
      * @return string
      */
-    protected function formatIp($ipAddress)
+    protected function formatIp(string $ipAddress): string
     {
         $tmp = explode('%', $ipAddress);
 

@@ -60,7 +60,7 @@ class Path
      * @see http://tools.ietf.org/html/rfc3986#section-5.2.4
      *
      * @param array  $carry   Path segments
-     * @param string $segment a path segment
+     * @param string $segment A path segment
      *
      * @return array
      */
@@ -82,7 +82,7 @@ class Path
     /**
      * Convert to Uppercase a string.
      *
-     * @param string $str
+     * @param string $path
      *
      * @return string
      */
