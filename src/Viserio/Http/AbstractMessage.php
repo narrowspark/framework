@@ -291,7 +291,7 @@ abstract class AbstractMessage implements MessageInterface
     /**
      * Test that an array contains only strings
      *
-     * @param array $array
+     * @param string[] $array
      *
      * @return bool
      */
@@ -339,7 +339,7 @@ abstract class AbstractMessage implements MessageInterface
     }
 
     /**
-     * @param array $value
+     * @param array $values
      */
     private function filterHeaderValue(array $values)
     {

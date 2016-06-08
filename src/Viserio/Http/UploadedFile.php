@@ -126,7 +126,7 @@ class UploadedFile implements UploadedFileInterface
     /**
      * {@inheritdoc}
      *
-     * @return int|null The file size in bytes or null if unknown.
+     * @return integer The file size in bytes or null if unknown.
      */
     public function getSize()
     {

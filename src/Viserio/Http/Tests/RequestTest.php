@@ -148,8 +148,8 @@ class RequestTest extends AbstractMessageTest
     /**
      * @dataProvider hostHeaderPreservationWhenUriIsSetProvider
      *
-     * @param RequestInterface $request
-     * @param UriInterface     $uri
+     * @param \Psr\Http\Message\RequestInterface $request
+     * @param \Psr\Http\Message\UriInterface     $uri
      * @param bool             $preserveHost
      * @param string[]         $expectedHostHeaderLine
      */
