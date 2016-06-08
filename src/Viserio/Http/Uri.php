@@ -12,6 +12,7 @@ use Viserio\Http\Uri\Filter\{
     Scheme,
     Query
 };
+use TrueBV\Punycode;
 
 class Uri implements UriInterface
 {
@@ -115,9 +116,9 @@ class Uri implements UriInterface
     private $filterClass = [];
 
     /**
-     * @param string $uri
+     * @param string $url
      */
-    public function __construct(string $uri = '')
+    public function __construct(string $url = '')
     {
         $this->filterClass = [
             'fragment' => new Fragment(),
@@ -128,10 +129,8 @@ class Uri implements UriInterface
             'query' => new Query(),
         ];
 
-        if ($uri !== '') {
-            $url = (new UriParser)->parse($uri);
-
-            $this->createFromComponents($url);
+        if ($url !== '') {
+            $this->createFromComponents($this->utf8UrlParser($url));
         }
     }
 
@@ -497,5 +496,35 @@ class Uri implements UriInterface
                 'The path of a URI with an authority must start with a slash "/" or be empty'
             );
         }
+    }
+
+    /**
+     * Parse urls with utf-8 support.
+     *
+     * @param  string $url
+     *
+     * @return array
+     */
+    private function utf8UrlParser(string $url): array
+    {
+        $encodeUrl = preg_replace_callback(
+            '%[^:/@?&=#]+%usD',
+            function ($matches) {
+                return urlencode($matches[0]);
+            },
+            $url
+        );
+
+        $components = parse_url($encodeUrl);
+
+        if (!$components) {
+            throw new InvalidArgumentException("Unable to parse URI: $url");
+        }
+
+        foreach ($components as $key => $value) {
+            $components[$key] = urldecode($value);
+        }
+
+        return $components;
     }
 }

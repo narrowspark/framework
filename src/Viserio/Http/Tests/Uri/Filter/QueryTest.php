@@ -1,5 +1,5 @@
 <?php
-namespace Viserio\Http\Tests\Filter;
+namespace Viserio\Http\Tests\Uri\Filter;
 
 use Viserio\Http\Uri\Filter\Query;
 

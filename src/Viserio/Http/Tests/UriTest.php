@@ -19,6 +19,27 @@ class UriTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Psr\Http\Message\UriInterface', new Uri());
     }
 
+    /**
+     * @dataProvider testInvalidURI
+     * @expectedException InvalidArgumentException
+     *
+     * @param string $uri
+     */
+    public function testParseFailed($uri)
+    {
+        new Uri($uri);
+    }
+
+    public function testInvalidURI()
+    {
+        return [
+            'invalid uri' => ['///'],
+            'invalid uri no host' => ['http:///example.com'],
+            'invalid uri no host with port' => ['http://:80'],
+            'invalid uri no host with port and wrong auth' => ['http://user@:80']
+        ];
+    }
+
     public function testParsesProvidedUri()
     {
         $uri = new Uri('https://user:pass@example.com:8080/path/123?q=abc#test');
