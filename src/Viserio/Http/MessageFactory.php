@@ -13,8 +13,8 @@ final class MessageFactory implements MessageFactoryContract
      * {@inheritdoc}
      */
     public function createRequest(
-        $method,
         $uri,
+        $method = 'GET',
         array $headers = [],
         $body = null,
         $protocolVersion = '1.1'

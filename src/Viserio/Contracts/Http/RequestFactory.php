@@ -10,8 +10,8 @@ interface RequestFactory
     /**
      * Creates a new PSR-7 request.
      *
-     * @param string                               $method
      * @param string|UriInterface                  $uri
+     * @param string                               $method
      * @param array                                $headers
      * @param resource|string|StreamInterface|null $body
      * @param string                               $protocolVersion
@@ -20,7 +20,7 @@ interface RequestFactory
      */
     public function createRequest(
         $uri,
-        $method,
+        $method = 'GET',
         array $headers = [],
         $body = null,
         $protocolVersion = '1.1'
