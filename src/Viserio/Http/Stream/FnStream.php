@@ -26,6 +26,7 @@ class FnStream implements StreamInterface
     public function __construct(array $methods)
     {
         $this->methods = $methods;
+
         // Create the functions on the class
         foreach ($methods as $name => $fn) {
             $this->{'_fn_' . $name} = $fn;

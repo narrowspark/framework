@@ -1,7 +1,10 @@
 <?php
 namespace Viserio\Http\Stream;
 
+use Exception;
+use RuntimeException;
 use Psr\Http\Message\StreamInterface;
+use Viserio\Http\Util;
 
 class PumpStream implements StreamInterface
 {
@@ -37,8 +40,8 @@ class PumpStream implements StreamInterface
     public function __toString()
     {
         try {
-            return copy_to_string($this);
-        } catch (\Exception $e) {
+            return Util::copyToString($this);
+        } catch (Exception $e) {
             return '';
         }
     }
@@ -81,7 +84,7 @@ class PumpStream implements StreamInterface
 
     public function seek($offset, $whence = SEEK_SET)
     {
-        throw new \RuntimeException('Cannot seek a PumpStream');
+        throw new RuntimeException('Cannot seek a PumpStream');
     }
 
     public function isWritable()
@@ -91,7 +94,7 @@ class PumpStream implements StreamInterface
 
     public function write($string)
     {
-        throw new \RuntimeException('Cannot write to a PumpStream');
+        throw new RuntimeException('Cannot write to a PumpStream');
     }
 
     public function isReadable()
