@@ -37,6 +37,9 @@ class PumpStream implements StreamInterface
         $this->buffer = new BufferStream();
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function __toString()
     {
         try {
@@ -46,68 +49,105 @@ class PumpStream implements StreamInterface
         }
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function close()
     {
         $this->detach();
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function detach()
     {
         $this->tellPos = false;
         $this->source = null;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getSize()
     {
         return $this->size;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function tell()
     {
         return $this->tellPos;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function eof()
     {
         return ! $this->source;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function isSeekable()
     {
         return false;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function rewind()
     {
         $this->seek(0);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function seek($offset, $whence = SEEK_SET)
     {
         throw new RuntimeException('Cannot seek a PumpStream');
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function isWritable()
     {
         return false;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function write($string)
     {
         throw new RuntimeException('Cannot write to a PumpStream');
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function isReadable()
     {
         return true;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function read($length)
     {
         $data = $this->buffer->read($length);
         $readLen = strlen($data);
         $this->tellPos += $readLen;
         $remaining = $length - $readLen;
+
         if ($remaining) {
             $this->pump($remaining);
             $data .= $this->buffer->read($remaining);
@@ -117,6 +157,9 @@ class PumpStream implements StreamInterface
         return $data;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getContents()
     {
         $result = '';
@@ -127,6 +170,9 @@ class PumpStream implements StreamInterface
         return $result;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getMetadata($key = null)
     {
         if (! $key) {
@@ -136,6 +182,9 @@ class PumpStream implements StreamInterface
         return isset($this->metadata[$key]) ? $this->metadata[$key] : null;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     private function pump($length)
     {
         if ($this->source) {

@@ -67,6 +67,7 @@ class PhpInputStreamTest extends \PHPUnit_Framework_TestCase
         $first  = (string) $this->stream;
         $read   = $this->stream->read(128);
         $second = (string) $this->stream;
+
         $this->assertSame($first, $second);
     }
 }

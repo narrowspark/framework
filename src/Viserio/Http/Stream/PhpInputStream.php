@@ -1,7 +1,10 @@
 <?php
 namespace Viserio\Http\Stream;
 
-use Viserio\Http\Stream;
+use Viserio\Http\{
+    Stream,
+    Util
+};
 
 class PhpInputStream extends AbstractStreamDecorator
 {
@@ -20,7 +23,9 @@ class PhpInputStream extends AbstractStreamDecorator
      */
     public function __construct($stream = 'php://input')
     {
-        $this->stream = new Stream($stream, 'r');
+        $stream = Util::tryFopen($stream, 'r');
+
+        $this->stream = new Stream($stream);
     }
 
     /**
@@ -66,16 +71,16 @@ class PhpInputStream extends AbstractStreamDecorator
     /**
      * {@inheritdoc}
      */
-    public function getContents($maxLength = -1)
+    public function getContents()
     {
         if ($this->reachedEof) {
             return $this->cache;
         }
 
-        $contents = stream_get_contents($this->resource, $maxLength);
+        $contents = $this->stream->getContents();
         $this->cache .= $contents;
 
-        if ($maxLength === -1 || $this->eof()) {
+        if ($this->eof()) {
             $this->reachedEof = true;
         }
 

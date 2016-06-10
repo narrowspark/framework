@@ -54,6 +54,9 @@ class FnStream implements StreamInterface
             . '() is not implemented in the FnStream');
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function __toString()
     {
         return call_user_func($this->_fn___toString);
@@ -79,71 +82,113 @@ class FnStream implements StreamInterface
         return new self($methods);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function close()
     {
         return call_user_func($this->_fn_close);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function detach()
     {
         return call_user_func($this->_fn_detach);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getSize()
     {
         return call_user_func($this->_fn_getSize);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function tell()
     {
         return call_user_func($this->_fn_tell);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function eof()
     {
         return call_user_func($this->_fn_eof);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function isSeekable()
     {
         return call_user_func($this->_fn_isSeekable);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function rewind()
     {
         call_user_func($this->_fn_rewind);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function seek($offset, $whence = SEEK_SET)
     {
         call_user_func($this->_fn_seek, $offset, $whence);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function isWritable()
     {
         return call_user_func($this->_fn_isWritable);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function write($string)
     {
         return call_user_func($this->_fn_write, $string);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function isReadable()
     {
         return call_user_func($this->_fn_isReadable);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function read($length)
     {
         return call_user_func($this->_fn_read, $length);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getContents()
     {
         return call_user_func($this->_fn_getContents);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getMetadata($key = null)
     {
         return call_user_func($this->_fn_getMetadata, $key);

@@ -99,11 +99,15 @@ class Stream implements StreamInterface
      *
      * @throws \InvalidArgumentException if the stream is not a stream resource
      */
-    public function __construct($stream, $options = [])
+    public function __construct($stream, array $options = [])
     {
-        if (! is_resource($stream)) {
-            throw new InvalidArgumentException('Stream must be a resource');
+        if (! is_resource($stream) || get_resource_type($stream) !== 'stream') {
+            throw new InvalidArgumentException(
+                'Invalid stream provided; must be a string stream identifier or stream resource'
+            );
         }
+
+        $this->stream = $stream;
 
         if (isset($options['size'])) {
             $this->size = $options['size'];
@@ -113,7 +117,6 @@ class Stream implements StreamInterface
             ? $options['metadata']
             : [];
 
-        $this->stream = $stream;
         $meta = stream_get_meta_data($this->stream);
 
         $this->seekable = $meta['seekable'];
@@ -290,8 +293,10 @@ class Stream implements StreamInterface
         if (! $this->seekable) {
             throw new RuntimeException('Stream is not seekable');
         } elseif (fseek($this->stream, $offset, $whence) === -1) {
-            throw new RuntimeException('Unable to seek to stream position '
-                . $offset . ' with whence ' . var_export($whence, true));
+            throw new RuntimeException(
+                'Unable to seek to stream position '
+                . $offset . ' with whence ' . var_export($whence, true)
+            );
         }
     }
 

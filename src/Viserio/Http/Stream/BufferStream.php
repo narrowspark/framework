@@ -29,11 +29,17 @@ class BufferStream implements StreamInterface
         $this->hwm = $hwm;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function __toString()
     {
         return $this->getContents();
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getContents()
     {
         $buffer = $this->buffer;
@@ -42,51 +48,81 @@ class BufferStream implements StreamInterface
         return $buffer;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function close()
     {
         $this->buffer = '';
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function detach()
     {
         $this->close();
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getSize()
     {
         return strlen($this->buffer);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function isReadable()
     {
         return true;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function isWritable()
     {
         return true;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function isSeekable()
     {
         return false;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function rewind()
     {
         $this->seek(0);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function seek($offset, $whence = SEEK_SET)
     {
         throw new RuntimeException('Cannot seek a BufferStream');
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function eof()
     {
         return strlen($this->buffer) === 0;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function tell()
     {
         throw new RuntimeException('Cannot determine the position of a BufferStream');
@@ -98,6 +134,7 @@ class BufferStream implements StreamInterface
     public function read($length)
     {
         $currentLength = strlen($this->buffer);
+
         if ($length >= $currentLength) {
             // No need to slice the buffer because we don't have enough data.
             $result = $this->buffer;
@@ -117,6 +154,7 @@ class BufferStream implements StreamInterface
     public function write($string)
     {
         $this->buffer .= $string;
+
         // TODO: What should happen here?
         if (strlen($this->buffer) >= $this->hwm) {
             return false;
@@ -125,6 +163,9 @@ class BufferStream implements StreamInterface
         return strlen($string);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getMetadata($key = null)
     {
         if ($key == 'hwm') {
