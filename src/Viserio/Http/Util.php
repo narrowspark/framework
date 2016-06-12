@@ -122,7 +122,7 @@ class Util
      * Copy the contents of a stream into a string until the given number of
      * bytes have been read.
      *
-     * @param StreamInterface $stream Stream to read
+     * @param \Psr\Http\Message\StreamInterface $stream Stream to read
      * @param int             $maxLen Maximum number of bytes to read. Pass -1
      *                                to read the entire stream.
      *
@@ -167,8 +167,8 @@ class Util
      * Copy the contents of a stream into another stream until the given number
      * of bytes have been read.
      *
-     * @param StreamInterface $source Stream to read from
-     * @param StreamInterface $dest   Stream to write to
+     * @param \Psr\Http\Message\StreamInterface $source Stream to read from
+     * @param \Psr\Http\Message\StreamInterface $dest   Stream to write to
      * @param int             $maxLen Maximum number of bytes to read. Pass -1
      *                                to read the entire stream.
      *

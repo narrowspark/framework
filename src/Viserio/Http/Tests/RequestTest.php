@@ -11,8 +11,8 @@ use Viserio\Http\{
     Util,
     Uri
 };
-use Viserio\Http\Stream\FnStream;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
+use Viserio\Http\Stream\FnStream;
 
 class RequestTest extends AbstractMessageTest
 {

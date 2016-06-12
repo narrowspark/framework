@@ -1,7 +1,7 @@
 <?php
 namespace Viserio\Http\Tests\Response;
 
-use  Viserio\Http\Response\JsonResponse;
+use Viserio\Http\Response\JsonResponse;
 
 class JsonResponseTest extends \PHPUnit_Framework_TestCase
 {

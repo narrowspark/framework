@@ -266,7 +266,7 @@ class UploadedFile implements UploadedFileInterface
     }
 
     /**
-     * @param mixed $param
+     * @param string|null $param
      *
      * @return bool
      */
@@ -276,7 +276,7 @@ class UploadedFile implements UploadedFileInterface
     }
 
     /**
-     * @param mixed $param
+     * @param string $param
      *
      * @return bool
      */
