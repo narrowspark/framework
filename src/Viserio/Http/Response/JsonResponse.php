@@ -2,9 +2,11 @@
 namespace Viserio\Http\Response;
 
 use InvalidArgumentException;
-use Viserio\Http\Response;
+use Viserio\Http\{
+    Response,
+    Stream
+};
 use Viserio\Http\Response\Traits\InjectContentTypeTrait;
-use Viserio\Http\Stream;
 
 class JsonResponse extends Response
 {
@@ -46,11 +48,13 @@ class JsonResponse extends Response
         array $headers = [],
         $encodingOptions = self::DEFAULT_JSON_FLAGS
     ) {
-        $body = new Stream('php://temp', 'wb+');
+        $body = new Stream(fopen('php://temp', 'wb+'));
         $body->write($this->jsonEncode($data, $encodingOptions));
         $body->rewind();
+
         $headers = $this->injectContentType('application/json', $headers);
-        parent::__construct($body, $status, $headers);
+
+        parent::__construct($status, $headers, $body);
     }
 
     /**

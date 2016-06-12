@@ -15,6 +15,14 @@ trait PortValidateTrait
         'https' => 443,
         'ftp' => 21,
         'sftp' => 22,
+        'gopher' => 70,
+        'nntp' => 119,
+        'news' => 119,
+        'telnet' => 23,
+        'tn3270' => 23,
+        'imap' => 143,
+        'pop' => 110,
+        'ldap' => 389,
     ];
 
     /**

@@ -1,6 +1,7 @@
 <?php
 namespace Viserio\Http\Tests;
 
+use ReflectionMethod;
 use Viserio\Http\{
     ServerRequestFactory,
     Uri,

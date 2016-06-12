@@ -2,6 +2,7 @@
 namespace Viserio\Http\Tests;
 
 use ArrayIterator;
+use Viserio\Http\Stream;
 use Viserio\Http\Stream\{
     FnStream,
     PumpStream
@@ -119,7 +120,7 @@ class UtilTest extends \PHPUnit_Framework_TestCase
     public function testCreatesWithFactory()
     {
         $stream = Util::getStream('foo');
-        $this->assertInstanceOf('Viserio\Http\Stream', $stream);
+        $this->assertInstanceOf(Stream::class, $stream);
         $this->assertEquals('foo', $stream->getContents());
         $stream->close();
     }
@@ -127,20 +128,20 @@ class UtilTest extends \PHPUnit_Framework_TestCase
     public function testFactoryCreatesFromEmptyString()
     {
         $s = Util::getStream();
-        $this->assertInstanceOf('Viserio\Http\Stream', $s);
+        $this->assertInstanceOf(Stream::class, $s);
     }
 
     public function testFactoryCreatesFromNull()
     {
         $s = Util::getStream(null);
-        $this->assertInstanceOf('Viserio\Http\Stream', $s);
+        $this->assertInstanceOf(Stream::class, $s);
     }
 
     public function testFactoryCreatesFromResource()
     {
         $r = fopen(__FILE__, 'r');
         $s = Util::getStream($r);
-        $this->assertInstanceOf('Viserio\Http\Stream', $s);
+        $this->assertInstanceOf(Stream::class, $s);
         $this->assertSame(file_get_contents(__FILE__), (string) $s);
     }
 
@@ -148,7 +149,7 @@ class UtilTest extends \PHPUnit_Framework_TestCase
     {
         $r = new HasToString();
         $s = Util::getStream($r);
-        $this->assertInstanceOf('Viserio\Http\Stream', $s);
+        $this->assertInstanceOf(Stream::class, $s);
         $this->assertEquals('foo', (string) $s);
     }
 
@@ -169,6 +170,7 @@ class UtilTest extends \PHPUnit_Framework_TestCase
     public function testReturnsCustomMetadata()
     {
         $s = Util::getStream('foo', ['metadata' => ['hwm' => 3]]);
+
         $this->assertEquals(3, $s->getMetadata('hwm'));
         $this->assertArrayHasKey('hwm', $s->getMetadata());
     }
@@ -176,6 +178,7 @@ class UtilTest extends \PHPUnit_Framework_TestCase
     public function testCanSetSize()
     {
         $s = Util::getStream('', ['size' => 10]);
+
         $this->assertEquals(10, $s->getSize());
     }
 
@@ -183,6 +186,7 @@ class UtilTest extends \PHPUnit_Framework_TestCase
     {
         $a = new ArrayIterator(['foo', 'bar', '123']);
         $p = Util::getStream($a);
+
         $this->assertInstanceOf(PumpStream::class, $p);
         $this->assertEquals('foo', $p->read(3));
         $this->assertFalse($p->eof());
