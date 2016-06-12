@@ -19,6 +19,7 @@ matrix:
       sudo: required
       dist: trusty
       group: edge
+      env: SETUP=basic
     - php: 7.0
       env: SETUP=basic CHECK_CS=true SEND_COVERAGE=true
     - php: 7.0
