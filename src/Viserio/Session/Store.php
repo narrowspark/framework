@@ -6,9 +6,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\SessionBagInterface;
 use Symfony\Component\HttpFoundation\Session\Storage\MetadataBag;
 use Viserio\Session\Handler\CookieSessionHandler;
-use Viserio\Session\Interfaces\SessionInterface;
 
-class Store implements SessionInterface
+class Store
 {
     /**
      * The session ID.

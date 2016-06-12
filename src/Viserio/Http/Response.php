@@ -1,90 +1,78 @@
 <?php
 namespace Viserio\Http;
 
-use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
-use Viserio\Contracts\Http\Response as ResponseContract;
-use Viserio\Contracts\Support\Jsonable;
-use Viserio\Contracts\Support\Renderable;
-use Viserio\Http\Traits\ResponseParameterTrait;
+use InvalidArgumentException;
+use Narrowspark\HttpStatus\HttpStatus;
+use Psr\Http\Message\{
+    ResponseInterface,
+    StreamInterface
+};
 
-class Response extends SymfonyResponse
+class Response extends AbstractMessage implements ResponseInterface
 {
-    /*
-     * Parameter encapsulation
+    /**
+     * @var null|string
      */
-    use ResponseParameterTrait;
+    private $reasonPhrase = '';
 
     /**
-     * The original content of the response.
-     *
-     * @var mixed
+     * @var int
      */
-    public $original;
+    private $statusCode = 200;
 
     /**
-     * Set the content on the response.
-     *
-     * @param mixed $content
-     *
-     * @return \Viserio\Http\Response
-     */
-    public function setContent($content)
-    {
-        $this->original = $content;
+     * @param int                             $status  Status code for the response, if any.
+     * @param array                           $headers Headers for the response, if any.
+     * @param string|resource|StreamInterface $body    Stream identifier and/or actual stream resource
+     * @param string                          $version Protocol version.
 
-        // If the content is "JSONable" we will set the appropriate header and convert
-        // the content to JSON. This is useful when returning something like models
-        // from routes that will be automatically transformed to their JSON form.
-        if ($this->shouldBeJson($content)) {
-            $this->headers->set('Content-Type', 'application/json');
-            $content = $this->morphToJson($content);
-        } elseif ($content instanceof Renderable) {
-            // If this content implements the "Renderable" interface then we will call the
-            // render method on the object so we will avoid any "__toString" exceptions
-            // that might be thrown and have their errors obscured by PHP's handling.
-            $content = $content->render();
+     * @throws InvalidArgumentException on any invalid element.
+     */
+    public function __construct(
+        int $status = 200,
+        array $headers = [],
+        $body = null,
+        $version = '1.1'
+    ) {
+        $this->statusCode = HttpStatus::filterStatusCode($status);
+
+        if ($body !== '' && $body !== null) {
+            $this->stream = Util::getStream($body);
         }
 
-        return parent::setContent($content);
+        $this->setHeaders($headers);
+        $this->protocol = $version;
     }
 
     /**
-     * Get the original response content.
-     *
-     * @return mixed
+     * {@inheritdoc}
      */
-    public function getOriginalContent()
+    public function getStatusCode()
     {
-        return $this->original;
+        return $this->statusCode;
     }
 
     /**
-     * Morph the given content into JSON.
-     *
-     * @param mixed $content
-     *
-     * @return string
+     * {@inheritdoc}
      */
-    protected function morphToJson($content)
+    public function getReasonPhrase()
     {
-        if ($content instanceof Jsonable) {
-            return $content->toJson();
+        if ($this->reasonPhrase == '') {
+            $this->reasonPhrase = HttpStatus::getReasonPhrase($this->statusCode);
         }
 
-        return json_encode($content);
+        return $this->reasonPhrase;
     }
 
     /**
-     * Determine if the given content should be turned into JSON.
-     *
-     * @param mixed $content
-     *
-     * @return bool
+     * {@inheritdoc}
      */
-    protected function shouldBeJson($content)
+    public function withStatus($code, $reasonPhrase = '')
     {
-        return $content instanceof Jsonable ||
-               $content instanceof \ArrayObject ||
-               is_array($content);
+        $new = clone $this;
+        $new->statusCode = HttpStatus::filterStatusCode($code);
+        $new->reasonPhrase = $reasonPhrase;
+
+        return $new;
     }
 }

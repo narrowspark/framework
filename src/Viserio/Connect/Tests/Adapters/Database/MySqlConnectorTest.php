@@ -23,10 +23,9 @@ class MySqlConnectorTest extends \PHPUnit_Framework_TestCase
     {
         $connection = $this->mock('stdClass');
 
-        $connector = $this->getMock(
-            'Viserio\Connect\Adapters\Database\MySqlConnector',
-            ['createConnection', 'getOptions']
-        );
+        $connector = $this->getMockBuilder('Viserio\Connect\Adapters\Database\MySqlConnector')
+             ->setMethods(['createConnection', 'getOptions'])
+             ->getMock();
         $connector->expects($this->once())
             ->method('getOptions')
             ->with($this->equalTo($config))

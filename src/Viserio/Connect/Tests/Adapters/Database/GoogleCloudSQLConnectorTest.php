@@ -38,10 +38,9 @@ class GoogleCloudSQLConnectorTest extends \PHPUnit_Framework_TestCase
         $config = ['server' => 'foo', 'database' => 'bar', 'charset' => 'utf8'];
         $connection = $this->mock('stdClass');
 
-        $connector = $this->getMock(
-            'Viserio\Connect\Adapters\Database\GoogleCloudSQLConnector',
-            ['createConnection', 'getOptions']
-        );
+        $connector = $this->getMockBuilder('Viserio\Connect\Adapters\Database\GoogleCloudSQLConnector')
+             ->setMethods(['createConnection', 'getOptions'])
+             ->getMock();
         $connector->expects($this->once())
             ->method('getOptions')
             ->with($this->equalTo($config))

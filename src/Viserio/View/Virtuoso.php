@@ -4,8 +4,7 @@ namespace Viserio\View;
 use Closure;
 use Interop\Container\ContainerInterface;
 use InvalidArgumentException;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Symfony\Component\EventDispatcher\GenericEvent;
+use Viserio\Contracts\Events\Dispatcher as DispatcherContract;
 use Viserio\Support\Invoker;
 use Viserio\Support\Str;
 use Viserio\Support\Traits\ContainerAwareTrait;
@@ -33,7 +32,7 @@ class Virtuoso
     /**
      * The event dispatcher instance.
      *
-     * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
+     * @var \Viserio\Contracts\Events\Dispatcher
      */
     protected $events;
 
@@ -54,13 +53,11 @@ class Virtuoso
     /**
      * Construct.
      *
-     * @param ContainerInterface                                          $container
-     * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $events
+     * @param ContainerInterface                   $container
+     * @param \Viserio\Contracts\Events\Dispatcher $events
      */
-    public function __construct(
-        ContainerInterface $container,
-        EventDispatcherInterface $events
-    ) {
+    public function __construct(ContainerInterface $container, DispatcherContract $events)
+    {
         $this->events = $events;
 
         $this->setContainer($container);
@@ -74,9 +71,9 @@ class Virtuoso
     /**
      * Get the event dispatcher instance.
      *
-     * @return \Symfony\Component\EventDispatcher\EventDispatcherInterface
+     * @return \Viserio\Contracts\Events\Dispatcher
      */
-    public function getDispatcher(): \Symfony\Component\EventDispatcher\EventDispatcherInterface
+    public function getDispatcher(): DispatcherContract
     {
         return $this->events;
     }
@@ -107,7 +104,7 @@ class Virtuoso
      */
     public function callCreator(View $view)
     {
-        $this->events->dispatch('creating: ' . $view->getName(), new GenericEvent($view));
+        $this->events->emit('creating: ' . $view->getName(), $view);
     }
 
     /**
@@ -117,7 +114,7 @@ class Virtuoso
      */
     public function callComposer(View $view)
     {
-        $this->events->dispatch('composing: ' . $view->getName(), new GenericEvent($view));
+        $this->events->emit('composing: ' . $view->getName(), $view);
     }
 
     /**
@@ -394,7 +391,7 @@ class Virtuoso
      *
      * @return \Closure
      */
-    protected function addClassEvent(string $view, string $class, string $prefix, int $priority = 0): \Closure
+    protected function addClassEvent(string $view, string $class, string $prefix, int $priority = 0): Closure
     {
         $name = $prefix . $view;
 
@@ -415,7 +412,7 @@ class Virtuoso
      *
      * @return \Closure
      */
-    protected function buildClassEventCallback(string $class, string $prefix): \Closure
+    protected function buildClassEventCallback(string $class, string $prefix): Closure
     {
         list($class, $method) = $this->parseClassEvent($class, $prefix);
 
@@ -453,7 +450,7 @@ class Virtuoso
      *
      * @return \Viserio\Support\Invoker
      */
-    protected function getInvoker(): \Viserio\Support\Invoker
+    protected function getInvoker(): Invoker
     {
         return $this->invoker;
     }

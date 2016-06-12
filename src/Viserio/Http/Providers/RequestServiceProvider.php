@@ -1,7 +1,6 @@
 <?php
 namespace Viserio\Http\Providers;
 
-use Symfony\Component\HttpFoundation\RequestStack;
 use Viserio\Application\ServiceProvider;
 use Viserio\Http\Request;
 
@@ -15,15 +14,6 @@ class RequestServiceProvider extends ServiceProvider
         $this->app->singleton('request', function () {
             return new Request();
         });
-
-        $this->app->singleton('stack.request', function () {
-            return new RequestStack();
-        });
-    }
-
-    public function aliases()
-    {
-        return ['stack.request' => 'Symfony\Component\HttpFoundation\RequestStack'];
     }
 
     /**
@@ -35,7 +25,6 @@ class RequestServiceProvider extends ServiceProvider
     {
         return [
             'request',
-            'stack.request',
         ];
     }
 }

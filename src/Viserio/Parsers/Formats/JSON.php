@@ -28,9 +28,12 @@ class JSON implements FormatContract
      */
     public function dump(array $data): string
     {
+        // Clear json_last_error()
+        json_encode(null);
+
         $json = json_encode($data, JSON_PRETTY_PRINT);
 
-        if ($json === false) {
+        if (json_last_error() !== JSON_ERROR_NONE) {
             $jsonError = $this->getJsonError(json_last_error());
 
             throw new DumpException('JSON dumping failed: ' . $jsonError);

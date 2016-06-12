@@ -75,7 +75,11 @@ class ListenerPattern
      */
     public function __construct(string $eventPattern, $listener, int $priority = 0)
     {
-        if (is_callable($listener) || $listener instanceof Closure || is_array($listener)) {
+        if (is_callable($listener) ||
+            $listener instanceof Closure ||
+            is_array($listener) ||
+            is_string($listener)
+        ) {
             $this->provider = $listener;
         } else {
             $this->provider = function () use ($listener) {
@@ -84,8 +88,8 @@ class ListenerPattern
         }
 
         $this->eventPattern = $eventPattern;
-        $this->priority     = $priority;
-        $this->regex        = $this->createRegex($eventPattern);
+        $this->priority = $priority;
+        $this->regex = $this->createRegex($eventPattern);
     }
 
     /**
@@ -105,7 +109,7 @@ class ListenerPattern
      */
     public function getListener()
     {
-        if (!isset($this->listener) && isset($this->provider)) {
+        if (! isset($this->listener) && isset($this->provider)) {
             $this->listener = $this->provider;
             $this->provider = null;
         }

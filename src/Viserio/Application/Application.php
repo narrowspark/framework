@@ -1,9 +1,9 @@
 <?php
 namespace Viserio\Application;
 
+use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ResponseInterface;
 use SplPriorityQueue;
-use Symfony\Component\HttpFoundation\Request as SymfonyRequest;
-use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Viserio\Application\Traits\BootableTrait;
 use Viserio\Application\Traits\EnvironmentTrait;
 use Viserio\Application\Traits\HttpErrorHandlingTrait;
@@ -13,9 +13,10 @@ use Viserio\Application\Traits\PathsTrait;
 use Viserio\Application\Traits\ServiceProviderTrait;
 use Viserio\Container\Container;
 use Viserio\Contracts\Application\Foundation;
+use Viserio\Http\ServerRequest;
 use Viserio\StaticalProxy\StaticalProxy;
 
-class Application extends Container implements Foundation, HttpKernelInterface
+class Application extends Container implements Foundation
 {
     // Register all needed Traits
     use BootableTrait;
@@ -25,6 +26,7 @@ class Application extends Container implements Foundation, HttpKernelInterface
     use MiddlewaresTrait;
     use PathsTrait;
     use ServiceProviderTrait;
+
     /**
      * The Viserio framework version.
      *
@@ -224,15 +226,15 @@ class Application extends Container implements Foundation, HttpKernelInterface
     /**
      * Run the application.
      *
-     * @param \Symfony\Component\HttpFoundation\Request|null $request
-     * @param bool                                           $send
+     * @param \Psr\Http\Message\RequestInterface|null $request
+     * @param bool                                    $send
      *
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @return \Psr\Http\Message\ResponseInterface
      */
-    public function run(SymfonyRequest $request = null, $send = true)
+    public function run(RequestInterface $request = null, $send = true): ResponseInterface
     {
         if ($request === null) {
-            $request = SymfonyRequest::createFromGlobals();
+            $request = ServerRequest::createFromGlobals();
         }
 
         $response = $this->handle($request);
@@ -243,7 +245,7 @@ class Application extends Container implements Foundation, HttpKernelInterface
     /**
      * {@inheritdoc}
      */
-    public function handle(SymfonyRequest $request, $type = HttpKernelInterface::MASTER_REQUEST, $catch = true)
+    public function handle(RequestInterface $request, $type = HttpKernelInterface::MASTER_REQUEST, $catch = true)
     {
         if (! $this->booted) {
             $this->boot();

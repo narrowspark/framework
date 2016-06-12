@@ -20,8 +20,8 @@
     "require": {
         "php"                                                : "^7.0.7",
         "container-interop/container-interop"                : "^1.1",
-        "symfony/event-dispatcher"                           : "^3.1",
         "viserio/contracts"                                  : "self.version",
+        "viserio/events"                                     : "self.version",
         "viserio/filesystem"                                 : "self.version",
         "viserio/support"                                    : "self.version"
     },

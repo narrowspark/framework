@@ -7,7 +7,7 @@ cache:
   - .phpunit -> phpunit
 
 init:
-  - SET PATH=c:\php;%PATH%
+  - SET PATH=C:\Program Files\OpenSSL;c:\php;%PATH%
   - SET COMPOSER_NO_INTERACTION=1
   - SET PHP=1
   - SET ANSICON=121x90 (121x90)
@@ -15,6 +15,7 @@ init:
 
 install:
   - IF EXIST c:\php (SET PHP=0) ELSE (mkdir c:\php)
+  - cinst -y OpenSSL.Light
   - cd c:\php
   - IF %PHP%==1 appveyor DownloadFile https://raw.githubusercontent.com/symfony/binary-utils/master/cacert.pem
   - IF %PHP%==1 appveyor DownloadFile http://windows.php.net/downloads/releases/php-7.0.7-nts-Win32-VC14-x86.zip

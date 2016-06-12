@@ -14,7 +14,10 @@ class MailMailerTest extends \PHPUnit_Framework_TestCase
     public function testMailerSendSendsMessageWithProperViewContent()
     {
         unset($_SERVER['__mailer.test']);
-        $mailer = $this->getMock('\Viserio\Mail\Mailer', ['createMessage'], $this->getMocks());
+        $mailer = $this->getMockBuilder('\Viserio\Mail\Mailer')
+            ->setConstructorArgs($this->getMocks())
+            ->setMethods(['createMessage'])
+            ->getMock();
         $message = Mock::mock('\Swift_Mime_Message');
         $mailer->expects($this->once())->method('createMessage')->will($this->returnValue($message));
         $view = Mock::mock('\StdClass');
@@ -36,7 +39,10 @@ class MailMailerTest extends \PHPUnit_Framework_TestCase
     public function testMailerSendSendsMessageWithProperPlainViewContent()
     {
         unset($_SERVER['__mailer.test']);
-        $mailer = $this->getMock('\Viserio\Mail\Mailer', ['createMessage'], $this->getMocks());
+        $mailer = $this->getMockBuilder('\Viserio\Mail\Mailer')
+            ->setConstructorArgs($this->getMocks())
+            ->setMethods(['createMessage'])
+            ->getMock();
         $message = Mock::mock('\Swift_Mime_Message');
         $mailer->expects($this->once())->method('createMessage')->will($this->returnValue($message));
         $view = Mock::mock('\StdClass');
@@ -60,7 +66,10 @@ class MailMailerTest extends \PHPUnit_Framework_TestCase
     public function testMailerSendSendsMessageWithProperPlainViewContentWhenExplicit()
     {
         unset($_SERVER['__mailer.test']);
-        $mailer = $this->getMock('\Viserio\Mail\Mailer', ['createMessage'], $this->getMocks());
+        $mailer = $this->getMockBuilder('\Viserio\Mail\Mailer')
+            ->setConstructorArgs($this->getMocks())
+            ->setMethods(['createMessage'])
+            ->getMock();
         $message = Mock::mock('\Swift_Mime_Message');
         $mailer->expects($this->once())->method('createMessage')->will($this->returnValue($message));
         $view = Mock::mock('\StdClass');
@@ -83,7 +92,10 @@ class MailMailerTest extends \PHPUnit_Framework_TestCase
 
     public function testMessagesCanBeLoggedInsteadOfSent()
     {
-        $mailer = $this->getMock('\Viserio\Mail\Mailer', ['createMessage'], $this->getMocks());
+        $mailer = $this->getMockBuilder('\Viserio\Mail\Mailer')
+            ->setConstructorArgs($this->getMocks())
+            ->setMethods(['createMessage'])
+            ->getMock();
         $message = Mock::mock('\Swift_Mime_Message');
         $mailer->expects($this->once())->method('createMessage')->will($this->returnValue($message));
         $view = Mock::mock('\StdClass');
@@ -107,7 +119,10 @@ class MailMailerTest extends \PHPUnit_Framework_TestCase
 
     public function testMailerCanResolveMailerClasses()
     {
-        $mailer = $this->getMock('\Viserio\Mail\Mailer', ['createMessage'], $this->getMocks());
+        $mailer = $this->getMockBuilder('\Viserio\Mail\Mailer')
+            ->setConstructorArgs($this->getMocks())
+            ->setMethods(['createMessage'])
+            ->getMock();
         $message = Mock::mock('\Swift_Mime_Message');
         $mailer->expects($this->once())->method('createMessage')->will($this->returnValue($message));
         $view = Mock::mock('\StdClass');
@@ -181,12 +196,12 @@ class MailMailerTest extends \PHPUnit_Framework_TestCase
 
     protected function getMailer()
     {
-        return new Mailer(Mock::mock('\Swift_Mailer'), Mock::mock('\Viserio\Contracts\View\Factory'), Mock::mock('\Symfony\Component\EventDispatcher\EventDispatcherInterface'));
+        return new Mailer(Mock::mock('\Swift_Mailer'), Mock::mock('\Viserio\Contracts\View\Factory'), Mock::mock('\Viserio\Contracts\Events\Dispatcher'));
     }
 
     protected function getMocks()
     {
-        return [Mock::mock('\Swift_Mailer'), Mock::mock('\Viserio\Contracts\View\Factory'), Mock::mock('\Symfony\Component\EventDispatcher\EventDispatcherInterface')];
+        return [Mock::mock('\Swift_Mailer'), Mock::mock('\Viserio\Contracts\View\Factory'), Mock::mock('\Viserio\Contracts\Events\Dispatcher')];
     }
 }
 

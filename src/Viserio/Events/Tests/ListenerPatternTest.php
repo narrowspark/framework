@@ -76,16 +76,20 @@ class ListenerPatternTest extends \PHPUnit_Framework_TestCase
 
     public function testDispatcherBinding()
     {
-        $pattern = new ListenerPattern('core.*', $listener = 'callback', $priority = 0);
+        $listener = function () {
+            return 'callback';
+        };
 
-        $dispatcher = $this->getMock(Dispatcher::class);
+        $pattern = new ListenerPattern('core.*', $listener, $priority = 0);
+
+        $dispatcher = $this->getMockBuilder(Dispatcher::class)
+            ->setMethods(['on', 'once', 'emit', 'getListeners', 'off', 'removeAllListeners', 'hasListeners'])
+            ->getMock();
         $dispatcher->expects($this->once())
             ->method('on')
             ->with(
                 'core.request',
-                function () use ($listener) {
-                    return $listener;
-                },
+                $listener,
                 $priority
             );
 

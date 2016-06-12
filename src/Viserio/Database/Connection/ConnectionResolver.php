@@ -1,8 +1,6 @@
 <?php
 namespace Viserio\Database\Connection;
 
-use Viserio\Contracts\Database\ConnectionResolver as ConnectionResolverContract;
-
 class ConnectionResolver
 {
     /**

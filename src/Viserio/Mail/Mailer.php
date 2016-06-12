@@ -9,7 +9,7 @@ use Psr\Log\LoggerInterface;
 use Swift_Mailer;
 use Swift_Message;
 use Swift_Transport_AbstractSmtpTransport;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Viserio\Contracts\Events\Dispatcher as DispatcherContract;
 use Viserio\Contracts\Mail\Mailer as MailerContract;
 use Viserio\Contracts\View\Factory;
 
@@ -25,7 +25,7 @@ class Mailer implements MailerContract
     /**
      * The event dispatcher instance.
      *
-     * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
+     * @var \Viserio\Contracts\Events\Dispatcher
      */
     protected $events;
 
@@ -81,14 +81,14 @@ class Mailer implements MailerContract
     /**
      * Create a new Mailer instance.
      *
-     * @param \Swift_Mailer                                               $swift
-     * @param \Viserio\Contracts\View\Factory                             $view
-     * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $events
+     * @param \Swift_Mailer                        $swift
+     * @param \Viserio\Contracts\View\Factory      $view
+     * @param \Viserio\Contracts\Events\Dispatcher $events
      */
     public function __construct(
         Swift_Mailer $swift,
         Factory $view,
-        EventDispatcherInterface $events
+        DispatcherContract $events
     ) {
         $this->swift = $swift;
         $this->views = $view;
@@ -360,7 +360,7 @@ class Mailer implements MailerContract
     protected function sendSwiftMessage($message)
     {
         if ($this->events) {
-            $this->events->addListener('mailer.sending', [$message]);
+            $this->events->on('mailer.sending', [$message]);
         }
 
         if (! $this->pretending) {
