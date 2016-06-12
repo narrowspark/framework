@@ -19,11 +19,11 @@
     ],
     "require": {
         "php"                             : "^7.0.7",
+        "ext-session"                     : "*",
+        "lcobucci/jwt"                    : "^3.1",
         "viserio/cookie"                  : "self.version",
         "viserio/encrypter"               : "self.version",
-        "viserio/support"                 : "self.version",
-        "nesbot/carbon"                   : "^1.18",
-        "symfony/http-foundation"         : "^3.1"
+        "viserio/support"                 : "self.version"
     },
     "require-dev": {
         "narrowspark/php-cs-fixer-config" : "^1.1",
