@@ -5,5 +5,7 @@ if [[ "$DISABLE_XDEBUG" = true ]]; then
   phpenv config-rm xdebug.ini;
 fi
 
+if [[ "$PHP" != hhvm* ]]; then
 # Doing something with phpenv
-phpenv config-add ./build/travis/php/php.ini
+phpenv config-add ./build/travis/php/php.ini;
+fi
