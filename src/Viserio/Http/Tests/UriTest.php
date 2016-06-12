@@ -77,15 +77,6 @@ class UriTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @dataProvider getValidUris
-     */
-    public function testValidUrisStayValid($input)
-    {
-        $uri = new Uri($input);
-        $this->assertSame($input, (string) $uri);
-    }
-
-    /**
      * @expectedException \InvalidArgumentException
      * @dataProvider getInvalidUris
      */

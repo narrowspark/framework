@@ -2,6 +2,7 @@
 namespace Viserio\Http;
 
 use Psr\Http\Message\{
+    RequestInterface,
     ResponseInterface,
     StreamInterface
 };

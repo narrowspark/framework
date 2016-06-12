@@ -12,12 +12,25 @@ use Viserio\Http\{
     Uri
 };
 use Viserio\Http\Stream\FnStream;
+use Narrowspark\TestingHelper\Traits\MockeryTrait;
 
 class RequestTest extends AbstractMessageTest
 {
+    use MockeryTrait;
+
+    private $mockUri;
+
     public function setUp()
     {
-        $this->classToTest = new Request($this->getMock(UriInterface::class));
+        $this->mockUri = $this->mock(UriInterface::class)
+            ->shouldReceive('getHost')
+            ->andReturn('')
+            ->shouldReceive('getPath')
+            ->andReturn('')
+            ->shouldReceive('getQuery')
+            ->andReturn('')
+            ->getMock();
+        $this->classToTest = new Request($this->mockUri);
     }
 
     public function testRequestImplementsInterface()
@@ -54,8 +67,6 @@ class RequestTest extends AbstractMessageTest
             'getUri must return instance of Psr\Http\Message\UriInterface'
         );
     }
-
-    // Test methods for change instances status
 
     /**
      * @dataProvider validRequestTargetProvider
@@ -118,8 +129,11 @@ class RequestTest extends AbstractMessageTest
     {
         $request = $this->classToTest;
         $requestClone = clone $request;
-        /** @var UriInterface $uri */
-        $uri = $this->getMock(UriInterface::class);
+
+        $uri = $this->mock(UriInterface::class)
+            ->shouldReceive('getHost')
+            ->andReturn('')
+            ->getMock();
         $newRequest = $request->withUri($uri);
         $this->assertImmutable($requestClone, $request, $newRequest);
         $this->assertEquals(
@@ -165,28 +179,24 @@ class RequestTest extends AbstractMessageTest
 
     public function hostHeaderPreservationWhenUriIsSetProvider()
     {
-        $emptyHostHeader = $this->classToTest;
-        $defaultRequestHostHeader = $this->classToTest->withHeader('Host', 'foo.com');
-        $emptyUriHost = $this->getMock(UriInterface::class);
-        $defaultUriHost = $this->getMock(UriInterface::class);
-        $defaultUriHost->expects(self::any())
-            ->method('getHost')
-            ->willReturn('baz.com')
-        ;
-        $defaultUriPort = $this->getMock(UriInterface::class);
-        $defaultUriPort->expects(self::any())
-            ->method('getPort')
-            ->willReturn('8080')
-        ;
-        $defaultUriHostAndPort = $this->getMock(UriInterface::class);
-        $defaultUriHostAndPort->expects(self::any())
-            ->method('getHost')
-            ->willReturn('baz.com')
-        ;
-        $defaultUriHostAndPort->expects(self::any())
-            ->method('getPort')
-            ->willReturn('8080')
-        ;
+        $emptyHostHeaderMockUri = $this->mock(UriInterface::class);
+        $emptyHostHeaderMockUri->shouldReceive('getHost')->andReturn('');
+        $emptyHostHeader = new Request($emptyHostHeaderMockUri);
+
+        $defaultRequestHostHeader =(new Request($this->mock(UriInterface::class)))->withHeader('Host', 'foo.com');
+
+        $emptyUriHost = $this->mock(UriInterface::class);
+        $defaultUriHost = $this->mock(UriInterface::class);
+        $defaultUriHost->shouldReceive('getHost')->andReturn('baz.com');
+        $defaultUriHost->shouldReceive('getPort')->andReturn(null);
+
+        $defaultUriPort = $this->mock(UriInterface::class);
+        $defaultUriPort->shouldReceive('getHost')->andReturn('foo.com');
+        $defaultUriPort->shouldReceive('getPort')->andReturn('8080');
+
+        $defaultUriHostAndPort = $this->mock(UriInterface::class);
+        $defaultUriHostAndPort->shouldReceive('getHost')->andReturn('baz.com');
+        $defaultUriHostAndPort->shouldReceive('getPort')->andReturn('8080');
 
         return [
             // Description => [request, with uri, host header line]

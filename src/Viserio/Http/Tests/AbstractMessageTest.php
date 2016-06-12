@@ -12,7 +12,7 @@ use Viserio\Http\Tests\Constraint\{
 
 abstract class AbstractMessageTest extends \PHPUnit_Framework_TestCase
 {
-    protected $classToTest;
+    public $classToTest;
 
     // Test methods for default/empty instances
     public function testMessageImplementsInterface()
