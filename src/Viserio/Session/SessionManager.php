@@ -2,7 +2,7 @@
 namespace Viserio\Session;
 
 use Viserio\Contracts\Config\Manager as ConfigContract;
-use Viserio\Contract\Session\SessionHandler as SessionHandlerContract;
+use Viserio\Contracts\Session\SessionHandler as SessionHandlerContract;
 use Viserio\Support\Manager;
 
 class SessionManager extends Manager

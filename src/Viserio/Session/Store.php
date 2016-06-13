@@ -3,8 +3,8 @@ namespace Viserio\Session;
 
 use InvalidArgumentException;
 use Narrowspark\Arr\StaticArr as Arr;
-use Viserio\Contract\Session\SessionHandler as SessionHandlerContract;
-use Viserio\Contract\Session\Store as StoreContract;
+use Viserio\Contracts\Session\SessionHandler as SessionHandlerContract;
+use Viserio\Contracts\Session\Store as StoreContract;
 
 class Store implements StoreContract
 {
