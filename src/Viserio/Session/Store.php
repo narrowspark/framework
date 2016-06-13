@@ -3,6 +3,7 @@ namespace Viserio\Session;
 
 use InvalidArgumentException;
 use Narrowspark\Arr\StaticArr as Arr;
+use Viserio\Contracts\Encryption\Encrypter as EncrypterContract;
 use Viserio\Contracts\Session\SessionHandler as SessionHandlerContract;
 use Viserio\Contracts\Session\Store as StoreContract;
 
@@ -33,7 +34,7 @@ class Store implements StoreContract
     /**
      * The session handler implementation.
      *
-     * @var \SessionHandlerInterface
+     * @var SessionHandlerContract
      */
     protected $handler;
 
@@ -45,13 +46,21 @@ class Store implements StoreContract
     protected $started = false;
 
     /**
+     * Encrypter instance.
+     *
+     * @var EncrypterContract
+     */
+    protected $encrypter;
+
+    /**
      * Create a new session instance.
      *
-     * @param string                   $name
-     * @param \SessionHandlerInterface $handler
-     * @param string|null              $id
+     * @param string                 $name
+     * @param SessionHandlerContract $handler
+     * @param EncrypterContract      $encrypter
+     * @param string|null            $id
      */
-    public function __construct(string $name, SessionHandlerContract $handler, $id = null)
+    public function __construct(string $name, SessionHandlerContract $handler, EncrypterContract $encrypter, $id = null)
     {
         $this->setId($id);
         $this->name = $name;

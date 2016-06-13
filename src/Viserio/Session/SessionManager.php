@@ -2,6 +2,7 @@
 namespace Viserio\Session;
 
 use Viserio\Contracts\Config\Manager as ConfigContract;
+use Viserio\Contracts\Encryption\Encrypter as EncrypterContract;
 use Viserio\Contracts\Session\SessionHandler as SessionHandlerContract;
 use Viserio\Support\Manager;
 
@@ -15,13 +16,22 @@ class SessionManager extends Manager
     protected $drivers = [];
 
     /**
+     * Encrypter instance.
+     *
+     * @var EncrypterContract
+     */
+    private $encrypter;
+
+    /**
      * Constructor.
      *
-     * @param ConfigContract $config
+     * @param ConfigContract    $config
+     * @param EncrypterContract $encrypter
      */
-    public function __construct(ConfigContract $config)
+    public function __construct(ConfigContract $config, EncrypterContract $encrypter)
     {
         $this->config = $config;
+        $this->encrypter = $encrypter;
     }
 
     /**
@@ -57,11 +67,7 @@ class SessionManager extends Manager
      */
     protected function buildSession(SessionHandlerContract $handler): Store
     {
-        if ($this->config->get($this->getConfigName().'::encrypt', false)) {
-            # code...
-        }
-
-        return new Store($this->config->get($this->getConfigName().'::cookie', false), $handler);
+        return new Store($this->config->get($this->getConfigName().'::cookie', false), $handler, $this->encrypter);
     }
 
     /**

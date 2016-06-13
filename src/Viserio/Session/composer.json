@@ -21,8 +21,10 @@
         "php"                             : "^7.0.7",
         "nesbot/carbon"                   : "^1.21",
         "lcobucci/jwt"                    : "^3.1",
+        "paragonie/anti-csrf"             : "^2.0",
         "viserio/config"                  : "self.version",
         "viserio/cotracts"                : "self.version",
+        "viserio/encrypter"               : "self.version",
         "viserio/support"                 : "self.version"
     },
     "require-dev": {
@@ -31,8 +33,7 @@
         "phpunit/phpunit"                 : "^5.1",
         "psr/http-message"                : "^1.0",
         "viserio/cookie"                  : "self.version",
-        "viserio/connect"                 : "self.version",
-        "viserio/encrypter"               : "self.version"
+        "viserio/connect"                 : "self.version"
     },
     "autoload": {
         "psr-4": {
