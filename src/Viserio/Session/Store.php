@@ -1,13 +1,12 @@
 <?php
 namespace Viserio\Session;
 
+use InvalidArgumentException;
 use Narrowspark\Arr\StaticArr as Arr;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Session\SessionBagInterface;
-use Symfony\Component\HttpFoundation\Session\Storage\MetadataBag;
-use Viserio\Session\Handler\CookieSessionHandler;
+use Viserio\Contract\Session\SessionHandler as SessionHandlerContract;
+use Viserio\Contract\Session\Store as StoreContract;
 
-class Store
+class Store implements StoreContract
 {
     /**
      * The session ID.
@@ -30,26 +29,6 @@ class Store
      */
     protected $attributes = [];
 
-    /**
-     * The session bags.
-     *
-     * @var array
-     */
-    protected $bags = [];
-
-    /**
-     * The meta-data bag instance.
-     *
-     * @var \Symfony\Component\HttpFoundation\Session\Storage\MetadataBag
-     */
-    protected $metaBag;
-
-    /**
-     * Local copies of the session bag data.
-     *
-     * @var array
-     */
-    protected $bagData = [];
 
     /**
      * The session handler implementation.
@@ -72,12 +51,11 @@ class Store
      * @param \SessionHandlerInterface $handler
      * @param string|null              $id
      */
-    public function __construct($name, \SessionHandlerInterface $handler, $id = null)
+    public function __construct(string $name, SessionHandlerContract $handler, $id = null)
     {
         $this->setId($id);
         $this->name = $name;
         $this->handler = $handler;
-        $this->metaBag = new MetadataBag();
     }
 
     /**
@@ -86,6 +64,7 @@ class Store
     public function start()
     {
         $this->loadSession();
+
         if (! $this->has('_token')) {
             $this->regenerateToken();
         }
@@ -184,7 +163,6 @@ class Store
      */
     public function save()
     {
-        $this->addBagDataToSession();
         $this->ageFlashData();
         $this->handler->write($this->getId(), serialize($this->attributes));
         $this->started = false;
@@ -270,6 +248,7 @@ class Store
         if (! is_array($key)) {
             $key = [$key => $value];
         }
+
         foreach ($key as $arrayKey => $arrayValue) {
             $this->set($arrayKey, $arrayValue);
         }
@@ -321,7 +300,7 @@ class Store
      */
     public function forget($key)
     {
-        array_forget($this->attributes, $key);
+        Arr::forget($this->attributes, $key);
     }
 
     /**
@@ -330,6 +309,7 @@ class Store
     public function clear()
     {
         $this->attributes = [];
+
         foreach ($this->bags as $bag) {
             $bag->clear();
         }
@@ -349,44 +329,6 @@ class Store
     public function isStarted()
     {
         return $this->started;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function registerBag(SessionBagInterface $bag)
-    {
-        $this->bags[$bag->getStorageKey()] = $bag;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getBag($name)
-    {
-        return Arr::get($this->bags, $name, function () {
-            throw new \InvalidArgumentException('Bag not registered.');
-        });
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getMetadataBag()
-    {
-        return $this->metaBag;
-    }
-
-    /**
-     * Get the raw bag data array for a given bag.
-     *
-     * @param string $name
-     *
-     * @return array
-     */
-    public function getBagData($name)
-    {
-        return Arr::get($this->bagData, $name, []);
     }
 
     /**
@@ -418,18 +360,6 @@ class Store
     }
 
     /**
-     * Set the existence of the session on the handler if applicable.
-     *
-     * @param bool $value
-     */
-    public function setExists($value)
-    {
-        if ($this->handler instanceof ExistenceAwareInterface) {
-            $this->handler->setExists($value);
-        }
-    }
-
-    /**
      * Get the underlying session handler implementation.
      *
      * @return \SessionHandlerInterface
@@ -437,28 +367,6 @@ class Store
     public function getHandler()
     {
         return $this->handler;
-    }
-
-    /**
-     * Determine if the session handler needs a request.
-     *
-     * @return bool
-     */
-    public function handlerNeedsRequest()
-    {
-        return $this->handler instanceof CookieSessionHandler;
-    }
-
-    /**
-     * Set the request on the handler instance.
-     *
-     * @param \Symfony\Component\HttpFoundation\Request $request
-     */
-    public function setRequestOnHandler(Request $request)
-    {
-        if ($this->handlerNeedsRequest()) {
-            $this->handler->setRequest($request);
-        }
     }
 
     /**
@@ -504,15 +412,5 @@ class Store
     protected function generateSessionId()
     {
         return sha1(uniqid('', true) . str_random(25) . microtime(true));
-    }
-
-    /**
-     * Merge all of the bag data into the session.
-     */
-    protected function addBagDataToSession()
-    {
-        foreach (array_merge($this->bags, [$this->metaBag]) as $bag) {
-            $this->put($bag->getStorageKey(), $this->bagData[$bag->getStorageKey()]);
-        }
     }
 }
