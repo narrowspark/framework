@@ -371,7 +371,7 @@ class Store implements StoreContract
     /**
      * Get the underlying session handler implementation.
      *
-     * @return \SessionHandlerInterface
+     * @return SessionHandlerContract
      */
     public function getHandler()
     {
