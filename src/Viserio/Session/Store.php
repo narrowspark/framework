@@ -1,11 +1,13 @@
 <?php
 namespace Viserio\Session;
 
-use InvalidArgumentException;
+use Exception;
+use RuntimeException;
 use Narrowspark\Arr\StaticArr as Arr;
 use Viserio\Contracts\Encryption\Encrypter as EncrypterContract;
 use Viserio\Contracts\Session\SessionHandler as SessionHandlerContract;
 use Viserio\Contracts\Session\Store as StoreContract;
+use Viserio\Support\Str;
 
 class Store implements StoreContract
 {
@@ -24,12 +26,11 @@ class Store implements StoreContract
     protected $name;
 
     /**
-     * The session attributes.
+     * Session store started status.
      *
-     * @var array
+     * @var bool
      */
-    protected $attributes = [];
-
+    protected $started = false;
 
     /**
      * The session handler implementation.
@@ -39,18 +40,39 @@ class Store implements StoreContract
     protected $handler;
 
     /**
-     * Session store started status.
-     *
-     * @var bool
-     */
-    protected $started = false;
-
-    /**
      * Encrypter instance.
      *
      * @var EncrypterContract
      */
     protected $encrypter;
+
+    /**
+     * The meta-data bag instance.
+     *
+     * @var MetadataBag
+     */
+    protected $metaBag;
+
+    /**
+     * The session bags.
+     *
+     * @var array
+     */
+    protected $bags = [];
+
+    /**
+     * Local copies of the session bag data.
+     *
+     * @var array
+     */
+    protected $bagData = [];
+
+    /**
+     * The session attributes.
+     *
+     * @var array
+     */
+    protected $attributes = [];
 
     /**
      * Create a new session instance.
@@ -60,31 +82,33 @@ class Store implements StoreContract
      * @param EncrypterContract      $encrypter
      * @param string|null            $id
      */
-    public function __construct(string $name, SessionHandlerContract $handler, EncrypterContract $encrypter, $id = null)
+    public function __construct(string $name, SessionHandlerContract $handler, EncrypterContract $encrypter)
     {
-        $this->setId($id);
         $this->name = $name;
         $this->handler = $handler;
+        $this->metabag = new MetadataBag();
     }
 
     /**
      * {@inheritdoc}
      */
-    public function start()
+    public function start(): bool
     {
-        $this->loadSession();
+        if (!$this->started) {
+            $this->id = $this->generateSessionId();
 
-        if (! $this->has('_token')) {
-            $this->regenerateToken();
+            $this->loadSession();
+
+            $this->started = true;
         }
 
-        return $this->started = true;
+        return $this->started;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getId()
+    public function getId(): string
     {
         return $this->id;
     }
@@ -92,25 +116,13 @@ class Store implements StoreContract
     /**
      * {@inheritdoc}
      */
-    public function setId($id)
+    public function setId(string $id)
     {
         if (! $this->isValidId($id)) {
             $id = $this->generateSessionId();
         }
 
         $this->id = $id;
-    }
-
-    /**
-     * Determine if this is a valid session ID.
-     *
-     * @param string $id
-     *
-     * @return bool
-     */
-    public function isValidId($id)
-    {
-        return is_string($id) && preg_match('/^[a-f0-9]{40}$/', $id);
     }
 
     /**
@@ -124,47 +136,9 @@ class Store implements StoreContract
     /**
      * {@inheritdoc}
      */
-    public function setName($name)
+    public function setName(string $name)
     {
-        $this->name = $name;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function invalidate($lifetime = null)
-    {
-        $this->attributes = [];
-        $this->migrate();
-
-        return true;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function migrate($destroy = false, $lifetime = null)
-    {
-        if ($destroy) {
-            $this->handler->destroy($this->getId());
-        }
-
-        $this->setExists(false);
-        $this->id = $this->generateSessionId();
-
-        return true;
-    }
-
-    /**
-     * Generate a new session identifier.
-     *
-     * @param bool $destroy
-     *
-     * @return bool
-     */
-    public function regenerate($destroy = false)
-    {
-        return $this->migrate($destroy);
+        return $this->name;
     }
 
     /**
@@ -172,85 +146,44 @@ class Store implements StoreContract
      */
     public function save()
     {
-        $this->ageFlashData();
-        $this->handler->write($this->getId(), serialize($this->attributes));
+        $bag = $this->metabag->initialize($this->attributes);
+
+        $this->handler->write($this->id, $bag, $this->ttl);
+
         $this->started = false;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function has($name)
+    public function has(string $name): bool
     {
-        return $this->get($name) !== null;
+        return Arr::has($this->attributes, $name);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function get($name, $default = null)
+    public function get(string $name, $default = null)
     {
         return Arr::get($this->attributes, $name, $default);
     }
 
     /**
-     * Get the value of a given key and then forget it.
-     *
-     * @param string $key
-     * @param string $default
-     *
-     * @return mixed
-     */
-    public function pull($key, $default = null)
-    {
-        return Arr::pull($this->attributes, $key, $default);
-    }
-
-    /**
-     * Determine if the session contains old input.
-     *
-     * @param string $key
-     *
-     * @return bool
-     */
-    public function hasOldInput($key = null)
-    {
-        $old = $this->getOldInput($key);
-
-        return $key === null ? count($old) > 0 : $old !== null;
-    }
-
-    /**
-     * Get the requested item from the flashed input array.
-     *
-     * @param string $key
-     * @param mixed  $default
-     *
-     * @return mixed
-     */
-    public function getOldInput($key = null, $default = null)
-    {
-        $input = $this->get('_old_input', []);
-
-        // Input that is flashed to the session can be easily retrieved by the
-        // developer, making repopulating old forms and the like much more
-        // convenient, since the request's previous input is available.
-        return Arr::get($input, $key, $default);
-    }
-
-    /**
      * {@inheritdoc}
      */
-    public function set($name, $value)
+    public function set(string $name, $value)
     {
-        array_set($this->attributes, $name, $value);
+        return Arr::set($this->attributes, $name, $value);
     }
 
     /**
      * Put a key / value pair or array of key / value pairs in the session.
      *
-     * @param string|array $key
-     * @param mixed|null   $value
+     * @param  string|array $key
+     * @param  mixed        $value
+     *
+     * @return void
      */
     public function put($key, $value = null)
     {
@@ -264,22 +197,9 @@ class Store implements StoreContract
     }
 
     /**
-     * Push a value onto a session array.
-     *
-     * @param string $key
-     * @param string $value
-     */
-    public function push($key, $value)
-    {
-        $array = $this->get($key, []);
-        $array[] = $value;
-        $this->put($key, $array);
-    }
-
-    /**
      * {@inheritdoc}
      */
-    public function all()
+    public function all(): array
     {
         return $this->attributes;
     }
@@ -289,27 +209,15 @@ class Store implements StoreContract
      */
     public function replace(array $attributes)
     {
-        foreach ($attributes as $key => $value) {
-            $this->put($key, $value);
-        }
+        $this->put($attributes);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function remove($name)
+    public function remove(string $name)
     {
         return Arr::pull($this->attributes, $name);
-    }
-
-    /**
-     * Remove an item from the session.
-     *
-     * @param string $key
-     */
-    public function forget($key)
-    {
-        Arr::forget($this->attributes, $key);
     }
 
     /**
@@ -318,54 +226,70 @@ class Store implements StoreContract
     public function clear()
     {
         $this->attributes = [];
-
-        foreach ($this->bags as $bag) {
-            $bag->clear();
-        }
-    }
-
-    /**
-     * Remove all of the items from the session.
-     */
-    public function flush()
-    {
-        $this->clear();
     }
 
     /**
      * {@inheritdoc}
      */
-    public function isStarted()
+    public function isStarted(): bool
     {
         return $this->started;
     }
 
     /**
-     * Get the CSRF token value.
+     * Gets last (id) regeneration timestamp.
      *
-     * @return string
+     * @return int
      */
-    public function token()
+    public function getRegenerationTrace()
     {
-        return $this->get('_token');
+        return $this->regenerationTrace;
     }
 
     /**
-     * Get the CSRF token value.
+     * It must be called before {@link self::start()}.
      *
-     * @return string
+     * @param int $ttl
+     *
+     * @throws Exception
      */
-    public function getToken()
+    public function setTtl(int $ttl)
     {
-        return $this->token();
+        if ($this->isStarted) {
+            throw new RuntimeException('Session is already opened, ttl cannot be set');
+        }
+
+        if ($ttl < 1) {
+            throw new Exception('$ttl must be greather than 0');
+        }
+
+        $this->ttl = $ttl;
     }
 
     /**
-     * Regenerate the CSRF token value.
+     * @return int
      */
-    public function regenerateToken()
+    public function getTtl(): int
     {
-        $this->put('_token', str_random(40));
+        return $this->ttl;
+    }
+    /**
+     * @return int
+     */
+    public function getRequestsCount()
+    {
+        return $this->requestsCount;
+    }
+
+
+    /**
+     * Get the underlying session handler implementation.
+     *
+     * @return SessionHandlerContract
+     */
+    public function getHandler(): SessionHandlerContract
+    {
+        return $this->handler;
     }
 
     /**
@@ -373,44 +297,17 @@ class Store implements StoreContract
      *
      * @return SessionHandlerContract
      */
-    public function getHandler()
+    public function getEncrypter(): EncrypterContract
     {
-        return $this->handler;
+        return $this->encrypter;
     }
 
     /**
-     * Load the session data from the handler.
+     * {@inheritdoc}
      */
-    protected function loadSession()
+    public function getMetadataBag(): MetadataBag
     {
-        $this->attributes = $this->readFromHandler();
-
-        foreach (array_merge($this->bags, [$this->metaBag]) as $bag) {
-            $this->initializeLocalBag($bag);
-            $bag->initialize($this->bagData[$bag->getStorageKey()]);
-        }
-    }
-
-    /**
-     * Read the session data from the handler.
-     *
-     * @return array
-     */
-    protected function readFromHandler()
-    {
-        $data = $this->handler->read($this->getId());
-
-        return $data ? unserialize($data) : [];
-    }
-
-    /**
-     * Initialize a bag in storage if it doesn't exist.
-     *
-     * @param \Symfony\Component\HttpFoundation\Session\SessionBagInterface $bag
-     */
-    protected function initializeLocalBag($bag)
-    {
-        $this->bagData[$bag->getStorageKey()] = $this->pull($bag->getStorageKey(), []);
+        return $this->metaBag;
     }
 
     /**
@@ -420,6 +317,50 @@ class Store implements StoreContract
      */
     protected function generateSessionId()
     {
-        return sha1(uniqid('', true) . str_random(25) . microtime(true));
+        return hash('sha1', uniqid(Str::random(23), true) . Str::random(25) . microtime(true));
+    }
+
+    /**
+     * Determine if session id should be regenerated? (based on request_counter or regenerationTrace)
+     *
+     * @return bool
+     */
+    protected function shouldRegenerateId(): bool
+    {
+    }
+
+    /**
+     * Determine if this is a valid session ID.
+     *
+     * @param  string  $id
+     * @return bool
+     */
+    protected function isValidId($id)
+    {
+        return is_string($id) && preg_match('/^[a-f0-9]{40}$/', $id);
+    }
+
+    /**
+     * Load the session data from the handler.
+     *
+     * @return bool
+     */
+    protected function loadSession(): bool
+    {
+        $bag = $this->handler->read($this->id);
+
+        if (!$bag) {
+            return false;
+        }
+
+        $this->firstTrace = $bag->getFirstTrace();
+        $this->lastTrace = $bag->getLastTrace();
+        $this->regenerationTrace = $bag->getRegenerationTrace();
+        $this->requestsCount = $bag->getRequestsCount();
+        $this->fingerprint = $bag->getFingerprint();
+
+        $this->attributes = $bag->toArray();
+
+        return true;
     }
 }
