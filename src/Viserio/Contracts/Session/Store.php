@@ -23,13 +23,14 @@ interface Store
      * Sets the session ID.
      *
      * @param string $id
+     * @return void
      */
     public function setId(string $id);
 
     /**
      * Returns the session name.
      *
-     * @return mixed The session name.
+     * @return string The session name.
      */
     public function getName();
 
@@ -37,6 +38,7 @@ interface Store
      * Sets the session name.
      *
      * @param string $name
+     * @return void
      */
     public function setName(string $name);
 
@@ -75,6 +77,7 @@ interface Store
      * This method is generally not required for real sessions as
      * the session will be automatically saved at the end of
      * code execution.
+     * @return void
      */
     public function save();
 
@@ -102,6 +105,7 @@ interface Store
      *
      * @param string $name
      * @param mixed  $value
+     * @return void
      */
     public function set(string $name, $value);
 
@@ -116,6 +120,7 @@ interface Store
      * Sets attributes.
      *
      * @param array $attributes Attributes
+     * @return void
      */
     public function replace(array $attributes);
 
@@ -130,6 +135,7 @@ interface Store
 
     /**
      * Clears all attributes.
+     * @return void
      */
     public function clear();
 
