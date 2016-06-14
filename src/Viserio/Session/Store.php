@@ -147,6 +147,7 @@ class Store implements StoreContract
     public function save()
     {
         $bag = $this->metabag->initialize($this->attributes);
+        $bag = $this->encrypter->encrypt(json_encode($bag));
 
         $this->handler->write($this->id, $bag, $this->ttl);
 
@@ -352,6 +353,8 @@ class Store implements StoreContract
         if (!$bag) {
             return false;
         }
+
+        $bag = json_decode($this->encrypter->decrypt($bag));
 
         $this->firstTrace = $bag->getFirstTrace();
         $this->lastTrace = $bag->getLastTrace();

@@ -45,35 +45,6 @@ interface Store
     public function setName(string $name);
 
     /**
-     * Invalidates the current session.
-     *
-     * Clears all session attributes and flashes and regenerates the
-     * session and deletes the old session from persistence.
-     *
-     * @param int $lifetime Sets the cookie lifetime for the session cookie. A null value
-     *                      will leave the system settings unchanged, 0 sets the cookie
-     *                      to expire with browser session. Time is in seconds, and is
-     *                      not a Unix timestamp.
-     *
-     * @return bool True if session invalidated, false if error.
-     */
-    public function invalidate(int $lifetime = null): bool;
-
-    /**
-     * Migrates the current session to a new session id while maintaining all
-     * session attributes.
-     *
-     * @param bool $destroy  Whether to delete the old session or leave it to garbage collection.
-     * @param int  $lifetime Sets the cookie lifetime for the session cookie. A null value
-     *                       will leave the system settings unchanged, 0 sets the cookie
-     *                       to expire with browser session. Time is in seconds, and is
-     *                       not a Unix timestamp.
-     *
-     * @return bool True if session migrated, false if error.
-     */
-    public function migrate(bool $destroy = false, int $lifetime = null): bool;
-
-    /**
      * Force the session to be saved and closed.
      *
      * This method is generally not required for real sessions as

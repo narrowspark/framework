@@ -1,9 +1,10 @@
 <?php
 namespace Viserio\Session;
 
+use JsonSerializable;
 use Viserio\Contracts\Support\Arrayable;
 
-class MetadataBag
+class MetadataBag implements JsonSerializable, Arrayable
 {
      /**
      * @var string
@@ -65,8 +66,9 @@ class MetadataBag
      *
      * @param array $array
      */
-    public function initialize(array $array)
+    public function initialize(array &$array)
     {
+        $data = &$array;
         $keys = [
             'firstTrace',
             'lastTrace',
@@ -76,13 +78,13 @@ class MetadataBag
         ];
 
         foreach ($keys as $key) {
-            if (isset($array[$key])) {
-                $this->meta[$key] = $array[$key];
-                unset($array[$key]);
+            if (isset($data[$key])) {
+                $this->meta[$key] = $data[$key];
+                unset($data[$key]);
             }
         }
 
-        array_merge($this->meta, $array);
+        array_merge($this->meta, $data);
     }
 
     /**
@@ -132,6 +134,14 @@ class MetadataBag
      * {@inheritDoc}
      */
     public function toArray(): array
+    {
+        return $this->meta;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function jsonSerialize()
     {
         return $this->meta;
     }
