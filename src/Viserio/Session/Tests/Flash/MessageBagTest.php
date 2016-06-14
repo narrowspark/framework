@@ -21,7 +21,7 @@ class MessageBagTest extends \PHPUnit_Framework_TestCase
         $this->bag = null;
     }
 
-        public function testGetSetName()
+    public function testGetSetName()
     {
         $this->assertEquals('messages', $this->bag->getName());
 
