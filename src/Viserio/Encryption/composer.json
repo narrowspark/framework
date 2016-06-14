@@ -20,6 +20,7 @@
     "require": {
         "php"                              : "^7.0.7",
         "defuse/php-encryption"            : "^2.0",
+        "paragonie/constant_time_encoding" : "^2.0",
         "ext-openssl"                      : "*",
         "viserio/contracts"                : "self.version"
     },
