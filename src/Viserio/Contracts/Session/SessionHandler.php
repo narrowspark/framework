@@ -13,11 +13,11 @@ interface SessionHandler
     /**
      * Destroys a session.
      *
-     * @param  string $session_id
+     * @param string $sessionId
      *
      * @return bool
      */
-    public function destroy(string $session_id): bool;
+    public function destroy(string $sessionId): bool;
 
     /**
      * Cleans up expired sessions.
@@ -40,10 +40,10 @@ interface SessionHandler
     /**
      * Writes the session data to the session storage.
      *
-     * @param  string $sessionId
-     * @param  string $sessionData
+     * @param string $sessionId
+     * @param string $sessionData
      *
-     * @return true
+     * @return bool
      */
     public function write(string $sessionId, string $sessionData): bool;
 }

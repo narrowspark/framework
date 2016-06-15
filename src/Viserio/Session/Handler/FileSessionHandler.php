@@ -5,7 +5,7 @@ use Symfony\Component\Finder\Finder;
 use Viserio\Filesystem\Filesystem;
 use Viserio\Contracts\Session\SessionHandler as SessionHandlerContract;
 
-class FileSessionHandler implements SessionHandlerContract
+class FileSessionHandler
 {
     /**
      * The filesystem instance.

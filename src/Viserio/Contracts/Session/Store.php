@@ -116,20 +116,33 @@ interface Store
     public function set(string $name, $value);
 
     /**
-     * Returns attributes.
+     * Put a key / value pair or array of key / value pairs in the session.
      *
-     * @return array Attributes
+     * @param string|array $key
+     * @param mixed        $value
+     *
+     * @return void
      */
-    public function all(): array;
+    public function put($key, $value = null);
+
+    /**
+     * Push a value onto a session array.
+     *
+     * @param string $key
+     * @param mixed  $value
+     *
+     * @return void
+     */
+    public function push(string $key, $value);
 
     /**
      * Sets attributes.
      *
-     * @param array $attributes Attributes
+     * @param array $values Attributes
      *
      * @return void
      */
-    public function replace(array $attributes);
+    public function replace(array $values);
 
     /**
      * Removes an attribute.
@@ -139,6 +152,13 @@ interface Store
      * @return mixed The removed value or null when it does not exist
      */
     public function remove(string $name);
+
+    /**
+     * Returns attributes.
+     *
+     * @return array Attributes
+     */
+    public function all(): array;
 
     /**
      * Clears all attributes.
@@ -153,4 +173,121 @@ interface Store
      * @return bool
      */
     public function isStarted(): bool;
+
+    /**
+     * Set the request limit for a session.
+     *
+     * @param int $limit
+     */
+    public function setIdRequestsLimit(int $limit);
+
+    /**
+     * Shows the counted request for session.
+     *
+     * @return int
+     */
+    public function getRequestsCount(): int;
+
+    /**
+     * Specifies the number of seconds after which session
+     * will be automatically expired.
+     *
+     * @param int $ttl
+     */
+    public function setIdLiveTime(int $ttl);
+
+    /**
+     * It must be called before {@link self::start()}.
+     *
+     * @param int $ttl
+     *
+     * @throws RuntimeException
+     */
+    public function setLiveTime(int $ttl);
+
+    /**
+     *Get the actual live time for session.
+     *
+     * @return int
+     */
+    public function getLiveTime(): int;
+
+    /**
+     * Gets last trace timestamp.
+     *
+     * @return int
+     */
+    public function getLastTrace(): int;
+
+    /**
+     * Gets first trace timestamp.
+     *
+     * @return int
+     */
+    public function getFirstTrace(): int;
+
+    /**
+     * Gets last (id) regeneration timestamp.
+     *
+     * @return int
+     */
+    public function getRegenerationTrace(): int;
+
+    /**
+     * Age the flash data for the session.
+     *
+     * @return void
+     */
+    public function ageFlashData();
+
+    /**
+     * Flash a key / value pair to the session.
+     *
+     * @param string $key
+     * @param mixed  $value
+     *
+     * @return void
+     */
+    public function flash(string $key, $value);
+
+    /**
+     * Flash a key / value pair to the session
+     * for immediate use.
+     *
+     * @param string $key
+     * @param mixed $value
+     *
+     * @return void
+     */
+    public function now(string $key, $value);
+
+    /**
+     * Reflash all of the session flash data.
+     *
+     * @return void
+     */
+    public function reflash();
+
+    /**
+     * Reflash a subset of the current flash data.
+     *
+     * @param array|mixed $keys
+     *
+     * @return void
+     */
+    public function keep($keys = null);
+
+    /**
+     * Add a new Fingerprint generator.
+     *
+     * @param Fingerprint $fingerprintGenerator
+     */
+    public function addFingerprintGenerator(Fingerprint $fingerprintGenerator);
+
+    /**
+     * Get used fingerprint.
+     *
+     * @return string
+     */
+    public function getFingerprint(): string;
 }

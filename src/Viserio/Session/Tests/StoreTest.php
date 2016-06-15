@@ -5,6 +5,7 @@ use Defuse\Crypto\Key;
 use ReflectionClass;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use Viserio\Contracts\Session\SessionHandler as SessionHandlerContract;
+use Viserio\Contracts\Encryption\Encrypter as EncrypterContract;
 use Viserio\Encryption\Encrypter;
 use Viserio\Session\Store;
 use Viserio\Session\Fingerprint\UserAgentGenerator;
@@ -16,6 +17,7 @@ class StoreTest extends \PHPUnit_Framework_TestCase
     const SESSION_ID = 'cfdddff0a844531c4a985eae2806a8c761b754df';
 
     private $encrypter;
+    private $encryptString;
     private $session;
 
     public function setUp()
@@ -31,6 +33,23 @@ class StoreTest extends \PHPUnit_Framework_TestCase
                 $this->mock(SessionHandlerContract::class),
                 $this->encrypter,
             ]
+        );
+
+        $this->encryptString = $this->encrypter->encrypt(
+            json_encode(
+                [
+                    'foo' => 'bar',
+                    'bagged' => ['name' => 'viserio'],
+                    '__metadata__' => [
+                        'firstTrace' => 0,
+                        'lastTrace' => 0,
+                        'regenerationTrace' => 1,
+                        'requestsCount' => 0,
+                        'fingerprint' => 0
+                    ]
+                ],
+                \JSON_PRESERVE_ZERO_FRACTION
+            )
         );
     }
 
@@ -62,6 +81,7 @@ class StoreTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals('bar', $session->get('foo'));
         $this->assertTrue($session->isStarted());
+        $this->assertInstanceOf(EncrypterContract::class, $session->getEncrypter());
 
         $session->getHandler()
             ->shouldReceive('write')
@@ -169,14 +189,18 @@ class StoreTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(0, count($session->all()));
     }
 
-    public function testStartMethodResetsLastTrace()
+    public function testStartMethodResetsLastTraceAndFirstTrace()
     {
-        $session = $this->session;
+        $session = $this->encryptedSession();
+        $session->open();
+
         $lastTrace = $session->getLastTrace();
+        $firstTrace = $session->getLastTrace();
 
         $session->start();
 
         $this->assertNotEquals($lastTrace, $session->getLastTrace());
+        $this->assertNotEquals($firstTrace, $session->getFirstTrace());
     }
 
     public function testStartMethodResetsRequestsCount()
@@ -189,7 +213,9 @@ class StoreTest extends \PHPUnit_Framework_TestCase
 
     public function testStartMethodResetsIdRegenerationTrace()
     {
-        $session = $this->session;
+        $session = $this->encryptedSession();
+        $session->open();
+
         $regenerationTrace = $session->getRegenerationTrace();
 
         $session->start();
@@ -240,5 +266,209 @@ class StoreTest extends \PHPUnit_Framework_TestCase
         $session->clear();
 
         $this->assertFalse($session->has('foo'));
+    }
+
+    public function testSessionIdShouldBeRegeneratedIfIdRequestsLimitReached()
+    {
+        $session = $this->session;
+        $session->setIdRequestsLimit(3);
+        $session->setId(self::SESSION_ID);
+        $session->getHandler()
+            ->shouldReceive('read')
+            ->times(4);
+        $session->getHandler()
+            ->shouldReceive('write')
+            ->times(3);
+        $session->getHandler()
+            ->shouldReceive('gc')
+            ->times(3);
+        $session->getHandler()
+            ->shouldReceive('destroy')
+            ->times(1);
+
+        $session->open();
+        $this->assertSame(1, $session->getRequestsCount());
+        $this->assertSame(self::SESSION_ID, $session->getId());
+
+        $session->save();
+        $session->open();
+
+        $this->assertSame(2, $session->getRequestsCount());
+        $this->assertSame(self::SESSION_ID, $session->getId());
+
+        $session->save();
+        $session->open();
+
+        $this->assertSame(3, $session->getRequestsCount());
+        $this->assertSame(self::SESSION_ID, $session->getId());
+
+        $session->save();
+        $session->open();
+
+        $this->assertSame(4, $session->getRequestsCount());
+        $this->assertNotSame(self::SESSION_ID, $session->getId());
+    }
+
+    public function testSetAndGetLiveTime()
+    {
+        $session = $this->session;
+        $session->setLiveTime(60);
+
+        $this->assertSame(60, $session->getLiveTime());
+    }
+
+    /**
+     * @expectedException \RuntimeException
+     */
+    public function testSetLiveTimeToThrowRuntimeException()
+    {
+        $session = $this->session;
+        $session->start();
+        $session->setLiveTime(60);
+    }
+
+    /**
+     * @expectedException \RuntimeException
+     */
+    public function testSetLiveTimeToThrowRuntimeExceptionIfTtlIsSmallThenZero()
+    {
+        $session = $this->session;
+        $session->setLiveTime(0);
+    }
+
+    public function testSessionIdShouldBeRegeneratedIfIdTtlLimitReached()
+    {
+        $encryptString = $this->encrypter->encrypt(
+            json_encode(
+                [
+                    'foo' => 'bar',
+                    'bagged' => ['name' => 'viserio'],
+                    '__metadata__' => [
+                        'firstTrace' => 0,
+                        'lastTrace' => 0,
+                        'regenerationTrace' => 1,
+                        'requestsCount' => 0,
+                        'fingerprint' => 0
+                    ]
+                ],
+                \JSON_PRESERVE_ZERO_FRACTION
+            )
+        );
+        $session = $this->session;
+        $session->setId(self::SESSION_ID);
+        $session->getHandler()
+            ->shouldReceive('read')
+            ->twice()
+            ->andReturn($this->encryptString);
+        $session->setIdLiveTime(5);
+        $session->getHandler()
+            ->shouldReceive('write')
+            ->times(1);
+        $session->getHandler()
+            ->shouldReceive('gc')
+            ->times(1);
+        $session->getHandler()
+            ->shouldReceive('destroy')
+            ->times(1);
+        $session->open();
+
+        $this->assertSame(1, $session->getRequestsCount());
+        $this->assertSame(self::SESSION_ID, $session->getId());
+
+        sleep(10);
+
+        $session->save();
+        $session->open();
+
+        $this->assertNotSame(self::SESSION_ID, $session->getId());
+    }
+
+    private function encryptedSession()
+    {
+        $session = $this->session;
+        $session->setId(self::SESSION_ID);
+        $session->getHandler()
+            ->shouldReceive('read')
+            ->once()
+            ->andReturn($this->encryptString);
+
+        return $session;
+    }
+
+    public function testDataFlashing()
+    {
+        $session = $this->session;
+        $session->flash('foo', 'bar');
+        $session->flash('bar', 0);
+
+        $this->assertTrue($session->has('foo'));
+        $this->assertEquals('bar', $session->get('foo'));
+        $this->assertEquals(0, $session->get('bar'));
+
+        $session->ageFlashData();
+
+        $this->assertTrue($session->has('foo'));
+        $this->assertEquals('bar', $session->get('foo'));
+        $this->assertEquals(0, $session->get('bar'));
+
+        $session->ageFlashData();
+
+        $this->assertFalse($session->has('foo'));
+        $this->assertNull($session->get('foo'));
+    }
+
+    public function testDataFlashingNow()
+    {
+        $session = $this->session;
+        $session->now('foo', 'bar');
+        $session->now('bar', 0);
+
+        $this->assertTrue($session->has('foo'));
+        $this->assertEquals('bar', $session->get('foo'));
+        $this->assertEquals(0, $session->get('bar'));
+
+        $session->ageFlashData();
+
+        $this->assertFalse($session->has('foo'));
+        $this->assertNull($session->get('foo'));
+    }
+
+    public function testDataMergeNewFlashes()
+    {
+        $session = $this->session;
+        $session->flash('foo', 'bar');
+        $session->set('fu', 'baz');
+        $session->set('flash.old', ['qu']);
+
+        $this->assertNotFalse(array_search('foo', $session->get('flash.new')));
+        $this->assertFalse(array_search('fu', $session->get('flash.new')));
+
+        $session->keep(['fu', 'qu']);
+
+        $this->assertNotFalse(array_search('foo', $session->get('flash.new')));
+        $this->assertNotFalse(array_search('fu', $session->get('flash.new')));
+        $this->assertNotFalse(array_search('qu', $session->get('flash.new')));
+        $this->assertFalse(array_search('qu', $session->get('flash.old')));
+    }
+
+    public function testReflash()
+    {
+        $session = $this->session;
+        $session->flash('foo', 'bar');
+        $session->set('flash.old', ['foo']);
+        $session->reflash();
+
+        $this->assertNotFalse(array_search('foo', $session->get('flash.new')));
+        $this->assertFalse(array_search('foo', $session->get('flash.old')));
+    }
+
+    public function testReflashWithNow()
+    {
+        $session = $this->session;
+        $session->now('foo', 'bar');
+        $session->reflash();
+
+        $this->assertNotFalse(array_search('foo', $session->get('flash.new')));
+        $this->assertFalse(array_search('foo', $session->get('flash.old')));
     }
 }
