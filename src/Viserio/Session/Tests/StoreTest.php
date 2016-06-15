@@ -2,13 +2,13 @@
 namespace Viserio\Session\Tests;
 
 use Defuse\Crypto\Key;
-use ReflectionClass;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
-use Viserio\Contracts\Session\SessionHandler as SessionHandlerContract;
+use ReflectionClass;
 use Viserio\Contracts\Encryption\Encrypter as EncrypterContract;
+use Viserio\Contracts\Session\SessionHandler as SessionHandlerContract;
 use Viserio\Encryption\Encrypter;
-use Viserio\Session\Store;
 use Viserio\Session\Fingerprint\UserAgentGenerator;
+use Viserio\Session\Store;
 
 class StoreTest extends \PHPUnit_Framework_TestCase
 {
