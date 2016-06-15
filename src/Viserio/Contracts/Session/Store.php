@@ -3,21 +3,25 @@ namespace Viserio\Contracts\Session;
 
 interface Store
 {
+    const METADATA_NAMESPACE = '__metadata__';
+
     /**
      * Starts the session storage.
+     * It should be called only once at the beginning. If called for existing
+     * session it ovewrites it (clears all values etc).
      *
      * @return bool True if session started.
-     *
-     * @throws \RuntimeException If session fails to start.
      */
     public function start(): bool;
 
     /**
-     * Returns the session ID.
+     * Opens the session (for a given request).
      *
-     * @return string The session ID.
+     * If called earlier, then second (and next ones) call does nothing.
+     *
+     * @return bool True if session started.
      */
-    public function getId(): string;
+    public function open(): bool;
 
     /**
      * Sets the session ID.
@@ -29,11 +33,11 @@ interface Store
     public function setId(string $id);
 
     /**
-     * Returns the session name.
+     * Returns the session ID.
      *
-     * @return string The session name.
+     * @return string The session ID.
      */
-    public function getName();
+    public function getId(): string;
 
     /**
      * Sets the session name.
@@ -43,6 +47,33 @@ interface Store
      * @return void
      */
     public function setName(string $name);
+
+    /**
+     * Returns the session name.
+     *
+     * @return string The session name.
+     */
+    public function getName();
+
+    /**
+     * Invalidates the current session.
+     *
+     * Clears all session attributes and flashes and regenerates the
+     * session and deletes the old session from persistence.
+     *
+     * @return bool True if session invalidated, false if error.
+     */
+    public function invalidate(): bool;
+
+    /**
+     * Migrates the current session to a new session id while maintaining all
+     * session attributes.
+     *
+     * @param bool $destroy  Whether to delete the old session or leave it to garbage collection.
+     *
+     * @return bool True if session migrated, false if error.
+     */
+    public function migrate(bool $destroy = false): bool;
 
     /**
      * Force the session to be saved and closed.

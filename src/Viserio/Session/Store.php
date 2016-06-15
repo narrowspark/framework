@@ -1,13 +1,14 @@
 <?php
 namespace Viserio\Session;
 
-use Exception;
 use RuntimeException;
 use Narrowspark\Arr\StaticArr as Arr;
+use ParagonIE\ConstantTime\Binary;
 use Viserio\Contracts\Encryption\Encrypter as EncrypterContract;
 use Viserio\Contracts\Session\SessionHandler as SessionHandlerContract;
+use Viserio\Contracts\Session\Fingerprint as FingerprintContract;
 use Viserio\Contracts\Session\Store as StoreContract;
-use Viserio\Support\Str;
+use Viserio\Contracts\Support\CharacterType;
 
 class Store implements StoreContract
 {
@@ -47,32 +48,74 @@ class Store implements StoreContract
     protected $encrypter;
 
     /**
-     * The meta-data bag instance.
+     * Number of requests after which id is regeneratd.
      *
-     * @var MetadataBag
+     * @var int|null
      */
-    protected $metaBag;
+    private $idRequestsLimit = null;
 
     /**
-     * The session bags.
+     * Time after id is regenerated.
      *
-     * @var array
+     * @var integer
      */
-    protected $bags = [];
+    private $idTtl = 1440;
 
     /**
-     * Local copies of the session bag data.
+     * Last (id) regeneration timestamp.
      *
-     * @var array
+     * @var int
      */
-    protected $bagData = [];
+    private $regenerationTrace = 0;
+
+    /**
+     * Specifies the number of seconds after which session will be automatically expired.
+     *
+     * @var int
+     */
+    private $ttl = 1440;
+
+    /**
+     * First trace (timestamp), time when session was created.
+     *
+     * @var int
+     */
+    private $firstTrace = 0;
+
+    /**
+     * Last trace (Unix timestamp).
+     *
+     * @var int
+     */
+    private $lastTrace = 0;
+
+    /**
+     * Counted requests.
+     *
+     * @var int
+     */
+    private $requestsCount = 0;
+
+    /**
+     * All fingerprint generators.
+     *
+     * @var Fingerprintcontract[]
+     */
+    private $fingerprintGenerators = [];
+
+    /**
+     * Full fingerprint.
+     *
+     * @var string
+     */
+    private $fingerprint = '';
 
     /**
      * The session attributes.
      *
      * @var array
      */
-    protected $attributes = [];
+    private $attributes = [];
 
     /**
      * Create a new session instance.
@@ -80,13 +123,12 @@ class Store implements StoreContract
      * @param string                 $name
      * @param SessionHandlerContract $handler
      * @param EncrypterContract      $encrypter
-     * @param string|null            $id
      */
     public function __construct(string $name, SessionHandlerContract $handler, EncrypterContract $encrypter)
     {
         $this->name = $name;
         $this->handler = $handler;
-        $this->metabag = new MetadataBag();
+        $this->encrypter = $encrypter;
     }
 
     /**
@@ -94,13 +136,18 @@ class Store implements StoreContract
      */
     public function start(): bool
     {
-        if (!$this->started) {
-            $this->id = $this->generateSessionId();
+        $this->id = $this->generateSessionId();
+        $this->attributes = [];
 
-            $this->loadSession();
+        $this->firstTrace = time();
+        $this->updateLastTrace();
 
-            $this->started = true;
-        }
+        $this->requestsCount = 1;
+        $this->regenerationTrace = time();
+
+        $this->fingerprint = $this->generateFingerprint();
+
+        $this->started = true;
 
         return $this->started;
     }
@@ -108,9 +155,18 @@ class Store implements StoreContract
     /**
      * {@inheritdoc}
      */
-    public function getId(): string
+    public function open(): bool
     {
-        return $this->id;
+        if (!$this->started) {
+            if ($this->id) {
+                $this->loadSession();
+
+                $this->started = true;
+                $this->requestsCount += 1;
+            }
+        }
+
+        return $this->started;
     }
 
     /**
@@ -128,15 +184,49 @@ class Store implements StoreContract
     /**
      * {@inheritdoc}
      */
-    public function getName()
+    public function getId(): string
     {
-        return $this->name;
+        return $this->id;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function invalidate(): bool
+    {
+        $this->clear();
+
+        return $this->migrate(true);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function migrate(bool $destroy = false): bool
+    {
+        if ($destroy) {
+            $this->handler->destroy($this->id);
+        }
+
+        $this->id = $this->generateSessionId();
+
+        $this->regenerationTrace = time();
+
+        return true;
     }
 
     /**
      * {@inheritdoc}
      */
     public function setName(string $name)
+    {
+        $this->name = $name;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getName()
     {
         return $this->name;
     }
@@ -146,12 +236,17 @@ class Store implements StoreContract
      */
     public function save()
     {
-        $bag = $this->metabag->initialize($this->attributes);
-        $bag = $this->encrypter->encrypt(json_encode($bag));
+        if ($this->started) {
+            if ($this->shouldRegenerateId()) {
+                $this->regenerateId();
+            }
 
-        $this->handler->write($this->id, $bag, $this->ttl);
+            $this->updateLastTrace();
+            $this->writeToHandler();
 
-        $this->started = false;
+            $this->attributes = [];
+            $this->started = false;
+        }
     }
 
     /**
@@ -175,7 +270,7 @@ class Store implements StoreContract
      */
     public function set(string $name, $value)
     {
-        return Arr::set($this->attributes, $name, $value);
+        $this->attributes = Arr::set($this->attributes, $name, $value);
     }
 
     /**
@@ -200,14 +295,6 @@ class Store implements StoreContract
     /**
      * {@inheritdoc}
      */
-    public function all(): array
-    {
-        return $this->attributes;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function replace(array $attributes)
     {
         $this->put($attributes);
@@ -218,7 +305,19 @@ class Store implements StoreContract
      */
     public function remove(string $name)
     {
-        return Arr::pull($this->attributes, $name);
+        $value = $this->get($name);
+
+        $this->attributes = Arr::forget($this->attributes, $name);
+
+        return $value;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function all(): array
+    {
+        return $this->attributes;
     }
 
     /**
@@ -238,13 +337,19 @@ class Store implements StoreContract
     }
 
     /**
-     * Gets last (id) regeneration timestamp.
-     *
-     * @return int
+     * @param int $limit
      */
-    public function getRegenerationTrace()
+    public function setIdRequestsLimit($limit)
     {
-        return $this->regenerationTrace;
+        $this->idRequestsLimit = $limit;
+    }
+
+    /**
+     * @param int $ttl
+     */
+    public function setIdTtl($ttl)
+    {
+        $this->idTtl = $ttl;
     }
 
     /**
@@ -261,7 +366,7 @@ class Store implements StoreContract
         }
 
         if ($ttl < 1) {
-            throw new Exception('$ttl must be greather than 0');
+            throw new RuntimeException('$ttl must be greather than 0');
         }
 
         $this->ttl = $ttl;
@@ -274,14 +379,52 @@ class Store implements StoreContract
     {
         return $this->ttl;
     }
+
+    /**
+     * Gets last trace timestamp.
+     *
+     * @return int
+     */
+    public function getLastTrace(): int
+    {
+        return $this->lastTrace;
+    }
+
+    /**
+     * Gets first trace timestamp.
+     *
+     * @return int
+     */
+    public function getFirstTrace(): int
+    {
+        return $this->firstTrace;
+    }
+
+    /**
+     * Gets last (id) regeneration timestamp.
+     *
+     * @return int
+     */
+    public function getRegenerationTrace(): int
+    {
+        return $this->regenerationTrace;
+    }
+
     /**
      * @return int
      */
-    public function getRequestsCount()
+    public function getRequestsCount(): int
     {
         return $this->requestsCount;
     }
 
+    /**
+     * @param FingerprintContract $fingerprintGenerator
+     */
+    public function addFingerprintGenerator(FingerprintContract $fingerprintGenerator)
+    {
+        $this->fingerprintGenerators[] = $fingerprintGenerator;
+    }
 
     /**
      * Get the underlying session handler implementation.
@@ -304,30 +447,13 @@ class Store implements StoreContract
     }
 
     /**
-     * {@inheritdoc}
-     */
-    public function getMetadataBag(): MetadataBag
-    {
-        return $this->metaBag;
-    }
-
-    /**
-     * Get a new, random session ID.
+     * Get used fingerprint.
      *
      * @return string
      */
-    protected function generateSessionId()
+    public function getFingerprint(): string
     {
-        return hash('sha1', uniqid(Str::random(23), true) . Str::random(25) . microtime(true));
-    }
-
-    /**
-     * Determine if session id should be regenerated? (based on request_counter or regenerationTrace)
-     *
-     * @return bool
-     */
-    protected function shouldRegenerateId(): bool
-    {
+        return $this->fingerprint;
     }
 
     /**
@@ -342,28 +468,143 @@ class Store implements StoreContract
     }
 
     /**
+     * Updates last trace timestamp.
+     *
+     * @return void
+     */
+    protected function updateLastTrace()
+    {
+        $this->lastTrace = time();
+    }
+
+    /**
+     * Get a new, random session ID.
+     *
+     * @return string
+     */
+    protected function generateSessionId()
+    {
+        return hash('sha1', uniqid(self::random(23), true) . self::random(25) . microtime(true));
+    }
+
+    /**
+     * Determine if session id should be regenerated? (based on request_counter or regenerationTrace)
+     *
+     * @return bool
+     */
+    private function shouldRegenerateId(): bool
+    {
+        if (($this->idRequestsLimit) && ($this->requestsCount >= $this->idRequestsLimit)) {
+            return true;
+        }
+
+        if (($this->idTtl && $this->regenerationTrace) && ($this->regenerationTrace + $this->idTtl < time())) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
      * Load the session data from the handler.
      *
      * @return bool
      */
-    protected function loadSession(): bool
+    private function loadSession(): bool
     {
-        $bag = $this->handler->read($this->id);
+        $values = $this->readFromHandler();
 
-        if (!$bag) {
+        if (empty($values)) {
             return false;
         }
 
-        $bag = json_decode($this->encrypter->decrypt($bag));
+        $metadata = $values[self::METADATA_NAMESPACE];
 
-        $this->firstTrace = $bag->getFirstTrace();
-        $this->lastTrace = $bag->getLastTrace();
-        $this->regenerationTrace = $bag->getRegenerationTrace();
-        $this->requestsCount = $bag->getRequestsCount();
-        $this->fingerprint = $bag->getFingerprint();
+        $this->firstTrace = $metadata['firstTrace'];
+        $this->lastTrace = $metadata['lastTrace'];
+        $this->regenerationTrace = $metadata['regenerationTrace'];
+        $this->requestsCount = $metadata['requestsCount'];
+        $this->fingerprint = $metadata['fingerprint'];
 
-        $this->attributes = $bag->toArray();
+        $this->attributes = array_merge($this->attributes, $values);
 
         return true;
+    }
+
+    /**
+     * Read the session data from the handler.
+     *
+     * @return array
+     */
+    private function readFromHandler(): array
+    {
+        $data = $this->handler->read($this->id);
+
+        if ($data) {
+            return json_decode($this->encrypter->decrypt($data), true);
+        }
+
+        return [];
+    }
+
+    /**
+     * Write attributes to handler.
+     *
+     * @return void
+     */
+    private function writeToHandler()
+    {
+        $values = $this->attributes;
+
+        $values[self::METADATA_NAMESPACE] = [
+            'firstTrace' => $this->firstTrace,
+            'lastTrace' => $this->lastTrace,
+            'regenerationTrace' => $this->regenerationTrace,
+            'requestsCount' => $this->requestsCount,
+            'fingerprint' => $this->fingerprint,
+        ];
+
+        $this->handler->write(
+            $this->id,
+            $this->encrypter->encrypt(json_encode($values, \JSON_PRESERVE_ZERO_FRACTION))
+        );
+        $this->handler->gc($this->ttl);
+    }
+
+    /**
+     * Generate a fingerprint string.
+     *
+     * @return string
+     */
+    private function generateFingerprint(): string
+    {
+        $fingerprint = '';
+
+        foreach ($this->fingerprintGenerators as $fingerprintGenerator) {
+            $fingerprint .= $fingerprintGenerator->generate();
+        }
+
+        return $fingerprint;
+    }
+
+    /**
+     * Generate a random string of a given length and character set
+     *
+     * @param int $length How many characters do you want?
+     *
+     * @return string
+     */
+    private static function random(int $length = 64): string
+    {
+        $str = '';
+        $characters = CharacterType::PRINTABLE_ASCII;
+        $l = Binary::safeStrlen($characters) - 1;
+
+        for ($i = 0; $i < $length; ++$i) {
+            $r = random_int(0, $l);
+            $str .= $characters[$r];
+        }
+
+        return $str;
     }
 }
