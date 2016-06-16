@@ -124,8 +124,7 @@ class Str extends StaticStringy
     public static function random(
         int $length = 64,
         string $characters = CharacterType::PRINTABLE_ASCII
-    ): string
-    {
+    ): string {
         $str = '';
         $l = self::stringLength($characters) - 1;
 

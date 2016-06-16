@@ -84,8 +84,7 @@ class CookieJar implements JarContract
         $domain = null,
         bool $secure = false,
         bool $httpOnly = true
-    ): CookieContract
-    {
+    ): CookieContract {
         return $this->create($name, $value, 2628000, $path, $domain, $secure, $httpOnly);
     }
 
