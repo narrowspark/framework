@@ -33,8 +33,8 @@ class FileSessionHandler implements SessionHandlerInterface
      * Create a new file driven handler instance.
      *
      * @param FilesystemContract $files
-     * @param int                $path
-     * @param string             $lifetime The session lifetime in minutes
+     * @param string             $path
+     * @param int                $lifetime The session lifetime in minutes
      */
     public function __construct(FilesystemContract $files, string $path, int $lifetime)
     {

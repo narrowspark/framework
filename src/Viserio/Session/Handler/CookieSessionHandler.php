@@ -33,7 +33,7 @@ class CookieSessionHandler implements SessionHandlerInterface
      * Create a new cookie driven handler instance.
      *
      * @param JarContract $cookie
-     * @param int            $minutes
+     * @param int         $lifetime
      */
     public function __construct(JarContract $cookie, int $lifetime)
     {
