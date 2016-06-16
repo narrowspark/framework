@@ -4,12 +4,11 @@ namespace Viserio\Session;
 use DateTimeImmutable;
 use RuntimeException;
 use Narrowspark\Arr\StaticArr as Arr;
-use ParagonIE\ConstantTime\Binary;
 use SessionHandlerInterface as SessionHandlerContract;
 use Viserio\Contracts\Encryption\Encrypter as EncrypterContract;
 use Viserio\Contracts\Session\Fingerprint as FingerprintContract;
 use Viserio\Contracts\Session\Store as StoreContract;
-use Viserio\Contracts\Support\CharacterType;
+use Viserio\Support\Str;
 
 class Store implements StoreContract
 {
@@ -536,7 +535,7 @@ class Store implements StoreContract
      */
     protected function generateSessionId(): string
     {
-        return hash('sha1', uniqid(self::random(23), true) . self::random(25) . microtime(true));
+        return hash('sha1', uniqid(Str::random(23), true) . Str::random(25) . microtime(true));
     }
 
     /**
@@ -661,27 +660,6 @@ class Store implements StoreContract
         }
 
         return $fingerprint;
-    }
-
-    /**
-     * Generate a random string of a given length and character set
-     *
-     * @param int $length How many characters do you want?
-     *
-     * @return string
-     */
-    private static function random(int $length = 64): string
-    {
-        $str = '';
-        $characters = CharacterType::PRINTABLE_ASCII;
-        $l = Binary::safeStrlen($characters) - 1;
-
-        for ($i = 0; $i < $length; ++$i) {
-            $r = random_int(0, $l);
-            $str .= $characters[$r];
-        }
-
-        return $str;
     }
 
     /**

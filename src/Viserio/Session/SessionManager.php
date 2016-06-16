@@ -4,6 +4,7 @@ namespace Viserio\Session;
 use Viserio\Contracts\Config\Manager as ConfigContract;
 use Viserio\Contracts\Encryption\Encrypter as EncrypterContract;
 use Viserio\Contracts\Session\SessionHandler as SessionHandlerContract;
+use Viserio\Contracts\Session\Store as StoreContract;
 use Viserio\Support\Manager;
 
 class SessionManager extends Manager
@@ -53,9 +54,9 @@ class SessionManager extends Manager
     /**
      * Create an instance of the file session driver.
      *
-     * @return \Viserio\Session\Store
+     * @return StoreContract
      */
-    protected function createNativeDriver(): Store
+    protected function createFileDriver(): StoreContract
     {
         $path = $this->config->get($this->getConfigName() . '::files');
         $lifetime = $this->config->get($this->getConfigName() . '::lifetime');
@@ -63,6 +64,18 @@ class SessionManager extends Manager
         return $this->buildSession(
             new FileSessionHandler($this->getContainer()->get('files'), $path, $lifetime)
         );
+    }
+
+     /**
+     * Create an instance of the "cookie" session driver.
+     *
+     * @return StoreContract
+     */
+    protected function createCookieDriver(): StoreContract
+    {
+        $lifetime = $this->config->get($this->getConfigName() . '::lifetime');
+
+        return $this->buildSession(new CookieSessionHandler($this->getContainer()->get('cookie'), $lifetime));
     }
 
     /**
@@ -78,9 +91,9 @@ class SessionManager extends Manager
      *
      * @param SessionHandlerContract $handler
      *
-     * @return \Viserio\Session\Store
+     * @return StoreContract
      */
-    protected function buildSession(SessionHandlerContract $handler): Store
+    protected function buildSession(SessionHandlerContract $handler): StoreContract
     {
         return new Store($this->config->get($this->getConfigName().'::cookie', false), $handler, $this->encrypter);
     }
