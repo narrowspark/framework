@@ -5,8 +5,8 @@ use DateTimeImmutable;
 use RuntimeException;
 use Narrowspark\Arr\StaticArr as Arr;
 use ParagonIE\ConstantTime\Binary;
+use SessionHandlerInterface as SessionHandlerContract;
 use Viserio\Contracts\Encryption\Encrypter as EncrypterContract;
-use Viserio\Contracts\Session\SessionHandler as SessionHandlerContract;
 use Viserio\Contracts\Session\Fingerprint as FingerprintContract;
 use Viserio\Contracts\Session\Store as StoreContract;
 use Viserio\Contracts\Support\CharacterType;
@@ -60,7 +60,7 @@ class Store implements StoreContract
      *
      * @var int
      */
-    private $idTtl = 1440;
+    private $idTtl = 86400;
 
     /**
      * Last (id) regeneration timestamp.
@@ -74,7 +74,7 @@ class Store implements StoreContract
      *
      * @var int
      */
-    private $ttl = 1440;
+    private $ttl = 86400;
 
     /**
      * First trace (timestamp), time when session was created.
@@ -572,7 +572,9 @@ class Store implements StoreContract
             return true;
         }
 
-        if (($this->idTtl && $this->regenerationTrace) && ($this->regenerationTrace + $this->idTtl < $this->timestamp())) {
+        if (($this->idTtl && $this->regenerationTrace) &&
+            ($this->regenerationTrace + $this->idTtl < $this->timestamp())
+        ) {
             return true;
         }
 

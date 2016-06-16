@@ -1,25 +1,19 @@
 <?php
 namespace Viserio\Session\Handler;
 
+use Carbon\Carbon;
+use SessionHandlerInterface;
 use Symfony\Component\Finder\Finder;
-use Viserio\Filesystem\Filesystem;
-use Viserio\Contracts\Session\SessionHandler as SessionHandlerContract;
+use Viserio\Contracts\Filesystem\Filesystem as FilesystemContract;
 
-class FileSessionHandler
+class FileSessionHandler implements SessionHandlerInterface
 {
     /**
      * The filesystem instance.
      *
-     * @var \Viserio\Filesystem\Filesystem
+     * @var FilesystemContract
      */
     protected $files;
-
-    /**
-     * The session file pointer.
-     *
-     * @var resource
-     */
-    protected $fp;
 
     /**
      * The path where sessions should be stored.
@@ -27,49 +21,33 @@ class FileSessionHandler
      * @var string
      */
     protected $path;
+
     /**
-     * The current session ID that's open.
+     * The number of minutes the session should be valid.
      *
-     * @var string
+     * @var int
      */
-    private $currentId;
+    protected $lifetime;
 
     /**
      * Create a new file driven handler instance.
      *
-     * @param \Viserio\Filesystem\Filesystem $files
-     * @param string                         $path
+     * @param FilesystemContract $files
+     * @param int                $path
+     * @param string             $lifetime The session lifetime in minutes
      */
-    public function __construct(Filesystem $files, $path)
+    public function __construct(FilesystemContract $files, string $path, int $lifetime)
     {
         $this->path = $path;
         $this->files = $files;
+        $this->lifetime = $lifetime;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function open($savePath, $sessionName)
+    public function open($savePath, $name)
     {
-        // close any open files before opening something new
-        $this->close();
-
-        $path = $this->path . '/' . $sessionName;
-
-        $this->currentId = $sessionName;
-        $this->fp = fopen($path, 'c+b');
-
-        // Obtain a write lock - must explicitly perform this because
-        // the underlying OS may be advisory as opposed to mandatory
-        $locked = flock($this->fp, LOCK_EX);
-        if (! $locked) {
-            fclose($this->fp);
-            $this->fp = null;
-            $this->currentId = null;
-
-            return false;
-        }
-
         return true;
     }
 
@@ -78,14 +56,6 @@ class FileSessionHandler
      */
     public function close()
     {
-        // only close if there is something to close
-        if ($this->fp) {
-            flock($this->fp, LOCK_UN);
-            fclose($this->fp);
-            $this->fp = null;
-            $this->currentId = null;
-        }
-
         return true;
     }
 
@@ -94,40 +64,23 @@ class FileSessionHandler
      */
     public function read($sessionId)
     {
-        // if the proper session file isn't open, open it
-        if ($sessionId !== $this->currentId || ! $this->fp) {
-            if (! $this->open($this->path, $sessionId)) {
-                throw new \Exception('Could not open session file');
+        $path = $this->path . '/' . $sessionId;
+
+        if ($this->files->has($path)) {
+            if (filemtime($path) >= Carbon::now()->subMinutes($this->lifetime)->getTimestamp()) {
+                return $this->files->read($path);
             }
-        } else {
-            // otherwise make sure we are at the beginning of the file
-            rewind($this->fp);
         }
 
-        $data = '';
-        while (! feof($this->fp)) {
-            $data .= fread($this->fp, 8192);
-        }
-
-        return $data;
+        return '';
     }
 
     /**
      * {@inheritdoc}
      */
-    public function write($sessionId, $data)
+    public function write($sessionId, $sessionData)
     {
-        if ($sessionId !== $this->currentId || ! $this->fp) {
-            if (! $this->open($this->path, $sessionId)) {
-                throw new \Exception('Could not open session file');
-            }
-        }
-
-        ftruncate($this->fp, 0);
-        rewind($this->fp);
-        fwrite($this->fp, $data);
-
-        $this->close();
+        return $this->files->write($this->path . '/' . $sessionId, $sessionData, ['lock' => true]);
     }
 
     /**
@@ -141,32 +94,24 @@ class FileSessionHandler
     /**
      * {@inheritdoc}
      */
-    public function gc($lifetime)
+    public function gc($maxlifetime)
     {
-        // a race condition exists such that garbage collection will throw a
-        // runtime exception if a file in the iterator object returned by the
-        // Finder call in the parent function is deleted out of band before the
-        // iterator call (foreach) gets to it.  this just catches those
-        // exceptions and retries the call (currently set arbitrarily at
-        // 5 retries
-        $retries = 5;
+        $files = Finder::create()
+            ->in($this->path)
+            ->files()
+            ->ignoreDotFiles(false)
+            ->date('<= now - ' . $maxlifetime . ' seconds');
 
-        for ($i = 0; $i < $retries; ++$i) {
-            try {
-                $files = Finder::create()
-                    ->in($this->path)
-                    ->files()
-                    ->ignoreDotFiles(true)
-                    ->date('<= now - ' . $lifetime . ' seconds');
+        $boolArray = [];
 
-                foreach ($files as $file) {
-                    $this->files->delete($file->getRealPath());
-                }
-            } catch (\RuntimeException $exception) {
-                continue;
-            }
-
-            break;
+        foreach ($files as $file) {
+            $boolArray[] = $this->files->delete([$file->getRealPath()]);
         }
+
+        if (in_array('false', $boolArray, true)) {
+            return false;
+        }
+
+        return true;
     }
 }

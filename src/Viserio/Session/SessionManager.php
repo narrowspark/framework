@@ -39,7 +39,7 @@ class SessionManager extends Manager
      */
     public function setDefaultDriver(string $name)
     {
-        $this->config->set($this->getConfigName().'::driver', $name);
+        $this->config->set($this->getConfigName() . '::driver', $name);
     }
 
     /**
@@ -47,7 +47,22 @@ class SessionManager extends Manager
      */
     public function getDefaultDriver(): string
     {
-        return $this->config->get($this->getConfigName().'::driver', '');
+        return $this->config->get($this->getConfigName() . '::driver', '');
+    }
+
+    /**
+     * Create an instance of the file session driver.
+     *
+     * @return \Viserio\Session\Store
+     */
+    protected function createNativeDriver(): Store
+    {
+        $path = $this->config->get($this->getConfigName() . '::files');
+        $lifetime = $this->config->get($this->getConfigName() . '::lifetime');
+
+        return $this->buildSession(
+            new FileSessionHandler($this->getContainer()->get('files'), $path, $lifetime)
+        );
     }
 
     /**

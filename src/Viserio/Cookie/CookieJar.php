@@ -84,7 +84,8 @@ class CookieJar implements JarContract
         $domain = null,
         bool $secure = false,
         bool $httpOnly = true
-    ): CookieContract {
+    ): CookieContract
+    {
         return $this->create($name, $value, 2628000, $path, $domain, $secure, $httpOnly);
     }
 
@@ -226,6 +227,6 @@ class CookieJar implements JarContract
      */
     protected function getPathAndDomain($path, $domain, bool $secure = false): array
     {
-        return [$path ?: $this->path, $domain ?: $this->domain, $secure ?: $this->secure];
+        return [$path ?? $this->path, $domain ?? $this->domain, $secure ?? $this->secure];
     }
 }

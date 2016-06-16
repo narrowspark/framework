@@ -5,7 +5,7 @@ use Defuse\Crypto\Key;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use ReflectionClass;
 use Viserio\Contracts\Encryption\Encrypter as EncrypterContract;
-use Viserio\Contracts\Session\SessionHandler as SessionHandlerContract;
+use SessionHandlerInterface as SessionHandlerContract;
 use Viserio\Encryption\Encrypter;
 use Viserio\Session\Fingerprint\UserAgentGenerator;
 use Viserio\Session\Store;
@@ -89,7 +89,7 @@ class StoreTest extends \PHPUnit_Framework_TestCase
         $session->getHandler()
             ->shouldReceive('gc')
             ->once()
-            ->with(1440);
+            ->with(86400);
 
         $session->save();
 

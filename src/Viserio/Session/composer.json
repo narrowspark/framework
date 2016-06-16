@@ -2,7 +2,7 @@
     "name"       : "viserio/session",
     "type"       : "library",
     "description": "The Viserio Session package.",
-    "keywords"   : ["narrowspark", "viserio", "cookie", "encrypter", "session"],
+    "keywords"   : ["narrowspark", "viserio", "cookie", "encrypter", "session", "csrf", "secure", "flash"],
     "license"    : "MIT",
     "homepage"   : "http://github.com/Narrowspark/session",
     "support"    : {
@@ -19,6 +19,7 @@
     ],
     "require": {
         "php"                              : "^7.0.7",
+        "nesbot/carbon"                    : "^1.21",
         "lcobucci/jwt"                     : "^3.1",
         "narrowspark/arr"                  : "^1.0",
         "paragonie/constant_time_encoding" : "^2.0",
@@ -31,9 +32,11 @@
         "narrowspark/php-cs-fixer-config" : "^1.2",
         "narrowspark/testing-helper"      : "^1.5",
         "mockery/mockery"                 : "^0.9.5",
+        "mikey179/vfsStream"              : "^1.6",
         "phpunit/phpunit"                 : "^5.1",
         "viserio/cookie"                  : "self.version",
-        "viserio/connect"                 : "self.version"
+        "viserio/connect"                 : "self.version",
+        "viserio/filesystem"              : "self.version"
     },
     "autoload": {
         "psr-4": {

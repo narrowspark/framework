@@ -1,6 +1,9 @@
 <?php
 namespace Viserio\Contracts\Session;
 
+use SessionHandlerInterface;
+use Viserio\Contracts\Encryption\Encrypter as EncrypterContract;
+
 interface Store
 {
     const METADATA_NAMESPACE = '__metadata__';
@@ -283,6 +286,20 @@ interface Store
      * @param Fingerprint $fingerprintGenerator
      */
     public function addFingerprintGenerator(Fingerprint $fingerprintGenerator);
+
+    /**
+     * Get the session handler instance.
+     *
+     * @return \SessionHandlerInterface
+     */
+    public function getHandler(): SessionHandlerInterface;
+
+    /**
+     * Get the encrypter instance.
+     *
+     * @return EncrypterContract
+     */
+    public function getEncrypter(): EncrypterContract;
 
     /**
      * Get used fingerprint.
