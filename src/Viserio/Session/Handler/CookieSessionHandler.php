@@ -2,8 +2,8 @@
 namespace Viserio\Session\Handler;
 
 use Carbon\Carbon;
-use SessionHandlerInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use SessionHandlerInterface;
 use Viserio\Contracts\Cookie\QueueingFactory as JarContract;
 
 class CookieSessionHandler implements SessionHandlerInterface
