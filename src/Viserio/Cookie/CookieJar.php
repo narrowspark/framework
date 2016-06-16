@@ -166,14 +166,12 @@ class CookieJar implements JarContract
      *
      * @param  mixed
      */
-    public function queue()
+    public function queue(...$arguments)
     {
-        $args = func_get_args();
-
-        if (reset($args) instanceof CookieContract) {
-            $cookie = reset($args);
+        if (reset($arguments) instanceof CookieContract) {
+            $cookie = reset($arguments);
         } else {
-            $cookie = call_user_func_array([$this, 'create'], $args);
+            $cookie = call_user_func_array([$this, 'create'], $arguments);
         }
 
         $this->queued[$cookie->getName()] = $cookie;
