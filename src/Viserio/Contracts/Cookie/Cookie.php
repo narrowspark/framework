@@ -198,11 +198,4 @@ interface Cookie
      * @link http://tools.ietf.org/html/rfc6265#section-5.1.3
      */
     public function matchDomain(string $domain): bool;
-
-    /**
-     * Returns the cookie as a string.
-     *
-     * @return string The cookie
-     */
-    public function __toString(): string;
 }

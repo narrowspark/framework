@@ -103,6 +103,8 @@ class CookieSessionHandler implements SessionHandlerInterface
     public function destroy($sessionId)
     {
          $this->cookie->queue($this->cookie->forget($sessionId));
+
+         return $this->cookie->hasQueued($sessionId);
     }
 
     /**

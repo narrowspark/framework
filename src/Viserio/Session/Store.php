@@ -507,6 +507,14 @@ class Store implements StoreContract
     }
 
     /**
+     * {@inheritDoc}
+     */
+    public function jsonSerialize()
+    {
+        return $this->values;
+    }
+
+    /**
      * Determine if this is a valid session ID.
      *
      * @param string $id
@@ -535,7 +543,7 @@ class Store implements StoreContract
      */
     protected function generateSessionId(): string
     {
-        return hash('sha1', uniqid(Str::random(23), true) . Str::random(25) . microtime(true));
+        return hash('ripemd160', uniqid(Str::random(23), true) . Str::random(25) . microtime(true));
     }
 
     /**

@@ -13,15 +13,16 @@ class UserAgentGenerator implements FingerprintContract
     private $userAgent;
 
     /**
+     * @param string $secretKey
      * @param string $userAgent
      */
-    public function __construct(string $userAgent = null)
+    public function __construct(string $secretKey, string $userAgent = null)
     {
         if ($userAgent !== null) {
             $userAgent = $_SERVER['HTTP_USER_AGENT'] ?? '';
         }
 
-        $this->userAgent = $userAgent;
+        $this->userAgent = $secretKey . $userAgent;
     }
 
     /**
@@ -29,6 +30,6 @@ class UserAgentGenerator implements FingerprintContract
      */
     public function generate(): string
     {
-        return hash('sha1', $this->userAgent);
+        return hash('ripemd160', $this->userAgent);
     }
 }

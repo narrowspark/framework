@@ -103,16 +103,16 @@ class EncryptCookies implements MiddlewareContract
      */
     protected function decrypt(ServerRequestInterface $request): ServerRequestInterface
     {
-        foreach ($request->cookies as $key => $c) {
+        foreach ($request->cookies as $key => $cookie) {
             if ($this->isDisabled($key)) {
                 continue;
             }
 
             try {
-                $request->cookies->set($key, $this->decryptCookie($c));
-            } catch (EnvironmentIsBrokenException $e) {
+                $request->cookies->set($key, $this->decryptCookie($cookie));
+            } catch (EnvironmentIsBrokenException $exception) {
                 $request->cookies->set($key, null);
-            } catch (WrongKeyOrModifiedCiphertextException $e) {
+            } catch (WrongKeyOrModifiedCiphertextException $exception) {
                 $request->cookies->set($key, null);
             }
         }

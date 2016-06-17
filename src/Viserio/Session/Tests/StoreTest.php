@@ -227,10 +227,11 @@ class StoreTest extends \PHPUnit_Framework_TestCase
     public function testStartMethodGeneratesFingerprint()
     {
         $session = $this->session;
+        $key = Key::createNewRandomKey();
 
         $oldFingerprint = $session->getFingerprint();
 
-        $session->addFingerprintGenerator(new UserAgentGenerator('test'));
+        $session->addFingerprintGenerator(new UserAgentGenerator($key->saveToAsciiSafeString(), 'test'));
 
         $session->start();
 

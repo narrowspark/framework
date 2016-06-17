@@ -99,4 +99,16 @@ class FileSessionHandlerTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($handler->gc(2));
         $this->assertSame('', $handler->read('temp.sess'));
     }
+
+    public function testDestroySuccessfullReturnsTrue()
+    {
+        $handler = new FileSessionHandler(
+            $this->files,
+            __DIR__ . '/stubs',
+            2
+        );
+
+        $this->assertTrue($handler->write('destroy.sess', json_encode(['user_id' => 1])));
+        $this->assertTrue($handler->destroy('destroy.sess'));
+    }
 }

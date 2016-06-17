@@ -82,8 +82,7 @@ class Dispatcher implements DispatcherContract
 
                 return $new;
             }
-        }
-        )->next($request);
+        })->next($request);
     }
 
     /**

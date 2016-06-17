@@ -75,8 +75,7 @@ class CookieSessionHandlerTest extends \PHPUnit_Framework_TestCase
     public function testWriteSuccessfullyReturnsTrue()
     {
         $jar = $this->mock(JarContract::class);
-        $jar
-            ->shouldReceive('queue')
+        $jar->shouldReceive('queue')
             ->once()
             ->with(
                 'write.sess',
@@ -102,5 +101,25 @@ class CookieSessionHandlerTest extends \PHPUnit_Framework_TestCase
         $handler = $this->handler;
 
         $this->assertTrue($handler->gc(2));
+    }
+
+    public function testDestroySuccessfullReturnsTrue()
+    {
+        $jar = $this->mock(JarContract::class);
+        $jar->shouldReceive('queue')
+            ->once();
+        $jar->shouldReceive('forget')
+            ->once()
+            ->with('cookie.sess');
+        $jar->shouldReceive('hasQueued')
+            ->once()
+            ->andReturn(true);
+
+        $handler = new CookieSessionHandler(
+            $jar,
+            5
+        );
+
+        $this->assertTrue($handler->destroy('cookie.sess'));
     }
 }

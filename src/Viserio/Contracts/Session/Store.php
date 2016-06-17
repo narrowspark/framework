@@ -1,10 +1,11 @@
 <?php
 namespace Viserio\Contracts\Session;
 
+use JsonSerializable;
 use SessionHandlerInterface;
 use Viserio\Contracts\Encryption\Encrypter as EncrypterContract;
 
-interface Store
+interface Store extends JsonSerializable
 {
     const METADATA_NAMESPACE = '__metadata__';
 

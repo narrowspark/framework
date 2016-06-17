@@ -88,7 +88,7 @@ class FileSessionHandler implements SessionHandlerInterface
      */
     public function destroy($sessionId)
     {
-        $this->files->delete($this->path . '/' . $sessionId);
+        return $this->files->delete([$this->path . '/' . $sessionId]);
     }
 
     /**
