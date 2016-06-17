@@ -162,9 +162,7 @@ class CookieJar implements JarContract
     }
 
     /**
-     * Queue a cookie to send with the next response.
-     *
-     * @param  mixed
+    * {@inheritdoc}
      */
     public function queue(...$arguments)
     {

@@ -108,10 +108,6 @@ class FileSessionHandler implements SessionHandlerInterface
             $boolArray[] = $this->files->delete([$file->getRealPath()]);
         }
 
-        if (in_array('false', $boolArray, true)) {
-            return false;
-        }
-
-        return true;
+        return !in_array('false', $boolArray, true);
     }
 }

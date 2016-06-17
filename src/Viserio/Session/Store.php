@@ -567,14 +567,12 @@ class Store implements StoreContract
      */
     private function shouldRegenerateId(): bool
     {
-        if ($this->idRequestsLimit && ($this->requestsCount >= $this->idRequestsLimit)) {
+        if ($this->idRequestsLimit !== null && ($this->requestsCount >= $this->idRequestsLimit)) {
             return true;
         }
 
-        if (($this->idTtl && $this->regenerationTrace) &&
-            ($this->regenerationTrace + $this->idTtl < $this->timestamp())
-        ) {
-            return true;
+        if ($this->idTtl && $this->regenerationTrace) {
+            return $this->regenerationTrace + $this->idTtl < $this->timestamp();
         }
 
         return false;

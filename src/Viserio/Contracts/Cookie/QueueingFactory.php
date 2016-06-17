@@ -8,7 +8,7 @@ interface QueueingFactory extends Factory
      *
      * @param  mixed
      */
-    public function queue();
+    public function queue(...$arguments);
 
     /**
      * Remove a cookie from the queue.
