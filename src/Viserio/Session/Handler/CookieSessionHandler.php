@@ -82,13 +82,17 @@ class CookieSessionHandler implements SessionHandlerInterface
      */
     public function write($sessionId, $data)
     {
-        $this->cookie->queue($sessionId, json_encode(
-            [
-                'data' => $data,
-                'expires' => Carbon::now()->addMinutes($this->lifetime)->getTimestamp(),
-            ],
-            \JSON_PRESERVE_ZERO_FRACTION
-        ), $this->lifetime);
+        $this->cookie->queue(
+            $sessionId,
+            json_encode(
+                [
+                    'data' => $data,
+                    'expires' => Carbon::now()->addMinutes($this->lifetime)->getTimestamp(),
+                ],
+                \JSON_PRESERVE_ZERO_FRACTION
+            ),
+            $this->lifetime
+        );
 
         return true;
     }

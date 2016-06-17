@@ -77,23 +77,24 @@ class CookieSessionHandlerTest extends \PHPUnit_Framework_TestCase
         $jar = $this->mock(JarContract::class);
         $jar
             ->shouldReceive('queue')
-            ->once();
-            // ->with(
-            //     'write.sess',
-            //     json_encode(
-            //         [
-            //             'data' => '{"user_id" : 1}',
-            //             'expires' => Carbon::now()->addMinutes(5)->getTimestamp(),
-            //         ],
-            //         \JSON_PRESERVE_ZERO_FRACTION
-            //     )
-            // );
+            ->once()
+            ->with(
+                'write.sess',
+                json_encode(
+                    [
+                        'data' => ['user_id' => 1],
+                        'expires' => Carbon::now()->addMinutes(5)->getTimestamp(),
+                    ],
+                    \JSON_PRESERVE_ZERO_FRACTION
+                ),
+                5
+            );
         $handler = new CookieSessionHandler(
             $jar,
             5
         );
 
-        $this->assertTrue($handler->write('write.sess', json_encode(['user_id' => 1])));
+        $this->assertTrue($handler->write('write.sess', ['user_id' => 1]));
     }
 
     public function testGcSuccessfullyReturnsTrue()
