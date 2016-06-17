@@ -84,7 +84,7 @@ class CookieTest extends \PHPUnit_Framework_TestCase
 
     public function testMatchPath()
     {
-        $cookie = new Cookie('foo', 'bar', '/');
+        $cookie = new Cookie('foo', 'bar', 0, '/');
 
         $this->assertTrue($cookie->matchPath('/'), '->matchPath() returns true if the paths match');
         $this->assertFalse(
@@ -95,8 +95,8 @@ class CookieTest extends \PHPUnit_Framework_TestCase
 
     public function testMatchCookie()
     {
-        $cookie = new Cookie('foo', 'bar', '/');
-        $cookie2 = new Cookie('bar', 'foo', '/');
+        $cookie = new Cookie('foo', 'bar', 0, '/');
+        $cookie2 = new Cookie('bar', 'foo', 0, '/');
 
         $this->assertTrue($cookie->matchCookie($cookie), '->matchCookie() returns true if both cookies are identical');
         $this->assertFalse(

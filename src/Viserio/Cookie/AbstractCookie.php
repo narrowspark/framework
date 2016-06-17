@@ -72,7 +72,7 @@ abstract class AbstractCookie implements Stringable, CookieContract
      *
      * @return self
      */
-    abstract public function withValue($value = null): CookieContract;
+    abstract public function withValue(string $value = null): CookieContract;
 
     /**
      * Returns the value
@@ -101,10 +101,10 @@ abstract class AbstractCookie implements Stringable, CookieContract
      *
      * @return self
      */
-    public function withMaxAge($maxAge = null): CookieContract
+    public function withMaxAge(int $maxAge = null): CookieContract
     {
         $new = clone $this;
-        $new->maxAge = is_int($maxAge) ? $maxAge : null;
+        $new->maxAge = $maxAge;
 
         return $new;
     }
@@ -130,11 +130,7 @@ abstract class AbstractCookie implements Stringable, CookieContract
     }
 
     /**
-     * Sets both the max age and the expires attributes
-     *
-     * @param int|null $expiration
-     *
-     * @return self
+    * {@inhertidoc}
      */
     public function withExpiration($expiration = null): CookieContract
     {
@@ -146,26 +142,20 @@ abstract class AbstractCookie implements Stringable, CookieContract
     }
 
     /**
-     * Sets the expires
-     *
-     * @param \DateTimeInterface $expires
-     *
-     * @return self
+    * {@inhertidoc}
      */
-    public function withExpires(DateTimeInterface $expires): CookieContract
+    public function withExpires($expires): CookieContract
     {
         $new = clone $this;
-        $new->expires = $expires;
+        $new->expires = $this->normalizeExpires($expires);
 
         return $new;
     }
 
     /**
-     * Returns the expiration time
-     *
-     * @return DateTimeInterface
+    * {@inhertidoc}
      */
-    public function getExpiresTime(): DateTimeInterface
+    public function getExpiresTime()
     {
         return $this->expires;
     }
@@ -197,7 +187,7 @@ abstract class AbstractCookie implements Stringable, CookieContract
      *
      * @return self
      */
-    public function withDomain($domain = null): CookieContract
+    public function withDomain(string $domain = null): CookieContract
     {
         $new = clone $this;
         $new->domain = $this->normalizeDomain($domain);
@@ -232,7 +222,7 @@ abstract class AbstractCookie implements Stringable, CookieContract
      *
      * @return self
      */
-    public function withPath($path = null): CookieContract
+    public function withPath(string $path = null): CookieContract
     {
         $new = clone $this;
         $new->path = $this->normalizePath($path);
@@ -355,9 +345,9 @@ abstract class AbstractCookie implements Stringable, CookieContract
     /**
      * Normalizes the expiration value
      *
-     * @param int|\DateTimeInterface $expiration
+     * @param int|string|\DateTimeInterface|null $expiration
      *
-     * @return \DateTime|null
+     * @return \DateTimeInterface|null
      */
     protected function normalizeExpires($expiration = null)
     {
@@ -370,7 +360,7 @@ abstract class AbstractCookie implements Stringable, CookieContract
             if ($expiration <= 0) {
                 $expires->setTimestamp(-PHP_INT_MAX);
             }
-        } elseif ($expiration instanceof DateTime) {
+        } elseif ($expiration instanceof DateTimeInterface) {
             $expires = $expiration;
         }
 

@@ -19,7 +19,7 @@ interface Cookie
      *
      * @return self
      */
-    public function withValue($value = null): Cookie;
+    public function withValue(string $value = null): Cookie;
 
     /**
      * Returns the value.
@@ -42,7 +42,7 @@ interface Cookie
      *
      * @return self
      */
-    public function withMaxAge($maxAge = null): Cookie;
+    public function withMaxAge(int $maxAge = null): Cookie;
 
     /**
      * Returns the max age.
@@ -61,7 +61,7 @@ interface Cookie
     /**
      * Sets both the max age and the expires attributes.
      *
-     * @param int|\DateTimeInterface|null $expiration
+     * @param int|string|\DateTimeInterface|null $expiration
      *
      * @return self
      */
@@ -70,18 +70,18 @@ interface Cookie
     /**
      * Sets the expires
      *
-     * @param \DateTimeInterface $expires.
+     * @param int|string|\DateTimeInterface|null $expires.
      *
      * @return self
      */
-    public function withExpires(DateTimeInterface $expires): Cookie;
+    public function withExpires($expires): Cookie;
 
     /**
-     * Returns the expiration time.
+     * Returns the expiration time
      *
-     * @return \DateTimeInterface
+     * @return \DateTimeInterface|null
      */
-    public function getExpiresTime(): DateTimeInterface;
+    public function getExpiresTime();
 
     /**
      * Checks if there is an expiration time.
@@ -104,7 +104,7 @@ interface Cookie
      *
      * @return self
      */
-    public function withDomain($domain = null): Cookie;
+    public function withDomain(string $domain = null): Cookie;
 
     /**
      * Returns the domain.
@@ -127,7 +127,7 @@ interface Cookie
      *
      * @return self
      */
-    public function withPath($path = null): Cookie;
+    public function withPath(string $path = null): Cookie;
 
     /**
      * Returns the path.
