@@ -10,7 +10,7 @@ final class Cookie extends AbstractCookie
      * @param string          $name       The name of the cookie.
      * @param string|null     $value      The value of the cookie.
      * @param int|string|null $expiration The time the cookie expires.
-     * @param string|null     $path       The path on the server in which the cookie will
+     * @param string          $path       The path on the server in which the cookie will
      *                                    be available on.
      * @param string|null     $domain     The domain that the cookie is available to.
      * @param bool            $secure     Whether the cookie should only be transmitted
@@ -24,7 +24,7 @@ final class Cookie extends AbstractCookie
         string $name,
         $value = null,
         $expiration = 0,
-        $path = null,
+        $path = '/',
         $domain = null,
         bool $secure = false,
         bool $httpOnly = false

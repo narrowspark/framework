@@ -49,16 +49,12 @@ abstract class AbstractCookie implements Stringable, CookieContract
     protected $httpOnly;
 
     /**
-     * Returns the cookie as a string.
-     *
-     * @return string The cookie
+     * {@inheritdoc}
      */
     abstract public function __toString(): string;
 
     /**
-     * Returns the name
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function getName(): string
     {
@@ -66,18 +62,12 @@ abstract class AbstractCookie implements Stringable, CookieContract
     }
 
     /**
-     * Sets the value
-     *
-     * @param string|null $value
-     *
-     * @return self
+     * {@inheritdoc}
      */
     abstract public function withValue(string $value = null): CookieContract;
 
     /**
-     * Returns the value
-     *
-     * @return string|null
+     * {@inheritdoc}
      */
     public function getValue()
     {
@@ -85,9 +75,7 @@ abstract class AbstractCookie implements Stringable, CookieContract
     }
 
     /**
-     * Checks if there is a value
-     *
-     * @return bool
+     * {@inheritdoc}
      */
     public function hasValue(): bool
     {
@@ -95,11 +83,7 @@ abstract class AbstractCookie implements Stringable, CookieContract
     }
 
     /**
-     * Sets the max age
-     *
-     * @param int|null $maxAge
-     *
-     * @return self
+     * {@inheritdoc}
      */
     public function withMaxAge(int $maxAge = null): CookieContract
     {
@@ -110,9 +94,7 @@ abstract class AbstractCookie implements Stringable, CookieContract
     }
 
     /**
-     * Returns the max age
-     *
-     * @return int|null
+     * {@inheritdoc}
      */
     public function getMaxAge()
     {
@@ -120,9 +102,7 @@ abstract class AbstractCookie implements Stringable, CookieContract
     }
 
     /**
-     * Checks if there is a max age
-     *
-     * @return bool
+     * {@inheritdoc}
      */
     public function hasMaxAge(): bool
     {
@@ -130,7 +110,7 @@ abstract class AbstractCookie implements Stringable, CookieContract
     }
 
     /**
-    * {@inhertidoc}
+     * {@inheritdoc}
      */
     public function withExpiration($expiration = null): CookieContract
     {
@@ -142,7 +122,7 @@ abstract class AbstractCookie implements Stringable, CookieContract
     }
 
     /**
-    * {@inhertidoc}
+     * {@inheritdoc}
      */
     public function withExpires($expires): CookieContract
     {
@@ -153,7 +133,7 @@ abstract class AbstractCookie implements Stringable, CookieContract
     }
 
     /**
-    * {@inhertidoc}
+     * {@inheritdoc}
      */
     public function getExpiresTime()
     {
@@ -161,9 +141,7 @@ abstract class AbstractCookie implements Stringable, CookieContract
     }
 
     /**
-     * Checks if there is an expiration time
-     *
-     * @return bool
+     * {@inheritdoc}
      */
     public function hasExpires(): bool
     {
@@ -171,9 +149,7 @@ abstract class AbstractCookie implements Stringable, CookieContract
     }
 
     /**
-     * Checks if the cookie is expired
-     *
-     * @return bool
+     * {@inheritdoc}
      */
     public function isExpired(): bool
     {
@@ -181,11 +157,7 @@ abstract class AbstractCookie implements Stringable, CookieContract
     }
 
     /**
-     * Sets the domain
-     *
-     * @param string|null $domain
-     *
-     * @return self
+     * {@inheritdoc}
      */
     public function withDomain(string $domain = null): CookieContract
     {
@@ -196,9 +168,7 @@ abstract class AbstractCookie implements Stringable, CookieContract
     }
 
     /**
-     * Returns the domain
-     *
-     * @return string|null
+     * {@inheritdoc}
      */
     public function getDomain()
     {
@@ -206,9 +176,7 @@ abstract class AbstractCookie implements Stringable, CookieContract
     }
 
     /**
-     * Checks if there is a domain
-     *
-     * @return bool
+     * {@inheritdoc}
      */
     public function hasDomain(): bool
     {
@@ -216,13 +184,9 @@ abstract class AbstractCookie implements Stringable, CookieContract
     }
 
     /**
-     * Sets the path
-     *
-     * @param string|null $path
-     *
-     * @return self
+     * {@inheritdoc}
      */
-    public function withPath(string $path = null): CookieContract
+    public function withPath(string $path = '/'): CookieContract
     {
         $new = clone $this;
         $new->path = $this->normalizePath($path);
@@ -231,9 +195,7 @@ abstract class AbstractCookie implements Stringable, CookieContract
     }
 
     /**
-     * Returns the path
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function getPath(): string
     {
@@ -241,11 +203,7 @@ abstract class AbstractCookie implements Stringable, CookieContract
     }
 
     /**
-     * Sets the secure
-     *
-     * @param bool $secure
-     *
-     * @return self
+     * {@inheritdoc}
      */
     public function withSecure(bool $secure): CookieContract
     {
@@ -256,9 +214,7 @@ abstract class AbstractCookie implements Stringable, CookieContract
     }
 
     /**
-     * Checks if HTTPS is required
-     *
-     * @return bool
+     * {@inheritdoc}
      */
     public function isSecure(): bool
     {
@@ -266,11 +222,7 @@ abstract class AbstractCookie implements Stringable, CookieContract
     }
 
     /**
-     * Sets the HTTP Only
-     *
-     * @param bool $httpOnly
-     *
-     * @return self
+     * {@inheritdoc}
      */
     public function withHttpOnly(bool $httpOnly): CookieContract
     {
@@ -281,9 +233,7 @@ abstract class AbstractCookie implements Stringable, CookieContract
     }
 
     /**
-     * Checks if it is HTTP-only
-     *
-     * @return bool
+     * {@inheritdoc}
      */
     public function isHttpOnly(): bool
     {
@@ -291,13 +241,7 @@ abstract class AbstractCookie implements Stringable, CookieContract
     }
 
     /**
-     * It matches a path
-     *
-     * @param string $path
-     *
-     * @return bool
-     *
-     * @link http://tools.ietf.org/html/rfc6265#section-5.1.4
+     * {@inheritdoc}
      */
     public function matchPath(string $path): bool
     {
@@ -305,11 +249,7 @@ abstract class AbstractCookie implements Stringable, CookieContract
     }
 
     /**
-     * Checks if it matches with another cookie
-     *
-     * @param \Viserio\Contracts\Cookie\Cookie $cookie
-     *
-     * @return bool
+     * {@inheritdoc}
      */
     public function matchCookie(CookieContract $cookie): bool
     {
@@ -319,13 +259,7 @@ abstract class AbstractCookie implements Stringable, CookieContract
     }
 
     /**
-     * Matches a domain
-     *
-     * @param string $domain
-     *
-     * @return bool
-     *
-     * @link http://tools.ietf.org/html/rfc6265#section-5.1.3
+     * {@inheritdoc}
      */
     public function matchDomain(string $domain): bool
     {
@@ -390,14 +324,14 @@ abstract class AbstractCookie implements Stringable, CookieContract
     /**
      * Processes path as per spec in RFC 6265
      *
-     * @param string|null $path
+     * @param string $path
      *
      * @return string
      *
      * @link http://tools.ietf.org/html/rfc6265#section-5.1.4
      * @link http://tools.ietf.org/html/rfc6265#section-5.2.4
      */
-    protected function normalizePath(string $path = null): string
+    protected function normalizePath(string $path): string
     {
         $path = rtrim($path, '/');
 
