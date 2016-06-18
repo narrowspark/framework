@@ -8,15 +8,15 @@ use Psr\Http\Message\UriInterface;
 interface RequestFactory
 {
     /**
-     * Creates a new PSR-7 request.
+     * Create a new request.
      *
-     * @param string              $method
-     * @param string|UriInterface $uri
+     * @param string $method
+     * @param UriInterface|string $uri
      *
      * @return RequestInterface
      */
     public function createRequest(
-        string $method = 'GET',
+        string $method,
         $uri
     ): RequestInterface;
 }
