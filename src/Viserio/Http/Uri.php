@@ -115,6 +115,8 @@ class Uri implements UriInterface
     private $filterClass = [];
 
     /**
+     * Create a new uri instance.
+     *
      * @param string $url
      */
     public function __construct(string $url = '')

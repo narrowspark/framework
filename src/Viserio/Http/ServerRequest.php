@@ -51,6 +51,8 @@ class ServerRequest extends Request implements ServerRequestInterface
     private $uploadedFiles = [];
 
     /**
+     * Create a new server request instance.
+     *
      * @param null|string|UriInterface             $uri          URI for the request.
      * @param string|null                          $method       HTTP method for the request.
      * @param array                                $headers      Headers for the message.
