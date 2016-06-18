@@ -102,13 +102,10 @@ class FileSessionHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testDestroySuccessfullReturnsTrue()
     {
-        $handler = new FileSessionHandler(
-            $this->files,
-            __DIR__ . '/stubs',
-            2
-        );
+        vfsStream::newFile('destroy.sess')->withContent('Foo Bar')->at($this->root);
 
-        $this->assertTrue($handler->write('destroy.sess', json_encode(['user_id' => 1])));
+        $handler = $this->handler;
+
         $this->assertTrue($handler->destroy('destroy.sess'));
     }
 }

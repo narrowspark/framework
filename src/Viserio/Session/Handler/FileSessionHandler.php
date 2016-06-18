@@ -67,7 +67,7 @@ class FileSessionHandler implements SessionHandlerInterface
         $path = $this->path . '/' . $sessionId;
 
         if ($this->files->has($path)) {
-            if (filemtime($path) >= Carbon::now()->subMinutes($this->lifetime)->getTimestamp()) {
+            if (strtotime($this->files->getTimestamp($path)) >= Carbon::now()->subMinutes($this->lifetime)->getTimestamp()) {
                 return $this->files->read($path);
             }
         }
