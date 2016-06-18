@@ -10,18 +10,12 @@ final class RequestFactory implements RequestFactoryContract
      * {@inheritdoc}
      */
     public function createRequest(
-        $uri,
-        $method = 'GET',
-        array $headers = [],
-        $body = null,
-        $protocolVersion = '1.1'
+        string $method = 'GET',
+        $uri
     ): RequestInterface {
         return new Request(
             $uri,
-            $method,
-            $headers,
-            $body,
-            $protocolVersion
+            $method
         );
     }
 }

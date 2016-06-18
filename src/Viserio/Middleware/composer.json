@@ -2,7 +2,7 @@
     "name"       : "viserio/middleware",
     "type"       : "library",
     "description": "The Viserio Middleware package.",
-    "keywords"   : ["framework", "narrowspark", "viserio", "middleware", "psr7", "psr-7"],
+    "keywords"   : ["framework", "narrowspark", "viserio", "middleware", "psr7", "psr-7", "psr-15", "psr15", "http"],
     "license"    : "MIT",
     "homepage"   : "http://github.com/narrowspark/framework",
     "support"    : {

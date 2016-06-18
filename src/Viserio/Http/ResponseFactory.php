@@ -10,16 +10,10 @@ final class ResponseFactory implements ResponseFactoryContract
      * {@inheritdoc}
      */
     public function createResponse(
-        $statusCode = 200,
-        array $headers = [],
-        $body = null,
-        $protocolVersion = '1.1'
+        int $code = 200
     ): ResponseInterface {
         return new Response(
-            $statusCode,
-            $headers,
-            $body,
-            $protocolVersion
+            $code
         );
     }
 }

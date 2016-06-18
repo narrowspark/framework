@@ -1,41 +1,46 @@
 <?php
 namespace Viserio\Middleware;
 
-use InvalidArgumentException;
 use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\ServerRequestInterface;
-use Viserio\Contracts\Container\ContainerAware;
-use Viserio\Contracts\Middleware\Dispatcher as DispatcherContract;
-use Viserio\Contracts\Middleware\Factory as FactoryContract;
+use Psr\Http\Message\RequestInterface;
+use SplDoublyLinkedList;
+use SplStack;
+use Viserio\Contracts\Middleware\Stack as StackContract;
 use Viserio\Contracts\Middleware\Frame as FrameContract;
 use Viserio\Contracts\Middleware\Middleware as MiddlewareContract;
 use Viserio\Support\Traits\ContainerAwareTrait;
 
-class Dispatcher implements DispatcherContract
+class Dispatcher implements StackContract
 {
     use ContainerAwareTrait;
 
     /**
      * All of the short-hand keys for middlewares.
      *
-     * @var array
+     * @var \SplStack $response
      */
-    protected $middlewares = [];
+    protected $stack;
 
     /**
-     * Create a new dispatcher instance.
+     * A response instance.
+     *
+     * @var ResponseInterface $response
      */
-    public function __construct(FactoryContract $factory)
+    protected $response;
+
+    public function __construct(ResponseInterface $response)
     {
-        $this->factory = $factory;
+        $this->response = $response;
+        $this->stack = new SplStack();
+        $this->stack->setIteratorMode(SplDoublyLinkedList::IT_MODE_LIFO | SplDoublyLinkedList::IT_MODE_KEEP);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function pipe($middleware): DispatcherContract
+    public function withMiddleware(MiddlewareContract $middleware): StackContract
     {
-        $this->middlewares[] = $this->normalize($middleware);
+        $this->stack->push($this->isContainerAware($middleware));
 
         return $this;
     }
@@ -43,36 +48,42 @@ class Dispatcher implements DispatcherContract
     /**
      * {@inheritdoc}
      */
-    public function run(ServerRequestInterface $request, callable $default): ResponseInterface
+    public function withoutMiddleware(MiddlewareContract $middleware): StackContract
     {
-        return (new class($this->middlewares, $this->factory, $default) implements FrameContract {
+        foreach ($this->stack as $key => $stackMiddleware) {
+            if (get_class($this->stack[$key]) === get_class($middleware)) {
+                unset($this->stack[$key]);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function process(RequestInterface $request): ResponseInterface
+    {
+        return (new class($this->stack, $this->response) implements FrameContract {
             private $middlewares;
+
+            private $response;
 
             private $index = 0;
 
-            private $factory;
-
-            private $default;
-
-            public function __construct(array $middleware, FactoryContract $factory, callable $default)
+            public function __construct(SplStack $stack, ResponseInterface $response)
             {
-                $this->middlewares = $middleware;
-                $this->factory = $factory;
-                $this->default = $default;
+                $this->middlewares = $stack;
+                $this->response = $response;
             }
 
-            public function next(ServerRequestInterface $request): ResponseInterface
+            public function next(RequestInterface $request): ResponseInterface
             {
-                if (! isset($this->middlewares[$this->index])) {
-                    return ($this->default)($request);
+                if (!isset($this->middlewares[$this->index])) {
+                    return $this->response;
                 }
 
-                return $this->middlewares[$this->index]->handle($request, $this->nextFrame());
-            }
-
-            public function factory(): FactoryContract
-            {
-                return $this->factory;
+                return $this->middlewares[$this->index]->process($request, $this->nextFrame());
             }
 
             private function nextFrame()
@@ -82,42 +93,8 @@ class Dispatcher implements DispatcherContract
 
                 return $new;
             }
-        })->next($request);
-    }
-
-    /**
-     * Check if middleware is a callable or has MiddlewareContract.
-     *
-     * @param MiddlewareContract|callable(RequestInterface,FrameInterface):ResponseInterface $middleware
-     *
-     * @throws \InvalidArgumentException when adding a invalid middleware to the stack
-     *
-     * @return MiddlewareContract
-     */
-    private function normalize($middleware): MiddlewareContract
-    {
-        if ($middleware instanceof MiddlewareContract) {
-            return $this->isContainerAware($middleware);
-        } elseif (is_callable($middleware)) {
-            return new class($middleware) implements MiddlewareContract {
-                private $callback;
-
-                public function __construct($middleware)
-                {
-                    $this->callback = $middleware;
-                }
-
-                /**
-                 *  {@inheritdoc}
-                 */
-                public function handle(ServerRequestInterface $request, FrameContract $frame): ResponseInterface
-                {
-                    return ($this->callback)($request, $frame);
-                }
-            };
         }
-
-        throw new InvalidArgumentException('Invalid Middleware Detected.');
+        )->next($request);
     }
 
     /**
@@ -129,7 +106,7 @@ class Dispatcher implements DispatcherContract
      */
     private function isContainerAware($middleware): MiddlewareContract
     {
-        if ($middleware instanceof ContainerAware || method_exists($middleware, 'setContainer')) {
+        if (method_exists($middleware, 'setContainer')) {
             $middleware->setContainer($this->getContainer());
         }
 

@@ -6,7 +6,7 @@ use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Contracts\Middleware\Frame as FrameContract;
 use Viserio\Contracts\Middleware\ServerMiddleware as ServerMiddlewareContract;
 
-class FakeMiddleware implements ServerMiddlewareContract
+class FakeMiddleware2 implements ServerMiddlewareContract
 {
     public function process(
         ServerRequestInterface $request,
@@ -14,8 +14,6 @@ class FakeMiddleware implements ServerMiddlewareContract
     ): ResponseInterface {
         $response = $frame->next($request);
 
-        $response = $response->withAddedHeader('X-Foo', 'modified');
-
-        return $response;
+        return $response->withStatus(500);
     }
 }

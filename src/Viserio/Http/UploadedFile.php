@@ -85,7 +85,7 @@ class UploadedFile implements UploadedFileInterface
     public function __construct(
         $streamOrFile,
         $size,
-        $errorStatus,
+        $errorStatus = \UPLOAD_ERR_OK,
         $clientFilename = null,
         $clientMediaType = null
     ) {

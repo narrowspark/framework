@@ -1,6 +1,11 @@
 <?php
 namespace Viserio\Session\Middleware;
 
+use Lcobucci\JWT\Builder;
+use Lcobucci\JWT\Parser;
+use Lcobucci\JWT\Signer;
+use Lcobucci\JWT\Token;
+use Lcobucci\JWT\ValidationData;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Contracts\Middleware\Frame as FrameContract;
@@ -94,8 +99,11 @@ class SessionMiddleware implements MiddlewareContract
         $session = $this->manager->driver();
 
         $cookies = $request->getCookieParams();
+        $key = $session->getConfig()->get('app::key');
 
         $session->setId($cookies[$session->getName()]);
+        $session->addFingerprintGenerator(new ClientIpGenerator($key));
+        $session->addFingerprintGenerator(new UserAgentGenerator($key));
 
         return $session;
     }
