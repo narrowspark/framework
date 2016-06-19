@@ -67,3 +67,8 @@ script:
 
 after_success:
   - ./build/travis/after_success.sh
+
+notifications:
+  webhooks:
+    urls:
+      - https://webhooks.gitter.im/e/5886ad33ac123a7c06b0
