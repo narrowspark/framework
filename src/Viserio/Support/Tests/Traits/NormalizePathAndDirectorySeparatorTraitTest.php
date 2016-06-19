@@ -27,6 +27,14 @@ class NormalizePathAndDirectorySeparatorTraitTest extends \PHPUnit_Framework_Tes
     }
 
     /**
+     * @expectedException LogicException
+     */
+    public function testNormalizePathToThrowException()
+    {
+        $this->normalizePath('..//../test/');
+    }
+
+    /**
      * @dataProvider  pathProvider
      */
     public function testNormalizePath($input, $expected)

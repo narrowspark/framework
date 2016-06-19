@@ -2,7 +2,7 @@
     "name"       : "viserio/support",
     "type"       : "library",
     "description": "The Viserio Support package.",
-    "keywords"   : ["framework", "narrowspark", "support", "viserio", "env", "manager", "dumper"],
+    "keywords"   : ["framework", "narrowspark", "support", "viserio", "env", "manager", "dumper", "invoker"],
     "license"    : "MIT",
     "homepage"   : "http://github.com/narrowspark/framework",
     "support"    : {
@@ -25,7 +25,7 @@
         "viserio/contracts"                   : "self.version"
     },
     "require-dev": {
-        "php-di/invoker"                      : "^1.2",
+        "php-di/invoker"                      : "^1.3",
         "narrowspark/php-cs-fixer-config"     : "^1.1",
         "narrowspark/testing-helper"          : "^1.5",
         "phpunit/phpunit"                     : "^5.1",
@@ -47,7 +47,7 @@
         }
     },
     "suggest": {
-        "php-di/invoker"                      : "Required to use the Invoker Class (~1.2)",
+        "php-di/invoker"                      : "Required to use the Invoker Class (^1.3)",
         "symfony/var-dumper"                  : "Improves the Dumper::dump() (^3.1)."
     },
     "minimum-stability"                       : "dev",

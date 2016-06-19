@@ -1,8 +1,12 @@
 <?php
 namespace Viserio\Support;
 
+use Viserio\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
+
 class Autoloader
 {
+    use NormalizePathAndDirectorySeparatorTrait;
+
     /**
      * The registered directories.
      *
@@ -29,7 +33,7 @@ class Autoloader
         $class = self::normalizeClass($class);
 
         foreach (self::getDirectories() as $directory) {
-            if (file_exists($path = $directory . DIRECTORY_SEPARATOR . $class)) {
+            if (file_exists($path = $this->normalizeDirectorySeparator($directory . '/' . $class))) {
                 require_once $path;
 
                 return true;
@@ -57,6 +61,8 @@ class Autoloader
 
     /**
      * Register the given class loader on the auto-loader stack.
+     *
+     * @codeCoverageIgnore
      */
     public static function register()
     {
@@ -96,7 +102,7 @@ class Autoloader
      *
      * @return array
      */
-    public static function getDirectories()
+    public static function getDirectories(): array
     {
         return self::$directories;
     }
