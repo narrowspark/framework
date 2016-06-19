@@ -1,9 +1,7 @@
 <?php
 namespace Viserio\Contracts\Http;
 
-use InvalidArgumentException;
 use Psr\Http\Message\StreamInterface;
-use RuntimeException;
 
 interface StreamFactory
 {

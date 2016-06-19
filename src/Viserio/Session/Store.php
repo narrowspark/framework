@@ -2,9 +2,8 @@
 namespace Viserio\Session;
 
 use DateTimeImmutable;
-use Psr\Http\Message\ServerRequestInterface;
-use RuntimeException;
 use Narrowspark\Arr\StaticArr as Arr;
+use Psr\Http\Message\ServerRequestInterface;
 use SessionHandlerInterface as SessionHandlerContract;
 use Viserio\Contracts\Encryption\Encrypter as EncrypterContract;
 use Viserio\Contracts\Session\Fingerprint as FingerprintContract;
