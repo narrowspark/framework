@@ -10,11 +10,22 @@ use Viserio\Support\Manager;
 class SessionManager extends Manager
 {
     /**
-     * The array of created "drivers".
+     * All supported drivers.
      *
      * @var array
      */
-    protected $drivers = [];
+    protected $supportedDrivers = [
+        'apc',
+        'apcu',
+        'array',
+        'filesystem',
+        'local',
+        'memcache',
+        'memcached',
+        'mongodb',
+        'predis',
+        'redis',
+    ];
 
     /**
      * Encrypter instance.
@@ -48,7 +59,7 @@ class SessionManager extends Manager
      */
     public function getDefaultDriver(): string
     {
-        return $this->config->get($this->getConfigName() . '::driver', '');
+        return $this->config->get($this->getConfigName() . '::driver', 'local');
     }
 
     /**
@@ -56,7 +67,7 @@ class SessionManager extends Manager
      *
      * @return StoreContract
      */
-    protected function createFileDriver(): StoreContract
+    protected function createLocalDriver(): StoreContract
     {
         $path = $this->config->get($this->getConfigName() . '::files');
         $lifetime = $this->config->get($this->getConfigName() . '::lifetime');
@@ -79,11 +90,129 @@ class SessionManager extends Manager
     }
 
     /**
+     * Create an instance of the Memcached session driver.
+     *
+     * @return StoreContract
+     */
+    protected function createMemcachedDriver(): StoreContract
+    {
+        return $this->createCacheBased('memcached');
+    }
+
+    /**
+     * Create an instance of the Memcache session driver.
+     *
+     * @return StoreContract
+     */
+    protected function createMemcacheDriver(): StoreContract
+    {
+        return $this->createCacheBased('memcache');
+    }
+
+    /**
+     * Create an instance of the Mongodb session driver.
+     *
+     * @return StoreContract
+     */
+    protected function createMongodbDriver(): StoreContract
+    {
+        $options = $this->config->get($this->getConfigName() . '::mongodb');
+
+        return $this->createCacheBased('mongodb', $options);
+    }
+
+    /**
+     * Create an instance of the Predis session driver.
+     *
+     * @return StoreContract
+     */
+    protected function createPredisDriver(): StoreContract
+    {
+        $options = $this->config->get($this->getConfigName() . '::predis');
+
+        return $this->createCacheBased('predis', $options);
+    }
+
+    /**
+     * Create an instance of the Redis session driver.
+     *
+     * @return StoreContract
+     */
+    protected function createRedisDriver(): StoreContract
+    {
+        $options = $this->config->get($this->getConfigName() . '::redis');
+
+        return $this->createCacheBased('redis', $options);
+    }
+
+    /**
+     * Create an instance of the Filesystem session driver.
+     *
+     * @return StoreContract
+     */
+    protected function createFilesystemDriver(): StoreContract
+    {
+        $options = $this->config->get($this->getConfigName() . '::flysystem');
+
+        return $this->createCacheBased('filesystem', $options);
+    }
+
+    /**
+     * Create an instance of the Array session driver.
+     *
+     * @return StoreContract
+     */
+    protected function createArrayDriver(): StoreContract
+    {
+        return $this->createCacheBased('array');
+    }
+
+    /**
+     * Create an instance of the APCu session driver.
+     *
+     * @return StoreContract
+     */
+    protected function createApcuDriver(): StoreContract
+    {
+        return $this->createCacheBased('apcu');
+    }
+
+    /**
+     * Create an instance of the APC session driver.
+     *
+     * @return StoreContract
+     */
+    protected function createApcDriver(): StoreContract
+    {
+        return $this->createCacheBased('apc');
+    }
+
+    /**
      * {@inheritdoc}
      */
     protected function callCustomCreator(string $driver, array $options = [])
     {
         return $this->buildSession(parent::callCustomCreator($driver, $options));
+    }
+
+    /**
+     * Create the cache based session handler instance.
+     *
+     * @param string $driver
+     * @param array $options
+     *
+     * @return StoreContract
+     */
+    protected function createCacheBased($driver, array $options = []): StoreContract
+    {
+        $lifetime = $this->config->get($this->getConfigName() . '::lifetime');
+
+        return $this->buildSession(
+            new CacheBasedSessionHandler(
+                clone $this->getContainer()->get('cache')->driver($driver, $options),
+                $lifetime
+            )
+        );
     }
 
     /**
