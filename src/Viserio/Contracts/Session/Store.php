@@ -2,6 +2,7 @@
 namespace Viserio\Contracts\Session;
 
 use JsonSerializable;
+use Psr\Http\Message\ServerRequestInterface;
 use SessionHandlerInterface;
 use Viserio\Contracts\Encryption\Encrypter as EncrypterContract;
 
@@ -201,22 +202,6 @@ interface Store extends JsonSerializable
     public function setIdLiveTime(int $ttl);
 
     /**
-     * It must be called before {@link self::start()}.
-     *
-     * @param int $ttl
-     *
-     * @throws RuntimeException
-     */
-    public function setLiveTime(int $ttl);
-
-    /**
-     *Get the actual live time for session.
-     *
-     * @return int
-     */
-    public function getLiveTime(): int;
-
-    /**
      * Gets last trace timestamp.
      *
      * @return int
@@ -294,6 +279,22 @@ interface Store extends JsonSerializable
      * @return \SessionHandlerInterface
      */
     public function getHandler(): SessionHandlerInterface;
+
+    /**
+     * Determine if the session handler needs a request.
+     *
+     * @return bool
+     */
+    public function handlerNeedsRequest(): bool;
+
+    /**
+     * Set the request on the handler instance.
+     *
+     * @param ServerRequestInterface $request
+     *
+     * @return void
+     */
+    public function setRequestOnHandler(ServerRequestInterface $request);
 
     /**
      * Get the encrypter instance.

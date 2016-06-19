@@ -86,10 +86,6 @@ class StoreTest extends \PHPUnit_Framework_TestCase
         $session->getHandler()
             ->shouldReceive('write')
             ->once();
-        $session->getHandler()
-            ->shouldReceive('gc')
-            ->once()
-            ->with(86400);
 
         $session->save();
 
@@ -281,9 +277,6 @@ class StoreTest extends \PHPUnit_Framework_TestCase
             ->shouldReceive('write')
             ->times(3);
         $session->getHandler()
-            ->shouldReceive('gc')
-            ->times(3);
-        $session->getHandler()
             ->shouldReceive('destroy')
             ->times(1);
 
@@ -308,33 +301,6 @@ class StoreTest extends \PHPUnit_Framework_TestCase
 
         $this->assertSame(4, $session->getRequestsCount());
         $this->assertNotSame(self::SESSION_ID, $session->getId());
-    }
-
-    public function testSetAndGetLiveTime()
-    {
-        $session = $this->session;
-        $session->setLiveTime(60);
-
-        $this->assertSame(60, $session->getLiveTime());
-    }
-
-    /**
-     * @expectedException \RuntimeException
-     */
-    public function testSetLiveTimeToThrowRuntimeException()
-    {
-        $session = $this->session;
-        $session->start();
-        $session->setLiveTime(60);
-    }
-
-    /**
-     * @expectedException \RuntimeException
-     */
-    public function testSetLiveTimeToThrowRuntimeExceptionIfTtlIsSmallThenZero()
-    {
-        $session = $this->session;
-        $session->setLiveTime(0);
     }
 
     public function testSessionIdShouldBeRegeneratedIfIdTtlLimitReached()
@@ -364,9 +330,6 @@ class StoreTest extends \PHPUnit_Framework_TestCase
         $session->setIdLiveTime(5);
         $session->getHandler()
             ->shouldReceive('write')
-            ->times(1);
-        $session->getHandler()
-            ->shouldReceive('gc')
             ->times(1);
         $session->getHandler()
             ->shouldReceive('destroy')

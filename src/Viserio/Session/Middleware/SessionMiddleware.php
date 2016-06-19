@@ -1,37 +1,23 @@
 <?php
 namespace Viserio\Session\Middleware;
 
-use Lcobucci\JWT\Builder;
-use Lcobucci\JWT\Parser;
-use Lcobucci\JWT\Signer;
-use Lcobucci\JWT\Token;
-use Lcobucci\JWT\ValidationData;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Viserio\Cookie\Cookie;
 use Viserio\Contracts\Middleware\Frame as FrameContract;
-use Viserio\Contracts\Middleware\Middleware as MiddlewareContract;
+use Viserio\Contracts\Middleware\ServerMiddleware as ServerMiddlewareContract;
 use Viserio\Contracts\Session\Store as StoreContract;
 use Viserio\Session\SessionManager;
 use Viserio\Session\Handler\CookieSessionHandler;
 
-class SessionMiddleware implements MiddlewareContract
+class SessionMiddleware implements ServerMiddlewareContract
 {
-    const DEFAULT_COOKIE = 'nvsession';
-    const SESSION_ATTRIBUTE = 'session';
-
     /**
      * The session manager.
      *
      * @var \Viserio\Session\SessionManager
      */
     protected $manager;
-
-    /**
-     * Indicates if the session was handled for the current request.
-     *
-     * @var bool
-     */
-    protected $sessionHandled = false;
 
     /**
      * Create a new session middleware.
@@ -50,8 +36,6 @@ class SessionMiddleware implements MiddlewareContract
      */
     public function handle(ServerRequestInterface $request, FrameContract $frame): ResponseInterface
     {
-        $this->sessionHandled = true;
-
         // If a session driver has been configured, we will need to start the session
         // so that the data is ready.
         if ($this->sessionConfigured()) {
@@ -60,9 +44,18 @@ class SessionMiddleware implements MiddlewareContract
             $session = $this->startSession($request);
         }
 
-        $request->withAttribute(self::SESSION_ATTRIBUTE, $session);
-
         $response = $frame->next($request);
+
+        // Again, if the session has been configured we will need to close out the session
+        // so that the attributes may be persisted to some storage medium. We will also
+        // add the session identifier cookie to the application response headers now.
+        if ($this->sessionConfigured()) {
+            $this->collectGarbage($session);
+
+            $response = $this->addCookieToResponse($response, $session);
+
+            $session->save();
+        }
 
         return $response;
     }
@@ -78,8 +71,8 @@ class SessionMiddleware implements MiddlewareContract
     {
         $session = $this->getSession($request);
 
-        if ($session instanceof CookieSessionHandler) {
-            $session->setRequest($request);
+        if ($session->handlerNeedsRequest()) {
+            $session->setRequestOnHandler($request);
         }
 
         $session->start();
@@ -98,14 +91,33 @@ class SessionMiddleware implements MiddlewareContract
     {
         $session = $this->manager->driver();
 
-        $cookies = $request->getCookieParams();
-        $key = $session->getConfig()->get('app::key');
+        $key = $session->getConfig()->get('session::key');
 
-        $session->setId($cookies[$session->getName()]);
         $session->addFingerprintGenerator(new ClientIpGenerator($key));
         $session->addFingerprintGenerator(new UserAgentGenerator($key));
 
         return $session;
+    }
+
+    /**
+     * Remove the garbage from the session if necessary.
+     *
+     * @param StoreContract $session
+     *
+     * @return void
+     */
+    protected function collectGarbage(SessionInterface $session)
+    {
+        $config = $this->manager->getConfig();
+        $lottery = $config->get('session::lottery');
+        $hitsLottery = random_int(1, $lottery[1]) <= $lottery[0];
+
+        // Here we will see if this request hits the garbage collection lottery by hitting
+        // the odds needed to perform garbage collection on any given request. If we do
+        // hit it, we'll call this handler to let it delete all the expired sessions.
+        if ($hitsLottery) {
+            $session->getHandler()->gc($this->getSessionLifetimeInSeconds());
+        }
     }
 
     /**
@@ -114,11 +126,54 @@ class SessionMiddleware implements MiddlewareContract
      * @param ResponseInterface $response
      * @param StoreContract     $session
      *
-     * @return void
+     * @return ResponseInterface
      */
-    protected function addCookieToResponse(ResponseInterface $response, StoreContract $session)
+    protected function addCookieToResponse(ResponseInterface $response, StoreContract $session): ResponseInterface
     {
+        if ($session->getHandler() instanceof CookieSessionHandler) {
+            $session->save();
+            return response;
+        }
 
+        $config = $this->manager->getConfig();
+
+        $setCookie = new Cookie(
+            $session->getName(),
+            $session->getId(),
+            $this->getCookieExpirationDate($config),
+            $config->get('path'),
+            $config->get('domain'),
+            $config->get('secure', false),
+            $config->get('http_only', false)
+        );
+
+        $response = $response->withoutHeader('Set-Cookie');
+        $response = $response->withAddedHeader('Set-Cookie', (string) $setCookie);
+
+        return $response;
+    }
+
+    /**
+     * Get the session lifetime in seconds.
+     *
+     * @return int
+     */
+    protected function getSessionLifetimeInSeconds(): int
+    {
+        // Default 1 day
+        $lifetime = $this->manager->getConfig()->get('lifetime', 1440);
+
+        return Carbon::now()->subMinutes($lifetime)->getTimestamp();
+    }
+
+    /**
+     * Get the cookie lifetime in seconds.
+     *
+     * @return int
+     */
+    protected function getCookieExpirationDate($config): int
+    {
+        return $config->get('expire_on_close', false) ? 0 : Carbon::now()->addMinutes($config->get('lifetime'));
     }
 
     /**
@@ -126,8 +181,8 @@ class SessionMiddleware implements MiddlewareContract
      *
      * @return bool
      */
-    private function sessionConfigured()
+    private function sessionConfigured(): bool
     {
-        return $this->manager->getConfig()->get('session::driver') !== null;
+        return $this->manager->getConfig()->get('session::driver', null) !== null;
     }
 }

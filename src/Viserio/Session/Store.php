@@ -2,12 +2,14 @@
 namespace Viserio\Session;
 
 use DateTimeImmutable;
+use Psr\Http\Message\ServerRequestInterface;
 use RuntimeException;
 use Narrowspark\Arr\StaticArr as Arr;
 use SessionHandlerInterface as SessionHandlerContract;
 use Viserio\Contracts\Encryption\Encrypter as EncrypterContract;
 use Viserio\Contracts\Session\Fingerprint as FingerprintContract;
 use Viserio\Contracts\Session\Store as StoreContract;
+use Viserio\Session\Handler\CookieSessionHandler;
 use Viserio\Support\Str;
 
 class Store implements StoreContract
@@ -67,13 +69,6 @@ class Store implements StoreContract
      * @var int
      */
     private $regenerationTrace;
-
-    /**
-     * Specifies the number of seconds after which session will be automatically expired.
-     *
-     * @var int
-     */
-    private $ttl = 86400;
 
     /**
      * First trace (timestamp), time when session was created.
@@ -371,30 +366,6 @@ class Store implements StoreContract
     /**
      * {@inheritdoc}
      */
-    public function setLiveTime(int $ttl)
-    {
-        if ($this->started) {
-            throw new RuntimeException('Session is already opened, ttl cannot be set.');
-        }
-
-        if ($ttl < 1) {
-            throw new RuntimeException('$ttl must be greather than 0');
-        }
-
-        $this->ttl = $ttl;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getLiveTime(): int
-    {
-        return $this->ttl;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getLastTrace(): int
     {
         return $this->lastTrace;
@@ -488,6 +459,24 @@ class Store implements StoreContract
     public function getHandler(): SessionHandlerContract
     {
         return $this->handler;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function handlerNeedsRequest(): bool
+    {
+        return $this->handler instanceof CookieSessionHandler;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setRequestOnHandler(ServerRequestInterface $request)
+    {
+        if ($this->handlerNeedsRequest()) {
+            $this->handler->setRequest($request);
+        }
     }
 
     /**
@@ -649,7 +638,6 @@ class Store implements StoreContract
             $this->id,
             $this->encrypter->encrypt(json_encode($values, \JSON_PRESERVE_ZERO_FRACTION))
         );
-        $this->handler->gc($this->ttl);
     }
 
     /**
