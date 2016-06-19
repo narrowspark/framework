@@ -13,7 +13,7 @@ interface ServerMiddleware extends Middleware
      * to the next frame to get a response.
      *
      * @param ServerRequestInterface $request
-     * @param FrameInterface         $frame
+     * @param Frame                  $frame
      *
      * @return ResponseInterface
      */

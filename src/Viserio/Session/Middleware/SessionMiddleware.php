@@ -10,6 +10,7 @@ use Viserio\Contracts\Middleware\{
     Middleware as MiddlewareContract,
     Session\Store as StoreContract
 };
+use Viserio\Contracts\Config\Manager as ConfigContract;
 use Viserio\Cookie\Cookie;
 use Viserio\Session\{
     SessionManager,
@@ -174,9 +175,11 @@ class SessionMiddleware implements ServerMiddlewareContract
     /**
      * Get the cookie lifetime in seconds.
      *
+     * @param ConfigContract $config
+     *
      * @return int
      */
-    protected function getCookieExpirationDate($config): int
+    protected function getCookieExpirationDate(ConfigContract $config): int
     {
         return $config->get('expire_on_close', false) ? 0 : Carbon::now()->addMinutes($config->get('lifetime'));
     }
