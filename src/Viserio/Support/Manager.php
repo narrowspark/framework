@@ -93,13 +93,13 @@ abstract class Manager
      * Builder.
      *
      * @param string|null $driver  The cache driver to use
-     * @param array       $options
+     * @param array       $config
      *
      * @throws \RuntimeException
      *
      * @return mixed
      */
-    public function driver(string $driver = null, array $options = [])
+    public function driver(string $driver = null, array $config = [])
     {
         $driver = $driver ?: $this->getDefaultDriver();
 
@@ -113,7 +113,7 @@ abstract class Manager
         // here and cache it so we can return it next time very quickly. If there is
         // already a driver created by this name, we'll just return that instance.
         if (! isset($this->drivers[$driver])) {
-            $this->drivers[$driver] = $this->createDriver($driver, $options);
+            $this->drivers[$driver] = $this->createDriver($driver, $config);
         }
 
         return $this->drivers[$driver];
@@ -162,13 +162,13 @@ abstract class Manager
      * Create a new driver instance.
      *
      * @param string $driver
-     * @param array  $options
+     * @param array  $config
      *
      * @throws \RuntimeException
      *
      * @return mixed
      */
-    protected function createDriver(string $driver, array $options)
+    protected function createDriver(string $driver, array $config)
     {
         $method = 'create' . Str::studly($driver) . 'Driver';
 
@@ -176,9 +176,9 @@ abstract class Manager
         // will check for a custom driver creator, which allows developers to create
         // drivers using their own customized driver creator Closure to create it.
         if (isset($this->customCreators[$driver])) {
-            return $this->callCustomCreator($driver, $options);
+            return $this->callCustomCreator($driver, $config);
         } elseif (method_exists($this, $method)) {
-            return $this->$method($options);
+            return $this->$method($config);
         } elseif (isset($this->supportedDrivers[$driver]) && class_exists($this->supportedDrivers[$driver])) {
             return new $this->supportedDrivers[$driver]();
         }
@@ -190,13 +190,13 @@ abstract class Manager
      * Call a custom driver creator.
      *
      * @param string $driver
-     * @param array  $options
+     * @param array  $config
      *
      * @return mixed
      */
-    protected function callCustomCreator(string $driver, array $options = [])
+    protected function callCustomCreator(string $driver, array $config = [])
     {
-        return $this->customCreators[$driver]($options);
+        return $this->customCreators[$driver]($config);
     }
 
     /**

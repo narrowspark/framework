@@ -1,48 +1,50 @@
 <?php
 namespace Viserio\Session\Handler;
 
-use Viserio\Contracts\Cookie\Factory as CookieContract;
-use Viserio\Contracts\Http\Request as RequestContract;
+use Carbon\Carbon;
+use Psr\Http\Message\ServerRequestInterface;
+use SessionHandlerInterface;
+use Viserio\Contracts\Cookie\QueueingFactory as JarContract;
 
-class CookieSessionHandler implements \SessionHandlerInterface
+class CookieSessionHandler implements SessionHandlerInterface
 {
     /**
      * The cookie jar instance.
      *
-     * @var CookieContract
+     * @var JarContract
      */
     protected $cookie;
 
     /**
      * The request instance.
      *
-     * @var RequestContract
+     * @var ServerRequestInterface
      */
     protected $request;
 
     /**
-     * The time the cookie expires.
+     * The number of minutes the session should be valid.
      *
      * @var int
      */
-    protected $minutes;
+    protected $lifetime;
 
     /**
      * Create a new cookie driven handler instance.
      *
-     * @param CookieContract $cookie
-     * @param int            $minutes
+     * @param JarContract $cookie
+     * @param int         $lifetime
      */
-    public function __construct(CookieContract $cookie, $minutes)
+    public function __construct(JarContract $cookie, int $lifetime)
     {
         $this->cookie = $cookie;
-        $this->minutes = $minutes;
+        $this->lifetime = $lifetime;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function open($savePath, $sessionName)
+    public function open($savePath, $name)
     {
         return true;
     }
@@ -60,7 +62,19 @@ class CookieSessionHandler implements \SessionHandlerInterface
      */
     public function read($sessionId)
     {
-        return $this->request->getCookie($sessionId) ?: '';
+        $cookies = $this->request->getCookieParams();
+
+        if (! is_null($decoded = json_decode($cookies, true)) && is_array($decoded)) {
+            if (isset($decoded[$sessionId])) {
+                $data = $decoded[$sessionId];
+
+                if (isset($data['expires']) && time() <= $data['expires']) {
+                    return $data['data'];
+                }
+            }
+        }
+
+        return '';
     }
 
     /**
@@ -68,7 +82,19 @@ class CookieSessionHandler implements \SessionHandlerInterface
      */
     public function write($sessionId, $data)
     {
-        //TODO
+        $this->cookie->queue(
+            $sessionId,
+            json_encode(
+                [
+                    'data' => $data,
+                    'expires' => Carbon::now()->addMinutes($this->lifetime)->getTimestamp(),
+                ],
+                \JSON_PRESERVE_ZERO_FRACTION
+            ),
+            $this->lifetime
+        );
+
+        return true;
     }
 
     /**
@@ -76,7 +102,9 @@ class CookieSessionHandler implements \SessionHandlerInterface
      */
     public function destroy($sessionId)
     {
-        $this->cookie->remove($sessionId);
+         $this->cookie->queue($this->cookie->forget($sessionId));
+
+         return $this->cookie->hasQueued($sessionId);
     }
 
     /**
@@ -90,9 +118,9 @@ class CookieSessionHandler implements \SessionHandlerInterface
     /**
      * Set the request instance.
      *
-     * @param RequestContract $request
+     * @param ServerRequestInterface $request
      */
-    public function setRequest(RequestContract $request)
+    public function setRequest(ServerRequestInterface $request)
     {
         $this->request = $request;
     }

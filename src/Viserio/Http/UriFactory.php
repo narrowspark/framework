@@ -9,7 +9,7 @@ final class UriFactory implements UriFactoryContract
     /**
      * {@inheritdoc}
      */
-    public function createUri($uri): UriInterface
+    public function createUri(string $uri = ''): UriInterface
     {
         return new Uri($uri);
     }

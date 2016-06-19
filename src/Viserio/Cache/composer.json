@@ -38,7 +38,7 @@
         }
     ],
     "require": {
-        "php"                                 : "^7.0.7",
+        "php"                                 : "7.0.0 - 7.0.5 || ^7.0.7",
         "cache/adapter-common"                : "^0.3.2",
         "cache/hierarchical-cache"            : "^0.2.1",
         "cache/taggable-cache"                : "^0.4",

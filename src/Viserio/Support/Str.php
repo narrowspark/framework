@@ -1,8 +1,9 @@
 <?php
 namespace Viserio\Support;
 
-use Defuse\Crypto\Core as DefuseCore;
+use ParagonIE\ConstantTime\Binary;
 use Stringy\StaticStringy;
+use Viserio\Contracts\Support\CharacterType;
 
 class Str extends StaticStringy
 {
@@ -87,15 +88,52 @@ class Str extends StaticStringy
     }
 
     /**
-     * Generate a more truly "random" alpha-numeric string.
+     * Binary-safe substr() implementation
      *
-     * @param int $length
+     * @param string   $str
+     * @param int      $start
+     * @param int|null $length
      *
      * @return string
      */
-    public static function random(int $length = 16): string
+    public static function subString(string $str, int $start, $length = null): string
     {
-        return DefuseCore::secureRandom($length);
+        return Binary::safeSubstr($str, $start, $length);
+    }
+
+    /**
+     * Binary-safe strlen() implementation
+     *
+     * @param string $str
+     *
+     * @return int
+     */
+    public static function stringLength(string $str) : int
+    {
+        return Binary::safeStrlen($str);
+    }
+
+    /**
+     * Generate a random string of a given length and character set
+     *
+     * @param int $length How many characters do you want?
+     * @param string $characters Which characters to choose from
+     *
+     * @return string
+     */
+    public static function random(
+        int $length = 64,
+        string $characters = CharacterType::PRINTABLE_ASCII
+    ): string {
+        $str = '';
+        $l = self::stringLength($characters) - 1;
+
+        for ($i = 0; $i < $length; ++$i) {
+            $r = \random_int(0, $l);
+            $str .= $characters[$r];
+        }
+
+        return $str;
     }
 
     /**

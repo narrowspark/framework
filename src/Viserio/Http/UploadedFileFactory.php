@@ -10,12 +10,12 @@ final class UploadedFileFactory implements UploadedFileFactoryContract
      * {@inheritdoc}
      */
     public function createUploadedFile(
-        $data,
-        int $size,
-        int $error,
-        string $clientFile = '',
-        string $clientMediaType = ''
+        $file,
+        int $size = null,
+        int $error = \UPLOAD_ERR_OK,
+        string $clientFilename = null,
+        string $clientMediaType = null
     ): UploadedFileInterface {
-        return new UploadedFile($data, $size, $error, $clientFile, $clientMediaType);
+        return new UploadedFile($file, $size, $error, $clientFilename, $clientMediaType);
     }
 }

@@ -1,21 +1,48 @@
 <?php
 namespace Viserio\Contracts\Http;
 
-use InvalidArgumentException;
 use Psr\Http\Message\StreamInterface;
-use RuntimeException;
 
 interface StreamFactory
 {
     /**
-     * Creates a new PSR-7 stream.
+     * Create a new stream with no content.
      *
-     * @param string|resource|StreamInterface|null $body
-     *
-     * @throws InvalidArgumentException If the stream body is invalid.
-     * @throws RuntimeException         If creating the stream from $body fails.
+     * The stream will be writable and seekable.
      *
      * @return StreamInterface
      */
-    public function createStream($body = null): StreamInterface;
+    public function createStream(): StreamInterface;
+
+    /**
+     * Create a new stream from a callback.
+     *
+     * The stream will be read-only and not seekable.
+     *
+     * @param callable $callback
+     *
+     * @return StreamInterface
+     */
+    public function createStreamFromCallback(callable $callback): StreamInterface;
+
+    /**
+     * Create a new stream from a resource.
+     *
+     * @param resource $body
+     *
+     * @return StreamInterface
+     */
+    public function createStreamFromResource($body): StreamInterface;
+
+    /**
+     * Create a new stream from a string.
+     *
+     * A temporary resource will be created with the content of the string.
+     * The resource will be writable and seekable.
+     *
+     * @param string $body
+     *
+     * @return StreamInterface
+     */
+    public function createStreamFromString(string $body): StreamInterface;
 }

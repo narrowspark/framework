@@ -5,21 +5,15 @@ use Psr\Http\Message\{
     UriInterface,
     ServerRequestInterface
 };
+use Viserio\Contracts\Http\ServerRequestFactory as ServerRequestFactoryContract;
 use Viserio\Http\Stream\LazyOpenStream;
 
-class ServerRequestFactory
+class ServerRequestFactory implements ServerRequestFactoryContract
 {
     /**
-     * Return a ServerRequest populated with superglobals:
-     * $_GET
-     * $_POST
-     * $_COOKIE
-     * $_FILES
-     * $_SERVER
-     *
-     * @return \Psr\Http\Message\ServerRequestInterface
+     * {@inheritdoc}
      */
-    final public static function createFromGlobals(): ServerRequestInterface
+    public function createServerRequestFromGlobals(): ServerRequestInterface
     {
         $server = $_SERVER;
         $method = $server['REQUEST_METHOD'] ?? 'GET';
@@ -38,11 +32,19 @@ class ServerRequestFactory
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function createServerRequest(string $method, $uri): ServerRequestInterface
+    {
+        return new ServerRequest($uri, $method);
+    }
+
+    /**
      * Get a Uri populated with values from $_SERVER.
      *
      * @return \Psr\Http\Message\UriInterface
      */
-    final public static function getUriFromGlobals(): UriInterface
+    protected function getUriFromGlobals(): UriInterface
     {
         $uri = new Uri('');
         $server = $_SERVER;

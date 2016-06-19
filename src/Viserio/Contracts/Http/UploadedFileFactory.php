@@ -1,27 +1,34 @@
 <?php
 namespace Viserio\Contracts\Http;
 
-use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\UploadedFileInterface;
 
 interface UploadedFileFactory
 {
     /**
-     * Create a PSR-7 Uploaded Object.
+     * Create a new uploaded file.
      *
-     * @param StreamInterface|string|resource $data
-     * @param int                             $size
-     * @param int                             $error
-     * @param string                          $clientFile
-     * @param string                          $clientMediaType
+     * If a string is passed it is assumed to be a file path.
+     *
+     * If a size is not provided it will be determined by checking the size of
+     * the file.
+     *
+     * @see http://php.net/manual/features.file-upload.post-method.php
+     * @see http://php.net/manual/features.file-upload.errors.php
+     *
+     * @param string|resource $file
+     * @param integer         $size in bytes
+     * @param integer         $error PHP file upload error
+     * @param string          $clientFilename
+     * @param string          $clientMediaType
      *
      * @return UploadedFileInterface
      */
     public function createUploadedFile(
-        $data,
-        int $size,
-        int $error,
-        string $clientFile = '',
-        string $clientMediaType = ''
+        $file,
+        int $size = null,
+        int $error = \UPLOAD_ERR_OK,
+        string $clientFilename = null,
+        string $clientMediaType = null
     ): UploadedFileInterface;
 }

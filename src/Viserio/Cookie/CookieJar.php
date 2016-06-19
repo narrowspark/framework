@@ -46,6 +46,7 @@ class CookieJar implements JarContract
      * @param string|null $domain
      * @param bool        $secure
      * @param bool        $httpOnly
+     * @param string|bool $sameSite
      *
      * @return Cookie
      */
@@ -56,13 +57,14 @@ class CookieJar implements JarContract
         $path = null,
         $domain = null,
         bool $secure = false,
-        bool $httpOnly = true
+        bool $httpOnly = true,
+        $sameSite = false
     ): CookieContract {
         list($path, $domain, $secure) = $this->getPathAndDomain($path, $domain, $secure);
 
         $time = ($minutes === 0) ? 0 : time() + ($minutes * 60);
 
-        return new Cookie($name, $value, $time, $path, $domain, $secure, $httpOnly);
+        return new Cookie($name, $value, $time, $path, $domain, $secure, $httpOnly, $sameSite);
     }
 
     /**
@@ -74,6 +76,7 @@ class CookieJar implements JarContract
      * @param string|null $domain
      * @param bool        $secure
      * @param bool        $httpOnly
+     * @param string|bool $sameSite
      *
      * @return Cookie
      */
@@ -83,9 +86,10 @@ class CookieJar implements JarContract
         $path = null,
         $domain = null,
         bool $secure = false,
-        bool $httpOnly = true
+        bool $httpOnly = true,
+        $sameSite = false
     ): CookieContract {
-        return $this->create($name, $value, 2628000, $path, $domain, $secure, $httpOnly);
+        return $this->create($name, $value, 2628000, $path, $domain, $secure, $httpOnly, $sameSite);
     }
 
     /**
@@ -103,7 +107,7 @@ class CookieJar implements JarContract
     }
 
     /**
-     * Render SetCookies into a Response.
+     * Render Set-Cookies into a Response.
      *
      * @param \Psr\Http\Message\ResponseInterface $response
      *
@@ -162,18 +166,14 @@ class CookieJar implements JarContract
     }
 
     /**
-     * Queue a cookie to send with the next response.
-     *
-     * @param  mixed
+    * {@inheritdoc}
      */
-    public function queue()
+    public function queue(...$arguments)
     {
-        $args = func_get_args();
-
-        if (reset($args) instanceof CookieContract) {
-            $cookie = reset($args);
+        if (reset($arguments) instanceof CookieContract) {
+            $cookie = reset($arguments);
         } else {
-            $cookie = call_user_func_array([$this, 'create'], $args);
+            $cookie = call_user_func_array([$this, 'create'], $arguments);
         }
 
         $this->queued[$cookie->getName()] = $cookie;
@@ -226,6 +226,6 @@ class CookieJar implements JarContract
      */
     protected function getPathAndDomain($path, $domain, bool $secure = false): array
     {
-        return [$path ?: $this->path, $domain ?: $this->domain, $secure ?: $this->secure];
+        return [$path ?? $this->path, $domain ?? $this->domain, $secure ?? $this->secure];
     }
 }

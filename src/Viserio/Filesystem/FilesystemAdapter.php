@@ -74,9 +74,7 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
      */
     public function write(string $path, string $contents, array $config = []): bool
     {
-        $visibility = isset($configs['visibility']) ? $configs['visibility'] : null;
-
-        $configs['visibility'] = $this->parseVisibility($visibility) ?: [];
+        $configs['visibility'] = $this->parseVisibility($config['visibility'] ?? null) ?: [];
 
         $flyConfig = new FlyConfig($configs);
 
@@ -217,11 +215,7 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
             $deletes[] = $this->driver->delete($path);
         }
 
-        if (in_array('false', $deletes, true)) {
-            return false;
-        }
-
-        return true;
+        return !in_array('false', $deletes, true);
     }
 
     /**
@@ -245,8 +239,6 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
      */
     public function directories(string $directory): array
     {
-        $contents = $this->driver->listContents($directory, false);
-
         return $this->getContents($directory, 'dir');
     }
 
@@ -305,7 +297,7 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
     /**
      * Get the Flysystem driver.
      *
-     * @return object
+     * @return AdapterInterface
      */
     public function getDriver()
     {

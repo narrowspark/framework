@@ -21,6 +21,8 @@ class Response extends AbstractMessage implements ResponseInterface
     private $statusCode = 200;
 
     /**
+     * Create a new response instance.
+     *
      * @param int                             $status  Status code for the response, if any.
      * @param array                           $headers Headers for the response, if any.
      * @param string|resource|StreamInterface $body    Stream identifier and/or actual stream resource

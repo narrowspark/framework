@@ -1,13 +1,17 @@
 <?php
 namespace Viserio\Session;
 
+use DateTimeImmutable;
 use Narrowspark\Arr\StaticArr as Arr;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Session\SessionBagInterface;
-use Symfony\Component\HttpFoundation\Session\Storage\MetadataBag;
+use Psr\Http\Message\ServerRequestInterface;
+use SessionHandlerInterface as SessionHandlerContract;
+use Viserio\Contracts\Encryption\Encrypter as EncrypterContract;
+use Viserio\Contracts\Session\Fingerprint as FingerprintContract;
+use Viserio\Contracts\Session\Store as StoreContract;
 use Viserio\Session\Handler\CookieSessionHandler;
+use Viserio\Support\Str;
 
-class Store
+class Store implements StoreContract
 {
     /**
      * The session ID.
@@ -24,41 +28,6 @@ class Store
     protected $name;
 
     /**
-     * The session attributes.
-     *
-     * @var array
-     */
-    protected $attributes = [];
-
-    /**
-     * The session bags.
-     *
-     * @var array
-     */
-    protected $bags = [];
-
-    /**
-     * The meta-data bag instance.
-     *
-     * @var \Symfony\Component\HttpFoundation\Session\Storage\MetadataBag
-     */
-    protected $metaBag;
-
-    /**
-     * Local copies of the session bag data.
-     *
-     * @var array
-     */
-    protected $bagData = [];
-
-    /**
-     * The session handler implementation.
-     *
-     * @var \SessionHandlerInterface
-     */
-    protected $handler;
-
-    /**
      * Session store started status.
      *
      * @var bool
@@ -66,45 +35,138 @@ class Store
     protected $started = false;
 
     /**
+     * The session handler implementation.
+     *
+     * @var SessionHandlerContract
+     */
+    protected $handler;
+
+    /**
+     * Encrypter instance.
+     *
+     * @var EncrypterContract
+     */
+    protected $encrypter;
+
+    /**
+     * Number of requests after which id is regeneratd.
+     *
+     * @var int|null
+     */
+    private $idRequestsLimit = null;
+
+    /**
+     * Time after id is regenerated.
+     *
+     * @var int
+     */
+    private $idTtl = 86400;
+
+    /**
+     * Last (id) regeneration timestamp.
+     *
+     * @var int
+     */
+    private $regenerationTrace;
+
+    /**
+     * First trace (timestamp), time when session was created.
+     *
+     * @var int
+     */
+    private $firstTrace;
+
+    /**
+     * Last trace (Unix timestamp).
+     *
+     * @var int
+     */
+    private $lastTrace;
+
+    /**
+     * Counted requests.
+     *
+     * @var int
+     */
+    private $requestsCount = 0;
+
+    /**
+     * All fingerprint generators.
+     *
+     * @var Fingerprintcontract[]
+     */
+    private $fingerprintGenerators = [];
+
+    /**
+     * Full fingerprint.
+     *
+     * @var string
+     */
+    private $fingerprint = '';
+
+    /**
+     * The session values.
+     *
+     * @var array
+     */
+    private $values = [];
+
+    /**
      * Create a new session instance.
      *
-     * @param string                   $name
-     * @param \SessionHandlerInterface $handler
-     * @param string|null              $id
+     * @param string                 $name
+     * @param SessionHandlerContract $handler
+     * @param EncrypterContract      $encrypter
      */
-    public function __construct($name, \SessionHandlerInterface $handler, $id = null)
+    public function __construct(string $name, SessionHandlerContract $handler, EncrypterContract $encrypter)
     {
-        $this->setId($id);
         $this->name = $name;
         $this->handler = $handler;
-        $this->metaBag = new MetadataBag();
+        $this->encrypter = $encrypter;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function start()
+    public function start(): bool
     {
-        $this->loadSession();
-        if (! $this->has('_token')) {
-            $this->regenerateToken();
+        $this->id = $this->generateSessionId();
+        $this->values = [];
+
+        $this->firstTrace = $this->timestamp();
+        $this->updateLastTrace();
+
+        $this->requestsCount = 1;
+        $this->regenerationTrace = $this->timestamp();
+
+        $this->fingerprint = $this->generateFingerprint();
+
+        $this->started = true;
+
+        return $this->started;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function open(): bool
+    {
+        if (!$this->started) {
+            if ($this->id) {
+                $this->loadSession();
+
+                $this->started = true;
+                $this->requestsCount += 1;
+            }
         }
 
-        return $this->started = true;
+        return $this->started;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setId($id)
+    public function setId(string $id)
     {
         if (! $this->isValidId($id)) {
             $id = $this->generateSessionId();
@@ -114,15 +176,45 @@ class Store
     }
 
     /**
-     * Determine if this is a valid session ID.
-     *
-     * @param string $id
-     *
-     * @return bool
+     * {@inheritdoc}
      */
-    public function isValidId($id)
+    public function getId(): string
     {
-        return is_string($id) && preg_match('/^[a-f0-9]{40}$/', $id);
+        return $this->id;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function invalidate(): bool
+    {
+        $this->clear();
+
+        return $this->migrate(true);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function migrate(bool $destroy = false): bool
+    {
+        if ($destroy) {
+            $this->handler->destroy($this->id);
+        }
+
+        $this->id = $this->generateSessionId();
+
+        $this->regenerationTrace = $this->timestamp();
+
+        return true;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setName(string $name)
+    {
+        $this->name = $name;
     }
 
     /**
@@ -136,192 +228,76 @@ class Store
     /**
      * {@inheritdoc}
      */
-    public function setName($name)
-    {
-        $this->name = $name;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function invalidate($lifetime = null)
-    {
-        $this->attributes = [];
-        $this->migrate();
-
-        return true;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function migrate($destroy = false, $lifetime = null)
-    {
-        if ($destroy) {
-            $this->handler->destroy($this->getId());
-        }
-
-        $this->setExists(false);
-        $this->id = $this->generateSessionId();
-
-        return true;
-    }
-
-    /**
-     * Generate a new session identifier.
-     *
-     * @param bool $destroy
-     *
-     * @return bool
-     */
-    public function regenerate($destroy = false)
-    {
-        return $this->migrate($destroy);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function save()
     {
-        $this->addBagDataToSession();
-        $this->ageFlashData();
-        $this->handler->write($this->getId(), serialize($this->attributes));
-        $this->started = false;
-    }
+        if ($this->started) {
+            if ($this->shouldRegenerateId()) {
+                $this->migrate(true);
+            }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function has($name)
-    {
-        return $this->get($name) !== null;
-    }
+            $this->updateLastTrace();
+            $this->ageFlashData();
+            $this->writeToHandler();
 
-    /**
-     * {@inheritdoc}
-     */
-    public function get($name, $default = null)
-    {
-        return Arr::get($this->attributes, $name, $default);
-    }
-
-    /**
-     * Get the value of a given key and then forget it.
-     *
-     * @param string $key
-     * @param string $default
-     *
-     * @return mixed
-     */
-    public function pull($key, $default = null)
-    {
-        return Arr::pull($this->attributes, $key, $default);
-    }
-
-    /**
-     * Determine if the session contains old input.
-     *
-     * @param string $key
-     *
-     * @return bool
-     */
-    public function hasOldInput($key = null)
-    {
-        $old = $this->getOldInput($key);
-
-        return $key === null ? count($old) > 0 : $old !== null;
-    }
-
-    /**
-     * Get the requested item from the flashed input array.
-     *
-     * @param string $key
-     * @param mixed  $default
-     *
-     * @return mixed
-     */
-    public function getOldInput($key = null, $default = null)
-    {
-        $input = $this->get('_old_input', []);
-
-        // Input that is flashed to the session can be easily retrieved by the
-        // developer, making repopulating old forms and the like much more
-        // convenient, since the request's previous input is available.
-        return Arr::get($input, $key, $default);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function set($name, $value)
-    {
-        array_set($this->attributes, $name, $value);
-    }
-
-    /**
-     * Put a key / value pair or array of key / value pairs in the session.
-     *
-     * @param string|array $key
-     * @param mixed|null   $value
-     */
-    public function put($key, $value = null)
-    {
-        if (! is_array($key)) {
-            $key = [$key => $value];
-        }
-        foreach ($key as $arrayKey => $arrayValue) {
-            $this->set($arrayKey, $arrayValue);
+            $this->values = [];
+            $this->started = false;
         }
     }
 
     /**
-     * Push a value onto a session array.
-     *
-     * @param string $key
-     * @param string $value
+     * {@inheritdoc}
      */
-    public function push($key, $value)
+    public function has(string $name): bool
+    {
+        return Arr::has($this->values, $name);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function get(string $name, $default = null)
+    {
+        return Arr::get($this->values, $name, $default);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function set(string $name, $value)
+    {
+        $this->values = Arr::set($this->values, $name, $value);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function push(string $key, $value)
     {
         $array = $this->get($key, []);
+
         $array[] = $value;
-        $this->put($key, $array);
+
+        $this->set($key, $array);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function all()
+    public function remove(string $name)
     {
-        return $this->attributes;
+        $value = $this->get($name);
+
+        $this->values = Arr::forget($this->values, $name);
+
+        return $value;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function replace(array $attributes)
+    public function all(): array
     {
-        foreach ($attributes as $key => $value) {
-            $this->put($key, $value);
-        }
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function remove($name)
-    {
-        return Arr::pull($this->attributes, $name);
-    }
-
-    /**
-     * Remove an item from the session.
-     *
-     * @param string $key
-     */
-    public function forget($key)
-    {
-        array_forget($this->attributes, $key);
+        return $this->values;
     }
 
     /**
@@ -329,24 +305,13 @@ class Store
      */
     public function clear()
     {
-        $this->attributes = [];
-        foreach ($this->bags as $bag) {
-            $bag->clear();
-        }
-    }
-
-    /**
-     * Remove all of the items from the session.
-     */
-    public function flush()
-    {
-        $this->clear();
+        $this->values = [];
     }
 
     /**
      * {@inheritdoc}
      */
-    public function isStarted()
+    public function isStarted(): bool
     {
         return $this->started;
     }
@@ -354,107 +319,137 @@ class Store
     /**
      * {@inheritdoc}
      */
-    public function registerBag(SessionBagInterface $bag)
+    public function setIdRequestsLimit(int $limit)
     {
-        $this->bags[$bag->getStorageKey()] = $bag;
+        $this->idRequestsLimit = $limit;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getBag($name)
+    public function getRequestsCount(): int
     {
-        return Arr::get($this->bags, $name, function () {
-            throw new \InvalidArgumentException('Bag not registered.');
-        });
+        return $this->requestsCount;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getMetadataBag()
+    public function setIdLiveTime(int $ttl)
     {
-        return $this->metaBag;
+        $this->idTtl = $ttl;
     }
 
     /**
-     * Get the raw bag data array for a given bag.
-     *
-     * @param string $name
-     *
-     * @return array
+     * {@inheritdoc}
      */
-    public function getBagData($name)
+    public function getLastTrace(): int
     {
-        return Arr::get($this->bagData, $name, []);
+        return $this->lastTrace;
     }
 
     /**
-     * Get the CSRF token value.
-     *
-     * @return string
+     * {@inheritdoc}
      */
-    public function token()
+    public function getFirstTrace(): int
     {
-        return $this->get('_token');
+        return $this->firstTrace;
     }
 
     /**
-     * Get the CSRF token value.
-     *
-     * @return string
+     * {@inheritdoc}
      */
-    public function getToken()
+    public function getRegenerationTrace(): int
     {
-        return $this->token();
+        return $this->regenerationTrace;
     }
 
     /**
-     * Regenerate the CSRF token value.
+     * {@inheritdoc}
      */
-    public function regenerateToken()
+    public function ageFlashData()
     {
-        $this->put('_token', str_random(40));
-    }
-
-    /**
-     * Set the existence of the session on the handler if applicable.
-     *
-     * @param bool $value
-     */
-    public function setExists($value)
-    {
-        if ($this->handler instanceof ExistenceAwareInterface) {
-            $this->handler->setExists($value);
+        foreach ($this->get('flash.old', []) as $old) {
+            $this->remove($old);
         }
+
+        $this->set('flash.old', $this->get('flash.new', []));
+
+        $this->set('flash.new', []);
     }
 
     /**
-     * Get the underlying session handler implementation.
-     *
-     * @return \SessionHandlerInterface
+     * {@inheritdoc}
      */
-    public function getHandler()
+    public function flash(string $key, $value)
+    {
+        $this->set($key, $value);
+
+        $this->push('flash.new', $key);
+
+        $this->removeFromOldFlashData([$key]);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function now(string $key, $value)
+    {
+        $this->set($key, $value);
+
+        $this->push('flash.old', $key);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function reflash()
+    {
+        $this->mergeNewFlashes($this->get('flash.old', []));
+
+        $this->set('flash.old', []);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function keep($keys = null)
+    {
+        $keys = is_array($keys) ? $keys : func_get_args();
+
+        $this->mergeNewFlashes($keys);
+
+        $this->removeFromOldFlashData($keys);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function addFingerprintGenerator(FingerprintContract $fingerprintGenerator)
+    {
+        $this->fingerprintGenerators[] = $fingerprintGenerator;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getHandler(): SessionHandlerContract
     {
         return $this->handler;
     }
 
     /**
-     * Determine if the session handler needs a request.
-     *
-     * @return bool
+     * {@inheritdoc}
      */
-    public function handlerNeedsRequest()
+    public function handlerNeedsRequest(): bool
     {
         return $this->handler instanceof CookieSessionHandler;
     }
 
     /**
-     * Set the request on the handler instance.
-     *
-     * @param \Symfony\Component\HttpFoundation\Request $request
+     * {@inheritdoc}
      */
-    public function setRequestOnHandler(Request $request)
+    public function setRequestOnHandler(ServerRequestInterface $request)
     {
         if ($this->handlerNeedsRequest()) {
             $this->handler->setRequest($request);
@@ -462,38 +457,49 @@ class Store
     }
 
     /**
-     * Load the session data from the handler.
+     * {@inheritdoc}
      */
-    protected function loadSession()
+    public function getEncrypter(): EncrypterContract
     {
-        $this->attributes = $this->readFromHandler();
-
-        foreach (array_merge($this->bags, [$this->metaBag]) as $bag) {
-            $this->initializeLocalBag($bag);
-            $bag->initialize($this->bagData[$bag->getStorageKey()]);
-        }
+        return $this->encrypter;
     }
 
     /**
-     * Read the session data from the handler.
-     *
-     * @return array
+     * {@inheritdoc}
      */
-    protected function readFromHandler()
+    public function getFingerprint(): string
     {
-        $data = $this->handler->read($this->getId());
-
-        return $data ? unserialize($data) : [];
+        return $this->fingerprint;
     }
 
     /**
-     * Initialize a bag in storage if it doesn't exist.
-     *
-     * @param \Symfony\Component\HttpFoundation\Session\SessionBagInterface $bag
+     * {@inheritDoc}
      */
-    protected function initializeLocalBag($bag)
+    public function jsonSerialize()
     {
-        $this->bagData[$bag->getStorageKey()] = $this->pull($bag->getStorageKey(), []);
+        return $this->values;
+    }
+
+    /**
+     * Determine if this is a valid session ID.
+     *
+     * @param string $id
+     *
+     * @return bool
+     */
+    protected function isValidId($id): bool
+    {
+        return is_string($id) && preg_match('/^[a-f0-9]{40}$/', $id);
+    }
+
+    /**
+     * Updates last trace timestamp.
+     *
+     * @return void
+     */
+    protected function updateLastTrace()
+    {
+        $this->lastTrace = $this->timestamp();
     }
 
     /**
@@ -501,18 +507,139 @@ class Store
      *
      * @return string
      */
-    protected function generateSessionId()
+    protected function generateSessionId(): string
     {
-        return sha1(uniqid('', true) . str_random(25) . microtime(true));
+        return hash('ripemd160', uniqid(Str::random(23), true) . Str::random(25) . microtime(true));
     }
 
     /**
-     * Merge all of the bag data into the session.
+     * Merge new flash keys into the new flash array.
+     *
+     * @param array $keys
      */
-    protected function addBagDataToSession()
+    private function mergeNewFlashes(array $keys)
     {
-        foreach (array_merge($this->bags, [$this->metaBag]) as $bag) {
-            $this->put($bag->getStorageKey(), $this->bagData[$bag->getStorageKey()]);
+        $values = array_unique(array_merge($this->get('flash.new', []), $keys));
+
+        $this->set('flash.new', $values);
+    }
+
+    /**
+     * Remove the given keys from the old flash data.
+     *
+     * @param array $keys
+     */
+    private function removeFromOldFlashData(array $keys)
+    {
+        $this->set('flash.old', array_diff($this->get('flash.old', []), $keys));
+    }
+
+    /**
+     * Determine if session id should be regenerated? (based on request_counter or regenerationTrace)
+     *
+     * @return bool
+     */
+    private function shouldRegenerateId(): bool
+    {
+        if ($this->idRequestsLimit !== null && ($this->requestsCount >= $this->idRequestsLimit)) {
+            return true;
         }
+
+        if ($this->idTtl && $this->regenerationTrace) {
+            return $this->regenerationTrace + $this->idTtl < $this->timestamp();
+        }
+
+        return false;
+    }
+
+    /**
+     * Load the session data from the handler.
+     *
+     * @return bool
+     */
+    private function loadSession(): bool
+    {
+        $values = $this->readFromHandler();
+
+        if (empty($values)) {
+            return false;
+        }
+
+        $metadata = $values[self::METADATA_NAMESPACE];
+
+        $this->firstTrace = $metadata['firstTrace'];
+        $this->lastTrace = $metadata['lastTrace'];
+        $this->regenerationTrace = $metadata['regenerationTrace'];
+        $this->requestsCount = $metadata['requestsCount'];
+        $this->fingerprint = $metadata['fingerprint'];
+
+        $this->values = array_merge($this->values, $values);
+
+        return true;
+    }
+
+    /**
+     * Read the session data from the handler.
+     *
+     * @return array
+     */
+    private function readFromHandler(): array
+    {
+        $data = $this->handler->read($this->id);
+
+        if ($data) {
+            return json_decode($this->encrypter->decrypt($data), true);
+        }
+
+        return [];
+    }
+
+    /**
+     * Write values to handler.
+     *
+     * @return void
+     */
+    private function writeToHandler()
+    {
+        $values = $this->values;
+
+        $values[self::METADATA_NAMESPACE] = [
+            'firstTrace' => $this->firstTrace,
+            'lastTrace' => $this->lastTrace,
+            'regenerationTrace' => $this->regenerationTrace,
+            'requestsCount' => $this->requestsCount,
+            'fingerprint' => $this->fingerprint,
+        ];
+
+        $this->handler->write(
+            $this->id,
+            $this->encrypter->encrypt(json_encode($values, \JSON_PRESERVE_ZERO_FRACTION))
+        );
+    }
+
+    /**
+     * Generate a fingerprint string.
+     *
+     * @return string
+     */
+    private function generateFingerprint(): string
+    {
+        $fingerprint = '';
+
+        foreach ($this->fingerprintGenerators as $fingerprintGenerator) {
+            $fingerprint .= $fingerprintGenerator->generate();
+        }
+
+        return $fingerprint;
+    }
+
+    /**
+     * Get time stamp.
+     *
+     * @return int
+     */
+    private function timestamp() : int
+    {
+        return (new DateTimeImmutable())->getTimestamp();
     }
 }

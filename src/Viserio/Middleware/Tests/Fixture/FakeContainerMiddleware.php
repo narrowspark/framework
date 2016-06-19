@@ -5,9 +5,9 @@ use Interop\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Contracts\Middleware\Frame as FrameContract;
-use Viserio\Contracts\Middleware\Middleware as MiddlewareContract;
+use Viserio\Contracts\Middleware\ServerMiddleware as ServerMiddlewareContract;
 
-class FakeContainerMiddleware implements MiddlewareContract
+class FakeContainerMiddleware implements ServerMiddlewareContract
 {
     /**
      * Container instance.
@@ -23,7 +23,7 @@ class FakeContainerMiddleware implements MiddlewareContract
      *
      * @return self
      */
-    public function setContainer(ContainerInterface $container): MiddlewareContract
+    public function setContainer(ContainerInterface $container): ServerMiddlewareContract
     {
         $this->container = $container;
 
@@ -40,7 +40,7 @@ class FakeContainerMiddleware implements MiddlewareContract
         return $this->container;
     }
 
-    public function handle(
+   public function process(
         ServerRequestInterface $request,
         FrameContract $frame
     ): ResponseInterface {

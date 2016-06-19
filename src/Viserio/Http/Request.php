@@ -56,6 +56,8 @@ class Request extends AbstractMessage implements RequestInterface
     protected $uri;
 
     /**
+     * Create a new request instance.
+     *
      * @param null|string|UriInterface             $uri     URI for the request.
      * @param string|null                          $method  HTTP method for the request.
      * @param array                                $headers Headers for the message.

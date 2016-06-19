@@ -7,9 +7,9 @@ mkdir -p build/logs
 set +e
 bash -e <<TRY
     if [[ "$CHECK_CS" = true && "$SEND_COVERAGE" = true ]]; then
-        vendor/bin/phpunit -c phpunit.xml.dist -v --coverage-text="php://stdout" --coverage-xml="build/coverage-xml.xml" --coverage-clover="build/logs/clover.xml";
+        vendor/bin/phpunit -c phpunit.xml.dist --verbose --coverage-text="php://stdout" --coverage-clover=coverage.xml;
     else
-        vendor/bin/phpunit -c phpunit.xml.dist -v;
+        vendor/bin/phpunit -c phpunit.xml.dist --verbose;
     fi
 
     if [[ "$HUMBUG" = true ]]; then vendor/bin/humbug; fi

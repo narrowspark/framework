@@ -3,6 +3,7 @@ namespace Viserio\Cookie;
 
 use DateTime;
 use Psr\Http\Message\ServerRequestInterface;
+use \Viserio\Contracts\Cookie\Cookie as CookieContract;
 
 class RequestCookie
 {
@@ -13,7 +14,7 @@ class RequestCookie
      *
      * @return \Viserio\Contracts\Cookie\Cookie
      */
-    public function fromSetCookieHeader(ServerRequestInterface $request): \Viserio\Contracts\Cookie\Cookie
+    public function fromSetCookieHeader(ServerRequestInterface $request): CookieContract
     {
         return $this->fromStringCookie($request->getHeader('Set-Cookie'));
     }
@@ -25,7 +26,7 @@ class RequestCookie
      *
      * @return \Viserio\Contracts\Cookie\Cookie
      */
-    public function fromCookieHeader(ServerRequestInterface $request): \Viserio\Contracts\Cookie\Cookie
+    public function fromCookieHeader(ServerRequestInterface $request): CookieContract
     {
         return $this->fromStringCookie($request->getHeaderLine('Cookie'));
     }
@@ -37,7 +38,7 @@ class RequestCookie
      *
      * @return \Viserio\Contracts\Cookie\Cookie
      */
-    protected function fromStringCookie(string $string): \Viserio\Contracts\Cookie\Cookie
+    protected function fromStringCookie(string $string): CookieContract
     {
         $rawAttributes = $this->splitOnAttributeDelimiter($string);
 
@@ -74,6 +75,9 @@ class RequestCookie
                     break;
                 case 'httponly':
                     $cookie = $cookie->withHttpOnly(true);
+                    break;
+                case 'samesite':
+                    $cookie = $cookie->withSameSite($attributeValue);
                     break;
             }
         }

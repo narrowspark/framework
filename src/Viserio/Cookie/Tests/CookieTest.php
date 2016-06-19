@@ -84,7 +84,7 @@ class CookieTest extends \PHPUnit_Framework_TestCase
 
     public function testMatchPath()
     {
-        $cookie = new Cookie('foo', 'bar', '/');
+        $cookie = new Cookie('foo', 'bar', 0, '/');
 
         $this->assertTrue($cookie->matchPath('/'), '->matchPath() returns true if the paths match');
         $this->assertFalse(
@@ -95,8 +95,8 @@ class CookieTest extends \PHPUnit_Framework_TestCase
 
     public function testMatchCookie()
     {
-        $cookie = new Cookie('foo', 'bar', '/');
-        $cookie2 = new Cookie('bar', 'foo', '/');
+        $cookie = new Cookie('foo', 'bar', 0, '/');
+        $cookie2 = new Cookie('bar', 'foo', 0, '/');
 
         $this->assertTrue($cookie->matchCookie($cookie), '->matchCookie() returns true if both cookies are identical');
         $this->assertFalse(
@@ -268,6 +268,42 @@ class CookieTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse(
             $cookie->isHttpOnly(),
             '->isHttpOnly() returns whether the cookie is only transmitted over HTTP'
+        );
+    }
+
+    public function testIsSameSite()
+    {
+        $cookie = new Cookie('foo', 'bar', 0, '/', '.myfoodomain.com', false, true, Cookie::SAMESITE_STRICT);
+
+        $this->assertTrue(
+            $cookie->isSameSite(),
+            '->isSameSite() returns whether the cookie is set with samesite value'
+        );
+
+        $cookie = $cookie->withSameSite(false);
+
+        $this->assertFalse(
+            $cookie->isSameSite(),
+            '->isHttpOnly() returns whether the cookie is send normal without samesite'
+        );
+    }
+
+    public function testGetSameSite()
+    {
+        $cookie = new Cookie('foo', 'bar', 0, '/', '.myfoodomain.com', false, true, Cookie::SAMESITE_STRICT);
+
+        $this->assertSame(
+            Cookie::SAMESITE_STRICT,
+            $cookie->getSameSite(),
+            '->getSameSite() returns cookies samesite which is set to strict'
+        );
+
+        $cookie = $cookie->withSameSite(Cookie::SAMESITE_LAX);
+
+        $this->assertSame(
+            Cookie::SAMESITE_LAX,
+            $cookie->getSameSite(),
+            '->getSameSite() returns cookies samesite which is set to lax'
         );
     }
 

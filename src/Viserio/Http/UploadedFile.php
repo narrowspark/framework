@@ -61,6 +61,7 @@ class UploadedFile implements UploadedFileInterface
      * @var bool
      */
     protected $moved = false;
+
     /**
      * @var int[]
      */
@@ -76,6 +77,8 @@ class UploadedFile implements UploadedFileInterface
     ];
 
     /**
+     * Create a new uploadedfile instance.
+     *
      * @param StreamInterface|string|resource $streamOrFile
      * @param int                             $size
      * @param int                             $errorStatus
@@ -85,7 +88,7 @@ class UploadedFile implements UploadedFileInterface
     public function __construct(
         $streamOrFile,
         $size,
-        $errorStatus,
+        $errorStatus = \UPLOAD_ERR_OK,
         $clientFilename = null,
         $clientMediaType = null
     ) {

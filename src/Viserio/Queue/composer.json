@@ -18,7 +18,7 @@
         }
     ],
     "require": {
-        "php"                             : "^7.0.7",
+        "php"                             : "7.0.0 - 7.0.5 || ^7.0.7",
         "viserio/cotracts"                : "self.version",
         "symfony/event-dispatcher"        : "^3.1"
     },

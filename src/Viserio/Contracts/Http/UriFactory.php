@@ -1,19 +1,18 @@
 <?php
 namespace Viserio\Contracts\Http;
 
-use InvalidArgumentException;
 use Psr\Http\Message\UriInterface;
 
 interface UriFactory
 {
     /**
-     * Creates an PSR-7 URI.
+     * Create a new URI.
      *
-     * @param string|UriInterface $uri
-     *
-     * @throws InvalidArgumentException If the $uri argument can not be converted into a valid URI.
+     * @param string $uri
      *
      * @return UriInterface
+     *
+     * @throws \InvalidArgumentException If the given URI cannot be parsed.
      */
-    public function createUri($uri): UriInterface;
+    public function createUri(string $uri = ''): UriInterface;
 }

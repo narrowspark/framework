@@ -15,7 +15,7 @@ addons:
 matrix:
   include:
     # Use the newer stack for HHVM as HHVM does not support Precise anymore since a long time and so Precise has an outdated version
-    - php: hhvm
+    - php: hhvm-3.12
       sudo: required
       dist: trusty
       group: edge
@@ -25,9 +25,7 @@ matrix:
     - php: 7.0
       env: SETUP=basic HUMBUG=true
     - php: 7.0
-      env: SETUP=basic ADAPTER=Libuv
-    - php: 7.0
-      env: SETUP=basic ADAPTER=Uv
+      env: SETUP=lowest
     - php: 7.0
       env: SETUP=stable
   allow_failures:
@@ -35,6 +33,9 @@ matrix:
       php: 7.0
     - env: SETUP=lowest
       php: 7.0
+    # HHVM dont have full support for php7
+    - env: SETUP=basic
+      php: hhvm-3.12
   fast_finish: true
 
 cache:
@@ -66,3 +67,8 @@ script:
 
 after_success:
   - ./build/travis/after_success.sh
+
+notifications:
+  webhooks:
+    urls:
+      - https://webhooks.gitter.im/e/5886ad33ac123a7c06b0

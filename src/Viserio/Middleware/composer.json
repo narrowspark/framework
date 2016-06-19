@@ -2,7 +2,7 @@
     "name"       : "viserio/middleware",
     "type"       : "library",
     "description": "The Viserio Middleware package.",
-    "keywords"   : ["framework", "narrowspark", "viserio", "middleware", "psr7", "psr-7"],
+    "keywords"   : ["framework", "narrowspark", "viserio", "middleware", "psr7", "psr-7", "psr-15", "psr15", "http"],
     "license"    : "MIT",
     "homepage"   : "http://github.com/narrowspark/framework",
     "support"    : {
@@ -18,7 +18,7 @@
         }
     ],
     "require": {
-        "php"                                                : "^7.0.7",
+        "php"                                                : "7.0.0 - 7.0.5 || ^7.0.7",
         "container-interop/container-interop"                : "^1.1",
         "psr/http-message"                                   : "^1.0",
         "viserio/cotracts"                                   : "self.version"

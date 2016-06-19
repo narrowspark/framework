@@ -34,7 +34,7 @@ trait ContainerAwareTrait
      *
      * @return \Interop\Container\ContainerInterface
      */
-    public function getContainer(): \Interop\Container\ContainerInterface
+    public function getContainer(): ContainerInteropInterface
     {
         if (! $this->container) {
             throw new RuntimeException('Container is not set up.');
