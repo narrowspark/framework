@@ -1,7 +1,6 @@
 <?php
 namespace Viserio\Contracts\Http;
 
-use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\UploadedFileInterface;
 
 interface UploadedFileFactory
