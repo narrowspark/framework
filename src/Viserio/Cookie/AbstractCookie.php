@@ -248,7 +248,7 @@ abstract class AbstractCookie implements Stringable, CookieContract
     /**
      * {@inheritdoc}
      */
-    public function withSameSite(string $sameSite): CookieContract
+    public function withSameSite($sameSite): CookieContract
     {
         $new = clone $this;
         $new->sameSite = $this->validateSameSite($sameSite);
