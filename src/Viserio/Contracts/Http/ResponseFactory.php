@@ -2,7 +2,6 @@
 namespace Viserio\Contracts\Http;
 
 use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\StreamInterface;
 
 interface ResponseFactory
 {

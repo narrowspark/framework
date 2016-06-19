@@ -2,7 +2,6 @@
 namespace Viserio\Contracts\Http;
 
 use Psr\Http\Message\RequestInterface;
-use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\UriInterface;
 
 interface RequestFactory
@@ -10,7 +9,7 @@ interface RequestFactory
     /**
      * Create a new request.
      *
-     * @param string $method
+     * @param string              $method
      * @param UriInterface|string $uri
      *
      * @return RequestInterface

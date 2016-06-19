@@ -2,6 +2,7 @@
 namespace Viserio\Contracts\Http;
 
 use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Message\UriInterface;
 
 interface ServerRequestFactory
 {

@@ -44,5 +44,5 @@ interface StreamFactory
      *
      * @return StreamInterface
      */
-    public function createStreamFromString($body): StreamInterface;
+    public function createStreamFromString(string $body): StreamInterface;
 }

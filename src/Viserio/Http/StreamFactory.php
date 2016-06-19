@@ -33,7 +33,7 @@ final class StreamFactory implements StreamFactoryContract
     /**
      * {@inheritdoc}
      */
-    public function createStreamFromString($body): StreamInterface
+    public function createStreamFromString(string $body): StreamInterface
     {
         return Util::getStream($body);
     }
