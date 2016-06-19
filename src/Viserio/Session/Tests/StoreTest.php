@@ -305,22 +305,6 @@ class StoreTest extends \PHPUnit_Framework_TestCase
 
     public function testSessionIdShouldBeRegeneratedIfIdTtlLimitReached()
     {
-        $encryptString = $this->encrypter->encrypt(
-            json_encode(
-                [
-                    'foo' => 'bar',
-                    'bagged' => ['name' => 'viserio'],
-                    '__metadata__' => [
-                        'firstTrace' => 0,
-                        'lastTrace' => 0,
-                        'regenerationTrace' => 1,
-                        'requestsCount' => 0,
-                        'fingerprint' => 0
-                    ]
-                ],
-                \JSON_PRESERVE_ZERO_FRACTION
-            )
-        );
         $session = $this->session;
         $session->setId(self::SESSION_ID);
         $session->getHandler()

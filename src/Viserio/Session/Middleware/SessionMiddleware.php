@@ -34,11 +34,11 @@ class SessionMiddleware implements ServerMiddlewareContract
     /**
     * {@inhertidoc}
      */
-    public function handle(ServerRequestInterface $request, FrameContract $frame): ResponseInterface
+    public function process(ServerRequestInterface $request, FrameContract $frame): ResponseInterface
     {
         // If a session driver has been configured, we will need to start the session
         // so that the data is ready.
-        if ($this->sessionConfigured()) {
+        if ($this->isSessionConfigured()) {
             // Note that the Narrowspark sessions do not make use of PHP
             // "native" sessions in any way since they are crappy.
             $session = $this->startSession($request);
@@ -49,7 +49,7 @@ class SessionMiddleware implements ServerMiddlewareContract
         // Again, if the session has been configured we will need to close out the session
         // so that the attributes may be persisted to some storage medium. We will also
         // add the session identifier cookie to the application response headers now.
-        if ($this->sessionConfigured()) {
+        if ($this->isSessionConfigured()) {
             $this->collectGarbage($session);
 
             $response = $this->addCookieToResponse($response, $session);
@@ -106,7 +106,7 @@ class SessionMiddleware implements ServerMiddlewareContract
      *
      * @return void
      */
-    protected function collectGarbage(SessionInterface $session)
+    protected function collectGarbage(StoreContract $session)
     {
         $config = $this->manager->getConfig();
         $lottery = $config->get('session::lottery');
@@ -181,7 +181,7 @@ class SessionMiddleware implements ServerMiddlewareContract
      *
      * @return bool
      */
-    private function sessionConfigured(): bool
+    private function isSessionConfigured(): bool
     {
         return $this->manager->getConfig()->get('session::driver', null) !== null;
     }
