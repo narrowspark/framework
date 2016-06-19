@@ -8,7 +8,7 @@ class ClientIpGeneratorTest extends \PHPUnit_Framework_TestCase
 {
     public function testGenerate()
     {
-        $generator = new ClientIpGenerator(Key::createNewRandomKey(), 'test');
+        $generator = new ClientIpGenerator(Key::createNewRandomKey());
 
         $this->assertInternalType('string', $generator->generate());
         $this->assertSame(40, strlen($generator->generate()));

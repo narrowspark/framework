@@ -177,11 +177,11 @@ interface Cookie
     /**
      * Whether the cookie will be available for cross-site requests.
      *
-     * @param string $sameSite
+     * @param string|bool $sameSite
      *
      * @return self
      */
-    public function withSameSite(string $sameSite): Cookie;
+    public function withSameSite($sameSite): Cookie;
 
     /**
      * Checks if the cookie value should be sent with a SameSite attribute.

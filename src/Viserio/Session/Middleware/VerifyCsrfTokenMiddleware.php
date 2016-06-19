@@ -33,8 +33,6 @@ class VerifyCsrfTokenMiddleware implements ServerMiddlewareContract
      * Create a new session middleware.
      *
      * @param \Viserio\Session\SessionManager $manager
-     *
-     * @return void
      */
     public function __construct(SessionManager $manager)
     {
@@ -56,13 +54,13 @@ class VerifyCsrfTokenMiddleware implements ServerMiddlewareContract
     {
         $request = $this->generateNewToken($request);
 
+        $response = $frame->next($request);
+
         if ($this->isReading($request) ||
             $this->tokensMatch($request)
         ) {
-            $response = $this->addCookieToResponse($request, $response);
+            $response = $this->addCookieToResponse($response);
         }
-
-        $response = $frame->next($request);
 
         return $response;
     }
@@ -70,29 +68,23 @@ class VerifyCsrfTokenMiddleware implements ServerMiddlewareContract
     /**
      * Determine if the session and input CSRF tokens match.
      *
-     * @param ServerRequestInterface $request
+     * @param \Psr\Http\Message\ServerRequestInterface $request
      *
      * @return bool
      */
     protected function tokensMatch(ServerRequestInterface $request): bool
     {
         foreach ($request->getHeader('X-XSRF-TOKEN') as $token) {
-            $validate = $this->tokenService->validate($token);
-
-            if ($validate) {
-                return true;
-            }
-
-            return false;
+            return $this->tokenService->validate($token);
         }
     }
 
     /**
      * Generates a new CSRF token and attaches it to the Request Object
      *
-     * @param  ServerRequestInterface $request PSR7 response object.
+     * @param \Psr\Http\Message\ServerRequestInterface $request
      *
-     * @return ServerRequestInterface
+     * @return \Psr\Http\Message\ServerRequestInterface
      */
     public function generateNewToken(ServerRequestInterface $request): ServerRequestInterface
     {
@@ -104,12 +96,11 @@ class VerifyCsrfTokenMiddleware implements ServerMiddlewareContract
     /**
      * Add the CSRF token to the response cookies.
      *
-     * @param ServerRequestInterface $request
-     * @param ResponseInterface      $response
+     * @param \Psr\Http\Message\ResponseInterface      $response
      *
-     * @return ResponseInterface
+     * @return \Psr\Http\Message\ResponseInterface
      */
-    protected function addCookieToResponse(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
+    protected function addCookieToResponse(ResponseInterface $response): ResponseInterface
     {
         $config = $this->manager->getConfig();
 
@@ -130,7 +121,7 @@ class VerifyCsrfTokenMiddleware implements ServerMiddlewareContract
     /**
      * Determine if the HTTP request uses a ‘read’ verb.
      *
-     * @param ServerRequestInterface $request
+     * @param \Psr\Http\Message\ServerRequestInterface $request
      *
      * @return bool
      */
