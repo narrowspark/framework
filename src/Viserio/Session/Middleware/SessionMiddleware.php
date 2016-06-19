@@ -70,9 +70,9 @@ class SessionMiddleware implements ServerMiddlewareContract
     /**
      * Start the session for the given request.
      *
-     * @param ServerRequestInterface $request
+     * @param \Psr\Http\Message\ServerRequestInterface $request
      *
-     * @return StoreContract
+     * @return \Psr\Http\Message\ResponseInterface
      */
     protected function startSession(ServerRequestInterface $request): StoreContract
     {
@@ -90,9 +90,9 @@ class SessionMiddleware implements ServerMiddlewareContract
     /**
      * Get the session implementation from the manager.
      *
-     * @param ServerRequestInterface $request
+     * @param \Psr\Http\Message\ServerRequestInterface $request
      *
-     * @return StoreContract
+     * @return \Psr\Http\Message\ServerRequestInterface
      */
     protected function getSession(ServerRequestInterface $request): StoreContract
     {
@@ -130,10 +130,10 @@ class SessionMiddleware implements ServerMiddlewareContract
     /**
      * Add the session cookie to the application response.
      *
-     * @param ResponseInterface $response
+     * @param \Psr\Http\Message\ResponseInterface $response
      * @param StoreContract     $session
      *
-     * @return ResponseInterface
+     * @return \Psr\Http\Message\ResponseInterface
      */
     protected function addCookieToResponse(ResponseInterface $response, StoreContract $session): ResponseInterface
     {
@@ -175,7 +175,7 @@ class SessionMiddleware implements ServerMiddlewareContract
     /**
      * Get the cookie lifetime in seconds.
      *
-     * @param ConfigContract $config
+     * @param \Viserio\Contracts\Config\Manager $config
      *
      * @return int
      */
