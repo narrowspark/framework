@@ -1,6 +1,7 @@
 <?php
 namespace Viserio\Session\Fingerprint;
 
+use Defuse\Crypto\Key;
 use Viserio\Contracts\Session\Fingerprint as FingerprintContract;
 
 class UserAgentGenerator implements FingerprintContract
@@ -13,16 +14,18 @@ class UserAgentGenerator implements FingerprintContract
     private $userAgent;
 
     /**
-     * @param string $secretKey
+     * Create a new UserAgentGenerator instance.
+     *
+     * @param Key    $secretKey
      * @param string $userAgent
      */
-    public function __construct(string $secretKey, string $userAgent = null)
+    public function __construct(Key $secretKey, string $userAgent = null)
     {
         if ($userAgent !== null) {
             $userAgent = $_SERVER['HTTP_USER_AGENT'] ?? '';
         }
 
-        $this->userAgent = $secretKey . $userAgent;
+        $this->userAgent = $secretKey->saveToAsciiSafeString() . $userAgent;
     }
 
     /**

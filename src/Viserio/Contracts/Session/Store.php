@@ -121,16 +121,6 @@ interface Store extends JsonSerializable
     public function set(string $name, $value);
 
     /**
-     * Put a key / value pair or array of key / value pairs in the session.
-     *
-     * @param string|array $key
-     * @param mixed        $value
-     *
-     * @return void
-     */
-    public function put($key, $value = null);
-
-    /**
      * Push a value onto a session array.
      *
      * @param string $key
@@ -139,15 +129,6 @@ interface Store extends JsonSerializable
      * @return void
      */
     public function push(string $key, $value);
-
-    /**
-     * Sets attributes.
-     *
-     * @param array $values Attributes
-     *
-     * @return void
-     */
-    public function replace(array $values);
 
     /**
      * Removes an attribute.

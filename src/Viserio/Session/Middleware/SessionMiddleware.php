@@ -1,14 +1,20 @@
 <?php
 namespace Viserio\Session\Middleware;
 
-use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Message\{
+    ResponseInterface,
+    ServerRequestInterface
+};
+use Viserio\Contracts\Middleware\{
+    Frame as FrameContract,
+    Middleware as MiddlewareContract,
+    Session\Store as StoreContract
+};
 use Viserio\Cookie\Cookie;
-use Viserio\Contracts\Middleware\Frame as FrameContract;
-use Viserio\Contracts\Middleware\ServerMiddleware as ServerMiddlewareContract;
-use Viserio\Contracts\Session\Store as StoreContract;
-use Viserio\Session\SessionManager;
-use Viserio\Session\Handler\CookieSessionHandler;
+use Viserio\Session\{
+    SessionManager,
+    Handler\CookieSessionHandler
+};
 
 class SessionMiddleware implements ServerMiddlewareContract
 {
@@ -147,7 +153,6 @@ class SessionMiddleware implements ServerMiddlewareContract
             $config->get('http_only', false)
         );
 
-        $response = $response->withoutHeader('Set-Cookie');
         $response = $response->withAddedHeader('Set-Cookie', (string) $setCookie);
 
         return $response;

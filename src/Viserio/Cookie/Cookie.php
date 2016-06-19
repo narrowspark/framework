@@ -17,6 +17,7 @@ final class Cookie extends AbstractCookie
      *                                    over a secure HTTPS connection from the client.
      * @param bool            $httpOnly   Whether the cookie will be made accessible only.
      *                                    through the HTTP protocol.
+     * @param string|bool     $sameSite   Whether the cookie will be available for cross-site requests
      *
      * @throws \InvalidArgumentException
      */
@@ -27,7 +28,8 @@ final class Cookie extends AbstractCookie
         $path = '/',
         $domain = null,
         bool $secure = false,
-        bool $httpOnly = false
+        bool $httpOnly = false,
+        $sameSite = false
     ) {
         $this->validateName($name);
         $this->validateValue($value);
@@ -40,6 +42,7 @@ final class Cookie extends AbstractCookie
         $this->path = $this->normalizePath($path);
         $this->secure = $secure;
         $this->httpOnly = $httpOnly;
+        $this->sameSite = $this->validateSameSite($sameSite);
     }
 
     /**
@@ -57,6 +60,7 @@ final class Cookie extends AbstractCookie
         $cookieStringParts = $this->appendFormattedMaxAgePartIfSet($cookieStringParts);
         $cookieStringParts = $this->appendFormattedSecurePartIfSet($cookieStringParts);
         $cookieStringParts = $this->appendFormattedHttpOnlyPartIfSet($cookieStringParts);
+        $cookieStringParts = $this->appendFormattedSameSitePartIfSet($cookieStringParts);
 
         return implode('; ', $cookieStringParts);
     }

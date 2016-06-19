@@ -1,6 +1,7 @@
 <?php
 namespace Viserio\Session\Fingerprint;
 
+use Defuse\Crypto\Key;
 use Viserio\Contracts\Session\Fingerprint as FingerprintContract;
 
 class ClientIpGenerator implements FingerprintContract
@@ -13,13 +14,15 @@ class ClientIpGenerator implements FingerprintContract
     private $clientIp;
 
     /**
-     * @param string $secretKey
+     * Create a new ClientIpGenerator instance.
+     *
+     * @param Key $secretKey
      */
-    public function __construct(string $secretKey)
+    public function __construct(Key $secretKey)
     {
         $clientIp = $this->getIpAddress();
 
-        $this->clientIp = $secretKey . $clientIp;
+        $this->clientIp = $secretKey->saveToAsciiSafeString() . $clientIp;
     }
 
     /**

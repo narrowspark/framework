@@ -271,6 +271,42 @@ class CookieTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    public function testIsSameSite()
+    {
+        $cookie = new Cookie('foo', 'bar', 0, '/', '.myfoodomain.com', false, true, Cookie::SAMESITE_STRICT);
+
+        $this->assertTrue(
+            $cookie->isSameSite(),
+            '->isSameSite() returns whether the cookie is set with samesite value'
+        );
+
+        $cookie = $cookie->withSameSite(false);
+
+        $this->assertFalse(
+            $cookie->isSameSite(),
+            '->isHttpOnly() returns whether the cookie is send normal without samesite'
+        );
+    }
+
+    public function testGetSameSite()
+    {
+        $cookie = new Cookie('foo', 'bar', 0, '/', '.myfoodomain.com', false, true, Cookie::SAMESITE_STRICT);
+
+        $this->assertSame(
+            Cookie::SAMESITE_STRICT,
+            $cookie->getSameSite(),
+            '->getSameSite() returns cookies samesite which is set to strict'
+        );
+
+        $cookie = $cookie->withSameSite(Cookie::SAMESITE_LAX);
+
+        $this->assertSame(
+            Cookie::SAMESITE_LAX,
+            $cookie->getSameSite(),
+            '->getSameSite() returns cookies samesite which is set to lax'
+        );
+    }
+
     public function testCookieIsNotExpired()
     {
         $cookie = new Cookie('foo', 'bar', new DateTime('+360 day'));

@@ -49,6 +49,11 @@ abstract class AbstractCookie implements Stringable, CookieContract
     protected $httpOnly;
 
     /**
+     * @var string
+     */
+    protected $sameSite;
+
+    /**
      * {@inheritdoc}
      */
     abstract public function __toString(): string;
@@ -243,6 +248,33 @@ abstract class AbstractCookie implements Stringable, CookieContract
     /**
      * {@inheritdoc}
      */
+    public function withSameSite(string $sameSite): CookieContract
+    {
+        $new = clone $this;
+        $new->sameSite = $this->validateSameSite($sameSite);
+
+        return $new;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isSameSite(): bool
+    {
+        return $this->sameSite !== false;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getSameSite()
+    {
+        return $this->sameSite;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function matchPath(string $path): bool
     {
         return $this->path === $path || (strpos($path, $this->path . '/') === 0);
@@ -274,6 +306,22 @@ abstract class AbstractCookie implements Stringable, CookieContract
         }
 
         return (bool) preg_match('/\b' . preg_quote($this->getDomain()) . '$/i', $domain);
+    }
+
+    /**
+    * Validate SameSite value.
+     *
+     * @param string|bool $sameSite
+     *
+     * @return string|bool
+     */
+    protected function validateSameSite($sameSite)
+    {
+        if (!in_array($sameSite, [self::SAMESITE_STRICT, self::SAMESITE_LAX])) {
+            return false;
+        }
+
+        return $sameSite;
     }
 
     /**
@@ -399,6 +447,15 @@ abstract class AbstractCookie implements Stringable, CookieContract
     {
         if ($this->httpOnly) {
             $cookieStringParts[] = 'HttpOnly';
+        }
+
+        return $cookieStringParts;
+    }
+
+    protected function appendFormattedSameSitePartIfSet(array $cookieStringParts)
+    {
+        if ($this->sameSite) {
+            $cookieStringParts[] = sprintf('SameSite=%s', $this->sameSite);
         }
 
         return $cookieStringParts;

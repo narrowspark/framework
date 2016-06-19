@@ -6,6 +6,12 @@ use DateTimeInterface;
 interface Cookie
 {
     /**
+     * Const for samesite.
+     */
+    const SAMESITE_STRICT = 'strict';
+    const SAMESITE_LAX = 'lax';
+
+    /**
      * Returns the name.
      *
      * @return string
@@ -167,6 +173,29 @@ interface Cookie
      * @return bool
      */
     public function isHttpOnly(): bool;
+
+    /**
+     * Whether the cookie will be available for cross-site requests.
+     *
+     * @param string $sameSite
+     *
+     * @return self
+     */
+    public function withSameSite(string $sameSite): Cookie;
+
+    /**
+     * Checks if the cookie value should be sent with a SameSite attribute.
+     *
+     * @return bool
+     */
+    public function isSameSite(): bool;
+
+    /**
+     * Gets the SameSite attribute.
+     *
+     * @return string|null
+     */
+    public function getSameSite();
 
     /**
      * It matches a path.

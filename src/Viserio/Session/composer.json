@@ -21,20 +21,21 @@
         "php"                              : "7.0.0 - 7.0.5 || ^7.0.7",
         "narrowspark/arr"                  : "^1.0",
         "nesbot/carbon"                    : "^1.21",
+        "psr/http-message"                 : "^1.0",
+        "schnittstabil/csrf-tokenservice"  : "^2.0",
         "viserio/config"                   : "self.version",
+        "viserio/cookie"                   : "self.version",
         "viserio/cotracts"                 : "self.version",
         "viserio/encrypter"                : "self.version",
         "viserio/support"                  : "self.version"
     },
     "require-dev": {
-        "lcobucci/jwt"                     : "^3.1",
         "narrowspark/php-cs-fixer-config"  : "^1.2",
         "narrowspark/testing-helper"       : "^1.5",
         "mockery/mockery"                  : "^0.9.5",
         "mikey179/vfsStream"               : "^1.6",
-        "psr/http-message"                 : "^1.0",
         "phpunit/phpunit"                  : "^5.1",
-        "viserio/cookie"                   : "self.version",
+        "viserio/cache"                    : "self.version",
         "viserio/filesystem"               : "self.version"
     },
     "autoload": {

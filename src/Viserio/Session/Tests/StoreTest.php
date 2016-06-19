@@ -131,19 +131,6 @@ class StoreTest extends \PHPUnit_Framework_TestCase
         $this->assertNotEquals('wrong', $session->getId());
     }
 
-    public function testReplace()
-    {
-        $session = $this->session;
-        $session->start();
-
-        $session->set('foo', 'bar');
-        $session->set('qu', 'ux');
-        $session->replace(['foo' => 'baz']);
-
-        $this->assertEquals('baz', $session->get('foo'));
-        $this->assertEquals('ux', $session->get('qu'));
-    }
-
     public function testSessionInvalidate()
     {
         $session = $this->session;
@@ -223,11 +210,10 @@ class StoreTest extends \PHPUnit_Framework_TestCase
     public function testStartMethodGeneratesFingerprint()
     {
         $session = $this->session;
-        $key = Key::createNewRandomKey();
 
         $oldFingerprint = $session->getFingerprint();
 
-        $session->addFingerprintGenerator(new UserAgentGenerator($key->saveToAsciiSafeString(), 'test'));
+        $session->addFingerprintGenerator(new UserAgentGenerator(Key::createNewRandomKey(), 'test'));
 
         $session->start();
 

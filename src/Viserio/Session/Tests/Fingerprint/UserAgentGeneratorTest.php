@@ -8,13 +8,12 @@ class UserAgentGeneratorTest extends \PHPUnit_Framework_TestCase
 {
     public function testGenerate()
     {
-        $key = Key::createNewRandomKey();
-        $generator = new UserAgentGenerator($key->saveToAsciiSafeString(), 'test');
+        $generator = new UserAgentGenerator(Key::createNewRandomKey(), 'test');
 
         $this->assertInternalType('string', $generator->generate());
         $this->assertSame(40, strlen($generator->generate()));
 
-        $generator = new UserAgentGenerator($key->saveToAsciiSafeString());
+        $generator = new UserAgentGenerator(Key::createNewRandomKey());
 
         $this->assertInternalType('string', $generator->generate());
         $this->assertSame(40, strlen($generator->generate()));

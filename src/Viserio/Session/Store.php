@@ -272,35 +272,13 @@ class Store implements StoreContract
     /**
      * {@inheritdoc}
      */
-    public function put($key, $value = null)
-    {
-        if (! is_array($key)) {
-            $key = [$key => $value];
-        }
-
-        foreach ($key as $arrayKey => $arrayValue) {
-            $this->set($arrayKey, $arrayValue);
-        }
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function push(string $key, $value)
     {
         $array = $this->get($key, []);
 
         $array[] = $value;
 
-        $this->put($key, $array);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function replace(array $values)
-    {
-        $this->put($values);
+        $this->set($key, $array);
     }
 
     /**
@@ -396,9 +374,9 @@ class Store implements StoreContract
             $this->remove($old);
         }
 
-        $this->put('flash.old', $this->get('flash.new', []));
+        $this->set('flash.old', $this->get('flash.new', []));
 
-        $this->put('flash.new', []);
+        $this->set('flash.new', []);
     }
 
     /**
@@ -406,7 +384,7 @@ class Store implements StoreContract
      */
     public function flash(string $key, $value)
     {
-        $this->put($key, $value);
+        $this->set($key, $value);
 
         $this->push('flash.new', $key);
 
@@ -418,7 +396,7 @@ class Store implements StoreContract
      */
     public function now(string $key, $value)
     {
-        $this->put($key, $value);
+        $this->set($key, $value);
 
         $this->push('flash.old', $key);
     }
@@ -430,7 +408,7 @@ class Store implements StoreContract
     {
         $this->mergeNewFlashes($this->get('flash.old', []));
 
-        $this->put('flash.old', []);
+        $this->set('flash.old', []);
     }
 
     /**
@@ -544,7 +522,7 @@ class Store implements StoreContract
     {
         $values = array_unique(array_merge($this->get('flash.new', []), $keys));
 
-        $this->put('flash.new', $values);
+        $this->set('flash.new', $values);
     }
 
     /**
@@ -554,7 +532,7 @@ class Store implements StoreContract
      */
     private function removeFromOldFlashData(array $keys)
     {
-        $this->put('flash.old', array_diff($this->get('flash.old', []), $keys));
+        $this->set('flash.old', array_diff($this->get('flash.old', []), $keys));
     }
 
     /**

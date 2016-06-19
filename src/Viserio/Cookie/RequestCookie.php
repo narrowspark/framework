@@ -76,6 +76,9 @@ class RequestCookie
                 case 'httponly':
                     $cookie = $cookie->withHttpOnly(true);
                     break;
+                case 'samesite':
+                    $cookie = $cookie->withSameSite($attributeValue);
+                    break;
             }
         }
 
