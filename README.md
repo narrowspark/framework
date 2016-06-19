@@ -1,5 +1,7 @@
 ## Narrowspark Framework (Kernel)
 
+[![Join the chat at https://gitter.im/narrowspark/framework](https://badges.gitter.im/narrowspark/framework.svg)](https://gitter.im/narrowspark/framework?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 [![Author](http://img.shields.io/badge/author-@anolilab-blue.svg?style=flat-square)](https://twitter.com/anolilab)
 [![Source Code](http://img.shields.io/badge/source-narrowspark/narrowspark-blue.svg?style=flat-square)](https://github.com/narrowspark/narrowspark)
 [![Latest Version](https://img.shields.io/packagist/v/narrowspark/framework.svg?style=flat-square)](https://github.com/narrowspark/framework/releases)
