@@ -7,7 +7,7 @@ use Psr\Http\Message\{
 };
 use Viserio\Contracts\Middleware\{
     Frame as FrameContract,
-    Middleware as MiddlewareContract,
+    ServerMiddleware as ServerMiddlewareContract,
     Session\Store as StoreContract
 };
 use Viserio\Contracts\Config\Manager as ConfigContract;

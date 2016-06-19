@@ -8,12 +8,12 @@ use Psr\Http\Message\{
 use Schnittstabil\Csrf\TokenService\TokenService;
 use Viserio\Contracts\Middleware\{
     Frame as FrameContract,
-    Middleware as MiddlewareContract
+    ServerMiddleware as ServerMiddlewareContract
 };
 use Viserio\Cookie\Cookie;
 use Viserio\Session\SessionManager;
 
-class VerifyCsrfTokenMiddleware implements MiddlewareContract
+class VerifyCsrfTokenMiddleware implements ServerMiddlewareContract
 {
     /**
      * The session manager.
