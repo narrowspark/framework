@@ -5,12 +5,12 @@ use Psr\Http\Message\{
     ResponseInterface,
     ServerRequestInterface
 };
-use Viserio\Contracts\Middleware\{
-    Frame as FrameContract,
-    ServerMiddleware as ServerMiddlewareContract,
+use Viserio\Contracts\{
+    Config\Manager as ConfigContract,
+    Middleware\Frame as FrameContract,
+    Middleware\ServerMiddleware as ServerMiddlewareContract,
     Session\Store as StoreContract
 };
-use Viserio\Contracts\Config\Manager as ConfigContract;
 use Viserio\Cookie\Cookie;
 use Viserio\Session\{
     SessionManager,
