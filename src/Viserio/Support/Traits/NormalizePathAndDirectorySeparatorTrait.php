@@ -74,7 +74,14 @@ trait NormalizePathAndDirectorySeparatorTrait
         return $path;
     }
 
-    private static function normalizeAndAddDirectorySeparatorOnArray(array $paths)
+    /**
+    * Normalize path.
+    *
+     * @param array $paths
+     *
+     * @return array
+     */
+    private static function normalizeAndAddDirectorySeparatorOnArray(array $paths): array
     {
         $newPaths = [];
 
