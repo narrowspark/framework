@@ -12,12 +12,12 @@ class PredisConnector implements ConnectorContract
      */
     public function connect(array $config)
     {
-        if (!isset($config['servers'])) {
+        if (! isset($config['servers'])) {
             throw new InvalidArgumentException('servers config don\'t exist.');
         }
 
         $parameters = $config['servers'];
-        $options    = null;
+        $options = null;
 
         if (isset($config['options'])) {
             $options = $config['options'];

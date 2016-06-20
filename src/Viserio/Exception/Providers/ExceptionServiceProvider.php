@@ -37,6 +37,36 @@ class ExceptionServiceProvider extends ServiceProvider
     }
 
     /**
+     * Get the resource path for Whoops.
+     *
+     * @return string|null
+     */
+    public function resourcePath()
+    {
+        if (is_dir($path = $this->getResourcePath())) {
+            return $path;
+        }
+    }
+
+    /**
+     * Get the services provided by the provider.
+     *
+     * @return string[]
+     */
+    public function provides(): array
+    {
+        return [
+            'exception.debug',
+            'exception.plain',
+            'exception',
+            'whoops',
+            'whoops.handler',
+            'whoops.handler.info',
+            'whoops.plain.handler',
+        ];
+    }
+
+    /**
      * Register the exception displayers.
      */
     protected function registerDisplayers()
@@ -141,7 +171,7 @@ class ExceptionServiceProvider extends ServiceProvider
             $whoops->writeToOutput(true);
             $whoops->pushHandler($app['whoops.handler']);
 
-            if (!$this->shouldReturnJson()) {
+            if (! $this->shouldReturnJson()) {
                 $whoops->pushHandler($app->get('whoops.plain.handler'));
                 $whoops->pushHandler($app->get('whoops.handler.info'));
             }
@@ -194,7 +224,7 @@ class ExceptionServiceProvider extends ServiceProvider
      *
      * @return bool
      */
-    protected function shouldReturnJson()
+    protected function shouldReturnJson(): bool
     {
         return $this->app->get('environment')->runningInConsole() || $this->requestWantsJson();
     }
@@ -204,7 +234,7 @@ class ExceptionServiceProvider extends ServiceProvider
      *
      * @return bool
      */
-    protected function requestWantsJson()
+    protected function requestWantsJson(): bool
     {
         return $this->app->get('request')->ajax() || $this->app->get('request')->wantsJson();
     }
@@ -227,23 +257,11 @@ class ExceptionServiceProvider extends ServiceProvider
     }
 
     /**
-     * Get the resource path for Whoops.
-     *
-     * @return string|null
-     */
-    public function resourcePath()
-    {
-        if (is_dir($path = $this->getResourcePath())) {
-            return $path;
-        }
-    }
-
-    /**
      * Get the Whoops custom resource path.
      *
      * @return string
      */
-    protected function getResourcePath()
+    protected function getResourcePath(): string
     {
         $base = $this->app->basePath();
 
@@ -290,23 +308,5 @@ class ExceptionServiceProvider extends ServiceProvider
 
             return $whoops;
         });
-    }
-
-    /**
-     * Get the services provided by the provider.
-     *
-     * @return string[]
-     */
-    public function provides()
-    {
-        return [
-            'exception.debug',
-            'exception.plain',
-            'exception',
-            'whoops',
-            'whoops.handler',
-            'whoops.handler.info',
-            'whoops.plain.handler',
-        ];
     }
 }

@@ -13,7 +13,7 @@ class InvokerTest extends \PHPUnit_Framework_TestCase
             ->injectByParameterName(true)
             ->setContainer(new ArrayContainer());
 
-        $call =  $invoker->call(function ($name) {
+        $call = $invoker->call(function ($name) {
             return 'Hello ' . $name;
         }, ['John']);
 

@@ -2,53 +2,73 @@
 namespace Viserio\Cookie;
 
 use InvalidArgumentException;
+use Viserio\Contracts\Cookie\Cookie as CookieContract;
 
 final class Cookie extends AbstractCookie
 {
     /**
-     * @param string                 $name       The name of the cookie.
-     * @param string|null            $value      The value of the cookie.
-     * @param int|\DateTimeInterface $expiration The time the cookie expires.
-     * @param string|null            $path       The path on the server in which the cookie will
-     *                                           be available on.
-     * @param string|null            $domain     The domain that the cookie is available to.
-     * @param bool                   $secure     Whether the cookie should only be transmitted
-     *                                           over a secure HTTPS connection from the client.
-     * @param bool                   $httpOnly   Whether the cookie will be made accessible only.
-     *                                           through the HTTP protocol.
+     * @param string          $name       The name of the cookie.
+     * @param string|null     $value      The value of the cookie.
+     * @param int|string|null $expiration The time the cookie expires.
+     * @param string          $path       The path on the server in which the cookie will
+     *                                    be available on.
+     * @param string|null     $domain     The domain that the cookie is available to.
+     * @param bool            $secure     Whether the cookie should only be transmitted
+     *                                    over a secure HTTPS connection from the client.
+     * @param bool            $httpOnly   Whether the cookie will be made accessible only.
+     *                                    through the HTTP protocol.
+     * @param string|bool     $sameSite   Whether the cookie will be available for cross-site requests
      *
      * @throws \InvalidArgumentException
      */
     public function __construct(
-        $name,
+        string $name,
         $value = null,
         $expiration = 0,
-        $path = null,
+        $path = '/',
         $domain = null,
-        $secure = false,
-        $httpOnly = false
+        bool $secure = false,
+        bool $httpOnly = false,
+        $sameSite = false
     ) {
         $this->validateName($name);
         $this->validateValue($value);
 
-        $this->name     = $name;
-        $this->value    = $value;
-        $this->maxAge   = is_int($expiration) ? $expiration : null;
-        $this->expires  = $this->normalizeExpires($expiration);
-        $this->domain   = $this->normalizeDomain($domain);
-        $this->path     = $this->normalizePath($path);
-        $this->secure   = filter_var($secure, FILTER_VALIDATE_BOOLEAN);
-        $this->httpOnly = filter_var($httpOnly, FILTER_VALIDATE_BOOLEAN);
+        $this->name = $name;
+        $this->value = $value;
+        $this->maxAge = is_int($expiration) ? $expiration : null;
+        $this->expires = $this->normalizeExpires($expiration);
+        $this->domain = $this->normalizeDomain($domain);
+        $this->path = $this->normalizePath($path);
+        $this->secure = $secure;
+        $this->httpOnly = $httpOnly;
+        $this->sameSite = $this->validateSameSite($sameSite);
     }
 
     /**
-     * Sets the value
+     * Returns the cookie as a string.
      *
-     * @param string|null $value
-     *
-     * @return self
+     * @return string The cookie
      */
-    public function withValue($value)
+    public function __toString(): string
+    {
+        $cookieStringParts = [];
+
+        $cookieStringParts = $this->appendFormattedNameAndValuePartIfSet($cookieStringParts);
+        $cookieStringParts = $this->appendFormattedPathPartIfSet($cookieStringParts);
+        $cookieStringParts = $this->appendFormattedDomainPartIfSet($cookieStringParts);
+        $cookieStringParts = $this->appendFormattedMaxAgePartIfSet($cookieStringParts);
+        $cookieStringParts = $this->appendFormattedSecurePartIfSet($cookieStringParts);
+        $cookieStringParts = $this->appendFormattedHttpOnlyPartIfSet($cookieStringParts);
+        $cookieStringParts = $this->appendFormattedSameSitePartIfSet($cookieStringParts);
+
+        return implode('; ', $cookieStringParts);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function withValue(string $value = null): CookieContract
     {
         $this->validateValue($value);
 
@@ -59,34 +79,15 @@ final class Cookie extends AbstractCookie
     }
 
     /**
-     * Returns the cookie as a string.
-     *
-     * @return string The cookie
-     */
-    public function __toString()
-    {
-        $cookieStringParts = [];
-
-        $cookieStringParts = $this->appendFormattedNameAndValuePartIfSet($cookieStringParts);
-        $cookieStringParts = $this->appendFormattedPathPartIfSet($cookieStringParts);
-        $cookieStringParts = $this->appendFormattedDomainPartIfSet($cookieStringParts);
-        $cookieStringParts = $this->appendFormattedMaxAgePartIfSet($cookieStringParts);
-        $cookieStringParts = $this->appendFormattedSecurePartIfSet($cookieStringParts);
-        $cookieStringParts = $this->appendFormattedHttpOnlyPartIfSet($cookieStringParts);
-
-        return implode('; ', $cookieStringParts);
-    }
-
-    /**
      * Validates the name attribute
      *
      * @param string $name
      *
      * @throws \InvalidArgumentException
      *
-     * @see http://tools.ietf.org/search/rfc2616#section-2.2
+     * @link http://tools.ietf.org/search/rfc2616#section-2.2
      */
-    private function validateName($name)
+    private function validateName(string $name)
     {
         if (strlen($name) < 1) {
             throw new InvalidArgumentException('The name cannot be empty');
@@ -105,9 +106,9 @@ final class Cookie extends AbstractCookie
      *
      * @throws \InvalidArgumentException
      *
-     * @see http://tools.ietf.org/html/rfc6265#section-4.1.1
+     * @link http://tools.ietf.org/html/rfc6265#section-4.1.1
      */
-    private function validateValue($value)
+    private function validateValue(string $value = null)
     {
         if (isset($value)) {
             if (preg_match('/[^\x21\x23-\x2B\x2D-\x3A\x3C-\x5B\x5D-\x7E]/', $value)) {

@@ -55,7 +55,7 @@ class FilesystemHelperTraitTest extends \PHPUnit_Framework_TestCase
     public function testIsFile()
     {
         $this->root->addChild(new vfsStreamDirectory('assets'));
-        $dir  = $this->root->getChild('assets');
+        $dir = $this->root->getChild('assets');
         $file = vfsStream::newFile('foo.txt')->withContent('foo')->at($this->root);
 
         $this->assertFalse($this->isFile($dir->url()));

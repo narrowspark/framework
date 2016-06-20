@@ -10,7 +10,7 @@ interface Encrypter
      *
      * @return string
      */
-    public function encrypt($plaintext);
+    public function encrypt(string $plaintext): string;
 
     /**
      * Decrypts a ciphertext string using a secret key.
@@ -19,5 +19,5 @@ interface Encrypter
      *
      * @return string
      */
-    public function decrypt($ciphertext);
+    public function decrypt(string $ciphertext): string;
 }

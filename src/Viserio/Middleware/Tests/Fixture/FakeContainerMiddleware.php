@@ -4,9 +4,10 @@ namespace Viserio\Middleware\Tests\Fixture;
 use Interop\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Viserio\Contracts\Middleware\Middleware as MiddlewareContract;
+use Viserio\Contracts\Middleware\Frame as FrameContract;
+use Viserio\Contracts\Middleware\ServerMiddleware as ServerMiddlewareContract;
 
-class FakeContainerMiddleware implements MiddlewareContract
+class FakeContainerMiddleware implements ServerMiddlewareContract
 {
     /**
      * Container instance.
@@ -22,7 +23,7 @@ class FakeContainerMiddleware implements MiddlewareContract
      *
      * @return self
      */
-    public function setContainer(ContainerInterface $container)
+    public function setContainer(ContainerInterface $container): ServerMiddlewareContract
     {
         $this->container = $container;
 
@@ -34,18 +35,17 @@ class FakeContainerMiddleware implements MiddlewareContract
      *
      * @return \Interop\Container\ContainerInterface
      */
-    public function getContainer()
+    public function getContainer(): ContainerInterface
     {
         return $this->container;
     }
 
-    public function __invoke(
+   public function process(
         ServerRequestInterface $request,
-        ResponseInterface $response,
-        callable $next
-    ) {
+        FrameContract $frame
+    ): ResponseInterface {
+        $response = $frame->next($request);
         $response = $response->withAddedHeader('X-Foo', $this->getcontainer()->get('doo'));
-        $response = $next($request, $response, $next);
 
         return $response;
     }

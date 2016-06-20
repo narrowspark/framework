@@ -6,9 +6,9 @@ use Invoker\Exception\InvocationException;
 use RuntimeException;
 use Symfony\Component\Console\Application as SymfonyConsole;
 use Symfony\Component\Console\Command\Command as SymfonyCommand;
+use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Viserio\Console\Command\Command as ViserioCommand;
 use Viserio\Console\Command\ExpressionParser as Parser;
 use Viserio\Console\Input\InputOption;
@@ -35,13 +35,6 @@ class Application extends SymfonyConsole implements ApplicationContract
     public $version = 'UNKNOWN';
 
     /**
-     * The event dispatcher implementation.
-     *
-     * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
-     */
-    protected $events;
-
-    /**
      * Command expression parser.
      *
      * @var \Viserio\Console\Command\ExpressionParser
@@ -65,20 +58,17 @@ class Application extends SymfonyConsole implements ApplicationContract
     /**
      * Create a new Cerebro console application.
      *
-     * @param ContainerContract                                           $container
-     * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $events
-     * @param string                                                      $version
-     * @param string                                                      $name
+     * @param ContainerContract $container
+     * @param string            $version
+     * @param string            $name
      */
     public function __construct(
         ContainerContract $container,
-        EventDispatcherInterface $events,
-        $version,
-        $name = 'Narrowspark Framework'
+        string $version,
+        string $name = 'Narrowspark Framework'
     ) {
-        $this->name      = $name;
-        $this->version   = $version;
-        $this->events    = $events;
+        $this->name = $name;
+        $this->version = $version;
 
         $this->setContainer($container);
         $this->expressionParser = new Parser();
@@ -117,7 +107,7 @@ class Application extends SymfonyConsole implements ApplicationContract
      *
      * @return SymfonyCommand
      */
-    public function command($expression, $callable)
+    public function command(string $expression, $callable): SymfonyCommand
     {
         $commandFunction = function (InputInterface $input, OutputInterface $output) use ($callable) {
             $parameters = array_merge(
@@ -153,7 +143,7 @@ class Application extends SymfonyConsole implements ApplicationContract
      * @param string $commandName      Name of the command.
      * @param array  $argumentDefaults Default argument values.
      */
-    public function defaults($commandName, array $argumentDefaults = [])
+    public function defaults(string $commandName, array $argumentDefaults = [])
     {
         $command = $this->get($commandName);
         $commandDefinition = $command->getDefinition();
@@ -169,7 +159,7 @@ class Application extends SymfonyConsole implements ApplicationContract
      *
      * @return string
      */
-    public function getVersion()
+    public function getVersion(): string
     {
         return $this->version;
     }
@@ -179,7 +169,7 @@ class Application extends SymfonyConsole implements ApplicationContract
      *
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
@@ -191,7 +181,7 @@ class Application extends SymfonyConsole implements ApplicationContract
      *
      * @return \Symfony\Component\Console\Input\InputDefinition
      */
-    protected function getDefaultInputDefinition()
+    protected function getDefaultInputDefinition(): InputDefinition
     {
         $definition = parent::getDefaultInputDefinition();
         $definition->addOption($this->getEnvironmentOption());
@@ -204,7 +194,7 @@ class Application extends SymfonyConsole implements ApplicationContract
      *
      * @return \Viserio\Console\Input\InputOption
      */
-    protected function getEnvironmentOption()
+    protected function getEnvironmentOption(): InputOption
     {
         $message = 'The environment the command should run under.';
 
@@ -219,7 +209,7 @@ class Application extends SymfonyConsole implements ApplicationContract
      *
      * @return SymfonyCommand
      */
-    protected function createCommand($expression, callable $callable)
+    protected function createCommand(string $expression, callable $callable): SymfonyCommand
     {
         $result = $this->expressionParser->parse($expression);
 
@@ -247,7 +237,7 @@ class Application extends SymfonyConsole implements ApplicationContract
      *
      * @return \Viserio\Support\Invoker
      */
-    protected function getInvoker()
+    protected function getInvoker(): Invoker
     {
         return $this->invoker;
     }

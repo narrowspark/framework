@@ -9,14 +9,14 @@ class ResolverTest extends \PHPUnit_Framework_TestCase
     {
         $resolver = new Resolver('pattern', 'stdClass');
 
-        $this->assertEquals('stdClass', $resolver->resolve('pattern'));
+        $this->assertSame('stdClass', $resolver->resolve('pattern'));
     }
 
     public function testResolveWithRegex()
     {
         $resolver = new Resolver('Pattern\*', '$1');
 
-        $this->assertEquals('stdClass', $resolver->resolve('Pattern\stdClass'));
+        $this->assertSame('stdClass', $resolver->resolve('Pattern\stdClass'));
     }
 
     public function testFailingResolve()

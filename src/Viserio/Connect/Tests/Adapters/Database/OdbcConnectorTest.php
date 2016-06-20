@@ -9,7 +9,7 @@ class OdbcConnectorTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        if (!class_exists('PDO')) {
+        if (! class_exists('PDO')) {
             $this->markTestSkipped('PDO module is not installed.');
         }
     }
@@ -21,10 +21,9 @@ class OdbcConnectorTest extends \PHPUnit_Framework_TestCase
     {
         $connection = $this->mock('stdClass');
 
-        $connector = $this->getMock(
-            'Viserio\Connect\Adapters\Database\OdbcConnector',
-            ['createConnection', 'getOptions']
-        );
+        $connector = $this->getMockBuilder('Viserio\Connect\Adapters\Database\OdbcConnector')
+             ->setMethods(['createConnection', 'getOptions'])
+             ->getMock();
         $connector->expects($this->once())
             ->method('getOptions')
             ->with($this->equalTo($config))

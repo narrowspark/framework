@@ -10,7 +10,7 @@ class MSSQLConnectorTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        if (!class_exists('PDO')) {
+        if (! class_exists('PDO')) {
             $this->markTestSkipped('PDO module is not installed.');
         }
     }
@@ -26,16 +26,15 @@ class MSSQLConnectorTest extends \PHPUnit_Framework_TestCase
             'Windows',
         ]);
 
-        if (!$contain) {
+        if (! $contain) {
             $this->markTestSkipped('Can only run on windows.');
         }
 
         $connection = $this->mock('stdClass');
 
-        $connector = $this->getMock(
-            'Viserio\Connect\Adapters\Database\MSSQLConnector',
-            ['createConnection', 'getOptions']
-        );
+        $connector = $this->getMockBuilder('Viserio\Connect\Adapters\Database\MSSQLConnector')
+             ->setMethods(['createConnection', 'getOptions'])
+             ->getMock();
         $connector->expects($this->once())
             ->method('getOptions')
             ->with($this->equalTo($config))
@@ -92,10 +91,9 @@ class MSSQLConnectorTest extends \PHPUnit_Framework_TestCase
 
         $connection = $this->mock('stdClass');
 
-        $connector = $this->getMock(
-            'Viserio\Connect\Adapters\Database\MSSQLConnector',
-            ['createConnection', 'getOptions']
-        );
+        $connector = $this->getMockBuilder('Viserio\Connect\Adapters\Database\MSSQLConnector')
+             ->setMethods(['createConnection', 'getOptions'])
+             ->getMock();
         $connector->expects($this->once())
             ->method('getOptions')
             ->with($this->equalTo($config))

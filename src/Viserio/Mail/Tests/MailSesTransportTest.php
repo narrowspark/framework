@@ -3,8 +3,8 @@ namespace Viserio\Mail\Test;
 
 use Aws\Ses\SesClient;
 use Viserio\Application\Application;
-use Viserio\Mail\Transport\Ses as SesTransport;
 use Viserio\Mail\TransportManager;
+use Viserio\Mail\Transport\Ses as SesTransport;
 use Viserio\Support\Collection;
 
 class MailSesTransportTest extends \PHPUnit_Framework_TestCase
@@ -42,7 +42,7 @@ class MailSesTransportTest extends \PHPUnit_Framework_TestCase
         $client = $this->getMockBuilder('Aws\Ses\SesClient')
             ->setMethods(['sendRawEmail'])
             ->disableOriginalConstructor()
-            ->getMock();
+            ->createMock();
         $transport = new SesTransport($client);
 
         $client->expects($this->once())

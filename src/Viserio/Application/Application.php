@@ -1,9 +1,9 @@
 <?php
 namespace Viserio\Application;
 
+use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ResponseInterface;
 use SplPriorityQueue;
-use Symfony\Component\HttpFoundation\Request as SymfonyRequest;
-use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Viserio\Application\Traits\BootableTrait;
 use Viserio\Application\Traits\EnvironmentTrait;
 use Viserio\Application\Traits\HttpErrorHandlingTrait;
@@ -13,17 +13,11 @@ use Viserio\Application\Traits\PathsTrait;
 use Viserio\Application\Traits\ServiceProviderTrait;
 use Viserio\Container\Container;
 use Viserio\Contracts\Application\Foundation;
+use Viserio\Http\ServerRequest;
 use Viserio\StaticalProxy\StaticalProxy;
 
-class Application extends Container implements Foundation, HttpKernelInterface
+class Application extends Container implements Foundation
 {
-    /**
-     * The Viserio framework version.
-     *
-     * @var string
-     */
-    const VERSION = '0.10.0';
-
     // Register all needed Traits
     use BootableTrait;
     use EnvironmentTrait;
@@ -32,6 +26,13 @@ class Application extends Container implements Foundation, HttpKernelInterface
     use MiddlewaresTrait;
     use PathsTrait;
     use ServiceProviderTrait;
+
+    /**
+     * The Viserio framework version.
+     *
+     * @var string
+     */
+    const VERSION = '0.10.0';
 
     /**
      * Instantiate a new Application.
@@ -66,22 +67,6 @@ class Application extends Container implements Foundation, HttpKernelInterface
         foreach ($this->get('config')->get('services::providers') as $provider => $arr) {
             $this->register(new $provider($this), $arr);
         }
-    }
-
-    /**
-     * Register all of the base service providers.
-     */
-    protected function registerBaseServiceProviders()
-    {
-        $this->register('Viserio\Http\Providers\ResponseServiceProvider');
-
-        $this->register('Viserio\Http\Providers\RequestServiceProvider');
-
-        $this->register('Viserio\Filesystem\Providers\FilesystemServiceProvider');
-
-        $this->register('Viserio\Application\Providers\ApplicationServiceProvider');
-
-        $this->register('Viserio\Exception\Providers\ExceptionServiceProvider');
     }
 
     /**
@@ -134,18 +119,6 @@ class Application extends Container implements Foundation, HttpKernelInterface
         $this->get('translator')->setLocale($locale);
 
         return $this;
-    }
-
-    /**
-     * Register the basic bindings into the container.
-     */
-    protected function registerBaseBindings()
-    {
-        $this->singleton('app', function () {
-            return $this;
-        });
-
-        $this->bind('\Viserio\Container\Container');
     }
 
     /**
@@ -245,7 +218,7 @@ class Application extends Container implements Foundation, HttpKernelInterface
      *
      * @return string
      */
-    public function getVersion()
+    public function getVersion(): string
     {
         return self::VERSION;
     }
@@ -253,15 +226,15 @@ class Application extends Container implements Foundation, HttpKernelInterface
     /**
      * Run the application.
      *
-     * @param \Symfony\Component\HttpFoundation\Request|null $request
-     * @param bool                                           $send
+     * @param \Psr\Http\Message\RequestInterface|null $request
+     * @param bool                                    $send
      *
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @return \Psr\Http\Message\ResponseInterface
      */
-    public function run(SymfonyRequest $request = null, $send = true)
+    public function run(RequestInterface $request = null, $send = true): ResponseInterface
     {
         if ($request === null) {
-            $request = SymfonyRequest::createFromGlobals();
+            $request = ServerRequest::createFromGlobals();
         }
 
         $response = $this->handle($request);
@@ -272,9 +245,9 @@ class Application extends Container implements Foundation, HttpKernelInterface
     /**
      * {@inheritdoc}
      */
-    public function handle(SymfonyRequest $request, $type = HttpKernelInterface::MASTER_REQUEST, $catch = true)
+    public function handle(RequestInterface $request, $type = HttpKernelInterface::MASTER_REQUEST, $catch = true)
     {
-        if (!$this->booted) {
+        if (! $this->booted) {
             $this->boot();
         }
 
@@ -287,5 +260,33 @@ class Application extends Container implements Foundation, HttpKernelInterface
     public function shutdown()
     {
         $this->get('exception')->unregister();
+    }
+
+    /**
+     * Register all of the base service providers.
+     */
+    protected function registerBaseServiceProviders()
+    {
+        $this->register('Viserio\Http\Providers\ResponseServiceProvider');
+
+        $this->register('Viserio\Http\Providers\RequestServiceProvider');
+
+        $this->register('Viserio\Filesystem\Providers\FilesystemServiceProvider');
+
+        $this->register('Viserio\Application\Providers\ApplicationServiceProvider');
+
+        $this->register('Viserio\Exception\Providers\ExceptionServiceProvider');
+    }
+
+    /**
+     * Register the basic bindings into the container.
+     */
+    protected function registerBaseBindings()
+    {
+        $this->singleton('app', function () {
+            return $this;
+        });
+
+        $this->bind('\Viserio\Container\Container');
     }
 }

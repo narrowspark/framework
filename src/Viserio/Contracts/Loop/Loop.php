@@ -8,7 +8,7 @@ interface Loop
      *
      * @param bool $blocking Determines if the tick should block and wait for I/O if no other tasks are scheduled.
      */
-    public function tick($blocking = true);
+    public function tick(bool $blocking = true);
 
     /**
      * Schedules a callback to be executed immediately in the next tick.
@@ -45,7 +45,7 @@ interface Loop
      *
      * @return bool
      */
-    public function isRunning();
+    public function isRunning(): bool;
 
     /**
      * Removes all events (I/O, timers, callbacks, signal handlers, etc.) from the loop.
@@ -57,7 +57,7 @@ interface Loop
      *
      * @return bool
      */
-    public function isEmpty();
+    public function isEmpty(): bool;
 
     /**
      * Performs any reinitializing necessary after forking.
@@ -71,7 +71,7 @@ interface Loop
      *
      * @return int Current max depth if $depth = null or previous max depth otherwise.
      */
-    public function maxScheduleDepth($depth = null);
+    public function maxScheduleDepth(int $depth = null): int;
 
     /**
      * Define a callback function to be run after all I/O has been handled in the current tick.

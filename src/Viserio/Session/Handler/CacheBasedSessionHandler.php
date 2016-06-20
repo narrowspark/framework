@@ -1,34 +1,28 @@
 <?php
 namespace Viserio\Session\Handler;
 
-use Viserio\Contracts\Cache\Repository as CacheContract;
+use Cache\SessionHandler\Psr6SessionHandler;
+use Psr\Cache\CacheItemPoolInterface;
+use SessionHandlerInterface;
 
-class CacheBasedSessionHandler implements \SessionHandlerInterface
+class CacheBasedSessionHandler implements SessionHandlerInterface
 {
     /**
      * The cache repository instance.
      *
-     * @var CacheContract
+     * @var CacheItemPoolInterface
      */
-    protected $cache;
-
-    /**
-     * The number of minutes to store the data in the cache.
-     *
-     * @var int
-     */
-    protected $minutes;
+    protected $psr6cache;
 
     /**
      * Create a new cache driven handler instance.
      *
-     * @param CacheContract $cache
-     * @param int           $minutes
+     * @param CacheItemPoolInterface $cache
+     * @param int                    $lifetime
      */
-    public function __construct(CacheContract $cache, $minutes)
+    public function __construct(CacheItemPoolInterface $cache, int $lifetime)
     {
-        $this->cache = $cache;
-        $this->minutes = $minutes;
+        $this->psr6cache = new Psr6SessionHandler($cache, ['ttl' => $lifetime]);
     }
 
     /**
@@ -52,7 +46,7 @@ class CacheBasedSessionHandler implements \SessionHandlerInterface
      */
     public function read($sessionId)
     {
-        return $this->cache->get($sessionId, '');
+        return $this->psr6cache->read($sessionId);
     }
 
     /**
@@ -60,7 +54,7 @@ class CacheBasedSessionHandler implements \SessionHandlerInterface
      */
     public function write($sessionId, $data)
     {
-        $this->cache->put($sessionId, $data, $this->minutes);
+        $this->psr6cache->write($sessionId, $data);
     }
 
     /**
@@ -68,7 +62,7 @@ class CacheBasedSessionHandler implements \SessionHandlerInterface
      */
     public function destroy($sessionId)
     {
-        $this->cache->forget($sessionId);
+        $this->psr6cache->destroy($sessionId);
     }
 
     /**
@@ -77,15 +71,5 @@ class CacheBasedSessionHandler implements \SessionHandlerInterface
     public function gc($lifetime)
     {
         return true;
-    }
-
-    /**
-     * Get the underlying cache repository.
-     *
-     * @return CacheContract
-     */
-    public function getCache()
-    {
-        return $this->cache;
     }
 }

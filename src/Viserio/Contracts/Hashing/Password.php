@@ -14,7 +14,7 @@ interface Password
      *
      * @return string
      */
-    public function create($password);
+    public function create(string $password): string;
 
     /**
      * 1. VerifyHMAC-then-Decrypt the ciphertext to get the hash
@@ -25,5 +25,5 @@ interface Password
      *
      * @return bool
      */
-    public function verify($password, $hashedValue);
+    public function verify(string $password, string $hashedValue): bool;
 }

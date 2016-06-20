@@ -14,7 +14,7 @@ class XML implements FormatContract
     /**
      * {@inheritdoc}
      */
-    public function parse($payload)
+    public function parse(string $payload): array
     {
         try {
             $data = simplexml_load_string($payload, 'SimpleXMLElement', LIBXML_NOCDATA);
@@ -33,9 +33,9 @@ class XML implements FormatContract
     /**
      * {@inheritdoc}
      */
-    public function dump(array $data)
+    public function dump(array $data): string
     {
-        if (!class_exists('Spatie\\ArrayToXml\\ArrayToXml')) {
+        if (! class_exists('Spatie\\ArrayToXml\\ArrayToXml')) {
             throw new RuntimeException('Unable to dump XML, the ArrayToXml dumper is not installed.');
         }
 

@@ -7,6 +7,7 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Contracts\Cookie\Cookie as CookieContract;
 use Viserio\Contracts\Encryption\Encrypter as EncrypterContract;
+use Viserio\Contracts\Middleware\Frame as FrameContract;
 use Viserio\Contracts\Middleware\Middleware as MiddlewareContract;
 use Viserio\Cookie\Cookie;
 
@@ -37,6 +38,16 @@ class EncryptCookies implements MiddlewareContract
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function handle(
+        ServerRequestInterface $request,
+        FrameContract $frame
+    ): ResponseInterface {
+        return $this->encrypt($frame->next($this->decrypt($request)));
+    }
+
+    /**
      * Disable encryption for the given cookie name(s).
      *
      * @param string|array $cookieName
@@ -51,6 +62,18 @@ class EncryptCookies implements MiddlewareContract
     }
 
     /**
+     * Determine whether encryption has been disabled for the given cookie.
+     *
+     * @param string $name
+     *
+     * @return bool
+     */
+    public function isDisabled(string $name): bool
+    {
+        return in_array($name, $this->except);
+    }
+
+    /**
      * Duplicate a cookie with a new value.
      *
      * @param CookieContract $cookie
@@ -58,7 +81,7 @@ class EncryptCookies implements MiddlewareContract
      *
      * @return CookieContract
      */
-    protected function duplicate(CookieContract $cookie, $value)
+    protected function duplicate(CookieContract $cookie, string $value): CookieContract
     {
         return new Cookie(
             $cookie->getName(),
@@ -72,44 +95,24 @@ class EncryptCookies implements MiddlewareContract
     }
 
     /**
-     * Determine whether encryption has been disabled for the given cookie.
-     *
-     * @param string $name
-     *
-     * @return bool
-     */
-    public function isDisabled($name)
-    {
-        return in_array($name, $this->except);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function __invoke(ServerRequestInterface $request, ResponseInterface $response, callable $next)
-    {
-        return $this->encrypt($next($this->decrypt($request)));
-    }
-
-    /**
      * Decrypt the cookies on the request.
      *
      * @param ServerRequestInterface $request
      *
      * @return ServerRequestInterface
      */
-    protected function decrypt(ServerRequestInterface $request)
+    protected function decrypt(ServerRequestInterface $request): ServerRequestInterface
     {
-        foreach ($request->cookies as $key => $c) {
+        foreach ($request->cookies as $key => $cookie) {
             if ($this->isDisabled($key)) {
                 continue;
             }
 
             try {
-                $request->cookies->set($key, $this->decryptCookie($c));
-            } catch (EnvironmentIsBrokenException $e) {
+                $request->cookies->set($key, $this->decryptCookie($cookie));
+            } catch (EnvironmentIsBrokenException $exception) {
                 $request->cookies->set($key, null);
-            } catch (WrongKeyOrModifiedCiphertextException $e) {
+            } catch (WrongKeyOrModifiedCiphertextException $exception) {
                 $request->cookies->set($key, null);
             }
         }
@@ -138,7 +141,7 @@ class EncryptCookies implements MiddlewareContract
      *
      * @return array
      */
-    protected function decryptArray(array $cookie)
+    protected function decryptArray(array $cookie): array
     {
         $decrypted = [];
 
@@ -158,7 +161,7 @@ class EncryptCookies implements MiddlewareContract
      *
      * @return ResponseInterface
      */
-    protected function encrypt(ResponseInterface $response)
+    protected function encrypt(ResponseInterface $response): ResponseInterface
     {
         foreach ($response->headers->getCookies() as $cookie) {
             if ($this->isDisabled($cookie->getName())) {

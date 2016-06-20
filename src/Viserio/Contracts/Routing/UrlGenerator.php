@@ -12,5 +12,5 @@ interface UrlGenerator
      *
      * @return string
      */
-    public function generate($name, array $parameters = [], $absolute = false);
+    public function generate(string $name, array $parameters = [], bool $absolute = false): string;
 }

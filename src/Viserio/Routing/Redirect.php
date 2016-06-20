@@ -108,7 +108,7 @@ class Redirect
      * @internal param $ [type] $key   [description]
      * @internal param $ [type] $value [description]
      *
-     * @return $this [type] [description]
+     * @return self [type] [description]
      */
     public function with($key, $value)
     {

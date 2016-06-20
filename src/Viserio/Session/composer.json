@@ -2,7 +2,7 @@
     "name"       : "viserio/session",
     "type"       : "library",
     "description": "The Viserio Session package.",
-    "keywords"   : ["narrowspark", "viserio", "cookie", "encrypter", "session"],
+    "keywords"   : ["narrowspark", "viserio", "cookie", "encrypter", "session", "csrf", "secure", "flash"],
     "license"    : "MIT",
     "homepage"   : "http://github.com/Narrowspark/session",
     "support"    : {
@@ -18,33 +18,46 @@
         }
     ],
     "require": {
-        "php"                             : "^5.6 || ^7.0",
-        "viserio/cookie"                  : "self.version",
-        "viserio/encrypter"               : "self.version",
-        "viserio/support"                 : "self.version",
-        "nesbot/carbon"                   : "^1.18",
-        "symfony/http-foundation"         : "^3.0 || ^2.8"
+        "php"                              : "7.0.0 - 7.0.5 || ^7.0.7",
+        "narrowspark/arr"                  : "^1.0",
+        "nesbot/carbon"                    : "^1.21",
+        "psr/http-message"                 : "^1.0",
+        "schnittstabil/csrf-tokenservice"  : "^2.0",
+        "viserio/config"                   : "self.version",
+        "viserio/cookie"                   : "self.version",
+        "viserio/cotracts"                 : "self.version",
+        "viserio/encrypter"                : "self.version",
+        "viserio/support"                  : "self.version"
     },
     "require-dev": {
-        "narrowspark/php-cs-fixer-config" : "^1.1",
-        "narrowspark/testing-helper"      : "^1.5",
-        "phpunit/phpunit"                 : "^5.1"
+        "narrowspark/php-cs-fixer-config"  : "^1.2",
+        "narrowspark/testing-helper"       : "^1.5",
+        "mockery/mockery"                  : "^0.9.5",
+        "mikey179/vfsStream"               : "^1.6",
+        "phpunit/phpunit"                  : "^5.1",
+        "viserio/cache"                    : "self.version",
+        "viserio/filesystem"               : "self.version"
     },
     "autoload": {
         "psr-4": {
-            "Viserio\\Session\\"          : ""
+            "Viserio\\Session\\"           : ""
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Viserio\\Session\\Tests\\"   : "Tests/"
+            "Viserio\\Session\\Tests\\"    : "Tests/"
         }
+    },
+    "suggest": {
+        "cache/session-handler"            : "Required to use the CacheBasedSessionHandler (^0.1).",
+        "viserio/cookie"                   : "Required to use the CookieSessionHandler (self.version).",
+        "viserio/filesystem"               : "Required to use the FileSessionHandler (self.version)."
     },
     "extra": {
         "branch-alias": {
-            "dev-master"                  : "1.0-dev"
+            "dev-master"                   : "1.0-dev"
         }
     },
-    "minimum-stability"                   : "dev",
-    "prefer-stable"                       : true
+    "minimum-stability"                    : "dev",
+    "prefer-stable"                        : true
 }

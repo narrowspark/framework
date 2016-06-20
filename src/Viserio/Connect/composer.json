@@ -18,7 +18,7 @@
         }
     ],
     "require": {
-        "php"                                                : "^5.6 || ^7.0",
+        "php"                                                : "7.0.0 - 7.0.5 || ^7.0.7",
         "container-interop/container-interop"                : "^1.1",
         "narrowspark/arr"                                    : "^1.0",
         "viserio/contracts"                                  : "self.version",
@@ -49,7 +49,6 @@
         "container-interop/container-interop-implementation" : "~1.1"
     },
     "suggest": {
-        "ext-apc"                                            : "Required to use apc",
         "ext-memcached"                                      : "Required to use memcached",
         "ext-mongo"                                          : "Required to use mongo",
         "ext-pdo"                                            : "Required to use PDO adapters",

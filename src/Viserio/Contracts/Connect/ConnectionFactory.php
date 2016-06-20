@@ -8,18 +8,18 @@ interface ConnectionFactory
      *
      * @param string $name
      *
-     * @return Connector
+     * @return object
      */
-    public function connection($name);
+    public function connection(string $name);
 
     /**
      * Reconnect to the given connection.
      *
      * @param string $name
      *
-     * @return Connector
+     * @return object
      */
-    public function reconnect($name);
+    public function reconnect(string $name);
 
     /**
      * Disconnect from the given connection.
@@ -35,22 +35,24 @@ interface ConnectionFactory
      *
      * @return array
      */
-    public function getConnectionConfig($name);
+    public function getConnectionConfig(string $name): array;
 
     /**
      * Register an extension connection resolver.
      *
-     * @param Connector $name
+     * @param string    $name
      * @param Connector $resolver
+     *
+     * @return self
      */
-    public function extend($name, Connector $resolver);
+    public function extend(string $name, Connector $resolver): ConnectionFactory;
 
     /**
      * Return all extensions.
      *
      * @return object[]
      */
-    public function getExtensions();
+    public function getExtensions(): array;
 
     /**
      * Return created connection.

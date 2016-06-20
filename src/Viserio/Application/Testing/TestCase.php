@@ -22,27 +22,11 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase implements TestCaseC
     {
         parent::setUp();
 
-        if (!$this->app) {
+        if (! $this->app) {
             $this->refreshApplication();
         }
 
         $this->start();
-    }
-
-    /**
-     * Run extra setup code.
-     */
-    protected function start()
-    {
-        // call more setup methods
-    }
-
-    /**
-     * Run extra tear down code.
-     */
-    protected function finish()
-    {
-        // call more tear down methods
     }
 
     /**
@@ -115,5 +99,21 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase implements TestCaseC
         }
 
         static::assertArraySubset($haystack, $array, false, $msg);
+    }
+
+    /**
+     * Run extra setup code.
+     */
+    protected function start()
+    {
+        // call more setup methods
+    }
+
+    /**
+     * Run extra tear down code.
+     */
+    protected function finish()
+    {
+        // call more tear down methods
     }
 }

@@ -42,7 +42,7 @@ class ConsoleServiceProvider extends ServiceProvider
      *
      * @return string[]
      */
-    public function provides()
+    public function provides(): array
     {
         return [
             'command',

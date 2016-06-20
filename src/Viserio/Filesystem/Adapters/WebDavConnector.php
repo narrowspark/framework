@@ -16,7 +16,7 @@ class WebDavConnector implements ConnectorContract
      *
      * @return WebDAVAdapter
      */
-    public function connect(array $config)
+    public function connect(array $config): \League\Flysystem\WebDAV\WebDAVAdapter
     {
         $client = $this->getClient($config);
 
@@ -28,11 +28,11 @@ class WebDavConnector implements ConnectorContract
      */
     protected function getClient(array $config)
     {
-        if (!array_key_exists('baseUri', $config)) {
+        if (! array_key_exists('baseUri', $config)) {
             throw new InvalidArgumentException('The WebDav connector requires baseUri configuration.');
         }
 
-        if (!array_key_exists('prefix', $config)) {
+        if (! array_key_exists('prefix', $config)) {
             $config['prefix'] = null;
         }
 

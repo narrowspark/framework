@@ -26,6 +26,25 @@ class RoutingServiceProvider extends ServiceProvider
         $this->registerUrlGenerator();
     }
 
+    public function boot()
+    {
+        require $this->app->path() . '/Http/routes.php';
+    }
+
+    /**
+     * Get the services provided by the provider.
+     *
+     * @return string[]
+     */
+    public function provides(): array
+    {
+        return [
+            'route',
+            'route.url.generator',
+            'route.url.data.generator',
+        ];
+    }
+
     protected function registerUrlGenerator()
     {
         $this->registerUrlGeneratorDataGenerator();
@@ -40,24 +59,5 @@ class RoutingServiceProvider extends ServiceProvider
         $this->app->singleton('route.url.data.generator', function ($app) {
             return new GroupCountBasedDataGenerator($app->get('route'));
         });
-    }
-
-    public function boot()
-    {
-        require $this->app->path() . '/Http/routes.php';
-    }
-
-    /**
-     * Get the services provided by the provider.
-     *
-     * @return string[]
-     */
-    public function provides()
-    {
-        return [
-            'route',
-            'route.url.generator',
-            'route.url.data.generator',
-        ];
     }
 }

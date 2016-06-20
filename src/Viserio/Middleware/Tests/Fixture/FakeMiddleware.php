@@ -3,17 +3,18 @@ namespace Viserio\Middleware\Tests\Fixture;
 
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Viserio\Contracts\Middleware\Middleware as MiddlewareContract;
+use Viserio\Contracts\Middleware\Frame as FrameContract;
+use Viserio\Contracts\Middleware\ServerMiddleware as ServerMiddlewareContract;
 
-class FakeMiddleware implements MiddlewareContract
+class FakeMiddleware implements ServerMiddlewareContract
 {
-    public function __invoke(
+    public function process(
         ServerRequestInterface $request,
-        ResponseInterface $response,
-        callable $next
-    ) {
+        FrameContract $frame
+    ): ResponseInterface {
+        $response = $frame->next($request);
+
         $response = $response->withAddedHeader('X-Foo', 'modified');
-        $response = $next($request, $response, $next);
 
         return $response;
     }

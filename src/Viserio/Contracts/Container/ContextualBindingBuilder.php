@@ -15,9 +15,9 @@ interface ContextualBindingBuilder
      *
      * @param string $abstract
      *
-     * @return $this
+     * @return self
      */
-    public function needs($abstract);
+    public function needs(string $abstract): ContextualBindingBuilder;
 
     /**
      * Define the implementation for the contextual binding.

@@ -12,17 +12,17 @@ trait NormalizePathAndDirectorySeparatorTrait
      *
      * @return string|array
      */
-    public function normalizeDirectorySeparator($paths)
+    public static function normalizeDirectorySeparator($paths)
     {
         if (is_array($paths)) {
-            return $this->normalizeAndAddDirectorySeparatorOnArray($paths);
+            return self::normalizeAndAddDirectorySeparatorOnArray($paths);
         }
 
         if (strpos($paths, 'vfs:') !== false) {
             return $paths;
         }
 
-        return $this->normalizePath(str_replace('\\', '/', $paths));
+        return self::normalizePath(str_replace('\\', '/', $paths));
     }
 
     /**
@@ -34,11 +34,11 @@ trait NormalizePathAndDirectorySeparatorTrait
      *
      * @return string
      */
-    public function normalizePath($path)
+    public static function normalizePath(string $path): string
     {
         // Remove any kind of funky unicode whitespace
         $normalized = preg_replace('#\p{C}+|^\./#u', '', $path);
-        $normalized = $this->normalizeRelativePath($normalized);
+        $normalized = self::normalizeRelativePath($normalized);
 
         if (preg_match('#/\.{2}|^\.{2}/|^\.{2}$#', $normalized)) {
             throw new LogicException(
@@ -59,7 +59,7 @@ trait NormalizePathAndDirectorySeparatorTrait
      *
      * @return string
      */
-    public function normalizeRelativePath($path)
+    public static function normalizeRelativePath(string $path): string
     {
         // Path remove self referring paths ("/./").
         $path = preg_replace('#/\.(?=/)|^\./|/\./?$#', '', $path);
@@ -74,7 +74,14 @@ trait NormalizePathAndDirectorySeparatorTrait
         return $path;
     }
 
-    private function normalizeAndAddDirectorySeparatorOnArray(array $paths)
+    /**
+    * Normalize path.
+    *
+     * @param array $paths
+     *
+     * @return array
+     */
+    private static function normalizeAndAddDirectorySeparatorOnArray(array $paths): array
     {
         $newPaths = [];
 
@@ -82,7 +89,7 @@ trait NormalizePathAndDirectorySeparatorTrait
             if (strpos($path, 'vfs:') !== false) {
                 $newPaths[] = $path;
             } else {
-                $newPaths[] = $this->normalizePath(str_replace('\\', '/', $path));
+                $newPaths[] = self::normalizePath(str_replace('\\', '/', $path));
             }
         }
 

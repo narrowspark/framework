@@ -10,7 +10,7 @@ interface Connector
      *
      * @throws \RuntimeException|\InvalidArgumentException
      *
-     * @return \League\Flysystem\AdapterInterface
+     * @return object
      */
     public function connect(array $config);
 }

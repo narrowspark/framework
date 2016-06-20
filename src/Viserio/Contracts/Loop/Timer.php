@@ -8,21 +8,21 @@ interface Timer
      *
      * @return LoopInterface
      */
-    public function getLoop();
+    public function getLoop(): \Viserio\Contracts\Loop\LoopInterface;
 
     /**
      * Get the interval after which this timer will execute, in seconds
      *
      * @return float
      */
-    public function getInterval();
+    public function getInterval(): float;
 
     /**
      * Get the callback that will be executed when this timer elapses
      *
      * @return callable
      */
-    public function getCallback();
+    public function getCallback(): callable;
 
     /**
      * Set arbitrary data associated with timer
@@ -43,14 +43,14 @@ interface Timer
      *
      * @return bool
      */
-    public function isPeriodic();
+    public function isPeriodic(): bool;
 
     /**
      * Determine whether the time is active
      *
      * @return bool
      */
-    public function isActive();
+    public function isActive(): bool;
 
     /**
      * Cancel this timer

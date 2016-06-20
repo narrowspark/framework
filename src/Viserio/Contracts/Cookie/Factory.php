@@ -7,24 +7,24 @@ interface Factory
      * Create a new cookie instance.
      *
      * @param string      $name
-     * @param string      $value
+     * @param string|null $value
      * @param int         $minutes
      * @param string|null $path
      * @param string|null $domain
      * @param bool        $secure
      * @param bool        $httpOnly
      *
-     * @return \Viserio\Cookie\Cookie
+     * @return \Viserio\Contracts\Cookie\Cookie
      */
     public function create(
-        $name,
+        string $name,
         $value,
-        $minutes = 0,
+        int $minutes = 0,
         $path = null,
         $domain = null,
-        $secure = false,
-        $httpOnly = true
-    );
+        bool $secure = false,
+        bool $httpOnly = true
+    ): Cookie;
 
     /**
      * Create a cookie that lasts "forever" (five years).
@@ -36,16 +36,16 @@ interface Factory
      * @param bool        $secure
      * @param bool        $httpOnly
      *
-     * @return \Viserio\Cookie\Cookie
+     * @return \Viserio\Contracts\Cookie\Cookie
      */
     public function forever(
-        $name,
-        $value,
+        string $name,
+        string $value,
         $path = null,
         $domain = null,
-        $secure = false,
-        $httpOnly = true
-    );
+        bool $secure = false,
+        bool $httpOnly = true
+    ): Cookie;
 
     /**
      * Expire the given cookie.
@@ -54,11 +54,11 @@ interface Factory
      * @param string|null $path
      * @param string|null $domain
      *
-     * @return \Viserio\Cookie\Cookie
+     * @return \Viserio\Contracts\Cookie\Cookie
      */
     public function forget(
-        $name,
+        string $name,
         $path = null,
         $domain = null
-    );
+    ): Cookie;
 }

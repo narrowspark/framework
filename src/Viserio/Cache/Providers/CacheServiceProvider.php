@@ -16,6 +16,19 @@ class CacheServiceProvider extends ServiceProvider
         $this->registerCaches();
     }
 
+    /**
+     * Get the services provided by the provider.
+     *
+     * @return string[]
+     */
+    public function provides(): array
+    {
+        return [
+            'cache',
+            'cache.factory',
+        ];
+    }
+
     protected function registerCacheFactory()
     {
         $this->app->singleton('cache.factory', function ($app) {
@@ -57,18 +70,5 @@ class CacheServiceProvider extends ServiceProvider
                 });
             }
         }
-    }
-
-    /**
-     * Get the services provided by the provider.
-     *
-     * @return string[]
-     */
-    public function provides()
-    {
-        return [
-            'cache',
-            'cache.factory',
-        ];
     }
 }

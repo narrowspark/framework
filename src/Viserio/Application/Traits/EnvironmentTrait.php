@@ -12,7 +12,7 @@ trait EnvironmentTrait
      *
      * @return string
      */
-    public function environment()
+    public function environment(): string
     {
         if (func_num_args() > 0) {
             $patterns = is_array(func_get_arg(0)) ? func_get_arg(0) : func_get_args();
@@ -46,7 +46,7 @@ trait EnvironmentTrait
      *
      * @return string
      */
-    public function detectEnvironment(\Closure $callback)
+    public function detectEnvironment(\Closure $callback): string
     {
         $args = (false !== getenv('argv') ? getenv('argv') : null);
 
@@ -81,7 +81,7 @@ trait EnvironmentTrait
      * @param string $alias
      * @param string $concrete
      */
-    abstract public function bind($alias, $concrete = null, $singleton = false);
+    abstract public function bind(string $alias, $concrete = null, $singleton = false);
 
     /**
      * {@inheritdoc}

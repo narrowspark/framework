@@ -10,7 +10,7 @@ class TransportManager extends Manager
      *
      * @param string $name
      */
-    public function setDefaultDriver($name)
+    public function setDefaultDriver(string $name)
     {
     }
 
@@ -19,7 +19,7 @@ class TransportManager extends Manager
      *
      * @return string
      */
-    public function getDefaultDriver()
+    public function getDefaultDriver(): string
     {
     }
 
@@ -28,7 +28,7 @@ class TransportManager extends Manager
      *
      * @return string
      */
-    protected function getConfigName()
+    protected function getConfigName(): string
     {
         return 'mail';
     }

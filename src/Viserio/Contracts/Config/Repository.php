@@ -10,28 +10,29 @@ interface Repository extends ArrayAccess
      * Merge provided values with the defaults to ensure all required values are set.
      *
      * @param array $values
-     * @required
+     *
+     * @return self
      */
-    public function setArray(array $values = []);
+    public function setArray(array $values = []): Repository;
 
     /**
      * Get all values as nested array.
      *
      * @return array
      */
-    public function getAllNested();
+    public function getAllNested(): array;
 
     /**
      * Get all values as flattened key array.
      *
      * @return array
      */
-    public function getAllFlat();
+    public function getAllFlat(): array;
 
     /**
      * Get all flattened array keys.
      *
      * @return array
      */
-    public function getKeys();
+    public function getKeys(): array;
 }

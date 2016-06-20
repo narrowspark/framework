@@ -1,8 +1,8 @@
 <?php
 namespace Viserio\Support;
 
-use RandomLib\Factory as RandomLib;
 use Stringy\StaticStringy;
+use Viserio\Contracts\Support\CharacterType;
 
 class Str extends StaticStringy
 {
@@ -28,7 +28,7 @@ class Str extends StaticStringy
      *
      * @return string
      */
-    public static function finish($value, $cap)
+    public static function finish(string $value, string $cap): string
     {
         $quoted = preg_quote($cap, '/');
 
@@ -44,7 +44,7 @@ class Str extends StaticStringy
      *
      * @return string
      */
-    public static function limit($value, $limit = 100, $end = '...')
+    public static function limit(string $value, int $limit = 100, string $end = '...'): string
     {
         if (mb_strwidth($value, 'UTF-8') <= $limit) {
             return $value;
@@ -62,11 +62,11 @@ class Str extends StaticStringy
      *
      * @return string
      */
-    public static function words($value, $words = 100, $end = '...')
+    public static function words(string $value, int $words = 100, string $end = '...'): string
     {
         preg_match('/^\s*+(?:\S++\s*+){1,' . $words . '}/u', $value, $matches);
 
-        if (!isset($matches[0]) || strlen($value) === strlen($matches[0])) {
+        if (! isset($matches[0]) || strlen($value) === strlen($matches[0])) {
             return $value;
         }
 
@@ -81,85 +81,58 @@ class Str extends StaticStringy
      *
      * @return array
      */
-    public static function parseCallback($callback, $default)
+    public static function parseCallback(string $callback, string $default): array
     {
         return static::contains($callback, '@') ? explode('@', $callback, 2) : [$callback, $default];
     }
 
     /**
-     * Generate a more truly "random" alpha-numeric string.
+     * Generate a random string of a given length and character set
      *
-     * @param int    $length
-     * @param string $type
+     * @param int $length How many characters do you want?
+     * @param string $characters Which characters to choose from
      *
      * @return string
      */
-    public static function random($length = 16, $type = 'alnum')
-    {
-        switch ($type) {
-            case 'alnum':
-                $pool = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-                break;
-            case 'alpha':
-                $pool = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-                break;
-            case 'hexdec':
-                $pool = '0123456789abcdef';
-                break;
-            case 'numeric':
-                $pool = '0123456789';
-                break;
-            case 'nozero':
-                $pool = '123456789';
-                break;
-            case 'distinct':
-                $pool = '2345679ACDEFHJKLMNPRSTUVWXYZ';
-                break;
-            default:
-                $pool = (string) $type;
-                break;
+    public static function random(
+        int $length = 64,
+        string $characters = CharacterType::PRINTABLE_ASCII
+    ): string {
+        $str = '';
+        $l = self::length($characters) - 1;
+
+        for ($i = 0; $i < $length; ++$i) {
+            $r = \random_int(0, $l);
+            $str .= $characters[$r];
         }
 
-        $factory   = new RandomLib();
-        $generator = $factory->getMediumStrengthGenerator();
-
-        return $generator->generateString($length, $pool);
+        return $str;
     }
 
     /**
      * Convert a string to snake case.
+     *
+     * @link https://en.wikipedia.org/wiki/Snake_case
      *
      * @param string $value
      * @param string $delimiter
      *
      * @return string
      */
-    public static function snake($value, $delimiter = '_')
+    public static function snake(string $value, string $delimiter = '_'): string
     {
-        $key = $value . $delimiter;
+        $key = $value;
 
-        if (isset(static::$snakeCache[$key])) {
-            return static::$snakeCache[$key];
+        if (isset(static::$snakeCache[$key][$delimiter])) {
+            return static::$snakeCache[$key][$delimiter];
         }
 
-        $value    = preg_replace('/\s+/', '', $value);
-        $value[0] = strtolower($value[0]);
-        $len      = strlen($value);
-
-        for ($i = 0; $i < $len; ++$i) {
-            // See if we have an uppercase character and replace; ord A = 65, Z = 90.
-            if (ord($value[$i]) > 64 && ord($value[$i]) < 91) {
-                // Replace uppercase of with underscore and lowercase.
-                $replace = $delimiter . strtolower($value[$i]);
-                $value   = substr_replace($value, $replace, $i, 1);
-
-                // Increase length of class and position since we made the string longer.
-                ++$len;
-                ++$i;
-            }
+        if (! ctype_lower($value)) {
+            $value = preg_replace('/\s+/u', '', $value);
+            $value = static::toLowerCase(preg_replace('/(.)(?=[A-Z0-9])/u', '$1'.$delimiter, $value));
         }
 
-        return static::$snakeCache[$key] = $value;
+        return static::$snakeCache[$key][$delimiter] = $value;
     }
 
     /**
@@ -169,7 +142,7 @@ class Str extends StaticStringy
      *
      * @return string
      */
-    public static function studly($value)
+    public static function studly(string $value): string
     {
         $key = $value;
 

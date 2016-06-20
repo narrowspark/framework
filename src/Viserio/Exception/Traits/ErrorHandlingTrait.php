@@ -11,7 +11,7 @@ trait ErrorHandlingTrait
      *
      * @return array
      */
-    protected function message($code, $msg)
+    protected function message(int $code, string $msg): array
     {
         switch ($code) {
             case 400:
@@ -100,7 +100,7 @@ trait ErrorHandlingTrait
                 $message = 'An error has occurred and this resource cannot be displayed.';
         }
 
-        $extra = (!$msg || strlen($msg) > 35 || strlen($msg) < 5) ? 'TEXT' : $msg;
+        $extra = (! $msg || strlen($msg) > 35 || strlen($msg) < 5) ? 'TEXT' : $msg;
 
         return compact('code', 'name', 'message', 'extra');
     }

@@ -27,7 +27,7 @@ class Password implements PasswordContract
     /**
      * {@inheritdoc}
      */
-    public function create($password)
+    public function create(string $password): string
     {
         return PasswordLock::hashAndEncrypt($password, $this->key);
     }
@@ -35,7 +35,7 @@ class Password implements PasswordContract
     /**
      * {@inheritdoc}
      */
-    public function verify($password, $hashedValue)
+    public function verify(string $password, string $hashedValue): bool
     {
         return PasswordLock::decryptAndVerify($password, $hashedValue, $this->key);
     }
@@ -48,7 +48,7 @@ class Password implements PasswordContract
      *
      * @return string
      */
-    public function shouldRecreate($hashedValue, Key $newKey)
+    public function shouldRecreate(string $hashedValue, Key $newKey): string
     {
         return PasswordLock::rotateKey($hashedValue, $this->key, $newKey);
     }

@@ -105,6 +105,26 @@ class Dispatcher extends GroupCountBasedDispatcher implements RouteStrategyContr
     }
 
     /**
+     * Invoke a controller action.
+     *
+     * @param ResponseContract $controller
+     * @param array            $vars
+     *
+     * @return ResponseContract
+     */
+    public function invokeController($controller, array $vars = [])
+    {
+        if (is_array($controller)) {
+            $controller = [
+                $this->container[$controller[0]],
+                $controller[1],
+            ];
+        }
+
+        return call_user_func_array($controller, array_values($vars));
+    }
+
+    /**
      * Handle dispatching of a found route.
      *
      * @param string|\Closure                               $handler
@@ -162,7 +182,7 @@ class Dispatcher extends GroupCountBasedDispatcher implements RouteStrategyContr
         }
 
         // if controller method wasn't specified, throw exception.
-        if (!$controller) {
+        if (! $controller) {
             throw new RuntimeException('A class method must be provided as a controller. ClassName::methodName');
         }
 
@@ -194,26 +214,6 @@ class Dispatcher extends GroupCountBasedDispatcher implements RouteStrategyContr
         }
 
         return $response;
-    }
-
-    /**
-     * Invoke a controller action.
-     *
-     * @param ResponseContract $controller
-     * @param array            $vars
-     *
-     * @return ResponseContract
-     */
-    public function invokeController($controller, array $vars = [])
-    {
-        if (is_array($controller)) {
-            $controller = [
-                $this->container[$controller[0]],
-                $controller[1],
-            ];
-        }
-
-        return call_user_func_array($controller, array_values($vars));
     }
 
     /**

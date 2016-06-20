@@ -18,16 +18,16 @@
         }
     ],
     "require": {
-        "php"                                 : "^5.6 || ^7.0",
-        "viserio/cotracts"                    : "self.version",
+        "php"                                 : "7.0.0 - 7.0.5 || ^7.0.7",
         "container-interop/container-interop" : "^1.1",
-        "php-di/invoker"                      : "~1.2",
         "stecman/symfony-console-completion"  : "^0.6",
-        "symfony/console"                     : "^3.0 || ^2.8"
+        "symfony/console"                     : "^3.1",
+        "viserio/cotracts"                    : "self.version",
+        "viserio/support"                     : "self.version"
     },
     "require-dev": {
-        "narrowspark/php-cs-fixer-config"     : "^1.1",
-        "narrowspark/testing-helper"          : "^1.5",
+        "narrowspark/php-cs-fixer-config"     : "^1.4",
+        "narrowspark/testing-helper"          : "^1.6",
         "phpunit/phpunit"                     : "^5.1"
     },
     "autoload": {
@@ -46,7 +46,7 @@
         }
     },
     "suggest": {
-        "symfony/process"                     : "Required to use scheduling component (^3.0 || ^2.8)."
+        "symfony/process"                     : "Required to use scheduling component (^3.1)."
     },
     "minimum-stability"                       : "dev",
     "prefer-stable"                           : true

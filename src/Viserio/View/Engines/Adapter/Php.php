@@ -15,7 +15,7 @@ class Php implements EnginesContract
      *
      * @return string
      */
-    public function get($path, array $data = [])
+    public function get(string $path, array $data = []): string
     {
         return $this->evaluatePath($path, $data);
     }
@@ -28,7 +28,7 @@ class Php implements EnginesContract
      *
      * @return string
      */
-    protected function evaluatePath($phpPath, array $phpData)
+    protected function evaluatePath(string $phpPath, array $phpData): string
     {
         $obLevel = ob_get_level();
 
@@ -59,9 +59,9 @@ class Php implements EnginesContract
      * @param \Exception $exception
      * @param int        $obLevel
      *
-     * @throws $exception
+     * @throws \Exception
      */
-    protected function handleViewException(Exception $exception, $obLevel)
+    protected function handleViewException(Exception $exception, int $obLevel)
     {
         while (ob_get_level() > $obLevel) {
             ob_end_clean();

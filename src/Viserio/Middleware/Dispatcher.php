@@ -1,104 +1,115 @@
 <?php
 namespace Viserio\Middleware;
 
-use Interop\Container\ContainerInterface;
-use Psr\Http\Message\ResponseInterface as Response;
-use Psr\Http\Message\ServerRequestInterface as Request;
-use RuntimeException;
-use SplQueue;
-use Viserio\Contracts\Container\ContainerAware;
+use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ResponseInterface;
+use SplDoublyLinkedList;
+use SplStack;
+use Viserio\Contracts\Middleware\Frame as FrameContract;
+use Viserio\Contracts\Middleware\Middleware as MiddlewareContract;
+use Viserio\Contracts\Middleware\Stack as StackContract;
+use Viserio\Support\Traits\ContainerAwareTrait;
 
-class Dispatcher
+class Dispatcher implements StackContract
 {
+    use ContainerAwareTrait;
+
     /**
      * All of the short-hand keys for middlewares.
      *
-     * @var SplQueue
+     * @var \SplStack $response
      */
-    protected $middleware;
+    protected $stack;
 
     /**
-     * Container instance.
+     * A response instance.
      *
-     * @var \Interop\Container\ContainerInterface|null
+     * @var ResponseInterface $response
      */
-    protected $container;
+    protected $response;
 
-    /**
-     * Lock status of the pipeline
-     *
-     * @var bool
-     */
-    protected $locked = false;
-
-    /**
-     * Create a new class instance.
-     */
-    public function __construct()
+    public function __construct(ResponseInterface $response)
     {
-        $this->middleware = new SplQueue();
-    }
-
-    /**
-     * Set a container.
-     *
-     * @param \Interop\Container\ContainerInterface $container
-     *
-     * @return self
-     */
-    public function setContainer(ContainerInterface $container)
-    {
-        $this->container = $container;
-
-        return $this;
-    }
-
-    /**
-     * Get the container.
-     *
-     * @return \Interop\Container\ContainerInterface
-     */
-    public function getContainer()
-    {
-        return $this->container;
+        $this->response = $response;
+        $this->stack = new SplStack();
+        $this->stack->setIteratorMode(SplDoublyLinkedList::IT_MODE_LIFO | SplDoublyLinkedList::IT_MODE_KEEP);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function pipe(callable $middleware)
+    public function withMiddleware(MiddlewareContract $middleware): StackContract
     {
-        // Check if the pipeline is locked
-        if ($this->locked) {
-            throw new RuntimeException('Middleware can’t be added once the stack is dequeuing');
+        $this->stack->push($this->isContainerAware($middleware));
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function withoutMiddleware(MiddlewareContract $middleware): StackContract
+    {
+        foreach ($this->stack as $key => $stackMiddleware) {
+            if (get_class($this->stack[$key]) === get_class($middleware)) {
+                unset($this->stack[$key]);
+            }
         }
 
-        if ($middleware instanceof ContainerAware || method_exists($middleware, 'setContainer')) {
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function process(RequestInterface $request): ResponseInterface
+    {
+        return (new class($this->stack, $this->response) implements FrameContract {
+            private $middlewares;
+
+            private $response;
+
+            private $index = 0;
+
+            public function __construct(SplStack $stack, ResponseInterface $response)
+            {
+                $this->middlewares = $stack;
+                $this->response = $response;
+            }
+
+            public function next(RequestInterface $request): ResponseInterface
+            {
+                if (!isset($this->middlewares[$this->index])) {
+                    return $this->response;
+                }
+
+                return $this->middlewares[$this->index]->process($request, $this->nextFrame());
+            }
+
+            private function nextFrame()
+            {
+                $new = clone $this;
+                ++$new->index;
+
+                return $new;
+            }
+        }
+        )->next($request);
+    }
+
+    /**
+     *  Check if middleware is aware of Interop\Container\ContainerInterface.
+     *
+     * @param MiddlewareContract $middleware
+     *
+     * @return MiddlewareContract
+     */
+    private function isContainerAware($middleware): MiddlewareContract
+    {
+        if (method_exists($middleware, 'setContainer')) {
             $middleware->setContainer($this->getContainer());
         }
 
-        $this->middleware->enqueue($middleware);
-
-        return $this;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function __invoke(Request $request, Response $response)
-    {
-        // Lock the pipeline
-        $this->locked = true;
-
-        // Check if the pipe-line is broken or if we are at the end of the queue
-        if (!$this->middleware->isEmpty()) {
-            // Pick the next middleware from the queue
-            $next = $this->middleware->dequeue();
-            // Call the next middleware (if callable)
-            return (is_callable($next)) ? $next($request, $response, $this) : $response;
-        }
-
-        // Nothing left to do, return the response
-        return $response;
+        return $middleware;
     }
 }

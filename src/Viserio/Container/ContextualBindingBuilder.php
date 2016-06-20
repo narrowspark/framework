@@ -44,9 +44,9 @@ class ContextualBindingBuilder implements ContextualBindingBuilderContract
      *
      * @param string $abstract
      *
-     * @return $this
+     * @return self
      */
-    public function needs($abstract)
+    public function needs(string $abstract): ContextualBindingBuilderContract
     {
         $this->needs = $abstract;
 

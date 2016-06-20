@@ -39,16 +39,16 @@ trait ServiceProviderTrait
     /**
      * {@inheritdoc}
      */
-    public function register($provider, $options = [], $force = false)
+    public function register(string $provider, array $options = [], bool $force = false): \Viserio\Contract\Application\ServiceProvider
     {
-        if ((!is_string($provider)) && (!$provider instanceof ServiceProvider)) {
+        if ((! is_string($provider)) && (! $provider instanceof ServiceProvider)) {
             throw new \Exception(
                 'When registering a service provider, you must provide either and instance of ' .
                 '[\Viserio\Container\ServiceProvider] or a fully qualified class name'
             );
         }
 
-        if (($registered = $this->getProvider($provider)) && !$force) {
+        if (($registered = $this->getProvider($provider)) && ! $force) {
             return $registered;
         }
 
@@ -90,6 +90,11 @@ trait ServiceProviderTrait
     {
         return $this->loadedProviders;
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    abstract public function bind(string $alias, $concrete = null, $singleton = false);
 
     /**
      * Register a service provider.
@@ -138,7 +143,7 @@ trait ServiceProviderTrait
         $aliases = class_parents($class) + class_implements($class) + [$class];
 
         foreach ($aliases as $alias) {
-            if (!isset($this->loadedProviders[$alias])) {
+            if (! isset($this->loadedProviders[$alias])) {
                 $this->loadedProviders[$alias] = $provider;
             }
         }
@@ -155,9 +160,4 @@ trait ServiceProviderTrait
             $this->provides[$binding][] = $provider;
         }
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    abstract public function bind($alias, $concrete = null, $singleton = false);
 }

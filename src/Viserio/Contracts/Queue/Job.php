@@ -7,9 +7,9 @@ interface Job
 
     const STATUS_REQUEUE = 1;
 
-    const STATUS_FAILED  = 2;
+    const STATUS_FAILED = 2;
 
-    const STATUS_DELETE  = 3;
+    const STATUS_DELETE = 3;
 
     /**
      * @return mixed
@@ -24,12 +24,12 @@ interface Job
     /**
      * @return string
      */
-    public function getInfo();
+    public function getInfo(): string;
 
     /**
      * @return array
      */
-    public function getMetadata();
+    public function getMetadata(): array;
 
     /**
      * @return null|string
@@ -39,12 +39,12 @@ interface Job
     /**
      * @return int
      */
-    public function getAttempts();
+    public function getAttempts(): int;
 
     /**
      * @return int
      */
-    public function getStatus();
+    public function getStatus(): int;
 
     /**
      * Mark the job as failed.
@@ -52,7 +52,7 @@ interface Job
      * @param string   $message Info about the failure
      * @param int|null $delay   The requeue delay
      */
-    public function fail($message, $delay = null);
+    public function fail(string $message, int $delay = null);
 
     /**
      * Mark the job as requeue.

@@ -25,6 +25,21 @@ class Message
     }
 
     /**
+     * Dynamically pass missing methods to the Swift instance.
+     *
+     * @param string $method
+     * @param array  $parameters
+     *
+     * @return mixed
+     */
+    public function __call($method, $parameters)
+    {
+        $callable = [$this->swift, $method];
+
+        return call_user_func_array($callable, $parameters);
+    }
+
+    /**
      * Add a "from" address to the message.
      *
      * @param string      $address
@@ -126,28 +141,6 @@ class Message
     }
 
     /**
-     * Add a recipient to the message.
-     *
-     * @param string|array $address
-     * @param string       $name
-     * @param string       $type
-     *
-     * @return \Viserio\Mail\Message
-     */
-    protected function addAddresses($address, $name, $type)
-    {
-        if (is_array($address)) {
-            $set = sprintf('set%s', $type);
-            $this->swift->$set($address, $name);
-        } else {
-            $add = sprintf('add%s', $type);
-            $this->swift->$add($address, $name);
-        }
-
-        return $this;
-    }
-
-    /**
      * Set the subject of the message.
      *
      * @param string $subject
@@ -191,18 +184,6 @@ class Message
     }
 
     /**
-     * Create a Swift Attachment instance.
-     *
-     * @param string $file
-     *
-     * @return \Swift_Attachment
-     */
-    protected function createAttachmentFromPath($file)
-    {
-        return Swift_Attachment::fromPath($file);
-    }
-
-    /**
      * Attach in-memory data as an attachment.
      *
      * @param string $data
@@ -216,19 +197,6 @@ class Message
         $attachment = $this->createAttachmentFromData($data, $name);
 
         return $this->prepAttachment($attachment, $options);
-    }
-
-    /**
-     * Create a Swift Attachment instance from data.
-     *
-     * @param string $data
-     * @param string $name
-     *
-     * @return \Swift_Attachment
-     */
-    protected function createAttachmentFromData($data, $name)
-    {
-        return Swift_Attachment::newInstance($data, $name);
     }
 
     /**
@@ -260,6 +228,63 @@ class Message
     }
 
     /**
+     * Get the underlying Swift Message instance.
+     *
+     * @return \Swift_Message
+     */
+    public function getSwiftMessage()
+    {
+        return $this->swift;
+    }
+
+    /**
+     * Add a recipient to the message.
+     *
+     * @param string|array $address
+     * @param string       $name
+     * @param string       $type
+     *
+     * @return \Viserio\Mail\Message
+     */
+    protected function addAddresses($address, $name, $type)
+    {
+        if (is_array($address)) {
+            $set = sprintf('set%s', $type);
+            $this->swift->$set($address, $name);
+        } else {
+            $add = sprintf('add%s', $type);
+            $this->swift->$add($address, $name);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Create a Swift Attachment instance.
+     *
+     * @param string $file
+     *
+     * @return \Swift_Attachment
+     */
+    protected function createAttachmentFromPath($file)
+    {
+        return Swift_Attachment::fromPath($file);
+    }
+
+    /**
+     * Create a Swift Attachment instance from data.
+     *
+     * @param string $data
+     * @param string $name
+     *
+     * @return \Swift_Attachment
+     */
+    protected function createAttachmentFromData($data, $name)
+    {
+        return Swift_Attachment::newInstance($data, $name);
+    }
+
+    /**
      * Prepare and attach the given attachment.
      *
      * @param \Swift_Attachment $attachment
@@ -286,30 +311,5 @@ class Message
         $this->swift->attach($attachment);
 
         return $this;
-    }
-
-    /**
-     * Get the underlying Swift Message instance.
-     *
-     * @return \Swift_Message
-     */
-    public function getSwiftMessage()
-    {
-        return $this->swift;
-    }
-
-    /**
-     * Dynamically pass missing methods to the Swift instance.
-     *
-     * @param string $method
-     * @param array  $parameters
-     *
-     * @return mixed
-     */
-    public function __call($method, $parameters)
-    {
-        $callable = [$this->swift, $method];
-
-        return call_user_func_array($callable, $parameters);
     }
 }

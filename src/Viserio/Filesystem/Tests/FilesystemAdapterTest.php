@@ -122,7 +122,7 @@ class FilesystemAdapterTest extends \PHPUnit_Framework_TestCase
 
         $this->assertTrue($adapter->has('unlucky.txt'));
 
-        $adapter->delete('unlucky.txt');
+        $adapter->delete(['unlucky.txt']);
 
         $this->assertFalse($adapter->has('unlucky.txt'));
     }
@@ -154,7 +154,7 @@ class FilesystemAdapterTest extends \PHPUnit_Framework_TestCase
         $content = LargeFileContent::withKilobytes(2);
         $adapter = $this->adapter;
 
-        $adapter->write('2kb.txt', $content);
+        $adapter->write('2kb.txt', $content->content());
 
         $this->assertEquals(filesize($this->root . '2kb.txt'), $adapter->getSize('2kb.txt'));
     }

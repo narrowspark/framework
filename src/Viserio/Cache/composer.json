@@ -38,7 +38,7 @@
         }
     ],
     "require": {
-        "php"                                 : "^5.6 || ^7.0",
+        "php"                                 : "7.0.0 - 7.0.5 || ^7.0.7",
         "cache/adapter-common"                : "^0.3.2",
         "cache/hierarchical-cache"            : "^0.2.1",
         "cache/taggable-cache"                : "^0.4",
@@ -85,10 +85,8 @@
         "cache/predis-adapter"                : "Required to use the Predis cache (~0.3).",
         "php-cache/session-handler"           : "Required to use the Session cache (~0.1).",
         "cache/void-adapter"                  : "Required to use the Void cache (~0.2).",
-        "ext-wincache"                        : "Required to use the WinCache cache.",
         "viserio/connect"                     : "Alternative for Predis connection (self.version).",
         "viserio/encryption"                  : "Required to use the Encrypter cache. (self.version)",
-        "ext-xcache"                          : "Required to use the xCache cache."
     },
     "minimum-stability"                       : "dev",
     "prefer-stable"                           : true

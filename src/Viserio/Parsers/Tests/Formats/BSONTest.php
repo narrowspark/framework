@@ -12,7 +12,7 @@ class BSONTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        if (!function_exists('bson_decode')) {
+        if (! function_exists('bson_decode')) {
             $this->markTestSkipped('Failed To Parse BSON - Supporting Library Not Available');
         }
 
@@ -22,8 +22,8 @@ class BSONTest extends \PHPUnit_Framework_TestCase
     public function testParse()
     {
         $expected = ['status' => 123, 'message' => 'hello world'];
-        $payload  = bson_encode($expected);
-        $parsed   = $this->parser->parse($payload);
+        $payload = bson_encode($expected);
+        $parsed = $this->parser->parse($payload);
 
         $this->assertTrue(is_array($parsed));
         $this->assertSame($expected, $parsed);
@@ -40,8 +40,8 @@ class BSONTest extends \PHPUnit_Framework_TestCase
     public function testDump()
     {
         $expected = ['status' => 123, 'message' => 'hello world'];
-        $payload  = bson_encode($expected);
-        $dump     = $this->parser->dump($expected);
+        $payload = bson_encode($expected);
+        $dump = $this->parser->dump($expected);
 
         $this->assertEquals($payload, $dump);
     }

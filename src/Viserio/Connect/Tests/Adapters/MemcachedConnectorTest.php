@@ -31,7 +31,9 @@ class MemcachedConnectorTest extends \PHPUnit_Framework_TestCase
         $memcached->shouldReceive('getServerList')->once()->andReturn(null);
         $memcached->shouldReceive('getVersion')->once()->andReturn([]);
 
-        $connector = $this->getMock('Viserio\Connect\Adapters\MemcachedConnector', ['getMemcached']);
+        $connector = $this->getMockBuilder('Viserio\Connect\Adapters\MemcachedConnector')
+            ->setMethods(['getMemcached'])
+            ->getMock();
         $connector->expects($this->once())->method('getMemcached')->will($this->returnValue($memcached));
 
         $this->assertSame($connector->connect($config), $memcached);
@@ -58,7 +60,9 @@ class MemcachedConnectorTest extends \PHPUnit_Framework_TestCase
         $memcached->shouldReceive('getServerList')->once()->andReturn(null);
         $memcached->shouldReceive('getVersion')->once()->andReturn(['255.255.255']);
 
-        $connector = $this->getMock('Viserio\Connect\Adapters\MemcachedConnector', ['getMemcached']);
+        $connector = $this->getMockBuilder('Viserio\Connect\Adapters\MemcachedConnector')
+            ->setMethods(['getMemcached'])
+            ->getMock();
         $connector->expects($this->once())->method('getMemcached')->will($this->returnValue($memcached));
 
         $connector->connect($config);
@@ -66,7 +70,7 @@ class MemcachedConnectorTest extends \PHPUnit_Framework_TestCase
 
     public function testAddMemcachedOptions()
     {
-        if (!extension_loaded('memcached')) {
+        if (! extension_loaded('memcached')) {
             $this->markTestSkipped('Memcached is not loaded.');
         }
 
@@ -86,7 +90,7 @@ class MemcachedConnectorTest extends \PHPUnit_Framework_TestCase
                 ],
             ];
 
-        if (!defined('HHVM_VERSION')) {
+        if (! defined('HHVM_VERSION')) {
             $config = array_merge($config, [
                 'options' => [
                     'OPT_AUTO_EJECT_HOSTS' => true,
@@ -96,7 +100,7 @@ class MemcachedConnectorTest extends \PHPUnit_Framework_TestCase
 
         $connector = (new MemcachedConnector())->connect($config);
 
-        if (!defined('HHVM_VERSION')) {
+        if (! defined('HHVM_VERSION')) {
             $this->assertSame(1, $connector->getOption(Memcached::OPT_AUTO_EJECT_HOSTS));
         }
 
@@ -111,7 +115,7 @@ class MemcachedConnectorTest extends \PHPUnit_Framework_TestCase
      */
     public function testAddSaslAuth()
     {
-        if (!extension_loaded('memcached')) {
+        if (! extension_loaded('memcached')) {
             $this->markTestSkipped('Memcached is not loaded.');
         }
 
@@ -150,7 +154,9 @@ class MemcachedConnectorTest extends \PHPUnit_Framework_TestCase
         $memcached->shouldReceive('getVersion')->once()->andReturn('');
         $memcached->shouldReceive('getServerList')->once()->andReturn($config);
 
-        $connector = $this->getMock('Viserio\Connect\Adapters\MemcachedConnector', ['getMemcached']);
+        $connector = $this->getMockBuilder('Viserio\Connect\Adapters\MemcachedConnector')
+            ->setMethods(['getMemcached'])
+            ->getMock();
         $connector->expects($this->once())->method('getMemcached')->will($this->returnValue($memcached));
 
         $connector->connect($config);
@@ -162,7 +168,7 @@ class MemcachedConnectorTest extends \PHPUnit_Framework_TestCase
      */
     public function testAddBadMemcachedOptionsToThrowExeption()
     {
-        if (!extension_loaded('memcached')) {
+        if (! extension_loaded('memcached')) {
             $this->markTestSkipped('Memcached is not loaded.');
         }
 

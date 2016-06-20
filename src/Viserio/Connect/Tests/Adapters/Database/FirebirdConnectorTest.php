@@ -10,7 +10,7 @@ class FirebirdConnectorTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        if (!class_exists('PDO')) {
+        if (! class_exists('PDO')) {
             $this->markTestSkipped('PDO module is not installed.');
         }
     }
@@ -21,7 +21,7 @@ class FirebirdConnectorTest extends \PHPUnit_Framework_TestCase
     public function testConnectThrowPDOException()
     {
         $connector = new FirebirdConnector();
-        $config    = [
+        $config = [
             'server'   => '',
             'database' => 'stc\Connect\Tests\Fixture\employee.fdb',
             'username' => '',
@@ -40,10 +40,9 @@ class FirebirdConnectorTest extends \PHPUnit_Framework_TestCase
         $config = ['server' => 'localhost', 'database' => null, 'username' => '', 'password' => ''];
         $connection = $this->mock('stdClass');
 
-        $connector = $this->getMock(
-            'Viserio\Connect\Adapters\Database\FirebirdConnector',
-            ['createConnection', 'getOptions']
-        );
+        $connector = $this->getMockBuilder('Viserio\Connect\Adapters\Database\FirebirdConnector')
+             ->setMethods(['createConnection', 'getOptions'])
+             ->getMock();
 
         $this->assertSame($connector->connect($config), $connection);
     }
@@ -59,10 +58,9 @@ class FirebirdConnectorTest extends \PHPUnit_Framework_TestCase
         ];
         $connection = $this->mock('stdClass');
 
-        $connector = $this->getMock(
-            'Viserio\Connect\Adapters\Database\FirebirdConnector',
-            ['createConnection', 'getOptions']
-        );
+        $connector = $this->getMockBuilder('Viserio\Connect\Adapters\Database\FirebirdConnector')
+             ->setMethods(['createConnection', 'getOptions'])
+             ->getMock();
         $connector->expects($this->once())
             ->method('getOptions')
             ->with($this->equalTo($config))

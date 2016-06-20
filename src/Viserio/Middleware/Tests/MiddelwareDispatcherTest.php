@@ -1,93 +1,82 @@
 <?php
 namespace Viserio\Middleware\Tests;
 
-use Interop\Container\ContainerInterface;
-use Mockery as Mock;
+use Narrowspark\TestingHelper\ArrayContainer;
+use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Viserio\Middleware\Dispatcher;
 use Viserio\Middleware\Tests\Fixture\FakeContainerMiddleware;
 use Viserio\Middleware\Tests\Fixture\FakeMiddleware;
+use Viserio\Middleware\Tests\Fixture\FakeMiddleware2;
 
 class MiddelwareDispatcherTest extends \PHPUnit_Framework_TestCase
 {
-    public function testPipe()
-    {
-        $request = Mock::mock(Request::class);
+    use MockeryTrait;
 
-        $response = Mock::mock(Response::class);
+    public function testWithMiddleware()
+    {
+        $request = $this->mock(Request::class);
+
+        $response = $this->mock(Response::class);
         $response->shouldReceive('hasHeader')->with('X-Foo')->andReturn(true);
         $response->shouldReceive('getHeader')->with('X-Foo')->andReturn('modified');
-        $response->shouldReceive('getStatusCode')->andReturn(500);
-        $response->shouldReceive('withStatus')->andReturnSelf();
+        $response->shouldReceive('getStatusCode')->once()->andReturn(500);
+        $response->shouldReceive('withStatus')->once()->andReturnSelf();
         $response->shouldReceive('withAddedHeader')->withAnyArgs()->andReturnSelf();
 
-        $dispatcher = new Dispatcher();
+        $dispatcher = new Dispatcher($response);
 
-        $dispatcher->pipe(new FakeMiddleware());
-        $dispatcher->pipe(function ($request, $response, $next) {
-            $response = $next($request, $response, $next);
+        $dispatcher->withMiddleware(new FakeMiddleware());
+        $dispatcher->withMiddleware(new FakeMiddleware2());
 
-            return $response->withStatus(500);
-        });
+        $newResponse = $dispatcher->process($request);
 
-        $response = $dispatcher(
-            $request,
-            $response
-        );
+        $this->assertTrue($newResponse->hasHeader('X-Foo'));
+        $this->assertEquals('modified', $newResponse->getHeader('X-Foo'));
+        $this->assertSame(500, $newResponse->getStatusCode());
 
-        $this->assertTrue($response->hasHeader('X-Foo'));
-        $this->assertEquals('modified', $response->getHeader('X-Foo'));
-        $this->assertSame(500, $response->getStatusCode());
+        $dispatcher->withoutMiddleware(new FakeMiddleware2());
     }
 
-    /**
-     * @expectedException RuntimeException
-     * @expectedExceptionMessage Middleware can’t be added once the stack is dequeuing
-     */
-    public function testPipeThrowRuntimeException()
+    public function testWithoutMiddleware()
     {
-        $request = Mock::mock(Request::class);
+        $request = $this->mock(Request::class);
 
-        $response = Mock::mock(Response::class);
+        $response = $this->mock(Response::class);
+        $response->shouldReceive('hasHeader')->with('X-Foo')->andReturn(true);
+        $response->shouldReceive('getHeader')->with('X-Foo')->andReturn('modified');
+        $response->shouldReceive('withStatus')->never();
         $response->shouldReceive('withAddedHeader')->withAnyArgs()->andReturnSelf();
 
-        $dispatcher = new Dispatcher();
-        $dispatcher->pipe(new FakeMiddleware());
-        $dispatcher->pipe(function ($request, $response, $next) use ($dispatcher) {
-            $dispatcher->pipe(new FakeMiddleware());
+        $dispatcher = new Dispatcher($response);
 
-            $response = $next($request, $response, $next);
+        $dispatcher->withMiddleware(new FakeMiddleware());
+        $dispatcher->withMiddleware(new FakeMiddleware2());
+        $dispatcher->withoutMiddleware(new FakeMiddleware2());
 
-            return $response->withStatus(500);
-        });
+        $newResponse = $dispatcher->process($request);
 
-        $response = $dispatcher(
-            $request,
-            $response
-        );
+        $this->assertTrue($newResponse->hasHeader('X-Foo'));
+        $this->assertEquals('modified', $newResponse->getHeader('X-Foo'));
     }
 
     public function testPipeAddContainer()
     {
-        $request = Mock::mock(Request::class);
+        $request = $this->mock(Request::class);
 
-        $response = Mock::mock(Response::class);
+        $response = $this->mock(Response::class);
         $response->shouldReceive('withAddedHeader')->withAnyArgs()->andReturnSelf();
         $response->shouldReceive('getHeader')->with('X-Foo')->andReturn('modified');
 
-        $container = Mock::mock(ContainerInterface::class);
-        $container->shouldReceive('get')->with('doo')->andReturn('modified');
+        $container = new ArrayContainer(['doo' => 'modified']);
 
-        $dispatcher = new Dispatcher();
+        $dispatcher = new Dispatcher($response);
         $dispatcher->setContainer($container);
-        $dispatcher->pipe(new FakeContainerMiddleware());
+        $dispatcher->withMiddleware(new FakeContainerMiddleware());
 
-        $response = $dispatcher(
-            $request,
-            $response
-        );
+        $newResponse = $dispatcher->process($request);
 
-        $this->assertEquals('modified', $response->getHeader('X-Foo'));
+        $this->assertEquals('modified', $newResponse->getHeader('X-Foo'));
     }
 }

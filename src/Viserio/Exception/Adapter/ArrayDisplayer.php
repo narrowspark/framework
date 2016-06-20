@@ -17,7 +17,7 @@ class ArrayDisplayer implements Adapter
      *
      * @return array
      */
-    public function display(Exception $exception, $code)
+    public function display(Exception $exception, int $code): array
     {
         $message = $this->message($code, $exception->getMessage());
 

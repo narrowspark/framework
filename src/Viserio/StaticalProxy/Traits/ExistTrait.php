@@ -11,7 +11,7 @@ trait ExistTrait
      *
      * @return bool
      */
-    protected function exists($object, $autoload = true)
+    protected function exists($object, bool $autoload = true): bool
     {
         return class_exists($object, $autoload) ||
             interface_exists($object, $autoload) ||

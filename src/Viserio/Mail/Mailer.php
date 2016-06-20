@@ -9,7 +9,7 @@ use Psr\Log\LoggerInterface;
 use Swift_Mailer;
 use Swift_Message;
 use Swift_Transport_AbstractSmtpTransport;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Viserio\Contracts\Events\Dispatcher as DispatcherContract;
 use Viserio\Contracts\Mail\Mailer as MailerContract;
 use Viserio\Contracts\View\Factory;
 
@@ -25,7 +25,7 @@ class Mailer implements MailerContract
     /**
      * The event dispatcher instance.
      *
-     * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
+     * @var \Viserio\Contracts\Events\Dispatcher
      */
     protected $events;
 
@@ -81,14 +81,14 @@ class Mailer implements MailerContract
     /**
      * Create a new Mailer instance.
      *
-     * @param \Swift_Mailer                                               $swift
-     * @param \Viserio\Contracts\View\Factory                             $view
-     * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $events
+     * @param \Swift_Mailer                        $swift
+     * @param \Viserio\Contracts\View\Factory      $view
+     * @param \Viserio\Contracts\Events\Dispatcher $events
      */
     public function __construct(
         Swift_Mailer $swift,
         Factory $view,
-        EventDispatcherInterface $events
+        DispatcherContract $events
     ) {
         $this->swift = $swift;
         $this->views = $view;
@@ -135,7 +135,7 @@ class Mailer implements MailerContract
      *
      * @return int
      */
-    public function raw($text, $callback)
+    public function raw(string $text, $callback): int
     {
         return $this->send(['raw' => $text], [], $callback);
     }
@@ -163,7 +163,7 @@ class Mailer implements MailerContract
      *
      * @return int
      */
-    public function send($view, array $data, Closure $callback)
+    public function send($view, array $data, Closure $callback): int
     {
         $this->forceReconnection();
 
@@ -193,21 +193,11 @@ class Mailer implements MailerContract
     }
 
     /**
-     * Force the transport to re-connect.
-     *
-     * This will prevent errors in daemon queue situations.
-     */
-    protected function forceReconnection()
-    {
-        $this->getSwiftMailer()->getTransport()->stop();
-    }
-
-    /**
      * Get the array of failed recipients.
      *
      * @return array
      */
-    public function failures()
+    public function failures(): array
     {
         return $this->failedRecipients;
     }
@@ -274,6 +264,16 @@ class Mailer implements MailerContract
         $this->logger = $logger;
 
         return $this;
+    }
+
+    /**
+     * Force the transport to re-connect.
+     *
+     * This will prevent errors in daemon queue situations.
+     */
+    protected function forceReconnection()
+    {
+        $this->getSwiftMailer()->getTransport()->stop();
     }
 
     /**
@@ -360,10 +360,10 @@ class Mailer implements MailerContract
     protected function sendSwiftMessage($message)
     {
         if ($this->events) {
-            $this->events->addListener('mailer.sending', [$message]);
+            $this->events->on('mailer.sending', [$message]);
         }
 
-        if (!$this->pretending) {
+        if (! $this->pretending) {
             if ($this->resetSwift) {
                 // Fail-safe restart before email TXN
                 // Required for queued mail sending using daemon
@@ -404,7 +404,7 @@ class Mailer implements MailerContract
         // If a global from address has been specified we will set it on every message
         // instances so the developer does not have to repeat themselves every time
         // they create a new message. We will just go ahead and push the address.
-        if (!empty($this->from['address'])) {
+        if (! empty($this->from['address'])) {
             $message->from($this->from['address'], $this->from['name']);
         }
 
@@ -448,7 +448,7 @@ class Mailer implements MailerContract
      */
     protected function resetSwiftTransport()
     {
-        if (!$transport = $this->getSwiftMailerTransport()) {
+        if (! $transport = $this->getSwiftMailerTransport()) {
             return;
         }
 

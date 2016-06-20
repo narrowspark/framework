@@ -80,6 +80,18 @@ trait HttpHandlingTrait
     }
 
     /**
+     * {@inheritdoc}
+     */
+    abstract public function resolveStack();
+
+    /**
+     * {@inheritdoc}
+     *
+     * @param string $id
+     */
+    abstract public function get($id);
+
+    /**
      * ResolveKernel.
      *
      * @return \Viserio\Application\HttpKernel
@@ -96,16 +108,4 @@ trait HttpHandlingTrait
 
         return $this->kernel;
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    abstract public function resolveStack();
-
-    /**
-     * {@inheritdoc}
-     *
-     * @param string $id
-     */
-    abstract public function get($id);
 }

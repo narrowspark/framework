@@ -49,28 +49,30 @@ abstract class AbstractCookie implements Stringable, CookieContract
     protected $httpOnly;
 
     /**
-     * Returns the name
-     *
-     * @return string
+     * @var string
      */
-    public function getName()
+    protected $sameSite;
+
+    /**
+     * {@inheritdoc}
+     */
+    abstract public function __toString(): string;
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getName(): string
     {
         return $this->name;
     }
 
     /**
-     * Sets the value
-     *
-     * @param string|null $value
-     *
-     * @return self
+     * {@inheritdoc}
      */
-    abstract public function withValue($value);
+    abstract public function withValue(string $value = null): CookieContract;
 
     /**
-     * Returns the value
-     *
-     * @return string|null
+     * {@inheritdoc}
      */
     public function getValue()
     {
@@ -78,34 +80,26 @@ abstract class AbstractCookie implements Stringable, CookieContract
     }
 
     /**
-     * Checks if there is a value
-     *
-     * @return bool
+     * {@inheritdoc}
      */
-    public function hasValue()
+    public function hasValue(): bool
     {
-        return !empty($this->value);
+        return ! empty($this->value);
     }
 
     /**
-     * Sets the max age
-     *
-     * @param int|null $maxAge
-     *
-     * @return self
+     * {@inheritdoc}
      */
-    public function withMaxAge($maxAge)
+    public function withMaxAge(int $maxAge = null): CookieContract
     {
         $new = clone $this;
-        $new->maxAge = is_int($maxAge) ? $maxAge : null;
+        $new->maxAge = $maxAge;
 
         return $new;
     }
 
     /**
-     * Returns the max age
-     *
-     * @return int|null
+     * {@inheritdoc}
      */
     public function getMaxAge()
     {
@@ -113,23 +107,17 @@ abstract class AbstractCookie implements Stringable, CookieContract
     }
 
     /**
-     * Checks if there is a max age
-     *
-     * @return bool
+     * {@inheritdoc}
      */
-    public function hasMaxAge()
+    public function hasMaxAge(): bool
     {
         return $this->maxAge !== null;
     }
 
     /**
-     * Sets both the max age and the expires attributes
-     *
-     * @param int|null $expiration
-     *
-     * @return self
+     * {@inheritdoc}
      */
-    public function withExpiration($expiration)
+    public function withExpiration($expiration = null): CookieContract
     {
         $new = clone $this;
         $new->maxAge = is_int($expiration) ? $expiration : null;
@@ -139,24 +127,18 @@ abstract class AbstractCookie implements Stringable, CookieContract
     }
 
     /**
-     * Sets the expires
-     *
-     * @param \DateTimeInterface $expires
-     *
-     * @return self
+     * {@inheritdoc}
      */
-    public function withExpires(DateTimeInterface $expires)
+    public function withExpires($expires): CookieContract
     {
         $new = clone $this;
-        $new->expires = $expires;
+        $new->expires = $this->normalizeExpires($expires);
 
         return $new;
     }
 
     /**
-     * Returns the expiration time
-     *
-     * @return int|DateTimeInterface
+     * {@inheritdoc}
      */
     public function getExpiresTime()
     {
@@ -164,33 +146,25 @@ abstract class AbstractCookie implements Stringable, CookieContract
     }
 
     /**
-     * Checks if there is an expiration time
-     *
-     * @return bool
+     * {@inheritdoc}
      */
-    public function hasExpires()
+    public function hasExpires(): bool
     {
         return $this->expires !== 0;
     }
 
     /**
-     * Checks if the cookie is expired
-     *
-     * @return bool
+     * {@inheritdoc}
      */
-    public function isExpired()
+    public function isExpired(): bool
     {
         return $this->expires !== 0 && $this->expires < new DateTime();
     }
 
     /**
-     * Sets the domain
-     *
-     * @param string|null $domain
-     *
-     * @return self
+     * {@inheritdoc}
      */
-    public function withDomain($domain)
+    public function withDomain(string $domain = null): CookieContract
     {
         $new = clone $this;
         $new->domain = $this->normalizeDomain($domain);
@@ -199,9 +173,7 @@ abstract class AbstractCookie implements Stringable, CookieContract
     }
 
     /**
-     * Returns the domain
-     *
-     * @return string|null
+     * {@inheritdoc}
      */
     public function getDomain()
     {
@@ -209,23 +181,17 @@ abstract class AbstractCookie implements Stringable, CookieContract
     }
 
     /**
-     * Checks if there is a domain
-     *
-     * @return bool
+     * {@inheritdoc}
      */
-    public function hasDomain()
+    public function hasDomain(): bool
     {
         return $this->domain !== null;
     }
 
     /**
-     * Sets the path
-     *
-     * @param string|null $path
-     *
-     * @return self
+     * {@inheritdoc}
      */
-    public function withPath($path)
+    public function withPath(string $path = '/'): CookieContract
     {
         $new = clone $this;
         $new->path = $this->normalizePath($path);
@@ -234,23 +200,17 @@ abstract class AbstractCookie implements Stringable, CookieContract
     }
 
     /**
-     * Returns the path
-     *
-     * @return string
+     * {@inheritdoc}
      */
-    public function getPath()
+    public function getPath(): string
     {
         return $this->path;
     }
 
     /**
-     * Sets the secure
-     *
-     * @param bool $secure
-     *
-     * @return self
+     * {@inheritdoc}
      */
-    public function withSecure($secure)
+    public function withSecure(bool $secure): CookieContract
     {
         $new = clone $this;
         $new->secure = filter_var($secure, FILTER_VALIDATE_BOOLEAN);
@@ -259,23 +219,17 @@ abstract class AbstractCookie implements Stringable, CookieContract
     }
 
     /**
-     * Checks if HTTPS is required
-     *
-     * @return bool
+     * {@inheritdoc}
      */
-    public function isSecure()
+    public function isSecure(): bool
     {
         return $this->secure;
     }
 
     /**
-     * Sets the HTTP Only
-     *
-     * @param bool $httpOnly
-     *
-     * @return self
+     * {@inheritdoc}
      */
-    public function withHttpOnly($httpOnly)
+    public function withHttpOnly(bool $httpOnly): CookieContract
     {
         $new = clone $this;
         $new->httpOnly = filter_var($httpOnly, FILTER_VALIDATE_BOOLEAN);
@@ -284,37 +238,52 @@ abstract class AbstractCookie implements Stringable, CookieContract
     }
 
     /**
-     * Checks if it is HTTP-only
-     *
-     * @return bool
+     * {@inheritdoc}
      */
-    public function isHttpOnly()
+    public function isHttpOnly(): bool
     {
         return $this->httpOnly;
     }
 
     /**
-     * It matches a path
-     *
-     * @param string $path
-     *
-     * @return bool
-     *
-     * @see http://tools.ietf.org/html/rfc6265#section-5.1.4
+     * {@inheritdoc}
      */
-    public function matchPath($path)
+    public function withSameSite($sameSite): CookieContract
+    {
+        $new = clone $this;
+        $new->sameSite = $this->validateSameSite($sameSite);
+
+        return $new;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isSameSite(): bool
+    {
+        return $this->sameSite !== false;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getSameSite()
+    {
+        return $this->sameSite;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function matchPath(string $path): bool
     {
         return $this->path === $path || (strpos($path, $this->path . '/') === 0);
     }
 
     /**
-     * Checks if it matches with another cookie
-     *
-     * @param \Viserio\Contracts\Cookie\Cookie $cookie
-     *
-     * @return bool
+     * {@inheritdoc}
      */
-    public function matchCookie(CookieContract $cookie)
+    public function matchCookie(CookieContract $cookie): bool
     {
         return $this->getName() === $cookie->getName() &&
             $this->getDomain() === $cookie->getDomain() &&
@@ -322,18 +291,12 @@ abstract class AbstractCookie implements Stringable, CookieContract
     }
 
     /**
-     * Matches a domain
-     *
-     * @param string $domain
-     *
-     * @return bool
-     *
-     * @see http://tools.ietf.org/html/rfc6265#section-5.1.3
+     * {@inheritdoc}
      */
-    public function matchDomain($domain)
+    public function matchDomain(string $domain): bool
     {
         // Domain is not set or exact match
-        if (!$this->hasDomain() || strcasecmp($domain, $this->getDomain()) === 0) {
+        if (! $this->hasDomain() || strcasecmp($domain, $this->getDomain()) === 0) {
             return true;
         }
 
@@ -346,20 +309,29 @@ abstract class AbstractCookie implements Stringable, CookieContract
     }
 
     /**
-     * Returns the cookie as a string.
+    * Validate SameSite value.
      *
-     * @return string The cookie
+     * @param string|bool $sameSite
+     *
+     * @return string|bool
      */
-    abstract public function __toString();
+    protected function validateSameSite($sameSite)
+    {
+        if (!in_array($sameSite, [self::SAMESITE_STRICT, self::SAMESITE_LAX])) {
+            return false;
+        }
+
+        return $sameSite;
+    }
 
     /**
      * Normalizes the expiration value
      *
-     * @param int|null $expiration
+     * @param int|string|\DateTimeInterface|null $expiration
      *
-     * @return \DateTime|null
+     * @return \DateTimeInterface|null
      */
-    protected function normalizeExpires($expiration)
+    protected function normalizeExpires($expiration = null)
     {
         $expires = null;
 
@@ -370,7 +342,7 @@ abstract class AbstractCookie implements Stringable, CookieContract
             if ($expiration <= 0) {
                 $expires->setTimestamp(-PHP_INT_MAX);
             }
-        } elseif ($expiration instanceof DateTime) {
+        } elseif ($expiration instanceof DateTimeInterface) {
             $expires = $expiration;
         }
 
@@ -384,11 +356,11 @@ abstract class AbstractCookie implements Stringable, CookieContract
      *
      * @return string|null
      *
-     * @see http://tools.ietf.org/html/rfc6265#section-4.1.2.3
-     * @see http://tools.ietf.org/html/rfc6265#section-5.1.3
-     * @see http://tools.ietf.org/html/rfc6265#section-5.2.3
+     * @link http://tools.ietf.org/html/rfc6265#section-4.1.2.3
+     * @link http://tools.ietf.org/html/rfc6265#section-5.1.3
+     * @link http://tools.ietf.org/html/rfc6265#section-5.2.3
      */
-    protected function normalizeDomain($domain)
+    protected function normalizeDomain(string $domain = null)
     {
         if (isset($domain)) {
             $domain = ltrim(strtolower($domain), '.');
@@ -400,14 +372,14 @@ abstract class AbstractCookie implements Stringable, CookieContract
     /**
      * Processes path as per spec in RFC 6265
      *
-     * @param string|null $path
+     * @param string $path
      *
      * @return string
      *
-     * @see http://tools.ietf.org/html/rfc6265#section-5.1.4
-     * @see http://tools.ietf.org/html/rfc6265#section-5.2.4
+     * @link http://tools.ietf.org/html/rfc6265#section-5.1.4
+     * @link http://tools.ietf.org/html/rfc6265#section-5.2.4
      */
-    protected function normalizePath($path)
+    protected function normalizePath(string $path): string
     {
         $path = rtrim($path, '/');
 
@@ -475,6 +447,15 @@ abstract class AbstractCookie implements Stringable, CookieContract
     {
         if ($this->httpOnly) {
             $cookieStringParts[] = 'HttpOnly';
+        }
+
+        return $cookieStringParts;
+    }
+
+    protected function appendFormattedSameSitePartIfSet(array $cookieStringParts)
+    {
+        if ($this->sameSite) {
+            $cookieStringParts[] = sprintf('SameSite=%s', $this->sameSite);
         }
 
         return $cookieStringParts;

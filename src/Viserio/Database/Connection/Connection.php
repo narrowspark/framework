@@ -2,13 +2,12 @@
 namespace Viserio\Database\Connection;
 
 use Narrowspark\Arr\StaticArr as Arr;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Viserio\Contracts\Cache\Factory as CacheContract;
-use Viserio\Contracts\Database\Connection as ConnectionContract;
+use Viserio\Contracts\Events\Dispatcher;
 use Viserio\Database\Exception\ConnectException;
 use Viserio\Database\Grammar\Builder;
 
-class Connection implements ConnectionContract
+class Connection
 {
     /**
      * The active PDO connection.
@@ -20,7 +19,7 @@ class Connection implements ConnectionContract
     /**
      * The event dispatcher instance.
      *
-     * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
+     * @var \Viserio\Contracts\Events\Dispatcher
      */
     protected $events;
 
@@ -203,82 +202,6 @@ class Connection implements ConnectionContract
     }
 
     /**
-     * Run a SQL statement.
-     *
-     * @param string   $query
-     * @param array    $bindings
-     * @param \Closure $callback
-     *
-     * @throws \Viserio\Database\Exception\ConnectException
-     *
-     * @return mixed
-     */
-    protected function runQueryCallback($query, $bindings, \Closure $callback)
-    {
-        // To execute the statement, we'll simply call the callback, which will actually
-        // run the SQL against the PDO connection. Then we can calculate the time it
-        // took to execute and log the query SQL and time in our memory.
-        try {
-            $result = $callback($this, $query, $bindings);
-
-            // If an exception occurs when attempting to run a query, we'll format the error
-            // message, which will make this exception a lot more helpful to the developer
-            // instead of just the database's errors.
-        } catch (\Exception $exception) {
-            throw new ConnectException(
-                $query,
-                $this->prepareBindings($bindings),
-                $exception
-            );
-        }
-
-        return $result;
-    }
-
-    /**
-     * Handle a query exception that occurred during query execution.
-     *
-     * @param \Viserio\Database\Exception\ConnectException $exception
-     * @param string                                       $query
-     * @param $bindings
-     * @param \Closure $callback
-     *
-     * @return mixed
-     */
-    protected function tryAgainIfCausedByLostConnection(
-        ConnectException $exception,
-        $query,
-        $bindings,
-        \Closure $callback
-    ) {
-        if ($this->causedByLostConnection($exception)) {
-            $this->reconnect();
-
-            return $this->runQueryCallback($query, $bindings, $callback);
-        }
-
-        throw $exception;
-    }
-
-    /**
-     * Determine if the given exception was caused by a lost connection.
-     *
-     * @param  \Viserio\Database\Exception\ConnectException
-     *
-     * @return bool
-     */
-    protected function causedByLostConnection(ConnectException $exception)
-    {
-        $message = $exception->getPrevious()->getMessage();
-
-        return Str::contains($message, [
-            'server has gone away',
-            'no connection to the server',
-            'Lost connection',
-        ]);
-    }
-
-    /**
      * Disconnect from the underlying PDO connection.
      */
     public function disconnect()
@@ -291,7 +214,7 @@ class Connection implements ConnectionContract
      *
      * @param callable $reconnector
      *
-     * @return $this
+     * @return self
      */
     public function setReconnector(callable $reconnector)
     {
@@ -314,16 +237,6 @@ class Connection implements ConnectionContract
         }
 
         throw new \LogicException('Lost connection and no reconnector available.');
-    }
-
-    /**
-     * Reconnect to the database if a PDO connection is missing.
-     */
-    protected function reconnectIfMissingConnection()
-    {
-        if ($this->getPdo() === null) {
-            $this->reconnect();
-        }
     }
 
     /**
@@ -438,7 +351,7 @@ class Connection implements ConnectionContract
      *
      * @param \PDO|null $pdo
      *
-     * @return $this
+     * @return self
      */
     public function setPdo($pdo)
     {
@@ -627,7 +540,7 @@ class Connection implements ConnectionContract
      */
     public function logQuery($query, $bindings, $time = null)
     {
-        if (!$this->loggingQueries) {
+        if (! $this->loggingQueries) {
             return;
         }
 
@@ -752,7 +665,7 @@ class Connection implements ConnectionContract
     /**
      * Get the event dispatcher used by the connection.
      *
-     * @return \Symfony\Component\EventDispatcher\EventDispatcherInterface
+     * @return \Viserio\Contracts\Events\Dispatcher
      */
     public function getEventDispatcher()
     {
@@ -762,25 +675,13 @@ class Connection implements ConnectionContract
     /**
      * Set the event dispatcher instance on the connection.
      *
-     * @param  \Symfony\Component\EventDispatcher\EventDispatcherInterface
+     * @param  \Viserio\Contracts\Events\Dispatcher
      */
     public function setEventDispatcher(EventDispatcherInterface $events)
     {
         $this->events = $events;
 
         return $this;
-    }
-
-    /**
-     * Get the elapsed time since a given starting point.
-     *
-     * @param int $start
-     *
-     * @return float
-     */
-    protected function getElapsedTime($start)
-    {
-        return round((microtime(true) - $start) * 1000, 2);
     }
 
     /**
@@ -813,5 +714,103 @@ class Connection implements ConnectionContract
         }
 
         return $output;
+    }
+
+    /**
+     * Run a SQL statement.
+     *
+     * @param string   $query
+     * @param array    $bindings
+     * @param \Closure $callback
+     *
+     * @throws \Viserio\Database\Exception\ConnectException
+     *
+     * @return mixed
+     */
+    protected function runQueryCallback($query, $bindings, \Closure $callback)
+    {
+        // To execute the statement, we'll simply call the callback, which will actually
+        // run the SQL against the PDO connection. Then we can calculate the time it
+        // took to execute and log the query SQL and time in our memory.
+        try {
+            $result = $callback($this, $query, $bindings);
+
+            // If an exception occurs when attempting to run a query, we'll format the error
+            // message, which will make this exception a lot more helpful to the developer
+            // instead of just the database's errors.
+        } catch (\Exception $exception) {
+            throw new ConnectException(
+                $query,
+                $this->prepareBindings($bindings),
+                $exception
+            );
+        }
+
+        return $result;
+    }
+
+    /**
+     * Handle a query exception that occurred during query execution.
+     *
+     * @param \Viserio\Database\Exception\ConnectException $exception
+     * @param string                                       $query
+     * @param $bindings
+     * @param \Closure $callback
+     *
+     * @return mixed
+     */
+    protected function tryAgainIfCausedByLostConnection(
+        ConnectException $exception,
+        $query,
+        $bindings,
+        \Closure $callback
+    ) {
+        if ($this->causedByLostConnection($exception)) {
+            $this->reconnect();
+
+            return $this->runQueryCallback($query, $bindings, $callback);
+        }
+
+        throw $exception;
+    }
+
+    /**
+     * Determine if the given exception was caused by a lost connection.
+     *
+     * @param  \Viserio\Database\Exception\ConnectException
+     *
+     * @return bool
+     */
+    protected function causedByLostConnection(ConnectException $exception)
+    {
+        $message = $exception->getPrevious()->getMessage();
+
+        return Str::contains($message, [
+            'server has gone away',
+            'no connection to the server',
+            'Lost connection',
+        ]);
+    }
+
+    /**
+     * Reconnect to the database if a PDO connection is missing.
+     */
+    protected function reconnectIfMissingConnection()
+    {
+        if ($this->getPdo() === null) {
+            $this->reconnect();
+        }
+    }
+
+    /**
+     * Get the elapsed time since a given starting point.
+     *
+     * @param int $start
+     *
+     * @return float
+     */
+    protected function getElapsedTime($start)
+    {
+        return round((microtime(true) - $start) * 1000, 2);
     }
 }

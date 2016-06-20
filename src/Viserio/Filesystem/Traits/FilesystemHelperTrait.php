@@ -14,9 +14,9 @@ trait FilesystemHelperTrait
      *
      * @return mixed
      */
-    public function getRequire($path)
+    public function getRequire(string $path)
     {
-        $path = $this->normalizeDirectorySeparator($path);
+        $path = self::normalizeDirectorySeparator($path);
 
         if ($this->isFile($path) && file_exists($path)) {
             return require $path;
@@ -34,9 +34,9 @@ trait FilesystemHelperTrait
      *
      * @return mixed
      */
-    public function requireOnce($file)
+    public function requireOnce(string $file)
     {
-        $path = $this->normalizeDirectorySeparator($path);
+        $path = self::normalizeDirectorySeparator($path);
 
         if ($this->isFile($path) && file_exists($path)) {
             require_once $file;
@@ -52,9 +52,9 @@ trait FilesystemHelperTrait
      *
      * @return bool
      */
-    public function isWritable($path)
+    public function isWritable(string $path): bool
     {
-        $path = $this->normalizeDirectorySeparator($path);
+        $path = self::normalizeDirectorySeparator($path);
 
         return is_writable($path);
     }
@@ -66,9 +66,9 @@ trait FilesystemHelperTrait
      *
      * @return bool
      */
-    public function isFile($file)
+    public function isFile(string $file): bool
     {
-        $file = $this->normalizeDirectorySeparator($file);
+        $file = self::normalizeDirectorySeparator($file);
 
         return is_file($file);
     }

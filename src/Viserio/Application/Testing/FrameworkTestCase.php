@@ -13,14 +13,13 @@ use Viserio\Container\Container;
  */
 abstract class FrameworkTestCase extends \PHPUnit_Framework_TestCase
 {
+    use ServiceProviderTrait;
     /**
      * Container instanve.
      *
      * @var \Viserio\Container\Container
      */
     protected $container;
-
-    use ServiceProviderTrait;
 
     /**
      * When overriding this method, make sure you call parent::setUp().
@@ -32,6 +31,11 @@ abstract class FrameworkTestCase extends \PHPUnit_Framework_TestCase
         $this->container = new Container();
 
         $this->start();
+    }
+
+    public function bind($alias, $concrete)
+    {
+        $this->bind($alias, $concrete);
     }
 
     /**
@@ -62,10 +66,5 @@ abstract class FrameworkTestCase extends \PHPUnit_Framework_TestCase
         foreach ($services as $provider => $arr) {
             $this->register(new $provider($this), $arr);
         }
-    }
-
-    public function bind($alias, $concrete)
-    {
-        $this->bind($alias, $concrete);
     }
 }

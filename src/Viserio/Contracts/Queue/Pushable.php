@@ -11,5 +11,5 @@ interface Pushable
      * @param array    $metadata Additional data about the job
      * @param int|null $delay    Delay in seconds (null for adapter default)
      */
-    public function push($data, $info, array $metadata = [], $delay = null);
+    public function push($data, string $info, array $metadata = [], int $delay = null);
 }

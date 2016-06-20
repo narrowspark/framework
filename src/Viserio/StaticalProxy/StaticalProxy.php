@@ -22,6 +22,25 @@ abstract class StaticalProxy
     protected static $resolvedInstance = [];
 
     /**
+     * Handle dynamic, static calls to the object.
+     *
+     * @param string $method
+     * @param array  $args
+     *
+     * @return mixed
+     */
+    public static function __callStatic(string $method, array $args)
+    {
+        $instance = static::getStaticalProxyRoot();
+
+        if (! $instance) {
+            throw new RuntimeException('A statical proxy root has not been set.');
+        }
+
+        return $instance->$method(...$args);
+    }
+
+    /**
      * Sets the Container that will be used to retrieve the Proxy Subject.
      *
      * @param ContainerInterface $container The Container that provides the real Proxy Subject
@@ -46,7 +65,7 @@ abstract class StaticalProxy
      *
      * @throws \BadMethodCallException if the method has not been implemented by a subclass
      *
-     * @return NoType
+     * @return mixed
      */
     public static function getInstanceIdentifier()
     {
@@ -66,9 +85,7 @@ abstract class StaticalProxy
     /**
      * Initiate a mock expectation on the facade.
      *
-     * @param  dynamic
-     *
-     * @return \Mockery\Expectation
+     * @return object
      */
     public static function shouldReceive()
     {
@@ -98,7 +115,7 @@ abstract class StaticalProxy
      *
      * @param string $name
      */
-    public static function clearResolvedInstance($name)
+    public static function clearResolvedInstance(string $name)
     {
         unset(static::$resolvedInstance[$name]);
     }
@@ -112,28 +129,9 @@ abstract class StaticalProxy
     }
 
     /**
-     * Handle dynamic, static calls to the object.
-     *
-     * @param string $method
-     * @param array  $args
-     *
-     * @return mixed
-     */
-    public static function __callStatic($method, $args)
-    {
-        $instance = static::getStaticalProxyRoot();
-
-        if (!$instance) {
-            throw new RuntimeException('A statical proxy root has not been set.');
-        }
-
-        return $instance->$method(...$args);
-    }
-
-    /**
      * Resolve the statical proxy root instance from the app.
      *
-     * @param string $name
+     * @param object $name
      *
      * @return mixed
      */
@@ -155,9 +153,9 @@ abstract class StaticalProxy
      *
      * @param string $name
      *
-     * @return \Mockery\MockInterface
+     * @return object
      */
-    protected static function createFreshMockInstance($name)
+    protected static function createFreshMockInstance(string $name)
     {
         static::$resolvedInstance[$name] = $mock = static::createMock();
 
@@ -169,8 +167,7 @@ abstract class StaticalProxy
     /**
      * Create a fresh mock instance for the given class.
      *
-     *
-     * @return \Mockery\MockInterface
+     * @return object
      */
     protected static function createMock()
     {
@@ -184,7 +181,7 @@ abstract class StaticalProxy
      *
      * @return bool
      */
-    protected static function isMock()
+    protected static function isMock(): bool
     {
         $name = static::getInstanceIdentifier();
 

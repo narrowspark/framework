@@ -134,7 +134,7 @@ trait HttpErrorHandlingTrait
      *
      * @return bool
      */
-    public function isDownForMaintenance()
+    public function isDownForMaintenance(): bool
     {
         return file_exists($this->storagePath() . '/framework/down');
     }

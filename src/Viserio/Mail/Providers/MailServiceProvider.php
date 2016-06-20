@@ -57,6 +57,35 @@ class MailServiceProvider extends ServiceProvider
     }
 
     /**
+     * Register the Swift Mailer instance.
+     */
+    public function registerSwiftMailer()
+    {
+        $this->registerSwiftTransport($this->app->get('config'));
+
+        // Once we have the transporter registered, we will register the actual Swift
+        // mailer instance, passing in the transport instances, which allows us to
+        // override this transporter instances during app start-up if necessary.
+        $this->app->bind('swift.mailer', function ($container) {
+            return new \Swift_Mailer($container['swift.transport']);
+        });
+    }
+
+    /**
+     * Get the services provided by the provider.
+     *
+     * @return string[]
+     */
+    public function provides(): array
+    {
+        return [
+            'mailer',
+            'swift.transport',
+            'ses.transport',
+        ];
+    }
+
+    /**
      * Register the Swift Transport instance.
      *
      * @param array $config
@@ -95,21 +124,6 @@ class MailServiceProvider extends ServiceProvider
             default:
                 throw new \InvalidArgumentException('Invalid mail driver.');
         }
-    }
-
-    /**
-     * Register the Swift Mailer instance.
-     */
-    public function registerSwiftMailer()
-    {
-        $this->registerSwiftTransport($this->app->get('config'));
-
-        // Once we have the transporter registered, we will register the actual Swift
-        // mailer instance, passing in the transport instances, which allows us to
-        // override this transporter instances during app start-up if necessary.
-        $this->app->bind('swift.mailer', function ($container) {
-            return new \Swift_Mailer($container['swift.transport']);
-        });
     }
 
     /**
@@ -163,8 +177,7 @@ class MailServiceProvider extends ServiceProvider
     protected function registerSesTransport($config)
     {
         $this->app->bind('ses.transport', function () use ($config) {
-
-            $config  = $this->app->get('config')->get('services.ses', []);
+            $config = $this->app->get('config')->get('services.ses', []);
             $config += [
                 'version' => 'latest',
                 'service' => 'email',
@@ -266,19 +279,5 @@ class MailServiceProvider extends ServiceProvider
         $this->app->bind('swift.transport', function ($container) {
             return new LogTransport($container['log']->getMonolog());
         });
-    }
-
-    /**
-     * Get the services provided by the provider.
-     *
-     * @return string[]
-     */
-    public function provides()
-    {
-        return [
-            'mailer',
-            'swift.transport',
-            'ses.transport',
-        ];
     }
 }

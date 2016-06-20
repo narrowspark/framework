@@ -1,7 +1,6 @@
 <?php
 namespace Viserio\Parsers\Formats;
 
-use Viserio\Contracts\Filesystem\Filesystem as FilesystemContract;
 use Viserio\Contracts\Parsers\Exception\DumpException;
 use Viserio\Contracts\Parsers\Exception\ParseException;
 use Viserio\Contracts\Parsers\Format as FormatContract;
@@ -11,7 +10,7 @@ class JSON implements FormatContract
     /**
      * {@inheritdoc}
      */
-    public function parse($payload)
+    public function parse(string $payload): array
     {
         $json = json_decode(trim($payload), true);
 
@@ -27,11 +26,14 @@ class JSON implements FormatContract
     /**
      * {@inheritdoc}
      */
-    public function dump(array $data)
+    public function dump(array $data): string
     {
+        // Clear json_last_error()
+        json_encode(null);
+
         $json = json_encode($data, JSON_PRETTY_PRINT);
 
-        if ($json === false) {
+        if (json_last_error() !== JSON_ERROR_NONE) {
             $jsonError = $this->getJsonError(json_last_error());
 
             throw new DumpException('JSON dumping failed: ' . $jsonError);
@@ -50,7 +52,7 @@ class JSON implements FormatContract
      *
      * @return string
      */
-    private function getJsonError($code)
+    private function getJsonError(int $code): string
     {
         $errorMessages = [
             JSON_ERROR_DEPTH          => 'The maximum stack depth has been exceeded',

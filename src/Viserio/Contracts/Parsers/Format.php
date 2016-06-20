@@ -12,7 +12,7 @@ interface Format
      *
      * @return array
      */
-    public function parse($payload);
+    public function parse(string $payload): array;
 
     /**
      * Dumps a array into a string.

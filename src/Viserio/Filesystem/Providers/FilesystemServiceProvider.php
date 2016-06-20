@@ -23,6 +23,22 @@ class FilesystemServiceProvider extends ServiceProvider
     }
 
     /**
+     * Get the services provided by the provider.
+     *
+     * @return string[]
+     */
+    public function provides(): array
+    {
+        return [
+            'flysystem',
+            'flysystem.factory',
+            'filesystem.disk',
+            'filesystem.cloud',
+            'file.loader',
+        ];
+    }
+
+    /**
      * Register the driver based filesystem.
      */
     protected function registerFlysystem()
@@ -67,21 +83,5 @@ class FilesystemServiceProvider extends ServiceProvider
 
             return new FileLoader($app->get('parser'), $app->get('files.path'));
         });
-    }
-
-    /**
-     * Get the services provided by the provider.
-     *
-     * @return string[]
-     */
-    public function provides()
-    {
-        return [
-            'flysystem',
-            'flysystem.factory',
-            'filesystem.disk',
-            'filesystem.cloud',
-            'file.loader',
-        ];
     }
 }

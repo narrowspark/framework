@@ -2,7 +2,6 @@
 namespace Viserio\Pipeline;
 
 use Closure;
-use Interop\Container\ContainerInterface;
 use ReflectionClass;
 use Viserio\Contracts\Pipeline\Pipeline as PipelineContract;
 use Viserio\Support\Traits\ContainerAwareTrait;
@@ -33,13 +32,9 @@ class Pipeline implements PipelineContract
     protected $stages = [];
 
     /**
-     * Set the object being sent through the pipeline.
-     *
-     * @param string $traveler
-     *
-     * @return $this
+     * {@inheritdoc}
      */
-    public function send($traveler)
+    public function send(string $traveler): PipelineContract
     {
         $this->traveler = $traveler;
 
@@ -47,13 +42,9 @@ class Pipeline implements PipelineContract
     }
 
     /**
-     * Set the array of stages.
-     *
-     * @param array|mixed $stages
-     *
-     * @return self
+     * {@inheritdoc}
      */
-    public function through($stages)
+    public function through($stages): PipelineContract
     {
         $this->stages = is_array($stages) ? $stages : func_get_args();
 
@@ -61,13 +52,9 @@ class Pipeline implements PipelineContract
     }
 
     /**
-     * Set the method to call on the stages.
-     *
-     * @param string $method
-     *
-     * @return $this
+     * {@inheritdoc}
      */
-    public function via($method)
+    public function via(string $method): PipelineContract
     {
         $this->method = $method;
 
@@ -75,11 +62,7 @@ class Pipeline implements PipelineContract
     }
 
     /**
-     * Run the pipeline with a final destination callback.
-     *
-     * @param \Closure $destination
-     *
-     * @return mixed
+     * {@inheritdoc}
      */
     public function then(Closure $destination)
     {
@@ -102,7 +85,7 @@ class Pipeline implements PipelineContract
      *
      * @return \Closure
      */
-    protected function getSlice()
+    protected function getSlice(): Closure
     {
         return function ($stack, $stage) {
             return function ($traveler) use ($stack, $stage) {
@@ -112,7 +95,7 @@ class Pipeline implements PipelineContract
 
                 // Otherwise we'll resolve the stages out of the container and call it with
                 // the appropriate method and arguments, returning the results back out.
-                } elseif ($this->container && !is_object($stage)) {
+                } elseif ($this->container && ! is_object($stage)) {
                     return $this->sliceThroughContainer($traveler, $stack, $stage);
                 } elseif (is_array($stage)) {
                     $reflectionClass = new ReflectionClass(array_shift($stage));
@@ -138,7 +121,7 @@ class Pipeline implements PipelineContract
      *
      * @return \Closure
      */
-    protected function getInitialSlice(Closure $destination)
+    protected function getInitialSlice(Closure $destination): Closure
     {
         return function ($traveler) use ($destination) {
             return call_user_func($destination, $traveler);
@@ -152,7 +135,7 @@ class Pipeline implements PipelineContract
      *
      * @return array
      */
-    protected function parseStageString($stage)
+    protected function parseStageString(string $stage): array
     {
         list($name, $parameters) = array_pad(explode(':', $stage, 2), 2, []);
 
@@ -163,13 +146,6 @@ class Pipeline implements PipelineContract
         return [$name, $parameters];
     }
 
-    /**
-     * @param [type] $traveler [description]
-     * @param [type] $stack    [description]
-     * @param [type] $stage    [description]
-     *
-     * @return \Closure
-     */
     protected function sliceThroughContainer($traveler, $stack, $stage)
     {
         list($name, $parameters) = $this->parseStageString($stage);

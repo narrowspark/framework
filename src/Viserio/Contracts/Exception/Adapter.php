@@ -11,5 +11,5 @@ interface Adapter
      * @param \Exception $exception
      * @param int        $code
      */
-    public function display(Exception $exception, $code);
+    public function display(Exception $exception, int $code);
 }

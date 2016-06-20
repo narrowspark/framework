@@ -4,6 +4,9 @@ namespace Viserio\Support\Debug;
 use Symfony\Component\VarDumper\Cloner\VarCloner;
 use Symfony\Component\VarDumper\Dumper\CliDumper;
 
+/**
+ * @codeCoverageIgnore
+ */
 class Dumper
 {
     /**

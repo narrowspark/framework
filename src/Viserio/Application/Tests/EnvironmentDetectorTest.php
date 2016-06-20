@@ -23,13 +23,17 @@ class EnvironmentDetectorTest extends \PHPUnit_Framework_TestCase
 
     public function testClosureCanBeUsedForCustomEnvironmentDetection()
     {
-        $result = $this->env->detect(function () { return 'foobar'; });
+        $result = $this->env->detect(function () {
+            return 'foobar';
+        });
         $this->assertEquals('foobar', $result);
     }
 
     public function testConsoleEnvironmentDetection()
     {
-        $result = $this->env->detect(function () { return 'foobar'; }, ['--env=local']);
+        $result = $this->env->detect(function () {
+            return 'foobar';
+        }, ['--env=local']);
         $this->assertEquals('local', $result);
     }
 

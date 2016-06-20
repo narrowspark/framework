@@ -39,8 +39,7 @@ class PipelineTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('foo', $_SERVER['__test.pipe.one']);
         $this->assertEquals('foo', $_SERVER['__test.pipe.two']);
 
-        unset($_SERVER['__test.pipe.one']);
-        unset($_SERVER['__test.pipe.two']);
+        unset($_SERVER['__test.pipe.one'], $_SERVER['__test.pipe.two']);
     }
 
     public function testPipelineUsageWithParameters()

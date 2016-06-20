@@ -26,7 +26,7 @@ class GroupCountBasedDataGenerator implements DataGeneratorContract
      *
      * @return array
      */
-    public function getData()
+    public function getData(): array
     {
         $routes = $this->routeCollector->getData();
         $data = [];
@@ -61,7 +61,7 @@ class GroupCountBasedDataGenerator implements DataGeneratorContract
         $data = [];
 
         foreach ($group['routeMap'] as $matchIndex => $routeData) {
-            if (!is_array($routeData[0]) || !isset($routeData[0]['name']) || !isset($parts[$matchIndex - 1])) {
+            if (! is_array($routeData[0]) || ! isset($routeData[0]['name']) || ! isset($parts[$matchIndex - 1])) {
                 continue;
             }
 

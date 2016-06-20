@@ -2,13 +2,13 @@
 namespace Viserio\Console\Tests;
 
 use Mockery as Mock;
+use Narrowspark\TestingHelper\ArrayContainer;
 use stdClass;
 use Symfony\Component\Console\Input\StringInput;
 use Symfony\Component\Console\Output\OutputInterface;
 use Viserio\Console\Application;
 use Viserio\Console\Tests\Fixture\SpyOutput;
 use Viserio\Console\Tests\Fixture\ViserioCommand;
-use Viserio\Console\Tests\Mock\Container as MockContainer;
 
 class ApplicationTest extends \PHPUnit_Framework_TestCase
 {
@@ -17,11 +17,6 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
      */
     private $application;
 
-    public function tearDown()
-    {
-        Mock::close();
-    }
-
     public function setUp()
     {
         $stdClass = new stdClass();
@@ -29,7 +24,7 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
         $stdClass2 = new stdClass();
         $stdClass2->foo = 'nope!';
 
-        $container = new MockContainer([
+        $container = new ArrayContainer([
             'command.greet' => function (OutputInterface $output) {
                 $output->write('hello');
             },
@@ -38,9 +33,13 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
             'stdClass2'         => $stdClass2,
             'command.arr.greet' => [$this, 'foo'],
         ]);
-        $events = Mock::mock('Symfony\Component\EventDispatcher\EventDispatcherInterface', ['addListener' => null]);
 
-        $this->application = new Application($container, $events, '1.0.0');
+        $this->application = new Application($container, '1.0.0');
+    }
+
+    public function tearDown()
+    {
+        Mock::close();
     }
 
     public function testAllowsToDefineViserioCommand()
@@ -63,7 +62,6 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
     public function testAllowsToDefineDefaultValues()
     {
         $this->application->command('greet [firstname] [lastname]', function ($firstname, $lastname, Outputinterface $output) {
-
         });
         $this->application->defaults('greet', [
             'firstname' => 'John',
@@ -182,7 +180,6 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
     public function testItShouldThrowIfAParameterCannotBeResolved()
     {
         $this->application->command('greet', function ($fbo) {
-
         });
         $this->assertOutputIs('greet', '');
     }
@@ -190,13 +187,17 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
     /**
      * Fixture method.
      *
-     * @param Out $output
+     * @param OutputInterface $output
      */
     public function foo(OutputInterface $output)
     {
         $output->write('hello');
     }
 
+    /**
+     * @param string $command
+     * @param string $expected
+     */
     private function assertOutputIs($command, $expected)
     {
         $output = new SpyOutput();

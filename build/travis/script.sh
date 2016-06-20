@@ -6,13 +6,13 @@ mkdir -p build/logs
 
 set +e
 bash -e <<TRY
-    if [[ "$TRAVIS_PHP_VERSION" != "hhvm" && "$CHECK_CS" = true && "$SEND_COVERAGE" = true ]]; then
-        vendor/bin/phpunit -c phpunit.xml.dist -v --coverage-text="php://stdout" --coverage-xml="build/coverage-xml.xml" --coverage-clover="build/logs/clover.xml";
+    if [[ "$CHECK_CS" = true && "$SEND_COVERAGE" = true ]]; then
+        vendor/bin/phpunit -c phpunit.xml.dist --verbose --coverage-text="php://stdout" --coverage-clover=coverage.xml;
     else
-        vendor/bin/phpunit -c phpunit.xml.dist -v;
+        vendor/bin/phpunit -c phpunit.xml.dist --verbose;
     fi
 
-    if [[ "$TRAVIS_PHP_VERSION" != "hhvm" && "$HUMBUG" = true ]]; then vendor/bin/humbug; fi
+    if [[ "$HUMBUG" = true ]]; then vendor/bin/humbug; fi
 TRY
 if [ $? -ne 0 ]; then
   exit 1

@@ -16,7 +16,7 @@ interface Container
      * @param string $abstract
      * @param string $alias
      */
-    public function alias($abstract, $alias);
+    public function alias(string $abstract, string $alias);
 
     /**
      * Register a binding with the container.
@@ -25,7 +25,7 @@ interface Container
      * @param \Closure|string|null $concrete
      * @param bool                 $singleton
      */
-    public function bind($alias, $concrete = null, $singleton = false);
+    public function bind(string $alias, $concrete = null, $singleton = false);
 
     /**
      * Register a shared binding in the container.
@@ -48,10 +48,10 @@ interface Container
     /**
      * Adds an entry to the container.
      *
-     * @param string    $id    Identifier of the entry to add
-     * @param \stdClass $value The entry to add to the container
+     * @param string $id    Identifier of the entry to add
+     * @param mixed  $value The entry to add to the container
      */
-    public function set($id, $value);
+    public function set(string $id, $value);
 
     /**
      * Extend an existing binding.
@@ -61,14 +61,14 @@ interface Container
      *
      * @throws ContainerException
      */
-    public function extend($binding, \Closure $closure);
+    public function extend(string $binding, \Closure $closure);
 
     /**
      * Removes an entry from the container.
      *
      * @param string $id Identifier of the entry to remove
      */
-    public function remove($id);
+    public function remove(string $id);
 
     /**
      * Allows for methods to be invoked on any object that is resolved of the tyoe
@@ -79,7 +79,7 @@ interface Container
      *
      * @return \Viserio\Container\Inflector|void
      */
-    public function inflector($type, callable $callback = null);
+    public function inflector(string $type, callable $callback = null);
 
     /**
      * Define a contextual binding.
@@ -88,7 +88,7 @@ interface Container
      *
      * @return \Viserio\Contracts\Container\ContextualBindingBuilder
      */
-    public function when($concrete);
+    public function when($concrete): \Viserio\Contracts\Container\ContextualBindingBuilder;
 
     /**
      * Determine if the given abstract type has been bound.
@@ -97,7 +97,7 @@ interface Container
      *
      * @return bool
      */
-    public function bound($abstract);
+    public function bound(string $abstract): bool;
 
     /**
      * Check if an item is being managed as a singleton.
@@ -106,7 +106,7 @@ interface Container
      *
      * @return bool
      */
-    public function isSingleton($alias);
+    public function isSingleton(string $alias): bool;
 
     /**
      * Call the given Closure and inject its dependencies.
@@ -118,5 +118,5 @@ interface Container
      *
      * @return mixed
      */
-    public function call($callable, array $args = []);
+    public function call(callable $callable, array $args = []);
 }

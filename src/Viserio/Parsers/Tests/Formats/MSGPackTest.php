@@ -12,7 +12,7 @@ class MSGPackTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        if (!function_exists('msgpack_unpack')) {
+        if (! function_exists('msgpack_unpack')) {
             $this->markTestSkipped('Failed To Parse MSGPack - Supporting Library Not Available');
         }
 
@@ -22,8 +22,8 @@ class MSGPackTest extends \PHPUnit_Framework_TestCase
     public function testParse()
     {
         $expected = ['status' => 123, 'message' => 'hello world'];
-        $payload  = msgpack_pack($expected);
-        $parsed   = $this->parser->parse($payload);
+        $payload = msgpack_pack($expected);
+        $parsed = $this->parser->parse($payload);
 
         $this->assertTrue(is_array($parsed));
         $this->assertSame($expected, $parsed);
@@ -40,8 +40,8 @@ class MSGPackTest extends \PHPUnit_Framework_TestCase
     public function testDump()
     {
         $expected = ['status' => 123, 'message' => 'hello world'];
-        $payload  = msgpack_pack($expected);
-        $dump     = $this->parser->dump($expected);
+        $payload = msgpack_pack($expected);
+        $dump = $this->parser->dump($expected);
 
         $this->assertEquals($payload, $dump);
     }
