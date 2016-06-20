@@ -41,6 +41,9 @@ class FrenchTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
+    /**
+     * @param integer $int
+     */
     protected function intToString($int)
     {
         switch ($int) {

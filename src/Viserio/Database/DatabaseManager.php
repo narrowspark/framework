@@ -236,7 +236,7 @@ class DatabaseManager
      *
      * @param ConnectionContract $connection
      *
-     * @return \Viserio\Database\Connection\Connection
+     * @return ConnectionContract
      */
     protected function prepare(ConnectionContract $connection)
     {
