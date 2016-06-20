@@ -7,7 +7,7 @@ class ClassLoaderTest extends \PHPUnit_Framework_TestCase
 {
     public function testLoad()
     {
-        ClassLoader::addDirectories(__DIR__ . '/Fixture');
+        ClassLoader::addDirectories([__DIR__ . '/Fixture']);
 
         $this->assertTrue(ClassLoader::load('TestManager'));
         $this->assertFalse(ClassLoader::load('NoExistManager'));
@@ -21,7 +21,7 @@ class ClassLoaderTest extends \PHPUnit_Framework_TestCase
 
     public function testAddAndRemoeveDirectories()
     {
-        ClassLoader::addDirectories(__DIR__ . '/Traits');
+        ClassLoader::addDirectories([__DIR__ . '/Traits']);
 
         $this->assertTrue(in_array(
             __DIR__ . '/Traits',
@@ -33,14 +33,14 @@ class ClassLoaderTest extends \PHPUnit_Framework_TestCase
             ClassLoader::getDirectories()
         ));
 
-        ClassLoader::removeDirectories(__DIR__ . '/Fixture');
+        ClassLoader::removeDirectories([__DIR__ . '/Fixture']);
 
         $this->assertFalse(in_array(
             __DIR__ . '/Fixture',
             ClassLoader::getDirectories()
         ));
 
-        ClassLoader::addDirectories(__DIR__ . '/Fixture');
+        ClassLoader::addDirectories([__DIR__ . '/Fixture']);
         ClassLoader::removeDirectories();
 
         $this->assertSame([], ClassLoader::getDirectories());

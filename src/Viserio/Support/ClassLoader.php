@@ -78,24 +78,24 @@ class ClassLoader
     /**
      * Add directories to the class loader.
      *
-     * @param string|array|null $directories
+     * @param array $directories
      */
-    public static function addDirectories($directories)
+    public static function addDirectories(array $directories)
     {
-        self::$directories = array_unique(array_merge(self::$directories, (array) $directories));
+        self::$directories = array_unique(array_merge(self::$directories, $directories));
     }
 
     /**
      * Remove directories from the class loader.
      *
-     * @param string|array|null $directories
+     * @param array|null $directories
      */
-    public static function removeDirectories($directories = null)
+    public static function removeDirectories(array $directories = null)
     {
         if ($directories === null) {
             self::$directories = [];
         } else {
-            self::$directories = array_diff(self::$directories, (array) $directories);
+            self::$directories = array_diff(self::$directories, $directories);
         }
     }
 
