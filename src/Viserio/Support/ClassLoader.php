@@ -32,7 +32,8 @@ class ClassLoader
     {
         $class = self::normalizeClass($class);
 
-        foreach (self::getDirectories() as $directory) {
+        foreach (self::$directories as $directory) {
+            var_dump(self::normalizeDirectorySeparator($directory . '/' . $class));
             if (file_exists($path = self::normalizeDirectorySeparator($directory . '/' . $class))) {
                 require_once $path;
 
