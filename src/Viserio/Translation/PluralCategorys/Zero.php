@@ -30,11 +30,11 @@ class Zero implements CategoryContract
      *  one   → n in 0..1;
      *  other → everything else
      *
-     * @param int $count
+     * @param int|string $count
      *
      * @return int
      */
-    public function category(int $count): string
+    public function category($count): int
     {
         $count = $this->normalizeInteger($count);
 

@@ -28,11 +28,11 @@ class Balkan implements CategoryContract
      *  many  → n mod 10 is 0 or n mod 10 in 5..9 or n mod 100 in 11..14;
      *  other → everything else (fractions)
      *
-     * @param int $count
+     * @param int|string $count
      *
      * @return int
      */
-    public function category($count)
+    public function category($count): int
     {
         $count = $this->normalizeInteger($count);
         $i = 0;

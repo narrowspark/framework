@@ -10,7 +10,7 @@ trait FileLoaderAwareTrait
      *
      * @var \Viserio\Contracts\Parsers\Loader
      */
-    protected $fileLoader;
+    protected $loader;
 
     /**
      * Set the file loader.
@@ -21,7 +21,7 @@ trait FileLoaderAwareTrait
      */
     public function setLoader(LoaderContract $loader)
     {
-        $this->fileLoader = $loader;
+        $this->loader = $loader;
 
         return $this;
     }
@@ -33,6 +33,6 @@ trait FileLoaderAwareTrait
      */
     public function getLoader()
     {
-        return $this->fileLoader;
+        return $this->loader;
     }
 }

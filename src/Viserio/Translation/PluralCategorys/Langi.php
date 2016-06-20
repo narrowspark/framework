@@ -21,11 +21,11 @@ class Langi implements CategoryContract
      *  one   → n within 0..2 and n is not 0 and n is not 2;
      *  other → everything else
      *
-     * @param int $count
+     * @param int|string $count
      *
-     * @return integereger
+     * @return int
      */
-    public function category(int $count): string
+    public function category($count): int
     {
         $count = $this->normalizeInteger($count);
 

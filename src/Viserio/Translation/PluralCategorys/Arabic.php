@@ -24,11 +24,11 @@ class Arabic implements CategoryContract
      *  many  → n mod 100 in 11..99;
      *  other → everything else
      *
-     * @param int $count
+     * @param int|string $count
      *
      * @return int
      */
-    public function category(int $count): string
+    public function category($count): int
     {
         $count = $this->normalizeInteger($count);
 

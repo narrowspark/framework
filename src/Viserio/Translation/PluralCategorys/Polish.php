@@ -21,11 +21,11 @@ class Polish implements CategoryContract
      *  few   → n mod 10 in 2..4 and n mod 100 not in 12..14 and n mod 100 not in 22..24;
      *  other → everything else (fractions)
      *
-     * @param int $count
+     * @param int|string $count
      *
-     * @return integereger
+     * @return int
      */
-    public function category(int $count): string
+    public function category($count): int
     {
         $count = $this->normalizeInteger($count);
 
@@ -34,12 +34,11 @@ class Polish implements CategoryContract
 
         if ($count === 1) {
             return 0;
-        } elseif (
-<<<<<<< HEAD:src/Viserio/Translation/PluralCategorys/Polish.php
-            !is_float($count) && $i10 >= 2 && $i10 <= 4 && !($i >= 12 && $i <= 14) && !($i >= 22 && $i <= 24)
-=======
-            $this->isInteger($count) && ($i10) >= 2 && $i10 <= 4 && ! (($i) >= 12 && $i <= 14) && ! ($i >= 22 && $i <= 24)
->>>>>>> develop:src/Viserio/Translator/PluralCategorys/Polish.php
+        } elseif (!is_float($count) &&
+            $i10 >= 2 &&
+            $i10 <= 4 &&
+            ! ($i >= 12 &&$i <= 14) &&
+            ! ($i >= 22 && $i <= 24)
         ) {
             return 1;
         }

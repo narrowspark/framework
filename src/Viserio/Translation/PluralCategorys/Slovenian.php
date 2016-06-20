@@ -22,11 +22,11 @@ class Slovenian implements CategoryContract
      *  few   → n mod 100 in 3..4;
      *  other → everything else
      *
-     * @param int $count
+     * @param int|string $count
      *
-     * @return integereger
+     * @return int
      */
-    public function category($count)
+    public function category($count): int
     {
         $count = $this->normalizeInteger($count);
 

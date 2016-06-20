@@ -22,11 +22,11 @@ class Gaelic implements CategoryContract
      *  few → n in 3..10,13..19;
      *  other → everything else
      *
-     * @param int $count
+     * @param int|string $count
      *
-     * @return integereger
+     * @return int
      */
-    public function category($count)
+    public function category($count): int
     {
         $count = $this->normalizeInteger($count);
 

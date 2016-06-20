@@ -48,11 +48,11 @@ class None implements CategoryContract
      * These are known to have no plurals, there are no rules:
      *   other → everything
      *
-     * @param int $count
+     * @param int|string $count
      *
-     * @return integereger
+     * @return int
      */
-    public function category(int $count): string
+    public function category($count): int
     {
         return 0;
     }

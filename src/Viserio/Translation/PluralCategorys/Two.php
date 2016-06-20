@@ -29,11 +29,11 @@ class Two implements CategoryContract
      *  two   → n is 2;
      *  other → everything else
      *
-     * @param int $count
+     * @param int|string $count
      *
      * @return int
      */
-    public function category(int $count): string
+    public function category($count): int
     {
         $count = $this->normalizeInteger($count);
 

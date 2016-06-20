@@ -21,11 +21,11 @@ class Latvian implements CategoryContract
      *  one   → n mod 10 is 1 and n mod 100 is not 11;
      *  other → everything else
      *
-     * @param int $count
+     * @param int|string $count
      *
-     * @return integereger
+     * @return int
      */
-    public function category(int $count): string
+    public function category($count): int
     {
         $count = $this->normalizeInteger($count);
 

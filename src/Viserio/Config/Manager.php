@@ -56,6 +56,8 @@ class Manager implements ManagerContract, IteratorAggregate
      * Set Viserio's defaults using the repository.
      *
      * @param array $array
+     *
+     * @return self
      */
     public function setArray(array $array): ManagerContract
     {
@@ -78,7 +80,7 @@ class Manager implements ManagerContract, IteratorAggregate
      */
     public function import(string $file, string $group = null): ManagerContract
     {
-        $config = $this->fileLoader->load($file, $group);
+        $config = $this->loader->load($file, $group);
 
         $this->repository->setArray($config);
 

@@ -23,11 +23,11 @@ class Breton implements CategoryContract
      *  many  → n mod 1000000 is 0 and n is not 0;
      *  other → everything else
      *
-     * @param int $count
+     * @param int|string $count
      *
      * @return int
      */
-    public function category($count)
+    public function category($count): int
     {
         $count = $this->normalizeInteger($count);
 

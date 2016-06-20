@@ -6,9 +6,9 @@ interface PluralCategory
     /**
      * Returns category key by count.
      *
-     * @param int $count
+     * @param int|string $count
      *
-     * @return string
+     * @return int
      */
-    public function category(int $count): string;
+    public function category($count): int;
 }
