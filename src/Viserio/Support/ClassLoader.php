@@ -78,7 +78,7 @@ class ClassLoader
     /**
      * Add directories to the class loader.
      *
-     * @param array $directories
+     * @param string[] $directories
      */
     public static function addDirectories(array $directories)
     {
@@ -88,7 +88,7 @@ class ClassLoader
     /**
      * Remove directories from the class loader.
      *
-     * @param array|null $directories
+     * @param string[] $directories
      */
     public static function removeDirectories(array $directories = null)
     {

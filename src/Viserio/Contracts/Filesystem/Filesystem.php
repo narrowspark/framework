@@ -142,7 +142,7 @@ interface Filesystem
     /**
      * Delete the file at a given path.
      *
-     * @param array $paths
+     * @param string[] $paths
      *
      * @return bool
      */
