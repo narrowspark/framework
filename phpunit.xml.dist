@@ -70,10 +70,10 @@
         <testsuite name="Narrowspark Http Component Test Suite">
             <directory>./src/Viserio/Http/Tests</directory>
         </testsuite>
-<!--        <testsuite name="Narrowspark Log Component Test Suite">
+        <testsuite name="Narrowspark Log Component Test Suite">
             <directory>./src/Viserio/Log/Tests</directory>
         </testsuite>
-        <testsuite name="Narrowspark Loop Component Test Suite">
+<!--        <testsuite name="Narrowspark Loop Component Test Suite">
             <directory>./src/Viserio/Loop/Tests</directory>
         </testsuite>
         <testsuite name="Narrowspark Mail Component Test Suite">
