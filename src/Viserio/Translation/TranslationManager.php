@@ -141,7 +141,7 @@ class TranslationManager
     /**
      * Get default fallback.
      *
-     * @return MessageCatalogueContract|null
+     * @return MessageCatalogueContract
      */
     public function getDefaultFallback()
     {
@@ -166,7 +166,7 @@ class TranslationManager
     /**
      * Get fallback for a language.
      *
-     * @param stirng $lang
+     * @param string $lang
      *
      * @return MessageCatalogueContract|null
      */
