@@ -52,7 +52,7 @@ class None implements CategoryContract
      *
      * @return integereger
      */
-    public function category($count)
+    public function category(int $count): string
     {
         return 0;
     }

@@ -1,6 +1,8 @@
 <?php
 namespace Viserio\Contracts\Translation;
 
-class NotFoundResourceException extends \InvalidArgumentException
+use InvalidArgumentException;
+
+class NotFoundResourceException extends InvalidArgumentException
 {
 }

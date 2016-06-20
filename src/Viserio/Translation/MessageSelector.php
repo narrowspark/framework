@@ -81,7 +81,7 @@ class MessageSelector
 
         // var_dump($number, $position, $standardRules);
 
-        if (!isset($standardRules[$position])) {
+        if (! isset($standardRules[$position])) {
             // when there's exactly one rule given, and that rule is a standard
             // rule, use this rule
             if (count($parts) === 1 && isset($standardRules[0])) {

@@ -23,7 +23,7 @@ class FileLoaderTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->root       = vfsStream::setup();
+        $this->root = vfsStream::setup();
         $this->fileloader = new FileLoader(new TaggableParser(new Filesystem()), []);
     }
 
@@ -80,10 +80,10 @@ class FileLoaderTest extends \PHPUnit_Framework_TestCase
         )->at($this->root);
 
         $exist = $this->fileloader->exists($file->url());
-        $this->assertSame($this->normalizeDirectorySeparator($file->url()), $exist);
+        $this->assertSame(self::normalizeDirectorySeparator($file->url()), $exist);
 
         $exist2 = $this->fileloader->exists($file->url());
-        $this->assertSame($this->normalizeDirectorySeparator($file->url()), $exist2);
+        $this->assertSame(self::normalizeDirectorySeparator($file->url()), $exist2);
     }
 
     public function testExistsWithFalsePath()
@@ -99,7 +99,7 @@ class FileLoaderTest extends \PHPUnit_Framework_TestCase
         ]);
 
         $exist = $this->fileloader->exists('temp.json');
-        $this->assertSame($this->normalizeDirectorySeparator($file->url()), $exist);
+        $this->assertSame(self::normalizeDirectorySeparator($file->url()), $exist);
     }
 
     public function testGetParser()

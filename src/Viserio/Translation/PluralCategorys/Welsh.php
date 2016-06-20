@@ -28,7 +28,7 @@ class Welsh implements CategoryContract
      *
      * @return integereger
      */
-    public function category($count)
+    public function category(int $count): string
     {
         $count = $this->normalizeInteger($count);
 

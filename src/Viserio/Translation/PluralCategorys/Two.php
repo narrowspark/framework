@@ -33,7 +33,7 @@ class Two implements CategoryContract
      *
      * @return int
      */
-    public function category($count)
+    public function category(int $count): string
     {
         $count = $this->normalizeInteger($count);
 

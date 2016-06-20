@@ -27,10 +27,10 @@
         </testsuite>
         <testsuite name="Narrowspark Bus Component Test Suite">
             <directory>./src/Viserio/Bus/Tests</directory>
-        </testsuite>
+        </testsuite> -->
         <testsuite name="Narrowspark Cache Component Test Suite">
             <directory>./src/Viserio/Cache/Tests</directory>
-        </testsuite> -->
+        </testsuite>
         <testsuite name="Narrowspark Config Component Test Suite">
             <directory>./src/Viserio/Config/Tests</directory>
         </testsuite>
@@ -43,9 +43,9 @@
 <!--        <testsuite name="Narrowspark Container Component Test Suite">
             <directory>./src/Viserio/Container/Tests</directory>
         </testsuite> -->
-<!--         <testsuite name="Narrowspark Contracts Component Test Suite">
+        <testsuite name="Narrowspark Contracts Component Test Suite">
             <directory>./src/Viserio/Contracts/Tests</directory>
-        </testsuite> -->
+        </testsuite>
         <testsuite name="Narrowspark Cookie Component Test Suite">
             <directory>./src/Viserio/Cookie/Tests</directory>
         </testsuite>
@@ -55,10 +55,10 @@
         <testsuite name="Narrowspark Encryption Component Test Suite">
             <directory>./src/Viserio/Encryption/Tests</directory>
         </testsuite>
-<!--        <testsuite name="Narrowspark Events Component Test Suite">
+        <testsuite name="Narrowspark Events Component Test Suite">
             <directory>./src/Viserio/Events/Tests</directory>
         </testsuite>
-        <testsuite name="Narrowspark Exception Component Test Suite">
+<!--        <testsuite name="Narrowspark Exception Component Test Suite">
             <directory>./src/Viserio/Exception/Tests</directory>
         </testsuite> -->
         <testsuite name="Narrowspark Filesystem Component Test Suite">
@@ -67,10 +67,10 @@
         <testsuite name="Narrowspark Hashing Component Test Suite">
             <directory>./src/Viserio/Hashing/Tests</directory>
         </testsuite>
-<!--    <testsuite name="Narrowspark Http Component Test Suite">
+        <testsuite name="Narrowspark Http Component Test Suite">
             <directory>./src/Viserio/Http/Tests</directory>
         </testsuite>
-        <testsuite name="Narrowspark Log Component Test Suite">
+<!--        <testsuite name="Narrowspark Log Component Test Suite">
             <directory>./src/Viserio/Log/Tests</directory>
         </testsuite>
         <testsuite name="Narrowspark Loop Component Test Suite">
@@ -93,10 +93,10 @@
         </testsuite>
         <testsuite name="Narrowspark Routing Component Test Suite">
             <directory>./src/Viserio/Routing/Tests</directory>
-        </testsuite>
+        </testsuite> -->
         <testsuite name="Narrowspark Session Component Test Suite">
             <directory>./src/Viserio/Session/Tests</directory>
-        </testsuite> -->
+        </testsuite>
         <testsuite name="Narrowspark StaticalProxy Component Test Suite">
             <directory>./src/Viserio/StaticalProxy/Tests</directory>
         </testsuite>

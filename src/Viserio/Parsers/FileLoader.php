@@ -1,27 +1,13 @@
 <?php
 namespace Viserio\Parsers;
 
-use Narrowspark\Arr\StaticArr as Arr;
 use Viserio\Contracts\Parsers\Loader as LoaderContract;
 use Viserio\Contracts\Parsers\TaggableParser as TaggableParserContract;
-use Viserio\Parsers\IniParser;
-use Viserio\Parsers\JsonParser;
-use Viserio\Parsers\PHPParser;
-use Viserio\Parsers\TomlParser;
-use Viserio\Parsers\XmlParser;
-use Viserio\Parsers\YamlParser;
 use Viserio\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
 class FileLoader implements LoaderContract
 {
     use NormalizePathAndDirectorySeparatorTrait;
-
-    /**
-     * The filesystem instance.
-     *
-     * @var \Viserio\Filesystem\Filesystem
-     */
-    private $filesystem;
 
     /**
      * The parser instance.
@@ -45,6 +31,13 @@ class FileLoader implements LoaderContract
     protected $exists = [];
 
     /**
+     * The filesystem instance.
+     *
+     * @var \Viserio\Filesystem\Filesystem
+     */
+    private $filesystem;
+
+    /**
      * Create a new fileloader.
      *
      * @param TaggableParserContract $parser
@@ -52,8 +45,8 @@ class FileLoader implements LoaderContract
      */
     public function __construct(TaggableParserContract $parser, array $directories)
     {
-        $this->parser      = $parser;
-        $this->filesystem  = $parser->getFilesystem();
+        $this->parser = $parser;
+        $this->filesystem = $parser->getFilesystem();
         $this->directories = $directories;
     }
 
@@ -62,7 +55,7 @@ class FileLoader implements LoaderContract
      *
      * @return TaggableParserContract
      */
-    public function getParser()
+    public function getParser(): TaggableParserContract
     {
         return $this->parser;
     }
@@ -74,7 +67,7 @@ class FileLoader implements LoaderContract
      *
      * @return self
      */
-    public function setDirectories(array $directories)
+    public function setDirectories(array $directories): LoaderContract
     {
         foreach ($directories as $directory) {
             $this->addDirectory($directory);
@@ -88,7 +81,7 @@ class FileLoader implements LoaderContract
      *
      * @return array
      */
-    public function getDirectories()
+    public function getDirectories(): array
     {
         return $this->directories;
     }
@@ -100,10 +93,10 @@ class FileLoader implements LoaderContract
      *
      * @return self
      */
-    public function addDirectory($directory)
+    public function addDirectory(string $directory): LoaderContract
     {
-        if (!in_array($directory, $this->directories)) {
-            $this->directories[] = $this->normalizeDirectorySeparator($directory);
+        if (! in_array($directory, $this->directories)) {
+            $this->directories[] = self::normalizeDirectorySeparator($directory);
         }
 
         return $this;
@@ -112,10 +105,10 @@ class FileLoader implements LoaderContract
     /**
      * {@inheritdoc}
      */
-    public function load($file, $tag = null)
+    public function load(string $file, string $tag = null): array
     {
         // Determine if the given file exists.
-        $path  = $this->exists($file);
+        $path = $this->exists($file);
 
         $parser = $this->parser;
 
@@ -130,7 +123,7 @@ class FileLoader implements LoaderContract
     /**
      * {@inheritdoc}
      */
-    public function exists($file)
+    public function exists(string $file)
     {
         $key = str_replace('/', '', $file);
 
@@ -138,7 +131,7 @@ class FileLoader implements LoaderContract
         // the value in an array so we don't have to go through this process
         // again on subsequent checks for the existing of the data file.
         $path = $this->getPath($file);
-        $file = $this->normalizeDirectorySeparator($path . $file);
+        $file = self::normalizeDirectorySeparator($path . $file);
 
         if ($this->filesystem->has($file)) {
             return $this->exists[$key] = $file;
@@ -157,13 +150,13 @@ class FileLoader implements LoaderContract
      *
      * @return string
      */
-    protected function getPath($file)
+    protected function getPath(string $file): string
     {
         foreach ($this->directories as $directory) {
-            $dirFile = $this->normalizeDirectorySeparator($directory . '/' . $file);
+            $dirFile = self::normalizeDirectorySeparator($directory . '/' . $file);
 
             if ($this->filesystem->has($dirFile)) {
-                return $this->normalizeDirectorySeparator($directory) . '/';
+                return self::normalizeDirectorySeparator($directory) . '/';
             }
         }
 

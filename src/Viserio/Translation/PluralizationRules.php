@@ -54,7 +54,7 @@ class PluralizationRules
         if (isset($this->rules[$language])) {
             $return = call_user_func($this->rules[$language], $count);
 
-            if (!is_int($return) || $return < 0) {
+            if (! is_int($return) || $return < 0) {
                 return (new Zero())->category(0);
             }
 
@@ -67,10 +67,19 @@ class PluralizationRules
     /**
      * Overrides the default plural rule for a given locale.
      *
+<<<<<<< HEAD:src/Viserio/Translation/PluralizationRules.php
      * @param string   $language
      * @param callable $rule
      */
     public function set($language, callable $rule)
+=======
+     * @param callable $rule
+     * @param string   $language
+     *
+     * @throws \LogicException
+     */
+    public function set(callable $rule, $language)
+>>>>>>> develop:src/Viserio/Translator/PluralizationRules.php
     {
         if (strlen($language) > 3) {
             $language = substr($language, 0, -strlen(strrchr($language, '_')));

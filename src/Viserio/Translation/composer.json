@@ -18,7 +18,7 @@
         }
     ],
     "require": {
-        "php"                               : "^5.6 || ^7.0",
+        "php"                               : "7.0.0 - 7.0.5 || ^7.0.7",
         "viserio/contracts"                 : "self.version",
         "viserio/support"                   : "self.version"
     },
@@ -26,8 +26,7 @@
         "narrowspark/php-cs-fixer-config"   : "^1.1",
         "narrowspark/testing-helper"        : "^1.5",
         "phpunit/phpunit"                   : "^5.1",
-        "symfony/event-dispatcher"          : "^3.0 || ^2.8",
-        "viserio/parsers"                   : "self.version",
+        "symfony/event-dispatcher"          : "^3.1",
         "viserio/cache"                     : "self.version"
     },
     "autoload": {

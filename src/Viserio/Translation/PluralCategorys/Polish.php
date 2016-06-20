@@ -25,7 +25,7 @@ class Polish implements CategoryContract
      *
      * @return integereger
      */
-    public function category($count)
+    public function category(int $count): string
     {
         $count = $this->normalizeInteger($count);
 
@@ -35,7 +35,11 @@ class Polish implements CategoryContract
         if ($count === 1) {
             return 0;
         } elseif (
+<<<<<<< HEAD:src/Viserio/Translation/PluralCategorys/Polish.php
             !is_float($count) && $i10 >= 2 && $i10 <= 4 && !($i >= 12 && $i <= 14) && !($i >= 22 && $i <= 24)
+=======
+            $this->isInteger($count) && ($i10) >= 2 && $i10 <= 4 && ! (($i) >= 12 && $i <= 14) && ! ($i >= 22 && $i <= 24)
+>>>>>>> develop:src/Viserio/Translator/PluralCategorys/Polish.php
         ) {
             return 1;
         }

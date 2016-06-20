@@ -37,12 +37,19 @@ class PluralizationRulesTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
+<<<<<<< HEAD:src/Viserio/Translation/Tests/PluralizationRulesTest.php
         $this->object = new PluralizationRules();
 
         $createRules  = new ReflectionMethod($this->object, 'createRules');
         $createRules->setAccessible(true);
 
         $this->createRules = $createRules;
+=======
+        parent::setUp();
+        $this->object = new PluralizationRules();
+        $this->createRules = new \ReflectionMethod($this->object, 'createRules');
+        $this->createRules->setAccessible(true);
+>>>>>>> develop:src/Viserio/Translator/Tests/PluralizationRulesTest.php
     }
 
     /**

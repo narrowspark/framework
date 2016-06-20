@@ -1,6 +1,7 @@
 <?php
 namespace Viserio\Config;
 
+use ArrayIterator;
 use IteratorAggregate;
 use Viserio\Contracts\Config\Manager as ManagerContract;
 use Viserio\Contracts\Config\Repository as RepositoryContract;
@@ -35,13 +36,35 @@ class Manager implements ManagerContract, IteratorAggregate
     }
 
     /**
+     * Call a method from repository.
+     *
+     * @param string $method
+     * @param array  $params
+     *
+     * @return mixed
+     */
+    public function __call(string $method, array $params = [])
+    {
+        if ($this->loader && method_exists($this->loader, $method)) {
+            return call_user_func_array([$this->loader, $method], $params);
+        }
+
+        return call_user_func_array([$this->repository, $method], $params);
+    }
+
+    /**
      * Set Viserio's defaults using the repository.
      *
      * @param array $array
      */
-    public function setArray(array $array)
+    public function setArray(array $array): ManagerContract
     {
         $this->repository->setArray($array);
+
+        return $this;
+    }
+
+    /**
     }
 
     /**
@@ -53,7 +76,7 @@ class Manager implements ManagerContract, IteratorAggregate
      *
      * @return self
      */
-    public function import($file, $group = null)
+    public function import(string $file, string $group = null): ManagerContract
     {
         $config = $this->fileLoader->load($file, $group);
 
@@ -65,7 +88,7 @@ class Manager implements ManagerContract, IteratorAggregate
     /**
      * {@inheritdoc}
      */
-    public function set($key, $value)
+    public function set(string $key, $value): ManagerContract
     {
         $this->offsetSet($key, $value);
 
@@ -75,9 +98,9 @@ class Manager implements ManagerContract, IteratorAggregate
     /**
      * {@inheritdoc}
      */
-    public function get($key, $default = null)
+    public function get(string $key, $default = null)
     {
-        if (!$this->offsetExists($key)) {
+        if (! $this->offsetExists($key)) {
             return $default;
         }
 
@@ -89,7 +112,7 @@ class Manager implements ManagerContract, IteratorAggregate
     /**
      * {@inheritdoc}
      */
-    public function has($key)
+    public function has(string $key): bool
     {
         return $this->offsetExists($key);
     }
@@ -97,7 +120,7 @@ class Manager implements ManagerContract, IteratorAggregate
     /**
      * {@inheritdoc}
      */
-    public function forget($key)
+    public function forget(string $key)
     {
         $this->offsetUnset($key);
     }
@@ -156,25 +179,8 @@ class Manager implements ManagerContract, IteratorAggregate
      *
      * @return \ArrayIterator
      */
-    public function getIterator()
+    public function getIterator(): ArrayIterator
     {
         return $this->repository->getIterator();
-    }
-
-    /**
-     * Call a method from repository.
-     *
-     * @param string $method
-     * @param array  $params
-     *
-     * @return mixed
-     */
-    public function __call($method, array $params = [])
-    {
-        if ($this->fileLoader && method_exists($this->fileLoader, $method)) {
-            return call_user_func_array([$this->fileLoader, $method], $params);
-        }
-
-        return call_user_func_array([$this->repository, $method], $params);
     }
 }
