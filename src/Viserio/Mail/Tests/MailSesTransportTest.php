@@ -3,8 +3,8 @@ namespace Viserio\Mail\Test;
 
 use Aws\Ses\SesClient;
 use Viserio\Application\Application;
-use Viserio\Mail\Transport\Ses as SesTransport;
 use Viserio\Mail\TransportManager;
+use Viserio\Mail\Transport\Ses as SesTransport;
 use Viserio\Support\Collection;
 
 class MailSesTransportTest extends \PHPUnit_Framework_TestCase

@@ -4,7 +4,6 @@ namespace Viserio\Http\Uri\Filter;
 class Scheme
 {
     /**
-     * @param string $value
      *
      * @return string
      */
