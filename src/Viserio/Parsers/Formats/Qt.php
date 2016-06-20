@@ -2,7 +2,7 @@
 namespace Viserio\Parsers\Formats;
 
 use Exception;
-use Viserio\Contracts\Filesystem\LoadingException;
+use Viserio\Contracts\Parsers\Exception\ParseException;
 use Viserio\Contracts\Parsers\Format as FormatContract;
 use Viserio\Filesystem\Filesystem;
 
@@ -28,21 +28,23 @@ class Qt implements FormatContract
     /**
      * {@inheritdoc}
      */
-    public function parse($payload)
+    public function parse(string $payload): array
     {
         try {
             if ($this->files->exists($filename)) {
                 return '';
             }
         } catch (Exception $exception) {
-            throw new LoadingException(sprintf('Unable to parse the Qt xml string: [%s]', $exception->getMessage()));
+            throw new ParseException([
+                'message' => 'Unable to parse the Qt xml string.'
+            ]);
         }
     }
 
     /**
      * {@inheritdoc}
      */
-    public function dump(array $data)
+    public function dump(array $data): string
     {
         //
     }

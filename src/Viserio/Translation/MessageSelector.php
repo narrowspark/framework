@@ -117,9 +117,11 @@ class MessageSelector
         foreach ($parts as $part) {
             $part = trim($part);
 
-            if (
-                preg_match('/^(?P<interval>' . $this->getIntervalRegexp() . ')\s*(?P<message>.*?)$/x', $part, $matches)
-            ) {
+            if (preg_match(
+                '/^(?P<interval>' . $this->getIntervalRegexp() . ')\s*(?P<message>.*?)$/x',
+                $part,
+                $matches
+            )) {
                 $explicitRules[$matches['interval']] = $matches['message'];
             }
         }
@@ -143,9 +145,10 @@ class MessageSelector
 
             if (preg_match('/^\w+\:\s*(.*?)$/', $part, $matches)) {
                 $standardRules[] = $matches[1];
-            } elseif (
-                !preg_match('/^(?P<interval>' . $this->getIntervalRegexp() . ')\s*(?P<message>.*?)$/x', $part)
-            ) {
+            } elseif (! preg_match(
+                '/^(?P<interval>' . $this->getIntervalRegexp() . ')\s*(?P<message>.*?)$/x',
+                $part
+            )) {
                 $standardRules[] = $part;
             }
         }

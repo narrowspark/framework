@@ -67,9 +67,6 @@ class Manager implements ManagerContract, IteratorAggregate
     }
 
     /**
-    }
-
-    /**
      * Import configuation from file.
      * Can be grouped together.
      *

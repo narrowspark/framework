@@ -28,7 +28,7 @@ class TOML implements FormatContract
             return YosymfonyToml::parse($payload);
         } catch (TomlParseException $exception) {
             throw new ParseException([
-                'message' => 'Unable to parse the TOML string',
+                'message' => 'Unable to parse the TOML string.',
                 'line' => $exception->getParsedLine(),
             ]);
         }

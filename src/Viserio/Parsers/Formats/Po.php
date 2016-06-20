@@ -4,7 +4,7 @@ namespace Viserio\Parsers\Formats;
 use Exception;
 use Sepia\FileHandler;
 use Sepia\PoParser;
-use Viserio\Contracts\Filesystem\LoadingException;
+use Viserio\Contracts\Parsers\Exception\ParseException;
 use Viserio\Contracts\Parsers\Format as FormatContract;
 use Viserio\Filesystem\Filesystem;
 
@@ -24,31 +24,35 @@ class Po implements FormatContract
      */
     public function __construct(Filesystem $files)
     {
+        if (! class_exists('Sepia\\PoParser')) {
+            throw new RuntimeException(
+                'Loading translations from the Po format requires the Sepia PoParser component.'
+            );
+        }
+
         $this->files = $files;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function parse($payload)
+    public function parse(string $payload): array
     {
-        if (!class_exists('Sepia\\PoParser')) {
-            throw new LogicException('Loading translations from the Po format requires the Sepia PoParser component.');
-        }
-
         try {
             if ($this->files->exists($filename)) {
                 return (new PoParser())->parseFile($filename);
             }
         } catch (Exception $exception) {
-            throw new LoadingException(sprintf('Unable to parse the Mo string: [%s]', $exception->getMessage()));
+            throw new ParseException([
+                'message' => 'Unable to parse the Po string'
+            ]);
         }
     }
 
     /**
      * {@inheritdoc}
      */
-    public function dump(array $data)
+    public function dump(array $data): string
     {
         //
     }

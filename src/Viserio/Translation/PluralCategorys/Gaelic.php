@@ -34,8 +34,7 @@ class Gaelic implements CategoryContract
             return 0;
         } elseif ($count === 2 || $count === 12) {
             return 1;
-        } elseif (
-            !is_float($count) &&
+        } elseif (! is_float($count) &&
             (
                 ($count >= 3 && $count <= 10) ||
                 ($count >= 13 && $count <= 19)
