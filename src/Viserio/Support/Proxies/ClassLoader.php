@@ -7,6 +7,6 @@ class Autoloader extends StaticalProxy
 {
     protected static function getFacadeAccessor()
     {
-        return 'autoloader';
+        return 'classloader';
     }
 }

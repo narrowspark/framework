@@ -1,7 +1,6 @@
 <?php
 namespace Viserio\Support;
 
-use ParagonIE\ConstantTime\Binary;
 use Stringy\StaticStringy;
 use Viserio\Contracts\Support\CharacterType;
 
@@ -88,32 +87,6 @@ class Str extends StaticStringy
     }
 
     /**
-     * Binary-safe substr() implementation
-     *
-     * @param string   $str
-     * @param int      $start
-     * @param int|null $length
-     *
-     * @return string
-     */
-    public static function subString(string $str, int $start, $length = null): string
-    {
-        return Binary::safeSubstr($str, $start, $length);
-    }
-
-    /**
-     * Binary-safe strlen() implementation
-     *
-     * @param string $str
-     *
-     * @return int
-     */
-    public static function stringLength(string $str) : int
-    {
-        return Binary::safeStrlen($str);
-    }
-
-    /**
      * Generate a random string of a given length and character set
      *
      * @param int $length How many characters do you want?
@@ -126,7 +99,7 @@ class Str extends StaticStringy
         string $characters = CharacterType::PRINTABLE_ASCII
     ): string {
         $str = '';
-        $l = self::stringLength($characters) - 1;
+        $l = self::length($characters) - 1;
 
         for ($i = 0; $i < $length; ++$i) {
             $r = \random_int(0, $l);
@@ -139,6 +112,8 @@ class Str extends StaticStringy
     /**
      * Convert a string to snake case.
      *
+     * @link https://en.wikipedia.org/wiki/Snake_case
+     *
      * @param string $value
      * @param string $delimiter
      *
@@ -146,30 +121,18 @@ class Str extends StaticStringy
      */
     public static function snake(string $value, string $delimiter = '_'): string
     {
-        $key = $value . $delimiter;
+        $key = $value;
 
-        if (isset(static::$snakeCache[$key])) {
-            return static::$snakeCache[$key];
+        if (isset(static::$snakeCache[$key][$delimiter])) {
+            return static::$snakeCache[$key][$delimiter];
         }
 
-        $value = preg_replace('/\s+/', '', $value);
-        $value[0] = strtolower($value[0]);
-        $len = strlen($value);
-
-        for ($i = 0; $i < $len; ++$i) {
-            // See if we have an uppercase character and replace; ord A = 65, Z = 90.
-            if (ord($value[$i]) > 64 && ord($value[$i]) < 91) {
-                // Replace uppercase of with underscore and lowercase.
-                $replace = $delimiter . strtolower($value[$i]);
-                $value = substr_replace($value, $replace, $i, 1);
-
-                // Increase length of class and position since we made the string longer.
-                ++$len;
-                ++$i;
-            }
+        if (! ctype_lower($value)) {
+            $value = preg_replace('/\s+/u', '', $value);
+            $value = static::toLowerCase(preg_replace('/(.)(?=[A-Z0-9])/u', '$1'.$delimiter, $value));
         }
 
-        return static::$snakeCache[$key] = $value;
+        return static::$snakeCache[$key][$delimiter] = $value;
     }
 
     /**

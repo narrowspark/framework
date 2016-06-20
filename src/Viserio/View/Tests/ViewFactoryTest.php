@@ -152,11 +152,11 @@ class ViewFactoryTest extends \PHPUnit_Framework_TestCase
         $factory->getFinder()
             ->shouldReceive('find')
             ->with('layout')
-            ->andReturn($this->normalizeDirectorySeparator($this->getPath() . '/foo.php'));
+            ->andReturn(self::normalizeDirectorySeparator($this->getPath() . '/foo.php'));
         $factory->getFinder()
             ->shouldReceive('find')
             ->with('view')
-            ->andReturn($this->normalizeDirectorySeparator($this->getPath() . '/bar/foo/fi.php'));
+            ->andReturn(self::normalizeDirectorySeparator($this->getPath() . '/bar/foo/fi.php'));
 
         $virtuoso = new Virtuoso(
             Mock::mock(ContainerInterface::class),
@@ -397,6 +397,6 @@ class ViewFactoryTest extends \PHPUnit_Framework_TestCase
 
     protected function getPath()
     {
-        return $this->normalizeDirectorySeparator(dirname(__FILE__) . '/' . 'Fixture');
+        return self::normalizeDirectorySeparator(dirname(__FILE__) . '/' . 'Fixture');
     }
 }

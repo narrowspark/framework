@@ -96,7 +96,7 @@ class FileLoader implements LoaderContract
     public function addDirectory(string $directory): LoaderContract
     {
         if (! in_array($directory, $this->directories)) {
-            $this->directories[] = $this->normalizeDirectorySeparator($directory);
+            $this->directories[] = self::normalizeDirectorySeparator($directory);
         }
 
         return $this;
@@ -131,7 +131,7 @@ class FileLoader implements LoaderContract
         // the value in an array so we don't have to go through this process
         // again on subsequent checks for the existing of the data file.
         $path = $this->getPath($file);
-        $file = $this->normalizeDirectorySeparator($path . $file);
+        $file = self::normalizeDirectorySeparator($path . $file);
 
         if ($this->filesystem->has($file)) {
             return $this->exists[$key] = $file;
@@ -153,10 +153,10 @@ class FileLoader implements LoaderContract
     protected function getPath(string $file): string
     {
         foreach ($this->directories as $directory) {
-            $dirFile = $this->normalizeDirectorySeparator($directory . '/' . $file);
+            $dirFile = self::normalizeDirectorySeparator($directory . '/' . $file);
 
             if ($this->filesystem->has($dirFile)) {
-                return $this->normalizeDirectorySeparator($directory) . '/';
+                return self::normalizeDirectorySeparator($directory) . '/';
             }
         }
 

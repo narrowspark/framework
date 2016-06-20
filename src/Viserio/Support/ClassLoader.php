@@ -3,7 +3,7 @@ namespace Viserio\Support;
 
 use Viserio\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
-class Autoloader
+class ClassLoader
 {
     use NormalizePathAndDirectorySeparatorTrait;
 
@@ -33,7 +33,7 @@ class Autoloader
         $class = self::normalizeClass($class);
 
         foreach (self::getDirectories() as $directory) {
-            if (file_exists($path = $this->normalizeDirectorySeparator($directory . '/' . $class))) {
+            if (file_exists($path = self::normalizeDirectorySeparator($directory . '/' . $class))) {
                 require_once $path;
 
                 return true;
@@ -56,7 +56,9 @@ class Autoloader
             $class = substr($class, 1);
         }
 
-        return str_replace(['\\', '_'], DIRECTORY_SEPARATOR, $class) . '.php';
+        return self::normalizeDirectorySeparator(
+            str_replace(['\\', '_'], '/', $class) . '.php'
+        );
     }
 
     /**
