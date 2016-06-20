@@ -10,20 +10,28 @@ class NormalizePathAndDirectorySeparatorTraitTest extends \PHPUnit_Framework_Tes
     public function testNormalizeDirectorySeparator()
     {
         if (DIRECTORY_SEPARATOR !== '/') {
-            $this->assertSame('path/to/test', $this->normalizeDirectorySeparator('path\to\test'));
+            $this->assertSame('path/to/test', self::normalizeDirectorySeparator('path\to\test'));
 
-            $paths = $this->normalizeDirectorySeparator(['path\to\test', 'path\to\test', 'vfs://path/to/test']);
+            $paths = self::normalizeDirectorySeparator(['path\to\test', 'path\to\test', 'vfs://path/to/test']);
             $this->assertSame(['path/to/test', 'path/to/test', 'vfs://path/to/test'], $paths);
         }
 
         if (DIRECTORY_SEPARATOR === '/') {
-            $this->assertSame('path/to/test', $this->normalizeDirectorySeparator('path/to/test'));
-            $this->assertSame('vfs://path/to/test', $this->normalizeDirectorySeparator('vfs://path/to/test'));
+            $this->assertSame('path/to/test', self::normalizeDirectorySeparator('path/to/test'));
+            $this->assertSame('vfs://path/to/test', self::normalizeDirectorySeparator('vfs://path/to/test'));
             $this->assertSame(
                 ['path/to/test', 'path/to/test'],
-                $this->normalizeDirectorySeparator(['path/to/test', 'path/to/test'])
+                self::normalizeDirectorySeparator(['path/to/test', 'path/to/test'])
             );
         }
+    }
+
+    /**
+     * @expectedException LogicException
+     */
+    public function testNormalizePathToThrowException()
+    {
+        $this->normalizePath('..//../test/');
     }
 
     /**

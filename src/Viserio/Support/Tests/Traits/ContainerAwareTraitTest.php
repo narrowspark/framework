@@ -14,4 +14,12 @@ class ContainerAwareTraitTest extends \PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf('\Interop\Container\ContainerInterface', $this->getcontainer());
     }
+
+    /**
+     * @expectedException RuntimeException
+     */
+    public function testGetSetContainerThrowExceptionIfContainerIsNotSet()
+    {
+        $this->getcontainer();
+    }
 }

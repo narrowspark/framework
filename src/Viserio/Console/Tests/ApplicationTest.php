@@ -187,13 +187,17 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
     /**
      * Fixture method.
      *
-     * @param Out $output
+     * @param OutputInterface $output
      */
     public function foo(OutputInterface $output)
     {
         $output->write('hello');
     }
 
+    /**
+     * @param string $command
+     * @param string $expected
+     */
     private function assertOutputIs($command, $expected)
     {
         $output = new SpyOutput();

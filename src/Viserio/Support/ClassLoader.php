@@ -1,8 +1,12 @@
 <?php
 namespace Viserio\Support;
 
-class Autoloader
+use Viserio\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
+
+class ClassLoader
 {
+    use NormalizePathAndDirectorySeparatorTrait;
+
     /**
      * The registered directories.
      *
@@ -28,8 +32,8 @@ class Autoloader
     {
         $class = self::normalizeClass($class);
 
-        foreach (self::getDirectories() as $directory) {
-            if (file_exists($path = $directory . DIRECTORY_SEPARATOR . $class)) {
+        foreach (self::$directories as $directory) {
+            if (file_exists($path = $directory . '/' . $class)) {
                 require_once $path;
 
                 return true;
@@ -52,11 +56,15 @@ class Autoloader
             $class = substr($class, 1);
         }
 
-        return str_replace(['\\', '_'], DIRECTORY_SEPARATOR, $class) . '.php';
+        return self::normalizeDirectorySeparator(
+            str_replace(['\\', '_'], '/', $class) . '.php'
+        );
     }
 
     /**
      * Register the given class loader on the auto-loader stack.
+     *
+     * @codeCoverageIgnore
      */
     public static function register()
     {
@@ -70,24 +78,24 @@ class Autoloader
     /**
      * Add directories to the class loader.
      *
-     * @param string|array|null $directories
+     * @param string[] $directories
      */
-    public static function addDirectories($directories)
+    public static function addDirectories(array $directories)
     {
-        self::$directories = array_unique(array_merge(self::$directories, (array) $directories));
+        self::$directories = array_unique(array_merge(self::$directories, $directories));
     }
 
     /**
      * Remove directories from the class loader.
      *
-     * @param string|array|null $directories
+     * @param string[] $directories
      */
-    public static function removeDirectories($directories = null)
+    public static function removeDirectories(array $directories = null)
     {
         if ($directories === null) {
             self::$directories = [];
         } else {
-            self::$directories = array_diff(self::$directories, (array) $directories);
+            self::$directories = array_diff(self::$directories, $directories);
         }
     }
 
@@ -96,7 +104,7 @@ class Autoloader
      *
      * @return array
      */
-    public static function getDirectories()
+    public static function getDirectories(): array
     {
         return self::$directories;
     }
