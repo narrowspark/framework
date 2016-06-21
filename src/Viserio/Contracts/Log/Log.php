@@ -2,8 +2,9 @@
 namespace Viserio\Contracts\Log;
 
 use Closure;
+use Psr\Log\LoggerInterface as PsrLoggerInterface;
 
-interface Log
+interface Log extends PsrLoggerInterface
 {
     /**
      * Register a file log handler.
@@ -33,25 +34,6 @@ interface Log
         string $path,
         int $days = 0,
         string $level = 'debug',
-        $processor = null,
-        $formatter = null
-    );
-
-    /**
-     * Parse the handler into a Monolog constant.
-     *
-     * @param string|object $handler
-     * @param string        $path
-     * @param string        $level
-     * @param object|null   $processor
-     * @param object|null   $formatter
-     *
-     * @return void
-     */
-    public function parseHandler(
-        $handler,
-        string $path = '',
-        string $level = '',
         $processor = null,
         $formatter = null
     );
