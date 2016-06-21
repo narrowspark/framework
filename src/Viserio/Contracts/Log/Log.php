@@ -1,6 +1,7 @@
 <?php
 namespace Viserio\Contracts\Log;
 
+use Closure;
 use Psr\Log\LoggerInterface;
 use Viserio\Contracts\Events\Dispatcher as DispatcherContract;
 
@@ -56,4 +57,13 @@ interface Log
         $processor = null,
         $formatter = null
     );
+
+    /**
+     * Register a new callback handler for when a log event is triggered.
+     *
+     * @param \Closure $callback
+     *
+     * @return void
+     */
+    public function on(Closure $callback);
 }

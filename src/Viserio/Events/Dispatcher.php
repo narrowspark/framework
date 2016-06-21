@@ -99,7 +99,7 @@ class Dispatcher implements DispatcherContract
         $listeners = $this->getListeners($eventName);
 
         if ($continue === null) {
-            return $this->continueEmit($listeners);
+            return $this->continueEmit($listeners, $arguments);
         }
 
         $counter = count($listeners);
@@ -302,10 +302,11 @@ class Dispatcher implements DispatcherContract
      * time before the next event handler is called.
      *
      * @param array $listeners
+     * @param array $arguments
      *
      * @return bool
      */
-    protected function continueEmit(array $listeners): bool
+    protected function continueEmit(array $listeners, array $arguments): bool
     {
         foreach ($listeners as $listener) {
             $result = false;
