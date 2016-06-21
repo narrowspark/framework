@@ -2,6 +2,7 @@
 namespace Viserio\Log;
 
 use InvalidArgumentException;
+use RuntimeException;
 use Monolog\Formatter\{
     ChromePHPFormatter,
     ElasticaFormatter,
@@ -32,7 +33,6 @@ use Monolog\Handler\{
     ZendMonitorHandler
 };
 use Monolog\Logger as MonologLogger;
-use Psr\Log\LoggerInterface as PsrLoggerInterface;
 use Viserio\Log\Traits\ParseLevelTrait;
 
 class HandlerParser
@@ -100,11 +100,11 @@ class HandlerParser
      /**
      * Parse the handler into a Monolog constant.
      *
-     * @param string|object $handler
-     * @param string        $path
-     * @param string        $level
-     * @param object|null   $processor
-     * @param object|null   $formatter
+     * @param string|object       $handler
+     * @param string              $path
+     * @param string              $level
+     * @param object|array|null   $processor
+     * @param object|null         $formatter
      *
      * @return void
      */
@@ -115,11 +115,7 @@ class HandlerParser
         $processor = null,
         $formatter = null
     ) {
-        if (is_object($handler)) {
-            $customHandler = $handler;
-        } else {
-            $customHandler = new $this->handler[$handler]($path, $this->parseLevel($level));
-        }
+        $customHandler = $this->validateHandler($handler, $path, $level);
 
         $customHandler = $this->parseProcessor($customHandler, $processor);
 
@@ -133,9 +129,9 @@ class HandlerParser
     /**
      * Get the underlying Monolog instance.
      *
-     * @return PsrLoggerInterface
+     * @return MonologLogger
      */
-    public function getMonolog(): PsrLoggerInterface
+    public function getMonolog(): MonologLogger
     {
         return $this->monolog;
     }
@@ -158,7 +154,7 @@ class HandlerParser
             foreach ($processors as $processor => $settings) {
                 $handler->pushProcessor(new $processor($settings));
             }
-        } elseif ($processors !== null) {
+        } elseif (is_object($processors)) {
             $handler->pushProcessor($processors);
         }
 
@@ -252,5 +248,34 @@ class HandlerParser
         $format .= sprintf('%s%s%s%s', $color['gray'], $separator, $color['reset'], PHP_EOL);
 
         return $format;
+    }
+
+    /**
+     * Validate handler var.
+     *
+     * @param string|object $handler
+     * @param string        $path
+     * @param string        $level
+     *
+     * @return HandlerInterface
+     *
+     * @throws \RuntimeException
+     */
+    protected function validateHandler($handler, string $path, string $level): HandlerInterface
+    {
+        if (is_object($handler) && $handler instanceof HandlerInterface) {
+            return $handler;
+        } elseif (is_string($handler) && isset($this->handler[$handler])) {
+            return new $this->handler[$handler]($path, $this->parseLevel($level));
+        } else {
+            throw new RuntimeException(
+                sprintf(
+                    'Handler [%s] dont exist.',
+                    is_object($handler) ?
+                    get_class($handler) :
+                    $handler
+                )
+            );
+        }
     }
 }

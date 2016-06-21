@@ -6,7 +6,6 @@ use DateTime;
 use Monolog\Handler\RotatingFileHandler;
 use Monolog\Logger as MonologLogger;
 use Monolog\Processor\PsrLogMessageProcessor;
-use Psr\Log\LoggerInterface as PsrLoggerInterface;
 use RuntimeException;
 use Viserio\Contracts\{
     Events\Dispatcher as DispatcherContract,
@@ -98,96 +97,96 @@ class Writer implements LogContract
     /**
      * Log an emergency message to the logs.
      *
-     * @param string $message
+     * @param mixed  $message
      * @param array  $context
      */
     public function emergency($message, array $context = [])
     {
-        return $this->writeLog(__FUNCTION__, $message, $context);
+        return $this->writeLog('emergency', $message, $context);
     }
 
     /**
      * Log an alert message to the logs.
      *
-     * @param string $message
+     * @param mixed  $message
      * @param array  $context
      */
     public function alert($message, array $context = [])
     {
-        return $this->writeLog(__FUNCTION__, $message, $context);
+        return $this->writeLog('alert', $message, $context);
     }
 
     /**
      * Log a critical message to the logs.
      *
-     * @param string $message
+     * @param mixed  $message
      * @param array  $context
      */
     public function critical($message, array $context = [])
     {
-        return $this->writeLog(__FUNCTION__, $message, $context);
+        return $this->writeLog('critical', $message, $context);
     }
 
     /**
      * Log an error message to the logs.
      *
-     * @param string $message
+     * @param mixed  $message
      * @param array  $context
      */
     public function error($message, array $context = [])
     {
-        return $this->writeLog(__FUNCTION__, $message, $context);
+        return $this->writeLog('error', $message, $context);
     }
 
     /**
      * Log a warning message to the logs.
      *
-     * @param string $message
+     * @param mixed  $message
      * @param array  $context
      */
     public function warning($message, array $context = [])
     {
-        return $this->writeLog(__FUNCTION__, $message, $context);
+        return $this->writeLog('warning', $message, $context);
     }
 
     /**
      * Log a notice to the logs.
      *
-     * @param string $message
+     * @param mixed  $message
      * @param array  $context
      */
     public function notice($message, array $context = [])
     {
-        return $this->writeLog(__FUNCTION__, $message, $context);
+        return $this->writeLog('notice', $message, $context);
     }
 
     /**
      * Log an informational message to the logs.
      *
-     * @param string $message
+     * @param mixed  $message
      * @param array  $context
      */
     public function info($message, array $context = [])
     {
-        return $this->writeLog(__FUNCTION__, $message, $context);
+        return $this->writeLog('info', $message, $context);
     }
 
     /**
      * Log a debug message to the logs.
      *
-     * @param string $message
+     * @param mixed  $message
      * @param array  $context
      */
     public function debug($message, array $context = [])
     {
-        return $this->writeLog(__FUNCTION__, $message, $context);
+        return $this->writeLog('debug', $message, $context);
     }
 
     /**
      * Log a message to the logs.
      *
      * @param string $level
-     * @param string $message
+     * @param mixed  $message
      * @param array  $context
      */
     public function log($level, $message, array $context = [])
@@ -198,9 +197,9 @@ class Writer implements LogContract
     /**
      * Get the underlying Monolog instance.
      *
-     * @return PsrLoggerInterface
+     * @return MonologLogger
      */
-    public function getMonolog(): PsrLoggerInterface
+    public function getMonolog(): MonologLogger
     {
         return $this->monolog;
     }
@@ -293,13 +292,15 @@ class Writer implements LogContract
      * Write a message to Monolog.
      *
      * @param string $level
-     * @param string $message
+     * @param mixed  $message
      * @param array  $context
      */
-    protected function writeLog($level, $message, $context)
+    protected function writeLog(string $level, $message, array $context)
     {
+        $message = $this->formatMessage($message);
+
         if ($this->dispatcher !== null) {
-            $this->emitLogEvent($level, $message = $this->formatMessage($message), $context);
+            $this->emitLogEvent($level, $message, $context);
         }
 
         $this->monolog->{$level}($message, $context);
