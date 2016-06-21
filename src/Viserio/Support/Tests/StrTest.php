@@ -95,6 +95,9 @@ class StrTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('narrowsparkphpframework', Str::snake('narrowspark php framework'));
         $this->assertEquals('narrowspark_php_framework', Str::snake('Narrowspark  Php  Framework'));
 
+        // test cache
+        $this->assertEquals('narrowspark_php_framework', Str::snake('Narrowspark  Php  Framework'));
+
         // `Str::snake()` should not duplicate the delimeters
         $this->assertEquals('narrowspark_php_framework', Str::snake('narrowspark_php_framework'));
         $this->assertEquals('narrowspark__php__framework', Str::snake('Narrowspark_Php_Framework'));

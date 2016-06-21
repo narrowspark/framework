@@ -8,6 +8,8 @@ final class RequestFactory implements RequestFactoryContract
 {
     /**
      * {@inheritdoc}
+     *
+     * @codeCoverageIgnore
      */
     public function createRequest(
         string $method = 'GET',

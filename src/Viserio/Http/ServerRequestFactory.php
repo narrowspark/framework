@@ -33,6 +33,8 @@ class ServerRequestFactory implements ServerRequestFactoryContract
 
     /**
      * {@inheritdoc}
+     *
+     * @codeCoverageIgnore
      */
     public function createServerRequest(string $method, $uri): ServerRequestInterface
     {
