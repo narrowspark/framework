@@ -91,7 +91,7 @@ class Writer implements LogContract, PsrLoggerInterface
      * Create a new log writer instance.
      *
      * @param \Monolog\Logger    $monolog
-     * @param DispatcherContract $dispatcher
+     * @param \Viserio\Contracts\Events\Dispatcher $dispatcher
      */
     public function __construct(MonologLogger $monolog, DispatcherContract $dispatcher = null)
     {
@@ -271,7 +271,7 @@ class Writer implements LogContract, PsrLoggerInterface
     /**
      * Set the event dispatcher instance.
      *
-     * @param DispatcherContract $dispatcher
+     * @param \Viserio\Contracts\Events\Dispatcher $dispatcher
      *
      * @return void
      */
@@ -283,7 +283,7 @@ class Writer implements LogContract, PsrLoggerInterface
    /**
      * Get the event dispatcher instance.
      *
-     * @return DispatcherContract
+     * @return \Viserio\Contracts\Events\Dispatcher
      */
     public function getEventDispatcher(): DispatcherContract
     {

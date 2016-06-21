@@ -2,8 +2,6 @@
 namespace Viserio\Contracts\Log;
 
 use Closure;
-use Psr\Log\LoggerInterface;
-use Viserio\Contracts\Events\Dispatcher as DispatcherContract;
 
 interface Log
 {
