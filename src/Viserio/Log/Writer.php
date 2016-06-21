@@ -3,7 +3,6 @@ namespace Viserio\Log;
 
 use Closure;
 use DateTime;
-use JsonSerializable;
 use Monolog\Handler\RotatingFileHandler;
 use Monolog\Logger as MonologLogger;
 use Monolog\Processor\PsrLogMessageProcessor;
@@ -31,7 +30,7 @@ class Writer implements LogContract
     /**
      * The event dispatcher instance.
      *
-     * @var DispatcherContract
+     * @var \Viserio\Contracts\Events\Dispatcher|null
      */
     protected $dispatcher;
 
@@ -45,8 +44,8 @@ class Writer implements LogContract
     /**
      * Create a new log writer instance.
      *
-     * @param \Monolog\Logger    $monolog
-     * @param \Viserio\Contracts\Events\Dispatcher $dispatcher
+     * @param \Monolog\Logger                           $monolog
+     * @param \Viserio\Contracts\Events\Dispatcher|null $dispatcher
      */
     public function __construct(MonologLogger $monolog, DispatcherContract $dispatcher = null)
     {
@@ -275,7 +274,7 @@ class Writer implements LogContract
      *
      * @param mixed $message
      *
-     * @return mixed
+     * @return string|object|integer|double|null|boolean
      */
     protected function formatMessage($message)
     {
@@ -285,8 +284,6 @@ class Writer implements LogContract
             return $message->toJson();
         } elseif ($message instanceof Arrayable) {
             return var_export($message->toArray(), true);
-        } elseif ($message instanceof JsonSerializable) {
-            return var_export($message->jsonSerialize(), true);
         }
 
         return $message;

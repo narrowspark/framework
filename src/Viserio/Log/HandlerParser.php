@@ -23,6 +23,7 @@ use Monolog\Handler\{
     ErrorLogHandler,
     FirePHPHandler,
     GelfHandler,
+    HandlerInterface,
     LogglyHandler,
     NewRelicHandler,
     RavenHandler,
@@ -142,12 +143,12 @@ class HandlerParser
     /**
      * Parse Processor.
      *
-     * @param object            $handler
+     * @param HandlerInterface  $handler
      * @param array|object|null $processors
      *
-     * @return object|null
+     * @return HandlerInterface
      */
-    protected function parseProcessor($handler, $processors = null)
+    protected function parseProcessor(HandlerInterface $handler, $processors = null): HandlerInterface
     {
         if ($processors === null) {
             return $handler;
