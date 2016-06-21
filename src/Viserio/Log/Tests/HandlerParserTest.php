@@ -1,11 +1,11 @@
 <?php
 namespace Viserio\Log\Tests;
 
-use Narrowspark\TestingHelper\Traits\MockeryTrait;
-use Monolog\Logger;
 use Monolog\Handler\HandlerInterface;
-use Monolog\Processor\PsrLogMessageProcessor;
+use Monolog\Logger;
 use Monolog\Processor\GitProcessor;
+use Monolog\Processor\PsrLogMessageProcessor;
+use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use Viserio\Log\HandlerParser;
 
 class HandlerParserTest extends \PHPUnit_Framework_TestCase
