@@ -139,10 +139,10 @@ class HandlerParser
     /**
      * Parse Processor.
      *
-     * @param HandlerInterface  $handler
+     * @param \Monolog\Handler\HandlerInterface  $handler
      * @param array|object|null $processors
      *
-     * @return HandlerInterface
+     * @return \Monolog\Handler\HandlerInterface
      */
     protected function parseProcessor(HandlerInterface $handler, $processors = null): HandlerInterface
     {
@@ -257,7 +257,7 @@ class HandlerParser
      * @param string        $path
      * @param string        $level
      *
-     * @return HandlerInterface
+     * @return \Monolog\Handler\HandlerInterface
      *
      * @throws \RuntimeException
      */

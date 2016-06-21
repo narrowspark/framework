@@ -2,9 +2,9 @@
 namespace Viserio\Log\Tests;
 
 use Interop\Container\ContainerInterface as ContainerContract;
-use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use Mockery as Mock;
 use Monolog\Logger;
+use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use Monolog\Handler\{
     StreamHandler,
     RotatingFileHandler
