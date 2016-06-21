@@ -1,12 +1,14 @@
 <?php
 namespace Viserio\Log\Test;
 
-use Mockery as Mock;
+use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use Viserio\Events\Dispatcher;
 use Viserio\Log\Writer;
 
 class WriterTest extends \PHPUnit_Framework_TestCase
 {
+    use MockeryTrait;
+
     public function tearDown()
     {
         Mock::close();
@@ -14,28 +16,28 @@ class WriterTest extends \PHPUnit_Framework_TestCase
 
     public function testFileHandlerCanBeAdded()
     {
-        $writer = new Writer($monolog = Mock::mock('Monolog\Logger'), $this->getEventsDispatcher());
+        $writer = new Writer($monolog = $this->mock('Monolog\Logger'), $this->getEventsDispatcher());
         $monolog->shouldReceive('pushHandler')->once()->with(Mock::type('Monolog\Handler\StreamHandler'));
         $writer->useFiles(__DIR__);
     }
 
     public function testRotatingFileHandlerCanBeAdded()
     {
-        $writer = new Writer($monolog = Mock::mock('Monolog\Logger'), $this->getEventsDispatcher());
+        $writer = new Writer($monolog = $this->mock('Monolog\Logger'), $this->getEventsDispatcher());
         $monolog->shouldReceive('pushHandler')->once()->with(Mock::type('Monolog\Handler\RotatingFileHandler'));
         $writer->useDailyFiles(__DIR__, 5);
     }
 
     public function testErrorLogHandlerCanBeAdded()
     {
-        $writer = new Writer($monolog = Mock::mock('Monolog\Logger'), $this->getEventsDispatcher());
+        $writer = new Writer($monolog = $this->mock('Monolog\Logger'), $this->getEventsDispatcher());
         $monolog->shouldReceive('pushHandler')->once()->with(Mock::type('Monolog\Handler\ErrorLogHandler'));
         $writer->useErrorLog();
     }
 
     public function testMethodsPassErrorAdditionsToMonolog()
     {
-        $writer = new Writer($monolog = Mock::mock('Monolog\Logger'), $this->getEventsDispatcher());
+        $writer = new Writer($monolog = $this->mock('Monolog\Logger'), $this->getEventsDispatcher());
         $monolog->shouldReceive('error')->once()->with('foo', []);
         $writer->error('foo');
     }
@@ -43,7 +45,7 @@ class WriterTest extends \PHPUnit_Framework_TestCase
     public function testWriterFiresEventsDispatcher()
     {
         $events = $this->getEventsDispatcher();
-        $writer = new Writer($monolog = Mock::mock('Monolog\Logger'), $events);
+        $writer = new Writer($monolog = $this->mock('Monolog\Logger'), $events);
         $monolog->shouldReceive('error')->once()->with('foo', []);
         // $events->on(
         //     'Viserio.log',
@@ -70,7 +72,7 @@ class WriterTest extends \PHPUnit_Framework_TestCase
      */
     public function testListenShortcutFailsWithNoDispatcher()
     {
-        $writer = new Writer($monolog = Mock::mock('Monolog\Logger'), $this->getEventsDispatcher());
+        $writer = new Writer($monolog = $this->mock('Monolog\Logger'), $this->getEventsDispatcher());
         // $writer->on(function () {
 
         // });
@@ -78,7 +80,7 @@ class WriterTest extends \PHPUnit_Framework_TestCase
 
     public function testListenShortcut()
     {
-        $writer = new Writer($monolog = Mock::mock('Monolog\Logger'), $events = Mock::mock('Viserio\Contracts\Events\Dispatcher'));
+        $writer = new Writer($monolog = $this->mock('Monolog\Logger'), $events = $this->mock('Viserio\Contracts\Events\Dispatcher'));
 
         $callback = function () {
             return 'success';
@@ -91,8 +93,7 @@ class WriterTest extends \PHPUnit_Framework_TestCase
     protected function getEventsDispatcher()
     {
         return new Dispatcher(
-            Mock::mock('Symfony\Component\EventDispatcher\EventDispatcher'),
-            Mock::mock('Viserio\Container\Container')
+            $this->mock('Viserio\Container\Container')
         );
     }
 }
