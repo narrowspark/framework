@@ -213,6 +213,15 @@ class Writer implements LogContract, PsrLoggerInterface
      */
     public function __call($method, $parameters)
     {
+        // If the event dispatcher is set, we will pass along the parameters to the
+        // log listeners. These are useful for building profilers or other tools
+        // that aggregate all of the log messages for a given "request" cycle.
+        if ($this->dispatcher !== null &&
+            in_array($method, ['debug', 'info', 'notice', 'warning', 'error', 'critical', 'alert', 'emergency'])
+        ) {
+            $this->dispatcher->emit('viserio.log', $parameters);
+        }
+
         return call_user_func_array([$this->monolog, $method], $parameters);
     }
 
