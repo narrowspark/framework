@@ -231,14 +231,6 @@ class Writer implements LogContract
     }
 
     /**
-     * {@inheritdoc}
-     */
-    public function on(Closure $callback)
-    {
-        $this->getEventDispatcher()->on('viserio.log', $callback);
-    }
-
-    /**
      * Call Monolog with the given method and parameters.
      *
      * @param string $method

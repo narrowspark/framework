@@ -261,37 +261,14 @@ class WriterTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException RuntimeException
      */
-    public function testListenShortcutFailsWithNoDispatcher()
+    public function testGetEventDispatcher()
     {
         $monolog = $this->mock(Logger::class);
         $monolog
             ->shouldReceive('pushProcessor')
             ->once();
         $writer = new Writer($monolog);
-        $writer->on(function () {
-
-        });
-    }
-
-    public function testListenShortcut()
-    {
-        $monolog = $this->mock(Logger::class);
-        $monolog
-            ->shouldReceive('pushProcessor')
-            ->once();
-
-        $callback = function () {
-            $_SERVER['__log.message'] = 'success';
-        };
-
-        $writer = new Writer($monolog, $this->getEventsDispatcher());
-        $writer->on($callback);
-        $writer->getEventDispatcher()->emit('viserio.log');
-
-        $this->assertTrue(isset($_SERVER['__log.message']));
-        $this->assertEquals('success', $_SERVER['__log.message']);
-
-        unset($_SERVER['__log.message']);
+        $writer->getEventDispatcher();
     }
 
     public function testMessageInput()
