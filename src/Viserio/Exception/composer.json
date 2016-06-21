@@ -19,9 +19,9 @@
     ],
     "require": {
         "php"                                 : "7.0.0 - 7.0.5 || ^7.0.7",
-        "container-interop/container-interop" : "^1.1",
         "narrowspark/http-status"             : "^1.1",
         "symfony/debug"                       : "^3.1",
+        "viserio/config"                      : "self.version",
         "viserio/cotracts"                    : "self.version"
     },
     "require-dev": {

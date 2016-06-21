@@ -1,22 +1,17 @@
 <?php
-namespace Viserio\Exception\Adapter;
+namespace Viserio\Exception\Displayers;
 
 use Exception;
 use Symfony\Component\HttpFoundation\Response;
-use Viserio\Contracts\Exception\Adapter;
+use Viserio\Contracts\Exception\Displayer as DisplayerContract;
 use Viserio\Contracts\Http\HttpExceptionInterface;
 
-class PlainDisplayer implements Adapter
+class HtmlDisplayer implements DisplayerContract
 {
     /**
-     * Display the given exception to the user.
-     *
-     * @param \Exception $exception
-     * @param int        $code
-     *
-     * @return Response
+    * {@inheritdoc}
      */
-    public function display(Exception $exception, int $code): \Symfony\Component\HttpFoundation\Response
+    public function display($exception, int $code)
     {
         $status = $exception instanceof HttpExceptionInterface ?
                 $exception->getStatusCode() :

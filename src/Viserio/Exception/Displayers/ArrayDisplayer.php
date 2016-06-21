@@ -1,27 +1,22 @@
 <?php
-namespace Viserio\Exception\Adapter;
+namespace Viserio\Exception\Displayers;
 
 use Exception;
 use OutOfBoundsException;
 use Narrowspark\HttpStatus\HttpStatus;
-use Viserio\Contracts\Exception\Adapter;
+use Viserio\Contracts\Exception\Displayer as DisplayerContract;
 
-class ArrayDisplayer implements Adapter
+class ArrayDisplayer implements DisplayerContract
 {
     /**
-     * Display the given exception to the user.
-     *
-     * @param \Exception $exception
-     * @param int        $code
-     *
-     * @return array
+    * {@inheritdoc}
      */
-    public function display(Exception $exception, int $code): array
+    public function display($exception, int $code)
     {
         try {
             $message = HttpStatus::getReasonPhrase($code);
         } catch (OutOfBoundsException $narrowsparkExc) {
-            $message =  $exception->getMessage();;
+            $message =  $exception->getMessage();
         }
 
         return ['success' => false, 'code' => $message['code'], 'msg' => $message['extra']];

@@ -1,12 +1,12 @@
 <?php
-namespace Viserio\Exception\Adapter;
+namespace Viserio\Exception\Displayers;
 
 use Exception;
-use Viserio\Contracts\Exception\Adapter;
+use Viserio\Contracts\Exception\Displayer as DisplayerContract;
 use Viserio\Contracts\Http\HttpExceptionInterface;
 use Whoops\Run;
 
-class WhoopsDisplayer implements Adapter
+class WhoopsDisplayer implements DisplayerContract
 {
     /**
      * The Whoops run instance.
@@ -35,14 +35,9 @@ class WhoopsDisplayer implements Adapter
     }
 
     /**
-     * Display the given exception to the user.
-     *
-     * @param \Exception $exception
-     * @param int        $code
-     *
-     * @return Response
+    * {@inheritdoc}
      */
-    public function display(Exception $exception, int $code): \Symfony\Component\HttpFoundation\Response
+    public function display($exception, int $code)
     {
         $status = $exception instanceof HttpExceptionInterface ?
                 $exception->getStatusCode() :
