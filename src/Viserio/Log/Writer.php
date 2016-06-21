@@ -116,7 +116,8 @@ class Writer implements LogContract, PsrLoggerInterface
         string $path,
         int $days = 0,
         string $level = 'debug',
-        $processor = null, $formatter = null
+        $processor = null,
+        $formatter = null
     ) {
         $this->parseHandler(
             new RotatingFileHandler($path, $days, $this->parseLevel($level)),
