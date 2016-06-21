@@ -8,6 +8,8 @@ final class UploadedFileFactory implements UploadedFileFactoryContract
 {
     /**
      * {@inheritdoc}
+     *
+     * @codeCoverageIgnore
      */
     public function createUploadedFile(
         $file,

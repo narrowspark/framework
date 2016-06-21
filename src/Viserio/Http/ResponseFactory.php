@@ -8,6 +8,8 @@ final class ResponseFactory implements ResponseFactoryContract
 {
     /**
      * {@inheritdoc}
+     *
+     * @codeCoverageIgnore
      */
     public function createResponse(
         int $code = 200
