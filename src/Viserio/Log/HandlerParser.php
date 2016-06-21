@@ -97,11 +97,11 @@ class HandlerParser
      /**
      * Parse the handler into a Monolog constant.
      *
-     * @param string|object       $handler
-     * @param string              $path
-     * @param string              $level
-     * @param object|array|null   $processor
-     * @param object|null         $formatter
+     * @param string|object        $handler
+     * @param string               $path
+     * @param string               $level
+     * @param object|string[]|null $processor
+     * @param object|string|null   $formatter
      *
      * @return void
      */
