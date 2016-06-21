@@ -97,7 +97,15 @@ class HandlerParser
     }
 
      /**
-     * {@inheritdoc}
+     * Parse the handler into a Monolog constant.
+     *
+     * @param string|object $handler
+     * @param string        $path
+     * @param string        $level
+     * @param object|null   $processor
+     * @param object|null   $formatter
+     *
+     * @return void
      */
     public function parseHandler(
         $handler,
@@ -137,10 +145,14 @@ class HandlerParser
      * @param object            $handler
      * @param array|object|null $processors
      *
-     * @return object
+     * @return object|null
      */
     protected function parseProcessor($handler, $processors = null)
     {
+        if ($processors === null) {
+            return $handler;
+        }
+
         if (is_array($processors)) {
             foreach ($processors as $processor => $settings) {
                 $handler->pushProcessor(new $processor($settings));

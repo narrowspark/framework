@@ -31,12 +31,8 @@ trait ParseLevelTrait
      *
      * @return int
      */
-    protected function parseLevel($level)
+    protected function parseLevel(string $level): int
     {
-        if (is_object($level)) {
-            return $level;
-        }
-
         if (isset($this->levels[$level])) {
             return $this->levels[$level];
         }

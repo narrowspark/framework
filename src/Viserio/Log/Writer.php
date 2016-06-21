@@ -4,10 +4,7 @@ namespace Viserio\Log;
 use Closure;
 use DateTime;
 use JsonSerializable;
-use Monolog\Handler\{
-    ErrorLogHandler,
-    RotatingFileHandler
-};
+use Monolog\Handler\RotatingFileHandler;
 use Monolog\Logger as MonologLogger;
 use Monolog\Processor\PsrLogMessageProcessor;
 use Psr\Log\LoggerInterface as PsrLoggerInterface;
