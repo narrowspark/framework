@@ -3,6 +3,7 @@ namespace Viserio\Log\Tests;
 
 use Monolog\Handler\HandlerInterface;
 use Monolog\Logger;
+use Monolog\Formatter\ChromePHPFormatter;
 use Monolog\Processor\GitProcessor;
 use Monolog\Processor\PsrLogMessageProcessor;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
@@ -39,10 +40,17 @@ class HandlerParserTest extends \PHPUnit_Framework_TestCase
     {
         $handler = new HandlerParser($this->mock(Logger::class));
 
-        $this->assertInstanceOf(
-            HandlerInterface::class,
-            $handler->parseHandler('dontexist', '', 'debug')
-        );
+        $handler->parseHandler('dontexist', '', 'debug');
+    }
+
+    /**
+     * @expectedException RuntimeException
+     */
+    public function testParseHandlerToThrowExceptionForHandlerWithObject()
+    {
+        $handler = new HandlerParser($this->mock(Logger::class));
+
+        $handler->parseHandler($handler, '', 'debug');
     }
 
     public function testParseHandler()
@@ -97,5 +105,82 @@ class HandlerParserTest extends \PHPUnit_Framework_TestCase
             'info',
             new PsrLogMessageProcessor()
         );
+    }
+
+    public function testParseHandlerWithObjectFormatter()
+    {
+        $logger = $this->mock(Logger::class);
+        $logger->shouldReceive('pushHandler')
+            ->once()
+            ->andReturn(HandlerInterface::class);
+        $handler = $this->mock(HandlerInterface::class);
+        $handler
+            ->shouldReceive('setFormatter')
+            ->once();
+
+        $parser = new HandlerParser($logger);
+        $parser->parseHandler(
+            $handler,
+            '',
+            'info',
+            null,
+            new ChromePHPFormatter()
+        );
+    }
+
+    /**
+     * @expectedException InvalidArgumentException
+     */
+    public function testParseHandlerWithFormatterTothrowException()
+    {
+        $logger = $this->mock(Logger::class);
+        $handler = $this->mock(HandlerInterface::class);
+
+        $parser = new HandlerParser($logger);
+        $parser->parseHandler(
+            $handler,
+            '',
+            'info',
+            null,
+            'dontexist'
+        );
+    }
+
+    /**
+     * @dataProvider formatterProvider
+     */
+    public function testParseHandlerWithFormatterWithDataProvider($formatter)
+    {
+        $logger = $this->mock(Logger::class);
+        $logger->shouldReceive('pushHandler')
+            ->once()
+            ->andReturn(HandlerInterface::class);
+        $handler = $this->mock(HandlerInterface::class);
+        $handler
+            ->shouldReceive('setFormatter')
+            ->once();
+
+        $parser = new HandlerParser($logger);
+        $parser->parseHandler(
+            $handler,
+            '',
+            'info',
+            null,
+            $formatter
+        );
+    }
+
+    public function formatterProvider()
+    {
+        return [
+            ['line'],
+            ['html'],
+            ['normalizer'],
+            ['scalar'],
+            ['json'],
+            ['wildfire'],
+            ['chrome'],
+            ['gelf'],
+        ];
     }
 }

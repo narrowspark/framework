@@ -1,17 +1,16 @@
 <?php
 namespace Viserio\Log;
 
+use DateTime;
 use InvalidArgumentException;
 use RuntimeException;
 use Monolog\Formatter\{
     ChromePHPFormatter,
-    ElasticaFormatter,
     FormatterInterface,
-    GelfFormatter,
+    GelfMessageFormatter,
     HtmlFormatter,
     JsonFormatter,
     LineFormatter,
-    LogstashFormatter,
     NormalizerFormatter,
     ScalarFormatter,
     WildfireFormatter
@@ -82,9 +81,7 @@ class HandlerParser
         'json'       => JsonFormatter::class,
         'wildfire'   => WildfireFormatter::class,
         'chrome'     => ChromePHPFormatter::class,
-        'gelf'       => GelfFormatter::class,
-        'logstash'   => LogstashFormatter::class,
-        'elastica'   => ElasticaFormatter::class,
+        'gelf'       => GelfMessageFormatter::class,
     ];
 
     /**
@@ -178,41 +175,25 @@ class HandlerParser
 
         switch ($formatter) {
             case 'line':
-                $format = $this->formatter['line']($this->lineFormatterSettings(), 'H:i:s', true);
-                break;
+                return new $this->formatter['line']($this->lineFormatterSettings(), 'H:i:s', true);
             case 'html':
-                $format = $this->formatter['html'](DateTime::RFC2822);
-                break;
+                return new $this->formatter['html'](DateTime::RFC2822);
             case 'normalizer':
-                $format = $this->formatter['normalizer']();
-                break;
+                return new $this->formatter['normalizer']();
             case 'scalar':
-                $format = $this->formatter['scalar']();
-                break;
+                return new $this->formatter['scalar']();
             case 'json':
-                $format = $this->formatter['json']();
-                break;
+                return new $this->formatter['json']();
             case 'wildfire':
-                $format = $this->formatter['wildfire']();
-                break;
+                return new $this->formatter['wildfire']();
             case 'chrome':
-                $format = $this->formatter['chrome']();
-                break;
+                return new $this->formatter['chrome']();
             case 'gelf':
-                $format = $this->formatter['gelf']();
-                break;
-            case 'logstash':
-                $format = $this->formatter['logstash']();
-                break;
-            case 'elastica':
-                $format = $this->formatter['elastica']();
-                break;
+                return new $this->formatter['gelf']();
 
             default:
                 throw new InvalidArgumentException('Invalid formatter.');
         }
-
-        return new $format();
     }
 
     /**
@@ -222,7 +203,7 @@ class HandlerParser
      */
     protected function lineFormatterSettings(): string
     {
-        $color = [
+        $options = [
             'gray' => "\033[37m",
             'green' => "\033[32m",
             'yellow' => "\033[93m",
@@ -236,16 +217,16 @@ class HandlerParser
         $width = getenv('COLUMNS') ?: 60; // Console width from env, or 60 chars.
         $separator = str_repeat('━', $width); // A nice separator line
 
-        $format = sprintf('%s', $color['bold']);
-        $format .= sprintf('%s[%datetime%]', $color['green']);
-        $format .= sprintf('%s[%channel%.', $color['white']);
-        $format .= sprintf('%s%level_name%', $color['yellow']);
-        $format .= sprintf('%s]', $color['white']);
-        $format .= sprintf('%s[UID:%extra.uid%]', $color['blue']);
-        $format .= sprintf('%s[PID:%extra.process_id%]', $color['purple']);
-        $format .= sprintf('%s:%s', $color['reset'], PHP_EOL);
+        $format  = $options['bold'];
+        $format .= $options['green'] . '[%datetime%]';
+        $format .= $options['white'] . '[%channel%.';
+        $format .= $options['yellow'] . '%level_name%';
+        $format .= sprintf('%s]', $options['white']);
+        $format .= $options['blue'] . '[UID:%extra.uid%]';
+        $format .= $options['purple'] . '[PID:%extra.process_id%]';
+        $format .= sprintf('%s:%s', $options['reset'], PHP_EOL);
         $format .= '%message%' . PHP_EOL;
-        $format .= sprintf('%s%s%s%s', $color['gray'], $separator, $color['reset'], PHP_EOL);
+        $format .= sprintf('%s%s%s%s', $options['gray'], $separator, $options['reset'], PHP_EOL);
 
         return $format;
     }
