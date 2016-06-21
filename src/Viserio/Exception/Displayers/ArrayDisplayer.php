@@ -2,13 +2,12 @@
 namespace Viserio\Exception\Adapter;
 
 use Exception;
+use OutOfBoundsException;
+use Narrowspark\HttpStatus\HttpStatus;
 use Viserio\Contracts\Exception\Adapter;
-use Viserio\Exception\Traits\ErrorHandlingTrait;
 
 class ArrayDisplayer implements Adapter
 {
-    use ErrorHandlingTrait;
-
     /**
      * Display the given exception to the user.
      *
@@ -19,7 +18,11 @@ class ArrayDisplayer implements Adapter
      */
     public function display(Exception $exception, int $code): array
     {
-        $message = $this->message($code, $exception->getMessage());
+        try {
+            $message = HttpStatus::getReasonPhrase($code);
+        } catch (OutOfBoundsException $narrowsparkExc) {
+            $message =  $exception->getMessage();;
+        }
 
         return ['success' => false, 'code' => $message['code'], 'msg' => $message['extra']];
     }

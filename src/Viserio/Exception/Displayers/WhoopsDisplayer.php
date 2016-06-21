@@ -2,7 +2,6 @@
 namespace Viserio\Exception\Adapter;
 
 use Exception;
-use Symfony\Component\HttpFoundation\Response;
 use Viserio\Contracts\Exception\Adapter;
 use Viserio\Contracts\Http\HttpExceptionInterface;
 use Whoops\Run;
