@@ -12,7 +12,7 @@ class EmptyResponse extends Response
      * @param array $headers Headers for the response, if any.
      * @param int   $status  Status code for the response, if any.
      */
-    public function __construct(array $headers = [], $status = 204)
+    public function __construct(array $headers = [], int $status = 204)
     {
         parent::__construct(
             $status,

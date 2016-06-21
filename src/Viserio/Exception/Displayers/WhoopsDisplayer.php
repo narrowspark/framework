@@ -1,50 +1,66 @@
 <?php
 namespace Viserio\Exception\Displayers;
 
-use Exception;
+use Psr\Http\Message\ResponseInterface;
 use Viserio\Contracts\Exception\Displayer as DisplayerContract;
-use Viserio\Contracts\Http\HttpExceptionInterface;
-use Whoops\Run;
+use Viserio\Http\Response;
+use Whoops\Handler\{
+    PrettyPageHandler,
+    PlainTextHandler,
+    JsonResponseHandler,
+    XmlResponseHandler
+};
+use Whoops\Run as Whoops;
 
 class WhoopsDisplayer implements DisplayerContract
 {
     /**
-     * The Whoops run instance.
-     *
-     * @var \Whoops\Run
+     * {@inheritdoc}
      */
-    protected $whoops;
-
-    /**
-     * Indicates if the application is in a console environment.
-     *
-     * @var bool
-     */
-    protected $runningInConsole;
-
-    /**
-     * Create a new Whoops exception displayer.
-     *
-     * @param \Whoops\Run $whoops
-     * @param bool        $runningInConsole
-     */
-    public function __construct(Run $whoops, bool $runningInConsole)
+    public function display($exception, string $id, int $code, array $headers): ResponseInterface
     {
-        $this->whoops = $whoops;
-        $this->runningInConsole = $runningInConsole;
+        $content = $this->whoops()->handleException($exception);
+
+        return new Response($code, array_merge($headers, ['Content-Type' => $this->contentType()]), $content);
     }
 
     /**
-    * {@inheritdoc}
+     * {@inheritdoc}
      */
-    public function display($exception, int $code)
+    public function contentType(): string
     {
-        $status = $exception instanceof HttpExceptionInterface ?
-                $exception->getStatusCode() :
-                Response::HTTP_INTERNAL_SERVER_ERROR;
+        return 'text/html';
+    }
 
-        $headers = $exception instanceof HttpExceptionInterface ? $exception->getHeaders() : [];
+    /**
+     * {@inheritdoc}
+     */
+    public function canDisplay($original, $transformed, int $code): bool
+    {
+        return class_exists(Whoops::class);
+    }
 
-        return new Response($this->whoops->handleException($exception), $status, $headers);
+    /**
+     * {@inheritdoc}
+     */
+    public function isVerbose(): bool
+    {
+        return true;
+    }
+
+    /**
+     * Returns the whoops instance.
+     *
+     * @return Run
+     */
+    private function getWhoops()
+    {
+        $whoops = new Whoops();
+        $whoops->allowQuit(false);
+        $whoops->writeToOutput(false);
+
+        $whoops->pushHandler(new PrettyPageHandler());
+
+        return $whoops;
     }
 }

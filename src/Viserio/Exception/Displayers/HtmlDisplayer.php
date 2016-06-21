@@ -1,24 +1,90 @@
 <?php
 namespace Viserio\Exception\Displayers;
 
-use Exception;
-use Symfony\Component\HttpFoundation\Response;
+use Psr\Http\Message\ResponseInterface;
 use Viserio\Contracts\Exception\Displayer as DisplayerContract;
-use Viserio\Contracts\Http\HttpExceptionInterface;
+use Viserio\Exceptions\ExceptionInfo;
+use Viserio\Http\Response\HtmlResponse;
 
 class HtmlDisplayer implements DisplayerContract
 {
     /**
-    * {@inheritdoc}
+     * The exception info instance.
+     *
+     * @var \Viserio\Exceptions\ExceptionInfo
      */
-    public function display($exception, int $code)
+    protected $info;
+
+    /**
+     * The html template path.
+     *
+     * @var string
+     */
+    protected $path;
+
+    /**
+     * Create a new html displayer instance.
+     *
+     * @param \Viserio\Exceptions\ExceptionInfo $info
+     * @param string                            $path
+     *
+     * @return void
+     */
+    public function __construct(ExceptionInfo $info, string $path)
     {
-        $status = $exception instanceof HttpExceptionInterface ?
-                $exception->getStatusCode() :
-                Response::HTTP_INTERNAL_SERVER_ERROR;
+        $this->info = $info;
+        $this->path = $path;
+    }
 
-        $headers = $exception instanceof HttpExceptionInterface ? $exception->getHeaders() : [];
+    /**
+     * {@inheritdoc}
+     */
+    public function display($exception, string $id, int $code, array $headers): ResponseInterface
+    {
+        $info = $this->info->generate($exception, $id, $code);
 
-        return new Response(file_get_contents(__DIR__ . '/../Resources/plain.html'), $status, $headers);
+        return new HtmlResponse($this->render($info), $code, array_merge($headers, ['Content-Type' => $this->contentType()]));
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function contentType(): string
+    {
+        return 'text/html';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function canDisplay($original, $transformed, int $code): bool
+    {
+        return true;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isVerbose(): bool
+    {
+        return false;
+    }
+
+    /**
+     * Render the page with given info.
+     *
+     * @param array $info
+     *
+     * @return string
+     */
+    protected function render(array $info): string
+    {
+        $content = file_get_contents($this->path);
+
+        foreach ($info as $key => $val) {
+            $content = str_replace("{{ $$key }}", $val, $content);
+        }
+
+        return $content;
     }
 }

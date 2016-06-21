@@ -54,7 +54,7 @@ class ViewFactoryTest extends \PHPUnit_Framework_TestCase
             $_SERVER['__test.view'] = $view;
         });
 
-        $view = $factory->make('view', ['foo' => 'bar'], ['baz' => 'boom']);
+        $view = $factory->create('view', ['foo' => 'bar'], ['baz' => 'boom']);
 
         $this->assertSame($engine, $view->getEngine());
         $this->assertSame($_SERVER['__test.view']->getSubject(), $view);
@@ -116,7 +116,7 @@ class ViewFactoryTest extends \PHPUnit_Framework_TestCase
             ->with('php');
         $factory->addExtension('php', 'php');
 
-        $view = $factory->make('view', ['foo' => 'bar'], ['baz' => 'boom']);
+        $view = $factory->create('view', ['foo' => 'bar'], ['baz' => 'boom']);
 
         $this->assertSame($engine, $view->getEngine());
     }
@@ -165,7 +165,7 @@ class ViewFactoryTest extends \PHPUnit_Framework_TestCase
 
         $factory->setVirtuoso($virtuoso);
 
-        $factory->make('view')->render();
+        $factory->create('view')->render();
     }
 
     public function testExistsPassesAndFailsViews()
@@ -278,7 +278,7 @@ class ViewFactoryTest extends \PHPUnit_Framework_TestCase
             ->andReturn($engine = Mock::mock(Engine::class));
         $factory->addExtension('foo', 'bar', $resolver);
 
-        $view = $factory->make('view', ['data']);
+        $view = $factory->create('view', ['data']);
 
         $this->assertSame($engine, $view->getEngine());
     }
@@ -331,8 +331,8 @@ class ViewFactoryTest extends \PHPUnit_Framework_TestCase
             ->twice()
             ->with('php')
             ->andReturn(Mock::mock(Engine::class));
-        $factory->make('foo/bar');
-        $factory->make('foo.bar');
+        $factory->create('foo/bar');
+        $factory->create('foo.bar');
     }
 
     public function testMakeWithAlias()
@@ -350,7 +350,7 @@ class ViewFactoryTest extends \PHPUnit_Framework_TestCase
             ->with('php')
             ->andReturn(Mock::mock(Engine::class));
 
-        $view = $factory->make('alias');
+        $view = $factory->create('alias');
 
         $this->assertEquals('real', $view->getName());
     }
@@ -366,7 +366,7 @@ class ViewFactoryTest extends \PHPUnit_Framework_TestCase
             ->once()
             ->with('view')
             ->andReturn('view.foo');
-        $factory->make('view');
+        $factory->create('view');
     }
 
     public function testGetAnItemFromTheSharedData()

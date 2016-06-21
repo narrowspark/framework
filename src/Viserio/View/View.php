@@ -183,7 +183,7 @@ class View implements ArrayAccess, ViewContract
      */
     public function nest($key, string $view, array $data = []): self
     {
-        return $this->with($key, $this->factory->make($view, $data));
+        return $this->with($key, $this->factory->create($view, $data));
     }
 
     /**
