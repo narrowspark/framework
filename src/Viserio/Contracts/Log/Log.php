@@ -1,7 +1,6 @@
 <?php
 namespace Viserio\Contracts\Log;
 
-use Closure;
 use Psr\Log\LoggerInterface as PsrLoggerInterface;
 
 interface Log extends PsrLoggerInterface

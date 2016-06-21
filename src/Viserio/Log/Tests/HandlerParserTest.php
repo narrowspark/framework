@@ -1,9 +1,9 @@
 <?php
 namespace Viserio\Log\Tests;
 
+use Monolog\Formatter\ChromePHPFormatter;
 use Monolog\Handler\HandlerInterface;
 use Monolog\Logger;
-use Monolog\Formatter\ChromePHPFormatter;
 use Monolog\Processor\GitProcessor;
 use Monolog\Processor\PsrLogMessageProcessor;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
