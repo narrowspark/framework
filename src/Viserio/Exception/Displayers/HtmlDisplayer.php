@@ -4,7 +4,7 @@ namespace Viserio\Exception\Displayers;
 use Psr\Http\Message\ResponseInterface;
 use Throwable;
 use Viserio\Contracts\Exception\Displayer as DisplayerContract;
-use Viserio\Exceptions\ExceptionInfo;
+use Viserio\Exception\ExceptionInfo;
 use Viserio\Http\Response\HtmlResponse;
 
 class HtmlDisplayer implements DisplayerContract
@@ -12,7 +12,7 @@ class HtmlDisplayer implements DisplayerContract
     /**
      * The exception info instance.
      *
-     * @var \Viserio\Exceptions\ExceptionInfo
+     * @var \Viserio\Exception\ExceptionInfo
      */
     protected $info;
 
@@ -26,7 +26,7 @@ class HtmlDisplayer implements DisplayerContract
     /**
      * Create a new html displayer instance.
      *
-     * @param \Viserio\Exceptions\ExceptionInfo $info
+     * @param \Viserio\Exception\ExceptionInfo $info
      * @param string                            $path
      *
      * @return void

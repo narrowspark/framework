@@ -3,8 +3,11 @@ namespace Viserio\Exception\Displayers;
 
 use Psr\Http\Message\ResponseInterface;
 use Throwable;
-use Viserio\Contracts\Exception\Displayer as DisplayerContract;
-use Viserio\Exceptions\ExceptionInfo;
+use Viserio\Contracts\{
+    Exception\Displayer as DisplayerContract,
+    View\Factory as FactoryContract
+};
+use Viserio\Exception\ExceptionInfo;
 use Viserio\Http\Response\HtmlResponse;
 
 class ViewDisplayer implements DisplayerContract
@@ -12,7 +15,7 @@ class ViewDisplayer implements DisplayerContract
     /**
      * The exception info instance.
      *
-     * @var \Viserio\Exceptions\ExceptionInfo
+     * @var \Viserio\Exception\ExceptionInfo
      */
     protected $info;
 
@@ -26,12 +29,12 @@ class ViewDisplayer implements DisplayerContract
     /**
      * Create a new json displayer instance.
      *
-     * @param \Viserio\Exceptions\ExceptionInfo $info
-     * @param \Viserio\Contracts\View\Factory   $factory
+     * @param \Viserio\Exception\ExceptionInfo $info
+     * @param \Viserio\Contracts\View\Factory  $factory
      *
      * @return void
      */
-    public function __construct(ExceptionInfo $info)
+    public function __construct(ExceptionInfo $info, FactoryContract $factory)
     {
         $this->info = $info;
         $this->factory = $factory;
@@ -44,7 +47,11 @@ class ViewDisplayer implements DisplayerContract
     {
         $info = $this->info->generate($exception, $id, $code);
 
-        return new HtmlResponse($this->factory->create("errors.{$code}", $info), $code, array_merge($headers, ['Content-Type' => $this->contentType()]));
+        return new HtmlResponse(
+            $this->factory->create("errors.{$code}", $info),
+            $code,
+            array_merge($headers, ['Content-Type' => $this->contentType()])
+        );
     }
 
     /**

@@ -4,7 +4,7 @@ namespace Viserio\Exception\Displayers;
 use Psr\Http\Message\ResponseInterface;
 use Throwable;
 use Viserio\Contracts\Exception\Displayer as DisplayerContract;
-use Viserio\Exceptions\ExceptionInfo;
+use Viserio\Exception\ExceptionInfo;
 use Viserio\Http\Response\JsonResponse;
 
 class JsonDisplayer implements DisplayerContract
@@ -12,14 +12,14 @@ class JsonDisplayer implements DisplayerContract
     /**
      * The exception info instance.
      *
-     * @var \Viserio\Exceptions\ExceptionInfo
+     * @var \Viserio\Exception\ExceptionInfo
      */
     protected $info;
 
     /**
      * Create a new json displayer instance.
      *
-     * @param \Viserio\Exceptions\ExceptionInfo $info
+     * @param \Viserio\Exception\ExceptionInfo $info
      *
      * @return void
      */

@@ -56,9 +56,8 @@ class Handler implements HandlerContract
      * @var array
      */
     protected $defaultLevels = [
-        'Symfony\Component\HttpKernel\Exception\HttpExceptionInterface' => 'warning',
-        'Symfony\Component\Debug\Exception\FatalThrowableError' => 'critical',
-        'Throwable' => 'error',
+        FatalThrowableError::class => 'critical',
+        Throwable::class => 'error',
     ];
 
     /**
