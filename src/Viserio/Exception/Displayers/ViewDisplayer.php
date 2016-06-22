@@ -31,8 +31,6 @@ class ViewDisplayer implements DisplayerContract
      *
      * @param \Viserio\Exception\ExceptionInfo $info
      * @param \Viserio\Contracts\View\Factory  $factory
-     *
-     * @return void
      */
     public function __construct(ExceptionInfo $info, FactoryContract $factory)
     {

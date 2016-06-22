@@ -20,8 +20,6 @@ class JsonDisplayer implements DisplayerContract
      * Create a new json displayer instance.
      *
      * @param \Viserio\Exception\ExceptionInfo $info
-     *
-     * @return void
      */
     public function __construct(ExceptionInfo $info)
     {

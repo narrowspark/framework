@@ -28,8 +28,6 @@ class HtmlDisplayer implements DisplayerContract
      *
      * @param \Viserio\Exception\ExceptionInfo $info
      * @param string                            $path
-     *
-     * @return void
      */
     public function __construct(ExceptionInfo $info, string $path)
     {
