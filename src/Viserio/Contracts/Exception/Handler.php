@@ -1,8 +1,6 @@
 <?php
 namespace Viserio\Contracts\Exception;
 
-use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\RequestInterface;
 use Throwable;
 
 interface Handler

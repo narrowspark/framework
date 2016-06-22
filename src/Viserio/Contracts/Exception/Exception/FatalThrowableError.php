@@ -3,8 +3,8 @@ namespace Viserio\Contracts\Exception\Exception;
 
 use ErrorException;
 use ParseError;
-use TypeError;
 use ReflectionProperty;
+use TypeError;
 
 /**
  * Fatal Throwable Exception.

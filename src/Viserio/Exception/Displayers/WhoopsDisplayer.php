@@ -56,7 +56,7 @@ class WhoopsDisplayer implements DisplayerContract
     /**
      * Returns the whoops instance.
      *
-     * @return Run
+     * @return Whoops
      */
     private function getWhoops()
     {
