@@ -37,7 +37,7 @@ interface Handler
      *
      * @return array
      */
-    public function getTransformer(): array;
+    public function getTransformers(): array;
 
     /**
      * Report or log an exception.
@@ -92,17 +92,7 @@ interface Handler
         string $file = '',
         int $line = 0,
         $context = null
-    ): ErrorException;
-
-    /**
-     * Render an exception into a response.
-     *
-     * @param \Psr\Http\Message\ResponseInterface $request
-     * @param \Throwable                          $exception
-     *
-     * @return \Psr\Http\Message\ResponseInterface
-     */
-    public function render(RequestInterface $request, Throwable $exception): ResponseInterface;
+    );
 
     /**
      * Handle an uncaught exception from the application.

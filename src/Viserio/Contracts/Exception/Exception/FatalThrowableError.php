@@ -14,7 +14,8 @@ use ReflectionProperty;
  */
 class FatalThrowableError extends ErrorException
 {
-    public function __construct(Throwable $e) {
+    public function __construct(Throwable $e)
+    {
         if ($e instanceof ParseError) {
             $message = 'Parse error: '.$e->getMessage();
             $severity = E_PARSE;

@@ -15,6 +15,7 @@ use Viserio\Config\Traits\ConfigAwareTrait;
 use Viserio\Contracts\{
     Config\Manager as ConfigManagerContract,
     Exception\Displayer as DisplayerContract,
+    Exception\Transformer as TransformerContract,
     Exception\Exception\FatalThrowableError,
     Exception\Exception\FlattenException,
     Exception\Handler as HandlerContract
@@ -91,7 +92,7 @@ class Handler implements HandlerContract
     /**
      * {@inheritdoc}
      */
-    public function addDisplayer(DisplayerContract $displayer)
+    public function addDisplayer(DisplayerContract $displayer): HandlerContract
     {
         $this->displayers[] = $displayer;
 
@@ -101,7 +102,7 @@ class Handler implements HandlerContract
     /**
      * {@inheritdoc}
      */
-    public function getDispatchers(): array
+    public function getDisplayers(): array
     {
         return $this->displayers;
     }
@@ -109,7 +110,7 @@ class Handler implements HandlerContract
     /**
      * {@inheritdoc}
      */
-    public function addTransformer(Transformer $transformer): HandlerContract
+    public function addTransformer(TransformerContract $transformer): HandlerContract
     {
         $this->transformers[] = $transformer;
 
@@ -179,8 +180,13 @@ class Handler implements HandlerContract
     /**
      * {@inheritdoc}
      */
-    public function handleError(int $level, string $message, string $file = '', int $line = 0, $context = null)
-    {
+    public function handleError(
+        int $level,
+        string $message,
+        string $file = '',
+        int $line = 0,
+        $context = null
+    ) {
         if ($level & error_reporting()) {
             throw new ErrorException($message, 0, $level, $file, $line);
         }
