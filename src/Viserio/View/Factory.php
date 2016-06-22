@@ -451,7 +451,7 @@ class Factory implements FactoryContract
     /**
      * Get the right view object.
      *
-     * @param \Viserio\View\Factory                      $factory
+     * @param \Viserio\Contracts\View\Factory            $factory
      * @param \Viserio\Contracts\View\Engine             $engine
      * @param string                                     $view
      * @param string                                     $path
@@ -459,7 +459,7 @@ class Factory implements FactoryContract
      *
      * @return \Viserio\View\View|\Viserio\View\VirtuosoView
      */
-    protected function getView(Factory $factory, EngineContract $engine, string $view, string $path, $data = [])
+    protected function getView(FactoryContract $factory, EngineContract $engine, string $view, string $path, $data = [])
     {
         if ($this->virtuoso !== null) {
             $this->virtuoso->callCreator($view = new VirtuosoView($factory, $engine, $view, $path, $data));
@@ -467,6 +467,6 @@ class Factory implements FactoryContract
             return $view;
         }
 
-        return new View($this, $engine, $view, $path, $data);
+        return new View($factory, $engine, $view, $path, $data);
     }
 }

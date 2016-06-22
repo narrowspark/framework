@@ -2,6 +2,7 @@
 namespace Viserio\Exception\Tests;
 
 use Psr\Log\LoggerInterface;
+use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use Viserio\Contracts\{
     Config\Manager as ConfigManagerContract,
     Exception\Displayer as DisplayerContract,
@@ -17,7 +18,6 @@ use Viserio\Exception\{
     Handler,
     ExceptionInfo
 };
-use Narrowspark\TestingHelper\Traits\MockeryTrait;
 
 class HandlerTest extends \PHPUnit_Framework_TestCase
 {

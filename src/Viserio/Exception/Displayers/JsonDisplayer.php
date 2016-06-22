@@ -36,7 +36,11 @@ class JsonDisplayer implements DisplayerContract
         $info = $this->info->generate($exception, $id, $code);
         $error = ['id' => $id, 'status' => $info['code'], 'title' => $info['name'], 'detail' => $info['detail']];
 
-        return new JsonResponse(['errors' => [$error]], $code, array_merge($headers, ['Content-Type' => $this->contentType()]));
+        return new JsonResponse(
+            ['errors' => [$error]],
+            $code,
+            array_merge($headers, ['Content-Type' => $this->contentType()])
+        );
     }
 
     /**

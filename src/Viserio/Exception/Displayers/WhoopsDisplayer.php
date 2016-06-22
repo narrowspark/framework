@@ -20,9 +20,13 @@ class WhoopsDisplayer implements DisplayerContract
      */
     public function display(Throwable $exception, string $id, int $code, array $headers): ResponseInterface
     {
-        $content = $this->whoops()->handleException($exception);
+        $content = $this->getWhoops()->handleException($exception);
 
-        return new Response($code, array_merge($headers, ['Content-Type' => $this->contentType()]), $content);
+        return new Response(
+            $code,
+            array_merge($headers, ['Content-Type' => $this->contentType()]),
+            $content
+        );
     }
 
     /**

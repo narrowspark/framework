@@ -202,13 +202,13 @@ class Handler implements HandlerContract
             try {
                 $respone = $this->getResponse($request->createServerRequestFromGlobals(), $exception, $transformed);
 
-                return $response->body();
+                return (string) $response->body();
             } catch (Throwable $error) {
                 $this->report($error);
 
                 $respone = new Response(500, [], HttpStatus::getReasonPhrase(500));
 
-                return $response->body();
+                return (string) $response->body();
             }
         }
     }

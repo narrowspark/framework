@@ -44,7 +44,11 @@ class HtmlDisplayer implements DisplayerContract
     {
         $info = $this->info->generate($exception, $id, $code);
 
-        return new HtmlResponse($this->render($info), $code, array_merge($headers, ['Content-Type' => $this->contentType()]));
+        return new HtmlResponse(
+            $this->render($info),
+            $code,
+            array_merge($headers, ['Content-Type' => $this->contentType()])
+        );
     }
 
     /**
