@@ -45,7 +45,7 @@
         "league/flysystem"                                   : "^1.0",
         "monolog/monolog"                                    : "^1.17",
         "narrowspark/arr"                                    : "^1.0",
-        "narrowspark/http-status"                            : "^1.1",
+        "narrowspark/http-status"                            : "^2.0",
         "php-di/invoker"                                     : "^1.3",
         "mpoiriert/invoker"                                  : "^1.1",
         "nesbot/carbon"                                      : "^1.21",
