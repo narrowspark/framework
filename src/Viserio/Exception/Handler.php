@@ -2,11 +2,11 @@
 namespace Viserio\Exception;
 
 use ErrorException;
-use Throwable;
 use Narrowspark\HttpStatus\HttpStatus;
-use Psr\Log\LoggerInterface;
-use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Log\LoggerInterface;
+use Throwable;
 use Symfony\Component\Console\{
     Application as ConsoleApplication,
     Output\ConsoleOutput
@@ -77,9 +77,8 @@ class Handler implements HandlerContract
     /**
      * Create a new exception handler instance.
      *
-     * @param Viserio\Contracts\Config\Manager $config
+     * @param \Viserio\Contracts\Config\Manager $config
      * @param \Psr\Log\LoggerInterface         $log
-     * @param bool                             $debug
      */
     public function __construct(ConfigManagerContract $config, LoggerInterface $log)
     {
@@ -285,7 +284,7 @@ class Handler implements HandlerContract
      * @param \Throwable                         $transformed
      * @param \Throwable                         $exception
      *
-     * @return Psr\Http\Message\ResponseInterface
+     * @return ResponseInterface
      */
     protected function getResponse(
         RequestInterface $request,
