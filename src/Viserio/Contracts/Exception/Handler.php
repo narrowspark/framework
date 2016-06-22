@@ -1,0 +1,126 @@
+<?php
+namespace Viserio\Contracts\Exception;
+
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\RequestInterface;
+use Throwable;
+
+interface Handler
+{
+    /**
+     * Set the displayer instance.
+     *
+     * @param Displayer $displayer
+     *
+     * @return self
+     */
+    public function addDisplayer(Displayer $displayer): Handler;
+
+    /**
+     * Get the displayer instance.
+     *
+     * @return array
+     */
+    public function getDisplayers(): array;
+
+    /**
+     * Set the transformed instance.
+     *
+     * @param Transformer $transformer
+     *
+     * @return self
+     */
+    public function addTransformer(Transformer $transformer): Handler;
+
+    /**
+     * Get the transformed exception.
+     *
+     * @return array
+     */
+    public function getTransformer(): array;
+
+    /**
+     * Report or log an exception.
+     *
+     * @param \Throwable $exception
+     *
+     * @return void|null
+     */
+    public function report(Throwable $exception);
+
+    /**
+     * Determine if the exception should be reported.
+     *
+     * @param \Throwable $exception
+     *
+     * @return bool
+     */
+    public function shouldReport(Throwable $exception): bool;
+
+    /**
+     * Register the exception / Error handlers for the application.
+     *
+     * @return void
+     */
+    public function register();
+
+    /**
+     * Unregister the PHP error handler.
+     *
+     * @return void
+     */
+    public function unregister();
+
+    /**
+     * Convert errors into ErrorException objects.
+     *
+     * This method catches PHP errors and converts them into ErrorException objects;
+     * these ErrorException objects are then thrown and caught by Viserio's
+     * built-in or custom error handlers.
+     *
+     * @param int    $level   The numeric type of the Error
+     * @param string $message The error message
+     * @param string $file    The absolute path to the affected file
+     * @param int    $line    The line number of the error in the affected file
+     * @param null   $context
+     *
+     * @throws \ErrorException
+     */
+    public function handleError(
+        int $level,
+        string $message,
+        string $file = '',
+        int $line = 0,
+        $context = null
+    ): ErrorException;
+
+    /**
+     * Render an exception into a response.
+     *
+     * @param \Psr\Http\Message\ResponseInterface $request
+     * @param \Throwable                          $exception
+     *
+     * @return \Psr\Http\Message\ResponseInterface
+     */
+    public function render(RequestInterface $request, Throwable $exception): ResponseInterface;
+
+    /**
+     * Handle an uncaught exception from the application.
+     *
+     * Note: Most exceptions can be handled via the try / catch block in
+     * the HTTP and Console kernels. But, fatal error exceptions must
+     * be handled differently since they are not normal exceptions.
+     *
+     * @param \Throwable $exception
+     *
+     * @return void
+     */
+    public function handleException(Throwable $exception);
+
+    /**
+     * Handle the PHP shutdown event.
+     *
+     * @return void
+     */
+    public function handleShutdown();
+}

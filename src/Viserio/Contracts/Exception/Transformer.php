@@ -1,14 +1,16 @@
 <?php
 namespace Viserio\Contracts\Exception;
 
+use Throwable;
+
 interface Transformer
 {
     /**
      * Transform the provided exception.
      *
-     * @param \Exception|\Throwable $exception
+     * @param \Throwable $exception
      *
-     * @return \Exception|\Throwable
+     * @return \Throwable
      */
-    public function transform($exception);
+    public function transform(Throwable $exception): Throwable;
 }

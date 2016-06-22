@@ -50,6 +50,7 @@
         "mpoiriert/invoker"                                  : "^1.1",
         "nesbot/carbon"                                      : "^1.21",
         "nikic/fast-route"                                   : "^0.6",
+        "ramsey/uuid"                                        : "^3.4",
         "paragonie/constant_time_encoding"                   : "^2.0",
         "paragonie/password_lock"                            : "^3.0",
         "psr/cache"                                          : "^1.0",

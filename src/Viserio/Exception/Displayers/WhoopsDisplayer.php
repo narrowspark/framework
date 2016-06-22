@@ -2,6 +2,7 @@
 namespace Viserio\Exception\Displayers;
 
 use Psr\Http\Message\ResponseInterface;
+use Throwable;
 use Viserio\Contracts\Exception\Displayer as DisplayerContract;
 use Viserio\Http\Response;
 use Whoops\Handler\{
@@ -17,7 +18,7 @@ class WhoopsDisplayer implements DisplayerContract
     /**
      * {@inheritdoc}
      */
-    public function display($exception, string $id, int $code, array $headers): ResponseInterface
+    public function display(Throwable $exception, string $id, int $code, array $headers): ResponseInterface
     {
         $content = $this->whoops()->handleException($exception);
 
@@ -35,7 +36,7 @@ class WhoopsDisplayer implements DisplayerContract
     /**
      * {@inheritdoc}
      */
-    public function canDisplay($original, $transformed, int $code): bool
+    public function canDisplay(Throwable $original, Throwable $transformed, int $code): bool
     {
         return class_exists(Whoops::class);
     }

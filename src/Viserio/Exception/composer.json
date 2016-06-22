@@ -19,16 +19,17 @@
     ],
     "require": {
         "php"                                 : "7.0.0 - 7.0.5 || ^7.0.7",
-        "symfony/debug"                       : "^3.1",
+        "ramsey/uuid"                         : "^3.4",
         "viserio/config"                      : "self.version",
-        "viserio/cotracts"                    : "self.version"
+        "viserio/cotracts"                    : "self.version",
+        "viserio/http"                        : "self.version"
     },
     "require-dev": {
         "filp/whoops"                         : "^2.0",
         "narrowspark/php-cs-fixer-config"     : "^1.1",
         "narrowspark/testing-helper"          : "^1.5",
         "phpunit/phpunit"                     : "^5.1",
-        "viserio/http"                        : "self.version"
+        "viserio/view"                        : "self.version"
     },
     "autoload": {
         "psr-4": {
@@ -39,6 +40,10 @@
         "psr-4": {
             "Viserio\\Exception\\Tests\\"     : "Tests/"
         }
+    },
+    "suggest": {
+        "filp/whoops"                         : "Enables use of the whoops displayer (^2.0).",
+        "narrowspark/view"                    : "Enables use of the view displayer (self.version)."
     },
     "extra": {
         "branch-alias": {

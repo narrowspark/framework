@@ -2,6 +2,7 @@
 namespace Viserio\Exception\Displayers;
 
 use Psr\Http\Message\ResponseInterface;
+use Throwable;
 use Viserio\Contracts\Exception\Displayer as DisplayerContract;
 use Viserio\Exceptions\ExceptionInfo;
 use Viserio\Http\Response\JsonResponse;
@@ -30,7 +31,7 @@ class JsonDisplayer implements DisplayerContract
     /**
      * {@inheritdoc}
      */
-    public function display($exception, string $id, int $code, array $headers): ResponseInterface
+    public function display(Throwable $exception, string $id, int $code, array $headers): ResponseInterface
     {
         $info = $this->info->generate($exception, $id, $code);
         $error = ['id' => $id, 'status' => $info['code'], 'title' => $info['name'], 'detail' => $info['detail']];
@@ -49,7 +50,7 @@ class JsonDisplayer implements DisplayerContract
     /**
      * {@inheritdoc}
      */
-    public function canDisplay($original, $transformed, int $code): bool
+    public function canDisplay(Throwable $original, Throwable $transformed, int $code): bool
     {
         return true;
     }

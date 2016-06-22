@@ -2,20 +2,21 @@
 namespace Viserio\Contracts\Exception;
 
 use Psr\Http\Message\ResponseInterface;
+use Throwable;
 
 interface Displayer
 {
     /**
      * Display the given exception.
      *
-     * @param \Exception|\Throwable $exception
-     * @param string                $id
-     * @param int                   $code
-     * @param string[]              $headers
+     * @param \Throwable $exception
+     * @param string     $id
+     * @param int        $code
+     * @param string[]   $headers
      *
      * @return \Psr\Http\Message\ResponseInterface
      */
-    public function display($exception, string $id, int $code, array $headers): ResponseInterface;
+    public function display(Throwable $exception, string $id, int $code, array $headers): ResponseInterface;
 
     /**
      * Get the supported content type.
@@ -27,13 +28,13 @@ interface Displayer
     /**
      * Can we display the exception?
      *
-     * @param \Exception|\Throwable $original
-     * @param \Exception|\Throwable $transformed
-     * @param int                   $code
+     * @param \Throwable $original
+     * @param \Throwable $transformed
+     * @param int        $code
      *
      * @return bool
      */
-    public function canDisplay($original, $transformed, int $code): bool;
+    public function canDisplay(Throwable $original, Throwable $transformed, int $code): bool;
 
     /**
      * Do we provide verbose information about the exception?
