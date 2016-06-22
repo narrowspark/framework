@@ -142,14 +142,6 @@ class Handler implements HandlerContract
     /**
      * {@inheritdoc}
      */
-    public function shouldReport(Throwable $exception): bool
-    {
-        return ! $this->shouldntReport($exception);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function register()
     {
         error_reporting(E_ALL);

@@ -49,15 +49,6 @@ interface Handler
     public function report(Throwable $exception);
 
     /**
-     * Determine if the exception should be reported.
-     *
-     * @param \Throwable $exception
-     *
-     * @return bool
-     */
-    public function shouldReport(Throwable $exception): bool;
-
-    /**
      * Register the exception / Error handlers for the application.
      *
      * @return void
