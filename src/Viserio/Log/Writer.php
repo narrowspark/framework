@@ -1,21 +1,23 @@
 <?php
 namespace Viserio\Log;
 
-use Monolog\Handler\ErrorLogHandler;
+use Closure;
+use DateTime;
 use Monolog\Handler\RotatingFileHandler;
 use Monolog\Logger as MonologLogger;
 use Monolog\Processor\PsrLogMessageProcessor;
-use Psr\Log\LoggerInterface as PsrLoggerInterface;
-use Viserio\Contracts\Events\Dispatcher as DispatcherContract;
-use Viserio\Contracts\Logging\Log as LogContract;
-use Viserio\Log\Traits\FormatterTrait;
-use Viserio\Log\Traits\HandlerTrait;
-use Viserio\Log\Traits\ProcessorTrait;
-use Viserio\Log\Traits\PsrLoggerTrait;
+use RuntimeException;
+use Viserio\Contracts\{
+    Events\Dispatcher as DispatcherContract,
+    Log\Log as LogContract,
+    Support\Arrayable,
+    Support\Jsonable
+};
+use Viserio\Log\Traits\ParseLevelTrait;
 
-class Writer implements LogContract, PsrLoggerInterface
+class Writer implements LogContract
 {
-    use FormatterTrait, HandlerTrait, ProcessorTrait, PsrLoggerTrait;
+    use ParseLevelTrait;
 
     /**
      * The Monolog logger instance.
@@ -25,62 +27,65 @@ class Writer implements LogContract, PsrLoggerInterface
     protected $monolog;
 
     /**
-     * The Events Dispatcher instance.
+     * The event dispatcher instance.
      *
-     * @var \Viserio\Contracts\Events\Dispatcher
+     * @var \Viserio\Contracts\Events\Dispatcher|null
      */
     protected $dispatcher;
 
     /**
-     * The permission mode for for new log files.
+     * The handler parser instance.
      *
-     * @var int|null
+     * @var HandlerParser
      */
-    protected $filePermission;
+    protected $handlerParser;
 
     /**
      * Create a new log writer instance.
      *
-     * @param \Monolog\Logger                      $monolog
-     * @param \Viserio\Contracts\Events\Dispatcher $dispatcher
+     * @param \Monolog\Logger                           $monolog
+     * @param \Viserio\Contracts\Events\Dispatcher|null $dispatcher
      */
-    public function __construct(MonologLogger $monolog, DispatcherContract $dispatcher)
+    public function __construct(MonologLogger $monolog, DispatcherContract $dispatcher = null)
     {
         // PSR 3 log message formatting for all handlers
         $monolog->pushProcessor(new PsrLogMessageProcessor());
 
-        $this->monolog = $monolog;
+        $this->handlerParser = new HandlerParser($monolog);
 
-        if (isset($dispatcher)) {
-            $this->dispatcher = $dispatcher;
-        }
+        $this->monolog = $this->handlerParser->getMonolog();
+        $this->dispatcher = $dispatcher;
     }
 
     /**
-     * Register a file log handler.
-     *
-     * @param string      $path
-     * @param string      $level
-     * @param object|null $processor
-     * @param object|null $formatter
+     * {@inheritdoc}
      */
-    public function useFiles(string $path, string $level = 'debug', $processor = null, $formatter = null)
-    {
-        $this->parseHandler('stream', $path, $level, $processor, $formatter);
+    public function useFiles(
+        string $path,
+        string $level = 'debug',
+        $processor = null,
+        $formatter = null
+    ) {
+        $this->handlerParser->parseHandler(
+            'stream',
+            $path,
+            $level,
+            $processor,
+            $formatter
+        );
     }
 
     /**
-     * Register a daily file log handler.
-     *
-     * @param string      $path
-     * @param int         $days
-     * @param string      $level
-     * @param object|null $processor
-     * @param object|null $formatter
+     * {@inheritdoc}
      */
-    public function useDailyFiles($path, int $days = 0, string $level = 'debug', $processor = null, $formatter = null)
-    {
-        $this->parseHandler(
+    public function useDailyFiles(
+        string $path,
+        int $days = 0,
+        string $level = 'debug',
+        $processor = null,
+        $formatter = null
+    ) {
+        $this->handlerParser->parseHandler(
             new RotatingFileHandler($path, $days, $this->parseLevel($level)),
             '',
             '',
@@ -90,32 +95,109 @@ class Writer implements LogContract, PsrLoggerInterface
     }
 
     /**
-     * Register an error_log handler.
+     * Log an emergency message to the logs.
      *
-     * @param string      $level
-     * @param int         $messageType
-     * @param object|null $processor
-     * @param object|null $formatter
+     * @param mixed  $message
+     * @param array  $context
      */
-    public function useErrorLog(
-        $level = 'debug',
-        $messageType = ErrorLogHandler::OPERATING_SYSTEM,
-        $processor = null,
-        $formatter = null
-    ) {
-        $this->parseHandler(
-            new ErrorLogHandler($messageType, $this->parseLevel($level)),
-            '',
-            '',
-            $processor,
-            $formatter
-        );
+    public function emergency($message, array $context = [])
+    {
+        return $this->writeLog('emergency', $message, $context);
+    }
+
+    /**
+     * Log an alert message to the logs.
+     *
+     * @param mixed  $message
+     * @param array  $context
+     */
+    public function alert($message, array $context = [])
+    {
+        return $this->writeLog('alert', $message, $context);
+    }
+
+    /**
+     * Log a critical message to the logs.
+     *
+     * @param mixed  $message
+     * @param array  $context
+     */
+    public function critical($message, array $context = [])
+    {
+        return $this->writeLog('critical', $message, $context);
+    }
+
+    /**
+     * Log an error message to the logs.
+     *
+     * @param mixed  $message
+     * @param array  $context
+     */
+    public function error($message, array $context = [])
+    {
+        return $this->writeLog('error', $message, $context);
+    }
+
+    /**
+     * Log a warning message to the logs.
+     *
+     * @param mixed  $message
+     * @param array  $context
+     */
+    public function warning($message, array $context = [])
+    {
+        return $this->writeLog('warning', $message, $context);
+    }
+
+    /**
+     * Log a notice to the logs.
+     *
+     * @param mixed  $message
+     * @param array  $context
+     */
+    public function notice($message, array $context = [])
+    {
+        return $this->writeLog('notice', $message, $context);
+    }
+
+    /**
+     * Log an informational message to the logs.
+     *
+     * @param mixed  $message
+     * @param array  $context
+     */
+    public function info($message, array $context = [])
+    {
+        return $this->writeLog('info', $message, $context);
+    }
+
+    /**
+     * Log a debug message to the logs.
+     *
+     * @param mixed  $message
+     * @param array  $context
+     */
+    public function debug($message, array $context = [])
+    {
+        return $this->writeLog('debug', $message, $context);
+    }
+
+    /**
+     * Log a message to the logs.
+     *
+     * @param string $level
+     * @param mixed  $message
+     * @param array  $context
+     */
+    public function log($level, $message, array $context = [])
+    {
+        return $this->writeLog($level, $message, $context);
     }
 
     /**
      * Get the underlying Monolog instance.
      *
-     * @return \Monolog\Logger
+     * @return MonologLogger
      */
     public function getMonolog(): MonologLogger
     {
@@ -125,41 +207,27 @@ class Writer implements LogContract, PsrLoggerInterface
     /**
      * Set the event dispatcher instance.
      *
-     * @param \Viserio\Contracts\Events\Dispatcher
+     * @param \Viserio\Contracts\Events\Dispatcher $dispatcher
+     *
+     * @return void
      */
     public function setEventDispatcher(DispatcherContract $dispatcher)
     {
         $this->dispatcher = $dispatcher;
     }
 
-    /**
+   /**
      * Get the event dispatcher instance.
      *
      * @return \Viserio\Contracts\Events\Dispatcher
      */
     public function getEventDispatcher(): DispatcherContract
     {
+        if ($this->dispatcher === null) {
+            throw new RuntimeException('Events dispatcher has not been set.');
+        }
+
         return $this->dispatcher;
-    }
-
-    /**
-     * Set the file permission for newly created files
-     *
-     * @param int|null $filePermission
-     */
-    public function setFilePermission($filePermission)
-    {
-        $this->filePermission = $filePermission;
-    }
-
-    /**
-     * Get the file permission for creating files
-     *
-     * @return int|null
-     */
-    public function getFilePermission()
-    {
-        return $this->filePermission;
     }
 
     /**
@@ -170,12 +238,63 @@ class Writer implements LogContract, PsrLoggerInterface
      *
      * @return mixed
      */
-    protected function callMonolog($method, $parameters)
+    public function __call($method, $parameters)
     {
-        if (is_array($parameters[0])) {
-            $parameters[0] = json_encode($parameters[0]);
+        return call_user_func_array([$this->monolog, $method], $parameters);
+    }
+
+    /**
+     * Emit a log event.
+     *
+     * @param string $level
+     * @param string $message
+     * @param array  $context
+     *
+     * @return void
+     */
+    protected function emitLogEvent(string $level, string $message, array $context = [])
+    {
+        // If the event dispatcher is set, we will pass along the parameters to the
+        // log listeners. These are useful for building profilers or other tools
+        // that aggregate all of the log messages for a given "request" cycle.
+        $this->getEventDispatcher()->emit('viserio.log', compact('level', 'message', 'context'));
+    }
+
+    /**
+     * Format the parameters for the logger.
+     *
+     * @param mixed $message
+     *
+     * @return string|object|integer|double|null|boolean
+     */
+    protected function formatMessage($message)
+    {
+        if (is_array($message)) {
+            return var_export($message, true);
+        } elseif ($message instanceof Jsonable) {
+            return $message->toJson();
+        } elseif ($message instanceof Arrayable) {
+            return var_export($message->toArray(), true);
         }
 
-        return call_user_func_array([$this->monolog, $method], $parameters);
+        return $message;
+    }
+
+    /**
+     * Write a message to Monolog.
+     *
+     * @param string $level
+     * @param mixed  $message
+     * @param array  $context
+     */
+    protected function writeLog(string $level, $message, array $context)
+    {
+        $message = $this->formatMessage($message);
+
+        if ($this->dispatcher !== null) {
+            $this->emitLogEvent($level, $message, $context);
+        }
+
+        $this->monolog->{$level}($message, $context);
     }
 }

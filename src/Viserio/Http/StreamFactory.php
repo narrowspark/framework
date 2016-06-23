@@ -8,6 +8,8 @@ final class StreamFactory implements StreamFactoryContract
 {
     /**
      * {@inheritdoc}
+     *
+     * @codeCoverageIgnore
      */
     public function createStream(): StreamInterface
     {
@@ -16,6 +18,8 @@ final class StreamFactory implements StreamFactoryContract
 
     /**
      * {@inheritdoc}
+     *
+     * @codeCoverageIgnore
      */
     public function createStreamFromCallback(callable $callback): StreamInterface
     {
@@ -24,6 +28,8 @@ final class StreamFactory implements StreamFactoryContract
 
     /**
      * {@inheritdoc}
+     *
+     * @codeCoverageIgnore
      */
     public function createStreamFromResource($body): StreamInterface
     {
@@ -32,6 +38,8 @@ final class StreamFactory implements StreamFactoryContract
 
     /**
      * {@inheritdoc}
+     *
+     * @codeCoverageIgnore
      */
     public function createStreamFromString(string $body): StreamInterface
     {

@@ -8,6 +8,8 @@ final class UriFactory implements UriFactoryContract
 {
     /**
      * {@inheritdoc}
+     *
+     * @codeCoverageIgnore
      */
     public function createUri(string $uri = ''): UriInterface
     {

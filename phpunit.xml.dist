@@ -58,9 +58,9 @@
         <testsuite name="Narrowspark Events Component Test Suite">
             <directory>./src/Viserio/Events/Tests</directory>
         </testsuite>
-<!--        <testsuite name="Narrowspark Exception Component Test Suite">
+       <testsuite name="Narrowspark Exception Component Test Suite">
             <directory>./src/Viserio/Exception/Tests</directory>
-        </testsuite> -->
+        </testsuite>
         <testsuite name="Narrowspark Filesystem Component Test Suite">
             <directory>./src/Viserio/Filesystem/Tests</directory>
         </testsuite>
@@ -70,10 +70,10 @@
         <testsuite name="Narrowspark Http Component Test Suite">
             <directory>./src/Viserio/Http/Tests</directory>
         </testsuite>
-<!--        <testsuite name="Narrowspark Log Component Test Suite">
+        <testsuite name="Narrowspark Log Component Test Suite">
             <directory>./src/Viserio/Log/Tests</directory>
         </testsuite>
-        <testsuite name="Narrowspark Mail Component Test Suite">
+<!--         <testsuite name="Narrowspark Mail Component Test Suite">
             <directory>./src/Viserio/Mail/Tests</directory>
         </testsuite> -->
         <testsuite name="Narrowspark Middleware Component Test Suite">

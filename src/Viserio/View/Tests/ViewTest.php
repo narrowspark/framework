@@ -1,5 +1,5 @@
 <?php
-namespace Viserio\View\Test;
+namespace Viserio\View\Tests;
 
 use Mockery as Mock;
 use Viserio\Contracts\Support\Arrayable;
@@ -143,10 +143,11 @@ class ViewTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($view->offsetExists('foo'));
     }
 
+    /**
+     * @expectedException BadMethodCallException
+     */
     public function testViewBadMethod()
     {
-        $this->setExpectedException('BadMethodCallException');
-
         $view = $this->getView();
         $view->badMethodCall();
     }

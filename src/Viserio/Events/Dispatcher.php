@@ -99,19 +99,7 @@ class Dispatcher implements DispatcherContract
         $listeners = $this->getListeners($eventName);
 
         if ($continue === null) {
-            foreach ($listeners as $listener) {
-                $result = false;
-
-                if ($listener !== null) {
-                    $result = $this->invoker->call($listener, $arguments);
-                }
-
-                if ($result === false) {
-                    return false;
-                }
-            }
-
-            return true;
+            return $this->continueEmit($listeners, $arguments);
         }
 
         $counter = count($listeners);
@@ -307,5 +295,31 @@ class Dispatcher implements DispatcherContract
                 unset($this->patterns[$eventPattern][$key]);
             }
         }
+    }
+
+    /**
+     * If the continue is specified, this callback will be called every
+     * time before the next event handler is called.
+     *
+     * @param array $listeners
+     * @param array $arguments
+     *
+     * @return bool
+     */
+    protected function continueEmit(array $listeners, array $arguments): bool
+    {
+        foreach ($listeners as $listener) {
+            $result = false;
+
+            if ($listener !== null) {
+                $result = $this->invoker->call($listener, $arguments);
+            }
+
+            if ($result === false) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }

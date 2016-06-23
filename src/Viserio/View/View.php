@@ -177,13 +177,13 @@ class View implements ArrayAccess, ViewContract
      *
      * @param string $key
      * @param string $view
-     * @param array  $data
+     * @param string[]  $data
      *
      * @return self
      */
     public function nest($key, string $view, array $data = []): self
     {
-        return $this->with($key, $this->factory->make($view, $data));
+        return $this->with($key, $this->factory->create($view, $data));
     }
 
     /**

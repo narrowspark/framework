@@ -19,10 +19,10 @@ class RedirectResponse extends Response
      * Note: this method overwrites the `location` $headers value.
      *
      * @param string|UriInterface $uri URI for the Location header.
-     * @param int $status Integer status code for the redirect; 302 by default.
-     * @param array $headers Array of headers to use at initialization.
+     * @param int                 $status Integer status code for the redirect; 302 by default.
+     * @param array               $headers Array of headers to use at initialization.
      */
-    public function __construct($uri, $status = 302, array $headers = [])
+    public function __construct($uri, int $status = 302, array $headers = [])
     {
         if (! is_string($uri) && ! $uri instanceof UriInterface) {
             throw new InvalidArgumentException(sprintf(

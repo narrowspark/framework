@@ -1,5 +1,5 @@
 <?php
-namespace Viserio\Container\Test;
+namespace Viserio\Container\Tests;
 
 use Viserio\Container\Container;
 use Viserio\Container\Definition;
@@ -31,7 +31,7 @@ class DefinitionTest extends \PHPUnit_Framework_TestCase
      */
     public function testConstruct()
     {
-        $definition = new Definition($this->container, 'Viserio\\Test\\Container\\Qux');
+        $definition = new Definition($this->container, 'Viserio\\Tests\\Container\\Qux');
         $this->assertAttributeInstanceOf(
             'Viserio\\Container\\Container',
             'container',
@@ -39,7 +39,7 @@ class DefinitionTest extends \PHPUnit_Framework_TestCase
             'The passed container name should be assigned to the $container property.'
         );
         $this->assertAttributeEquals(
-            'Viserio\\Test\\Container\\Qux',
+            'Viserio\\Tests\\Container\\Qux',
             'class',
             $definition,
             'The passed class name should be assigned to the $class property.'
@@ -51,10 +51,10 @@ class DefinitionTest extends \PHPUnit_Framework_TestCase
      */
     public function testInvokeNoArgsOrMethodCalls()
     {
-        $definition = new Definition($this->container, 'Viserio\\Test\\Container\\Qux');
+        $definition = new Definition($this->container, 'Viserio\\Tests\\Container\\Qux');
         $instance = $definition();
         $this->assertInstanceOf(
-            'Viserio\\Test\\Container\\Qux',
+            'Viserio\\Tests\\Container\\Qux',
             $instance,
             'Invoking the Definition class should return an instance of the class $class.'
         );
@@ -65,22 +65,22 @@ class DefinitionTest extends \PHPUnit_Framework_TestCase
      */
     public function testInvokeWithArgs()
     {
-        $definition = new Definition($this->container, 'Viserio\\Test\\Container\\Foo');
-        $definition->withArgument('Viserio\\Test\\Container\\Bar')->withArgument('Viserio\\Test\\Container\\Baz');
+        $definition = new Definition($this->container, 'Viserio\\Tests\\Container\\Foo');
+        $definition->withArgument('Viserio\\Tests\\Container\\Bar')->withArgument('Viserio\\Tests\\Container\\Baz');
         $instance = $definition();
         $this->assertInstanceOf(
-            'Viserio\\Test\\Container\\Foo',
+            'Viserio\\Tests\\Container\\Foo',
             $instance,
             'Invoking a Definition should return an instance of the class defined in the $class property.'
         );
         $this->assertAttributeInstanceOf(
-            'Viserio\\Test\\Container\\Bar',
+            'Viserio\\Tests\\Container\\Bar',
             'bar',
             $instance,
             'Invoking a Definition with arguments assigned should pass those args to the method.'
         );
         $this->assertAttributeInstanceOf(
-            'Viserio\\Test\\Container\\Baz',
+            'Viserio\\Tests\\Container\\Baz',
             'baz',
             $instance,
             'Invoking a Definition with arguments assigned should pass those args to the method.'
@@ -93,8 +93,8 @@ class DefinitionTest extends \PHPUnit_Framework_TestCase
     public function testInvokeWithInheritedArgs()
     {
         $int = rand(1, 5000);
-        $this->container->bind('Viserio\\Test\\Container\\CorgeInterface')->withArgument($int);
-        $definition = new Definition($this->container, 'Viserio\\Test\\Container\\Corge');
+        $this->container->bind('Viserio\\Tests\\Container\\CorgeInterface')->withArgument($int);
+        $definition = new Definition($this->container, 'Viserio\\Tests\\Container\\Corge');
         $instance = $definition();
         $this->assertAttributeEquals(
             $int,
@@ -109,11 +109,11 @@ class DefinitionTest extends \PHPUnit_Framework_TestCase
      */
     public function testInvokeWithIntegerAsArg()
     {
-        $definition = new Definition($this->container, 'Viserio\\Test\\Container\\Corge');
+        $definition = new Definition($this->container, 'Viserio\\Tests\\Container\\Corge');
         $definition->withArgument(1);
         $instance = $definition();
         $this->assertInstanceOf(
-            'Viserio\\Test\\Container\\Corge',
+            'Viserio\\Tests\\Container\\Corge',
             $instance,
             'Invoking a Definition should return an instance of the class defined in the $class property.'
         );
@@ -130,16 +130,16 @@ class DefinitionTest extends \PHPUnit_Framework_TestCase
      */
     public function testInvokeWithMethodCall()
     {
-        $definition = new Definition($this->container, 'Viserio\\Test\\Container\\Qux');
-        $definition->withMethodCall('setBar', ['Viserio\\Test\\Container\\Bar']);
+        $definition = new Definition($this->container, 'Viserio\\Tests\\Container\\Qux');
+        $definition->withMethodCall('setBar', ['Viserio\\Tests\\Container\\Bar']);
         $instance = $definition();
         $this->assertInstanceOf(
-            'Viserio\\Test\\Container\\Qux',
+            'Viserio\\Tests\\Container\\Qux',
             $instance,
             'Invoking a Definition should return an instance of the class defined in the $class property.'
         );
         $this->assertAttributeInstanceOf(
-            'Viserio\\Test\\Container\\Bar',
+            'Viserio\\Tests\\Container\\Bar',
             'bar',
             $instance,
             'Invoking a Definition with a defined method call pass the defined args to the method.'
@@ -152,9 +152,9 @@ class DefinitionTest extends \PHPUnit_Framework_TestCase
     public function testInvokeWithInheritedMethodCall()
     {
         $int = rand(1, 5000);
-        $this->container->bind('Viserio\\Test\\Container\\CorgeInterface')
+        $this->container->bind('Viserio\\Tests\\Container\\CorgeInterface')
             ->withMethodCall('setInt', [$int]);
-        $definition = new Definition($this->container, 'Viserio\\Test\\Container\\Corge');
+        $definition = new Definition($this->container, 'Viserio\\Tests\\Container\\Corge');
         $instance = $definition();
         $this->assertAttributeEquals(
             $int,
@@ -169,7 +169,7 @@ class DefinitionTest extends \PHPUnit_Framework_TestCase
      */
     public function testWithArgument()
     {
-        $definition = new Definition($this->container, 'Viserio\\Test\\Container\\Foo');
+        $definition = new Definition($this->container, 'Viserio\\Tests\\Container\\Foo');
         $definition->withArgument('foo');
         $this->assertAttributeContains(
             'foo',
@@ -184,7 +184,7 @@ class DefinitionTest extends \PHPUnit_Framework_TestCase
      */
     public function testAddIntegerArg()
     {
-        $definition = new Definition($this->container, 'Viserio\\Test\\Container\\Foo');
+        $definition = new Definition($this->container, 'Viserio\\Tests\\Container\\Foo');
         $definition->withArgument(1);
         $args = $this->readAttribute($definition, 'arguments');
         $this->assertEquals(
@@ -199,7 +199,7 @@ class DefinitionTest extends \PHPUnit_Framework_TestCase
      */
     public function testWithArguments()
     {
-        $definition = new Definition($this->container, 'Viserio\\Test\\Container\\Foo');
+        $definition = new Definition($this->container, 'Viserio\\Tests\\Container\\Foo');
         $definition->withArguments(['foo', 'bar']);
         $this->assertAttributeEquals(
             ['foo', 'bar'],
@@ -214,7 +214,7 @@ class DefinitionTest extends \PHPUnit_Framework_TestCase
      */
     public function testCleanArgs()
     {
-        $definition = new Definition($this->container, 'Viserio\\Test\\Container\\Foo');
+        $definition = new Definition($this->container, 'Viserio\\Tests\\Container\\Foo');
         $definition->withArguments(['foo', 'bar']);
         $definition->cleanArgument();
         $this->assertAttributeEquals(
@@ -227,8 +227,8 @@ class DefinitionTest extends \PHPUnit_Framework_TestCase
 
     public function testWithMethod()
     {
-        $definition = new Definition($this->container, 'Viserio\\Test\\Container\\Qux');
-        $definition->withMethodCall('setBar', ['Viserio\\Test\\Container\\Bar']);
+        $definition = new Definition($this->container, 'Viserio\\Tests\\Container\\Qux');
+        $definition->withMethodCall('setBar', ['Viserio\\Tests\\Container\\Bar']);
         $methods = $this->readAttribute($definition, 'methods');
         $this->assertArrayHasKey(
             'setBar',
@@ -239,7 +239,7 @@ class DefinitionTest extends \PHPUnit_Framework_TestCase
 
     public function testCallMethod()
     {
-        $definition = new Definition($this->container, 'Viserio\\Test\\Container\\Corge');
+        $definition = new Definition($this->container, 'Viserio\\Tests\\Container\\Corge');
         $definition->withMethodCall('setInt', [1]);
         $reflection = new \ReflectionMethod($definition, 'callMethods');
         $reflection->setAccessible(true);

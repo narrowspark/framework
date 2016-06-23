@@ -1,5 +1,5 @@
 <?php
-namespace Viserio\Container\Test;
+namespace Viserio\Container\Tests;
 
 use Viserio\Container\Container;
 

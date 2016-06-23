@@ -44,7 +44,7 @@ class JsonResponse extends Response
      */
     public function __construct(
         $data,
-        $status = 200,
+        int $status = 200,
         array $headers = [],
         $encodingOptions = self::DEFAULT_JSON_FLAGS
     ) {

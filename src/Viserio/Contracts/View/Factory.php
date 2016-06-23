@@ -32,7 +32,7 @@ interface Factory
      *
      * @return \Viserio\View\View
      */
-    public function make(string $view, array $data = [], array $mergeData = []): View;
+    public function create(string $view, array $data = [], array $mergeData = []): View;
 
     /**
      * Add a piece of shared data to the environment.
@@ -47,6 +47,7 @@ interface Factory
      *
      * @param string       $namespace
      * @param string|array $hints
+     * @return void
      */
     public function addNamespace(string $namespace, $hints);
 }

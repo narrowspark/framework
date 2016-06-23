@@ -1,5 +1,5 @@
 <?php
-namespace Viserio\Support\Test;
+namespace Viserio\Support\Tests;
 
 use Viserio\Support\Str;
 
@@ -93,6 +93,9 @@ class StrTest extends \PHPUnit_Framework_TestCase
         // snake cased strings should not contain spaces
         $this->assertEquals('narrowspark_php_framework', Str::snake('Narrowspark Php Framework'));
         $this->assertEquals('narrowsparkphpframework', Str::snake('narrowspark php framework'));
+        $this->assertEquals('narrowspark_php_framework', Str::snake('Narrowspark  Php  Framework'));
+
+        // test cache
         $this->assertEquals('narrowspark_php_framework', Str::snake('Narrowspark  Php  Framework'));
 
         // `Str::snake()` should not duplicate the delimeters

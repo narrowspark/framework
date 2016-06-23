@@ -350,14 +350,18 @@ class UriTest extends \PHPUnit_Framework_TestCase
         $this->assertSame('foo', (string) $uri);
     }
 
+    /**
+     * @expectedException InvalidArgumentException
+     */
     public function testPathStartingWithTwoSlashes()
     {
         $uri = new Uri('http://example.org//path-not-host.com');
         $this->assertSame('//path-not-host.com', $uri->getPath());
 
         $uri = $uri->withScheme('');
+
         $this->assertSame('//example.org//path-not-host.com', (string) $uri); // This is still valid
-        $this->setExpectedException('\InvalidArgumentException');
+
         $uri->withHost(''); // Now it becomes invalid
     }
 
@@ -390,12 +394,14 @@ class UriTest extends \PHPUnit_Framework_TestCase
         $this->createDefaultUri()->withPath('mailto:foo');
     }
 
+    /**
+     * @expectedException InvalidArgumentException
+     */
     public function testRelativeUriWithPathHavingColonSegment()
     {
         $uri = (new Uri('urn:/mailto:foo'))->withScheme('');
         $this->assertSame('/mailto:foo', $uri->getPath());
 
-        $this->setExpectedException('\InvalidArgumentException');
         (new Uri('urn:mailto:foo'))->withScheme('');
     }
 

@@ -2,7 +2,7 @@
     "name"       : "viserio/exception",
     "type"       : "library",
     "description": "The Viserio Exception package.",
-    "keywords"   : ["narrowspark", "viserio", "exception", "debug", "Symfony"],
+    "keywords"   : ["narrowspark", "viserio", "exception", "debug", "http", "psr7", "middleware"],
     "license"    : "MIT",
     "homepage"   : "http://github.com/Narrowspark/session",
     "support"    : {
@@ -19,20 +19,17 @@
     ],
     "require": {
         "php"                                 : "7.0.0 - 7.0.5 || ^7.0.7",
-        "viserio/conifg"                      : "self.version",
+        "ramsey/uuid"                         : "^3.4",
+        "viserio/config"                      : "self.version",
         "viserio/cotracts"                    : "self.version",
-        "viserio/log"                         : "self.version",
-        "viserio/container"                   : "self.version",
-        "container-interop/container-interop" : "^1.0",
-        "filp/whoops"                         : "^2.0",
-        "symfony/http-foundation"             : "^3.1",
-        "symfony/debug"                       : "^3.1",
-        "psr/log"                             : "^1.0"
+        "viserio/http"                        : "self.version"
     },
     "require-dev": {
+        "filp/whoops"                         : "^2.0",
         "narrowspark/php-cs-fixer-config"     : "^1.1",
         "narrowspark/testing-helper"          : "^1.5",
-        "phpunit/phpunit"                     : "^5.1"
+        "phpunit/phpunit"                     : "^5.1",
+        "viserio/view"                        : "self.version"
     },
     "autoload": {
         "psr-4": {
@@ -43,6 +40,10 @@
         "psr-4": {
             "Viserio\\Exception\\Tests\\"     : "Tests/"
         }
+    },
+    "suggest": {
+        "filp/whoops"                         : "Enables use of the whoops displayer (^2.0).",
+        "narrowspark/view"                    : "Enables use of the view displayer (self.version)."
     },
     "extra": {
         "branch-alias": {
