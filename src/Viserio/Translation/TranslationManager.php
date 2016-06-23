@@ -6,7 +6,6 @@ use RuntimeException;
 use Viserio\Contracts\Cache\Factory as CacheContract;
 use Viserio\Contracts\Translation\MessageCatalogue as MessageCatalogueContract;
 use Viserio\Contracts\Translation\Exception\NotFoundResourceException;
-use Viserio\Support\Traits\EventAwareTrait;
 use Viserio\Support\Traits\FileLoaderAwareTrait;
 use Viserio\Support\Traits\LoggerAwareTrait;
 use Viserio\Translation\Traits\ValidateLocaleTrait;
@@ -16,7 +15,6 @@ class TranslationManager
     use ValidateLocaleTrait;
     use LoggerAwareTrait;
     use FileLoaderAwareTrait;
-    use EventAwareTrait;
 
     /**
      * PluralizationRules instance.
