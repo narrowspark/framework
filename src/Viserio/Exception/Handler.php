@@ -15,6 +15,7 @@ use Viserio\Config\Traits\ConfigAwareTrait;
 use Viserio\Contracts\{
     Config\Manager as ConfigManagerContract,
     Exception\Displayer as DisplayerContract,
+    Exception\Filter as FilterContract,
     Exception\Transformer as TransformerContract,
     Exception\Exception\FatalThrowableError,
     Exception\Exception\FlattenException,
@@ -68,6 +69,13 @@ class Handler implements HandlerContract
     protected $transformers = [];
 
     /**
+     * Exception filters.
+     *
+     * @var array
+     */
+    protected $filters = [];
+
+    /**
      * A list of the exception types that should not be reported.
      *
      * @var array
@@ -92,6 +100,12 @@ class Handler implements HandlerContract
      */
     public function addDisplayer(DisplayerContract $displayer): HandlerContract
     {
+        if (in_array($displayer, $this->displayers)) {
+            $pos = array_search($displayer, $this->displayers);
+
+            unset($this->displayers[$pos]);
+        }
+
         $this->displayers[] = $displayer;
 
         return $this;
@@ -110,6 +124,12 @@ class Handler implements HandlerContract
      */
     public function addTransformer(TransformerContract $transformer): HandlerContract
     {
+        if (in_array($transformer, $this->transformers)) {
+            $pos = array_search($transformer, $this->transformers);
+
+            unset($this->transformers[$pos]);
+        }
+
         $this->transformers[] = $transformer;
 
         return $this;
@@ -120,7 +140,39 @@ class Handler implements HandlerContract
      */
     public function getTransformers(): array
     {
-        return  $this->transformers;
+        return $this->transformers;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function addFilter(FilterContract $filter): HandlerContract
+    {
+        if (in_array($filter, $this->filters)) {
+            $pos = array_search($filter, $this->filters);
+
+            unset($this->filters[$pos]);
+        }
+
+        $this->filters[] = $filter;
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getFilters(): array
+    {
+        return $this->filters;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function addShouldntReport(Throwable $exception): HandlerContract
+    {
+        $this->dontReport[] = $exception;
     }
 
     /**
@@ -140,6 +192,8 @@ class Handler implements HandlerContract
 
     /**
      * {@inheritdoc}
+     *
+     * @codeCoverageIgnore
      */
     public function register()
     {
@@ -161,6 +215,8 @@ class Handler implements HandlerContract
 
     /**
      * {@inheritdoc}
+     *
+     * @codeCoverageIgnore
      */
     public function unregister()
     {
@@ -195,17 +251,16 @@ class Handler implements HandlerContract
         $request = new ServerRequestFactory();
 
         if (php_sapi_name() === 'cli') {
-            $console = new ConsoleApplication();
-            $console->renderException(new ConsoleOutput, $exception);
+            (new ConsoleApplication())->renderException(new ConsoleOutput, $exception);
         } else {
             try {
-                $respone = $this->getResponse($request->createServerRequestFromGlobals(), $exception, $transformed);
+                $response = $this->getResponse($request->createServerRequestFromGlobals(), $exception, $transformed);
 
                 return (string) $response->body();
             } catch (Throwable $error) {
                 $this->report($error);
 
-                $respone = new Response(500, [], HttpStatus::getReasonPhrase(500));
+                $response = new Response(500, [], HttpStatus::getReasonPhrase(500));
 
                 return (string) $response->body();
             }
@@ -248,7 +303,9 @@ class Handler implements HandlerContract
      */
     protected function shouldntReport(Throwable $exception): bool
     {
-        foreach ($this->dontReport as $type) {
+        $dontReport = array_merge($this->dontReport, $this->config->get('', []));
+
+        foreach ($dontReport as $type) {
             if ($exception instanceof $type) {
                 return true;
             }
@@ -295,7 +352,12 @@ class Handler implements HandlerContract
         $code = $flattened->getStatusCode();
         $headers = $flattened->getHeaders();
 
-        return $this->getDisplayer($request, $exception, $transformed, $code)->display($transformed, $id, $code, $headers);
+        return $this->getDisplayer(
+            $request,
+            $exception,
+            $transformed,
+            $code
+        )->display($transformed, $id, $code, $headers);
     }
 
     /**
@@ -375,6 +437,8 @@ class Handler implements HandlerContract
      * @param int $type
      *
      * @return bool
+     *
+     * @codeCoverageIgnore
      */
     protected function isFatal(int $type): bool
     {

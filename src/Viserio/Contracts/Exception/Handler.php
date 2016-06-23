@@ -6,7 +6,7 @@ use Throwable;
 interface Handler
 {
     /**
-     * Set the displayer instance.
+     * Add the displayer instance.
      *
      * @param Displayer $displayer
      *
@@ -22,7 +22,7 @@ interface Handler
     public function getDisplayers(): array;
 
     /**
-     * Set the transformed instance.
+     * Add the transformed instance.
      *
      * @param Transformer $transformer
      *
@@ -31,11 +31,27 @@ interface Handler
     public function addTransformer(Transformer $transformer): Handler;
 
     /**
-     * Get the transformed exception.
+     * Get the transformer exceptions.
      *
      * @return array
      */
     public function getTransformers(): array;
+
+    /**
+     * Add the filter instance.
+     *
+     * @param Filter $filter
+     *
+     * @return self
+     */
+    public function addFilter(Filter $filter): Handler;
+
+   /**
+     * Get the filter exceptions.
+     *
+     * @return array
+     */
+    public function getFilters(): array;
 
     /**
      * Report or log an exception.
@@ -45,6 +61,15 @@ interface Handler
      * @return void|null
      */
     public function report(Throwable $exception);
+
+    /**
+     * Determine if the exception shouldn't be reported.
+     *
+     * @param \Throwable $exception
+     *
+     * @return self
+     */
+    public function addShouldntReport(Throwable $exception): Handler;
 
     /**
      * Register the exception / Error handlers for the application.

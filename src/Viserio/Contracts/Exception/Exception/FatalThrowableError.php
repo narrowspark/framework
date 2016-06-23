@@ -5,6 +5,7 @@ use ErrorException;
 use ParseError;
 use ReflectionProperty;
 use TypeError;
+use Throwable;
 
 /**
  * Fatal Throwable Exception.
@@ -27,7 +28,10 @@ class FatalThrowableError extends ErrorException
             $severity = E_ERROR;
         }
 
-        parent::__construct($message, $code, $severity, $filename, $lineno);
+        parent::__construct($message, $e->getCode(), $severity, $e->getFile(), $e->getLine());
+
+        $trace = $e->getTrace();
+        $traceArgs = $traceOffset = null;
 
         if (null !== $trace) {
             if (!$traceArgs) {
