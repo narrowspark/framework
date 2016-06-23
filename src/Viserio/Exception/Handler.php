@@ -84,16 +84,24 @@ class Handler implements HandlerContract
     protected $dontReport = [];
 
     /**
+     * The default displayer.
+     *
+     * @var \Viserio\Contracts\Exception\Displayer
+     */
+    protected $defaultDisplayer;
+
+    /**
      * Create a new exception handler instance.
      *
-     * @param \Viserio\Contracts\Config\Manager $config
-     * @param \Psr\Log\LoggerInterface         $log
+     * @param \Viserio\Contracts\Config\Manager      $config
+     * @param \Psr\Log\LoggerInterface               $log
+     * @param Viserio\\Exception\ExceptionIdentifier $eIdentifier
      */
-    public function __construct(ConfigManagerContract $config, LoggerInterface $log)
+    public function __construct(ConfigManagerContract $config, LoggerInterface $log, ExceptionIdentifier $eIdentifier)
     {
         $this->config = $config;
-        $this->eIdentifier = new ExceptionIdentifier();
         $this->log = $log;
+        $this->eIdentifier = $eIdentifier;
     }
 
     /**
@@ -262,13 +270,13 @@ class Handler implements HandlerContract
             try {
                 $response = $this->getResponse($request->createServerRequestFromGlobals(), $exception, $transformed);
 
-                return (string) $response->body();
+                return (string) $response->getBody();
             } catch (Throwable $error) {
                 $this->report($error);
 
                 $response = new Response(500, [], HttpStatus::getReasonPhrase(500));
 
-                return (string) $response->body();
+                return (string) $response->getBody();
             }
         }
     }
@@ -356,6 +364,7 @@ class Handler implements HandlerContract
         Throwable $exception,
         Throwable $transformed
     ): ResponseInterface {
+        $id = $this->eIdentifier->identify($exception);
         $flattened = FlattenException::create($transformed);
         $code = $flattened->getStatusCode();
         $headers = $flattened->getHeaders();

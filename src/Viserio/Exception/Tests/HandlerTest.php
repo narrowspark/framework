@@ -32,7 +32,8 @@ class HandlerTest extends \PHPUnit_Framework_TestCase
     {
         $handler = new Handler(
             $this->mock(ConfigManagerContract::class),
-            $this->mock(LoggerInterface::class)
+            $this->mock(LoggerInterface::class),
+            new ExceptionIdentifier()
         );
 
         $info = $this->mock(ExceptionInfo::class);
@@ -48,7 +49,8 @@ class HandlerTest extends \PHPUnit_Framework_TestCase
     {
         $handler = new Handler(
             $this->mock(ConfigManagerContract::class),
-            $this->mock(LoggerInterface::class)
+            $this->mock(LoggerInterface::class),
+            new ExceptionIdentifier()
         );
 
         $handler->addTransformer(new CommandLineTransformer());
@@ -61,7 +63,8 @@ class HandlerTest extends \PHPUnit_Framework_TestCase
     {
         $handler = new Handler(
             $this->mock(ConfigManagerContract::class),
-            $this->mock(LoggerInterface::class)
+            $this->mock(LoggerInterface::class),
+            new ExceptionIdentifier()
         );
 
         $handler->addFilter($this->mock(VerboseFilter::class));
@@ -88,7 +91,8 @@ class HandlerTest extends \PHPUnit_Framework_TestCase
 
         $handler = new Handler(
             $config,
-            $log
+            $log,
+            new ExceptionIdentifier()
         );
 
         $handler->report($exception);
@@ -112,7 +116,8 @@ class HandlerTest extends \PHPUnit_Framework_TestCase
 
         $handler = new Handler(
             $config,
-            $log
+            $log,
+            new ExceptionIdentifier()
         );
 
         $handler->report($exception);
@@ -136,7 +141,8 @@ class HandlerTest extends \PHPUnit_Framework_TestCase
 
         $handler = new Handler(
             $config,
-            $log
+            $log,
+            new ExceptionIdentifier()
         );
 
         $handler->addShouldntReport($exception);
@@ -148,7 +154,8 @@ class HandlerTest extends \PHPUnit_Framework_TestCase
     {
         $handler = new Handler(
             $this->mock(ConfigManagerContract::class),
-            $this->mock(LoggerInterface::class)
+            $this->mock(LoggerInterface::class),
+            new ExceptionIdentifier()
         );
 
         try {
@@ -172,7 +179,8 @@ class HandlerTest extends \PHPUnit_Framework_TestCase
 
         $handler = new Handler(
             $config,
-            $log
+            $log,
+            new ExceptionIdentifier()
         );
 
         ob_start();
@@ -200,7 +208,8 @@ class HandlerTest extends \PHPUnit_Framework_TestCase
 
         $handler = new Handler(
             $config,
-            $log
+            $log,
+            new ExceptionIdentifier()
         );
 
         $handler->addTransformer(new CommandLineTransformer());

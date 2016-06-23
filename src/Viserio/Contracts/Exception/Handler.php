@@ -98,6 +98,8 @@ interface Handler
      * @param int    $line    The line number of the error in the affected file
      * @param null   $context
      *
+     * @return void
+     *
      * @throws \ErrorException
      */
     public function handleError(

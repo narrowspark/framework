@@ -43,7 +43,7 @@ class ViewDisplayer implements DisplayerContract
      */
     public function display(Throwable $exception, string $id, int $code, array $headers): ResponseInterface
     {
-        $info = $this->info->generate($exception, $id, $code);
+        $info = $this->info->generate($id, $code);
         $view = $this->factory->create("errors.{$code}", $info);
 
         return new HtmlResponse(
