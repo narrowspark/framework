@@ -1,8 +1,8 @@
 <?php
 namespace Viserio\Exception\Transformers;
 
-use Exception;
 use ErrorException;
+use Exception;
 use Throwable;
 use Viserio\Contracts\Exception\Transformer as TransformerContract;
 
