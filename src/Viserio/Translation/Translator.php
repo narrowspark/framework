@@ -34,8 +34,12 @@ class Translator
     /**
      * {@inheritdoc}
      */
-    public function trans($id, array $parameters = [], $domain = null, $locale = null)
-    {
+    public function trans(
+        string $id,
+        array $parameters = [],
+        string $domain = null,
+        string $locale = null
+    ): string {
         $locale = (null !== $locale) ? $this->assertValidLocale($locale) : $this->getLocale();
 
         if (is_numeric($context)) {
@@ -52,9 +56,59 @@ class Translator
     /**
      * {@inheritdoc}
      */
-    public function transChoice($id, $number, array $parameters = [], $domain = null, $locale = null)
-    {
+    public function transChoice(
+        string $id,
+        int $number,
+        array $parameters = [],
+        string $domain = null,
+        string $locale = null
+    ): string {
         $this->assertValidLocale($locale);
+
+        // TODO finish
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function addHelper(string $name, callable $helper): TranslatorContract
+    {
+        $this->helpers[$name] = $helper;
+
+        return $this;
+    }
+
+    /**
+     * Apply helpers.
+     *
+     * @param string[] $translation
+     * @param array    $helpers
+     *
+     * @throws \RuntimeException
+     *
+     * @return mixed
+     */
+    public function applyHelpers(array $translation, array $helpers): array
+    {
+        if (is_array($translation)) {
+            $translator = $this;
+
+            return array_map(function ($trans) use ($translator, $helpers) {
+                return $translator->applyHelpers($trans, $helpers);
+            }, $translation);
+        }
+
+        foreach ($helpers as $helper) {
+            if (!isset($this->helpers[$helper['name']])) {
+                throw new RuntimeException('Helper ' . $helper['name'] . ' is not registered.');
+            }
+
+            array_unshift($helper['arguments'], $translation);
+
+            $translation = call_user_func_array($this->helpers[$helper['name']], $helper['arguments']);
+        }
+
+        return $translation;
     }
 
     /**
@@ -79,58 +133,13 @@ class Translator
     }
 
     /**
-     * Add helper.
-     *
-     * @param string   $name
-     * @param callable $helper
+     * {@inheritdoc}
      */
-    public function addHelper(string $name, callable $helper)
-    {
-        $this->helpers[$name] = $helper;
-    }
-
-    /**
-     * Apply helpers.
-     *
-     * @param string[] $translation
-     * @param array    $helpers
-     *
-     * @throws \RuntimeException
-     *
-     * @return mixed
-     */
-    public function applyHelpers($translation, array $helpers)
-    {
-        if (is_array($translation)) {
-            $translator = $this;
-
-            return array_map(function ($trans) use ($translator, $helpers) {
-                return $translator->applyHelpers($trans, $helpers);
-            }, $translation);
-        }
-
-        foreach ($helpers as $helper) {
-            if (!isset($this->helpers[$helper['name']])) {
-                throw new RuntimeException('Helper ' . $helper['name'] . ' is not registered.');
-            }
-
-            array_unshift($helper['arguments'], $translation);
-
-            $translation = call_user_func_array($this->helpers[$helper['name']], $helper['arguments']);
-        }
-
-        return $translation;
-    }
-
-    /**
-     * Add filter.
-     *
-     * @param string   $name
-     * @param callable $filter
-     */
-    public function addFilter($name, callable $filter)
+    public function addFilter(string $name, callable $filter): TranslatorContract
     {
         $this->filters[$name] = $filter;
+
+        return $this;
     }
 
     /**
@@ -139,7 +148,7 @@ class Translator
      *
      * @return array
      */
-    public function applyFilters($translation, array $filters)
+    public function applyFilters($translation, array $filters): array
     {
         if (is_array($translation)) {
             $translator = $this;

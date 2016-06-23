@@ -5,7 +5,7 @@ use InvalidArgumentException;
 use RuntimeException;
 use Viserio\Contracts\Cache\Factory as CacheContract;
 use Viserio\Contracts\Translation\MessageCatalogue as MessageCatalogueContract;
-use Viserio\Contracts\Translation\NotFoundResourceException;
+use Viserio\Contracts\Translation\Exception\NotFoundResourceException;
 use Viserio\Support\Traits\EventAwareTrait;
 use Viserio\Support\Traits\FileLoaderAwareTrait;
 use Viserio\Support\Traits\LoggerAwareTrait;

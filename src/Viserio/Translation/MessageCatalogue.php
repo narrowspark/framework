@@ -19,7 +19,7 @@ class MessageCatalogue implements MessageCatalogueContract
     /**
      * Message catalogue instance.
      *
-     * @var MessageCatalogueContract
+     * @var \Viserio\Contracts\Translation\MessageCatalogue
      */
     protected $fallbackCatalogue;
 
@@ -33,7 +33,7 @@ class MessageCatalogue implements MessageCatalogueContract
     /**
      *  Parent.
      *
-     * @var MessageCatalogueContract
+     * @var \Viserio\Contracts\Translation\MessageCatalogue
      */
     protected $parent;
 

@@ -136,9 +136,9 @@ interface MessageCatalogue
     /**
      * Set parent.
      *
-     * @param MessageCatalogueContract $parent
+     * @param MessageCatalogue $parent
      *
      * @return self
      */
-    public function setParent(MessageCatalogueContract $parent): MessageCatalogue;
+    public function setParent(MessageCatalogue $parent): MessageCatalogue;
 }

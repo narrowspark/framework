@@ -19,7 +19,7 @@ interface Translator
      *
      * @return self
      */
-    public function setLocale($defaultLang);
+    public function setLocale(string $defaultLang): Translator;
 
     /**
      * Translates the given message.
@@ -33,7 +33,12 @@ interface Translator
      *
      * @return string The translated string
      */
-    public function trans($id, array $parameters = [], $domain = null, $locale = null);
+    public function trans(
+        string $id,
+        array $parameters = [],
+        string $domain = null,
+        string $locale = null
+    ): string;
 
     /**
      * Translates the given choice message by choosing a translation according to a number.
@@ -48,7 +53,13 @@ interface Translator
      *
      * @return string The translated string
      */
-    public function transChoice($id, $number, array $parameters = [], $domain = null, $locale = null);
+    public function transChoice(
+        string $id,
+        int $number,
+        array $parameters = [],
+        string $domain = null,
+        string $locale = null
+    ): string;
 
     /**
      * Add helper.
@@ -58,7 +69,7 @@ interface Translator
      *
      * @return self
      */
-    public function addHelper($name, callable $helper);
+    public function addHelper(string $name, callable $helper): Translator;
 
     /**
      * Apply helpers.
@@ -68,9 +79,9 @@ interface Translator
      *
      * @throws \Exception
      *
-     * @return self
+     * @return array
      */
-    public function applyHelpers($translation, array $helpers);
+    public function applyHelpers(array $translation, array $helpers): array;
 
     /**
      * Add filter.
@@ -78,13 +89,13 @@ interface Translator
      * @param string   $name
      * @param callable $filter
      */
-    public function addFilter($name, callable $filter);
+    public function addFilter(string $name, callable $filter);
 
     /**
-     * @param array        $filters
      * @param string|array $translation
+     * @param array        $filters
      *
-     * @return self
+     * @return array
      */
-    public function applyFilters($translation, array $filters);
+    public function applyFilters($translation, array $filters): array;
 }

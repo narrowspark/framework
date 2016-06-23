@@ -1,5 +1,5 @@
 <?php
-namespace Viserio\Contracts\Translation;
+namespace Viserio\Contracts\Translation\Exception;
 
 use InvalidArgumentException;
 
