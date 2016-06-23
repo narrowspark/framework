@@ -1,8 +1,8 @@
 <?php
 namespace Viserio\Exception\Tests\Transformers;
 
-use Exception;
 use ErrorException;
+use Exception;
 use Viserio\Exception\Transformers\CommandLineTransformer;
 
 class CommandLineTransformerTest extends \PHPUnit_Framework_TestCase
