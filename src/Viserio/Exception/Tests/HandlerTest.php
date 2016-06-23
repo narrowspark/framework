@@ -1,6 +1,7 @@
 <?php
 namespace Viserio\Exception\Tests;
 
+use ErrorException;
 use Exception;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use Psr\Log\LoggerInterface;
@@ -115,5 +116,103 @@ class HandlerTest extends \PHPUnit_Framework_TestCase
         );
 
         $handler->report($exception);
+    }
+
+    public function testShouldntReport()
+    {
+        $exception = new FatalThrowableError(new Exception());
+        $id = (new ExceptionIdentifier())->identify($exception);
+
+        $log = $this->mock(LoggerInterface::class);
+        $log
+            ->shouldReceive('critical')
+            ->never();
+
+        $config = $this->mock(ConfigManagerContract::class);
+        $config
+            ->shouldReceive('get')
+            ->once()
+            ->andReturn([]);
+
+        $handler = new Handler(
+            $config,
+            $log
+        );
+
+        $handler->addShouldntReport($exception);
+
+        $handler->report($exception);
+    }
+
+    public function testHandleError()
+    {
+        $handler = new Handler(
+            $this->mock(ConfigManagerContract::class),
+            $this->mock(LoggerInterface::class)
+        );
+
+        try {
+            $handler->handleError(E_PARSE, 'test', '', 0, null);
+        } catch (ErrorException $e) {
+            $this->assertInstanceOf(ErrorException::class, $e);
+        }
+    }
+
+    public function testHandleException()
+    {
+        $log = $this->mock(LoggerInterface::class);
+        $log
+            ->shouldReceive('critical')
+            ->once();
+
+        $config = $this->mock(ConfigManagerContract::class);
+        $config
+            ->shouldReceive('get')
+            ->andReturn([]);
+
+        $handler = new Handler(
+            $config,
+            $log
+        );
+
+        ob_start();
+
+        try {
+            $handler->handleException(new Exception());
+        } catch (FatalThrowableError $e) {
+            $this->assertInstanceOf(FatalThrowableError::class, $e);
+        }
+
+        ob_end_clean();
+    }
+
+    public function testFormatedHandleException()
+    {
+        $log = $this->mock(LoggerInterface::class);
+        $log
+            ->shouldReceive('critical')
+            ->once();
+
+        $config = $this->mock(ConfigManagerContract::class);
+        $config
+            ->shouldReceive('get')
+            ->andReturn([]);
+
+        $handler = new Handler(
+            $config,
+            $log
+        );
+
+        $handler->addTransformer(new CommandLineTransformer());
+
+        ob_start();
+
+        try {
+            $handler->handleException(new Exception());
+        } catch (FatalThrowableError $e) {
+            $this->assertInstanceOf(FatalThrowableError::class, $e);
+        }
+
+        ob_end_clean();
     }
 }

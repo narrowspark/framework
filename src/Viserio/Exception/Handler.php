@@ -2,6 +2,7 @@
 namespace Viserio\Exception;
 
 use ErrorException;
+use Exception;
 use Narrowspark\HttpStatus\HttpStatus;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -173,6 +174,8 @@ class Handler implements HandlerContract
     public function addShouldntReport(Throwable $exception): HandlerContract
     {
         $this->dontReport[] = $exception;
+
+        return $this;
     }
 
     /**
@@ -243,16 +246,19 @@ class Handler implements HandlerContract
      */
     public function handleException(Throwable $exception)
     {
-        $exception = new FatalThrowableError($exception);
+        if ($exception instanceof Exception) {
+            $exception = new FatalThrowableError($exception);
+        }
 
         $this->report($exception);
 
         $transformed = $this->getTransformed($exception);
-        $request = new ServerRequestFactory();
 
         if (php_sapi_name() === 'cli') {
-            (new ConsoleApplication())->renderException(new ConsoleOutput, $exception);
+            (new ConsoleApplication())->renderException($transformed, new ConsoleOutput);
         } else {
+            $request = new ServerRequestFactory();
+
             try {
                 $response = $this->getResponse($request->createServerRequestFromGlobals(), $exception, $transformed);
 
@@ -269,6 +275,8 @@ class Handler implements HandlerContract
 
     /**
      * {@inheritdoc}
+     *
+     * @codeCoverageIgnore
      */
     public function handleShutdown()
     {
@@ -361,21 +369,29 @@ class Handler implements HandlerContract
     }
 
     /**
-     * Get the transformed exception.
+     * Get the displayer instance.
      *
-     * @param \Throwable $exception
+     * @param \Psr\Http\Message\RequestInterface $request
+     * @param \Throwable                         $original
+     * @param \Throwable                         $transformed
+     * @param int                                $code
      *
-     * @return \Throwable
+     * @return \Viserio\Contracts\Exception\Displayer
      */
-    protected function getTransformed(Throwable $exception): Throwable
-    {
-        $transformers = array_merge($this->transformers, $this->config-get('exception::transformers', []));
 
-        foreach ($transformers as $transformer) {
-            $exception = $transformer->transform($exception);
+    protected function getDisplayer(
+        RequestInterface $request,
+        Throwable $original,
+        Throwable $transformed,
+        int $code
+    ): DisplayerContract {
+        $displayers = array_merge($this->displayers, $this->config->get('exception::displayers', []));
+
+        if ($filtered = $this->getFiltered($displayers, $request, $original, $transformed, $code)) {
+            return $filtered[0];
         }
 
-        return $exception;
+        return $this->defaultDisplayer;
     }
 
     /**
@@ -406,29 +422,21 @@ class Handler implements HandlerContract
     }
 
     /**
-     * Get the displayer instance.
+     * Get the transformed exception.
      *
-     * @param \Psr\Http\Message\RequestInterface $request
-     * @param \Throwable                         $original
-     * @param \Throwable                         $transformed
-     * @param int                                $code
+     * @param \Throwable $exception
      *
-     * @return \Viserio\Contracts\Exception\Displayer
+     * @return \Throwable
      */
+    protected function getTransformed(Throwable $exception): Throwable
+    {
+        $transformers = array_merge($this->transformers, $this->config->get('exception::transformers', []));
 
-    protected function getDisplayer(
-        RequestInterface $request,
-        Throwable $original,
-        Throwable $transformed,
-        int $code
-    ): DisplayerContract {
-        $displayers = array_merge($this->displayers, $this->config->get('exception::displayers', []));
-
-        if ($filtered = $this->getFiltered($displayers, $request, $original, $transformed, $code)) {
-            return $filtered[0];
+        foreach ($transformers as $transformer) {
+            $exception = $transformer->transform($exception);
         }
 
-        return $this->defaultDisplayer;
+        return $exception;
     }
 
     /**
