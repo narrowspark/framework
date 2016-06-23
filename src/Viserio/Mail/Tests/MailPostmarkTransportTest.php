@@ -1,5 +1,5 @@
 <?php
-namespace Viserio\Mail\Test;
+namespace Viserio\Mail\Tests;
 
 class MailPostmarkTransportTest extends \PHPUnit_Framework_TestCase
 {
@@ -20,7 +20,7 @@ class MailPostmarkTransportTest extends \PHPUnit_Framework_TestCase
         $headers = $message->getHeaders();
         $messageId = $headers->get('Message-ID')->getId();
 
-        $transport = new \Viserio\Mail\Test\PostmarkTransportStub('TESTING_SERVER');
+        $transport = new \Viserio\Mail\Tests\PostmarkTransportStub('TESTING_SERVER');
 
         $client = $this->getMockBuilder('GuzzleHttp\Client')
             ->setMethods(['post'])

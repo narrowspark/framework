@@ -1,5 +1,5 @@
 <?php
-namespace Viserio\View\Test;
+namespace Viserio\View\Tests;
 
 use Interop\Container\ContainerInterface;
 use Mockery as Mock;

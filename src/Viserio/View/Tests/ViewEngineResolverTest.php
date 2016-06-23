@@ -1,5 +1,5 @@
 <?php
-namespace Viserio\View\Test;
+namespace Viserio\View\Tests;
 
 use StdClass;
 use Viserio\View\Engines\EngineResolver;

@@ -1,5 +1,5 @@
 <?php
-namespace Viserio\Routing\Test\UrlGenerator;
+namespace Viserio\Routing\Tests\UrlGenerator;
 
 use Symfony\Component\HttpFoundation\Request;
 use Viserio\Routing\UrlGenerator\SimpleUrlGenerator;

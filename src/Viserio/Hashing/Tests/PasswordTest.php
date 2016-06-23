@@ -1,5 +1,5 @@
 <?php
-namespace Viserio\Hashing\Test;
+namespace Viserio\Hashing\Tests;
 
 use Defuse\Crypto\Key;
 use Viserio\Hashing\Password;

@@ -1,2 +1,2 @@
 <?php
-namespace Viserio\Routing\Test;
+namespace Viserio\Routing\Tests;
