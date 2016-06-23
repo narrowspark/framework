@@ -41,10 +41,11 @@ class UploadedFileTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider invalidStreams
+     *
+     * @expectedException InvalidArgumentException
      */
     public function testRaisesExceptionOnInvalidStreamOrFile($streamOrFile)
     {
-        $this->setExpectedException('InvalidArgumentException');
         new UploadedFile($streamOrFile, 0, UPLOAD_ERR_OK);
     }
 
@@ -105,19 +106,23 @@ class UploadedFileTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider invalidFilenamesAndMediaTypes
+     *
+     * @expectedException InvalidArgumentException
+     * @expectedExceptionMessage filename
      */
     public function testRaisesExceptionOnInvalidClientFilename($filename)
     {
-        $this->setExpectedException('InvalidArgumentException', 'filename');
         new UploadedFile(fopen('php://temp', 'wb+'), 0, UPLOAD_ERR_OK, $filename);
     }
 
     /**
      * @dataProvider invalidFilenamesAndMediaTypes
+     *
+     * @expectedException InvalidArgumentException
+     * @expectedExceptionMessage media type
      */
     public function testRaisesExceptionOnInvalidClientMediaType($mediaType)
     {
-        $this->setExpectedException('InvalidArgumentException', 'media type');
         new UploadedFile(fopen('php://temp', 'wb+'), 0, UPLOAD_ERR_OK, 'foobar.baz', $mediaType);
     }
 
@@ -125,6 +130,7 @@ class UploadedFileTest extends \PHPUnit_Framework_TestCase
     {
         $stream = new Stream(fopen('php://temp', 'r'));
         $upload = new UploadedFile($stream, 0, UPLOAD_ERR_OK);
+
         $this->assertSame($stream, $upload->getStream());
     }
 
@@ -133,16 +139,20 @@ class UploadedFileTest extends \PHPUnit_Framework_TestCase
         $stream = fopen('php://temp', 'wb+');
         $upload = new UploadedFile($stream, 0, UPLOAD_ERR_OK);
         $uploadStream = $upload->getStream()->detach();
+
         $this->assertSame($stream, $uploadStream);
     }
 
     public function testGetStreamReturnsStreamForFile()
     {
         $this->cleanup[] = $stream = tempnam(sys_get_temp_dir(), 'stream_file');
+
         $upload = new UploadedFile($stream, 0, UPLOAD_ERR_OK);
         $uploadStream = $upload->getStream();
+
         $r = new ReflectionProperty($uploadStream, 'filename');
         $r->setAccessible(true);
+
         $this->assertSame($stream, $r->getValue($uploadStream));
     }
 
@@ -150,11 +160,14 @@ class UploadedFileTest extends \PHPUnit_Framework_TestCase
     {
         $stream = Util::getStream('Foo bar!');
         $upload = new UploadedFile($stream, $stream->getSize(), UPLOAD_ERR_OK, 'filename.txt', 'text/plain');
+
         $this->assertEquals($stream->getSize(), $upload->getSize());
         $this->assertEquals('filename.txt', $upload->getClientFilename());
         $this->assertEquals('text/plain', $upload->getClientMediaType());
         $this->cleanup[] = $to = tempnam(sys_get_temp_dir(), 'successful');
+
         $upload->moveTo($to);
+
         $this->assertFileExists($to);
         $this->assertEquals($stream->__toString(), file_get_contents($to));
     }
@@ -175,35 +188,53 @@ class UploadedFileTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider invalidMovePaths
+     *
+     * @expectedException InvalidArgumentException
+     * @expectedExceptionMessage path
      */
     public function testMoveRaisesExceptionForInvalidPath($path)
     {
         $stream = Util::getStream('Foo bar!');
         $upload = new UploadedFile($stream, 0, UPLOAD_ERR_OK);
+
         $this->cleanup[] = $path;
-        $this->setExpectedException('InvalidArgumentException', 'path');
+
         $upload->moveTo($path);
     }
 
+    /**
+     * @expectedException RuntimeException
+     * @expectedExceptionMessage moved
+     */
     public function testMoveCannotBeCalledMoreThanOnce()
     {
         $stream = Util::getStream('Foo bar!');
         $upload = new UploadedFile($stream, 0, UPLOAD_ERR_OK);
+
         $this->cleanup[] = $to = tempnam(sys_get_temp_dir(), 'diac');
+
         $upload->moveTo($to);
+
         $this->assertTrue(file_exists($to));
-        $this->setExpectedException('RuntimeException', 'moved');
+
         $upload->moveTo($to);
     }
 
+    /**
+     * @expectedException RuntimeException
+     * @expectedExceptionMessage moved
+     */
     public function testCannotRetrieveStreamAfterMove()
     {
         $stream = Util::getStream('Foo bar!');
         $upload = new UploadedFile($stream, 0, UPLOAD_ERR_OK);
+
         $this->cleanup[] = $to = tempnam(sys_get_temp_dir(), 'diac');
+
         $upload->moveTo($to);
+
         $this->assertFileExists($to);
-        $this->setExpectedException('RuntimeException', 'moved');
+
         $upload->getStream();
     }
 
@@ -231,21 +262,27 @@ class UploadedFileTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider nonOkErrorStatus
+     *
+     * @expectedException RuntimeException
+     * @expectedExceptionMessage upload error
      */
     public function testMoveToRaisesExceptionWhenErrorStatusPresent($status)
     {
         $uploadedFile = new UploadedFile('not ok', 0, $status);
-        $this->setExpectedException('RuntimeException', 'upload error');
+
         $uploadedFile->moveTo(__DIR__ . '/' . uniqid());
     }
 
     /**
      * @dataProvider nonOkErrorStatus
+     *
+     * @expectedException RuntimeException
+     * @expectedExceptionMessage upload error
      */
     public function testGetStreamRaisesExceptionWhenErrorStatusPresent($status)
     {
         $uploadedFile = new UploadedFile('not ok', 0, $status);
-        $this->setExpectedException('RuntimeException', 'upload error');
+
         $stream = $uploadedFile->getStream();
     }
 

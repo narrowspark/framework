@@ -24,7 +24,6 @@ class ViewEngineResolverTest extends \PHPUnit_Framework_TestCase
      */
     public function testResolverThrowsExceptionOnUnknownEngine()
     {
-        $this->setExpectedException('InvalidArgumentException');
         $resolver = new EngineResolver();
         $resolver->resolve('foo');
     }
