@@ -1,8 +1,8 @@
 <?php
 namespace Viserio\Exception\Tests;
 
-use Psr\Log\LoggerInterface;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
+use Psr\Log\LoggerInterface;
 use Viserio\Contracts\{
     Config\Manager as ConfigManagerContract,
     Exception\Displayer as DisplayerContract,

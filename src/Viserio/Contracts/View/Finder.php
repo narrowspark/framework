@@ -23,6 +23,7 @@ interface Finder
      * Add a location to the finder.
      *
      * @param string $location
+     * @return void
      */
     public function addLocation(string $location);
 
