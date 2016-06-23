@@ -34,7 +34,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Viserio\\Queue\\Test\\"      : "Tests/"
+            "Viserio\\Queue\\Tests\\"     : "Tests/"
         }
     },
     "extra": {

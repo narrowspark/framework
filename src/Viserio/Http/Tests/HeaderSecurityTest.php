@@ -99,10 +99,11 @@ class HeaderSecurityTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider assertValues
      * @group ZF2015-04
+     *
+     * @expectedException InvalidArgumentException
      */
     public function testAssertValidRaisesExceptionForInvalidValue($value)
     {
-        $this->setExpectedException('InvalidArgumentException');
         HeaderSecurity::assertValid($value);
     }
 }

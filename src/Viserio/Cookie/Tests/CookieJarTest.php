@@ -1,5 +1,5 @@
 <?php
-namespace Viserio\Cookie\Test;
+namespace Viserio\Cookie\Tests;
 
 use Viserio\Cookie\CookieJar;
 

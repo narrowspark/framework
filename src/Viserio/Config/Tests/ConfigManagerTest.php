@@ -1,5 +1,5 @@
 <?php
-namespace Viserio\Config\Test;
+namespace Viserio\Config\Tests;
 
 use org\bovigo\vfs\vfsStream;
 use Viserio\Config\Manager as ConfigManager;

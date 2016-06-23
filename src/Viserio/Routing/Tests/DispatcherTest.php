@@ -1,5 +1,5 @@
 <?php
-namespace Viserio\Routing\Test;
+namespace Viserio\Routing\Tests;
 
 use FastRoute\DataGenerator\GroupCountBased;
 use Viserio\Container\Container;

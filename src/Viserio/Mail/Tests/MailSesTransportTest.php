@@ -1,5 +1,5 @@
 <?php
-namespace Viserio\Mail\Test;
+namespace Viserio\Mail\Tests;
 
 use Aws\Ses\SesClient;
 use Viserio\Application\Application;

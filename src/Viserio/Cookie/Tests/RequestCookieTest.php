@@ -1,5 +1,5 @@
 <?php
-namespace Viserio\Cookie\Test;
+namespace Viserio\Cookie\Tests;
 
 use DateTime;
 use Mockery as Mock;

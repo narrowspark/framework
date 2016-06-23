@@ -1,5 +1,5 @@
 <?php
-namespace Viserio\View\Test\Traits;
+namespace Viserio\View\Tests\Traits;
 
 use Viserio\View\Traits\NormalizeNameTrait;
 

@@ -1,5 +1,5 @@
 <?php
-namespace Viserio\Encryption\Test;
+namespace Viserio\Encryption\Tests;
 
 use Defuse\Crypto\Key;
 use Viserio\Encryption\Encrypter;

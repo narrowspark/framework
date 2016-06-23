@@ -127,7 +127,7 @@ class Factory implements FactoryContract
      *
      * @return \Viserio\View\View
      */
-    public function make(string $view, array $data = [], array $mergeData = []): ViewContract
+    public function create(string $view, array $data = [], array $mergeData = []): ViewContract
     {
         if (isset($this->aliases[$view])) {
             $view = $this->aliases[$view];
@@ -151,7 +151,7 @@ class Factory implements FactoryContract
      */
     public function of(string $view, array $data = []): ViewContract
     {
-        return $this->make($this->names[$view], $data);
+        return $this->create($this->names[$view], $data);
     }
 
     /**
@@ -214,7 +214,7 @@ class Factory implements FactoryContract
         if (count($data) > 0) {
             foreach ($data as $key => $value) {
                 $data = ['key' => $key, $iterator => $value];
-                $result .= $this->make($view, $data)->render();
+                $result .= $this->create($view, $data)->render();
             }
 
         // If there is no data in the array, we will render the contents of the empty
@@ -224,7 +224,7 @@ class Factory implements FactoryContract
             if (Str::startsWith($empty, 'raw|')) {
                 $result = substr($empty, 4);
             } else {
-                $result = $this->make($empty)->render();
+                $result = $this->create($empty)->render();
             }
         }
 
@@ -451,7 +451,7 @@ class Factory implements FactoryContract
     /**
      * Get the right view object.
      *
-     * @param \Viserio\View\Factory                      $factory
+     * @param \Viserio\Contracts\View\Factory            $factory
      * @param \Viserio\Contracts\View\Engine             $engine
      * @param string                                     $view
      * @param string                                     $path
@@ -459,7 +459,7 @@ class Factory implements FactoryContract
      *
      * @return \Viserio\View\View|\Viserio\View\VirtuosoView
      */
-    protected function getView(Factory $factory, EngineContract $engine, string $view, string $path, $data = [])
+    protected function getView(FactoryContract $factory, EngineContract $engine, string $view, string $path, $data = [])
     {
         if ($this->virtuoso !== null) {
             $this->virtuoso->callCreator($view = new VirtuosoView($factory, $engine, $view, $path, $data));
@@ -467,6 +467,6 @@ class Factory implements FactoryContract
             return $view;
         }
 
-        return new View($this, $engine, $view, $path, $data);
+        return new View($factory, $engine, $view, $path, $data);
     }
 }

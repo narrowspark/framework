@@ -1,5 +1,5 @@
 <?php
-namespace Viserio\Config\Test;
+namespace Viserio\Config\Tests;
 
 use Viserio\Config\Repository;
 

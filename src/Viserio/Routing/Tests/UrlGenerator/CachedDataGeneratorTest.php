@@ -1,5 +1,5 @@
 <?php
-namespace Viserio\Routing\Test\UrlGenerator;
+namespace Viserio\Routing\Tests\UrlGenerator;
 
 use Viserio\Filesystem\Filesystem;
 use Viserio\Routing\UrlGenerator\CachedDataGenerator;

@@ -1,5 +1,5 @@
 <?php
-namespace Viserio\Mail\Test;
+namespace Viserio\Mail\Tests;
 
 use Mockery as Mock;
 use Swift_Mailer;

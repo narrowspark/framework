@@ -1,5 +1,5 @@
 <?php
-namespace Viserio\Mail\Test;
+namespace Viserio\Mail\Tests;
 
 use Mockery as Mock;
 use Viserio\Mail\Mailer;
@@ -169,7 +169,7 @@ class MailMailerTest extends \PHPUnit_Framework_TestCase
         $view = Mock::mock('\StdClass');
         $mailer->getViewFactory()->shouldReceive('make')->once()->andReturn($view);
         $view->shouldReceive('render')->once()->andReturn('rendered.view');
-        $swift = new \Viserio\Mail\Test\FailingSwiftMailerStub();
+        $swift = new \Viserio\Mail\Tests\FailingSwiftMailerStub();
 
         $this->setSwiftMailer($mailersend('foo', ['data'], function ($m) {
         }));
