@@ -53,15 +53,15 @@ class MessageSelector
      * The two methods can also be mixed:
      *     {0} There are no apples|one: There is one apple|more: There are %count% apples
      *
-     * @param string $message The message being translated
-     * @param int    $number  The number of items represented for the message
-     * @param string $locale  The locale to use for choosing
+     * @param string    $message The message being translated
+     * @param int|float $number  The number of items represented for the message
+     * @param string    $locale  The locale to use for choosing
      *
      * @throws \InvalidArgumentException
      *
      * @return string
      */
-    public function choose(string $message, int $number, string $locale): string
+    public function choose(string $message, $number, string $locale): string
     {
         $parts = explode('|', $message);
 
