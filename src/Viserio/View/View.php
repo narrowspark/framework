@@ -177,7 +177,7 @@ class View implements ArrayAccess, ViewContract
      *
      * @param string $key
      * @param string $view
-     * @param array  $data
+     * @param string[]  $data
      *
      * @return self
      */

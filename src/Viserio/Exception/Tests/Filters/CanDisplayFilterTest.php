@@ -2,8 +2,8 @@
 namespace Viserio\Exception\Tests\Filters;
 
 use Exception;
-use Psr\Http\Message\RequestInterface;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
+use Psr\Http\Message\RequestInterface;
 use Viserio\Exception\{
     Displayers\HtmlDisplayer,
     Displayers\JsonDisplayer,

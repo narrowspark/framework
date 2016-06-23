@@ -47,6 +47,7 @@ interface Factory
      *
      * @param string       $namespace
      * @param string|array $hints
+     * @return void
      */
     public function addNamespace(string $namespace, $hints);
 }
