@@ -67,7 +67,7 @@ class Translator
      *
      * @return string
      */
-    public function plural($string, $count = 0, $locale = null)
+    public function plural(string $string, int $count = 0, $locale = null): string
     {
         $this->assertValidLocale($locale);
 
@@ -84,7 +84,7 @@ class Translator
      * @param string   $name
      * @param callable $helper
      */
-    public function addHelper($name, callable $helper)
+    public function addHelper(string $name, callable $helper)
     {
         $this->helpers[$name] = $helper;
     }

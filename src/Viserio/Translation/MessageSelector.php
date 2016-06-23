@@ -30,7 +30,7 @@ class MessageSelector
      *
      * @return \Viserio\Translation\PluralizationRules
      */
-    public function getPluralization()
+    public function getPluralization(): PluralizationRules
     {
         return $this->pluralization;
     }
@@ -61,7 +61,7 @@ class MessageSelector
      *
      * @return string
      */
-    public function choose($message, $number, $locale)
+    public function choose(string $message, int $number, string $locale): string
     {
         $parts = explode('|', $message);
 
@@ -110,7 +110,7 @@ class MessageSelector
      *
      * @return array
      */
-    private function getExplicitRules(array $parts)
+    private function getExplicitRules(array $parts): array
     {
         $explicitRules = [];
 
@@ -136,7 +136,7 @@ class MessageSelector
      *
      * @return array
      */
-    private function getStandardRules(array $parts)
+    private function getStandardRules(array $parts): array
     {
         $standardRules = [];
 

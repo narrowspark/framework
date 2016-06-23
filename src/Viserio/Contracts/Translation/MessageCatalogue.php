@@ -34,8 +34,10 @@ interface MessageCatalogue
      * @param string $id          The message id
      * @param string $translation The messages translation
      * @param string $domain      The domain name
+     *
+     * @return void
      */
-    public function set($id, string $translation, string $domain = 'messages');
+    public function set(string $id, string $translation, string $domain = 'messages');
 
     /**
      * Checks if a message has a translation.
@@ -72,14 +74,28 @@ interface MessageCatalogue
      *
      * @param array  $messages An array of translations
      * @param string $domain   The domain name
+     *
+     * @return void
      */
     public function replace(array $messages, string $domain = 'messages');
+
+    /**
+     * Removes a record.
+     *
+     * @param string|array $messages
+     * @param string       $domain
+     *
+     * @return void
+     */
+    public function remove(array $messages, string $domain = 'messages');
 
     /**
      * Adds translations for a given domain.
      *
      * @param array  $messages An array of translations
      * @param string $domain   The domain name
+     *
+     * @return void
      */
     public function add(array $messages, string $domain = 'messages');
 
@@ -89,6 +105,10 @@ interface MessageCatalogue
      * The two catalogues must have the same locale.
      *
      * @param MessageCatalogue $catalogue A MessageCatalogue instance
+     *
+     * @throws \LogicException
+     *
+     * @return void
      */
     public function addCatalogue(MessageCatalogue $catalogue);
 
@@ -99,6 +119,10 @@ interface MessageCatalogue
      * This is used to provide default translations when they do not exist for the current locale.
      *
      * @param MessageCatalogue $catalogue A MessageCatalogue instance
+     *
+     * @throws \LogicException
+     *
+     * @return void
      */
     public function addFallbackCatalogue(MessageCatalogue $catalogue);
 
@@ -108,4 +132,13 @@ interface MessageCatalogue
      * @return MessageCatalogue|null A MessageCatalogue instance or null when no fallback has been set
      */
     public function getFallbackCatalogue();
+
+    /**
+     * Set parent.
+     *
+     * @param MessageCatalogueContract $parent
+     *
+     * @return self
+     */
+    public function setParent(MessageCatalogueContract $parent): MessageCatalogue;
 }

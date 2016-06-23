@@ -2,7 +2,7 @@
     "name"       : "viserio/translation",
     "type"       : "library",
     "description": "The Viserio Translator package.",
-    "keywords"   : ["narrowspark", "viserio", "translator", "translation"],
+    "keywords"   : ["narrowspark", "viserio", "translator", "translation", "trans", "languages", "lang", "localisation", "localization", "validations"],
     "license"    : "MIT",
     "homepage"   : "http://github.com/Narrowspark/translation",
     "support"    : {
@@ -18,16 +18,18 @@
         }
     ],
     "require": {
-        "php"                               : "7.0.0 - 7.0.5 || ^7.0.7",
-        "viserio/contracts"                 : "self.version",
-        "viserio/support"                   : "self.version"
+        "php"                                : "7.0.0 - 7.0.5 || ^7.0.7",
+        "viserio/contracts"                  : "self.version",
+        "viserio/filesystem"                 : "self.version",
+        "viserio/parsers"                    : "self.version",
+        "viserio/support"                    : "self.version"
     },
     "require-dev": {
-        "narrowspark/php-cs-fixer-config"   : "^1.1",
-        "narrowspark/testing-helper"        : "^1.5",
-        "phpunit/phpunit"                   : "^5.1",
-        "symfony/event-dispatcher"          : "^3.1",
-        "viserio/cache"                     : "self.version"
+        "narrowspark/php-cs-fixer-config"    : "^1.1",
+        "narrowspark/testing-helper"         : "^1.5",
+        "phpunit/phpunit"                    : "^5.1",
+        "symfony/event-dispatcher"           : "^3.1",
+        "viserio/cache"                      : "self.version"
     },
     "autoload": {
         "psr-4": {
@@ -41,9 +43,9 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-master"                    : "1.0-dev"
+            "dev-master"                     : "1.0-dev"
         }
     },
-    "minimum-stability"                     : "dev",
-    "prefer-stable"                         : true
+    "minimum-stability"                      : "dev",
+    "prefer-stable"                          : true
 }

@@ -40,12 +40,12 @@ class PluralizationRules
     /**
      * Returns the plural position to use for the given locale and number.
      *
-     * @param string $language
      * @param int    $count
+     * @param string $language
      *
-     * @return mixed
+     * @return int
      */
-    public function get($count, $language)
+    public function get(int $count, string $language): int
     {
         if (strlen($language) > 3) {
             $language = substr($language, 0, -strlen(strrchr($language, '_')));
@@ -70,7 +70,7 @@ class PluralizationRules
      * @param string   $language
      * @param callable $rule
      */
-    public function set($language, callable $rule)
+    public function set(string $language, callable $rule)
     {
         if (strlen($language) > 3) {
             $language = substr($language, 0, -strlen(strrchr($language, '_')));

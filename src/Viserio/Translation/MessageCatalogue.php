@@ -43,7 +43,7 @@ class MessageCatalogue implements MessageCatalogueContract
      * @param string $locale   The locale
      * @param array  $messages An array of messages classified by domain
      */
-    public function __construct($locale, array $messages = [])
+    public function __construct(string $locale, array $messages = [])
     {
         $this->assertValidLocale($locale);
 
@@ -87,7 +87,7 @@ class MessageCatalogue implements MessageCatalogueContract
     /**
      * {@inheritdoc}
      */
-    public function set($id, string $translation, string $domain = 'messages')
+    public function set(string $id, string $translation, string $domain = 'messages')
     {
         $this->add([$id => $translation], $domain);
     }
@@ -142,10 +142,7 @@ class MessageCatalogue implements MessageCatalogueContract
     }
 
     /**
-     * Removes a record.
-     *
-     * @param string|array $messages
-     * @param string       $domain
+     * {@inheritdoc}
      */
     public function remove(array $messages, string $domain = 'messages')
     {
@@ -205,24 +202,20 @@ class MessageCatalogue implements MessageCatalogueContract
     }
 
     /**
-     * Set parent.
-     *
-     * @param MessageCatalogueContract $parent
-     *
-     * @return self
-     */
-    public function setParent(MessageCatalogueContract $parent)
-    {
-        $this->parent = $parent;
-
-        return $this;
-    }
-
-    /**
      * {@inheritdoc}
      */
     public function getFallbackCatalogue()
     {
         return $this->fallbackCatalogue;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setParent(MessageCatalogueContract $parent): MessageCatalogueContract
+    {
+        $this->parent = $parent;
+
+        return $this;
     }
 }
