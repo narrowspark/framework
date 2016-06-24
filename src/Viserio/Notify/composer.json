@@ -1,13 +1,13 @@
 {
-    "name"       : "viserio/notifynder",
+    "name"       : "viserio/notify",
     "type"       : "library",
-    "description": "The Viserio Notifynder package.",
+    "description": "The Viserio Notify package.",
     "keywords"   : [
         "narrowspark",
         "viserio",
     ],
     "license"    : "MIT",
-    "homepage"   : "http://github.com/narrowspark/notifynder",
+    "homepage"   : "http://github.com/narrowspark/notify",
     "support"    : {
         "issues": "https://github.com/narrowspark/framework/issues",
         "source": "https://github.com/narrowspark/framework"
@@ -35,12 +35,12 @@
     },
     "autoload": {
         "psr-4": {
-            "Viserio\\Notifynder\\"          : ""
+            "Viserio\\Notify\\"          : ""
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Viserio\\Notifynder\\Tests\\"   : "Tests/"
+            "Viserio\\Notify\\Tests\\"   : "Tests/"
         }
     },
     "extra": {

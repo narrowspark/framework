@@ -79,8 +79,8 @@
         <testsuite name="Narrowspark Middleware Component Test Suite">
             <directory>./src/Viserio/Middleware/Tests</directory>
         </testsuite>
-        <testsuite name="Narrowspark Notifynder Component Test Suite">
-            <directory>./src/Viserio/Notifynder/Tests</directory>
+        <testsuite name="Narrowspark Notify Component Test Suite">
+            <directory>./src/Viserio/Notify/Tests</directory>
         </testsuite>
         <testsuite name="Narrowspark Parsers Component Test Suite">
             <directory>./src/Viserio/Parsers/Tests</directory>
