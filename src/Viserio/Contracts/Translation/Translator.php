@@ -13,13 +13,13 @@ interface Translator
     /**
      * Sets the string dictating the default language to translate into. (e.g. 'en').
      *
-     * @param string $defaultLang A string representing the default language to translate into. (e.g. 'en').
+     * @param string $locale A string representing the default language to translate into. (e.g. 'en').
      *
      * @throws \InvalidArgumentException If the locale contains invalid characters
      *
      * @return self
      */
-    public function setLocale(string $defaultLang): Translator;
+    public function setLocale(string $locale): Translator;
 
     /**
      * Translates the given message.

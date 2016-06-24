@@ -17,7 +17,7 @@ trait IntervalTrait
      *
      * @return bool
      */
-    public function intervalTest($number, $interval)
+    public function intervalTest($number, string $interval)
     {
         $interval = trim($interval);
         $number   = $this->normalizeInteger($number);
@@ -37,8 +37,8 @@ trait IntervalTrait
             $rightNumber = $this->convertNumber($matches['right']);
 
             return
-                ('[' === $matches['left_delimiter'] ? $number >= $leftNumber : $number > $leftNumber) &&
-                (']' === $matches['right_delimiter'] ? $number <= $rightNumber : $number < $rightNumber)
+                ($matches['left_delimiter'] === '[' ? $number >= $leftNumber : $number > $leftNumber) &&
+                ($matches['right_delimiter'] === ']' ? $number <= $rightNumber : $number < $rightNumber)
             ;
         }
 
@@ -50,7 +50,7 @@ trait IntervalTrait
      *
      * @return string A Regexp (without the delimiters)
      */
-    public function getIntervalRegexp()
+    public function getIntervalRegexp(): string
     {
         return <<<EOF
         ({\s*
@@ -76,14 +76,14 @@ EOF;
      *
      * @return float
      */
-    protected function convertNumber($number)
+    protected function convertNumber($number): float
     {
-        if ('-Inf' === $number) {
+        if ($number === '-Inf') {
             return log(0);
-        } elseif ('+Inf' === $number || 'Inf' === $number) {
+        } elseif ($number === '+Inf' || $number === 'Inf') {
             return -log(0);
         }
 
-        return (float) $number;
+        return $number;
     }
 }

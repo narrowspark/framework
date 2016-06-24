@@ -3,6 +3,13 @@ namespace Viserio\Translation\Traits;
 
 trait NormalizeIntegerValueTrait
 {
+    /**
+     * Normalize integer.
+     *
+     * @param int|float $inter
+     *
+     * @return int
+     */
     public function normalizeInteger($inter)
     {
         $inter = trim((string) $inter);

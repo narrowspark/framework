@@ -6,7 +6,7 @@ use RuntimeException;
 use Viserio\Contracts\Translation\Translator as TranslatorContract;
 use Viserio\Translation\Traits\ValidateLocaleTrait;
 
-class Translator
+class Translator implements TranslatorContract
 {
     use ValidateLocaleTrait;
 
@@ -30,6 +30,32 @@ class Translator
      * @var array
      */
     private $helpers = [];
+
+    /**
+     * Default language to translate into. (e.g. 'en').
+     *
+     * @var string
+     */
+    private $locale;
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setLocale(string $locale): TranslatorContract
+    {
+        $this->assertValidLocale($locale);
+        $this->locale = $locale;
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getLocale()
+    {
+        return $this->locale;
+    }
 
     /**
      * {@inheritdoc}
