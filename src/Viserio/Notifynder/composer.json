@@ -1,0 +1,53 @@
+{
+    "name"       : "viserio/notifynder",
+    "type"       : "library",
+    "description": "The Viserio Notifynder package.",
+    "keywords"   : [
+        "narrowspark",
+        "viserio",
+    ],
+    "license"    : "MIT",
+    "homepage"   : "http://github.com/narrowspark/notifynder",
+    "support"    : {
+        "issues": "https://github.com/narrowspark/framework/issues",
+        "source": "https://github.com/narrowspark/framework"
+    },
+    "authors"    : [
+        {
+          "name"    : "Daniel Bannert",
+          "email"   : "d.bannert@anolilab.de",
+          "homepage": "http://www.anolilab.de",
+          "role"    : "Developer"
+        }
+    ],
+    "require": {
+        "php"                                : "7.0.0 - 7.0.5 || ^7.0.7",
+        "viserio/contracts"                  : "self.version"
+    },
+    "require-dev": {
+        "narrowspark/php-cs-fixer-config"    : "^1.1",
+        "narrowspark/testing-helper"         : "^1.5",
+        "phpunit/phpunit"                    : "^5.1"
+    },
+    "provide": {
+    },
+    "suggest": {
+    },
+    "autoload": {
+        "psr-4": {
+            "Viserio\\Notifynder\\"          : ""
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Viserio\\Notifynder\\Tests\\"   : "Tests/"
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master"                     : "1.0-dev"
+        }
+    },
+    "minimum-stability"                      : "dev",
+    "prefer-stable"                          : true
+}
