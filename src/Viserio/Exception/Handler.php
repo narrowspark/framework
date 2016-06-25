@@ -12,7 +12,6 @@ use Symfony\Component\Console\{
     Application as ConsoleApplication,
     Output\ConsoleOutput
 };
-use Viserio\Config\Traits\ConfigAwareTrait;
 use Viserio\Contracts\{
     Config\Manager as ConfigManagerContract,
     Exception\Displayer as DisplayerContract,

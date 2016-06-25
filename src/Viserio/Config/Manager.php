@@ -35,7 +35,7 @@ class Manager implements ManagerContract, IteratorAggregate
     /**
      * Constructor.
      *
-     * @param RepositoryContract $repository
+     * @param \Viserio\Contracts\Config\Repository $repository
      */
     public function __construct(RepositoryContract $repository)
     {
