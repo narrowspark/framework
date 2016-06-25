@@ -82,12 +82,12 @@ interface MessageCatalogue
     /**
      * Removes a record.
      *
-     * @param string|array $messages
-     * @param string       $domain
+     * @param string $messages
+     * @param string $domain
      *
      * @return void
      */
-    public function remove(array $messages, string $domain = 'messages');
+    public function remove(string $messages, string $domain = 'messages');
 
     /**
      * Adds translations for a given domain.

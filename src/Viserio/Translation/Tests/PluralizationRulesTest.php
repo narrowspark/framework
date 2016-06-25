@@ -51,6 +51,7 @@ class PluralizationRulesTest extends \PHPUnit_Framework_TestCase
     public function testCreateRules($lang, $expected)
     {
         $actual = $this->createRules->invoke($this->object, $lang);
+
         $this->assertInstanceOf($expected, $actual);
     }
 

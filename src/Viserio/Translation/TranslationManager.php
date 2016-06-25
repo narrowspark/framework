@@ -38,13 +38,6 @@ class TranslationManager
     protected $locale = 'en';
 
     /**
-     * Translation cache.
-     *
-     * @var \Viserio\Contracts\Cache\Factory
-     */
-    protected $cache;
-
-    /**
      * Default fallback for all languages.
      *
      * @var MessageCatalogueContract
@@ -201,30 +194,6 @@ class TranslationManager
         $this->locale = $locale;
 
         return $this;
-    }
-
-    /**
-     * Sets a cache.
-     *
-     * @param CacheContract $cache
-     *
-     * @return self
-     */
-    public function setCache(CacheContract $cache)
-    {
-        $this->cache = $cache;
-
-        return $this;
-    }
-
-    /**
-     * Returns the set cache.
-     *
-     * @return CacheContract
-     */
-    public function getCache()
-    {
-        return $this->cache;
     }
 
     /**

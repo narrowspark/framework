@@ -13,13 +13,16 @@ class MessageSelectorTest extends \PHPUnit_Framework_TestCase
     {
         $selector = new MessageSelector();
         $selector->setPluralization(new PluralizationRules());
+
         $this->assertEquals($expected, $selector->choose($id, $number, 'en'));
+        $this->assertInstanceOf(PluralizationRules::class, $selector->getPluralization());
     }
 
     public function testReturnMessageIfExactlyOneStandardRuleIsGiven()
     {
         $selector = new MessageSelector();
         $selector->setPluralization(new PluralizationRules());
+
         $this->assertEquals('There are two apples', $selector->choose('There are two apples', 2, 'en'));
     }
 

@@ -49,10 +49,6 @@ class MessageCatalogue implements MessageCatalogueContract
 
         $this->locale = $locale;
 
-        if (isset($messages['lang'])) {
-            unset($messages['lang']);
-        }
-
         $this->messages = $messages;
     }
 
@@ -144,7 +140,7 @@ class MessageCatalogue implements MessageCatalogueContract
     /**
      * {@inheritdoc}
      */
-    public function remove(array $messages, string $domain = 'messages')
+    public function remove(string $messages, string $domain = 'messages')
     {
         unset($this->messages[$domain][$messages]);
     }
