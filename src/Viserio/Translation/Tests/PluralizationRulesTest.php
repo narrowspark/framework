@@ -2,31 +2,33 @@
 namespace Viserio\Translation\Tests;
 
 use ReflectionMethod;
-use Viserio\Translation\PluralCategorys\Arabic;
-use Viserio\Translation\PluralCategorys\Balkan;
-use Viserio\Translation\PluralCategorys\Breton;
-use Viserio\Translation\PluralCategorys\Colognian;
-use Viserio\Translation\PluralCategorys\Czech;
-use Viserio\Translation\PluralCategorys\French;
-use Viserio\Translation\PluralCategorys\Gaelic;
-use Viserio\Translation\PluralCategorys\Hebrew;
-use Viserio\Translation\PluralCategorys\Irish;
-use Viserio\Translation\PluralCategorys\Langi;
-use Viserio\Translation\PluralCategorys\Latvian;
-use Viserio\Translation\PluralCategorys\Lithuanian;
-use Viserio\Translation\PluralCategorys\Macedonian;
-use Viserio\Translation\PluralCategorys\Maltese;
-use Viserio\Translation\PluralCategorys\Manx;
-use Viserio\Translation\PluralCategorys\None;
-use Viserio\Translation\PluralCategorys\One;
-use Viserio\Translation\PluralCategorys\Polish;
-use Viserio\Translation\PluralCategorys\Romanian;
-use Viserio\Translation\PluralCategorys\Slovenian;
-use Viserio\Translation\PluralCategorys\Tachelhit;
-use Viserio\Translation\PluralCategorys\Tamazight;
-use Viserio\Translation\PluralCategorys\Two;
-use Viserio\Translation\PluralCategorys\Welsh;
-use Viserio\Translation\PluralCategorys\Zero;
+use Viserio\Translation\PluralCategorys\{
+    Arabic,
+    Balkan,
+    Breton,
+    Colognian,
+    Czech,
+    French,
+    Gaelic,
+    Hebrew,
+    Irish,
+    Langi,
+    Latvian,
+    Lithuanian,
+    Macedonian,
+    Maltese,
+    Manx,
+    None,
+    One,
+    Polish,
+    Romanian,
+    Slovenian,
+    Tachelhit,
+    Tamazight,
+    Two,
+    Welsh,
+    Zero
+};
 use Viserio\Translation\PluralizationRules;
 
 class PluralizationRulesTest extends \PHPUnit_Framework_TestCase
@@ -202,5 +204,67 @@ class PluralizationRulesTest extends \PHPUnit_Framework_TestCase
             [100],
             [-3.14],
         ];
+    }
+
+    /**
+     * @dataProvider successLangcodes
+     */
+    public function testLangcodes($nplural, $langCodes)
+    {
+        $matrix = $this->generateTestData($nplural, $langCodes);
+        $this->validateMatrix($nplural, $matrix);
+    }
+
+    /**
+     * This array should contain all currently known langcodes.
+     *
+     * As it is impossible to have this ever complete we should try as hard as possible to have it almost complete.
+     *
+     * @return array
+     */
+    public function successLangcodes()
+    {
+        return array(
+            array('1', array('ay', 'bo', 'cgg', 'dz', 'id', 'ja', 'jbo', 'ka', 'kk', 'km', 'ko', 'ky', 'fa')),
+            array('2', array('nl', 'fr', 'en', 'de', 'de_GE', 'hy', 'hy_AM', 'jbo')),
+            array('3', array('be', 'bs', 'cs', 'hr', 'cbs')),
+            array('4', array('cy', 'mt', 'sl', 'gd', 'kw')),
+            array('5', array('ga')),
+            array('6', array('ar')),
+        );
+    }
+
+    /**
+     * We validate only on the plural coverage. Thus the real rules is not tested.
+     *
+     * @param string $nplural       plural expected
+     * @param array  $matrix        containing langcodes and their plural index values.
+     * @param bool   $expectSuccess
+     */
+    protected function validateMatrix(string $nplural, array $matrix, bool $expectSuccess = true)
+    {
+        foreach ($matrix as $langCode => $data) {
+            $indexes = array_flip($data);
+
+            if ($expectSuccess) {
+                $this->assertEquals($nplural, count($indexes), "Langcode '$langCode' has '$nplural' plural forms.");
+            } else {
+                $this->assertNotEquals((int) $nplural, count($indexes), "Langcode '$langCode' has '$nplural' plural forms.");
+            }
+        }
+    }
+
+    protected function generateTestData($plural, $langCodes)
+    {
+        $matrix = [];
+
+        foreach ($langCodes as $langCode) {
+            for ($count = 0; $count < 200; ++$count) {
+                $plural = $this->object->get($count, $langCode);
+                $matrix[$langCode][$count] = $plural;
+            }
+        }
+
+        return $matrix;
     }
 }
