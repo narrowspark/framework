@@ -3,15 +3,14 @@ namespace Viserio\Config;
 
 use ArrayIterator;
 use IteratorAggregate;
-use Viserio\Contracts\Config\Manager as ManagerContract;
-use Viserio\Contracts\Config\Repository as RepositoryContract;
-use Viserio\Contracts\Parsers\Loader as LoaderContract;
-use Viserio\Support\Traits\FileLoaderAwareTrait;
+use Viserio\Contracts\{
+    Config\Manager as ManagerContract,
+    Config\Repository as RepositoryContract,
+    Parsers\Loader as LoaderContract
+};
 
 class Manager implements ManagerContract, IteratorAggregate
 {
-    use FileLoaderAwareTrait;
-
     /**
      * Handler for Configuration values.
      *

@@ -29,8 +29,6 @@ use Viserio\Http\{
 
 class Handler implements HandlerContract
 {
-    use ConfigAwareTrait;
-
     /**
      * The log instance.
      *
@@ -91,6 +89,14 @@ class Handler implements HandlerContract
     protected $defaultDisplayer;
 
     /**
+     * The config instance.
+     *
+     * @var \Viserio\Contracts\Config\Manager
+     */
+    protected $config;
+
+
+    /**
      * Create a new exception handler instance.
      *
      * @param \Viserio\Contracts\Config\Manager      $config
@@ -102,6 +108,30 @@ class Handler implements HandlerContract
         $this->config = $config;
         $this->log = $log;
         $this->eIdentifier = $eIdentifier;
+    }
+
+    /**
+     * Set a config manager.
+     *
+     * @param \Viserio\Contracts\Config\Manager $config
+     *
+     * @return self
+     */
+    public function setConfig(ConfigManagerContract $config): Manager
+    {
+        $this->config = $config;
+
+        return $this;
+    }
+
+    /**
+     * Get config.
+     *
+     * @return \Viserio\Contracts\Config\Manager
+     */
+    public function getConfig(): ConfigManagerContract
+    {
+        return $this->config;
     }
 
     /**

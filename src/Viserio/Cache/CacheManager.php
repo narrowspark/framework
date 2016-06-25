@@ -1,16 +1,18 @@
 <?php
 namespace Viserio\Cache;
 
-use Cache\Adapter\Apc\ApcCachePool;
-use Cache\Adapter\Apcu\ApcuCachePool;
-use Cache\Adapter\Filesystem\FilesystemCachePool;
-use Cache\Adapter\Memcache\MemcacheCachePool;
-use Cache\Adapter\Memcached\MemcachedCachePool;
-use Cache\Adapter\MongoDB\MongoDBCachePool;
-use Cache\Adapter\PHPArray\ArrayCachePool;
-use Cache\Adapter\Predis\PredisCachePool;
-use Cache\Adapter\Redis\RedisCachePool;
-use Cache\Adapter\Void\VoidCachePool;
+use Cache\Adapter\{
+    Apc\ApcCachePool,
+    Apcu\ApcuCachePool,
+    Filesystem\FilesystemCachePool,
+    Memcache\MemcacheCachePool,
+    Memcached\MemcachedCachePool,
+    MongoDB\MongoDBCachePool,
+    PHPArray\ArrayCachePool,
+    Predis\PredisCachePool,
+    Redis\RedisCachePool,
+    Void\VoidCachePool
+};
 use League\Flysystem\Adapter\Local;
 use League\Flysystem\Filesystem as Flysystem;
 use Memcache;

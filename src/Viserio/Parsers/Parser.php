@@ -1,11 +1,11 @@
 <?php
 namespace Viserio\Parsers;
 
-use Viserio\Contracts\Parsers\{
-    Exception\NotSupportedException,
+use Viserio\Contracts\{
     Filesystem\Filesystem as FilesystemContract,
-    Format as FormatContract,
-    Parser as ParserContract
+    Parsers\Exception\NotSupportedException,
+    Parsers\Format as FormatContract,
+    Parsers\Parser as ParserContract
 };
 use Viserio\Parsers\Formats\{
     BSON,
