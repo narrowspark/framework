@@ -11,7 +11,8 @@
         "viserio",
         "container",
         "pipeline",
-        "event"
+        "event",
+        "translation"
     ],
     "license"    : "MIT",
     "homepage"   : "https://github.com/narrowspark/framework",
@@ -124,6 +125,7 @@
         "roave/security-advisories"                          : "dev-master",
         "symfony/yaml"                                       : "^3.1",
         "spatie/array-to-xml"                                : "^2.1",
+        "sepia/po-parser"                                    : "^4.2",
         "yosymfony/toml"                                     : "^0.3"
     },
     "autoload": {

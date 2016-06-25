@@ -16,7 +16,7 @@ class ConfigManagerTest extends \PHPUnit_Framework_TestCase
     private $root;
 
     /**
-     * @var \Viserio\Filesystem\FileLoader
+     * @var \Viserio\Parsers\FileLoader
      */
     private $fileloader;
 

@@ -3,9 +3,11 @@ namespace Viserio\Config;
 
 use ArrayIterator;
 use IteratorAggregate;
-use Viserio\Contracts\Config\Manager as ManagerContract;
-use Viserio\Contracts\Config\Repository as RepositoryContract;
-use Viserio\Contracts\Parsers\Loader as LoaderContract;
+use Viserio\Contracts\{
+    Config\Manager as ManagerContract,
+    Config\Repository as RepositoryContract,
+    Parsers\Loader as LoaderContract
+};
 
 class Manager implements ManagerContract, IteratorAggregate
 {
@@ -19,7 +21,7 @@ class Manager implements ManagerContract, IteratorAggregate
     /**
      * Fileloader instance.
      *
-     * @var \Viserio\Contracts\Config\Loader
+     * @var \Viserio\Contracts\Parsers\Loader
      */
     protected $loader;
 
@@ -61,36 +63,14 @@ class Manager implements ManagerContract, IteratorAggregate
      * Set Viserio's defaults using the repository.
      *
      * @param array $array
+     *
+     * @return self
      */
     public function setArray(array $array): ManagerContract
     {
         $this->repository->setArray($array);
 
         return $this;
-    }
-
-    /**
-     * Get the configuration loader.
-     *
-     * @param \Viserio\Contracts\Parsers\Loader $loader
-     *
-     * @return self
-     */
-    public function setLoader(LoaderContract $loader): ManagerContract
-    {
-        $this->loader = $loader;
-
-        return $this;
-    }
-
-    /**
-     * Get the configuration loader.
-     *
-     * @return \Viserio\Contracts\Parsers\Loader
-     */
-    public function getLoader(): LoaderContract
-    {
-        return $this->loader;
     }
 
     /**
@@ -208,5 +188,29 @@ class Manager implements ManagerContract, IteratorAggregate
     public function getIterator(): ArrayIterator
     {
         return $this->repository->getIterator();
+    }
+
+    /**
+     * Set the file loader.
+     *
+     * @param \Viserio\Contracts\Parsers\Loader $loader
+     *
+     * @return self
+     */
+    public function setLoader(LoaderContract $loader)
+    {
+        $this->loader = $loader;
+
+        return $this;
+    }
+
+    /**
+     * Get the file loader.
+     *
+     * @return \Viserio\Contracts\Parsers\Loader
+     */
+    public function getLoader()
+    {
+        return $this->loader;
     }
 }

@@ -4,8 +4,11 @@ namespace Viserio\Parsers\Formats;
 use RuntimeException;
 use Symfony\Component\Yaml\Exception\ParseException as YamlParseException;
 use Symfony\Component\Yaml\Parser;
-use Viserio\Contracts\Parsers\Exception\ParseException;
-use Viserio\Contracts\Parsers\Format as FormatContract;
+use Viserio\Contracts\Parsers\{
+    Exception\ParseException,
+    Format as FormatContract
+};
+
 
 class YAML implements FormatContract
 {
@@ -46,6 +49,8 @@ class YAML implements FormatContract
 
     /**
      * {@inheritdoc}
+     *
+     * @codeCoverageIgnore
      */
     public function dump(array $data): string
     {

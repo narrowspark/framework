@@ -1,8 +1,10 @@
 <?php
 namespace Viserio\Parsers;
 
-use Viserio\Contracts\Parsers\Loader as LoaderContract;
-use Viserio\Contracts\Parsers\TaggableParser as TaggableParserContract;
+use Viserio\Contracts\Parsers\{
+    Loader as LoaderContract,
+    TaggableParser as TaggableParserContract
+};
 use Viserio\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
 class FileLoader implements LoaderContract
