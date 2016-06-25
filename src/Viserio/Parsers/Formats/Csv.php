@@ -3,19 +3,12 @@ namespace Viserio\Parsers\Formats;
 
 use RuntimeException;
 use SplFileObject;
-use Viserio\Contracts\Filesystem\ParseException;
+use Viserio\Contracts\Parsers\Exception\DumpException;
+use Viserio\Contracts\Parsers\Exception\ParseException;
 use Viserio\Contracts\Parsers\Format as FormatContract;
-use Viserio\Filesystem\Filesystem;
 
 class Csv implements FormatContract
 {
-    /**
-     * The filesystem instance.
-     *
-     * @var \Viserio\Filesystem\Filesystem
-     */
-    protected $files;
-
     /**
      * Sets the delimiter, enclosure, and escape character for CSV.
      *
@@ -28,24 +21,18 @@ class Csv implements FormatContract
     ];
 
     /**
-     * Create a new file filesystem loader.
-     *
-     * @param \Viserio\Filesystem\Filesystem $files
-     */
-    public function __construct(Filesystem $files)
-    {
-        $this->files = $files;
-    }
-
-    /**
      * {@inheritdoc}
      */
     public function parse(string $payload): array
     {
+        if (! file_exists($payload)) {
+            throw new ParseException([
+                'message' => 'File not found.',
+            ]);
+        }
+
         try {
-            if ($this->files->exists($payload)) {
-               $file = new SplFileObject($payload, 'rb');
-            }
+            $file = new SplFileObject($payload, 'rb');
         } catch (RuntimeException $exception) {
             throw new ParseException([
                 'message' => 'Failed To Parse Csv',

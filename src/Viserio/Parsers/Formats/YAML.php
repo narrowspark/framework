@@ -46,6 +46,8 @@ class YAML implements FormatContract
 
     /**
      * {@inheritdoc}
+     *
+     * @codeCoverageIgnore
      */
     public function dump(array $data): string
     {
