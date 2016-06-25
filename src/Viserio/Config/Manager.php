@@ -5,6 +5,7 @@ use ArrayIterator;
 use IteratorAggregate;
 use Viserio\Contracts\Config\Manager as ManagerContract;
 use Viserio\Contracts\Config\Repository as RepositoryContract;
+use Viserio\Contracts\Parsers\Loader as LoaderContract;
 use Viserio\Support\Traits\FileLoaderAwareTrait;
 
 class Manager implements ManagerContract, IteratorAggregate
@@ -17,6 +18,13 @@ class Manager implements ManagerContract, IteratorAggregate
      * @var mixed
      */
     protected $repository;
+
+    /**
+     * Fileloader instance.
+     *
+     * @var \Viserio\Contracts\Parsers\Loader
+     */
+    protected $loader;
 
     /**
      * Config folder path.
@@ -181,5 +189,29 @@ class Manager implements ManagerContract, IteratorAggregate
     public function getIterator(): ArrayIterator
     {
         return $this->repository->getIterator();
+    }
+
+    /**
+     * Set the file loader.
+     *
+     * @param \Viserio\Contracts\Parsers\Loader $loader
+     *
+     * @return self
+     */
+    public function setLoader(LoaderContract $loader)
+    {
+        $this->loader = $loader;
+
+        return $this;
+    }
+
+    /**
+     * Get the file loader.
+     *
+     * @return \Viserio\Contracts\Parsers\Loader
+     */
+    public function getLoader()
+    {
+        return $this->loader;
     }
 }

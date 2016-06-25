@@ -2,9 +2,11 @@
 namespace Viserio\Parsers\Formats;
 
 use RuntimeException;
-use Viserio\Contracts\Parsers\Exception\DumpException;
-use Viserio\Contracts\Parsers\Exception\ParseException;
-use Viserio\Contracts\Parsers\Format as FormatContract;
+use Viserio\Contracts\Parsers\{
+    Exception\DumpException,
+    Exception\ParseException,
+    Format as FormatContract
+};
 
 class MSGPack implements FormatContract
 {

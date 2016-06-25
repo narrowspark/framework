@@ -1,8 +1,10 @@
 <?php
 namespace Viserio\Parsers\Formats;
 
-use Viserio\Contracts\Parsers\Exception\ParseException;
-use Viserio\Contracts\Parsers\Format as FormatContract;
+use Viserio\Contracts\Parsers\{
+    Exception\ParseException,
+    Format as FormatContract
+};
 
 class PHP implements FormatContract
 {

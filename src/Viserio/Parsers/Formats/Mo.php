@@ -1,10 +1,10 @@
 <?php
 namespace Viserio\Parsers\Formats;
 
-use Exception;
-use Viserio\Contracts\Parsers\Exception\ParseException;
-use Viserio\Contracts\Parsers\Format as FormatContract;
-use Viserio\Filesystem\Filesystem;
+use Viserio\Contracts\Parsers\{
+    Exception\ParseException,
+    Format as FormatContract
+};
 
 /**
  * @copyright Copyright (c) 2010, Union of RAD http://union-of-rad.org (http://lithify.me/)

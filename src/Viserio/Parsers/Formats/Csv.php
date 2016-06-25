@@ -3,9 +3,11 @@ namespace Viserio\Parsers\Formats;
 
 use RuntimeException;
 use SplFileObject;
-use Viserio\Contracts\Parsers\Exception\DumpException;
-use Viserio\Contracts\Parsers\Exception\ParseException;
-use Viserio\Contracts\Parsers\Format as FormatContract;
+use Viserio\Contracts\Parsers\{
+    Exception\ParseException,
+    Format as FormatContract
+};
+
 
 class Csv implements FormatContract
 {

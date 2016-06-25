@@ -3,8 +3,10 @@ namespace Viserio\Parsers\Tests;
 
 use org\bovigo\vfs\vfsStream;
 use Viserio\Filesystem\Filesystem;
-use Viserio\Parsers\FileLoader;
-use Viserio\Parsers\TaggableParser;
+use Viserio\Parsers\{
+    FileLoader,
+    TaggableParser
+};
 use Viserio\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
 class FileLoaderTest extends \PHPUnit_Framework_TestCase

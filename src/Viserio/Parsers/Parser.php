@@ -1,20 +1,24 @@
 <?php
 namespace Viserio\Parsers;
 
-use Viserio\Contracts\Filesystem\Filesystem as FilesystemContract;
-use Viserio\Contracts\Parsers\Exception\NotSupportedException;
-use Viserio\Contracts\Parsers\Format as FormatContract;
-use Viserio\Contracts\Parsers\Parser as ParserContract;
-use Viserio\Parsers\Formats\BSON;
-use Viserio\Parsers\Formats\INI;
-use Viserio\Parsers\Formats\JSON;
-use Viserio\Parsers\Formats\MSGPack;
-use Viserio\Parsers\Formats\PHP;
-use Viserio\Parsers\Formats\QueryStr;
-use Viserio\Parsers\Formats\Serialize;
-use Viserio\Parsers\Formats\TOML;
-use Viserio\Parsers\Formats\XML;
-use Viserio\Parsers\Formats\YAML;
+use Viserio\Contracts\Parsers\{
+    Exception\NotSupportedException,
+    Filesystem\Filesystem as FilesystemContract,
+    Format as FormatContract,
+    Parser as ParserContract
+};
+use Viserio\Parsers\Formats\{
+    BSON,
+    INI,
+    JSON,
+    MSGPack,
+    PHP,
+    QueryStr,
+    Serialize,
+    TOML,
+    XML,
+    YAML
+};
 
 class Parser implements ParserContract
 {

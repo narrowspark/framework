@@ -3,9 +3,10 @@ namespace Viserio\Parsers\Formats;
 
 use Exception;
 use Sepia\PoParser;
-use Viserio\Contracts\Parsers\Exception\ParseException;
-use Viserio\Contracts\Parsers\Format as FormatContract;
-use Viserio\Filesystem\Filesystem;
+use Viserio\Contracts\Parsers\{
+    Exception\ParseException,
+    Format as FormatContract
+};
 
 class Po implements FormatContract
 {

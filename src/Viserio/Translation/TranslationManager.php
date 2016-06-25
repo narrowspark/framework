@@ -13,8 +13,6 @@ use Viserio\Translation\Traits\ValidateLocaleTrait;
 class TranslationManager
 {
     use ValidateLocaleTrait;
-    use LoggerAwareTrait;
-    use FileLoaderAwareTrait;
 
     /**
      * PluralizationRules instance.
