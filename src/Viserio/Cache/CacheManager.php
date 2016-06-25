@@ -81,7 +81,7 @@ class CacheManager extends Manager
      *
      * @param array $config
      *
-     * @return MongoDBCachePool|null
+     * @return \Cache\Adapter\MongoDB\MongoDBCachePool|null
      */
     protected function createMongodbDriver(array $config)
     {
@@ -97,7 +97,7 @@ class CacheManager extends Manager
      *
      * @param array $config
      *
-     * @return RedisCachePool|null
+     * @return \Cache\Adapter\Redis\RedisCachePool|null
      */
     protected function createRedisDriver(array $config)
     {
@@ -113,7 +113,7 @@ class CacheManager extends Manager
      *
      * @param array $config
      *
-     * @return PredisCachePool|null
+     * @return \Cache\Adapter\Predis\PredisCachePool|null
      */
     protected function createPredisDriver(array $config)
     {
@@ -144,7 +144,7 @@ class CacheManager extends Manager
      * Create an instance of the Memcached cache driver.
      *
      *
-     * @return MemcachedCachePool|null
+     * @return \Cache\Adapter\Memcached\MemcachedCachePool|null
      */
     protected function createMemcachedDriver(array $config)
     {
@@ -160,7 +160,7 @@ class CacheManager extends Manager
      *
      * @param array $config
      *
-     * @return MemcacheCachePool|null
+     * @return \Cache\Adapter\Memcache\MemcacheCachePool|null
      */
     protected function createMemcacheDriver(array $config)
     {
@@ -176,7 +176,7 @@ class CacheManager extends Manager
      *
      * @param array $config
      *
-     * @return FilesystemCachePool|null
+     * @return \Cache\Adapter\Filesystem\FilesystemCachePool|null
      */
     protected function createLocalDriver(array $config)
     {
