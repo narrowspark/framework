@@ -42,7 +42,7 @@ class FileLoader implements LoaderContract
     /**
      * Create a new fileloader.
      *
-     * @param TaggableParserContract $parser
+     * @param \Viserio\Contracts\Parsers\TaggableParser $parser
      * @param array                  $directories
      */
     public function __construct(TaggableParserContract $parser, array $directories)
@@ -55,7 +55,7 @@ class FileLoader implements LoaderContract
     /**
      * Get parser.
      *
-     * @return TaggableParserContract
+     * @return \Viserio\Contracts\Parsers\TaggableParser
      */
     public function getParser(): TaggableParserContract
     {
