@@ -52,7 +52,7 @@ class Translator implements TranslatorContract
     /**
      * {@inheritdoc}
      */
-    public function getLocale()
+    public function getLocale(): string
     {
         return $this->locale;
     }
@@ -105,16 +105,9 @@ class Translator implements TranslatorContract
     }
 
     /**
-     * Apply helpers.
-     *
-     * @param string[] $translation
-     * @param array    $helpers
-     *
-     * @throws \RuntimeException
-     *
-     * @return mixed
+     * {@inheritdoc}
      */
-    public function applyHelpers(array $translation, array $helpers): array
+    public function applyHelpers(array $translation, array $helpers)
     {
         if (is_array($translation)) {
             $translator = $this;
@@ -138,14 +131,7 @@ class Translator implements TranslatorContract
     }
 
     /**
-     * Returns translation of a string. If no translation exists, the original string will be
-     * returned. No parameters are replaced.
-     *
-     * @param string      $string
-     * @param int         $count
-     * @param string|null $locale
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function plural(string $string, int $count = 0, $locale = null): string
     {
@@ -169,10 +155,7 @@ class Translator implements TranslatorContract
     }
 
     /**
-     * @param string|array $translation
-     * @param array        $filters
-     *
-     * @return array
+     * {@inheritdoc}
      */
     public function applyFilters($translation, array $filters): array
     {
@@ -192,14 +175,9 @@ class Translator implements TranslatorContract
     }
 
     /**
-     * Add replacement.
-     *
-     * @param string $search
-     * @param string $replacement
-     *
-     * @return self
+     * {@inheritdoc}
      */
-    public function addReplacement($search, $replacement)
+    public function addReplacement(string $search, string $replacement): TranslatorContract
     {
         $this->replacements[$search] = $replacement;
 
@@ -207,15 +185,9 @@ class Translator implements TranslatorContract
     }
 
     /**
-     * Remove replacements.
-     *
-     * @param string $search
-     *
-     * @throws \InvalidArgumentException
-     *
-     * @return self
+     * {@inheritdoc}
      */
-    public function removeReplacement($search)
+    public function removeReplacement(string $search): TranslatorContract
     {
         if (!isset($this->replacements[$search])) {
             throw new InvalidArgumentException(sprintf('Replacement [%s] was not found.', $search));
@@ -227,9 +199,9 @@ class Translator implements TranslatorContract
     }
 
     /**
-     * @return array
+     * {@inheritdoc}
      */
-    public function getReplacements()
+    public function getReplacements(): array
     {
         return $this->replacements;
     }
@@ -242,7 +214,7 @@ class Translator implements TranslatorContract
      *
      * @return string
      */
-    protected function applyReplacements($message, array $args = [])
+    protected function applyReplacements(string $message, array $args = []): string
     {
         $replacements = $this->replacements;
 

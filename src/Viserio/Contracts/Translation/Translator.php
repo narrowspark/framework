@@ -8,7 +8,7 @@ interface Translator
      *
      * @return string
      */
-    public function getLocale();
+    public function getLocale(): string;
 
     /**
      * Sets the string dictating the default language to translate into. (e.g. 'en').
@@ -77,25 +77,69 @@ interface Translator
      * @param string[] $translation
      * @param array    $helpers
      *
-     * @throws \Exception
+     * @return mixed
      *
-     * @return array
+     * @throws \RuntimeException
      */
-    public function applyHelpers(array $translation, array $helpers): array;
+    public function applyHelpers(array $translation, array $helpers);
+
+    /**
+     * Returns translation of a string. If no translation exists, the original string will be
+     * returned. No parameters are replaced.
+     *
+     * @param string      $string
+     * @param int         $count
+     * @param string|null $locale
+     *
+     * @return string
+     */
+    public function plural(string $string, int $count = 0, $locale = null): string;
 
     /**
      * Add filter.
      *
      * @param string   $name
      * @param callable $filter
+     *
+     * @return self
      */
-    public function addFilter(string $name, callable $filter);
+    public function addFilter(string $name, callable $filter): Translator;
 
     /**
+     * Applay filter.
+     *
      * @param string|array $translation
      * @param array        $filters
      *
      * @return array
      */
     public function applyFilters($translation, array $filters): array;
+
+    /**
+     * Add replacement for a existing translation.
+     *
+     * @param string $search
+     * @param string $replacement
+     *
+     * @return self
+     */
+    public function addReplacement(string $search, string $replacement): Translator;
+
+    /**
+     * Remove replacements.
+     *
+     * @param string $search
+     *
+     * @throws \InvalidArgumentException
+     *
+     * @return self
+     */
+    public function removeReplacement(string $search): Translator;
+
+    /**
+     * Get all replacements.
+     *
+     * @return array
+     */
+    public function getReplacements(): array;
 }

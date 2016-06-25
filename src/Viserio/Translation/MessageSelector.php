@@ -2,64 +2,43 @@
 namespace Viserio\Translation;
 
 use InvalidArgumentException;
+use Viserio\Contracts\Translation\{
+    MessageSelector as MessageSelectorContract,
+    PluralizationRules as PluralizationRulesContract
+};
 use Viserio\Translation\Traits\IntervalTrait;
 
-class MessageSelector
+class MessageSelector implements MessageSelectorContract
 {
     use IntervalTrait;
 
     /**
      * PluralizationRules instance.
      *
-     * @var \Viserio\Translation\PluralizationRules
+     * @var \Viserio\Contracts\Translation\PluralizationRules
      */
     protected $pluralization;
 
     /**
-     * Set pluralization.
-     *
-     * @param \Viserio\Translation\PluralizationRules $pluralization
+     * {@inheritdoc}
      */
-    public function setPluralization(PluralizationRules $pluralization)
+    public function setPluralization(PluralizationRulesContract $pluralization): MessageSelectorContract
     {
         $this->pluralization = $pluralization;
+
+        return $this;
     }
 
     /**
-     * Get pluralization.
-     *
-     * @return \Viserio\Translation\PluralizationRules
+     * {@inheritdoc}
      */
-    public function getPluralization(): PluralizationRules
+    public function getPluralization(): PluralizationRulesContract
     {
         return $this->pluralization;
     }
 
     /**
-     * Given a message with different plural translations separated by a
-     * pipe (|), this method returns the correct portion of the message based
-     * on the given number, locale and the pluralization rules in the message
-     * itself.
-     *
-     * The message supports two different types of pluralization rules:
-     *
-     * interval: {0} There are no apples|{1} There is one apple|]1,Inf] There are %count% apples
-     * indexed:  There is one apple|There are %count% apples
-     *
-     * The indexed solution can also contain labels (e.g. one: There is one apple).
-     * This is purely for making the translations more clear - it does not
-     * affect the functionality.
-     *
-     * The two methods can also be mixed:
-     *     {0} There are no apples|one: There is one apple|more: There are %count% apples
-     *
-     * @param string    $message The message being translated
-     * @param int|float $number  The number of items represented for the message
-     * @param string    $locale  The locale to use for choosing
-     *
-     * @throws \InvalidArgumentException
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function choose(string $message, $number, string $locale): string
     {
@@ -78,8 +57,6 @@ class MessageSelector
         }
 
         $position = $this->pluralization->get($number, $locale);
-
-        // var_dump($number, $position, $standardRules);
 
         if (! isset($standardRules[$position])) {
             // when there's exactly one rule given, and that rule is a standard
