@@ -17,7 +17,8 @@ class TransChecker implements TransCheckerContract
      *
      * @param \TranslationManager $manager
      */
-    public function __construct(TransManager $manager) {
+    public function __construct(TransManager $manager)
+    {
         $this->manager = $manager;
     }
 

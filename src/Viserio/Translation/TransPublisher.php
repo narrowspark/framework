@@ -55,7 +55,7 @@ class TransPublisher implements TransPublisherContract
             return true;
         }
 
-        if ( ! $this->isSupported($locale)) {
+        if (! $this->isSupported($locale)) {
             throw new RuntimeException("The locale [$locale] is not supported.");
         }
 
