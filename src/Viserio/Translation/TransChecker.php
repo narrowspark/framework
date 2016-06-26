@@ -12,6 +12,15 @@ class TransChecker implements TransCheckerContract
      */
     private $missing = [];
 
+     /**
+     * Make TransChecker instance.
+     *
+     * @param \TranslationManager $manager
+     */
+    public function __construct(TransManager $manager) {
+        $this->manager = $manager;
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -23,9 +32,29 @@ class TransChecker implements TransCheckerContract
     /**
      * {@inheritdoc}
      */
+    public function setLocales(array $locales): TransCheckerContract
+    {
+        $this->locales = locales;
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getLocales(): array
     {
+        return $this->locales;
+    }
 
+    /**
+     * {@inheritdoc}
+     */
+    public function setIgnoredTranslations(array $ignored): TransCheckerContract
+    {
+        $this->ignored = ignored;
+
+        return $this;
     }
 
     /**
@@ -33,7 +62,7 @@ class TransChecker implements TransCheckerContract
      */
     public function getIgnoredTranslations(): array
     {
-
+        return $this->ignored;
     }
 
     /**
@@ -41,7 +70,9 @@ class TransChecker implements TransCheckerContract
      */
     public function check(): array
     {
-
+        $from = $this->getDefaultLocale();
+        $locales = $this->getLocales();
+        $ignored = $this->getIgnoredTranslations();
     }
 
     /**

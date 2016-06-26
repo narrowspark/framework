@@ -72,7 +72,7 @@ class TranslationManager
     {
         $locale = $locale === null ? $messageCatalogue->getLocale() : $locale;
 
-        $translation = new Translator($messageCatalogue);
+        $translation = new Translator($locale, $messageCatalogue);
 
         $this->translations[$locale] = $translation;
 

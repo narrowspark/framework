@@ -3,7 +3,10 @@ namespace Viserio\Translation;
 
 use InvalidArgumentException;
 use RuntimeException;
-use Viserio\Contracts\Translation\Translator as TranslatorContract;
+use Viserio\Contracts\Translation\{
+    MessageCatalogue as MessageCatalogueContract,
+    Translator as TranslatorContract
+};
 use Viserio\Translation\Traits\ValidateLocaleTrait;
 
 class Translator implements TranslatorContract
@@ -37,6 +40,20 @@ class Translator implements TranslatorContract
      * @var string
      */
     private $locale;
+
+    /**
+     * Creat new Translator instance.
+     *
+     * @param string                                          $locale   The locale
+     * @param \Viserio\Contracts\Translation\MessageCatalogue $selector The message selector for pluralization
+     *
+     * @throws \InvalidArgumentException If a locale contains invalid characters
+     */
+    public function __construct($locale, MessageCatalogueContract $selector)
+    {
+        $this->setLocale($locale);
+        $this->selector = $selector;
+    }
 
     /**
      * {@inheritdoc}

@@ -16,7 +16,7 @@ interface TransPublisher
     public function publish(string $localeKey, bool $force = false): bool;
 
     /**
-     * Check if the locale is a default one (English is shipped with laravel).
+     * Check if the locale is a default one.
      *
      * @param string $locale
      *
