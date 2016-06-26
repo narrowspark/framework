@@ -48,7 +48,7 @@ class PluralizationRulesTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @dataProvider  provideCreateRules
+     * @dataProvider provideCreateRules
      */
     public function testCreateRules($lang, $expected)
     {
@@ -185,86 +185,11 @@ class PluralizationRulesTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @dataProvider provideInvalidPluralRules
-     * @expectedException InvalidArgumentException
-     */
-    public function testInvalidInstance($lang)
-    {
-        $this->createRules->invoke($this->object, $lang);
-    }
-
-    public function provideInvalidPluralRules()
-    {
-        return [
-            ['xx'],
-            [null],
-            [true],
-            [false],
-            [0],
-            [100],
-            [-3.14],
-        ];
-    }
-
-    /**
      * @dataProvider successLangcodes
      */
     public function testLangcodes($nplural, $langCodes)
     {
         $matrix = $this->generateTestData($nplural, $langCodes);
         $this->validateMatrix($nplural, $matrix);
-    }
-
-    /**
-     * This array should contain all currently known langcodes.
-     *
-     * As it is impossible to have this ever complete we should try as hard as possible to have it almost complete.
-     *
-     * @return array
-     */
-    public function successLangcodes()
-    {
-        return array(
-            array('1', array('ay', 'bo', 'cgg', 'dz', 'id', 'ja', 'jbo', 'ka', 'kk', 'km', 'ko', 'ky', 'fa')),
-            array('2', array('nl', 'fr', 'en', 'de', 'de_GE', 'hy', 'hy_AM', 'jbo')),
-            array('3', array('be', 'bs', 'cs', 'hr', 'cbs')),
-            array('4', array('cy', 'mt', 'sl', 'gd', 'kw')),
-            array('5', array('ga')),
-            array('6', array('ar')),
-        );
-    }
-
-    /**
-     * We validate only on the plural coverage. Thus the real rules is not tested.
-     *
-     * @param string $nplural       plural expected
-     * @param array  $matrix        containing langcodes and their plural index values.
-     * @param bool   $expectSuccess
-     */
-    protected function validateMatrix(string $nplural, array $matrix, bool $expectSuccess = true)
-    {
-        foreach ($matrix as $langCode => $data) {
-            $indexes = array_flip($data);
-
-            if ($expectSuccess) {
-                $this->assertEquals($nplural, count($indexes), "Langcode '$langCode' has '$nplural' plural forms.");
-            } else {
-                $this->assertNotEquals((int) $nplural, count($indexes), "Langcode '$langCode' has '$nplural' plural forms.");
-            }
-        }
-    }
-
-    protected function generateTestData($plural, $langCodes)
-    {
-        $matrix = [];
-
-        foreach ($langCodes as $langCode) {
-            for ($count = 0; $count < 200; ++$count) {
-                $plural = $this->object->get($count, $langCode);
-                $matrix[$langCode][$count] = $plural;
-            }
-        }
-
-        return $matrix;
     }
 }

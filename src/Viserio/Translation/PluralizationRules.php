@@ -111,7 +111,7 @@ class PluralizationRules implements PluralizationRulesContract
      *                                 PluralCategorys\Zero|
      *                                 PluralCategorys\None
      */
-    protected function createRules($prefix)
+    protected function createRules(string $prefix)
     {
         if ($prefix === 'ar') {
             return new Arabic();
@@ -168,7 +168,7 @@ class PluralizationRules implements PluralizationRulesContract
             'se', 'kw', 'iu', 'smn', 'sms', 'smj', 'sma', 'naq', 'smi', ], true)) {
             return new Two();
         } elseif (in_array($prefix, [
-            'hi', 'ln', 'mg', 'ak', 'tl', 'am', 'bh', 'wa', 'ti', 'guw', 'fil', 'nso', 'hy'], true)) {
+            'hi', 'ln', 'mg', 'ak', 'tl', 'am', 'bh', 'wa', 'ti', 'guw', 'fil', 'nso', ], true)) {
             return new Zero();
         } elseif (in_array($prefix, [
             'my', 'sg', 'ms', 'lo', 'kn', 'ko', 'th', 'to', 'yo', 'zh', 'wo', 'vi', 'tr', 'az', 'km', 'id',
@@ -176,6 +176,6 @@ class PluralizationRules implements PluralizationRulesContract
             return new None();
         }
 
-        throw new InvalidArgumentException('Unknown language prefix: ' . $prefix . '.');
+        return new Zero();
     }
 }

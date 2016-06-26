@@ -2,26 +2,42 @@
 namespace Viserio\Translation;
 
 use RuntimeException;
-use Viserio\Contracts\Translation\MessageCatalogue as MessageCatalogueContract;
+use Psr\Log\LoggerInterface;
+use Viserio\Contracts\Translation\{
+    MessageCatalogue as MessageCatalogueContract,
+    MessageSelector as MessageSelectorContract,
+    PluralizationRules as PluralizationRulesContract,
+    Translator as TranslatorContract
+};
+use Viserio\Contracts\Parsers\Loader as LoaderContract;
 use Viserio\Translation\Traits\ValidateLocaleTrait;
+use Viserio\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
 class TranslationManager
 {
     use ValidateLocaleTrait;
+    use NormalizePathAndDirectorySeparatorTrait;
 
     /**
      * PluralizationRules instance.
      *
-     * @var \Viserio\Translation\PluralizationRules
+     * @var \Viserio\Contracts\Translation\PluralizationRules
      */
     protected $pluralization;
 
     /**
      * MessageSelector instance.
      *
-     * @var \Viserio\Translation\MessageSelector
+     * @var \Viserio\Contracts\Translation\MessageSelector
      */
     protected $messageSelector;
+
+    /**
+     * Fileloader instance.
+     *
+     * @var \Viserio\Contracts\Parsers\Loader
+     */
+    protected $loader;
 
     /**
      * A string dictating the default language to translate into. (e.g. 'en').
@@ -45,51 +61,96 @@ class TranslationManager
     protected $langFallback = [];
 
     /**
+     * All directories to look for a file.
+     *
+     * @var array
+     */
+    protected $directories = [];
+
+    /**
+     * All added translations.
+     *
+     * @var array
+     */
+    protected $translations = [];
+
+    /**
+     * The psr logger instance.
+     *
+     * @var \Psr\Log\LoggerInterface
+     */
+    private $logger;
+
+    /**
      * Creat new Translation instance.
      *
-     * @param MessageSelector    $messageSelector
-     * @param PluralizationRules $pluralization
+     * @param \Viserio\Contracts\Translation\PluralizationRules $pluralization
+     * @param \Viserio\Contracts\Translation\MessageSelector    $messageSelector
      */
-    public function __construct(
-        MessageSelector $messageSelector,
-        PluralizationRules $pluralization
-    ) {
+    public function __construct(PluralizationRulesContract $pluralization, MessageSelectorContract $messageSelector) {
         $this->pluralization = $pluralization;
 
         $messageSelector->setPluralization($pluralization);
         $this->messageSelector = $messageSelector;
     }
 
-    /**
-     * Add message catalogue.
+     /**
+     * Set directories
      *
-     * @param MessageCatalogueContract $messageCatalogue
-     * @param string|null              $locale
+     * @param array $directories
      *
-     * @return $this
+     * @return self
      */
-    public function addMessage(MessageCatalogueContract $messageCatalogue, $locale = null)
+    public function setDirectories(array $directories): TranslationManager
     {
-        $locale = $locale === null ? $messageCatalogue->getLocale() : $locale;
-
-        $translation = new Translator($locale, $messageCatalogue);
-
-        $this->translations[$locale] = $translation;
+        foreach ($directories as $directory) {
+            $this->addDirectory($directory);
+        }
 
         return $this;
     }
 
     /**
-     * Import language from file.
-     * Can be grouped together.
+     * Get directories.
      *
-     * @param string $file
+     * @return array
+     */
+    public function getDirectories(): array
+    {
+        return $this->directories;
+    }
+
+    /**
+     * Add directory.
+     *
+     * @param string $directory
      *
      * @return self
      */
-    public function import($file)
+    public function addDirectory(string $directory): TranslationManager
     {
-        $langFile = $this->loader->load($file);
+        if (! in_array($directory, $this->directories)) {
+            $this->directories[] = self::normalizeDirectorySeparator($directory);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Import a language from file.
+     *
+     * @param string $file
+     *
+     * @throws \RuntimeException
+     *
+     * @return self
+     */
+    public function import(string $file): TranslationManager
+    {
+        $loader = $this->getLoader();
+        $loader->setDirectories($this->directories);
+
+        $langFile = $loader->load($file);
 
         if (!isset($langFile['lang'])) {
             throw new RuntimeException(sprintf('File [%s] cant be imported.', $file));
@@ -97,13 +158,35 @@ class TranslationManager
 
         $message = new MessageCatalogue($langFile['lang'], $langFile);
 
-        if ($fallback = $this->getLanguageFallback($message->getLocale())) {
-            $message->addFallbackCatalogue($fallback);
+        $this->addMessageCatalogue($message);
+
+        return $this;
+    }
+
+    /**
+     * Add message catalogue.
+     *
+     * @param \Viserio\Contracts\Translation\MessageCatalogue $messageCatalogue
+     *
+     * @return $this
+     */
+    public function addMessageCatalogue(MessageCatalogueContract $messageCatalogue): TranslationManager
+    {
+        $locale = $messageCatalogue->getLocale();
+
+        if ($fallback = $this->getLanguageFallback($messageCatalogue->getLocale())) {
+            $messageCatalogue->addFallbackCatalogue($fallback);
         } elseif ($fallback = $this->defaultFallback) {
-            $message->addFallbackCatalogue($fallback);
+            $messageCatalogue->addFallbackCatalogue($fallback);
         }
 
-        $this->addMessage($message, $langFile['lang']);
+        $translation = new Translator($messageCatalogue, $this->messageSelector);
+
+        if ($this->logger !== null) {
+            $translation->setLogger($this->logger);
+        }
+
+        $this->translations[$locale] = $translation;
 
         return $this;
     }
@@ -111,11 +194,11 @@ class TranslationManager
     /**
      * Set default fallback for all languages.
      *
-     * @param MessageCatalogueContract $fallback
+     * @param \Viserio\Contracts\Translation\MessageCatalogue $fallback
      *
      * @return self
      */
-    public function setDefaultFallback(MessageCatalogueContract $fallback)
+    public function setDefaultFallback(MessageCatalogueContract $fallback): TranslationManager
     {
         $this->defaultFallback = $fallback;
 
@@ -127,7 +210,7 @@ class TranslationManager
      *
      * @return MessageCatalogueContract
      */
-    public function getDefaultFallback()
+    public function getDefaultFallback(): MessageCatalogueContract
     {
         return $this->defaultFallback;
     }
@@ -135,12 +218,12 @@ class TranslationManager
     /**
      * Set fallback for a language.
      *
-     * @param stirng                   $lang
-     * @param MessageCatalogueContract $fallback
+     * @param stirng                                          $lang
+     * @param \Viserio\Contracts\Translation\MessageCatalogue $fallback
      *
      * @return self
      */
-    public function setLanguageFallback($lang, MessageCatalogueContract $fallback)
+    public function setLanguageFallback(string $lang, MessageCatalogueContract $fallback)
     {
         $this->langFallback[$lang] = $fallback;
 
@@ -154,7 +237,7 @@ class TranslationManager
      *
      * @return MessageCatalogueContract|null
      */
-    public function getLanguageFallback($lang)
+    public function getLanguageFallback(string $lang)
     {
         if (isset($this->langFallback[$lang])) {
             return $this->langFallback[$lang];
@@ -164,11 +247,11 @@ class TranslationManager
     }
 
     /**
-     * Gets the string dictating the default language to translate into. (e.g. 'en').
+     * Gets the string dictating the default language.
      *
      * @return string
      */
-    public function getLocale()
+    public function getLocale(): string
     {
         return $this->locale;
     }
@@ -180,7 +263,7 @@ class TranslationManager
      *
      * @return self
      */
-    public function setLocale($locale)
+    public function setLocale(string $locale): TranslationManager
     {
         $this->assertValidLocale($locale);
 
@@ -194,50 +277,74 @@ class TranslationManager
      *
      * @return \Viserio\Translation\PluralizationRules
      */
-    public function getPluralization()
+    public function getPluralization(): PluralizationRulesContract
     {
         return $this->pluralization;
     }
 
     /**
-     * {@inheritdoc}
+     * Get a language translator instance.
+     *
+     * @param string|null $locale
+     *
+     * @throws \RuntimeException
+     *
+     * @return \Viserio\Contracts\Translation\Translator
      */
-    protected function getConfigName()
+    public function getTranslator(string $locale = null): TranslatorContract
     {
-        return 'translation';
+        $lang = $locale ?? $this->locale;
+
+        if (isset($this->translations[$lang])) {
+            return $this->translations[$lang];
+        }
+
+        throw new RuntimeException(sprintf('Translator for [%s] dont exist.', $lang));
     }
 
     /**
-     * Logs for missing translations.
+     * Set the file loader.
      *
-     * @param string      $id
-     * @param string|null $domain
-     * @param string|null $locale
+     * @param \Viserio\Contracts\Parsers\Loader $loader
+     *
+     * @return self
      */
-    protected function log($id, $domain, $locale)
+    public function setLoader(LoaderContract $loader): TranslationManager
     {
-        if ($domain === null) {
-            $domain = 'messages';
-        }
+        $this->loader = $loader;
 
-        $id = (string) $id;
+        return $this;
+    }
 
-        $catalogue = $this->translator->getCatalogue($locale);
+    /**
+     * Get the file loader.
+     *
+     * @return \Viserio\Contracts\Parsers\Loader
+     */
+    public function getLoader(): LoaderContract
+    {
+        return $this->loader;
+    }
 
-        if ($catalogue->defines($id, $domain)) {
-            return;
-        }
+    /**
+     * Set a logger instance..
+     *
+     * @param \Psr\Log\LoggerInterface $logger
+     */
+    public function setLogger(LoggerInterface $logger)
+    {
+        $this->logger = $logger;
 
-        if ($catalogue->has($id, $domain)) {
-            $this->logger->debug(
-                'Translation use a fallback catalogue.',
-                ['id' => $id, 'domain' => $domain, 'locale' => $catalogue->getLocale()]
-            );
-        } else {
-            $this->logger->warning(
-                'Translation not found.',
-                ['id' => $id, 'domain' => $domain, 'locale' => $catalogue->getLocale()]
-            );
-        }
+        return $this;
+    }
+
+    /**
+     * Get a logger instance.
+     *
+     * @return \Psr\Log\LoggerInterface
+     */
+    public function getLogger(): LoggerInterface
+    {
+        return $this->logger;
     }
 }

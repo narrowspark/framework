@@ -3,6 +3,7 @@ namespace Viserio\Connect\Adapters\Database;
 
 use Mongo;
 use MongoClient;
+use MongoDB\Client as MongoDBClient;
 use MongoConnectionException;
 use Narrowspark\Arr\StaticArr as Arr;
 use Viserio\Connect\Traits\DetectsLostConnections;
@@ -62,7 +63,7 @@ class MongoConnector implements ConnectorContract
      * @param array  $config
      * @param array  $options
      *
-     * @return \Mongo|\MongoClient
+     * @return \Mongo|\MongoClient|\MongoDB\Client
      */
     public function createConnection($dsn, array $config, array $options)
     {
@@ -131,6 +132,10 @@ class MongoConnector implements ConnectorContract
     {
         if (class_exists(MongoClient::class)) {
             return MongoClient::class;
+        }
+
+        if (class_exists(MongoDBClient::class)) {
+            return MongoDBClient::class;
         }
 
         return Mongo::class;

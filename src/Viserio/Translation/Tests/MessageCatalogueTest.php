@@ -171,4 +171,30 @@ class MessageCatalogueTest extends \PHPUnit_Framework_TestCase
         $catalogue = new MessageCatalogue('en');
         $catalogue->addCatalogue(new MessageCatalogue('fr', []));
     }
+
+        /**
+     * @dataProvider getValidLocalesTests
+     */
+    public function testSetValidLocale($locale)
+    {
+        $message = new MessageCatalogue($locale);
+
+        $this->assertEquals($locale, $message->getLocale());
+    }
+
+    public function getValidLocalesTests()
+    {
+        return array(
+            array(''),
+            array('fr'),
+            array('francais'),
+            array('FR'),
+            array('frFR'),
+            array('fr-FR'),
+            array('fr_FR'),
+            array('fr.FR'),
+            array('fr-FR.UTF8'),
+            array('sr@latin'),
+        );
+    }
 }

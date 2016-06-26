@@ -9,10 +9,13 @@ use Viserio\Contracts\{
 };
 use Viserio\Parsers\Formats\{
     BSON,
+    Csv,
     INI,
     JSON,
+    Mo,
     MSGPack,
     PHP,
+    Po,
     QueryStr,
     Serialize,
     TOML,
@@ -58,25 +61,32 @@ class Parser implements ParserContract
     ];
 
     private $supportedFileFormats = [
+        'bson',
+        'csv',
         'ini',
         'json',
+        'mo',
         'php',
+        'po',
         'toml',
         'xml',
         'yaml',
     ];
 
     private $supportedParsers = [
-        'ini'       => INI::class,
-        'json'      => JSON::class,
-        'php'       => PHP::class,
-        'toml'      => TOML::class,
-        'xml'       => XML::class,
-        'yaml'      => YAML::class,
+        'bson' => BSON::class,
+        'csv' => Csv::class,
+        'ini' => INI::class,
+        'json' => JSON::class,
+        'mo' => Mo::class,
+        'msgpack' => MSGPack::class,
+        'php' => PHP::class,
+        'po' => Po::class,
+        'querystr' => QueryStr::class,
         'serialize' => Serialize::class,
-        'querystr'  => QueryStr::class,
-        'msgpack'   => MSGPack::class,
-        'bson'      => BSON::class,
+        'toml' => TOML::class,
+        'xml' => XML::class,
+        'yaml' => YAML::class,
     ];
 
     /**
