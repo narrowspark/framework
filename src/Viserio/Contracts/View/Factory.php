@@ -95,6 +95,8 @@ interface Factory
      *
      * @param string|array $key
      * @param mixed        $value
+     *
+     * @return mixed
      */
     public function share($key, $value = null);
 
