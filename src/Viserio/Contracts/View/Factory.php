@@ -93,12 +93,10 @@ interface Factory
     /**
      * Add a piece of shared data to the environment.
      *
-     * @param string $key
-     * @param mixed  $value
-     *
-     * @return self
+     * @param string|array $key
+     * @param mixed        $value
      */
-    public function share(string $key, $value = null): Factory;
+    public function share($key, $value = null);
 
     /**
      * Add a location to the array of view locations.

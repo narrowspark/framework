@@ -4,7 +4,7 @@ namespace Viserio\View\Engines;
 use Closure;
 use InvalidArgumentException;
 use Viserio\Contracts\View\{
-    Engines as EnginesContract,
+    Engine as EngineContract,
     EngineResolver as EngineResolverContract
 };
 
@@ -39,7 +39,7 @@ class EngineResolver implements EngineResolverContract
     /**
      * {@inheritdoc}
      */
-    public function resolve(string $engine): EnginesContract
+    public function resolve(string $engine): EngineContract
     {
         if (isset($this->resolved[$engine])) {
             return $this->resolved[$engine];

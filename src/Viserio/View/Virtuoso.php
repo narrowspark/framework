@@ -66,8 +66,6 @@ class Virtuoso implements VirtuosoContract
     {
         $this->events = $events;
 
-        $this->container = $container;
-
         $this->invoker = (new Invoker())
             ->injectByTypeHint(true)
             ->injectByParameterName(true)
@@ -101,7 +99,7 @@ class Virtuoso implements VirtuosoContract
      */
     public function callCreator(ViewContract $view): VirtuosoContract
     {
-        $this->events->emit('creating: ' . $view->getName(), $view);
+        $this->events->emit('creating: ' . $view->getName(), [$view]);
 
         return $this;
     }
@@ -111,7 +109,7 @@ class Virtuoso implements VirtuosoContract
      */
     public function callComposer(ViewContract $view): VirtuosoContract
     {
-        $this->events->emit('composing: ' . $view->getName(), $view);
+        $this->events->emit('composing: ' . $view->getName(), [$view]);
 
         return $this;
     }
@@ -378,7 +376,7 @@ class Virtuoso implements VirtuosoContract
         // the instance out of the IoC container and call the method on it with the
         // given arguments that are passed to the Closure as the composer's data.
         return function () use ($class, $method) {
-            $callable = [$this->getInvoker()->call($class), $method];
+            $callable = [$this->invoker->call($class), $method];
 
             return call_user_func_array($callable, func_get_args());
         };
@@ -401,15 +399,5 @@ class Virtuoso implements VirtuosoContract
         $method = Str::contains($prefix, 'composing') ? 'compose' : 'create';
 
         return [$class, $method];
-    }
-
-    /**
-     * Get configured invoker.
-     *
-     * @return \Viserio\Support\Invoker
-     */
-    protected function getInvoker(): Invoker
-    {
-        return $this->invoker;
     }
 }

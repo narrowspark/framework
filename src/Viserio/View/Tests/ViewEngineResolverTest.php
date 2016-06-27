@@ -1,18 +1,21 @@
 <?php
 namespace Viserio\View\Tests;
 
-use StdClass;
+use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use Viserio\View\Engines\EngineResolver;
+use Viserio\Contracts\View\Engine as EngineContract;
 
 class ViewEngineResolverTest extends \PHPUnit_Framework_TestCase
 {
+    use MockeryTrait;
+
     public function testResolversMayBeResolved()
     {
         $resolver = new EngineResolver();
         $resolver->register(
             'foo',
             function () {
-                return new StdClass();
+                return $this->mock(EngineContract::class);
             }
         );
         $result = $resolver->resolve('foo');

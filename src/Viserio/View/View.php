@@ -217,6 +217,8 @@ class View implements ArrayAccess, ViewContract
     public function setPath(string $path): ViewContract
     {
         $this->path = $path;
+
+        return $this;
     }
 
     /**

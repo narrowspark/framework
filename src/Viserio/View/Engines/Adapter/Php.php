@@ -1,11 +1,13 @@
 <?php
 namespace Viserio\View\Engines\Adapter;
 
-use Exception;
 use Throwable;
-use Viserio\Contracts\View\Engine as EnginesContract;
+use Viserio\Contracts\{
+    Exception\Exception\FatalThrowableError,
+    View\Engine as EngineContract
+};
 
-class Php implements EnginesContract
+class Php implements EngineContract
 {
     /**
      * Get the evaluated contents of the view.
@@ -41,27 +43,23 @@ class Php implements EnginesContract
 
         try {
             require $phpPath;
-            // Return temporary output buffer content, destroy output buffer
-            return ltrim(ob_get_clean());
-        } catch (Exception $exception) {
-            // Return temporary output buffer content, destroy output buffer
-            $this->handleViewException($exception, $obLevel);
         } catch (Throwable $exception) {
             $this->handleViewException(new FatalThrowableError($exception), $obLevel);
         }
 
+        // Return temporary output buffer content, destroy output buffer
         return ltrim(ob_get_clean());
     }
 
     /**
      * Handle a view exception.
      *
-     * @param \Exception $exception
+     * @param \Throwable $exception
      * @param int        $obLevel
      *
-     * @throws \Exception
+     * @throws \Throwable
      */
-    protected function handleViewException(Exception $exception, int $obLevel)
+    protected function handleViewException(Throwable $exception, int $obLevel)
     {
         while (ob_get_level() > $obLevel) {
             ob_end_clean();

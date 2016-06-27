@@ -21,7 +21,7 @@ interface EngineResolver
      *
      * @param string $engine
      *
-     * @return \Viserio\Contracts\View\Engines
+     * @return \Viserio\Contracts\View\Engine
      */
-    public function resolve(string $engine): Engines;
+    public function resolve(string $engine): Engine;
 }

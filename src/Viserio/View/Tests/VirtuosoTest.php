@@ -10,6 +10,13 @@ class VirtuosoTest extends \PHPUnit_Framework_TestCase
 {
     use MockeryTrait;
 
+    public function testGetDispatcher()
+    {
+        $virtuoso = $this->getVirtuoso();
+
+        $this->assertInstanceOf(EventDispatcher::class, $virtuoso->getDispatcher());
+    }
+
     public function testBasicSectionHandling()
     {
         $virtuoso = $this->getVirtuoso();

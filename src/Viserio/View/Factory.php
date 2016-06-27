@@ -228,7 +228,7 @@ class Factory implements FactoryContract
     /**
      * {@inheritdoc}
      */
-    public function share(string $key, $value = null): FactoryContract
+    public function share($key, $value = null)
     {
         if (! is_array($key)) {
             return $this->shared[$key] = $value;
@@ -237,8 +237,6 @@ class Factory implements FactoryContract
         foreach ($key as $innerKey => $innerValue) {
             $this->share($innerKey, $innerValue);
         }
-
-        return $this;
     }
 
     /**
@@ -382,9 +380,9 @@ class Factory implements FactoryContract
      *
      * @param string $path
      *
-     * @return string
+     * @return string|null
      */
-    protected function getExtension(string $path): string
+    protected function getExtension(string $path)
     {
         $extensions = array_keys($this->extensions);
 

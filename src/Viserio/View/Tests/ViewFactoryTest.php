@@ -3,15 +3,19 @@ namespace Viserio\View\Tests;
 
 use Interop\Container\ContainerInterface;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
-use StdClass;
 use Viserio\Events\Dispatcher as EventDispatcher;
-use Viserio\Contracts\View\Engine;
-use Viserio\Contracts\View\Finder;
+use Viserio\Contracts\View\{
+    Engine,
+    Finder,
+    View as ViewContract
+};
 use Viserio\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
-use Viserio\View\Engines\Adapter\Php;
-use Viserio\View\Engines\EngineResolver;
-use Viserio\View\Factory;
-use Viserio\View\Virtuoso;
+use Viserio\View\{
+    Engines\Adapter\Php,
+    Engines\EngineResolver,
+    Factory,
+    Virtuoso
+};
 
 class ViewFactoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -53,7 +57,7 @@ class ViewFactoryTest extends \PHPUnit_Framework_TestCase
         $view = $factory->create('view', ['foo' => 'bar'], ['baz' => 'boom']);
 
         $this->assertSame($engine, $view->getEngine());
-        $this->assertSame($_SERVER['__test.view']->getSubject(), $view);
+        $this->assertSame($_SERVER['__test.view'], $view);
 
         unset($_SERVER['__test.view']);
     }
@@ -88,7 +92,7 @@ class ViewFactoryTest extends \PHPUnit_Framework_TestCase
         $view = $factory->file('path.php', ['foo' => 'bar'], ['baz' => 'boom']);
 
         $this->assertSame($engine, $view->getEngine());
-        $this->assertSame($_SERVER['__test.view']->getSubject(), $view);
+        $this->assertSame($_SERVER['__test.view'], $view);
 
         unset($_SERVER['__test.view']);
     }
@@ -184,30 +188,39 @@ class ViewFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testRenderEachCreatesViewForEachItemInArray()
     {
-        $factory = $this->mock('Viserio\View\Factory[make]', $this->getFactoryArgs());
-        $factory->shouldReceive('make')
+        $factory = $this->mock('Viserio\View\Factory[create]', $this->getFactoryArgs());
+        $factory
+            ->shouldReceive('create')
             ->once()
             ->with('foo', ['key' => 'bar', 'value' => 'baz'])
-            ->andReturn($mockView1 = $this->mock(StdClass::class));
-        $factory->shouldReceive('make')
+            ->andReturn($mockView1 = $this->mock(ViewContract::class));
+        $factory
+            ->shouldReceive('create')
             ->once()
             ->with('foo', ['key' => 'breeze', 'value' => 'boom'])
-            ->andReturn($mockView2 = $this->mock(StdClass::class));
+            ->andReturn($mockView2 = $this->mock(ViewContract::class));
 
-        $mockView1->shouldReceive('render')->once()->andReturn('dayle');
-        $mockView2->shouldReceive('render')->once()->andReturn('rees');
+        $mockView1
+            ->shouldReceive('render')
+            ->once()
+            ->andReturn('dayle');
+        $mockView2
+            ->shouldReceive('render')
+            ->once()
+            ->andReturn('rees');
 
         $result = $factory->renderEach('foo', ['bar' => 'baz', 'breeze' => 'boom'], 'value');
+
         $this->assertEquals('daylerees', $result);
     }
 
     public function testEmptyViewsCanBeReturnedFromRenderEach()
     {
-        $factory = $this->mock('Viserio\View\Factory[make]', $this->getFactoryArgs());
-        $factory->shouldReceive('make')
+        $factory = $this->mock('Viserio\View\Factory[create]', $this->getFactoryArgs());
+        $factory->shouldReceive('create')
             ->once()
             ->with('foo')
-            ->andReturn($mockView = $this->mock(StdClass::class));
+            ->andReturn($mockView = $this->mock(ViewContract::class));
         $mockView->shouldReceive('render')
             ->once()
             ->andReturn('empty');
