@@ -17,7 +17,7 @@ class ViewFinderTest extends \PHPUnit_Framework_TestCase
 
         $finder = $this->getFinder();
         $finder->getFilesystem()
-            ->shouldReceive('exists')
+            ->shouldReceive('has')
             ->once()
             ->with($path)
             ->andReturn(true);
@@ -39,12 +39,12 @@ class ViewFinderTest extends \PHPUnit_Framework_TestCase
 
         $finder = $this->getFinder();
         $finder->getFilesystem()
-            ->shouldReceive('exists')
+            ->shouldReceive('has')
             ->once()
             ->with($path)
             ->andReturn(true);
         $finder->getFilesystem()
-            ->shouldReceive('exists')
+            ->shouldReceive('has')
             ->once()
             ->with($path2)
             ->andReturn(false);
@@ -64,17 +64,17 @@ class ViewFinderTest extends \PHPUnit_Framework_TestCase
         $finder = $this->getFinder();
         $finder->addLocation($this->getPath() . '/' . 'Nested');
         $finder->getFilesystem()
-            ->shouldReceive('exists')
+            ->shouldReceive('has')
             ->once()
             ->with($path)
             ->andReturn(false);
         $finder->getFilesystem()
-            ->shouldReceive('exists')
+            ->shouldReceive('has')
             ->once()
             ->with($path3)
             ->andReturn(false);
         $finder->getFilesystem()
-            ->shouldReceive('exists')
+            ->shouldReceive('has')
             ->once()
             ->with($path2)
             ->andReturn(true);
@@ -95,7 +95,7 @@ class ViewFinderTest extends \PHPUnit_Framework_TestCase
             self::normalizeDirectorySeparator($this->getPath() . '/' . 'foo')
         );
         $finder->getFilesystem()
-            ->shouldReceive('exists')
+            ->shouldReceive('has')
             ->once()
             ->with($path)
             ->andReturn(true);
@@ -116,7 +116,7 @@ class ViewFinderTest extends \PHPUnit_Framework_TestCase
             self::normalizeDirectorySeparator($this->getPath() . '/' . 'foo')
         );
         $finder->getFilesystem()
-            ->shouldReceive('exists')
+            ->shouldReceive('has')
             ->once()
             ->with($path)
             ->andReturn(true);
@@ -146,17 +146,17 @@ class ViewFinderTest extends \PHPUnit_Framework_TestCase
             self::normalizeDirectorySeparator($this->getPath() . '/' . 'baz')
         );
         $finder->getFilesystem()
-            ->shouldReceive('exists')
+            ->shouldReceive('has')
             ->once()
             ->with($path)
             ->andReturn(false);
         $finder->getFilesystem()
-            ->shouldReceive('exists')
+            ->shouldReceive('has')
             ->once()
             ->with($path3)
             ->andReturn(false);
         $finder->getFilesystem()
-            ->shouldReceive('exists')
+            ->shouldReceive('has')
             ->once()
             ->with($path2)
             ->andReturn(true);
@@ -185,12 +185,12 @@ class ViewFinderTest extends \PHPUnit_Framework_TestCase
 
         $finder = $this->getFinder();
         $finder->getFilesystem()
-            ->shouldReceive('exists')
+            ->shouldReceive('has')
             ->once()
             ->with($path)
             ->andReturn(false);
         $finder->getFilesystem()
-            ->shouldReceive('exists')
+            ->shouldReceive('has')
             ->once()
             ->with(self::normalizeDirectorySeparator($this->getPath() . '/' . 'foo.phtml'))
             ->andReturn(false);
@@ -207,7 +207,7 @@ class ViewFinderTest extends \PHPUnit_Framework_TestCase
 
         $finder = $this->getFinder();
         $finder->getFilesystem()
-            ->shouldReceive('exists')
+            ->shouldReceive('has')
             ->once()
             ->with($path)
             ->andReturn(true);
