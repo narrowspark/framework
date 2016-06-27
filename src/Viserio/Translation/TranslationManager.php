@@ -87,7 +87,10 @@ class TranslationManager
      * @param \Viserio\Contracts\Translation\PluralizationRules $pluralization
      * @param \Viserio\Contracts\Translation\MessageSelector    $messageSelector
      */
-    public function __construct(PluralizationRulesContract $pluralization, MessageSelectorContract $messageSelector) {
+    public function __construct(
+        PluralizationRulesContract $pluralization,
+        MessageSelectorContract $messageSelector
+    ) {
         $this->pluralization = $pluralization;
 
         $messageSelector->setPluralization($pluralization);

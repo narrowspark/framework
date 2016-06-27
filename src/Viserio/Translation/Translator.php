@@ -3,7 +3,6 @@ namespace Viserio\Translation;
 
 use Countable;
 use InvalidArgumentException;
-use RuntimeException;
 use Psr\Log\LoggerInterface;
 use Viserio\Contracts\Translation\{
     MessageCatalogue as MessageCatalogueContract,
@@ -61,7 +60,7 @@ class Translator implements TranslatorContract
     /**
      * Creat new Translator instance.
      *
-     * @param \Viserio\Contracts\Translation\MessageCatalogue $selector
+     * @param \Viserio\Contracts\Translation\MessageCatalogue $catalogue
      * @param \Viserio\Contracts\Translation\MessageSelector  $selector The message selector for pluralization
      *
      * @throws \InvalidArgumentException If a locale contains invalid characters

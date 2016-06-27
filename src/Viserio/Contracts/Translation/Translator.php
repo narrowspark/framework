@@ -41,8 +41,10 @@ interface Translator
      * Set a logger instance..
      *
      * @param \Psr\Log\LoggerInterface $logger
+     *
+     * @return \Viserio\Translation\Translator
      */
-    public function setLogger(LoggerInterface $logger);
+    public function setLogger(LoggerInterface $logger): Translator;
 
     /**
      * Get a logger instance.
