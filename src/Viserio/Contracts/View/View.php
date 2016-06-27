@@ -13,6 +13,29 @@ interface View extends Renderable
     public function getName(): string;
 
     /**
+     * Get the array of view data.
+     *
+     * @return array
+     */
+    public function getData(): array;
+
+    /**
+     * Get the path to the view file.
+     *
+     * @return string
+     */
+    public function getPath(): string;
+
+    /**
+     * Set the path to the view.
+     *
+     * @param string $path
+     *
+     * @return self
+     */
+    public function setPath(string $path): View;
+
+    /**
      * Add a piece of data to the view.
      *
      * @param string|array $key
@@ -30,4 +53,29 @@ interface View extends Renderable
      * @return string
      */
     public function render(callable $callback = null): string;
+
+    /**
+     * Add a view instance to the view data.
+     *
+     * @param string $key
+     * @param string $view
+     * @param string[]  $data
+     *
+     * @return self
+     */
+    public function nest($key, string $view, array $data = []): View;
+
+    /**
+     * Get the view factory instance.
+     *
+     * @return \Viserio\Contracts\View\Factory
+     */
+    public function getFactory(): Factory;
+
+    /**
+     * Get the view's rendering engine.
+     *
+     * @return \Viserio\Contracts\View\Engine
+     */
+    public function getEngine(): Engine;
 }

@@ -2,8 +2,10 @@
 namespace Viserio\View;
 
 use InvalidArgumentException;
-use Viserio\Contracts\View\Finder as FinderContract;
-use Viserio\Filesystem\Filesystem;
+use Viserio\Contracts\{
+    View\Finder as FinderContract,
+    Filesystem\Filesystem as FilesystemContract
+};
 use Viserio\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
 class ViewFinder implements FinderContract
@@ -13,7 +15,7 @@ class ViewFinder implements FinderContract
     /**
      * The filesystem instance.
      *
-     * @var \Viserio\Filesystem\Filesystem
+     * @var \Viserio\Contracts\Filesystem\Filesystem
      */
     protected $files;
 
@@ -48,11 +50,11 @@ class ViewFinder implements FinderContract
     /**
      * Create a new file view loader instance.
      *
-     * @param \Viserio\Filesystem\Filesystem $files
-     * @param array                          $paths
-     * @param null|array                     $extensions
+     * @param \Viserio\Contracts\Filesystem\Filesystem $files
+     * @param array                                    $paths
+     * @param null|array                               $extensions
      */
-    public function __construct(Filesystem $files, array $paths, array $extensions = null)
+    public function __construct(FilesystemContract $files, array $paths, array $extensions = null)
     {
         $this->files = $files;
         $this->paths = $paths;
@@ -63,11 +65,7 @@ class ViewFinder implements FinderContract
     }
 
     /**
-     * Get the fully qualified location of the view.
-     *
-     * @param string $name
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function find(string $name): string
     {
@@ -83,22 +81,19 @@ class ViewFinder implements FinderContract
     }
 
     /**
-     * Add a location to the finder.
-     *
-     * @param string $location
+     * {@inheritdoc}
      */
-    public function addLocation(string $location)
+    public function addLocation(string $location): FinderContract
     {
         $this->paths[] = $location;
+
+        return $this;
     }
 
     /**
-     * Add a namespace hint to the finder.
-     *
-     * @param string       $namespace
-     * @param string|array $hints
+     * {@inheritdoc}
      */
-    public function addNamespace(string $namespace, $hints)
+    public function addNamespace(string $namespace, $hints): FinderContract
     {
         $hints = (array) $hints;
 
@@ -107,15 +102,14 @@ class ViewFinder implements FinderContract
         }
 
         $this->hints[$namespace] = $hints;
+
+        return $this;
     }
 
     /**
-     * Prepend a namespace hint to the finder.
-     *
-     * @param string       $namespace
-     * @param string|array $hints
+     * {@inheritdoc}
      */
-    public function prependNamespace(string $namespace, $hints)
+    public function prependNamespace(string $namespace, $hints): FinderContract
     {
         $hints = (array) $hints;
 
@@ -124,28 +118,26 @@ class ViewFinder implements FinderContract
         }
 
         $this->hints[$namespace] = $hints;
+
+        return $this;
     }
 
     /**
-     * Register an extension with the view finder.
-     *
-     * @param string $extension
+     * {@inheritdoc}
      */
-    public function addExtension(string $extension)
+    public function addExtension(string $extension): FinderContract
     {
         if (($index = array_search($extension, $this->extensions, true)) !== false) {
             unset($this->extensions[$index]);
         }
 
         array_unshift($this->extensions, $extension);
+
+        return $this;
     }
 
     /**
-     * Returns whether or not the view specify a hint information.
-     *
-     * @param string $name
-     *
-     * @return bool
+     * {@inheritdoc}
      */
     public function hasHintInformation(string $name): bool
     {
@@ -153,19 +145,15 @@ class ViewFinder implements FinderContract
     }
 
     /**
-     * Get the filesystem instance.
-     *
-     * @return \Viserio\Filesystem\Filesystem
+     * {@inheritdoc}
      */
-    public function getFilesystem(): \Viserio\Filesystem\Filesystem
+    public function getFilesystem(): FilesystemContract
     {
         return $this->files;
     }
 
     /**
-     * Get the active view paths.
-     *
-     * @return array
+     * {@inheritdoc}
      */
     public function getPaths(): array
     {
@@ -173,19 +161,17 @@ class ViewFinder implements FinderContract
     }
 
     /**
-     * Set the active view paths.
-     *
-     * @param string[] $paths
+     * {@inheritdoc}
      */
-    public function setPaths(array $paths)
+    public function setPaths(array $paths): FinderContract
     {
         $this->paths = $paths;
+
+        return $this;
     }
 
     /**
-     * Get the namespace to file path hints.
-     *
-     * @return array
+     * {@inheritdoc}
      */
     public function getHints(): array
     {
@@ -193,9 +179,7 @@ class ViewFinder implements FinderContract
     }
 
     /**
-     * Get registered extensions.
-     *
-     * @return array
+     * {@inheritdoc}
      */
     public function getExtensions(): array
     {

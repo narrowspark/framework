@@ -3,8 +3,12 @@ namespace Viserio\View\Engines;
 
 use Closure;
 use InvalidArgumentException;
+use Viserio\Contracts\View\{
+    Engines as EnginesContract,
+    EngineResolver as EngineResolverContract
+};
 
-class EngineResolver
+class EngineResolver implements EngineResolverContract
 {
     /**
      * The array of engine resolvers.
@@ -21,26 +25,21 @@ class EngineResolver
     protected $resolved = [];
 
     /**
-     * Register a new engine resolver.
-     * The engine string typically corresponds to a file extension.
-     *
-     * @param string   $engine
-     * @param \Closure $resolver
+     * {@inheritdoc}
      */
-    public function register(string $engine, Closure $resolver)
+    public function register(string $engine, Closure $resolver): EngineResolverContract
     {
         unset($this->resolved[$engine]);
+
         $this->resolvers[$engine] = $resolver;
+
+        return $this;
     }
 
     /**
-     * Resolver an engine instance by name.
-     *
-     * @param string $engine
-     *
-     * @return \Viserio\Contracts\View\Engines
+     * {@inheritdoc}
      */
-    public function resolve(string $engine): \Viserio\Contracts\View\Engines
+    public function resolve(string $engine): EnginesContract
     {
         if (isset($this->resolved[$engine])) {
             return $this->resolved[$engine];

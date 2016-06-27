@@ -6,11 +6,7 @@ use Throwable;
 class VirtuosoView extends View
 {
     /**
-     * Get the string contents of the view.
-     *
-     * @param callable|null $callback
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function render(callable $callback = null): string
     {
