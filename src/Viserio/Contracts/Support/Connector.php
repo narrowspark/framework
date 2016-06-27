@@ -1,5 +1,5 @@
 <?php
-namespace Viserio\Contracts\Connect;
+namespace Viserio\Contracts\Support;
 
 interface Connector
 {

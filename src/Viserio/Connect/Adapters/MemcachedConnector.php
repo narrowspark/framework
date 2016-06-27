@@ -3,18 +3,12 @@ namespace Viserio\Connect\Adapters;
 
 use Memcached;
 use RuntimeException;
-use Viserio\Contracts\Connect\Connector as ConnectorContract;
+use Viserio\Contracts\Support\Connector as ConnectorContract;
 
 class MemcachedConnector implements ConnectorContract
 {
     /**
-     * Establish a connection.
-     *
-     * @param array $config
-     *
-     * @throws \RuntimeException
-     *
-     * @return \Memcached
+     * {@inheritdoc}
      */
     public function connect(array $config)
     {

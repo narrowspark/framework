@@ -3,7 +3,10 @@ namespace Viserio\Support;
 
 use Closure;
 use RuntimeException;
-use Viserio\Contracts\Config\Manager as ConfigContract;
+use Viserio\Contracts\{
+    Config\Manager as ConfigContract,
+    Support\Connector as ConnectorContract
+};
 use Viserio\Support\Traits\ContainerAwareTrait;
 
 abstract class AbstractConnectionManager
@@ -62,28 +65,6 @@ abstract class AbstractConnectionManager
     }
 
     /**
-     * Set a config manager
-     *
-     * @param \Viserio\Contracts\Config\Manager $config
-     *
-     * @return void
-     */
-    public function setConfig(ConfigContract $config)
-    {
-        $this->config = $config;
-    }
-
-    /**
-     * Get the config instance.
-     *
-     * @return \Viserio\Contracts\Config\Manager
-     */
-    public function getConfig(): ConfigContract
-    {
-        return $this->config;
-    }
-
-    /**
      * Get a connection instance.
      *
      * @param string|null $connectionName
@@ -95,7 +76,7 @@ abstract class AbstractConnectionManager
     {
         $connectionName = $connectionName ?? $this->getDefaultConnection();
 
-        if (! $this->createConnection($connectionName)) {
+        if (! $this->hasConnection($connectionName)) {
             throw new RuntimeException(
                 sprintf('The connection [%s] is not supported.', $connectionName)
             );
@@ -105,8 +86,6 @@ abstract class AbstractConnectionManager
         // here and cache it so we can return it next time very quickly. If there is
         // already a driver created by this name, we'll just return that instance.
         if (! isset($this->connections[$connectionName])) {
-            $config['name'] = $connectionName;
-
             $settings = array_merge(
                 $this->getConnectionConfig($connectionName),
                 $config
@@ -155,7 +134,7 @@ abstract class AbstractConnectionManager
      */
     public function getDefaultConnection(): string
     {
-        return $this->config->get($this->getConfigName() . '.default');
+        return $this->config->get($this->getConfigName() . '.default', '');
     }
 
     /**
@@ -220,7 +199,7 @@ abstract class AbstractConnectionManager
     {
         $name = $name ?? $this->getDefaultConnection();
 
-        $connections = $this->config->get($this->getConfigName() . '.connections');
+        $connections = $this->config->get($this->getConfigName() . '.connections', []);
 
         if (!isset($connections[$name]) && !is_array($connections[$name])) {
             return [
@@ -232,6 +211,28 @@ abstract class AbstractConnectionManager
         $config['name'] = $name;
 
         return $config;
+    }
+
+    /**
+     * Set a config manager
+     *
+     * @param \Viserio\Contracts\Config\Manager $config
+     *
+     * @return void
+     */
+    public function setConfig(ConfigContract $config)
+    {
+        $this->config = $config;
+    }
+
+    /**
+     * Get the config instance.
+     *
+     * @return \Viserio\Contracts\Config\Manager
+     */
+    public function getConfig(): ConfigContract
+    {
+        return $this->config;
     }
 
     /**
@@ -256,10 +257,16 @@ abstract class AbstractConnectionManager
         } elseif (isset($this->supportedConnectors[$connection]) &&
             class_exists($this->supportedConnectors[$connection])
         ) {
-            return new $this->supportedConnectors[$connection]();
+            $connection = new $this->supportedConnectors[$connection];
+
+            if ($connection instanceof ConnectorContract) {
+                return $connection->connect($config);
+            }
+
+            return $connection;
         }
 
-        throw new RuntimeException(sprintf('Connection [%s] not supported.', $connection));
+        throw new RuntimeException(sprintf('Connection [%s] is not supported.', $connection));
     }
 
     /**

@@ -3,7 +3,7 @@ namespace Viserio\Connect\Adapters;
 
 use InvalidArgumentException;
 use Predis\Client;
-use Viserio\Contracts\Connect\Connector as ConnectorContract;
+use Viserio\Contracts\Support\Connector as ConnectorContract;
 
 class PredisConnector implements ConnectorContract
 {

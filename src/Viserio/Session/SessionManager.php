@@ -212,7 +212,7 @@ class SessionManager extends AbstractManager
     /**
      * Build the session instance.
      *
-     * @param \\Viserio\Contracts\Session\SessionHandler $handler
+     * @param \Viserio\Contracts\Session\SessionHandler $handler
      *
      * @return \Viserio\Contracts\Session\Store
      */
