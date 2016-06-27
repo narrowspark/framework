@@ -29,8 +29,10 @@
         "viserio/support"                 : "self.version"
     },
     "require-dev": {
+        "microsoft/windowsazure"          : "^0.4",
         "narrowspark/php-cs-fixer-config" : "^1.1",
         "narrowspark/testing-helper"      : "^1.5",
+        "iron-io/iron_mq"                 : "^4.0",
         "phpunit/phpunit"                 : "^5.1"
     },
     "autoload": {
@@ -45,7 +47,9 @@
     },
     "suggest": {
         "aws/aws-sdk-php"                 : "Required to use the SQS queue driver (^3.0).",
-        "pda/pheanstalk"                  : "Required to use the Beanstalk queue driver (^3.0)."
+        "pda/pheanstalk"                  : "Required to use the Beanstalk queue driver (^3.0).",
+        "iron-io/iron_mq"                 : "Required to use the IronMQ queue driver (^4.0).",
+        "microsoft/windowsazure"          : "Required to use the Windows Azure Service queue driver (^0.4)."
     },
     "extra": {
         "branch-alias": {
