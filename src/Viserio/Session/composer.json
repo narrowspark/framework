@@ -4,7 +4,7 @@
     "description": "The Viserio Session package.",
     "keywords"   : ["narrowspark", "viserio", "cookie", "encrypter", "session", "csrf", "secure", "flash"],
     "license"    : "MIT",
-    "homepage"   : "http://github.com/Narrowspark/session",
+    "homepage"   : "http://github.com/narrowspark/framework",
     "support"    : {
         "issues": "https://github.com/narrowspark/framework/issues",
         "source": "https://github.com/narrowspark/framework"

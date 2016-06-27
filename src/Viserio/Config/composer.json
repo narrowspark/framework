@@ -4,7 +4,7 @@
     "description": "The Viserio Config package.",
     "keywords"   : ["narrowspark", "viserio", "config", "configuration"],
     "license"    : "MIT",
-    "homepage"   : "http://github.com/Narrowspark/config",
+    "homepage"   : "http://github.com/narrowspark/framework",
     "support"    : {
         "issues": "https://github.com/narrowspark/framework/issues",
         "source": "https://github.com/narrowspark/framework"

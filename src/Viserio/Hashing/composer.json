@@ -4,7 +4,7 @@
     "description": "The Viserio Hashing package.",
     "keywords"   : ["narrowspark", "viserio", "hashing", "password", "hash"],
     "license"    : "MIT",
-    "homepage"   : "http://github.com/Narrowspark/hashing",
+    "homepage"   : "http://github.com/narrowspark/framework",
     "support"    : {
         "issues": "https://github.com/narrowspark/framework/issues",
         "source": "https://github.com/narrowspark/framework"

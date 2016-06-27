@@ -4,7 +4,7 @@
     "description": "The Viserio Statical Proxy package.",
     "keywords"   : ["narrowspark", "viserio", "static", "facade", "static proxy", "static interface", "statical", "alias"],
     "license"    : "MIT",
-    "homepage"   : "http://github.com/viserio/statical-proxy",
+    "homepage"   : "http://github.com/narrowspark/framework",
     "support"    : {
         "issues": "https://github.com/narrowspark/framework/issues",
         "source": "https://github.com/narrowspark/framework"

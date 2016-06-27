@@ -4,7 +4,7 @@
     "description": "The Viserio Http package.",
     "keywords"   : ["narrowspark", "viserio", "http", "request", "response", "psr7", "psr-7", "parse_url", "request", "response", "message", "stream", "http", "uri", "url"],
     "license"    : "MIT",
-    "homepage"   : "http://github.com/Narrowspark/http",
+    "homepage"   : "http://github.com/narrowspark/framework",
     "support"    : {
         "issues": "https://github.com/narrowspark/framework/issues",
         "source": "https://github.com/narrowspark/framework"

@@ -4,7 +4,7 @@
     "description": "The Viserio Events package.",
     "keywords"   : ["narrowspark", "viserio", "events"],
     "license"    : "MIT",
-    "homepage"   : "http://github.com/Narrowspark/events",
+    "homepage"   : "http://github.com/narrowspark/framework",
     "support"    : {
         "issues": "https://github.com/narrowspark/framework/issues",
         "source": "https://github.com/narrowspark/framework"

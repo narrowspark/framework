@@ -9,9 +9,11 @@ use Psr\Log\LoggerInterface;
 use Swift_Mailer;
 use Swift_Message;
 use Swift_Transport_AbstractSmtpTransport;
-use Viserio\Contracts\Events\Dispatcher as DispatcherContract;
-use Viserio\Contracts\Mail\Mailer as MailerContract;
-use Viserio\Contracts\View\Factory;
+use Viserio\Contracts\{
+    Events\Dispatcher as DispatcherContract,
+    Mail\Mailer as MailerContract,
+    View\Factory
+};
 
 class Mailer implements MailerContract
 {
@@ -41,7 +43,14 @@ class Mailer implements MailerContract
      *
      * @var array
      */
-    protected $from;
+    protected $from = [];
+
+    /**
+     * Set the global to address and name.
+     *
+     * @var array
+     */
+    protected $to = [];
 
     /**
      * The log writer instance.
@@ -70,13 +79,6 @@ class Mailer implements MailerContract
      * @var bool
      */
     protected $resetSwift = false;
-
-    /**
-     * Set the global to address and name.
-     *
-     * @var array
-     */
-    protected $to;
 
     /**
      * Create a new Mailer instance.

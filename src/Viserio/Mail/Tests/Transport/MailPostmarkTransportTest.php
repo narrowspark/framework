@@ -1,5 +1,5 @@
 <?php
-namespace Viserio\Mail\Tests;
+namespace Viserio\Mail\Tests\Transport;
 
 class MailPostmarkTransportTest extends \PHPUnit_Framework_TestCase
 {

@@ -4,7 +4,7 @@
     "description": "The Viserio Encrypter package.",
     "keywords"   : ["narrowspark", "viserio", "encrypter", "security", "encryption", "AES", "openssl", "cipher", "cryptography", "symmetric key cryptography", "crypto", "encrypt", "authenticated encryption"],
     "license"    : "MIT",
-    "homepage"   : "http://github.com/Narrowspark/encrypter",
+    "homepage"   : "http://github.com/narrowspark/framework",
     "support"    : {
         "issues": "https://github.com/narrowspark/framework/issues",
         "source": "https://github.com/narrowspark/framework"

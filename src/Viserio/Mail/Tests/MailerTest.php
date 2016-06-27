@@ -1,23 +1,22 @@
 <?php
 namespace Viserio\Mail\Tests;
 
-use Mockery as Mock;
+use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use Viserio\Mail\Mailer;
 
-class MailMailerTest extends \PHPUnit_Framework_TestCase
+class MailerTest extends \PHPUnit_Framework_TestCase
 {
-    public function tearDown()
-    {
-        Mock::close();
-    }
+    use MockeryTrait;
 
     public function testMailerSendSendsMessageWithProperViewContent()
     {
         unset($_SERVER['__mailer.test']);
-        $mailer = $this->getMockBuilder('\Viserio\Mail\Mailer')
+
+        $mailer = $this->getMockBuilder(Mailer::class)
             ->setConstructorArgs($this->getMocks())
             ->setMethods(['createMessage'])
             ->getMock();
+
         $message = Mock::mock('\Swift_Mime_Message');
         $mailer->expects($this->once())->method('createMessage')->will($this->returnValue($message));
         $view = Mock::mock('\StdClass');
@@ -196,7 +195,11 @@ class MailMailerTest extends \PHPUnit_Framework_TestCase
 
     protected function getMailer()
     {
-        return new Mailer(Mock::mock('\Swift_Mailer'), Mock::mock('\Viserio\Contracts\View\Factory'), Mock::mock('\Viserio\Contracts\Events\Dispatcher'));
+        return new Mailer(
+            Mock::mock('\Swift_Mailer'),
+            Mock::mock('\Viserio\Contracts\View\Factory'),
+            Mock::mock('\Viserio\Contracts\Events\Dispatcher')
+        );
     }
 
     protected function getMocks()

@@ -1,5 +1,5 @@
 <?php
-namespace Viserio\Mail\Tests;
+namespace Viserio\Mail\Tests\Transport;
 
 use Viserio\Mail\Transport\Mandrill;
 

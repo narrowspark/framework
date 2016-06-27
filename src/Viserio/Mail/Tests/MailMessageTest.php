@@ -1,15 +1,12 @@
 <?php
 namespace Viserio\Mail\Tests;
 
-use Mockery as Mock;
+use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use Swift_Mailer;
 
 class MailMessageTest extends \PHPUnit_Framework_TestCase
 {
-    public function tearDown()
-    {
-        Mock::close();
-    }
+    use MockeryTrait;
 
     public function testBasicAttachment()
     {
