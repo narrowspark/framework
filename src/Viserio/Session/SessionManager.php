@@ -1,10 +1,12 @@
 <?php
 namespace Viserio\Session;
 
-use Viserio\Contracts\Config\Manager as ConfigContract;
-use Viserio\Contracts\Encryption\Encrypter as EncrypterContract;
-use Viserio\Contracts\Session\SessionHandler as SessionHandlerContract;
-use Viserio\Contracts\Session\Store as StoreContract;
+use Viserio\Contracts\{
+    Config\Manager as ConfigContract,
+    Encryption\Encrypter as EncrypterContract,
+    Session\SessionHandler as SessionHandlerContract,
+    Session\Store as StoreContract
+};
 use Viserio\Support\Manager;
 
 class SessionManager extends Manager

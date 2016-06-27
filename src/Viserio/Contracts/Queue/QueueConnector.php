@@ -1,7 +1,7 @@
 <?php
 namespace Viserio\Contracts\Queue;
 
-interface Adapter
+interface QueueConnector
 {
     /**
      * Push a new message onto the queue.

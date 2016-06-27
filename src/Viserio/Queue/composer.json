@@ -2,9 +2,9 @@
     "name"       : "viserio/queue",
     "type"       : "library",
     "description": "The Viserio Queue package.",
-    "keywords"   : ["narrowspark", "viserio", "queue", "symfony"],
+    "keywords"   : ["narrowspark", "viserio", "queue", "pheanstalk"],
     "license"    : "MIT",
-    "homepage"   : "http://github.com/Narrowspark/queue",
+    "homepage"   : "http://github.com/narrowspark/framework",
     "support"    : {
         "issues": "https://github.com/narrowspark/framework/issues",
         "source": "https://github.com/narrowspark/framework"
@@ -19,8 +19,14 @@
     ],
     "require": {
         "php"                             : "7.0.0 - 7.0.5 || ^7.0.7",
+        "jeremeamia/SuperClosure"         : "^2.2",
+        "nesbot/carbon"                   : "^1.21",
+        "symfony/process"                 : "^3.1",
         "viserio/cotracts"                : "self.version",
-        "symfony/event-dispatcher"        : "^3.1"
+        "viserio/connect"                 : "self.version",
+        "viserio/console"                 : "self.version",
+        "viserio/events"                  : "self.version",
+        "viserio/support"                 : "self.version"
     },
     "require-dev": {
         "narrowspark/php-cs-fixer-config" : "^1.1",
@@ -36,6 +42,10 @@
         "psr-4": {
             "Viserio\\Queue\\Tests\\"     : "Tests/"
         }
+    },
+    "suggest": {
+        "aws/aws-sdk-php"                 : "Required to use the SQS queue driver (^3.0).",
+        "pda/pheanstalk"                  : "Required to use the Beanstalk queue driver (^3.0)."
     },
     "extra": {
         "branch-alias": {

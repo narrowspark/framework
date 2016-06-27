@@ -1,7 +1,7 @@
 <?php
 namespace Viserio\Contracts\Queue;
 
-interface FailedJob
+interface FailedJobProvider
 {
     /**
      * Log a failed job into storage.
