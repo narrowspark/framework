@@ -239,7 +239,7 @@ class ViewFinder implements FinderContract
         foreach ($paths as $path) {
             foreach ($this->getPossibleViewFiles($name) as $file) {
                 if (
-                    $this->files->exists(
+                    $this->files->has(
                         $viewPath = self::normalizeDirectorySeparator($path . '/' . $file)
                     )
                 ) {
