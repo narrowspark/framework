@@ -42,8 +42,6 @@ abstract class AbstractManager
      * Create a new manager instance.
      *
      * @param \Viserio\Contracts\Config\Manager $config
-     *
-     * @return void
      */
     public function __construct(ConfigContract $config)
     {

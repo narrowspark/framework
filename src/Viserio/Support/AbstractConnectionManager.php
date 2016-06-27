@@ -42,8 +42,6 @@ abstract class AbstractConnectionManager
      * Create a new manager instance.
      *
      * @param \Viserio\Contracts\Config\Manager $config
-     *
-     * @return void
      */
     public function __construct(ConfigContract $config)
     {
@@ -88,16 +86,16 @@ abstract class AbstractConnectionManager
     /**
      * Get a connection instance.
      *
-     * @param string $connectionName
-     * @param array  $config
+     * @param string|null $connectionName
+     * @param array       $config
      *
      * @return object
      */
-    public function connection(string $connectionName, array $config = [])
+    public function connection(string $connectionName = null, array $config = [])
     {
-        $connectionName = $connectionName ?? $this->getDefaultDriver();
+        $connectionName = $connectionName ?? $this->getDefaultConnection();
 
-        if (! $this->hasDriver($connectionName)) {
+        if (! $this->createConnection($connectionName)) {
             throw new RuntimeException(
                 sprintf('The connection [%s] is not supported.', $connectionName)
             );
@@ -114,7 +112,7 @@ abstract class AbstractConnectionManager
                 $config
             );
 
-            $this->connections[$connectionName] = $this->createDriver($connectionName, $settings);
+            $this->connections[$connectionName] = $this->createConnection($connectionName, $settings);
         }
 
         return $this->connections[$connectionName];
@@ -123,7 +121,7 @@ abstract class AbstractConnectionManager
     /**
      * Reconnect to the given connection.
      *
-     * @param string $name
+     * @param string|null $name
      *
      * @return object
      */
@@ -139,7 +137,7 @@ abstract class AbstractConnectionManager
      /**
      * Disconnect from the given connection.
      *
-     * @param string $name
+     * @param string|null $name
      *
      * @return void
      */
