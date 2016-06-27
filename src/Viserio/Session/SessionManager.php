@@ -39,8 +39,8 @@ class SessionManager extends Manager
     /**
      * Constructor.
      *
-     * @param ConfigContract    $config
-     * @param EncrypterContract $encrypter
+     * @param \Viserio\Contracts\Config\Manager    $config
+     * @param \Viserio\Contracts\Encryption\Encrypter $encrypter
      */
     public function __construct(ConfigContract $config, EncrypterContract $encrypter)
     {
