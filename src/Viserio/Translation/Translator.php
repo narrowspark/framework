@@ -111,7 +111,7 @@ class Translator implements TranslatorContract
     /**
      * {@inheritdoc}
      */
-    public function setLogger(LoggerInterface $logger)
+    public function setLogger(LoggerInterface $logger): TranslatorContract
     {
         $this->logger = $logger;
 
