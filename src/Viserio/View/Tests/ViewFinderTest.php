@@ -1,19 +1,15 @@
 <?php
 namespace Viserio\View\Tests;
 
-use Mockery as Mock;
+use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use Viserio\Filesystem\Filesystem;
 use Viserio\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 use Viserio\View\ViewFinder;
 
 class ViewFinderTest extends \PHPUnit_Framework_TestCase
 {
+    use MockeryTrait;
     use NormalizePathAndDirectorySeparatorTrait;
-
-    public function tearDown()
-    {
-        Mock::close();
-    }
 
     public function testBasicViewFinding()
     {
@@ -297,6 +293,6 @@ class ViewFinderTest extends \PHPUnit_Framework_TestCase
 
     protected function getFinder()
     {
-        return new ViewFinder(Mock::mock(Filesystem::class), [$this->getPath()], ['php', 'phtml']);
+        return new ViewFinder($this->mock(Filesystem::class), [$this->getPath()], ['php', 'phtml']);
     }
 }

@@ -3,7 +3,6 @@ namespace Viserio\View;
 
 use ArrayAccess;
 use BadMethodCallException;
-use Exception;
 use Throwable;
 use Viserio\Contracts\Support\Arrayable;
 use Viserio\Contracts\Support\Renderable;
@@ -146,8 +145,6 @@ class View implements ArrayAccess, ViewContract
             $response = isset($callback) ? call_user_func($callback, $this, $contents) : null;
 
             return $response !== null ? $response : $contents;
-        } catch (Exception $exception) {
-            throw $exception;
         } catch (Throwable $exception) {
             throw $exception;
         }

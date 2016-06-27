@@ -373,7 +373,7 @@ class Virtuoso
         $view = $this->normalizeName($view);
 
         if ($callback instanceof Closure) {
-            $this->events->addListener($prefix . $view, $callback, $priority);
+            $this->events->on($prefix . $view, $callback, $priority);
 
             return $callback;
         } elseif (is_string($callback)) {
@@ -399,7 +399,7 @@ class Virtuoso
         // classes from the application IoC container then call the compose method
         // on the instance. This allows for convenient, testable view composers.
         $callback = $this->buildClassEventCallback($class, $prefix);
-        $this->events->addListener($name, $callback, $priority);
+        $this->events->on($name, $callback, $priority);
 
         return $callback;
     }

@@ -3,15 +3,19 @@ namespace Viserio\View;
 
 use InvalidArgumentException;
 use Narrowspark\Arr\StaticArr as Arr;
-use Viserio\Contracts\Events\Dispatcher as DispatcherContract;
-use Viserio\Contracts\Support\Arrayable;
-use Viserio\Contracts\View\Engine as EngineContract;
-use Viserio\Contracts\View\Factory as FactoryContract;
-use Viserio\Contracts\View\Finder as FinderContract;
-use Viserio\Contracts\View\View as ViewContract;
+use Viserio\Contracts\{
+    Events\Dispatcher as DispatcherContract,
+    Support\Arrayable,
+    View\Engine as EngineContract,
+    View\Factory as FactoryContract,
+    View\Finder as FinderContract,
+    View\View as ViewContract
+};
 use Viserio\Support\Str;
-use Viserio\View\Engines\EngineResolver;
-use Viserio\View\Traits\NormalizeNameTrait;
+use Viserio\View\{
+    Engines\EngineResolver,
+    Traits\NormalizeNameTrait
+};
 
 class Factory implements FactoryContract
 {

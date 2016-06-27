@@ -1,7 +1,6 @@
 <?php
 namespace Viserio\View;
 
-use Exception;
 use Throwable;
 
 class VirtuosoView extends View
@@ -26,10 +25,6 @@ class VirtuosoView extends View
             $this->factory->getVirtuoso()->flushSectionsIfDoneRendering();
 
             return ! is_null($response) ? $response : $contents;
-        } catch (Exception $exception) {
-            $this->factory->getVirtuoso()->flushSections();
-
-            throw $exception;
         } catch (Throwable $exception) {
             $this->factory->getVirtuoso()->flushSections();
 
