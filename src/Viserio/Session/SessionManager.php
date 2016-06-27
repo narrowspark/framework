@@ -7,9 +7,9 @@ use Viserio\Contracts\{
     Session\SessionHandler as SessionHandlerContract,
     Session\Store as StoreContract
 };
-use Viserio\Support\Manager;
+use Viserio\Support\AbstractManager;
 
-class SessionManager extends Manager
+class SessionManager extends AbstractManager
 {
     /**
      * All supported drivers.
@@ -51,17 +51,9 @@ class SessionManager extends Manager
     /**
      * {@inheritdoc}
      */
-    public function setDefaultDriver(string $name)
-    {
-        $this->config->set($this->getConfigName() . '::driver', $name);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getDefaultDriver(): string
     {
-        return $this->config->get($this->getConfigName() . '::driver', 'local');
+        return $this->config->get($this->getConfigName() . '.driver', 'local');
     }
 
     /**
@@ -71,8 +63,8 @@ class SessionManager extends Manager
      */
     protected function createLocalDriver(): StoreContract
     {
-        $path = $this->config->get($this->getConfigName() . '::files');
-        $lifetime = $this->config->get($this->getConfigName() . '::lifetime');
+        $path = $this->config->get($this->getConfigName() . '.files');
+        $lifetime = $this->config->get($this->getConfigName() . '.lifetime');
 
         return $this->buildSession(
             new FileSessionHandler($this->getContainer()->get('files'), $path, $lifetime)
@@ -86,7 +78,7 @@ class SessionManager extends Manager
      */
     protected function createCookieDriver(): StoreContract
     {
-        $lifetime = $this->config->get($this->getConfigName() . '::lifetime');
+        $lifetime = $this->config->get($this->getConfigName() . '.lifetime');
 
         return $this->buildSession(new CookieSessionHandler($this->getContainer()->get('cookie'), $lifetime));
     }
@@ -118,7 +110,7 @@ class SessionManager extends Manager
      */
     protected function createMongodbDriver(): StoreContract
     {
-        $options = $this->config->get($this->getConfigName() . '::mongodb');
+        $options = $this->config->get($this->getConfigName() . '.mongodb');
 
         return $this->createCacheBased('mongodb', $options);
     }
@@ -130,7 +122,7 @@ class SessionManager extends Manager
      */
     protected function createPredisDriver(): StoreContract
     {
-        $options = $this->config->get($this->getConfigName() . '::predis');
+        $options = $this->config->get($this->getConfigName() . '.predis');
 
         return $this->createCacheBased('predis', $options);
     }
@@ -142,7 +134,7 @@ class SessionManager extends Manager
      */
     protected function createRedisDriver(): StoreContract
     {
-        $options = $this->config->get($this->getConfigName() . '::redis');
+        $options = $this->config->get($this->getConfigName() . '.redis');
 
         return $this->createCacheBased('redis', $options);
     }
@@ -154,7 +146,7 @@ class SessionManager extends Manager
      */
     protected function createFilesystemDriver(): StoreContract
     {
-        $options = $this->config->get($this->getConfigName() . '::flysystem');
+        $options = $this->config->get($this->getConfigName() . '.flysystem');
 
         return $this->createCacheBased('filesystem', $options);
     }
@@ -207,7 +199,7 @@ class SessionManager extends Manager
      */
     protected function createCacheBased($driver, array $options = []): StoreContract
     {
-        $lifetime = $this->config->get($this->getConfigName() . '::lifetime');
+        $lifetime = $this->config->get($this->getConfigName() . '.lifetime');
 
         return $this->buildSession(
             new CacheBasedSessionHandler(

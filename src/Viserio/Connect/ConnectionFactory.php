@@ -4,22 +4,28 @@ namespace Viserio\Connect;
 use Interop\Container\ContainerInterface;
 use PDO;
 use RuntimeException;
-use Viserio\Connect\Adapters\Database\DblibConnector;
-use Viserio\Connect\Adapters\Database\Firebirdconnector;
-use Viserio\Connect\Adapters\Database\GoogleCloudSQLConnector;
-use Viserio\Connect\Adapters\Database\MariaDBConnector;
-use Viserio\Connect\Adapters\Database\MongoConnector;
-use Viserio\Connect\Adapters\Database\MSSQLConnector;
-use Viserio\Connect\Adapters\Database\MySqlConnector;
-use Viserio\Connect\Adapters\Database\OdbcConnection;
-use Viserio\Connect\Adapters\Database\OracleConnector;
-use Viserio\Connect\Adapters\Database\PostgreSQLConnector;
-use Viserio\Connect\Adapters\Database\SQLiteConnector;
-use Viserio\Connect\Adapters\Database\SqlServerConnector;
-use Viserio\Connect\Adapters\MemcachedConnector;
-use Viserio\Connect\Adapters\PredisConnector;
-use Viserio\Contracts\Connect\ConnectionFactory as ConnectionFactoryContract;
-use Viserio\Contracts\Connect\Connector as ConnectorContract;
+use Viserio\Connect\Adapters\Database\{
+    DblibConnector,
+    Firebirdconnector,
+    GoogleCloudSQLConnector,
+    MariaDBConnector,
+    MongoConnector,
+    MSSQLConnector,
+    MySqlConnector,
+    OdbcConnection,
+    OracleConnector,
+    PostgreSQLConnector,
+    SQLiteConnector,
+    SqlServerConnector
+};
+use Viserio\Connect\Adapters\{
+    MemcachedConnector,
+    PredisConnector
+};
+use Viserio\Contracts\Connect\{
+    ConnectionFactory as ConnectionFactoryContract,
+    Connector as ConnectorContract
+};
 
 class ConnectionFactory implements ConnectionFactoryContract
 {

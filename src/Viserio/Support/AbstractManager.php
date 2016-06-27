@@ -6,14 +6,14 @@ use RuntimeException;
 use Viserio\Contracts\Config\Manager as ConfigContract;
 use Viserio\Support\Traits\ContainerAwareTrait;
 
-abstract class Manager
+abstract class AbstractManager
 {
     use ContainerAwareTrait;
 
     /**
      * The config instance.
      *
-     * @var ConfigContract
+     * @var \Viserio\Contracts\Config\Manager
      */
     protected $config;
 
@@ -39,6 +39,18 @@ abstract class Manager
     protected $supportedDrivers = [];
 
     /**
+     * Create a new manager instance.
+     *
+     * @param \Viserio\Contracts\Config\Manager $config
+     *
+     * @return void
+     */
+    public function __construct(ConfigContract $config)
+    {
+        $this->config = $config;
+    }
+
+    /**
      * Dynamically call the default driver instance.
      *
      * @param string $method
@@ -54,21 +66,19 @@ abstract class Manager
     /**
      * Set a config manager
      *
-     * @param ConfigContract $config
+     * @param \Viserio\Contracts\Config\Manager $config
      *
-     * @return self
+     * @return void
      */
-    public function setConfig(ConfigContract $config): Manager
+    public function setConfig(ConfigContract $config)
     {
         $this->config = $config;
-
-        return $this;
     }
 
     /**
      * Get config
      *
-     * @return ConfigContract
+     * @return \Viserio\Contracts\Config\Manager
      */
     public function getConfig(): ConfigContract
     {
@@ -76,18 +86,26 @@ abstract class Manager
     }
 
     /**
-     * Set the default cache driver name.
-     *
-     * @param string $name
-     */
-    abstract public function setDefaultDriver(string $name);
-
-    /**
      * Get the default driver name.
      *
      * @return string
      */
-    abstract public function getDefaultDriver(): string;
+    public function getDefaultDriver(): string
+    {
+        return $this->config->get($this->getConfigName() . '.default');
+    }
+
+    /**
+     * Set the default driver name.
+     *
+     * @param string $name
+     *
+     * @return void
+     */
+    public function setDefaultDriver(string $name)
+    {
+        $this->config->set($this->getConfigName() . '.default', $name);
+    }
 
     /**
      * Builder.
@@ -101,7 +119,7 @@ abstract class Manager
      */
     public function driver(string $driver = null, array $config = [])
     {
-        $driver = $driver ?: $this->getDefaultDriver();
+        $driver = $driver ?? $this->getDefaultDriver();
 
         if (! $this->hasDriver($driver)) {
             throw new RuntimeException(
@@ -113,7 +131,12 @@ abstract class Manager
         // here and cache it so we can return it next time very quickly. If there is
         // already a driver created by this name, we'll just return that instance.
         if (! isset($this->drivers[$driver])) {
-            $this->drivers[$driver] = $this->createDriver($driver, $config);
+            $settings = array_merge(
+                $this->getDriverConfig($driver),
+                $config
+            );
+
+            $this->drivers[$driver] = $this->createDriver($driver, $settings);
         }
 
         return $this->drivers[$driver];
@@ -125,13 +148,11 @@ abstract class Manager
      * @param string   $driver
      * @param \Closure $callback
      *
-     * @return self
+     * @return void
      */
-    public function extend(string $driver, Closure $callback): Manager
+    public function extend(string $driver, Closure $callback)
     {
         $this->customCreators[$driver] = $callback->bindTo($this, $this);
-
-        return $this;
     }
 
     /**
@@ -156,6 +177,33 @@ abstract class Manager
         return isset($this->supportedDrivers[$driver]) ||
             in_array($driver, $this->supportedDrivers, true) ||
             isset($this->customCreators[$driver]);
+    }
+
+    /**
+     * Get the configuration for a driver.
+     *
+     * @param string $name
+     *
+     * @throws \InvalidArgumentException
+     *
+     * @return array
+     */
+    public function getDriverConfig(string $name): array
+    {
+        $name = $name ?? $this->getDefaultDriver();
+
+        $drivers = $this->config->get($this->getConfigName() . '.drivers');
+
+        if (!isset($drivers[$name]) && !is_array($drivers[$name])) {
+            return [
+                'name' => $name
+            ];
+        }
+
+        $config = $drivers[$name];
+        $config['name'] = $name;
+
+        return $config;
     }
 
     /**

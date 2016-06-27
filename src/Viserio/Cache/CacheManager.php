@@ -22,9 +22,9 @@ use Predis\Client as PredisClient;
 use Psr\Cache\CacheItemPoolInterface;
 use Redis;
 use Viserio\Contracts\Config\Manager as ConfigContract;
-use Viserio\Support\Manager;
+use Viserio\Support\AbstractManager;
 
-class CacheManager extends Manager
+class CacheManager extends AbstractManager
 {
     /**
      * All supported drivers.
@@ -54,26 +54,6 @@ class CacheManager extends Manager
     public function __construct(ConfigContract $config)
     {
         $this->config = $config;
-    }
-
-    /**
-     * Set the default cache driver name.
-     *
-     * @param string $name
-     */
-    public function setDefaultDriver(string $name)
-    {
-        $this->config->set($this->getConfigName() . '::driver', $name);
-    }
-
-    /**
-     * Get the default cache driver name.
-     *
-     * @return string
-     */
-    public function getDefaultDriver(): string
-    {
-        return $this->config->get($this->getConfigName() . '::driver', '');
     }
 
     /**

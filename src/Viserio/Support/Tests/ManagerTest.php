@@ -12,7 +12,10 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testDefaultDriverSetGet()
     {
-        $manager = new TestManager();
+        $config = $this->mock(ConfigContract::class);
+        $config->shouldReceive('get');
+
+        $manager = new TestManager($config);
         $manager->setDefaultDriver('testDriver');
 
         $this->assertSame('testDriver', $manager->getDefaultDriver());
@@ -21,8 +24,9 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
     public function testConfigSetGet()
     {
         $config = $this->mock(ConfigContract::class);
+        $config->shouldReceive('get');
 
-        $manager = new TestManager();
+        $manager = new TestManager($config);
         $manager->setConfig($config);
 
         $this->assertSame($config, $manager->getConfig());
@@ -30,19 +34,25 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testDriver()
     {
-        $manager = new TestManager();
+        $config = $this->mock(ConfigContract::class);
+        $config->shouldReceive('get');
+
+        $manager = new TestManager($config);
         $setting = ['name' => 'foo'];
 
         $this->assertTrue($manager->driver('test'));
         $this->assertEquals($setting, $manager->driver('config', $setting));
         $this->assertEquals($setting, $manager->driver('value', $setting));
         $this->assertEquals(['test' => true, 'config' => $setting, 'value' => $setting], $manager->getDrivers());
-        $this->assertInstanceOf('Viserio\Support\Tests\Fixture\TestManager', $manager->driver('testmanager'));
+        $this->assertInstanceOf('stdClass', $manager->driver('testmanager'));
     }
 
     public function testCustomeDriver()
     {
-        $manager = new TestManager();
+        $config = $this->mock(ConfigContract::class);
+        $config->shouldReceive('get');
+
+        $manager = new TestManager($config);
         $manager->extend('custom', function () {
             return 'custom';
         });
@@ -55,7 +65,11 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
      */
     public function testDriverToThrowException()
     {
-        (new TestManager())->driver('dont');
+        $config = $this->mock(ConfigContract::class);
+        $config->shouldReceive('get');
+
+        $manager = new TestManager($config);
+        $manager->driver('dont');
     }
 
     /**
@@ -63,12 +77,19 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
      */
     public function testCreateDriverToThrowException()
     {
-        (new TestManager())->driver('throw');
+        $config = $this->mock(ConfigContract::class);
+        $config->shouldReceive('get');
+
+        $manager = new TestManager($config);
+        $manager->driver('throw');
     }
 
     public function testCall()
     {
-        $manager = new TestManager();
+        $config = $this->mock(ConfigContract::class);
+        $config->shouldReceive('get');
+
+        $manager = new TestManager($config);
         $manager->extend('call', function () {
             return new ArrayContainer();
         });
@@ -82,7 +103,10 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testCustomDriverClosureBoundObjectIsCacheManager()
     {
-        $manager = new TestManager();
+        $config = $this->mock(ConfigContract::class);
+        $config->shouldReceive('get');
+
+        $manager = new TestManager($config);
 
         $driver = function () {
             return $this;

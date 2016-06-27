@@ -1,9 +1,10 @@
 <?php
 namespace Viserio\Support\Tests\Fixture;
 
-use Viserio\Support\Manager;
+use stdClass;
+use Viserio\Support\AbstractManager;
 
-class TestManager extends Manager
+class TestManager extends AbstractManager
 {
     protected $defaultDriver;
 
@@ -12,24 +13,16 @@ class TestManager extends Manager
         'test'        => 'test',
         'config'      => 'config',
         'throw'       => 'throw',
-        'testmanager' => TestManager::class,
+        'testmanager' => stdClass::class,
     ];
 
-    /**
-     * Set the default cache driver name.
-     *
-     * @param string $name
-     */
     public function setDefaultDriver(string $name)
     {
         $this->defaultDriver = $name;
+
+        return $this;
     }
 
-    /**
-     * Get the default driver name.
-     *
-     * @return string
-     */
     public function getDefaultDriver(): string
     {
         return $this->defaultDriver;

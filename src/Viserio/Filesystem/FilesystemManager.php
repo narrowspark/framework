@@ -6,9 +6,9 @@ use League\Flysystem\AdapterInterface;
 use Narrowspark\Arr\StaticArr as Arr;
 use RuntimeException;
 use Viserio\Contracts\Config\Manager as ConfigContract;
-use Viserio\Support\Manager;
+use Viserio\Support\AbstractManager;
 
-class FilesystemManager extends Manager
+class FilesystemManager extends AbstractManager
 {
     /**
      * All supported drivers.
@@ -40,25 +40,13 @@ class FilesystemManager extends Manager
     }
 
     /**
-     * Set the default cache driver name.
-     *
-     * @param string $name
-     */
-    public function setDefaultDriver(string $name)
-    {
-        $this->config->set($this->getConfigName() . '::default', $name);
-
-        return $this;
-    }
-
-    /**
      * Get the default driver name.
      *
      * @return string
      */
     public function getDefaultDriver(): string
     {
-        return $this->config->get($this->getConfigName() . '::default', 'local');
+        return $this->config->get($this->getConfigName() . '.default', 'local');
     }
 
     /**
@@ -97,7 +85,7 @@ class FilesystemManager extends Manager
     {
         $name = $name ?: $this->getDefaultDriver();
 
-        $connections = $this->config->get($this->getConfigName() . '::connections');
+        $connections = $this->config->get($this->getConfigName() . '.connections');
 
         if (! is_array($config = Arr::get($connections, $name)) && ! $config) {
             throw new InvalidArgumentException("Adapter [$name] not configured.");
@@ -123,7 +111,7 @@ class FilesystemManager extends Manager
      */
     protected function getCacheConfig(string $name): array
     {
-        $cache = $this->config->get($this->getConfigName() . '::cache');
+        $cache = $this->config->get($this->getConfigName() . '.cache');
 
         if (! is_array($config = Arr::get($cache, $name)) && ! $config) {
             throw new InvalidArgumentException("Cache [$name] not configured.");

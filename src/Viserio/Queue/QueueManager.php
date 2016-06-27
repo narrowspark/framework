@@ -5,9 +5,9 @@ use Viserio\Contracts\{
     Config\Manager as ConfigContract,
     Encryption\Encrypter as EncrypterContract
 };
-use Viserio\Support\Manager;
+use Viserio\Support\AbstractManager;
 
-class QueueManager extends Manager
+class QueueManager extends AbstractManager
 {
     /**
      * All supported drivers.
@@ -35,22 +35,6 @@ class QueueManager extends Manager
     {
         $this->config = $config;
         $this->encrypter = $encrypter;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setDefaultDriver(string $name)
-    {
-        $this->config->set($this->getConfigName() . '::driver', $name);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getDefaultDriver(): string
-    {
-        return $this->config->get($this->getConfigName() . '::driver', 'local');
     }
 
     /**
