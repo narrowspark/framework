@@ -1,8 +1,8 @@
 <?php
 namespace Viserio\Translation;
 
-use RuntimeException;
 use Psr\Log\LoggerInterface;
+use RuntimeException;
 use Viserio\Contracts\Translation\{
     MessageCatalogue as MessageCatalogueContract,
     MessageSelector as MessageSelectorContract,
@@ -10,8 +10,8 @@ use Viserio\Contracts\Translation\{
     Translator as TranslatorContract
 };
 use Viserio\Contracts\Parsers\Loader as LoaderContract;
-use Viserio\Translation\Traits\ValidateLocaleTrait;
 use Viserio\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
+use Viserio\Translation\Traits\ValidateLocaleTrait;
 
 class TranslationManager
 {
@@ -208,7 +208,7 @@ class TranslationManager
     /**
      * Get default fallback.
      *
-     * @return MessageCatalogueContract
+     * @return \Viserio\Contracts\Translation\MessageCatalogue
      */
     public function getDefaultFallback(): MessageCatalogueContract
     {
