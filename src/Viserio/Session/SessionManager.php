@@ -32,7 +32,7 @@ class SessionManager extends AbstractManager
     /**
      * Encrypter instance.
      *
-     * @var EncrypterContract
+     * @var \Viserio\Contracts\Encryption\Encrypter
      */
     private $encrypter;
 
@@ -59,7 +59,7 @@ class SessionManager extends AbstractManager
     /**
      * Create an instance of the file session driver.
      *
-     * @return StoreContract
+     * @return \Viserio\Contracts\Session\Store
      */
     protected function createLocalDriver(): StoreContract
     {
@@ -74,7 +74,7 @@ class SessionManager extends AbstractManager
      /**
      * Create an instance of the "cookie" session driver.
      *
-     * @return StoreContract
+     * @return \Viserio\Contracts\Session\Store
      */
     protected function createCookieDriver(): StoreContract
     {
@@ -86,7 +86,7 @@ class SessionManager extends AbstractManager
     /**
      * Create an instance of the Memcached session driver.
      *
-     * @return StoreContract
+     * @return \Viserio\Contracts\Session\Store
      */
     protected function createMemcachedDriver(): StoreContract
     {
@@ -96,7 +96,7 @@ class SessionManager extends AbstractManager
     /**
      * Create an instance of the Memcache session driver.
      *
-     * @return StoreContract
+     * @return \Viserio\Contracts\Session\Store
      */
     protected function createMemcacheDriver(): StoreContract
     {
@@ -106,7 +106,7 @@ class SessionManager extends AbstractManager
     /**
      * Create an instance of the Mongodb session driver.
      *
-     * @return StoreContract
+     * @return \Viserio\Contracts\Session\Store
      */
     protected function createMongodbDriver(): StoreContract
     {
@@ -118,7 +118,7 @@ class SessionManager extends AbstractManager
     /**
      * Create an instance of the Predis session driver.
      *
-     * @return StoreContract
+     * @return \Viserio\Contracts\Session\Store
      */
     protected function createPredisDriver(): StoreContract
     {
@@ -130,7 +130,7 @@ class SessionManager extends AbstractManager
     /**
      * Create an instance of the Redis session driver.
      *
-     * @return StoreContract
+     * @return \Viserio\Contracts\Session\Store
      */
     protected function createRedisDriver(): StoreContract
     {
@@ -142,7 +142,7 @@ class SessionManager extends AbstractManager
     /**
      * Create an instance of the Filesystem session driver.
      *
-     * @return StoreContract
+     * @return \Viserio\Contracts\Session\Store
      */
     protected function createFilesystemDriver(): StoreContract
     {
@@ -154,7 +154,7 @@ class SessionManager extends AbstractManager
     /**
      * Create an instance of the Array session driver.
      *
-     * @return StoreContract
+     * @return \Viserio\Contracts\Session\Store
      */
     protected function createArrayDriver(): StoreContract
     {
@@ -164,7 +164,7 @@ class SessionManager extends AbstractManager
     /**
      * Create an instance of the APCu session driver.
      *
-     * @return StoreContract
+     * @return \Viserio\Contracts\Session\Store
      */
     protected function createApcuDriver(): StoreContract
     {
@@ -174,7 +174,7 @@ class SessionManager extends AbstractManager
     /**
      * Create an instance of the APC session driver.
      *
-     * @return StoreContract
+     * @return \Viserio\Contracts\Session\Store
      */
     protected function createApcDriver(): StoreContract
     {
@@ -195,7 +195,7 @@ class SessionManager extends AbstractManager
      * @param string $driver
      * @param array $options
      *
-     * @return StoreContract
+     * @return \Viserio\Contracts\Session\Store
      */
     protected function createCacheBased($driver, array $options = []): StoreContract
     {
@@ -212,9 +212,9 @@ class SessionManager extends AbstractManager
     /**
      * Build the session instance.
      *
-     * @param SessionHandlerContract $handler
+     * @param \\Viserio\Contracts\Session\SessionHandler $handler
      *
-     * @return StoreContract
+     * @return \Viserio\Contracts\Session\Store
      */
     protected function buildSession(SessionHandlerContract $handler): StoreContract
     {
