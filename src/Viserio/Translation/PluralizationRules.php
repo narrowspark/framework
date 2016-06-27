@@ -2,6 +2,7 @@
 namespace Viserio\Translation;
 
 use InvalidArgumentException;
+use Viserio\Contracts\Translation\PluralizationRules as PluralizationRulesContract;
 use Viserio\Translation\PluralCategorys\{
     Arabic,
     Balkan,
@@ -30,7 +31,7 @@ use Viserio\Translation\PluralCategorys\{
     Zero
 };
 
-class PluralizationRules
+class PluralizationRules implements PluralizationRulesContract
 {
     /**
      * Rules.
@@ -40,12 +41,7 @@ class PluralizationRules
     protected $rules = [];
 
     /**
-     * Returns the plural position to use for the given locale and number.
-     *
-     * @param int    $count
-     * @param string $language
-     *
-     * @return int
+     * {@inheritdoc}
      */
     public function get(int $count, string $language): int
     {
@@ -67,18 +63,17 @@ class PluralizationRules
     }
 
     /**
-     * Overrides the default plural rule for a given locale.
-     *
-     * @param string   $language
-     * @param callable $rule
+     * {@inheritdoc}
      */
-    public function set(string $language, callable $rule)
+    public function set(string $language, callable $rule): PluralizationRulesContract
     {
         if (strlen($language) > 3) {
             $language = substr($language, 0, -strlen(strrchr($language, '_')));
         }
 
         $this->rules[$language] = $rule;
+
+        return $this;
     }
 
     /**
@@ -116,7 +111,7 @@ class PluralizationRules
      *                                 PluralCategorys\Zero|
      *                                 PluralCategorys\None
      */
-    protected function createRules($prefix)
+    protected function createRules(string $prefix)
     {
         if ($prefix === 'ar') {
             return new Arabic();
@@ -181,6 +176,6 @@ class PluralizationRules
             return new None();
         }
 
-        throw new InvalidArgumentException('Unknown language prefix: ' . $prefix . '.');
+        return new Zero();
     }
 }

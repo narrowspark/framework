@@ -1,6 +1,8 @@
 <?php
 namespace Viserio\Contracts\Translation;
 
+use Psr\Log\LoggerInterface;
+
 interface Translator
 {
     /**
@@ -8,7 +10,7 @@ interface Translator
      *
      * @return string
      */
-    public function getLocale();
+    public function getLocale(): string;
 
     /**
      * Sets the string dictating the default language to translate into. (e.g. 'en').
@@ -22,12 +24,41 @@ interface Translator
     public function setLocale(string $locale): Translator;
 
     /**
+     * Get the message selector instance.
+     *
+     * @return \Viserio\Contracts\Translation\MessageSelector
+     */
+    public function getSelector(): MessageSelector;
+
+    /**
+     * Get the message catalogue.
+     *
+     * @return \Viserio\Contracts\Translation\MessageCatalogue
+     */
+    public function getCatalogue(): MessageCatalogue;
+
+        /**
+     * Set a logger instance..
+     *
+     * @param \Psr\Log\LoggerInterface $logger
+     *
+     * @return \Viserio\Translation\Translator
+     */
+    public function setLogger(LoggerInterface $logger): Translator;
+
+    /**
+     * Get a logger instance.
+     *
+     * @return \Psr\Log\LoggerInterface
+     */
+    public function getLogger(): LoggerInterface;
+
+    /**
      * Translates the given message.
      *
      * @param string      $id         The message id (may also be an object that can be cast to string)
      * @param array       $parameters An array of parameters for the message
-     * @param string|null $domain     The domain for the message or null to use the default
-     * @param string|null $locale     The locale or null to use the default
+     * @param string|     $domain     The domain for the message or null to use the default
      *
      * @throws \InvalidArgumentException If the locale contains invalid characters
      *
@@ -36,18 +67,16 @@ interface Translator
     public function trans(
         string $id,
         array $parameters = [],
-        string $domain = null,
-        string $locale = null
+        string $domain = 'messages'
     ): string;
 
     /**
      * Translates the given choice message by choosing a translation according to a number.
      *
-     * @param string      $id         The message id (may also be an object that can be cast to string)
-     * @param int         $number     The number to use to find the indice of the message
-     * @param array       $parameters An array of parameters for the message
-     * @param string|null $domain     The domain for the message or null to use the default
-     * @param string|null $locale     The locale or null to use the default
+     * @param string               $id         The message id (may also be an object that can be cast to string)
+     * @param int|array|\Countable $number     The number to use to find the indice of the message
+     * @param array                $parameters An array of parameters for the message
+     * @param string               $domain     The domain for the message or null to use the default
      *
      * @throws \InvalidArgumentException If the locale contains invalid characters
      *
@@ -55,10 +84,9 @@ interface Translator
      */
     public function transChoice(
         string $id,
-        int $number,
+        $number,
         array $parameters = [],
-        string $domain = null,
-        string $locale = null
+        string $domain = 'messages'
     ): string;
 
     /**
@@ -72,30 +100,11 @@ interface Translator
     public function addHelper(string $name, callable $helper): Translator;
 
     /**
-     * Apply helpers.
-     *
-     * @param string[] $translation
-     * @param array    $helpers
-     *
-     * @throws \Exception
-     *
-     * @return array
-     */
-    public function applyHelpers(array $translation, array $helpers): array;
-
-    /**
      * Add filter.
      *
-     * @param string   $name
      * @param callable $filter
-     */
-    public function addFilter(string $name, callable $filter);
-
-    /**
-     * @param string|array $translation
-     * @param array        $filters
      *
-     * @return array
+     * @return self
      */
-    public function applyFilters($translation, array $filters): array;
+    public function addFilter(callable $filter): Translator;
 }

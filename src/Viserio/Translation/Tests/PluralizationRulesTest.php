@@ -2,31 +2,33 @@
 namespace Viserio\Translation\Tests;
 
 use ReflectionMethod;
-use Viserio\Translation\PluralCategorys\Arabic;
-use Viserio\Translation\PluralCategorys\Balkan;
-use Viserio\Translation\PluralCategorys\Breton;
-use Viserio\Translation\PluralCategorys\Colognian;
-use Viserio\Translation\PluralCategorys\Czech;
-use Viserio\Translation\PluralCategorys\French;
-use Viserio\Translation\PluralCategorys\Gaelic;
-use Viserio\Translation\PluralCategorys\Hebrew;
-use Viserio\Translation\PluralCategorys\Irish;
-use Viserio\Translation\PluralCategorys\Langi;
-use Viserio\Translation\PluralCategorys\Latvian;
-use Viserio\Translation\PluralCategorys\Lithuanian;
-use Viserio\Translation\PluralCategorys\Macedonian;
-use Viserio\Translation\PluralCategorys\Maltese;
-use Viserio\Translation\PluralCategorys\Manx;
-use Viserio\Translation\PluralCategorys\None;
-use Viserio\Translation\PluralCategorys\One;
-use Viserio\Translation\PluralCategorys\Polish;
-use Viserio\Translation\PluralCategorys\Romanian;
-use Viserio\Translation\PluralCategorys\Slovenian;
-use Viserio\Translation\PluralCategorys\Tachelhit;
-use Viserio\Translation\PluralCategorys\Tamazight;
-use Viserio\Translation\PluralCategorys\Two;
-use Viserio\Translation\PluralCategorys\Welsh;
-use Viserio\Translation\PluralCategorys\Zero;
+use Viserio\Translation\PluralCategorys\{
+    Arabic,
+    Balkan,
+    Breton,
+    Colognian,
+    Czech,
+    French,
+    Gaelic,
+    Hebrew,
+    Irish,
+    Langi,
+    Latvian,
+    Lithuanian,
+    Macedonian,
+    Maltese,
+    Manx,
+    None,
+    One,
+    Polish,
+    Romanian,
+    Slovenian,
+    Tachelhit,
+    Tamazight,
+    Two,
+    Welsh,
+    Zero
+};
 use Viserio\Translation\PluralizationRules;
 
 class PluralizationRulesTest extends \PHPUnit_Framework_TestCase
@@ -46,7 +48,7 @@ class PluralizationRulesTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @dataProvider  provideCreateRules
+     * @dataProvider provideCreateRules
      */
     public function testCreateRules($lang, $expected)
     {
@@ -183,24 +185,11 @@ class PluralizationRulesTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @dataProvider provideInvalidPluralRules
-     * @expectedException InvalidArgumentException
+     * @dataProvider successLangcodes
      */
-    public function testInvalidInstance($lang)
+    public function testLangcodes($nplural, $langCodes)
     {
-        $this->createRules->invoke($this->object, $lang);
-    }
-
-    public function provideInvalidPluralRules()
-    {
-        return [
-            ['xx'],
-            [null],
-            [true],
-            [false],
-            [0],
-            [100],
-            [-3.14],
-        ];
+        $matrix = $this->generateTestData($nplural, $langCodes);
+        $this->validateMatrix($nplural, $matrix);
     }
 }

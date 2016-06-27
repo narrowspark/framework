@@ -1,21 +1,19 @@
 <?php
 namespace Viserio\Translation;
 
+use Countable;
 use InvalidArgumentException;
-use RuntimeException;
-use Viserio\Contracts\Translation\Translator as TranslatorContract;
+use Psr\Log\LoggerInterface;
+use Viserio\Contracts\Translation\{
+    MessageCatalogue as MessageCatalogueContract,
+    MessageSelector as MessageSelectorContract,
+    Translator as TranslatorContract
+};
 use Viserio\Translation\Traits\ValidateLocaleTrait;
 
 class Translator implements TranslatorContract
 {
     use ValidateLocaleTrait;
-
-    /**
-     * All added replacements.
-     *
-     * @var array
-     */
-    private $replacements = [];
 
     /**
      * All registred filters.
@@ -39,6 +37,43 @@ class Translator implements TranslatorContract
     private $locale;
 
     /**
+     * The message selector.
+     *
+     * @var \Viserio\Contracts\Translation\MessageSelector
+     */
+    protected $selector;
+
+    /**
+     * The message catalogue.
+     *
+     * @var \Viserio\Contracts\Translation\MessageCatalogue
+     */
+    protected $catalogue;
+
+    /**
+     * The psr logger instance.
+     *
+     * @var \Psr\Log\LoggerInterface
+     */
+    private $logger;
+
+    /**
+     * Creat new Translator instance.
+     *
+     * @param \Viserio\Contracts\Translation\MessageCatalogue $catalogue
+     * @param \Viserio\Contracts\Translation\MessageSelector  $selector The message selector for pluralization
+     *
+     * @throws \InvalidArgumentException If a locale contains invalid characters
+     */
+    public function __construct(MessageCatalogueContract $catalogue, MessageSelectorContract $selector)
+    {
+        $this->setLocale($catalogue->getLocale());
+
+        $this->catalogue = $catalogue;
+        $this->selector = $selector;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function setLocale(string $locale): TranslatorContract
@@ -52,9 +87,43 @@ class Translator implements TranslatorContract
     /**
      * {@inheritdoc}
      */
-    public function getLocale()
+    public function getLocale(): string
     {
         return $this->locale;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getSelector(): MessageSelectorContract
+    {
+        return $this->selector;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getCatalogue(): MessageCatalogueContract
+    {
+        return $this->catalogue;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setLogger(LoggerInterface $logger): TranslatorContract
+    {
+        $this->logger = $logger;
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getLogger(): LoggerInterface
+    {
+        return $this->logger;
     }
 
     /**
@@ -63,20 +132,18 @@ class Translator implements TranslatorContract
     public function trans(
         string $id,
         array $parameters = [],
-        string $domain = null,
-        string $locale = null
+        string $domain = 'messages'
     ): string {
-        $locale = (null !== $locale) ? $this->assertValidLocale($locale) : $this->getLocale();
+        $trans = strtr($this->catalogue->get($id, $domain), $parameters);
 
-        if (is_numeric($context)) {
-            // Get plural form
-            $string = $this->plural($string, $context, $locale);
-        } else {
-            // Get custom form
-            $string = $this->form($string, $context, $locale);
+        $trans = $this->applyFilters($trans);
+        $trans = $this->applyHelpers($trans);
+
+        if ($this->logger !== null) {
+            $this->log($id, $domain);
         }
 
-        return empty($values) ? $string : strtr($string, $values);
+        return $trans;
     }
 
     /**
@@ -84,14 +151,35 @@ class Translator implements TranslatorContract
      */
     public function transChoice(
         string $id,
-        int $number,
+        $number,
         array $parameters = [],
-        string $domain = null,
-        string $locale = null
+        string $domain = 'messages'
     ): string {
-        $this->assertValidLocale($locale);
+        if (is_array($number) || $number instanceof Countable) {
+            $number = count($number);
+        }
 
-        // TODO finish
+        if (preg_match("/^(.*?)\[(.*?)\]$/", $id, $match)) {
+            $id = $match[1];
+        }
+
+        $trans = strtr(
+            $this->selector->choose(
+                $this->catalogue->get($id, $domain),
+                $number,
+                $this->locale
+            ),
+            $parameters
+        );
+
+        $trans = $this->applyFilters($trans);
+        $trans = $this->applyHelpers(empty($match) ? $trans : $trans . '[' . $match[2] . ']');
+
+        if ($this->logger !== null) {
+            $this->log($id, $domain);
+        }
+
+        return $trans;
     }
 
     /**
@@ -105,28 +193,33 @@ class Translator implements TranslatorContract
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function addFilter(callable $filter): TranslatorContract
+    {
+        $this->filters[] = $filter;
+
+        return $this;
+    }
+
+    /**
      * Apply helpers.
      *
-     * @param string[] $translation
-     * @param array    $helpers
-     *
-     * @throws \RuntimeException
+     * @param string $translation
      *
      * @return mixed
      */
-    public function applyHelpers(array $translation, array $helpers): array
+    private function applyHelpers(string $translation)
     {
-        if (is_array($translation)) {
-            $translator = $this;
+        $helpers = $this->filterHelpersFromString($translation);
 
-            return array_map(function ($trans) use ($translator, $helpers) {
-                return $translator->applyHelpers($trans, $helpers);
-            }, $translation);
+        if (count($this->helpers) === 0 || count($helpers) === 0) {
+            return $translation;
         }
 
         foreach ($helpers as $helper) {
-            if (!isset($this->helpers[$helper['name']])) {
-                throw new RuntimeException('Helper ' . $helper['name'] . ' is not registered.');
+            if (! isset($this->helpers[$helper['name']])) {
+                return $translation;
             }
 
             array_unshift($helper['arguments'], $translation);
@@ -138,50 +231,49 @@ class Translator implements TranslatorContract
     }
 
     /**
-     * Returns translation of a string. If no translation exists, the original string will be
-     * returned. No parameters are replaced.
+     * Filter a helper from string.
      *
-     * @param string      $string
-     * @param int         $count
-     * @param string|null $locale
-     *
-     * @return string
-     */
-    public function plural(string $string, int $count = 0, $locale = null): string
-    {
-        $this->assertValidLocale($locale);
-
-        // Get the translation form key
-        $form = $this->getPluralization()->get($count, $locale);
-
-        // Return the translation for that form
-        return $this->form($string, $form, $locale);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function addFilter(string $name, callable $filter): TranslatorContract
-    {
-        $this->filters[$name] = $filter;
-
-        return $this;
-    }
-
-    /**
-     * @param string|array $translation
-     * @param array        $filters
+     * @param string $translation
      *
      * @return array
      */
-    public function applyFilters($translation, array $filters): array
+    private function filterHelpersFromString(string $translation): array
     {
-        if (is_array($translation)) {
-            $translator = $this;
+        $helpers = [];
 
-            return array_map(function ($translation) use ($translator) {
-                return $translator->applyFilters($translation);
-            }, $translation);
+        if (preg_match("/^(.*?)\[(.*?)\]$/", $translation, $match)) {
+            $translation = $match[1];
+            $helpers = explode('|', $match[2]);
+            $helpers = array_map(function ($helper) {
+                $name = $helper;
+                $arguments = [];
+
+                if (preg_match('/^(.*?)\:(.*)$/', $helper, $match)) {
+                    $name = $match[1];
+                    $arguments = explode(':', $match[2]);
+                }
+
+                return [
+                    'name' => $name,
+                    'arguments' => $arguments,
+                ];
+            }, $helpers);
+        }
+
+        return $helpers;
+    }
+
+    /**
+     * Applay filter on string.
+     *
+     * @param string $translation
+     *
+     * @return string
+     */
+    private function applyFilters(string $translation): string
+    {
+        if (empty($this->filters)) {
+            return $translation;
         }
 
         foreach ($this->filters as $filter) {
@@ -192,70 +284,29 @@ class Translator implements TranslatorContract
     }
 
     /**
-     * Add replacement.
+     * Logs for missing translations.
      *
-     * @param string $search
-     * @param string $replacement
-     *
-     * @return self
+     * @param string $id
+     * @param string $domain
      */
-    public function addReplacement($search, $replacement)
+    private function log(string $id, string $domain)
     {
-        $this->replacements[$search] = $replacement;
+        $catalogue = $this->catalogue;
 
-        return $this;
-    }
-
-    /**
-     * Remove replacements.
-     *
-     * @param string $search
-     *
-     * @throws \InvalidArgumentException
-     *
-     * @return self
-     */
-    public function removeReplacement($search)
-    {
-        if (!isset($this->replacements[$search])) {
-            throw new InvalidArgumentException(sprintf('Replacement [%s] was not found.', $search));
+        if ($catalogue->defines($id, $domain)) {
+            return;
         }
 
-        unset($this->replacements[$search]);
-
-        return $this;
-    }
-
-    /**
-     * @return array
-     */
-    public function getReplacements()
-    {
-        return $this->replacements;
-    }
-
-    /**
-     * Description.
-     *
-     * @param string $message
-     * @param array  $args
-     *
-     * @return string
-     */
-    protected function applyReplacements($message, array $args = [])
-    {
-        $replacements = $this->replacements;
-
-        foreach ($args as $countame => $value) {
-            $replacements[$countame] = $value;
+        if ($catalogue->has($id, $domain)) {
+            $this->logger->debug(
+                'Translation use fallback catalogue.',
+                ['id' => $id, 'domain' => $domain, 'locale' => $catalogue->getLocale()]
+            );
+        } else {
+            $this->logger->warning(
+                'Translation not found.',
+                ['id' => $id, 'domain' => $domain, 'locale' => $catalogue->getLocale()]
+            );
         }
-
-        foreach ($replacements as $countame => $value) {
-            if ($value !== false) {
-                $message = preg_replace('~%' . $countame . '%~', $value, $message);
-            }
-        }
-
-        return $message;
     }
 }

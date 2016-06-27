@@ -11,11 +11,29 @@ interface TransChecker
     public function getDefaultLocale(): string;
 
     /**
+     * Set the locales that need to be checked.
+     *
+     * @param array $locales
+     *
+     * @return self
+     */
+    public function setLocales(array $locales): TransChecker;
+
+    /**
      * Get the locales to check.
      *
      * @return array
      */
     public function getLocales(): array;
+
+        /**
+     * Set the locals that are ignored on the check.
+     *
+     * @param array $ignored
+     *
+     * @return self
+     */
+    public function setIgnoredTranslations(array $ignored): TransChecker;
 
     /**
      * Get the ignored translation attributes.
