@@ -24,7 +24,7 @@ class ViewFinder implements FinderContract
      *
      * @var array
      */
-    protected $paths;
+    protected $paths = [];
 
     /**
      * The array of views that have been located.
@@ -236,7 +236,7 @@ class ViewFinder implements FinderContract
      */
     protected function findInPaths(string $name, array $paths): string
     {
-        foreach ((array) $paths as $path) {
+        foreach ($paths as $path) {
             foreach ($this->getPossibleViewFiles($name) as $file) {
                 if (
                     $this->files->exists(

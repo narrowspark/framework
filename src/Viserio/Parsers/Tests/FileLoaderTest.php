@@ -118,8 +118,8 @@ class FileLoaderTest extends \PHPUnit_Framework_TestCase
 
         $directory = $this->fileloader->getDirectories();
 
-        $this->assertSame('foo/bar', $directory[0]);
-        $this->assertSame('bar/foo', $directory[1]);
+        $this->assertSame('foo/bar/', $directory[0]);
+        $this->assertSame('bar/foo/', $directory[1]);
 
         $this->fileloader->addDirectory('added/directory');
 
