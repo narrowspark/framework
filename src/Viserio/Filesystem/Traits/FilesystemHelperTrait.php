@@ -74,6 +74,27 @@ trait FilesystemHelperTrait
     }
 
     /**
+     * Create a hard link to the target file or directory.
+     *
+     * @param string $target
+     * @param string $link
+     *
+     * @return void
+     *
+     * @codeCoverageIgnore
+     */
+    public function link(string $target, string $link)
+    {
+        if (! $this->isWindows()) {
+            return symlink($target, $link);
+        }
+
+        $mode = $this->isDirectory($target) ? 'J' : 'H';
+
+        exec("mklink /{$mode} \"{$link}\" \"{$target}\"");
+    }
+
+    /**
      * Fix directory separators for windows and linux
      *
      * @param string|array $paths
@@ -81,4 +102,16 @@ trait FilesystemHelperTrait
      * @return string|array
      */
     abstract protected function normalizeDirectorySeparator($paths);
+
+    /**
+     * Determine whether the current environment is Windows based.
+     *
+     * @return bool
+     *
+     * @codeCoverageIgnore
+     */
+    protected function isWindows(): bool
+    {
+        return strtolower(substr(PHP_OS, 0, 3)) === 'win';
+    }
 }

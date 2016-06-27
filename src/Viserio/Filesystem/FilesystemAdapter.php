@@ -2,18 +2,28 @@
 namespace Viserio\Filesystem;
 
 use InvalidArgumentException;
-use League\Flysystem\AdapterInterface;
-use League\Flysystem\Config as FlyConfig;
+use League\Flysystem\{
+    AdapterInterface,
+    Config as FlyConfig
+};
 use Narrowspark\Arr\StaticArr as Arr;
-use Viserio\Contracts\Filesystem\Directorysystem as DirectorysystemContract;
-use Viserio\Contracts\Filesystem\Exception\FileNotFoundException;
-use Viserio\Contracts\Filesystem\Exception\IOException as ViserioIOException;
-use Viserio\Contracts\Filesystem\Filesystem as FilesystemContract;
-use Viserio\Filesystem\Traits\FilesystemExtensionTrait;
+use Viserio\Contracts\Filesystem\{
+    Directorysystem as DirectorysystemContract,
+    Exception\FileNotFoundException,
+    Exception\IOException as ViserioIOException,
+    Filesystem as FilesystemContract
+};
+use Viserio\Filesystem\Traits\{
+    FilesystemExtensionTrait,
+    FilesystemHelperTrait
+};
+use Viserio\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
 class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
 {
+    use NormalizePathAndDirectorySeparatorTrait;
     use FilesystemExtensionTrait;
+    use FilesystemHelperTrait;
 
     /**
      * The Flysystem filesystem implementation.
