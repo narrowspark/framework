@@ -307,7 +307,7 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
     /**
      * Get the Flysystem driver.
      *
-     * @return AdapterInterface
+     * @return \League\Flysystem\AdapterInterface
      */
     public function getDriver()
     {
