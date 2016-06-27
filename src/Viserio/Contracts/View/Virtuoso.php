@@ -25,7 +25,7 @@ interface Virtuoso
     /**
      * Call the creator for a given view.
      *
-     * @param \Viserio\View\View $view
+     * @param \Viserio\Contracts\View\View $view
      *
      * @return self
      */
@@ -34,7 +34,7 @@ interface Virtuoso
     /**
      * Call the composer for a given view.
      *
-     * @param \Viserio\View\View $view
+     * @param \Viserio\Contracts\View\View $view
      *
      * @return self
      */

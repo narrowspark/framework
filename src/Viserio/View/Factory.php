@@ -27,7 +27,7 @@ class Factory implements FactoryContract
     /**
      * The engines instance.
      *
-     * @var \Viserio\Contracts\View\EnginesResolver
+     * @var \Viserio\Contracts\View\EngineResolver
      */
     protected $engines;
 
@@ -85,7 +85,7 @@ class Factory implements FactoryContract
     /**
      * Virtuoso instance.
      *
-     * @var Virtuoso
+     * @var \Viserio\Contracts\View\Virtuoso
      */
     protected $virtuoso;
 
