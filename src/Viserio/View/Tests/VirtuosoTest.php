@@ -2,12 +2,21 @@
 namespace Viserio\View\Tests;
 
 use Interop\Container\ContainerInterface;
-use Mockery as Mock;
-use Symfony\Component\EventDispatcher\EventDispatcher;
+use Narrowspark\TestingHelper\Traits\MockeryTrait;
+use Viserio\Contracts\Events\Dispatcher as EventDispatcher;
 use Viserio\View\Virtuoso;
 
 class VirtuosoTest extends \PHPUnit_Framework_TestCase
 {
+    use MockeryTrait;
+
+    public function testGetDispatcher()
+    {
+        $virtuoso = $this->getVirtuoso();
+
+        $this->assertInstanceOf(EventDispatcher::class, $virtuoso->getDispatcher());
+    }
+
     public function testBasicSectionHandling()
     {
         $virtuoso = $this->getVirtuoso();
@@ -172,9 +181,11 @@ class VirtuosoTest extends \PHPUnit_Framework_TestCase
 
     protected function getVirtuoso()
     {
+        $container = $this->mock(ContainerInterface::class);
+
         return new Virtuoso(
-            Mock::mock(ContainerInterface::class),
-            Mock::mock(EventDispatcher::class)
+            $container,
+            $this->mock(EventDispatcher::class)
         );
     }
 }

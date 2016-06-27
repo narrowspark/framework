@@ -4,13 +4,19 @@ namespace Viserio\View;
 use Closure;
 use Interop\Container\ContainerInterface;
 use InvalidArgumentException;
-use Viserio\Contracts\Events\Dispatcher as DispatcherContract;
-use Viserio\Support\Invoker;
-use Viserio\Support\Str;
-use Viserio\Support\Traits\ContainerAwareTrait;
+use Viserio\Contracts\{
+    Events\Dispatcher as DispatcherContract,
+    View\View as ViewContract,
+    View\Virtuoso as VirtuosoContract
+};
+use Viserio\Support\{
+    Invoker,
+    Str,
+    Traits\ContainerAwareTrait
+};
 use Viserio\View\Traits\NormalizeNameTrait;
 
-class Virtuoso
+class Virtuoso implements VirtuosoContract
 {
     use ContainerAwareTrait;
     use NormalizeNameTrait;
@@ -53,14 +59,12 @@ class Virtuoso
     /**
      * Construct.
      *
-     * @param ContainerInterface                   $container
-     * @param \Viserio\Contracts\Events\Dispatcher $events
+     * @param \Interop\Container\ContainerInterface $container
+     * @param \Viserio\Contracts\Events\Dispatcher  $events
      */
     public function __construct(ContainerInterface $container, DispatcherContract $events)
     {
         $this->events = $events;
-
-        $this->setContainer($container);
 
         $this->invoker = (new Invoker())
             ->injectByTypeHint(true)
@@ -69,9 +73,7 @@ class Virtuoso
     }
 
     /**
-     * Get the event dispatcher instance.
-     *
-     * @return \Viserio\Contracts\Events\Dispatcher
+     * {@inheritdoc}
      */
     public function getDispatcher(): DispatcherContract
     {
@@ -79,12 +81,7 @@ class Virtuoso
     }
 
     /**
-     * Register a view creator event.
-     *
-     * @param array|string    $views
-     * @param \Closure|string $callback
-     *
-     * @return array
+     * {@inheritdoc}
      */
     public function creator($views, $callback): array
     {
@@ -98,31 +95,27 @@ class Virtuoso
     }
 
     /**
-     * Call the creator for a given view.
-     *
-     * @param \Viserio\View\View $view
+     * {@inheritdoc}
      */
-    public function callCreator(View $view)
+    public function callCreator(ViewContract $view): VirtuosoContract
     {
-        $this->events->emit('creating: ' . $view->getName(), $view);
+        $this->events->emit('creating: ' . $view->getName(), [$view]);
+
+        return $this;
     }
 
     /**
-     * Call the composer for a given view.
-     *
-     * @param \Viserio\View\View $view
+     * {@inheritdoc}
      */
-    public function callComposer(View $view)
+    public function callComposer(ViewContract $view): VirtuosoContract
     {
-        $this->events->emit('composing: ' . $view->getName(), $view);
+        $this->events->emit('composing: ' . $view->getName(), [$view]);
+
+        return $this;
     }
 
     /**
-     * Register multiple view composers via an array.
-     *
-     * @param array $composers
-     *
-     * @return array
+     * {@inheritdoc}
      */
     public function composers(array $composers): array
     {
@@ -136,13 +129,7 @@ class Virtuoso
     }
 
     /**
-     * Register a view composer event.
-     *
-     * @param array|string    $views
-     * @param \Closure|string $callback
-     * @param int|null        $priority
-     *
-     * @return array
+     * {@inheritdoc}
      */
     public function composer($views, $callback, int $priority = null): array
     {
@@ -156,9 +143,7 @@ class Virtuoso
     }
 
     /**
-     * Stop injecting content into a section and return its contents.
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function yieldSection(): string
     {
@@ -170,14 +155,9 @@ class Virtuoso
     }
 
     /**
-     * Get the string contents of a section.
-     *
-     * @param string $section
-     * @param string $default
-     *
-     * @return string
+     * {@inheritdoc}
      */
-    public function yieldContent($section, string $default = ''): string
+    public function yieldContent(string $section, string $default = ''): string
     {
         $sectionContent = $default;
 
@@ -199,10 +179,7 @@ class Virtuoso
     }
 
     /**
-     * Start injecting content into a section.
-     *
-     * @param string $section
-     * @param string $content
+     * {@inheritdoc}
      */
     public function startSection(string $section, string $content = '')
     {
@@ -216,24 +193,15 @@ class Virtuoso
     }
 
     /**
-     * Inject inline content into a section.
-     *
-     * @param string $section
-     * @param string $content
+     * {@inheritdoc}
      */
     public function inject(string $section, string $content)
     {
-        return $this->startSection($section, $content);
+        $this->startSection($section, $content);
     }
 
     /**
-     * Stop injecting content into a section.
-     *
-     * @param bool $overwrite
-     *
-     * @throws \InvalidArgumentException
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function stopSection(bool $overwrite = false): string
     {
@@ -253,11 +221,7 @@ class Virtuoso
     }
 
     /**
-     * Stop injecting content into a section and append it.
-     *
-     * @throws \InvalidArgumentException
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function appendSection(): string
     {
@@ -277,7 +241,7 @@ class Virtuoso
     }
 
     /**
-     * Flush all of the section contents.
+     * {@inheritdoc}
      */
     public function flushSections()
     {
@@ -286,7 +250,7 @@ class Virtuoso
     }
 
     /**
-     * Flush all of the section contents if done rendering.
+     * {@inheritdoc}
      */
     public function flushSectionsIfDoneRendering()
     {
@@ -296,7 +260,7 @@ class Virtuoso
     }
 
     /**
-     * Increment the rendering counter.
+     * {@inheritdoc}
      */
     public function incrementRender()
     {
@@ -304,7 +268,7 @@ class Virtuoso
     }
 
     /**
-     * Decrement the rendering counter.
+     * {@inheritdoc}
      */
     public function decrementRender()
     {
@@ -312,9 +276,7 @@ class Virtuoso
     }
 
     /**
-     * Check if there are no active render operations.
-     *
-     * @return bool
+     * {@inheritdoc}
      */
     public function doneRendering(): bool
     {
@@ -322,21 +284,15 @@ class Virtuoso
     }
 
     /**
-     * Check if section exists.
-     *
-     * @param string $name
-     *
-     * @return bool
+     * {@inheritdoc}
      */
-    public function hasSection($name): bool
+    public function hasSection(string $name): bool
     {
         return array_key_exists($name, $this->sections);
     }
 
     /**
-     * Get the entire array of sections.
-     *
-     * @return array
+     * {@inheritdoc}
      */
     public function getSections(): array
     {
@@ -373,7 +329,7 @@ class Virtuoso
         $view = $this->normalizeName($view);
 
         if ($callback instanceof Closure) {
-            $this->events->addListener($prefix . $view, $callback, $priority);
+            $this->events->on($prefix . $view, $callback, $priority);
 
             return $callback;
         } elseif (is_string($callback)) {
@@ -399,7 +355,7 @@ class Virtuoso
         // classes from the application IoC container then call the compose method
         // on the instance. This allows for convenient, testable view composers.
         $callback = $this->buildClassEventCallback($class, $prefix);
-        $this->events->addListener($name, $callback, $priority);
+        $this->events->on($name, $callback, $priority);
 
         return $callback;
     }
@@ -420,7 +376,7 @@ class Virtuoso
         // the instance out of the IoC container and call the method on it with the
         // given arguments that are passed to the Closure as the composer's data.
         return function () use ($class, $method) {
-            $callable = [$this->getInvoker()->call($class), $method];
+            $callable = [$this->invoker->call($class), $method];
 
             return call_user_func_array($callable, func_get_args());
         };
@@ -443,15 +399,5 @@ class Virtuoso
         $method = Str::contains($prefix, 'composing') ? 'compose' : 'create';
 
         return [$class, $method];
-    }
-
-    /**
-     * Get configured invoker.
-     *
-     * @return \Viserio\Support\Invoker
-     */
-    protected function getInvoker(): Invoker
-    {
-        return $this->invoker;
     }
 }

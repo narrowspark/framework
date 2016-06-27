@@ -22,7 +22,7 @@ trait NormalizePathAndDirectorySeparatorTrait
             return $paths;
         }
 
-        return self::normalizePath(str_replace('\\', '/', $paths));
+        return str_replace('\\', '/', $paths);
     }
 
     /**

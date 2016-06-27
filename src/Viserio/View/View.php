@@ -3,12 +3,14 @@ namespace Viserio\View;
 
 use ArrayAccess;
 use BadMethodCallException;
-use Exception;
 use Throwable;
-use Viserio\Contracts\Support\Arrayable;
-use Viserio\Contracts\Support\Renderable;
-use Viserio\Contracts\View\Engine as EngineContract;
-use Viserio\Contracts\View\View as ViewContract;
+use Viserio\Contracts\{
+    Support\Arrayable,
+    Support\Renderable,
+    View\Engine as EngineContract,
+    View\Factory as FactoryContract,
+    View\View as ViewContract
+};
 use Viserio\Support\Str;
 
 class View implements ArrayAccess, ViewContract
@@ -132,11 +134,7 @@ class View implements ArrayAccess, ViewContract
     }
 
     /**
-     * Get the string contents of the view.
-     *
-     * @param callable|null $callback
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function render(callable $callback = null): string
     {
@@ -146,20 +144,13 @@ class View implements ArrayAccess, ViewContract
             $response = isset($callback) ? call_user_func($callback, $this, $contents) : null;
 
             return $response !== null ? $response : $contents;
-        } catch (Exception $exception) {
-            throw $exception;
         } catch (Throwable $exception) {
             throw $exception;
         }
     }
 
     /**
-     * Add a piece of data to the view.
-     *
-     * @param string $key
-     * @param mixed  $value
-     *
-     * @return self
+     * {@inheritdoc}
      */
     public function with($key, $value = null): ViewContract
     {
@@ -173,33 +164,23 @@ class View implements ArrayAccess, ViewContract
     }
 
     /**
-     * Add a view instance to the view data.
-     *
-     * @param string $key
-     * @param string $view
-     * @param string[]  $data
-     *
-     * @return self
+     * {@inheritdoc}
      */
-    public function nest($key, string $view, array $data = []): self
+    public function nest($key, string $view, array $data = []): ViewContract
     {
         return $this->with($key, $this->factory->create($view, $data));
     }
 
     /**
-     * Get the view factory instance.
-     *
-     * @return \Viserio\View\Factory
+     * {@inheritdoc}
      */
-    public function getFactory(): Factory
+    public function getFactory(): FactoryContract
     {
         return $this->factory;
     }
 
     /**
-     * Get the view's rendering engine.
-     *
-     * @return EngineContract
+     * {@inheritdoc}
      */
     public function getEngine(): EngineContract
     {
@@ -207,9 +188,7 @@ class View implements ArrayAccess, ViewContract
     }
 
     /**
-     * Get the name of the view.
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function getName(): string
     {
@@ -217,9 +196,7 @@ class View implements ArrayAccess, ViewContract
     }
 
     /**
-     * Get the array of view data.
-     *
-     * @return array
+     * {@inheritdoc}
      */
     public function getData(): array
     {
@@ -227,9 +204,7 @@ class View implements ArrayAccess, ViewContract
     }
 
     /**
-     * Get the path to the view file.
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function getPath(): string
     {
@@ -237,13 +212,13 @@ class View implements ArrayAccess, ViewContract
     }
 
     /**
-     * Set the path to the view.
-     *
-     * @param string $path
+     * {@inheritdoc}
      */
-    public function setPath(string $path)
+    public function setPath(string $path): ViewContract
     {
         $this->path = $path;
+
+        return $this;
     }
 
     /**
@@ -253,7 +228,7 @@ class View implements ArrayAccess, ViewContract
      *
      * @return bool
      */
-    public function offsetExists($key): bool
+    public function offsetExists($key)
     {
         return array_key_exists($key, $this->data);
     }

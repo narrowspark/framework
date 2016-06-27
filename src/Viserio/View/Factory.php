@@ -1,17 +1,24 @@
 <?php
 namespace Viserio\View;
 
+use Closure;
 use InvalidArgumentException;
 use Narrowspark\Arr\StaticArr as Arr;
-use Viserio\Contracts\Events\Dispatcher as DispatcherContract;
-use Viserio\Contracts\Support\Arrayable;
-use Viserio\Contracts\View\Engine as EngineContract;
-use Viserio\Contracts\View\Factory as FactoryContract;
-use Viserio\Contracts\View\Finder as FinderContract;
-use Viserio\Contracts\View\View as ViewContract;
+use Viserio\Contracts\{
+    Events\Dispatcher as DispatcherContract,
+    Support\Arrayable,
+    View\Engine as EngineContract,
+    View\EngineResolver as EngineResolverContract,
+    View\Factory as FactoryContract,
+    View\Finder as FinderContract,
+    View\View as ViewContract,
+    View\Virtuoso as VirtuosoContract
+};
 use Viserio\Support\Str;
-use Viserio\View\Engines\EngineResolver;
-use Viserio\View\Traits\NormalizeNameTrait;
+use Viserio\View\{
+    Engines\EngineResolver,
+    Traits\NormalizeNameTrait
+};
 
 class Factory implements FactoryContract
 {
@@ -20,7 +27,7 @@ class Factory implements FactoryContract
     /**
      * The engines instance.
      *
-     * @var \Viserio\View\Engines\EngineResolver
+     * @var \Viserio\Contracts\View\EnginesResolver
      */
     protected $engines;
 
@@ -85,12 +92,12 @@ class Factory implements FactoryContract
     /**
      * Constructor.
      *
-     * @param \Viserio\View\Engines\EngineResolver $engines
-     * @param \Viserio\Contracts\View\Finder       $finder
-     * @param \Viserio\Contracts\Events\Dispatcher $events
+     * @param \Viserio\Contracts\View\EngineResolver $engines
+     * @param \Viserio\Contracts\View\Finder         $finder
+     * @param \Viserio\Contracts\Events\Dispatcher   $events
      */
     public function __construct(
-        EngineResolver $engines,
+        EngineResolverContract $engines,
         FinderContract $finder,
         DispatcherContract $events
     ) {
@@ -102,13 +109,21 @@ class Factory implements FactoryContract
     }
 
     /**
-     * Get the evaluated view contents for the given view.
-     *
-     * @param string $path
-     * @param array  $data
-     * @param array  $mergeData
-     *
-     * @return \Viserio\View\View
+     * {@inheritdoc}
+     */
+    public function exists(string $view): bool
+    {
+        try {
+            $this->finder->find($view);
+        } catch (InvalidArgumentException $exception) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * {@inheritdoc}
      */
     public function file(string $path, array $data = [], array $mergeData = []): ViewContract
     {
@@ -119,13 +134,7 @@ class Factory implements FactoryContract
     }
 
     /**
-     * Get the evaluated view contents for the given view.
-     *
-     * @param string $view
-     * @param array  $data
-     * @param array  $mergeData
-     *
-     * @return \Viserio\View\View
+     * {@inheritdoc}
      */
     public function create(string $view, array $data = [], array $mergeData = []): ViewContract
     {
@@ -142,12 +151,7 @@ class Factory implements FactoryContract
     }
 
     /**
-     * Get the evaluated view contents for a named view.
-     *
-     * @param string   $view
-     * @param string[] $data
-     *
-     * @return \Viserio\View\View
+     * {@inheritdoc}
      */
     public function of(string $view, array $data = []): ViewContract
     {
@@ -155,54 +159,27 @@ class Factory implements FactoryContract
     }
 
     /**
-     * Register a named view.
-     *
-     * @param string $view
-     * @param string $name
+     * {@inheritdoc}
      */
-    public function name(string $view, string $name)
+    public function name(string $view, string $name): FactoryContract
     {
         $this->names[$name] = $view;
+
+        return $this;
     }
 
     /**
-     * Add an alias for a view.
-     *
-     * @param string $view
-     * @param string $alias
+     * {@inheritdoc}
      */
-    public function alias(string $view, string $alias)
+    public function alias(string $view, string $alias): FactoryContract
     {
         $this->aliases[$alias] = $view;
+
+        return $this;
     }
 
     /**
-     * Determine if a given view exists.
-     *
-     * @param string $view
-     *
-     * @return bool
-     */
-    public function exists(string $view): bool
-    {
-        try {
-            $this->finder->find($view);
-        } catch (InvalidArgumentException $exception) {
-            return false;
-        }
-
-        return true;
-    }
-
-    /**
-     * Get the rendered contents of a partial from a loop.
-     *
-     * @param string $view
-     * @param array  $data
-     * @param string $iterator
-     * @param string $empty
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function renderEach(string $view, array $data, string $iterator, string $empty = 'raw|'): string
     {
@@ -232,15 +209,9 @@ class Factory implements FactoryContract
     }
 
     /**
-     * Get the appropriate view engine for the given path.
-     *
-     * @param string $path
-     *
-     * @throws \InvalidArgumentException
-     *
-     * @return \Viserio\Contracts\View\Engine
+     * {@inheritdoc}
      */
-    public function getEngineFromPath(string $path): \Viserio\Contracts\View\Engine
+    public function getEngineFromPath(string $path): EngineContract
     {
         $engine = explode('|', $path);
         $path = isset($engine[1]) ? $engine[1] : $path;
@@ -255,12 +226,9 @@ class Factory implements FactoryContract
     }
 
     /**
-     * Add a piece of shared data to the environment.
-     *
-     * @param string $key
-     * @param mixed  $value
+     * {@inheritdoc}
      */
-    public function share(string $key, $value = null)
+    public function share($key, $value = null)
     {
         if (! is_array($key)) {
             return $this->shared[$key] = $value;
@@ -272,45 +240,39 @@ class Factory implements FactoryContract
     }
 
     /**
-     * Add a location to the array of view locations.
-     *
-     * @param string $location
+     * {@inheritdoc}
      */
-    public function addLocation($location)
+    public function addLocation(string $location): FactoryContract
     {
         $this->finder->addLocation($location);
+
+        return $this;
     }
 
     /**
-     * Add a new namespace to the loader.
-     *
-     * @param string       $namespace
-     * @param string|array $hints
+     * {@inheritdoc}
      */
-    public function addNamespace(string $namespace, $hints)
+    public function addNamespace(string $namespace, $hints): FactoryContract
     {
         $this->finder->addNamespace($namespace, $hints);
+
+        return $this;
     }
 
     /**
-     * Prepend a new namespace to the loader.
-     *
-     * @param string       $namespace
-     * @param string|array $hints
+     * {@inheritdoc}
      */
-    public function prependNamespace(string $namespace, $hints)
+    public function prependNamespace(string $namespace, $hints): FactoryContract
     {
         $this->finder->prependNamespace($namespace, $hints);
+
+        return $this;
     }
 
     /**
-     * Register a valid view extension and its engine.
-     *
-     * @param string        $extension
-     * @param string        $engine
-     * @param \Closure|null $resolver
+     * {@inheritdoc}
      */
-    public function addExtension(string $extension, string $engine, \Closure $resolver = null)
+    public function addExtension(string $extension, string $engine, Closure $resolver = null): FactoryContract
     {
         $this->finder->addExtension($extension);
 
@@ -321,12 +283,12 @@ class Factory implements FactoryContract
         unset($this->extensions[$extension]);
 
         $this->extensions = array_merge([$extension => $engine], $this->extensions);
+
+        return $this;
     }
 
     /**
-     * Get the extension to engine bindings.
-     *
-     * @return array
+     * {@inheritdoc}
      */
     public function getExtensions(): array
     {
@@ -334,19 +296,15 @@ class Factory implements FactoryContract
     }
 
     /**
-     * Get the engine resolver instance.
-     *
-     * @return \Viserio\View\Engines\EngineResolver
+     * {@inheritdoc}
      */
-    public function getEngineResolver(): EngineResolver
+    public function getEngineResolver(): EngineResolverContract
     {
         return $this->engines;
     }
 
     /**
-     * Get the view finder instance.
-     *
-     * @return \Viserio\Contracts\View\Finder
+     * {@inheritdoc}
      */
     public function getFinder(): FinderContract
     {
@@ -354,9 +312,7 @@ class Factory implements FactoryContract
     }
 
     /**
-     * Get the event dispatcher instance.
-     *
-     * @return \Viserio\Contracts\Events\Dispatcher
+     * {@inheritdoc}
      */
     public function getDispatcher(): DispatcherContract
     {
@@ -364,11 +320,9 @@ class Factory implements FactoryContract
     }
 
     /**
-     * Set virtuoso.
-     *
-     * @param Virtuoso $virtuoso
+     * {@inheritdoc}
      */
-    public function setVirtuoso(Virtuoso $virtuoso)
+    public function setVirtuoso(VirtuosoContract $virtuoso): FactoryContract
     {
         $this->virtuoso = $virtuoso;
 
@@ -378,22 +332,15 @@ class Factory implements FactoryContract
     }
 
     /**
-     * Get virtuoso.
-     *
-     * @return Virtuoso
+     * {@inheritdoc}
      */
-    public function getVirtuoso(): Virtuoso
+    public function getVirtuoso(): VirtuosoContract
     {
         return $this->virtuoso;
     }
 
     /**
-     * Get an item from the shared data.
-     *
-     * @param string $key
-     * @param mixed  $default
-     *
-     * @return mixed
+     * {@inheritdoc}
      */
     public function shared(string $key, $default = null)
     {
@@ -401,9 +348,7 @@ class Factory implements FactoryContract
     }
 
     /**
-     * Get all of the shared data for the environment.
-     *
-     * @return array
+     * {@inheritdoc}
      */
     public function getShared(): array
     {
@@ -411,9 +356,7 @@ class Factory implements FactoryContract
     }
 
     /**
-     * Get all of the registered named views in environment.
-     *
-     * @return array
+     * {@inheritdoc}
      */
     public function getNames(): array
     {
@@ -437,9 +380,9 @@ class Factory implements FactoryContract
      *
      * @param string $path
      *
-     * @return string
+     * @return string|null
      */
-    protected function getExtension(string $path): string
+    protected function getExtension(string $path)
     {
         $extensions = array_keys($this->extensions);
 

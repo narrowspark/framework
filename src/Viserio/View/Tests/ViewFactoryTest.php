@@ -2,25 +2,25 @@
 namespace Viserio\View\Tests;
 
 use Interop\Container\ContainerInterface;
-use Mockery as Mock;
-use StdClass;
-use Symfony\Component\EventDispatcher\EventDispatcher;
-use Viserio\Contracts\View\Engine;
-use Viserio\Contracts\View\Finder;
+use Narrowspark\TestingHelper\Traits\MockeryTrait;
+use Viserio\Events\Dispatcher as EventDispatcher;
+use Viserio\Contracts\View\{
+    Engine,
+    Finder,
+    View as ViewContract
+};
 use Viserio\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
-use Viserio\View\Engines\Adapter\Php;
-use Viserio\View\Engines\EngineResolver;
-use Viserio\View\Factory;
-use Viserio\View\Virtuoso;
+use Viserio\View\{
+    Engines\Adapter\Php,
+    Engines\EngineResolver,
+    Factory,
+    Virtuoso
+};
 
 class ViewFactoryTest extends \PHPUnit_Framework_TestCase
 {
+    use MockeryTrait;
     use NormalizePathAndDirectorySeparatorTrait;
-
-    public function tearDown()
-    {
-        Mock::close();
-    }
 
     public function testMakeCreatesNewViewInstanceWithProperPathVirtuosoAndEngine()
     {
@@ -36,7 +36,7 @@ class ViewFactoryTest extends \PHPUnit_Framework_TestCase
             ->shouldReceive('resolve')
             ->once()
             ->with('php')
-            ->andReturn($engine = Mock::mock(Engine::class));
+            ->andReturn($engine = $this->mock(Engine::class));
         $factory->getFinder()
             ->shouldReceive('addExtension')
             ->once()
@@ -44,7 +44,7 @@ class ViewFactoryTest extends \PHPUnit_Framework_TestCase
         $factory->addExtension('php', 'php');
 
         $virtuoso = new Virtuoso(
-            Mock::mock(ContainerInterface::class),
+            $this->mock(ContainerInterface::class),
             $factory->getDispatcher()
         );
 
@@ -57,7 +57,7 @@ class ViewFactoryTest extends \PHPUnit_Framework_TestCase
         $view = $factory->create('view', ['foo' => 'bar'], ['baz' => 'boom']);
 
         $this->assertSame($engine, $view->getEngine());
-        $this->assertSame($_SERVER['__test.view']->getSubject(), $view);
+        $this->assertSame($_SERVER['__test.view'], $view);
 
         unset($_SERVER['__test.view']);
     }
@@ -71,7 +71,7 @@ class ViewFactoryTest extends \PHPUnit_Framework_TestCase
             ->shouldReceive('resolve')
             ->once()
             ->with('php')
-            ->andReturn($engine = Mock::mock(Engine::class));
+            ->andReturn($engine = $this->mock(Engine::class));
         $factory->getFinder()
             ->shouldReceive('addExtension')
             ->once()
@@ -79,7 +79,7 @@ class ViewFactoryTest extends \PHPUnit_Framework_TestCase
         $factory->addExtension('php', 'php');
 
         $virtuoso = new Virtuoso(
-            Mock::mock(ContainerInterface::class),
+            $this->mock(ContainerInterface::class),
             $factory->getDispatcher()
         );
 
@@ -92,7 +92,7 @@ class ViewFactoryTest extends \PHPUnit_Framework_TestCase
         $view = $factory->file('path.php', ['foo' => 'bar'], ['baz' => 'boom']);
 
         $this->assertSame($engine, $view->getEngine());
-        $this->assertSame($_SERVER['__test.view']->getSubject(), $view);
+        $this->assertSame($_SERVER['__test.view'], $view);
 
         unset($_SERVER['__test.view']);
     }
@@ -109,7 +109,7 @@ class ViewFactoryTest extends \PHPUnit_Framework_TestCase
             ->shouldReceive('resolve')
             ->once()
             ->with('php')
-            ->andReturn($engine = Mock::mock(Engine::class));
+            ->andReturn($engine = $this->mock(Engine::class));
         $factory->getFinder()
             ->shouldReceive('addExtension')
             ->once()
@@ -128,7 +128,7 @@ class ViewFactoryTest extends \PHPUnit_Framework_TestCase
             ->shouldReceive('resolve')
             ->once()
             ->with('php')
-            ->andReturn($engine = Mock::mock(Engine::class));
+            ->andReturn($engine = $this->mock(Engine::class));
         $factory->getFinder()
             ->shouldReceive('addExtension')
             ->once()
@@ -159,7 +159,7 @@ class ViewFactoryTest extends \PHPUnit_Framework_TestCase
             ->andReturn(self::normalizeDirectorySeparator($this->getPath() . '/bar/foo/fi.php'));
 
         $virtuoso = new Virtuoso(
-            Mock::mock(ContainerInterface::class),
+            $this->mock(ContainerInterface::class),
             $factory->getDispatcher()
         );
 
@@ -188,30 +188,39 @@ class ViewFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testRenderEachCreatesViewForEachItemInArray()
     {
-        $factory = Mock::mock('Viserio\View\Factory[make]', $this->getFactoryArgs());
-        $factory->shouldReceive('make')
+        $factory = $this->mock('Viserio\View\Factory[create]', $this->getFactoryArgs());
+        $factory
+            ->shouldReceive('create')
             ->once()
             ->with('foo', ['key' => 'bar', 'value' => 'baz'])
-            ->andReturn($mockView1 = Mock::mock(StdClass::class));
-        $factory->shouldReceive('make')
+            ->andReturn($mockView1 = $this->mock(ViewContract::class));
+        $factory
+            ->shouldReceive('create')
             ->once()
             ->with('foo', ['key' => 'breeze', 'value' => 'boom'])
-            ->andReturn($mockView2 = Mock::mock(StdClass::class));
+            ->andReturn($mockView2 = $this->mock(ViewContract::class));
 
-        $mockView1->shouldReceive('render')->once()->andReturn('dayle');
-        $mockView2->shouldReceive('render')->once()->andReturn('rees');
+        $mockView1
+            ->shouldReceive('render')
+            ->once()
+            ->andReturn('dayle');
+        $mockView2
+            ->shouldReceive('render')
+            ->once()
+            ->andReturn('rees');
 
         $result = $factory->renderEach('foo', ['bar' => 'baz', 'breeze' => 'boom'], 'value');
+
         $this->assertEquals('daylerees', $result);
     }
 
     public function testEmptyViewsCanBeReturnedFromRenderEach()
     {
-        $factory = Mock::mock('Viserio\View\Factory[make]', $this->getFactoryArgs());
-        $factory->shouldReceive('make')
+        $factory = $this->mock('Viserio\View\Factory[create]', $this->getFactoryArgs());
+        $factory->shouldReceive('create')
             ->once()
             ->with('foo')
-            ->andReturn($mockView = Mock::mock(StdClass::class));
+            ->andReturn($mockView = $this->mock(ViewContract::class));
         $mockView->shouldReceive('render')
             ->once()
             ->andReturn('empty');
@@ -235,7 +244,7 @@ class ViewFactoryTest extends \PHPUnit_Framework_TestCase
             ->shouldReceive('resolve')
             ->once()
             ->with('php')
-            ->andReturn($engine = Mock::mock(Engine::class));
+            ->andReturn($engine = $this->mock(Engine::class));
         $factory->getFinder()
             ->shouldReceive('addExtension')
             ->once()
@@ -275,7 +284,7 @@ class ViewFactoryTest extends \PHPUnit_Framework_TestCase
             ->shouldReceive('resolve')
             ->once()
             ->with('bar')
-            ->andReturn($engine = Mock::mock(Engine::class));
+            ->andReturn($engine = $this->mock(Engine::class));
         $factory->addExtension('foo', 'bar', $resolver);
 
         $view = $factory->create('view', ['data']);
@@ -330,7 +339,7 @@ class ViewFactoryTest extends \PHPUnit_Framework_TestCase
             ->shouldReceive('resolve')
             ->twice()
             ->with('php')
-            ->andReturn(Mock::mock(Engine::class));
+            ->andReturn($this->mock(Engine::class));
         $factory->create('foo/bar');
         $factory->create('foo.bar');
     }
@@ -348,7 +357,7 @@ class ViewFactoryTest extends \PHPUnit_Framework_TestCase
             ->shouldReceive('resolve')
             ->once()
             ->with('php')
-            ->andReturn(Mock::mock(Engine::class));
+            ->andReturn($this->mock(Engine::class));
 
         $view = $factory->create('alias');
 
@@ -380,18 +389,18 @@ class ViewFactoryTest extends \PHPUnit_Framework_TestCase
     protected function getFactory()
     {
         return new Factory(
-            Mock::mock(EngineResolver::class),
-            Mock::mock(Finder::class),
-            new EventDispatcher()
+            $this->mock(EngineResolver::class),
+            $this->mock(Finder::class),
+            new EventDispatcher($this->mock(ContainerInterface::class))
         );
     }
 
     protected function getFactoryArgs()
     {
         return [
-            Mock::mock(EngineResolver::class),
-            Mock::mock(Finder::class),
-            new EventDispatcher(),
+            $this->mock(EngineResolver::class),
+            $this->mock(Finder::class),
+            new EventDispatcher($this->mock(ContainerInterface::class)),
         ];
     }
 

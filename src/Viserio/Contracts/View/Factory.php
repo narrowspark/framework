@@ -1,6 +1,9 @@
 <?php
 namespace Viserio\Contracts\View;
 
+use Closure;
+use Viserio\Contracts\Events\Dispatcher as DispatcherContract;
+
 interface Factory
 {
     /**
@@ -35,19 +38,171 @@ interface Factory
     public function create(string $view, array $data = [], array $mergeData = []): View;
 
     /**
+     * Get the evaluated view contents for a named view.
+     *
+     * @param string   $view
+     * @param string[] $data
+     *
+     * @return \Viserio\View\View
+     */
+    public function of(string $view, array $data = []): View;
+
+    /**
+     * Register a named view.
+     *
+     * @param string $view
+     * @param string $name
+     *
+     * @return self
+     */
+    public function name(string $view, string $name): Factory;
+
+    /**
+     * Add an alias for a view.
+     *
+     * @param string $view
+     * @param string $alias
+     *
+     * @return self
+     */
+    public function alias(string $view, string $alias): Factory;
+
+    /**
+     * Get the rendered contents of a partial from a loop.
+     *
+     * @param string $view
+     * @param array  $data
+     * @param string $iterator
+     * @param string $empty
+     *
+     * @return string
+     */
+    public function renderEach(string $view, array $data, string $iterator, string $empty = 'raw|'): string;
+
+    /**
+     * Get the appropriate view engine for the given path.
+     *
+     * @param string $path
+     *
+     * @throws \InvalidArgumentException
+     *
+     * @return \Viserio\Contracts\View\Engine
+     */
+    public function getEngineFromPath(string $path): Engine;
+
+    /**
      * Add a piece of shared data to the environment.
      *
-     * @param string $key
-     * @param mixed  $value
+     * @param string|array $key
+     * @param mixed        $value
      */
-    public function share(string $key, $value = null);
+    public function share($key, $value = null);
+
+    /**
+     * Add a location to the array of view locations.
+     *
+     * @param string $location
+     *
+     * @return self
+     */
+    public function addLocation(string $location): Factory;
 
     /**
      * Add a new namespace to the loader.
      *
      * @param string       $namespace
      * @param string|array $hints
-     * @return void
+     *
+     * @return self
      */
-    public function addNamespace(string $namespace, $hints);
+    public function addNamespace(string $namespace, $hints): Factory;
+
+    /**
+     * Prepend a new namespace to the loader.
+     *
+     * @param string       $namespace
+     * @param string|array $hints
+     *
+     * @return self
+     */
+    public function prependNamespace(string $namespace, $hints): Factory;
+
+    /**
+     * Register a valid view extension and its engine.
+     *
+     * @param string        $extension
+     * @param string        $engine
+     * @param \Closure|null $resolver
+     *
+     * @return self
+     */
+    public function addExtension(string $extension, string $engine, Closure $resolver = null): Factory;
+
+    /**
+     * Get the extension to engine bindings.
+     *
+     * @return array
+     */
+    public function getExtensions(): array;
+
+    /**
+     * Get the engine resolver instance.
+     *
+     * @return \Viserio\Contracts\View\EngineResolver
+     */
+    public function getEngineResolver(): EngineResolver;
+
+    /**
+     * Get the view finder instance.
+     *
+     * @return \Viserio\Contracts\View\Finder
+     */
+    public function getFinder(): Finder;
+
+    /**
+     * Get the event dispatcher instance.
+     *
+     * @return \Viserio\Contracts\Events\Dispatcher
+     */
+    public function getDispatcher(): DispatcherContract;
+
+    /**
+     * Set virtuoso.
+     *
+     * @param Virtuoso $virtuoso
+     *
+     * @return self
+     */
+    public function setVirtuoso(Virtuoso $virtuoso): Factory;
+
+    /**
+     * Get virtuoso.
+     *
+     * @return Virtuoso
+     */
+    public function getVirtuoso(): Virtuoso;
+
+    /**
+     * Get an item from the shared data.
+     *
+     * @param string $key
+     * @param mixed  $default
+     *
+     * @return mixed
+     */
+    public function shared(string $key, $default = null);
+
+    /**
+     * Get all of the shared data for the environment.
+     *
+     * @return array
+     */
+    public function getShared(): array;
+
+    /**
+     * Get all of the registered named views in environment.
+     *
+     * @return array
+     */
+    public function getNames(): array;
 }
