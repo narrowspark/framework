@@ -246,6 +246,7 @@ abstract class AbstractConnectionManager
     protected function createConnection(string $connection, array $config)
     {
          $method = 'create' . Str::studly($connection) . 'Connection';
+         $supported = $this->supportedConnectors;
 
         // We'll check to see if a creator method exists for the given connection. If not we
         // will check for a custom connection creator, which allows developers to create
@@ -254,19 +255,30 @@ abstract class AbstractConnectionManager
             return $this->callCustomCreator($connection, $config);
         } elseif (method_exists($this, $method)) {
             return $this->$method($config);
-        } elseif (isset($this->supportedConnectors[$connection]) &&
-            class_exists($this->supportedConnectors[$connection])
-        ) {
-            $connection = new $this->supportedConnectors[$connection];
-
-            if ($connection instanceof ConnectorContract) {
-                return $connection->connect($config);
-            }
-
-            return $connection;
+        } elseif (isset($supported[$connection]) && class_exists($supported[$connection])) {
+            return $this->createClassInstance($connection, $config);
         }
 
         throw new RuntimeException(sprintf('Connection [%s] is not supported.', $connection));
+    }
+
+    /**
+     * Create a class instance.
+     *
+     * @param string $connection
+     * @param array  $config
+     *
+     * @return mixed
+     */
+    protected function createClassInstance(string $connection, array $config = [])
+    {
+        $connection = new $this->supportedConnectors[$connection];
+
+        if ($connection instanceof ConnectorContract) {
+            return $connection->connect($config);
+        }
+
+        return $connection;
     }
 
     /**

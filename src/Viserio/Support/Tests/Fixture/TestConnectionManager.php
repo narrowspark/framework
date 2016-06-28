@@ -12,6 +12,22 @@ class TestConnectionManager extends AbstractConnectionManager
      * @var array
      */
     protected $supportedConnectors = [
-
+        'test' => 'test',
+        'class' => stdClass::class
     ];
+
+    protected function createTestDriver($config = null)
+    {
+        return true;
+    }
+
+    /**
+     * Get the configuration name.
+     *
+     * @return string
+     */
+    protected function getConfigName(): string
+    {
+        return 'connection';
+    }
 }

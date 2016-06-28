@@ -6,7 +6,7 @@ use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use Viserio\Contracts\Config\Manager as ConfigContract;
 use Viserio\Support\Tests\Fixture\TestManager;
 
-class ManagerTest extends \PHPUnit_Framework_TestCase
+class AbstractManagerTest extends \PHPUnit_Framework_TestCase
 {
     use MockeryTrait;
 
