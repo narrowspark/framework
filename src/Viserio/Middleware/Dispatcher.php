@@ -1,13 +1,17 @@
 <?php
 namespace Viserio\Middleware;
 
-use Psr\Http\Message\RequestInterface;
-use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\{
+    RequestInterface,
+    ResponseInterface
+};
 use SplDoublyLinkedList;
 use SplStack;
-use Viserio\Contracts\Middleware\Frame as FrameContract;
-use Viserio\Contracts\Middleware\Middleware as MiddlewareContract;
-use Viserio\Contracts\Middleware\Stack as StackContract;
+use Viserio\Contracts\{
+    Middleware\Frame as FrameContract,
+    Middleware\Middleware as MiddlewareContract,
+    Middleware\Stack as StackContract
+};
 use Viserio\Support\Traits\ContainerAwareTrait;
 
 class Dispatcher implements StackContract
