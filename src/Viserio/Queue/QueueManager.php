@@ -5,9 +5,9 @@ use Viserio\Contracts\{
     Config\Manager as ConfigContract,
     Encryption\Encrypter as EncrypterContract
 };
-use Viserio\Support\AbstractManager;
+use Viserio\Support\AbstractConnectionManager;
 
-class QueueManager extends AbstractManager
+class QueueManager extends AbstractConnectionManager
 {
     /**
      * All supported drivers.
@@ -26,7 +26,7 @@ class QueueManager extends AbstractManager
     private $encrypter;
 
     /**
-     * Constructor.
+     * Constructor.b
      *
      * @param \Viserio\Contracts\Config\Manager    $config
      * @param \Viserio\Contracts\Encryption\Encrypter $encrypter

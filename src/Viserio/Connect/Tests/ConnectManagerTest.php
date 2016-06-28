@@ -60,7 +60,7 @@ class ConnectManagerTest extends \PHPUnit_Framework_TestCase
         $factory = new ConnectManager($config);
 
         $this->assertInstanceOf(Client::class, $factory->connection('predis'));
-        $this->assertInstanceOf(Client::class, $factory->getConnection());
+        $this->assertTrue($factory->connection() instanceof Client);
     }
 
     public function testExtensionsConnection()

@@ -3,31 +3,69 @@ namespace Viserio\Contracts\Queue;
 
 interface QueueConnector
 {
-    /**
-     * Push a new message onto the queue.
+   /**
+     * Push a new job onto the queue.
      *
-     * @param $message The job to push
+     * @param string      $job
+     * @param mixed       $data
+     * @param string|null $queue
+     *
+     * @return mixed
      */
-    public function push($message);
+    public function push(string $job, $data = '', string $queue = null);
+
+    /**
+     * Push a raw payload onto the queue.
+     *
+     * @param string $payload
+     * @param string $queue
+     * @param array  $options
+     *
+     * @return mixed
+     */
+    public function pushRaw(string $payload, string $queue = null, array $options = []);
+
+    /**
+     * Push a new job onto the queue after a delay.
+     *
+     * @param \DateTime|int $delay
+     * @param string        $job
+     * @param mixed         $data
+     * @param string|null   $queue
+     *
+     * @return mixed
+     */
+    public function later($delay, string $job, $data = '', string $queue = null);
 
     /**
      * Pop the next job off of the queue.
      *
-     * @return Job|null
+     * @param string|null $queue
+     *
+     * @return \Viserio\Contracts\Queue\Job|null
      */
-    public function pop();
+    public function pop(string $queue = null);
 
     /**
-     * Release the job back onto the queue (increases it's attempt count).
+     * Push a new job onto the queue.
      *
-     * @param $job
+     * @param string $queue
+     * @param string $job
+     * @param mixed  $data
+     *
+     * @return mixed
      */
-    public function release($job);
+    public function pushOn(string $queue, string $job, $data = '');
 
     /**
-     * Delete a job from the queue.
+     * Push a new job onto the queue after a delay.
      *
-     * @param $job
+     * @param string         $queue
+     * @param \DateTime|int  $delay
+     * @param string         $job
+     * @param mixed          $data
+     *
+     * @return mixed
      */
-    public function delete($job);
+    public function laterOn(string $queue, $delay, string $job, $data = '');
 }

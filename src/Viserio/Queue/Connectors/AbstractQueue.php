@@ -20,6 +20,22 @@ abstract class AbstractQueue implements QueueConnectorContract
     protected $encrypter;
 
     /**
+     * {@inheritdoc}
+     */
+    public function pushOn(string $queue, string $job, $data = '')
+    {
+        return $this->push($job, $data, $queue);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function laterOn(string $queue, $delay, string $job, $data = '')
+    {
+        return $this->later($delay, $job, $data, $queue);
+    }
+
+    /**
      * Get the encrypter implementation.
      *
      * @return  \Viserio\Contracts\Encryption\Encrypter
