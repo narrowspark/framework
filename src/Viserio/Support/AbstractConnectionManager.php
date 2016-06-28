@@ -14,13 +14,6 @@ abstract class AbstractConnectionManager
     use ContainerAwareTrait;
 
     /**
-     * All supported connectors.
-     *
-     * @var array
-     */
-    protected $supportedConnectors = [];
-
-    /**
      * The active connection instances.
      *
      * @var array
@@ -32,7 +25,7 @@ abstract class AbstractConnectionManager
      *
      * @var array
      */
-    protected $customCreators = [];
+    protected $extensions = [];
 
     /**
      * Conifg instace.
@@ -67,34 +60,34 @@ abstract class AbstractConnectionManager
     /**
      * Get a connection instance.
      *
-     * @param string|null $connectionName
+     * @param string|null $name
      * @param array       $config
      *
      * @return object
      */
-    public function connection(string $connectionName = null, array $config = [])
+    public function connection(string $name = null, array $config = [])
     {
-        $connectionName = $connectionName ?? $this->getDefaultConnection();
+        $name = $name ?? $this->getDefaultConnection();
 
-        if (! $this->hasConnection($connectionName)) {
+        if (! $this->hasConnection($name)) {
             throw new RuntimeException(
-                sprintf('The connection [%s] is not supported.', $connectionName)
+                sprintf('The connection [%s] is not supported.', $name)
             );
         }
 
         // If the given driver has not been created before, we will create the instances
         // here and cache it so we can return it next time very quickly. If there is
         // already a driver created by this name, we'll just return that instance.
-        if (! isset($this->connections[$connectionName])) {
+        if (! isset($this->connections[$name])) {
             $settings = array_merge(
-                $this->getConnectionConfig($connectionName),
+                $this->getConnectionConfig($name),
                 $config
             );
 
-            $this->connections[$connectionName] = $this->createConnection($connectionName, $settings);
+            $this->connections[$name] = $this->makeConnection($settings);
         }
 
-        return $this->connections[$connectionName];
+        return $this->connections[$name];
     }
 
     /**
@@ -159,7 +152,7 @@ abstract class AbstractConnectionManager
      */
     public function extend(string $driver, Closure $callback)
     {
-        $this->customCreators[$driver] = $callback->bindTo($this, $this);
+        $this->extensions[$driver] = $callback->bindTo($this, $this);
     }
 
     /**
@@ -183,7 +176,7 @@ abstract class AbstractConnectionManager
     {
         return isset($this->supportedConnectors[$connect]) ||
             in_array($connect, $this->supportedConnectors, true) ||
-            isset($this->customCreators[$connect]);
+            isset($this->extensions[$connect]);
     }
 
     /**
@@ -238,47 +231,30 @@ abstract class AbstractConnectionManager
     /**
      * Create the connection instance.
      *
-     * @param string $connection
-     * @param array  $config
+     * @param array $config
      *
      * @return mixed
      */
-    protected function createConnection(string $connection, array $config)
-    {
-         $method = 'create' . Str::studly($connection) . 'Connection';
-         $supported = $this->supportedConnectors;
-
-        // We'll check to see if a creator method exists for the given connection. If not we
-        // will check for a custom connection creator, which allows developers to create
-        // connections using their own customized connection creator Closure to create it.
-        if (isset($this->customCreators[$connection])) {
-            return $this->callCustomCreator($connection, $config);
-        } elseif (method_exists($this, $method)) {
-            return $this->$method($config);
-        } elseif (isset($supported[$connection]) && class_exists($supported[$connection])) {
-            return $this->createClassInstance($connection, $config);
-        }
-
-        throw new RuntimeException(sprintf('Connection [%s] is not supported.', $connection));
-    }
+    abstract protected function createConnection(array $config);
 
     /**
-     * Create a class instance.
+     * Create the connection instance.
      *
-     * @param string $connection
-     * @param array  $config
+     * @param array $config
      *
      * @return mixed
      */
-    protected function createClassInstance(string $connection, array $config = [])
+    protected function makeConnection(array $config)
     {
-        $connection = new $this->supportedConnectors[$connection];
+        $method = 'create' . Str::studly($config['name']) . 'Connection';
 
-        if ($connection instanceof ConnectorContract) {
-            return $connection->connect($config);
+        if (isset($this->extensions[$config['name']])) {
+            return $this->callCustomCreator($config['name'], $config);
+        } elseif (method_exists($this, $method)) {
+            return $this->$method($config);
         }
 
-        return $connection;
+        return $this->createConnection($config);
     }
 
     /**
@@ -291,7 +267,7 @@ abstract class AbstractConnectionManager
      */
     protected function callCustomCreator(string $connection, array $config = [])
     {
-        return $this->customCreators[$connection]($config);
+        return $this->extensions[$connection]($config);
     }
 
      /**

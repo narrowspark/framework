@@ -22,6 +22,14 @@ class TestConnectionManager extends AbstractConnectionManager
     }
 
     /**
+     * {@inheritdoc}
+     */
+    protected function createConnection(array $config = [])
+    {
+
+    }
+
+    /**
      * Get the configuration name.
      *
      * @return string

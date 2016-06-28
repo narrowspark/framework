@@ -188,11 +188,11 @@ abstract class AbstractManager
      */
     public function getDriverConfig(string $name): array
     {
-        $name = $name ?? $this->getDefaultDriver();
+        $name = $name ?? $this->getDefaultConnection();
 
-        $drivers = $this->config->get($this->getConfigName() . '.drivers');
+        $drivers = $this->config->get($this->getConfigName() . '.drivers', []);
 
-        if (!isset($drivers[$name]) && !is_array($drivers[$name])) {
+        if (! isset($drivers[$name])) {
             return [
                 'name' => $name
             ];

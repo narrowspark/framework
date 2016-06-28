@@ -2,6 +2,7 @@
 namespace Viserio\Connect;
 
 use PDO;
+use RuntimeException;
 use Viserio\Connect\Adapters\Database\{
     DblibConnector,
     Firebirdconnector,
@@ -70,6 +71,20 @@ class ConnectManager extends AbstractConnectionManager implements ConnectManager
         }
 
         return $drivers;
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @throws \RuntimeException
+     */
+    protected function createConnection(array $config = [])
+    {
+        if (isset($this->supportedConnectors[$config['name']])) {
+            return (new $this->supportedConnectors[$config['name']])->connect($config);
+        }
+
+        throw new RuntimeException(sprintf('Connection [%s] is not supported.', $config['name']));
     }
 
     /**
