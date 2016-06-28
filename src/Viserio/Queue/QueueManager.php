@@ -40,6 +40,14 @@ class QueueManager extends AbstractConnectionManager
     /**
      * {@inheritdoc}
      */
+    protected function createConnection(array $config)
+    {
+
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     protected function getConfigName(): string
     {
         return 'queue';
