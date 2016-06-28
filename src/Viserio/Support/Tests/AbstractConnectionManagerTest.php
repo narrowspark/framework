@@ -28,17 +28,17 @@ class AbstractConnectionManagerTest extends \PHPUnit_Framework_TestCase
         $config = $this->mock(ConfigContract::class);
         $config->shouldReceive('get')
             ->once()
-            ->with('connect.default', '')
+            ->with('connection.default', '')
             ->andReturn('test');
         $config->shouldReceive('get')
             ->once()
-            ->with('connect.connections', [])
+            ->with('connection.connections', [])
             ->andReturn([]);
 
         $factory = new TestConnectionManager($config);
 
         $this->assertTrue($factory->connection());
-        $this->assertInstanceOf(Client::class, $factory->getConnection('class'));
+        $this->assertTrue(is_array($factory->getConnections('class')));
     }
 
     public function testExtend()

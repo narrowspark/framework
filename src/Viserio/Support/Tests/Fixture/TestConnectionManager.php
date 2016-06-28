@@ -16,7 +16,7 @@ class TestConnectionManager extends AbstractConnectionManager
         'class' => stdClass::class
     ];
 
-    protected function createTestDriver($config = null)
+    protected function createTestConnection($config = null)
     {
         return true;
     }
