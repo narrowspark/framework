@@ -13,16 +13,6 @@ class FilesystemManagerTest extends \PHPUnit_Framework_TestCase
 {
     use MockeryTrait;
 
-    /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage The driver [notfound] is not supported.
-     */
-    public function testDriverToThrowException()
-    {
-        $manager = $this->getManager();
-        $manager->driver('notfound');
-    }
-
     // public function testSetAndGetDefaultDriver()
     // {
     //     $manager = $this->getManager();
@@ -58,7 +48,7 @@ class FilesystemManagerTest extends \PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf(
             FilesystemAdapter::class,
-            $manager->driver(
+            $manager->connection(
                 'awss3',
                 [
                     'key'     => 'your-key',
@@ -77,7 +67,7 @@ class FilesystemManagerTest extends \PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf(
             FilesystemAdapter::class,
-            $manager->driver(
+            $manager->connection(
                 'dropbox',
                 [
                     'token' => 'your-token',
@@ -97,7 +87,7 @@ class FilesystemManagerTest extends \PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf(
             FilesystemAdapter::class,
-            $manager->driver(
+            $manager->connection(
                 'ftp',
                 [
                     'host'     => 'ftp.example.com',
@@ -120,7 +110,7 @@ class FilesystemManagerTest extends \PHPUnit_Framework_TestCase
         try {
             $this->assertInstanceOf(
                 FilesystemAdapter::class,
-                $manager->driver(
+                $manager->connection(
                     'gridfs',
                     [
                         'server'   => 'mongodb://localhost:27017',
@@ -139,7 +129,7 @@ class FilesystemManagerTest extends \PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf(
             FilesystemAdapter::class,
-            $manager->driver(
+            $manager->connection(
                 'local',
                 [
                     'path' => __DIR__,
@@ -154,7 +144,7 @@ class FilesystemManagerTest extends \PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf(
             FilesystemAdapter::class,
-            $manager->driver(
+            $manager->connection(
                 'null'
             )
         );
@@ -167,7 +157,7 @@ class FilesystemManagerTest extends \PHPUnit_Framework_TestCase
         try {
             $this->assertInstanceOf(
                 FilesystemAdapter::class,
-                $manager->driver(
+                $manager->connection(
                     'rackspace',
                     [
                         'endpoint'  => 'https://lon.identity.api.rackspacecloud.com/v2.0/',
@@ -191,7 +181,7 @@ class FilesystemManagerTest extends \PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf(
             FilesystemAdapter::class,
-            $manager->driver(
+            $manager->connection(
                 'sftp',
                 [
                     'host'     => 'sftp.example.com',
@@ -209,7 +199,7 @@ class FilesystemManagerTest extends \PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf(
             FilesystemAdapter::class,
-            $manager->driver(
+            $manager->connection(
                 'vfs'
             )
         );
@@ -221,7 +211,7 @@ class FilesystemManagerTest extends \PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf(
             FilesystemAdapter::class,
-            $manager->driver(
+            $manager->connection(
                 'webdav',
                 [
                     'baseUri'  => 'http://example.org/dav/',
@@ -238,7 +228,7 @@ class FilesystemManagerTest extends \PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf(
             FilesystemAdapter::class,
-            $manager->driver(
+            $manager->connection(
                 'zip',
                 [
                     'path' => __DIR__ . '\Adapters\stubs\test.zip',

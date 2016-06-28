@@ -3,6 +3,7 @@ namespace Viserio\Support;
 
 use Closure;
 use RuntimeException;
+use InvalidArgumentException;
 use Viserio\Contracts\Config\Manager as ConfigContract;
 use Viserio\Support\Traits\ContainerAwareTrait;
 
@@ -22,7 +23,7 @@ abstract class AbstractManager
      *
      * @var array
      */
-    protected $customCreators = [];
+    protected $extensions = [];
 
     /**
      * The array of created "drivers".
@@ -90,7 +91,7 @@ abstract class AbstractManager
      */
     public function getDefaultDriver(): string
     {
-        return $this->config->get($this->getConfigName() . '.default');
+        return $this->config->get($this->getConfigName() . '.default', '');
     }
 
     /**
@@ -106,35 +107,23 @@ abstract class AbstractManager
     }
 
     /**
-     * Builder.
+     * Get a driver instance.
      *
-     * @param string|null $driver  The cache driver to use
-     * @param array       $config
-     *
-     * @throws \RuntimeException
+     * @param string|null $driver
      *
      * @return mixed
      */
-    public function driver(string $driver = null, array $config = [])
+    public function driver(string $driver = null)
     {
         $driver = $driver ?? $this->getDefaultDriver();
-
-        if (! $this->hasDriver($driver)) {
-            throw new RuntimeException(
-                sprintf('The driver [%s] is not supported.', $driver)
-            );
-        }
 
         // If the given driver has not been created before, we will create the instances
         // here and cache it so we can return it next time very quickly. If there is
         // already a driver created by this name, we'll just return that instance.
         if (! isset($this->drivers[$driver])) {
-            $settings = array_merge(
-                $this->getDriverConfig($driver),
-                $config
+            $this->drivers[$driver] = $this->makeDriver(
+                $this->getDriverConfig($driver)
             );
-
-            $this->drivers[$driver] = $this->createDriver($driver, $settings);
         }
 
         return $this->drivers[$driver];
@@ -150,7 +139,7 @@ abstract class AbstractManager
      */
     public function extend(string $driver, Closure $callback)
     {
-        $this->customCreators[$driver] = $callback->bindTo($this, $this);
+        $this->extensions[$driver] = $callback->bindTo($this, $this);
     }
 
     /**
@@ -172,17 +161,15 @@ abstract class AbstractManager
      */
     public function hasDriver(string $driver): bool
     {
-        return isset($this->supportedDrivers[$driver]) ||
-            in_array($driver, $this->supportedDrivers, true) ||
-            isset($this->customCreators[$driver]);
+        $method = 'create' . Str::studly($driver) . 'Driver';
+
+        return method_exists($this, $method) || isset($this->extensions[$driver]);
     }
 
     /**
      * Get the configuration for a driver.
      *
      * @param string $name
-     *
-     * @throws \InvalidArgumentException
      *
      * @return array
      */
@@ -192,44 +179,36 @@ abstract class AbstractManager
 
         $drivers = $this->config->get($this->getConfigName() . '.drivers', []);
 
-        if (! isset($drivers[$name])) {
-            return [
-                'name' => $name
-            ];
+        if (isset($drivers[$name]) && is_array($drivers[$name])) {
+            $config = $drivers[$name];
+            $config['name'] = $name;
+
+            return $config;
         }
 
-        $config = $drivers[$name];
-        $config['name'] = $name;
-
-        return $config;
+        return ['name' => $name];
     }
 
     /**
-     * Create a new driver instance.
+     * Make a new driver instance.
      *
-     * @param string $driver
-     * @param array  $config
+     * @param array $config
      *
-     * @throws \RuntimeException
+     * @throws \InvalidArgumentException
      *
      * @return mixed
      */
-    protected function createDriver(string $driver, array $config)
+    protected function makeDriver(array $config)
     {
-        $method = 'create' . Str::studly($driver) . 'Driver';
+        $method = 'create' . Str::studly($config['name']) . 'Driver';
 
-        // We'll check to see if a creator method exists for the given driver. If not we
-        // will check for a custom driver creator, which allows developers to create
-        // drivers using their own customized driver creator Closure to create it.
-        if (isset($this->customCreators[$driver])) {
-            return $this->callCustomCreator($driver, $config);
+        if (isset($this->extensions[$config['name']])) {
+            return $this->callCustomCreator($config['name'], $config);
         } elseif (method_exists($this, $method)) {
             return $this->$method($config);
-        } elseif (isset($this->supportedDrivers[$driver]) && class_exists($this->supportedDrivers[$driver])) {
-            return new $this->supportedDrivers[$driver]();
         }
 
-        throw new RuntimeException(sprintf('Driver [%s] not supported.', $driver));
+        throw new InvalidArgumentException(sprintf('Driver [%s] not supported.', $config['name']));
     }
 
     /**
@@ -242,7 +221,7 @@ abstract class AbstractManager
      */
     protected function callCustomCreator(string $driver, array $config = [])
     {
-        return $this->customCreators[$driver]($config);
+        return $this->extensions[$driver]($config);
     }
 
     /**

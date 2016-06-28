@@ -3,6 +3,7 @@ namespace Viserio\Support;
 
 use Closure;
 use RuntimeException;
+use InvalidArgumentException;
 use Viserio\Contracts\{
     Config\Manager as ConfigContract,
     Support\Connector as ConnectorContract
@@ -61,11 +62,10 @@ abstract class AbstractConnectionManager
      * Get a connection instance.
      *
      * @param string|null $name
-     * @param array       $config
      *
      * @return object
      */
-    public function connection(string $name = null, array $config = [])
+    public function connection(string $name = null)
     {
         $name = $name ?? $this->getDefaultConnection();
 
@@ -75,16 +75,10 @@ abstract class AbstractConnectionManager
             );
         }
 
-        // If the given driver has not been created before, we will create the instances
-        // here and cache it so we can return it next time very quickly. If there is
-        // already a driver created by this name, we'll just return that instance.
         if (! isset($this->connections[$name])) {
-            $settings = array_merge(
-                $this->getConnectionConfig($name),
-                $config
+            $this->connections[$name] = $this->makeConnection(
+                $this->getConnectionConfig($name)
             );
-
-            $this->connections[$name] = $this->makeConnection($settings);
         }
 
         return $this->connections[$name];
@@ -174,9 +168,9 @@ abstract class AbstractConnectionManager
      */
     public function hasConnection(string $connect): bool
     {
-        return isset($this->supportedConnectors[$connect]) ||
-            in_array($connect, $this->supportedConnectors, true) ||
-            isset($this->extensions[$connect]);
+        $method = 'create' . Str::studly($connect) . 'Connection';
+
+        return method_exists($this, $method) || isset($this->extensions[$connect]);
     }
 
     /**
@@ -194,16 +188,14 @@ abstract class AbstractConnectionManager
 
         $connections = $this->config->get($this->getConfigName() . '.connections', []);
 
-        if (! isset($connections[$name])) {
-            return [
-                'name' => $name
-            ];
+        if (isset($connections[$name]) && is_array($connections[$name])) {
+            $config = $connections[$name];
+            $config['name'] = $name;
+
+            return $config;
         }
 
-        $config = $connections[$name];
-        $config['name'] = $name;
-
-        return $config;
+        throw new InvalidArgumentException(sprintf('Driver [%s] not configured.', $name));
     }
 
     /**
@@ -238,7 +230,7 @@ abstract class AbstractConnectionManager
     abstract protected function createConnection(array $config);
 
     /**
-     * Create the connection instance.
+     * Make the connection instance.
      *
      * @param array $config
      *

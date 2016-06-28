@@ -75,6 +75,15 @@ class ConnectManager extends AbstractConnectionManager implements ConnectManager
 
     /**
      * {@inheritdoc}
+     */
+    public function hasConnection(string $connect): bool
+    {
+        return isset($this->supportedConnectors[$connect]) ||
+            parent::hasConnection($connect);
+    }
+
+    /**
+     * {@inheritdoc}
      *
      * @throws \RuntimeException
      */

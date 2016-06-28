@@ -13,7 +13,8 @@ class TestConnectionManager extends AbstractConnectionManager
      */
     protected $supportedConnectors = [
         'test' => 'test',
-        'class' => stdClass::class
+        'class' => stdClass::class,
+        'foo' => 'foo'
     ];
 
     protected function createTestConnection($config = null)
@@ -21,12 +22,23 @@ class TestConnectionManager extends AbstractConnectionManager
         return true;
     }
 
+    protected function createFooConnection($config = null)
+    {
+        return (new class() {
+            public function getName(): string
+            {
+                return 'manager';
+            }
+        }
+        );
+    }
+
     /**
      * {@inheritdoc}
      */
     protected function createConnection(array $config = [])
     {
-
+        return $this->supportedConnectors[$config['name']];
     }
 
     /**

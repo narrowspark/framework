@@ -6,9 +6,9 @@ use League\Flysystem\AdapterInterface;
 use Narrowspark\Arr\StaticArr as Arr;
 use RuntimeException;
 use Viserio\Contracts\Config\Manager as ConfigContract;
-use Viserio\Support\AbstractManager;
+use Viserio\Support\AbstractConnectionManager;
 
-class FilesystemManager extends AbstractManager
+class FilesystemManager extends AbstractConnectionManager
 {
     /**
      * All supported drivers.
@@ -30,21 +30,9 @@ class FilesystemManager extends AbstractManager
     ];
 
     /**
-     * Create a new filesystem manager instance.
-     *
-     * @param \Viserio\Contracts\Config\Manager $config
+     * {@inheritdoc}
      */
-    public function __construct(ConfigContract $config)
-    {
-        $this->config = $config;
-    }
-
-    /**
-     * Get the default driver name.
-     *
-     * @return string
-     */
-    public function getDefaultDriver(): string
+    public function getDefaultConnection(): string
     {
         return $this->config->get($this->getConfigName() . '.default', 'local');
     }
@@ -52,50 +40,21 @@ class FilesystemManager extends AbstractManager
     /**
      * {@inheritdoc}
      */
-    public function driver(string $driver = null, array $options = [])
+    public function connection(string $name = null)
     {
-        $driver = $driver ?: $this->getDefaultDriver();
-
-        if (! $this->hasDriver($driver)) {
-            throw new RuntimeException(
-                sprintf('The driver [%s] is not supported.', $driver)
-            );
-        }
-
-        // If the given driver has not been created before, we will create the instances
-        // here and cache it so we can return it next time very quickly. If there is
-        // already a driver created by this name, we'll just return that instance.
-        if (! isset($this->drivers[$driver])) {
-            $this->drivers[$driver] = $this->adapt($this->createDriver($driver, $options));
-        }
-
-        return $this->drivers[$driver];
+        return $this->adapt(parent::connection($name));
     }
 
     /**
-     * Get the configuration for a connection.
-     *
-     * @param string $name
-     *
-     * @throws \InvalidArgumentException
-     *
-     * @return array
+     * {@inheritdoc}
      */
-    public function getConnectionConfig(string $name): array
+    public function getDriverConfig(string $name): array
     {
-        $name = $name ?: $this->getDefaultDriver();
-
-        $connections = $this->config->get($this->getConfigName() . '.connections');
-
-        if (! is_array($config = Arr::get($connections, $name)) && ! $config) {
-            throw new InvalidArgumentException("Adapter [$name] not configured.");
-        }
+        $config = parent::getDriverConfig($name);
 
         if (is_string($cache = Arr::get($config, 'cache'))) {
             $config['cache'] = $this->getCacheConfig($cache);
         }
-
-        $config['name'] = $name;
 
         return $config;
     }
@@ -120,6 +79,14 @@ class FilesystemManager extends AbstractManager
         $config['name'] = $name;
 
         return $config;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function createConnection(array $config)
+    {
+        return $this->adapt();
     }
 
     /**
