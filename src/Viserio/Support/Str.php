@@ -1,10 +1,11 @@
 <?php
 namespace Viserio\Support;
 
+use BadMethodCallException;
 use Stringy\StaticStringy;
 use Viserio\Contracts\Support\CharacterType;
 
-class Str extends StaticStringy
+class Str
 {
     /**
      * The cache of snake-cased words.
@@ -153,5 +154,30 @@ class Str extends StaticStringy
         $value = ucwords(str_replace(['-', '_'], ' ', $value));
 
         return static::$studlyCache[$key] = str_replace(' ', '', $value);
+    }
+
+    /**
+     * Creates an instance of Stringy and invokes the given method with the
+     * rest of the passed arguments. The optional encoding is expected to be
+     * the last argument. For example, the following:
+     * StaticStringy::slice('fòôbàř', 0, 3, 'UTF-8'); translates to
+     * Stringy::create('fòôbàř', 'UTF-8')->slice(0, 3);
+     * The result is not cast, so the return value may be of type Stringy,
+     * integer, boolean, etc.
+     *
+     * @param string  $name
+     * @param mixed[] $arguments
+     *
+     * @return Stringy
+     *
+     * @throws \BadMethodCallException
+     */
+    public static function __callStatic($name, $arguments)
+    {
+        if (class_exists(StaticStringy::class)) {
+            return forward_static_call_array([StaticStringy::class, $name], $arguments);
+        }
+
+        throw new BadMethodCallException($name . ' is not a valid method');
     }
 }
