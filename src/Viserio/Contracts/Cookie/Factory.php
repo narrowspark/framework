@@ -56,7 +56,7 @@ interface Factory
      *
      * @return \Viserio\Contracts\Cookie\Cookie
      */
-    public function forget(
+    public function delete(
         string $name,
         $path = null,
         $domain = null

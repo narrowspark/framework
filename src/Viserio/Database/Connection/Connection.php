@@ -565,7 +565,7 @@ class Connection
     /**
      * Clear the query log.
      */
-    public function flushQueryLog()
+    public function clearQueryLog()
     {
         $this->queryLog = [];
     }

@@ -126,7 +126,7 @@ class Manager implements ManagerContract, IteratorAggregate
     /**
      * {@inheritdoc}
      */
-    public function forget(string $key)
+    public function delete(string $key)
     {
         $this->offsetUnset($key);
     }

@@ -162,7 +162,7 @@ interface Connection
     /**
      * Clear the query log.
      */
-    public function flushQueryLog();
+    public function clearQueryLog();
 
     /**
      * Enable the query log on the connection.

@@ -35,10 +35,10 @@ interface FailedJobProvider
      *
      * @return bool
      */
-    public function forget($id): bool;
+    public function delete($id): bool;
 
     /**
-     * Flush all of the failed jobs from storage.
+     * Clear all of the failed jobs from storage.
      */
-    public function flush();
+    public function clear();
 }

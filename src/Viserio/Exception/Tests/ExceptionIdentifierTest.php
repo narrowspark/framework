@@ -40,7 +40,7 @@ class ExceptionIdentifierTest extends \PHPUnit_Framework_TestCase
             $ids[] = $i->identify($e);
         }
 
-        // these should have been flushed
+        // these should have been cleared
         $this->assertNotSame($i->identify($arr[0]), $ids[0]);
         $this->assertNotSame($i->identify($arr[2]), $ids[2]);
         $this->assertNotSame($i->identify($arr[5]), $ids[5]);

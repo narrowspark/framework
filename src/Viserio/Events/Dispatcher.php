@@ -53,7 +53,7 @@ class Dispatcher implements DispatcherContract
      */
     public function __construct(ContainerContract $container)
     {
-        $this->setContainer($container);
+        $this->container = $container;
 
         $invoker = new Invoker();
         $invoker->injectByTypeHint(true)

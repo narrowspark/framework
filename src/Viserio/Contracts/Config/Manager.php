@@ -37,9 +37,9 @@ interface Manager extends ArrayAccess
     public function has(string $key): bool;
 
     /**
-     * Forget a key and all his values.
+     * delete a key and all his values.
      *
      * @param string $key
      */
-    public function forget(string $key);
+    public function delete(string $key);
 }

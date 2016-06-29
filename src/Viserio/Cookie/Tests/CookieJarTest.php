@@ -24,7 +24,7 @@ class CookieJarTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('/domain', $c2->getDomain());
         $this->assertEquals('/path', $c2->getPath());
 
-        $c3 = $cookie->forget('color');
+        $c3 = $cookie->delete('color');
         $this->assertNull($c3->getValue());
         $this->assertNotEquals($c3->getExpiresTime()->getTimestamp(), time());
     }

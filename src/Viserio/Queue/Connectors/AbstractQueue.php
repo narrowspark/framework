@@ -38,7 +38,7 @@ abstract class AbstractQueue implements QueueConnectorContract
     /**
      * Get the encrypter implementation.
      *
-     * @return  \Viserio\Contracts\Encryption\Encrypter
+     * @return \Viserio\Contracts\Encryption\Encrypter
      *
      * @throws \Exception
      */
