@@ -10,6 +10,7 @@ use Pheanstalk\{
 use Viserio\Contracts\{
     Config\Manager as ConfigContract,
     Encryption\Encrypter as EncrypterContract,
+    Events\Dispatcher as DispatcherContract,
     Queue\Monitor as MonitorContract
 };
 use Viserio\Queue\Events\{
@@ -98,9 +99,9 @@ class QueueManager extends AbstractConnectionManager implements MonitorContract
             $connect = $this->createConnection($config);
 
             $connect->setContainer($this->container);
-            $connect->setEncrypter($this->container->get('encrypter'));
+            $connect->setEncrypter($this->encrypter);
 
-            $this->connections[$name] = $connect->connect($config);
+            $this->connections[$name] = $connect;
         }
 
         return $this->connections[$name];

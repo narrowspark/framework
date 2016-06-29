@@ -6,9 +6,10 @@ use Guzzle\Http\Exception\CurlException;
 use MongoConnectionException;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use Viserio\Contracts\Config\Manager as ConfigManger;
-use Viserio\Filesystem\FilesystemAdapter;
-use Viserio\Filesystem\FilesystemManager;
-
+use Viserio\Filesystem\{
+    FilesystemAdapter,
+    FilesystemManager
+};
 class FilesystemManagerTest extends \PHPUnit_Framework_TestCase
 {
     use MockeryTrait;
