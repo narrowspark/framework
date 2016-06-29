@@ -52,6 +52,7 @@ class AbstractManagerTest extends \PHPUnit_Framework_TestCase
             ]);
 
         $this->assertEquals(['name' => 'value', 'driver' => 'foo'], $manager->driver('value'));
+        $this->assertTrue($manager->hasDriver('value'));
         $this->assertEquals([
             'test' => true,
             'config' => ['name' => 'config', 'driver' => 'config'],
@@ -146,6 +147,7 @@ class AbstractManagerTest extends \PHPUnit_Framework_TestCase
         $manager->extend(__CLASS__, $driver);
 
         $this->assertEquals($manager, $manager->driver(__CLASS__));
+        $this->assertTrue($manager->hasDriver(__CLASS__));
     }
 
     public function testGetDriverConfig()

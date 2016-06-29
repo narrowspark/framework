@@ -111,6 +111,7 @@ class AbstractConnectionManagerTest extends \PHPUnit_Framework_TestCase
 
         $this->assertSame('manager', $return);
         $this->assertArrayHasKey('foo', $manager->getConnections());
+        $this->assertTrue($manager->hasConnection('foo'));
     }
 
     public function testDefaultConnection()
@@ -149,15 +150,16 @@ class AbstractConnectionManagerTest extends \PHPUnit_Framework_TestCase
                 ]
             ]);
 
-        $factory = new TestConnectionManager($config);
-        $factory->extend('stdclass2', function($options) {
+        $manager = new TestConnectionManager($config);
+        $manager->extend('stdclass2', function($options) {
             return new stdClass;
         });
 
-        $this->assertInstanceOf(stdClass::class, $factory->connection('stdclass2'));
+        $this->assertTrue($manager->hasConnection('stdclass2'));
+        $this->assertInstanceOf(stdClass::class, $manager->connection('stdclass2'));
 
-        $factory->reconnect('stdclass2');
+        $manager->reconnect('stdclass2');
 
-        $this->assertInstanceOf(stdClass::class, $factory->connection('stdclass2'));
+        $this->assertInstanceOf(stdClass::class, $manager->connection('stdclass2'));
     }
 }

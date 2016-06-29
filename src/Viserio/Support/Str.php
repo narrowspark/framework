@@ -177,7 +177,8 @@ class Str
         if (class_exists(StaticStringy::class)) {
             return forward_static_call_array([StaticStringy::class, $name], $arguments);
         }
-
+        // @codeCoverageIgnoreStart
         throw new BadMethodCallException($name . ' is not a valid method');
+        // @codeCoverageIgnoreEnd
     }
 }
