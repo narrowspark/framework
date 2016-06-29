@@ -28,15 +28,18 @@ class Dispatcher implements StackContract
     /**
      * A response instance.
      *
-     * @var ResponseInterface $response
+     * @var \Psr\Http\Message\ResponseInterface $response
      */
     protected $response;
 
     public function __construct(ResponseInterface $response)
     {
         $this->response = $response;
-        $this->stack = new SplStack();
-        $this->stack->setIteratorMode(SplDoublyLinkedList::IT_MODE_LIFO | SplDoublyLinkedList::IT_MODE_KEEP);
+
+        $stack = new SplStack();
+        $stack->setIteratorMode(SplDoublyLinkedList::IT_MODE_LIFO | SplDoublyLinkedList::IT_MODE_KEEP);
+
+        $this->stack = $stack;
     }
 
     /**
