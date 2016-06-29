@@ -104,9 +104,9 @@ class Dispatcher implements StackContract
     /**
      *  Check if middleware is aware of Interop\Container\ContainerInterface.
      *
-     * @param MiddlewareContract $middleware
+     * @param \Viserio\Contracts\Middleware\Middleware $middleware
      *
-     * @return MiddlewareContract
+     * @return \Viserio\Contracts\Middleware\Middleware
      */
     private function isContainerAware($middleware): MiddlewareContract
     {
