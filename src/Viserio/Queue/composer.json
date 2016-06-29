@@ -30,6 +30,7 @@
         "viserio/support"                 : "self.version"
     },
     "require-dev": {
+        "google/appengine-php-sdk"        : "^1.9.30",
         "microsoft/windowsazure"          : "^0.4",
         "narrowspark/php-cs-fixer-config" : "^1.1",
         "narrowspark/testing-helper"      : "^1.5",
@@ -47,6 +48,7 @@
         }
     },
     "suggest": {
+        "google/appengine-php-sdk"        : "Required to use the Google App Engine queue driver (^1.9.30).",
         "aws/aws-sdk-php"                 : "Required to use the SQS queue driver (^3.0).",
         "pda/pheanstalk"                  : "Required to use the Beanstalk queue driver (^3.0).",
         "iron-io/iron_mq"                 : "Required to use the IronMQ queue driver (^4.0).",
