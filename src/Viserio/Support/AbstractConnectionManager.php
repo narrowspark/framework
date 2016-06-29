@@ -69,14 +69,8 @@ abstract class AbstractConnectionManager
     {
         $name = $name ?? $this->getDefaultConnection();
 
-        if (! $this->hasConnection($name)) {
-            throw new RuntimeException(
-                sprintf('The connection [%s] is not supported.', $name)
-            );
-        }
-
         if (! isset($this->connections[$name])) {
-            $this->connections[$name] = $this->makeConnection(
+            $this->connections[$name] = $this->createConnection(
                 $this->getConnectionConfig($name)
             );
         }
@@ -178,8 +172,6 @@ abstract class AbstractConnectionManager
      *
      * @param string $name
      *
-     * @throws \InvalidArgumentException
-     *
      * @return array
      */
     public function getConnectionConfig(string $name): array
@@ -195,7 +187,7 @@ abstract class AbstractConnectionManager
             return $config;
         }
 
-        throw new InvalidArgumentException(sprintf('Driver [%s] not configured.', $name));
+        return ['name' => $name];
     }
 
     /**
@@ -221,22 +213,15 @@ abstract class AbstractConnectionManager
     }
 
     /**
-     * Create the connection instance.
-     *
-     * @param array $config
-     *
-     * @return mixed
-     */
-    abstract protected function createConnection(array $config);
-
-    /**
      * Make the connection instance.
      *
      * @param array $config
      *
+     * @throws \InvalidArgumentException
+     *
      * @return mixed
      */
-    protected function makeConnection(array $config)
+    protected function createConnection(array $config)
     {
         $method = 'create' . Str::studly($config['name']) . 'Connection';
 
@@ -246,7 +231,7 @@ abstract class AbstractConnectionManager
             return $this->$method($config);
         }
 
-        return $this->createConnection($config);
+        throw new InvalidArgumentException(sprintf('Connection [%s] not supported.', $config['name']));
     }
 
     /**

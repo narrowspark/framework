@@ -11,13 +11,13 @@ class AbstractConnectionManagerTest extends \PHPUnit_Framework_TestCase
     use MockeryTrait;
 
     /**
-     * @expectedException RuntimeException
-     * @expectedExceptionMessage The connection [fail] is not supported.
+     * @expectedException InvalidArgumentException
+     * @expectedExceptionMessage Connection [fail] not supported.
      */
     public function testConnectionToThrowRuntimeException()
     {
         $config = $this->mock(ConfigContract::class);
-        $config->shouldReceive('get')->never();
+        $config->shouldReceive('get')->once();
 
         $manager = new TestConnectionManager($config);
         $manager->connection('fail');
