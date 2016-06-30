@@ -123,10 +123,10 @@ class Util
      * bytes have been read.
      *
      * @param \Psr\Http\Message\StreamInterface $stream Stream to read
-     * @param int             $maxLen Maximum number of bytes to read. Pass -1
-     *                                to read the entire stream.
+     * @param int                               $maxLen Maximum number of bytes to read. Pass -1
+     *                                                  to read the entire stream.
      *
-     * @throws \RuntimeException on error.
+     * @throws \RuntimeException
      *
      * @return string
      */
@@ -169,10 +169,10 @@ class Util
      *
      * @param \Psr\Http\Message\StreamInterface $source Stream to read from
      * @param \Psr\Http\Message\StreamInterface $dest   Stream to write to
-     * @param int             $maxLen Maximum number of bytes to read. Pass -1
-     *                                to read the entire stream.
+     * @param int                               $maxLen Maximum number of bytes to read. Pass -1
+     *                                                  to read the entire stream.
      *
-     * @throws \RuntimeException on error.
+     * @throws \RuntimeException
      */
     public static function copyToStream(
         StreamInterface $source,
@@ -189,21 +189,19 @@ class Util
             return;
         }
 
-        $bytes = 0;
+        $bufferSize = 8192;
+        $remaining = $maxLen;
 
-        while (! $source->eof()) {
-            $buf = $source->read($maxLen - $bytes);
+        while ($remaining > 0 && !$source->eof()) {
+            $buf = $source->read(min($bufferSize, $remaining));
+            $len = strlen($buf);
 
-            if (! ($len = strlen($buf))) {
+            if (!$len) {
                 break;
             }
 
-            $bytes += $len;
+            $remaining -= $len;
             $dest->write($buf);
-
-            if ($bytes == $maxLen) {
-                break;
-            }
         }
     }
 
