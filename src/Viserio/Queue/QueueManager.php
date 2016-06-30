@@ -7,6 +7,8 @@ use Pheanstalk\{
     Pheanstalk,
     PheanstalkInterface
 };
+use IronMQ\IronMQ;
+use Psr\Http\Message\RequestInterface;
 use Viserio\Contracts\{
     Config\Manager as ConfigContract,
     Encryption\Encrypter as EncrypterContract,
@@ -17,7 +19,8 @@ use Viserio\Queue\Events\{
     WorkerStopping
 };
 use Viserio\Queue\Connectors\{
-    BeanstalkdQueue
+    BeanstalkdQueue,
+    IronQueue
 };
 use Viserio\Support\AbstractConnectionManager;
 
@@ -47,7 +50,14 @@ class QueueManager extends AbstractConnectionManager implements MonitorContract
     protected $dispatcher;
 
     /**
-     * Constructor.b
+     * The current request instance.
+     *
+     * @var \Psr\Http\Message\RequestInterface
+     */
+    protected $request;
+
+    /**
+     * Create a new queue manager instance.
      *
      * @param \Viserio\Contracts\Config\Manager       $config
      * @param \Interop\Container\ContainerInterface   $container
@@ -156,7 +166,31 @@ class QueueManager extends AbstractConnectionManager implements MonitorContract
     }
 
     /**
-     * {@inheritdoc}
+     * Get the request instance.
+     *
+     * @return \Psr\Http\Message\RequestInterface
+     */
+    public function getRequest()
+    {
+        return $this->request;
+    }
+
+    /**
+     * Set the request instance.
+     *
+     * @param \Psr\Http\Message\RequestInterface $request
+     *
+     * @return self
+     */
+    public function setRequest(RequestInterface $request): QueueManager
+    {
+        $this->request = $request;
+
+        return $this;
+    }
+
+    /**
+     * Create Beanstalkd connection.
      */
     protected function createBeanstalkdConnection(array $config): BeanstalkdQueue
     {
@@ -169,6 +203,31 @@ class QueueManager extends AbstractConnectionManager implements MonitorContract
             $pheanstalk,
             $config['queue'],
             Arr::get($config, 'ttr', Pheanstalk::DEFAULT_TTR)
+        );
+    }
+
+    /**
+     * Create IronMQ connection.
+     */
+    protected function createIronmqConnection(array $config): IronQueue
+    {
+        $ironConfig = ['token' => $config['token'], 'project_id' => $config['project']];
+
+        if (isset($config['host'])) {
+            $ironConfig['host'] = $config['host'];
+        }
+
+        $iron = new IronMQ($ironConfig);
+
+        if (isset($config['ssl_verifypeer'])) {
+            $iron->ssl_verifypeer = $config['ssl_verifypeer'];
+        }
+
+        return new IronQueue(
+            $iron,
+            $this->request,
+            $config['queue'],
+            $config['timeout']
         );
     }
 
