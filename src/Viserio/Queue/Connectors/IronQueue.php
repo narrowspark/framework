@@ -3,7 +3,6 @@ namespace Viserio\Queue\Connectors;
 
 use Narrowspark\Arr\StaticArr as Arr;
 use IronMQ\IronMQ;
-use Psr\Http\Message\RequestInterface;
 
 class IronQueue extends AbstractQueue
 {
@@ -13,14 +12,6 @@ class IronQueue extends AbstractQueue
      * @var \IronMQ\IronMQ
      */
     protected $iron;
-
-    /**
-     * The current request instance.
-     *
-     * @var \Psr\Http\Message\RequestInterface
-     */
-    protected $request;
-
     /**
      * Number of seconds before the reservation_id times out on a newly popped message.
      *
@@ -31,15 +22,13 @@ class IronQueue extends AbstractQueue
     /**
      * Create a new IronMQ queue instance.
      *
-     * @param \IronMQ\IronMQ                     $iron
-     * @param \Psr\Http\Message\RequestInterface $request
-     * @param string                             $default
-     * @param int                                $timeout
+     * @param \IronMQ\IronMQ $iron
+     * @param string         $default
+     * @param int            $timeout
      */
-    public function __construct(IronMQ $iron, RequestInterface $request, string $default, int $timeout = 60)
+    public function __construct(IronMQ $iron, string $default, int $timeout = 60)
     {
         $this->iron = $iron;
-        $this->request = $request;
         $this->default = $default;
         $this->timeout = $timeout;
     }
@@ -84,15 +73,5 @@ class IronQueue extends AbstractQueue
     public function getIron()
     {
         return $this->iron;
-    }
-
-    /**
-     * Get the request instance.
-     *
-     * @return \Psr\Http\Message\RequestInterface
-     */
-    public function getRequest(): RequestInterface
-    {
-        return $this->request;
     }
 }

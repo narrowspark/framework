@@ -2,7 +2,7 @@
 namespace Viserio\Queue\Connectors;
 
 use Narrowspark\Arr\StaticArr as Arr;
-use Pheanstalk\Pheanstalk;
+use Pheanstalk\Job as PheanstalkJob;
 use Pheanstalk\PheanstalkInterface;
 
 class BeanstalkdQueue extends AbstractQueue
@@ -10,7 +10,7 @@ class BeanstalkdQueue extends AbstractQueue
     /**
      * The Pheanstalk instance.
      *
-     * @var \Pheanstalk\Pheanstalk
+     * @var \Pheanstalk\PheanstalkInterface
      */
     protected $pheanstalk;
 
@@ -24,11 +24,11 @@ class BeanstalkdQueue extends AbstractQueue
     /**
      * Create a new Beanstalkd queue instance.
      *
-     * @param  \Pheanstalk\Pheanstalk $pheanstalk
-     * @param  string                 $default
-     * @param  int                    $timeToRun
+     * @param \Pheanstalk\PheanstalkInterface $pheanstalk
+     * @param string                          $default
+     * @param int                             $timeToRun
      */
-    public function __construct(Pheanstalk $pheanstalk, string $default, int $timeToRun)
+    public function __construct(PheanstalkInterface $pheanstalk, string $default, int $timeToRun)
     {
         $this->default = $default;
         $this->timeToRun = $timeToRun;
@@ -50,8 +50,8 @@ class BeanstalkdQueue extends AbstractQueue
     {
         return $this->pheanstalk->useTube($this->getQueue($queue))->put(
             $payload,
-            Pheanstalk::DEFAULT_PRIORITY,
-            Pheanstalk::DEFAULT_DELAY,
+            PheanstalkInterface::DEFAULT_PRIORITY,
+            PheanstalkInterface::DEFAULT_DELAY,
             $this->timeToRun
         );
     }
@@ -61,7 +61,16 @@ class BeanstalkdQueue extends AbstractQueue
      */
     public function later($delay, string $job, $data = '', string $queue = null)
     {
-        //
+        $payload = $this->createPayload($job, $data);
+
+        $pheanstalk = $this->pheanstalk->useTube($this->getQueue($queue));
+
+        return $pheanstalk->put(
+            $payload,
+            PheanstalkInterface::DEFAULT_PRIORITY,
+            $this->getSeconds($delay),
+            $this->timeToRun
+        );
     }
 
     /**
@@ -69,7 +78,13 @@ class BeanstalkdQueue extends AbstractQueue
      */
     public function pop(string $queue = null)
     {
-        //
+        $queue = $this->getQueue($queue);
+
+        $job = $this->pheanstalk->watchOnly($queue)->reserve(0);
+
+        if ($job instanceof PheanstalkJob) {
+            return new BeanstalkdJob($this->container, $this->pheanstalk, $job, $queue);
+        }
     }
 
     /**

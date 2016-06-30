@@ -68,4 +68,15 @@ interface QueueConnector
      * @return mixed
      */
     public function laterOn(string $queue, $delay, string $job, $data = '');
+
+    /**
+     * Push an array of jobs onto the queue.
+     *
+     * @param array  $jobs
+     * @param mixed  $data
+     * @param string $queue
+     *
+     * @return mixed
+     */
+    public function bulk(array $jobs, $data = '', string $queue = null);
 }
