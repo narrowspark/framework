@@ -6,6 +6,38 @@ use Narrowspark\Arr\StaticArr as Arr;
 class RedisQueue extends AbstractQueue
 {
     /**
+     * {@inheritdoc}
+     */
+    public function push(string $job, $data = '', string $queue = null)
+    {
+        //
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function pushRaw(string $payload, string $queue = null, array $options = [])
+    {
+        //
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function later($delay, string $job, $data = '', string $queue = null)
+    {
+        //
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function pop(string $queue = null)
+    {
+        //
+    }
+
+    /**
      * Set additional meta on a payload string.
      *
      * @param string $payload
