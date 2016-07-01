@@ -28,27 +28,6 @@ class ConnectManager extends AbstractConnectionManager implements ConnectManager
     /**
      * {@inheritdoc}
      */
-    protected $supportedConnectors = [
-        'dblib' => DblibConnector::class,
-        'firebird' => Firebirdconnector::class,
-        'googlecloudsql' => GoogleCloudSQLConnector::class,
-        'mariadb' => MariaDBConnector::class,
-        'mongo' => MongoConnector::class,
-        'mssql' => MSSQLConnector::class,
-        'mysql' => MySqlConnector::class,
-        'odbc' => OdbcConnection::class,
-        'oracle' => OracleConnector::class,
-        'postgresql' => PostgreSQLConnector::class,
-        'sqllite' => SQLiteConnector::class,
-        'sqlserver' => SqlServerConnector::class,
-        'sybase' => SybaseConnector::class,
-        'memcached' => MemcachedConnector::class,
-        'predis' => PredisConnector::class,
-    ];
-
-    /**
-     * {@inheritdoc}
-     */
     public function supportedPDODrivers(): array
     {
         return ['mysql', 'pgsql', 'sqlite', 'sqlsrv', 'dblib'];
@@ -72,25 +51,79 @@ class ConnectManager extends AbstractConnectionManager implements ConnectManager
         return $drivers;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function hasConnection(string $connect): bool
+    protected function createDblibConnection(array $config)
     {
-        return isset($this->supportedConnectors[$connect]) ||
-            parent::hasConnection($connect);
+        return (new DblibConnector())->connect($config);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    protected function createConnection(array $config = [])
+    protected function createFirebirdConnection(array $config)
     {
-        if (isset($this->supportedConnectors[$config['name']])) {
-            return (new $this->supportedConnectors[$config['name']])->connect($config);
-        }
+        return (new Firebirdconnector())->connect($config);
+    }
 
-        return parent::createConnection($config);
+    protected function createGooglecloudsqlConnection(array $config)
+    {
+        return (new GoogleCloudSQLConnector())->connect($config);
+    }
+
+    protected function createMariadbConnection(array $config)
+    {
+        return (new MariaDBConnector())->connect($config);
+    }
+
+    protected function createMongoConnection(array $config)
+    {
+        return (new MongoConnector())->connect($config);
+    }
+
+    protected function createMssqlConnection(array $config)
+    {
+        return (new MSSQLConnector())->connect($config);
+    }
+
+    protected function createMysqlConnection(array $config)
+    {
+        return (new MySqlConnector())->connect($config);
+    }
+
+    protected function createOdbcConnection(array $config)
+    {
+        return (new OdbcConnection())->connect($config);
+    }
+
+    protected function createOracleConnection(array $config)
+    {
+        return (new OracleConnector())->connect($config);
+    }
+
+    protected function createPostgresqlConnection(array $config)
+    {
+        return (new PostgreSQLConnector())->connect($config);
+    }
+
+    protected function createSQLiteConnection(array $config)
+    {
+        return (new SQLiteConnector())->connect($config);
+    }
+
+    protected function createSqlserverConnection(array $config)
+    {
+        return (new SqlServerConnector())->connect($config);
+    }
+
+    protected function createSybaseConnection(array $config)
+    {
+        return (new SybaseConnector())->connect($config);
+    }
+
+    protected function createMemcachedConnection(array $config)
+    {
+        return (new MemcachedConnector())->connect($config);
+    }
+
+    protected function createPredisConnection(array $config)
+    {
+        return (new PredisConnector())->connect($config);
     }
 
     /**

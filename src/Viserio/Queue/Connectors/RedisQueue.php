@@ -1,10 +1,59 @@
 <?php
 namespace Viserio\Queue\Connectors;
 
+use Predis\Client;
 use Narrowspark\Arr\StaticArr as Arr;
 
 class RedisQueue extends AbstractQueue
 {
+    /**
+     * The Redis database instance.
+     *
+     * @var \Predis\Client
+     */
+    protected $redis;
+
+    /**
+     * The connection name.
+     *
+     * @var string
+     */
+    protected $connection;
+
+    /**
+     * The name of the default queue.
+     *
+     * @var string
+     */
+    protected $default;
+
+    /**
+     * The expiration time of a job.
+     *
+     * @var int
+     */
+    protected $expire = 90;
+
+    /**
+     * Create a new Redis queue instance.
+     *
+     * @param \Predis\Client $redis
+     * @param string         $default
+     * @param string         $connection
+     * @param int            $expire
+     */
+    public function __construct(
+        Client $redis,
+        string $default = 'default',
+        string $connection = null,
+        int $expire = 90
+    ) {
+        $this->redis = $redis;
+        $this->default = $default;
+        $this->connection = $connection;
+        $this->expire = $expire;
+    }
+
     /**
      * {@inheritdoc}
      */

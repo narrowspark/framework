@@ -82,4 +82,11 @@ interface Job
      * @return string
      */
     public function getRawBody(): string;
+
+    /**
+     * Get the resolved name of the queued job class.
+     *
+     * @return string
+     */
+    public function resolveName(): string;
 }

@@ -31,7 +31,7 @@ abstract class AbstractDatabaseConnector implements ConnectorContract
      *
      * @return array
      */
-    public function getOptions(array $config)
+    public function getOptions(array $config): array
     {
         $options = Arr::get($config, 'options', []);
 
@@ -54,7 +54,7 @@ abstract class AbstractDatabaseConnector implements ConnectorContract
      *
      * @return \PDO
      */
-    public function createConnection($dsn, array $config, array $options)
+    public function createConnection(string $dsn, array $config, array $options)
     {
         try {
             $pdo = new PDO($dsn, $config['username'], $config['password'], $options);
@@ -76,7 +76,7 @@ abstract class AbstractDatabaseConnector implements ConnectorContract
      *
      * @return array
      */
-    public function getDefaultOptions()
+    public function getDefaultOptions(): array
     {
         return $this->options;
     }
@@ -104,8 +104,13 @@ abstract class AbstractDatabaseConnector implements ConnectorContract
      *
      * @return \PDO
      */
-    protected function tryAgainIfCausedByLostConnection(PDOException $exception, $dsn, $username, $password, $options)
-    {
+    protected function tryAgainIfCausedByLostConnection(
+        PDOException $exception,
+        string $dsn,
+        string $username,
+        string $password,
+        array $options
+    ) {
         if ($this->causedByLostConnection($exception)) {
             return new PDO($dsn, $username, $password, $options);
         }

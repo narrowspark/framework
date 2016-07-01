@@ -1,0 +1,141 @@
+<?php
+namespace Viserio\Queue\Jobs;
+
+use Interop\Container\ContainerInterface;
+use Pheanstalk\PheanstalkInterface;
+use Pheanstalk\Job as PheanstalkJob;
+
+class BeanstalkdJob extends AbstractJob
+{
+    /**
+     * The Pheanstalk instance.
+     *
+     * @var \Pheanstalk\Pheanstalk
+     */
+    protected $pheanstalk;
+
+    /**
+     * The Pheanstalk job instance.
+     *
+     * @var \Pheanstalk\Job
+     */
+    protected $job;
+
+    /**
+     * Create a new job instance.
+     *
+     * @param \Interop\Container\ContainerInterface $container
+     * @param \Pheanstalk\PheanstalkInterface       $pheanstalk
+     * @param \Pheanstalk\Job                       $job
+     * @param string                                $queue
+     */
+    public function __construct(
+        ContainerInterface $container,
+        PheanstalkInterface $pheanstalk,
+        PheanstalkJob $job,
+        string $queue
+    ) {
+        $this->job = $job;
+        $this->queue = $queue;
+        $this->container = $container;
+        $this->pheanstalk = $pheanstalk;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function run()
+    {
+        $this->resolveAndRun(json_decode($this->getRawBody(), true));
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getRawBody(): string
+    {
+        return $this->job->getData();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function delete()
+    {
+        parent::delete();
+
+        $this->pheanstalk->delete($this->job);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function release(int $delay = 0)
+    {
+        parent::release($delay);
+
+        $priority = PheanstalkInterface::DEFAULT_PRIORITY;
+
+        $this->pheanstalk->release($this->job, $priority, $delay);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function bury()
+    {
+        $this->release();
+
+        $this->pheanstalk->bury($this->job);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function attempts(): int
+    {
+        $stats = $this->pheanstalk->statsJob($this->job);
+
+        return (int) $stats->reserves;
+    }
+
+    /**
+     * Get the job identifier.
+     *
+     * @return string
+     */
+    public function getJobId(): string
+    {
+        return $this->job->getId();
+    }
+
+    /**
+     * Get the IoC container instance.
+     *
+     * @return \Interop\Container\ContainerInterface
+     */
+    public function getContainer(): ContainerInterface
+    {
+        return $this->container;
+    }
+
+    /**
+     * Get the underlying Pheanstalk instance.
+     *
+     * @return \Pheanstalk\PheanstalkInterface
+     */
+    public function getPheanstalk(): PheanstalkInterface
+    {
+        return $this->pheanstalk;
+    }
+
+    /**
+     * Get the underlying Pheanstalk job.
+     *
+     * @return \Pheanstalk\Job
+     */
+    public function getPheanstalkJob(): PheanstalkJob
+    {
+        return $this->job;
+    }
+}

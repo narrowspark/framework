@@ -177,7 +177,7 @@ class Util
     public static function copyToStream(
         StreamInterface $source,
         StreamInterface $dest,
-        $maxLen = -1
+        int $maxLen = -1
     ) {
         if ($maxLen === -1) {
             while (! $source->eof()) {
@@ -190,18 +190,27 @@ class Util
         }
 
         $bufferSize = 8192;
-        $remaining = $maxLen;
 
-        while ($remaining > 0 && !$source->eof()) {
-            $buf = $source->read(min($bufferSize, $remaining));
-            $len = strlen($buf);
-
-            if (!$len) {
-                break;
+        if ($maxLen === -1) {
+            while (! $source->eof()) {
+                if (! $dest->write($source->read($bufferSize))) {
+                    break;
+                }
             }
+        } else {
+            $remaining = $maxLen;
 
-            $remaining -= $len;
-            $dest->write($buf);
+            while ($remaining > 0 && ! $source->eof()) {
+                $buf = $source->read(min($bufferSize, $remaining));
+                $len = strlen($buf);
+
+                if (!$len) {
+                    break;
+                }
+
+                $remaining -= $len;
+                $dest->write($buf);
+            }
         }
     }
 

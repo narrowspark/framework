@@ -1,7 +1,9 @@
 <?php
 namespace Viserio\Queue\Jobs;
 
+use Narrowspark\Arr\StaticArr as Arr;
 use Viserio\Contracts\Queue\Job as JobContract;
+use Viserio\Queue\CallQueuedHandler;
 
 abstract class AbstractJob implements JobContract
 {
@@ -81,7 +83,7 @@ abstract class AbstractJob implements JobContract
      */
     public function getName(): string
     {
-
+        return json_decode($this->getRawBody(), true)['job'];
     }
 
     /**
@@ -89,7 +91,15 @@ abstract class AbstractJob implements JobContract
      */
     public function failed()
     {
+        $payload = json_decode($this->getRawBody(), true);
 
+        list($class, $method) = $this->parseJob($payload['job']);
+
+        $this->instance = $this->container->get($class);
+
+        if (method_exists($this->instance, 'failed')) {
+            $this->instance->failed($payload['data']);
+        }
     }
 
     /**
@@ -104,4 +114,75 @@ abstract class AbstractJob implements JobContract
      * {@inheritdoc}
      */
     abstract public function getRawBody(): string;
+
+    /**
+     * {@inheritdoc}
+     */
+    public function resolveName(): string
+    {
+        $name = $this->getName();
+        $payload = json_decode($this->getRawBody(), true);
+
+        if ($name === sprintf('%s@call', CallQueuedHandler::class)) {
+            return Arr::get($payload, 'data.commandName', $name);
+        }
+
+        return $name;
+    }
+
+     /**
+     * Resolve and run the job handler method.
+     *
+     * @param array $payload
+     *
+     * @return void
+     */
+    protected function resolveAndRun(array $payload)
+    {
+        list($class, $method) = $this->parseJob($payload['job']);
+
+        $this->instance = $this->container->get($class);
+
+        $this->instance->{$method}($this, $payload['data']);
+    }
+
+    /**
+     * Parse the job declaration into class and method.
+     *
+     * @param string $job
+     *
+     * @return array
+     */
+    protected function parseJob(string $job): array
+    {
+        $segments = explode('@', $job);
+
+        return count($segments) > 1 ? $segments : [$segments[0], 'run'];
+    }
+
+    /**
+     * Calculate the number of seconds with the given delay.
+     *
+     * @param \DateTime|int $delay
+     *
+     * @return int
+     */
+    protected function getSeconds($delay): int
+    {
+        if ($delay instanceof DateTime) {
+            return max(0, $delay->getTimestamp() - $this->getTime());
+        }
+
+        return (int) $delay;
+    }
+
+    /**
+     * Get the current system time.
+     *
+     * @return int
+     */
+    protected function getTime(): int
+    {
+        return time();
+    }
 }

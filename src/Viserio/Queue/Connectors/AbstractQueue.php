@@ -108,9 +108,9 @@ abstract class AbstractQueue implements QueueConnectorContract
     /**
      * Create a payload string from the given job and data.
      *
-     * @param string|object|\Closure $job
-     * @param mixed                  $data
-     * @param string                 $queue
+     * @param string|object|\Closure|array $job
+     * @param mixed                        $data
+     * @param string                       $queue
      *
      * @return string
      */
@@ -126,8 +126,8 @@ abstract class AbstractQueue implements QueueConnectorContract
             return json_encode([
                 'job' => sprintf('%s@call', CallQueuedHandler::class),
                 'data' => [
-                    'commandName' => get_class($job),
-                    'command' => serialize(clone $job)
+                    'commandName' => $encrypter->encrypt(get_class($job)),
+                    'command' => $encrypter->encrypt(serialize(clone $job))
                 ],
             ]);
         }
