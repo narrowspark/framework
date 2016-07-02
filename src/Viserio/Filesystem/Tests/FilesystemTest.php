@@ -4,6 +4,7 @@ namespace Viserio\Filesystem\Tests;
 use org\bovigo\vfs\content\LargeFileContent;
 use org\bovigo\vfs\vfsStream;
 use org\bovigo\vfs\vfsStreamDirectory;
+use Symfony\Component\Finder\SplFileInfo;
 use Viserio\Filesystem\Filesystem;
 
 class FilesystemTest extends \PHPUnit_Framework_TestCase
@@ -449,5 +450,33 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
         $this->assertFileExists(vfsStream::url('root/tmp2') . '/bar.txt');
         $this->assertTrue(is_dir(vfsStream::url('root/tmp2') . '/nested'));
         $this->assertFileExists(vfsStream::url('root/tmp2') . '/nested/baz.txt');
+    }
+
+    public function testFiles()
+    {
+        $this->root->addChild(new vfsStreamDirectory('tmp'));
+        $this->root->addChild(new vfsStreamDirectory('tmp2'));
+
+        $dir = $this->root->getChild('tmp');
+
+        vfsStream::newFile('foo.txt')
+            ->withContent('foo')
+            ->at($dir);
+        vfsStream::newFile('bar.txt')
+            ->withContent('bar')
+            ->at($dir);
+
+        $this->assertTrue(in_array('bar.txt', $this->files->files($dir->url())));
+        $this->assertTrue(in_array('foo.txt', $this->files->files($dir->url())));
+    }
+
+    public function testAllDirectories()
+    {
+        $this->root->addChild(new vfsStreamDirectory('tmp'));
+        $this->root->addChild(new vfsStreamDirectory('tmp2'));
+
+        $arr = $this->files->allDirectories($this->root->url());
+
+        $this->assertInstanceOf(SplFileInfo::class, $arr[0]);
     }
 }
