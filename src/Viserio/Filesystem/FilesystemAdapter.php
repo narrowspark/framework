@@ -151,18 +151,30 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
 
         // https://bugs.php.net/bug.php?id=64634
         if (@fopen($orginal, 'r') === false) {
-            throw new ViserioIOException(sprintf('Failed to copy "%s" to "%s" because source file could not be opened for reading.', $orginal, $target), 0, null, $orginal);
+            throw new ViserioIOException(sprintf(
+                'Failed to copy "%s" to "%s" because source file could not be opened for reading.',
+                $orginal,
+                $target
+            ), 0, null, $orginal);
         }
 
         // Stream context created to allow files overwrite when using FTP stream wrapper - disabled by default
         if (@fopen($target, 'w', null, stream_context_create(['ftp' => ['overwrite' => true]])) === false) {
-            throw new ViserioIOException(sprintf('Failed to copy "%s" to "%s" because target file could not be opened for writing.', $orginal, $target), 0, null, $orginal);
+            throw new ViserioIOException(sprintf(
+                'Failed to copy "%s" to "%s" because target file could not be opened for writing.',
+                $orginal,
+                $target
+            ), 0, null, $orginal);
         }
 
         $this->driver->copy($originFile, $targetFile);
 
         if (! is_file($target)) {
-            throw new ViserioIOException(sprintf('Failed to copy "%s" to "%s".', $originFile, $target), 0, null, $originFile);
+            throw new ViserioIOException(sprintf(
+                'Failed to copy "%s" to "%s".',
+                $originFile,
+                $target
+            ), 0, null, $originFile);
         }
 
         return true;
@@ -302,6 +314,48 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
     public function isDirectory(string $dirname): bool
     {
         return $this->driver->getMetadata($dirname)['type'] === 'dir';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function copyDirectory(string $directory, string $destination, array $options = []): bool
+    {
+        if (! $this->isDirectory($directory)) {
+            return false;
+        }
+
+        if (! $this->isDirectory($destination)) {
+            $this->createDirectory($destination, ['visibility' => 'public']);
+        }
+
+        $contents = $this->driver->listContents($directory, $recursive);
+
+        foreach ($contents as $item) {
+            # code...
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function moveDirectory(string $directory, string $destination, array $options = []): bool
+    {
+        $overwrite = $options['overwrite'] ?? false;
+
+        if ($overwrite && $this->isDirectory($destination)) {
+            $this->deleteDirectory($destination);
+            $this->copyDirectory($directory, $destination);
+            $this->deleteDirectory($directory);
+
+            return true;
+        }
+
+        if (@rename($directory, $destination) !== true) {
+            return false;
+        }
+
+        return true;
     }
 
     /**

@@ -294,4 +294,77 @@ class FilesystemAdapterTest extends \PHPUnit_Framework_TestCase
 
         return rmdir($dir);
     }
+
+    // public function testMoveDirectoryMovesEntireDirectory()
+    // {
+    //     $this->root->addChild(new vfsStreamDirectory('tmp'));
+    //     $this->root->addChild(new vfsStreamDirectory('tmp2'));
+
+    //     $dir = $this->root->getChild('tmp');
+    //     $temp2 = $this->root->getChild('tmp2');
+
+    //     $file = vfsStream::newFile('foo.txt')
+    //         ->withContent('foo')
+    //         ->at($dir);
+    //     $file2 = vfsStream::newFile('bar.txt')
+    //         ->withContent('bar')
+    //         ->at($dir);
+
+    //     $dir->addChild(new vfsStreamDirectory('nested'));
+    //     $dir2 = $dir->getChild('nested');
+
+    //     $file3 = vfsStream::newFile('baz.txt')
+    //         ->withContent('baz')
+    //         ->at($dir2);
+
+    //     $this->adapter->moveDirectory($dir->url(), $temp2->url());
+
+    //     $this->assertTrue(is_dir(vfsStream::url('root/tmp2')));
+    //     $this->assertFileExists(vfsStream::url('root/tmp2') . '/foo.txt');
+    //     $this->assertFileExists(vfsStream::url('root/tmp2') . '/bar.txt');
+    //     $this->assertTrue(is_dir(vfsStream::url('root/tmp2') . '/nested'));
+    //     $this->assertFileExists(vfsStream::url('root/tmp2') . '/nested/baz.txt');
+    //     $this->assertFalse(is_dir(vfsStream::url('root/tmp')));
+    // }
+
+    // public function testMoveDirectoryMovesEntireDirectoryAndOverwrites()
+    // {
+    //     $this->root->addChild(new vfsStreamDirectory('tmp'));
+    //     $this->root->addChild(new vfsStreamDirectory('tmp2'));
+
+    //     $dir = $this->root->getChild('tmp');
+    //     $temp2 = $this->root->getChild('tmp2');
+
+    //     vfsStream::newFile('foo.txt')
+    //         ->withContent('foo')
+    //         ->at($dir);
+    //     vfsStream::newFile('bar.txt')
+    //         ->withContent('bar')
+    //         ->at($dir);
+
+    //     $dir->addChild(new vfsStreamDirectory('nested'));
+    //     $dir2 = $dir->getChild('nested');
+
+    //     vfsStream::newFile('baz.txt')
+    //         ->withContent('baz')
+    //         ->at($dir2);
+
+    //     vfsStream::newFile('foo2.txt')
+    //         ->withContent('foo2')
+    //         ->at($temp2);
+    //     vfsStream::newFile('bar2.txt')
+    //         ->withContent('bar2')
+    //         ->at($temp2);
+
+    //     $this->adapter->moveDirectory($dir->url(), $temp2->url(), ['overwrite' => true]);
+
+    //     $this->assertTrue(is_dir(vfsStream::url('root/tmp2')));
+    //     $this->assertFileExists(vfsStream::url('root/tmp2') . '/foo.txt');
+    //     $this->assertFileExists(vfsStream::url('root/tmp2') . '/bar.txt');
+    //     $this->assertTrue(is_dir(vfsStream::url('root/tmp2') . '/nested'));
+    //     $this->assertFileExists(vfsStream::url('root/tmp2') . '/nested/baz.txt');
+    //     $this->assertFileNotExists(vfsStream::url('root/tmp2') . '/foo2.txt');
+    //     $this->assertFileNotExists(vfsStream::url('root/tmp2') . '/bar2.txt');
+    //     $this->assertFalse(is_dir(vfsStream::url('root/tmp')));
+    // }
 }

@@ -343,6 +343,52 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract, Direct
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function copyDirectory(string $directory, string $destination, array $options = []): bool
+    {
+        $directory = self::normalizeDirectorySeparator($directory);
+
+        if (! $this->isDirectory($directory)) {
+            return false;
+        }
+
+        $destination = self::normalizeDirectorySeparator($destination);
+
+        try {
+            $this->mirror($directory, $destination, null, $options);
+        } catch (SymfonyIOException $e) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function moveDirectory(string $directory, string $destination, array $options = []): bool
+    {
+        $directory = self::normalizeDirectorySeparator($directory);
+        $destination = self::normalizeDirectorySeparator($destination);
+        $overwrite = $options['overwrite'] ?? false;
+
+        if ($overwrite && $this->isDirectory($destination)) {
+            $this->deleteDirectory($destination);
+            $this->copyDirectory($directory, $destination);
+            $this->deleteDirectory($directory);
+
+            return true;
+        }
+
+        if (@rename($directory, $destination) !== true) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
      * Parse the given visibility value.
      *
      * @param string      $path
