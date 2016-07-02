@@ -284,15 +284,19 @@ class FilesystemAdapterTest extends \PHPUnit_Framework_TestCase
         $this->adapter->getTimestamp('/DontExist');
     }
 
-    private function delTree($dir)
+    public function testFiles()
     {
-        $files = array_diff(scandir($dir), ['.', '..']);
+        $adapter = $this->adapter;
 
-        foreach ($files as $file) {
-            (is_dir("$dir/$file")) ? $this->delTree("$dir/$file") : unlink("$dir/$file");
-        }
+        $adapter->createDirectory('languages');
+        $adapter->write('languages/php.txt', 'php');
+        $adapter->write('languages/c.txt', 'c');
+        $adapter->createDirectory('languages/lang');
+        $adapter->write('languages/lang/c.txt', 'c');
 
-        return rmdir($dir);
+        $this->assertTrue(in_array('languages/c.txt', $this->adapter->files('languages')));
+        $this->assertTrue(in_array('languages/php.txt', $this->adapter->files('languages')));
+        $this->assertFalse(in_array('languages/lang/c.txt', $this->adapter->files('languages')));
     }
 
     // public function testMoveDirectoryMovesEntireDirectory()
@@ -367,4 +371,15 @@ class FilesystemAdapterTest extends \PHPUnit_Framework_TestCase
     //     $this->assertFileNotExists(vfsStream::url('root/tmp2') . '/bar2.txt');
     //     $this->assertFalse(is_dir(vfsStream::url('root/tmp')));
     // }
+
+    private function delTree($dir)
+    {
+        $files = array_diff(scandir($dir), ['.', '..']);
+
+        foreach ($files as $file) {
+            (is_dir("$dir/$file")) ? $this->delTree("$dir/$file") : unlink("$dir/$file");
+        }
+
+        return rmdir($dir);
+    }
 }

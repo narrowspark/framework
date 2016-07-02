@@ -455,7 +455,6 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
     public function testFiles()
     {
         $this->root->addChild(new vfsStreamDirectory('tmp'));
-        $this->root->addChild(new vfsStreamDirectory('tmp2'));
 
         $dir = $this->root->getChild('tmp');
 
@@ -466,8 +465,16 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
             ->withContent('bar')
             ->at($dir);
 
+        $dir->addChild(new vfsStreamDirectory('nested'));
+        $dir2 = $dir->getChild('nested');
+
+        vfsStream::newFile('baz.txt')
+            ->withContent('baz')
+            ->at($dir2);
+
         $this->assertTrue(in_array('bar.txt', $this->files->files($dir->url())));
         $this->assertTrue(in_array('foo.txt', $this->files->files($dir->url())));
+        $this->assertFalse(in_array('foo2.txt', $this->files->files($dir->url())));
     }
 
     public function testAllDirectories()
