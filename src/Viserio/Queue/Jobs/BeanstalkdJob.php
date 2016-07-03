@@ -80,7 +80,9 @@ class BeanstalkdJob extends AbstractJob
     }
 
     /**
-     * {@inheritdoc}
+     * Bury the job in the queue.
+     *
+     * @return void
      */
     public function bury()
     {
@@ -92,31 +94,19 @@ class BeanstalkdJob extends AbstractJob
     /**
      * {@inheritdoc}
      */
-    public function attempts(): int
-    {
-        $stats = $this->pheanstalk->statsJob($this->job);
-
-        return (int) $stats->reserves;
-    }
-
-    /**
-     * Get the job identifier.
-     *
-     * @return string
-     */
     public function getJobId(): string
     {
         return $this->job->getId();
     }
 
     /**
-     * Get the IoC container instance.
-     *
-     * @return \Interop\Container\ContainerInterface
+     * {@inheritdoc}
      */
-    public function getContainer(): ContainerInterface
+    public function attempts(): int
     {
-        return $this->container;
+        $stats = $this->pheanstalk->statsJob($this->job);
+
+        return (int) $stats->reserves;
     }
 
     /**

@@ -33,7 +33,7 @@ abstract class AbstractQueue implements QueueConnectorContract
     /**
      * {@inheritdoc}
      */
-    public function pushOn(string $queue, string $job, $data = '')
+    public function pushOn(string $queue, $job, $data = '')
     {
         return $this->push($job, $data, $queue);
     }
@@ -41,7 +41,7 @@ abstract class AbstractQueue implements QueueConnectorContract
     /**
      * {@inheritdoc}
      */
-    public function laterOn(string $queue, $delay, string $job, $data = '')
+    public function laterOn(string $queue, $delay, $job, $data = '')
     {
         return $this->later($delay, $job, $data, $queue);
     }
@@ -59,12 +59,13 @@ abstract class AbstractQueue implements QueueConnectorContract
     /**
      * Get the queue or return the default.
      *
-     * @param  string|null  $queue
+     * @param string|null $queue
+     *
      * @return string
      */
     public function getQueue($queue)
     {
-        return $queue ?: $this->default;
+        return $queue ?? $this->default;
     }
 
     /**
@@ -92,7 +93,7 @@ abstract class AbstractQueue implements QueueConnectorContract
             return max(0, $delay->getTimestamp() - $this->getTime());
         }
 
-        return $delay;
+        return (int) $delay;
     }
 
     /**
@@ -108,9 +109,9 @@ abstract class AbstractQueue implements QueueConnectorContract
     /**
      * Create a payload string from the given job and data.
      *
-     * @param string|object|\Closure|array $job
-     * @param mixed                        $data
-     * @param string                       $queue
+     * @param string|object|\Closure $job
+     * @param mixed                  $data
+     * @param string                 $queue
      *
      * @return string
      */

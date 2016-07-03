@@ -84,6 +84,13 @@ interface Job
     public function getRawBody(): string;
 
     /**
+     * Get the job identifier.
+     *
+     * @return string
+     */
+    public function getJobId(): string;
+
+    /**
      * Get the resolved name of the queued job class.
      *
      * @return string

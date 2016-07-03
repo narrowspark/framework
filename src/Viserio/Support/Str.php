@@ -103,7 +103,7 @@ class Str
         $l = self::length($characters) - 1;
 
         for ($i = 0; $i < $length; ++$i) {
-            $r = \random_int(0, $l);
+            $r = random_int(0, $l);
             $str .= $characters[$r];
         }
 

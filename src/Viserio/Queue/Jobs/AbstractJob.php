@@ -4,9 +4,12 @@ namespace Viserio\Queue\Jobs;
 use Narrowspark\Arr\StaticArr as Arr;
 use Viserio\Contracts\Queue\Job as JobContract;
 use Viserio\Queue\CallQueuedHandler;
+use Viserio\Support\Traits\ContainerAwareTrait;
 
 abstract class AbstractJob implements JobContract
 {
+    use ContainerAwareTrait;
+
     /**
      * The name of the queue the job belongs to.
      *
@@ -95,7 +98,7 @@ abstract class AbstractJob implements JobContract
 
         list($class, $method) = $this->parseJob($payload['job']);
 
-        $this->instance = $this->container->get($class);
+        $this->instance = $this->getContainer()->get($class);
 
         if (method_exists($this->instance, 'failed')) {
             $this->instance->failed($payload['data']);
@@ -114,6 +117,11 @@ abstract class AbstractJob implements JobContract
      * {@inheritdoc}
      */
     abstract public function getRawBody(): string;
+
+    /**
+     * {@inheritdoc}
+     */
+    abstract public function getJobId(): string;
 
     /**
      * {@inheritdoc}
@@ -141,7 +149,7 @@ abstract class AbstractJob implements JobContract
     {
         list($class, $method) = $this->parseJob($payload['job']);
 
-        $this->instance = $this->container->get($class);
+        $this->instance = $this->getContainer()->get($class);
 
         $this->instance->{$method}($this, $payload['data']);
     }

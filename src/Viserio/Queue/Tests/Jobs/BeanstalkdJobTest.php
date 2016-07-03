@@ -58,7 +58,7 @@ class BeanstalkdJobTest extends \PHPUnit_Framework_TestCase
         $job->failed();
     }
 
-    public function testFireProperlyCallsTheJobHandler()
+    public function testRunProperlyCallsTheJobHandler()
     {
         $job = $this->getJob();
         $job->getPheanstalkJob()->shouldReceive('getData')
