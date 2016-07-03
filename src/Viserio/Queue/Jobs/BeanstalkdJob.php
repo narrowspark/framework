@@ -2,8 +2,8 @@
 namespace Viserio\Queue\Jobs;
 
 use Interop\Container\ContainerInterface;
-use Pheanstalk\PheanstalkInterface;
 use Pheanstalk\Job as PheanstalkJob;
+use Pheanstalk\PheanstalkInterface;
 
 class BeanstalkdJob extends AbstractJob
 {
