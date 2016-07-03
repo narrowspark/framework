@@ -6,8 +6,10 @@ use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use Pheanstalk\PheanstalkInterface;
 use Pheanstalk\Job as PheanstalkJob;
 use stdClass;
-use Viserio\Queue\Jobs\BeanstalkdJob;
-use Viserio\Queue\Tests\Fixture\BeanstalkdJobTestFailed;
+use Viserio\Queue\{
+    Jobs\BeanstalkdJob,
+    Tests\Fixture\BeanstalkdJobTestFailed
+};
 
 class BeanstalkdJobTest extends \PHPUnit_Framework_TestCase
 {

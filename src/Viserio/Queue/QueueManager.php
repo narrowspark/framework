@@ -20,11 +20,13 @@ use Viserio\Queue\Events\{
     WorkerStopping
 };
 use Viserio\Queue\Connectors\{
+    AzureQueue,
     BeanstalkdQueue,
     IronQueue,
     RabbitMQQueue
 };
 use Viserio\Support\AbstractConnectionManager;
+use WindowsAzure\Common\ServicesBuilder;
 
 class QueueManager extends AbstractConnectionManager implements MonitorContract
 {
@@ -236,7 +238,7 @@ class QueueManager extends AbstractConnectionManager implements MonitorContract
     /**
      * Create RabbitMQ connection.
      */
-    protected function createRabitmqconnection(array $config): RabbitMQQueue
+    protected function createRabitmqConnection(array $config): RabbitMQQueue
     {
         $connection = new AMQPStreamConnection(
             $config['host'],
@@ -250,6 +252,23 @@ class QueueManager extends AbstractConnectionManager implements MonitorContract
             $connection,
             $config
         );
+    }
+
+    /**
+     * Create RabbitMQ connection.
+     */
+    protected function createAzureConnection(array $config): RabbitMQQueue
+    {
+        $connectionString = sprintf(
+            'DefaultEndpointsProtocol=%s;AccountName=%s;AccountKey=%s',
+            $config['protocol'],
+            $config['account'],
+            $config['key']
+        );
+
+        $azure = ServicesBuilder::getInstance()->createQueueService($connectionString);
+
+        return new AzureQueue($azure, $config['queue']);
     }
 
     /**

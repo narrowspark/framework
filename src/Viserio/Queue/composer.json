@@ -30,8 +30,6 @@
         "viserio/support"                 : "self.version"
     },
     "require-dev": {
-        "google/appengine-php-sdk"        : "^1.9.30",
-        "iron-io/iron_mq"                 : "^4.0",
         "microsoft/windowsazure"          : "^0.4",
         "narrowspark/php-cs-fixer-config" : "^1.1",
         "narrowspark/testing-helper"      : "^1.5",
