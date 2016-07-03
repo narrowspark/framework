@@ -1,9 +1,9 @@
 <?php
 namespace Viserio\Queue;
 
-use PhpAmqpLib\Connection\AMQPStreamConnection;
 use Interop\Container\ContainerInterface as ContainerInteropInterface;
 use Narrowspark\Arr\StaticArr as Arr;
+use PhpAmqpLib\Connection\AMQPStreamConnection;
 use Pheanstalk\{
     Pheanstalk,
     PheanstalkInterface

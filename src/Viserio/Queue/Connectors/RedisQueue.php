@@ -29,7 +29,6 @@ class RedisQueue extends AbstractQueue
      *
      * @param \Predis\Client $redis
      * @param string         $default
-     * @param string         $connection
      * @param int            $expire
      */
     public function __construct(Client $redis, string $default = 'default', int $expire = 90) {
