@@ -52,7 +52,7 @@ class SqsQueue extends AbstractQueue
     /**
      * {@inheritdoc}
      */
-    public function pushRaw($payload, $queue = null, array $options = [])
+    public function pushRaw(string $payload, string $queue = null, array $options = [])
     {
         $response = $this->sqs->sendMessage(['QueueUrl' => $this->getQueue($queue), 'MessageBody' => $payload]);
 
@@ -62,7 +62,15 @@ class SqsQueue extends AbstractQueue
     /**
      * {@inheritdoc}
      */
-    public function pop($queue = null)
+    public function later($delay, $job, $data = '', string $queue = null)
+    {
+        return $this->pushRaw($this->createPayload($job, $data), $queue, ['delay' => $delay]);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function pop(string $queue = null)
     {
         $queue = $this->getQueue($queue);
 
@@ -84,7 +92,7 @@ class SqsQueue extends AbstractQueue
     /**
      * {@inheritdoc}
      */
-    public function getQueue(string $queue)
+    public function getQueue($queue)
     {
         $queue = parent::getQueue($queue);
 
@@ -114,7 +122,7 @@ class SqsQueue extends AbstractQueue
      *
      * @return \Aws\Sqs\SqsClient
      */
-    public function getSqs()
+    public function getSqs(): SqsClient
     {
         return $this->sqs;
     }

@@ -41,8 +41,8 @@ class QueueSqsJobTest extends \PHPUnit_Framework_TestCase
     public function testDeleteRemovesTheJobFromSqs()
     {
         $job = $this->getJob();
-        $job->getSqs()->expects($this->once())
-            ->method('deleteMessage')
+        $job->getSqs()->shouldReceive('deleteMessage')
+            ->once()
             ->with(['QueueUrl' => $this->queueUrl, 'ReceiptHandle' => $this->mockedReceiptHandle]);
 
         $job->delete();
@@ -51,8 +51,8 @@ class QueueSqsJobTest extends \PHPUnit_Framework_TestCase
     public function testReleaseProperlyReleasesTheJobOntoSqs()
     {
         $job = $this->getJob();
-        $job->getSqs()->expects($this->once())
-            ->method('changeMessageVisibility')
+        $job->getSqs()->shouldReceive('changeMessageVisibility')
+            ->once()
             ->with(['QueueUrl' => $this->queueUrl, 'ReceiptHandle' => $this->mockedReceiptHandle, 'VisibilityTimeout' => 0]);
         $job->release(0);
 
@@ -61,10 +61,6 @@ class QueueSqsJobTest extends \PHPUnit_Framework_TestCase
 
     protected function getJob()
     {
-        $mockedSqsClient = $this->getMockBuilder(SqsClient::class)
-            ->setMethods(['deleteMessage'])
-            ->disableOriginalConstructor()
-            ->getMock();
         $mockedPayload = json_encode(['job' => 'foo', 'data' => ['data'], 'attempts' => 1]);
 
         $mockedJobData = [
@@ -77,7 +73,7 @@ class QueueSqsJobTest extends \PHPUnit_Framework_TestCase
 
         return new SqsJob(
             $this->mock(ContainerInterface::class),
-            $mockedSqsClient,
+            $this->mock(SqsClient::class),
             $this->queueUrl,
             $mockedJobData
         );

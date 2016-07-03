@@ -6,7 +6,7 @@ class DatabaseQueue extends AbstractQueue
     /**
      * {@inheritdoc}
      */
-    public function push(string $job, $data = '', string $queue = null)
+    public function push($job, $data = '', string $queue = null)
     {
         //
     }
@@ -22,7 +22,7 @@ class DatabaseQueue extends AbstractQueue
     /**
      * {@inheritdoc}
      */
-    public function later($delay, string $job, $data = '', string $queue = null)
+    public function later($delay, $job, $data = '', string $queue = null)
     {
         //
     }

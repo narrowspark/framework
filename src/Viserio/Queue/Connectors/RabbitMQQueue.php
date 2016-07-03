@@ -30,7 +30,7 @@ class RabbitMQQueue extends AbstractQueue
     /**
      * {@inheritdoc}
      */
-    public function push($job, $data = '', $queue = null)
+    public function push($job, $data = '', string $queue = null)
     {
         return $this->pushRaw($this->createPayload($job, $data), $queue, []);
     }
@@ -38,7 +38,7 @@ class RabbitMQQueue extends AbstractQueue
     /**
      * {@inheritdoc}
      */
-    public function pushRaw($payload, $queue = null, array $options = [])
+    public function pushRaw(string $payload, string $queue = null, array $options = [])
     {
         $queue = $this->getQueue($queue);
 
@@ -65,7 +65,7 @@ class RabbitMQQueue extends AbstractQueue
     /**
      * {@inheritdoc}
      */
-    public function later($delay, $job, $data = '', $queue = null)
+    public function later($delay, $job, $data = '', string $queue = null)
     {
         return $this->pushRaw($this->createPayload($job, $data), $queue, ['delay' => $delay]);
     }
@@ -73,7 +73,7 @@ class RabbitMQQueue extends AbstractQueue
     /**
      * {@inheritdoc}
      */
-    public function pop($queue = null)
+    public function pop(string $queue = null)
     {
         $queue = $this->getQueue($queue);
 

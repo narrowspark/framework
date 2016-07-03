@@ -41,7 +41,7 @@ class RabbitMQJob extends AbstractJob
     /**
      * {@inheritdoc}
      */
-    public function getRawBody()
+    public function getRawBody(): string
     {
         return $this->message->body;
     }
@@ -97,7 +97,7 @@ class RabbitMQJob extends AbstractJob
     /**
      * {@inheritdoc}
      */
-    public function getJobId()
+    public function getJobId(): string
     {
         return $this->message->get('correlation_id');
     }

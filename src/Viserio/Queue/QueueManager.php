@@ -1,6 +1,7 @@
 <?php
 namespace Viserio\Queue;
 
+use PhpAmqpLib\Connection\AMQPStreamConnection;
 use Interop\Container\ContainerInterface as ContainerInteropInterface;
 use Narrowspark\Arr\StaticArr as Arr;
 use Pheanstalk\{
@@ -20,7 +21,8 @@ use Viserio\Queue\Events\{
 };
 use Viserio\Queue\Connectors\{
     BeanstalkdQueue,
-    IronQueue
+    IronQueue,
+    RabbitMQQueue
 };
 use Viserio\Support\AbstractConnectionManager;
 
@@ -228,6 +230,25 @@ class QueueManager extends AbstractConnectionManager implements MonitorContract
             $this->request,
             $config['queue'],
             $config['timeout']
+        );
+    }
+
+    /**
+     * Create RabbitMQ connection.
+     */
+    protected function createRabitmqconnection(array $config): RabbitMQQueue
+    {
+        $connection = new AMQPStreamConnection(
+            $config['host'],
+            $config['port'],
+            $config['login'],
+            $config['password'],
+            $config['vhost']
+        );
+
+        return new RabbitMQQueue(
+            $connection,
+            $config
         );
     }
 
