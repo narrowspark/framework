@@ -18,7 +18,7 @@ trait ContainerAwareTrait
      *
      * @param \Interop\Container\ContainerInterface $container
      *
-     * @return self
+     * @return $this
      */
     public function setContainer(ContainerInteropInterface $container)
     {

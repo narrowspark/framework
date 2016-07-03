@@ -61,7 +61,7 @@ class Worker
      *
      * @param \Viserio\Queue\QueueManager $manager
      *
-     * @return self
+     * @return $this
      */
     public function setManager(QueueManager $manager)
     {

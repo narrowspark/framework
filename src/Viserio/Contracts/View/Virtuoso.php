@@ -27,7 +27,7 @@ interface Virtuoso
      *
      * @param \Viserio\Contracts\View\View $view
      *
-     * @return self
+     * @return $this
      */
     public function callCreator(View $view): Virtuoso;
 
@@ -36,7 +36,7 @@ interface Virtuoso
      *
      * @param \Viserio\Contracts\View\View $view
      *
-     * @return self
+     * @return $this
      */
     public function callComposer(View $view): Virtuoso;
 

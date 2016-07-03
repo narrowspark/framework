@@ -21,7 +21,7 @@ class FakeContainerMiddleware implements ServerMiddlewareContract
      *
      * @param \Interop\Container\ContainerInterface $container
      *
-     * @return self
+     * @return $this
      */
     public function setContainer(ContainerInterface $container): ServerMiddlewareContract
     {

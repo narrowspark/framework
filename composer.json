@@ -125,6 +125,7 @@
         "phpunit/phpunit"                                    : "^5.1",
         "phpbench/phpbench"                                  : "^0.11",
         "predis/predis"                                      : "^1.0",
+        "php-amqplib/php-amqplib"                            : "^2.6",
         "pda/pheanstalk"                                     : "^3.1",
         "roave/security-advisories"                          : "dev-master",
         "symfony/yaml"                                       : "^3.1",

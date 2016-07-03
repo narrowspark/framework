@@ -1,5 +1,5 @@
 <?php
-namespace Viserio\Queue\Jobs\Tests;
+namespace Viserio\Queue\Tests\Jobs;
 
 class AbstractJobTest extends \PHPUnit_Framework_TestCase
 {

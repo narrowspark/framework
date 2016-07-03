@@ -8,7 +8,7 @@ interface Loader
      *
      * @param array $directories
      *
-     * @return self
+     * @return $this
      */
     public function setDirectories(array $directories): Loader;
 
@@ -24,7 +24,7 @@ interface Loader
      *
      * @param string $directory
      *
-     * @return self
+     * @return $this
      */
     public function addDirectory(string $directory): Loader;
 

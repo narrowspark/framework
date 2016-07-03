@@ -196,7 +196,7 @@ class CookieJar implements JarContract
      * @param string $domain
      * @param bool   $secure
      *
-     * @return self
+     * @return $this
      */
     public function setDefaultPathAndDomain(string $path, string $domain, bool $secure = false): JarContract
     {

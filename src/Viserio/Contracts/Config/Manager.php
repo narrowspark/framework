@@ -12,7 +12,7 @@ interface Manager extends ArrayAccess
      * @param string $key
      * @param mixed  $value
      *
-     * @return self
+     * @return $this
      */
     public function set(string $key, $value): Manager;
 

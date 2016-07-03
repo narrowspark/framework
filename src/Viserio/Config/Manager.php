@@ -64,7 +64,7 @@ class Manager implements ManagerContract, IteratorAggregate
      *
      * @param array $array
      *
-     * @return self
+     * @return $this
      */
     public function setArray(array $array): ManagerContract
     {
@@ -80,7 +80,7 @@ class Manager implements ManagerContract, IteratorAggregate
      * @param string      $file
      * @param string|null $group
      *
-     * @return self
+     * @return $this
      */
     public function import(string $file, string $group = null): ManagerContract
     {
@@ -149,7 +149,7 @@ class Manager implements ManagerContract, IteratorAggregate
      * @param string $key
      * @param mixed  $value
      *
-     * @return self
+     * @return $this
      */
     public function offsetSet($key, $value)
     {
@@ -195,7 +195,7 @@ class Manager implements ManagerContract, IteratorAggregate
      *
      * @param \Viserio\Contracts\Parsers\Loader $loader
      *
-     * @return self
+     * @return $this
      */
     public function setLoader(LoaderContract $loader)
     {

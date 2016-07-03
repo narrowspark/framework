@@ -10,7 +10,7 @@ interface Pipeline
      *
      * @param mixed $traveler
      *
-     * @return self
+     * @return $this
      */
     public function send(string $traveler): Pipeline;
 
@@ -19,7 +19,7 @@ interface Pipeline
      *
      * @param array|mixed $stages
      *
-     * @return self
+     * @return $this
      */
     public function through($stages): Pipeline;
 
@@ -37,7 +37,7 @@ interface Pipeline
      *
      * @param string $method
      *
-     * @return self
+     * @return $this
      */
     public function via(string $method): Pipeline;
 }

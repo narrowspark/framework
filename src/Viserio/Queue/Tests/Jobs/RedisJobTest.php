@@ -1,5 +1,5 @@
 <?php
-namespace Viserio\Queue\Connectors\Tests;
+namespace Viserio\Queue\Tests\Jobs;
 
 use Interop\Container\ContainerInterface;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;

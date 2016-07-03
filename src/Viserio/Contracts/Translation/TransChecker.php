@@ -15,7 +15,7 @@ interface TransChecker
      *
      * @param array $locales
      *
-     * @return self
+     * @return $this
      */
     public function setLocales(array $locales): TransChecker;
 
@@ -31,7 +31,7 @@ interface TransChecker
      *
      * @param array $ignored
      *
-     * @return self
+     * @return $this
      */
     public function setIgnoredTranslations(array $ignored): TransChecker;
 

@@ -34,7 +34,7 @@ class Invoker implements InvokerInterface
      *
      * @param bool $inject
      *
-     * @return self
+     * @return $this
      */
     public function injectByTypeHint(bool $inject = false): InvokerInterface
     {
@@ -48,7 +48,7 @@ class Invoker implements InvokerInterface
      *
      * @param bool $inject
      *
-     * @return self
+     * @return $this
      */
     public function injectByParameterName(bool $inject = false): InvokerInterface
     {

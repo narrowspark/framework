@@ -10,7 +10,7 @@ interface Handler
      *
      * @param Displayer $displayer
      *
-     * @return self
+     * @return $this
      */
     public function addDisplayer(Displayer $displayer): Handler;
 
@@ -26,7 +26,7 @@ interface Handler
      *
      * @param Transformer $transformer
      *
-     * @return self
+     * @return $this
      */
     public function addTransformer(Transformer $transformer): Handler;
 
@@ -42,7 +42,7 @@ interface Handler
      *
      * @param Filter $filter
      *
-     * @return self
+     * @return $this
      */
     public function addFilter(Filter $filter): Handler;
 
@@ -67,7 +67,7 @@ interface Handler
      *
      * @param \Throwable $exception
      *
-     * @return self
+     * @return $this
      */
     public function addShouldntReport(Throwable $exception): Handler;
 

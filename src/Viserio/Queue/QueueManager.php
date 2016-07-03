@@ -132,7 +132,7 @@ class QueueManager extends AbstractConnectionManager implements MonitorContract
      *
      * @param \Viserio\Contracts\Events\Dispatcher $dispatcher
      *
-     * @return self
+     * @return $this
      */
     public function setDispatcher(DispatcherContract $dispatcher): QueueManager
     {
@@ -156,7 +156,7 @@ class QueueManager extends AbstractConnectionManager implements MonitorContract
      *
      * @param \Viserio\Contracts\Encryption\Encrypter  $encrypter
      *
-     * @return self
+     * @return $this
      */
     public function setEncrypter(EncrypterContract $encrypter): QueueManager
     {
@@ -180,7 +180,7 @@ class QueueManager extends AbstractConnectionManager implements MonitorContract
      *
      * @param \Psr\Http\Message\RequestInterface $request
      *
-     * @return self
+     * @return $this
      */
     public function setRequest(RequestInterface $request): QueueManager
     {

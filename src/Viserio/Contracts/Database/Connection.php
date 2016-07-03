@@ -43,7 +43,7 @@ interface Connection
      *
      * @param callable $reconnector
      *
-     * @return self
+     * @return $this
      */
     public function setReconnector(callable $reconnector): self;
 
@@ -93,7 +93,7 @@ interface Connection
      *
      * @param \PDO|null $pdo
      *
-     * @return self
+     * @return $this
      */
     public function setPdo(\PDO $pdo = null): self;
 

@@ -27,7 +27,7 @@ class Repository implements RepositoryContract
      *
      * @param array $values
      *
-     * @return self
+     * @return $this
      */
     public function setArray(array $values = []): RepositoryContract
     {
@@ -84,7 +84,7 @@ class Repository implements RepositoryContract
      * @param string $key
      * @param mixed  $value
      *
-     * @return self
+     * @return $this
      */
     public function offsetSet($key, $value): RepositoryContract
     {

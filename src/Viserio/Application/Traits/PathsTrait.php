@@ -12,7 +12,7 @@ trait PathsTrait
      *
      * @throws \Exception
      *
-     * @return self
+     * @return $this
      */
     public function bindInstallPaths(array $paths)
     {

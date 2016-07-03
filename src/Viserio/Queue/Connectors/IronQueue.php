@@ -70,7 +70,7 @@ class IronQueue extends AbstractQueue
      *
      * @return \IronMQ\IronMQ
      */
-    public function getIron()
+    public function getIron(): IronMQ
     {
         return $this->iron;
     }

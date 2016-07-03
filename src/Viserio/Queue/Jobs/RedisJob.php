@@ -51,11 +51,11 @@ class RedisJob extends AbstractJob
         string $reserved,
         string $queue
     ) {
-        $this->job = $job;
-        $this->redis = $redis;
-        $this->queue = $queue;
-        $this->reserved = $reserved;
         $this->container = $container;
+        $this->redis = $redis;
+        $this->job = $job;
+        $this->reserved = $reserved;
+        $this->queue = $queue;
         $this->decoded = json_decode($job, true);
     }
 

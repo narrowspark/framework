@@ -102,7 +102,7 @@ class TranslationManager
      *
      * @param array $directories
      *
-     * @return self
+     * @return $this
      */
     public function setDirectories(array $directories): TranslationManager
     {
@@ -128,7 +128,7 @@ class TranslationManager
      *
      * @param string $directory
      *
-     * @return self
+     * @return $this
      */
     public function addDirectory(string $directory): TranslationManager
     {
@@ -146,7 +146,7 @@ class TranslationManager
      *
      * @throws \RuntimeException
      *
-     * @return self
+     * @return $this
      */
     public function import(string $file): TranslationManager
     {
@@ -199,7 +199,7 @@ class TranslationManager
      *
      * @param \Viserio\Contracts\Translation\MessageCatalogue $fallback
      *
-     * @return self
+     * @return $this
      */
     public function setDefaultFallback(MessageCatalogueContract $fallback): TranslationManager
     {
@@ -224,7 +224,7 @@ class TranslationManager
      * @param stirng                                          $lang
      * @param \Viserio\Contracts\Translation\MessageCatalogue $fallback
      *
-     * @return self
+     * @return $this
      */
     public function setLanguageFallback(string $lang, MessageCatalogueContract $fallback)
     {
@@ -264,7 +264,7 @@ class TranslationManager
      *
      * @param string $locale
      *
-     * @return self
+     * @return $this
      */
     public function setLocale(string $locale): TranslationManager
     {
@@ -310,7 +310,7 @@ class TranslationManager
      *
      * @param \Viserio\Contracts\Parsers\Loader $loader
      *
-     * @return self
+     * @return $this
      */
     public function setLoader(LoaderContract $loader): TranslationManager
     {

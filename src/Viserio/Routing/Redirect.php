@@ -55,7 +55,7 @@ class Redirect
      *
      * @param string $location
      *
-     * @return self
+     * @return $this
      */
     public function to($location)
     {
@@ -71,7 +71,7 @@ class Redirect
      * @param string $routeName  [description]
      * @param array  $parameters
      *
-     * @return self
+     * @return $this
      */
     public function toRoute($routeName, array $parameters = [])
     {
@@ -88,7 +88,7 @@ class Redirect
      * @param [type] $action     [description]
      * @param array  $parameters
      *
-     * @return self
+     * @return $this
      */
     public function toAction($action, array $parameters = [])
     {
@@ -108,7 +108,7 @@ class Redirect
      * @internal param $ [type] $key   [description]
      * @internal param $ [type] $value [description]
      *
-     * @return self [type] [description]
+     * @return $this [type] [description]
      */
     public function with($key, $value)
     {

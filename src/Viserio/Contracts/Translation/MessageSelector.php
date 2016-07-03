@@ -8,7 +8,7 @@ interface MessageSelector
      *
      * @param \Viserio\Contracts\Translation\PluralizationRules $pluralization
      *
-     * @return self
+     * @return $this
      */
     public function setPluralization(PluralizationRules $pluralization): MessageSelector;
 

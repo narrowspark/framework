@@ -1,6 +1,7 @@
 <?php
 namespace Viserio\Connect\Tests\Adapters;
 
+use Predis\Client;
 use Viserio\Connect\Adapters\PredisConnector;
 
 class PredisConnectorTest extends \PHPUnit_Framework_TestCase
@@ -17,7 +18,7 @@ class PredisConnectorTest extends \PHPUnit_Framework_TestCase
             ],
         ];
 
-        $this->assertInstanceOf('Predis\Client', $connector->connect($config));
+        $this->assertInstanceOf(Client::class, $connector->connect($config));
     }
 
     /**
@@ -29,6 +30,6 @@ class PredisConnectorTest extends \PHPUnit_Framework_TestCase
         $connector = new PredisConnector();
         $config = [];
 
-        $this->assertInstanceOf('Predis\Client', $connector->connect($config));
+        $this->assertInstanceOf(Client::class, $connector->connect($config));
     }
 }
