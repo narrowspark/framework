@@ -14,14 +14,14 @@ class TOML implements FormatContract
 {
     /**
      * Create a new Toml parser.
+     *
+     * @codeCoverageIgnore
      */
     public function __construct()
     {
-        // @codeCoverageIgnoreStart
         if (! class_exists('Yosymfony\\Toml\\Toml')) {
             throw new RuntimeException('Unable to read toml, the Toml Parser is not installed.');
         }
-        // @codeCoverageIgnoreEnd
     }
 
     /**

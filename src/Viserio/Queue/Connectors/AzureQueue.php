@@ -11,7 +11,7 @@ class AzureQueue extends AbstractQueue
     /**
      * The Microsoft Azure instance.
      *
-     * @var WindowsAzure\Queue\QueueRestProxy
+     * @var \WindowsAzure\Queue\QueueRestProxy
      */
     protected $azure;
 
