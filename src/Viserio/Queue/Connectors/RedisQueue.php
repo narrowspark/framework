@@ -97,7 +97,11 @@ return {job, reserved}
 LUA;
 
         list($job, $reserved) = $this->redis->eval(
-            $script, 3, $queue, $queue.':reserved', $this->getTime() + $this->expire
+            $script,
+            3,
+            $queue,
+            $queue.':reserved',
+            $this->getTime() + $this->expire
         );
 
         if ($reserved) {
@@ -138,8 +142,12 @@ redis.call('zadd', KEYS[1], KEYS[4], KEYS[3])
 return true
 LUA;
         $this->redis->eval(
-            $script, 4, $queue.':delayed', $queue.':reserved',
-            $job, $this->getTime() + $delay
+            $script,
+            4,
+            $queue.':delayed',
+            $queue.':reserved',
+            $job,
+            $this->getTime() + $delay
         );
     }
 

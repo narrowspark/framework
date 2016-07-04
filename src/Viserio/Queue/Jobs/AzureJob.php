@@ -40,8 +40,8 @@ class AzureJob extends AbstractJob
         Container $container,
         QueueRestProxy $azure,
         string $queue,
-        WindowsAzureQueueMessage $job)
-    {
+        WindowsAzureQueueMessage $job
+    ) {
         $this->container = $container;
         $this->azure = $azure;
         $this->queue = $queue;

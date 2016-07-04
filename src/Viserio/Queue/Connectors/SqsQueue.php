@@ -64,7 +64,13 @@ class SqsQueue extends AbstractQueue
      */
     public function later($delay, $job, $data = '', string $queue = null)
     {
-        return $this->pushRaw($this->createPayload($job, $data), $queue, ['delay' => $delay]);
+        $payload = $this->createPayload($job, $data);
+
+        $delay = $this->getSeconds($delay);
+
+        return $this->sqs->sendMessage([
+            'QueueUrl' => $this->getQueue($queue), 'MessageBody' => $payload, 'DelaySeconds' => $delay,
+        ])->get('MessageId');
     }
 
     /**
