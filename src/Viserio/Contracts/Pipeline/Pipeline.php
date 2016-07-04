@@ -12,7 +12,7 @@ interface Pipeline
      *
      * @return $this
      */
-    public function send(string $traveler): Pipeline;
+    public function send($traveler): Pipeline;
 
     /**
      * Set the array of stages.
