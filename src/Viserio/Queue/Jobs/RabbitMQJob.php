@@ -8,14 +8,36 @@ use Viserio\Queue\Connectors\RabbitMQQueue;
 
 class RabbitMQJob extends AbstractJob
 {
+    /**
+     * The PRabbitMQQueue instance.
+     *
+     * @var \Viserio\Queue\Connectors\RabbitMQQueue
+     */
     protected $connection;
 
+    /**
+     * The PhpAmqpLib AMQPChannel instance.
+     *
+     * @var \PhpAmqpLib\Channel\AMQPChannel
+     */
     protected $channel;
 
-    protected $queue;
-
+    /**
+     * The PhpAmqpLib AMQPMessage instance.
+     *
+     * @var \PhpAmqpLib\Message\AMQPMessage
+     */
     protected $message;
 
+    /**
+     * Create a new job instance.
+     *
+     * @param \Interop\Container\ContainerInterface   $container
+     * @param \Viserio\Queue\Connectors\RabbitMQQueue $connection
+     * @param \PhpAmqpLib\Channel\AMQPChannel         $channel
+     * @param string                                  $queue
+     * @param \PhpAmqpLib\Message\AMQPMessage         $message
+     */
     public function __construct(
         ContainerInterface $container,
         RabbitMQQueue $connection,
