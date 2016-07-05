@@ -1,13 +1,9 @@
 <?php
 namespace Viserio\Bus;
 
-use ArrayAccess;
 use Closure;
-use InvalidArgumentException;
-use ReflectionClass;
-use ReflectionParameter;
-use RuntimeException;
 use Interop\Container\ContainerInterface;
+use InvalidArgumentException;
 use Viserio\Contracts\Bus\Dispatcher as DispatcherContract;
 use Viserio\Pipeline\Pipeline;
 use Viserio\Support\Invoker;
