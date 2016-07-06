@@ -34,12 +34,7 @@ class QueueingDispatcher extends Dispatcher implements QueueingDispatcherContrac
     }
 
     /**
-     * Dispatch a command to its appropriate handler.
-     *
-     * @param mixed         $command
-     * @param \Closure|null $afterResolving
-     *
-     * @return mixed
+     * {@inheritdoc}
      */
     public function dispatch($command, Closure $afterResolving = null)
     {
@@ -51,13 +46,7 @@ class QueueingDispatcher extends Dispatcher implements QueueingDispatcherContrac
     }
 
     /**
-     * Dispatch a command to its appropriate handler behind a queue.
-     *
-     * @param mixed $command
-     *
-     * @throws \RuntimeException
-     *
-     * @return mixed
+     * {@inheritdoc}
      */
     public function dispatchToQueue($command)
     {
