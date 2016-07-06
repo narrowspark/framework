@@ -41,23 +41,10 @@ class Encrypter implements EncrypterContract
     }
 
     /**
-     * Compare two encrypted values.
-     *
-     * @param bool   $loose
-     * @param string $encrypted1
-     * @param string $encrypted2
-     *
-     * @return bool
+     * {@inheritdoc}
      */
-    public function compare(string $encrypted1, string $encrypted2, bool $loose = false): bool
+    public function compare(string $encrypted1, string $encrypted2): bool
     {
-        $encrypt1 = $this->decrypt($encrypted1);
-        $encrypt2 = $this->decrypt($encrypted2);
-
-        if ($loose) {
-            return $encrypt1 == $encrypt2;
-        }
-
-        return $encrypt1 === $encrypt2;
+        return $this->decrypt($encrypted1) === $this->decrypt($encrypted2);
     }
 }
