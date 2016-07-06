@@ -190,6 +190,6 @@ class Dispatcher implements DispatcherContract
             return explode('@', call_user_func($this->mapper, [$command]))[$segment];
         }
 
-        throw new InvalidArgumentException("No handler registered for command [{$className}]");
+        throw new InvalidArgumentException("No handler registered for command [{$className}].");
     }
 }

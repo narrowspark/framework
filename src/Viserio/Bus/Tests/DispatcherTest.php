@@ -1,15 +1,13 @@
 <?php
 namespace Viserio\Bus\Tests;
 
-use Interop\Container\ContainerInterface;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use Narrowspark\TestingHelper\ArrayContainer;
 use stdClass;
 use Viserio\Bus\Dispatcher;
 use Viserio\Bus\Tests\Fixture\{
     BusDispatcherBasicCommand,
-    BusDispatcherSetCommand,
-    BusDispatcherArgumentMapping
+    BusDispatcherSetCommand
 };
 
 class DispatcherTest extends \PHPUnit_Framework_TestCase
@@ -77,7 +75,10 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase
     {
         $dispatcher = new Dispatcher(new ArrayContainer());
 
-        $this->assertInstanceOf(BusDispatcherArgumentMapping::class, $dispatcher->resolveHandler(new BusDispatcherArgumentMapping('', '')));
+        $this->assertInstanceOf(
+            BusDispatcherSetCommand::class,
+            $dispatcher->resolveHandler(new BusDispatcherSetCommand())
+        );
     }
 
 
@@ -85,7 +86,10 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase
     {
         $dispatcher = new Dispatcher(new ArrayContainer());
 
-        $this->assertSame(BusDispatcherArgumentMapping::class, $dispatcher->getHandlerClass(new BusDispatcherArgumentMapping('', '')));
+        $this->assertSame(
+            BusDispatcherSetCommand::class,
+            $dispatcher->getHandlerClass(new BusDispatcherSetCommand())
+        );
     }
 
 
@@ -93,18 +97,19 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase
     {
         $dispatcher = new Dispatcher(new ArrayContainer());
 
-        $this->assertSame('handle', $dispatcher->getHandlerMethod(new BusDispatcherArgumentMapping('', '')));
+        $this->assertSame('handle', $dispatcher->getHandlerMethod(new BusDispatcherSetCommand()));
     }
 
     /**
      * @expectedException InvalidArgumentException
+     * @expectedExceptionMessage No handler registered for command [Viserio\Bus\Tests\Fixture\BusDispatcherBasicCommand].
      */
     public function testToThrowInvalidArgumentException()
     {
         $dispatcher = new Dispatcher(new ArrayContainer());
         $dispatcher->via('test');
 
-        $this->assertSame('handle', $dispatcher->getHandlerMethod(new BusDispatcherArgumentMapping('', '')));
+        $this->assertSame('handle', $dispatcher->getHandlerMethod(new BusDispatcherBasicCommand()));
     }
 
     public function testPipeThrough()

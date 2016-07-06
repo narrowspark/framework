@@ -6,7 +6,7 @@ use RuntimeException;
 use ReflectionClass;
 use Interop\Container\ContainerInterface;
 use Viserio\Contracts\Queue\{
-    Queue as QueueContract,
+    QueueConnector as QueueContract,
     ShouldQueue as ShouldQueueContract
 };
 use Viserio\Contracts\Bus\QueueingDispatcher as QueueingDispatcherContract;
@@ -26,7 +26,7 @@ class QueueingDispatcher extends Dispatcher implements QueueingDispatcherContrac
      * @param \Interop\Container\ContainerInterface $container
      * @param \Closure|null                         $queueResolver
      */
-    public function __construct(Container $container, Closure $queueResolver = null)
+    public function __construct(ContainerInterface $container, Closure $queueResolver = null)
     {
         $this->queueResolver = $queueResolver;
 
@@ -50,22 +50,6 @@ class QueueingDispatcher extends Dispatcher implements QueueingDispatcherContrac
         return parent::dispatch($command, $afterResolving);
     }
 
-     /**
-     * Determine if the given command should be queued.
-     *
-     * @param mixed $command
-     *
-     * @return bool
-     */
-    protected function commandShouldBeQueued($command): string
-    {
-        if ($command instanceof ShouldQueueContract) {
-            return true;
-        }
-
-        return (new ReflectionClass($this->getHandlerClass($command)))->implementsInterface(ShouldQueue::class);
-    }
-
     /**
      * Dispatch a command to its appropriate handler behind a queue.
      *
@@ -80,7 +64,7 @@ class QueueingDispatcher extends Dispatcher implements QueueingDispatcherContrac
         $connection = isset($command->connection) ? $command->connection : null;
         $queue = call_user_func($this->queueResolver, $connection);
 
-        if (!$queue instanceof QueueContract) {
+        if (! $queue instanceof QueueContract) {
             throw new RuntimeException('Queue resolver did not return a Queue implementation.');
         }
 
@@ -94,8 +78,8 @@ class QueueingDispatcher extends Dispatcher implements QueueingDispatcherContrac
     /**
      * Push the command onto the given queue instance.
      *
-     * @param \Viserio\Contracts\Queue\Queue $queue
-     * @param mixed                          $command
+     * @param \Viserio\Contracts\Queue\QueueConnector $queue
+     * @param mixed                                   $command
      *
      * @return mixed
      */
@@ -114,5 +98,21 @@ class QueueingDispatcher extends Dispatcher implements QueueingDispatcherContrac
         }
 
         return $queue->push($command);
+    }
+
+    /**
+     * Determine if the given command should be queued.
+     *
+     * @param mixed $command
+     *
+     * @return bool
+     */
+    protected function commandShouldBeQueued($command): string
+    {
+        if ($command instanceof ShouldQueueContract) {
+            return true;
+        }
+
+        return (new ReflectionClass($this->getHandlerClass($command)))->implementsInterface(ShouldQueueContract::class);
     }
 }
