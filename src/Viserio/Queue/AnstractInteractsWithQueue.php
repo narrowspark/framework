@@ -17,6 +17,8 @@ abstract class AnstractInteractsWithQueue implements InteractsWithQueueContract
 
     /**
      * {@inheritdoc}
+     *
+     * @codeCoverageIgnore
      */
     public function setJob(JobContract $job): InteractsWithQueueContract
     {
@@ -27,6 +29,8 @@ abstract class AnstractInteractsWithQueue implements InteractsWithQueueContract
 
     /**
      * {@inheritdoc}
+     *
+     * @codeCoverageIgnore
      */
     public function attempts(): int
     {
@@ -35,6 +39,8 @@ abstract class AnstractInteractsWithQueue implements InteractsWithQueueContract
 
     /**
      * {@inheritdoc}
+     *
+     * @codeCoverageIgnore
      */
     public function delete()
     {
@@ -45,6 +51,8 @@ abstract class AnstractInteractsWithQueue implements InteractsWithQueueContract
 
     /**
      * {@inheritdoc}
+     *
+     * @codeCoverageIgnore
      */
     public function failed()
     {
@@ -55,6 +63,8 @@ abstract class AnstractInteractsWithQueue implements InteractsWithQueueContract
 
     /**
      * {@inheritdoc}
+     *
+     * @codeCoverageIgnore
      */
     public function release(int $delay = 0)
     {
