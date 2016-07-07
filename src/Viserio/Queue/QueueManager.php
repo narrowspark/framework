@@ -28,15 +28,6 @@ use WindowsAzure\Common\ServicesBuilder;
 class QueueManager extends AbstractConnectionManager implements MonitorContract
 {
     /**
-     * All supported drivers.
-     *
-     * @var array
-     */
-    protected $supportedDrivers = [
-        'null'
-    ];
-
-    /**
      * Encrypter instance.
      *
      * @var \Viserio\Contracts\Encryption\Encrypter

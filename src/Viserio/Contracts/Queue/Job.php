@@ -3,7 +3,6 @@ namespace Viserio\Contracts\Queue;
 
 interface Job
 {
-
     /**
      * Runs the job.
      *
