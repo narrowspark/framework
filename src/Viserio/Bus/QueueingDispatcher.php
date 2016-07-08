@@ -2,9 +2,9 @@
 namespace Viserio\Bus;
 
 use Closure;
-use RuntimeException;
-use ReflectionClass;
 use Interop\Container\ContainerInterface;
+use ReflectionClass;
+use RuntimeException;
 use Viserio\Contracts\Queue\{
     QueueConnector as QueueContract,
     ShouldQueue as ShouldQueueContract
