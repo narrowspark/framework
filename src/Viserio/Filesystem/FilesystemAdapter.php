@@ -4,6 +4,8 @@ namespace Viserio\Filesystem;
 use InvalidArgumentException;
 use League\Flysystem\{
     AdapterInterface,
+    Adapter\Local as LocalAdapter,
+    AwsS3v3\AwsS3Adapter,
     Config as FlyConfig
 };
 use Narrowspark\Arr\StaticArr as Arr;
@@ -224,6 +226,28 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
         $getTimestamp = $this->driver->getTimestamp($path);
 
         return ! $getTimestamp ?: $getTimestamp['timestamp'];
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @throws \RuntimeException
+     */
+    public function url(string $path): string
+    {
+        $adapter = $this->driver->getAdapter();
+
+        if ($adapter instanceof AwsS3Adapter) {
+            $path = $adapter->getPathPrefix() . $path;
+
+            return $adapter->getClient()->getObjectUrl($adapter->getBucket(), $path);
+        } elseif ($adapter instanceof LocalAdapter) {
+            return '/storage/'.$path;
+        } elseif (method_exists($adapter, 'getUrl')) {
+            return $adapter->getUrl($path);
+        }
+
+        throw new RuntimeException('This driver does not support retrieving URLs.');
     }
 
     /**
