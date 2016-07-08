@@ -4,10 +4,9 @@ namespace Viserio\Queue;
 use Viserio\Contracts\{
     Bus\QueueingDispatcher as QueueingDispatcherContract,
     Encryption\Encrypter as EncrypterContract,
-    Queue\Job as JobContract,
-    Queue\InteractsWithQueue as InteractsWithQueueContract
+    Queue\Job as JobContract
 };
-use Viserio\Queue\InteractsWithQueue;
+use Viserio\Queue\AbstractInteractsWithQueue;
 
 class CallQueuedHandler
 {
@@ -85,7 +84,7 @@ class CallQueuedHandler
      */
     protected function setJobInstanceIfNecessary(JobContract $job, $instance)
     {
-        if (get_class($instance) instanceof InteractsWithQueueContract) {
+        if (is_object($instance) && is_subclass_of($instance, AbstractInteractsWithQueue::class)) {
             $instance->setJob($job);
         }
 

@@ -6,7 +6,7 @@ use Viserio\Contracts\Queue\{
     InteractsWithQueue as InteractsWithQueueContract
 };
 
-abstract class AnstractInteractsWithQueue implements InteractsWithQueueContract
+abstract class AbstractInteractsWithQueue implements InteractsWithQueueContract
 {
     /**
      * The underlying queue job instance.

@@ -28,7 +28,9 @@ class QueueingDispatcherTest extends \PHPUnit_Framework_TestCase
         $container = new ArrayContainer();
 
         $handler = $this->mock(stdClass::class);
-        $handler->shouldReceive('handle')->once()->andReturn('foo');
+        $handler->shouldReceive('handle')
+            ->once()
+            ->andReturn('foo');
 
         $container->set('Handler', $handler);
 
