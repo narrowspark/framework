@@ -325,7 +325,7 @@ class Uri implements UriInterface
     {
         $authority = $this->host;
 
-        if ($this->userInfo != '') {
+        if ($this->userInfo !== '') {
             $authority = $this->userInfo . '@' . $authority;
         }
 
