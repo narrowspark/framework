@@ -78,7 +78,7 @@ class MemcachedConnector implements ConnectorContract
      *
      * @throws \RuntimeException
      *
-     * @return object
+     * @return Memcached
      */
     protected function addMemcachedOptions($memcached, array $config)
     {
@@ -103,7 +103,7 @@ class MemcachedConnector implements ConnectorContract
     /**
      * Set SASL auth data, requires binary protocol.
      *
-     * @param object $memcached
+     * @param Memcached $memcached
      * @param array  $config
      *
      * @return object
