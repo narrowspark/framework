@@ -156,11 +156,9 @@ class MongoConnector implements ConnectorContract
         extract($config, EXTR_SKIP);
 
         if (isset($config['username']) && isset($config['password'])) {
-            $dsn = sprintf('mongodb://%s:%s@%s:%s', $username, $password, $server, $port);
-        } else {
-            $dsn = sprintf('mongodb://%s:%s', $server, $port);
+            return sprintf('mongodb://%s:%s@%s:%s', $username, $password, $server, $port);
         }
 
-        return $dsn;
+        return sprintf('mongodb://%s:%s', $server, $port);
     }
 }

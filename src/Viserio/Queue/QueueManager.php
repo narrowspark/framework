@@ -14,9 +14,6 @@ use Viserio\Contracts\{
     Events\Dispatcher as DispatcherContract,
     Queue\Monitor as MonitorContract
 };
-use Viserio\Queue\Events\{
-    WorkerStopping
-};
 use Viserio\Queue\Connectors\{
     AzureQueue,
     BeanstalkdQueue,
@@ -63,7 +60,7 @@ class QueueManager extends AbstractConnectionManager implements MonitorContract
      */
     public function looping($callback)
     {
-        $this->container->get('events')->on('', $callback);
+        $this->container->get('events')->on('viserio.queue.looping', $callback);
     }
 
     /**
@@ -71,7 +68,7 @@ class QueueManager extends AbstractConnectionManager implements MonitorContract
      */
     public function failing($callback)
     {
-        $this->container->get('events')->on('', $callback);
+        $this->container->get('events')->on('viserio.job.failed', $callback);
     }
 
     /**
@@ -79,7 +76,38 @@ class QueueManager extends AbstractConnectionManager implements MonitorContract
      */
     public function stopping($callback)
     {
-        $this->container->get('events')->on(WorkerStopping::class, $callback);
+        $this->container->get('events')->on('viserio.worker.stopping', $callback);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function exceptionOccurred($callback)
+    {
+        $this->container->get('events')->on('viserio.job.exception.occurred', $callback);
+    }
+
+    /**
+     * Register an event listener for the before job event.
+     *
+     * @param  mixed  $callback
+     * @return void
+     */
+    public function before($callback)
+    {
+        $this->container->get('events')->on('viserio.job.processing', $callback);
+    }
+
+    /**
+     * Register an event listener for the after job event.
+     *
+     * @param mixed $callback
+     *
+     * @return void
+     */
+    public function after($callback)
+    {
+        $this->container->get('events')->on('viserio.job.processed', $callback);
     }
 
     /**

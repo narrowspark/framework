@@ -29,4 +29,13 @@ interface Monitor
      * @return void
      */
     public function stopping($callback);
+
+    /**
+     * Register an event listener for the exception occurred job event.
+     *
+     * @param mixed $callback
+     *
+     * @return void
+     */
+    public function exceptionOccurred($callback);
 }
