@@ -334,7 +334,7 @@ class TranslationManager
      *
      * @param \Psr\Log\LoggerInterface $logger
      *
-     * @return \Viserio\Translation\Translator
+     * @return TranslationManager
      */
     public function setLogger(LoggerInterface $logger): TranslationManager
     {

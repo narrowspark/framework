@@ -3,8 +3,8 @@ namespace Viserio\Connect\Adapters\Database;
 
 use Mongo;
 use MongoClient;
-use MongoDB\Client as MongoDBClient;
 use MongoConnectionException;
+use MongoDB\Client as MongoDBClient;
 use Narrowspark\Arr\StaticArr as Arr;
 use Viserio\Connect\Traits\DetectsLostConnections;
 use Viserio\Contracts\Support\Connector as ConnectorContract;
