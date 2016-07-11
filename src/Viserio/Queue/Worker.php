@@ -198,7 +198,7 @@ class Worker implements WorkerContract
     /**
      * Get the events dispatcher instance.
      *
-     * @return $this
+     * @return \Viserio\Contracts\Events\Dispatcher
      */
     public function getEventDispatcher(): DispatcherContract
     {

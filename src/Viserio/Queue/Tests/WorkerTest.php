@@ -112,6 +112,8 @@ class WorkerTest extends \PHPUnit_Framework_TestCase
             ->with('connection', 'queue', 'body');
 
         $worker->process('connection', $job, 3, 0);
+
+        $this->assertInstanceOf(QueueManager::class, $worker->getManager());
     }
 
     public function testWorkerSleepsIfNoJobIsPresentAndSleepIsEnabled()
