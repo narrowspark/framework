@@ -3,7 +3,7 @@ namespace Viserio\Queue\Connectors;
 
 use Narrowspark\Arr\StaticArr as Arr;
 use Pheanstalk\Job as PheanstalkJob;
-use Pheanstalk\PheanstalkInterface;
+use Pheanstalk\Pheanstalk;
 use Viserio\Queue\Jobs\BeanstalkdJob;
 
 class BeanstalkdQueue extends AbstractQueue
@@ -11,7 +11,7 @@ class BeanstalkdQueue extends AbstractQueue
     /**
      * The Pheanstalk instance.
      *
-     * @var \Pheanstalk\PheanstalkInterface
+     * @var \Pheanstalk\Pheanstalk
      */
     protected $pheanstalk;
 
@@ -20,16 +20,16 @@ class BeanstalkdQueue extends AbstractQueue
      *
      * @var int
      */
-    protected $timeToRun = PheanstalkInterface::DEFAULT_TTR;
+    protected $timeToRun = Pheanstalk::DEFAULT_TTR;
 
     /**
      * Create a new Beanstalkd queue instance.
      *
-     * @param \Pheanstalk\PheanstalkInterface $pheanstalk
+     * @param \Pheanstalk\Pheanstalk $pheanstalk
      * @param string                          $default
      * @param int                             $timeToRun
      */
-    public function __construct(PheanstalkInterface $pheanstalk, string $default, int $timeToRun)
+    public function __construct(Pheanstalk $pheanstalk, string $default, int $timeToRun)
     {
         $this->default = $default;
         $this->timeToRun = $timeToRun;
@@ -51,8 +51,8 @@ class BeanstalkdQueue extends AbstractQueue
     {
         return $this->pheanstalk->useTube($this->getQueue($queue))->put(
             $payload,
-            PheanstalkInterface::DEFAULT_PRIORITY,
-            PheanstalkInterface::DEFAULT_DELAY,
+            Pheanstalk::DEFAULT_PRIORITY,
+            Pheanstalk::DEFAULT_DELAY,
             $this->timeToRun
         );
     }
@@ -68,7 +68,7 @@ class BeanstalkdQueue extends AbstractQueue
 
         return $pheanstalk->put(
             $payload,
-            PheanstalkInterface::DEFAULT_PRIORITY,
+            Pheanstalk::DEFAULT_PRIORITY,
             $this->getSeconds($delay),
             $this->timeToRun
         );

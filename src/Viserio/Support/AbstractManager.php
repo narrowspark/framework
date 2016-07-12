@@ -175,7 +175,7 @@ abstract class AbstractManager
      */
     public function getDriverConfig(string $name): array
     {
-        $name = $name ?? $this->getDefaultConnection();
+        $name = $name ?? $this->getDefaultDriver();
 
         $drivers = $this->config->get($this->getConfigName() . '.drivers', []);
 

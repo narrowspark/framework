@@ -1,6 +1,7 @@
 <?php
 namespace Viserio\Queue\Connectors;
 
+use WindowsAzure\Common\ServicesBuilder;
 use WindowsAzure\Queue\Models\CreateMessageOptions;
 use WindowsAzure\Queue\Models\ListMessagesOptions;
 use WindowsAzure\Queue\Models\PeekMessagesOptions;

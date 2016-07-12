@@ -63,7 +63,7 @@ abstract class AbstractConnectionManager
      *
      * @param string|null $name
      *
-     * @return object
+     * @return mixed
      */
     public function connection(string $name = null)
     {
