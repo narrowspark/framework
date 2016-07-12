@@ -32,6 +32,8 @@ abstract class AbstractQueue implements QueueConnectorContract
 
     /**
      * {@inheritdoc}
+     *
+     * @codeCoverageIgnore
      */
     public function pushOn(string $queue, $job, $data = '')
     {
@@ -40,6 +42,8 @@ abstract class AbstractQueue implements QueueConnectorContract
 
     /**
      * {@inheritdoc}
+     *
+     * @codeCoverageIgnore
      */
     public function laterOn(string $queue, $delay, $job, $data = '')
     {
@@ -48,6 +52,8 @@ abstract class AbstractQueue implements QueueConnectorContract
 
     /**
      * {@inheritdoc}
+     *
+     * @codeCoverageIgnore
      */
     public function bulk(array $jobs, $data = '', string $queue = null)
     {
@@ -57,13 +63,9 @@ abstract class AbstractQueue implements QueueConnectorContract
     }
 
     /**
-     * Get the queue or return the default.
-     *
-     * @param string|null $queue
-     *
-     * @return string
+     * {@inheritdoc}
      */
-    public function getQueue($queue)
+    public function getQueue($queue): string
     {
         return $queue ?? $this->default;
     }

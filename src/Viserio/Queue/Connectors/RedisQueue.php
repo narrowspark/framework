@@ -176,13 +176,9 @@ LUA;
     }
 
     /**
-     * Get the queue or return the default.
-     *
-     * @param string|null $queue
-     *
-     * @return string
+     * {@inheritdoc}
      */
-    public function getQueue($queue)
+    public function getQueue($queue): string
     {
         return 'queues:' . parent::getQueue($queue);
     }

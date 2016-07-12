@@ -79,4 +79,13 @@ interface QueueConnector
      * @return mixed
      */
     public function bulk(array $jobs, $data = '', string $queue = null);
+
+    /**
+     * Get the queue or return the default.
+     *
+     * @param string|null $queue
+     *
+     * @return string
+     */
+    public function getQueue($queue): string;
 }

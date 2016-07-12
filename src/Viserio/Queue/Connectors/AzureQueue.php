@@ -99,7 +99,7 @@ class AzureQueue extends AbstractQueue
     /**
      * {@inheritdoc}
      */
-    public function getQueue($queue)
+    public function getQueue($queue): string
     {
         $queue = parent::getQueue($queue);
 
