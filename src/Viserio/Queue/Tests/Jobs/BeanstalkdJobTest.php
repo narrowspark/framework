@@ -3,7 +3,7 @@ namespace Viserio\Queue\Tests\Jobs;
 
 use Interop\Container\ContainerInterface;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
-use Pheanstalk\PheanstalkInterface;
+use Pheanstalk\Pheanstalk;
 use Pheanstalk\Job as PheanstalkJob;
 use stdClass;
 use Viserio\Queue\{
@@ -17,7 +17,7 @@ class BeanstalkdJobTest extends \PHPUnit_Framework_TestCase
 
     public function testBuryProperlyBuryTheJobFromBeanstalkd()
     {
-        $pheanstalk = $this->mock(PheanstalkInterface::class);
+        $pheanstalk = $this->mock(Pheanstalk::class);
         $pheanstalk->shouldReceive('release');
 
         $job = new BeanstalkdJob(
@@ -84,7 +84,7 @@ class BeanstalkdJobTest extends \PHPUnit_Framework_TestCase
 
         return new BeanstalkdJob(
             $this->mock(ContainerInterface::class),
-            $this->mock(PheanstalkInterface::class),
+            $this->mock(Pheanstalk::class),
             $pheanstalk,
             'default'
         );
