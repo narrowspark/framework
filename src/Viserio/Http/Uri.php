@@ -460,6 +460,9 @@ class Uri implements UriInterface
         return $uri;
     }
 
+    /**
+     * @param string|null $string
+     */
     private function isValidString($string)
     {
         if (! is_string($string)) {

@@ -63,7 +63,7 @@ abstract class AbstractConnectionManager
      *
      * @param string|null $name
      *
-     * @return object
+     * @return \League\Flysystem\AdapterInterface
      */
     public function connection(string $name = null)
     {

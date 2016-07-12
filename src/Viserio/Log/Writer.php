@@ -1,8 +1,6 @@
 <?php
 namespace Viserio\Log;
 
-use Closure;
-use DateTime;
 use Monolog\Handler\RotatingFileHandler;
 use Monolog\Logger as MonologLogger;
 use Monolog\Processor\PsrLogMessageProcessor;
