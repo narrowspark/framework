@@ -3,7 +3,7 @@ namespace Viserio\Queue\Jobs;
 
 use Interop\Container\ContainerInterface;
 use Pheanstalk\Job as PheanstalkJob;
-use Pheanstalk\PheanstalkInterface;
+use Pheanstalk\Pheanstalk;
 
 class BeanstalkdJob extends AbstractJob
 {
@@ -25,13 +25,13 @@ class BeanstalkdJob extends AbstractJob
      * Create a new job instance.
      *
      * @param \Interop\Container\ContainerInterface $container
-     * @param \Pheanstalk\PheanstalkInterface       $pheanstalk
+     * @param \Pheanstalk\Pheanstalk                $pheanstalk
      * @param \Pheanstalk\Job                       $job
      * @param string                                $queue
      */
     public function __construct(
         ContainerInterface $container,
-        PheanstalkInterface $pheanstalk,
+        Pheanstalk $pheanstalk,
         PheanstalkJob $job,
         string $queue
     ) {
@@ -74,7 +74,7 @@ class BeanstalkdJob extends AbstractJob
     {
         parent::release($delay);
 
-        $priority = PheanstalkInterface::DEFAULT_PRIORITY;
+        $priority = Pheanstalk::DEFAULT_PRIORITY;
 
         $this->pheanstalk->release($this->job, $priority, $delay);
     }
@@ -112,9 +112,9 @@ class BeanstalkdJob extends AbstractJob
     /**
      * Get the underlying Pheanstalk instance.
      *
-     * @return \Pheanstalk\PheanstalkInterface
+     * @return \Pheanstalk\Pheanstalk
      */
-    public function getPheanstalk(): PheanstalkInterface
+    public function getPheanstalk(): Pheanstalk
     {
         return $this->pheanstalk;
     }

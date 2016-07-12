@@ -23,7 +23,7 @@ class Dispatcher implements DispatcherContract
     /**
      * The invoker instance.
      *
-     * @var \Viserio\Pipeline\Pipeline
+     * @var \Viserio\Support\Invoker
      */
     protected $invoker;
 
@@ -190,6 +190,6 @@ class Dispatcher implements DispatcherContract
             return explode('@', call_user_func($this->mapper, [$command]))[$segment];
         }
 
-        throw new InvalidArgumentException("No handler registered for command [{$className}].");
+        throw new InvalidArgumentException(sprintf('No handler registered for command [%s].', $className));
     }
 }

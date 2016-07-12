@@ -9,6 +9,8 @@ interface FailedJobProvider
      * @param string $connection
      * @param string $queue
      * @param string $payload
+     *
+     * @return void
      */
     public function log(string $connection, string $queue, string $payload);
 
@@ -39,6 +41,8 @@ interface FailedJobProvider
 
     /**
      * Clear all of the failed jobs from storage.
+     *
+     * @return void
      */
     public function clear();
 }

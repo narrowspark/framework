@@ -46,9 +46,9 @@ class Worker implements WorkerContract
     /**
      * Create a new queue worker.
      *
-     * @param \Viserio\Queue\QueueManager                $manager
-     * @param \Viserio\Contracts\Queue\FailedJobProvider $failed
-     * @param \Viserio\Contracts\Events\Dispatcher       $events
+     * @param \Viserio\Queue\QueueManager                     $manager
+     * @param \Viserio\Contracts\Queue\FailedJobProvider|null $failed
+     * @param \Viserio\Contracts\Events\Dispatcher|null       $events
      */
     public function __construct(
         QueueManager $manager,
@@ -331,7 +331,7 @@ class Worker implements WorkerContract
                     'connection' => $connection,
                     'job' => $job,
                     'data' => json_decode($job->getRawBody(), true),
-                    'failedI' => $failedI
+                    'failedId' => $failedId
                 ]
             );
         }
@@ -384,10 +384,10 @@ class Worker implements WorkerContract
     /**
      * Handle an exception that occurred while the job was running.
      *
-     * @param string                          $connection
-     * @param \Illuminate\Contracts\Queue\Job $job
-     * @param int                             $delay
-     * @param \Throwable                      $exception
+     * @param string                       $connection
+     * @param \Viserio\Contracts\Queue\Job $job
+     * @param int                          $delay
+     * @param \Throwable                   $exception
      *
      * @return void
      *

@@ -78,9 +78,9 @@ class AzureQueue extends AbstractQueue
     /**
      * [peak description]
      *
-     * @param  [type] $queue [description]
+     * @param string|null $queue
      *
-     * @return [type]        [description]
+     * @return mixed
      */
     public function peak($queue = null)
     {
@@ -110,7 +110,7 @@ class AzureQueue extends AbstractQueue
     /**
      * Get the underlying Azure instance.
      *
-     * @return WindowsAzure\Common\ServicesBuilder
+     * @return \WindowsAzure\Common\ServicesBuilder
      */
     public function getAzure(): ServicesBuilder
     {

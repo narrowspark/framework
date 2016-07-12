@@ -353,6 +353,12 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
             $this->createDirectory($destination, ['visibility' => 'public']);
         }
 
+        $recursive = true;
+
+        if (isset($options['recursive'])) {
+            $recursive = $options['recursive'];
+        }
+
         $contents = $this->driver->listContents($directory, $recursive);
 
         foreach ($contents as $item) {

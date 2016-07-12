@@ -96,7 +96,7 @@ class QueueingDispatcher extends Dispatcher implements QueueingDispatcherContrac
      *
      * @return bool
      */
-    protected function commandShouldBeQueued($command): string
+    protected function commandShouldBeQueued($command): bool
     {
         if ($command instanceof ShouldQueueContract) {
             return true;

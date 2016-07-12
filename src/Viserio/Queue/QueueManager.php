@@ -90,7 +90,8 @@ class QueueManager extends AbstractConnectionManager implements MonitorContract
     /**
      * Register an event listener for the before job event.
      *
-     * @param  mixed  $callback
+     * @param mixed $callback
+     *
      * @return void
      */
     public function before($callback)

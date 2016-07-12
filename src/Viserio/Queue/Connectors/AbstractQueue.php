@@ -111,7 +111,7 @@ abstract class AbstractQueue implements QueueConnectorContract
      *
      * @param string|object|\Closure $job
      * @param mixed                  $data
-     * @param string                 $queue
+     * @param string|null            $queue
      *
      * @return string
      */

@@ -11,13 +11,13 @@ interface Worker
     /**
      * Listen to the given queue in a loop.
      *
-     * @param string $connectionName
-     * @param string $queue
-     * @param int    $delay
-     * @param int    $memory
-     * @param int    $timeout
-     * @param int    $sleep
-     * @param int    $maxTries
+     * @param string      $connectionName
+     * @param string|null $queue
+     * @param int         $delay
+     * @param int         $memory
+     * @param int         $timeout
+     * @param int         $sleep
+     * @param int         $maxTries
      *
      * @return void
      */

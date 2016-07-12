@@ -57,7 +57,7 @@ class RabbitMQJob extends AbstractJob
      */
     public function run()
     {
-        $this->resolveAndFire(json_decode($this->message->body, true));
+        $this->resolveAndRun(json_decode($this->message->body, true));
     }
 
     /**

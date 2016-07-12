@@ -17,9 +17,9 @@ interface QueueConnector
     /**
      * Push a raw payload onto the queue.
      *
-     * @param string $payload
-     * @param string $queue
-     * @param array  $options
+     * @param string      $payload
+     * @param string|null $queue
+     * @param array       $options
      *
      * @return mixed
      */
@@ -72,9 +72,9 @@ interface QueueConnector
     /**
      * Push an array of jobs onto the queue.
      *
-     * @param array  $jobs
-     * @param mixed  $data
-     * @param string $queue
+     * @param array       $jobs
+     * @param mixed       $data
+     * @param string|null $queue
      *
      * @return mixed
      */

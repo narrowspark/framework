@@ -80,7 +80,7 @@ class CallQueuedHandler
      * @param \Viserio\Contracts\Queue\Job $job
      * @param mixed                        $instance
      *
-     * @return mixed
+     * @return integer|double|string|null|array|boolean|resource|object
      */
     protected function setJobInstanceIfNecessary(JobContract $job, $instance)
     {

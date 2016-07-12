@@ -1,6 +1,7 @@
 <?php
 namespace Viserio\Queue\Jobs;
 
+use DateTime;
 use Narrowspark\Arr\StaticArr as Arr;
 use Viserio\Contracts\Queue\Job as JobContract;
 use Viserio\Queue\CallQueuedHandler;
@@ -9,6 +10,13 @@ use Viserio\Support\Traits\ContainerAwareTrait;
 abstract class AbstractJob implements JobContract
 {
     use ContainerAwareTrait;
+
+    /**
+     * The job handler instance.
+     *
+     * @var mixed
+     */
+    protected $instance;
 
     /**
      * The name of the queue the job belongs to.

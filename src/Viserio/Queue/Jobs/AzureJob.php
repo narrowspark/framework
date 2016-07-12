@@ -31,13 +31,13 @@ class AzureJob extends AbstractJob
     /**
      * Create a new job instance.
      *
-     * @param \Interop\Container\ContainerInterface              $container
-     * @param \WindowsAzure\Queue\QueueRestProxy                 $azure
-     * @param string                                             $queue
-     * @param WindowsAzure\Queue\Models\WindowsAzureQueueMessage $job
+     * @param \Interop\Container\ContainerInterface               $container
+     * @param \WindowsAzure\Queue\QueueRestProxy                  $azure
+     * @param string                                              $queue
+     * @param \WindowsAzure\Queue\Models\WindowsAzureQueueMessage $job
      */
     public function __construct(
-        Container $container,
+        ContainerInterface $container,
         QueueRestProxy $azure,
         string $queue,
         WindowsAzureQueueMessage $job
