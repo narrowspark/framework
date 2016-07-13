@@ -3,7 +3,6 @@ namespace Viserio\Http;
 
 use InvalidArgumentException;
 use Psr\Http\Message\UriInterface;
-use Viserio\Http\Uri\UriParser;
 use Viserio\Http\Uri\Filter\{
     Fragment,
     Host,
