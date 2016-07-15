@@ -3,12 +3,32 @@ namespace Viserio\Queue\Connectors;
 
 use PhpAmqpLib\Channel\AMQPChannel;
 use PhpAmqpLib\Connection\AMQPStreamConnection;
+use PhpAmqpLib\Exception\AMQPRuntimeException;
 use PhpAmqpLib\Message\AMQPMessage;
 use PhpAmqpLib\Wire\AMQPTable;
 use Viserio\Queue\Jobs\RabbitMQJob;
 
 class RabbitMQQueue extends AbstractQueue
 {
+    protected $connection;
+
+    protected $channel;
+
+    protected $declareExchange;
+
+    protected $declareBindQueue;
+
+    protected $defaultQueue;
+
+    protected $configQueue;
+
+    protected $configExchange;
+
+    /**
+     * @var int
+     */
+    private $attempts;
+
     /**
      * Create a new RabbitMQ queue instance.
      *
@@ -24,7 +44,7 @@ class RabbitMQQueue extends AbstractQueue
         $this->declareExchange = $config['exchange_declare'];
         $this->declareBindQueue = $config['queue_declare_bind'];
 
-        $this->channel = $this->getChannel();
+        $this->channel = $this->connection->channel();
     }
 
     /**
@@ -56,6 +76,17 @@ class RabbitMQQueue extends AbstractQueue
             'delivery_mode' => 2,
         ]);
 
+        $headers = [
+            'Content-Type' => 'application/json',
+            'delivery_mode' => 2,
+        ];
+
+        if ($this->attempts !== null) {
+            $headers['application_headers'] = ['attempts_count' => ['I', $this->attempts]];
+        }
+
+        $message = new AMQPMessage($payload, $headers);
+
         // push task to a queue
         $this->channel->basic_publish($message, $exchange, $queue);
 
@@ -77,8 +108,12 @@ class RabbitMQQueue extends AbstractQueue
     {
         $queue = $this->getQueue($queue);
 
-        // declare queue if not exists
-        $this->declareQueue($queue);
+        try {
+            $this->declareQueue($queue);
+        } catch (AMQPRuntimeException $exception) {
+            $this->connection->reconnect();
+            $this->declareQueue($queue);
+        }
 
         // get envelope
         $message = $this->channel->basic_get($queue);
@@ -91,13 +126,15 @@ class RabbitMQQueue extends AbstractQueue
     }
 
     /**
-     * Get the AMQPChannel.
+     * Sets the attempts member variable to be used in message generation
      *
-     * @return \PhpAmqpLib\Channel\AMQPChannel
+     * @param int $count
+     *
+     * @return void
      */
-    protected function getChannel(): AMQPChannel
+    public function setAttempts(int $count)
     {
-        return $this->connection->channel();
+        $this->attempts = $count;
     }
 
     /**
@@ -131,6 +168,7 @@ class RabbitMQQueue extends AbstractQueue
                 $this->configQueue['exclusive'],
                 $this->configQueue['auto_delete']
             );
+
             // bind queue to the exchange
             $this->channel->queue_bind($name, $exchange, $name);
         }

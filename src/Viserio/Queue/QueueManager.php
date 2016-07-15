@@ -216,23 +216,6 @@ class QueueManager extends AbstractConnectionManager implements MonitorContract
     }
 
     /**
-     * Create RabbitMQ connection.
-     */
-    protected function createAzureConnection(array $config): RabbitMQQueue
-    {
-        $connectionString = sprintf(
-            'DefaultEndpointsProtocol=%s;AccountName=%s;AccountKey=%s',
-            $config['protocol'],
-            $config['account'],
-            $config['key']
-        );
-
-        $azure = ServicesBuilder::getInstance()->createQueueService($connectionString);
-
-        return new AzureQueue($azure, $config['queue']);
-    }
-
-    /**
      * {@inheritdoc}
      */
     protected function getConfigName(): string
