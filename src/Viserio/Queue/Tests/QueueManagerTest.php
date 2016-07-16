@@ -21,8 +21,7 @@ class QueueManagerTest extends \PHPUnit_Framework_TestCase
         $config->shouldReceive('get')
             ->once()
             ->with('queue.connections', [])
-            ->andReturn([
-            ]);
+            ->andReturn([]);
 
         $manager = new QueueManager(
             $config,
@@ -62,13 +61,13 @@ class QueueManagerTest extends \PHPUnit_Framework_TestCase
         $config = $this->mock(ConfigContract::class);
 
         $manager = new QueueManager(
-            $this->mock(ConfigContract::class),
+            $config,
             $this->mock(ContainerInteropInterface::class),
             $this->mock(EncrypterContract::class)
         );
 
-        $manager->setDispatcher($this->mock(DispatcherContract::class));
+        $manager->setEventDispatcher($this->mock(DispatcherContract::class));
 
-        $this->assertInstanceOf(DispatcherContract::class, $manager->getDispatcher());
+        $this->assertInstanceOf(DispatcherContract::class, $manager->getEventDispatcher());
     }
 }

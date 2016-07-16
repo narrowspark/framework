@@ -136,7 +136,7 @@ class QueueManager extends AbstractConnectionManager implements MonitorContract
      *
      * @return \Viserio\Contracts\Events\Dispatcher
      */
-    public function getDispatcher(): DispatcherContract
+    public function getEventDispatcher(): DispatcherContract
     {
         return $this->dispatcher;
     }
@@ -148,7 +148,7 @@ class QueueManager extends AbstractConnectionManager implements MonitorContract
      *
      * @return $this
      */
-    public function setDispatcher(DispatcherContract $dispatcher): QueueManager
+    public function setEventDispatcher(DispatcherContract $dispatcher): QueueManager
     {
         $this->dispatcher = $dispatcher;
 
@@ -168,7 +168,7 @@ class QueueManager extends AbstractConnectionManager implements MonitorContract
     /**
      * Set the encrypter implementation.
      *
-     * @param \Viserio\Contracts\Encryption\Encrypter  $encrypter
+     * @param \Viserio\Contracts\Encryption\Encrypter $encrypter
      *
      * @return $this
      */
@@ -181,6 +181,8 @@ class QueueManager extends AbstractConnectionManager implements MonitorContract
 
     /**
      * Create Beanstalkd connection.
+     *
+     * @return \Viserio\Queue\Connectors\BeanstalkdQueue
      */
     protected function createBeanstalkdConnection(array $config): BeanstalkdQueue
     {
@@ -198,6 +200,8 @@ class QueueManager extends AbstractConnectionManager implements MonitorContract
 
     /**
      * Create RabbitMQ connection.
+     *
+     * @return \Viserio\Queue\Connectors\RabbitMQQueue
      */
     protected function createRabitmqConnection(array $config): RabbitMQQueue
     {

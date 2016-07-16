@@ -9,7 +9,10 @@ use Viserio\Contracts\{
     Encryption\Encrypter as EncrypterContract,
     Queue\QueueConnector as QueueConnectorContract
 };
-use Viserio\Queue\CallQueuedHandler;
+use Viserio\Queue\{
+    CallQueuedHandler,
+    QueueClosure
+};
 use Viserio\Support\Traits\ContainerAwareTrait;
 
 abstract class AbstractQueue implements QueueConnectorContract
@@ -165,7 +168,7 @@ abstract class AbstractQueue implements QueueConnectorContract
             (new Serializer)->serialize($job)
         );
 
-        return ['job' => 'QueueClosure', 'data' => compact('closure')];
+        return ['job' => QueueClosure::class, 'data' => compact('closure')];
     }
 
     /**
