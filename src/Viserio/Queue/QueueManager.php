@@ -25,7 +25,6 @@ use Viserio\Queue\Connectors\{
     SyncQueue
 };
 use Viserio\Support\AbstractConnectionManager;
-use WindowsAzure\Common\ServicesBuilder;
 
 class QueueManager extends AbstractConnectionManager implements MonitorContract
 {
