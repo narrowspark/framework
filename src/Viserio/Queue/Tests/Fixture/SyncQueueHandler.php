@@ -1,7 +1,7 @@
 <?php
 namespace Viserio\Queue\Tests\Fixture;
 
-class SyncQueueTestHandler
+class SyncQueueHandler
 {
     public function run($job, $data)
     {

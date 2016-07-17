@@ -32,9 +32,7 @@ class SyncJob extends AbstractJob
     }
 
     /**
-     * Fire the job.
-     *
-     * @return void
+     * {@inheritdoc}
      */
     public function run()
     {
@@ -42,9 +40,7 @@ class SyncJob extends AbstractJob
     }
 
     /**
-     * Get the raw body string for the job.
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function getRawBody(): string
     {
@@ -52,9 +48,9 @@ class SyncJob extends AbstractJob
     }
 
     /**
-     * Get the number of times the job has been attempted.
+     * {@inheritdoc}
      *
-     * @return int
+     * @codeCoverageIgnore
      */
     public function attempts(): int
     {
@@ -62,9 +58,9 @@ class SyncJob extends AbstractJob
     }
 
     /**
-     * Get the job identifier.
+     * {@inheritdoc}
      *
-     * @return string
+     * @codeCoverageIgnore
      */
     public function getJobId(): string
     {

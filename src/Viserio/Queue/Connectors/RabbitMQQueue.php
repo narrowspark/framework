@@ -10,21 +10,51 @@ use Viserio\Queue\Jobs\RabbitMQJob;
 
 class RabbitMQQueue extends AbstractQueue
 {
+    /**
+     * The AMQPStreamConnection instance.
+     *
+     * @var \PhpAmqpLib\Connection\AMQPStreamConnection
+     */
     protected $connection;
 
+    /**
+     * [$channel description]
+     *
+     * @var string
+     */
     protected $channel;
 
+    /**
+     * [$channel description]
+     *
+     * @var bool
+     */
     protected $declareExchange;
 
+    /**
+     * [$channel description]
+     *
+     * @var string
+     */
     protected $declareBindQueue;
 
-    protected $defaultQueue;
-
+    /**
+     * [$channel description]
+     *
+     * @var array
+     */
     protected $configQueue;
 
+    /**
+     * [$channel description]
+     *
+     * @var array
+     */
     protected $configExchange;
 
     /**
+     * [$channel description]
+     *
      * @var int
      */
     private $attempts;
@@ -38,7 +68,7 @@ class RabbitMQQueue extends AbstractQueue
     public function __construct(AMQPStreamConnection $amqpConnection, $config)
     {
         $this->connection = $amqpConnection;
-        $this->defaultQueue = $config['queue'];
+        $this->default = $config['queue'];
         $this->configQueue = $config['queue_params'];
         $this->configExchange = $config['exchange_params'];
         $this->declareExchange = $config['exchange_declare'];
@@ -69,12 +99,6 @@ class RabbitMQQueue extends AbstractQueue
         } else {
             list($queue, $exchange) = $this->declareQueue($queue);
         }
-
-        // push job to a queue
-        $message = new AMQPMessage($payload, [
-            'Content-Type' => 'application/json',
-            'delivery_mode' => 2,
-        ]);
 
         $headers = [
             'Content-Type' => 'application/json',

@@ -123,10 +123,4 @@ class RabbitMQJob extends AbstractJob
     {
         return $this->message->get('correlation_id');
     }
-
-    /**
-     */
-    public function getRabbitMQJob()
-    {
-    }
 }
