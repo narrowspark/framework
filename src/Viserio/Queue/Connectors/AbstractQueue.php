@@ -105,6 +105,8 @@ abstract class AbstractQueue implements QueueConnectorContract
      * Get the current UNIX timestamp.
      *
      * @return int
+     *
+     * @codeCoverageIgnore
      */
     protected function getTime(): int
     {
