@@ -20,4 +20,14 @@ interface Encrypter
      * @return string
      */
     public function decrypt(string $ciphertext): string;
+
+    /**
+     * Compare two encrypted values.
+     *
+     * @param string $encrypted1
+     * @param string $encrypted2
+     *
+     * @return bool
+     */
+    public function compare(string $encrypted1, string $encrypted2): bool;
 }

@@ -243,7 +243,7 @@ class Virtuoso implements VirtuosoContract
     /**
      * {@inheritdoc}
      */
-    public function flushSections()
+    public function clearSections()
     {
         $this->sections = [];
         $this->sectionStack = [];
@@ -252,10 +252,10 @@ class Virtuoso implements VirtuosoContract
     /**
      * {@inheritdoc}
      */
-    public function flushSectionsIfDoneRendering()
+    public function clearSectionsIfDoneRendering()
     {
         if ($this->doneRendering()) {
-            $this->flushSections();
+            $this->clearSections();
         }
     }
 

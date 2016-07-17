@@ -138,7 +138,7 @@ interface MessageCatalogue
      *
      * @param MessageCatalogue $parent
      *
-     * @return self
+     * @return $this
      */
     public function setParent(MessageCatalogue $parent): MessageCatalogue;
 }

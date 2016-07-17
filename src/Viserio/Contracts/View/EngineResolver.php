@@ -12,7 +12,7 @@ interface EngineResolver
      * @param string   $engine
      * @param \Closure $resolver
      *
-     * @return self
+     * @return $this
      */
     public function register(string $engine, Closure $resolver): EngineResolver;
 

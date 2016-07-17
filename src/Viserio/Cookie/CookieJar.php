@@ -101,7 +101,7 @@ class CookieJar implements JarContract
      *
      * @return Cookie
      */
-    public function forget(string $name, $path = null, $domain = null): CookieContract
+    public function delete(string $name, $path = null, $domain = null): CookieContract
     {
         return $this->create($name, null, -2628000, $path, $domain);
     }
@@ -196,7 +196,7 @@ class CookieJar implements JarContract
      * @param string $domain
      * @param bool   $secure
      *
-     * @return self
+     * @return $this
      */
     public function setDefaultPathAndDomain(string $path, string $domain, bool $secure = false): JarContract
     {

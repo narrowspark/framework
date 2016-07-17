@@ -3,7 +3,6 @@ namespace Viserio\Http;
 
 use InvalidArgumentException;
 use Psr\Http\Message\UriInterface;
-use Viserio\Http\Uri\UriParser;
 use Viserio\Http\Uri\Filter\{
     Fragment,
     Host,
@@ -325,7 +324,7 @@ class Uri implements UriInterface
     {
         $authority = $this->host;
 
-        if ($this->userInfo != '') {
+        if ($this->userInfo !== '') {
             $authority = $this->userInfo . '@' . $authority;
         }
 
@@ -460,6 +459,9 @@ class Uri implements UriInterface
         return $uri;
     }
 
+    /**
+     * @param string|null $string
+     */
     private function isValidString($string)
     {
         if (! is_string($string)) {

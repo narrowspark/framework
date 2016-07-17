@@ -43,7 +43,7 @@ interface Connection
      *
      * @param callable $reconnector
      *
-     * @return self
+     * @return $this
      */
     public function setReconnector(callable $reconnector): self;
 
@@ -93,7 +93,7 @@ interface Connection
      *
      * @param \PDO|null $pdo
      *
-     * @return self
+     * @return $this
      */
     public function setPdo(\PDO $pdo = null): self;
 
@@ -162,7 +162,7 @@ interface Connection
     /**
      * Clear the query log.
      */
-    public function flushQueryLog();
+    public function clearQueryLog();
 
     /**
      * Enable the query log on the connection.

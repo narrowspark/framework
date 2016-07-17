@@ -3,18 +3,12 @@ namespace Viserio\Connect\Adapters;
 
 use Memcached;
 use RuntimeException;
-use Viserio\Contracts\Connect\Connector as ConnectorContract;
+use Viserio\Contracts\Support\Connector as ConnectorContract;
 
 class MemcachedConnector implements ConnectorContract
 {
     /**
-     * Establish a connection.
-     *
-     * @param array $config
-     *
-     * @throws \RuntimeException
-     *
-     * @return \Memcached
+     * {@inheritdoc}
      */
     public function connect(array $config)
     {
@@ -84,7 +78,7 @@ class MemcachedConnector implements ConnectorContract
      *
      * @throws \RuntimeException
      *
-     * @return object
+     * @return Memcached
      */
     protected function addMemcachedOptions($memcached, array $config)
     {
@@ -109,7 +103,7 @@ class MemcachedConnector implements ConnectorContract
     /**
      * Set SASL auth data, requires binary protocol.
      *
-     * @param object $memcached
+     * @param Memcached $memcached
      * @param array  $config
      *
      * @return object

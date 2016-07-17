@@ -128,7 +128,7 @@ class VirtuosoTest extends \PHPUnit_Framework_TestCase
         $this->assertEmpty($virtuoso->yieldContent('foo'));
     }
 
-    public function testSectionFlushing()
+    public function testSectionclearing()
     {
         $virtuoso = $this->getVirtuoso();
 
@@ -138,7 +138,7 @@ class VirtuosoTest extends \PHPUnit_Framework_TestCase
 
         $this->assertCount(1, $virtuoso->getSections());
 
-        $virtuoso->flushSections();
+        $virtuoso->clearSections();
         $this->assertCount(0, $virtuoso->getSections());
     }
 

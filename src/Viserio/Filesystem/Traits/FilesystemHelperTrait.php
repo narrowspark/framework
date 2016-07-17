@@ -33,6 +33,8 @@ trait FilesystemHelperTrait
      * @throws Viserio\Contracts\Filesystem\Exception\FileNotFoundException
      *
      * @return mixed
+     *
+     * @codeCoverageIgnore
      */
     public function requireOnce(string $path)
     {

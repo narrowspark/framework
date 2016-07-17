@@ -31,7 +31,7 @@ interface View extends Renderable
      *
      * @param string $path
      *
-     * @return self
+     * @return $this
      */
     public function setPath(string $path): View;
 
@@ -41,7 +41,7 @@ interface View extends Renderable
      * @param string|array $key
      * @param mixed        $value
      *
-     * @return self
+     * @return $this
      */
     public function with($key, $value = null): View;
 
@@ -61,7 +61,7 @@ interface View extends Renderable
      * @param string $view
      * @param string[]  $data
      *
-     * @return self
+     * @return $this
      */
     public function nest($key, string $view, array $data = []): View;
 

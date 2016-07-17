@@ -6,47 +6,13 @@ use Guzzle\Http\Exception\CurlException;
 use MongoConnectionException;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use Viserio\Contracts\Config\Manager as ConfigManger;
-use Viserio\Filesystem\FilesystemAdapter;
-use Viserio\Filesystem\FilesystemManager;
-
+use Viserio\Filesystem\{
+    FilesystemAdapter,
+    FilesystemManager
+};
 class FilesystemManagerTest extends \PHPUnit_Framework_TestCase
 {
     use MockeryTrait;
-
-    /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage The driver [notfound] is not supported.
-     */
-    public function testDriverToThrowException()
-    {
-        $manager = $this->getManager();
-        $manager->driver('notfound');
-    }
-
-    // public function testSetAndGetDefaultDriver()
-    // {
-    //     $manager = $this->getManager();
-
-    //     $manager->getConfig()->shouldReceive('set')->once()
-    //         ->with('flysystem::default')->withArgs(['localfly']);
-
-    //     $manager->getConfig()->shouldReceive('get')->once()
-    //         ->with('flysystem::default')->andReturn('localfly');
-
-    //     $manager->setDefaultDriver('localfly');
-
-    //     $this->assertTrue($manager->getDefaultDriver());
-    // }
-
-    // public function testGetDefaultDriverFromConfig()
-    // {
-    //     $manager = $this->getManager();
-
-    //     $manager->getConfig()->shouldReceive('get')->once()
-    //         ->with('flysystem::default')->withArgs(['local'])->andReturn('local');
-
-    //     $this->assertSame('local', $manager->getDefaultDriver());
-    // }
 
     public function testAwsS3ConnectorDriver()
     {
@@ -54,36 +20,46 @@ class FilesystemManagerTest extends \PHPUnit_Framework_TestCase
             $this->markTestSkipped('The AWS SDK requires a newer verison of HHVM');
         }
 
-        $manager = $this->getManager();
-
-        $this->assertInstanceOf(
-            FilesystemAdapter::class,
-            $manager->driver(
-                'awss3',
-                [
+        $config = $this->mock(ConfigManger::class);
+        $config->shouldReceive('get')
+            ->once()
+            ->with('filesystem.connections', [])
+            ->andReturn([
+                'awss3' => [
                     'key'     => 'your-key',
                     'secret'  => 'your-secret',
                     'bucket'  => 'your-bucket',
                     'region'  => 'us-east-1',
                     'version' => 'latest',
                 ]
-            )
+            ]);
+
+        $manager = new FilesystemManager($config);
+
+        $this->assertInstanceOf(
+            FilesystemAdapter::class,
+            $manager->connection('awss3')
         );
     }
 
     public function testDropboxConnectorDriver()
     {
-        $manager = $this->getManager();
-
-        $this->assertInstanceOf(
-            FilesystemAdapter::class,
-            $manager->driver(
-                'dropbox',
-                [
+        $config = $this->mock(ConfigManger::class);
+        $config->shouldReceive('get')
+            ->once()
+            ->with('filesystem.connections', [])
+            ->andReturn([
+                'dropbox' => [
                     'token' => 'your-token',
                     'app'   => 'your-app',
                 ]
-            )
+            ]);
+
+        $manager = new FilesystemManager($config);
+
+        $this->assertInstanceOf(
+            FilesystemAdapter::class,
+            $manager->connection('dropbox')
         );
     }
 
@@ -93,19 +69,24 @@ class FilesystemManagerTest extends \PHPUnit_Framework_TestCase
             $this->markTestSkipped('The FTP_BINARY constant is not defined');
         }
 
-        $manager = $this->getManager();
-
-        $this->assertInstanceOf(
-            FilesystemAdapter::class,
-            $manager->driver(
-                'ftp',
-                [
+        $config = $this->mock(ConfigManger::class);
+        $config->shouldReceive('get')
+            ->once()
+            ->with('filesystem.connections', [])
+            ->andReturn([
+                'ftp' => [
                     'host'     => 'ftp.example.com',
                     'port'     => 21,
                     'username' => 'your-username',
                     'password' => 'your-password',
                 ]
-            )
+            ]);
+
+        $manager = new FilesystemManager($config);
+
+        $this->assertInstanceOf(
+            FilesystemAdapter::class,
+            $manager->connection('ftp')
         );
     }
 
@@ -115,18 +96,23 @@ class FilesystemManagerTest extends \PHPUnit_Framework_TestCase
             $this->markTestSkipped('The MongoClient class does not exist');
         }
 
-        $manager = $this->getManager();
+        $config = $this->mock(ConfigManger::class);
+        $config->shouldReceive('get')
+            ->once()
+            ->with('filesystem.connections', [])
+            ->andReturn([
+                'gridfs' => [
+                    'server'   => 'mongodb://localhost:27017',
+                    'database' => 'your-database',
+                ]
+            ]);
+
+        $manager = new FilesystemManager($config);
 
         try {
             $this->assertInstanceOf(
                 FilesystemAdapter::class,
-                $manager->driver(
-                    'gridfs',
-                    [
-                        'server'   => 'mongodb://localhost:27017',
-                        'database' => 'your-database',
-                    ]
-                )
+                $manager->connection('gridfs')
             );
         } catch (MongoConnectionException $e) {
             $this->markTestSkipped('No mongo serer running');
@@ -135,48 +121,64 @@ class FilesystemManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testLocalConnectorDriver()
     {
-        $manager = $this->getManager();
+        $config = $this->mock(ConfigManger::class);
+        $config->shouldReceive('get')
+            ->once()
+            ->with('filesystem.connections', [])
+            ->andReturn([
+                'local' => [
+                    'path' => __DIR__,
+                ]
+            ]);
+
+        $manager = new FilesystemManager($config);
 
         $this->assertInstanceOf(
             FilesystemAdapter::class,
-            $manager->driver(
-                'local',
-                [
-                    'path' => __DIR__,
-                ]
-            )
+            $manager->connection('local')
         );
     }
 
     public function testNullConnectorDriver()
     {
-        $manager = $this->getManager();
+        $config = $this->mock(ConfigManger::class);
+        $config->shouldReceive('get')
+            ->once()
+            ->with('filesystem.connections', [])
+            ->andReturn([
+                'null' => []
+            ]);
+
+        $manager = new FilesystemManager($config);
 
         $this->assertInstanceOf(
             FilesystemAdapter::class,
-            $manager->driver(
-                'null'
-            )
+            $manager->connection('null')
         );
     }
 
     public function testRackspaceConnectorDriver()
     {
-        $manager = $this->getManager();
+        $config = $this->mock(ConfigManger::class);
+        $config->shouldReceive('get')
+            ->once()
+            ->with('filesystem.connections', [])
+            ->andReturn([
+                'rackspace' => [
+                    'endpoint'  => 'https://lon.identity.api.rackspacecloud.com/v2.0/',
+                    'region'    => 'LON',
+                    'username'  => 'your-username',
+                    'apiKey'    => 'your-api-key',
+                    'container' => 'your-container',
+                ]
+            ]);
+
+        $manager = new FilesystemManager($config);
 
         try {
             $this->assertInstanceOf(
                 FilesystemAdapter::class,
-                $manager->driver(
-                    'rackspace',
-                    [
-                        'endpoint'  => 'https://lon.identity.api.rackspacecloud.com/v2.0/',
-                        'region'    => 'LON',
-                        'username'  => 'your-username',
-                        'apiKey'    => 'your-api-key',
-                        'container' => 'your-container',
-                    ]
-                )
+                $manager->connection('rackspace')
             );
         } catch (CurlException $e) {
             $this->markTestSkipped('No internet connection');
@@ -187,70 +189,84 @@ class FilesystemManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testSftpConnectorDriver()
     {
-        $manager = $this->getManager();
-
-        $this->assertInstanceOf(
-            FilesystemAdapter::class,
-            $manager->driver(
-                'sftp',
-                [
+        $config = $this->mock(ConfigManger::class);
+        $config->shouldReceive('get')
+            ->once()
+            ->with('filesystem.connections', [])
+            ->andReturn([
+                'sftp' => [
                     'host'     => 'sftp.example.com',
                     'port'     => 22,
                     'username' => 'your-username',
                     'password' => 'your-password',
                 ]
-            )
+            ]);
+
+        $manager = new FilesystemManager($config);
+
+        $this->assertInstanceOf(
+            FilesystemAdapter::class,
+            $manager->connection('sftp')
         );
     }
 
     public function testVfsConnectorDriver()
     {
-        $manager = $this->getManager();
+        $config = $this->mock(ConfigManger::class);
+        $config->shouldReceive('get')
+            ->once()
+            ->with('filesystem.connections', [])
+            ->andReturn([
+                'vfs' => []
+            ]);
+
+        $manager = new FilesystemManager($config);
 
         $this->assertInstanceOf(
             FilesystemAdapter::class,
-            $manager->driver(
-                'vfs'
-            )
+            $manager->connection('vfs')
         );
     }
 
     public function testWebDavConnectorDriver()
     {
-        $manager = $this->getManager();
-
-        $this->assertInstanceOf(
-            FilesystemAdapter::class,
-            $manager->driver(
-                'webdav',
-                [
+        $config = $this->mock(ConfigManger::class);
+        $config->shouldReceive('get')
+            ->once()
+            ->with('filesystem.connections', [])
+            ->andReturn([
+                'webdav' => [
                     'baseUri'  => 'http://example.org/dav/',
                     'userName' => 'your-username',
                     'password' => 'your-password',
                 ]
-            )
+            ]);
+
+        $manager = new FilesystemManager($config);
+
+        $this->assertInstanceOf(
+            FilesystemAdapter::class,
+            $manager->connection('webdav')
         );
     }
 
     public function testZipConnectorDriver()
     {
-        $manager = $this->getManager();
+        $config = $this->mock(ConfigManger::class);
+        $config->shouldReceive('get')
+            ->once()
+            ->with('filesystem.connections', [])
+            ->andReturn([
+                'zip' => [
+                    'path' => __DIR__ . '\Adapters\stubs\test.zip',
+                ]
+            ]);
+
+        $manager = new FilesystemManager($config);
 
         $this->assertInstanceOf(
             FilesystemAdapter::class,
-            $manager->driver(
-                'zip',
-                [
-                    'path' => __DIR__ . '\Adapters\stubs\test.zip',
-                ]
-            )
+            $manager->connection('zip')
         );
-    }
-
-    protected function getManager()
-    {
-        $config = $this->mock(ConfigManger::class);
-
-        return new FilesystemManager($config);
     }
 }

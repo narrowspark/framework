@@ -23,19 +23,18 @@ class Stream implements StreamInterface
      *
      * @link http://php.net/manual/function.fopen.php
      */
-    protected static $modes = [
-        'readable' => [
-            'r' => true, 'w+' => true, 'r+' => true, 'x+' => true, 'c+' => true,
-            'rb' => true, 'w+b' => true, 'r+b' => true, 'x+b' => true,
-            'c+b' => true, 'rt' => true, 'w+t' => true, 'r+t' => true,
-            'x+t' => true, 'c+t' => true, 'a+' => true,
-        ],
-        'writable' => [
-            'w' => true, 'w+' => true, 'rw' => true, 'r+' => true, 'x+' => true,
-            'c+' => true, 'wb' => true, 'w+b' => true, 'r+b' => true,
-            'x+b' => true, 'c+b' => true, 'w+t' => true, 'r+t' => true,
-            'x+t' => true, 'c+t' => true, 'a' => true, 'a+' => true,
-        ],
+    const READABLE_MODES = [
+        'r' => true, 'w+' => true, 'r+' => true, 'x+' => true, 'c+' => true,
+        'rb' => true, 'w+b' => true, 'r+b' => true, 'x+b' => true,
+        'c+b' => true, 'rt' => true, 'w+t' => true, 'r+t' => true,
+        'x+t' => true, 'c+t' => true, 'a+' => true,
+    ];
+
+    const WRITABLE_MODES = [
+        'w' => true, 'w+' => true, 'rw' => true, 'r+' => true, 'x+' => true,
+        'c+' => true, 'wb' => true, 'w+b' => true, 'r+b' => true,
+        'x+b' => true, 'c+b' => true, 'w+t' => true, 'r+t' => true,
+        'x+t' => true, 'c+t' => true, 'a' => true, 'a+' => true,
     ];
 
     /**
@@ -120,8 +119,8 @@ class Stream implements StreamInterface
         $meta = stream_get_meta_data($this->stream);
 
         $this->seekable = $meta['seekable'];
-        $this->readable = isset(self::$modes['readable'][$meta['mode']]);
-        $this->writable = isset(self::$modes['writable'][$meta['mode']]);
+        $this->readable = isset(self::READABLE_MODES[$meta['mode']]);
+        $this->writable = isset(self::WRITABLE_MODES[$meta['mode']]);
 
         $this->uri = $this->getMetadata('uri');
     }

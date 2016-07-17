@@ -57,4 +57,26 @@ interface Directorysystem
      * @return bool
      */
     public function isDirectory(string $dirname): bool;
+
+    /**
+     * Copy a directory from one location to another.
+     *
+     * @param string $directory
+     * @param string $destination
+     * @param array  $options
+     *
+     * @return bool
+     */
+    public function copyDirectory(string $directory, string $destination, array $options = []): bool;
+
+    /**
+     * Move a directory.
+     *
+     * @param string $directory
+     * @param string $destination
+     * @param array  $options
+     *
+     * @return bool
+     */
+    public function moveDirectory(string $directory, string $destination, array $options = []): bool;
 }

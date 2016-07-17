@@ -74,7 +74,7 @@ class DatabaseManager
      *
      * @param \Viserio\Contracts\Cache\Manager $cache
      *
-     * @return self
+     * @return $this
      */
     public function setCache(CacheContract $cache)
     {

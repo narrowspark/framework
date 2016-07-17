@@ -205,6 +205,18 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract, Direct
     }
 
     /**
+     * Get the URL for the file at the given path.
+     *
+     * @param string $path
+     *
+     * @return string
+     */
+    public function url(string $path): string
+    {
+        return self::normalizeDirectorySeparator($path);
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function delete(array $paths): bool
@@ -227,7 +239,14 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract, Direct
     {
         $directory = self::normalizeDirectorySeparator($directory);
 
-        return array_diff(scandir($directory), ['..', '.']);
+        $files = array_diff(scandir($directory), ['..', '.']);
+
+        // To get the appropriate files, we'll simply scan the directory and filter
+        // out any "files" that are not truly files so we do not end up with any
+        // directories in our list, but only true files within the directory.
+        return array_filter($files, function ($file) use ($directory) {
+            return filetype(self::normalizeDirectorySeparator($directory . '/' . $file)) == 'file';
+        });
     }
 
     /**
@@ -340,6 +359,52 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract, Direct
         $dirname = self::normalizeDirectorySeparator($dirname);
 
         return is_dir($dirname);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function copyDirectory(string $directory, string $destination, array $options = []): bool
+    {
+        $directory = self::normalizeDirectorySeparator($directory);
+
+        if (! $this->isDirectory($directory)) {
+            return false;
+        }
+
+        $destination = self::normalizeDirectorySeparator($destination);
+
+        try {
+            $this->mirror($directory, $destination, null, $options);
+        } catch (SymfonyIOException $e) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function moveDirectory(string $directory, string $destination, array $options = []): bool
+    {
+        $directory = self::normalizeDirectorySeparator($directory);
+        $destination = self::normalizeDirectorySeparator($destination);
+        $overwrite = $options['overwrite'] ?? false;
+
+        if ($overwrite && $this->isDirectory($destination)) {
+            $this->deleteDirectory($destination);
+            $this->copyDirectory($directory, $destination);
+            $this->deleteDirectory($directory);
+
+            return true;
+        }
+
+        if (@rename($directory, $destination) !== true) {
+            return false;
+        }
+
+        return true;
     }
 
     /**

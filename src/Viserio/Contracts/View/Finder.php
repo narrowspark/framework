@@ -26,7 +26,7 @@ interface Finder
      *
      * @param string $location
      *
-     * @return self
+     * @return $this
      */
     public function addLocation(string $location): Finder;
 
@@ -36,7 +36,7 @@ interface Finder
      * @param string       $namespace
      * @param string|array $hints
      *
-     * @return self
+     * @return $this
      */
     public function addNamespace(string $namespace, $hints): Finder;
 
@@ -46,7 +46,7 @@ interface Finder
      * @param string       $namespace
      * @param string|array $hints
      *
-     * @return self
+     * @return $this
      */
     public function prependNamespace(string $namespace, $hints): Finder;
 
@@ -55,7 +55,7 @@ interface Finder
      *
      * @param string $extension
      *
-     * @return self
+     * @return $this
      */
     public function addExtension(string $extension): Finder;
 
@@ -87,7 +87,7 @@ interface Finder
      *
      * @param string[] $paths
      *
-     * @return self
+     * @return $this
      */
     public function setPaths(array $paths): Finder;
 

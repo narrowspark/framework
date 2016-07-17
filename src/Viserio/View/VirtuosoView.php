@@ -15,14 +15,14 @@ class VirtuosoView extends View
 
             $response = isset($callback) ? call_user_func($callback, $this, $contents) : null;
 
-            // Once we have the contents of the view, we will flush the sections if we are
+            // Once we have the contents of the view, we will clear the sections if we are
             // done rendering all views so that there is nothing left hanging over when
             // another view gets rendered in the future by the application developer.
-            $this->factory->getVirtuoso()->flushSectionsIfDoneRendering();
+            $this->factory->getVirtuoso()->clearSectionsIfDoneRendering();
 
             return ! is_null($response) ? $response : $contents;
         } catch (Throwable $exception) {
-            $this->factory->getVirtuoso()->flushSections();
+            $this->factory->getVirtuoso()->clearSections();
 
             throw $exception;
         }
@@ -47,7 +47,7 @@ class VirtuosoView extends View
      */
     protected function renderContents(): string
     {
-        // We will keep track of the amount of views being rendered so we can flush
+        // We will keep track of the amount of views being rendered so we can clear
         // the section after the complete rendering operation is done. This will
         // clear out the sections for any separate views that may be rendered.
         $this->factory->getVirtuoso()->incrementRender();
@@ -57,7 +57,7 @@ class VirtuosoView extends View
         $contents = $this->getContents();
 
         // Once we've finished rendering the view, we'll decrement the render count
-        // so that each sections get flushed out next time a view is created and
+        // so that each sections get cleared out next time a view is created and
         // no old sections are staying around in the memory of an environment.
         $this->factory->getVirtuoso()->decrementRender();
 
