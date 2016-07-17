@@ -123,4 +123,14 @@ class RabbitMQJob extends AbstractJob
     {
         return $this->message->get('correlation_id');
     }
+
+    /**
+     * Get the underlying queue driver instance.
+     *
+     * @return \Viserio\Queue\Connectors\RabbitMQQueue
+     */
+    public function getRabbitMQQueue(): RabbitMQQueue
+    {
+        return $this->connection;
+    }
 }
