@@ -2,8 +2,8 @@
 namespace Viserio\Queue\Connectors;
 
 use Throwable;
-use Viserio\Queue\Jobs\SyncJob;
 use Viserio\Contracts\Queue\Job as JobContract;
+use Viserio\Queue\Jobs\SyncJob;
 
 class SyncQueue extends AbstractQueue
 {
