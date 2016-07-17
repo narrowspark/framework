@@ -63,9 +63,13 @@ class UploadedFile implements UploadedFileInterface
     protected $moved = false;
 
     /**
+     * All errors which can happen on a upload.
+     *
+     * @internal
+     *
      * @var int[]
      */
-    private static $errors = [
+    const ERRORS = [
         UPLOAD_ERR_OK,
         UPLOAD_ERR_INI_SIZE,
         UPLOAD_ERR_FORM_SIZE,
@@ -245,7 +249,7 @@ class UploadedFile implements UploadedFileInterface
             );
         }
 
-        if (! in_array($error, UploadedFile::$errors)) {
+        if (! in_array($error, self::ERRORS)) {
             throw new InvalidArgumentException(
                 'Invalid error status for UploadedFile'
             );

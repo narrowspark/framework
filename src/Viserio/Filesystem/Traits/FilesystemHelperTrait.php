@@ -8,7 +8,7 @@ trait FilesystemHelperTrait
     /**
      * Require file.
      *
-     * @param string $file
+     * @param string $path
      *
      * @throws Viserio\Contracts\Filesystem\Exception\FileNotFoundException
      *
@@ -18,7 +18,7 @@ trait FilesystemHelperTrait
     {
         $path = self::normalizeDirectorySeparator($path);
 
-        if ($this->isFile($path) && file_exists($path)) {
+        if ($this->isFile($path) && $this->has($path)) {
             return require $path;
         }
 
@@ -28,18 +28,20 @@ trait FilesystemHelperTrait
     /**
      * Require file once.
      *
-     * @param string $file
+     * @param string $path
      *
      * @throws Viserio\Contracts\Filesystem\Exception\FileNotFoundException
      *
      * @return mixed
+     *
+     * @codeCoverageIgnore
      */
-    public function requireOnce(string $file)
+    public function requireOnce(string $path)
     {
         $path = self::normalizeDirectorySeparator($path);
 
-        if ($this->isFile($path) && file_exists($path)) {
-            require_once $file;
+        if ($this->isFile($path) && $this->has($path)) {
+            require_once $path;
         }
 
         throw new FileNotFoundException($path);
@@ -74,6 +76,36 @@ trait FilesystemHelperTrait
     }
 
     /**
+     * Create a hard link to the target file or directory.
+     *
+     * @param string $target
+     * @param string $link
+     *
+     * @return bool|null
+     *
+     * @codeCoverageIgnore
+     */
+    public function link(string $target, string $link)
+    {
+        if (! $this->isWindows()) {
+            return symlink($target, $link);
+        }
+
+        $mode = $this->isDirectory($target) ? 'J' : 'H';
+
+        exec("mklink /{$mode} \"{$link}\" \"{$target}\"");
+    }
+
+    /**
+     * Check whether a file exists.
+     *
+     * @param string $path
+     *
+     * @return bool
+     */
+    abstract public function has(string $path): bool;
+
+    /**
      * Fix directory separators for windows and linux
      *
      * @param string|array $paths
@@ -81,4 +113,25 @@ trait FilesystemHelperTrait
      * @return string|array
      */
     abstract protected function normalizeDirectorySeparator($paths);
+
+    /**
+     * Determine if the given path is a directory.
+     *
+     * @param string $dirname
+     *
+     * @return bool
+     */
+    abstract public function isDirectory(string $dirname): bool;
+
+    /**
+     * Determine whether the current environment is Windows based.
+     *
+     * @return bool
+     *
+     * @codeCoverageIgnore
+     */
+    protected function isWindows(): bool
+    {
+        return strtolower(substr(PHP_OS, 0, 3)) === 'win';
+    }
 }

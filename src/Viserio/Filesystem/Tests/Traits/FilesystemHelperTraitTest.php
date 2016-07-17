@@ -61,4 +61,14 @@ class FilesystemHelperTraitTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($this->isFile($dir->url()));
         $this->assertTrue($this->isFile($file->url()));
     }
+
+    public function has(string $path)
+    {
+        return file_exists($path);
+    }
+
+    public function isDirectory(string $dirname)
+    {
+        return is_dir($dirname);
+    }
 }

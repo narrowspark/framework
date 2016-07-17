@@ -2,18 +2,30 @@
 namespace Viserio\Filesystem;
 
 use InvalidArgumentException;
-use League\Flysystem\AdapterInterface;
-use League\Flysystem\Config as FlyConfig;
+use League\Flysystem\{
+    AdapterInterface,
+    Adapter\Local as LocalAdapter,
+    AwsS3v3\AwsS3Adapter,
+    Config as FlyConfig
+};
 use Narrowspark\Arr\StaticArr as Arr;
-use Viserio\Contracts\Filesystem\Directorysystem as DirectorysystemContract;
-use Viserio\Contracts\Filesystem\Exception\FileNotFoundException;
-use Viserio\Contracts\Filesystem\Exception\IOException as ViserioIOException;
-use Viserio\Contracts\Filesystem\Filesystem as FilesystemContract;
-use Viserio\Filesystem\Traits\FilesystemExtensionTrait;
+use Viserio\Contracts\Filesystem\{
+    Directorysystem as DirectorysystemContract,
+    Exception\FileNotFoundException,
+    Exception\IOException as ViserioIOException,
+    Filesystem as FilesystemContract
+};
+use Viserio\Filesystem\Traits\{
+    FilesystemExtensionTrait,
+    FilesystemHelperTrait
+};
+use Viserio\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
 class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
 {
+    use NormalizePathAndDirectorySeparatorTrait;
     use FilesystemExtensionTrait;
+    use FilesystemHelperTrait;
 
     /**
      * The Flysystem filesystem implementation.
@@ -141,18 +153,30 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
 
         // https://bugs.php.net/bug.php?id=64634
         if (@fopen($orginal, 'r') === false) {
-            throw new ViserioIOException(sprintf('Failed to copy "%s" to "%s" because source file could not be opened for reading.', $orginal, $target), 0, null, $orginal);
+            throw new ViserioIOException(sprintf(
+                'Failed to copy "%s" to "%s" because source file could not be opened for reading.',
+                $orginal,
+                $target
+            ), 0, null, $orginal);
         }
 
         // Stream context created to allow files overwrite when using FTP stream wrapper - disabled by default
         if (@fopen($target, 'w', null, stream_context_create(['ftp' => ['overwrite' => true]])) === false) {
-            throw new ViserioIOException(sprintf('Failed to copy "%s" to "%s" because target file could not be opened for writing.', $orginal, $target), 0, null, $orginal);
+            throw new ViserioIOException(sprintf(
+                'Failed to copy "%s" to "%s" because target file could not be opened for writing.',
+                $orginal,
+                $target
+            ), 0, null, $orginal);
         }
 
         $this->driver->copy($originFile, $targetFile);
 
         if (! is_file($target)) {
-            throw new ViserioIOException(sprintf('Failed to copy "%s" to "%s".', $originFile, $target), 0, null, $originFile);
+            throw new ViserioIOException(sprintf(
+                'Failed to copy "%s" to "%s".',
+                $originFile,
+                $target
+            ), 0, null, $originFile);
         }
 
         return true;
@@ -202,6 +226,28 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
         $getTimestamp = $this->driver->getTimestamp($path);
 
         return ! $getTimestamp ?: $getTimestamp['timestamp'];
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @throws \RuntimeException
+     */
+    public function url(string $path): string
+    {
+        $adapter = $this->driver->getAdapter();
+
+        if ($adapter instanceof AwsS3Adapter) {
+            $path = $adapter->getPathPrefix() . $path;
+
+            return $adapter->getClient()->getObjectUrl($adapter->getBucket(), $path);
+        } elseif ($adapter instanceof LocalAdapter) {
+            return '/storage/'.$path;
+        } elseif (method_exists($adapter, 'getUrl')) {
+            return $adapter->getUrl($path);
+        }
+
+        throw new RuntimeException('This driver does not support retrieving URLs.');
     }
 
     /**
@@ -295,9 +341,57 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function copyDirectory(string $directory, string $destination, array $options = []): bool
+    {
+        if (! $this->isDirectory($directory)) {
+            return false;
+        }
+
+        if (! $this->isDirectory($destination)) {
+            $this->createDirectory($destination, ['visibility' => 'public']);
+        }
+
+        $recursive = true;
+
+        if (isset($options['recursive'])) {
+            $recursive = $options['recursive'];
+        }
+
+        $contents = $this->driver->listContents($directory, $recursive);
+
+        foreach ($contents as $item) {
+            # code...
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function moveDirectory(string $directory, string $destination, array $options = []): bool
+    {
+        $overwrite = $options['overwrite'] ?? false;
+
+        if ($overwrite && $this->isDirectory($destination)) {
+            $this->deleteDirectory($destination);
+            $this->copyDirectory($directory, $destination);
+            $this->deleteDirectory($directory);
+
+            return true;
+        }
+
+        if (@rename($directory, $destination) !== true) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
      * Get the Flysystem driver.
      *
-     * @return AdapterInterface
+     * @return \League\Flysystem\AdapterInterface
      */
     public function getDriver()
     {

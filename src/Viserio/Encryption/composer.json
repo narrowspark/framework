@@ -1,5 +1,5 @@
 {
-    "name"       : "viserio/encrypter",
+    "name"       : "viserio/encryption",
     "type"       : "library",
     "description": "The Viserio Encrypter package.",
     "keywords"   : ["narrowspark", "viserio", "encrypter", "security", "encryption", "AES", "openssl", "cipher", "cryptography", "symmetric key cryptography", "crypto", "encrypt", "authenticated encryption"],

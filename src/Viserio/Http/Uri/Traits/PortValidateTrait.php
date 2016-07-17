@@ -6,7 +6,7 @@ use InvalidArgumentException;
 trait PortValidateTrait
 {
     /**
-     * Supported Schemes.
+     * The default port per scheme.
      *
      * @var array
      */

@@ -15,7 +15,7 @@ interface Stack
      *
      * @param Middleware $middleware
      *
-     * @return self
+     * @return $this
      */
     public function withMiddleware(Middleware $middleware): Stack;
 
@@ -28,7 +28,7 @@ interface Stack
      *
      * @param Middleware $middleware
      *
-     * @return self
+     * @return $this
      */
     public function withoutMiddleware(Middleware $middleware): Stack;
 

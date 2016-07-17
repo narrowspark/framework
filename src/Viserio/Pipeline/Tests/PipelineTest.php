@@ -100,7 +100,7 @@ class PipelineTest extends \PHPUnit_Framework_TestCase
                 return $piped;
             });
 
-        // $this->assertEquals('foo', $result);
+        $this->assertEquals('foo', $result);
         $this->assertEquals($parameters, $_SERVER['__test.pipe.parameters']);
 
         unset($_SERVER['__test.pipe.one']);

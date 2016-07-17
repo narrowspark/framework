@@ -1,13 +1,17 @@
 <?php
 namespace Viserio\Middleware;
 
-use Psr\Http\Message\RequestInterface;
-use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\{
+    RequestInterface,
+    ResponseInterface
+};
 use SplDoublyLinkedList;
 use SplStack;
-use Viserio\Contracts\Middleware\Frame as FrameContract;
-use Viserio\Contracts\Middleware\Middleware as MiddlewareContract;
-use Viserio\Contracts\Middleware\Stack as StackContract;
+use Viserio\Contracts\{
+    Middleware\Frame as FrameContract,
+    Middleware\Middleware as MiddlewareContract,
+    Middleware\Stack as StackContract
+};
 use Viserio\Support\Traits\ContainerAwareTrait;
 
 class Dispatcher implements StackContract
@@ -24,15 +28,18 @@ class Dispatcher implements StackContract
     /**
      * A response instance.
      *
-     * @var ResponseInterface $response
+     * @var \Psr\Http\Message\ResponseInterface $response
      */
     protected $response;
 
     public function __construct(ResponseInterface $response)
     {
         $this->response = $response;
-        $this->stack = new SplStack();
-        $this->stack->setIteratorMode(SplDoublyLinkedList::IT_MODE_LIFO | SplDoublyLinkedList::IT_MODE_KEEP);
+
+        $stack = new SplStack();
+        $stack->setIteratorMode(SplDoublyLinkedList::IT_MODE_LIFO | SplDoublyLinkedList::IT_MODE_KEEP);
+
+        $this->stack = $stack;
     }
 
     /**
@@ -100,9 +107,9 @@ class Dispatcher implements StackContract
     /**
      *  Check if middleware is aware of Interop\Container\ContainerInterface.
      *
-     * @param MiddlewareContract $middleware
+     * @param \Viserio\Contracts\Middleware\Middleware $middleware
      *
-     * @return MiddlewareContract
+     * @return \Viserio\Contracts\Middleware\Middleware
      */
     private function isContainerAware($middleware): MiddlewareContract
     {

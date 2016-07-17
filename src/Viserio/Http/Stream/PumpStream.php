@@ -183,19 +183,24 @@ class PumpStream implements StreamInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param integer $length
+     *
+     * @return void|null
      */
     private function pump($length)
     {
         if ($this->source) {
             do {
                 $data = call_user_func($this->source, $length);
+
                 if ($data === false || $data === null) {
                     $this->source = null;
 
                     return;
                 }
+
                 $this->buffer->write($data);
+
                 $length -= strlen($data);
             } while ($length > 0);
         }

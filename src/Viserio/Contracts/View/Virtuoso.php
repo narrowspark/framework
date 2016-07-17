@@ -27,7 +27,7 @@ interface Virtuoso
      *
      * @param \Viserio\Contracts\View\View $view
      *
-     * @return self
+     * @return $this
      */
     public function callCreator(View $view): Virtuoso;
 
@@ -36,7 +36,7 @@ interface Virtuoso
      *
      * @param \Viserio\Contracts\View\View $view
      *
-     * @return self
+     * @return $this
      */
     public function callComposer(View $view): Virtuoso;
 
@@ -118,18 +118,18 @@ interface Virtuoso
     public function appendSection(): string;
 
     /**
-     * Flush all of the section contents.
+     * Clear all of the section contents.
      *
      * @return void
      */
-    public function flushSections();
+    public function clearSections();
 
     /**
-     * Flush all of the section contents if done rendering.
+     * Clear all of the section contents if done rendering.
      *
      * @return void
      */
-    public function flushSectionsIfDoneRendering();
+    public function clearSectionsIfDoneRendering();
 
     /**
      * Increment the rendering counter.

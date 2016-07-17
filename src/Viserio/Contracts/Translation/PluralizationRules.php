@@ -19,7 +19,7 @@ interface PluralizationRules
      * @param string   $language
      * @param callable $rule
      *
-     * @return self
+     * @return $this
      */
     public function set(string $language, callable $rule): PluralizationRules;
 }

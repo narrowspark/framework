@@ -4,6 +4,7 @@ namespace Viserio\Pipeline;
 use Closure;
 use ReflectionClass;
 use Viserio\Contracts\Pipeline\Pipeline as PipelineContract;
+use Viserio\Support\Invoker;
 use Viserio\Support\Traits\ContainerAwareTrait;
 
 class Pipeline implements PipelineContract
@@ -34,7 +35,7 @@ class Pipeline implements PipelineContract
     /**
      * {@inheritdoc}
      */
-    public function send(string $traveler): PipelineContract
+    public function send($traveler): PipelineContract
     {
         $this->traveler = $traveler;
 
@@ -146,14 +147,28 @@ class Pipeline implements PipelineContract
         return [$name, $parameters];
     }
 
-    protected function sliceThroughContainer($traveler, $stack, $stage)
+    /**
+     * Resolve from container.
+     *
+     * @param mixed  $traveler
+     * @param mixed  $stack
+     * @param string $stage
+     *
+     * @return mixed
+     */
+    protected function sliceThroughContainer($traveler, $stack, string $stage)
     {
         list($name, $parameters) = $this->parseStageString($stage);
 
         if ($this->container->has($name)) {
             $merge = array_merge([$traveler, $stack], $parameters);
 
-            return call_user_func_array(
+            $invoker = (new Invoker())
+                ->injectByTypeHint(true)
+                ->injectByParameterName(true)
+                ->setContainer($this->container);
+
+            return $invoker->call(
                 [
                     $this->container->get($name),
                     $this->method,
@@ -161,5 +176,7 @@ class Pipeline implements PipelineContract
                 $merge
             );
         }
+
+        return [];
     }
 }

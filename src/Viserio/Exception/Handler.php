@@ -114,7 +114,7 @@ class Handler implements HandlerContract
      *
      * @param \Viserio\Contracts\Config\Manager $config
      *
-     * @return self
+     * @return $this
      */
     public function setConfig(ConfigManagerContract $config): Manager
     {

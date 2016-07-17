@@ -3,66 +3,96 @@ namespace Viserio\Contracts\Queue;
 
 interface Job
 {
-    const STATUS_UNKNOWN = 0;
-
-    const STATUS_REQUEUE = 1;
-
-    const STATUS_FAILED = 2;
-
-    const STATUS_DELETE = 3;
-
     /**
-     * @return mixed
-     */
-    public function getId();
-
-    /**
-     * @return mixed
-     */
-    public function getData();
-
-    /**
-     * @return string
-     */
-    public function getInfo(): string;
-
-    /**
-     * @return array
-     */
-    public function getMetadata(): array;
-
-    /**
-     * @return null|string
-     */
-    public function getFailMessage();
-
-    /**
-     * @return int
-     */
-    public function getAttempts(): int;
-
-    /**
-     * @return int
-     */
-    public function getStatus(): int;
-
-    /**
-     * Mark the job as failed.
+     * Runs the job.
      *
-     * @param string   $message Info about the failure
-     * @param int|null $delay   The requeue delay
+     * @return void
      */
-    public function fail(string $message, int $delay = null);
+    public function run();
 
     /**
-     * Mark the job as requeue.
+     * Delete the job from the queue.
      *
-     * @param int|null $delay The requeue delay
-     */
-    public function requeue($delay = null);
-
-    /**
-     * Mark the job for deletion.
+     * @return void
      */
     public function delete();
+
+    /**
+     * Determine if the job has been deleted.
+     *
+     * @return bool
+     */
+    public function isDeleted(): bool;
+
+    /**
+     * Release the job back into the queue.
+     *
+     * @param int $delay
+     *
+     * @return void
+     */
+    public function release(int $delay = 0);
+
+    /**
+     * Determine if the job was released back into the queue.
+     *
+     * @return bool
+     */
+    public function isReleased(): bool;
+
+    /**
+     * Determine if the job has been deleted or released.
+     *
+     * @return bool
+     */
+    public function isDeletedOrReleased(): bool;
+
+    /**
+     * Get the number of times the job has been attempted.
+     *
+     * @return int
+     */
+    public function attempts(): int;
+
+    /**
+     * Get the name of the queued job class.
+     *
+     * @return string
+     */
+    public function getName(): string;
+
+    /**
+     * Call the failed method on the job instance.
+     *
+     * @return void
+     */
+    public function failed();
+
+    /**
+     * Get the name of the queue the job belongs to.
+     *
+     * @return string
+     */
+    public function getQueue(): string;
+
+    /**
+     * Get the raw body string for the job.
+     *
+     * @return string
+     */
+    public function getRawBody(): string;
+
+    /**
+     * Get the job identifier.
+     *
+     * @return string
+     */
+    public function getJobId(): string;
+
+    /**
+     * Get the resolved name of the queued job class.
+     *
+     * @return string
+     */
+    public function resolveName(): string;
 }

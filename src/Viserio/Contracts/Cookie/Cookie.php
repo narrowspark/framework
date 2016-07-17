@@ -23,7 +23,7 @@ interface Cookie
      *
      * @param string|null $value
      *
-     * @return self
+     * @return $this
      */
     public function withValue(string $value = null): Cookie;
 
@@ -46,7 +46,7 @@ interface Cookie
      *
      * @param int|null $maxAge
      *
-     * @return self
+     * @return $this
      */
     public function withMaxAge(int $maxAge = null): Cookie;
 
@@ -69,7 +69,7 @@ interface Cookie
      *
      * @param int|string|\DateTimeInterface|null $expiration
      *
-     * @return self
+     * @return $this
      */
     public function withExpiration($expiration = null): Cookie;
 
@@ -78,7 +78,7 @@ interface Cookie
      *
      * @param int|string|\DateTimeInterface|null $expires.
      *
-     * @return self
+     * @return $this
      */
     public function withExpires($expires): Cookie;
 
@@ -108,7 +108,7 @@ interface Cookie
      *
      * @param string|null $domain
      *
-     * @return self
+     * @return $this
      */
     public function withDomain(string $domain = null): Cookie;
 
@@ -131,7 +131,7 @@ interface Cookie
      *
      * @param string $path
      *
-     * @return self
+     * @return $this
      */
     public function withPath(string $path = '/'): Cookie;
 
@@ -147,7 +147,7 @@ interface Cookie
      *
      * @param bool $secure
      *
-     * @return self
+     * @return $this
      */
     public function withSecure(bool $secure): Cookie;
 
@@ -163,7 +163,7 @@ interface Cookie
      *
      * @param bool $httpOnly
      *
-     * @return self
+     * @return $this
      */
     public function withHttpOnly(bool $httpOnly): Cookie;
 
@@ -179,7 +179,7 @@ interface Cookie
      *
      * @param string|bool $sameSite
      *
-     * @return self
+     * @return $this
      */
     public function withSameSite($sameSite): Cookie;
 

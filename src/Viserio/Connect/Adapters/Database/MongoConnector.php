@@ -3,11 +3,11 @@ namespace Viserio\Connect\Adapters\Database;
 
 use Mongo;
 use MongoClient;
-use MongoDB\Client as MongoDBClient;
 use MongoConnectionException;
+use MongoDB\Client as MongoDBClient;
 use Narrowspark\Arr\StaticArr as Arr;
 use Viserio\Connect\Traits\DetectsLostConnections;
-use Viserio\Contracts\Connect\Connector as ConnectorContract;
+use Viserio\Contracts\Support\Connector as ConnectorContract;
 
 class MongoConnector implements ConnectorContract
 {
@@ -156,11 +156,9 @@ class MongoConnector implements ConnectorContract
         extract($config, EXTR_SKIP);
 
         if (isset($config['username']) && isset($config['password'])) {
-            $dsn = sprintf('mongodb://%s:%s@%s:%s', $username, $password, $server, $port);
-        } else {
-            $dsn = sprintf('mongodb://%s:%s', $server, $port);
+            return sprintf('mongodb://%s:%s@%s:%s', $username, $password, $server, $port);
         }
 
-        return $dsn;
+        return sprintf('mongodb://%s:%s', $server, $port);
     }
 }

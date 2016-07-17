@@ -11,7 +11,7 @@ interface Repository extends ArrayAccess
      *
      * @param array $values
      *
-     * @return self
+     * @return $this
      */
     public function setArray(array $values = []): Repository;
 

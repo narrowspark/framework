@@ -2,11 +2,15 @@
 namespace Viserio\Config\Tests;
 
 use org\bovigo\vfs\vfsStream;
-use Viserio\Config\Manager as ConfigManager;
-use Viserio\Config\Repository;
+use Viserio\Config\{
+    Manager as ConfigManager,
+    Repository
+};
 use Viserio\Filesystem\Filesystem;
-use Viserio\Parsers\FileLoader;
-use Viserio\Parsers\TaggableParser;
+use Viserio\Parsers\{
+    FileLoader,
+    TaggableParser
+};
 
 class ConfigManagerTest extends \PHPUnit_Framework_TestCase
 {
@@ -143,7 +147,7 @@ class ConfigManagerTest extends \PHPUnit_Framework_TestCase
 
         $this->assertTrue($config->has('foo'));
 
-        $config->forget('foo');
+        $config->delete('foo');
 
         $this->assertFalse($config->has('foo'));
     }

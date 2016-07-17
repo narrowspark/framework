@@ -46,12 +46,26 @@ class ExpressionParser
         ];
     }
 
-    protected function isOption($token)
+    /**
+     * Check if token is a option.
+     *
+     * @param string  $token
+     *
+     * @return bool
+     */
+    protected function isOption(string $token): bool
     {
         return Str::startsWith($token, '[-');
     }
 
-    protected function parseArgument($token)
+    /**
+     * Parse arguments.
+     *
+     * @param string $token
+     *
+     * @return \Viserio\Console\Input\InputArgument
+     */
+    protected function parseArgument(string $token): InputArgument
     {
         if (Str::endsWith($token, ']*')) {
             $mode = InputArgument::IS_ARRAY;
@@ -70,7 +84,14 @@ class ExpressionParser
         return new InputArgument($name, $mode);
     }
 
-    protected function parseOption($token)
+    /**
+     * Parse options.
+     *
+     * @param string $token
+     *
+     * @return \Viserio\Console\Input\InputOption
+     */
+    protected function parseOption(string $token): InputOption
     {
         $token = trim($token, '[]');
 

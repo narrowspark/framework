@@ -108,7 +108,7 @@ class CookieSessionHandlerTest extends \PHPUnit_Framework_TestCase
         $jar = $this->mock(JarContract::class);
         $jar->shouldReceive('queue')
             ->once();
-        $jar->shouldReceive('forget')
+        $jar->shouldReceive('delete')
             ->once()
             ->with('cookie.sess');
         $jar->shouldReceive('hasQueued')

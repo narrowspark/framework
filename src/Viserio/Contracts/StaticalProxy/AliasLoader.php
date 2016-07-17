@@ -9,7 +9,7 @@ interface AliasLoader
      * @param string|string[] $classes
      * @param string|null     $alias
      *
-     * @return self
+     * @return $this
      */
     public function alias($classes, string $alias = null): AliasLoader;
 

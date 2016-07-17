@@ -1,9 +1,9 @@
 <?php
 namespace Viserio\Mail;
 
-use Viserio\Support\Manager;
+use Viserio\Support\AbstractManager;
 
-class TransportManager extends Manager
+class TransportManager extends AbstractManager
 {
     /**
      * Set the default cache driver name.

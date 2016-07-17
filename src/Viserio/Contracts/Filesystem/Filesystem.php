@@ -140,6 +140,15 @@ interface Filesystem
     public function getTimestamp(string $path);
 
     /**
+     * Get the URL for the file at the given path.
+     *
+     * @param string $path
+     *
+     * @return string
+     */
+    public function url(string $path): string;
+
+    /**
      * Delete the file at a given path.
      *
      * @param string[] $paths

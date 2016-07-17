@@ -12,13 +12,17 @@ use Psr\Http\Message\StreamInterface;
  */
 class FnStream implements StreamInterface
 {
-    /** @var array */
-    private $methods;
-
-    /** @var array Methods that must be implemented in the given array */
-    private static $slots = ['__toString', 'close', 'detach', 'rewind',
+    /**
+     * Methods that must be implemented in the given array.
+     *
+     * @var array
+     */
+    const SLOTS = ['__toString', 'close', 'detach', 'rewind',
         'getSize', 'tell', 'eof', 'isSeekable', 'seek', 'isWritable', 'write',
         'isReadable', 'read', 'getContents', 'getMetadata', ];
+
+    /** @var array */
+    private $methods;
 
     /**
      * @param array $methods Hash of method name to a callable.
@@ -50,8 +54,9 @@ class FnStream implements StreamInterface
      */
     public function __get($name)
     {
-        throw new BadMethodCallException(str_replace('_fn_', '', $name)
-            . '() is not implemented in the FnStream');
+        throw new BadMethodCallException(
+            str_replace('_fn_', '', $name) . '() is not implemented in the FnStream'
+        );
     }
 
     /**
@@ -75,7 +80,7 @@ class FnStream implements StreamInterface
     {
         // If any of the required methods were not provided, then simply
         // proxy to the decorated stream.
-        foreach (array_diff(self::$slots, array_keys($methods)) as $diff) {
+        foreach (array_diff(self::SLOTS, array_keys($methods)) as $diff) {
             $methods[$diff] = [$stream, $diff];
         }
 

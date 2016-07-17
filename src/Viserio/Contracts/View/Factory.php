@@ -53,7 +53,7 @@ interface Factory
      * @param string $view
      * @param string $name
      *
-     * @return self
+     * @return $this
      */
     public function name(string $view, string $name): Factory;
 
@@ -63,7 +63,7 @@ interface Factory
      * @param string $view
      * @param string $alias
      *
-     * @return self
+     * @return $this
      */
     public function alias(string $view, string $alias): Factory;
 
@@ -105,7 +105,7 @@ interface Factory
      *
      * @param string $location
      *
-     * @return self
+     * @return $this
      */
     public function addLocation(string $location): Factory;
 
@@ -115,7 +115,7 @@ interface Factory
      * @param string       $namespace
      * @param string|array $hints
      *
-     * @return self
+     * @return $this
      */
     public function addNamespace(string $namespace, $hints): Factory;
 
@@ -125,7 +125,7 @@ interface Factory
      * @param string       $namespace
      * @param string|array $hints
      *
-     * @return self
+     * @return $this
      */
     public function prependNamespace(string $namespace, $hints): Factory;
 
@@ -136,7 +136,7 @@ interface Factory
      * @param string        $engine
      * @param \Closure|null $resolver
      *
-     * @return self
+     * @return $this
      */
     public function addExtension(string $extension, string $engine, Closure $resolver = null): Factory;
 
@@ -173,7 +173,7 @@ interface Factory
      *
      * @param Virtuoso $virtuoso
      *
-     * @return self
+     * @return $this
      */
     public function setVirtuoso(Virtuoso $virtuoso): Factory;
 

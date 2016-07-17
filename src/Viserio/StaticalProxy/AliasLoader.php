@@ -280,7 +280,7 @@ class AliasLoader implements AliasLoaderContract
      *
      * @param string $alias
      *
-     * @return bool
+     * @return bool|string
      */
     protected function resolvePatternAlias(string $alias)
     {

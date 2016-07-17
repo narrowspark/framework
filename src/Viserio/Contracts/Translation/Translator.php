@@ -19,7 +19,7 @@ interface Translator
      *
      * @throws \InvalidArgumentException If the locale contains invalid characters
      *
-     * @return self
+     * @return $this
      */
     public function setLocale(string $locale): Translator;
 
@@ -95,7 +95,7 @@ interface Translator
      * @param string   $name
      * @param callable $helper
      *
-     * @return self
+     * @return $this
      */
     public function addHelper(string $name, callable $helper): Translator;
 
@@ -104,7 +104,7 @@ interface Translator
      *
      * @param callable $filter
      *
-     * @return self
+     * @return $this
      */
     public function addFilter(callable $filter): Translator;
 }
