@@ -61,15 +61,16 @@ class Listener
      * Create a new queue listener.
      *
      * @param string $commandPath
+     * @param string $consoleName
      */
-    public function __construct(string $commandPath, $consoleName = '')
+    public function __construct(string $commandPath, string $consoleName = 'cerebro')
     {
         $this->commandPath = $commandPath;
         $this->workerCommand = $this->buildWorkerCommand();
         $this->consoleName = $consoleName;
     }
 
-     /**
+    /**
      * Listen to the given queue connection.
      *
      * @param string $connection
@@ -82,7 +83,7 @@ class Listener
      */
     public function listen(string $connection, string $queue, string $delay, string $memory, int $timeout = 60)
     {
-        $process = $this->makeProcess($connection, $queue, $delay, $memory, $timeout);
+        $process = $this->createProcess($connection, $queue, $delay, $memory, $timeout);
 
         while (true) {
             $this->runProcess($process, $memory);
@@ -170,6 +171,8 @@ class Listener
      * Stop listening and bail out of the script.
      *
      * @return void
+     *
+     * @codeCoverageIgnore
      */
     public function stop()
     {
@@ -214,6 +217,8 @@ class Listener
      * Get the amount of seconds to wait before polling the queue.
      *
      * @return int
+     *
+     * @codeCoverageIgnore
      */
     public function getSleep(): int
     {

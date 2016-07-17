@@ -65,7 +65,7 @@ class Application extends SymfonyConsole implements ApplicationContract
     public function __construct(
         ContainerContract $container,
         string $version,
-        string $name = 'Narrowspark Framework'
+        string $name = 'cerebro'
     ) {
         $this->name = $name;
         $this->version = $version;

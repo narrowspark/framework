@@ -18,42 +18,42 @@ class RabbitMQQueue extends AbstractQueue
     protected $connection;
 
     /**
-     * [$channel description]
+     * The AMQPChannel instance.
      *
-     * @var string
+     * @var \PhpAmqpLib\Channel\AMQPChannel
      */
     protected $channel;
 
     /**
-     * [$channel description]
+     * Declare exchange.
      *
      * @var bool
      */
     protected $declareExchange;
 
     /**
-     * [$channel description]
+     * Declare bind queue.
      *
      * @var string
      */
     protected $declareBindQueue;
 
     /**
-     * [$channel description]
+     * Config queue.
      *
      * @var array
      */
     protected $configQueue;
 
     /**
-     * [$channel description]
+     * Config exchange.
      *
      * @var array
      */
     protected $configExchange;
 
     /**
-     * [$channel description]
+     * Attempts.
      *
      * @var int
      */

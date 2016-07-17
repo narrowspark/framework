@@ -1,6 +1,7 @@
 <?php
 namespace Viserio\Queue;
 
+use Aws\Sqs\SqsClient;
 use Interop\Container\ContainerInterface as ContainerInteropInterface;
 use Narrowspark\Arr\StaticArr as Arr;
 use PhpAmqpLib\Connection\AMQPStreamConnection;
@@ -17,7 +18,11 @@ use Viserio\Contracts\{
 use Viserio\Queue\Connectors\{
     AzureQueue,
     BeanstalkdQueue,
-    RabbitMQQueue
+    NullQueue,
+    RabbitMQQueue,
+    RedisQueue,
+    SqsQueue,
+    SyncQueue
 };
 use Viserio\Support\AbstractConnectionManager;
 use WindowsAzure\Common\ServicesBuilder;
@@ -196,6 +201,70 @@ class QueueManager extends AbstractConnectionManager implements MonitorContract
             $config['queue'],
             Arr::get($config, 'ttr', Pheanstalk::DEFAULT_TTR)
         );
+    }
+
+    /**
+     * Create Null connection.
+     *
+     * @return \Viserio\Queue\Connectors\NullQueue
+     */
+    protected function createNullConnection(array $config): NullQueue
+    {
+        return new NullQueue();
+    }
+
+    /**
+     * Create Sync connection.
+     *
+     * @return \Viserio\Queue\Connectors\SyncQueue
+     */
+    protected function createSyncConnection(array $config): SyncQueue
+    {
+        return new SyncQueue();
+    }
+
+    /**
+     * Create Sqs connection.
+     *
+     * @return \Viserio\Queue\Connectors\SqsQueue
+     */
+    protected function createSqsConnection(array $config): SqsQueue
+    {
+        $config = array_merge([
+            'version' => 'latest',
+            'http' => [
+                'timeout' => 60,
+                'connect_timeout' => 60,
+            ],
+        ], $config);
+
+        if ($config['key'] && $config['secret']) {
+            $config['credentials'] = Arr::only($config, ['key', 'secret']);
+        }
+
+        return new SqsQueue(
+            new SqsClient($config),
+            $config['queue'],
+            Arr::get($config, 'prefix', '')
+        );
+    }
+
+    /**
+     * Create Redis connection.
+     *
+     * @return \Viserio\Queue\Connectors\RedisQueue
+     */
+    protected function createRedisConnection(array $config): RedisQueue
+    {
+        $connect = new ConnectManager($this->config);
+
+        $queue = new RedisQueue(
+            $connect->connection($config['connection']),
+            $config['queue'],
+            Arr::get($config, 'expire', 90)
+        );
+
+        return $queue;
     }
 
     /**
