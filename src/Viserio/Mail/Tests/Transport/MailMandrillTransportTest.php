@@ -1,13 +1,14 @@
 <?php
 namespace Viserio\Mail\Tests\Transport;
 
-use Viserio\Mail\Transport\Mandrill;
+use Swift_Message;
+use Viserio\Mail\Tests\Fixture\MandrillTransportStub;
 
 class MailMandrillTransportTest extends \PHPUnit_Framework_TestCase
 {
     public function testSend()
     {
-        $message = new \Swift_Message('Foo subject', 'Bar body');
+        $message = new Swift_Message('Foo subject', 'Bar body');
         $message->setTo('me@example.com');
         $message->setBcc('you@example.com');
 
@@ -31,20 +32,5 @@ class MailMandrillTransportTest extends \PHPUnit_Framework_TestCase
             );
 
         $transport->send($message);
-    }
-}
-
-class MandrillTransportStub extends Mandrill
-{
-    protected $client;
-
-    public function setHttpClient($client)
-    {
-        $this->client = $client;
-    }
-
-    protected function getHttpClient()
-    {
-        return $this->client;
     }
 }

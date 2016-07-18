@@ -1,11 +1,16 @@
 <?php
 namespace Viserio\Mail\Tests\Transport;
 
+use GuzzleHttp\Client as HttpClient;
+use Swift_Message;
+use Swift_Attachment;
+use Viserio\Mail\Tests\Fixture\PostmarkTransportStub;
+
 class MailPostmarkTransportTest extends \PHPUnit_Framework_TestCase
 {
     public function testSend()
     {
-        $message = new \Swift_Message('Is alive!', 'Doo-wah-ditty.');
+        $message = new Swift_Message('Is alive!', 'Doo-wah-ditty.');
         $message->setFrom('johnny5@example.com', 'Johnny #5');
         $message->addTo('you@example.com', 'A. Friend');
         $message->addTo('you+two@example.com');
@@ -14,15 +19,15 @@ class MailPostmarkTransportTest extends \PHPUnit_Framework_TestCase
         $message->addBcc('another+3@example.com');
         $message->addBcc('another+4@example.com', 'Extra 4');
         $message->addPart('<q>Help me Rhonda</q>', 'text/html');
-        $message->attach(\Swift_Attachment::newInstance('This is the plain text attachment.', 'hello.txt', 'text/plain'));
+        $message->attach(Swift_Attachment::newInstance('This is the plain text attachment.', 'hello.txt', 'text/plain'));
         $message->setPriority(1);
 
         $headers = $message->getHeaders();
         $messageId = $headers->get('Message-ID')->getId();
 
-        $transport = new \Viserio\Mail\Tests\PostmarkTransportStub('TESTING_SERVER');
+        $transport = new PostmarkTransportStub('TESTING_SERVER');
 
-        $client = $this->getMockBuilder('GuzzleHttp\Client')
+        $client = $this->getMockBuilder(HttpClient::class)
             ->setMethods(['post'])
             ->getMock();
         $transport->setHttpClient($client);
@@ -59,20 +64,5 @@ class MailPostmarkTransportTest extends \PHPUnit_Framework_TestCase
                );
 
         $transport->send($message);
-    }
-}
-
-class PostmarkTransportStub extends \Viserio\Mail\Transport\Postmark
-{
-    protected $client;
-
-    public function setHttpClient($client)
-    {
-        $this->client = $client;
-    }
-
-    protected function getHttpClient()
-    {
-        return $this->client;
     }
 }

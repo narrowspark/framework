@@ -3,6 +3,7 @@ namespace Viserio\Mail\Tests;
 
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use Viserio\Mail\Mailer;
+use Viserio\Mail\Tests\Fixture\FailingSwiftMailerStub;
 
 class MailerTest extends \PHPUnit_Framework_TestCase
 {
@@ -17,9 +18,9 @@ class MailerTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['createMessage'])
             ->getMock();
 
-        $message = Mock::mock('\Swift_Mime_Message');
+        $message = $this->mock('\Swift_Mime_Message');
         $mailer->expects($this->once())->method('createMessage')->will($this->returnValue($message));
-        $view = Mock::mock('\StdClass');
+        $view = $this->mock('\StdClass');
         $mailer->getViewFactory()->shouldReceive('make')->once()->with('foo', ['data', 'message' => $message])->andReturn($view);
         $view->shouldReceive('render')->once()->andReturn('rendered.view');
         $message->shouldReceive('setBody')->once()->with('rendered.view', 'text/html');
@@ -42,9 +43,9 @@ class MailerTest extends \PHPUnit_Framework_TestCase
             ->setConstructorArgs($this->getMocks())
             ->setMethods(['createMessage'])
             ->getMock();
-        $message = Mock::mock('\Swift_Mime_Message');
+        $message = $this->mock('\Swift_Mime_Message');
         $mailer->expects($this->once())->method('createMessage')->will($this->returnValue($message));
-        $view = Mock::mock('\StdClass');
+        $view = $this->mock('\StdClass');
         $mailer->getViewFactory()->shouldReceive('make')->once()->with('foo', ['data', 'message' => $message])->andReturn($view);
         $mailer->getViewFactory()->shouldReceive('make')->once()->with('bar', ['data', 'message' => $message])->andReturn($view);
         $view->shouldReceive('render')->twice()->andReturn('rendered.view');
@@ -69,9 +70,9 @@ class MailerTest extends \PHPUnit_Framework_TestCase
             ->setConstructorArgs($this->getMocks())
             ->setMethods(['createMessage'])
             ->getMock();
-        $message = Mock::mock('\Swift_Mime_Message');
+        $message = $this->mock('\Swift_Mime_Message');
         $mailer->expects($this->once())->method('createMessage')->will($this->returnValue($message));
-        $view = Mock::mock('\StdClass');
+        $view = $this->mock('\StdClass');
         $mailer->getViewFactory()->shouldReceive('make')->once()->with('foo', ['data', 'message' => $message])->andReturn($view);
         $mailer->getViewFactory()->shouldReceive('make')->once()->with('bar', ['data', 'message' => $message])->andReturn($view);
         $view->shouldReceive('render')->twice()->andReturn('rendered.view');
@@ -95,9 +96,9 @@ class MailerTest extends \PHPUnit_Framework_TestCase
             ->setConstructorArgs($this->getMocks())
             ->setMethods(['createMessage'])
             ->getMock();
-        $message = Mock::mock('\Swift_Mime_Message');
+        $message = $this->mock('\Swift_Mime_Message');
         $mailer->expects($this->once())->method('createMessage')->will($this->returnValue($message));
-        $view = Mock::mock('\StdClass');
+        $view = $this->mock('\StdClass');
         $mailer->getViewFactory()->shouldReceive('make')->once()->with('foo', ['data', 'message' => $message])->andReturn($view);
         $view->shouldReceive('render')->once()->andReturn('rendered.view');
         $message->shouldReceive('setBody')->once()->with('rendered.view', 'text/html');
@@ -108,7 +109,7 @@ class MailerTest extends \PHPUnit_Framework_TestCase
         $message->shouldReceive('getTo')->once()->andReturn(['info@narrowspark.de' => 'Daniel']);
         $message->shouldReceive('getSwiftMessage')->once()->andReturn($message);
         $mailer->getSwiftMailer()->shouldReceive('send')->never();
-        $logger = Mock::mock('\Psr\Log\LoggerInterface');
+        $logger = $this->mock('\Psr\Log\LoggerInterface');
         $logger->shouldReceive('info')->once()->with('Pretending to mail message to: info@narrowspark.de');
         $mailer->setLogger($logger);
         $mailer->pretend();
@@ -122,10 +123,10 @@ class MailerTest extends \PHPUnit_Framework_TestCase
             ->setConstructorArgs($this->getMocks())
             ->setMethods(['createMessage'])
             ->getMock();
-        $message = Mock::mock('\Swift_Mime_Message');
+        $message = $this->mock('\Swift_Mime_Message');
         $mailer->expects($this->once())->method('createMessage')->will($this->returnValue($message));
-        $view = Mock::mock('\StdClass');
-        $mockMailer = Mock::mock('\StdClass');
+        $view = $this->mock('\StdClass');
+        $mockMailer = $this->mock('\StdClass');
 
         $mockMailer->shouldReceive('mail')->once()->with($message);
         $mailer->getViewFactory()->shouldReceive('make')->once()->with('foo', ['data', 'message' => $message])->andReturn($view);
@@ -144,7 +145,7 @@ class MailerTest extends \PHPUnit_Framework_TestCase
     {
         unset($_SERVER['__mailer.test']);
         $mailer = $this->getMailer();
-        $view = Mock::mock('\StdClass');
+        $view = $this->mock('\StdClass');
         $mailer->getViewFactory()->shouldReceive('make')->once()->andReturn($view);
         $view->shouldReceive('render')->once()->andReturn('rendered.view');
 
@@ -152,7 +153,7 @@ class MailerTest extends \PHPUnit_Framework_TestCase
 
         $mailer->alwaysFrom('info@narrowspark.de', 'Daniel Bannert');
         $me = $this;
-        $mailer->getSwiftMailer()->shouldReceive('send')->once()->with(Mock::type('\Swift_Message'), [])->andReturnUsing(function ($message) use ($me) {
+        $mailer->getSwiftMailer()->shouldReceive('send')->once()->with($this->type('\Swift_Message'), [])->andReturnUsing(function ($message) use ($me) {
             $me->assertEquals(['info@narrowspark.de' => 'Daniel Bannert'], $message->getFrom());
         });
         $mailer->send('foo', ['data'], function ($m) {
@@ -163,12 +164,12 @@ class MailerTest extends \PHPUnit_Framework_TestCase
     {
         unset($_SERVER['__mailer.test']);
         $mailer = $this->getMailer();
-        $mailer->getSwiftMailer()->shouldReceive('getTransport')->andReturn($transport = Mock::mock('\Swift_Transport'));
+        $mailer->getSwiftMailer()->shouldReceive('getTransport')->andReturn($transport = $this->mock('\Swift_Transport'));
         $transport->shouldReceive('stop');
-        $view = Mock::mock('\StdClass');
+        $view = $this->mock('\StdClass');
         $mailer->getViewFactory()->shouldReceive('make')->once()->andReturn($view);
         $view->shouldReceive('render')->once()->andReturn('rendered.view');
-        $swift = new \Viserio\Mail\Tests\FailingSwiftMailerStub();
+        $swift = new FailingSwiftMailerStub();
 
         $this->setSwiftMailer($mailersend('foo', ['data'], function ($m) {
         }));
@@ -178,8 +179,8 @@ class MailerTest extends \PHPUnit_Framework_TestCase
 
     public function setSwiftMailer($mailer)
     {
-        $swift = Mock::mock('\Swift_Mailer');
-        $swift->shouldReceive('getTransport')->andReturn($transport = Mock::mock('\Swift_Transport'));
+        $swift = $this->mock('\Swift_Mailer');
+        $swift->shouldReceive('getTransport')->andReturn($transport = $this->mock('\Swift_Transport'));
         $transport->shouldReceive('stop');
 
         $this->setSwiftMailer($mailermailer);
@@ -187,7 +188,7 @@ class MailerTest extends \PHPUnit_Framework_TestCase
 
     public function getTransport()
     {
-        $transport = Mock::mock('\Swift_Transport');
+        $transport = $this->mock('\Swift_Transport');
         $transport->shouldReceive('stop');
 
         return $transport;
@@ -196,22 +197,14 @@ class MailerTest extends \PHPUnit_Framework_TestCase
     protected function getMailer()
     {
         return new Mailer(
-            Mock::mock('\Swift_Mailer'),
-            Mock::mock('\Viserio\Contracts\View\Factory'),
-            Mock::mock('\Viserio\Contracts\Events\Dispatcher')
+            $this->mock('\Swift_Mailer'),
+            $this->mock('\Viserio\Contracts\View\Factory'),
+            $this->mock('\Viserio\Contracts\Events\Dispatcher')
         );
     }
 
     protected function getMocks()
     {
-        return [Mock::mock('\Swift_Mailer'), Mock::mock('\Viserio\Contracts\View\Factory'), Mock::mock('\Viserio\Contracts\Events\Dispatcher')];
-    }
-}
-
-class FailingSwiftMailerStub
-{
-    public function send($message, &$failed)
-    {
-        $failed[] = 'info@narrowspark.de';
+        return [$this->mock('\Swift_Mailer'), $this->mock('\Viserio\Contracts\View\Factory'), $this->mock('\Viserio\Contracts\Events\Dispatcher')];
     }
 }

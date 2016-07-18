@@ -6,7 +6,7 @@ use Swift_Events_SendEvent;
 use Swift_Mime_Message;
 use Swift_Transport;
 
-abstract class Transport implements Swift_Transport
+abstract class AbstractTransport implements Swift_Transport
 {
     /**
      * The plug-ins registered with the transport.

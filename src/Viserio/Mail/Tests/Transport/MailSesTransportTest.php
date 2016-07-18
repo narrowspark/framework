@@ -2,6 +2,7 @@
 namespace Viserio\Mail\Tests\Transport;
 
 use Aws\Ses\SesClient;
+use Swift_Message;
 use Viserio\Application\Application;
 use Viserio\Mail\TransportManager;
 use Viserio\Mail\Transport\Ses as SesTransport;
@@ -34,12 +35,12 @@ class MailSesTransportTest extends \PHPUnit_Framework_TestCase
 
     public function testSend()
     {
-        $message = new \Swift_Message('Foo subject', 'Bar body');
+        $message = new Swift_Message('Foo subject', 'Bar body');
         $message->setSender('myself@example.com');
         $message->setTo('me@example.com');
         $message->setBcc('you@example.com');
 
-        $client = $this->getMockBuilder('Aws\Ses\SesClient')
+        $client = $this->getMockBuilder(SesClient::class)
             ->setMethods(['sendRawEmail'])
             ->disableOriginalConstructor()
             ->createMock();

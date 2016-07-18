@@ -4,7 +4,7 @@ namespace Viserio\Mail\Transport;
 use GuzzleHttp\ClientInterface;
 use Swift_Mime_Message;
 
-class Mandrill extends Transport
+class Mandrill extends AbstractTransport
 {
     /**
      * Guzzle client instance.

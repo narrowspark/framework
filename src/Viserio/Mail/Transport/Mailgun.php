@@ -5,7 +5,7 @@ use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Post\PostFile;
 use Swift_Mime_Message;
 
-class Mailgun extends Transport
+class Mailgun extends AbstractTransport
 {
     /**
      * Guzzle client instance.

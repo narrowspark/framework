@@ -11,7 +11,7 @@ use Swift_Mime_Headers_PathHeader;
 use Swift_Mime_Headers_UnstructuredHeader;
 use Swift_Mime_Message;
 
-class Postmark extends Transport
+class Postmark extends AbstractTransport
 {
     /**
      * Guzzle client instance.

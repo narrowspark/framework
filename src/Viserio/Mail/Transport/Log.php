@@ -5,7 +5,7 @@ use Psr\Log\LoggerInterface;
 use Swift_Mime_Message;
 use Swift_Mime_MimeEntity;
 
-class Log extends Transport
+class Log extends AbstractTransport
 {
     /**
      * The Logger instance.
@@ -25,16 +25,15 @@ class Log extends Transport
     }
 
     /**
-     * Send Email.
-     *
-     * @param \Swift_Mime_Message $message
-     * @param string|null         $failedRecipients
-     *
-     * @return Log|null
+     * {@inheritdoc}
      */
     public function send(Swift_Mime_Message $message, &$failedRecipients = null)
     {
+        $this->beforeSendPerformed($message);
+
         $this->logger->debug($this->getMimeEntityString($message));
+
+        return $this->numberOfRecipients($message);
     }
 
     /**
@@ -44,7 +43,7 @@ class Log extends Transport
      *
      * @return string
      */
-    protected function getMimeEntityString(Swift_Mime_MimeEntity $entity)
+    protected function getMimeEntityString(Swift_Mime_MimeEntity $entity): string
     {
         $string = (string) $entity->getHeaders() . PHP_EOL . $entity->getBody();
 

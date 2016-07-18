@@ -4,7 +4,7 @@ namespace Viserio\Mail\Transport;
 use Aws\Ses\SesClient;
 use Swift_Mime_Message;
 
-class Ses extends Transport
+class Ses extends AbstractTransport
 {
     /**
      * The Amazon SES instance.
