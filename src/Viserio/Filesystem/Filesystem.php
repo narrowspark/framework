@@ -393,11 +393,9 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract, Direct
         $overwrite = $options['overwrite'] ?? false;
 
         if ($overwrite && $this->isDirectory($destination)) {
-            $this->deleteDirectory($destination);
-            $this->copyDirectory($directory, $destination);
-            $this->deleteDirectory($directory);
-
-            return true;
+            if (! $this->deleteDirectory($destination)) {
+                return false;
+            }
         }
 
         if (@rename($directory, $destination) !== true) {
