@@ -23,9 +23,12 @@ trait DetectsLostConnections
             'Lost connection',
             'is dead or not enabled',
             'Error while sending',
-            'Operation in progress',
             'decryption failed or bad record mac',
+            'server closed the connection unexpectedly',
             'SSL connection has been closed unexpectedly',
+            'Deadlock found when trying to get lock',
+            'Error writing data to the connection',
+            'Resource deadlock avoided',
         ]);
     }
 }
