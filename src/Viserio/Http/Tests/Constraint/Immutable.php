@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Viserio\Http\Tests\Constraint;
 
 use PHPUnit_Framework_Assert as Assert;

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Viserio\Session\Middleware;
 
 use Psr\Http\Message\{

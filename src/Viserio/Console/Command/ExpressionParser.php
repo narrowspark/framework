@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Viserio\Console\Command;
 
 use Viserio\Console\Input\InputArgument;

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Viserio\Log\Tests\Fixture;
 
 use Viserio\Contracts\Support\Jsonable;

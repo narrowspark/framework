@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Viserio\Mail\Tests\Transport;
 
 use Swift_Message;

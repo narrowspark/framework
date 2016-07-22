@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Viserio\Queue\Failed;
 
 use Viserio\Contracts\Queue\FailedJobProvider as FailedJobProviderContract;

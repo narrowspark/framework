@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Viserio\Console\Command;
 
 use Stecman\Component\Symfony\Console\BashCompletion\Completion\CompletionAwareInterface;

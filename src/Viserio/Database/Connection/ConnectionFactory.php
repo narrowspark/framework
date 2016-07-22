@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Viserio\Database\Connection;
 
 use Narrowspark\Arr\StaticArr as Arr;

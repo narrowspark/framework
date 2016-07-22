@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Viserio\Exception\Providers;
 
 use Symfony\Component\Debug\ExceptionHandler as SymfonyExceptionHandler;

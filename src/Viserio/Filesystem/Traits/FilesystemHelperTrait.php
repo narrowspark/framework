@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Viserio\Filesystem\Traits;
 
 use Viserio\Contracts\Filesystem\Exception\FileNotFoundException;

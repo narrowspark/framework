@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Viserio\Parsers\Tests\Formats;
 
 use org\bovigo\vfs\vfsStream;
@@ -33,6 +34,7 @@ class PHPTest extends \PHPUnit_Framework_TestCase
     {
         $file = vfsStream::newFile('temp.php')->withContent(
             '<?php
+declare(strict_types=1);
 return [\'a\' => 1, "b" => 2, "c" => 3, "d" => 4, "e" => 5,];
             '
         )->at($this->root);
@@ -54,7 +56,8 @@ return [\'a\' => 1, "b" => 2, "c" => 3, "d" => 4, "e" => 5,];
     public function testDump()
     {
         $file = vfsStream::newFile('temp.php')->withContent(
-            '<?php return array (
+            '<?php
+declare(strict_types=1); return array (
 \'a\' => 1,
 \'b\' => 2,
 \'c\' => 3,

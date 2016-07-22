@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Viserio\Contracts\View;
 
 use Viserio\Contracts\Events\Dispatcher as DispatcherContract;

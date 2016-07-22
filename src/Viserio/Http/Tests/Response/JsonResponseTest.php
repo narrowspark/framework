@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Viserio\Http\Tests\Response;
 
 use Viserio\Http\Response\JsonResponse;

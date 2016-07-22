@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Viserio\Filesystem\Tests\Traits;
 
 use org\bovigo\vfs\vfsStream;
@@ -34,7 +35,8 @@ class FilesystemHelperTraitTest extends \PHPUnit_Framework_TestCase
 
     public function testGetRequire()
     {
-        $file = vfsStream::newFile('pop.php')->withContent('<?php return "pop"; ?>')->at($this->root);
+        $file = vfsStream::newFile('pop.php')->withContent('<?php
+declare(strict_types=1); return "pop"; ?>')->at($this->root);
 
         $pop = $this->getRequire($file->url());
 

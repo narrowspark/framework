@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Viserio\Translation\Tests;
 
 use Viserio\Translation\MessageCatalogue;

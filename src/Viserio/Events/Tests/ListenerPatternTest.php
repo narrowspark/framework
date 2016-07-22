@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Viserio\Events\Tests;
 
 use Viserio\Contracts\Events\Dispatcher;

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Viserio\Parsers\Formats;
 
 use Viserio\Contracts\Parsers\Format as FormatContract;
