@@ -2,6 +2,9 @@ language: php
 
 sudo: false
 
+git:
+  depth: 1
+
 services:
   - memcached
   - mongodb
@@ -28,11 +31,17 @@ matrix:
       env: SETUP=lowest
     - php: 7.0
       env: SETUP=stable
+    - php: 7.1
+      env: SETUP=lowest
+    - php: 7.1
+      env: SETUP=stable
   allow_failures:
     - env: SETUP=basic HUMBUG=true
       php: 7.0
     - env: SETUP=lowest
       php: 7.0
+    - env: SETUP=lowest
+      php: 7.1
     # HHVM dont have full support for php7
     - env: SETUP=basic
       php: hhvm-3.12
