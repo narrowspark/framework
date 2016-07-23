@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 namespace Viserio\Exception\Displayers;
 
@@ -28,7 +29,7 @@ class HtmlDisplayer implements DisplayerContract
      * Create a new html displayer instance.
      *
      * @param \Viserio\Exception\ExceptionInfo $info
-     * @param string                            $path
+     * @param string                           $path
      */
     public function __construct(ExceptionInfo $info, string $path)
     {

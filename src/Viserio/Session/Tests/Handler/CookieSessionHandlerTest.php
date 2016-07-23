@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 namespace Viserio\Session\Tests\Handler;
 
@@ -51,7 +52,7 @@ class CookieSessionHandlerTest extends \PHPUnit_Framework_TestCase
             ->once()
             ->andReturn('{
                 "temp": {
-                    "expires": "'. Carbon::now()->addMinutes(6)->getTimestamp() .'",
+                    "expires": "' . Carbon::now()->addMinutes(6)->getTimestamp() . '",
                     "data": "Foo Bar"
                 }
             }');

@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 namespace Viserio\Http\Tests;
 
@@ -37,7 +38,7 @@ class UriTest extends \PHPUnit_Framework_TestCase
             'invalid uri' => ['///'],
             'invalid uri no host' => ['http:///example.com'],
             'invalid uri no host with port' => ['http://:80'],
-            'invalid uri no host with port and wrong auth' => ['http://user@:80']
+            'invalid uri no host with port and wrong auth' => ['http://user@:80'],
         ];
     }
 
@@ -522,6 +523,7 @@ class UriTest extends \PHPUnit_Framework_TestCase
      * in the following examples.
      *
      * Some of these example return invalid Url
+     *
      * @dataProvider authorityProvider
      */
     public function testAuthorityDelimiterPresence($url)
@@ -590,7 +592,7 @@ class UriTest extends \PHPUnit_Framework_TestCase
                 'path'     => '/%7ejohndoe/%a1/index.php',
                 'query'    => 'foo.bar=%7evalue',
                 'fragment' => 'fragment',
-                'uri'      => 'https://iGoR:rAsMuZeN@master.example.com/~johndoe/%A1/index.php?foo.bar=~value#fragment'
+                'uri'      => 'https://iGoR:rAsMuZeN@master.example.com/~johndoe/%A1/index.php?foo.bar=~value#fragment',
             ],
             'URL without scheme' => [
                 'scheme'   => '',
@@ -670,10 +672,10 @@ class UriTest extends \PHPUnit_Framework_TestCase
     public function hostProvider()
     {
         return [
-            'normalized host' => ["MaStEr.eXaMpLe.CoM", "master.example.com"],
-            "simple host"     => ["www.example.com", "www.example.com"],
-            "IDN hostname"    => ["مثال.إختبار", "مثال.إختبار"],
-            "IPv6 Host"       => ["[::1]", "[::1]"],
+            'normalized host' => ['MaStEr.eXaMpLe.CoM', 'master.example.com'],
+            'simple host'     => ['www.example.com', 'www.example.com'],
+            'IDN hostname'    => ['مثال.إختبار', 'مثال.إختبار'],
+            'IPv6 Host'       => ['[::1]', '[::1]'],
         ];
     }
 
@@ -696,7 +698,7 @@ class UriTest extends \PHPUnit_Framework_TestCase
             'empty label'                          => ['tot.    .coucou.com'],
             'space in the label'                   => ['re view'],
             'underscore in label'                  => ['_bad.host.com'],
-            'label too long'                       => [implode('', array_fill(0, 12, 'banana')).'.secure.example.com'],
+            'label too long'                       => [implode('', array_fill(0, 12, 'banana')) . '.secure.example.com'],
             'too many labels'                      => [implode('.', array_fill(0, 128, 'a'))],
             'Invalid IPv4 format'                  => ['[127.0.0.1]'],
             'Invalid IPv6 format'                  => ['[[::1]]'],

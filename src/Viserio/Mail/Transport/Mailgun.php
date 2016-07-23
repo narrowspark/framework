@@ -1,9 +1,9 @@
 <?php
+
 declare(strict_types=1);
 namespace Viserio\Mail\Transport;
 
 use GuzzleHttp\ClientInterface;
-use GuzzleHttp\Post\PostFile;
 use Swift_Mime_Message;
 
 class Mailgun extends AbstractTransport

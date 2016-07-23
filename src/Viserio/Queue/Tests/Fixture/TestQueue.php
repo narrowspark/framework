@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 namespace Viserio\Queue\Tests\Fixture;
 
@@ -16,12 +17,12 @@ class TestQueue
      */
     protected $encrypter;
 
-        /**
+    /**
      * Get the encrypter implementation.
      *
-     * @return \Viserio\Contracts\Encryption\Encrypter
-     *
      * @throws \Exception
+     *
+     * @return \Viserio\Contracts\Encryption\Encrypter
      */
     public function getEncrypter(): EncrypterContract
     {
@@ -35,9 +36,7 @@ class TestQueue
     /**
      * Set the encrypter implementation.
      *
-     * @param  \Viserio\Contracts\Encryption\Encrypter  $encrypter
-     *
-     * @return void
+     * @param \Viserio\Contracts\Encryption\Encrypter $encrypter
      */
     public function setEncrypter(EncrypterContract $encrypter)
     {

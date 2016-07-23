@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 namespace Viserio\Contracts\View;
 
@@ -58,9 +59,9 @@ interface View extends Renderable
     /**
      * Add a view instance to the view data.
      *
-     * @param string $key
-     * @param string $view
-     * @param string[]  $data
+     * @param string   $key
+     * @param string   $view
+     * @param string[] $data
      *
      * @return $this
      */

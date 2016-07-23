@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 namespace Viserio\Console\Command;
 
@@ -50,7 +51,7 @@ class ExpressionParser
     /**
      * Check if token is a option.
      *
-     * @param string  $token
+     * @param string $token
      *
      * @return bool
      */

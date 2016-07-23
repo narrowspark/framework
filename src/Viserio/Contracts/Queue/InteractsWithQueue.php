@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 namespace Viserio\Contracts\Queue;
 
@@ -22,15 +23,11 @@ interface InteractsWithQueue
 
     /**
      * Delete the job from the queue.
-     *
-     * @return void
      */
     public function delete();
 
     /**
      * Fail the job from the queue.
-     *
-     * @return void
      */
     public function failed();
 
@@ -38,8 +35,6 @@ interface InteractsWithQueue
      * Release the job back into the queue.
      *
      * @param int $delay
-     *
-     * @return void
      */
     public function release(int $delay = 0);
 }

@@ -1,14 +1,14 @@
 <?php
+
 declare(strict_types=1);
 namespace Viserio\Mail\Tests;
 
-use Swift_Mime_Message;
 use Swift_Attachment;
+use Swift_Mime_Message;
 use Viserio\Mail\Message;
 
 class MessageTest extends \PHPUnit_Framework_TestCase
 {
-
     /**
      * @var \Swift_Mime_Message
      */

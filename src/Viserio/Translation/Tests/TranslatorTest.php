@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 namespace Viserio\Translation\Tests;
 
@@ -22,13 +23,13 @@ class TranslatorTest extends \PHPUnit_Framework_TestCase
         $catalogue = new MessageCatalogue('en', [
             'messages' => [
                 'foo' => 'bar',
-            ]
+            ],
         ]);
 
         $catalogue->addFallbackCatalogue(new MessageCatalogue('fr', [
             'messages' => [
                 'test' => 'bar',
-            ]
+            ],
         ]));
 
         $selector = new MessageSelector();

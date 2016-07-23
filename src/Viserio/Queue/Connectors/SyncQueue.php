@@ -1,11 +1,12 @@
 <?php
+
 declare(strict_types=1);
 namespace Viserio\Queue\Connectors;
 
 use Throwable;
 use Viserio\Contracts\Queue\Job as JobContract;
-use Viserio\Queue\Jobs\SyncJob;
 use Viserio\Exception\Exception\FatalThrowableError;
+use Viserio\Queue\Jobs\SyncJob;
 
 class SyncQueue extends AbstractQueue
 {
@@ -63,8 +64,6 @@ class SyncQueue extends AbstractQueue
      * Raise the before queue job event.
      *
      * @param \Viserio\Contracts\Queue\Job $job
-     *
-     * @return void
      */
     protected function raiseBeforeJobEvent(JobContract $job)
     {
@@ -74,7 +73,7 @@ class SyncQueue extends AbstractQueue
                 [
                     'connection' => 'sync',
                     'job' => $job,
-                    'data' => json_decode($job->getRawBody(), true)
+                    'data' => json_decode($job->getRawBody(), true),
                 ]
             );
         }
@@ -84,8 +83,6 @@ class SyncQueue extends AbstractQueue
      * Raise the after queue job event.
      *
      * @param \Viserio\Contracts\Queue\Job $job
-     *
-     * @return void
      */
     protected function raiseAfterJobEvent(JobContract $job)
     {
@@ -95,7 +92,7 @@ class SyncQueue extends AbstractQueue
                 [
                     'connection' => 'sync',
                     'job' => $job,
-                    'data' => json_decode($job->getRawBody(), true)
+                    'data' => json_decode($job->getRawBody(), true),
                 ]
             );
         }
@@ -106,8 +103,6 @@ class SyncQueue extends AbstractQueue
      *
      * @param \Viserio\Contracts\Queue\Job $job
      * @param \Throwable                   $exception
-     *
-     * @return void
      */
     protected function raiseExceptionOccurredJobEvent(JobContract $job, Throwable $exception)
     {
@@ -118,7 +113,7 @@ class SyncQueue extends AbstractQueue
                     'connection' => 'sync',
                     'job' => $job,
                     'data' => json_decode($job->getRawBody(), true),
-                    'exception' => $exception
+                    'exception' => $exception,
                 ]
             );
         }
@@ -128,8 +123,6 @@ class SyncQueue extends AbstractQueue
      * Handle the failed job.
      *
      * @param \Viserio\Contracts\Queue\Job $job
-     *
-     * @return void
      */
     protected function handleFailedJob(JobContract $job)
     {
@@ -141,7 +134,7 @@ class SyncQueue extends AbstractQueue
                 [
                     'connection' => 'sync',
                     'job' => $job,
-                    'data' => json_decode($job->getRawBody(), true)
+                    'data' => json_decode($job->getRawBody(), true),
                 ]);
         }
     }

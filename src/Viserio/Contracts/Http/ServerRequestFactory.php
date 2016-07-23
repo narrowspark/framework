@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 namespace Viserio\Contracts\Http;
 
@@ -10,7 +11,7 @@ interface ServerRequestFactory
     /**
      * Create a new server request.
      *
-     * @param string $method
+     * @param string              $method
      * @param UriInterface|string $uri
      *
      * @return ServerRequestInterface

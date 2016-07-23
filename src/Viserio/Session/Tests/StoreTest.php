@@ -1,12 +1,13 @@
 <?php
+
 declare(strict_types=1);
 namespace Viserio\Session\Tests;
 
 use Defuse\Crypto\Key;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use ReflectionClass;
-use Viserio\Contracts\Encryption\Encrypter as EncrypterContract;
 use SessionHandlerInterface as SessionHandlerContract;
+use Viserio\Contracts\Encryption\Encrypter as EncrypterContract;
 use Viserio\Encryption\Encrypter;
 use Viserio\Session\Fingerprint\UserAgentGenerator;
 use Viserio\Session\Store;
@@ -46,8 +47,8 @@ class StoreTest extends \PHPUnit_Framework_TestCase
                         'lastTrace' => 0,
                         'regenerationTrace' => 1,
                         'requestsCount' => 0,
-                        'fingerprint' => 0
-                    ]
+                        'fingerprint' => 0,
+                    ],
                 ],
                 \JSON_PRESERVE_ZERO_FRACTION
             )
@@ -67,8 +68,8 @@ class StoreTest extends \PHPUnit_Framework_TestCase
                         'lastTrace' => 0,
                         'regenerationTrace' => 0,
                         'requestsCount' => 0,
-                        'fingerprint' => 0
-                    ]
+                        'fingerprint' => 0,
+                    ],
                 ],
                 \JSON_PRESERVE_ZERO_FRACTION
             )
@@ -318,18 +319,6 @@ class StoreTest extends \PHPUnit_Framework_TestCase
         $this->assertNotSame(self::SESSION_ID, $session->getId());
     }
 
-    private function encryptedSession()
-    {
-        $session = $this->session;
-        $session->setId(self::SESSION_ID);
-        $session->getHandler()
-            ->shouldReceive('read')
-            ->once()
-            ->andReturn($this->encryptString);
-
-        return $session;
-    }
-
     public function testDataFlashing()
     {
         $session = $this->session;
@@ -405,5 +394,17 @@ class StoreTest extends \PHPUnit_Framework_TestCase
 
         $this->assertNotFalse(array_search('foo', $session->get('flash.new')));
         $this->assertFalse(array_search('foo', $session->get('flash.old')));
+    }
+
+    private function encryptedSession()
+    {
+        $session = $this->session;
+        $session->setId(self::SESSION_ID);
+        $session->getHandler()
+            ->shouldReceive('read')
+            ->once()
+            ->andReturn($this->encryptString);
+
+        return $session;
     }
 }

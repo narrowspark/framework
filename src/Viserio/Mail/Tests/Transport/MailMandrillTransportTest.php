@@ -1,9 +1,10 @@
 <?php
+
 declare(strict_types=1);
 namespace Viserio\Mail\Tests\Transport;
 
-use Swift_Message;
 use GuzzleHttp\Client as HttpClient;
+use Swift_Message;
 use Viserio\Mail\Tests\Fixture\MandrillTransportStub;
 
 class MailMandrillTransportTest extends \PHPUnit_Framework_TestCase

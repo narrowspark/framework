@@ -1,9 +1,10 @@
 <?php
+
 declare(strict_types=1);
 namespace Viserio\Exception;
 
-use Throwable;
 use Ramsey\Uuid\Uuid;
+use Throwable;
 
 class ExceptionIdentifier
 {

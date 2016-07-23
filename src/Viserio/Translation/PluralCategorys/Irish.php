@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 namespace Viserio\Translation\PluralCategorys;
 
@@ -36,9 +37,9 @@ class Irish implements CategoryContract
             return 0;
         } elseif ($count === 2) {
             return 1;
-        } elseif (!is_float($count) && $count >= 3 && $count <= 6) {
+        } elseif (! is_float($count) && $count >= 3 && $count <= 6) {
             return 2;
-        } elseif (!is_float($count) && $count >= 7 && $count <= 10) {
+        } elseif (! is_float($count) && $count >= 7 && $count <= 10) {
             return 3;
         }
 

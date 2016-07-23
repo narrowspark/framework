@@ -1,9 +1,9 @@
 <?php
+
 declare(strict_types=1);
 namespace Viserio\Support;
 
 use Closure;
-use RuntimeException;
 use InvalidArgumentException;
 use Viserio\Contracts\Config\Manager as ConfigContract;
 use Viserio\Support\Traits\ContainerAwareTrait;
@@ -67,8 +67,6 @@ abstract class AbstractManager
      * Set a config manager
      *
      * @param \Viserio\Contracts\Config\Manager $config
-     *
-     * @return void
      */
     public function setConfig(ConfigContract $config)
     {
@@ -99,8 +97,6 @@ abstract class AbstractManager
      * Set the default driver name.
      *
      * @param string $name
-     *
-     * @return void
      */
     public function setDefaultDriver(string $name)
     {
@@ -135,8 +131,6 @@ abstract class AbstractManager
      *
      * @param string   $driver
      * @param \Closure $callback
-     *
-     * @return void
      */
     public function extend(string $driver, Closure $callback)
     {

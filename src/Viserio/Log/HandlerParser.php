@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 namespace Viserio\Log;
 
@@ -95,7 +96,7 @@ class HandlerParser
         $this->monolog = $monolog;
     }
 
-     /**
+    /**
      * Parse the handler into a Monolog constant.
      *
      * @param string|object        $handler
@@ -103,8 +104,6 @@ class HandlerParser
      * @param string               $level
      * @param object|string[]|null $processor
      * @param object|string|null   $formatter
-     *
-     * @return void
      */
     public function parseHandler(
         $handler,
@@ -137,8 +136,8 @@ class HandlerParser
     /**
      * Parse Processor.
      *
-     * @param \Monolog\Handler\HandlerInterface  $handler
-     * @param array|object|null $processors
+     * @param \Monolog\Handler\HandlerInterface $handler
+     * @param array|object|null                 $processors
      *
      * @return \Monolog\Handler\HandlerInterface
      */
@@ -218,7 +217,7 @@ class HandlerParser
         $width = getenv('COLUMNS') ?: 60; // Console width from env, or 60 chars.
         $separator = str_repeat('━', $width); // A nice separator line
 
-        $format  = $options['bold'];
+        $format = $options['bold'];
         $format .= $options['green'] . '[%datetime%]';
         $format .= $options['white'] . '[%channel%.';
         $format .= $options['yellow'] . '%level_name%';
@@ -239,9 +238,9 @@ class HandlerParser
      * @param string        $path
      * @param string        $level
      *
-     * @return \Monolog\Handler\HandlerInterface
-     *
      * @throws \RuntimeException
+     *
+     * @return \Monolog\Handler\HandlerInterface
      */
     protected function validateHandler($handler, string $path, string $level): HandlerInterface
     {

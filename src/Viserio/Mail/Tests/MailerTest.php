@@ -1,12 +1,13 @@
 <?php
+
 declare(strict_types=1);
 namespace Viserio\Mail\Tests;
 
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
-use stdClass;
 use Psr\Log\LoggerInterface;
-use Swift_Mime_Message;
+use stdClass;
 use Swift_Mailer;
+use Swift_Mime_Message;
 use Swift_Transport;
 use Viserio\Mail\Mailer;
 use Viserio\Mail\Tests\Fixture\FailingSwiftMailerStub;
@@ -374,7 +375,7 @@ class MailerTest extends \PHPUnit_Framework_TestCase
     {
         return [
             $this->mock(Swift_Mailer::class),
-            $this->mock(ViewFactoryContract::class)
+            $this->mock(ViewFactoryContract::class),
         ];
     }
 }

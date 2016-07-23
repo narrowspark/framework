@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 namespace Viserio\Http\Tests;
 
@@ -99,8 +100,9 @@ class ResponseTest extends AbstractMessageTest
         $body = FnStream::decorate(Util::getStream(''), [
             '__toString' => function () use (&$streamIsRead) {
                 $streamIsRead = true;
+
                 return '';
-            }
+            },
         ]);
 
         $r = new Response(200, [], $body);

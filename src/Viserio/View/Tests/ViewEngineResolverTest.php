@@ -1,10 +1,11 @@
 <?php
+
 declare(strict_types=1);
 namespace Viserio\View\Tests;
 
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
-use Viserio\View\Engines\EngineResolver;
 use Viserio\Contracts\View\Engine as EngineContract;
+use Viserio\View\Engines\EngineResolver;
 
 class ViewEngineResolverTest extends \PHPUnit_Framework_TestCase
 {

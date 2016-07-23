@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 namespace Viserio\Http\Uri\Traits;
 
@@ -97,7 +98,7 @@ trait HostValidateTrait
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     protected function assertLabelsCount(array $labels)
     {
@@ -194,11 +195,11 @@ trait HostValidateTrait
     {
         preg_match(',^(?P<ldelim>[\[]?)(?P<ipv6>.*?)(?P<rdelim>[\]]?)$,', $str, $matches);
 
-        if (! in_array(strlen($matches['ldelim'].$matches['rdelim']), [0, 2])) {
+        if (! in_array(strlen($matches['ldelim'] . $matches['rdelim']), [0, 2])) {
             return false;
         }
 
-        if (!strpos($str, '%')) {
+        if (! strpos($str, '%')) {
             return filter_var($matches['ipv6'], FILTER_VALIDATE_IP, FILTER_FLAG_IPV6);
         }
 
@@ -225,7 +226,7 @@ trait HostValidateTrait
 
         $ipv6 = substr($ip, 0, $pos);
 
-        if (!$this->isLocalLink($ipv6)) {
+        if (! $this->isLocalLink($ipv6)) {
             return false;
         }
 
@@ -268,7 +269,7 @@ trait HostValidateTrait
         $tmp = explode('%', $ipAddress);
 
         if (isset($tmp[1])) {
-            $ipAddress = $tmp[0].'%25'.rawurlencode($tmp[1]);
+            $ipAddress = $tmp[0] . '%25' . rawurlencode($tmp[1]);
         }
 
         if ($this->hostAsIpv6) {

@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 namespace Viserio\Support\Traits;
 
@@ -76,8 +77,8 @@ trait NormalizePathAndDirectorySeparatorTrait
     }
 
     /**
-    * Normalize path.
-    *
+     * Normalize path.
+     *
      * @param array $paths
      *
      * @return array

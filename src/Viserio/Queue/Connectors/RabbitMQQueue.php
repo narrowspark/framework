@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 namespace Viserio\Queue\Connectors;
 
@@ -146,16 +147,12 @@ class RabbitMQQueue extends AbstractQueue
         if ($message instanceof AMQPMessage) {
             return new RabbitMQJob($this->container, $this, $this->channel, $queue, $message);
         }
-
-        return;
     }
 
     /**
      * Sets the attempts member variable to be used in message generation
      *
      * @param int $count
-     *
-     * @return void
      */
     public function setAttempts(int $count)
     {

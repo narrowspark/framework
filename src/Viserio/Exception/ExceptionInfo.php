@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 namespace Viserio\Exception;
 
@@ -10,8 +11,8 @@ class ExceptionInfo
     /**
      * Get the exception information.
      *
-     * @param string     $id
-     * @param int        $code
+     * @param string $id
+     * @param int    $code
      *
      * @return array
      */
@@ -22,14 +23,14 @@ class ExceptionInfo
                 'id' => $id,
                 'code' => $code,
                 'name' => HttpStatus::getReasonPhrase($code),
-                'detail' => HttpStatus::getReasonMessage($code)
+                'detail' => HttpStatus::getReasonMessage($code),
             ];
         } catch (InvalidArgumentException $error) {
             $info = [
                 'id' => $id,
                 'code' => 500,
                 'name' => HttpStatus::getReasonPhrase(500),
-                'detail' => HttpStatus::getReasonMessage(500)
+                'detail' => HttpStatus::getReasonMessage(500),
             ];
         }
 

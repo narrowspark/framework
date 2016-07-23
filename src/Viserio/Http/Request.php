@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 namespace Viserio\Http;
 
@@ -7,7 +8,7 @@ use Psr\Http\Message\{
     RequestInterface,
     StreamInterface,
     UriInterface
-};
+use StreamInterface;
 
 class Request extends AbstractMessage implements RequestInterface
 {
@@ -49,7 +50,7 @@ class Request extends AbstractMessage implements RequestInterface
      */
     protected $requestTarget;
 
-   /**
+    /**
      * The request URI object
      *
      * @var \Psr\Http\Message\UriInterface|null
@@ -249,9 +250,9 @@ class Request extends AbstractMessage implements RequestInterface
      *
      * @param null|string|UriInterface $uri
      *
-     * @return UriInterface
-     *
      * @throws InvalidArgumentException
+     *
+     * @return UriInterface
      */
     private function createUri($uri)
     {

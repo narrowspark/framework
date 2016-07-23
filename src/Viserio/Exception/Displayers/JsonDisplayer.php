@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 namespace Viserio\Exception\Displayers;
 
@@ -58,8 +59,8 @@ class JsonDisplayer implements DisplayerContract
         return true;
     }
 
-     /**
-    * {@inheritdoc}
+    /**
+     * {@inheritdoc}
      */
     public function isVerbose(): bool
     {

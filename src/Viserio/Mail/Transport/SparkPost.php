@@ -1,9 +1,10 @@
 <?php
+
 declare(strict_types=1);
 namespace Viserio\Mail\Transport;
 
-use Swift_Mime_Message;
 use GuzzleHttp\ClientInterface;
+use Swift_Mime_Message;
 
 class SparkPost extends Transport
 {
@@ -103,7 +104,7 @@ class SparkPost extends Transport
      *
      * Note that SparkPost still respects CC, BCC headers in raw message itself.
      *
-     * @param  \Swift_Mime_Message $message
+     * @param \Swift_Mime_Message $message
      *
      * @return array
      */

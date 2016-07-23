@@ -1,22 +1,29 @@
 <?php
+
 declare(strict_types=1);
 namespace Viserio\Console\Command;
 
-use Stecman\Component\Symfony\Console\BashCompletion\Completion\CompletionAwareInterface;
-use Stecman\Component\Symfony\Console\BashCompletion\CompletionContext;
-use Symfony\Component\Console\Command\Command as BaseCommand;
-use Symfony\Component\Console\Formatter\OutputFormatterStyle;
-use Symfony\Component\Console\Helper\Table;
-use Symfony\Component\Console\Input\ArrayInput;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\NullOutput;
-use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Question\ChoiceQuestion;
-use Symfony\Component\Console\Question\Question;
+use Stecman\Component\Symfony\Console\BashCompletion\{
+    Completion\CompletionAwareInterface,
+    CompletionContext
+};
+use Symfony\Component\Console\{
+    Command\Command as BaseCommand,
+    Formatter\OutputFormatterStyle,
+    Helper\Table,
+    Input\ArrayInput,
+    Input\InputInterface,
+    Output\NullOutput,
+    Output\OutputInterface,
+    Question\ChoiceQuestion,
+    Question\Question
+};
 use Viserio\Console\Style\NarrowsparkStyle;
 use Viserio\Contracts\Support\Arrayable;
-use Viserio\Support\Invoker;
-use Viserio\Support\Traits\ContainerAwareTrait;
+use Viserio\Support\{
+    Invoker,
+    Traits\ContainerAwareTrait
+};
 
 abstract class Command extends BaseCommand implements CompletionAwareInterface
 {

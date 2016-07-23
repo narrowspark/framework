@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 namespace Viserio\Support\Tests;
 
@@ -29,7 +30,7 @@ class AbstractManagerTest extends \PHPUnit_Framework_TestCase
             ->once()
             ->with('test.drivers', [])
             ->andReturn([
-                'test' => ['']
+                'test' => [''],
             ]);
 
         $manager = new TestManager($config);
@@ -57,7 +58,7 @@ class AbstractManagerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals([
             'test' => true,
             'config' => ['name' => 'config', 'driver' => 'config'],
-            'value' => ['name' => 'value', 'driver' => 'foo']
+            'value' => ['name' => 'value', 'driver' => 'foo'],
         ], $manager->getDrivers());
 
         $config->shouldReceive('get')
@@ -77,7 +78,7 @@ class AbstractManagerTest extends \PHPUnit_Framework_TestCase
             ->once()
             ->with('test.drivers', [])
             ->andReturn([
-                'custom' => ['']
+                'custom' => [''],
             ]);
 
         $manager = new TestManager($config);
@@ -107,7 +108,7 @@ class AbstractManagerTest extends \PHPUnit_Framework_TestCase
             ->once()
             ->with('test.drivers', [])
             ->andReturn([
-                'call' => ['']
+                'call' => [''],
             ]);
         $config->shouldReceive('set')
             ->once()
@@ -137,7 +138,7 @@ class AbstractManagerTest extends \PHPUnit_Framework_TestCase
             ->once()
             ->with('test.drivers', [])
             ->andReturn([
-                __CLASS__ => ['']
+                __CLASS__ => [''],
             ]);
 
         $manager = new TestManager($config);
@@ -160,7 +161,7 @@ class AbstractManagerTest extends \PHPUnit_Framework_TestCase
             ->andReturn([
                 'pdo' => [
                     'servers' => 'localhost',
-                ]
+                ],
             ]);
 
         $manager = new TestManager($config);

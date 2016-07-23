@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 namespace Viserio\Translation\Traits;
 
@@ -10,8 +11,6 @@ trait ValidateLocaleTrait
      * Asserts that the locale is valid, throws an Exception if not.
      *
      * @param string $locale Locale to tests
-     *
-     * @return void
      *
      * @throws \InvalidArgumentException If the locale contains invalid characters
      */

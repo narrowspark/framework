@@ -1,10 +1,11 @@
 <?php
+
 declare(strict_types=1);
 namespace Viserio\Contracts\Queue;
 
 interface QueueConnector
 {
-   /**
+    /**
      * Push a new job onto the queue.
      *
      * @param string|object|\Closure $job

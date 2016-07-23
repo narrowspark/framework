@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 namespace Viserio\Http\Response;
 
@@ -19,8 +20,8 @@ class RedirectResponse extends Response
      *
      * Note: this method overwrites the `location` $headers value.
      *
-     * @param string|UriInterface $uri URI for the Location header.
-     * @param int                 $status Integer status code for the redirect; 302 by default.
+     * @param string|UriInterface $uri     URI for the Location header.
+     * @param int                 $status  Integer status code for the redirect; 302 by default.
      * @param array               $headers Array of headers to use at initialization.
      */
     public function __construct($uri, int $status = 302, array $headers = [])

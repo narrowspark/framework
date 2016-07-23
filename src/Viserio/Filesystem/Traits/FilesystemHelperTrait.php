@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 namespace Viserio\Filesystem\Traits;
 
@@ -107,15 +108,6 @@ trait FilesystemHelperTrait
     abstract public function has(string $path): bool;
 
     /**
-     * Fix directory separators for windows and linux
-     *
-     * @param string|array $paths
-     *
-     * @return string|array
-     */
-    abstract protected function normalizeDirectorySeparator($paths);
-
-    /**
      * Determine if the given path is a directory.
      *
      * @param string $dirname
@@ -123,6 +115,15 @@ trait FilesystemHelperTrait
      * @return bool
      */
     abstract public function isDirectory(string $dirname): bool;
+
+    /**
+     * Fix directory separators for windows and linux
+     *
+     * @param string|array $paths
+     *
+     * @return string|array
+     */
+    abstract protected function normalizeDirectorySeparator($paths);
 
     /**
      * Determine whether the current environment is Windows based.

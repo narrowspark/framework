@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 namespace Viserio\Http;
 
@@ -505,7 +506,7 @@ class Uri implements UriInterface
     /**
      * Parse urls with utf-8 support.
      *
-     * @param  string $url
+     * @param string $url
      *
      * @return array
      */
@@ -521,7 +522,7 @@ class Uri implements UriInterface
 
         $components = parse_url($encodeUrl);
 
-        if (!$components) {
+        if (! $components) {
             throw new InvalidArgumentException("Unable to parse URI: $url");
         }
 

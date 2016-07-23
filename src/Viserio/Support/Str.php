@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 namespace Viserio\Support;
 
@@ -21,6 +22,32 @@ class Str
      * @var array
      */
     protected static $studlyCache = [];
+
+    /**
+     * Creates an instance of Stringy and invokes the given method with the
+     * rest of the passed arguments. The optional encoding is expected to be
+     * the last argument. For example, the following:
+     * StaticStringy::slice('fòôbàř', 0, 3, 'UTF-8'); translates to
+     * Stringy::create('fòôbàř', 'UTF-8')->slice(0, 3);
+     * The result is not cast, so the return value may be of type Stringy,
+     * integer, boolean, etc.
+     *
+     * @param string  $name
+     * @param mixed[] $arguments
+     *
+     * @throws \BadMethodCallException
+     *
+     * @return Stringy
+     */
+    public static function __callStatic($name, $arguments)
+    {
+        if (class_exists(StaticStringy::class)) {
+            return forward_static_call_array([StaticStringy::class, $name], $arguments);
+        }
+        // @codeCoverageIgnoreStart
+        throw new BadMethodCallException($name . ' is not a valid method');
+        // @codeCoverageIgnoreEnd
+    }
 
     /**
      * Cap a string with a single instance of a given value.
@@ -91,7 +118,7 @@ class Str
     /**
      * Generate a random string of a given length and character set
      *
-     * @param int $length How many characters do you want?
+     * @param int    $length     How many characters do you want?
      * @param string $characters Which characters to choose from
      *
      * @return string
@@ -131,7 +158,7 @@ class Str
 
         if (! ctype_lower($value)) {
             $value = preg_replace('/\s+/u', '', $value);
-            $value = static::toLowerCase(preg_replace('/(.)(?=[A-Z0-9])/u', '$1'.$delimiter, $value));
+            $value = static::toLowerCase(preg_replace('/(.)(?=[A-Z0-9])/u', '$1' . $delimiter, $value));
         }
 
         return static::$snakeCache[$key][$delimiter] = $value;
@@ -155,31 +182,5 @@ class Str
         $value = ucwords(str_replace(['-', '_'], ' ', $value));
 
         return static::$studlyCache[$key] = str_replace(' ', '', $value);
-    }
-
-    /**
-     * Creates an instance of Stringy and invokes the given method with the
-     * rest of the passed arguments. The optional encoding is expected to be
-     * the last argument. For example, the following:
-     * StaticStringy::slice('fòôbàř', 0, 3, 'UTF-8'); translates to
-     * Stringy::create('fòôbàř', 'UTF-8')->slice(0, 3);
-     * The result is not cast, so the return value may be of type Stringy,
-     * integer, boolean, etc.
-     *
-     * @param string  $name
-     * @param mixed[] $arguments
-     *
-     * @return Stringy
-     *
-     * @throws \BadMethodCallException
-     */
-    public static function __callStatic($name, $arguments)
-    {
-        if (class_exists(StaticStringy::class)) {
-            return forward_static_call_array([StaticStringy::class, $name], $arguments);
-        }
-        // @codeCoverageIgnoreStart
-        throw new BadMethodCallException($name . ' is not a valid method');
-        // @codeCoverageIgnoreEnd
     }
 }

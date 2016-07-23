@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 namespace Viserio\Http\Tests\Stream;
 
@@ -13,9 +14,10 @@ class PumpStreamTest extends \PHPUnit_Framework_TestCase
 {
     public function testHasMetadataAndSize()
     {
-        $p = new PumpStream(function () {}, [
+        $p = new PumpStream(function () {
+        }, [
             'metadata' => ['foo' => 'bar'],
-            'size'     => 100
+            'size'     => 100,
         ]);
 
         $this->assertEquals('bar', $p->getMetadata('foo'));
@@ -41,6 +43,7 @@ class PumpStreamTest extends \PHPUnit_Framework_TestCase
 
         $p = Util::getStream(function ($size) use (&$called) {
             $called[] = $size;
+
             return 'abcdef';
         });
 
@@ -53,7 +56,9 @@ class PumpStreamTest extends \PHPUnit_Framework_TestCase
 
     public function testInifiniteStreamWrappedInLimitStream()
     {
-        $p = Util::getStream(function () { return 'a'; });
+        $p = Util::getStream(function () {
+            return 'a';
+        });
         $s = new LimitStream($p, 5);
 
         $this->assertEquals('aaaaa', (string) $s);
@@ -61,7 +66,8 @@ class PumpStreamTest extends \PHPUnit_Framework_TestCase
 
     public function testDescribesCapabilities()
     {
-        $p = Util::getStream(function () {});
+        $p = Util::getStream(function () {
+        });
 
         $this->assertTrue($p->isReadable());
         $this->assertFalse($p->isSeekable());
@@ -77,7 +83,6 @@ class PumpStreamTest extends \PHPUnit_Framework_TestCase
             $this->assertFalse($p->write('aa'));
             $this->fail();
         } catch (RuntimeException $e) {
-
         }
     }
 }

@@ -1,12 +1,13 @@
 <?php
+
 declare(strict_types=1);
 namespace Viserio\Contracts\Exception\Exception;
 
 use ErrorException;
 use ParseError;
 use ReflectionProperty;
-use TypeError;
 use Throwable;
+use TypeError;
 
 /**
  * Fatal Throwable Exception.
@@ -19,10 +20,10 @@ class FatalThrowableError extends ErrorException
     public function __construct(Throwable $e)
     {
         if ($e instanceof ParseError) {
-            $message = 'Parse error: '.$e->getMessage();
+            $message = 'Parse error: ' . $e->getMessage();
             $severity = E_PARSE;
         } elseif ($e instanceof TypeError) {
-            $message = 'Type error: '.$e->getMessage();
+            $message = 'Type error: ' . $e->getMessage();
             $severity = E_RECOVERABLE_ERROR;
         } else {
             $message = $e->getMessage();
@@ -35,7 +36,7 @@ class FatalThrowableError extends ErrorException
         $traceArgs = $traceOffset = null;
 
         if (null !== $trace) {
-            if (!$traceArgs) {
+            if (! $traceArgs) {
                 foreach ($trace as &$frame) {
                     unset($frame['args'], $frame['this'], $frame);
                 }
@@ -51,7 +52,7 @@ class FatalThrowableError extends ErrorException
                 }
 
                 foreach ($trace as &$frame) {
-                    if (!isset($frame['type'])) {
+                    if (! isset($frame['type'])) {
                         // XDebug pre 2.1.1 doesn't currently set the call type key http://bugs.xdebug.org/view.php?id=695
                         if (isset($frame['class'])) {
                             $frame['type'] = '::';
@@ -63,9 +64,9 @@ class FatalThrowableError extends ErrorException
                     }
 
                     // XDebug also has a different name for the parameters array
-                    if (!$traceArgs) {
+                    if (! $traceArgs) {
                         unset($frame['params'], $frame['args']);
-                    } elseif (isset($frame['params']) && !isset($frame['args'])) {
+                    } elseif (isset($frame['params']) && ! isset($frame['args'])) {
                         $frame['args'] = $frame['params'];
                         unset($frame['params']);
                     }
@@ -74,7 +75,7 @@ class FatalThrowableError extends ErrorException
                 unset($frame);
                 $trace = array_reverse($trace);
             } else {
-                $trace = array();
+                $trace = [];
             }
 
             $this->setTrace($trace);

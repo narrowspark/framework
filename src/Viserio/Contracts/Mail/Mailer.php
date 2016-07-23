@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 namespace Viserio\Contracts\Mail;
 
@@ -11,8 +12,6 @@ interface Mailer
      *
      * @param string      $address
      * @param string|null $name
-     *
-     * @return void
      */
     public function alwaysFrom(string $address, string $name = null);
 
@@ -21,8 +20,6 @@ interface Mailer
      *
      * @param string      $address
      * @param string|null $name
-     *
-     * @return void
      */
     public function alwaysTo(string $address, string $name = null);
 

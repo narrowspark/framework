@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 namespace Viserio\Translation\PluralCategorys;
 
@@ -29,7 +30,7 @@ class Macedonian implements CategoryContract
     {
         $count = $this->normalizeInteger($count);
 
-        if (!is_float($count) && $count % 10 === 1 && $count !== 11) {
+        if (! is_float($count) && $count % 10 === 1 && $count !== 11) {
             return 0;
         }
 

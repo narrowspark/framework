@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 namespace Viserio\Contracts\Http;
 
@@ -11,9 +12,9 @@ interface UriFactory
      *
      * @param string $uri
      *
-     * @return UriInterface
-     *
      * @throws \InvalidArgumentException If the given URI cannot be parsed.
+     *
+     * @return UriInterface
      */
     public function createUri(string $uri = ''): UriInterface;
 }

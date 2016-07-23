@@ -1,10 +1,11 @@
 <?php
+
 declare(strict_types=1);
 namespace Viserio\Cookie;
 
 use DateTime;
 use Psr\Http\Message\ServerRequestInterface;
-use \Viserio\Contracts\Cookie\Cookie as CookieContract;
+use Viserio\Contracts\Cookie\Cookie as CookieContract;
 
 class RequestCookie
 {

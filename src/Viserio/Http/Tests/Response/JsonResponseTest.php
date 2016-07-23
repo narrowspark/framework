@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 namespace Viserio\Http\Tests\Response;
 
@@ -111,7 +112,7 @@ class JsonResponseTest extends \PHPUnit_Framework_TestCase
     {
         $defaultFlags = JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP | JSON_UNESCAPED_SLASHES;
         $response = new JsonResponse([$key => $value]);
-        $stream   = $response->getBody();
+        $stream = $response->getBody();
         $contents = (string) $stream;
         $expected = json_encode($value, $defaultFlags);
         $this->assertContains(

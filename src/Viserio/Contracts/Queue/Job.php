@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 namespace Viserio\Contracts\Queue;
 
@@ -6,15 +7,11 @@ interface Job
 {
     /**
      * Runs the job.
-     *
-     * @return void
      */
     public function run();
 
     /**
      * Delete the job from the queue.
-     *
-     * @return void
      */
     public function delete();
 
@@ -29,8 +26,6 @@ interface Job
      * Release the job back into the queue.
      *
      * @param int $delay
-     *
-     * @return void
      */
     public function release(int $delay = 0);
 
@@ -64,8 +59,6 @@ interface Job
 
     /**
      * Call the failed method on the job instance.
-     *
-     * @return void
      */
     public function failed();
 

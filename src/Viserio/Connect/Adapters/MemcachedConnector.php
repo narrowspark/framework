@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 namespace Viserio\Connect\Adapters;
 
@@ -105,7 +106,7 @@ class MemcachedConnector implements ConnectorContract
      * Set SASL auth data, requires binary protocol.
      *
      * @param Memcached $memcached
-     * @param array  $config
+     * @param array     $config
      *
      * @return object
      */

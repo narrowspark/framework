@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 namespace Viserio\Translation\Traits;
 
@@ -14,7 +15,7 @@ trait NormalizeIntegerValueTrait
     public function normalizeInteger($inter)
     {
         $inter = trim((string) $inter);
-        $dot   = explode('.', $inter);
+        $dot = explode('.', $inter);
 
         if (isset($dot[1]) && $dot[1] === '0') {
             return $dot[0] + 0;

@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 namespace Viserio\Contracts\Middleware;
 
@@ -14,7 +15,7 @@ interface ClientMiddleware extends Middleware
      * to the next frame to get a response.
      *
      * @param RequestInterface $request
-     * @param Frame $next
+     * @param Frame            $next
      *
      * @return ResponseInterface
      */

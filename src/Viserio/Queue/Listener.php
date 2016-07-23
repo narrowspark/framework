@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 namespace Viserio\Queue;
 
@@ -79,8 +80,6 @@ class Listener
      * @param string $delay
      * @param string $memory
      * @param int    $timeout
-     *
-     * @return void
      */
     public function listen(string $connection, string $queue, string $delay, string $memory, int $timeout = 60)
     {
@@ -96,8 +95,6 @@ class Listener
      *
      * @param \Symfony\Component\Process\Process $process
      * @param int                                $memory
-     *
-     * @return void
      */
     public function runProcess(Process $process, int $memory)
     {
@@ -116,11 +113,11 @@ class Listener
     /**
      * Create a new Symfony process for the worker.
      *
-     * @param  string  $connection
-     * @param  string  $queue
-     * @param  int     $delay
-     * @param  int     $memory
-     * @param  int     $timeout
+     * @param string $connection
+     * @param string $queue
+     * @param int    $delay
+     * @param int    $memory
+     * @param int    $timeout
      *
      * @return \Symfony\Component\Process\Process
      */
@@ -137,7 +134,7 @@ class Listener
         // workers will run under the specified environment. Otherwise, they will
         // just run under the production environment which is not always right.
         if (isset($this->environment)) {
-            $string .= ' --env='.ProcessUtils::escapeArgument($this->environment);
+            $string .= ' --env=' . ProcessUtils::escapeArgument($this->environment);
         }
 
         // Next, we will just format out the worker commands with all of the various
@@ -171,7 +168,6 @@ class Listener
     /**
      * Stop listening and bail out of the script.
      *
-     * @return void
      *
      * @codeCoverageIgnore
      */
@@ -184,8 +180,6 @@ class Listener
      * Set the output handler callback.
      *
      * @param \Closure $outputHandler
-     *
-     * @return void
      */
     public function setOutputHandler(Closure $outputHandler)
     {
@@ -206,8 +200,6 @@ class Listener
      * Set the current environment.
      *
      * @param string $environment
-     *
-     * @return void
      */
     public function setEnvironment(string $environment)
     {
@@ -230,8 +222,6 @@ class Listener
      * Set the amount of seconds to wait before polling the queue.
      *
      * @param int $sleep
-     *
-     * @return void
      */
     public function setSleep(int $sleep)
     {
@@ -242,8 +232,6 @@ class Listener
      * Set the amount of times to try a job before logging it failed.
      *
      * @param int $tries
-     *
-     * @return void
      */
     public function setMaxTries(int $tries)
     {
@@ -257,7 +245,7 @@ class Listener
      */
     protected function buildWorkerCommand(): string
     {
-        $binary = ProcessUtils::escapeArgument((new PhpExecutableFinder)->find(false));
+        $binary = ProcessUtils::escapeArgument((new PhpExecutableFinder())->find(false));
 
         if (defined('HHVM_VERSION')) {
             $binary .= ' --php';
@@ -274,8 +262,6 @@ class Listener
      *
      * @param int    $type
      * @param string $line
-     *
-     * @return void
      */
     protected function handleWorkerOutput(int $type, string $line)
     {

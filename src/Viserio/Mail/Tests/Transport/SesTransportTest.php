@@ -1,13 +1,11 @@
 <?php
+
 declare(strict_types=1);
 namespace Viserio\Mail\Tests\Transport;
 
 use Aws\Ses\SesClient;
 use Swift_Message;
-use Viserio\Application\Application;
-use Viserio\Mail\TransportManager;
 use Viserio\Mail\Transport\Ses as SesTransport;
-use Viserio\Support\Collection;
 
 class SesTransportTest extends \PHPUnit_Framework_TestCase
 {

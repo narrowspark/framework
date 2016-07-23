@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 namespace Viserio\Exception\Tests;
 
@@ -15,7 +16,7 @@ class ExceptionInfoTest extends \PHPUnit_Framework_TestCase
             'code' => 500,
             'name' => 'Internal Server Error',
             'detail' => 'An error has occurred and this resource cannot be displayed.',
-            'summary' => 'Houston, We Have A Problem.'
+            'summary' => 'Houston, We Have A Problem.',
         ];
 
         $this->assertSame($expected, $info);
@@ -30,7 +31,7 @@ class ExceptionInfoTest extends \PHPUnit_Framework_TestCase
             'code' => 503,
             'name' => 'Service Unavailable',
             'detail' => 'The server is currently unavailable. It may be overloaded or down for maintenance.',
-            'summary' => 'Houston, We Have A Problem.'
+            'summary' => 'Houston, We Have A Problem.',
         ];
 
         $this->assertSame($expected, $info);

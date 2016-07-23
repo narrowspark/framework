@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 namespace Viserio\Queue\Jobs;
 
@@ -82,8 +83,6 @@ class BeanstalkdJob extends AbstractJob
 
     /**
      * Bury the job in the queue.
-     *
-     * @return void
      */
     public function bury()
     {

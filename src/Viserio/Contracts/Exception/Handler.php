@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 namespace Viserio\Contracts\Exception;
 
@@ -47,7 +48,7 @@ interface Handler
      */
     public function addFilter(Filter $filter): Handler;
 
-   /**
+    /**
      * Get the filter exceptions.
      *
      * @return array
@@ -74,15 +75,11 @@ interface Handler
 
     /**
      * Register the exception / Error handlers for the application.
-     *
-     * @return void
      */
     public function register();
 
     /**
      * Unregister the PHP error handler.
-     *
-     * @return void
      */
     public function unregister();
 
@@ -98,8 +95,6 @@ interface Handler
      * @param string $file    The absolute path to the affected file
      * @param int    $line    The line number of the error in the affected file
      * @param null   $context
-     *
-     * @return void
      *
      * @throws \ErrorException
      */
@@ -119,15 +114,11 @@ interface Handler
      * be handled differently since they are not normal exceptions.
      *
      * @param \Throwable $exception
-     *
-     * @return void
      */
     public function handleException(Throwable $exception);
 
     /**
      * Handle the PHP shutdown event.
-     *
-     * @return void
      */
     public function handleShutdown();
 }

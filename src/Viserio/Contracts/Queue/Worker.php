@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 namespace Viserio\Contracts\Queue;
 
@@ -19,8 +20,6 @@ interface Worker
      * @param int         $timeout
      * @param int         $sleep
      * @param int         $maxTries
-     *
-     * @return void
      */
     public function daemon(
         string $connectionName,
@@ -40,8 +39,6 @@ interface Worker
      * @param int                          $maxTries
      * @param int                          $delay
      *
-     * @return void
-     *
      * @throws \Throwable
      */
     public function process(string $connection, Job $job, int $maxTries = 0, int $delay = 0);
@@ -54,8 +51,6 @@ interface Worker
      * @param int         $delay
      * @param int         $sleep
      * @param int         $maxTries
-     *
-     * @return void
      */
     public function runNextJob(
         string $connectionName,
@@ -76,8 +71,6 @@ interface Worker
 
     /**
      * Stop listening and bail out of the script.
-     *
-     * @return void
      */
     public function stop();
 
@@ -85,8 +78,6 @@ interface Worker
      * Sleep the script for a given number of seconds.
      *
      * @param int $seconds
-     *
-     * @return void
      */
     public function sleep(int $seconds);
 

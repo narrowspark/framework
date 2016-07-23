@@ -1,9 +1,10 @@
 <?php
+
 declare(strict_types=1);
 namespace Viserio\Http\Tests\Stream;
 
-use Viserio\Http\Util;
 use Viserio\Http\Stream\NoSeekStream;
+use Viserio\Http\Util;
 
 class NoSeekStreamTest extends \PHPUnit_Framework_TestCase
 {

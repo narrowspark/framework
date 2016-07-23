@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 namespace Viserio\Http\Tests\Stream;
 
@@ -65,8 +66,8 @@ class PhpInputStreamTest extends \PHPUnit_Framework_TestCase
 
     public function testMultipleCastsToStringReturnSameContentsEvenIfReadsOccur()
     {
-        $first  = (string) $this->stream;
-        $read   = $this->stream->read(128);
+        $first = (string) $this->stream;
+        $read = $this->stream->read(128);
         $second = (string) $this->stream;
 
         $this->assertSame($first, $second);

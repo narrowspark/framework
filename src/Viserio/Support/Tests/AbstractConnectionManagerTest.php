@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 namespace Viserio\Support\Tests;
 
@@ -35,7 +36,7 @@ class AbstractConnectionManagerTest extends \PHPUnit_Framework_TestCase
             ->once()
             ->with('connection.connections', [])
             ->andReturn([
-                'test' => ['']
+                'test' => [''],
             ]);
 
         $manager = new TestConnectionManager($config);
@@ -51,11 +52,11 @@ class AbstractConnectionManagerTest extends \PHPUnit_Framework_TestCase
             ->once()
             ->with('connection.connections', [])
             ->andReturn([
-                'test' => ['']
+                'test' => [''],
             ]);
 
         $manager = new TestConnectionManager($config);
-        $manager->extend('test', function() {
+        $manager->extend('test', function () {
             return new stdClass();
         });
 
@@ -84,7 +85,7 @@ class AbstractConnectionManagerTest extends \PHPUnit_Framework_TestCase
             ->andReturn([
                 'pdo' => [
                     'servers' => 'localhost',
-                ]
+                ],
             ]);
 
         $manager = new TestConnectionManager($config);
@@ -148,12 +149,12 @@ class AbstractConnectionManagerTest extends \PHPUnit_Framework_TestCase
             ->andReturn([
                 'stdclass2' => [
                     'servers' => 'localhost',
-                ]
+                ],
             ]);
 
         $manager = new TestConnectionManager($config);
-        $manager->extend('stdclass2', function($options) {
-            return new stdClass;
+        $manager->extend('stdclass2', function ($options) {
+            return new stdClass();
         });
 
         $this->assertTrue($manager->hasConnection('stdclass2'));

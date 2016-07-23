@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 namespace Viserio\Translation\PluralCategorys;
 
@@ -32,7 +33,7 @@ class Latvian implements CategoryContract
 
         if ($count === 0) {
             return 0;
-        } elseif (!is_float($count) && $count % 10 === 1 && $count % 100 !== 11) {
+        } elseif (! is_float($count) && $count % 10 === 1 && $count % 100 !== 11) {
             return 1;
         }
 

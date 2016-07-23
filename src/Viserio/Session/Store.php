@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 namespace Viserio\Session;
 
@@ -152,7 +153,7 @@ class Store implements StoreContract
      */
     public function open(): bool
     {
-        if (!$this->started) {
+        if (! $this->started) {
             if ($this->id) {
                 $this->loadSession();
 
@@ -474,7 +475,7 @@ class Store implements StoreContract
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function jsonSerialize()
     {
@@ -495,8 +496,6 @@ class Store implements StoreContract
 
     /**
      * Updates last trace timestamp.
-     *
-     * @return void
      */
     protected function updateLastTrace()
     {
@@ -597,8 +596,6 @@ class Store implements StoreContract
 
     /**
      * Write values to handler.
-     *
-     * @return void
      */
     private function writeToHandler()
     {

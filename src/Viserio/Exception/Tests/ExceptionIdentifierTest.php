@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 namespace Viserio\Exception\Tests;
 
@@ -31,7 +32,7 @@ class ExceptionIdentifierTest extends \PHPUnit_Framework_TestCase
         $i = new ExceptionIdentifier();
         $arr = [];
 
-        for ($j = 0; $j < 20; $j++) {
+        for ($j = 0; $j < 20; ++$j) {
             $arr[] = new Exception();
         }
 

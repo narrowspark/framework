@@ -1,10 +1,11 @@
 <?php
+
 declare(strict_types=1);
 namespace Viserio\Mail\Tests\Transport;
 
 use GuzzleHttp\Client as HttpClient;
-use Swift_Message;
 use Swift_Attachment;
+use Swift_Message;
 use Viserio\Mail\Transport\Postmark;
 
 class PostmarkTransportTest extends \PHPUnit_Framework_TestCase
@@ -47,7 +48,7 @@ class PostmarkTransportTest extends \PHPUnit_Framework_TestCase
                     'headers' => [
                         'X-Postmark-Server-Token' => 'TESTING_SERVER',
                         'User-Agent' => "postmark (PHP Version: $version, OS: $os)",
-                        'Content-Type' => 'application/json'
+                        'Content-Type' => 'application/json',
                     ],
                     'json' => [
                         'From' => '"Me #5" <me@example.com>',
@@ -65,13 +66,13 @@ class PostmarkTransportTest extends \PHPUnit_Framework_TestCase
                             [
                                 'ContentType' => 'text/plain',
                                 'Content' => 'VGhpcyBpcyB0aGUgcGxhaW4gdGV4dCBhdHRhY2htZW50Lg==',
-                                'Name' => 'hello.txt'
+                                'Name' => 'hello.txt',
                             ],
                             [
                                 'ContentType' => 'text/plain',
                                 'Content' => 'VGhpcyBpcyB0aGUgcGxhaW4gdGV4dCBhdHRhY2htZW50Lg==',
                                 'Name' => 'hello.txt',
-                                'ContentID' => 'cid:' . $attachment2->getId()
+                                'ContentID' => 'cid:' . $attachment2->getId(),
                             ],
                         ],
                     ],

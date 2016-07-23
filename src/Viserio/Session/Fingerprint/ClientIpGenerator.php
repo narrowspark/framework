@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 namespace Viserio\Session\Fingerprint;
 
@@ -7,7 +8,7 @@ use Viserio\Contracts\Session\Fingerprint as FingerprintContract;
 
 class ClientIpGenerator implements FingerprintContract
 {
-/**
+    /**
      * Client ip + secret key string.
      *
      * @var string
@@ -27,14 +28,14 @@ class ClientIpGenerator implements FingerprintContract
     }
 
     /**
-    * {@inhertiddoc}
+     * {@inhertiddoc}
      */
     public function generate(): string
     {
         return hash('ripemd160', $this->clientIp);
     }
 
-     /**
+    /**
      * Returns client IP address.
      *
      * @return string IP address.
@@ -64,7 +65,7 @@ class ClientIpGenerator implements FingerprintContract
     {
         $header = 'HTTP_X_FORWARDED_FOR';
 
-        if (!isset($_SERVER[$header]) || empty($_SERVER[$header])) {
+        if (! isset($_SERVER[$header]) || empty($_SERVER[$header])) {
             return false;
         }
 
