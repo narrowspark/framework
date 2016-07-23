@@ -27,19 +27,14 @@ class Mandrill extends AbstractTransport
      * @param \GuzzleHttp\ClientInterface $client
      * @param string                      $key
      */
-    public function __construct(ClientInterface $client, $key)
+    public function __construct(ClientInterface $client, string $key)
     {
         $this->client = $client;
         $this->key = $key;
     }
 
     /**
-     * Send Email.
-     *
-     * @param \Swift_Mime_Message $message
-     * @param string[]|null       $failedRecipients
-     *
-     * @return Log|null
+     * {@inheritdoc}
      */
     public function send(Swift_Mime_Message $message, &$failedRecipients = null)
     {
@@ -52,13 +47,11 @@ class Mandrill extends AbstractTransport
             'async' => false,
         ];
 
-        if (version_compare(ClientInterface::VERSION, '6') === 1) {
-            $options = ['form_params' => $data];
-        } else {
-            $options = ['body' => $data];
-        }
+        $options = ['form_params' => $data];
 
-        return $this->client->post('https://mandrillapp.com/api/1.0/messages/send-raw.json', $options);
+        $this->client->post('https://mandrillapp.com/api/1.0/messages/send-raw.json', $options);
+
+        return $this->numberOfRecipients($message);
     }
 
     /**
@@ -66,7 +59,7 @@ class Mandrill extends AbstractTransport
      *
      * @return string
      */
-    public function getKey()
+    public function getKey(): string
     {
         return $this->key;
     }
@@ -78,9 +71,11 @@ class Mandrill extends AbstractTransport
      *
      * @return string
      */
-    public function setKey($key)
+    public function setKey(string $key): Mandrill
     {
-        return $this->key = $key;
+        $this->key = $key;
+
+        return $this;
     }
 
     /**
@@ -91,9 +86,10 @@ class Mandrill extends AbstractTransport
      *
      * @return array
      */
-    protected function getToAddresses(Swift_Mime_Message $message)
+    protected function getToAddresses(Swift_Mime_Message $message): array
     {
         $to = [];
+
         if ($message->getTo()) {
             $to = array_merge($to, array_keys($message->getTo()));
         }

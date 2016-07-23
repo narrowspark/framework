@@ -37,7 +37,7 @@ class MessageTest extends \PHPUnit_Framework_TestCase
             ->setConstructorArgs([$swift])
             ->getMock();
 
-        $attachment = $this->mock(Swift_Attachment::class);
+        $attachment = $this->getMockBuilder(Swift_Attachment::class)->getMock();
 
         $message->expects($this->once())
             ->method('createAttachmentFromPath')
@@ -69,7 +69,7 @@ class MessageTest extends \PHPUnit_Framework_TestCase
             ->setConstructorArgs([$swift])
             ->getMock();
 
-        $attachment = $this->mock(Swift_Attachment::class);
+        $attachment = $this->getMockBuilder(Swift_Attachment::class)->getMock();
 
         $message->expects($this->once())
             ->method('createAttachmentFromData')

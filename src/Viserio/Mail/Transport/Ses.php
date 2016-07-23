@@ -34,35 +34,15 @@ class Ses extends AbstractTransport
      */
     public function send(Swift_Mime_Message $message, &$failedRecipients = null)
     {
-        return $this->ses->sendRawEmail([
-            'Source' => key($message->getSender()),
-            'Destinations' => $this->getTo($message),
+        $this->beforeSendPerformed($message);
+
+        $this->ses->sendRawEmail([
+            'Source' => key($message->getSender() ?? $message->getFrom()),
             'RawMessage' => [
                 'Data' => $message->toString(),
             ],
         ]);
-    }
 
-    /**
-     * Get the "to" payload field for the API request.
-     *
-     * @param \Swift_Mime_Message $message
-     *
-     * @return array
-     */
-    protected function getTo(Swift_Mime_Message $message)
-    {
-        $destinations = [];
-        $contacts = array_merge(
-            (array) $message->getTo(),
-            (array) $message->getCc(),
-            (array) $message->getBcc()
-        );
-
-        foreach ($contacts as $address => $display) {
-            $destinations[] = $address;
-        }
-
-        return $destinations;
+        return $this->numberOfRecipients($message);
     }
 }

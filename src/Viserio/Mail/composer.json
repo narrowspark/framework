@@ -2,7 +2,7 @@
     "name"       : "viserio/mail",
     "type"       : "library",
     "description": "The Viserio Mail package.",
-    "keywords"   : ["framework", "narrowspark", "mail", "viserio"],
+    "keywords"   : ["narrowspark", "viserio", "mail", "viserio", "swiftmailer", "gpg", "gnupg"],
     "license"    : "MIT",
     "homepage"   : "http://github.com/narrowspark/framework",
     "support"    : {
@@ -18,41 +18,46 @@
         }
     ],
     "require": {
-        "php"                             : "7.0.0 - 7.0.5 || ^7.0.7",
-        "viserio/config"                  : "self.version",
-        "viserio/contracts"               : "self.version",
-        "viserio/events"                  : "self.version",
-        "viserio/view"                    : "self.version",
-        "swiftmailer/swiftmailer"         : "^5.4"
+        "php"                                 : "7.0.0 - 7.0.5 || ^7.0.7",
+        "container-interop/container-interop" : "^1.1",
+        "narrowspark/arr"                     : "^1.1",
+        "swiftmailer/swiftmailer"             : "^5.4",
+        "viserio/config"                      : "self.version",
+        "viserio/contracts"                   : "self.version",
+        "viserio/support"                     : "self.version"
     },
     "require-dev": {
-        "aws/aws-sdk-php"                 : "^3.0",
-        "guzzlehttp/guzzle"               : "^6.0",
-        "narrowspark/php-cs-fixer-config" : "^1.1",
-        "narrowspark/testing-helper"      : "^1.5",
-        "jeremeamia/superclosure"         : "^2.2",
-        "phpunit/phpunit"                 : "^5.1"
+        "aws/aws-sdk-php"                     : "^3.0",
+        "guzzlehttp/guzzle"                   : "^6.0",
+        "narrowspark/php-cs-fixer-config"     : "^1.1",
+        "narrowspark/testing-helper"          : "^1.5",
+        "jeremeamia/superclosure"             : "^2.2",
+        "phpunit/phpunit"                     : "^5.1",
+        "viserio/events"                      : "self.version",
+        "viserio/queue"                       : "self.version",
+        "viserio/view"                        : "self.version"
     },
     "autoload": {
         "psr-4": {
-            "Viserio\\Mail\\"             : ""
+            "Viserio\\Mail\\"                 : ""
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Viserio\\Mail\\Tests\\"      : "Tests/"
+            "Viserio\\Mail\\Tests\\"          : "Tests/"
         }
     },
     "extra": {
         "branch-alias": {
-            "dev-master"                  : "1.0-dev"
+            "dev-master"                      : "1.0-dev"
         }
     },
     "suggest" : {
-        "aws/aws-sdk-php"                 : "Required to use the SES mail driver (^3.0).",
-        "guzzlehttp/guzzle"               : "Required to use the Mailgun, Mandrill, and Postmark mail drivers (^6.0).",
-        "jeremeamia/superclosure"         : "Required to be able to serialize closures (^2.2)."
+        "aws/aws-sdk-php"                     : "Required to use the SES mail driver (^3.0).",
+        "guzzlehttp/guzzle"                   : "Required to use the Mailgun, Mandrill, and Postmark mail drivers (^6.0).",
+        "jeremeamia/superclosure"             : "Required to be able to serialize closures (^2.2).",
+        "pear/crypt_gpg"                      : "Required to send GPG-encrypted emails (^1.4).",
     },
-    "minimum-stability"                   : "dev",
-    "prefer-stable"                       : true
+    "minimum-stability"                       : "dev",
+    "prefer-stable"                           : true
 }

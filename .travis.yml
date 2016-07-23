@@ -58,6 +58,7 @@ before_install:
   - if [[ "$HUMBUG" = "true" ]]; then composer global require humbug/humbug; fi
   - git config --global user.name travis-ci
   - git config --global user.email travis@example.com
+  - printf "\n" | pear install Crypt_GPG
 
 install:
   - if [[ "$SETUP" = "basic" ]]; then travis_retry composer install --no-interaction --prefer-dist --no-progress --profile; fi

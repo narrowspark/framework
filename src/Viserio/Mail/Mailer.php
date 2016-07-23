@@ -9,28 +9,17 @@ use Narrowspark\Arr\StaticArr as Arr;
 use Psr\Log\LoggerInterface;
 use Swift_Mailer;
 use Swift_Message;
-use Swift_Transport_AbstractSmtpTransport;
 use Viserio\Contracts\{
-    Events\Dispatcher as DispatcherContract,
+    Events\Traits\EventsAwareTrait,
     Mail\Mailer as MailerContract,
-    View\Factory
+    View\Factory as ViewFactoryContract,
+    View\Traits\ViewAwareTrait
 };
 
 class Mailer implements MailerContract
 {
-    /**
-     * The view factory instance.
-     *
-     * @var \Viserio\Contracts\View\Factory
-     */
-    protected $views;
-
-    /**
-     * The event dispatcher instance.
-     *
-     * @var \Viserio\Contracts\Events\Dispatcher
-     */
-    protected $events;
+    use EventsAwareTrait;
+    use ViewAwareTrait;
 
     /**
      * The Swift Mailer instance.
@@ -54,20 +43,6 @@ class Mailer implements MailerContract
     protected $to = [];
 
     /**
-     * The log writer instance.
-     *
-     * @var \Psr\Log\LoggerInterface
-     */
-    protected $logger;
-
-    /**
-     * Indicates if the actual sending is disabled.
-     *
-     * @var bool
-     */
-    protected $pretending = false;
-
-    /**
      * Array of failed recipients.
      *
      * @var array
@@ -75,37 +50,15 @@ class Mailer implements MailerContract
     protected $failedRecipients = [];
 
     /**
-     * Try to reset swift in case of failure.
-     *
-     * @var bool
-     */
-    protected $resetSwift = false;
-
-    /**
      * Create a new Mailer instance.
      *
-     * @param \Swift_Mailer                        $swift
-     * @param \Viserio\Contracts\View\Factory      $view
-     * @param \Viserio\Contracts\Events\Dispatcher $events
+     * @param \Swift_Mailer                   $swift
+     * @param \Viserio\Contracts\View\Factory $views
      */
-    public function __construct(
-        Swift_Mailer $swift,
-        Factory $view,
-        DispatcherContract $events
-    ) {
-        $this->swift = $swift;
-        $this->views = $view;
-        $this->events = $events;
-    }
-
-    /**
-     * Enable to reset swift mailer on failure.
-     *
-     * @var void
-     */
-    public function resetSwift($reset = false)
+    public function __construct(Swift_Mailer $swift, ViewFactoryContract $views)
     {
-        $this->resetSwift = $reset;
+        $this->swift = $swift;
+        $this->views = $views;
     }
 
     /**
@@ -113,8 +66,10 @@ class Mailer implements MailerContract
      *
      * @param string      $address
      * @param string|null $name
+     *
+     * @return void
      */
-    public function alwaysFrom($address, $name = null)
+    public function alwaysFrom(string $address, string $name = null)
     {
         $this->from = compact($address, $name);
     }
@@ -124,8 +79,10 @@ class Mailer implements MailerContract
      *
      * @param string      $address
      * @param string|null $name
+     *
+     * @return void
      */
-    public function alwaysTo($address, $name = null)
+    public function alwaysTo(string $address, string $name = null)
     {
         $this->to = compact('address', 'name');
     }
@@ -152,7 +109,7 @@ class Mailer implements MailerContract
      *
      * @return int
      */
-    public function plain($view, array $data, $callback)
+    public function plain(string $view, array $data, $callback): int
     {
         return $this->send(['text' => $view], $data, $callback);
     }
@@ -160,16 +117,14 @@ class Mailer implements MailerContract
     /**
      * Send a new message using a view.
      *
-     * @param string|array $view
-     * @param array        $data
-     * @param \Closure     $callback
+     * @param string|array  $view
+     * @param array         $data
+     * @param \Closure|null $callback
      *
      * @return int
      */
-    public function send($view, array $data, Closure $callback): int
+    public function send($view, array $data = [], Closure $callback = null): int
     {
-        $this->forceReconnection();
-
         // First we need to parse the view, which could either be a string or an array
         // containing both an HTML and plain text versions of the view which should
         // be used when sending an e-mail. We will extract both of them out here.
@@ -177,12 +132,12 @@ class Mailer implements MailerContract
 
         $data['message'] = $message = $this->createMessage();
 
-        $this->callMessageBuilder($callback, $message);
-
         // Once we have retrieved the view content for the e-mail we will set the body
         // of this message using the HTML type, which will provide a simple wrapper
         // to creating view based emails that are able to receive arrays of data.
         $this->addContent($message, $view, $plain, $raw, $data);
+
+        $this->callMessageBuilder($callback, $message);
 
         // If a global to address has been specified we will override
         // any recipient addresses previously set and use this one instead.
@@ -190,9 +145,7 @@ class Mailer implements MailerContract
             $message->to($this->to['address'], $this->to['name'], true);
         }
 
-        $message = $message->getSwiftMessage();
-
-        return $this->sendSwiftMessage($message);
+        return $this->sendSwiftMessage($message->getSwiftMessage());
     }
 
     /**
@@ -203,36 +156,6 @@ class Mailer implements MailerContract
     public function failures(): array
     {
         return $this->failedRecipients;
-    }
-
-    /**
-     * Get the view factory instance.
-     *
-     * @return \Viserio\Contracts\View\Factory
-     */
-    public function getViewFactory()
-    {
-        return $this->views;
-    }
-
-    /**
-     * Tell the mailer to not really send messages.
-     *
-     * @param bool $value
-     */
-    public function pretend($value = true)
-    {
-        $this->pretending = $value;
-    }
-
-    /**
-     * Check if the mailer is pretending to send messages.
-     *
-     * @return bool
-     */
-    public function isPretending()
-    {
-        return $this->pretending;
     }
 
     /**
@@ -253,30 +176,6 @@ class Mailer implements MailerContract
     public function getSwiftMailer()
     {
         return $this->swift;
-    }
-
-    /**
-     * Set the log writer instance.
-     *
-     * @param \Psr\Log\LoggerInterface $logger
-     *
-     * @return \Viserio\Mail\Mailer
-     */
-    public function setLogger(LoggerInterface $logger)
-    {
-        $this->logger = $logger;
-
-        return $this;
-    }
-
-    /**
-     * Force the transport to re-connect.
-     *
-     * This will prevent errors in daemon queue situations.
-     */
-    protected function forceReconnection()
-    {
-        $this->getSwiftMailer()->getTransport()->stop();
     }
 
     /**
@@ -315,41 +214,32 @@ class Mailer implements MailerContract
     }
 
     /**
-     * Get the Swift Mailer Transport instance.
-     *
-     * @return \Swift_Transport|null
-     */
-    protected function getSwiftMailerTransport()
-    {
-        if ($this->swift instanceof Swift_Mailer) {
-            return $this->swift->getTransport();
-        }
-    }
-
-    /**
      * Add the content to a given message.
      *
      * @param \Viserio\Mail\Message $message
-     * @param string                $view
-     * @param string                $plain
-     * @param string                $raw
+     * @param string|null           $view
+     * @param string|null           $plain
+     * @param string|null           $raw
      * @param array                 $data
      *
-     * @method setBody()
-     * @method addPart()
+     * @return void
      */
-    protected function addContent($message, $view, $plain, $raw, $data)
+    protected function addContent(MessageContract $message, $view, $plain, $raw, array $data)
     {
-        if (isset($view)) {
-            $message->setBody($this->getView($view, $data), 'text/html');
+        if ($view !== null) {
+            $message->$method($this->views->create($view, $data), 'text/html');
         }
 
-        if (isset($plain)) {
-            $message->addPart($this->getView($plain, $data), 'text/plain');
+        if ($plain !== null) {
+            $method = $view !== null ? 'addPart' : 'setBody';
+
+            $message->$method($this->views->create($plain, $data), 'text/plain');
         }
 
-        if (isset($raw)) {
-            $message->addPart($raw, 'text/plain');
+        if ($raw !== null) {
+            $method = ($view !== null || $plain !== null) ? 'addPart' : 'setBody';
+
+            $message->$method($raw, 'text/plain');
         }
     }
 
@@ -358,41 +248,19 @@ class Mailer implements MailerContract
      *
      * @param \Swift_Message $message
      *
-     * @return int
+     * @return void
      */
-    protected function sendSwiftMessage($message)
+    protected function sendSwiftMessage(Swift_Message $message)
     {
         if ($this->events) {
-            $this->events->on('mailer.sending', [$message]);
+            $this->events->emit('events.message.sending', $message);
         }
 
-        if (! $this->pretending) {
-            if ($this->resetSwift) {
-                // Fail-safe restart before email TXN
-                // Required for queued mail sending using daemon
-                $this->resetSwiftTransport();
-            }
-
+        try {
             return $this->swift->send($message, $this->failedRecipients);
-        } elseif (isset($this->logger)) {
-            $this->logMessage($message);
-
-            return 1;
+        } finally {
+            $this->swift->getTransport()->stop();
         }
-
-        return 0;
-    }
-
-    /**
-     * Log that a message was sent.
-     *
-     * @param \Swift_Message $message
-     */
-    protected function logMessage($message)
-    {
-        $emails = implode(', ', array_keys((array) $message->getTo()));
-
-        $this->logger->info(sprintf('Pretending to mail message to: %s', $emails));
     }
 
     /**
@@ -431,53 +299,5 @@ class Mailer implements MailerContract
         }
 
         throw new InvalidArgumentException('Callback is not valid.');
-    }
-
-    /**
-     * Render the given view.
-     *
-     * @param string $view
-     * @param array  $data
-     *
-     * @return \Viserio\Contracts\View\View
-     */
-    protected function getView($view, array $data)
-    {
-        return $this->views->make($view, $data);
-    }
-
-    /**
-     * Reset Swift Mailer SMTP transport adapter.
-     */
-    protected function resetSwiftTransport()
-    {
-        if (! $transport = $this->getSwiftMailerTransport()) {
-            return;
-        }
-
-        try {
-            // Send RESET to restart the SMTP status and check if it's ready for running
-            if ($transport instanceof Swift_Transport_AbstractSmtpTransport) {
-                $transport->reset();
-            }
-        } catch (Exception $e) {
-            $this->tryResetSwiftTransport($transport);
-        }
-    }
-
-    /**
-     * In case of failure - let's try to restart it.
-     *
-     * @param \Swift_Transport_AbstractSmtpTransport $transport
-     */
-    protected function tryResetSwiftTransport($transport)
-    {
-        try {
-            $transport->stop();
-        } catch (Exception $e) {
-            // Just start it then...
-        }
-
-        $transport->start();
     }
 }

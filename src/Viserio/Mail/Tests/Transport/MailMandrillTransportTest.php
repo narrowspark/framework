@@ -14,11 +14,11 @@ class MailMandrillTransportTest extends \PHPUnit_Framework_TestCase
         $message->setTo('me@example.com');
         $message->setBcc('you@example.com');
 
-        $transport = new MandrillTransportStub('testkey');
         $client = $this->getMockBuilder(HttpClient::class)
             ->setMethods(['post'])
             ->getMock();
-        $transport->setHttpClient($client);
+
+        $transport = new MandrillTransportStub($client, 'testkey');
 
         $client->expects($this->once())
             ->method('post')

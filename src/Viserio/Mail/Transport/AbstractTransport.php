@@ -19,7 +19,7 @@ abstract class AbstractTransport implements Swift_Transport
     /**
      * {@inheritdoc}
      */
-    public function isStarted()
+    public function isStarted(): bool
     {
         return true;
     }
@@ -64,5 +64,21 @@ abstract class AbstractTransport implements Swift_Transport
                 $plugin->beforeSendPerformed($event);
             }
         }
+    }
+
+    /**
+     * Get the number of recipients.
+     *
+     * @param \Swift_Mime_Message $message
+     *
+     * @return int
+     */
+    protected function numberOfRecipients(Swift_Mime_Message $message): int
+    {
+        return count(array_merge(
+            (array) $message->getTo(),
+            (array) $message->getCc(),
+            (array) $message->getBcc()
+        ));
     }
 }

@@ -5,6 +5,7 @@ namespace Viserio\Queue\Connectors;
 use Throwable;
 use Viserio\Contracts\Queue\Job as JobContract;
 use Viserio\Queue\Jobs\SyncJob;
+use Viserio\Exception\Exception\FatalThrowableError;
 
 class SyncQueue extends AbstractQueue
 {
@@ -25,7 +26,7 @@ class SyncQueue extends AbstractQueue
 
             $this->raiseAfterJobEvent($queueJob);
         } catch (Throwable $exception) {
-            $this->raiseExceptionOccurredJobEvent($queueJob, $exception);
+            $this->raiseExceptionOccurredJobEvent($queueJob, new FatalThrowableError($exception));
             $this->handleFailedJob($queueJob);
 
             throw $exception;

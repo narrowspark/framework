@@ -11,8 +11,8 @@ use Swift_Transport;
 use Viserio\Mail\Mailer;
 use Viserio\Mail\Tests\Fixture\FailingSwiftMailerStub;
 use Viserio\Contracts\{
-    Events\Dispatcher,
-    View\Factory
+    Events\Dispatcher as EventsDispatcherContract,
+    View\Factory as ViewFactoryContract
 };
 
 class MailerTest extends \PHPUnit_Framework_TestCase
@@ -352,8 +352,6 @@ class MailerTest extends \PHPUnit_Framework_TestCase
             ->andReturn($transport = $this->mock(Swift_Transport::class));
 
         $transport->shouldReceive('stop');
-
-        $this->setSwiftMailer($mailermailer);
     }
 
     public function getTransport()
@@ -368,8 +366,7 @@ class MailerTest extends \PHPUnit_Framework_TestCase
     {
         return new Mailer(
             $this->mock(Swift_Mailer::class),
-            $this->mock(Factory::class),
-            $this->mock(Dispatcher::class)
+            $this->mock(ViewFactoryContract::class)
         );
     }
 
@@ -377,8 +374,7 @@ class MailerTest extends \PHPUnit_Framework_TestCase
     {
         return [
             $this->mock(Swift_Mailer::class),
-            $this->mock(Factory::class),
-            $this->mock(Dispatcher::class)
+            $this->mock(ViewFactoryContract::class)
         ];
     }
 }
