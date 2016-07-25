@@ -86,6 +86,6 @@ EOF;
             return -log(0);
         }
 
-        return $number;
+        return (float) $number;
     }
 }

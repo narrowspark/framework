@@ -20,7 +20,7 @@ trait NormalizePathAndDirectorySeparatorTrait
             return self::normalizeAndAddDirectorySeparatorOnArray($paths);
         }
 
-        if (strpos($paths, 'vfs:') !== false) {
+        if (is_string($paths) && strpos($paths, 'vfs:') !== false) {
             return $paths;
         }
 

@@ -110,7 +110,7 @@ class TranslatorTest extends \PHPUnit_Framework_TestCase
             return ucfirst($translation);
         });
         $this->translator->addHelper('truncate', function ($translation, $length) {
-            return substr($translation, 0, $length);
+            return substr($translation, 0, (int) $length);
         });
 
         $this->assertSame('He', $this->translator->trans('hello[truncate:2|firstUpper]'));
@@ -123,7 +123,7 @@ class TranslatorTest extends \PHPUnit_Framework_TestCase
             return ucfirst($translation);
         });
         $this->translator->addHelper('truncate', function ($translation, $length) {
-            return substr($translation, 0, $length);
+            return substr($translation, 0, (int) $length);
         });
 
         $this->assertSame(

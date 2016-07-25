@@ -158,7 +158,7 @@ class Str
 
         if (! ctype_lower($value)) {
             $value = preg_replace('/\s+/u', '', $value);
-            $value = static::toLowerCase(preg_replace('/(.)(?=[A-Z0-9])/u', '$1' . $delimiter, $value));
+            $value = (string) static::toLowerCase(preg_replace('/(.)(?=[A-Z0-9])/u', '$1' . $delimiter, $value));
         }
 
         return static::$snakeCache[$key][$delimiter] = $value;

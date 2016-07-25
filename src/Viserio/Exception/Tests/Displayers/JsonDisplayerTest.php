@@ -40,7 +40,7 @@ class JsonDisplayerTest extends \PHPUnit_Framework_TestCase
         $displayer = new JsonDisplayer(new ExceptionInfo());
 
         $this->assertFalse($displayer->isVerbose());
-        $this->assertTrue($displayer->canDisplay(new InvalidArgumentException(), new Exception(500), 500));
+        $this->assertTrue($displayer->canDisplay(new InvalidArgumentException(), new Exception('error', 500), 500));
         $this->assertSame('application/json', $displayer->contentType());
     }
 }

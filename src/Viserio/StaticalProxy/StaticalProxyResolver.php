@@ -42,7 +42,7 @@ class StaticalProxyResolver
             return $staticName;
         }
 
-        return ucfirst(Str::camelize(strtolower($staticName)));
+        return ucfirst((string) Str::camelize(strtolower($staticName)));
     }
 
     /**

@@ -67,7 +67,8 @@ class CookieSessionHandlerTest extends \PHPUnit_Framework_TestCase
         $request = $this->mock(ServerRequestInterface::class);
         $request
             ->shouldReceive('getCookieParams')
-            ->once();
+            ->once()
+            ->andReturn('');
         $handler = $this->handler;
         $handler->setRequest($request);
 

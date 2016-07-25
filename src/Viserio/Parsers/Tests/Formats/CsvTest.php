@@ -86,6 +86,13 @@ bar;"foo
 foo"
 "foo;foo";bar')->at($this->root);
 
-        $this->assertEquals(preg_replace('/^\s+|\n|\r|\s+$/m', '', $this->file->read($file->url())), preg_replace('/^\s+|\n|\r|\s+$/m', '', $dump));
+        $this->assertEquals(
+            preg_replace(
+                '/^\s+|\n|\r|\s+$/m',
+                '',
+                $this->file->read($file->url())
+            ),
+            preg_replace('/^\s+|\n|\r|\s+$/m', '', $dump)
+        );
     }
 }

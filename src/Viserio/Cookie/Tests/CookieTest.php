@@ -112,7 +112,7 @@ class CookieTest extends \PHPUnit_Framework_TestCase
         $cookie = new Cookie('MyCookie', 'MyValue');
         $this->assertTrue($cookie->hasMaxAge(), '->hasMaxAge() returns true if max age is not empty');
 
-        $cookie = new Cookie('Cookie', 'Value', new DateTime(3600));
+        $cookie = new Cookie('Cookie', 'Value', new DateTime('3600'));
         $this->assertFalse($cookie->hasMaxAge(), '->hasMaxAge() returns false if max age is empty');
         $this->assertEquals(
             null,
@@ -133,7 +133,7 @@ class CookieTest extends \PHPUnit_Framework_TestCase
 
     public function testGetExpiresTime()
     {
-        $time = new DateTime(3600);
+        $time = new DateTime('3600');
         $cookie = new Cookie('foo', 'bar', $time);
 
         $this->assertInstanceOf('DateTime', $cookie->getExpiresTime(), '->getExpiresTime() returns \DateTime');

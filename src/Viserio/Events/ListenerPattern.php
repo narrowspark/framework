@@ -159,7 +159,7 @@ class ListenerPattern
      */
     final public function test(string $eventName): bool
     {
-        return preg_match($this->regex, $eventName);
+        return (bool) preg_match($this->regex, $eventName);
     }
 
     /**

@@ -93,9 +93,9 @@ class BeanstalkdQueue extends AbstractQueue
      * Delete a message from the Beanstalk queue.
      *
      * @param string $queue
-     * @param string $id
+     * @param int    $id
      */
-    public function deleteMessage(string $queue, string $id)
+    public function deleteMessage(string $queue, int $id)
     {
         $this->pheanstalk->useTube($this->getQueue($queue))->delete($id);
     }

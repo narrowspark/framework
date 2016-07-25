@@ -5,7 +5,7 @@ namespace Viserio\Queue\Connectors;
 
 use Throwable;
 use Viserio\Contracts\Queue\Job as JobContract;
-use Viserio\Exception\Exception\FatalThrowableError;
+use Viserio\Contracts\Exception\Exception\FatalThrowableError;
 use Viserio\Queue\Jobs\SyncJob;
 
 class SyncQueue extends AbstractQueue

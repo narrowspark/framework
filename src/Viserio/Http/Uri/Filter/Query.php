@@ -28,8 +28,8 @@ class Query
 
         $encoder = [$this, 'encodeQueryFragment'];
 
-        foreach ($arr as $key => $value) {
-            $pairs = array_merge($pairs, $this->buildPair($encoder, $value, $encoder($key)));
+        foreach ($arr as $key => $values) {
+            $pairs = array_merge($pairs, $this->buildPair($encoder, $values, $encoder($key)));
         }
 
         return implode('&', $pairs);
@@ -71,7 +71,7 @@ class Query
         $reducer = function (array $carry, $data) use ($key, $encoder) {
             $pair = $key;
 
-            if (null !== $data) {
+            if ($data !== null) {
                 $pair .= '=' . call_user_func($encoder, $data);
             }
 

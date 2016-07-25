@@ -11,6 +11,6 @@ class JsonableClass implements Jsonable
     {
         return json_encode([
             'message' => true,
-        ], true);
+        ], JSON_PRETTY_PRINT);
     }
 }

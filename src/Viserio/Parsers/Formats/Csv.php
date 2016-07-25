@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 namespace Viserio\Parsers\Formats;
 
@@ -34,26 +35,29 @@ class Csv implements FormatContract
             ]);
         }
 
-        try {
-            $file = new SplFileObject($payload, 'rb');
-        } catch (RuntimeException $exception) {
+        $arr = [];
+        $from = fopen($payload, 'r+');
+
+        if (! $from) {
             throw new ParseException([
                 'message' => 'Failed To Parse Csv',
             ]);
         }
 
-        $array = [];
+        $headerRowExists = false;
 
-        $file->setFlags(SplFileObject::READ_CSV | SplFileObject::SKIP_EMPTY);
-        $file->setCsvControl($this->option['delimiter'], $this->option['enclosure'], $this->option['escape']);
-
-        foreach ($file as $data) {
-            if ('#' !== substr($data[0], 0, 1) && isset($data[1]) && 2 === count($data)) {
-                $array[$data[0]] = $data[1];
-            }
+        if ($headerRowExists) {
+            // first header row
+            $header = fgetcsv($from, 0, $this->option['delimiter'], $this->option['enclosure']);
         }
 
-        return $array;
+        while (($data = fgetcsv($from, 0, $this->option['delimiter'], $this->option['enclosure'])) !== false) {
+            $arr[] = $headerRowExists ? array_combine($header, $data) : $data;
+        }
+
+        fclose($from);
+
+        return $arr;
     }
 
     /**

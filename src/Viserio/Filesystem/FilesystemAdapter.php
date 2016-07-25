@@ -162,7 +162,7 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
         }
 
         // Stream context created to allow files overwrite when using FTP stream wrapper - disabled by default
-        if (@fopen($target, 'w', null, stream_context_create(['ftp' => ['overwrite' => true]])) === false) {
+        if (@fopen($target, 'w', false, stream_context_create(['ftp' => ['overwrite' => true]])) === false) {
             throw new ViserioIOException(sprintf(
                 'Failed to copy "%s" to "%s" because target file could not be opened for writing.',
                 $orginal,
