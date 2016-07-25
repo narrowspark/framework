@@ -527,7 +527,7 @@ class Uri implements UriInterface
         }
 
         foreach ($components as $key => $value) {
-            $components[$key] = urldecode($value);
+            $components[$key] = urldecode((string) $value);
         }
 
         return $components;

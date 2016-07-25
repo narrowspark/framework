@@ -48,7 +48,14 @@ class ClientIpGenerator implements FingerprintContract
 
         // direct IP address
         if (isset($_SERVER['REMOTE_ADDR'])) {
-            return filter_var($_SERVER['REMOTE_ADDR'], FILTER_VALIDATE_IP|FILTER_FLAG_NO_PRIV_RANGE|FILTER_FLAG_NO_RES_RANGE);
+            $ip = filter_var(
+                $_SERVER['REMOTE_ADDR'],
+                FILTER_VALIDATE_IP|FILTER_FLAG_NO_PRIV_RANGE|FILTER_FLAG_NO_RES_RANGE
+            );
+
+            if ($ip === false) {
+                return '';
+            }
         }
 
         return '';

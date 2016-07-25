@@ -23,13 +23,13 @@ trait TranscoderTrait
     /**
      * Encode a string according to RFC3986 Rules
      *
-     * @param string $subject
+     * @param string|int $subject
      *
      * @return string
      */
-    protected static function encodeQueryFragment(string $subject): string
+    protected static function encodeQueryFragment($subject): string
     {
-        return self::encodeComponent($subject, self::$queryFragmentRegexp);
+        return self::encodeComponent((string) $subject, self::$queryFragmentRegexp);
     }
 
     /**
@@ -110,7 +110,8 @@ trait TranscoderTrait
                 '%40', '%26', '%3D', '%2B',
                 '%24', '%2C', '%2F', '%3F',
                 '%25', '%23', '%5B', '%5D',
-            ], [
+            ],
+            [
                 '~', '!', '*', "'",
                 '(', ')', ';', ':',
                 '@', '&', '=', '+',

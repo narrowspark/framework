@@ -22,8 +22,9 @@ class UploadedFileTest extends \PHPUnit_Framework_TestCase
     public function tearDown()
     {
         foreach ($this->cleanup as $file) {
-            if (is_scalar($file) && file_exists($file)) {
+            if (is_string($file) && is_scalar($file) && file_exists($file)) {
                 unlink($file);
+                $this->cleanup = [];
             }
         }
     }

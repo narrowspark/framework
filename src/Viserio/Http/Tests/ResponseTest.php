@@ -110,17 +110,6 @@ class ResponseTest extends AbstractMessageTest
         $this->assertSame($body, $r->getBody());
     }
 
-    public function testStatusCanBeNumericString()
-    {
-        $r = new Response('404');
-
-        $r2 = $r->withStatus('201');
-        $this->assertSame(404, $r->getStatusCode());
-        $this->assertSame('Not Found', $r->getReasonPhrase());
-        $this->assertSame(201, $r2->getStatusCode());
-        $this->assertSame('Created', $r2->getReasonPhrase());
-    }
-
     public function testCanConstructWithHeaders()
     {
         $r = new Response(200, ['Foo' => 'Bar']);
