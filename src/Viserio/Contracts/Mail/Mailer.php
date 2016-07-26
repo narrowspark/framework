@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 namespace Viserio\Contracts\Mail;
 
@@ -44,16 +43,16 @@ interface Mailer
      */
     public function plain(string $view, array $data, $callback): int;
 
-    /**
+   /**
      * Send a new message using a view.
      *
-     * @param string|array $view
-     * @param array        $data
-     * @param \Closure     $callback
+     * @param string|array         $view
+     * @param array                $data
+     * @param \Closure|string|null $callback
      *
      * @return int
      */
-    public function send($view, array $data, Closure $callback): int;
+    public function send($view, array $data = [], $callback = null): int;
 
     /**
      * Get the array of failed recipients.

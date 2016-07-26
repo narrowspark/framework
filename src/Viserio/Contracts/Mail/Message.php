@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 namespace Viserio\Contracts\Mail;
 
@@ -133,4 +132,11 @@ interface Message
      * @return string
      */
     public function embedData(string $data, string $name, string $contentType = null): string;
+
+    /**
+     * Get the underlying Swift Message instance.
+     *
+     * @return \Swift_Mime_Message
+     */
+    public function getSwiftMessage();
 }

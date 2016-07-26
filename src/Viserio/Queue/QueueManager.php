@@ -63,14 +63,6 @@ class QueueManager extends AbstractConnectionManager implements MonitorContract
     /**
      * {@inheritdoc}
      */
-    public function looping($callback)
-    {
-        $this->container->get('events')->on('viserio.queue.looping', $callback);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function failing($callback)
     {
         $this->container->get('events')->on('viserio.job.failed', $callback);

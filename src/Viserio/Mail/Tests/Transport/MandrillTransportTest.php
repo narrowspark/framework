@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 namespace Viserio\Mail\Tests\Transport;
 
@@ -7,7 +6,7 @@ use GuzzleHttp\Client as HttpClient;
 use Swift_Message;
 use Viserio\Mail\Tests\Fixture\MandrillTransportStub;
 
-class MailMandrillTransportTest extends \PHPUnit_Framework_TestCase
+class MandrillTransportTest extends \PHPUnit_Framework_TestCase
 {
     public function testSend()
     {
@@ -26,7 +25,7 @@ class MailMandrillTransportTest extends \PHPUnit_Framework_TestCase
             ->with(
                 $this->equalTo('https://mandrillapp.com/api/1.0/messages/send-raw.json'),
                 $this->equalTo([
-                    'body' => [
+                    'form_params' => [
                         'key'         => 'testkey',
                         'raw_message' => $message->toString(),
                         'async'       => false,

@@ -1,17 +1,9 @@
 <?php
-
 declare(strict_types=1);
 namespace Viserio\Contracts\Queue;
 
 interface Monitor
 {
-    /**
-     * Register a callback to be executed on every iteration through the queue loop.
-     *
-     * @param mixed $callback
-     */
-    public function looping($callback);
-
     /**
      * Register a callback to be executed when a job fails after the maximum amount of retries.
      *

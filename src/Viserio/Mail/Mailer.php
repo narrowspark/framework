@@ -6,12 +6,13 @@ use Closure;
 use Exception;
 use InvalidArgumentException;
 use Narrowspark\Arr\StaticArr as Arr;
-use Psr\Log\LoggerInterface;
 use Swift_Mailer;
+use Swift_Mime_Message;
 use Swift_Message;
 use Viserio\Contracts\{
     Events\Traits\EventsAwareTrait,
     Mail\Mailer as MailerContract,
+    Mail\Message as MessageContract,
     View\Factory as ViewFactoryContract,
     View\Traits\ViewAwareTrait
 };
@@ -62,12 +63,7 @@ class Mailer implements MailerContract
     }
 
     /**
-     * Set the global from address and name.
-     *
-     * @param string      $address
-     * @param string|null $name
-     *
-     * @return void
+     * {@inheritdoc}
      */
     public function alwaysFrom(string $address, string $name = null)
     {
@@ -75,12 +71,7 @@ class Mailer implements MailerContract
     }
 
     /**
-     * Set the global to address and name.
-     *
-     * @param string      $address
-     * @param string|null $name
-     *
-     * @return void
+     * {@inheritdoc}
      */
     public function alwaysTo(string $address, string $name = null)
     {
@@ -88,12 +79,7 @@ class Mailer implements MailerContract
     }
 
     /**
-     * Send a new message when only a raw text part.
-     *
-     * @param string $text
-     * @param mixed  $callback
-     *
-     * @return int
+     * {@inheritdoc}
      */
     public function raw(string $text, $callback): int
     {
@@ -101,13 +87,7 @@ class Mailer implements MailerContract
     }
 
     /**
-     * Send a new message when only a plain part.
-     *
-     * @param string $view
-     * @param array  $data
-     * @param mixed  $callback
-     *
-     * @return int
+     * {@inheritdoc}
      */
     public function plain(string $view, array $data, $callback): int
     {
@@ -115,15 +95,9 @@ class Mailer implements MailerContract
     }
 
     /**
-     * Send a new message using a view.
-     *
-     * @param string|array  $view
-     * @param array         $data
-     * @param \Closure|null $callback
-     *
-     * @return int
+     * {@inheritdoc}
      */
-    public function send($view, array $data = [], Closure $callback = null): int
+    public function send($view, array $data = [], $callback = null): int
     {
         // First we need to parse the view, which could either be a string or an array
         // containing both an HTML and plain text versions of the view which should
@@ -149,9 +123,7 @@ class Mailer implements MailerContract
     }
 
     /**
-     * Get the array of failed recipients.
-     *
-     * @return array
+     * {@inheritdoc}
      */
     public function failures(): array
     {
@@ -227,13 +199,13 @@ class Mailer implements MailerContract
     protected function addContent(MessageContract $message, $view, $plain, $raw, array $data)
     {
         if ($view !== null) {
-            $message->$method($this->views->create($view, $data), 'text/html');
+            $message->setBody($this->views->create($view, $data)->render(), 'text/html');
         }
 
         if ($plain !== null) {
             $method = $view !== null ? 'addPart' : 'setBody';
 
-            $message->$method($this->views->create($plain, $data), 'text/plain');
+            $message->$method($this->views->create($plain, $data)->render(), 'text/plain');
         }
 
         if ($raw !== null) {
@@ -246,11 +218,11 @@ class Mailer implements MailerContract
     /**
      * Send a Swift Message instance.
      *
-     * @param \Swift_Message $message
+     * @param \Swift_Mime_Message $message
      *
-     * @return void
+     * @return int
      */
-    protected function sendSwiftMessage(Swift_Message $message)
+    protected function sendSwiftMessage($message): int
     {
         if ($this->events) {
             $this->events->emit('events.message.sending', $message);
@@ -268,7 +240,7 @@ class Mailer implements MailerContract
      *
      * @return \Viserio\Mail\Message
      */
-    protected function createMessage()
+    protected function createMessage(): MessageContract
     {
         $message = new Message(new Swift_Message());
 
@@ -285,14 +257,14 @@ class Mailer implements MailerContract
     /**
      * Call the provided message builder.
      *
-     * @param \Closure              $callback
+     * @param \Closure|string       $callback
      * @param \Viserio\Mail\Message $message
      *
      * @throws \InvalidArgumentException
      *
      * @return mixed
      */
-    protected function callMessageBuilder(Closure $callback, $message)
+    protected function callMessageBuilder($callback, $message)
     {
         if ($callback instanceof Closure) {
             return call_user_func($callback, $message);

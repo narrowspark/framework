@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 namespace Viserio\Mail;
 
@@ -167,11 +166,9 @@ class Message implements MessageContract
     }
 
     /**
-     * Get the underlying Swift Message instance.
-     *
-     * @return \Swift_Mime_Message
+     * {@inheritdoc}
      */
-    public function getSwiftMessage(): Swift_Mime_Message
+    public function getSwiftMessage()
     {
         return $this->swift;
     }
