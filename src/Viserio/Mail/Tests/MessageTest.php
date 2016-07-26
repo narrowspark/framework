@@ -22,7 +22,8 @@ class MessageTest extends \PHPUnit_Framework_TestCase
     {
         parent::setUp();
 
-        $this->swift = $this->getMock(Swift_Mime_Message::class);
+        $this->swift = $this->getMockBuilder(Swift_Mime_Message::class)
+            ->getMock();
         $this->message = new Message($this->swift);
     }
 
