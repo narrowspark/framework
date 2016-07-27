@@ -157,10 +157,17 @@ class ViewTest extends \PHPUnit_Framework_TestCase
     public function testViewGatherDataWithRenderable()
     {
         $view = $this->getView();
-        $view->getFactory()->shouldReceive('getShared')->twice()->andReturn(['shared' => 'foo']);
-        $view->getEngine()->shouldReceive('get')->twice()->andReturn('contents');
+        $view->getFactory()
+            ->shouldReceive('getShared')
+            ->twice()
+            ->andReturn(['shared' => 'foo']);
+        $view->getEngine()
+            ->shouldReceive('get')
+            ->twice()
+            ->andReturn('contents');
         $view->renderable = $this->mock(Renderable::class);
-        $view->renderable->shouldReceive('render')->once()->andReturn('text');
+        $view->renderable->shouldReceive('render')
+            ->andReturn('text');
 
         $this->assertEquals('contents', $view->render());
         $this->assertEquals('contents', (string) $view);
