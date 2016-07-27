@@ -2,8 +2,6 @@
 declare(strict_types=1);
 namespace Viserio\Contracts\Mail;
 
-use Closure;
-
 interface Mailer
 {
     /**

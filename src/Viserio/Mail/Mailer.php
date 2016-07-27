@@ -222,7 +222,7 @@ class Mailer implements MailerContract
      *
      * @return int
      */
-    protected function sendSwiftMessage($message): int
+    protected function sendSwiftMessage(Swift_Mime_Message $message): int
     {
         if ($this->events) {
             $this->events->emit('events.message.sending', $message);

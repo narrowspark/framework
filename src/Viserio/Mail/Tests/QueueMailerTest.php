@@ -4,6 +4,8 @@ namespace Viserio\Mail\Tests;
 
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use Interop\Container\ContainerInterface;
+use Mockery;
+use SuperClosure\Serializer;
 use Swift_Mailer;
 use Swift_Mime_Message;
 use Swift_Transport;
@@ -14,6 +16,7 @@ use Viserio\Mail\{
 };
 use Viserio\Contracts\{
     Mail\Message as MessageContract,
+    Queue\Queue as QueueContract,
     View\Factory as ViewFactoryContract,
     View\View as ViewContract
 };
@@ -28,7 +31,7 @@ class QueueMailerTest extends \PHPUnit_Framework_TestCase
 
         $mockMailer = $this->mock(stdClass::class);
         $mockMailer->shouldReceive('mail')
-            // ->once()
+            ->once()
             ->with($message);
 
         $container = $this->mock(ContainerInterface::class);
@@ -84,70 +87,75 @@ class QueueMailerTest extends \PHPUnit_Framework_TestCase
         $mailer->send('foo', ['data'], 'FooMailer');
     }
 
-    // public function testGlobalFromIsRespectedOnAllMessages()
-    // {
-    //     unset($_SERVER['__mailer.test']);
+    public function testGlobalFromIsRespectedOnAllMessages()
+    {
+        unset($_SERVER['__mailer.test']);
 
-    //     $mailer = $this->getMailer();
+        $mailer = $this->getMailer();
 
-    //     $view = $this->mock(stdClass::class);
+        $view = $this->mock(ViewContract::class);
 
-    //     $mailer->getViewFactory()
-    //         ->shouldReceive('create')
-    //         ->once()
-    //         ->andReturn($view);
+        // $mailer->getViewFactory()
+        //     ->shouldReceive('create')
+        //     ->once()
+        //     ->andReturn($view);
 
-    //     $view->shouldReceive('render')
-    //         ->once()
-    //         ->andReturn('rendered.view');
+        // $view->shouldReceive('render')
+        //     ->once()
+        //     ->andReturn('rendered.view');
 
-    //     $this->setSwiftMailer($mailer);
+        // $this->setSwiftMailer($mailer);
 
-    //     $me = $this;
+        // $me = $this;
 
-    //     $mailer->alwaysFrom('info@narrowspark.de', 'Daniel Bannert');
-    //     $mailer->getSwiftMailer()
-    //         ->shouldReceive('send')
-    //         ->once()
-    //         ->with($this->type(Swift_Message::class), [])
-    //         ->andReturnUsing(function ($message) use ($me) {
-    //             $me->assertEquals(['info@narrowspark.de' => 'Daniel Bannert'], $message->getFrom());
-    //         });
-    //     $mailer->send('foo', ['data'], function ($m) {
-    //     });
-    // }
+        // $mimeMessage = $this->mock(Swift_Mime_Message::class);
 
-    // public function testFailedRecipientsAreAppendedAndCanBeRetrieved()
-    // {
-    //     unset($_SERVER['__mailer.test']);
+        // $mailer->alwaysFrom('info@narrowspark.de', 'Daniel Bannert');
+        // $mailer->getSwiftMailer()
+        //     ->shouldReceive('send')
+        //     ->once()
+        //     ->with($mimeMessage, [])
+        //     ->andReturnUsing(function ($message) use ($me) {
+        //         $me->assertEquals(['info@narrowspark.de' => 'Daniel Bannert'], $message->getFrom());
 
-    //     $mailer = $this->getMailer();
-    //     $mailer->getSwiftMailer()
-    //         ->shouldReceive('getTransport')
-    //         ->andReturn($transport = $this->mock(Swift_Transport::class));
+        //         return 1;
+        //     });
+        // $mailer->send('foo', ['data'], function ($mail) {
+        // });
+    }
 
-    //     $transport->shouldReceive('stop');
+    public function testFailedRecipientsAreAppendedAndCanBeRetrieved()
+    {
+        unset($_SERVER['__mailer.test']);
 
-    //     $view = $this->mock(stdClass::class);
+        $mailer = $this->getMailer();
+        $mailer->getSwiftMailer()
+            ->shouldReceive('getTransport')
+            ->andReturn($transport = $this->mock(Swift_Transport::class));
 
-    //     $mailer->getViewFactory()
-    //         ->shouldReceive('create')
-    //         ->once()
-    //         ->andReturn($view);
+        $transport->shouldReceive('stop');
 
-    //     $view->shouldReceive('render')
-    //         ->once()
-    //         ->andReturn('rendered.view');
+        $view = $this->mock(ViewContract::class);
 
-    //     $swift = new FailingSwiftMailerStub();
+        $mailer->getViewFactory()
+            ->shouldReceive('create')
+            ->once()
+            ->andReturn($view);
 
-    //     $this->setSwiftMailer($mailersend('foo', ['data'], function ($m) {
-    //     }));
+        $view->shouldReceive('render')
+            ->once()
+            ->andReturn('rendered.view');
 
-    //     $this->assertEquals(['info@narrowspark.de'], $mailer->failures());
-    // }
+        $swift = new FailingSwiftMailerStub($this->mock(Swift_Transport::class));
 
-    public function setSwiftMailer($mailer)
+        $mailer->setSwiftMailer($swift);
+        $mailer->send('foo', ['data'], function ($m) {
+        });
+
+        $this->assertEquals(['info@narrowspark.de'], $mailer->failures());
+    }
+
+    protected function setSwiftMailer($mailer)
     {
         $transport = $this->mock(Swift_Transport::class);
         $transport->shouldReceive('stop');
@@ -164,9 +172,11 @@ class QueueMailerTest extends \PHPUnit_Framework_TestCase
 
     protected function getMailer()
     {
-        return new Mailer(
+        return new QueueMailer(
             $this->mock(Swift_Mailer::class),
-            $this->mock(ViewFactoryContract::class)
+            $this->mock(ViewFactoryContract::class),
+            $this->mock(QueueContract::class),
+            $this->mock(Serializer::class)
         );
     }
 
@@ -175,6 +185,8 @@ class QueueMailerTest extends \PHPUnit_Framework_TestCase
         return [
             $this->mock(Swift_Mailer::class),
             $this->mock(ViewFactoryContract::class),
+            $this->mock(QueueContract::class),
+            $this->mock(Serializer::class),
         ];
     }
 }

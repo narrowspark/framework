@@ -23,7 +23,8 @@
         "swiftmailer/swiftmailer"             : "^5.4",
         "viserio/config"                      : "self.version",
         "viserio/contracts"                   : "self.version",
-        "viserio/support"                     : "self.version"
+        "viserio/support"                     : "self.version",
+        "viserio/view"                        : "self.version"
     },
     "require-dev": {
         "aws/aws-sdk-php"                     : "^3.0",
@@ -33,8 +34,7 @@
         "jeremeamia/superclosure"             : "^2.2",
         "phpunit/phpunit"                     : "^5.1",
         "viserio/events"                      : "self.version",
-        "viserio/queue"                       : "self.version",
-        "viserio/view"                        : "self.version"
+        "viserio/queue"                       : "self.version"
     },
     "autoload": {
         "psr-4": {
@@ -53,7 +53,7 @@
     },
     "suggest" : {
         "aws/aws-sdk-php"                     : "Required to use the SES mail driver (^3.0).",
-        "guzzlehttp/guzzle"                   : "Required to use the Mailgun, Mandrill, and Postmark mail drivers (^6.0).",
+        "guzzlehttp/guzzle"                   : "Required to use the Mailgun, Mandrill, SparkPost and Postmark mail drivers (^6.0).",
         "jeremeamia/superclosure"             : "Required to be able to serialize closures (^2.2).",
         "pear/crypt_gpg"                      : "Required to send GPG-encrypted emails (^1.4).",
     },

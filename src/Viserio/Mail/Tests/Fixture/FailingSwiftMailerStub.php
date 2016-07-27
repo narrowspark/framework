@@ -2,10 +2,25 @@
 declare(strict_types=1);
 namespace Viserio\Mail\Tests\Fixture;
 
-class FailingSwiftMailerStub
+use Mockery;
+use Swift_Transport;
+use Swift_Mailer;
+use Swift_Mime_Message;
+
+class FailingSwiftMailerStub extends Swift_Mailer
 {
-    public function send($message, &$failed)
+    public function send(Swift_Mime_Message $message, &$failedRecipients = null)
     {
-        $failed[] = 'info@narrowspark.de';
+        $failedRecipients[] = 'info@narrowspark.de';
+
+        return 1;
+    }
+
+    public function getTransport()
+    {
+        $transport = Mockery::mock(Swift_Transport::class);
+        $transport->shouldReceive('stop');
+
+        return $transport;
     }
 }

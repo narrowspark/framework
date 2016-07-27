@@ -7,7 +7,6 @@ use Interop\Container\ContainerInterface;
 use Swift_Mailer;
 use Swift_Mime_Message;
 use Swift_Transport;
-use stdClass;
 use Viserio\Mail\Mailer;
 use Viserio\Contracts\{
     Mail\Message as MessageContract,
@@ -191,7 +190,7 @@ class MailerTest extends \PHPUnit_Framework_TestCase
         unset($_SERVER['__mailer.test']);
     }
 
-    public function setSwiftMailer($mailer)
+    protected function setSwiftMailer($mailer)
     {
         $transport = $this->mock(Swift_Transport::class);
         $transport->shouldReceive('stop');
