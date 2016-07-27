@@ -30,7 +30,6 @@
     ],
     "require": {
         "php"                                                : "7.0.0 - 7.0.5 || ^7.0.7",
-        "ext-curl"                                           : "*",
         "ext-openssl"                                        : "*",
         "ext-fileinfo"                                       : "*",
         "cache/adapter-common"                               : "^0.3.2",
@@ -157,7 +156,7 @@
         "league/flysystem-webdav"                            : "Required to use the Flysystem WebDav adapter.",
         "league/flysystem-ziparchive"                        : "Required to use the Flysystem ZipArchive adapter.",
         "pda/pheanstalk"                                     : "Required to use the Beanstalk queue driver (^3.0).",
-        "predis/predis"                                      : "Required to use the redis cache and queue drivers (^1.0).",
+        "predis/predis"                                      : "Required to use the Redis cache and Queue drivers (^1.0).",
         "symfony/yaml"                                       : "Required to use the Yaml parser (^3.1).",
         "spatie/array-to-xml"                                : "Required to use the XML dump (^2.1.1).",
         "yosymfony/toml"                                     : "Required to use the TOML parser (^0.3)."
