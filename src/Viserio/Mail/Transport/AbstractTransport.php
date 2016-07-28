@@ -14,7 +14,12 @@ abstract class AbstractTransport implements Swift_Transport
      *
      * @var array
      */
-    public $plugins = [];
+    protected $plugins = [];
+
+    /**
+     * @var string
+     */
+    protected $serverKeyFingerprint;
 
     /**
      * {@inheritdoc}

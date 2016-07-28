@@ -21,25 +21,13 @@ use Viserio\Mail\Transport\{
 class TransportManager extends AbstractManager
 {
     /**
-     * Create a new manager instance.
-     *
-     * @param \Viserio\Contracts\Config\Manager     $config
-     * @param \Interop\Container\ContainerInterface $container
-     */
-    public function __construct(ConfigContract $config, ContainerInterface $container)
-    {
-        $this->config = $config;
-        $this->container = $container;
-    }
-
-    /**
      * Create an instance of the Log Swift Transport driver.
      *
      * @return \Viserio\Mail\Transport\Log
      */
     protected function createLogDriver(): LogTransport
     {
-        return new LogTransport($this->container->get(LoggerInterface::class));
+        return new LogTransport($this->getContainer()->get(LoggerInterface::class));
     }
 
     /**

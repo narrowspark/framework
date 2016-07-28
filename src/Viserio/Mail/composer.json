@@ -56,6 +56,7 @@
         "guzzlehttp/guzzle"                   : "Required to use the Mailgun, Mandrill, SparkPost and Postmark mail drivers (^6.0).",
         "jeremeamia/superclosure"             : "Required to be able to serialize closures (^2.2).",
         "pear/crypt_gpg"                      : "Required to send GPG-encrypted emails (^1.4).",
+        "viserio/queue"                       : "Required to send queue emails (self.version)."
     },
     "minimum-stability"                       : "dev",
     "prefer-stable"                           : true

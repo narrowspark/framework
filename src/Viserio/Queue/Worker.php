@@ -8,6 +8,7 @@ use Viserio\Contracts\{
     Events\Dispatcher as DispatcherContract,
     Exception\Handler as ExceptionHandlerContract,
     Exception\Exception\FatalThrowableError,
+    Queue\Exception\TimeoutException,
     Queue\FailedJobProvider as FailedJobProviderContract,
     Queue\Job as JobContract,
     Queue\Worker as WorkerContract,
@@ -289,11 +290,15 @@ class Worker implements WorkerContract
     protected function waitForChildProcess(int $processId, int $timeout)
     {
         declare(ticks = 1) {
-            pcntl_signal(SIGALRM, function () use ($processId) {
+            pcntl_signal(SIGALRM, function () use ($processId, $timeout) {
                 posix_kill($processId, SIGKILL);
 
                 if ($this->exceptions) {
-                    $this->exceptions->report(new Exception('Daemon queue child process timed out.'));
+                    $this->exceptions->report(
+                        new TimeoutException(
+                            sprintf('Queue child process timed out after %s seconds.', $timeout)
+                        )
+                    );
                 }
             }, true);
 
