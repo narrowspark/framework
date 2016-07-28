@@ -89,21 +89,6 @@ class Container implements \ArrayAccess, ContainerInteropInterface, ContainerCon
     protected $buildStack = [];
 
     /**
-     * Invoker instance.
-     *
-     * @var \Nucleus\Invoker\Invoker
-     */
-    protected $invoker;
-
-    /**
-     *
-     */
-    public function __construct()
-    {
-        $this->invoker = new Invoker();
-    }
-
-    /**
      * Alias a type to a different name.
      *
      * @param string $alias
@@ -337,7 +322,7 @@ class Container implements \ArrayAccess, ContainerInteropInterface, ContainerCon
      */
     public function call(callable $callable, array $args = [])
     {
-        return $this->invoker->invoke($callable, $args);
+
     }
 
     /**
