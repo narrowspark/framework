@@ -34,7 +34,8 @@
     "autoload": {
         "psr-4": {
             "Viserio\\Database\\": ""
-        }
+        },
+        "exclude-from-classmap"  : ["/Tests/"]
     },
     "extra": {
         "branch-alias": {

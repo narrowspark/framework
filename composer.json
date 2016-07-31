@@ -131,7 +131,8 @@
     "autoload": {
         "psr-4": {
             "Viserio\\"                                      : "src/Viserio/"
-        }
+        },
+        "exclude-from-classmap"                              : ["src/Viserio/**/Tests/"]
     },
     "extra": {
         "branch-alias": {

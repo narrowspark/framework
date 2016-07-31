@@ -33,7 +33,8 @@
     "autoload": {
         "psr-4": {
             "Viserio\\Console\\"              : ""
-        }
+        },
+        "exclude-from-classmap"               : ["/Tests/"]
     },
     "autoload-dev": {
         "psr-4": {

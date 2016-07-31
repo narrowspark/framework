@@ -57,7 +57,8 @@
     "autoload": {
         "psr-4": {
             "Viserio\\Cache\\"            : ""
-        }
+        },
+        "exclude-from-classmap"           : ["/Tests/"]
     },
     "autoload-dev": {
         "psr-4": {

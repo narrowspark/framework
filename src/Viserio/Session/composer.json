@@ -41,7 +41,8 @@
     "autoload": {
         "psr-4": {
             "Viserio\\Session\\"           : ""
-        }
+        },
+        "exclude-from-classmap"            : ["/Tests/"]
     },
     "autoload-dev": {
         "psr-4": {

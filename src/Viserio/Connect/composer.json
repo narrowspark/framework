@@ -32,7 +32,8 @@
     "autoload": {
         "psr-4": {
             "Viserio\\Connect\\"                             : ""
-        }
+        },
+        "exclude-from-classmap"                              : ["/Tests/"]
     },
     "autoload-dev": {
         "psr-4": {

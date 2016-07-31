@@ -77,7 +77,8 @@
     "autoload": {
         "psr-4": {
             "Viserio\\Filesystem\\"          : ""
-        }
+        },
+        "exclude-from-classmap"              : ["/Tests/"]
     },
     "autoload-dev": {
         "psr-4": {

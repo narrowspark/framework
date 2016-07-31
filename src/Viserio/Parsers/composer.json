@@ -56,7 +56,8 @@
     "autoload": {
         "psr-4": {
             "Viserio\\Parsers\\"          : ""
-        }
+        },
+        "exclude-from-classmap"           : ["/Tests/"]
     },
     "autoload-dev": {
         "psr-4": {
