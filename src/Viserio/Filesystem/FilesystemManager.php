@@ -15,25 +15,6 @@ use Viserio\Support\AbstractConnectionManager;
 class FilesystemManager extends AbstractConnectionManager
 {
     /**
-     * All supported drivers.
-     *
-     * @var array
-     */
-    protected $supportedDrivers = [
-        'awss3',
-        'dropbox',
-        'ftp',
-        'gridfs',
-        'local',
-        'null',
-        'rackspace',
-        'sftp',
-        'vfs',
-        'webdav',
-        'zip',
-    ];
-
-    /**
      * {@inheritdoc}
      */
     public function getDefaultConnection(): string
@@ -105,58 +86,113 @@ class FilesystemManager extends AbstractConnectionManager
         return new FilesystemAdapter($filesystem);
     }
 
-    protected function createAwss3Connection(array $options)
+    /**
+     * Create an instance of the Awss3 connection.
+     *
+     * @param array $config
+     */
+    protected function createAwss3Connection(array $config)
     {
-        return (new Adapters\AwsS3Connector())->connect($options);
+        return (new Adapters\AwsS3Connector())->connect($config);
     }
 
-    protected function createDropboxConnection(array $options)
+    /**
+     * Create an instance of the Dropbox connection.
+     *
+     * @param array $config
+     */
+    protected function createDropboxConnection(array $config)
     {
-        return (new Adapters\DropboxConnector())->connect($options);
+        return (new Adapters\DropboxConnector())->connect($config);
     }
 
-    protected function createFtpConnection(array $options)
+    /**
+     * Create an instance of the Ftp connection.
+     *
+     * @param array $config
+     */
+    protected function createFtpConnection(array $config)
     {
-        return (new Adapters\FtpConnector())->connect($options);
+        return (new Adapters\FtpConnector())->connect($config);
     }
 
-    protected function createGridfsConnection(array $options)
+    /**
+     * Create an instance of the Gridfs connection.
+     *
+     * @param array $config
+     */
+    protected function createGridfsConnection(array $config)
     {
-        return (new Adapters\GridFSConnector())->connect($options);
+        return (new Adapters\GridFSConnector())->connect($config);
     }
 
-    protected function createLocalConnection(array $options)
+    /**
+     * Create an instance of the Local connection.
+     *
+     * @param array $config
+     */
+    protected function createLocalConnection(array $config)
     {
-        return (new Adapters\LocalConnector())->connect($options);
+        return (new Adapters\LocalConnector())->connect($config);
     }
 
+    /**
+     * Create an instance of the Null connection.
+     *
+     * @param array $config
+     */
     protected function createNullConnection()
     {
         return (new Adapters\NullConnector())->connect([]);
     }
 
-    protected function createRackspaceConnection(array $options)
+    /**
+     * Create an instance of the Rackspace connection.
+     *
+     * @param array $config
+     */
+    protected function createRackspaceConnection(array $config)
     {
-        return (new Adapters\RackspaceConnector())->connect($options);
+        return (new Adapters\RackspaceConnector())->connect($config);
     }
 
-    protected function createSftpConnection(array $options)
+    /**
+     * Create an instance of the Sftp connection.
+     *
+     * @param array $config
+     */
+    protected function createSftpConnection(array $config)
     {
-        return (new Adapters\SftpConnector())->connect($options);
+        return (new Adapters\SftpConnector())->connect($config);
     }
 
-    protected function createVfsConnection(array $options)
+    /**
+     * Create an instance of the Vfs connection.
+     *
+     * @param array $config
+     */
+    protected function createVfsConnection(array $config)
     {
-        return (new Adapters\VfsConnector())->connect($options);
+        return (new Adapters\VfsConnector())->connect($config);
     }
 
-    protected function createWebdavConnection(array $options)
+    /**
+     * Create an instance of the WebDav connection.
+     *
+     * @param array $config
+     */
+    protected function createWebdavConnection(array $config)
     {
-        return (new Adapters\WebDavConnector())->connect($options);
+        return (new Adapters\WebDavConnector())->connect($config);
     }
 
-    protected function createZipConnection(array $options)
+    /**
+     * Create an instance of the Zip connection.
+     *
+     * @param array $config
+     */
+    protected function createZipConnection(array $config)
     {
-        return (new Adapters\ZipConnector())->connect($options);
+        return (new Adapters\ZipConnector())->connect($config);
     }
 }

@@ -33,13 +33,6 @@ abstract class AbstractManager
     protected $drivers = [];
 
     /**
-     * All supported drivers.
-     *
-     * @var array
-     */
-    protected $supportedDrivers = [];
-
-    /**
      * Create a new manager instance.
      *
      * @param \Viserio\Contracts\Config\Manager $config
@@ -117,7 +110,7 @@ abstract class AbstractManager
         // here and cache it so we can return it next time very quickly. If there is
         // already a driver created by this name, we'll just return that instance.
         if (! isset($this->drivers[$driver])) {
-            $this->drivers[$driver] = $this->makeDriver(
+            $this->drivers[$driver] = $this->createDriver(
                 $this->getDriverConfig($driver)
             );
         }
@@ -192,7 +185,7 @@ abstract class AbstractManager
      *
      * @return mixed
      */
-    protected function makeDriver(array $config)
+    protected function createDriver(array $config)
     {
         $method = 'create' . Str::studly($config['name']) . 'Driver';
 
