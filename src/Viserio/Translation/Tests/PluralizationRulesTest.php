@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Viserio\Translation\Tests;
 
 use ReflectionMethod;
@@ -41,7 +42,7 @@ class PluralizationRulesTest extends \PHPUnit_Framework_TestCase
     {
         $this->object = new PluralizationRules();
 
-        $createRules  = new ReflectionMethod($this->object, 'createRules');
+        $createRules = new ReflectionMethod($this->object, 'createRules');
         $createRules->setAccessible(true);
 
         $this->createRules = $createRules;

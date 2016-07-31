@@ -1,8 +1,9 @@
 <?php
+declare(strict_types=1);
 namespace Viserio\Bus\Tests;
 
-use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use Narrowspark\TestingHelper\ArrayContainer;
+use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use stdClass;
 use Viserio\Bus\Dispatcher;
 use Viserio\Bus\Tests\Fixture\{
@@ -83,7 +84,6 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-
     public function testGetHandlerClass()
     {
         $dispatcher = new Dispatcher(new ArrayContainer());
@@ -93,7 +93,6 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase
             $dispatcher->getHandlerClass(new BusDispatcherSetCommand())
         );
     }
-
 
     public function testGetHandlerMethod()
     {
@@ -122,7 +121,7 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase
                 $piped = $piped->set('test');
 
                 return $next($piped);
-            }
+            },
         ]);
 
         $this->assertEquals(

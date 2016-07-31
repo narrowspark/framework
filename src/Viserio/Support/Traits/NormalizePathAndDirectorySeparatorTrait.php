@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Viserio\Support\Traits;
 
 use LogicException;
@@ -18,7 +19,7 @@ trait NormalizePathAndDirectorySeparatorTrait
             return self::normalizeAndAddDirectorySeparatorOnArray($paths);
         }
 
-        if (strpos($paths, 'vfs:') !== false) {
+        if (is_string($paths) && strpos($paths, 'vfs:') !== false) {
             return $paths;
         }
 
@@ -75,8 +76,8 @@ trait NormalizePathAndDirectorySeparatorTrait
     }
 
     /**
-    * Normalize path.
-    *
+     * Normalize path.
+     *
      * @param array $paths
      *
      * @return array

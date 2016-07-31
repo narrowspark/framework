@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Viserio\Http\Uri\Filter;
 
 use Viserio\Http\Uri\Traits\TranscoderTrait;
@@ -24,7 +25,7 @@ class Path
     public function filter(string $path): string
     {
         $input = explode('/', $path);
-        $newPath   = implode('/', array_reduce($input, [$this, 'filterDotSegments'], []));
+        $newPath = implode('/', array_reduce($input, [$this, 'filterDotSegments'], []));
 
         if (isset(static::$dotSegments[end($input)])) {
             $newPath .= '/';
@@ -72,7 +73,7 @@ class Path
             return $carry;
         }
 
-        if (!isset(static::$dotSegments[$segment])) {
+        if (! isset(static::$dotSegments[$segment])) {
             $carry[] = $segment;
         }
 
@@ -88,7 +89,7 @@ class Path
      */
     protected function upper(string $path): string
     {
-        return preg_replace_callback('/%[A-Fa-f0-9]{2}/', function($match) {
+        return preg_replace_callback('/%[A-Fa-f0-9]{2}/', function ($match) {
             return strtoupper($match[0]);
         }, $path);
     }

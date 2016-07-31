@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Viserio\StaticalProxy\Tests;
 
 use Mockery as Mock;
@@ -27,7 +28,10 @@ class StaticalProxyResolverTest extends \PHPUnit_Framework_TestCase
     {
         $resolver = new StaticalProxyResolver();
 
-        $this->assertEquals('The registered static proxy [Viserio\staticalproxy\tests\fixture\facadestub] maps to [stdClass]', $resolver->resolve(FacadeStub::class));
+        $this->assertEquals(
+            'The registered static proxy [Viserio\staticalproxy\tests\fixture\facadestub] maps to [stdClass]',
+            $resolver->resolve(FacadeStub::class)
+        );
 
         $this->assertEquals('No static proxy found!', $resolver->resolve(Mock::class));
     }

@@ -14,7 +14,7 @@
         "parsers"
     ],
     "license"    : "MIT",
-    "homepage"   : "http://github.com/narrowspark/parsers",
+    "homepage"   : "http://github.com/narrowspark/framework",
     "support"    : {
         "issues": "https://github.com/narrowspark/framework/issues",
         "source": "https://github.com/narrowspark/framework"
@@ -48,10 +48,9 @@
     },
     "suggest": {
         "symfony/yaml"                    : "Required to use the yaml parser (^3.1).",
-        "viserio/statical-proxy"          : "Required to use the proxies (self.version).",
-        "symfony/yaml"                    : "Required to use the yaml parser (^3.0 || ^2.8).",
         "sepia/po-parser"                 : "Required to use the PO parser (^4.2).",
         "spatie/array-to-xml"             : "Required to use the XML dump (^2.1.1).",
+        "viserio/statical-proxy"          : "Required to use the proxies (self.version).",
         "yosymfony/toml"                  : "Required to use the TOML parser (^0.3)."
     },
     "autoload": {

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Viserio\Contracts\Log;
 
 use Psr\Log\LoggerInterface as PsrLoggerInterface;

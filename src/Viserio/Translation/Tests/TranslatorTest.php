@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Viserio\Translation\Tests;
 
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
@@ -21,13 +22,13 @@ class TranslatorTest extends \PHPUnit_Framework_TestCase
         $catalogue = new MessageCatalogue('en', [
             'messages' => [
                 'foo' => 'bar',
-            ]
+            ],
         ]);
 
         $catalogue->addFallbackCatalogue(new MessageCatalogue('fr', [
             'messages' => [
                 'test' => 'bar',
-            ]
+            ],
         ]));
 
         $selector = new MessageSelector();
@@ -108,7 +109,7 @@ class TranslatorTest extends \PHPUnit_Framework_TestCase
             return ucfirst($translation);
         });
         $this->translator->addHelper('truncate', function ($translation, $length) {
-            return substr($translation, 0, $length);
+            return substr($translation, 0, (int) $length);
         });
 
         $this->assertSame('He', $this->translator->trans('hello[truncate:2|firstUpper]'));
@@ -121,7 +122,7 @@ class TranslatorTest extends \PHPUnit_Framework_TestCase
             return ucfirst($translation);
         });
         $this->translator->addHelper('truncate', function ($translation, $length) {
-            return substr($translation, 0, $length);
+            return substr($translation, 0, (int) $length);
         });
 
         $this->assertSame(

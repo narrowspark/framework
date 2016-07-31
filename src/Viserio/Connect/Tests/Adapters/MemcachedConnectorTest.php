@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Viserio\Connect\Tests\Adapters;
 
 use Memcached;
@@ -90,19 +91,7 @@ class MemcachedConnectorTest extends \PHPUnit_Framework_TestCase
                 ],
             ];
 
-        if (! defined('HHVM_VERSION')) {
-            $config = array_merge($config, [
-                'options' => [
-                    'OPT_AUTO_EJECT_HOSTS' => true,
-                ],
-            ]);
-        }
-
         $connector = (new MemcachedConnector())->connect($config);
-
-        if (! defined('HHVM_VERSION')) {
-            $this->assertSame(1, $connector->getOption(Memcached::OPT_AUTO_EJECT_HOSTS));
-        }
 
         $this->assertSame(1, $connector->getOption(Memcached::OPT_NO_BLOCK));
         $this->assertSame(2000, $connector->getOption(Memcached::OPT_CONNECT_TIMEOUT));

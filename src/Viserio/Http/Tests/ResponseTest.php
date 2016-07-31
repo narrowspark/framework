@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Viserio\Http\Tests;
 
 use Psr\Http\Message\{
@@ -98,24 +99,14 @@ class ResponseTest extends AbstractMessageTest
         $body = FnStream::decorate(Util::getStream(''), [
             '__toString' => function () use (&$streamIsRead) {
                 $streamIsRead = true;
+
                 return '';
-            }
+            },
         ]);
 
         $r = new Response(200, [], $body);
         $this->assertFalse($streamIsRead);
         $this->assertSame($body, $r->getBody());
-    }
-
-    public function testStatusCanBeNumericString()
-    {
-        $r = new Response('404');
-
-        $r2 = $r->withStatus('201');
-        $this->assertSame(404, $r->getStatusCode());
-        $this->assertSame('Not Found', $r->getReasonPhrase());
-        $this->assertSame(201, $r2->getStatusCode());
-        $this->assertSame('Created', $r2->getReasonPhrase());
     }
 
     public function testCanConstructWithHeaders()

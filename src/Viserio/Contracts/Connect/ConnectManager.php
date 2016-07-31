@@ -1,9 +1,10 @@
 <?php
+declare(strict_types=1);
 namespace Viserio\Contracts\Connect;
 
 interface ConnectManager
 {
-     /**
+    /**
      * All supported PDO drivers.
      *
      * @return string[]

@@ -1,7 +1,7 @@
 <?php
+declare(strict_types=1);
 namespace Viserio\Http\Tests;
 
-use ReflectionMethod;
 use Viserio\Http\{
     ServerRequestFactory,
     Uri,
@@ -70,6 +70,7 @@ class ServerRequestFactoryTest extends \PHPUnit_Framework_TestCase
             ],
         ];
     }
+
     /**
      * @dataProvider dataGetUriFromGlobals
      */
@@ -113,7 +114,7 @@ class ServerRequestFactoryTest extends \PHPUnit_Framework_TestCase
             'REQUEST_URI' => '/blog/article.php?id=10&user=foo',
         ];
         $_COOKIE = [
-            'logged-in' => 'yes!'
+            'logged-in' => 'yes!',
         ];
         $_POST = [
             'name' => 'Pesho',
@@ -130,7 +131,7 @@ class ServerRequestFactoryTest extends \PHPUnit_Framework_TestCase
                 'tmp_name' => '/tmp/php/php1h4j1o',
                 'error' => UPLOAD_ERR_OK,
                 'size' => 123,
-            ]
+            ],
         ];
 
         $server = (new ServerRequestFactory())->createServerRequestFromGlobals();

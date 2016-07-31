@@ -4,7 +4,7 @@
     "description": "The Viserio Pipeline package.",
     "keywords"   : ["narrowspark", "viserio", "pipeline"],
     "license"    : "MIT",
-    "homepage"   : "http://github.com/Narrowspark/pipeline",
+    "homepage"   : "http://github.com/narrowspark/framework",
     "support"    : {
         "issues": "https://github.com/narrowspark/framework/issues",
         "source": "https://github.com/narrowspark/framework"

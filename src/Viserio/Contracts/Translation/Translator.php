@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Viserio\Contracts\Translation;
 
 use Psr\Log\LoggerInterface;
@@ -37,7 +38,7 @@ interface Translator
      */
     public function getCatalogue(): MessageCatalogue;
 
-        /**
+    /**
      * Set a logger instance..
      *
      * @param \Psr\Log\LoggerInterface $logger
@@ -56,9 +57,9 @@ interface Translator
     /**
      * Translates the given message.
      *
-     * @param string      $id         The message id (may also be an object that can be cast to string)
-     * @param array       $parameters An array of parameters for the message
-     * @param string|     $domain     The domain for the message or null to use the default
+     * @param string  $id         The message id (may also be an object that can be cast to string)
+     * @param array   $parameters An array of parameters for the message
+     * @param string| $domain     The domain for the message or null to use the default
      *
      * @throws \InvalidArgumentException If the locale contains invalid characters
      *

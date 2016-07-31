@@ -1,8 +1,9 @@
 <?php
+declare(strict_types=1);
 namespace Viserio\Queue\Jobs;
 
-use Narrowspark\Arr\StaticArr as Arr;
 use Interop\Container\ContainerInterface;
+use Narrowspark\Arr\StaticArr as Arr;
 use Viserio\Queue\Connectors\RedisQueue;
 
 class RedisJob extends AbstractJob

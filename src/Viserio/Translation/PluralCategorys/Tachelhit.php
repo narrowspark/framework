@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Viserio\Translation\PluralCategorys;
 
 use Viserio\Contracts\Translation\PluralCategory as CategoryContract;
@@ -29,10 +30,10 @@ class Tachelhit implements CategoryContract
     {
         $count = $this->normalizeInteger($count);
 
-        if (!is_float($count) && $count >= 0 && $count <= 1) {
+        if (! is_float($count) && $count >= 0 && $count <= 1) {
             return 0;
         } elseif (
-            !is_float($count) && $count >= 2 && $count <= 10
+            ! is_float($count) && $count >= 2 && $count <= 10
         ) {
             return 1;
         }

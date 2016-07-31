@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Viserio\Exception\Transformers;
 
 use ErrorException;
@@ -38,7 +39,7 @@ class CommandLineTransformer implements TransformerContract
 
         // Let's calculate the length of the box, and set the box border.
         $dashes = "\n+" . str_repeat('-', strlen($severity) + 2) . "+\n";
-        $severity = $dashes . "| " . strtoupper($severity) . " |" . $dashes;
+        $severity = $dashes . '| ' . strtoupper($severity) . ' |' . $dashes;
 
         // Okay, now let's prep the message components.
         $error = $exception->getMessage();

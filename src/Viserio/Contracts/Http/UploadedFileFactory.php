@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Viserio\Contracts\Http;
 
 use Psr\Http\Message\UploadedFileInterface;
@@ -17,8 +18,8 @@ interface UploadedFileFactory
      * @see http://php.net/manual/features.file-upload.errors.php
      *
      * @param string|resource $file
-     * @param integer         $size in bytes
-     * @param integer         $error PHP file upload error
+     * @param int             $size            in bytes
+     * @param int             $error           PHP file upload error
      * @param string          $clientFilename
      * @param string          $clientMediaType
      *

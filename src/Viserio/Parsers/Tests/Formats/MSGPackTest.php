@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Viserio\Parsers\Tests\Formats\Formats;
 
 use Viserio\Parsers\Formats\MSGPack;

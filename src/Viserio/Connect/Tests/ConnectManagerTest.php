@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Viserio\Connect\Tests;
 
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
@@ -27,7 +28,7 @@ class ConnectManagerTest extends \PHPUnit_Framework_TestCase
             ->andReturn([
                 'predis' => [
                     'servers' => 'localhost',
-                ]
+                ],
             ]);
 
         $factory = new ConnectManager($config);

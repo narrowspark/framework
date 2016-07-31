@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Viserio\Mail\Transport;
 
 use Swift_Events_EventListener;
@@ -6,19 +7,24 @@ use Swift_Events_SendEvent;
 use Swift_Mime_Message;
 use Swift_Transport;
 
-abstract class Transport implements Swift_Transport
+abstract class AbstractTransport implements Swift_Transport
 {
     /**
      * The plug-ins registered with the transport.
      *
      * @var array
      */
-    public $plugins = [];
+    protected $plugins = [];
+
+    /**
+     * @var string
+     */
+    protected $serverKeyFingerprint;
 
     /**
      * {@inheritdoc}
      */
-    public function isStarted()
+    public function isStarted(): bool
     {
         return true;
     }
@@ -63,5 +69,21 @@ abstract class Transport implements Swift_Transport
                 $plugin->beforeSendPerformed($event);
             }
         }
+    }
+
+    /**
+     * Get the number of recipients.
+     *
+     * @param \Swift_Mime_Message $message
+     *
+     * @return int
+     */
+    protected function numberOfRecipients(Swift_Mime_Message $message): int
+    {
+        return count(array_merge(
+            (array) $message->getTo(),
+            (array) $message->getCc(),
+            (array) $message->getBcc()
+        ));
     }
 }

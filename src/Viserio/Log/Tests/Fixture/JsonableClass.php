@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Viserio\Log\Tests\Fixture;
 
 use Viserio\Contracts\Support\Jsonable;
@@ -9,6 +10,6 @@ class JsonableClass implements Jsonable
     {
         return json_encode([
             'message' => true,
-        ], true);
+        ], JSON_PRETTY_PRINT);
     }
 }

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Viserio\Http\Tests;
 
 use Psr\Http\Message\{
@@ -150,8 +151,9 @@ class RequestTest extends AbstractMessageTest
         $body = FnStream::decorate(Util::getStream(''), [
             '__toString' => function () use (&$streamIsRead) {
                 $streamIsRead = true;
+
                 return '';
-            }
+            },
         ]);
 
         $r = new Request('/', 'GET', [], $body);
@@ -164,8 +166,8 @@ class RequestTest extends AbstractMessageTest
      *
      * @param \Psr\Http\Message\RequestInterface $request
      * @param \Psr\Http\Message\UriInterface     $uri
-     * @param bool             $preserveHost
-     * @param string[]         $expectedHostHeaderLine
+     * @param bool                               $preserveHost
+     * @param string[]                           $expectedHostHeaderLine
      */
     public function testHostHeaderPreservationWhenUriIsSet(
         RequestInterface $request,

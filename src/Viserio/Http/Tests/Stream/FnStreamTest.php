@@ -1,8 +1,9 @@
 <?php
+declare(strict_types=1);
 namespace Viserio\Http\Tests\Stream;
 
-use Viserio\Http\Util;
 use Viserio\Http\Stream\FnStream;
+use Viserio\Http\Util;
 
 class FnStreamTest extends \PHPUnit_Framework_TestCase
 {
@@ -20,8 +21,9 @@ class FnStreamTest extends \PHPUnit_Framework_TestCase
         $s = new FnStream([
             'read' => function ($len) {
                 $this->assertEquals(3, $len);
+
                 return 'foo';
-            }
+            },
         ]);
 
         $this->assertEquals('foo', $s->read(3));
@@ -34,7 +36,7 @@ class FnStreamTest extends \PHPUnit_Framework_TestCase
         $s = new FnStream([
             'close' => function () use (&$called) {
                 $called = true;
-            }
+            },
         ]);
         unset($s);
 
@@ -82,8 +84,9 @@ class FnStreamTest extends \PHPUnit_Framework_TestCase
         $b = FnStream::decorate($a, [
             'read' => function ($len) use (&$called, $a) {
                 $called = true;
+
                 return $a->read($len);
-            }
+            },
         ]);
 
         $this->assertEquals('foo', $b->read(3));

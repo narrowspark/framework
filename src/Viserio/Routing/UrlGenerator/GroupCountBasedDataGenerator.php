@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Viserio\Routing\UrlGenerator;
 
 use Viserio\Contracts\Routing\DataGenerator as DataGeneratorContract;

@@ -4,7 +4,7 @@
     "description": "The Viserio Exception package.",
     "keywords"   : ["narrowspark", "viserio", "exception", "debug", "http", "psr7", "middleware"],
     "license"    : "MIT",
-    "homepage"   : "http://github.com/Narrowspark/session",
+    "homepage"   : "http://github.com/narrowspark/framework",
     "support"    : {
         "issues": "https://github.com/narrowspark/framework/issues",
         "source": "https://github.com/narrowspark/framework"

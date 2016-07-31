@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Viserio\Contracts\Session;
 
 use JsonSerializable;
@@ -32,8 +33,6 @@ interface Store extends JsonSerializable
      * Sets the session ID.
      *
      * @param string $id
-     *
-     * @return void
      */
     public function setId(string $id);
 
@@ -48,8 +47,6 @@ interface Store extends JsonSerializable
      * Sets the session name.
      *
      * @param string $name
-     *
-     * @return void
      */
     public function setName(string $name);
 
@@ -74,7 +71,7 @@ interface Store extends JsonSerializable
      * Migrates the current session to a new session id while maintaining all
      * session attributes.
      *
-     * @param bool $destroy  Whether to delete the old session or leave it to garbage collection.
+     * @param bool $destroy Whether to delete the old session or leave it to garbage collection.
      *
      * @return bool True if session migrated, false if error.
      */
@@ -86,8 +83,6 @@ interface Store extends JsonSerializable
      * This method is generally not required for real sessions as
      * the session will be automatically saved at the end of
      * code execution.
-     *
-     * @return void
      */
     public function save();
 
@@ -115,8 +110,6 @@ interface Store extends JsonSerializable
      *
      * @param string $name
      * @param mixed  $value
-     *
-     * @return void
      */
     public function set(string $name, $value);
 
@@ -125,8 +118,6 @@ interface Store extends JsonSerializable
      *
      * @param string $key
      * @param mixed  $value
-     *
-     * @return void
      */
     public function push(string $key, $value);
 
@@ -148,8 +139,6 @@ interface Store extends JsonSerializable
 
     /**
      * Clears all attributes.
-     *
-     * @return void
      */
     public function clear();
 
@@ -205,8 +194,6 @@ interface Store extends JsonSerializable
 
     /**
      * Age the flash data for the session.
-     *
-     * @return void
      */
     public function ageFlashData();
 
@@ -215,8 +202,6 @@ interface Store extends JsonSerializable
      *
      * @param string $key
      * @param mixed  $value
-     *
-     * @return void
      */
     public function flash(string $key, $value);
 
@@ -225,16 +210,12 @@ interface Store extends JsonSerializable
      * for immediate use.
      *
      * @param string $key
-     * @param mixed $value
-     *
-     * @return void
+     * @param mixed  $value
      */
     public function now(string $key, $value);
 
     /**
      * Reflash all of the session flash data.
-     *
-     * @return void
      */
     public function reflash();
 
@@ -242,8 +223,6 @@ interface Store extends JsonSerializable
      * Reflash a subset of the current flash data.
      *
      * @param array|mixed $keys
-     *
-     * @return void
      */
     public function keep($keys = null);
 
@@ -272,8 +251,6 @@ interface Store extends JsonSerializable
      * Set the request on the handler instance.
      *
      * @param ServerRequestInterface $request
-     *
-     * @return void
      */
     public function setRequestOnHandler(ServerRequestInterface $request);
 

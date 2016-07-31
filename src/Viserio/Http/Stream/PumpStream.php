@@ -1,9 +1,10 @@
 <?php
+declare(strict_types=1);
 namespace Viserio\Http\Stream;
 
 use Exception;
-use RuntimeException;
 use Psr\Http\Message\StreamInterface;
+use RuntimeException;
 use Viserio\Http\Util;
 
 class PumpStream implements StreamInterface
@@ -183,7 +184,7 @@ class PumpStream implements StreamInterface
     }
 
     /**
-     * @param integer $length
+     * @param int $length
      *
      * @return void|null
      */

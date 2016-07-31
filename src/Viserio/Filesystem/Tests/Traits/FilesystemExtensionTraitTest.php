@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Viserio\Filesystem\Tests\Traits;
 
 use org\bovigo\vfs\vfsStream;

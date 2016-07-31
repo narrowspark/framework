@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Viserio\Events;
 
 use Interop\Container\ContainerInterface as ContainerContract;
@@ -185,15 +186,11 @@ class Dispatcher implements DispatcherContract
     }
 
     /**
-     * Determine if a given event has listeners.
-     *
-     * @param string $eventName
-     *
-     * @return bool
+     * {@inhertidoc}
      */
     public function hasListeners(string $eventName): bool
     {
-        return count($this->getListeners($eventName));
+        return (bool) count($this->getListeners($eventName));
     }
 
     /**

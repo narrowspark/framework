@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Viserio\Container;
 
 use Viserio\Contracts\Container\ContainerAware as ContainerAwareContract;

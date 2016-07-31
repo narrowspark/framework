@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Viserio\Http\Tests\Stream;
 
 use RuntimeException;
@@ -90,7 +91,6 @@ class LimitStreamTest extends \PHPUnit_Framework_TestCase
             $this->body->seek(-10);
             $this->fail();
         } catch (RuntimeException $e) {
-
         }
         $this->assertEquals(0, $this->body->tell());
         $this->assertEquals(3, $this->decorated->tell());
@@ -102,7 +102,6 @@ class LimitStreamTest extends \PHPUnit_Framework_TestCase
             $this->body->seek(1000, SEEK_END);
             $this->fail();
         } catch (RuntimeException $e) {
-
         }
     }
 
@@ -161,8 +160,11 @@ class LimitStreamTest extends \PHPUnit_Framework_TestCase
     public function testReturnsNullIfSizeCannotBeDetermined()
     {
         $a = new FnStream([
-            'getSize' => function () { return null; },
-            'tell'    => function () { return 0; },
+            'getSize' => function () {
+            },
+            'tell'    => function () {
+                return 0;
+            },
         ]);
         $b = new LimitStream($a);
 

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Viserio\Session\Tests\Handler;
 
 use Carbon\Carbon;
@@ -50,7 +51,7 @@ class CookieSessionHandlerTest extends \PHPUnit_Framework_TestCase
             ->once()
             ->andReturn('{
                 "temp": {
-                    "expires": "'. Carbon::now()->addMinutes(6)->getTimestamp() .'",
+                    "expires": "' . Carbon::now()->addMinutes(6)->getTimestamp() . '",
                     "data": "Foo Bar"
                 }
             }');
@@ -65,7 +66,8 @@ class CookieSessionHandlerTest extends \PHPUnit_Framework_TestCase
         $request = $this->mock(ServerRequestInterface::class);
         $request
             ->shouldReceive('getCookieParams')
-            ->once();
+            ->once()
+            ->andReturn('');
         $handler = $this->handler;
         $handler->setRequest($request);
 

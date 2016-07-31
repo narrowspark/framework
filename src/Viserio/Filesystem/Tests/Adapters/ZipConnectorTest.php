@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Viserio\Filesystem\Tests\Adapters;
 
 use League\Flysystem\ZipArchive\ZipArchiveAdapter;

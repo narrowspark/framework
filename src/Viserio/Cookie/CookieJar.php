@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Viserio\Cookie;
 
 use Narrowspark\Arr\StaticArr as Arr;
@@ -166,7 +167,7 @@ class CookieJar implements JarContract
     }
 
     /**
-    * {@inheritdoc}
+     * {@inheritdoc}
      */
     public function queue(...$arguments)
     {

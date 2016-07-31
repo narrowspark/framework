@@ -1,25 +1,27 @@
 <?php
+declare(strict_types=1);
 namespace Viserio\Mail;
 
 use Swift_Attachment;
 use Swift_Image;
-use Swift_Message;
+use Swift_Mime_Message;
+use Viserio\Contracts\Mail\Message as MessageContract;
 
-class Message
+class Message implements MessageContract
 {
     /**
      * The Swift Message instance.
      *
-     * @var \Swift_Message
+     * @var \Swift_Mime_Message
      */
     protected $swift;
 
     /**
      * Create a new message instance.
      *
-     * @param \Swift_Message $swift
+     * @param \Swift_Mime_Message $swift
      */
-    public function __construct(Swift_Message $swift)
+    public function __construct(Swift_Mime_Message $swift)
     {
         $this->swift = $swift;
     }
@@ -34,20 +36,13 @@ class Message
      */
     public function __call($method, $parameters)
     {
-        $callable = [$this->swift, $method];
-
-        return call_user_func_array($callable, $parameters);
+        return call_user_func_array([$this->swift, $method], $parameters);
     }
 
     /**
-     * Add a "from" address to the message.
-     *
-     * @param string      $address
-     * @param string|null $name
-     *
-     * @return \Viserio\Mail\Message
+     * {@inheritdoc}
      */
-    public function from($address, $name = null)
+    public function from(string $address, string $name = null): MessageContract
     {
         $this->swift->setFrom($address, $name);
 
@@ -55,14 +50,9 @@ class Message
     }
 
     /**
-     * Set the "sender" of the message.
-     *
-     * @param string      $address
-     * @param string|null $name
-     *
-     * @return \Viserio\Mail\Message
+     * {@inheritdoc}
      */
-    public function sender($address, $name = null)
+    public function sender(string $address, string $name = null): MessageContract
     {
         $this->swift->setSender($address, $name);
 
@@ -70,13 +60,9 @@ class Message
     }
 
     /**
-     * Set the "return path" of the message.
-     *
-     * @param string $address
-     *
-     * @return \Viserio\Mail\Message
+     * {@inheritdoc}
      */
-    public function returnPath($address)
+    public function returnPath(string $address): MessageContract
     {
         $this->swift->setReturnPath($address);
 
@@ -84,70 +70,47 @@ class Message
     }
 
     /**
-     * Add a recipient to the message.
-     *
-     * @param string|array $address
-     * @param string|null  $name
-     * @param bool         $override Will force ignoring the previous recipients
-     *
-     * @return \Viserio\Mail\Message
+     * {@inheritdoc}
      */
-    public function to($address, $name = null, $override = false)
+    public function to($address, string $name = null, bool $override = false): MessageContract
     {
         if ($override) {
-            return $this->swift->setTo($address, $name);
+            $this->swift->setTo($address, $name);
+
+            return $this;
         }
 
         return $this->addAddresses($address, $name, 'To');
     }
 
     /**
-     * Add a carbon copy to the message.
-     *
-     * @param string      $address
-     * @param string|null $name
-     *
-     * @return \Viserio\Mail\Message
+     * {@inheritdoc}
      */
-    public function cc($address, $name = null)
+    public function cc(string $address, string $name = null): MessageContract
     {
         return $this->addAddresses($address, $name, 'Cc');
     }
 
     /**
-     * Add a blind carbon copy to the message.
-     *
-     * @param string      $address
-     * @param string|null $name
-     *
-     * @return \Viserio\Mail\Message
+     * {@inheritdoc}
      */
-    public function bcc($address, $name = null)
+    public function bcc(string $address, string $name = null): MessageContract
     {
         return $this->addAddresses($address, $name, 'Bcc');
     }
 
     /**
-     * Add a reply to address to the message.
-     *
-     * @param string      $address
-     * @param string|null $name
-     *
-     * @return \Viserio\Mail\Message
+     * {@inheritdoc}
      */
-    public function replyTo($address, $name = null)
+    public function replyTo(string $address, string $name = null): MessageContract
     {
         return $this->addAddresses($address, $name, 'ReplyTo');
     }
 
     /**
-     * Set the subject of the message.
-     *
-     * @param string $subject
-     *
-     * @return \Viserio\Mail\Message
+     * {@inheritdoc}
      */
-    public function subject($subject)
+    public function subject(string $subject): MessageContract
     {
         $this->swift->setSubject($subject);
 
@@ -155,13 +118,9 @@ class Message
     }
 
     /**
-     * Set the message priority level.
-     *
-     * @param int $level
-     *
-     * @return \Viserio\Mail\Message
+     * {@inheritdoc}
      */
-    public function priority($level)
+    public function priority(int $level): MessageContract
     {
         $this->swift->setPriority($level);
 
@@ -169,14 +128,9 @@ class Message
     }
 
     /**
-     * Attach a file to the message.
-     *
-     * @param string $file
-     * @param array  $options
-     *
-     * @return \Viserio\Mail\Message
+     * {@inheritdoc}
      */
-    public function attach($file, array $options = [])
+    public function attach(string $file, array $options = []): MessageContract
     {
         $attachment = $this->createAttachmentFromPath($file);
 
@@ -184,15 +138,9 @@ class Message
     }
 
     /**
-     * Attach in-memory data as an attachment.
-     *
-     * @param string $data
-     * @param string $name
-     * @param array  $options
-     *
-     * @return \Viserio\Mail\Message
+     * {@inheritdoc}
      */
-    public function attachData($data, $name, array $options = [])
+    public function attachData(string $data, string $name, array $options = []): MessageContract
     {
         $attachment = $this->createAttachmentFromData($data, $name);
 
@@ -200,27 +148,17 @@ class Message
     }
 
     /**
-     * Embed a file in the message and get the CID.
-     *
-     * @param string $file
-     *
-     * @return string
+     * {@inheritdoc}
      */
-    public function embed($file)
+    public function embed(string $file): string
     {
         return $this->swift->embed(Swift_Image::fromPath($file));
     }
 
     /**
-     * Embed in-memory data in the message and get the CID.
-     *
-     * @param string      $data
-     * @param string      $name
-     * @param string|null $contentType
-     *
-     * @return string
+     * {@inheritdoc}
      */
-    public function embedData($data, $name, $contentType = null)
+    public function embedData(string $data, string $name, string $contentType = null): string
     {
         $image = Swift_Image::newInstance($data, $name, $contentType);
 
@@ -228,9 +166,7 @@ class Message
     }
 
     /**
-     * Get the underlying Swift Message instance.
-     *
-     * @return \Swift_Message
+     * {@inheritdoc}
      */
     public function getSwiftMessage()
     {
@@ -244,9 +180,9 @@ class Message
      * @param string       $name
      * @param string       $type
      *
-     * @return \Viserio\Mail\Message
+     * @return $this
      */
-    protected function addAddresses($address, $name, $type)
+    protected function addAddresses($address, string $name, string $type): MessageContract
     {
         if (is_array($address)) {
             $set = sprintf('set%s', $type);
@@ -266,7 +202,7 @@ class Message
      *
      * @return \Swift_Attachment
      */
-    protected function createAttachmentFromPath($file)
+    protected function createAttachmentFromPath(string $file): Swift_Attachment
     {
         return Swift_Attachment::fromPath($file);
     }
@@ -279,7 +215,7 @@ class Message
      *
      * @return \Swift_Attachment
      */
-    protected function createAttachmentFromData($data, $name)
+    protected function createAttachmentFromData(string $data, string $name): Swift_Attachment
     {
         return Swift_Attachment::newInstance($data, $name);
     }
@@ -290,9 +226,9 @@ class Message
      * @param \Swift_Attachment $attachment
      * @param array             $options
      *
-     * @return \Viserio\Mail\Message
+     * @return $this
      */
-    protected function prepAttachment(Swift_Attachment $attachment, $options = [])
+    protected function prepAttachment(Swift_Attachment $attachment, array $options = []): MessageContract
     {
         // First we will check for a MIME type on the message, which instructs the
         // mail client on what type of attachment the file is so that it may be

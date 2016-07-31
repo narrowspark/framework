@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Viserio\Http;
 
 use InvalidArgumentException;
@@ -11,6 +12,23 @@ use Psr\Http\Message\{
 
 class UploadedFile implements UploadedFileInterface
 {
+    /**
+     * All errors which can happen on a upload.
+     *
+     * @internal
+     *
+     * @var int[]
+     */
+    const ERRORS = [
+        UPLOAD_ERR_OK,
+        UPLOAD_ERR_INI_SIZE,
+        UPLOAD_ERR_FORM_SIZE,
+        UPLOAD_ERR_PARTIAL,
+        UPLOAD_ERR_NO_FILE,
+        UPLOAD_ERR_NO_TMP_DIR,
+        UPLOAD_ERR_CANT_WRITE,
+        UPLOAD_ERR_EXTENSION,
+    ];
     /**
      * The client-provided full path to the file
      *
@@ -61,24 +79,6 @@ class UploadedFile implements UploadedFileInterface
      * @var bool
      */
     protected $moved = false;
-
-    /**
-     * All errors which can happen on a upload.
-     *
-     * @internal
-     *
-     * @var int[]
-     */
-    const ERRORS = [
-        UPLOAD_ERR_OK,
-        UPLOAD_ERR_INI_SIZE,
-        UPLOAD_ERR_FORM_SIZE,
-        UPLOAD_ERR_PARTIAL,
-        UPLOAD_ERR_NO_FILE,
-        UPLOAD_ERR_NO_TMP_DIR,
-        UPLOAD_ERR_CANT_WRITE,
-        UPLOAD_ERR_EXTENSION,
-    ];
 
     /**
      * Create a new uploadedfile instance.
@@ -133,7 +133,7 @@ class UploadedFile implements UploadedFileInterface
     /**
      * {@inheritdoc}
      *
-     * @return integer The file size in bytes or null if unknown.
+     * @return int The file size in bytes or null if unknown.
      */
     public function getSize()
     {

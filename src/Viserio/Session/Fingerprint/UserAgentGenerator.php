@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Viserio\Session\Fingerprint;
 
 use Defuse\Crypto\Key;
@@ -29,7 +30,7 @@ class UserAgentGenerator implements FingerprintContract
     }
 
     /**
-    * {@inhertiddoc}
+     * {@inhertiddoc}
      */
     public function generate(): string
     {

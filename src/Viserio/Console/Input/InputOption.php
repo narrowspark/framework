@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Viserio\Console\Input;
 
 use Symfony\Component\Console\Input\InputOption as SymfonyInputOption;

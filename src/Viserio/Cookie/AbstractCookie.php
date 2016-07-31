@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Viserio\Cookie;
 
 use DateTime;
@@ -309,7 +310,7 @@ abstract class AbstractCookie implements Stringable, CookieContract
     }
 
     /**
-    * Validate SameSite value.
+     * Validate SameSite value.
      *
      * @param string|bool $sameSite
      *
@@ -317,7 +318,7 @@ abstract class AbstractCookie implements Stringable, CookieContract
      */
     protected function validateSameSite($sameSite)
     {
-        if (!in_array($sameSite, [self::SAMESITE_STRICT, self::SAMESITE_LAX])) {
+        if (! in_array($sameSite, [self::SAMESITE_STRICT, self::SAMESITE_LAX])) {
             return false;
         }
 

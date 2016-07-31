@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Viserio\Container;
 
 use Interop\Container\ContainerInterface as ContainerInteropInterface;
@@ -86,21 +87,6 @@ class Container implements \ArrayAccess, ContainerInteropInterface, ContainerCon
      * @var array
      */
     protected $buildStack = [];
-
-    /**
-     * Invoker instance.
-     *
-     * @var \Nucleus\Invoker\Invoker
-     */
-    protected $invoker;
-
-    /**
-     *
-     */
-    public function __construct()
-    {
-        $this->invoker = new Invoker();
-    }
 
     /**
      * Alias a type to a different name.
@@ -336,7 +322,7 @@ class Container implements \ArrayAccess, ContainerInteropInterface, ContainerCon
      */
     public function call(callable $callable, array $args = [])
     {
-        return $this->invoker->invoke($callable, $args);
+
     }
 
     /**

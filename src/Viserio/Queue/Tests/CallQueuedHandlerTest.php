@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Viserio\Queue\Tests;
 
 use Interop\Container\ContainerInterface;

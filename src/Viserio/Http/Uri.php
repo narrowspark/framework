@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Viserio\Http;
 
 use InvalidArgumentException;
@@ -504,7 +505,7 @@ class Uri implements UriInterface
     /**
      * Parse urls with utf-8 support.
      *
-     * @param  string $url
+     * @param string $url
      *
      * @return array
      */
@@ -520,12 +521,12 @@ class Uri implements UriInterface
 
         $components = parse_url($encodeUrl);
 
-        if (!$components) {
+        if (! $components) {
             throw new InvalidArgumentException("Unable to parse URI: $url");
         }
 
         foreach ($components as $key => $value) {
-            $components[$key] = urldecode($value);
+            $components[$key] = urldecode((string) $value);
         }
 
         return $components;

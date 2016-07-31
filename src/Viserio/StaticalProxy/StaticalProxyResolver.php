@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Viserio\StaticalProxy;
 
 use Viserio\Support\Str;
@@ -40,7 +41,7 @@ class StaticalProxyResolver
             return $staticName;
         }
 
-        return ucfirst(Str::camelize(strtolower($staticName)));
+        return ucfirst((string) Str::camelize(strtolower($staticName)));
     }
 
     /**

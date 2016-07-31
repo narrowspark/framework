@@ -1,11 +1,11 @@
 <?php
+declare(strict_types=1);
 namespace Viserio\Mail\Transport;
 
 use GuzzleHttp\ClientInterface;
-use GuzzleHttp\Post\PostFile;
 use Swift_Mime_Message;
 
-class Mailgun extends Transport
+class Mailgun extends AbstractTransport
 {
     /**
      * Guzzle client instance.
@@ -40,24 +40,17 @@ class Mailgun extends Transport
      *
      * @param \GuzzleHttp\ClientInterface $client
      * @param string                      $key
-     * @param string                      $base
      * @param string                      $domain
      */
-    public function __construct(ClientInterface $client, $key, $base, $domain)
+    public function __construct(ClientInterface $client, string $key, string $domain)
     {
         $this->client = $client;
         $this->key = $key;
-        $this->domain = $domain;
-        $this->url = $base . $this->domain . '/messages.mime';
+        $this->setDomain($domain);
     }
 
     /**
-     * Send Email.
-     *
-     * @param \Swift_Mime_Message $message
-     * @param string[]|null       $failedRecipients
-     *
-     * @return Log|null
+     * {@inheritdoc}
      */
     public function send(Swift_Mime_Message $message, &$failedRecipients = null)
     {
@@ -66,21 +59,17 @@ class Mailgun extends Transport
         $options = ['auth' => ['api', $this->key]];
 
         $to = $this->getTo($message);
+
         $message->setBcc([]);
 
-        if (version_compare(ClientInterface::VERSION, '6') === 1) {
-            $options['multipart'] = [
-                ['name' => 'to', 'contents' => $to],
-                ['name' => 'message', 'contents' => $message->toString(), 'filename' => 'message.mime'],
-            ];
-        } else {
-            $options['body'] = [
-                'to' => $to,
-                'message' => new PostFile('message', $message->toString()),
-            ];
-        }
+        $options['multipart'] = [
+            ['name' => 'to', 'contents' => $to],
+            ['name' => 'message', 'contents' => $message->toString(), 'filename' => 'message.mime'],
+        ];
 
-        return $this->client->post($this->url, $options);
+        $this->client->post($this->url, $options);
+
+        return $this->numberOfRecipients($message);
     }
 
     /**
@@ -88,7 +77,7 @@ class Mailgun extends Transport
      *
      * @return string
      */
-    public function getKey()
+    public function getKey(): string
     {
         return $this->key;
     }
@@ -98,11 +87,13 @@ class Mailgun extends Transport
      *
      * @param string $key
      *
-     * @return string
+     * @return $this
      */
-    public function setKey($key)
+    public function setKey(string $key): Mailgun
     {
-        return $this->key = $key;
+        $this->key = $key;
+
+        return $this;
     }
 
     /**
@@ -110,7 +101,7 @@ class Mailgun extends Transport
      *
      * @return string
      */
-    public function getDomain()
+    public function getDomain(): string
     {
         return $this->domain;
     }
@@ -120,13 +111,15 @@ class Mailgun extends Transport
      *
      * @param string $domain
      *
-     * @return string
+     * @return $this
      */
-    public function setDomain($domain)
+    public function setDomain(string $domain): Mailgun
     {
         $this->url = 'https://api.mailgun.net/v3/' . $domain . '/messages.mime';
 
-        return $this->domain = $domain;
+        $this->domain = $domain;
+
+        return $this;
     }
 
     /**
@@ -136,7 +129,7 @@ class Mailgun extends Transport
      *
      * @return string
      */
-    protected function getTo(Swift_Mime_Message $message)
+    protected function getTo(Swift_Mime_Message $message): string
     {
         $formatted = [];
 

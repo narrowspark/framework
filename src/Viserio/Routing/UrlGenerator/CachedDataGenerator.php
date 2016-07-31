@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Viserio\Routing\UrlGenerator;
 
 use Viserio\Contracts\Routing\DataGenerator as DataGeneratorContract;
@@ -61,7 +62,8 @@ class CachedDataGenerator implements DataGeneratorContract
 
         if (! $files->exists($cache) || ! $this->debug) {
             $routes = $this->wrappedGenerator->getData();
-            $files->write($cache, '<?php return ' . var_export($routes, true) . ';');
+            $files->write($cache, '<?php
+declare(strict_types=1); return ' . var_export($routes, true) . ';');
         }
 
         return (array) $files->getRequire($this->cacheFile);

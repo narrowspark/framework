@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Viserio\Mail\Transport;
 
 use GuzzleHttp\ClientInterface;
@@ -11,7 +12,7 @@ use Swift_Mime_Headers_PathHeader;
 use Swift_Mime_Headers_UnstructuredHeader;
 use Swift_Mime_Message;
 
-class Postmark extends Transport
+class Postmark extends AbstractTransport
 {
     /**
      * Guzzle client instance.
@@ -44,14 +45,21 @@ class Postmark extends Transport
      */
     public function send(Swift_Mime_Message $message, &$failedRecipients = null)
     {
-        return $client->post('https://api.postmarkapp.com/email', [
+        $this->beforeSendPerformed($message);
+
+        $version = phpversion() ?? 'Unknown PHP version';
+        $os = PHP_OS ?? 'Unknown OS';
+
+        $this->client->post('https://api.postmarkapp.com/email', [
             'headers' => [
                 'X-Postmark-Server-Token' => $this->serverToken,
+                'Content-Type' => 'application/json',
+                'User-Agent' => "postmark (PHP Version: $version, OS: $os)",
             ],
             'json' => $this->getMessagePayload($message),
         ]);
 
-        return $this->client->post($this->url, $options);
+        return $this->numberOfRecipients($message);
     }
 
     /**
@@ -59,7 +67,7 @@ class Postmark extends Transport
      *
      * @return string
      */
-    public function getServerToken()
+    public function getServerToken(): string
     {
         return $this->serverToken;
     }
@@ -71,26 +79,29 @@ class Postmark extends Transport
      *
      * @return string
      */
-    public function setServerToken($serverToken)
+    public function setServerToken(string $serverToken): Postmark
     {
-        return $this->serverToken = $serverToken;
+        $this->serverToken = $serverToken;
+
+        return $this;
     }
 
     /**
      * Convert email dictionary with emails and names
      * to array of emails with names.
      *
-     * @param string[] $emails
+     * @param array $emails
      *
      * @return array
      */
-    private function convertEmailsArray(array $emails)
+    protected function convertEmailsArray(array $emails): array
     {
         $convertedEmails = [];
+
         foreach ($emails as $email => $name) {
-            $convertedEmails[] = $name
-            ? '"' . str_replace('"', '\\"', $name) . sprintf('\ <%s>', $email)
-            : $email;
+            $convertedEmails[] = $name ?
+            '"' . str_replace('"', '\\"', $name) . "\" <{$email}>" :
+            $email;
         }
 
         return $convertedEmails;
@@ -101,15 +112,17 @@ class Postmark extends Transport
      * Excludes parts of type \Swift_Mime_Attachment as those
      * are handled later.
      *
-     * @param \Swift_Mime_Message $message
-     * @param string              $mimeType
+     * @param Swift_Mime_Message $message
+     * @param string             $mimeType
      *
-     * @return \Swift_Mime_MimeEntity|null
+     * @return \Swift_Mime_MimePart|null
      */
-    private function getMIMEPart(Swift_Mime_Message $message, $mimeType)
+    protected function getMIMEPart(Swift_Mime_Message $message, $mimeType)
     {
         foreach ($message->getChildren() as $part) {
-            if (strpos($part->getContentType(), $mimeType) === 0 &&  ! ($part instanceof Swift_Mime_Attachment)) {
+            if (strpos($part->getContentType(), $mimeType) === 0 &&
+                ! ($part instanceof Swift_Mime_Attachment)
+            ) {
                 return $part;
             }
         }
@@ -118,18 +131,19 @@ class Postmark extends Transport
     /**
      * Convert a Swift Mime Message to a Postmark Payload.
      *
-     * @param \Swift_Mime_Message $message
+     * @param Swift_Mime_Message $message
      *
      * @return array
      */
-    private function getMessagePayload(Swift_Mime_Message $message)
+    protected function getMessagePayload(Swift_Mime_Message $message): array
     {
         $payload = [];
-        $this->processRecipients($payload, $message);
-        $this->processMessageParts($payload, $message);
+
+        $payload = $this->processRecipients($payload, $message);
+        $payload = $this->processMessageParts($payload, $message);
 
         if ($message->getHeaders()) {
-            $this->processHeaders($payload, $message);
+            $payload = $this->processHeaders($payload, $message);
         }
 
         return $payload;
@@ -138,12 +152,12 @@ class Postmark extends Transport
     /**
      * Applies the recipients of the message into the API Payload.
      *
-     * @param array               $payload
-     * @param \Swift_Mime_Message $message
+     * @param array              $payload
+     * @param Swift_Mime_Message $message
      *
-     * @return object|null
+     * @return array
      */
-    private function processRecipients(&$payload, $message)
+    protected function processRecipients(array $payload, Swift_Mime_Message $message): array
     {
         $payload['From'] = implode(',', $this->convertEmailsArray($message->getFrom()));
         $payload['To'] = implode(',', $this->convertEmailsArray($message->getTo()));
@@ -160,23 +174,26 @@ class Postmark extends Transport
         if ($bcc = $message->getBcc()) {
             $payload['Bcc'] = implode(',', $this->convertEmailsArray($bcc));
         }
+
+        return $payload;
     }
 
     /**
      * Applies the message parts and attachments
      * into the API Payload.
      *
-     * @param array               $payload
-     * @param \Swift_Mime_Message $message
+     * @param array              $payload
+     * @param Swift_Mime_Message $message
      *
-     * @return object|null
+     * @return array
      */
-    private function processMessageParts(&$payload, $message)
+    protected function processMessageParts(array $payload, Swift_Mime_Message $message): array
     {
         //Get the primary message.
         switch ($message->getContentType()) {
             case 'text/html':
             case 'multipart/alternative':
+            case 'multipart/mixed':
                 $payload['HtmlBody'] = $message->getBody();
                 break;
             default:
@@ -195,27 +212,38 @@ class Postmark extends Transport
 
         if ($message->getChildren()) {
             $payload['Attachments'] = [];
+
             foreach ($message->getChildren() as $attachment) {
                 if (is_object($attachment) && $attachment instanceof Swift_Mime_Attachment) {
-                    $payload['Attachments'][] = [
+                    $attachments = [
                         'Name' => $attachment->getFilename(),
                         'Content' => base64_encode($attachment->getBody()),
                         'ContentType' => $attachment->getContentType(),
                     ];
+
+                    if ($attachment->getDisposition() !== 'attachment' &&
+                        $attachment->getId() != null
+                    ) {
+                        $attachments['ContentID'] = 'cid:' . $attachment->getId();
+                    }
+
+                    $payload['Attachments'][] = $attachments;
                 }
             }
         }
+
+        return $payload;
     }
 
     /**
      * Applies the headers into the API Payload.
      *
-     * @param array               $payload
-     * @param \Swift_Mime_Message $message
+     * @param array              $payload
+     * @param Swift_Mime_Message $message
      *
-     * @return object|null
+     * @return array
      */
-    private function processHeaders(&$payload, $message)
+    protected function processHeaders(array $payload, Swift_Mime_Message $message): array
     {
         $headers = [];
 
@@ -223,9 +251,10 @@ class Postmark extends Transport
             $fieldName = $value->getFieldName();
             $excludedHeaders = ['Subject', 'Content-Type', 'MIME-Version', 'Date'];
 
-            if (! in_array($fieldName, $excludedHeaders, true)) {
+            if (! in_array($fieldName, $excludedHeaders)) {
                 if ($value instanceof Swift_Mime_Headers_UnstructuredHeader ||
-                    $value instanceof Swift_Mime_Headers_OpenDKIMHeader) {
+                    $value instanceof Swift_Mime_Headers_OpenDKIMHeader
+                ) {
                     array_push($headers, [
                         'Name' => $fieldName,
                         'Value' => $value->getValue(),
@@ -233,7 +262,8 @@ class Postmark extends Transport
                 } elseif ($value instanceof Swift_Mime_Headers_DateHeader ||
                     $value instanceof Swift_Mime_Headers_IdentificationHeader ||
                     $value instanceof Swift_Mime_Headers_ParameterizedHeader ||
-                    $value instanceof Swift_Mime_Headers_PathHeader) {
+                    $value instanceof Swift_Mime_Headers_PathHeader
+                ) {
                     array_push($headers, [
                         'Name' => $fieldName,
                         'Value' => $value->getFieldBody(),
@@ -250,5 +280,7 @@ class Postmark extends Transport
         }
 
         $payload['Headers'] = $headers;
+
+        return $payload;
     }
 }

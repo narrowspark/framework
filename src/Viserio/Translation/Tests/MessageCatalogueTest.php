@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Viserio\Translation\Tests;
 
 use Viserio\Translation\MessageCatalogue;
@@ -172,7 +173,7 @@ class MessageCatalogueTest extends \PHPUnit_Framework_TestCase
         $catalogue->addCatalogue(new MessageCatalogue('fr', []));
     }
 
-        /**
+    /**
      * @dataProvider getValidLocalesTests
      */
     public function testSetValidLocale($locale)
@@ -184,17 +185,17 @@ class MessageCatalogueTest extends \PHPUnit_Framework_TestCase
 
     public function getValidLocalesTests()
     {
-        return array(
-            array(''),
-            array('fr'),
-            array('francais'),
-            array('FR'),
-            array('frFR'),
-            array('fr-FR'),
-            array('fr_FR'),
-            array('fr.FR'),
-            array('fr-FR.UTF8'),
-            array('sr@latin'),
-        );
+        return [
+            [''],
+            ['fr'],
+            ['francais'],
+            ['FR'],
+            ['frFR'],
+            ['fr-FR'],
+            ['fr_FR'],
+            ['fr.FR'],
+            ['fr-FR.UTF8'],
+            ['sr@latin'],
+        ];
     }
 }

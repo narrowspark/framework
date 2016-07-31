@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Viserio\Middleware\Tests\Fixture;
 
 use Interop\Container\ContainerInterface;
@@ -40,7 +41,7 @@ class FakeContainerMiddleware implements ServerMiddlewareContract
         return $this->container;
     }
 
-   public function process(
+    public function process(
         ServerRequestInterface $request,
         FrameContract $frame
     ): ResponseInterface {

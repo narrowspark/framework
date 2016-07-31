@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Viserio\Application\Traits;
 
 use Stack\Builder as StackBuilder;

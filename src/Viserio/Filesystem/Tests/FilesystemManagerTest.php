@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Viserio\Filesystem\Tests;
 
 use Guzzle\Http\Exception\ClientErrorResponseException;
@@ -10,16 +11,13 @@ use Viserio\Filesystem\{
     FilesystemAdapter,
     FilesystemManager
 };
+
 class FilesystemManagerTest extends \PHPUnit_Framework_TestCase
 {
     use MockeryTrait;
 
     public function testAwsS3ConnectorDriver()
     {
-        if (defined('HHVM_VERSION') && version_compare(HHVM_VERSION, '3.9.0') < 0) {
-            $this->markTestSkipped('The AWS SDK requires a newer verison of HHVM');
-        }
-
         $config = $this->mock(ConfigManger::class);
         $config->shouldReceive('get')
             ->once()
@@ -31,7 +29,7 @@ class FilesystemManagerTest extends \PHPUnit_Framework_TestCase
                     'bucket'  => 'your-bucket',
                     'region'  => 'us-east-1',
                     'version' => 'latest',
-                ]
+                ],
             ]);
 
         $manager = new FilesystemManager($config);
@@ -52,7 +50,7 @@ class FilesystemManagerTest extends \PHPUnit_Framework_TestCase
                 'dropbox' => [
                     'token' => 'your-token',
                     'app'   => 'your-app',
-                ]
+                ],
             ]);
 
         $manager = new FilesystemManager($config);
@@ -79,7 +77,7 @@ class FilesystemManagerTest extends \PHPUnit_Framework_TestCase
                     'port'     => 21,
                     'username' => 'your-username',
                     'password' => 'your-password',
-                ]
+                ],
             ]);
 
         $manager = new FilesystemManager($config);
@@ -104,7 +102,7 @@ class FilesystemManagerTest extends \PHPUnit_Framework_TestCase
                 'gridfs' => [
                     'server'   => 'mongodb://localhost:27017',
                     'database' => 'your-database',
-                ]
+                ],
             ]);
 
         $manager = new FilesystemManager($config);
@@ -128,7 +126,7 @@ class FilesystemManagerTest extends \PHPUnit_Framework_TestCase
             ->andReturn([
                 'local' => [
                     'path' => __DIR__,
-                ]
+                ],
             ]);
 
         $manager = new FilesystemManager($config);
@@ -146,7 +144,7 @@ class FilesystemManagerTest extends \PHPUnit_Framework_TestCase
             ->once()
             ->with('filesystem.connections', [])
             ->andReturn([
-                'null' => []
+                'null' => [],
             ]);
 
         $manager = new FilesystemManager($config);
@@ -170,7 +168,7 @@ class FilesystemManagerTest extends \PHPUnit_Framework_TestCase
                     'username'  => 'your-username',
                     'apiKey'    => 'your-api-key',
                     'container' => 'your-container',
-                ]
+                ],
             ]);
 
         $manager = new FilesystemManager($config);
@@ -199,7 +197,7 @@ class FilesystemManagerTest extends \PHPUnit_Framework_TestCase
                     'port'     => 22,
                     'username' => 'your-username',
                     'password' => 'your-password',
-                ]
+                ],
             ]);
 
         $manager = new FilesystemManager($config);
@@ -217,7 +215,7 @@ class FilesystemManagerTest extends \PHPUnit_Framework_TestCase
             ->once()
             ->with('filesystem.connections', [])
             ->andReturn([
-                'vfs' => []
+                'vfs' => [],
             ]);
 
         $manager = new FilesystemManager($config);
@@ -239,7 +237,7 @@ class FilesystemManagerTest extends \PHPUnit_Framework_TestCase
                     'baseUri'  => 'http://example.org/dav/',
                     'userName' => 'your-username',
                     'password' => 'your-password',
-                ]
+                ],
             ]);
 
         $manager = new FilesystemManager($config);
@@ -259,7 +257,7 @@ class FilesystemManagerTest extends \PHPUnit_Framework_TestCase
             ->andReturn([
                 'zip' => [
                     'path' => __DIR__ . '\Adapters\stubs\test.zip',
-                ]
+                ],
             ]);
 
         $manager = new FilesystemManager($config);

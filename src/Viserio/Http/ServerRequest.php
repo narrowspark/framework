@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Viserio\Http;
 
 use Psr\Http\Message\{
@@ -29,7 +30,7 @@ class ServerRequest extends Request implements ServerRequestInterface
      */
     private $parsedBody;
 
-   /**
+    /**
      * The request query string params.
      *
      * @var array

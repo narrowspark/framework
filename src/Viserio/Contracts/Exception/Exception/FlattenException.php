@@ -1,9 +1,10 @@
 <?php
+declare(strict_types=1);
 namespace Viserio\Contracts\Exception\Exception;
 
+use __PHP_Incomplete_Class;
 use ArrayObject;
 use Throwable;
-use __PHP_Incomplete_Class;
 
 /**
  * @author Fabien Potencier <fabien@symfony.com>
@@ -53,12 +54,12 @@ class FlattenException
     {
         $exceptions = [];
 
-        foreach (array_merge(array($this), $this->getAllPrevious()) as $exception) {
-            $exceptions[] = array(
+        foreach (array_merge([$this], $this->getAllPrevious()) as $exception) {
+            $exceptions[] = [
                 'message' => $exception->getMessage(),
                 'class' => $exception->getClass(),
                 'trace' => $exception->getTrace(),
-            );
+            ];
         }
 
         return $exceptions;
@@ -189,7 +190,7 @@ class FlattenException
                 $namespace = implode('\\', $parts);
             }
 
-            $this->trace[] = array(
+            $this->trace[] = [
                 'namespace' => $namespace,
                 'short_class' => $class,
                 'class' => isset($entry['class']) ? $entry['class'] : '',
@@ -198,7 +199,7 @@ class FlattenException
                 'file' => isset($entry['file']) ? $entry['file'] : null,
                 'line' => isset($entry['line']) ? $entry['line'] : null,
                 'args' => isset($entry['args']) ? $this->flattenArgs($entry['args']) : [],
-            );
+            ];
         }
     }
 
@@ -208,32 +209,32 @@ class FlattenException
 
         foreach ($args as $key => $value) {
             if (++$count > 1e4) {
-                return array('array', '*SKIPPED over 10000 entries*');
+                return ['array', '*SKIPPED over 10000 entries*'];
             }
 
             if (is_object($value)) {
-                $result[$key] = array('object', get_class($value));
+                $result[$key] = ['object', get_class($value)];
             } elseif (is_array($value)) {
                 if ($level > 10) {
-                    $result[$key] = array('array', '*DEEP NESTED ARRAY*');
+                    $result[$key] = ['array', '*DEEP NESTED ARRAY*'];
                 } else {
-                    $result[$key] = array('array', $this->flattenArgs($value, $level + 1, $count));
+                    $result[$key] = ['array', $this->flattenArgs($value, $level + 1, $count)];
                 }
             } elseif (null === $value) {
-                $result[$key] = array('null', null);
+                $result[$key] = ['null', null];
             } elseif (is_bool($value)) {
-                $result[$key] = array('boolean', $value);
-            } elseif (is_integer($value)) {
-                $result[$key] = array('integer', $value);
+                $result[$key] = ['boolean', $value];
+            } elseif (is_int($value)) {
+                $result[$key] = ['integer', $value];
             } elseif (is_float($value)) {
-                $result[$key] = array('float', $value);
+                $result[$key] = ['float', $value];
             } elseif (is_resource($value)) {
-                $result[$key] = array('resource', get_resource_type($value));
+                $result[$key] = ['resource', get_resource_type($value)];
             } elseif ($value instanceof __PHP_Incomplete_Class) {
                 // Special case of object, is_object will return false
-                $result[$key] = array('incomplete-object', $this->getClassNameFromIncomplete($value));
+                $result[$key] = ['incomplete-object', $this->getClassNameFromIncomplete($value)];
             } else {
-                $result[$key] = array('string', (string) $value);
+                $result[$key] = ['string', (string) $value];
             }
         }
 

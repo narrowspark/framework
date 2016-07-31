@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Viserio\Parsers\Formats;
 
 use Viserio\Contracts\Parsers\{
@@ -35,7 +36,8 @@ class PHP implements FormatContract
             $data
         );
 
-        $output = '<?php return ' . $formatted . ';';
+        $output = '<?php
+declare(strict_types=1); return ' . $formatted . ';';
 
         return $output;
     }

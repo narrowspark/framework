@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Viserio\Contracts\Cookie;
 
 interface QueueingFactory extends Factory
@@ -6,9 +7,7 @@ interface QueueingFactory extends Factory
     /**
      * Queue a cookie to send with the next response.
      *
-     * @param mixed ...$arguments
-     *
-     * @param  mixed
+     * @param mixed ...$argument
      */
     public function queue(...$arguments);
 

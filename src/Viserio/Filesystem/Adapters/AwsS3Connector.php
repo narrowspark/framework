@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Viserio\Filesystem\Adapters;
 
 use Aws\S3\S3Client;

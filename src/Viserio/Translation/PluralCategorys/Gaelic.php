@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Viserio\Translation\PluralCategorys;
 
 use Viserio\Contracts\Translation\PluralCategory as CategoryContract;

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Viserio\StaticalProxy;
 
 use BadMethodCallException;
@@ -199,7 +200,5 @@ abstract class StaticalProxy
         if ($root = static::getStaticalProxyRoot()) {
             return get_class($root);
         }
-
-        return null;
     }
 }

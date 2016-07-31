@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Viserio\Contracts\Translation;
 
 interface TransChecker
@@ -26,7 +27,7 @@ interface TransChecker
      */
     public function getLocales(): array;
 
-        /**
+    /**
      * Set the locals that are ignored on the check.
      *
      * @param array $ignored

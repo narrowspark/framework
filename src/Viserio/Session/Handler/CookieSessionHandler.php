@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Viserio\Session\Handler;
 
 use Carbon\Carbon;
@@ -102,9 +103,9 @@ class CookieSessionHandler implements SessionHandlerInterface
      */
     public function destroy($sessionId)
     {
-         $this->cookie->queue($this->cookie->delete($sessionId));
+        $this->cookie->queue($this->cookie->delete($sessionId));
 
-         return $this->cookie->hasQueued($sessionId);
+        return $this->cookie->hasQueued($sessionId);
     }
 
     /**

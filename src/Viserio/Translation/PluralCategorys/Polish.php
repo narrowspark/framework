@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Viserio\Translation\PluralCategorys;
 
 use Viserio\Contracts\Translation\PluralCategory as CategoryContract;
@@ -30,11 +31,11 @@ class Polish implements CategoryContract
         $count = $this->normalizeInteger($count);
 
         $i10 = $count % 10;
-        $i   = $count % 100;
+        $i = $count % 100;
 
         if ($count === 1) {
             return 0;
-        } elseif (!is_float($count) &&
+        } elseif (! is_float($count) &&
             $i10 >= 2 &&
             $i10 <= 4 &&
             ! ($i >= 12 &&$i <= 14) &&

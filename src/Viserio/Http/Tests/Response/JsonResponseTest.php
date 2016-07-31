@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Viserio\Http\Tests\Response;
 
 use Viserio\Http\Response\JsonResponse;
@@ -78,14 +79,6 @@ class JsonResponseTest extends \PHPUnit_Framework_TestCase
      */
     public function testJsonErrorHandlingOfBadEmbeddedData()
     {
-        if (version_compare(PHP_VERSION, '5.5', 'lt')) {
-            $this->markTestSkipped('Skipped as PHP versions prior to 5.5 are noisy about JSON errors');
-        }
-
-        if (defined('HHVM_VERSION')) {
-            $this->markTestSkipped('Skipped as HHVM happily serializes embedded resources');
-        }
-
         // Serializing something that is not serializable.
         $data = [
             'stream' => fopen('php://memory', 'r'),
@@ -110,7 +103,7 @@ class JsonResponseTest extends \PHPUnit_Framework_TestCase
     {
         $defaultFlags = JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP | JSON_UNESCAPED_SLASHES;
         $response = new JsonResponse([$key => $value]);
-        $stream   = $response->getBody();
+        $stream = $response->getBody();
         $contents = (string) $stream;
         $expected = json_encode($value, $defaultFlags);
         $this->assertContains(

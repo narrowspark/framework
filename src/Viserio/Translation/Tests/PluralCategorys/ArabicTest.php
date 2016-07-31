@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Viserio\Translation\Tests\PluralCategorys;
 
 use Viserio\Translation\PluralCategorys\Arabic;
@@ -99,7 +100,7 @@ class ArabicTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param integer $int
+     * @param int $int
      */
     protected function intToString($int)
     {

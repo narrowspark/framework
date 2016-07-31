@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Viserio\Contracts\StaticalProxy;
 
 interface AliasLoader
@@ -24,7 +25,6 @@ interface AliasLoader
 
     /**
      * Removes an alias.
-     * @return void
      */
     public function removeAlias();
 
@@ -42,7 +42,6 @@ interface AliasLoader
      *
      * @param string|string[] $patterns
      * @param string|null     $translation
-     * @return void
      */
     public function aliasPattern($patterns, string $translation = null);
 
@@ -51,7 +50,6 @@ interface AliasLoader
      *
      * @param string      $pattern
      * @param string|null $translation
-     * @return void
      */
     public function removeAliasPattern(string $pattern, string $translation = null);
 
@@ -60,7 +58,6 @@ interface AliasLoader
      *
      * @param string $class
      * @param string $alias
-     * @return void
      */
     public function aliasNamespace(string $class, string $alias);
 
@@ -75,13 +72,11 @@ interface AliasLoader
 
     /**
      * Removes a namespace alias.
-     * @return void
      */
     public function removeNamespaceAlias();
 
     /**
      * Register the loader on the auto-loader stack.
-     * @return void
      */
     public function register();
 
@@ -94,7 +89,6 @@ interface AliasLoader
 
     /**
      * Unregisters the autoloader function.
-     * @return void
      */
     public function unregister();
 
@@ -102,7 +96,6 @@ interface AliasLoader
      * Set the registered aliases.
      *
      * @param array $aliases
-     * @return void
      */
     public function setAliases(array $aliases);
 

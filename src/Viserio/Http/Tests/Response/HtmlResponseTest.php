@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Viserio\Http\Tests\Response;
 
 use Viserio\Http\Response\HtmlResponse;
@@ -29,7 +30,7 @@ class HtmlResponseTest extends \PHPUnit_Framework_TestCase
         $body = '<html>Uh oh not found</html>';
         $status = 404;
         $headers = [
-            'x-custom' => [ 'foo-bar' ],
+            'x-custom' => ['foo-bar'],
         ];
         $response = new HtmlResponse($body, $status, $headers);
 

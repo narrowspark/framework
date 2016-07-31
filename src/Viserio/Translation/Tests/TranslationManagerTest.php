@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Viserio\Translation\Tests;
 
 use org\bovigo\vfs\vfsStream;
@@ -69,7 +70,8 @@ class TranslationManagerTest extends \PHPUnit_Framework_TestCase
      */
     public function testImportToThrowException()
     {
-        vfsStream::newFile('invalid.php')->withContent("<?php return [
+        vfsStream::newFile('invalid.php')->withContent("<?php
+declare(strict_types=1); return [
     'domain1' => [
         'foo' => 'bar',
     ],
@@ -85,7 +87,8 @@ class TranslationManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testImport()
     {
-        vfsStream::newFile('en.php')->withContent("<?php return [
+        vfsStream::newFile('en.php')->withContent("<?php
+declare(strict_types=1); return [
     'lang' => 'en',
     'domain1' => [
         'foo' => 'bar',
@@ -106,7 +109,8 @@ class TranslationManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testImportWithDefaultFallback()
     {
-        vfsStream::newFile('fr.php')->withContent("<?php return [
+        vfsStream::newFile('fr.php')->withContent("<?php
+declare(strict_types=1); return [
     'lang' => 'fr',
     'domain1' => [
         'foo' => 'bar',
@@ -133,7 +137,8 @@ class TranslationManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testImportWithLanguageFallback()
     {
-        vfsStream::newFile('de.php')->withContent("<?php return [
+        vfsStream::newFile('de.php')->withContent("<?php
+declare(strict_types=1); return [
     'lang' => 'de',
     'domain1' => [
         'foo' => 'bar',

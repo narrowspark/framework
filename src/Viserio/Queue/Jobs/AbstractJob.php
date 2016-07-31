@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Viserio\Queue\Jobs;
 
 use DateTime;
@@ -146,12 +147,10 @@ abstract class AbstractJob implements JobContract
         return $name;
     }
 
-     /**
+    /**
      * Resolve and run the job handler method.
      *
      * @param array $payload
-     *
-     * @return void
      */
     protected function resolveAndRun(array $payload)
     {

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Viserio\Queue;
 
 use Aws\Sqs\SqsClient;
@@ -57,14 +58,6 @@ class QueueManager extends AbstractConnectionManager implements MonitorContract
         $this->config = $config;
         $this->container = $container;
         $this->encrypter = $encrypter;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function looping($callback)
-    {
-        $this->container->get('events')->on('viserio.queue.looping', $callback);
     }
 
     /**

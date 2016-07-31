@@ -1,7 +1,7 @@
 <?php
+declare(strict_types=1);
 namespace Viserio\Queue\Connectors;
 
-use Narrowspark\Arr\StaticArr as Arr;
 use Pheanstalk\Job as PheanstalkJob;
 use Pheanstalk\Pheanstalk;
 use Viserio\Queue\Jobs\BeanstalkdJob;
@@ -26,8 +26,8 @@ class BeanstalkdQueue extends AbstractQueue
      * Create a new Beanstalkd queue instance.
      *
      * @param \Pheanstalk\Pheanstalk $pheanstalk
-     * @param string                          $default
-     * @param int                             $timeToRun
+     * @param string                 $default
+     * @param int                    $timeToRun
      */
     public function __construct(Pheanstalk $pheanstalk, string $default, int $timeToRun)
     {
@@ -86,19 +86,15 @@ class BeanstalkdQueue extends AbstractQueue
         if ($job instanceof PheanstalkJob) {
             return new BeanstalkdJob($this->container, $this->pheanstalk, $job, $queue);
         }
-
-        return;
     }
 
     /**
      * Delete a message from the Beanstalk queue.
      *
      * @param string $queue
-     * @param string $id
-     *
-     * @return void
+     * @param int    $id
      */
-    public function deleteMessage(string $queue, string $id)
+    public function deleteMessage(string $queue, int $id)
     {
         $this->pheanstalk->useTube($this->getQueue($queue))->delete($id);
     }

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Viserio\Session\Handler;
 
 use Carbon\Carbon;
@@ -108,6 +109,6 @@ class FileSessionHandler implements SessionHandlerInterface
             $boolArray[] = $this->files->delete([$file->getRealPath()]);
         }
 
-        return !in_array('false', $boolArray, true);
+        return ! in_array('false', $boolArray, true);
     }
 }

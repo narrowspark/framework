@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Viserio\Contracts\Translation;
 
 interface MessageCatalogue
@@ -34,8 +35,6 @@ interface MessageCatalogue
      * @param string $id          The message id
      * @param string $translation The messages translation
      * @param string $domain      The domain name
-     *
-     * @return void
      */
     public function set(string $id, string $translation, string $domain = 'messages');
 
@@ -74,8 +73,6 @@ interface MessageCatalogue
      *
      * @param array  $messages An array of translations
      * @param string $domain   The domain name
-     *
-     * @return void
      */
     public function replace(array $messages, string $domain = 'messages');
 
@@ -84,8 +81,6 @@ interface MessageCatalogue
      *
      * @param string $messages
      * @param string $domain
-     *
-     * @return void
      */
     public function remove(string $messages, string $domain = 'messages');
 
@@ -94,8 +89,6 @@ interface MessageCatalogue
      *
      * @param array  $messages An array of translations
      * @param string $domain   The domain name
-     *
-     * @return void
      */
     public function add(array $messages, string $domain = 'messages');
 
@@ -107,8 +100,6 @@ interface MessageCatalogue
      * @param MessageCatalogue $catalogue A MessageCatalogue instance
      *
      * @throws \LogicException
-     *
-     * @return void
      */
     public function addCatalogue(MessageCatalogue $catalogue);
 
@@ -121,8 +112,6 @@ interface MessageCatalogue
      * @param MessageCatalogue $catalogue A MessageCatalogue instance
      *
      * @throws \LogicException
-     *
-     * @return void
      */
     public function addFallbackCatalogue(MessageCatalogue $catalogue);
 

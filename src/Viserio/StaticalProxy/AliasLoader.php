@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Viserio\StaticalProxy;
 
 use Viserio\Contracts\StaticalProxy\AliasLoader as AliasLoaderContract;

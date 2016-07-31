@@ -1,7 +1,7 @@
 <?php
+declare(strict_types=1);
 namespace Viserio\Support\Tests\Fixture;
 
-use stdClass;
 use Viserio\Support\AbstractConnectionManager;
 
 class TestConnectionManager extends AbstractConnectionManager
@@ -13,13 +13,13 @@ class TestConnectionManager extends AbstractConnectionManager
 
     protected function createFooConnection($config = null)
     {
-        return (new class() {
+        return new class() {
             public function getName(): string
             {
                 return 'manager';
             }
         }
-        );
+        ;
     }
 
     /**

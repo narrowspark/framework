@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Viserio\Parsers\Tests\Formats;
 
 use org\bovigo\vfs\vfsStream;
@@ -80,10 +81,6 @@ class XMLTest extends \PHPUnit_Framework_TestCase
 
     public function testDumpToThrowException()
     {
-        if (defined('HHVM_VERSION')) {
-            $this->markTestSkipped('@TODO find error.');
-        }
-
         $this->expectException('Viserio\Contracts\Parsers\Exception\DumpException');
         $this->parser->dump(['one', 'two', 'three']);
     }

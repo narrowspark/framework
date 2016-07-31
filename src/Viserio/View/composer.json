@@ -4,7 +4,7 @@
     "description": "The Viserio View package.",
     "keywords"   : ["narrowspark", "viserio", "view", "php", "virtuoso"],
     "license"    : "MIT",
-    "homepage"   : "http://github.com/Narrowspark/api",
+    "homepage"   : "http://github.com/narrowspark/framework",
     "support"    : {
         "issues": "https://github.com/narrowspark/framework/issues",
         "source": "https://github.com/narrowspark/framework"

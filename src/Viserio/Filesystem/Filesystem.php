@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Viserio\Filesystem;
 
 use FilesystemIterator;
@@ -96,7 +97,7 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract, Direct
             throw new FileNotFoundException($path);
         }
 
-        return file_put_contents($path, $contents, FILE_APPEND);
+        return (bool) file_put_contents($path, $contents, FILE_APPEND);
     }
 
     /**

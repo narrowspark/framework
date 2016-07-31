@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Viserio\Contracts\Bus;
 
 use Closure;
@@ -45,8 +46,6 @@ interface Dispatcher
      * Register command to handler mappings.
      *
      * @param array $commands
-     *
-     * @return void
      */
     public function maps(array $commands);
 
@@ -54,8 +53,6 @@ interface Dispatcher
      * Register a fallback mapper callback.
      *
      * @param \Closure $mapper
-     *
-     * @return void
      */
     public function mapUsing(Closure $mapper);
 

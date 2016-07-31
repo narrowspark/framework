@@ -4,7 +4,7 @@
     "description": "The Viserio Connectors package.",
     "keywords"   : ["narrowspark", "viserio", "connectors", "predis", "connect", "pdo"],
     "license"    : "MIT",
-    "homepage"   : "http://github.com/Narrowspark/connect",
+    "homepage"   : "http://github.com/narrowspark/framework",
     "support"    : {
         "issues": "https://github.com/narrowspark/framework/issues",
         "source": "https://github.com/narrowspark/framework"

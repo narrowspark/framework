@@ -1,12 +1,12 @@
 <?php
+declare(strict_types=1);
 namespace Viserio\Http\Stream;
 
-use RuntimeException;
 use Psr\Http\Message\StreamInterface;
+use RuntimeException;
 
 class LimitStream extends AbstractStreamDecorator
 {
-
     /** @var int Offset to start reading from */
     private $offset;
 
@@ -55,7 +55,7 @@ class LimitStream extends AbstractStreamDecorator
     public function getSize()
     {
         if (null === ($length = $this->stream->getSize())) {
-            return null;
+            return;
         } elseif ($this->limit == -1) {
             return $length - $this->offset;
         } else {

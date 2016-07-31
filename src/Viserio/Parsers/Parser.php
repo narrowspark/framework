@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Viserio\Parsers;
 
 use Viserio\Contracts\{
@@ -113,9 +114,14 @@ class Parser implements ParserContract
      *
      * @return string Return the short format code (xml, json, ...).
      */
-    public function getFormat($format = null)
+    public function getFormat($format = null): string
     {
-        $format = strtolower($format);
+        if ($format !== null) {
+            $format = strtolower($format);
+        } else {
+            $format = '';
+        }
+
         $fsystem = $this->filesystem;
 
         if ($fsystem->isFile($format)) {

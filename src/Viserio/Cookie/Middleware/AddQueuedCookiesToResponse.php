@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Viserio\Cookie\Middleware;
 
 use Psr\Http\Message\ResponseInterface;

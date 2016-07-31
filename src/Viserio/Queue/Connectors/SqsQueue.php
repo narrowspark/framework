@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Viserio\Queue\Connectors;
 
 use Aws\Sqs\SqsClient;
@@ -91,8 +92,6 @@ class SqsQueue extends AbstractQueue
 
             return new SqsJob($this->container, $this->sqs, $queue, $response['Messages'][0]);
         }
-
-        return;
     }
 
     /**
@@ -106,7 +105,7 @@ class SqsQueue extends AbstractQueue
             return $queue;
         }
 
-        return rtrim($this->prefix, '/').'/'.($queue);
+        return rtrim($this->prefix, '/') . '/' . ($queue);
     }
 
     /**

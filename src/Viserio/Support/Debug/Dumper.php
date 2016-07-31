@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Viserio\Support\Debug;
 
 use Symfony\Component\VarDumper\Cloner\VarCloner;

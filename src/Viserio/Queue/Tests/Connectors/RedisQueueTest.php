@@ -1,8 +1,8 @@
 <?php
+declare(strict_types=1);
 namespace Viserio\Queue\Tests\Connectors;
 
 use Carbon\Carbon;
-use Interop\Container\ContainerInterface;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use Predis\Client;
 use Viserio\Contracts\Encryption\Encrypter as EncrypterContract;

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Viserio\Contracts\Queue;
 
 interface FailedJobProvider
@@ -41,8 +42,6 @@ interface FailedJobProvider
 
     /**
      * Clear all of the failed jobs from storage.
-     *
-     * @return void
      */
     public function clear();
 }

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Viserio\Log\Tests;
 
 use Interop\Container\ContainerInterface as ContainerContract;
@@ -224,8 +225,8 @@ class WriterTest extends \PHPUnit_Framework_TestCase
         $events = $this->getEventsDispatcher();
         $events->on(
             'viserio.log',
-            function ($level, $message, array $context = array()) {
-                $_SERVER['__log.level']   = $level;
+            function ($level, $message, array $context = []) {
+                $_SERVER['__log.level'] = $level;
                 $_SERVER['__log.message'] = $message;
                 $_SERVER['__log.context'] = $context;
             }

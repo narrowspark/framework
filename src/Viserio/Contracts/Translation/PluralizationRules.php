@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Viserio\Contracts\Translation;
 
 interface PluralizationRules
@@ -13,7 +14,7 @@ interface PluralizationRules
      */
     public function get(int $count, string $language): int;
 
-     /**
+    /**
      * Overrides the default plural rule for a given locale.
      *
      * @param string   $language

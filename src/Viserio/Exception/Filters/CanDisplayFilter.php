@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Viserio\Exception\Filters;
 
 use Psr\Http\Message\RequestInterface;
@@ -18,7 +19,7 @@ class CanDisplayFilter implements FilterContract
         int $code
     ): array {
         foreach ($displayers as $index => $displayer) {
-            if (!$displayer->canDisplay($original, $transformed, $code)) {
+            if (! $displayer->canDisplay($original, $transformed, $code)) {
                 unset($displayers[$index]);
             }
         }

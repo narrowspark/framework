@@ -4,7 +4,7 @@
     "description": "The Viserio Database package.",
     "keywords"   : ["narrowspark", "viserio", "database", "SQL", "MySQL", "MSSQL", "SQLite", "Sybase", "Oracle", "Google Cloud SQL"],
     "license"    : "MIT",
-    "homepage"   : "http://github.com/Narrowspark/database",
+    "homepage"   : "http://github.com/narrowspark/framework",
     "support"    : {
         "issues": "https://github.com/narrowspark/framework/issues",
         "source": "https://github.com/narrowspark/framework"

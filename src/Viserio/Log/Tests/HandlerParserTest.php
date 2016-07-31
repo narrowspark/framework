@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Viserio\Log\Tests;
 
 use Monolog\Formatter\ChromePHPFormatter;
@@ -82,7 +83,7 @@ class HandlerParserTest extends \PHPUnit_Framework_TestCase
             'info',
             [
                 PsrLogMessageProcessor::class => '',
-                GitProcessor::class => ''
+                GitProcessor::class => '',
             ]
         );
     }

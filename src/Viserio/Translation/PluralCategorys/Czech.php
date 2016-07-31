@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Viserio\Translation\PluralCategorys;
 
 use Viserio\Contracts\Translation\PluralCategory as CategoryContract;
@@ -32,7 +33,7 @@ class Czech implements CategoryContract
 
         if ($count === 1) {
             return 0;
-        } elseif (!is_float($count) && $count >= 2 && $count <= 4) {
+        } elseif (! is_float($count) && $count >= 2 && $count <= 4) {
             return 1;
         }
 

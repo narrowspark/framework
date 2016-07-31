@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Viserio\Config\Providers;
 
 use Viserio\Application\ServiceProvider;

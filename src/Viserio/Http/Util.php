@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Viserio\Http;
 
 use InvalidArgumentException;
@@ -204,7 +205,7 @@ class Util
                 $buf = $source->read(min($bufferSize, $remaining));
                 $len = strlen($buf);
 
-                if (!$len) {
+                if (! $len) {
                     break;
                 }
 
@@ -219,9 +220,9 @@ class Util
      *
      * @param array $files A array which respect $_FILES structure
      *
-     * @return array
-     *
      * @throws InvalidArgumentException for unrecognized values
+     *
+     * @return array
      */
     public static function normalizeFiles(array $files): array
     {
@@ -238,6 +239,7 @@ class Util
                 throw new InvalidArgumentException('Invalid value in files specification');
             }
         }
+
         return $normalized;
     }
 

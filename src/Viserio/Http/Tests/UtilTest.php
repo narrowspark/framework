@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Viserio\Http\Tests;
 
 use ArrayIterator;
@@ -61,13 +62,14 @@ class UtilTest extends \PHPUnit_Framework_TestCase
         $sizes = [];
 
         $s1 = new FnStream([
-            'eof' => function() {
+            'eof' => function () {
                 return false;
             },
-            'read' => function($size) use (&$sizes) {
+            'read' => function ($size) use (&$sizes) {
                 $sizes[] = $size;
+
                 return str_repeat('.', $size);
-            }
+            },
         ]);
 
         $s2 = Util::getStream('');
@@ -234,8 +236,8 @@ class UtilTest extends \PHPUnit_Framework_TestCase
                         'type' => 'text/plain',
                         'tmp_name' => '/tmp/php/php1h4j1o',
                         'error' => '0',
-                        'size' => '123'
-                    ]
+                        'size' => '123',
+                    ],
                 ],
                 [
                     'file' => new UploadedFile(
@@ -244,8 +246,8 @@ class UtilTest extends \PHPUnit_Framework_TestCase
                         UPLOAD_ERR_OK,
                         'MyFile.txt',
                         'text/plain'
-                    )
-                ]
+                    ),
+                ],
             ],
             'Empty file' => [
                 [
@@ -254,8 +256,8 @@ class UtilTest extends \PHPUnit_Framework_TestCase
                         'type' => '',
                         'tmp_name' => '',
                         'error' => '4',
-                        'size' => '0'
-                    ]
+                        'size' => '0',
+                    ],
                 ],
                 [
                     'image_file' => new UploadedFile(
@@ -264,8 +266,8 @@ class UtilTest extends \PHPUnit_Framework_TestCase
                         UPLOAD_ERR_NO_FILE,
                         '',
                         ''
-                    )
-                ]
+                    ),
+                ],
             ],
             'Already Converted' => [
                 [
@@ -275,7 +277,7 @@ class UtilTest extends \PHPUnit_Framework_TestCase
                         UPLOAD_ERR_OK,
                         'MyFile.txt',
                         'text/plain'
-                    )
+                    ),
                 ],
                 [
                     'file' => new UploadedFile(
@@ -284,8 +286,8 @@ class UtilTest extends \PHPUnit_Framework_TestCase
                         UPLOAD_ERR_OK,
                         'MyFile.txt',
                         'text/plain'
-                    )
-                ]
+                    ),
+                ],
             ],
             'Already Converted array' => [
                 [
@@ -303,7 +305,7 @@ class UtilTest extends \PHPUnit_Framework_TestCase
                             UPLOAD_ERR_NO_FILE,
                             '',
                             ''
-                        )
+                        ),
                     ],
                 ],
                 [
@@ -321,9 +323,9 @@ class UtilTest extends \PHPUnit_Framework_TestCase
                             UPLOAD_ERR_NO_FILE,
                             '',
                             ''
-                        )
+                        ),
                     ],
-                ]
+                ],
             ],
             'Multiple files' => [
                 [
@@ -332,15 +334,15 @@ class UtilTest extends \PHPUnit_Framework_TestCase
                         'type' => 'text/plain',
                         'tmp_name' => '/tmp/php/php1h4j1o',
                         'error' => '0',
-                        'size' => '123'
+                        'size' => '123',
                     ],
                     'image_file' => [
                         'name' => '',
                         'type' => '',
                         'tmp_name' => '',
                         'error' => '4',
-                        'size' => '0'
-                    ]
+                        'size' => '0',
+                    ],
                 ],
                 [
                     'text_file' => new UploadedFile(
@@ -356,8 +358,8 @@ class UtilTest extends \PHPUnit_Framework_TestCase
                         UPLOAD_ERR_NO_FILE,
                         '',
                         ''
-                    )
-                ]
+                    ),
+                ],
             ],
             'Nested files' => [
                 [
@@ -417,8 +419,8 @@ class UtilTest extends \PHPUnit_Framework_TestCase
                             'test' => [
                                 0 => '32',
                                 1 => '0',
-                            ]
-                        ]
+                            ],
+                        ],
                     ],
                 ],
                 [
@@ -461,10 +463,10 @@ class UtilTest extends \PHPUnit_Framework_TestCase
                                 '',
                                 ''
                             ),
-                        ]
-                    ]
-                ]
-            ]
+                        ],
+                    ],
+                ],
+            ],
         ];
     }
 
