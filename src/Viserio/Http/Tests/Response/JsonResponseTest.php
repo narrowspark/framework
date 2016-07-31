@@ -79,14 +79,6 @@ class JsonResponseTest extends \PHPUnit_Framework_TestCase
      */
     public function testJsonErrorHandlingOfBadEmbeddedData()
     {
-        if (version_compare(PHP_VERSION, '5.5', 'lt')) {
-            $this->markTestSkipped('Skipped as PHP versions prior to 5.5 are noisy about JSON errors');
-        }
-
-        if (defined('HHVM_VERSION')) {
-            $this->markTestSkipped('Skipped as HHVM happily serializes embedded resources');
-        }
-
         // Serializing something that is not serializable.
         $data = [
             'stream' => fopen('php://memory', 'r'),

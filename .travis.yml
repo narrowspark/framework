@@ -17,12 +17,6 @@ addons:
 
 matrix:
   include:
-    # Use the newer stack for HHVM as HHVM does not support Precise anymore since a long time and so Precise has an outdated version
-    - php: hhvm-3.12
-      sudo: required
-      dist: trusty
-      group: edge
-      env: SETUP=basic
     - php: 7.0
       env: SETUP=basic CHECK_CS=true SEND_COVERAGE=true
     - php: 7.0
@@ -42,9 +36,6 @@ matrix:
       php: 7.0
     - env: SETUP=lowest
       php: 7.1
-    # HHVM dont have full support for php7
-    - env: SETUP=basic
-      php: hhvm-3.12
   fast_finish: true
 
 cache:
@@ -54,7 +45,7 @@ cache:
 before_install:
   - mkdir -p ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d
   - if [ -f build/travis/php/$TRAVIS_PHP_VERSION.sh]; then ./build/travis/php/$TRAVIS_PHP_VERSION.sh; fi
-  - if [[ "$PHP" != hhvm* ]]; then composer global require hirak/prestissimo; fi # Now composer can install components parallel
+  - composer global require hirak/prestissimo # Now composer can install components parallel
   - if [[ "$HUMBUG" = "true" ]]; then composer global require humbug/humbug; fi
   - git config --global user.name travis-ci
   - git config --global user.email travis@example.com

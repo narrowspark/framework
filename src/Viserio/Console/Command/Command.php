@@ -133,7 +133,7 @@ abstract class Command extends BaseCommand implements CompletionAwareInterface
      *
      * @return \Viserio\Console\Style\NarrowsparkStyle
      */
-    public function getOutput(): \Viserio\Console\Style\NarrowsparkStyle
+    public function getOutput(): NarrowsparkStyle
     {
         return $this->output;
     }
@@ -174,7 +174,7 @@ abstract class Command extends BaseCommand implements CompletionAwareInterface
      *
      * @return int
      */
-    public function call($command, array $arguments = []): int
+    public function call(string $command, array $arguments = []): int
     {
         $instance = $this->getApplication()->find($command);
         $arguments['command'] = $command;
@@ -237,16 +237,22 @@ abstract class Command extends BaseCommand implements CompletionAwareInterface
      *
      * @return bool
      */
-    public function hasOption($key): bool
+    public function hasOption(string $key): bool
     {
         return $this->input->hasParameterOption('--' . $key);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function completeOptionValues($optionName, CompletionContext $context)
     {
         //
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function completeArgumentValues($argumentName, CompletionContext $context)
     {
         //
@@ -273,7 +279,7 @@ abstract class Command extends BaseCommand implements CompletionAwareInterface
      *
      * @return string
      */
-    public function ask($question, string $default = null): string
+    public function ask(string $question, string $default = null): string
     {
         return $this->output->ask($question, $default);
     }
@@ -287,7 +293,7 @@ abstract class Command extends BaseCommand implements CompletionAwareInterface
      *
      * @return string
      */
-    public function anticipate($question, array $choices, string $default = null): string
+    public function anticipate(string $question, array $choices, string $default = null): string
     {
         return $this->askWithCompletion($question, $choices, $default);
     }
@@ -301,7 +307,7 @@ abstract class Command extends BaseCommand implements CompletionAwareInterface
      *
      * @return string
      */
-    public function askWithCompletion($question, array $choices, string $default = null): string
+    public function askWithCompletion(string $question, array $choices, string $default = null): string
     {
         $question = new Question($question, $default);
 
@@ -318,7 +324,7 @@ abstract class Command extends BaseCommand implements CompletionAwareInterface
      *
      * @return string
      */
-    public function secret($question, bool $fallback = true): string
+    public function secret(string $question, bool $fallback = true): string
     {
         $question = new Question($question);
 
@@ -338,8 +344,13 @@ abstract class Command extends BaseCommand implements CompletionAwareInterface
      *
      * @return string
      */
-    public function choice($question, array $choices, string $default = null, $attempts = null, $multiple = null): string
-    {
+    public function choice(
+        string $question,
+        array $choices,
+        string $default = null,
+        $attempts = null,
+        $multiple = null
+    ): string {
         $question = new ChoiceQuestion($question, $choices, $default);
 
         $question->setMaxAttempts($attempts)->setMultiselect($multiple);
@@ -384,7 +395,7 @@ abstract class Command extends BaseCommand implements CompletionAwareInterface
      * @param string          $string
      * @param null|int|string $verbosityLevel
      */
-    public function info($string, $verbosityLevel = null)
+    public function info(string $string, $verbosityLevel = null)
     {
         $this->line($string, 'info', $verbosityLevel);
     }
@@ -395,7 +406,7 @@ abstract class Command extends BaseCommand implements CompletionAwareInterface
      * @param string          $string
      * @param null|int|string $verbosityLevel
      */
-    public function comment($string, $verbosityLevel = null)
+    public function comment(string $string, $verbosityLevel = null)
     {
         $this->line($string, 'comment', $verbosityLevel);
     }
@@ -406,7 +417,7 @@ abstract class Command extends BaseCommand implements CompletionAwareInterface
      * @param string          $string
      * @param null|int|string $verbosityLevel
      */
-    public function question($string, $verbosityLevel = null)
+    public function question(string $string, $verbosityLevel = null)
     {
         $this->line($string, 'question', $verbosityLevel);
     }
@@ -417,7 +428,7 @@ abstract class Command extends BaseCommand implements CompletionAwareInterface
      * @param string          $string
      * @param null|int|string $verbosityLevel
      */
-    public function error($string, $verbosityLevel = null)
+    public function error(string $string, $verbosityLevel = null)
     {
         $this->line($string, 'error', $verbosityLevel);
     }
@@ -428,7 +439,7 @@ abstract class Command extends BaseCommand implements CompletionAwareInterface
      * @param string          $string
      * @param null|int|string $verbosityLevel
      */
-    public function warn($string, $verbosityLevel = null)
+    public function warn(string $string, $verbosityLevel = null)
     {
         if (! $this->output->getFormatter()->hasStyle('warning')) {
             $style = new OutputFormatterStyle('yellow');
@@ -495,6 +506,7 @@ abstract class Command extends BaseCommand implements CompletionAwareInterface
         foreach ($arguments as $argument) {
             $this->getDefinition()->addArgument($argument);
         }
+
         foreach ($options as $option) {
             $this->getDefinition()->addOption($option);
         }
@@ -511,6 +523,7 @@ abstract class Command extends BaseCommand implements CompletionAwareInterface
         foreach ($this->getArguments() as $arguments) {
             call_user_func_array([$this, 'addArgument'], $arguments);
         }
+
         foreach ($this->getOptions() as $options) {
             call_user_func_array([$this, 'addOption'], $options);
         }
@@ -521,7 +534,7 @@ abstract class Command extends BaseCommand implements CompletionAwareInterface
      *
      * @return \Viserio\Support\Invoker
      */
-    protected function getInvoker(): \Viserio\Support\Invoker
+    protected function getInvoker(): Invoker
     {
         return $this->invoker;
     }

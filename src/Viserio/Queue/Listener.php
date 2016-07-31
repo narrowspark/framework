@@ -246,10 +246,6 @@ class Listener
     {
         $binary = ProcessUtils::escapeArgument((new PhpExecutableFinder())->find(false));
 
-        if (defined('HHVM_VERSION')) {
-            $binary .= ' --php';
-        }
-
         $console = ProcessUtils::escapeArgument($this->consoleName);
         $command = 'queue:work %s --queue=%s --delay=%s --memory=%s --sleep=%s --tries=%s';
 

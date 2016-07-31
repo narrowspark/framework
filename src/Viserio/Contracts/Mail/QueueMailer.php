@@ -90,8 +90,6 @@ interface QueueMailer extends Mailer
      *
      * @param \Viserio\Contracts\Queue\Job $job
      * @param array                        $data
-     *
-     * @return void
      */
     public function handleQueuedMessage(JobContract $job, array $data);
 }

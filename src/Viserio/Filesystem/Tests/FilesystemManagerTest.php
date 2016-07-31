@@ -18,10 +18,6 @@ class FilesystemManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testAwsS3ConnectorDriver()
     {
-        if (defined('HHVM_VERSION') && version_compare(HHVM_VERSION, '3.9.0') < 0) {
-            $this->markTestSkipped('The AWS SDK requires a newer verison of HHVM');
-        }
-
         $config = $this->mock(ConfigManger::class);
         $config->shouldReceive('get')
             ->once()

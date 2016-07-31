@@ -7,13 +7,6 @@ use Viserio\Filesystem\Adapters\AwsS3Connector;
 
 class AwsS3ConnectorTest extends \PHPUnit_Framework_TestCase
 {
-    protected function setUp()
-    {
-        if (defined('HHVM_VERSION') && version_compare(HHVM_VERSION, '3.9.0') < 0) {
-            $this->markTestSkipped('The AWS SDK requires a newer verison of HHVM');
-        }
-    }
-
     public function testConnectStandard()
     {
         $connector = new AwsS3Connector();

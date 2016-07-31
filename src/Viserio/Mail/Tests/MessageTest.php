@@ -116,7 +116,7 @@ class MessageTest extends \PHPUnit_Framework_TestCase
         $this->swift->expects($this->once())
             ->method('addTo')
             ->with('foo@bar.baz', 'Foo');
-        $this->assertInstanceOf(Message::class, $this->message->to('foo@bar.baz', 'Foo', false));
+        $this->assertInstanceOf(Message::class, $this->message->to('foo@bar.baz', 'Foo'));
     }
 
     public function testToMethodWithOverride()
