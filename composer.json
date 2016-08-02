@@ -101,7 +101,8 @@
     },
     "require-dev": {
         "aws/aws-sdk-php"                                    : "^3.18",
-        "cache/array-adapter"                                : "^0.2",
+        "cache/array-adapter"                                : "^0.4",
+        "cache/session-handler"                              : "^0.1",
         "fzaninotto/faker"                                   : "^1.6",
         "guzzlehttp/guzzle"                                  : "^6.0",
         "league/flysystem-aws-s3-v3"                         : "^1.0",

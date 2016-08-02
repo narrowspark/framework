@@ -15,7 +15,9 @@ use Cache\Adapter\{
     Redis\RedisCachePool,
     Void\VoidCachePool
 };
+use Cache\Hierarchy\HierarchicalPoolInterface;
 use Cache\Namespaced\NamespacedCachePool;
+use Cache\SessionHandler\Psr6SessionHandler;
 use League\Flysystem\Filesystem as Flysystem;
 use Memcache;
 use Memcached;
@@ -41,7 +43,7 @@ class CacheManager extends AbstractManager
     {
         return new CachePoolChain(
             $pools,
-            (array) $this->config->get($this->getConfigName() . 'chain.options', [])
+            (array) $this->config->get($this->getConfigName() . '.chain.options', [])
         );
     }
 
@@ -51,6 +53,8 @@ class CacheManager extends AbstractManager
      * @param array $config
      *
      * @return \Cache\Adapter\Apc\ApcCachePool
+     *
+     * @codeCoverageIgnore
      */
     protected function createApcDriver(array $config): ApcCachePool
     {
@@ -63,6 +67,8 @@ class CacheManager extends AbstractManager
      * @param array $config
      *
      * @return \Cache\Adapter\Apcu\ApcuCachePool
+     *
+     * @codeCoverageIgnore
      */
     protected function createApcuDriver(array $config): ApcuCachePool
     {
@@ -75,6 +81,8 @@ class CacheManager extends AbstractManager
      * @param array $config
      *
      * @return \Cache\Adapter\PHPArray\ArrayCachePool
+     *
+     * @codeCoverageIgnore
      */
     protected function createArrayDriver(array $config): ArrayCachePool
     {
@@ -87,6 +95,8 @@ class CacheManager extends AbstractManager
      * @param array $config
      *
      * @return \Cache\Adapter\MongoDB\MongoDBCachePool
+     *
+     * @codeCoverageIgnore
      */
     protected function createMongodbDriver(array $config): MongoDBCachePool
     {
@@ -131,9 +141,9 @@ class CacheManager extends AbstractManager
      *
      * @param array $config
      *
-     * @return \Cache\Adapter\Predis\PredisCachePool|null
+     * @return \Cache\Adapter\Predis\PredisCachePool
      */
-    protected function createPredisDriver(array $config)
+    protected function createPredisDriver(array $config): PredisCachePool
     {
         $client = new PredisClient(sprintf('tcp:/%s:%s', $config['server'], $config['port']));
 
@@ -175,7 +185,7 @@ class CacheManager extends AbstractManager
      *
      * @param array $config
      *
-     * @return \Cache\Adapter\Memcache\MemcacheCachePool|null
+     * @return \Cache\Adapter\Memcache\MemcacheCachePool
      */
     protected function createMemcacheDriver(array $config): MemcacheCachePool
     {
@@ -206,23 +216,9 @@ class CacheManager extends AbstractManager
      */
     protected function createSessionDriver(array $config): Psr6SessionHandler
     {
-        $pool = $this->driver($config['session']['pool']);
+        $pool = parent::driver($config['pool']);
 
-        return new Psr6SessionHandler($pool, $config['session']['config']);
-    }
-
-    /**
-     * Create a prefixed cache pool with a namespace.
-     *
-     * @param \Psr\Cache\CacheItemPoolInterface $hierarchyPool
-     *
-     * @return \Psr\Cache\CacheItemPoolInterface
-     */
-    protected function namespacedPool(CacheItemPoolInterface $hierarchyPool)
-    {
-        $namespace = $this->config->get($this->getConfigName() . 'namespace', 'viserio');
-
-        return new NamespacedCachePool($hierarchyPool, $namespace);
+        return new Psr6SessionHandler($pool, $config['config']);
     }
 
     /**
@@ -232,7 +228,26 @@ class CacheManager extends AbstractManager
     {
         $driver = parent::createDriver($config);
 
-        return $this->namespacedPool($driver);
+        $namespace = $this->config->get($this->getConfigName() . '.namespace');
+
+        if ($namespace !== null && $driver instanceof HierarchicalPoolInterface) {
+            return $this->namespacedPool($driver, $namespace);
+        }
+
+        return $driver;
+    }
+
+    /**
+     * Create a prefixed cache pool with a namespace.
+     *
+     * @param \Psr\Cache\CacheItemPoolInterface $hierarchyPool
+     * @param string                            $namespace
+     *
+     * @return \Psr\Cache\CacheItemPoolInterface
+     */
+    protected function namespacedPool(CacheItemPoolInterface $hierarchyPool, $namespace)
+    {
+        return new NamespacedCachePool($hierarchyPool, $namespace);
     }
 
     /**
