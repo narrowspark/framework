@@ -127,6 +127,8 @@ class CacheManager extends AbstractManager
      * @param array $config
      *
      * @return \Cache\Adapter\Redis\RedisCachePool
+     *
+     * @codeCoverageIgnore
      */
     protected function createRedisDriver(array $config): RedisCachePool
     {
@@ -142,6 +144,8 @@ class CacheManager extends AbstractManager
      * @param array $config
      *
      * @return \Cache\Adapter\Predis\PredisCachePool
+     *
+     * @codeCoverageIgnore
      */
     protected function createPredisDriver(array $config): PredisCachePool
     {
@@ -156,6 +160,8 @@ class CacheManager extends AbstractManager
      * @param array $config
      *
      * @return \Cache\Adapter\Filesystem\FilesystemCachePool
+     *
+     * @codeCoverageIgnore
      */
     protected function createFilesystemDriver(array $config): FilesystemCachePool
     {
@@ -169,8 +175,11 @@ class CacheManager extends AbstractManager
     /**
      * Create an instance of the Memcached cache driver.
      *
+     * @param array $config
      *
      * @return \Cache\Adapter\Memcached\MemcachedCachePool
+     *
+     * @codeCoverageIgnore
      */
     protected function createMemcachedDriver(array $config): MemcachedCachePool
     {
@@ -186,6 +195,8 @@ class CacheManager extends AbstractManager
      * @param array $config
      *
      * @return \Cache\Adapter\Memcache\MemcacheCachePool
+     *
+     * @codeCoverageIgnore
      */
     protected function createMemcacheDriver(array $config): MemcacheCachePool
     {

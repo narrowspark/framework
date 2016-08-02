@@ -5,7 +5,10 @@ namespace Viserio\Cache\Tests;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use Viserio\Cache\CacheManager;
 use Viserio\Contracts\Config\Manager as ConfigManager;
-use Cache\Adapter\PHPArray\ArrayCachePool;
+use Cache\Adapter\{
+    PHPArray\ArrayCachePool,
+    Void\VoidCachePool
+};
 use Cache\SessionHandler\Psr6SessionHandler;
 use Cache\Namespaced\NamespacedCachePool;
 
@@ -68,5 +71,19 @@ class CacheManagerTest extends \PHPUnit_Framework_TestCase
             ->andReturn('viserio');
 
         $this->assertInstanceOf(Psr6SessionHandler::class, $this->manager->driver('session'));
+    }
+
+    public function testNamespacedNullPoolCall()
+    {
+        $this->manager->getConfig()->shouldReceive('get')
+            ->once()
+            ->with('cache.drivers', []);
+
+        $this->manager->getConfig()->shouldReceive('get')
+            ->once()
+            ->with('cache.namespace')
+            ->andReturn('viserio');
+
+        $this->assertInstanceOf(NamespacedCachePool::class, $this->manager->driver('null'));
     }
 }
