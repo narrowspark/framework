@@ -58,7 +58,7 @@ class MongoConnectorTest extends \PHPUnit_Framework_TestCase
                 'connect' => true,
             ],
         ];
-        $connection = $this->mock('stdClass');
+        $connection = $this->mock(StdClass::class);
 
         $connector = $this->getMockBuilder(MongoConnector::class)
              ->setMethods(['createConnection', 'getOptions'])
