@@ -5,6 +5,7 @@ namespace Viserio\Cache;
 use Cache\Adapter\{
     Apc\ApcCachePool,
     Apcu\ApcuCachePool,
+    Chain\CachePoolChain,
     Filesystem\FilesystemCachePool,
     Memcache\MemcacheCachePool,
     Memcached\MemcachedCachePool,
@@ -14,7 +15,9 @@ use Cache\Adapter\{
     Redis\RedisCachePool,
     Void\VoidCachePool
 };
-use League\Flysystem\Adapter\Local;
+use Cache\Hierarchy\HierarchicalPoolInterface;
+use Cache\Namespaced\NamespacedCachePool;
+use Cache\SessionHandler\Psr6SessionHandler;
 use League\Flysystem\Filesystem as Flysystem;
 use Memcache;
 use Memcached;
@@ -22,39 +25,79 @@ use MongoDB\Driver\Manager as MongoDBManager;
 use Predis\Client as PredisClient;
 use Psr\Cache\CacheItemPoolInterface;
 use Redis;
-use Viserio\Contracts\Config\Manager as ConfigContract;
-use Viserio\Support\AbstractManager;
+use Viserio\{
+    Filesystem\FilesystemManager,
+    Support\AbstractManager
+};
 
 class CacheManager extends AbstractManager
 {
     /**
-     * All supported drivers.
+     *  Chain multiple PSR-6 Cache pools together for performance.
      *
-     * @var array
+     * @param array      $pools
+     * @param array|null $options
+     *
+     * @return \Cache\Adapter\Chain\CachePoolChain
      */
-    protected $supportedDrivers = [
-        'apc'         => ApcCachePool::class,
-        'apcu'        => ApcuCachePool::class,
-        'array'       => ArrayCachePool::class,
-        'filesystem',
-        'local',
-        'memcache',
-        'memcached',
-        'mongodb',
-        'predis',
-        'redis',
-        'session',
-        'void'         => VoidCachePool::class,
-    ];
+    public function chain(array $pools, array $options = null): CachePoolChain
+    {
+        $resolvedPools = [];
+
+        foreach ($pools as $pool) {
+            if (is_string($pool)) {
+                $resolvedPools[] = $this->driver($pool);
+            } else {
+                $resolvedPools[] = $pool;
+            }
+        }
+
+        return new CachePoolChain(
+            $resolvedPools,
+            $options ?? (array) $this->config->get($this->getConfigName() . '.chain.options', [])
+        );
+    }
 
     /**
-     * Constructor.
+     * Create an instance of the Apc cache driver.
      *
-     * @param ConfigContract $config
+     * @param array $config
+     *
+     * @return \Cache\Adapter\Apc\ApcCachePool
+     *
+     * @codeCoverageIgnore
      */
-    public function __construct(ConfigContract $config)
+    protected function createApcDriver(array $config): ApcCachePool
     {
-        $this->config = $config;
+        return new ApcCachePool();
+    }
+
+    /**
+     * Create an instance of the Apcu cache driver.
+     *
+     * @param array $config
+     *
+     * @return \Cache\Adapter\Apcu\ApcuCachePool
+     *
+     * @codeCoverageIgnore
+     */
+    protected function createApcuDriver(array $config): ApcuCachePool
+    {
+        return new ApcuCachePool();
+    }
+
+    /**
+     * Create an instance of the Apcu cache driver.
+     *
+     * @param array $config
+     *
+     * @return \Cache\Adapter\PHPArray\ArrayCachePool
+     *
+     * @codeCoverageIgnore
+     */
+    protected function createArrayDriver(array $config): ArrayCachePool
+    {
+        return new ArrayCachePool();
     }
 
     /**
@@ -62,15 +105,31 @@ class CacheManager extends AbstractManager
      *
      * @param array $config
      *
-     * @return \Cache\Adapter\MongoDB\MongoDBCachePool|null
+     * @return \Cache\Adapter\MongoDB\MongoDBCachePool
+     *
+     * @codeCoverageIgnore
      */
-    protected function createMongodbDriver(array $config)
+    protected function createMongodbDriver(array $config): MongoDBCachePool
     {
-        $servers = $this->config->get($this->getConfigName() . '::mongodb', $config);
-
-        if ($servers instanceof MongoDBManager) {
-            return new MongoDBCachePool($servers);
+        if (isset($config['username'], $config['password'])) {
+            $dns = sprintf(
+                'mongodb://%s:%s@%s:%s',
+                $config['username'],
+                $config['password'],
+                $config['server'],
+                $config['port']
+            );
+        } else {
+            $dns = sprintf('mongodb://%s:%s', $config['server'], $config['port']);
         }
+
+        $collection = MongoDBCachePool::createCollection(
+            new MongoDBManager($dns),
+            $config['database'],
+            $config['prefix']
+        );
+
+        return new MongoDBCachePool($collection);
     }
 
     /**
@@ -78,15 +137,16 @@ class CacheManager extends AbstractManager
      *
      * @param array $config
      *
-     * @return \Cache\Adapter\Redis\RedisCachePool|null
+     * @return \Cache\Adapter\Redis\RedisCachePool
+     *
+     * @codeCoverageIgnore
      */
-    protected function createRedisDriver(array $config)
+    protected function createRedisDriver(array $config): RedisCachePool
     {
-        $servers = $this->config->get($this->getConfigName() . '::redis', $config);
+        $client = new Redis();
+        $client->connect($config['host'], $config['port']);
 
-        if ($servers instanceof Redis) {
-            return new RedisCachePool($servers);
-        }
+        return new RedisCachePool($client);
     }
 
     /**
@@ -94,15 +154,15 @@ class CacheManager extends AbstractManager
      *
      * @param array $config
      *
-     * @return \Cache\Adapter\Predis\PredisCachePool|null
+     * @return \Cache\Adapter\Predis\PredisCachePool
+     *
+     * @codeCoverageIgnore
      */
-    protected function createPredisDriver(array $config)
+    protected function createPredisDriver(array $config): PredisCachePool
     {
-        $servers = $this->config->get($this->getConfigName() . '::predis', $config);
+        $client = new PredisClient(sprintf('tcp:/%s:%s', $config['server'], $config['port']));
 
-        if ($servers instanceof PredisClient) {
-            return new PredisCachePool($servers);
-        }
+        return new PredisCachePool($client);
     }
 
     /**
@@ -110,13 +170,15 @@ class CacheManager extends AbstractManager
      *
      * @param array $config
      *
-     * @return FilesystemCachePool|null
+     * @return \Cache\Adapter\Filesystem\FilesystemCachePool
+     *
+     * @codeCoverageIgnore
      */
-    protected function createFilesystemDriver(array $config)
+    protected function createFilesystemDriver(array $config): FilesystemCachePool
     {
-        $adapter = $this->config->get($this->getConfigName() . '::flysystem', $config);
+        $adapter = new FilesystemManager($this->config);
 
-        $filesystem = new Flysystem($adapter['connection']);
+        $filesystem = new Flysystem($adapter->connection($config['connection']));
 
         return new FilesystemCachePool($filesystem);
     }
@@ -124,16 +186,18 @@ class CacheManager extends AbstractManager
     /**
      * Create an instance of the Memcached cache driver.
      *
+     * @param array $config
      *
-     * @return \Cache\Adapter\Memcached\MemcachedCachePool|null
+     * @return \Cache\Adapter\Memcached\MemcachedCachePool
+     *
+     * @codeCoverageIgnore
      */
-    protected function createMemcachedDriver(array $config)
+    protected function createMemcachedDriver(array $config): MemcachedCachePool
     {
-        $servers = $this->config->get($this->getConfigName() . '::memcached', $config);
+        $client = new Memcached();
+        $client->addServer($config['host'], $config['port']);
 
-        if ($servers instanceof Memcached) {
-            return new MemcachedCachePool($servers);
-        }
+        return new MemcachedCachePool($client);
     }
 
     /**
@@ -141,31 +205,28 @@ class CacheManager extends AbstractManager
      *
      * @param array $config
      *
-     * @return \Cache\Adapter\Memcache\MemcacheCachePool|null
+     * @return \Cache\Adapter\Memcache\MemcacheCachePool
+     *
+     * @codeCoverageIgnore
      */
-    protected function createMemcacheDriver(array $config)
+    protected function createMemcacheDriver(array $config): MemcacheCachePool
     {
-        $servers = $this->config->get($this->getConfigName() . '::memcache', $config);
+        $client = new Memcache();
+        $client->addServer($config['host'], $config['port']);
 
-        if ($servers instanceof Memcache) {
-            return new MemcacheCachePool($servers);
-        }
+        return new MemcacheCachePool($client);
     }
 
     /**
-     * Create an instance of the local cache driver.
+     * Create an instance of the Void cache driver.
      *
      * @param array $config
      *
-     * @return \Cache\Adapter\Filesystem\FilesystemCachePool|null
+     * @return \Cache\Adapter\Void\VoidCachePool
      */
-    protected function createLocalDriver(array $config)
+    protected function createNullDriver(array $config): VoidCachePool
     {
-        $adapter = $this->config->get($this->getConfigName() . '::local', $config);
-
-        if ($adapter instanceof Local) {
-            return new FilesystemCachePool($adapter);
-        }
+        return new VoidCachePool();
     }
 
     /**
@@ -173,19 +234,42 @@ class CacheManager extends AbstractManager
      *
      * @param array $config
      *
-     * @return Psr6SessionHandler|null
+     * @return \Cache\SessionHandler\Psr6SessionHandler
      */
-    protected function createSessionDriver(array $config)
+    protected function createSessionDriver(array $config): Psr6SessionHandler
     {
-        $adapter = $this->config->get($this->getConfigName() . '::session', $config);
+        $pool = $this->driver($config['pool']);
 
-        if (
-            isset($config['local']['pool'], $config['local']['config']) &&
-            $config['local']['pool'] instanceof CacheItemPoolInterface &&
-            is_array($config['local']['config'])
-        ) {
-            return new Psr6SessionHandler($config['local']['pool'], $config['local']['config']);
+        return new Psr6SessionHandler($pool, $config['config']);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function createDriver(array $config)
+    {
+        $driver = parent::createDriver($config);
+
+        $namespace = $this->config->get($this->getConfigName() . '.namespace');
+
+        if ($namespace !== null && $driver instanceof HierarchicalPoolInterface) {
+            return $this->namespacedPool($driver, $namespace);
         }
+
+        return $driver;
+    }
+
+    /**
+     * Create a prefixed cache pool with a namespace.
+     *
+     * @param \Cache\Hierarchy\HierarchicalPoolInterface $hierarchyPool
+     * @param string                                     $namespace
+     *
+     * @return \Cache\Namespaced\NamespacedCachePool
+     */
+    protected function namespacedPool(HierarchicalPoolInterface $hierarchyPool, $namespace): NamespacedCachePool
+    {
+        return new NamespacedCachePool($hierarchyPool, $namespace);
     }
 
     /**

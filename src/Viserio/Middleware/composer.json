@@ -33,7 +33,8 @@
     "autoload": {
         "psr-4": {
             "Viserio\\Middleware\\"                          : ""
-        }
+        },
+        "exclude-from-classmap"                              : ["/Tests/"]
     },
     "autoload-dev": {
         "psr-4": {

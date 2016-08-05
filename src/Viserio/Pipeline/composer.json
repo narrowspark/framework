@@ -32,7 +32,8 @@
     "autoload": {
         "psr-4": {
             "Viserio\\Pipeline\\"                           : ""
-        }
+        },
+        "exclude-from-classmap"                             : ["/Tests/"]
     },
     "autoload-dev": {
         "psr-4": {

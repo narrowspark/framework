@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Connect\Tests\Adapter\Database;
 
+use StdClass;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use Viserio\Connect\Adapters\Database\MongoConnector;
 
@@ -59,7 +60,7 @@ class MongoConnectorTest extends \PHPUnit_Framework_TestCase
         ];
         $connection = $this->mock('stdClass');
 
-        $connector = $this->getMockBuilder('Viserio\Connect\Adapters\Database\MongoConnector')
+        $connector = $this->getMockBuilder(MongoConnector::class)
              ->setMethods(['createConnection', 'getOptions'])
              ->getMock();
         $connector->expects($this->once())
@@ -86,9 +87,10 @@ class MongoConnectorTest extends \PHPUnit_Framework_TestCase
                 'connect' => true,
             ],
         ];
-        $connection = $this->mock('stdClass');
 
-        $connector = $this->getMockBuilder('Viserio\Connect\Adapters\Database\MongoConnector')
+        $connection = $this->mock(StdClass::class);
+
+        $connector = $this->getMockBuilder(MongoConnector::class)
              ->setMethods(['createConnection', 'getOptions'])
              ->getMock();
         $connector->expects($this->once())

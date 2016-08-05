@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Connect;
 
 use PDO;
+use Predis\Client as PredisClient;
 use Viserio\Connect\Adapters\Database\{
     DblibConnector,
     Firebirdconnector,
@@ -52,77 +53,170 @@ class ConnectManager extends AbstractConnectionManager implements ConnectManager
         return $drivers;
     }
 
+    /**
+     * Create an instance of the Dblib connection.
+     *
+     * @param array $config
+     *
+     * @return \PDO
+     */
     protected function createDblibConnection(array $config)
     {
         return (new DblibConnector())->connect($config);
     }
 
-    protected function createFirebirdConnection(array $config)
+    /**
+     * Create an instance of the Firebird connection.
+     *
+     * @param array $config
+     *
+     * @return \PDO
+     */
+    protected function createFirebirdConnection(array $config): PDO
     {
         return (new Firebirdconnector())->connect($config);
     }
 
-    protected function createGooglecloudsqlConnection(array $config)
+    /**
+     * Create an instance of the Googlecloudsql connection.
+     *
+     * @param array $config
+     *
+     * @return \PDO
+     */
+    protected function createGooglecloudsqlConnection(array $config): PDO
     {
         return (new GoogleCloudSQLConnector())->connect($config);
     }
 
-    protected function createMariadbConnection(array $config)
+    /**
+     * Create an instance of the MariaDB connection.
+     *
+     * @param array $config
+     *
+     * @return \PDO
+     */
+    protected function createMariadbConnection(array $config): PDO
     {
         return (new MariaDBConnector())->connect($config);
     }
 
-    protected function createMongoConnection(array $config)
+    /**
+     * Create an instance of the Mongo connection.
+     *
+     * @param array $config
+     *
+     * @return \Mongo|\MongoClient|\MongoDB\Client
+     */
+    protected function createMongoConnection(array $config): PDO
     {
         return (new MongoConnector())->connect($config);
     }
 
-    protected function createMssqlConnection(array $config)
+    /**
+     * Create an instance of the MSSQL connection.
+     *
+     * @param array $config
+     *
+     * @return \PDO
+     */
+    protected function createMssqlConnection(array $config): PDO
     {
         return (new MSSQLConnector())->connect($config);
     }
 
-    protected function createMysqlConnection(array $config)
+    /**
+     * Create an instance of the MySql connection.
+     *
+     * @param array $config
+     *
+     * @return \PDO
+     */
+    protected function createMysqlConnection(array $config): PDO
     {
         return (new MySqlConnector())->connect($config);
     }
 
-    protected function createOdbcConnection(array $config)
+    /**
+     * Create an instance of the Odbc connection.
+     *
+     * @param array $config
+     *
+     * @return \PDO
+     */
+    protected function createOdbcConnection(array $config): PDO
     {
         return (new OdbcConnection())->connect($config);
     }
 
-    protected function createOracleConnection(array $config)
+    /**
+     * Create an instance of the Oracle connection.
+     *
+     * @param array $config
+     *
+     * @return \PDO
+     */
+    protected function createOracleConnection(array $config): PDO
     {
         return (new OracleConnector())->connect($config);
     }
 
-    protected function createPostgresqlConnection(array $config)
+    /**
+     * Create an instance of the PostgreSQL connection.
+     *
+     * @param array $config
+     *
+     * @return \PDO
+     */
+    protected function createPostgresqlConnection(array $config): PDO
     {
         return (new PostgreSQLConnector())->connect($config);
     }
 
-    protected function createSQLiteConnection(array $config)
+    /**
+     * Create an instance of the SQLite connection.
+     *
+     * @param array $config
+     *
+     * @return \PDO
+     */
+    protected function createSQLiteConnection(array $config): PDO
     {
         return (new SQLiteConnector())->connect($config);
     }
 
-    protected function createSqlserverConnection(array $config)
+    /**
+     * Create an instance of the SqlServer connection.
+     *
+     * @param array $config
+     *
+     * @return \PDO
+     */
+    protected function createSqlserverConnection(array $config): PDO
     {
         return (new SqlServerConnector())->connect($config);
     }
 
-    protected function createSybaseConnection(array $config)
-    {
-        return (new SybaseConnector())->connect($config);
-    }
-
-    protected function createMemcachedConnection(array $config)
+    /**
+     * Create an instance of the Memcached connection.
+     *
+     * @param array $config
+     *
+     * @return \Memcached
+     */
+    protected function createMemcachedConnection(array $config): Memcached
     {
         return (new MemcachedConnector())->connect($config);
     }
 
-    protected function createPredisConnection(array $config)
+    /**
+     * Create an instance of the Memcached connection.
+     *
+     * @param array $config
+     *
+     * @return \Predis\Client
+     */
+    protected function createPredisConnection(array $config): PredisClient
     {
         return (new PredisConnector())->connect($config);
     }

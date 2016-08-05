@@ -2,7 +2,9 @@
 declare(strict_types=1);
 namespace Viserio\Connect\Tests\Adapter\Database;
 
+use PDO;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
+use Viserio\Connect\Adapters\Database\OracleConnector;
 
 class OracleConnectorTest extends \PHPUnit_Framework_TestCase
 {
@@ -12,7 +14,7 @@ class OracleConnectorTest extends \PHPUnit_Framework_TestCase
     {
         $this->allowMockingNonExistentMethods(true);
 
-        if (! class_exists('PDO')) {
+        if (! class_exists(PDO::class)) {
             $this->markTestSkipped('PDO module is not installed.');
         }
     }
@@ -22,9 +24,9 @@ class OracleConnectorTest extends \PHPUnit_Framework_TestCase
      */
     public function testConnect($dsn, $config)
     {
-        $connection = $this->mock('stdClass');
+        $connection = $this->mock(PDO::class);
 
-        $connector = $this->getMockBuilder('Viserio\Connect\Adapters\Database\OracleConnector')
+        $connector = $this->getMockBuilder(OracleConnector::class)
             ->setMethods(['createConnection', 'getOptions'])
             ->getMock();
         $connector->expects($this->once())
@@ -36,9 +38,16 @@ class OracleConnectorTest extends \PHPUnit_Framework_TestCase
             ->with($this->equalTo($dsn), $this->equalTo($config), $this->equalTo(['options']))
             ->will($this->returnValue($connection));
 
-        $connection->shouldReceive('prepare')->once()->with('set names \'utf8\'')->andReturn($connection);
-        $connection->shouldReceive('prepare')->once()->with('set sql_mode=\'ANSI_QUOTES\'')->andReturn($connection);
-        $connection->shouldReceive('execute')->twice();
+        $connection->shouldReceive('prepare')
+            ->once()
+            ->with('set names \'utf8\'')
+            ->andReturn($connection);
+        $connection->shouldReceive('prepare')
+            ->once()
+            ->with('set sql_mode=\'ANSI_QUOTES\'')
+            ->andReturn($connection);
+        $connection->shouldReceive('execute')
+            ->twice();
 
         $this->assertSame($connector->connect($config), $connection);
     }

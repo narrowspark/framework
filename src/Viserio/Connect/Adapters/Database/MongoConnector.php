@@ -111,10 +111,13 @@ class MongoConnector implements ConnectorContract
      *
      * @throws \Exception
      *
-     * @return \Mongo|\MongoClient
+     * @return \Mongo|\MongoClient|\MongoDB\Client
      */
-    protected function tryAgainIfCausedByLostConnection(Exception $exception, $dsn, array $options)
-    {
+    protected function tryAgainIfCausedByLostConnection(
+        Exception $exception,
+        string $dsn,
+        array $options
+    ) {
         if ($this->causedByLostConnection($exception)) {
             $class = $this->getMongoClass();
 
@@ -129,7 +132,7 @@ class MongoConnector implements ConnectorContract
      *
      * @return string
      */
-    protected function getMongoClass()
+    protected function getMongoClass(): string
     {
         if (class_exists(MongoClient::class)) {
             return MongoClient::class;
@@ -149,14 +152,14 @@ class MongoConnector implements ConnectorContract
      *
      * @return string
      */
-    protected function getDsn(array $config)
+    protected function getDsn(array $config): string
     {
         // First we will create the basic DSN setup as well as the port if it is in
         // in the configuration options. This will give us the basic DSN we will
         // need to establish the PDO connections and return them back for use.
         extract($config, EXTR_SKIP);
 
-        if (isset($config['username']) && isset($config['password'])) {
+        if (isset($config['username'], $config['password'])) {
             return sprintf('mongodb://%s:%s@%s:%s', $username, $password, $server, $port);
         }
 

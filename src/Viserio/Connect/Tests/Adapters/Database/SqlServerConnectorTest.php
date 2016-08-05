@@ -4,6 +4,7 @@ namespace Viserio\Connect\Tests\Adapter\Database;
 
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use PDO;
+use Viserio\Connect\Adapters\Database\SqlServerConnector;
 
 class SqlServerConnectorTest extends \PHPUnit_Framework_TestCase
 {
@@ -11,7 +12,7 @@ class SqlServerConnectorTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        if (! class_exists('PDO')) {
+        if (! class_exists(PDO::class)) {
             $this->markTestSkipped('PDO module is not installed.');
         }
     }
@@ -21,8 +22,8 @@ class SqlServerConnectorTest extends \PHPUnit_Framework_TestCase
         $config = ['host' => 'foo', 'database' => 'bar'];
 
         $dsn = $this->getDsn($config);
-        $connection = $this->mock('stdClass');
-        $connector = $this->getMockBuilder('Viserio\Connect\Adapters\Database\SqlServerConnector')
+        $connection = $this->mock(PDO::class);
+        $connector = $this->getMockBuilder(SqlServerConnector::class)
             ->setMethods(['createConnection', 'getOptions'])
             ->getMock();
         $connector->expects($this->once())
@@ -42,8 +43,8 @@ class SqlServerConnectorTest extends \PHPUnit_Framework_TestCase
         $config = ['host' => 'foo', 'database' => 'bar', 'port' => 111, 'appname' => 'baz', 'charset' => 'utf-8'];
         $dsn = $this->getDsn($config);
 
-        $connection = $this->mock('stdClass');
-        $connector = $this->getMockBuilder('Viserio\Connect\Adapters\Database\SqlServerConnector')
+        $connection = $this->mock(PDO::class);
+        $connector = $this->getMockBuilder(SqlServerConnector::class)
             ->setMethods(['createConnection', 'getOptions'])
             ->getMock();
 

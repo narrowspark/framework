@@ -2,7 +2,9 @@
 declare(strict_types=1);
 namespace Viserio\Connect\Tests\Adapter\Database;
 
+use PDO;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
+use Viserio\Connect\Adapters\Database\MSSQLConnector;
 use Viserio\Support\Str;
 
 class MSSQLConnectorTest extends \PHPUnit_Framework_TestCase
@@ -11,7 +13,7 @@ class MSSQLConnectorTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        if (! class_exists('PDO')) {
+        if (! class_exists(PDO::class)) {
             $this->markTestSkipped('PDO module is not installed.');
         }
     }
@@ -31,9 +33,9 @@ class MSSQLConnectorTest extends \PHPUnit_Framework_TestCase
             $this->markTestSkipped('Can only run on windows.');
         }
 
-        $connection = $this->mock('stdClass');
+        $connection = $this->mock(Pdo::class);
 
-        $connector = $this->getMockBuilder('Viserio\Connect\Adapters\Database\MSSQLConnector')
+        $connector = $this->getMockBuilder(MSSQLConnector::class)
              ->setMethods(['createConnection', 'getOptions'])
              ->getMock();
         $connector->expects($this->once())
@@ -90,9 +92,9 @@ class MSSQLConnectorTest extends \PHPUnit_Framework_TestCase
             $this->markTestSkipped('Can\'t run on windows.');
         }
 
-        $connection = $this->mock('stdClass');
+        $connection = $this->mock(PDO::class);
 
-        $connector = $this->getMockBuilder('Viserio\Connect\Adapters\Database\MSSQLConnector')
+        $connector = $this->getMockBuilder(MSSQLConnector::class)
              ->setMethods(['createConnection', 'getOptions'])
              ->getMock();
         $connector->expects($this->once())
@@ -104,9 +106,16 @@ class MSSQLConnectorTest extends \PHPUnit_Framework_TestCase
             ->with($this->equalTo($dsn), $this->equalTo($config), $this->equalTo(['options']))
             ->will($this->returnValue($connection));
 
-        $connection->shouldReceive('prepare')->once()->with('set names \'utf8\'')->andReturn($connection);
-        $connection->shouldReceive('prepare')->once()->with('set quoted_identifier on')->andReturn($connection);
-        $connection->shouldReceive('execute')->twice();
+        $connection->shouldReceive('prepare')
+            ->once()
+            ->with('set names \'utf8\'')
+            ->andReturn($connection);
+        $connection->shouldReceive('prepare')
+            ->once()
+            ->with('set quoted_identifier on')
+            ->andReturn($connection);
+        $connection->shouldReceive('execute')
+            ->twice();
 
         $this->assertSame($connector->connect($config), $connection);
     }

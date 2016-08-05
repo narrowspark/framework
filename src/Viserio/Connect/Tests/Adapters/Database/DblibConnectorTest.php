@@ -2,7 +2,9 @@
 declare(strict_types=1);
 namespace Viserio\Connect\Tests\Adapter\Database;
 
+use PDO;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
+use Viserio\Connect\Adapters\Database\DblibConnector;
 
 class DblibConnectorTest extends \PHPUnit_Framework_TestCase
 {
@@ -12,7 +14,7 @@ class DblibConnectorTest extends \PHPUnit_Framework_TestCase
     {
         $this->allowMockingNonExistentMethods(true);
 
-        if (! class_exists('PDO')) {
+        if (! class_exists(PDO::class)) {
             $this->markTestSkipped('PDO module is not installed.');
         }
     }
@@ -22,9 +24,9 @@ class DblibConnectorTest extends \PHPUnit_Framework_TestCase
      */
     public function testDblibDatabasesMayBeConnectedTo($dsn, $config)
     {
-        $connection = $this->mock('stdClass');
+        $connection = $this->mock(PDO::class);
 
-        $connector = $this->getMockBuilder('Viserio\Connect\Adapters\Database\DblibConnector')
+        $connector = $this->getMockBuilder(DblibConnector::class)
              ->setMethods(['createConnection', 'getOptions'])
              ->getMock();
         $connector->expects($this->once())
@@ -36,8 +38,12 @@ class DblibConnectorTest extends \PHPUnit_Framework_TestCase
             ->with($this->equalTo($dsn), $this->equalTo($config), $this->equalTo(['options']))
             ->will($this->returnValue($connection));
 
-        $connection->shouldReceive('prepare')->once()->with('set names \'utf8\'')->andReturn($connection);
-        $connection->shouldReceive('execute')->once();
+        $connection->shouldReceive('prepare')
+            ->once()
+            ->with('set names \'utf8\'')
+            ->andReturn($connection);
+        $connection->shouldReceive('execute')
+            ->once();
 
         $this->assertSame($connector->connect($config), $connection);
     }

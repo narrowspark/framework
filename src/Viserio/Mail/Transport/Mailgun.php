@@ -58,12 +58,10 @@ class Mailgun extends AbstractTransport
 
         $options = ['auth' => ['api', $this->key]];
 
-        $to = $this->getTo($message);
-
-        $message->setBcc([]);
-
         $options['multipart'] = [
-            ['name' => 'to', 'contents' => $to],
+            ['name' => 'to', 'contents' => $this->getTo($message)],
+            ['name' => 'cc', 'contents' => $this->getCc($message)],
+            ['name' => 'bcc', 'contents' => $this->getBcc($message)],
             ['name' => 'message', 'contents' => $message->toString(), 'filename' => 'message.mime'],
         ];
 
@@ -131,13 +129,43 @@ class Mailgun extends AbstractTransport
      */
     protected function getTo(Swift_Mime_Message $message): string
     {
-        $formatted = [];
+        return $this->formatAddress($message->getTo());
+    }
 
-        $contacts = array_merge(
-            (array) $message->getTo(),
-            (array) $message->getCc(),
-            (array) $message->getBcc()
-        );
+    /**
+     * Get the "cc" payload field for the API request.
+     *
+     * @param \Swift_Mime_Message $message
+     *
+     * @return string
+     */
+    protected function getCc(Swift_Mime_Message $message): string
+    {
+        return $this->formatAddress($message->getCc());
+    }
+
+    /**
+     * Get the "bcc" payload field for the API request.
+     *
+     * @param \Swift_Mime_Message $message
+     *
+     * @return string
+     */
+    protected function getBcc(Swift_Mime_Message $message): string
+    {
+        return $this->formatAddress($message->getBcc());
+    }
+
+    /**
+     * Get Comma-Separated Address (with name, if available) for the API request.
+     *
+     * @param array $contacts
+     *
+     * @return string
+     */
+    protected function formatAddress(array $contacts): string
+    {
+        $formatted = [];
 
         foreach ($contacts as $address => $display) {
             $formatted[] = $display ? $display . sprintf('<%s>', $address) : $address;

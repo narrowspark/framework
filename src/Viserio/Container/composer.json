@@ -29,7 +29,8 @@
     "autoload": {
         "psr-4": {
             "Viserio\\Container\\"         : ""
-        }
+        },
+        "exclude-from-classmap"            : ["/Tests/"]
     },
     "autoload-dev": {
         "psr-4": {
