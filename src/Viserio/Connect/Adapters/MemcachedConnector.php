@@ -53,10 +53,10 @@ class MemcachedConnector implements ConnectorContract
      * the server to the Memcached connection. Once we have added all of these
      * servers we'll verify the connection is successful and return it back.
      *
-     * @param object $memcached
+     * @param Memcached $memcached
      * @param array  $servers
      *
-     * @return object
+     * @return Memcached
      */
     protected function addMemcachedServers($memcached, array $servers): Memcached
     {
