@@ -141,7 +141,7 @@ class FilesystemManager extends AbstractConnectionManager
      *
      * @param array $config
      */
-    protected function createNullConnection()
+    protected function createNullConnection(array $config)
     {
         return (new Adapters\NullConnector())->connect([]);
     }
