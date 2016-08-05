@@ -162,7 +162,7 @@ class CacheManager extends AbstractManager
     {
         $client = new PredisClient(sprintf('tcp:/%s:%s', $config['server'], $config['port']));
 
-        return new PredisCachePool($servers);
+        return new PredisCachePool($client);
     }
 
     /**
@@ -238,7 +238,7 @@ class CacheManager extends AbstractManager
      */
     protected function createSessionDriver(array $config): Psr6SessionHandler
     {
-        $pool = parent::driver($config['pool']);
+        $pool = $this->driver($config['pool']);
 
         return new Psr6SessionHandler($pool, $config['config']);
     }
@@ -262,12 +262,12 @@ class CacheManager extends AbstractManager
     /**
      * Create a prefixed cache pool with a namespace.
      *
-     * @param \Psr\Cache\CacheItemPoolInterface $hierarchyPool
-     * @param string                            $namespace
+     * @param \Cache\Hierarchy\HierarchicalPoolInterface $hierarchyPool
+     * @param string                                     $namespace
      *
-     * @return \Psr\Cache\CacheItemPoolInterface
+     * @return \Cache\Namespaced\NamespacedCachePool
      */
-    protected function namespacedPool(CacheItemPoolInterface $hierarchyPool, $namespace)
+    protected function namespacedPool(HierarchicalPoolInterface $hierarchyPool, $namespace): NamespacedCachePool
     {
         return new NamespacedCachePool($hierarchyPool, $namespace);
     }
