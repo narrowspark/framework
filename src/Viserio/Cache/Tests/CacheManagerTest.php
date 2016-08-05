@@ -2,13 +2,16 @@
 declare(strict_types=1);
 namespace Viserio\Cache\Tests;
 
+use Interop\Container\ContainerInterface;
+use League\Flysystem\Adapter\Local;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use Viserio\Cache\CacheManager;
 use Viserio\Contracts\Config\Manager as ConfigManager;
 use Cache\Adapter\{
     PHPArray\ArrayCachePool,
     Void\VoidCachePool,
-    Chain\CachePoolChain
+    Chain\CachePoolChain,
+    Filesystem\FilesystemCachePool
 };
 use Cache\SessionHandler\Psr6SessionHandler;
 use Cache\Namespaced\NamespacedCachePool;
@@ -107,5 +110,32 @@ class CacheManagerTest extends \PHPUnit_Framework_TestCase
         $chain = $this->manager->chain(['array', 'null', new VoidCachePool()]);
 
         $this->assertInstanceOf(CachePoolChain::class, $chain);
+    }
+
+    public function testFilesystem()
+    {
+        $this->manager->getConfig()->shouldReceive('get')
+            ->once()
+            ->with('cache.drivers', [])
+            ->andReturn([
+                'filesystem' => [
+                    'connection' => 'local'
+                ]
+            ]);
+
+        $this->manager->getConfig()->shouldReceive('get')
+            ->once()
+            ->with('cache.namespace')
+            ->andReturn(null);
+
+        $container = $this->mock(ContainerInterface::class);
+        $container->shouldReceive('get')
+            ->once()
+            ->with('local')
+            ->andReturn(new Local(__DIR__ . '/'));
+
+        $this->manager->setContainer($container);
+
+        $this->assertInstanceOf(FilesystemCachePool::class, $this->manager->driver('filesystem'));
     }
 }

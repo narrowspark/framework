@@ -23,6 +23,18 @@ class FilesystemManager extends AbstractConnectionManager
     }
 
     /**
+     * Get the clean flysystem adapter.
+     *
+     * @param string|null $name
+     *
+     * @return \League\Flysystem\AdapterInterface
+     */
+    public function getFlysystemAdapter(string $name = null): AdapterInterface
+    {
+        return parent::connection($name);
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function connection(string $name = null)

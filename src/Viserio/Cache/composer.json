@@ -49,6 +49,7 @@
         "cache/array-adapter"             : "^0.2",
         "cache/session-handler"           : "^0.1",
         "cache/void-adapter"              : "^0.3",
+        "cache/filesystem-adapter"        : "^0.3",
         "narrowspark/php-cs-fixer-config" : "^1.1",
         "narrowspark/testing-helper"      : "^1.5",
         "phpunit/phpunit"                 : "^5.1"
@@ -82,8 +83,7 @@
         "cache/mongodb-adapter"           : "Required to use the Mongodb cache (^0.3).",
         "cache/predis-adapter"            : "Required to use the Predis cache (^0.4).",
         "cache/session-handler"           : "Required to use the Session cache (^0.1).",
-        "cache/void-adapter"              : "Required to use the Void cache (^0.3).",
-        "viserio/filesystem"              : "Required to use the Filesystem cache. (self.version)"
+        "cache/void-adapter"              : "Required to use the Void cache (^0.3)."
     },
     "minimum-stability"                   : "dev",
     "prefer-stable"                       : true

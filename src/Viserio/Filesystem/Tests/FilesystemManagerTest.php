@@ -4,6 +4,7 @@ namespace Viserio\Filesystem\Tests;
 
 use Guzzle\Http\Exception\ClientErrorResponseException;
 use Guzzle\Http\Exception\CurlException;
+use League\Flysystem\AdapterInterface;
 use MongoConnectionException;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use Viserio\Contracts\Config\Manager as ConfigManger;
@@ -265,6 +266,26 @@ class FilesystemManagerTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(
             FilesystemAdapter::class,
             $manager->connection('zip')
+        );
+    }
+
+    public function testgetFlysystemAdapter()
+    {
+        $config = $this->mock(ConfigManger::class);
+        $config->shouldReceive('get')
+            ->once()
+            ->with('filesystem.connections', [])
+            ->andReturn([
+                'zip' => [
+                    'path' => __DIR__ . '\Adapters\stubs\test.zip',
+                ],
+            ]);
+
+        $manager = new FilesystemManager($config);
+
+        $this->assertInstanceOf(
+            AdapterInterface::class,
+            $manager->getFlysystemAdapter('zip')
         );
     }
 }

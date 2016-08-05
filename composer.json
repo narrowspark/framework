@@ -103,6 +103,7 @@
     "require-dev": {
         "aws/aws-sdk-php"                                    : "^3.18",
         "cache/array-adapter"                                : "^0.4",
+        "cache/filesystem-adapter"                           : "^0.3",
         "cache/session-handler"                              : "^0.1",
         "cache/void-adapter"                                 : "^0.3",
         "fzaninotto/faker"                                   : "^1.6",
