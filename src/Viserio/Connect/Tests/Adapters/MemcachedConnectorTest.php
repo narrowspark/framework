@@ -12,6 +12,10 @@ class MemcachedConnectorTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
+        if (! class_exists('Memcached')) {
+            $this->markTestSkipped('Memcached module is not installed.');
+        }
+
         $this->allowMockingNonExistentMethods(true);
     }
 
@@ -27,7 +31,7 @@ class MemcachedConnectorTest extends \PHPUnit_Framework_TestCase
             ],
         ];
 
-        $memcached = $this->mock('stdClass');
+        $memcached = $this->mock(Memcached::class);
         $memcached->shouldReceive('addServer')->once()->with('localhost', 11211, 100);
         $memcached->shouldReceive('getServerList')->once()->andReturn(null);
         $memcached->shouldReceive('getVersion')->once()->andReturn([]);
@@ -35,7 +39,9 @@ class MemcachedConnectorTest extends \PHPUnit_Framework_TestCase
         $connector = $this->getMockBuilder('Viserio\Connect\Adapters\MemcachedConnector')
             ->setMethods(['getMemcached'])
             ->getMock();
-        $connector->expects($this->once())->method('getMemcached')->will($this->returnValue($memcached));
+        $connector->expects($this->once())
+            ->method('getMemcached')
+            ->will($this->returnValue($memcached));
 
         $this->assertSame($connector->connect($config), $memcached);
     }
@@ -56,7 +62,7 @@ class MemcachedConnectorTest extends \PHPUnit_Framework_TestCase
             ],
         ];
 
-        $memcached = $this->mock('stdClass');
+        $memcached = $this->mock(Memcached::class);
         $memcached->shouldReceive('addServer')->once()->with('localhost', 11211, 100);
         $memcached->shouldReceive('getServerList')->once()->andReturn(null);
         $memcached->shouldReceive('getVersion')->once()->andReturn(['255.255.255']);
@@ -139,7 +145,7 @@ class MemcachedConnectorTest extends \PHPUnit_Framework_TestCase
     {
         $config = [];
 
-        $memcached = $this->mock('stdClass');
+        $memcached = $this->mock(Memcached::class);
         $memcached->shouldReceive('getVersion')->once()->andReturn('');
         $memcached->shouldReceive('getServerList')->once()->andReturn($config);
 

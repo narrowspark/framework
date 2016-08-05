@@ -3,6 +3,8 @@ declare(strict_types=1);
 namespace Viserio\Connect\Tests\Adapter\Database;
 
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
+use PDO;
+use Viserio\Connect\Adapters\Database\SQLiteConnector;
 
 class SQLiteConnectorTest extends \PHPUnit_Framework_TestCase
 {
@@ -10,7 +12,7 @@ class SQLiteConnectorTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        if (! class_exists('PDO')) {
+        if (! class_exists(PDO::class)) {
             $this->markTestSkipped('PDO module is not installed.');
         }
     }
@@ -22,9 +24,9 @@ class SQLiteConnectorTest extends \PHPUnit_Framework_TestCase
     public function testSQLiteDatabaseNotFound()
     {
         $config = ['database' => __DIR__ . 'notfound.db'];
-        $connection = $this->createMock('stdClass');
+        $connection = $this->createMock(PDO::class);
 
-        $connector = $this->getMockBuilder('Viserio\Connect\Adapters\Database\SQLiteConnector')
+        $connector = $this->getMockBuilder(SQLiteConnector::class)
             ->setMethods(['createConnection', 'getOptions'])
             ->getMock();
 
@@ -35,9 +37,9 @@ class SQLiteConnectorTest extends \PHPUnit_Framework_TestCase
     {
         $dsn = 'sqlite:' . __DIR__;
         $config = ['database' => __DIR__];
-        $connection = $this->mock('stdClass');
+        $connection = $this->mock(PDO::class);
 
-        $connector = $this->getMockBuilder('Viserio\Connect\Adapters\Database\SQLiteConnector')
+        $connector = $this->getMockBuilder(SQLiteConnector::class)
             ->setMethods(['createConnection', 'getOptions'])
             ->getMock();
         $connector->expects($this->once())
@@ -56,9 +58,9 @@ class SQLiteConnectorTest extends \PHPUnit_Framework_TestCase
     {
         $dsn = 'sqlite::memory:';
         $config = ['database' => ':memory:'];
-        $connection = $this->mock('stdClass');
+        $connection = $this->mock(PDO::class);
 
-        $connector = $this->getMockBuilder('Viserio\Connect\Adapters\Database\SQLiteConnector')
+        $connector = $this->getMockBuilder(SQLiteConnector::class)
             ->setMethods(['createConnection', 'getOptions'])
             ->getMock();
         $connector->expects($this->once())

@@ -2,7 +2,9 @@
 declare(strict_types=1);
 namespace Viserio\Connect\Tests\Adapter\Database;
 
+use PDO;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
+use Viserio\Connect\Adapters\Database\OdbcConnector;
 
 class OdbcConnectorTest extends \PHPUnit_Framework_TestCase
 {
@@ -10,7 +12,7 @@ class OdbcConnectorTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        if (! class_exists('PDO')) {
+        if (! class_exists(PDO::class)) {
             $this->markTestSkipped('PDO module is not installed.');
         }
     }
@@ -20,9 +22,9 @@ class OdbcConnectorTest extends \PHPUnit_Framework_TestCase
      */
     public function testConnect($dsn, $config)
     {
-        $connection = $this->mock('stdClass');
+        $connection = $this->mock(PDO::class);
 
-        $connector = $this->getMockBuilder('Viserio\Connect\Adapters\Database\OdbcConnector')
+        $connector = $this->getMockBuilder(OdbcConnector::class)
              ->setMethods(['createConnection', 'getOptions'])
              ->getMock();
         $connector->expects($this->once())

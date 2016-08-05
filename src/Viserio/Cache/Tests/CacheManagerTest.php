@@ -7,7 +7,8 @@ use Viserio\Cache\CacheManager;
 use Viserio\Contracts\Config\Manager as ConfigManager;
 use Cache\Adapter\{
     PHPArray\ArrayCachePool,
-    Void\VoidCachePool
+    Void\VoidCachePool,
+    Chain\CachePoolChain
 };
 use Cache\SessionHandler\Psr6SessionHandler;
 use Cache\Namespaced\NamespacedCachePool;
@@ -85,5 +86,26 @@ class CacheManagerTest extends \PHPUnit_Framework_TestCase
             ->andReturn('viserio');
 
         $this->assertInstanceOf(NamespacedCachePool::class, $this->manager->driver('null'));
+    }
+
+    public function testChain()
+    {
+        $this->manager->getConfig()->shouldReceive('get')
+            ->twice()
+            ->with('cache.drivers', []);
+
+        $this->manager->getConfig()->shouldReceive('get')
+            ->twice()
+            ->with('cache.namespace')
+            ->andReturn('viserio');
+
+        $this->manager->getConfig()->shouldReceive('get')
+            ->once()
+            ->with('cache.chain.options', [])
+            ->andReturn([]);
+
+        $chain = $this->manager->chain(['array', 'null', new VoidCachePool()]);
+
+        $this->assertInstanceOf(CachePoolChain::class, $chain);
     }
 }

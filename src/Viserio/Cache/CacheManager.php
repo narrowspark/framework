@@ -35,15 +35,26 @@ class CacheManager extends AbstractManager
     /**
      *  Chain multiple PSR-6 Cache pools together for performance.
      *
-     * @param array $pools
+     * @param array      $pools
+     * @param array|null $options
      *
      * @return \Cache\Adapter\Chain\CachePoolChain
      */
-    public function chain(array $pools): CachePoolChain
+    public function chain(array $pools, array $options = null): CachePoolChain
     {
+        $resolvedPools = [];
+
+        foreach ($pools as $pool) {
+            if (is_string($pool)) {
+                $resolvedPools[] = $this->driver($pool);
+            } else {
+                $resolvedPools[] = $pool;
+            }
+        }
+
         return new CachePoolChain(
-            $pools,
-            (array) $this->config->get($this->getConfigName() . '.chain.options', [])
+            $resolvedPools,
+            $options ?? (array) $this->config->get($this->getConfigName() . '.chain.options', [])
         );
     }
 

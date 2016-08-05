@@ -2,7 +2,9 @@
 declare(strict_types=1);
 namespace Viserio\Connect\Tests\Adapter\Database;
 
+use PDO;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
+use Viserio\Connect\Adapters\Database\MySqlConnector;
 
 class MySqlConnectorTest extends \PHPUnit_Framework_TestCase
 {
@@ -12,7 +14,7 @@ class MySqlConnectorTest extends \PHPUnit_Framework_TestCase
     {
         $this->allowMockingNonExistentMethods(true);
 
-        if (! class_exists('PDO')) {
+        if (! class_exists(PDO::class)) {
             $this->markTestSkipped('PDO module is not installed.');
         }
     }
@@ -22,9 +24,9 @@ class MySqlConnectorTest extends \PHPUnit_Framework_TestCase
      */
     public function testMySqlConnectCallsCreateConnectionWithProperArguments($dsn, $config)
     {
-        $connection = $this->mock('stdClass');
+        $connection = $this->mock(PDO::class);
 
-        $connector = $this->getMockBuilder('Viserio\Connect\Adapters\Database\MySqlConnector')
+        $connector = $this->getMockBuilder(MySqlConnector::class)
              ->setMethods(['createConnection', 'getOptions'])
              ->getMock();
         $connector->expects($this->once())

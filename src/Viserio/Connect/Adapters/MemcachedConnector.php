@@ -58,7 +58,7 @@ class MemcachedConnector implements ConnectorContract
      *
      * @return object
      */
-    protected function addMemcachedServers($memcached, array $servers)
+    protected function addMemcachedServers($memcached, array $servers): Memcached
     {
         foreach ($servers as $server) {
             $memcached->addServer(
@@ -79,9 +79,9 @@ class MemcachedConnector implements ConnectorContract
      *
      * @throws \RuntimeException
      *
-     * @return Memcached
+     * @return \Memcached
      */
-    protected function addMemcachedOptions($memcached, array $config)
+    protected function addMemcachedOptions($memcached, array $config): Memcached
     {
         $memcachedConstants = array_map(
             function ($option) {
@@ -107,9 +107,9 @@ class MemcachedConnector implements ConnectorContract
      * @param Memcached $memcached
      * @param array     $config
      *
-     * @return object
+     * @return \Memcached
      */
-    protected function addSaslAuth(object $memcached, array $config)
+    protected function addSaslAuth(object $memcached, array $config): Memcached
     {
         $memcached->setOption(Memcached::OPT_BINARY_PROTOCOL, true);
         $memcached->setSaslAuthData($config['sasl']['username'], $config['sasl']['passowrt']);
@@ -124,7 +124,7 @@ class MemcachedConnector implements ConnectorContract
      *
      * @return \Memcached
      */
-    protected function getMemcached($persistentConnectionId = null)
+    protected function getMemcached($persistentConnectionId = null): Memcached
     {
         if ($persistentConnectionId) {
             return new Memcached($persistentConnectionId);
