@@ -92,8 +92,6 @@ class CacheManager extends AbstractManager
      * @param array $config
      *
      * @return \Cache\Adapter\PHPArray\ArrayCachePool
-     *
-     * @codeCoverageIgnore
      */
     protected function createArrayDriver(array $config): ArrayCachePool
     {
@@ -171,16 +169,12 @@ class CacheManager extends AbstractManager
      * @param array $config
      *
      * @return \Cache\Adapter\Filesystem\FilesystemCachePool
-     *
-     * @codeCoverageIgnore
      */
     protected function createFilesystemDriver(array $config): FilesystemCachePool
     {
-        $adapter = new FilesystemManager($this->config);
+        $adapter = $this->getContainer()->get($config['connection']);
 
-        $filesystem = new Flysystem($adapter->connection($config['connection']));
-
-        return new FilesystemCachePool($filesystem);
+        return new FilesystemCachePool(new Flysystem($adapter));
     }
 
     /**

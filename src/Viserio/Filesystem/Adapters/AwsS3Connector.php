@@ -4,7 +4,10 @@ namespace Viserio\Filesystem\Adapters;
 
 use Aws\S3\S3Client;
 use InvalidArgumentException;
-use League\Flysystem\AwsS3v3\AwsS3Adapter as AwsS3v3;
+use League\Flysystem\{
+    AdapterInterface,
+    AwsS3v3\AwsS3Adapter as AwsS3v3
+};
 use Narrowspark\Arr\StaticArr as Arr;
 
 class AwsS3Connector extends AbstractConnector
@@ -72,7 +75,7 @@ class AwsS3Connector extends AbstractConnector
     /**
      * {@inheritdoc}
      */
-    protected function getAdapter($client, array $config): \League\Flysystem\AdapterInterface
+    protected function getAdapter($client, array $config): AdapterInterface
     {
         return new AwsS3v3($client, $config['bucket'], $config['prefix'], $config['options']);
     }

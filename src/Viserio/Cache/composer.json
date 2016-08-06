@@ -47,6 +47,7 @@
     },
     "require-dev": {
         "cache/array-adapter"             : "^0.2",
+        "cache/filesystem-adapter"        : "^0.3",
         "cache/session-handler"           : "^0.1",
         "cache/void-adapter"              : "^0.3",
         "narrowspark/php-cs-fixer-config" : "^1.1",
@@ -79,11 +80,10 @@
         "cache/filesystem-adapter"        : "Required to use the Filesystem cache (^0.3).",
         "cache/memcache-adapter"          : "Required to use the Memcache cache (^0.3).",
         "cache/memcached-adapter"         : "Required to use the Memcached cache (^0.3).",
-        "cache/mongodb-adapter"           : "Required to use the Mongodb cache (^0.3).",
+        "cache/mongodb-adapter"           : "Required to use the Mongodb cache (^0.2).",
         "cache/predis-adapter"            : "Required to use the Predis cache (^0.4).",
         "cache/session-handler"           : "Required to use the Session cache (^0.1).",
-        "cache/void-adapter"              : "Required to use the Void cache (^0.3).",
-        "viserio/filesystem"              : "Required to use the Filesystem cache. (self.version)"
+        "cache/void-adapter"              : "Required to use the Void cache (^0.3)."
     },
     "minimum-stability"                   : "dev",
     "prefer-stable"                       : true
