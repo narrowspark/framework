@@ -4,4 +4,5 @@ namespace Viserio\Routing;
 
 class Router
 {
+
 }
