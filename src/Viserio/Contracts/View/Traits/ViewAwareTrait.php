@@ -10,7 +10,7 @@ trait ViewAwareTrait
     /**
      * View factory instance.
      *
-     * @var \Interop\Container\ContainerInterface|null
+     * @var \Viserio\Contracts\View\Factory
      */
     protected $views;
 

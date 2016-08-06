@@ -18,11 +18,11 @@ use Symfony\Component\Console\{
     Question\Question
 };
 use Viserio\Console\Style\NarrowsparkStyle;
-use Viserio\Contracts\Support\Arrayable;
-use Viserio\Support\{
-    Invoker,
-    Traits\ContainerAwareTrait
+use Viserio\Contracts\{
+    Support\Arrayable,
+    Container\Traits\ContainerAwareTrait
 };
+use Viserio\Support\Invoker;
 
 abstract class Command extends BaseCommand implements CompletionAwareInterface
 {

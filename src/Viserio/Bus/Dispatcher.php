@@ -8,7 +8,7 @@ use InvalidArgumentException;
 use Viserio\Contracts\Bus\Dispatcher as DispatcherContract;
 use Viserio\Pipeline\Pipeline;
 use Viserio\Support\Invoker;
-use Viserio\Support\Traits\ContainerAwareTrait;
+use Viserio\Contracts\Container\Traits\ContainerAwareTrait;
 
 class Dispatcher implements DispatcherContract
 {

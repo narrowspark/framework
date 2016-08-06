@@ -13,7 +13,7 @@ use Viserio\Contracts\{
     Middleware\Middleware as MiddlewareContract,
     Middleware\Stack as StackContract
 };
-use Viserio\Support\Traits\ContainerAwareTrait;
+use Viserio\Contracts\Container\Traits\ContainerAwareTrait;
 
 class Dispatcher implements StackContract
 {

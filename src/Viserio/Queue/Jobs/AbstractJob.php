@@ -6,7 +6,7 @@ use DateTime;
 use Narrowspark\Arr\StaticArr as Arr;
 use Viserio\Contracts\Queue\Job as JobContract;
 use Viserio\Queue\CallQueuedHandler;
-use Viserio\Support\Traits\ContainerAwareTrait;
+use Viserio\Contracts\Container\Traits\ContainerAwareTrait;
 
 abstract class AbstractJob implements JobContract
 {

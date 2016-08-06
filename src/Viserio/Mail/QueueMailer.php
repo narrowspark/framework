@@ -7,6 +7,7 @@ use InvalidArgumentException;
 use SuperClosure\Serializer;
 use Swift_Mailer;
 use Viserio\Contracts\{
+    Container\Traits\ContainerAwareTrait,
     Mail\QueueMailer as QueueMailerContract,
     Queue\Queue as QueueContract,
     Queue\Job as JobContract,
@@ -14,7 +15,6 @@ use Viserio\Contracts\{
 };
 use Viserio\Support\{
     Invoker,
-    Traits\ContainerAwareTrait,
     Str
 };
 

@@ -4,8 +4,7 @@ namespace Viserio\Routing;
 
 use Closure;
 use Exception;
-use FastRoute\Dispatcher as FastDispatcher;
-use FastRoute\Dispatcher\GroupCountBased as GroupCountBasedDispatcher;
+use RapidRoute\MatchResult;
 use Interop\Container\ContainerInterface as ContainerContract;
 use RuntimeException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
@@ -14,7 +13,7 @@ use Viserio\Contracts\Routing\RouteStrategy as RouteStrategyContract;
 use Viserio\Http\JsonResponse;
 use Viserio\Http\Response;
 
-class Dispatcher extends GroupCountBasedDispatcher implements RouteStrategyContract
+class Dispatcher implements RouteStrategyContract
 {
     /*
      * Route strategy functionality
@@ -81,18 +80,16 @@ class Dispatcher extends GroupCountBasedDispatcher implements RouteStrategyContr
      */
     public function dispatch($method, $uri)
     {
-        $match = parent::dispatch($method, $uri);
-
         switch ($match[0]) {
-            case FastDispatcher::NOT_FOUND:
+            case MatchResult::NOT_FOUND:
                 return $this->handleNotFound();
 
-            case FastDispatcher::METHOD_NOT_ALLOWED:
+            case MatchResult::HTTP_METHOD_NOT_ALLOWED:
                 $allowed = (array) $match[1];
 
                 return $this->handleNotAllowed($allowed);
 
-            case FastDispatcher::FOUND:
+            case MatchResult::FOUND:
             default:
                 $handler = (isset($this->routes[$match[1]]['callback'])) ?
                             $this->routes[$match[1]]['callback'] :

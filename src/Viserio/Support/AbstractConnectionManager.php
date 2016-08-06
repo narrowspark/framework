@@ -9,7 +9,7 @@ use Viserio\Contracts\{
     Config\Manager as ConfigContract,
     Support\Connector as ConnectorContract
 };
-use Viserio\Support\Traits\ContainerAwareTrait;
+use Viserio\Contracts\Container\Traits\ContainerAwareTrait;
 
 abstract class AbstractConnectionManager
 {

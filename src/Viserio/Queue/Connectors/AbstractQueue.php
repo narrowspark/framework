@@ -14,7 +14,7 @@ use Viserio\Queue\{
     CallQueuedHandler,
     QueueClosure
 };
-use Viserio\Support\Traits\ContainerAwareTrait;
+use Viserio\Contracts\Container\Traits\ContainerAwareTrait;
 
 abstract class AbstractQueue implements QueueConnectorContract
 {

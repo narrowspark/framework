@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Support\Tests\Traits;
+namespace Viserio\Contracts\Container\Tests\Traits;
 
 use Narrowspark\TestingHelper\ArrayContainer;
-use Viserio\Support\Traits\ContainerAwareTrait;
+use Viserio\Contracts\Container\Traits\ContainerAwareTrait;
 
 class ContainerAwareTraitTest extends \PHPUnit_Framework_TestCase
 {

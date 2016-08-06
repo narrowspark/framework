@@ -47,14 +47,13 @@
         "php-di/invoker"                                     : "^1.3",
         "phpseclib/phpseclib"                                : "^2.0",
         "nesbot/carbon"                                      : "^1.21",
-        "nikic/fast-route"                                   : "^0.6",
-        "ramsey/uuid"                                        : "^3.4",
         "paragonie/constant_time_encoding"                   : "^2.0",
         "paragonie/password_lock"                            : "^3.0",
         "psr/cache"                                          : "^1.0",
         "psr/log"                                            : "^1.0",
         "psr/http-message"                                   : "^1.0",
         "psy/psysh"                                          : "^0.6",
+        "ramsey/uuid"                                        : "^3.4",
         "roave/security-advisories"                          : "dev-master",
         "schnittstabil/csrf-tokenservice"                    : "^2.0",
         "stecman/symfony-console-completion"                 : "^0.6",
@@ -65,7 +64,8 @@
         "symfony/polyfill-intl-icu"                          : "^1.0",
         "symfony/polyfill-mbstring"                          : "^1.0",
         "symfony/var-dumper"                                 : "^3.1",
-        "swiftmailer/swiftmailer"                            : "^5.4"
+        "swiftmailer/swiftmailer"                            : "^5.4",
+        "timetoogo/rapid-route"                              : "^2.0"
     },
     "replace": {
         "viserio/cache"                                      : "self.version",

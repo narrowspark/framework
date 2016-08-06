@@ -5,7 +5,7 @@ namespace Viserio\Support;
 use Closure;
 use InvalidArgumentException;
 use Viserio\Contracts\Config\Manager as ConfigContract;
-use Viserio\Support\Traits\ContainerAwareTrait;
+use Viserio\Contracts\Container\Traits\ContainerAwareTrait;
 
 abstract class AbstractManager
 {

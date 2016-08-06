@@ -6,7 +6,7 @@ use Closure;
 use ReflectionClass;
 use Viserio\Contracts\Pipeline\Pipeline as PipelineContract;
 use Viserio\Support\Invoker;
-use Viserio\Support\Traits\ContainerAwareTrait;
+use Viserio\Contracts\Container\Traits\ContainerAwareTrait;
 
 class Pipeline implements PipelineContract
 {

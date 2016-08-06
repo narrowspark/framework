@@ -6,7 +6,7 @@ use Interop\Container\ContainerInterface as ContainerContract;
 use Viserio\Contracts\Events\Dispatcher as DispatcherContract;
 use Viserio\Support\Invoker;
 use Viserio\Support\Str;
-use Viserio\Support\Traits\ContainerAwareTrait;
+use Viserio\Contracts\Container\Traits\ContainerAwareTrait;
 
 class Dispatcher implements DispatcherContract
 {

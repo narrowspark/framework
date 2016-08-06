@@ -3,23 +3,20 @@ declare(strict_types=1);
 namespace Viserio\Routing;
 
 use Closure;
-use FastRoute\DataGenerator;
-use FastRoute\RouteCollector;
-use FastRoute\RouteParser as FastRouteParser;
-use Interop\Container\ContainerInterface as ContainerContract;
+use Interop\Container\ContainerInterface;
 use InvalidArgumentException;
 use LogicException;
 use RuntimeException;
-use Viserio\Contracts\Routing\RouteCollector as RouteCollectorContract;
-use Viserio\Contracts\Routing\RouteStrategy as RouteStrategyContract;
+use Viserio\Contracts\{
+    Container\Traits\ContainerAwareTrait,
+    Routing\RouteCollector as RouteCollectorContract,
+    Routing\RouteStrategy as RouteStrategyContract
+};
 use Viserio\Routing\RouteParser as ViserioRouteParser;
 
-class RouteCollection extends RouteCollector implements RouteStrategyContract, RouteCollectorContract
+class RouteCollection implements RouteStrategyContract, RouteCollectorContract
 {
-    /*
-     * Route strategy functionality
-     */
-    use RouteStrategyTrait;
+    use ContainerAwareTrait;
 
     /**
      * @var \Interop\Container\ContainerInterface
@@ -42,20 +39,30 @@ class RouteCollection extends RouteCollector implements RouteStrategyContract, R
     protected $filters = [];
 
     /**
+     * @var \Viserio\Routing\RouteGroup[]
+     */
+    protected $groups = [];
+
+    /**
+     * @var array
+     */
+    protected $patternMatchers = [
+        '/{(.+?):number}/'        => '{$1:[0-9]+}',
+        '/{(.+?):word}/'          => '{$1:[a-zA-Z]+}',
+        '/{(.+?):alphanum_dash}/' => '{$1:[a-zA-Z0-9-_]+}',
+        '/{(.+?):slug}/'          => '{$1:[a-z0-9-]+}',
+        '/{(.+?):uuid}/'          => '{$1:[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}+}'
+    ];
+
+    /**
      * Constructor.
      *
-     * @param ContainerContract        $container
-     * @param \FastRoute\RouteParser   $parser
-     * @param \FastRoute\DataGenerator $generator
+     * @param \Interop\Container\ContainerInterface $container
      */
     public function __construct(
-        ContainerContract $container,
-        FastRouteParser $parser,
-        DataGenerator $generator
+        ContainerInterface $container
     ) {
         $this->container = $container;
-
-        parent::__construct($parser, $generator);
     }
 
     /**
@@ -125,7 +132,7 @@ class RouteCollection extends RouteCollector implements RouteStrategyContract, R
     /**
      * Map a handler to the given methods and route.
      *
-     * @param string          $route    The route to match against
+     * @param string|array    $route    The route to match against
      * @param string|callable $handler  The handler for the route
      * @param string|string[] $methods  The HTTP methods for this handler
      * @param int             $strategy
@@ -146,7 +153,7 @@ class RouteCollection extends RouteCollector implements RouteStrategyContract, R
      */
     public function get($route, $handler, $strategy = self::REQUEST_RESPONSE_STRATEGY)
     {
-        return $this->addRoute('GET', $route, $handler, $strategy);
+        return $this->addRoute(['GET', 'HEAD'], $route, $handler, $strategy);
     }
 
     /**
@@ -298,7 +305,7 @@ class RouteCollection extends RouteCollector implements RouteStrategyContract, R
      *
      * @return \Viserio\Routing\Redirect
      */
-    public function redirect()
+    public function redirect(): Redirect
     {
         return new Redirect($this);
     }
