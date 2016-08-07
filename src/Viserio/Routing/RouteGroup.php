@@ -40,4 +40,28 @@ class RouteGroup
     {
         call_user_func_array($this->callback, [$this]);
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function map($method, $path, $handler)
+    {
+        $path  = ($path === '/') ? $this->prefix : $this->prefix . sprintf('/%s', ltrim($path, '/'));
+        $route = $this->collection->map($method, $path, $handler);
+        $route->setParentGroup($this);
+
+        if ($host = $this->getHost()) {
+            $route->setHost($host);
+        }
+
+        if ($scheme = $this->getScheme()) {
+            $route->setScheme($scheme);
+        }
+
+        foreach ($this->getMiddlewareStack() as $middleware) {
+            $route->middleware($middleware);
+        }
+
+        return $route;
+    }
 }

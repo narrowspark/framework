@@ -2,11 +2,15 @@
 declare(strict_types=1);
 namespace Viserio\Routing;
 
+use ArrayIterator;
 use Closure;
+use Countable;
 use Interop\Container\ContainerInterface;
 use InvalidArgumentException;
+use IteratorAggregate;
 use LogicException;
 use RuntimeException;
+use RapidRoute\RouteParser;
 use Viserio\Contracts\{
     Container\Traits\ContainerAwareTrait,
     Routing\RouteCollector as RouteCollectorContract,
@@ -14,19 +18,23 @@ use Viserio\Contracts\{
 };
 use Viserio\Routing\RouteParser as ViserioRouteParser;
 
-class RouteCollection implements RouteStrategyContract, RouteCollectorContract
+class RouteCollection implements RouteStrategyContract, RouteCollectorContract, Countable, IteratorAggregate
 {
     use ContainerAwareTrait;
 
-    /**
-     * @var \Interop\Container\ContainerInterface
-     */
-    protected $container;
-
-    /**
+   /**
+     * An array of the routes keyed by method.
+     *
      * @var array
      */
     protected $routes = [];
+
+    /**
+     * An flattened array of all of the routes.
+     *
+     * @var array
+     */
+    protected $allRoutes = [];
 
      /**
       * @var array
@@ -44,6 +52,11 @@ class RouteCollection implements RouteStrategyContract, RouteCollectorContract
     protected $groups = [];
 
     /**
+     * @var \RapidRoute\RouteParser
+     */
+    protected $parser = [];
+
+    /**
      * @var array
      */
     protected $patternMatchers = [
@@ -57,11 +70,14 @@ class RouteCollection implements RouteStrategyContract, RouteCollectorContract
     /**
      * Constructor.
      *
+     * @param \RapidRoute\RouteParser               $parser
      * @param \Interop\Container\ContainerInterface $container
      */
     public function __construct(
+        RouteParser $parser,
         ContainerInterface $container
     ) {
+        $this->parser = $parser;
         $this->container = $container;
     }
 
@@ -318,6 +334,36 @@ class RouteCollection implements RouteStrategyContract, RouteCollectorContract
     public function getNamedRoutes()
     {
         return $this->namedRoutes;
+    }
+
+    /**
+     * Get all of the routes in the collection.
+     *
+     * @return array
+     */
+    public function getRoutes()
+    {
+        return array_values($this->allRoutes);
+    }
+
+    /**
+     * Get an iterator for the items.
+     *
+     * @return \ArrayIterator
+     */
+    public function getIterator(): ArrayIterator
+    {
+        return new ArrayIterator($this->getRoutes());
+    }
+
+    /**
+     * Count the number of items in the collection.
+     *
+     * @return int
+     */
+    public function count(): int
+    {
+        return count($this->getRoutes());
     }
 
     /**

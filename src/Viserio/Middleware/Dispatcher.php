@@ -33,6 +33,11 @@ class Dispatcher implements StackContract
      */
     protected $response;
 
+    /**
+     * Create a new middleware instance.
+     *
+     * @param \Psr\Http\Message\ResponseInterface $response
+     */
     public function __construct(ResponseInterface $response)
     {
         $this->response = $response;
