@@ -15,11 +15,6 @@ use Viserio\Http\Response;
 
 class Dispatcher implements RouteStrategyContract
 {
-    /*
-     * Route strategy functionality
-     */
-    use RouteStrategyTrait;
-
     /**
      * Container instance.
      *

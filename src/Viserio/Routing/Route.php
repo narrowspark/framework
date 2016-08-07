@@ -5,7 +5,7 @@ namespace Viserio\Routing;
 use RapidRoute\Route as BaseRoute;
 use Viserio\Contracts\Routing\Route as RouteContract;
 
-class Route extends BaseRoute implements RouteContract
+class Route extends BaseRoute
 {
     /**
      * The URI pattern the route responds to.
