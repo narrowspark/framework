@@ -4,7 +4,10 @@ namespace Viserio\Routing;
 
 use ArrayIterator;
 use Countable;
-use Viserio\Contracts\Routing\Route as RouteContract;
+use Viserio\Contracts\{
+    Container\Traits\ContainerAwareTrait,
+    Routing\Route as RouteContract
+};
 
 class RouteCollection implements Countable, IteratorAggregate
 {
