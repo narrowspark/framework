@@ -87,19 +87,94 @@ interface Route
      */
     public function setAction(array $action): Route;
 
-     /**
-     * Get the parent group.
+    /**
+     * Add a prefix to the route URI.
      *
-     * @return \Viserio\Contracts\Routing\RouteGroup
+     * @param string $prefix
+     *
+     * @return $this
      */
-    public function getParentGroup(): RouteGroup;
+    public function prefix(string $prefix): Route;
 
     /**
-     * Set the parent group.
+     * Get the prefix of the route instance.
      *
-     * @param \Viserio\Contracts\Routing\RouteGroup $group
-     *
-     * @return \Viserio\Contracts\Routing\Route
+     * @return string
      */
-    public function setParentGroup(RouteGroup $group): Route;
+    public function getPrefix(): string;
+
+     /**
+     * Set a parameter to the given value.
+     *
+     * @param string $name
+     * @param mixed  $value
+     *
+     * @return $this
+     */
+    public function setParameter($name, $value): Route;
+
+    /**
+     * Get a given parameter from the route.
+     *
+     * @param string $name
+     * @param mixed  $default
+     *
+     * @return string|object
+     */
+    public function getParameter(string $name, $default = null);
+
+    /**
+     * Determine a given parameter exists from the route.
+     *
+     * @param string $name
+     *
+     * @return bool
+     */
+    public function hasParameter(string $name): bool;
+
+    /**
+     * Get the key / value list of parameters for the route.
+     *
+     * @return array
+     *
+     * @throws \LogicException
+     */
+    public function getParameters(): array;
+
+    /**
+     * Determine if the route has parameters.
+     *
+     * @return bool
+     */
+    public function hasParameters(): bool;
+
+    /**
+     * Unset a parameter on the route if it is set.
+     *
+     * @param string $name
+     */
+    public function forgetParameter(string $name);
+
+    /**
+     * Check if route is a static route.
+     *
+     * @return bool
+     */
+    public function isStatic(): bool;
+
+    /**
+     * Run the route action and return the response.
+     *
+     * @return mixed
+     */
+    public function run();
+
+    /**
+     * Set the router instance on the route.
+     *
+     * @param \Viserio\Contracts\Routing\Router $router
+     *
+     * @return $this
+     */
+    public function setRouter(Router $router): Route;
 }

@@ -2,10 +2,18 @@
 declare(strict_types=1);
 namespace Viserio\Routing;
 
+use LogicException;
+use Narrowspark\Arr\StaticArr as Arr;
+use RapidRoute\RouteSegments\ParameterSegment;
+use UnexpectedValueException;
 use Viserio\Contracts\{
     Container\Traits\ContainerAwareTrait,
     Routing\Route as RouteContract,
-    Routing\RouteGroup as RouteGroupContract
+    Routing\Router as RouterContract
+};
+use Viserio\Support\{
+    Invoker,
+    Str
 };
 
 class Route implements RouteContract
@@ -75,17 +83,37 @@ class Route implements RouteContract
      */
     protected $router;
 
-     /**
-     * The route group instance used by the route.
+    /**
+     * Invoker instance.
      *
-     * @var \Viserio\Contracts\Routing\RouteGroup
+     * @var \Viserio\Support\Invoker
      */
-    protected $group;
+    protected $invoker;
+
+     /**
+     * Create a new Route instance.
+     *
+     * @param array|string        $methods
+     * @param string              $uri
+     * @param \Closure|array|null $action
+     */
+    public function __construct($methods, $uri, $action)
+    {
+        $this->uri = $uri;
+        $this->methods = (array) $methods;
+        $this->action = $this->parseAction($action);
+
+        if (in_array('GET', $this->methods) && ! in_array('HEAD', $this->methods)) {
+            $this->methods[] = 'HEAD';
+        }
+
+        if (isset($this->action['prefix'])) {
+            $this->prefix($this->action['prefix']);
+        }
+    }
 
     /**
-     * Get the domain defined for the route.
-     *
-     * @return string|null
+     * {@inheritdoc}
      */
     public function getDomain()
     {
@@ -93,9 +121,7 @@ class Route implements RouteContract
     }
 
     /**
-     * Get the URI associated with the route.
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function getUri(): string
     {
@@ -103,11 +129,7 @@ class Route implements RouteContract
     }
 
     /**
-     * Set the URI that the route responds to.
-     *
-     * @param string $uri
-     *
-     * @return $this
+     * {@inheritdoc}
      */
     public function setUri(string $uri): RouteContract
     {
@@ -117,9 +139,7 @@ class Route implements RouteContract
     }
 
     /**
-     * Get the name of the route instance.
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function getName()
     {
@@ -127,11 +147,7 @@ class Route implements RouteContract
     }
 
      /**
-     * Add or change the route name.
-     *
-     * @param string $name
-     *
-     * @return $this
+     * {@inheritdoc}
      */
     public function setName(string $name): RouteContract
     {
@@ -141,9 +157,7 @@ class Route implements RouteContract
     }
 
     /**
-     * Get the HTTP verbs the route responds to.
-     *
-     * @return array
+     * {@inheritdoc}
      */
     public function getMethods(): array
     {
@@ -151,9 +165,7 @@ class Route implements RouteContract
     }
 
     /**
-     * Determine if the route only responds to HTTP requests.
-     *
-     * @return bool
+     * {@inheritdoc}
      */
     public function httpOnly(): bool
     {
@@ -161,9 +173,7 @@ class Route implements RouteContract
     }
 
     /**
-     * Determine if the route only responds to HTTPS requests.
-     *
-     * @return bool
+     * {@inheritdoc}
      */
     public function httpsOnly(): bool
     {
@@ -171,9 +181,7 @@ class Route implements RouteContract
     }
 
     /**
-     * Get the action name for the route.
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function getActionName(): string
     {
@@ -181,9 +189,7 @@ class Route implements RouteContract
     }
 
     /**
-     * Get the action array for the route.
-     *
-     * @return array
+     * {@inheritdoc}
      */
     public function getAction(): array
     {
@@ -191,11 +197,7 @@ class Route implements RouteContract
     }
 
     /**
-     * Set the action array for the route.
-     *
-     * @param array $action
-     *
-     * @return $this
+     * {@inheritdoc}
      */
     public function setAction(array $action): RouteContract
     {
@@ -205,26 +207,194 @@ class Route implements RouteContract
     }
 
     /**
-     * Get the parent group.
-     *
-     * @return \Viserio\Contracts\Routing\RouteGroup
+     * {@inheritdoc}
      */
-    public function getParentGroup(): RouteGroupContract
+    public function prefix(string $prefix): RouteContract
     {
-        return $this->group;
+        $uri = rtrim($prefix, '/').'/'.ltrim($this->uri, '/');
+
+        $this->uri = trim($uri, '/');
+
+        return $this;
     }
 
     /**
-     * Set the parent group.
-     *
-     * @param \Viserio\Contracts\Routing\RouteGroup $group
-     *
-     * @return \Viserio\Contracts\Routing\Route
+     * {@inheritdoc}
      */
-    public function setParentGroup(RouteGroupContract $group): RouteContract
+    public function getPrefix(): string
     {
-        $this->group = $group;
+        return $this->action['prefix'] ?? '';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setParameter($name, $value): RouteContract
+    {
+        $this->parameters();
+
+        $this->parameters[$name] = $value;
 
         return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getParameter(string $name, $default = null)
+    {
+        return Arr::get($this->parameters(), $name, $default);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function hasParameter(string $name): bool
+    {
+        return Arr::has($this->parameters(), $name);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getParameters(): array
+    {
+        if (isset($this->parameters)) {
+            return $this->parameters;
+        }
+
+        throw new LogicException('Route is not bound.');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function hasParameters(): bool
+    {
+        return isset($this->parameters);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function forgetParameter(string $name)
+    {
+        $this->parameters();
+
+        unset($this->parameters[$name]);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isStatic(): bool
+    {
+        foreach($this->parameters as $parameter) {
+            if ($parameter instanceof ParameterSegment) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function run()
+    {
+        $this->initInvoker();
+
+        return $this->invoker->call(
+            $this->action['uses'],
+            array_values($this->getParameters())
+        );
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setRouter(RouterContract $router): RouteContract
+    {
+        $this->router = $router;
+
+        return $this;
+    }
+
+    /**
+     * Dynamically access route parameters.
+     *
+     * @param string $key
+     *
+     * @return mixed
+     */
+    public function __get($key)
+    {
+        return $this->parameter($key);
+    }
+
+    /**
+     * Set configured invoker.
+     *
+     * @return \Viserio\Support\Invoker;
+     */
+    protected function initInvoker(): Invoker
+    {
+        if ($this->invoker === null) {
+            $this->invoker = (new Invoker())
+                ->injectByTypeHint(true)
+                ->injectByParameterName(true)
+                ->setContainer($this->getContainer());
+        }
+
+        return $this->invoker;
+    }
+
+    /**
+     * Parse the route action into a standard array.
+     *
+     * @param callable|array|null $action
+     *
+     * @return array
+     *
+     * @throws \UnexpectedValueException
+     */
+    protected function parseAction($action): array
+    {
+        // If no action is passed in right away, we assume the user will make use of
+        // fluent routing. In that case, we set a default closure, to be executed
+        // if the user never explicitly sets an action to handle the given uri.
+        if (is_null($action)) {
+            return ['uses' => function () {
+                throw new LogicException("Route for [{$this->uri}] has no action.");
+            }];
+        }
+
+        // If the action is already a Closure instance, we will just set that instance
+        // as the "uses" property.
+        if (is_callable($action)) {
+            return ['uses' => $action];
+        }
+
+        // If no "uses" property has been set, we will dig through the array to find a
+        // Closure instance within this list. We will set the first Closure we come across.
+        if (! isset($action['uses'])) {
+            $action['uses'] = Arr::first($action, function ($value, $key) {
+                return is_callable($value) && is_numeric($key);
+            });
+        }
+
+        if (is_string($action['uses']) && ! Str::contains($action['uses'], '::')) {
+            if (! method_exists($action, '__invoke')) {
+                throw new UnexpectedValueException(sprintf(
+                    'Invalid route action: [%s]',
+                    $action
+                ));
+            }
+
+            $action['uses'] = $action.'::__invoke';
+        }
+
+        return $action;
     }
 }
