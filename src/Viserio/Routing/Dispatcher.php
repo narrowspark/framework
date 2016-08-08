@@ -9,11 +9,10 @@ use Interop\Container\ContainerInterface as ContainerContract;
 use RuntimeException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Viserio\Contracts\Http\Response as ResponseContract;
-use Viserio\Contracts\Routing\RouteStrategy as RouteStrategyContract;
 use Viserio\Http\JsonResponse;
 use Viserio\Http\Response;
 
-class Dispatcher implements RouteStrategyContract
+class Dispatcher
 {
     /**
      * Container instance.
