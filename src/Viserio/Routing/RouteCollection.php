@@ -4,6 +4,7 @@ namespace Viserio\Routing;
 
 use ArrayIterator;
 use Countable;
+use IteratorAggregate;
 use Viserio\Contracts\{
     Container\Traits\ContainerAwareTrait,
     Routing\Route as RouteContract
