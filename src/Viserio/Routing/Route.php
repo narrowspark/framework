@@ -100,15 +100,15 @@ class Route implements RouteContract
     public function __construct($methods, $uri, $action)
     {
         $this->uri = $uri;
-        $this->methods = (array) $methods;
+        $this->httpMethods = (array) $methods;
         $this->action = $this->parseAction($action);
 
-        if (in_array('GET', $this->methods) && ! in_array('HEAD', $this->methods)) {
-            $this->methods[] = 'HEAD';
+        if (in_array('GET', $this->httpMethods) && ! in_array('HEAD', $this->httpMethods)) {
+            $this->httpMethods[] = 'HEAD';
         }
 
         if (isset($this->action['prefix'])) {
-            $this->prefix($this->action['prefix']);
+            $this->addPrefix($this->action['prefix']);
         }
     }
 
@@ -209,7 +209,7 @@ class Route implements RouteContract
     /**
      * {@inheritdoc}
      */
-    public function prefix(string $prefix): RouteContract
+    public function addPrefix(string $prefix): RouteContract
     {
         $uri = rtrim($prefix, '/').'/'.ltrim($this->uri, '/');
 

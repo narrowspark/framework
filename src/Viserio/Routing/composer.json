@@ -32,7 +32,8 @@
     "require-dev": {
         "narrowspark/php-cs-fixer-config"     : "^1.1",
         "narrowspark/testing-helper"          : "^1.5",
-        "phpunit/phpunit"                     : "^5.1"
+        "phpunit/phpunit"                     : "^5.1",
+        "viserio/http"                        : "self.version"
     },
     "autoload": {
         "psr-4": {

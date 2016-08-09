@@ -94,7 +94,7 @@ interface Route
      *
      * @return $this
      */
-    public function prefix(string $prefix): Route;
+    public function addPrefix(string $prefix): Route;
 
     /**
      * Get the prefix of the route instance.
