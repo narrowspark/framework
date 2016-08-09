@@ -64,8 +64,7 @@
         "symfony/polyfill-intl-icu"                          : "^1.0",
         "symfony/polyfill-mbstring"                          : "^1.0",
         "symfony/var-dumper"                                 : "^3.1",
-        "swiftmailer/swiftmailer"                            : "^5.4",
-        "timetoogo/rapid-route"                              : "^2.0"
+        "swiftmailer/swiftmailer"                            : "^5.4"
     },
     "replace": {
         "viserio/cache"                                      : "self.version",

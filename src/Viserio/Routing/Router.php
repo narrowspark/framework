@@ -2,13 +2,22 @@
 declare(strict_types=1);
 namespace Viserio\Routing;
 
+use Closure;
 use Interop\Container\ContainerInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use RapidRoute\{
+    InvalidRoutePatternException,
+    RouteParser
+};
 use Viserio\Contracts\{
     Container\Traits\ContainerAwareTrait,
-    Events\Traits\EventsAwareTrait
+    Events\Traits\EventsAwareTrait,
+    Routing\Route as RouteContract,
+    Routing\Router as RouterContract,
+    Routing\RouteGroup as RouteGroupContract
 };
 
-class Router
+class Router implements RouterContract
 {
     use ContainerAwareTrait;
     use EventsAwareTrait;
@@ -24,11 +33,13 @@ class Router
      * Create a new Router instance.
      *
      * @param \Interop\Container\ContainerInterface $container
+     * @param \RapidRoute\RouteParser               $parser
      */
-    public function __construct(ContainerInterface $container)
+    public function __construct(ContainerInterface $container, RouteParser $parser)
     {
         $this->routes = new RouteCollection;
         $this->container = $container;
+        $this->parser = $parser;
     }
 
     /**
@@ -116,6 +127,18 @@ class Router
     }
 
      /**
+     * Dispatch router for HTTP request.
+     *
+     * @param \Psr\Http\Message\ServerRequestInterface $request The current HTTP request object
+     *
+     * @return array
+     */
+    public function dispatch(ServerRequestInterface $request)
+    {
+
+    }
+
+     /**
      * Add a route to the underlying route collection.
      *
      * @param array|string               $methods
@@ -140,11 +163,11 @@ class Router
      */
     protected function createRoute($methods, string $uri, $action): RouteContract
     {
-        list($patternString, $conditions) = $this->parseRoutingPattern($pattern);
+        list($patternString, $conditions) = $this->parseRoutingPattern($uri);
 
         $pattern = $this->parser->parse(
             $patternString,
-            $conditions + $this->globalParameterConditions
+            $conditions
         );
 
         $route = $this->newRoute(
@@ -202,5 +225,16 @@ class Router
             'Cannot add route: route pattern must be a pattern string or array, %s given',
             gettype($pattern)
         ));
+    }
+
+    /**
+     * Prefix the given URI with the last prefix.
+     *
+     * @param  string  $uri
+     * @return string
+     */
+    protected function prefix($uri)
+    {
+        return trim('/'.trim($uri, '/'), '/') ?: '/';
     }
 }

@@ -43,7 +43,7 @@ class RouteCollection implements Countable, IteratorAggregate
      */
     protected $groups = [];
 
-   /**
+    /**
      * Add a Route instance to the collection.
      *
      * @param Viserio\Contracts\Routing\Route $route
@@ -55,22 +55,6 @@ class RouteCollection implements Countable, IteratorAggregate
         $this->addToCollections($route);
 
         return $route;
-    }
-
-    /**
-     * Add the given route to the arrays of routes.
-     *
-     * @param Viserio\Contracts\Routing\Route $route
-     */
-    protected function addToCollections(RouteContract $route)
-    {
-        $domainAndUri = $route->domain() . $route->getUri();
-
-        foreach ($route->methods() as $method) {
-            $this->routes[$method][$domainAndUri] = $route;
-        }
-
-        $this->allRoutes[$method.$domainAndUri] = $route;
     }
 
     /**
@@ -101,5 +85,29 @@ class RouteCollection implements Countable, IteratorAggregate
     public function count(): int
     {
         return count($this->getRoutes());
+    }
+
+    /**
+     * @return Route[]
+     */
+    public function asArray(): array
+    {
+        return array_values($this->allRoutes);
+    }
+
+    /**
+     * Add the given route to the arrays of routes.
+     *
+     * @param Viserio\Contracts\Routing\Route $route
+     */
+    protected function addToCollections(RouteContract $route)
+    {
+        $domainAndUri = $route->getDomain() . $route->getUri();
+
+        foreach ($route->getMethods() as $method) {
+            $this->routes[$method][$domainAndUri] = $route;
+        }
+
+        $this->allRoutes[$method.$domainAndUri] = $route;
     }
 }

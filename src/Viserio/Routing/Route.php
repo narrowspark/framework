@@ -100,7 +100,8 @@ class Route implements RouteContract
     public function __construct($methods, $uri, $action)
     {
         $this->uri = $uri;
-        $this->httpMethods = (array) $methods;
+        // According to RFC methods are defined in uppercase (See RFC 7231)
+        $this->httpMethods = array_map("strtoupper",(array) $methods);
         $this->action = $this->parseAction($action);
 
         if (in_array('GET', $this->httpMethods) && ! in_array('HEAD', $this->httpMethods)) {
@@ -231,8 +232,6 @@ class Route implements RouteContract
      */
     public function setParameter($name, $value): RouteContract
     {
-        $this->parameters();
-
         $this->parameters[$name] = $value;
 
         return $this;
@@ -243,7 +242,7 @@ class Route implements RouteContract
      */
     public function getParameter(string $name, $default = null)
     {
-        return Arr::get($this->parameters(), $name, $default);
+        return Arr::get($this->getParameters(), $name, $default);
     }
 
     /**
@@ -251,7 +250,7 @@ class Route implements RouteContract
      */
     public function hasParameter(string $name): bool
     {
-        return Arr::has($this->parameters(), $name);
+        return Arr::has($this->getParameters(), $name);
     }
 
     /**
@@ -279,7 +278,7 @@ class Route implements RouteContract
      */
     public function forgetParameter(string $name)
     {
-        $this->parameters();
+        $this->getParameters();
 
         unset($this->parameters[$name]);
     }
