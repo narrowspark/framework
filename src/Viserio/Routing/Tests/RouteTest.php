@@ -4,10 +4,10 @@ namespace Viserio\Routing\Tests;
 
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use Interop\Container\ContainerInterface;
-use RapidRoute\RouteParser;
 use Viserio\Routing\{
     Route,
     Router,
+    RouteParser,
     Tests\Fixture\Controller
 };
 

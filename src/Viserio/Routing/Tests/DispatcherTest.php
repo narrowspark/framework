@@ -18,7 +18,5 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase
         $collection->addRoute($route);
 
         $dispatcher = new Dispatcher($collection);
-
-        var_dump($dispatcher->match('GET', 'test'));
     }
 }

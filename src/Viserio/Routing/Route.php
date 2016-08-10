@@ -4,13 +4,13 @@ namespace Viserio\Routing;
 
 use LogicException;
 use Narrowspark\Arr\StaticArr as Arr;
-use RapidRoute\RouteSegments\ParameterSegment;
 use UnexpectedValueException;
 use Viserio\Contracts\{
     Container\Traits\ContainerAwareTrait,
     Routing\Route as RouteContract,
     Routing\Router as RouterContract
 };
+use Viserio\Routing\Segments\ParameterSegment;
 use Viserio\Support\{
     Invoker,
     Str
@@ -49,32 +49,11 @@ class Route implements RouteContract
     protected $controller;
 
     /**
-     * The default values for the route.
-     *
-     * @var array
-     */
-    protected $defaults = [];
-
-    /**
-     * The regular expression requirements.
-     *
-     * @var array
-     */
-    protected $wheres = [];
-
-    /**
      * The array of matched parameters.
      *
      * @var array|null
      */
     protected $parameters;
-
-    /**
-     * The parameter names for the route.
-     *
-     * @var array|null
-     */
-    protected $parameterNames;
 
     /**
      * The router instance used by the route.

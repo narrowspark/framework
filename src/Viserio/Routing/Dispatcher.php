@@ -2,11 +2,6 @@
 declare(strict_types=1);
 namespace Viserio\Routing;
 
-use RapidRoute\{
-    MatchResult,
-    InvalidRouteDataException,
-    Compilation\TreeBasedRouterCompiler
-};
 use Psr\Http\Message\ServerRequestInterface;
 
 class Dispatcher
@@ -68,15 +63,10 @@ class Dispatcher
      */
     public function match(string $httpMethod, string $uri)
     {
-        $compiledRouter = $this->generate();
 
-        return MatchResult::fromArray($compiledRouter($httpMethod, $uri));
     }
 
     protected function generate()
     {
-        $routerCompiler = new TreeBasedRouterCompiler();
-
-        return $routerCompiler->compileRouter($this->routes);
     }
 }

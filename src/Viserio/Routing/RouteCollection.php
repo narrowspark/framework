@@ -2,15 +2,12 @@
 declare(strict_types=1);
 namespace Viserio\Routing;
 
-use ArrayIterator;
-use Countable;
-use IteratorAggregate;
 use Viserio\Contracts\{
     Container\Traits\ContainerAwareTrait,
     Routing\Route as RouteContract
 };
 
-class RouteCollection implements Countable, IteratorAggregate
+class RouteCollection
 {
     use ContainerAwareTrait;
 
@@ -28,7 +25,7 @@ class RouteCollection implements Countable, IteratorAggregate
      */
     protected $allRoutes = [];
 
-     /**
+    /**
       * @var array
       */
      protected $namedRoutes = [];
@@ -63,34 +60,6 @@ class RouteCollection implements Countable, IteratorAggregate
      * @return array
      */
     public function getRoutes(): array
-    {
-        return array_values($this->allRoutes);
-    }
-
-    /**
-     * Get an iterator for the items.
-     *
-     * @return \ArrayIterator
-     */
-    public function getIterator(): ArrayIterator
-    {
-        return new ArrayIterator($this->getRoutes());
-    }
-
-    /**
-     * Count the number of items in the collection.
-     *
-     * @return int
-     */
-    public function count(): int
-    {
-        return count($this->getRoutes());
-    }
-
-    /**
-     * @return Route[]
-     */
-    public function asArray(): array
     {
         return array_values($this->allRoutes);
     }
