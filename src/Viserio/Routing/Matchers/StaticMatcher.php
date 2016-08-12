@@ -34,7 +34,7 @@ class StaticMatcher extends AbstractSegmentMatcher
     /**
      * {@inheritdoc}
      */
-    public function getConditionExpression($segmentVariable, $uniqueKey): string
+    public function getConditionExpression(string $segmentVariable, int $uniqueKey): string
     {
         return $segmentVariable . ' === ' . VarExporter::export($this->segment);
     }
@@ -42,7 +42,7 @@ class StaticMatcher extends AbstractSegmentMatcher
     /**
      * {@inheritdoc}
      */
-    public function getMatchedParameterExpressions($segmentVariable, $uniqueKey): array
+    public function getMatchedParameterExpressions(string $segmentVariable, int $uniqueKey): array
     {
         return $this->parameterKeys ? [$this->parameterKeys[0] => $segmentVariable] : [];
     }
