@@ -132,9 +132,10 @@
     },
     "autoload": {
         "psr-4": {
-            "Viserio\\"                                      : "src/Viserio/"
+            "Viserio\\"                                      : "src/Viserio/",
+            "Narrowspark\\"                                  : "benchmarks/"
         },
-        "exclude-from-classmap"                              : ["src/Viserio/**/Tests/"]
+        "exclude-from-classmap"                              : ["src/Viserio/**/Tests/", "benchmarks/"]
     },
     "extra": {
         "branch-alias": {

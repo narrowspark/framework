@@ -17,8 +17,8 @@ class RouteParser implements RouteParserContract
     {
         if (strlen($route) > 1 && $route[0] !== '/') {
             throw new InvalidRoutePatternException(sprintf(
-                    'Invalid route pattern: non-root route must be prefixed with \'/\', \'%s\' given',
-                    $route
+                'Invalid route pattern: non-root route must be prefixed with \'/\', \'%s\' given',
+                $route
             ));
         }
 

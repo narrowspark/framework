@@ -39,7 +39,7 @@ final class Pattern
     }
 
     /**
-     * Don't Instantiate the class.
+     * Don't instantiate this class.
      */
     private function __construct() {
         //
