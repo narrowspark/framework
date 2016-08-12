@@ -41,7 +41,7 @@ class VarExporter
             $code .= ']';
 
             return $code;
-        } elseif (is_object($value) && get_class($value) === StdClass::class) {
+        } elseif (is_object($value) && $value instanceof StdClass) {
             return '(object)' . self::export((array) $value);
         }
 
