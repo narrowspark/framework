@@ -79,11 +79,11 @@ class RouteTest extends \PHPUnit_Framework_TestCase
     {
         $route = new Route('GET', 'test', ['http']);
 
-        $this->assertTrue($route->httpOnly());
+        $this->assertTrue($route->isHttpOnly());
 
         $route = new Route('GET', 'test', ['https']);
 
-        $this->assertTrue($route->httpsOnly());
+        $this->assertTrue($route->isHttpsOnly());
     }
 
     public function testSetAndGetPrefix()

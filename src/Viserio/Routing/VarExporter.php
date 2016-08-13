@@ -29,7 +29,6 @@ class VarExporter
             }
 
             $code = '[';
-            $indent = '    ';
 
             foreach ($value as $key => $element) {
                 $code .= self::export($key);

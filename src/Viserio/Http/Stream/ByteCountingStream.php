@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Http\Stream;
 
-use Psr\Http\Message\StreamInterface;
 use InvalidArgumentException;
+use Psr\Http\Message\StreamInterface;
 use Viserio\Contracts\Http\Exceptions\ByteCountingStreamException;
 
 /**
@@ -30,9 +30,10 @@ class ByteCountingStream extends AbstractStreamDecorator
     public function __construct(StreamInterface $stream, int $bytesToRead)
     {
         $this->stream = $stream;
+
         if (!is_int($bytesToRead) || $bytesToRead < 0) {
-            $msg = "Bytes to read should be a non-negative integer for "
-                . "ByteCountingStream, got {$bytesToRead}.";
+            $msg = 'Bytes to read should be a non-negative integer for '
+                . sprintf('ByteCountingStream, got %s.', $bytesToRead);
             throw new InvalidArgumentException($msg);
         }
 

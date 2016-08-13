@@ -25,12 +25,13 @@ class LazyOpenStream extends AbstractStreamDecorator
     {
         $this->filename = $filename;
         $this->mode = $mode;
+        $this->stream = $this->createStream();
     }
 
     /**
      * Creates the underlying stream lazily when required.
      *
-     * @return StreamInterface
+     * @return \Psr\Http\Message\StreamInterface
      */
     protected function createStream(): StreamInterface
     {

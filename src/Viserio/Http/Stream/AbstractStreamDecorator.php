@@ -11,30 +11,18 @@ use Viserio\Http\Util;
 abstract class AbstractStreamDecorator implements StreamInterface
 {
     /**
+     * Stream instance.
+     *
+     * @var \Psr\Http\Message\StreamInterface
+     */
+    protected $stream;
+
+    /**
      * @param StreamInterface $stream Stream to decorate
      */
     public function __construct(StreamInterface $stream)
     {
         $this->stream = $stream;
-    }
-
-    /**
-     * Magic method used to create a new stream if streams are not added in
-     * the constructor of a decorator (e.g., LazyOpenStream).
-     *
-     * @param string $name Name of the property (allows "stream" only).
-     *
-     * @return StreamInterface
-     */
-    public function __get($name)
-    {
-        if ($name == 'stream') {
-            $this->stream = $this->createStream();
-
-            return $this->stream;
-        }
-
-        throw new UnexpectedValueException("$name not found on class");
     }
 
     /**
@@ -121,6 +109,9 @@ abstract class AbstractStreamDecorator implements StreamInterface
         return $this->stream->eof();
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function tell()
     {
         return $this->stream->tell();

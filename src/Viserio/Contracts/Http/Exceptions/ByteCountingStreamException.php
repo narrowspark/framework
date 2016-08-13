@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Contracts\Http\Exceptions;
 
-use Throwable;
 use RuntimeException;
+use Throwable;
 
 class ByteCountingStreamException extends RuntimeException
 {
@@ -24,15 +24,15 @@ class ByteCountingStreamException extends RuntimeException
     /**
      * ByteCountingStreamException constructor.
      *
-     * @param int        $expect   expected bytes to be read
-     * @param int        $actual   actual available bytes to read
-     * @param \Throwable $previous Exception being thrown
+     * @param int             $expect   expected bytes to be read
+     * @param int             $actual   actual available bytes to read
+     * @param \Throwable|null $previous Exception being thrown
      */
     public function __construct(int $expect, int $actual, Throwable $previous = null)
     {
-        $msg = "The ByteCountingStream decorator expects to be able to "
-        . "read {$expect} bytes from a stream, but the stream being decorated "
-        . "only contains {$actual} bytes.";
+        $msg = 'The ByteCountingStream decorator expects to be able to '
+        . sprintf('read %s bytes from a stream, but the stream being decorated ', $expect)
+        . sprintf('only contains %s bytes.', $actual);
 
         $this->expectBytes = $expect;
         $this->actualBytes = $actual;

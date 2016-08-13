@@ -43,9 +43,9 @@ class RouteCollection
     /**
      * Add a Route instance to the collection.
      *
-     * @param Viserio\Contracts\Routing\Route $route
+     * @param \Viserio\Contracts\Routing\Route $route
      *
-     * @return Viserio\Contracts\Routing\Route
+     * @return \Viserio\Contracts\Routing\Route
      */
     public function addRoute(RouteContract $route): RouteContract
     {
@@ -67,7 +67,7 @@ class RouteCollection
     /**
      * Add the given route to the arrays of routes.
      *
-     * @param Viserio\Contracts\Routing\Route $route
+     * @param \Viserio\Contracts\Routing\Route $route
      */
     protected function addToCollections(RouteContract $route)
     {

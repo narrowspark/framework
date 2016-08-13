@@ -55,14 +55,14 @@ interface Route
      *
      * @return bool
      */
-    public function httpOnly(): bool;
+    public function isHttpOnly(): bool;
 
     /**
      * Determine if the route only responds to HTTPS requests.
      *
      * @return bool
      */
-    public function httpsOnly(): bool;
+    public function isHttpsOnly(): bool;
 
     /**
      * Get the action name for the route.
@@ -152,6 +152,8 @@ interface Route
      * Unset a parameter on the route if it is set.
      *
      * @param string $name
+     *
+     * @return void
      */
     public function forgetParameter(string $name);
 

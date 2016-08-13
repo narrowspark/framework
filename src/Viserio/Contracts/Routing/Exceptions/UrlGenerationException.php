@@ -18,7 +18,7 @@ class UrlGenerationException extends Exception
         return new static(sprintf(
             'Missing required parameters for [Route: %s] [URI: %s].',
             $route->getName(),
-            $route->getPath()
+            $route->getUri()
         ));
     }
 }

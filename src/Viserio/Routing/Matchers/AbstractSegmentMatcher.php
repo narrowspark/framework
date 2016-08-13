@@ -42,7 +42,7 @@ abstract class AbstractSegmentMatcher implements SegmentMatcherContract
         }
 
         $this->parameterKeys = array_unique(
-            array_merge($this->parameterKeys, $matcher->parameterKeys),
+            array_merge($this->parameterKeys, $matcher->getParameterKeys()),
             SORT_NUMERIC
         );
     }

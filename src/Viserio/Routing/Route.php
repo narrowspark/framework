@@ -80,7 +80,7 @@ class Route implements RouteContract
     {
         $this->uri = $uri;
         // According to RFC methods are defined in uppercase (See RFC 7231)
-        $this->httpMethods = array_map("strtoupper",(array) $methods);
+        $this->httpMethods = array_map('strtoupper',(array) $methods);
         $this->action = $this->parseAction($action);
 
         if (in_array('GET', $this->httpMethods) && ! in_array('HEAD', $this->httpMethods)) {
@@ -147,7 +147,7 @@ class Route implements RouteContract
     /**
      * {@inheritdoc}
      */
-    public function httpOnly(): bool
+    public function isHttpOnly(): bool
     {
         return in_array('http', $this->action, true);
     }
@@ -155,7 +155,7 @@ class Route implements RouteContract
     /**
      * {@inheritdoc}
      */
-    public function httpsOnly(): bool
+    public function isHttpsOnly(): bool
     {
         return in_array('https', $this->action, true);
     }
@@ -267,6 +267,8 @@ class Route implements RouteContract
      */
     public function isStatic(): bool
     {
+        $this->getParameters();
+
         foreach($this->parameters as $parameter) {
             if ($parameter instanceof ParameterSegment) {
                 return false;
@@ -308,13 +310,13 @@ class Route implements RouteContract
      */
     public function __get($key)
     {
-        return $this->parameter($key);
+        return $this->getParameter($key);
     }
 
     /**
      * Set configured invoker.
      *
-     * @return \Viserio\Support\Invoker;
+     * @return \Viserio\Support\Invoker
      */
     protected function initInvoker(): Invoker
     {
@@ -344,7 +346,7 @@ class Route implements RouteContract
         // if the user never explicitly sets an action to handle the given uri.
         if (is_null($action)) {
             return ['uses' => function () {
-                throw new LogicException("Route for [{$this->uri}] has no action.");
+                throw new LogicException(sprintf('Route for [%s] has no action.', $this->uri));
             }];
         }
 

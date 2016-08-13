@@ -16,7 +16,7 @@ class StaticMatcher extends AbstractSegmentMatcher
     /**
      * Create a new satic segment matcher instance.
      *
-     * @param string     $value
+     * @param string     $segment
      * @param array|null $parameterKey
      */
     public function __construct(string $segment, $parameterKey = null)
