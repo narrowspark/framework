@@ -4,7 +4,9 @@ namespace Viserio\Contracts\Routing;
 
 interface SegmentMatcher
 {
-     /**
+    const SEGMENT_PLACEHOLDER = '{segment}';
+
+    /**
      * Return all set parameters keys.
      *
      * @return int[]
@@ -41,9 +43,9 @@ interface SegmentMatcher
     public function getConditionExpression(string $segmentVariable, int $uniqueKey = null): string;
 
     /**
-     * Returns a unique hash for the matching criteria of the segment.
+     * Returns a unique hash for the segment matcher.
      *
      * @return string
      */
-    public function getMatchHash(): string;
+    public function getHash(): string;
 }

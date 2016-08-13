@@ -6,6 +6,7 @@ use Viserio\Routing\{
     Pattern,
     VarExporter
 };
+use Viserio\Contracts\Routing\SegmentMatcher as SegmentMatcherContract;
 
 class RegexMatcher extends AbstractMatcher
 {
@@ -104,5 +105,13 @@ class RegexMatcher extends AbstractMatcher
         parent::mergeParameterKeys($matcher);
 
         $this->parameterKeyGroupMap += $matcher->getParameterKeyGroupMap();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getMatchHash(): string
+    {
+        return $this->regex;
     }
 }

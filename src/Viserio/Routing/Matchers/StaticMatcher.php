@@ -18,9 +18,9 @@ class StaticMatcher extends AbstractMatcher
      * Create a new satic segment matcher instance.
      *
      * @param string     $segment
-     * @param array|null $parameterKey
+     * @param array|null $parameterKeys
      */
-    public function __construct(string $segment, array $parameterKey = null)
+    public function __construct(string $segment, array $parameterKeys = null)
     {
         if (strpos($segment, '/') !== false) {
             throw new RuntimeException(
@@ -28,7 +28,7 @@ class StaticMatcher extends AbstractMatcher
             );
         }
 
-        $this->parameterKeys = $parameterKey ?? [];
+        $this->parameterKeys = $parameterKeys ?? [];
         $this->segment = $segment;
     }
 
@@ -52,5 +52,13 @@ class StaticMatcher extends AbstractMatcher
         }
 
         return [];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getMatchHash(): string
+    {
+        return $this->segment;
     }
 }
