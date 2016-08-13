@@ -2,8 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Http\Stream;
 
-use BadMethodCallException;
-use Exception;
+use Throwable;
 use Psr\Http\Message\StreamInterface;
 use UnexpectedValueException;
 use Viserio\Http\Util;
@@ -36,7 +35,7 @@ abstract class AbstractStreamDecorator implements StreamInterface
             }
 
             return $this->getContents();
-        } catch (Exception $e) {
+        } catch (Throwable $e) {
             // Really, PHP? https://bugs.php.net/bug.php?id=53648
             trigger_error('StreamDecorator::__toString exception: '
                 . (string) $e, E_USER_ERROR);
@@ -171,17 +170,5 @@ abstract class AbstractStreamDecorator implements StreamInterface
     public function write($string)
     {
         return $this->stream->write($string);
-    }
-
-    /**
-     * Implement in subclasses to dynamically create streams when requested.
-     *
-     * @throws \BadMethodCallException
-     *
-     * @return StreamInterface
-     */
-    protected function createStream(): StreamInterface
-    {
-        throw new BadMethodCallException('Not implemented');
     }
 }
