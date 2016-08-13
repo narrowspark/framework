@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Http\Stream;
 
 use Psr\Http\Message\StreamInterface;
+use UnexpectedValueException;
 use Viserio\Http\Util;
 
 class LazyOpenStream implements StreamInterface
@@ -29,11 +30,11 @@ class LazyOpenStream implements StreamInterface
 
     /**
      * Magic method used to create a new stream if streams are not added in
-     * the constructor of a decorator (e.g., LazyOpenStream).
+     * the constructor of LazyOpenStream.
      *
      * @param string $name Name of the property (allows "stream" only).
      *
-     * @return StreamInterface
+     * @return \Psr\Http\Message\StreamInterface
      */
     public function __get($name)
     {
