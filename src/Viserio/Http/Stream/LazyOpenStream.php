@@ -4,6 +4,7 @@ namespace Viserio\Http\Stream;
 
 use Psr\Http\Message\StreamInterface;
 use UnexpectedValueException;
+use Throwable;
 use Viserio\Http\Util;
 
 class LazyOpenStream implements StreamInterface
@@ -44,7 +45,7 @@ class LazyOpenStream implements StreamInterface
             return $this->stream;
         }
 
-        throw new UnexpectedValueException("$name not found on class");
+        throw new UnexpectedValueException(sprintf('%s not found on class', $name));
     }
 
     /**

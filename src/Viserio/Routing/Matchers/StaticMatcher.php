@@ -3,8 +3,9 @@ declare(strict_types=1);
 namespace Viserio\Routing\Matchers;
 
 use RuntimeException;
+use Viserio\Routing\VarExporter;
 
-class StaticMatcher extends AbstractSegmentMatcher
+class StaticMatcher extends AbstractMatcher
 {
     /**
      * The static string
@@ -19,7 +20,7 @@ class StaticMatcher extends AbstractSegmentMatcher
      * @param string     $segment
      * @param array|null $parameterKey
      */
-    public function __construct(string $segment, $parameterKey = null)
+    public function __construct(string $segment, array $parameterKey = null)
     {
         if (strpos($segment, '/') !== false) {
             throw new RuntimeException(
@@ -27,14 +28,14 @@ class StaticMatcher extends AbstractSegmentMatcher
             );
         }
 
-        $this->parameterKeys = $parameterKey === null ? [] : [$parameterKey];
+        $this->parameterKeys = $parameterKey ?? [];
         $this->segment = $segment;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getConditionExpression(string $segmentVariable, int $uniqueKey): string
+    public function getConditionExpression(string $segmentVariable, int $uniqueKey = null): string
     {
         return $segmentVariable . ' === ' . VarExporter::export($this->segment);
     }
@@ -42,8 +43,14 @@ class StaticMatcher extends AbstractSegmentMatcher
     /**
      * {@inheritdoc}
      */
-    public function getMatchedParameterExpressions(string $segmentVariable, int $uniqueKey): array
+    public function getMatchedParameterExpressions(string $segmentVariable, int $uniqueKey = null): array
     {
-        return $this->parameterKeys ? [$this->parameterKeys[0] => $segmentVariable] : [];
+        $keys = $this->parameterKeys;
+
+        if (count($keys) > 0) {
+            return [$keys[0] => $segmentVariable];
+        }
+
+        return [];
     }
 }

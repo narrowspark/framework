@@ -5,7 +5,7 @@ namespace Viserio\Routing\Matchers;
 use RuntimeException;
 use Viserio\Contracts\Routing\SegmentMatcher as SegmentMatcherContract;
 
-abstract class AbstractSegmentMatcher implements SegmentMatcherContract
+abstract class AbstractMatcher implements SegmentMatcherContract
 {
     /**
      * Stores all parameters keys.
@@ -25,7 +25,7 @@ abstract class AbstractSegmentMatcher implements SegmentMatcherContract
     /**
      * {@inheritdoc}
      */
-    public function getMatchedParameterExpressions(string $segmentVariable, int $uniqueKey): array
+    public function getMatchedParameterExpressions(string $segmentVariable, int $uniqueKey = null): array
     {
         return array_fill_keys($this->parameterKeys, $segmentVariable);
     }
