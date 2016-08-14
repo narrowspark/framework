@@ -25,7 +25,7 @@ abstract class AbstractMatcher implements SegmentMatcherContract
     /**
      * {@inheritdoc}
      */
-    public function getMatchedParameterExpressions(string $segmentVariable, int $uniqueKey = null): array
+    public function getMatchedParameterExpressions(string $segmentVariable, string $uniqueKey = null): array
     {
         return array_fill_keys($this->parameterKeys, $segmentVariable);
     }
