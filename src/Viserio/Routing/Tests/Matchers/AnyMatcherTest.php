@@ -12,4 +12,13 @@ class AnyMatcherTest extends \PHPUnit_Framework_TestCase
 
         $this->assertSame('segment/[test] !== \'\'', $matcher->getConditionExpression('segment/[test]'));
     }
+
+    public function testAnyMergingParameterKeys()
+    {
+        $matcher1 = new AnyMatcher([123]);
+        $matcher2 = new AnyMatcher([12, 3]);
+        $matcher1->mergeParameterKeys($matcher2);
+
+        $this->assertSame([123, 12, 3], $matcher1->getParameterKeys());
+    }
 }

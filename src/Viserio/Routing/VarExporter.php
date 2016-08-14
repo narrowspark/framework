@@ -50,4 +50,11 @@ class VarExporter
 
         return 'unserialize(' . var_export(serialize($value), true) . ')';
     }
+
+    /**
+     * Don't instantiate this class.
+     */
+    private function __construct() {
+        //
+    }
 }

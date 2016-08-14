@@ -43,4 +43,14 @@ class RegexMatcherTest extends \PHPUnit_Framework_TestCase
 
         $this->assertSame([12 => '$matches[1]'], $matcher->getMatchedParameterExpressions('test'));
     }
+
+    public function testRegexMergingParameterKeys()
+    {
+        $matcher1 = new RegexMatcher(Pattern::ANY, 12);
+        $matcher2 = new RegexMatcher(Pattern::ANY, 11);
+        $matcher1->mergeParameterKeys($matcher2);
+
+        $this->assertSame([12, 11], $matcher1->getParameterKeys());
+        $this->assertSame([12 => 0, 11 => 0], $matcher1->getParameterKeyGroupMap());
+    }
 }
