@@ -14,8 +14,7 @@ class CompoundMatcher extends AbstractMatcher
     /**
      * Create a new compound matcher instance.
      *
-     * @param string $expression
-     * @param array  $parameterKeys
+     * @param array $matchers
      */
     public function __construct(array $matchers)
     {
