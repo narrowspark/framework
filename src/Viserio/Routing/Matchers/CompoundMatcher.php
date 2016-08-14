@@ -21,7 +21,7 @@ class CompoundMatcher extends AbstractMatcher
     {
         $parameterKeys = [];
 
-        foreach($matchers as $matcher) {
+        foreach ($matchers as $matcher) {
             $parameterKeys = array_merge($parameterKeys, $matcher->getParameterKeys());
         }
 
@@ -36,7 +36,7 @@ class CompoundMatcher extends AbstractMatcher
     {
         $conditions = [];
 
-        foreach($this->matchers as $key => $matcher) {
+        foreach ($this->matchers as $key => $matcher) {
             $conditions[] = $matcher->getConditionExpression($segmentVariable, $uniqueKey . '_' . $key);
         }
 
@@ -50,13 +50,13 @@ class CompoundMatcher extends AbstractMatcher
     {
         $expressions = [];
 
-        foreach($this->matchers as $key => $matcher) {
+        foreach ($this->matchers as $key => $matcher) {
             $matchedParameterExpressions = $matcher->getMatchedParameterExpressions(
                 $segmentVariable,
                 $uniqueKey . '_' . $key
             );
 
-            foreach($matchedParameterExpressions as $parameter => $expression) {
+            foreach ($matchedParameterExpressions as $parameter => $expression) {
                 $expressions[$parameter] = $expression;
             }
         }
@@ -67,11 +67,11 @@ class CompoundMatcher extends AbstractMatcher
     /**
      * {@inheritdoc}
      */
-    protected function getMatchHash()
+    protected function getMatchHash(): string
     {
         $hashes = [];
 
-        foreach($this->matchers as $matcher) {
+        foreach ($this->matchers as $matcher) {
             $hashes[] = $matcher->getHash();
         }
 

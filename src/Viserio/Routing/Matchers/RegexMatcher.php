@@ -28,13 +28,16 @@ class RegexMatcher extends AbstractMatcher
      * Create a new regex segment matcher instance.
      *
      * @param string $segment
-     * @param array  $parameterKeyGroupMap
+     * @param int    $parameterKeyGroupMap
      */
-    public function __construct(string $regex, array $parameterKeyGroupMap)
+    public function __construct(string $regex, int $parameterKeyGroupMap)
     {
         $this->regex = Pattern::asRegex($regex);
-        $this->parameterKeyGroupMap = $parameterKeyGroupMap;
-        $this->parameterKeys = array_keys($parameterKeyGroupMap);
+
+        $map = [$parameterKeyGroupMap => 0];
+
+        $this->parameterKeyGroupMap = $map;
+        $this->parameterKeys = array_keys($map);
     }
 
     /**
@@ -88,7 +91,7 @@ class RegexMatcher extends AbstractMatcher
     {
         $matches = [];
 
-        foreach($this->parameterKeyGroupMap as $parameterKey => $group) {
+        foreach ($this->parameterKeyGroupMap as $parameterKey => $group) {
             // Use $group + 1 as the first $matches element is the full text that matched,
             // we want the groups
             $matches[$parameterKey] = '$matches' . $uniqueKey . '[' . ($group + 1) . ']';
