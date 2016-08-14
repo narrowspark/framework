@@ -33,6 +33,7 @@ class VarExporterTest extends \PHPUnit_Framework_TestCase
            [new Controller(), 'unserialize(\'O:40:"Viserio\\\\Routing\\\\Tests\\\\Fixture\\\\Controller":0:{}\')'],
        ];
     }
+
     /**
      * @dataProvider exportCases
      */
