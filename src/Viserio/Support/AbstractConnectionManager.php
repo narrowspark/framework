@@ -7,9 +7,9 @@ use RuntimeException;
 use InvalidArgumentException;
 use Viserio\Contracts\{
     Config\Manager as ConfigContract,
+    Container\Traits\ContainerAwareTrait,
     Support\Connector as ConnectorContract
 };
-use Viserio\Contracts\Container\Traits\ContainerAwareTrait;
 
 abstract class AbstractConnectionManager
 {

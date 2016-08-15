@@ -10,7 +10,7 @@ use Viserio\Contracts\{
     Routing\Route as RouteContract,
     Routing\Router as RouterContract
 };
-use Viserio\Routing\Segments\ParameterSegment;
+use Viserio\Routing\Matchers\ParameterMatcher;
 use Viserio\Support\{
     Invoker,
     Str
@@ -270,7 +270,7 @@ class Route implements RouteContract
         $this->getParameters();
 
         foreach($this->parameters as $parameter) {
-            if ($parameter instanceof ParameterSegment) {
+            if ($parameter instanceof ParameterMatcher) {
                 return false;
             }
         }

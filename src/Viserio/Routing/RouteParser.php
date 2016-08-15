@@ -51,7 +51,7 @@ class RouteParser implements RouteParserContract
     /**
      * Validate and match uri paramters.
      *
-     * @param string $pattern
+     * @param string $route
      * @param string $patternSegment
      * @param array  &$conditions
      * @param array  &$matches
@@ -60,7 +60,7 @@ class RouteParser implements RouteParserContract
      * @return bool
      */
     protected function matchRouteParameters(
-        string $uri,
+        string $route,
         string $patternSegment,
         array &$conditions,
         array &$matches,
@@ -91,7 +91,7 @@ class RouteParser implements RouteParserContract
                 } elseif ($character === '{') {
                     throw new InvalidRoutePatternException(sprintf(
                         'Invalid route uri: cannot contain nested \'{\', \'%s\' given',
-                        $uri
+                        $route
                     ));
                 }
             } else {
@@ -104,7 +104,7 @@ class RouteParser implements RouteParserContract
                 } elseif ($character === '}') {
                     throw new InvalidRoutePatternException(sprintf(
                         'Invalid route uri: cannot contain \'}\' before opening \'{\', \'%s\' given',
-                        $uri
+                        $route
                     ));
                 }
             }
@@ -115,7 +115,7 @@ class RouteParser implements RouteParserContract
         if ($inParameter) {
             throw new InvalidRoutePatternException(sprintf(
                 'Invalid route uri: cannot contain \'{\' without closing \'}\', \'%s\' given',
-                $uri
+                $route
             ));
         } elseif ($current !== '') {
             $matches[] = [self::STATIC_PART, $current];

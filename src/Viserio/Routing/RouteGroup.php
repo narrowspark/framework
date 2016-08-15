@@ -28,9 +28,9 @@ class RouteGroup
      */
     public function __construct(string $prefix, callable $callback, RouteCollection $collection)
     {
-        $this->callback   = $callback;
+        $this->callback = $callback;
         $this->collection = $collection;
-        $this->prefix     = sprintf('/%s', ltrim($prefix, '/'));
+        $this->prefix = sprintf('/%s', ltrim($prefix, '/'));
     }
 
     /**
