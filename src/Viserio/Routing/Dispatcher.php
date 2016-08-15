@@ -40,13 +40,13 @@ class Dispatcher implements DispatcherContract
         );
 
         switch ($match[0]) {
-            case MatchResult::NOT_FOUND:
+            case DispatcherContract::NOT_FOUND:
                 // 404 Not Found...
                 break;
-            case MatchResult::HTTP_METHOD_NOT_ALLOWED:
+            case DispatcherContract::HTTP_METHOD_NOT_ALLOWED:
                 // 405 Method Not Allowed...
                 break;
-            case MatchResult::FOUND:
+            case DispatcherContract::FOUND:
                 // Matched route, dispatch to associated handler...
                 break;
         }
