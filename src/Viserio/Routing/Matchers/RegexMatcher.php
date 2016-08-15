@@ -24,7 +24,7 @@ class RegexMatcher extends AbstractMatcher
     /**
      * Create a new regex segment matcher instance.
      *
-     * @param string $segment
+     * @param string $regex
      * @param int    $parameterKeyGroupMap
      */
     public function __construct(string $regex, int $parameterKeyGroupMap)
