@@ -3,8 +3,8 @@ declare(strict_types=1);
 namespace Viserio\Http\Stream;
 
 use Psr\Http\Message\StreamInterface;
-use UnexpectedValueException;
 use Throwable;
+use UnexpectedValueException;
 use Viserio\Http\Util;
 
 class LazyOpenStream implements StreamInterface
