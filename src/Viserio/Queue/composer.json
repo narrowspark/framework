@@ -21,7 +21,7 @@
         "php"                             : "7.0.0 - 7.0.5 || ^7.0.7",
         "jeremeamia/SuperClosure"         : "^2.2",
         "narrowspark/arr"                 : "^1.1",
-        "nesbot/carbon"                   : "^1.21",
+        "cakephp/chronos"                 : "^1.0",
         "symfony/process"                 : "^3.1",
         "viserio/cotracts"                : "self.version",
         "viserio/console"                 : "self.version",

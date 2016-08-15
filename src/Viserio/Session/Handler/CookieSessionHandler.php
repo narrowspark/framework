@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Session\Handler;
 
-use Carbon\Carbon;
+use Cake\Chronos\Chronos;
 use Psr\Http\Message\ServerRequestInterface;
 use SessionHandlerInterface;
 use Viserio\Contracts\Cookie\QueueingFactory as JarContract;
@@ -88,7 +88,7 @@ class CookieSessionHandler implements SessionHandlerInterface
             json_encode(
                 [
                     'data' => $data,
-                    'expires' => Carbon::now()->addMinutes($this->lifetime)->getTimestamp(),
+                    'expires' => Chronos::now()->addMinutes($this->lifetime)->getTimestamp(),
                 ],
                 \JSON_PRESERVE_ZERO_FRACTION
             ),
