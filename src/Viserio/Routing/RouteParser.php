@@ -143,7 +143,7 @@ class RouteParser implements RouteParserContract
                 $regex .= preg_quote($part, '/');
             } else {
                 // Parameter, $part is the parameter name
-                $regex .= '(' . $parameterPatterns[$part] ?? Pattern::ANY . ')';
+                $regex .= '(' . ($parameterPatterns[$part] ?? Pattern::ANY) . ')';
             }
         }
 

@@ -16,16 +16,16 @@ use Viserio\Contracts\Routing\{
 class RouteParserTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @dataProvider parsingProvider
+     * @dataProvider routeParsingProvider
      */
-    public function testParse(string $pattern, array $conditions, array $expectedSegments)
+    public function testRouteParser($pattern, array $conditions, array $expectedSegments)
     {
         $parser = new RouteParser();
 
         $this->assertEquals($expectedSegments, $parser->parse($pattern, $conditions));
     }
 
-    public function parsingProvider()
+    public function routeParsingProvider()
     {
         return [
             [
@@ -58,21 +58,21 @@ class RouteParserTest extends \PHPUnit_Framework_TestCase
             [
                 '/{parameter}',
                 [],
-                [new ParameterMatcher('parameter', RouteParser::DEFAULT_PARAMETER_PATTERN)]
+                [new ParameterMatcher('parameter', '/^(' . Pattern::ANY. ')$/')]
             ],
             [
                 '/{param}',
                 ['param' => Pattern::ALPHA_NUM],
-                [new ParameterMatcher('param', Pattern::ALPHA_NUM)]
+                [new ParameterMatcher('param', '/^(' . Pattern::ALPHA_NUM . ')$/')]
             ],
             [
                 '/user/{id}/profile/{type}',
                 ['id' => Pattern::DIGITS, 'type' => Pattern::ALPHA_LOWER],
                 [
                     new StaticMatcher('user'),
-                    new ParameterMatcher('id', Pattern::DIGITS),
+                    new ParameterMatcher('id', '/^(' . Pattern::DIGITS . ')$/'),
                     new StaticMatcher('profile'),
-                    new ParameterMatcher('type', Pattern::ALPHA_LOWER),
+                    new ParameterMatcher('type', '/^(' . Pattern::ALPHA_LOWER . ')$/'),
                 ]
             ],
             [
