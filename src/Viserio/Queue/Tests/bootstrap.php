@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 require __DIR__ . '/../vendor/autoload.php';
 
-use Carbon\Carbon;
+use Cake\Chronos\Chronos;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,4 +17,4 @@ use Carbon\Carbon;
 */
 date_default_timezone_set('UTC');
 
-Carbon::setTestNow(Carbon::now());
+Chronos::setTestNow(Chronos::now());

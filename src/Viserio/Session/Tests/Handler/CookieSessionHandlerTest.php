@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Session\Tests\Handler;
 
-use Carbon\Carbon;
+use Cake\Chronos\Chronos;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Contracts\Cookie\QueueingFactory as JarContract;
@@ -51,7 +51,7 @@ class CookieSessionHandlerTest extends \PHPUnit_Framework_TestCase
             ->once()
             ->andReturn('{
                 "temp": {
-                    "expires": "' . Carbon::now()->addMinutes(6)->getTimestamp() . '",
+                    "expires": "' . Chronos::now()->addMinutes(6)->getTimestamp() . '",
                     "data": "Foo Bar"
                 }
             }');
@@ -84,7 +84,7 @@ class CookieSessionHandlerTest extends \PHPUnit_Framework_TestCase
                 json_encode(
                     [
                         'data' => ['user_id' => 1],
-                        'expires' => Carbon::now()->addMinutes(5)->getTimestamp(),
+                        'expires' => Chronos::now()->addMinutes(5)->getTimestamp(),
                     ],
                     \JSON_PRESERVE_ZERO_FRACTION
                 ),
