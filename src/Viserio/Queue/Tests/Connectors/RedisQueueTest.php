@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Queue\Tests\Connectors;
 
-use Carbon\Carbon;
+use Cake\Chronos\Chronos;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use Predis\Client;
 use Viserio\Contracts\Encryption\Encrypter as EncrypterContract;
@@ -17,7 +17,7 @@ class RedisQueueTest extends \PHPUnit_Framework_TestCase
 
     public function testDelayedPushWithDateTimeProperlyPushesJobOntoRedis()
     {
-        $date = Carbon::now();
+        $date = Chronos::now();
         $encrypter = $this->mock(EncrypterContract::class);
         $encrypter->shouldReceive('encrypt');
 

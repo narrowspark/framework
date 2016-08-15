@@ -4,7 +4,7 @@ namespace Viserio\Queue\Tests\Connectors;
 
 use Aws\Result;
 use Aws\Sqs\SqsClient;
-use Carbon\Carbon;
+use Cake\Chronos\Chronos;
 use Interop\Container\ContainerInterface;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use Viserio\Queue\{
@@ -93,7 +93,8 @@ class SqsQueueTest extends \PHPUnit_Framework_TestCase
 
     public function testDelayedPushWithDateTimeProperlyPushesJobOntoSqs()
     {
-        $now = Carbon::now();
+        $now = Chronos::now();
+        $now->addSeconds(5);
 
         $queue = $this->getMockBuilder(SqsQueue::class)
             ->setMethods(['createPayload', 'getSeconds', 'getQueue'])
@@ -117,7 +118,7 @@ class SqsQueueTest extends \PHPUnit_Framework_TestCase
             ->with(['QueueUrl' => $this->queueUrl, 'MessageBody' => $this->mockedPayload, 'DelaySeconds' => 5])
             ->andReturn($this->mockedSendMessageResponseModel);
 
-        $id = $queue->later($now->addSeconds(5), $this->mockedJob, $this->mockedData, $this->queueName);
+        $id = $queue->later($now, $this->mockedJob, $this->mockedData, $this->queueName);
 
         $this->assertEquals($this->mockedMessageId, $id);
     }

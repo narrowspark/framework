@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Session\Handler;
 
-use Carbon\Carbon;
+use Cake\Chronos\Chronos;
 use SessionHandlerInterface;
 use Symfony\Component\Finder\Finder;
 use Viserio\Contracts\Filesystem\Filesystem as FilesystemContract;
@@ -68,7 +68,7 @@ class FileSessionHandler implements SessionHandlerInterface
         $path = $this->path . '/' . $sessionId;
 
         if ($this->files->has($path)) {
-            if (strtotime($this->files->getTimestamp($path)) >= Carbon::now()->subMinutes($this->lifetime)->getTimestamp()) {
+            if (strtotime($this->files->getTimestamp($path)) >= Chronos::now()->subMinutes($this->lifetime)->getTimestamp()) {
                 return $this->files->read($path);
             }
         }

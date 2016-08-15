@@ -170,7 +170,7 @@ class SessionMiddleware implements ServerMiddlewareContract
         // Default 1 day
         $lifetime = $this->manager->getConfig()->get('lifetime', 1440);
 
-        return Carbon::now()->subMinutes($lifetime)->getTimestamp();
+        return Chronos::now()->subMinutes($lifetime)->getTimestamp();
     }
 
     /**
@@ -182,7 +182,7 @@ class SessionMiddleware implements ServerMiddlewareContract
      */
     protected function getCookieExpirationDate(ConfigContract $config): int
     {
-        return $config->get('expire_on_close', false) ? 0 : Carbon::now()->addMinutes($config->get('lifetime'));
+        return $config->get('expire_on_close', false) ? 0 : Chronos::now()->addMinutes($config->get('lifetime'));
     }
 
     /**
