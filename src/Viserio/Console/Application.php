@@ -105,10 +105,11 @@ class Application extends SymfonyConsole implements ApplicationContract
      * @param callable|string|array $callable   Called when the command is called.
      *                                          When using a container, this can be a "pseudo-callable"
      *                                          i.e. the name of the container entry to invoke.
+     * @param array                 $aliases An array of aliases for the command.
      *
      * @return SymfonyCommand
      */
-    public function command(string $expression, $callable): SymfonyCommand
+    public function command(string $expression, $callable, array $aliases = []): SymfonyCommand
     {
         $commandFunction = function (InputInterface $input, OutputInterface $output) use ($callable) {
             $parameters = array_merge(
@@ -132,6 +133,7 @@ class Application extends SymfonyConsole implements ApplicationContract
         };
 
         $command = $this->createCommand($expression, $commandFunction);
+        $command->setAliases($aliases);
 
         $this->add($command);
 
