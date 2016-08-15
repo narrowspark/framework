@@ -11,10 +11,7 @@ use Viserio\Contracts\{
     Routing\Router as RouterContract
 };
 use Viserio\Routing\Matchers\ParameterMatcher;
-use Viserio\Support\{
-    Invoker,
-    Str
-};
+use Viserio\Support\Invoker;
 
 class Route implements RouteContract
 {
@@ -364,7 +361,7 @@ class Route implements RouteContract
             });
         }
 
-        if (is_string($action['uses']) && ! Str::contains($action['uses'], '::')) {
+        if (is_string($action['uses']) && strpos($action['uses'], '::') === false) {
             if (! method_exists($action, '__invoke')) {
                 throw new UnexpectedValueException(sprintf(
                     'Invalid route action: [%s]',
