@@ -18,12 +18,12 @@ class RouteTest extends \PHPUnit_Framework_TestCase
     public function testBasicDispatchingOfRoutes()
     {
         $router = $this->getRouter();
-        $router->get('/hello/{name}', function (Request $request, Response $response) {
-            $name = $request->getAttribute('name');
-            $response->getBody()->write("Hello, $name");
+        // $router->get('/hello/{name}', function (Request $request, Response $response) {
+        //     $name = $request->getAttribute('name');
+        //     $response->getBody()->write("Hello, $name");
 
-            return $response;
-        });
+        //     return $response;
+        // });
     }
 
     public function testGetMethods()

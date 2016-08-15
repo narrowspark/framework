@@ -3,8 +3,9 @@ declare(strict_types=1);
 namespace Viserio\Routing;
 
 use Psr\Http\Message\ServerRequestInterface;
+use Viserio\Contracts\Routing\Dispatcher as DispatcherContract;
 
-class Dispatcher
+class Dispatcher implements DispatcherContract
 {
     /**
      * The route collection instance.
@@ -33,7 +34,7 @@ class Dispatcher
      */
     public function handle(ServerRequestInterface $request)
     {
-        $match = $this->match(
+        $match = $this->dispatch(
             $request->getMethod(),
             $request->getUri()->getPath()
         );
@@ -52,16 +53,9 @@ class Dispatcher
     }
 
     /**
-     * Get Route for given method and uri.
-     *
-     * @param string $httpMethod
-     * @param string $uri
-     *
-     * @return \RapidRoute\MatchResult
-     *
-     * @throws \RapidRoute\InvalidRouteDataException
+     * {@inheritdoc}
      */
-    public function match(string $httpMethod, string $uri)
+    public function dispatch(string $httpMethod, string $uri): array
     {
 
     }

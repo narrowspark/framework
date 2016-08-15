@@ -2,10 +2,15 @@
 declare(strict_types=1);
 namespace Viserio\Routing;
 
+use Viserio\Routing\Matchers\{
+    StaticMatcher,
+    ParameterMatcher
+};
 use Viserio\Contracts\Routing\{
-    Exception\InvalidRoutePatternException,
+    Exceptions\InvalidRoutePatternException,
     RouteParser as RouteParserContract,
-    RouteSegment as RouteSegmentContract
+    RouteSegment as RouteSegmentContract,
+    Pattern
 };
 
 class RouteParser implements RouteParserContract
@@ -13,7 +18,7 @@ class RouteParser implements RouteParserContract
     /**
      * {@inheritdoc}
      */
-    public function parse(string $route): array
+    public function parse(string $route, array $conditions): array
     {
         if (strlen($route) > 1 && $route[0] !== '/') {
             throw new InvalidRoutePatternException(sprintf(
@@ -22,38 +27,128 @@ class RouteParser implements RouteParserContract
             ));
         }
 
-        list($patternString, $conditions) = $this->parseRoutingPattern($route);
-
         $segments = [];
+        $matches = [];
+        $names = [];
+        $patternSegments = explode('/', $route);
+
+        array_shift($patternSegments);
+
+        foreach ($patternSegments as $key => $patternSegment) {
+            if ($this->matchRouteParameters($route, $patternSegment, $conditions, $matches, $names)) {
+                $segments[] = new ParameterMatcher(
+                    $names,
+                    $this->generateRegex($matches, $conditions)
+                );
+            } else {
+                $segments[] = new StaticMatcher($patternSegment);
+            }
+        }
 
         return $segments;
     }
 
-    protected function parseRoutingPattern($pattern)
-    {
-        if (is_string($pattern)) {
-            return [$pattern, []];
-        }
+    /**
+     * Validate and match uri paramters.
+     *
+     * @param string $pattern
+     * @param string $patternSegment
+     * @param array  &$conditions
+     * @param array  &$matches
+     * @param array  &$names
+     *
+     * @return bool
+     */
+    protected function matchRouteParameters(
+        string $uri,
+        string $patternSegment,
+        array &$conditions,
+        array &$matches,
+        array &$names
+    ): bool {
+        $matchedParameter = false;
+        $names = [];
+        $matches = [];
+        $current = '';
+        $inParameter = false;
 
-        if (is_array($pattern)) {
-            if (!isset($pattern[0]) || !is_string($pattern[0])) {
-                throw new InvalidRoutePatternException(sprintf(
-                    'Cannot add route: route pattern array must have the first element containing the pattern string, %s given',
-                    isset($pattern[0]) ? gettype($pattern[0]) : 'none'
-                ));
+        foreach (str_split($patternSegment) as $character) {
+            if ($inParameter) {
+                if ($character === '}') {
+                    if (strpos($current, ':') !== false) {
+                        $regex = substr($current, strpos($current, ':') + 1);
+                        $current = substr($current, 0, strpos($current, ':'));
+                        $conditions[$current] = $regex;
+                    }
+
+                    $matches[] = [self::PARAMETER_PART, $current];
+                    $names[] = $current;
+                    $current = '';
+                    $inParameter = false;
+                    $matchedParameter = true;
+
+                    continue;
+                } elseif ($character === '{') {
+                    throw new InvalidRoutePatternException(sprintf(
+                        'Invalid route uri: cannot contain nested \'{\', \'%s\' given',
+                        $uri
+                    ));
+                }
+            } else {
+                if ($character === '{') {
+                    $matches[] = [self::STATIC_PART, $current];
+                    $current = '';
+                    $inParameter = true;
+
+                    continue;
+                } elseif ($character === '}') {
+                    throw new InvalidRoutePatternException(sprintf(
+                        'Invalid route uri: cannot contain \'}\' before opening \'{\', \'%s\' given',
+                        $uri
+                    ));
+                }
             }
 
-            $patternString = $pattern[0];
-            $parameterConditions = $pattern;
-
-            unset($parameterConditions[0]);
-
-            return [$patternString, $parameterConditions];
+            $current .= $character;
         }
 
-        throw new InvalidRoutePatternException(sprintf(
-            'Cannot add route: route pattern must be a pattern string or array, %s given',
-            gettype($pattern)
-        ));
+        if ($inParameter) {
+            throw new InvalidRoutePatternException(sprintf(
+                'Invalid route uri: cannot contain \'{\' without closing \'}\', \'%s\' given',
+                $uri
+            ));
+        } elseif ($current !== '') {
+            $matches[] = [self::STATIC_PART, $current];
+        }
+
+        return $matchedParameter;
+    }
+
+    /**
+     * Generate a segment regex.
+     *
+     * @param array $matches
+     * @param array $parameterPatterns
+     *
+     * @return string
+     */
+    protected function generateRegex(array $matches, array $parameterPatterns): string
+    {
+        $regex = '/^';
+
+        foreach ($matches as $match) {
+            list($type, $part) = $match;
+
+            if ($type === self::STATIC_PART) {
+                $regex .= preg_quote($part, '/');
+            } else {
+                // Parameter, $part is the parameter name
+                $regex .= '(' . $parameterPatterns[$part] ?? Pattern::ANY . ')';
+            }
+        }
+
+        $regex .= '$/';
+
+        return $regex;
     }
 }

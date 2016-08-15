@@ -2,10 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Routing\Matchers;
 
-use Viserio\Routing\{
-    Pattern,
-    VarExporter
-};
+use Viserio\Routing\VarExporter;
 use Viserio\Contracts\Routing\SegmentMatcher as SegmentMatcherContract;
 
 class RegexMatcher extends AbstractMatcher
@@ -32,7 +29,7 @@ class RegexMatcher extends AbstractMatcher
      */
     public function __construct(string $regex, int $parameterKeyGroupMap)
     {
-        $this->regex = Pattern::asRegex($regex);
+        $this->regex = $regex;
 
         $map = [$parameterKeyGroupMap => 0];
 

@@ -7,7 +7,7 @@ class AnyMatcher extends AbstractMatcher
     /**
      * Create a new any matcher instance.
      *
-     * @param array  $parameterKeys
+     * @param array $parameterKeys
      */
     public function __construct(array $parameterKeys)
     {

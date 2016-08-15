@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Contracts\Routing\Exceptions;
 
-use Exception;
+use InvalidArgumentException;
 
-class InvalidRoutePatternException extends Exception
+class InvalidRoutePatternException extends InvalidArgumentException
 {
 }

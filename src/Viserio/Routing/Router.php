@@ -159,7 +159,7 @@ class Router implements RouterContract
      */
     protected function createRoute($methods, string $uri, $action): RouteContract
     {
-        $pattern = $this->parser->parse($uri);
+        $pattern = $this->parser->parse($uri, ['TODO']);
 
         $route = $this->newRoute(
             $methods,

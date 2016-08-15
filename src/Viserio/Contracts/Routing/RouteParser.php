@@ -4,6 +4,10 @@ namespace Viserio\Contracts\Routing;
 
 interface RouteParser
 {
+    const STATIC_PART = 0;
+
+    const PARAMETER_PART = 1;
+
     /**
      * Parses the supplied route pattern into an array of route segments.
      *
@@ -14,11 +18,12 @@ interface RouteParser
      *     StaticSegment{ $value => 'create' },
      * ]
      *
-     * @param string $route
+     * @param string   $route
+     * @param string[] $conditions
      *
      * @return \Viserio\Contracts\Routing\RouteSegment[]
      *
      * @throws \Viserio\Contracts\Routing\Exception\InvalidRoutePatternException
      */
-    public function parse(string $route): array;
+    public function parse(string $route, array $conditions): array;
 }

@@ -1,8 +1,8 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Routing;
+namespace Viserio\Contracts\Routing;
 
-final class Pattern
+interface Pattern
 {
     const ANY = '.+';
 
@@ -25,23 +25,4 @@ final class Pattern
     const SLUG = '[a-z0-9-]+';
 
     const UUID = '[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}+';
-
-    /**
-     * Generate a regex for a string.
-     *
-     * @param string $pattern
-     *
-     * @return string
-     */
-    public static function asRegex(string $pattern): string
-    {
-        return '/^(' . $pattern . ')$/';
-    }
-
-    /**
-     * Don't instantiate this class.
-     */
-    private function __construct() {
-        //
-    }
 }

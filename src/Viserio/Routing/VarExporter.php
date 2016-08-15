@@ -53,6 +53,8 @@ class VarExporter
 
     /**
      * Don't instantiate this class.
+     *
+     * @codeCoverageIgnore
      */
     private function __construct() {
         //
