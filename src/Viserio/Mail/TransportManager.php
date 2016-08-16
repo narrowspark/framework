@@ -3,12 +3,11 @@ declare(strict_types=1);
 namespace Viserio\Mail;
 
 use Aws\Ses\SesClient;
-use Interop\Container\ContainerInterface;
-use Swift_SmtpTransport as SmtpTransport;
-use Swift_MailTransport as MailTransport;
-use Narrowspark\Arr\StaticArr as Arr;
 use GuzzleHttp\Client as HttpClient;
+use Narrowspark\Arr\StaticArr as Arr;
 use Psr\Log\LoggerInterface;
+use Swift_MailTransport as MailTransport;
+use Swift_SmtpTransport as SmtpTransport;
 use Viserio\Support\AbstractManager;
 use Viserio\Mail\Transport\{
     Log as LogTransport,

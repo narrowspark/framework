@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Container;
 
-use Viserio\Support\Traits\ContainerAwareTrait;
+use Viserio\Contracts\Container\Traits\ContainerAwareTrait;
 
 class Inflector
 {

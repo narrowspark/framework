@@ -77,7 +77,7 @@ class Postmark extends AbstractTransport
      *
      * @param string $serverToken
      *
-     * @return string
+     * @return Postmark
      */
     public function setServerToken(string $serverToken): Postmark
     {
@@ -90,7 +90,7 @@ class Postmark extends AbstractTransport
      * Convert email dictionary with emails and names
      * to array of emails with names.
      *
-     * @param array $emails
+     * @param string[] $emails
      *
      * @return array
      */
@@ -115,7 +115,7 @@ class Postmark extends AbstractTransport
      * @param Swift_Mime_Message $message
      * @param string             $mimeType
      *
-     * @return \Swift_Mime_MimePart|null
+     * @return \Swift_Mime_MimeEntity|null
      */
     protected function getMIMEPart(Swift_Mime_Message $message, $mimeType)
     {

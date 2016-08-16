@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Support\Traits;
+namespace Viserio\Contracts\Container\Traits;
 
 use Interop\Container\ContainerInterface;
 use RuntimeException;

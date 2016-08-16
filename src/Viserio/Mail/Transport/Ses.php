@@ -30,7 +30,7 @@ class Ses extends AbstractTransport
      * @param \Swift_Mime_Message $message
      * @param string[]|null       $failedRecipients
      *
-     * @return Log|null
+     * @return integer
      */
     public function send(Swift_Mime_Message $message, &$failedRecipients = null)
     {

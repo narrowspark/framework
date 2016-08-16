@@ -2,19 +2,21 @@
 declare(strict_types=1);
 namespace Viserio\Routing\Tests;
 
-use FastRoute\DataGenerator\GroupCountBased;
-use Viserio\Container\Container;
-use Viserio\Routing\RouteCollection;
-use Viserio\Routing\RouteParser;
+use Viserio\Routing\{
+    Dispatcher,
+    Route,
+    RouteCollection
+};
 
 class DispatcherTest extends \PHPUnit_Framework_TestCase
 {
-    private function getRouteCollection()
+    public function testMatch()
     {
-        return new RouteCollection(
-            new Container(),
-            new RouteParser(),
-            new GroupCountBased()
-        );
+        $route = new Route('GET', 'test', null);
+
+        $collection = new RouteCollection();
+        $collection->addRoute($route);
+
+        $dispatcher = new Dispatcher($collection);
     }
 }

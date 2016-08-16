@@ -13,7 +13,7 @@ use Viserio\Contracts\{
     Middleware\Middleware as MiddlewareContract,
     Middleware\Stack as StackContract
 };
-use Viserio\Support\Traits\ContainerAwareTrait;
+use Viserio\Contracts\Container\Traits\ContainerAwareTrait;
 
 class Dispatcher implements StackContract
 {
@@ -33,6 +33,11 @@ class Dispatcher implements StackContract
      */
     protected $response;
 
+    /**
+     * Create a new middleware instance.
+     *
+     * @param \Psr\Http\Message\ResponseInterface $response
+     */
     public function __construct(ResponseInterface $response)
     {
         $this->response = $response;

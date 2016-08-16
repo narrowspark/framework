@@ -4,9 +4,11 @@ namespace Viserio\Pipeline;
 
 use Closure;
 use ReflectionClass;
-use Viserio\Contracts\Pipeline\Pipeline as PipelineContract;
+use Viserio\Contracts\{
+    Container\Traits\ContainerAwareTrait,
+    Pipeline\Pipeline as PipelineContract
+};
 use Viserio\Support\Invoker;
-use Viserio\Support\Traits\ContainerAwareTrait;
 
 class Pipeline implements PipelineContract
 {
@@ -71,15 +73,9 @@ class Pipeline implements PipelineContract
         $firstSlice = $this->getInitialSlice($destination);
 
         $stages = array_reverse($this->stages);
+        $callable = array_reduce($stages, $this->getSlice(), $firstSlice);
 
-        return call_user_func(
-            array_reduce(
-                $stages,
-                $this->getSlice(),
-                $firstSlice
-            ),
-            $this->traveler
-        );
+        return $callable($this->traveler);
     }
 
     /**
@@ -93,7 +89,7 @@ class Pipeline implements PipelineContract
             return function ($traveler) use ($stack, $stage) {
                 // If the $stage is an instance of a Closure, we will just call it directly.
                 if ($stage instanceof Closure) {
-                    return call_user_func($stage, $traveler, $stack);
+                    return $stage($traveler, $stack);
 
                 // Otherwise we'll resolve the stages out of the container and call it with
                 // the appropriate method and arguments, returning the results back out.
@@ -101,17 +97,17 @@ class Pipeline implements PipelineContract
                     return $this->sliceThroughContainer($traveler, $stack, $stage);
                 } elseif (is_array($stage)) {
                     $reflectionClass = new ReflectionClass(array_shift($stage));
+                    $parameters = [$traveler, $stack];
 
-                    return call_user_func_array(
-                        $reflectionClass->newInstanceArgs($stage),
-                        [$traveler, $stack]
-                    );
+                    return $reflectionClass->newInstanceArgs($stage)(...$parameters);
                 }
 
                 // If the pipe is already an object we'll just make a callable and pass it to
                 // the pipe as-is. There is no need to do any extra parsing and formatting
                 // since the object we're given was already a fully instantiated object.
-                return call_user_func_array([$stage, $this->method], [$traveler, $stack]);
+                $parameters = [$traveler, $stack];
+
+                return $stage->{$this->method}(...$parameters);
             };
         };
     }
@@ -126,7 +122,7 @@ class Pipeline implements PipelineContract
     protected function getInitialSlice(Closure $destination): Closure
     {
         return function ($traveler) use ($destination) {
-            return call_user_func($destination, $traveler);
+            return $destination($traveler);
         };
     }
 

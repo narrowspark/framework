@@ -2,8 +2,10 @@
 declare(strict_types=1);
 namespace Viserio\Console\Tests\Fixture;
 
-use Symfony\Component\Console\Output\Output;
-use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Output\{
+    Output,
+    OutputInterface
+};
 
 class SpyOutput extends Output implements OutputInterface
 {

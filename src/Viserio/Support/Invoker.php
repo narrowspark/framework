@@ -4,13 +4,15 @@ namespace Viserio\Support;
 
 use Invoker\Invoker as DiInvoker;
 use Invoker\InvokerInterface;
-use Invoker\ParameterResolver\AssociativeArrayResolver;
-use Invoker\ParameterResolver\Container\ParameterNameContainerResolver;
-use Invoker\ParameterResolver\Container\TypeHintContainerResolver;
-use Invoker\ParameterResolver\DefaultValueResolver;
-use Invoker\ParameterResolver\NumericArrayResolver;
-use Invoker\ParameterResolver\ResolverChain;
-use Viserio\Support\Traits\ContainerAwareTrait;
+use Invoker\ParameterResolver\{
+    AssociativeArrayResolver,
+    Container\ParameterNameContainerResolver,
+    Container\TypeHintContainerResolver,
+    DefaultValueResolver,
+    NumericArrayResolver,
+    ResolverChain
+};
+use Viserio\Contracts\Container\Traits\ContainerAwareTrait;
 
 class Invoker implements InvokerInterface
 {

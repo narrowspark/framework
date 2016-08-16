@@ -159,7 +159,7 @@ class Request extends AbstractMessage implements RequestInterface
      */
     public function withUri(UriInterface $uri, $preserveHost = false)
     {
-        if ($uri === $this->uri) {
+        if ($this->uri === $uri) {
             return $this;
         }
 

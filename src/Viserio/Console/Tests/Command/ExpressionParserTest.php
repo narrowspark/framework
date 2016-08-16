@@ -3,8 +3,10 @@ declare(strict_types=1);
 namespace Viserio\Console\Tests\Command;
 
 use Viserio\Console\Command\ExpressionParser;
-use Viserio\Console\Input\InputArgument;
-use Viserio\Console\Input\InputOption;
+use Viserio\Console\Input\{
+    InputArgument,
+    InputOption
+};
 
 class ExpressionParserTest extends \PHPUnit_Framework_TestCase
 {
@@ -119,7 +121,7 @@ class ExpressionParserTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Viserio\Contracts\Console\InvalidCommandExpression
+     * @expectedException \Viserio\Contracts\Console\Exceptions\InvalidCommandExpression
      * @expectedExceptionMessage An option must be enclosed by brackets: [--option]
      */
     public function testItProvidesAnErrorMessageOnOptionsMissingBrackets()
@@ -129,7 +131,7 @@ class ExpressionParserTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Viserio\Contracts\Console\InvalidCommandExpression
+     * @expectedException \Viserio\Contracts\Console\Exceptions\InvalidCommandExpression
      * @expectedExceptionMessage The expression was empty
      */
     public function testItProvidesAnErrorMessageOnEmpty()

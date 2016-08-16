@@ -2,20 +2,27 @@
 declare(strict_types=1);
 namespace Viserio\Console;
 
+use Closure;
 use Interop\Container\ContainerInterface as ContainerContract;
 use Invoker\Exception\InvocationException;
 use RuntimeException;
-use Symfony\Component\Console\Application as SymfonyConsole;
-use Symfony\Component\Console\Command\Command as SymfonyCommand;
-use Symfony\Component\Console\Input\InputDefinition;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
-use Viserio\Console\Command\Command as ViserioCommand;
-use Viserio\Console\Command\ExpressionParser as Parser;
-use Viserio\Console\Input\InputOption;
-use Viserio\Contracts\Console\Application as ApplicationContract;
+use Symfony\Component\Console\{
+    Application as SymfonyConsole,
+    Command\Command as SymfonyCommand,
+    Input\InputDefinition,
+    Input\InputInterface,
+    Output\OutputInterface
+};
+use Viserio\Console\{
+    Command\Command as ViserioCommand,
+    Command\ExpressionParser as Parser,
+    Input\InputOption
+};
+use Viserio\Contracts\{
+    Console\Application as ApplicationContract,
+    Container\Traits\ContainerAwareTrait
+};
 use Viserio\Support\Invoker;
-use Viserio\Support\Traits\ContainerAwareTrait;
 
 class Application extends SymfonyConsole implements ApplicationContract
 {
@@ -59,9 +66,9 @@ class Application extends SymfonyConsole implements ApplicationContract
     /**
      * Create a new Cerebro console application.
      *
-     * @param ContainerContract $container
-     * @param string            $version
-     * @param string            $name
+     * @param \Interop\Container\ContainerInterface $container
+     * @param string                                $version
+     * @param string                                $name
      */
     public function __construct(
         ContainerContract $container,
@@ -70,15 +77,14 @@ class Application extends SymfonyConsole implements ApplicationContract
     ) {
         $this->name = $name;
         $this->version = $version;
-
-        $this->setContainer($container);
+        $this->container = $container;
         $this->expressionParser = new Parser();
-        $this->initInvoker();
 
+        $this->initInvoker();
         $this->setAutoExit(false);
         $this->setCatchExceptions(false);
 
-        parent::__construct($this->getName(), $this->getVersion());
+        parent::__construct($name, $version);
     }
 
     /**
@@ -86,7 +92,7 @@ class Application extends SymfonyConsole implements ApplicationContract
      *
      * @param \Symfony\Component\Console\Command\Command $command
      *
-     * @return SymfonyCommand|null
+     * @return null|\Symfony\Component\Console\Command\Command
      */
     public function add(SymfonyCommand $command)
     {
@@ -105,10 +111,11 @@ class Application extends SymfonyConsole implements ApplicationContract
      * @param callable|string|array $callable   Called when the command is called.
      *                                          When using a container, this can be a "pseudo-callable"
      *                                          i.e. the name of the container entry to invoke.
+     * @param array                 $aliases An array of aliases for the command.
      *
-     * @return SymfonyCommand
+     * @return \Symfony\Component\Console\Command\Command
      */
-    public function command(string $expression, $callable): SymfonyCommand
+    public function command(string $expression, $callable, array $aliases = []): SymfonyCommand
     {
         $commandFunction = function (InputInterface $input, OutputInterface $output) use ($callable) {
             $parameters = array_merge(
@@ -120,18 +127,23 @@ class Application extends SymfonyConsole implements ApplicationContract
                 $input->getOptions()
             );
 
+            if ($callable instanceof Closure) {
+                $callable = $callable->bindTo($this, $this);
+            }
+
             try {
                 $this->getInvoker()->call($callable, $parameters);
-            } catch (InvocationException $e) {
+            } catch (InvocationException $exception) {
                 throw new RuntimeException(sprintf(
                     "Impossible to call the '%s' command: %s",
                     $input->getFirstArgument(),
-                    $e->getMessage()
-                ), 0, $e);
+                    $exception->getMessage()
+                ), 0, $exception);
             }
         };
 
         $command = $this->createCommand($expression, $commandFunction);
+        $command->setAliases($aliases);
 
         $this->add($command);
 
@@ -208,7 +220,7 @@ class Application extends SymfonyConsole implements ApplicationContract
      * @param string   $expression
      * @param callable $callable
      *
-     * @return SymfonyCommand
+     * @return \Symfony\Component\Console\Command\Command
      */
     protected function createCommand(string $expression, callable $callable): SymfonyCommand
     {

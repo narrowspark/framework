@@ -6,14 +6,14 @@ use Closure;
 use Interop\Container\ContainerInterface;
 use InvalidArgumentException;
 use Viserio\Contracts\{
+    Container\Traits\ContainerAwareTrait,
     Events\Dispatcher as DispatcherContract,
     View\View as ViewContract,
     View\Virtuoso as VirtuosoContract
 };
 use Viserio\Support\{
     Invoker,
-    Str,
-    Traits\ContainerAwareTrait
+    Str
 };
 use Viserio\View\Traits\NormalizeNameTrait;
 

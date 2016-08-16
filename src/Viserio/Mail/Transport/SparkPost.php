@@ -89,7 +89,7 @@ class SparkPost extends AbstractTransport
      *
      * @param string $key
      *
-     * @return string
+     * @return SparkPost
      */
     public function setKey(string $key): SparkPost
     {

@@ -3,7 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Container;
 
 use Viserio\Contracts\Container\ContextualBindingBuilder as ContextualBindingBuilderContract;
-use Viserio\Support\Traits\ContainerAwareTrait;
+use Viserio\Contracts\Container\Traits\ContainerAwareTrait;
 
 /**
  * ContextualBindingBuilder.

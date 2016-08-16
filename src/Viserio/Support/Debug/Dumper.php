@@ -2,8 +2,10 @@
 declare(strict_types=1);
 namespace Viserio\Support\Debug;
 
-use Symfony\Component\VarDumper\Cloner\VarCloner;
-use Symfony\Component\VarDumper\Dumper\CliDumper;
+use Symfony\Component\VarDumper\{
+    Cloner\VarCloner,
+    Dumper\CliDumper
+};
 
 /**
  * @codeCoverageIgnore
