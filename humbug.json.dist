@@ -5,7 +5,7 @@
         ],
         "excludes": [
             "vendor",
-            "Tests"
+            "src\/Viserio\/**\/Tests"
         ]
     },
     "timeout": 10,

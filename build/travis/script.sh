@@ -12,7 +12,7 @@ bash -e <<TRY
         vendor/bin/phpunit -c phpunit.xml.dist --verbose;
     fi
 
-    if [[ "$HUMBUG" = true ]]; then humbug; fi
+    if [[ "$HUMBUG" = true ]]; then vendor/bin/humbug; fi
 TRY
 if [ $? -ne 0 ]; then
   exit 1

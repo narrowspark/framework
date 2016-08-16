@@ -46,7 +46,7 @@ before_install:
   - mkdir -p ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d
   - if [ -f build/travis/php/$TRAVIS_PHP_VERSION.sh]; then ./build/travis/php/$TRAVIS_PHP_VERSION.sh; fi
   - composer global require hirak/prestissimo # Now composer can install components parallel
-  - if [[ "$HUMBUG" = "true" ]]; then composer global require 'humbug/humbug=~1.0-alpha2'; fi
+  - if [[ "$HUMBUG" = "true" ]]; then composer global require humbug/humbug:1.0.0-alpha2; fi
   - git config --global user.name travis-ci
   - git config --global user.email travis@example.com
   - printf "\n" | pear install Crypt_GPG
