@@ -85,7 +85,7 @@ class Parser implements ParserContract
     /**
      * {@inheritdoc}
      */
-    public function getFormat($format = null): string
+    public function getFormat(string $format = null): string
     {
         if ($format !== null) {
             $format = strtolower($format);
