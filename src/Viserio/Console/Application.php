@@ -92,7 +92,7 @@ class Application extends SymfonyConsole implements ApplicationContract
      *
      * @param \Symfony\Component\Console\Command\Command $command
      *
-     * @return SymfonyCommand|null
+     * @return null|\Symfony\Component\Console\Command\Command
      */
     public function add(SymfonyCommand $command)
     {
@@ -113,7 +113,7 @@ class Application extends SymfonyConsole implements ApplicationContract
      *                                          i.e. the name of the container entry to invoke.
      * @param array                 $aliases An array of aliases for the command.
      *
-     * @return SymfonyCommand
+     * @return \Symfony\Component\Console\Command\Command
      */
     public function command(string $expression, $callable, array $aliases = []): SymfonyCommand
     {
@@ -220,7 +220,7 @@ class Application extends SymfonyConsole implements ApplicationContract
      * @param string   $expression
      * @param callable $callable
      *
-     * @return SymfonyCommand
+     * @return \Symfony\Component\Console\Command\Command
      */
     protected function createCommand(string $expression, callable $callable): SymfonyCommand
     {
