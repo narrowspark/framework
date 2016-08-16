@@ -106,7 +106,7 @@ class ConnectManager extends AbstractConnectionManager implements ConnectManager
      *
      * @param array $config
      *
-     * @return PDO
+     * @return \Mongo
      */
     protected function createMongoConnection(array $config)
     {
