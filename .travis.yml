@@ -20,8 +20,6 @@ matrix:
     - php: 7.0
       env: SETUP=basic CHECK_CS=true SEND_COVERAGE=true
     - php: 7.0
-      env: SETUP=basic HUMBUG=true
-    - php: 7.0
       env: SETUP=lowest
     - php: 7.0
       env: SETUP=stable
@@ -30,8 +28,6 @@ matrix:
     - php: 7.1
       env: SETUP=stable
   allow_failures:
-    - env: SETUP=basic HUMBUG=true
-      php: 7.0
     - env: SETUP=lowest
       php: 7.0
     - env: SETUP=lowest
@@ -46,7 +42,6 @@ before_install:
   - mkdir -p ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d
   - if [ -f build/travis/php/$TRAVIS_PHP_VERSION.sh]; then ./build/travis/php/$TRAVIS_PHP_VERSION.sh; fi
   - composer global require hirak/prestissimo # Now composer can install components parallel
-  - if [[ "$HUMBUG" = "true" ]]; then composer global require 'humbug/humbug=~1.0-alpha2'; fi
   - git config --global user.name travis-ci
   - git config --global user.email travis@example.com
   - printf "\n" | pear install Crypt_GPG

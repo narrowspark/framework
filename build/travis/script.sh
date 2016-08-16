@@ -11,8 +11,6 @@ bash -e <<TRY
     else
         vendor/bin/phpunit -c phpunit.xml.dist --verbose;
     fi
-
-    if [[ "$HUMBUG" = true ]]; then humbug; fi
 TRY
 if [ $? -ne 0 ]; then
   exit 1
