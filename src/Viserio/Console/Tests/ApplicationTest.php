@@ -5,11 +5,15 @@ namespace Viserio\Console\Tests;
 use Mockery as Mock;
 use Narrowspark\TestingHelper\ArrayContainer;
 use StdClass;
-use Symfony\Component\Console\Input\StringInput;
-use Symfony\Component\Console\Output\OutputInterface;
-use Viserio\Console\Application;
-use Viserio\Console\Tests\Fixture\SpyOutput;
-use Viserio\Console\Tests\Fixture\ViserioCommand;
+use Symfony\Component\Console\{
+    Input\StringInput,
+    Output\OutputInterface
+};
+use Viserio\Console\{
+    Application,
+    Tests\Fixture\SpyOutput,
+    Tests\Fixture\ViserioCommand
+};
 
 class ApplicationTest extends \PHPUnit_Framework_TestCase
 {
@@ -192,11 +196,23 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
 
     public function testRunsACommandViaItsAliasAndReturnsExitCode()
     {
-        $this->application->command('foo', function () {
-            return 1;
+        $this->application->command('foo', function ($output) {
+            $output->write(1);
         }, ['bar']);
 
-        $this->assertSame(1, $this->application->runCommand('bar'));
+        $this->assertOutputIs('bar', 1);
+    }
+
+    public function testitShouldRunACommandInTheScopeOfTheApplication()
+    {
+        $whatIsThis = null;
+
+        $this->application->command('foo', function () use (&$whatIsThis) {
+            $whatIsThis = $this;
+        });
+
+        $this->assertOutputIs('foo', '');
+        $this->assertSame($this->application, $whatIsThis);
     }
 
     /**
@@ -218,6 +234,7 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
         $output = new SpyOutput();
 
         $this->application->run(new StringInput($command), $output);
+
         $this->assertEquals($expected, $output->output);
     }
 }

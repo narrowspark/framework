@@ -2,8 +2,10 @@
 declare(strict_types=1);
 namespace Viserio\Console\Tests\Fixture;
 
-use Symfony\Component\Console\Input\InputArgument;
-use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Input\{
+    InputArgument,
+    InputOption
+};
 use Viserio\Console\Command\Command;
 
 class ViserioSecCommand extends Command
