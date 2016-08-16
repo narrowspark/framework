@@ -5,8 +5,10 @@ namespace Viserio\Exception;
 use ErrorException;
 use Exception;
 use Narrowspark\HttpStatus\HttpStatus;
-use Psr\Http\Message\RequestInterface;
-use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\{
+    RequestInterface,
+    ResponseInterface
+};
 use Psr\Log\LoggerInterface;
 use Throwable;
 use Symfony\Component\Console\{

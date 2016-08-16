@@ -30,6 +30,8 @@
     },
     "provide": {
         "container-interop/container-interop-implementation" : "^1.1",
+        "psr/container-implementation"                       : "^1.0",
+        "psr/event-manager-implementation"                   : "^1.0",
     },
     "autoload": {
         "psr-4": {

@@ -5,6 +5,15 @@ namespace Viserio\Contracts\Parsers;
 interface Parser
 {
     /**
+     * Autodetect the payload data type using content-type value.
+     *
+     * @param string|null $format
+     *
+     * @return string Return the short format code (xml, json, ...)
+     */
+    public function getFormat(string $format = null): string;
+
+    /**
      * Loads a file and output it content as array.
      *
      * @param string $payload
@@ -14,4 +23,15 @@ interface Parser
      * @return array
      */
     public function parse(string $payload): array;
+
+     /**
+     * Get supported parser.
+     *
+     * @param string $type
+     *
+     * @throws \Viserio\Contracts\Parsers\Exception\NotSupportedException
+     *
+     * @return \Viserio\Contracts\Parsers\Format
+     */
+    public function getParser(string $type): Format;
 }

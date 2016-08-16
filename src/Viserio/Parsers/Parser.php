@@ -3,7 +3,6 @@ declare(strict_types=1);
 namespace Viserio\Parsers;
 
 use Viserio\Contracts\{
-    Filesystem\Filesystem as FilesystemContract,
     Parsers\Exception\NotSupportedException,
     Parsers\Format as FormatContract,
     Parsers\Parser as ParserContract
@@ -22,15 +21,11 @@ use Viserio\Parsers\Formats\{
     XML,
     YAML
 };
+use Viserio\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
 class Parser implements ParserContract
 {
-    /**
-     * The filesystem instance.
-     *
-     * @var \Viserio\Contracts\Filesystem\Filesystem
-     */
-    protected $filesystem;
+    use NormalizePathAndDirectorySeparatorTrait;
 
     /**
      * @var array Supported Formats
@@ -88,31 +83,7 @@ class Parser implements ParserContract
     ];
 
     /**
-     * Add filesystem.
-     *
-     * @param \Viserio\Contracts\Filesystem\Filesystem $filesystem
-     */
-    public function __construct(FilesystemContract $filesystem)
-    {
-        $this->filesystem = $filesystem;
-    }
-
-    /**
-     * Get filesystem.
-     *
-     * @return \Viserio\Contracts\Filesystem\Filesystem
-     */
-    public function getFilesystem(): FilesystemContract
-    {
-        return $this->filesystem;
-    }
-
-    /**
-     * Autodetect the payload data type using content-type value.
-     *
-     * @param string|null $format
-     *
-     * @return string Return the short format code (xml, json, ...).
+     * {@inheritdoc}
      */
     public function getFormat($format = null): string
     {
@@ -122,10 +93,10 @@ class Parser implements ParserContract
             $format = '';
         }
 
-        $fsystem = $this->filesystem;
+        $format = self::normalizeDirectorySeparator($format);
 
-        if ($fsystem->isFile($format)) {
-            return $fsystem->getExtension($format);
+        if (is_file($format)) {
+            return pathinfo($format, PATHINFO_EXTENSION);
         }
 
         return $_SERVER['HTTP_CONTENT_TYPE'] ?? $format;
@@ -141,11 +112,12 @@ class Parser implements ParserContract
         }
 
         $format = $this->getFormat($payload);
-        $fsystem = $this->filesystem;
 
         if ($format !== 'php') {
-            if ($fsystem->isFile($payload)) {
-                $payload = $fsystem->read($payload);
+            $payload = self::normalizeDirectorySeparator($payload);
+
+            if (is_file($payload)) {
+                $payload = file_get_contents($payload);
             }
         }
 
@@ -153,15 +125,9 @@ class Parser implements ParserContract
     }
 
     /**
-     * Get supported parser.
-     *
-     * @param string $type
-     *
-     * @throws \Viserio\Contracts\Parsers\Exception\NotSupportedException
-     *
-     * @return \Viserio\Contracts\Parsers\Format
+     * {@inheritdoc}
      */
-    public function getParser($type): FormatContract
+    public function getParser(string $type): FormatContract
     {
         $supportedFileFormats = array_flip($this->supportedFileFormats);
 

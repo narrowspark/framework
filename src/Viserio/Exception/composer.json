@@ -42,6 +42,10 @@
             "Viserio\\Exception\\Tests\\"     : "Tests/"
         }
     },
+    "provide": {
+        "psr/http-message"                : "^1.0",
+        "psr/http-message-implementation" : "^1.0"
+    },
     "suggest": {
         "filp/whoops"                         : "Enables use of the whoops displayer (^2.0).",
         "narrowspark/view"                    : "Enables use of the view displayer (self.version)."

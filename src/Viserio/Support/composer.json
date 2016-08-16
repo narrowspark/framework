@@ -18,38 +18,42 @@
         }
     ],
     "require": {
-        "php"                             : "7.0.0 - 7.0.5 || ^7.0.7",
-        "viserio/contracts"               : "self.version"
+        "php"                                                : "7.0.0 - 7.0.5 || ^7.0.7",
+        "viserio/contracts"                                  : "self.version"
     },
     "require-dev": {
-        "danielstjules/stringy"           : "^2.3",
-        "narrowspark/php-cs-fixer-config" : "^1.1",
-        "narrowspark/testing-helper"      : "^1.5",
-        "php-di/invoker"                  : "^1.3",
-        "phpunit/phpunit"                 : "^5.1",
-        "symfony/var-dumper"              : "^3.1"
+        "danielstjules/stringy"                              : "^2.3",
+        "narrowspark/php-cs-fixer-config"                    : "^1.1",
+        "narrowspark/testing-helper"                         : "^1.5",
+        "php-di/invoker"                                     : "^1.3",
+        "phpunit/phpunit"                                    : "^5.1",
+        "symfony/var-dumper"                                 : "^3.1"
     },
     "autoload": {
         "psr-4": {
-            "Viserio\\Support\\"          : ""
+            "Viserio\\Support\\"                             : ""
         },
-        "exclude-from-classmap"           : ["/Tests/"]
+        "exclude-from-classmap"                              : ["/Tests/"]
     },
     "autoload-dev": {
         "psr-4": {
-            "Viserio\\Support\\Tests\\"   : "Tests/"
+            "Viserio\\Support\\Tests\\"                      : "Tests/"
         }
+    },
+    "provide": {
+        "container-interop/container-interop-implementation" : "^1.1",
+        "psr/container-implementation"                       : "^1.0"
+    },
+    "suggest": {
+        "danielstjules/stringy"                              : "Required to use the Stringy Class in Str (^2.3)",
+        "php-di/invoker"                                     : "Required to use the Invoker Class (^1.3)",
+        "symfony/var-dumper"                                 : "Improves the Dumper::dump() (^3.1)."
     },
     "extra": {
         "branch-alias": {
-            "dev-master"                  : "1.0-dev"
+            "dev-master"                                     : "1.0-dev"
         }
     },
-    "suggest": {
-        "danielstjules/stringy"           : "Required to use the Stringy Class in Str (^2.3)",
-        "php-di/invoker"                  : "Required to use the Invoker Class (^1.3)",
-        "symfony/var-dumper"              : "Improves the Dumper::dump() (^3.1)."
-    },
-    "minimum-stability"                   : "dev",
-    "prefer-stable"                       : true
+    "minimum-stability"                                      : "dev",
+    "prefer-stable"                                          : true
 }

@@ -31,9 +31,6 @@
         "narrowspark/testing-helper"      : "^1.6",
         "phpunit/phpunit"                 : "^5.1"
     },
-    "provide": {
-        "psr/http-message-implementation" : "^1.0"
-    },
     "autoload": {
         "psr-4": {
             "Viserio\\Http\\"             : ""
@@ -44,6 +41,10 @@
         "psr-4": {
             "Viserio\\Http\\Tests\\"      : "Tests/"
         }
+    },
+    "provide": {
+        "psr/http-message"                : "^1.0",
+        "psr/http-message-implementation" : "^1.0"
     },
     "extra": {
         "branch-alias": {

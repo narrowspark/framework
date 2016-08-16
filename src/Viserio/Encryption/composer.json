@@ -46,8 +46,6 @@
             "dev-master"                   : "1.0-dev"
         }
     },
-    "suggest": {
-    },
     "minimum-stability"                    : "dev",
     "prefer-stable"                        : true
 }

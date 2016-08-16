@@ -34,13 +34,6 @@ class FileLoader implements LoaderContract
     protected $exists = [];
 
     /**
-     * The filesystem instance.
-     *
-     * @var \Viserio\Filesystem\Filesystem
-     */
-    private $filesystem;
-
-    /**
      * Create a new fileloader.
      *
      * @param \Viserio\Contracts\Parsers\TaggableParser $parser
@@ -49,7 +42,6 @@ class FileLoader implements LoaderContract
     public function __construct(TaggableParserContract $parser, array $directories)
     {
         $this->parser = $parser;
-        $this->filesystem = $parser->getFilesystem();
         $this->directories = $directories;
     }
 
@@ -126,7 +118,7 @@ class FileLoader implements LoaderContract
         $path = $this->getPath($file);
         $file = self::normalizeDirectorySeparator($path . $file);
 
-        if ($this->filesystem->has($file)) {
+        if (file_exists($file)) {
             return $this->exists[$key] = $file;
         }
 
@@ -148,7 +140,7 @@ class FileLoader implements LoaderContract
         foreach ($this->directories as $directory) {
             $dirFile = self::normalizeDirectorySeparator($directory . '/' . $file);
 
-            if ($this->filesystem->has($dirFile)) {
+            if (file_exists($dirFile)) {
                 return self::normalizeDirectorySeparator($directory) . '/';
             }
         }

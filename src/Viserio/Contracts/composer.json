@@ -50,15 +50,16 @@
             "Viserio\\Contracts\\Tests\\"                    : "Tests/"
         }
     },
+    "provide": {
+        "container-interop/container-interop-implementation" : "^1.1",
+        "psr/container-implementation"                       : "^1.0",
+        "psr/http-message-implementation"                    : "^1.0",
+        "psr/log-implementation"                             : "^1.0"
+    },
     "extra": {
         "branch-alias": {
             "dev-master"                                     : "1.0-dev"
         }
-    },
-    "provide": {
-        "container-interop/container-interop-implementation" : "^1.1",
-        "psr/http-message-implementation"                    : "^1.0",
-        "psr/log-implementation"                             : "^1.0"
     },
     "suggest": {
         "psr/log"                                            : "Required to use log contracts (^1.0).",

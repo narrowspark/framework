@@ -37,9 +37,6 @@
         "phpunit/phpunit"                                    : "^5.1",
         "viserio/statical-proxy"                             : "self.version"
     },
-    "provide": {
-        "container-interop/container-interop-implementation" : "^1.1",
-    },
     "autoload": {
         "psr-4": {
             "Viserio\\Bus\\"                                 : ""
@@ -50,6 +47,10 @@
         "psr-4": {
             "Viserio\\Bus\\Tests\\"                          : "Tests/"
         }
+    },
+    "provide": {
+        "container-interop/container-interop-implementation" : "^1.1",
+        "psr/container-implementation"                       : "^1.0"
     },
     "extra": {
         "branch-alias": {

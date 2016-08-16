@@ -39,6 +39,10 @@
             "Viserio\\Cookie\\Tests\\"    : "Tests/"
         }
     },
+    "provide": {
+        "psr/http-message"                : "^1.0",
+        "psr/http-message-implementation" : "^1.0"
+    },
     "extra": {
         "branch-alias": {
             "dev-master"                  : "1.0-dev"
@@ -46,10 +50,6 @@
     },
     "suggest": {
         "viserio/encrypter"               : "Required to use the EncryptCookies Middleware."
-    },
-    "provide": {
-        "psr/http-message"                : "^1.0",
-        "psr/http-message-implementation" : "^1.0"
     },
     "minimum-stability"                   : "dev",
     "prefer-stable"                       : true

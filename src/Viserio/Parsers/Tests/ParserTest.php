@@ -26,11 +26,6 @@ class ParserTest extends \PHPUnit_Framework_TestCase
         $this->parser = new Parser(new Filesystem());
     }
 
-    public function testGetFilesystem()
-    {
-        $this->assertInstanceOf(Filesystem::class, $this->parser->getFilesystem());
-    }
-
     public function testParserEmptyData()
     {
         $this->assertEquals([], $this->parser->parse(''));
