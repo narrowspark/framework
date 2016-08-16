@@ -154,7 +154,7 @@ abstract class StaticalProxy
      *
      * @param string $name
      *
-     * @return object
+     * @return MockInterface
      */
     protected static function createFreshMockInstance(string $name)
     {
@@ -168,7 +168,7 @@ abstract class StaticalProxy
     /**
      * Create a fresh mock instance for the given class.
      *
-     * @return object
+     * @return MockInterface
      */
     protected static function createMock()
     {

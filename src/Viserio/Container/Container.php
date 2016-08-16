@@ -3,7 +3,6 @@ declare(strict_types=1);
 namespace Viserio\Container;
 
 use Interop\Container\ContainerInterface as ContainerInteropInterface;
-use Nucleus\Invoker\Invoker;
 use Viserio\Container\Exception\BindingResolutionException;
 use Viserio\Container\Exception\ContainerException;
 use Viserio\Container\Exception\NotFoundException;

@@ -23,7 +23,6 @@ use Memcache;
 use Memcached;
 use MongoDB\Driver\Manager as MongoDBManager;
 use Predis\Client as PredisClient;
-use Psr\Cache\CacheItemPoolInterface;
 use Redis;
 use Viserio\{
     Filesystem\FilesystemManager,

@@ -69,7 +69,7 @@ class Mandrill extends AbstractTransport
      *
      * @param string $key
      *
-     * @return string
+     * @return Mandrill
      */
     public function setKey(string $key): Mandrill
     {

@@ -83,6 +83,7 @@ interface Virtuoso
      *
      * @param string $section
      * @param string $content
+     * @return void
      */
     public function startSection(string $section, string $content = '');
 
@@ -91,6 +92,7 @@ interface Virtuoso
      *
      * @param string $section
      * @param string $content
+     * @return void
      */
     public function inject(string $section, string $content);
 
@@ -116,21 +118,25 @@ interface Virtuoso
 
     /**
      * Clear all of the section contents.
+     * @return void
      */
     public function clearSections();
 
     /**
      * Clear all of the section contents if done rendering.
+     * @return void
      */
     public function clearSectionsIfDoneRendering();
 
     /**
      * Increment the rendering counter.
+     * @return void
      */
     public function incrementRender();
 
     /**
      * Decrement the rendering counter.
+     * @return void
      */
     public function decrementRender();
 

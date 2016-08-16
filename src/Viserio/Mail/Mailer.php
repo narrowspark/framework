@@ -3,12 +3,11 @@ declare(strict_types=1);
 namespace Viserio\Mail;
 
 use Closure;
-use Exception;
 use InvalidArgumentException;
 use Narrowspark\Arr\StaticArr as Arr;
 use Swift_Mailer;
-use Swift_Mime_Message;
 use Swift_Message;
+use Swift_Mime_Message;
 use Viserio\Contracts\{
     Events\Traits\EventsAwareTrait,
     Mail\Mailer as MailerContract,

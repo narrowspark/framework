@@ -81,7 +81,7 @@ interface GPGMailer extends Mailer
      *
      * @throws \Exception
      *
-     * @return string
+     * @return boolean
      */
     public function verify($text, string $fingerprint): bool;
 }
