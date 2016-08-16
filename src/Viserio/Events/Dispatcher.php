@@ -5,16 +5,18 @@ namespace Viserio\Events;
 use Interop\Container\ContainerInterface as ContainerContract;
 use Viserio\Contracts\{
     Container\Traits\ContainerAwareTrait,
-    Events\Dispatcher as DispatcherContract
+    Events\EventManager as EventManagerContract
 };
+use Viserio\Events\Traits\ValidateNameTrait;
 use Viserio\Support\{
     Invoker,
     Str
 };
 
-class Dispatcher implements DispatcherContract
+class Dispatcher implements EventManagerContract
 {
     use ContainerAwareTrait;
+    use ValidateNameTrait;
 
     /**
      * The registered event listeners.
@@ -71,42 +73,23 @@ class Dispatcher implements DispatcherContract
     /**
      * {@inhertidoc}
      */
-    public function on(string $eventName, $listener, int $priority = 0)
+    public function attach($event, $callback, $priority = 0)
     {
-        if ($this->hasWildcards($eventName)) {
-            $this->addListenerPattern(new ListenerPattern($eventName, $listener, $priority));
+        if ($this->hasWildcards($event)) {
+            $this->addListenerPattern(new ListenerPattern($event, $callback, $priority));
         } else {
-            $this->listeners[$eventName][$priority][] = $listener;
-            unset($this->sorted[$eventName]);
+            $this->listeners[$event][$priority][] = $callback;
+
+            unset($this->sorted[$event]);
         }
     }
 
     /**
      * {@inhertidoc}
      */
-    public function once(string $eventName, $listener, int $priority = 0)
+    public function trigger($event, $target = null, $argv = [])
     {
-        $wrapper = null;
-        $wrapper = function () use ($eventName, $listener, &$wrapper) {
-            $this->off($eventName, $wrapper);
-
-            return $this->invoker->call($listener, func_get_args());
-        };
-
-        $this->on($eventName, $wrapper, $priority);
-    }
-
-    /**
-     * {@inhertidoc}
-     */
-    public function emit(string $eventName, array $arguments = [], $continue = null): bool
-    {
-        $listeners = $this->getListeners($eventName);
-
-        if ($continue === null) {
-            return $this->continueEmit($listeners, $arguments);
-        }
-
+        $listeners = $this->getListeners($event);
         $counter = count($listeners);
 
         foreach ($listeners as $listener) {
@@ -136,39 +119,21 @@ class Dispatcher implements DispatcherContract
     /**
      * {@inhertidoc}
      */
-    public function getListeners(string $eventName): array
+    public function detach($event, $callback)
     {
-        $this->bindPatterns($eventName);
-
-        if (! isset($this->listeners[$eventName])) {
-            return [];
-        }
-
-        if (! isset($this->sorted[$eventName])) {
-            $this->sortListeners($eventName);
-        }
-
-        return $this->sorted[$eventName];
-    }
-
-    /**
-     * {@inhertidoc}
-     */
-    public function off(string $eventName, $listener): bool
-    {
-        if ($this->hasWildcards($eventName)) {
-            $this->removeListenerPattern($eventName, $listener);
+        if ($this->hasWildcards($event)) {
+            $this->removeListenerPattern($event, $callback);
 
             return true;
         }
 
-        if (! $this->hasListeners($eventName)) {
+        if (! $this->hasListeners($event)) {
             return false;
         }
 
-        foreach ($this->listeners[$eventName] as $priority => $listeners) {
-            if (($key = array_search($listener, $listeners, true)) !== false) {
-                unset($this->listeners[$eventName][$priority][$key], $this->sorted[$eventName]);
+        foreach ($this->listeners[$event] as $priority => $listeners) {
+            if (($key = array_search($callback, $listeners, true)) !== false) {
+                unset($this->listeners[$event][$priority][$key], $this->sorted[$event]);
 
                 return true;
             }
@@ -180,21 +145,9 @@ class Dispatcher implements DispatcherContract
     /**
      * {@inhertidoc}
      */
-    public function removeAllListeners($eventName = null)
+    public function clearListeners($event)
     {
-        if ($eventName !== null) {
-            unset($this->listeners[$eventName], $this->syncedEvents[$eventName]);
-        } else {
-            $this->listeners = $this->syncedEvents = [];
-        }
-    }
-
-    /**
-     * {@inhertidoc}
-     */
-    public function hasListeners(string $eventName): bool
-    {
-        return (bool) count($this->getListeners($eventName));
+        $this->detach($event, null);
     }
 
     /**
@@ -299,28 +252,39 @@ class Dispatcher implements DispatcherContract
     }
 
     /**
-     * If the continue is specified, this callback will be called every
-     * time before the next event handler is called.
+     * Determine if a given event has listeners.
      *
-     * @param array $listeners
-     * @param array $arguments
+     * @param string $eventName
      *
      * @return bool
      */
-    protected function continueEmit(array $listeners, array $arguments): bool
+    protected function hasListeners(string $eventName): bool
     {
-        foreach ($listeners as $listener) {
-            $result = false;
+        return (bool) count($this->getListeners($eventName));
+    }
 
-            if ($listener !== null) {
-                $result = $this->invoker->call($listener, $arguments);
-            }
+    /**
+     * Returns the list of listeners for an event.
+     *
+     * The list is returned as an array, and the list of events are sorted by
+     * their priority.
+     *
+     * @param string $eventName
+     *
+     * @return array
+     */
+    protected function getListeners(string $eventName): array
+    {
+        $this->bindPatterns($eventName);
 
-            if ($result === false) {
-                return false;
-            }
+        if (! isset($this->listeners[$eventName])) {
+            return [];
         }
 
-        return true;
+        if (! isset($this->sorted[$eventName])) {
+            $this->sortListeners($eventName);
+        }
+
+        return $this->sorted[$eventName];
     }
 }

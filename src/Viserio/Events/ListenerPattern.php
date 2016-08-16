@@ -68,7 +68,7 @@ class ListenerPattern
     ];
 
     /**
-     * Constructor.
+     * Create a new listener pattern instance.
      *
      * @param string $eventPattern
      * @param mixed  $listener
