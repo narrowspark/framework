@@ -2,16 +2,16 @@
 declare(strict_types=1);
 namespace Viserio\Contracts\View;
 
-use Viserio\Contracts\Events\Dispatcher as DispatcherContract;
+use Viserio\Contracts\Events\EventManager as EventManagerContract;
 
 interface Virtuoso
 {
     /**
      * Get the event dispatcher instance.
      *
-     * @return \Viserio\Contracts\Events\Dispatcher
+     * @return \Viserio\Contracts\Events\EventManager
      */
-    public function getDispatcher(): DispatcherContract;
+    public function getEventManager(): EventManagerContract;
 
     /**
      * Register a view creator event.

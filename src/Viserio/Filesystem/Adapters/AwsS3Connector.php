@@ -45,7 +45,7 @@ class AwsS3Connector extends AbstractConnector
     /**
      * {@inheritdoc}
      */
-    protected function getClient(array $auth)
+    protected function getClient(array $auth): S3Client
     {
         return new S3Client($auth);
     }

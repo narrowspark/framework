@@ -18,37 +18,32 @@
         }
     ],
     "require": {
-        "php"                                                : "7.0.0 - 7.0.5 || ^7.0.7",
-        "danielstjules/stringy"                              : "^2.3",
-        "viserio/cotracts"                                   : "self.version",
-        "viserio/support"                                    : "self.version"
+        "php"                              : "7.0.0 - 7.0.5 || ^7.0.7"
     },
     "require-dev": {
-        "narrowspark/php-cs-fixer-config"                    : "^2.0",
-        "narrowspark/testing-helper"                         : "^1.5",
-        "phpunit/phpunit"                                    : "^5.1"
+        "narrowspark/php-cs-fixer-config"  : "^2.0",
+        "narrowspark/testing-helper"       : "^1.5",
+        "phpunit/phpunit"                  : "^5.1"
     },
     "provide": {
-        "container-interop/container-interop-implementation" : "^1.1",
-        "psr/container-implementation"                       : "^1.0",
-        "psr/event-manager-implementation"                   : "^1.0",
+        "psr/event-manager-implementation" : "^1.0",
     },
     "autoload": {
         "psr-4": {
-            "Viserio\\Events\\"                              : ""
+            "Viserio\\Events\\"            : ""
         },
-        "exclude-from-classmap"                              : ["/Tests/"]
+        "exclude-from-classmap"            : ["/Tests/"]
     },
     "autoload-dev": {
         "psr-4": {
-            "Viserio\\Events\\Tests\\"                       : "Tests/"
+            "Viserio\\Events\\Tests\\"     : "Tests/"
         }
     },
     "extra": {
         "branch-alias": {
-            "dev-master"                                     : "1.0-dev"
+            "dev-master"                   : "1.0-dev"
         }
     },
-    "minimum-stability"                                      : "dev",
-    "prefer-stable"                                          : true
+    "minimum-stability"                    : "dev",
+    "prefer-stable"                        : true
 }

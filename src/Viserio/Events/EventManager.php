@@ -2,16 +2,12 @@
 declare(strict_types=1);
 namespace Viserio\Events;
 
-use Interop\Container\ContainerInterface as ContainerContract;
-use Viserio\Contracts\Container\Traits\ContainerAwareTrait;
+use Viserio\Contracts\Events\Event as EventContract;
 use Viserio\Contracts\Events\EventManager as EventManagerContract;
 use Viserio\Events\Traits\ValidateNameTrait;
-use Viserio\Support\Invoker;
-use Viserio\Support\Str;
 
-class Dispatcher implements EventManagerContract
+class EventManager implements EventManagerContract
 {
-    use ContainerAwareTrait;
     use ValidateNameTrait;
 
     /**
@@ -36,35 +32,11 @@ class Dispatcher implements EventManagerContract
     protected $sorted = [];
 
     /**
-     * Invoker instance.
-     *
-     * @var \Viserio\Support\Invoker
-     */
-    protected $invoker;
-
-    /**
      * Wildcard patterns.
      *
      * @var array
      */
     private $patterns = [];
-
-    /**
-     * Create a new event dispatcher instance.
-     *
-     * @param ContainerContract $container
-     */
-    public function __construct(ContainerContract $container)
-    {
-        $this->container = $container;
-
-        $invoker = new Invoker();
-        $invoker->injectByTypeHint(true)
-            ->injectByParameterName(true)
-            ->setContainer($container);
-
-        $this->invoker = $invoker;
-    }
 
     /**
      * {@inhertidoc}
@@ -78,38 +50,6 @@ class Dispatcher implements EventManagerContract
 
             unset($this->sorted[$event]);
         }
-    }
-
-    /**
-     * {@inhertidoc}
-     */
-    public function trigger($event, $target = null, $argv = [])
-    {
-        $listeners = $this->getListeners($event);
-        $counter = count($listeners);
-
-        foreach ($listeners as $listener) {
-            --$counter;
-            $result = false;
-
-            if ($listener !== null) {
-                $result = $this->invoker->call($listener, $arguments);
-            }
-
-            if ($result === false) {
-                return false;
-            }
-
-            if ($counter > 0) {
-                $repeater = $this->invoker->call($continue);
-
-                if (! $repeater) {
-                    break;
-                }
-            }
-        }
-
-        return true;
     }
 
     /**
@@ -141,9 +81,53 @@ class Dispatcher implements EventManagerContract
     /**
      * {@inhertidoc}
      */
+    public function trigger($event, $target = null, $argv = [])
+    {
+        $event = $this->createNewEvent($event, $target, $argv);
+        $listeners = $this->getListeners($event->getName());
+        $result = true;
+
+        foreach ($listeners as $listener) {
+            if ($listener !== null) {
+                $result = $listener($event);
+            }
+
+            // stopped ?
+            if ($result->isPropagationStopped()) {
+                break;
+            }
+        }
+
+        return $result;
+    }
+
+    /**
+     * {@inhertidoc}
+     */
     public function clearListeners($event)
     {
         $this->detach($event, null);
+    }
+
+    /**
+     * Create a new event.
+     *
+     * @param string|\Viserio\Contracts\Events\Event $eventName
+     * @param object|string|null                     $target
+     * @param array                                  $parameters
+     *
+     * @return \Viserio\Contracts\Events\Event
+     */
+    protected function createNewEvent(
+        $eventName,
+        $target = null,
+        array $parameters = []
+    ): EventContract {
+        if (is_object($eventName) && $eventName instanceof EventContract) {
+            return $eventName;
+        } else {
+            return new Event($eventName, $target, $parameters);
+        }
     }
 
     /**
@@ -179,7 +163,7 @@ class Dispatcher implements EventManagerContract
      */
     protected function hasWildcards($subject): bool
     {
-        return Str::contains($subject, '*') || Str::contains($subject, '#');
+        return strpos($subject, '*') !== false || strpos($subject, '#') !== false;
     }
 
     /**

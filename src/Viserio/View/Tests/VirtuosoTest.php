@@ -4,7 +4,7 @@ namespace Viserio\View\Tests;
 
 use Interop\Container\ContainerInterface;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
-use Viserio\Contracts\Events\Dispatcher as EventDispatcher;
+use Viserio\Contracts\Events\EventManager as EventManagerContract;
 use Viserio\View\Virtuoso;
 
 class VirtuosoTest extends \PHPUnit_Framework_TestCase
@@ -15,7 +15,7 @@ class VirtuosoTest extends \PHPUnit_Framework_TestCase
     {
         $virtuoso = $this->getVirtuoso();
 
-        $this->assertInstanceOf(EventDispatcher::class, $virtuoso->getDispatcher());
+        $this->assertInstanceOf(EventManagerContract::class, $virtuoso->getDispatcher());
     }
 
     public function testBasicSectionHandling()
@@ -186,7 +186,7 @@ class VirtuosoTest extends \PHPUnit_Framework_TestCase
 
         return new Virtuoso(
             $container,
-            $this->mock(EventDispatcher::class)
+            $this->mock(EventManagerContract::class)
         );
     }
 }

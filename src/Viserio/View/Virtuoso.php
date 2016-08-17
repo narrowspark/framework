@@ -6,7 +6,7 @@ use Closure;
 use Interop\Container\ContainerInterface;
 use InvalidArgumentException;
 use Viserio\Contracts\Container\Traits\ContainerAwareTrait;
-use Viserio\Contracts\Events\Dispatcher as DispatcherContract;
+use Viserio\Contracts\Events\EventManager as EventManagerContract;
 use Viserio\Contracts\View\View as ViewContract;
 use Viserio\Contracts\View\Virtuoso as VirtuosoContract;
 use Viserio\Support\Invoker;
@@ -33,9 +33,9 @@ class Virtuoso implements VirtuosoContract
     protected $sectionStack = [];
 
     /**
-     * The event dispatcher instance.
+     * The event manager instance.
      *
-     * @var \Viserio\Contracts\Events\Dispatcher
+     * @var \Viserio\Contracts\Events\EventManager
      */
     protected $events;
 
@@ -56,10 +56,10 @@ class Virtuoso implements VirtuosoContract
     /**
      * Construct.
      *
-     * @param \Interop\Container\ContainerInterface $container
-     * @param \Viserio\Contracts\Events\Dispatcher  $events
+     * @param \Interop\Container\ContainerInterface  $container
+     * @param \Viserio\Contracts\Events\EventManager $events
      */
-    public function __construct(ContainerInterface $container, DispatcherContract $events)
+    public function __construct(ContainerInterface $container, EventManagerContract $events)
     {
         $this->events = $events;
 
@@ -72,7 +72,7 @@ class Virtuoso implements VirtuosoContract
     /**
      * {@inheritdoc}
      */
-    public function getDispatcher(): DispatcherContract
+    public function getEventManager(): EventManagerContract
     {
         return $this->events;
     }
