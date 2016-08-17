@@ -3,47 +3,52 @@ declare(strict_types=1);
 namespace Viserio\Http;
 
 use Psr\Http\Message\StreamInterface;
+use InvalidArgumentException;
 use Viserio\Contracts\Http\StreamFactory as StreamFactoryContract;
+use Viserio\Http\Stream\PumpStream;
 
 final class StreamFactory implements StreamFactoryContract
 {
     /**
      * {@inheritdoc}
-     *
-     * @codeCoverageIgnore
      */
     public function createStream(): StreamInterface
     {
-        return Util::getStream();
+        return new Stream(fopen('php://temp', 'r+'));
     }
 
     /**
      * {@inheritdoc}
-     *
-     * @codeCoverageIgnore
      */
     public function createStreamFromCallback(callable $callback): StreamInterface
     {
-        return Util::getStream($callback);
+        return new PumpStream($callback);
     }
 
     /**
      * {@inheritdoc}
-     *
-     * @codeCoverageIgnore
      */
     public function createStreamFromResource($body): StreamInterface
     {
-        return Util::getStream($body);
+        if (gettype($body) === 'resource') {
+            return new Stream($body);
+        }
+
+        throw new InvalidArgumentException('Invalid resource type: ' . gettype($body));
     }
 
     /**
      * {@inheritdoc}
-     *
-     * @codeCoverageIgnore
      */
     public function createStreamFromString(string $body): StreamInterface
     {
-        return Util::getStream($body);
+        $stream = fopen('php://temp', 'r+');
+
+        if ($body !== '') {
+            fwrite($stream, $body);
+            fseek($stream, 0);
+        }
+
+        return new Stream($stream);
     }
 }
