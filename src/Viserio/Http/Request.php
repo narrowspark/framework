@@ -3,24 +3,22 @@ declare(strict_types=1);
 namespace Viserio\Http;
 
 use InvalidArgumentException;
-use Psr\Http\Message\{
-    RequestInterface,
-    StreamInterface,
-    UriInterface
-};
+use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\StreamInterface;
+use Psr\Http\Message\UriInterface;
 
 class Request extends AbstractMessage implements RequestInterface
 {
     protected static $validMethods = [
-        'OPTIONS'  => true,
-        'GET'      => true,
-        'HEAD'     => true,
-        'POST'     => true,
-        'PUT'      => true,
-        'DELETE'   => true,
-        'TRACE'    => true,
-        'CONNECT'  => true,
-        'PATCH'    => true,
+        'OPTIONS' => true,
+        'GET' => true,
+        'HEAD' => true,
+        'POST' => true,
+        'PUT' => true,
+        'DELETE' => true,
+        'TRACE' => true,
+        'CONNECT' => true,
+        'PATCH' => true,
         'PROPFIND' => true,
     ];
 

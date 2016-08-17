@@ -20,7 +20,7 @@ class GridFSConnectorTest extends \PHPUnit_Framework_TestCase
 
         try {
             $return = $connector->connect([
-                'server'   => 'mongodb://localhost:27017',
+                'server' => 'mongodb://localhost:27017',
                 'database' => 'your-database',
             ]);
             $this->assertInstanceOf(GridFSAdapter::class, $return);

@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Connect\Tests\Adapter\Database;
 
-use PDO;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
+use PDO;
 use Viserio\Connect\Adapters\Database\GoogleCloudSQLConnector;
 
 class GoogleCloudSQLConnectorTest extends \PHPUnit_Framework_TestCase
@@ -24,11 +24,11 @@ class GoogleCloudSQLConnectorTest extends \PHPUnit_Framework_TestCase
     {
         $connector = new GoogleCloudSQLConnector();
         $config = [
-            'server'   => '',
+            'server' => '',
             'database' => '',
             'username' => '',
             'password' => '',
-            'charset'  => 'utf-8',
+            'charset' => 'utf-8',
         ];
 
         $this->assertInstanceOf(PDO::class, $connector->connect($config));

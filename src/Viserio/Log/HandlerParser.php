@@ -4,35 +4,31 @@ namespace Viserio\Log;
 
 use DateTime;
 use InvalidArgumentException;
-use RuntimeException;
-use Monolog\Formatter\{
-    ChromePHPFormatter,
-    FormatterInterface,
-    GelfMessageFormatter,
-    HtmlFormatter,
-    JsonFormatter,
-    LineFormatter,
-    NormalizerFormatter,
-    ScalarFormatter,
-    WildfireFormatter
-};
-use Monolog\Handler\{
-    AmqpHandler,
-    BrowserConsoleHandler,
-    ChromePHPHandler,
-    CubeHandler,
-    ErrorLogHandler,
-    FirePHPHandler,
-    GelfHandler,
-    HandlerInterface,
-    LogglyHandler,
-    NewRelicHandler,
-    RavenHandler,
-    StreamHandler,
-    SyslogUdpHandler,
-    ZendMonitorHandler
-};
+use Monolog\Formatter\ChromePHPFormatter;
+use Monolog\Formatter\FormatterInterface;
+use Monolog\Formatter\GelfMessageFormatter;
+use Monolog\Formatter\HtmlFormatter;
+use Monolog\Formatter\JsonFormatter;
+use Monolog\Formatter\LineFormatter;
+use Monolog\Formatter\NormalizerFormatter;
+use Monolog\Formatter\ScalarFormatter;
+use Monolog\Formatter\WildfireFormatter;
+use Monolog\Handler\AmqpHandler;
+use Monolog\Handler\BrowserConsoleHandler;
+use Monolog\Handler\ChromePHPHandler;
+use Monolog\Handler\CubeHandler;
+use Monolog\Handler\ErrorLogHandler;
+use Monolog\Handler\FirePHPHandler;
+use Monolog\Handler\GelfHandler;
+use Monolog\Handler\HandlerInterface;
+use Monolog\Handler\LogglyHandler;
+use Monolog\Handler\NewRelicHandler;
+use Monolog\Handler\RavenHandler;
+use Monolog\Handler\StreamHandler;
+use Monolog\Handler\SyslogUdpHandler;
+use Monolog\Handler\ZendMonitorHandler;
 use Monolog\Logger as MonologLogger;
+use RuntimeException;
 use Viserio\Log\Traits\ParseLevelTrait;
 
 class HandlerParser
@@ -52,21 +48,21 @@ class HandlerParser
      * @var array
      */
     protected $handler = [
-        'stream'      => StreamHandler::class,
-        'amqp'        => AmqpHandler::class,
-        'gelf'        => GelfHandler::class,
-        'cube'        => CubeHandler::class,
-        'raven'       => RavenHandler::class,
+        'stream' => StreamHandler::class,
+        'amqp' => AmqpHandler::class,
+        'gelf' => GelfHandler::class,
+        'cube' => CubeHandler::class,
+        'raven' => RavenHandler::class,
         'zendMonitor' => ZendMonitorHandler::class,
-        'newRelic'    => NewRelicHandler::class,
+        'newRelic' => NewRelicHandler::class,
         //Log
-        'errorLog'    => ErrorLogHandler::class,
-        'loggly'      => LogglyHandler::class,
-        'syslogUdp'   => SyslogUdpHandler::class,
+        'errorLog' => ErrorLogHandler::class,
+        'loggly' => LogglyHandler::class,
+        'syslogUdp' => SyslogUdpHandler::class,
         //Browser
-        'browser'     => BrowserConsoleHandler::class,
-        'firePHP'     => FirePHPHandler::class,
-        'chromePHP'   => ChromePHPHandler::class,
+        'browser' => BrowserConsoleHandler::class,
+        'firePHP' => FirePHPHandler::class,
+        'chromePHP' => ChromePHPHandler::class,
     ];
 
     /**
@@ -75,14 +71,14 @@ class HandlerParser
      * @var array
      */
     protected $formatter = [
-        'line'       => LineFormatter::class,
-        'html'       => HtmlFormatter::class,
+        'line' => LineFormatter::class,
+        'html' => HtmlFormatter::class,
         'normalizer' => NormalizerFormatter::class,
-        'scalar'     => ScalarFormatter::class,
-        'json'       => JsonFormatter::class,
-        'wildfire'   => WildfireFormatter::class,
-        'chrome'     => ChromePHPFormatter::class,
-        'gelf'       => GelfMessageFormatter::class,
+        'scalar' => ScalarFormatter::class,
+        'json' => JsonFormatter::class,
+        'wildfire' => WildfireFormatter::class,
+        'chrome' => ChromePHPFormatter::class,
+        'gelf' => GelfMessageFormatter::class,
     ];
 
     /**
@@ -247,8 +243,8 @@ class HandlerParser
             return $handler;
         } elseif (is_string($handler) && isset($this->handler[$handler])) {
             return new $this->handler[$handler]($path, $this->parseLevel($level));
-        } else {
-            throw new RuntimeException(
+        }
+        throw new RuntimeException(
                 sprintf(
                     'Handler [%s] dont exist.',
                     is_object($handler) ?
@@ -256,6 +252,5 @@ class HandlerParser
                     $handler
                 )
             );
-        }
     }
 }

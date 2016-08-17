@@ -4,5 +4,4 @@ namespace Viserio\Routing\Generator;
 
 class RouteTreeBuilder
 {
-
 }

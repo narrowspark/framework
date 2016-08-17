@@ -6,17 +6,13 @@ use Closure;
 use InvalidArgumentException;
 use SuperClosure\Serializer;
 use Swift_Mailer;
-use Viserio\Contracts\{
-    Container\Traits\ContainerAwareTrait,
-    Mail\QueueMailer as QueueMailerContract,
-    Queue\Queue as QueueContract,
-    Queue\Job as JobContract,
-    View\Factory as ViewFactoryContract
-};
-use Viserio\Support\{
-    Invoker,
-    Str
-};
+use Viserio\Contracts\Container\Traits\ContainerAwareTrait;
+use Viserio\Contracts\Mail\QueueMailer as QueueMailerContract;
+use Viserio\Contracts\Queue\Job as JobContract;
+use Viserio\Contracts\Queue\Queue as QueueContract;
+use Viserio\Contracts\View\Factory as ViewFactoryContract;
+use Viserio\Support\Invoker;
+use Viserio\Support\Str;
 
 class QueueMailer extends Mailer implements QueueMailerContract
 {

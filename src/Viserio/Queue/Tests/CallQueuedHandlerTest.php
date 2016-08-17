@@ -3,23 +3,16 @@ declare(strict_types=1);
 namespace Viserio\Queue\Tests;
 
 use Interop\Container\ContainerInterface;
-use Narrowspark\TestingHelper\{
-    ArrayContainer,
-    Traits\MockeryTrait
-};
+use Narrowspark\TestingHelper\ArrayContainer;
+use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use stdClass;
-use Viserio\Contracts\{
-    Encryption\Encrypter as EncrypterContract,
-    Queue\Job as JobContract,
-    Bus\Dispatcher as DispatcherContract
-};
 use Viserio\Bus\QueueingDispatcher;
-use Viserio\Queue\{
-    CallQueuedHandler,
-    Jobs\RedisJob,
-    Connectors\RedisQueue,
-    Tests\Fixture\InteractsWithQueue
-};
+use Viserio\Contracts\Encryption\Encrypter as EncrypterContract;
+use Viserio\Contracts\Queue\Job as JobContract;
+use Viserio\Queue\CallQueuedHandler;
+use Viserio\Queue\Connectors\RedisQueue;
+use Viserio\Queue\Jobs\RedisJob;
+use Viserio\Queue\Tests\Fixture\InteractsWithQueue;
 
 class CallQueuedHandlerTest extends \PHPUnit_Framework_TestCase
 {

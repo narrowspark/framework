@@ -4,14 +4,12 @@ namespace Viserio\Http;
 
 use InvalidArgumentException;
 use Psr\Http\Message\UriInterface;
-use Viserio\Http\Uri\Filter\{
-    Fragment,
-    Host,
-    Path,
-    Port,
-    Scheme,
-    Query
-};
+use Viserio\Http\Uri\Filter\Fragment;
+use Viserio\Http\Uri\Filter\Host;
+use Viserio\Http\Uri\Filter\Path;
+use Viserio\Http\Uri\Filter\Port;
+use Viserio\Http\Uri\Filter\Query;
+use Viserio\Http\Uri\Filter\Scheme;
 
 class Uri implements UriInterface
 {

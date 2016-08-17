@@ -3,11 +3,9 @@ declare(strict_types=1);
 namespace Viserio\Parsers\Formats;
 
 use Exception;
-use Viserio\Contracts\Parsers\{
-    Exception\DumpException,
-    Exception\ParseException,
-    Format as FormatContract
-};
+use Viserio\Contracts\Parsers\Exception\DumpException;
+use Viserio\Contracts\Parsers\Exception\ParseException;
+use Viserio\Contracts\Parsers\Format as FormatContract;
 
 class Serialize implements FormatContract
 {

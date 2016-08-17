@@ -22,8 +22,8 @@ class ByteCountingStream extends AbstractStreamDecorator
     private $remaining;
 
     /**
-     * @param StreamInterface $stream       Stream to wrap
-     * @param int             $bytesToRead  Number of bytes to read
+     * @param StreamInterface $stream      Stream to wrap
+     * @param int             $bytesToRead Number of bytes to read
      *
      * @throws \Viserio\Contracts\Http\Exception\ByteCountingStreamException|\InvalidArgumentException
      */
@@ -31,7 +31,7 @@ class ByteCountingStream extends AbstractStreamDecorator
     {
         $this->stream = $stream;
 
-        if (!is_int($bytesToRead) || $bytesToRead < 0) {
+        if (! is_int($bytesToRead) || $bytesToRead < 0) {
             $msg = 'Bytes to read should be a non-negative integer for '
                 . sprintf('ByteCountingStream, got %s.', $bytesToRead);
             throw new InvalidArgumentException($msg);
@@ -66,7 +66,7 @@ class ByteCountingStream extends AbstractStreamDecorator
 
         $this->remaining -= strlen($data);
 
-        if ((!$data || $data === '') && $this->remaining !== 0) {
+        if ((! $data || $data === '') && $this->remaining !== 0) {
             // hits EOF
             $provide = $this->tell() - $offset;
 

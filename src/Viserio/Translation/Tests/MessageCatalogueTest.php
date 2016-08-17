@@ -56,7 +56,7 @@ class MessageCatalogueTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($catalogue->has('foo1', 'domain1'));
     }
 
-    public function testDefines($value='')
+    public function testDefines($value = '')
     {
         $catalogue = new MessageCatalogue('en_US', [
             'domain1' => ['foo' => 'foo'],

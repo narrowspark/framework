@@ -49,7 +49,7 @@ class ClientIpGenerator implements FingerprintContract
         if (isset($_SERVER['REMOTE_ADDR'])) {
             $ip = filter_var(
                 $_SERVER['REMOTE_ADDR'],
-                FILTER_VALIDATE_IP|FILTER_FLAG_NO_PRIV_RANGE|FILTER_FLAG_NO_RES_RANGE
+                FILTER_VALIDATE_IP | FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE
             );
 
             if ($ip === false) {
@@ -90,6 +90,6 @@ class ClientIpGenerator implements FingerprintContract
         // @see http://en.wikipedia.org/wiki/X-Forwarded-For
         $ip = array_pop($ips);
 
-        return filter_var(end($ip), FILTER_VALIDATE_IP|FILTER_FLAG_NO_PRIV_RANGE|FILTER_FLAG_NO_RES_RANGE);
+        return filter_var(end($ip), FILTER_VALIDATE_IP | FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE);
     }
 }

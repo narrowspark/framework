@@ -2,19 +2,17 @@
 declare(strict_types=1);
 namespace Viserio\Cache\Tests;
 
+use Cache\Adapter\Chain\CachePoolChain;
+use Cache\Adapter\Filesystem\FilesystemCachePool;
+use Cache\Adapter\PHPArray\ArrayCachePool;
+use Cache\Adapter\Void\VoidCachePool;
+use Cache\Namespaced\NamespacedCachePool;
+use Cache\SessionHandler\Psr6SessionHandler;
 use Interop\Container\ContainerInterface;
 use League\Flysystem\Adapter\Local;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use Viserio\Cache\CacheManager;
 use Viserio\Contracts\Config\Manager as ConfigManager;
-use Cache\Adapter\{
-    PHPArray\ArrayCachePool,
-    Void\VoidCachePool,
-    Chain\CachePoolChain,
-    Filesystem\FilesystemCachePool
-};
-use Cache\SessionHandler\Psr6SessionHandler;
-use Cache\Namespaced\NamespacedCachePool;
 
 class CacheManagerTest extends \PHPUnit_Framework_TestCase
 {
@@ -67,7 +65,7 @@ class CacheManagerTest extends \PHPUnit_Framework_TestCase
                 'session' => [
                     'pool' => 'array',
                     'config' => [],
-                ]
+                ],
             ]);
         $this->manager->getConfig()->shouldReceive('get')
             ->twice()
@@ -119,8 +117,8 @@ class CacheManagerTest extends \PHPUnit_Framework_TestCase
             ->with('cache.drivers', [])
             ->andReturn([
                 'filesystem' => [
-                    'connection' => 'local'
-                ]
+                    'connection' => 'local',
+                ],
             ]);
 
         $this->manager->getConfig()->shouldReceive('get')

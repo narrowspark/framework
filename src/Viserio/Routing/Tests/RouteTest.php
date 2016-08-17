@@ -2,14 +2,12 @@
 declare(strict_types=1);
 namespace Viserio\Routing\Tests;
 
-use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use Interop\Container\ContainerInterface;
-use Viserio\Routing\{
-    Route,
-    Router,
-    RouteParser,
-    Tests\Fixture\Controller
-};
+use Narrowspark\TestingHelper\Traits\MockeryTrait;
+use Viserio\Routing\Route;
+use Viserio\Routing\RouteParser;
+use Viserio\Routing\Router;
+use Viserio\Routing\Tests\Fixture\Controller;
 
 class RouteTest extends \PHPUnit_Framework_TestCase
 {
@@ -28,15 +26,15 @@ class RouteTest extends \PHPUnit_Framework_TestCase
 
     public function testGetMethods()
     {
-        $route = new Route('GET', 'test', ['uses' => Controller::class.'::string']);
+        $route = new Route('GET', 'test', ['uses' => Controller::class . '::string']);
 
         $this->assertSame(['GET', 'HEAD'], $route->getMethods());
 
-        $route = new Route('PUT', 'test', ['uses' => Controller::class.'::string']);
+        $route = new Route('PUT', 'test', ['uses' => Controller::class . '::string']);
 
         $this->assertSame(['PUT'], $route->getMethods());
 
-        $route = new Route(['GET', 'POST'], 'test', ['uses' => Controller::class.'::string']);
+        $route = new Route(['GET', 'POST'], 'test', ['uses' => Controller::class . '::string']);
 
         $this->assertSame(['GET', 'POST', 'HEAD'], $route->getMethods());
     }

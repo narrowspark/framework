@@ -3,9 +3,9 @@ declare(strict_types=1);
 namespace Viserio\Mail\Tests\Fixture;
 
 use Mockery;
-use Swift_Transport;
 use Swift_Mailer;
 use Swift_Mime_Message;
+use Swift_Transport;
 
 class FailingSwiftMailerStub extends Swift_Mailer
 {

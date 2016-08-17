@@ -4,10 +4,8 @@ namespace Viserio\Exception\Displayers;
 
 use Psr\Http\Message\ResponseInterface;
 use Throwable;
-use Viserio\Contracts\{
-    Exception\Displayer as DisplayerContract,
-    View\Factory as FactoryContract
-};
+use Viserio\Contracts\Exception\Displayer as DisplayerContract;
+use Viserio\Contracts\View\Factory as FactoryContract;
 use Viserio\Exception\ExceptionInfo;
 use Viserio\Http\Response\HtmlResponse;
 
@@ -70,8 +68,8 @@ class ViewDisplayer implements DisplayerContract
         return $this->factory->exists("errors.{$code}");
     }
 
-     /**
-    * {@inheritdoc}
+    /**
+     * {@inheritdoc}
      */
     public function isVerbose(): bool
     {

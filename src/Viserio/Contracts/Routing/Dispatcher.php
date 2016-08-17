@@ -35,9 +35,9 @@ interface Dispatcher
      * @param string $httpMethod
      * @param string $uri
      *
-     * @return array
-     *
      * @throws \RuntimeException
+     *
+     * @return array
      */
     public function dispatch(string $httpMethod, string $uri): array;
 }

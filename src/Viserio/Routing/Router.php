@@ -5,14 +5,12 @@ namespace Viserio\Routing;
 use Closure;
 use Interop\Container\ContainerInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Viserio\Contracts\{
-    Container\Traits\ContainerAwareTrait,
-    Events\Traits\EventsAwareTrait,
-    Routing\Route as RouteContract,
-    Routing\Router as RouterContract,
-    Routing\RouteGroup as RouteGroupContract,
-    Routing\RouteParser as RouteParserContract
-};
+use Viserio\Contracts\Container\Traits\ContainerAwareTrait;
+use Viserio\Contracts\Events\Traits\EventsAwareTrait;
+use Viserio\Contracts\Routing\Route as RouteContract;
+use Viserio\Contracts\Routing\RouteGroup as RouteGroupContract;
+use Viserio\Contracts\Routing\RouteParser as RouteParserContract;
+use Viserio\Contracts\Routing\Router as RouterContract;
 
 class Router implements RouterContract
 {
@@ -122,7 +120,7 @@ class Router implements RouterContract
         return $this;
     }
 
-     /**
+    /**
      * Dispatch router for HTTP request.
      *
      * @param \Psr\Http\Message\ServerRequestInterface $request The current HTTP request object
@@ -131,10 +129,9 @@ class Router implements RouterContract
      */
     public function dispatch(ServerRequestInterface $request)
     {
-
     }
 
-     /**
+    /**
      * Add a route to the underlying route collection.
      *
      * @param array|string               $methods
@@ -193,11 +190,12 @@ class Router implements RouterContract
     /**
      * Prefix the given URI with the last prefix.
      *
-     * @param  string  $uri
+     * @param string $uri
+     *
      * @return string
      */
     protected function prefix($uri)
     {
-        return trim('/'.trim($uri, '/'), '/') ?: '/';
+        return trim('/' . trim($uri, '/'), '/') ?: '/';
     }
 }

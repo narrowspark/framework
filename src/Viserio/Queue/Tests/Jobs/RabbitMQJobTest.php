@@ -6,12 +6,8 @@ use Interop\Container\ContainerInterface;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use PhpAmqpLib\Channel\AMQPChannel;
 use PhpAmqpLib\Message\AMQPMessage;
-use PhpAmqpLib\Connection\AMQPStreamConnection;
-use stdClass;
-use Viserio\Queue\{
-    Jobs\RabbitMQJob,
-    Connectors\RabbitMQQueue
-};
+use Viserio\Queue\Connectors\RabbitMQQueue;
+use Viserio\Queue\Jobs\RabbitMQJob;
 
 class RabbitMQJobTest extends \PHPUnit_Framework_TestCase
 {
@@ -22,7 +18,7 @@ class RabbitMQJobTest extends \PHPUnit_Framework_TestCase
         $message = $this->mock(AMQPMessage::class);
         $message->delivery_info['delivery_tag'] = 'test';
 
-        $channel =  $this->mock(AMQPChannel::class);
+        $channel = $this->mock(AMQPChannel::class);
 
         return new RabbitMQJob(
             $this->mock(ContainerInterface::class),

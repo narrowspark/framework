@@ -2,24 +2,19 @@
 declare(strict_types=1);
 namespace Viserio\Mail\Tests;
 
-use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use Interop\Container\ContainerInterface;
-use Mockery;
+use Narrowspark\TestingHelper\Traits\MockeryTrait;
+use stdClass;
 use SuperClosure\Serializer;
 use Swift_Mailer;
 use Swift_Mime_Message;
 use Swift_Transport;
-use stdClass;
-use Viserio\Mail\{
-    QueueMailer,
-    Tests\Fixture\FailingSwiftMailerStub
-};
-use Viserio\Contracts\{
-    Mail\Message as MessageContract,
-    Queue\Queue as QueueContract,
-    View\Factory as ViewFactoryContract,
-    View\View as ViewContract
-};
+use Viserio\Contracts\Mail\Message as MessageContract;
+use Viserio\Contracts\Queue\Queue as QueueContract;
+use Viserio\Contracts\View\Factory as ViewFactoryContract;
+use Viserio\Contracts\View\View as ViewContract;
+use Viserio\Mail\QueueMailer;
+use Viserio\Mail\Tests\Fixture\FailingSwiftMailerStub;
 
 class QueueMailerTest extends \PHPUnit_Framework_TestCase
 {

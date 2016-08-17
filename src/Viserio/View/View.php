@@ -5,13 +5,11 @@ namespace Viserio\View;
 use ArrayAccess;
 use BadMethodCallException;
 use Throwable;
-use Viserio\Contracts\{
-    Support\Arrayable,
-    Support\Renderable,
-    View\Engine as EngineContract,
-    View\Factory as FactoryContract,
-    View\View as ViewContract
-};
+use Viserio\Contracts\Support\Arrayable;
+use Viserio\Contracts\Support\Renderable;
+use Viserio\Contracts\View\Engine as EngineContract;
+use Viserio\Contracts\View\Factory as FactoryContract;
+use Viserio\Contracts\View\View as ViewContract;
 use Viserio\Support\Str;
 
 class View implements ArrayAccess, ViewContract

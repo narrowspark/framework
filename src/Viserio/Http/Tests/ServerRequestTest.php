@@ -2,10 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Http\Tests;
 
-use Viserio\Http\{
-    ServerRequest,
-    UploadedFile
-};
+use Viserio\Http\ServerRequest;
+use Viserio\Http\UploadedFile;
 
 class ServerRequestTest extends \PHPUnit_Framework_TestCase
 {

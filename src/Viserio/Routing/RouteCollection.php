@@ -2,16 +2,14 @@
 declare(strict_types=1);
 namespace Viserio\Routing;
 
-use Viserio\Contracts\{
-    Container\Traits\ContainerAwareTrait,
-    Routing\Route as RouteContract
-};
+use Viserio\Contracts\Container\Traits\ContainerAwareTrait;
+use Viserio\Contracts\Routing\Route as RouteContract;
 
 class RouteCollection
 {
     use ContainerAwareTrait;
 
-   /**
+    /**
      * An array of the routes keyed by method.
      *
      * @var array
@@ -25,7 +23,7 @@ class RouteCollection
      */
     protected $allRoutes = [];
 
-    /**
+     /**
       * @var array
       */
      protected $namedRoutes = [];
@@ -77,12 +75,11 @@ class RouteCollection
             $this->routes[$method][$domainAndUri] = $route;
         }
 
-        $this->allRoutes[$method.$domainAndUri] = $route;
+        $this->allRoutes[$method . $domainAndUri] = $route;
     }
 
     /**
-     *
-     * @param  string $pattern [description]
+     * @param string $pattern [description]
      *
      * @return array
      */
@@ -93,7 +90,7 @@ class RouteCollection
         }
 
         if (is_array($pattern)) {
-            if (!isset($pattern[0]) || !is_string($pattern[0])) {
+            if (! isset($pattern[0]) || ! is_string($pattern[0])) {
                 throw new InvalidRoutePatternException(sprintf(
                     'Cannot add route: route pattern array must have the first element containing the pattern string, %s given',
                     isset($pattern[0]) ? gettype($pattern[0]) : 'none'

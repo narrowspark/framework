@@ -5,15 +5,11 @@ namespace Viserio\Console\Tests;
 use Mockery as Mock;
 use Narrowspark\TestingHelper\ArrayContainer;
 use StdClass;
-use Symfony\Component\Console\{
-    Input\StringInput,
-    Output\OutputInterface
-};
-use Viserio\Console\{
-    Application,
-    Tests\Fixture\SpyOutput,
-    Tests\Fixture\ViserioCommand
-};
+use Symfony\Component\Console\Input\StringInput;
+use Symfony\Component\Console\Output\OutputInterface;
+use Viserio\Console\Application;
+use Viserio\Console\Tests\Fixture\SpyOutput;
+use Viserio\Console\Tests\Fixture\ViserioCommand;
 
 class ApplicationTest extends \PHPUnit_Framework_TestCase
 {
@@ -33,9 +29,9 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
             'command.greet' => function (OutputInterface $output) {
                 $output->write('hello');
             },
-            'stdClass'          => $stdClass,
-            'param'             => 'bob',
-            'stdClass2'         => $stdClass2,
+            'stdClass' => $stdClass,
+            'param' => 'bob',
+            'stdClass2' => $stdClass2,
             'command.arr.greet' => [$this, 'foo'],
         ]);
 

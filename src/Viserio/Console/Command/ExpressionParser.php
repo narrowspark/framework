@@ -2,10 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Console\Command;
 
-use Viserio\Console\Input\{
-    InputArgument,
-    InputOption
-};
+use Viserio\Console\Input\InputArgument;
+use Viserio\Console\Input\InputOption;
 use Viserio\Contracts\Console\Exceptions\InvalidCommandExpression;
 use Viserio\Support\Str;
 

@@ -22,8 +22,7 @@
         "container-interop/container-interop": "^1.0"
     },
     "require-dev": {
-        "mockery/mockery"                    : "~0.9.3",
-        "fabpot/php-cs-fixer"                : "dev-master",
+        "mockery/mockery"                    : "^0.9",
         "phpunit/phpunit"                    : "^5.1"
     },
     "autoload": {

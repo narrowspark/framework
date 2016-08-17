@@ -3,10 +3,8 @@ declare(strict_types=1);
 namespace Viserio\Http;
 
 use InvalidArgumentException;
-use Psr\Http\Message\{
-    MessageInterface,
-    StreamInterface
-};
+use Psr\Http\Message\MessageInterface;
+use Psr\Http\Message\StreamInterface;
 
 abstract class AbstractMessage implements MessageInterface
 {

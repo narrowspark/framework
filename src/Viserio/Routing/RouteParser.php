@@ -2,16 +2,11 @@
 declare(strict_types=1);
 namespace Viserio\Routing;
 
-use Viserio\Routing\Matchers\{
-    StaticMatcher,
-    ParameterMatcher
-};
-use Viserio\Contracts\Routing\{
-    Exceptions\InvalidRoutePatternException,
-    RouteParser as RouteParserContract,
-    RouteSegment as RouteSegmentContract,
-    Pattern
-};
+use Viserio\Contracts\Routing\Exceptions\InvalidRoutePatternException;
+use Viserio\Contracts\Routing\Pattern;
+use Viserio\Contracts\Routing\RouteParser as RouteParserContract;
+use Viserio\Routing\Matchers\ParameterMatcher;
+use Viserio\Routing\Matchers\StaticMatcher;
 
 class RouteParser implements RouteParserContract
 {

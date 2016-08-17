@@ -3,11 +3,9 @@ declare(strict_types=1);
 namespace Viserio\Http\Response;
 
 use InvalidArgumentException;
-use Viserio\Http\{
-    Response,
-    Stream
-};
+use Viserio\Http\Response;
 use Viserio\Http\Response\Traits\InjectContentTypeTrait;
+use Viserio\Http\Stream;
 
 class JsonResponse extends Response
 {

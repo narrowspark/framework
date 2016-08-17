@@ -6,12 +6,7 @@ use Psr\Http\Message\ResponseInterface;
 use Throwable;
 use Viserio\Contracts\Exception\Displayer as DisplayerContract;
 use Viserio\Http\Response;
-use Whoops\Handler\{
-    PrettyPageHandler,
-    PlainTextHandler,
-    JsonResponseHandler,
-    XmlResponseHandler
-};
+use Whoops\Handler\PrettyPageHandler;
 use Whoops\Run as Whoops;
 
 class WhoopsDisplayer implements DisplayerContract

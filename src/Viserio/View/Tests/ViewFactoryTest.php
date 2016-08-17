@@ -4,19 +4,15 @@ namespace Viserio\View\Tests;
 
 use Interop\Container\ContainerInterface;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
+use Viserio\Contracts\View\Engine;
+use Viserio\Contracts\View\Finder;
+use Viserio\Contracts\View\View as ViewContract;
 use Viserio\Events\Dispatcher as EventDispatcher;
-use Viserio\Contracts\View\{
-    Engine,
-    Finder,
-    View as ViewContract
-};
 use Viserio\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
-use Viserio\View\{
-    Engines\Adapter\Php,
-    Engines\EngineResolver,
-    Factory,
-    Virtuoso
-};
+use Viserio\View\Engines\Adapter\Php;
+use Viserio\View\Engines\EngineResolver;
+use Viserio\View\Factory;
+use Viserio\View\Virtuoso;
 
 class ViewFactoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -407,6 +403,6 @@ class ViewFactoryTest extends \PHPUnit_Framework_TestCase
 
     protected function getPath()
     {
-        return self::normalizeDirectorySeparator(dirname(__FILE__) . '/' . 'Fixture');
+        return self::normalizeDirectorySeparator(__DIR__ . '/' . 'Fixture');
     }
 }

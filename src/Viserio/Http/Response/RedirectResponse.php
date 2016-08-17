@@ -4,10 +4,8 @@ namespace Viserio\Http\Response;
 
 use InvalidArgumentException;
 use Psr\Http\Message\UriInterface;
-use Viserio\Http\{
-    Response,
-    Util
-};
+use Viserio\Http\Response;
+use Viserio\Http\Util;
 
 class RedirectResponse extends Response
 {

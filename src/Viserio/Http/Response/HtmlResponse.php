@@ -4,11 +4,9 @@ namespace Viserio\Http\Response;
 
 use InvalidArgumentException;
 use Psr\Http\Message\StreamInterface;
-use Viserio\Http\{
-    Response,
-    Stream
-};
+use Viserio\Http\Response;
 use Viserio\Http\Response\Traits\InjectContentTypeTrait;
+use Viserio\Http\Stream;
 
 class HtmlResponse extends Response
 {

@@ -3,16 +3,13 @@ declare(strict_types=1);
 namespace Viserio\Mail\Tests;
 
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
-use Interop\Container\ContainerInterface;
 use Swift_Mailer;
 use Swift_Mime_Message;
 use Swift_Transport;
+use Viserio\Contracts\Mail\Message as MessageContract;
+use Viserio\Contracts\View\Factory as ViewFactoryContract;
+use Viserio\Contracts\View\View as ViewContract;
 use Viserio\Mail\Mailer;
-use Viserio\Contracts\{
-    Mail\Message as MessageContract,
-    View\Factory as ViewFactoryContract,
-    View\View as ViewContract
-};
 
 class MailerTest extends \PHPUnit_Framework_TestCase
 {

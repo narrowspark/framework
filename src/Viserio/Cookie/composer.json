@@ -24,7 +24,6 @@
     },
     "require-dev": {
         "phpunit/phpunit"                 : "^5.1",
-        "narrowspark/php-cs-fixer-config" : "^1.1",
         "narrowspark/testing-helper"      : "^1.5",
         "viserio/encrypter"               : "self.version"
     },

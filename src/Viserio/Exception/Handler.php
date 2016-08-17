@@ -5,29 +5,21 @@ namespace Viserio\Exception;
 use ErrorException;
 use Exception;
 use Narrowspark\HttpStatus\HttpStatus;
-use Psr\Http\Message\{
-    RequestInterface,
-    ResponseInterface
-};
+use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ResponseInterface;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\Console\Application as ConsoleApplication;
+use Symfony\Component\Console\Output\ConsoleOutput;
 use Throwable;
-use Symfony\Component\Console\{
-    Application as ConsoleApplication,
-    Output\ConsoleOutput
-};
-use Viserio\Contracts\{
-    Config\Manager as ConfigManagerContract,
-    Exception\Displayer as DisplayerContract,
-    Exception\Filter as FilterContract,
-    Exception\Transformer as TransformerContract,
-    Exception\Exception\FatalThrowableError,
-    Exception\Exception\FlattenException,
-    Exception\Handler as HandlerContract
-};
-use Viserio\Http\{
-    Response,
-    ServerRequestFactory
-};
+use Viserio\Contracts\Config\Manager as ConfigManagerContract;
+use Viserio\Contracts\Exception\Displayer as DisplayerContract;
+use Viserio\Contracts\Exception\Exception\FatalThrowableError;
+use Viserio\Contracts\Exception\Exception\FlattenException;
+use Viserio\Contracts\Exception\Filter as FilterContract;
+use Viserio\Contracts\Exception\Handler as HandlerContract;
+use Viserio\Contracts\Exception\Transformer as TransformerContract;
+use Viserio\Http\Response;
+use Viserio\Http\ServerRequestFactory;
 
 class Handler implements HandlerContract
 {
@@ -96,7 +88,6 @@ class Handler implements HandlerContract
      * @var \Viserio\Contracts\Config\Manager
      */
     protected $config;
-
 
     /**
      * Create a new exception handler instance.
@@ -295,7 +286,7 @@ class Handler implements HandlerContract
         $transformed = $this->getTransformed($exception);
 
         if (php_sapi_name() === 'cli') {
-            (new ConsoleApplication())->renderException($transformed, new ConsoleOutput);
+            (new ConsoleApplication())->renderException($transformed, new ConsoleOutput());
         } else {
             $request = new ServerRequestFactory();
 
@@ -419,7 +410,6 @@ class Handler implements HandlerContract
      *
      * @return \Viserio\Contracts\Exception\Displayer
      */
-
     protected function getDisplayer(
         RequestInterface $request,
         Throwable $original,

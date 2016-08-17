@@ -2,21 +2,15 @@
 declare(strict_types=1);
 namespace Viserio\Session\Middleware;
 
-use Psr\Http\Message\{
-    ResponseInterface,
-    ServerRequestInterface
-};
-use Viserio\Contracts\{
-    Config\Manager as ConfigContract,
-    Middleware\Frame as FrameContract,
-    Middleware\ServerMiddleware as ServerMiddlewareContract,
-    Session\Store as StoreContract
-};
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use Viserio\Contracts\Config\Manager as ConfigContract;
+use Viserio\Contracts\Middleware\Frame as FrameContract;
+use Viserio\Contracts\Middleware\ServerMiddleware as ServerMiddlewareContract;
+use Viserio\Contracts\Session\Store as StoreContract;
 use Viserio\Cookie\Cookie;
-use Viserio\Session\{
-    SessionManager,
-    Handler\CookieSessionHandler
-};
+use Viserio\Session\Handler\CookieSessionHandler;
+use Viserio\Session\SessionManager;
 
 class SessionMiddleware implements ServerMiddlewareContract
 {
@@ -31,8 +25,6 @@ class SessionMiddleware implements ServerMiddlewareContract
      * Create a new session middleware.
      *
      * @param \Viserio\Session\SessionManager $manager
-     *
-     * @return void
      */
     public function __construct(SessionManager $manager)
     {
@@ -40,7 +32,7 @@ class SessionMiddleware implements ServerMiddlewareContract
     }
 
     /**
-    * {@inhertidoc}
+     * {@inhertidoc}
      */
     public function process(ServerRequestInterface $request, FrameContract $frame): ResponseInterface
     {
@@ -111,8 +103,6 @@ class SessionMiddleware implements ServerMiddlewareContract
      * Remove the garbage from the session if necessary.
      *
      * @param StoreContract $session
-     *
-     * @return void
      */
     protected function collectGarbage(StoreContract $session)
     {
@@ -132,7 +122,7 @@ class SessionMiddleware implements ServerMiddlewareContract
      * Add the session cookie to the application response.
      *
      * @param \Psr\Http\Message\ResponseInterface $response
-     * @param StoreContract     $session
+     * @param StoreContract                       $session
      *
      * @return \Psr\Http\Message\ResponseInterface
      */
@@ -140,6 +130,7 @@ class SessionMiddleware implements ServerMiddlewareContract
     {
         if ($session->getHandler() instanceof CookieSessionHandler) {
             $session->save();
+
             return response;
         }
 

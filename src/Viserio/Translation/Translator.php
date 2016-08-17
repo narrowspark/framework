@@ -3,18 +3,29 @@ declare(strict_types=1);
 namespace Viserio\Translation;
 
 use Countable;
-use InvalidArgumentException;
 use Psr\Log\LoggerInterface;
-use Viserio\Contracts\Translation\{
-    MessageCatalogue as MessageCatalogueContract,
-    MessageSelector as MessageSelectorContract,
-    Translator as TranslatorContract
-};
+use Viserio\Contracts\Translation\MessageCatalogue as MessageCatalogueContract;
+use Viserio\Contracts\Translation\MessageSelector as MessageSelectorContract;
+use Viserio\Contracts\Translation\Translator as TranslatorContract;
 use Viserio\Translation\Traits\ValidateLocaleTrait;
 
 class Translator implements TranslatorContract
 {
     use ValidateLocaleTrait;
+
+    /**
+     * The message selector.
+     *
+     * @var \Viserio\Contracts\Translation\MessageSelector
+     */
+    protected $selector;
+
+    /**
+     * The message catalogue.
+     *
+     * @var \Viserio\Contracts\Translation\MessageCatalogue
+     */
+    protected $catalogue;
 
     /**
      * All registred filters.
@@ -38,20 +49,6 @@ class Translator implements TranslatorContract
     private $locale;
 
     /**
-     * The message selector.
-     *
-     * @var \Viserio\Contracts\Translation\MessageSelector
-     */
-    protected $selector;
-
-    /**
-     * The message catalogue.
-     *
-     * @var \Viserio\Contracts\Translation\MessageCatalogue
-     */
-    protected $catalogue;
-
-    /**
      * The psr logger instance.
      *
      * @var \Psr\Log\LoggerInterface
@@ -62,7 +59,7 @@ class Translator implements TranslatorContract
      * Creat new Translator instance.
      *
      * @param \Viserio\Contracts\Translation\MessageCatalogue $catalogue
-     * @param \Viserio\Contracts\Translation\MessageSelector  $selector The message selector for pluralization
+     * @param \Viserio\Contracts\Translation\MessageSelector  $selector  The message selector for pluralization
      *
      * @throws \InvalidArgumentException If a locale contains invalid characters
      */

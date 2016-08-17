@@ -4,10 +4,8 @@ namespace Viserio\Http;
 
 use InvalidArgumentException;
 use Iterator;
-use Psr\Http\Message\{
-    StreamInterface,
-    UploadedFileInterface
-};
+use Psr\Http\Message\StreamInterface;
+use Psr\Http\Message\UploadedFileInterface;
 use RuntimeException;
 use Viserio\Http\Stream\PumpStream;
 
@@ -285,10 +283,10 @@ class Util
         foreach (array_keys($files['tmp_name']) as $key) {
             $spec = [
                 'tmp_name' => $files['tmp_name'][$key],
-                'size'     => $files['size'][$key],
-                'error'    => $files['error'][$key],
-                'name'     => $files['name'][$key],
-                'type'     => $files['type'][$key],
+                'size' => $files['size'][$key],
+                'error' => $files['error'][$key],
+                'name' => $files['name'][$key],
+                'type' => $files['type'][$key],
             ];
 
             $normalizedFiles[$key] = self::createUploadedFileFromSpec($spec);

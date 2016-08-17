@@ -26,10 +26,10 @@ class MandrillTransportTest extends \PHPUnit_Framework_TestCase
                 $this->equalTo('https://mandrillapp.com/api/1.0/messages/send-raw.json'),
                 $this->equalTo([
                     'form_params' => [
-                        'key'         => 'testkey',
+                        'key' => 'testkey',
                         'raw_message' => $message->toString(),
-                        'async'       => false,
-                        'to'          => ['me@example.com', 'you@example.com'],
+                        'async' => false,
+                        'to' => ['me@example.com', 'you@example.com'],
                     ],
                 ])
             );

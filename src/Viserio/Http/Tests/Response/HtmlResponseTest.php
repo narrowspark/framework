@@ -51,15 +51,15 @@ class HtmlResponseTest extends \PHPUnit_Framework_TestCase
     public function invalidHtmlContent()
     {
         return [
-            'null'       => [null],
-            'true'       => [true],
-            'false'      => [false],
-            'zero'       => [0],
-            'int'        => [1],
+            'null' => [null],
+            'true' => [true],
+            'false' => [false],
+            'zero' => [0],
+            'int' => [1],
             'zero-float' => [0.0],
-            'float'      => [1.1],
-            'array'      => [['php://temp']],
-            'object'     => [(object) ['php://temp']],
+            'float' => [1.1],
+            'array' => [['php://temp']],
+            'object' => [(object) ['php://temp']],
         ];
     }
 

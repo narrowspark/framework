@@ -3,23 +3,17 @@ declare(strict_types=1);
 namespace Viserio\Filesystem;
 
 use InvalidArgumentException;
-use League\Flysystem\{
-    AdapterInterface,
-    Adapter\Local as LocalAdapter,
-    AwsS3v3\AwsS3Adapter,
-    Config as FlyConfig
-};
+use League\Flysystem\Adapter\Local as LocalAdapter;
+use League\Flysystem\AdapterInterface;
+use League\Flysystem\AwsS3v3\AwsS3Adapter;
+use League\Flysystem\Config as FlyConfig;
 use Narrowspark\Arr\StaticArr as Arr;
-use Viserio\Contracts\Filesystem\{
-    Directorysystem as DirectorysystemContract,
-    Exception\FileNotFoundException,
-    Exception\IOException as ViserioIOException,
-    Filesystem as FilesystemContract
-};
-use Viserio\Filesystem\Traits\{
-    FilesystemExtensionTrait,
-    FilesystemHelperTrait
-};
+use Viserio\Contracts\Filesystem\Directorysystem as DirectorysystemContract;
+use Viserio\Contracts\Filesystem\Exception\FileNotFoundException;
+use Viserio\Contracts\Filesystem\Exception\IOException as ViserioIOException;
+use Viserio\Contracts\Filesystem\Filesystem as FilesystemContract;
+use Viserio\Filesystem\Traits\FilesystemExtensionTrait;
+use Viserio\Filesystem\Traits\FilesystemHelperTrait;
 use Viserio\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
 class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
@@ -243,7 +237,7 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
 
             return $adapter->getClient()->getObjectUrl($adapter->getBucket(), $path);
         } elseif ($adapter instanceof LocalAdapter) {
-            return '/storage/'.$path;
+            return '/storage/' . $path;
         } elseif (method_exists($adapter, 'getUrl')) {
             return $adapter->getUrl($path);
         }
@@ -262,7 +256,7 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
             $deletes[] = $this->driver->delete($path);
         }
 
-        return !in_array('false', $deletes, true);
+        return ! in_array('false', $deletes, true);
     }
 
     /**
@@ -363,7 +357,7 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
         $contents = $this->driver->listContents($directory, $recursive);
 
         foreach ($contents as $item) {
-            # code...
+            // code...
         }
     }
 

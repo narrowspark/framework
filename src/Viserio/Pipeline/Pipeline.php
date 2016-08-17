@@ -4,10 +4,8 @@ namespace Viserio\Pipeline;
 
 use Closure;
 use ReflectionClass;
-use Viserio\Contracts\{
-    Container\Traits\ContainerAwareTrait,
-    Pipeline\Pipeline as PipelineContract
-};
+use Viserio\Contracts\Container\Traits\ContainerAwareTrait;
+use Viserio\Contracts\Pipeline\Pipeline as PipelineContract;
 use Viserio\Support\Invoker;
 
 class Pipeline implements PipelineContract

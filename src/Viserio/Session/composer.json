@@ -31,7 +31,6 @@
         "viserio/support"                                    : "self.version"
     },
     "require-dev": {
-        "narrowspark/php-cs-fixer-config"                    : "^1.2",
         "narrowspark/testing-helper"                         : "^1.5",
         "mockery/mockery"                                    : "^0.9.5",
         "mikey179/vfsStream"                                 : "^1.6",

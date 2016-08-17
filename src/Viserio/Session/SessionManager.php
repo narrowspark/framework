@@ -2,12 +2,10 @@
 declare(strict_types=1);
 namespace Viserio\Session;
 
-use Viserio\Contracts\{
-    Config\Manager as ConfigContract,
-    Encryption\Encrypter as EncrypterContract,
-    Session\SessionHandler as SessionHandlerContract,
-    Session\Store as StoreContract
-};
+use Viserio\Contracts\Config\Manager as ConfigContract;
+use Viserio\Contracts\Encryption\Encrypter as EncrypterContract;
+use Viserio\Contracts\Session\SessionHandler as SessionHandlerContract;
+use Viserio\Contracts\Session\Store as StoreContract;
 use Viserio\Support\AbstractManager;
 
 class SessionManager extends AbstractManager
@@ -40,7 +38,7 @@ class SessionManager extends AbstractManager
     /**
      * Constructor.
      *
-     * @param \Viserio\Contracts\Config\Manager    $config
+     * @param \Viserio\Contracts\Config\Manager       $config
      * @param \Viserio\Contracts\Encryption\Encrypter $encrypter
      */
     public function __construct(ConfigContract $config, EncrypterContract $encrypter)
@@ -72,7 +70,7 @@ class SessionManager extends AbstractManager
         );
     }
 
-     /**
+    /**
      * Create an instance of the "cookie" session driver.
      *
      * @return \Viserio\Contracts\Session\Store
@@ -194,7 +192,7 @@ class SessionManager extends AbstractManager
      * Create the cache based session handler instance.
      *
      * @param string $driver
-     * @param array $options
+     * @param array  $options
      *
      * @return \Viserio\Contracts\Session\Store
      */
@@ -219,7 +217,7 @@ class SessionManager extends AbstractManager
      */
     protected function buildSession(SessionHandlerContract $handler): StoreContract
     {
-        return new Store($this->config->get($this->getConfigName().'::cookie', false), $handler, $this->encrypter);
+        return new Store($this->config->get($this->getConfigName() . '::cookie', false), $handler, $this->encrypter);
     }
 
     /**

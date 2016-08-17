@@ -4,10 +4,8 @@ namespace Viserio\Exception\Tests\Displayers;
 
 use Exception;
 use InvalidArgumentException;
-use Viserio\Exception\{
-    Displayers\JsonDisplayer,
-    ExceptionInfo
-};
+use Viserio\Exception\Displayers\JsonDisplayer;
+use Viserio\Exception\ExceptionInfo;
 
 class JsonDisplayerTest extends \PHPUnit_Framework_TestCase
 {

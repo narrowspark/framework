@@ -38,7 +38,7 @@ class ProxyStub extends StaticalProxy
 
     public function fourArg($arg, $arga, $argb, $argc)
     {
-        return $arg + $arga + $argb  + $argc;
+        return $arg + $arga + $argb + $argc;
     }
 
     public function moreArg($arg, $arga, $argb, $argc, $argd)

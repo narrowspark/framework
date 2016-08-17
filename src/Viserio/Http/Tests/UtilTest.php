@@ -4,15 +4,11 @@ namespace Viserio\Http\Tests;
 
 use ArrayIterator;
 use Viserio\Http\Stream;
-use Viserio\Http\Stream\{
-    FnStream,
-    PumpStream
-};
+use Viserio\Http\Stream\FnStream;
+use Viserio\Http\Stream\PumpStream;
 use Viserio\Http\Tests\Fixture\HasToString;
-use Viserio\Http\{
-    Util,
-    UploadedFile
-};
+use Viserio\Http\UploadedFile;
+use Viserio\Http\Util;
 
 class UtilTest extends \PHPUnit_Framework_TestCase
 {

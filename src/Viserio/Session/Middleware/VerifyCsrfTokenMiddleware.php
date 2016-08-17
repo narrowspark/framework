@@ -2,15 +2,11 @@
 declare(strict_types=1);
 namespace Viserio\Session\Middleware;
 
-use Psr\Http\Message\{
-    ResponseInterface,
-    ServerRequestInterface
-};
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 use Schnittstabil\Csrf\TokenService\TokenService;
-use Viserio\Contracts\Middleware\{
-    Frame as FrameContract,
-    ServerMiddleware as ServerMiddlewareContract
-};
+use Viserio\Contracts\Middleware\Frame as FrameContract;
+use Viserio\Contracts\Middleware\ServerMiddleware as ServerMiddlewareContract;
 use Viserio\Cookie\Cookie;
 use Viserio\Session\SessionManager;
 
@@ -23,7 +19,7 @@ class VerifyCsrfTokenMiddleware implements ServerMiddlewareContract
      */
     protected $manager;
 
-     /**
+    /**
      * TokenService for building.
      *
      * @var \Schnittstabil\Csrf\TokenService\TokenServiceInterface
@@ -49,7 +45,7 @@ class VerifyCsrfTokenMiddleware implements ServerMiddlewareContract
     }
 
     /**
-    * {@inhertidoc}
+     * {@inhertidoc}
      */
     public function process(ServerRequestInterface $request, FrameContract $frame): ResponseInterface
     {
@@ -67,20 +63,6 @@ class VerifyCsrfTokenMiddleware implements ServerMiddlewareContract
     }
 
     /**
-     * Determine if the session and input CSRF tokens match.
-     *
-     * @param \Psr\Http\Message\ServerRequestInterface $request
-     *
-     * @return bool
-     */
-    protected function tokensMatch(ServerRequestInterface $request): bool
-    {
-        foreach ($request->getHeader('X-XSRF-TOKEN') as $token) {
-            return $this->tokenService->validate($token);
-        }
-    }
-
-    /**
      * Generates a new CSRF token and attaches it to the Request Object
      *
      * @param \Psr\Http\Message\ServerRequestInterface $request
@@ -95,9 +77,23 @@ class VerifyCsrfTokenMiddleware implements ServerMiddlewareContract
     }
 
     /**
+     * Determine if the session and input CSRF tokens match.
+     *
+     * @param \Psr\Http\Message\ServerRequestInterface $request
+     *
+     * @return bool
+     */
+    protected function tokensMatch(ServerRequestInterface $request): bool
+    {
+        foreach ($request->getHeader('X-XSRF-TOKEN') as $token) {
+            return $this->tokenService->validate($token);
+        }
+    }
+
+    /**
      * Add the CSRF token to the response cookies.
      *
-     * @param \Psr\Http\Message\ResponseInterface      $response
+     * @param \Psr\Http\Message\ResponseInterface $response
      *
      * @return \Psr\Http\Message\ResponseInterface
      */
