@@ -3,10 +3,8 @@ declare(strict_types=1);
 namespace Viserio\View\Engines\Adapter;
 
 use Throwable;
-use Viserio\Contracts\{
-    Exception\Exception\FatalThrowableError,
-    View\Engine as EngineContract
-};
+use Viserio\Contracts\Exception\Exception\FatalThrowableError;
+use Viserio\Contracts\View\Engine as EngineContract;
 
 class Php implements EngineContract
 {

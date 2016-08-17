@@ -49,15 +49,15 @@ class RedirectResponseTest extends \PHPUnit_Framework_TestCase
     public function invalidUris()
     {
         return [
-            'null'       => [null],
-            'false'      => [false],
-            'true'       => [true],
-            'zero'       => [0],
-            'int'        => [1],
+            'null' => [null],
+            'false' => [false],
+            'true' => [true],
+            'zero' => [0],
+            'int' => [1],
             'zero-float' => [0.0],
-            'float'      => [1.1],
-            'array'      => [['/foo/bar']],
-            'object'     => [(object) ['/foo/bar']],
+            'float' => [1.1],
+            'array' => [['/foo/bar']],
+            'object' => [(object) ['/foo/bar']],
         ];
     }
 

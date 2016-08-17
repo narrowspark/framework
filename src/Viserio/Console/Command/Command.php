@@ -2,26 +2,20 @@
 declare(strict_types=1);
 namespace Viserio\Console\Command;
 
-use Stecman\Component\Symfony\Console\BashCompletion\{
-    Completion\CompletionAwareInterface,
-    CompletionContext
-};
-use Symfony\Component\Console\{
-    Command\Command as BaseCommand,
-    Formatter\OutputFormatterStyle,
-    Helper\Table,
-    Input\ArrayInput,
-    Input\InputInterface,
-    Output\NullOutput,
-    Output\OutputInterface,
-    Question\ChoiceQuestion,
-    Question\Question
-};
+use Stecman\Component\Symfony\Console\BashCompletion\Completion\CompletionAwareInterface;
+use Stecman\Component\Symfony\Console\BashCompletion\CompletionContext;
+use Symfony\Component\Console\Command\Command as BaseCommand;
+use Symfony\Component\Console\Formatter\OutputFormatterStyle;
+use Symfony\Component\Console\Helper\Table;
+use Symfony\Component\Console\Input\ArrayInput;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\NullOutput;
+use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Question\ChoiceQuestion;
+use Symfony\Component\Console\Question\Question;
 use Viserio\Console\Style\NarrowsparkStyle;
-use Viserio\Contracts\{
-    Support\Arrayable,
-    Container\Traits\ContainerAwareTrait
-};
+use Viserio\Contracts\Container\Traits\ContainerAwareTrait;
+use Viserio\Contracts\Support\Arrayable;
 use Viserio\Support\Invoker;
 
 abstract class Command extends BaseCommand implements CompletionAwareInterface
@@ -56,10 +50,10 @@ abstract class Command extends BaseCommand implements CompletionAwareInterface
      * @var array
      */
     protected $verbosityMap = [
-        'v'      => OutputInterface::VERBOSITY_VERBOSE,
-        'vv'     => OutputInterface::VERBOSITY_VERY_VERBOSE,
-        'vvv'    => OutputInterface::VERBOSITY_DEBUG,
-        'quiet'  => OutputInterface::VERBOSITY_QUIET,
+        'v' => OutputInterface::VERBOSITY_VERBOSE,
+        'vv' => OutputInterface::VERBOSITY_VERY_VERBOSE,
+        'vvv' => OutputInterface::VERBOSITY_DEBUG,
+        'quiet' => OutputInterface::VERBOSITY_QUIET,
         'normal' => OutputInterface::VERBOSITY_NORMAL,
     ];
 

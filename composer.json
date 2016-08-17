@@ -120,7 +120,7 @@
         "league/flysystem-vfs"                               : "^1.0",
         "league/flysystem-ziparchive"                        : "^1.0",
         "mikey179/vfsStream"                                 : "^1.6",
-        "narrowspark/php-cs-fixer-config"                    : "^1.2",
+        "narrowspark/php-cs-fixer-config"                    : "dev-master",
         "narrowspark/testing-helper"                         : "^1.5",
         "mockery/mockery"                                    : "^0.9.5",
         "phpunit/phpunit"                                    : "^5.1",

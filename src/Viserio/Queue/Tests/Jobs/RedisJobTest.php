@@ -5,10 +5,8 @@ namespace Viserio\Queue\Tests\Jobs;
 use Interop\Container\ContainerInterface;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use stdClass;
-use Viserio\Queue\{
-    Jobs\RedisJob,
-    Connectors\RedisQueue
-};
+use Viserio\Queue\Connectors\RedisQueue;
+use Viserio\Queue\Jobs\RedisJob;
 
 class RedisJobTest extends \PHPUnit_Framework_TestCase
 {

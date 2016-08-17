@@ -6,12 +6,10 @@ use Monolog\Handler\RotatingFileHandler;
 use Monolog\Logger as MonologLogger;
 use Monolog\Processor\PsrLogMessageProcessor;
 use RuntimeException;
-use Viserio\Contracts\{
-    Events\Dispatcher as DispatcherContract,
-    Log\Log as LogContract,
-    Support\Arrayable,
-    Support\Jsonable
-};
+use Viserio\Contracts\Events\Dispatcher as DispatcherContract;
+use Viserio\Contracts\Log\Log as LogContract;
+use Viserio\Contracts\Support\Arrayable;
+use Viserio\Contracts\Support\Jsonable;
 use Viserio\Log\Traits\ParseLevelTrait;
 
 class Writer implements LogContract
@@ -57,6 +55,19 @@ class Writer implements LogContract
     }
 
     /**
+     * Call Monolog with the given method and parameters.
+     *
+     * @param string $method
+     * @param array  $parameters
+     *
+     * @return mixed
+     */
+    public function __call($method, $parameters)
+    {
+        return call_user_func_array([$this->monolog, $method], $parameters);
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function useFiles(
@@ -96,8 +107,8 @@ class Writer implements LogContract
     /**
      * Log an emergency message to the logs.
      *
-     * @param mixed  $message
-     * @param array  $context
+     * @param mixed $message
+     * @param array $context
      */
     public function emergency($message, array $context = [])
     {
@@ -107,8 +118,8 @@ class Writer implements LogContract
     /**
      * Log an alert message to the logs.
      *
-     * @param mixed  $message
-     * @param array  $context
+     * @param mixed $message
+     * @param array $context
      */
     public function alert($message, array $context = [])
     {
@@ -118,8 +129,8 @@ class Writer implements LogContract
     /**
      * Log a critical message to the logs.
      *
-     * @param mixed  $message
-     * @param array  $context
+     * @param mixed $message
+     * @param array $context
      */
     public function critical($message, array $context = [])
     {
@@ -129,8 +140,8 @@ class Writer implements LogContract
     /**
      * Log an error message to the logs.
      *
-     * @param mixed  $message
-     * @param array  $context
+     * @param mixed $message
+     * @param array $context
      */
     public function error($message, array $context = [])
     {
@@ -140,8 +151,8 @@ class Writer implements LogContract
     /**
      * Log a warning message to the logs.
      *
-     * @param mixed  $message
-     * @param array  $context
+     * @param mixed $message
+     * @param array $context
      */
     public function warning($message, array $context = [])
     {
@@ -151,8 +162,8 @@ class Writer implements LogContract
     /**
      * Log a notice to the logs.
      *
-     * @param mixed  $message
-     * @param array  $context
+     * @param mixed $message
+     * @param array $context
      */
     public function notice($message, array $context = [])
     {
@@ -162,8 +173,8 @@ class Writer implements LogContract
     /**
      * Log an informational message to the logs.
      *
-     * @param mixed  $message
-     * @param array  $context
+     * @param mixed $message
+     * @param array $context
      */
     public function info($message, array $context = [])
     {
@@ -173,8 +184,8 @@ class Writer implements LogContract
     /**
      * Log a debug message to the logs.
      *
-     * @param mixed  $message
-     * @param array  $context
+     * @param mixed $message
+     * @param array $context
      */
     public function debug($message, array $context = [])
     {
@@ -207,15 +218,13 @@ class Writer implements LogContract
      * Set the event dispatcher instance.
      *
      * @param \Viserio\Contracts\Events\Dispatcher $dispatcher
-     *
-     * @return void
      */
     public function setEventDispatcher(DispatcherContract $dispatcher)
     {
         $this->dispatcher = $dispatcher;
     }
 
-   /**
+    /**
      * Get the event dispatcher instance.
      *
      * @return \Viserio\Contracts\Events\Dispatcher
@@ -230,26 +239,11 @@ class Writer implements LogContract
     }
 
     /**
-     * Call Monolog with the given method and parameters.
-     *
-     * @param string $method
-     * @param array  $parameters
-     *
-     * @return mixed
-     */
-    public function __call($method, $parameters)
-    {
-        return call_user_func_array([$this->monolog, $method], $parameters);
-    }
-
-    /**
      * Emit a log event.
      *
      * @param string $level
      * @param string $message
      * @param array  $context
-     *
-     * @return void
      */
     protected function emitLogEvent(string $level, string $message, array $context = [])
     {
@@ -264,7 +258,7 @@ class Writer implements LogContract
      *
      * @param mixed $message
      *
-     * @return string|object|integer|double|null|boolean
+     * @return string|object|int|float|null|bool
      */
     protected function formatMessage($message)
     {

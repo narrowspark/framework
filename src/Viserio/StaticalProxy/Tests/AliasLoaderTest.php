@@ -58,10 +58,10 @@ class AliasLoaderTest extends \PHPUnit_Framework_TestCase
     {
         $aliasloader = new AliasLoader();
         $aliasloader->setAliases([
-            'Resolvable'      => Foo::class,
-            'ResolvableTwo'   => Foo::class,
+            'Resolvable' => Foo::class,
+            'ResolvableTwo' => Foo::class,
             'ResolvableThree' => Foo::class,
-            'ResolvableFour'  => Foo::class,
+            'ResolvableFour' => Foo::class,
         ]);
         $this->assertTrue(is_array($aliasloader->getAliases()));
         $this->assertTrue($aliasloader->load('Resolvable'));
@@ -80,10 +80,10 @@ class AliasLoaderTest extends \PHPUnit_Framework_TestCase
     {
         $aliasloader = new AliasLoader();
         $aliasloader->aliasPattern([
-            'PatternResolvable'      => Foo::class,
-            'PatternResolvableTwo'   => Foo::class,
+            'PatternResolvable' => Foo::class,
+            'PatternResolvableTwo' => Foo::class,
             'PatternResolvableThree' => Foo::class,
-            'PatternResolvableFour'  => Foo::class,
+            'PatternResolvableFour' => Foo::class,
         ]);
         $this->assertTrue($aliasloader->load('PatternResolvable'));
 
@@ -101,9 +101,9 @@ class AliasLoaderTest extends \PHPUnit_Framework_TestCase
     {
         $aliasloader = new AliasLoader();
         $aliasloader->alias([
-            'Autoloaded\Foo'        => Foo::class,
+            'Autoloaded\Foo' => Foo::class,
             'Second\Autoloaded\Foo' => Foo::class,
-            'Third\Autoloaded\Foo'  => Foo::class,
+            'Third\Autoloaded\Foo' => Foo::class,
         ]);
         $this->assertFalse(class_exists('Autoloaded\Foo', true));
         $this->assertTrue($aliasloader->load('Autoloaded\Foo'));

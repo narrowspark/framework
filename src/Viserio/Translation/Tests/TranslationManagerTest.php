@@ -2,25 +2,19 @@
 declare(strict_types=1);
 namespace Viserio\Translation\Tests;
 
-use org\bovigo\vfs\vfsStream;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
+use org\bovigo\vfs\vfsStream;
 use Psr\Log\LoggerInterface;
-use Viserio\Contracts\{
-    Parsers\Loader as LoaderContract,
-    Translation\MessageCatalogue as MessageCatalogueContract,
-    Translation\Translator as TranslatorContract
-};
+use Viserio\Contracts\Parsers\Loader as LoaderContract;
+use Viserio\Contracts\Translation\MessageCatalogue as MessageCatalogueContract;
+use Viserio\Contracts\Translation\Translator as TranslatorContract;
 use Viserio\Filesystem\Filesystem;
-use Viserio\Parsers\{
-    FileLoader,
-    TaggableParser
-};
-use Viserio\Translation\{
-    MessageSelector,
-    PluralizationRules,
-    TranslationManager
-};
+use Viserio\Parsers\FileLoader;
+use Viserio\Parsers\TaggableParser;
 use Viserio\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
+use Viserio\Translation\MessageSelector;
+use Viserio\Translation\PluralizationRules;
+use Viserio\Translation\TranslationManager;
 
 class TranslationManagerTest extends \PHPUnit_Framework_TestCase
 {
@@ -33,7 +27,6 @@ class TranslationManagerTest extends \PHPUnit_Framework_TestCase
      * @var org\bovigo\vfs\vfsStreamDirectory
      */
     private $root;
-
 
     public function setUp()
     {

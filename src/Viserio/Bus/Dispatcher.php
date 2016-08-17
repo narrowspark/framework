@@ -6,9 +6,9 @@ use Closure;
 use Interop\Container\ContainerInterface;
 use InvalidArgumentException;
 use Viserio\Contracts\Bus\Dispatcher as DispatcherContract;
+use Viserio\Contracts\Container\Traits\ContainerAwareTrait;
 use Viserio\Pipeline\Pipeline;
 use Viserio\Support\Invoker;
-use Viserio\Contracts\Container\Traits\ContainerAwareTrait;
 
 class Dispatcher implements DispatcherContract
 {

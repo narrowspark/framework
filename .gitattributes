@@ -1,4 +1,5 @@
 * text=auto
+*.php text eol=lf
 
 /src/Viserio/*/Tests export-ignore
 
@@ -17,3 +18,4 @@
 /CONTRIBUTING.md     export-ignore
 /README.md           export-ignore
 /CODE_OF_CONDUCT.md  export-ignore
+

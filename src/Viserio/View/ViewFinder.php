@@ -3,10 +3,8 @@ declare(strict_types=1);
 namespace Viserio\View;
 
 use InvalidArgumentException;
-use Viserio\Contracts\{
-    View\Finder as FinderContract,
-    Filesystem\Filesystem as FilesystemContract
-};
+use Viserio\Contracts\Filesystem\Filesystem as FilesystemContract;
+use Viserio\Contracts\View\Finder as FinderContract;
 use Viserio\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
 class ViewFinder implements FinderContract

@@ -4,10 +4,8 @@ namespace Viserio\View\Engines;
 
 use Closure;
 use InvalidArgumentException;
-use Viserio\Contracts\View\{
-    Engine as EngineContract,
-    EngineResolver as EngineResolverContract
-};
+use Viserio\Contracts\View\Engine as EngineContract;
+use Viserio\Contracts\View\EngineResolver as EngineResolverContract;
 
 class EngineResolver implements EngineResolverContract
 {

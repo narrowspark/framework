@@ -4,18 +4,14 @@ namespace Viserio\Log\Tests;
 
 use Interop\Container\ContainerInterface as ContainerContract;
 use Mockery as Mock;
+use Monolog\Handler\RotatingFileHandler;
+use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
-use Monolog\Handler\{
-    StreamHandler,
-    RotatingFileHandler
-};
 use Viserio\Events\Dispatcher;
+use Viserio\Log\Tests\Fixture\ArrayableClass;
+use Viserio\Log\Tests\Fixture\JsonableClass;
 use Viserio\Log\Writer;
-use Viserio\Log\Tests\Fixture\{
-    ArrayableClass,
-    JsonableClass
-};
 
 class WriterTest extends \PHPUnit_Framework_TestCase
 {

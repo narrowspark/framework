@@ -2,10 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Contracts\Queue;
 
-use Viserio\Contracts\{
-    Events\Dispatcher as DispatcherContract,
-    Exception\Handler as ExceptionHandlerContract
-};
+use Viserio\Contracts\Exception\Handler as ExceptionHandlerContract;
 
 interface Worker
 {

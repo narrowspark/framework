@@ -4,10 +4,8 @@ namespace Viserio\Filesystem\Adapters;
 
 use Aws\S3\S3Client;
 use InvalidArgumentException;
-use League\Flysystem\{
-    AdapterInterface,
-    AwsS3v3\AwsS3Adapter as AwsS3v3
-};
+use League\Flysystem\AdapterInterface;
+use League\Flysystem\AwsS3v3\AwsS3Adapter as AwsS3v3;
 use Narrowspark\Arr\StaticArr as Arr;
 
 class AwsS3Connector extends AbstractConnector
@@ -20,8 +18,8 @@ class AwsS3Connector extends AbstractConnector
         $this->checkForKeyinConfigArray($config);
 
         $auth = [
-            'region'      => $config['region'],
-            'version'     => $config['version'],
+            'region' => $config['region'],
+            'version' => $config['version'],
             'credentials' => Arr::only($config, ['key', 'secret']),
         ];
 

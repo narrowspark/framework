@@ -2,12 +2,10 @@
 declare(strict_types=1);
 namespace Viserio\Http;
 
-use Psr\Http\Message\{
-    UploadedFileInterface,
-    StreamInterface,
-    ServerRequestInterface,
-    UriInterface
-};
+use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Message\StreamInterface;
+use Psr\Http\Message\UploadedFileInterface;
+use Psr\Http\Message\UriInterface;
 
 class ServerRequest extends Request implements ServerRequestInterface
 {

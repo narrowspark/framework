@@ -61,8 +61,8 @@ class JSONTest extends \PHPUnit_Framework_TestCase
     public function testDump()
     {
         $book = [
-            'title'   => 'bar',
-            'author'  => 'foo',
+            'title' => 'bar',
+            'author' => 'foo',
             'edition' => 6,
         ];
 

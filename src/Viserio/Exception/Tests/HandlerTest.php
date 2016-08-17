@@ -6,23 +6,14 @@ use ErrorException;
 use Exception;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use Psr\Log\LoggerInterface;
-use Viserio\Contracts\{
-    Config\Manager as ConfigManagerContract,
-    Exception\Displayer as DisplayerContract,
-    Exception\Transformer as TransformerContract,
-    Exception\Exception\FatalThrowableError,
-    Exception\Exception\FlattenException
-};
-use Viserio\Exception\{
-    Handler,
-    ExceptionInfo,
-    ExceptionIdentifier
-};
-use Viserio\Exception\Displayers\{
-    HtmlDisplayer,
-    JsonDisplayer
-};
+use Viserio\Contracts\Config\Manager as ConfigManagerContract;
+use Viserio\Contracts\Exception\Exception\FatalThrowableError;
+use Viserio\Exception\Displayers\HtmlDisplayer;
+use Viserio\Exception\Displayers\JsonDisplayer;
+use Viserio\Exception\ExceptionIdentifier;
+use Viserio\Exception\ExceptionInfo;
 use Viserio\Exception\Filters\VerboseFilter;
+use Viserio\Exception\Handler;
 use Viserio\Exception\Transformers\CommandLineTransformer;
 
 class HandlerTest extends \PHPUnit_Framework_TestCase
@@ -74,7 +65,7 @@ class HandlerTest extends \PHPUnit_Framework_TestCase
         $this->assertSame(1, count($handler->getFilters()));
     }
 
-    public function testReportError($value='')
+    public function testReportError($value = '')
     {
         $exception = new Exception();
         $id = (new ExceptionIdentifier())->identify($exception);
@@ -99,7 +90,7 @@ class HandlerTest extends \PHPUnit_Framework_TestCase
         $handler->report($exception);
     }
 
-    public function testReportCritical($value='')
+    public function testReportCritical($value = '')
     {
         $exception = new FatalThrowableError(new Exception());
         $id = (new ExceptionIdentifier())->identify($exception);

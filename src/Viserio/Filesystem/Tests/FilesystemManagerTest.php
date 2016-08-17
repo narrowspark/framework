@@ -8,10 +8,8 @@ use League\Flysystem\AdapterInterface;
 use MongoConnectionException;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use Viserio\Contracts\Config\Manager as ConfigManger;
-use Viserio\Filesystem\{
-    FilesystemAdapter,
-    FilesystemManager
-};
+use Viserio\Filesystem\FilesystemAdapter;
+use Viserio\Filesystem\FilesystemManager;
 
 class FilesystemManagerTest extends \PHPUnit_Framework_TestCase
 {
@@ -25,10 +23,10 @@ class FilesystemManagerTest extends \PHPUnit_Framework_TestCase
             ->with('filesystem.connections', [])
             ->andReturn([
                 'awss3' => [
-                    'key'     => 'your-key',
-                    'secret'  => 'your-secret',
-                    'bucket'  => 'your-bucket',
-                    'region'  => 'us-east-1',
+                    'key' => 'your-key',
+                    'secret' => 'your-secret',
+                    'bucket' => 'your-bucket',
+                    'region' => 'us-east-1',
                     'version' => 'latest',
                 ],
             ]);
@@ -50,7 +48,7 @@ class FilesystemManagerTest extends \PHPUnit_Framework_TestCase
             ->andReturn([
                 'dropbox' => [
                     'token' => 'your-token',
-                    'app'   => 'your-app',
+                    'app' => 'your-app',
                 ],
             ]);
 
@@ -74,8 +72,8 @@ class FilesystemManagerTest extends \PHPUnit_Framework_TestCase
             ->with('filesystem.connections', [])
             ->andReturn([
                 'ftp' => [
-                    'host'     => 'ftp.example.com',
-                    'port'     => 21,
+                    'host' => 'ftp.example.com',
+                    'port' => 21,
                     'username' => 'your-username',
                     'password' => 'your-password',
                 ],
@@ -101,7 +99,7 @@ class FilesystemManagerTest extends \PHPUnit_Framework_TestCase
             ->with('filesystem.connections', [])
             ->andReturn([
                 'gridfs' => [
-                    'server'   => 'mongodb://localhost:27017',
+                    'server' => 'mongodb://localhost:27017',
                     'database' => 'your-database',
                 ],
             ]);
@@ -164,10 +162,10 @@ class FilesystemManagerTest extends \PHPUnit_Framework_TestCase
             ->with('filesystem.connections', [])
             ->andReturn([
                 'rackspace' => [
-                    'endpoint'  => 'https://lon.identity.api.rackspacecloud.com/v2.0/',
-                    'region'    => 'LON',
-                    'username'  => 'your-username',
-                    'apiKey'    => 'your-api-key',
+                    'endpoint' => 'https://lon.identity.api.rackspacecloud.com/v2.0/',
+                    'region' => 'LON',
+                    'username' => 'your-username',
+                    'apiKey' => 'your-api-key',
                     'container' => 'your-container',
                 ],
             ]);
@@ -194,8 +192,8 @@ class FilesystemManagerTest extends \PHPUnit_Framework_TestCase
             ->with('filesystem.connections', [])
             ->andReturn([
                 'sftp' => [
-                    'host'     => 'sftp.example.com',
-                    'port'     => 22,
+                    'host' => 'sftp.example.com',
+                    'port' => 22,
                     'username' => 'your-username',
                     'password' => 'your-password',
                 ],
@@ -235,7 +233,7 @@ class FilesystemManagerTest extends \PHPUnit_Framework_TestCase
             ->with('filesystem.connections', [])
             ->andReturn([
                 'webdav' => [
-                    'baseUri'  => 'http://example.org/dav/',
+                    'baseUri' => 'http://example.org/dav/',
                     'userName' => 'your-username',
                     'password' => 'your-password',
                 ],

@@ -2,19 +2,17 @@
 declare(strict_types=1);
 namespace Viserio\Cache;
 
-use Cache\Adapter\{
-    Apc\ApcCachePool,
-    Apcu\ApcuCachePool,
-    Chain\CachePoolChain,
-    Filesystem\FilesystemCachePool,
-    Memcache\MemcacheCachePool,
-    Memcached\MemcachedCachePool,
-    MongoDB\MongoDBCachePool,
-    PHPArray\ArrayCachePool,
-    Predis\PredisCachePool,
-    Redis\RedisCachePool,
-    Void\VoidCachePool
-};
+use Cache\Adapter\Apc\ApcCachePool;
+use Cache\Adapter\Apcu\ApcuCachePool;
+use Cache\Adapter\Chain\CachePoolChain;
+use Cache\Adapter\Filesystem\FilesystemCachePool;
+use Cache\Adapter\Memcache\MemcacheCachePool;
+use Cache\Adapter\Memcached\MemcachedCachePool;
+use Cache\Adapter\MongoDB\MongoDBCachePool;
+use Cache\Adapter\PHPArray\ArrayCachePool;
+use Cache\Adapter\Predis\PredisCachePool;
+use Cache\Adapter\Redis\RedisCachePool;
+use Cache\Adapter\Void\VoidCachePool;
 use Cache\Hierarchy\HierarchicalPoolInterface;
 use Cache\Namespaced\NamespacedCachePool;
 use Cache\SessionHandler\Psr6SessionHandler;
@@ -24,10 +22,7 @@ use Memcached;
 use MongoDB\Driver\Manager as MongoDBManager;
 use Predis\Client as PredisClient;
 use Redis;
-use Viserio\{
-    Filesystem\FilesystemManager,
-    Support\AbstractManager
-};
+use Viserio\Support\AbstractManager;
 
 class CacheManager extends AbstractManager
 {

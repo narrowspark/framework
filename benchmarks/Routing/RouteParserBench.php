@@ -6,5 +6,4 @@ use Benchmark;
 
 class RouteParserBench implements Benchmark
 {
-
 }

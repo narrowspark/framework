@@ -2,23 +2,19 @@
 declare(strict_types=1);
 namespace Viserio\Bus\Tests;
 
-use Narrowspark\TestingHelper\Traits\MockeryTrait;
-use Narrowspark\TestingHelper\ArrayContainer;
 use Mockery as Mock;
+use Narrowspark\TestingHelper\ArrayContainer;
+use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use stdClass;
 use Viserio\Bus\QueueingDispatcher;
-use Viserio\Bus\Tests\Fixture\{
-    BusDispatcherBasicCommand,
-    BusDispatcherQueuedHandler,
-    BusDispatcherCustomQueueCommand,
-    BusDispatcherSpecificQueueCommand,
-    BusDispatcherSpecificDelayCommand,
-    BusDispatcherSpecificQueueAndDelayCommand
-};
-use Viserio\Contracts\Queue\{
-    QueueConnector as QueueConnectorContract,
-    ShouldQueue as ShouldQueueContract
-};
+use Viserio\Bus\Tests\Fixture\BusDispatcherBasicCommand;
+use Viserio\Bus\Tests\Fixture\BusDispatcherCustomQueueCommand;
+use Viserio\Bus\Tests\Fixture\BusDispatcherQueuedHandler;
+use Viserio\Bus\Tests\Fixture\BusDispatcherSpecificDelayCommand;
+use Viserio\Bus\Tests\Fixture\BusDispatcherSpecificQueueAndDelayCommand;
+use Viserio\Bus\Tests\Fixture\BusDispatcherSpecificQueueCommand;
+use Viserio\Contracts\Queue\QueueConnector as QueueConnectorContract;
+use Viserio\Contracts\Queue\ShouldQueue as ShouldQueueContract;
 
 class QueueingDispatcherTest extends \PHPUnit_Framework_TestCase
 {
@@ -59,7 +55,7 @@ class QueueingDispatcherTest extends \PHPUnit_Framework_TestCase
         });
 
         $dispatcher->mapUsing(function () {
-            return BusDispatcherQueuedHandler::class.'@handle';
+            return BusDispatcherQueuedHandler::class . '@handle';
         });
 
         $dispatcher->dispatch(new BusDispatcherBasicCommand());

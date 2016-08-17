@@ -321,7 +321,6 @@ class Container implements \ArrayAccess, ContainerInteropInterface, ContainerCon
      */
     public function call(callable $callable, array $args = [])
     {
-
     }
 
     /**

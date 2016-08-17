@@ -4,13 +4,11 @@ namespace Viserio\Translation;
 
 use Psr\Log\LoggerInterface;
 use RuntimeException;
-use Viserio\Contracts\Translation\{
-    MessageCatalogue as MessageCatalogueContract,
-    MessageSelector as MessageSelectorContract,
-    PluralizationRules as PluralizationRulesContract,
-    Translator as TranslatorContract
-};
 use Viserio\Contracts\Parsers\Loader as LoaderContract;
+use Viserio\Contracts\Translation\MessageCatalogue as MessageCatalogueContract;
+use Viserio\Contracts\Translation\MessageSelector as MessageSelectorContract;
+use Viserio\Contracts\Translation\PluralizationRules as PluralizationRulesContract;
+use Viserio\Contracts\Translation\Translator as TranslatorContract;
 use Viserio\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 use Viserio\Translation\Traits\ValidateLocaleTrait;
 
@@ -98,7 +96,7 @@ class TranslationManager
         $this->messageSelector = $messageSelector;
     }
 
-     /**
+    /**
      * Set directories
      *
      * @param array $directories
@@ -156,7 +154,7 @@ class TranslationManager
 
         $langFile = $loader->load($file);
 
-        if (!isset($langFile['lang'])) {
+        if (! isset($langFile['lang'])) {
             throw new RuntimeException(sprintf('File [%s] cant be imported.', $file));
         }
 
@@ -246,8 +244,6 @@ class TranslationManager
         if (isset($this->langFallback[$lang])) {
             return $this->langFallback[$lang];
         }
-
-        return;
     }
 
     /**

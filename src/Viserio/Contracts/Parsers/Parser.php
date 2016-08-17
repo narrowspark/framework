@@ -24,7 +24,7 @@ interface Parser
      */
     public function parse(string $payload): array;
 
-     /**
+    /**
      * Get supported parser.
      *
      * @param string $type

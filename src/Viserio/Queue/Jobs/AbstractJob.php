@@ -4,10 +4,8 @@ namespace Viserio\Queue\Jobs;
 
 use DateTime;
 use Narrowspark\Arr\StaticArr as Arr;
-use Viserio\Contracts\{
-    Container\Traits\ContainerAwareTrait,
-    Queue\Job as JobContract
-};
+use Viserio\Contracts\Container\Traits\ContainerAwareTrait;
+use Viserio\Contracts\Queue\Job as JobContract;
 use Viserio\Queue\CallQueuedHandler;
 
 abstract class AbstractJob implements JobContract

@@ -97,8 +97,8 @@ interface Router
     /**
      * Create a route group with shared attributes.
      *
-     * @param  array  $attributes
-     * @param  \Closure  $callback
+     * @param array    $attributes
+     * @param \Closure $callback
      *
      * @return \Viserio\Contracts\Routing\Router
      */

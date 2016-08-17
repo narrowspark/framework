@@ -16,10 +16,10 @@ class RackspaceConnectorTest extends \PHPUnit_Framework_TestCase
 
         try {
             $connector->connect([
-                'endpoint'  => 'https://lon.identity.api.rackspacecloud.com/v2.0/',
-                'region'    => 'LON',
-                'username'  => 'your-username',
-                'apiKey'    => 'your-api-key',
+                'endpoint' => 'https://lon.identity.api.rackspacecloud.com/v2.0/',
+                'region' => 'LON',
+                'username' => 'your-username',
+                'apiKey' => 'your-api-key',
                 'container' => 'your-container',
             ]);
         } catch (CurlException $e) {
@@ -36,9 +36,9 @@ class RackspaceConnectorTest extends \PHPUnit_Framework_TestCase
         $connector = new RackspaceConnector();
 
         $connector->connect([
-            'region'    => 'LON',
-            'username'  => 'your-username',
-            'apiKey'    => 'your-api-key',
+            'region' => 'LON',
+            'username' => 'your-username',
+            'apiKey' => 'your-api-key',
             'container' => 'your-container',
         ]);
     }
@@ -52,9 +52,9 @@ class RackspaceConnectorTest extends \PHPUnit_Framework_TestCase
         $connector = new RackspaceConnector();
 
         $connector->connect([
-            'endpoint'  => 'https://lon.identity.api.rackspacecloud.com/v2.0/',
-            'username'  => 'your-username',
-            'apiKey'    => 'your-api-key',
+            'endpoint' => 'https://lon.identity.api.rackspacecloud.com/v2.0/',
+            'username' => 'your-username',
+            'apiKey' => 'your-api-key',
             'container' => 'your-container',
         ]);
     }
@@ -68,9 +68,9 @@ class RackspaceConnectorTest extends \PHPUnit_Framework_TestCase
         $connector = new RackspaceConnector();
 
         $connector->connect([
-            'endpoint'  => 'https://lon.identity.api.rackspacecloud.com/v2.0/',
-            'region'    => 'LON',
-            'apiKey'    => 'your-api-key',
+            'endpoint' => 'https://lon.identity.api.rackspacecloud.com/v2.0/',
+            'region' => 'LON',
+            'apiKey' => 'your-api-key',
             'container' => 'your-container',
         ]);
     }
@@ -84,9 +84,9 @@ class RackspaceConnectorTest extends \PHPUnit_Framework_TestCase
         $connector = new RackspaceConnector();
 
         $connector->connect([
-            'endpoint'  => 'https://lon.identity.api.rackspacecloud.com/v2.0/',
-            'region'    => 'LON',
-            'username'  => 'your-username',
+            'endpoint' => 'https://lon.identity.api.rackspacecloud.com/v2.0/',
+            'region' => 'LON',
+            'username' => 'your-username',
             'container' => 'your-container',
         ]);
     }
@@ -100,10 +100,10 @@ class RackspaceConnectorTest extends \PHPUnit_Framework_TestCase
         $connector = new RackspaceConnector();
 
         $connector->connect([
-            'endpoint'  => 'https://lon.identity.api.rackspacecloud.com/v2.0/',
-            'region'    => 'LON',
-            'username'  => 'your-username',
-            'apiKey'    => 'your-api-key',
+            'endpoint' => 'https://lon.identity.api.rackspacecloud.com/v2.0/',
+            'region' => 'LON',
+            'username' => 'your-username',
+            'apiKey' => 'your-api-key',
         ]);
     }
 
@@ -116,12 +116,12 @@ class RackspaceConnectorTest extends \PHPUnit_Framework_TestCase
 
         try {
             $connector->connect([
-                'endpoint'  => 'https://lon.identity.api.rackspacecloud.com/v2.0/',
-                'region'    => 'LON',
-                'username'  => 'your-username',
-                'apiKey'    => 'your-api-key',
+                'endpoint' => 'https://lon.identity.api.rackspacecloud.com/v2.0/',
+                'region' => 'LON',
+                'username' => 'your-username',
+                'apiKey' => 'your-api-key',
                 'container' => 'your-container',
-                'internal'  => true,
+                'internal' => true,
             ]);
         } catch (CurlException $e) {
             $this->markTestSkipped('No internet connection');
@@ -137,12 +137,12 @@ class RackspaceConnectorTest extends \PHPUnit_Framework_TestCase
 
         try {
             $connector->connect([
-                'endpoint'  => 'https://lon.identity.api.rackspacecloud.com/v2.0/',
-                'region'    => 'LON',
-                'username'  => 'your-username',
-                'apiKey'    => 'your-api-key',
+                'endpoint' => 'https://lon.identity.api.rackspacecloud.com/v2.0/',
+                'region' => 'LON',
+                'username' => 'your-username',
+                'apiKey' => 'your-api-key',
                 'container' => 'your-container',
-                'internal'  => false,
+                'internal' => false,
             ]);
         } catch (CurlException $e) {
             $this->markTestSkipped('No internet connection');

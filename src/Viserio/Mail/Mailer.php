@@ -8,13 +8,11 @@ use Narrowspark\Arr\StaticArr as Arr;
 use Swift_Mailer;
 use Swift_Message;
 use Swift_Mime_Message;
-use Viserio\Contracts\{
-    Events\Traits\EventsAwareTrait,
-    Mail\Mailer as MailerContract,
-    Mail\Message as MessageContract,
-    View\Factory as ViewFactoryContract,
-    View\Traits\ViewAwareTrait
-};
+use Viserio\Contracts\Events\Traits\EventsAwareTrait;
+use Viserio\Contracts\Mail\Mailer as MailerContract;
+use Viserio\Contracts\Mail\Message as MessageContract;
+use Viserio\Contracts\View\Factory as ViewFactoryContract;
+use Viserio\Contracts\View\Traits\ViewAwareTrait;
 
 class Mailer implements MailerContract
 {
@@ -192,8 +190,6 @@ class Mailer implements MailerContract
      * @param string|null           $plain
      * @param string|null           $raw
      * @param array                 $data
-     *
-     * @return void
      */
     protected function addContent(MessageContract $message, $view, $plain, $raw, array $data)
     {

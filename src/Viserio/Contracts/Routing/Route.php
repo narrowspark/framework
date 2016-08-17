@@ -103,7 +103,7 @@ interface Route
      */
     public function getPrefix(): string;
 
-     /**
+    /**
      * Set a parameter to the given value.
      *
      * @param string $name
@@ -135,9 +135,9 @@ interface Route
     /**
      * Get the key / value list of parameters for the route.
      *
-     * @return array
-     *
      * @throws \LogicException
+     *
+     * @return array
      */
     public function getParameters(): array;
 
@@ -152,8 +152,6 @@ interface Route
      * Unset a parameter on the route if it is set.
      *
      * @param string $name
-     *
-     * @return void
      */
     public function forgetParameter(string $name);
 

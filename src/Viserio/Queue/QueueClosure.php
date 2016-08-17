@@ -2,14 +2,12 @@
 declare(strict_types=1);
 namespace Viserio\Queue;
 
-use Viserio\Contracts\{
-    Encryption\Encrypter as EncrypterContract,
-    Queue\Job as JobContract
-};
+use Viserio\Contracts\Encryption\Encrypter as EncrypterContract;
+use Viserio\Contracts\Queue\Job as JobContract;
 
 class QueueClosure
 {
-     /**
+    /**
      * The encrypter instance.
      *
      * @var \Viserio\Contracts\Encryption\Encrypter
@@ -31,8 +29,6 @@ class QueueClosure
      *
      * @param \Viserio\Contracts\Queue\Job $job
      * @param array                        $data
-     *
-     * @return void
      */
     public function run(JobContract $job, array $data)
     {

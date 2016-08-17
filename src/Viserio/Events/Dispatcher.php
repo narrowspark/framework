@@ -3,15 +3,11 @@ declare(strict_types=1);
 namespace Viserio\Events;
 
 use Interop\Container\ContainerInterface as ContainerContract;
-use Viserio\Contracts\{
-    Container\Traits\ContainerAwareTrait,
-    Events\EventManager as EventManagerContract
-};
+use Viserio\Contracts\Container\Traits\ContainerAwareTrait;
+use Viserio\Contracts\Events\EventManager as EventManagerContract;
 use Viserio\Events\Traits\ValidateNameTrait;
-use Viserio\Support\{
-    Invoker,
-    Str
-};
+use Viserio\Support\Invoker;
+use Viserio\Support\Str;
 
 class Dispatcher implements EventManagerContract
 {

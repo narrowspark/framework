@@ -41,24 +41,25 @@ class Event implements EventContract
     /**
      * Create a new event instance.
      *
-     * @param string             $eventName event name
-     * @param string|object|null $target event context, object or classname
+     * @param string             $eventName  event name
+     * @param string|object|null $target     event context, object or classname
      * @param array              $parameters event parameters
      *
      * @throws InvalidArgumentException if event name is invalid
      */
-    public function __construct(string $eventName, $target = null, array $parameters = []) {
+    public function __construct(string $eventName, $target = null, array $parameters = [])
+    {
         $this->setName($eventName);
         $this->setTarget($target);
         $this->setParams($parameters);
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function setName($name)
     {
-        if (!is_string($name) || empty($name)) {
+        if (! is_string($name) || empty($name)) {
             throw new InvalidArgumentException(sprintf('Event name "%s" is not valid', $name));
         }
 
@@ -66,7 +67,7 @@ class Event implements EventContract
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getName()
     {
@@ -74,7 +75,7 @@ class Event implements EventContract
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function setTarget($target)
     {
@@ -82,7 +83,7 @@ class Event implements EventContract
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getTarget()
     {
@@ -90,7 +91,7 @@ class Event implements EventContract
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function setParams(array $params)
     {
@@ -98,7 +99,7 @@ class Event implements EventContract
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getParams()
     {
@@ -106,7 +107,7 @@ class Event implements EventContract
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getParam($name)
     {
@@ -114,7 +115,7 @@ class Event implements EventContract
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function stopPropagation($flag)
     {
@@ -122,7 +123,7 @@ class Event implements EventContract
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function isPropagationStopped()
     {

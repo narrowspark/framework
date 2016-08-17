@@ -7,7 +7,7 @@ interface EventManager
     /**
      * Attaches a listener to an event
      *
-     * @param string   $event the event to attach too
+     * @param string   $event    the event to attach too
      * @param callable $callback a callable function
      * @param int      $priority the priority at which the $callback executed
      *
@@ -18,7 +18,7 @@ interface EventManager
     /**
      * Detaches a listener from an event
      *
-     * @param string   $event the event to attach too
+     * @param string   $event    the event to attach too
      * @param callable $callback a callable function
      *
      * @return bool true on success false on failure
@@ -29,8 +29,6 @@ interface EventManager
      * Clear all listeners for a given event
      *
      * @param string $event
-     *
-     * @return void
      */
     public function clearListeners($event);
 
@@ -45,5 +43,5 @@ interface EventManager
      *
      * @return mixed
      */
-    public function trigger($event, $target = null, $argv = array());
+    public function trigger($event, $target = null, $argv = []);
 }

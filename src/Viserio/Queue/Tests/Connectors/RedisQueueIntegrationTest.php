@@ -6,11 +6,8 @@ use Interop\Container\ContainerInterface;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use Predis\Client;
 use Viserio\Contracts\Encryption\Encrypter as EncrypterContract;
-use Viserio\Queue\{
-    Connectors\RedisQueue,
-    Jobs\RedisJob,
-    Tests\Fixture\RedisQueueIntegrationJob
-};
+use Viserio\Queue\Connectors\RedisQueue;
+use Viserio\Queue\Tests\Fixture\RedisQueueIntegrationJob;
 
 class RedisQueueIntegrationTest extends \PHPUnit_Framework_TestCase
 {
@@ -38,7 +35,7 @@ class RedisQueueIntegrationTest extends \PHPUnit_Framework_TestCase
                     'host' => '127.0.0.1',
                     'port' => 6379,
                     'database' => 5,
-                ]
+                ],
             ],
         ]);
         $this->redis->flushdb();

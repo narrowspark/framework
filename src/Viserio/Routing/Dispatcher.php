@@ -21,7 +21,7 @@ class Dispatcher implements DispatcherContract
      */
     public function __construct(RouteCollection $routes)
     {
-        $this->routes = new RouteCollection;
+        $this->routes = new RouteCollection();
     }
 
     /**
@@ -57,7 +57,6 @@ class Dispatcher implements DispatcherContract
      */
     public function dispatch(string $httpMethod, string $uri): array
     {
-
     }
 
     protected function generate()

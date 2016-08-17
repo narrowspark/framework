@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Contracts\Mail;
 
-use Viserio\Contracts\Queue\Queue as QueueContract;
 use Viserio\Contracts\Queue\Job as JobContract;
+use Viserio\Contracts\Queue\Queue as QueueContract;
 
 interface QueueMailer extends Mailer
 {
@@ -16,7 +16,7 @@ interface QueueMailer extends Mailer
      */
     public function setQueue(QueueContract $queue): QueueMailer;
 
-     /**
+    /**
      * Get the queue manager instance.
      *
      * @return \Viserio\Contracts\Queue\Queue

@@ -28,7 +28,8 @@ interface Event
     /**
      * Get a single parameter by name
      *
-     * @param  string $name
+     * @param string $name
+     *
      * @return mixed
      */
     public function getParam($name);
@@ -36,31 +37,28 @@ interface Event
     /**
      * Set the event name
      *
-     * @param  string $name
-     * @return void
+     * @param string $name
      */
     public function setName($name);
 
     /**
      * Set the event target
      *
-     * @param  null|string|object $target
-     * @return void
+     * @param null|string|object $target
      */
     public function setTarget($target);
 
     /**
      * Set event parameters
      *
-     * @param  array $params
-     * @return void
+     * @param array $params
      */
     public function setParams(array $params);
 
     /**
      * Indicate whether or not to stop propagating this event
      *
-     * @param  bool $flag
+     * @param bool $flag
      */
     public function stopPropagation($flag);
 

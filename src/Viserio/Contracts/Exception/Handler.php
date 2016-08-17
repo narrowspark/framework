@@ -74,13 +74,11 @@ interface Handler
 
     /**
      * Register the exception / Error handlers for the application.
-     * @return void
      */
     public function register();
 
     /**
      * Unregister the PHP error handler.
-     * @return void
      */
     public function unregister();
 
@@ -98,7 +96,6 @@ interface Handler
      * @param null   $context
      *
      * @throws \ErrorException
-     * @return void
      */
     public function handleError(
         int $level,
@@ -116,13 +113,13 @@ interface Handler
      * be handled differently since they are not normal exceptions.
      *
      * @param \Throwable $exception
+     *
      * @return null|string
      */
     public function handleException(Throwable $exception);
 
     /**
      * Handle the PHP shutdown event.
-     * @return void
      */
     public function handleShutdown();
 }

@@ -6,15 +6,11 @@ use Closure;
 use DateTimeInterface;
 use Exception;
 use SuperClosure\Serializer;
-use Viserio\Contracts\{
-    Encryption\Encrypter as EncrypterContract,
-    Queue\QueueConnector as QueueConnectorContract
-};
-use Viserio\Queue\{
-    CallQueuedHandler,
-    QueueClosure
-};
 use Viserio\Contracts\Container\Traits\ContainerAwareTrait;
+use Viserio\Contracts\Encryption\Encrypter as EncrypterContract;
+use Viserio\Contracts\Queue\QueueConnector as QueueConnectorContract;
+use Viserio\Queue\CallQueuedHandler;
+use Viserio\Queue\QueueClosure;
 
 abstract class AbstractQueue implements QueueConnectorContract
 {
@@ -78,8 +74,6 @@ abstract class AbstractQueue implements QueueConnectorContract
      * Set the encrypter implementation.
      *
      * @param \Viserio\Contracts\Encryption\Encrypter $encrypter
-     *
-     * @return void
      */
     public function setEncrypter(EncrypterContract $encrypter)
     {
@@ -136,7 +130,7 @@ abstract class AbstractQueue implements QueueConnectorContract
                 'job' => sprintf('%s@call', CallQueuedHandler::class),
                 'data' => [
                     'commandName' => $encrypter->encrypt(get_class($job)),
-                    'command' => $encrypter->encrypt(serialize(clone $job))
+                    'command' => $encrypter->encrypt(serialize(clone $job)),
                 ],
             ]);
         }
@@ -168,7 +162,7 @@ abstract class AbstractQueue implements QueueConnectorContract
     protected function createClosurePayload(Closure $job, $data): array
     {
         $closure = $this->getEncrypter()->encrypt(
-            (new Serializer)->serialize($job)
+            (new Serializer())->serialize($job)
         );
 
         return ['job' => QueueClosure::class, 'data' => compact('closure')];
@@ -177,9 +171,9 @@ abstract class AbstractQueue implements QueueConnectorContract
     /**
      * Get the encrypter implementation.
      *
-     * @return \Viserio\Contracts\Encryption\Encrypter
-     *
      * @throws \Exception
+     *
+     * @return \Viserio\Contracts\Encryption\Encrypter
      */
     protected function getEncrypter(): EncrypterContract
     {
