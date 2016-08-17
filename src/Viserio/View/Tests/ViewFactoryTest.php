@@ -7,7 +7,7 @@ use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use Viserio\Contracts\View\Engine;
 use Viserio\Contracts\View\Finder;
 use Viserio\Contracts\View\View as ViewContract;
-use Viserio\Events\Dispatcher as EventDispatcher;
+use Viserio\Events\EventManager as EventManager;
 use Viserio\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 use Viserio\View\Engines\Adapter\Php;
 use Viserio\View\Engines\EngineResolver;
@@ -388,7 +388,7 @@ class ViewFactoryTest extends \PHPUnit_Framework_TestCase
         return new Factory(
             $this->mock(EngineResolver::class),
             $this->mock(Finder::class),
-            new EventDispatcher($this->mock(ContainerInterface::class))
+            new EventManager($this->mock(ContainerInterface::class))
         );
     }
 
@@ -397,7 +397,7 @@ class ViewFactoryTest extends \PHPUnit_Framework_TestCase
         return [
             $this->mock(EngineResolver::class),
             $this->mock(Finder::class),
-            new EventDispatcher($this->mock(ContainerInterface::class)),
+            new EventManager($this->mock(ContainerInterface::class)),
         ];
     }
 
