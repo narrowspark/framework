@@ -1,0 +1,46 @@
+{
+    "name"       : "viserio/link",
+    "type"       : "library",
+    "description": "The Viserio Link package.",
+    "keywords"   : ["narrowspark", "viserio", "link", "psr-13"],
+    "license"    : "MIT",
+    "homepage"   : "http://github.com/narrowspark/framework",
+    "support"    : {
+        "issues": "https://github.com/narrowspark/framework/issues",
+        "source": "https://github.com/narrowspark/framework"
+    },
+    "authors"    : [
+        {
+          "name"    : "Daniel Bannert",
+          "email"   : "d.bannert@anolilab.de",
+          "homepage": "http://www.anolilab.de",
+          "role"    : "Developer"
+        }
+    ],
+    "require": {
+        "php"                         : "7.0.0 - 7.0.5 || ^7.0.7",
+        "psr/link"                    : "^1.0@dev"
+    },
+    "require-dev": {
+        "narrowspark/testing-helper" : "^1.5",
+        "phpunit/phpunit"            : "^5.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "Viserio\\Link\\"        : ""
+        },
+        "exclude-from-classmap"      : ["/Tests/"]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Viserio\\Link\\Tests\\" : "Tests/"
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master"             : "1.0-dev"
+        }
+    },
+    "minimum-stability"              : "dev",
+    "prefer-stable"                  : true
+}
