@@ -3,10 +3,8 @@ declare(strict_types=1);
 namespace Viserio\Translation;
 
 use InvalidArgumentException;
-use Viserio\Contracts\Translation\{
-    MessageSelector as MessageSelectorContract,
-    PluralizationRules as PluralizationRulesContract
-};
+use Viserio\Contracts\Translation\MessageSelector as MessageSelectorContract;
+use Viserio\Contracts\Translation\PluralizationRules as PluralizationRulesContract;
 use Viserio\Translation\Traits\IntervalTrait;
 
 class MessageSelector implements MessageSelectorContract
@@ -49,7 +47,7 @@ class MessageSelector implements MessageSelectorContract
         $standardRules = $this->getStandardRules($parts);
 
         // try to match an explicit rule, then fallback to the standard ones
-        if (!empty($explicitRules)) {
+        if (! empty($explicitRules)) {
             foreach ($explicitRules as $interval => $string) {
                 if ($this->intervalTest($number, $interval)) {
                     return $string;

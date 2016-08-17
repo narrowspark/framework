@@ -41,7 +41,7 @@ interface Mailer
      */
     public function plain(string $view, array $data, $callback): int;
 
-   /**
+    /**
      * Send a new message using a view.
      *
      * @param string|array         $view

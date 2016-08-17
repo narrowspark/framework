@@ -8,14 +8,12 @@ use Narrowspark\Arr\StaticArr as Arr;
 use Psr\Log\LoggerInterface;
 use Swift_MailTransport as MailTransport;
 use Swift_SmtpTransport as SmtpTransport;
+use Viserio\Mail\Transport\Log as LogTransport;
+use Viserio\Mail\Transport\Mailgun as MailgunTransport;
+use Viserio\Mail\Transport\Mandrill as MandrillTransport;
+use Viserio\Mail\Transport\Ses as SesTransport;
+use Viserio\Mail\Transport\SparkPost as SparkPostTransport;
 use Viserio\Support\AbstractManager;
-use Viserio\Mail\Transport\{
-    Log as LogTransport,
-    Ses as SesTransport,
-    Mailgun as MailgunTransport,
-    Mandrill as MandrillTransport,
-    SparkPost as SparkPostTransport
-};
 
 class TransportManager extends AbstractManager
 {
@@ -133,7 +131,6 @@ class TransportManager extends AbstractManager
             Arr::get($config, 'options', [])
         );
     }
-
 
     /**
      * Create an instance of the Amazon SES Swift Transport driver.

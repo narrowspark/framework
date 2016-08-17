@@ -56,15 +56,15 @@ class ListenerPattern
      */
     private $wildcardsSeparators = [
         // Trailing single-wildcard with separator prefix
-        '/\\\\\.\\\\\*$/'     => '(?:\.\w+)?',
+        '/\\\\\.\\\\\*$/' => '(?:\.\w+)?',
         // Single-wildcard with separator prefix
-        '/\\\\\.\\\\\*/'      => '(?:\.\w+)',
+        '/\\\\\.\\\\\*/' => '(?:\.\w+)',
         // Single-wildcard without separator prefix
         '/(?<!\\\\\.)\\\\\*/' => '(?:\w+)',
         // Multi-wildcard with separator prefix
-        '/\\\\\.#/'           => '(?:\.\w+)*',
+        '/\\\\\.#/' => '(?:\.\w+)*',
         // Multi-wildcard without separator prefix
-        '/(?<!\\\\\.)#/'      => '(?:|\w+(?:\.\w+)*)',
+        '/(?<!\\\\\.)#/' => '(?:|\w+(?:\.\w+)*)',
     ];
 
     /**

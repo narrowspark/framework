@@ -2,15 +2,11 @@
 declare(strict_types=1);
 namespace Viserio\Http\Tests;
 
-use Psr\Http\Message\{
-    ResponseInterface,
-    StreamInterface
-};
-use Viserio\Http\{
-    Response,
-    Util
-};
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\StreamInterface;
+use Viserio\Http\Response;
 use Viserio\Http\Stream\FnStream;
+use Viserio\Http\Util;
 
 class ResponseTest extends AbstractMessageTest
 {

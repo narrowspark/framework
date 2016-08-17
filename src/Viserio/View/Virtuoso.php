@@ -5,16 +5,12 @@ namespace Viserio\View;
 use Closure;
 use Interop\Container\ContainerInterface;
 use InvalidArgumentException;
-use Viserio\Contracts\{
-    Container\Traits\ContainerAwareTrait,
-    Events\Dispatcher as DispatcherContract,
-    View\View as ViewContract,
-    View\Virtuoso as VirtuosoContract
-};
-use Viserio\Support\{
-    Invoker,
-    Str
-};
+use Viserio\Contracts\Container\Traits\ContainerAwareTrait;
+use Viserio\Contracts\Events\Dispatcher as DispatcherContract;
+use Viserio\Contracts\View\View as ViewContract;
+use Viserio\Contracts\View\Virtuoso as VirtuosoContract;
+use Viserio\Support\Invoker;
+use Viserio\Support\Str;
 use Viserio\View\Traits\NormalizeNameTrait;
 
 class Virtuoso implements VirtuosoContract

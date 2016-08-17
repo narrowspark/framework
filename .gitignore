@@ -1,3 +1,7 @@
+# Your tools may add their own folders and files to the project.
+# Ignoring those within your global gitignore will make it so
+# they will never get commited within any project you have.
+
 .DS_Store
 .php_cs.cache
 

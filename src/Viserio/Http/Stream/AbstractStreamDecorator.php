@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Http\Stream;
 
-use Throwable;
 use Psr\Http\Message\StreamInterface;
+use Throwable;
 use Viserio\Http\Util;
 
 abstract class AbstractStreamDecorator implements StreamInterface

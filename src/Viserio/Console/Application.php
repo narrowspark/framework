@@ -6,22 +6,16 @@ use Closure;
 use Interop\Container\ContainerInterface as ContainerContract;
 use Invoker\Exception\InvocationException;
 use RuntimeException;
-use Symfony\Component\Console\{
-    Application as SymfonyConsole,
-    Command\Command as SymfonyCommand,
-    Input\InputDefinition,
-    Input\InputInterface,
-    Output\OutputInterface
-};
-use Viserio\Console\{
-    Command\Command as ViserioCommand,
-    Command\ExpressionParser as Parser,
-    Input\InputOption
-};
-use Viserio\Contracts\{
-    Console\Application as ApplicationContract,
-    Container\Traits\ContainerAwareTrait
-};
+use Symfony\Component\Console\Application as SymfonyConsole;
+use Symfony\Component\Console\Command\Command as SymfonyCommand;
+use Symfony\Component\Console\Input\InputDefinition;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
+use Viserio\Console\Command\Command as ViserioCommand;
+use Viserio\Console\Command\ExpressionParser as Parser;
+use Viserio\Console\Input\InputOption;
+use Viserio\Contracts\Console\Application as ApplicationContract;
+use Viserio\Contracts\Container\Traits\ContainerAwareTrait;
 use Viserio\Support\Invoker;
 
 class Application extends SymfonyConsole implements ApplicationContract
@@ -111,7 +105,7 @@ class Application extends SymfonyConsole implements ApplicationContract
      * @param callable|string|array $callable   Called when the command is called.
      *                                          When using a container, this can be a "pseudo-callable"
      *                                          i.e. the name of the container entry to invoke.
-     * @param array                 $aliases An array of aliases for the command.
+     * @param array                 $aliases    An array of aliases for the command.
      *
      * @return \Symfony\Component\Console\Command\Command
      */

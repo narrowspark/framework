@@ -2,9 +2,9 @@
 declare(strict_types=1);
 namespace Viserio\Contracts\Exception\Exception;
 
+use __PHP_Incomplete_Class;
 use ArrayObject;
 use Throwable;
-use __PHP_Incomplete_Class;
 
 /**
  * @author Fabien Potencier <fabien@symfony.com>

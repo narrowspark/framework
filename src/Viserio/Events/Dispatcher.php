@@ -3,14 +3,10 @@ declare(strict_types=1);
 namespace Viserio\Events;
 
 use Interop\Container\ContainerInterface as ContainerContract;
-use Viserio\Contracts\{
-    Container\Traits\ContainerAwareTrait,
-    Events\Dispatcher as DispatcherContract
-};
-use Viserio\Support\{
-    Invoker,
-    Str
-};
+use Viserio\Contracts\Container\Traits\ContainerAwareTrait;
+use Viserio\Contracts\Events\Dispatcher as DispatcherContract;
+use Viserio\Support\Invoker;
+use Viserio\Support\Str;
 
 class Dispatcher implements DispatcherContract
 {

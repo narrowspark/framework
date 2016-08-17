@@ -5,11 +5,9 @@ namespace Viserio\Routing;
 use LogicException;
 use Narrowspark\Arr\StaticArr as Arr;
 use UnexpectedValueException;
-use Viserio\Contracts\{
-    Container\Traits\ContainerAwareTrait,
-    Routing\Route as RouteContract,
-    Routing\Router as RouterContract
-};
+use Viserio\Contracts\Container\Traits\ContainerAwareTrait;
+use Viserio\Contracts\Routing\Route as RouteContract;
+use Viserio\Contracts\Routing\Router as RouterContract;
 use Viserio\Routing\Matchers\ParameterMatcher;
 use Viserio\Support\Invoker;
 
@@ -66,7 +64,7 @@ class Route implements RouteContract
      */
     protected $invoker;
 
-     /**
+    /**
      * Create a new Route instance.
      *
      * @param array|string        $methods
@@ -77,7 +75,7 @@ class Route implements RouteContract
     {
         $this->uri = $uri;
         // According to RFC methods are defined in uppercase (See RFC 7231)
-        $this->httpMethods = array_map('strtoupper',(array) $methods);
+        $this->httpMethods = array_map('strtoupper', (array) $methods);
         $this->action = $this->parseAction($action);
 
         if (in_array('GET', $this->httpMethods) && ! in_array('HEAD', $this->httpMethods)) {
@@ -87,6 +85,18 @@ class Route implements RouteContract
         if (isset($this->action['prefix'])) {
             $this->addPrefix($this->action['prefix']);
         }
+    }
+
+    /**
+     * Dynamically access route parameters.
+     *
+     * @param string $key
+     *
+     * @return mixed
+     */
+    public function __get($key)
+    {
+        return $this->getParameter($key);
     }
 
     /**
@@ -123,7 +133,7 @@ class Route implements RouteContract
         return $this->action['as'] ?? null;
     }
 
-     /**
+    /**
      * {@inheritdoc}
      */
     public function setName(string $name): RouteContract
@@ -188,7 +198,7 @@ class Route implements RouteContract
      */
     public function addPrefix(string $prefix): RouteContract
     {
-        $uri = rtrim($prefix, '/').'/'.ltrim($this->uri, '/');
+        $uri = rtrim($prefix, '/') . '/' . ltrim($this->uri, '/');
 
         $this->uri = trim($uri, '/');
 
@@ -266,7 +276,7 @@ class Route implements RouteContract
     {
         $this->getParameters();
 
-        foreach($this->parameters as $parameter) {
+        foreach ($this->parameters as $parameter) {
             if ($parameter instanceof ParameterMatcher) {
                 return false;
             }
@@ -299,18 +309,6 @@ class Route implements RouteContract
     }
 
     /**
-     * Dynamically access route parameters.
-     *
-     * @param string $key
-     *
-     * @return mixed
-     */
-    public function __get($key)
-    {
-        return $this->getParameter($key);
-    }
-
-    /**
      * Set configured invoker.
      *
      * @return \Viserio\Support\Invoker
@@ -332,9 +330,9 @@ class Route implements RouteContract
      *
      * @param callable|array|null $action
      *
-     * @return array
-     *
      * @throws \UnexpectedValueException
+     *
+     * @return array
      */
     protected function parseAction($action): array
     {
@@ -369,7 +367,7 @@ class Route implements RouteContract
                 ));
             }
 
-            $action['uses'] = $action.'::__invoke';
+            $action['uses'] = $action . '::__invoke';
         }
 
         return $action;

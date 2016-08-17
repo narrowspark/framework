@@ -2,11 +2,9 @@
 declare(strict_types=1);
 namespace Viserio\Http\Tests;
 
-use Viserio\Http\{
-    ServerRequestFactory,
-    Uri,
-    UploadedFile
-};
+use Viserio\Http\ServerRequestFactory;
+use Viserio\Http\UploadedFile;
+use Viserio\Http\Uri;
 
 class ServerRequestFactoryTest extends \PHPUnit_Framework_TestCase
 {

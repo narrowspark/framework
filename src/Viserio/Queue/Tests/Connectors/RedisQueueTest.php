@@ -6,10 +6,7 @@ use Cake\Chronos\Chronos;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use Predis\Client;
 use Viserio\Contracts\Encryption\Encrypter as EncrypterContract;
-use Viserio\Queue\{
-    Jobs\RedisJob,
-    Connectors\RedisQueue
-};
+use Viserio\Queue\Connectors\RedisQueue;
 
 class RedisQueueTest extends \PHPUnit_Framework_TestCase
 {

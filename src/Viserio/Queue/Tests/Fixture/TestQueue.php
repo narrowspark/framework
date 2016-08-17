@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Queue\Tests\Fixture;
 
-use Viserio\Contracts\Encryption\Encrypter as EncrypterContract;
 use Viserio\Contracts\Container\Traits\ContainerAwareTrait;
+use Viserio\Contracts\Encryption\Encrypter as EncrypterContract;
 
 class TestQueue
 {

@@ -7,10 +7,8 @@ use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use Pheanstalk\Job;
 use Pheanstalk\Pheanstalk;
 use Viserio\Contracts\Encryption\Encrypter as EncrypterContract;
-use Viserio\Queue\{
-    Jobs\BeanstalkdJob,
-    Connectors\BeanstalkdQueue
-};
+use Viserio\Queue\Connectors\BeanstalkdQueue;
+use Viserio\Queue\Jobs\BeanstalkdJob;
 
 class BeanstalkdQueueTest extends \PHPUnit_Framework_TestCase
 {

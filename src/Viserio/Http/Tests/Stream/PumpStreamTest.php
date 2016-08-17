@@ -3,10 +3,8 @@ declare(strict_types=1);
 namespace Viserio\Http\Tests\Stream;
 
 use RuntimeException;
-use Viserio\Http\Stream\{
-    LimitStream,
-    PumpStream
-};
+use Viserio\Http\Stream\LimitStream;
+use Viserio\Http\Stream\PumpStream;
 use Viserio\Http\Util;
 
 class PumpStreamTest extends \PHPUnit_Framework_TestCase
@@ -16,7 +14,7 @@ class PumpStreamTest extends \PHPUnit_Framework_TestCase
         $p = new PumpStream(function () {
         }, [
             'metadata' => ['foo' => 'bar'],
-            'size'     => 100,
+            'size' => 100,
         ]);
 
         $this->assertEquals('bar', $p->getMetadata('foo'));

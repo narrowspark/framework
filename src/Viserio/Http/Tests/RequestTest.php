@@ -2,18 +2,14 @@
 declare(strict_types=1);
 namespace Viserio\Http\Tests;
 
-use Psr\Http\Message\{
-    RequestInterface,
-    StreamInterface,
-    UriInterface
-};
-use Viserio\Http\{
-    Request,
-    Util,
-    Uri
-};
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
+use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\StreamInterface;
+use Psr\Http\Message\UriInterface;
+use Viserio\Http\Request;
 use Viserio\Http\Stream\FnStream;
+use Viserio\Http\Uri;
+use Viserio\Http\Util;
 
 class RequestTest extends AbstractMessageTest
 {
@@ -185,7 +181,7 @@ class RequestTest extends AbstractMessageTest
         $emptyHostHeaderMockUri->shouldReceive('getHost')->andReturn('');
         $emptyHostHeader = new Request($emptyHostHeaderMockUri);
 
-        $defaultRequestHostHeader =(new Request($this->mock(UriInterface::class)))->withHeader('Host', 'foo.com');
+        $defaultRequestHostHeader = (new Request($this->mock(UriInterface::class)))->withHeader('Host', 'foo.com');
 
         $emptyUriHost = $this->mock(UriInterface::class);
         $defaultUriHost = $this->mock(UriInterface::class);
@@ -400,7 +396,7 @@ class RequestTest extends AbstractMessageTest
         $r = new Request('http://foo.com/baz?bar=bam', 'GET', ['Foo' => 'Bar']);
         $this->assertEquals([
             'Host' => ['foo.com'],
-            'Foo'  => ['Bar'],
+            'Foo' => ['Bar'],
         ], $r->getHeaders());
     }
 

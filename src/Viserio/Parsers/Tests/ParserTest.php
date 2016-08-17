@@ -3,19 +3,17 @@ declare(strict_types=1);
 namespace Viserio\Parsers\Tests;
 
 use Viserio\Filesystem\Filesystem;
+use Viserio\Parsers\Formats\BSON;
+use Viserio\Parsers\Formats\INI;
+use Viserio\Parsers\Formats\JSON;
+use Viserio\Parsers\Formats\MSGPack;
+use Viserio\Parsers\Formats\PHP;
+use Viserio\Parsers\Formats\QueryStr;
+use Viserio\Parsers\Formats\Serialize;
+use Viserio\Parsers\Formats\TOML;
+use Viserio\Parsers\Formats\XML;
+use Viserio\Parsers\Formats\YAML;
 use Viserio\Parsers\Parser;
-use Viserio\Parsers\Formats\{
-    BSON,
-    INI,
-    JSON,
-    MSGPack,
-    PHP,
-    QueryStr,
-    Serialize,
-    TOML,
-    XML,
-    YAML
-};
 
 class ParserTest extends \PHPUnit_Framework_TestCase
 {

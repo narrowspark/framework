@@ -3,11 +3,9 @@ declare(strict_types=1);
 namespace Viserio\Http\Tests;
 
 use Exception;
-use Viserio\Http\{
-    Util,
-    Stream
-};
+use Viserio\Http\Stream;
 use Viserio\Http\Stream\NoSeekStream;
+use Viserio\Http\Util;
 
 class StreamTest extends \PHPUnit_Framework_TestCase
 {

@@ -4,12 +4,8 @@ namespace Viserio\Connect\Tests;
 
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use Predis\Client;
+use Viserio\Connect\ConnectManager;
 use Viserio\Contracts\Config\Manager as ConfigContract;
-use Viserio\Connect\{
-    ConnectManager,
-    Adapters\MemcachedConnector,
-    Adapters\PredisConnector
-};
 
 class ConnectManagerTest extends \PHPUnit_Framework_TestCase
 {

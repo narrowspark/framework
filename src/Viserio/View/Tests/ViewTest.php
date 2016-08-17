@@ -3,15 +3,11 @@ declare(strict_types=1);
 namespace Viserio\View\Tests;
 
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
-use Viserio\Contracts\{
-    Support\Arrayable,
-    Support\Renderable,
-    View\Engine
-};
-use Viserio\View\{
-    Factory,
-    View
-};
+use Viserio\Contracts\Support\Arrayable;
+use Viserio\Contracts\Support\Renderable;
+use Viserio\Contracts\View\Engine;
+use Viserio\View\Factory;
+use Viserio\View\View;
 
 class ViewTest extends \PHPUnit_Framework_TestCase
 {

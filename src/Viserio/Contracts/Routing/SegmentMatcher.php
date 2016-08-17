@@ -23,13 +23,11 @@ interface SegmentMatcher
      */
     public function getMatchedParameterExpressions(string $segmentVariable, string $uniqueKey = null): array;
 
-     /**
-      * Merge parameters keys from same matcher.
-      *
-      * @param \Viserio\Contracts\Routing\SegmentMatcher $matcher
-      *
-      * @return void
-      */
+    /**
+     * Merge parameters keys from same matcher.
+     *
+     * @param \Viserio\Contracts\Routing\SegmentMatcher $matcher
+     */
     public function mergeParameterKeys(SegmentMatcher $matcher);
 
     /**

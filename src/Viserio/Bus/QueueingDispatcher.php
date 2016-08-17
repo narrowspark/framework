@@ -6,11 +6,9 @@ use Closure;
 use Interop\Container\ContainerInterface;
 use ReflectionClass;
 use RuntimeException;
-use Viserio\Contracts\Queue\{
-    QueueConnector as QueueContract,
-    ShouldQueue as ShouldQueueContract
-};
 use Viserio\Contracts\Bus\QueueingDispatcher as QueueingDispatcherContract;
+use Viserio\Contracts\Queue\QueueConnector as QueueContract;
+use Viserio\Contracts\Queue\ShouldQueue as ShouldQueueContract;
 
 class QueueingDispatcher extends Dispatcher implements QueueingDispatcherContract
 {

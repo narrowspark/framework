@@ -69,11 +69,10 @@ class SqlServerConnectorTest extends \PHPUnit_Framework_TestCase
             $charset = isset($config['charset']) ? ';charset=' . $config['charset'] : '';
 
             return "dblib:host={$host}{$port};dbname={$database}{$appname}{$charset}";
-        } else {
-            $port = isset($config['port']) ? ',' . $port : '';
-            $appname = isset($config['appname']) ? ';APP=' . $config['appname'] : '';
-
-            return "sqlsrv:Server={$host}{$port};Database={$database}{$appname}";
         }
+        $port = isset($config['port']) ? ',' . $port : '';
+        $appname = isset($config['appname']) ? ';APP=' . $config['appname'] : '';
+
+        return "sqlsrv:Server={$host}{$port};Database={$database}{$appname}";
     }
 }

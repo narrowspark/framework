@@ -59,7 +59,7 @@ class ByteCountingStreamTest extends \PHPUnit_Framework_TestCase
      */
     public function testEnsureReadUnclosedStream()
     {
-        $body = Util::getStream("closed");
+        $body = Util::getStream('closed');
         $closedStream = new ByteCountingStream($body, 5);
         $body->close();
         $closedStream->read(3);

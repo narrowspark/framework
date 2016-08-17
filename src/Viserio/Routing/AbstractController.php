@@ -4,5 +4,4 @@ namespace Viserio\Routing;
 
 abstract class AbstractController
 {
-
 }

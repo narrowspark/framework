@@ -27,15 +27,15 @@ class JsonResponseTest extends \PHPUnit_Framework_TestCase
     public function scalarValuesForJSON()
     {
         return [
-            'null'         => [null],
-            'false'        => [false],
-            'true'         => [true],
-            'zero'         => [0],
-            'int'          => [1],
-            'zero-float'   => [0.0],
-            'float'        => [1.1],
+            'null' => [null],
+            'false' => [false],
+            'true' => [true],
+            'zero' => [0],
+            'int' => [1],
+            'zero-float' => [0.0],
+            'float' => [1.1],
             'empty-string' => [''],
-            'string'       => ['string'],
+            'string' => ['string'],
         ];
     }
 
@@ -90,8 +90,8 @@ class JsonResponseTest extends \PHPUnit_Framework_TestCase
     public function valuesToJsonEncode()
     {
         return [
-            'uri'    => ['https://example.com/foo?bar=baz&baz=bat', 'uri'],
-            'html'   => ['<p class="test">content</p>', 'html'],
+            'uri' => ['https://example.com/foo?bar=baz&baz=bat', 'uri'],
+            'html' => ['<p class="test">content</p>', 'html'],
             'string' => ["Don't quote!", 'string'],
         ];
     }

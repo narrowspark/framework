@@ -2,25 +2,21 @@
 declare(strict_types=1);
 namespace Viserio\Parsers;
 
-use Viserio\Contracts\{
-    Parsers\Exception\NotSupportedException,
-    Parsers\Format as FormatContract,
-    Parsers\Parser as ParserContract
-};
-use Viserio\Parsers\Formats\{
-    BSON,
-    Csv,
-    INI,
-    JSON,
-    MSGPack,
-    PHP,
-    Po,
-    QueryStr,
-    Serialize,
-    TOML,
-    XML,
-    YAML
-};
+use Viserio\Contracts\Parsers\Exception\NotSupportedException;
+use Viserio\Contracts\Parsers\Format as FormatContract;
+use Viserio\Contracts\Parsers\Parser as ParserContract;
+use Viserio\Parsers\Formats\BSON;
+use Viserio\Parsers\Formats\Csv;
+use Viserio\Parsers\Formats\INI;
+use Viserio\Parsers\Formats\JSON;
+use Viserio\Parsers\Formats\MSGPack;
+use Viserio\Parsers\Formats\PHP;
+use Viserio\Parsers\Formats\Po;
+use Viserio\Parsers\Formats\QueryStr;
+use Viserio\Parsers\Formats\Serialize;
+use Viserio\Parsers\Formats\TOML;
+use Viserio\Parsers\Formats\XML;
+use Viserio\Parsers\Formats\YAML;
 use Viserio\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
 class Parser implements ParserContract
@@ -32,26 +28,26 @@ class Parser implements ParserContract
      */
     private $supportedFormats = [
         // XML
-        'application/xml'                   => 'xml',
-        'text/xml'                          => 'xml',
+        'application/xml' => 'xml',
+        'text/xml' => 'xml',
         // JSON
-        'application/json'                  => 'json',
-        'application/x-javascript'          => 'json',
-        'text/javascript'                   => 'json',
-        'text/x-javascript'                 => 'json',
-        'text/x-json'                       => 'json',
+        'application/json' => 'json',
+        'application/x-javascript' => 'json',
+        'text/javascript' => 'json',
+        'text/x-javascript' => 'json',
+        'text/x-json' => 'json',
         // BSON
-        'application/bson'                  => 'bson',
+        'application/bson' => 'bson',
         // MSGPACK
-        'application/msgpack'               => 'msgpack',
-        'application/x-msgpack'             => 'msgpack',
+        'application/msgpack' => 'msgpack',
+        'application/x-msgpack' => 'msgpack',
         // YAML
-        'text/yaml'                         => 'yaml',
-        'text/x-yaml'                       => 'yaml',
-        'application/yaml'                  => 'yaml',
-        'application/x-yaml'                => 'yaml',
+        'text/yaml' => 'yaml',
+        'text/x-yaml' => 'yaml',
+        'application/yaml' => 'yaml',
+        'application/x-yaml' => 'yaml',
         // MISC
-        'application/vnd.php.serialized'    => 'serialize',
+        'application/vnd.php.serialized' => 'serialize',
         'application/x-www-form-urlencoded' => 'querystr',
     ];
 

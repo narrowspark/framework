@@ -3,12 +3,10 @@ declare(strict_types=1);
 namespace Viserio\Http;
 
 use InvalidArgumentException;
+use Psr\Http\Message\StreamInterface;
+use Psr\Http\Message\UploadedFileInterface;
 use RuntimeException;
 use Viserio\Http\Stream\LazyOpenStream;
-use Psr\Http\Message\{
-    UploadedFileInterface,
-    StreamInterface
-};
 
 class UploadedFile implements UploadedFileInterface
 {
@@ -289,7 +287,7 @@ class UploadedFile implements UploadedFileInterface
      */
     private function isStringNotEmpty($param): bool
     {
-        return is_string($param) &&  empty($param) === false;
+        return is_string($param) && empty($param) === false;
     }
 
     /**

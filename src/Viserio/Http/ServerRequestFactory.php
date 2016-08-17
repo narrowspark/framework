@@ -2,10 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Http;
 
-use Psr\Http\Message\{
-    UriInterface,
-    ServerRequestInterface
-};
+use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Message\UriInterface;
 use Viserio\Contracts\Http\ServerRequestFactory as ServerRequestFactoryContract;
 use Viserio\Http\Stream\LazyOpenStream;
 

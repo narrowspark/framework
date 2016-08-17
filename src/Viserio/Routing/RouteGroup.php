@@ -46,7 +46,7 @@ class RouteGroup
      */
     public function map($method, $path, $handler)
     {
-        $path  = ($path === '/') ? $this->prefix : $this->prefix . sprintf('/%s', ltrim($path, '/'));
+        $path = ($path === '/') ? $this->prefix : $this->prefix . sprintf('/%s', ltrim($path, '/'));
         $route = $this->collection->map($method, $path, $handler);
         $route->setParentGroup($this);
 

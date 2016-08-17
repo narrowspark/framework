@@ -85,8 +85,8 @@ class PostgreSQLConnector extends AbstractDatabaseConnector
     {
         if (is_array($schema)) {
             return '\'' . implode('\', \'', $schema) . '\'';
-        } else {
-            return '\'' . $schema . '\'';
         }
+
+        return '\'' . $schema . '\'';
     }
 }

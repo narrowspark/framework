@@ -16,8 +16,8 @@ class FtpConnectorTest extends \PHPUnit_Framework_TestCase
         $connector = new FtpConnector();
 
         $return = $connector->connect([
-            'host'     => 'ftp.example.com',
-            'port'     => 21,
+            'host' => 'ftp.example.com',
+            'port' => 21,
             'username' => 'your-username',
             'password' => 'your-password',
         ]);
@@ -45,7 +45,7 @@ class FtpConnectorTest extends \PHPUnit_Framework_TestCase
         $connector = new FtpConnector();
 
         $connector->connect([
-            'host'     => 'ftp.example.com',
+            'host' => 'ftp.example.com',
         ]);
     }
 
@@ -58,8 +58,8 @@ class FtpConnectorTest extends \PHPUnit_Framework_TestCase
         $connector = new FtpConnector();
 
         $connector->connect([
-            'host'     => 'ftp.example.com',
-            'port'     => 21,
+            'host' => 'ftp.example.com',
+            'port' => 21,
         ]);
     }
 
@@ -72,8 +72,8 @@ class FtpConnectorTest extends \PHPUnit_Framework_TestCase
         $connector = new FtpConnector();
 
         $connector->connect([
-            'host'     => 'ftp.example.com',
-            'port'     => 21,
+            'host' => 'ftp.example.com',
+            'port' => 21,
             'username' => 'your-username',
         ]);
     }

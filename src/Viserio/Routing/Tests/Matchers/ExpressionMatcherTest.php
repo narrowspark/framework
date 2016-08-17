@@ -2,10 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Routing\Tests\Matchers;
 
-use Viserio\Routing\Matchers\{
-    ExpressionMatcher,
-    StaticMatcher
-};
+use Viserio\Routing\Matchers\ExpressionMatcher;
+use Viserio\Routing\Matchers\StaticMatcher;
 
 class ExpressionMatcherTest extends \PHPUnit_Framework_TestCase
 {

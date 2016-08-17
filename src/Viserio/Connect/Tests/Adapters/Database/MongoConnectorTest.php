@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Connect\Tests\Adapter\Database;
 
-use StdClass;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
+use StdClass;
 use Viserio\Connect\Adapters\Database\MongoConnector;
 
 class MongoConnectorTest extends \PHPUnit_Framework_TestCase
@@ -25,8 +25,8 @@ class MongoConnectorTest extends \PHPUnit_Framework_TestCase
     {
         $options = [
             'replicaSet' => false,
-            'persist'    => false,
-            'connect'    => false,
+            'persist' => false,
+            'connect' => false,
         ];
 
         $connector = new MongoConnector();
@@ -53,7 +53,7 @@ class MongoConnectorTest extends \PHPUnit_Framework_TestCase
         $dsn = 'mongodb://localhost:27017';
         $config = [
             'server' => 'localhost',
-            'port'   => '27017',
+            'port' => '27017',
             'options' => [
                 'connect' => true,
             ],
@@ -79,8 +79,8 @@ class MongoConnectorTest extends \PHPUnit_Framework_TestCase
     {
         $dsn = 'mongodb://test:test@localhost:27017';
         $config = [
-            'server'   => 'localhost',
-            'port'     => '27017',
+            'server' => 'localhost',
+            'port' => '27017',
             'username' => 'test',
             'password' => 'test',
             'options' => [

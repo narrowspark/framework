@@ -45,9 +45,9 @@ class EnvironmentDetector implements EnvironmentContract
     {
         if ($this->isHHVM()) {
             return HHVM_VERSION;
-        } else {
-            return PHP_VERSION;
         }
+
+        return PHP_VERSION;
     }
 
     /**

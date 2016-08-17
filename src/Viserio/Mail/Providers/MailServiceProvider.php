@@ -183,7 +183,7 @@ class MailServiceProvider extends ServiceProvider
                 'version' => 'latest',
                 'service' => 'email',
                 'credentials' => [
-                    'key'    => $config['key'],
+                    'key' => $config['key'],
                     'secret' => $config['secret'],
                 ],
             ];

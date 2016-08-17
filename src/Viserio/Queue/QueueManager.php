@@ -5,26 +5,19 @@ namespace Viserio\Queue;
 use Aws\Sqs\SqsClient;
 use Interop\Container\ContainerInterface as ContainerInteropInterface;
 use Narrowspark\Arr\StaticArr as Arr;
+use Pheanstalk\Pheanstalk;
+use Pheanstalk\PheanstalkInterface;
 use PhpAmqpLib\Connection\AMQPStreamConnection;
-use Pheanstalk\{
-    Pheanstalk,
-    PheanstalkInterface
-};
-use Viserio\Contracts\{
-    Config\Manager as ConfigContract,
-    Encryption\Encrypter as EncrypterContract,
-    Events\Dispatcher as DispatcherContract,
-    Queue\Monitor as MonitorContract
-};
-use Viserio\Queue\Connectors\{
-    AzureQueue,
-    BeanstalkdQueue,
-    NullQueue,
-    RabbitMQQueue,
-    RedisQueue,
-    SqsQueue,
-    SyncQueue
-};
+use Viserio\Contracts\Config\Manager as ConfigContract;
+use Viserio\Contracts\Encryption\Encrypter as EncrypterContract;
+use Viserio\Contracts\Events\Dispatcher as DispatcherContract;
+use Viserio\Contracts\Queue\Monitor as MonitorContract;
+use Viserio\Queue\Connectors\BeanstalkdQueue;
+use Viserio\Queue\Connectors\NullQueue;
+use Viserio\Queue\Connectors\RabbitMQQueue;
+use Viserio\Queue\Connectors\RedisQueue;
+use Viserio\Queue\Connectors\SqsQueue;
+use Viserio\Queue\Connectors\SyncQueue;
 use Viserio\Support\AbstractConnectionManager;
 
 class QueueManager extends AbstractConnectionManager implements MonitorContract
@@ -88,8 +81,6 @@ class QueueManager extends AbstractConnectionManager implements MonitorContract
      * Register an event listener for the before job event.
      *
      * @param mixed $callback
-     *
-     * @return void
      */
     public function before($callback)
     {
@@ -100,8 +91,6 @@ class QueueManager extends AbstractConnectionManager implements MonitorContract
      * Register an event listener for the after job event.
      *
      * @param mixed $callback
-     *
-     * @return void
      */
     public function after($callback)
     {

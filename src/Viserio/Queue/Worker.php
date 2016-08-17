@@ -4,16 +4,14 @@ namespace Viserio\Queue;
 
 use Exception;
 use Throwable;
-use Viserio\Contracts\{
-    Events\Dispatcher as DispatcherContract,
-    Exception\Handler as ExceptionHandlerContract,
-    Exception\Exception\FatalThrowableError,
-    Queue\Exception\TimeoutException,
-    Queue\FailedJobProvider as FailedJobProviderContract,
-    Queue\Job as JobContract,
-    Queue\Worker as WorkerContract,
-    Queue\QueueConnector as QueueConnectorContract
-};
+use Viserio\Contracts\Events\Dispatcher as DispatcherContract;
+use Viserio\Contracts\Exception\Exception\FatalThrowableError;
+use Viserio\Contracts\Exception\Handler as ExceptionHandlerContract;
+use Viserio\Contracts\Queue\Exception\TimeoutException;
+use Viserio\Contracts\Queue\FailedJobProvider as FailedJobProviderContract;
+use Viserio\Contracts\Queue\Job as JobContract;
+use Viserio\Contracts\Queue\QueueConnector as QueueConnectorContract;
+use Viserio\Contracts\Queue\Worker as WorkerContract;
 
 class Worker implements WorkerContract
 {
@@ -216,8 +214,6 @@ class Worker implements WorkerContract
      * @param int    $timeout
      * @param int    $sleep
      * @param int    $maxTries
-     *
-     * @return void
      */
     protected function runNextJobForDaemon(
         $connectionName,
@@ -261,8 +257,6 @@ class Worker implements WorkerContract
                 return $job;
             }
         }
-
-        return;
     }
 
     /**
@@ -284,12 +278,10 @@ class Worker implements WorkerContract
      *
      * @param int $processId
      * @param int $timeout
-     *
-     * @return void
      */
     protected function waitForChildProcess(int $processId, int $timeout)
     {
-        declare(ticks = 1) {
+        declare(ticks=1) {
             pcntl_signal(SIGALRM, function () use ($processId, $timeout) {
                 posix_kill($processId, SIGKILL);
 
@@ -337,7 +329,7 @@ class Worker implements WorkerContract
                     'connection' => $connection,
                     'job' => $job,
                     'data' => json_decode($job->getRawBody(), true),
-                    'failedId' => $failedId
+                    'failedId' => $failedId,
                 ]
             );
         }
@@ -346,10 +338,8 @@ class Worker implements WorkerContract
     /**
      * Raise the before queue job event.
      *
-     * @param string                        $connection
-     * @param \Viserio\Contracts\Queue\Job  $job
-     *
-     * @return void
+     * @param string                       $connection
+     * @param \Viserio\Contracts\Queue\Job $job
      */
     protected function raiseBeforeJobEvent(string $connection, JobContract $job)
     {
@@ -359,7 +349,7 @@ class Worker implements WorkerContract
                 [
                     'connection' => $connection,
                     'job' => $job,
-                    'data' => json_decode($job->getRawBody(), true)
+                    'data' => json_decode($job->getRawBody(), true),
                 ]
             );
         }
@@ -368,10 +358,8 @@ class Worker implements WorkerContract
     /**
      * Raise the after queue job event.
      *
-     * @param string                        $connection
-     * @param \Viserio\Contracts\Queue\Job  $job
-     *
-     * @return void
+     * @param string                       $connection
+     * @param \Viserio\Contracts\Queue\Job $job
      */
     protected function raiseAfterJobEvent(string $connection, JobContract $job)
     {
@@ -381,7 +369,7 @@ class Worker implements WorkerContract
                 [
                     'connection' => $connection,
                     'job' => $job,
-                    'data' => json_decode($job->getRawBody(), true)
+                    'data' => json_decode($job->getRawBody(), true),
                 ]
             );
         }
@@ -394,8 +382,6 @@ class Worker implements WorkerContract
      * @param \Viserio\Contracts\Queue\Job $job
      * @param int                          $delay
      * @param \Throwable                   $exception
-     *
-     * @return void
      *
      * @throws \Throwable
      */
@@ -412,7 +398,7 @@ class Worker implements WorkerContract
                         'connection' => $connection,
                         'job' => $job,
                         'data' => json_decode($job->getRawBody(), true),
-                        'exception' => $exception
+                        'exception' => $exception,
                     ]
                 );
             }

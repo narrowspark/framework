@@ -7,10 +7,8 @@ use Aws\Sqs\SqsClient;
 use Cake\Chronos\Chronos;
 use Interop\Container\ContainerInterface;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
-use Viserio\Queue\{
-    Connectors\SqsQueue,
-    Jobs\SqsJob
-};
+use Viserio\Queue\Connectors\SqsQueue;
+use Viserio\Queue\Jobs\SqsJob;
 
 class SqsQueueTest extends \PHPUnit_Framework_TestCase
 {
@@ -41,8 +39,8 @@ class SqsQueueTest extends \PHPUnit_Framework_TestCase
         $this->baseUrl = 'https://sqs.someregion.amazonaws.com';
 
         // This is how the modified getQueue builds the queueUrl
-        $this->prefix = $this->baseUrl.'/'.$this->account.'/';
-        $this->queueUrl = $this->prefix.$this->queueName;
+        $this->prefix = $this->baseUrl . '/' . $this->account . '/';
+        $this->queueUrl = $this->prefix . $this->queueName;
 
         $this->mockedJob = 'foo';
         $this->mockedData = ['data'];
@@ -64,8 +62,8 @@ class SqsQueueTest extends \PHPUnit_Framework_TestCase
                     'MD5OfBody' => md5($this->mockedPayload),
                     'ReceiptHandle' => $this->mockedReceiptHandle,
                     'MessageId' => $this->mockedMessageId,
-                ]
-            ]
+                ],
+            ],
         ]);
     }
 
@@ -208,7 +206,7 @@ class SqsQueueTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals($this->queueUrl, $queue->getQueue(null));
 
-        $queueUrl = $this->baseUrl.'/'.$this->account.'/test';
+        $queueUrl = $this->baseUrl . '/' . $this->account . '/test';
 
         $this->assertEquals($queueUrl, $queue->getQueue('test'));
     }
@@ -219,7 +217,7 @@ class SqsQueueTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals($this->queueUrl, $queue->getQueue(null));
 
-        $queueUrl = $this->baseUrl.'/'.$this->account.'/test';
+        $queueUrl = $this->baseUrl . '/' . $this->account . '/test';
 
         $this->assertEquals($queueUrl, $queue->getQueue($queueUrl));
     }

@@ -259,10 +259,10 @@ class UriTest extends \PHPUnit_Framework_TestCase
     {
         return [
             'with userinfo' => ['iGoR', 'rAsMuZeN', 'iGoR:rAsMuZeN'],
-            'no userinfo'   => ['', '', ''],
-            'no pass'       => ['iGoR', '', 'iGoR'],
-            'pass is null'  => ['iGoR', null, 'iGoR'],
-            'upercased'     => ['IgOr', 'RaSm0537', 'IgOr:RaSm0537'],
+            'no userinfo' => ['', '', ''],
+            'no pass' => ['iGoR', '', 'iGoR'],
+            'pass is null' => ['iGoR', null, 'iGoR'],
+            'upercased' => ['IgOr', 'RaSm0537', 'IgOr:RaSm0537'],
         ];
     }
 
@@ -499,7 +499,7 @@ class UriTest extends \PHPUnit_Framework_TestCase
     {
         return [
             'normalized query' => ['foo.bar=%7evalue', 'foo.bar=~value'],
-            'empty query'      => ['', ''],
+            'empty query' => ['', ''],
             'same param query' => ['foo.bar=1&foo.bar=1', 'foo.bar=1&foo.bar=1'],
         ];
     }
@@ -583,26 +583,26 @@ class UriTest extends \PHPUnit_Framework_TestCase
     {
         return [
             'URL normalized' => [
-                'scheme'   => 'HtTps',
-                'user'     => 'iGoR',
-                'pass'     => 'rAsMuZeN',
-                'host'     => 'MaStEr.eXaMpLe.CoM',
-                'port'     => 443,
-                'path'     => '/%7ejohndoe/%a1/index.php',
-                'query'    => 'foo.bar=%7evalue',
+                'scheme' => 'HtTps',
+                'user' => 'iGoR',
+                'pass' => 'rAsMuZeN',
+                'host' => 'MaStEr.eXaMpLe.CoM',
+                'port' => 443,
+                'path' => '/%7ejohndoe/%a1/index.php',
+                'query' => 'foo.bar=%7evalue',
                 'fragment' => 'fragment',
-                'uri'      => 'https://iGoR:rAsMuZeN@master.example.com/~johndoe/%A1/index.php?foo.bar=~value#fragment',
+                'uri' => 'https://iGoR:rAsMuZeN@master.example.com/~johndoe/%A1/index.php?foo.bar=~value#fragment',
             ],
             'URL without scheme' => [
-                'scheme'   => '',
-                'user'     => '',
-                'pass'     => '',
-                'host'     => 'www.example.com',
-                'port'     => 443,
-                'path'     => '/foo/bar',
-                'query'    => 'param=value',
+                'scheme' => '',
+                'user' => '',
+                'pass' => '',
+                'host' => 'www.example.com',
+                'port' => 443,
+                'path' => '/foo/bar',
+                'query' => 'param=value',
                 'fragment' => 'fragment',
-                'uri'      => '//www.example.com:443/foo/bar?param=value#fragment',
+                'uri' => '//www.example.com:443/foo/bar?param=value#fragment',
             ],
         ];
     }
@@ -633,26 +633,26 @@ class UriTest extends \PHPUnit_Framework_TestCase
     {
         return [
             'URL without rootless path' => [
-                'scheme'   => 'http',
-                'user'     => '',
-                'pass'     => '',
-                'host'     => 'www.example.com',
-                'port'     => null,
-                'path'     => 'foo/bar',
-                'query'    => '',
+                'scheme' => 'http',
+                'user' => '',
+                'pass' => '',
+                'host' => 'www.example.com',
+                'port' => null,
+                'path' => 'foo/bar',
+                'query' => '',
                 'fragment' => '',
-                'uri'      => 'http://www.example.com/foo/bar',
+                'uri' => 'http://www.example.com/foo/bar',
             ],
             'URL without authority and scheme' => [
-                'scheme'   => '',
-                'user'     => '',
-                'pass'     => '',
-                'host'     => '',
-                'port'     => null,
-                'path'     => '//foo/bar',
-                'query'    => '',
+                'scheme' => '',
+                'user' => '',
+                'pass' => '',
+                'host' => '',
+                'port' => null,
+                'path' => '//foo/bar',
+                'query' => '',
                 'fragment' => '',
-                'uri'      => '/foo/bar',
+                'uri' => '/foo/bar',
             ],
         ];
     }
@@ -672,9 +672,9 @@ class UriTest extends \PHPUnit_Framework_TestCase
     {
         return [
             'normalized host' => ['MaStEr.eXaMpLe.CoM', 'master.example.com'],
-            'simple host'     => ['www.example.com', 'www.example.com'],
-            'IDN hostname'    => ['مثال.إختبار', 'مثال.إختبار'],
-            'IPv6 Host'       => ['[::1]', '[::1]'],
+            'simple host' => ['www.example.com', 'www.example.com'],
+            'IDN hostname' => ['مثال.إختبار', 'مثال.إختبار'],
+            'IPv6 Host' => ['[::1]', '[::1]'],
         ];
     }
 
@@ -690,23 +690,23 @@ class UriTest extends \PHPUnit_Framework_TestCase
     public function withHostFailedProvider()
     {
         return [
-            'dot in front'                         => ['.example.com'],
-            'hyphen suffix'                        => ['host.com-'],
-            'multiple dot'                         => ['.......'],
-            'one dot'                              => ['.'],
-            'empty label'                          => ['tot.    .coucou.com'],
-            'space in the label'                   => ['re view'],
-            'underscore in label'                  => ['_bad.host.com'],
-            'label too long'                       => [implode('', array_fill(0, 12, 'banana')) . '.secure.example.com'],
-            'too many labels'                      => [implode('.', array_fill(0, 128, 'a'))],
-            'Invalid IPv4 format'                  => ['[127.0.0.1]'],
-            'Invalid IPv6 format'                  => ['[[::1]]'],
-            'Invalid IPv6 format 2'                => ['[::1'],
-            'space character in starting label'    => ['example. com'],
-            'invalid character in host label'      => ["examp\0le.com"],
-            'invalid IP with scope'                => ['[127.2.0.1%253]'],
-            'invalid scope IPv6'                   => ['ab23::1234%251'],
-            'invalid scope ID'                     => ['fe80::1234%25?@'],
+            'dot in front' => ['.example.com'],
+            'hyphen suffix' => ['host.com-'],
+            'multiple dot' => ['.......'],
+            'one dot' => ['.'],
+            'empty label' => ['tot.    .coucou.com'],
+            'space in the label' => ['re view'],
+            'underscore in label' => ['_bad.host.com'],
+            'label too long' => [implode('', array_fill(0, 12, 'banana')) . '.secure.example.com'],
+            'too many labels' => [implode('.', array_fill(0, 128, 'a'))],
+            'Invalid IPv4 format' => ['[127.0.0.1]'],
+            'Invalid IPv6 format' => ['[[::1]]'],
+            'Invalid IPv6 format 2' => ['[::1'],
+            'space character in starting label' => ['example. com'],
+            'invalid character in host label' => ["examp\0le.com"],
+            'invalid IP with scope' => ['[127.2.0.1%253]'],
+            'invalid scope IPv6' => ['ab23::1234%251'],
+            'invalid scope ID' => ['fe80::1234%25?@'],
             'invalid scope ID with utf8 character' => ['fe80::1234%25€'],
         ];
     }

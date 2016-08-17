@@ -34,7 +34,6 @@
     },
     "require-dev": {
         "mikey179/vfsStream"              : "^1.6",
-        "narrowspark/php-cs-fixer-config" : "^1.1",
         "narrowspark/testing-helper"      : "^1.5",
         "phpunit/phpunit"                 : "^5.1",
         "psr/http-message"                : "^1.0",

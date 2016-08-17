@@ -142,9 +142,9 @@ class DatabaseManager
 
         if (! isset($this->connections[$name])) {
             return $this->connection($name);
-        } else {
-            return $this->refreshPdoConnections($name);
         }
+
+        return $this->refreshPdoConnections($name);
     }
 
     /**

@@ -5,11 +5,7 @@ namespace Viserio\Filesystem;
 use InvalidArgumentException;
 use League\Flysystem\AdapterInterface;
 use Narrowspark\Arr\StaticArr as Arr;
-use RuntimeException;
-use Viserio\Contracts\{
-    Config\Manager as ConfigContract,
-    Filesystem\Filesystem as FilesystemContract
-};
+use Viserio\Contracts\Filesystem\Filesystem as FilesystemContract;
 use Viserio\Support\AbstractConnectionManager;
 
 class FilesystemManager extends AbstractConnectionManager

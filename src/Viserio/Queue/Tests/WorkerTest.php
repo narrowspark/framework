@@ -2,21 +2,13 @@
 declare(strict_types=1);
 namespace Viserio\Queue\Tests;
 
-use RuntimeException;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
+use RuntimeException;
 use stdClass;
-use Viserio\Contracts\{
-    Events\Dispatcher as DispatcherContract,
-    Exception\Handler as ExceptionHandlerContract,
-    Exception\Exception\FatalThrowableError,
-    Queue\FailedJobProvider as FailedJobProviderContract,
-    Queue\Job as JobContract,
-    Queue\QueueConnector as QueueConnectorContract
-};
-use Viserio\Queue\{
-    Worker,
-    QueueManager
-};
+use Viserio\Contracts\Queue\FailedJobProvider as FailedJobProviderContract;
+use Viserio\Contracts\Queue\Job as JobContract;
+use Viserio\Queue\QueueManager;
+use Viserio\Queue\Worker;
 
 class WorkerTest extends \PHPUnit_Framework_TestCase
 {

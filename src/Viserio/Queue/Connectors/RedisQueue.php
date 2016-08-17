@@ -2,12 +2,10 @@
 declare(strict_types=1);
 namespace Viserio\Queue\Connectors;
 
-use Predis\Client;
 use Narrowspark\Arr\StaticArr as Arr;
-use Viserio\{
-    Queue\Jobs\RedisJob,
-    Support\Str
-};
+use Predis\Client;
+use Viserio\Queue\Jobs\RedisJob;
+use Viserio\Support\Str;
 
 class RedisQueue extends AbstractQueue
 {
@@ -32,7 +30,8 @@ class RedisQueue extends AbstractQueue
      * @param string         $default
      * @param int            $expire
      */
-    public function __construct(Client $redis, string $default = 'default', int $expire = 90) {
+    public function __construct(Client $redis, string $default = 'default', int $expire = 90)
+    {
         $this->redis = $redis;
         $this->default = $default;
         $this->expire = $expire;
@@ -65,7 +64,7 @@ class RedisQueue extends AbstractQueue
 
         $delay = $this->getSeconds($delay);
 
-        $this->redis->zadd($this->getQueue($queue).':delayed', $this->getTime() + $delay, $payload);
+        $this->redis->zadd($this->getQueue($queue) . ':delayed', $this->getTime() + $delay, $payload);
 
         return Arr::get(json_decode($payload, true), 'id');
     }
@@ -79,10 +78,10 @@ class RedisQueue extends AbstractQueue
 
         $queue = $this->getQueue($queue);
 
-        $this->migrateExpiredJobs($queue.':delayed', $queue);
+        $this->migrateExpiredJobs($queue . ':delayed', $queue);
 
         if (! is_null($this->expire)) {
-            $this->migrateExpiredJobs($queue.':reserved', $queue);
+            $this->migrateExpiredJobs($queue . ':reserved', $queue);
         }
 
         $script = <<<'LUA'
@@ -101,15 +100,13 @@ LUA;
             $script,
             3,
             $queue,
-            $queue.':reserved',
+            $queue . ':reserved',
             $this->getTime() + $this->expire
         );
 
         if ($reserved) {
             return new RedisJob($this->getContainer(), $this, $job, $reserved, $original);
         }
-
-        return;
     }
 
     /**
@@ -117,12 +114,10 @@ LUA;
      *
      * @param string $queue
      * @param string $job
-     *
-     * @return void
      */
     public function deleteReserved(string $queue, string $job)
     {
-        $this->redis->zrem($this->getQueue($queue).':reserved', $job);
+        $this->redis->zrem($this->getQueue($queue) . ':reserved', $job);
     }
 
     /**
@@ -131,8 +126,6 @@ LUA;
      * @param string $queue
      * @param string $job
      * @param int    $delay
-     *
-     * @return void
      */
     public function deleteAndRelease(string $queue, string $job, int $delay)
     {
@@ -145,8 +138,8 @@ LUA;
         $this->redis->eval(
             $script,
             4,
-            $queue.':delayed',
-            $queue.':reserved',
+            $queue . ':delayed',
+            $queue . ':reserved',
             $job,
             $this->getTime() + $delay
         );
@@ -157,8 +150,6 @@ LUA;
      *
      * @param string $from
      * @param string $to
-     *
-     * @return void
      */
     public function migrateExpiredJobs(string $from, string $to)
     {

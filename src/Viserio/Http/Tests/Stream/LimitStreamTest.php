@@ -3,15 +3,11 @@ declare(strict_types=1);
 namespace Viserio\Http\Tests\Stream;
 
 use RuntimeException;
-use Viserio\Http\{
-    Util,
-    Stream
-};
-use Viserio\Http\Stream\{
-    FnStream,
-    LimitStream,
-    NoSeekStream
-};
+use Viserio\Http\Stream;
+use Viserio\Http\Stream\FnStream;
+use Viserio\Http\Stream\LimitStream;
+use Viserio\Http\Stream\NoSeekStream;
+use Viserio\Http\Util;
 
 class LimitStreamTest extends \PHPUnit_Framework_TestCase
 {
@@ -162,7 +158,7 @@ class LimitStreamTest extends \PHPUnit_Framework_TestCase
         $a = new FnStream([
             'getSize' => function () {
             },
-            'tell'    => function () {
+            'tell' => function () {
                 return 0;
             },
         ]);
