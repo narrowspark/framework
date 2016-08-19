@@ -34,7 +34,7 @@ final class StreamFactory implements StreamFactoryContract
             return new Stream($body);
         }
 
-        throw new InvalidArgumentException('Invalid resource type: ' . gettype($body));
+        throw new InvalidArgumentException(sprintf('Invalid resource type: %s.', gettype($body)));
     }
 
     /**

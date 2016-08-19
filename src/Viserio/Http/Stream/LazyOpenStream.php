@@ -6,6 +6,7 @@ use Psr\Http\Message\StreamInterface;
 use Throwable;
 use UnexpectedValueException;
 use Viserio\Http\Util;
+use Viserio\Http\StreamFactory;
 
 class LazyOpenStream implements StreamInterface
 {
@@ -187,6 +188,6 @@ class LazyOpenStream implements StreamInterface
      */
     protected function createStream(): StreamInterface
     {
-        return Util::getStream(Util::tryFopen($this->filename, $this->mode));
+        return (new StreamFactory)->createStreamFromResource(Util::tryFopen($this->filename, $this->mode));
     }
 }

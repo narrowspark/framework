@@ -5,7 +5,7 @@ namespace Viserio\Http\Tests;
 use Exception;
 use Viserio\Http\Stream;
 use Viserio\Http\Stream\NoSeekStream;
-use Viserio\Http\Util;
+use Viserio\Http\StreamFactory;
 
 class StreamTest extends \PHPUnit_Framework_TestCase
 {
@@ -179,7 +179,7 @@ class StreamTest extends \PHPUnit_Framework_TestCase
 
     public function testDoesNotThrowInToString()
     {
-        $s = Util::getStream('foo');
+        $s = (new StreamFactory)->createStreamFromString('foo');
         $s = new NoSeekStream($s);
 
         $this->assertEquals('foo', (string) $s);

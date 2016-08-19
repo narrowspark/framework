@@ -17,12 +17,12 @@ class UriTest extends \PHPUnit_Framework_TestCase
 
     public function testUriImplementsInterface()
     {
-        $this->assertInstanceOf('Psr\Http\Message\UriInterface', new Uri());
+        $this->assertInstanceOf(UriInterface::class, new Uri());
     }
 
     /**
-     * @dataProvider testInvalidURI
-     * @expectedException InvalidArgumentException
+     * @expectedException \InvalidArgumentException
+     * @dataProvider invalidURIProvider
      *
      * @param string $uri
      */
@@ -31,7 +31,7 @@ class UriTest extends \PHPUnit_Framework_TestCase
         new Uri($uri);
     }
 
-    public function testInvalidURI()
+    public function invalidURIProvider()
     {
         return [
             'invalid uri' => ['///'],
@@ -66,6 +66,7 @@ class UriTest extends \PHPUnit_Framework_TestCase
             ->withPath('/path/123')
             ->withQuery('q=abc')
             ->withFragment('test');
+
         $this->assertSame('https', $uri->getScheme());
         $this->assertSame('user:pass@example.com:8080', $uri->getAuthority());
         $this->assertSame('user:pass', $uri->getUserInfo());
@@ -166,10 +167,12 @@ class UriTest extends \PHPUnit_Framework_TestCase
     public function testSchemeIsNormalizedToLowercase()
     {
         $uri = new Uri('HTTP://example.com');
+
         $this->assertSame('http', $uri->getScheme());
         $this->assertSame('http://example.com', (string) $uri);
 
         $uri = (new Uri('//example.com'))->withScheme('HTTP');
+
         $this->assertSame('http', $uri->getScheme());
         $this->assertSame('http://example.com', (string) $uri);
     }
@@ -178,19 +181,23 @@ class UriTest extends \PHPUnit_Framework_TestCase
     {
         // HTTPS standard port
         $uri = new Uri('https://example.com:443');
+
         $this->assertNull($uri->getPort());
         $this->assertSame('example.com', $uri->getAuthority());
 
         $uri = (new Uri('https://example.com'))->withPort(443);
+
         $this->assertNull($uri->getPort());
         $this->assertSame('example.com', $uri->getAuthority());
 
         // HTTP standard port
         $uri = new Uri('http://example.com:80');
+
         $this->assertNull($uri->getPort());
         $this->assertSame('example.com', $uri->getAuthority());
 
         $uri = (new Uri('http://example.com'))->withPort(80);
+
         $this->assertNull($uri->getPort());
         $this->assertSame('example.com', $uri->getAuthority());
     }
@@ -198,6 +205,7 @@ class UriTest extends \PHPUnit_Framework_TestCase
     public function testPortIsReturnedIfSchemeUnknown()
     {
         $uri = (new Uri('//example.com'))->withPort(80);
+
         $this->assertSame(80, $uri->getPort());
         $this->assertSame('example.com:80', $uri->getAuthority());
     }
@@ -205,15 +213,19 @@ class UriTest extends \PHPUnit_Framework_TestCase
     public function testStandardPortIsNullIfSchemeChanges()
     {
         $uri = new Uri('http://example.com:443');
+
         $this->assertSame('http', $uri->getScheme());
         $this->assertSame(443, $uri->getPort());
+
         $uri = $uri->withScheme('https');
+
         $this->assertNull($uri->getPort());
     }
 
     public function testPortPassedAsStringIsCastedToInt()
     {
         $uri = (new Uri('//example.com'))->withPort('8080');
+
         $this->assertSame(8080, $uri->getPort(), 'Port is returned as integer');
         $this->assertSame('example.com:8080', $uri->getAuthority());
     }
@@ -221,6 +233,7 @@ class UriTest extends \PHPUnit_Framework_TestCase
     public function testPortCanBeRemoved()
     {
         $uri = (new Uri('http://example.com:8080'))->withPort(null);
+
         $this->assertNull($uri->getPort());
         $this->assertSame('http://example.com', (string) $uri);
     }
@@ -232,15 +245,18 @@ class UriTest extends \PHPUnit_Framework_TestCase
     public function testAuthorityWithUserInfoOrPortButWithoutHost()
     {
         $uri = $this->createDefaultUri()->withUserInfo('user', 'pass');
+
         $this->assertSame('user:pass', $uri->getUserInfo());
         $this->assertSame('user:pass@', $uri->getAuthority());
 
         $uri = $uri->withPort(8080);
+
         $this->assertSame(8080, $uri->getPort());
         $this->assertSame('user:pass@:8080', $uri->getAuthority());
         $this->assertSame('//user:pass@:8080', (string) $uri);
 
         $uri = $uri->withUserInfo('');
+
         $this->assertSame(':8080', $uri->getAuthority());
     }
 
@@ -312,6 +328,7 @@ class UriTest extends \PHPUnit_Framework_TestCase
     public function testUriComponentsGetEncodedProperly($input, $path, $query, $fragment, $output)
     {
         $uri = new Uri($input);
+
         $this->assertSame($path, $uri->getPath());
         $this->assertSame($query, $uri->getQuery());
         $this->assertSame($fragment, $uri->getFragment());
@@ -321,6 +338,7 @@ class UriTest extends \PHPUnit_Framework_TestCase
     public function testWithPathEncodesProperly()
     {
         $uri = $this->createDefaultUri()->withPath('/baz?#€/b%61r^bar');
+
         // Query and fragment delimiters and multibyte chars are encoded.
         $this->assertSame('/baz%3F%23%E2%82%AC/b%61r%5Ebar', $uri->getPath());
         $this->assertSame('/baz%3F%23%E2%82%AC/b%61r%5Ebar', (string) $uri);
@@ -329,6 +347,7 @@ class UriTest extends \PHPUnit_Framework_TestCase
     public function testWithQueryEncodesProperly()
     {
         $uri = $this->createDefaultUri()->withQuery('?=#&€=/&b%61r');
+
         // A query starting with a "?" is valid and must not be magically removed. Otherwise it would be impossible to
         // construct such an URI. Also the "?" and "/" does not need to be encoded in the query.
         $this->assertSame('?=%23&%E2%82%AC=/&b%61r', $uri->getQuery());
@@ -338,6 +357,7 @@ class UriTest extends \PHPUnit_Framework_TestCase
     public function testWithFragmentEncodesProperly()
     {
         $uri = $this->createDefaultUri()->withFragment('#€?/b%61r');
+
         // A fragment starting with a "#" is valid and must not be magically removed. Otherwise it would be impossible to
         // construct such an URI. Also the "?" and "/" does not need to be encoded in the fragment.
         $this->assertSame('%23%E2%82%AC?/b%61r', $uri->getFragment());
@@ -347,6 +367,7 @@ class UriTest extends \PHPUnit_Framework_TestCase
     public function testAllowsForRelativeUri()
     {
         $uri = $this->createDefaultUri()->withPath('foo');
+
         $this->assertSame('foo', $uri->getPath());
         $this->assertSame('foo', (string) $uri);
     }
@@ -357,6 +378,7 @@ class UriTest extends \PHPUnit_Framework_TestCase
     public function testPathStartingWithTwoSlashes()
     {
         $uri = new Uri('http://example.org//path-not-host.com');
+
         $this->assertSame('//path-not-host.com', $uri->getPath());
 
         $uri = $uri->withScheme('');
@@ -401,6 +423,7 @@ class UriTest extends \PHPUnit_Framework_TestCase
     public function testRelativeUriWithPathHavingColonSegment()
     {
         $uri = (new Uri('urn:/mailto:foo'))->withScheme('');
+
         $this->assertSame('/mailto:foo', $uri->getPath());
 
         (new Uri('urn:mailto:foo'))->withScheme('');
@@ -409,6 +432,7 @@ class UriTest extends \PHPUnit_Framework_TestCase
     public function testDefaultReturnValuesOfGetters()
     {
         $uri = new Uri();
+
         $this->assertSame('', $uri->getScheme());
         $this->assertSame('', $uri->getAuthority());
         $this->assertSame('', $uri->getUserInfo());
@@ -422,6 +446,7 @@ class UriTest extends \PHPUnit_Framework_TestCase
     public function testImmutability()
     {
         $uri = new Uri();
+
         $this->assertNotSame($uri, $uri->withScheme('https'));
         $this->assertNotSame($uri, $uri->withUserInfo('user', 'pass'));
         $this->assertNotSame($uri, $uri->withHost('example.com'));
@@ -437,7 +462,7 @@ class UriTest extends \PHPUnit_Framework_TestCase
         // should not use late static binding to access private static members.
         // If they do, this will fatal.
         $this->assertInstanceOf(
-            '\Viserio\Http\Tests\Fixture\ExtendedUriTest',
+            ExtendedUriTest::class,
             new ExtendedUriTest('http://h:9/')
         );
     }
@@ -447,8 +472,8 @@ class UriTest extends \PHPUnit_Framework_TestCase
      */
     public function testHostnameMustBeLowerCasedAsPerPsr7Interface()
     {
-        $url = 'http://WwW.ExAmPlE.CoM';
-        $uri = new Uri($url);
+        $uri = new Uri('http://WwW.ExAmPlE.CoM');
+
         $this->assertEquals('www.example.com', $uri->getHost());
     }
 
@@ -457,8 +482,8 @@ class UriTest extends \PHPUnit_Framework_TestCase
      */
     public function testSchemeMustBeLowerCasedAsPerPsr7Interface()
     {
-        $url = 'hTtp://www.example.com';
-        $uri = new Uri($url);
+        $uri = new Uri('hTtp://www.example.com');
+
         $this->assertEquals('http', $uri->getScheme());
     }
 
@@ -492,6 +517,7 @@ class UriTest extends \PHPUnit_Framework_TestCase
     public function testGetQuery($query, $expected)
     {
         $uri = (new Uri())->withQuery($query);
+
         $this->assertEquals($expected, $uri->getQuery(), 'Query must be normalized according to RFC3986');
     }
 
@@ -512,8 +538,8 @@ class UriTest extends \PHPUnit_Framework_TestCase
      */
     public function testUrlStandardNormalization()
     {
-        $url = 'hTtp://WwW.ExAmPlE.CoM/%a1/%7Epsr7/rocks';
-        $uri = new Uri($url);
+        $uri = new Uri('hTtp://WwW.ExAmPlE.CoM/%a1/%7Epsr7/rocks');
+
         $this->assertEquals('http://www.example.com/%A1/~psr7/rocks', (string) $uri);
     }
 
@@ -545,8 +571,8 @@ class UriTest extends \PHPUnit_Framework_TestCase
      */
     public function testWithPortWithNullValue()
     {
-        $url = 'http://www.example.com:81';
-        $uri = new Uri($url);
+        $uri = new Uri('http://www.example.com:81');
+
         $this->assertNull($uri->withPort(null)->getPort());
     }
 
@@ -665,6 +691,7 @@ class UriTest extends \PHPUnit_Framework_TestCase
     public function testGetHost($host, $expected)
     {
         $uri = $this->createDefaultUri()->withHost($host);
+
         $this->assertEquals($expected, $uri->getHost(), 'Host must be normalized according to RFC3986');
     }
 

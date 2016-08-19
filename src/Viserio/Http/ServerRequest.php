@@ -121,23 +121,6 @@ class ServerRequest extends Request implements ServerRequestInterface
     }
 
     /**
-     * Proxy to receive the request method.
-     *
-     * This overrides the parent functionality to ensure the method is never
-     * empty; if no method is present, it returns 'GET'.
-     *
-     * @return string
-     */
-    public function getMethod()
-    {
-        if ($this->method === null) {
-            return 'GET';
-        }
-
-        return $this->method;
-    }
-
-    /**
      * {@inheritdoc}
      */
     public function withUploadedFiles(array $uploadedFiles)

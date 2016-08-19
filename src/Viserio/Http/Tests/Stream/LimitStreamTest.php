@@ -7,7 +7,7 @@ use Viserio\Http\Stream;
 use Viserio\Http\Stream\FnStream;
 use Viserio\Http\Stream\LimitStream;
 use Viserio\Http\Stream\NoSeekStream;
-use Viserio\Http\Util;
+use Viserio\Http\StreamFactory;
 
 class LimitStreamTest extends \PHPUnit_Framework_TestCase
 {
@@ -19,17 +19,19 @@ class LimitStreamTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->decorated = Util::getStream(fopen(__FILE__, 'r'));
+        $this->decorated = (new StreamFactory)->createStreamFromResource(fopen(__FILE__, 'r'));
         $this->body = new LimitStream($this->decorated, 10, 3);
     }
 
     public function testReturnsSubset()
     {
-        $body = new LimitStream(Util::getStream('foo'), -1, 1);
+        $body = new LimitStream((new StreamFactory)->createStreamFromString('foo'), -1, 1);
 
         $this->assertEquals('oo', (string) $body);
         $this->assertTrue($body->eof());
+
         $body->seek(0);
+
         $this->assertFalse($body->eof());
         $this->assertEquals('oo', $body->read(100));
         $this->assertSame('', $body->read(1));
@@ -38,7 +40,7 @@ class LimitStreamTest extends \PHPUnit_Framework_TestCase
 
     public function testReturnsSubsetWhenCastToString()
     {
-        $body = Util::getStream('foo_baz_bar');
+        $body = (new StreamFactory)->createStreamFromString('foo_baz_bar');
         $limited = new LimitStream($body, 3, 4);
 
         $this->assertEquals('baz', (string) $limited);
@@ -50,12 +52,12 @@ class LimitStreamTest extends \PHPUnit_Framework_TestCase
      */
     public function testEnsuresPositionCanBeekSeekedTo()
     {
-        new LimitStream(Util::getStream(''), 0, 10);
+        new LimitStream((new StreamFactory)->createStreamFromString(''), 0, 10);
     }
 
     public function testReturnsSubsetOfEmptyBodyWhenCastToString()
     {
-        $body = Util::getStream('01234567891234');
+        $body = (new StreamFactory)->createStreamFromString('01234567891234');
         $limited = new LimitStream($body, 0, 10);
 
         $this->assertEquals('', (string) $limited);
@@ -63,7 +65,7 @@ class LimitStreamTest extends \PHPUnit_Framework_TestCase
 
     public function testReturnsSpecificSubsetOBodyWhenCastToString()
     {
-        $body = Util::getStream('0123456789abcdef');
+        $body = (new StreamFactory)->createStreamFromString('0123456789abcdef');
         $limited = new LimitStream($body, 3, 10);
 
         $this->assertEquals('abc', (string) $limited);
@@ -83,16 +85,19 @@ class LimitStreamTest extends \PHPUnit_Framework_TestCase
         $this->body->seek(0);
         $this->assertEquals(0, $this->body->tell());
         $this->assertEquals(3, $this->decorated->tell());
+
         try {
             $this->body->seek(-10);
             $this->fail();
         } catch (RuntimeException $e) {
         }
+
         $this->assertEquals(0, $this->body->tell());
         $this->assertEquals(3, $this->decorated->tell());
         $this->body->seek(5);
         $this->assertEquals(5, $this->body->tell());
         $this->assertEquals(8, $this->decorated->tell());
+
         // Fail
         try {
             $this->body->seek(1000, SEEK_END);
@@ -104,10 +109,13 @@ class LimitStreamTest extends \PHPUnit_Framework_TestCase
     public function testReadsOnlySubsetOfData()
     {
         $data = $this->body->read(100);
+
         $this->assertEquals(10, strlen($data));
         $this->assertSame('', $this->body->read(1000));
         $this->body->setOffset(10);
+
         $newData = $this->body->read(100);
+
         $this->assertEquals(10, strlen($newData));
         $this->assertNotSame($data, $newData);
     }
@@ -118,26 +126,29 @@ class LimitStreamTest extends \PHPUnit_Framework_TestCase
      */
     public function testThrowsWhenCurrentGreaterThanOffsetSeek()
     {
-        $a = Util::getStream('foo_bar');
-        $b = new NoSeekStream($a);
-        $c = new LimitStream($b);
-        $a->getContents();
-        $c->setOffset(2);
+        $stream1 = (new StreamFactory)->createStreamFromString('foo_bar');
+        $stream2 = new NoSeekStream($stream1);
+        $stream3 = new LimitStream($stream2);
+
+        $stream1->getContents();
+        $stream3->setOffset(2);
     }
 
     public function testCanGetContentsWithoutSeeking()
     {
-        $a = Util::getStream('foo_bar');
-        $b = new NoSeekStream($a);
-        $c = new LimitStream($b);
+        $stream1 = (new StreamFactory)->createStreamFromString('foo_bar');
+        $stream2 = new NoSeekStream($stream1);
+        $stream3 = new LimitStream($stream2);
 
-        $this->assertEquals('foo_bar', $c->getContents());
+        $this->assertEquals('foo_bar', $stream3->getContents());
     }
 
     public function testClaimsConsumedWhenReadLimitIsReached()
     {
         $this->assertFalse($this->body->eof());
+
         $this->body->read(1000);
+
         $this->assertTrue($this->body->eof());
     }
 
@@ -148,28 +159,28 @@ class LimitStreamTest extends \PHPUnit_Framework_TestCase
 
     public function testGetContentsIsBasedOnSubset()
     {
-        $body = new LimitStream(Util::getStream('foobazbar'), 3, 3);
+        $body = new LimitStream((new StreamFactory)->createStreamFromString('foobazbar'), 3, 3);
 
         $this->assertEquals('baz', $body->getContents());
     }
 
     public function testReturnsNullIfSizeCannotBeDetermined()
     {
-        $a = new FnStream([
+        $stream = new FnStream([
             'getSize' => function () {
             },
             'tell' => function () {
                 return 0;
             },
         ]);
-        $b = new LimitStream($a);
+        $stream2 = new LimitStream($stream);
 
-        $this->assertNull($b->getSize());
+        $this->assertNull($stream2->getSize());
     }
 
     public function testLengthLessOffsetWhenNoLimitSize()
     {
-        $a = Util::getStream('foo_bar');
+        $a = (new StreamFactory)->createStreamFromString('foo_bar');
         $b = new LimitStream($a, -1, 4);
 
         $this->assertEquals(3, $b->getSize());

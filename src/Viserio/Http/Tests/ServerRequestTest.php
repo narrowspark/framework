@@ -12,6 +12,9 @@ class ServerRequestTest extends \PHPUnit_Framework_TestCase
         $request1 = new ServerRequest('', 'GET');
         $files = [
             'file' => new UploadedFile('test', 123, UPLOAD_ERR_OK),
+            'file2' => [
+                new UploadedFile('test', 123, UPLOAD_ERR_OK)
+            ],
         ];
         $request2 = $request1->withUploadedFiles($files);
 

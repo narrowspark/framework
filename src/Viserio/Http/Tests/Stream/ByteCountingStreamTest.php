@@ -3,7 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Http\Tests\Stream;
 
 use Viserio\Http\Stream\ByteCountingStream;
-use Viserio\Http\Util;
+use Viserio\Http\StreamFactory;
 
 class ByteCountingStreamTest extends \PHPUnit_Framework_TestCase
 {
@@ -13,7 +13,7 @@ class ByteCountingStreamTest extends \PHPUnit_Framework_TestCase
      */
     public function testEnsureNonNegativeByteCount()
     {
-        new ByteCountingStream(Util::getStream('testing'), -2);
+        new ByteCountingStream((new StreamFactory)->createStreamFromString('testing'), -2);
     }
 
     /**
@@ -22,19 +22,19 @@ class ByteCountingStreamTest extends \PHPUnit_Framework_TestCase
      */
     public function testEnsureValidByteCountNumber()
     {
-        new ByteCountingStream(Util::getStream('testing'), 10);
+        new ByteCountingStream((new StreamFactory)->createStreamFromString('testing'), 10);
     }
 
     public function testByteCountingReadWhenAvailable()
     {
-        $testStream = new ByteCountingStream(Util::getStream('foo bar test'), 8);
+        $testStream = new ByteCountingStream((new StreamFactory)->createStreamFromString('foo bar test'), 8);
 
         $this->assertEquals('foo ', $testStream->read(4));
         $this->assertEquals('bar ', $testStream->read(4));
         $this->assertEquals('', $testStream->read(4));
 
         $testStream->close();
-        $testStream = new ByteCountingStream(Util::getStream('testing'), 5);
+        $testStream = new ByteCountingStream((new StreamFactory)->createStreamFromString('testing'), 5);
         $testStream->seek(4);
 
         $this->assertEquals('ing', $testStream->read(5));
@@ -48,7 +48,7 @@ class ByteCountingStreamTest extends \PHPUnit_Framework_TestCase
      */
     public function testEnsureStopReadWhenHitEof()
     {
-        $testStream = new ByteCountingStream(Util::getStream('abc'), 3);
+        $testStream = new ByteCountingStream((new StreamFactory)->createStreamFromString('abc'), 3);
         $testStream->seek(3);
         $testStream->read(3);
     }
@@ -59,7 +59,7 @@ class ByteCountingStreamTest extends \PHPUnit_Framework_TestCase
      */
     public function testEnsureReadUnclosedStream()
     {
-        $body = Util::getStream('closed');
+        $body = (new StreamFactory)->createStreamFromString('closed');
         $closedStream = new ByteCountingStream($body, 5);
         $body->close();
         $closedStream->read(3);
