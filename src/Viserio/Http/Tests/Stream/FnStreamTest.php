@@ -43,6 +43,12 @@ class FnStreamTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($called);
     }
 
+    public function doesNotRequireClose()
+    {
+        $stream = new FnStream([]);
+        unset($stream);
+    }
+
     public function testDecoratesStream()
     {
         $stream1 = (new StreamFactory())->createStreamFromString('foo');
