@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Http;
 
-use Psr\Http\Message\StreamInterface;
 use InvalidArgumentException;
+use Psr\Http\Message\StreamInterface;
 use Viserio\Contracts\Http\StreamFactory as StreamFactoryContract;
 use Viserio\Http\Stream\PumpStream;
 

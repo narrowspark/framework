@@ -186,7 +186,7 @@ abstract class AbstractMessage implements MessageInterface
     public function getBody()
     {
         if (! $this->stream) {
-            $this->stream = (new StreamFactory)->createStreamFromString('');
+            $this->stream = (new StreamFactory())->createStreamFromString('');
         }
 
         return $this->stream;

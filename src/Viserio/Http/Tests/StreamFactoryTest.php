@@ -4,8 +4,8 @@ namespace Viserio\Http\Tests;
 
 use ArrayIterator;
 use Viserio\Http\Stream;
-use Viserio\Http\StreamFactory;
 use Viserio\Http\Stream\PumpStream;
+use Viserio\Http\StreamFactory;
 
 class StreamFactoryTest extends \PHPUnit_Framework_TestCase
 {

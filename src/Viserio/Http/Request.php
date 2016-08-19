@@ -4,7 +4,6 @@ namespace Viserio\Http;
 
 use InvalidArgumentException;
 use Psr\Http\Message\RequestInterface;
-use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\UriInterface;
 
 class Request extends AbstractMessage implements RequestInterface

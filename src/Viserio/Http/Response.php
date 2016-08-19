@@ -5,7 +5,6 @@ namespace Viserio\Http;
 use InvalidArgumentException;
 use Narrowspark\HttpStatus\HttpStatus;
 use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\StreamInterface;
 
 class Response extends AbstractMessage implements ResponseInterface
 {

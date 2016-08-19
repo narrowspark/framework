@@ -4,8 +4,8 @@ namespace Viserio\Http\Tests;
 
 use ReflectionProperty;
 use Viserio\Http\Stream;
-use Viserio\Http\UploadedFile;
 use Viserio\Http\StreamFactory;
+use Viserio\Http\UploadedFile;
 
 class UploadedFileTest extends \PHPUnit_Framework_TestCase
 {
@@ -158,7 +158,7 @@ class UploadedFileTest extends \PHPUnit_Framework_TestCase
 
     public function testSuccessful()
     {
-        $stream = (new StreamFactory)->createStreamFromString('Foo bar!');
+        $stream = (new StreamFactory())->createStreamFromString('Foo bar!');
         $upload = new UploadedFile($stream, $stream->getSize(), UPLOAD_ERR_OK, 'filename.txt', 'text/plain');
 
         $this->assertEquals($stream->getSize(), $upload->getSize());
@@ -194,7 +194,7 @@ class UploadedFileTest extends \PHPUnit_Framework_TestCase
      */
     public function testMoveRaisesExceptionForInvalidPath($path)
     {
-        $stream = (new StreamFactory)->createStreamFromString('Foo bar!');
+        $stream = (new StreamFactory())->createStreamFromString('Foo bar!');
         $upload = new UploadedFile($stream, 0, UPLOAD_ERR_OK);
 
         $this->cleanup[] = $path;
@@ -208,7 +208,7 @@ class UploadedFileTest extends \PHPUnit_Framework_TestCase
      */
     public function testMoveCannotBeCalledMoreThanOnce()
     {
-        $stream = (new StreamFactory)->createStreamFromString('Foo bar!');
+        $stream = (new StreamFactory())->createStreamFromString('Foo bar!');
         $upload = new UploadedFile($stream, 0, UPLOAD_ERR_OK);
 
         $this->cleanup[] = $to = tempnam(sys_get_temp_dir(), 'diac');
@@ -226,7 +226,7 @@ class UploadedFileTest extends \PHPUnit_Framework_TestCase
      */
     public function testCannotRetrieveStreamAfterMove()
     {
-        $stream = (new StreamFactory)->createStreamFromString('Foo bar!');
+        $stream = (new StreamFactory())->createStreamFromString('Foo bar!');
         $upload = new UploadedFile($stream, 0, UPLOAD_ERR_OK);
 
         $this->cleanup[] = $to = tempnam(sys_get_temp_dir(), 'diac');

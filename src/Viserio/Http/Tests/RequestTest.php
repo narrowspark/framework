@@ -2,15 +2,15 @@
 declare(strict_types=1);
 namespace Viserio\Http\Tests;
 
-use StdClass;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\UriInterface;
+use StdClass;
 use Viserio\Http\Request;
 use Viserio\Http\Stream\FnStream;
-use Viserio\Http\Uri;
 use Viserio\Http\StreamFactory;
+use Viserio\Http\Uri;
 
 class RequestTest extends AbstractMessageTest
 {
@@ -151,7 +151,7 @@ class RequestTest extends AbstractMessageTest
     {
         $streamIsRead = false;
 
-        $body = FnStream::decorate((new StreamFactory)->createStreamFromString(''), [
+        $body = FnStream::decorate((new StreamFactory())->createStreamFromString(''), [
             '__toString' => function () use (&$streamIsRead) {
                 $streamIsRead = true;
 
@@ -159,7 +159,7 @@ class RequestTest extends AbstractMessageTest
             },
         ]);
 
-        $request= new Request('/', 'GET', [], $body);
+        $request = new Request('/', 'GET', [], $body);
 
         $this->assertFalse($streamIsRead);
         $this->assertSame($body, $request->getBody());
@@ -288,7 +288,7 @@ class RequestTest extends AbstractMessageTest
 
     public function testRequestUriMayBeString()
     {
-        $request= new Request('/', 'GET');
+        $request = new Request('/', 'GET');
 
         $this->assertEquals('/', (string) $request->getUri());
     }
@@ -296,7 +296,7 @@ class RequestTest extends AbstractMessageTest
     public function testRequestUriMayBeUri()
     {
         $uri = new Uri('/');
-        $request= new Request($uri, 'GET');
+        $request = new Request($uri, 'GET');
 
         $this->assertSame($uri, $request->getUri());
     }
@@ -321,7 +321,7 @@ class RequestTest extends AbstractMessageTest
 
     public function testCanConstructWithBody()
     {
-        $request= new Request('/', 'GET', [], 'baz');
+        $request = new Request('/', 'GET', [], 'baz');
 
         $this->assertInstanceOf(StreamInterface::class, $request->getBody());
         $this->assertEquals('baz', (string) $request->getBody());
@@ -329,7 +329,7 @@ class RequestTest extends AbstractMessageTest
 
     public function testNullBody()
     {
-        $request= new Request('/', 'GET', [], null);
+        $request = new Request('/', 'GET', [], null);
 
         $this->assertInstanceOf(StreamInterface::class, $request->getBody());
         $this->assertSame('', (string) $request->getBody());
@@ -337,7 +337,7 @@ class RequestTest extends AbstractMessageTest
 
     public function testFalseyBody()
     {
-        $request= new Request('/', 'GET', [], '0');
+        $request = new Request('/', 'GET', [], '0');
 
         $this->assertInstanceOf(StreamInterface::class, $request->getBody());
         $this->assertSame('0', (string) $request->getBody());
@@ -345,14 +345,14 @@ class RequestTest extends AbstractMessageTest
 
     public function testCapitalizesMethod()
     {
-        $request= new Request('/', 'get');
+        $request = new Request('/', 'get');
 
         $this->assertEquals('GET', $request->getMethod());
     }
 
     public function testCapitalizesWithMethod()
     {
-        $request= new Request('/', 'GET');
+        $request = new Request('/', 'GET');
 
         $this->assertEquals('PUT', $request->withMethod('put')->getMethod());
     }
@@ -400,7 +400,7 @@ class RequestTest extends AbstractMessageTest
      */
     public function testRequestToThrowException()
     {
-        new Request(new StdClass, 'GET');
+        new Request(new StdClass(), 'GET');
     }
 
     /**
@@ -444,7 +444,7 @@ class RequestTest extends AbstractMessageTest
 
     public function testHostIsAddedFirst()
     {
-        $request= new Request('http://foo.com/baz?bar=bam', 'GET', ['Foo' => 'Bar']);
+        $request = new Request('http://foo.com/baz?bar=bam', 'GET', ['Foo' => 'Bar']);
 
         $this->assertEquals([
             'Host' => ['foo.com'],
@@ -454,7 +454,7 @@ class RequestTest extends AbstractMessageTest
 
     public function testCanGetHeaderAsCsv()
     {
-        $request= new Request('http://foo.com/baz?bar=bam', 'GET', [
+        $request = new Request('http://foo.com/baz?bar=bam', 'GET', [
             'Foo' => ['a', 'b', 'c'],
         ]);
 
@@ -464,7 +464,7 @@ class RequestTest extends AbstractMessageTest
 
     public function testHostIsNotOverwrittenWhenPreservingHost()
     {
-        $request= new Request('http://foo.com/baz?bar=bam', 'GET', ['Host' => 'a.com']);
+        $request = new Request('http://foo.com/baz?bar=bam', 'GET', ['Host' => 'a.com']);
 
         $this->assertEquals(['Host' => ['a.com']], $request->getHeaders());
 
@@ -475,7 +475,7 @@ class RequestTest extends AbstractMessageTest
 
     public function testOverridesHostWithUri()
     {
-        $request= new Request('http://foo.com/baz?bar=bam', 'GET');
+        $request = new Request('http://foo.com/baz?bar=bam', 'GET');
 
         $this->assertEquals(['Host' => ['foo.com']], $request->getHeaders());
 
@@ -486,7 +486,7 @@ class RequestTest extends AbstractMessageTest
 
     public function testAggregatesHeaders()
     {
-        $request= new Request('', 'GET', [
+        $request = new Request('', 'GET', [
             'ZOO' => 'zoobar',
             'zoo' => ['foobar', 'zoobar'],
         ]);
@@ -497,15 +497,15 @@ class RequestTest extends AbstractMessageTest
 
     public function testAddsPortToHeader()
     {
-        $request= new Request('http://foo.com:8124/bar', 'GET');
+        $request = new Request('http://foo.com:8124/bar', 'GET');
 
         $this->assertEquals('foo.com:8124', $request->getHeaderLine('host'));
     }
 
     public function testAddsPortToHeaderAndReplacePreviousPort()
     {
-        $request= new Request('http://foo.com:8124/bar', 'GET');
-        $request= $request->withUri(new Uri('http://foo.com:8125/bar'));
+        $request = new Request('http://foo.com:8124/bar', 'GET');
+        $request = $request->withUri(new Uri('http://foo.com:8125/bar'));
 
         $this->assertEquals('foo.com:8125', $request->getHeaderLine('host'));
     }

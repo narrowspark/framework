@@ -179,7 +179,7 @@ class StreamTest extends \PHPUnit_Framework_TestCase
 
     public function testDoesNotThrowInToString()
     {
-        $s = (new StreamFactory)->createStreamFromString('foo');
+        $s = (new StreamFactory())->createStreamFromString('foo');
         $s = new NoSeekStream($s);
 
         $this->assertEquals('foo', (string) $s);

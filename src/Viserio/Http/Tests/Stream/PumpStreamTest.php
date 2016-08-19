@@ -24,7 +24,7 @@ class PumpStreamTest extends \PHPUnit_Framework_TestCase
 
     public function testCanReadFromCallable()
     {
-        $pump =  (new StreamFactory)->createStreamFromCallback(function ($size) {
+        $pump = (new StreamFactory())->createStreamFromCallback(function ($size) {
             return 'a';
         });
 
@@ -38,7 +38,7 @@ class PumpStreamTest extends \PHPUnit_Framework_TestCase
     {
         $called = [];
 
-        $pump =  (new StreamFactory)->createStreamFromCallback(function ($size) use (&$called) {
+        $pump = (new StreamFactory())->createStreamFromCallback(function ($size) use (&$called) {
             $called[] = $size;
 
             return 'abcdef';
@@ -53,7 +53,7 @@ class PumpStreamTest extends \PHPUnit_Framework_TestCase
 
     public function testInifiniteStreamWrappedInLimitStream()
     {
-        $pump =  (new StreamFactory)->createStreamFromCallback(function () {
+        $pump = (new StreamFactory())->createStreamFromCallback(function () {
             return 'a';
         });
         $s = new LimitStream($pump, 5);
@@ -63,7 +63,7 @@ class PumpStreamTest extends \PHPUnit_Framework_TestCase
 
     public function testDescribesCapabilities()
     {
-        $pump =  (new StreamFactory)->createStreamFromCallback(function () {
+        $pump = (new StreamFactory())->createStreamFromCallback(function () {
         });
 
         $this->assertTrue($pump->isReadable());
@@ -82,7 +82,6 @@ class PumpStreamTest extends \PHPUnit_Framework_TestCase
             $this->assertFalse($pump->write('aa'));
             $this->fail();
         } catch (RuntimeException $e) {
-
         }
     }
 }

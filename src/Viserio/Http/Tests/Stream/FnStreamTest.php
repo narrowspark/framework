@@ -45,7 +45,7 @@ class FnStreamTest extends \PHPUnit_Framework_TestCase
 
     public function testDecoratesStream()
     {
-        $stream1 = (new StreamFactory)->createStreamFromString('foo');
+        $stream1 = (new StreamFactory())->createStreamFromString('foo');
         $stream2 = FnStream::decorate($stream1, []);
 
         $this->assertEquals(3, $stream2->getSize());
@@ -74,7 +74,7 @@ class FnStreamTest extends \PHPUnit_Framework_TestCase
     {
         $called = false;
 
-        $stream1 = (new StreamFactory)->createStreamFromString('foo');
+        $stream1 = (new StreamFactory())->createStreamFromString('foo');
         $stream2 = FnStream::decorate($stream1, [
             'read' => function ($len) use (&$called, $stream1) {
                 $called = true;

@@ -96,7 +96,7 @@ class ResponseTest extends AbstractMessageTest
     public function testConstructorDoesNotReadStreamBody()
     {
         $streamIsRead = false;
-        $body = FnStream::decorate((new StreamFactory)->createStreamFromString(''), [
+        $body = FnStream::decorate((new StreamFactory())->createStreamFromString(''), [
             '__toString' => function () use (&$streamIsRead) {
                 $streamIsRead = true;
 
@@ -193,7 +193,7 @@ class ResponseTest extends AbstractMessageTest
 
     public function testWithBody()
     {
-        $body = (new StreamFactory)->createStreamFromString('0');
+        $body = (new StreamFactory())->createStreamFromString('0');
         $response = (new Response())->withBody($body);
 
         $this->assertInstanceOf(StreamInterface::class, $response->getBody());

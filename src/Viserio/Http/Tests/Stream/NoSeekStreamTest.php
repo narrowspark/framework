@@ -32,7 +32,7 @@ class NoSeekStreamTest extends \PHPUnit_Framework_TestCase
      */
     public function testHandlesClose()
     {
-        $s = (new StreamFactory)->createStreamFromString('foo');
+        $s = (new StreamFactory())->createStreamFromString('foo');
         $wrapped = new NoSeekStream($s);
         $wrapped->close();
         $wrapped->write('foo');

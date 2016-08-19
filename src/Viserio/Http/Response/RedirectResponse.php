@@ -33,6 +33,6 @@ class RedirectResponse extends Response
 
         $headers['location'] = [(string) $uri];
 
-        parent::__construct($status, $headers, (new StreamFactory)->createStream());
+        parent::__construct($status, $headers, (new StreamFactory())->createStream());
     }
 }
