@@ -260,7 +260,7 @@ abstract class AbstractMessage implements MessageInterface
             return $stream->createStreamFromResource($body);
         }
 
-        throw new InvalidArgumentException('Invalid resource type: ' . gettype($resource));
+        throw new InvalidArgumentException('Invalid resource type: ' . gettype($body));
     }
 
     /**
