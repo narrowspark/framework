@@ -39,12 +39,12 @@
         <testsuite name="Narrowspark Connect Component Test Suite">
             <directory>./src/Viserio/Connect/Tests</directory>
         </testsuite>
-<!--         <testsuite name="Narrowspark Console Component Test Suite">
+        <testsuite name="Narrowspark Console Component Test Suite">
             <directory>./src/Viserio/Console/Tests</directory>
-        </testsuite> -->
-       <testsuite name="Narrowspark Container Component Test Suite">
-            <directory>./src/Viserio/Container/Tests</directory>
         </testsuite>
+<!--        <testsuite name="Narrowspark Container Component Test Suite">
+            <directory>./src/Viserio/Container/Tests</directory>
+        </testsuite> -->
         <testsuite name="Narrowspark Contracts Component Test Suite">
             <directory>./src/Viserio/Contracts/Tests</directory>
         </testsuite>
@@ -69,9 +69,9 @@
         <testsuite name="Narrowspark Hashing Component Test Suite">
             <directory>./src/Viserio/Hashing/Tests</directory>
         </testsuite>
-        <testsuite name="Narrowspark Http Component Test Suite">
+<!--         <testsuite name="Narrowspark Http Component Test Suite">
             <directory>./src/Viserio/Http/Tests</directory>
-        </testsuite>
+        </testsuite> -->
         <testsuite name="Narrowspark Log Component Test Suite">
             <directory>./src/Viserio/Log/Tests</directory>
         </testsuite>
