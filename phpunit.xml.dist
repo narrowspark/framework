@@ -30,7 +30,7 @@
         <testsuite name="Narrowspark Bus Component Test Suite">
             <directory>./src/Viserio/Bus/Tests</directory>
         </testsuite>
-        <testsuite name="Narrowspark Cache Component Test Suite">
+        <!-- <testsuite name="Narrowspark Cache Component Test Suite">
             <directory>./src/Viserio/Cache/Tests</directory>
         </testsuite>
         <testsuite name="Narrowspark Config Component Test Suite">
@@ -41,7 +41,7 @@
         </testsuite>
         <testsuite name="Narrowspark Console Component Test Suite">
             <directory>./src/Viserio/Console/Tests</directory>
-        </testsuite>
+        </testsuite> -->
 <!--        <testsuite name="Narrowspark Container Component Test Suite">
             <directory>./src/Viserio/Container/Tests</directory>
         </testsuite> -->
@@ -54,7 +54,7 @@
 <!--        <testsuite name="Narrowspark Database Component Test Suite">
             <directory>./src/Viserio/Database/Tests</directory>
         </testsuite> -->
-        <testsuite name="Narrowspark Encryption Component Test Suite">
+        <!-- <testsuite name="Narrowspark Encryption Component Test Suite">
             <directory>./src/Viserio/Encryption/Tests</directory>
         </testsuite>
         <testsuite name="Narrowspark Events Component Test Suite">
@@ -69,9 +69,9 @@
         <testsuite name="Narrowspark Hashing Component Test Suite">
             <directory>./src/Viserio/Hashing/Tests</directory>
         </testsuite>
-<!--         <testsuite name="Narrowspark Http Component Test Suite">
+        <testsuite name="Narrowspark Http Component Test Suite">
             <directory>./src/Viserio/Http/Tests</directory>
-        </testsuite> -->
+        </testsuite>
         <testsuite name="Narrowspark Log Component Test Suite">
             <directory>./src/Viserio/Log/Tests</directory>
         </testsuite>
@@ -107,7 +107,7 @@
         </testsuite>
         <testsuite name="Narrowspark View Component Test Suite">
             <directory>./src/Viserio/View/Tests</directory>
-        </testsuite>
+        </testsuite> -->
     </testsuites>
 
     <filter>
