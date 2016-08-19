@@ -520,7 +520,7 @@ class Uri implements UriInterface
         $components = parse_url($encodeUrl);
 
         if (! $components) {
-            throw new InvalidArgumentException("Unable to parse URI: $url");
+            throw new InvalidArgumentException(sprintf('Unable to parse URI: %s.', $url));
         }
 
         foreach ($components as $key => $value) {
