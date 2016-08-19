@@ -27,13 +27,13 @@
 <!--         <testsuite name="Narrowspark Application Component Test Suite">
             <directory>./src/Viserio/Application/Tests</directory>
         </testsuite> -->
-        <testsuite name="Narrowspark Bus Component Test Suite">
+<!--         <testsuite name="Narrowspark Bus Component Test Suite">
             <directory>./src/Viserio/Bus/Tests</directory>
-         </testsuite>
-<!--        <testsuite name="Narrowspark Cache Component Test Suite">
+         </testsuite> -->
+        <testsuite name="Narrowspark Cache Component Test Suite">
             <directory>./src/Viserio/Cache/Tests</directory>
         </testsuite>
-        <testsuite name="Narrowspark Config Component Test Suite">
+<!--        <testsuite name="Narrowspark Config Component Test Suite">
             <directory>./src/Viserio/Config/Tests</directory>
         </testsuite>
         <testsuite name="Narrowspark Connect Component Test Suite">
