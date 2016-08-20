@@ -5,10 +5,10 @@ namespace Viserio\Routing\Generator;
 use Viserio\Contracts\Routing\Pattern;
 use Viserio\Contracts\Routing\SegmentMatcher as SegmentMatcherContract;
 use Viserio\Routing\Matchers\AnyMatcher;
-use Viserio\Routing\Matchers\StaticMatcher;
 use Viserio\Routing\Matchers\CompoundMatcher;
 use Viserio\Routing\Matchers\ExpressionMatcher;
 use Viserio\Routing\Matchers\RegexMatcher;
+use Viserio\Routing\Matchers\StaticMatcher;
 
 class RouteTreeOptimizer
 {
@@ -172,7 +172,6 @@ class RouteTreeOptimizer
     }
 
     /**
-     *
      * @param \Viserio\Routing\Generator\ChildrenNodeCollection $nodeCollection
      *
      * @return \Viserio\Routing\Generator\ChildrenNodeCollection
@@ -205,7 +204,6 @@ class RouteTreeOptimizer
     }
 
     /**
-     *
      * @param \Viserio\Routing\Generator\RouteTreeNode $node1
      * @param \Viserio\Routing\Generator\RouteTreeNode $node2
      *
