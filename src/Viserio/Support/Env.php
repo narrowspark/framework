@@ -2,6 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Support;
 
+use Closure;
+
 class Env
 {
     /**
@@ -17,7 +19,7 @@ class Env
         $value = getenv($key);
 
         if ($value === false) {
-            return false;
+            return $default instanceof Closure ? $default() : $default;
         }
 
         $value = strtolower($value);
@@ -54,7 +56,10 @@ class Env
             return '';
         }
 
-        if (strlen($value) > 1 && mb_substr($value, 0, strlen('"')) === '"' && mb_substr($value, -strlen('"')) === '"') {
+        if (strlen($value) > 1 &&
+            mb_substr($value, 0, strlen('"')) === '"' &&
+            mb_substr($value, -strlen('"')) === '"'
+        ) {
             return mb_substr($value, 1, -1);
         }
 
