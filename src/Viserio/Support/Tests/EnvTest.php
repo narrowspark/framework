@@ -41,7 +41,10 @@ class EnvTest extends \PHPUnit_Framework_TestCase
     public function testGet()
     {
         $this->assertTrue(Env::get('TEST_TRUE'));
-        $this->assertFalse(Env::get('NOT_SET'));
+        $this->assertFalse(Env::get('NOT_SET', false));
+        $this->assertSame('test', Env::get('NOT_SET2', function () {
+            return 'test';
+        }));
         $this->assertFalse(Env::get('TEST_FALSE'));
         $this->assertFalse(Env::get('TEST_FALSE_2'));
         $this->assertSame(null, Env::get('TEST_NULL'));
