@@ -4,7 +4,6 @@ namespace Viserio\Parsers\Formats;
 
 use Viserio\Contracts\Parsers\Dumper as DumperContract;
 use Viserio\Contracts\Parsers\Exception\ParseException;
-use Viserio\Contracts\Parsers\Dumper as DumperContract;
 use Viserio\Contracts\Parsers\Format as FormatContract;
 
 class PHP implements FormatContract, DumperContract
