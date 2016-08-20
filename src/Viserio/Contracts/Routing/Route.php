@@ -163,6 +163,13 @@ interface Route
     public function isStatic(): bool;
 
     /**
+     * Get optional route parameters.
+     *
+     * @return \Viserio\Contracts\Routing\RouteMatcher[]
+     */
+    public function getSegments(): array;
+
+    /**
      * Run the route action and return the response.
      *
      * @return mixed

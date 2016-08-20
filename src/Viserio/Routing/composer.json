@@ -29,6 +29,7 @@
     },
     "require-dev": {
         "narrowspark/testing-helper"                         : "^1.5",
+        "mockery/mockery"                                    : "^0.9.5",
         "phpunit/phpunit"                                    : "^5.1",
         "viserio/http"                                       : "self.version"
     },

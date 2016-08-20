@@ -19,9 +19,8 @@ class Dispatcher implements DispatcherContract
      *
      * @param \Viserio\Routing\RouteCollection $routes
      */
-    public function __construct(RouteCollection $routes)
+    public function __construct($routes)
     {
-        $this->routes = new RouteCollection();
     }
 
     /**

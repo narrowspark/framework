@@ -9,7 +9,6 @@ use Viserio\Contracts\Container\Traits\ContainerAwareTrait;
 use Viserio\Contracts\Events\Traits\EventsAwareTrait;
 use Viserio\Contracts\Routing\Route as RouteContract;
 use Viserio\Contracts\Routing\RouteGroup as RouteGroupContract;
-use Viserio\Contracts\Routing\RouteParser as RouteParserContract;
 use Viserio\Contracts\Routing\Router as RouterContract;
 
 class Router implements RouterContract
@@ -25,15 +24,32 @@ class Router implements RouterContract
     protected $routes = [];
 
     /**
+     * An flattened array of all of the routes.
+     *
+     * @var array
+     */
+    protected $allRoutes = [];
+
+    /**
+     * @var \Viserio\Routing\RouteGroup[]
+     */
+    protected $groups = [];
+
+    /**
+     * Used global parameters in all routes.
+     *
+     * @var string[]
+     */
+    protected $globalParameterConditions = [];
+
+    /**
      * Create a new Router instance.
      *
-     * @param \Interop\Container\ContainerInterface  $container
-     * @param \Viserio\Contracts\Routing\RouteParser $parser
+     * @param \Interop\Container\ContainerInterface $container
      */
-    public function __construct(ContainerInterface $container, RouteParserContract $parser)
+    public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
-        $this->parser = $parser;
     }
 
     /**
@@ -121,6 +137,55 @@ class Router implements RouterContract
     }
 
     /**
+     * Defines the supplied parameter name to be globally associated with the pattern
+     *
+     * @param string $parameterName
+     * @param string $pattern
+     *
+     * @return $this
+     */
+    public function setGlobalParameter(string $parameterName, string $pattern)
+    {
+        $this->globalParameterConditions[$parameterName] = $pattern;
+
+        return $this;
+    }
+
+    /**
+     * Defines the supplied parameter name to be globally associated with the pattern
+     *
+     * @param string[] $parameterPatternMap
+     *
+     * @return $this
+     */
+    public function addGlobalParameters(array $parameterPatternMap)
+    {
+        $this->globalParameterConditions += $parameterPatternMap;
+
+        return $this;
+    }
+
+    /**
+     * Removes the global pattern associated with the supplied parameter name
+     *
+     * @param string $name
+     */
+    public function removeGlobalParameter(string $name)
+    {
+        unset($this->globalParameterConditions[$name]);
+    }
+
+    /**
+     * Get all global parameters for all routes.
+     *
+     * @return array
+     */
+    public function getGlobalParameters(): array
+    {
+        return $this->globalParameterConditions;
+    }
+
+    /**
      * Dispatch router for HTTP request.
      *
      * @param \Psr\Http\Message\ServerRequestInterface $request The current HTTP request object
@@ -142,7 +207,15 @@ class Router implements RouterContract
      */
     protected function addRoute($methods, string $uri, $action): RouteContract
     {
-        return $this->routes[] = $this->createRoute($methods, $uri, $action);
+        $route = $this->createRoute($methods, $uri, $action);
+
+        $domainAndUri = $route->getDomain() . $route->getUri();
+
+        foreach ($route->getMethods() as $method) {
+            $this->routes[$method][$domainAndUri] = $route;
+        }
+
+        return $this->allRoutes[$method . $domainAndUri] = $route;
     }
 
     /**
@@ -156,17 +229,12 @@ class Router implements RouterContract
      */
     protected function createRoute($methods, string $uri, $action): RouteContract
     {
-        $pattern = $this->parser->parse($uri, ['TODO']);
-
         $route = $this->newRoute(
             $methods,
             $this->prefix($uri),
-            $action
+            $action,
+            $this->getGlobalParameters()
         );
-
-        foreach ($pattern as $key => $value) {
-            $route->setParameter($key, $value);
-        }
 
         return $route;
     }

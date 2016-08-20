@@ -26,8 +26,7 @@
         "phpunit/phpunit"                 : "^5.1",
         "mikey179/vfsStream"              : "^1.6",
         "narrowspark/testing-helper"      : "^1.5",
-        "viserio/parsers"                 : "self.version",
-        "viserio/filesystem"              : "self.version"
+        "viserio/parsers"                 : "self.version"
     },
     "autoload": {
         "psr-4": {
@@ -46,7 +45,6 @@
         }
     },
     "suggest": {
-        "viserio/filesystem"              : "Required to use bind or cascadePackage function (0.10)",
         "viserio/parsers"                 : "Required to use FileLoader class (self.version)."
     },
     "minimum-stability"                   : "dev",

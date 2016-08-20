@@ -8,7 +8,7 @@ use UnexpectedValueException;
 use Viserio\Contracts\Container\Traits\ContainerAwareTrait;
 use Viserio\Contracts\Routing\Route as RouteContract;
 use Viserio\Contracts\Routing\Router as RouterContract;
-use Viserio\Routing\Matchers\ParameterMatcher;
+use Viserio\Routing\Segments\ParameterSegment;
 use Viserio\Support\Invoker;
 
 class Route implements RouteContract
@@ -65,13 +65,28 @@ class Route implements RouteContract
     protected $invoker;
 
     /**
+     * Optional route parameters.
+     *
+     * @var \Viserio\Contracts\Routing\RouteMatcher[]
+     */
+    protected $segments;
+
+    /**
+     * Global route parameters.
+     *
+     * @var array
+     */
+    protected $globalParameters;
+
+    /**
      * Create a new Route instance.
      *
      * @param array|string        $methods
      * @param string              $uri
      * @param \Closure|array|null $action
+     * @param array               $globalParameters
      */
-    public function __construct($methods, $uri, $action)
+    public function __construct($methods, $uri, $action, $globalParameters = [])
     {
         $this->uri = $uri;
         // According to RFC methods are defined in uppercase (See RFC 7231)
@@ -85,6 +100,10 @@ class Route implements RouteContract
         if (isset($this->action['prefix'])) {
             $this->addPrefix($this->action['prefix']);
         }
+
+        $this->globalParameters = $globalParameters;
+
+        $this->parseSegment($uri);
     }
 
     /**
@@ -121,6 +140,8 @@ class Route implements RouteContract
     public function setUri(string $uri): RouteContract
     {
         $this->uri = $uri;
+
+        $this->parseSegment($uri);
 
         return $this;
     }
@@ -277,12 +298,22 @@ class Route implements RouteContract
         $this->getParameters();
 
         foreach ($this->parameters as $parameter) {
-            if ($parameter instanceof ParameterMatcher) {
+            if ($parameter instanceof ParameterSegment) {
                 return false;
             }
         }
 
         return true;
+    }
+
+    /**
+     * Get optional route parameters.
+     *
+     * @return \Viserio\Contracts\Routing\RouteMatcher[]
+     */
+    public function getSegments(): array
+    {
+        return $this->segments;
     }
 
     /**
@@ -371,5 +402,15 @@ class Route implements RouteContract
         }
 
         return $action;
+    }
+
+    /**
+     * Get the optional parameters for the route.
+     *
+     * @param string $uri
+     */
+    private function parseSegment(string $uri)
+    {
+        $this->segments = (new RouteParser())->parse($uri, $this->globalParameters);
     }
 }

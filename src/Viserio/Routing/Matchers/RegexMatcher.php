@@ -24,14 +24,18 @@ class RegexMatcher extends AbstractMatcher
     /**
      * Create a new regex segment matcher instance.
      *
-     * @param string $regex
-     * @param int    $parameterKeyGroupMap
+     * @param string    $regex
+     * @param array|int $parameterKeyGroupMap
      */
-    public function __construct(string $regex, int $parameterKeyGroupMap)
+    public function __construct(string $regex, $parameterKeyGroupMap)
     {
-        $this->regex = $regex;
+        if (strpos($regex, '/^(') !== false && strpos($regex, ')$/') !== false) {
+            $this->regex = $regex;
+        } else {
+            $this->regex = '/^(' . $regex . ')$/';
+        }
 
-        $map = [$parameterKeyGroupMap => 0];
+        $map = is_array($parameterKeyGroupMap) ? $parameterKeyGroupMap : [$parameterKeyGroupMap => 0];
 
         $this->parameterKeyGroupMap = $map;
         $this->parameterKeys = array_keys($map);

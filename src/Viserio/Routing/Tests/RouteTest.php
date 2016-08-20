@@ -26,31 +26,31 @@ class RouteTest extends \PHPUnit_Framework_TestCase
 
     public function testGetMethods()
     {
-        $route = new Route('GET', 'test', ['uses' => Controller::class . '::string']);
+        $route = new Route('GET', '/test', ['uses' => Controller::class . '::string']);
 
         $this->assertSame(['GET', 'HEAD'], $route->getMethods());
 
-        $route = new Route('PUT', 'test', ['uses' => Controller::class . '::string']);
+        $route = new Route('PUT', '/test', ['uses' => Controller::class . '::string']);
 
         $this->assertSame(['PUT'], $route->getMethods());
 
-        $route = new Route(['GET', 'POST'], 'test', ['uses' => Controller::class . '::string']);
+        $route = new Route(['GET', 'POST'], '/test', ['uses' => Controller::class . '::string']);
 
         $this->assertSame(['GET', 'POST', 'HEAD'], $route->getMethods());
     }
 
     public function testGetDomain()
     {
-        $route = new Route('GET', 'test', ['domain' => 'test.com']);
+        $route = new Route('GET', '/test', ['domain' => 'test.com']);
 
         $this->assertSame('test.com', $route->getDomain());
     }
 
     public function testGetAndSetUri()
     {
-        $route = new Route('GET', 'test', ['domain' => 'test.com']);
+        $route = new Route('GET', '/test', ['domain' => 'test.com']);
 
-        $this->assertSame('test', $route->getUri());
+        $this->assertSame('/test', $route->getUri());
 
         $route->setUri('/foo/bar');
 
@@ -59,7 +59,7 @@ class RouteTest extends \PHPUnit_Framework_TestCase
 
     public function testGetAndSetName()
     {
-        $route = new Route('GET', 'test', ['as' => 'test']);
+        $route = new Route('GET', '/test', ['as' => 'test']);
 
         $this->assertSame('test', $route->getName());
 
@@ -67,7 +67,7 @@ class RouteTest extends \PHPUnit_Framework_TestCase
 
         $this->assertSame('testfoo', $route->getName());
 
-        $route = new Route('GET', 'test', null);
+        $route = new Route('GET', '/test', null);
         $route->setName('test');
 
         $this->assertSame('test', $route->getName());
@@ -75,23 +75,23 @@ class RouteTest extends \PHPUnit_Framework_TestCase
 
     public function testHttpAndHttps()
     {
-        $route = new Route('GET', 'test', ['http']);
+        $route = new Route('GET', '/test', ['http']);
 
         $this->assertTrue($route->isHttpOnly());
 
-        $route = new Route('GET', 'test', ['https']);
+        $route = new Route('GET', '/test', ['https']);
 
         $this->assertTrue($route->isHttpsOnly());
     }
 
     public function testSetAndGetPrefix()
     {
-        $route = new Route('GET', 'test', ['prefix' => 'test']);
+        $route = new Route('GET', '/test', ['prefix' => 'test']);
 
         $this->assertSame('test', $route->getPrefix());
         $this->assertSame('test/test', $route->getUri());
 
-        $route = new Route('GET', 'test', null);
+        $route = new Route('GET', '/test', null);
         $route->addPrefix('foo');
 
         $this->assertSame('foo/test', $route->getUri());
