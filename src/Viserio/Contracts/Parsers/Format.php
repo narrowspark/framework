@@ -14,15 +14,4 @@ interface Format
      * @return array
      */
     public function parse(string $payload): array;
-
-    /**
-     * Dumps a array into a string.
-     *
-     * @param array $data
-     *
-     * @throws \Viserio\Contracts\Parsers\Exception\DumpException If dumping fails
-     *
-     * @return string|false
-     */
-    public function dump(array $data);
 }
