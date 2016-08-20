@@ -4,7 +4,6 @@ namespace Viserio\Http;
 
 use InvalidArgumentException;
 use Psr\Http\Message\RequestInterface;
-use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\UriInterface;
 
 class Request extends AbstractMessage implements RequestInterface
@@ -57,11 +56,11 @@ class Request extends AbstractMessage implements RequestInterface
     /**
      * Create a new request instance.
      *
-     * @param null|string|UriInterface             $uri     URI for the request.
-     * @param string|null                          $method  HTTP method for the request.
-     * @param array                                $headers Headers for the message.
-     * @param string|null|resource|StreamInterface $body    Message body.
-     * @param string                               $version HTTP protocol version.
+     * @param null|string|UriInterface                               $uri     URI for the request.
+     * @param string|null                                            $method  HTTP method for the request.
+     * @param array                                                  $headers Headers for the message.
+     * @param string|null|resource|\Psr\Http\Message\StreamInterface $body    Message body.
+     * @param string                                                 $version HTTP protocol version.
      */
     public function __construct(
         $uri,
@@ -80,7 +79,7 @@ class Request extends AbstractMessage implements RequestInterface
         }
 
         if ($body !== '' && $body !== null) {
-            $this->stream = Util::getStream($body);
+            $this->stream = $this->createStream($body);
         }
     }
 
@@ -215,17 +214,9 @@ class Request extends AbstractMessage implements RequestInterface
 
         $method = strtoupper($method);
 
-        if (! is_string($method)) {
-            throw new InvalidArgumentException(
-                'The HTTP method must be a string'
-            );
-        }
-
-        $method = strtoupper($method);
-
         if (! isset(static::$validMethods[$method])) {
             throw new InvalidArgumentException(sprintf(
-                'Unsupported HTTP method "%s"',
+                'Unsupported HTTP method "%s".',
                 $method
             ));
         }
@@ -266,7 +257,7 @@ class Request extends AbstractMessage implements RequestInterface
         }
 
         throw new InvalidArgumentException(
-            'Invalid URI provided; must be null, a string, or a Psr\Http\Message\UriInterface instance'
+            'Invalid URI provided; must be null, a string, or a Psr\Http\Message\UriInterface instance.'
         );
     }
 }

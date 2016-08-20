@@ -42,12 +42,4 @@ class Po implements FormatContract
             ]);
         }
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function dump(array $data): string
-    {
-        //
-    }
 }
