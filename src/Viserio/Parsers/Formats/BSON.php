@@ -3,9 +3,9 @@ declare(strict_types=1);
 namespace Viserio\Parsers\Formats;
 
 use RuntimeException;
+use Viserio\Contracts\Parsers\Dumper as DumperContract;
 use Viserio\Contracts\Parsers\Exception\DumpException;
 use Viserio\Contracts\Parsers\Exception\ParseException;
-use Viserio\Contracts\Parsers\Dumper as DumperContract;
 use Viserio\Contracts\Parsers\Format as FormatContract;
 
 class BSON implements FormatContract, DumperContract

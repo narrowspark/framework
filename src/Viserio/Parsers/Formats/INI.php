@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Parsers\Formats;
 
-use Viserio\Contracts\Parsers\Exception\ParseException;
 use Viserio\Contracts\Parsers\Dumper as DumperContract;
+use Viserio\Contracts\Parsers\Exception\ParseException;
 use Viserio\Contracts\Parsers\Format as FormatContract;
 
 class INI implements FormatContract, DumperContract
@@ -39,10 +39,8 @@ class INI implements FormatContract, DumperContract
     }
 
     /**
-     *
      * @param string $section
-     *
-     * @param array $array
+     * @param array  $array
      *
      * @return string
      */
