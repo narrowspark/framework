@@ -5,9 +5,10 @@ namespace Viserio\Parsers\Formats;
 use RuntimeException;
 use Viserio\Contracts\Parsers\Exception\DumpException;
 use Viserio\Contracts\Parsers\Exception\ParseException;
+use Viserio\Contracts\Parsers\Dumper as DumperContract;
 use Viserio\Contracts\Parsers\Format as FormatContract;
 
-class MSGPack implements FormatContract
+class MSGPack implements FormatContract, DumperContract
 {
     /**
      * {@inheritdoc}
