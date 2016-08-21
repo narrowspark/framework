@@ -41,7 +41,7 @@ abstract class AbstractMessage implements MessageInterface
     protected $headerNames = [];
 
     /**
-     * @var StreamInterface
+     * @var \Psr\Http\Message\StreamInterface
      */
     protected $stream;
 
@@ -186,7 +186,7 @@ abstract class AbstractMessage implements MessageInterface
     public function getBody()
     {
         if (! $this->stream) {
-            $this->stream = Util::getStream('');
+            $this->stream = (new StreamFactory())->createStreamFromString('');
         }
 
         return $this->stream;
@@ -234,6 +234,33 @@ abstract class AbstractMessage implements MessageInterface
                 $this->headers[$header] = $value;
             }
         }
+    }
+
+    /**
+     * Create a new stream based on the input type.
+     *
+     * @param string|null|resource|\Psr\Http\Message\StreamInterface $body
+     *
+     * @throws \InvalidArgumentException if the $resource arg is not valid.
+     *
+     * @return \Psr\Http\Message\StreamInterface
+     */
+    protected function createStream($body): StreamInterface
+    {
+        $stream = new StreamFactory();
+        $type = gettype($body);
+
+        if ($body instanceof StreamInterface) {
+            return $body;
+        } elseif (is_string($body)) {
+            return $stream->createStreamFromString($body);
+        } elseif ($type === 'NULL') {
+            return new Stream(fopen('php://temp', 'r+'));
+        } elseif ($type === 'resource') {
+            return $stream->createStreamFromResource($body);
+        }
+
+        throw new InvalidArgumentException('Invalid resource type: ' . gettype($body));
     }
 
     /**

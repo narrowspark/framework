@@ -25,7 +25,6 @@
     "require-dev": {
         "phpunit/phpunit"                 : "^5.1",
         "mikey179/vfsStream"              : "^1.6",
-        "narrowspark/php-cs-fixer-config" : "^2.0",
         "narrowspark/testing-helper"      : "^1.5",
         "viserio/parsers"                 : "self.version",
         "viserio/filesystem"              : "self.version"

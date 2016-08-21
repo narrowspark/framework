@@ -2,9 +2,10 @@
 declare(strict_types=1);
 namespace Viserio\Parsers\Formats;
 
+use Viserio\Contracts\Parsers\Dumper as DumperContract;
 use Viserio\Contracts\Parsers\Format as FormatContract;
 
-class QueryStr implements FormatContract
+class QueryStr implements FormatContract, DumperContract
 {
     /**
      * {@inheritdoc}

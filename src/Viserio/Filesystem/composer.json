@@ -55,7 +55,6 @@
         "league/flysystem-vfs"               : "^1.0",
         "league/flysystem-ziparchive"        : "^1.0",
         "mikey179/vfsStream"                 : "^1.6",
-        "narrowspark/php-cs-fixer-config"    : "^2.0",
         "narrowspark/testing-helper"         : "^1.5",
         "phpunit/phpunit"                    : "^5.1",
         "viserio/cache"                      : "self.version"

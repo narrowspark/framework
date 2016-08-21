@@ -36,12 +36,4 @@ class TOML implements FormatContract
             ]);
         }
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function dump(array $data): string
-    {
-        return 'Not supported.';
-    }
 }

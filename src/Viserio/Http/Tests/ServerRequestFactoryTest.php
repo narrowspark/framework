@@ -76,6 +76,7 @@ class ServerRequestFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $_SERVER = $serverParams;
         $serverRequest = (new ServerRequestFactory())->createServerRequestFromGlobals();
+
         $this->assertEquals(new Uri($expected), $serverRequest->getUri());
     }
 

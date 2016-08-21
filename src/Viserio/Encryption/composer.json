@@ -26,7 +26,6 @@
         "viserio/contracts"                : "self.version"
     },
     "require-dev": {
-        "narrowspark/php-cs-fixer-config"  : "^2.0",
         "narrowspark/testing-helper"       : "^1.5",
         "phpunit/phpunit"                  : "^5.1"
     },
