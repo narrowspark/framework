@@ -19,15 +19,6 @@ interface Route
     public function getUri(): string;
 
     /**
-     * Set the URI that the route responds to.
-     *
-     * @param string $uri
-     *
-     * @return $this
-     */
-    public function setUri(string $uri): Route;
-
-    /**
      * Get the name of the route instance.
      *
      * @return string|null
@@ -49,6 +40,16 @@ interface Route
      * @return array
      */
     public function getMethods(): array;
+
+    /**
+     * Set a regular expression requirement on the route.
+     *
+     * @param array|string $name
+     * @param string       $expression
+     *
+     * @return $this
+     */
+    public function where($name, string $expression = null): Route;
 
     /**
      * Determine if the route only responds to HTTP requests.
@@ -163,9 +164,9 @@ interface Route
     public function isStatic(): bool;
 
     /**
-     * Get optional route parameters.
+     * The regular expression requirements.
      *
-     * @return \Viserio\Contracts\Routing\RouteMatcher[]
+     * @return \\Viserio\Contracts\Routing\RouteMatcher[]
      */
     public function getSegments(): array;
 
@@ -179,9 +180,9 @@ interface Route
     /**
      * Set the router instance on the route.
      *
-     * @param \Viserio\Contracts\Routing\Router $router
+     * @param \Viserio\Contracts\Routing\RouteCollection $router
      *
      * @return $this
      */
-    public function setRouter(Router $router): Route;
+    public function setRouter(RouteCollection $router): Route;
 }

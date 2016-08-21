@@ -74,7 +74,7 @@ class RegexMatcher extends AbstractMatcher
     /**
      * {@inheritdoc}
      */
-    public function getConditionExpression(string $segmentVariable, string $uniqueKey = null): string
+    public function getConditionExpression(string $segmentVariable, int $uniqueKey = null): string
     {
         return 'preg_match('
             . VarExporter::export($this->regex)
@@ -88,7 +88,7 @@ class RegexMatcher extends AbstractMatcher
     /**
      * {@inheritdoc}
      */
-    public function getMatchedParameterExpressions(string $segmentVariable, string $uniqueKey = null): array
+    public function getMatchedParameterExpressions(string $segmentVariable, int $uniqueKey = null): array
     {
         $matches = [];
 

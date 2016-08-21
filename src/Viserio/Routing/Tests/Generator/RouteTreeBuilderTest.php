@@ -10,7 +10,6 @@ use Viserio\Routing\Generator\RouteTreeNode;
 use Viserio\Routing\Matchers\RegexMatcher;
 use Viserio\Routing\Matchers\StaticMatcher;
 use Viserio\Routing\Route;
-use Viserio\Routing\Segments\ParameterSegment;
 
 class RouteTreeBuilderTest extends \PHPUnit_Framework_TestCase
 {
@@ -35,7 +34,7 @@ class RouteTreeBuilderTest extends \PHPUnit_Framework_TestCase
                 ],
             ],
             [
-                [(new Route(['GET'], '/{param}', null, [new ParameterSegment('param', Pattern::ANY)]))->setParameter('root-route', '')],
+                [(new Route(['GET'], '/{param}', null))->where('param', Pattern::ANY)->setParameter('root-route', '')],
                 null,
                 [
                     1 => new ChildrenNodeCollection([
@@ -51,7 +50,7 @@ class RouteTreeBuilderTest extends \PHPUnit_Framework_TestCase
             [
                 [
                     (new Route(['GET'], '/first/{param1}', null))->setParameter('static-first', ''),
-                    (new Route(['GET'], '/{param1}/{param2}', null, [new ParameterSegment('param1', Pattern::ANY), new ParameterSegment('param2', Pattern::ANY)]))->setParameter('dynamic', ''),
+                    (new Route(['GET'], '/{param1}/{param2}', null))->where(['param1', 'param2'], Pattern::ANY)->setParameter('dynamic', ''),
                 ],
                 null,
                 [
@@ -89,8 +88,8 @@ class RouteTreeBuilderTest extends \PHPUnit_Framework_TestCase
                     (new Route(['POST'], '/main/place', null))->setParameter('main.place-post', ''),
                     (new Route('ANY', '/main/thing', null))->setParameter('main.thing', ''),
                     (new Route('ANY', '/main/thing/abc', null))->setParameter('main.thing.abc', ''),
-                    (new Route('ANY', '/user/{name}', null, [new StaticMatcher('user'), new ParameterSegment('name', Pattern::ANY)]))->setParameter('user.show', ''),
-                    (new Route('ANY', '/user/{name}/edit', null, [new ParameterSegment('name', Pattern::ANY)]))->setParameter('user.edit', ''),
+                    (new Route('ANY', '/user/{name}', null))->where('name', Pattern::ANY)->setParameter('user.show', ''),
+                    (new Route('ANY', '/user/{name}/edit', null))->where('name', Pattern::ANY)->setParameter('user.edit', ''),
                     (new Route('ANY', '/user/create', null))->setParameter('user.create', ''),
                 ],
                 new MatchedRouteDataMap([], [[], ['home' => '']]),

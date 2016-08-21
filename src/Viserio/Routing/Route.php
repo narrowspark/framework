@@ -7,7 +7,8 @@ use Narrowspark\Arr\StaticArr as Arr;
 use UnexpectedValueException;
 use Viserio\Contracts\Container\Traits\ContainerAwareTrait;
 use Viserio\Contracts\Routing\Route as RouteContract;
-use Viserio\Contracts\Routing\Router as RouterContract;
+use Viserio\Contracts\Routing\RouteCollection as RouteCollectionContract;
+use Viserio\Contracts\Routing\RouteSegment as RouteSegmentContract;
 use Viserio\Routing\Segments\ParameterSegment;
 use Viserio\Support\Invoker;
 
@@ -46,9 +47,16 @@ class Route implements RouteContract
     /**
      * The array of matched parameters.
      *
-     * @var array|null
+     * @var array
      */
-    protected $parameters;
+    protected $parameters = [];
+
+    /**
+     * The regular expression requirements.
+     *
+     * @var array
+     */
+    protected $wheres = [];
 
     /**
      * The router instance used by the route.
@@ -65,28 +73,13 @@ class Route implements RouteContract
     protected $invoker;
 
     /**
-     * Optional route parameters.
-     *
-     * @var \Viserio\Contracts\Routing\RouteMatcher[]
-     */
-    protected $segments;
-
-    /**
-     * Global route parameters.
-     *
-     * @var array
-     */
-    protected $globalParameters;
-
-    /**
      * Create a new Route instance.
      *
      * @param array|string        $methods
      * @param string              $uri
      * @param \Closure|array|null $action
-     * @param array               $globalParameters
      */
-    public function __construct($methods, $uri, $action, array $globalParameters = [])
+    public function __construct($methods, string $uri, $action)
     {
         $this->uri = $uri;
         // According to RFC methods are defined in uppercase (See RFC 7231)
@@ -100,10 +93,6 @@ class Route implements RouteContract
         if (isset($this->action['prefix'])) {
             $this->addPrefix($this->action['prefix']);
         }
-
-        $this->globalParameters = $globalParameters;
-
-        $this->parseSegment($uri);
     }
 
     /**
@@ -137,18 +126,6 @@ class Route implements RouteContract
     /**
      * {@inheritdoc}
      */
-    public function setUri(string $uri): RouteContract
-    {
-        $this->uri = $uri;
-
-        $this->parseSegment($uri);
-
-        return $this;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getName()
     {
         return $this->action['as'] ?? null;
@@ -170,6 +147,18 @@ class Route implements RouteContract
     public function getMethods(): array
     {
         return $this->httpMethods;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function where($name, string $expression = null): RouteContract
+    {
+        foreach ($this->parseWhere($name, $expression) as $name => $expression) {
+            $this->wheres[] = new ParameterSegment($name, $expression);
+        }
+
+        return $this;
     }
 
     /**
@@ -307,13 +296,11 @@ class Route implements RouteContract
     }
 
     /**
-     * Get optional route parameters.
-     *
-     * @return \Viserio\Contracts\Routing\RouteMatcher[]
+     * {@inheritdoc}
      */
     public function getSegments(): array
     {
-        return $this->segments;
+        return (new RouteParser())->parse($this->uri, $this->wheres);
     }
 
     /**
@@ -332,7 +319,7 @@ class Route implements RouteContract
     /**
      * {@inheritdoc}
      */
-    public function setRouter(RouterContract $router): RouteContract
+    public function setRouter(RouteCollectionContract $router): RouteContract
     {
         $this->router = $router;
 
@@ -405,12 +392,25 @@ class Route implements RouteContract
     }
 
     /**
-     * Get the optional parameters for the route.
+     * Parse arguments to the where method into an array.
      *
-     * @param string $uri
+     * @param array|string $name
+     * @param string       $expression
+     *
+     * @return array
      */
-    private function parseSegment(string $uri)
+    protected function parseWhere($name, string $expression): array
     {
-        $this->segments = (new RouteParser())->parse($uri, $this->globalParameters);
+        if (is_string($name)) {
+            return [$name => $expression];
+        }
+
+        $arr = [];
+
+        foreach ($name as $paramName) {
+            $arr[$paramName] = $expression;
+        }
+
+        return $arr;
     }
 }

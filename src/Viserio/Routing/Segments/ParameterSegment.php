@@ -2,9 +2,11 @@
 declare(strict_types=1);
 namespace Viserio\Routing\Segments;
 
+use Viserio\Contracts\Routing\RouteSegment as RouteSegmentContract;
+use Viserio\Contracts\Routing\SegmentMatcher as SegmentMatcherContract;
 use Viserio\Routing\Matchers\RegexMatcher;
 
-class ParameterSegment
+class ParameterSegment implements RouteSegmentContract
 {
     /**
      * @var string[]
@@ -29,13 +31,9 @@ class ParameterSegment
     }
 
     /**
-     * [getMatcher description]
-     *
-     * @param array &$parameterIndexNameMap
-     *
-     * @return \Viserio\Routing\Matchers\RegexMatcher
+     * {@inheritdoc}
      */
-    public function getMatcher(array &$parameterIndexNameMap): RegexMatcher
+    public function getMatcher(array &$parameterIndexNameMap): SegmentMatcherContract
     {
         $parameterKey = empty($parameterIndexNameMap) ? 0 : max(array_keys($parameterIndexNameMap)) + 1;
         $parameterKeyGroupMap = [];

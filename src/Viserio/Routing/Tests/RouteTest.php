@@ -5,24 +5,13 @@ namespace Viserio\Routing\Tests;
 use Interop\Container\ContainerInterface;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use Viserio\Routing\Route;
-use Viserio\Routing\RouteParser;
-use Viserio\Routing\Router;
+use Viserio\Routing\Dispatcher;
 use Viserio\Routing\Tests\Fixture\Controller;
+use Viserio\Http\ServerRequestFactory;
 
 class RouteTest extends \PHPUnit_Framework_TestCase
 {
     use MockeryTrait;
-
-    public function testBasicDispatchingOfRoutes()
-    {
-        $router = $this->getRouter();
-        // $router->get('/hello/{name}', function (Request $request, Response $response) {
-        //     $name = $request->getAttribute('name');
-        //     $response->getBody()->write("Hello, $name");
-
-        //     return $response;
-        // });
-    }
 
     public function testGetMethods()
     {
@@ -51,10 +40,6 @@ class RouteTest extends \PHPUnit_Framework_TestCase
         $route = new Route('GET', '/test', ['domain' => 'test.com']);
 
         $this->assertSame('/test', $route->getUri());
-
-        $route->setUri('/foo/bar');
-
-        $this->assertSame('/foo/bar', $route->getUri());
     }
 
     public function testGetAndSetName()
@@ -99,10 +84,5 @@ class RouteTest extends \PHPUnit_Framework_TestCase
         $route->addPrefix('test');
 
         $this->assertSame('test/foo/test', $route->getUri());
-    }
-
-    protected function getRouter()
-    {
-        return new Router($this->mock(ContainerInterface::class), new RouteParser());
     }
 }

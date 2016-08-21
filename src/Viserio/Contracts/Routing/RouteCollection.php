@@ -3,8 +3,9 @@ declare(strict_types=1);
 namespace Viserio\Contracts\Routing;
 
 use Closure;
+use Viserio\Contracts\Support\Arrayable as ArrayableContract;
 
-interface Router
+interface RouteCollection extends ArrayableContract
 {
     /**
      * Register a new GET route with the router.
@@ -88,19 +89,24 @@ interface Router
     public function match($methods, $uri, $action = null): Route;
 
     /**
-     * Get the parent group.
-     *
-     * @return \Viserio\Contracts\Routing\RouteGroup
-     */
-    public function getGroup(): RouteGroup;
-
-    /**
      * Create a route group with shared attributes.
      *
      * @param array    $attributes
      * @param \Closure $callback
-     *
-     * @return \Viserio\Contracts\Routing\Router
      */
-    public function group(array $attributes, Closure $callback): Router;
+    public function group(array $attributes, Closure $callback);
+
+    /**
+     * Determine if the router currently has a group stack.
+     *
+     * @return bool
+     */
+    public function hasGroupStack(): bool;
+
+    /**
+     * Get the current group stack for the router.
+     *
+     * @return array
+     */
+    public function getGroupStack(): array;
 }

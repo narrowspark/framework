@@ -228,7 +228,8 @@ class RouteTreeOptimizerTest extends \PHPUnit_Framework_TestCase
                                     [
                                         2 => new StaticMatcher('1'),
                                     ],
-                                    new ChildrenNodeCollection([])),
+                                    new ChildrenNodeCollection([])
+                                ),
                                 new RouteTreeNode(
                                     [
                                         2 => new StaticMatcher('3'),

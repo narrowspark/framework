@@ -2,25 +2,35 @@
 declare(strict_types=1);
 namespace Viserio\Routing;
 
+use Interop\Container\ContainerInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Viserio\Contracts\Container\Traits\ContainerAwareTrait;
+use Viserio\Contracts\Events\Traits\EventsAwareTrait;
 use Viserio\Contracts\Routing\Dispatcher as DispatcherContract;
 
 class Dispatcher implements DispatcherContract
 {
-    /**
-     * The route collection instance.
-     *
-     * @var \Viserio\Routing\RouteCollection
-     */
-    protected $routes;
+    use ContainerAwareTrait;
+    use EventsAwareTrait;
 
     /**
-     * Create a new dispatcher instance.
+     * The router instance.
      *
-     * @param \Viserio\Routing\RouteCollection $routes
+     * @var object
      */
-    public function __construct($routes)
+    protected $router;
+
+    /**
+     * Create a new Router instance.
+     *
+     * @param object                                $path
+     * @param \Interop\Container\ContainerInterface $container
+     * @param array                                 $options
+     */
+    public function __construct($router, ContainerInterface $container)
     {
+        $this->router = $router;
+        $this->container = $container;
     }
 
     /**
@@ -33,32 +43,57 @@ class Dispatcher implements DispatcherContract
      */
     public function handle(ServerRequestInterface $request)
     {
-        $match = $this->dispatch(
+        $router = $this->router;
+        $match = $router(
             $request->getMethod(),
             $request->getUri()->getPath()
-        );
+        );var_dump($match);
 
         switch ($match[0]) {
             case DispatcherContract::NOT_FOUND:
-                // 404 Not Found...
+                return $this->handleNotFound();
                 break;
             case DispatcherContract::HTTP_METHOD_NOT_ALLOWED:
-                // 405 Method Not Allowed...
+                $allowed = (array) $match[1];
+                return $this->handleNotAllowed($allowed);
                 break;
             case DispatcherContract::FOUND:
-                // Matched route, dispatch to associated handler...
+
+                return $this->handleFound($match[1], (array) $match[2]);
                 break;
         }
     }
 
     /**
-     * {@inheritdoc}
+     * Handle dispatching of a found route.
+     *
+     * @param callable $route
+     * @param array    $vars
+     *
+     * @return \League\Route\Middleware\ExecutionChain
      */
-    public function dispatch(string $httpMethod, string $uri): array
+    protected function handleFound(callable $route, array $vars)
+    {
+
+    }
+
+    /**
+     * Handle a not found route.
+     *
+     * @return \League\Route\Middleware\ExecutionChain
+     */
+    protected function handleNotFound()
     {
     }
 
-    protected function generate()
+    /**
+     * Handles a not allowed route.
+     *
+     * @param array $allowed
+     *
+     * @return \League\Route\Middleware\ExecutionChain
+     */
+    protected function handleNotAllowed(array $allowed)
     {
     }
 }
