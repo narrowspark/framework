@@ -42,6 +42,5 @@ class TreeRouteCompiler
      */
     public function compile(array $routes): string
     {
-
     }
 }

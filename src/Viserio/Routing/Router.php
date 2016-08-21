@@ -7,10 +7,10 @@ use Interop\Container\ContainerInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Contracts\Container\Traits\ContainerAwareTrait;
 use Viserio\Contracts\Events\Traits\EventsAwareTrait;
-use Viserio\Contracts\Support\Arrayable as ArrayableContract;
 use Viserio\Contracts\Routing\Route as RouteContract;
 use Viserio\Contracts\Routing\RouteGroup as RouteGroupContract;
 use Viserio\Contracts\Routing\Router as RouterContract;
+use Viserio\Contracts\Support\Arrayable as ArrayableContract;
 
 class Router implements RouterContract, ArrayableContract
 {
@@ -202,7 +202,7 @@ class Router implements RouterContract, ArrayableContract
      */
     public function toArray(): array
     {
-         return $this->allRoutes;
+        return $this->allRoutes;
     }
 
     /**
