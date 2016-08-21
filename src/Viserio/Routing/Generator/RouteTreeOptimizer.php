@@ -2,18 +2,13 @@
 declare(strict_types=1);
 namespace Viserio\Routing\Generator;
 
-use Viserio\Contracts\Routing\Pattern;
 use Viserio\Contracts\Routing\SegmentMatcher as SegmentMatcherContract;
-use Viserio\Routing\Matchers\AnyMatcher;
-use Viserio\Routing\Matchers\CompoundMatcher;
-use Viserio\Routing\Matchers\ExpressionMatcher;
-use Viserio\Routing\Matchers\RegexMatcher;
-use Viserio\Routing\Matchers\StaticMatcher;
+use Viserio\Routing\Generator\Optimizer\MatcherOptimizer;
 
 class RouteTreeOptimizer
 {
     /**
-     * Optimizes the supplied route tree
+     * Optimizes the supplied route tree.
      *
      * @param array $routeTree
      *
@@ -67,108 +62,14 @@ class RouteTreeOptimizer
 
             if (count($children) === 1) {
                 $childNode = reset($children);
-                $matchers = $this->mergeMatchers($node->getMatchers(), $childNode->getMatchers());
+                $matchers = MatcherOptimizer::mergeMatchers($node->getMatchers(), $childNode->getMatchers());
                 $contents = $childNode->getContents();
             }
         }
 
-        $matchers = $this->optimizeMatchers($matchers);
+        $matchers = MatcherOptimizer::optimizeMatchers($matchers);
 
         return $node->update($matchers, $contents);
-    }
-
-    /**
-     * [mergeMatchers description]
-     *
-     * @param \Viserio\Contracts\Routing\SegmentMatcher[] $parentMatchers
-     * @param array                                       $childMatchers
-     *
-     * @return array
-     */
-    protected function mergeMatchers(array $parentMatchers, array $childMatchers): array
-    {
-        $mergedMatchers = $parentMatchers;
-
-        foreach ($childMatchers as $segment => $childMatcher) {
-            if (isset($mergedMatchers[$segment])) {
-                $mergedMatchers[$segment] = new CompoundMatcher([$mergedMatchers[$segment], $childMatcher]);
-            } else {
-                $mergedMatchers[$segment] = $childMatcher;
-            }
-        }
-
-        return $mergedMatchers;
-    }
-
-    /**
-     * @param \Viserio\Contracts\Routing\SegmentMatcher $matcher
-     *
-     * @return \Viserio\Contracts\Routing\SegmentMatcher
-     */
-    protected function optimizeMatcher(SegmentMatcherContract $matcher): SegmentMatcherContract
-    {
-        if ($matcher instanceof RegexMatcher && $matcher->getGroupCount() === 1) {
-            $parameterKeys = $matcher->getParameterKeys();
-
-            switch ($matcher->getRegex()) {
-                case Pattern::ANY:
-                    return new AnyMatcher($parameterKeys);
-                case Pattern::DIGITS:
-                    return new ExpressionMatcher('ctype_digit({segment})', $parameterKeys);
-                case Pattern::ALPHA:
-                    return new ExpressionMatcher('ctype_alpha({segment})', $parameterKeys);
-                case Pattern::ALPHA_LOWER:
-                    return new ExpressionMatcher('ctype_lower({segment})', $parameterKeys);
-                case Pattern::ALPHA_UPPER:
-                    return new ExpressionMatcher('ctype_upper({segment})', $parameterKeys);
-                case Pattern::ALPHA_NUM:
-                    return new ExpressionMatcher('ctype_alnum({segment})', $parameterKeys);
-                case Pattern::ALPHA_NUM_DASH:
-                    return new ExpressionMatcher('ctype_alnum(str_replace(\'-\', \'\', {segment}))', $parameterKeys);
-            }
-        }
-
-        return $matcher;
-    }
-
-    /**
-     * [optimizeMatcherOrder description]
-     *
-     * @param array $matchers
-     *
-     * @return array
-     */
-    protected function optimizeMatcherOrder(array $matchers): array
-    {
-        $computationalCostOrder = [
-            AnyMatcher::class,
-            StaticMatcher::class,
-            ExpressionMatcher::class,
-            RegexMatcher::class,
-            // Unknown types last
-            SegmentMatcherContract::class,
-        ];
-
-        $groups = [];
-
-        foreach ($computationalCostOrder as $type) {
-            foreach ($matchers as $index => $matcher) {
-                if ($matcher instanceof $type) {
-                    unset($matchers[$index]);
-                    $groups[$type][$index] = $matcher;
-                }
-            }
-        }
-
-        $matchers = [];
-
-        foreach ($groups as $group) {
-            foreach ($group as $index => $matcher) {
-                $matchers[$index] = $matcher;
-            }
-        }
-
-        return $matchers;
     }
 
     /**

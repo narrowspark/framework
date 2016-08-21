@@ -91,12 +91,12 @@ class RouteTreeNode
     /**
      * Update RouteTreeNode class.
      *
-     * @param array            $matchers
-     * @param NodeContentsBase $contents
+     * @param array                                   $matchers
+     * @param \Viserio\Contracts\Routing\NodeContents $contents
      *
      * @return \Viserio\Routing\Generator\RouteTreeNode
      */
-    public function update(array $matchers, NodeContentsBase $contents): RouteTreeNode
+    public function update(array $matchers, NodeContentsContract $contents): RouteTreeNode
     {
         if ($this->matchers === $matchers && $this->contents === $contents) {
             return $this;

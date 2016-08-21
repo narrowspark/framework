@@ -86,7 +86,7 @@ class MatchedRouteDataMap implements NodeContentsContract
      */
     public function isEmpty(): bool
     {
-        return $this->defaultRouteData === null && empty($this->httpMethodRouteDataMap);
+        return $this->defaultRouteData === null && empty($this->httpMethodRouteMap);
     }
 
     /**
@@ -100,7 +100,7 @@ class MatchedRouteDataMap implements NodeContentsContract
         if (count($route->getMethods()) === 1 && in_array('ANY', $route->getMethods())) {
             $this->defaultRouteData = [$parameterIndexNameMap, $route->getParameters()];
         } else {
-            $this->httpMethodRouteDataMap[] = [$route->getMethods(), [$parameterIndexNameMap, $route->getParameters()]];
+            $this->httpMethodRouteMap[] = [$route->getMethods(), [$parameterIndexNameMap, $route->getParameters()]];
         }
     }
 }
