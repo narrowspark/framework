@@ -45,8 +45,6 @@ class RouteCollection implements RouteCollectionContract
     protected $globalParameterConditions = [];
 
     /**
-     *
-     *
      * @var bool
      */
     protected $isDevelopMode = true;
@@ -469,7 +467,7 @@ class RouteCollection implements RouteCollectionContract
     {
         $group = end($this->groupStack);
 
-        return isset($group['namespace']) && strpos($uses, '\\') !== 0 ? $group['namespace'].'\\'.$uses : $uses;
+        return isset($group['namespace']) && strpos($uses, '\\') !== 0 ? $group['namespace'] . '\\' . $uses : $uses;
     }
 
     /**

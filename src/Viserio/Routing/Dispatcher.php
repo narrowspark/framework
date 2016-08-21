@@ -47,7 +47,8 @@ class Dispatcher implements DispatcherContract
         $match = $router(
             $request->getMethod(),
             $request->getUri()->getPath()
-        );var_dump($match);
+        );
+        var_dump($match);
 
         switch ($match[0]) {
             case DispatcherContract::NOT_FOUND:
@@ -55,6 +56,7 @@ class Dispatcher implements DispatcherContract
                 break;
             case DispatcherContract::HTTP_METHOD_NOT_ALLOWED:
                 $allowed = (array) $match[1];
+
                 return $this->handleNotAllowed($allowed);
                 break;
             case DispatcherContract::FOUND:
@@ -74,7 +76,6 @@ class Dispatcher implements DispatcherContract
      */
     protected function handleFound(callable $route, array $vars)
     {
-
     }
 
     /**

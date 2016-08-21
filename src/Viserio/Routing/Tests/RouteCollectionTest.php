@@ -4,8 +4,8 @@ namespace Viserio\Routing\Tests;
 
 use Interop\Container\ContainerInterface;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
-use Viserio\Routing\RouteCollection;
 use Viserio\Http\ServerRequestFactory;
+use Viserio\Routing\RouteCollection;
 
 class RouteCollectionTest extends \PHPUnit_Framework_TestCase
 {
@@ -13,7 +13,7 @@ class RouteCollectionTest extends \PHPUnit_Framework_TestCase
 
     public function testMatch()
     {
-        $router = new RouteCollection(__DIR__.'/Cache/router.cache', $this->mock(ContainerInterface::class));
+        $router = new RouteCollection(__DIR__ . '/Cache/router.cache', $this->mock(ContainerInterface::class));
         $router->isDevelopMode(true);
 
         $router->get('/', function () {
