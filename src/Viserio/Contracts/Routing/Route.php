@@ -2,6 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Contracts\Routing;
 
+use Viserio\Contracts\Middleware\Middleware as MiddlewareContract;
+
 interface Route
 {
     /**
@@ -50,6 +52,34 @@ interface Route
      * @return $this
      */
     public function where($name, string $expression = null): Route;
+
+    /**
+     * Add a middleware to route.
+     *
+     * @return $this
+     */
+    public function withMiddleware(MiddlewareContract $middleware): Route;
+
+    /**
+     * Get all added withmiddlewares.
+     *
+     * @return array
+     */
+    public function getWithMiddlewares(): array;
+
+    /**
+     * Remove a middleware from route.
+     *
+     * @return $this
+     */
+    public function withoutMiddleware(MiddlewareContract $middleware): Route;
+
+    /**
+     * Get all middlewares that need to be removed.
+     *
+     * @return array
+     */
+    public function getWithoutMiddlewares(): array;
 
     /**
      * Determine if the route only responds to HTTP requests.
@@ -176,13 +206,4 @@ interface Route
      * @return mixed
      */
     public function run();
-
-    /**
-     * Set the router instance on the route.
-     *
-     * @param \Viserio\Contracts\Routing\RouteCollection $router
-     *
-     * @return $this
-     */
-    public function setRouter(RouteCollection $router): Route;
 }

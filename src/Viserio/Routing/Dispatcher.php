@@ -2,35 +2,31 @@
 declare(strict_types=1);
 namespace Viserio\Routing;
 
-use Interop\Container\ContainerInterface;
+use Closure;
 use Psr\Http\Message\ServerRequestInterface;
-use Viserio\Contracts\Container\Traits\ContainerAwareTrait;
 use Viserio\Contracts\Events\Traits\EventsAwareTrait;
 use Viserio\Contracts\Routing\Dispatcher as DispatcherContract;
 
 class Dispatcher implements DispatcherContract
 {
-    use ContainerAwareTrait;
     use EventsAwareTrait;
 
     /**
      * The router instance.
      *
-     * @var object
+     * @var \Closure
      */
     protected $router;
 
     /**
      * Create a new Router instance.
      *
-     * @param object                                $path
-     * @param \Interop\Container\ContainerInterface $container
-     * @param array                                 $options
+     * @param \Closure                            $path
+     * @param \Viserio\Contracts\Middleware\Stack $middlewareDispatcher
      */
-    public function __construct($router, ContainerInterface $container)
+    public function __construct(Closure $router)
     {
         $this->router = $router;
-        $this->container = $container;
     }
 
     /**
@@ -48,19 +44,15 @@ class Dispatcher implements DispatcherContract
             $request->getMethod(),
             $request->getUri()->getPath()
         );
-        var_dump($match);
 
         switch ($match[0]) {
             case DispatcherContract::NOT_FOUND:
                 return $this->handleNotFound();
                 break;
             case DispatcherContract::HTTP_METHOD_NOT_ALLOWED:
-                $allowed = (array) $match[1];
-
-                return $this->handleNotAllowed($allowed);
+                return $this->handleNotAllowed($match[1]);
                 break;
             case DispatcherContract::FOUND:
-
                 return $this->handleFound($match[1], (array) $match[2]);
                 break;
         }
@@ -71,8 +63,6 @@ class Dispatcher implements DispatcherContract
      *
      * @param callable $route
      * @param array    $vars
-     *
-     * @return \League\Route\Middleware\ExecutionChain
      */
     protected function handleFound(callable $route, array $vars)
     {
@@ -80,8 +70,6 @@ class Dispatcher implements DispatcherContract
 
     /**
      * Handle a not found route.
-     *
-     * @return \League\Route\Middleware\ExecutionChain
      */
     protected function handleNotFound()
     {
@@ -91,8 +79,6 @@ class Dispatcher implements DispatcherContract
      * Handles a not allowed route.
      *
      * @param array $allowed
-     *
-     * @return \League\Route\Middleware\ExecutionChain
      */
     protected function handleNotAllowed(array $allowed)
     {

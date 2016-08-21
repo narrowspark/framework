@@ -4,7 +4,7 @@ namespace Viserio\View\Middleware;
 
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Viserio\Contracts\Middleware\Frame as FrameContract;
+use Viserio\Contracts\Middleware\Delegate as DelegateContract;
 use Viserio\Contracts\Middleware\Middleware as MiddlewareContract;
 use Viserio\Contracts\View\Factory as ViewFactory;
 
@@ -29,7 +29,7 @@ class ShareErrorsFromSession implements MiddlewareContract
 
     public function handle(
         ServerRequestInterface $request,
-        FrameContract $frame
+        DelegateContract $frame
     ): ResponseInterface {
         // If the current session has an "errors" variable bound to it, we will share
         // its value with all view instances so the views can easily access errors

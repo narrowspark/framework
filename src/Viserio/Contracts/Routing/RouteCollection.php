@@ -4,6 +4,7 @@ namespace Viserio\Contracts\Routing;
 
 use Closure;
 use Viserio\Contracts\Support\Arrayable as ArrayableContract;
+use Viserio\Contracts\Middleware\Middleware as MiddlewareContract;
 
 interface RouteCollection extends ArrayableContract
 {
@@ -109,4 +110,18 @@ interface RouteCollection extends ArrayableContract
      * @return array
      */
     public function getGroupStack(): array;
+
+    /**
+     * Add a middleware to all routes.
+     *
+     * @return $this
+     */
+    public function withMiddleware(MiddlewareContract $middleware): RouteCollection;
+
+    /**
+     * Remove a middleware from all routes.
+     *
+     * @return $this
+     */
+    public function withoutMiddleware(MiddlewareContract $middleware): RouteCollection;
 }

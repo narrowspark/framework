@@ -4,23 +4,19 @@ namespace Viserio\Routing;
 
 use Closure;
 use Interop\Container\ContainerInterface;
+use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Contracts\Container\Traits\ContainerAwareTrait;
+use Viserio\Contracts\Middleware\Middleware as MiddlewareContract;
 use Viserio\Contracts\Routing\Route as RouteContract;
 use Viserio\Contracts\Routing\RouteCollection as RouteCollectionContract;
+use Viserio\Middleware\Dispatcher as MiddlewareDispatcher;
 use Viserio\Routing\Generator\RouteTreeBuilder;
 use Viserio\Routing\Generator\RouteTreeOptimizer;
 
 class RouteCollection implements RouteCollectionContract
 {
     use ContainerAwareTrait;
-
-    /**
-     * The route collection instance.
-     *
-     * @var array
-     */
-    protected $routes = [];
 
     /**
      * An flattened array of all of the routes.
@@ -35,6 +31,20 @@ class RouteCollection implements RouteCollectionContract
      * @var array
      */
     protected $groupStack = [];
+
+    /**
+     * All of the middlewares.
+     *
+     * @var array
+     */
+    protected $withMiddlewares = [];
+
+    /**
+     * All to remove middlewares.
+     *
+     * @var array
+     */
+    protected $withoutMiddlewares = [];
 
     /**
      * The globally available parameter patterns.
@@ -191,22 +201,22 @@ class RouteCollection implements RouteCollectionContract
     }
 
     /**
-     * Defines the supplied parameter name to be globally associated with the pattern
+     * Defines the supplied parameter name to be globally associated with the expression.
      *
      * @param string $parameterName
-     * @param string $pattern
+     * @param string $expression
      *
      * @return $this
      */
-    public function setParameter(string $parameterName, string $pattern)
+    public function setParameter(string $parameterName, string $expression)
     {
-        $this->globalParameterConditions[$parameterName] = $pattern;
+        $this->globalParameterConditions[$parameterName] = $expression;
 
         return $this;
     }
 
     /**
-     * Defines the supplied parameter name to be globally associated with the pattern
+     * Defines the supplied parameter name to be globally associated with the expression.
      *
      * @param string[] $parameterPatternMap
      *
@@ -220,7 +230,7 @@ class RouteCollection implements RouteCollectionContract
     }
 
     /**
-     * Removes the global pattern associated with the supplied parameter name
+     * Removes the global expression associated with the supplied parameter name.
      *
      * @param string $name
      */
@@ -240,19 +250,48 @@ class RouteCollection implements RouteCollectionContract
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function withMiddleware(MiddlewareContract $middleware): RouteCollectionContract
+    {
+        $this->withMiddlewares[] = $middleware;
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function withoutMiddleware(MiddlewareContract $middleware): RouteCollectionContract
+    {
+        $this->withoutMiddlewares[] = $middleware;
+
+        return $this;
+    }
+
+    /**
      * Dispatch router for HTTP request.
      *
-     * @param \Psr\Http\Message\ServerRequestInterface $request The current HTTP request object
+     * @param \Psr\Http\Message\ServerRequestInterface $request
+     * @param \Psr\Http\Message\ResponseInterface      $response
      *
-     * @return array
+     * @return \Psr\Http\Message\ResponseInterface
      */
-    public function dispatch(ServerRequestInterface $request)
+    public function dispatch(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
     {
-        $router = $this->generateRouterFile();
+        $middlewareDispatcher = new MiddlewareDispatcher($response);
+        $dispatcher = new Dispatcher($this->generateRouterFile());
+        $route = $dispatcher->handle($request);
 
-        $dispatcher = new Dispatcher($router, $this->getContainer());
+        foreach (array_merge($this->withMiddlewares, $route->getWithMiddlewares()) as $withMiddleware) {
+            $middlewareDispatcher->withMiddleware($withMiddleware);
+        }
 
-        return $dispatcher->handle($request);
+        foreach (array_merge($this->withoutMiddlewares, $route->getWithoutMiddlewares()) as $withoutMiddleware) {
+            $middlewareDispatcher->withoutMiddleware($withoutMiddleware);
+        }
+
+        return $middlewareDispatcher->process($route->run());
     }
 
     /**
@@ -278,11 +317,7 @@ class RouteCollection implements RouteCollectionContract
 
         $domainAndUri = $route->getDomain() . $route->getUri();
 
-        foreach ($route->getMethods() as $method) {
-            $this->routes[$method][$domainAndUri] = $route;
-        }
-
-        return $this->allRoutes[$method . $domainAndUri] = $route;
+        return $this->allRoutes[implode('', $methods) . $domainAndUri] = $route;
     }
 
     /**
@@ -303,9 +338,8 @@ class RouteCollection implements RouteCollectionContract
             $action = $this->convertToControllerAction($action);
         }
 
-        $route = (new Route($methods, $this->prefix($uri), $action))
-            ->setRouter($this)
-            ->setContainer($this->container);
+        $route = new Route($methods, $this->prefix($uri), $action);
+        $route->setContainer($this->container);
 
         // If we have groups that need to be merged, we will merge them now after this
         // route has already been created and is ready to go. After we're done with
@@ -314,6 +348,27 @@ class RouteCollection implements RouteCollectionContract
             $action = $this->mergeWithLastGroup($route->getAction());
 
             $route->setAction($action);
+        }
+
+        $this->addWhereClausesToRoute($route);
+
+        return $route;
+    }
+
+    /**
+     * Add the necessary where clauses to the route based on its initial registration.
+     *
+     * @param \Viserio\Contracts\Routing\Route $route
+     *
+     * @return \Viserio\Contracts\Routing\Route
+     */
+    protected function addWhereClausesToRoute(RouteContract $route): RouteContract
+    {
+        $where = $route->getAction()['where'] ?? [];
+        $patern = array_merge($this->globalParameterConditions, $where);
+
+        foreach ($patern as $name => $value) {
+            $route->where($name, $value);
         }
 
         return $route;

@@ -6,8 +6,8 @@ use LogicException;
 use Narrowspark\Arr\StaticArr as Arr;
 use UnexpectedValueException;
 use Viserio\Contracts\Container\Traits\ContainerAwareTrait;
+use Viserio\Contracts\Middleware\Middleware as MiddlewareContract;
 use Viserio\Contracts\Routing\Route as RouteContract;
-use Viserio\Contracts\Routing\RouteCollection as RouteCollectionContract;
 use Viserio\Routing\Segments\ParameterSegment;
 use Viserio\Support\Invoker;
 
@@ -58,11 +58,18 @@ class Route implements RouteContract
     protected $wheres = [];
 
     /**
-     * The router instance used by the route.
+     * All of the middlewares.
      *
-     * @var \Viserio\Contracts\Routing\Router
+     * @var array
      */
-    protected $router;
+    protected $withMiddlewares = [];
+
+    /**
+     * All to remove middlewares.
+     *
+     * @var array
+     */
+    protected $withoutMiddlewares = [];
 
     /**
      * Invoker instance.
@@ -158,6 +165,42 @@ class Route implements RouteContract
         }
 
         return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function withMiddleware(MiddlewareContract $middleware): RouteContract
+    {
+        $this->withMiddlewares[] = $middleware;
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getWithMiddlewares(): array
+    {
+        return $this->withMiddlewares;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function withoutMiddleware(MiddlewareContract $middleware): RouteContract
+    {
+        $this->withoutMiddlewares[] = $middleware;
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getWithoutMiddlewares(): array
+    {
+        return $this->withoutMiddlewares;
     }
 
     /**
@@ -313,16 +356,6 @@ class Route implements RouteContract
             $this->action['uses'],
             array_values($this->getParameters())
         );
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setRouter(RouteCollectionContract $router): RouteContract
-    {
-        $this->router = $router;
-
-        return $this;
     }
 
     /**

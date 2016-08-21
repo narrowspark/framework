@@ -13,13 +13,13 @@ interface ServerMiddleware extends Middleware
      * Takes the incoming request and optionally modifies it before delegating
      * to the next frame to get a response.
      *
-     * @param ServerRequestInterface $request
-     * @param Frame                  $frame
+     * @param \Psr\Http\Message\ServerRequestInterface $request
+     * @param \Viserio\Contracts\Middleware\Delegate   $frame
      *
-     * @return ResponseInterface
+     * @return \Psr\Http\Message\ResponseInterface
      */
     public function process(
         ServerRequestInterface $request,
-        Frame $frame
+        Delegate $frame
     ): ResponseInterface;
 }
