@@ -3,8 +3,8 @@ declare(strict_types=1);
 namespace Viserio\Contracts\Routing;
 
 use Closure;
-use Viserio\Contracts\Support\Arrayable as ArrayableContract;
 use Viserio\Contracts\Middleware\Middleware as MiddlewareContract;
+use Viserio\Contracts\Support\Arrayable as ArrayableContract;
 
 interface RouteCollection extends ArrayableContract
 {
