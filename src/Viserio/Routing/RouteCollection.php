@@ -6,7 +6,6 @@ use Closure;
 use Interop\Container\ContainerInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Contracts\Container\Traits\ContainerAwareTrait;
-use Viserio\Contracts\Events\Traits\EventsAwareTrait;
 use Viserio\Contracts\Routing\Route as RouteContract;
 use Viserio\Contracts\Routing\RouteCollection as RouteCollectionContract;
 use Viserio\Routing\Generator\RouteTreeBuilder;
@@ -481,7 +480,7 @@ class RouteCollection implements RouteCollectionContract
             @unlink($this->path);
         }
 
-        if (!file_exists($this->path)) {
+        if (! file_exists($this->path)) {
             $routerCompiler = new TreeRouteCompiler(new RouteTreeBuilder(), new RouteTreeOptimizer());
 
             file_put_contents($this->path, $routerCompiler->compile($this));

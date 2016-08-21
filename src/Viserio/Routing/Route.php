@@ -8,7 +8,6 @@ use UnexpectedValueException;
 use Viserio\Contracts\Container\Traits\ContainerAwareTrait;
 use Viserio\Contracts\Routing\Route as RouteContract;
 use Viserio\Contracts\Routing\RouteCollection as RouteCollectionContract;
-use Viserio\Contracts\Routing\RouteSegment as RouteSegmentContract;
 use Viserio\Routing\Segments\ParameterSegment;
 use Viserio\Support\Invoker;
 

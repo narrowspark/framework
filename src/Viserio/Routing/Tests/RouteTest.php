@@ -2,10 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Routing\Tests;
 
-use Interop\Container\ContainerInterface;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
-use Viserio\Http\ServerRequestFactory;
-use Viserio\Routing\Dispatcher;
 use Viserio\Routing\Route;
 use Viserio\Routing\Tests\Fixture\Controller;
 

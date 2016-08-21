@@ -2,7 +2,6 @@
 declare(strict_types=1);
 namespace Viserio\Routing;
 
-use Viserio\Contracts\Routing\Dispatcher;
 use Viserio\Contracts\Routing\RouteCollection as RouteCollectionContract;
 use Viserio\Routing\Generator\ChildrenNodeCollection;
 use Viserio\Routing\Generator\MatchedRouteDataMap;
