@@ -8,7 +8,9 @@ use Viserio\Contracts\Routing\SegmentMatcher as SegmentMatcherContract;
 final class ChildrenNodeCollection implements NodeContentsContract
 {
     /**
-     * @var \Viserio\Contracts\Routing\RouteTreeNode[]
+     * All added children routes.
+     *
+     * @var \Viserio\Routing\RouteTreeNode[]
      */
     protected $children = [];
 
@@ -23,7 +25,7 @@ final class ChildrenNodeCollection implements NodeContentsContract
     }
 
     /**
-     * @return \Viserio\Contracts\Routing\RouteTreeNode[]
+     * @return \Viserio\Routing\RouteTreeNode[]
      */
     public function getChildren(): array
     {
@@ -31,7 +33,7 @@ final class ChildrenNodeCollection implements NodeContentsContract
     }
 
     /**
-     * @param \Viserio\Contracts\Routing\RouteTreeNode $node
+     * @param \Viserio\Routing\RouteTreeNode $node
      *
      * @return bool
      */

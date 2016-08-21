@@ -80,8 +80,8 @@ class RouteTreeOptimizer
     /**
      * [mergeMatchers description]
      *
-     * @param array $parentMatchers
-     * @param array $childMatchers
+     * @param \Viserio\Contracts\Routing\SegmentMatcher[] $parentMatchers
+     * @param array                                       $childMatchers
      *
      * @return array
      */

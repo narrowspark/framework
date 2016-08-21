@@ -10,7 +10,7 @@ class MatchedRouteDataMap implements NodeContentsContract
     /**
      * @var array
      */
-    protected $httpMethodRouteDataMap = [];
+    protected $httpMethodRouteMap = [];
 
     /**
      * @var array|null
@@ -20,23 +20,26 @@ class MatchedRouteDataMap implements NodeContentsContract
     /**
      * Create a new child node collection instance.
      *
-     * @param array $children
+     * @param array      $httpMethodRouteMap
+     * @param array|null $defaultRouteData
      */
-    public function __construct(array $httpMethodRouteDataMap = [], array $defaultRouteData = null)
+    public function __construct(array $httpMethodRouteMap = [], array $defaultRouteData = null)
     {
-        $this->httpMethodRouteDataMap = $httpMethodRouteDataMap;
+        $this->httpMethodRouteMap = $httpMethodRouteMap;
         $this->defaultRouteData = $defaultRouteData;
     }
 
     /**
      * @return array
      */
-    public function getHttpMethodRouteDataMap()
+    public function getHttpMethodRouteDataMap(): array
     {
-        return $this->httpMethodRouteDataMap;
+        return $this->httpMethodRouteMap;
     }
 
     /**
+     * Get all allowed http methods.
+     *
      * @return array|null
      */
     public function getAllowedHttpMethods()
@@ -47,7 +50,7 @@ class MatchedRouteDataMap implements NodeContentsContract
 
         $allowedHttpMethods = [];
 
-        foreach ($this->httpMethodRouteDataMap as $item) {
+        foreach ($this->httpMethodRouteMap as $item) {
             foreach ($item[0] as $method) {
                 $allowedHttpMethods[$method] = true;
             }
@@ -57,7 +60,9 @@ class MatchedRouteDataMap implements NodeContentsContract
     }
 
     /**
-     * @return MatchedRouteData|null
+     * Get the default data.
+     *
+     * @return array|null
      */
     public function getDefaultRouteData()
     {
@@ -65,17 +70,21 @@ class MatchedRouteDataMap implements NodeContentsContract
     }
 
     /**
+     * Check if route has default data.
+     *
      * @return bool
      */
-    public function hasDefaultRouteData()
+    public function hasDefaultRouteData(): bool
     {
         return $this->defaultRouteData !== null;
     }
 
     /**
+     * Check if route is empty.
+     *
      * @return bool
      */
-    public function isEmpty()
+    public function isEmpty(): bool
     {
         return $this->defaultRouteData === null && empty($this->httpMethodRouteDataMap);
     }

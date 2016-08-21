@@ -10,7 +10,7 @@ abstract class AbstractMatcher implements SegmentMatcherContract
     /**
      * Stores all parameters keys.
      *
-     * @var int[]
+     * @var array
      */
     protected $parameterKeys = [];
 

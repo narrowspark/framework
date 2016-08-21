@@ -25,8 +25,8 @@ class RouteTreeNode
     /**
      * Create a new child node collection instance.
      *
-     * @param array                                   $matchers
-     * @param \Viserio\Contracts\Routing\NodeContents $contents
+     * @param \Viserio\Contracts\Routing\SegmentMatcher[] $matchers
+     * @param \Viserio\Contracts\Routing\NodeContents     $contents
      */
     public function __construct(array $matchers, NodeContentsContract $contents)
     {
@@ -81,9 +81,9 @@ class RouteTreeNode
     /**
      * Get actual route content.
      *
-     * @return \Viserio\Contracts\Routing\NodeContents
+     * @return \Viserio\Routing\Generator\ChildrenNodeCollection|\Viserio\Routing\Generator\MatchedRouteDataMap
      */
-    public function getContents(): NodeContentsContract
+    public function getContents()
     {
         return $this->contents;
     }

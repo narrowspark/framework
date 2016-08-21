@@ -86,7 +86,7 @@ class Route implements RouteContract
      * @param \Closure|array|null $action
      * @param array               $globalParameters
      */
-    public function __construct($methods, $uri, $action, $globalParameters = [])
+    public function __construct($methods, $uri, $action, array $globalParameters = [])
     {
         $this->uri = $uri;
         // According to RFC methods are defined in uppercase (See RFC 7231)
