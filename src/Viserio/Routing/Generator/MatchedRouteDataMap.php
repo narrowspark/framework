@@ -98,9 +98,9 @@ class MatchedRouteDataMap implements NodeContentsContract
     public function addRoute(RouteContract $route, array $parameterIndexNameMap)
     {
         if (count($route->getMethods()) === 1 && in_array('ANY', $route->getMethods())) {
-            $this->defaultRouteData = [$parameterIndexNameMap, $route->getParameters()];
+            $this->defaultRouteData = [$parameterIndexNameMap, $route->getIdentifier()];
         } else {
-            $this->httpMethodRouteMap[] = [$route->getMethods(), [$parameterIndexNameMap, $route->getParameters()]];
+            $this->httpMethodRouteMap[] = [$route->getMethods(), [$parameterIndexNameMap, $route->getIdentifier()]];
         }
     }
 }

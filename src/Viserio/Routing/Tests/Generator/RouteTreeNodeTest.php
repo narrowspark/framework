@@ -78,42 +78,42 @@ class RouteTreeNodeTest extends \PHPUnit_Framework_TestCase
     public function testMatchedRouteDataMapOperations()
     {
         $node = new RouteTreeNode([$this->mock(AbstractMatcher::class)], new MatchedRouteDataMap());
-        $node->getContents()->addRoute((new Route(['GET', 'POST'], '', null))->setParameter('first_route', ''), []);
+        $node->getContents()->addRoute((new Route(['GET', 'POST'], '', null)), []);
 
         $this->assertSame(['GET', 'POST', 'HEAD'], $node->getContents()->getAllowedHttpMethods());
         $this->assertEquals(
             [
-                [['GET', 'POST', 'HEAD'], [[], ['first_route' => '']]],
+                [['GET', 'POST', 'HEAD'], [[], 'GET|POST|HEAD']],
             ],
             $node->getContents()->getHttpMethodRouteDataMap()
         );
         $this->assertNull($node->getContents()->getDefaultRouteData());
         $this->assertFalse($node->getContents()->hasDefaultRouteData());
 
-        $node->getContents()->addRoute((new Route('PATCH', '', null))->setParameter('second_route', ''), [0 => 'param']);
+        $node->getContents()->addRoute((new Route('PATCH', '', null)), [0 => 'param']);
 
         $this->assertSame(['GET', 'POST', 'HEAD', 'PATCH'], $node->getContents()->getAllowedHttpMethods());
         $this->assertEquals(
             [
-                [['GET', 'POST', 'HEAD'], [[], ['first_route' => '']]],
-                [['PATCH'], [[0 => 'param'], ['second_route' => '']]],
+                [['GET', 'POST', 'HEAD'], [[], 'GET|POST|HEAD']],
+                [['PATCH'], [[0 => 'param'], 'PATCH']],
             ],
             $node->getContents()->getHttpMethodRouteDataMap()
         );
         $this->assertNull($node->getContents()->getDefaultRouteData());
         $this->assertFalse($node->getContents()->hasDefaultRouteData());
 
-        $node->getContents()->addRoute((new Route(['ANY'], '', null))->setParameter('third_route', ''), []);
+        $node->getContents()->addRoute((new Route(['ANY'], '', null)), []);
 
         $this->assertSame('GET', $node->getContents()->getAllowedHttpMethods());
         $this->assertEquals(
             [
-                [['GET', 'POST', 'HEAD'], [[], ['first_route' => '']]],
-                [['PATCH'], [[0 => 'param'], ['second_route' => '']]],
+                [['GET', 'POST', 'HEAD'], [[], 'GET|POST|HEAD']],
+                [['PATCH'], [[0 => 'param'], 'PATCH']],
             ],
             $node->getContents()->getHttpMethodRouteDataMap()
         );
-        $this->assertEquals([[], ['third_route' => '']], $node->getContents()->getDefaultRouteData());
+        $this->assertEquals([[], 'ANY'], $node->getContents()->getDefaultRouteData());
         $this->assertTrue($node->getContents()->hasDefaultRouteData());
     }
 

@@ -2,7 +2,6 @@
 declare(strict_types=1);
 namespace Viserio\Routing;
 
-use Viserio\Contracts\Routing\RouteCollection as RouteCollectionContract;
 use Viserio\Routing\Generator\ChildrenNodeCollection;
 use Viserio\Routing\Generator\MatchedRouteDataMap;
 use Viserio\Routing\Generator\RouteTreeBuilder;
@@ -39,14 +38,14 @@ class TreeRouteCompiler
     /**
      * Complie all added routes to a router handler.
      *
-     * @param \Viserio\Contracts\Routing\RouteCollection $routes
+     * @param array $routes
      *
      * @return string
      */
-    public function compile(RouteCollectionContract $routes): string
+    public function compile(array $routes): string
     {
         $routeTree = $this->treeOptimizer->optimize(
-            $this->treeBuilder->build($routes->toArray())
+            $this->treeBuilder->build($routes)
         );
 
         $code = $this->phpBuilder();
@@ -147,8 +146,12 @@ PHP;
      * @param array                  $segmentVariables
      * @param array                  $parameters
      */
-    protected function compileSegmentNodes($code, ChildrenNodeCollection $nodes, array $segmentVariables, array $parameters = [])
-    {
+    protected function compileSegmentNodes(
+        $code,
+        ChildrenNodeCollection $nodes,
+        array $segmentVariables,
+        array $parameters = []
+    ) {
         $originalParameters = $parameters;
 
         foreach ($nodes->getChildren() as $node) {
@@ -169,7 +172,10 @@ PHP;
             $count = $currentParameter;
 
             foreach ($segmentMatchers as $segmentDepth => $matcher) {
-                $matchedParameters = $matcher->getMatchedParameterExpressions($segmentVariables[$segmentDepth], $count++);
+                $matchedParameters = $matcher->getMatchedParameterExpressions(
+                    $segmentVariables[$segmentDepth],
+                    $count++
+                );
 
                 foreach ($matchedParameters as $parameterKey => $matchedParameter) {
                     $parameters[$parameterKey] = $matchedParameter;
@@ -190,6 +196,13 @@ PHP;
         }
     }
 
+    /**
+     * [compiledRouteHttpMethodMatch description]
+     *
+     * @param object              $code
+     * @param MatchedRouteDataMap $routeDataMap
+     * @param array               $parameters
+     */
     protected function compiledRouteHttpMethodMatch($code, MatchedRouteDataMap $routeDataMap, array $parameters)
     {
         $code->appendLine('switch ($method) {');
@@ -248,7 +261,13 @@ PHP;
      */
     protected function compileDisallowedHttpMethod($code, array $allowedMethod)
     {
-        $code->appendLine('return [' . VarExporter::export(Dispatcher::HTTP_METHOD_NOT_ALLOWED) . ', ' . VarExporter::export($allowedMethod) . '];');
+        $code->appendLine(
+            'return [' .
+            VarExporter::export(Dispatcher::HTTP_METHOD_NOT_ALLOWED) .
+            ', ' .
+            VarExporter::export($allowedMethod) .
+            '];'
+        );
     }
 
     /**
@@ -258,7 +277,8 @@ PHP;
      */
     protected function compileDisallowedHttpMethodOrNotFound($code)
     {
-        $code->appendLine('return ' .
+        $code->appendLine(
+            'return ' .
             'isset($allowedHttpMethods) '
             . '? '
             . '['
@@ -267,7 +287,8 @@ PHP;
             . ': '
             . '['
             . VarExporter::export(Dispatcher::NOT_FOUND)
-            . '];');
+            . '];'
+        );
     }
 
     /**
@@ -291,7 +312,8 @@ PHP;
 
         $parameters .= ']';
 
-        $code->appendLine('return ['
+        $code->appendLine(
+            'return ['
             . VarExporter::export(Dispatcher::FOUND)
             . ', '
             . VarExporter::export($foundRoute[1])

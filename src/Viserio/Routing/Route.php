@@ -79,6 +79,13 @@ class Route implements RouteContract
     protected $invoker;
 
     /**
+     * Route identifier.
+     *
+     * @var string
+     */
+    protected $identifier;
+
+    /**
      * Create a new Route instance.
      *
      * @param array|string        $methods
@@ -111,6 +118,16 @@ class Route implements RouteContract
     public function __get($key)
     {
         return $this->getParameter($key);
+    }
+
+    /**
+     * Get route identifier
+     *
+     * @return string
+     */
+    public function getIdentifier(): string
+    {
+        return implode($this->httpMethods, '|') . $this->getDomain() . $this->uri;
     }
 
     /**
@@ -319,22 +336,6 @@ class Route implements RouteContract
         $this->getParameters();
 
         unset($this->parameters[$name]);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function isStatic(): bool
-    {
-        $this->getParameters();
-
-        foreach ($this->parameters as $parameter) {
-            if ($parameter instanceof ParameterSegment) {
-                return false;
-            }
-        }
-
-        return true;
     }
 
     /**

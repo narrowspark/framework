@@ -187,13 +187,6 @@ interface Route
     public function forgetParameter(string $name);
 
     /**
-     * Check if route is a static route.
-     *
-     * @return bool
-     */
-    public function isStatic(): bool;
-
-    /**
      * The regular expression requirements.
      *
      * @return \\Viserio\Contracts\Routing\RouteMatcher[]

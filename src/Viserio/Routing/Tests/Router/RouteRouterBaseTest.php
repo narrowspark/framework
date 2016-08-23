@@ -1,15 +1,15 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Routing\Tests\RouteCollection;
+namespace Viserio\Routing\Tests\Router;
 
 use Interop\Container\ContainerInterface;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use ReflectionClass;
 use Viserio\Http\ResponseFactory;
 use Viserio\Http\ServerRequestFactory;
-use Viserio\Routing\RouteCollection;
+use Viserio\Routing\Router;
 
-abstract class RouteCollectionBaseTest extends \PHPUnit_Framework_TestCase
+abstract class RouteRouterBaseTest extends \PHPUnit_Framework_TestCase
 {
     use MockeryTrait;
 
@@ -20,7 +20,7 @@ abstract class RouteCollectionBaseTest extends \PHPUnit_Framework_TestCase
         parent::setUp();
 
         $name = (new ReflectionClass($this))->getShortName();
-        $router = new RouteCollection(__DIR__ . '/../Cache/' . $name . '.cache', $this->mock(ContainerInterface::class));
+        $router = new Router(__DIR__ . '/../Cache/' . $name . '.cache', $this->mock(ContainerInterface::class));
         $router->isDevelopMode(true);
 
         $this->definitions($router);

@@ -1,10 +1,10 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Routing\Tests\RouteCollection;
+namespace Viserio\Routing\Tests\Router;
 
 use Viserio\Contracts\Routing\Dispatcher;
 
-class RootRoutesRouterTest extends RouteCollectionBaseTest
+class RootRoutesRouterTest extends RouteRouterBaseTest
 {
     /**
      * Should return each case in the format:
@@ -23,6 +23,7 @@ class RootRoutesRouterTest extends RouteCollectionBaseTest
             ['GET', '', ['name' => 'root'], []],
             ['GET', '/', ['name' => 'root-slash'], []],
             ['GET', '/a', []],
+            ['GET', 'test/123', []],
         ];
     }
 
@@ -30,5 +31,6 @@ class RootRoutesRouterTest extends RouteCollectionBaseTest
     {
         $router->get('')->setParameter('name', 'root');
         $router->get('/')->setParameter('name', 'root-slash');
+        $router->get('/test/{param}');
     }
 }

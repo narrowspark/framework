@@ -6,27 +6,62 @@ use Closure;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Contracts\Events\Traits\EventsAwareTrait;
 use Viserio\Contracts\Routing\Dispatcher as DispatcherContract;
+use Viserio\Contracts\Routing\RouteCollection as RouteCollectionContract;
+use Viserio\Middleware\Dispatcher as MiddlewareDispatcher;
+use Viserio\Routing\Generator\RouteTreeBuilder;
+use Viserio\Routing\Generator\RouteTreeOptimizer;
+use Viserio\Routing\Middlewares\NotFoundMiddleware;
 
 class Dispatcher implements DispatcherContract
 {
     use EventsAwareTrait;
 
     /**
-     * The router instance.
+     * Patch to cache file.
      *
-     * @var \Closure
+     * @var string
      */
-    protected $router;
+    protected $path;
+
+    /**
+     * The route collection instance.
+     *
+     * @var \Viserio\Routing\RouteCollection
+     */
+    protected $routes;
+
+    /**
+     * The middelware dispatcher instance.
+     *
+     * @var \Viserio\Middleware\Dispatcher
+     */
+    protected $middlewareDispatcher;
+
+    /**
+     * Flag for development mode.
+     *
+     * @var bool
+     */
+    protected $isDevelopMode = true;
 
     /**
      * Create a new Router instance.
      *
-     * @param \Closure                            $path
-     * @param \Viserio\Contracts\Middleware\Stack $middlewareDispatcher
+     * @param string                                     $path
+     * @param \Viserio\Contracts\Routing\RouteCollection $routes
+     * @param \Viserio\Middleware\Dispatcher             $middlewareDispatcher
+     * @param bool                                       $isDevelopMode
      */
-    public function __construct(Closure $router)
-    {
-        $this->router = $router;
+    public function __construct(
+        string $path,
+        RouteCollectionContract $routes,
+        MiddlewareDispatcher $middlewareDispatcher,
+        bool $isDevelopMode
+    ) {
+        $this->path = $path;
+        $this->routes = $routes;
+        $this->middlewareDispatcher = $middlewareDispatcher;
+        $this->isDevelopMode = $isDevelopMode;
     }
 
     /**
@@ -35,14 +70,14 @@ class Dispatcher implements DispatcherContract
      *
      * @param \Psr\Http\Message\ServerRequestInterface $request
      *
-     * @return mixed
+     * @return \Viserio\Middleware\Dispatcher
      */
-    public function handle(ServerRequestInterface $request)
+    public function handle(ServerRequestInterface $request): MiddlewareDispatcher
     {
-        $router = $this->router;
+        $router = $this->generateRouterFile();
         $match = $router(
             $request->getMethod(),
-            $request->getUri()->getPath()
+           '/' . ltrim($request->getUri()->getPath(), '/')
         );
 
         switch ($match[0]) {
@@ -53,7 +88,7 @@ class Dispatcher implements DispatcherContract
                 return $this->handleNotAllowed($match[1]);
                 break;
             case DispatcherContract::FOUND:
-                return $this->handleFound($match[1], (array) $match[2]);
+                return $this->handleFound($match[1], $match[2]);
                 break;
         }
     }
@@ -61,26 +96,61 @@ class Dispatcher implements DispatcherContract
     /**
      * Handle dispatching of a found route.
      *
-     * @param callable $route
-     * @param array    $vars
+     * @param string $identifier
+     * @param array  $segments
+     *
+     * @return \Viserio\Middleware\Dispatcher
      */
-    protected function handleFound(callable $route, array $vars)
+    protected function handleFound(string $identifier, array $segments): MiddlewareDispatcher
     {
+        $route = $this->routes->match($identifier);
+
+        foreach ($segments as $key => $value) {
+            $route->setParameter($key, $value);
+        }
+
+        return $this->middlewareDispatcher;
     }
 
     /**
      * Handle a not found route.
+     *
+     * @return \Viserio\Middleware\Dispatcher
      */
-    protected function handleNotFound()
+    protected function handleNotFound(): MiddlewareDispatcher
     {
+        return $this->middlewareDispatcher->withMiddleware(new NotFoundMiddleware());
     }
 
     /**
      * Handles a not allowed route.
      *
      * @param array $allowed
+     *
+     * @return \Viserio\Middleware\Dispatcher
      */
-    protected function handleNotAllowed(array $allowed)
+    protected function handleNotAllowed(array $allowed): MiddlewareDispatcher
     {
+        return $this->middlewareDispatcher->withMiddleware(new NotFoundMiddleware($allowed));
+    }
+
+    /**
+     * Generates a router file with all routes.
+     *
+     * @return \Closure
+     */
+    protected function generateRouterFile(): Closure
+    {
+        if ($this->isDevelopMode && file_exists($this->path)) {
+            @unlink($this->path);
+        }
+
+        if (! file_exists($this->path)) {
+            $routerCompiler = new TreeRouteCompiler(new RouteTreeBuilder(), new RouteTreeOptimizer());
+
+            file_put_contents($this->path, $routerCompiler->compile($this->routes->getRoutes()));
+        }
+
+        return require $this->path;
     }
 }

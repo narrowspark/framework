@@ -2,126 +2,66 @@
 declare(strict_types=1);
 namespace Viserio\Contracts\Routing;
 
-use Closure;
-use Viserio\Contracts\Middleware\Middleware as MiddlewareContract;
-use Viserio\Contracts\Support\Arrayable as ArrayableContract;
-
-interface RouteCollection extends ArrayableContract
+interface RouteCollection
 {
     /**
-     * Register a new GET route with the router.
+     * Add a Route instance to the collection.
      *
-     * @param string                     $uri
-     * @param \Closure|array|string|null $action
+     * @param \Viserio\Contracts\Routing\Route $route
      *
-     * @return \Viserio\Contracts\Routing\Route
+     * @return Viserio\Contracts\Routing\Route
      */
-    public function get(string $uri, $action = null): Route;
+    public function add(Route $route): Route;
 
     /**
-     * Register a new POST route with the router.
+     * Find the first route matching a given identifier.
      *
-     * @param string                     $uri
-     * @param \Closure|array|string|null $action
+     * @param string $identifier
      *
-     * @return \Viserio\Contracts\Routing\Route
+     * @throws \RuntimeException
+     *
+     * @return Viserio\Contracts\Routing\Route
      */
-    public function post(string $uri, $action = null): Route;
+    public function match(string $identifier): Route;
 
     /**
-     * Register a new PUT route with the router.
+     * Determine if the route collection contains a given named route.
      *
-     * @param string                     $uri
-     * @param \Closure|array|string|null $action
-     *
-     * @return \Viserio\Contracts\Routing\Route
-     */
-    public function put(string $uri, $action = null): Route;
-
-    /**
-     * Register a new PATCH route with the router.
-     *
-     * @param string                     $uri
-     * @param \Closure|array|string|null $action
-     *
-     * @return \Viserio\Contracts\Routing\Route
-     */
-    public function patch(string $uri, $action = null): Route;
-
-    /**
-     * Register a new DELETE route with the router.
-     *
-     * @param string                     $uri
-     * @param \Closure|array|string|null $action
-     *
-     * @return \Viserio\Contracts\Routing\Route
-     */
-    public function delete(string $uri, $action = null): Route;
-
-    /**
-     * Register a new OPTIONS route with the router.
-     *
-     * @param string                     $uri
-     * @param \Closure|array|string|null $action
-     *
-     * @return \Viserio\Contracts\Routing\Route
-     */
-    public function options(string $uri, $action = null): Route;
-
-    /**
-     * Register a new route responding to all verbs.
-     *
-     * @param string                     $uri
-     * @param \Closure|array|string|null $action
-     *
-     * @return \Viserio\Contracts\Routing\Route
-     */
-    public function any(string $uri, $action = null): Route;
-
-    /**
-     * Register a new route with the given verbs.
-     *
-     * @param array|string               $methods
-     * @param string                     $uri
-     * @param \Closure|array|string|null $action
-     *
-     * @return \Viserio\Contracts\Routing\Route
-     */
-    public function match($methods, $uri, $action = null): Route;
-
-    /**
-     * Create a route group with shared attributes.
-     *
-     * @param array    $attributes
-     * @param \Closure $callback
-     */
-    public function group(array $attributes, Closure $callback);
-
-    /**
-     * Determine if the router currently has a group stack.
+     * @param string $name
      *
      * @return bool
      */
-    public function hasGroupStack(): bool;
+    public function hasNamedRoute(string $name): bool;
 
     /**
-     * Get the current group stack for the router.
+     * Get a route instance by its name.
+     *
+     * @param string $name
+     *
+     * @return Viserio\Contracts\Routing\Route|null
+     */
+    public function getByName(string $name);
+
+    /**
+     * Get a route instance by its controller action.
+     *
+     * @param string $action
+     *
+     * @return Viserio\Contracts\Routing\Route|null
+     */
+    public function getByAction(string $action);
+
+    /**
+     * Get all of the routes in the collection.
      *
      * @return array
      */
-    public function getGroupStack(): array;
+    public function getRoutes(): array;
 
     /**
-     * Add a middleware to all routes.
+     * Get all of the routes keyed by their HTTP verb / method.
      *
-     * @return $this
+     * @return array
      */
-    public function withMiddleware(MiddlewareContract $middleware): RouteCollection;
-
-    /**
-     * Remove a middleware from all routes.
-     *
-     * @return $this
-     */
-    public function withoutMiddleware(MiddlewareContract $middleware): RouteCollection;
+    public function getRoutesByMethod(): array;
 }
