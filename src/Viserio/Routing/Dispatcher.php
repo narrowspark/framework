@@ -11,9 +11,9 @@ use Viserio\Middleware\Dispatcher as MiddlewareDispatcher;
 use Viserio\Routing\Generator\RouteTreeBuilder;
 use Viserio\Routing\Generator\RouteTreeOptimizer;
 use Viserio\Routing\Middlewares\FoundMiddleware;
-use Viserio\Routing\Middlewares\NotFoundMiddleware;
-use Viserio\Routing\Middlewares\NotAllowedMiddleware;
 use Viserio\Routing\Middlewares\InternalServerErrorMiddleware;
+use Viserio\Routing\Middlewares\NotAllowedMiddleware;
+use Viserio\Routing\Middlewares\NotFoundMiddleware;
 
 class Dispatcher implements DispatcherContract
 {
