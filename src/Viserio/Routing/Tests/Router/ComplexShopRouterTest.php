@@ -21,6 +21,5 @@ class ComplexShopRouterTest #extends RouteRouterBaseTest
 
     protected function definitions($router)
     {
-
     }
 }

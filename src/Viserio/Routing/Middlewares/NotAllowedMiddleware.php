@@ -2,9 +2,9 @@
 declare(strict_types=1);
 namespace Viserio\Routing\Middlewares;
 
+use Narrowspark\HttpStatus\Exception\MethodNotAllowedException;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Narrowspark\HttpStatus\Exception\MethodNotAllowedException;
 use Viserio\Contracts\Middleware\Delegate as DelegateContract;
 use Viserio\Contracts\Middleware\ServerMiddleware as ServerMiddlewareContract;
 

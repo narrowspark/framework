@@ -18,7 +18,7 @@ class RootRoutesRouterTest extends RouteRouterBaseTest
     public function routerMatching404Provider()
     {
         return [
-            ['GET', '/a']
+            ['GET', '/a'],
         ];
     }
 
