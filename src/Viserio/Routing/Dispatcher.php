@@ -139,7 +139,6 @@ class Dispatcher implements DispatcherContract
     /**
      * Handles a internal server error.
      *
-     * @param array $allowed
      *
      * @return \Viserio\Middleware\Dispatcher
      */
