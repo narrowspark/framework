@@ -10,7 +10,6 @@ use UnexpectedValueException;
 use Viserio\Contracts\Container\Traits\ContainerAwareTrait;
 use Viserio\Contracts\Middleware\Middleware as MiddlewareContract;
 use Viserio\Contracts\Routing\Route as RouteContract;
-use Viserio\Routing\Segments\ParameterSegment;
 use Viserio\Support\Invoker;
 
 class Route implements RouteContract
