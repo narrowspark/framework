@@ -6,24 +6,25 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Contracts\Middleware\Delegate as DelegateContract;
 use Viserio\Contracts\Middleware\ServerMiddleware as ServerMiddlewareContract;
+use Viserio\Contracts\Routing\Route as RouteContract;
 
-class NotAllowedMiddleware implements ServerMiddlewareContract
+class FoundMiddleware implements ServerMiddlewareContract
 {
     /**
-     * All not allowed http methods.
+     * A route instance.
      *
-     * @var array
+     * @var \Viserio\Contracts\Routing\Route
      */
-    protected $allowed;
+    protected $route;
 
     /**
      * Create a found middleware instance.
      *
-     * @param array $allowed
+     * @param \Viserio\Contracts\Routing\Route $route
      */
-    public function __construct(array $allowed)
+    public function __construct(RouteContract $route)
     {
-        $this->allowed = $allowed;
+        $this->route = $route;
     }
 
     /**
@@ -33,8 +34,11 @@ class NotAllowedMiddleware implements ServerMiddlewareContract
         ServerRequestInterface $request,
         DelegateContract $frame
     ): ResponseInterface {
+        // add route to the request's attributes in case a middleware or handler needs access to the route
+        $request = $request->withAttribute('route', $this->route);
+
         $response = $frame->next($request);
 
-        return $response->withStatus(405);
+        return $this->route->run($request, $response);
     }
 }

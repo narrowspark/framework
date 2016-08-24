@@ -24,8 +24,8 @@ class MatcherOptimizer
     /**
      * Merge same matcher together.
      *
-     * @param \Viserio\Contracts\Routing\SegmentMatcher[] $parentMatchers
-     * @param array                                       $childMatchers
+     * @param array $parentMatchers
+     * @param array $childMatchers
      *
      * @return array
      */
@@ -47,9 +47,9 @@ class MatcherOptimizer
     /**
      * Optimize matcher and matcher order.
      *
-     * @param \Viserio\Contracts\Routing\SegmentMatcher[] $matchers
+     * @param array $matchers
      *
-     * @return \Viserio\Contracts\Routing\SegmentMatcher[]
+     * @return array
      */
     public static function optimizeMatchers(array $matchers): array
     {

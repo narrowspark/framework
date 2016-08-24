@@ -3,6 +3,8 @@ declare(strict_types=1);
 namespace Viserio\Contracts\Routing;
 
 use Viserio\Contracts\Middleware\Middleware as MiddlewareContract;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 
 interface Route
 {
@@ -47,7 +49,7 @@ interface Route
      * Set a regular expression requirement on the route.
      *
      * @param array|string $name
-     * @param string       $expression
+     * @param string|null  $expression
      *
      * @return $this
      */
@@ -189,14 +191,17 @@ interface Route
     /**
      * The regular expression requirements.
      *
-     * @return \\Viserio\Contracts\Routing\RouteMatcher[]
+     * @return \Viserio\Contracts\Routing\RouteMatcher[]
      */
     public function getSegments(): array;
 
     /**
      * Run the route action and return the response.
      *
-     * @return mixed
+     * @param \Psr\Http\Message\ServerRequestInterface $request
+     * @param \Psr\Http\Message\ResponseInterface      $response
+     *
+     * @return \Psr\Http\Message\ResponseInterface
      */
-    public function run();
+    public function run(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface;
 }

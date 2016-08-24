@@ -33,12 +33,12 @@ abstract class RouteRouterBaseTest extends \PHPUnit_Framework_TestCase
      */
     public function testRouter($httpMethod, $uri, $expectedResult)
     {
-        // $actualResult = $this->router->dispatch(
-        //     (new ServerRequestFactory())->createServerRequest($httpMethod, $uri),
-        //     (new ResponseFactory())->createResponse()
-        // );
+        $actualResult = $this->router->dispatch(
+            (new ServerRequestFactory())->createServerRequest($httpMethod, $uri),
+            (new ResponseFactory())->createResponse()
+        );
 
-        // $this->assertEquals($expectedResult, $actualResult);
+        $this->assertEquals($expectedResult, (string) $actualResult->getBody());
     }
 
     abstract protected function definitions($routes);

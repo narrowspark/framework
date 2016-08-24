@@ -9,7 +9,7 @@ interface RouteCollection
      *
      * @param \Viserio\Contracts\Routing\Route $route
      *
-     * @return Viserio\Contracts\Routing\Route
+     * @return \Viserio\Contracts\Routing\Route
      */
     public function add(Route $route): Route;
 
@@ -20,7 +20,7 @@ interface RouteCollection
      *
      * @throws \RuntimeException
      *
-     * @return Viserio\Contracts\Routing\Route
+     * @return \Viserio\Contracts\Routing\Route
      */
     public function match(string $identifier): Route;
 
@@ -38,7 +38,7 @@ interface RouteCollection
      *
      * @param string $name
      *
-     * @return Viserio\Contracts\Routing\Route|null
+     * @return \Viserio\Contracts\Routing\Route|null
      */
     public function getByName(string $name);
 
@@ -47,7 +47,7 @@ interface RouteCollection
      *
      * @param string $action
      *
-     * @return Viserio\Contracts\Routing\Route|null
+     * @return \Viserio\Contracts\Routing\Route|null
      */
     public function getByAction(string $action);
 

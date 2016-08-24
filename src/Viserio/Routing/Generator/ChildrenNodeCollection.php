@@ -10,7 +10,7 @@ final class ChildrenNodeCollection implements NodeContentsContract
     /**
      * All added children routes.
      *
-     * @var \Viserio\Routing\RouteTreeNode[]
+     * @var \Viserio\Routing\Generator\RouteTreeNode[]
      */
     protected $children = [];
 
@@ -25,7 +25,7 @@ final class ChildrenNodeCollection implements NodeContentsContract
     }
 
     /**
-     * @return \Viserio\Routing\RouteTreeNode[]
+     * @return \Viserio\Routing\Generator\RouteTreeNode[]
      */
     public function getChildren(): array
     {
@@ -33,7 +33,7 @@ final class ChildrenNodeCollection implements NodeContentsContract
     }
 
     /**
-     * @param \Viserio\Routing\RouteTreeNode $node
+     * @param \Viserio\Routing\Generator\RouteTreeNode $node
      *
      * @return bool
      */
@@ -49,15 +49,13 @@ final class ChildrenNodeCollection implements NodeContentsContract
      */
     public function hasChildFor(SegmentMatcherContract $matcher): bool
     {
-        $hash = $matcher->getHash();
-
-        return isset($this->children[$hash]);
+        return isset($this->children[$matcher->getHash()]);
     }
 
     /**
      * @param \Viserio\Contracts\Routing\SegmentMatcher $matcher
      *
-     * @return \Viserio\Contracts\Routing\RouteTreeNode|null
+     * @return \Viserio\Routing\Generator\RouteTreeNode|null
      */
     public function getChild(SegmentMatcherContract $matcher)
     {
@@ -65,7 +63,7 @@ final class ChildrenNodeCollection implements NodeContentsContract
     }
 
     /**
-     * @param \Viserio\Contracts\Routing\RouteTreeNode $node
+     * @param \Viserio\Routing\Generator\RouteTreeNode $node
      */
     public function addChild(RouteTreeNode $node)
     {

@@ -9,12 +9,15 @@ use Viserio\Contracts\Middleware\ServerMiddleware as ServerMiddlewareContract;
 
 class NotFoundMiddleware implements ServerMiddlewareContract
 {
+    /**
+     * {@inheritdoc}
+     */
     public function process(
         ServerRequestInterface $request,
         DelegateContract $frame
     ): ResponseInterface {
         $response = $frame->next($request);
 
-        return $response;
+        return $response->withStatus(404);
     }
 }

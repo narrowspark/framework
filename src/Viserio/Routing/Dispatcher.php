@@ -10,7 +10,10 @@ use Viserio\Contracts\Routing\RouteCollection as RouteCollectionContract;
 use Viserio\Middleware\Dispatcher as MiddlewareDispatcher;
 use Viserio\Routing\Generator\RouteTreeBuilder;
 use Viserio\Routing\Generator\RouteTreeOptimizer;
+use Viserio\Routing\Middlewares\FoundMiddleware;
 use Viserio\Routing\Middlewares\NotFoundMiddleware;
+use Viserio\Routing\Middlewares\NotAllowedMiddleware;
+use Viserio\Routing\Middlewares\InternalServerErrorMiddleware;
 
 class Dispatcher implements DispatcherContract
 {
@@ -26,7 +29,7 @@ class Dispatcher implements DispatcherContract
     /**
      * The route collection instance.
      *
-     * @var \Viserio\Routing\RouteCollection
+     * @var \Viserio\Contracts\Routing\RouteCollection
      */
     protected $routes;
 
@@ -83,13 +86,12 @@ class Dispatcher implements DispatcherContract
         switch ($match[0]) {
             case DispatcherContract::NOT_FOUND:
                 return $this->handleNotFound();
-                break;
             case DispatcherContract::HTTP_METHOD_NOT_ALLOWED:
                 return $this->handleNotAllowed($match[1]);
-                break;
             case DispatcherContract::FOUND:
                 return $this->handleFound($match[1], $match[2]);
-                break;
+            default:
+                return $this->handleInternalServerError();
         }
     }
 
@@ -106,10 +108,10 @@ class Dispatcher implements DispatcherContract
         $route = $this->routes->match($identifier);
 
         foreach ($segments as $key => $value) {
-            $route->setParameter($key, $value);
+            $route->setParameter($key, urldecode($value));
         }
 
-        return $this->middlewareDispatcher;
+        return $this->middlewareDispatcher->withMiddleware(new FoundMiddleware($route));
     }
 
     /**
@@ -131,7 +133,19 @@ class Dispatcher implements DispatcherContract
      */
     protected function handleNotAllowed(array $allowed): MiddlewareDispatcher
     {
-        return $this->middlewareDispatcher->withMiddleware(new NotFoundMiddleware($allowed));
+        return $this->middlewareDispatcher->withMiddleware(new NotAllowedMiddleware($allowed));
+    }
+
+    /**
+     * Handles a internal server error.
+     *
+     * @param array $allowed
+     *
+     * @return \Viserio\Middleware\Dispatcher
+     */
+    public function handleInternalServerError(): MiddlewareDispatcher
+    {
+        return $this->middlewareDispatcher->withMiddleware(new InternalServerErrorMiddleware());
     }
 
     /**

@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Routing\Tests\Router;
 
 use Viserio\Contracts\Routing\Dispatcher;
+use Viserio\Http\StreamFactory;
 
 class RootRoutesRouterTest extends RouteRouterBaseTest
 {
@@ -12,25 +13,33 @@ class RootRoutesRouterTest extends RouteRouterBaseTest
      * [
      *      'GET',
      *      '/user/1',
-     *      Dispatcher::found(['route_data'], ['id' => '1'])
+     *      body string
      * ]
      *
      * @return array[]
      */
-    public function routerMatchingProvider()
+    public function routerMatchingProvider(): array
     {
         return [
-            ['GET', '', ['name' => 'root'], []],
-            ['GET', '/', ['name' => 'root-slash'], []],
-            ['GET', '/a', []],
-            ['GET', 'test/123', []],
+            ['GET', '', 'Hello'],
+            ['GET', '/', 'Hello'],
+            ['GET', '/a', ''],
+            ['GET', 'test/123', 'Hello, 123'],
         ];
     }
 
     protected function definitions($router)
     {
-        $router->get('')->setParameter('name', 'root');
-        $router->get('/')->setParameter('name', 'root-slash');
-        $router->get('/test/{param}');
+        $router->get('', function ($request, $response, $args) {
+            return $response->withBody((new StreamFactory())->createStreamFromString('Hello'));
+        })->setParameter('name', 'root');
+
+        $router->get('/', function ($request, $response, $args) {
+            return $response->withBody((new StreamFactory())->createStreamFromString('Hello'));
+        })->setParameter('name', 'root-slash');
+
+        $router->get('/test/{param}', function ($request, $response, $args) {
+            return $response->withBody((new StreamFactory())->createStreamFromString('Hello, ' . $args['param']));
+        });
     }
 }

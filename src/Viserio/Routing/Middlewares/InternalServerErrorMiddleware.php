@@ -7,25 +7,8 @@ use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Contracts\Middleware\Delegate as DelegateContract;
 use Viserio\Contracts\Middleware\ServerMiddleware as ServerMiddlewareContract;
 
-class NotAllowedMiddleware implements ServerMiddlewareContract
+class InternalServerErrorMiddleware implements ServerMiddlewareContract
 {
-    /**
-     * All not allowed http methods.
-     *
-     * @var array
-     */
-    protected $allowed;
-
-    /**
-     * Create a found middleware instance.
-     *
-     * @param array $allowed
-     */
-    public function __construct(array $allowed)
-    {
-        $this->allowed = $allowed;
-    }
-
     /**
      * {@inheritdoc}
      */
@@ -35,6 +18,6 @@ class NotAllowedMiddleware implements ServerMiddlewareContract
     ): ResponseInterface {
         $response = $frame->next($request);
 
-        return $response->withStatus(405);
+        return $response->withStatus(500);
     }
 }

@@ -281,14 +281,13 @@ class Router implements RouterContract
      */
     public function dispatch(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
     {
-        $middlewareDispatcher = new MiddlewareDispatcher($response);
         $dispatcher = new Dispatcher(
             $this->path,
             $this->routes,
-            $middlewareDispatcher,
+            new MiddlewareDispatcher($response),
             $this->isDevelopMode
         );
-        $route = $dispatcher->handle($request);
+        $middlewareDispatcher = $dispatcher->handle($request);
 
         foreach ($this->withMiddlewares as $withMiddleware) {
             $middlewareDispatcher->withMiddleware($withMiddleware);
@@ -298,7 +297,7 @@ class Router implements RouterContract
             $middlewareDispatcher->withoutMiddleware($withoutMiddleware);
         }
 
-        return $middlewareDispatcher->process($route->run());
+        return $middlewareDispatcher->process($request);
     }
 
     /**

@@ -5,6 +5,8 @@ namespace Viserio\Routing;
 use LogicException;
 use Narrowspark\Arr\StaticArr as Arr;
 use UnexpectedValueException;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Contracts\Container\Traits\ContainerAwareTrait;
 use Viserio\Contracts\Middleware\Middleware as MiddlewareContract;
 use Viserio\Contracts\Routing\Route as RouteContract;
@@ -349,13 +351,13 @@ class Route implements RouteContract
     /**
      * {@inheritdoc}
      */
-    public function run()
+    public function run(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
     {
         $this->initInvoker();
 
         return $this->invoker->call(
             $this->action['uses'],
-            array_values($this->getParameters())
+            [$request, $response, $this->getParameters()]
         );
     }
 

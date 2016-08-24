@@ -92,7 +92,7 @@ PHP;
     }
 
     /**
-     * [compileRouteTree description]
+     * Compile the counter for the segments check.
      *
      * @param object $code
      * @param array  $routeTree
@@ -139,7 +139,7 @@ PHP;
     }
 
     /**
-     * [compileSegmentNodes description]
+     * Comple the segemtns nodes to if statements.
      *
      * @param object                 $code
      * @param ChildrenNodeCollection $nodes
@@ -197,7 +197,7 @@ PHP;
     }
 
     /**
-     * [compiledRouteHttpMethodMatch description]
+     * Compile the route http method match switch.
      *
      * @param object              $code
      * @param MatchedRouteDataMap $routeDataMap
@@ -244,7 +244,7 @@ PHP;
     }
 
     /**
-     * [compileNotFound description]
+     * Compile the return data.
      *
      * @param object $code
      */
@@ -254,7 +254,7 @@ PHP;
     }
 
     /**
-     * [compileDisallowedHttpMethod
+     * Compile disallowed http method data.
      *
      * @param object $code
      * @param array  $allowedMethod
@@ -271,7 +271,7 @@ PHP;
     }
 
     /**
-     * [compileDisallowedHttpMethodOrNotFound
+     * Compile disallowed http method or not found data check.
      *
      * @param object $code
      */
@@ -292,7 +292,7 @@ PHP;
     }
 
     /**
-     * [compileFoundRoute description]
+     * Compile the found route data.
      *
      * @param object $code
      * @param array  $foundRoute
