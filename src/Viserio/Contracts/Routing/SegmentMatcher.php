@@ -4,8 +4,6 @@ namespace Viserio\Contracts\Routing;
 
 interface SegmentMatcher
 {
-    const SEGMENT_PLACEHOLDER = '{segment}';
-
     /**
      * Return all set parameters keys.
      *

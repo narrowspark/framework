@@ -87,7 +87,7 @@ class Dispatcher implements DispatcherContract
             case DispatcherContract::NOT_FOUND:
                 return $this->handleNotFound();
             case DispatcherContract::HTTP_METHOD_NOT_ALLOWED:
-                return $this->handleNotAllowed($match[1]);
+                return $this->handleMethodNotAllowed($match[1]);
             case DispatcherContract::FOUND:
                 return $this->handleFound($match[1], $match[2]);
             default:
@@ -131,7 +131,7 @@ class Dispatcher implements DispatcherContract
      *
      * @return \Viserio\Middleware\Dispatcher
      */
-    protected function handleNotAllowed(array $allowed): MiddlewareDispatcher
+    protected function handleMethodNotAllowed(array $allowed): MiddlewareDispatcher
     {
         return $this->middlewareDispatcher->withMiddleware(new NotAllowedMiddleware($allowed));
     }

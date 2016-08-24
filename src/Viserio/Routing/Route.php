@@ -180,7 +180,7 @@ class Route implements RouteContract
     public function where($name, string $expression = null): RouteContract
     {
         foreach ($this->parseWhere($name, $expression) as $name => $expression) {
-            $this->wheres[] = new ParameterSegment($name, $expression);
+            $this->wheres[$name] = $expression;
         }
 
         return $this;

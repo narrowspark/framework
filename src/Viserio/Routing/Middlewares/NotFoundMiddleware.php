@@ -4,6 +4,7 @@ namespace Viserio\Routing\Middlewares;
 
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Narrowspark\HttpStatus\Exception\NotFoundException;
 use Viserio\Contracts\Middleware\Delegate as DelegateContract;
 use Viserio\Contracts\Middleware\ServerMiddleware as ServerMiddlewareContract;
 
@@ -18,6 +19,6 @@ class NotFoundMiddleware implements ServerMiddlewareContract
     ): ResponseInterface {
         $response = $frame->next($request);
 
-        return $response->withStatus(404);
+        throw new NotFoundException();
     }
 }

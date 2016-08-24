@@ -4,6 +4,7 @@ namespace Viserio\Routing\Middlewares;
 
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Narrowspark\HttpStatus\Exception\MethodNotAllowedException;
 use Viserio\Contracts\Middleware\Delegate as DelegateContract;
 use Viserio\Contracts\Middleware\ServerMiddleware as ServerMiddlewareContract;
 
@@ -35,6 +36,6 @@ class NotAllowedMiddleware implements ServerMiddlewareContract
     ): ResponseInterface {
         $response = $frame->next($request);
 
-        return $response->withStatus(405);
+        throw new MethodNotAllowedException();
     }
 }

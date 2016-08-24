@@ -50,7 +50,7 @@ class RouteTreeBuilderTest extends \PHPUnit_Framework_TestCase
             [
                 [
                     (new Route(['GET'], '/first/{param1}', null)),
-                    (new Route(['GET'], '/{param1}/{param2}', null))->where(['param1', 'param2'], Pattern::ANY),
+                    (new Route(['GET'], '/{param1}/{param2}', null))->where(['param1', 'param2'], Pattern::ALPHA),
                 ],
                 null,
                 [
@@ -66,11 +66,11 @@ class RouteTreeBuilderTest extends \PHPUnit_Framework_TestCase
                                 ),
                             ])
                         ),
-                        (new RegexMatcher(Pattern::ANY, 0))->getHash() => new RouteTreeNode(
-                            [0 => new RegexMatcher(Pattern::ANY, 0)],
+                        (new RegexMatcher(Pattern::ALPHA, 0))->getHash() => new RouteTreeNode(
+                            [0 => new RegexMatcher(Pattern::ALPHA, 0)],
                             new ChildrenNodeCollection([
-                                (new RegexMatcher(Pattern::ANY, 1))->getHash() => new RouteTreeNode(
-                                    [1 => new RegexMatcher(Pattern::ANY, 1)],
+                                (new RegexMatcher(Pattern::ALPHA, 1))->getHash() => new RouteTreeNode(
+                                    [1 => new RegexMatcher(Pattern::ALPHA, 1)],
                                     new MatchedRouteDataMap([
                                         [['GET', 'HEAD'], [[0 => 'param1', 1 => 'param2'], 'GET|HEAD/{param1}/{param2}']],
                                     ])

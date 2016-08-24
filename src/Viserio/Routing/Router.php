@@ -53,6 +53,13 @@ class Router implements RouterContract
     protected $globalParameterConditions = [];
 
     /**
+     * The globally available parameter patterns.
+     *
+     * @var array
+     */
+    protected $patterns = [];
+
+    /**
      * Flag for development mode.
      *
      * @var bool
@@ -200,6 +207,39 @@ class Router implements RouterContract
     public function getGroupStack(): array
     {
         return $this->groupStack;
+    }
+
+    /**
+     * Set a global where pattern on all routes.
+     *
+     * @param string $key
+     * @param string $pattern
+     */
+    public function pattern(string $key, string $pattern)
+    {
+        $this->patterns[$key] = $pattern;
+    }
+
+    /**
+     * Set a group of global where patterns on all routes.
+     *
+     * @param array $patterns
+     */
+    public function patterns(array $patterns)
+    {
+        foreach ($patterns as $key => $pattern) {
+            $this->pattern($key, $pattern);
+        }
+    }
+
+    /**
+     * Get the global "where" patterns.
+     *
+     * @return array
+     */
+    public function getPatterns(): array
+    {
+        return $this->patterns;
     }
 
     /**
@@ -369,7 +409,7 @@ class Router implements RouterContract
     protected function addWhereClausesToRoute(RouteContract $route): RouteContract
     {
         $where = $route->getAction()['where'] ?? [];
-        $patern = array_merge($this->globalParameterConditions, $where);
+        $patern = array_merge($this->patterns, $where);
 
         foreach ($patern as $name => $value) {
             $route->where($name, $value);

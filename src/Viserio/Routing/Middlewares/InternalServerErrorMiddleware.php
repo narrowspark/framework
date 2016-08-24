@@ -4,6 +4,7 @@ namespace Viserio\Routing\Middlewares;
 
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Narrowspark\HttpStatus\Exception\InternalServerErrorException;
 use Viserio\Contracts\Middleware\Delegate as DelegateContract;
 use Viserio\Contracts\Middleware\ServerMiddleware as ServerMiddlewareContract;
 
@@ -18,6 +19,6 @@ class InternalServerErrorMiddleware implements ServerMiddlewareContract
     ): ResponseInterface {
         $response = $frame->next($request);
 
-        return $response->withStatus(500);
+        throw new InternalServerErrorException();
     }
 }

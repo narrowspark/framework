@@ -130,7 +130,6 @@ class RouteParser implements RouteParserContract
     protected function generateRegex(array $matches, array $parameterPatterns): string
     {
         $regex = '/^';
-
         foreach ($matches as $match) {
             list($type, $part) = $match;
 
@@ -138,7 +137,8 @@ class RouteParser implements RouteParserContract
                 $regex .= preg_quote($part, '/');
             } else {
                 // Parameter, $part is the parameter name
-                $regex .= '(' . ($parameterPatterns[$part] ?? Pattern::ANY) . ')';
+                $pattern = $parameterPatterns[$part] ?? Pattern::ANY;
+                $regex .= '(' . $pattern . ')';
             }
         }
 
