@@ -33,9 +33,9 @@ class MatchedRouteDataMap implements NodeContentsContract
     /**
      * Get all allowed http methods.
      *
-     * @return array|null
+     * @return array
      */
-    public function getAllowedHttpMethods()
+    public function getAllowedHttpMethods(): array
     {
         $allowedHttpMethods = [];
 

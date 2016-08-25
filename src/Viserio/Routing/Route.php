@@ -59,18 +59,11 @@ class Route implements RouteContract
     protected $wheres = [];
 
     /**
-     * All of the middlewares.
+     * All middlewares.
      *
      * @var array
      */
-    protected $withMiddlewares = [];
-
-    /**
-     * All to remove middlewares.
-     *
-     * @var array
-     */
-    protected $withoutMiddlewares = [];
+    protected $middleware = [];
 
     /**
      * Invoker instance.
@@ -119,6 +112,16 @@ class Route implements RouteContract
     public function __get($key)
     {
         return $this->getParameter($key);
+    }
+
+    /**
+     * Set the invoker instance.
+     *
+     * @param \Viserio\Support\Invoker $invoker
+     */
+    public function setInvoker(Invoker $invoker)
+    {
+        $this->invoker = $invoker;
     }
 
     /**
@@ -190,17 +193,9 @@ class Route implements RouteContract
      */
     public function withMiddleware(MiddlewareContract $middleware): RouteContract
     {
-        $this->withMiddlewares[] = $middleware;
+        $this->middleware['with'][] = $middleware;
 
         return $this;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getWithMiddlewares(): array
-    {
-        return $this->withMiddlewares;
     }
 
     /**
@@ -208,7 +203,7 @@ class Route implements RouteContract
      */
     public function withoutMiddleware(MiddlewareContract $middleware): RouteContract
     {
-        $this->withoutMiddlewares[] = $middleware;
+        $this->middleware['without'][] = $middleware;
 
         return $this;
     }
@@ -216,9 +211,13 @@ class Route implements RouteContract
     /**
      * {@inheritdoc}
      */
-    public function getWithoutMiddlewares(): array
+    public function gatherMiddleware(): array
     {
-        return $this->withoutMiddlewares;
+        // Merge middlewares from Action.
+        $this->middleware['with'] = array_merge($this->middleware['with'], Arr::get($this->action, 'middleware.with', []));
+        $this->middleware['without'] = array_merge($this->middleware['without'], Arr::get($this->action, 'middleware.without', []));
+
+        return array_merge($this->middleware, $this->getControllerMiddleware());
     }
 
     /**
@@ -298,7 +297,7 @@ class Route implements RouteContract
      */
     public function getParameter(string $name, $default = null)
     {
-        return Arr::get($this->getParameters(), $name, $default);
+        return Arr::get($this->parameters, $name, $default);
     }
 
     /**
@@ -306,7 +305,7 @@ class Route implements RouteContract
      */
     public function hasParameter(string $name): bool
     {
-        return Arr::has($this->getParameters(), $name);
+        return Arr::has($this->parameters, $name);
     }
 
     /**
@@ -314,11 +313,7 @@ class Route implements RouteContract
      */
     public function getParameters(): array
     {
-        if (isset($this->parameters)) {
-            return $this->parameters;
-        }
-
-        throw new LogicException('Route is not bound.');
+        return $this->parameters;
     }
 
     /**
@@ -334,7 +329,7 @@ class Route implements RouteContract
      */
     public function forgetParameter(string $name)
     {
-        $this->getParameters();
+        $this->parameters;
 
         unset($this->parameters[$name]);
     }
@@ -352,29 +347,10 @@ class Route implements RouteContract
      */
     public function run(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
     {
-        $this->initInvoker();
-
         return $this->invoker->call(
             $this->action['uses'],
-            [$request, $response, $this->getParameters()]
+            [$request, $response, $this->parameters]
         );
-    }
-
-    /**
-     * Set configured invoker.
-     *
-     * @return \Viserio\Support\Invoker
-     */
-    protected function initInvoker(): Invoker
-    {
-        if ($this->invoker === null) {
-            $this->invoker = (new Invoker())
-                ->injectByTypeHint(true)
-                ->injectByParameterName(true)
-                ->setContainer($this->getContainer());
-        }
-
-        return $this->invoker;
     }
 
     /**
@@ -446,5 +422,19 @@ class Route implements RouteContract
         }
 
         return $arr;
+    }
+
+    /**
+     * Get the middleware for the route's controller.
+     *
+     * @return array
+     */
+    protected function getControllerMiddleware(): array
+    {
+        if (! $this->isControllerAction()) {
+            return [];
+        }
+
+        return [];
     }
 }

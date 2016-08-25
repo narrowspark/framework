@@ -63,13 +63,6 @@ interface Route
     public function withMiddleware(MiddlewareContract $middleware): Route;
 
     /**
-     * Get all added withmiddlewares.
-     *
-     * @return array
-     */
-    public function getWithMiddlewares(): array;
-
-    /**
      * Remove a middleware from route.
      *
      * @return $this
@@ -77,11 +70,11 @@ interface Route
     public function withoutMiddleware(MiddlewareContract $middleware): Route;
 
     /**
-     * Get all middlewares that need to be removed.
+     * Get all middleware, including the ones from the controller.
      *
      * @return array
      */
-    public function getWithoutMiddlewares(): array;
+    public function gatherMiddleware(): array;
 
     /**
      * Determine if the route only responds to HTTP requests.

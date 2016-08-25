@@ -89,7 +89,7 @@ class Dispatcher implements DispatcherContract
             case DispatcherContract::HTTP_METHOD_NOT_ALLOWED:
                 return $this->handleMethodNotAllowed($match[1]);
             case DispatcherContract::FOUND:
-                return $this->handleFound($match[1], $match[2]);
+                return $this->handleFound($match[1], $match[2], $request);
             default:
                 return $this->handleInternalServerError();
         }
@@ -111,15 +111,20 @@ class Dispatcher implements DispatcherContract
      *
      * @param string $identifier
      * @param array  $segments
+     * @param \Psr\Http\Message\ServerRequestInterface $request
      *
      * @return \Viserio\Middleware\Dispatcher
      */
-    protected function handleFound(string $identifier, array $segments): MiddlewareDispatcher
+    protected function handleFound(string $identifier, array $segments, ServerRequestInterface $request): MiddlewareDispatcher
     {
         $route = $this->routes->match($identifier);
 
         foreach ($segments as $key => $value) {
             $route->setParameter($key, urldecode($value));
+        }
+
+        if ($this->events !== null) {
+            $this->getEventsDispatcher()->emit('route.matched', [$route, $request]);
         }
 
         return $this->middlewareDispatcher->withMiddleware(new FoundMiddleware($route));

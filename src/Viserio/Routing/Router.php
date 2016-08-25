@@ -8,15 +8,18 @@ use Narrowspark\Arr\StaticArr as Arr;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Contracts\Container\Traits\ContainerAwareTrait;
+use Viserio\Contracts\Events\Traits\EventsAwareTrait;
 use Viserio\Contracts\Middleware\Middleware as MiddlewareContract;
 use Viserio\Contracts\Routing\Route as RouteContract;
 use Viserio\Contracts\Routing\RouteCollection as RouteCollectionContract;
 use Viserio\Contracts\Routing\Router as RouterContract;
 use Viserio\Middleware\Dispatcher as MiddlewareDispatcher;
+use Viserio\Support\Invoker;
 
 class Router implements RouterContract
 {
     use ContainerAwareTrait;
+    use EventsAwareTrait;
 
     /**
      * The route collection instance.
@@ -24,6 +27,13 @@ class Router implements RouterContract
      * @var \Viserio\Routing\RouteCollection
      */
     protected $routes;
+
+    /**
+     * Invoker instance.
+     *
+     * @var \Viserio\Support\Invoker
+     */
+    protected $invoker;
 
     /**
      * The route group attribute stack.
@@ -78,6 +88,8 @@ class Router implements RouterContract
         $this->path = $path;
         $this->container = $container;
         $this->routes = new RouteCollection();
+
+        $this->initInvoker();
     }
 
     /**
@@ -304,6 +316,8 @@ class Router implements RouterContract
             new MiddlewareDispatcher($response),
             $this->refreshCache
         );
+        $dispatcher->setEventsDispatcher($this->events);
+
         $middlewareDispatcher = $dispatcher->handle($request);
 
         if (isset($this->middlewares['with'])) {
@@ -363,6 +377,7 @@ class Router implements RouterContract
 
         $route = new Route($methods, $this->prefix($uri), $action);
         $route->setContainer($this->container);
+        $route->setInvoker($this->invoker);
 
         // If we have groups that need to be merged, we will merge them now after this
         // route has already been created and is ready to go. After we're done with
@@ -545,5 +560,22 @@ class Router implements RouterContract
         $group = end($this->groupStack);
 
         return isset($group['namespace']) && strpos($uses, '\\') !== 0 ? $group['namespace'] . '\\' . $uses : $uses;
+    }
+
+    /**
+     * Set configured invoker.
+     *
+     * @return \Viserio\Support\Invoker
+     */
+    protected function initInvoker(): Invoker
+    {
+        if ($this->invoker === null) {
+            $this->invoker = (new Invoker())
+                ->injectByTypeHint(true)
+                ->injectByParameterName(true)
+                ->setContainer($this->getContainer());
+        }
+
+        return $this->invoker;
     }
 }
