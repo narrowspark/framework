@@ -96,6 +96,17 @@ class Dispatcher implements DispatcherContract
     }
 
     /**
+     * Handles a internal server error.
+     *
+     *
+     * @return \Viserio\Middleware\Dispatcher
+     */
+    public function handleInternalServerError(): MiddlewareDispatcher
+    {
+        return $this->middlewareDispatcher->withMiddleware(new InternalServerErrorMiddleware());
+    }
+
+    /**
      * Handle dispatching of a found route.
      *
      * @param string $identifier
@@ -134,17 +145,6 @@ class Dispatcher implements DispatcherContract
     protected function handleMethodNotAllowed(array $allowed): MiddlewareDispatcher
     {
         return $this->middlewareDispatcher->withMiddleware(new NotAllowedMiddleware($allowed));
-    }
-
-    /**
-     * Handles a internal server error.
-     *
-     *
-     * @return \Viserio\Middleware\Dispatcher
-     */
-    public function handleInternalServerError(): MiddlewareDispatcher
-    {
-        return $this->middlewareDispatcher->withMiddleware(new InternalServerErrorMiddleware());
     }
 
     /**
