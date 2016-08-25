@@ -109,8 +109,8 @@ class Dispatcher implements DispatcherContract
     /**
      * Handle dispatching of a found route.
      *
-     * @param string $identifier
-     * @param array  $segments
+     * @param string                                   $identifier
+     * @param array                                    $segments
      * @param \Psr\Http\Message\ServerRequestInterface $request
      *
      * @return \Viserio\Middleware\Dispatcher
