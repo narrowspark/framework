@@ -2,7 +2,6 @@
 declare(strict_types=1);
 namespace Viserio\Routing\Tests\Router;
 
-use Viserio\Contracts\Routing\Dispatcher;
 use Viserio\Http\StreamFactory;
 
 class RootRoutesRouterTest extends RouteRouterBaseTest
@@ -10,6 +9,7 @@ class RootRoutesRouterTest extends RouteRouterBaseTest
     public function routerMatchingProvider(): array
     {
         return [
+            ['Put', '', 'Hello'],
             ['GET', '', 'Hello'],
             ['GET', '/', 'Hello'],
         ];
@@ -24,7 +24,11 @@ class RootRoutesRouterTest extends RouteRouterBaseTest
 
     protected function definitions($router)
     {
-        $router->get('', function ($request, $response, $args) {
+        $router->any('/', function ($request, $response, $args) {
+            return $response->withBody((new StreamFactory())->createStreamFromString('Hello'));
+        })->setParameter('name', 'root');
+
+        $router->get('/', function ($request, $response, $args) {
             return $response->withBody((new StreamFactory())->createStreamFromString('Hello'));
         })->setParameter('name', 'root');
 

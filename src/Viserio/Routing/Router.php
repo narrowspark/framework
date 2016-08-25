@@ -10,6 +10,7 @@ use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Contracts\Container\Traits\ContainerAwareTrait;
 use Viserio\Contracts\Middleware\Middleware as MiddlewareContract;
 use Viserio\Contracts\Routing\Route as RouteContract;
+use Viserio\Contracts\Routing\RouteCollection as RouteCollectionContract;
 use Viserio\Contracts\Routing\Router as RouterContract;
 use Viserio\Middleware\Dispatcher as MiddlewareDispatcher;
 
@@ -32,18 +33,11 @@ class Router implements RouterContract
     protected $groupStack = [];
 
     /**
-     * All of the middlewares.
+     * All middlewares.
      *
      * @var array
      */
-    protected $withMiddlewares = [];
-
-    /**
-     * All to remove middlewares.
-     *
-     * @var array
-     */
-    protected $withoutMiddlewares = [];
+    protected $middlewares = [];
 
     /**
      * The globally available parameter patterns.
@@ -60,11 +54,11 @@ class Router implements RouterContract
     protected $patterns = [];
 
     /**
-     * Flag for development mode.
+     * Flag for refresh the cache file on every call.
      *
      * @var bool
      */
-    protected $isDevelopMode = true;
+    protected $refreshCache = false;
 
     /**
      * Path to the cached router file.
@@ -87,13 +81,15 @@ class Router implements RouterContract
     }
 
     /**
-     * Route collection is in develop mode.
+     * Refresh cache file on development.
      *
-     * @param bool $isDev
+     * @param bool $refreshCache
      */
-    public function isDevelopMode(bool $isDev)
+    public function refreshCache(bool $refreshCache): RouterContract
     {
-        $this->isDevelopMode = $isDev;
+        $this->refreshCache = $refreshCache;
+
+        return $this;
     }
 
     /**
@@ -149,9 +145,7 @@ class Router implements RouterContract
      */
     public function any(string $uri, $action = null): RouteContract
     {
-        $verbs = ['GET', 'HEAD', 'POST', 'PUT', 'PATCH', 'DELETE'];
-
-        return $this->addRoute($verbs, $uri, $action);
+        return $this->addRoute(self::HTTP_METHOD_VARS, $uri, $action);
     }
 
     /**
@@ -182,13 +176,9 @@ class Router implements RouterContract
     }
 
     /**
-     * Merge the given array with the last group stack.
-     *
-     * @param array $new
-     *
-     * @return array
+     * {@inheritdoc}
      */
-    public function mergeWithLastGroup($new)
+    public function mergeWithLastGroup(array $new): array
     {
         return $this->mergeGroup($new, end($this->groupStack));
     }
@@ -210,32 +200,29 @@ class Router implements RouterContract
     }
 
     /**
-     * Set a global where pattern on all routes.
-     *
-     * @param string $key
-     * @param string $pattern
+     * {@inheritdoc}
      */
-    public function pattern(string $key, string $pattern)
+    public function pattern(string $key, string $pattern): RouterContract
     {
         $this->patterns[$key] = $pattern;
+
+        return $this;
     }
 
     /**
-     * Set a group of global where patterns on all routes.
-     *
-     * @param array $patterns
+     * {@inheritdoc}
      */
-    public function patterns(array $patterns)
+    public function patterns(array $patterns): RouterContract
     {
         foreach ($patterns as $key => $pattern) {
             $this->pattern($key, $pattern);
         }
+
+        return $this;
     }
 
     /**
-     * Get the global "where" patterns.
-     *
-     * @return array
+     * {@inheritdoc}
      */
     public function getPatterns(): array
     {
@@ -243,14 +230,9 @@ class Router implements RouterContract
     }
 
     /**
-     * Defines the supplied parameter name to be globally associated with the expression.
-     *
-     * @param string $parameterName
-     * @param string $expression
-     *
-     * @return $this
+     * {@inheritdoc}
      */
-    public function setParameter(string $parameterName, string $expression)
+    public function setParameter(string $parameterName, string $expression): RouterContract
     {
         $this->globalParameterConditions[$parameterName] = $expression;
 
@@ -258,13 +240,9 @@ class Router implements RouterContract
     }
 
     /**
-     * Defines the supplied parameter name to be globally associated with the expression.
-     *
-     * @param string[] $parameterPatternMap
-     *
-     * @return $this
+     * {@inheritdoc}
      */
-    public function addParameters(array $parameterPatternMap)
+    public function addParameters(array $parameterPatternMap): RouterContract
     {
         $this->globalParameterConditions += $parameterPatternMap;
 
@@ -272,9 +250,7 @@ class Router implements RouterContract
     }
 
     /**
-     * Removes the global expression associated with the supplied parameter name.
-     *
-     * @param string $name
+     * {@inheritdoc}
      */
     public function removeParameter(string $name)
     {
@@ -282,9 +258,7 @@ class Router implements RouterContract
     }
 
     /**
-     * Get all global parameters for all routes.
-     *
-     * @return array
+     * {@inheritdoc}
      */
     public function getParameters(): array
     {
@@ -296,7 +270,7 @@ class Router implements RouterContract
      */
     public function withMiddleware(MiddlewareContract $middleware): RouterContract
     {
-        $this->withMiddlewares[] = $middleware;
+        $this->middlewares['with'][] = $middleware;
 
         return $this;
     }
@@ -306,18 +280,21 @@ class Router implements RouterContract
      */
     public function withoutMiddleware(MiddlewareContract $middleware): RouterContract
     {
-        $this->withoutMiddlewares[] = $middleware;
+        $this->middlewares['without'][] = $middleware;
 
         return $this;
     }
 
     /**
-     * Dispatch router for HTTP request.
-     *
-     * @param \Psr\Http\Message\ServerRequestInterface $request
-     * @param \Psr\Http\Message\ResponseInterface      $response
-     *
-     * @return \Psr\Http\Message\ResponseInterface
+     * {@inheritdoc}
+     */
+    public function getMiddlewares(): array
+    {
+        return $this->middlewares;
+    }
+
+    /**
+     * {@inheritdoc}
      */
     public function dispatch(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
     {
@@ -329,11 +306,14 @@ class Router implements RouterContract
         );
         $middlewareDispatcher = $dispatcher->handle($request);
 
-        foreach ($this->withMiddlewares as $withMiddleware) {
+        $withMiddleware = $this->middlewares['with'];
+        $withoutMiddleware = $this->middlewares['without'];
+
+        foreach ($withMiddleware as $middleware) {
             $middlewareDispatcher->withMiddleware($withMiddleware);
         }
 
-        foreach ($this->withoutMiddlewares as $withoutMiddleware) {
+        foreach ($withoutMiddleware as $withoutMiddleware) {
             $middlewareDispatcher->withoutMiddleware($withoutMiddleware);
         }
 
@@ -341,11 +321,9 @@ class Router implements RouterContract
     }
 
     /**
-     * Get the underlying route collection.
-     *
-     * @return \Viserio\Routing\RouteCollection
+     * {@inheritdoc}
      */
-    public function getRoutes()
+    public function getRoutes(): RouteCollectionContract
     {
         return $this->routes;
     }

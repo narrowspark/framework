@@ -13,20 +13,13 @@ class MatchedRouteDataMap implements NodeContentsContract
     protected $httpMethodRouteMap = [];
 
     /**
-     * @var array|null
-     */
-    protected $defaultRouteData = null;
-
-    /**
-     * Create a new child node collection instance.
+     * Create a new matched route data map instance.
      *
-     * @param array      $httpMethodRouteMap
-     * @param array|null $defaultRouteData
+     * @param array $httpMethodRouteMap
      */
-    public function __construct(array $httpMethodRouteMap = [], array $defaultRouteData = null)
+    public function __construct(array $httpMethodRouteMap = [])
     {
         $this->httpMethodRouteMap = $httpMethodRouteMap;
-        $this->defaultRouteData = $defaultRouteData;
     }
 
     /**
@@ -44,49 +37,15 @@ class MatchedRouteDataMap implements NodeContentsContract
      */
     public function getAllowedHttpMethods()
     {
-        if ($this->hasDefaultRouteData()) {
-            return 'GET';
-        }
-
         $allowedHttpMethods = [];
 
         foreach ($this->httpMethodRouteMap as $item) {
             foreach ($item[0] as $method) {
-                $allowedHttpMethods[$method] = true;
+                $allowedHttpMethods[] = $method;
             }
         }
 
-        return array_keys($allowedHttpMethods);
-    }
-
-    /**
-     * Get the default data.
-     *
-     * @return array|null
-     */
-    public function getDefaultRouteData()
-    {
-        return $this->defaultRouteData;
-    }
-
-    /**
-     * Check if route has default data.
-     *
-     * @return bool
-     */
-    public function hasDefaultRouteData(): bool
-    {
-        return $this->defaultRouteData !== null;
-    }
-
-    /**
-     * Check if route is empty.
-     *
-     * @return bool
-     */
-    public function isEmpty(): bool
-    {
-        return $this->defaultRouteData === null && empty($this->httpMethodRouteMap);
+        return array_values($allowedHttpMethods);
     }
 
     /**
@@ -97,10 +56,6 @@ class MatchedRouteDataMap implements NodeContentsContract
      */
     public function addRoute(RouteContract $route, array $parameterIndexNameMap)
     {
-        if (count($route->getMethods()) === 1 && in_array('ANY', $route->getMethods())) {
-            $this->defaultRouteData = [$parameterIndexNameMap, $route->getIdentifier()];
-        } else {
-            $this->httpMethodRouteMap[] = [$route->getMethods(), [$parameterIndexNameMap, $route->getIdentifier()]];
-        }
+        $this->httpMethodRouteMap[] = [$route->getMethods(), [$parameterIndexNameMap, $route->getIdentifier()]];
     }
 }
