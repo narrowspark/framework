@@ -34,8 +34,6 @@ class NotAllowedMiddleware implements ServerMiddlewareContract
         ServerRequestInterface $request,
         DelegateContract $frame
     ): ResponseInterface {
-        $response = $frame->next($request);
-
         throw new MethodNotAllowedException();
     }
 }

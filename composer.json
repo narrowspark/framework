@@ -40,6 +40,7 @@
         "danielstjules/stringy"                              : "^2.3",
         "defuse/php-encryption"                              : "^2.0",
         "filp/whoops"                                        : "^2.0",
+        "http-interop/http-factory"                          : "^0.1",
         "league/flysystem"                                   : "^1.0",
         "jeremeamia/SuperClosure"                            : "^2.2",
         "monolog/monolog"                                    : "^1.17",
