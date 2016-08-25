@@ -302,19 +302,20 @@ class Router implements RouterContract
             $this->path,
             $this->routes,
             new MiddlewareDispatcher($response),
-            $this->isDevelopMode
+            $this->refreshCache
         );
         $middlewareDispatcher = $dispatcher->handle($request);
 
-        $withMiddleware = $this->middlewares['with'];
-        $withoutMiddleware = $this->middlewares['without'];
-
-        foreach ($withMiddleware as $middleware) {
-            $middlewareDispatcher->withMiddleware($withMiddleware);
+        if (isset($this->middlewares['with'])) {
+            foreach ($this->middlewares['with'] as $middleware) {
+                $middlewareDispatcher->withMiddleware($middleware);
+            }
         }
 
-        foreach ($withoutMiddleware as $withoutMiddleware) {
-            $middlewareDispatcher->withoutMiddleware($withoutMiddleware);
+        if (isset($this->middlewares['without'])) {
+            foreach ($this->middlewares['without'] as $middleware) {
+                $middlewareDispatcher->withoutMiddleware($middleware);
+            }
         }
 
         return $middlewareDispatcher->process($request);

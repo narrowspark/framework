@@ -21,7 +21,7 @@ abstract class RouteRouterBaseTest extends \PHPUnit_Framework_TestCase
 
         $name = (new ReflectionClass($this))->getShortName();
         $router = new Router(__DIR__ . '/../Cache/' . $name . '.cache', $this->mock(ContainerInterface::class));
-        $router->isDevelopMode(true);
+        $router->refreshCache(true);
 
         $this->definitions($router);
 

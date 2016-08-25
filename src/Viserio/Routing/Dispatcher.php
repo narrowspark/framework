@@ -41,11 +41,11 @@ class Dispatcher implements DispatcherContract
     protected $middlewareDispatcher;
 
     /**
-     * Flag for development mode.
+     * Flag for refresh the cache file on every call.
      *
      * @var bool
      */
-    protected $isDevelopMode = true;
+    protected $refreshCache = false;
 
     /**
      * Create a new Router instance.
@@ -53,18 +53,18 @@ class Dispatcher implements DispatcherContract
      * @param string                                     $path
      * @param \Viserio\Contracts\Routing\RouteCollection $routes
      * @param \Viserio\Middleware\Dispatcher             $middlewareDispatcher
-     * @param bool                                       $isDevelopMode
+     * @param bool                                       $refreshCache
      */
     public function __construct(
         string $path,
         RouteCollectionContract $routes,
         MiddlewareDispatcher $middlewareDispatcher,
-        bool $isDevelopMode
+        bool $refreshCache
     ) {
         $this->path = $path;
         $this->routes = $routes;
         $this->middlewareDispatcher = $middlewareDispatcher;
-        $this->isDevelopMode = $isDevelopMode;
+        $this->refreshCache = $refreshCache;
     }
 
     /**
@@ -154,7 +154,7 @@ class Dispatcher implements DispatcherContract
      */
     protected function generateRouterFile(): Closure
     {
-        if ($this->isDevelopMode && file_exists($this->path)) {
+        if ($this->refreshCache && file_exists($this->path)) {
             @unlink($this->path);
         }
 
