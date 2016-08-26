@@ -310,15 +310,7 @@ class Router implements RouterContract
      */
     public function dispatch(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
     {
-        $dispatcher = new Dispatcher(
-            $this->path,
-            $this->routes,
-            new MiddlewareDispatcher($response),
-            $this->refreshCache
-        );
-        $dispatcher->setEventsDispatcher($this->events);
-
-        $middlewareDispatcher = $dispatcher->handle($request);
+        $middlewareDispatcher = new MiddlewareDispatcher($response);
 
         if (isset($this->middlewares['with'])) {
             foreach ($this->middlewares['with'] as $middleware) {
@@ -331,6 +323,21 @@ class Router implements RouterContract
                 $middlewareDispatcher->withoutMiddleware($middleware);
             }
         }
+
+        $dispatcher = new Dispatcher(
+            $this->path,
+            $this->routes,
+            $middlewareDispatcher,
+            $this->refreshCache
+        );
+
+        if ($this->events !== null) {
+            $dispatcher->setEventsDispatcher($this->events);
+
+            $this->events = $dispatcher->getEventsDispatcher();
+        }
+
+        $middlewareDispatcher = $dispatcher->handle($request);
 
         return $middlewareDispatcher->process($request);
     }

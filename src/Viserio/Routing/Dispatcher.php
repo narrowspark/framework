@@ -115,12 +115,29 @@ class Dispatcher implements DispatcherContract
      *
      * @return \Viserio\Middleware\Dispatcher
      */
-    protected function handleFound(string $identifier, array $segments, ServerRequestInterface $request): MiddlewareDispatcher
-    {
+    protected function handleFound(
+        string $identifier,
+        array $segments,
+        ServerRequestInterface $request
+    ): MiddlewareDispatcher {
         $route = $this->routes->match($identifier);
 
         foreach ($segments as $key => $value) {
             $route->setParameter($key, urldecode($value));
+        }
+
+        $middlewares = $route->gatherMiddleware();
+
+        if (isset($middlewares['with'])) {
+            foreach ($middlewares['with'] as $middleware) {
+                $this->middlewareDispatcher->withMiddleware($middleware);
+            }
+        }
+
+        if (isset($middlewares['without'])) {
+            foreach ($middlewares['without'] as $middleware) {
+                $this->middlewareDispatcher->withoutMiddleware($middleware);
+            }
         }
 
         if ($this->events !== null) {

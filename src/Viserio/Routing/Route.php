@@ -63,7 +63,10 @@ class Route implements RouteContract
      *
      * @var array
      */
-    protected $middleware = [];
+    protected $middleware = [
+        'with' => [],
+        'without' => []
+    ];
 
     /**
      * Invoker instance.
@@ -214,8 +217,14 @@ class Route implements RouteContract
     public function gatherMiddleware(): array
     {
         // Merge middlewares from Action.
-        $this->middleware['with'] = array_merge($this->middleware['with'], Arr::get($this->action, 'middleware.with', []));
-        $this->middleware['without'] = array_merge($this->middleware['without'], Arr::get($this->action, 'middleware.without', []));
+        $this->middleware['with'] = array_merge(
+            $this->middleware['with'],
+            Arr::get($this->action, 'middleware.with', [])
+        );
+        $this->middleware['without'] = array_merge(
+            $this->middleware['without'],
+            Arr::get($this->action, 'middleware.without', [])
+        );
 
         return array_merge($this->middleware, $this->getControllerMiddleware());
     }
@@ -347,6 +356,10 @@ class Route implements RouteContract
      */
     public function run(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
     {
+        if ($this->isControllerAction()) {
+            return $this->getController()->{$this->getControllerMethod()};
+        }
+
         return $this->invoker->call(
             $this->action['uses'],
             [$request, $response, $this->parameters]
@@ -435,6 +448,48 @@ class Route implements RouteContract
             return [];
         }
 
+        $controller = $this->getController();
+
+        if (method_exists($controller, 'gatherMiddleware')) {
+            return $controller->gatherMiddleware();
+        }
+
         return [];
+    }
+
+    /**
+     * Checks whether the route's action is a controller.
+     *
+     * @return bool
+     */
+    protected function isControllerAction(): bool
+    {
+        return is_string($this->action['uses']);
+    }
+
+    /**
+     * Get the controller instance for the route.
+     *
+     * @return mixed
+     */
+    protected function getController()
+    {
+        list($class) = explode('::', $this->action['uses']);
+
+        if (! $this->controller) {
+            $this->controller = $this->invoker($class);
+        }
+
+        return $this->controller;
+    }
+
+    /**
+     * Get the controller method used for the route.
+     *
+     * @return string
+     */
+    protected function getControllerMethod(): string
+    {
+        return explode('::', $this->action['uses'])[1];
     }
 }
