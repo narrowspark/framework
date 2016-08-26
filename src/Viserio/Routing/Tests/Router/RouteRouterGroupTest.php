@@ -6,6 +6,5 @@ class RouteRouterGroupTest extends RouteRouterBaseTest
 {
     protected function definitions($routes)
     {
-
     }
 }
