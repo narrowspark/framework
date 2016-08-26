@@ -36,6 +36,13 @@ class Router implements RouterContract
     protected $invoker;
 
     /**
+     * The currently dispatched route instance.
+     *
+     * @var \Viserio\Contracts\Routing\Route
+     */
+    protected $current;
+
+    /**
      * The route group attribute stack.
      *
      * @var array
@@ -306,6 +313,16 @@ class Router implements RouterContract
     }
 
     /**
+     * Get the currently dispatched route instance.
+     *
+     * @return \Viserio\Contracts\Routing\Route|null
+     */
+    public function getCurrentRoute()
+    {
+        return $this->current;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function dispatch(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
@@ -338,6 +355,7 @@ class Router implements RouterContract
         }
 
         $middlewareDispatcher = $dispatcher->handle($request);
+        $this->current = $this->getCurrentRoute();
 
         return $middlewareDispatcher->process($request);
     }

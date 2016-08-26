@@ -2,7 +2,6 @@
 declare(strict_types=1);
 namespace Viserio\Routing\Tests;
 
-use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use Viserio\Contracts\Routing\Pattern;
 use Viserio\Routing\Route;
 use Viserio\Routing\Segments\ParameterSegment;
@@ -10,8 +9,6 @@ use Viserio\Routing\Tests\Fixture\Controller;
 
 class RouteTest extends \PHPUnit_Framework_TestCase
 {
-    use MockeryTrait;
-
     public function testGetMethods()
     {
         $route = new Route('GET', '/test', ['uses' => Controller::class . '::string']);
