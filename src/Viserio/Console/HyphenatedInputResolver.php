@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Console;
 
-use ReflectionFunctionAbstract;
 use Invoker\ParameterResolver\ParameterResolver;
+use ReflectionFunctionAbstract;
 
 class HyphenatedInputResolver implements ParameterResolver
 {
@@ -32,7 +32,7 @@ class HyphenatedInputResolver implements ParameterResolver
         }
 
         foreach ($providedParameters as $name => $value) {
-            $normalizedName = strtolower(str_replace("-", "", $name));
+            $normalizedName = strtolower(str_replace('-', '', $name));
 
             // Skip parameters that do not exist with the normalized name
             if (! array_key_exists($normalizedName, $parameters)) {

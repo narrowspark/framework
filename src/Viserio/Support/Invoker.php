@@ -9,8 +9,8 @@ use Invoker\ParameterResolver\Container\ParameterNameContainerResolver;
 use Invoker\ParameterResolver\Container\TypeHintContainerResolver;
 use Invoker\ParameterResolver\DefaultValueResolver;
 use Invoker\ParameterResolver\NumericArrayResolver;
-use Invoker\ParameterResolver\ResolverChain;
 use Invoker\ParameterResolver\ParameterResolver;
+use Invoker\ParameterResolver\ResolverChain;
 use Viserio\Contracts\Container\Traits\ContainerAwareTrait;
 
 class Invoker implements InvokerInterface

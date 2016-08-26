@@ -65,7 +65,7 @@ class Route implements RouteContract
      */
     protected $middleware = [
         'with' => [],
-        'without' => []
+        'without' => [],
     ];
 
     /**
