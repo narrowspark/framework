@@ -41,7 +41,9 @@ class RouteCollection implements RouteCollectionContract
      */
     public function add(RouteContract $route): RouteContract
     {
-        $this->addToCollections($route);
+        $domainAndUri = $route->getDomain() . $route->getUri();
+        $this->allRoutes[implode($route->getMethods(), '|') . $domainAndUri] = $route;
+
         $this->addLookups($route);
 
         return $route;
@@ -91,32 +93,6 @@ class RouteCollection implements RouteCollectionContract
     public function getRoutes(): array
     {
         return array_values($this->allRoutes);
-    }
-
-    /**
-     * {@inheritdoc}
-     *
-     * @codeCoverageIgnore
-     */
-    public function getRoutesByMethod(): array
-    {
-        return $this->routes;
-    }
-
-    /**
-     * Add the given route to the arrays of routes.
-     *
-     * @param \Viserio\Contracts\Routing\Route $route
-     */
-    protected function addToCollections(RouteContract $route)
-    {
-        $domainAndUri = $route->getDomain() . $route->getUri();
-
-        foreach ($route->getMethods() as $method) {
-            $this->routes[$method][$domainAndUri] = $route;
-        }
-
-        $this->allRoutes[implode($route->getMethods(), '|') . $domainAndUri] = $route;
     }
 
     /**

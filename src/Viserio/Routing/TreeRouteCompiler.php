@@ -56,11 +56,7 @@ class TreeRouteCompiler
         $rootRouteCode = $this->phpBuilder();
         $rootRouteCode->indent = 2;
 
-        if ($routeTree[0] !== null && ! $routeTree[0]->isEmpty()) {
-            $this->compiledRouteHttpMethodMatch($rootRouteCode, $routeTree[0], []);
-        } else {
-            $this->compileNotFound($rootRouteCode);
-        }
+        $this->compileNotFound($rootRouteCode);
 
         return $this->createRouterClassTemplate(substr($rootRouteCode->code, 0, -strlen(PHP_EOL)), $code->code);
     }
@@ -227,15 +223,11 @@ PHP;
 
         ++$code->indent;
 
-        if ($routeDataMap->hasDefaultRouteData()) {
-            $this->compileFoundRoute($code, $routeDataMap->getDefaultRouteData(), $parameters);
-        } else {
-            foreach ($routeDataMap->getAllowedHttpMethods() as $method) {
-                $code->appendLine('$allowedHttpMethods[] = ' . VarExporter::export($method) . ';');
-            }
-
-            $code->appendLine('break;');
+        foreach ($routeDataMap->getAllowedHttpMethods() as $method) {
+            $code->appendLine('$allowedHttpMethods[] = ' . VarExporter::export($method) . ';');
         }
+
+        $code->appendLine('break;');
 
         --$code->indent;
         --$code->indent;
@@ -251,23 +243,6 @@ PHP;
     protected function compileNotFound($code)
     {
         $code->appendLine('return [' . VarExporter::export(Dispatcher::NOT_FOUND) . '];');
-    }
-
-    /**
-     * Compile disallowed http method data.
-     *
-     * @param object $code
-     * @param array  $allowedMethod
-     */
-    protected function compileDisallowedHttpMethod($code, array $allowedMethod)
-    {
-        $code->appendLine(
-            'return [' .
-            VarExporter::export(Dispatcher::HTTP_METHOD_NOT_ALLOWED) .
-            ', ' .
-            VarExporter::export($allowedMethod) .
-            '];'
-        );
     }
 
     /**

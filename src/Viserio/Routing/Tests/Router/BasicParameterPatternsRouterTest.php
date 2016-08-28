@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Routing\Tests\Router;
 
-use Viserio\Contracts\Routing\Dispatcher;
 use Viserio\Contracts\Routing\Pattern;
+use Viserio\Http\ResponseFactory;
 use Viserio\Http\StreamFactory;
 
 class BasicParameterPatternsRouterTest extends RouteRouterBaseTest
@@ -106,36 +106,76 @@ class BasicParameterPatternsRouterTest extends RouteRouterBaseTest
 
     protected function definitions($router)
     {
-        $router->get('/digits/{param}', function ($request, $response, $args) {
-            return $response->withBody((new StreamFactory())->createStreamFromString($args['param'] . ' | ' . $args['name']));
+        $router->get('/digits/{param}', function ($request, $args) {
+            return (new ResponseFactory())
+                ->createResponse()
+                ->withBody(
+                    (new StreamFactory())
+                    ->createStreamFromString($args['param'] . ' | ' . $args['name'])
+                );
         })->where('param', Pattern::DIGITS)->setParameter('name', 'digits');
 
-        $router->get('/alpha/{param}', function ($request, $response, $args) {
-            return $response->withBody((new StreamFactory())->createStreamFromString($args['param'] . ' | ' . $args['name']));
+        $router->get('/alpha/{param}', function ($request, $args) {
+            return (new ResponseFactory())
+                ->createResponse()
+                ->withBody(
+                    (new StreamFactory())
+                    ->createStreamFromString($args['param'] . ' | ' . $args['name'])
+                );
         })->where('param', Pattern::ALPHA)->setParameter('name', 'alpha');
 
-        $router->get('/alpha_low/{param}', function ($request, $response, $args) {
-            return $response->withBody((new StreamFactory())->createStreamFromString($args['param'] . ' | ' . $args['name']));
+        $router->get('/alpha_low/{param}', function ($request, $args) {
+            return (new ResponseFactory())
+                ->createResponse()
+                ->withBody(
+                    (new StreamFactory())
+                    ->createStreamFromString($args['param'] . ' | ' . $args['name'])
+                );
         })->where('param', Pattern::ALPHA_LOWER)->setParameter('name', 'alpha_low');
 
-        $router->get('/alpha_up/{param}', function ($request, $response, $args) {
-            return $response->withBody((new StreamFactory())->createStreamFromString($args['param'] . ' | ' . $args['name']));
+        $router->get('/alpha_up/{param}', function ($request, $args) {
+            return (new ResponseFactory())
+                ->createResponse()
+                ->withBody(
+                    (new StreamFactory())
+                    ->createStreamFromString($args['param'] . ' | ' . $args['name'])
+                );
         })->where('param', Pattern::ALPHA_UPPER)->setParameter('name', 'alpha_up');
 
-        $router->get('/alpha_num/{param}', function ($request, $response, $args) {
-            return $response->withBody((new StreamFactory())->createStreamFromString($args['param'] . ' | ' . $args['name']));
+        $router->get('/alpha_num/{param}', function ($request, $args) {
+            return (new ResponseFactory())
+                ->createResponse()
+                ->withBody(
+                    (new StreamFactory())
+                    ->createStreamFromString($args['param'] . ' | ' . $args['name'])
+                );
         })->where('param', Pattern::ALPHA_NUM)->setParameter('name', 'alpha_num');
 
-        $router->get('/alpha_num_dash/{param}', function ($request, $response, $args) {
-            return $response->withBody((new StreamFactory())->createStreamFromString($args['param'] . ' | ' . $args['name']));
+        $router->get('/alpha_num_dash/{param}', function ($request, $args) {
+            return (new ResponseFactory())
+                ->createResponse()
+                ->withBody(
+                    (new StreamFactory())
+                    ->createStreamFromString($args['param'] . ' | ' . $args['name'])
+                );
         })->where('param', Pattern::ALPHA_NUM_DASH)->setParameter('name', 'alpha_num_dash');
 
-        $router->get('/any/{param}', function ($request, $response, $args) {
-            return $response->withBody((new StreamFactory())->createStreamFromString($args['param'] . ' | ' . $args['name']));
+        $router->get('/any/{param}', function ($request, $args) {
+            return (new ResponseFactory())
+                ->createResponse()
+                ->withBody(
+                    (new StreamFactory())
+                    ->createStreamFromString($args['param'] . ' | ' . $args['name'])
+                );
         })->where('param', Pattern::ANY)->setParameter('name', 'any');
 
-        $router->get('/custom/{param}', function ($request, $response, $args) {
-            return $response->withBody((new StreamFactory())->createStreamFromString($args['param'] . ' | ' . $args['name']));
+        $router->get('/custom/{param}', function ($request, $args) {
+            return (new ResponseFactory())
+                ->createResponse()
+                ->withBody(
+                    (new StreamFactory())
+                    ->createStreamFromString($args['param'] . ' | ' . $args['name'])
+                );
         })->where('param', '[\!]{3,5}')->setParameter('name', 'custom');
     }
 }

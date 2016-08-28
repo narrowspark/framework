@@ -57,11 +57,4 @@ interface RouteCollection
      * @return array
      */
     public function getRoutes(): array;
-
-    /**
-     * Get all of the routes keyed by their HTTP verb / method.
-     *
-     * @return array
-     */
-    public function getRoutesByMethod(): array;
 }

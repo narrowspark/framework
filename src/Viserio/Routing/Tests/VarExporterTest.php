@@ -28,7 +28,7 @@ class VarExporterTest extends \PHPUnit_Framework_TestCase
            [['foo' => 1, [2, 3]], '[\'foo\' => 1,0 => [0 => 2,1 => 3,],]'],
            [new StdClass(), '(object)[]'],
            [(object) ['foo' => 'bar'], '(object)[\'foo\' => \'bar\']'],
-           [new Controller(), 'unserialize(\'O:40:"Viserio\\\\Routing\\\\Tests\\\\Fixture\\\\Controller":0:{}\')'],
+           [new Controller(), 'unserialize(' . var_export(serialize(new Controller()), true) . ')'],
        ];
     }
 

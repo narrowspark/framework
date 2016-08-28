@@ -10,7 +10,7 @@ use Viserio\Routing\Matchers\ExpressionMatcher;
 use Viserio\Routing\Matchers\RegexMatcher;
 use Viserio\Routing\Matchers\StaticMatcher;
 
-class MatcherOptimizer
+final class MatcherOptimizer
 {
     /**
      * Private constructor; non-instantiable.

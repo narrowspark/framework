@@ -1,25 +1,24 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Middleware\Tests\Fixture;
+namespace Viserio\Routing\Tests\Fixture;
 
-use Interop\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Viserio\Contracts\Container\Traits\ContainerAwareTrait;
 use Viserio\Contracts\Middleware\Delegate as DelegateContract;
 use Viserio\Contracts\Middleware\ServerMiddleware as ServerMiddlewareContract;
+use Viserio\Http\StreamFactory;
 
-class FakeContainerMiddleware implements ServerMiddlewareContract
+class FakeMiddleware implements ServerMiddlewareContract
 {
-    use ContainerAwareTrait;
-
     public function process(
         ServerRequestInterface $request,
         DelegateContract $frame
     ): ResponseInterface {
         $response = $frame->next($request);
-        $response = $response->withAddedHeader('X-Foo', $this->getcontainer()->get('doo'));
 
-        return $response;
+        return $response->withBody(
+            (new StreamFactory())
+            ->createStreamFromString('caught')
+        );
     }
 }

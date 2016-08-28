@@ -2,14 +2,13 @@
 declare(strict_types=1);
 namespace Viserio\Routing\Tests;
 
-use Narrowspark\TestingHelper\Traits\MockeryTrait;
+use Viserio\Contracts\Routing\Pattern;
 use Viserio\Routing\Route;
+use Viserio\Routing\Segments\ParameterSegment;
 use Viserio\Routing\Tests\Fixture\Controller;
 
 class RouteTest extends \PHPUnit_Framework_TestCase
 {
-    use MockeryTrait;
-
     public function testGetMethods()
     {
         $route = new Route('GET', '/test', ['uses' => Controller::class . '::string']);
@@ -81,5 +80,51 @@ class RouteTest extends \PHPUnit_Framework_TestCase
         $route->addPrefix('test');
 
         $this->assertSame('test/foo/test', $route->getUri());
+    }
+
+    public function testWhere()
+    {
+        $route = new Route('GET', '/test/{param1}/{param2}', null);
+        $route->where(['param1', 'param2'], Pattern::ANY);
+
+        $segments = $route->getSegments();
+
+        $this->assertEquals(new ParameterSegment('param1', '/^(.+)$/'), $segments[1]);
+        $this->assertEquals(new ParameterSegment('param2', '/^(.+)$/'), $segments[2]);
+    }
+
+    public function testParametersFunctions()
+    {
+        $route = new Route('GET', '/test/{param1}/{param2}', null);
+        $route->setParameter('test1', 'test1');
+        $route->setParameter('test2', 'test2');
+
+        $this->assertTrue($route->hasParameters());
+        $this->assertTrue($route->hasParameter('test1'));
+        $this->assertSame(['test1' => 'test1', 'test2' => 'test2'], $route->getParameters());
+        $this->assertSame('test1', $route->getParameter('test1'));
+
+        $route->forgetParameter('test1');
+
+        $this->assertFalse($route->hasParameter('test1'));
+    }
+
+    public function testSetAndGetAction()
+    {
+        $route = new Route('GET', '/test/{param1}/{param2}', null);
+        $route->setAction([
+            'domain' => 'http://test.com',
+            'controller' => 'routeController',
+        ]);
+
+        $this->assertSame('http://test.com', $route->getDomain());
+        $this->assertTrue(is_array($route->getAction()));
+        $this->assertSame('routeController', $route->getActionName());
+
+        $route->setAction([
+            'controller' => null,
+        ]);
+
+        $this->assertSame('Closure', $route->getActionName());
     }
 }

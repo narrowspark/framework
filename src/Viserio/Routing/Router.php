@@ -8,14 +8,18 @@ use Narrowspark\Arr\StaticArr as Arr;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Contracts\Container\Traits\ContainerAwareTrait;
+use Viserio\Contracts\Events\Traits\EventsAwareTrait;
 use Viserio\Contracts\Middleware\Middleware as MiddlewareContract;
 use Viserio\Contracts\Routing\Route as RouteContract;
+use Viserio\Contracts\Routing\RouteCollection as RouteCollectionContract;
 use Viserio\Contracts\Routing\Router as RouterContract;
 use Viserio\Middleware\Dispatcher as MiddlewareDispatcher;
+use Viserio\Support\Invoker;
 
 class Router implements RouterContract
 {
     use ContainerAwareTrait;
+    use EventsAwareTrait;
 
     /**
      * The route collection instance.
@@ -25,6 +29,20 @@ class Router implements RouterContract
     protected $routes;
 
     /**
+     * Invoker instance.
+     *
+     * @var \Viserio\Support\Invoker
+     */
+    protected $invoker;
+
+    /**
+     * The currently dispatched route instance.
+     *
+     * @var \Viserio\Contracts\Routing\Route
+     */
+    protected $current;
+
+    /**
      * The route group attribute stack.
      *
      * @var array
@@ -32,18 +50,11 @@ class Router implements RouterContract
     protected $groupStack = [];
 
     /**
-     * All of the middlewares.
+     * All middlewares.
      *
      * @var array
      */
-    protected $withMiddlewares = [];
-
-    /**
-     * All to remove middlewares.
-     *
-     * @var array
-     */
-    protected $withoutMiddlewares = [];
+    protected $middlewares = [];
 
     /**
      * The globally available parameter patterns.
@@ -60,11 +71,11 @@ class Router implements RouterContract
     protected $patterns = [];
 
     /**
-     * Flag for development mode.
+     * Flag for refresh the cache file on every call.
      *
      * @var bool
      */
-    protected $isDevelopMode = true;
+    protected $refreshCache = false;
 
     /**
      * Path to the cached router file.
@@ -84,16 +95,20 @@ class Router implements RouterContract
         $this->path = $path;
         $this->container = $container;
         $this->routes = new RouteCollection();
+
+        $this->initInvoker();
     }
 
     /**
-     * Route collection is in develop mode.
+     * Refresh cache file on development.
      *
-     * @param bool $isDev
+     * @param bool $refreshCache
      */
-    public function isDevelopMode(bool $isDev)
+    public function refreshCache(bool $refreshCache): RouterContract
     {
-        $this->isDevelopMode = $isDev;
+        $this->refreshCache = $refreshCache;
+
+        return $this;
     }
 
     /**
@@ -149,9 +164,7 @@ class Router implements RouterContract
      */
     public function any(string $uri, $action = null): RouteContract
     {
-        $verbs = ['GET', 'HEAD', 'POST', 'PUT', 'PATCH', 'DELETE'];
-
-        return $this->addRoute($verbs, $uri, $action);
+        return $this->addRoute(self::HTTP_METHOD_VARS, $uri, $action);
     }
 
     /**
@@ -165,77 +178,29 @@ class Router implements RouterContract
     /**
      * {@inheritdoc}
      */
-    public function group(array $attributes, Closure $callback)
-    {
-        if (! empty($this->groupStack)) {
-            $attributes = $this->mergeGroup($attributes, end($this->groupStack));
-        }
-
-        $this->groupStack[] = $attributes;
-
-        // Once we have updated the group stack, we will execute the user Closure and
-        // merge in the groups attributes when the route is created. After we have
-        // run the callback, we will pop the attributes off of this group stack.
-        call_user_func($callback, $this);
-
-        array_pop($this->groupStack);
-    }
-
-    /**
-     * Merge the given array with the last group stack.
-     *
-     * @param array $new
-     *
-     * @return array
-     */
-    public function mergeWithLastGroup($new)
-    {
-        return $this->mergeGroup($new, end($this->groupStack));
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function hasGroupStack(): bool
-    {
-        return ! empty($this->groupStack);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getGroupStack(): array
-    {
-        return $this->groupStack;
-    }
-
-    /**
-     * Set a global where pattern on all routes.
-     *
-     * @param string $key
-     * @param string $pattern
-     */
-    public function pattern(string $key, string $pattern)
+    public function pattern(string $key, string $pattern): RouterContract
     {
         $this->patterns[$key] = $pattern;
+
+        return $this;
     }
 
     /**
-     * Set a group of global where patterns on all routes.
-     *
-     * @param array $patterns
+     * {@inheritdoc}
      */
-    public function patterns(array $patterns)
+    public function patterns(array $patterns): RouterContract
     {
         foreach ($patterns as $key => $pattern) {
             $this->pattern($key, $pattern);
         }
+
+        return $this;
     }
 
     /**
-     * Get the global "where" patterns.
+     * {@inheritdoc}
      *
-     * @return array
+     * @codeCoverageIgnore
      */
     public function getPatterns(): array
     {
@@ -243,14 +208,9 @@ class Router implements RouterContract
     }
 
     /**
-     * Defines the supplied parameter name to be globally associated with the expression.
-     *
-     * @param string $parameterName
-     * @param string $expression
-     *
-     * @return $this
+     * {@inheritdoc}
      */
-    public function setParameter(string $parameterName, string $expression)
+    public function setParameter(string $parameterName, string $expression): RouterContract
     {
         $this->globalParameterConditions[$parameterName] = $expression;
 
@@ -258,13 +218,9 @@ class Router implements RouterContract
     }
 
     /**
-     * Defines the supplied parameter name to be globally associated with the expression.
-     *
-     * @param string[] $parameterPatternMap
-     *
-     * @return $this
+     * {@inheritdoc}
      */
-    public function addParameters(array $parameterPatternMap)
+    public function addParameters(array $parameterPatternMap): RouterContract
     {
         $this->globalParameterConditions += $parameterPatternMap;
 
@@ -272,9 +228,9 @@ class Router implements RouterContract
     }
 
     /**
-     * Removes the global expression associated with the supplied parameter name.
+     * {@inheritdoc}
      *
-     * @param string $name
+     * @codeCoverageIgnore
      */
     public function removeParameter(string $name)
     {
@@ -282,9 +238,9 @@ class Router implements RouterContract
     }
 
     /**
-     * Get all global parameters for all routes.
+     * {@inheritdoc}
      *
-     * @return array
+     * @codeCoverageIgnore
      */
     public function getParameters(): array
     {
@@ -296,7 +252,7 @@ class Router implements RouterContract
      */
     public function withMiddleware(MiddlewareContract $middleware): RouterContract
     {
-        $this->withMiddlewares[] = $middleware;
+        $this->middlewares['with'][] = $middleware;
 
         return $this;
     }
@@ -306,48 +262,78 @@ class Router implements RouterContract
      */
     public function withoutMiddleware(MiddlewareContract $middleware): RouterContract
     {
-        $this->withoutMiddlewares[] = $middleware;
+        $this->middlewares['without'][] = $middleware;
 
         return $this;
     }
 
     /**
-     * Dispatch router for HTTP request.
+     * {@inheritdoc}
      *
-     * @param \Psr\Http\Message\ServerRequestInterface $request
-     * @param \Psr\Http\Message\ResponseInterface      $response
-     *
-     * @return \Psr\Http\Message\ResponseInterface
+     * @codeCoverageIgnore
      */
-    public function dispatch(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
+    public function getMiddlewares(): array
     {
-        $dispatcher = new Dispatcher(
-            $this->path,
-            $this->routes,
-            new MiddlewareDispatcher($response),
-            $this->isDevelopMode
-        );
-        $middlewareDispatcher = $dispatcher->handle($request);
-
-        foreach ($this->withMiddlewares as $withMiddleware) {
-            $middlewareDispatcher->withMiddleware($withMiddleware);
-        }
-
-        foreach ($this->withoutMiddlewares as $withoutMiddleware) {
-            $middlewareDispatcher->withoutMiddleware($withoutMiddleware);
-        }
-
-        return $middlewareDispatcher->process($request);
+        return $this->middlewares;
     }
 
     /**
-     * Get the underlying route collection.
+     * {@inheritdoc}
      *
-     * @return \Viserio\Routing\RouteCollection
+     * @codeCoverageIgnore
      */
-    public function getRoutes()
+    public function getCurrentRoute()
+    {
+        return $this->current;
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @codeCoverageIgnore
+     */
+    public function getRoutes(): RouteCollectionContract
     {
         return $this->routes;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function dispatch(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
+    {
+        $middlewareDispatcher = new MiddlewareDispatcher($response);
+
+        if (isset($this->middlewares['with'])) {
+            foreach ($this->middlewares['with'] as $middleware) {
+                $middlewareDispatcher->withMiddleware($middleware);
+            }
+        }
+
+        if (isset($this->middlewares['without'])) {
+            foreach ($this->middlewares['without'] as $middleware) {
+                $middlewareDispatcher->withoutMiddleware($middleware);
+            }
+        }
+
+        $dispatcher = new Dispatcher(
+            $this->path,
+            $this->routes,
+            $middlewareDispatcher,
+            $this->refreshCache,
+            $this->globalParameterConditions
+        );
+
+        if ($this->events !== null) {
+            $dispatcher->setEventsDispatcher($this->events);
+
+            $this->events = $dispatcher->getEventsDispatcher();
+        }
+
+        $middlewareDispatcher = $dispatcher->handle($request);
+        $this->current = $dispatcher->getCurrentRoute();
+
+        return $middlewareDispatcher->process($request);
     }
 
     /**
@@ -384,15 +370,7 @@ class Router implements RouterContract
 
         $route = new Route($methods, $this->prefix($uri), $action);
         $route->setContainer($this->container);
-
-        // If we have groups that need to be merged, we will merge them now after this
-        // route has already been created and is ready to go. After we're done with
-        // the merge we will be ready to return the route back out to the caller.
-        if ($this->hasGroupStack()) {
-            $action = $this->mergeWithLastGroup($route->getAction());
-
-            $route->setAction($action);
-        }
+        $route->setInvoker($this->invoker);
 
         $this->addWhereClausesToRoute($route);
 
@@ -447,83 +425,12 @@ class Router implements RouterContract
             $action = ['uses' => $action];
         }
 
-        // Here we'll merge any group "uses" statement if necessary so that the action
-        // has the proper clause for this property. Then we can simply set the name
-        // of the controller on the action and return the action array for usage.
-        if (! empty($this->groupStack)) {
-            $action['uses'] = $this->prependGroupUses($action['uses']);
-        }
-
         // Here we will set this controller name on the action array just so we always
         // have a copy of it for reference if we need it. This can be used while we
         // search for a controller name or do some other type of fetch operation.
         $action['controller'] = $action['uses'];
 
         return $action;
-    }
-
-    /**
-     * Merge the given group attributes.
-     *
-     * @param array $new
-     * @param array $old
-     *
-     * @return array
-     */
-    protected function mergeGroup(array $new, array $old): array
-    {
-        $new['namespace'] = $this->formatUsesPrefix($new, $old);
-        $new['prefix'] = $this->formatGroupPrefix($new, $old);
-
-        if (isset($new['domain'])) {
-            unset($old['domain']);
-        }
-
-        $new['where'] = array_merge($old['where'] ?? [], $new['where'] ?? []);
-
-        if (isset($old['as'])) {
-            $new['as'] = $old['as'] . ($new['as'] ?? '');
-        }
-
-        return array_merge_recursive(Arr::except($old, ['namespace', 'prefix', 'where', 'as']), $new);
-    }
-
-    /**
-     * Format the uses prefix for the new group attributes.
-     *
-     * @param array $new
-     * @param array $old
-     *
-     * @return string|null
-     */
-    protected function formatUsesPrefix(array $new, array $old)
-    {
-        if (isset($new['namespace'])) {
-            return isset($old['namespace'])
-                    ? trim($old['namespace'], '\\') . '\\' . trim($new['namespace'], '\\')
-                    : trim($new['namespace'], '\\');
-        }
-
-        return $old['namespace'] ?? null;
-    }
-
-    /**
-     * Format the prefix for the new group attributes.
-     *
-     * @param array $new
-     * @param array $old
-     *
-     * @return string|null
-     */
-    protected function formatGroupPrefix(array $new, array $old)
-    {
-        $oldPrefix = $old['prefix'] ?? null;
-
-        if (isset($new['prefix'])) {
-            return trim($oldPrefix, '/') . '/' . trim($new['prefix'], '/');
-        }
-
-        return $oldPrefix;
     }
 
     /**
@@ -535,36 +442,23 @@ class Router implements RouterContract
      */
     protected function prefix($uri)
     {
-        return '/' . trim(trim($this->getLastGroupPrefix(), '/') . '/' . trim($uri, '/'), '/');
+        return '/' . trim($uri, '/');
     }
 
     /**
-     * Get the prefix from the last group on the stack.
+     * Set configured invoker.
      *
-     * @return string
+     * @return \Viserio\Support\Invoker
      */
-    protected function getLastGroupPrefix(): string
+    protected function initInvoker(): Invoker
     {
-        if (! empty($this->groupStack)) {
-            $last = end($this->groupStack);
-
-            return isset($last['prefix']) ? $last['prefix'] : '';
+        if ($this->invoker === null) {
+            $this->invoker = (new Invoker())
+                ->injectByTypeHint(true)
+                ->injectByParameterName(true)
+                ->setContainer($this->getContainer());
         }
 
-        return '';
-    }
-
-    /**
-     * Prepend the last group uses onto the use clause.
-     *
-     * @param string $uses
-     *
-     * @return string
-     */
-    protected function prependGroupUses(string $uses): string
-    {
-        $group = end($this->groupStack);
-
-        return isset($group['namespace']) && strpos($uses, '\\') !== 0 ? $group['namespace'] . '\\' . $uses : $uses;
+        return $this->invoker;
     }
 }

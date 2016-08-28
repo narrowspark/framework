@@ -236,6 +236,7 @@ class Application extends SymfonyConsole implements ApplicationContract
         $this->invoker = (new Invoker())
             ->injectByTypeHint(true)
             ->injectByParameterName(true)
+            ->addResolver(new HyphenatedInputResolver())
             ->setContainer($this->getContainer());
     }
 

@@ -34,6 +34,13 @@ class Dispatcher implements DispatcherContract
     protected $routes;
 
     /**
+     * The currently dispatched route instance.
+     *
+     * @var \Viserio\Contracts\Routing\Route
+     */
+    protected $current;
+
+    /**
      * The middelware dispatcher instance.
      *
      * @var \Viserio\Middleware\Dispatcher
@@ -41,11 +48,18 @@ class Dispatcher implements DispatcherContract
     protected $middlewareDispatcher;
 
     /**
-     * Flag for development mode.
+     * Flag for refresh the cache file on every call.
      *
      * @var bool
      */
-    protected $isDevelopMode = true;
+    protected $refreshCache = false;
+
+    /**
+     * The globally available parameter patterns.
+     *
+     * @var string[]
+     */
+    protected $globalParameterConditions = [];
 
     /**
      * Create a new Router instance.
@@ -53,18 +67,20 @@ class Dispatcher implements DispatcherContract
      * @param string                                     $path
      * @param \Viserio\Contracts\Routing\RouteCollection $routes
      * @param \Viserio\Middleware\Dispatcher             $middlewareDispatcher
-     * @param bool                                       $isDevelopMode
+     * @param bool                                       $refreshCache
      */
     public function __construct(
         string $path,
         RouteCollectionContract $routes,
         MiddlewareDispatcher $middlewareDispatcher,
-        bool $isDevelopMode
+        bool $refreshCache,
+        array $globalParameterConditions
     ) {
         $this->path = $path;
         $this->routes = $routes;
         $this->middlewareDispatcher = $middlewareDispatcher;
-        $this->isDevelopMode = $isDevelopMode;
+        $this->refreshCache = $refreshCache;
+        $this->globalParameterConditions = $globalParameterConditions;
     }
 
     /**
@@ -89,29 +105,68 @@ class Dispatcher implements DispatcherContract
             case DispatcherContract::HTTP_METHOD_NOT_ALLOWED:
                 return $this->handleMethodNotAllowed($match[1]);
             case DispatcherContract::FOUND:
-                return $this->handleFound($match[1], $match[2]);
+                return $this->handleFound($match[1], $match[2], $request);
             default:
                 return $this->handleInternalServerError();
         }
     }
 
     /**
-     * Handle dispatching of a found route.
+     * Get the currently dispatched route instance.
      *
-     * @param string $identifier
-     * @param array  $segments
+     * @return \Viserio\Contracts\Routing\Route|null
+     */
+    public function getCurrentRoute()
+    {
+        return $this->current;
+    }
+
+    /**
+     * Handles a internal server error.
+     *
      *
      * @return \Viserio\Middleware\Dispatcher
      */
-    protected function handleFound(string $identifier, array $segments): MiddlewareDispatcher
+    public function handleInternalServerError(): MiddlewareDispatcher
     {
+        return $this->middlewareDispatcher->withMiddleware(new InternalServerErrorMiddleware());
+    }
+
+    /**
+     * Handle dispatching of a found route.
+     *
+     * @param string                                   $identifier
+     * @param array                                    $segments
+     * @param \Psr\Http\Message\ServerRequestInterface $request
+     *
+     * @return \Viserio\Middleware\Dispatcher
+     */
+    protected function handleFound(
+        string $identifier,
+        array $segments,
+        ServerRequestInterface $request
+    ): MiddlewareDispatcher {
         $route = $this->routes->match($identifier);
+
+        foreach ($this->globalParameterConditions as $key => $value) {
+            $route->setParameter($key, $value);
+        }
 
         foreach ($segments as $key => $value) {
             $route->setParameter($key, urldecode($value));
         }
 
-        return $this->middlewareDispatcher->withMiddleware(new FoundMiddleware($route));
+        $this->current = $route;
+
+        $this->middlewareDispatcher->withMiddleware(new FoundMiddleware($route));
+
+        $this->addMiddlewares($route->gatherMiddleware());
+
+        if ($this->events !== null) {
+            $this->getEventsDispatcher()->emit('route.matched', [$route, $request]);
+        }
+
+        return $this->middlewareDispatcher;
     }
 
     /**
@@ -137,25 +192,13 @@ class Dispatcher implements DispatcherContract
     }
 
     /**
-     * Handles a internal server error.
-     *
-     * @param array $allowed
-     *
-     * @return \Viserio\Middleware\Dispatcher
-     */
-    public function handleInternalServerError(): MiddlewareDispatcher
-    {
-        return $this->middlewareDispatcher->withMiddleware(new InternalServerErrorMiddleware());
-    }
-
-    /**
      * Generates a router file with all routes.
      *
      * @return \Closure
      */
     protected function generateRouterFile(): Closure
     {
-        if ($this->isDevelopMode && file_exists($this->path)) {
+        if ($this->refreshCache && file_exists($this->path)) {
             @unlink($this->path);
         }
 
@@ -166,5 +209,25 @@ class Dispatcher implements DispatcherContract
         }
 
         return require $this->path;
+    }
+
+    /**
+     * If route has middlewares add it to the middleware dispatcher.
+     *
+     * @param array $middelwares
+     */
+    private function addMiddlewares(array $middlewares)
+    {
+        if (count($middlewares['with']) !== 0) {
+            foreach ($middlewares['with'] as $middleware) {
+                $this->middlewareDispatcher->withMiddleware($middleware);
+            }
+        }
+
+        if (count($middlewares['without']) !== 0) {
+            foreach ($middlewares['without'] as $middleware) {
+                $this->middlewareDispatcher->withoutMiddleware($middleware);
+            }
+        }
     }
 }

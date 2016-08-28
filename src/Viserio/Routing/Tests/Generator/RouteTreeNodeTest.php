@@ -87,8 +87,6 @@ class RouteTreeNodeTest extends \PHPUnit_Framework_TestCase
             ],
             $node->getContents()->getHttpMethodRouteDataMap()
         );
-        $this->assertNull($node->getContents()->getDefaultRouteData());
-        $this->assertFalse($node->getContents()->hasDefaultRouteData());
 
         $node->getContents()->addRoute((new Route('PATCH', '', null)), [0 => 'param']);
 
@@ -100,21 +98,6 @@ class RouteTreeNodeTest extends \PHPUnit_Framework_TestCase
             ],
             $node->getContents()->getHttpMethodRouteDataMap()
         );
-        $this->assertNull($node->getContents()->getDefaultRouteData());
-        $this->assertFalse($node->getContents()->hasDefaultRouteData());
-
-        $node->getContents()->addRoute((new Route(['ANY'], '', null)), []);
-
-        $this->assertSame('GET', $node->getContents()->getAllowedHttpMethods());
-        $this->assertEquals(
-            [
-                [['GET', 'POST', 'HEAD'], [[], 'GET|POST|HEAD']],
-                [['PATCH'], [[0 => 'param'], 'PATCH']],
-            ],
-            $node->getContents()->getHttpMethodRouteDataMap()
-        );
-        $this->assertEquals([[], 'ANY'], $node->getContents()->getDefaultRouteData());
-        $this->assertTrue($node->getContents()->hasDefaultRouteData());
     }
 
     /**

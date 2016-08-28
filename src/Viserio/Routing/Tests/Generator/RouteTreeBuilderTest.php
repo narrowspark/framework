@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Routing\Tests\Generator;
 
 use Viserio\Contracts\Routing\Pattern;
+use Viserio\Contracts\Routing\Router as RouterContract;
 use Viserio\Routing\Generator\ChildrenNodeCollection;
 use Viserio\Routing\Generator\MatchedRouteDataMap;
 use Viserio\Routing\Generator\RouteTreeBuilder;
@@ -17,18 +18,18 @@ class RouteTreeBuilderTest extends \PHPUnit_Framework_TestCase
     {
         return [
             [
-                [(new Route('ANY', '', null))],
-                new MatchedRouteDataMap([], [[], 'ANY']),
+                [(new Route(RouterContract::HTTP_METHOD_VARS, '', null))],
+                new MatchedRouteDataMap([[RouterContract::HTTP_METHOD_VARS, [[], 'GET|HEAD|POST|PUT|PATCH|DELETE|OPTIONS']]]),
                 [],
             ],
             [
-                [(new Route('ANY', '/', null))],
+                [(new Route(RouterContract::HTTP_METHOD_VARS, '/', null))],
                 null,
                 [
                     1 => new ChildrenNodeCollection([
                         (new StaticMatcher(''))->getHash() => new RouteTreeNode(
                             [0 => new StaticMatcher('')],
-                            new MatchedRouteDataMap([], [[], 'ANY/'])
+                            new MatchedRouteDataMap([[RouterContract::HTTP_METHOD_VARS, [[], 'GET|HEAD|POST|PUT|PATCH|DELETE|OPTIONS/']]])
                         ),
                     ]),
                 ],
@@ -82,22 +83,22 @@ class RouteTreeBuilderTest extends \PHPUnit_Framework_TestCase
             ],
             [
                 [
-                    (new Route('ANY', '', null)),
-                    (new Route('ANY', '/main', null)),
+                    (new Route(RouterContract::HTTP_METHOD_VARS, '', null)),
+                    (new Route(RouterContract::HTTP_METHOD_VARS, '/main', null)),
                     (new Route(['GET'], '/main/place', null)),
                     (new Route(['POST'], '/main/place', null)),
-                    (new Route('ANY', '/main/thing', null)),
-                    (new Route('ANY', '/main/thing/abc', null)),
-                    (new Route('ANY', '/user/{name}', null))->where('name', Pattern::ANY),
-                    (new Route('ANY', '/user/{name}/edit', null))->where('name', Pattern::ANY),
-                    (new Route('ANY', '/user/create', null))->setParameter('user.create', ''),
+                    (new Route(RouterContract::HTTP_METHOD_VARS, '/main/thing', null)),
+                    (new Route(RouterContract::HTTP_METHOD_VARS, '/main/thing/abc', null)),
+                    (new Route(RouterContract::HTTP_METHOD_VARS, '/user/{name}', null))->where('name', Pattern::ANY),
+                    (new Route(RouterContract::HTTP_METHOD_VARS, '/user/{name}/edit', null))->where('name', Pattern::ANY),
+                    (new Route(RouterContract::HTTP_METHOD_VARS, '/user/create', null))->setParameter('user.create', ''),
                 ],
-                new MatchedRouteDataMap([], [[], 'ANY']),
+                new MatchedRouteDataMap([[RouterContract::HTTP_METHOD_VARS, [[], 'GET|HEAD|POST|PUT|PATCH|DELETE|OPTIONS']]]),
                 [
                     1 => new ChildrenNodeCollection([
                         (new StaticMatcher('main'))->getHash() => new RouteTreeNode(
                             [0 => new StaticMatcher('main')],
-                            new MatchedRouteDataMap([], [[], 'ANY/main'])
+                            new MatchedRouteDataMap([[RouterContract::HTTP_METHOD_VARS, [[], 'GET|HEAD|POST|PUT|PATCH|DELETE|OPTIONS/main']]])
                         ),
                     ]),
                     2 => new ChildrenNodeCollection([
@@ -111,17 +112,17 @@ class RouteTreeBuilderTest extends \PHPUnit_Framework_TestCase
                             ),
                             (new StaticMatcher('thing'))->getHash() => new RouteTreeNode(
                                 [1 => new StaticMatcher('thing')],
-                                new MatchedRouteDataMap([], [[], 'ANY/main/thing'])
+                                new MatchedRouteDataMap([[RouterContract::HTTP_METHOD_VARS, [[], 'GET|HEAD|POST|PUT|PATCH|DELETE|OPTIONS/main/thing']]])
                             ),
                         ])),
                         (new StaticMatcher('user'))->getHash() => new RouteTreeNode([0 => new StaticMatcher('user')], new ChildrenNodeCollection([
                             (new RegexMatcher(Pattern::ANY, 0))->getHash() => new RouteTreeNode(
                                 [1 => new RegexMatcher(Pattern::ANY, 0)],
-                                new MatchedRouteDataMap([], [[0 => 'name'], 'ANY/user/{name}'])
+                                new MatchedRouteDataMap([[RouterContract::HTTP_METHOD_VARS, [[0 => 'name'], 'GET|HEAD|POST|PUT|PATCH|DELETE|OPTIONS/user/{name}']]])
                             ),
                             (new StaticMatcher('create'))->getHash() => new RouteTreeNode(
                                 [1 => new StaticMatcher('create')],
-                                new MatchedRouteDataMap([], [[], 'ANY/user/create'])
+                                new MatchedRouteDataMap([[RouterContract::HTTP_METHOD_VARS, [[], 'GET|HEAD|POST|PUT|PATCH|DELETE|OPTIONS/user/create']]])
                             ),
                         ])),
                     ]),
@@ -130,7 +131,7 @@ class RouteTreeBuilderTest extends \PHPUnit_Framework_TestCase
                             (new StaticMatcher('thing'))->getHash() => new RouteTreeNode([1 => new StaticMatcher('thing')], new ChildrenNodeCollection([
                                 (new StaticMatcher('abc'))->getHash() => new RouteTreeNode(
                                     [2 => new StaticMatcher('abc')],
-                                    new MatchedRouteDataMap([], [[], 'ANY/main/thing/abc'])
+                                    new MatchedRouteDataMap([[RouterContract::HTTP_METHOD_VARS, [[], 'GET|HEAD|POST|PUT|PATCH|DELETE|OPTIONS/main/thing/abc']]])
                                 ),
                             ])),
                         ])),
@@ -138,7 +139,7 @@ class RouteTreeBuilderTest extends \PHPUnit_Framework_TestCase
                             (new RegexMatcher(Pattern::ANY, 0))->getHash() => new RouteTreeNode([1 => new RegexMatcher(Pattern::ANY, 0)], new ChildrenNodeCollection([
                                 (new StaticMatcher('edit'))->getHash() => new RouteTreeNode(
                                     [2 => new StaticMatcher('edit')],
-                                    new MatchedRouteDataMap([], [[0 => 'name'], 'ANY/user/{name}/edit'])
+                                    new MatchedRouteDataMap([[RouterContract::HTTP_METHOD_VARS, [[0 => 'name'], 'GET|HEAD|POST|PUT|PATCH|DELETE|OPTIONS/user/{name}/edit']]])
                                 ),
                             ])),
                         ])),
@@ -155,7 +156,7 @@ class RouteTreeBuilderTest extends \PHPUnit_Framework_TestCase
     {
         list($rootRouteData, $segmentDepthNodeMap) = (new RouteTreeBuilder())->build($routes);
 
-        $this->assertSame($rootRoute !== null, $rootRouteData !== null && ! $rootRouteData->isEmpty());
+        $this->assertSame($rootRoute !== null, $rootRouteData !== null);
         $this->assertEquals($rootRoute, $rootRouteData);
         $this->assertEquals($segmentDepthNodesMap, $segmentDepthNodeMap);
     }

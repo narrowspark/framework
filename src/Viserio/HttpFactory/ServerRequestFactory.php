@@ -47,6 +47,7 @@ class ServerRequestFactory implements ServerRequestFactoryInterface
     {
         $uri = new Uri('');
         $server = $_SERVER;
+        $addProtocol = false;
 
         if (isset($server['HTTPS'])) {
             $uri = $uri->withScheme($server['HTTPS'] == 'on' ? 'https' : 'http');
@@ -54,8 +55,14 @@ class ServerRequestFactory implements ServerRequestFactoryInterface
 
         if (isset($server['HTTP_HOST'])) {
             $uri = $uri->withHost($server['HTTP_HOST']);
+            $addProtocol = true;
         } elseif (isset($server['SERVER_NAME'])) {
             $uri = $uri->withHost($server['SERVER_NAME']);
+            $addProtocol = true;
+        }
+
+        if ($addProtocol) {
+            $uri = $uri->withScheme(isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on' ? 'https' : 'http');
         }
 
         if (isset($server['SERVER_PORT'])) {
