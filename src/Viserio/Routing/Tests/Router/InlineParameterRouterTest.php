@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Routing\Tests\Router;
 
-use Viserio\Http\ResponseFactory;
-use Viserio\Http\StreamFactory;
+use Viserio\HttpFactory\ResponseFactory;
+use Viserio\HttpFactory\StreamFactory;
 
 class InlineParameterRouterTest extends RouteRouterBaseTest
 {
@@ -49,7 +49,7 @@ class InlineParameterRouterTest extends RouteRouterBaseTest
                 ->createResponse()
                 ->withBody(
                     (new StreamFactory())
-                    ->createStreamFromString('name = ' . $args['name'])
+                    ->createStream('name = ' . $args['name'])
                 );
         })->setParameter('name', 'home');
 
@@ -58,7 +58,7 @@ class InlineParameterRouterTest extends RouteRouterBaseTest
                 ->createResponse()
                 ->withBody(
                     (new StreamFactory())
-                    ->createStreamFromString('name = ' . $args['name'])
+                    ->createStream('name = ' . $args['name'])
                 );
         })->setParameter('name', 'blog.index');
         $router->get('/blog/post/{post_slug:[a-z0-9\-]+}', function ($request, $args) {
@@ -66,7 +66,7 @@ class InlineParameterRouterTest extends RouteRouterBaseTest
                 ->createResponse()
                 ->withBody(
                     (new StreamFactory())
-                    ->createStreamFromString('name = ' . $args['name'] . ' | post_slug = ' . $args['post_slug'])
+                    ->createStream('name = ' . $args['name'] . ' | post_slug = ' . $args['post_slug'])
                 );
         })->setParameter('name', 'blog.post.show');
         $router->post('/blog/post/{post_slug:[a-z0-9\-]+}/comment', function ($request, $args) {
@@ -74,7 +74,7 @@ class InlineParameterRouterTest extends RouteRouterBaseTest
                 ->createResponse()
                 ->withBody(
                     (new StreamFactory())
-                    ->createStreamFromString('name = ' . $args['name'] . ' | post_slug = ' . $args['post_slug'])
+                    ->createStream('name = ' . $args['name'] . ' | post_slug = ' . $args['post_slug'])
                 );
         })->setParameter('name', 'blog.post.comment');
         $router->get('/blog/post/{post_slug:[a-z0-9\-]+}/comment/{comment_id:[0-9]+}', function ($request, $args) {
@@ -82,7 +82,7 @@ class InlineParameterRouterTest extends RouteRouterBaseTest
                 ->createResponse()
                 ->withBody(
                     (new StreamFactory())
-                    ->createStreamFromString('name = ' . $args['name'] . ' | post_slug = ' . $args['post_slug'] . ' | comment_id = ' . $args['comment_id'])
+                    ->createStream('name = ' . $args['name'] . ' | post_slug = ' . $args['post_slug'] . ' | comment_id = ' . $args['comment_id'])
                 );
         })->setParameter('name', 'blog.post.comment.show');
     }

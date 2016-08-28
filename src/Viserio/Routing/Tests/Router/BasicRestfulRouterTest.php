@@ -3,8 +3,8 @@ declare(strict_types=1);
 namespace Viserio\Routing\Tests\Router;
 
 use Viserio\Contracts\Routing\Pattern;
-use Viserio\Http\ResponseFactory;
-use Viserio\Http\StreamFactory;
+use Viserio\HttpFactory\ResponseFactory;
+use Viserio\HttpFactory\StreamFactory;
 
 class BasicRestfulRouterTest extends RouteRouterBaseTest
 {
@@ -68,7 +68,7 @@ class BasicRestfulRouterTest extends RouteRouterBaseTest
             ->createResponse()
             ->withBody(
                 (new StreamFactory())
-                ->createStreamFromString($args['name'] . ' | ' . ($args['id'] ?? ''))
+                ->createStream($args['name'] . ' | ' . ($args['id'] ?? ''))
             );
         })->setParameter('name', 'user.index');
         $router->get('/user/create', function ($request, $args) {
@@ -76,7 +76,7 @@ class BasicRestfulRouterTest extends RouteRouterBaseTest
             ->createResponse()
             ->withBody(
                 (new StreamFactory())
-                ->createStreamFromString($args['name'] . ' | ' . ($args['id'] ?? ''))
+                ->createStream($args['name'] . ' | ' . ($args['id'] ?? ''))
             );
         })->setParameter('name', 'user.create');
         $router->post('/user', function ($request, $args) {
@@ -84,7 +84,7 @@ class BasicRestfulRouterTest extends RouteRouterBaseTest
             ->createResponse()
             ->withBody(
                 (new StreamFactory())
-                ->createStreamFromString($args['name'] . ' | ' . ($args['id'] ?? ''))
+                ->createStream($args['name'] . ' | ' . ($args['id'] ?? ''))
             );
         })->setParameter('name', 'user.save');
         $router->get('/user/{id}', function ($request, $args) {
@@ -92,7 +92,7 @@ class BasicRestfulRouterTest extends RouteRouterBaseTest
             ->createResponse()
             ->withBody(
                 (new StreamFactory())
-                ->createStreamFromString($args['name'] . ' | ' . ($args['id'] ?? ''))
+                ->createStream($args['name'] . ' | ' . ($args['id'] ?? ''))
             );
         })->setParameter('name', 'user.show');
         $router->get('/user/{id}/edit', function ($request, $args) {
@@ -100,7 +100,7 @@ class BasicRestfulRouterTest extends RouteRouterBaseTest
             ->createResponse()
             ->withBody(
                 (new StreamFactory())
-                ->createStreamFromString($args['name'] . ' | ' . ($args['id'] ?? ''))
+                ->createStream($args['name'] . ' | ' . ($args['id'] ?? ''))
             );
         })->setParameter('name', 'user.edit');
         $router->put('/user/{id}', function ($request, $args) {
@@ -108,7 +108,7 @@ class BasicRestfulRouterTest extends RouteRouterBaseTest
             ->createResponse()
             ->withBody(
                 (new StreamFactory())
-                ->createStreamFromString($args['name'] . ' | ' . ($args['id'] ?? ''))
+                ->createStream($args['name'] . ' | ' . ($args['id'] ?? ''))
             );
         })->setParameter('name', 'user.update');
         $router->delete('/user/{id}', function ($request, $args) {
@@ -116,7 +116,7 @@ class BasicRestfulRouterTest extends RouteRouterBaseTest
             ->createResponse()
             ->withBody(
                 (new StreamFactory())
-                ->createStreamFromString($args['name'] . ' | ' . ($args['id'] ?? ''))
+                ->createStream($args['name'] . ' | ' . ($args['id'] ?? ''))
             );
         })->setParameter('name', 'user.delete');
         $router->patch('/admin/{id}', function ($request, $args) {
@@ -124,7 +124,7 @@ class BasicRestfulRouterTest extends RouteRouterBaseTest
             ->createResponse()
             ->withBody(
                 (new StreamFactory())
-                ->createStreamFromString($args['name'] . ' | ' . ($args['id'] ?? ''))
+                ->createStream($args['name'] . ' | ' . ($args['id'] ?? ''))
             );
         })->setParameter('name', 'admin.patch');
         $router->options('/options', function ($request, $args) {
@@ -132,7 +132,7 @@ class BasicRestfulRouterTest extends RouteRouterBaseTest
             ->createResponse()
             ->withBody(
                 (new StreamFactory())
-                ->createStreamFromString($args['name'] . ' | ' . $args['digits'])
+                ->createStream($args['name'] . ' | ' . $args['digits'])
             );
         })->setParameter('name', 'options');
     }

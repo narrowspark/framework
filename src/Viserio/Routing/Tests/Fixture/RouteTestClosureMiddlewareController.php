@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Routing\Tests\Fixture;
 
-use Viserio\Http\ResponseFactory;
-use Viserio\Http\StreamFactory;
+use Viserio\HttpFactory\ResponseFactory;
+use Viserio\HttpFactory\StreamFactory;
 use Viserio\Routing\AbstractController;
 
 class RouteTestClosureMiddlewareController extends AbstractController
@@ -19,7 +19,7 @@ class RouteTestClosureMiddlewareController extends AbstractController
             ->createResponse()
             ->withBody(
                 (new StreamFactory())
-                ->createStreamFromString('index')
+                ->createStream('index')
             );
     }
 }

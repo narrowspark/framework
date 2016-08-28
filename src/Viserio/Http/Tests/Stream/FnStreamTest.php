@@ -3,7 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Http\Tests\Stream;
 
 use Viserio\Http\Stream\FnStream;
-use Viserio\Http\StreamFactory;
+use Viserio\Http\Stream;
 
 class FnStreamTest extends \PHPUnit_Framework_TestCase
 {
@@ -51,7 +51,12 @@ class FnStreamTest extends \PHPUnit_Framework_TestCase
 
     public function testDecoratesStream()
     {
-        $stream1 = (new StreamFactory())->createStreamFromString('foo');
+        $body = 'foo';
+        $stream = fopen('php://temp', 'r+');
+
+        fwrite($stream, $body);
+        fseek($stream, 0);
+        $stream1 = new Stream($stream);
         $stream2 = FnStream::decorate($stream1, []);
 
         $this->assertEquals(3, $stream2->getSize());
@@ -80,7 +85,13 @@ class FnStreamTest extends \PHPUnit_Framework_TestCase
     {
         $called = false;
 
-        $stream1 = (new StreamFactory())->createStreamFromString('foo');
+        $body = 'foo';
+        $stream = fopen('php://temp', 'r+');
+
+        fwrite($stream, $body);
+        fseek($stream, 0);
+
+        $stream1 = new Stream($stream);
         $stream2 = FnStream::decorate($stream1, [
             'read' => function ($len) use (&$called, $stream1) {
                 $called = true;

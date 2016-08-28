@@ -9,7 +9,7 @@ use Psr\Http\Message\UriInterface;
 use StdClass;
 use Viserio\Http\Request;
 use Viserio\Http\Stream\FnStream;
-use Viserio\Http\StreamFactory;
+use Viserio\Http\Stream;
 use Viserio\Http\Uri;
 
 class RequestTest extends AbstractMessageTest
@@ -151,7 +151,7 @@ class RequestTest extends AbstractMessageTest
     {
         $streamIsRead = false;
 
-        $body = FnStream::decorate((new StreamFactory())->createStreamFromString(''), [
+        $body = FnStream::decorate(new Stream(fopen('php://temp', 'r+')), [
             '__toString' => function () use (&$streamIsRead) {
                 $streamIsRead = true;
 

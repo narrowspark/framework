@@ -4,6 +4,7 @@ namespace Viserio\HttpFactory;
 
 use Psr\Http\Message\ResponseInterface;
 use Interop\Http\Factory\ResponseFactoryInterface;
+use Viserio\Http\Response;
 
 final class ResponseFactory implements ResponseFactoryInterface
 {

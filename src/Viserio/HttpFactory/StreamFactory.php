@@ -2,18 +2,26 @@
 declare(strict_types=1);
 namespace Viserio\HttpFactory;
 
-use InvalidArgumentException;
-use Psr\Http\Message\StreamInterface;
 use Interop\Http\Factory\StreamFactoryInterface;
-use Viserio\Http\Stream\PumpStream;
+use Viserio\Http\Stream;
 
 final class StreamFactory implements StreamFactoryInterface
 {
     /**
      * {@inheritdoc}
      */
-    public function createStream($stream)
+    public function createStream($resource)
     {
-        return new Stream(fopen('php://temp', 'r+'));
+        if (gettype($resource) === 'resource') {
+            return new Stream($resource);
+        }
+
+        $stream = fopen('php://temp', 'r+');
+
+        if ($resource !== '') {
+            fwrite($stream, $resource);
+            fseek($stream, 0);
+        }
+        return new Stream($stream);
     }
 }

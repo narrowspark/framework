@@ -5,9 +5,13 @@ namespace Viserio\HttpFactory;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\UriInterface;
 use Interop\Http\Factory\ServerRequestFactoryInterface;
+use Interop\Http\Factory\ServerRequestFromGlobalsFactoryInterface;
 use Viserio\Http\Stream\LazyOpenStream;
+use Viserio\Http\ServerRequest;
+use Viserio\Http\Uri;
+use Viserio\Http\Util;
 
-class ServerRequestFactory implements ServerRequestFactoryInterface
+class ServerRequestFactory implements ServerRequestFactoryInterface, ServerRequestFromGlobalsFactoryInterface
 {
     /**
      * {@inheritdoc}
@@ -32,6 +36,7 @@ class ServerRequestFactory implements ServerRequestFactoryInterface
 
     /**
      * {@inheritdoc}
+     * @codeCoverageIgnore
      */
     public function createServerRequest($method, $uri)
     {

@@ -3,8 +3,8 @@ declare(strict_types=1);
 namespace Viserio\Routing\Tests\Router;
 
 use Viserio\Contracts\Routing\Pattern;
-use Viserio\Http\ResponseFactory;
-use Viserio\Http\StreamFactory;
+use Viserio\HttpFactory\ResponseFactory;
+use Viserio\HttpFactory\StreamFactory;
 
 class ComplexParameterPatternsRouterTest extends RouteRouterBaseTest
 {
@@ -77,7 +77,7 @@ class ComplexParameterPatternsRouterTest extends RouteRouterBaseTest
             ->createResponse()
             ->withBody(
                 (new StreamFactory())
-                ->createStreamFromString($args['name'] . ' | param = ' . $args['param'])
+                ->createStream($args['name'] . ' | param = ' . $args['param'])
             );
         })->setParameter('name', 'prefix');
         $router->get('/b/{param}:suffix', function ($request, $args) {
@@ -85,7 +85,7 @@ class ComplexParameterPatternsRouterTest extends RouteRouterBaseTest
             ->createResponse()
             ->withBody(
                 (new StreamFactory())
-                ->createStreamFromString($args['name'] . ' | param = ' . $args['param'])
+                ->createStream($args['name'] . ' | param = ' . $args['param'])
             );
         })->setParameter('name', 'suffix');
         $router->get('/c/prefix:{param}:suffix', function ($request, $args) {
@@ -93,7 +93,7 @@ class ComplexParameterPatternsRouterTest extends RouteRouterBaseTest
             ->createResponse()
             ->withBody(
                 (new StreamFactory())
-                ->createStreamFromString($args['name'] . ' | param = ' . $args['param'])
+                ->createStream($args['name'] . ' | param = ' . $args['param'])
             );
         })->setParameter('name', 'prefix-and-suffix');
         $router->get('/d/{param1}-{param2}:{param3}', function ($request, $args) {
@@ -101,7 +101,7 @@ class ComplexParameterPatternsRouterTest extends RouteRouterBaseTest
             ->createResponse()
             ->withBody(
                 (new StreamFactory())
-                ->createStreamFromString($args['name'] . ' | param1 = ' . $args['param1'] . ' | param2 = ' . $args['param2'] . ' | param3 = ' . $args['param3'])
+                ->createStream($args['name'] . ' | param1 = ' . $args['param1'] . ' | param2 = ' . $args['param2'] . ' | param3 = ' . $args['param3'])
             );
         })->setParameter('name', 'multi-param');
         $router->get('/e/{digits}-{alpha}:{exclaim}', function ($request, $args) {
@@ -109,7 +109,7 @@ class ComplexParameterPatternsRouterTest extends RouteRouterBaseTest
             ->createResponse()
             ->withBody(
                 (new StreamFactory())
-                ->createStreamFromString($args['routename'] . ' | digits = ' . $args['digits'] . ' | alpha = ' . $args['alpha'] . ' | exclaim = ' . $args['exclaim'])
+                ->createStream($args['routename'] . ' | digits = ' . $args['digits'] . ' | alpha = ' . $args['alpha'] . ' | exclaim = ' . $args['exclaim'])
             );
         })
             ->where('digits', Pattern::DIGITS)
@@ -121,7 +121,7 @@ class ComplexParameterPatternsRouterTest extends RouteRouterBaseTest
             ->createResponse()
             ->withBody(
                 (new StreamFactory())
-                ->createStreamFromString($args['routename'] . ' | name = ' . $args['name'] . ' | thing = ' . $args['thing'])
+                ->createStream($args['routename'] . ' | name = ' . $args['name'] . ' | thing = ' . $args['thing'])
             );
         })->where('name', '[A-Z]?[a-z]+')
             ->where('thing', Pattern::ALPHA_LOWER)

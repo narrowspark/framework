@@ -5,8 +5,8 @@ namespace Viserio\Http\Tests;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\StreamInterface;
 use Viserio\Http\Response;
+use Viserio\Http\Stream;
 use Viserio\Http\Stream\FnStream;
-use Viserio\Http\StreamFactory;
 
 class ResponseTest extends AbstractMessageTest
 {
@@ -96,7 +96,7 @@ class ResponseTest extends AbstractMessageTest
     public function testConstructorDoesNotReadStreamBody()
     {
         $streamIsRead = false;
-        $body = FnStream::decorate((new StreamFactory())->createStreamFromString(''), [
+        $body = FnStream::decorate(new Stream(fopen('php://temp', 'r+')), [
             '__toString' => function () use (&$streamIsRead) {
                 $streamIsRead = true;
 
@@ -193,8 +193,13 @@ class ResponseTest extends AbstractMessageTest
 
     public function testWithBody()
     {
-        $body = (new StreamFactory())->createStreamFromString('0');
-        $response = (new Response())->withBody($body);
+        $body = '0';
+        $stream = fopen('php://temp', 'r+');
+
+        fwrite($stream, $body);
+        fseek($stream, 0);
+
+        $response = (new Response())->withBody(new Stream($stream));
 
         $this->assertInstanceOf(StreamInterface::class, $response->getBody());
         $this->assertSame('0', (string) $response->getBody());

@@ -4,13 +4,12 @@ namespace Viserio\HttpFactory;
 
 use Psr\Http\Message\UploadedFileInterface;
 use Interop\Http\Factory\UploadedFileFactoryInterface;
+use Viserio\Http\UploadedFile;
 
 final class UploadedFileFactory implements UploadedFileFactoryInterface
 {
     /**
      * {@inheritdoc}
-     *
-     * @codeCoverageIgnore
      */
     public function createUploadedFile(
         $file,

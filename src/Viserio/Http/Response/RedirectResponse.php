@@ -4,8 +4,8 @@ namespace Viserio\Http\Response;
 
 use InvalidArgumentException;
 use Psr\Http\Message\UriInterface;
+use Viserio\Http\Stream;
 use Viserio\Http\Response;
-use Viserio\Http\StreamFactory;
 
 class RedirectResponse extends Response
 {
@@ -33,6 +33,6 @@ class RedirectResponse extends Response
 
         $headers['location'] = [(string) $uri];
 
-        parent::__construct($status, $headers, (new StreamFactory())->createStream());
+        parent::__construct($status, $headers, new Stream(fopen('php://temp', 'r+')));
     }
 }
