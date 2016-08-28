@@ -5,8 +5,8 @@ namespace Viserio\Routing\Tests\Fixture;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Contracts\Middleware\Delegate as DelegateContract;
-use Viserio\Http\StreamFactory;
 use Viserio\Contracts\Middleware\ServerMiddleware as ServerMiddlewareContract;
+use Viserio\Http\StreamFactory;
 
 class FooMiddleware implements ServerMiddlewareContract
 {
