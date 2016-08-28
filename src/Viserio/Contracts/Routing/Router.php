@@ -98,37 +98,6 @@ interface Router
     public function match($methods, $uri, $action = null): Route;
 
     /**
-     * Create a route group with shared attributes.
-     *
-     * @param array    $attributes
-     * @param \Closure $callback
-     */
-    public function group(array $attributes, Closure $callback);
-
-    /**
-     * Merge the given array with the last group stack.
-     *
-     * @param array $new
-     *
-     * @return array
-     */
-    public function mergeWithLastGroup(array $new): array;
-
-    /**
-     * Determine if the router currently has a group stack.
-     *
-     * @return bool
-     */
-    public function hasGroupStack(): bool;
-
-    /**
-     * Get the current group stack for the router.
-     *
-     * @return array
-     */
-    public function getGroupStack(): array;
-
-    /**
      * Set a global where pattern on all routes.
      *
      * @param string $key
@@ -207,6 +176,13 @@ interface Router
      * @return array
      */
     public function getMiddlewares(): array;
+
+    /**
+     * Get the currently dispatched route instance.
+     *
+     * @return \Viserio\Contracts\Routing\Route|null
+     */
+    public function getCurrentRoute();
 
     /**
      * Dispatch router for HTTP request.

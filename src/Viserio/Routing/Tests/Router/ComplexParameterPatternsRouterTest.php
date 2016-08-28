@@ -4,6 +4,7 @@ namespace Viserio\Routing\Tests\Router;
 
 use Viserio\Contracts\Routing\Pattern;
 use Viserio\Http\StreamFactory;
+use Viserio\Http\ResponseFactory;
 
 class ComplexParameterPatternsRouterTest extends RouteRouterBaseTest
 {
@@ -71,27 +72,57 @@ class ComplexParameterPatternsRouterTest extends RouteRouterBaseTest
 
     protected function definitions($router)
     {
-        $router->get('/a/prefix:{param}', function ($request, $response, $args) {
-            return $response->withBody((new StreamFactory())->createStreamFromString($args['name'] . ' | param = ' . $args['param']));
+        $router->get('/a/prefix:{param}', function ($request, $args) {
+            return (new ResponseFactory())
+            ->createResponse()
+            ->withBody(
+                (new StreamFactory())
+                ->createStreamFromString($args['name'] . ' | param = ' . $args['param'])
+            );
         })->setParameter('name', 'prefix');
-        $router->get('/b/{param}:suffix', function ($request, $response, $args) {
-            return $response->withBody((new StreamFactory())->createStreamFromString($args['name'] . ' | param = ' . $args['param']));
+        $router->get('/b/{param}:suffix', function ($request, $args) {
+            return (new ResponseFactory())
+            ->createResponse()
+            ->withBody(
+                (new StreamFactory())
+                ->createStreamFromString($args['name'] . ' | param = ' . $args['param'])
+            );
         })->setParameter('name', 'suffix');
-        $router->get('/c/prefix:{param}:suffix', function ($request, $response, $args) {
-            return $response->withBody((new StreamFactory())->createStreamFromString($args['name'] . ' | param = ' . $args['param']));
+        $router->get('/c/prefix:{param}:suffix', function ($request, $args) {
+            return (new ResponseFactory())
+            ->createResponse()
+            ->withBody(
+                (new StreamFactory())
+                ->createStreamFromString($args['name'] . ' | param = ' . $args['param'])
+            );
         })->setParameter('name', 'prefix-and-suffix');
-        $router->get('/d/{param1}-{param2}:{param3}', function ($request, $response, $args) {
-            return $response->withBody((new StreamFactory())->createStreamFromString($args['name'] . ' | param1 = ' . $args['param1'] . ' | param2 = ' . $args['param2'] . ' | param3 = ' . $args['param3']));
+        $router->get('/d/{param1}-{param2}:{param3}', function ($request, $args) {
+            return (new ResponseFactory())
+            ->createResponse()
+            ->withBody(
+                (new StreamFactory())
+                ->createStreamFromString($args['name'] . ' | param1 = ' . $args['param1'] . ' | param2 = ' . $args['param2'] . ' | param3 = ' . $args['param3'])
+            );
         })->setParameter('name', 'multi-param');
-        $router->get('/e/{digits}-{alpha}:{exclaim}', function ($request, $response, $args) {
-            return $response->withBody((new StreamFactory())->createStreamFromString($args['routename'] . ' | digits = ' . $args['digits'] . ' | alpha = ' . $args['alpha'] . ' | exclaim = ' . $args['exclaim']));
+        $router->get('/e/{digits}-{alpha}:{exclaim}', function ($request, $args) {
+            return (new ResponseFactory())
+            ->createResponse()
+            ->withBody(
+                (new StreamFactory())
+                ->createStreamFromString($args['routename'] . ' | digits = ' . $args['digits'] . ' | alpha = ' . $args['alpha'] . ' | exclaim = ' . $args['exclaim'])
+            );
         })
             ->where('digits', Pattern::DIGITS)
             ->where('alpha', Pattern::ALPHA)
             ->where('exclaim', '!{3,5}')
             ->setParameter('routename', 'filtered-multi-param');
-        $router->get('/f/{name}-is-awesome-at-{thing}', function ($request, $response, $args) {
-            return $response->withBody((new StreamFactory())->createStreamFromString($args['routename'] . ' | name = ' . $args['name'] . ' | thing = ' . $args['thing']));
+        $router->get('/f/{name}-is-awesome-at-{thing}', function ($request, $args) {
+            return (new ResponseFactory())
+            ->createResponse()
+            ->withBody(
+                (new StreamFactory())
+                ->createStreamFromString($args['routename'] . ' | name = ' . $args['name'] . ' | thing = ' . $args['thing'])
+            );
         })->where('name', '[A-Z]?[a-z]+')
             ->where('thing', Pattern::ALPHA_LOWER)
             ->setParameter('routename', 'sentence-multi-param');

@@ -192,9 +192,8 @@ interface Route
      * Run the route action and return the response.
      *
      * @param \Psr\Http\Message\ServerRequestInterface $request
-     * @param \Psr\Http\Message\ResponseInterface      $response
      *
      * @return \Psr\Http\Message\ResponseInterface
      */
-    public function run(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface;
+    public function run(ServerRequestInterface $request): ResponseInterface;
 }

@@ -34,11 +34,9 @@ class FoundMiddleware implements ServerMiddlewareContract
         ServerRequestInterface $request,
         DelegateContract $frame
     ): ResponseInterface {
-        // add route to the request's attributes in case a middleware or handler needs access to the route
+        // Add route to the request's attributes in case a middleware or handler needs access to the route
         $request = $request->withAttribute('route', $this->route);
 
-        $response = $frame->next($request);
-
-        return $this->route->run($request, $response);
+        return $this->route->run($request);
     }
 }

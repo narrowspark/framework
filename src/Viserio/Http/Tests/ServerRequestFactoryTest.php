@@ -29,7 +29,6 @@ class ServerRequestFactoryTest extends \PHPUnit_Framework_TestCase
             'HTTP_HOST' => 'www.narrowspark.com',
             'HTTP_REFERER' => 'http://previous.url.com',
             'HTTP_USER_AGENT' => 'Mozilla/5.0 (Windows; U; Windows NT 6.0; en-GB; rv:1.9.2.6) Gecko/20100625 Firefox/3.6.6 ( .NET CLR 3.5.30729)',
-            'HTTPS' => '1',
             'REMOTE_ADDR' => '193.60.168.69',
             'REMOTE_HOST' => 'Client server\'s host name',
             'REMOTE_PORT' => '5390',
@@ -49,6 +48,10 @@ class ServerRequestFactoryTest extends \PHPUnit_Framework_TestCase
             'Secure request' => [
                 'https://www.narrowspark.com/blog/article.php?id=10&user=foo',
                 array_merge($server, ['HTTPS' => 'on', 'SERVER_PORT' => '443']),
+            ],
+            'No HTTPS param' => [
+                'http://www.narrowspark.com/blog/article.php?id=10&user=foo',
+                $server
             ],
             'HTTP_HOST missing' => [
                 'http://www.narrowspark.com/blog/article.php?id=10&user=foo',

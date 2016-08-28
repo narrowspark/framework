@@ -2,7 +2,7 @@
     "name"       : "viserio/routing",
     "type"       : "library",
     "description": "The Viserio Routing package.",
-    "keywords"   : ["viserio", "narrowspark", "route", "dispatcher", "router"],
+    "keywords"   : ["viserio", "narrowspark", "route", "dispatcher", "router", "middleware"],
     "license"    : "MIT",
     "homepage"   : "http://github.com/narrowspark/framework",
     "support"    : {

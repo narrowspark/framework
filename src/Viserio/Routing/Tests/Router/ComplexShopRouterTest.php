@@ -4,6 +4,7 @@ namespace Viserio\Routing\Tests\Router;
 
 use Viserio\Contracts\Routing\Pattern;
 use Viserio\Http\StreamFactory;
+use Viserio\Http\ResponseFactory;
 
 class ComplexShopRouterTest extends RouteRouterBaseTest
 {
@@ -114,135 +115,335 @@ class ComplexShopRouterTest extends RouteRouterBaseTest
         $router->pattern('post_slug', Pattern::ALPHA_NUM_DASH);
         $router->pattern('category_id', Pattern::DIGITS);
         $router->pattern('product_id', Pattern::DIGITS);
-        $router->pattern('filter_by', Pattern::ALPHA);
+        $router->patterns(['filter_by' => Pattern::ALPHA]);
 
-        $router->get('/', function ($request, $response, $args) {
-            return $response->withBody((new StreamFactory())->createStreamFromString('name = ' . $args['name']));
+        $router->get('/', function ($request, $args) {
+            return (new ResponseFactory())
+                ->createResponse()
+                ->withBody(
+                    (new StreamFactory())
+                    ->createStreamFromString('name = ' . $args['name'])
+                );
         })->setParameter('name', 'home');
-        $router->get('/about-us', function ($request, $response, $args) {
-            return $response->withBody((new StreamFactory())->createStreamFromString('name = ' . $args['name']));
+        $router->get('/about-us', function ($request, $args) {
+            return (new ResponseFactory())
+                ->createResponse()
+                ->withBody(
+                    (new StreamFactory())
+                    ->createStreamFromString('name = ' . $args['name'])
+                );
         })->setParameter('name', 'about-us');
-        $router->get('/contact-us', function ($request, $response, $args) {
-            return $response->withBody((new StreamFactory())->createStreamFromString('name = ' . $args['name']));
+        $router->get('/contact-us', function ($request, $args) {
+            return (new ResponseFactory())
+                ->createResponse()
+                ->withBody(
+                    (new StreamFactory())
+                    ->createStreamFromString('name = ' . $args['name'])
+                );
         })->setParameter('name', 'contact-us');
-        $router->post('/contact-us', function ($request, $response, $args) {
-            return $response->withBody((new StreamFactory())->createStreamFromString('name = ' . $args['name']));
+        $router->post('/contact-us', function ($request, $args) {
+            return (new ResponseFactory())
+                ->createResponse()
+                ->withBody(
+                    (new StreamFactory())
+                    ->createStreamFromString('name = ' . $args['name'])
+                );
         })->setParameter('name', 'contact-us.submit');
 
-        $router->get('/blog', function ($request, $response, $args) {
-            return $response->withBody((new StreamFactory())->createStreamFromString('name = ' . $args['name']));
+        $router->get('/blog', function ($request, $args) {
+            return (new ResponseFactory())
+                ->createResponse()
+                ->withBody(
+                    (new StreamFactory())
+                    ->createStreamFromString('name = ' . $args['name'])
+                );
         })->setParameter('name', 'blog.index');
-        $router->get('/blog/recent', function ($request, $response, $args) {
-            return $response->withBody((new StreamFactory())->createStreamFromString('name = ' . $args['name']));
+        $router->get('/blog/recent', function ($request, $args) {
+            return (new ResponseFactory())
+                ->createResponse()
+                ->withBody(
+                    (new StreamFactory())
+                    ->createStreamFromString('name = ' . $args['name'])
+                );
         })->setParameter('name', 'blog.recent');
-        $router->get('/blog/post/{post_slug}', function ($request, $response, $args) {
-            return $response->withBody((new StreamFactory())->createStreamFromString('name = ' . $args['name'] . ' | post_slug = ' . $args['post_slug']));
+        $router->get('/blog/post/{post_slug}', function ($request, $args) {
+            return (new ResponseFactory())
+                ->createResponse()
+                ->withBody(
+                    (new StreamFactory())
+                    ->createStreamFromString('name = ' . $args['name'] . ' | post_slug = ' . $args['post_slug'])
+                );
         })->setParameter('name', 'blog.post.show');
-        $router->post('/blog/post/{post_slug}/comment', function ($request, $response, $args) {
-            return $response->withBody((new StreamFactory())->createStreamFromString('name = ' . $args['name'] . ' | post_slug = ' . $args['post_slug']));
+        $router->post('/blog/post/{post_slug}/comment', function ($request, $args) {
+            return (new ResponseFactory())
+                ->createResponse()
+                ->withBody(
+                    (new StreamFactory())
+                    ->createStreamFromString('name = ' . $args['name'] . ' | post_slug = ' . $args['post_slug'])
+                );
         })->setParameter('name', 'blog.post.comment');
 
-        $router->get('/shop', function ($request, $response, $args) {
-            return $response->withBody((new StreamFactory())->createStreamFromString('name = ' . $args['name']));
+        $router->get('/shop', function ($request, $args) {
+            return (new ResponseFactory())
+                ->createResponse()
+                ->withBody(
+                    (new StreamFactory())
+                    ->createStreamFromString('name = ' . $args['name'])
+                );
         })->setParameter('name', 'shop.index');
 
-        $router->get('/shop/category', function ($request, $response, $args) {
-            return $response->withBody((new StreamFactory())->createStreamFromString('name = ' . $args['name']));
+        $router->get('/shop/category', function ($request, $args) {
+            return (new ResponseFactory())
+                ->createResponse()
+                ->withBody(
+                    (new StreamFactory())
+                    ->createStreamFromString('name = ' . $args['name'])
+                );
         })->setParameter('name', 'shop.category.index');
-        $router->get('/shop/category/search/{filter_by}:{filter_value}', function ($request, $response, $args) {
-            return $response->withBody((new StreamFactory())->createStreamFromString('name = ' . $args['name'] . ' | filter_by = ' . $args['filter_by'] . ' | filter_value = ' . $args['filter_value']));
+        $router->get('/shop/category/search/{filter_by}:{filter_value}', function ($request, $args) {
+            return (new ResponseFactory())
+                ->createResponse()
+                ->withBody(
+                    (new StreamFactory())
+                    ->createStreamFromString('name = ' . $args['name'] . ' | filter_by = ' . $args['filter_by'] . ' | filter_value = ' . $args['filter_value'])
+                );
         })->setParameter('name', 'shop.category.search');
-        $router->get('/shop/category/{category_id}', function ($request, $response, $args) {
-            return $response->withBody((new StreamFactory())->createStreamFromString('name = ' . $args['name'] . ' | category_id = ' . $args['category_id']));
+        $router->get('/shop/category/{category_id}', function ($request, $args) {
+            return (new ResponseFactory())
+                ->createResponse()
+                ->withBody(
+                    (new StreamFactory())
+                    ->createStreamFromString('name = ' . $args['name'] . ' | category_id = ' . $args['category_id'])
+                );
         })->setParameter('name', 'shop.category.show');
-        $router->get('/shop/category/{category_id}/product', function ($request, $response, $args) {
-            return $response->withBody((new StreamFactory())->createStreamFromString('name = ' . $args['name'] . ' | category_id = ' . $args['category_id']));
+        $router->get('/shop/category/{category_id}/product', function ($request, $args) {
+            return (new ResponseFactory())
+                ->createResponse()
+                ->withBody(
+                    (new StreamFactory())
+                    ->createStreamFromString('name = ' . $args['name'] . ' | category_id = ' . $args['category_id'])
+                );
         })->setParameter('name', 'shop.category.product.index');
-        $router->get('/shop/category/{category_id}/product/search/{filter_by}:{filter_value}', function ($request, $response, $args) {
-            return $response->withBody((new StreamFactory())->createStreamFromString('name = ' . $args['name'] . ' | category_id = ' . $args['category_id'] . ' | filter_by = ' . $args['filter_by'] . ' | filter_value = ' . $args['filter_value']));
+        $router->get('/shop/category/{category_id}/product/search/{filter_by}:{filter_value}', function ($request, $args) {
+            return (new ResponseFactory())
+                ->createResponse()
+                ->withBody(
+                    (new StreamFactory())
+                    ->createStreamFromString('name = ' . $args['name'] . ' | category_id = ' . $args['category_id'] . ' | filter_by = ' . $args['filter_by'] . ' | filter_value = ' . $args['filter_value'])
+                );
         })->setParameter('name', 'shop.category.product.search');
 
-        $router->get('/shop/product', function ($request, $response, $args) {
-            return $response->withBody((new StreamFactory())->createStreamFromString('name = ' . $args['name']));
+        $router->get('/shop/product', function ($request, $args) {
+            return (new ResponseFactory())
+                ->createResponse()
+                ->withBody(
+                    (new StreamFactory())
+                    ->createStreamFromString('name = ' . $args['name'])
+                );
         })->setParameter('name', 'shop.product.index');
-        $router->get('/shop/product/search/{filter_by}:{filter_value}', function ($request, $response, $args) {
-            return $response->withBody((new StreamFactory())->createStreamFromString('name = ' . $args['name'] . ' | filter_by = ' . $args['filter_by'] . ' | filter_value = ' . $args['filter_value']));
+        $router->get('/shop/product/search/{filter_by}:{filter_value}', function ($request, $args) {
+            return (new ResponseFactory())
+                ->createResponse()
+                ->withBody(
+                    (new StreamFactory())
+                    ->createStreamFromString('name = ' . $args['name'] . ' | filter_by = ' . $args['filter_by'] . ' | filter_value = ' . $args['filter_value'])
+                );
         })->setParameter('name', 'shop.product.search');
-        $router->get('/shop/product/{product_id}', function ($request, $response, $args) {
-            return $response->withBody((new StreamFactory())->createStreamFromString('name = ' . $args['name'] . ' | product_id = ' . $args['product_id']));
+        $router->get('/shop/product/{product_id}', function ($request, $args) {
+            return (new ResponseFactory())
+                ->createResponse()
+                ->withBody(
+                    (new StreamFactory())
+                    ->createStreamFromString('name = ' . $args['name'] . ' | product_id = ' . $args['product_id'])
+                );
         })->setParameter('name', 'shop.product.show');
 
-        $router->get('/shop/cart', function ($request, $response, $args) {
-            return $response->withBody((new StreamFactory())->createStreamFromString('name = ' . $args['name']));
+        $router->get('/shop/cart', function ($request, $args) {
+            return (new ResponseFactory())
+                ->createResponse()
+                ->withBody(
+                    (new StreamFactory())
+                    ->createStreamFromString('name = ' . $args['name'])
+                );
         })->setParameter('name', 'shop.cart.show');
-        $router->put('/shop/cart', function ($request, $response, $args) {
-            return $response->withBody((new StreamFactory())->createStreamFromString('name = ' . $args['name']));
+        $router->put('/shop/cart', function ($request, $args) {
+            return (new ResponseFactory())
+                ->createResponse()
+                ->withBody(
+                    (new StreamFactory())
+                    ->createStreamFromString('name = ' . $args['name'])
+                );
         })->setParameter('name', 'shop.cart.add');
-        $router->delete('/shop/cart', function ($request, $response, $args) {
-            return $response->withBody((new StreamFactory())->createStreamFromString('name = ' . $args['name']));
+        $router->delete('/shop/cart', function ($request, $args) {
+            return (new ResponseFactory())
+                ->createResponse()
+                ->withBody(
+                    (new StreamFactory())
+                    ->createStreamFromString('name = ' . $args['name'])
+                );
         })->setParameter('name', 'shop.cart.empty');
-        $router->get('/shop/cart/checkout', function ($request, $response, $args) {
-            return $response->withBody((new StreamFactory())->createStreamFromString('name = ' . $args['name']));
+        $router->get('/shop/cart/checkout', function ($request, $args) {
+            return (new ResponseFactory())
+                ->createResponse()
+                ->withBody(
+                    (new StreamFactory())
+                    ->createStreamFromString('name = ' . $args['name'])
+                );
         })->setParameter('name', 'shop.cart.checkout.show');
-        $router->post('/shop/cart/checkout', function ($request, $response, $args) {
-            return $response->withBody((new StreamFactory())->createStreamFromString('name = ' . $args['name']));
+        $router->post('/shop/cart/checkout', function ($request, $args) {
+            return (new ResponseFactory())
+                ->createResponse()
+                ->withBody(
+                    (new StreamFactory())
+                    ->createStreamFromString('name = ' . $args['name'])
+                );
         })->setParameter('name', 'shop.cart.checkout.process');
 
-        $router->get('/admin/login', function ($request, $response, $args) {
-            return $response->withBody((new StreamFactory())->createStreamFromString('name = ' . $args['name']));
+        $router->get('/admin/login', function ($request, $args) {
+            return (new ResponseFactory())
+                ->createResponse()
+                ->withBody(
+                    (new StreamFactory())
+                    ->createStreamFromString('name = ' . $args['name'])
+                );
         })->setParameter('name', 'admin.login');
-        $router->post('/admin/login', function ($request, $response, $args) {
-            return $response->withBody((new StreamFactory())->createStreamFromString('name = ' . $args['name']));
+        $router->post('/admin/login', function ($request, $args) {
+            return (new ResponseFactory())
+                ->createResponse()
+                ->withBody(
+                    (new StreamFactory())
+                    ->createStreamFromString('name = ' . $args['name'])
+                );
         })->setParameter('name', 'admin.login.submit');
-        $router->get('/admin/logout', function ($request, $response, $args) {
-            return $response->withBody((new StreamFactory())->createStreamFromString('name = ' . $args['name']));
+        $router->get('/admin/logout', function ($request, $args) {
+            return (new ResponseFactory())
+                ->createResponse()
+                ->withBody(
+                    (new StreamFactory())
+                    ->createStreamFromString('name = ' . $args['name'])
+                );
         })->setParameter('name', 'admin.logout');
-        $router->get('/admin', function ($request, $response, $args) {
-            return $response->withBody((new StreamFactory())->createStreamFromString('name = ' . $args['name']));
+        $router->get('/admin', function ($request, $args) {
+            return (new ResponseFactory())
+                ->createResponse()
+                ->withBody(
+                    (new StreamFactory())
+                    ->createStreamFromString('name = ' . $args['name'])
+                );
         })->setParameter('name', 'admin.index');
 
-        $router->get('/admin/product', function ($request, $response, $args) {
-            return $response->withBody((new StreamFactory())->createStreamFromString('name = ' . $args['name']));
+        $router->get('/admin/product', function ($request, $args) {
+            return (new ResponseFactory())
+                ->createResponse()
+                ->withBody(
+                    (new StreamFactory())
+                    ->createStreamFromString('name = ' . $args['name'])
+                );
         })->setParameter('name', 'admin.product.index');
-        $router->get('/admin/product/create', function ($request, $response, $args) {
-            return $response->withBody((new StreamFactory())->createStreamFromString('name = ' . $args['name']));
+        $router->get('/admin/product/create', function ($request, $args) {
+            return (new ResponseFactory())
+                ->createResponse()
+                ->withBody(
+                    (new StreamFactory())
+                    ->createStreamFromString('name = ' . $args['name'])
+                );
         })->setParameter('name', 'admin.product.create');
-        $router->post('/admin/product', function ($request, $response, $args) {
-            return $response->withBody((new StreamFactory())->createStreamFromString('name = ' . $args['name']));
+        $router->post('/admin/product', function ($request, $args) {
+            return (new ResponseFactory())
+                ->createResponse()
+                ->withBody(
+                    (new StreamFactory())
+                    ->createStreamFromString('name = ' . $args['name'])
+                );
         })->setParameter('name', 'admin.product.store');
-        $router->get('/admin/product/{product_id}', function ($request, $response, $args) {
-            return $response->withBody((new StreamFactory())->createStreamFromString('name = ' . $args['name'] . ' | product_id = ' . $args['product_id']));
+        $router->get('/admin/product/{product_id}', function ($request, $args) {
+            return (new ResponseFactory())
+                ->createResponse()
+                ->withBody(
+                    (new StreamFactory())
+                    ->createStreamFromString('name = ' . $args['name'] . ' | product_id = ' . $args['product_id'])
+                );
         })->setParameter('name', 'admin.product.show');
-        $router->get('/admin/product/{product_id}/edit', function ($request, $response, $args) {
-            return $response->withBody((new StreamFactory())->createStreamFromString('name = ' . $args['name'] . ' | product_id = ' . $args['product_id']));
+        $router->get('/admin/product/{product_id}/edit', function ($request, $args) {
+            return (new ResponseFactory())
+                ->createResponse()
+                ->withBody(
+                    (new StreamFactory())
+                    ->createStreamFromString('name = ' . $args['name'] . ' | product_id = ' . $args['product_id'])
+                );
         })->setParameter('name', 'admin.product.edit');
-        $router->match(['PUT', 'PATCH'], '/admin/product/{product_id}', function ($request, $response, $args) {
-            return $response->withBody((new StreamFactory())->createStreamFromString('name = ' . $args['name'] . ' | product_id = ' . $args['product_id']));
+        $router->match(['PUT', 'PATCH'], '/admin/product/{product_id}', function ($request, $args) {
+            return (new ResponseFactory())
+                ->createResponse()
+                ->withBody(
+                    (new StreamFactory())
+                    ->createStreamFromString('name = ' . $args['name'] . ' | product_id = ' . $args['product_id'])
+                );
         })->setParameter('name', 'admin.product.update');
-        $router->delete('/admin/product/{product_id}', function ($request, $response, $args) {
-            return $response->withBody((new StreamFactory())->createStreamFromString('name = ' . $args['name'] . ' | product_id = ' . $args['product_id']));
+        $router->delete('/admin/product/{product_id}', function ($request, $args) {
+            return (new ResponseFactory())
+                ->createResponse()
+                ->withBody(
+                    (new StreamFactory())
+                    ->createStreamFromString('name = ' . $args['name'] . ' | product_id = ' . $args['product_id'])
+                );
         })->setParameter('name', 'admin.product.destroy');
 
-        $router->get('/admin/category', function ($request, $response, $args) {
-            return $response->withBody((new StreamFactory())->createStreamFromString('name = ' . $args['name']));
+        $router->get('/admin/category', function ($request, $args) {
+            return (new ResponseFactory())
+                ->createResponse()
+                ->withBody(
+                    (new StreamFactory())
+                    ->createStreamFromString('name = ' . $args['name'])
+                );
         })->setParameter('name', 'admin.category.index');
-        $router->get('/admin/category/create', function ($request, $response, $args) {
-            return $response->withBody((new StreamFactory())->createStreamFromString('name = ' . $args['name']));
+        $router->get('/admin/category/create', function ($request, $args) {
+            return (new ResponseFactory())
+                ->createResponse()
+                ->withBody(
+                    (new StreamFactory())
+                    ->createStreamFromString('name = ' . $args['name'])
+                );
         })->setParameter('name', 'admin.category.create');
-        $router->post('/admin/category', function ($request, $response, $args) {
-            return $response->withBody((new StreamFactory())->createStreamFromString('name = ' . $args['name']));
+        $router->post('/admin/category', function ($request, $args) {
+            return (new ResponseFactory())
+                ->createResponse()
+                ->withBody(
+                    (new StreamFactory())
+                    ->createStreamFromString('name = ' . $args['name'])
+                );
         })->setParameter('name', 'admin.category.store');
-        $router->get('/admin/category/{category_id}', function ($request, $response, $args) {
-            return $response->withBody((new StreamFactory())->createStreamFromString('name = ' . $args['name'] . ' | category_id = ' . $args['category_id']));
+        $router->get('/admin/category/{category_id}', function ($request, $args) {
+            return (new ResponseFactory())
+                ->createResponse()
+                ->withBody(
+                    (new StreamFactory())
+                    ->createStreamFromString('name = ' . $args['name'] . ' | category_id = ' . $args['category_id'])
+                );
         })->setParameter('name', 'admin.category.show');
-        $router->get('/admin/category/{category_id}/edit', function ($request, $response, $args) {
-            return $response->withBody((new StreamFactory())->createStreamFromString('name = ' . $args['name'] . ' | category_id = ' . $args['category_id']));
+        $router->get('/admin/category/{category_id}/edit', function ($request, $args) {
+            return (new ResponseFactory())
+                ->createResponse()
+                ->withBody(
+                    (new StreamFactory())
+                    ->createStreamFromString('name = ' . $args['name'] . ' | category_id = ' . $args['category_id'])
+                );
         })->setParameter('name', 'admin.category.edit');
-        $router->match(['PUT', 'PATCH'], '/admin/category/{category_id}', function ($request, $response, $args) {
-            return $response->withBody((new StreamFactory())->createStreamFromString('name = ' . $args['name'] . ' | category_id = ' . $args['category_id']));
+        $router->match(['PUT', 'PATCH'], '/admin/category/{category_id}', function ($request, $args) {
+            return (new ResponseFactory())
+                ->createResponse()
+                ->withBody(
+                    (new StreamFactory())
+                    ->createStreamFromString('name = ' . $args['name'] . ' | category_id = ' . $args['category_id'])
+                );
         })->setParameter('name', 'admin.category.update');
-        $router->delete('/admin/category/{category_id}', function ($request, $response, $args) {
-            return $response->withBody((new StreamFactory())->createStreamFromString('name = ' . $args['name'] . ' | category_id = ' . $args['category_id']));
+        $router->delete('/admin/category/{category_id}', function ($request, $args) {
+            return (new ResponseFactory())
+                ->createResponse()
+                ->withBody(
+                    (new StreamFactory())
+                    ->createStreamFromString('name = ' . $args['name'] . ' | category_id = ' . $args['category_id'])
+                );
         })->setParameter('name', 'admin.category.destroy');
     }
 }

@@ -34,6 +34,13 @@ class Dispatcher implements DispatcherContract
     protected $routes;
 
     /**
+     * The currently dispatched route instance.
+     *
+     * @var \Viserio\Contracts\Routing\Route
+     */
+    protected $current;
+
+    /**
      * The middelware dispatcher instance.
      *
      * @var \Viserio\Middleware\Dispatcher
@@ -48,6 +55,13 @@ class Dispatcher implements DispatcherContract
     protected $refreshCache = false;
 
     /**
+     * The globally available parameter patterns.
+     *
+     * @var string[]
+     */
+    protected $globalParameterConditions = [];
+
+    /**
      * Create a new Router instance.
      *
      * @param string                                     $path
@@ -59,12 +73,14 @@ class Dispatcher implements DispatcherContract
         string $path,
         RouteCollectionContract $routes,
         MiddlewareDispatcher $middlewareDispatcher,
-        bool $refreshCache
+        bool $refreshCache,
+        array $globalParameterConditions
     ) {
         $this->path = $path;
         $this->routes = $routes;
         $this->middlewareDispatcher = $middlewareDispatcher;
         $this->refreshCache = $refreshCache;
+        $this->globalParameterConditions = $globalParameterConditions;
     }
 
     /**
@@ -96,6 +112,16 @@ class Dispatcher implements DispatcherContract
     }
 
     /**
+     * Get the currently dispatched route instance.
+     *
+     * @return \Viserio\Contracts\Routing\Route|null
+     */
+    public function getCurrentRoute()
+    {
+        return $this->current;
+    }
+
+    /**
      * Handles a internal server error.
      *
      *
@@ -122,29 +148,25 @@ class Dispatcher implements DispatcherContract
     ): MiddlewareDispatcher {
         $route = $this->routes->match($identifier);
 
+        foreach ($this->globalParameterConditions as $key => $value) {
+            $route->setParameter($key, $value);
+        }
+
         foreach ($segments as $key => $value) {
             $route->setParameter($key, urldecode($value));
         }
 
-        $middlewares = $route->gatherMiddleware();
+        $this->current = $route;
 
-        if (isset($middlewares['with'])) {
-            foreach ($middlewares['with'] as $middleware) {
-                $this->middlewareDispatcher->withMiddleware($middleware);
-            }
-        }
+        $this->middlewareDispatcher->withMiddleware(new FoundMiddleware($route));
 
-        if (isset($middlewares['without'])) {
-            foreach ($middlewares['without'] as $middleware) {
-                $this->middlewareDispatcher->withoutMiddleware($middleware);
-            }
-        }
+        $this->addMiddlewares($route->gatherMiddleware());
 
         if ($this->events !== null) {
             $this->getEventsDispatcher()->emit('route.matched', [$route, $request]);
         }
 
-        return $this->middlewareDispatcher->withMiddleware(new FoundMiddleware($route));
+        return $this->middlewareDispatcher;
     }
 
     /**
@@ -187,5 +209,25 @@ class Dispatcher implements DispatcherContract
         }
 
         return require $this->path;
+    }
+
+    /**
+     * If rout has middlewares add it to the middleware dispatcher.
+     *
+     * @param array $middelwares
+     */
+    private function addMiddlewares(array $middlewares)
+    {
+        if (count($middlewares['with']) !== 0) {
+            foreach ($middlewares['with'] as $middleware) {
+                $this->middlewareDispatcher->withMiddleware($middleware);
+            }
+        }
+
+        if (count($middlewares['without']) !== 0) {
+            foreach ($middlewares['without'] as $middleware) {
+                $this->middlewareDispatcher->withoutMiddleware($middleware);
+            }
+        }
     }
 }

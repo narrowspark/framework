@@ -2,6 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Routing;
 
+use Viserio\Contracts\Middleware\Middleware as MiddlewareContract;
+
 abstract class AbstractController
 {
     /**
@@ -9,7 +11,10 @@ abstract class AbstractController
      *
      * @var array
      */
-    protected $middleware = [];
+    protected $middleware = [
+        'with' => [],
+        'without' => [],
+    ];
 
     /**
      * Add a middleware to route.

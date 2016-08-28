@@ -217,16 +217,21 @@ class Route implements RouteContract
     public function gatherMiddleware(): array
     {
         // Merge middlewares from Action.
+        $with = Arr::get($this->action, 'middleware.with', []);
+        $without = Arr::get($this->action, 'middleware.without', []);
+
+        $this->middleware = Arr::merge($this->middleware, $this->getControllerMiddleware());
+
         $this->middleware['with'] = array_merge(
             $this->middleware['with'],
-            Arr::get($this->action, 'middleware.with', [])
+            is_array($with) ? $with : [$with]
         );
         $this->middleware['without'] = array_merge(
             $this->middleware['without'],
-            Arr::get($this->action, 'middleware.without', [])
+            is_array($without) ? $without : [$without]
         );
 
-        return array_merge($this->middleware, $this->getControllerMiddleware());
+        return $this->middleware;
     }
 
     /**
@@ -354,15 +359,15 @@ class Route implements RouteContract
     /**
      * {@inheritdoc}
      */
-    public function run(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
+    public function run(ServerRequestInterface $request): ResponseInterface
     {
         if ($this->isControllerAction()) {
-            return $this->getController()->{$this->getControllerMethod()};
+            return $this->getController()->{$this->getControllerMethod()}();
         }
 
         return $this->invoker->call(
             $this->action['uses'],
-            [$request, $response, $this->parameters]
+            [$request, $this->parameters]
         );
     }
 
@@ -395,7 +400,7 @@ class Route implements RouteContract
         // If no "uses" property has been set, we will dig through the array to find a
         // Closure instance within this list. We will set the first Closure we come across.
         if (! isset($action['uses'])) {
-            $action['uses'] = Arr::first($action, function ($value, $key) {
+            $action['uses'] = Arr::first($action, function ($key, $value) {
                 return is_callable($value) && is_numeric($key);
             });
         }
@@ -404,7 +409,7 @@ class Route implements RouteContract
             if (! method_exists($action, '__invoke')) {
                 throw new UnexpectedValueException(sprintf(
                     'Invalid route action: [%s]',
-                    $action
+                    $action['uses']
                 ));
             }
 
@@ -477,7 +482,7 @@ class Route implements RouteContract
         list($class) = explode('::', $this->action['uses']);
 
         if (! $this->controller) {
-            $this->controller = $this->invoker($class);
+            $this->controller = $this->getContainer()->get($class);
         }
 
         return $this->controller;

@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Routing\Tests\Router;
 
 use Viserio\Http\StreamFactory;
+use Viserio\Http\ResponseFactory;
 
 class HttpMethodRouterTest extends RouteRouterBaseTest
 {
@@ -22,20 +23,40 @@ class HttpMethodRouterTest extends RouteRouterBaseTest
 
     protected function definitions($router)
     {
-        $router->get('/', function ($request, $response, $args) {
-            return $response->withBody((new StreamFactory())->createStreamFromString('name = ' . $args['name']));
+        $router->get('/', function ($request, $args) {
+            return (new ResponseFactory())
+            ->createResponse()
+            ->withBody(
+                (new StreamFactory())
+                ->createStreamFromString('name = ' . $args['name'])
+            );
         })->setParameter('name', 'home.get');
 
-        $router->match(['POST', 'PATCH'], '/', function ($request, $response, $args) {
-            return $response->withBody((new StreamFactory())->createStreamFromString('name = ' . $args['name']));
+        $router->match(['POST', 'PATCH'], '/', function ($request, $args) {
+            return (new ResponseFactory())
+            ->createResponse()
+            ->withBody(
+                (new StreamFactory())
+                ->createStreamFromString('name = ' . $args['name'])
+            );
         })->setParameter('name', 'home.post-or-patch');
 
-        $router->delete('/', function ($request, $response, $args) {
-            return $response->withBody((new StreamFactory())->createStreamFromString('name = ' . $args['name']));
+        $router->delete('/', function ($request, $args) {
+            return (new ResponseFactory())
+            ->createResponse()
+            ->withBody(
+                (new StreamFactory())
+                ->createStreamFromString('name = ' . $args['name'])
+            );
         })->setParameter('name', 'home.delete');
 
-        $router->any('/', function ($request, $response, $args) {
-            return $response->withBody((new StreamFactory())->createStreamFromString('name = ' . $args['name']));
+        $router->any('/', function ($request, $args) {
+            return (new ResponseFactory())
+            ->createResponse()
+            ->withBody(
+                (new StreamFactory())
+                ->createStreamFromString('name = ' . $args['name'])
+            );
         })->setParameter('name', 'home.fallback');
     }
 }
