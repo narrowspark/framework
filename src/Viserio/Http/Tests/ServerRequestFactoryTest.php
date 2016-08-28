@@ -51,7 +51,7 @@ class ServerRequestFactoryTest extends \PHPUnit_Framework_TestCase
             ],
             'No HTTPS param' => [
                 'http://www.narrowspark.com/blog/article.php?id=10&user=foo',
-                $server
+                $server,
             ],
             'HTTP_HOST missing' => [
                 'http://www.narrowspark.com/blog/article.php?id=10&user=foo',

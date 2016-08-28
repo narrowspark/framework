@@ -199,6 +199,7 @@ class Router implements RouterContract
 
     /**
      * {@inheritdoc}
+     *
      * @codeCoverageIgnore
      */
     public function getPatterns(): array
@@ -228,6 +229,7 @@ class Router implements RouterContract
 
     /**
      * {@inheritdoc}
+     *
      * @codeCoverageIgnore
      */
     public function removeParameter(string $name)
@@ -237,6 +239,7 @@ class Router implements RouterContract
 
     /**
      * {@inheritdoc}
+     *
      * @codeCoverageIgnore
      */
     public function getParameters(): array
@@ -266,6 +269,7 @@ class Router implements RouterContract
 
     /**
      * {@inheritdoc}
+     *
      * @codeCoverageIgnore
      */
     public function getMiddlewares(): array
@@ -275,6 +279,7 @@ class Router implements RouterContract
 
     /**
      * {@inheritdoc}
+     *
      * @codeCoverageIgnore
      */
     public function getCurrentRoute()
@@ -284,6 +289,7 @@ class Router implements RouterContract
 
     /**
      * {@inheritdoc}
+     *
      * @codeCoverageIgnore
      */
     public function getRoutes(): RouteCollectionContract

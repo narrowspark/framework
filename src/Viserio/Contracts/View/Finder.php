@@ -35,8 +35,6 @@ interface Finder
      * Prepend a location to the finder.
      *
      * @param string $location
-     *
-     * @return void
      */
     public function prependLocation(string $location);
 
