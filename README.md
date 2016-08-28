@@ -3,7 +3,7 @@
 [![Author](http://img.shields.io/badge/author-@anolilab-blue.svg?style=flat-square)](https://twitter.com/anolilab)
 [![Source Code](http://img.shields.io/badge/source-narrowspark/narrowspark-blue.svg?style=flat-square)](https://github.com/narrowspark/narrowspark)
 [![Latest Version](https://img.shields.io/packagist/v/narrowspark/framework.svg?style=flat-square)](https://github.com/narrowspark/framework/releases)
-[![Minimum PHP Version](https://img.shields.io/badge/php-%5E7.0-8892BF.svg?style=flat-square)](https://php.net/)
+[![Minimum PHP Version](https://img.shields.io/badge/php-%5E7.0.7-8892BF.svg?style=flat-square)](https://php.net/)
 [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE)
 
 ## Chat Room on Gitter

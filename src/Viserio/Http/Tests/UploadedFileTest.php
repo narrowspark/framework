@@ -5,7 +5,6 @@ namespace Viserio\Http\Tests;
 use ReflectionProperty;
 use Viserio\Http\Stream;
 use Viserio\Http\UploadedFile;
-use Viserio\Http\Util;
 
 class UploadedFileTest extends \PHPUnit_Framework_TestCase
 {
@@ -42,7 +41,7 @@ class UploadedFileTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider invalidStreams
      *
-     * @expectedException InvalidArgumentException
+     * @expectedException \InvalidArgumentException
      */
     public function testRaisesExceptionOnInvalidStreamOrFile($streamOrFile)
     {
@@ -107,7 +106,7 @@ class UploadedFileTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider invalidFilenamesAndMediaTypes
      *
-     * @expectedException InvalidArgumentException
+     * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage filename
      */
     public function testRaisesExceptionOnInvalidClientFilename($filename)
@@ -118,7 +117,7 @@ class UploadedFileTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider invalidFilenamesAndMediaTypes
      *
-     * @expectedException InvalidArgumentException
+     * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage media type
      */
     public function testRaisesExceptionOnInvalidClientMediaType($mediaType)
@@ -158,7 +157,13 @@ class UploadedFileTest extends \PHPUnit_Framework_TestCase
 
     public function testSuccessful()
     {
-        $stream = Util::getStream('Foo bar!');
+        $body = 'Foo bar!';
+        $stream = fopen('php://temp', 'r+');
+
+        fwrite($stream, $body);
+        fseek($stream, 0);
+
+        $stream = new Stream($stream);
         $upload = new UploadedFile($stream, $stream->getSize(), UPLOAD_ERR_OK, 'filename.txt', 'text/plain');
 
         $this->assertEquals($stream->getSize(), $upload->getSize());
@@ -189,12 +194,18 @@ class UploadedFileTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider invalidMovePaths
      *
-     * @expectedException InvalidArgumentException
+     * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage path
      */
     public function testMoveRaisesExceptionForInvalidPath($path)
     {
-        $stream = Util::getStream('Foo bar!');
+        $body = 'Foo bar!';
+        $stream = fopen('php://temp', 'r+');
+
+        fwrite($stream, $body);
+        fseek($stream, 0);
+
+        $stream = new Stream($stream);
         $upload = new UploadedFile($stream, 0, UPLOAD_ERR_OK);
 
         $this->cleanup[] = $path;
@@ -208,7 +219,13 @@ class UploadedFileTest extends \PHPUnit_Framework_TestCase
      */
     public function testMoveCannotBeCalledMoreThanOnce()
     {
-        $stream = Util::getStream('Foo bar!');
+        $body = 'Foo bar!';
+        $stream = fopen('php://temp', 'r+');
+
+        fwrite($stream, $body);
+        fseek($stream, 0);
+
+        $stream = new Stream($stream);
         $upload = new UploadedFile($stream, 0, UPLOAD_ERR_OK);
 
         $this->cleanup[] = $to = tempnam(sys_get_temp_dir(), 'diac');
@@ -226,7 +243,13 @@ class UploadedFileTest extends \PHPUnit_Framework_TestCase
      */
     public function testCannotRetrieveStreamAfterMove()
     {
-        $stream = Util::getStream('Foo bar!');
+        $body = 'Foo bar!';
+        $stream = fopen('php://temp', 'r+');
+
+        fwrite($stream, $body);
+        fseek($stream, 0);
+
+        $stream = new Stream($stream);
         $upload = new UploadedFile($stream, 0, UPLOAD_ERR_OK);
 
         $this->cleanup[] = $to = tempnam(sys_get_temp_dir(), 'diac');

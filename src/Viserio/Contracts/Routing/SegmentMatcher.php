@@ -4,8 +4,6 @@ namespace Viserio\Contracts\Routing;
 
 interface SegmentMatcher
 {
-    const SEGMENT_PLACEHOLDER = '{segment}';
-
     /**
      * Return all set parameters keys.
      *
@@ -16,12 +14,12 @@ interface SegmentMatcher
     /**
      * Get a metched parameter key back,
      *
-     * @param string      $segmentVariable
-     * @param string|null $uniqueKey
+     * @param string   $segmentVariable
+     * @param int|null $uniqueKey
      *
      * @return string[]
      */
-    public function getMatchedParameterExpressions(string $segmentVariable, string $uniqueKey = null): array;
+    public function getMatchedParameterExpressions(string $segmentVariable, int $uniqueKey = null): array;
 
     /**
      * Merge parameters keys from same matcher.
@@ -33,12 +31,12 @@ interface SegmentMatcher
     /**
      * Get a ready to use condition expression from a segment.
      *
-     * @param string      $segmentVariable
-     * @param string|null $uniqueKey
+     * @param string   $segmentVariable
+     * @param int|null $uniqueKey
      *
      * @return string
      */
-    public function getConditionExpression(string $segmentVariable, string $uniqueKey = null): string;
+    public function getConditionExpression(string $segmentVariable, int $uniqueKey = null): string;
 
     /**
      * Returns a unique hash for the segment matcher.

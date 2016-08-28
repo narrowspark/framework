@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Http\Tests\Stream;
 
+use Viserio\Http\Stream;
 use Viserio\Http\Stream\FnStream;
-use Viserio\Http\Util;
 
 class FnStreamTest extends \PHPUnit_Framework_TestCase
 {
@@ -18,7 +18,7 @@ class FnStreamTest extends \PHPUnit_Framework_TestCase
 
     public function testProxiesToFunction()
     {
-        $s = new FnStream([
+        $stream = new FnStream([
             'read' => function ($len) {
                 $this->assertEquals(3, $len);
 
@@ -26,70 +26,81 @@ class FnStreamTest extends \PHPUnit_Framework_TestCase
             },
         ]);
 
-        $this->assertEquals('foo', $s->read(3));
+        $this->assertEquals('foo', $stream->read(3));
     }
 
     public function testCanCloseOnDestruct()
     {
         $called = false;
 
-        $s = new FnStream([
+        $stream = new FnStream([
             'close' => function () use (&$called) {
                 $called = true;
             },
         ]);
-        unset($s);
+        unset($stream);
 
         $this->assertTrue($called);
     }
 
-    public function testDoesNotRequireClose()
+    public function doesNotRequireClose()
     {
-        $s = new FnStream([]);
-        unset($s);
+        $stream = new FnStream([]);
+        unset($stream);
     }
 
     public function testDecoratesStream()
     {
-        $a = Util::getStream('foo');
-        $b = FnStream::decorate($a, []);
+        $body = 'foo';
+        $stream = fopen('php://temp', 'r+');
 
-        $this->assertEquals(3, $b->getSize());
-        $this->assertEquals($b->isWritable(), true);
-        $this->assertEquals($b->isReadable(), true);
-        $this->assertEquals($b->isSeekable(), true);
-        $this->assertEquals($b->read(3), 'foo');
-        $this->assertEquals($b->tell(), 3);
-        $this->assertEquals($a->tell(), 3);
-        $this->assertSame('', $a->read(1));
-        $this->assertEquals($b->eof(), true);
-        $this->assertEquals($a->eof(), true);
-        $b->seek(0);
-        $this->assertEquals('foo', (string) $b);
-        $b->seek(0);
-        $this->assertEquals('foo', $b->getContents());
-        $this->assertEquals($a->getMetadata(), $b->getMetadata());
-        $b->seek(0, SEEK_END);
-        $b->write('bar');
-        $this->assertEquals('foobar', (string) $b);
-        $this->assertInternalType('resource', $b->detach());
-        $b->close();
+        fwrite($stream, $body);
+        fseek($stream, 0);
+        $stream1 = new Stream($stream);
+        $stream2 = FnStream::decorate($stream1, []);
+
+        $this->assertEquals(3, $stream2->getSize());
+        $this->assertEquals($stream2->isWritable(), true);
+        $this->assertEquals($stream2->isReadable(), true);
+        $this->assertEquals($stream2->isSeekable(), true);
+        $this->assertEquals($stream2->read(3), 'foo');
+        $this->assertEquals($stream2->tell(), 3);
+        $this->assertEquals($stream1->tell(), 3);
+        $this->assertSame('', $stream1->read(1));
+        $this->assertEquals($stream2->eof(), true);
+        $this->assertEquals($stream1->eof(), true);
+        $stream2->seek(0);
+        $this->assertEquals('foo', (string) $stream2);
+        $stream2->seek(0);
+        $this->assertEquals('foo', $stream2->getContents());
+        $this->assertEquals($stream1->getMetadata(), $stream2->getMetadata());
+        $stream2->seek(0, SEEK_END);
+        $stream2->write('bar');
+        $this->assertEquals('foobar', (string) $stream2);
+        $this->assertInternalType('resource', $stream2->detach());
+        $stream2->close();
     }
 
     public function testDecoratesWithCustomizations()
     {
         $called = false;
 
-        $a = Util::getStream('foo');
-        $b = FnStream::decorate($a, [
-            'read' => function ($len) use (&$called, $a) {
+        $body = 'foo';
+        $stream = fopen('php://temp', 'r+');
+
+        fwrite($stream, $body);
+        fseek($stream, 0);
+
+        $stream1 = new Stream($stream);
+        $stream2 = FnStream::decorate($stream1, [
+            'read' => function ($len) use (&$called, $stream1) {
                 $called = true;
 
-                return $a->read($len);
+                return $stream1->read($len);
             },
         ]);
 
-        $this->assertEquals('foo', $b->read(3));
+        $this->assertEquals('foo', $stream2->read(3));
         $this->assertTrue($called);
     }
 }

@@ -13,6 +13,7 @@ git subsplit publish src/Viserio/Exception:git@github.com:viserio/exception.git
 git subsplit publish src/Viserio/Filesystem:git@github.com:viserio/filesystem.git
 git subsplit publish src/Viserio/Hashing:git@github.com:viserio/hashing.git
 git subsplit publish src/Viserio/Http:git@github.com:viserio/http.git
+git subsplit publish src/Viserio/HttpFactory:git@github.com:viserio/http-factory.git
 git subsplit publish src/Viserio/Link:git@github.com:viserio/link.git
 git subsplit publish src/Viserio/Log:git@github.com:viserio/log.git
 git subsplit publish src/Viserio/Mail:git@github.com:viserio/mail.git

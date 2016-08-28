@@ -5,7 +5,6 @@ namespace Viserio\Http;
 use InvalidArgumentException;
 use Narrowspark\HttpStatus\HttpStatus;
 use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\StreamInterface;
 
 class Response extends AbstractMessage implements ResponseInterface
 {
@@ -22,10 +21,10 @@ class Response extends AbstractMessage implements ResponseInterface
     /**
      * Create a new response instance.
      *
-     * @param int                             $status  Status code for the response, if any.
-     * @param array                           $headers Headers for the response, if any.
-     * @param string|resource|StreamInterface $body    Stream identifier and/or actual stream resource
-     * @param string                          $version Protocol version.
+     * @param int                                                    $status  Status code for the response, if any.
+     * @param array                                                  $headers Headers for the response, if any.
+     * @param string|resource|\Psr\Http\Message\StreamInterface|null $body    Stream identifier and/or actual stream resource
+     * @param string                                                 $version Protocol version.
 
      * @throws InvalidArgumentException on any invalid element.
      */
@@ -38,7 +37,7 @@ class Response extends AbstractMessage implements ResponseInterface
         $this->statusCode = HttpStatus::filterStatusCode($status);
 
         if ($body !== '' && $body !== null) {
-            $this->stream = Util::getStream($body);
+            $this->stream = $this->createStream($body);
         }
 
         $this->setHeaders($headers);

@@ -1,0 +1,52 @@
+{
+    "name"       : "viserio/http-factory",
+    "type"       : "library",
+    "description": "The Viserio Http Factory package.",
+    "keywords"   : ["narrowspark", "viserio", "http-factory", "psr-17"],
+    "license"    : "MIT",
+    "homepage"   : "http://github.com/narrowspark/framework",
+    "support"    : {
+        "issues": "https://github.com/narrowspark/framework/issues",
+        "source": "https://github.com/narrowspark/framework"
+    },
+    "authors"    : [
+        {
+          "name"    : "Daniel Bannert",
+          "email"   : "d.bannert@anolilab.de",
+          "homepage": "http://www.anolilab.de",
+          "role"    : "Developer"
+        }
+    ],
+    "require": {
+        "php"                               : "7.0.0 - 7.0.5 || ^7.0.7",
+        "http-interop/http-factory"         : "^0.1",
+        "viserio/http"                      : "self.version"
+    },
+    "require-dev": {
+        "mockery/mockery"                   : "^0.9",
+        "narrowspark/testing-helper"        : "^1.6",
+        "phpunit/phpunit"                   : "^5.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "Viserio\\HttpFactory\\"        : ""
+        },
+        "exclude-from-classmap"             : ["/Tests/"]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Viserio\\HttpFactory\\Tests\\" : "Tests/"
+        }
+    },
+    "provide": {
+        "psr/http-message"                  : "^1.0",
+        "psr/http-message-implementation"   : "^1.0"
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master"                    : "1.0-dev"
+        }
+    },
+    "minimum-stability"                     : "dev",
+    "prefer-stable"                         : true
+}

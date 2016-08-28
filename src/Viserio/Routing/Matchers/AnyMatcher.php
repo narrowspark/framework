@@ -17,7 +17,7 @@ class AnyMatcher extends AbstractMatcher
     /**
      * {@inheritdoc}
      */
-    public function getConditionExpression(string $segmentVariable, string $uniqueKey = null): string
+    public function getConditionExpression(string $segmentVariable, int $uniqueKey = null): string
     {
         return $segmentVariable . ' !== \'\'';
     }

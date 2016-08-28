@@ -2,13 +2,12 @@
 declare(strict_types=1);
 namespace Viserio\Routing;
 
-use Viserio\Contracts\Container\Traits\ContainerAwareTrait;
+use RuntimeException;
 use Viserio\Contracts\Routing\Route as RouteContract;
+use Viserio\Contracts\Routing\RouteCollection as RouteCollectionContract;
 
-class RouteCollection
+class RouteCollection implements RouteCollectionContract
 {
-    use ContainerAwareTrait;
-
     /**
      * An array of the routes keyed by method.
      *
@@ -23,39 +22,73 @@ class RouteCollection
      */
     protected $allRoutes = [];
 
-     /**
-      * @var array
-      */
-     protected $namedRoutes = [];
-
     /**
+     * A look-up table of routes by their names.
+     *
      * @var array
      */
-    protected $filters = [];
+    protected $nameList = [];
 
     /**
-     * @var \Viserio\Routing\RouteGroup[]
+     * A look-up table of routes by controller action.
+     *
+     * @var array
      */
-    protected $groups = [];
+    protected $actionList = [];
 
     /**
-     * Add a Route instance to the collection.
-     *
-     * @param \Viserio\Contracts\Routing\Route $route
-     *
-     * @return \Viserio\Contracts\Routing\Route
+     * {@inheritdoc}
      */
-    public function addRoute(RouteContract $route): RouteContract
+    public function add(RouteContract $route): RouteContract
     {
-        $this->addToCollections($route);
+        $domainAndUri = $route->getDomain() . $route->getUri();
+        $this->allRoutes[implode($route->getMethods(), '|') . $domainAndUri] = $route;
+
+        $this->addLookups($route);
 
         return $route;
     }
 
     /**
-     * Get all of the routes in the collection.
+     * {@inheritdoc}
+     */
+    public function match(string $identifier): RouteContract
+    {
+        if (isset($this->allRoutes[$identifier])) {
+            return $this->allRoutes[$identifier];
+        }
+
+        throw new RuntimeException('Route not found, looks like your route cache is stale.');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function hasNamedRoute(string $name): bool
+    {
+        return ! is_null($this->getByName($name));
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getByName(string $name)
+    {
+        return isset($this->nameList[$name]) ? $this->nameList[$name] : null;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getByAction(string $action)
+    {
+        return isset($this->actionList[$action]) ? $this->actionList[$action] : null;
+    }
+
+    /**
+     * {@inheritdoc}
      *
-     * @return array
+     * @codeCoverageIgnore
      */
     public function getRoutes(): array
     {
@@ -63,51 +96,26 @@ class RouteCollection
     }
 
     /**
-     * Add the given route to the arrays of routes.
+     * Add the route to any look-up tables if necessary.
      *
      * @param \Viserio\Contracts\Routing\Route $route
      */
-    protected function addToCollections(RouteContract $route)
+    protected function addLookups(RouteContract $route)
     {
-        $domainAndUri = $route->getDomain() . $route->getUri();
+        // If the route has a name, we will add it to the name look-up table so that we
+        // will quickly be able to find any route associate with a name and not have
+        // to iterate through every route every time we need to perform a look-up.
+        $action = $route->getAction();
 
-        foreach ($route->getMethods() as $method) {
-            $this->routes[$method][$domainAndUri] = $route;
+        if (isset($action['as'])) {
+            $this->nameList[$action['as']] = $route;
         }
 
-        $this->allRoutes[$method . $domainAndUri] = $route;
-    }
-
-    /**
-     * @param string $pattern [description]
-     *
-     * @return array
-     */
-    protected function parseRoutingPattern(string $pattern): array
-    {
-        if (is_string($pattern)) {
-            return [$pattern, []];
+        // When the route is routing to a controller we will also store the action that
+        // is used by the route. This will let us reverse route to controllers while
+        // processing a request and easily generate URLs to the given controllers.
+        if (isset($action['controller'])) {
+            $this->actionList[trim($action['controller'], '\\')] = $route;
         }
-
-        if (is_array($pattern)) {
-            if (! isset($pattern[0]) || ! is_string($pattern[0])) {
-                throw new InvalidRoutePatternException(sprintf(
-                    'Cannot add route: route pattern array must have the first element containing the pattern string, %s given',
-                    isset($pattern[0]) ? gettype($pattern[0]) : 'none'
-                ));
-            }
-
-            $patternString = $pattern[0];
-            $parameterConditions = $pattern;
-
-            unset($parameterConditions[0]);
-
-            return [$patternString, $parameterConditions];
-        }
-
-        throw new InvalidRoutePatternException(sprintf(
-            'Cannot add route: route pattern must be a pattern string, %s given',
-            gettype($pattern)
-        ));
     }
 }

@@ -31,12 +31,12 @@ class CompoundMatcher extends AbstractMatcher
     /**
      * {@inheritdoc}
      */
-    public function getConditionExpression(string $segmentVariable, string $uniqueKey = null): string
+    public function getConditionExpression(string $segmentVariable, int $uniqueKey = null): string
     {
         $conditions = [];
 
         foreach ($this->matchers as $key => $matcher) {
-            $conditions[] = $matcher->getConditionExpression($segmentVariable, $uniqueKey . '_' . $key);
+            $conditions[] = $matcher->getConditionExpression($segmentVariable, $uniqueKey + $key);
         }
 
         return implode(' && ', $conditions);
@@ -45,14 +45,14 @@ class CompoundMatcher extends AbstractMatcher
     /**
      * {@inheritdoc}
      */
-    public function getMatchedParameterExpressions(string $segmentVariable, string $uniqueKey = null): array
+    public function getMatchedParameterExpressions(string $segmentVariable, int $uniqueKey = null): array
     {
         $expressions = [];
 
         foreach ($this->matchers as $key => $matcher) {
             $matchedParameterExpressions = $matcher->getMatchedParameterExpressions(
                 $segmentVariable,
-                $uniqueKey . '_' . $key
+                $uniqueKey + $key
             );
 
             foreach ($matchedParameterExpressions as $parameter => $expression) {

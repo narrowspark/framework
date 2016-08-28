@@ -15,6 +15,7 @@ class PathTest extends \PHPUnit_Framework_TestCase
     public function testFilter($raw, $parsed)
     {
         $path = new Path();
+
         $this->assertSame($parsed, $path->filter($raw));
     }
 

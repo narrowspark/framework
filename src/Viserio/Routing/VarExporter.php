@@ -7,13 +7,12 @@ use StdClass;
 class VarExporter
 {
     /**
-     * Don't instantiate this class.
+     * Private constructor; non-instantiable.
      *
      * @codeCoverageIgnore
      */
     private function __construct()
     {
-        //
     }
 
     /**

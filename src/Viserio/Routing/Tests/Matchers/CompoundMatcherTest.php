@@ -15,7 +15,7 @@ class CompoundMatcherTest extends \PHPUnit_Framework_TestCase
             new AnyMatcher([0]),
         ]);
 
-        $this->assertSame('test === \'test\' && test !== \'\'', $matcher->getConditionExpression('test', '2'));
+        $this->assertSame('test === \'test\' && test !== \'\'', $matcher->getConditionExpression('test', 2));
     }
 
     public function testGetMatchedParameterExpressions()
@@ -25,7 +25,7 @@ class CompoundMatcherTest extends \PHPUnit_Framework_TestCase
             new AnyMatcher([0]),
         ]);
 
-        $this->assertSame([1 => 'test', 0 => 'test'], $matcher->getMatchedParameterExpressions('test', '2'));
+        $this->assertSame([1 => 'test', 0 => 'test'], $matcher->getMatchedParameterExpressions('test', 2));
     }
 
     public function testGetHash()
@@ -45,9 +45,9 @@ class CompoundMatcherTest extends \PHPUnit_Framework_TestCase
 
         $this->assertSame([0], $matcher1->getParameterKeys());
         $this->assertNotEquals($matcher2->getHash(), $matcher1->getHash());
-        $this->assertSame('$segment === \'a\' && $segment === \'b\'', $matcher1->getConditionExpression('$segment', '0'));
-        $this->assertSame([0 => '$segment'], $matcher1->getMatchedParameterExpressions('$segment', '0'));
-        $this->assertSame('$segment === \'a\' && $segment === \'c\'', $matcher2->getConditionExpression('$segment', '0'));
-        $this->assertSame([0 => '$segment', 1 => '$segment'], $matcher2->getMatchedParameterExpressions('$segment', '0'));
+        $this->assertSame('$segment === \'a\' && $segment === \'b\'', $matcher1->getConditionExpression('$segment', 0));
+        $this->assertSame([0 => '$segment'], $matcher1->getMatchedParameterExpressions('$segment', 0));
+        $this->assertSame('$segment === \'a\' && $segment === \'c\'', $matcher2->getConditionExpression('$segment', 0));
+        $this->assertSame([0 => '$segment', 1 => '$segment'], $matcher2->getMatchedParameterExpressions('$segment', 0));
     }
 }
