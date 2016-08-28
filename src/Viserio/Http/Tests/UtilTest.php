@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Http\Tests;
 
-use Viserio\Http\Stream\FnStream;
 use Viserio\Http\Stream;
+use Viserio\Http\Stream\FnStream;
 use Viserio\Http\UploadedFile;
 use Viserio\Http\Util;
 

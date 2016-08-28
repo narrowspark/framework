@@ -8,8 +8,8 @@ use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\UriInterface;
 use StdClass;
 use Viserio\Http\Request;
-use Viserio\Http\Stream\FnStream;
 use Viserio\Http\Stream;
+use Viserio\Http\Stream\FnStream;
 use Viserio\Http\Uri;
 
 class RequestTest extends AbstractMessageTest

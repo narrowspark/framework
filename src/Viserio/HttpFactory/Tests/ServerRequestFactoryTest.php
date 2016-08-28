@@ -3,10 +3,10 @@ declare(strict_types=1);
 namespace Viserio\HttpFactory\Tests;
 
 use Psr\Http\Message\ServerRequestInterface;
-use Viserio\HttpFactory\ServerRequestFactory;
-use Viserio\HttpFactory\UriFactory;
 use Viserio\Http\UploadedFile;
 use Viserio\Http\Uri;
+use Viserio\HttpFactory\ServerRequestFactory;
+use Viserio\HttpFactory\UriFactory;
 
 class ServerRequestFactoryTest extends \PHPUnit_Framework_TestCase
 {

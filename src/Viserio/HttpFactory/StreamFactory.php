@@ -22,6 +22,7 @@ final class StreamFactory implements StreamFactoryInterface
             fwrite($stream, $resource);
             fseek($stream, 0);
         }
+
         return new Stream($stream);
     }
 }

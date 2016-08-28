@@ -5,8 +5,8 @@ namespace Viserio\Http\Stream;
 use Psr\Http\Message\StreamInterface;
 use Throwable;
 use UnexpectedValueException;
-use Viserio\Http\Util;
 use Viserio\Http\Stream;
+use Viserio\Http\Util;
 
 class LazyOpenStream implements StreamInterface
 {

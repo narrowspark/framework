@@ -2,10 +2,10 @@
 declare(strict_types=1);
 namespace Viserio\HttpFactory\Tests;
 
-use Viserio\Http\Stream;
 use ArrayIterator;
-use Viserio\HttpFactory\StreamFactory;
 use Psr\Http\Message\StreamInterface;
+use Viserio\Http\Stream;
+use Viserio\HttpFactory\StreamFactory;
 
 class StreamFactoryTest extends \PHPUnit_Framework_TestCase
 {

@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\HttpFactory\Tests;
 
-use Viserio\HttpFactory\UploadedFileFactory;
 use Psr\Http\Message\UploadedFileInterface;
+use Viserio\HttpFactory\UploadedFileFactory;
 
 class UploadedFileFactoryTest extends \PHPUnit_Framework_TestCase
 {

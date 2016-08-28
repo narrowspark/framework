@@ -2,9 +2,9 @@
 declare(strict_types=1);
 namespace Viserio\HttpFactory\Tests;
 
+use Psr\Http\Message\RequestInterface;
 use Viserio\HttpFactory\RequestFactory;
 use Viserio\HttpFactory\UriFactory;
-use Psr\Http\Message\RequestInterface;
 
 class RequestFactoryTest extends \PHPUnit_Framework_TestCase
 {

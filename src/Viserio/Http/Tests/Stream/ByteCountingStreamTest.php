@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Http\Tests\Stream;
 
-use Viserio\Http\Stream\ByteCountingStream;
 use Viserio\Http\Stream;
+use Viserio\Http\Stream\ByteCountingStream;
 
 class ByteCountingStreamTest extends \PHPUnit_Framework_TestCase
 {

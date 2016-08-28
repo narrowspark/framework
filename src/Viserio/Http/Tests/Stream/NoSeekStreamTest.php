@@ -3,8 +3,8 @@ declare(strict_types=1);
 namespace Viserio\Http\Tests\Stream;
 
 use Psr\Http\Message\StreamInterface;
-use Viserio\Http\Stream\NoSeekStream;
 use Viserio\Http\Stream;
+use Viserio\Http\Stream\NoSeekStream;
 
 class NoSeekStreamTest extends \PHPUnit_Framework_TestCase
 {
