@@ -2,10 +2,10 @@
 declare(strict_types=1);
 namespace Viserio\Http\Tests\Stream;
 
+use ArrayIterator;
 use RuntimeException;
 use Viserio\Http\Stream\LimitStream;
 use Viserio\Http\Stream\PumpStream;
-use Viserio\Http\StreamFactory;
 
 class PumpStreamTest extends \PHPUnit_Framework_TestCase
 {
@@ -24,7 +24,7 @@ class PumpStreamTest extends \PHPUnit_Framework_TestCase
 
     public function testCanReadFromCallable()
     {
-        $pump = (new StreamFactory())->createStreamFromCallback(function ($size) {
+        $pump = new PumpStream(function ($size) {
             return 'a';
         });
 
@@ -38,7 +38,7 @@ class PumpStreamTest extends \PHPUnit_Framework_TestCase
     {
         $called = [];
 
-        $pump = (new StreamFactory())->createStreamFromCallback(function ($size) use (&$called) {
+        $pump = new PumpStream(function ($size) use (&$called) {
             $called[] = $size;
 
             return 'abcdef';
@@ -53,7 +53,7 @@ class PumpStreamTest extends \PHPUnit_Framework_TestCase
 
     public function testInifiniteStreamWrappedInLimitStream()
     {
-        $pump = (new StreamFactory())->createStreamFromCallback(function () {
+        $pump = new PumpStream(function () {
             return 'a';
         });
         $s = new LimitStream($pump, 5);
@@ -63,7 +63,7 @@ class PumpStreamTest extends \PHPUnit_Framework_TestCase
 
     public function testDescribesCapabilities()
     {
-        $pump = (new StreamFactory())->createStreamFromCallback(function () {
+        $pump = new PumpStream(function () {
         });
 
         $this->assertTrue($pump->isReadable());
@@ -83,5 +83,32 @@ class PumpStreamTest extends \PHPUnit_Framework_TestCase
             $this->fail();
         } catch (RuntimeException $e) {
         }
+    }
+
+    public function testCanCreateCallableBasedStream()
+    {
+        $resource = new ArrayIterator(['foo', 'bar', '123']);
+
+        $stream = new PumpStream(function () use ($resource) {
+            if (! $resource->valid()) {
+                return false;
+            }
+
+            $result = $resource->current();
+            $resource->next();
+
+            return $result;
+        });
+
+        $this->assertInstanceOf(PumpStream::class, $stream);
+        $this->assertEquals('foo', $stream->read(3));
+        $this->assertFalse($stream->eof());
+        $this->assertEquals('b', $stream->read(1));
+        $this->assertEquals('a', $stream->read(1));
+        $this->assertEquals('r12', $stream->read(3));
+        $this->assertFalse($stream->eof());
+        $this->assertEquals('3', $stream->getContents());
+        $this->assertTrue($stream->eof());
+        $this->assertEquals(9, $stream->tell());
     }
 }

@@ -6,7 +6,7 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Contracts\Middleware\Delegate as DelegateContract;
 use Viserio\Contracts\Middleware\ServerMiddleware as ServerMiddlewareContract;
-use Viserio\Http\StreamFactory;
+use Viserio\HttpFactory\StreamFactory;
 
 class ControllerClosureMiddleware implements ServerMiddlewareContract
 {
@@ -16,7 +16,7 @@ class ControllerClosureMiddleware implements ServerMiddlewareContract
     ): ResponseInterface {
         $response = $frame->next($request);
 
-        $response = $response->withBody((new StreamFactory())->createStreamFromString(
+        $response = $response->withBody((new StreamFactory())->createStream(
             $response->getBody() . '-' . $request->getAttribute('foo-middleware') . '-controller-closure'
         ));
 

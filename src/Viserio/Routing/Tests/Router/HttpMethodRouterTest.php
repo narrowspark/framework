@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Routing\Tests\Router;
 
-use Viserio\Http\ResponseFactory;
-use Viserio\Http\StreamFactory;
+use Viserio\HttpFactory\ResponseFactory;
+use Viserio\HttpFactory\StreamFactory;
 
 class HttpMethodRouterTest extends RouteRouterBaseTest
 {
@@ -28,7 +28,7 @@ class HttpMethodRouterTest extends RouteRouterBaseTest
             ->createResponse()
             ->withBody(
                 (new StreamFactory())
-                ->createStreamFromString('name = ' . $args['name'])
+                ->createStream('name = ' . $args['name'])
             );
         })->setParameter('name', 'home.get');
 
@@ -37,7 +37,7 @@ class HttpMethodRouterTest extends RouteRouterBaseTest
             ->createResponse()
             ->withBody(
                 (new StreamFactory())
-                ->createStreamFromString('name = ' . $args['name'])
+                ->createStream('name = ' . $args['name'])
             );
         })->setParameter('name', 'home.post-or-patch');
 
@@ -46,7 +46,7 @@ class HttpMethodRouterTest extends RouteRouterBaseTest
             ->createResponse()
             ->withBody(
                 (new StreamFactory())
-                ->createStreamFromString('name = ' . $args['name'])
+                ->createStream('name = ' . $args['name'])
             );
         })->setParameter('name', 'home.delete');
 
@@ -55,7 +55,7 @@ class HttpMethodRouterTest extends RouteRouterBaseTest
             ->createResponse()
             ->withBody(
                 (new StreamFactory())
-                ->createStreamFromString('name = ' . $args['name'])
+                ->createStream('name = ' . $args['name'])
             );
         })->setParameter('name', 'home.fallback');
     }

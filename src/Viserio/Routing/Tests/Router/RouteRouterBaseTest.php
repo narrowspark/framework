@@ -5,8 +5,8 @@ namespace Viserio\Routing\Tests\Router;
 use Interop\Container\ContainerInterface;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use ReflectionClass;
-use Viserio\Http\ResponseFactory;
-use Viserio\Http\ServerRequestFactory;
+use Viserio\HttpFactory\ResponseFactory;
+use Viserio\HttpFactory\ServerRequestFactory;
 use Viserio\Routing\Router;
 
 abstract class RouteRouterBaseTest extends \PHPUnit_Framework_TestCase

@@ -1,13 +1,22 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Http\Tests;
+namespace Viserio\HttpFactory\Tests;
 
-use Viserio\Http\ServerRequestFactory;
+use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Http\UploadedFile;
 use Viserio\Http\Uri;
+use Viserio\HttpFactory\ServerRequestFactory;
+use Viserio\HttpFactory\UriFactory;
 
 class ServerRequestFactoryTest extends \PHPUnit_Framework_TestCase
 {
+    private $factory;
+
+    public function setUp()
+    {
+        $this->factory = new ServerRequestFactory();
+    }
+
     public function dataGetUriFromGlobals()
     {
         $server = [
@@ -78,7 +87,7 @@ class ServerRequestFactoryTest extends \PHPUnit_Framework_TestCase
     public function testGetUriFromGlobals($expected, $serverParams)
     {
         $_SERVER = $serverParams;
-        $serverRequest = (new ServerRequestFactory())->createServerRequestFromGlobals();
+        $serverRequest = $this->factory->createServerRequestFromGlobals();
 
         $this->assertEquals(new Uri($expected), $serverRequest->getUri());
     }
@@ -136,7 +145,7 @@ class ServerRequestFactoryTest extends \PHPUnit_Framework_TestCase
             ],
         ];
 
-        $server = (new ServerRequestFactory())->createServerRequestFromGlobals();
+        $server = $this->factory->createServerRequestFromGlobals();
 
         $this->assertEquals('POST', $server->getMethod());
         $this->assertEquals(['Host' => ['www.narrowspark.com']], $server->getHeaders());

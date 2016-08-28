@@ -3,8 +3,8 @@ declare(strict_types=1);
 namespace Viserio\Routing\Tests\Router;
 
 use Viserio\Contracts\Routing\Pattern;
-use Viserio\Http\ResponseFactory;
-use Viserio\Http\StreamFactory;
+use Viserio\HttpFactory\ResponseFactory;
+use Viserio\HttpFactory\StreamFactory;
 
 class ComplexShopRouterTest extends RouteRouterBaseTest
 {
@@ -122,7 +122,7 @@ class ComplexShopRouterTest extends RouteRouterBaseTest
                 ->createResponse()
                 ->withBody(
                     (new StreamFactory())
-                    ->createStreamFromString('name = ' . $args['name'])
+                    ->createStream('name = ' . $args['name'])
                 );
         })->setParameter('name', 'home');
         $router->get('/about-us', function ($request, $args) {
@@ -130,7 +130,7 @@ class ComplexShopRouterTest extends RouteRouterBaseTest
                 ->createResponse()
                 ->withBody(
                     (new StreamFactory())
-                    ->createStreamFromString('name = ' . $args['name'])
+                    ->createStream('name = ' . $args['name'])
                 );
         })->setParameter('name', 'about-us');
         $router->get('/contact-us', function ($request, $args) {
@@ -138,7 +138,7 @@ class ComplexShopRouterTest extends RouteRouterBaseTest
                 ->createResponse()
                 ->withBody(
                     (new StreamFactory())
-                    ->createStreamFromString('name = ' . $args['name'])
+                    ->createStream('name = ' . $args['name'])
                 );
         })->setParameter('name', 'contact-us');
         $router->post('/contact-us', function ($request, $args) {
@@ -146,7 +146,7 @@ class ComplexShopRouterTest extends RouteRouterBaseTest
                 ->createResponse()
                 ->withBody(
                     (new StreamFactory())
-                    ->createStreamFromString('name = ' . $args['name'])
+                    ->createStream('name = ' . $args['name'])
                 );
         })->setParameter('name', 'contact-us.submit');
 
@@ -155,7 +155,7 @@ class ComplexShopRouterTest extends RouteRouterBaseTest
                 ->createResponse()
                 ->withBody(
                     (new StreamFactory())
-                    ->createStreamFromString('name = ' . $args['name'])
+                    ->createStream('name = ' . $args['name'])
                 );
         })->setParameter('name', 'blog.index');
         $router->get('/blog/recent', function ($request, $args) {
@@ -163,7 +163,7 @@ class ComplexShopRouterTest extends RouteRouterBaseTest
                 ->createResponse()
                 ->withBody(
                     (new StreamFactory())
-                    ->createStreamFromString('name = ' . $args['name'])
+                    ->createStream('name = ' . $args['name'])
                 );
         })->setParameter('name', 'blog.recent');
         $router->get('/blog/post/{post_slug}', function ($request, $args) {
@@ -171,7 +171,7 @@ class ComplexShopRouterTest extends RouteRouterBaseTest
                 ->createResponse()
                 ->withBody(
                     (new StreamFactory())
-                    ->createStreamFromString('name = ' . $args['name'] . ' | post_slug = ' . $args['post_slug'])
+                    ->createStream('name = ' . $args['name'] . ' | post_slug = ' . $args['post_slug'])
                 );
         })->setParameter('name', 'blog.post.show');
         $router->post('/blog/post/{post_slug}/comment', function ($request, $args) {
@@ -179,7 +179,7 @@ class ComplexShopRouterTest extends RouteRouterBaseTest
                 ->createResponse()
                 ->withBody(
                     (new StreamFactory())
-                    ->createStreamFromString('name = ' . $args['name'] . ' | post_slug = ' . $args['post_slug'])
+                    ->createStream('name = ' . $args['name'] . ' | post_slug = ' . $args['post_slug'])
                 );
         })->setParameter('name', 'blog.post.comment');
 
@@ -188,7 +188,7 @@ class ComplexShopRouterTest extends RouteRouterBaseTest
                 ->createResponse()
                 ->withBody(
                     (new StreamFactory())
-                    ->createStreamFromString('name = ' . $args['name'])
+                    ->createStream('name = ' . $args['name'])
                 );
         })->setParameter('name', 'shop.index');
 
@@ -197,7 +197,7 @@ class ComplexShopRouterTest extends RouteRouterBaseTest
                 ->createResponse()
                 ->withBody(
                     (new StreamFactory())
-                    ->createStreamFromString('name = ' . $args['name'])
+                    ->createStream('name = ' . $args['name'])
                 );
         })->setParameter('name', 'shop.category.index');
         $router->get('/shop/category/search/{filter_by}:{filter_value}', function ($request, $args) {
@@ -205,7 +205,7 @@ class ComplexShopRouterTest extends RouteRouterBaseTest
                 ->createResponse()
                 ->withBody(
                     (new StreamFactory())
-                    ->createStreamFromString('name = ' . $args['name'] . ' | filter_by = ' . $args['filter_by'] . ' | filter_value = ' . $args['filter_value'])
+                    ->createStream('name = ' . $args['name'] . ' | filter_by = ' . $args['filter_by'] . ' | filter_value = ' . $args['filter_value'])
                 );
         })->setParameter('name', 'shop.category.search');
         $router->get('/shop/category/{category_id}', function ($request, $args) {
@@ -213,7 +213,7 @@ class ComplexShopRouterTest extends RouteRouterBaseTest
                 ->createResponse()
                 ->withBody(
                     (new StreamFactory())
-                    ->createStreamFromString('name = ' . $args['name'] . ' | category_id = ' . $args['category_id'])
+                    ->createStream('name = ' . $args['name'] . ' | category_id = ' . $args['category_id'])
                 );
         })->setParameter('name', 'shop.category.show');
         $router->get('/shop/category/{category_id}/product', function ($request, $args) {
@@ -221,7 +221,7 @@ class ComplexShopRouterTest extends RouteRouterBaseTest
                 ->createResponse()
                 ->withBody(
                     (new StreamFactory())
-                    ->createStreamFromString('name = ' . $args['name'] . ' | category_id = ' . $args['category_id'])
+                    ->createStream('name = ' . $args['name'] . ' | category_id = ' . $args['category_id'])
                 );
         })->setParameter('name', 'shop.category.product.index');
         $router->get('/shop/category/{category_id}/product/search/{filter_by}:{filter_value}', function ($request, $args) {
@@ -229,7 +229,7 @@ class ComplexShopRouterTest extends RouteRouterBaseTest
                 ->createResponse()
                 ->withBody(
                     (new StreamFactory())
-                    ->createStreamFromString('name = ' . $args['name'] . ' | category_id = ' . $args['category_id'] . ' | filter_by = ' . $args['filter_by'] . ' | filter_value = ' . $args['filter_value'])
+                    ->createStream('name = ' . $args['name'] . ' | category_id = ' . $args['category_id'] . ' | filter_by = ' . $args['filter_by'] . ' | filter_value = ' . $args['filter_value'])
                 );
         })->setParameter('name', 'shop.category.product.search');
 
@@ -238,7 +238,7 @@ class ComplexShopRouterTest extends RouteRouterBaseTest
                 ->createResponse()
                 ->withBody(
                     (new StreamFactory())
-                    ->createStreamFromString('name = ' . $args['name'])
+                    ->createStream('name = ' . $args['name'])
                 );
         })->setParameter('name', 'shop.product.index');
         $router->get('/shop/product/search/{filter_by}:{filter_value}', function ($request, $args) {
@@ -246,7 +246,7 @@ class ComplexShopRouterTest extends RouteRouterBaseTest
                 ->createResponse()
                 ->withBody(
                     (new StreamFactory())
-                    ->createStreamFromString('name = ' . $args['name'] . ' | filter_by = ' . $args['filter_by'] . ' | filter_value = ' . $args['filter_value'])
+                    ->createStream('name = ' . $args['name'] . ' | filter_by = ' . $args['filter_by'] . ' | filter_value = ' . $args['filter_value'])
                 );
         })->setParameter('name', 'shop.product.search');
         $router->get('/shop/product/{product_id}', function ($request, $args) {
@@ -254,7 +254,7 @@ class ComplexShopRouterTest extends RouteRouterBaseTest
                 ->createResponse()
                 ->withBody(
                     (new StreamFactory())
-                    ->createStreamFromString('name = ' . $args['name'] . ' | product_id = ' . $args['product_id'])
+                    ->createStream('name = ' . $args['name'] . ' | product_id = ' . $args['product_id'])
                 );
         })->setParameter('name', 'shop.product.show');
 
@@ -263,7 +263,7 @@ class ComplexShopRouterTest extends RouteRouterBaseTest
                 ->createResponse()
                 ->withBody(
                     (new StreamFactory())
-                    ->createStreamFromString('name = ' . $args['name'])
+                    ->createStream('name = ' . $args['name'])
                 );
         })->setParameter('name', 'shop.cart.show');
         $router->put('/shop/cart', function ($request, $args) {
@@ -271,7 +271,7 @@ class ComplexShopRouterTest extends RouteRouterBaseTest
                 ->createResponse()
                 ->withBody(
                     (new StreamFactory())
-                    ->createStreamFromString('name = ' . $args['name'])
+                    ->createStream('name = ' . $args['name'])
                 );
         })->setParameter('name', 'shop.cart.add');
         $router->delete('/shop/cart', function ($request, $args) {
@@ -279,7 +279,7 @@ class ComplexShopRouterTest extends RouteRouterBaseTest
                 ->createResponse()
                 ->withBody(
                     (new StreamFactory())
-                    ->createStreamFromString('name = ' . $args['name'])
+                    ->createStream('name = ' . $args['name'])
                 );
         })->setParameter('name', 'shop.cart.empty');
         $router->get('/shop/cart/checkout', function ($request, $args) {
@@ -287,7 +287,7 @@ class ComplexShopRouterTest extends RouteRouterBaseTest
                 ->createResponse()
                 ->withBody(
                     (new StreamFactory())
-                    ->createStreamFromString('name = ' . $args['name'])
+                    ->createStream('name = ' . $args['name'])
                 );
         })->setParameter('name', 'shop.cart.checkout.show');
         $router->post('/shop/cart/checkout', function ($request, $args) {
@@ -295,7 +295,7 @@ class ComplexShopRouterTest extends RouteRouterBaseTest
                 ->createResponse()
                 ->withBody(
                     (new StreamFactory())
-                    ->createStreamFromString('name = ' . $args['name'])
+                    ->createStream('name = ' . $args['name'])
                 );
         })->setParameter('name', 'shop.cart.checkout.process');
 
@@ -304,7 +304,7 @@ class ComplexShopRouterTest extends RouteRouterBaseTest
                 ->createResponse()
                 ->withBody(
                     (new StreamFactory())
-                    ->createStreamFromString('name = ' . $args['name'])
+                    ->createStream('name = ' . $args['name'])
                 );
         })->setParameter('name', 'admin.login');
         $router->post('/admin/login', function ($request, $args) {
@@ -312,7 +312,7 @@ class ComplexShopRouterTest extends RouteRouterBaseTest
                 ->createResponse()
                 ->withBody(
                     (new StreamFactory())
-                    ->createStreamFromString('name = ' . $args['name'])
+                    ->createStream('name = ' . $args['name'])
                 );
         })->setParameter('name', 'admin.login.submit');
         $router->get('/admin/logout', function ($request, $args) {
@@ -320,7 +320,7 @@ class ComplexShopRouterTest extends RouteRouterBaseTest
                 ->createResponse()
                 ->withBody(
                     (new StreamFactory())
-                    ->createStreamFromString('name = ' . $args['name'])
+                    ->createStream('name = ' . $args['name'])
                 );
         })->setParameter('name', 'admin.logout');
         $router->get('/admin', function ($request, $args) {
@@ -328,7 +328,7 @@ class ComplexShopRouterTest extends RouteRouterBaseTest
                 ->createResponse()
                 ->withBody(
                     (new StreamFactory())
-                    ->createStreamFromString('name = ' . $args['name'])
+                    ->createStream('name = ' . $args['name'])
                 );
         })->setParameter('name', 'admin.index');
 
@@ -337,7 +337,7 @@ class ComplexShopRouterTest extends RouteRouterBaseTest
                 ->createResponse()
                 ->withBody(
                     (new StreamFactory())
-                    ->createStreamFromString('name = ' . $args['name'])
+                    ->createStream('name = ' . $args['name'])
                 );
         })->setParameter('name', 'admin.product.index');
         $router->get('/admin/product/create', function ($request, $args) {
@@ -345,7 +345,7 @@ class ComplexShopRouterTest extends RouteRouterBaseTest
                 ->createResponse()
                 ->withBody(
                     (new StreamFactory())
-                    ->createStreamFromString('name = ' . $args['name'])
+                    ->createStream('name = ' . $args['name'])
                 );
         })->setParameter('name', 'admin.product.create');
         $router->post('/admin/product', function ($request, $args) {
@@ -353,7 +353,7 @@ class ComplexShopRouterTest extends RouteRouterBaseTest
                 ->createResponse()
                 ->withBody(
                     (new StreamFactory())
-                    ->createStreamFromString('name = ' . $args['name'])
+                    ->createStream('name = ' . $args['name'])
                 );
         })->setParameter('name', 'admin.product.store');
         $router->get('/admin/product/{product_id}', function ($request, $args) {
@@ -361,7 +361,7 @@ class ComplexShopRouterTest extends RouteRouterBaseTest
                 ->createResponse()
                 ->withBody(
                     (new StreamFactory())
-                    ->createStreamFromString('name = ' . $args['name'] . ' | product_id = ' . $args['product_id'])
+                    ->createStream('name = ' . $args['name'] . ' | product_id = ' . $args['product_id'])
                 );
         })->setParameter('name', 'admin.product.show');
         $router->get('/admin/product/{product_id}/edit', function ($request, $args) {
@@ -369,7 +369,7 @@ class ComplexShopRouterTest extends RouteRouterBaseTest
                 ->createResponse()
                 ->withBody(
                     (new StreamFactory())
-                    ->createStreamFromString('name = ' . $args['name'] . ' | product_id = ' . $args['product_id'])
+                    ->createStream('name = ' . $args['name'] . ' | product_id = ' . $args['product_id'])
                 );
         })->setParameter('name', 'admin.product.edit');
         $router->match(['PUT', 'PATCH'], '/admin/product/{product_id}', function ($request, $args) {
@@ -377,7 +377,7 @@ class ComplexShopRouterTest extends RouteRouterBaseTest
                 ->createResponse()
                 ->withBody(
                     (new StreamFactory())
-                    ->createStreamFromString('name = ' . $args['name'] . ' | product_id = ' . $args['product_id'])
+                    ->createStream('name = ' . $args['name'] . ' | product_id = ' . $args['product_id'])
                 );
         })->setParameter('name', 'admin.product.update');
         $router->delete('/admin/product/{product_id}', function ($request, $args) {
@@ -385,7 +385,7 @@ class ComplexShopRouterTest extends RouteRouterBaseTest
                 ->createResponse()
                 ->withBody(
                     (new StreamFactory())
-                    ->createStreamFromString('name = ' . $args['name'] . ' | product_id = ' . $args['product_id'])
+                    ->createStream('name = ' . $args['name'] . ' | product_id = ' . $args['product_id'])
                 );
         })->setParameter('name', 'admin.product.destroy');
 
@@ -394,7 +394,7 @@ class ComplexShopRouterTest extends RouteRouterBaseTest
                 ->createResponse()
                 ->withBody(
                     (new StreamFactory())
-                    ->createStreamFromString('name = ' . $args['name'])
+                    ->createStream('name = ' . $args['name'])
                 );
         })->setParameter('name', 'admin.category.index');
         $router->get('/admin/category/create', function ($request, $args) {
@@ -402,7 +402,7 @@ class ComplexShopRouterTest extends RouteRouterBaseTest
                 ->createResponse()
                 ->withBody(
                     (new StreamFactory())
-                    ->createStreamFromString('name = ' . $args['name'])
+                    ->createStream('name = ' . $args['name'])
                 );
         })->setParameter('name', 'admin.category.create');
         $router->post('/admin/category', function ($request, $args) {
@@ -410,7 +410,7 @@ class ComplexShopRouterTest extends RouteRouterBaseTest
                 ->createResponse()
                 ->withBody(
                     (new StreamFactory())
-                    ->createStreamFromString('name = ' . $args['name'])
+                    ->createStream('name = ' . $args['name'])
                 );
         })->setParameter('name', 'admin.category.store');
         $router->get('/admin/category/{category_id}', function ($request, $args) {
@@ -418,7 +418,7 @@ class ComplexShopRouterTest extends RouteRouterBaseTest
                 ->createResponse()
                 ->withBody(
                     (new StreamFactory())
-                    ->createStreamFromString('name = ' . $args['name'] . ' | category_id = ' . $args['category_id'])
+                    ->createStream('name = ' . $args['name'] . ' | category_id = ' . $args['category_id'])
                 );
         })->setParameter('name', 'admin.category.show');
         $router->get('/admin/category/{category_id}/edit', function ($request, $args) {
@@ -426,7 +426,7 @@ class ComplexShopRouterTest extends RouteRouterBaseTest
                 ->createResponse()
                 ->withBody(
                     (new StreamFactory())
-                    ->createStreamFromString('name = ' . $args['name'] . ' | category_id = ' . $args['category_id'])
+                    ->createStream('name = ' . $args['name'] . ' | category_id = ' . $args['category_id'])
                 );
         })->setParameter('name', 'admin.category.edit');
         $router->match(['PUT', 'PATCH'], '/admin/category/{category_id}', function ($request, $args) {
@@ -434,7 +434,7 @@ class ComplexShopRouterTest extends RouteRouterBaseTest
                 ->createResponse()
                 ->withBody(
                     (new StreamFactory())
-                    ->createStreamFromString('name = ' . $args['name'] . ' | category_id = ' . $args['category_id'])
+                    ->createStream('name = ' . $args['name'] . ' | category_id = ' . $args['category_id'])
                 );
         })->setParameter('name', 'admin.category.update');
         $router->delete('/admin/category/{category_id}', function ($request, $args) {
@@ -442,7 +442,7 @@ class ComplexShopRouterTest extends RouteRouterBaseTest
                 ->createResponse()
                 ->withBody(
                     (new StreamFactory())
-                    ->createStreamFromString('name = ' . $args['name'] . ' | category_id = ' . $args['category_id'])
+                    ->createStream('name = ' . $args['name'] . ' | category_id = ' . $args['category_id'])
                 );
         })->setParameter('name', 'admin.category.destroy');
     }

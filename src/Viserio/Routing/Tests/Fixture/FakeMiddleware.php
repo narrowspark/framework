@@ -6,7 +6,7 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Contracts\Middleware\Delegate as DelegateContract;
 use Viserio\Contracts\Middleware\ServerMiddleware as ServerMiddlewareContract;
-use Viserio\Http\StreamFactory;
+use Viserio\HttpFactory\StreamFactory;
 
 class FakeMiddleware implements ServerMiddlewareContract
 {
@@ -18,7 +18,7 @@ class FakeMiddleware implements ServerMiddlewareContract
 
         return $response->withBody(
             (new StreamFactory())
-            ->createStreamFromString('caught')
+            ->createStream('caught')
         );
     }
 }

@@ -1,18 +1,22 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Http;
+namespace Viserio\HttpFactory;
 
+use Interop\Http\Factory\ServerRequestFactoryInterface;
+use Interop\Http\Factory\ServerRequestFromGlobalsFactoryInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\UriInterface;
-use Viserio\Contracts\Http\ServerRequestFactory as ServerRequestFactoryContract;
+use Viserio\Http\ServerRequest;
 use Viserio\Http\Stream\LazyOpenStream;
+use Viserio\Http\Uri;
+use Viserio\Http\Util;
 
-class ServerRequestFactory implements ServerRequestFactoryContract
+class ServerRequestFactory implements ServerRequestFactoryInterface, ServerRequestFromGlobalsFactoryInterface
 {
     /**
      * {@inheritdoc}
      */
-    public function createServerRequestFromGlobals(): ServerRequestInterface
+    public function createServerRequestFromGlobals()
     {
         $server = $_SERVER;
         $method = $server['REQUEST_METHOD'] ?? 'GET';
@@ -35,7 +39,7 @@ class ServerRequestFactory implements ServerRequestFactoryContract
      *
      * @codeCoverageIgnore
      */
-    public function createServerRequest(string $method, $uri): ServerRequestInterface
+    public function createServerRequest($method, $uri)
     {
         return new ServerRequest($uri, $method);
     }

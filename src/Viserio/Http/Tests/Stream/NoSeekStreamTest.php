@@ -3,8 +3,8 @@ declare(strict_types=1);
 namespace Viserio\Http\Tests\Stream;
 
 use Psr\Http\Message\StreamInterface;
+use Viserio\Http\Stream;
 use Viserio\Http\Stream\NoSeekStream;
-use Viserio\Http\StreamFactory;
 
 class NoSeekStreamTest extends \PHPUnit_Framework_TestCase
 {
@@ -32,7 +32,13 @@ class NoSeekStreamTest extends \PHPUnit_Framework_TestCase
      */
     public function testHandlesClose()
     {
-        $s = (new StreamFactory())->createStreamFromString('foo');
+        $body = 'foo';
+        $stream = fopen('php://temp', 'r+');
+
+        fwrite($stream, $body);
+        fseek($stream, 0);
+
+        $s = new Stream($stream);
         $wrapped = new NoSeekStream($s);
         $wrapped->close();
         $wrapped->write('foo');

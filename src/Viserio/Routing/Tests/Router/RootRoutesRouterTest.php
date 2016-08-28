@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Routing\Tests\Router;
 
-use Viserio\Http\ResponseFactory;
-use Viserio\Http\StreamFactory;
+use Viserio\HttpFactory\ResponseFactory;
+use Viserio\HttpFactory\StreamFactory;
 use Viserio\Routing\Tests\Fixture\FakeMiddleware;
 use Viserio\Routing\Tests\Fixture\FooMiddleware;
 use Viserio\Routing\Tests\Fixture\RouteTestClosureMiddlewareController;
@@ -38,7 +38,7 @@ class RootRoutesRouterTest extends RouteRouterBaseTest
                 ->createResponse()
                 ->withBody(
                     (new StreamFactory())
-                    ->createStreamFromString('Hello')
+                    ->createStream('Hello')
                 );
         })->setParameter('name', 'root');
 
@@ -47,7 +47,7 @@ class RootRoutesRouterTest extends RouteRouterBaseTest
                 ->createResponse()
                 ->withBody(
                     (new StreamFactory())
-                    ->createStreamFromString('Hello')
+                    ->createStream('Hello')
                 );
         })->setParameter('name', 'root');
 
@@ -56,7 +56,7 @@ class RootRoutesRouterTest extends RouteRouterBaseTest
                 ->createResponse()
                 ->withBody(
                     (new StreamFactory())
-                    ->createStreamFromString('Hello')
+                    ->createStream('Hello')
                 );
         })->setParameter('name', 'root-slash');
 
@@ -65,7 +65,7 @@ class RootRoutesRouterTest extends RouteRouterBaseTest
                 ->createResponse()
                 ->withBody(
                     (new StreamFactory())
-                    ->createStreamFromString('Hello')
+                    ->createStream('Hello')
                 );
         })->setParameter('name', 'root-slash');
 
@@ -75,7 +75,7 @@ class RootRoutesRouterTest extends RouteRouterBaseTest
                 ->createResponse()
                 ->withBody(
                     (new StreamFactory())
-                    ->createStreamFromString('Middleware')
+                    ->createStream('Middleware')
                 );
         }])->setParameter('name', 'middleware');
         $router->get('/middleware2', ['middleware.with' => new FakeMiddleware(), 'uses' => function ($request, $args) {
@@ -83,7 +83,7 @@ class RootRoutesRouterTest extends RouteRouterBaseTest
                 ->createResponse()
                 ->withBody(
                     (new StreamFactory())
-                    ->createStreamFromString('Middleware')
+                    ->createStream('Middleware')
                 );
         }])->setParameter('name', 'middleware2');
 
