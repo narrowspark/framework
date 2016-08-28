@@ -212,7 +212,7 @@ class Dispatcher implements DispatcherContract
     }
 
     /**
-     * If rout has middlewares add it to the middleware dispatcher.
+     * If route has middlewares add it to the middleware dispatcher.
      *
      * @param array $middelwares
      */
