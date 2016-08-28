@@ -32,6 +32,13 @@ interface Finder
     public function addLocation(string $location): Finder;
 
     /**
+     * Prepend a location to the finder.
+     *
+     * @param string $location
+     */
+    public function prependLocation(string $location);
+
+    /**
      * Add a namespace hint to the finder.
      *
      * @param string       $namespace

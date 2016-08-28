@@ -178,6 +178,44 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
         $this->assertOutputIs('greet', 'hello');
     }
 
+    public function testItShouldMatchHyphenatedArgumentsToLowercaseParameters()
+    {
+        $this->application->command('greet first-name', function ($firstname, OutputInterface $output) {
+            $output->write('hello ' . $firstname);
+        });
+
+        $this->assertOutputIs('greet john', 'hello john');
+    }
+
+    public function testItShouldMatchHyphenatedArgumentsToMixedcaseParameters()
+    {
+        $this->application->command('greet first-name', function ($firstName, OutputInterface $output) {
+            $output->write('hello ' . $firstName);
+        });
+
+        $this->assertOutputIs('greet john', 'hello john');
+    }
+
+    public function testItShouldMatchHyphenatedOptionToLowercaseParameters()
+    {
+        $this->application->command('greet [--yell-louder]', function ($yelllouder, OutputInterface $output) {
+            $output->write(var_export($yelllouder, true));
+        });
+
+        $this->assertOutputIs('greet', 'false');
+        $this->assertOutputIs('greet --yell-louder', 'true');
+    }
+
+    public function testItShouldMatchHyphenatedOptionToMixedCaseParameters()
+    {
+        $this->application->command('greet [--yell-louder]', function ($yellLouder, OutputInterface $output) {
+            $output->write(var_export($yellLouder, true));
+        });
+
+        $this->assertOutputIs('greet', 'false');
+        $this->assertOutputIs('greet --yell-louder', 'true');
+    }
+
     /**
      * @expectedException \RuntimeException
      * @expectedExceptionMessage Impossible to call the 'greet' command: Unable to invoke the callable because no value was given for parameter 1 ($fbo)

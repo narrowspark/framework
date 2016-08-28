@@ -3,9 +3,19 @@ declare(strict_types=1);
 namespace Viserio\Contracts\Routing;
 
 use Closure;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use Viserio\Contracts\Middleware\Middleware as MiddlewareContract;
 
 interface Router
 {
+    /**
+     * All of the verbs supported by the router.
+     *
+     * @var array
+     */
+    const HTTP_METHOD_VARS = ['GET', 'HEAD', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'];
+
     /**
      * Register a new GET route with the router.
      *
@@ -88,19 +98,106 @@ interface Router
     public function match($methods, $uri, $action = null): Route;
 
     /**
-     * Get the parent group.
+     * Set a global where pattern on all routes.
      *
-     * @return \Viserio\Contracts\Routing\RouteGroup
+     * @param string $key
+     * @param string $pattern
+     *
+     * @return $this
      */
-    public function getGroup(): RouteGroup;
+    public function pattern(string $key, string $pattern): Router;
 
     /**
-     * Create a route group with shared attributes.
+     * Set a group of global where patterns on all routes.
      *
-     * @param array    $attributes
-     * @param \Closure $callback
+     * @param array $patterns
      *
-     * @return \Viserio\Contracts\Routing\Router
+     * @return $this
      */
-    public function group(array $attributes, Closure $callback): Router;
+    public function patterns(array $patterns): Router;
+
+    /**
+     * Get the global "where" patterns.
+     *
+     * @return array
+     */
+    public function getPatterns(): array;
+
+    /**
+     * Defines the supplied parameter name to be globally associated with the expression.
+     *
+     * @param string $parameterName
+     * @param string $expression
+     *
+     * @return $this
+     */
+    public function setParameter(string $parameterName, string $expression): Router;
+
+    /**
+     * Defines the supplied parameter name to be globally associated with the expression.
+     *
+     * @param string[] $parameterPatternMap
+     *
+     * @return $this
+     */
+    public function addParameters(array $parameterPatternMap): Router;
+
+    /**
+     * Removes the global expression associated with the supplied parameter name.
+     *
+     * @param string $name
+     */
+    public function removeParameter(string $name);
+
+    /**
+     * Get all global parameters for all routes.
+     *
+     * @return array
+     */
+    public function getParameters(): array;
+
+    /**
+     * Add a middleware to all routes.
+     *
+     * @return $this
+     */
+    public function withMiddleware(MiddlewareContract $middleware): Router;
+
+    /**
+     * Remove a middleware from all routes.
+     *
+     * @return $this
+     */
+    public function withoutMiddleware(MiddlewareContract $middleware): Router;
+
+    /**
+     * Get all with and without middlewares.
+     *
+     * @return array
+     */
+    public function getMiddlewares(): array;
+
+    /**
+     * Get the currently dispatched route instance.
+     *
+     * @return \Viserio\Contracts\Routing\Route|null
+     */
+    public function getCurrentRoute();
+
+    /**
+     * Dispatch router for HTTP request.
+     *
+     * @param \Psr\Http\Message\ServerRequestInterface $request
+     * @param \Psr\Http\Message\ResponseInterface      $response
+     *
+     * @return \Psr\Http\Message\ResponseInterface
+     */
+    public function dispatch(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface;
+
+    /**
+     * Get the underlying route collection.
+     *
+     * @return \Viserio\Contracts\Routing\RouteCollection
+     */
+    public function getRoutes(): RouteCollection;
 }

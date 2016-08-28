@@ -5,7 +5,6 @@ namespace Viserio\Config\Providers;
 use Viserio\Application\ServiceProvider;
 use Viserio\Config\Manager as ConfigManager;
 use Viserio\Config\Repository;
-use Viserio\Filesystem\FileLoader;
 
 class ConfigServiceProvider extends ServiceProvider
 {

@@ -7,7 +7,7 @@ use Psr\Http\Message\ResponseInterface;
 use SplDoublyLinkedList;
 use SplStack;
 use Viserio\Contracts\Container\Traits\ContainerAwareTrait;
-use Viserio\Contracts\Middleware\Frame as FrameContract;
+use Viserio\Contracts\Middleware\Delegate as DelegateContract;
 use Viserio\Contracts\Middleware\Middleware as MiddlewareContract;
 use Viserio\Contracts\Middleware\Stack as StackContract;
 
@@ -73,7 +73,7 @@ class Dispatcher implements StackContract
      */
     public function process(RequestInterface $request): ResponseInterface
     {
-        return (new class($this->stack, $this->response) implements FrameContract {
+        return (new class($this->stack, $this->response) implements DelegateContract {
             private $middlewares;
 
             private $response;

@@ -92,6 +92,14 @@ class ViewFinder implements FinderContract
     /**
      * {@inheritdoc}
      */
+    public function prependLocation(string $location)
+    {
+        array_unshift($this->paths, $location);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function addNamespace(string $namespace, $hints): FinderContract
     {
         $hints = (array) $hints;

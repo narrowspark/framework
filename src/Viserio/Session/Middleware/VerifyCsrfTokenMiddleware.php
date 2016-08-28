@@ -5,7 +5,7 @@ namespace Viserio\Session\Middleware;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Schnittstabil\Csrf\TokenService\TokenService;
-use Viserio\Contracts\Middleware\Frame as FrameContract;
+use Viserio\Contracts\Middleware\Delegate as DelegateContract;
 use Viserio\Contracts\Middleware\ServerMiddleware as ServerMiddlewareContract;
 use Viserio\Cookie\Cookie;
 use Viserio\Session\SessionManager;
@@ -47,7 +47,7 @@ class VerifyCsrfTokenMiddleware implements ServerMiddlewareContract
     /**
      * {@inhertidoc}
      */
-    public function process(ServerRequestInterface $request, FrameContract $frame): ResponseInterface
+    public function process(ServerRequestInterface $request, DelegateContract $frame): ResponseInterface
     {
         $request = $this->generateNewToken($request);
 

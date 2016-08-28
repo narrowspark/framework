@@ -5,7 +5,7 @@ namespace Viserio\Session\Middleware;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Contracts\Config\Manager as ConfigContract;
-use Viserio\Contracts\Middleware\Frame as FrameContract;
+use Viserio\Contracts\Middleware\Delegate as DelegateContract;
 use Viserio\Contracts\Middleware\ServerMiddleware as ServerMiddlewareContract;
 use Viserio\Contracts\Session\Store as StoreContract;
 use Viserio\Cookie\Cookie;
@@ -34,7 +34,7 @@ class SessionMiddleware implements ServerMiddlewareContract
     /**
      * {@inhertidoc}
      */
-    public function process(ServerRequestInterface $request, FrameContract $frame): ResponseInterface
+    public function process(ServerRequestInterface $request, DelegateContract $frame): ResponseInterface
     {
         // If a session driver has been configured, we will need to start the session
         // so that the data is ready.
