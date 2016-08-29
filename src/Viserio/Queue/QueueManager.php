@@ -58,7 +58,7 @@ class QueueManager extends AbstractConnectionManager implements MonitorContract
      */
     public function failing($callback)
     {
-        $this->container->get('events')->on('viserio.job.failed', $callback);
+        $this->container->get('events')->attach('viserio.job.failed', $callback);
     }
 
     /**
@@ -66,7 +66,7 @@ class QueueManager extends AbstractConnectionManager implements MonitorContract
      */
     public function stopping($callback)
     {
-        $this->container->get('events')->on('viserio.worker.stopping', $callback);
+        $this->container->get('events')->attach('viserio.worker.stopping', $callback);
     }
 
     /**
@@ -74,7 +74,7 @@ class QueueManager extends AbstractConnectionManager implements MonitorContract
      */
     public function exceptionOccurred($callback)
     {
-        $this->container->get('events')->on('viserio.job.exception.occurred', $callback);
+        $this->container->get('events')->attach('viserio.job.exception.occurred', $callback);
     }
 
     /**
@@ -84,7 +84,7 @@ class QueueManager extends AbstractConnectionManager implements MonitorContract
      */
     public function before($callback)
     {
-        $this->container->get('events')->on('viserio.job.processing', $callback);
+        $this->container->get('events')->attach('viserio.job.processing', $callback);
     }
 
     /**
@@ -94,7 +94,7 @@ class QueueManager extends AbstractConnectionManager implements MonitorContract
      */
     public function after($callback)
     {
-        $this->container->get('events')->on('viserio.job.processed', $callback);
+        $this->container->get('events')->attach('viserio.job.processed', $callback);
     }
 
     /**

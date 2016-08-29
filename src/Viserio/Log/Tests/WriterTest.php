@@ -219,7 +219,7 @@ class WriterTest extends \PHPUnit_Framework_TestCase
     public function testWriterFiresEventsDispatcher()
     {
         $events = $this->getEventsDispatcher();
-        $events->on(
+        $events->attach(
             'viserio.log',
             function ($level, $message, array $context = []) {
                 $_SERVER['__log.level'] = $level;

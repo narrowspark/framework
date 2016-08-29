@@ -11,7 +11,7 @@ interface Dispatcher
      * @param mixed  $listener
      * @param int    $priority
      */
-    public function on(string $eventName, $listener, int $priority = 0);
+    public function attach(string $eventName, $listener, int $priority = 0);
 
     /**
      * Subscribe to an event exactly once.
@@ -26,22 +26,11 @@ interface Dispatcher
      * Emits an event.
      *
      * This method will return true if 0 or more listeners were succesfully
-     * handled. false is returned if one of the events broke the event chain.
+     * handled. False is returned if one of the events broke the event chain.
      *
-     * If the continue is specified, this callback will be called every
-     * time before the next event handler is called.
-     *
-     * If the continue returns false, event propagation stops. This
-     * allows you to use the eventEmitter as a means for listeners to implement
-     * functionality in your application, and break the event loop as soon as
-     * some condition is fulfilled.
      *
      * Note that returning false from an event subscriber breaks propagation
-     * and returns false, but if the continue-callback stops propagation, this
-     * is still considered a 'successful' operation and returns true.
-     *
-     * Lastly, if there are 5 event handlers for an event. The continue
-     * will be called at most 4 times.
+     * and returns false.
      *
      * @param string $eventName
      * @param array  $arguments
@@ -49,7 +38,7 @@ interface Dispatcher
      *
      * @return bool
      */
-    public function emit(string $eventName, array $arguments = [], $continue = null): bool;
+    public function emit(string $eventName, array $arguments = []): bool;
 
     /**
      * Returns the list of listeners for an event.
@@ -74,7 +63,7 @@ interface Dispatcher
      *
      * @return bool
      */
-    public function off(string $eventName, $listener): bool;
+    public function detach(string $eventName, $listener): bool;
 
     /**
      * Removes all listeners.
