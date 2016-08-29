@@ -5,7 +5,6 @@ namespace Viserio\Mail\Tests;
 use Interop\Container\ContainerInterface;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use stdClass;
-use SuperClosure\Serializer;
 use Swift_Mailer;
 use Swift_Mime_Message;
 use Swift_Transport;
@@ -90,33 +89,33 @@ class QueueMailerTest extends \PHPUnit_Framework_TestCase
 
         $view = $this->mock(ViewContract::class);
 
-        // $mailer->getViewFactory()
-        //     ->shouldReceive('create')
-        //     ->once()
-        //     ->andReturn($view);
+        $mailer->getViewFactory()
+            ->shouldReceive('create')
+            ->once()
+            ->andReturn($view);
 
-        // $view->shouldReceive('render')
-        //     ->once()
-        //     ->andReturn('rendered.view');
+        $view->shouldReceive('render')
+            ->once()
+            ->andReturn('rendered.view');
 
-        // $this->setSwiftMailer($mailer);
+        $me = $this;
 
-        // $me = $this;
+        $mimeMessage = $this->mock(Swift_Mime_Message::class);
 
-        // $mimeMessage = $this->mock(Swift_Mime_Message::class);
+        $this->setSwiftMailer($mailer);
 
-        // $mailer->alwaysFrom('info@narrowspark.de', 'Daniel Bannert');
-        // $mailer->getSwiftMailer()
-        //     ->shouldReceive('send')
-        //     ->once()
-        //     ->with($mimeMessage, [])
-        //     ->andReturnUsing(function ($message) use ($me) {
-        //         $me->assertEquals(['info@narrowspark.de' => 'Daniel Bannert'], $message->getFrom());
+        $mailer->alwaysFrom('info@narrowspark.de', 'Daniel Bannert');
+        $mailer->getSwiftMailer()
+            ->shouldReceive('send')
+            ->once()
+            ->with(\Mockery::type('Swift_Message'), [])
+            ->andReturnUsing(function ($message) use ($me) {
+                $me->assertEquals(['info@narrowspark.de' => 'Daniel Bannert'], $message->getFrom());
 
-        //         return 1;
-        //     });
-        // $mailer->send('foo', ['data'], function ($mail) {
-        // });
+                return 1;
+            });
+        $mailer->send('foo', ['data'], function ($mail) {
+        });
     }
 
     public function testFailedRecipientsAreAppendedAndCanBeRetrieved()
@@ -170,8 +169,7 @@ class QueueMailerTest extends \PHPUnit_Framework_TestCase
         return new QueueMailer(
             $this->mock(Swift_Mailer::class),
             $this->mock(ViewFactoryContract::class),
-            $this->mock(QueueContract::class),
-            $this->mock(Serializer::class)
+            $this->mock(QueueContract::class)
         );
     }
 
@@ -180,8 +178,7 @@ class QueueMailerTest extends \PHPUnit_Framework_TestCase
         return [
             $this->mock(Swift_Mailer::class),
             $this->mock(ViewFactoryContract::class),
-            $this->mock(QueueContract::class),
-            $this->mock(Serializer::class),
+            $this->mock(QueueContract::class)
         ];
     }
 }

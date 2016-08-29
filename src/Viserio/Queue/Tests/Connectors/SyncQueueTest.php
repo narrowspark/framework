@@ -6,7 +6,7 @@ use Exception;
 use Interop\Container\ContainerInterface;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use stdClass;
-use SuperClosure\Serializer;
+use Opis\Closure\SerializableClosure;
 use Viserio\Contracts\Encryption\Encrypter as EncrypterContract;
 use Viserio\Queue\Connectors\SyncQueue;
 use Viserio\Queue\Jobs\SyncJob;
@@ -37,7 +37,7 @@ class SyncQueueTest extends \PHPUnit_Framework_TestCase
             ->once();
         $encrypter->shouldReceive('decrypt')
             ->once()
-            ->andReturn((new Serializer())->serialize($closure));
+            ->andReturn(serialize(new SerializableClosure($closure)));
 
         $container = $this->mock(ContainerInterface::class);
         $container->shouldReceive('has')

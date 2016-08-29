@@ -19,10 +19,10 @@
     ],
     "require": {
         "php"                                                : "7.0.0 - 7.0.5 || ^7.0.7",
-        "container-interop/container-interop"                : "^1.1",
-        "jeremeamia/SuperClosure"                            : "^2.2",
-        "narrowspark/arr"                                    : "^1.1",
         "cakephp/chronos"                                    : "^1.0",
+        "container-interop/container-interop"                : "^1.1",
+        "narrowspark/arr"                                    : "^1.1",
+        "opis/closure"                                       : "^2.2.1",
         "symfony/process"                                    : "^3.1",
         "viserio/cotracts"                                   : "self.version",
         "viserio/console"                                    : "self.version",
