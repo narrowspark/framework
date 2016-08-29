@@ -5,7 +5,7 @@ namespace Viserio\Queue\Connectors;
 use Closure;
 use DateTimeInterface;
 use Exception;
-use SuperClosure\Serializer;
+use Opis\Closure\SerializableClosure;
 use Viserio\Contracts\Container\Traits\ContainerAwareTrait;
 use Viserio\Contracts\Encryption\Encrypter as EncrypterContract;
 use Viserio\Contracts\Queue\QueueConnector as QueueConnectorContract;
@@ -162,7 +162,7 @@ abstract class AbstractQueue implements QueueConnectorContract
     protected function createClosurePayload(Closure $job, $data): array
     {
         $closure = $this->getEncrypter()->encrypt(
-            (new Serializer())->serialize($job)
+            serialize(new SerializableClosure($job))
         );
 
         return ['job' => QueueClosure::class, 'data' => compact('closure')];

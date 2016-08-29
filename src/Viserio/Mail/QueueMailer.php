@@ -4,7 +4,7 @@ namespace Viserio\Mail;
 
 use Closure;
 use InvalidArgumentException;
-use SuperClosure\Serializer;
+use Opis\Closure\SerializableClosure;
 use Swift_Mailer;
 use Viserio\Contracts\Container\Traits\ContainerAwareTrait;
 use Viserio\Contracts\Mail\QueueMailer as QueueMailerContract;
@@ -12,18 +12,10 @@ use Viserio\Contracts\Queue\Job as JobContract;
 use Viserio\Contracts\Queue\Queue as QueueContract;
 use Viserio\Contracts\View\Factory as ViewFactoryContract;
 use Viserio\Support\Invoker;
-use Viserio\Support\Str;
 
 class QueueMailer extends Mailer implements QueueMailerContract
 {
     use ContainerAwareTrait;
-
-    /**
-     * The super closure serializer instance.
-     *
-     * @var \SuperClosure\Serializer|null
-     */
-    protected $serializer;
 
     /**
      * Create a new Mailer instance.
@@ -31,42 +23,15 @@ class QueueMailer extends Mailer implements QueueMailerContract
      * @param \Swift_Mailer                   $swift
      * @param \Viserio\Contracts\View\Factory $views
      * @param \Viserio\Contracts\Queue\Queue  $queue
-     * @param \SuperClosure\Serializer        $serializer
      */
     public function __construct(
         Swift_Mailer $swift,
         ViewFactoryContract $views,
-        QueueContract $queue,
-        Serializer $serializer
+        QueueContract $queue
     ) {
         $this->swift = $swift;
         $this->views = $views;
         $this->queue = $queue;
-        $this->serializer = $serializer;
-    }
-
-    /**
-     * Set super closure serializer instance.
-     *
-     * @param \SuperClosure\Serializer $serializer
-     *
-     * @return $this
-     */
-    public function setSerializer(Serializer $serializer): QueueMailerContract
-    {
-        $this->serializer = $serializer;
-
-        return $this;
-    }
-
-    /**
-     * Get super closure serializer instance.
-     *
-     * @return \SuperClosure\Serializer
-     */
-    public function getSerializer(): Serializer
-    {
-        return $this->serializer;
     }
 
     /**
@@ -165,7 +130,7 @@ class QueueMailer extends Mailer implements QueueMailerContract
             return $callback;
         }
 
-        return $this->serializer->serialize($callback);
+        return serialize(new SerializableClosure($callback));
     }
 
     /**
@@ -177,8 +142,8 @@ class QueueMailer extends Mailer implements QueueMailerContract
      */
     protected function getQueuedCallable(array $data)
     {
-        if (Str::contains($data['callback'], 'SerializableClosure')) {
-            return $this->serializer->unserialize($data['callback']);
+        if (strpos($data['callback'], 'SerializableClosure') !== false) {
+            return unserialize($data['callback']);
         }
 
         return $data['callback'];
