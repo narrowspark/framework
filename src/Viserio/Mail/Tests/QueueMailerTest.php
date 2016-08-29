@@ -178,7 +178,7 @@ class QueueMailerTest extends \PHPUnit_Framework_TestCase
         return [
             $this->mock(Swift_Mailer::class),
             $this->mock(ViewFactoryContract::class),
-            $this->mock(QueueContract::class)
+            $this->mock(QueueContract::class),
         ];
     }
 }

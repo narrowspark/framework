@@ -4,8 +4,8 @@ namespace Viserio\Mail;
 
 use Closure;
 use InvalidArgumentException;
-use Swift_Mailer;
 use Opis\Closure\SerializableClosure;
+use Swift_Mailer;
 use Viserio\Contracts\Container\Traits\ContainerAwareTrait;
 use Viserio\Contracts\Mail\QueueMailer as QueueMailerContract;
 use Viserio\Contracts\Queue\Job as JobContract;
