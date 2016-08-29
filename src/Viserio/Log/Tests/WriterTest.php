@@ -17,19 +17,6 @@ class WriterTest extends \PHPUnit_Framework_TestCase
 {
     use MockeryTrait;
 
-    public function testSetAndGetDispatcher()
-    {
-        $monolog = $this->mock(Logger::class);
-        $monolog
-            ->shouldReceive('pushProcessor')
-            ->once();
-
-        $writer = new Writer($monolog);
-        $writer->setEventDispatcher($this->getEventsDispatcher());
-
-        $this->assertInstanceOf(Dispatcher::class, $writer->getEventDispatcher());
-    }
-
     public function testGetMonolog()
     {
         $writer = new Writer(new Logger('name'));
@@ -253,19 +240,6 @@ class WriterTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals([], $_SERVER['__log.context']);
 
         unset($_SERVER['__log.context']);
-    }
-
-    /**
-     * @expectedException RuntimeException
-     */
-    public function testGetEventDispatcher()
-    {
-        $monolog = $this->mock(Logger::class);
-        $monolog
-            ->shouldReceive('pushProcessor')
-            ->once();
-        $writer = new Writer($monolog);
-        $writer->getEventDispatcher();
     }
 
     public function testMessageInput()

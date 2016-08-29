@@ -11,10 +11,12 @@ use Viserio\Contracts\Log\Log as LogContract;
 use Viserio\Contracts\Support\Arrayable;
 use Viserio\Contracts\Support\Jsonable;
 use Viserio\Log\Traits\ParseLevelTrait;
+use Viserio\Contracts\Events\Traits\EventsAwareTrait;
 
 class Writer implements LogContract
 {
     use ParseLevelTrait;
+    use EventsAwareTrait;
 
     /**
      * The Monolog logger instance.
@@ -22,13 +24,6 @@ class Writer implements LogContract
      * @var \Monolog\Logger
      */
     protected $monolog;
-
-    /**
-     * The event dispatcher instance.
-     *
-     * @var \Viserio\Contracts\Events\Dispatcher|null
-     */
-    protected $dispatcher;
 
     /**
      * The handler parser instance.
@@ -43,7 +38,7 @@ class Writer implements LogContract
      * @param \Monolog\Logger                           $monolog
      * @param \Viserio\Contracts\Events\Dispatcher|null $dispatcher
      */
-    public function __construct(MonologLogger $monolog, DispatcherContract $dispatcher = null)
+    public function __construct(MonologLogger $monolog, DispatcherContract $events = null)
     {
         // PSR 3 log message formatting for all handlers
         $monolog->pushProcessor(new PsrLogMessageProcessor());
@@ -51,7 +46,7 @@ class Writer implements LogContract
         $this->handlerParser = new HandlerParser($monolog);
 
         $this->monolog = $this->handlerParser->getMonolog();
-        $this->dispatcher = $dispatcher;
+        $this->events = $events;
     }
 
     /**
@@ -215,45 +210,6 @@ class Writer implements LogContract
     }
 
     /**
-     * Set the event dispatcher instance.
-     *
-     * @param \Viserio\Contracts\Events\Dispatcher $dispatcher
-     */
-    public function setEventDispatcher(DispatcherContract $dispatcher)
-    {
-        $this->dispatcher = $dispatcher;
-    }
-
-    /**
-     * Get the event dispatcher instance.
-     *
-     * @return \Viserio\Contracts\Events\Dispatcher
-     */
-    public function getEventDispatcher(): DispatcherContract
-    {
-        if ($this->dispatcher === null) {
-            throw new RuntimeException('Events dispatcher has not been set.');
-        }
-
-        return $this->dispatcher;
-    }
-
-    /**
-     * Emit a log event.
-     *
-     * @param string $level
-     * @param string $message
-     * @param array  $context
-     */
-    protected function emitLogEvent(string $level, string $message, array $context = [])
-    {
-        // If the event dispatcher is set, we will pass along the parameters to the
-        // log listeners. These are useful for building profilers or other tools
-        // that aggregate all of the log messages for a given "request" cycle.
-        $this->getEventDispatcher()->emit('viserio.log', compact('level', 'message', 'context'));
-    }
-
-    /**
      * Format the parameters for the logger.
      *
      * @param mixed $message
@@ -284,8 +240,11 @@ class Writer implements LogContract
     {
         $message = $this->formatMessage($message);
 
-        if ($this->dispatcher !== null) {
-            $this->emitLogEvent($level, $message, $context);
+        if ($this->events !== null) {
+            // If the event dispatcher is set, we will pass along the parameters to the
+            // log listeners. These are useful for building profilers or other tools
+            // that aggregate all of the log messages for a given "request" cycle.
+            $this->getEventsDispatcher()->emit('viserio.log', compact('level', 'message', 'context'));
         }
 
         $this->monolog->{$level}($message, $context);
