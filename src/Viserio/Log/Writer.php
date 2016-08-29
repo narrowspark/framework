@@ -7,11 +7,11 @@ use Monolog\Logger as MonologLogger;
 use Monolog\Processor\PsrLogMessageProcessor;
 use RuntimeException;
 use Viserio\Contracts\Events\Dispatcher as DispatcherContract;
+use Viserio\Contracts\Events\Traits\EventsAwareTrait;
 use Viserio\Contracts\Log\Log as LogContract;
 use Viserio\Contracts\Support\Arrayable;
 use Viserio\Contracts\Support\Jsonable;
 use Viserio\Log\Traits\ParseLevelTrait;
-use Viserio\Contracts\Events\Traits\EventsAwareTrait;
 
 class Writer implements LogContract
 {
