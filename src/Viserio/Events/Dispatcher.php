@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Events;
 
-use Interop\Container\ContainerInterface as ContainerContract;
+use Interop\Container\ContainerInterface;
 use Viserio\Contracts\Container\Traits\ContainerAwareTrait;
 use Viserio\Contracts\Events\Dispatcher as DispatcherContract;
 use Viserio\Events\Traits\ValidateNameTrait;
@@ -51,9 +51,9 @@ class Dispatcher implements DispatcherContract
     /**
      * Create a new event dispatcher instance.
      *
-     * @param ContainerContract $container
+     * @param \Interop\Container\ContainerInterface $container
      */
-    public function __construct(ContainerContract $container)
+    public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
 
