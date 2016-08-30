@@ -8,7 +8,6 @@ use Viserio\Container\Exception\ContainerException;
 use Viserio\Container\Exception\NotFoundException;
 use Viserio\Container\Traits\ContainerArrayAccessTrait;
 use Viserio\Container\Traits\ContainerResolverTraits;
-use Viserio\Container\Traits\MockerContainerTrait;
 use Viserio\Contracts\Container\Container as ContainerContract;
 
 /**
@@ -24,7 +23,7 @@ class Container implements \ArrayAccess, ContainerInteropInterface, ContainerCon
      * Array Access Support
      * Mock Support
      */
-    use ContainerArrayAccessTrait, MockerContainerTrait, ContainerResolverTraits;
+    use ContainerArrayAccessTrait, ContainerResolverTraits;
 
     /**
      * The contextual binding map.
