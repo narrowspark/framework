@@ -2,574 +2,399 @@
 declare(strict_types=1);
 namespace Viserio\Container;
 
-use Interop\Container\ContainerInterface as ContainerInteropInterface;
-use Viserio\Container\Exception\BindingResolutionException;
-use Viserio\Container\Exception\ContainerException;
-use Viserio\Container\Exception\NotFoundException;
-use Viserio\Container\Traits\ContainerArrayAccessTrait;
-use Viserio\Container\Traits\ContainerResolverTraits;
+use ArrayAccess;
+use InvalidArgumentException;
+use Interop\Container\ContainerInterface;
+use Invoker\Invoker;
+use Invoker\InvokerInterface;
+use Invoker\ParameterResolver\AssociativeArrayResolver;
+use Invoker\ParameterResolver\Container\ParameterNameContainerResolver;
+use Invoker\ParameterResolver\Container\TypeHintContainerResolver;
+use Invoker\ParameterResolver\DefaultValueResolver;
+use Invoker\ParameterResolver\NumericArrayResolver;
+use Invoker\ParameterResolver\ResolverChain;
+use Viserio\Container\Proxy\ProxyFactory;
 use Viserio\Contracts\Container\Container as ContainerContract;
 
-/**
- * Container.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.4
- */
-class Container implements \ArrayAccess, ContainerInteropInterface, ContainerContract
+class Container implements ArrayAccess, ContainerInterface, ContainerContract, InvokerInterface
 {
-    /*
-     * Array Access Support
-     * Mock Support
-     */
-    use ContainerArrayAccessTrait, ContainerResolverTraits;
-
     /**
-     * The contextual binding map.
-     *
-     * @var array
-     */
-    public $contextual = [];
-
-    /**
-     * The registered type aliases.
-     *
-     * @var array
-     */
-    protected $aliases = [];
-
-    /**
-     * Array containing every binding in the container.
+     * The container's bindings.
      *
      * @var array
      */
     protected $bindings = [];
 
     /**
-     * Array containing every singleton in the container.
+     * Invoker instance.
      *
-     * @var array
+     * @var \Invoker\InvokerInterface|null
      */
-    protected $singletons = [];
+    private $invoker;
 
     /**
-     * Array containing frozen instances.
+     * Array full of container implementing the ContainerInterface.
      *
-     * @var array
+     * @var \Interop\Container\ContainerInterface[]
      */
-    protected $frozen = [];
+    protected $delegates = [];
 
     /**
-     * Array containing every non-object binding.
+     * Autowiring to guess injections.
      *
-     * @var array
-     */
-    protected $values = [];
-
-    /**
-     * Array containing every key.
+     * Enabled by default.
      *
-     * @var array
+     * @var bool
      */
-    protected $keys = [];
+    private $useAutowiring = true;
 
     /**
-     * @var array
-     */
-    protected $inflectors = [];
-
-    /**
-     * The stack of concretions being current built.
+     * ProxyFactory instance.
      *
-     * @var array
+     * @var \Viserio\Container\Proxy\ProxyFactory
      */
-    protected $buildStack = [];
+    private $proxyFactory;
 
     /**
-     * Alias a type to a different name.
+     * Create a new container instance.
+     *
+     * @param bool        $writeProxiesToFile
+     * @param string|null $proxyDirectory
+     */
+    public function __construct(bool $writeProxiesToFile, string $proxyDirectory = null)
+    {
+        $this->proxyFactory = new ProxyFactory($writeProxiesToFile, $proxyDirectory);
+
+        // Auto-register the container
+        $this->singleton(Container::class, $this);
+        $this->singleton(ContainerContract::class, $this);
+        $this->singleton(ContainerInteropInterface::class, $this);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function bind($abstract, $concrete = null)
+    {
+        $abstract = $this->normalize($abstract);
+        $concrete = ($concrete) ? $this->normalize($concrete) : $abstract;
+
+        if (is_array($abstract)) {
+            $this->bindService(key($abstract), $concrete);
+            $this->alias(key($abstract), current($abstract));
+        } else {
+            $this->bindService($abstract, $concrete);
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function bindIf(string $abstract, $concrete = null)
+    {
+        if (!$this->has($abstract)) {
+            $this->bind($abstract, $concrete);
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function instance(string $abstract, $instance)
+    {
+        $abstract = $this->normalize($abstract);
+
+        if (is_array($abstract)) {
+            $this->bindPlain(key($abstract), $instance);
+            $this->alias(key($abstract), current($abstract));
+        } else {
+            $this->bindPlain($abstract, $instance);
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function singleton($abstract, $concrete = null)
+    {
+        $abstract = $this->normalize($abstract);
+        $concrete = ($concrete) ? $this->normalize($concrete) : $abstract;
+
+        if (is_array($abstract)) {
+            $this->bindSingleton(key($abstract), $concrete);
+            $this->alias(key($abstract), current($abstract));
+        } else {
+            $this->bindSingleton($abstract, $concrete);
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function alias(string $abstract, string $alias)
+    {
+        $alias = $this->normalize($alias);
+        $abstract = $this->normalize($abstract);
+
+        $this->bindings[$alias] = &$this->bindings[$abstract];
+    }
+
+    /**
+     * Returns an entry of the container by its name.
+     *
+     * @param string $name Entry name or a class name.
+     *
+     * @throws InvalidArgumentException The name parameter must be of type string.
+     * @throws DependencyException      Error while resolving the entry.
+     * @throws NotFoundException        No entry found for the given name.
+     *
+     * @return mixed
+     */
+    public function get($id)
+    {
+        if (! is_string($id)) {
+            throw new InvalidArgumentException(sprintf(
+                'The name parameter must be of type string, %s given',
+                is_object($id) ? get_class($id) : gettype($id)
+            ));
+        }
+
+        if ($resolved = $this->getFromDelegate($alias, $args)) {
+
+        }
+
+        throw new NotFoundException(
+            sprintf('Alias (%s) is not being managed by the container', $id)
+        );
+    }
+
+    /**
+     * Test if the container can provide something for the given name.
+     *
+     * @param string $name Entry name or a class name.
+     *
+     * @throws InvalidArgumentException The name parameter must be of type string.
+     *
+     * @return bool
+     */
+    public function has($id)
+    {
+        if (! is_string($id)) {
+            throw new InvalidArgumentException(sprintf(
+                'The name parameter must be of type string, %s given',
+                is_object($id) ? get_class($id) : gettype($id)
+            ));
+        }
+
+        $id = $this->normalize($id);
+
+        if (is_string($id) && isset($this->bindings[$id])) {
+            return true;
+        }
+
+        return $this->hasInDelegate($id);
+    }
+
+    /**
+     * Enable or disable the use of autowiring to guess injections.
+     *
+     * @param bool $bool
+     *
+     * @return \Viserio\Contracts\Container\Container
+     */
+    public function useAutowiring(bool $bool): ContainerContract
+    {
+        $this->useAutowiring = $bool;
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function call($callable, array $parameters = [])
+    {
+        return $this->getInvoker()->call($callable, $parameters);
+    }
+
+    /**
+     * Delegate a backup container to be checked for services if it
+     * cannot be resolved via this container.
+     *
+     * @param \Interop\Container\ContainerInterface $container
+     *
+     * @return $this
+     */
+    public function delegate(InteropContainerInterface $container): ContainerContract
+    {
+        $this->delegates[] = $container;
+
+        return $this;
+    }
+
+    /**
+     * Returns true if service is registered in one of the delegated backup containers.
      *
      * @param string $alias
+     *
+     * @return boolean
+     */
+    public function hasInDelegate($abstract)
+    {
+        foreach ($this->delegates as $container) {
+            if ($container->has($abstract)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Set the value at a given offset
+     *
+     * @param string $offset
+     * @param mixed  $value
+     */
+    public function offsetSet($offset, $value)
+    {
+        if (is_string($value)) {
+            $this->bindPlain($offset, $value);
+        } else {
+            $this->bindService($offset, $value);
+        }
+    }
+
+    /**
+     * Get the value at a given offset
+     *
+     * @param string $offset
+     *
+     * @return mixed
+     */
+    public function offsetGet($offset)
+    {
+        return $this->resolve($offset);
+    }
+
+    /**
+     * Unset the value at a given offset
+     *
+     * @param string $offset
+     */
+    public function offsetUnset($offset)
+    {
+        unset($this->bindings[$offset]);
+    }
+
+    /**
+     * Determine if a given offset exists
+     *
+     * @param string $offset
+     *
+     * @return boolean
+     */
+    public function offsetExists($offset)
+    {
+        return isset($this->bindings[$offset]);
+    }
+
+    /**
+     * Attempt to get a service from the stack of delegated backup containers.
+     *
      * @param string $abstract
-     */
-    public function alias(string $alias, string $abstract)
-    {
-        $this->keys[$alias] = true;
-        $this->keys[$abstract] = true;
-        $this->aliases[$alias] = $abstract;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function singleton($alias, $concrete = null)
-    {
-        return $this->bind($alias, $concrete, true);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function bind(string $alias, $concrete = null, $singleton = false)
-    {
-        $this->notFrozen($alias);
-
-        // If the given types are actually an array, we will assume an alias is being
-        // defined and will grab this "real" abstract class name and register this
-        // alias with the container so that it can be used as a shortcut for it.
-        if (is_array($alias)) {
-            list($alias, $abstract) = $this->extractAlias($alias);
-            $this->alias($alias, $abstract);
-        }
-
-        if (! is_object($alias)) {
-            $this->keys[$alias] = true;
-        }
-
-        // If the given type is actually an string, we will register this value
-        // with the container so that it can be used.
-        if ($this->shouldNotBeDefinitionObject($alias, $concrete)) {
-            $this->values[$alias] = $concrete;
-
-            return $concrete;
-        }
-
-        // If no concrete type was given, we will simply set the concrete type to the
-        // abstract type. This will allow concrete type to be registered as shared
-        // without being forced to state their classes in both of the parameter.
-        $this->dropStaleSingletons($alias);
-
-        if (null === $concrete) {
-            $concrete = $alias;
-        }
-
-        // if the concrete is an already instantiated object, we just store it
-        // as a singleton
-        if ($this->shouldBeDefinitionObject($concrete)) {
-            $concrete = new Definition($this, $concrete);
-        }
-
-        $this->bindings[$alias] = compact('concrete', 'singleton');
-
-        return $this->bindings[$alias]['concrete'];
-    }
-
-    /**
-     * Resolve the given type from the container.
-     *
-     * @param string $alias
      * @param array  $args
-     *
-     * @throws NotFoundException
      *
      * @return mixed
      */
-    public function make($alias, array $args = [])
+    protected function getFromDelegate(string $abstract, array $args = [])
     {
-        $alias = $this->getAlias($alias);
-
-        if (! $this->bound($alias)) {
-            throw new NotFoundException(sprintf('Binding [%s] does not exists in the container bindings', $alias));
-        }
-
-        // If an instance of the type is currently being managed as a singleton we'll
-        // just return an existing instance instead of instantiating new instances
-        // so the developer can keep using the same objects instance every time.
-        if (isset($this->singletons[$alias])) {
-            $this->frozen[$alias] = true;
-
-            return $this->applyInflectors($this->singletons[$alias]);
-        }
-
-        if (isset($this->values[$alias])) {
-            $this->frozen[$alias] = true;
-
-            return $this->values[$alias];
-        }
-
-        $concrete = $this->getConcrete($alias);
-
-        if ($this->isBuildable($concrete, $alias)) {
-            $object = $this->build($concrete, $args);
-        } else {
-            $object = $this->make($concrete, $args);
-        }
-
-        // If the requested type is registered as a singleton we'll want to cache off
-        // the instances in "memory" so we can return it later without creating an
-        // entirely new instance of an object on each subsequent request for it.
-        if ($this->isSingleton($alias)) {
-            $this->singletons[$alias] = $object;
-        }
-
-        $this->frozen[$alias] = true;
-
-        return $this->applyInflectors($object);
-    }
-
-    /**
-     * Build a concrete instance of a class.
-     *
-     * @param string $concrete The name of the class to buld.
-     * @param array  $args
-     *
-     * @throws BindingResolutionException
-     *
-     * @return mixed The instantiated class.
-     */
-    public function build($concrete, array $args = [])
-    {
-        // If the concrete type is actually a Closure, we will just execute it and
-        // hand back the results of the functions, which allows functions to be
-        // used as resolvers for more fine-tuned resolution of these objects.
-        if ($concrete instanceof \Closure) {
-            return $concrete($this, $args);
-        }
-
-        $instances = $this->reflect($concrete, $args);
-
-        return $instances;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function inflector(string $type, callable $callback = null)
-    {
-        if (is_null($callback)) {
-            $inflector = new Inflector();
-            $this->inflectors[$type] = $inflector;
-
-            return $inflector;
-        }
-
-        $this->inflectors[$type] = $callback;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function when($concrete): \Viserio\Contracts\Container\ContextualBindingBuilder
-    {
-        $contextualBindingBuilder = new ContextualBindingBuilder($concrete);
-        $contextualBindingBuilder->setContainer($this);
-
-        return $contextualBindingBuilder;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function isRegistered($alias)
-    {
-        return isset($this->keys[$alias]);
-    }
-
-    /**
-     * Determine if a given string is an alias.
-     *
-     * @param string $name
-     *
-     * @return bool
-     */
-    public function isAlias($name)
-    {
-        return isset($this->aliases[$name]);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function isSingleton(string $alias): bool
-    {
-        if (isset($this->bindings[$alias]['singleton'])) {
-            $singleton = $this->bindings[$alias]['singleton'];
-        } else {
-            $singleton = false;
-        }
-
-        return isset($this->singletons[$alias]) || $singleton === true;
-    }
-
-    /**
-     * Determine if the given abstract type has been bound.
-     *
-     * @param string $alias
-     *
-     * @return bool
-     */
-    public function bound(string $alias): bool
-    {
-        return
-            isset($this->bindings[$alias]) ||
-            $this->isSingleton($alias) ||
-            $this->isAlias($alias) ||
-            isset($this->values[$alias])
-        ;
-    }
-
-    /**
-     * Call the given Closure and inject its dependencies.
-     *
-     * @param callable $callable
-     * @param array    $args
-     *
-     * @throws \RuntimeException
-     *
-     * @return mixed
-     */
-    public function call(callable $callable, array $args = [])
-    {
-    }
-
-    /**
-     * Extend an existing binding.
-     *
-     * @param string   $binding The name of the binding to extend.
-     * @param \Closure $closure The function to use to extend the existing binding.
-     *
-     * @throws ContainerException
-     */
-    public function extend(string $binding, \Closure $closure)
-    {
-        $boundObject = $this->getRaw($binding);
-
-        if (null === $boundObject) {
-            throw new ContainerException(
-                sprintf('Cannot extend %s because it has not yet been bound.', $binding)
-            );
-        }
-
-        $this->bind($binding, function ($container) use ($closure, $boundObject) {
-            return $closure($container, $boundObject($container));
-        });
-    }
-
-    /**
-     * Get the raw object prior to resolution.
-     *
-     * @param string $binding The $binding key to get the raw value from.
-     *
-     * @return string Value of the $binding.
-     */
-    public function getRaw($binding)
-    {
-        if (isset($this->bindings[$binding])) {
-            return $this->bindings[$binding]['concrete'];
-        }
-    }
-
-    /**
-     * Get the container's bindings.
-     *
-     * @return array
-     */
-    public function getBindings()
-    {
-        return $this->bindings;
-    }
-
-    /**
-     * Get the container's values.
-     *
-     * @return array
-     */
-    public function getValues()
-    {
-        return $this->values;
-    }
-
-    /**
-     * Get the container's values.
-     *
-     * @return array
-     */
-    public function getKeys()
-    {
-        return $this->keys;
-    }
-
-    /**
-     * Add a contextual binding to the container.
-     *
-     * @param string          $concrete
-     * @param string          $alias
-     * @param \Closure|string $implementation
-     */
-    public function addContextualBinding($concrete, $alias, $implementation)
-    {
-        $this->contextual[$concrete][$alias] = $implementation;
-    }
-
-    /**
-     * Get the alias for an abstract if available.
-     *
-     * @param string $alias
-     *
-     * @return string
-     */
-    protected function getAlias($alias)
-    {
-        return isset($this->aliases[$alias]) ? $this->aliases[$alias] : $alias;
-    }
-
-    /**
-     * Apply any active inflectors to the resolved object.
-     *
-     * @param object $object
-     *
-     * @return object
-     */
-    protected function applyInflectors($object)
-    {
-        foreach ($this->inflectors as $type => $inflector) {
-            if (! $object instanceof $type) {
-                continue;
+        foreach ($this->delegates as $container) {
+            if ($container->has($abstract)) {
+                return $container->get($abstract, $args);
             }
 
-            if ($inflector instanceof Inflector) {
-                $inflector->setContainer($this);
-                $inflector->inflect($object);
-                continue;
-            }
-
-            // must be dealing with a callable as the inflector
-            call_user_func_array($inflector, [$object]);
+            continue;
         }
 
-        return $object;
+        return false;
     }
 
     /**
-     * Get the contextual concrete binding for the given abstract.
+     * Bind a plain value.
      *
-     * @param string $alias
-     *
-     * @return string
-     */
-    protected function getContextualConcrete($alias)
-    {
-        if (isset($this->contextual[end($this->buildStack)][$alias])) {
-            return $this->contextual[end($this->buildStack)][$alias];
-        }
-    }
-
-    /**
-     * Get the concrete type for a given abstract.
-     *
-     * @param string $alias
-     *
-     * @return mixed $concrete
-     */
-    protected function getConcrete($alias)
-    {
-        if (null !== ($concrete = $this->getContextualConcrete($alias))) {
-            return $concrete;
-        }
-
-        // If we don't have a registered resolver or concrete for the type, we'll just
-        // assume each type is a concrete name and will attempt to resolve it as is
-        // since the container should be able to resolve concretes automatically.
-        if (! isset($this->bindings[$alias])) {
-            if (isset($this->bindings[$this->absoluteClassName($alias)])) {
-                $alias = $this->absoluteClassName($alias);
-            }
-
-            return $alias;
-        }
-
-        return $this->bindings[$alias]['concrete'];
-    }
-
-    /**
-     * Check if class is frozen.
-     *
-     * @param string $concrete
-     *
-     * @throws ContainerException
-     */
-    protected function notFrozen($concrete)
-    {
-        if (isset($this->frozen[$concrete])) {
-            throw new ContainerException(sprintf('Cannot override frozen service [%s]', $concrete));
-        }
-    }
-
-    /**
-     * Drop all of the stale instances and aliases.
-     *
-     * @param string $alias
-     */
-    protected function dropStaleSingletons($alias)
-    {
-        unset($this->singletons[$alias], $this->aliases[$alias]);
-    }
-
-    /**
-     * Determine if the given concrete is buildable.
-     *
+     * @param string $abstract
      * @param mixed  $concrete
-     * @param string $alias
-     *
-     * @return bool
      */
-    protected function isBuildable($concrete, $alias)
+    protected function bindPlain(string $abstract, $concrete)
     {
-        return $concrete === $alias || $concrete instanceof \Closure;
+        $this->bindings[$abstract] = [
+            self::VALUE => $concrete,
+            self::IS_RESOLVED => false,
+            self::BINDING_TYPE => self::TYPE_PLAIN
+        ];
     }
 
     /**
-     * Extract the type and alias from a given definition.
+     * Bind a value which need to be resolved each time.
      *
-     * @param array $definition
-     *
-     * @return array
+     * @param string $abstract
+     * @param mixed  $concrete
      */
-    protected function extractAlias(array $definition)
+    protected function bindService(string $abstract, $concrete)
     {
-        return [key($definition), current($definition)];
+        $this->bindings[$abstract] = [
+            self::VALUE => $concrete,
+            self::IS_RESOLVED => false,
+            self::BINDING_TYPE => self::TYPE_SERVICE
+        ];
     }
 
     /**
-     * Check if the specified concrete definiton should be a
-     * definition object.
+     * Bind a value which need to be resolved one time.
      *
-     * @param string|object|\Closure $concrete The concrete definition
-     *
-     * @return bool
+     * @param string $abstract
+     * @param mixed  $concrete
      */
-    protected function shouldBeDefinitionObject($concrete)
+    protected function bindSingleton(string $abstract, $concrete)
     {
-        return
-            is_object($concrete) && ! $concrete instanceof \Closure || is_string($concrete)
-        ;
+        $this->bindings[$abstract] = [
+            self::VALUE => $concrete,
+            self::IS_RESOLVED => false,
+            self::BINDING_TYPE => self::TYPE_SINGLETON
+        ];
     }
 
     /**
-     * Check if the specified concrete definiton should be not a
-     * definition object.
+     * Normalize the given class name by removing leading slashes.
      *
-     * @param string|object|\Closure $alias
-     * @param string|\Closure|null   $concrete
+     * @param mixed $service
      *
-     * @return bool
+     * @return mixed
      */
-    protected function shouldNotBeDefinitionObject($alias, $concrete)
+    private function normalize($service)
     {
-        return
-            is_string($alias) && (! is_object($concrete) && ! $concrete instanceof \Closure && (is_string($concrete) || null !== $concrete))
-        ;
+        return is_string($service) ? ltrim($service, '\\') : $service;
     }
 
     /**
-     * Returns absolute class name - always with leading backslash.
+     * Get a configured instance of invoker.
      *
-     * @param string $className
-     *
-     * @return string
+     * @return \Invoker\InvokerInterface
      */
-    protected function absoluteClassName($className)
+    private function getInvoker(): InvokerInterface
     {
-        return (substr($className, 0, 1) === '\\') ? $className : '\\' . $className;
+        if (! $this->invoker) {
+            $parameterResolver = new ResolverChain([
+                new NumericArrayResolver,
+                new AssociativeArrayResolver,
+                new DefaultValueResolver,
+                new TypeHintContainerResolver($this),
+                new ParameterNameContainerResolver($this)
+            ]);
+
+            $this->invoker = new Invoker($parameterResolver, $this);
+        }
+
+        return $this->invoker;
     }
 }

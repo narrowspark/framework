@@ -56,7 +56,6 @@
         "psr/http-message"                                   : "^1.0",
         "psy/psysh"                                          : "^0.6",
         "ramsey/uuid"                                        : "^3.4",
-        "roave/better-reflection"                            : "^1.1",
         "roave/security-advisories"                          : "dev-master",
         "schnittstabil/csrf-tokenservice"                    : "^2.0",
         "stecman/symfony-console-completion"                 : "^0.6",

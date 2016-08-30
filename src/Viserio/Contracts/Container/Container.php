@@ -2,15 +2,25 @@
 declare(strict_types=1);
 namespace Viserio\Contracts\Container;
 
-/**
- * Container.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.4
- */
 interface Container
 {
+    const TYPE_PLAIN = 0;
+
+    const TYPE_SERVICE = 1;
+
+    /**
+     * A singleton entry will be computed once and shared.
+     *
+     * For a class, only a single instance of the class will be created.
+     */
+    const TYPE_SINGLETON = 2;
+
+    const VALUE = 0;
+
+    const IS_RESOLVED = 1;
+
+    const BINDING_TYPE = 2;
+
     /**
      * Alias a type to a different name.
      *
@@ -22,11 +32,18 @@ interface Container
     /**
      * Register a binding with the container.
      *
-     * @param string               $alias
+     * @param string|array         $abstract
      * @param \Closure|string|null $concrete
-     * @param bool                 $singleton
      */
-    public function bind(string $alias, $concrete = null, $singleton = false);
+    public function bind($abstract, $concrete = null);
+
+    /**
+     * Register a binding if it hasn't already been registered.
+     *
+     * @param  string                $abstract
+     * @param  \Closure|string|null  $concrete
+     */
+    public function bindIf(string $abstract, $concrete = null);
 
     /**
      * Register a shared binding in the container.
@@ -35,6 +52,14 @@ interface Container
      * @param \Closure|string|null $concrete
      */
     public function singleton($abstract, $concrete = null);
+
+    /**
+     * Register an existing instance as shared in the container.
+     *
+     * @param string $abstract
+     * @param mixed  $instance
+     */
+    public function instance(string $abstract, $instance);
 
     /**
      * Resolve the given type from the container.
@@ -92,15 +117,6 @@ interface Container
     public function when($concrete): \Viserio\Contracts\Container\ContextualBindingBuilder;
 
     /**
-     * Determine if the given abstract type has been bound.
-     *
-     * @param string $abstract
-     *
-     * @return bool
-     */
-    public function bound(string $abstract): bool;
-
-    /**
      * Check if an item is being managed as a singleton.
      *
      * @param string $alias
@@ -108,16 +124,4 @@ interface Container
      * @return bool
      */
     public function isSingleton(string $alias): bool;
-
-    /**
-     * Call the given Closure and inject its dependencies.
-     *
-     * @param callable $callable
-     * @param array    $args
-     *
-     * @throws \RuntimeException
-     *
-     * @return mixed
-     */
-    public function call(callable $callable, array $args = []);
 }
