@@ -3,12 +3,12 @@ declare(strict_types=1);
 namespace Viserio\Container\Proxy;
 
 use Closure;
-use RuntimeException;
 use ProxyManager\Configuration;
 use ProxyManager\Factory\LazyLoadingValueHolderFactory;
 use ProxyManager\FileLocator\FileLocator;
 use ProxyManager\GeneratorStrategy\EvaluatingGeneratorStrategy;
 use ProxyManager\GeneratorStrategy\FileWriterGeneratorStrategy;
+use RuntimeException;
 
 class ProxyFactory
 {

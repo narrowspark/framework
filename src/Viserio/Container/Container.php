@@ -3,8 +3,8 @@ declare(strict_types=1);
 namespace Viserio\Container;
 
 use ArrayAccess;
-use InvalidArgumentException;
 use Interop\Container\ContainerInterface;
+use InvalidArgumentException;
 use Invoker\Invoker;
 use Invoker\InvokerInterface;
 use Invoker\ParameterResolver\AssociativeArrayResolver;
@@ -160,7 +160,6 @@ class Container implements ArrayAccess, ContainerInterface, ContainerContract, I
         }
 
         if ($resolved = $this->getFromDelegate($alias, $args)) {
-
         }
 
         throw new NotFoundException(
@@ -237,7 +236,7 @@ class Container implements ArrayAccess, ContainerInterface, ContainerContract, I
      *
      * @param string $alias
      *
-     * @return boolean
+     * @return bool
      */
     public function hasInDelegate($abstract)
     {
@@ -246,6 +245,7 @@ class Container implements ArrayAccess, ContainerInterface, ContainerContract, I
                 return true;
             }
         }
+
         return false;
     }
 
@@ -291,7 +291,7 @@ class Container implements ArrayAccess, ContainerInterface, ContainerContract, I
      *
      * @param string $offset
      *
-     * @return boolean
+     * @return bool
      */
     public function offsetExists($offset)
     {
@@ -330,7 +330,7 @@ class Container implements ArrayAccess, ContainerInterface, ContainerContract, I
         $this->bindings[$abstract] = [
             self::VALUE => $concrete,
             self::IS_RESOLVED => false,
-            self::BINDING_TYPE => self::TYPE_PLAIN
+            self::BINDING_TYPE => self::TYPE_PLAIN,
         ];
     }
 
@@ -345,7 +345,7 @@ class Container implements ArrayAccess, ContainerInterface, ContainerContract, I
         $this->bindings[$abstract] = [
             self::VALUE => $concrete,
             self::IS_RESOLVED => false,
-            self::BINDING_TYPE => self::TYPE_SERVICE
+            self::BINDING_TYPE => self::TYPE_SERVICE,
         ];
     }
 
@@ -360,7 +360,7 @@ class Container implements ArrayAccess, ContainerInterface, ContainerContract, I
         $this->bindings[$abstract] = [
             self::VALUE => $concrete,
             self::IS_RESOLVED => false,
-            self::BINDING_TYPE => self::TYPE_SINGLETON
+            self::BINDING_TYPE => self::TYPE_SINGLETON,
         ];
     }
 
@@ -385,11 +385,11 @@ class Container implements ArrayAccess, ContainerInterface, ContainerContract, I
     {
         if (! $this->invoker) {
             $parameterResolver = new ResolverChain([
-                new NumericArrayResolver,
-                new AssociativeArrayResolver,
-                new DefaultValueResolver,
+                new NumericArrayResolver(),
+                new AssociativeArrayResolver(),
+                new DefaultValueResolver(),
                 new TypeHintContainerResolver($this),
-                new ParameterNameContainerResolver($this)
+                new ParameterNameContainerResolver($this),
             ]);
 
             $this->invoker = new Invoker($parameterResolver, $this);

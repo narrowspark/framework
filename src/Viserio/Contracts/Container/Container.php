@@ -40,8 +40,8 @@ interface Container
     /**
      * Register a binding if it hasn't already been registered.
      *
-     * @param  string                $abstract
-     * @param  \Closure|string|null  $concrete
+     * @param string               $abstract
+     * @param \Closure|string|null $concrete
      */
     public function bindIf(string $abstract, $concrete = null);
 
