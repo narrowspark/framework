@@ -2,7 +2,7 @@
 namespace Viserio\Container;
 
 use InvalidArgumentException;
-use Mockery\Mock;
+use Mockery;
 
 class MockContainer extends Container
 {
@@ -15,9 +15,9 @@ class MockContainer extends Container
      * Takes an id of the service as the first argument.
      * Any other arguments are passed to the Mockery factory.
      *
-     * @return \Mockery\Mock
+     * @return \Mockery
      */
-    public function mock(): Mock
+    public function mock()
     {
         $arguments = func_get_args();
         $id = array_shift($arguments);
@@ -26,8 +26,8 @@ class MockContainer extends Container
             throw new InvalidArgumentException(sprintf('Cannot mock a non-existent service: "%s"', $id));
         }
 
-        if (!array_key_exists($id, $this->mockedServices)) {
-            $this->mockedServices['mock::' . $id] = call_user_func_array([Mock::class, 'mock'], $arguments);
+        if (!isset($this->mockedServices['mock::' . $id])) {
+            $this->mockedServices['mock::' . $id] = call_user_func_array([Mockery::class, 'mock'],  $arguments);
         }
 
         return $this->mockedServices['mock::' . $id];
@@ -52,36 +52,25 @@ class MockContainer extends Container
     }
 
     /**
-     * Gets a parameter or an object.
-     *
-     * @param string $offset
-     *
-     * @return mixed The value of the parameter or an object
+     * {@inheritdoc}
      */
-    public function offsetGet($offset)
+    public function get($id)
     {
-        return $this->mockedServices['mock::' . $this->normalize($offset)] ?? $this->get($offset);
+        return $this->mockedServices['mock::' . $this->normalize($id)] ?? parent::get($id);
     }
 
     /**
-     * Checks if a parameter or an object is set.
-     *
-     * @param string $offset
-     *
-     * @return bool
+     * {@inheritdoc}
      */
-    public function offsetExists($offset)
+    public function has($id)
     {
-        $offset = $this->normalize($offset);
+        $offset = $this->normalize($id);
 
-        if (
-            isset($this->mockedServices['mock::' . $offset]) ||
-            isset($this->bindings[$offset])
-        ) {
+        if (isset($this->mockedServices['mock::' . $this->normalize($id)])) {
             return true;
         }
 
-        return $this->hasInDelegate($offset);
+        return parent::has($id);
     }
 
     /**
@@ -93,11 +82,6 @@ class MockContainer extends Container
     {
         $offset = $this->normalize($offset);
 
-        if (isset($this->bindings[$offset])) {
-            unset(
-                $this->bindings[$offset],
-                $this->mockedServices['mock::' . $offset]
-            );
-        }
+        unset($this->bindings[$offset], $this->mockedServices['mock::' . $offset]);
     }
 }

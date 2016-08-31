@@ -4,6 +4,7 @@ namespace Viserio\Container;
 
 use ArrayAccess;
 use Closure;
+use ReflectionClass;
 use Interop\Container\ContainerInterface;
 use InvalidArgumentException;
 use Invoker\Invoker;
@@ -19,9 +20,10 @@ use Viserio\Container\Traits\NormalizeClassNameTrait;
 use Viserio\Contracts\Container\Container as ContainerContract;
 use Viserio\Contracts\Container\ContextualBindingBuilder as ContextualBindingBuilderContract;
 use Viserio\Contracts\Container\Exceptions\NotFoundException;
+use Viserio\Contracts\Container\Exceptions\UnresolvableDependencyException;
 use Viserio\Contracts\Container\Types as TypesContract;
 
-class Container extends ContainerResolver implements ArrayAccess, ContainerInterface, ContainerContract, InvokerInterface
+class Container extends ContainerResolver implements ArrayAccess, ContainerInterface, ContainerContract, InvokerInterface, ContextualBindingBuilderContract
 {
     use NormalizeClassNameTrait;
 
@@ -52,6 +54,27 @@ class Container extends ContainerResolver implements ArrayAccess, ContainerInter
      * @var array
      */
     protected $immutable = [];
+
+    /**
+     * The concrete instance.
+     *
+     * @var string
+     */
+    protected $concrete;
+
+    /**
+     * Abstract target.
+     *
+     * @var string
+     */
+    protected $parameter;
+
+    /**
+     * Contextual parameters.
+     *
+     * @var array
+     */
+    protected $contextualParameters = [];
 
     /**
      * ProxyFactory instance.
@@ -225,9 +248,7 @@ class Container extends ContainerResolver implements ArrayAccess, ContainerInter
         $concrete = $binding[TypesContract::VALUE];
         $bindingType = $binding[TypesContract::BINDING_TYPE];
 
-        if ($binding[TypesContract::IS_RESOLVED] &&
-            $binding[TypesContract::BINDING_TYPE] !== TypesContract::SERVICE
-        ) {
+        if ($this->isComputed($binding)) {
             return $binding[TypesContract::VALUE];
         }
 
@@ -272,22 +293,64 @@ class Container extends ContainerResolver implements ArrayAccess, ContainerInter
     /**
      * {@inheritdoc}
      */
-    public function when($concrete): ContextualBindingBuilderContract
+    public function when(string $concrete): ContainerContract
     {
-        $abstract = $this->normalize($concrete);
+        $this->abstract = $this->normalize($concrete);
 
-        if (isset($this->bindings[$abstract])) {
-            $concrete = $this->bindings[$abstract][TypesContract::VALUE];
-        } elseif (strpos($abstract, '::')) {
-            $concrete = explode('::', $abstract, 2);
+        if (isset($this->bindings[$this->abstract])) {
+            $this->concrete = $this->bindings[$this->abstract][TypesContract::VALUE];
+        } elseif (strpos($this->abstract, '::')) {
+            $this->concrete = explode('::', $this->abstract, 2);
         } else {
-            $concrete = $abstract;
+            $this->concrete = $this->abstract;
         }
 
-        $builder = new ContextualBindingBuilder($concrete);
-        $builder->setContainer($this);
+        return $this;
+    }
 
-        return $builder;
+        /**
+     * {@inheritdoc}
+     */
+    public function needs(string $abstract): ContextualBindingBuilderContract
+    {
+        $this->parameter = $this->normalize($abstract);
+
+        if ($this->parameter[0] === '$') {
+            $this->parameter = substr($this->parameter, 1);
+        }
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function give($implementation)
+    {
+        if (!($reflector = $this->getReflector($this->concrete))) {
+            throw new UnresolvableDependencyException("[$this->concrete] is not resolvable.");
+        }
+
+        if ($reflector instanceof ReflectionClass && !($reflector = $reflector->getConstructor())) {
+            throw new UnresolvableDependencyException("[$this->concrete] must have a constructor.");
+        }
+
+        $reflectionParameters = $reflector->getParameters();
+        $contextualParameters = &$this->contextualParameters[$this->abstract];
+
+        foreach ($reflectionParameters as $key => $parameter) {
+            $class = $parameter->getClass();
+
+            if ($this->parameter === $parameter->name) {
+                return $contextualParameters[$key] = $implementation;
+            }
+
+            if ($class && $this->parameter === $class->name) {
+                return $contextualParameters[$key] = $this->contextualBindingFormat($implementation, $class);
+            }
+        }
+
+        throw new UnresolvableDependencyException("Parameter [$this->parameter] cannot be injected in [$this->concrete].");
     }
 
     /**
@@ -359,6 +422,18 @@ class Container extends ContainerResolver implements ArrayAccess, ContainerInter
     }
 
     /**
+     * Check if a binding is computed.
+     *
+     * @param array $binding
+     *
+     * @return bool
+     */
+    public static function isComputed($binding): bool
+    {
+        return $binding[TypesContract::IS_RESOLVED] && $binding[TypesContract::BINDING_TYPE] !== TypesContract::SERVICE;
+    }
+
+    /**
      * Set the value at a given offset
      *
      * @param string $offset
@@ -404,7 +479,7 @@ class Container extends ContainerResolver implements ArrayAccess, ContainerInter
      */
     public function offsetExists($offset)
     {
-        return isset($this->bindings[$offset]);
+        return $this->has($offset);
     }
 
     /**
@@ -602,12 +677,31 @@ class Container extends ContainerResolver implements ArrayAccess, ContainerInter
      * Call the given closure
      *
      * @param mixed   $concrete
-     * @param Closure $closure
+     * @param \Closure $closure
      *
      * @return mixed
      */
     protected function extendConcrete($concrete, Closure $closure)
     {
         return $closure($concrete, $this);
+    }
+
+    /**
+     * Format a class binding
+     *
+     * @param string|closure|object $implementation
+     * @param \ReflectionClass      $parameterClass
+     *
+     * @return \Closure|object
+     */
+    protected function contextualBindingFormat($implementation, ReflectionClass $parameter)
+    {
+        if ($implementation instanceof Closure || $implementation instanceof $parameter->name) {
+            return $implementation;
+        }
+
+        return function ($container) use ($implementation) {
+            return $container->make($implementation);
+        };
     }
 }

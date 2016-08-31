@@ -8,9 +8,16 @@ use Viserio\Container\Tests\Fixture\ContainerConcreteFixture;
 use Viserio\Container\Tests\Fixture\ContainerContractFixtureInterface;
 use Viserio\Container\Tests\Fixture\ContainerDefaultValueFixture;
 use Viserio\Container\Tests\Fixture\ContainerDependentFixture;
+use Viserio\Container\Tests\Fixture\ContainerImplementationTwoFixture;
 use Viserio\Container\Tests\Fixture\ContainerImplementationFixture;
 use Viserio\Container\Tests\Fixture\ContainerNestedDependentFixture;
+use Viserio\Container\Tests\Fixture\ContainerTestContextInjectOneFixture;
 use Viserio\Container\Tests\Fixture\ContainerTestInterfaceFixture;
+use Viserio\Container\Tests\Fixture\ContainerCircularReferenceStubA;
+use Viserio\Container\Tests\Fixture\ContainerCircularReferenceStubD;
+use Viserio\Container\Tests\Fixture\ContainerTestContextInjectTwoFixture;
+use Viserio\Container\Tests\Fixture\ContainerInjectVariableFixture;
+use Viserio\Container\Tests\Fixture\ContainerMixedPrimitiveFixture;
 
 class ContainerTest extends \PHPUnit_Framework_TestCase
 {
@@ -220,7 +227,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals('narrowspark', $result->name);
         $this->assertEquals('viserio', $result->oldName);
-        $this->assertSame($result, $container->make('foo'));
+        // $this->assertSame($result, $container->make('foo'));
     }
 
     public function testMultipleExtends()
@@ -241,28 +248,29 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
 
     public function testExtendInstancesArePreserved()
     {
-        $container = $this->container;
+        $container = new Container;
         $container->bind('foo', function () {
-            $obj = new StdClass();
+            $obj = new StdClass;
             $obj->foo = 'bar';
-
             return $obj;
         });
-        $obj = new StdClass();
+
+        $obj = new StdClass;
         $obj->foo = 'foo';
-        $container->singleton('foo', $obj);
+
+        $container->instance('foo', $obj);
         $container->extend('foo', function ($obj, $container) {
             $obj->bar = 'baz';
-
             return $obj;
         });
         $container->extend('foo', function ($obj, $container) {
             $obj->baz = 'foo';
-
             return $obj;
         });
 
         $this->assertEquals('foo', $container->make('foo')->foo);
+        $this->assertEquals('baz', $container->make('foo')->bar);
+        $this->assertEquals('foo', $container->make('foo')->baz);
     }
 
     public function testExtendCanBeCalledBeforeBind()
@@ -319,46 +327,144 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue(isset($container['alias']));
     }
 
+    /**
+     * @expectedException \Viserio\Contracts\Container\Exceptions\CircularReferenceException
+     * @expectedExceptionMessage Circular reference found while resolving [Viserio\Container\Tests\Fixture\ContainerCircularReferenceStubD].
+     */
     public function testCircularReferenceCheck()
     {
         // Since the dependency is ( D -> F -> E -> D ), the exception
         // message should state that the issue starts in class D
-        $this->setExpectedException('Viserio\Container\CircularReferenceException', 'Circular reference found while resolving [ContainerCircularReferenceStubD].');
         $container = $this->container;
-        $parameters = [];
-        $container->make('ContainerCircularReferenceStubD', $parameters);
+        $container->make(ContainerCircularReferenceStubD::class);
     }
 
+    /**
+     * @expectedException \Viserio\Contracts\Container\Exceptions\CircularReferenceException
+     * @expectedExceptionMessage Circular reference found while resolving [Viserio\Container\Tests\Fixture\ContainerCircularReferenceStubB].
+     */
     public function testCircularReferenceCheckDetectCycleStartLocation()
     {
         // Since the dependency is ( A -> B -> C -> B ), the exception
         // message should state that the issue starts in class B
-        $this->setExpectedException('Viserio\Container\CircularReferenceException', 'Circular reference found while resolving [ContainerCircularReferenceStubB].');
         $container = $this->container;
-        $parameters = [];
-        $container->make('ContainerCircularReferenceStubA', $parameters);
+        $container->make(ContainerCircularReferenceStubA::class);
     }
 
-    /**
-     * Methods should using contextual binding
-     */
-    public function testContextualBindingOnMethods()
+    public function testContainerCanInjectSimpleVariable()
     {
         $container = new Container();
-        $container->when(ContainerTestInterfaceFixture::class)
+        $container->when(ContainerInjectVariableFixture::class)
+            ->needs('$something')
+            ->give(100);
+        $instance = $container->make(ContainerInjectVariableFixture::class);
+
+        $this->assertEquals(100, $instance->something);
+
+        $container = new Container;
+        $container->when(ContainerInjectVariableFixture::class)
+            ->needs('$something')->give(function ($container) {
+                return $container->make(ContainerConcreteFixture::class);
+            });
+
+        $instance = $container->make(ContainerInjectVariableFixture::class);
+
+        $this->assertInstanceOf(ContainerConcreteFixture::class, $instance->something);
+    }
+
+    public function testContainerCanInjectDifferentImplementationsDependingOnContext()
+    {
+        $container = new Container();
+        $container->bind(ContainerContractFixtureInterface::class, ContainerImplementationFixture::class);
+
+        $container->when(ContainerTestContextInjectOneFixture::class)
             ->needs(ContainerContractFixtureInterface::class)
             ->give(ContainerImplementationFixture::class);
 
-         // Works if using constructor
-        $constructor = $container->make(ContainerTestInterfaceFixture::class);
-        $result = $constructor->getStub();
+        $container->when(ContainerTestContextInjectTwoFixture::class)
+            ->needs(ContainerContractFixtureInterface::class)
+            ->give(ContainerImplementationTwoFixture::class);
 
-        $this->assertInstanceOf(ContainerImplementationFixture::class, $result);
+        $one = $container->make(ContainerTestContextInjectOneFixture::class);
+        $two = $container->make(ContainerTestContextInjectTwoFixture::class);
 
-         // Doesn't work if using methods
-        $result = $container->call(ContainerTestInterfaceFixture::class . '::go');
+        $this->assertInstanceOf(ContainerImplementationFixture::class, $one->impl);
+        $this->assertInstanceOf(ContainerImplementationTwoFixture::class, $two->impl);
 
-        $this->assertInstanceOf(ContainerImplementationFixture::class, $result);
+        /*
+         * Test With Closures
+         */
+        $container = new Container();
+        $container->bind(ContainerContractFixtureInterface::class, ContainerImplementationFixture::class);
+        $container->when(ContainerTestContextInjectOneFixture::class)
+            ->needs(ContainerContractFixtureInterface::class)
+            ->give(ContainerImplementationFixture::class);
+        $container->when(ContainerTestContextInjectTwoFixture::class)
+            ->needs(ContainerContractFixtureInterface::class)
+            ->give(function ($container) {
+            return $container->make(ContainerImplementationTwoFixture::class);
+        });
+
+        $one = $container->make(ContainerTestContextInjectOneFixture::class);
+        $two = $container->make(ContainerTestContextInjectTwoFixture::class);
+
+        $this->assertInstanceOf(ContainerImplementationFixture::class, $one->impl);
+        $this->assertInstanceOf(ContainerImplementationTwoFixture::class, $two->impl);
+    }
+
+    public function testContextualBindingWorksRegardlessOfLeadingBackslash()
+    {
+        $container = new Container();
+        $container->bind(ContainerContractFixtureInterface::class, ContainerImplementationFixture::class);
+
+        $container->when('\Viserio\Container\Tests\Fixture\ContainerTestContextInjectOneFixture')
+            ->needs(ContainerContractFixtureInterface::class)
+            ->give(ContainerImplementationTwoFixture::class);
+        $container->when(ContainerTestContextInjectTwoFixture::class)
+            ->needs('\Viserio\Container\Tests\Fixture\ContainerContractFixtureInterface')
+            ->give(ContainerImplementationTwoFixture::class);
+
+        $this->assertInstanceOf(
+            ContainerImplementationTwoFixture::class,
+            $container->make(ContainerTestContextInjectOneFixture::class)->impl
+        );
+        $this->assertInstanceOf(
+            ContainerImplementationTwoFixture::class,
+            $container->make(ContainerTestContextInjectTwoFixture::class)->impl
+        );
+        $this->assertInstanceOf(
+            ContainerImplementationTwoFixture::class,
+            $container->make('\Viserio\Container\Tests\Fixture\ContainerTestContextInjectTwoFixture')->impl
+        );
+    }
+
+    /**
+     * @expectedException \Viserio\Contracts\Container\Exceptions\BindingResolutionException
+     * @expectedExceptionMessage Unresolvable dependency resolving [Parameter #0 [ <required> $first ]] in [Viserio\Container\Tests\Fixture\ContainerMixedPrimitiveFixture]
+     */
+    public function testInternalClassWithDefaultParameters()
+    {
+        $container = new Container;
+        $container->make(ContainerMixedPrimitiveFixture::class, []);
+    }
+    /**
+     * @expectedException \Viserio\Contracts\Container\Exceptions\BindingResolutionException
+     * @expectedExceptionMessage [Viserio\Container\Tests\Fixture\ContainerContractFixtureInterface] is not resolvable. Build stack : []
+     */
+    public function testBindingResolutionExceptionMessage()
+    {
+        $container = new Container;
+        $container->make(ContainerContractFixtureInterface::class, []);
+    }
+
+    /**
+     * @expectedException \Viserio\Contracts\Container\Exceptions\BindingResolutionException
+     * @expectedExceptionMessage [Viserio\Container\Tests\Fixture\ContainerContractFixtureInterface] is not resolvable. Build stack : [Viserio\Container\Tests\Fixture\ContainerTestContextInjectOneFixture]
+     */
+    public function testBindingResolutionExceptionMessageIncludesBuildStack()
+    {
+        $container = new Container;
+        $container->make(ContainerTestContextInjectOneFixture::class, []);
     }
 
     public function testExtendedBindingsKeptTypes()

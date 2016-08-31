@@ -126,7 +126,7 @@ interface Container
      *
      * @param string $concrete
      *
-     * @return \Viserio\Contracts\Container\ContextualBindingBuilder
+     * @return $this
      */
-    public function when($concrete): ContextualBindingBuilder;
+    public function when(string $concrete): Container;
 }

@@ -25,8 +25,7 @@ class MockerContainerTest extends \PHPUnit_Framework_TestCase
             $service->id = $id;
 
             $this->services[$id] = $service;
-
-            $this->container->bind($id, $service);
+            $this->container->instance($id, $service);
         }
     }
 
@@ -40,7 +39,7 @@ class MockerContainerTest extends \PHPUnit_Framework_TestCase
 
         $property = $reflection->getProperty('mockedServices');
         $property->setAccessible(true);
-        $property->setValue(null, []);
+        $property->setValue($reflection, []);
     }
 
     public function testThatBehaviorDoesNotChangeByDefault()
@@ -48,6 +47,7 @@ class MockerContainerTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($this->container->has('test.service_1'));
         $this->assertTrue($this->container->has('test.service_2'));
         $this->assertTrue($this->container->has('test.service_3'));
+
         $this->assertSame($this->services['test.service_1'], $this->container->get('test.service_1'));
         $this->assertSame($this->services['test.service_2'], $this->container->get('test.service_2'));
         $this->assertSame($this->services['test.service_3'], $this->container->get('test.service_3'));
@@ -69,17 +69,6 @@ class MockerContainerTest extends \PHPUnit_Framework_TestCase
     public function testThatServiceCannotBeMockedIfItDoesNotExist()
     {
         $this->container->mock('test.new_service', StdClass::class);
-    }
-
-    public function testThatMultipleInstancesShareMockedServices()
-    {
-        $mock = $this->container->mock('test.service_1', StdClass::class);
-        $secondContainer = new MockContainer();
-
-        $this->assertTrue($secondContainer->has('test.service_1'));
-        $this->assertFalse($secondContainer->has('test.service_2'));
-        $this->assertFalse($secondContainer->has('test.service_3'));
-        $this->assertSame($mock, $secondContainer->get('test.service_1'));
     }
 
     public function testThatMockedServicesAreAccessible()

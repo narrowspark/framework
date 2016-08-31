@@ -8,7 +8,8 @@ use ReflectionFunction;
 use ReflectionMethod;
 use ReflectionParameter;
 use Reflector;
-use Viserio\Contracts\Container\Exceptions\UnresolvableDependencyException;
+use Viserio\Contracts\Container\Exceptions\BindingResolutionException;
+use Viserio\Contracts\Container\Exceptions\CircularReferenceException;
 
 class ContainerResolver
 {
@@ -37,9 +38,9 @@ class ContainerResolver
             return $this->resolveFunction($subject, $parameters);
         }
 
-        $subject = is_object($subject) ? get_class($subject) : gettype($subject);
+        $subject = is_object($subject) ? get_class($subject) : $subject;
 
-        throw new UnresolvableDependencyException("[$subject] is not resolvable. Build stack : [" . implode(', ', $this->buildStack) . ']');
+        throw new BindingResolutionException("[$subject] is not resolvable. Build stack : [" . implode(', ', $this->buildStack) . ']');
     }
 
     /**
@@ -53,6 +54,22 @@ class ContainerResolver
     public function resolveClass(string $class, array $parameters = [])
     {
         $reflectionClass = new ReflectionClass($class);
+
+        if (!$reflectionClass->isInstantiable()) {
+            throw new BindingResolutionException(
+                sprintf(
+                    'Unable to reflect on the class [%s], does the class exist and is it properly autoloaded?',
+                    is_object($class) ? get_class($class) : gettype($class)
+                )
+            );
+        }
+
+        if (in_array($class, $this->buildStack, true)) {
+            $this->buildStack[] = $class;
+
+            throw new CircularReferenceException($class, $this->buildStack);
+        }
+
         $reflectionMethod = $reflectionClass->getConstructor();
 
         array_push($this->buildStack, $reflectionClass->name);
@@ -160,7 +177,7 @@ class ContainerResolver
             return $parameter->getDefaultValue();
         }
 
-        throw new UnresolvableDependencyException("Unresolvable dependency resolving [$parameter] in [" . end($this->buildStack) . ']');
+        throw new BindingResolutionException("Unresolvable dependency resolving [$parameter] in [" . end($this->buildStack) . ']');
     }
 
     /**
@@ -251,17 +268,5 @@ class ContainerResolver
     protected function isFunction($value): bool
     {
         return is_callable($value) && ($value instanceof Closure || is_string($value) && function_exists($value));
-    }
-
-    /**
-     * Check if something is resolvable.
-     *
-     * @param mixed $value
-     *
-     * @return bool
-     */
-    protected function isResolvable($value): bool
-    {
-        return $this->isClass($value) || $this->isMethod($value) || $this->isFunction($value);
     }
 }
