@@ -2,25 +2,11 @@
 declare(strict_types=1);
 namespace Viserio\Contracts\Container;
 
+use Closure;
+use Interop\Container\ContainerInterface;
+
 interface Container
 {
-    const TYPE_PLAIN = 0;
-
-    const TYPE_SERVICE = 1;
-
-    /**
-     * A singleton entry will be computed once and shared.
-     *
-     * For a class, only a single instance of the class will be created.
-     */
-    const TYPE_SINGLETON = 2;
-
-    const VALUE = 0;
-
-    const IS_RESOLVED = 1;
-
-    const BINDING_TYPE = 2;
-
     /**
      * Alias a type to a different name.
      *
@@ -48,7 +34,7 @@ interface Container
     /**
      * Register a shared binding in the container.
      *
-     * @param string               $abstract
+     * @param string|array         $abstract
      * @param \Closure|string|null $concrete
      */
     public function singleton($abstract, $concrete = null);
@@ -56,10 +42,36 @@ interface Container
     /**
      * Register an existing instance as shared in the container.
      *
-     * @param string $abstract
-     * @param mixed  $instance
+     * @param string|array $abstract
+     * @param mixed        $instance
      */
-    public function instance(string $abstract, $instance);
+    public function instance($abstract, $instance);
+
+    /**
+     * Delegate a backup container to be checked for services if it
+     * cannot be resolved via this container.
+     *
+     * @param \Interop\Container\ContainerInterface $container
+     *
+     * @return $this
+     */
+    public function delegate(ContainerInterface $container): Container;
+
+    /**
+     * Returns true if service is registered in one of the delegated backup containers.
+     *
+     * @param string $alias
+     *
+     * @return bool
+     */
+    public function hasInDelegate(string $abstract): bool;
+
+    /**
+     * Removes an entry from the container.
+     *
+     * @param string $abstract Identifier of the entry to remove
+     */
+    public function forget(string $abstract);
 
     /**
      * Resolve the given type from the container.
@@ -69,59 +81,52 @@ interface Container
      *
      * @return mixed
      */
-    public function make($alias, array $args = []);
+    public function make(string $abstract, array $parameters = []);
 
     /**
-     * Adds an entry to the container.
+     * "Extend" an abstract type in the container.
      *
-     * @param string $id    Identifier of the entry to add
-     * @param mixed  $value The entry to add to the container
+     * @param string   $abstract
+     * @param \Closure $closure
      */
-    public function set(string $id, $value);
+    public function extend(string $binding, Closure $closure);
 
     /**
-     * Extend an existing binding.
+     * Intercept the resolve call to add some features
      *
-     * @param string   $binding The name of the binding to extend.
-     * @param \Closure $closure The function to use to extend the existing binding.
+     * @param mixed $abstract
+     * @param array $parameters
      *
-     * @throws ContainerException
+     * @return mixed
      */
-    public function extend(string $binding, \Closure $closure);
+    public function resolve($abstract, array $parameters = []);
 
     /**
-     * Removes an entry from the container.
+     * Resolve a bound type from container.
      *
-     * @param string $id Identifier of the entry to remove
+     * @param string $abstract
+     * @param array  $parameters
+     *
+     * @return mixed
      */
-    public function remove(string $id);
+    public function resolveBound(string $abstract, array $parameters = []);
 
     /**
-     * Allows for methods to be invoked on any object that is resolved of the tyoe
-     * provided.
+     * Resolve a non bound type.
      *
-     * @param string        $type
-     * @param callable|null $callback
+     * @param string $abstract
+     * @param array  $parameters
      *
-     * @return \Viserio\Container\Inflector|void
+     * @return mixed
      */
-    public function inflector(string $type, callable $callback = null);
+    public function resolveNonBound(string $concrete, array $parameters = []);
 
     /**
      * Define a contextual binding.
      *
-     * @param string $concrete
+     * @param  string  $concrete
      *
      * @return \Viserio\Contracts\Container\ContextualBindingBuilder
      */
-    public function when($concrete): \Viserio\Contracts\Container\ContextualBindingBuilder;
-
-    /**
-     * Check if an item is being managed as a singleton.
-     *
-     * @param string $alias
-     *
-     * @return bool
-     */
-    public function isSingleton(string $alias): bool;
+    public function when($concrete): ContextualBindingBuilder;
 }

@@ -1,6 +1,9 @@
 <?php
 namespace Viserio\Container;
 
+use Mockery\Mock;
+use InvalidArgumentException;
+
 class MockContainer extends Container
 {
     /**
@@ -14,17 +17,17 @@ class MockContainer extends Container
      *
      * @return \Mockery\Mock
      */
-    public function mock()
+    public function mock(): Mock
     {
         $arguments = func_get_args();
         $id = array_shift($arguments);
 
         if (!$this->has($id)) {
-            throw new \InvalidArgumentException(sprintf('Cannot mock a non-existent service: "%s"', $id));
+            throw new InvalidArgumentException(sprintf('Cannot mock a non-existent service: "%s"', $id));
         }
 
         if (!array_key_exists($id, $this->mockedServices)) {
-            $this->mockedServices['mock::' . $id] = call_user_func_array(['Mockery', 'mock'], $arguments);
+            $this->mockedServices['mock::' . $id] = call_user_func_array([Mock::class, 'mock'], $arguments);
         }
 
         return $this->mockedServices['mock::' . $id];
@@ -51,71 +54,49 @@ class MockContainer extends Container
     /**
      * Gets a parameter or an object.
      *
-     * @param string $alias
+     * @param string $offset
      *
      * @return mixed The value of the parameter or an object
      */
-    public function offsetGet($alias)
+    public function offsetGet($offset)
     {
-        $alias = $this->normalize($alias);
-
-        if (isset($this->mockedServices['mock::' . $alias])) {
-            return $this->mockedServices['mock::' . $alias];
-        }
-
-        if ($this->hasInDelegate($alias)) {
-            return $this->getFromDelegate($alias);
-        }
-
-        if (!$this->isSingleton($alias) && isset($this->interopDefinitions[$alias])) {
-            $this->singletons[$alias] = $this->resolveDefinition($this->interopDefinitions[$alias]);
-        }
-
-        return $this->make($alias);
+        return $this->mockedServices['mock::' . $this->normalize($offset)] ?? $this->get($offset);
     }
 
     /**
      * Checks if a parameter or an object is set.
      *
-     * @param string $alias
+     * @param string $offset
      *
      * @return bool
      */
-    public function offsetExists($alias)
+    public function offsetExists($offset)
     {
-        $alias = $this->normalize($alias);
+        $offset = $this->normalize($offset);
 
         if (
-            isset($this->keys[$alias]) ||
-            isset($this->mockedServices['mock::' . $alias]) ||
-            isset($this->interopDefinitions[$alias])
+            isset($this->mockedServices['mock::' . $offset]) ||
+            isset($this->bindings[$offset])
         ) {
             return true;
         }
 
-        return $this->hasInDelegate($alias);
+        return $this->hasInDelegate($offset);
     }
 
     /**
      * Unsets a parameter or an object.
      *
-     * @param string $alias
-     *
-     * @return string|null $alias The unique identifier for the parameter or object
+     * @param string $offset
      */
-    public function offsetUnset($alias)
+    public function offsetUnset($offset)
     {
-        $alias = $this->normalize($alias);
+        $offset = $this->normalize($offset);
 
-        if (isset($this->keys[$alias])) {
+        if (isset($this->bindings[$offset])) {
             unset(
-                $this->aliases[$alias],
-                $this->bindings[$alias],
-                $this->singletons[$alias],
-                $this->frozen[$alias],
-                $this->values[$alias],
-                $this->keys[$alias],
-                $this->mockedServices['mock::' . $alias]
+                $this->bindings[$offset],
+                $this->mockedServices['mock::' . $offset]
             );
         }
     }

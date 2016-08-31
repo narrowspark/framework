@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Container;
 
 use ArrayAccess;
+use Closure;
 use Interop\Container\ContainerInterface;
 use InvalidArgumentException;
 use Invoker\Invoker;
@@ -15,9 +16,15 @@ use Invoker\ParameterResolver\NumericArrayResolver;
 use Invoker\ParameterResolver\ResolverChain;
 use Viserio\Container\Proxy\ProxyFactory;
 use Viserio\Contracts\Container\Container as ContainerContract;
+use Viserio\Contracts\Container\Types as TypesContract;
+use Viserio\Contracts\Container\Exceptions\NotFoundException;
+use Viserio\Contracts\Container\ContextualBindingBuilder as ContextualBindingBuilderContract;
+use Viserio\Container\Traits\NormalizeClassNameTrait;
 
-class Container implements ArrayAccess, ContainerInterface, ContainerContract, InvokerInterface
+class Container extends ContainerResolver implements ArrayAccess, ContainerInterface, ContainerContract, InvokerInterface
 {
+    use NormalizeClassNameTrait;
+
     /**
      * The container's bindings.
      *
@@ -40,13 +47,11 @@ class Container implements ArrayAccess, ContainerInterface, ContainerContract, I
     protected $delegates = [];
 
     /**
-     * Autowiring to guess injections.
+     * Array containing immutable instances.
      *
-     * Enabled by default.
-     *
-     * @var bool
+     * @var array
      */
-    private $useAutowiring = true;
+    protected $immutable = [];
 
     /**
      * ProxyFactory instance.
@@ -58,11 +63,11 @@ class Container implements ArrayAccess, ContainerInterface, ContainerContract, I
     /**
      * Create a new container instance.
      *
-     * @param bool        $writeProxiesToFile
      * @param string|null $proxyDirectory
      */
-    public function __construct(bool $writeProxiesToFile, string $proxyDirectory = null)
+    public function __construct(string $proxyDirectory = null)
     {
+        $writeProxiesToFile = $proxyDirectory === null ? false : true;
         $this->proxyFactory = new ProxyFactory($writeProxiesToFile, $proxyDirectory);
 
         // Auto-register the container
@@ -100,7 +105,7 @@ class Container implements ArrayAccess, ContainerInterface, ContainerContract, I
     /**
      * {@inheritdoc}
      */
-    public function instance(string $abstract, $instance)
+    public function instance($abstract, $instance)
     {
         $abstract = $this->normalize($abstract);
 
@@ -140,6 +145,152 @@ class Container implements ArrayAccess, ContainerInterface, ContainerContract, I
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function make(string $abstract, array $parameters = [])
+    {
+        return $this->resolve($this->normalize($abstract), $parameters);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function extend(string $abstract, Closure $closure)
+    {
+        $this->extendAbstract($this->normalize($abstract), $closure);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function delegate(ContainerInterface $container): ContainerContract
+    {
+        $this->delegates[] = $container;
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function hasInDelegate(string $abstract): bool
+    {
+        foreach ($this->delegates as $container) {
+            if ($container->has($abstract)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function forget(string $abstract)
+    {
+        unset($this->bindings[$abstract]);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function resolve($abstract, array $parameters = [])
+    {
+        if (is_string($abstract) && isset($this->contextualParameters[$abstract])) {
+            $contextualParameters = $this->contextualParameters[$abstract];
+
+            foreach ($contextualParameters as $key => $value) {
+                if ($value instanceof Closure) {
+                    $contextualParameters[$key] = $value($this);
+                }
+            }
+
+            $parameters = array_replace($contextualParameters, $parameters);
+        }
+
+        if ($this->has($abstract)) {
+            return $this->resolveBound($abstract, $parameters);
+        }
+
+        return $this->resolveNonBound($abstract, $parameters);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function resolveBound(string $abstract, array $parameters = [])
+    {
+        $binding = $this->bindings[$abstract];
+        $concrete = $binding[TypesContract::VALUE];
+        $bindingType = $binding[TypesContract::BINDING_TYPE];
+
+        if ($binding[TypesContract::IS_RESOLVED] &&
+            $binding[TypesContract::BINDING_TYPE] !== TypesContract::SERVICE
+        ) {
+            return $binding[TypesContract::VALUE];
+        }
+
+        if ($concrete instanceof Closure) {
+            array_unshift($parameters, $this);
+        }
+
+        if ($bindingType === TypesContract::PLAIN) {
+            $resolved = $this->resolvePlain($abstract);
+        } else if ($bindingType === TypesContract::SERVICE) {
+            $resolved = $this->resolveService($abstract, $parameters);
+        } else {
+            $resolved = $this->resolveSingleton($abstract, $parameters);
+        }
+
+        $this->extendResolved($abstract, $resolved);
+
+        return $resolved;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function resolveNonBound(string $concrete, array $parameters = [])
+    {
+        if ($concrete instanceof Closure) {
+            array_unshift($parameters, $this);
+        }
+
+        if (is_string($concrete) && strpos($concrete, '::')) {
+            $parts = explode('::', $concrete, 2);
+            $concrete = [$this->resolve($parts[0]), $parts[1]];
+        }
+
+        $resolved = parent::resolve($concrete, $parameters);
+
+        $this->extendResolved($concrete, $resolved);
+
+        return $resolved;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function when($concrete): ContextualBindingBuilderContract
+    {
+        $abstract = $this->normalize($concrete);
+
+        if (isset($this->bindings[$abstract])) {
+            $concrete = $this->bindings[$abstract][TypesContract::VALUE];
+        } else if (strpos($abstract, '::')) {
+            $concrete = explode('::', $abstract, 2);
+        } else {
+            $concrete = $abstract;
+        }
+
+        $builder = new ContextualBindingBuilder($concrete);
+        $builder->setContainer($this);
+
+        return $builder;
+    }
+
+    /**
      * Returns an entry of the container by its name.
      *
      * @param string $name Entry name or a class name.
@@ -154,16 +305,21 @@ class Container implements ArrayAccess, ContainerInterface, ContainerContract, I
     {
         if (! is_string($id)) {
             throw new InvalidArgumentException(sprintf(
-                'The name parameter must be of type string, %s given',
+                'The id parameter must be of type string, %s given',
                 is_object($id) ? get_class($id) : gettype($id)
             ));
         }
 
-        if ($resolved = $this->getFromDelegate($alias, $args)) {
+        if (isset($this->bindings[$id])) {
+            return $this->resolve($id);
+        }
+
+        if ($resolved = $this->getFromDelegate($id)) {
+            return $resolved;
         }
 
         throw new NotFoundException(
-            sprintf('Alias (%s) is not being managed by the container', $id)
+            sprintf('Abstract (%s) is not being managed by the container', $id)
         );
     }
 
@@ -185,27 +341,13 @@ class Container implements ArrayAccess, ContainerInterface, ContainerContract, I
             ));
         }
 
-        $id = $this->normalize($id);
+        $abstract = $this->normalize($id);
 
-        if (is_string($id) && isset($this->bindings[$id])) {
+        if (isset($this->bindings[$abstract])) {
             return true;
         }
 
         return $this->hasInDelegate($id);
-    }
-
-    /**
-     * Enable or disable the use of autowiring to guess injections.
-     *
-     * @param bool $bool
-     *
-     * @return \Viserio\Contracts\Container\Container
-     */
-    public function useAutowiring(bool $bool): ContainerContract
-    {
-        $this->useAutowiring = $bool;
-
-        return $this;
     }
 
     /**
@@ -214,39 +356,6 @@ class Container implements ArrayAccess, ContainerInterface, ContainerContract, I
     public function call($callable, array $parameters = [])
     {
         return $this->getInvoker()->call($callable, $parameters);
-    }
-
-    /**
-     * Delegate a backup container to be checked for services if it
-     * cannot be resolved via this container.
-     *
-     * @param \Interop\Container\ContainerInterface $container
-     *
-     * @return $this
-     */
-    public function delegate(InteropContainerInterface $container): ContainerContract
-    {
-        $this->delegates[] = $container;
-
-        return $this;
-    }
-
-    /**
-     * Returns true if service is registered in one of the delegated backup containers.
-     *
-     * @param string $alias
-     *
-     * @return bool
-     */
-    public function hasInDelegate($abstract)
-    {
-        foreach ($this->delegates as $container) {
-            if ($container->has($abstract)) {
-                return true;
-            }
-        }
-
-        return false;
     }
 
     /**
@@ -273,7 +382,7 @@ class Container implements ArrayAccess, ContainerInterface, ContainerContract, I
      */
     public function offsetGet($offset)
     {
-        return $this->resolve($offset);
+        return $this->get($offset);
     }
 
     /**
@@ -306,11 +415,11 @@ class Container implements ArrayAccess, ContainerInterface, ContainerContract, I
      *
      * @return mixed
      */
-    protected function getFromDelegate(string $abstract, array $args = [])
+    protected function getFromDelegate(string $abstract)
     {
         foreach ($this->delegates as $container) {
             if ($container->has($abstract)) {
-                return $container->get($abstract, $args);
+                return $container->get($abstract);
             }
 
             continue;
@@ -328,9 +437,9 @@ class Container implements ArrayAccess, ContainerInterface, ContainerContract, I
     protected function bindPlain(string $abstract, $concrete)
     {
         $this->bindings[$abstract] = [
-            self::VALUE => $concrete,
-            self::IS_RESOLVED => false,
-            self::BINDING_TYPE => self::TYPE_PLAIN,
+            TypesContract::VALUE => $concrete,
+            TypesContract::IS_RESOLVED => false,
+            TypesContract::BINDING_TYPE => TypesContract::PLAIN,
         ];
     }
 
@@ -343,9 +452,9 @@ class Container implements ArrayAccess, ContainerInterface, ContainerContract, I
     protected function bindService(string $abstract, $concrete)
     {
         $this->bindings[$abstract] = [
-            self::VALUE => $concrete,
-            self::IS_RESOLVED => false,
-            self::BINDING_TYPE => self::TYPE_SERVICE,
+            TypesContract::VALUE => $concrete,
+            TypesContract::IS_RESOLVED => false,
+            TypesContract::BINDING_TYPE => TypesContract::SERVICE,
         ];
     }
 
@@ -358,22 +467,77 @@ class Container implements ArrayAccess, ContainerInterface, ContainerContract, I
     protected function bindSingleton(string $abstract, $concrete)
     {
         $this->bindings[$abstract] = [
-            self::VALUE => $concrete,
-            self::IS_RESOLVED => false,
-            self::BINDING_TYPE => self::TYPE_SINGLETON,
+            TypesContract::VALUE => $concrete,
+            TypesContract::IS_RESOLVED => false,
+            TypesContract::BINDING_TYPE => TypesContract::SINGLETON,
         ];
     }
 
     /**
-     * Normalize the given class name by removing leading slashes.
+     * Resolve a plain value from the container.
      *
-     * @param mixed $service
+     * @param string $abstract
      *
      * @return mixed
      */
-    private function normalize($service)
+    protected function resolvePlain(string $abstract)
     {
-        return is_string($service) ? ltrim($service, '\\') : $service;
+        $binding = &$this->bindings[$abstract];
+        $binding[TypesContract::IS_RESOLVED] = true;
+
+        return $binding[TypesContract::VALUE];
+    }
+
+    /**
+     * Resolve a service from the container.
+     *
+     * @param string $abstract
+     * @param array  $parameters
+     *
+     * @return mixed
+     */
+    protected function resolveService(string $abstract, array $parameters = [])
+    {
+        $binding = &$this->bindings[$abstract];
+        $binding[TypesContract::IS_RESOLVED] = true;
+
+        return parent::resolve($binding[TypesContract::VALUE], $parameters);
+    }
+
+    /**
+     * Resolve a singleton from the container.
+     *
+     * @param string $abstract
+     * @param array  $parameters
+     *
+     * @return mixed
+     */
+    protected function resolveSingleton(string $abstract, array $parameters = [])
+    {
+        $binding = &$this->bindings[$abstract];
+
+        if ($binding[TypesContract::IS_RESOLVED]) {
+            return $binding[TypesContract::VALUE];
+        }
+
+        $binding[TypesContract::VALUE] = parent::resolve($binding[TypesContract::VALUE], $parameters);
+        $binding[TypesContract::IS_RESOLVED] = true;
+
+        return $binding[TypesContract::VALUE];
+    }
+
+    /**
+     * Check if class is immutable.
+     *
+     * @param  string $concrete
+     *
+     * @throws ContainerException
+     */
+    protected function notImmutable(string $concrete)
+    {
+        if (isset($this->immutable[$concrete])) {
+            throw new ContainerException(sprintf('Attempted overwrite of initialized component [%s]', $concrete));
+        }
     }
 
     /**
@@ -381,7 +545,7 @@ class Container implements ArrayAccess, ContainerInterface, ContainerContract, I
      *
      * @return \Invoker\InvokerInterface
      */
-    private function getInvoker(): InvokerInterface
+    protected function getInvoker(): InvokerInterface
     {
         if (! $this->invoker) {
             $parameterResolver = new ResolverChain([
@@ -396,5 +560,54 @@ class Container implements ArrayAccess, ContainerInterface, ContainerContract, I
         }
 
         return $this->invoker;
+    }
+
+    /**
+     * Extend a resolved subject
+     *
+     * @param string $abstract
+     * @param mixed  &$resolved
+     */
+    protected function extendResolved($abstract, &$resolved)
+    {
+        if (!is_string($abstract) || !isset($this->extenders[$abstract])) {
+            return ;
+        }
+
+        $binding = $this->bindings[$abstract];
+
+        foreach ($this->extenders[$abstract] as $extender) {
+            $resolved = $this->extendConcrete($resolved, $extender);
+        }
+
+        if ($binding && $binding[TypesContract::BINDING_TYPE] !== TypesContract::SERVICE) {
+            unset($this->extenders[$abstract]);
+
+            $this->bindings[$abstract][TypesContract::VALUE] = $resolved;
+        }
+    }
+
+    /**
+     * "Extend" an abstract type in the container.
+     *
+     * @param string   $abstract
+     * @param \Closure $closure
+     */
+    protected function extendAbstract(string $abstract, Closure $closure)
+    {
+        $this->extenders[$abstract][] = $closure;
+    }
+
+    /**
+     * Call the given closure
+     *
+     * @param mixed   $concrete
+     * @param Closure $closure
+     *
+     * @return mixed
+     */
+    protected function extendConcrete($concrete, Closure $closure)
+    {
+        return $closure($concrete, $this);
     }
 }
