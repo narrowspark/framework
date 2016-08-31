@@ -15,11 +15,11 @@ use Invoker\ParameterResolver\DefaultValueResolver;
 use Invoker\ParameterResolver\NumericArrayResolver;
 use Invoker\ParameterResolver\ResolverChain;
 use Viserio\Container\Proxy\ProxyFactory;
-use Viserio\Contracts\Container\Container as ContainerContract;
-use Viserio\Contracts\Container\Types as TypesContract;
-use Viserio\Contracts\Container\Exceptions\NotFoundException;
-use Viserio\Contracts\Container\ContextualBindingBuilder as ContextualBindingBuilderContract;
 use Viserio\Container\Traits\NormalizeClassNameTrait;
+use Viserio\Contracts\Container\Container as ContainerContract;
+use Viserio\Contracts\Container\ContextualBindingBuilder as ContextualBindingBuilderContract;
+use Viserio\Contracts\Container\Exceptions\NotFoundException;
+use Viserio\Contracts\Container\Types as TypesContract;
 
 class Container extends ContainerResolver implements ArrayAccess, ContainerInterface, ContainerContract, InvokerInterface
 {
@@ -237,7 +237,7 @@ class Container extends ContainerResolver implements ArrayAccess, ContainerInter
 
         if ($bindingType === TypesContract::PLAIN) {
             $resolved = $this->resolvePlain($abstract);
-        } else if ($bindingType === TypesContract::SERVICE) {
+        } elseif ($bindingType === TypesContract::SERVICE) {
             $resolved = $this->resolveService($abstract, $parameters);
         } else {
             $resolved = $this->resolveSingleton($abstract, $parameters);
@@ -278,7 +278,7 @@ class Container extends ContainerResolver implements ArrayAccess, ContainerInter
 
         if (isset($this->bindings[$abstract])) {
             $concrete = $this->bindings[$abstract][TypesContract::VALUE];
-        } else if (strpos($abstract, '::')) {
+        } elseif (strpos($abstract, '::')) {
             $concrete = explode('::', $abstract, 2);
         } else {
             $concrete = $abstract;
@@ -529,7 +529,7 @@ class Container extends ContainerResolver implements ArrayAccess, ContainerInter
     /**
      * Check if class is immutable.
      *
-     * @param  string $concrete
+     * @param string $concrete
      *
      * @throws ContainerException
      */
@@ -571,7 +571,7 @@ class Container extends ContainerResolver implements ArrayAccess, ContainerInter
     protected function extendResolved($abstract, &$resolved)
     {
         if (!is_string($abstract) || !isset($this->extenders[$abstract])) {
-            return ;
+            return;
         }
 
         $binding = $this->bindings[$abstract];

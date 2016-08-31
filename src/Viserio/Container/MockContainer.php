@@ -1,8 +1,8 @@
 <?php
 namespace Viserio\Container;
 
-use Mockery\Mock;
 use InvalidArgumentException;
+use Mockery\Mock;
 
 class MockContainer extends Container
 {

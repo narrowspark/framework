@@ -3,11 +3,11 @@ declare(strict_types=1);
 namespace Viserio\Container;
 
 use Closure;
-use Reflector;
 use ReflectionClass;
-use ReflectionMethod;
 use ReflectionFunction;
+use ReflectionMethod;
 use ReflectionParameter;
+use Reflector;
 use Viserio\Contracts\Container\Exceptions\UnresolvableDependencyException;
 
 class ContainerResolver
@@ -22,23 +22,24 @@ class ContainerResolver
     /**
      * Resolve a closure, function, method or a class
      *
-     * @param  string|array  $subject
-     * @param  array         $parameters
+     * @param string|array $subject
+     * @param array        $parameters
+     *
      * @return mixed
      */
     public function resolve($subject, array $parameters = [])
     {
         if ($this->isClass($subject)) {
             return $this->resolveClass($subject, $parameters);
-        } else if ($this->isMethod($subject)) {
+        } elseif ($this->isMethod($subject)) {
             return $this->resolveMethod($subject, $parameters);
-        } else if ($this->isFunction($subject)) {
+        } elseif ($this->isFunction($subject)) {
             return $this->resolveFunction($subject, $parameters);
         }
 
         $subject = is_object($subject) ? get_class($subject) : gettype($subject);
 
-        throw new UnresolvableDependencyException("[$subject] is not resolvable. Build stack : [".implode(', ', $this->buildStack)."]");
+        throw new UnresolvableDependencyException("[$subject] is not resolvable. Build stack : [" . implode(', ', $this->buildStack) . ']');
     }
 
     /**
@@ -121,9 +122,9 @@ class ContainerResolver
     {
         if ($this->isClass($subject)) {
             return new ReflectionClass($subject);
-        } else if ($this->isMethod($subject)) {
+        } elseif ($this->isMethod($subject)) {
             return $this->getMethodReflector($subject);
-        } else if ($this->isFunction($subject)) {
+        } elseif ($this->isFunction($subject)) {
             return new ReflectionFunction($subject);
         }
 
@@ -159,14 +160,14 @@ class ContainerResolver
             return $parameter->getDefaultValue();
         }
 
-        throw new UnresolvableDependencyException("Unresolvable dependency resolving [$parameter] in [".end($this->buildStack)."]");
+        throw new UnresolvableDependencyException("Unresolvable dependency resolving [$parameter] in [" . end($this->buildStack) . ']');
     }
 
     /**
      * Resolve an array of \ReflectionParameter parameters.
      *
-     * @param  array $reflectionParameters
-     * @param  array $parameters
+     * @param array $reflectionParameters
+     * @param array $parameters
      *
      * @return array
      */

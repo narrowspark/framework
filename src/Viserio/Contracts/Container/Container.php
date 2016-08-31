@@ -124,7 +124,7 @@ interface Container
     /**
      * Define a contextual binding.
      *
-     * @param  string  $concrete
+     * @param string $concrete
      *
      * @return \Viserio\Contracts\Container\ContextualBindingBuilder
      */

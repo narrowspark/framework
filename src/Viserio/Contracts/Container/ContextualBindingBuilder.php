@@ -16,7 +16,7 @@ interface ContextualBindingBuilder
     /**
      * Define the implementation for the contextual binding.
      *
-     * @param \Closure|string  $implementation
+     * @param \Closure|string $implementation
      */
     public function give($implementation);
 }

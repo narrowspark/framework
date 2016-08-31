@@ -6,10 +6,10 @@ use StdClass;
 use Viserio\Container\Container;
 use Viserio\Container\Tests\Fixture\ContainerConcreteFixture;
 use Viserio\Container\Tests\Fixture\ContainerContractFixtureInterface;
-use Viserio\Container\Tests\Fixture\ContainerDependentFixture;
-use Viserio\Container\Tests\Fixture\ContainerNestedDependentFixture;
-use Viserio\Container\Tests\Fixture\ContainerImplementationFixture;
 use Viserio\Container\Tests\Fixture\ContainerDefaultValueFixture;
+use Viserio\Container\Tests\Fixture\ContainerDependentFixture;
+use Viserio\Container\Tests\Fixture\ContainerImplementationFixture;
+use Viserio\Container\Tests\Fixture\ContainerNestedDependentFixture;
 use Viserio\Container\Tests\Fixture\ContainerTestInterfaceFixture;
 
 class ContainerTest extends \PHPUnit_Framework_TestCase
@@ -117,7 +117,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
 
     public function testAbstractToConcreteResolution()
     {
-        $container = new Container;
+        $container = new Container();
         $container->bind(ContainerContractFixtureInterface::class, ContainerImplementationFixture::class);
         $class = $container->make(ContainerDependentFixture::class);
 
@@ -126,7 +126,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
 
     public function testNestedDependencyResolution()
     {
-        $container = new Container;
+        $container = new Container();
         $container->bind(ContainerContractFixtureInterface::class, ContainerImplementationFixture::class);
         $class = $container->make(ContainerNestedDependentFixture::class);
 
@@ -163,7 +163,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
 
     public function testAliases()
     {
-        $container = new Container;
+        $container = new Container();
         $container['foo'] = 'bar';
         $container->alias('foo', 'baz');
         $container->alias('baz', 'bat');
@@ -297,13 +297,13 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
 
     public function testUnsetRemoveBoundInstances()
     {
-        $container = new Container;
-        $container->instance('object', new StdClass);
+        $container = new Container();
+        $container->instance('object', new StdClass());
         unset($container['object']);
 
         $this->assertFalse($container->has('object'));
 
-        $container->instance('object', new StdClass);
+        $container->instance('object', new StdClass());
         $container->forget('object');
 
         $this->assertFalse($container->has('object'));
@@ -312,7 +312,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
     public function testBoundInstanceAndAliasCheckViaArrayAccess()
     {
         $container = new Container();
-        $container->instance('object', new StdClass);
+        $container->instance('object', new StdClass());
         $container->alias('object', 'alias');
 
         $this->assertTrue(isset($container['object']));
@@ -365,7 +365,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
     {
         $container = new Container();
 
-        $container->singleton('foo', function() {
+        $container->singleton('foo', function () {
             return (object) ['name' => 'narrowspark'];
         });
 
@@ -375,7 +375,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
             return $old;
         });
 
-        $container->bind('bar', function() {
+        $container->bind('bar', function () {
             return (object) ['name' => 'narrowspark'];
         });
 

@@ -4,10 +4,10 @@ namespace Viserio\Container;
 
 use Closure;
 use ReflectionClass;
-use Viserio\Contracts\Container\Traits\ContainerAwareTrait;
-use Viserio\Contracts\Container\Exceptions\UnresolvableDependencyException;
 use Viserio\Container\Traits\NormalizeClassNameTrait;
 use Viserio\Contracts\Container\ContextualBindingBuilder as ContextualBindingBuilderContract;
+use Viserio\Contracts\Container\Exceptions\UnresolvableDependencyException;
+use Viserio\Contracts\Container\Traits\ContainerAwareTrait;
 
 class ContextualBindingBuilder implements ContextualBindingBuilderContract
 {
@@ -104,7 +104,7 @@ class ContextualBindingBuilder implements ContextualBindingBuilderContract
             return $implementation;
         }
 
-        return function($container) use ($implementation) {
+        return function ($container) use ($implementation) {
             return $container->make($implementation);
         };
     }

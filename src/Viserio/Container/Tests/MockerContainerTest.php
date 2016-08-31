@@ -3,8 +3,8 @@ declare(strict_types=1);
 namespace Viserio\Container\Tests;
 
 use ReflectionClass;
-use Viserio\Container\MockContainer;
 use StdClass;
+use Viserio\Container\MockContainer;
 
 class MockerContainerTest extends \PHPUnit_Framework_TestCase
 {
