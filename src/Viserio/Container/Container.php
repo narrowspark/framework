@@ -4,7 +4,6 @@ namespace Viserio\Container;
 
 use ArrayAccess;
 use Closure;
-use ReflectionClass;
 use Interop\Container\ContainerInterface;
 use InvalidArgumentException;
 use Invoker\Invoker;
@@ -15,6 +14,7 @@ use Invoker\ParameterResolver\Container\TypeHintContainerResolver;
 use Invoker\ParameterResolver\DefaultValueResolver;
 use Invoker\ParameterResolver\NumericArrayResolver;
 use Invoker\ParameterResolver\ResolverChain;
+use ReflectionClass;
 use Viserio\Container\Proxy\ProxyFactory;
 use Viserio\Container\Traits\NormalizeClassNameTrait;
 use Viserio\Contracts\Container\Container as ContainerContract;
@@ -308,7 +308,7 @@ class Container extends ContainerResolver implements ArrayAccess, ContainerInter
         return $this;
     }
 
-        /**
+    /**
      * {@inheritdoc}
      */
     public function needs(string $abstract): ContextualBindingBuilderContract
@@ -676,7 +676,7 @@ class Container extends ContainerResolver implements ArrayAccess, ContainerInter
     /**
      * Call the given closure
      *
-     * @param mixed   $concrete
+     * @param mixed    $concrete
      * @param \Closure $closure
      *
      * @return mixed

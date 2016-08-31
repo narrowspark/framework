@@ -27,7 +27,7 @@ class MockContainer extends Container
         }
 
         if (!isset($this->mockedServices['mock::' . $id])) {
-            $this->mockedServices['mock::' . $id] = call_user_func_array([Mockery::class, 'mock'],  $arguments);
+            $this->mockedServices['mock::' . $id] = call_user_func_array([Mockery::class, 'mock'], $arguments);
         }
 
         return $this->mockedServices['mock::' . $id];

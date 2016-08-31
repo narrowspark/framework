@@ -4,20 +4,20 @@ namespace Viserio\Container\Tests;
 
 use StdClass;
 use Viserio\Container\Container;
+use Viserio\Container\Tests\Fixture\ContainerCircularReferenceStubA;
+use Viserio\Container\Tests\Fixture\ContainerCircularReferenceStubD;
 use Viserio\Container\Tests\Fixture\ContainerConcreteFixture;
 use Viserio\Container\Tests\Fixture\ContainerContractFixtureInterface;
 use Viserio\Container\Tests\Fixture\ContainerDefaultValueFixture;
 use Viserio\Container\Tests\Fixture\ContainerDependentFixture;
-use Viserio\Container\Tests\Fixture\ContainerImplementationTwoFixture;
 use Viserio\Container\Tests\Fixture\ContainerImplementationFixture;
-use Viserio\Container\Tests\Fixture\ContainerNestedDependentFixture;
-use Viserio\Container\Tests\Fixture\ContainerTestContextInjectOneFixture;
-use Viserio\Container\Tests\Fixture\ContainerTestInterfaceFixture;
-use Viserio\Container\Tests\Fixture\ContainerCircularReferenceStubA;
-use Viserio\Container\Tests\Fixture\ContainerCircularReferenceStubD;
-use Viserio\Container\Tests\Fixture\ContainerTestContextInjectTwoFixture;
+use Viserio\Container\Tests\Fixture\ContainerImplementationTwoFixture;
 use Viserio\Container\Tests\Fixture\ContainerInjectVariableFixture;
 use Viserio\Container\Tests\Fixture\ContainerMixedPrimitiveFixture;
+use Viserio\Container\Tests\Fixture\ContainerNestedDependentFixture;
+use Viserio\Container\Tests\Fixture\ContainerTestContextInjectOneFixture;
+use Viserio\Container\Tests\Fixture\ContainerTestContextInjectTwoFixture;
+use Viserio\Container\Tests\Fixture\ContainerTestInterfaceFixture;
 
 class ContainerTest extends \PHPUnit_Framework_TestCase
 {
@@ -248,23 +248,26 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
 
     public function testExtendInstancesArePreserved()
     {
-        $container = new Container;
+        $container = new Container();
         $container->bind('foo', function () {
-            $obj = new StdClass;
+            $obj = new StdClass();
             $obj->foo = 'bar';
+
             return $obj;
         });
 
-        $obj = new StdClass;
+        $obj = new StdClass();
         $obj->foo = 'foo';
 
         $container->instance('foo', $obj);
         $container->extend('foo', function ($obj, $container) {
             $obj->bar = 'baz';
+
             return $obj;
         });
         $container->extend('foo', function ($obj, $container) {
             $obj->baz = 'foo';
+
             return $obj;
         });
 
@@ -361,7 +364,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(100, $instance->something);
 
-        $container = new Container;
+        $container = new Container();
         $container->when(ContainerInjectVariableFixture::class)
             ->needs('$something')->give(function ($container) {
                 return $container->make(ContainerConcreteFixture::class);
@@ -402,8 +405,8 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
         $container->when(ContainerTestContextInjectTwoFixture::class)
             ->needs(ContainerContractFixtureInterface::class)
             ->give(function ($container) {
-            return $container->make(ContainerImplementationTwoFixture::class);
-        });
+                return $container->make(ContainerImplementationTwoFixture::class);
+            });
 
         $one = $container->make(ContainerTestContextInjectOneFixture::class);
         $two = $container->make(ContainerTestContextInjectTwoFixture::class);
@@ -444,16 +447,17 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
      */
     public function testInternalClassWithDefaultParameters()
     {
-        $container = new Container;
+        $container = new Container();
         $container->make(ContainerMixedPrimitiveFixture::class, []);
     }
+
     /**
      * @expectedException \Viserio\Contracts\Container\Exceptions\BindingResolutionException
      * @expectedExceptionMessage [Viserio\Container\Tests\Fixture\ContainerContractFixtureInterface] is not resolvable. Build stack : []
      */
     public function testBindingResolutionExceptionMessage()
     {
-        $container = new Container;
+        $container = new Container();
         $container->make(ContainerContractFixtureInterface::class, []);
     }
 
@@ -463,7 +467,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
      */
     public function testBindingResolutionExceptionMessageIncludesBuildStack()
     {
-        $container = new Container;
+        $container = new Container();
         $container->make(ContainerTestContextInjectOneFixture::class, []);
     }
 
