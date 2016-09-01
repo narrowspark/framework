@@ -8,6 +8,7 @@ use ProxyManager\Factory\LazyLoadingValueHolderFactory;
 use ProxyManager\FileLocator\FileLocator;
 use ProxyManager\GeneratorStrategy\EvaluatingGeneratorStrategy;
 use ProxyManager\GeneratorStrategy\FileWriterGeneratorStrategy;
+use ProxyManager\Proxy\LazyLoadingInterface;
 use RuntimeException;
 
 class ProxyFactory
