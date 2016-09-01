@@ -2,7 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Cache\Providers;
 
-use Viserio\Application\ServiceProvider;
+use Interop\Container\ContainerInterface;
+use Interop\Container\ServiceProvider;
 use Viserio\Cache\Manager as CacheManager;
 
 class CacheServiceProvider extends ServiceProvider
@@ -10,23 +11,9 @@ class CacheServiceProvider extends ServiceProvider
     /**
      * {@inheritdoc}
      */
-    public function register()
-    {
-        $this->registerCacheFactory();
-        $this->registerDefaultCache();
-        $this->registerCaches();
-    }
-
-    /**
-     * Get the services provided by the provider.
-     *
-     * @return string[]
-     */
-    public function provides(): array
+    public function getServices()
     {
         return [
-            'cache',
-            'cache.factory',
         ];
     }
 

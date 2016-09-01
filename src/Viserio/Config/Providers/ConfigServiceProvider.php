@@ -2,7 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Config\Providers;
 
-use Viserio\Application\ServiceProvider;
+use Interop\Container\ContainerInterface;
+use Interop\Container\ServiceProvider;
 use Viserio\Config\Manager as ConfigManager;
 use Viserio\Config\Repository;
 
@@ -11,17 +12,16 @@ class ConfigServiceProvider extends ServiceProvider
     /**
      * {@inheritdoc}
      */
-    public function register()
+    public function getServices()
     {
-        $this->app->singleton('config.repository', function () {
-            return new Repository();
-        });
+        return [
+            ConfigManager::class => [self::class, 'createConfigManager'],
+            Repository::class => new Repository(),
+        ];
+    }
 
-        $this->app->singleton('config', function ($app) {
-            return new ConfigManager(
-                $app->get('config.repository'),
-                new FileLoader($app->get('files'), $app->get('settings.path'))
-            );
-        });
+    public static function createConfigManager(ContainerInterface $container): ConfigManager
+    {
+        return new ConfigManager($container->get(Repository::class));
     }
 }
