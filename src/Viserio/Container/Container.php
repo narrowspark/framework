@@ -100,14 +100,9 @@ class Container extends ContainerResolver implements ArrayAccess, ContainerContr
 
     /**
      * Create a new container instance.
-     *
-     * @param string|null $proxyDirectory
      */
-    public function __construct(string $proxyDirectory = null)
+    public function __construct()
     {
-        $writeProxiesToFile = $proxyDirectory === null ? false : true;
-        $this->proxyFactory = new ProxyFactory($writeProxiesToFile, $proxyDirectory);
-
         // Auto-register the container
         $this->instance(Container::class, $this);
         $this->instance(ContainerContract::class, $this);
@@ -169,16 +164,6 @@ class Container extends ContainerResolver implements ArrayAccess, ContainerContr
         } else {
             $this->bindSingleton($abstract, $concrete);
         }
-    }
-
-    public function layzSingleton($abstract, $concrete = null)
-    {
-        $initializer = function (&$wrappedInstance, LazyLoadingInterface $proxy) use ($id) {
-            $proxy->setProxyInitializer(null);
-            $wrappedInstance = $this->container->get($id);
-
-            return true;
-        };
     }
 
     /**
