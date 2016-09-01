@@ -9,7 +9,7 @@ trait NormalizeClassNameTrait
      *
      * @param mixed $service
      *
-     * @return object|integer|double|null|array|boolean|string
+     * @return object|int|float|null|array|bool|string
      */
     protected function normalize($service)
     {
