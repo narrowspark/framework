@@ -176,6 +176,7 @@ class Container extends ContainerResolver implements ArrayAccess, ContainerContr
         $initializer = function (&$wrappedInstance, LazyLoadingInterface $proxy) use ($id) {
             $proxy->setProxyInitializer(null);
             $wrappedInstance = $this->container->get($id);
+
             return true;
         };
     }

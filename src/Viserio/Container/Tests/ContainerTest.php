@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Container\Tests;
 
-use StdClass;
 use Mouf\Picotainer\Picotainer;
+use StdClass;
 use Viserio\Container\Container;
 use Viserio\Container\Tests\Fixture\ContainerCircularReferenceStubA;
 use Viserio\Container\Tests\Fixture\ContainerCircularReferenceStubD;
@@ -16,10 +16,10 @@ use Viserio\Container\Tests\Fixture\ContainerImplementationTwoFixture;
 use Viserio\Container\Tests\Fixture\ContainerInjectVariableFixture;
 use Viserio\Container\Tests\Fixture\ContainerMixedPrimitiveFixture;
 use Viserio\Container\Tests\Fixture\ContainerNestedDependentFixture;
+use Viserio\Container\Tests\Fixture\ContainerPrivateConstructor;
 use Viserio\Container\Tests\Fixture\ContainerTestContextInjectOneFixture;
 use Viserio\Container\Tests\Fixture\ContainerTestContextInjectTwoFixture;
 use Viserio\Container\Tests\Fixture\FactoryClass;
-use Viserio\Container\Tests\Fixture\ContainerPrivateConstructor;
 
 class ContainerTest extends \PHPUnit_Framework_TestCase
 {
@@ -107,7 +107,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
     {
         $container = new Container();
 
-        $this->assertEquals('Hello', $container->make(FactoryClass::class. '::create'));
+        $this->assertEquals('Hello', $container->make(FactoryClass::class . '::create'));
     }
 
     public function testSharedConcreteResolution()
@@ -497,7 +497,9 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
     public function testDelegateContainer()
     {
         $picotainer = new Picotainer([
-            "instance" => function () { return "value"; },
+            'instance' => function () {
+                return 'value';
+            },
         ]);
 
         $container = new Container();
