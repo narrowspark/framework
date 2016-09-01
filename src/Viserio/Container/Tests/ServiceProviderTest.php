@@ -3,8 +3,8 @@ declare(strict_types=1);
 namespace Viserio\Container\Tests;
 
 use Viserio\Container\Container;
-use Viserio\Container\Tests\Fixture\SimpleFixtureServiceProvider;
 use Viserio\Container\Tests\Fixture\ServiceFixture;
+use Viserio\Container\Tests\Fixture\SimpleFixtureServiceProvider;
 
 class ServiceProviderTest extends \PHPUnit_Framework_TestCase
 {
@@ -20,9 +20,9 @@ class ServiceProviderTest extends \PHPUnit_Framework_TestCase
     public function testProviderWithRegisterMethod()
     {
         $container = new Container();
-        $container->register(new SimpleFixtureServiceProvider(), array(
+        $container->register(new SimpleFixtureServiceProvider(), [
             'anotherParameter' => 'anotherValue',
-        ));
+        ]);
 
         $this->assertEquals('value', $container->get('param'));
         $this->assertEquals('anotherValue', $container->get('anotherParameter'));

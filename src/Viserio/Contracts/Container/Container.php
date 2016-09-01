@@ -134,7 +134,7 @@ interface Container extends ContainerInterface
     /**
      * Registers a service provider.
      *
-     * @param \Interop\Container\ServiceProvider $provider the service provider to register
+     * @param \Interop\Container\ServiceProvider $provider   the service provider to register
      * @param array                              $parameters An array of values that customizes the provider
      *
      * @return $this

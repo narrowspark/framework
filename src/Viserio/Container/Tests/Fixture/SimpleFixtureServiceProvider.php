@@ -9,13 +9,13 @@ class SimpleFixtureServiceProvider implements ServiceProvider
 {
     public function getServices()
     {
-        return array(
-            'param' => array(SimpleFixtureServiceProvider::class, 'getParam'),
-            'service' => function() {
+        return [
+            'param' => [SimpleFixtureServiceProvider::class, 'getParam'],
+            'service' => function () {
                 return new ServiceFixture();
             },
-            'previous' => array(SimpleFixtureServiceProvider::class, 'getPrevious'),
-        );
+            'previous' => [SimpleFixtureServiceProvider::class, 'getPrevious'],
+        ];
     }
 
     public static function getParam()
