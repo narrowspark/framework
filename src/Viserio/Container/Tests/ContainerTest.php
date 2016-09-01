@@ -17,7 +17,6 @@ use Viserio\Container\Tests\Fixture\ContainerMixedPrimitiveFixture;
 use Viserio\Container\Tests\Fixture\ContainerNestedDependentFixture;
 use Viserio\Container\Tests\Fixture\ContainerTestContextInjectOneFixture;
 use Viserio\Container\Tests\Fixture\ContainerTestContextInjectTwoFixture;
-use Viserio\Container\Tests\Fixture\ContainerTestInterfaceFixture;
 
 class ContainerTest extends \PHPUnit_Framework_TestCase
 {
@@ -166,6 +165,11 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
         unset($container['something']);
 
         $this->assertFalse(isset($container['something']));
+
+        $container['foo'] = 'foo';
+        $result = $container->make('foo');
+
+        $this->assertSame($result, $container->make('foo'));
     }
 
     public function testAliases()
@@ -227,7 +231,6 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals('narrowspark', $result->name);
         $this->assertEquals('viserio', $result->oldName);
-        // $this->assertSame($result, $container->make('foo'));
     }
 
     public function testMultipleExtends()
@@ -331,7 +334,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Viserio\Contracts\Container\Exceptions\CircularReferenceException
+     * @expectedException \Viserio\Contracts\Container\Exceptions\CyclicDependencyException
      * @expectedExceptionMessage Circular reference found while resolving [Viserio\Container\Tests\Fixture\ContainerCircularReferenceStubD].
      */
     public function testCircularReferenceCheck()
@@ -343,7 +346,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Viserio\Contracts\Container\Exceptions\CircularReferenceException
+     * @expectedException \Viserio\Contracts\Container\Exceptions\CyclicDependencyException
      * @expectedExceptionMessage Circular reference found while resolving [Viserio\Container\Tests\Fixture\ContainerCircularReferenceStubB].
      */
     public function testCircularReferenceCheckDetectCycleStartLocation()

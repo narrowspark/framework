@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Viserio\Container;
 
 use InvalidArgumentException;
@@ -22,11 +23,11 @@ class MockContainer extends Container
         $arguments = func_get_args();
         $id = array_shift($arguments);
 
-        if (!$this->has($id)) {
+        if (! $this->has($id)) {
             throw new InvalidArgumentException(sprintf('Cannot mock a non-existent service: "%s"', $id));
         }
 
-        if (!isset($this->mockedServices['mock::' . $id])) {
+        if (! isset($this->mockedServices['mock::' . $id])) {
             $this->mockedServices['mock::' . $id] = call_user_func_array([Mockery::class, 'mock'], $arguments);
         }
 

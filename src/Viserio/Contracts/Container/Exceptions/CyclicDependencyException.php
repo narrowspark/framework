@@ -3,8 +3,9 @@ declare(strict_types=1);
 namespace Viserio\Contracts\Container\Exceptions;
 
 use Exception;
+use Interop\Container\Exception\ContainerException as InteropContainerException;
 
-class CircularReferenceException extends Exception
+class CyclicDependencyException extends Exception implements InteropContainerException
 {
     /**
      * The build stack that caused the exception.

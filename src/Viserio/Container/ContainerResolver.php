@@ -7,9 +7,8 @@ use ReflectionClass;
 use ReflectionFunction;
 use ReflectionMethod;
 use ReflectionParameter;
-use Reflector;
 use Viserio\Contracts\Container\Exceptions\BindingResolutionException;
-use Viserio\Contracts\Container\Exceptions\CircularReferenceException;
+use Viserio\Contracts\Container\Exceptions\CyclicDependencyException;
 
 class ContainerResolver
 {
@@ -40,7 +39,11 @@ class ContainerResolver
 
         $subject = is_object($subject) ? get_class($subject) : $subject;
 
-        throw new BindingResolutionException("[$subject] is not resolvable. Build stack : [" . implode(', ', $this->buildStack) . ']');
+        throw new BindingResolutionException(sprintf(
+            '[%s] is not resolvable. Build stack : [%s]',
+            $subject,
+            implode(', ', $this->buildStack)
+        ));
     }
 
     /**
@@ -55,7 +58,7 @@ class ContainerResolver
     {
         $reflectionClass = new ReflectionClass($class);
 
-        if (!$reflectionClass->isInstantiable()) {
+        if (! $reflectionClass->isInstantiable()) {
             throw new BindingResolutionException(
                 sprintf(
                     'Unable to reflect on the class [%s], does the class exist and is it properly autoloaded?',
@@ -67,7 +70,7 @@ class ContainerResolver
         if (in_array($class, $this->buildStack, true)) {
             $this->buildStack[] = $class;
 
-            throw new CircularReferenceException($class, $this->buildStack);
+            throw new CyclicDependencyException($class, $this->buildStack);
         }
 
         $reflectionMethod = $reflectionClass->getConstructor();
@@ -144,8 +147,6 @@ class ContainerResolver
         } elseif ($this->isFunction($subject)) {
             return new ReflectionFunction($subject);
         }
-
-        return;
     }
 
     /**
@@ -200,25 +201,6 @@ class ContainerResolver
     }
 
     /**
-     * Merge some dynamicly resolved parameters whith some others provided parameters by the user.
-     *
-     * @param array $rootParameters
-     * @param array $parameters
-     *
-     * @return array
-     */
-    private function mergeParameters(array $rootParameters, array $parameters = []): array
-    {
-        foreach ($parameters as $key => $value) {
-            if (!isset($rootParameters[$key]) && is_int($key)) {
-                $rootParameters[$key] = $value;
-            }
-        }
-
-        return $rootParameters;
-    }
-
-    /**
      * Get the reflection object for a method.
      *
      * @param string|array $method
@@ -255,7 +237,7 @@ class ContainerResolver
      */
     protected function isMethod($value): bool
     {
-        return is_callable($value) && !$this->isFunction($value);
+        return is_callable($value) && ! $this->isFunction($value);
     }
 
     /**
@@ -268,5 +250,24 @@ class ContainerResolver
     protected function isFunction($value): bool
     {
         return is_callable($value) && ($value instanceof Closure || is_string($value) && function_exists($value));
+    }
+
+    /**
+     * Merge some dynamicly resolved parameters whith some others provided parameters by the user.
+     *
+     * @param array $rootParameters
+     * @param array $parameters
+     *
+     * @return array
+     */
+    private function mergeParameters(array $rootParameters, array $parameters = []): array
+    {
+        foreach ($parameters as $key => $value) {
+            if (! isset($rootParameters[$key]) && is_int($key)) {
+                $rootParameters[$key] = $value;
+            }
+        }
+
+        return $rootParameters;
     }
 }

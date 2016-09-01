@@ -5,7 +5,6 @@ namespace Viserio\Container;
 use ArrayAccess;
 use Closure;
 use Interop\Container\ContainerInterface;
-use InvalidArgumentException;
 use Invoker\Invoker;
 use Invoker\InvokerInterface;
 use Invoker\ParameterResolver\AssociativeArrayResolver;
@@ -19,6 +18,7 @@ use Viserio\Container\Proxy\ProxyFactory;
 use Viserio\Container\Traits\NormalizeClassNameTrait;
 use Viserio\Contracts\Container\Container as ContainerContract;
 use Viserio\Contracts\Container\ContextualBindingBuilder as ContextualBindingBuilderContract;
+use Viserio\Contracts\Container\Exceptions\ContainerException;
 use Viserio\Contracts\Container\Exceptions\NotFoundException;
 use Viserio\Contracts\Container\Exceptions\UnresolvableDependencyException;
 use Viserio\Contracts\Container\Types as TypesContract;
@@ -33,13 +33,6 @@ class Container extends ContainerResolver implements ArrayAccess, ContainerInter
      * @var array
      */
     protected $bindings = [];
-
-    /**
-     * Invoker instance.
-     *
-     * @var \Invoker\InvokerInterface|null
-     */
-    private $invoker;
 
     /**
      * Array full of container implementing the ContainerInterface.
@@ -75,6 +68,13 @@ class Container extends ContainerResolver implements ArrayAccess, ContainerInter
      * @var array
      */
     protected $contextualParameters = [];
+
+    /**
+     * Invoker instance.
+     *
+     * @var \Invoker\InvokerInterface|null
+     */
+    private $invoker;
 
     /**
      * ProxyFactory instance.
@@ -120,7 +120,7 @@ class Container extends ContainerResolver implements ArrayAccess, ContainerInter
      */
     public function bindIf(string $abstract, $concrete = null)
     {
-        if (!$this->has($abstract)) {
+        if (! $this->has($abstract)) {
             $this->bind($abstract, $concrete);
         }
     }
@@ -327,11 +327,11 @@ class Container extends ContainerResolver implements ArrayAccess, ContainerInter
      */
     public function give($implementation)
     {
-        if (!($reflector = $this->getReflector($this->concrete))) {
+        if (! ($reflector = $this->getReflector($this->concrete))) {
             throw new UnresolvableDependencyException("[$this->concrete] is not resolvable.");
         }
 
-        if ($reflector instanceof ReflectionClass && !($reflector = $reflector->getConstructor())) {
+        if ($reflector instanceof ReflectionClass && ! ($reflector = $reflector->getConstructor())) {
             throw new UnresolvableDependencyException("[$this->concrete] must have a constructor.");
         }
 
@@ -354,26 +354,18 @@ class Container extends ContainerResolver implements ArrayAccess, ContainerInter
     }
 
     /**
-     * Returns an entry of the container by its name.
-     *
-     * @param string $name Entry name or a class name.
-     *
-     * @throws InvalidArgumentException The name parameter must be of type string.
-     * @throws DependencyException      Error while resolving the entry.
-     * @throws NotFoundException        No entry found for the given name.
-     *
-     * @return mixed
+     * {@inheritdoc}
      */
     public function get($id)
     {
         if (! is_string($id)) {
-            throw new InvalidArgumentException(sprintf(
+            throw new ContainerException(sprintf(
                 'The id parameter must be of type string, %s given',
                 is_object($id) ? get_class($id) : gettype($id)
             ));
         }
 
-        if (isset($this->bindings[$id])) {
+        if ($this->has($id)) {
             return $this->resolve($id);
         }
 
@@ -387,18 +379,12 @@ class Container extends ContainerResolver implements ArrayAccess, ContainerInter
     }
 
     /**
-     * Test if the container can provide something for the given name.
-     *
-     * @param string $name Entry name or a class name.
-     *
-     * @throws InvalidArgumentException The name parameter must be of type string.
-     *
-     * @return bool
+     * {@inheritdoc}
      */
     public function has($id)
     {
         if (! is_string($id)) {
-            throw new InvalidArgumentException(sprintf(
+            throw new ContainerException(sprintf(
                 'The name parameter must be of type string, %s given',
                 is_object($id) ? get_class($id) : gettype($id)
             ));
@@ -486,7 +472,6 @@ class Container extends ContainerResolver implements ArrayAccess, ContainerInter
      * Attempt to get a service from the stack of delegated backup containers.
      *
      * @param string $abstract
-     * @param array  $args
      *
      * @return mixed
      */
@@ -606,7 +591,7 @@ class Container extends ContainerResolver implements ArrayAccess, ContainerInter
      *
      * @param string $concrete
      *
-     * @throws ContainerException
+     * @throws \Viserio\Contracts\Container\Exceptions\ContainerException
      */
     protected function notImmutable(string $concrete)
     {
@@ -645,7 +630,7 @@ class Container extends ContainerResolver implements ArrayAccess, ContainerInter
      */
     protected function extendResolved($abstract, &$resolved)
     {
-        if (!is_string($abstract) || !isset($this->extenders[$abstract])) {
+        if (! is_string($abstract) || ! isset($this->extenders[$abstract])) {
             return;
         }
 
@@ -687,16 +672,16 @@ class Container extends ContainerResolver implements ArrayAccess, ContainerInter
     }
 
     /**
-     * Format a class binding
+     * Format a class binding.
      *
      * @param string|closure|object $implementation
      * @param \ReflectionClass      $parameterClass
      *
      * @return \Closure|object
      */
-    protected function contextualBindingFormat($implementation, ReflectionClass $parameter)
+    protected function contextualBindingFormat($implementation, ReflectionClass $parameterClass)
     {
-        if ($implementation instanceof Closure || $implementation instanceof $parameter->name) {
+        if ($implementation instanceof Closure || $implementation instanceof $parameterClass->name) {
             return $implementation;
         }
 

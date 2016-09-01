@@ -69,7 +69,6 @@ class RootRoutesRouterTest extends RouteRouterBaseTest
                 );
         })->setParameter('name', 'root-slash');
 
-
         $router->get('/middleware', ['middleware.with' => new FakeMiddleware(), function ($request, $args) {
             return (new ResponseFactory())
                 ->createResponse()

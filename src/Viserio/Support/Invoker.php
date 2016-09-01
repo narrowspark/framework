@@ -106,7 +106,6 @@ class Invoker implements InvokerInterface
                 new DefaultValueResolver(),
             ], $this->resolvers);
 
-
             if (isset($this->inject['type'])) {
                 $resolvers[] = new TypeHintContainerResolver($container);
             }
