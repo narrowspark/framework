@@ -23,7 +23,8 @@ use Viserio\Contracts\Container\Exceptions\NotFoundException;
 use Viserio\Contracts\Container\Exceptions\UnresolvableDependencyException;
 use Viserio\Contracts\Container\Types as TypesContract;
 
-class Container extends ContainerResolver implements ArrayAccess,
+class Container extends ContainerResolver implements
+ArrayAccess,
     ContainerContract,
     InvokerInterface,
     ContextualBindingBuilderContract
@@ -304,7 +305,7 @@ class Container extends ContainerResolver implements ArrayAccess,
 
         $resolved = parent::resolve($abstract, $parameters);
 
-         if (! is_string($abstract)) {
+        if (! is_string($abstract)) {
             $this->extendResolved($abstract, $resolved);
         }
 
