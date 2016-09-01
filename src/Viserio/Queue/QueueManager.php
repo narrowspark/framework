@@ -19,8 +19,9 @@ use Viserio\Queue\Connectors\RedisQueue;
 use Viserio\Queue\Connectors\SqsQueue;
 use Viserio\Queue\Connectors\SyncQueue;
 use Viserio\Support\AbstractConnectionManager;
+use Viserio\Contracts\Queue\Factory as FactoryContract;
 
-class QueueManager extends AbstractConnectionManager implements MonitorContract
+class QueueManager extends AbstractConnectionManager implements MonitorContract, FactoryContract
 {
     /**
      * Encrypter instance.

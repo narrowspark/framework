@@ -437,7 +437,7 @@ class Container extends ContainerResolver implements ArrayAccess, ContainerContr
                     return call_user_func($callable, $container, $getPrevious);
                 });
             } else {
-                $this->bind($key, function (ContainerInterface $container) use ($callable) {
+                $this->singleton($key, function (ContainerInterface $container) use ($callable) {
                     return call_user_func($callable, $container, null);
                 });
             }

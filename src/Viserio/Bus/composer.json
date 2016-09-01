@@ -32,8 +32,10 @@
         "viserio/support"                                    : "self.version"
     },
     "require-dev": {
+        "container-interop/service-provider"                 : "^0.3",
         "narrowspark/testing-helper"                         : "^1.5",
         "phpunit/phpunit"                                    : "^5.1",
+        "viserio/queue"                                      : "self.version",
         "viserio/statical-proxy"                             : "self.version"
     },
     "autoload": {
@@ -55,6 +57,10 @@
         "branch-alias": {
             "dev-master"                                     : "1.0-dev"
         }
+    },
+    "suggest": {
+        "container-interop/service-provider"                 : "Required to use service-provider (^0.3).",
+        "viserio/queue"                                      : "Required to use queueing dispatcher (self.version)."
     },
     "minimum-stability"                                      : "dev",
     "prefer-stable"                                          : true
