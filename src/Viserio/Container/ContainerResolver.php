@@ -183,8 +183,8 @@ class ContainerResolver
         throw new BindingResolutionException(sprintf(
             'Unresolvable dependency resolving [%s] in [%s]',
             $parameter,
-            end($this->buildStack))
-        );
+            end($this->buildStack)
+        ));
     }
 
     /**

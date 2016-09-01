@@ -23,11 +23,7 @@ use Viserio\Contracts\Container\Exceptions\NotFoundException;
 use Viserio\Contracts\Container\Exceptions\UnresolvableDependencyException;
 use Viserio\Contracts\Container\Types as TypesContract;
 
-class Container extends ContainerResolver implements
-ArrayAccess,
-    ContainerContract,
-    InvokerInterface,
-    ContextualBindingBuilderContract
+class Container extends ContainerResolver implements ArrayAccess, ContainerContract, InvokerInterface, ContextualBindingBuilderContract
 {
     use NormalizeClassNameTrait;
 
