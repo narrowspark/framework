@@ -15,7 +15,6 @@ use Invoker\ParameterResolver\DefaultValueResolver;
 use Invoker\ParameterResolver\NumericArrayResolver;
 use Invoker\ParameterResolver\ResolverChain;
 use ReflectionClass;
-use Viserio\Container\Proxy\ProxyFactory;
 use Viserio\Container\Traits\NormalizeClassNameTrait;
 use Viserio\Contracts\Container\Container as ContainerContract;
 use Viserio\Contracts\Container\ContextualBindingBuilder as ContextualBindingBuilderContract;
@@ -92,16 +91,11 @@ class Container extends ContainerResolver implements ArrayAccess, ContainerContr
     private $invoker;
 
     /**
-     * ProxyFactory instance.
-     *
-     * @var \Viserio\Container\Proxy\ProxyFactory
-     */
-    private $proxyFactory;
-
-    /**
      * Create a new container instance.
+     *
+     * @param string|null $proxyDirectory
      */
-    public function __construct()
+    public function __construct(string $proxyDirectory = null)
     {
         // Auto-register the container
         $this->instance(Container::class, $this);

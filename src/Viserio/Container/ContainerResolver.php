@@ -149,8 +149,6 @@ class ContainerResolver
         } elseif ($this->isFunction($subject)) {
             return new ReflectionFunction($subject);
         }
-
-        return;
     }
 
     /**
