@@ -4,7 +4,6 @@ namespace Viserio\Routing;
 
 use Closure;
 use Interop\Container\ContainerInterface;
-use Narrowspark\Arr\StaticArr as Arr;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Contracts\Container\Traits\ContainerAwareTrait;

@@ -75,19 +75,4 @@ trait EnvironmentTrait
     {
         return $this->get('env') === 'testing';
     }
-
-    /**
-     * {@inheritdoc}
-     *
-     * @param string $alias
-     * @param string $concrete
-     */
-    abstract public function bind(string $alias, $concrete = null, $singleton = false);
-
-    /**
-     * {@inheritdoc}
-     *
-     * @param string $id
-     */
-    abstract public function get($id);
 }

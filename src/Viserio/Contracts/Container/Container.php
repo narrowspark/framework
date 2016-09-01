@@ -2,14 +2,11 @@
 declare(strict_types=1);
 namespace Viserio\Contracts\Container;
 
-/**
- * Container.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.4
- */
-interface Container
+use Closure;
+use Interop\Container\ContainerInterface;
+use Interop\Container\ServiceProvider;
+
+interface Container extends ContainerInterface
 {
     /**
      * Alias a type to a different name.
@@ -22,102 +19,125 @@ interface Container
     /**
      * Register a binding with the container.
      *
-     * @param string               $alias
+     * @param string|array         $abstract
      * @param \Closure|string|null $concrete
-     * @param bool                 $singleton
      */
-    public function bind(string $alias, $concrete = null, $singleton = false);
+    public function bind($abstract, $concrete = null);
+
+    /**
+     * Register a binding if it hasn't already been registered.
+     *
+     * @param string               $abstract
+     * @param \Closure|string|null $concrete
+     */
+    public function bindIf(string $abstract, $concrete = null);
 
     /**
      * Register a shared binding in the container.
      *
-     * @param string               $abstract
+     * @param string|array         $abstract
      * @param \Closure|string|null $concrete
      */
     public function singleton($abstract, $concrete = null);
 
     /**
-     * Resolve the given type from the container.
+     * Register an existing instance as shared in the container.
      *
-     * @param string $alias
-     * @param array  $args
-     *
-     * @return mixed
+     * @param string|array $abstract
+     * @param mixed        $instance
      */
-    public function make($alias, array $args = []);
+    public function instance($abstract, $instance);
 
     /**
-     * Adds an entry to the container.
+     * Delegate a backup container to be checked for services if it
+     * cannot be resolved via this container.
      *
-     * @param string $id    Identifier of the entry to add
-     * @param mixed  $value The entry to add to the container
+     * @param \Interop\Container\ContainerInterface $container
+     *
+     * @return $this
      */
-    public function set(string $id, $value);
+    public function delegate(ContainerInterface $container): Container;
 
     /**
-     * Extend an existing binding.
+     * Returns true if service is registered in one of the delegated backup containers.
      *
-     * @param string   $binding The name of the binding to extend.
-     * @param \Closure $closure The function to use to extend the existing binding.
+     * @param string $abstract
      *
-     * @throws ContainerException
+     * @return bool
      */
-    public function extend(string $binding, \Closure $closure);
+    public function hasInDelegate(string $abstract): bool;
 
     /**
      * Removes an entry from the container.
      *
-     * @param string $id Identifier of the entry to remove
+     * @param string $abstract Identifier of the entry to remove
      */
-    public function remove(string $id);
+    public function forget(string $abstract);
 
     /**
-     * Allows for methods to be invoked on any object that is resolved of the tyoe
-     * provided.
+     * Resolve the given type from the container.
      *
-     * @param string        $type
-     * @param callable|null $callback
+     * @param string $abstract
+     * @param array  $parameters
      *
-     * @return \Viserio\Container\Inflector|void
+     * @return mixed
      */
-    public function inflector(string $type, callable $callback = null);
+    public function make(string $abstract, array $parameters = []);
+
+    /**
+     * "Extend" an abstract type in the container.
+     *
+     * @param string   $binding
+     * @param \Closure $closure
+     */
+    public function extend(string $binding, Closure $closure);
+
+    /**
+     * Intercept the resolve call to add some features
+     *
+     * @param mixed $abstract
+     * @param array $parameters
+     *
+     * @return mixed
+     */
+    public function resolve($abstract, array $parameters = []);
+
+    /**
+     * Resolve a bound type from container.
+     *
+     * @param string $abstract
+     * @param array  $parameters
+     *
+     * @return mixed
+     */
+    public function resolveBound(string $abstract, array $parameters = []);
+
+    /**
+     * Resolve a non bound type.
+     *
+     * @param string|\Closure $abstract
+     * @param array           $parameters
+     *
+     * @return mixed
+     */
+    public function resolveNonBound($abstract, array $parameters = []);
 
     /**
      * Define a contextual binding.
      *
      * @param string $concrete
      *
-     * @return \Viserio\Contracts\Container\ContextualBindingBuilder
+     * @return $this
      */
-    public function when($concrete): \Viserio\Contracts\Container\ContextualBindingBuilder;
+    public function when(string $concrete): Container;
 
     /**
-     * Determine if the given abstract type has been bound.
+     * Registers a service provider.
      *
-     * @param string $abstract
+     * @param \Interop\Container\ServiceProvider $provider   the service provider to register
+     * @param array                              $parameters An array of values that customizes the provider
      *
-     * @return bool
+     * @return $this
      */
-    public function bound(string $abstract): bool;
-
-    /**
-     * Check if an item is being managed as a singleton.
-     *
-     * @param string $alias
-     *
-     * @return bool
-     */
-    public function isSingleton(string $alias): bool;
-
-    /**
-     * Call the given Closure and inject its dependencies.
-     *
-     * @param callable $callable
-     * @param array    $args
-     *
-     * @throws \RuntimeException
-     *
-     * @return mixed
-     */
-    public function call(callable $callable, array $args = []);
+    public function register(ServiceProvider $provider, array $parameters = []): Container;
 }

@@ -13,11 +13,10 @@ use Viserio\Application\Traits\MiddlewaresTrait;
 use Viserio\Application\Traits\PathsTrait;
 use Viserio\Application\Traits\ServiceProviderTrait;
 use Viserio\Container\Container;
-use Viserio\Contracts\Application\Foundation;
 use Viserio\Http\ServerRequest;
 use Viserio\StaticalProxy\StaticalProxy;
 
-class Application extends Container implements Foundation
+class Application
 {
     // Register all needed Traits
     use BootableTrait;
@@ -79,6 +78,10 @@ class Application extends Container implements Foundation
     {
         StaticalProxy::setFacadeApplication($this);
         StaticalProxy::clearResolvedInstances();
+    }
+
+    public function get($id)
+    {
     }
 
     /**

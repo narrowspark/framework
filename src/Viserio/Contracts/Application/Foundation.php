@@ -4,7 +4,7 @@ namespace Viserio\Contracts\Application;
 
 use Viserio\Contracts\Container\Container;
 
-interface Foundation extends Container
+interface Foundation
 {
     /**
      * Get the version number of the application.

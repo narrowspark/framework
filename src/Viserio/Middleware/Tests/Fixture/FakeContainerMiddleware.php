@@ -2,7 +2,6 @@
 declare(strict_types=1);
 namespace Viserio\Middleware\Tests\Fixture;
 
-use Interop\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Contracts\Container\Traits\ContainerAwareTrait;

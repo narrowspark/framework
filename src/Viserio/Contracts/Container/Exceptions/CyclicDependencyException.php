@@ -1,8 +1,11 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Container\Exception;
+namespace Viserio\Contracts\Container\Exceptions;
 
-class CircularReferenceException extends \Exception
+use Exception;
+use Interop\Container\Exception\ContainerException as InteropContainerException;
+
+class CyclicDependencyException extends Exception implements InteropContainerException
 {
     /**
      * The build stack that caused the exception.
@@ -17,7 +20,7 @@ class CircularReferenceException extends \Exception
      * @param string $class
      * @param array  $buildStack
      */
-    public function __construct($class, array $buildStack)
+    public function __construct(string $class, array $buildStack)
     {
         $this->message = sprintf('Circular reference found while resolving [%s].', $class);
         $this->buildStack = $buildStack;

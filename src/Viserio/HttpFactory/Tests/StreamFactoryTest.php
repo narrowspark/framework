@@ -2,7 +2,6 @@
 declare(strict_types=1);
 namespace Viserio\HttpFactory\Tests;
 
-use ArrayIterator;
 use Psr\Http\Message\StreamInterface;
 use Viserio\Http\Stream;
 use Viserio\HttpFactory\StreamFactory;
@@ -21,12 +20,6 @@ class StreamFactoryTest extends \PHPUnit_Framework_TestCase
         $resource = tmpfile();
         $stream = $this->factory->createStream($resource);
         $this->assertStream($stream, '');
-    }
-
-    private function assertStream($stream, $content)
-    {
-        $this->assertInstanceOf(StreamInterface::class, $stream);
-        $this->assertSame($content, (string) $stream);
     }
 
     public function testKeepsPositionOfResource()
@@ -63,5 +56,11 @@ class StreamFactoryTest extends \PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf(Stream::class, $stream);
         $this->assertSame(file_get_contents(__FILE__), (string) $stream);
+    }
+
+    private function assertStream($stream, $content)
+    {
+        $this->assertInstanceOf(StreamInterface::class, $stream);
+        $this->assertSame($content, (string) $stream);
     }
 }

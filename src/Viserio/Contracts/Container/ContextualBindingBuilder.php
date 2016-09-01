@@ -2,13 +2,6 @@
 declare(strict_types=1);
 namespace Viserio\Contracts\Container;
 
-/**
- * ContextualBindingBuilder.
- *
- * @author  Daniel Bannert
- *
- * @since   0.9.6
- */
 interface ContextualBindingBuilder
 {
     /**

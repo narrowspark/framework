@@ -4,7 +4,6 @@ namespace Viserio\HttpFactory;
 
 use Interop\Http\Factory\ServerRequestFactoryInterface;
 use Interop\Http\Factory\ServerRequestFromGlobalsFactoryInterface;
-use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\UriInterface;
 use Viserio\Http\ServerRequest;
 use Viserio\Http\Stream\LazyOpenStream;

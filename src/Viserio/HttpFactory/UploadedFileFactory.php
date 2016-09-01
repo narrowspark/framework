@@ -3,7 +3,6 @@ declare(strict_types=1);
 namespace Viserio\HttpFactory;
 
 use Interop\Http\Factory\UploadedFileFactoryInterface;
-use Psr\Http\Message\UploadedFileInterface;
 use Viserio\Http\UploadedFile;
 
 final class UploadedFileFactory implements UploadedFileFactoryInterface

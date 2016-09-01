@@ -97,19 +97,4 @@ trait PathsTrait
     {
         return $this->get('path.storage');
     }
-
-    /**
-     * {@inheritdoc}
-     *
-     * @param string $concrete
-     * @param string $alias
-     */
-    abstract public function bind(string $alias, $concrete = null, $singleton = false);
-
-    /**
-     * {@inheritdoc}
-     *
-     * @param string $id
-     */
-    abstract public function get($id);
 }
