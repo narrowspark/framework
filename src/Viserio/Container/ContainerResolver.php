@@ -137,6 +137,8 @@ class ContainerResolver
      * @param mixed $subject
      *
      * @return \ReflectionClass|\ReflectionMethod|\ReflectionFunction|null
+     *
+     * @codeCoverageIgnore
      */
     public function getReflector($subject)
     {

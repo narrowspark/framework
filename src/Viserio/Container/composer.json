@@ -26,8 +26,8 @@
         "ocramius/proxy-manager"              : "^2.0.3"
     },
     "require-dev": {
-        "league/container"                    : "^2.0",
         "mockery/mockery"                     : "^0.9",
+        "mouf/picotainer"                     : "^1.0",
         "phpunit/phpunit"                     : "^5.1",
         "narrowspark/testing-helper"          : "^1.5"
     },

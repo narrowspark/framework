@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Container\Tests;
 
 use StdClass;
+use Mouf\Picotainer\Picotainer;
 use Viserio\Container\Container;
 use Viserio\Container\Tests\Fixture\ContainerCircularReferenceStubA;
 use Viserio\Container\Tests\Fixture\ContainerCircularReferenceStubD;
@@ -17,6 +18,8 @@ use Viserio\Container\Tests\Fixture\ContainerMixedPrimitiveFixture;
 use Viserio\Container\Tests\Fixture\ContainerNestedDependentFixture;
 use Viserio\Container\Tests\Fixture\ContainerTestContextInjectOneFixture;
 use Viserio\Container\Tests\Fixture\ContainerTestContextInjectTwoFixture;
+use Viserio\Container\Tests\Fixture\FactoryClass;
+use Viserio\Container\Tests\Fixture\ContainerPrivateConstructor;
 
 class ContainerTest extends \PHPUnit_Framework_TestCase
 {
@@ -98,6 +101,13 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
         });
 
         $this->assertEquals('hello', $container->make('Foo'));
+    }
+
+    public function testResolveMethod()
+    {
+        $container = new Container();
+
+        $this->assertEquals('Hello', $container->make(FactoryClass::class. '::create'));
     }
 
     public function testSharedConcreteResolution()
@@ -451,7 +461,17 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
     public function testInternalClassWithDefaultParameters()
     {
         $container = new Container();
-        $container->make(ContainerMixedPrimitiveFixture::class, []);
+        $container->make(ContainerMixedPrimitiveFixture::class);
+    }
+
+    /**
+     * @expectedException \Viserio\Contracts\Container\Exceptions\BindingResolutionException
+     * @expectedExceptionMessage Unable to reflect on the class [string], does the class exist and is it properly autoloaded?
+     */
+    public function testUnableToReflectClass()
+    {
+        $container = new Container();
+        $container->make(ContainerPrivateConstructor::class);
     }
 
     /**
@@ -461,7 +481,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
     public function testBindingResolutionExceptionMessage()
     {
         $container = new Container();
-        $container->make(ContainerContractFixtureInterface::class, []);
+        $container->make(ContainerContractFixtureInterface::class);
     }
 
     /**
@@ -471,14 +491,28 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
     public function testBindingResolutionExceptionMessageIncludesBuildStack()
     {
         $container = new Container();
-        $container->make(ContainerTestContextInjectOneFixture::class, []);
+        $container->make(ContainerTestContextInjectOneFixture::class);
+    }
+
+    public function testDelegateContainer()
+    {
+        $picotainer = new Picotainer([
+            "instance" => function () { return "value"; },
+        ]);
+
+        $container = new Container();
+        $container->delegate($picotainer);
+        $container->instance('instance2', $container->get('instance'));
+
+        $this->assertSame('value', $container->get('instance2'));
+        $this->assertTrue($container->hasInDelegate('instance'));
     }
 
     public function testExtendedBindingsKeptTypes()
     {
         $container = new Container();
 
-        $container->singleton('foo', function () {
+        $container->singleton(['foo' => 'foo2'], function () {
             return (object) ['name' => 'narrowspark'];
         });
 
@@ -499,6 +533,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
         });
 
         $this->assertSame($container->make('foo'), $container->make('foo'));
+        $this->assertSame($container->make('foo'), $container->make('foo2'));
         $this->assertNotSame($container->make('bar'), $container->make('bar'));
     }
 }

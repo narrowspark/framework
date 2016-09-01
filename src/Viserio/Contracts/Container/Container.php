@@ -115,12 +115,12 @@ interface Container extends ContainerInterface
     /**
      * Resolve a non bound type.
      *
-     * @param string $abstract
-     * @param array  $parameters
+     * @param string|\Closure $abstract
+     * @param array           $parameters
      *
      * @return mixed
      */
-    public function resolveNonBound(string $abstract, array $parameters = []);
+    public function resolveNonBound($abstract, array $parameters = []);
 
     /**
      * Define a contextual binding.

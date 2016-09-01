@@ -171,6 +171,15 @@ class Container extends ContainerResolver implements ArrayAccess, ContainerContr
         }
     }
 
+    public function layzSingleton($abstract, $concrete = null)
+    {
+        $initializer = function (&$wrappedInstance, LazyLoadingInterface $proxy) use ($id) {
+            $proxy->setProxyInitializer(null);
+            $wrappedInstance = $this->container->get($id);
+            return true;
+        };
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -283,15 +292,13 @@ class Container extends ContainerResolver implements ArrayAccess, ContainerContr
             $this->extendResolved($abstract, $resolved);
         }
 
-        $this->frozen[$abstract] = true;
-
         return $resolved;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function resolveNonBound(string $abstract, array $parameters = [])
+    public function resolveNonBound($abstract, array $parameters = [])
     {
         if ($abstract instanceof Closure) {
             array_unshift($parameters, $this);
@@ -307,8 +314,6 @@ class Container extends ContainerResolver implements ArrayAccess, ContainerContr
         if (is_string($abstract)) {
             $this->extendResolved($abstract, $resolved);
         }
-
-        $this->frozen[$abstract] = true;
 
         return $resolved;
     }
@@ -392,11 +397,9 @@ class Container extends ContainerResolver implements ArrayAccess, ContainerContr
             ));
         }
 
-        if ($this->has($id)) {
+        if (isset($this->bindings[$id])) {
             return $this->resolve($id);
-        }
-
-        if ($resolved = $this->getFromDelegate($id)) {
+        } elseif ($resolved = $this->getFromDelegate($id)) {
             return $resolved;
         }
 
@@ -428,6 +431,8 @@ class Container extends ContainerResolver implements ArrayAccess, ContainerContr
 
     /**
      * {@inheritdoc}
+     *
+     * @codeCoverageIgnore
      */
     public function call($callable, array $parameters = [])
     {
@@ -478,7 +483,7 @@ class Container extends ContainerResolver implements ArrayAccess, ContainerContr
     }
 
     /**
-     * Set the value at a given offset
+     * Set the value at a given offset.
      *
      * @param string $offset
      * @param mixed  $value
@@ -493,7 +498,7 @@ class Container extends ContainerResolver implements ArrayAccess, ContainerContr
     }
 
     /**
-     * Get the value at a given offset
+     * Get the value at a given offset.
      *
      * @param string $offset
      *
@@ -505,7 +510,7 @@ class Container extends ContainerResolver implements ArrayAccess, ContainerContr
     }
 
     /**
-     * Unset the value at a given offset
+     * Unset the value at a given offset.
      *
      * @param string $offset
      */
@@ -515,7 +520,7 @@ class Container extends ContainerResolver implements ArrayAccess, ContainerContr
     }
 
     /**
-     * Determine if a given offset exists
+     * Determine if a given offset exists.
      *
      * @param string $offset
      *
@@ -645,36 +650,24 @@ class Container extends ContainerResolver implements ArrayAccess, ContainerContr
     }
 
     /**
-     * Check if class is immutable.
-     *
-     * @param string $concrete
-     *
-     * @throws \Viserio\Contracts\Container\Exceptions\ContainerException
-     */
-    protected function notImmutable(string $concrete)
-    {
-        if (isset($this->immutable[$concrete])) {
-            throw new ContainerException(sprintf('Attempted overwrite of initialized component [%s]', $concrete));
-        }
-    }
-
-    /**
      * Get a configured instance of invoker.
      *
      * @return \Invoker\InvokerInterface
+     *
+     * @codeCoverageIgnore
      */
     protected function getInvoker(): InvokerInterface
     {
         if (! $this->invoker) {
-            $parameterResolver = new ResolverChain([
+            $parameterResolver = [
                 new NumericArrayResolver(),
                 new AssociativeArrayResolver(),
                 new DefaultValueResolver(),
                 new TypeHintContainerResolver($this),
                 new ParameterNameContainerResolver($this),
-            ]);
+            ];
 
-            $this->invoker = new Invoker($parameterResolver, $this);
+            $this->invoker = new Invoker(new ResolverChain($parameterResolver), $this);
         }
 
         return $this->invoker;

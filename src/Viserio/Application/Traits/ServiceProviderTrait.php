@@ -38,37 +38,6 @@ trait ServiceProviderTrait
     protected $serviceProviderLookup = [];
 
     /**
-     * {@inheritdoc}
-     */
-    public function register(string $provider, array $options = [], bool $force = false): \Viserio\Contract\Application\ServiceProvider
-    {
-        if ((! is_string($provider)) && (! $provider instanceof ServiceProvider)) {
-            throw new \Exception(
-                'When registering a service provider, you must provide either and instance of ' .
-                '[\Viserio\Container\ServiceProvider] or a fully qualified class name'
-            );
-        }
-
-        if (($registered = $this->getProvider($provider)) && ! $force) {
-            return $registered;
-        }
-
-        if (is_string($provider)) {
-            $provider = new $provider($this);
-        }
-
-        // Only allow a service provider to be registered once.
-        if (in_array($provider, $this->serviceProviders, true)) {
-            return;
-        }
-
-        $this->registerProvides($provider);
-        $this->registerProvider($provider, $options);
-
-        return $provider;
-    }
-
-    /**
      * Get the registered service provider instance if it exists.
      *
      * @param ServiceProvider|string $provider
@@ -91,11 +60,6 @@ trait ServiceProviderTrait
     {
         return $this->loadedProviders;
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    abstract public function bind(string $alias, $concrete = null, $singleton = false);
 
     /**
      * Register a service provider.
