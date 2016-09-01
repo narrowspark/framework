@@ -36,6 +36,7 @@
         "cakephp/chronos"                                    : "^1.0",
         "classpreloader/classpreloader"                      : "^3.0",
         "container-interop/container-interop"                : "^1.1",
+        "container-interop/service-provider"                 : "^0.3",
         "danielstjules/stringy"                              : "^2.3",
         "defuse/php-encryption"                              : "^2.0",
         "filp/whoops"                                        : "^2.0",

@@ -5,6 +5,7 @@ namespace Viserio\Container;
 use ArrayAccess;
 use Closure;
 use Interop\Container\ContainerInterface;
+use Interop\Container\ServiceProvider;
 use Invoker\Invoker;
 use Invoker\InvokerInterface;
 use Invoker\ParameterResolver\AssociativeArrayResolver;
@@ -278,9 +279,11 @@ class Container extends ContainerResolver implements ArrayAccess, ContainerContr
             $resolved = $this->resolveSingleton($abstract, $parameters);
         }
 
-        if (! is_string($abstract)) {
+        if (is_string($abstract)) {
             $this->extendResolved($abstract, $resolved);
         }
+
+        $this->frozen[$abstract] = true;
 
         return $resolved;
     }
@@ -301,9 +304,11 @@ class Container extends ContainerResolver implements ArrayAccess, ContainerContr
 
         $resolved = parent::resolve($abstract, $parameters);
 
-        if (! is_string($abstract)) {
+        if (is_string($abstract)) {
             $this->extendResolved($abstract, $resolved);
         }
+
+        $this->frozen[$abstract] = true;
 
         return $resolved;
     }
@@ -427,6 +432,37 @@ class Container extends ContainerResolver implements ArrayAccess, ContainerContr
     public function call($callable, array $parameters = [])
     {
         return $this->getInvoker()->call($callable, $parameters);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function register(ServiceProvider $provider, array $parameters = []): ContainerContract
+    {
+        $entries = $provider->getServices();
+
+        foreach ($entries as $key => $callable) {
+            if ($this->has($key)) {
+                // Extend a previous entry
+                $this->extend($key, function ($previous, ContainerInterface $container) use ($callable) {
+                    $getPrevious = function () use ($previous) {
+                        return $previous;
+                    };
+
+                    return call_user_func($callable, $container, $getPrevious);
+                });
+            } else {
+                $this->bind($key, function (ContainerInterface $container) use ($callable) {
+                    return call_user_func($callable, $container, null);
+                });
+            }
+        }
+
+        foreach ($parameters as $key => $value) {
+            $this->instance($key, $value);
+        }
+
+        return $this;
     }
 
     /**

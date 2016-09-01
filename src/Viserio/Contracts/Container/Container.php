@@ -4,6 +4,7 @@ namespace Viserio\Contracts\Container;
 
 use Closure;
 use Interop\Container\ContainerInterface;
+use Interop\Container\ServiceProvider;
 
 interface Container extends ContainerInterface
 {
@@ -129,4 +130,14 @@ interface Container extends ContainerInterface
      * @return $this
      */
     public function when(string $concrete): Container;
+
+    /**
+     * Registers a service provider.
+     *
+     * @param \Interop\Container\ServiceProvider $provider the service provider to register
+     * @param array                              $parameters An array of values that customizes the provider
+     *
+     * @return $this
+     */
+    public function register(ServiceProvider $provider, array $parameters = []): Container;
 }
