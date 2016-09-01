@@ -49,10 +49,10 @@ class ContainerResolver
     /**
      * Resolve a class.
      *
-     * @param string $subject
+     * @param string $class
      * @param array  $parameters
      *
-     * @return mixed
+     * @return object
      */
     public function resolveClass(string $class, array $parameters = [])
     {
@@ -90,7 +90,7 @@ class ContainerResolver
     /**
      * Resolve a method.
      *
-     * @param string|array $subject
+     * @param string|array $method
      * @param array        $parameters
      *
      * @return mixed
@@ -110,9 +110,9 @@ class ContainerResolver
     }
 
     /**
-     * Resolve a closure / function
+     * Resolve a closure / function.
      *
-     * @param string|\Closure $subject
+     * @param string|\Closure $function
      * @param array           $parameters
      *
      * @return mixed
@@ -136,7 +136,7 @@ class ContainerResolver
      *
      * @param mixed $subject
      *
-     * @return mixed
+     * @return \ReflectionClass|\ReflectionMethod|\ReflectionFunction|null
      */
     public function getReflector($subject)
     {
@@ -147,6 +147,8 @@ class ContainerResolver
         } elseif ($this->isFunction($subject)) {
             return new ReflectionFunction($subject);
         }
+
+        return;
     }
 
     /**
@@ -178,7 +180,11 @@ class ContainerResolver
             return $parameter->getDefaultValue();
         }
 
-        throw new BindingResolutionException("Unresolvable dependency resolving [$parameter] in [" . end($this->buildStack) . ']');
+        throw new BindingResolutionException(sprintf(
+            'Unresolvable dependency resolving [%s] in [%s]',
+            $parameter,
+            end($this->buildStack))
+        );
     }
 
     /**

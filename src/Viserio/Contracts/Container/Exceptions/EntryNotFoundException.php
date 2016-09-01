@@ -3,9 +3,9 @@ declare(strict_types=1);
 namespace Viserio\Contracts\Container\Exceptions;
 
 use Exception;
-use Interop\Container\Exception\ContainerException;
+use Interop\Container\Exception\ContainerException as InteropContainerException;
 
-class EntryNotFoundException extends Exception implements ContainerException
+class EntryNotFoundException extends Exception implements InteropContainerException
 {
     public static function fromId(string $id)
     {

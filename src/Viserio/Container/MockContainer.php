@@ -65,9 +65,7 @@ class MockContainer extends Container
      */
     public function has($id)
     {
-        $offset = $this->normalize($id);
-
-        if (isset($this->mockedServices['mock::' . $this->normalize($id)])) {
+        if (isset($this->mockedServices['mock::' . $this->normalize($this->normalize($id))])) {
             return true;
         }
 

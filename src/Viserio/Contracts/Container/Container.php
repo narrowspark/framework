@@ -5,7 +5,7 @@ namespace Viserio\Contracts\Container;
 use Closure;
 use Interop\Container\ContainerInterface;
 
-interface Container
+interface Container extends ContainerInterface
 {
     /**
      * Alias a type to a different name.
@@ -60,7 +60,7 @@ interface Container
     /**
      * Returns true if service is registered in one of the delegated backup containers.
      *
-     * @param string $alias
+     * @param string $abstract
      *
      * @return bool
      */
@@ -76,8 +76,8 @@ interface Container
     /**
      * Resolve the given type from the container.
      *
-     * @param string $alias
-     * @param array  $args
+     * @param string $abstract
+     * @param array  $parameters
      *
      * @return mixed
      */
@@ -86,7 +86,7 @@ interface Container
     /**
      * "Extend" an abstract type in the container.
      *
-     * @param string   $abstract
+     * @param string   $binding
      * @param \Closure $closure
      */
     public function extend(string $binding, Closure $closure);
@@ -119,7 +119,7 @@ interface Container
      *
      * @return mixed
      */
-    public function resolveNonBound(string $concrete, array $parameters = []);
+    public function resolveNonBound(string $abstract, array $parameters = []);
 
     /**
      * Define a contextual binding.

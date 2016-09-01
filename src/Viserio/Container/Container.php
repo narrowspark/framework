@@ -23,7 +23,10 @@ use Viserio\Contracts\Container\Exceptions\NotFoundException;
 use Viserio\Contracts\Container\Exceptions\UnresolvableDependencyException;
 use Viserio\Contracts\Container\Types as TypesContract;
 
-class Container extends ContainerResolver implements ArrayAccess, ContainerInterface, ContainerContract, InvokerInterface, ContextualBindingBuilderContract
+class Container extends ContainerResolver implements ArrayAccess,
+    ContainerContract,
+    InvokerInterface,
+    ContextualBindingBuilderContract
 {
     use NormalizeClassNameTrait;
 
@@ -33,6 +36,13 @@ class Container extends ContainerResolver implements ArrayAccess, ContainerInter
      * @var array
      */
     protected $bindings = [];
+
+    /**
+     * The container's extenders.
+     *
+     * @var array
+     */
+    protected $extenders = [];
 
     /**
      * Array full of container implementing the ContainerInterface.
@@ -47,6 +57,13 @@ class Container extends ContainerResolver implements ArrayAccess, ContainerInter
      * @var array
      */
     protected $immutable = [];
+
+    /**
+     * The normalized abstract instance.
+     *
+     * @var string
+     */
+    protected $abstract;
 
     /**
      * The concrete instance.
@@ -94,9 +111,9 @@ class Container extends ContainerResolver implements ArrayAccess, ContainerInter
         $this->proxyFactory = new ProxyFactory($writeProxiesToFile, $proxyDirectory);
 
         // Auto-register the container
-        $this->singleton(Container::class, $this);
-        $this->singleton(ContainerContract::class, $this);
-        $this->singleton(ContainerInteropInterface::class, $this);
+        $this->instance(Container::class, $this);
+        $this->instance(ContainerContract::class, $this);
+        $this->instance(ContainerInteropInterface::class, $this);
     }
 
     /**
@@ -264,7 +281,9 @@ class Container extends ContainerResolver implements ArrayAccess, ContainerInter
             $resolved = $this->resolveSingleton($abstract, $parameters);
         }
 
-        $this->extendResolved($abstract, $resolved);
+        if (! is_string($abstract)) {
+            $this->extendResolved($abstract, $resolved);
+        }
 
         return $resolved;
     }
@@ -272,20 +291,22 @@ class Container extends ContainerResolver implements ArrayAccess, ContainerInter
     /**
      * {@inheritdoc}
      */
-    public function resolveNonBound(string $concrete, array $parameters = [])
+    public function resolveNonBound(string $abstract, array $parameters = [])
     {
-        if ($concrete instanceof Closure) {
+        if ($abstract instanceof Closure) {
             array_unshift($parameters, $this);
         }
 
-        if (is_string($concrete) && strpos($concrete, '::')) {
-            $parts = explode('::', $concrete, 2);
-            $concrete = [$this->resolve($parts[0]), $parts[1]];
+        if (is_string($abstract) && strpos($abstract, '::')) {
+            $parts = explode('::', $abstract, 2);
+            $abstract = [$this->resolve($parts[0]), $parts[1]];
         }
 
-        $resolved = parent::resolve($concrete, $parameters);
+        $resolved = parent::resolve($abstract, $parameters);
 
-        $this->extendResolved($concrete, $resolved);
+         if (! is_string($abstract)) {
+            $this->extendResolved($abstract, $resolved);
+        }
 
         return $resolved;
     }
@@ -328,11 +349,11 @@ class Container extends ContainerResolver implements ArrayAccess, ContainerInter
     public function give($implementation)
     {
         if (! ($reflector = $this->getReflector($this->concrete))) {
-            throw new UnresolvableDependencyException("[$this->concrete] is not resolvable.");
+            throw new UnresolvableDependencyException(sprintf('[%s] is not resolvable.', $this->concrete));
         }
 
         if ($reflector instanceof ReflectionClass && ! ($reflector = $reflector->getConstructor())) {
-            throw new UnresolvableDependencyException("[$this->concrete] must have a constructor.");
+            throw new UnresolvableDependencyException(sprintf('[%s] must have a constructor.', $this->concrete));
         }
 
         $reflectionParameters = $reflector->getParameters();
@@ -350,7 +371,11 @@ class Container extends ContainerResolver implements ArrayAccess, ContainerInter
             }
         }
 
-        throw new UnresolvableDependencyException("Parameter [$this->parameter] cannot be injected in [$this->concrete].");
+        throw new UnresolvableDependencyException(sprintf(
+            'Parameter [%s] cannot be injected in [%s].',
+            $this->parameter,
+            $this->concrete
+        ));
     }
 
     /**
@@ -630,7 +655,7 @@ class Container extends ContainerResolver implements ArrayAccess, ContainerInter
      */
     protected function extendResolved($abstract, &$resolved)
     {
-        if (! is_string($abstract) || ! isset($this->extenders[$abstract])) {
+        if (! isset($this->extenders[$abstract])) {
             return;
         }
 
