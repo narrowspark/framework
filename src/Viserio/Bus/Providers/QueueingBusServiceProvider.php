@@ -17,15 +17,15 @@ class QueueingBusServiceProvider implements ServiceProvider
     {
         return [
             QueueingDispatcher::class => [self::class, 'registerBusDispatcher'],
-            QueueingDispatcherContract::class => function(ContainerInterface $container) {
+            QueueingDispatcherContract::class => function (ContainerInterface $container) {
                 return $container->get(QueueingDispatcher::class);
-            }
+            },
         ];
     }
 
     public static function registerBusDispatcher(ContainerInterface $container)
     {
-        return new QueueingDispatcher($container,  function ($connection = null) use ($container) {
+        return new QueueingDispatcher($container, function ($connection = null) use ($container) {
             return $container->get(FactoryContract::class)->connection($connection);
         });
     }

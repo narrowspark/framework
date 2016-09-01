@@ -11,6 +11,7 @@ use PhpAmqpLib\Connection\AMQPStreamConnection;
 use Viserio\Contracts\Config\Manager as ConfigContract;
 use Viserio\Contracts\Encryption\Encrypter as EncrypterContract;
 use Viserio\Contracts\Events\Dispatcher as DispatcherContract;
+use Viserio\Contracts\Queue\Factory as FactoryContract;
 use Viserio\Contracts\Queue\Monitor as MonitorContract;
 use Viserio\Queue\Connectors\BeanstalkdQueue;
 use Viserio\Queue\Connectors\NullQueue;
@@ -19,7 +20,6 @@ use Viserio\Queue\Connectors\RedisQueue;
 use Viserio\Queue\Connectors\SqsQueue;
 use Viserio\Queue\Connectors\SyncQueue;
 use Viserio\Support\AbstractConnectionManager;
-use Viserio\Contracts\Queue\Factory as FactoryContract;
 
 class QueueManager extends AbstractConnectionManager implements MonitorContract, FactoryContract
 {

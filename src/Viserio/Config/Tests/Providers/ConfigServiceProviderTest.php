@@ -2,10 +2,10 @@
 declare(strict_types=1);
 namespace Viserio\Config\Tests\Providers;
 
-use Viserio\Container\Container;
+use Viserio\Config\Manager as ConfigManager;
 use Viserio\Config\Providers\ConfigServiceProvider;
 use Viserio\Config\Repository;
-use Viserio\Config\Manager as ConfigManager;
+use Viserio\Container\Container;
 
 class ConfigServiceProviderTest extends \PHPUnit_Framework_TestCase
 {
