@@ -5,6 +5,7 @@ namespace Viserio\Config\Providers;
 use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
 use Viserio\Config\Manager as ConfigManager;
+use Viserio\Contracts\Config\Manager as ManagerContract;
 use Viserio\Config\Repository;
 
 class ConfigServiceProvider implements ServiceProvider
@@ -17,6 +18,9 @@ class ConfigServiceProvider implements ServiceProvider
         return [
             Repository::class => [self::class, 'createRepository'],
             ConfigManager::class => [self::class, 'createConfigManager'],
+            ManagerContract::class => function (ContainerInterface $container) {
+                return $container->get(ConfigManager::class);
+            },
             'config' => function (ContainerInterface $container) {
                 return $container->get(ConfigManager::class);
             },

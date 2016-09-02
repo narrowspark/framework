@@ -63,9 +63,4 @@ collection:
 
         $this->parser->parse($this->file->read($file->url()));
     }
-
-    public function testDump()
-    {
-        // code...
-    }
 }

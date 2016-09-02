@@ -14,9 +14,9 @@ class LocalConnector implements ConnectorContract
      *
      * @param array $config
      *
-     * @return Local
+     * @return \League\Flysystem\Adapter\Local
      */
-    public function connect(array $config): \League\Flysystem\Adapter\Local
+    public function connect(array $config): Local
     {
         $config = $this->getConfig($config);
 
@@ -60,7 +60,7 @@ class LocalConnector implements ConnectorContract
      *
      * @return \League\Flysystem\Adapter\Local
      */
-    protected function getAdapter(array $config): \League\Flysystem\Adapter\Local
+    protected function getAdapter(array $config): Local
     {
         return new Local($config['path'], $config['write_flags'], $config['link_handling'], $config['permissions']);
     }

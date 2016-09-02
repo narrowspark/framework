@@ -96,7 +96,7 @@ class Virtuoso implements VirtuosoContract
      */
     public function callCreator(ViewContract $view): VirtuosoContract
     {
-        $this->events->emit('creating.' . $view->getName(), [$view]);
+        $this->events->trigger('creating.' . $view->getName(), [$view]);
 
         return $this;
     }
@@ -106,7 +106,7 @@ class Virtuoso implements VirtuosoContract
      */
     public function callComposer(ViewContract $view): VirtuosoContract
     {
-        $this->events->emit('composing.' . $view->getName(), [$view]);
+        $this->events->trigger('composing.' . $view->getName(), [$view]);
 
         return $this;
     }

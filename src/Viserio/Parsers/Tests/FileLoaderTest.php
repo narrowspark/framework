@@ -25,7 +25,7 @@ class FileLoaderTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->root = vfsStream::setup();
-        $this->fileloader = new FileLoader(new TaggableParser(new Filesystem()), []);
+        $this->fileloader = new FileLoader(new TaggableParser(), []);
     }
 
     public function testLoad()

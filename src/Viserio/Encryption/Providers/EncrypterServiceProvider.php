@@ -6,6 +6,7 @@ use Defuse\Crypto\Key;
 use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
 use Viserio\Config\Manager as ConfigManager;
+use Viserio\Contracts\Encryption\Encrypter as EncrypterContract;
 use Viserio\Encryption\Encrypter;
 
 class EncrypterServiceProvider implements ServiceProvider
@@ -19,6 +20,9 @@ class EncrypterServiceProvider implements ServiceProvider
     {
         return [
             Encrypter::class => [self::class, 'createEncrypter'],
+            EncrypterContract::class => function (ContainerInterface $container) {
+                return $container->get(Encrypter::class);
+            },
             'encrypter' => function (ContainerInterface $container) {
                 return $container->get(Encrypter::class);
             },

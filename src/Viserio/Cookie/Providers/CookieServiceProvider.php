@@ -6,6 +6,7 @@ use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
 use Viserio\Config\Manager as ConfigManager;
 use Viserio\Cookie\CookieJar;
+use Viserio\Contracts\Cookie\QueueingFactory as JarContract;
 use Viserio\Cookie\RequestCookie;
 
 class CookieServiceProvider implements ServiceProvider
@@ -21,6 +22,9 @@ class CookieServiceProvider implements ServiceProvider
             CookieJar::class => [self::class, 'createCookieJar'],
             RequestCookie::class => [self::class, 'createRequestCookie'],
             'cookie' => function (ContainerInterface $container) {
+                return $container->get(CookieJar::class);
+            },
+            JarContract::class => function (ContainerInterface $container) {
                 return $container->get(CookieJar::class);
             },
             'request-cookie' => function (ContainerInterface $container) {

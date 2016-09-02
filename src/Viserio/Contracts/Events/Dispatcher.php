@@ -38,7 +38,7 @@ interface Dispatcher
      *
      * @return bool
      */
-    public function emit(string $eventName, array $arguments = []): bool;
+    public function trigger(string $eventName, array $arguments = []): bool;
 
     /**
      * Returns the list of listeners for an event.

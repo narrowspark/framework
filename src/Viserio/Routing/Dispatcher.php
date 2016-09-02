@@ -163,7 +163,7 @@ class Dispatcher implements DispatcherContract
         $this->addMiddlewares($route->gatherMiddleware());
 
         if ($this->events !== null) {
-            $this->getEventsDispatcher()->emit('route.matched', [$route, $request]);
+            $this->getEventsDispatcher()->trigger('route.matched', [$route, $request]);
         }
 
         return $this->middlewareDispatcher;

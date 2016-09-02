@@ -5,6 +5,7 @@ namespace Viserio\Config\Tests\Providers;
 use Viserio\Config\Manager as ConfigManager;
 use Viserio\Config\Providers\ConfigServiceProvider;
 use Viserio\Config\Repository;
+use Viserio\Contracts\Config\Manager as ManagerContract;
 use Viserio\Container\Container;
 
 class ConfigServiceProviderTest extends \PHPUnit_Framework_TestCase
@@ -20,6 +21,7 @@ class ConfigServiceProviderTest extends \PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf(Repository::class, $container->get(Repository::class));
         $this->assertInstanceOf(ConfigManager::class, $config);
+        $this->assertInstanceOf(ConfigManager::class, $container->get(ManagerContract::class));
         $this->assertEquals($config, $alias);
         $this->assertTrue($config->has('foo'));
         $this->assertTrue($alias->has('foo'));

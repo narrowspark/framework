@@ -2,7 +2,9 @@
 declare(strict_types=1);
 namespace Viserio\Pipeline\Providers;
 
+use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
+use Viserio\Contracts\Pipeline\Pipeline as PipelineContract;
 use Viserio\Pipeline\Pipeline;
 
 class PipelineServiceProvider implements ServiceProvider
@@ -12,20 +14,19 @@ class PipelineServiceProvider implements ServiceProvider
      */
     public function getServices()
     {
-        $this->app->singleton('pipeline', function ($app) {
-            return new Pipeline($app);
-        });
+        return [
+            Pipeline::class => [self::class, 'createPipeline'],
+            PipelineContract::class => function (ContainerInterface $container) {
+                return $container->get(Pipeline::class);
+            },
+            'pipeline' => function (ContainerInterface $container) {
+                return $container->get(Pipeline::class);
+            },
+        ];
     }
 
-    /**
-     * Get the services provided by the provider.
-     *
-     * @return string[]
-     */
-    public function provides(): array
+    public static function createPipeline(ContainerInterface $container): Pipeline
     {
-        return [
-            Pipeline::class,
-        ];
+        return (new Pipeline())->setContainer($container);
     }
 }

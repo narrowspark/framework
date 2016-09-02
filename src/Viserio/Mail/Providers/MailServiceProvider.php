@@ -73,20 +73,6 @@ class MailServiceProvider implements ServiceProvider
     }
 
     /**
-     * Get the services provided by the provider.
-     *
-     * @return string[]
-     */
-    public function provides(): array
-    {
-        return [
-            'mailer',
-            'swift.transport',
-            'ses.transport',
-        ];
-    }
-
-    /**
      * Register the Swift Transport instance.
      *
      * @param array $config
