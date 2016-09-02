@@ -18,33 +18,42 @@
         }
     ],
     "require": {
-        "php"                              : "7.0.0 - 7.0.5 || ^7.0.7",
-        "defuse/php-encryption"            : "^2.0",
-        "ext-openssl"                      : "*",
-        "paragonie/constant_time_encoding" : "^2.0",
-        "phpseclib/phpseclib"              : "^2.0",
-        "viserio/contracts"                : "self.version"
+        "php"                                 : "7.0.0 - 7.0.5 || ^7.0.7",
+        "defuse/php-encryption"               : "^2.0",
+        "ext-openssl"                         : "*",
+        "paragonie/constant_time_encoding"    : "^2.0",
+        "phpseclib/phpseclib"                 : "^2.0",
+        "viserio/contracts"                   : "self.version"
     },
     "require-dev": {
-        "narrowspark/testing-helper"       : "^1.5",
-        "phpunit/phpunit"                  : "^5.1"
+        "container-interop/container-interop" : "^1.1",
+        "container-interop/service-provider"  : "^0.3",
+        "phpunit/phpunit"                     : "^5.1",
+        "narrowspark/testing-helper"          : "^1.5",
+        "viserio/config"                      : "self.version",
+        "viserio/container"                   : "self.version"
     },
     "autoload": {
         "psr-4": {
-            "Viserio\\Encrypter\\"         : ""
+            "Viserio\\Encrypter\\"            : ""
         },
-        "exclude-from-classmap"            : ["/Tests/"]
+        "exclude-from-classmap"               : ["/Tests/"]
     },
     "autoload-dev": {
         "psr-4": {
-            "Viserio\\Encrypter\\Tests\\"  : "Tests/"
+            "Viserio\\Encrypter\\Tests\\"     : "Tests/"
         }
     },
     "extra": {
         "branch-alias": {
-            "dev-master"                   : "1.0-dev"
+            "dev-master"                      : "1.0-dev"
         }
     },
-    "minimum-stability"                    : "dev",
-    "prefer-stable"                        : true
+    "suggest": {
+        "container-interop/container-interop" : "Required to use service-provider (^1.1).",
+        "container-interop/service-provider"  : "Required to use service-provider (^0.3).",
+        "viserio/config"                      : "Optional to use service-provider (self.version)."
+    },
+    "minimum-stability"                       : "dev",
+    "prefer-stable"                           : true
 }

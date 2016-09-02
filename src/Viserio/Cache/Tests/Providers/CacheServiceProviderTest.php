@@ -7,7 +7,7 @@ use Viserio\Cache\CacheManager;
 use Viserio\Config\Providers\ConfigServiceProvider;
 use Viserio\Cache\Providers\CacheServiceProvider;
 
-class TwigServiceProviderTest extends \PHPUnit_Framework_TestCase
+class CacheServiceProviderTest extends \PHPUnit_Framework_TestCase
 {
     public function testProvider()
     {

@@ -27,8 +27,11 @@
         "viserio/support"                                    : "self.version"
     },
     "require-dev": {
+        "container-interop/container-interop"                : "^1.1",
+        "container-interop/service-provider"                 : "^0.3",
         "narrowspark/testing-helper"                         : "^1.6",
-        "phpunit/phpunit"                                    : "^5.1"
+        "phpunit/phpunit"                                    : "^5.1",
+        "viserio/container"                                  : "self.version"
     },
     "autoload": {
         "psr-4": {
@@ -51,6 +54,8 @@
         }
     },
     "suggest": {
+        "container-interop/container-interop"                : "Required to use service-provider (^1.1).",
+        "container-interop/service-provider"                 : "Required to use service-provider (^0.3).",
         "symfony/process"                                    : "Required to use scheduling component (^3.1)."
     },
     "minimum-stability"                                      : "dev",

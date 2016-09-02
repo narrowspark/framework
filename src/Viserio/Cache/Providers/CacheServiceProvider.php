@@ -25,7 +25,10 @@ class CacheServiceProvider implements ServiceProvider
 
     public static function registerCacheFactory(ContainerInterface $container)
     {
-        return new CacheManager($container->get(ConfigManager::class));
+        $cache = new CacheManager($container->get(ConfigManager::class));
+        $cache->setContainer($container);
+
+        return $cache;
     }
 
     public static function registerDefaultCache(ContainerInterface $container)

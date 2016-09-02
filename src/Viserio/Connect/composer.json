@@ -26,9 +26,12 @@
         "viserio/support"                                    : "self.version"
     },
     "require-dev": {
+        "container-interop/container-interop"                : "^1.1",
+        "container-interop/service-provider"                 : "^0.3",
         "narrowspark/testing-helper"                         : "^1.5",
         "phpunit/phpunit"                                    : "^5.1",
-        "predis/predis"                                      : "^1.0"
+        "predis/predis"                                      : "^1.0",
+        "viserio/container"                                  : "self.version"
     },
     "autoload": {
         "psr-4": {
@@ -51,6 +54,8 @@
         }
     },
     "suggest": {
+        "container-interop/container-interop"                : "Required to use service-provider (^1.1).",
+        "container-interop/service-provider"                 : "Required to use service-provider (^0.3).",
         "ext-memcached"                                      : "Required to use memcached adapter",
         "ext-pdo"                                            : "Required to use PDO adapters",
         "ext-pdo_dblib"                                      : "Required to use MSSQL databases on Liunx/UNIX platform",

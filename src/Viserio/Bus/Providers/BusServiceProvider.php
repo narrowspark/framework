@@ -24,6 +24,9 @@ class BusServiceProvider implements ServiceProvider
 
     public static function registerBusDispatcher(ContainerInterface $container)
     {
-        return new Dispatcher($container);
+        $bus = new Dispatcher($container);
+        $bus->setContainer($container);
+
+        return $bus;
     }
 }
