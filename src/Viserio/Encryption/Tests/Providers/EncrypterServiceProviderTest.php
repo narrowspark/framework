@@ -2,10 +2,10 @@
 declare(strict_types=1);
 namespace Viserio\Encryption\Tests\Providers;
 
-use Viserio\Container\Container;
-use Viserio\Encryption\Encrypter;
 use Defuse\Crypto\Key;
 use Viserio\Config\Providers\ConfigServiceProvider;
+use Viserio\Container\Container;
+use Viserio\Encryption\Encrypter;
 use Viserio\Encryption\Providers\EncrypterServiceProvider;
 
 class EncrypterServiceProviderTest extends \PHPUnit_Framework_TestCase
@@ -19,7 +19,7 @@ class EncrypterServiceProviderTest extends \PHPUnit_Framework_TestCase
         $key = Key::createNewRandomKey();
 
         $container->get('config')->set('encrypter', [
-            'key' => $key->saveToAsciiSafeString()
+            'key' => $key->saveToAsciiSafeString(),
         ]);
 
         $this->assertInstanceOf(Encrypter::class, $container->get(Encrypter::class));

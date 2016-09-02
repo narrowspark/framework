@@ -19,7 +19,7 @@ class EncrypterServiceProvider implements ServiceProvider
     {
         return [
             Encrypter::class => [self::class, 'createEncrypter'],
-            'encrypter' => function(ContainerInterface $container) {
+            'encrypter' => function (ContainerInterface $container) {
                 return $container->get(Encrypter::class);
             },
             'encrypter.options' => [self::class, 'createOptions'],
@@ -46,7 +46,7 @@ class EncrypterServiceProvider implements ServiceProvider
     public static function createOptions(ContainerInterface $container) : array
     {
         return [
-            'key' => self::get($container, 'key')
+            'key' => self::get($container, 'key'),
         ];
     }
 
@@ -60,7 +60,7 @@ class EncrypterServiceProvider implements ServiceProvider
      */
     private static function get(ContainerInterface $container, string $name, $default = null)
     {
-        $namespacedName = self::PACKAGE.'.'.$name;
+        $namespacedName = self::PACKAGE . '.' . $name;
 
         return $container->has($namespacedName) ? $container->get($namespacedName) :
             ($container->has($name) ? $container->get($name) : $default);

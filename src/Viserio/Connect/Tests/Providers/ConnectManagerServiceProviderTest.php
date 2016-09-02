@@ -2,15 +2,15 @@
 declare(strict_types=1);
 namespace Viserio\Connect\Tests\Providers;
 
+use Viserio\Config\Providers\ConfigServiceProvider;
+use Viserio\Connect\ConnectManager;
 use Viserio\Connect\Providers\ConnectManagerServiceProvider;
 use Viserio\Container\Container;
-use Viserio\Connect\ConnectManager;
-use Viserio\Config\Providers\ConfigServiceProvider;
 use Viserio\Contracts\Connect\ConnectManager as ConnectManagerContract;
 
 class ConnectManagerServiceProviderTest extends \PHPUnit_Framework_TestCase
 {
-   public function testProvider()
+    public function testProvider()
     {
         $container = new Container();
         $container->register(new ConfigServiceProvider());

@@ -4,15 +4,15 @@ namespace Viserio\Cookie\Providers;
 
 use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
+use Viserio\Config\Manager as ConfigManager;
 use Viserio\Cookie\CookieJar;
 use Viserio\Cookie\RequestCookie;
-use Viserio\Config\Manager as ConfigManager;
 
 class CookieServiceProvider implements ServiceProvider
 {
     const PACKAGE = 'viserio.cookie';
 
-     /**
+    /**
      * {@inheritdoc}
      */
     public function getServices()
@@ -20,10 +20,10 @@ class CookieServiceProvider implements ServiceProvider
         return [
             CookieJar::class => [self::class, 'createCookieJar'],
             RequestCookie::class => [self::class, 'createRequestCookie'],
-            'cookie' => function(ContainerInterface $container) {
+            'cookie' => function (ContainerInterface $container) {
                 return $container->get(CookieJar::class);
             },
-            'request-cookie' => function(ContainerInterface $container) {
+            'request-cookie' => function (ContainerInterface $container) {
                 return $container->get(RequestCookie::class);
             },
             'cookie.options' => [self::class, 'createOptions'],
@@ -69,7 +69,7 @@ class CookieServiceProvider implements ServiceProvider
      */
     private static function get(ContainerInterface $container, string $name, $default = null)
     {
-        $namespacedName = self::PACKAGE.'.'.$name;
+        $namespacedName = self::PACKAGE . '.' . $name;
 
         return $container->has($namespacedName) ? $container->get($namespacedName) :
             ($container->has($name) ? $container->get($name) : $default);

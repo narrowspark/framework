@@ -2,9 +2,9 @@
 declare(strict_types=1);
 namespace Viserio\Console\Tests\Providers;
 
-use Viserio\Container\Container;
 use Viserio\Console\Application;
 use Viserio\Console\Providers\ConsoleServiceProvider;
+use Viserio\Container\Container;
 
 class ConsoleServiceProviderTest extends \PHPUnit_Framework_TestCase
 {

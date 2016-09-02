@@ -2,10 +2,10 @@
 declare(strict_types=1);
 namespace Viserio\Bus\Tests\Providers;
 
-use Viserio\Container\Container;
-use Viserio\Bus\QueueingDispatcher;
-use Viserio\Contracts\Bus\QueueingDispatcher as QueueingDispatcherContract;
 use Viserio\Bus\Providers\QueueingBusServiceProvider;
+use Viserio\Bus\QueueingDispatcher;
+use Viserio\Container\Container;
+use Viserio\Contracts\Bus\QueueingDispatcher as QueueingDispatcherContract;
 
 class QueueingBusServiceProviderTest extends \PHPUnit_Framework_TestCase
 {

@@ -4,8 +4,8 @@ namespace Viserio\Connect\Providers;
 
 use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
-use Viserio\Connect\ConnectManager;
 use Viserio\Config\Manager as ConfigManager;
+use Viserio\Connect\ConnectManager;
 use Viserio\Contracts\Connect\ConnectManager as ConnectManagerContract;
 
 class ConnectManagerServiceProvider implements ServiceProvider
@@ -17,12 +17,12 @@ class ConnectManagerServiceProvider implements ServiceProvider
     {
         return [
             ConnectManager::class => [self::class, 'createConnectManager'],
-            ConnectManagerContract::class => function(ContainerInterface $container) {
+            ConnectManagerContract::class => function (ContainerInterface $container) {
                 return $container->get(ConnectManager::class);
             },
-            'connect' => function(ContainerInterface $container) {
+            'connect' => function (ContainerInterface $container) {
                 return $container->get(ConnectManager::class);
-            }
+            },
         ];
     }
 

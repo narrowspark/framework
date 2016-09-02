@@ -12,6 +12,5 @@ class ExceptionServiceProviderr implements ServiceProvider
      */
     public function getServices()
     {
-
     }
 }

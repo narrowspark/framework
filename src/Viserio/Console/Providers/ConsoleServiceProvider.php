@@ -20,12 +20,12 @@ class ConsoleServiceProvider implements ServiceProvider
             Application::class => [self::class, 'createCerebro'],
             'console.app.name' => [self::class, 'createConsoleName'],
             'console.app.version' => [self::class, 'createConsoleVersion'],
-            'console' => function(ContainerInterface $container) {
+            'console' => function (ContainerInterface $container) {
                 return $container->get(Application::class);
             },
-            'cerebro' => function(ContainerInterface $container) {
+            'cerebro' => function (ContainerInterface $container) {
                 return $container->get(Application::class);
-            }
+            },
         ];
     }
 
@@ -63,7 +63,7 @@ class ConsoleServiceProvider implements ServiceProvider
      */
     private static function get(ContainerInterface $container, string $name, $default = null)
     {
-        $namespacedName = self::PACKAGE.'.'.$name;
+        $namespacedName = self::PACKAGE . '.' . $name;
 
         return $container->has($namespacedName) ? $container->get($namespacedName) :
             ($container->has($name) ? $container->get($name) : $default);
