@@ -2,15 +2,15 @@
 declare(strict_types=1);
 namespace Viserio\Pipeline\Providers;
 
-use Viserio\Application\ServiceProvider;
+use Interop\Container\ServiceProvider;
 use Viserio\Pipeline\Pipeline;
 
-class PipelineServiceProvider extends ServiceProvider
+class PipelineServiceProvider implements ServiceProvider
 {
     /**
      * {@inheritdoc}
      */
-    public function register()
+    public function getServices()
     {
         $this->app->singleton('pipeline', function ($app) {
             return new Pipeline($app);

@@ -2,17 +2,17 @@
 declare(strict_types=1);
 namespace Viserio\Database\Providers;
 
-use Viserio\Application\ServiceProvider;
+use Interop\Container\ServiceProvider;
 use Viserio\Database\Connection\ConnectionFactory;
 use Viserio\Database\DatabaseManager;
 use Viserio\Database\Query;
 
-class DatabaseServiceProvider extends ServiceProvider
+class DatabaseServiceProvider implements ServiceProvider
 {
     /**
      * {@inheritdoc}
      */
-    public function register()
+    public function getServices()
     {
         if ($this->app->get('config')->get('database::frozen')) {
             $this->app->bind('db', function () {

@@ -2,15 +2,15 @@
 declare(strict_types=1);
 namespace Viserio\Http\Providers;
 
-use Viserio\Application\ServiceProvider;
+use Interop\Container\ServiceProvider;
 use Viserio\Http\Request;
 
-class RequestServiceProvider extends ServiceProvider
+class RequestServiceProvider implements ServiceProvider
 {
     /**
      * {@inheritdoc}
      */
-    public function register()
+    public function getServices()
     {
         $this->app->singleton('request', function () {
             return new Request();

@@ -3,15 +3,15 @@ declare(strict_types=1);
 namespace Viserio\Hashing\Providers;
 
 use Defuse\Crypto\Key;
-use Viserio\Application\ServiceProvider;
+use Interop\Container\ServiceProvider;
 use Viserio\Hashing\Password;
 
-class HashingServiceProvider extends ServiceProvider
+class HashingServiceProvider implements ServiceProvider
 {
     /**
      * {@inheritdoc}
      */
-    public function register()
+    public function getServices()
     {
         $this->registerPassword();
     }

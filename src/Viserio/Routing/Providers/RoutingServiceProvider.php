@@ -3,18 +3,18 @@ declare(strict_types=1);
 namespace Viserio\Routing\Providers;
 
 use FastRoute\DataGenerator\GroupCountBased;
-use Viserio\Application\ServiceProvider;
+use Interop\Container\ServiceProvider;
 use Viserio\Routing\RouteCollection;
 use Viserio\Routing\RouteParser;
 use Viserio\Routing\UrlGenerator\GroupCountBasedDataGenerator;
 use Viserio\Routing\UrlGenerator\SimpleUrlGenerator;
 
-class RoutingServiceProvider extends ServiceProvider
+class RoutingServiceProvider implements ServiceProvider
 {
     /**
      * {@inheritdoc}
      */
-    public function register()
+    public function getServices()
     {
         $this->app->singleton('route', function ($app) {
             return new RouteCollection(

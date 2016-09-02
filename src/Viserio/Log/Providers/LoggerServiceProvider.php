@@ -3,15 +3,15 @@ declare(strict_types=1);
 namespace Viserio\Log\Providers;
 
 use Monolog\Logger;
-use Viserio\Application\ServiceProvider;
+use Interop\Container\ServiceProvider;
 use Viserio\Log\Writer as MonologWriter;
 
-class LoggerServiceProvider extends ServiceProvider
+class LoggerServiceProvider implements ServiceProvider
 {
     /**
      * {@inheritdoc}
      */
-    public function register()
+    public function getServices()
     {
         $this->app->singleton('logger', function ($app) {
             return new MonologWriter(

@@ -4,16 +4,16 @@ namespace Viserio\Support\Providers;
 
 use Narrowspark\Arr\StaticArr as Arr;
 use RandomLib\Factory as RandomLib;
-use Viserio\Application\ServiceProvider;
+use Interop\Container\ServiceProvider;
 use Viserio\Support\AliasLoader;
 use Viserio\Support\Str;
 
-class SupportServiceProvider extends ServiceProvider
+class SupportServiceProvider implements ServiceProvider
 {
     /**
      * {@inheritdoc}
      */
-    public function register()
+    public function getServices()
     {
         $this->registerArr();
         $this->registerStr();

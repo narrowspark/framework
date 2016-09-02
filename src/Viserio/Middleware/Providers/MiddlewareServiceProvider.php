@@ -2,15 +2,15 @@
 declare(strict_types=1);
 namespace Viserio\Middleware\Providers;
 
-use Viserio\Application\ServiceProvider;
+use Interop\Container\ServiceProvider;
 use Viserio\Middleware\Dispatcher;
 
-class MiddlewareServiceProvider extends ServiceProvider
+class MiddlewareServiceProvider implements ServiceProvider
 {
     /**
      * {@inheritdoc}
      */
-    public function register()
+    public function getServices()
     {
         $this->app->singleton('middleware', function ($app) {
             return (new Dispatcher())->setContainer($app);

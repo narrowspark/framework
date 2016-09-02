@@ -2,15 +2,15 @@
 declare(strict_types=1);
 namespace Viserio\Support\Providers;
 
-use Viserio\Application\ServiceProvider;
+use Interop\Container\ServiceProvider;
 use Viserio\Support\Autoloader;
 
-class AutoloaderServiceProvider extends ServiceProvider
+class AutoloaderServiceProvider implements ServiceProvider
 {
     /**
      * {@inheritdoc}
      */
-    public function register()
+    public function getServices()
     {
         $this->app->singleton('autoloader', function () {
             return new Autoloader();

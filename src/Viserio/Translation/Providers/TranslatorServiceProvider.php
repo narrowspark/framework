@@ -2,16 +2,16 @@
 declare(strict_types=1);
 namespace Viserio\Translation\Providers;
 
-use Viserio\Application\ServiceProvider;
+use Interop\Container\ServiceProvider;
 use Viserio\Translation\Manager;
 use Viserio\Translation\PluralizationRules;
 
-class TranslatorServiceProvider extends ServiceProvider
+class TranslatorServiceProvider implements ServiceProvider
 {
     /**
      * {@inheritdoc}
      */
-    public function register()
+    public function getServices()
     {
         $this->app->bind('translator.pluralization.rules', function () {
             return new PluralizationRules();

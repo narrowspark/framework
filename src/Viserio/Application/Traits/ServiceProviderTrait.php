@@ -3,7 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Application\Traits;
 
 use Narrowspark\Arr\StaticArr as Arr;
-use Viserio\Application\ServiceProvider;
+use Interop\Container\ServiceProvider;
 
 trait ServiceProviderTrait
 {
@@ -78,7 +78,7 @@ trait ServiceProviderTrait
         }
 
         if (method_exists($provider, 'register')) {
-            $provider->register();
+            $provider->getServices();
         }
 
         // Once we have registered the service we will iterate through the options

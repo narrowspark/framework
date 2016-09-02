@@ -2,18 +2,18 @@
 declare(strict_types=1);
 namespace Viserio\Filesystem\Providers;
 
-use Viserio\Application\ServiceProvider;
+use Interop\Container\ServiceProvider;
 use Viserio\Filesystem\Adapters\ConnectionFactory as Factory;
 use Viserio\Filesystem\FileLoader;
 use Viserio\Filesystem\Filesystem;
 use Viserio\Filesystem\FilesystemManager;
 
-class FilesystemServiceProvider extends ServiceProvider
+class FilesystemServiceProvider implements ServiceProvider
 {
     /**
      * {@inheritdoc}
      */
-    public function register()
+    public function getServices()
     {
         $this->app->singleton('files', function () {
             return new Filesystem();
@@ -21,22 +21,6 @@ class FilesystemServiceProvider extends ServiceProvider
 
         $this->registerFlysystem();
         $this->registerFileLoader();
-    }
-
-    /**
-     * Get the services provided by the provider.
-     *
-     * @return string[]
-     */
-    public function provides(): array
-    {
-        return [
-            'flysystem',
-            'flysystem.factory',
-            'filesystem.disk',
-            'filesystem.cloud',
-            'file.loader',
-        ];
     }
 
     /**

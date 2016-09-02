@@ -2,18 +2,18 @@
 declare(strict_types=1);
 namespace Viserio\View\Providers;
 
-use Viserio\Application\ServiceProvider;
+use Interop\Container\ServiceProvider;
 use Viserio\View\Engines\Adapter\Php as PhpEngine;
 use Viserio\View\Engines\EngineResolver;
 use Viserio\View\Factory;
 use Viserio\View\ViewFinder;
 
-class ViewServiceProvider extends ServiceProvider
+class ViewServiceProvider implements ServiceProvider
 {
     /**
      * {@inheritdoc}
      */
-    public function register()
+    public function getServices()
     {
         $this->registerEngineResolver();
         $this->registerViewFinder();

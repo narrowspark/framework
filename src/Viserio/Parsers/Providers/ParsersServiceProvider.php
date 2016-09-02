@@ -2,23 +2,14 @@
 declare(strict_types=1);
 namespace Viserio\Parsers\Providers;
 
-use Viserio\Application\ServiceProvider;
+use Interop\Container\ServiceProvider;
 
-class ParsersServiceProvider extends ServiceProvider
+class ParsersServiceProvider implements ServiceProvider
 {
     /**
      * {@inheritdoc}
      */
-    public function register()
-    {
-    }
-
-    /**
-     * Get the services provided by the provider.
-     *
-     * @return string[]
-     */
-    public function provides(): array
+    public function getServices()
     {
     }
 }

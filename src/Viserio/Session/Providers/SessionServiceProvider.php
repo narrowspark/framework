@@ -2,14 +2,14 @@
 declare(strict_types=1);
 namespace Viserio\Session\Providers;
 
-use Viserio\Application\ServiceProvider;
+use Interop\Container\ServiceProvider;
 
-class SessionServiceProvider extends ServiceProvider
+class SessionServiceProvider implements ServiceProvider
 {
     /**
      * {@inheritdoc}
      */
-    public function register()
+    public function getServices()
     {
         $this->app->singleton('session', function () {
         });

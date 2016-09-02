@@ -4,7 +4,7 @@ namespace Viserio\Mail\Providers;
 
 use Aws\Ses\SesClient;
 use GuzzleHttp\Client as HttpClient;
-use Viserio\Application\ServiceProvider;
+use Interop\Container\ServiceProvider;
 use Viserio\Mail\Mailer;
 use Viserio\Mail\Transport\Log as LogTransport;
 use Viserio\Mail\Transport\Mailgun as MailgunTransport;
@@ -12,12 +12,12 @@ use Viserio\Mail\Transport\Mandrill as MandrillTransport;
 use Viserio\Mail\Transport\Postmark as PostmarkTransport;
 use Viserio\Mail\Transport\Ses as SesTransport;
 
-class MailServiceProvider extends ServiceProvider
+class MailServiceProvider implements ServiceProvider
 {
     /**
      * {@inheritdoc}
      */
-    public function register()
+    public function getServices()
     {
         $this->registerSwiftMailer();
 
