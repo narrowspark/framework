@@ -2,9 +2,9 @@
 declare(strict_types=1);
 namespace Viserio\Support\Providers;
 
+use Interop\Container\ServiceProvider;
 use Narrowspark\Arr\StaticArr as Arr;
 use RandomLib\Factory as RandomLib;
-use Interop\Container\ServiceProvider;
 use Viserio\Support\AliasLoader;
 use Viserio\Support\Str;
 

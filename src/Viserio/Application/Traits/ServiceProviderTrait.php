@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Application\Traits;
 
-use Narrowspark\Arr\StaticArr as Arr;
 use Interop\Container\ServiceProvider;
+use Narrowspark\Arr\StaticArr as Arr;
 
 trait ServiceProviderTrait
 {

@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Log\Providers;
 
-use Monolog\Logger;
 use Interop\Container\ServiceProvider;
+use Monolog\Logger;
 use Viserio\Log\Writer as MonologWriter;
 
 class LoggerServiceProvider implements ServiceProvider

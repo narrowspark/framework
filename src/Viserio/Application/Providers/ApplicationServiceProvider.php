@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Application\Providers;
 
-use Viserio\Application\EnvironmentDetector;
 use Interop\Container\ServiceProvider;
+use Viserio\Application\EnvironmentDetector;
 
 /**
  * ApplicationServiceProvider.
