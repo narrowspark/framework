@@ -4,8 +4,8 @@ namespace Viserio\Parsers\Providers;
 
 use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
-use Viserio\Parsers\FileLoader;
 use Viserio\Contracts\Parsers\Loader as LoaderContract;
+use Viserio\Parsers\FileLoader;
 use Viserio\Parsers\TaggableParser;
 
 class ParsersServiceProvider implements ServiceProvider

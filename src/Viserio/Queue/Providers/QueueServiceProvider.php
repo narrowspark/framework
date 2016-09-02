@@ -5,7 +5,6 @@ namespace Viserio\Queue\Providers;
 use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
 
-
 class QueueServiceProvider implements ServiceProvider
 {
     /**

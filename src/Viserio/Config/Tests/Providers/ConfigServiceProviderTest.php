@@ -5,8 +5,8 @@ namespace Viserio\Config\Tests\Providers;
 use Viserio\Config\Manager as ConfigManager;
 use Viserio\Config\Providers\ConfigServiceProvider;
 use Viserio\Config\Repository;
-use Viserio\Contracts\Config\Manager as ManagerContract;
 use Viserio\Container\Container;
+use Viserio\Contracts\Config\Manager as ManagerContract;
 
 class ConfigServiceProviderTest extends \PHPUnit_Framework_TestCase
 {

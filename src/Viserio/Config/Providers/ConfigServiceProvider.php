@@ -5,8 +5,8 @@ namespace Viserio\Config\Providers;
 use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
 use Viserio\Config\Manager as ConfigManager;
-use Viserio\Contracts\Config\Manager as ManagerContract;
 use Viserio\Config\Repository;
+use Viserio\Contracts\Config\Manager as ManagerContract;
 
 class ConfigServiceProvider implements ServiceProvider
 {

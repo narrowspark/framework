@@ -3,10 +3,10 @@ declare(strict_types=1);
 namespace Viserio\Hashing\Tests\Providers;
 
 use Defuse\Crypto\Key;
+use Viserio\Config\Manager as ConfigManager;
 use Viserio\Config\Providers\ConfigServiceProvider;
 use Viserio\Container\Container;
 use Viserio\Hashing\Password;
-use Viserio\Config\Manager as ConfigManager;
 use Viserio\Hashing\Providers\HashingServiceProvider;
 
 class HashingServiceProviderTest extends \PHPUnit_Framework_TestCase

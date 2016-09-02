@@ -3,12 +3,12 @@ declare(strict_types=1);
 namespace Viserio\Log\Providers;
 
 use Interop\Container\ContainerInterface;
-use Monolog\Logger;
 use Interop\Container\ServiceProvider;
-use Viserio\Events\Dispatcher;
-use Viserio\Log\Writer as MonologWriter;
+use Monolog\Logger;
 use Psr\Log\LoggerInterface;
 use Viserio\Contracts\Log\Log;
+use Viserio\Events\Dispatcher;
+use Viserio\Log\Writer as MonologWriter;
 
 class LoggerServiceProvider implements ServiceProvider
 {

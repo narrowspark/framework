@@ -4,10 +4,10 @@ namespace Viserio\Filesystem\Providers;
 
 use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
-use Viserio\Filesystem\FilesystemManager;
-use Viserio\Config\Manager as ConfigManager;
 use League\Flysystem\Filesystem;
 use League\Flysystem\FilesystemInterface;
+use Viserio\Config\Manager as ConfigManager;
+use Viserio\Filesystem\FilesystemManager;
 
 class FilesystemServiceProvider implements ServiceProvider
 {
@@ -46,6 +46,5 @@ class FilesystemServiceProvider implements ServiceProvider
 
     public static function createCacheFactory()
     {
-
     }
 }

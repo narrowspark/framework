@@ -3,14 +3,14 @@ declare(strict_types=1);
 namespace Viserio\Log\Tests\Providers;
 
 use Defuse\Crypto\Key;
+use Monolog\Logger;
+use Psr\Log\LoggerInterface;
+use Viserio\Config\Manager as ConfigManager;
 use Viserio\Config\Providers\ConfigServiceProvider;
 use Viserio\Container\Container;
-use Viserio\Log\Writer as MonologWriter;
-use Viserio\Config\Manager as ConfigManager;
-use Psr\Log\LoggerInterface;
-use Viserio\Log\Providers\LoggerServiceProvider;
-use Monolog\Logger;
 use Viserio\Contracts\Log\Log;
+use Viserio\Log\Providers\LoggerServiceProvider;
+use Viserio\Log\Writer as MonologWriter;
 
 class LoggerServiceProviderTest extends \PHPUnit_Framework_TestCase
 {

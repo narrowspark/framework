@@ -2,12 +2,12 @@
 declare(strict_types=1);
 namespace Viserio\Filesystem\Tests\Providers;
 
-use Viserio\Container\Container;
-use Viserio\Filesystem\FilesystemManager;
-use Viserio\Config\Providers\ConfigServiceProvider;
 use League\Flysystem\Filesystem;
 use League\Flysystem\FilesystemInterface;
+use Viserio\Config\Providers\ConfigServiceProvider;
+use Viserio\Container\Container;
 use Viserio\Filesystem\FilesystemAdapter;
+use Viserio\Filesystem\FilesystemManager;
 use Viserio\Filesystem\Providers\FilesystemServiceProvider;
 
 class FilesystemServiceProviderTest extends \PHPUnit_Framework_TestCase
@@ -21,9 +21,9 @@ class FilesystemServiceProviderTest extends \PHPUnit_Framework_TestCase
         $container->get('config')->setArray([
             'filesystem.connections' => [
                 'local' => [
-                    'path' => __DIR__, 'prefix' => 'your-prefix'
-                ]
-            ]
+                    'path' => __DIR__, 'prefix' => 'your-prefix',
+                ],
+            ],
         ]);
 
         $this->assertInstanceOf(FilesystemManager::class, $container->get(FilesystemManager::class));

@@ -4,8 +4,8 @@ namespace Viserio\Filesystem\Providers;
 
 use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
-use Viserio\Filesystem\Filesystem;
 use Viserio\Config\Manager as ConfigManager;
+use Viserio\Filesystem\Filesystem;
 
 class FilesServiceProvider implements ServiceProvider
 {
