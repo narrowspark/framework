@@ -25,8 +25,11 @@ class QueueingBusServiceProvider implements ServiceProvider
 
     public static function registerBusDispatcher(ContainerInterface $container)
     {
-        return new QueueingDispatcher($container, function ($connection = null) use ($container) {
+        $bus = new QueueingDispatcher($container, function ($connection = null) use ($container) {
             return $container->get(FactoryContract::class)->connection($connection);
         });
+        $bus->setContainer($container);
+
+        return $bus;
     }
 }

@@ -67,14 +67,13 @@ class Application extends SymfonyConsole implements ApplicationContract
     public function __construct(
         ContainerContract $container,
         string $version,
-        string $name = 'cerebro'
+        string $name = 'Cerebro'
     ) {
         $this->name = $name;
         $this->version = $version;
         $this->container = $container;
         $this->expressionParser = new Parser();
 
-        $this->initInvoker();
         $this->setAutoExit(false);
         $this->setCatchExceptions(false);
 
@@ -229,24 +228,20 @@ class Application extends SymfonyConsole implements ApplicationContract
     }
 
     /**
-     * Set configured invoker.
-     */
-    protected function initInvoker()
-    {
-        $this->invoker = (new Invoker())
-            ->injectByTypeHint(true)
-            ->injectByParameterName(true)
-            ->addResolver(new HyphenatedInputResolver())
-            ->setContainer($this->getContainer());
-    }
-
-    /**
      * Get configured invoker.
      *
      * @return \Viserio\Support\Invoker
      */
     protected function getInvoker(): Invoker
     {
+        if (! $this->invoker) {
+            $this->invoker = (new Invoker())
+                ->injectByTypeHint(true)
+                ->injectByParameterName(true)
+                ->addResolver(new HyphenatedInputResolver())
+                ->setContainer($this->getContainer());
+        }
+
         return $this->invoker;
     }
 }
