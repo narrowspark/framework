@@ -3,8 +3,8 @@ declare(strict_types=1);
 namespace Viserio\Translation\Providers;
 
 use Interop\Container\ServiceProvider;
-use Viserio\Translation\TranslationManager;
 use Viserio\Translation\PluralizationRules;
+use Viserio\Translation\TranslationManager;
 
 class TranslatorServiceProvider implements ServiceProvider
 {
