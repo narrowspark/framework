@@ -86,11 +86,17 @@ class FileLoaderTest extends \PHPUnit_Framework_TestCase
         $this->assertSame(self::normalizeDirectorySeparator($file->url()), $exist2);
     }
 
+    /**
+     * @expectedException Viserio\Contracts\Parsers\Exception\LoadingException
+     * @expectedExceptionMessage File [no/file] not found.
+     */
     public function testExistsWithFalsePath()
     {
         $exist = $this->fileloader->exists('no/file');
-        $this->assertFalse($exist);
+    }
 
+    public function testExists()
+    {
         $file = vfsStream::newFile('temp.json')->withContent('{"a":1 }')->at($this->root);
 
         $this->fileloader->setDirectories([
@@ -99,6 +105,7 @@ class FileLoaderTest extends \PHPUnit_Framework_TestCase
         ]);
 
         $exist = $this->fileloader->exists('temp.json');
+
         $this->assertSame(self::normalizeDirectorySeparator($file->url()), $exist);
     }
 

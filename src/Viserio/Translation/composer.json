@@ -23,6 +23,7 @@
         "viserio/filesystem"                  : "self.version"
     },
     "require-dev": {
+        "container-interop/container-interop" : "^1.1",
         "container-interop/service-provider"  : "^0.3",
         "narrowspark/testing-helper"          : "^1.5",
         "mikey179/vfsStream"                  : "^1.6",
@@ -45,6 +46,7 @@
     "suggest": {
         "container-interop/container-interop" : "Required to use service-provider (^1.1).",
         "container-interop/service-provider"  : "Required to use service-provider (^0.3).",
+        "viserio/parsers"                     : "Required to use service-provider or the import function (self.version)."
     },
     "extra": {
         "branch-alias": {
