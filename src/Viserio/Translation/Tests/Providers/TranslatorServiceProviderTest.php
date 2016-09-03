@@ -59,7 +59,7 @@ return [
 
         $container->instance('options', [
             'locale' => 'en',
-            'path.lang' => $this->file->url()
+            'path.lang' => $this->file->url(),
         ]);
 
         $this->assertInstanceOf(TranslationManager::class, $container->get(TranslationManager::class));
