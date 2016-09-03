@@ -30,7 +30,7 @@ class SyncQueueTest extends \PHPUnit_Framework_TestCase
         };
 
         $events = $this->mock(stdClass::class);
-        $events->shouldReceive('emit');
+        $events->shouldReceive('trigger');
 
         $encrypter = $this->mock(EncrypterContract::class);
         $encrypter->shouldReceive('encrypt')
@@ -74,7 +74,7 @@ class SyncQueueTest extends \PHPUnit_Framework_TestCase
         unset($_SERVER['__sync.failed']);
 
         $events = $this->mock(stdClass::class);
-        $events->shouldReceive('emit')
+        $events->shouldReceive('trigger')
             ->times(3);
 
         $container = $this->mock(ContainerInterface::class);
