@@ -3,9 +3,9 @@ declare(strict_types=1);
 namespace Viserio\StaticalProxy\Tests\Providers;
 
 use Viserio\Container\Container;
-use Viserio\StaticalProxy\StaticalProxyResolver;
-use Viserio\StaticalProxy\StaticalProxy;
 use Viserio\StaticalProxy\Providers\StaticalProxyServiceProvider;
+use Viserio\StaticalProxy\StaticalProxy;
+use Viserio\StaticalProxy\StaticalProxyResolver;
 
 class StaticalProxyServiceProviderTest extends \PHPUnit_Framework_TestCase
 {

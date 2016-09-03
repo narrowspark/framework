@@ -5,8 +5,8 @@ namespace Viserio\Routing\Tests\Providers;
 use Defuse\Crypto\Key;
 use Viserio\Config\Providers\ConfigServiceProvider;
 use Viserio\Container\Container;
-use Viserio\Routing\Router;
 use Viserio\Routing\Providers\RoutingServiceProvider;
+use Viserio\Routing\Router;
 
 class RoutingServiceProviderTest extends \PHPUnit_Framework_TestCase
 {

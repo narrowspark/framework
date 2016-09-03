@@ -20,7 +20,7 @@ class QueueServiceProvider implements ServiceProvider
             'queue' => function (ContainerInterface $container) {
                 return $container->get(QueueManager::class);
             },
-            'queue.connection' => [self::class, 'createQueueConnection']
+            'queue.connection' => [self::class, 'createQueueConnection'],
         ];
     }
 

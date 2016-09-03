@@ -29,7 +29,7 @@ class CookieServiceProvider implements ServiceProvider
             },
             'request-cookie' => function (ContainerInterface $container) {
                 return $container->get(RequestCookie::class);
-            }
+            },
         ];
     }
 

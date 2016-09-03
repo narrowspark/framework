@@ -4,8 +4,8 @@ namespace Viserio\StaticalProxy\Providers;
 
 use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
-use Viserio\StaticalProxy\StaticalProxyResolver;
 use Viserio\StaticalProxy\StaticalProxy;
+use Viserio\StaticalProxy\StaticalProxyResolver;
 
 class StaticalProxyServiceProvider implements ServiceProvider
 {

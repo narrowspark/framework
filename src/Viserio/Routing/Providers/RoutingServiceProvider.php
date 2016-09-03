@@ -4,8 +4,8 @@ namespace Viserio\Routing\Providers;
 
 use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
-use Viserio\Contracts\Events\Dispatcher as DispatcherContract;
 use Viserio\Config\Manager as ConfigManager;
+use Viserio\Contracts\Events\Dispatcher as DispatcherContract;
 use Viserio\Routing\Router;
 
 class RoutingServiceProvider implements ServiceProvider

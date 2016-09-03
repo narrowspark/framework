@@ -4,12 +4,12 @@ namespace Viserio\Session\Tests\Providers;
 
 use Defuse\Crypto\Key;
 use Viserio\Config\Providers\ConfigServiceProvider;
-use Viserio\Session\Providers\SessionServiceProvider;
-use Viserio\Contracts\Session\Store as StoreContract;
-use Viserio\Session\SessionManager;
 use Viserio\Container\Container;
+use Viserio\Contracts\Session\Store as StoreContract;
 use Viserio\Encryption\Providers\EncrypterServiceProvider;
 use Viserio\Filesystem\Providers\FilesServiceProvider;
+use Viserio\Session\Providers\SessionServiceProvider;
+use Viserio\Session\SessionManager;
 
 class SessionServiceProviderTest extends \PHPUnit_Framework_TestCase
 {
@@ -28,7 +28,7 @@ class SessionServiceProviderTest extends \PHPUnit_Framework_TestCase
         ]);
         $container->get('config')->set('session', [
             'path' => '',
-            'lifetime' => ''
+            'lifetime' => '',
         ]);
 
         $this->assertInstanceOf(SessionManager::class, $container->get(SessionManager::class));

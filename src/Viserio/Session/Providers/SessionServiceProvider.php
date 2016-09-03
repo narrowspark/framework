@@ -4,9 +4,9 @@ namespace Viserio\Session\Providers;
 
 use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
-use Viserio\Session\SessionManager;
-use Viserio\Encryption\Encrypter;
 use Viserio\Config\Manager as ConfigManager;
+use Viserio\Encryption\Encrypter;
+use Viserio\Session\SessionManager;
 
 class SessionServiceProvider implements ServiceProvider
 {

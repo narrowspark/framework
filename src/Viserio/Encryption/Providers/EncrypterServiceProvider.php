@@ -25,7 +25,7 @@ class EncrypterServiceProvider implements ServiceProvider
             },
             'encrypter' => function (ContainerInterface $container) {
                 return $container->get(Encrypter::class);
-            }
+            },
         ];
     }
 
