@@ -3,13 +3,13 @@ declare(strict_types=1);
 namespace Viserio\Session;
 
 use Interop\Container\ContainerInterface;
+use SessionHandlerInterface;
 use Viserio\Cache\CacheManager;
 use Viserio\Contracts\Config\Manager as ConfigContract;
 use Viserio\Contracts\Cookie\QueueingFactory as JarContract;
 use Viserio\Contracts\Encryption\Encrypter as EncrypterContract;
 use Viserio\Contracts\Encryption\Traits\EncrypterAwareTrait;
 use Viserio\Contracts\Filesystem\Filesystem as FilesystemContract;
-use SessionHandlerInterface;
 use Viserio\Contracts\Session\Store as StoreContract;
 use Viserio\Session\Handler\CacheBasedSessionHandler;
 use Viserio\Session\Handler\CookieSessionHandler;
