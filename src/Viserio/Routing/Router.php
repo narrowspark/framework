@@ -375,7 +375,7 @@ class Router implements RouterContract
         }
 
         $route = new Route($methods, $this->prefix($uri), $action);
-        $route->setContainer($this->container);
+        $route->setContainer($this->getContainer());
         $route->setInvoker($this->getInvoker());
 
         $this->addWhereClausesToRoute($route);
