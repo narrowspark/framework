@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Translation\Tests\Providers;
 
+use org\bovigo\vfs\vfsStream;
 use Viserio\Config\Providers\ConfigServiceProvider;
 use Viserio\Container\Container;
 use Viserio\Contracts\Translation\Translator as TranslatorContract;
@@ -11,6 +12,28 @@ use Viserio\Translation\TranslationManager;
 
 class TranslatorServiceProviderTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @var org\bovigo\vfs\vfsStreamDirectory
+     */
+    private $root;
+
+    private $file;
+
+    public function setUp()
+    {
+        $this->root = vfsStream::setup();
+        $this->file = vfsStream::newFile('temp.php')->withContent(
+            '<?php
+declare(strict_types=1);
+
+return [
+    "lang" => "en",
+    "Hallo" => "hallo",
+];
+            '
+        )->at($this->root);
+    }
+
     public function testProvider()
     {
         $container = new Container();
@@ -20,7 +43,7 @@ class TranslatorServiceProviderTest extends \PHPUnit_Framework_TestCase
 
         $container->get('config')->set('translation', [
             'locale' => 'en',
-            'path.lang' => __DIR__ . '/../Fixture/en.php',
+            'path.lang' => $this->file->url(),
         ]);
 
         $this->assertInstanceOf(TranslationManager::class, $container->get(TranslationManager::class));
@@ -36,10 +59,7 @@ class TranslatorServiceProviderTest extends \PHPUnit_Framework_TestCase
 
         $container->instance('options', [
             'locale' => 'en',
-            'path.lang' => '../Fixture/en.php',
-            'directories' => [
-                __DIR__,
-            ],
+            'path.lang' => $this->file->url()
         ]);
 
         $this->assertInstanceOf(TranslationManager::class, $container->get(TranslationManager::class));
@@ -53,12 +73,7 @@ class TranslatorServiceProviderTest extends \PHPUnit_Framework_TestCase
 
         $container->instance('viserio.translation.options', [
             'locale' => 'en',
-            'path.lang' => '../Fixture/en.php',
-        ]);
-        $container->instance('viserio.parsers.options', [
-            'directories' => [
-                __DIR__,
-            ],
+            'path.lang' => $this->file->url(),
         ]);
 
         $this->assertInstanceOf(TranslationManager::class, $container->get(TranslationManager::class));
