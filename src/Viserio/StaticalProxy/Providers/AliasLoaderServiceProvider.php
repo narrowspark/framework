@@ -32,7 +32,7 @@ class AliasLoaderServiceProvider implements ServiceProvider
             $config = self::get($container, 'options', []);
         }
 
-        return new AliasLoader(config['aliases']);
+        return new AliasLoader($config['aliases'] ?? []);
     }
 
     /**
