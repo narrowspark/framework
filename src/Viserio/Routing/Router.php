@@ -94,8 +94,6 @@ class Router implements RouterContract
         $this->path = $path;
         $this->container = $container;
         $this->routes = new RouteCollection();
-
-        $this->initInvoker();
     }
 
     /**
@@ -140,6 +138,14 @@ class Router implements RouterContract
     public function patch(string $uri, $action = null): RouteContract
     {
         return $this->addRoute('PATCH', $uri, $action);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function head(string $uri, $action = null): RouteContract
+    {
+        return $this->addRoute('HEAD', $uri, $action);
     }
 
     /**
@@ -330,6 +336,7 @@ class Router implements RouterContract
         }
 
         $middlewareDispatcher = $dispatcher->handle($request);
+
         $this->current = $dispatcher->getCurrentRoute();
 
         return $middlewareDispatcher->process($request);
@@ -368,8 +375,8 @@ class Router implements RouterContract
         }
 
         $route = new Route($methods, $this->prefix($uri), $action);
-        $route->setContainer($this->container);
-        $route->setInvoker($this->invoker);
+        $route->setContainer($this->getContainer());
+        $route->setInvoker($this->getInvoker());
 
         $this->addWhereClausesToRoute($route);
 
@@ -449,7 +456,7 @@ class Router implements RouterContract
      *
      * @return \Viserio\Support\Invoker
      */
-    protected function initInvoker(): Invoker
+    protected function getInvoker(): Invoker
     {
         if ($this->invoker === null) {
             $this->invoker = (new Invoker())

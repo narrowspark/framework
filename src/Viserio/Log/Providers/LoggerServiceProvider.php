@@ -2,34 +2,79 @@
 declare(strict_types=1);
 namespace Viserio\Log\Providers;
 
+use Interop\Container\ContainerInterface;
+use Interop\Container\ServiceProvider;
 use Monolog\Logger;
-use Viserio\Application\ServiceProvider;
+use Psr\Log\LoggerInterface;
+use Viserio\Config\Manager as ConfigManager;
+use Viserio\Contracts\Log\Log;
+use Viserio\Events\Dispatcher;
 use Viserio\Log\Writer as MonologWriter;
 
-class LoggerServiceProvider extends ServiceProvider
+class LoggerServiceProvider implements ServiceProvider
 {
+    const PACKAGE = 'viserio.log';
+
     /**
      * {@inheritdoc}
      */
-    public function register()
+    public function getServices()
     {
-        $this->app->singleton('logger', function ($app) {
-            return new MonologWriter(
-                new Logger($app->get('env')),
-                $app->get('events')
-            );
-        });
+        return [
+            MonologWriter::class => [self::class, 'createLogger'],
+            'logger' => function (ContainerInterface $container) {
+                return $container->get(MonologWriter::class);
+            },
+            Logger::class => function (ContainerInterface $container) {
+                return $container->get(MonologWriter::class);
+            },
+            LoggerInterface::class => function (ContainerInterface $container) {
+                return $container->get(MonologWriter::class);
+            },
+            Log::class => function (ContainerInterface $container) {
+                return $container->get(MonologWriter::class);
+            },
+            'logger.options' => [self::class, 'createOptions'],
+        ];
+    }
+
+    public static function createLogger(ContainerInterface $container): MonologWriter
+    {
+        if ($container->has(ConfigManager::class)) {
+            $config = $container->get(ConfigManager::class)->get('log');
+        } else {
+            $config = self::get($container, 'options');
+        }
+
+        $logger = new MonologWriter(new Logger($config['env']));
+
+        if ($container->has(Dispatcher::class)) {
+            $logger->setEventsDispatcher($container->get(Dispatcher::class));
+        }
+
+        return $logger;
+    }
+
+    public static function createOptions(ContainerInterface $container) : array
+    {
+        return [
+            'env' => self::get($container, 'env'),
+        ];
     }
 
     /**
-     * Get the services provided by the provider.
+     * Returns the entry named PACKAGE.$name, of simply $name if PACKAGE.$name is not found.
      *
-     * @return string[]
+     * @param ContainerInterface $container
+     * @param string             $name
+     *
+     * @return mixed
      */
-    public function provides(): array
+    private static function get(ContainerInterface $container, string $name, $default = null)
     {
-        return [
-            'logger',
-        ];
+        $namespacedName = self::PACKAGE . '.' . $name;
+
+        return $container->has($namespacedName) ? $container->get($namespacedName) :
+            ($container->has($name) ? $container->get($name) : $default);
     }
 }

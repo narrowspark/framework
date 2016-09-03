@@ -2,87 +2,49 @@
 declare(strict_types=1);
 namespace Viserio\Filesystem\Providers;
 
-use Viserio\Application\ServiceProvider;
-use Viserio\Filesystem\Adapters\ConnectionFactory as Factory;
-use Viserio\Filesystem\FileLoader;
-use Viserio\Filesystem\Filesystem;
+use Interop\Container\ContainerInterface;
+use Interop\Container\ServiceProvider;
+use League\Flysystem\Filesystem;
+use League\Flysystem\FilesystemInterface;
+use Viserio\Config\Manager as ConfigManager;
 use Viserio\Filesystem\FilesystemManager;
 
-class FilesystemServiceProvider extends ServiceProvider
+class FilesystemServiceProvider implements ServiceProvider
 {
     /**
      * {@inheritdoc}
      */
-    public function register()
-    {
-        $this->app->singleton('files', function () {
-            return new Filesystem();
-        });
-
-        $this->registerFlysystem();
-        $this->registerFileLoader();
-    }
-
-    /**
-     * Get the services provided by the provider.
-     *
-     * @return string[]
-     */
-    public function provides(): array
+    public function getServices()
     {
         return [
-            'flysystem',
-            'flysystem.factory',
-            'filesystem.disk',
-            'filesystem.cloud',
-            'file.loader',
+            FilesystemManager::class => [self::class, 'createFilesystemManager'],
+            'flysystem' => function (ContainerInterface $container) {
+                return $container->get(FilesystemManager::class);
+            },
+            'flysystem.connection' => [self::class, 'createFlysystemConnection'],
+            Filesystem::class => function (ContainerInterface $container) {
+                return $container->get(FilesystemManager::class);
+            },
+            FilesystemInterface::class => function (ContainerInterface $container) {
+                return $container->get(FilesystemManager::class);
+            },
+            'flysystem.cachefactory' => function (ContainerInterface $container) {
+                return $container->get('todo');
+            },
         ];
     }
 
-    /**
-     * Register the driver based filesystem.
-     */
-    protected function registerFlysystem()
+    public static function createFilesystemManager(ContainerInterface $container): FilesystemManager
     {
-        $this->registerFactory();
-
-        $this->registerManager();
-
-        $this->app->bind('filesystem.disk', function ($app) {
-            return $app->get('filesystem')->disk($app->get('config')->get('filesystems::default'));
-        });
-
-        $this->app->bind('filesystem.cloud', function ($app) {
-            return $app->get('filesystem')->disk($app->get('config')->get('filesystems::cloud'));
-        });
+        return new FilesystemManager($container->get(ConfigManager::class));
     }
 
-    /**
-     * Register the filesystem factory.
-     */
-    protected function registerFactory()
+    public static function createFlysystemConnection(ContainerInterface $container)
     {
-        $this->app->singleton('filesystem.factory', function () {
-            return new Factory();
-        });
+        return $container->get(FilesystemManager::class)->connection();
     }
 
-    /**
-     * Register the filesystem manager.
-     */
-    protected function registerManager()
+    public static function createCacheFactory()
     {
-        $this->app->singleton('filesystem', function ($app) {
-            return new FilesystemManager($app->get('config'), $app->get('filesystem.factory'));
-        });
-    }
-
-    protected function registerFileLoader()
-    {
-        $this->app->singleton('file.loader', function ($app) {
-            $app->bind('files.path', '');
-
-            return new FileLoader($app->get('parser'), $app->get('files.path'));
-        });
     }
 }

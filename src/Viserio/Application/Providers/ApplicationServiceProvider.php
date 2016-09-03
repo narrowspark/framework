@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Application\Providers;
 
+use Interop\Container\ServiceProvider;
 use Viserio\Application\EnvironmentDetector;
-use Viserio\Application\ServiceProvider;
 
 /**
  * ApplicationServiceProvider.
@@ -12,7 +12,7 @@ use Viserio\Application\ServiceProvider;
  *
  * @since   0.9.4
  */
-class ApplicationServiceProvider extends ServiceProvider
+class ApplicationServiceProvider implements ServiceProvider
 {
     /**
      * Narrowspark config files.
@@ -61,7 +61,7 @@ class ApplicationServiceProvider extends ServiceProvider
     /**
      * {@inheritdoc}
      */
-    public function register()
+    public function getServices()
     {
         $this->registerConfig();
         $this->registerEntvironment();

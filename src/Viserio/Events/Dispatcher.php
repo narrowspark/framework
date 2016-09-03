@@ -100,11 +100,23 @@ class Dispatcher implements DispatcherContract
     /**
      * {@inhertidoc}
      */
-    public function emit(string $eventName, array $arguments = []): bool
+    public function trigger(string $eventName, array $arguments = []): bool
     {
         $listeners = $this->getListeners($eventName);
 
-        return $this->continueEmit($listeners, $arguments);
+        foreach ($listeners as $listener) {
+            $result = false;
+
+            if ($listener !== null) {
+                $result = $this->invoker->call($listener, $arguments);
+            }
+
+            if ($result === false) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     /**
@@ -112,6 +124,8 @@ class Dispatcher implements DispatcherContract
      */
     public function getListeners(string $eventName): array
     {
+        $this->validateEventName($eventName);
+
         $this->bindPatterns($eventName);
 
         if (! isset($this->listeners[$eventName])) {
@@ -130,6 +144,8 @@ class Dispatcher implements DispatcherContract
      */
     public function detach(string $eventName, $listener): bool
     {
+        $this->validateEventName($eventName);
+
         if ($this->hasWildcards($eventName)) {
             $this->removeListenerPattern($eventName, $listener);
 
@@ -157,6 +173,8 @@ class Dispatcher implements DispatcherContract
     public function removeAllListeners($eventName = null)
     {
         if ($eventName !== null) {
+            $this->validateEventName($eventName);
+
             unset($this->listeners[$eventName], $this->syncedEvents[$eventName]);
         } else {
             $this->listeners = $this->syncedEvents = [];
@@ -268,31 +286,5 @@ class Dispatcher implements DispatcherContract
                 unset($this->patterns[$eventPattern][$key]);
             }
         }
-    }
-
-    /**
-     * If the continue is specified, this callback will be called every
-     * time before the next event handler is called.
-     *
-     * @param array $listeners
-     * @param array $arguments
-     *
-     * @return bool
-     */
-    protected function continueEmit(array $listeners, array $arguments): bool
-    {
-        foreach ($listeners as $listener) {
-            $result = false;
-
-            if ($listener !== null) {
-                $result = $this->invoker->call($listener, $arguments);
-            }
-
-            if ($result === false) {
-                return false;
-            }
-        }
-
-        return true;
     }
 }

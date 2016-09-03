@@ -2,74 +2,37 @@
 declare(strict_types=1);
 namespace Viserio\Cache\Providers;
 
-use Viserio\Application\ServiceProvider;
-use Viserio\Cache\Manager as CacheManager;
+use Interop\Container\ContainerInterface;
+use Interop\Container\ServiceProvider;
+use Viserio\Cache\CacheManager;
+use Viserio\Config\Manager as ConfigManager;
 
-class CacheServiceProvider extends ServiceProvider
+class CacheServiceProvider implements ServiceProvider
 {
     /**
      * {@inheritdoc}
      */
-    public function register()
-    {
-        $this->registerCacheFactory();
-        $this->registerDefaultCache();
-        $this->registerCaches();
-    }
-
-    /**
-     * Get the services provided by the provider.
-     *
-     * @return string[]
-     */
-    public function provides(): array
+    public function getServices()
     {
         return [
-            'cache',
-            'cache.factory',
+            CacheManager::class => [self::class, 'registerCacheFactory'],
+            'cache' => function (ContainerInterface $container) {
+                return $container->get(CacheManager::class);
+            },
+            'cache.store' => [self::class, 'registerDefaultCache'],
         ];
     }
 
-    protected function registerCacheFactory()
+    public static function registerCacheFactory(ContainerInterface $container)
     {
-        $this->app->singleton('cache.factory', function ($app) {
-            $cacheFactory = new CacheManager(
-                $app->get('config'),
-                $app->get('files'),
-                $app->get('config')->get('cache::supported.drivers', [])
-            );
+        $cache = new CacheManager($container->get(ConfigManager::class));
+        $cache->setContainer($container);
 
-            $cacheFactory->setPrefix($app->get('config')->get('cache::prefix'));
-
-            return $cacheFactory;
-        });
+        return $cache;
     }
 
-    protected function registerDefaultCache()
+    public static function registerDefaultCache(ContainerInterface $container)
     {
-        $this->app->singleton('cache.store', function ($app) {
-            //The default driver
-            $app->get('cache.factory')->setDefaultDriver($app->get('config')->get('cache::driver'));
-
-            return $app->get('cache.factory')->driver($app->get('cache.factory')->getDefaultDriver());
-        });
-    }
-
-    protected function registerCaches()
-    {
-        if (($cache = $this->app->get('config')->get('cache::caches')) !== null) {
-            foreach ($cache as $name => $class) {
-                if ($this->app->get('cache.factory')->getDefaultDriver() === $name) {
-                    // we use shortcuts here in case the default has been overridden
-                    $config = $this->app->get('config')->get('cache::driver');
-                } else {
-                    $config = $cache[$name];
-                }
-
-                $this->app->singleton(sprintf('cache.%s.store', $name), function ($app) use ($config) {
-                    return $app->get('cache.factory')->driver($config['driver'], $config);
-                });
-            }
-        }
+        return $container->get(CacheManager::class)->driver();
     }
 }

@@ -2,67 +2,75 @@
 declare(strict_types=1);
 namespace Viserio\Translation\Providers;
 
-use Viserio\Application\ServiceProvider;
-use Viserio\Translation\Manager;
+use Interop\Container\ContainerInterface;
+use Interop\Container\ServiceProvider;
+use Psr\Log\LoggerInterface as PsrLoggerInterface;
+use Viserio\Config\Manager as ConfigManager;
+use Viserio\Contracts\Translation\Translator as TranslatorContract;
+use Viserio\Parsers\FileLoader;
+use Viserio\Translation\MessageSelector;
 use Viserio\Translation\PluralizationRules;
+use Viserio\Translation\TranslationManager;
 
-class TranslatorServiceProvider extends ServiceProvider
+class TranslatorServiceProvider implements ServiceProvider
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function register()
-    {
-        $this->app->bind('translator.pluralization.rules', function () {
-            return new PluralizationRules();
-        });
-
-        $this->app->bind('translator.message.selector', function () {
-            return new MessageSelector();
-        });
-
-        $this->app->singleton('translator', function ($app) {
-            $translator = new Manager(
-                $app->get('files'),
-                $app->get('translator.pluralization.rules'),
-                $app->get('translator.message.selector')
-            );
-
-            $translator->setLocale($app->get('config')->get('app::locale'));
-
-            return $translator;
-        });
-    }
+    const PACKAGE = 'viserio.translation';
 
     /**
      * {@inheritdoc}
      */
-    public function boot()
-    {
-        // Load lang files
-        if (($langFiles = $this->app->get('config')->get('app::language.files')) !== null) {
-            foreach ($langFiles as $file => $lang) {
-                $this->app->get('translator')->bind(
-                    $file . '.' . $lang['ext'],
-                    $lang['group'],
-                    $lang['env'],
-                    $lang['namespace']
-                );
-            }
-        }
-    }
-
-    /**
-     * Get the services provided by the provider.
-     *
-     * @return string[]
-     */
-    public function provides(): array
+    public function getServices()
     {
         return [
-            'translator',
-            'translator.pluralization.rules',
-            'translator.message.selector',
+            TranslationManager::class => [self::class, 'createTranslationManager'],
+            'translator' => [self::class, 'createTranslator'],
+            TranslatorContract::class => function (ContainerInterface $container) {
+                return $container->get('translator');
+            },
         ];
+    }
+
+    public static function createTranslationManager(ContainerInterface $container): TranslationManager
+    {
+        if ($container->has(ConfigManager::class)) {
+            $config = $container->get(ConfigManager::class)->get('translation');
+        } else {
+            $config = self::get($container, 'options');
+        }
+
+        $manager = new TranslationManager(
+            new PluralizationRules(),
+            new MessageSelector()
+        );
+        $manager->setLoader($container->get(FileLoader::class));
+        $manager->setLocale($config['locale']);
+        $manager->import($config['path.lang']);
+
+        if ($container->has(PsrLoggerInterface::class)) {
+            $manager->setLogger($container->get(PsrLoggerInterface::class));
+        }
+
+        return $manager;
+    }
+
+    public static function createTranslator(ContainerInterface $container): TranslatorContract
+    {
+        return $container->get(TranslationManager::class)->getTranslator();
+    }
+
+    /**
+     * Returns the entry named PACKAGE.$name, of simply $name if PACKAGE.$name is not found.
+     *
+     * @param ContainerInterface $container
+     * @param string             $name
+     *
+     * @return mixed
+     */
+    private static function get(ContainerInterface $container, string $name, $default = null)
+    {
+        $namespacedName = self::PACKAGE . '.' . $name;
+
+        return $container->has($namespacedName) ? $container->get($namespacedName) :
+            ($container->has($name) ? $container->get($name) : $default);
     }
 }

@@ -18,33 +18,41 @@
         }
     ],
     "require": {
-        "php"                                : "7.0.0 - 7.0.5 || ^7.0.7",
-        "viserio/contracts"                  : "self.version",
-        "viserio/filesystem"                 : "self.version"
+        "php"                                 : "7.0.0 - 7.0.5 || ^7.0.7",
+        "viserio/contracts"                   : "self.version",
+        "viserio/filesystem"                  : "self.version"
     },
     "require-dev": {
-        "mikey179/vfsStream"                 : "^1.6",
-        "narrowspark/testing-helper"         : "^1.5",
-        "phpunit/phpunit"                    : "^5.1",
-        "viserio/cache"                      : "self.version",
-        "viserio/parsers"                    : "self.version"
+        "container-interop/container-interop" : "^1.1",
+        "container-interop/service-provider"  : "^0.3",
+        "narrowspark/testing-helper"          : "^1.5",
+        "mikey179/vfsStream"                  : "^1.6",
+        "narrowspark/testing-helper"          : "^1.5",
+        "phpunit/phpunit"                     : "^5.1",
+        "viserio/container"                   : "self.version",
+        "viserio/parsers"                     : "self.version"
     },
     "autoload": {
         "psr-4": {
-            "Viserio\\Translation\\"         : ""
+            "Viserio\\Translation\\"          : ""
         },
-        "exclude-from-classmap"              : ["/Tests/"]
+        "exclude-from-classmap"               : ["/Tests/"]
     },
     "autoload-dev": {
         "psr-4": {
-            " Viserio\\Translation\\Tests\\" : "Tests/"
+            " Viserio\\Translation\\Tests\\"  : "Tests/"
         }
+    },
+    "suggest": {
+        "container-interop/container-interop" : "Required to use service-provider (^1.1).",
+        "container-interop/service-provider"  : "Required to use service-provider (^0.3).",
+        "viserio/parsers"                     : "Required to use service-provider or the import function (self.version)."
     },
     "extra": {
         "branch-alias": {
-            "dev-master"                     : "1.0-dev"
+            "dev-master"                      : "1.0-dev"
         }
     },
-    "minimum-stability"                      : "dev",
-    "prefer-stable"                          : true
+    "minimum-stability"                       : "dev",
+    "prefer-stable"                           : true
 }

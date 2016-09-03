@@ -27,6 +27,14 @@ use Viserio\Support\AbstractManager;
 class CacheManager extends AbstractManager
 {
     /**
+     * {@inheritdoc}
+     */
+    public function getDefaultDriver(): string
+    {
+        return $this->config->get($this->getConfigName() . '.driver', 'array');
+    }
+
+    /**
      *  Chain multiple PSR-6 Cache pools together for performance.
      *
      * @param array      $pools

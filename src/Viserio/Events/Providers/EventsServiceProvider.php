@@ -2,31 +2,31 @@
 declare(strict_types=1);
 namespace Viserio\Events\Providers;
 
-use Symfony\Component\EventDispatcher\EventDispatcher;
-use Viserio\Application\ServiceProvider;
+use Interop\Container\ContainerInterface;
+use Interop\Container\ServiceProvider;
+use Viserio\Contracts\Events\Dispatcher as DispatcherContract;
 use Viserio\Events\Dispatcher;
 
-class EventsServiceProvider extends ServiceProvider
+class EventsServiceProvider implements ServiceProvider
 {
     /**
      * {@inheritdoc}
      */
-    public function register()
-    {
-        $this->app->singleton('events', function ($app) {
-            return new Dispatcher(new EventDispatcher(), $app);
-        });
-    }
-
-    /**
-     * Get the services provided by the provider.
-     *
-     * @return string[]
-     */
-    public function provides(): array
+    public function getServices()
     {
         return [
-            'events',
+            Dispatcher::class => [self::class, 'createEventDispatcher'],
+            DispatcherContract::class => function (ContainerInterface $container) {
+                return $container->get(Dispatcher::class);
+            },
+            'events' => function (ContainerInterface $container) {
+                return $container->get(Dispatcher::class);
+            },
         ];
+    }
+
+    public static function createEventDispatcher(ContainerInterface $container): Dispatcher
+    {
+        return new Dispatcher($container);
     }
 }

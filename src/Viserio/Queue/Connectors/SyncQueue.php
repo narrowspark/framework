@@ -67,7 +67,7 @@ class SyncQueue extends AbstractQueue
     protected function raiseBeforeJobEvent(JobContract $job)
     {
         if ($this->container->has('events')) {
-            $this->container->get('events')->emit(
+            $this->container->get('events')->trigger(
                 'viserio.job.processing',
                 [
                     'connection' => 'sync',
@@ -86,7 +86,7 @@ class SyncQueue extends AbstractQueue
     protected function raiseAfterJobEvent(JobContract $job)
     {
         if ($this->container->has('events')) {
-            $this->container->get('events')->emit(
+            $this->container->get('events')->trigger(
                 'viserio.job.processed',
                 [
                     'connection' => 'sync',
@@ -106,7 +106,7 @@ class SyncQueue extends AbstractQueue
     protected function raiseExceptionOccurredJobEvent(JobContract $job, Throwable $exception)
     {
         if ($this->container->has('events')) {
-            $this->container->get('events')->emit(
+            $this->container->get('events')->trigger(
                 'viserio.job.exception.occurred',
                 [
                     'connection' => 'sync',
@@ -128,7 +128,7 @@ class SyncQueue extends AbstractQueue
         $job->failed();
 
         if ($this->container->has('events')) {
-            $this->container->get('events')->emit(
+            $this->container->get('events')->trigger(
                 'viserio.job.failed',
                 [
                     'connection' => 'sync',

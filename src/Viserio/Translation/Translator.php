@@ -3,7 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Translation;
 
 use Countable;
-use Psr\Log\LoggerInterface;
+use Viserio\Contracts\Log\Traits\LoggerAwareTrait;
 use Viserio\Contracts\Translation\MessageCatalogue as MessageCatalogueContract;
 use Viserio\Contracts\Translation\MessageSelector as MessageSelectorContract;
 use Viserio\Contracts\Translation\Translator as TranslatorContract;
@@ -11,6 +11,7 @@ use Viserio\Translation\Traits\ValidateLocaleTrait;
 
 class Translator implements TranslatorContract
 {
+    use LoggerAwareTrait;
     use ValidateLocaleTrait;
 
     /**
@@ -47,13 +48,6 @@ class Translator implements TranslatorContract
      * @var string
      */
     private $locale;
-
-    /**
-     * The psr logger instance.
-     *
-     * @var \Psr\Log\LoggerInterface
-     */
-    private $logger;
 
     /**
      * Creat new Translator instance.
@@ -104,24 +98,6 @@ class Translator implements TranslatorContract
     public function getCatalogue(): MessageCatalogueContract
     {
         return $this->catalogue;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setLogger(LoggerInterface $logger): TranslatorContract
-    {
-        $this->logger = $logger;
-
-        return $this;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getLogger(): LoggerInterface
-    {
-        return $this->logger;
     }
 
     /**

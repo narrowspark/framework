@@ -22,6 +22,15 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase
         $this->listener = new EventListener();
     }
 
+    /**
+     * @expectedException InvalidArgumentException
+     * @expectedExceptionMessage The event name must only contain the characters A-Z, a-z, 0-9, _, and '.'.
+     */
+    public function testNoValidName()
+    {
+        $this->dispatcher->attach('foo-bar', 'test', 100);
+    }
+
     public function testInitialState()
     {
         $ee = $this->dispatcher;
@@ -57,7 +66,7 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase
             $argResult = $arg;
         });
 
-        $this->assertTrue($ee->emit('foo', ['bar']));
+        $this->assertTrue($ee->trigger('foo', ['bar']));
         $this->assertEquals('bar', $argResult);
     }
 
@@ -78,7 +87,7 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase
             $argResult = 2;
         });
 
-        $this->assertFalse($ee->emit('foo', ['bar']));
+        $this->assertFalse($ee->trigger('foo', ['bar']));
         $this->assertEquals(1, $argResult);
     }
 
@@ -101,7 +110,7 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase
             return false;
         }, 1);
 
-        $this->assertFalse($ee->emit('foo', ['bar']));
+        $this->assertFalse($ee->trigger('foo', ['bar']));
         $this->assertEquals(2, $argResult);
     }
 
@@ -125,7 +134,7 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase
         $ee->attach('foo', function () use (&$result) {
             $result[] = 'd';
         });
-        $ee->emit('foo');
+        $ee->trigger('foo');
 
         $this->assertEquals(['c', 'a', 'b', 'd'], $result);
     }
@@ -140,7 +149,7 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase
 
         $ee = $this->dispatcher;
         $ee->attach('foo', $callBack);
-        $ee->emit('foo');
+        $ee->trigger('foo');
 
         $this->assertTrue($result);
 
@@ -148,7 +157,7 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase
 
         $this->assertTrue($ee->detach('foo', $callBack));
 
-        $ee->emit('foo');
+        $ee->trigger('foo');
 
         $this->assertFalse($result);
     }
@@ -163,7 +172,7 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase
 
         $ee = $this->dispatcher;
         $ee->attach('foo', $callBack);
-        $ee->emit('foo');
+        $ee->trigger('foo');
 
         $this->assertTrue($result);
 
@@ -171,7 +180,7 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase
 
         $this->assertFalse($ee->detach('bar', $callBack));
 
-        $ee->emit('foo');
+        $ee->trigger('foo');
 
         $this->assertTrue($result);
     }
@@ -186,7 +195,7 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase
 
         $ee = $this->dispatcher;
         $ee->attach('foo', $callBack);
-        $ee->emit('foo');
+        $ee->trigger('foo');
 
         $this->assertTrue($result);
 
@@ -195,7 +204,7 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($ee->detach('foo', $callBack));
         $this->assertFalse($ee->detach('foo', $callBack));
 
-        $ee->emit('foo');
+        $ee->trigger('foo');
 
         $this->assertFalse($result);
     }
@@ -210,14 +219,14 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase
 
         $ee = $this->dispatcher;
         $ee->attach('foo', $callBack);
-        $ee->emit('foo');
+        $ee->trigger('foo');
 
         $this->assertTrue($result);
 
         $result = false;
 
         $ee->removeAllListeners('foo');
-        $ee->emit('foo');
+        $ee->trigger('foo');
 
         $this->assertFalse($result);
     }
@@ -232,14 +241,14 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase
 
         $ee = $this->dispatcher;
         $ee->attach('foo', $callBack);
-        $ee->emit('foo');
+        $ee->trigger('foo');
 
         $this->assertTrue($result);
 
         $result = false;
 
         $ee->removeAllListeners();
-        $ee->emit('foo');
+        $ee->trigger('foo');
 
         $this->assertFalse($result);
     }
@@ -254,8 +263,8 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase
 
         $ee = $this->dispatcher;
         $ee->once('foo', $callBack);
-        $ee->emit('foo');
-        $ee->emit('foo');
+        $ee->trigger('foo');
+        $ee->trigger('foo');
 
         $this->assertEquals(1, $result);
     }
@@ -280,7 +289,7 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase
             return false;
         }, 1);
 
-        $this->assertFalse($ee->emit('foo', ['bar']));
+        $this->assertFalse($ee->trigger('foo', ['bar']));
 
         $this->assertEquals(2, $argResult);
     }
@@ -297,7 +306,7 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase
 
         $ee->attach('foo', $callback);
         $ee->attach('foo', $callback);
-        $ee->emit('foo');
+        $ee->trigger('foo');
 
         $this->assertEquals(2, $argResult);
     }
@@ -364,7 +373,7 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase
         $this->assertNumberListenersAdded(1, self::apiException);
     }
 
-    public function testEmit()
+    public function testtrigger()
     {
         $ee = $this->dispatcher;
 
@@ -373,10 +382,10 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase
         $ee->attach('*.exception', [$this->listener, 'onException']);
         $ee->attach(self::coreRequest, [$this->listener, 'onCoreRequest']);
 
-        $ee->emit(self::coreRequest);
-        $ee->emit(self::coreException);
-        $ee->emit(self::apiRequest);
-        $ee->emit(self::apiException);
+        $ee->trigger(self::coreRequest);
+        $ee->trigger(self::coreException);
+        $ee->trigger(self::apiRequest);
+        $ee->trigger(self::apiException);
 
         $this->assertEquals(4, $this->listener->onAnyInvoked);
         $this->assertEquals(2, $this->listener->onCoreInvoked);
@@ -403,7 +412,7 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase
             'The listener provider should not be invoked until the listener is requested'
         );
 
-        $ee->emit('foo');
+        $ee->trigger('foo');
 
         $this->assertEquals([$listenerProvider], $ee->getListeners('foo'));
         $this->assertEquals(

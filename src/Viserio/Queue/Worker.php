@@ -161,7 +161,7 @@ class Worker implements WorkerContract
     public function stop()
     {
         if ($this->events !== null) {
-            $this->events->emit('viserio.worker.stopping');
+            $this->events->trigger('viserio.worker.stopping');
         }
 
         die;
@@ -267,7 +267,7 @@ class Worker implements WorkerContract
     protected function daemonShouldRun(): bool
     {
         if ($this->events !== null) {
-            return $this->events->emit('viserio.queue.looping') !== false;
+            return $this->events->trigger('viserio.queue.looping') !== false;
         }
 
         return true;
@@ -323,7 +323,7 @@ class Worker implements WorkerContract
         $job->failed();
 
         if ($this->events !== null) {
-            $this->events->emit(
+            $this->events->trigger(
                 'viserio.job.failed',
                 [
                     'connection' => $connection,
@@ -344,7 +344,7 @@ class Worker implements WorkerContract
     protected function raiseBeforeJobEvent(string $connection, JobContract $job)
     {
         if ($this->events !== null) {
-            $this->events->emit(
+            $this->events->trigger(
                 'viserio.job.processing',
                 [
                     'connection' => $connection,
@@ -364,7 +364,7 @@ class Worker implements WorkerContract
     protected function raiseAfterJobEvent(string $connection, JobContract $job)
     {
         if ($this->events !== null) {
-            $this->events->emit(
+            $this->events->trigger(
                 'viserio.job.processed',
                 [
                     'connection' => $connection,
@@ -392,7 +392,7 @@ class Worker implements WorkerContract
         // another listener (or this same one). We will re-throw this exception after.
         try {
             if ($this->events !== null) {
-                $this->events->emit(
+                $this->events->trigger(
                     'viserio.job.exception.occurred',
                     [
                         'connection' => $connection,

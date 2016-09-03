@@ -5,7 +5,6 @@ namespace Viserio\Log;
 use Monolog\Handler\RotatingFileHandler;
 use Monolog\Logger as MonologLogger;
 use Monolog\Processor\PsrLogMessageProcessor;
-use Viserio\Contracts\Events\Dispatcher as DispatcherContract;
 use Viserio\Contracts\Events\Traits\EventsAwareTrait;
 use Viserio\Contracts\Log\Log as LogContract;
 use Viserio\Contracts\Support\Arrayable;
@@ -34,10 +33,9 @@ class Writer implements LogContract
     /**
      * Create a new log writer instance.
      *
-     * @param \Monolog\Logger                           $monolog
-     * @param \Viserio\Contracts\Events\Dispatcher|null $dispatcher
+     * @param \Monolog\Logger $monolog
      */
-    public function __construct(MonologLogger $monolog, DispatcherContract $events = null)
+    public function __construct(MonologLogger $monolog)
     {
         // PSR 3 log message formatting for all handlers
         $monolog->pushProcessor(new PsrLogMessageProcessor());
@@ -45,7 +43,6 @@ class Writer implements LogContract
         $this->handlerParser = new HandlerParser($monolog);
 
         $this->monolog = $this->handlerParser->getMonolog();
-        $this->events = $events;
     }
 
     /**
@@ -243,7 +240,7 @@ class Writer implements LogContract
             // If the event dispatcher is set, we will pass along the parameters to the
             // log listeners. These are useful for building profilers or other tools
             // that aggregate all of the log messages for a given "request" cycle.
-            $this->getEventsDispatcher()->emit('viserio.log', compact('level', 'message', 'context'));
+            $this->getEventsDispatcher()->trigger('viserio.log', compact('level', 'message', 'context'));
         }
 
         $this->monolog->{$level}($message, $context);

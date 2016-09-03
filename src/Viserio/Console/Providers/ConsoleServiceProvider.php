@@ -2,52 +2,70 @@
 declare(strict_types=1);
 namespace Viserio\Console\Providers;
 
+use Interop\Container\ContainerInterface;
+use Interop\Container\ServiceProvider;
 use Stecman\Component\Symfony\Console\BashCompletion\CompletionCommand;
-use Viserio\Application\ServiceProvider;
 use Viserio\Console\Application;
-use Viserio\Console\Command\CommandResolver;
 
-class ConsoleServiceProvider extends ServiceProvider
+class ConsoleServiceProvider implements ServiceProvider
 {
+    const PACKAGE = 'viserio.console';
+
     /**
      * {@inheritdoc}
      */
-    public function register()
+    public function getServices()
     {
-        $this->app->singleton('command.resolver', function ($app) {
-            return new CommandResolver($app);
-        });
+        return [
+            Application::class => [self::class, 'createCerebro'],
+            'console.app.name' => [self::class, 'createConsoleName'],
+            'console.app.version' => [self::class, 'createConsoleVersion'],
+            'console' => function (ContainerInterface $container) {
+                return $container->get(Application::class);
+            },
+            'cerebro' => function (ContainerInterface $container) {
+                return $container->get(Application::class);
+            },
+        ];
+    }
 
-        $this->app->singleton('command', function ($app) {
-            $app->bind('console.app.name', 'Narrowspark Cerebro');
-            $app->bind('console.app.version', $app->getVersion());
+    public static function createCerebro(ContainerInterface $container): Application
+    {
+        $console = new Application(
+            $container,
+            $container->get('console.app.version'),
+            $container->get('console.app.name')
+        );
 
-            $console = new Application(
-                $app,
-                $app->get('events'),
-                $app->get('console.app.version'),
-                $app->get('console.app.name')
-            );
+        // Add auto-complete for Symfony Console application
+        $console->add(new CompletionCommand());
 
-            // Add auto-complete for Symfony Console application
-            $console->add(new CompletionCommand());
+        return $console;
+    }
 
-            $console->addCommands($app->get('command.resolver')->commands());
+    public static function createConsoleName(ContainerInterface $container): string
+    {
+        return self::get($container, 'app.name', 'Cerebro');
+    }
 
-            return $console;
-        });
+    public static function createConsoleVersion(ContainerInterface $container): string
+    {
+        return self::get($container, 'app.version');
     }
 
     /**
-     * Get the services provided by the provider.
+     * Returns the entry named PACKAGE.$name, of simply $name if PACKAGE.$name is not found.
      *
-     * @return string[]
+     * @param ContainerInterface $container
+     * @param string             $name
+     *
+     * @return mixed
      */
-    public function provides(): array
+    private static function get(ContainerInterface $container, string $name, $default = null)
     {
-        return [
-            'command',
-            'command.resolver',
-        ];
+        $namespacedName = self::PACKAGE . '.' . $name;
+
+        return $container->has($namespacedName) ? $container->get($namespacedName) :
+            ($container->has($name) ? $container->get($name) : $default);
     }
 }

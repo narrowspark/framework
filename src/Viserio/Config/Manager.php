@@ -32,7 +32,7 @@ class Manager implements ManagerContract, IteratorAggregate
     protected $path;
 
     /**
-     * Constructor.
+     * Create a new config manager instance.
      *
      * @param \Viserio\Contracts\Config\Repository $repository
      */
@@ -109,9 +109,7 @@ class Manager implements ManagerContract, IteratorAggregate
             return $default;
         }
 
-        return is_callable($this->offsetGet($key)) ?
-            call_user_func($this->offsetGet($key)) :
-            $this->offsetGet($key);
+        return $this->offsetGet($key);
     }
 
     /**

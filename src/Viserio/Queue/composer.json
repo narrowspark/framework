@@ -30,6 +30,7 @@
         "viserio/support"                                    : "self.version"
     },
     "require-dev": {
+        "container-interop/service-provider"                 : "^0.3",
         "narrowspark/testing-helper"                         : "^1.5",
         "phpunit/phpunit"                                    : "^5.1",
         "php-amqplib/php-amqplib"                            : "^2.6",
@@ -53,6 +54,8 @@
         "psr/container-implementation"                       : "^1.0"
     },
     "suggest": {
+        "container-interop/container-interop"                : "Required to use service-provider (^1.1).",
+        "container-interop/service-provider"                 : "Required to use service-provider (^0.3).",
         "google/appengine-php-sdk"                           : "Required to use the Google App Engine queue driver (^1.9.30).",
         "aws/aws-sdk-php"                                    : "Required to use the SQS queue driver (^3.0).",
         "pda/pheanstalk"                                     : "Required to use the Beanstalk queue driver (^3.0).",

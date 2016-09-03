@@ -18,31 +18,38 @@
         }
     ],
     "require": {
-        "php"                             : "7.0.0 - 7.0.5 || ^7.0.7",
-        "defuse/php-encryption"           : "^2.0",
-        "paragonie/password_lock"         : "^3.0",
-        "viserio/contracts"               : "self.version"
+        "php"                                 : "7.0.0 - 7.0.5 || ^7.0.7",
+        "defuse/php-encryption"               : "^2.0",
+        "paragonie/password_lock"             : "^3.0",
+        "viserio/contracts"                   : "self.version"
     },
     "require-dev": {
-        "narrowspark/testing-helper"      : "^1.5",
-        "phpunit/phpunit"                 : "^5.1"
+        "container-interop/container-interop" : "^1.1",
+        "container-interop/service-provider"  : "^0.3",
+        "narrowspark/testing-helper"          : "^1.5",
+        "phpunit/phpunit"                     : "^5.1",
+        "viserio/container"                   : "self.version"
     },
     "autoload": {
         "psr-4": {
-            "Viserio\\Hashing\\"          : ""
+            "Viserio\\Hashing\\"              : ""
         },
-        "exclude-from-classmap"           : ["/Tests/"]
+        "exclude-from-classmap"               : ["/Tests/"]
     },
     "autoload-dev": {
         "psr-4": {
-            "Viserio\\Hashing\\Tests\\"   : "Tests/"
+            "Viserio\\Hashing\\Tests\\"       : "Tests/"
         }
     },
     "extra": {
         "branch-alias": {
-            "dev-master"                  : "1.0-dev"
+            "dev-master"                      : "1.0-dev"
         }
     },
-    "minimum-stability"                   : "dev",
-    "prefer-stable"                       : true
+    "suggest": {
+        "container-interop/container-interop" : "Required to use service-provider (^1.1).",
+        "container-interop/service-provider"  : "Required to use service-provider (^0.3)."
+    },
+    "minimum-stability"                       : "dev",
+    "prefer-stable"                           : true
 }

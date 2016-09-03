@@ -26,8 +26,10 @@
         "viserio/support"                                    : "self.version"
     },
     "require-dev": {
+        "container-interop/service-provider"                 : "^0.3",
         "narrowspark/testing-helper"                         : "^1.5",
-        "phpunit/phpunit"                                    : "^5.1"
+        "phpunit/phpunit"                                    : "^5.1",
+        "viserio/container"                                  : "self.version"
     },
     "provide": {
         "container-interop/container-interop-implementation" : "^1.1",
@@ -43,6 +45,10 @@
         "psr-4": {
             "Viserio\\Events\\Tests\\"                       : "Tests/"
         }
+    },
+    "suggest": {
+        "container-interop/container-interop"                : "Required to use service-provider (^1.1).",
+        "container-interop/service-provider"                 : "Required to use service-provider (^0.3)."
     },
     "extra": {
         "branch-alias": {

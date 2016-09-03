@@ -49,7 +49,8 @@ class WriterTest extends \PHPUnit_Framework_TestCase
             ->shouldReceive('pushProcessor')
             ->once();
 
-        $writer = new Writer($monolog, $this->getEventsDispatcher());
+        $writer = new Writer($monolog);
+        $writer->setEventsDispatcher($this->getEventsDispatcher());
         $writer->useFiles(__DIR__);
     }
 
@@ -64,7 +65,8 @@ class WriterTest extends \PHPUnit_Framework_TestCase
             ->shouldReceive('pushProcessor')
             ->once();
 
-        $writer = new Writer($monolog, $this->getEventsDispatcher());
+        $writer = new Writer($monolog);
+        $writer->setEventsDispatcher($this->getEventsDispatcher());
         $writer->useDailyFiles(__DIR__, 5);
     }
 
@@ -79,7 +81,8 @@ class WriterTest extends \PHPUnit_Framework_TestCase
             ->shouldReceive('pushProcessor')
             ->once();
 
-        $writer = new Writer($monolog, $this->getEventsDispatcher());
+        $writer = new Writer($monolog);
+        $writer->setEventsDispatcher($this->getEventsDispatcher());
         $writer->error('foo');
     }
 
@@ -94,7 +97,8 @@ class WriterTest extends \PHPUnit_Framework_TestCase
             ->shouldReceive('pushProcessor')
             ->once();
 
-        $writer = new Writer($monolog, $this->getEventsDispatcher());
+        $writer = new Writer($monolog);
+        $writer->setEventsDispatcher($this->getEventsDispatcher());
         $writer->emergency('foo');
     }
 
@@ -109,7 +113,8 @@ class WriterTest extends \PHPUnit_Framework_TestCase
             ->shouldReceive('pushProcessor')
             ->once();
 
-        $writer = new Writer($monolog, $this->getEventsDispatcher());
+        $writer = new Writer($monolog);
+        $writer->setEventsDispatcher($this->getEventsDispatcher());
         $writer->alert('foo');
     }
 
@@ -124,7 +129,8 @@ class WriterTest extends \PHPUnit_Framework_TestCase
             ->shouldReceive('pushProcessor')
             ->once();
 
-        $writer = new Writer($monolog, $this->getEventsDispatcher());
+        $writer = new Writer($monolog);
+        $writer->setEventsDispatcher($this->getEventsDispatcher());
         $writer->critical('foo');
     }
 
@@ -139,7 +145,8 @@ class WriterTest extends \PHPUnit_Framework_TestCase
             ->shouldReceive('pushProcessor')
             ->once();
 
-        $writer = new Writer($monolog, $this->getEventsDispatcher());
+        $writer = new Writer($monolog);
+        $writer->setEventsDispatcher($this->getEventsDispatcher());
         $writer->warning('foo');
     }
 
@@ -154,7 +161,8 @@ class WriterTest extends \PHPUnit_Framework_TestCase
             ->shouldReceive('pushProcessor')
             ->once();
 
-        $writer = new Writer($monolog, $this->getEventsDispatcher());
+        $writer = new Writer($monolog);
+        $writer->setEventsDispatcher($this->getEventsDispatcher());
         $writer->notice('foo');
     }
 
@@ -169,7 +177,8 @@ class WriterTest extends \PHPUnit_Framework_TestCase
             ->shouldReceive('pushProcessor')
             ->once();
 
-        $writer = new Writer($monolog, $this->getEventsDispatcher());
+        $writer = new Writer($monolog);
+        $writer->setEventsDispatcher($this->getEventsDispatcher());
         $writer->info('foo');
     }
 
@@ -184,7 +193,8 @@ class WriterTest extends \PHPUnit_Framework_TestCase
             ->shouldReceive('pushProcessor')
             ->once();
 
-        $writer = new Writer($monolog, $this->getEventsDispatcher());
+        $writer = new Writer($monolog);
+        $writer->setEventsDispatcher($this->getEventsDispatcher());
         $writer->debug('foo');
     }
 
@@ -199,7 +209,8 @@ class WriterTest extends \PHPUnit_Framework_TestCase
             ->shouldReceive('pushProcessor')
             ->once();
 
-        $writer = new Writer($monolog, $this->getEventsDispatcher());
+        $writer = new Writer($monolog);
+        $writer->setEventsDispatcher($this->getEventsDispatcher());
         $writer->log('debug', 'foo');
     }
 
@@ -223,7 +234,8 @@ class WriterTest extends \PHPUnit_Framework_TestCase
             ->shouldReceive('pushProcessor')
             ->once();
 
-        $writer = new Writer($monolog, $events);
+        $writer = new Writer($monolog);
+        $writer->setEventsDispatcher($events);
         $writer->error('foo');
 
         $this->assertTrue(isset($_SERVER['__log.level']));
