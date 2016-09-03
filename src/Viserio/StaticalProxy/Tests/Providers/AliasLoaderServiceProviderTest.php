@@ -2,10 +2,10 @@
 declare(strict_types=1);
 namespace Viserio\StaticalProxy\Tests\Providers;
 
+use Viserio\Config\Providers\ConfigServiceProvider;
 use Viserio\Container\Container;
 use Viserio\StaticalProxy\AliasLoader;
 use Viserio\StaticalProxy\Providers\AliasLoaderServiceProvider;
-use Viserio\Config\Providers\ConfigServiceProvider;
 
 class AliasLoaderServiceProviderTest extends \PHPUnit_Framework_TestCase
 {
@@ -18,7 +18,6 @@ class AliasLoaderServiceProviderTest extends \PHPUnit_Framework_TestCase
         $container->get('config')->set('aliasloader', [
             'aliases' => [],
         ]);
-
 
         $this->assertInstanceOf(AliasLoader::class, $container->get(AliasLoader::class));
         $this->assertInstanceOf(AliasLoader::class, $container->get('alias'));
