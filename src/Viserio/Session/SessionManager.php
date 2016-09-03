@@ -3,7 +3,6 @@ declare(strict_types=1);
 namespace Viserio\Session;
 
 use Interop\Container\ContainerInterface;
-use Psr\Cache\CacheItemPoolInterface;
 use Viserio\Cache\CacheManager;
 use Viserio\Contracts\Config\Manager as ConfigContract;
 use Viserio\Contracts\Cookie\QueueingFactory as JarContract;

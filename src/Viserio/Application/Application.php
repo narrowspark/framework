@@ -11,7 +11,6 @@ use Viserio\Application\Traits\HttpErrorHandlingTrait;
 use Viserio\Application\Traits\HttpHandlingTrait;
 use Viserio\Application\Traits\MiddlewaresTrait;
 use Viserio\Application\Traits\PathsTrait;
-use Viserio\Application\Traits\ServiceProviderTrait;
 use Viserio\Container\Container;
 use Viserio\Http\ServerRequest;
 use Viserio\StaticalProxy\StaticalProxy;

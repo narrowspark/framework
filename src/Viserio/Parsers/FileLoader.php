@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Parsers;
 
+use Viserio\Contracts\Parsers\Exception\LoadingException;
 use Viserio\Contracts\Parsers\Loader as LoaderContract;
 use Viserio\Contracts\Parsers\TaggableParser as TaggableParserContract;
 use Viserio\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
@@ -106,13 +107,18 @@ class FileLoader implements LoaderContract
     /**
      * {@inheritdoc}
      */
-    public function exists(string $file)
+    public function exists(string $file): string
     {
         $key = str_replace('/', '', $file);
 
         // Finally, we can simply check if this file exists. We will also cache
         // the value in an array so we don't have to go through this process
         // again on subsequent checks for the existing of the data file.
+
+        if (isset($this->exists[$key])) {
+            return $this->exists[$key];
+        }
+
         $path = $this->getPath($file);
         $file = self::normalizeDirectorySeparator($path . $file);
 
@@ -123,7 +129,7 @@ class FileLoader implements LoaderContract
         // False is returned if no path exists for a namespace.
         $this->exists[$key] = false;
 
-        return false;
+        throw new LoadingException(sprintf('File [%s] not found.', $file));
     }
 
     /**

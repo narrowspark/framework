@@ -26,7 +26,13 @@ class AliasLoaderServiceProvider implements ServiceProvider
 
     public static function createAliasLoader(ContainerInterface $container): AliasLoader
     {
-        return new AliasLoader(self::get($container, 'aliases', []));
+        if ($container->has(ConfigManager::class)) {
+            $config = $container->get(ConfigManager::class)->get('aliasloader', []);
+        } else {
+            $config = self::get($container, 'options', []);
+        }
+
+        return new AliasLoader(config['aliases']);
     }
 
     /**

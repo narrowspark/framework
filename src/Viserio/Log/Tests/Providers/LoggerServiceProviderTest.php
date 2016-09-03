@@ -2,7 +2,6 @@
 declare(strict_types=1);
 namespace Viserio\Log\Tests\Providers;
 
-use Defuse\Crypto\Key;
 use Monolog\Logger;
 use Psr\Log\LoggerInterface;
 use Viserio\Config\Manager as ConfigManager;

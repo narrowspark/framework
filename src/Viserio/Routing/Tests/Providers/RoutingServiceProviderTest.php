@@ -2,7 +2,6 @@
 declare(strict_types=1);
 namespace Viserio\Routing\Tests\Providers;
 
-use Defuse\Crypto\Key;
 use Viserio\Config\Providers\ConfigServiceProvider;
 use Viserio\Container\Container;
 use Viserio\Routing\Providers\RoutingServiceProvider;

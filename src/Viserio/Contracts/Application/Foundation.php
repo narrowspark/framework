@@ -2,8 +2,6 @@
 declare(strict_types=1);
 namespace Viserio\Contracts\Application;
 
-use Viserio\Contracts\Container\Container;
-
 interface Foundation
 {
     /**

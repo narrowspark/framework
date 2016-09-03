@@ -2,8 +2,6 @@
 declare(strict_types=1);
 namespace Viserio\Contracts\Translation;
 
-use Psr\Log\LoggerInterface;
-
 interface Translator
 {
     /**
@@ -37,22 +35,6 @@ interface Translator
      * @return \Viserio\Contracts\Translation\MessageCatalogue
      */
     public function getCatalogue(): MessageCatalogue;
-
-    /**
-     * Set a logger instance..
-     *
-     * @param \Psr\Log\LoggerInterface $logger
-     *
-     * @return \Viserio\Translation\Translator
-     */
-    public function setLogger(LoggerInterface $logger): Translator;
-
-    /**
-     * Get a logger instance.
-     *
-     * @return \Psr\Log\LoggerInterface
-     */
-    public function getLogger(): LoggerInterface;
 
     /**
      * Translates the given message.

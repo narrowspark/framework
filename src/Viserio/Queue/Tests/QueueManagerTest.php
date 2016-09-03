@@ -6,7 +6,6 @@ use Interop\Container\ContainerInterface as ContainerInteropInterface;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use Viserio\Contracts\Config\Manager as ConfigContract;
 use Viserio\Contracts\Encryption\Encrypter as EncrypterContract;
-use Viserio\Contracts\Events\Dispatcher as DispatcherContract;
 use Viserio\Queue\QueueManager;
 use Viserio\Queue\Tests\Fixture\TestQueue;
 

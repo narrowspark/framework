@@ -3,7 +3,6 @@ declare(strict_types=1);
 namespace Viserio\Parsers\Tests;
 
 use org\bovigo\vfs\vfsStream;
-use Viserio\Filesystem\Filesystem;
 use Viserio\Parsers\FileLoader;
 use Viserio\Parsers\TaggableParser;
 use Viserio\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
