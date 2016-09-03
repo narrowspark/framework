@@ -54,19 +54,4 @@ class QueueManagerTest extends \PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf(EncrypterContract::class, $manager->getEncrypter());
     }
-
-    public function testSetAndGetDispatcher()
-    {
-        $config = $this->mock(ConfigContract::class);
-
-        $manager = new QueueManager(
-            $config,
-            $this->mock(ContainerInteropInterface::class),
-            $this->mock(EncrypterContract::class)
-        );
-
-        $manager->setEventDispatcher($this->mock(DispatcherContract::class));
-
-        $this->assertInstanceOf(DispatcherContract::class, $manager->getEventDispatcher());
-    }
 }

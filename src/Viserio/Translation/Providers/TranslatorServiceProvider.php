@@ -3,7 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Translation\Providers;
 
 use Interop\Container\ServiceProvider;
-use Viserio\Translation\Manager;
+use Viserio\Translation\TranslationManager;
 use Viserio\Translation\PluralizationRules;
 
 class TranslatorServiceProvider implements ServiceProvider
@@ -32,5 +32,13 @@ class TranslatorServiceProvider implements ServiceProvider
 
             return $translator;
         });
+    }
+
+    public static function createTranslationManager(ContainerInterface $container): AliasLoader
+    {
+        return new TranslationManager(
+            new PluralizationRules(),
+            new MessageSelector()
+        );
     }
 }
