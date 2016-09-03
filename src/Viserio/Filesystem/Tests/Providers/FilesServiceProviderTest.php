@@ -4,6 +4,7 @@ namespace Viserio\Filesystem\Tests\Providers;
 
 use Viserio\Container\Container;
 use Viserio\Filesystem\Filesystem;
+use Viserio\Contracts\Filesystem\Filesystem as FilesystemContract;
 use Viserio\Filesystem\Providers\FilesServiceProvider;
 
 class FilesServiceProviderTest extends \PHPUnit_Framework_TestCase
@@ -14,6 +15,7 @@ class FilesServiceProviderTest extends \PHPUnit_Framework_TestCase
         $container->register(new FilesServiceProvider());
 
         $this->assertInstanceOf(Filesystem::class, $container->get(Filesystem::class));
+        $this->assertInstanceOf(Filesystem::class, $container->get(FilesystemContract::class));
         $this->assertInstanceOf(Filesystem::class, $container->get('files'));
     }
 }

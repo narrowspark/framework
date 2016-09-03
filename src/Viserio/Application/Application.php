@@ -25,7 +25,6 @@ class Application
     use HttpHandlingTrait;
     use MiddlewaresTrait;
     use PathsTrait;
-    use ServiceProviderTrait;
 
     /**
      * The Viserio framework version.

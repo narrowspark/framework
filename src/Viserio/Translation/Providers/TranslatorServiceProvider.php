@@ -33,36 +33,4 @@ class TranslatorServiceProvider implements ServiceProvider
             return $translator;
         });
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function boot()
-    {
-        // Load lang files
-        if (($langFiles = $this->app->get('config')->get('app::language.files')) !== null) {
-            foreach ($langFiles as $file => $lang) {
-                $this->app->get('translator')->bind(
-                    $file . '.' . $lang['ext'],
-                    $lang['group'],
-                    $lang['env'],
-                    $lang['namespace']
-                );
-            }
-        }
-    }
-
-    /**
-     * Get the services provided by the provider.
-     *
-     * @return string[]
-     */
-    public function provides(): array
-    {
-        return [
-            'translator',
-            'translator.pluralization.rules',
-            'translator.message.selector',
-        ];
-    }
 }

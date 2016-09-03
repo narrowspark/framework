@@ -7,9 +7,20 @@ use Viserio\Contracts\Encryption\Encrypter as EncrypterContract;
 use Viserio\Contracts\Session\SessionHandler as SessionHandlerContract;
 use Viserio\Contracts\Session\Store as StoreContract;
 use Viserio\Support\AbstractManager;
+use Viserio\Session\Handler\FileSessionHandler;
+use Viserio\Session\Handler\CookieSessionHandler;
+use Interop\Container\ContainerInterface;
+use Viserio\Contracts\Cookie\QueueingFactory as JarContract;
+use Viserio\Contracts\Filesystem\Filesystem as FilesystemContract;
+use Psr\Cache\CacheItemPoolInterface;
+use Viserio\Cache\CacheManager;
+use Viserio\Contracts\Encryption\Traits\EncrypterAwareTrait;
+use Viserio\Session\Handler\CacheBasedSessionHandler;
 
 class SessionManager extends AbstractManager
 {
+    use EncrypterAwareTrait;
+
     /**
      * All supported drivers.
      *
@@ -29,22 +40,20 @@ class SessionManager extends AbstractManager
     ];
 
     /**
-     * Encrypter instance.
-     *
-     * @var \Viserio\Contracts\Encryption\Encrypter
-     */
-    private $encrypter;
-
-    /**
      * Constructor.
      *
      * @param \Viserio\Contracts\Config\Manager       $config
      * @param \Viserio\Contracts\Encryption\Encrypter $encrypter
+     * @param \Interop\Container\ContainerInterface   $container
      */
-    public function __construct(ConfigContract $config, EncrypterContract $encrypter)
-    {
+    public function __construct(
+        ConfigContract $config,
+        EncrypterContract $encrypter,
+        ContainerInterface $container
+    ) {
         $this->config = $config;
         $this->encrypter = $encrypter;
+        $this->container = $container;
     }
 
     /**
@@ -62,11 +71,15 @@ class SessionManager extends AbstractManager
      */
     protected function createLocalDriver(): StoreContract
     {
-        $path = $this->config->get($this->getConfigName() . '.files');
+        $path = $this->config->get($this->getConfigName() . '.path');
         $lifetime = $this->config->get($this->getConfigName() . '.lifetime');
 
         return $this->buildSession(
-            new FileSessionHandler($this->getContainer()->get('files'), $path, $lifetime)
+            new FileSessionHandler(
+                $this->getContainer()->get(FilesystemContract::class),
+                $path,
+                $lifetime
+            )
         );
     }
 
@@ -79,7 +92,12 @@ class SessionManager extends AbstractManager
     {
         $lifetime = $this->config->get($this->getConfigName() . '.lifetime');
 
-        return $this->buildSession(new CookieSessionHandler($this->getContainer()->get('cookie'), $lifetime));
+        return $this->buildSession(
+            new CookieSessionHandler(
+                $this->getContainer()->get(JarContract::class),
+                $lifetime
+            )
+        );
     }
 
     /**
@@ -202,7 +220,7 @@ class SessionManager extends AbstractManager
 
         return $this->buildSession(
             new CacheBasedSessionHandler(
-                clone $this->getContainer()->get('cache')->driver($driver, $options),
+                clone $this->getContainer()->get(CacheManager::class)->driver($driver, $options),
                 $lifetime
             )
         );
@@ -217,7 +235,7 @@ class SessionManager extends AbstractManager
      */
     protected function buildSession(SessionHandlerContract $handler): StoreContract
     {
-        return new Store($this->config->get($this->getConfigName() . '::cookie', false), $handler, $this->encrypter);
+        return new Store($this->config->get($this->getConfigName() . '.cookie', false), $handler, $this->encrypter);
     }
 
     /**

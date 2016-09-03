@@ -1,16 +1,15 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Hashing\Providers;
+namespace Viserio\StaticalProxy\Providers;
 
-use Defuse\Crypto\Key;
 use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
+use Viserio\StaticalProxy\AliasLoader;
 use Viserio\Config\Manager as ConfigManager;
-use Viserio\Hashing\Password;
 
-class HashingServiceProvider implements ServiceProvider
+class AliasLoaderServiceProvider implements ServiceProvider
 {
-    const PACKAGE = 'viserio.hashing';
+    const PACKAGE = 'viserio.staticalproxy';
 
     /**
      * {@inheritdoc}
@@ -18,26 +17,16 @@ class HashingServiceProvider implements ServiceProvider
     public function getServices()
     {
         return [
-            Password::class => [self::class, 'createPassword'],
-            'password' => function (ContainerInterface $container) {
-                return $container->get(Password::class);
+            AliasLoader::class => [self::class, 'createAliasLoader'],
+            'alias' => function (ContainerInterface $container) {
+                return $container->get(AliasLoader::class);
             },
         ];
     }
 
-    public static function createPassword(ContainerInterface $container): Password
+    public static function createAliasLoader(ContainerInterface $container): AliasLoader
     {
-        if ($container->has(ConfigManager::class)) {
-            $config = $container->get(ConfigManager::class)->get('hashing');
-        } else {
-            $config = self::get($container, 'options');
-        }
-
-        $encrypt = new Password(
-            $config['key']
-        );
-
-        return $encrypt;
+        return new AliasLoader(self::get($container, 'aliases', []));
     }
 
     /**

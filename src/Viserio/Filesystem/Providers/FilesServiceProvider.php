@@ -5,6 +5,7 @@ namespace Viserio\Filesystem\Providers;
 use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
 use Viserio\Config\Manager as ConfigManager;
+use Viserio\Contracts\Filesystem\Filesystem as FilesystemContract;
 use Viserio\Filesystem\Filesystem;
 
 class FilesServiceProvider implements ServiceProvider
@@ -17,6 +18,9 @@ class FilesServiceProvider implements ServiceProvider
         return [
             Filesystem::class => [self::class, 'createFilesystem'],
             'files' => function (ContainerInterface $container) {
+                return $container->get(Filesystem::class);
+            },
+            FilesystemContract::class => function (ContainerInterface $container) {
                 return $container->get(Filesystem::class);
             },
         ];

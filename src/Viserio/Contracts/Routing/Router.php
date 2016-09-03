@@ -56,6 +56,16 @@ interface Router
     public function patch(string $uri, $action = null): Route;
 
     /**
+     * Register a new HEAD route with the router.
+     *
+     * @param string                     $uri
+     * @param \Closure|array|string|null $action
+     *
+     * @return \Viserio\Contracts\Routing\Route
+     */
+    public function head(string $uri, $action = null): Route;
+
+    /**
      * Register a new DELETE route with the router.
      *
      * @param string                     $uri

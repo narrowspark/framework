@@ -20,22 +20,15 @@ use Viserio\Queue\Connectors\RedisQueue;
 use Viserio\Queue\Connectors\SqsQueue;
 use Viserio\Queue\Connectors\SyncQueue;
 use Viserio\Support\AbstractConnectionManager;
+use Viserio\Contracts\Events\Traits\EventsAwareTrait;
+use Viserio\Contracts\Container\Traits\ContainerAwareTrait;
+use Viserio\Contracts\Encryption\Traits\EncrypterAwareTrait;
 
 class QueueManager extends AbstractConnectionManager implements MonitorContract, FactoryContract
 {
-    /**
-     * Encrypter instance.
-     *
-     * @var \Viserio\Contracts\Encryption\Encrypter
-     */
-    protected $encrypter;
-
-    /**
-     * Event Dispatcher instance.
-     *
-     * @var \Viserio\Contracts\Events\Dispatcher
-     */
-    protected $dispatcher;
+    use ContainerAwareTrait;
+    use EventsAwareTrait;
+    use EncrypterAwareTrait;
 
     /**
      * Create a new queue manager instance.
@@ -59,7 +52,7 @@ class QueueManager extends AbstractConnectionManager implements MonitorContract,
      */
     public function failing($callback)
     {
-        $this->container->get('events')->attach('viserio.job.failed', $callback);
+        $this->container->get(DispatcherContract::class)->attach('viserio.job.failed', $callback);
     }
 
     /**
@@ -67,7 +60,7 @@ class QueueManager extends AbstractConnectionManager implements MonitorContract,
      */
     public function stopping($callback)
     {
-        $this->container->get('events')->attach('viserio.worker.stopping', $callback);
+        $this->container->get(DispatcherContract::class)->attach('viserio.worker.stopping', $callback);
     }
 
     /**
@@ -75,7 +68,7 @@ class QueueManager extends AbstractConnectionManager implements MonitorContract,
      */
     public function exceptionOccurred($callback)
     {
-        $this->container->get('events')->attach('viserio.job.exception.occurred', $callback);
+        $this->container->get(DispatcherContract::class)->attach('viserio.job.exception.occurred', $callback);
     }
 
     /**
@@ -85,7 +78,7 @@ class QueueManager extends AbstractConnectionManager implements MonitorContract,
      */
     public function before($callback)
     {
-        $this->container->get('events')->attach('viserio.job.processing', $callback);
+        $this->container->get(DispatcherContract::class)->attach('viserio.job.processing', $callback);
     }
 
     /**
@@ -95,7 +88,7 @@ class QueueManager extends AbstractConnectionManager implements MonitorContract,
      */
     public function after($callback)
     {
-        $this->container->get('events')->attach('viserio.job.processed', $callback);
+        $this->container->get(DispatcherContract::class)->attach('viserio.job.processed', $callback);
     }
 
     /**
@@ -119,51 +112,15 @@ class QueueManager extends AbstractConnectionManager implements MonitorContract,
     }
 
     /**
-     * Get the event dispatcher implementation.
-     *
-     * @return \Viserio\Contracts\Events\Dispatcher
+     * {@inheritdoc}
      */
-    public function getEventDispatcher(): DispatcherContract
+    public function getEventsDispatcher(): DispatcherContract
     {
-        return $this->dispatcher;
-    }
+        if (! $this->events || $this->container->has(DispatcherContract::class)) {
+            throw new RuntimeException('Events dispatcher is not set up.');
+        }
 
-    /**
-     * Set the event dispatcher implementation.
-     *
-     * @param \Viserio\Contracts\Events\Dispatcher $dispatcher
-     *
-     * @return $this
-     */
-    public function setEventDispatcher(DispatcherContract $dispatcher): QueueManager
-    {
-        $this->dispatcher = $dispatcher;
-
-        return $this;
-    }
-
-    /**
-     * Get the encrypter implementation.
-     *
-     * @return \Viserio\Contracts\Encryption\Encrypter
-     */
-    public function getEncrypter(): EncrypterContract
-    {
-        return $this->encrypter;
-    }
-
-    /**
-     * Set the encrypter implementation.
-     *
-     * @param \Viserio\Contracts\Encryption\Encrypter $encrypter
-     *
-     * @return $this
-     */
-    public function setEncrypter(EncrypterContract $encrypter): QueueManager
-    {
-        $this->encrypter = $encrypter;
-
-        return $this;
+        return $this->events ?? $this->container->get(DispatcherContract::class);
     }
 
     /**

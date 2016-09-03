@@ -30,4 +30,38 @@ class LoggerServiceProviderTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(MonologWriter::class, $container->get(Log::class));
         $this->assertInstanceOf(MonologWriter::class, $container->get('logger'));
     }
+
+    public function testProviderWithoutConfigManager()
+    {
+        $container = new Container();
+        $container->register(new ConfigServiceProvider());
+        $container->register(new LoggerServiceProvider());
+
+        $container->instance('options', [
+            'env' => 'dev',
+        ]);
+
+        $this->assertInstanceOf(MonologWriter::class, $container->get(LoggerInterface::class));
+        $this->assertInstanceOf(MonologWriter::class, $container->get(MonologWriter::class));
+        $this->assertInstanceOf(MonologWriter::class, $container->get(Logger::class));
+        $this->assertInstanceOf(MonologWriter::class, $container->get(Log::class));
+        $this->assertInstanceOf(MonologWriter::class, $container->get('logger'));
+    }
+
+    public function testProviderWithoutConfigManagerAndNamespace()
+    {
+        $container = new Container();
+        $container->register(new ConfigServiceProvider());
+        $container->register(new LoggerServiceProvider());
+
+        $container->instance('viserio.log.options', [
+            'env' => 'dev',
+        ]);
+
+        $this->assertInstanceOf(MonologWriter::class, $container->get(LoggerInterface::class));
+        $this->assertInstanceOf(MonologWriter::class, $container->get(MonologWriter::class));
+        $this->assertInstanceOf(MonologWriter::class, $container->get(Logger::class));
+        $this->assertInstanceOf(MonologWriter::class, $container->get(Log::class));
+        $this->assertInstanceOf(MonologWriter::class, $container->get('logger'));
+    }
 }

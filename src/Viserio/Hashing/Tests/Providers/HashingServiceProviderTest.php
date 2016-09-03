@@ -24,4 +24,30 @@ class HashingServiceProviderTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(Password::class, $container->get(Password::class));
         $this->assertInstanceOf(Password::class, $container->get('password'));
     }
+
+    public function testProviderWithoutConfigManager()
+    {
+        $container = new Container();
+        $container->register(new HashingServiceProvider());
+
+        $container->instance('options', [
+            'key' => Key::createNewRandomKey(),
+        ]);
+
+        $this->assertInstanceOf(Password::class, $container->get(Password::class));
+        $this->assertInstanceOf(Password::class, $container->get('password'));
+    }
+
+    public function testProviderWithoutConfigManagerAndNamespace()
+    {
+        $container = new Container();
+        $container->register(new HashingServiceProvider());
+
+        $container->instance('viserio.hashing.options', [
+            'key' => Key::createNewRandomKey(),
+        ]);
+
+        $this->assertInstanceOf(Password::class, $container->get(Password::class));
+        $this->assertInstanceOf(Password::class, $container->get('password'));
+    }
 }

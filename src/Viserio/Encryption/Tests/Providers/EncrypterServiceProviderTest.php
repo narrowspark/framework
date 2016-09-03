@@ -25,4 +25,34 @@ class EncrypterServiceProviderTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(Encrypter::class, $container->get(Encrypter::class));
         $this->assertInstanceOf(Encrypter::class, $container->get('encrypter'));
     }
+
+    public function testProviderWithoutConfigManager()
+    {
+        $container = new Container();
+        $container->register(new EncrypterServiceProvider());
+
+        $key = Key::createNewRandomKey();
+
+        $container->instance('options', [
+            'key' => $key->saveToAsciiSafeString(),
+        ]);
+
+        $this->assertInstanceOf(Encrypter::class, $container->get(Encrypter::class));
+        $this->assertInstanceOf(Encrypter::class, $container->get('encrypter'));
+    }
+
+    public function testProviderWithoutConfigManagerAndNamespace()
+    {
+        $container = new Container();
+        $container->register(new EncrypterServiceProvider());
+
+        $key = Key::createNewRandomKey();
+
+        $container->instance('viserio.encryption.options', [
+            'key' => $key->saveToAsciiSafeString(),
+        ]);
+
+        $this->assertInstanceOf(Encrypter::class, $container->get(Encrypter::class));
+        $this->assertInstanceOf(Encrypter::class, $container->get('encrypter'));
+    }
 }

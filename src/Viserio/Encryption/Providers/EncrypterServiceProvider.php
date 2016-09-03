@@ -25,8 +25,7 @@ class EncrypterServiceProvider implements ServiceProvider
             },
             'encrypter' => function (ContainerInterface $container) {
                 return $container->get(Encrypter::class);
-            },
-            'encrypter.options' => [self::class, 'createOptions'],
+            }
         ];
     }
 
@@ -35,7 +34,7 @@ class EncrypterServiceProvider implements ServiceProvider
         if ($container->has(ConfigManager::class)) {
             $config = $container->get(ConfigManager::class)->get('encrypter');
         } else {
-            $config = self::get($container, 'encrypter.options');
+            $config = self::get($container, 'options');
         }
 
         $encrypt = new Encrypter(
@@ -45,13 +44,6 @@ class EncrypterServiceProvider implements ServiceProvider
         );
 
         return $encrypt;
-    }
-
-    public static function createOptions(ContainerInterface $container) : array
-    {
-        return [
-            'key' => self::get($container, 'key'),
-        ];
     }
 
     /**

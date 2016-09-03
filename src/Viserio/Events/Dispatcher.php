@@ -124,6 +124,8 @@ class Dispatcher implements DispatcherContract
      */
     public function getListeners(string $eventName): array
     {
+        $this->validateEventName($eventName);
+
         $this->bindPatterns($eventName);
 
         if (! isset($this->listeners[$eventName])) {
@@ -142,6 +144,8 @@ class Dispatcher implements DispatcherContract
      */
     public function detach(string $eventName, $listener): bool
     {
+        $this->validateEventName($eventName);
+
         if ($this->hasWildcards($eventName)) {
             $this->removeListenerPattern($eventName, $listener);
 
@@ -169,6 +173,8 @@ class Dispatcher implements DispatcherContract
     public function removeAllListeners($eventName = null)
     {
         if ($eventName !== null) {
+            $this->validateEventName($eventName);
+
             unset($this->listeners[$eventName], $this->syncedEvents[$eventName]);
         } else {
             $this->listeners = $this->syncedEvents = [];

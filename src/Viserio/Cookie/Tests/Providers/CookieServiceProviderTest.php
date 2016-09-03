@@ -25,4 +25,34 @@ class CookieServiceProviderTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(RequestCookie::class, $container->get(RequestCookie::class));
         $this->assertInstanceOf(CookieJar::class, $container->get(CookieJar::class));
     }
+
+    public function testProviderWithoutConfigManager()
+    {
+        $container = new Container();
+        $container->register(new CookieServiceProvider());
+
+        $container->instance('options', [
+            'domain' => '',
+            'path' => '',
+            'secure' => true,
+        ]);
+
+        $this->assertInstanceOf(RequestCookie::class, $container->get(RequestCookie::class));
+        $this->assertInstanceOf(CookieJar::class, $container->get(CookieJar::class));
+    }
+
+    public function testProviderWithoutConfigManagerAndNamespace()
+    {
+        $container = new Container();
+        $container->register(new CookieServiceProvider());
+
+        $container->instance('viserio.cookie.options', [
+            'domain' => '',
+            'path' => '',
+            'secure' => true,
+        ]);
+
+        $this->assertInstanceOf(RequestCookie::class, $container->get(RequestCookie::class));
+        $this->assertInstanceOf(CookieJar::class, $container->get(CookieJar::class));
+    }
 }

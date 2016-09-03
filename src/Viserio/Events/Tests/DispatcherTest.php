@@ -22,6 +22,15 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase
         $this->listener = new EventListener();
     }
 
+    /**
+     * @expectedException InvalidArgumentException
+     * @expectedExceptionMessage The event name must only contain the characters A-Z, a-z, 0-9, _, and '.'.
+     */
+    public function testNoValidName()
+    {
+        $this->dispatcher->attach('foo-bar', 'test', 100);
+    }
+
     public function testInitialState()
     {
         $ee = $this->dispatcher;

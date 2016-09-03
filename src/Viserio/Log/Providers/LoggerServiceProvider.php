@@ -8,6 +8,7 @@ use Monolog\Logger;
 use Psr\Log\LoggerInterface;
 use Viserio\Contracts\Log\Log;
 use Viserio\Events\Dispatcher;
+use Viserio\Config\Manager as ConfigManager;
 use Viserio\Log\Writer as MonologWriter;
 
 class LoggerServiceProvider implements ServiceProvider
@@ -40,9 +41,9 @@ class LoggerServiceProvider implements ServiceProvider
     public static function createLogger(ContainerInterface $container): MonologWriter
     {
         if ($container->has(ConfigManager::class)) {
-            $config = $container->get(ConfigManager::class)->get('logger');
+            $config = $container->get(ConfigManager::class)->get('log');
         } else {
-            $config = self::get($container, 'logger.options');
+            $config = self::get($container, 'options');
         }
 
         $logger = new MonologWriter(new Logger($config['env']));

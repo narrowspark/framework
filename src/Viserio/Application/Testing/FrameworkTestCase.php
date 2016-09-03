@@ -2,7 +2,6 @@
 declare(strict_types=1);
 namespace Viserio\Application\Testing;
 
-use Viserio\Application\Traits\ServiceProviderTrait;
 use Viserio\Container\Container;
 
 /**
@@ -14,7 +13,6 @@ use Viserio\Container\Container;
  */
 abstract class FrameworkTestCase extends \PHPUnit_Framework_TestCase
 {
-    use ServiceProviderTrait;
     /**
      * Container instanve.
      *

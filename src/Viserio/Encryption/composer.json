@@ -44,15 +44,15 @@
             "Viserio\\Encrypter\\Tests\\"     : "Tests/"
         }
     },
-    "extra": {
-        "branch-alias": {
-            "dev-master"                      : "1.0-dev"
-        }
-    },
     "suggest": {
         "container-interop/container-interop" : "Required to use service-provider (^1.1).",
         "container-interop/service-provider"  : "Required to use service-provider (^0.3).",
         "viserio/config"                      : "Optional to use service-provider (self.version)."
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master"                      : "1.0-dev"
+        }
     },
     "minimum-stability"                       : "dev",
     "prefer-stable"                           : true

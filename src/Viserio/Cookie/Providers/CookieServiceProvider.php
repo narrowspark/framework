@@ -29,8 +29,7 @@ class CookieServiceProvider implements ServiceProvider
             },
             'request-cookie' => function (ContainerInterface $container) {
                 return $container->get(RequestCookie::class);
-            },
-            'cookie.options' => [self::class, 'createOptions'],
+            }
         ];
     }
 
@@ -44,7 +43,7 @@ class CookieServiceProvider implements ServiceProvider
         if ($container->has(ConfigManager::class)) {
             $config = $container->get(ConfigManager::class)->get('session');
         } else {
-            $config = self::get($container, 'cookie.options');
+            $config = self::get($container, 'options');
         }
 
         return (new CookieJar())->setDefaultPathAndDomain(
@@ -52,15 +51,6 @@ class CookieServiceProvider implements ServiceProvider
             $config['domain'],
             $config['secure']
         );
-    }
-
-    public static function createOptions(ContainerInterface $container) : array
-    {
-        return [
-            'path' => self::get($container, 'path'),
-            'domain' => self::get($container, 'domain'),
-            'secure' => self::get($container, 'secure'),
-        ];
     }
 
     /**

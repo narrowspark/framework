@@ -109,11 +109,7 @@ class Manager implements ManagerContract, IteratorAggregate
             return $default;
         }
 
-        $get = $this->offsetGet($key);
-
-        return is_callable($get) ?
-            call_user_func($get) :
-            $get;
+        return $this->offsetGet($key);
     }
 
     /**

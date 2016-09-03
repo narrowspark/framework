@@ -29,6 +29,8 @@ class Resolver
     protected $active = false;
 
     /**
+     * Create a new Resolver instance.
+     *
      * @param string          $pattern
      * @param string|callable $translation
      */
