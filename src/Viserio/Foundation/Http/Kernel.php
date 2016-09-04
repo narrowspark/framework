@@ -2,18 +2,18 @@
 declare(strict_types=1);
 namespace Viserio\Foundation\Http;
 
-use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use Viserio\Config\Manager as ConfigManager;
 use Viserio\Contracts\Events\Dispatcher as DispatcherContract;
 use Viserio\Contracts\Events\Traits\EventsAwareTrait;
-use Viserio\Contracts\Foundation\Application as ApplicationContract;
-use Viserio\Contracts\Routing\Router as RouterContract;
-use Viserio\Routing\Router;
 use Viserio\Contracts\Exception\Handler as HandlerContract;
-use Viserio\Config\Manager as ConfigManager;
-use Viserio\StaticalProxy\StaticalProxy;
+use Viserio\Contracts\Foundation\Application as ApplicationContract;
 use Viserio\Contracts\Foundation\Emitter as EmitterContract;
 use Viserio\Contracts\Foundation\Terminable as TerminableContract;
+use Viserio\Contracts\Routing\Router as RouterContract;
+use Viserio\Routing\Router;
+use Viserio\StaticalProxy\StaticalProxy;
 
 class Kernel implements TerminableContract
 {
@@ -138,7 +138,6 @@ class Kernel implements TerminableContract
      */
     protected function handleRequest(ServerServerRequestInterface $request, ResponseInterface $response)
     {
-
         if ($this->events !== null) {
             $this->events->trigger('request.received', [$request]);
         }

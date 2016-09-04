@@ -5,10 +5,10 @@ namespace Viserio\Foundation;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Viserio\Container\Container;
-use Viserio\Routing\Providers\RoutingServiceProvider;
 use Viserio\Contracts\Foundation\Emitter as EmitterContract;
-use Viserio\StaticalProxy\StaticalProxy;
 use Viserio\Foundation\Http\Emitter;
+use Viserio\Routing\Providers\RoutingServiceProvider;
+use Viserio\StaticalProxy\StaticalProxy;
 
 class Application extends Container
 {
