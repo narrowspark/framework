@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Foundation\Http;
 
 use Psr\Http\Message\ResponseInterface;
+use RuntimeException;
 use Viserio\Contracts\Foundation\Emitter as EmitterContract;
 
 class Emitter implements EmitterContract
