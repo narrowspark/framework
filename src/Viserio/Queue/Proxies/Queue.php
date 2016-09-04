@@ -1,13 +1,13 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Middleware\Proxies;
+namespace Viserio\Queue\Proxies;
 
 use Viserio\StaticalProxy\StaticalProxy;
 
-class Middleware extends StaticalProxy
+class Queue extends StaticalProxy
 {
     public static function getInstanceIdentifier()
     {
-        return 'middleware';
+        return 'queue';
     }
 }
