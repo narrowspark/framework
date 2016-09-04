@@ -1,8 +1,8 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Application\Traits;
+namespace Viserio\Foundation\Traits;
 
-use Viserio\Application\EnvironmentDetector;
+use Viserio\Foundation\EnvironmentDetector;
 
 trait EnvironmentTrait
 {

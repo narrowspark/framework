@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Application;
+namespace Viserio\Foundation;
 
 use Narrowspark\Arr\StaticArr as Arr;
-use Viserio\Contracts\Application\Environment as EnvironmentContract;
+use Viserio\Contracts\Foundation\Environment as EnvironmentContract;
 use Viserio\Support\Str;
 
 class EnvironmentDetector implements EnvironmentContract

@@ -1,14 +1,14 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Application\Tests;
+namespace Viserio\Foundation\Tests;
 
 use Mockery as Mock;
-use Viserio\Application\EnvironmentDetector;
+use Viserio\Foundation\EnvironmentDetector;
 
 class EnvironmentDetectorTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Viserio\Application\EnvironmentDetector
+     * @var \Viserio\Foundation\EnvironmentDetector
      */
     private $env;
 

@@ -24,9 +24,6 @@
     </php>
 
     <testsuites>
-<!--         <testsuite name="Narrowspark Application Component Test Suite">
-            <directory>./src/Viserio/Application/Tests</directory>
-        </testsuite> -->
         <testsuite name="Narrowspark Bus Component Test Suite">
             <directory>./src/Viserio/Bus/Tests</directory>
         </testsuite>
@@ -65,6 +62,9 @@
         </testsuite>
         <testsuite name="Narrowspark Filesystem Component Test Suite">
             <directory>./src/Viserio/Filesystem/Tests</directory>
+        </testsuite>
+        <testsuite name="Narrowspark Foundation Component Test Suite">
+            <directory>./src/Viserio/Foundation/Tests</directory>
         </testsuite>
         <testsuite name="Narrowspark Hashing Component Test Suite">
             <directory>./src/Viserio/Hashing/Tests</directory>

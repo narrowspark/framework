@@ -1,16 +1,16 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Application\Traits;
+namespace Viserio\Foundation\Traits;
 
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\StreamedResponse;
-use Viserio\Application\HttpKernel;
+use Viserio\Foundation\HttpKernel;
 
 trait HttpHandlingTrait
 {
     /**
-     * @var \Viserio\Application\HttpKernel
+     * @var \Viserio\Foundation\HttpKernel
      */
     protected $kernel;
 
@@ -95,7 +95,7 @@ trait HttpHandlingTrait
     /**
      * ResolveKernel.
      *
-     * @return \Viserio\Application\HttpKernel
+     * @return \Viserio\Foundation\HttpKernel
      */
     protected function resolveKernel()
     {

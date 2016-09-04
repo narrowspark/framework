@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Application\Providers;
+namespace Viserio\Foundation\Providers;
 
 use Interop\Container\ServiceProvider;
-use Viserio\Application\EnvironmentDetector;
+use Viserio\Foundation\EnvironmentDetector;
 
 /**
  * ApplicationServiceProvider.

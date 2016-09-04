@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Application\Traits;
+namespace Viserio\Foundation\Traits;
 
 use Symfony\Component\Debug\Exception\FatalErrorException;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;

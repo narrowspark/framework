@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Contracts\Application;
+namespace Viserio\Contracts\Foundation;
 
 interface Foundation
 {
@@ -62,7 +62,7 @@ interface Foundation
      * @param array  $options
      * @param bool   $force
      *
-     * @return \Viserio\Contract\Application\ServiceProvider
+     * @return \Viserio\Contract\Foundation\ServiceProvider
      */
-    public function register(string $provider, array $options = [], bool $force = false): \Viserio\Contract\Application\ServiceProvider;
+    public function register(string $provider, array $options = [], bool $force = false): \Viserio\Contract\Foundation\ServiceProvider;
 }
