@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Foundation\Http;
 
+use Psr\Http\Message\ResponseInterface;
 use Viserio\Contracts\Foundation\Emitter as EmitterContract;
 
 class Emitter implements EmitterContract
@@ -75,7 +76,7 @@ class Emitter implements EmitterContract
     protected function emitHeaders(ResponseInterface $response)
     {
         foreach ($response->getHeaders() as $header => $values) {
-            $name  = $this->filterHeader($header);
+            $name = $this->filterHeader($header);
             $first = true;
 
             foreach ($values as $value) {
@@ -96,43 +97,7 @@ class Emitter implements EmitterContract
      */
     protected function emitBody(ResponseInterface $response)
     {
-        if (! $this->isEmptyResponse($response)) {
-            $body = $response->getBody();
-
-            if ($body->isSeekable()) {
-                $body->rewind();
-            }
-
-            $chunkSize =  $this->app->get(ConfigManager::class)->get('response.chunksize', 4096);
-            $contentLength  = $response->getHeaderLine('Content-Length');
-
-            if (!$contentLength) {
-                $contentLength = $body->getSize();
-            }
-
-            if (isset($contentLength)) {
-                $amountToRead = $contentLength;
-
-                while ($amountToRead > 0 && !$body->eof()) {
-                    $data = $body->read(min($chunkSize, $amountToRead));
-                    echo $data;
-
-                    $amountToRead -= strlen($data);
-
-                    if (connection_status() != CONNECTION_NORMAL) {
-                        break;
-                    }
-                }
-            } else {
-                while (!$body->eof()) {
-                    echo $body->read($chunkSize);
-
-                    if (connection_status() != CONNECTION_NORMAL) {
-                        break;
-                    }
-                }
-            }
-        }
+        echo $response->getBody();
     }
 
     /**
@@ -143,16 +108,6 @@ class Emitter implements EmitterContract
      */
     protected function terminateOutputBuffering(int $maxBufferLevel = 0, ResponseInterface $response = null)
     {
-        // close response stream berfore terminating output buffer
-        // and only if response is an instance of \Psr\Http\ResponseInterface
-        if ($response instanceof ResponseInterface) {
-            $body = $response->getBody();
-
-            if ($body->isReadable()) {
-                $body->close();
-            }
-        }
-
         // Command line output buffering is disabled in cli by default
         if (substr(PHP_SAPI, 0, 3) === 'cgi') {
             return;

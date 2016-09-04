@@ -6,7 +6,7 @@ use Viserio\StaticalProxy\StaticalProxy;
 
 class Middleware extends StaticalProxy
 {
-    protected static function getFacadeAccessor()
+    public static function getInstanceIdentifier()
     {
         return 'middleware';
     }

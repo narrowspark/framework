@@ -86,20 +86,44 @@ class Router implements RouterContract
     /**
      * Create a new Router instance.
      *
-     * @param string                                $path
      * @param \Interop\Container\ContainerInterface $container
      */
-    public function __construct(string $path, ContainerInterface $container)
+    public function __construct(ContainerInterface $container)
     {
-        $this->path = $path;
         $this->container = $container;
         $this->routes = new RouteCollection();
+    }
+
+    /**
+     * Set the cache path for compiled routes.
+     *
+     * @param string $path
+     *
+     * @return \Viserio\Contracts\Routing\Router
+     */
+    public function setCachePath(string $path): RouterContract
+    {
+        $this->path = $path;
+
+        return $this;
+    }
+
+    /**
+     * Get the cache path for the compiled routes.
+     *
+     * @return string
+     */
+    public function getCachePath(): string
+    {
+        return $this->path;
     }
 
     /**
      * Refresh cache file on development.
      *
      * @param bool $refreshCache
+     *
+     * @return \Viserio\Contracts\Routing\Router
      */
     public function refreshCache(bool $refreshCache): RouterContract
     {

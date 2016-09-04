@@ -2,12 +2,10 @@
 declare(strict_types=1);
 namespace Viserio\Foundation\Traits;
 
-use Narrowspark\Arr\StaticArr as Arr;
-
 trait PathsTrait
 {
     /**
-     * Bind the installation paths to the application.
+     * Bind the installation paths to the config.
      *
      * @param array $paths
      *
@@ -17,12 +15,10 @@ trait PathsTrait
      */
     public function bindInstallPaths(array $paths)
     {
-        $this->bind('path', realpath($paths['app']));
-
         // Each path key is prefixed with path
         // so that they have the consistent naming convention.
-        foreach (Arr::except($paths, ['app']) as $key => $value) {
-            $this->bind(sprintf('path.%s', $key), realpath($value));
+        foreach ($paths as $key => $value) {
+            $this->instance(sprintf('path.%s', $key), realpath($value));
         }
 
         return $this;
@@ -33,9 +29,9 @@ trait PathsTrait
      *
      * @return string
      */
-    public function path()
+    public function path(): string
     {
-        return $this->get('path');
+        return $this->get('path.app');
     }
 
     /**
@@ -43,9 +39,19 @@ trait PathsTrait
      *
      * @return string
      */
-    public function configPath()
+    public function configPath(): string
     {
         return $this->get('path.config');
+    }
+
+    /**
+     * Get the path to the application routes files.
+     *
+     * @return string
+     */
+    public function routesPath(): string
+    {
+        return $this->get('path.route');
     }
 
     /**
@@ -53,7 +59,7 @@ trait PathsTrait
      *
      * @return string
      */
-    public function databasePath()
+    public function databasePath(): string
     {
         return $this->get('path.database');
     }
@@ -63,7 +69,7 @@ trait PathsTrait
      *
      * @return string
      */
-    public function langPath()
+    public function langPath(): string
     {
         return $this->get('path.lang');
     }
@@ -73,7 +79,7 @@ trait PathsTrait
      *
      * @return string
      */
-    public function publicPath()
+    public function publicPath(): string
     {
         return $this->get('path.public');
     }
@@ -83,7 +89,7 @@ trait PathsTrait
      *
      * @return string
      */
-    public function basePath()
+    public function basePath(): string
     {
         return $this->get('path.base');
     }
@@ -93,8 +99,18 @@ trait PathsTrait
      *
      * @return string
      */
-    public function storagePath()
+    public function storagePath(): string
     {
         return $this->get('path.storage');
+    }
+
+    /**
+     * Get the path to the configuration cache file.
+     *
+     * @return string
+     */
+    public function getCachedConfigPath():string
+    {
+        return $this->storagePath() . '/framework/cache/config.php';
     }
 }

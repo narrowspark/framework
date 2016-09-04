@@ -11,7 +11,7 @@ class Caches extends StaticalProxy
         return self::$container['caches'][$key];
     }
 
-    protected static function getFacadeAccessor()
+    public static function getInstanceIdentifier()
     {
         return 'caches';
     }

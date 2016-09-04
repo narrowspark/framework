@@ -5,17 +5,21 @@ namespace Viserio\Foundation\Http;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Config\Manager as ConfigManager;
-use Viserio\Contracts\Events\Dispatcher as DispatcherContract;
 use Viserio\Contracts\Events\Traits\EventsAwareTrait;
 use Viserio\Contracts\Exception\Handler as HandlerContract;
 use Viserio\Contracts\Foundation\Application as ApplicationContract;
-use Viserio\Contracts\Foundation\Emitter as EmitterContract;
+use Viserio\Contracts\Foundation\Kernel as KernelContract;
 use Viserio\Contracts\Foundation\Terminable as TerminableContract;
 use Viserio\Contracts\Routing\Router as RouterContract;
+use Viserio\Foundation\Bootstrap\DetectEnvironment;
+use Viserio\Foundation\Bootstrap\LoadConfiguration;
+use Viserio\Foundation\Bootstrap\LoadRoutes;
+use Viserio\Foundation\Bootstrap\RegisterStaticalProxys;
+use Viserio\HttpFactory\ResponseFactory;
 use Viserio\Routing\Router;
 use Viserio\StaticalProxy\StaticalProxy;
 
-class Kernel implements TerminableContract
+class Kernel implements TerminableContract, KernelContract
 {
     use EventsAwareTrait;
 
@@ -48,11 +52,22 @@ class Kernel implements TerminableContract
     protected $routeWithoutMiddlewares = [];
 
     /**
+     * The bootstrap classes for the application.
+     *
+     * @var array
+     */
+    protected $bootstrappers = [
+        LoadConfiguration::class,
+        RegisterStaticalProxys::class,
+        DetectEnvironment::class,
+        LoadRoutes::class,
+    ];
+
+    /**
      * Create a new HTTP kernel instance.
      *
      * @param \Viserio\Contracts\Foundation\Application $app
      * @param \Viserio\Contracts\Routing\Router         $router
-     * @param \Viserio\Contracts\Events\Dispatcher      $events
      */
     public function __construct(
         ApplicationContract $app,
@@ -82,25 +97,24 @@ class Kernel implements TerminableContract
     public function handle(ServerRequestInterface $request, ResponseInterface $response = null)
     {
         // Passes the request to the container
-        $this->getContainer()->share(ServerRequestInterface::class, $request);
+        $this->app->instance(ServerRequestInterface::class, $request);
+
+        StaticalProxy::clearResolvedInstance('request');
 
         if ($response === null) {
-            $response = $this->getResponse();
+            $response = (new ResponseFactory())->createResponse();
         }
+
+        $this->app->instance(ResponseInterface::class, $response);
+
+        StaticalProxy::clearResolvedInstance('response');
 
         $response = $this->handleRequest($request, $response);
 
         // stop PHP sending a Content-Type automatically
         ini_set('default_mimetype', '');
 
-        if ($this->isEmptyResponse($response)) {
-            return $response->withoutHeader('Content-Type')
-                ->withoutHeader('Content-Length');
-        }
-
-        $this->app->get(EmitterContract::class)->emit($response);
-
-        $this->terminate($request, $response);
+        return $response;
     }
 
     /**
@@ -116,6 +130,16 @@ class Kernel implements TerminableContract
         }
 
         $this->app->get(HandlerContract::class)->unregister();
+    }
+
+    /**
+     * Bootstrap the application for HTTP requests.
+     */
+    public function bootstrap()
+    {
+        if (! $this->app->hasBeenBootstrapped()) {
+            $this->app->bootstrapWith($this->bootstrappers);
+        }
     }
 
     /**
@@ -136,49 +160,26 @@ class Kernel implements TerminableContract
      *
      * @return \Psr\Http\Message\ResponseInterface
      */
-    protected function handleRequest(ServerServerRequestInterface $request, ResponseInterface $response)
+    protected function handleRequest(ServerRequestInterface $request, ResponseInterface $response)
     {
         if ($this->events !== null) {
             $this->events->trigger('request.received', [$request]);
         }
 
-        $response = $this->router->dispatch($request, $response);
+        $this->bootstrap();
+
+        $router = $this->router;
+        $config = $this->app->get(ConfigManager::class);
+
+        $router->setCachePath($config->get('routing.path'));
+        $router->refreshCache($config->get('env', 'production') === 'production' ? true : false);
+
+        $response = $router->dispatch($request, $response);
 
         if ($this->events !== null) {
             $this->events->trigger('response.created', [$request, $response]);
         }
 
         return $response;
-    }
-
-    /**
-     * Send the given request through the middleware / router.
-     *
-     * @param \Psr\Http\Message\ServerRequestInterface $request
-     *
-     * @return \Psr\Http\Message\ResponseInterface
-     */
-    protected function sendRequestThroughRouter($request): ResponseInterface
-    {
-        $this->app->instance('request', $request);
-
-        StaticalProxy::clearResolvedInstance('request');
-
-        $this->router->dispatch();
-    }
-
-    /**
-     * Returns true if the provided response must not output a body and false
-     * if the response could have a body.
-     *
-     * @see https://tools.ietf.org/html/rfc7231
-     *
-     * @param \Psr\Http\Message\ResponseInterface $response
-     *
-     * @return bool
-     */
-    protected function isEmptyResponse(ResponseInterface $response): bool
-    {
-        return in_array($response->getStatusCode(), [204, 205, 304]);
     }
 }

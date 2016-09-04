@@ -2,22 +2,49 @@
 declare(strict_types=1);
 namespace Viserio\Foundation;
 
-use Psr\Http\Message\RequestInterface;
-use Psr\Http\Message\ResponseInterface;
+use Closure;
+use Viserio\Config\Providers\ConfigServiceProvider;
 use Viserio\Container\Container;
+use Viserio\Contracts\Events\Dispatcher as DispatcherContract;
+use Viserio\Contracts\Foundation\Application as ApplicationContract;
 use Viserio\Contracts\Foundation\Emitter as EmitterContract;
+use Viserio\Events\Providers\EventsServiceProvider;
 use Viserio\Foundation\Http\Emitter;
+use Viserio\Foundation\Traits\PathsTrait;
+use Viserio\Parsers\Providers\ParsersServiceProvider;
 use Viserio\Routing\Providers\RoutingServiceProvider;
-use Viserio\StaticalProxy\StaticalProxy;
 
-class Application extends Container
+class Application extends Container implements ApplicationContract
 {
+    use PathsTrait;
+
     /**
      * The Viserio framework version.
      *
      * @var string
      */
     const VERSION = '1.0.0';
+
+    /**
+     * The environment file to load during bootstrapping.
+     *
+     * @var string
+     */
+    protected $environmentFile = '.env';
+
+    /**
+     * The custom environment path defined by the developer.
+     *
+     * @var string
+     */
+    protected $environmentPath;
+
+    /**
+     * Indicates if the application has been bootstrapped before.
+     *
+     * @var bool
+     */
+    protected $hasBeenBootstrapped = false;
 
     /**
      * Create a new application instance.
@@ -30,8 +57,6 @@ class Application extends Container
     {
         parent::__construct();
 
-        $this->registerFacade();
-
         /*
          * Here we are binding the paths configured in paths.php to the app. You
          * should not be changing these here. If you need to change these you
@@ -39,63 +64,9 @@ class Application extends Container
          */
         $this->bindInstallPaths($paths);
 
-        // App setting
-        $this->bind('env', '');
+        $this->registerBaseServiceProviders();
 
         $this->registerBaseBindings();
-        $this->registerBaseServiceProviders();
-    }
-
-    /**
-     * The facades provide a terser static interface over the various parts
-     * of the application, allowing their methods to be accessed through
-     * a mixtures of magic methods and facade derivatives. It's slick.
-     */
-    public function registerFacade()
-    {
-        StaticalProxy::setFacadeApplication($this);
-        StaticalProxy::clearResolvedInstances();
-    }
-
-    /**
-     * Escapes a text for HTML.
-     *
-     * @param string      $text         The input text to be escaped
-     * @param int         $flags        The flags (@see htmlspecialchars)
-     * @param string|null $charset      The charset
-     * @param bool        $doubleEncode Whether to try to avoid double escaping or not
-     *
-     * @return string Escaped text
-     */
-    public function escape($text, $flags = ENT_COMPAT, $charset = null, $doubleEncode = true)
-    {
-        return htmlspecialchars($text, $flags, $charset === null ? $this->get('charset') : $charset, $doubleEncode);
-    }
-
-    /**
-     * Get the current application locale.
-     *
-     * @return string
-     */
-    public function getLocale()
-    {
-        return $this->get('config')->get('app::locale', 'en');
-    }
-
-    /**
-     * Set the current application locale.
-     *
-     * @param string $locale
-     *
-     * @return Application
-     */
-    public function setLocale($locale)
-    {
-        $this->get('config')->set('app::locale', $locale);
-
-        $this->get('translator')->setLocale($locale);
-
-        return $this;
     }
 
     /**
@@ -109,27 +80,123 @@ class Application extends Container
     }
 
     /**
-     * Run the application.
+     * Run the given array of bootstrap classes.
      *
-     * @param \Psr\Http\Message\RequestInterface  $request
-     * @param \Psr\Http\Message\ResponseInterface $response
-     * @param bool                                $silent
-     *
-     * @return \Psr\Http\Message\ResponseInterface
+     * @param array $bootstrappers
      */
-    public function run(RequestInterface $request, ResponseInterface $response = null, bool $silent = false): ResponseInterface
+    public function bootstrapWith(array $bootstrappers)
     {
-        $response = $this->handle($request);
+        $this->hasBeenBootstrapped = true;
 
-        return $send ? $response->send() : $response;
+        foreach ($bootstrappers as $bootstrapper) {
+            if ($this->has(DispatcherContract::class)) {
+                $this->get(DispatcherContract::class)->trigger(
+                    'bootstrapping.' . str_replace('\\', '', $bootstrapper),
+                    [$this]
+                );
+            }
+
+            $this->make($bootstrapper)->bootstrap($this);
+
+            if ($this->has(DispatcherContract::class)) {
+                $this->get(DispatcherContract::class)->trigger(
+                    'bootstrapped.' . str_replace('\\', '', $bootstrapper),
+                    [$this]
+                );
+            }
+        }
     }
 
     /**
-     * Register shutdown.
+     * Determine if the application has been bootstrapped before.
+     *
+     * @return bool
      */
-    public function shutdown()
+    public function hasBeenBootstrapped(): bool
     {
-        $this->get('exception')->unregister();
+        return $this->hasBeenBootstrapped;
+    }
+
+    /**
+     * Get the path to the environment file directory.
+     *
+     * @return string
+     */
+    public function environmentPath(): string
+    {
+        return $this->environmentPath ?: $this->get('path.base');
+    }
+
+    /**
+     * Set the directory for the environment file.
+     *
+     * @param string $path
+     *
+     * @return $this
+     */
+    public function useEnvironmentPath(string $path)
+    {
+        $this->environmentPath = $path;
+
+        return $this;
+    }
+
+    /**
+     * Set the environment file to be loaded during bootstrapping.
+     *
+     * @param string $file
+     *
+     * @return $this
+     */
+    public function loadEnvironmentFrom(string $file)
+    {
+        $this->environmentFile = $file;
+
+        return $this;
+    }
+
+    /**
+     * Get the environment file the application is using.
+     *
+     * @return string
+     */
+    public function environmentFile(): string
+    {
+        return $this->environmentFile ?: '.env';
+    }
+
+    /**
+     * Get the fully qualified path to the environment file.
+     *
+     * @return string
+     */
+    public function environmentFilePath(): string
+    {
+        return $this->environmentPath() . '/' . $this->environmentFile();
+    }
+
+    /**
+     * Determine if the application configuration is cached.
+     *
+     * @return bool
+     */
+    public function configurationIsCached()
+    {
+        return file_exists($this->getCachedConfigPath());
+    }
+
+    /**
+     * Detect the application's current environment.
+     *
+     * @param \Closure $callback
+     *
+     * @return string
+     */
+    public function detectEnvironment(Closure $callback)
+    {
+        $args = isset($_SERVER['argv']) ? $_SERVER['argv'] : null;
+
+        return $this['env'] = (new EnvironmentDetector())->detect($callback, $args);
     }
 
     /**
@@ -137,7 +204,9 @@ class Application extends Container
      */
     protected function registerBaseServiceProviders()
     {
-        $this->register(new EventServiceProvider());
+        $this->register(new ConfigServiceProvider());
+        $this->register(new EventsServiceProvider());
+        $this->register(new ParsersServiceProvider());
         $this->register(new RoutingServiceProvider());
     }
 
@@ -151,6 +220,9 @@ class Application extends Container
         });
 
         $this->instance(Container::class, $this);
-        $this->instance(EmitterContract::class, new Emitter());
+
+        $this->instance(ApplicationContract::class, $this);
+
+        $this->singleton(EmitterContract::class, Emitter::class);
     }
 }

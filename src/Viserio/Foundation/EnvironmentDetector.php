@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Foundation;
 
+use Closure;
 use Narrowspark\Arr\StaticArr as Arr;
 use Viserio\Contracts\Foundation\Environment as EnvironmentContract;
 use Viserio\Support\Str;
@@ -16,7 +17,7 @@ class EnvironmentDetector implements EnvironmentContract
      *
      * @return string
      */
-    public function detect(\Closure $callback, array $consoleArgs = null): string
+    public function detect(Closure $callback, array $consoleArgs = null): string
     {
         if ($consoleArgs) {
             return $this->detectConsoleEnvironment($callback, $consoleArgs);
@@ -97,7 +98,7 @@ class EnvironmentDetector implements EnvironmentContract
      *
      * @return string
      */
-    protected function detectWebEnvironment(\Closure $callback)
+    protected function detectWebEnvironment(Closure $callback)
     {
         return call_user_func($callback);
     }
@@ -110,7 +111,7 @@ class EnvironmentDetector implements EnvironmentContract
      *
      * @return string
      */
-    protected function detectConsoleEnvironment(\Closure $callback, array $args)
+    protected function detectConsoleEnvironment(Closure $callback, array $args)
     {
         // First we will check if an environment argument was passed via console arguments
         // and if it was that automatically overrides as the environment. Otherwise, we

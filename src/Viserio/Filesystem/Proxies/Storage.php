@@ -6,7 +6,7 @@ use Viserio\StaticalProxy\StaticalProxy;
 
 class Storage extends StaticalProxy
 {
-    protected static function getFacadeAccessor()
+    public static function getInstanceIdentifier()
     {
         return 'filesystem';
     }

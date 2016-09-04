@@ -9,7 +9,7 @@ class App extends StaticalProxy
         return self::$container[$key];
     }
 
-    protected static function getFacadeAccessor()
+    public static function getInstanceIdentifier()
     {
         return self::$container;
     }
