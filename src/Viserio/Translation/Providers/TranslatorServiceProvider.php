@@ -24,7 +24,7 @@ class TranslatorServiceProvider implements ServiceProvider
     {
         return [
             TranslationManager::class => [self::class, 'createTranslationManager'],
-            TranslationManagerContract::class  => function (ContainerInterface $container) {
+            TranslationManagerContract::class => function (ContainerInterface $container) {
                 return $container->get(TranslationManager::class);
             },
             'translator' => [self::class, 'createTranslator'],

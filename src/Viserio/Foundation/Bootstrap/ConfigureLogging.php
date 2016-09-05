@@ -3,7 +3,6 @@ declare(strict_types=1);
 namespace Viserio\Foundation\Bootstrap;
 
 use Monolog\Handler\ErrorLogHandler;
-use Monolog\Logger as MonologLogger;
 use Viserio\Config\Manager as ConfigManager;
 use Viserio\Contracts\Events\Dispatcher as DispatcherContract;
 use Viserio\Contracts\Foundation\Application;
