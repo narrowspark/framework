@@ -4,9 +4,6 @@ namespace Viserio\Exception\Providers;
 
 use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
-use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\ServerRequestInterface;
-use Psr\Log\LoggerInterface;
 use Viserio\Contracts\Config\Manager as ConfigManagerContract;
 use Viserio\Contracts\Exception\Handler as HandlerContract;
 use Viserio\Contracts\View\Factory as FactoryContract;

@@ -29,7 +29,6 @@ use Viserio\Exception\Displayers\HtmlDisplayer;
 use Viserio\Exception\Filters\CanDisplayFilter;
 use Viserio\Exception\Filters\VerboseFilter;
 use Viserio\Exception\Transformers\CommandLineTransformer;
-use Viserio\Http\ServerRequestFactory;
 
 class Handler implements HandlerContract
 {
@@ -54,7 +53,7 @@ class Handler implements HandlerContract
         NotFoundException::class => 'notice',
         AbstractClientErrorException::class => 'notice',
         AbstractServerErrorException::class => 'error',
-        Exception::class  => 'error',
+        Exception::class => 'error',
     ];
 
     /**
