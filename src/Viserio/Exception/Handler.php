@@ -4,32 +4,32 @@ namespace Viserio\Exception;
 
 use ErrorException;
 use Exception;
+use Interop\Container\ContainerInterface;
+use Narrowspark\HttpStatus\Exception\AbstractClientErrorException;
+use Narrowspark\HttpStatus\Exception\AbstractServerErrorException;
+use Narrowspark\HttpStatus\Exception\NotFoundException;
 use Narrowspark\HttpStatus\HttpStatus;
-use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Application as ConsoleApplication;
 use Symfony\Component\Console\Output\ConsoleOutput;
+use Symfony\Component\Debug\Exception\FatalErrorException;
+use Symfony\Component\Debug\Exception\FatalThrowableError;
+use Symfony\Component\Debug\Exception\FlattenException;
 use Throwable;
 use Viserio\Contracts\Config\Manager as ConfigManagerContract;
+use Viserio\Contracts\Config\Traits\ConfigAwareTrait;
+use Viserio\Contracts\Container\Traits\ContainerAwareTrait;
 use Viserio\Contracts\Exception\Displayer as DisplayerContract;
 use Viserio\Contracts\Exception\Filter as FilterContract;
 use Viserio\Contracts\Exception\Handler as HandlerContract;
 use Viserio\Contracts\Exception\Transformer as TransformerContract;
-use Symfony\Component\Debug\Exception\FatalErrorException;
-use Symfony\Component\Debug\Exception\FatalThrowableError;
-use Symfony\Component\Debug\Exception\FlattenException;
-use Viserio\Http\ServerRequestFactory;
-use Interop\Container\ContainerInterface;
-use Viserio\Contracts\Config\Traits\ConfigAwareTrait;
 use Viserio\Exception\Displayers\HtmlDisplayer;
-use Viserio\Contracts\Container\Traits\ContainerAwareTrait;
 use Viserio\Exception\Filters\CanDisplayFilter;
 use Viserio\Exception\Filters\VerboseFilter;
 use Viserio\Exception\Transformers\CommandLineTransformer;
-use Narrowspark\HttpStatus\Exception\AbstractClientErrorException;
-use Narrowspark\HttpStatus\Exception\AbstractServerErrorException;
-use Narrowspark\HttpStatus\Exception\NotFoundException;
+use Viserio\Http\ServerRequestFactory;
 
 class Handler implements HandlerContract
 {
@@ -88,7 +88,8 @@ class Handler implements HandlerContract
      *
      * @param \Interop\Container\ContainerInterface $container
      */
-    public function __construct(ContainerInterface $container) {
+    public function __construct(ContainerInterface $container)
+    {
         $this->container = $container;
     }
 
@@ -185,7 +186,7 @@ class Handler implements HandlerContract
 
         if ($this->getContainer()->has(LoggerInterface::class)) {
             try {
-                    $logger = $this->getContainer()->get(LoggerInterface::class);
+                $logger = $this->getContainer()->get(LoggerInterface::class);
             } catch (Exception $exception) {
                 throw $exception;
             }
@@ -307,11 +308,11 @@ class Handler implements HandlerContract
         }
     }
 
-     /**
+    /**
      * Render an exception into a response.
      *
      * @param \Psr\Http\Message\ServerRequestInterface $request
-     * @param \Exception               $exception
+     * @param \Exception                               $exception
      *
      * @return \Psr\Http\Message\ResponseInterface
      */
@@ -377,8 +378,8 @@ class Handler implements HandlerContract
      * Create a response for the given exception.
      *
      * @param \Psr\Http\Message\ServerRequestInterface $request
-     * @param \Throwable                         $exception
-     * @param \Throwable                         $transformed
+     * @param \Throwable                               $exception
+     * @param \Throwable                               $transformed
      *
      * @return ResponseInterface
      */
@@ -404,9 +405,9 @@ class Handler implements HandlerContract
      * Get the displayer instance.
      *
      * @param \Psr\Http\Message\ServerRequestInterface $request
-     * @param \Throwable                         $original
-     * @param \Throwable                         $transformed
-     * @param int                                $code
+     * @param \Throwable                               $original
+     * @param \Throwable                               $transformed
+     * @param int                                      $code
      *
      * @return \Viserio\Contracts\Exception\Displayer
      */
@@ -431,7 +432,7 @@ class Handler implements HandlerContract
      * Get the filtered list of displayers.
      *
      * @param \Viserio\Contracts\Exception\Displayer[] $displayers
-     * @param \Psr\Http\Message\ServerRequestInterface       $request
+     * @param \Psr\Http\Message\ServerRequestInterface $request
      * @param \Throwable                               $original
      * @param \Throwable                               $transformed
      * @param int                                      $code

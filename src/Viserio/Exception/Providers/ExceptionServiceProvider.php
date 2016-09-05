@@ -2,23 +2,23 @@
 declare(strict_types=1);
 namespace Viserio\Exception\Providers;
 
-use Viserio\Contracts\Config\Manager as ConfigManagerContract;
-use Viserio\Exception\ExceptionIdentifier;
-use Viserio\Exception\Handler;
-use Viserio\Exception\ExceptionInfo;
 use Interop\Container\ContainerInterface;
-use Psr\Log\LoggerInterface;
-use Viserio\Contracts\Exception\Handler as HandlerContract;
 use Interop\Container\ServiceProvider;
-use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use Psr\Log\LoggerInterface;
+use Viserio\Contracts\Config\Manager as ConfigManagerContract;
+use Viserio\Contracts\Exception\Handler as HandlerContract;
+use Viserio\Contracts\View\Factory as FactoryContract;
 use Viserio\Exception\Displayers\HtmlDisplayer;
 use Viserio\Exception\Displayers\JsonDisplayer;
 use Viserio\Exception\Displayers\ViewDisplayer;
 use Viserio\Exception\Displayers\WhoopsDisplayer;
-use Viserio\Exception\Filters\VerboseFilter;
-use Viserio\Contracts\View\Factory as FactoryContract;
+use Viserio\Exception\ExceptionIdentifier;
+use Viserio\Exception\ExceptionInfo;
 use Viserio\Exception\Filters\CanDisplayFilter;
+use Viserio\Exception\Filters\VerboseFilter;
+use Viserio\Exception\Handler;
 use Viserio\Exception\Transformers\CommandLineTransformer;
 
 class ExceptionServiceProvider implements ServiceProvider
@@ -62,7 +62,7 @@ class ExceptionServiceProvider implements ServiceProvider
 
     public static function createHtmlDisplayer(ContainerInterface $container): HtmlDisplayer
     {
-        return new HtmlDisplayer($container->get(ExceptionInfo::class), __DIR__.'/../Resources/error.html');
+        return new HtmlDisplayer($container->get(ExceptionInfo::class), __DIR__ . '/../Resources/error.html');
     }
 
     public static function createJsonDisplayer(ContainerInterface $container): JsonDisplayer

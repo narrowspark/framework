@@ -2,9 +2,9 @@
 declare(strict_types=1);
 namespace Viserio\Foundation\Http;
 
-use Throwable;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Throwable;
 use Viserio\Config\Manager as ConfigManager;
 use Viserio\Contracts\Events\Traits\EventsAwareTrait;
 use Viserio\Contracts\Exception\Handler as HandlerContract;
@@ -14,11 +14,11 @@ use Viserio\Contracts\Foundation\Terminable as TerminableContract;
 use Viserio\Contracts\Routing\Router as RouterContract;
 use Viserio\Foundation\Bootstrap\ConfigureLogging;
 use Viserio\Foundation\Bootstrap\DetectEnvironment;
+use Viserio\Foundation\Bootstrap\HandleExceptions;
 use Viserio\Foundation\Bootstrap\LoadConfiguration;
 use Viserio\Foundation\Bootstrap\LoadRoutes;
 use Viserio\Foundation\Bootstrap\LoadServiceProvider;
 use Viserio\Foundation\Bootstrap\RegisterStaticalProxys;
-use Viserio\Foundation\Bootstrap\HandleExceptions;
 use Viserio\HttpFactory\ResponseFactory;
 use Viserio\Routing\Router;
 use Viserio\StaticalProxy\StaticalProxy;
@@ -184,7 +184,7 @@ class Kernel implements TerminableContract, KernelContract
         try {
             $response = $router->dispatch($request, $response);
         } catch (Throwable $exception) {
-            $response =$this->app->get(HandlerContract::class)->render($request, $exception);
+            $response = $this->app->get(HandlerContract::class)->render($request, $exception);
         }
 
         if ($this->events !== null) {

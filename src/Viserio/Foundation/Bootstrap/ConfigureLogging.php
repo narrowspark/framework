@@ -8,8 +8,8 @@ use Viserio\Config\Manager as ConfigManager;
 use Viserio\Contracts\Events\Dispatcher as DispatcherContract;
 use Viserio\Contracts\Foundation\Application;
 use Viserio\Contracts\Foundation\Bootstrap as BootstrapContract;
-use Viserio\Log\Writer;
 use Viserio\Log\Providers\LoggerServiceProvider;
+use Viserio\Log\Writer;
 
 class ConfigureLogging implements BootstrapContract
 {

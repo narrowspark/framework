@@ -2,9 +2,9 @@
 declare(strict_types=1);
 namespace Viserio\Contracts\Exception;
 
-use Throwable;
-use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use Throwable;
 
 interface Handler
 {
@@ -125,12 +125,11 @@ interface Handler
      */
     public function handleShutdown();
 
-
-     /**
+    /**
      * Render an exception into a response.
      *
      * @param \Psr\Http\Message\ServerRequestInterface $request
-     * @param \Exception               $exception
+     * @param \Exception                               $exception
      *
      * @return \Psr\Http\Message\ResponseInterface
      */
