@@ -9,6 +9,7 @@ use Viserio\Contracts\Events\Dispatcher as DispatcherContract;
 use Viserio\Contracts\Foundation\Application;
 use Viserio\Contracts\Foundation\Bootstrap as BootstrapContract;
 use Viserio\Log\Writer;
+use Viserio\Log\Providers\LoggerServiceProvider;
 
 class ConfigureLogging implements BootstrapContract
 {
@@ -17,6 +18,8 @@ class ConfigureLogging implements BootstrapContract
      */
     public function bootstrap(Application $app)
     {
+        $app->register(new LoggerServiceProvider());
+
         $log = $this->registerLogger($app);
 
         // If a custom Monolog configurator has been registered for the application
@@ -40,12 +43,8 @@ class ConfigureLogging implements BootstrapContract
      */
     protected function registerLogger(Application $app): Writer
     {
-        $monolog = new MonologLogger($app->get('env'));
-
-        $log = new Writer($monolog);
+        $log = $app->get(Writer::class);
         $log->setEventsDispatcher($app->get(DispatcherContract::class));
-
-        $app->instance('log', $log);
 
         return $log;
     }

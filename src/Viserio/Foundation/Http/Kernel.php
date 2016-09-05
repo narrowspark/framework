@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Foundation\Http;
 
+use Throwable;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Config\Manager as ConfigManager;
@@ -17,6 +18,7 @@ use Viserio\Foundation\Bootstrap\LoadConfiguration;
 use Viserio\Foundation\Bootstrap\LoadRoutes;
 use Viserio\Foundation\Bootstrap\LoadServiceProvider;
 use Viserio\Foundation\Bootstrap\RegisterStaticalProxys;
+use Viserio\Foundation\Bootstrap\HandleExceptions;
 use Viserio\HttpFactory\ResponseFactory;
 use Viserio\Routing\Router;
 use Viserio\StaticalProxy\StaticalProxy;
@@ -65,6 +67,7 @@ class Kernel implements TerminableContract, KernelContract
         ConfigureLogging::class,
         LoadRoutes::class,
         LoadServiceProvider::class,
+        HandleExceptions::class,
     ];
 
     /**
@@ -178,7 +181,11 @@ class Kernel implements TerminableContract, KernelContract
         $router->setCachePath($config->get('routing.path'));
         $router->refreshCache($config->get('env', 'production') === 'production' ? true : false);
 
-        $response = $router->dispatch($request, $response);
+        try {
+            $response = $router->dispatch($request, $response);
+        } catch (Throwable $exception) {
+            $response =$this->app->get(HandlerContract::class)->render($request, $exception);
+        }
 
         if ($this->events !== null) {
             $this->events->trigger('response.created', [$request, $response]);

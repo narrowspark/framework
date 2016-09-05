@@ -5,7 +5,7 @@ namespace Viserio\Exception;
 use ErrorException;
 use Exception;
 use Narrowspark\HttpStatus\HttpStatus;
-use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Application as ConsoleApplication;
@@ -13,22 +13,28 @@ use Symfony\Component\Console\Output\ConsoleOutput;
 use Throwable;
 use Viserio\Contracts\Config\Manager as ConfigManagerContract;
 use Viserio\Contracts\Exception\Displayer as DisplayerContract;
-use Viserio\Contracts\Exception\Exception\FatalThrowableError;
-use Viserio\Contracts\Exception\Exception\FlattenException;
 use Viserio\Contracts\Exception\Filter as FilterContract;
 use Viserio\Contracts\Exception\Handler as HandlerContract;
 use Viserio\Contracts\Exception\Transformer as TransformerContract;
-use Viserio\Http\Response;
+use Symfony\Component\Debug\Exception\FatalErrorException;
+use Symfony\Component\Debug\Exception\FatalThrowableError;
+use Symfony\Component\Debug\Exception\FlattenException;
 use Viserio\Http\ServerRequestFactory;
+use Interop\Container\ContainerInterface;
+use Viserio\Contracts\Config\Traits\ConfigAwareTrait;
+use Viserio\Exception\Displayers\HtmlDisplayer;
+use Viserio\Contracts\Container\Traits\ContainerAwareTrait;
+use Viserio\Exception\Filters\CanDisplayFilter;
+use Viserio\Exception\Filters\VerboseFilter;
+use Viserio\Exception\Transformers\CommandLineTransformer;
+use Narrowspark\HttpStatus\Exception\AbstractClientErrorException;
+use Narrowspark\HttpStatus\Exception\AbstractServerErrorException;
+use Narrowspark\HttpStatus\Exception\NotFoundException;
 
 class Handler implements HandlerContract
 {
-    /**
-     * The log instance.
-     *
-     * @var \Psr\Log\LoggerInterface
-     */
-    protected $log;
+    use ConfigAwareTrait;
+    use ContainerAwareTrait;
 
     /**
      * Exception displayers.
@@ -38,13 +44,6 @@ class Handler implements HandlerContract
     protected $displayers = [];
 
     /**
-     * ExceptionIdentifier instance.
-     *
-     * @var \Viserio\Exception\ExceptionIdentifier
-     */
-    protected $eIdentifier;
-
-    /**
      * Exception levels.
      *
      * @var array
@@ -52,6 +51,10 @@ class Handler implements HandlerContract
     protected $defaultLevels = [
         FatalThrowableError::class => 'critical',
         Throwable::class => 'error',
+        NotFoundException::class => 'notice',
+        AbstractClientErrorException::class => 'notice',
+        AbstractServerErrorException::class => 'error',
+        Exception::class  => 'error',
     ];
 
     /**
@@ -59,14 +62,19 @@ class Handler implements HandlerContract
      *
      * @var array
      */
-    protected $transformers = [];
+    protected $transformers = [
+        CommandLineTransformer::class,
+    ];
 
     /**
      * Exception filters.
      *
      * @var array
      */
-    protected $filters = [];
+    protected $filters = [
+        VerboseFilter::class,
+        CanDisplayFilter::class,
+    ];
 
     /**
      * A list of the exception types that should not be reported.
@@ -76,55 +84,12 @@ class Handler implements HandlerContract
     protected $dontReport = [];
 
     /**
-     * The default displayer.
-     *
-     * @var \Viserio\Contracts\Exception\Displayer
-     */
-    protected $defaultDisplayer;
-
-    /**
-     * The config instance.
-     *
-     * @var \Viserio\Contracts\Config\Manager
-     */
-    protected $config;
-
-    /**
      * Create a new exception handler instance.
      *
-     * @param \Viserio\Contracts\Config\Manager      $config
-     * @param \Psr\Log\LoggerInterface               $log
-     * @param Viserio\\Exception\ExceptionIdentifier $eIdentifier
+     * @param \Interop\Container\ContainerInterface $container
      */
-    public function __construct(ConfigManagerContract $config, LoggerInterface $log, ExceptionIdentifier $eIdentifier)
-    {
-        $this->config = $config;
-        $this->log = $log;
-        $this->eIdentifier = $eIdentifier;
-    }
-
-    /**
-     * Set a config manager.
-     *
-     * @param \Viserio\Contracts\Config\Manager $config
-     *
-     * @return $this
-     */
-    public function setConfig(ConfigManagerContract $config): Manager
-    {
-        $this->config = $config;
-
-        return $this;
-    }
-
-    /**
-     * Get config.
-     *
-     * @return \Viserio\Contracts\Config\Manager
-     */
-    public function getConfig(): ConfigManagerContract
-    {
-        return $this->config;
+    public function __construct(ContainerInterface $container) {
+        $this->container = $container;
     }
 
     /**
@@ -218,10 +183,20 @@ class Handler implements HandlerContract
             return;
         }
 
-        $level = $this->getLevel($exception);
-        $id = $this->eIdentifier->identify($exception);
+        if ($this->getContainer()->has(LoggerInterface::class)) {
+            try {
+                    $logger = $this->getContainer()->get(LoggerInterface::class);
+            } catch (Exception $exception) {
+                throw $exception;
+            }
+        }
 
-        $this->log->{$level}($exception, ['identification' => ['id' => $id]]);
+        $level = $this->getLevel($exception);
+        $id = $this->getContainer()->get(ExceptionIdentifier::class)->identify($exception);
+
+        if ($this->getContainer()->has(LoggerInterface::class)) {
+            $logger->{$level}($exception, ['identification' => ['id' => $id]]);
+        }
     }
 
     /**
@@ -237,12 +212,12 @@ class Handler implements HandlerContract
         set_error_handler([$this, 'handleError']);
 
         // Register the PHP exception handler.
-        set_exception_handler([$this, 'handleUncaughtException']);
+        set_exception_handler([$this, 'handleException']);
 
         // Register the PHP shutdown handler.
         register_shutdown_function([$this, 'handleShutdown']);
 
-        if ($this->config->get('exception::env', null) !== 'testing') {
+        if ($this->getContainer()->get(ConfigManagerContract::class)->get('exception.env', null) !== 'testing') {
             ini_set('display_errors', 'Off');
         }
     }
@@ -288,16 +263,15 @@ class Handler implements HandlerContract
         if (php_sapi_name() === 'cli') {
             (new ConsoleApplication())->renderException($transformed, new ConsoleOutput());
         } else {
-            $request = new ServerRequestFactory();
-
             try {
-                $response = $this->getResponse($request->createServerRequestFromGlobals(), $exception, $transformed);
+                $response = $this->getResponse($this->getContainer()->get(ServerRequestInterface::class), $exception, $transformed);
 
                 return (string) $response->getBody();
             } catch (Throwable $error) {
                 $this->report($error);
 
-                $response = new Response(500, [], HttpStatus::getReasonPhrase(500));
+                $response = $this->getContainer()->get(ResponseInterface::class);
+                $response = $response->withStatus(500, HttpStatus::getReasonPhrase(500));
 
                 return (string) $response->getBody();
             }
@@ -320,7 +294,7 @@ class Handler implements HandlerContract
             $this->handleException(
                 // Create a new fatal exception instance from an error array.
                 new FatalThrowableError(
-                    new ErrorException(
+                    new FatalErrorException(
                         $error['message'],
                         $error['type'],
                         0,
@@ -333,6 +307,32 @@ class Handler implements HandlerContract
         }
     }
 
+     /**
+     * Render an exception into a response.
+     *
+     * @param \Psr\Http\Message\ServerRequestInterface $request
+     * @param \Exception               $exception
+     *
+     * @return \Psr\Http\Message\ResponseInterface
+     */
+    public function render(ServerRequestInterface $request, Throwable $exception): ResponseInterface
+    {
+        $transformed = $this->getTransformed($exception);
+
+        try {
+            $response = $this->getResponse($this->getContainer()->get(ServerRequestInterface::class), $exception, $transformed);
+
+            return $response;
+        } catch (Throwable $error) {
+            $this->report($error);
+
+            $response = $this->getContainer()->get(ResponseInterface::class);
+            $response = $response->withStatus(500, HttpStatus::getReasonPhrase(500));
+
+            return $response;
+        }
+    }
+
     /**
      * Determine if the exception is in the "do not report" list.
      *
@@ -342,7 +342,7 @@ class Handler implements HandlerContract
      */
     protected function shouldntReport(Throwable $exception): bool
     {
-        $dontReport = array_merge($this->dontReport, $this->config->get('', []));
+        $dontReport = array_merge($this->dontReport, $this->getContainer()->get(ConfigManagerContract::class)->get('', []));
 
         foreach ($dontReport as $type) {
             if ($exception instanceof $type) {
@@ -362,7 +362,7 @@ class Handler implements HandlerContract
      */
     protected function getLevel(Throwable $exception): string
     {
-        $levels = array_merge($this->defaultLevels, $this->config->get('exception::levels', []));
+        $levels = array_merge($this->defaultLevels, $this->getContainer()->get(ConfigManagerContract::class)->get('exception.levels', []));
 
         foreach ($levels as $class => $level) {
             if ($exception instanceof $class) {
@@ -376,18 +376,18 @@ class Handler implements HandlerContract
     /**
      * Create a response for the given exception.
      *
-     * @param \Psr\Http\Message\RequestInterface $request
-     * @param \Throwable                         $transformed
+     * @param \Psr\Http\Message\ServerRequestInterface $request
      * @param \Throwable                         $exception
+     * @param \Throwable                         $transformed
      *
      * @return ResponseInterface
      */
     protected function getResponse(
-        RequestInterface $request,
+        ServerRequestInterface $request,
         Throwable $exception,
         Throwable $transformed
     ): ResponseInterface {
-        $id = $this->eIdentifier->identify($exception);
+        $id = $this->getContainer()->get(ExceptionIdentifier::class)->identify($exception);
         $flattened = FlattenException::create($transformed);
         $code = $flattened->getStatusCode();
         $headers = $flattened->getHeaders();
@@ -403,7 +403,7 @@ class Handler implements HandlerContract
     /**
      * Get the displayer instance.
      *
-     * @param \Psr\Http\Message\RequestInterface $request
+     * @param \Psr\Http\Message\ServerRequestInterface $request
      * @param \Throwable                         $original
      * @param \Throwable                         $transformed
      * @param int                                $code
@@ -411,25 +411,27 @@ class Handler implements HandlerContract
      * @return \Viserio\Contracts\Exception\Displayer
      */
     protected function getDisplayer(
-        RequestInterface $request,
+        ServerRequestInterface $request,
         Throwable $original,
         Throwable $transformed,
         int $code
     ): DisplayerContract {
-        $displayers = array_merge($this->displayers, $this->config->get('exception::displayers', []));
+        $displayers = array_merge($this->displayers, $this->getContainer()->get(ConfigManagerContract::class)->get('exception.displayers', []));
 
         if ($filtered = $this->getFiltered($displayers, $request, $original, $transformed, $code)) {
             return $filtered[0];
         }
 
-        return $this->defaultDisplayer;
+        $config = $this->getContainer()->get(ConfigManagerContract::class);
+
+        return $this->getContainer()->get($config->get('exception.default', HtmlDisplayer::class));
     }
 
     /**
      * Get the filtered list of displayers.
      *
      * @param \Viserio\Contracts\Exception\Displayer[] $displayers
-     * @param \Psr\Http\Message\RequestInterface       $request
+     * @param \Psr\Http\Message\ServerRequestInterface       $request
      * @param \Throwable                               $original
      * @param \Throwable                               $transformed
      * @param int                                      $code
@@ -438,15 +440,15 @@ class Handler implements HandlerContract
      */
     protected function getFiltered(
         array $displayers,
-        RequestInterface $request,
+        ServerRequestInterface $request,
         Throwable $original,
         Throwable $transformed,
         int $code
     ): array {
-        $filters = array_merge($this->filters, $this->config->get('exception::filters', []));
+        $filters = array_merge($this->filters, $this->getContainer()->get(ConfigManagerContract::class)->get('exception.filters', []));
 
         foreach ($filters as $filter) {
-            $displayers = $filter->filter($displayers, $request, $original, $transformed, $code);
+            $displayers = $this->getContainer()->get($filter)->filter($displayers, $request, $original, $transformed, $code);
         }
 
         return array_values($displayers);
@@ -461,10 +463,10 @@ class Handler implements HandlerContract
      */
     protected function getTransformed(Throwable $exception): Throwable
     {
-        $transformers = array_merge($this->transformers, $this->config->get('exception::transformers', []));
+        $transformers = array_merge($this->transformers, $this->getContainer()->get(ConfigManagerContract::class)->get('exception.transformers', []));
 
         foreach ($transformers as $transformer) {
-            $exception = $transformer->transform($exception);
+            $exception = $this->getContainer()->get($transformer)->transform($exception);
         }
 
         return $exception;
