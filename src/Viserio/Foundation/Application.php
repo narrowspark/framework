@@ -10,14 +10,13 @@ use Viserio\Contracts\Foundation\Application as ApplicationContract;
 use Viserio\Contracts\Foundation\Emitter as EmitterContract;
 use Viserio\Events\Providers\EventsServiceProvider;
 use Viserio\Foundation\Http\Emitter;
-use Viserio\Foundation\Traits\PathsTrait;
 use Viserio\Parsers\Providers\ParsersServiceProvider;
+use Viserio\Config\Manager as ConfigManager;
+use Viserio\Contracts\Translation\TranslationManager;
 use Viserio\Routing\Providers\RoutingServiceProvider;
 
 class Application extends Container implements ApplicationContract
 {
-    use PathsTrait;
-
     /**
      * The Viserio framework version.
      *
@@ -45,6 +44,13 @@ class Application extends Container implements ApplicationContract
      * @var bool
      */
     protected $hasBeenBootstrapped = false;
+
+    /**
+     * A custom callback used to configure Monolog.
+     *
+     * @var callable|null
+     */
+    protected $monologConfigurator;
 
     /**
      * Create a new application instance.
@@ -118,6 +124,44 @@ class Application extends Container implements ApplicationContract
     }
 
     /**
+     * Get the current application locale.
+     *
+     * @return string
+     */
+    public function getLocale()
+    {
+        return $this->get(ConfigManager::class)->get('app.locale');
+    }
+
+    /**
+     * Set the current application locale.
+     *
+     * @param  string  $locale
+     * @return void
+     */
+    public function setLocale($locale)
+    {
+        $this->get(ConfigManager::class)->set('app.locale', $locale);
+
+        if ($this->has(TranslationManager::class)) {
+            $this->get(TranslationManager::class)->setLocale($locale);
+        }
+
+        $this->get(DispatcherContract::class)->trigger('locale.changed', [$locale]);
+    }
+
+    /**
+     * Determine if application locale is the given locale.
+     *
+     * @param  string  $locale
+     * @return bool
+     */
+    public function isLocale($locale)
+    {
+        return $this->getLocale() == $locale;
+    }
+
+    /**
      * Get the path to the environment file directory.
      *
      * @return string
@@ -134,7 +178,7 @@ class Application extends Container implements ApplicationContract
      *
      * @return $this
      */
-    public function useEnvironmentPath(string $path)
+    public function useEnvironmentPath(string $path): ApplicationContract
     {
         $this->environmentPath = $path;
 
@@ -148,7 +192,7 @@ class Application extends Container implements ApplicationContract
      *
      * @return $this
      */
-    public function loadEnvironmentFrom(string $file)
+    public function loadEnvironmentFrom(string $file): ApplicationContract
     {
         $this->environmentFile = $file;
 
@@ -180,7 +224,7 @@ class Application extends Container implements ApplicationContract
      *
      * @return bool
      */
-    public function configurationIsCached()
+    public function configurationIsCached(): bool
     {
         return file_exists($this->getCachedConfigPath());
     }
@@ -192,11 +236,187 @@ class Application extends Container implements ApplicationContract
      *
      * @return string
      */
-    public function detectEnvironment(Closure $callback)
+    public function detectEnvironment(Closure $callback): string
     {
         $args = isset($_SERVER['argv']) ? $_SERVER['argv'] : null;
 
-        return $this['env'] = (new EnvironmentDetector())->detect($callback, $args);
+        $this->instance('env', (new EnvironmentDetector())->detect($callback, $args));
+
+        return $this->get('env');
+    }
+
+    /**
+     * Determine if we are running in the console.
+     *
+     * @return bool
+     */
+    public function runningInConsole(): bool
+    {
+        return php_sapi_name() == 'cli';
+    }
+
+    /**
+     * Determine if application is in local environment.
+     *
+     * @return bool
+     */
+    public function isLocal(): bool
+    {
+        return $this->get('env') == 'local';
+    }
+
+    /**
+     * Determine if we are running unit tests.
+     *
+     * @return bool
+     */
+    public function runningUnitTests(): bool
+    {
+        return $this->get('env') == 'testing';
+    }
+
+    /**
+     * Define a callback to be used to configure Monolog.
+     *
+     * @param callable $callback
+     *
+     * @return $this
+     */
+    public function configureMonologUsing(callable $callback): ApplicationContract
+    {
+        $this->monologConfigurator = $callback;
+
+        return $this;
+    }
+
+    /**
+     * Determine if the application has a custom Monolog configurator.
+     *
+     * @return bool
+     */
+    public function hasMonologConfigurator(): bool
+    {
+        return ! is_null($this->monologConfigurator);
+    }
+
+    /**
+     * Get the custom Monolog configurator for the application.
+     *
+     * @return callable
+     */
+    public function getMonologConfigurator()
+    {
+        return $this->monologConfigurator;
+    }
+
+    /**
+     * Get the path to the application "app" directory.
+     *
+     * @return string
+     */
+    public function path(): string
+    {
+        return $this->get('path.app');
+    }
+
+    /**
+     * Get the path to the application configuration files.
+     *
+     * @return string
+     */
+    public function configPath(): string
+    {
+        return $this->get('path.config');
+    }
+
+    /**
+     * Get the path to the application routes files.
+     *
+     * @return string
+     */
+    public function routesPath(): string
+    {
+        return $this->get('path.route');
+    }
+
+    /**
+     * Get the path to the database directory.
+     *
+     * @return string
+     */
+    public function databasePath(): string
+    {
+        return $this->get('path.database');
+    }
+
+    /**
+     * Get the path to the language files.
+     *
+     * @return string
+     */
+    public function langPath(): string
+    {
+        return $this->get('path.lang');
+    }
+
+    /**
+     * Get the path to the public / web directory.
+     *
+     * @return string
+     */
+    public function publicPath(): string
+    {
+        return $this->get('path.public');
+    }
+
+    /**
+     * Get the path to the base ../ directory.
+     *
+     * @return string
+     */
+    public function basePath(): string
+    {
+        return $this->get('path.base');
+    }
+
+    /**
+     * Get the path to the storage directory.
+     *
+     * @return string
+     */
+    public function storagePath(): string
+    {
+        return $this->get('path.storage');
+    }
+
+    /**
+     * Get the path to the configuration cache file.
+     *
+     * @return string
+     */
+    public function getCachedConfigPath():string
+    {
+        return $this->storagePath() . '/framework/cache/config.php';
+    }
+
+    /**
+     * Bind the installation paths to the config.
+     *
+     * @param array $paths
+     *
+     * @throws \Exception
+     *
+     * @return $this
+     */
+    protected function bindInstallPaths(array $paths)
+    {
+        // Each path key is prefixed with path
+        // so that they have the consistent naming convention.
+        foreach ($paths as $key => $value) {
+            $this->instance(sprintf('path.%s', $key), realpath($value));
+        }
+
+        return $this;
     }
 
     /**

@@ -11,8 +11,9 @@ use Viserio\Contracts\Translation\PluralizationRules as PluralizationRulesContra
 use Viserio\Contracts\Translation\Translator as TranslatorContract;
 use Viserio\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 use Viserio\Translation\Traits\ValidateLocaleTrait;
+use Viserio\Contracts\Translation\TranslationManager as TranslationManagerContract;
 
-class TranslationManager
+class TranslationManager implements TranslationManagerContract
 {
     use ValidateLocaleTrait;
     use LoaderAwareTrait;

@@ -17,13 +17,6 @@ class Writer implements LogContract
     use EventsAwareTrait;
 
     /**
-     * The Monolog logger instance.
-     *
-     * @var \Monolog\Logger
-     */
-    protected $monolog;
-
-    /**
      * The handler parser instance.
      *
      * @var HandlerParser
@@ -41,8 +34,6 @@ class Writer implements LogContract
         $monolog->pushProcessor(new PsrLogMessageProcessor());
 
         $this->handlerParser = new HandlerParser($monolog);
-
-        $this->monolog = $this->handlerParser->getMonolog();
     }
 
     /**
@@ -55,7 +46,7 @@ class Writer implements LogContract
      */
     public function __call($method, $parameters)
     {
-        return call_user_func_array([$this->monolog, $method], $parameters);
+        return call_user_func_array([$this->getMonolog(), $method], $parameters);
     }
 
     /**
@@ -198,11 +189,21 @@ class Writer implements LogContract
     /**
      * Get the underlying Monolog instance.
      *
-     * @return MonologLogger
+     * @return \Monolog\Logger
      */
     public function getMonolog(): MonologLogger
     {
-        return $this->monolog;
+        return $this->handlerParser->getMonolog();
+    }
+
+    /**
+     * Get the handler parser instance.
+     *
+     * @return \Viserio\Log\HandlerParser
+     */
+    public function getHandlerParser(): HandlerParser
+    {
+        return $this->handlerParser;
     }
 
     /**
@@ -243,6 +244,6 @@ class Writer implements LogContract
             $this->getEventsDispatcher()->trigger('viserio.log', compact('level', 'message', 'context'));
         }
 
-        $this->monolog->{$level}($message, $context);
+        $this->getMonolog()->{$level}($message, $context);
     }
 }

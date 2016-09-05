@@ -14,7 +14,9 @@ use Viserio\Contracts\Routing\Router as RouterContract;
 use Viserio\Foundation\Bootstrap\DetectEnvironment;
 use Viserio\Foundation\Bootstrap\LoadConfiguration;
 use Viserio\Foundation\Bootstrap\LoadRoutes;
+use Viserio\Foundation\Bootstrap\ConfigureLogging;
 use Viserio\Foundation\Bootstrap\RegisterStaticalProxys;
+use Viserio\Foundation\Bootstrap\LoadServiceProvider;
 use Viserio\HttpFactory\ResponseFactory;
 use Viserio\Routing\Router;
 use Viserio\StaticalProxy\StaticalProxy;
@@ -60,7 +62,9 @@ class Kernel implements TerminableContract, KernelContract
         LoadConfiguration::class,
         RegisterStaticalProxys::class,
         DetectEnvironment::class,
+        ConfigureLogging::class,
         LoadRoutes::class,
+        LoadServiceProvider::class
     ];
 
     /**

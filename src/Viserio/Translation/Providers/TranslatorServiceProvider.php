@@ -9,6 +9,7 @@ use Viserio\Config\Manager as ConfigManager;
 use Viserio\Contracts\Translation\Translator as TranslatorContract;
 use Viserio\Parsers\FileLoader;
 use Viserio\Translation\MessageSelector;
+use Viserio\Contracts\Translation\TranslationManager as TranslationManagerContract;
 use Viserio\Translation\PluralizationRules;
 use Viserio\Translation\TranslationManager;
 
@@ -23,6 +24,9 @@ class TranslatorServiceProvider implements ServiceProvider
     {
         return [
             TranslationManager::class => [self::class, 'createTranslationManager'],
+            TranslationManagerContract::class  => function (ContainerInterface $container) {
+                return $container->get(TranslationManager::class);
+            },
             'translator' => [self::class, 'createTranslator'],
             TranslatorContract::class => function (ContainerInterface $container) {
                 return $container->get('translator');

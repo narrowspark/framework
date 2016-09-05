@@ -19,7 +19,7 @@ class DetectEnvironment implements BootstrapContract
 
             try {
                 (new Dotenv($app->environmentPath(), $app->environmentFile()))->load();
-            } catch (InvalidPathException $e) {
+            } catch (InvalidPathException $exception) {
                 //
             }
         }
