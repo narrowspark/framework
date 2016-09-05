@@ -2,13 +2,13 @@
 declare(strict_types=1);
 namespace Viserio\Foundation\Bootstrap;
 
-use Viserio\Log\Writer;
-use Monolog\Logger as MonologLogger;
-use Viserio\Contracts\Foundation\Application;
-use Viserio\Contracts\Events\Dispatcher as DispatcherContract;
-use Viserio\Config\Manager as ConfigManager;
 use Monolog\Handler\ErrorLogHandler;
+use Monolog\Logger as MonologLogger;
+use Viserio\Config\Manager as ConfigManager;
+use Viserio\Contracts\Events\Dispatcher as DispatcherContract;
+use Viserio\Contracts\Foundation\Application;
 use Viserio\Contracts\Foundation\Bootstrap as BootstrapContract;
+use Viserio\Log\Writer;
 
 class ConfigureLogging implements BootstrapContract
 {
@@ -50,7 +50,6 @@ class ConfigureLogging implements BootstrapContract
         return $log;
     }
 
-
     /**
      * Configure the Monolog handlers for the application.
      *
@@ -62,7 +61,7 @@ class ConfigureLogging implements BootstrapContract
         $config = $app->get(ConfigManager::class);
         $level = $app->get(ConfigManager::class)->get('app.log_level', 'debug');
 
-        $method = 'configure'.ucfirst($config->get('app.log')).'Handler';
+        $method = 'configure' . ucfirst($config->get('app.log')) . 'Handler';
 
         $this->{$method}($app, $log, $level);
     }
@@ -77,7 +76,7 @@ class ConfigureLogging implements BootstrapContract
     protected function configureSingleHandler(Application $app, Writer $log, string $level)
     {
         $log->useFiles(
-            $app->storagePath().'/logs/narrowspark.log',
+            $app->storagePath() . '/logs/narrowspark.log',
             $level
         );
     }
@@ -95,7 +94,7 @@ class ConfigureLogging implements BootstrapContract
         $maxFiles = $config->get('app.log_max_files');
 
         $log->useDailyFiles(
-            $app->storagePath().'/logs/narrowspark.log',
+            $app->storagePath() . '/logs/narrowspark.log',
             is_null($maxFiles) ? 5 : $maxFiles,
             $level
         );

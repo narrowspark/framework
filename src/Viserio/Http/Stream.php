@@ -3,10 +3,10 @@ declare(strict_types=1);
 namespace Viserio\Http;
 
 use BadMethodCallException;
-use Throwable;
 use InvalidArgumentException;
 use Psr\Http\Message\StreamInterface;
 use RuntimeException;
+use Throwable;
 
 class Stream implements StreamInterface
 {

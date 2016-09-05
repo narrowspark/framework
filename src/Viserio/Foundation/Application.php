@@ -3,16 +3,16 @@ declare(strict_types=1);
 namespace Viserio\Foundation;
 
 use Closure;
+use Viserio\Config\Manager as ConfigManager;
 use Viserio\Config\Providers\ConfigServiceProvider;
 use Viserio\Container\Container;
 use Viserio\Contracts\Events\Dispatcher as DispatcherContract;
 use Viserio\Contracts\Foundation\Application as ApplicationContract;
 use Viserio\Contracts\Foundation\Emitter as EmitterContract;
+use Viserio\Contracts\Translation\TranslationManager;
 use Viserio\Events\Providers\EventsServiceProvider;
 use Viserio\Foundation\Http\Emitter;
 use Viserio\Parsers\Providers\ParsersServiceProvider;
-use Viserio\Config\Manager as ConfigManager;
-use Viserio\Contracts\Translation\TranslationManager;
 use Viserio\Routing\Providers\RoutingServiceProvider;
 
 class Application extends Container implements ApplicationContract
@@ -136,8 +136,7 @@ class Application extends Container implements ApplicationContract
     /**
      * Set the current application locale.
      *
-     * @param  string  $locale
-     * @return void
+     * @param string $locale
      */
     public function setLocale($locale)
     {
@@ -153,7 +152,8 @@ class Application extends Container implements ApplicationContract
     /**
      * Determine if application locale is the given locale.
      *
-     * @param  string  $locale
+     * @param string $locale
+     *
      * @return bool
      */
     public function isLocale($locale)

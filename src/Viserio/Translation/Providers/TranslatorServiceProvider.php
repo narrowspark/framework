@@ -6,10 +6,10 @@ use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
 use Psr\Log\LoggerInterface as PsrLoggerInterface;
 use Viserio\Config\Manager as ConfigManager;
+use Viserio\Contracts\Translation\TranslationManager as TranslationManagerContract;
 use Viserio\Contracts\Translation\Translator as TranslatorContract;
 use Viserio\Parsers\FileLoader;
 use Viserio\Translation\MessageSelector;
-use Viserio\Contracts\Translation\TranslationManager as TranslationManagerContract;
 use Viserio\Translation\PluralizationRules;
 use Viserio\Translation\TranslationManager;
 
