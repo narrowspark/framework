@@ -4,8 +4,8 @@ namespace Viserio\Foundation\Http;
 
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Throwable;
 use Symfony\Component\Debug\Exception\FatalThrowableError;
+use Throwable;
 use Viserio\Config\Manager as ConfigManager;
 use Viserio\Contracts\Events\Traits\EventsAwareTrait;
 use Viserio\Contracts\Exception\Handler as HandlerContract;
