@@ -3,7 +3,6 @@ declare(strict_types=1);
 namespace Viserio\Exception;
 
 use ErrorException;
-use Exception;
 use Interop\Container\ContainerInterface;
 use Narrowspark\HttpStatus\Exception\AbstractClientErrorException;
 use Narrowspark\HttpStatus\Exception\AbstractServerErrorException;
@@ -190,7 +189,7 @@ class Handler implements HandlerContract
         if ($this->getContainer()->has(LoggerInterface::class)) {
             try {
                 $logger = $this->getContainer()->get(LoggerInterface::class);
-            } catch (Exception $exception) {
+            } catch (Throwable $exception) {
                 throw $exception;
             }
         }
@@ -395,7 +394,7 @@ class Handler implements HandlerContract
      * @param \Throwable                               $exception
      * @param \Throwable                               $transformed
      *
-     * @return ResponseInterface
+     * @return \Psr\Http\Message\ResponseInterface
      */
     protected function getResponse(
         ServerRequestInterface $request,
@@ -404,7 +403,7 @@ class Handler implements HandlerContract
     ): ResponseInterface {
         $id = $this->getContainer()->get(ExceptionIdentifier::class)->identify($exception);
         $flattened = FlattenException::create($transformed);
-        $code = $flattened->getStatusCode();
+        $code = $flattened->getCode();
         $headers = $flattened->getHeaders();
 
         return $this->getDisplayer(
@@ -431,16 +430,16 @@ class Handler implements HandlerContract
         Throwable $transformed,
         int $code
     ): DisplayerContract {
+        $config = $this->getContainer()->get(ConfigManagerContract::class);
+
         $displayers = array_merge(
             $this->displayers,
-            $this->getContainer()->get(ConfigManagerContract::class)->get('exception.displayers', [])
+            $config->get('exception.displayers', [])
         );
 
         if ($filtered = $this->getFiltered($displayers, $request, $original, $transformed, $code)) {
             return $filtered[0];
         }
-
-        $config = $this->getContainer()->get(ConfigManagerContract::class);
 
         return $this->getContainer()->get($config->get('exception.default', HtmlDisplayer::class));
     }
@@ -486,10 +485,15 @@ class Handler implements HandlerContract
      */
     protected function getTransformed(Throwable $exception): Throwable
     {
-        $transformers = array_merge($this->transformers, $this->getContainer()->get(ConfigManagerContract::class)->get('exception.transformers', []));
+        $container =  $this->getContainer();
+        $transformers = array_merge(
+            $this->transformers,
+            $container->get(ConfigManagerContract::class)->get('exception.transformers', [])
+        );
 
         foreach ($transformers as $transformer) {
-            $exception = $this->getContainer()->get($transformer)->transform($exception);
+            $transformerClass = is_object($transformer) ? $transformer : $container->get($transformer);
+            $exception = $transformerClass->transform($exception);
         }
 
         return $exception;
