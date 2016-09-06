@@ -34,7 +34,6 @@ interface Dispatcher
      *
      * @param string $eventName
      * @param array  $arguments
-     * @param mixed  $continue
      *
      * @return bool
      */
