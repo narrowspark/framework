@@ -214,7 +214,7 @@ class Dispatcher implements DispatcherContract
     /**
      * If route has middlewares add it to the middleware dispatcher.
      *
-     * @param array $middelwares
+     * @param array $middlewares
      */
     private function addMiddlewares(array $middlewares)
     {
