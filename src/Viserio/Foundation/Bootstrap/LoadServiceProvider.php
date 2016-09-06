@@ -18,7 +18,7 @@ class LoadServiceProvider implements BootstrapContract
 
         if (count($providers) > 0) {
             foreach ($providers as $provider) {
-                $app->register($this->make($provider));
+                $app->register($app->make($provider));
             }
         }
     }

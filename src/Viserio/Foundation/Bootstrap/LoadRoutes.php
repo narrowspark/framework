@@ -14,7 +14,7 @@ class LoadRoutes extends AbstractLoadFiles implements BootstrapContract
     {
         $routesPath = realpath($app->routesPath());
 
-        foreach ($this->getFiles($app, $routesPath) as $key => $path) {
+        foreach ($this->getFiles($routesPath) as $key => $path) {
             require_once $path;
         }
     }

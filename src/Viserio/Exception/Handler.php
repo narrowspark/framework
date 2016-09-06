@@ -315,12 +315,7 @@ class Handler implements HandlerContract
     }
 
     /**
-     * Render an exception into a response.
-     *
-     * @param \Psr\Http\Message\ServerRequestInterface $request
-     * @param \Exception                               $exception
-     *
-     * @return \Psr\Http\Message\ResponseInterface
+     * {@inheritdoc}
      */
     public function render(ServerRequestInterface $request, Throwable $exception): ResponseInterface
     {

@@ -11,12 +11,11 @@ abstract class AbstractLoadFiles
     /**
      * Get all of the files for the application.
      *
-     * @param \Viserio\Contracts\Foundation\Application $app
-     * @param string                                    $path
+     * @param string $path
      *
      * @return array
      */
-    protected function getFiles(Application $app, string $path): array
+    protected function getFiles(string $path): array
     {
         $files = [];
 

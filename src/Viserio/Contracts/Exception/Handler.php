@@ -129,7 +129,7 @@ interface Handler
      * Render an exception into a response.
      *
      * @param \Psr\Http\Message\ServerRequestInterface $request
-     * @param \Exception                               $exception
+     * @param \Throwable                               $exception
      *
      * @return \Psr\Http\Message\ResponseInterface
      */

@@ -69,7 +69,7 @@ class ExceptionServiceProvider implements ServiceProvider
 
     public static function createViewDisplayer(ContainerInterface $container): ViewDisplayer
     {
-        return new ViewDisplayer($container->get(ExceptionInfo::class, $container->get(FactoryContract::class)));
+        return new ViewDisplayer($container->get(ExceptionInfo::class), $container->get(FactoryContract::class));
     }
 
     public static function createWhoopsDisplayer(): WhoopsDisplayer

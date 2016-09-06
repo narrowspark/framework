@@ -21,7 +21,7 @@ class Emitter implements EmitterContract
 
         $this->emitStatusLine($response);
         $this->emitHeaders($response);
-        $this->terminateOutputBuffering(0, $response);
+        $this->terminateOutputBuffering(0);
         $this->emitBody($response);
         $this->cleanUp();
     }
@@ -107,7 +107,7 @@ class Emitter implements EmitterContract
      * @param int                                      $maxBufferLevel
      * @param \Psr\Http\Message\ResponseInterface|null $response
      */
-    protected function terminateOutputBuffering(int $maxBufferLevel = 0, ResponseInterface $response = null)
+    protected function terminateOutputBuffering(int $maxBufferLevel = 0)
     {
         // Command line output buffering is disabled in cli by default
         if (substr(PHP_SAPI, 0, 3) === 'cgi') {
