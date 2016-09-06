@@ -102,7 +102,7 @@ class Kernel implements TerminableContract, KernelContract
      *
      * @return \Psr\Http\Message\ResponseInterface
      */
-    public function handle(ServerRequestInterface $request, ResponseInterface $response = null)
+    public function handle(ServerRequestInterface $request, ResponseInterface $response = null): ResponseInterface
     {
         // Passes the request to the container
         $this->app->instance(ServerRequestInterface::class, $request);
