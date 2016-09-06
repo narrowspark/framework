@@ -2,9 +2,9 @@
 declare(strict_types=1);
 namespace Viserio\View\Engines\Adapter;
 
-use Throwable;
 use ErrorException;
 use ParseError;
+use Throwable;
 use TypeError;
 use Viserio\Contracts\View\Engine as EngineContract;
 
@@ -82,10 +82,10 @@ class Php implements EngineContract
     private function getErrorException($exception): ErrorException
     {
         if ($exception instanceof ParseError) {
-            $message = 'Parse error: '.$exception->getMessage();
+            $message = 'Parse error: ' . $exception->getMessage();
             $severity = E_PARSE;
         } elseif ($exception instanceof TypeError) {
-            $message = 'Type error: '.$exception->getMessage();
+            $message = 'Type error: ' . $exception->getMessage();
             $severity = E_RECOVERABLE_ERROR;
         } else {
             $message = $exception->getMessage();

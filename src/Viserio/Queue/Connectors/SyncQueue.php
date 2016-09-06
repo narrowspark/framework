@@ -2,10 +2,10 @@
 declare(strict_types=1);
 namespace Viserio\Queue\Connectors;
 
-use Throwable;
-use ParseError;
-use TypeError;
 use ErrorException;
+use ParseError;
+use Throwable;
+use TypeError;
 use Viserio\Contracts\Queue\Job as JobContract;
 use Viserio\Queue\Jobs\SyncJob;
 
@@ -153,10 +153,10 @@ class SyncQueue extends AbstractQueue
     private function getErrorException($exception): ErrorException
     {
         if ($exception instanceof ParseError) {
-            $message = 'Parse error: '.$exception->getMessage();
+            $message = 'Parse error: ' . $exception->getMessage();
             $severity = E_PARSE;
         } elseif ($exception instanceof TypeError) {
-            $message = 'Type error: '.$exception->getMessage();
+            $message = 'Type error: ' . $exception->getMessage();
             $severity = E_RECOVERABLE_ERROR;
         } else {
             $message = $exception->getMessage();

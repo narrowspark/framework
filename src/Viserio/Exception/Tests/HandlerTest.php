@@ -4,10 +4,13 @@ namespace Viserio\Exception\Tests;
 
 use ErrorException;
 use Exception;
+use Interop\Container\ContainerInterface;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\LoggerInterface;
-use Viserio\Contracts\Config\Manager as ConfigManagerContract;
 use Symfony\Component\Debug\Exception\FatalThrowableError;
+use Viserio\Contracts\Config\Manager as ConfigManagerContract;
 use Viserio\Exception\Displayers\HtmlDisplayer;
 use Viserio\Exception\Displayers\JsonDisplayer;
 use Viserio\Exception\Displayers\WhoopsDisplayer;
@@ -16,9 +19,6 @@ use Viserio\Exception\ExceptionInfo;
 use Viserio\Exception\Filters\VerboseFilter;
 use Viserio\Exception\Handler;
 use Viserio\Exception\Transformers\CommandLineTransformer;
-use Psr\Http\Message\ResponseInterface;
-use Interop\Container\ContainerInterface;
-use Psr\Http\Message\ServerRequestInterface;
 
 class HandlerTest extends \PHPUnit_Framework_TestCase
 {
@@ -34,7 +34,7 @@ class HandlerTest extends \PHPUnit_Framework_TestCase
             ->andReturn(true);
         $container->shouldReceive('get')
             ->with(ExceptionIdentifier::class)
-            ->andReturn( new ExceptionIdentifier());
+            ->andReturn(new ExceptionIdentifier());
         $container->shouldReceive('get')
             ->with(ResponseInterface::class)
             ->andReturn($this->mock(ResponseInterface::class));

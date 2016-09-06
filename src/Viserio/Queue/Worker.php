@@ -2,12 +2,12 @@
 declare(strict_types=1);
 namespace Viserio\Queue;
 
+use ErrorException;
 use Exception;
-use Throwable;
 use ParseError;
+use Throwable;
 use TypeError;
 use Viserio\Contracts\Events\Dispatcher as DispatcherContract;
-use ErrorException;
 use Viserio\Contracts\Exception\Handler as ExceptionHandlerContract;
 use Viserio\Contracts\Queue\Exception\TimeoutException;
 use Viserio\Contracts\Queue\FailedJobProvider as FailedJobProviderContract;
@@ -423,10 +423,10 @@ class Worker implements WorkerContract
     private function getErrorException($exception): ErrorException
     {
         if ($exception instanceof ParseError) {
-            $message = 'Parse error: '.$exception->getMessage();
+            $message = 'Parse error: ' . $exception->getMessage();
             $severity = E_PARSE;
         } elseif ($exception instanceof TypeError) {
-            $message = 'Type error: '.$exception->getMessage();
+            $message = 'Type error: ' . $exception->getMessage();
             $severity = E_RECOVERABLE_ERROR;
         } else {
             $message = $exception->getMessage();
