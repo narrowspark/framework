@@ -5,6 +5,7 @@ namespace Viserio\Foundation\Http;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Throwable;
+use Symfony\Component\Debug\Exception\FatalThrowableError;
 use Viserio\Config\Manager as ConfigManager;
 use Viserio\Contracts\Events\Traits\EventsAwareTrait;
 use Viserio\Contracts\Exception\Handler as HandlerContract;
@@ -179,12 +180,16 @@ class Kernel implements TerminableContract, KernelContract
         $config = $this->app->get(ConfigManager::class);
 
         $router->setCachePath($config->get('routing.path'));
-        $router->refreshCache($config->get('env', 'production') === 'production' ? true : false);
+        $router->refreshCache($config->get('app.env', 'production') === 'production' ? false : true);
 
         try {
             $response = $router->dispatch($request, $response);
         } catch (Throwable $exception) {
-            $response = $this->app->get(HandlerContract::class)->render($request, $exception);
+            $exceptionHandler = $this->app->get(HandlerContract::class);
+
+            $exceptionHandler->report($exception = new FatalThrowableError($exception));
+
+            $response = $exceptionHandler->render($request, $exception);
         }
 
         if ($this->events !== null) {

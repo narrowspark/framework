@@ -112,13 +112,11 @@ class HandlerTest extends \PHPUnit_Framework_TestCase
         $id = (new ExceptionIdentifier())->identify($exception);
 
         $log = $this->mock(LoggerInterface::class);
-        $log
-            ->shouldReceive('critical')
+        $log->shouldReceive('critical')
             ->once($exception, ['identification' => ['id' => $id]]);
 
         $config = $this->mock(ConfigManagerContract::class);
-        $config
-            ->shouldReceive('get')
+        $config->shouldReceive('get')
             ->twice()
             ->andReturn([]);
 
@@ -140,13 +138,11 @@ class HandlerTest extends \PHPUnit_Framework_TestCase
         $id = (new ExceptionIdentifier())->identify($exception);
 
         $log = $this->mock(LoggerInterface::class);
-        $log
-            ->shouldReceive('critical')
+        $log->shouldReceive('critical')
             ->never();
 
         $config = $this->mock(ConfigManagerContract::class);
-        $config
-            ->shouldReceive('get')
+        $config->shouldReceive('get')
             ->once()
             ->andReturn([]);
 
@@ -178,8 +174,7 @@ class HandlerTest extends \PHPUnit_Framework_TestCase
     public function testHandleException()
     {
         $log = $this->mock(LoggerInterface::class);
-        $log
-            ->shouldReceive('critical')
+        $log->shouldReceive('critical')
             ->once();
 
         $config = $this->mock(ConfigManagerContract::class);
@@ -214,13 +209,11 @@ class HandlerTest extends \PHPUnit_Framework_TestCase
     public function testFormatedHandleException()
     {
         $log = $this->mock(LoggerInterface::class);
-        $log
-            ->shouldReceive('critical')
+        $log->shouldReceive('critical')
             ->once();
 
         $config = $this->mock(ConfigManagerContract::class);
-        $config
-            ->shouldReceive('get')
+        $config->shouldReceive('get')
             ->andReturn([]);
 
         $container = $this->getContainer();

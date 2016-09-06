@@ -17,6 +17,8 @@ class NotFoundMiddleware implements ServerMiddlewareContract
         ServerRequestInterface $request,
         DelegateContract $frame
     ): ResponseInterface {
-        throw new NotFoundException();
+        throw new NotFoundException(
+            '404 Not Found: Requested route (/' . ltrim($request->getUri()->getPath(), '/') . ')'
+        );
     }
 }

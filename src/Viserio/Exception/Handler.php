@@ -255,9 +255,7 @@ class Handler implements HandlerContract
      */
     public function handleException(Throwable $exception)
     {
-        if ($exception instanceof Exception) {
-            $exception = new FatalThrowableError($exception);
-        }
+        $exception = new FatalThrowableError($exception);
 
         $this->report($exception);
 
@@ -266,9 +264,11 @@ class Handler implements HandlerContract
         if (php_sapi_name() === 'cli') {
             (new ConsoleApplication())->renderException($transformed, new ConsoleOutput());
         } else {
+            $container = $this->getContainer();
+
             try {
                 $response = $this->getResponse(
-                    $this->getContainer()->get(ServerRequestInterface::class),
+                    $container->get(ServerRequestInterface::class),
                     $exception,
                     $transformed
                 );
@@ -277,7 +277,7 @@ class Handler implements HandlerContract
             } catch (Throwable $error) {
                 $this->report($error);
 
-                $response = $this->getContainer()->get(ResponseInterface::class);
+                $response = $container->get(ResponseInterface::class);
                 $response = $response->withStatus(500, HttpStatus::getReasonPhrase(500));
 
                 return (string) $response->getBody();
