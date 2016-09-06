@@ -121,8 +121,10 @@ class Handler implements HandlerContract
      */
     public function addTransformer(TransformerContract $transformer): HandlerContract
     {
-        if (in_array($transformer, $this->transformers)) {
-            $pos = array_search($transformer, $this->transformers);
+        $transformerClass = is_object($transformer) ? get_class($transformer) : $transformer;
+
+        if (in_array($transformerClass, $this->transformers)) {
+            $pos = array_search($transformerClass, $this->transformers);
 
             unset($this->transformers[$pos]);
         }
@@ -145,8 +147,10 @@ class Handler implements HandlerContract
      */
     public function addFilter(FilterContract $filter): HandlerContract
     {
-        if (in_array($filter, $this->filters)) {
-            $pos = array_search($filter, $this->filters);
+        $filterClass = is_object($filter) ? get_class($filter) : $filter;
+
+        if (in_array($filterClass, $this->filters)) {
+            $pos = array_search($filterClass, $this->filters);
 
             unset($this->filters[$pos]);
         }
@@ -264,7 +268,11 @@ class Handler implements HandlerContract
             (new ConsoleApplication())->renderException($transformed, new ConsoleOutput());
         } else {
             try {
-                $response = $this->getResponse($this->getContainer()->get(ServerRequestInterface::class), $exception, $transformed);
+                $response = $this->getResponse(
+                    $this->getContainer()->get(ServerRequestInterface::class),
+                    $exception,
+                    $transformed
+                );
 
                 return (string) $response->getBody();
             } catch (Throwable $error) {
@@ -320,7 +328,11 @@ class Handler implements HandlerContract
         $transformed = $this->getTransformed($exception);
 
         try {
-            $response = $this->getResponse($this->getContainer()->get(ServerRequestInterface::class), $exception, $transformed);
+            $response = $this->getResponse(
+                $this->getContainer()->get(ServerRequestInterface::class),
+                $exception,
+                $transformed
+            );
 
             return $response;
         } catch (Throwable $error) {
@@ -362,7 +374,10 @@ class Handler implements HandlerContract
      */
     protected function getLevel(Throwable $exception): string
     {
-        $levels = array_merge($this->defaultLevels, $this->getContainer()->get(ConfigManagerContract::class)->get('exception.levels', []));
+        $levels = array_merge(
+            $this->defaultLevels,
+            $this->getContainer()->get(ConfigManagerContract::class)->get('exception.levels', [])
+        );
 
         foreach ($levels as $class => $level) {
             if ($exception instanceof $class) {
@@ -416,7 +431,10 @@ class Handler implements HandlerContract
         Throwable $transformed,
         int $code
     ): DisplayerContract {
-        $displayers = array_merge($this->displayers, $this->getContainer()->get(ConfigManagerContract::class)->get('exception.displayers', []));
+        $displayers = array_merge(
+            $this->displayers,
+            $this->getContainer()->get(ConfigManagerContract::class)->get('exception.displayers', [])
+        );
 
         if ($filtered = $this->getFiltered($displayers, $request, $original, $transformed, $code)) {
             return $filtered[0];
@@ -445,10 +463,15 @@ class Handler implements HandlerContract
         Throwable $transformed,
         int $code
     ): array {
-        $filters = array_merge($this->filters, $this->getContainer()->get(ConfigManagerContract::class)->get('exception.filters', []));
+        $container = $this->getContainer();
+        $filters = array_merge(
+            $this->filters,
+            $container->get(ConfigManagerContract::class)->get('exception.filters', [])
+        );
 
         foreach ($filters as $filter) {
-            $displayers = $this->getContainer()->get($filter)->filter($displayers, $request, $original, $transformed, $code);
+            $filterClass = is_object($filter) ? $filter : $container->get($filter);
+            $displayers = $filterClass->filter($displayers, $request, $original, $transformed, $code);
         }
 
         return array_values($displayers);

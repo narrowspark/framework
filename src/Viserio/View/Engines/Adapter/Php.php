@@ -3,7 +3,9 @@ declare(strict_types=1);
 namespace Viserio\View\Engines\Adapter;
 
 use Throwable;
-use Viserio\Contracts\Exception\Exception\FatalThrowableError;
+use ErrorException;
+use ParseError;
+use TypeError;
 use Viserio\Contracts\View\Engine as EngineContract;
 
 class Php implements EngineContract
@@ -43,7 +45,10 @@ class Php implements EngineContract
         try {
             require $phpPath;
         } catch (Throwable $exception) {
-            $this->handleViewException(new FatalThrowableError($exception), $obLevel);
+            $this->handleViewException(
+                $this->getErrorException($exception),
+                $obLevel
+            );
         }
 
         // Return temporary output buffer content, destroy output buffer
@@ -65,5 +70,34 @@ class Php implements EngineContract
         }
 
         throw $exception;
+    }
+
+    /**
+     * Get a ErrorException instance.
+     *
+     * @param \ParseError|\TypeError|\Throwable $exception
+     *
+     * @return \ErrorException
+     */
+    private function getErrorException($exception): ErrorException
+    {
+        if ($exception instanceof ParseError) {
+            $message = 'Parse error: '.$exception->getMessage();
+            $severity = E_PARSE;
+        } elseif ($exception instanceof TypeError) {
+            $message = 'Type error: '.$exception->getMessage();
+            $severity = E_RECOVERABLE_ERROR;
+        } else {
+            $message = $exception->getMessage();
+            $severity = E_ERROR;
+        }
+
+        return new ErrorException(
+            $message,
+            $exception->getCode(),
+            $severity,
+            $exception->getFile(),
+            $exception->getLine()
+        );
     }
 }
