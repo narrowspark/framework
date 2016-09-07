@@ -104,7 +104,7 @@ class Emitter implements EmitterContract
     /**
      * Close response stream and terminate output buffering.
      *
-     * @param int                                      $maxBufferLevel
+     * @param int $maxBufferLevel
      */
     protected function terminateOutputBuffering(int $maxBufferLevel = 0)
     {
