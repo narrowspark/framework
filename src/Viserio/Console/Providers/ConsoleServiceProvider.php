@@ -5,6 +5,8 @@ namespace Viserio\Console\Providers;
 use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
 use Stecman\Component\Symfony\Console\BashCompletion\CompletionCommand;
+use Viserio\Config\Manager as ConfigManager;
+use Viserio\Contracts\Console\Application as ApplicationContract;
 use Viserio\Console\Application;
 
 class ConsoleServiceProvider implements ServiceProvider
@@ -18,8 +20,9 @@ class ConsoleServiceProvider implements ServiceProvider
     {
         return [
             Application::class => [self::class, 'createCerebro'],
-            'console.app.name' => [self::class, 'createConsoleName'],
-            'console.app.version' => [self::class, 'createConsoleVersion'],
+            ApplicationContract::class => function (ContainerInterface $container) {
+                return $container->get(Application::class);
+            },
             'console' => function (ContainerInterface $container) {
                 return $container->get(Application::class);
             },
@@ -31,26 +34,23 @@ class ConsoleServiceProvider implements ServiceProvider
 
     public static function createCerebro(ContainerInterface $container): Application
     {
+
+        if ($container->has(ConfigManager::class)) {
+            $config = $container->get(ConfigManager::class)->get('console');
+        } else {
+            $config = self::get($container, 'options');
+        }
+
         $console = new Application(
             $container,
-            $container->get('console.app.version'),
-            $container->get('console.app.name')
+            $config['version'],
+            $config['name'] ?? 'Cerebro'
         );
 
         // Add auto-complete for Symfony Console application
         $console->add(new CompletionCommand());
 
         return $console;
-    }
-
-    public static function createConsoleName(ContainerInterface $container): string
-    {
-        return self::get($container, 'app.name', 'Cerebro');
-    }
-
-    public static function createConsoleVersion(ContainerInterface $container): string
-    {
-        return self::get($container, 'app.version');
     }
 
     /**

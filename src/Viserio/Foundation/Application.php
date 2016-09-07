@@ -400,6 +400,16 @@ class Application extends Container implements ApplicationContract
     }
 
     /**
+     * Get the path to the commands cache file.
+     *
+     * @return string
+     */
+    public function getCachedCommandsPath():string
+    {
+        return $this->storagePath() . '/framework/cache/commands.php';
+    }
+
+    /**
      * Bind the installation paths to the config.
      *
      * @param array $paths

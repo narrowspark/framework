@@ -19,6 +19,7 @@ use Viserio\Foundation\Bootstrap\HandleExceptions;
 use Viserio\Foundation\Bootstrap\LoadConfiguration;
 use Viserio\Foundation\Bootstrap\LoadRoutes;
 use Viserio\Foundation\Bootstrap\LoadServiceProvider;
+use Viserio\Foundation\Bootstrap\CommandsLoader;
 use Viserio\Foundation\Bootstrap\RegisterStaticalProxys;
 use Viserio\HttpFactory\ResponseFactory;
 use Viserio\Routing\Router;
@@ -69,6 +70,7 @@ class Kernel implements TerminableContract, KernelContract
         LoadRoutes::class,
         LoadServiceProvider::class,
         HandleExceptions::class,
+        CommandsLoader::class,
     ];
 
     /**
