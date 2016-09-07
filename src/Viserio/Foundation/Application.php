@@ -68,17 +68,16 @@ class Application extends Container implements ApplicationContract
          * should not be changing these here. If you need to change these you
          * may do so within the paths.php file and they will be bound here.
          */
-        $this->bindInstallPaths($paths);
-
         $this->registerBaseServiceProviders();
+
+        $this->bindInstallPaths($paths);
+        $this->registerCacheFilePaths();
 
         $this->registerBaseBindings();
     }
 
     /**
-     * Get the version number of the application.
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function getVersion(): string
     {
@@ -86,37 +85,29 @@ class Application extends Container implements ApplicationContract
     }
 
     /**
-     * Run the given array of bootstrap classes.
-     *
-     * @param array $bootstrappers
+     * {@inheritdoc}
      */
     public function bootstrapWith(array $bootstrappers)
     {
         $this->hasBeenBootstrapped = true;
 
         foreach ($bootstrappers as $bootstrapper) {
-            if ($this->has(DispatcherContract::class)) {
-                $this->get(DispatcherContract::class)->trigger(
-                    'bootstrapping.' . str_replace('\\', '', $bootstrapper),
-                    [$this]
-                );
-            }
+            $this->get(DispatcherContract::class)->trigger(
+                'bootstrapping.' . str_replace('\\', '', $bootstrapper),
+                [$this]
+            );
 
             $this->make($bootstrapper)->bootstrap($this);
 
-            if ($this->has(DispatcherContract::class)) {
-                $this->get(DispatcherContract::class)->trigger(
-                    'bootstrapped.' . str_replace('\\', '', $bootstrapper),
-                    [$this]
-                );
-            }
+            $this->get(DispatcherContract::class)->trigger(
+                'bootstrapped.' . str_replace('\\', '', $bootstrapper),
+                [$this]
+            );
         }
     }
 
     /**
-     * Determine if the application has been bootstrapped before.
-     *
-     * @return bool
+     * {@inheritdoc}
      */
     public function hasBeenBootstrapped(): bool
     {
@@ -124,21 +115,17 @@ class Application extends Container implements ApplicationContract
     }
 
     /**
-     * Get the current application locale.
-     *
-     * @return string
+     * {@inheritdoc}
      */
-    public function getLocale()
+    public function getLocale(): string
     {
         return $this->get(ConfigManager::class)->get('app.locale');
     }
 
     /**
-     * Set the current application locale.
-     *
-     * @param string $locale
+     * {@inheritdoc}
      */
-    public function setLocale($locale)
+    public function setLocale(string $locale): ApplicationContract
     {
         $this->get(ConfigManager::class)->set('app.locale', $locale);
 
@@ -147,36 +134,28 @@ class Application extends Container implements ApplicationContract
         }
 
         $this->get(DispatcherContract::class)->trigger('locale.changed', [$locale]);
+
+        return $this;
     }
 
     /**
-     * Determine if application locale is the given locale.
-     *
-     * @param string $locale
-     *
-     * @return bool
+     * {@inheritdoc}
      */
-    public function isLocale($locale)
+    public function isLocale(string $locale): bool
     {
         return $this->getLocale() == $locale;
     }
 
     /**
-     * Get the path to the environment file directory.
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function environmentPath(): string
     {
-        return $this->environmentPath ?: $this->get('path.base');
+        return $this->environmentPath ?: $this->get(ConfigManager::class)->get('path.base');
     }
 
     /**
-     * Set the directory for the environment file.
-     *
-     * @param string $path
-     *
-     * @return $this
+     * {@inheritdoc}
      */
     public function useEnvironmentPath(string $path): ApplicationContract
     {
@@ -186,11 +165,7 @@ class Application extends Container implements ApplicationContract
     }
 
     /**
-     * Set the environment file to be loaded during bootstrapping.
-     *
-     * @param string $file
-     *
-     * @return $this
+     * {@inheritdoc}
      */
     public function loadEnvironmentFrom(string $file): ApplicationContract
     {
@@ -200,9 +175,7 @@ class Application extends Container implements ApplicationContract
     }
 
     /**
-     * Get the environment file the application is using.
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function environmentFile(): string
     {
@@ -210,9 +183,7 @@ class Application extends Container implements ApplicationContract
     }
 
     /**
-     * Get the fully qualified path to the environment file.
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function environmentFilePath(): string
     {
@@ -220,45 +191,27 @@ class Application extends Container implements ApplicationContract
     }
 
     /**
-     * Determine if the application configuration is cached.
-     *
-     * @return bool
+     * {@inheritdoc}
      */
     public function configurationIsCached(): bool
     {
-        return file_exists($this->getCachedConfigPath());
+        return file_exists($this->get(ConfigManager::class)->get('patch.cached.config'));
     }
 
     /**
-     * Detect the application's current environment.
-     *
-     * @param \Closure $callback
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function detectEnvironment(Closure $callback): string
     {
         $args = isset($_SERVER['argv']) ? $_SERVER['argv'] : null;
 
-        $this->instance('env', (new EnvironmentDetector())->detect($callback, $args));
+        $this->instance('env', $this->get(EnvironmentDetector::class)->detect($callback, $args));
 
         return $this->get('env');
     }
 
     /**
-     * Determine if we are running in the console.
-     *
-     * @return bool
-     */
-    public function runningInConsole(): bool
-    {
-        return php_sapi_name() == 'cli';
-    }
-
-    /**
-     * Determine if application is in local environment.
-     *
-     * @return bool
+     * {@inheritdoc}
      */
     public function isLocal(): bool
     {
@@ -266,9 +219,7 @@ class Application extends Container implements ApplicationContract
     }
 
     /**
-     * Determine if we are running unit tests.
-     *
-     * @return bool
+     * {@inheritdoc}
      */
     public function runningUnitTests(): bool
     {
@@ -310,106 +261,6 @@ class Application extends Container implements ApplicationContract
     }
 
     /**
-     * Get the path to the application "app" directory.
-     *
-     * @return string
-     */
-    public function path(): string
-    {
-        return $this->get('path.app');
-    }
-
-    /**
-     * Get the path to the application configuration files.
-     *
-     * @return string
-     */
-    public function configPath(): string
-    {
-        return $this->get('path.config');
-    }
-
-    /**
-     * Get the path to the application routes files.
-     *
-     * @return string
-     */
-    public function routesPath(): string
-    {
-        return $this->get('path.route');
-    }
-
-    /**
-     * Get the path to the database directory.
-     *
-     * @return string
-     */
-    public function databasePath(): string
-    {
-        return $this->get('path.database');
-    }
-
-    /**
-     * Get the path to the language files.
-     *
-     * @return string
-     */
-    public function langPath(): string
-    {
-        return $this->get('path.lang');
-    }
-
-    /**
-     * Get the path to the public / web directory.
-     *
-     * @return string
-     */
-    public function publicPath(): string
-    {
-        return $this->get('path.public');
-    }
-
-    /**
-     * Get the path to the base ../ directory.
-     *
-     * @return string
-     */
-    public function basePath(): string
-    {
-        return $this->get('path.base');
-    }
-
-    /**
-     * Get the path to the storage directory.
-     *
-     * @return string
-     */
-    public function storagePath(): string
-    {
-        return $this->get('path.storage');
-    }
-
-    /**
-     * Get the path to the configuration cache file.
-     *
-     * @return string
-     */
-    public function getCachedConfigPath():string
-    {
-        return $this->storagePath() . '/framework/cache/config.php';
-    }
-
-    /**
-     * Get the path to the commands cache file.
-     *
-     * @return string
-     */
-    public function getCachedCommandsPath():string
-    {
-        return $this->storagePath() . '/framework/cache/commands.php';
-    }
-
-    /**
      * Bind the installation paths to the config.
      *
      * @param array $paths
@@ -423,7 +274,7 @@ class Application extends Container implements ApplicationContract
         // Each path key is prefixed with path
         // so that they have the consistent naming convention.
         foreach ($paths as $key => $value) {
-            $this->instance(sprintf('path.%s', $key), realpath($value));
+            $this->get(ConfigManager::class)->set(sprintf('path.%s', $key), realpath($value));
         }
 
         return $this;
@@ -449,10 +300,24 @@ class Application extends Container implements ApplicationContract
             return $this;
         });
 
-        $this->instance(Container::class, $this);
+        $this->singleton(Container::class, $this);
 
-        $this->instance(ApplicationContract::class, $this);
+        $this->singleton(ApplicationContract::class, $this);
 
         $this->singleton(EmitterContract::class, Emitter::class);
+
+        $this->singleton(EnvironmentDetector::class, EnvironmentDetector::class);
+    }
+
+    /**
+     * Bind needed cache paths to our config manager.
+     */
+    protected function registerCacheFilePaths()
+    {
+        $config = $this->get(ConfigManager::class);
+
+        $config->set('patch.cached.config', $config->get('path.storage') . '/framework/cache/config.php');
+
+        $config->set('patch.cached.commands', $config->get('path.storage') . '/framework/cache/commands.php');
     }
 }

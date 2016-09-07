@@ -20,8 +20,8 @@ class LoadConfiguration extends AbstractLoadFiles implements BootstrapContract
 
         // First we will see if we have a cache configuration file.
         // If we do, we'll load the configuration items.
-        if (file_exists($cached = $app->getCachedConfigPath())) {
-            $config->import($cached);
+        if (file_exists($cached = $config->get('patch.cached.config'))) {
+            $config->setArray($cached);
 
             $loadedFromCache = true;
         }
@@ -49,7 +49,7 @@ class LoadConfiguration extends AbstractLoadFiles implements BootstrapContract
      */
     protected function loadConfigurationFiles(Application $app, ConfigManager $configManager)
     {
-        $configPath = realpath($app->configPath());
+        $configPath = realpath($app->get(ConfigManager::class)->get('path.config'));
 
         foreach ($this->getFiles($configPath) as $key => $path) {
             $configManager->import($path);

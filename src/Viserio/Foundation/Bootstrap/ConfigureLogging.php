@@ -75,7 +75,7 @@ class ConfigureLogging implements BootstrapContract
     protected function configureSingleHandler(Application $app, LogContract $log, string $level)
     {
         $log->useFiles(
-            $app->storagePath() . '/logs/narrowspark.log',
+            $app->get(ConfigManager::class)->get('path.storage') . '/logs/narrowspark.log',
             $level
         );
     }
@@ -93,7 +93,7 @@ class ConfigureLogging implements BootstrapContract
         $maxFiles = $config->get('app.log_max_files');
 
         $log->useDailyFiles(
-            $app->storagePath() . '/logs/narrowspark.log',
+            $app->get(ConfigManager::class)->get('path.storage') . '/logs/narrowspark.log',
             is_null($maxFiles) ? 5 : $maxFiles,
             $level
         );

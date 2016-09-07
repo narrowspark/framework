@@ -10,12 +10,7 @@ use Viserio\Support\Str;
 class EnvironmentDetector implements EnvironmentContract
 {
     /**
-     * Detect the application's current environment.
-     *
-     * @param \Closure   $callback
-     * @param array|null $consoleArgs
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function detect(Closure $callback, array $consoleArgs = null): string
     {
@@ -27,10 +22,7 @@ class EnvironmentDetector implements EnvironmentContract
     }
 
     /**
-     * Returns true when the runtime used is HHVM or
-     * the runtime used is PHP + Xdebug.
-     *
-     * @return bool
+     * {@inheritdoc}
      */
     public function canCollectCodeCoverage(): bool
     {
@@ -38,9 +30,7 @@ class EnvironmentDetector implements EnvironmentContract
     }
 
     /**
-     * Returns the running php/HHVM version.
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function getVersion(): string
     {
@@ -52,9 +42,7 @@ class EnvironmentDetector implements EnvironmentContract
     }
 
     /**
-     * Returns true when the runtime used is PHP and Xdebug is loaded.
-     *
-     * @return bool
+     * {@inheritdoc}
      */
     public function hasXdebug(): bool
     {
@@ -62,9 +50,7 @@ class EnvironmentDetector implements EnvironmentContract
     }
 
     /**
-     * Returns true when the runtime used is HHVM.
-     *
-     * @return bool
+     * {@inheritdoc}
      */
     public function isHHVM(): bool
     {
@@ -72,9 +58,7 @@ class EnvironmentDetector implements EnvironmentContract
     }
 
     /**
-     * Returns true when the runtime used is PHP.
-     *
-     * @return bool
+     * {@inheritdoc}
      */
     public function isPHP(): bool
     {
@@ -82,9 +66,7 @@ class EnvironmentDetector implements EnvironmentContract
     }
 
     /**
-     * Returns true when the runtime used is Console.
-     *
-     * @return bool
+     * {@inheritdoc}
      */
     public function runningInConsole(): bool
     {
@@ -92,11 +74,7 @@ class EnvironmentDetector implements EnvironmentContract
     }
 
     /**
-     * Set the application environment for a web request.
-     *
-     * @param \Closure $callback
-     *
-     * @return string
+     * {@inheritdoc}
      */
     protected function detectWebEnvironment(Closure $callback)
     {
@@ -104,12 +82,7 @@ class EnvironmentDetector implements EnvironmentContract
     }
 
     /**
-     * Set the application environment from command-line arguments.
-     *
-     * @param \Closure $callback
-     * @param array    $args
-     *
-     * @return string
+     * {@inheritdoc}
      */
     protected function detectConsoleEnvironment(Closure $callback, array $args)
     {
@@ -128,11 +101,7 @@ class EnvironmentDetector implements EnvironmentContract
     }
 
     /**
-     * Get the environment argument from the console.
-     *
-     * @param array $args
-     *
-     * @return string|null
+     * {@inheritdoc}
      */
     protected function getEnvironmentArgument(array $args)
     {

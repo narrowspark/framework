@@ -13,7 +13,7 @@ use Viserio\Contracts\Foundation\Application as ApplicationContract;
 use Viserio\Contracts\Foundation\Kernel as KernelContract;
 use Viserio\Contracts\Foundation\Terminable as TerminableContract;
 use Viserio\Contracts\Routing\Router as RouterContract;
-use Viserio\Foundation\Bootstrap\CommandsLoader;
+use Viserio\Foundation\Bootstrap\LoadCommands;
 use Viserio\Foundation\Bootstrap\ConfigureLogging;
 use Viserio\Foundation\Bootstrap\DetectEnvironment;
 use Viserio\Foundation\Bootstrap\HandleExceptions;
@@ -70,7 +70,7 @@ class Kernel implements TerminableContract, KernelContract
         LoadRoutes::class,
         LoadServiceProvider::class,
         HandleExceptions::class,
-        CommandsLoader::class,
+        LoadCommands::class,
     ];
 
     /**
@@ -108,8 +108,11 @@ class Kernel implements TerminableContract, KernelContract
     {
         // Passes the request to the container
         $this->app->instance(ServerRequestInterface::class, $request);
-
         StaticalProxy::clearResolvedInstance('request');
+
+        if ($this->events !== null) {
+            $this->events->trigger(self::REQUEST, [$request]);
+        }
 
         if ($response === null) {
             $response = (new ResponseFactory())->createResponse();
@@ -136,7 +139,7 @@ class Kernel implements TerminableContract, KernelContract
     public function terminate(ServerRequestInterface $request, ResponseInterface $response)
     {
         if ($this->events !== null) {
-            $this->events->trigger('application.terminated', [$request, $response]);
+            $this->events->trigger(self::TERMINATE, [$request, $response]);
         }
 
         $this->app->get(HandlerContract::class)->unregister();
@@ -172,10 +175,6 @@ class Kernel implements TerminableContract, KernelContract
      */
     protected function handleRequest(ServerRequestInterface $request, ResponseInterface $response)
     {
-        if ($this->events !== null) {
-            $this->events->trigger('request.received', [$request]);
-        }
-
         $this->bootstrap();
 
         $router = $this->router;
@@ -186,16 +185,20 @@ class Kernel implements TerminableContract, KernelContract
 
         try {
             $response = $router->dispatch($request, $response);
+
+            if ($this->events !== null) {
+                $this->events->trigger(self::RESPONSE, [$request, $response]);
+            }
         } catch (Throwable $exception) {
+            if ($this->events !== null) {
+                $this->events->trigger(self::EXCEPTION, [$request, $response]);
+            }
+
             $exceptionHandler = $this->app->get(HandlerContract::class);
 
             $exceptionHandler->report($exception = new FatalThrowableError($exception));
 
             $response = $exceptionHandler->render($request, $exception);
-        }
-
-        if ($this->events !== null) {
-            $this->events->trigger('response.created', [$request, $response]);
         }
 
         return $response;
