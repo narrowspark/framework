@@ -3,9 +3,9 @@ declare(strict_types=1);
 namespace Viserio\Foundation\Bootstrap;
 
 use Viserio\Console\Providers\ConsoleServiceProvider;
+use Viserio\Contracts\Console\Application as ApplicationContract;
 use Viserio\Contracts\Container\Types as TypesContract;
 use Viserio\Contracts\Foundation\Application;
-use Viserio\Contracts\Console\Application as ApplicationContract;
 use Viserio\Contracts\Foundation\Bootstrap as BootstrapContract;
 
 class CommandsLoader implements BootstrapContract

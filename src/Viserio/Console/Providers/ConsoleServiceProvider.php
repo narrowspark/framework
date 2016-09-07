@@ -6,8 +6,8 @@ use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
 use Stecman\Component\Symfony\Console\BashCompletion\CompletionCommand;
 use Viserio\Config\Manager as ConfigManager;
-use Viserio\Contracts\Console\Application as ApplicationContract;
 use Viserio\Console\Application;
+use Viserio\Contracts\Console\Application as ApplicationContract;
 
 class ConsoleServiceProvider implements ServiceProvider
 {
@@ -34,7 +34,6 @@ class ConsoleServiceProvider implements ServiceProvider
 
     public static function createCerebro(ContainerInterface $container): Application
     {
-
         if ($container->has(ConfigManager::class)) {
             $config = $container->get(ConfigManager::class)->get('console');
         } else {

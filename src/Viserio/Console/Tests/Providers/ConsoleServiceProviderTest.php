@@ -16,7 +16,7 @@ class ConsoleServiceProviderTest extends \PHPUnit_Framework_TestCase
         $container->register(new ConsoleServiceProvider());
 
         $container->get('config')->set('console', [
-            'version' => '1'
+            'version' => '1',
         ]);
 
         $console = $container->get(Application::class);
