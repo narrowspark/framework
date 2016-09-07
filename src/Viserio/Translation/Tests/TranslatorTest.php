@@ -4,12 +4,10 @@ namespace Viserio\Translation\Tests;
 
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use Psr\Log\LoggerInterface;
-use Viserio\Translation\{
-    MessageCatalogue,
-    MessageSelector,
-    PluralizationRules,
-    Translator
-};
+use Viserio\Translation\MessageCatalogue;
+use Viserio\Translation\MessageSelector;
+use Viserio\Translation\PluralizationRules;
+use Viserio\Translation\Translator;
 
 class TranslatorTest extends \PHPUnit_Framework_TestCase
 {

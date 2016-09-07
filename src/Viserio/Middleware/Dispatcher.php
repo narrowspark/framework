@@ -2,18 +2,14 @@
 declare(strict_types=1);
 namespace Viserio\Middleware;
 
-use Psr\Http\Message\{
-    RequestInterface,
-    ResponseInterface
-};
+use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ResponseInterface;
 use SplDoublyLinkedList;
 use SplStack;
-use Viserio\Contracts\{
-    Middleware\Frame as FrameContract,
-    Middleware\Middleware as MiddlewareContract,
-    Middleware\Stack as StackContract
-};
 use Viserio\Contracts\Container\Traits\ContainerAwareTrait;
+use Viserio\Contracts\Middleware\Delegate as DelegateContract;
+use Viserio\Contracts\Middleware\Middleware as MiddlewareContract;
+use Viserio\Contracts\Middleware\Stack as StackContract;
 
 class Dispatcher implements StackContract
 {
@@ -22,14 +18,14 @@ class Dispatcher implements StackContract
     /**
      * All of the short-hand keys for middlewares.
      *
-     * @var \SplStack $response
+     * @var \SplStack
      */
     protected $stack;
 
     /**
      * A response instance.
      *
-     * @var \Psr\Http\Message\ResponseInterface $response
+     * @var \Psr\Http\Message\ResponseInterface
      */
     protected $response;
 
@@ -77,7 +73,7 @@ class Dispatcher implements StackContract
      */
     public function process(RequestInterface $request): ResponseInterface
     {
-        return (new class($this->stack, $this->response) implements FrameContract {
+        return (new class($this->stack, $this->response) implements DelegateContract {
             private $middlewares;
 
             private $response;
@@ -92,7 +88,7 @@ class Dispatcher implements StackContract
 
             public function next(RequestInterface $request): ResponseInterface
             {
-                if (!isset($this->middlewares[$this->index])) {
+                if (! isset($this->middlewares[$this->index])) {
                     return $this->response;
                 }
 

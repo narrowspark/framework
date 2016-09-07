@@ -3,10 +3,10 @@ declare(strict_types=1);
 namespace Viserio\Http;
 
 use BadMethodCallException;
-use Exception;
 use InvalidArgumentException;
 use Psr\Http\Message\StreamInterface;
 use RuntimeException;
+use Throwable;
 
 class Stream implements StreamInterface
 {
@@ -152,7 +152,7 @@ class Stream implements StreamInterface
             $this->seek(0);
 
             return (string) stream_get_contents($this->stream);
-        } catch (Exception $e) {
+        } catch (Throwable $exception) {
             return '';
         }
     }

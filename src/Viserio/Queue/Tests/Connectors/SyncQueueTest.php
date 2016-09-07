@@ -2,21 +2,17 @@
 declare(strict_types=1);
 namespace Viserio\Queue\Tests\Connectors;
 
-use stdClass;
 use Exception;
 use Interop\Container\ContainerInterface;
-use SuperClosure\Serializer;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
-use Viserio\Queue\{
-    Connectors\SyncQueue,
-    Jobs\SyncJob,
-    QueueClosure
-};
+use Opis\Closure\SerializableClosure;
+use stdClass;
 use Viserio\Contracts\Encryption\Encrypter as EncrypterContract;
-use Viserio\Queue\Tests\Fixture\{
-    SyncQueueHandler,
-    FailingSyncQueueHandler
-};
+use Viserio\Queue\Connectors\SyncQueue;
+use Viserio\Queue\Jobs\SyncJob;
+use Viserio\Queue\QueueClosure;
+use Viserio\Queue\Tests\Fixture\FailingSyncQueueHandler;
+use Viserio\Queue\Tests\Fixture\SyncQueueHandler;
 
 class SyncQueueTest extends \PHPUnit_Framework_TestCase
 {
@@ -26,7 +22,7 @@ class SyncQueueTest extends \PHPUnit_Framework_TestCase
     {
         unset($_SERVER['__sync.test']);
 
-        $sync = new SyncQueue;
+        $sync = new SyncQueue();
         $closure = function ($job) {
             $_SERVER['__sync.test'] = true;
 
@@ -34,14 +30,14 @@ class SyncQueueTest extends \PHPUnit_Framework_TestCase
         };
 
         $events = $this->mock(stdClass::class);
-        $events->shouldReceive('emit');
+        $events->shouldReceive('trigger');
 
         $encrypter = $this->mock(EncrypterContract::class);
         $encrypter->shouldReceive('encrypt')
             ->once();
         $encrypter->shouldReceive('decrypt')
             ->once()
-            ->andReturn((new Serializer)->serialize($closure));
+            ->andReturn(serialize(new SerializableClosure($closure)));
 
         $container = $this->mock(ContainerInterface::class);
         $container->shouldReceive('has')
@@ -78,7 +74,7 @@ class SyncQueueTest extends \PHPUnit_Framework_TestCase
         unset($_SERVER['__sync.failed']);
 
         $events = $this->mock(stdClass::class);
-        $events->shouldReceive('emit')
+        $events->shouldReceive('trigger')
             ->times(3);
 
         $container = $this->mock(ContainerInterface::class);
@@ -94,7 +90,7 @@ class SyncQueueTest extends \PHPUnit_Framework_TestCase
 
         $encrypter = $this->mock(EncrypterContract::class);
 
-        $sync = new SyncQueue;
+        $sync = new SyncQueue();
 
         $sync->setContainer($container);
         $sync->setEncrypter($encrypter);

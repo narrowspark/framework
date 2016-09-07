@@ -2,18 +2,18 @@
 declare(strict_types=1);
 namespace Viserio\Queue;
 
+use ErrorException;
 use Exception;
+use ParseError;
 use Throwable;
-use Viserio\Contracts\{
-    Events\Dispatcher as DispatcherContract,
-    Exception\Handler as ExceptionHandlerContract,
-    Exception\Exception\FatalThrowableError,
-    Queue\Exception\TimeoutException,
-    Queue\FailedJobProvider as FailedJobProviderContract,
-    Queue\Job as JobContract,
-    Queue\Worker as WorkerContract,
-    Queue\QueueConnector as QueueConnectorContract
-};
+use TypeError;
+use Viserio\Contracts\Events\Dispatcher as DispatcherContract;
+use Viserio\Contracts\Exception\Handler as ExceptionHandlerContract;
+use Viserio\Contracts\Queue\Exception\TimeoutException;
+use Viserio\Contracts\Queue\FailedJobProvider as FailedJobProviderContract;
+use Viserio\Contracts\Queue\Job as JobContract;
+use Viserio\Contracts\Queue\QueueConnector as QueueConnectorContract;
+use Viserio\Contracts\Queue\Worker as WorkerContract;
 
 class Worker implements WorkerContract
 {
@@ -119,7 +119,7 @@ class Worker implements WorkerContract
             }
         } catch (Throwable $exception) {
             if ($this->exceptions) {
-                $this->exceptions->report(new FatalThrowableError($exception));
+                $this->exceptions->report($this->getErrorException($exception));
             }
         }
 
@@ -163,7 +163,7 @@ class Worker implements WorkerContract
     public function stop()
     {
         if ($this->events !== null) {
-            $this->events->emit('viserio.worker.stopping');
+            $this->events->trigger('viserio.worker.stopping');
         }
 
         die;
@@ -216,8 +216,6 @@ class Worker implements WorkerContract
      * @param int    $timeout
      * @param int    $sleep
      * @param int    $maxTries
-     *
-     * @return void
      */
     protected function runNextJobForDaemon(
         $connectionName,
@@ -234,7 +232,7 @@ class Worker implements WorkerContract
                 $this->runNextJob($connectionName, $queue, $delay, $sleep, $maxTries);
             } catch (Throwable $exception) {
                 if ($this->exceptions) {
-                    $this->exceptions->report(new FatalThrowableError($exception));
+                    $this->exceptions->report($this->getErrorException($exception));
                 }
             } finally {
                 exit;
@@ -261,8 +259,6 @@ class Worker implements WorkerContract
                 return $job;
             }
         }
-
-        return;
     }
 
     /**
@@ -273,7 +269,7 @@ class Worker implements WorkerContract
     protected function daemonShouldRun(): bool
     {
         if ($this->events !== null) {
-            return $this->events->emit('viserio.queue.looping') !== false;
+            return $this->events->trigger('viserio.queue.looping') !== false;
         }
 
         return true;
@@ -284,12 +280,10 @@ class Worker implements WorkerContract
      *
      * @param int $processId
      * @param int $timeout
-     *
-     * @return void
      */
     protected function waitForChildProcess(int $processId, int $timeout)
     {
-        declare(ticks = 1) {
+        declare(ticks=1) {
             pcntl_signal(SIGALRM, function () use ($processId, $timeout) {
                 posix_kill($processId, SIGKILL);
 
@@ -331,13 +325,13 @@ class Worker implements WorkerContract
         $job->failed();
 
         if ($this->events !== null) {
-            $this->events->emit(
+            $this->events->trigger(
                 'viserio.job.failed',
                 [
                     'connection' => $connection,
                     'job' => $job,
                     'data' => json_decode($job->getRawBody(), true),
-                    'failedId' => $failedId
+                    'failedId' => $failedId,
                 ]
             );
         }
@@ -346,20 +340,18 @@ class Worker implements WorkerContract
     /**
      * Raise the before queue job event.
      *
-     * @param string                        $connection
-     * @param \Viserio\Contracts\Queue\Job  $job
-     *
-     * @return void
+     * @param string                       $connection
+     * @param \Viserio\Contracts\Queue\Job $job
      */
     protected function raiseBeforeJobEvent(string $connection, JobContract $job)
     {
         if ($this->events !== null) {
-            $this->events->emit(
+            $this->events->trigger(
                 'viserio.job.processing',
                 [
                     'connection' => $connection,
                     'job' => $job,
-                    'data' => json_decode($job->getRawBody(), true)
+                    'data' => json_decode($job->getRawBody(), true),
                 ]
             );
         }
@@ -368,20 +360,18 @@ class Worker implements WorkerContract
     /**
      * Raise the after queue job event.
      *
-     * @param string                        $connection
-     * @param \Viserio\Contracts\Queue\Job  $job
-     *
-     * @return void
+     * @param string                       $connection
+     * @param \Viserio\Contracts\Queue\Job $job
      */
     protected function raiseAfterJobEvent(string $connection, JobContract $job)
     {
         if ($this->events !== null) {
-            $this->events->emit(
+            $this->events->trigger(
                 'viserio.job.processed',
                 [
                     'connection' => $connection,
                     'job' => $job,
-                    'data' => json_decode($job->getRawBody(), true)
+                    'data' => json_decode($job->getRawBody(), true),
                 ]
             );
         }
@@ -395,8 +385,6 @@ class Worker implements WorkerContract
      * @param int                          $delay
      * @param \Throwable                   $exception
      *
-     * @return void
-     *
      * @throws \Throwable
      */
     protected function handleJobException(string $connection, JobContract $job, int $delay, Throwable $exception)
@@ -406,13 +394,13 @@ class Worker implements WorkerContract
         // another listener (or this same one). We will re-throw this exception after.
         try {
             if ($this->events !== null) {
-                $this->events->emit(
+                $this->events->trigger(
                     'viserio.job.exception.occurred',
                     [
                         'connection' => $connection,
                         'job' => $job,
                         'data' => json_decode($job->getRawBody(), true),
-                        'exception' => $exception
+                        'exception' => $exception,
                     ]
                 );
             }
@@ -423,5 +411,34 @@ class Worker implements WorkerContract
         }
 
         throw $exception;
+    }
+
+    /**
+     * Get a ErrorException instance.
+     *
+     * @param \ParseError|\TypeError|\Throwable $exception
+     *
+     * @return \ErrorException
+     */
+    private function getErrorException($exception): ErrorException
+    {
+        if ($exception instanceof ParseError) {
+            $message = 'Parse error: ' . $exception->getMessage();
+            $severity = E_PARSE;
+        } elseif ($exception instanceof TypeError) {
+            $message = 'Type error: ' . $exception->getMessage();
+            $severity = E_RECOVERABLE_ERROR;
+        } else {
+            $message = $exception->getMessage();
+            $severity = E_ERROR;
+        }
+
+        return new ErrorException(
+            $message,
+            $exception->getCode(),
+            $severity,
+            $exception->getFile(),
+            $exception->getLine()
+        );
     }
 }

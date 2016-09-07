@@ -1,0 +1,123 @@
+<?php
+declare(strict_types=1);
+namespace Viserio\Contracts\Foundation;
+
+use Closure;
+
+interface Application
+{
+    /**
+     * Get the version number of the application.
+     *
+     * @return string
+     */
+    public function getVersion(): string;
+
+    /**
+     * Run the given array of bootstrap classes.
+     *
+     * @param array $bootstrappers
+     */
+    public function bootstrapWith(array $bootstrappers);
+
+    /**
+     * Determine if the application has been bootstrapped before.
+     *
+     * @return bool
+     */
+    public function hasBeenBootstrapped(): bool;
+
+    /**
+     * Get the current application locale.
+     *
+     * @return string
+     */
+    public function getLocale(): string;
+
+    /**
+     * Set the current application locale.
+     *
+     * @param string $locale
+     *
+     * @return $this
+     */
+    public function setLocale(string $locale): Application;
+
+    /**
+     * Determine if application locale is the given locale.
+     *
+     * @param string $locale
+     *
+     * @return bool
+     */
+    public function isLocale(string $locale): bool;
+
+    /**
+     * Get the path to the environment file directory.
+     *
+     * @return string
+     */
+    public function environmentPath(): string;
+
+    /**
+     * Set the directory for the environment file.
+     *
+     * @param string $path
+     *
+     * @return $this
+     */
+    public function useEnvironmentPath(string $path): Application;
+
+    /**
+     * Set the environment file to be loaded during bootstrapping.
+     *
+     * @param string $file
+     *
+     * @return $this
+     */
+    public function loadEnvironmentFrom(string $file): Application;
+
+    /**
+     * Get the environment file the application is using.
+     *
+     * @return string
+     */
+    public function environmentFile(): string;
+
+    /**
+     * Get the fully qualified path to the environment file.
+     *
+     * @return string
+     */
+    public function environmentFilePath(): string;
+
+    /**
+     * Determine if the application configuration is cached.
+     *
+     * @return bool
+     */
+    public function configurationIsCached(): bool;
+
+    /**
+     * Detect the application's current environment.
+     *
+     * @param \Closure $callback
+     *
+     * @return string
+     */
+    public function detectEnvironment(Closure $callback): string;
+
+    /**
+     * Determine if application is in local environment.
+     *
+     * @return bool
+     */
+    public function isLocal(): bool;
+
+    /**
+     * Determine if we are running unit tests.
+     *
+     * @return bool
+     */
+    public function runningUnitTests(): bool;
+}

@@ -2,13 +2,12 @@
 declare(strict_types=1);
 namespace Viserio\Parsers\Formats;
 
-use Viserio\Contracts\Parsers\{
-    Exception\DumpException,
-    Exception\ParseException,
-    Format as FormatContract
-};
+use Viserio\Contracts\Parsers\Dumper as DumperContract;
+use Viserio\Contracts\Parsers\Exception\DumpException;
+use Viserio\Contracts\Parsers\Exception\ParseException;
+use Viserio\Contracts\Parsers\Format as FormatContract;
 
-class JSON implements FormatContract
+class JSON implements FormatContract, DumperContract
 {
     /**
      * {@inheritdoc}
@@ -58,11 +57,11 @@ class JSON implements FormatContract
     private function getJsonError(int $code): string
     {
         $errorMessages = [
-            JSON_ERROR_DEPTH          => 'The maximum stack depth has been exceeded',
+            JSON_ERROR_DEPTH => 'The maximum stack depth has been exceeded',
             JSON_ERROR_STATE_MISMATCH => 'Invalid or malformed JSON',
-            JSON_ERROR_CTRL_CHAR      => 'Control character error, possibly incorrectly encoded',
-            JSON_ERROR_SYNTAX         => 'Syntax error',
-            JSON_ERROR_UTF8           => 'Malformed UTF-8 characters, possibly incorrectly encoded',
+            JSON_ERROR_CTRL_CHAR => 'Control character error, possibly incorrectly encoded',
+            JSON_ERROR_SYNTAX => 'Syntax error',
+            JSON_ERROR_UTF8 => 'Malformed UTF-8 characters, possibly incorrectly encoded',
         ];
 
         return isset($errorMessages[$code]) ? $errorMessages[$code] : 'Unknown error';

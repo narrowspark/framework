@@ -2,52 +2,69 @@
 declare(strict_types=1);
 namespace Viserio\Console\Providers;
 
+use Interop\Container\ContainerInterface;
+use Interop\Container\ServiceProvider;
 use Stecman\Component\Symfony\Console\BashCompletion\CompletionCommand;
-use Viserio\Application\ServiceProvider;
+use Viserio\Config\Manager as ConfigManager;
 use Viserio\Console\Application;
-use Viserio\Console\Command\CommandResolver;
+use Viserio\Contracts\Console\Application as ApplicationContract;
 
-class ConsoleServiceProvider extends ServiceProvider
+class ConsoleServiceProvider implements ServiceProvider
 {
+    const PACKAGE = 'viserio.console';
+
     /**
      * {@inheritdoc}
      */
-    public function register()
+    public function getServices()
     {
-        $this->app->singleton('command.resolver', function ($app) {
-            return new CommandResolver($app);
-        });
+        return [
+            Application::class => [self::class, 'createCerebro'],
+            ApplicationContract::class => function (ContainerInterface $container) {
+                return $container->get(Application::class);
+            },
+            'console' => function (ContainerInterface $container) {
+                return $container->get(Application::class);
+            },
+            'cerebro' => function (ContainerInterface $container) {
+                return $container->get(Application::class);
+            },
+        ];
+    }
 
-        $this->app->singleton('command', function ($app) {
-            $app->bind('console.app.name', 'Narrowspark Cerebro');
-            $app->bind('console.app.version', $app->getVersion());
+    public static function createCerebro(ContainerInterface $container): Application
+    {
+        if ($container->has(ConfigManager::class)) {
+            $config = $container->get(ConfigManager::class)->get('console');
+        } else {
+            $config = self::get($container, 'options');
+        }
 
-            $console = new Application(
-                $app,
-                $app->get('events'),
-                $app->get('console.app.version'),
-                $app->get('console.app.name')
-            );
+        $console = new Application(
+            $container,
+            $config['version'],
+            $config['name'] ?? 'Cerebro'
+        );
 
-            // Add auto-complete for Symfony Console application
-            $console->add(new CompletionCommand());
+        // Add auto-complete for Symfony Console application
+        $console->add(new CompletionCommand());
 
-            $console->addCommands($app->get('command.resolver')->commands());
-
-            return $console;
-        });
+        return $console;
     }
 
     /**
-     * Get the services provided by the provider.
+     * Returns the entry named PACKAGE.$name, of simply $name if PACKAGE.$name is not found.
      *
-     * @return string[]
+     * @param ContainerInterface $container
+     * @param string             $name
+     *
+     * @return mixed
      */
-    public function provides(): array
+    private static function get(ContainerInterface $container, string $name, $default = null)
     {
-        return [
-            'command',
-            'command.resolver',
-        ];
+        $namespacedName = self::PACKAGE . '.' . $name;
+
+        return $container->has($namespacedName) ? $container->get($namespacedName) :
+            ($container->has($name) ? $container->get($name) : $default);
     }
 }

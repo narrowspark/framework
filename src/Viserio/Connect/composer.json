@@ -19,6 +19,7 @@
     ],
     "require": {
         "php"                                                : "7.0.0 - 7.0.5 || ^7.0.7",
+        "container-interop/container-interop"                : "^1.1",
         "danielstjules/stringy"                              : "^2.3",
         "narrowspark/arr"                                    : "^1.1",
         "viserio/contracts"                                  : "self.version",
@@ -26,10 +27,11 @@
         "viserio/support"                                    : "self.version"
     },
     "require-dev": {
-        "narrowspark/php-cs-fixer-config"                    : "^1.1",
+        "container-interop/service-provider"                 : "^0.3",
         "narrowspark/testing-helper"                         : "^1.5",
         "phpunit/phpunit"                                    : "^5.1",
-        "predis/predis"                                      : "^1.0"
+        "predis/predis"                                      : "^1.0",
+        "viserio/container"                                  : "self.version"
     },
     "autoload": {
         "psr-4": {
@@ -46,12 +48,9 @@
         "container-interop/container-interop-implementation" : "~1.1",
         "psr/container-implementation"                       : "^1.0"
     },
-    "extra": {
-        "branch-alias": {
-            "dev-master"                                     : "1.0-dev"
-        }
-    },
     "suggest": {
+        "container-interop/container-interop"                : "Required to use service-provider (^1.1).",
+        "container-interop/service-provider"                 : "Required to use service-provider (^0.3).",
         "ext-memcached"                                      : "Required to use memcached adapter",
         "ext-pdo"                                            : "Required to use PDO adapters",
         "ext-pdo_dblib"                                      : "Required to use MSSQL databases on Liunx/UNIX platform",
@@ -63,6 +62,11 @@
         "ext-pdo_oci"                                        : "Required to use oracle databases",
         "mongodb/mongodb"                                    : "Choose between mongodb (^1) or ext-mongo to use mongo.",
         "predis/predis"                                      : "Required to use the redis adapter (^1.0.3)."
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master"                                     : "1.0-dev"
+        }
     },
     "minimum-stability"                                      : "dev",
     "prefer-stable"                                          : true

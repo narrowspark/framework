@@ -3,13 +3,9 @@ declare(strict_types=1);
 namespace Viserio\Support;
 
 use Closure;
-use RuntimeException;
 use InvalidArgumentException;
-use Viserio\Contracts\{
-    Config\Manager as ConfigContract,
-    Container\Traits\ContainerAwareTrait,
-    Support\Connector as ConnectorContract
-};
+use Viserio\Contracts\Config\Manager as ConfigContract;
+use Viserio\Contracts\Container\Traits\ContainerAwareTrait;
 
 abstract class AbstractConnectionManager
 {
@@ -95,12 +91,10 @@ abstract class AbstractConnectionManager
         return $this->connection($name);
     }
 
-     /**
+    /**
      * Disconnect from the given connection.
      *
      * @param string|null $name
-     *
-     * @return void
      */
     public function disconnect(string $name = null)
     {
@@ -123,21 +117,17 @@ abstract class AbstractConnectionManager
      * Set the default connection name.
      *
      * @param string $name
-     *
-     * @return void
      */
     public function setDefaultConnection(string $name)
     {
         $this->config->set($this->getConfigName() . '.default', $name);
     }
 
-     /**
+    /**
      * Register a custom connection creator.
      *
      * @param string   $driver
      * @param \Closure $callback
-     *
-     * @return void
      */
     public function extend(string $driver, Closure $callback)
     {
@@ -195,8 +185,6 @@ abstract class AbstractConnectionManager
      * Set a config manager
      *
      * @param \Viserio\Contracts\Config\Manager $config
-     *
-     * @return void
      */
     public function setConfig(ConfigContract $config)
     {
@@ -248,7 +236,7 @@ abstract class AbstractConnectionManager
         return $this->extensions[$connection]($config);
     }
 
-     /**
+    /**
      * Get the configuration name.
      *
      * @return string

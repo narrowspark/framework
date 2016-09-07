@@ -3,16 +3,14 @@ declare(strict_types=1);
 namespace Viserio\Routing\Tests;
 
 use StdClass;
-use Viserio\Routing\{
-    VarExporter,
-    Tests\Fixture\Controller
-};
+use Viserio\Routing\Tests\Fixture\Controller;
+use Viserio\Routing\VarExporter;
 
 class VarExporterTest extends \PHPUnit_Framework_TestCase
 {
     public function exportCases()
     {
-       return [
+        return [
            [1, '1'],
            [-1, '-1'],
            [34243, '34243'],
@@ -30,7 +28,7 @@ class VarExporterTest extends \PHPUnit_Framework_TestCase
            [['foo' => 1, [2, 3]], '[\'foo\' => 1,0 => [0 => 2,1 => 3,],]'],
            [new StdClass(), '(object)[]'],
            [(object) ['foo' => 'bar'], '(object)[\'foo\' => \'bar\']'],
-           [new Controller(), 'unserialize(\'O:40:"Viserio\\\\Routing\\\\Tests\\\\Fixture\\\\Controller":0:{}\')'],
+           [new Controller(), 'unserialize(' . var_export(serialize(new Controller()), true) . ')'],
        ];
     }
 

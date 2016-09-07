@@ -8,7 +8,7 @@ use Mockery;
 use Mockery\MockInterface;
 use RuntimeException;
 
-abstract class StaticalProxy
+class StaticalProxy
 {
     /**
      * @var ContainerInterface The Container that provides the Proxy Subjects.

@@ -35,6 +35,8 @@ interface Loader
      * @param string      $file
      * @param string|null $tag
      *
+     * @throws \Viserio\Contracts\Parsers\Exception\LoadingException
+     *
      * @return array
      */
     public function load(string $file, string $tag = null): array;

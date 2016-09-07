@@ -5,13 +5,11 @@ namespace Viserio\Exception\Tests\Filters;
 use Exception;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use Psr\Http\Message\RequestInterface;
-use Viserio\Exception\{
-    ExceptionInfo,
-    Displayers\HtmlDisplayer,
-    Displayers\JsonDisplayer,
-    Displayers\WhoopsDisplayer,
-    Filters\VerboseFilter
-};
+use Viserio\Exception\Displayers\HtmlDisplayer;
+use Viserio\Exception\Displayers\JsonDisplayer;
+use Viserio\Exception\Displayers\WhoopsDisplayer;
+use Viserio\Exception\ExceptionInfo;
+use Viserio\Exception\Filters\VerboseFilter;
 
 class VerboseFilterTest extends \PHPUnit_Framework_TestCase
 {

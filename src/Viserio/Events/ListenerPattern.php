@@ -56,15 +56,15 @@ class ListenerPattern
      */
     private $wildcardsSeparators = [
         // Trailing single-wildcard with separator prefix
-        '/\\\\\.\\\\\*$/'     => '(?:\.\w+)?',
+        '/\\\\\.\\\\\*$/' => '(?:\.\w+)?',
         // Single-wildcard with separator prefix
-        '/\\\\\.\\\\\*/'      => '(?:\.\w+)',
+        '/\\\\\.\\\\\*/' => '(?:\.\w+)',
         // Single-wildcard without separator prefix
         '/(?<!\\\\\.)\\\\\*/' => '(?:\w+)',
         // Multi-wildcard with separator prefix
-        '/\\\\\.#/'           => '(?:\.\w+)*',
+        '/\\\\\.#/' => '(?:\.\w+)*',
         // Multi-wildcard without separator prefix
-        '/(?<!\\\\\.)#/'      => '(?:|\w+(?:\.\w+)*)',
+        '/(?<!\\\\\.)#/' => '(?:|\w+(?:\.\w+)*)',
     ];
 
     /**
@@ -130,7 +130,7 @@ class ListenerPattern
             return;
         }
 
-        $dispatcher->on($eventName, $this->getListener(), $this->priority);
+        $dispatcher->attach($eventName, $this->getListener(), $this->priority);
         $this->events[$eventName] = true;
     }
 
@@ -143,7 +143,7 @@ class ListenerPattern
     public function unbind(DispatcherContract $dispatcher)
     {
         foreach ($this->events as $eventName => $value) {
-            $dispatcher->off($eventName, $this->getListener());
+            $dispatcher->detach($eventName, $this->getListener());
         }
 
         $this->events = [];

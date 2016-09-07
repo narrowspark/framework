@@ -22,20 +22,14 @@ matrix:
     - php: 7.0
       env: SETUP=basic HUMBUG=true
     - php: 7.0
-      env: SETUP=lowest
+      env: SETUP=stable
     - php: 7.0
-      env: SETUP=stable
-    - php: 7.1
       env: SETUP=lowest
     - php: 7.1
-      env: SETUP=stable
+      env: SETUP=basic
   allow_failures:
-    - env: SETUP=basic HUMBUG=true
-      php: 7.0
     - env: SETUP=lowest
       php: 7.0
-    - env: SETUP=lowest
-      php: 7.1
   fast_finish: true
 
 cache:
@@ -52,9 +46,9 @@ before_install:
   - printf "\n" | pear install Crypt_GPG
 
 install:
-  - if [[ "$SETUP" = "basic" ]]; then travis_retry composer install --no-interaction --prefer-dist --no-progress --profile; fi
-  - if [[ "$SETUP" = "stable" ]]; then travis_retry composer update --prefer-dist --no-interaction --prefer-stable --no-progress --profile; fi
-  - if [[ "$SETUP" = "lowest" ]]; then travis_retry composer update --prefer-dist --no-interaction --prefer-lowest --prefer-stable --no-progress --profile; fi
+  - if [[ "$SETUP" = "basic" ]]; then travis_retry composer install --no-interaction --prefer-dist --no-progress --profile --no-suggest; fi
+  - if [[ "$SETUP" = "stable" ]]; then travis_retry composer update --prefer-dist --no-interaction --prefer-stable --no-progress --profile --no-suggest; fi
+  - if [[ "$SETUP" = "lowest" ]]; then travis_retry composer update --prefer-dist --no-interaction --prefer-lowest --prefer-stable --no-suggest; fi
 
 before_script:
   - chmod a+x ./build/travis/all.sh && chmod a+x ./build/travis/php/7.x.sh && chmod a+x ./build/travis/script.sh && chmod a+x ./build/travis/after_success.sh

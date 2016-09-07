@@ -196,7 +196,7 @@ class AliasLoader implements AliasLoaderContract
         foreach ($this->namespaces as $namespace) {
             list($nsClass, $nsAlias) = $namespace;
 
-            if (! $nsAlias || strpos($alias, strval($nsAlias)) === 0) {
+            if (! $nsAlias || strpos($alias, (string) $nsAlias) === 0) {
                 if ($nsAlias) {
                     $alias = substr($alias, strlen($nsAlias) + 1);
                 }

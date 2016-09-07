@@ -3,38 +3,62 @@ declare(strict_types=1);
 namespace Viserio\Encryption\Providers;
 
 use Defuse\Crypto\Key;
-use Viserio\Application\ServiceProvider;
+use Interop\Container\ContainerInterface;
+use Interop\Container\ServiceProvider;
+use Viserio\Config\Manager as ConfigManager;
+use Viserio\Contracts\Encryption\Encrypter as EncrypterContract;
 use Viserio\Encryption\Encrypter;
 
-class EncrypterServiceProvider extends ServiceProvider
+class EncrypterServiceProvider implements ServiceProvider
 {
+    const PACKAGE = 'viserio.encryption';
+
     /**
      * {@inheritdoc}
      */
-    public function register()
+    public function getServices()
     {
-        $this->app->singleton('encrypter', function ($app) {
-            $config = $app->get('config');
+        return [
+            Encrypter::class => [self::class, 'createEncrypter'],
+            EncrypterContract::class => function (ContainerInterface $container) {
+                return $container->get(Encrypter::class);
+            },
+            'encrypter' => function (ContainerInterface $container) {
+                return $container->get(Encrypter::class);
+            },
+        ];
+    }
 
-            $encrypt = new Encrypter(
-                Key::loadFromAsciiSafeString(
-                    $config->get('app::key')
-                )
-            );
+    public static function createEncrypter(ContainerInterface $container): Encrypter
+    {
+        if ($container->has(ConfigManager::class)) {
+            $config = $container->get(ConfigManager::class)->get('encrypter');
+        } else {
+            $config = self::get($container, 'options');
+        }
 
-            return $encrypt;
-        });
+        $encrypt = new Encrypter(
+            Key::loadFromAsciiSafeString(
+                $config['key']
+            )
+        );
+
+        return $encrypt;
     }
 
     /**
-     * Get the services provided by the provider.
+     * Returns the entry named PACKAGE.$name, of simply $name if PACKAGE.$name is not found.
      *
-     * @return string[]
+     * @param ContainerInterface $container
+     * @param string             $name
+     *
+     * @return mixed
      */
-    public function provides(): array
+    private static function get(ContainerInterface $container, string $name, $default = null)
     {
-        return [
-            'encrypter',
-        ];
+        $namespacedName = self::PACKAGE . '.' . $name;
+
+        return $container->has($namespacedName) ? $container->get($namespacedName) :
+            ($container->has($name) ? $container->get($name) : $default);
     }
 }

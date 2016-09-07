@@ -13,13 +13,13 @@ trait ParseLevelTrait
      * @var array
      */
     protected $levels = [
-        'debug'     => MonologLogger::DEBUG,
-        'info'      => MonologLogger::INFO,
-        'notice'    => MonologLogger::NOTICE,
-        'warning'   => MonologLogger::WARNING,
-        'error'     => MonologLogger::ERROR,
-        'critical'  => MonologLogger::CRITICAL,
-        'alert'     => MonologLogger::ALERT,
+        'debug' => MonologLogger::DEBUG,
+        'info' => MonologLogger::INFO,
+        'notice' => MonologLogger::NOTICE,
+        'warning' => MonologLogger::WARNING,
+        'error' => MonologLogger::ERROR,
+        'critical' => MonologLogger::CRITICAL,
+        'alert' => MonologLogger::ALERT,
         'emergency' => MonologLogger::EMERGENCY,
     ];
 
@@ -32,7 +32,7 @@ trait ParseLevelTrait
      *
      * @return int
      */
-    protected function parseLevel(string $level): int
+    public function parseLevel(string $level): int
     {
         if (isset($this->levels[$level])) {
             return $this->levels[$level];

@@ -2,12 +2,9 @@
 declare(strict_types=1);
 namespace Viserio\Queue;
 
-use Viserio\Contracts\{
-    Bus\QueueingDispatcher as QueueingDispatcherContract,
-    Encryption\Encrypter as EncrypterContract,
-    Queue\Job as JobContract
-};
-use Viserio\Queue\AbstractInteractsWithQueue;
+use Viserio\Contracts\Bus\QueueingDispatcher as QueueingDispatcherContract;
+use Viserio\Contracts\Encryption\Encrypter as EncrypterContract;
+use Viserio\Contracts\Queue\Job as JobContract;
 
 class CallQueuedHandler
 {
@@ -42,8 +39,6 @@ class CallQueuedHandler
      *
      * @param \Viserio\Contracts\Queue\Job $job
      * @param array                        $data
-     *
-     * @return void
      */
     public function call(JobContract $job, array $data)
     {
@@ -63,8 +58,6 @@ class CallQueuedHandler
      * Call the failed method on the job instance.
      *
      * @param array $data
-     *
-     * @return void
      */
     public function failed(array $data)
     {
@@ -81,7 +74,7 @@ class CallQueuedHandler
      * @param \Viserio\Contracts\Queue\Job $job
      * @param mixed                        $instance
      *
-     * @return integer|double|string|null|array|boolean|resource|object
+     * @return int|float|string|null|array|bool|resource|object
      */
     protected function setJobInstanceIfNecessary(JobContract $job, $instance)
     {

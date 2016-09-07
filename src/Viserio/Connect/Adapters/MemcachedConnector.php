@@ -54,7 +54,7 @@ class MemcachedConnector implements ConnectorContract
      * servers we'll verify the connection is successful and return it back.
      *
      * @param Memcached $memcached
-     * @param array  $servers
+     * @param array     $servers
      *
      * @return Memcached
      */

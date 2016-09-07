@@ -12,9 +12,23 @@ class WebDavConnectorTest extends \PHPUnit_Framework_TestCase
         $connector = new WebDavConnector();
 
         $return = $connector->connect([
-            'baseUri'  => 'http://example.org/dav/',
+            'baseUri' => 'http://example.org/dav/',
             'userName' => 'your-username',
             'password' => 'your-password',
+        ]);
+
+        $this->assertInstanceOf(WebDAVAdapter::class, $return);
+    }
+
+    public function testConnectWithPrefix()
+    {
+        $connector = new WebDavConnector();
+
+        $return = $connector->connect([
+            'baseUri' => 'http://example.org/dav/',
+            'userName' => 'your-username',
+            'password' => 'your-password',
+            'prefix' => 'your-prefix',
         ]);
 
         $this->assertInstanceOf(WebDAVAdapter::class, $return);

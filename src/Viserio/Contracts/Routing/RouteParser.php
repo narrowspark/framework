@@ -21,9 +21,9 @@ interface RouteParser
      * @param string   $route
      * @param string[] $conditions
      *
-     * @return \Viserio\Contracts\Routing\RouteSegment[]
-     *
      * @throws \Viserio\Contracts\Routing\Exception\InvalidRoutePatternException
+     *
+     * @return \Viserio\Contracts\Routing\RouteSegment[]
      */
     public function parse(string $route, array $conditions): array;
 }

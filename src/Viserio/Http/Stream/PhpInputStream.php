@@ -2,10 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Http\Stream;
 
-use Viserio\Http\{
-    Stream,
-    Util
-};
+use Viserio\Http\Stream;
+use Viserio\Http\Util;
 
 class PhpInputStream extends AbstractStreamDecorator
 {

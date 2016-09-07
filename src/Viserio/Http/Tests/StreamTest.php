@@ -3,10 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Http\Tests;
 
 use Exception;
-use Viserio\Http\{
-    Util,
-    Stream
-};
+use Viserio\Http\Stream;
 use Viserio\Http\Stream\NoSeekStream;
 
 class StreamTest extends \PHPUnit_Framework_TestCase
@@ -181,9 +178,15 @@ class StreamTest extends \PHPUnit_Framework_TestCase
 
     public function testDoesNotThrowInToString()
     {
-        $s = Util::getStream('foo');
-        $s = new NoSeekStream($s);
+        $body = 'foo';
+        $stream = fopen('php://temp', 'r+');
 
-        $this->assertEquals('foo', (string) $s);
+        fwrite($stream, $body);
+        fseek($stream, 0);
+
+        $stream = new Stream($stream);
+        $stream = new NoSeekStream($stream);
+
+        $this->assertEquals('foo', (string) $stream);
     }
 }

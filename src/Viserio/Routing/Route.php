@@ -4,13 +4,12 @@ namespace Viserio\Routing;
 
 use LogicException;
 use Narrowspark\Arr\StaticArr as Arr;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 use UnexpectedValueException;
-use Viserio\Contracts\{
-    Container\Traits\ContainerAwareTrait,
-    Routing\Route as RouteContract,
-    Routing\Router as RouterContract
-};
-use Viserio\Routing\Matchers\ParameterMatcher;
+use Viserio\Contracts\Container\Traits\ContainerAwareTrait;
+use Viserio\Contracts\Middleware\Middleware as MiddlewareContract;
+use Viserio\Contracts\Routing\Route as RouteContract;
 use Viserio\Support\Invoker;
 
 class Route implements RouteContract
@@ -48,16 +47,26 @@ class Route implements RouteContract
     /**
      * The array of matched parameters.
      *
-     * @var array|null
+     * @var array
      */
-    protected $parameters;
+    protected $parameters = [];
 
     /**
-     * The router instance used by the route.
+     * The regular expression requirements.
      *
-     * @var \Viserio\Contracts\Routing\Router
+     * @var array
      */
-    protected $router;
+    protected $wheres = [];
+
+    /**
+     * All middlewares.
+     *
+     * @var array
+     */
+    protected $middleware = [
+        'with' => [],
+        'without' => [],
+    ];
 
     /**
      * Invoker instance.
@@ -66,18 +75,25 @@ class Route implements RouteContract
      */
     protected $invoker;
 
-     /**
+    /**
+     * Route identifier.
+     *
+     * @var string
+     */
+    protected $identifier;
+
+    /**
      * Create a new Route instance.
      *
      * @param array|string        $methods
      * @param string              $uri
      * @param \Closure|array|null $action
      */
-    public function __construct($methods, $uri, $action)
+    public function __construct($methods, string $uri, $action)
     {
         $this->uri = $uri;
         // According to RFC methods are defined in uppercase (See RFC 7231)
-        $this->httpMethods = array_map('strtoupper',(array) $methods);
+        $this->httpMethods = array_map('strtoupper', (array) $methods);
         $this->action = $this->parseAction($action);
 
         if (in_array('GET', $this->httpMethods) && ! in_array('HEAD', $this->httpMethods)) {
@@ -87,6 +103,38 @@ class Route implements RouteContract
         if (isset($this->action['prefix'])) {
             $this->addPrefix($this->action['prefix']);
         }
+    }
+
+    /**
+     * Dynamically access route parameters.
+     *
+     * @param string $key
+     *
+     * @return mixed
+     */
+    public function __get($key)
+    {
+        return $this->getParameter($key);
+    }
+
+    /**
+     * Set the invoker instance.
+     *
+     * @param \Viserio\Support\Invoker $invoker
+     */
+    public function setInvoker(Invoker $invoker)
+    {
+        $this->invoker = $invoker;
+    }
+
+    /**
+     * Get route identifier
+     *
+     * @return string
+     */
+    public function getIdentifier(): string
+    {
+        return implode($this->httpMethods, '|') . $this->getDomain() . $this->uri;
     }
 
     /**
@@ -108,22 +156,12 @@ class Route implements RouteContract
     /**
      * {@inheritdoc}
      */
-    public function setUri(string $uri): RouteContract
-    {
-        $this->uri = $uri;
-
-        return $this;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getName()
     {
         return $this->action['as'] ?? null;
     }
 
-     /**
+    /**
      * {@inheritdoc}
      */
     public function setName(string $name): RouteContract
@@ -139,6 +177,61 @@ class Route implements RouteContract
     public function getMethods(): array
     {
         return $this->httpMethods;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function where($name, string $expression = null): RouteContract
+    {
+        foreach ($this->parseWhere($name, $expression) as $name => $expression) {
+            $this->wheres[$name] = $expression;
+        }
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function withMiddleware(MiddlewareContract $middleware): RouteContract
+    {
+        $this->middleware['with'][] = $middleware;
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function withoutMiddleware(MiddlewareContract $middleware): RouteContract
+    {
+        $this->middleware['without'][] = $middleware;
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function gatherMiddleware(): array
+    {
+        // Merge middlewares from Action.
+        $with = Arr::get($this->action, 'middleware.with', []);
+        $without = Arr::get($this->action, 'middleware.without', []);
+
+        $this->middleware = Arr::merge($this->middleware, $this->getControllerMiddleware());
+
+        $this->middleware['with'] = array_merge(
+            $this->middleware['with'],
+            is_array($with) ? $with : [$with]
+        );
+        $this->middleware['without'] = array_merge(
+            $this->middleware['without'],
+            is_array($without) ? $without : [$without]
+        );
+
+        return $this->middleware;
     }
 
     /**
@@ -188,7 +281,7 @@ class Route implements RouteContract
      */
     public function addPrefix(string $prefix): RouteContract
     {
-        $uri = rtrim($prefix, '/').'/'.ltrim($this->uri, '/');
+        $uri = rtrim($prefix, '/') . '/' . ltrim($this->uri, '/');
 
         $this->uri = trim($uri, '/');
 
@@ -218,7 +311,7 @@ class Route implements RouteContract
      */
     public function getParameter(string $name, $default = null)
     {
-        return Arr::get($this->getParameters(), $name, $default);
+        return Arr::get($this->parameters, $name, $default);
     }
 
     /**
@@ -226,7 +319,7 @@ class Route implements RouteContract
      */
     public function hasParameter(string $name): bool
     {
-        return Arr::has($this->getParameters(), $name);
+        return Arr::has($this->parameters, $name);
     }
 
     /**
@@ -234,11 +327,7 @@ class Route implements RouteContract
      */
     public function getParameters(): array
     {
-        if (isset($this->parameters)) {
-            return $this->parameters;
-        }
-
-        throw new LogicException('Route is not bound.');
+        return $this->parameters;
     }
 
     /**
@@ -254,7 +343,7 @@ class Route implements RouteContract
      */
     public function forgetParameter(string $name)
     {
-        $this->getParameters();
+        $this->parameters;
 
         unset($this->parameters[$name]);
     }
@@ -262,69 +351,24 @@ class Route implements RouteContract
     /**
      * {@inheritdoc}
      */
-    public function isStatic(): bool
+    public function getSegments(): array
     {
-        $this->getParameters();
-
-        foreach($this->parameters as $parameter) {
-            if ($parameter instanceof ParameterMatcher) {
-                return false;
-            }
-        }
-
-        return true;
+        return (new RouteParser())->parse($this->uri, $this->wheres);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function run()
+    public function run(ServerRequestInterface $request): ResponseInterface
     {
-        $this->initInvoker();
+        if ($this->isControllerAction()) {
+            return $this->getController()->{$this->getControllerMethod()}();
+        }
 
         return $this->invoker->call(
             $this->action['uses'],
-            array_values($this->getParameters())
+            [$request, $this->parameters]
         );
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setRouter(RouterContract $router): RouteContract
-    {
-        $this->router = $router;
-
-        return $this;
-    }
-
-    /**
-     * Dynamically access route parameters.
-     *
-     * @param string $key
-     *
-     * @return mixed
-     */
-    public function __get($key)
-    {
-        return $this->getParameter($key);
-    }
-
-    /**
-     * Set configured invoker.
-     *
-     * @return \Viserio\Support\Invoker
-     */
-    protected function initInvoker(): Invoker
-    {
-        if ($this->invoker === null) {
-            $this->invoker = (new Invoker())
-                ->injectByTypeHint(true)
-                ->injectByParameterName(true)
-                ->setContainer($this->getContainer());
-        }
-
-        return $this->invoker;
     }
 
     /**
@@ -332,9 +376,9 @@ class Route implements RouteContract
      *
      * @param callable|array|null $action
      *
-     * @return array
-     *
      * @throws \UnexpectedValueException
+     *
+     * @return array
      */
     protected function parseAction($action): array
     {
@@ -356,7 +400,7 @@ class Route implements RouteContract
         // If no "uses" property has been set, we will dig through the array to find a
         // Closure instance within this list. We will set the first Closure we come across.
         if (! isset($action['uses'])) {
-            $action['uses'] = Arr::first($action, function ($value, $key) {
+            $action['uses'] = Arr::first($action, function ($key, $value) {
                 return is_callable($value) && is_numeric($key);
             });
         }
@@ -365,13 +409,92 @@ class Route implements RouteContract
             if (! method_exists($action, '__invoke')) {
                 throw new UnexpectedValueException(sprintf(
                     'Invalid route action: [%s]',
-                    $action
+                    $action['uses']
                 ));
             }
 
-            $action['uses'] = $action.'::__invoke';
+            $action['uses'] = $action . '::__invoke';
         }
 
         return $action;
+    }
+
+    /**
+     * Parse arguments to the where method into an array.
+     *
+     * @param array|string $name
+     * @param string       $expression
+     *
+     * @return array
+     */
+    protected function parseWhere($name, string $expression): array
+    {
+        if (is_string($name)) {
+            return [$name => $expression];
+        }
+
+        $arr = [];
+
+        foreach ($name as $paramName) {
+            $arr[$paramName] = $expression;
+        }
+
+        return $arr;
+    }
+
+    /**
+     * Get the middleware for the route's controller.
+     *
+     * @return array
+     */
+    protected function getControllerMiddleware(): array
+    {
+        if (! $this->isControllerAction()) {
+            return [];
+        }
+
+        $controller = $this->getController();
+
+        if (method_exists($controller, 'gatherMiddleware')) {
+            return $controller->gatherMiddleware();
+        }
+
+        return [];
+    }
+
+    /**
+     * Checks whether the route's action is a controller.
+     *
+     * @return bool
+     */
+    protected function isControllerAction(): bool
+    {
+        return is_string($this->action['uses']);
+    }
+
+    /**
+     * Get the controller instance for the route.
+     *
+     * @return mixed
+     */
+    protected function getController()
+    {
+        list($class) = explode('::', $this->action['uses']);
+
+        if (! $this->controller) {
+            $this->controller = $this->getContainer()->get($class);
+        }
+
+        return $this->controller;
+    }
+
+    /**
+     * Get the controller method used for the route.
+     *
+     * @return string
+     */
+    protected function getControllerMethod(): string
+    {
+        return explode('::', $this->action['uses'])[1];
     }
 }

@@ -18,11 +18,11 @@ class AbstractDatabaseConnectorTest extends \PHPUnit_Framework_TestCase
     {
         $connector = new DatabaseConnector();
         $options = [
-            PDO::ATTR_CASE              => PDO::CASE_NATURAL,
-            PDO::ATTR_ERRMODE           => PDO::ERRMODE_EXCEPTION,
-            PDO::ATTR_ORACLE_NULLS      => PDO::NULL_NATURAL,
+            PDO::ATTR_CASE => PDO::CASE_NATURAL,
+            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+            PDO::ATTR_ORACLE_NULLS => PDO::NULL_NATURAL,
             PDO::ATTR_STRINGIFY_FETCHES => false,
-            PDO::ATTR_EMULATE_PREPARES  => false,
+            PDO::ATTR_EMULATE_PREPARES => false,
         ];
 
         $this->assertTrue(is_array($connector->getDefaultOptions()));
@@ -32,7 +32,7 @@ class AbstractDatabaseConnectorTest extends \PHPUnit_Framework_TestCase
     public function testSetDefaultOption()
     {
         $options = [
-            PDO::ATTR_EMULATE_PREPARES  => true,
+            PDO::ATTR_EMULATE_PREPARES => true,
         ];
 
         $connector = new DatabaseConnector();
@@ -47,7 +47,7 @@ class AbstractDatabaseConnectorTest extends \PHPUnit_Framework_TestCase
         $connector = new DatabaseConnector();
         $config = [
             'options' => [
-                PDO::ATTR_EMULATE_PREPARES  => true,
+                PDO::ATTR_EMULATE_PREPARES => true,
             ],
         ];
 

@@ -5,32 +5,16 @@ namespace Viserio\Log;
 use Monolog\Handler\RotatingFileHandler;
 use Monolog\Logger as MonologLogger;
 use Monolog\Processor\PsrLogMessageProcessor;
-use RuntimeException;
-use Viserio\Contracts\{
-    Events\Dispatcher as DispatcherContract,
-    Log\Log as LogContract,
-    Support\Arrayable,
-    Support\Jsonable
-};
+use Viserio\Contracts\Events\Traits\EventsAwareTrait;
+use Viserio\Contracts\Log\Log as LogContract;
+use Viserio\Contracts\Support\Arrayable;
+use Viserio\Contracts\Support\Jsonable;
 use Viserio\Log\Traits\ParseLevelTrait;
 
 class Writer implements LogContract
 {
     use ParseLevelTrait;
-
-    /**
-     * The Monolog logger instance.
-     *
-     * @var \Monolog\Logger
-     */
-    protected $monolog;
-
-    /**
-     * The event dispatcher instance.
-     *
-     * @var \Viserio\Contracts\Events\Dispatcher|null
-     */
-    protected $dispatcher;
+    use EventsAwareTrait;
 
     /**
      * The handler parser instance.
@@ -42,18 +26,27 @@ class Writer implements LogContract
     /**
      * Create a new log writer instance.
      *
-     * @param \Monolog\Logger                           $monolog
-     * @param \Viserio\Contracts\Events\Dispatcher|null $dispatcher
+     * @param \Monolog\Logger $monolog
      */
-    public function __construct(MonologLogger $monolog, DispatcherContract $dispatcher = null)
+    public function __construct(MonologLogger $monolog)
     {
         // PSR 3 log message formatting for all handlers
         $monolog->pushProcessor(new PsrLogMessageProcessor());
 
         $this->handlerParser = new HandlerParser($monolog);
+    }
 
-        $this->monolog = $this->handlerParser->getMonolog();
-        $this->dispatcher = $dispatcher;
+    /**
+     * Call Monolog with the given method and parameters.
+     *
+     * @param string $method
+     * @param array  $parameters
+     *
+     * @return mixed
+     */
+    public function __call($method, $parameters)
+    {
+        return call_user_func_array([$this->getMonolog(), $method], $parameters);
     }
 
     /**
@@ -96,8 +89,8 @@ class Writer implements LogContract
     /**
      * Log an emergency message to the logs.
      *
-     * @param mixed  $message
-     * @param array  $context
+     * @param mixed $message
+     * @param array $context
      */
     public function emergency($message, array $context = [])
     {
@@ -107,8 +100,8 @@ class Writer implements LogContract
     /**
      * Log an alert message to the logs.
      *
-     * @param mixed  $message
-     * @param array  $context
+     * @param mixed $message
+     * @param array $context
      */
     public function alert($message, array $context = [])
     {
@@ -118,8 +111,8 @@ class Writer implements LogContract
     /**
      * Log a critical message to the logs.
      *
-     * @param mixed  $message
-     * @param array  $context
+     * @param mixed $message
+     * @param array $context
      */
     public function critical($message, array $context = [])
     {
@@ -129,8 +122,8 @@ class Writer implements LogContract
     /**
      * Log an error message to the logs.
      *
-     * @param mixed  $message
-     * @param array  $context
+     * @param mixed $message
+     * @param array $context
      */
     public function error($message, array $context = [])
     {
@@ -140,8 +133,8 @@ class Writer implements LogContract
     /**
      * Log a warning message to the logs.
      *
-     * @param mixed  $message
-     * @param array  $context
+     * @param mixed $message
+     * @param array $context
      */
     public function warning($message, array $context = [])
     {
@@ -151,8 +144,8 @@ class Writer implements LogContract
     /**
      * Log a notice to the logs.
      *
-     * @param mixed  $message
-     * @param array  $context
+     * @param mixed $message
+     * @param array $context
      */
     public function notice($message, array $context = [])
     {
@@ -162,8 +155,8 @@ class Writer implements LogContract
     /**
      * Log an informational message to the logs.
      *
-     * @param mixed  $message
-     * @param array  $context
+     * @param mixed $message
+     * @param array $context
      */
     public function info($message, array $context = [])
     {
@@ -173,8 +166,8 @@ class Writer implements LogContract
     /**
      * Log a debug message to the logs.
      *
-     * @param mixed  $message
-     * @param array  $context
+     * @param mixed $message
+     * @param array $context
      */
     public function debug($message, array $context = [])
     {
@@ -196,67 +189,21 @@ class Writer implements LogContract
     /**
      * Get the underlying Monolog instance.
      *
-     * @return MonologLogger
+     * @return \Monolog\Logger
      */
     public function getMonolog(): MonologLogger
     {
-        return $this->monolog;
+        return $this->handlerParser->getMonolog();
     }
 
     /**
-     * Set the event dispatcher instance.
+     * Get the handler parser instance.
      *
-     * @param \Viserio\Contracts\Events\Dispatcher $dispatcher
-     *
-     * @return void
+     * @return \Viserio\Log\HandlerParser
      */
-    public function setEventDispatcher(DispatcherContract $dispatcher)
+    public function getHandlerParser(): HandlerParser
     {
-        $this->dispatcher = $dispatcher;
-    }
-
-   /**
-     * Get the event dispatcher instance.
-     *
-     * @return \Viserio\Contracts\Events\Dispatcher
-     */
-    public function getEventDispatcher(): DispatcherContract
-    {
-        if ($this->dispatcher === null) {
-            throw new RuntimeException('Events dispatcher has not been set.');
-        }
-
-        return $this->dispatcher;
-    }
-
-    /**
-     * Call Monolog with the given method and parameters.
-     *
-     * @param string $method
-     * @param array  $parameters
-     *
-     * @return mixed
-     */
-    public function __call($method, $parameters)
-    {
-        return call_user_func_array([$this->monolog, $method], $parameters);
-    }
-
-    /**
-     * Emit a log event.
-     *
-     * @param string $level
-     * @param string $message
-     * @param array  $context
-     *
-     * @return void
-     */
-    protected function emitLogEvent(string $level, string $message, array $context = [])
-    {
-        // If the event dispatcher is set, we will pass along the parameters to the
-        // log listeners. These are useful for building profilers or other tools
-        // that aggregate all of the log messages for a given "request" cycle.
-        $this->getEventDispatcher()->emit('viserio.log', compact('level', 'message', 'context'));
+        return $this->handlerParser;
     }
 
     /**
@@ -264,7 +211,7 @@ class Writer implements LogContract
      *
      * @param mixed $message
      *
-     * @return string|object|integer|double|null|boolean
+     * @return string|object|int|float|null|bool
      */
     protected function formatMessage($message)
     {
@@ -290,10 +237,13 @@ class Writer implements LogContract
     {
         $message = $this->formatMessage($message);
 
-        if ($this->dispatcher !== null) {
-            $this->emitLogEvent($level, $message, $context);
+        if ($this->events !== null) {
+            // If the event dispatcher is set, we will pass along the parameters to the
+            // log listeners. These are useful for building profilers or other tools
+            // that aggregate all of the log messages for a given "request" cycle.
+            $this->getEventsDispatcher()->trigger('viserio.log', compact('level', 'message', 'context'));
         }
 
-        $this->monolog->{$level}($message, $context);
+        $this->getMonolog()->{$level}($message, $context);
     }
 }

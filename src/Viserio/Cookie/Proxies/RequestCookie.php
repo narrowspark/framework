@@ -6,7 +6,7 @@ use Viserio\StaticalProxy\StaticalProxy;
 
 class RequestCookie extends StaticalProxy
 {
-    protected static function getFacadeAccessor()
+    public static function getInstanceIdentifier()
     {
         return 'request-cookie';
     }

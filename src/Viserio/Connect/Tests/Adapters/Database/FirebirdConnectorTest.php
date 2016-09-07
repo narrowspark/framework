@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Connect\Tests\Adapter\Database;
 
-use PDO;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
+use PDO;
 use Viserio\Connect\Adapters\Database\FirebirdConnector;
 
 class FirebirdConnectorTest extends \PHPUnit_Framework_TestCase
@@ -24,7 +24,7 @@ class FirebirdConnectorTest extends \PHPUnit_Framework_TestCase
     {
         $connector = new FirebirdConnector();
         $config = [
-            'server'   => '',
+            'server' => '',
             'database' => 'stc\Connect\Tests\Fixture\employee.fdb',
             'username' => '',
             'password' => '',

@@ -4,11 +4,8 @@ namespace Viserio\Queue\Tests;
 
 use Interop\Container\ContainerInterface as ContainerInteropInterface;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
-use Viserio\Contracts\{
-    Config\Manager as ConfigContract,
-    Encryption\Encrypter as EncrypterContract,
-    Events\Dispatcher as DispatcherContract
-};
+use Viserio\Contracts\Config\Manager as ConfigContract;
+use Viserio\Contracts\Encryption\Encrypter as EncrypterContract;
 use Viserio\Queue\QueueManager;
 use Viserio\Queue\Tests\Fixture\TestQueue;
 
@@ -30,7 +27,7 @@ class QueueManagerTest extends \PHPUnit_Framework_TestCase
             $this->mock(EncrypterContract::class)
         );
 
-        $manager->extend('testqueue', function($config) {
+        $manager->extend('testqueue', function ($config) {
             return new TestQueue();
         });
 
@@ -55,20 +52,5 @@ class QueueManagerTest extends \PHPUnit_Framework_TestCase
         $manager->setEncrypter($this->mock(EncrypterContract::class));
 
         $this->assertInstanceOf(EncrypterContract::class, $manager->getEncrypter());
-    }
-
-    public function testSetAndGetDispatcher()
-    {
-        $config = $this->mock(ConfigContract::class);
-
-        $manager = new QueueManager(
-            $config,
-            $this->mock(ContainerInteropInterface::class),
-            $this->mock(EncrypterContract::class)
-        );
-
-        $manager->setEventDispatcher($this->mock(DispatcherContract::class));
-
-        $this->assertInstanceOf(DispatcherContract::class, $manager->getEventDispatcher());
     }
 }

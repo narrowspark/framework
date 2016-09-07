@@ -5,15 +5,11 @@ namespace Viserio\Console\Tests;
 use Mockery as Mock;
 use Narrowspark\TestingHelper\ArrayContainer;
 use StdClass;
-use Symfony\Component\Console\{
-    Input\StringInput,
-    Output\OutputInterface
-};
-use Viserio\Console\{
-    Application,
-    Tests\Fixture\SpyOutput,
-    Tests\Fixture\ViserioCommand
-};
+use Symfony\Component\Console\Input\StringInput;
+use Symfony\Component\Console\Output\OutputInterface;
+use Viserio\Console\Application;
+use Viserio\Console\Tests\Fixture\SpyOutput;
+use Viserio\Console\Tests\Fixture\ViserioCommand;
 
 class ApplicationTest extends \PHPUnit_Framework_TestCase
 {
@@ -33,9 +29,9 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
             'command.greet' => function (OutputInterface $output) {
                 $output->write('hello');
             },
-            'stdClass'          => $stdClass,
-            'param'             => 'bob',
-            'stdClass2'         => $stdClass2,
+            'stdClass' => $stdClass,
+            'param' => 'bob',
+            'stdClass2' => $stdClass2,
             'command.arr.greet' => [$this, 'foo'],
         ]);
 
@@ -180,6 +176,44 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
         });
 
         $this->assertOutputIs('greet', 'hello');
+    }
+
+    public function testItShouldMatchHyphenatedArgumentsToLowercaseParameters()
+    {
+        $this->application->command('greet first-name', function ($firstname, OutputInterface $output) {
+            $output->write('hello ' . $firstname);
+        });
+
+        $this->assertOutputIs('greet john', 'hello john');
+    }
+
+    public function testItShouldMatchHyphenatedArgumentsToMixedcaseParameters()
+    {
+        $this->application->command('greet first-name', function ($firstName, OutputInterface $output) {
+            $output->write('hello ' . $firstName);
+        });
+
+        $this->assertOutputIs('greet john', 'hello john');
+    }
+
+    public function testItShouldMatchHyphenatedOptionToLowercaseParameters()
+    {
+        $this->application->command('greet [--yell-louder]', function ($yelllouder, OutputInterface $output) {
+            $output->write(var_export($yelllouder, true));
+        });
+
+        $this->assertOutputIs('greet', 'false');
+        $this->assertOutputIs('greet --yell-louder', 'true');
+    }
+
+    public function testItShouldMatchHyphenatedOptionToMixedCaseParameters()
+    {
+        $this->application->command('greet [--yell-louder]', function ($yellLouder, OutputInterface $output) {
+            $output->write(var_export($yellLouder, true));
+        });
+
+        $this->assertOutputIs('greet', 'false');
+        $this->assertOutputIs('greet --yell-louder', 'true');
     }
 
     /**

@@ -3,15 +3,10 @@ declare(strict_types=1);
 namespace Viserio\Config\Tests;
 
 use org\bovigo\vfs\vfsStream;
-use Viserio\Config\{
-    Manager as ConfigManager,
-    Repository
-};
-use Viserio\Filesystem\Filesystem;
-use Viserio\Parsers\{
-    FileLoader,
-    TaggableParser
-};
+use Viserio\Config\Manager as ConfigManager;
+use Viserio\Config\Repository;
+use Viserio\Parsers\FileLoader;
+use Viserio\Parsers\TaggableParser;
 
 class ConfigManagerTest extends \PHPUnit_Framework_TestCase
 {
@@ -118,7 +113,7 @@ class ConfigManagerTest extends \PHPUnit_Framework_TestCase
                     '789' => 1,
                 ],
             ],
-            'foo'  => 'bar',
+            'foo' => 'bar',
             'func' => function () {
                 return 'func';
             },

@@ -26,41 +26,42 @@ class LazyOpenStreamTest extends \PHPUnit_Framework_TestCase
 
     public function testOpensLazily()
     {
-        $l = new LazyOpenStream($this->fname, 'w+');
-        $l->write('foo');
+        $lazy = new LazyOpenStream($this->fname, 'w+');
+        $lazy->write('foo');
 
-        $this->assertInternalType('array', $l->getMetadata());
+        $this->assertInternalType('array', $lazy->getMetadata());
         $this->assertFileExists($this->fname);
         $this->assertEquals('foo', file_get_contents($this->fname));
-        $this->assertEquals('foo', (string) $l);
+        $this->assertEquals('foo', (string) $lazy);
     }
 
     public function testProxiesToFile()
     {
         file_put_contents($this->fname, 'foo');
-        $l = new LazyOpenStream($this->fname, 'r');
+        $lazy = new LazyOpenStream($this->fname, 'r');
 
-        $this->assertEquals('foo', $l->read(4));
-        $this->assertTrue($l->eof());
-        $this->assertEquals(3, $l->tell());
-        $this->assertTrue($l->isReadable());
-        $this->assertTrue($l->isSeekable());
-        $this->assertFalse($l->isWritable());
+        $this->assertEquals('foo', $lazy->read(4));
+        $this->assertTrue($lazy->eof());
+        $this->assertEquals(3, $lazy->tell());
+        $this->assertTrue($lazy->isReadable());
+        $this->assertTrue($lazy->isSeekable());
+        $this->assertFalse($lazy->isWritable());
 
-        $l->seek(1);
-        $this->assertEquals('oo', $l->getContents());
-        $this->assertEquals('foo', (string) $l);
-        $this->assertEquals(3, $l->getSize());
-        $this->assertInternalType('array', $l->getMetadata());
+        $lazy->seek(1);
 
-        $l->close();
+        $this->assertEquals('oo', $lazy->getContents());
+        $this->assertEquals('foo', (string) $lazy);
+        $this->assertEquals(3, $lazy->getSize());
+        $this->assertInternalType('array', $lazy->getMetadata());
+
+        $lazy->close();
     }
 
     public function testDetachesUnderlyingStream()
     {
         file_put_contents($this->fname, 'foo');
-        $l = new LazyOpenStream($this->fname, 'r');
-        $r = $l->detach();
+        $lazy = new LazyOpenStream($this->fname, 'r');
+        $r = $lazy->detach();
 
         $this->assertInternalType('resource', $r);
         fseek($r, 0);

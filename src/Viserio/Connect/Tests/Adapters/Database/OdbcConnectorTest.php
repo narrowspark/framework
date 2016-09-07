@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Connect\Tests\Adapter\Database;
 
-use PDO;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
+use PDO;
 use Viserio\Connect\Adapters\Database\OdbcConnector;
 
 class OdbcConnectorTest extends \PHPUnit_Framework_TestCase

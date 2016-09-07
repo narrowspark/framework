@@ -3,11 +3,8 @@ declare(strict_types=1);
 namespace Viserio\Parsers\Tests;
 
 use org\bovigo\vfs\vfsStream;
-use Viserio\Filesystem\Filesystem;
-use Viserio\Parsers\{
-    FileLoader,
-    TaggableParser
-};
+use Viserio\Parsers\FileLoader;
+use Viserio\Parsers\TaggableParser;
 use Viserio\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
 class FileLoaderTest extends \PHPUnit_Framework_TestCase
@@ -27,7 +24,7 @@ class FileLoaderTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->root = vfsStream::setup();
-        $this->fileloader = new FileLoader(new TaggableParser(new Filesystem()), []);
+        $this->fileloader = new FileLoader(new TaggableParser(), []);
     }
 
     public function testLoad()
@@ -89,11 +86,17 @@ class FileLoaderTest extends \PHPUnit_Framework_TestCase
         $this->assertSame(self::normalizeDirectorySeparator($file->url()), $exist2);
     }
 
+    /**
+     * @expectedException Viserio\Contracts\Parsers\Exception\LoadingException
+     * @expectedExceptionMessage File [no/file] not found.
+     */
     public function testExistsWithFalsePath()
     {
         $exist = $this->fileloader->exists('no/file');
-        $this->assertFalse($exist);
+    }
 
+    public function testExists()
+    {
         $file = vfsStream::newFile('temp.json')->withContent('{"a":1 }')->at($this->root);
 
         $this->fileloader->setDirectories([
@@ -102,6 +105,7 @@ class FileLoaderTest extends \PHPUnit_Framework_TestCase
         ]);
 
         $exist = $this->fileloader->exists('temp.json');
+
         $this->assertSame(self::normalizeDirectorySeparator($file->url()), $exist);
     }
 

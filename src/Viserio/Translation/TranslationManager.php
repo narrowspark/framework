@@ -2,21 +2,22 @@
 declare(strict_types=1);
 namespace Viserio\Translation;
 
-use Psr\Log\LoggerInterface;
 use RuntimeException;
-use Viserio\Contracts\Translation\{
-    MessageCatalogue as MessageCatalogueContract,
-    MessageSelector as MessageSelectorContract,
-    PluralizationRules as PluralizationRulesContract,
-    Translator as TranslatorContract
-};
-use Viserio\Contracts\Parsers\Loader as LoaderContract;
+use Viserio\Contracts\Log\Traits\LoggerAwareTrait;
+use Viserio\Contracts\Parsers\Traits\LoaderAwareTrait;
+use Viserio\Contracts\Translation\MessageCatalogue as MessageCatalogueContract;
+use Viserio\Contracts\Translation\MessageSelector as MessageSelectorContract;
+use Viserio\Contracts\Translation\PluralizationRules as PluralizationRulesContract;
+use Viserio\Contracts\Translation\TranslationManager as TranslationManagerContract;
+use Viserio\Contracts\Translation\Translator as TranslatorContract;
 use Viserio\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 use Viserio\Translation\Traits\ValidateLocaleTrait;
 
-class TranslationManager
+class TranslationManager implements TranslationManagerContract
 {
     use ValidateLocaleTrait;
+    use LoaderAwareTrait;
+    use LoggerAwareTrait;
     use NormalizePathAndDirectorySeparatorTrait;
 
     /**
@@ -32,13 +33,6 @@ class TranslationManager
      * @var \Viserio\Contracts\Translation\MessageSelector
      */
     protected $messageSelector;
-
-    /**
-     * Fileloader instance.
-     *
-     * @var \Viserio\Contracts\Parsers\Loader
-     */
-    protected $loader;
 
     /**
      * A string dictating the default language to translate into. (e.g. 'en').
@@ -76,13 +70,6 @@ class TranslationManager
     protected $translations = [];
 
     /**
-     * The psr logger instance.
-     *
-     * @var \Psr\Log\LoggerInterface
-     */
-    private $logger;
-
-    /**
      * Creat new Translation instance.
      *
      * @param \Viserio\Contracts\Translation\PluralizationRules $pluralization
@@ -98,7 +85,7 @@ class TranslationManager
         $this->messageSelector = $messageSelector;
     }
 
-     /**
+    /**
      * Set directories
      *
      * @param array $directories
@@ -156,8 +143,8 @@ class TranslationManager
 
         $langFile = $loader->load($file);
 
-        if (!isset($langFile['lang'])) {
-            throw new RuntimeException(sprintf('File [%s] cant be imported.', $file));
+        if (! isset($langFile['lang'])) {
+            throw new RuntimeException(sprintf('File [%s] cant be imported. Key for language is missing.', $file));
         }
 
         $message = new MessageCatalogue($langFile['lang'], $langFile);
@@ -246,8 +233,6 @@ class TranslationManager
         if (isset($this->langFallback[$lang])) {
             return $this->langFallback[$lang];
         }
-
-        return;
     }
 
     /**
@@ -304,53 +289,5 @@ class TranslationManager
         }
 
         throw new RuntimeException(sprintf('Translator for [%s] dont exist.', $lang));
-    }
-
-    /**
-     * Set the file loader.
-     *
-     * @param \Viserio\Contracts\Parsers\Loader $loader
-     *
-     * @return $this
-     */
-    public function setLoader(LoaderContract $loader): TranslationManager
-    {
-        $this->loader = $loader;
-
-        return $this;
-    }
-
-    /**
-     * Get the file loader.
-     *
-     * @return \Viserio\Contracts\Parsers\Loader
-     */
-    public function getLoader(): LoaderContract
-    {
-        return $this->loader;
-    }
-
-    /**
-     * Set a logger instance..
-     *
-     * @param \Psr\Log\LoggerInterface $logger
-     *
-     * @return TranslationManager
-     */
-    public function setLogger(LoggerInterface $logger): TranslationManager
-    {
-        $this->logger = $logger;
-
-        return $this;
-    }
-
-    /**
-     * Get a logger instance.
-     *
-     * @return \Psr\Log\LoggerInterface
-     */
-    public function getLogger(): LoggerInterface
-    {
-        return $this->logger;
     }
 }

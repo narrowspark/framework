@@ -4,14 +4,10 @@ namespace Viserio\Exception\Tests\Displayers;
 
 use Exception;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
-use Viserio\Exception\{
-    Displayers\ViewDisplayer,
-    ExceptionInfo
-};
-use Viserio\Contracts\View\{
-    Factory,
-    View
-};
+use Viserio\Contracts\View\Factory;
+use Viserio\Contracts\View\View;
+use Viserio\Exception\Displayers\ViewDisplayer;
+use Viserio\Exception\ExceptionInfo;
 
 class ViewDisplayerTest extends \PHPUnit_Framework_TestCase
 {

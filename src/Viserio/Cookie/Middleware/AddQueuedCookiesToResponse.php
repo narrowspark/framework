@@ -5,7 +5,7 @@ namespace Viserio\Cookie\Middleware;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Contracts\Cookie\QueueingFactory as CookieJar;
-use Viserio\Contracts\Middleware\Frame as FrameContract;
+use Viserio\Contracts\Middleware\Delegate as DelegateContract;
 use Viserio\Contracts\Middleware\Middleware as MiddlewareContract;
 
 class AddQueuedCookiesToResponse implements MiddlewareContract
@@ -32,7 +32,7 @@ class AddQueuedCookiesToResponse implements MiddlewareContract
      */
     public function handle(
         ServerRequestInterface $request,
-        FrameContract $frame
+        DelegateContract $frame
     ): ResponseInterface {
         $response = $frame->next($request);
 

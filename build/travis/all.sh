@@ -5,5 +5,4 @@ if [[ "$DISABLE_XDEBUG" = true ]]; then
   phpenv config-rm xdebug.ini;
 fi
 
-# Doing something with phpenv
-phpenv config-add ./build/travis/php/php.ini;
+echo "extension = memcached.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini

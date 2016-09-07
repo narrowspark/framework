@@ -83,10 +83,10 @@ class MemcachedConnectorTest extends \PHPUnit_Framework_TestCase
 
         $config = [
                 'options' => [
-                    'OPT_NO_BLOCK'         => true,
-                    'OPT_CONNECT_TIMEOUT'  => 2000,
-                    'OPT_POLL_TIMEOUT'     => 2000,
-                    'OPT_RETRY_TIMEOUT'    => 2,
+                    'OPT_NO_BLOCK' => true,
+                    'OPT_CONNECT_TIMEOUT' => 2000,
+                    'OPT_POLL_TIMEOUT' => 2000,
+                    'OPT_RETRY_TIMEOUT' => 2,
                 ],
                 'servers' => [
                     [

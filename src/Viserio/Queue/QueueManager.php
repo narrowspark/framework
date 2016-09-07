@@ -5,43 +5,30 @@ namespace Viserio\Queue;
 use Aws\Sqs\SqsClient;
 use Interop\Container\ContainerInterface as ContainerInteropInterface;
 use Narrowspark\Arr\StaticArr as Arr;
+use Pheanstalk\Pheanstalk;
+use Pheanstalk\PheanstalkInterface;
 use PhpAmqpLib\Connection\AMQPStreamConnection;
-use Pheanstalk\{
-    Pheanstalk,
-    PheanstalkInterface
-};
-use Viserio\Contracts\{
-    Config\Manager as ConfigContract,
-    Encryption\Encrypter as EncrypterContract,
-    Events\Dispatcher as DispatcherContract,
-    Queue\Monitor as MonitorContract
-};
-use Viserio\Queue\Connectors\{
-    AzureQueue,
-    BeanstalkdQueue,
-    NullQueue,
-    RabbitMQQueue,
-    RedisQueue,
-    SqsQueue,
-    SyncQueue
-};
+use Viserio\Contracts\Config\Manager as ConfigContract;
+use Viserio\Contracts\Container\Traits\ContainerAwareTrait;
+use Viserio\Contracts\Encryption\Encrypter as EncrypterContract;
+use Viserio\Contracts\Encryption\Traits\EncrypterAwareTrait;
+use Viserio\Contracts\Events\Dispatcher as DispatcherContract;
+use Viserio\Contracts\Events\Traits\EventsAwareTrait;
+use Viserio\Contracts\Queue\Factory as FactoryContract;
+use Viserio\Contracts\Queue\Monitor as MonitorContract;
+use Viserio\Queue\Connectors\BeanstalkdQueue;
+use Viserio\Queue\Connectors\NullQueue;
+use Viserio\Queue\Connectors\RabbitMQQueue;
+use Viserio\Queue\Connectors\RedisQueue;
+use Viserio\Queue\Connectors\SqsQueue;
+use Viserio\Queue\Connectors\SyncQueue;
 use Viserio\Support\AbstractConnectionManager;
 
-class QueueManager extends AbstractConnectionManager implements MonitorContract
+class QueueManager extends AbstractConnectionManager implements MonitorContract, FactoryContract
 {
-    /**
-     * Encrypter instance.
-     *
-     * @var \Viserio\Contracts\Encryption\Encrypter
-     */
-    protected $encrypter;
-
-    /**
-     * Event Dispatcher instance.
-     *
-     * @var \Viserio\Contracts\Events\Dispatcher
-     */
-    protected $dispatcher;
+    use ContainerAwareTrait;
+    use EventsAwareTrait;
+    use EncrypterAwareTrait;
 
     /**
      * Create a new queue manager instance.
@@ -65,7 +52,7 @@ class QueueManager extends AbstractConnectionManager implements MonitorContract
      */
     public function failing($callback)
     {
-        $this->container->get('events')->on('viserio.job.failed', $callback);
+        $this->container->get(DispatcherContract::class)->attach('viserio.job.failed', $callback);
     }
 
     /**
@@ -73,7 +60,7 @@ class QueueManager extends AbstractConnectionManager implements MonitorContract
      */
     public function stopping($callback)
     {
-        $this->container->get('events')->on('viserio.worker.stopping', $callback);
+        $this->container->get(DispatcherContract::class)->attach('viserio.worker.stopping', $callback);
     }
 
     /**
@@ -81,31 +68,27 @@ class QueueManager extends AbstractConnectionManager implements MonitorContract
      */
     public function exceptionOccurred($callback)
     {
-        $this->container->get('events')->on('viserio.job.exception.occurred', $callback);
+        $this->container->get(DispatcherContract::class)->attach('viserio.job.exception.occurred', $callback);
     }
 
     /**
      * Register an event listener for the before job event.
      *
      * @param mixed $callback
-     *
-     * @return void
      */
     public function before($callback)
     {
-        $this->container->get('events')->on('viserio.job.processing', $callback);
+        $this->container->get(DispatcherContract::class)->attach('viserio.job.processing', $callback);
     }
 
     /**
      * Register an event listener for the after job event.
      *
      * @param mixed $callback
-     *
-     * @return void
      */
     public function after($callback)
     {
-        $this->container->get('events')->on('viserio.job.processed', $callback);
+        $this->container->get(DispatcherContract::class)->attach('viserio.job.processed', $callback);
     }
 
     /**
@@ -129,51 +112,15 @@ class QueueManager extends AbstractConnectionManager implements MonitorContract
     }
 
     /**
-     * Get the event dispatcher implementation.
-     *
-     * @return \Viserio\Contracts\Events\Dispatcher
+     * {@inheritdoc}
      */
-    public function getEventDispatcher(): DispatcherContract
+    public function getEventsDispatcher(): DispatcherContract
     {
-        return $this->dispatcher;
-    }
+        if (! $this->events || $this->container->has(DispatcherContract::class)) {
+            throw new RuntimeException('Events dispatcher is not set up.');
+        }
 
-    /**
-     * Set the event dispatcher implementation.
-     *
-     * @param \Viserio\Contracts\Events\Dispatcher $dispatcher
-     *
-     * @return $this
-     */
-    public function setEventDispatcher(DispatcherContract $dispatcher): QueueManager
-    {
-        $this->dispatcher = $dispatcher;
-
-        return $this;
-    }
-
-    /**
-     * Get the encrypter implementation.
-     *
-     * @return \Viserio\Contracts\Encryption\Encrypter
-     */
-    public function getEncrypter(): EncrypterContract
-    {
-        return $this->encrypter;
-    }
-
-    /**
-     * Set the encrypter implementation.
-     *
-     * @param \Viserio\Contracts\Encryption\Encrypter $encrypter
-     *
-     * @return $this
-     */
-    public function setEncrypter(EncrypterContract $encrypter): QueueManager
-    {
-        $this->encrypter = $encrypter;
-
-        return $this;
+        return $this->events ?? $this->container->get(DispatcherContract::class);
     }
 
     /**

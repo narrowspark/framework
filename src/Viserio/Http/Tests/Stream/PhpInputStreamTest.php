@@ -30,6 +30,7 @@ class PhpInputStreamTest extends \PHPUnit_Framework_TestCase
     public function assertStreamContents($test, $message = null)
     {
         $content = $this->getFileContents();
+
         $this->assertEquals($content, $test, $message);
     }
 
@@ -54,12 +55,14 @@ class PhpInputStreamTest extends \PHPUnit_Framework_TestCase
         $start = $this->stream->read(128);
         $remainder = $this->stream->getContents();
         $contents = $this->getFileContents();
+
         $this->assertEquals(substr($contents, 128), $remainder);
     }
 
     public function testCastingToStringReturnsFullContentsRegardlesOfPriorReads()
     {
         $start = $this->stream->read(128);
+
         $this->assertStreamContents($this->stream->__toString());
     }
 

@@ -2,312 +2,93 @@
 declare(strict_types=1);
 namespace Viserio\Exception\Providers;
 
-use Symfony\Component\Debug\ExceptionHandler as SymfonyExceptionHandler;
-use Symfony\Component\HttpFoundation\Request;
-use Viserio\Application\ServiceProvider;
-use Viserio\Exception\Adapter\ArrayDisplayer;
-use Viserio\Exception\Adapter\PlainDisplayer;
-use Viserio\Exception\Adapter\SymfonyDisplayer;
-use Viserio\Exception\Adapter\WhoopsDisplayer;
-use Viserio\Exception\Handler as ExceptionHandler;
-use Whoops\Handler\JsonResponseHandler;
-use Whoops\Handler\PlainTextHandler;
-use Whoops\Handler\PrettyPageHandler;
-use Whoops\Run;
+use Interop\Container\ContainerInterface;
+use Interop\Container\ServiceProvider;
+use Viserio\Contracts\Config\Manager as ConfigManagerContract;
+use Viserio\Contracts\Exception\Handler as HandlerContract;
+use Viserio\Contracts\View\Factory as FactoryContract;
+use Viserio\Exception\Displayers\HtmlDisplayer;
+use Viserio\Exception\Displayers\JsonDisplayer;
+use Viserio\Exception\Displayers\ViewDisplayer;
+use Viserio\Exception\Displayers\WhoopsDisplayer;
+use Viserio\Exception\ExceptionIdentifier;
+use Viserio\Exception\ExceptionInfo;
+use Viserio\Exception\Filters\CanDisplayFilter;
+use Viserio\Exception\Filters\VerboseFilter;
+use Viserio\Exception\Handler;
+use Viserio\Exception\Transformers\CommandLineTransformer;
 
-class ExceptionServiceProvider extends ServiceProvider
+class ExceptionServiceProvider implements ServiceProvider
 {
     /**
      * {@inheritdoc}
      */
-    public function register()
-    {
-        $this->registerDisplayers();
-
-        $this->app->singleton('exception', function ($app) {
-            // stop PHP from polluting exception messages
-            // with html that Whoops escapes and prints.
-            ini_set('html_errors', false);
-
-            return new ExceptionHandler(
-                $app,
-                $app->get('logger')->getMonolog(),
-                $this->app->get('config')->get('app::debug')
-            );
-        });
-    }
-
-    /**
-     * Get the resource path for Whoops.
-     *
-     * @return string|null
-     */
-    public function resourcePath()
-    {
-        if (is_dir($path = $this->getResourcePath())) {
-            return $path;
-        }
-    }
-
-    /**
-     * Get the services provided by the provider.
-     *
-     * @return string[]
-     */
-    public function provides(): array
+    public function getServices()
     {
         return [
-            'exception.debug',
-            'exception.plain',
-            'exception',
-            'whoops',
-            'whoops.handler',
-            'whoops.handler.info',
-            'whoops.plain.handler',
+            ExceptionIdentifier::class => [self::class, 'createExceptionIdentifier'],
+            ExceptionInfo::class => [self::class, 'createExceptionInfo'],
+            Handler::class => [self::class, 'createExceptionHandler'],
+            HandlerContract::class => function (ContainerInterface $container) {
+                return $container->get(Handler::class);
+            },
+            HtmlDisplayer::class => [self::class, 'createHtmlDisplayer'],
+            JsonDisplayer::class => [self::class, 'createJsonDisplayer'],
+            ViewDisplayer::class => [self::class, 'createViewDisplayer'],
+            WhoopsDisplayer::class => [self::class, 'createWhoopsDisplayer'],
+            VerboseFilter::class => [self::class, 'createVerboseFilter'],
+            CanDisplayFilter::class => [self::class, 'createCanDisplayFilter'],
+            CommandLineTransformer::class => [self::class, 'createCommandLineTransformer'],
         ];
     }
 
-    /**
-     * Register the exception displayers.
-     */
-    protected function registerDisplayers()
+    public static function createExceptionIdentifier(): ExceptionIdentifier
     {
-        switch ($this->app->get('config')->get('app::exception.handler')) {
-            case 'whoops':
-                $this->registerWhoopsDebugDisplayer();
-                break;
-            case 'symfony':
-                $this->registerSymfonyDebugDisplayer();
-                break;
-            case 'array':
-                $this->registerArrayDebugDisplayer();
-                break;
-            default:
-                $this->registerArrayDebugDisplayer();
-                break;
-        }
-
-        $this->registerPlainDisplayer();
+        return new ExceptionIdentifier();
     }
 
-    /**
-     * Register the plain exception displayer.
-     */
-    protected function registerPlainDisplayer()
+    public static function createExceptionInfo(): ExceptionInfo
     {
-        $this->app->bind('exception.plain', function ($app) {
-            // If the application is running in a console environment, we will just always
-            // use the debug handler as there is no point in the console ever returning
-            // out HTML. This debug handler always returns JSON from the console env.
-            if ($app->get('environment')->runningInConsole()) {
-                return $app->get('exception.debug');
-            }
-
-            return new PlainDisplayer();
-        });
+        return new ExceptionInfo();
     }
 
-    /**
-     * Register the Whoops exception displayer.
-     */
-    protected function registerWhoopsDebugDisplayer()
+    public static function createExceptionHandler(ContainerInterface $container): Handler
     {
-        $this->registerWhoops();
-
-        $this->app->bind('exception.debug', function ($app) {
-            return new WhoopsDisplayer(
-                $app->get('whoops'),
-                $app->get('environment')->runningInConsole()
-            );
-        });
+        return new Handler($container);
     }
 
-    /**
-     * Register the Symfony exception displayer.
-     */
-    protected function registerSymfonyDebugDisplayer()
+    public static function createHtmlDisplayer(ContainerInterface $container): HtmlDisplayer
     {
-        $this->app->bind('exception.debug', function () {
-            return new SymfonyDisplayer(
-                new SymfonyExceptionHandler(),
-                $this->shouldReturnJson()
-            );
-        });
+        return new HtmlDisplayer($container->get(ExceptionInfo::class), __DIR__ . '/../Resources/error.html');
     }
 
-    /**
-     * Register the array exception displayer.
-     */
-    protected function registerArrayDebugDisplayer()
+    public static function createJsonDisplayer(ContainerInterface $container): JsonDisplayer
     {
-        $this->app->bind('exception.debug', function () {
-            return new ArrayDisplayer();
-        });
+        return new JsonDisplayer($container->get(ExceptionInfo::class));
     }
 
-    /**
-     * Register the Whoops error display service.
-     */
-    protected function registerWhoops()
+    public static function createViewDisplayer(ContainerInterface $container): ViewDisplayer
     {
-        $this->registerWhoopsHandler();
-
-        $request = $this->app->get('request');
-
-        if ($request === null) {
-            // This error occurred too early in the application's life
-            // and the request instance is not yet available.
-            return;
-        }
-
-        $this->registerPrettyWhoopsHandlerInfo($request);
-
-        $this->app->singleton('whoops', function ($app) {
-            // We will instruct Whoops to not exit after it displays the exception as it
-            // will otherwise run out before we can do anything else. We just want to
-            // let the framework go ahead and finish a request on this end instead.
-            $whoops = new Run();
-            $whoops->allowQuit(false);
-
-            $whoops->writeToOutput(true);
-            $whoops->pushHandler($app['whoops.handler']);
-
-            if (! $this->shouldReturnJson()) {
-                $whoops->pushHandler($app->get('whoops.plain.handler'));
-                $whoops->pushHandler($app->get('whoops.handler.info'));
-            }
-
-            return $whoops;
-        });
+        return new ViewDisplayer($container->get(ExceptionInfo::class), $container->get(FactoryContract::class));
     }
 
-    /**
-     * Register the Whoops handler for the request.
-     */
-    protected function registerWhoopsHandler()
+    public static function createWhoopsDisplayer(): WhoopsDisplayer
     {
-        if ($this->shouldReturnJson()) {
-            $this->app->bind('whoops.handler', function () {
-                $handler = new JsonResponseHandler();
-
-                $handler->onlyForAjaxRequests(true);
-                $handler->addTraceToOutput(true);
-
-                return $handler;
-            });
-        } else {
-            $this->registerPlainTextHandler();
-
-            $this->registerPrettyWhoopsHandler();
-        }
+        return new WhoopsDisplayer();
     }
 
-    /**
-     * Register the Whoops handler for the request.
-     */
-    protected function registerPlainTextHandler()
+    public static function createCommandLineTransformer(): CommandLineTransformer
     {
-        $this->app->bind('whoops.plain.handler', function ($app) {
-            $handler = new PlainTextHandler($app->get('logger')->getMonolog());
-
-            $handler->onlyForCommandLine(false);
-            $handler->outputOnlyIfCommandLine(false);
-            $handler->loggerOnly(true);
-
-            $handler->setLogger($app->get('logger')->getMonolog());
-
-            return $handler;
-        });
+        return new CommandLineTransformer();
     }
 
-    /**
-     * Determine if the error provider should return JSON.
-     *
-     * @return bool
-     */
-    protected function shouldReturnJson(): bool
+    public static function createVerboseFilter(ContainerInterface $container): VerboseFilter
     {
-        return $this->app->get('environment')->runningInConsole() || $this->requestWantsJson();
+        return new VerboseFilter($container->get(ConfigManagerContract::class)->get('exception.debug', false));
     }
 
-    /**
-     * Determine if the request warrants a JSON response.
-     *
-     * @return bool
-     */
-    protected function requestWantsJson(): bool
+    public static function createCanDisplayFilter(): CanDisplayFilter
     {
-        return $this->app->get('request')->ajax() || $this->app->get('request')->wantsJson();
-    }
-
-    /**
-     * Register the "pretty" Whoops handler.
-     */
-    protected function registerPrettyWhoopsHandler()
-    {
-        $this->app->bind('whoops.handler', function ($app) {
-            $handler = new PrettyPageHandler();
-            $handler->setEditor($app['config']->get('app::whoops.editor', 'sublime'));
-
-            if ($this->resourcePath() !== null) {
-                $handler->addResourcePath($this->resourcePath());
-            }
-
-            return $handler;
-        });
-    }
-
-    /**
-     * Get the Whoops custom resource path.
-     *
-     * @return string
-     */
-    protected function getResourcePath(): string
-    {
-        $base = $this->app->basePath();
-
-        return $base . '/vendor/narrowspark/framework/src/Viserio/Exception/Resources';
-    }
-
-    /**
-     * Retrieves info on the Narrowspark environment and ships it off
-     * to the PrettyPageHandler's data tables:.
-     *
-     * This works by adding a new handler to the stack that runs
-     * before the error page, retrieving the shared page handler
-     * instance, and working with it to add new data tables
-     *
-     * @param \Symfony\Component\HttpFoundation\Request $request
-     */
-    protected function registerPrettyWhoopsHandlerInfo(Request $request)
-    {
-        $this->app->bind('whoops.handler.info', function ($app) use ($request) {
-            $whoops = $app->get('whoops.handler');
-
-            $whoops->setPageTitle("We're all going to be fired!");
-
-            $whoops->addDataTable('Narrowspark Application', [
-                'Version' => $app->getVersion(),
-                'Charset' => $app->get('config')->get('app::locale'),
-                'Route Class' => get_class($app->get('route')),
-                'Application Class' => get_class($app),
-            ]);
-
-            $whoops->addDataTable('Narrowspark Application (Request)', [
-                'URI' => $request->getUri(),
-                'Request URI' => $request->getRequestUri(),
-                'Path Info' => $request->getPathInfo(),
-                'Query String' => $request->getQueryString() ?: '<none>',
-                'HTTP Method' => $request->getMethod(),
-                'Script Name' => $request->getScriptName(),
-                'Base Path' => $request->getBasePath(),
-                'Base URL' => $request->getBaseUrl(),
-                'Scheme' => $request->getScheme(),
-                'Port' => $request->getPort(),
-                'Host' => $request->getHost(),
-            ]);
-
-            return $whoops;
-        });
+        return new CanDisplayFilter();
     }
 }

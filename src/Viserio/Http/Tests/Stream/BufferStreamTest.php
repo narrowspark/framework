@@ -8,26 +8,26 @@ class BufferStreamTest extends \PHPUnit_Framework_TestCase
 {
     public function testHasMetadata()
     {
-        $b = new BufferStream(10);
+        $buffer = new BufferStream(10);
 
-        $this->assertTrue($b->isReadable());
-        $this->assertTrue($b->isWritable());
-        $this->assertFalse($b->isSeekable());
-        $this->assertEquals(null, $b->getMetadata('foo'));
-        $this->assertEquals(10, $b->getMetadata('hwm'));
-        $this->assertEquals([], $b->getMetadata());
+        $this->assertTrue($buffer->isReadable());
+        $this->assertTrue($buffer->isWritable());
+        $this->assertFalse($buffer->isSeekable());
+        $this->assertEquals(null, $buffer->getMetadata('foo'));
+        $this->assertEquals(10, $buffer->getMetadata('hwm'));
+        $this->assertEquals([], $buffer->getMetadata());
     }
 
     public function testRemovesReadDataFromBuffer()
     {
-        $b = new BufferStream();
+        $buffer = new BufferStream();
 
-        $this->assertEquals(3, $b->write('foo'));
-        $this->assertEquals(3, $b->getSize());
-        $this->assertFalse($b->eof());
-        $this->assertEquals('foo', $b->read(10));
-        $this->assertTrue($b->eof());
-        $this->assertEquals('', $b->read(10));
+        $this->assertEquals(3, $buffer->write('foo'));
+        $this->assertEquals(3, $buffer->getSize());
+        $this->assertFalse($buffer->eof());
+        $this->assertEquals('foo', $buffer->read(10));
+        $this->assertTrue($buffer->eof());
+        $this->assertEquals('', $buffer->read(10));
     }
 
     /**
@@ -36,33 +36,36 @@ class BufferStreamTest extends \PHPUnit_Framework_TestCase
      */
     public function testCanCastToStringOrGetContents()
     {
-        $b = new BufferStream();
-        $b->write('foo');
-        $b->write('baz');
-        $this->assertEquals('foo', $b->read(3));
-        $b->write('bar');
-        $this->assertEquals('bazbar', (string) $b);
-        $b->tell();
+        $buffer = new BufferStream();
+        $buffer->write('foo');
+        $buffer->write('baz');
+
+        $this->assertEquals('foo', $buffer->read(3));
+
+        $buffer->write('bar');
+
+        $this->assertEquals('bazbar', (string) $buffer);
+        $buffer->tell();
     }
 
     public function testDetachClearsBuffer()
     {
-        $b = new BufferStream();
-        $b->write('foo');
-        $b->detach();
+        $buffer = new BufferStream();
+        $buffer->write('foo');
+        $buffer->detach();
 
-        $this->assertTrue($b->eof());
-        $this->assertEquals(3, $b->write('abc'));
-        $this->assertEquals('abc', $b->read(10));
+        $this->assertTrue($buffer->eof());
+        $this->assertEquals(3, $buffer->write('abc'));
+        $this->assertEquals('abc', $buffer->read(10));
     }
 
     public function testExceedingHighwaterMarkReturnsFalseButStillBuffers()
     {
-        $b = new BufferStream(5);
+        $buffer = new BufferStream(5);
 
-        $this->assertEquals(3, $b->write('hi '));
-        $this->assertFalse($b->write('hello'));
-        $this->assertEquals('hi hello', (string) $b);
-        $this->assertEquals(4, $b->write('test'));
+        $this->assertEquals(3, $buffer->write('hi '));
+        $this->assertFalse($buffer->write('hello'));
+        $this->assertEquals('hi hello', (string) $buffer);
+        $this->assertEquals(4, $buffer->write('test'));
     }
 }

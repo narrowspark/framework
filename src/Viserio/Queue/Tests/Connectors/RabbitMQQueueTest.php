@@ -7,12 +7,9 @@ use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use PhpAmqpLib\Channel\AMQPChannel;
 use PhpAmqpLib\Connection\AMQPStreamConnection;
 use PhpAmqpLib\Message\AMQPMessage;
-use PhpAmqpLib\Wire\AMQPTable;
 use Viserio\Contracts\Encryption\Encrypter as EncrypterContract;
-use Viserio\Queue\{
-    Jobs\RabbitMQJob,
-    Connectors\RabbitMQQueue
-};
+use Viserio\Queue\Connectors\RabbitMQQueue;
+use Viserio\Queue\Jobs\RabbitMQJob;
 
 class RabbitMQQueueTest extends \PHPUnit_Framework_TestCase
 {

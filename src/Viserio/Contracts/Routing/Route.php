@@ -2,6 +2,10 @@
 declare(strict_types=1);
 namespace Viserio\Contracts\Routing;
 
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use Viserio\Contracts\Middleware\Middleware as MiddlewareContract;
+
 interface Route
 {
     /**
@@ -17,15 +21,6 @@ interface Route
      * @return string
      */
     public function getUri(): string;
-
-    /**
-     * Set the URI that the route responds to.
-     *
-     * @param string $uri
-     *
-     * @return $this
-     */
-    public function setUri(string $uri): Route;
 
     /**
      * Get the name of the route instance.
@@ -49,6 +44,37 @@ interface Route
      * @return array
      */
     public function getMethods(): array;
+
+    /**
+     * Set a regular expression requirement on the route.
+     *
+     * @param array|string $name
+     * @param string|null  $expression
+     *
+     * @return $this
+     */
+    public function where($name, string $expression = null): Route;
+
+    /**
+     * Add a middleware to route.
+     *
+     * @return $this
+     */
+    public function withMiddleware(MiddlewareContract $middleware): Route;
+
+    /**
+     * Remove a middleware from route.
+     *
+     * @return $this
+     */
+    public function withoutMiddleware(MiddlewareContract $middleware): Route;
+
+    /**
+     * Get all middleware, including the ones from the controller.
+     *
+     * @return array
+     */
+    public function gatherMiddleware(): array;
 
     /**
      * Determine if the route only responds to HTTP requests.
@@ -103,7 +129,7 @@ interface Route
      */
     public function getPrefix(): string;
 
-     /**
+    /**
      * Set a parameter to the given value.
      *
      * @param string $name
@@ -135,9 +161,9 @@ interface Route
     /**
      * Get the key / value list of parameters for the route.
      *
-     * @return array
-     *
      * @throws \LogicException
+     *
+     * @return array
      */
     public function getParameters(): array;
 
@@ -152,31 +178,22 @@ interface Route
      * Unset a parameter on the route if it is set.
      *
      * @param string $name
-     *
-     * @return void
      */
     public function forgetParameter(string $name);
 
     /**
-     * Check if route is a static route.
+     * The regular expression requirements.
      *
-     * @return bool
+     * @return \Viserio\Contracts\Routing\RouteMatcher[]
      */
-    public function isStatic(): bool;
+    public function getSegments(): array;
 
     /**
      * Run the route action and return the response.
      *
-     * @return mixed
-     */
-    public function run();
-
-    /**
-     * Set the router instance on the route.
+     * @param \Psr\Http\Message\ServerRequestInterface $request
      *
-     * @param \Viserio\Contracts\Routing\Router $router
-     *
-     * @return $this
+     * @return \Psr\Http\Message\ResponseInterface
      */
-    public function setRouter(Router $router): Route;
+    public function run(ServerRequestInterface $request): ResponseInterface;
 }

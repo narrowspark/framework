@@ -2,63 +2,43 @@
 declare(strict_types=1);
 namespace Viserio\Routing\Providers;
 
-use FastRoute\DataGenerator\GroupCountBased;
-use Viserio\Application\ServiceProvider;
-use Viserio\Routing\RouteCollection;
-use Viserio\Routing\RouteParser;
-use Viserio\Routing\UrlGenerator\GroupCountBasedDataGenerator;
-use Viserio\Routing\UrlGenerator\SimpleUrlGenerator;
+use Interop\Container\ContainerInterface;
+use Interop\Container\ServiceProvider;
+use Viserio\Contracts\Events\Dispatcher as DispatcherContract;
+use Viserio\Contracts\Routing\Router as RouterContract;
+use Viserio\Routing\Router;
 
-class RoutingServiceProvider extends ServiceProvider
+class RoutingServiceProvider implements ServiceProvider
 {
+    const PACKAGE = 'viserio.routing';
+
     /**
      * {@inheritdoc}
      */
-    public function register()
-    {
-        $this->app->singleton('route', function ($app) {
-            return new RouteCollection(
-                $app,
-                new RouteParser(),
-                new GroupCountBased()
-            );
-        });
-
-        $this->registerUrlGenerator();
-    }
-
-    public function boot()
-    {
-        require $this->app->path() . '/Http/routes.php';
-    }
-
-    /**
-     * Get the services provided by the provider.
-     *
-     * @return string[]
-     */
-    public function provides(): array
+    public function getServices()
     {
         return [
-            'route',
-            'route.url.generator',
-            'route.url.data.generator',
+            Router::class => [self::class, 'createRouter'],
+            'router' => function (ContainerInterface $container) {
+                return $container->get(Router::class);
+            },
+            'route' => function (ContainerInterface $container) {
+                return $container->get(Router::class);
+            },
+            RouterContract::class => function (ContainerInterface $container) {
+                return $container->get(Router::class);
+            },
         ];
     }
 
-    protected function registerUrlGenerator()
+    public static function createRouter(ContainerInterface $container): Router
     {
-        $this->registerUrlGeneratorDataGenerator();
+        $router = new Router($container);
 
-        $this->app->singleton('route.url.generator', function ($app) {
-            return (new SimpleUrlGenerator($app->get('route.url.data.generator')))->setRequest($app['request']);
-        });
-    }
+        if ($container->has(DispatcherContract::class)) {
+            $router->setEventsDispatcher($container->get(DispatcherContract::class));
+        }
 
-    protected function registerUrlGeneratorDataGenerator()
-    {
-        $this->app->singleton('route.url.data.generator', function ($app) {
-            return new GroupCountBasedDataGenerator($app->get('route'));
-        });
+        return $router;
     }
 }

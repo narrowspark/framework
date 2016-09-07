@@ -5,16 +5,12 @@ namespace Viserio\View;
 use Closure;
 use Interop\Container\ContainerInterface;
 use InvalidArgumentException;
-use Viserio\Contracts\{
-    Container\Traits\ContainerAwareTrait,
-    Events\Dispatcher as DispatcherContract,
-    View\View as ViewContract,
-    View\Virtuoso as VirtuosoContract
-};
-use Viserio\Support\{
-    Invoker,
-    Str
-};
+use Viserio\Contracts\Container\Traits\ContainerAwareTrait;
+use Viserio\Contracts\Events\Dispatcher as DispatcherContract;
+use Viserio\Contracts\View\View as ViewContract;
+use Viserio\Contracts\View\Virtuoso as VirtuosoContract;
+use Viserio\Support\Invoker;
+use Viserio\Support\Str;
 use Viserio\View\Traits\NormalizeNameTrait;
 
 class Virtuoso implements VirtuosoContract
@@ -89,7 +85,7 @@ class Virtuoso implements VirtuosoContract
         $creators = [];
 
         foreach ((array) $views as $view) {
-            $creators[] = $this->addViewEvent($view, $callback, 'creating: ');
+            $creators[] = $this->addViewEvent($view, $callback, 'creating.');
         }
 
         return $creators;
@@ -100,7 +96,7 @@ class Virtuoso implements VirtuosoContract
      */
     public function callCreator(ViewContract $view): VirtuosoContract
     {
-        $this->events->emit('creating: ' . $view->getName(), [$view]);
+        $this->events->trigger('creating.' . $view->getName(), [$view]);
 
         return $this;
     }
@@ -110,7 +106,7 @@ class Virtuoso implements VirtuosoContract
      */
     public function callComposer(ViewContract $view): VirtuosoContract
     {
-        $this->events->emit('composing: ' . $view->getName(), [$view]);
+        $this->events->trigger('composing.' . $view->getName(), [$view]);
 
         return $this;
     }
@@ -137,7 +133,7 @@ class Virtuoso implements VirtuosoContract
         $composers = [];
 
         foreach ((array) $views as $view) {
-            $composers[] = $this->addViewEvent($view, $callback, 'composing: ', $priority);
+            $composers[] = $this->addViewEvent($view, $callback, 'composing.', $priority);
         }
 
         return $composers;
@@ -325,12 +321,12 @@ class Virtuoso implements VirtuosoContract
      *
      * @return \Closure|null
      */
-    protected function addViewEvent(string $view, $callback, string $prefix = 'composing: ', int $priority = 0)
+    protected function addViewEvent(string $view, $callback, string $prefix = 'composing.', int $priority = 0)
     {
         $view = $this->normalizeName($view);
 
         if ($callback instanceof Closure) {
-            $this->events->on($prefix . $view, $callback, $priority);
+            $this->events->attach($prefix . $view, $callback, $priority);
 
             return $callback;
         } elseif (is_string($callback)) {
@@ -356,7 +352,8 @@ class Virtuoso implements VirtuosoContract
         // classes from the application IoC container then call the compose method
         // on the instance. This allows for convenient, testable view composers.
         $callback = $this->buildClassEventCallback($class, $prefix);
-        $this->events->on($name, $callback, $priority);
+
+        $this->events->attach($name, $callback, $priority);
 
         return $callback;
     }

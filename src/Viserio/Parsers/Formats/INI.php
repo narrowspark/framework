@@ -2,12 +2,11 @@
 declare(strict_types=1);
 namespace Viserio\Parsers\Formats;
 
-use Viserio\Contracts\Parsers\{
-    Exception\ParseException,
-    Format as FormatContract
-};
+use Viserio\Contracts\Parsers\Dumper as DumperContract;
+use Viserio\Contracts\Parsers\Exception\ParseException;
+use Viserio\Contracts\Parsers\Format as FormatContract;
 
-class INI implements FormatContract
+class INI implements FormatContract, DumperContract
 {
     /**
      * {@inheritdoc}
@@ -39,7 +38,13 @@ class INI implements FormatContract
         return $output;
     }
 
-    protected function writeSection($section, $array)
+    /**
+     * @param string $section
+     * @param array  $array
+     *
+     * @return string
+     */
+    protected function writeSection(string $section, array $array): string
     {
         $subsections = [];
         $output = '[' . $section . ']' . PHP_EOL;

@@ -2,8 +2,9 @@
 declare(strict_types=1);
 namespace Viserio\Http\Tests\Stream;
 
+use Psr\Http\Message\StreamInterface;
+use Viserio\Http\Stream;
 use Viserio\Http\Stream\NoSeekStream;
-use Viserio\Http\Util;
 
 class NoSeekStreamTest extends \PHPUnit_Framework_TestCase
 {
@@ -13,7 +14,7 @@ class NoSeekStreamTest extends \PHPUnit_Framework_TestCase
      */
     public function testCannotSeek()
     {
-        $s = $this->getMockBuilder('Psr\Http\Message\StreamInterface')
+        $s = $this->getMockBuilder(StreamInterface::class)
             ->setMethods(['isSeekable', 'seek'])
             ->getMockForAbstractClass();
 
@@ -31,7 +32,13 @@ class NoSeekStreamTest extends \PHPUnit_Framework_TestCase
      */
     public function testHandlesClose()
     {
-        $s = Util::getStream('foo');
+        $body = 'foo';
+        $stream = fopen('php://temp', 'r+');
+
+        fwrite($stream, $body);
+        fseek($stream, 0);
+
+        $s = new Stream($stream);
         $wrapped = new NoSeekStream($s);
         $wrapped->close();
         $wrapped->write('foo');

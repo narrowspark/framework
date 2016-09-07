@@ -8,13 +8,11 @@ use Narrowspark\Arr\StaticArr as Arr;
 use Swift_Mailer;
 use Swift_Message;
 use Swift_Mime_Message;
-use Viserio\Contracts\{
-    Events\Traits\EventsAwareTrait,
-    Mail\Mailer as MailerContract,
-    Mail\Message as MessageContract,
-    View\Factory as ViewFactoryContract,
-    View\Traits\ViewAwareTrait
-};
+use Viserio\Contracts\Events\Traits\EventsAwareTrait;
+use Viserio\Contracts\Mail\Mailer as MailerContract;
+use Viserio\Contracts\Mail\Message as MessageContract;
+use Viserio\Contracts\View\Factory as ViewFactoryContract;
+use Viserio\Contracts\View\Traits\ViewAwareTrait;
 
 class Mailer implements MailerContract
 {
@@ -66,7 +64,7 @@ class Mailer implements MailerContract
      */
     public function alwaysFrom(string $address, string $name = null)
     {
-        $this->from = compact($address, $name);
+        $this->from = compact('address', 'name');
     }
 
     /**
@@ -192,8 +190,6 @@ class Mailer implements MailerContract
      * @param string|null           $plain
      * @param string|null           $raw
      * @param array                 $data
-     *
-     * @return void
      */
     protected function addContent(MessageContract $message, $view, $plain, $raw, array $data)
     {
@@ -224,7 +220,7 @@ class Mailer implements MailerContract
     protected function sendSwiftMessage(Swift_Mime_Message $message): int
     {
         if ($this->events) {
-            $this->events->emit('events.message.sending', $message);
+            $this->events->trigger('events.message.sending', [$message]);
         }
 
         try {
@@ -246,7 +242,7 @@ class Mailer implements MailerContract
         // If a global from address has been specified we will set it on every message
         // instances so the developer does not have to repeat themselves every time
         // they create a new message. We will just go ahead and push the address.
-        if (! empty($this->from['address'])) {
+        if (isset($this->from['address'])) {
             $message->from($this->from['address'], $this->from['name']);
         }
 

@@ -3,41 +3,56 @@ declare(strict_types=1);
 namespace Viserio\Hashing\Providers;
 
 use Defuse\Crypto\Key;
-use Viserio\Application\ServiceProvider;
+use Interop\Container\ContainerInterface;
+use Interop\Container\ServiceProvider;
+use Viserio\Config\Manager as ConfigManager;
 use Viserio\Hashing\Password;
 
-class HashingServiceProvider extends ServiceProvider
+class HashingServiceProvider implements ServiceProvider
 {
+    const PACKAGE = 'viserio.hashing';
+
     /**
      * {@inheritdoc}
      */
-    public function register()
-    {
-        $this->registerPassword();
-    }
-
-    /**
-     * Get the services provided by the provider.
-     *
-     * @return string[]
-     */
-    public function provides(): array
+    public function getServices()
     {
         return [
-            'password',
+            Password::class => [self::class, 'createPassword'],
+            'password' => function (ContainerInterface $container) {
+                return $container->get(Password::class);
+            },
         ];
     }
 
-    protected function registerPassword()
+    public static function createPassword(ContainerInterface $container): Password
     {
-        $this->app->singleton('password', function () {
-            $config = $app->get('config');
+        if ($container->has(ConfigManager::class)) {
+            $config = $container->get(ConfigManager::class)->get('hashing');
+        } else {
+            $config = self::get($container, 'options');
+        }
 
-            return new Password(
-                Key::loadFromAsciiSafeString(
-                    $config->get('app::key')
-                )
-            );
-        });
+        $encrypt = new Password(
+            $config['key']
+        );
+
+        return $encrypt;
+    }
+
+    /**
+     * Returns the entry named PACKAGE.$name, of simply $name if PACKAGE.$name is not found.
+     *
+     * @param ContainerInterface $container
+     * @param string             $name
+     *
+     * @return mixed
+     */
+    private static function get(ContainerInterface $container, string $name, $default = null)
+    {
+        $namespacedName = self::PACKAGE . '.' . $name;
+
+        return $container->has($namespacedName) ? $container->get($namespacedName) :
+            ($container->has($name) ? $container->get($name) : $default);
     }
 }

@@ -12,8 +12,8 @@ class DropboxConnectorTest extends \PHPUnit_Framework_TestCase
         $connector = new DropboxConnector();
 
         $return = $connector->connect([
-            'token'  => 'your-token',
-            'app'    => 'your-app',
+            'token' => 'your-token',
+            'app' => 'your-app',
         ]);
 
         $this->assertInstanceOf(DropboxAdapter::class, $return);
@@ -24,8 +24,8 @@ class DropboxConnectorTest extends \PHPUnit_Framework_TestCase
         $connector = new DropboxConnector();
 
         $return = $connector->connect([
-            'token'  => 'your-token',
-            'app'    => 'your-app',
+            'token' => 'your-token',
+            'app' => 'your-app',
             'prefix' => 'your-prefix',
         ]);
 

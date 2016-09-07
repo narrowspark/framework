@@ -3,10 +3,8 @@ declare(strict_types=1);
 namespace Viserio\Console\Tests\Command;
 
 use Viserio\Console\Command\ExpressionParser;
-use Viserio\Console\Input\{
-    InputArgument,
-    InputOption
-};
+use Viserio\Console\Input\InputArgument;
+use Viserio\Console\Input\InputOption;
 
 class ExpressionParserTest extends \PHPUnit_Framework_TestCase
 {

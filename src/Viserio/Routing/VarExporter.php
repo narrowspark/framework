@@ -7,6 +7,15 @@ use StdClass;
 class VarExporter
 {
     /**
+     * Private constructor; non-instantiable.
+     *
+     * @codeCoverageIgnore
+     */
+    private function __construct()
+    {
+    }
+
+    /**
      * Converts the supplied value into a valid PHP representation.
      *
      * @param string|array|null|object $value
@@ -49,14 +58,5 @@ class VarExporter
         }
 
         return 'unserialize(' . var_export(serialize($value), true) . ')';
-    }
-
-    /**
-     * Don't instantiate this class.
-     *
-     * @codeCoverageIgnore
-     */
-    private function __construct() {
-        //
     }
 }

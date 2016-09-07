@@ -8,7 +8,7 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Contracts\Cookie\Cookie as CookieContract;
 use Viserio\Contracts\Encryption\Encrypter as EncrypterContract;
-use Viserio\Contracts\Middleware\Frame as FrameContract;
+use Viserio\Contracts\Middleware\Delegate as DelegateContract;
 use Viserio\Contracts\Middleware\Middleware as MiddlewareContract;
 use Viserio\Cookie\Cookie;
 
@@ -43,7 +43,7 @@ class EncryptCookies implements MiddlewareContract
      */
     public function handle(
         ServerRequestInterface $request,
-        FrameContract $frame
+        DelegateContract $frame
     ): ResponseInterface {
         return $this->encrypt($frame->next($this->decrypt($request)));
     }

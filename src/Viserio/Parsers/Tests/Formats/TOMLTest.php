@@ -51,9 +51,4 @@ class TOMLTest extends \PHPUnit_Framework_TestCase
     {
         $this->parser->parse('nonexistfile');
     }
-
-    public function testDump()
-    {
-        $this->assertSame('Not supported.', $this->parser->dump([]));
-    }
 }

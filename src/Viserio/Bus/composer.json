@@ -32,9 +32,10 @@
         "viserio/support"                                    : "self.version"
     },
     "require-dev": {
-        "narrowspark/php-cs-fixer-config"                    : "^1.1",
+        "container-interop/service-provider"                 : "^0.3",
         "narrowspark/testing-helper"                         : "^1.5",
         "phpunit/phpunit"                                    : "^5.1",
+        "viserio/container"                                  : "self.version",
         "viserio/statical-proxy"                             : "self.version"
     },
     "autoload": {
@@ -51,6 +52,10 @@
     "provide": {
         "container-interop/container-interop-implementation" : "^1.1",
         "psr/container-implementation"                       : "^1.0"
+    },
+    "suggest": {
+        "container-interop/service-provider"                 : "Required to use service-provider (^0.3).",
+        "viserio/queue"                                      : "Required to use queueing dispatcher (self.version)."
     },
     "extra": {
         "branch-alias": {
