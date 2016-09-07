@@ -101,7 +101,11 @@ class EnvironmentDetector implements EnvironmentContract
     }
 
     /**
-     * {@inheritdoc}
+     * Get the environment argument from the console.
+     *
+     * @param array $args
+     *
+     * @return string|null
      */
     protected function getEnvironmentArgument(array $args)
     {
