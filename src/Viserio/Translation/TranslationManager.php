@@ -8,11 +8,12 @@ use Viserio\Contracts\Parsers\Traits\LoaderAwareTrait;
 use Viserio\Contracts\Translation\MessageCatalogue as MessageCatalogueContract;
 use Viserio\Contracts\Translation\MessageSelector as MessageSelectorContract;
 use Viserio\Contracts\Translation\PluralizationRules as PluralizationRulesContract;
+use Viserio\Contracts\Translation\TranslationManager as TranslationManagerContract;
 use Viserio\Contracts\Translation\Translator as TranslatorContract;
 use Viserio\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 use Viserio\Translation\Traits\ValidateLocaleTrait;
 
-class TranslationManager
+class TranslationManager implements TranslationManagerContract
 {
     use ValidateLocaleTrait;
     use LoaderAwareTrait;

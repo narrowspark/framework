@@ -2,10 +2,12 @@
 declare(strict_types=1);
 namespace Viserio\Queue;
 
+use ErrorException;
 use Exception;
+use ParseError;
 use Throwable;
+use TypeError;
 use Viserio\Contracts\Events\Dispatcher as DispatcherContract;
-use Viserio\Contracts\Exception\Exception\FatalThrowableError;
 use Viserio\Contracts\Exception\Handler as ExceptionHandlerContract;
 use Viserio\Contracts\Queue\Exception\TimeoutException;
 use Viserio\Contracts\Queue\FailedJobProvider as FailedJobProviderContract;
@@ -117,7 +119,7 @@ class Worker implements WorkerContract
             }
         } catch (Throwable $exception) {
             if ($this->exceptions) {
-                $this->exceptions->report(new FatalThrowableError($exception));
+                $this->exceptions->report($this->getErrorException($exception));
             }
         }
 
@@ -230,7 +232,7 @@ class Worker implements WorkerContract
                 $this->runNextJob($connectionName, $queue, $delay, $sleep, $maxTries);
             } catch (Throwable $exception) {
                 if ($this->exceptions) {
-                    $this->exceptions->report(new FatalThrowableError($exception));
+                    $this->exceptions->report($this->getErrorException($exception));
                 }
             } finally {
                 exit;
@@ -409,5 +411,34 @@ class Worker implements WorkerContract
         }
 
         throw $exception;
+    }
+
+    /**
+     * Get a ErrorException instance.
+     *
+     * @param \ParseError|\TypeError|\Throwable $exception
+     *
+     * @return \ErrorException
+     */
+    private function getErrorException($exception): ErrorException
+    {
+        if ($exception instanceof ParseError) {
+            $message = 'Parse error: ' . $exception->getMessage();
+            $severity = E_PARSE;
+        } elseif ($exception instanceof TypeError) {
+            $message = 'Type error: ' . $exception->getMessage();
+            $severity = E_RECOVERABLE_ERROR;
+        } else {
+            $message = $exception->getMessage();
+            $severity = E_ERROR;
+        }
+
+        return new ErrorException(
+            $message,
+            $exception->getCode(),
+            $severity,
+            $exception->getFile(),
+            $exception->getLine()
+        );
     }
 }

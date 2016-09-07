@@ -29,9 +29,11 @@
         "viserio/support"                                    : "self.version"
     },
     "require-dev": {
+        "container-interop/service-provider"                 : "^0.3",
         "narrowspark/testing-helper"                         : "^1.5",
         "mockery/mockery"                                    : "^0.9.5",
         "phpunit/phpunit"                                    : "^5.1",
+        "viserio/container"                                  : "self.version",
         "viserio/http-factory"                               : "self.version"
     },
     "autoload": {
@@ -50,6 +52,10 @@
         "psr/container-implementation"                       : "^1.0",
         "psr/http-message"                                   : "^1.0",
         "psr/http-message-implementation"                    : "^1.0"
+    },
+    "suggest": {
+        "container-interop/container-interop"                : "Required to use service-provider (^1.1).",
+        "container-interop/service-provider"                 : "Required to use service-provider (^0.3).",
     },
     "extra": {
         "branch-alias": {

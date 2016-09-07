@@ -20,7 +20,7 @@ class VerboseFilter implements FilterContract
      *
      * @param bool $debug
      */
-    public function __construct($debug)
+    public function __construct(bool $debug)
     {
         $this->debug = $debug;
     }

@@ -36,6 +36,7 @@
         "php-amqplib/php-amqplib"                            : "^2.6",
         "pda/pheanstalk"                                     : "^3.1",
         "viserio/connect"                                    : "self.version",
+        "viserio/container"                                  : "self.version",
         "viserio/events"                                     : "self.version"
     },
     "autoload": {

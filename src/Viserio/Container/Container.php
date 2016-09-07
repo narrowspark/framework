@@ -451,15 +451,19 @@ class Container extends ContainerResolver implements ArrayAccess, ContainerContr
     }
 
     /**
-     * Check if a binding is computed.
-     *
-     * @param array $binding
-     *
-     * @return bool
+     * {@inheritdoc}
      */
-    public static function isComputed($binding): bool
+    public function isComputed($binding): bool
     {
         return $binding[TypesContract::IS_RESOLVED] && $binding[TypesContract::BINDING_TYPE] !== TypesContract::SERVICE;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getBindings(): array
+    {
+        return $this->bindings;
     }
 
     /**

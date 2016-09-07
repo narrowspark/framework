@@ -140,4 +140,20 @@ interface Container extends ContainerInterface
      * @return $this
      */
     public function register(ServiceProvider $provider, array $parameters = []): Container;
+
+    /**
+     * Check if a binding is computed.
+     *
+     * @param array $binding
+     *
+     * @return bool
+     */
+    public function isComputed($binding): bool;
+
+    /**
+     * Return all added bindings.
+     *
+     * @return array
+     */
+    public function getBindings(): array;
 }
