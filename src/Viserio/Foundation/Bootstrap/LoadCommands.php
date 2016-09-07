@@ -2,11 +2,11 @@
 declare(strict_types=1);
 namespace Viserio\Foundation\Bootstrap;
 
+use Viserio\Config\Manager as ConfigManager;
 use Viserio\Console\Providers\ConsoleServiceProvider;
 use Viserio\Contracts\Console\Application as ApplicationContract;
 use Viserio\Contracts\Container\Types as TypesContract;
 use Viserio\Contracts\Foundation\Application;
-use Viserio\Config\Manager as ConfigManager;
 use Viserio\Contracts\Foundation\Bootstrap as BootstrapContract;
 
 class LoadCommands implements BootstrapContract

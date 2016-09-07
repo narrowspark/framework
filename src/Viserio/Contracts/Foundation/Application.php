@@ -13,7 +13,6 @@ interface Application
      */
     public function getVersion(): string;
 
-
     /**
      * Run the given array of bootstrap classes.
      *
@@ -60,7 +59,7 @@ interface Application
      */
     public function environmentPath(): string;
 
-        /**
+    /**
      * Set the directory for the environment file.
      *
      * @param string $path
@@ -99,7 +98,6 @@ interface Application
      */
     public function configurationIsCached(): bool;
 
-
     /**
      * Detect the application's current environment.
      *
@@ -108,7 +106,6 @@ interface Application
      * @return string
      */
     public function detectEnvironment(Closure $callback): string;
-
 
     /**
      * Determine if application is in local environment.
