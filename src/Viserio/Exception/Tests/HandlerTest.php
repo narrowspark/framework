@@ -197,48 +197,7 @@ class HandlerTest extends \PHPUnit_Framework_TestCase
 
         ob_start();
 
-        try {
-            $handler->handleException(new Exception());
-        } catch (FatalThrowableError $e) {
-            $this->assertInstanceOf(FatalThrowableError::class, $e);
-        }
-
-        ob_end_clean();
-    }
-
-    public function testFormatedHandleException()
-    {
-        $log = $this->mock(LoggerInterface::class);
-        $log->shouldReceive('critical')
-            ->once();
-
-        $config = $this->mock(ConfigManagerContract::class);
-        $config->shouldReceive('get')
-            ->andReturn([]);
-
-        $container = $this->getContainer();
-        $container->shouldReceive('get')
-            ->with(ConfigManagerContract::class)
-            ->andReturn($config);
-        $container->shouldReceive('get')
-            ->with(LoggerInterface::class)
-            ->andReturn($log);
-        $container->shouldReceive('get')
-            ->with(CommandLineTransformer::class)
-            ->andReturn(new CommandLineTransformer());
-
-        $handler = new Handler($container);
-
-
-        $handler->addTransformer(new CommandLineTransformer());
-
-        ob_start();
-
-        try {
-            $handler->handleException(new Exception());
-        } catch (FatalThrowableError $e) {
-            $this->assertInstanceOf(FatalThrowableError::class, $e);
-        }
+        $handler->handleException(new Exception());
 
         ob_end_clean();
     }
