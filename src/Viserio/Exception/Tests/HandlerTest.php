@@ -170,35 +170,4 @@ class HandlerTest extends \PHPUnit_Framework_TestCase
             $this->assertInstanceOf(ErrorException::class, $e);
         }
     }
-
-    public function testHandleException()
-    {
-        $log = $this->mock(LoggerInterface::class);
-        $log->shouldReceive('critical')
-            ->once();
-
-        $config = $this->mock(ConfigManagerContract::class);
-        $config
-            ->shouldReceive('get')
-            ->andReturn([]);
-
-        $container = $this->getContainer();
-        $container->shouldReceive('get')
-            ->with(ConfigManagerContract::class)
-            ->andReturn($config);
-        $container->shouldReceive('get')
-            ->with(LoggerInterface::class)
-            ->andReturn($log);
-        $container->shouldReceive('get')
-            ->with(CommandLineTransformer::class)
-            ->andReturn(new CommandLineTransformer());
-
-        $handler = new Handler($container);
-
-        ob_start();
-
-        $handler->handleException(new Exception());
-
-        ob_end_clean();
-    }
 }
