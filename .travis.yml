@@ -19,8 +19,8 @@ matrix:
   include:
     - php: 7.0
       env: SETUP=basic CHECK_CS=true SEND_COVERAGE=true
-    - php: 7.0
-      env: SETUP=basic HUMBUG=true
+    # - php: 7.0
+    #   env: SETUP=basic HUMBUG=true
     - php: 7.0
       env: SETUP=stable
     - php: 7.0
@@ -30,8 +30,8 @@ matrix:
   allow_failures:
     - env: SETUP=lowest
       php: 7.0
-    - env: SETUP=basic HUMBUG=true
-      php: 7.0
+    # - env: SETUP=basic HUMBUG=true
+    #   php: 7.0
   fast_finish: true
 
 cache:
