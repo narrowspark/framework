@@ -21,38 +21,17 @@ class SessionManager extends AbstractManager
     use EncrypterAwareTrait;
 
     /**
-     * All supported drivers.
-     *
-     * @var array
-     */
-    protected $supportedDrivers = [
-        'apc',
-        'apcu',
-        'array',
-        'filesystem',
-        'local',
-        'memcache',
-        'memcached',
-        'mongodb',
-        'predis',
-        'redis',
-    ];
-
-    /**
      * Constructor.
      *
      * @param \Viserio\Contracts\Config\Manager       $config
      * @param \Viserio\Contracts\Encryption\Encrypter $encrypter
-     * @param \Interop\Container\ContainerInterface   $container
      */
     public function __construct(
         ConfigContract $config,
-        EncrypterContract $encrypter,
-        ContainerInterface $container
+        EncrypterContract $encrypter
     ) {
         $this->config = $config;
         $this->encrypter = $encrypter;
-        $this->container = $container;
     }
 
     /**
