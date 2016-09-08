@@ -30,7 +30,7 @@ matrix:
   allow_failures:
     - env: SETUP=lowest
       php: 7.0
-      env: SETUP=basic HUMBUG=true
+    - env: SETUP=basic HUMBUG=true
       php: 7.0
   fast_finish: true
 
