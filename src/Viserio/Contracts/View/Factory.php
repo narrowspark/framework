@@ -3,7 +3,6 @@ declare(strict_types=1);
 namespace Viserio\Contracts\View;
 
 use Closure;
-use Viserio\Contracts\Events\Dispatcher as DispatcherContract;
 
 interface Factory
 {
@@ -161,29 +160,6 @@ interface Factory
      * @return \Viserio\Contracts\View\Finder
      */
     public function getFinder(): Finder;
-
-    /**
-     * Get the event dispatcher instance.
-     *
-     * @return \Viserio\Contracts\Events\Dispatcher
-     */
-    public function getDispatcher(): DispatcherContract;
-
-    /**
-     * Set virtuoso.
-     *
-     * @param Virtuoso $virtuoso
-     *
-     * @return $this
-     */
-    public function setVirtuoso(Virtuoso $virtuoso): Factory;
-
-    /**
-     * Get virtuoso.
-     *
-     * @return Virtuoso
-     */
-    public function getVirtuoso(): Virtuoso;
 
     /**
      * Get an item from the shared data.

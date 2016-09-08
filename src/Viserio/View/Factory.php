@@ -5,20 +5,20 @@ namespace Viserio\View;
 use Closure;
 use InvalidArgumentException;
 use Narrowspark\Arr\StaticArr as Arr;
-use Viserio\Contracts\Events\Dispatcher as DispatcherContract;
+use Viserio\Contracts\Events\Traits\EventsAwareTrait;
 use Viserio\Contracts\Support\Arrayable;
 use Viserio\Contracts\View\Engine as EngineContract;
 use Viserio\Contracts\View\EngineResolver as EngineResolverContract;
 use Viserio\Contracts\View\Factory as FactoryContract;
 use Viserio\Contracts\View\Finder as FinderContract;
 use Viserio\Contracts\View\View as ViewContract;
-use Viserio\Contracts\View\Virtuoso as VirtuosoContract;
 use Viserio\Support\Str;
 use Viserio\View\Traits\NormalizeNameTrait;
 
 class Factory implements FactoryContract
 {
     use NormalizeNameTrait;
+    use EventsAwareTrait;
 
     /**
      * The engines instance.
@@ -33,13 +33,6 @@ class Factory implements FactoryContract
      * @var \Viserio\Contracts\View\Finder
      */
     protected $finder;
-
-    /**
-     * The event dispatcher instance.
-     *
-     * @var \Viserio\Contracts\Events\Dispatcher
-     */
-    protected $events;
 
     /**
      * Array of registered view name aliases.
@@ -79,27 +72,17 @@ class Factory implements FactoryContract
     protected $shared = [];
 
     /**
-     * Virtuoso instance.
-     *
-     * @var \Viserio\Contracts\View\Virtuoso
-     */
-    protected $virtuoso;
-
-    /**
      * Constructor.
      *
      * @param \Viserio\Contracts\View\EngineResolver $engines
      * @param \Viserio\Contracts\View\Finder         $finder
-     * @param \Viserio\Contracts\Events\Dispatcher   $events
      */
     public function __construct(
         EngineResolverContract $engines,
-        FinderContract $finder,
-        DispatcherContract $events
+        FinderContract $finder
     ) {
         $this->engines = $engines;
         $this->finder = $finder;
-        $this->events = $events;
 
         $this->share('__env', $this);
     }
@@ -310,34 +293,6 @@ class Factory implements FactoryContract
     /**
      * {@inheritdoc}
      */
-    public function getDispatcher(): DispatcherContract
-    {
-        return $this->events;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setVirtuoso(VirtuosoContract $virtuoso): FactoryContract
-    {
-        $this->virtuoso = $virtuoso;
-
-        $this->share('__virtuoso', $virtuoso);
-
-        return $this;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getVirtuoso(): VirtuosoContract
-    {
-        return $this->virtuoso;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function shared(string $key, $default = null)
     {
         return Arr::get($this->shared, $key, $default);
@@ -396,16 +351,10 @@ class Factory implements FactoryContract
      * @param string                                     $path
      * @param array|\Viserio\Contracts\Support\Arrayable $data
      *
-     * @return \Viserio\View\View|\Viserio\View\VirtuosoView
+     * @return \Viserio\View\View
      */
     protected function getView(FactoryContract $factory, EngineContract $engine, string $view, string $path, $data = [])
     {
-        if ($this->virtuoso !== null) {
-            $this->virtuoso->callCreator($view = new VirtuosoView($factory, $engine, $view, $path, $data));
-
-            return $view;
-        }
-
         return new View($factory, $engine, $view, $path, $data);
     }
 }
