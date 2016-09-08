@@ -79,7 +79,7 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
     /**
      * {@inheritdoc}
      */
-    public function write(string $path, string $contents, array $config = []): bool
+    public function write(string $path, $contents, array $config = []): bool
     {
         $configs['visibility'] = $this->parseVisibility($config['visibility'] ?? null) ?: [];
 
@@ -92,6 +92,29 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
         $write = $this->driver->write($path, $contents, $flyConfig);
 
         return ! $write ?: false;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function put(string $path, $contents, array $config = []): bool
+    {
+        $configs['visibility'] = $this->parseVisibility($config['visibility'] ?? null) ?: [];
+        $flyConfig = new FlyConfig($configs);
+
+        if (is_resource($contents)) {
+            if ($this->has($path)) {
+                return (bool) $this->driver->updateStream($path, $resource, $flyConfig);
+            }
+
+            return (bool) $this->driver->writeStream($path, $resource, $flyConfig);
+        }
+
+        if ($this->has($path)) {
+            return (bool) $this->driver->update($path, $contents, $flyConfig);
+        }
+
+        return (bool) $this->driver->write($path, $contents, $flyConfig);
     }
 
     /**

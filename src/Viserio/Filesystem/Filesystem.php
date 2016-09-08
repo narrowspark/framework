@@ -64,7 +64,7 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract, Direct
     /**
      * {@inheritdoc}
      */
-    public function write(string $path, string $contents, array $config = []): bool
+    public function write(string $path, $contents, array $config = []): bool
     {
         $path = self::normalizeDirectorySeparator($path);
         $lock = isset($config['lock']) ? LOCK_EX : 0;
@@ -78,6 +78,19 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract, Direct
         }
 
         return true;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function put(string $path, $contents, array $config = []): bool
+    {
+        $path = self::normalizeDirectorySeparator($path);
+        $lock = isset($config['lock']) ? LOCK_EX : 0;
+
+        $success = file_put_contents($path, $contents, $lock);
+
+        return (bool) $success;
     }
 
     /**

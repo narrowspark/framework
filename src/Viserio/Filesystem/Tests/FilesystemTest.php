@@ -53,6 +53,15 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
         $this->assertStringEqualsFile($file->url(), 'Hello World');
     }
 
+    public function testPutStoresFiles()
+    {
+        $file = vfsStream::newFile('temp.txt')->at($this->root);
+
+        $this->files->put($file->url(), 'Hello World');
+
+        $this->assertStringEqualsFile($file->url(), 'Hello World');
+    }
+
     /**
      * @expectedException Viserio\Contracts\Filesystem\Exception\FileNotFoundException
      */

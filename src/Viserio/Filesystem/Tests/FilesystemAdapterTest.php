@@ -58,6 +58,15 @@ class FilesystemAdapterTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('Hello World', $adapter->read('test.txt'));
     }
 
+    public function testPutStoresFiles()
+    {
+        $adapter = $this->adapter;
+
+        $adapter->put('test.txt', 'Hello World');
+
+        $this->assertEquals('Hello World', $adapter->read('test.txt'));
+    }
+
     /**
      * @expectedException Viserio\Contracts\Filesystem\Exception\FileNotFoundException
      */
