@@ -4,23 +4,21 @@ namespace Viserio\Cookie\Tests;
 
 use DateTime;
 use Mockery as Mock;
+use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Viserio\Cookie\Cookie;
 use Viserio\Cookie\RequestCookie;
 
 class RequestCookieTest extends \PHPUnit_Framework_TestCase
 {
-    public function tearDown()
-    {
-        Mock::close();
-    }
+    use MockeryTrait;
 
     /**
      * @dataProvider provideParsesFromCookieStringData
      */
     public function testFromSetCookieHeader($cookieString, Cookie $expectedCookie)
     {
-        $request = Mock::mock(Request::class);
+        $request = $this->mock(Request::class);
         $request->shouldReceive('getHeader')->with('Set-Cookie')->andReturn($cookieString);
 
         $cookie = new RequestCookie();
@@ -34,7 +32,7 @@ class RequestCookieTest extends \PHPUnit_Framework_TestCase
      */
     public function testFromCookieHeader($cookieString, Cookie $expectedCookie)
     {
-        $request = Mock::mock(Request::class);
+        $request = $this->mock(Request::class);
         $request->shouldReceive('getHeaderLine')->with('Cookie')->andReturn($cookieString);
 
         $cookie = new RequestCookie();

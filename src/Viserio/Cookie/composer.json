@@ -25,8 +25,9 @@
     "require-dev": {
         "container-interop/container-interop" : "^1.1",
         "container-interop/service-provider"  : "^0.3",
-        "phpunit/phpunit"                     : "^5.1",
+        "mockery/mockery"                     : "^0.9",
         "narrowspark/testing-helper"          : "^1.5",
+        "phpunit/phpunit"                     : "^5.1",
         "viserio/config"                      : "self.version",
         "viserio/container"                   : "self.version",
         "viserio/encrypter"                   : "self.version"

@@ -4,6 +4,7 @@ namespace Viserio\Routing\Tests\Router;
 
 use Viserio\Contracts\Routing\Pattern;
 use Viserio\HttpFactory\ResponseFactory;
+use Viserio\HttpFactory\ServerRequestFactory;
 use Viserio\HttpFactory\StreamFactory;
 
 class BasicRestfulRouterTest extends RouteRouterBaseTest
@@ -23,6 +24,18 @@ class BasicRestfulRouterTest extends RouteRouterBaseTest
             ['PATCH', '/admin/1', 'admin.patch | 1'],
             ['OPTIONS', '/options', 'options | \d+'],
         ];
+    }
+
+    /**
+     * @dataProvider routerMatching404Provider
+     * @expectedException \Narrowspark\HttpStatus\Exception\NotFoundException
+     */
+    public function testRouter404($httpMethod, $uri)
+    {
+        $this->router->dispatch(
+            (new ServerRequestFactory())->createServerRequest($httpMethod, $uri),
+            (new ResponseFactory())->createResponse()
+        );
     }
 
     public function routerMatching404Provider()
@@ -56,6 +69,18 @@ class BasicRestfulRouterTest extends RouteRouterBaseTest
             ['PATCH', '/user/1'],
             ['PATCH', '/user/123321'],
         ];
+    }
+
+    /**
+     * @dataProvider routerMatching405Provider
+     * @expectedException \Narrowspark\HttpStatus\Exception\MethodNotAllowedException
+     */
+    public function testRouter405($httpMethod, $uri)
+    {
+        $this->router->dispatch(
+            (new ServerRequestFactory())->createServerRequest($httpMethod, $uri),
+            (new ResponseFactory())->createResponse()
+        );
     }
 
     protected function definitions($router)

@@ -43,29 +43,5 @@ abstract class RouteRouterBaseTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($status, $actualResult->getStatusCode());
     }
 
-    /**
-     * @dataProvider routerMatching404Provider
-     * @expectedException \Narrowspark\HttpStatus\Exception\NotFoundException
-     */
-    public function testRouter404($httpMethod, $uri)
-    {
-        $this->router->dispatch(
-            (new ServerRequestFactory())->createServerRequest($httpMethod, $uri),
-            (new ResponseFactory())->createResponse()
-        );
-    }
-
-    /**
-     * @dataProvider routerMatching405Provider
-     * @expectedException \Narrowspark\HttpStatus\Exception\MethodNotAllowedException
-     */
-    public function testRouter405($httpMethod, $uri)
-    {
-        $this->router->dispatch(
-            (new ServerRequestFactory())->createServerRequest($httpMethod, $uri),
-            (new ResponseFactory())->createResponse()
-        );
-    }
-
     abstract protected function definitions($routes);
 }
