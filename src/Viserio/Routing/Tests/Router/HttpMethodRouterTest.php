@@ -4,6 +4,7 @@ namespace Viserio\Routing\Tests\Router;
 
 use Viserio\HttpFactory\ResponseFactory;
 use Viserio\HttpFactory\StreamFactory;
+use Viserio\HttpFactory\ServerRequestFactory;
 
 class HttpMethodRouterTest extends RouteRouterBaseTest
 {

@@ -4,6 +4,7 @@ namespace Viserio\Routing\Tests\Router;
 
 use Viserio\Contracts\Routing\Pattern;
 use Viserio\HttpFactory\ResponseFactory;
+use Viserio\HttpFactory\ServerRequestFactory;
 use Viserio\HttpFactory\StreamFactory;
 
 class CommonrouteregmentRouterTest extends RouteRouterBaseTest
@@ -18,6 +19,18 @@ class CommonrouteregmentRouterTest extends RouteRouterBaseTest
             ['GET', '/route5/a/b/c', 'route5 | p_1 = a | p_2 = b | p_3 = c'],
             ['GET', '/route6/a/b/c', 'route6 | p_1 = a | p2 = b | p_3 = c'],
         ];
+    }
+
+    /**
+     * @dataProvider routerMatching404Provider
+     * @expectedException \Narrowspark\HttpStatus\Exception\NotFoundException
+     */
+    public function testRouter404($httpMethod, $uri)
+    {
+        $this->router->dispatch(
+            (new ServerRequestFactory())->createServerRequest($httpMethod, $uri),
+            (new ResponseFactory())->createResponse()
+        );
     }
 
     public function routerMatching404Provider()

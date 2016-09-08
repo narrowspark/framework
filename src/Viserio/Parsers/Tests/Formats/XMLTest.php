@@ -76,7 +76,7 @@ class XMLTest extends \PHPUnit_Framework_TestCase
 
         $dump = vfsStream::newFile('dump.xml')->withContent($this->parser->dump($array))->at($this->root);
 
-        $this->assertEquals($this->file->read($file->url()), $this->file->read($dump->url()));
+        $this->assertEquals(str_replace("\r\n", '', $this->file->read($file->url())), str_replace("\r\n", '', $this->file->read($dump->url())));
     }
 
     public function testDumpToThrowException()

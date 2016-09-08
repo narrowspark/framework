@@ -252,11 +252,19 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
     {
         $deletes = [];
 
+        $success = true;
+
         foreach ($paths as $path) {
-            $deletes[] = $this->driver->delete($path);
+            try {
+                if (! $this->driver->delete($path)) {
+                    $success = false;
+                }
+            } catch (FileNotFoundException $e) {
+                $success = false;
+            }
         }
 
-        return ! in_array('false', $deletes, true);
+        return $success;
     }
 
     /**

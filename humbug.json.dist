@@ -5,10 +5,10 @@
         ],
         "excludes": [
             "vendor",
-            "src\/Viserio\/**\/Tests"
+            "Tests"
         ]
     },
-    "timeout": 10,
+    "timeout": 15,
     "logs": {
         "text": "build\/logs\/humbuglog.txt",
         "json": "build\/logs\/humbuglog.json"

@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Container\Tests;
 
 use Mouf\Picotainer\Picotainer;
+use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use StdClass;
 use Viserio\Container\Container;
 use Viserio\Container\Tests\Fixture\ContainerCircularReferenceStubA;
@@ -23,6 +24,8 @@ use Viserio\Container\Tests\Fixture\FactoryClass;
 
 class ContainerTest extends \PHPUnit_Framework_TestCase
 {
+    use MockeryTrait;
+
     /**
      * @var \Viserio\Container\Container
      */
@@ -124,7 +127,8 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
     public function testParametersCanOverrideDependencies()
     {
         $container = new Container();
-        $stub = new ContainerDependentFixture($mock = $this->createMock(ContainerContractFixtureInterface::class));
+        $mock = $this->mock(ContainerContractFixtureInterface::class);
+        $stub = new ContainerDependentFixture($mock);
         $resolved = $container->make(ContainerNestedDependentFixture::class, [$stub]);
 
         $this->assertInstanceOf(ContainerNestedDependentFixture::class, $resolved);

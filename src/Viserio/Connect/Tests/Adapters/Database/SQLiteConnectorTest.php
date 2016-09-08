@@ -24,7 +24,6 @@ class SQLiteConnectorTest extends \PHPUnit_Framework_TestCase
     public function testSQLiteDatabaseNotFound()
     {
         $config = ['database' => __DIR__ . 'notfound.db'];
-        $connection = $this->createMock(PDO::class);
 
         $connector = $this->getMockBuilder(SQLiteConnector::class)
             ->setMethods(['createConnection', 'getOptions'])
