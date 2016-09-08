@@ -4,8 +4,8 @@ namespace Viserio\Routing\Tests\Router;
 
 use Viserio\Contracts\Routing\Pattern;
 use Viserio\HttpFactory\ResponseFactory;
-use Viserio\HttpFactory\StreamFactory;
 use Viserio\HttpFactory\ServerRequestFactory;
+use Viserio\HttpFactory\StreamFactory;
 
 class BasicRestfulRouterTest extends RouteRouterBaseTest
 {

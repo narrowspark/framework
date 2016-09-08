@@ -4,9 +4,9 @@ namespace Viserio\Cookie\Tests;
 
 use DateTime;
 use Mockery as Mock;
+use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Viserio\Cookie\Cookie;
-use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use Viserio\Cookie\RequestCookie;
 
 class RequestCookieTest extends \PHPUnit_Framework_TestCase

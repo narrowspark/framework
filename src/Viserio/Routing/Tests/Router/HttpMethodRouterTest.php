@@ -3,8 +3,8 @@ declare(strict_types=1);
 namespace Viserio\Routing\Tests\Router;
 
 use Viserio\HttpFactory\ResponseFactory;
-use Viserio\HttpFactory\StreamFactory;
 use Viserio\HttpFactory\ServerRequestFactory;
+use Viserio\HttpFactory\StreamFactory;
 
 class HttpMethodRouterTest extends RouteRouterBaseTest
 {

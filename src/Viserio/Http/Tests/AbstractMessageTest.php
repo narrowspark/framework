@@ -2,10 +2,10 @@
 declare(strict_types=1);
 namespace Viserio\Http\Tests;
 
+use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use Psr\Http\Message\MessageInterface;
 use Psr\Http\Message\StreamInterface;
 use Viserio\Http\Tests\Constraint\HttpProtocolVersion;
-use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use Viserio\Http\Tests\Constraint\Immutable;
 
 abstract class AbstractMessageTest extends \PHPUnit_Framework_TestCase
