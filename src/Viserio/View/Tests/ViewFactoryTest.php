@@ -310,7 +310,7 @@ class ViewFactoryTest extends \PHPUnit_Framework_TestCase
     {
         return [
             $this->mock(EngineResolver::class),
-            $this->mock(Finder::class)
+            $this->mock(Finder::class),
         ];
     }
 
