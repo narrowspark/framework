@@ -91,7 +91,10 @@ class FilesystemManager extends AbstractConnectionManager
      */
     protected function adapt(AdapterInterface $filesystem): FilesystemContract
     {
-        return new FilesystemAdapter($filesystem);
+        $adapter = new FilesystemAdapter($filesystem);
+        $adapter->setLocalPath($this->config->get($this->getConfigName() . '.disks.local.root'));
+
+        return $adapter;
     }
 
     /**
