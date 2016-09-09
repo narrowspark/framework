@@ -71,6 +71,18 @@ class PostgreSQLConnector extends AbstractDatabaseConnector
             $dsn .= sprintf(';sslmode=%s', $sslmode);
         }
 
+        if (isset($config['sslcert'])) {
+            $dsn .= ";sslcert={$sslcert}";
+        }
+
+        if (isset($config['sslkey'])) {
+            $dsn .= ";sslkey={$sslkey}";
+        }
+
+        if (isset($config['sslrootcert'])) {
+            $dsn .= ";sslrootcert={$sslrootcert}";
+        }
+
         return $dsn;
     }
 
