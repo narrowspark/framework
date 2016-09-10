@@ -4,5 +4,4 @@ namespace Viserio\Validation;
 
 class Validator
 {
-
 }
