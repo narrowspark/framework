@@ -78,6 +78,7 @@ class Application extends Container implements ApplicationContract
 
     /**
      * {@inheritdoc}
+     *
      * @codeCoverageIgnore
      */
     public function getVersion(): string
@@ -149,6 +150,7 @@ class Application extends Container implements ApplicationContract
 
     /**
      * {@inheritdoc}
+     *
      * @codeCoverageIgnore
      */
     public function environmentPath(): string
@@ -158,6 +160,7 @@ class Application extends Container implements ApplicationContract
 
     /**
      * {@inheritdoc}
+     *
      * @codeCoverageIgnore
      */
     public function useEnvironmentPath(string $path): ApplicationContract
@@ -169,6 +172,7 @@ class Application extends Container implements ApplicationContract
 
     /**
      * {@inheritdoc}
+     *
      * @codeCoverageIgnore
      */
     public function loadEnvironmentFrom(string $file): ApplicationContract
@@ -180,6 +184,7 @@ class Application extends Container implements ApplicationContract
 
     /**
      * {@inheritdoc}
+     *
      * @codeCoverageIgnore
      */
     public function environmentFile(): string
@@ -189,6 +194,7 @@ class Application extends Container implements ApplicationContract
 
     /**
      * {@inheritdoc}
+     *
      * @codeCoverageIgnore
      */
     public function environmentFilePath(): string
@@ -210,6 +216,7 @@ class Application extends Container implements ApplicationContract
 
     /**
      * {@inheritdoc}
+     *
      * @codeCoverageIgnore
      */
     public function isLocal(): bool
@@ -219,6 +226,7 @@ class Application extends Container implements ApplicationContract
 
     /**
      * {@inheritdoc}
+     *
      * @codeCoverageIgnore
      */
     public function runningUnitTests(): bool

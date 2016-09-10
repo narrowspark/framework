@@ -2,14 +2,14 @@
 declare(strict_types=1);
 namespace Viserio\Foundation\Tests;
 
-use StdClass;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
-use Viserio\Foundation\Bootstrap\DetectEnvironment;
-use Viserio\Foundation\EnvironmentDetector;
+use StdClass;
 use Viserio\Config\Manager as ConfigManager;
 use Viserio\Contracts\Events\Dispatcher as DispatcherContract;
 use Viserio\Contracts\Translation\TranslationManager as TranslationManagerContract;
 use Viserio\Foundation\Application;
+use Viserio\Foundation\Bootstrap\DetectEnvironment;
+use Viserio\Foundation\EnvironmentDetector;
 
 class ApplicationTest extends \PHPUnit_Framework_TestCase
 {
@@ -19,7 +19,7 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
     {
         $app = $this->getApplication();
         $app->bootstrapWith([
-            DetectEnvironment::class
+            DetectEnvironment::class,
         ]);
 
         $this->assertTrue($app->hasBeenBootstrapped());
@@ -63,14 +63,14 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
     protected function getApplication()
     {
         $paths = [
-            'app' => __DIR__.'/../app',
-            'config' => __DIR__.'/../config',
-            'routes' => __DIR__.'/../routes',
-            'database' => __DIR__.'/../database',
-            'lang' => __DIR__.'/../resources/lang',
-            'public' => __DIR__.'/../public',
-            'base' => __DIR__.'/..',
-            'storage' => __DIR__.'/../storage',
+            'app' => __DIR__ . '/../app',
+            'config' => __DIR__ . '/../config',
+            'routes' => __DIR__ . '/../routes',
+            'database' => __DIR__ . '/../database',
+            'lang' => __DIR__ . '/../resources/lang',
+            'public' => __DIR__ . '/../public',
+            'base' => __DIR__ . '/..',
+            'storage' => __DIR__ . '/../storage',
         ];
 
         return new Application($paths);

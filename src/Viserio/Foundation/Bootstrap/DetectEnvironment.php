@@ -3,8 +3,8 @@ declare(strict_types=1);
 namespace Viserio\Foundation\Bootstrap;
 
 use Dotenv\Dotenv;
-use Viserio\Config\Manager as ConfigManager;
 use Dotenv\Exception\InvalidPathException;
+use Viserio\Config\Manager as ConfigManager;
 use Viserio\Contracts\Foundation\Application;
 use Viserio\Contracts\Foundation\Bootstrap as BootstrapContract;
 
