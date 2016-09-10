@@ -17,7 +17,7 @@ trait FilesystemHelperTrait
      */
     public function getRequire(string $path)
     {
-        $path = $this->getPath($path);
+        $path = $this->getNormalzedOrPrefixedPath($path);
 
         if ($this->isFile($path) && $this->has($path)) {
             return require $path;
@@ -39,7 +39,7 @@ trait FilesystemHelperTrait
      */
     public function requireOnce(string $path)
     {
-        $path = $this->getPath($path);
+        $path = $this->getNormalzedOrPrefixedPath($path);
 
         if ($this->isFile($path) && $this->has($path)) {
             require_once $path;
@@ -57,7 +57,7 @@ trait FilesystemHelperTrait
      */
     public function isWritable(string $path): bool
     {
-        return is_writable($this->getPath($path));
+        return is_writable($this->getNormalzedOrPrefixedPath($path));
     }
 
     /**
@@ -69,7 +69,7 @@ trait FilesystemHelperTrait
      */
     public function isFile(string $file): bool
     {
-        return is_file($this->getPath($file));
+        return is_file($this->getNormalzedOrPrefixedPath($file));
     }
 
     /**
@@ -84,8 +84,8 @@ trait FilesystemHelperTrait
      */
     public function link(string $target, string $link)
     {
-        $target = $this->getPath($target);
-        $link = $this->getPath($link);
+        $target = $this->getNormalzedOrPrefixedPath($target);
+        $link = $this->getNormalzedOrPrefixedPath($link);
 
         if (! $this->isWindows()) {
             return symlink($target, $link);
@@ -142,14 +142,5 @@ trait FilesystemHelperTrait
      *
      * @return string
      */
-    private function getPath(string $path): string
-    {
-        if (isset($this->driver)) {
-            $prefix = method_exists($this->driver, 'getPathPrefix') ? $this->driver->getPathPrefix() : '';
-
-            return $prefix . $path;
-        }
-
-        return self::normalizeDirectorySeparator($path);
-    }
+    abstract protected function getNormalzedOrPrefixedPath(string $path): string;
 }
