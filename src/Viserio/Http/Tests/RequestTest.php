@@ -165,37 +165,6 @@ class RequestTest extends AbstractMessageTest
         $this->assertSame($body, $request->getBody());
     }
 
-    private function getEmptyHostHeader()
-    {
-        $emptyHostHeaderMockUri = $this->mock(UriInterface::class);
-        $emptyHostHeaderMockUri->shouldReceive('getHost')
-            ->andReturn('');
-
-        return new Request($emptyHostHeaderMockUri);
-    }
-
-    private function getDefaultUriHost()
-    {
-        $defaultUriHost = $this->mock(UriInterface::class);
-        $defaultUriHost->shouldReceive('getHost')
-            ->andReturn('baz.com');
-        $defaultUriHost->shouldReceive('getPort')
-            ->andReturn(null);
-
-        return $defaultUriHost;
-    }
-
-    private function getDefaultUriHostAndPort()
-    {
-        $defaultUriHostAndPort = $this->mock(UriInterface::class);
-        $defaultUriHostAndPort->shouldReceive('getHost')
-            ->andReturn('baz.com');
-        $defaultUriHostAndPort->shouldReceive('getPort')
-            ->andReturn('8080');
-
-        return $defaultUriHostAndPort;
-    }
-
     public function testEmptyRequestHostEmptyUriHostPreserveHostFalse()
     {
         $uri = $this->mock(UriInterface::class);
@@ -546,5 +515,36 @@ class RequestTest extends AbstractMessageTest
         $request = $request->withUri(new Uri('http://foo.com:8125/bar'));
 
         $this->assertEquals('foo.com:8125', $request->getHeaderLine('host'));
+    }
+
+    private function getEmptyHostHeader()
+    {
+        $emptyHostHeaderMockUri = $this->mock(UriInterface::class);
+        $emptyHostHeaderMockUri->shouldReceive('getHost')
+            ->andReturn('');
+
+        return new Request($emptyHostHeaderMockUri);
+    }
+
+    private function getDefaultUriHost()
+    {
+        $defaultUriHost = $this->mock(UriInterface::class);
+        $defaultUriHost->shouldReceive('getHost')
+            ->andReturn('baz.com');
+        $defaultUriHost->shouldReceive('getPort')
+            ->andReturn(null);
+
+        return $defaultUriHost;
+    }
+
+    private function getDefaultUriHostAndPort()
+    {
+        $defaultUriHostAndPort = $this->mock(UriInterface::class);
+        $defaultUriHostAndPort->shouldReceive('getHost')
+            ->andReturn('baz.com');
+        $defaultUriHostAndPort->shouldReceive('getPort')
+            ->andReturn('8080');
+
+        return $defaultUriHostAndPort;
     }
 }

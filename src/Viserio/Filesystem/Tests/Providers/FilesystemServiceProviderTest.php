@@ -8,6 +8,8 @@ use Viserio\Config\Providers\ConfigServiceProvider;
 use Viserio\Container\Container;
 use Viserio\Filesystem\FilesystemAdapter;
 use Viserio\Filesystem\FilesystemManager;
+use Viserio\Filesystem\Cache\CachedFactory;
+use Viserio\Cache\Providers\CacheServiceProvider;
 use Viserio\Filesystem\Providers\FilesystemServiceProvider;
 
 class FilesystemServiceProviderTest extends \PHPUnit_Framework_TestCase
@@ -17,6 +19,7 @@ class FilesystemServiceProviderTest extends \PHPUnit_Framework_TestCase
         $container = new Container();
         $container->register(new ConfigServiceProvider());
         $container->register(new FilesystemServiceProvider());
+        $container->register(new CacheServiceProvider());
 
         $container->get('config')->setArray([
             'filesystem.connections' => [
@@ -31,5 +34,10 @@ class FilesystemServiceProviderTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(FilesystemManager::class, $container->get(FilesystemInterface::class));
         $this->assertInstanceOf(FilesystemManager::class, $container->get('flysystem'));
         $this->assertInstanceOf(FilesystemAdapter::class, $container->get('flysystem.connection'));
+        $this->assertInstanceOf(CachedFactory::class, $container->get(CachedFactory::class));
+        $this->assertInstanceOf(CachedFactory::class, $container->get('flysystem.cachedfactory'));
+
+        $this->assertInstanceOf(FilesystemManager::class, $container->get(FilesystemManager::class));
+        $this->assertInstanceOf(CachedFactory::class, $container->get(CachedFactory::class));
     }
 }

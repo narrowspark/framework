@@ -7,6 +7,8 @@ use Interop\Container\ServiceProvider;
 use League\Flysystem\Filesystem;
 use League\Flysystem\FilesystemInterface;
 use Viserio\Config\Manager as ConfigManager;
+use Viserio\Contracts\Cache\Manager as CacheManagerContract;
+use Viserio\Filesystem\Cache\CachedFactory;
 use Viserio\Filesystem\FilesystemManager;
 
 class FilesystemServiceProvider implements ServiceProvider
@@ -28,15 +30,22 @@ class FilesystemServiceProvider implements ServiceProvider
             FilesystemInterface::class => function (ContainerInterface $container) {
                 return $container->get(FilesystemManager::class);
             },
-            'flysystem.cachefactory' => function (ContainerInterface $container) {
-                return $container->get('todo');
+            CachedFactory::class => [self::class, 'createCachedFactory'],
+            'flysystem.cachedfactory' => function (ContainerInterface $container) {
+                return $container->get(CachedFactory::class);
             },
         ];
     }
 
     public static function createFilesystemManager(ContainerInterface $container): FilesystemManager
     {
-        return new FilesystemManager($container->get(ConfigManager::class));
+        $manager = new FilesystemManager($container->get(ConfigManager::class));
+
+        if ($container->has(CacheManagerContract::class)) {
+            $manager->setCacheManager($container->get(CacheManagerContract::class));
+        }
+
+        return $manager;
     }
 
     public static function createFlysystemConnection(ContainerInterface $container)
@@ -44,7 +53,17 @@ class FilesystemServiceProvider implements ServiceProvider
         return $container->get(FilesystemManager::class)->connection();
     }
 
-    public static function createCacheFactory()
+    public static function createCachedFactory(ContainerInterface $container): CachedFactory
     {
+        $cache = null;
+
+        if ($container->has(CacheManagerContract::class)) {
+            $cache = $container->get(CacheManagerContract::class);
+        }
+
+        return new CachedFactory(
+            $container->get(FilesystemManager::class),
+            $cache
+        );
     }
 }

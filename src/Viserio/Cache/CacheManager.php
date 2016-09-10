@@ -22,9 +22,10 @@ use Memcached;
 use MongoDB\Driver\Manager as MongoDBManager;
 use Predis\Client as PredisClient;
 use Redis;
+use Viserio\Contracts\Cache\Manager as CacheManagerContract;
 use Viserio\Support\AbstractManager;
 
-class CacheManager extends AbstractManager
+class CacheManager extends AbstractManager implements CacheManagerContract
 {
     /**
      * {@inheritdoc}
@@ -58,6 +59,22 @@ class CacheManager extends AbstractManager
             $resolvedPools,
             $options ?? (array) $this->config->get($this->getConfigName() . '.chain.options', [])
         );
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function createDriver(array $config)
+    {
+        $driver = parent::createDriver($config);
+
+        $namespace = $this->config->get($this->getConfigName() . '.namespace');
+
+        if ($namespace !== null && $driver instanceof HierarchicalPoolInterface) {
+            return $this->namespacedPool($driver, $namespace);
+        }
+
+        return $driver;
     }
 
     /**
@@ -237,22 +254,6 @@ class CacheManager extends AbstractManager
         $pool = $this->driver($config['pool']);
 
         return new Psr6SessionHandler($pool, $config['config']);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function createDriver(array $config)
-    {
-        $driver = parent::createDriver($config);
-
-        $namespace = $this->config->get($this->getConfigName() . '.namespace');
-
-        if ($namespace !== null && $driver instanceof HierarchicalPoolInterface) {
-            return $this->namespacedPool($driver, $namespace);
-        }
-
-        return $driver;
     }
 
     /**

@@ -5,18 +5,13 @@ namespace Viserio\Support;
 use Closure;
 use InvalidArgumentException;
 use Viserio\Contracts\Config\Manager as ConfigContract;
+use Viserio\Contracts\Config\Traits\ConfigAwareTrait;
 use Viserio\Contracts\Container\Traits\ContainerAwareTrait;
 
 abstract class AbstractManager
 {
     use ContainerAwareTrait;
-
-    /**
-     * The config instance.
-     *
-     * @var \Viserio\Contracts\Config\Manager
-     */
-    protected $config;
+    use ConfigAwareTrait;
 
     /**
      * The registered custom driver creators.
@@ -53,26 +48,6 @@ abstract class AbstractManager
     public function __call(string $method, array $parameters)
     {
         return call_user_func_array([$this->driver(), $method], $parameters);
-    }
-
-    /**
-     * Set a config manager
-     *
-     * @param \Viserio\Contracts\Config\Manager $config
-     */
-    public function setConfig(ConfigContract $config)
-    {
-        $this->config = $config;
-    }
-
-    /**
-     * Get config
-     *
-     * @return \Viserio\Contracts\Config\Manager
-     */
-    public function getConfig(): ConfigContract
-    {
-        return $this->config;
     }
 
     /**
@@ -185,7 +160,7 @@ abstract class AbstractManager
      *
      * @return mixed
      */
-    protected function createDriver(array $config)
+    public function createDriver(array $config)
     {
         $method = 'create' . Str::studly($config['name']) . 'Driver';
 

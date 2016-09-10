@@ -107,6 +107,7 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
     public function put(string $path, $contents, array $config = []): bool
     {
         $config['visibility'] = $this->parseVisibility($config['visibility'] ?? null) ?: [];
+
         $flyConfig = new FlyConfig($config);
 
         if (is_resource($contents)) {
@@ -388,7 +389,7 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
      */
     public function isDirectory(string $dirname): bool
     {
-        return $this->driver->getMetadata($dirname)['type'] === 'dir';
+        return is_dir($this->driver->getPathPrefix() . $dirname);
     }
 
     /**
@@ -400,21 +401,31 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
             return false;
         }
 
-        if (! $this->isDirectory($destination)) {
+        if (! is_dir($destination)) {
             $this->createDirectory($destination, ['visibility' => 'public']);
         }
 
-        $recursive = true;
-
-        if (isset($options['recursive'])) {
-            $recursive = $options['recursive'];
-        }
+        $recursive = $options['recursive'] ?? true;
 
         $contents = $this->driver->listContents($directory, $recursive);
 
         foreach ($contents as $item) {
-            // code...
+            if ($item['type'] == 'dir') {
+                $this->createDirectory(
+                    $destination . str_replace($directory, '', $item['path']),
+                    ['visibility' => $this->getVisibility($item['path'])]
+                );
+            }
+
+            if ($item['type'] == 'file') {
+                $this->copy(
+                    $item['path'],
+                    $destination . str_replace($directory, '', $item['path'])
+                );
+            }
         }
+
+        return true;
     }
 
     /**
@@ -430,7 +441,14 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
             }
         }
 
-        if (@rename($directory, $destination) !== true) {
+        $copy = $this->copyDirectory(
+            $directory,
+            $destination,
+            ['visibility' => $this->getVisibility($directory)]
+        );
+        $delete = $this->deleteDirectory($directory);
+
+        if (!$copy && !$delete) {
             return false;
         }
 

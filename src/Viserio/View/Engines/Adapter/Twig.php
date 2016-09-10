@@ -2,7 +2,6 @@
 declare(strict_types=1);
 namespace Viserio\View\Engines\Adapter;
 
-use ErrorException;
 use Throwable;
 use Twig_Environment;
 use Twig_Extension_Core;
@@ -79,7 +78,7 @@ class Twig implements EngineContract
      */
     protected function getInstance(): Twig_Environment
     {
-        if (!$this->parserInstance) {
+        if (! $this->parserInstance) {
             $config = $this->config;
             $twig = new Twig_Environment(
                 $this->loader(),
@@ -90,7 +89,7 @@ class Twig implements EngineContract
             $twig->addExtension(new Twig_Extension_Optimizer());
             $extensions = $config->get('view.engine.twig.extensions', []);
 
-            if (!empty($extensions)) {
+            if (! empty($extensions)) {
                 foreach ($extensions as $extension) {
                     $twig->addExtension(is_object($extension) ? $extension : new $extension());
                 }

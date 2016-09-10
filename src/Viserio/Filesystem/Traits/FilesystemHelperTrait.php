@@ -17,7 +17,11 @@ trait FilesystemHelperTrait
      */
     public function getRequire(string $path)
     {
-        $path = self::normalizeDirectorySeparator($path);
+        if (isset($this->driver)) {
+            $path = $this->driver->getPathPrefix(). $path;
+        } else {
+            $path = self::normalizeDirectorySeparator($path);
+        }
 
         if ($this->isFile($path) && $this->has($path)) {
             return require $path;
@@ -39,7 +43,11 @@ trait FilesystemHelperTrait
      */
     public function requireOnce(string $path)
     {
-        $path = self::normalizeDirectorySeparator($path);
+        if (isset($this->driver)) {
+            $path = $this->driver->getPathPrefix(). $path;
+        } else {
+            $path = self::normalizeDirectorySeparator($path);
+        }
 
         if ($this->isFile($path) && $this->has($path)) {
             require_once $path;
@@ -57,7 +65,11 @@ trait FilesystemHelperTrait
      */
     public function isWritable(string $path): bool
     {
-        $path = self::normalizeDirectorySeparator($path);
+        if (isset($this->driver)) {
+            $path = $this->driver->getPathPrefix(). $path;
+        } else {
+            $path = self::normalizeDirectorySeparator($path);
+        }
 
         return is_writable($path);
     }
@@ -71,7 +83,11 @@ trait FilesystemHelperTrait
      */
     public function isFile(string $file): bool
     {
-        $file = self::normalizeDirectorySeparator($file);
+        if (isset($this->driver)) {
+            $file = $this->driver->getPathPrefix(). $file;
+        } else {
+            $file = self::normalizeDirectorySeparator($file);
+        }
 
         return is_file($file);
     }
@@ -88,6 +104,14 @@ trait FilesystemHelperTrait
      */
     public function link(string $target, string $link)
     {
+        if (isset($this->driver)) {
+            $target = $this->driver->getPathPrefix(). $target;
+            $link = $this->driver->getPathPrefix(). $link;
+        } else {
+            $target = self::normalizeDirectorySeparator($target);
+            $link = self::normalizeDirectorySeparator($link);
+        }
+
         if (! $this->isWindows()) {
             return symlink($target, $link);
         }

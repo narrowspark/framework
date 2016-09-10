@@ -480,7 +480,7 @@ class Handler implements HandlerContract
      */
     protected function getTransformed(Throwable $exception): Throwable
     {
-        $container =  $this->getContainer();
+        $container = $this->getContainer();
         $transformers = array_merge(
             $this->transformers,
             $container->get(ConfigManagerContract::class)->get('exception.transformers', [])

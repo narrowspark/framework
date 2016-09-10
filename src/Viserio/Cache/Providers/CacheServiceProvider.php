@@ -6,6 +6,7 @@ use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
 use Viserio\Cache\CacheManager;
 use Viserio\Config\Manager as ConfigManager;
+use Viserio\Contracts\Cache\Manager as CacheManagerContract;
 
 class CacheServiceProvider implements ServiceProvider
 {
@@ -16,6 +17,9 @@ class CacheServiceProvider implements ServiceProvider
     {
         return [
             CacheManager::class => [self::class, 'registerCacheFactory'],
+            CacheManagerContract::class => function (ContainerInterface $container) {
+                return $container->get(CacheManager::class);
+            },
             'cache' => function (ContainerInterface $container) {
                 return $container->get(CacheManager::class);
             },

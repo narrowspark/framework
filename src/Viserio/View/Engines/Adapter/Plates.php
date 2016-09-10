@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Viserio\View\Engines\Adapter;
 
 use Exception;
@@ -77,7 +78,7 @@ class Plates implements EnginesContract
      */
     protected function getLoader(): LeagueEngine
     {
-        if (!$this->engine) {
+        if (! $this->engine) {
             $config = $this->config;
             $this->engine = new LeagueEngine(
                 $config->get('view.default.template.path', null),
@@ -117,13 +118,13 @@ class Plates implements EnginesContract
         $engine->loadExtension(new Asset($this->config->get('view.asset', null)));
 
         // Get all extensions
-        if (!empty($this->availableExtensions)) {
+        if (! empty($this->availableExtensions)) {
             foreach ($this->availableExtensions as $extension) {
                 $engine->loadExtension(is_object($extension) ? $extension : new $extension());
             }
         }
 
-        if (!$engine->exists($path)) {
+        if (! $engine->exists($path)) {
             throw new Exception('Template "' . $path . '" dont exist!');
         }
 
