@@ -60,7 +60,7 @@ class RackspaceConnector extends AbstractConnector
     /**
      * {@inheritdoc}
      */
-    protected function getAdapter($client, array $config): \League\Flysystem\AdapterInterface
+    protected function getAdapter($client, array $config): RackspaceAdapter
     {
         return new RackspaceAdapter($client);
     }
