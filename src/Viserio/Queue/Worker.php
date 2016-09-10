@@ -3,7 +3,6 @@ declare(strict_types=1);
 namespace Viserio\Queue;
 
 use ErrorException;
-use Exception;
 use ParseError;
 use Throwable;
 use TypeError;
