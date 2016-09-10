@@ -3,11 +3,11 @@ declare(strict_types=1);
 namespace Viserio\View\Engines\Adapter;
 
 use ErrorException;
-use Twig_Extension_Optimizer;
-use Twig_Extension_Core;
-use Twig_Loader_Filesystem;
-use Twig_Environment;
 use Throwable;
+use Twig_Environment;
+use Twig_Extension_Core;
+use Twig_Extension_Optimizer;
+use Twig_Loader_Filesystem;
 use Viserio\Contracts\View\Engine as EngineContract;
 
 class Twig implements EngineContract
@@ -91,7 +91,7 @@ class Twig implements EngineContract
 
             if (!empty($extensions)) {
                 foreach ($extensions as $extension) {
-                    $twig->addExtension(is_object($extension) ? $extension : new $extension);
+                    $twig->addExtension(is_object($extension) ? $extension : new $extension());
                 }
             }
         }

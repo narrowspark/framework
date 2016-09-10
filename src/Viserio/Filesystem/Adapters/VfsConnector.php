@@ -12,7 +12,7 @@ class VfsConnector extends AbstractConnector
      */
     protected function getClient(array $config)
     {
-        return new Vfs;
+        return new Vfs();
     }
 
     protected function getAuth(array $config): array

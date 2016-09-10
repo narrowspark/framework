@@ -7,9 +7,9 @@ use Viserio\Config\Providers\ConfigServiceProvider;
 use Viserio\Container\Container;
 use Viserio\Encryption\Providers\EncrypterServiceProvider;
 use Viserio\Filesystem\Providers\FilesServiceProvider;
-use Viserio\View\Providers\ViewServiceProvider;
-use Viserio\View\Factory;
 use Viserio\View\Engines\EngineResolver;
+use Viserio\View\Factory;
+use Viserio\View\Providers\ViewServiceProvider;
 use Viserio\View\ViewFinder;
 
 class ViewServiceProviderTest extends \PHPUnit_Framework_TestCase

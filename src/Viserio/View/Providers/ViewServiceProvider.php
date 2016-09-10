@@ -4,14 +4,14 @@ namespace Viserio\View\Providers;
 
 use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
+use Psr\Http\Message\ServerRequestInterface;
+use Viserio\Config\Manager as ConfigManager;
+use Viserio\Filesystem\Filesystem;
 use Viserio\View\Engines\Adapter\Php as PhpEngine;
 use Viserio\View\Engines\Adapter\Plates as PlatesEngine;
 use Viserio\View\Engines\Adapter\Twig as TwigEngine;
 use Viserio\View\Engines\EngineResolver;
 use Viserio\View\Factory;
-use Viserio\Config\Manager as ConfigManager;
-use Viserio\Filesystem\Filesystem;
-use Psr\Http\Message\ServerRequestInterface;
 use Viserio\View\ViewFinder;
 
 class ViewServiceProvider implements ServiceProvider

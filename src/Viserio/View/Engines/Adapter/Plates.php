@@ -1,14 +1,14 @@
 <?php
 namespace Viserio\View\Engines\Adapter;
 
-use Throwable;
 use Exception;
-use Viserio\Contracts\Config\Manager as ManagerContract;
 use League\Plates\Engine;
 use League\Plates\Extension\Asset;
 use League\Plates\Extension\URI;
-use Psr\Http\Message\ServerRequestInterface;
 use League\Plates\Template\Template;
+use Psr\Http\Message\ServerRequestInterface;
+use Throwable;
+use Viserio\Contracts\Config\Manager as ManagerContract;
 use Viserio\Contracts\View\Engine as EnginesContract;
 
 class Plates implements EnginesContract
@@ -119,7 +119,7 @@ class Plates implements EnginesContract
         // Get all extensions
         if (!empty($this->availableExtensions)) {
             foreach ($this->availableExtensions as $extension) {
-                $engine->loadExtension(is_object($extension) ? $extension : new $extension);
+                $engine->loadExtension(is_object($extension) ? $extension : new $extension());
             }
         }
 
