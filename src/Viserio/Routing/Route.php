@@ -26,7 +26,7 @@ class Route implements RouteContract
     /**
      * The HTTP methods the route responds to.
      *
-     * @var string|string[]
+     * @var array
      */
     protected $httpMethods;
 
