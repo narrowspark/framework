@@ -42,42 +42,6 @@ class FilesystemManager extends AbstractConnectionManager
     /**
      * {@inheritdoc}
      */
-    public function getConnectionConfig(string $name): array
-    {
-        $config = parent::getConnectionConfig($name);
-
-        if (is_string($cache = Arr::get($config, 'cache'))) {
-            $config['cache'] = $this->getCacheConfig($cache);
-        }
-
-        return $config;
-    }
-
-    /**
-     * Get the cache configuration.
-     *
-     * @param string $name
-     *
-     * @throws \InvalidArgumentException
-     *
-     * @return array
-     */
-    protected function getCacheConfig(string $name): array
-    {
-        $cache = $this->config->get($this->getConfigName() . '.cache');
-
-        if (! is_array($config = Arr::get($cache, $name)) && ! $config) {
-            throw new InvalidArgumentException("Cache [$name] not configured.");
-        }
-
-        $config['name'] = $name;
-
-        return $config;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     protected function getConfigName(): string
     {
         return 'filesystem';
@@ -86,14 +50,19 @@ class FilesystemManager extends AbstractConnectionManager
     /**
      * Adapt the filesystem implementation.
      *
-     * @param \League\Flysystem\AdapterInterface $filesystem
+     * @param \League\Flysystem\AdapterInterface $adapter
      *
      * @return \Viserio\Contracts\Filesystem\Filesystem
      */
-    protected function adapt(AdapterInterface $filesystem): FilesystemContract
+    protected function adapt(AdapterInterface $adapter): FilesystemContract
     {
-        $adapter = new FilesystemAdapter($filesystem);
-        if ($filesystem instanceof FlyLocal) {
+        if (!($cache = $this->config->get($this->getConfigName() . '.cache', false))) {
+            $adapter = new CachedAdapter($adapter, $this->createCache($cache, $manager));
+        }
+
+        $adapter = new FilesystemAdapter($adapter);
+
+        if ($adapter instanceof FlyLocal) {
             $adapter->setLocalPath($this->config->get($this->getConfigName() . '.disks.local.root', ''));
         }
 

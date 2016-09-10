@@ -101,6 +101,7 @@ class ViewServiceProvider implements ServiceProvider
      * Register the PHP engine implementation.
      *
      * @param \Viserio\View\Engines\EngineResolver $engines
+     * @param \Interop\Container\ContainerInterface $container
      */
     protected static function registerPhpEngine(EngineResolver $engines, ContainerInterface $container)
     {
@@ -113,10 +114,11 @@ class ViewServiceProvider implements ServiceProvider
      * Register the PHP engine implementation.
      *
      * @param \Viserio\View\Engines\EngineResolver $engines
+     * @param \Interop\Container\ContainerInterface $container
      */
     protected static function registerTwigEngine(EngineResolver $engines, ContainerInterface $container)
     {
-        $engines->register('twig', function () {
+        $engines->register('twig', function () use ($container) {
             return new TwigEngine($container->get(ConfigManager::class));
         });
     }
@@ -125,6 +127,7 @@ class ViewServiceProvider implements ServiceProvider
      * Register the PHP engine implementation.
      *
      * @param \Viserio\View\Engines\EngineResolver $engines
+     * @param \Interop\Container\ContainerInterface $container
      */
     protected static function registerPlatesEngine(EngineResolver $engines, ContainerInterface $container)
     {
@@ -134,7 +137,7 @@ class ViewServiceProvider implements ServiceProvider
             $request = $container->get(ServerRequestInterface::class);
         }
 
-        $engines->register('plates', function () {
+        $engines->register('plates', function () use ($container, $request) {
             return new PlatesEngine(
                 $container->get(ConfigManager::class),
                 $request

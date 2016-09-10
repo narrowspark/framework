@@ -2,7 +2,7 @@
 namespace Viserio\View\Engines\Adapter;
 
 use Exception;
-use League\Plates\Engine;
+use League\Plates\Engine as LeagueEngine;
 use League\Plates\Extension\Asset;
 use League\Plates\Extension\URI;
 use League\Plates\Template\Template;
@@ -23,7 +23,7 @@ class Plates implements EnginesContract
     /**
      * Engine instance.
      *
-     * @var \Viserio\Contracts\View\Engine
+     * @var \League\Plates\Engine
      */
     protected $engine;
 
@@ -50,6 +50,7 @@ class Plates implements EnginesContract
     public function __construct(ManagerContract $config, ServerRequestInterface $request = null)
     {
         $this->config = $config;
+        $this->request = $request;
 
         $exceptions = $this->config->get('view.engine.plates.extensions', null);
 
@@ -74,11 +75,11 @@ class Plates implements EnginesContract
     /**
      * Plates paths loader.
      */
-    protected function getLoader()
+    protected function getLoader(): LeagueEngine
     {
         if (!$this->engine) {
             $config = $this->config;
-            $this->engine = new Engine(
+            $this->engine = new LeagueEngine(
                 $config->get('view.default.template.path', null),
                 $config->get('view.engine.plates.file-extension', null)
             );
@@ -90,7 +91,6 @@ class Plates implements EnginesContract
             }
         }
 
-        // Engine
         return $this->engine;
     }
 

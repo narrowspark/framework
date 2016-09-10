@@ -8,6 +8,7 @@ use Twig_Environment;
 use Twig_Extension_Core;
 use Twig_Extension_Optimizer;
 use Twig_Loader_Filesystem;
+use Viserio\Contracts\Config\Manager as ManagerContract;
 use Viserio\Contracts\View\Engine as EngineContract;
 
 class Twig implements EngineContract
@@ -52,7 +53,7 @@ class Twig implements EngineContract
     /**
      * Get the evaluated contents of the view at the given path.
      *
-     * @param string $phpPath
+     * @param string $path
      * @param array  $data
      *
      * @return string
@@ -65,7 +66,7 @@ class Twig implements EngineContract
         ob_start();
 
         try {
-            return $this->getInstance()->render($template, $data);
+            return $this->getInstance()->render($path, $data);
         } catch (Throwable $exception) {
             $this->handleViewException($exception);
         }
@@ -121,11 +122,10 @@ class Twig implements EngineContract
      * Handle a view exception.
      *
      * @param \Throwable $exception
-     * @param int        $obLevel
      *
      * @throws \Throwable
      */
-    protected function handleViewException(Throwable $exception, int $obLevel)
+    protected function handleViewException(Throwable $exception)
     {
         ob_end_clean();
 
