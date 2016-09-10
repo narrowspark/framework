@@ -14,7 +14,7 @@ class SftpConnector implements ConnectorContract
      *
      * @param string[] $config
      *
-     * @return object
+     * @return SftpAdapter
      */
     public function connect(array $config)
     {
