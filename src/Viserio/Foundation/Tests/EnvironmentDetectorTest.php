@@ -2,7 +2,6 @@
 declare(strict_types=1);
 namespace Viserio\Foundation\Tests;
 
-use Mockery as Mock;
 use Viserio\Foundation\EnvironmentDetector;
 
 class EnvironmentDetectorTest extends \PHPUnit_Framework_TestCase
@@ -15,11 +14,6 @@ class EnvironmentDetectorTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->env = new EnvironmentDetector();
-    }
-
-    public function tearDown()
-    {
-        Mock::close();
     }
 
     public function testClosureCanBeUsedForCustomEnvironmentDetection()

@@ -78,6 +78,7 @@ class Application extends Container implements ApplicationContract
 
     /**
      * {@inheritdoc}
+     * @codeCoverageIgnore
      */
     public function getVersion(): string
     {
@@ -148,6 +149,7 @@ class Application extends Container implements ApplicationContract
 
     /**
      * {@inheritdoc}
+     * @codeCoverageIgnore
      */
     public function environmentPath(): string
     {
@@ -156,6 +158,7 @@ class Application extends Container implements ApplicationContract
 
     /**
      * {@inheritdoc}
+     * @codeCoverageIgnore
      */
     public function useEnvironmentPath(string $path): ApplicationContract
     {
@@ -166,6 +169,7 @@ class Application extends Container implements ApplicationContract
 
     /**
      * {@inheritdoc}
+     * @codeCoverageIgnore
      */
     public function loadEnvironmentFrom(string $file): ApplicationContract
     {
@@ -176,6 +180,7 @@ class Application extends Container implements ApplicationContract
 
     /**
      * {@inheritdoc}
+     * @codeCoverageIgnore
      */
     public function environmentFile(): string
     {
@@ -184,18 +189,11 @@ class Application extends Container implements ApplicationContract
 
     /**
      * {@inheritdoc}
+     * @codeCoverageIgnore
      */
     public function environmentFilePath(): string
     {
         return $this->environmentPath() . '/' . $this->environmentFile();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function configurationIsCached(): bool
-    {
-        return file_exists($this->get(ConfigManager::class)->get('patch.cached.config'));
     }
 
     /**
@@ -212,6 +210,7 @@ class Application extends Container implements ApplicationContract
 
     /**
      * {@inheritdoc}
+     * @codeCoverageIgnore
      */
     public function isLocal(): bool
     {
@@ -220,6 +219,7 @@ class Application extends Container implements ApplicationContract
 
     /**
      * {@inheritdoc}
+     * @codeCoverageIgnore
      */
     public function runningUnitTests(): bool
     {
@@ -232,6 +232,8 @@ class Application extends Container implements ApplicationContract
      * @param callable $callback
      *
      * @return $this
+     *
+     * @codeCoverageIgnore
      */
     public function configureMonologUsing(callable $callback): ApplicationContract
     {
@@ -244,6 +246,8 @@ class Application extends Container implements ApplicationContract
      * Determine if the application has a custom Monolog configurator.
      *
      * @return bool
+     *
+     * @codeCoverageIgnore
      */
     public function hasMonologConfigurator(): bool
     {
@@ -254,6 +258,8 @@ class Application extends Container implements ApplicationContract
      * Get the custom Monolog configurator for the application.
      *
      * @return callable
+     *
+     * @codeCoverageIgnore
      */
     public function getMonologConfigurator()
     {

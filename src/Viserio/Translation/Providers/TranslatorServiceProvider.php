@@ -27,9 +27,9 @@ class TranslatorServiceProvider implements ServiceProvider
             TranslationManagerContract::class => function (ContainerInterface $container) {
                 return $container->get(TranslationManager::class);
             },
-            'translator' => [self::class, 'createTranslator'],
-            TranslatorContract::class => function (ContainerInterface $container) {
-                return $container->get('translator');
+            TranslatorContract::class => [self::class, 'createTranslator'],
+            'translator' => function (ContainerInterface $container) {
+                return $container->get(TranslatorContract::class);
             },
         ];
     }
@@ -46,6 +46,7 @@ class TranslatorServiceProvider implements ServiceProvider
             new PluralizationRules(),
             new MessageSelector()
         );
+
         $manager->setLoader($container->get(FileLoader::class));
         $manager->setLocale($config['locale']);
         $manager->import($config['path.lang']);
