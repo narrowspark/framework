@@ -3,7 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Filesystem\Adapters;
 
 use League\Flysystem\Vfs\VfsAdapter;
-use VirtualFileSystem\FileSystem;
+use VirtualFileSystem\FileSystem as Vfs;
 
 class VfsConnector extends AbstractConnector
 {
@@ -12,7 +12,7 @@ class VfsConnector extends AbstractConnector
      */
     protected function getClient(array $config)
     {
-        return new FileSystem();
+        return new Vfs();
     }
 
     protected function getAuth(array $config): array
@@ -31,7 +31,7 @@ class VfsConnector extends AbstractConnector
     /**
      * {@inheritdoc}
      */
-    protected function getAdapter($client, array $config): \League\Flysystem\AdapterInterface
+    protected function getAdapter($client, array $config): VfsAdapter
     {
         return new VfsAdapter($client);
     }

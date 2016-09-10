@@ -50,13 +50,9 @@ class SftpConnector implements ConnectorContract
     }
 
     /**
-     * Get the sftp adapter.
-     *
-     * @param string[] $config
-     *
-     * @return \League\Flysystem\Sftp\SftpAdapter
+     * {@inheritdoc}
      */
-    protected function getAdapter(array $config): \League\Flysystem\Sftp\SftpAdapter
+    protected function getAdapter(array $config): SftpAdapter
     {
         return new SftpAdapter($config);
     }

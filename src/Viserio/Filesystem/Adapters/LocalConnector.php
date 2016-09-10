@@ -54,11 +54,7 @@ class LocalConnector implements ConnectorContract
     }
 
     /**
-     * Get the local adapter.
-     *
-     * @param string[] $config
-     *
-     * @return \League\Flysystem\Adapter\Local
+     * {@inheritdoc}
      */
     protected function getAdapter(array $config): Local
     {

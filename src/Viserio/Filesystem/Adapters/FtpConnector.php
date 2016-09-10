@@ -44,13 +44,9 @@ class FtpConnector implements ConnectorContract
     }
 
     /**
-     * Get the ftp adapter.
-     *
-     * @param array $config
-     *
-     * @return \League\Flysystem\Adapter\Ftp
+     * {@inheritdoc}
      */
-    protected function getAdapter(array $config): \League\Flysystem\Adapter\Ftp
+    protected function getAdapter(array $config): Ftp
     {
         return new Ftp($config);
     }

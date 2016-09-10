@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Filesystem;
 
 use InvalidArgumentException;
+use League\Flysystem\Adapter\Local as FlyLocal;
 use League\Flysystem\AdapterInterface;
 use Narrowspark\Arr\StaticArr as Arr;
 use Viserio\Contracts\Filesystem\Filesystem as FilesystemContract;
@@ -91,7 +92,12 @@ class FilesystemManager extends AbstractConnectionManager
      */
     protected function adapt(AdapterInterface $filesystem): FilesystemContract
     {
-        return new FilesystemAdapter($filesystem);
+        $adapter = new FilesystemAdapter($filesystem);
+        if ($filesystem instanceof FlyLocal) {
+            $adapter->setLocalPath($this->config->get($this->getConfigName() . '.disks.local.root', ''));
+        }
+
+        return $adapter;
     }
 
     /**

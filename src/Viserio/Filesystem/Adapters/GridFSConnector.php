@@ -47,7 +47,7 @@ class GridFSConnector extends AbstractConnector
     /**
      * {@inheritdoc}
      */
-    protected function getAdapter($client, array $config): \League\Flysystem\AdapterInterface
+    protected function getAdapter($client, array $config): GridFSAdapter
     {
         return new GridFSAdapter($client->selectDB($config['database'])->getGridFS());
     }

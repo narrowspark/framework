@@ -48,7 +48,7 @@ class DropboxConnector extends AbstractConnector
     /**
      * {@inheritdoc}
      */
-    protected function getAdapter($client, array $config): \League\Flysystem\AdapterInterface
+    protected function getAdapter($client, array $config): DropboxAdapter
     {
         return new DropboxAdapter($client, $config['prefix']);
     }
