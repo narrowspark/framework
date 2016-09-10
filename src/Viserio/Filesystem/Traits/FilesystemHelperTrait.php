@@ -18,7 +18,7 @@ trait FilesystemHelperTrait
     public function getRequire(string $path)
     {
         if (isset($this->driver)) {
-            $path = $this->driver->getPathPrefix(). $path;
+            $path = $this->driver->getPathPrefix() . $path;
         } else {
             $path = self::normalizeDirectorySeparator($path);
         }
@@ -44,7 +44,7 @@ trait FilesystemHelperTrait
     public function requireOnce(string $path)
     {
         if (isset($this->driver)) {
-            $path = $this->driver->getPathPrefix(). $path;
+            $path = $this->driver->getPathPrefix() . $path;
         } else {
             $path = self::normalizeDirectorySeparator($path);
         }
@@ -66,7 +66,7 @@ trait FilesystemHelperTrait
     public function isWritable(string $path): bool
     {
         if (isset($this->driver)) {
-            $path = $this->driver->getPathPrefix(). $path;
+            $path = $this->driver->getPathPrefix() . $path;
         } else {
             $path = self::normalizeDirectorySeparator($path);
         }
@@ -84,7 +84,7 @@ trait FilesystemHelperTrait
     public function isFile(string $file): bool
     {
         if (isset($this->driver)) {
-            $file = $this->driver->getPathPrefix(). $file;
+            $file = $this->driver->getPathPrefix() . $file;
         } else {
             $file = self::normalizeDirectorySeparator($file);
         }
@@ -105,8 +105,8 @@ trait FilesystemHelperTrait
     public function link(string $target, string $link)
     {
         if (isset($this->driver)) {
-            $target = $this->driver->getPathPrefix(). $target;
-            $link = $this->driver->getPathPrefix(). $link;
+            $target = $this->driver->getPathPrefix() . $target;
+            $link = $this->driver->getPathPrefix() . $link;
         } else {
             $target = self::normalizeDirectorySeparator($target);
             $link = self::normalizeDirectorySeparator($link);

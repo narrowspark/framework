@@ -356,7 +356,6 @@ class FilesystemAdapterTest extends \PHPUnit_Framework_TestCase
 
     public function testMoveDirectoryMovesEntireDirectoryAndOverwrites()
     {
-
         $adapter = $this->adapter;
 
         $adapter->createDirectory('languages');

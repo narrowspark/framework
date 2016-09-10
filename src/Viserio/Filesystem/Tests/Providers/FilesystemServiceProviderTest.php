@@ -4,12 +4,12 @@ namespace Viserio\Filesystem\Tests\Providers;
 
 use League\Flysystem\Filesystem;
 use League\Flysystem\FilesystemInterface;
+use Viserio\Cache\Providers\CacheServiceProvider;
 use Viserio\Config\Providers\ConfigServiceProvider;
 use Viserio\Container\Container;
+use Viserio\Filesystem\Cache\CachedFactory;
 use Viserio\Filesystem\FilesystemAdapter;
 use Viserio\Filesystem\FilesystemManager;
-use Viserio\Filesystem\Cache\CachedFactory;
-use Viserio\Cache\Providers\CacheServiceProvider;
 use Viserio\Filesystem\Providers\FilesystemServiceProvider;
 
 class FilesystemServiceProviderTest extends \PHPUnit_Framework_TestCase
