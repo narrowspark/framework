@@ -21,6 +21,7 @@
         "php"                                                : "7.0.0 - 7.0.5 || ^7.0.7",
         "container-interop/container-interop"                : "^1.1",
         "danielstjules/stringy"                              : "^2.3",
+        "viserio/config"                                     : "self.version",
         "viserio/contracts"                                  : "self.version",
         "viserio/filesystem"                                 : "self.version",
         "viserio/support"                                    : "self.version"

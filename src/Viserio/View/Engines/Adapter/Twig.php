@@ -3,13 +3,39 @@ declare(strict_types=1);
 namespace Viserio\View\Engines\Adapter;
 
 use ErrorException;
-use ParseError;
+use Twig_Extension_Optimizer;
+use Twig_Extension_Core;
+use Twig_Loader_Filesystem;
+use Twig_Environment;
 use Throwable;
-use TypeError;
 use Viserio\Contracts\View\Engine as EngineContract;
 
-class Php implements EngineContract
+class Twig implements EngineContract
 {
+    /**
+     * Config manager instance.
+     *
+     * @var \Viserio\Contracts\Config\Manager
+     */
+    protected $config;
+
+    /**
+     * The Twig environment for rendering templates.
+     *
+     * @var \TwigEnvironment
+     */
+    protected $parserInstance;
+
+    /**
+     * Create a new twig view instance.
+     *
+     * @param \Viserio\Contracts\Config\Manager $config
+     */
+    public function __construct(ManagerContract $config)
+    {
+        $this->config = $config;
+    }
+
     /**
      * Get the evaluated contents of the view.
      *
@@ -27,32 +53,68 @@ class Php implements EngineContract
      * Get the evaluated contents of the view at the given path.
      *
      * @param string $phpPath
-     * @param array  $phpData
+     * @param array  $data
      *
      * @return string
      */
-    protected function evaluatePath(string $phpPath, array $phpData): string
+    protected function evaluatePath(string $path, array $data): string
     {
-        $obLevel = ob_get_level();
-
+        // We'll evaluate the contents of the view inside a try/catch block so we can
+        // flush out any stray output that might get out before an error occurs or
+        // an exception is thrown. This prevents any partial views from leaking.
         ob_start();
 
-        // We'll evaluate the contents of the view inside a try/catch block so we can
-        // clear out any stray output that might get out before an error occurs or
-        // an exception is thrown. This prevents any partial views from leaking.
-        extract($phpData, EXTR_PREFIX_SAME, 'narrowspark');
-
         try {
-            require $phpPath;
+            return $this->getInstance()->render($template, $data);
         } catch (Throwable $exception) {
-            $this->handleViewException(
-                $this->getErrorException($exception),
-                $obLevel
+            $this->handleViewException($exception);
+        }
+    }
+
+    /**
+     * Creates new TwigEnvironment if it doesn't already exist, and returns it.
+     *
+     * @return \Twig_Environment
+     */
+    protected function getInstance(): Twig_Environment
+    {
+        if (!$this->parserInstance) {
+            $config = $this->config;
+            $twig = new Twig_Environment(
+                $this->loader(),
+                $config->get('view.engine.twig.options', [])
             );
+
+            $twig->addExtension(new Twig_Extension_Core());
+            $twig->addExtension(new Twig_Extension_Optimizer());
+            $extensions = $config->get('view.engine.twig.extensions', []);
+
+            if (!empty($extensions)) {
+                foreach ($extensions as $extension) {
+                    $twig->addExtension(is_object($extension) ? $extension : new $extension);
+                }
+            }
         }
 
-        // Return temporary output buffer content, destroy output buffer
-        return ltrim(ob_get_clean());
+        return $this->parserInstance;
+    }
+
+    /**
+     * Twig paths loader.
+     */
+    protected function loader()
+    {
+        $config = $this->config;
+        $defaultPath = $config->get('view.default.template.path', null);
+        $loader = new Twig_Loader_Filesystem((array) $defaultPath);
+
+        if (($paths = $config->get('view.template.paths', [])) !== null) {
+            foreach ($paths as $name => $path) {
+                $loader->addPath($path, $name);
+            }
+        }
+
+        return $loader;
     }
 
     /**
@@ -65,39 +127,8 @@ class Php implements EngineContract
      */
     protected function handleViewException(Throwable $exception, int $obLevel)
     {
-        while (ob_get_level() > $obLevel) {
-            ob_end_clean();
-        }
+        ob_end_clean();
 
         throw $exception;
-    }
-
-    /**
-     * Get a ErrorException instance.
-     *
-     * @param \ParseError|\TypeError|\Throwable $exception
-     *
-     * @return \ErrorException
-     */
-    private function getErrorException($exception): ErrorException
-    {
-        if ($exception instanceof ParseError) {
-            $message = 'Parse error: ' . $exception->getMessage();
-            $severity = E_PARSE;
-        } elseif ($exception instanceof TypeError) {
-            $message = 'Type error: ' . $exception->getMessage();
-            $severity = E_RECOVERABLE_ERROR;
-        } else {
-            $message = $exception->getMessage();
-            $severity = E_ERROR;
-        }
-
-        return new ErrorException(
-            $message,
-            $exception->getCode(),
-            $severity,
-            $exception->getFile(),
-            $exception->getLine()
-        );
     }
 }

@@ -2,10 +2,16 @@
 declare(strict_types=1);
 namespace Viserio\View\Providers;
 
+use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
 use Viserio\View\Engines\Adapter\Php as PhpEngine;
+use Viserio\View\Engines\Adapter\Plates as PlatesEngine;
+use Viserio\View\Engines\Adapter\Twig as TwigEngine;
 use Viserio\View\Engines\EngineResolver;
 use Viserio\View\Factory;
+use Viserio\Config\Manager as ConfigManager;
+use Viserio\Filesystem\Filesystem;
+use Psr\Http\Message\ServerRequestInterface;
 use Viserio\View\ViewFinder;
 
 class ViewServiceProvider implements ServiceProvider
@@ -15,40 +21,66 @@ class ViewServiceProvider implements ServiceProvider
      */
     public function getServices()
     {
-        $this->registerEngineResolver();
-        $this->registerViewFinder();
-        $this->registerFactory();
+        return [
+            EngineResolver::class => [self::class, 'createEngineResolver'],
+            'view.engine.resolver' => function (ContainerInterface $container) {
+                return $container->get(EngineResolver::class);
+            },
+            ViewFinder::class => [self::class, 'createViewFinder'],
+            'view.finder' => function (ContainerInterface $container) {
+                return $container->get(ViewFinder::class);
+            },
+            Factory::class => [self::class, 'createViewFactory'],
+            'view' => function (ContainerInterface $container) {
+                return $container->get(Factory::class);
+            },
+        ];
     }
 
-    /**
-     * Register the engine engines instance.
-     */
-    protected function registerEngineResolver()
+    public static function createEngineResolver(ContainerInterface $container)
     {
-        $this->app->bind('view.engine.resolver', function ($app) {
-            $resolver = new EngineResolver();
+        $engines = new EngineResolver();
 
-            // Next we will register the various engines with the engines so that the
-            // environment can resolve the engines it needs for various views based
-            // on the extension of view files. We call a method for each engines.
-            foreach (['php' => 'php', 'phtml' => 'php'] as $engineName => $engineClass) {
-                $this->{'register' . ucfirst($engineClass) . 'Engine'}($resolver);
-            }
+        // Next we will register the various engines with the engines so that the
+        // environment can resolve the engines it needs for various views based
+        // on the extension of view files. We call a method for each engines.
+        foreach (['php', 'twig', 'plates'] as $engineClass) {
+            self::{'register' . ucfirst($engineClass) . 'Engine'}($engines, $container);
+        }
 
-            if (($compilers = $app->get('config')->get('view::compilers')) !== null) {
-                foreach ($compilers as $compilerName => $compilerClass) {
-                    if ($compilerName === $compilerClass[0]) {
-                        $this->registercustomEngine(
-                            $compilerName,
-                            call_user_func_array($compilerClass[0], (array) $compilerClass[1]),
-                            $resolver
-                        );
-                    }
+        if (($compilers = $container->get(ConfigManager::class)->get('view.compilers')) !== null) {
+            foreach ($compilers as $compilerName => $compilerClass) {
+                if ($compilerName === $compilerClass[0]) {
+                    self::registercustomEngine(
+                        $compilerName,
+                        call_user_func_array($compilerClass[0], (array) $compilerClass[1]),
+                        $engines
+                    );
                 }
             }
+        }
 
-            return $resolver;
-        });
+        return $engines;
+    }
+
+    public static function createViewFinder(ContainerInterface $container)
+    {
+        return new ViewFinder(
+            $container->get(Filesystem::class),
+            $container->get(ConfigManager::class)->get('view.template.paths', [])
+        );
+    }
+
+    public static function createViewFactory(ContainerInterface $container)
+    {
+        $view = new Factory(
+            $container->get(EngineResolver::class),
+            $container->get(ViewFinder::class)
+        );
+
+        $view->share('app', $container);
+
+        return $view;
     }
 
     /**
@@ -58,7 +90,7 @@ class ViewServiceProvider implements ServiceProvider
      * @param string                               $engineClass
      * @param \Viserio\View\Engines\EngineResolver $engines
      */
-    protected function registercustomEngine(string $engineName, string $engineClass, \Viserio\View\Engines\EngineResolver $engines)
+    protected static function registercustomEngine(string $engineName, string $engineClass, EngineResolver $engines)
     {
         $engines->register($engineName, function () use ($engineClass) {
             return $engineClass;
@@ -70,7 +102,7 @@ class ViewServiceProvider implements ServiceProvider
      *
      * @param \Viserio\View\Engines\EngineResolver $engines
      */
-    protected function registerPhpEngine(\Viserio\View\Engines\EngineResolver $engines)
+    protected static function registerPhpEngine(EngineResolver $engines, ContainerInterface $container)
     {
         $engines->register('php', function () {
             return new PhpEngine();
@@ -78,42 +110,35 @@ class ViewServiceProvider implements ServiceProvider
     }
 
     /**
-     * Alias for PhpEngine.
+     * Register the PHP engine implementation.
      *
-     * @method registerPhpEngine
-     *
-     * @param $engines
+     * @param \Viserio\View\Engines\EngineResolver $engines
      */
-    protected function registerPhtmlEngine($engines)
+    protected static function registerTwigEngine(EngineResolver $engines, ContainerInterface $container)
     {
-        $this->registerPhpEngine($engines);
-    }
-
-    /**
-     * Register the view finder implementation.
-     */
-    protected function registerViewFinder()
-    {
-        $this->app->bind('view.finder', function ($app) {
-            return new ViewFinder($app->get('files'), $app->get('config')->get('view::template.paths'));
+        $engines->register('twig', function () {
+            return new TwigEngine($container->get(ConfigManager::class));
         });
     }
 
     /**
-     * Register the view environment.
+     * Register the PHP engine implementation.
+     *
+     * @param \Viserio\View\Engines\EngineResolver $engines
      */
-    protected function registerFactory()
+    protected static function registerPlatesEngine(EngineResolver $engines, ContainerInterface $container)
     {
-        $this->app->singleton('view', function ($app) {
-            $view = new Factory(
-                $app->get('view.engine.resolver'),
-                $app->get('view.finder'),
-                $app->get('events')
+        $request = null;
+
+        if ($container->has(ServerRequestInterface::class)) {
+            $request = $container->get(ServerRequestInterface::class);
+        }
+
+        $engines->register('plates', function () {
+            return new PlatesEngine(
+                $container->get(ConfigManager::class),
+                $request
             );
-
-            $view->share('app', $app);
-
-            return $view;
         });
     }
 }

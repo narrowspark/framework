@@ -15,9 +15,9 @@ class ZipConnector implements ConnectorContract
      *
      * @param string[] $config
      *
-     * @return ZipArchiveAdapter
+     * @return \League\Flysystem\ZipArchive\ZipArchiveAdapter
      */
-    public function connect(array $config): \League\Flysystem\ZipArchive\ZipArchiveAdapter
+    public function connect(array $config)
     {
         $config = $this->getConfig($config);
 
@@ -51,13 +51,9 @@ class ZipConnector implements ConnectorContract
     }
 
     /**
-     * Get the zip adapter.
-     *
-     * @param string[] $config
-     *
-     * @return \League\Flysystem\ZipArchive\ZipArchiveAdapter
+     * {@inheritdoc}
      */
-    protected function getAdapter(array $config): \League\Flysystem\ZipArchive\ZipArchiveAdapter
+    protected function getAdapter(array $config): ZipArchiveAdapter
     {
         return new ZipArchiveAdapter($config['path'], $config['archive'], $config['prefix']);
     }

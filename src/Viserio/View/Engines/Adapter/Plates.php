@@ -1,29 +1,38 @@
 <?php
 namespace Viserio\View\Engines\Adapter;
 
+use Throwable;
 use Exception;
-use Interop\Container\ContainerInterface as ContainerContract;
+use Viserio\Contracts\Config\Manager as ManagerContract;
 use League\Plates\Engine;
 use League\Plates\Extension\Asset;
 use League\Plates\Extension\URI;
+use Psr\Http\Message\ServerRequestInterface;
 use League\Plates\Template\Template;
 use Viserio\Contracts\View\Engine as EnginesContract;
 
 class Plates implements EnginesContract
 {
     /**
-     * Container.
+     * Config manager instance.
      *
-     * @var \Interop\Container\ContainerInterface
+     * @var \Viserio\Contracts\Config\Manager
      */
-    protected $container;
+    protected $config;
 
     /**
-     * [$engine description].
+     * Engine instance.
      *
-     * @var [type]
+     * @var \Viserio\Contracts\View\Engine
      */
     protected $engine;
+
+    /**
+     * Server request instance.
+     *
+     * @var \Psr\Http\Message\ServerRequestInterface
+     */
+    protected $request;
 
     /**
      * All available extensions.
@@ -33,23 +42,20 @@ class Plates implements EnginesContract
     protected $availableExtensions = [];
 
     /**
-     * Create a new view environment instance.
+     * Create a new plates view instance.
      *
-     * @param ContainerContract $container
-     * @param ContainerContract $request
+     * @param \Viserio\Contracts\Config\Manager             $config
+     * @param \Psr\Http\Message\ServerRequestInterface|null $request
      */
-    public function __construct($config, $request)
+    public function __construct(ManagerContract $config, ServerRequestInterface $request = null)
     {
-        $this->container = $container;
+        $this->config = $config;
 
-        $exceptions = $this->container->get('config')->get('view::plates.extensions', null);
+        $exceptions = $this->config->get('view.engine.plates.extensions', null);
 
         if ($exceptions !== null) {
             $this->availableExtensions = $exceptions;
         }
-
-        //Engine
-        $this->loader();
     }
 
     /**
@@ -66,22 +72,26 @@ class Plates implements EnginesContract
     }
 
     /**
-     * Plates paths.
+     * Plates paths loader.
      */
-    protected function loader()
+    protected function getLoader()
     {
-        $engine = new Engine($this->container->get('config')->get('view::default.template.path', null));
+        if (!$this->engine) {
+            $config = $this->config;
+            $this->engine = new Engine(
+                $config->get('view.default.template.path', null),
+                $config->get('view.engine.plates.file-extension', null)
+            );
 
-        if ($this->container->get('config')->get('view::template.paths', null) !== null) {
-            foreach ($this->container->get('config')->get('view::template.paths', null) as $name => $addPaths) {
-                $engine->addFolder($name, $addPaths);
+            if (($paths = $config->get('view.template.paths', null)) !== null) {
+                foreach ($paths as $name => $addPaths) {
+                    $this->engine->addFolder($name, $addPaths);
+                }
             }
         }
 
-        $engine->setFileExtension(null);
-
         // Engine
-        $this->engine = $engine;
+        return $this->engine;
     }
 
     /**
@@ -94,29 +104,31 @@ class Plates implements EnginesContract
      *
      * @return string
      */
-    protected function evaluatePath($path, array $data)
+    protected function evaluatePath(string $path, array $data): string
     {
-        $engine = $this->engine;
+        $engine = $this->getLoader();
 
-        // Set uri extensions
-        $engine->loadExtension(new URI($this->container->get('request')->getPathInfo()));
-
-        // Set asset extensions
-        $engine->loadExtension(new Asset($this->container->get('config')->get('view::asset', null)));
-
-        // Get all extensions
-        if ($this->container->get('config')->get('view::plates.extensions', null) !== null) {
-            foreach ($this->availableExtensions as $ext) {
-                $engine->loadExtensions($ext);
-            }
+        if ($this->request !== null) {
+            // Set uri extensions
+            $engine->loadExtension(new URI($this->request->getUri()->getPath()));
         }
 
-        // Creat a new template
-        $template = new Template($engine, $path);
+        // Set asset extensions
+        $engine->loadExtension(new Asset($this->config->get('view.asset', null)));
+
+        // Get all extensions
+        if (!empty($this->availableExtensions)) {
+            foreach ($this->availableExtensions as $extension) {
+                $engine->loadExtension(is_object($extension) ? $extension : new $extension);
+            }
+        }
 
         if (!$engine->exists($path)) {
             throw new Exception('Template "' . $path . '" dont exist!');
         }
+
+        // Creat a new template
+        $template = new Template($engine, $path);
 
         // We'll evaluate the contents of the view inside a try/catch block so we can
         // flush out any stray output that might get out before an error occurs or
@@ -125,7 +137,7 @@ class Plates implements EnginesContract
 
         try {
             return $template->render($data);
-        } catch (Exception $exception) {
+        } catch (Throwable $exception) {
             $this->handleViewException($exception);
         }
     }
@@ -133,13 +145,14 @@ class Plates implements EnginesContract
     /**
      * Handle a view exception.
      *
-     * @param \Exception $exception
+     * @param \Throwable $exception
      *
      * @throws $exception
      */
-    protected function handleViewException(Exception $exception)
+    protected function handleViewException(Throwable $exception)
     {
         ob_get_clean();
+
         throw $exception;
     }
 }

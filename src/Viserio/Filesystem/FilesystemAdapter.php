@@ -270,7 +270,7 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
      */
     public function getLocalPath(): string
     {
-        return $this->localPath ?? '/storage/';
+        return $this->localPath !== '' ? $this->localPath : '/storage/';
     }
 
     /**

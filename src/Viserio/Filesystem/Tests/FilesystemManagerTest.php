@@ -127,6 +127,10 @@ class FilesystemManagerTest extends \PHPUnit_Framework_TestCase
                     'path' => __DIR__,
                 ],
             ]);
+        $config->shouldReceive('get')
+            ->once()
+            ->with('filesystem.disks.local.root', '')
+            ->andReturn('');
 
         $manager = new FilesystemManager($config);
 
@@ -216,6 +220,10 @@ class FilesystemManagerTest extends \PHPUnit_Framework_TestCase
             ->andReturn([
                 'vfs' => [],
             ]);
+        $config->shouldReceive('get')
+            ->once()
+            ->with('filesystem.disks.local.root', '')
+            ->andReturn('');
 
         $manager = new FilesystemManager($config);
 

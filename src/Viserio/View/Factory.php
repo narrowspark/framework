@@ -62,6 +62,8 @@ class Factory implements FactoryContract
      */
     protected $extensions = [
         'php' => 'php',
+        'twig' => 'html',
+        'plates' => 'plates.php'
     ];
 
     /**

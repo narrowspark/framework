@@ -7,6 +7,7 @@ use League\Flysystem\AdapterInterface;
 use Narrowspark\Arr\StaticArr as Arr;
 use Viserio\Contracts\Filesystem\Filesystem as FilesystemContract;
 use Viserio\Support\AbstractConnectionManager;
+use League\Flysystem\Adapter\Local as FlyLocal;
 
 class FilesystemManager extends AbstractConnectionManager
 {
@@ -92,7 +93,9 @@ class FilesystemManager extends AbstractConnectionManager
     protected function adapt(AdapterInterface $filesystem): FilesystemContract
     {
         $adapter = new FilesystemAdapter($filesystem);
-        $adapter->setLocalPath($this->config->get($this->getConfigName() . '.disks.local.root'));
+        if ($filesystem instanceof FlyLocal) {
+            $adapter->setLocalPath($this->config->get($this->getConfigName() . '.disks.local.root', ''));
+        }
 
         return $adapter;
     }
