@@ -92,13 +92,6 @@ interface Application
     public function environmentFilePath(): string;
 
     /**
-     * Determine if the application configuration is cached.
-     *
-     * @return bool
-     */
-    public function configurationIsCached(): bool;
-
-    /**
      * Detect the application's current environment.
      *
      * @param \Closure $callback
