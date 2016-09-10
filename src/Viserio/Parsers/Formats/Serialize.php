@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Parsers\Formats;
 
-use Exception;
+use Throwable;
 use Viserio\Contracts\Parsers\Dumper as DumperContract;
 use Viserio\Contracts\Parsers\Exception\DumpException;
 use Viserio\Contracts\Parsers\Exception\ParseException;
@@ -17,7 +17,7 @@ class Serialize implements FormatContract, DumperContract
     {
         try {
             return unserialize(trim($payload));
-        } catch (Exception $exception) {
+        } catch (Throwable $exception) {
             throw new ParseException([
                 'message' => 'Failed to parse serialized Data',
             ]);
@@ -31,7 +31,7 @@ class Serialize implements FormatContract, DumperContract
     {
         try {
             return serialize($data);
-        } catch (Exception $exception) {
+        } catch (Throwable $exception) {
             throw new DumpException($exception->getMessage());
         }
     }

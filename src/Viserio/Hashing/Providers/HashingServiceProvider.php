@@ -2,7 +2,6 @@
 declare(strict_types=1);
 namespace Viserio\Hashing\Providers;
 
-use Defuse\Crypto\Key;
 use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
 use Viserio\Config\Manager as ConfigManager;
@@ -33,9 +32,7 @@ class HashingServiceProvider implements ServiceProvider
             $config = self::get($container, 'options');
         }
 
-        $encrypt = new Password(
-            $config['key']
-        );
+        $encrypt = new Password($config['key']);
 
         return $encrypt;
     }

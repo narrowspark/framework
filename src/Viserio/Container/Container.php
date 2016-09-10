@@ -100,7 +100,7 @@ class Container extends ContainerResolver implements ArrayAccess, ContainerContr
         // Auto-register the container
         $this->instance(Container::class, $this);
         $this->instance(ContainerContract::class, $this);
-        $this->instance(ContainerInteropInterface::class, $this);
+        $this->instance(ContainerInterface::class, $this);
     }
 
     /**
@@ -720,7 +720,7 @@ class Container extends ContainerResolver implements ArrayAccess, ContainerContr
             return $implementation;
         }
 
-        return function ($container) use ($implementation) {
+        return function (ContainerInterface $container) use ($implementation) {
             return $container->make($implementation);
         };
     }

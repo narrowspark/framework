@@ -9,7 +9,6 @@ use Viserio\Contracts\Events\Dispatcher as DispatcherContract;
 use Viserio\Contracts\Translation\TranslationManager as TranslationManagerContract;
 use Viserio\Foundation\Application;
 use Viserio\Foundation\Bootstrap\DetectEnvironment;
-use Viserio\Foundation\EnvironmentDetector;
 
 class ApplicationTest extends \PHPUnit_Framework_TestCase
 {

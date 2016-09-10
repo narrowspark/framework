@@ -450,7 +450,7 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
         );
         $delete = $this->deleteDirectory($directory);
 
-        return !(!$copy && !$delete);
+        return ! (! $copy && ! $delete);
     }
 
     /**
@@ -461,6 +461,24 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
     public function getDriver()
     {
         return $this->driver;
+    }
+
+    /**
+     * Get normalize or prefixed path.
+     *
+     * @param string $path
+     *
+     * @return string
+     */
+    protected function getNormalzedOrPrefixedPath(string $path): string
+    {
+        if (isset($this->driver)) {
+            $prefix = method_exists($this->driver, 'getPathPrefix') ? $this->driver->getPathPrefix() : '';
+
+            return $prefix . $path;
+        }
+
+        return self::normalizeDirectorySeparator($path);
     }
 
     /**
@@ -526,23 +544,5 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
         $contents = $this->driver->listContents($directory, $recursive);
 
         return $this->filterContentsByType($contents, $typ);
-    }
-
-    /**
-     * Get normalize or prefixed path.
-     *
-     * @param string $path
-     *
-     * @return string
-     */
-    protected function getNormalzedOrPrefixedPath(string $path): string
-    {
-        if (isset($this->driver)) {
-            $prefix = method_exists($this->driver, 'getPathPrefix') ? $this->driver->getPathPrefix() : '';
-
-            return $prefix . $path;
-        }
-
-        return self::normalizeDirectorySeparator($path);
     }
 }

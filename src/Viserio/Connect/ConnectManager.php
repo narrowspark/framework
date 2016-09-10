@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Connect;
 
+use Memcached;
 use PDO;
 use Predis\Client as PredisClient;
 use Viserio\Connect\Adapters\Database\DblibConnector;

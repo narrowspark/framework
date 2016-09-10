@@ -52,7 +52,7 @@ class Handler implements HandlerContract
         NotFoundException::class => 'notice',
         AbstractClientErrorException::class => 'notice',
         AbstractServerErrorException::class => 'error',
-        Exception::class => 'error',
+        Throwable::class => 'error',
     ];
 
     /**

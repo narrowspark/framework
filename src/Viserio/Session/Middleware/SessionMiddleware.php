@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Session\Middleware;
 
+use Cake\Chronos\Chronos;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Contracts\Config\Manager as ConfigContract;
@@ -9,6 +10,8 @@ use Viserio\Contracts\Middleware\Delegate as DelegateContract;
 use Viserio\Contracts\Middleware\ServerMiddleware as ServerMiddlewareContract;
 use Viserio\Contracts\Session\Store as StoreContract;
 use Viserio\Cookie\Cookie;
+use Viserio\Session\Fingerprint\ClientIpGenerator;
+use Viserio\Session\Fingerprint\UserAgentGenerator;
 use Viserio\Session\Handler\CookieSessionHandler;
 use Viserio\Session\SessionManager;
 

@@ -24,7 +24,7 @@ class QueueServiceProvider implements ServiceProvider
         ];
     }
 
-    public static function createQueueManager(ContainerInterface $container): Encrypter
+    public static function createQueueManager(ContainerInterface $container): QueueManager
     {
         return new QueueManager(
             $container->get(ConfigContract::class),
@@ -33,7 +33,7 @@ class QueueServiceProvider implements ServiceProvider
         );
     }
 
-    public static function createQueueConnection(ContainerInterface $container): Encrypter
+    public static function createQueueConnection(ContainerInterface $container)
     {
         return $container->get(ConfigContract::class)->connection();
     }

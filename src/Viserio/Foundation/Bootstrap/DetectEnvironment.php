@@ -17,7 +17,7 @@ class DetectEnvironment implements BootstrapContract
     {
         $config = $app->get(ConfigManager::class);
 
-        if (!file_exists($config->get('patch.cached.config'))) {
+        if (! file_exists($config->get('patch.cached.config'))) {
             $this->checkForSpecificEnvironmentFile($app);
 
             try {

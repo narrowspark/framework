@@ -4,7 +4,6 @@ namespace Viserio\Foundation\Bootstrap;
 
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo;
-use Viserio\Contracts\Foundation\Application;
 
 abstract class AbstractLoadFiles
 {

@@ -7,6 +7,7 @@ use MongoClient;
 use MongoConnectionException;
 use MongoDB\Client as MongoDBClient;
 use Narrowspark\Arr\StaticArr as Arr;
+use Throwable;
 use Viserio\Connect\Traits\DetectsLostConnections;
 use Viserio\Contracts\Support\Connector as ConnectorContract;
 
@@ -105,16 +106,16 @@ class MongoConnector implements ConnectorContract
     /**
      * Handle a exception that occurred during connect execution.
      *
-     * @param \Exception $exception
+     * @param \Throwable $exception
      * @param string     $dsn
      * @param array      $options
      *
-     * @throws \Exception
+     * @throws \MongoConnectionException
      *
      * @return \Mongo|\MongoClient|\MongoDB\Client
      */
     protected function tryAgainIfCausedByLostConnection(
-        Exception $exception,
+        Throwable $exception,
         string $dsn,
         array $options
     ) {

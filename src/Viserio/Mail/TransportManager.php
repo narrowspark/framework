@@ -6,8 +6,9 @@ use Aws\Ses\SesClient;
 use GuzzleHttp\Client as HttpClient;
 use Narrowspark\Arr\StaticArr as Arr;
 use Psr\Log\LoggerInterface;
-use Swift_MailTransport as MailTransport;
-use Swift_SmtpTransport as SmtpTransport;
+use Swift_MailTransport;
+use Swift_SendmailTransport;
+use Swift_SmtpTransport;
 use Viserio\Mail\Transport\Log as LogTransport;
 use Viserio\Mail\Transport\Mailgun as MailgunTransport;
 use Viserio\Mail\Transport\Mandrill as MandrillTransport;
@@ -34,7 +35,7 @@ class TransportManager extends AbstractManager
      */
     protected function createMailDriver(): Swift_MailTransport
     {
-        return MailTransport::newInstance();
+        return Swift_MailTransport::newInstance();
     }
 
     /**
@@ -44,9 +45,9 @@ class TransportManager extends AbstractManager
      *
      * @return \Swift_SendmailTransport
      */
-    protected function createSendmailDriver(array $config): SendmailTransport
+    protected function createSendmailDriver(array $config): Swift_SendmailTransport
     {
-        return SendmailTransport::newInstance($config);
+        return Swift_SendmailTransport::newInstance($config);
     }
 
     /**
@@ -61,7 +62,7 @@ class TransportManager extends AbstractManager
         // The Swift SMTP transport instance will allow us to use any SMTP backend
         // for delivering mail such as Sendgrid, Amazon SES, or a custom server
         // a developer has available. We will just pass this configured host.
-        $transport = SmtpTransport::newInstance(
+        $transport = Swift_SmtpTransport::newInstance(
             $config['host'],
             $config['port']
         );

@@ -3,9 +3,9 @@ declare(strict_types=1);
 namespace Viserio\Parsers\Formats;
 
 use DOMException;
-use Exception;
 use RuntimeException;
 use Spatie\ArrayToXml\ArrayToXml;
+use Throwable;
 use Viserio\Contracts\Parsers\Dumper as DumperContract;
 use Viserio\Contracts\Parsers\Exception\DumpException;
 use Viserio\Contracts\Parsers\Exception\ParseException;
@@ -25,7 +25,7 @@ class XML implements FormatContract, DumperContract
             $data = str_replace(':[]', ':null', $data);
 
             return $data;
-        } catch (Exception $exception) {
+        } catch (Throwable $exception) {
             throw new ParseException([
                 'message' => 'Failed To Parse XML',
             ]);

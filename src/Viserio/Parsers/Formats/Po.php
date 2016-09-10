@@ -2,8 +2,9 @@
 declare(strict_types=1);
 namespace Viserio\Parsers\Formats;
 
-use Exception;
+use RuntimeException;
 use Sepia\PoParser;
+use Throwable;
 use Viserio\Contracts\Parsers\Exception\ParseException;
 use Viserio\Contracts\Parsers\Format as FormatContract;
 
@@ -36,7 +37,7 @@ class Po implements FormatContract
 
         try {
             return (new PoParser())->parseFile($filename);
-        } catch (Exception $exception) {
+        } catch (Throwable $exception) {
             throw new ParseException([
                 'message' => 'Unable to parse the Po string',
             ]);

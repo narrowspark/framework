@@ -70,7 +70,7 @@ trait HostValidateTrait
             return [];
         }
 
-        $host = $this->lower($this->setIsAbsolute($str));
+        $host = $this->lower($this->isAbsolute($str));
 
         $rawLabels = explode('.', $host);
 
@@ -91,7 +91,7 @@ trait HostValidateTrait
      *
      * @return string
      */
-    protected function setIsAbsolute(string $host): string
+    protected function isAbsolute(string $host): string
     {
         return (mb_substr($host, -1, 1, 'UTF-8') == '.') ? mb_substr($host, 0, -1, 'UTF-8') : $host;
     }
