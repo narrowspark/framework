@@ -5,7 +5,6 @@ namespace Viserio\View\Tests\Providers;
 use Defuse\Crypto\Key;
 use Viserio\Config\Providers\ConfigServiceProvider;
 use Viserio\Container\Container;
-use Viserio\Encryption\Providers\EncrypterServiceProvider;
 use Viserio\Filesystem\Providers\FilesServiceProvider;
 use Viserio\View\Engines\EngineResolver;
 use Viserio\View\Factory;

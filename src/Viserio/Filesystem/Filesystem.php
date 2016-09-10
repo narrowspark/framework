@@ -443,4 +443,22 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract, Direct
 
         throw new InvalidArgumentException('Unknown visibility: ' . $visibility);
     }
+
+    /**
+     * Get normalize or prefixed path.
+     *
+     * @param string $path
+     *
+     * @return string
+     */
+    protected function getNormalzedOrPrefixedPath(string $path): string
+    {
+        if (isset($this->driver)) {
+            $prefix = method_exists($this->driver, 'getPathPrefix') ? $this->driver->getPathPrefix() : '';
+
+            return $prefix . $path;
+        }
+
+        return self::normalizeDirectorySeparator($path);
+    }
 }

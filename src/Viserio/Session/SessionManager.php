@@ -2,7 +2,6 @@
 declare(strict_types=1);
 namespace Viserio\Session;
 
-use Interop\Container\ContainerInterface;
 use SessionHandlerInterface;
 use Viserio\Cache\CacheManager;
 use Viserio\Contracts\Config\Manager as ConfigContract;

@@ -73,4 +73,22 @@ declare(strict_types=1); return "pop"; ?>')->at($this->root);
     {
         return is_dir($dirname);
     }
+
+    /**
+     * Get normalize or prefixed path.
+     *
+     * @param string $path
+     *
+     * @return string
+     */
+    protected function getNormalzedOrPrefixedPath(string $path): string
+    {
+        if (isset($this->driver)) {
+            $prefix = method_exists($this->driver, 'getPathPrefix') ? $this->driver->getPathPrefix() : '';
+
+            return $prefix . $path;
+        }
+
+        return self::normalizeDirectorySeparator($path);
+    }
 }
