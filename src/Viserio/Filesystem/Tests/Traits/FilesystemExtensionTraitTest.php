@@ -4,9 +4,11 @@ namespace Viserio\Filesystem\Tests\Traits;
 
 use org\bovigo\vfs\vfsStream;
 use Viserio\Filesystem\Traits\FilesystemExtensionTrait;
+use Viserio\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
 class FilesystemExtensionTraitTest extends \PHPUnit_Framework_TestCase
 {
+    use NormalizePathAndDirectorySeparatorTrait;
     use FilesystemExtensionTrait;
 
     /**

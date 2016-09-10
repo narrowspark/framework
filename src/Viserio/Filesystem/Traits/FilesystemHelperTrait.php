@@ -18,7 +18,7 @@ trait FilesystemHelperTrait
     public function getRequire(string $path)
     {
         if (isset($this->driver)) {
-            $prefix = method_exists($this->driver, 'getPathPrefix') ? method_exists($this->driver, 'getPathPrefix') : '';
+            $prefix = method_exists($this->driver, 'getPathPrefix') ? $this->driver->getPathPrefix() : '';
             $path = $prefix . $path;
         } else {
             $path = self::normalizeDirectorySeparator($path);
@@ -45,7 +45,7 @@ trait FilesystemHelperTrait
     public function requireOnce(string $path)
     {
         if (isset($this->driver)) {
-            $prefix = method_exists($this->driver, 'getPathPrefix') ? method_exists($this->driver, 'getPathPrefix') : '';
+            $prefix = method_exists($this->driver, 'getPathPrefix') ? $this->driver->getPathPrefix() : '';
             $path = $prefix . $path;
         } else {
             $path = self::normalizeDirectorySeparator($path);
@@ -68,7 +68,7 @@ trait FilesystemHelperTrait
     public function isWritable(string $path): bool
     {
         if (isset($this->driver)) {
-            $prefix = method_exists($this->driver, 'getPathPrefix') ? method_exists($this->driver, 'getPathPrefix') : '';
+            $prefix = method_exists($this->driver, 'getPathPrefix') ? $this->driver->getPathPrefix() : '';
             $path = $prefix . $path;
         } else {
             $path = self::normalizeDirectorySeparator($path);
@@ -87,7 +87,7 @@ trait FilesystemHelperTrait
     public function isFile(string $file): bool
     {
         if (isset($this->driver)) {
-            $prefix = method_exists($this->driver, 'getPathPrefix') ? method_exists($this->driver, 'getPathPrefix') : '';
+            $prefix = method_exists($this->driver, 'getPathPrefix') ? $this->driver->getPathPrefix() : '';
             $file = $prefix . $file;
         } else {
             $file = self::normalizeDirectorySeparator($file);
@@ -109,7 +109,7 @@ trait FilesystemHelperTrait
     public function link(string $target, string $link)
     {
         if (isset($this->driver)) {
-            $prefix = method_exists($this->driver, 'getPathPrefix') ? method_exists($this->driver, 'getPathPrefix') : '';
+            $prefix = method_exists($this->driver, 'getPathPrefix') ? $this->driver->getPathPrefix() : '';
             $target = $prefix . $target;
             $link = $prefix . $link;
         } else {

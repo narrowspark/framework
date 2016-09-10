@@ -389,7 +389,7 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
      */
     public function isDirectory(string $dirname): bool
     {
-        $prefix = method_exists($this->driver, 'getPathPrefix') ? method_exists($this->driver, 'getPathPrefix') : '';
+        $prefix = method_exists($this->driver, 'getPathPrefix') ? $this->driver->getPathPrefix() : '';
 
         return is_dir($prefix . $dirname);
     }
