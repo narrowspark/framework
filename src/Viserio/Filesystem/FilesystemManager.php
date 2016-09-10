@@ -94,7 +94,7 @@ class FilesystemManager extends AbstractConnectionManager
         $cache = $this->config->get($this->getConfigName() . '.cached');
 
         if (! is_array($config = Arr::get($cache, $name)) && ! $config) {
-            throw new InvalidArgumentException("Cache [$name] not configured.");
+            throw new InvalidArgumentException(sprintf('Cache [%s] not configured.', $name));
         }
 
         $config['name'] = $name;
@@ -106,7 +106,7 @@ class FilesystemManager extends AbstractConnectionManager
      * Adapt the filesystem implementation.
      *
      * @param \League\Flysystem\AdapterInterface $adapter
-     * @param \array                             $config
+     * @param array                              $config
      *
      * @return \Viserio\Contracts\Filesystem\Filesystem
      */

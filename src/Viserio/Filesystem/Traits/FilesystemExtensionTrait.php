@@ -13,6 +13,13 @@ trait FilesystemExtensionTrait
      */
     public function getExtension(string $path): string
     {
+        if (isset($this->driver)) {
+            $prefix = method_exists($this->driver, 'getPathPrefix') ? method_exists($this->driver, 'getPathPrefix') : '';
+            $path = $prefix . $path;
+        } else {
+            $path = self::normalizeDirectorySeparator($path);
+        }
+
         return pathinfo($path, PATHINFO_EXTENSION);
     }
 
@@ -27,6 +34,13 @@ trait FilesystemExtensionTrait
      */
     public function withoutExtension(string $path, string $extension = null): string
     {
+        if (isset($this->driver)) {
+            $prefix = method_exists($this->driver, 'getPathPrefix') ? method_exists($this->driver, 'getPathPrefix') : '';
+            $path = $prefix . $path;
+        } else {
+            $path = self::normalizeDirectorySeparator($path);
+        }
+
         if ($extension !== null) {
             // remove extension and trailing dot
             return rtrim(basename($path, $extension), '.');
@@ -45,6 +59,13 @@ trait FilesystemExtensionTrait
      */
     public function changeExtension(string $path, string $extension): string
     {
+        if (isset($this->driver)) {
+            $prefix = method_exists($this->driver, 'getPathPrefix') ? method_exists($this->driver, 'getPathPrefix') : '';
+            $path = $prefix . $path;
+        } else {
+            $path = self::normalizeDirectorySeparator($path);
+        }
+
         $explode = explode('.', $path);
         $substrPath = substr($path, -1);
 

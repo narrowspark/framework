@@ -389,7 +389,9 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
      */
     public function isDirectory(string $dirname): bool
     {
-        return is_dir($this->driver->getPathPrefix() . $dirname);
+        $prefix = method_exists($this->driver, 'getPathPrefix') ? method_exists($this->driver, 'getPathPrefix') : '';
+
+        return is_dir($prefix . $dirname);
     }
 
     /**
@@ -448,11 +450,7 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
         );
         $delete = $this->deleteDirectory($directory);
 
-        if (!$copy && !$delete) {
-            return false;
-        }
-
-        return true;
+        return !(!$copy && !$delete);
     }
 
     /**
