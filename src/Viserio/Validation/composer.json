@@ -19,6 +19,7 @@
     ],
     "require": {
         "php"                                                : "7.0.0 - 7.0.5 || ^7.0.7",
+        "egulias/email-validator"                            : "^2.1",
         "respect/validation"                                 : "^1.1.4",
         "symfony/polyfill-mbstring"                          : "^1.0",
         "viserio/contracts"                                  : "self.version"
