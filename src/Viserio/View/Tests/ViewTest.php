@@ -49,7 +49,7 @@ class ViewTest extends \PHPUnit_Framework_TestCase
         $view->getEngine()
             ->shouldReceive('get')
             ->once()
-            ->with(['path'=>'path','name'=>'name'], ['foo' => 'bar', 'shared' => 'foo'])
+            ->with(['path' => 'path', 'name' => 'name'], ['foo' => 'bar', 'shared' => 'foo'])
             ->andReturn('contents');
 
         $me = $this;

@@ -62,7 +62,7 @@ class Factory implements FactoryContract
      */
     protected $extensions = [
         'php' => 'php',
-        'phtml' => 'php'
+        'phtml' => 'php',
     ];
 
     /**

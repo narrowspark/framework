@@ -250,7 +250,7 @@ class ViewFinder implements FinderContract
                 if ($this->files->has($viewPath)) {
                     return [
                         'path' => $viewPath,
-                        'name' => $file
+                        'name' => $file,
                     ];
                 }
             }

@@ -7,8 +7,8 @@ interface Engine
     /**
      * Get the evaluated contents of the view.
      *
-     * @param array  $fileInfo
-     * @param array  $data
+     * @param array $fileInfo
+     * @param array $data
      *
      * @return string
      */
