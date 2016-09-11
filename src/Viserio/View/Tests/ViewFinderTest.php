@@ -127,7 +127,7 @@ class ViewFinderTest extends \PHPUnit_Framework_TestCase
             $finder->find('foo::bar.baz')['path']
         );
         $this->assertEquals(
-            'bar\baz.php',
+            self::normalizeDirectorySeparator('bar\baz.php'),
             $finder->find('foo::bar.baz')['name']
         );
     }
