@@ -64,13 +64,13 @@ class Kernel implements TerminableContract, KernelContract
      */
     protected $bootstrappers = [
         LoadConfiguration::class,
+        DetectEnvironment::class,
         HandleExceptions::class,
         ConfigureLogging::class,
-        DetectEnvironment::class,
-        LoadRoutes::class,
-        LoadCommands::class,
-        LoadServiceProvider::class,
         RegisterStaticalProxys::class,
+        LoadCommands::class,
+        LoadRoutes::class,
+        LoadServiceProvider::class,
     ];
 
     /**
