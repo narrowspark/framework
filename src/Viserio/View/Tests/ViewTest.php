@@ -19,7 +19,7 @@ class ViewTest extends \PHPUnit_Framework_TestCase
             $this->mock(Factory::class),
             $this->mock(Engine::class),
             'view',
-            'path',
+            ['path' => 'path', 'name' => 'name'],
             []
         );
         $view->with('foo', 'bar');
@@ -31,7 +31,7 @@ class ViewTest extends \PHPUnit_Framework_TestCase
             $this->mock(Factory::class),
             $this->mock(Engine::class),
             'view',
-            'path',
+            ['path' => 'path', 'name' => 'name'],
             []
         );
         $view->withFoo('bar')->withBaz('boom');
@@ -49,7 +49,7 @@ class ViewTest extends \PHPUnit_Framework_TestCase
         $view->getEngine()
             ->shouldReceive('get')
             ->once()
-            ->with('path', ['foo' => 'bar', 'shared' => 'foo'])
+            ->with(['path'=>'path','name'=>'name'], ['foo' => 'bar', 'shared' => 'foo'])
             ->andReturn('contents');
 
         $me = $this;
@@ -81,7 +81,7 @@ class ViewTest extends \PHPUnit_Framework_TestCase
             $this->mock(Factory::class),
             $this->mock(Engine::class),
             'view',
-            'path',
+            ['path' => 'path', 'name' => 'name'],
             $arrayable
         );
 
@@ -175,7 +175,7 @@ class ViewTest extends \PHPUnit_Framework_TestCase
             $this->mock(Factory::class),
             $this->mock(Engine::class),
             'view',
-            'path',
+            ['path' => 'path', 'name' => 'name'],
             ['foo' => 'bar']
         );
     }

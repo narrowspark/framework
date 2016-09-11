@@ -18,9 +18,9 @@ interface Finder
      *
      * @param string $view
      *
-     * @return string
+     * @return array
      */
-    public function find(string $view): string;
+    public function find(string $view): array;
 
     /**
      * Add a location to the finder.

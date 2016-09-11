@@ -65,9 +65,16 @@ class ViewServiceProvider implements ServiceProvider
 
     public static function createViewFinder(ContainerInterface $container)
     {
+        $config = $container->get(ConfigManager::class);
+        $paths = array_merge(
+            [$config->get('view.template.default', [])],
+            $config->get('view.template.paths', [])
+        );
+
         return new ViewFinder(
             $container->get(Filesystem::class),
-            $container->get(ConfigManager::class)->get('view.template.paths', [])
+            $paths,
+            $config->get('view.file_extensions')
         );
     }
 
@@ -79,6 +86,9 @@ class ViewServiceProvider implements ServiceProvider
         );
 
         $view->share('app', $container);
+        $view->addExtension('html', 'twig');
+        $view->addExtension('twig.html', 'twig');
+        $view->addExtension('plates.php', 'plates');
 
         return $view;
     }

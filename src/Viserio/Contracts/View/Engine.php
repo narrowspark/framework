@@ -7,10 +7,10 @@ interface Engine
     /**
      * Get the evaluated contents of the view.
      *
-     * @param string $path
+     * @param array  $fileInfo
      * @param array  $data
      *
      * @return string
      */
-    public function get(string $path, array $data = []): string;
+    public function get(array $fileInfo, array $data = []): string;
 }

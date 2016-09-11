@@ -48,11 +48,11 @@ class Handler implements HandlerContract
      */
     protected $defaultLevels = [
         FatalThrowableError::class => 'critical',
+        FatalErrorException::class => 'error',
         Throwable::class => 'error',
         NotFoundException::class => 'notice',
         AbstractClientErrorException::class => 'notice',
         AbstractServerErrorException::class => 'error',
-        Throwable::class => 'error',
     ];
 
     /**
@@ -398,7 +398,7 @@ class Handler implements HandlerContract
     ): ResponseInterface {
         $id = $this->getContainer()->get(ExceptionIdentifier::class)->identify($exception);
         $flattened = FlattenException::create($transformed);
-        $code = $flattened->getCode();
+        $code = $flattened->getStatusCode();
         $headers = $flattened->getHeaders();
 
         return $this->getDisplayer(
