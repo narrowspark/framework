@@ -3,32 +3,33 @@ declare(strict_types=1);
 namespace Viserio\Database;
 
 use Viserio\Contracts\Config\Manager as ConfigContract;
+use Viserio\Contracts\Connect\ConnectManager as ConnectManagerContract;
 
 class DatabaseManager
 {
     /**
-     * The application instance.
+     * The config instance.
      *
      * @var \Viserio\Contracts\Config\Manager
      */
     protected $config;
 
     /**
-     * The database connection factory instance.
+     * The connect manager instance.
      *
-     * @var \Viserio\Database\Connection\ConnectionFactory
+     * @var \Viserio\Contracts\Connect\ConnectManager
      */
-    protected $factory;
+    protected $connect;
 
     /**
      * Create a new database manager instance.
      *
-     * @param \Viserio\Contracts\Config\Manager              $config
-     * @param \Viserio\Database\Connection\ConnectionFactory $factory
+     * @param \Viserio\Contracts\Config\Manager         $config
+     * @param \Viserio\Contracts\Connect\ConnectManager $connect
      */
-    public function __construct(ConfigContract $config, ConnectionFactory $factory)
+    public function __construct(ConfigContract $config, ConnectManagerContract $connect)
     {
         $this->config = $config;
-        $this->factory = $factory;
+        $this->connect = $connect;
     }
 }
