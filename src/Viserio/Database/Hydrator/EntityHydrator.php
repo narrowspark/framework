@@ -29,7 +29,6 @@ class EntityHydrator implements HydratorContract
      */
     public function extract(): array
     {
-
     }
 
     /**
@@ -38,7 +37,6 @@ class EntityHydrator implements HydratorContract
     public function hydrate(array $data = [], $option = self::HYDRATE_AUTO)
     {
         $option = $this->determineOption($data, $option);
-
     }
 
     /**

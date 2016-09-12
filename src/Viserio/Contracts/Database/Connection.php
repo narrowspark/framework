@@ -4,5 +4,4 @@ namespace Viserio\Contracts\Database;
 
 interface Connection
 {
-
 }

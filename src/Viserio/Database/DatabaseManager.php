@@ -31,7 +31,7 @@ class DatabaseManager
     /**
      * Create a new database manager instance.
      *
-     * @param \Viserio\Contracts\Config\Manager         $config
+     * @param \Viserio\Contracts\Config\Manager      $config
      * @param \Viserio\Contracts\Database\Connection $connect
      */
     public function __construct(ConfigContract $config, ConnectionContract $connect)

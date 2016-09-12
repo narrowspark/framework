@@ -12,7 +12,7 @@ interface Hydrator
 
     const HYDRATE_AUTO = 'auto';
 
-   /**
+    /**
      * Extract values from received object
      *
      * @return array
@@ -22,7 +22,7 @@ interface Hydrator
     /**
      * Hydrate received object with the provided $data.
      *
-     * @param array $data
+     * @param array  $data
      * @param string $option
      *
      * @return mixed
