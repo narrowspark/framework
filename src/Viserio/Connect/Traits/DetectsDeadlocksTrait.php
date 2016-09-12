@@ -10,7 +10,7 @@ trait DetectsDeadlocks
     /**
      * Determine if the given exception was caused by a deadlock.
      *
-     * @param \Throwable  $exception
+     * @param \Throwable $exception
      *
      * @return bool
      */
