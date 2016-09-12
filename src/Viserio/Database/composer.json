@@ -19,10 +19,11 @@
     ],
     "require": {
         "php"                                 : "7.0.0 - 7.0.5 || ^7.0.7",
-        "ext-pdo"                             : "*",
-        "doctrine/dbal"                       : "^2.5",
+        "cakephp/chronos"                     : "^1.0",
         "doctrine/inflector"                  : "^1.1",
+        "ext-pdo"                             : "*",
         "ocramius/generated-hydrator"         : "^2.0",
+        "psr/cache"                           : "^1.0",
         "viserio/config"                      : "self.version",
         "viserio/connect"                     : "self.version",
         "viserio/contracts"                   : "self.version",
