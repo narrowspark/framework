@@ -109,10 +109,7 @@ class ConfigureLogging implements BootstrapContract
     protected function configureErrorlogHandler(Application $app, LogContract $log, string $level)
     {
         $log->getHandlerParser()->parseHandler(
-            new ErrorLogHandler(
-                ErrorLogHandler::OPERATING_SYSTEM,
-                $level
-            ),
+            new ErrorLogHandler(ErrorLogHandler::OPERATING_SYSTEM, $level),
             '',
             '',
             null,

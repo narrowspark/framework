@@ -23,7 +23,7 @@ class ViewFactoryTest extends \PHPUnit_Framework_TestCase
             ->shouldReceive('find')
             ->once()
             ->with('view')
-            ->andReturn('path.php');
+            ->andReturn(['path' => 'path.php']);
         $factory->getEngineResolver()
             ->shouldReceive('resolve')
             ->once()
@@ -71,11 +71,11 @@ class ViewFactoryTest extends \PHPUnit_Framework_TestCase
         $factory->getFinder()
             ->shouldReceive('find')
             ->with('layout')
-            ->andReturn(self::normalizeDirectorySeparator($this->getPath() . '/foo.php'));
+            ->andReturn(['path' => self::normalizeDirectorySeparator($this->getPath() . '/foo.php')]);
         $factory->getFinder()
             ->shouldReceive('find')
             ->with('view')
-            ->andReturn(self::normalizeDirectorySeparator($this->getPath() . '/bar/foo/fi.php'));
+            ->andReturn(['path' => self::normalizeDirectorySeparator($this->getPath() . '/bar/foo/fi.php')]);
 
         $factory->create('view')->render();
     }
@@ -92,7 +92,7 @@ class ViewFactoryTest extends \PHPUnit_Framework_TestCase
             ->shouldReceive('find')
             ->once()
             ->with('bar')
-            ->andReturn('path.php');
+            ->andReturn(['path' => 'path.php']);
 
         $this->assertFalse($factory->exists('foo'));
         $this->assertTrue($factory->exists('bar'));
@@ -151,7 +151,10 @@ class ViewFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $factory = $this->getFactory();
         $factory->getFinder()
-            ->shouldReceive('find')->once()->with('view')->andReturn('path.php');
+            ->shouldReceive('find')
+            ->once()
+            ->with('view')
+            ->andReturn(['path' => 'path.php']);
         $factory->getEngineResolver()
             ->shouldReceive('resolve')
             ->once()
@@ -191,7 +194,7 @@ class ViewFactoryTest extends \PHPUnit_Framework_TestCase
             ->shouldReceive('find')
             ->once()
             ->with('view')
-            ->andReturn('path.foo');
+            ->andReturn(['path' => 'path.foo']);
         $factory->getEngineResolver()
             ->shouldReceive('resolve')
             ->once()
@@ -246,7 +249,7 @@ class ViewFactoryTest extends \PHPUnit_Framework_TestCase
             ->shouldReceive('find')
             ->twice()
             ->with('foo.bar')
-            ->andReturn('path.php');
+            ->andReturn(['path' => 'path.php']);
         $factory->getEngineResolver()
             ->shouldReceive('resolve')
             ->twice()
@@ -264,7 +267,7 @@ class ViewFactoryTest extends \PHPUnit_Framework_TestCase
             ->shouldReceive('find')
             ->once()
             ->with('real')
-            ->andReturn('path.php');
+            ->andReturn(['path' => 'path.php']);
         $factory->getEngineResolver()
             ->shouldReceive('resolve')
             ->once()
@@ -286,7 +289,7 @@ class ViewFactoryTest extends \PHPUnit_Framework_TestCase
             ->shouldReceive('find')
             ->once()
             ->with('view')
-            ->andReturn('view.foo');
+            ->andReturn(['path' => 'view.foo']);
         $factory->create('view');
     }
 

@@ -61,51 +61,9 @@ class Plates implements EnginesContract
     }
 
     /**
-     * Get the evaluated contents of the view.
-     *
-     * @param string $path
-     * @param array  $data
-     *
-     * @return string
+     * {@inheritdoc}
      */
-    public function get(string $path, array $data = []): string
-    {
-        return $this->evaluatePath($path, $data);
-    }
-
-    /**
-     * Plates paths loader.
-     */
-    protected function getLoader(): LeagueEngine
-    {
-        if (! $this->engine) {
-            $config = $this->config;
-            $this->engine = new LeagueEngine(
-                $config->get('view.default.template.path', null),
-                $config->get('view.engine.plates.file-extension', null)
-            );
-
-            if (($paths = $config->get('view.template.paths', null)) !== null) {
-                foreach ($paths as $name => $addPaths) {
-                    $this->engine->addFolder($name, $addPaths);
-                }
-            }
-        }
-
-        return $this->engine;
-    }
-
-    /**
-     * Get the evaluated contents of the view at the given path.
-     *
-     * @param string $path
-     * @param array  $data
-     *
-     * @throws \Exception
-     *
-     * @return string
-     */
-    protected function evaluatePath(string $path, array $data): string
+    public function get(array $fileInfo, array $data = []): string
     {
         $engine = $this->getLoader();
 
@@ -115,7 +73,7 @@ class Plates implements EnginesContract
         }
 
         // Set asset extensions
-        $engine->loadExtension(new Asset($this->config->get('view.asset', null)));
+        $engine->loadExtension(new Asset($this->config->get('view.engine.plates.asset', null)));
 
         // Get all extensions
         if (! empty($this->availableExtensions)) {
@@ -124,12 +82,12 @@ class Plates implements EnginesContract
             }
         }
 
-        if (! $engine->exists($path)) {
-            throw new Exception('Template "' . $path . '" dont exist!');
+        if (! $engine->exists($fileInfo['name'])) {
+            throw new Exception('Template "' . $fileInfo['name'] . '" dont exist!');
         }
 
         // Creat a new template
-        $template = new Template($engine, $path);
+        $template = new Template($engine, $fileInfo['name']);
 
         // We'll evaluate the contents of the view inside a try/catch block so we can
         // flush out any stray output that might get out before an error occurs or
@@ -141,6 +99,28 @@ class Plates implements EnginesContract
         } catch (Throwable $exception) {
             $this->handleViewException($exception);
         }
+    }
+
+    /**
+     * Plates paths loader.
+     */
+    protected function getLoader(): LeagueEngine
+    {
+        if (! $this->engine) {
+            $config = $this->config;
+            $this->engine = new LeagueEngine(
+                $config->get('view.template.default', null),
+                $config->get('view.engine.plates.file_extension', null)
+            );
+
+            if (($paths = $config->get('view.template.paths', null)) !== null) {
+                foreach ($paths as $name => $addPaths) {
+                    $this->engine->addFolder($name, $addPaths);
+                }
+            }
+        }
+
+        return $this->engine;
     }
 
     /**

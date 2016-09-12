@@ -62,8 +62,7 @@ class Factory implements FactoryContract
      */
     protected $extensions = [
         'php' => 'php',
-        'twig' => 'html',
-        'plates' => 'plates.php',
+        'phtml' => 'php',
     ];
 
     /**
@@ -111,7 +110,7 @@ class Factory implements FactoryContract
         $data = array_merge($mergeData, $this->parseData($data));
         $engine = $this->getEngineFromPath($path);
 
-        return $this->getView($this, $engine, $path, $path, $data);
+        return $this->getView($this, $engine, $path, ['path' => $path], $data);
     }
 
     /**
@@ -124,11 +123,15 @@ class Factory implements FactoryContract
         }
 
         $view = $this->normalizeName($view);
-        $path = $this->finder->find($view);
-        $data = array_merge($mergeData, $this->parseData($data));
-        $engine = $this->getEngineFromPath($path);
+        $fileInfo = $this->finder->find($view);
 
-        return $this->getView($this, $engine, $view, $path, $data);
+        return $this->getView(
+            $this,
+            $this->getEngineFromPath($fileInfo['path']),
+            $view,
+            $fileInfo,
+            array_merge($mergeData, $this->parseData($data))
+        );
     }
 
     /**
@@ -261,7 +264,9 @@ class Factory implements FactoryContract
             $this->engines->register($engine, $resolver);
         }
 
-        unset($this->extensions[$extension]);
+        if (isset($this->extensions[$extension])) {
+            unset($this->extensions[$extension]);
+        }
 
         $this->extensions = array_merge([$extension => $engine], $this->extensions);
 
@@ -350,13 +355,13 @@ class Factory implements FactoryContract
      * @param \Viserio\Contracts\View\Factory            $factory
      * @param \Viserio\Contracts\View\Engine             $engine
      * @param string                                     $view
-     * @param string                                     $path
+     * @param array                                      $fileInfo
      * @param array|\Viserio\Contracts\Support\Arrayable $data
      *
      * @return \Viserio\View\View
      */
-    protected function getView(FactoryContract $factory, EngineContract $engine, string $view, string $path, $data = [])
+    protected function getView(FactoryContract $factory, EngineContract $engine, string $view, array $fileInfo, $data = [])
     {
-        return new View($factory, $engine, $view, $path, $data);
+        return new View($factory, $engine, $view, $fileInfo, $data);
     }
 }

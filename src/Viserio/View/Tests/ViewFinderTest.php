@@ -25,11 +25,11 @@ class ViewFinderTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(
             $path,
-            $finder->find('foo')
+            $finder->find('foo')['path']
         );
         $this->assertEquals(
             $path,
-            $finder->find('foo')
+            $finder->find('foo')['path']
         );
     }
 
@@ -52,7 +52,7 @@ class ViewFinderTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(
             $path,
-            $finder->find('foo')
+            $finder->find('foo')['path']
         );
     }
 
@@ -82,7 +82,7 @@ class ViewFinderTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(
             $path2,
-            $finder->find('foo')
+            $finder->find('foo')['path']
         );
     }
 
@@ -103,7 +103,7 @@ class ViewFinderTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(
             $path,
-            $finder->find('foo::bar.baz')
+            $finder->find('foo::bar.baz')['path']
         );
     }
 
@@ -124,7 +124,11 @@ class ViewFinderTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(
             $path,
-            $finder->find('foo::bar.baz')
+            $finder->find('foo::bar.baz')['path']
+        );
+        $this->assertEquals(
+            self::normalizeDirectorySeparator('bar\baz.php'),
+            self::normalizeDirectorySeparator($finder->find('foo::bar.baz')['name'])
         );
     }
 
@@ -164,7 +168,7 @@ class ViewFinderTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(
             $path2,
-            $finder->find('foo::bar.baz')
+            $finder->find('foo::bar.baz')['path']
         );
     }
 
@@ -182,13 +186,11 @@ class ViewFinderTest extends \PHPUnit_Framework_TestCase
      */
     public function testExceptionThrownWhenViewNotFound()
     {
-        $path = self::normalizeDirectorySeparator($this->getPath() . '/' . 'foo.php');
-
         $finder = $this->getFinder();
         $finder->getFilesystem()
             ->shouldReceive('has')
             ->once()
-            ->with($path)
+            ->with(self::normalizeDirectorySeparator($this->getPath() . '/' . 'foo.php'))
             ->andReturn(false);
         $finder->getFilesystem()
             ->shouldReceive('has')
@@ -215,7 +217,7 @@ class ViewFinderTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(
             $path,
-            $finder->find('foo')
+            $finder->find('foo')['path']
         );
 
         $finder->find('foo::foo::');

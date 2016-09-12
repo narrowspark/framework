@@ -37,27 +37,9 @@ class Twig implements EngineContract
     }
 
     /**
-     * Get the evaluated contents of the view.
-     *
-     * @param string $path
-     * @param array  $data
-     *
-     * @return string
+     * {@inheritdoc}
      */
-    public function get(string $path, array $data = []): string
-    {
-        return $this->evaluatePath($path, $data);
-    }
-
-    /**
-     * Get the evaluated contents of the view at the given path.
-     *
-     * @param string $path
-     * @param array  $data
-     *
-     * @return string
-     */
-    protected function evaluatePath(string $path, array $data): string
+    public function get(array $fileInfo, array $data = []): string
     {
         // We'll evaluate the contents of the view inside a try/catch block so we can
         // flush out any stray output that might get out before an error occurs or
@@ -65,7 +47,7 @@ class Twig implements EngineContract
         ob_start();
 
         try {
-            return $this->getInstance()->render($path, $data);
+            return $this->getInstance()->render($fileInfo['name'], $data);
         } catch (Throwable $exception) {
             $this->handleViewException($exception);
         }
@@ -94,6 +76,8 @@ class Twig implements EngineContract
                     $twig->addExtension(is_object($extension) ? $extension : new $extension());
                 }
             }
+
+            $this->parserInstance = $twig;
         }
 
         return $this->parserInstance;
@@ -105,8 +89,7 @@ class Twig implements EngineContract
     protected function loader()
     {
         $config = $this->config;
-        $defaultPath = $config->get('view.default.template.path', null);
-        $loader = new Twig_Loader_Filesystem((array) $defaultPath);
+        $loader = new Twig_Loader_Filesystem($config->get('view.template.default', []));
 
         if (($paths = $config->get('view.template.paths', [])) !== null) {
             foreach ($paths as $name => $path) {
