@@ -4,6 +4,7 @@ namespace Viserio\View;
 
 use ArrayAccess;
 use BadMethodCallException;
+use Closure;
 use Throwable;
 use Viserio\Contracts\Support\Arrayable;
 use Viserio\Contracts\Support\Renderable;
@@ -299,6 +300,8 @@ class View implements ArrayAccess, ViewContract
         foreach ($data as $key => $value) {
             if ($value instanceof Renderable) {
                 $data[$key] = $value->render();
+            } elseif ($value instanceof Closure) {
+                $data[$key] = call_user_func($value);
             }
         }
 
