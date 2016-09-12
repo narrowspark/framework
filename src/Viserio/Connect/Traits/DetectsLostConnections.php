@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Connect\Traits;
 
-use Exception;
+use Throwable;
 use Viserio\Support\Str;
 
 trait DetectsLostConnections
@@ -10,15 +10,13 @@ trait DetectsLostConnections
     /**
      * Determine if the given exception was caused by a lost connection.
      *
-     * @param \Exception $e
+     * @param \Throwable $exception
      *
      * @return bool
      */
-    protected function causedByLostConnection(Exception $e)
+    protected function causedByLostConnection(Throwable $exception): bool
     {
-        $message = $e->getMessage();
-
-        return Str::containsAny($message, [
+        return Str::containsAny($exception->getMessage(), [
             'server has gone away',
             'no connection to the server',
             'Lost connection',
@@ -27,7 +25,6 @@ trait DetectsLostConnections
             'decryption failed or bad record mac',
             'server closed the connection unexpectedly',
             'SSL connection has been closed unexpectedly',
-            'Deadlock found when trying to get lock',
             'Error writing data to the connection',
             'Resource deadlock avoided',
         ]);
