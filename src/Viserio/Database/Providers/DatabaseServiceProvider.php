@@ -3,8 +3,8 @@ declare(strict_types=1);
 namespace Viserio\Database\Providers;
 
 use Interop\Container\ContainerInterface;
-use Viserio\Contracts\Config\Manager as ManagerContract;
 use Interop\Container\ServiceProvider;
+use Viserio\Contracts\Config\Manager as ManagerContract;
 
 class DatabaseServiceProvider implements ServiceProvider
 {
@@ -19,6 +19,5 @@ class DatabaseServiceProvider implements ServiceProvider
     public static function createRuntimeConfiguration(ContainerInterface $container)
     {
         $config = $container->get(ManagerContract::class)->get('database');
-
     }
 }
