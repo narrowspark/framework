@@ -100,7 +100,7 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException InvalidArgumentException
+     * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage No handler registered for command [Viserio\Bus\Tests\Fixture\BusDispatcherBasicCommand].
      */
     public function testToThrowInvalidArgumentException()

@@ -6,7 +6,7 @@ use Mongo;
 use MongoClient;
 use MongoConnectionException;
 use MongoDB\Client as MongoDBClient;
-use Narrowspark\Arr\StaticArr as Arr;
+use Narrowspark\Arr\Arr;
 use Throwable;
 use Viserio\Connect\Traits\DetectsLostConnections;
 use Viserio\Contracts\Support\Connector as ConnectorContract;

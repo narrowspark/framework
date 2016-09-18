@@ -176,7 +176,7 @@ class ResponseTest extends AbstractMessageTest
     }
 
     /**
-     * @expectedException InvalidArgumentException
+     * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage Invalid HTTP version. Must be one of: 1.0, 1.1, 2.0
      */
     public function testWithProtocolVersion()

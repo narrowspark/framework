@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Connect\Adapters\Database;
 
-use Narrowspark\Arr\StaticArr as Arr;
+use Narrowspark\Arr\Arr;
 use PDO;
 use PDOException;
 use Viserio\Connect\Traits\DetectsLostConnections;

@@ -45,7 +45,7 @@ class TOMLTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException Viserio\Contracts\Parsers\Exception\ParseException
+     * @expectedException \Viserio\Contracts\Parsers\Exception\ParseException
      */
     public function testParseToThrowException()
     {

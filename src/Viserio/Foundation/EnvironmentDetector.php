@@ -3,7 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Foundation;
 
 use Closure;
-use Narrowspark\Arr\StaticArr as Arr;
+use Narrowspark\Arr\Arr;
 use Viserio\Contracts\Foundation\Environment as EnvironmentContract;
 use Viserio\Support\Str;
 

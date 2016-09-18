@@ -181,7 +181,7 @@ class ViewFinderTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException InvalidArgumentException
+     * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage View [foo] not found.
      */
     public function testExceptionThrownWhenViewNotFound()
@@ -201,7 +201,7 @@ class ViewFinderTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException InvalidArgumentException
+     * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage View [foo::foo::] has an invalid name.
      */
     public function testExceptionThrownWhenViewHasAInvalidName()
@@ -224,7 +224,7 @@ class ViewFinderTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException InvalidArgumentException
+     * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage No hint path defined for [name].
      */
     public function testExceptionThrownOnInvalidViewName()
@@ -234,7 +234,7 @@ class ViewFinderTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException InvalidArgumentException
+     * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage No hint path defined for [name].
      */
     public function testExceptionThrownWhenNoHintPathIsRegistered()

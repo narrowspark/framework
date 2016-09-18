@@ -4,7 +4,7 @@ namespace Viserio\Mail;
 
 use Closure;
 use InvalidArgumentException;
-use Narrowspark\Arr\StaticArr as Arr;
+use Narrowspark\Arr\Arr;
 use Swift_Mailer;
 use Swift_Message;
 use Swift_Mime_Message;

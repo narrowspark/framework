@@ -6,7 +6,7 @@ use InvalidArgumentException;
 use League\Flysystem\Adapter\Local as FlyLocal;
 use League\Flysystem\AdapterInterface;
 use League\Flysystem\Cached\CachedAdapter;
-use Narrowspark\Arr\StaticArr as Arr;
+use Narrowspark\Arr\Arr;
 use Viserio\Contracts\Cache\Traits\CacheAwareTrait;
 use Viserio\Contracts\Filesystem\Filesystem as FilesystemContract;
 use Viserio\Filesystem\Cache\CachedFactory;

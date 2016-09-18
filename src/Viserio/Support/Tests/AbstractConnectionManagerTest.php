@@ -12,7 +12,7 @@ class AbstractConnectionManagerTest extends \PHPUnit_Framework_TestCase
     use MockeryTrait;
 
     /**
-     * @expectedException InvalidArgumentException
+     * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage Connection [fail] not supported.
      */
     public function testConnectionToThrowRuntimeException()

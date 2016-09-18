@@ -47,7 +47,7 @@ class WorkerTest extends \PHPUnit_Framework_TestCase
     // }
 
     /**
-     * @expectedException RuntimeException
+     * @expectedException \RuntimeException
      */
     public function testJobIsReleasedWhenExceptionIsThrown()
     {
@@ -66,7 +66,7 @@ class WorkerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException RuntimeException
+     * @expectedException \RuntimeException
      */
     public function testJobIsNotReleasedWhenExceptionIsThrownButJobIsDeleted()
     {

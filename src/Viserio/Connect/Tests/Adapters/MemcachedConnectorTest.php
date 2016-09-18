@@ -47,7 +47,7 @@ class MemcachedConnectorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException RuntimeException
+     * @expectedException \RuntimeException
      * @expectedExceptionMessage Could not establish Memcached connection.
      */
     public function testExceptionThrownOnBadConnection()

@@ -28,7 +28,7 @@ class RouteCollectionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException RuntimeException
+     * @expectedException \RuntimeException
      * @expectedExceptionMessage Route not found, looks like your route cache is stale.
      */
     public function testMatchToThrowException()

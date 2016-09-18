@@ -102,7 +102,7 @@ class ParserTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException Viserio\Contracts\Parsers\Exception\NotSupportedException
+     * @expectedException \Viserio\Contracts\Parsers\Exception\NotSupportedException
      */
     public function testGetParserToThrowException()
     {

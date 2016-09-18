@@ -58,7 +58,7 @@ class StaticalProxyTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException RuntimeException
+     * @expectedException \RuntimeException
      * @expectedExceptionMessage A statical proxy root has not been set.
      */
     public function testCallStaticToThrowException()
@@ -71,7 +71,7 @@ class StaticalProxyTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException BadMethodCallException
+     * @expectedException \BadMethodCallException
      * @expectedExceptionMessage The Viserio\StaticalProxy\StaticalProxy::getInstanceIdentifier method must be implemented by a subclass.
      */
     public function testGetInstanceIdentifier()

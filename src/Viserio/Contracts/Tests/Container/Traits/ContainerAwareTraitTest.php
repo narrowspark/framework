@@ -17,7 +17,7 @@ class ContainerAwareTraitTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException RuntimeException
+     * @expectedException \RuntimeException
      * @expectedExceptionMessage Container is not set up.
      */
     public function testGetSetContainerThrowExceptionIfContainerIsNotSet()
