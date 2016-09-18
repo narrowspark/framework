@@ -4,7 +4,7 @@ namespace Viserio\Mail;
 
 use Aws\Ses\SesClient;
 use GuzzleHttp\Client as HttpClient;
-use Narrowspark\Arr\StaticArr as Arr;
+use Narrowspark\Arr\Arr;
 use Psr\Log\LoggerInterface;
 use Swift_MailTransport;
 use Swift_SendmailTransport;

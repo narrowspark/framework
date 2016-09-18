@@ -3,7 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Routing;
 
 use LogicException;
-use Narrowspark\Arr\StaticArr as Arr;
+use Narrowspark\Arr\Arr;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use UnexpectedValueException;

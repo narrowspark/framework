@@ -163,7 +163,9 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
         $repository = new Repository();
 
         $repository['param'] = 'value';
+
         unset($repository['param'], $repository['service']);
+
         $this->assertFalse(isset($repository['param']));
         $this->assertFalse(isset($repository['service']));
 

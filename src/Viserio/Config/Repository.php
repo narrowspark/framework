@@ -3,7 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Config;
 
 use ArrayIterator;
-use Narrowspark\Arr\StaticArr as Arr;
+use Narrowspark\Arr\Arr;
 use Viserio\Contracts\Config\Repository as RepositoryContract;
 
 class Repository implements RepositoryContract
@@ -113,7 +113,7 @@ class Repository implements RepositoryContract
      */
     public function offsetUnset($key)
     {
-        $this->data = Arr::forget($this->data, $key);
+        Arr::forget($this->data, $key);
     }
 
     /**

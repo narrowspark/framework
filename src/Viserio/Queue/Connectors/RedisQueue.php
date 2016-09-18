@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Queue\Connectors;
 
-use Narrowspark\Arr\StaticArr as Arr;
+use Narrowspark\Arr\Arr;
 use Predis\Client;
 use Viserio\Queue\Jobs\RedisJob;
 use Viserio\Support\Str;

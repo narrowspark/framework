@@ -4,7 +4,7 @@ namespace Viserio\Filesystem\Adapters;
 
 use InvalidArgumentException;
 use League\Flysystem\Rackspace\RackspaceAdapter;
-use Narrowspark\Arr\StaticArr as Arr;
+use Narrowspark\Arr\Arr;
 use OpenCloud\Rackspace;
 
 class RackspaceConnector extends AbstractConnector
