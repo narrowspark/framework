@@ -214,7 +214,7 @@ class UploadedFileTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException RuntimeException
+     * @expectedException \RuntimeException
      * @expectedExceptionMessage moved
      */
     public function testMoveCannotBeCalledMoreThanOnce()
@@ -238,7 +238,7 @@ class UploadedFileTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException RuntimeException
+     * @expectedException \RuntimeException
      * @expectedExceptionMessage moved
      */
     public function testCannotRetrieveStreamAfterMove()
@@ -286,7 +286,7 @@ class UploadedFileTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider nonOkErrorStatus
      *
-     * @expectedException RuntimeException
+     * @expectedException \RuntimeException
      * @expectedExceptionMessage upload error
      */
     public function testMoveToRaisesExceptionWhenErrorStatusPresent($status)
@@ -299,7 +299,7 @@ class UploadedFileTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider nonOkErrorStatus
      *
-     * @expectedException RuntimeException
+     * @expectedException \RuntimeException
      * @expectedExceptionMessage upload error
      */
     public function testGetStreamRaisesExceptionWhenErrorStatusPresent($status)

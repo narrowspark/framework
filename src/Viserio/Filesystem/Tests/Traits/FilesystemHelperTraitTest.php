@@ -26,7 +26,7 @@ class FilesystemHelperTraitTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException Viserio\Contracts\Filesystem\Exception\FileNotFoundException
+     * @expectedException \Viserio\Contracts\Filesystem\Exception\FileNotFoundException
      */
     public function testGetRequireThrowsExceptionOnexisitingFile()
     {

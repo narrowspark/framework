@@ -87,7 +87,7 @@ class FileLoaderTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException Viserio\Contracts\Parsers\Exception\LoadingException
+     * @expectedException \Viserio\Contracts\Parsers\Exception\LoadingException
      * @expectedExceptionMessage File [no/file] not found.
      */
     public function testExistsWithFalsePath()

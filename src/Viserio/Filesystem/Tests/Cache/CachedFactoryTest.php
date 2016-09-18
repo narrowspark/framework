@@ -15,7 +15,7 @@ class CachedFactoryTest extends \PHPUnit_Framework_TestCase
     use MockeryTrait;
 
     /**
-     * @expectedException InvalidArgumentException
+     * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage A driver must be specified.
      */
     public function testConnectionThrowsInvalidArgumentException()
@@ -26,7 +26,7 @@ class CachedFactoryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException InvalidArgumentException
+     * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage Unsupported driver [local].
      */
     public function testCreateConnectorThrowsInvalidArgumentException()

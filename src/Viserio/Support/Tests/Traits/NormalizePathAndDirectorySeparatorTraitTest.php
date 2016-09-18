@@ -28,7 +28,7 @@ class NormalizePathAndDirectorySeparatorTraitTest extends \PHPUnit_Framework_Tes
     }
 
     /**
-     * @expectedException LogicException
+     * @expectedException \LogicException
      */
     public function testNormalizePathToThrowException()
     {

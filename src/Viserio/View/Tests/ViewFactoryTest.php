@@ -60,7 +60,7 @@ class ViewFactoryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException Exception
+     * @expectedException \Exception
      */
     public function testExceptionsInSectionsAreThrown()
     {
@@ -280,7 +280,7 @@ class ViewFactoryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException InvalidArgumentException
+     * @expectedException \InvalidArgumentException
      */
     public function testExceptionIsThrownForUnknownExtension()
     {

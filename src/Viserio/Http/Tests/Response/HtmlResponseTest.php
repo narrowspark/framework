@@ -65,7 +65,7 @@ class HtmlResponseTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider invalidHtmlContent
-     * @expectedException InvalidArgumentException
+     * @expectedException \InvalidArgumentException
      */
     public function testRaisesExceptionforNonStringNonStreamBodyContent($body)
     {

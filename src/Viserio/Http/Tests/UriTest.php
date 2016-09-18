@@ -373,7 +373,7 @@ class UriTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException InvalidArgumentException
+     * @expectedException \InvalidArgumentException
      */
     public function testPathStartingWithTwoSlashes()
     {
@@ -418,7 +418,7 @@ class UriTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException InvalidArgumentException
+     * @expectedException \InvalidArgumentException
      */
     public function testRelativeUriWithPathHavingColonSegment()
     {
@@ -707,7 +707,7 @@ class UriTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider withHostFailedProvider
-     * @expectedException InvalidArgumentException
+     * @expectedException \InvalidArgumentException
      */
     public function testWithHostFailed($host)
     {
