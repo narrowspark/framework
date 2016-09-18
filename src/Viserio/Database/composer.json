@@ -2,7 +2,7 @@
     "name"       : "viserio/database",
     "type"       : "library",
     "description": "The Viserio Database package.",
-    "keywords"   : ["narrowspark", "viserio", "database", "SQL", "MySQL", "MSSQL", "SQLite", "Sybase", "Oracle", "Google Cloud SQL"],
+    "keywords"   : ["narrowspark", "viserio", "database", "SQL", "MySQL", "MSSQL", "SQLite", "Sybase", "Google Cloud SQL"],
     "license"    : "MIT",
     "homepage"   : "http://github.com/narrowspark/framework",
     "support"    : {
@@ -24,10 +24,10 @@
         "ext-pdo"                             : "*",
         "ocramius/generated-hydrator"         : "^2.0",
         "psr/cache"                           : "^1.0",
+        "psr/log"                             : "^1.0",
+        "narrowspark/collection"              : "^0.1",
         "viserio/config"                      : "self.version",
-        "viserio/connect"                     : "self.version",
-        "viserio/contracts"                   : "self.version",
-        "viserio/support"                     : "self.version"
+        "viserio/contracts"                   : "self.version"
     },
     "require-dev": {
         "container-interop/container-interop" : "^1.1",

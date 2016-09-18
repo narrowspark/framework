@@ -1,7 +1,6 @@
 git subsplit init git@github.com:narrowspark/framework.git
 git subsplit publish --heads="master 0.10.0-dev" --no-tags src/Viserio/Cache:git@github.com:viserio/cache.git
 git subsplit publish --heads="master 0.10.0-dev" --no-tags src/Viserio/Config:git@github.com:viserio/config.git
-git subsplit publish --heads="master 0.10.0-dev" --no-tags src/Viserio/Connect:git@github.com:viserio/connect.git
 git subsplit publish --heads="master 0.10.0-dev" --no-tags src/Viserio/Console:git@github.com:viserio/console.git
 git subsplit publish --heads="master 0.10.0-dev" --no-tags src/Viserio/Container:git@github.com:viserio/container.git
 git subsplit publish --heads="master 0.10.0-dev" --no-tags src/Viserio/Contracts:git@github.com:viserio/contracts.git
