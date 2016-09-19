@@ -13,10 +13,8 @@ use Viserio\Contracts\Foundation\Application as ApplicationContract;
 use Viserio\Contracts\Foundation\Kernel as KernelContract;
 use Viserio\Contracts\Foundation\Terminable as TerminableContract;
 use Viserio\Contracts\Routing\Router as RouterContract;
-use Viserio\Foundation\Bootstrap\ConfigureLogging;
 use Viserio\Foundation\Bootstrap\DetectEnvironment;
 use Viserio\Foundation\Bootstrap\HandleExceptions;
-use Viserio\Foundation\Bootstrap\LoadCommands;
 use Viserio\Foundation\Bootstrap\LoadConfiguration;
 use Viserio\Foundation\Bootstrap\LoadRoutes;
 use Viserio\Foundation\Bootstrap\LoadServiceProvider;
@@ -66,9 +64,7 @@ class Kernel implements TerminableContract, KernelContract
         LoadConfiguration::class,
         DetectEnvironment::class,
         HandleExceptions::class,
-        ConfigureLogging::class,
         RegisterStaticalProxys::class,
-        LoadCommands::class,
         LoadRoutes::class,
         LoadServiceProvider::class,
     ];

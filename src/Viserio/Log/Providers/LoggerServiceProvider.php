@@ -25,6 +25,9 @@ class LoggerServiceProvider implements ServiceProvider
             'logger' => function (ContainerInterface $container) {
                 return $container->get(MonologWriter::class);
             },
+            'log' => function (ContainerInterface $container) {
+                return $container->get(MonologWriter::class);
+            },
             Logger::class => function (ContainerInterface $container) {
                 return $container->get(MonologWriter::class);
             },
