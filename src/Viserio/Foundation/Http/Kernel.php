@@ -7,6 +7,7 @@ use Psr\Http\Message\ServerRequestInterface;
 use Symfony\Component\Debug\Exception\FatalThrowableError;
 use Throwable;
 use Viserio\Config\Manager as ConfigManager;
+use Viserio\Contracts\Events\Dispatcher as DispatcherContract;
 use Viserio\Contracts\Events\Traits\EventsAwareTrait;
 use Viserio\Contracts\Exception\Handler as HandlerContract;
 use Viserio\Contracts\Foundation\Application as ApplicationContract;
@@ -20,7 +21,6 @@ use Viserio\Foundation\Bootstrap\LoadRoutes;
 use Viserio\Foundation\Bootstrap\LoadServiceProvider;
 use Viserio\HttpFactory\ResponseFactory;
 use Viserio\Routing\Router;
-use Viserio\Contracts\Events\Dispatcher as DispatcherContract;
 use Viserio\StaticalProxy\StaticalProxy;
 
 class Kernel implements TerminableContract, KernelContract
