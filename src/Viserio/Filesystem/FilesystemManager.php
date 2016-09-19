@@ -112,8 +112,6 @@ class FilesystemManager extends AbstractConnectionManager
      */
     protected function adapt(AdapterInterface $adapter, array $config): FilesystemContract
     {
-        $localAdapter = $adapter instanceof FlyLocal;
-
         if (isset($config['cache']) && is_array($config['cache'])) {
             $cacheFactory = new CachedFactory($this, $this->cache);
 
@@ -121,12 +119,6 @@ class FilesystemManager extends AbstractConnectionManager
         }
 
         $filesystemAdapter = new FilesystemAdapter($adapter);
-
-        if ($localAdapter) {
-            $filesystemAdapter->setLocalPath(
-                $this->config->get($this->getConfigName() . '.disks.local.root', '')
-            );
-        }
 
         return $filesystemAdapter;
     }
