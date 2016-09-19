@@ -6,7 +6,7 @@ use InvalidArgumentException;
 use League\Flysystem\GridFS\GridFSAdapter;
 use Mongo;
 use MongoClient;
-use Narrowspark\Arr\StaticArr as Arr;
+use Narrowspark\Arr\Arr;
 
 class GridFSConnector extends AbstractConnector
 {

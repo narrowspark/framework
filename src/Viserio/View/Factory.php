@@ -4,7 +4,7 @@ namespace Viserio\View;
 
 use Closure;
 use InvalidArgumentException;
-use Narrowspark\Arr\StaticArr as Arr;
+use Narrowspark\Arr\Arr;
 use Viserio\Contracts\Events\Traits\EventsAwareTrait;
 use Viserio\Contracts\Support\Arrayable;
 use Viserio\Contracts\View\Engine as EngineContract;

@@ -4,7 +4,7 @@ namespace Viserio\Filesystem\Adapters;
 
 use InvalidArgumentException;
 use League\Flysystem\WebDAV\WebDAVAdapter;
-use Narrowspark\Arr\StaticArr as Arr;
+use Narrowspark\Arr\Arr;
 use Sabre\DAV\Client;
 use Viserio\Contracts\Filesystem\Connector as ConnectorContract;
 

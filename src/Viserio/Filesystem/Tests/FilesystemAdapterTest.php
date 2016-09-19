@@ -14,7 +14,7 @@ class FilesystemAdapterTest extends \PHPUnit_Framework_TestCase
     private $root;
 
     /**
-     * @var Viserio\Filesystem\FilesystemAdapter
+     * @var \Viserio\Filesystem\FilesystemAdapter
      */
     private $adapter;
 
@@ -72,7 +72,7 @@ class FilesystemAdapterTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException Viserio\Contracts\Filesystem\Exception\FileNotFoundException
+     * @expectedException \Viserio\Contracts\Filesystem\Exception\FileNotFoundException
      */
     public function testReadToThrowException()
     {
@@ -91,7 +91,7 @@ class FilesystemAdapterTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException Viserio\Contracts\Filesystem\Exception\FileNotFoundException
+     * @expectedException \Viserio\Contracts\Filesystem\Exception\FileNotFoundException
      */
     public function testUpdateToThrowException()
     {
@@ -221,7 +221,7 @@ class FilesystemAdapterTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException Viserio\Contracts\Filesystem\Exception\IOException
+     * @expectedException \Viserio\Contracts\Filesystem\Exception\IOException
      */
     public function testCopyToThrowIOException()
     {
@@ -233,7 +233,7 @@ class FilesystemAdapterTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException Viserio\Contracts\Filesystem\Exception\FileNotFoundException
+     * @expectedException \Viserio\Contracts\Filesystem\Exception\FileNotFoundException
      */
     public function testCopyToThrowFileNotFoundException()
     {
@@ -256,7 +256,7 @@ class FilesystemAdapterTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException InvalidArgumentException
+     * @expectedException \InvalidArgumentException
      */
     public function testSetVisibilityToThrowInvalidArgumentException()
     {
@@ -274,7 +274,7 @@ class FilesystemAdapterTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException Viserio\Contracts\Filesystem\Exception\FileNotFoundException
+     * @expectedException \Viserio\Contracts\Filesystem\Exception\FileNotFoundException
      */
     public function testGetMimetypeToThrowFileNotFoundException()
     {
@@ -291,7 +291,7 @@ class FilesystemAdapterTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException Viserio\Contracts\Filesystem\Exception\FileNotFoundException
+     * @expectedException \Viserio\Contracts\Filesystem\Exception\FileNotFoundException
      */
     public function testGetTimestampToThrowFileNotFoundException()
     {

@@ -3,7 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Queue\Jobs;
 
 use DateTime;
-use Narrowspark\Arr\StaticArr as Arr;
+use Narrowspark\Arr\Arr;
 use Viserio\Contracts\Container\Traits\ContainerAwareTrait;
 use Viserio\Contracts\Queue\Job as JobContract;
 use Viserio\Queue\CallQueuedHandler;

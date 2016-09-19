@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Cookie;
 
-use Narrowspark\Arr\StaticArr as Arr;
+use Narrowspark\Arr\Arr;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Viserio\Contracts\Cookie\Cookie as CookieContract;

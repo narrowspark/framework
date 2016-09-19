@@ -59,7 +59,7 @@ class TranslationManagerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException RuntimeException
+     * @expectedException \RuntimeException
      */
     public function testImportToThrowException()
     {
@@ -157,7 +157,7 @@ declare(strict_types=1); return [
     }
 
     /**
-     * @expectedException RuntimeException
+     * @expectedException \RuntimeException
      */
     public function testGetTranslator()
     {

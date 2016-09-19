@@ -4,7 +4,7 @@ namespace Viserio\Filesystem\Adapters;
 
 use InvalidArgumentException;
 use League\Flysystem\ZipArchive\ZipArchiveAdapter;
-use Narrowspark\Arr\StaticArr as Arr;
+use Narrowspark\Arr\Arr;
 use Viserio\Contracts\Filesystem\Connector as ConnectorContract;
 use ZipArchive;
 

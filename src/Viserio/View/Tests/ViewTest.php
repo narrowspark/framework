@@ -142,7 +142,7 @@ class ViewTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException BadMethodCallException
+     * @expectedException \BadMethodCallException
      */
     public function testViewBadMethod()
     {

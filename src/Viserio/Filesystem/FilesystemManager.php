@@ -6,7 +6,7 @@ use InvalidArgumentException;
 use League\Flysystem\Adapter\Local as FlyLocal;
 use League\Flysystem\AdapterInterface;
 use League\Flysystem\Cached\CachedAdapter;
-use Narrowspark\Arr\StaticArr as Arr;
+use Narrowspark\Arr\Arr;
 use Viserio\Contracts\Cache\Traits\CacheAwareTrait;
 use Viserio\Contracts\Filesystem\Filesystem as FilesystemContract;
 use Viserio\Filesystem\Cache\CachedFactory;
@@ -112,8 +112,6 @@ class FilesystemManager extends AbstractConnectionManager
      */
     protected function adapt(AdapterInterface $adapter, array $config): FilesystemContract
     {
-        $localAdapter = $adapter instanceof FlyLocal;
-
         if (isset($config['cache']) && is_array($config['cache'])) {
             $cacheFactory = new CachedFactory($this, $this->cache);
 
@@ -121,12 +119,6 @@ class FilesystemManager extends AbstractConnectionManager
         }
 
         $filesystemAdapter = new FilesystemAdapter($adapter);
-
-        if ($localAdapter) {
-            $filesystemAdapter->setLocalPath(
-                $this->config->get($this->getConfigName() . '.disks.local.root', '')
-            );
-        }
 
         return $filesystemAdapter;
     }

@@ -157,7 +157,7 @@ class QueueingDispatcherTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException RuntimeException
+     * @expectedException \RuntimeException
      * @expectedExceptionMessage Queue resolver did not return a Queue implementation.
      */
     public function testCommandsThatShouldThrowException()

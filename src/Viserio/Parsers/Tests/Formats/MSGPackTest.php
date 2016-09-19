@@ -31,7 +31,7 @@ class MSGPackTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException Viserio\Contracts\Parsers\Exception\ParseException
+     * @expectedException \Viserio\Contracts\Parsers\Exception\ParseException
      */
     public function testParseToThrowException()
     {
@@ -48,7 +48,7 @@ class MSGPackTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException Viserio\Contracts\Parsers\Exception\DumpException
+     * @expectedException \Viserio\Contracts\Parsers\Exception\DumpException
      */
     public function testDumpToThrowException()
     {

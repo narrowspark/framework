@@ -12,6 +12,8 @@ use Viserio\Contracts\Foundation\Emitter as EmitterContract;
 use Viserio\Contracts\Translation\TranslationManager;
 use Viserio\Events\Providers\EventsServiceProvider;
 use Viserio\Foundation\Http\Emitter;
+use Viserio\Foundation\Providers\ConfigureLoggingProvider;
+use Viserio\Log\Providers\LoggerServiceProvider;
 use Viserio\Parsers\Providers\ParsersServiceProvider;
 use Viserio\Routing\Providers\RoutingServiceProvider;
 
@@ -235,46 +237,6 @@ class Application extends Container implements ApplicationContract
     }
 
     /**
-     * Define a callback to be used to configure Monolog.
-     *
-     * @param callable $callback
-     *
-     * @return $this
-     *
-     * @codeCoverageIgnore
-     */
-    public function configureMonologUsing(callable $callback): ApplicationContract
-    {
-        $this->monologConfigurator = $callback;
-
-        return $this;
-    }
-
-    /**
-     * Determine if the application has a custom Monolog configurator.
-     *
-     * @return bool
-     *
-     * @codeCoverageIgnore
-     */
-    public function hasMonologConfigurator(): bool
-    {
-        return ! is_null($this->monologConfigurator);
-    }
-
-    /**
-     * Get the custom Monolog configurator for the application.
-     *
-     * @return callable
-     *
-     * @codeCoverageIgnore
-     */
-    public function getMonologConfigurator()
-    {
-        return $this->monologConfigurator;
-    }
-
-    /**
      * Bind the installation paths to the config.
      *
      * @param array $paths
@@ -299,9 +261,11 @@ class Application extends Container implements ApplicationContract
      */
     protected function registerBaseServiceProviders()
     {
+        $this->register(new ParsersServiceProvider());
         $this->register(new ConfigServiceProvider());
         $this->register(new EventsServiceProvider());
-        $this->register(new ParsersServiceProvider());
+        $this->register(new LoggerServiceProvider());
+        $this->register(new ConfigureLoggingProvider());
         $this->register(new RoutingServiceProvider());
     }
 

@@ -32,7 +32,7 @@ interface Filesystem
      *
      * @param string $path The path to the file.
      *
-     * @throws \Viserio\Contracts\Filesystem\FileNotFoundException
+     * @throws \Viserio\Contracts\Filesystem\Exception\FileNotFoundException
      *
      * @return string|false The file contents or false on failure.
      */
@@ -67,7 +67,7 @@ interface Filesystem
      * @param string $contents The file contents.
      * @param array  $config   An optional configuration array.
      *
-     * @throws \Viserio\Contracts\Filesystem\FileNotFoundException
+     * @throws \Viserio\Contracts\Filesystem\Exception\FileNotFoundException
      *
      * @return bool True on success, false on failure.
      */

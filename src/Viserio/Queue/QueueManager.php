@@ -4,7 +4,7 @@ namespace Viserio\Queue;
 
 use Aws\Sqs\SqsClient;
 use Interop\Container\ContainerInterface as ContainerInteropInterface;
-use Narrowspark\Arr\StaticArr as Arr;
+use Narrowspark\Arr\Arr;
 use Pheanstalk\Pheanstalk;
 use Pheanstalk\PheanstalkInterface;
 use PhpAmqpLib\Connection\AMQPStreamConnection;

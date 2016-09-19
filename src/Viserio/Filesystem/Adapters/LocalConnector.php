@@ -4,7 +4,7 @@ namespace Viserio\Filesystem\Adapters;
 
 use InvalidArgumentException;
 use League\Flysystem\Adapter\Local;
-use Narrowspark\Arr\StaticArr as Arr;
+use Narrowspark\Arr\Arr;
 use Viserio\Contracts\Filesystem\Connector as ConnectorContract;
 
 class LocalConnector implements ConnectorContract

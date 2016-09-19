@@ -30,7 +30,7 @@ abstract class AbstractConnector implements ConnectorContract
     abstract protected function getAuth(array $config): array;
 
     /**
-     * Get the awss3 client.
+     * Get the client.
      *
      * @param string[] $auth
      *
@@ -50,7 +50,7 @@ abstract class AbstractConnector implements ConnectorContract
     abstract protected function getConfig(array $config): array;
 
     /**
-     * Get the awss3 adapter.
+     * Get the adapter.
      *
      * @param object   $client
      * @param string[] $config
