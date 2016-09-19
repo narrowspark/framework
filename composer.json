@@ -41,7 +41,7 @@
         "defuse/php-encryption"                              : "^2.0",
         "egulias/email-validator"                            : "^2.1",
         "filp/whoops"                                        : "^2.0",
-        "http-interop/http-factory"                          : "^0.1",
+        "http-interop/http-factory"                          : "dev-master",
         "league/flysystem"                                   : "^1.0.27",
         "monolog/monolog"                                    : "^1.17",
         "narrowspark/arr"                                    : "^2.1",

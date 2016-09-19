@@ -18,39 +18,43 @@
         }
     ],
     "require": {
-        "php"                                 : "7.0.0 - 7.0.5 || ^7.0.7",
-        "viserio/config"                      : "self.version",
-        "viserio/container"                   : "self.version",
-        "viserio/contracts"                   : "self.version",
-        "viserio/events"                      : "self.version",
-        "viserio/exception"                   : "self.version",
-        "viserio/log"                         : "self.version",
-        "viserio/parsers"                     : "self.version",
-        "viserio/routing"                     : "self.version",
+        "php"                                                : "7.0.0 - 7.0.5 || ^7.0.7",
+        "viserio/config"                                     : "self.version",
+        "viserio/container"                                  : "self.version",
+        "viserio/contracts"                                  : "self.version",
+        "viserio/events"                                     : "self.version",
+        "viserio/exception"                                  : "self.version",
+        "viserio/log"                                        : "self.version",
+        "viserio/parsers"                                    : "self.version",
+        "viserio/routing"                                    : "self.version",
     },
     "require-dev": {
-        "narrowspark/testing-helper"          : "^1.5",
-        "phpunit/phpunit"                     : "^5.1"
+        "narrowspark/testing-helper"                         : "^1.5",
+        "phpunit/phpunit"                                    : "^5.1"
     },
     "autoload": {
         "psr-4": {
-            "Viserio\\Foundation\\"           : ""
+            "Viserio\\Foundation\\"                          : ""
         },
-        "exclude-from-classmap"               : ["/Tests/"]
+        "exclude-from-classmap"                              : ["/Tests/"]
     },
     "autoload-dev": {
         "psr-4": {
-            "Viserio\\Foundation\\Tests\\"    : "Tests/"
+            "Viserio\\Foundation\\Tests\\"                   : "Tests/"
         }
+    },
+    "provide": {
+        "container-interop/container-interop-implementation" : "^1.1",
+        "psr/container-implementation"                       : "^1.0"
     },
     "extra": {
         "branch-alias": {
-            "dev-master"                      : "1.0-dev"
+            "dev-master"                                     : "1.0-dev"
         }
     },
     "suggest": {
-        "viserio/statical-proxy"              : "Required to use statical-proxy bootstrapper (self.version).",
+        "viserio/statical-proxy"                             : "Required to use statical-proxy bootstrapper (self.version).",
     },
-    "minimum-stability"                       : "dev",
-    "prefer-stable"                           : true
+    "minimum-stability"                                      : "dev",
+    "prefer-stable"                                          : true
 }
