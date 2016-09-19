@@ -12,6 +12,8 @@ use Viserio\Contracts\Foundation\Emitter as EmitterContract;
 use Viserio\Contracts\Translation\TranslationManager;
 use Viserio\Events\Providers\EventsServiceProvider;
 use Viserio\Foundation\Http\Emitter;
+use Viserio\Foundation\Providers\ConfigureLoggingProvider;
+use Viserio\Log\Providers\LoggerServiceProvider;
 use Viserio\Parsers\Providers\ParsersServiceProvider;
 use Viserio\Routing\Providers\RoutingServiceProvider;
 
@@ -299,9 +301,11 @@ class Application extends Container implements ApplicationContract
      */
     protected function registerBaseServiceProviders()
     {
+        $this->register(new ParsersServiceProvider());
         $this->register(new ConfigServiceProvider());
         $this->register(new EventsServiceProvider());
-        $this->register(new ParsersServiceProvider());
+        $this->register(new LoggerServiceProvider());
+        $this->register(new ConfigureLoggingProvider());
         $this->register(new RoutingServiceProvider());
     }
 
