@@ -7,6 +7,7 @@ use Psr\Http\Message\ServerRequestInterface;
 use Symfony\Component\Debug\Exception\FatalThrowableError;
 use Throwable;
 use Viserio\Config\Manager as ConfigManager;
+use Viserio\Contracts\Events\Dispatcher as DispatcherContract;
 use Viserio\Contracts\Events\Traits\EventsAwareTrait;
 use Viserio\Contracts\Exception\Handler as HandlerContract;
 use Viserio\Contracts\Foundation\Application as ApplicationContract;
@@ -18,7 +19,6 @@ use Viserio\Foundation\Bootstrap\HandleExceptions;
 use Viserio\Foundation\Bootstrap\LoadConfiguration;
 use Viserio\Foundation\Bootstrap\LoadRoutes;
 use Viserio\Foundation\Bootstrap\LoadServiceProvider;
-use Viserio\Foundation\Bootstrap\RegisterStaticalProxys;
 use Viserio\HttpFactory\ResponseFactory;
 use Viserio\Routing\Router;
 use Viserio\StaticalProxy\StaticalProxy;
@@ -64,7 +64,6 @@ class Kernel implements TerminableContract, KernelContract
         LoadConfiguration::class,
         DetectEnvironment::class,
         HandleExceptions::class,
-        RegisterStaticalProxys::class,
         LoadRoutes::class,
         LoadServiceProvider::class,
     ];
@@ -74,12 +73,15 @@ class Kernel implements TerminableContract, KernelContract
      *
      * @param \Viserio\Contracts\Foundation\Application $app
      * @param \Viserio\Contracts\Routing\Router         $router
+     * @param \Viserio\Contracts\Events\Dispatcher      $events
      */
     public function __construct(
         ApplicationContract $app,
-        RouterContract $router
+        RouterContract $router,
+        DispatcherContract $events
     ) {
         $this->app = $app;
+        $this->events = $events;
 
         foreach ($this->routeWithMiddlewares as $routeWithMiddleware) {
             $router->withMiddleware($routeWithMiddleware);
@@ -106,9 +108,7 @@ class Kernel implements TerminableContract, KernelContract
         $this->app->instance(ServerRequestInterface::class, $request);
         StaticalProxy::clearResolvedInstance('request');
 
-        if ($this->events !== null) {
-            $this->events->trigger(self::REQUEST, [$request]);
-        }
+        $this->events->trigger(self::REQUEST, [$request]);
 
         if ($response === null) {
             $response = (new ResponseFactory())->createResponse();
@@ -134,9 +134,7 @@ class Kernel implements TerminableContract, KernelContract
      */
     public function terminate(ServerRequestInterface $request, ResponseInterface $response)
     {
-        if ($this->events !== null) {
-            $this->events->trigger(self::TERMINATE, [$request, $response]);
-        }
+        $this->events->trigger(self::TERMINATE, [$request, $response]);
 
         $this->app->get(HandlerContract::class)->unregister();
     }
@@ -182,13 +180,9 @@ class Kernel implements TerminableContract, KernelContract
         try {
             $response = $router->dispatch($request, $response);
 
-            if ($this->events !== null) {
-                $this->events->trigger(self::RESPONSE, [$request, $response]);
-            }
+            $this->events->trigger(self::RESPONSE, [$request, $response]);
         } catch (Throwable $exception) {
-            if ($this->events !== null) {
-                $this->events->trigger(self::EXCEPTION, [$request, $response]);
-            }
+            $this->events->trigger(self::EXCEPTION, [$request, $response]);
 
             $exceptionHandler = $this->app->get(HandlerContract::class);
 
