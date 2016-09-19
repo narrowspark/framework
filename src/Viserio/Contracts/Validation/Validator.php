@@ -4,5 +4,4 @@ namespace Viserio\Contracts\Validation;
 
 interface Validator
 {
-
 }

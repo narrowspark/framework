@@ -13,14 +13,13 @@ class Validator implements ValidatorContract
     /**
      * Define a set of rules that apply to each element in an array attribute.
      *
-     * @param string        $attribute
-     * @param string|array  $rules
+     * @param string       $attribute
+     * @param string|array $rules
      *
      * @throws \InvalidArgumentException
      */
     public function each(string $attribute, $rules)
     {
-
     }
 
     /**
@@ -30,7 +29,6 @@ class Validator implements ValidatorContract
      */
     public function passes(): bool
     {
-
     }
 
     /**
@@ -40,7 +38,6 @@ class Validator implements ValidatorContract
      */
     public function fails(): bool
     {
-
     }
 
     /**
@@ -109,6 +106,7 @@ class Validator implements ValidatorContract
                 $rules[$key] = (is_string($rule)) ? explode('|', $rule) : $rule;
             }
         }
+
         return $rules;
     }
 }
