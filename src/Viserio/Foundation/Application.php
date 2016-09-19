@@ -237,46 +237,6 @@ class Application extends Container implements ApplicationContract
     }
 
     /**
-     * Define a callback to be used to configure Monolog.
-     *
-     * @param callable $callback
-     *
-     * @return $this
-     *
-     * @codeCoverageIgnore
-     */
-    public function configureMonologUsing(callable $callback): ApplicationContract
-    {
-        $this->monologConfigurator = $callback;
-
-        return $this;
-    }
-
-    /**
-     * Determine if the application has a custom Monolog configurator.
-     *
-     * @return bool
-     *
-     * @codeCoverageIgnore
-     */
-    public function hasMonologConfigurator(): bool
-    {
-        return ! is_null($this->monologConfigurator);
-    }
-
-    /**
-     * Get the custom Monolog configurator for the application.
-     *
-     * @return callable
-     *
-     * @codeCoverageIgnore
-     */
-    public function getMonologConfigurator()
-    {
-        return $this->monologConfigurator;
-    }
-
-    /**
      * Bind the installation paths to the config.
      *
      * @param array $paths
