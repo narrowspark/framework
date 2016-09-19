@@ -256,26 +256,6 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
     }
 
     /**
-     * Set the path for LocalAdapter.
-     *
-     * @param string $path
-     */
-    public function setLocalPath(string $path)
-    {
-        $this->localPath = $path;
-    }
-
-    /**
-     * Get the LocalAdapter path.
-     *
-     * @return string
-     */
-    public function getLocalPath(): string
-    {
-        return $this->localPath !== '' ? $this->localPath : '/storage/';
-    }
-
-    /**
      * {@inheritdoc}
      *
      * @throws \RuntimeException
@@ -289,7 +269,7 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
 
             return $adapter->getClient()->getObjectUrl($adapter->getBucket(), $path);
         } elseif ($adapter instanceof LocalAdapter) {
-            return $this->normalizeDirectorySeparator($this->getLocalPath()) . $path;
+            return $adapter->getPathPrefix() . $path;
         } elseif (method_exists($adapter, 'getUrl')) {
             return $adapter->getUrl($path);
         }
