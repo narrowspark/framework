@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Validation\Tests;
 
-use Viserio\Validation\Validator;
 use Respect\Validation\Validator as RespectValidator;
+use Viserio\Validation\Validator;
 
 class ValidatorTest extends \PHPUnit_Framework_TestCase
 {
@@ -13,11 +13,11 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
         $validate = $validator->validate(
             [
                 'test' => 'foo',
-                'foo' => 'foo'
+                'foo' => 'foo',
             ],
             [
                 'test' => 'alpha|noWhitespace|length:1,32',
-                'foo' => RespectValidator::alpha()
+                'foo' => RespectValidator::alpha(),
             ]
         );
 

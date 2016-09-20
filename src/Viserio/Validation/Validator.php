@@ -2,10 +2,10 @@
 declare(strict_types=1);
 namespace Viserio\Validation;
 
+use Respect\Validation\Exceptions\NestedValidationException;
 use Respect\Validation\Validator as RespectValidator;
 use Viserio\Contracts\Translation\Traits\TranslationAwareTrait;
 use Viserio\Contracts\Validation\Validator as ValidatorContract;
-use Respect\Validation\Exceptions\NestedValidationException;
 
 class Validator implements ValidatorContract
 {
@@ -36,7 +36,7 @@ class Validator implements ValidatorContract
     /**
      * [with description]
      *
-     * @param  string $namespace
+     * @param string $namespace
      */
     public function with(string $namespace)
     {
@@ -46,7 +46,7 @@ class Validator implements ValidatorContract
     /**
      * [validate description]
      *
-     * @param array  $data
+     * @param array $data
      * @param array $rules
      *
      * @return $this
@@ -71,7 +71,7 @@ class Validator implements ValidatorContract
                 $rule->setName(ucfirst($fieldName))->assert($data);
 
                 $this->validRules[$fieldName] = true;
-            } catch (NestedValidationException $exception){
+            } catch (NestedValidationException $exception) {
                 $this->failedRules[$fieldName] = $exception->getMessages();
             }
         }
@@ -236,7 +236,7 @@ class Validator implements ValidatorContract
             return RespectValidator::not($validator);
         }
 
-        return null;
+        return;
     }
 
     /**
@@ -260,7 +260,7 @@ class Validator implements ValidatorContract
             return RespectValidator::optional($validator);
         }
 
-        return null;
+        return;
     }
 
     /**
