@@ -5,21 +5,78 @@ namespace Viserio\Validation;
 use Respect\Validation\Validator as RespectValidator;
 use Viserio\Contracts\Translation\Traits\TranslationAwareTrait;
 use Viserio\Contracts\Validation\Validator as ValidatorContract;
+use Respect\Validation\Exceptions\NestedValidationException;
 
 class Validator implements ValidatorContract
 {
     use TranslationAwareTrait;
 
     /**
-     * Define a set of rules that apply to each element in an array attribute.
+     * The failed validation rules.
      *
-     * @param string       $attribute
-     * @param string|array $rules
-     *
-     * @throws \InvalidArgumentException
+     * @var array
      */
-    public function each(string $attribute, $rules)
+    protected $failedRules = [];
+
+    /**
+     * The valid validation rules.
+     *
+     * @var array
+     */
+    protected $validRules = [];
+
+    /**
+     * [__construct description]
+     */
+    public function __construct()
     {
+        RespectValidator::with('Viserio\\Validation\\Rules');
+    }
+
+    /**
+     * [with description]
+     *
+     * @param  string $namespace
+     */
+    public function with(string $namespace)
+    {
+        RespectValidator::with($namespace);
+    }
+
+    /**
+     * [validate description]
+     *
+     * @param array  $data
+     * @param array $rules
+     *
+     * @return $this
+     */
+    public function validate(array $data, array $rules): ValidatorContract
+    {
+        $preparedData = $this->parseData($data);
+
+        foreach ($rules as $fieldName => $fieldRules) {
+            if ($fieldRules instanceof RespectValidator) {
+                $rule = $fieldRules;
+            } else {
+                //Explode the rules into an array of rules.
+                $fieldRules = (is_string($fieldRules)) ? explode('|', $fieldRules) : $fieldRules;
+
+                $data = $preparedData[$fieldName];
+
+                $rule = $this->createRule($fieldRules);
+            }
+
+            try {
+                $rule->setName(ucfirst($fieldName))->assert($data);
+
+                $this->validRules[$fieldName] = true;
+            } catch (NestedValidationException $exception){
+                $this->failedRules[$fieldName] = $exception->getMessages();
+            }
+        }
+
+        return $this;
     }
 
     /**
@@ -29,6 +86,17 @@ class Validator implements ValidatorContract
      */
     public function passes(): bool
     {
+        return empty($this->failedRules);
+    }
+
+    /**
+     * Returns the data which was valid.
+     *
+     * @return array
+     */
+    public function valid(): array
+    {
+        return $this->validRules;
     }
 
     /**
@@ -38,10 +106,43 @@ class Validator implements ValidatorContract
      */
     public function fails(): bool
     {
+        return !empty($this->failedRules);
     }
 
     /**
-     * Create a chained rule object.
+     * Returns the data which was invalid.
+     *
+     * @return array
+     */
+    public function invalid(): array
+    {
+        return $this->failedRules;
+    }
+
+    /**
+     * Parse the data array.
+     *
+     * @param array $data
+     *
+     * @return array
+     */
+    protected function parseData(array $data): array
+    {
+        $newData = [];
+
+        foreach ($data as $key => $value) {
+            if (is_array($value)) {
+                $value = $this->parseData($value);
+            } else {
+                $newData[$key] = $value;
+            }
+        }
+
+        return $newData;
+    }
+
+    /**
+     * Create a rule object.
      *
      * @param array $rules
      *
@@ -49,22 +150,117 @@ class Validator implements ValidatorContract
      */
     protected function createRule(array $rules): RespectValidator
     {
-        $chain = '';
-        $validator = RespectValidator::{strtolower($rules[0])}();
+        $notRules = [];
+        $optionalRules = [];
+
+        foreach ($rules as $key => $rule) {
+            if (strpos($rule, '!') !== false) {
+                $notRules[] = $rule;
+
+                unset($rules[$key]);
+            } elseif (strpos($rule, '?') !== false) {
+                $optionalRules[] = $rule;
+
+                unset($rules[$key]);
+            }
+        }
+
+        // reset keys
+        $rules = array_values($rules);
+
+        list($method, $parameters) = $this->parseStringRule($rules[0]);
+
+        $validator = $this->createValidator(RespectValidator::class, $method, $parameters);
 
         unset($rules[0]);
 
+        $chain = '';
+
         if (count($rules) !== 0) {
             foreach ($rules as $rule) {
-                $chain .= strtolower('.' . $rule);
+                if ($rules[1] === $rule) {
+                    $chain .= $rule;
+                } else {
+                    $chain .= '.' . $rule;
+                }
             }
 
-            return array_reduce(explode('.', $chain), function ($obj, $method) {
-                return $obj->$method();
+            return array_reduce(explode('.', $chain), function ($class, $method) {
+                list($method, $parameters) = $this->parseStringRule($method);
+
+                return call_user_func_array([$class, $method], $parameters);
             }, $validator);
         }
 
         return $validator;
+    }
+
+    /**
+     * Create a validator instance.
+     *
+     * @param \Respect\Validation\Validator|string $class
+     * @param string                               $method
+     * @param array                                $parameters
+     *
+     * @return \Respect\Validation\Validator
+     */
+    public function createValidator($class, string $method, array $parameters): RespectValidator
+    {
+        if ($negativeValidator = $this->createNegativeValidator($class, $method, $parameters)) {
+            return $negativeValidator;
+        } elseif ($optionalValidator = $this->createOptionalValidator($class, $method, $parameters)) {
+            return $optionalValidator;
+        }
+
+        return call_user_func_array([$class, $method], $parameters);
+    }
+
+    /**
+     * Create a negative validator instance.
+     *
+     * @param \Respect\Validation\Validator|string $class
+     * @param string                               $method
+     * @param array                                $parameters
+     *
+     * @return \Respect\Validation\Validator|null
+     */
+    protected function createNegativeValidator($class, string $method, array $parameters)
+    {
+        $isNegative = strpos($method, '!');
+
+        if ($isNegative !== false) {
+            $method = str_replace('!', '', $method);
+
+            $validator = call_user_func_array([$class, $method], $parameters);
+
+            return RespectValidator::not($validator);
+        }
+
+        return null;
+    }
+
+    /**
+     * Create a optional validator instance.
+     *
+     * @param \Respect\Validation\Validator|string $class
+     * @param string                               $method
+     * @param array                                $parameters
+     *
+     * @return \Respect\Validation\Validator|null
+     */
+    protected function createOptionalValidator($class, string $method, array $parameters)
+    {
+        $isOptional = strpos($method, '?');
+
+        if ($isOptional !== false) {
+            $method = str_replace('?', '', $method);
+
+            $validator = call_user_func_array([$class, $method], $parameters);
+
+            return RespectValidator::optional($validator);
+        }
+
+        return null;
     }
 
     /**
@@ -77,36 +273,33 @@ class Validator implements ValidatorContract
     protected function parseStringRule($rules)
     {
         $parameters = [];
+
         // The format for specifying validation rules and parameters follows an
         // easy {rule}:{parameters} formatting convention. For instance the
-        // rule "Max:3" states that the value may only be three letters.
+        // rule "Min:3" states that the value may only be three letters.
         if (strpos($rules, ':') !== false) {
             list($rules, $parameter) = explode(':', $rules, 2);
+
             $parameters = $this->parseParameters($rules, $parameter);
         }
 
-        return [Str::studly(trim($rules)), $parameters];
+        return [trim($rules), $parameters];
     }
 
     /**
-     * Explode the rules into an array of rules.
+     * Parse a parameter list.
      *
-     * @param string|array $rules
+     * @param string $rule
+     * @param string $parameter
      *
      * @return array
      */
-    protected function explodeRules($rules)
+    protected function parseParameters(string $rule, string $parameter): array
     {
-        foreach ($rules as $key => $rule) {
-            if (Str::contains($key, '*')) {
-                $this->each($key, [$rule]);
-
-                unset($rules[$key]);
-            } else {
-                $rules[$key] = (is_string($rule)) ? explode('|', $rule) : $rule;
-            }
+        if (strtolower($rule) == 'regex') {
+            return [$parameter];
         }
 
-        return $rules;
+        return str_getcsv($parameter);
     }
 }
