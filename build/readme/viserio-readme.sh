@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 
-$sourceDirectory = __DIR__.'/../src/Viserio';
+$sourceDirectory = __DIR__.'/../../src/Viserio';
 $readmeTemplate  = __DIR__.'/viserio-readme.md';
 
 $dirs = glob($sourceDirectory.'/*', GLOB_ONLYDIR);
