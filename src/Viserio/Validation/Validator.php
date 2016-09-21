@@ -45,12 +45,7 @@ class Validator implements ValidatorContract
     }
 
     /**
-     * Run the validator's rules against its data.
-     *
-     * @param array $data
-     * @param array $rules
-     *
-     * @return $this
+     * {@inheritdoc}
      */
     public function validate(array $data, array $rules): ValidatorContract
     {
@@ -60,8 +55,11 @@ class Validator implements ValidatorContract
             if ($fieldRules instanceof RespectValidator) {
                 $rule = $fieldRules;
             } else {
-                //Explode the rules into an array of rules.
-                $fieldRules = (is_string($fieldRules)) ? explode('|', $fieldRules) : $fieldRules;
+                if (is_string($fieldRules)) {
+                    // remove duplicate
+                    $fieldRules = array_unique(explode('|', $fieldRules));
+                }
+
                 $rule = $this->createRule($fieldRules);
             }
 
@@ -80,9 +78,7 @@ class Validator implements ValidatorContract
     }
 
     /**
-     * Determine if the data passes the validation rules.
-     *
-     * @return bool
+     * {@inheritdoc}
      */
     public function passes(): bool
     {
@@ -90,9 +86,7 @@ class Validator implements ValidatorContract
     }
 
     /**
-     * Returns the data which was valid.
-     *
-     * @return array
+     * {@inheritdoc}
      */
     public function valid(): array
     {
@@ -100,9 +94,7 @@ class Validator implements ValidatorContract
     }
 
     /**
-     * Determine if the data fails the validation rules.
-     *
-     * @return bool
+     * {@inheritdoc}
      */
     public function fails(): bool
     {
@@ -110,9 +102,7 @@ class Validator implements ValidatorContract
     }
 
     /**
-     * Returns the data which was invalid.
-     *
-     * @return array
+     * {@inheritdoc}
      */
     public function invalid(): array
     {
@@ -268,9 +258,9 @@ class Validator implements ValidatorContract
      *
      * @param string $rules
      *
-     * @return array
+     * @return array<string|array>
      */
-    protected function parseStringRule($rules)
+    protected function parseStringRule(string $rules): array
     {
         $parameters = [];
 

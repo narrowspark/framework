@@ -8,9 +8,9 @@ use Viserio\Contracts\Translation\Translator as TranslatorContract;
 trait TranslationAwareTrait
 {
     /**
-     * Event dispatcher instance.
+     * Translation instance.
      *
-     * @var \Viserio\Contracts\Parsers\Loader|null
+     * @var \Viserio\Contracts\Translation\Translator|null
      */
     protected $translation;
 
