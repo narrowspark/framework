@@ -141,6 +141,9 @@
         "yosymfony/toml"                                     : "^0.3"
     },
     "autoload": {
+        "files": [
+            "src/Viserio/helpers.php"
+        ],
         "psr-4": {
             "Viserio\\"                                      : "src/Viserio/",
             "Narrowspark\\"                                  : "benchmarks/"

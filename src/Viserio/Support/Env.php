@@ -27,18 +27,18 @@ class Env
         if (in_array(
             $value,
             [
-            'false',
-            '(false)',
-            'true',
-            '(true)',
-            'yes',
-            '(yes)',
-            'no',
-            '(no)',
-            'on',
-            '(on)',
-            'off',
-            '(off)',
+                'false',
+                '(false)',
+                'true',
+                '(true)',
+                'yes',
+                '(yes)',
+                'no',
+                '(no)',
+                'on',
+                '(on)',
+                'off',
+                '(off)',
             ]
         )) {
             $value = str_replace(['(', ')'], '', $value);
