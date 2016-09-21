@@ -41,7 +41,7 @@
             "Viserio\\Log\\Tests\\"           : "Tests/"
         }
     },
-    "provide": {
+    "provides": {
         "psr/log-implementation"              : "^1.0"
     },
     "suggest": {

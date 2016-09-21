@@ -50,7 +50,7 @@
             "Viserio\\Queue\\Tests\\"                        : "Tests/"
         }
     },
-    "provide": {
+    "provides": {
         "container-interop/container-interop-implementation" : "^1.1",
         "psr/container-implementation"                       : "^1.0"
     },
