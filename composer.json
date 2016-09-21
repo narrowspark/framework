@@ -99,7 +99,7 @@
         "viserio/validation"                                 : "self.version",
         "viserio/view"                                       : "self.version"
     },
-    "provides": {
+    "provide": {
         "container-interop/container-interop-implementation" : "^1.1",
         "psr/cache-implementation"                           : "^1.0",
         "psr/container-implementation"                       : "^1.0",

@@ -31,7 +31,7 @@
         "phpunit/phpunit"                                    : "^5.1",
         "viserio/container"                                  : "self.version"
     },
-    "provides": {
+    "provide": {
         "container-interop/container-interop-implementation" : "^1.1",
         "psr/container-implementation"                       : "^1.0"
     },

@@ -39,7 +39,7 @@
             "Viserio\\StaticalProxy\\Tests\\"                : "Tests/"
         }
     },
-    "provides": {
+    "provide": {
         "container-interop/container-interop-implementation" : "~1.1",
         "psr/container-implementation"                       : "^1.0"
     },

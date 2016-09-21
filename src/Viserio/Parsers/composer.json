@@ -44,7 +44,7 @@
         "yosymfony/toml"                      : "^0.3",
         "viserio/container"                   : "self.version"
     },
-    "provides": {
+    "provide": {
         "psr/http-message"                    : "^1.0",
         "psr/http-message-implementation"     : "^1.0"
     },
