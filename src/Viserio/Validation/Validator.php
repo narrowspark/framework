@@ -4,6 +4,7 @@ namespace Viserio\Validation;
 
 use Respect\Validation\Exceptions\NestedValidationException;
 use Respect\Validation\Validator as RespectValidator;
+use RuntimeException;
 use Viserio\Contracts\Translation\Traits\TranslationAwareTrait;
 use Viserio\Contracts\Validation\Validator as ValidatorContract;
 
@@ -26,7 +27,7 @@ class Validator implements ValidatorContract
     protected $validRules = [];
 
     /**
-     * [__construct description]
+     * Creat new validator instance.
      */
     public function __construct()
     {
@@ -34,7 +35,7 @@ class Validator implements ValidatorContract
     }
 
     /**
-     * [with description]
+     * Add your own rule's namespace.
      *
      * @param string $namespace
      */
@@ -44,7 +45,7 @@ class Validator implements ValidatorContract
     }
 
     /**
-     * [validate description]
+     * Run the validator's rules against its data.
      *
      * @param array $data
      * @param array $rules
@@ -61,11 +62,10 @@ class Validator implements ValidatorContract
             } else {
                 //Explode the rules into an array of rules.
                 $fieldRules = (is_string($fieldRules)) ? explode('|', $fieldRules) : $fieldRules;
-
-                $data = $preparedData[$fieldName];
-
                 $rule = $this->createRule($fieldRules);
             }
+
+            $data = $preparedData[$fieldName];
 
             try {
                 $rule->setName(ucfirst($fieldName))->assert($data);
@@ -106,7 +106,7 @@ class Validator implements ValidatorContract
      */
     public function fails(): bool
     {
-        return !empty($this->failedRules);
+        return ! empty($this->failedRules);
     }
 
     /**
@@ -168,99 +168,99 @@ class Validator implements ValidatorContract
         // reset keys
         $rules = array_values($rules);
 
-        list($method, $parameters) = $this->parseStringRule($rules[0]);
+        $validator = $this->createValidator($rules, $notRules, $optionalRules);
 
-        $validator = $this->createValidator(RespectValidator::class, $method, $parameters);
+        return $this->createChainableValidators($validator, $rules);
+    }
+
+    /**
+     * Create a validator instance.
+     *
+     * @param array $rules
+     * @param array $notRules
+     * @param array $optionalRules
+     *
+     * @throws \RuntimeException
+     *
+     * @return \Respect\Validation\Validator
+     */
+    protected function createValidator(array &$rules, array $notRules, array $optionalRules): RespectValidator
+    {
+        if (count($notRules) !== 0 && count($optionalRules) !== 0) {
+            throw new RuntimeException('Not (!) and optional (?) cant be used at the same time.');
+        } elseif (count($notRules) !== 0) {
+            return $this->createNegativeOrOptionalValidator('!', $notRules);
+        } elseif (count($optionalRules) !== 0) {
+            return $this->createNegativeOrOptionalValidator('?', $optionalRules);
+        }
+
+        list($method, $parameters) = $this->parseStringRule($rules[0]);
 
         unset($rules[0]);
 
-        $chain = '';
+        return call_user_func_array([RespectValidator::class, $method], $parameters);
+    }
+
+    /**
+     * Create a negative or optional validator instance.
+     *
+     * @param string $filter
+     * @param array  $rules
+     *
+     * @return \Respect\Validation\Validator
+     */
+    protected function createNegativeOrOptionalValidator(string $filter, array $rules): RespectValidator
+    {
+        list($method, $parameters) = $this->parseStringRule($rules[0]);
+
+        unset($rules[0]);
+
+        $validator = call_user_func_array(
+            [RespectValidator::class, str_replace($filter, '', $method)],
+            $parameters
+        );
+
+        if ($filter === '!') {
+            return RespectValidator::not($this->createChainableValidators($validator, $rules));
+        }
+
+        return RespectValidator::optional($this->createChainableValidators($validator, $rules));
+    }
+
+    /**
+     * Chain validators to a chanined validator object.
+     *
+     * @param string|\Respect\Validation\Validator $class
+     * @param array                                $rules
+     *
+     * @return \Respect\Validation\Validator
+     */
+    protected function createChainableValidators($class, array $rules): RespectValidator
+    {
+        // reset keys
+        $rules = array_values($rules);
 
         if (count($rules) !== 0) {
+            $chain = '';
+
             foreach ($rules as $rule) {
-                if ($rules[1] === $rule) {
+                if ($rules[0] === $rule) {
                     $chain .= $rule;
                 } else {
                     $chain .= '.' . $rule;
                 }
             }
 
-            return array_reduce(explode('.', $chain), function ($class, $method) {
+            return array_reduce(explode('.', $chain), function ($validator, $method) {
                 list($method, $parameters) = $this->parseStringRule($method);
 
-                return call_user_func_array([$class, $method], $parameters);
-            }, $validator);
+                $method = str_replace(['!', '?'], '', $method);
+
+                return call_user_func_array([$validator, $method], $parameters);
+            }, $class);
         }
 
-        return $validator;
-    }
-
-    /**
-     * Create a validator instance.
-     *
-     * @param \Respect\Validation\Validator|string $class
-     * @param string                               $method
-     * @param array                                $parameters
-     *
-     * @return \Respect\Validation\Validator
-     */
-    public function createValidator($class, string $method, array $parameters): RespectValidator
-    {
-        if ($negativeValidator = $this->createNegativeValidator($class, $method, $parameters)) {
-            return $negativeValidator;
-        } elseif ($optionalValidator = $this->createOptionalValidator($class, $method, $parameters)) {
-            return $optionalValidator;
-        }
-
-        return call_user_func_array([$class, $method], $parameters);
-    }
-
-    /**
-     * Create a negative validator instance.
-     *
-     * @param \Respect\Validation\Validator|string $class
-     * @param string                               $method
-     * @param array                                $parameters
-     *
-     * @return \Respect\Validation\Validator|null
-     */
-    protected function createNegativeValidator($class, string $method, array $parameters)
-    {
-        $isNegative = strpos($method, '!');
-
-        if ($isNegative !== false) {
-            $method = str_replace('!', '', $method);
-
-            $validator = call_user_func_array([$class, $method], $parameters);
-
-            return RespectValidator::not($validator);
-        }
-
-        return;
-    }
-
-    /**
-     * Create a optional validator instance.
-     *
-     * @param \Respect\Validation\Validator|string $class
-     * @param string                               $method
-     * @param array                                $parameters
-     *
-     * @return \Respect\Validation\Validator|null
-     */
-    protected function createOptionalValidator($class, string $method, array $parameters)
-    {
-        $isOptional = strpos($method, '?');
-
-        if ($isOptional !== false) {
-            $method = str_replace('?', '', $method);
-
-            $validator = call_user_func_array([$class, $method], $parameters);
-
-            return RespectValidator::optional($validator);
-        }
-
-        return;
+        return $class;
     }
 
     /**

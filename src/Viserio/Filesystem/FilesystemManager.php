@@ -3,7 +3,6 @@ declare(strict_types=1);
 namespace Viserio\Filesystem;
 
 use InvalidArgumentException;
-use League\Flysystem\Adapter\Local as FlyLocal;
 use League\Flysystem\AdapterInterface;
 use League\Flysystem\Cached\CachedAdapter;
 use Narrowspark\Arr\Arr;
