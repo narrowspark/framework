@@ -12,7 +12,7 @@ if (! function_exists('env')) {
      *
      * @return mixed
      */
-    function get(string $key, $default = null)
+    function env(string $key, $default = null)
     {
         return Env::get($key, $default);
     }
