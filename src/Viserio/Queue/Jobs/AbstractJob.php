@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Queue\Jobs;
 
+use Cake\Chronos\Chronos;
 use DateTime;
 use Narrowspark\Arr\Arr;
 use Viserio\Contracts\Container\Traits\ContainerAwareTrait;
@@ -198,6 +199,6 @@ abstract class AbstractJob implements JobContract
      */
     protected function getTime(): int
     {
-        return time();
+        return Chronos::now()->timestamp;
     }
 }

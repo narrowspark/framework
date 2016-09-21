@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Cookie\Tests;
 
+use Cake\Chronos\Chronos;
 use Viserio\Cookie\CookieJar;
 
 class CookieJarTest extends \PHPUnit_Framework_TestCase
@@ -27,7 +28,7 @@ class CookieJarTest extends \PHPUnit_Framework_TestCase
 
         $c3 = $cookie->delete('color');
         $this->assertNull($c3->getValue());
-        $this->assertNotEquals($c3->getExpiresTime()->getTimestamp(), time());
+        $this->assertNotEquals($c3->getExpiresTime()->getTimestamp(), Chronos::now()->timestamp);
     }
 
     public function testCookiesAreCreatedWithProperOptionsUsingDefaultPathAndDomain()
