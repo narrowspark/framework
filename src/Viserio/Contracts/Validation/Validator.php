@@ -11,7 +11,6 @@ interface Validator
      */
     public function with(string $namespace);
 
-
     /**
      * Run the validator's rules against its data.
      *
