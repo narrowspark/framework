@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Session\Middleware;
 
+use Cake\Chronos\Chronos;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Schnittstabil\Csrf\TokenService\TokenService;
@@ -39,7 +40,7 @@ class VerifyCsrfTokenMiddleware implements ServerMiddlewareContract
 
         $this->tokenService = new TokenService(
             $config->get('session::key'),
-            $config->get('session::csrf.livetime', time() + 60 * 120),
+            $config->get('session::csrf.livetime', Chronos::now()->timestamp + 60 * 120),
             $config->get('session::csrf.algo', 'SHA512')
         );
     }
@@ -104,7 +105,7 @@ class VerifyCsrfTokenMiddleware implements ServerMiddlewareContract
         $setCookie = new Cookie(
             'XSRF-TOKEN',
             $this->tokenService->generate(),
-            $config->get('session::csrf.livetime', time() + 60 * 120),
+            $config->get('session::csrf.livetime', Chronos::now()->timestamp + 60 * 120),
             $config->get('path'),
             $config->get('domain'),
             $config->get('secure', false),
