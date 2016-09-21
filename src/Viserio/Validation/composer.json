@@ -1,8 +1,8 @@
 {
-    "name"       : "viserio/foundation",
+    "name"       : "viserio/validation",
     "type"       : "library",
-    "description": "The Viserio Foundation package.",
-    "keywords"   : ["narrowspark", "viserio", "foundation", "container", "config", "log", "exception", "events", "parsers", "routing"],
+    "description": "The Viserio View package.",
+    "keywords"   : ["narrowspark", "viserio", "validation", "respect"],
     "license"    : "MIT",
     "homepage"   : "http://github.com/narrowspark/framework",
     "support"    : {
@@ -19,28 +19,28 @@
     ],
     "require": {
         "php"                                                : "7.0.0 - 7.0.5 || ^7.0.7",
-        "viserio/config"                                     : "self.version",
-        "viserio/container"                                  : "self.version",
-        "viserio/contracts"                                  : "self.version",
-        "viserio/events"                                     : "self.version",
-        "viserio/exception"                                  : "self.version",
-        "viserio/log"                                        : "self.version",
-        "viserio/parsers"                                    : "self.version",
-        "viserio/routing"                                    : "self.version",
+        "egulias/email-validator"                            : "^2.1",
+        "respect/validation"                                 : "^1.1",
+        "viserio/contracts"                                  : "self.version"
     },
     "require-dev": {
+        "container-interop/container-interop"                : "^1.1",
+        "container-interop/service-provider"                 : "^0.3",
+        "psr/http-message"                                   : "^1.0",
+        "mockery/mockery"                                    : "^0.9",
         "narrowspark/testing-helper"                         : "^1.5",
-        "phpunit/phpunit"                                    : "^5.1"
+        "phpunit/phpunit"                                    : "^5.1",
+        "viserio/translation"                                : "self.version"
     },
     "autoload": {
         "psr-4": {
-            "Viserio\\Foundation\\"                          : ""
+            "Viserio\\Validation\\"                          : ""
         },
         "exclude-from-classmap"                              : ["/Tests/"]
     },
     "autoload-dev": {
         "psr-4": {
-            "Viserio\\Foundation\\Tests\\"                   : "Tests/"
+            "Viserio\\Validation\\Tests\\"                   : "Tests/"
         }
     },
     "provide": {
@@ -51,9 +51,6 @@
         "branch-alias": {
             "dev-master"                                     : "1.0-dev"
         }
-    },
-    "suggest": {
-        "viserio/statical-proxy"                             : "Required to use statical-proxy bootstrapper (self.version).",
     },
     "minimum-stability"                                      : "dev",
     "prefer-stable"                                          : true

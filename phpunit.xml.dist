@@ -108,6 +108,9 @@
        <testsuite name="Narrowspark Translation Component Test Suite">
             <directory>./src/Viserio/Translation/Tests</directory>
         </testsuite>
+        <testsuite name="Narrowspark Validation Component Test Suite">
+            <directory>./src/Viserio/Validation/Tests</directory>
+        </testsuite>
         <testsuite name="Narrowspark View Component Test Suite">
             <directory>./src/Viserio/View/Tests</directory>
         </testsuite>

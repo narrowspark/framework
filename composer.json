@@ -39,8 +39,9 @@
         "container-interop/service-provider"                 : "^0.3",
         "danielstjules/stringy"                              : "^2.3",
         "defuse/php-encryption"                              : "^2.0",
+        "egulias/email-validator"                            : "^2.1",
         "filp/whoops"                                        : "^2.0",
-        "http-interop/http-factory"                          : "^0.1",
+        "http-interop/http-factory"                          : "dev-master",
         "league/flysystem"                                   : "^1.0.27",
         "monolog/monolog"                                    : "^1.17",
         "narrowspark/arr"                                    : "^2.1",
@@ -56,6 +57,7 @@
         "psr/http-message"                                   : "^1.0",
         "psy/psysh"                                          : "^0.6",
         "ramsey/uuid"                                        : "^3.4",
+        "respect/validation"                                 : "^1.1",
         "roave/security-advisories"                          : "dev-master",
         "schnittstabil/csrf-tokenservice"                    : "^2.0",
         "stecman/symfony-console-completion"                 : "^0.6",
@@ -95,6 +97,7 @@
         "viserio/statical-proxy"                             : "self.version",
         "viserio/support"                                    : "self.version",
         "viserio/translator"                                 : "self.version",
+        "viserio/validation"                                 : "self.version",
         "viserio/view"                                       : "self.version"
     },
     "provide": {

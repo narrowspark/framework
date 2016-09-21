@@ -27,11 +27,12 @@
         "viserio/support"                                    : "self.version"
     },
     "require-dev": {
-        "twig/twig"                                          : "^1.24",
+        "container-interop/service-provider"                 : "^0.3",
         "league/plates"                                      : "^3.1",
         "mockery/mockery"                                    : "^0.9",
         "narrowspark/testing-helper"                         : "^1.5",
-        "phpunit/phpunit"                                    : "^5.1"
+        "phpunit/phpunit"                                    : "^5.1",
+        "twig/twig"                                          : "^1.24"
     },
     "autoload": {
         "psr-4": {
