@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Connect\Adapters\Database;
+namespace Viserio\Database\Connectors;
 
 use Narrowspark\Arr\Arr;
 use PDO;

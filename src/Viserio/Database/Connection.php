@@ -22,18 +22,6 @@ class Connection extends AbstractConnectionManager implements ConnectionContract
     protected $readPdo;
 
     /**
-     * Create a new connection instance.
-     *
-     * @param string $database
-     * @param string $tablePrefix
-     */
-    public function __construct(string $database, string $tablePrefix)
-    {
-        $this->config = $config;
-        $this->connect = $connect;
-    }
-
-    /**
      * {@inheritdoc}
      */
     public function supportedPDODrivers(): array

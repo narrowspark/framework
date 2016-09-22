@@ -19,10 +19,9 @@
     ],
     "require": {
         "php"                                 : "7.0.0 - 7.0.5 || ^7.0.7",
-        "doctrine/inflector"                  : "^1.1",
         "ext-pdo"                             : "*",
+        "narrowspark/arr"                     : "^2.1",
         "narrowspark/collection"              : "^0.1",
-        "ocramius/generated-hydrator"         : "^2.0",
         "psr/cache"                           : "^1.0",
         "psr/log"                             : "^1.0",
         "viserio/config"                      : "self.version",
