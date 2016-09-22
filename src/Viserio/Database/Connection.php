@@ -6,5 +6,4 @@ use Viserio\Contracts\Database\Connection as ConnectionContract;
 
 class Connection implements ConnectionContract
 {
-
 }

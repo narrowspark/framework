@@ -8,10 +8,10 @@ use Viserio\Database\Connectors\GoogleCloudSQLConnector;
 use Viserio\Database\Connectors\MariaDBConnector;
 use Viserio\Database\Connectors\MSSQLConnector;
 use Viserio\Database\Connectors\MySqlConnector;
+use Viserio\Database\Connectors\OdbcConnector;
 use Viserio\Database\Connectors\PostgreSQLConnector;
 use Viserio\Database\Connectors\SQLiteConnector;
 use Viserio\Database\Connectors\SqlServerConnector;
-use Viserio\Database\Connectors\OdbcConnector;
 use Viserio\Support\AbstractConnectionManager;
 
 class ConnectManager extends AbstractConnectionManager
