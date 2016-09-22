@@ -40,7 +40,7 @@ class VerifyCsrfTokenMiddleware implements ServerMiddlewareContract
 
         $this->tokenService = new TokenService(
             $config->get('session::key'),
-            $config->get('session::csrf.livetime', Chronos::now()->timestamp + 60 * 120),
+            $config->get('session::csrf.livetime', Chronos::now()->getTimestamp() + 60 * 120),
             $config->get('session::csrf.algo', 'SHA512')
         );
     }
@@ -105,7 +105,7 @@ class VerifyCsrfTokenMiddleware implements ServerMiddlewareContract
         $setCookie = new Cookie(
             'XSRF-TOKEN',
             $this->tokenService->generate(),
-            $config->get('session::csrf.livetime', Chronos::now()->timestamp + 60 * 120),
+            $config->get('session::csrf.livetime', Chronos::now()->getTimestamp() + 60 * 120),
             $config->get('path'),
             $config->get('domain'),
             $config->get('secure', false),

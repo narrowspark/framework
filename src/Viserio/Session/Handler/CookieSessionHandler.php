@@ -69,7 +69,7 @@ class CookieSessionHandler implements SessionHandlerInterface
             if (isset($decoded[$sessionId])) {
                 $data = $decoded[$sessionId];
 
-                if (isset($data['expires']) && Chronos::now()->timestamp <= $data['expires']) {
+                if (isset($data['expires']) && Chronos::now()->getTimestamp() <= $data['expires']) {
                     return $data['data'];
                 }
             }

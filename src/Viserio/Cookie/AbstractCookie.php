@@ -397,7 +397,7 @@ abstract class AbstractCookie implements Stringable, CookieContract
         $name = urlencode($this->name) . '=';
 
         if ((string) $this->getValue() === '') {
-            $cookieStringParts[] .= $name . 'deleted; Expires=' . gmdate('D, d-M-Y H:i:s T', Chronos::now()->timestamp - 31536001);
+            $cookieStringParts[] .= $name . 'deleted; Expires=' . gmdate('D, d-M-Y H:i:s T', Chronos::now()->getTimestamp() - 31536001);
         } else {
             $cookieStringParts[] .= $name . urlencode($this->getValue());
 

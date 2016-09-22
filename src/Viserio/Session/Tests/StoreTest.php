@@ -206,7 +206,7 @@ class StoreTest extends \PHPUnit_Framework_TestCase
         $session->start();
 
         $this->assertNotEquals($regenerationTrace, $session->getRegenerationTrace());
-        $this->assertGreaterThanOrEqual(Chronos::now()->timestamp - 1, $session->getRegenerationTrace());
+        $this->assertGreaterThanOrEqual(Chronos::now()->getTimestamp() - 1, $session->getRegenerationTrace());
     }
 
     public function testStartMethodGeneratesFingerprint()

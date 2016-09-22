@@ -199,6 +199,6 @@ abstract class AbstractJob implements JobContract
      */
     protected function getTime(): int
     {
-        return Chronos::now()->timestamp;
+        return Chronos::now()->getTimestamp();
     }
 }

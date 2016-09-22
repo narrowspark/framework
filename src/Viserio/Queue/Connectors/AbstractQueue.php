@@ -106,7 +106,7 @@ abstract class AbstractQueue implements QueueConnectorContract
      */
     protected function getTime(): int
     {
-        return Chronos::now()->timestamp;
+        return Chronos::now()->getTimestamp();
     }
 
     /**

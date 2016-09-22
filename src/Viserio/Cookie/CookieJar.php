@@ -65,7 +65,7 @@ class CookieJar implements JarContract
     ): CookieContract {
         list($path, $domain, $secure) = $this->getPathAndDomain($path, $domain, $secure);
 
-        $time = ($minutes === 0) ? 0 : Chronos::now()->timestamp + ($minutes * 60);
+        $time = ($minutes === 0) ? 0 : Chronos::now()->getTimestamp() + ($minutes * 60);
 
         return new Cookie($name, $value, $time, $path, $domain, $secure, $httpOnly, $sameSite);
     }
