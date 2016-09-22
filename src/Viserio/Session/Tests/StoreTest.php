@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Session\Tests;
 
+use Cake\Chronos\Chronos;
 use Defuse\Crypto\Key;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use ReflectionClass;
@@ -205,7 +206,7 @@ class StoreTest extends \PHPUnit_Framework_TestCase
         $session->start();
 
         $this->assertNotEquals($regenerationTrace, $session->getRegenerationTrace());
-        $this->assertGreaterThanOrEqual(time() - 1, $session->getRegenerationTrace());
+        $this->assertGreaterThanOrEqual(Chronos::now()->getTimestamp() - 1, $session->getRegenerationTrace());
     }
 
     public function testStartMethodGeneratesFingerprint()

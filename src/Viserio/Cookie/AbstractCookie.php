@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Cookie;
 
+use Cake\Chronos\Chronos;
 use DateTime;
 use DateTimeInterface;
 use Viserio\Contracts\Cookie\Cookie as CookieContract;
@@ -396,7 +397,7 @@ abstract class AbstractCookie implements Stringable, CookieContract
         $name = urlencode($this->name) . '=';
 
         if ((string) $this->getValue() === '') {
-            $cookieStringParts[] .= $name . 'deleted; Expires=' . gmdate('D, d-M-Y H:i:s T', time() - 31536001);
+            $cookieStringParts[] .= $name . 'deleted; Expires=' . gmdate('D, d-M-Y H:i:s T', Chronos::now()->getTimestamp() - 31536001);
         } else {
             $cookieStringParts[] .= $name . urlencode($this->getValue());
 

@@ -35,9 +35,6 @@ class Parser implements ParserContract
         'text/javascript' => 'json',
         'text/x-javascript' => 'json',
         'text/x-json' => 'json',
-        // MSGPACK
-        'application/msgpack' => 'msgpack',
-        'application/x-msgpack' => 'msgpack',
         // YAML
         'text/yaml' => 'yaml',
         'text/x-yaml' => 'yaml',

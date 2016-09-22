@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Queue\Connectors;
 
+use Cake\Chronos\Chronos;
 use Closure;
 use DateTimeInterface;
 use Exception;
@@ -105,7 +106,7 @@ abstract class AbstractQueue implements QueueConnectorContract
      */
     protected function getTime(): int
     {
-        return time();
+        return Chronos::now()->getTimestamp();
     }
 
     /**

@@ -8,7 +8,7 @@ use Viserio\Contracts\Parsers\Loader as LoaderContract;
 trait LoaderAwareTrait
 {
     /**
-     * Event dispatcher instance.
+     * loader instance.
      *
      * @var \Viserio\Contracts\Parsers\Loader|null
      */

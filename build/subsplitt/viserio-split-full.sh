@@ -24,5 +24,6 @@ git subsplit publish src/Viserio/Session:git@github.com:viserio/session.git
 git subsplit publish src/Viserio/StaticalProxy:git@github.com:viserio/statical-proxy.git
 git subsplit publish src/Viserio/Support:git@github.com:viserio/support.git
 git subsplit publish src/Viserio/Translator:git@github.com:viserio/translator.git
+git subsplit publish src/Viserio/Validation:git@github.com:viserio/validation.git
 git subsplit publish src/Viserio/View:git@github.com:viserio/view.git
 rm -rf .subsplit/

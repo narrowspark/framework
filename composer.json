@@ -40,6 +40,7 @@
         "danielstjules/stringy"                              : "^2.3",
         "defuse/php-encryption"                              : "^2.0",
         "doctrine/inflector"                                 : "^1.1",
+        "egulias/email-validator"                            : "^2.1",
         "filp/whoops"                                        : "^2.0",
         "http-interop/http-factory"                          : "dev-master",
         "league/flysystem"                                   : "^1.0.27",
@@ -58,7 +59,7 @@
         "psr/http-message"                                   : "^1.0",
         "psy/psysh"                                          : "^0.6",
         "ramsey/uuid"                                        : "^3.4",
-        "roave/security-advisories"                          : "dev-master",
+        "respect/validation"                                 : "^1.1",
         "schnittstabil/csrf-tokenservice"                    : "^2.0",
         "stecman/symfony-console-completion"                 : "^0.6",
         "symfony/console"                                    : "^3.1",
@@ -96,6 +97,7 @@
         "viserio/statical-proxy"                             : "self.version",
         "viserio/support"                                    : "self.version",
         "viserio/translator"                                 : "self.version",
+        "viserio/validation"                                 : "self.version",
         "viserio/view"                                       : "self.version"
     },
     "provide": {
@@ -140,6 +142,9 @@
         "yosymfony/toml"                                     : "^0.3"
     },
     "autoload": {
+        "files": [
+            "src/Viserio/helpers.php"
+        ],
         "psr-4": {
             "Viserio\\"                                      : "src/Viserio/",
             "Narrowspark\\"                                  : "benchmarks/"

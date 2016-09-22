@@ -1,8 +1,8 @@
 {
-    "name"       : "viserio/view",
+    "name"       : "viserio/foundation",
     "type"       : "library",
-    "description": "The Viserio View package.",
-    "keywords"   : ["narrowspark", "viserio", "view", "php"],
+    "description": "The Viserio Foundation package.",
+    "keywords"   : ["narrowspark", "viserio", "foundation", "container", "config", "log", "exception", "events", "parsers", "routing"],
     "license"    : "MIT",
     "homepage"   : "http://github.com/narrowspark/framework",
     "support"    : {
@@ -19,44 +19,41 @@
     ],
     "require": {
         "php"                                                : "7.0.0 - 7.0.5 || ^7.0.7",
-        "container-interop/container-interop"                : "^1.1",
-        "danielstjules/stringy"                              : "^2.3",
         "viserio/config"                                     : "self.version",
+        "viserio/container"                                  : "self.version",
         "viserio/contracts"                                  : "self.version",
-        "viserio/filesystem"                                 : "self.version",
-        "viserio/support"                                    : "self.version"
+        "viserio/events"                                     : "self.version",
+        "viserio/exception"                                  : "self.version",
+        "viserio/log"                                        : "self.version",
+        "viserio/parsers"                                    : "self.version",
+        "viserio/routing"                                    : "self.version",
     },
     "require-dev": {
-        "container-interop/service-provider"                 : "^0.3",
-        "league/plates"                                      : "^3.1",
-        "mockery/mockery"                                    : "^0.9",
         "narrowspark/testing-helper"                         : "^1.5",
-        "phpunit/phpunit"                                    : "^5.1",
-        "twig/twig"                                          : "^1.24"
+        "phpunit/phpunit"                                    : "^5.1"
     },
     "autoload": {
         "psr-4": {
-            "Viserio\\View\\"                                : ""
+            "Viserio\\Foundation\\"                          : ""
         },
         "exclude-from-classmap"                              : ["/Tests/"]
     },
     "autoload-dev": {
         "psr-4": {
-            "Viserio\\View\\Tests\\"                         : "Tests/"
+            "Viserio\\Foundation\\Tests\\"                   : "Tests/"
         }
     },
     "provide": {
         "container-interop/container-interop-implementation" : "^1.1",
         "psr/container-implementation"                       : "^1.0"
     },
-    "suggest": {
-        "league/plates"                                      : "Required to use the League Plates view adapter (^3.1).",
-        "twig/twig"                                          : "Required to use the Twig view adapter (^1.24)."
-    },
     "extra": {
         "branch-alias": {
             "dev-master"                                     : "1.0-dev"
         }
+    },
+    "suggest": {
+        "viserio/statical-proxy"                             : "Required to use statical-proxy bootstrapper (self.version).",
     },
     "minimum-stability"                                      : "dev",
     "prefer-stable"                                          : true
