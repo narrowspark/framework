@@ -48,7 +48,7 @@ class MySqlConnectorTest extends \PHPUnit_Framework_TestCase
                 ->once()
                 ->with('set session sql_mode=\'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION\'')
                 ->andReturn($connection);
-        } elseif(isset($config['modes'])) {
+        } elseif (isset($config['modes'])) {
             $connection->shouldReceive('prepare')
                 ->once()
                 ->with(sprintf('set session sql_mode="%s"', implode(',', $config['modes'])))
@@ -81,7 +81,7 @@ class MySqlConnectorTest extends \PHPUnit_Framework_TestCase
                     'modes' => [
                         'NO_BACKSLASH_ESCAPES',
                         'NO_AUTO_CREATE_USER',
-                    ]
+                    ],
                 ],
             ],
             [
