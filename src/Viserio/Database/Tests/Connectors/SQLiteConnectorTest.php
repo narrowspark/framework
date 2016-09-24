@@ -1,12 +1,12 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Connect\Tests\Adapter\Database;
+namespace Viserio\Database\Tests\Connectors;
 
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use PDO;
-use Viserio\Connect\Adapters\Database\SqlServerConnector;
+use Viserio\Database\Connectors\SQLiteConnector;
 
-class SqlServerConnectorTest extends \PHPUnit_Framework_TestCase
+class SQLiteConnectorTest extends \PHPUnit_Framework_TestCase
 {
     use MockeryTrait;
 
@@ -17,13 +17,28 @@ class SqlServerConnectorTest extends \PHPUnit_Framework_TestCase
         }
     }
 
-    public function testSqlServerConnectCallsCreateConnectionWithProperArguments()
+    /**
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage Database does not exist.
+     */
+    public function testSQLiteDatabaseNotFound()
     {
-        $config = ['host' => 'foo', 'database' => 'bar'];
+        $config = ['database' => __DIR__ . 'notfound.db'];
 
-        $dsn = $this->getDsn($config);
+        $connector = $this->getMockBuilder(SQLiteConnector::class)
+            ->setMethods(['createConnection', 'getOptions'])
+            ->getMock();
+
+        $connector->connect($config);
+    }
+
+    public function testSQLiteFileDatabasesMayBeConnectedTo()
+    {
+        $dsn = 'sqlite:' . __DIR__;
+        $config = ['database' => __DIR__];
         $connection = $this->mock(PDO::class);
-        $connector = $this->getMockBuilder(SqlServerConnector::class)
+
+        $connector = $this->getMockBuilder(SQLiteConnector::class)
             ->setMethods(['createConnection', 'getOptions'])
             ->getMock();
         $connector->expects($this->once())
@@ -38,16 +53,15 @@ class SqlServerConnectorTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($connector->connect($config), $connection);
     }
 
-    public function testSqlServerConnectCallsCreateConnectionWithOptionalArguments()
+    public function testSQLiteMemoryDatabasesMayBeConnectedTo()
     {
-        $config = ['host' => 'foo', 'database' => 'bar', 'port' => 111, 'appname' => 'baz', 'charset' => 'utf-8'];
-        $dsn = $this->getDsn($config);
-
+        $dsn = 'sqlite::memory:';
+        $config = ['database' => ':memory:'];
         $connection = $this->mock(PDO::class);
-        $connector = $this->getMockBuilder(SqlServerConnector::class)
+
+        $connector = $this->getMockBuilder(SQLiteConnector::class)
             ->setMethods(['createConnection', 'getOptions'])
             ->getMock();
-
         $connector->expects($this->once())
             ->method('getOptions')
             ->with($this->equalTo($config))
@@ -58,21 +72,5 @@ class SqlServerConnectorTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($connection));
 
         $this->assertSame($connector->connect($config), $connection);
-    }
-
-    protected function getDsn(array $config)
-    {
-        extract($config, EXTR_SKIP);
-        if (in_array('dblib', PDO::getAvailableDrivers(), true)) {
-            $port = isset($config['port']) ? ':' . $port : '';
-            $appname = isset($config['appname']) ? ';appname=' . $config['appname'] : '';
-            $charset = isset($config['charset']) ? ';charset=' . $config['charset'] : '';
-
-            return "dblib:host={$host}{$port};dbname={$database}{$appname}{$charset}";
-        }
-        $port = isset($config['port']) ? ',' . $port : '';
-        $appname = isset($config['appname']) ? ';APP=' . $config['appname'] : '';
-
-        return "sqlsrv:Server={$host}{$port};Database={$database}{$appname}";
     }
 }

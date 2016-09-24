@@ -1,10 +1,10 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Connect\Tests\Adapter\Database;
+namespace Viserio\Database\Tests\Connectors;
 
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use PDO;
-use Viserio\Connect\Adapters\Database\MySqlConnector;
+use Viserio\Database\Connectors\MySqlConnector;
 
 class MySqlConnectorTest extends \PHPUnit_Framework_TestCase
 {
@@ -46,12 +46,12 @@ class MySqlConnectorTest extends \PHPUnit_Framework_TestCase
         if (isset($config['strict'])) {
             $connection->shouldReceive('prepare')
                 ->once()
-                ->with('set session sql_mode=\'STRICT_ALL_TABLES\'')
+                ->with('set session sql_mode=\'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION\'')
                 ->andReturn($connection);
-        } else {
+        } elseif(isset($config['modes'])) {
             $connection->shouldReceive('prepare')
                 ->once()
-                ->with('set session sql_mode=\'\'')
+                ->with(sprintf('set session sql_mode="%s"', implode(',', $config['modes'])))
                 ->andReturn($connection);
         }
 
@@ -78,6 +78,10 @@ class MySqlConnectorTest extends \PHPUnit_Framework_TestCase
                     'database' => 'bar',
                     'collation' => 'utf8_unicode_ci',
                     'charset' => 'utf8',
+                    'modes' => [
+                        'NO_BACKSLASH_ESCAPES',
+                        'NO_AUTO_CREATE_USER',
+                    ]
                 ],
             ],
             [

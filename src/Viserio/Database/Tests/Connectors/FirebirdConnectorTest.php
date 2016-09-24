@@ -1,10 +1,10 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Connect\Tests\Adapter\Database;
+namespace Viserio\Database\Tests\Connectors;
 
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use PDO;
-use Viserio\Connect\Adapters\Database\FirebirdConnector;
+use Viserio\Database\Connectors\FirebirdConnector;
 
 class FirebirdConnectorTest extends \PHPUnit_Framework_TestCase
 {

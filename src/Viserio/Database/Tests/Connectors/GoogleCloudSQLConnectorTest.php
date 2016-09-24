@@ -1,34 +1,48 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Connect\Tests\Adapter\Database;
+namespace Viserio\Database\Tests\Connectors;
 
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use PDO;
-use Viserio\Connect\Adapters\Database\OracleConnector;
+use Viserio\Database\Connectors\GoogleCloudSQLConnector;
 
-class OracleConnectorTest extends \PHPUnit_Framework_TestCase
+class GoogleCloudSQLConnectorTest extends \PHPUnit_Framework_TestCase
 {
     use MockeryTrait;
 
     public function setUp()
     {
-        $this->allowMockingNonExistentMethods(true);
-
         if (! class_exists(PDO::class)) {
             $this->markTestSkipped('PDO module is not installed.');
         }
     }
 
     /**
-     * @dataProvider oracleConnectProvider
+     * @expectedException \PDOException
      */
-    public function testConnect($dsn, $config)
+    public function testConnectThrowPDOException()
     {
+        $connector = new GoogleCloudSQLConnector();
+        $config = [
+            'server' => '',
+            'database' => '',
+            'username' => '',
+            'password' => '',
+            'charset' => 'utf-8',
+        ];
+
+        $this->assertInstanceOf(PDO::class, $connector->connect($config));
+    }
+
+    public function testConnect()
+    {
+        $dsn = 'mysql:unix_socket=/cloudsql/foo;dbname=bar';
+        $config = ['server' => 'foo', 'database' => 'bar', 'charset' => 'utf8'];
         $connection = $this->mock(PDO::class);
 
-        $connector = $this->getMockBuilder(OracleConnector::class)
-            ->setMethods(['createConnection', 'getOptions'])
-            ->getMock();
+        $connector = $this->getMockBuilder(GoogleCloudSQLConnector::class)
+             ->setMethods(['createConnection', 'getOptions'])
+             ->getMock();
         $connector->expects($this->once())
             ->method('getOptions')
             ->with($this->equalTo($config))
@@ -50,28 +64,5 @@ class OracleConnectorTest extends \PHPUnit_Framework_TestCase
             ->twice();
 
         $this->assertSame($connector->connect($config), $connection);
-    }
-
-    public function oracleConnectProvider()
-    {
-        return [
-            [
-                'oci:host=foo;port=111;dbname=bar',
-                [
-                    'server' => 'foo',
-                    'port' => 111,
-                    'database' => 'bar',
-                    'charset' => 'utf8',
-                ],
-            ],
-            [
-                'oci:host=foo;dbname=bar',
-                [
-                    'server' => 'foo',
-                    'database' => 'bar',
-                    'charset' => 'utf8',
-                ],
-            ],
-        ];
     }
 }

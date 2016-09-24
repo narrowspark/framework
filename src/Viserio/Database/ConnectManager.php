@@ -175,4 +175,12 @@ class ConnectManager extends AbstractConnectionManager
     {
         return (new OdbcConnector())->connect($config);
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getConfigName(): string
+    {
+        return 'database.connect';
+    }
 }

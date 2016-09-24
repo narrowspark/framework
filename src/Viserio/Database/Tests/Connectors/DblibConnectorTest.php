@@ -1,10 +1,10 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Connect\Tests\Adapter\Database;
+namespace Viserio\Database\Tests\Connectors;
 
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use PDO;
-use Viserio\Connect\Adapters\Database\DblibConnector;
+use Viserio\Database\Connectors\DblibConnector;
 
 class DblibConnectorTest extends \PHPUnit_Framework_TestCase
 {
