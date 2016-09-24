@@ -9,9 +9,6 @@ class PostgreSQLConnector extends AbstractDatabaseConnector
      */
     public function connect(array $config)
     {
-        // First we'll create the basic DSN and connection instance connecting to the
-        // using the configuration option specified by the developer. We will also
-        // set the default character set on the connections to UTF-8 by default.
         $connection = $this->createConnection(
             $this->getDsn($config),
             $config,

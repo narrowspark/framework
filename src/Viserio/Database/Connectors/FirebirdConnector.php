@@ -25,9 +25,6 @@ class FirebirdConnector extends AbstractDatabaseConnector
 
         $dsn = sprintf('firebird:dbname=%s:%s', $server, $database);
 
-        // We need to grab the PDO options that should be used while making the brand
-        // new connection instance. The PDO options control various aspects of the
-        // connection's behavior, and some might be specified by the developers.
         return $this->createConnection($dsn, $config, $this->getOptions($config));
     }
 }

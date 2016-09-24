@@ -9,9 +9,6 @@ class DblibConnector extends AbstractDatabaseConnector
      */
     public function connect(array $config)
     {
-        // We need to grab the PDO options that should be used while making the brand
-        // new connection instance. The PDO options control various aspects of the
-        // connection's behavior, and some might be specified by the developers.
         $connection = $this->createConnection(
             $this->getDsn($config),
             $config,
@@ -39,7 +36,7 @@ class DblibConnector extends AbstractDatabaseConnector
         extract($config, EXTR_SKIP);
 
         return isset($config['port']) ?
-        sprintf('dblib:host=%s:%s;dbname=%s', $server, $port, $database) :
-        sprintf('dblib:host=%s;dbname=%s', $server, $database);
+            sprintf('dblib:host=%s:%s;dbname=%s', $server, $port, $database) :
+            sprintf('dblib:host=%s;dbname=%s', $server, $database);
     }
 }

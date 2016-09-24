@@ -5,7 +5,7 @@ namespace Viserio\Database\Connectors;
 use Narrowspark\Arr\Arr;
 use PDO;
 use PDOException;
-use Viserio\Connect\Traits\DetectsLostConnections;
+use Viserio\Database\Traits\DetectsLostConnections;
 use Viserio\Contracts\Support\Connector as ConnectorContract;
 
 abstract class AbstractDatabaseConnector implements ConnectorContract

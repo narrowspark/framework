@@ -2,6 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Database\Connectors;
 
+use PDO;
+
 class MySqlConnector extends AbstractDatabaseConnector
 {
     /**
@@ -9,9 +11,6 @@ class MySqlConnector extends AbstractDatabaseConnector
      */
     public function connect(array $config)
     {
-        // We need to grab the PDO options that should be used while making the brand
-        // new connection instance. The PDO options control various aspects of the
-        // connection's behavior, and some might be specified by the developers.
         $connection = $this->createConnection(
             $this->getDsn($config),
             $config,
@@ -105,8 +104,7 @@ class MySqlConnector extends AbstractDatabaseConnector
     protected function setModes(PDO $connection, array $config)
     {
         if (isset($config['modes'])) {
-            $modes = implode(',', $config['modes']);
-            $connection->prepare("set session sql_mode='{$modes}'")->execute();
+            $connection->prepare(sprintf('set session sql_mode="%s"', implode(',', $config['modes'])))->execute();
         } elseif (isset($config['strict'])) {
             if ($config['strict']) {
                 $connection->prepare(

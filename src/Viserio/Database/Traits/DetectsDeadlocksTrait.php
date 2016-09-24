@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Connect\Traits;
+namespace Viserio\Database\Traits;
 
 use Throwable;
 use Viserio\Support\Str;

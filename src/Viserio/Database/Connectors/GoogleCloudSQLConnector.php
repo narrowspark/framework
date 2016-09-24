@@ -11,9 +11,6 @@ class GoogleCloudSQLConnector extends AbstractDatabaseConnector
     {
         $dsn = $this->getDsn($config);
 
-        // We need to grab the PDO options that should be used while making the brand
-        // new connection instance. The PDO options control various aspects of the
-        // connection's behavior, and some might be specified by the developers.
         $connection = $this->createConnection($dsn, $config, $this->getOptions($config));
 
         // Next we will set the "names" on the clients connections so

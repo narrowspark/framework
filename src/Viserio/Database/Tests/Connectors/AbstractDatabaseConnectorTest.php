@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Connect\Tests\Adapters\Database;
+namespace Viserio\Database\Tests\Connectors;
 
 use PDO;
-use Viserio\Connect\Tests\Fixture\DatabaseConnector;
+use Viserio\Database\Tests\Fixture\DatabaseConnector;
 
 class AbstractDatabaseConnectorTest extends \PHPUnit_Framework_TestCase
 {

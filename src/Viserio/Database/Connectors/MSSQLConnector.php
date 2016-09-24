@@ -11,9 +11,6 @@ class MSSQLConnector extends AbstractDatabaseConnector
      */
     public function connect(array $config)
     {
-        // We need to grab the PDO options that should be used while making the brand
-        // new connection instance. The PDO options control various aspects of the
-        // connection's behavior, and some might be specified by the developers.
         $connection = $this->createConnection(
             $this->getDsn($config),
             $config,
