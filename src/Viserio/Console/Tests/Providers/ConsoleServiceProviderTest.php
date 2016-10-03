@@ -4,9 +4,9 @@ namespace Viserio\Console\Tests\Providers;
 
 use Viserio\Config\Providers\ConfigServiceProvider;
 use Viserio\Console\Application;
-use Viserio\Events\Providers\EventsServiceProvider;
 use Viserio\Console\Providers\ConsoleServiceProvider;
 use Viserio\Container\Container;
+use Viserio\Events\Providers\EventsServiceProvider;
 
 class ConsoleServiceProviderTest extends \PHPUnit_Framework_TestCase
 {
