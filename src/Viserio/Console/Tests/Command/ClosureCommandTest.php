@@ -43,7 +43,7 @@ class ClosureCommandTest extends \PHPUnit_Framework_TestCase
         $this->application->add($command);
 
         $this->assertSame($command, $this->application->get('demo'));
-        $this->assertOutputIs('demo', 'hello'."\n");
+        $this->assertOutputIs('demo', 'hello' . "\n");
     }
 
     /**
