@@ -2,12 +2,12 @@
 declare(strict_types=1);
 namespace Viserio\Console\Tests\Command;
 
-use Viserio\Console\Command\ClosureCommand;
 use Narrowspark\TestingHelper\ArrayContainer;
 use Symfony\Component\Console\Input\StringInput;
 use Viserio\Console\Application;
-use Viserio\Events\Dispatcher;
+use Viserio\Console\Command\ClosureCommand;
 use Viserio\Console\Tests\Fixture\SpyOutput;
+use Viserio\Events\Dispatcher;
 use Viserio\Support\Invoker;
 
 class ClosureCommandTest extends \PHPUnit_Framework_TestCase

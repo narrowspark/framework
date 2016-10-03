@@ -486,7 +486,6 @@ abstract class Command extends BaseCommand implements CompletionAwareInterface
         return [];
     }
 
-
     /**
      * Configure the console command using a fluent definition.
      */
