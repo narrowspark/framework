@@ -2,7 +2,6 @@
 declare(strict_types=1);
 namespace Viserio\Console\Tests;
 
-use Mockery as Mock;
 use Narrowspark\TestingHelper\ArrayContainer;
 use StdClass;
 use Symfony\Component\Console\Input\StringInput;
@@ -10,6 +9,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Viserio\Console\Application;
 use Viserio\Console\Tests\Fixture\SpyOutput;
 use Viserio\Console\Tests\Fixture\ViserioCommand;
+use Viserio\Events\Dispatcher;
 
 class ApplicationTest extends \PHPUnit_Framework_TestCase
 {
@@ -35,12 +35,7 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
             'command.arr.greet' => [$this, 'foo'],
         ]);
 
-        $this->application = new Application($container, '1.0.0');
-    }
-
-    public function tearDown()
-    {
-        Mock::close();
+        $this->application = new Application($container, new Dispatcher($container), '1.0.0');
     }
 
     public function testAllowsToDefineViserioCommand()

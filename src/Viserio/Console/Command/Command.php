@@ -463,9 +463,7 @@ abstract class Command extends BaseCommand implements CompletionAwareInterface
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $method = method_exists($this, 'handle') ? 'handle' : 'fire';
-
-        return $this->getInvoker()->call([$this, $method]);
+        return $this->getInvoker()->call([$this, 'handle']);
     }
 
     /**
@@ -493,15 +491,15 @@ abstract class Command extends BaseCommand implements CompletionAwareInterface
      */
     protected function configureUsingFluentDefinition()
     {
-        list($name, $arguments, $options) = (new ExpressionParser())->parse($this->signature);
+        $arr = (new ExpressionParser())->parse($this->signature);
 
-        parent::__construct($name);
+        parent::__construct($arr['name']);
 
-        foreach ($arguments as $argument) {
+        foreach ($arr['arguments'] as $argument) {
             $this->getDefinition()->addArgument($argument);
         }
 
-        foreach ($options as $option) {
+        foreach ($arr['options'] as $option) {
             $this->getDefinition()->addOption($option);
         }
     }
