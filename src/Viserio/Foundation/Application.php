@@ -280,7 +280,7 @@ class Application extends Container implements ApplicationContract
             return $app;
         });
 
-        $this->alias(ApplicationContract::class, Application::class);
+        $this->alias(ApplicationContract::class, self::class);
         $this->alias(ApplicationContract::class, 'app');
 
         $this->singleton(Container::class, $this);

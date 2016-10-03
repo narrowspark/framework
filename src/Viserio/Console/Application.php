@@ -17,6 +17,7 @@ use Viserio\Console\Input\InputOption;
 use Viserio\Contracts\Console\Application as ApplicationContract;
 use Viserio\Contracts\Container\Traits\ContainerAwareTrait;
 use Viserio\Contracts\Events\Traits\EventsAwareTrait;
+use Viserio\Contracts\Events\Dispatcher as DispatcherContract;
 use Viserio\Support\Invoker;
 
 class Application extends SymfonyConsole implements ApplicationContract
@@ -63,23 +64,29 @@ class Application extends SymfonyConsole implements ApplicationContract
      * Create a new Cerebro console application.
      *
      * @param \Interop\Container\ContainerInterface $container
+     * @param \Viserio\Contracts\Events\Dispatcher  $events
      * @param string                                $version
      * @param string                                $name
      */
     public function __construct(
         ContainerContract $container,
+        DispatcherContract $events,
         string $version,
         string $name = 'Cerebro'
     ) {
         $this->name = $name;
         $this->version = $version;
-        $this->container = $container;
-        $this->expressionParser = new Parser();
 
         $this->setAutoExit(false);
         $this->setCatchExceptions(false);
 
         parent::__construct($name, $version);
+
+        $this->container = $container;
+        $this->events = $events;
+        $this->expressionParser = new Parser();
+
+        $this->events->trigger('console.starting', [$this]);
     }
 
     /**

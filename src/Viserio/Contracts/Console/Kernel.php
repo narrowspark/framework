@@ -18,26 +18,9 @@ interface Kernel
     public function handle(InputInterface $input, OutputInterface $output = null): int;
 
     /**
-     * Run an Artisan console command by name.
-     *
-     * @param string $command
-     * @param array  $parameters
-     *
-     * @return int
-     */
-    public function call(string $command, array $parameters = []): int;
-
-    /**
      * Get all of the commands registered with the console.
      *
      * @return array
      */
     public function all(): array;
-
-    /**
-     * Get the output for the last run command.
-     *
-     * @return string
-     */
-    public function output(): string;
 }

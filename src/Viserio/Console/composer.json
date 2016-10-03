@@ -25,6 +25,7 @@
         "stecman/symfony-console-completion"                 : "^0.6",
         "symfony/console"                                    : "^3.1",
         "viserio/cotracts"                                   : "self.version",
+        "viserio/events"                                     : "self.version",
         "viserio/support"                                    : "self.version"
     },
     "require-dev": {

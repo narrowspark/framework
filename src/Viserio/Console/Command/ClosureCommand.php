@@ -10,6 +10,13 @@ use Symfony\Component\Console\Output\OutputInterface;
 class ClosureCommand extends Command
 {
     /**
+     * Closure based command.
+     *
+     * @var \Closure
+     */
+    protected $callback;
+
+    /**
      * Create a new command instance.
      *
      * @param string  $signature

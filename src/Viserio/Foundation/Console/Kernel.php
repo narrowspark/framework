@@ -19,6 +19,7 @@ use Viserio\Foundation\Bootstrap\DetectEnvironment;
 use Viserio\Foundation\Bootstrap\HandleExceptions;
 use Viserio\Foundation\Bootstrap\LoadConfiguration;
 use Viserio\Foundation\Bootstrap\LoadServiceProvider;
+use Viserio\Console\Command\ClosureCommand;
 
 class Kernel implements KernelContract, TerminableContract
 {
@@ -121,16 +122,6 @@ class Kernel implements KernelContract, TerminableContract
     }
 
     /**
-     * {@inheritdoc}
-     */
-    public function output(): string
-    {
-        $this->bootstrap();
-
-        return $this->getConsole()->output();
-    }
-
-    /**
      * Set the console application instance.
      *
      * @param \Viserio\Console\Application $console
@@ -172,22 +163,11 @@ class Kernel implements KernelContract, TerminableContract
     {
         $command = new ClosureCommand($signature, $callback);
 
+        $this->events->attach('console.starting', function ($console) use ($command) {
+            $console->add($command);
+        });
+
         return $command;
-    }
-
-    /**
-     * Run an Artisan console command by name.
-     *
-     * @param string $command
-     * @param array  $parameters
-     *
-     * @return int
-     */
-    public function call(string $command, array $parameters = []):int
-    {
-        $this->bootstrap();
-
-        return $this->getConsole()->call($command, $parameters);
     }
 
     /**
@@ -211,7 +191,7 @@ class Kernel implements KernelContract, TerminableContract
             $console = $this->app->get(Cerebro::class);
 
             foreach ($this->commands as $command) {
-                $console->add($this->app()->make($command));
+                $console->add($this->app->make($command));
             }
 
             return $this->console = $console;
