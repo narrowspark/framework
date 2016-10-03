@@ -2,7 +2,6 @@
 declare(strict_types=1);
 namespace Viserio\Console\Tests;
 
-use Mockery as Mock;
 use Narrowspark\TestingHelper\ArrayContainer;
 use StdClass;
 use Symfony\Component\Console\Input\StringInput;
@@ -37,11 +36,6 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
         ]);
 
         $this->application = new Application($container, new Dispatcher($container), '1.0.0');
-    }
-
-    public function tearDown()
-    {
-        Mock::close();
     }
 
     public function testAllowsToDefineViserioCommand()

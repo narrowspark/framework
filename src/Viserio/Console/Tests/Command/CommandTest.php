@@ -3,7 +3,6 @@ declare(strict_types=1);
 namespace Viserio\Console\Tests\Command;
 
 use Narrowspark\TestingHelper\ArrayContainer;
-use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use Symfony\Component\Console\Input\StringInput;
 use Symfony\Component\Console\Output\NullOutput;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -14,8 +13,6 @@ use Viserio\Support\Invoker;
 
 class CommandTest extends \PHPUnit_Framework_TestCase
 {
-    use MockeryTrait;
-
     /**
      * @var Application
      */
@@ -28,8 +25,6 @@ class CommandTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        parent::setUp();
-
         $container = new ArrayContainer([
             'foo' => function (OutputInterface $output) {
                 $output->write('hello');
