@@ -9,6 +9,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Debug\Exception\FatalThrowableError;
 use Throwable;
 use Viserio\Console\Application as Cerebro;
+use Viserio\Console\Command\ClosureCommand;
 use Viserio\Contracts\Console\Kernel as KernelContract;
 use Viserio\Contracts\Console\Terminable as TerminableContract;
 use Viserio\Contracts\Events\Dispatcher as DispatcherContract;
@@ -19,7 +20,6 @@ use Viserio\Foundation\Bootstrap\DetectEnvironment;
 use Viserio\Foundation\Bootstrap\HandleExceptions;
 use Viserio\Foundation\Bootstrap\LoadConfiguration;
 use Viserio\Foundation\Bootstrap\LoadServiceProvider;
-use Viserio\Console\Command\ClosureCommand;
 
 class Kernel implements KernelContract, TerminableContract
 {

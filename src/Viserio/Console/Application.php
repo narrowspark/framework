@@ -16,8 +16,8 @@ use Viserio\Console\Command\ExpressionParser as Parser;
 use Viserio\Console\Input\InputOption;
 use Viserio\Contracts\Console\Application as ApplicationContract;
 use Viserio\Contracts\Container\Traits\ContainerAwareTrait;
-use Viserio\Contracts\Events\Traits\EventsAwareTrait;
 use Viserio\Contracts\Events\Dispatcher as DispatcherContract;
+use Viserio\Contracts\Events\Traits\EventsAwareTrait;
 use Viserio\Support\Invoker;
 
 class Application extends SymfonyConsole implements ApplicationContract
