@@ -8,6 +8,7 @@ use Stecman\Component\Symfony\Console\BashCompletion\CompletionCommand;
 use Viserio\Config\Manager as ConfigManager;
 use Viserio\Console\Application;
 use Viserio\Contracts\Console\Application as ApplicationContract;
+use Viserio\Contracts\Events\Dispatcher as DispatcherContract;
 
 class ConsoleServiceProvider implements ServiceProvider
 {
@@ -42,6 +43,7 @@ class ConsoleServiceProvider implements ServiceProvider
 
         $console = new Application(
             $container,
+            $container->get(DispatcherContract::class),
             $config['version'],
             $config['name'] ?? 'Cerebro'
         );

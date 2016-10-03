@@ -10,6 +10,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Viserio\Console\Application;
 use Viserio\Console\Tests\Fixture\SpyOutput;
 use Viserio\Console\Tests\Fixture\ViserioCommand;
+use Viserio\Events\Dispatcher;
 
 class ApplicationTest extends \PHPUnit_Framework_TestCase
 {
@@ -35,7 +36,7 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
             'command.arr.greet' => [$this, 'foo'],
         ]);
 
-        $this->application = new Application($container, '1.0.0');
+        $this->application = new Application($container, new Dispatcher($container), '1.0.0');
     }
 
     public function tearDown()

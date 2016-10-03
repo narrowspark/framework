@@ -50,7 +50,8 @@ class ClosureCommand extends Command
         }
 
         return $this->getInvoker()->call(
-            $this->callback->bindTo($this, $this), $parameters
+            $this->callback->bindTo($this, $this),
+            $parameters
         );
     }
 }

@@ -9,6 +9,7 @@ use Symfony\Component\Console\Output\NullOutput;
 use Symfony\Component\Console\Output\OutputInterface;
 use Viserio\Console\Application;
 use Viserio\Console\Tests\Fixture\ViserioSecCommand;
+use Viserio\Events\Dispatcher;
 use Viserio\Support\Invoker;
 
 class CommandTest extends \PHPUnit_Framework_TestCase
@@ -35,7 +36,7 @@ class CommandTest extends \PHPUnit_Framework_TestCase
             },
         ]);
 
-        $this->application = new Application($container, '1.0.0');
+        $this->application = new Application($container, new Dispatcher($container), '1.0.0');
 
         $this->invoker = (new Invoker())
             ->injectByTypeHint(true)
