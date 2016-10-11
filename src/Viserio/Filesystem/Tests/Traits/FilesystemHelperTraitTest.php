@@ -9,7 +9,9 @@ use Viserio\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
 class FilesystemHelperTraitTest extends \PHPUnit_Framework_TestCase
 {
-    use FilesystemHelperTrait;
+    use FilesystemHelperTrait {
+        isWritable as filesystemIsWritable;
+    }
     use NormalizePathAndDirectorySeparatorTrait;
 
     /**
@@ -47,11 +49,11 @@ declare(strict_types=1); return "pop"; ?>')->at($this->root);
     {
         $file = vfsStream::newFile('foo.txt', 0444)->withContent('foo')->at($this->root);
 
-        $this->assertFalse($this->isWritable($file->url()));
+        $this->assertFalse($this->filesystemIsWritable($file->url()));
 
         $file->chmod(0777);
 
-        $this->assertTrue($this->isWritable($file->url()));
+        $this->assertTrue($this->filesystemIsWritable($file->url()));
     }
 
     public function testIsFile()

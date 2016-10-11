@@ -2,13 +2,13 @@
 declare(strict_types=1);
 namespace Viserio\Routing;
 
+use Interop\Http\Middleware\MiddlewareInterface;
 use LogicException;
 use Narrowspark\Arr\Arr;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use UnexpectedValueException;
 use Viserio\Contracts\Container\Traits\ContainerAwareTrait;
-use Viserio\Contracts\Middleware\Middleware as MiddlewareContract;
 use Viserio\Contracts\Routing\Route as RouteContract;
 use Viserio\Support\Invoker;
 
@@ -194,7 +194,7 @@ class Route implements RouteContract
     /**
      * {@inheritdoc}
      */
-    public function withMiddleware(MiddlewareContract $middleware): RouteContract
+    public function withMiddleware(MiddlewareInterface $middleware): RouteContract
     {
         $this->middleware['with'][] = $middleware;
 
@@ -204,7 +204,7 @@ class Route implements RouteContract
     /**
      * {@inheritdoc}
      */
-    public function withoutMiddleware(MiddlewareContract $middleware): RouteContract
+    public function withoutMiddleware(MiddlewareInterface $middleware): RouteContract
     {
         $this->middleware['without'][] = $middleware;
 

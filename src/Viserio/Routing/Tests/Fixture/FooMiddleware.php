@@ -2,16 +2,16 @@
 declare(strict_types=1);
 namespace Viserio\Routing\Tests\Fixture;
 
+use Interop\Http\Middleware\DelegateInterface;
+use Interop\Http\Middleware\ServerMiddlewareInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Viserio\Contracts\Middleware\Delegate as DelegateContract;
-use Viserio\Contracts\Middleware\ServerMiddleware as ServerMiddlewareContract;
 
-class FooMiddleware implements ServerMiddlewareContract
+class FooMiddleware implements ServerMiddlewareInterface
 {
     public function process(
         ServerRequestInterface $request,
-        DelegateContract $frame
+        DelegateInterface $frame
     ): ResponseInterface {
         $request = $request->withAttribute('foo-middleware', 'foo-middleware');
 

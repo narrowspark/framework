@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Routing;
 
-use Viserio\Contracts\Middleware\Middleware as MiddlewareContract;
+use Interop\Http\Middleware\MiddlewareInterface;
 
 abstract class AbstractController
 {
@@ -21,7 +21,7 @@ abstract class AbstractController
      *
      * @return $this
      */
-    public function withMiddleware(MiddlewareContract $middleware)
+    public function withMiddleware(MiddlewareInterface $middleware)
     {
         $this->middleware['with'][] = $middleware;
 
@@ -33,7 +33,7 @@ abstract class AbstractController
      *
      * @return $this
      */
-    public function withoutMiddleware(MiddlewareContract $middleware)
+    public function withoutMiddleware(MiddlewareInterface $middleware)
     {
         $this->middleware['without'][] = $middleware;
 

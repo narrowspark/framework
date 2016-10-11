@@ -2,13 +2,13 @@
 declare(strict_types=1);
 namespace Viserio\Middleware;
 
+use Interop\Http\Middleware\DelegateInterface;
+use Interop\Http\Middleware\MiddlewareInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use SplDoublyLinkedList;
 use SplStack;
 use Viserio\Contracts\Container\Traits\ContainerAwareTrait;
-use Viserio\Contracts\Middleware\Delegate as DelegateContract;
-use Viserio\Contracts\Middleware\Middleware as MiddlewareContract;
 use Viserio\Contracts\Middleware\Stack as StackContract;
 
 class Dispatcher implements StackContract
@@ -47,7 +47,7 @@ class Dispatcher implements StackContract
     /**
      * {@inheritdoc}
      */
-    public function withMiddleware(MiddlewareContract $middleware): StackContract
+    public function withMiddleware(MiddlewareInterface $middleware): StackContract
     {
         $this->stack->push($this->isContainerAware($middleware));
 
@@ -57,7 +57,7 @@ class Dispatcher implements StackContract
     /**
      * {@inheritdoc}
      */
-    public function withoutMiddleware(MiddlewareContract $middleware): StackContract
+    public function withoutMiddleware(MiddlewareInterface $middleware): StackContract
     {
         foreach ($this->stack as $key => $stackMiddleware) {
             if (get_class($this->stack[$key]) === get_class($middleware)) {
@@ -73,7 +73,7 @@ class Dispatcher implements StackContract
      */
     public function process(RequestInterface $request): ResponseInterface
     {
-        return (new class($this->stack, $this->response) implements DelegateContract {
+        return (new class($this->stack, $this->response) implements DelegateInterface {
             private $middlewares;
 
             private $response;
@@ -113,7 +113,7 @@ class Dispatcher implements StackContract
      *
      * @return \Viserio\Contracts\Middleware\Middleware
      */
-    private function isContainerAware($middleware): MiddlewareContract
+    private function isContainerAware($middleware): MiddlewareInterface
     {
         if (method_exists($middleware, 'setContainer')) {
             $middleware->setContainer($this->getContainer());

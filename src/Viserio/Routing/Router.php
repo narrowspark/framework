@@ -4,11 +4,11 @@ namespace Viserio\Routing;
 
 use Closure;
 use Interop\Container\ContainerInterface;
+use Interop\Http\Middleware\MiddlewareInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Contracts\Container\Traits\ContainerAwareTrait;
 use Viserio\Contracts\Events\Traits\EventsAwareTrait;
-use Viserio\Contracts\Middleware\Middleware as MiddlewareContract;
 use Viserio\Contracts\Routing\Route as RouteContract;
 use Viserio\Contracts\Routing\RouteCollection as RouteCollectionContract;
 use Viserio\Contracts\Routing\Router as RouterContract;
@@ -279,7 +279,7 @@ class Router implements RouterContract
     /**
      * {@inheritdoc}
      */
-    public function withMiddleware(MiddlewareContract $middleware): RouterContract
+    public function withMiddleware(MiddlewareInterface $middleware): RouterContract
     {
         $this->middlewares['with'][] = $middleware;
 
@@ -289,7 +289,7 @@ class Router implements RouterContract
     /**
      * {@inheritdoc}
      */
-    public function withoutMiddleware(MiddlewareContract $middleware): RouterContract
+    public function withoutMiddleware(MiddlewareInterface $middleware): RouterContract
     {
         $this->middlewares['without'][] = $middleware;
 
