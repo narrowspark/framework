@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Filesystem\Tests\Traits\Fixture;
 
-use Viserio\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 use Viserio\Filesystem\Traits\FilesystemHelperTrait;
+use Viserio\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
 class FilesystemHelperTraitClass
 {

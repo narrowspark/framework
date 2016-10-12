@@ -3,8 +3,8 @@ declare(strict_types=1);
 namespace Viserio\Routing;
 
 use Interop\Http\Middleware\MiddlewareInterface;
-use LogicException;
 use Interop\Http\Middleware\ServerMiddlewareInterface;
+use LogicException;
 
 abstract class AbstractController
 {

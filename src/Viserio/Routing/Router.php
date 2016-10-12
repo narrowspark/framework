@@ -5,6 +5,8 @@ namespace Viserio\Routing;
 use Closure;
 use Interop\Container\ContainerInterface;
 use Interop\Http\Middleware\MiddlewareInterface;
+use Interop\Http\Middleware\ServerMiddlewareInterface;
+use LogicException;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Contracts\Container\Traits\ContainerAwareTrait;
@@ -12,8 +14,6 @@ use Viserio\Contracts\Events\Traits\EventsAwareTrait;
 use Viserio\Contracts\Routing\Route as RouteContract;
 use Viserio\Contracts\Routing\RouteCollection as RouteCollectionContract;
 use Viserio\Contracts\Routing\Router as RouterContract;
-use LogicException;
-use Interop\Http\Middleware\ServerMiddlewareInterface;
 use Viserio\Middleware\Dispatcher as MiddlewareDispatcher;
 use Viserio\Support\Invoker;
 
