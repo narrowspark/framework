@@ -37,7 +37,7 @@ class SessionMiddleware implements ServerMiddlewareInterface
     /**
      * {@inhertidoc}
      */
-    public function process(ServerRequestInterface $request, DelegateInterface $frame): ResponseInterface
+    public function process(ServerRequestInterface $request, DelegateInterface $delegate): ResponseInterface
     {
         // If a session driver has been configured, we will need to start the session
         // so that the data is ready.
@@ -47,7 +47,7 @@ class SessionMiddleware implements ServerMiddlewareInterface
             $session = $this->startSession($request);
         }
 
-        $response = $frame->next($request);
+        $response = $delegate->process($request);
 
         // Again, if the session has been configured we will need to close out the session
         // so that the attributes may be persisted to some storage medium. We will also

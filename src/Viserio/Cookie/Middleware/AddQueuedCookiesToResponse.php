@@ -29,9 +29,9 @@ class AddQueuedCookiesToResponse implements MiddlewareInterface
     /**
      * {@inheritdoc}
      */
-    public function process(ServerRequestInterface $request, DelegateInterface $frame)
+    public function process(ServerRequestInterface $request, DelegateInterface $delegate)
     {
-        $response = $frame->next($request);
+        $response = $delegate->process($request);
 
         foreach ($this->cookies->getQueuedCookies() as $cookie) {
             $response->withHeader('Cookie', $cookie);

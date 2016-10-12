@@ -48,11 +48,11 @@ class VerifyCsrfTokenMiddleware implements ServerMiddlewareInterface
     /**
      * {@inhertidoc}
      */
-    public function process(ServerRequestInterface $request, DelegateInterface $frame): ResponseInterface
+    public function process(ServerRequestInterface $request, DelegateInterface $delegate): ResponseInterface
     {
         $request = $this->generateNewToken($request);
 
-        $response = $frame->next($request);
+        $response = $delegate->process($request);
 
         if ($this->isReading($request) ||
             $this->tokensMatch($request)

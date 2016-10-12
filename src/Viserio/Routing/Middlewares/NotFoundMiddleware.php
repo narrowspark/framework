@@ -15,8 +15,8 @@ class NotFoundMiddleware implements ServerMiddlewareInterface
      */
     public function process(
         ServerRequestInterface $request,
-        DelegateInterface $frame
-    ): ResponseInterface {
+        DelegateInterface $delegate
+    ) {
         throw new NotFoundException(
             '404 Not Found: Requested route (/' . ltrim($request->getUri()->getPath(), '/') . ')'
         );

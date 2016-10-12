@@ -32,8 +32,8 @@ class FoundMiddleware implements ServerMiddlewareInterface
      */
     public function process(
         ServerRequestInterface $request,
-        DelegateInterface $frame
-    ): ResponseInterface {
+        DelegateInterface $delegate
+    ) {
         // Add route to the request's attributes in case a middleware or handler needs access to the route
         $request = $request->withAttribute('route', $this->route);
 

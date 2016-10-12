@@ -14,9 +14,9 @@ class FakeContainerMiddleware implements ServerMiddlewareInterface
 
     public function process(
         ServerRequestInterface $request,
-        DelegateInterface $frame
-    ): ResponseInterface {
-        $response = $frame->next($request);
+        DelegateInterface $delegate
+    ) {
+        $response = $delegate->process($request);
         $response = $response->withAddedHeader('X-Foo', $this->getcontainer()->get('doo'));
 
         return $response;

@@ -168,16 +168,24 @@ interface Router
     /**
      * Add a middleware to all routes.
      *
+     * @param \Interop\Http\Middleware\MiddlewareInterface|\Interop\Http\Middleware\ServerMiddlewareInterface $middleware
+     *
+     * @throws \LogicException
+     *
      * @return $this
      */
-    public function withMiddleware(MiddlewareInterface $middleware): Router;
+    public function withMiddleware($middleware): Router;
 
     /**
      * Remove a middleware from all routes.
      *
+     * @param \Interop\Http\Middleware\MiddlewareInterface|\Interop\Http\Middleware\ServerMiddlewareInterface $middleware
+     *
+     * @throws \LogicException
+     *
      * @return $this
      */
-    public function withoutMiddleware(MiddlewareInterface $middleware): Router;
+    public function withoutMiddleware($middleware): Router;
 
     /**
      * Get all with and without middlewares.

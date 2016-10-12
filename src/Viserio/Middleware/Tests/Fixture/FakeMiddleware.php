@@ -8,9 +8,9 @@ use Psr\Http\Message\ServerRequestInterface;
 
 class FakeMiddleware implements ServerMiddlewareInterface
 {
-    public function process(ServerRequestInterface $request, DelegateInterface $frame)
+    public function process(ServerRequestInterface $request, DelegateInterface $delegate)
     {
-        $response = $frame->next($request);
+        $response = $delegate->process($request);
 
         $response = $response->withAddedHeader('X-Foo', 'modified');
 

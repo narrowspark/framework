@@ -11,11 +11,11 @@ class FooMiddleware implements ServerMiddlewareInterface
 {
     public function process(
         ServerRequestInterface $request,
-        DelegateInterface $frame
-    ): ResponseInterface {
+        DelegateInterface $delegate
+    ) {
         $request = $request->withAttribute('foo-middleware', 'foo-middleware');
 
-        $response = $frame->next($request);
+        $response = $delegate->process($request);
 
         return $response;
     }

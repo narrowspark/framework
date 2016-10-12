@@ -12,9 +12,9 @@ class FakeMiddleware implements ServerMiddlewareInterface
 {
     public function process(
         ServerRequestInterface $request,
-        DelegateInterface $frame
-    ): ResponseInterface {
-        $response = $frame->next($request);
+        DelegateInterface $delegate
+    ) {
+        $response = $delegate->process($request);
 
         return $response->withBody(
             (new StreamFactory())

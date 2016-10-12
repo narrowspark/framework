@@ -12,6 +12,8 @@ use Viserio\Contracts\Events\Traits\EventsAwareTrait;
 use Viserio\Contracts\Routing\Route as RouteContract;
 use Viserio\Contracts\Routing\RouteCollection as RouteCollectionContract;
 use Viserio\Contracts\Routing\Router as RouterContract;
+use LogicException;
+use Interop\Http\Middleware\ServerMiddlewareInterface;
 use Viserio\Middleware\Dispatcher as MiddlewareDispatcher;
 use Viserio\Support\Invoker;
 
@@ -279,21 +281,29 @@ class Router implements RouterContract
     /**
      * {@inheritdoc}
      */
-    public function withMiddleware(MiddlewareInterface $middleware): RouterContract
+    public function withMiddleware($middleware): RouterContract
     {
-        $this->middlewares['with'][] = $middleware;
+        if ($middleware instanceof MiddlewareInterface || $middleware instanceof ServerMiddlewareInterface) {
+            $this->middlewares['with'][] = $middleware;
 
-        return $this;
+            return $this;
+        }
+
+        throw new LogicException('Unsupported middleware type.');
     }
 
     /**
      * {@inheritdoc}
      */
-    public function withoutMiddleware(MiddlewareInterface $middleware): RouterContract
+    public function withoutMiddleware($middleware): RouterContract
     {
-        $this->middlewares['without'][] = $middleware;
+        if ($middleware instanceof MiddlewareInterface || $middleware instanceof ServerMiddlewareInterface) {
+            $this->middlewares['without'][] = $middleware;
 
-        return $this;
+            return $this;
+        }
+
+        throw new LogicException('Unsupported middleware type.');
     }
 
     /**

@@ -3,6 +3,8 @@ declare(strict_types=1);
 namespace Viserio\Routing;
 
 use Interop\Http\Middleware\MiddlewareInterface;
+use LogicException;
+use Interop\Http\Middleware\ServerMiddlewareInterface;
 
 abstract class AbstractController
 {
@@ -19,25 +21,37 @@ abstract class AbstractController
     /**
      * Add a middleware to route.
      *
+     * @throws \LogicException
+     *
      * @return $this
      */
-    public function withMiddleware(MiddlewareInterface $middleware)
+    public function withMiddleware($middleware)
     {
-        $this->middleware['with'][] = $middleware;
+        if ($middleware instanceof MiddlewareInterface || $middleware instanceof ServerMiddlewareInterface) {
+            $this->middleware['with'][] = $middleware;
 
-        return $this;
+            return $this;
+        }
+
+        throw new LogicException('Unsupported middleware type.');
     }
 
     /**
      * Remove a middleware from route.
      *
+     * @throws \LogicException
+     *
      * @return $this
      */
-    public function withoutMiddleware(MiddlewareInterface $middleware)
+    public function withoutMiddleware($middleware)
     {
-        $this->middleware['without'][] = $middleware;
+        if ($middleware instanceof MiddlewareInterface || $middleware instanceof ServerMiddlewareInterface) {
+            $this->middleware['without'][] = $middleware;
 
-        return $this;
+            return $this;
+        }
+
+        throw new LogicException('Unsupported middleware type.');
     }
 
     /**

@@ -41,9 +41,9 @@ class EncryptCookies implements MiddlewareInterface
     /**
      * {@inheritdoc}
      */
-    public function process(ServerRequestInterface $request, DelegateInterface $frame)
+    public function process(ServerRequestInterface $request, DelegateInterface $delegate)
     {
-        return $this->encrypt($frame->next($this->decrypt($request)));
+        return $this->encrypt($delegate->process($this->decrypt($request)));
     }
 
     /**

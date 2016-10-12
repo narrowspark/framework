@@ -32,8 +32,8 @@ class NotAllowedMiddleware implements ServerMiddlewareInterface
      */
     public function process(
         ServerRequestInterface $request,
-        DelegateInterface $frame
-    ): ResponseInterface {
+        DelegateInterface $delegate
+    ) {
         throw new MethodNotAllowedException();
     }
 }
