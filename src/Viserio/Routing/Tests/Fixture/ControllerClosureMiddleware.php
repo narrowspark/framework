@@ -2,19 +2,18 @@
 declare(strict_types=1);
 namespace Viserio\Routing\Tests\Fixture;
 
-use Psr\Http\Message\ResponseInterface;
+use Interop\Http\Middleware\DelegateInterface;
+use Interop\Http\Middleware\ServerMiddlewareInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Viserio\Contracts\Middleware\Delegate as DelegateContract;
-use Viserio\Contracts\Middleware\ServerMiddleware as ServerMiddlewareContract;
 use Viserio\HttpFactory\StreamFactory;
 
-class ControllerClosureMiddleware implements ServerMiddlewareContract
+class ControllerClosureMiddleware implements ServerMiddlewareInterface
 {
     public function process(
         ServerRequestInterface $request,
-        DelegateContract $frame
-    ): ResponseInterface {
-        $response = $frame->next($request);
+        DelegateInterface $delegate
+    ) {
+        $response = $delegate->process($request);
 
         $response = $response->withBody((new StreamFactory())->createStream(
             $response->getBody() . '-' . $request->getAttribute('foo-middleware') . '-controller-closure'

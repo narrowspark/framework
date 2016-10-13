@@ -153,7 +153,7 @@ class Dispatcher implements DispatcherContract
         }
 
         foreach ($segments as $key => $value) {
-            $route->setParameter($key, urldecode($value));
+            $route->setParameter($key, rawurldecode($value));
         }
 
         $this->current = $route;

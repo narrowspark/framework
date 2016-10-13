@@ -3,18 +3,16 @@ declare(strict_types=1);
 namespace Viserio\Console\Tests\Command;
 
 use Narrowspark\TestingHelper\ArrayContainer;
-use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use Symfony\Component\Console\Input\StringInput;
 use Symfony\Component\Console\Output\NullOutput;
 use Symfony\Component\Console\Output\OutputInterface;
 use Viserio\Console\Application;
 use Viserio\Console\Tests\Fixture\ViserioSecCommand;
+use Viserio\Events\Dispatcher;
 use Viserio\Support\Invoker;
 
 class CommandTest extends \PHPUnit_Framework_TestCase
 {
-    use MockeryTrait;
-
     /**
      * @var Application
      */
@@ -27,15 +25,13 @@ class CommandTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        parent::setUp();
-
         $container = new ArrayContainer([
             'foo' => function (OutputInterface $output) {
                 $output->write('hello');
             },
         ]);
 
-        $this->application = new Application($container, '1.0.0');
+        $this->application = new Application($container, new Dispatcher($container), '1.0.0');
 
         $this->invoker = (new Invoker())
             ->injectByTypeHint(true)

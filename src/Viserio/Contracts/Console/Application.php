@@ -12,7 +12,7 @@ interface Application
      *                                          When using a container, this can be a "pseudo-callable"
      *                                          i.e. the name of the container entry to invoke.
      *
-     * @return SymfonyCommand|null
+     * @return \Symfony\Component\Console\Command\Command|null
      */
     public function command(string $expression, $callable);
 }

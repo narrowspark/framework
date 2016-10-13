@@ -2,21 +2,21 @@
 declare(strict_types=1);
 namespace Viserio\Middleware\Tests\Fixture;
 
+use Interop\Http\Middleware\DelegateInterface;
+use Interop\Http\Middleware\ServerMiddlewareInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Contracts\Container\Traits\ContainerAwareTrait;
-use Viserio\Contracts\Middleware\Delegate as DelegateContract;
-use Viserio\Contracts\Middleware\ServerMiddleware as ServerMiddlewareContract;
 
-class FakeContainerMiddleware implements ServerMiddlewareContract
+class FakeContainerMiddleware implements ServerMiddlewareInterface
 {
     use ContainerAwareTrait;
 
     public function process(
         ServerRequestInterface $request,
-        DelegateContract $frame
-    ): ResponseInterface {
-        $response = $frame->next($request);
+        DelegateInterface $delegate
+    ) {
+        $response = $delegate->process($request);
         $response = $response->withAddedHeader('X-Foo', $this->getcontainer()->get('doo'));
 
         return $response;

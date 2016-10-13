@@ -95,12 +95,7 @@ class Kernel implements TerminableContract, KernelContract
     }
 
     /**
-     * Handle an incoming HTTP request.
-     *
-     * @param \Psr\Http\Message\ServerRequestInterface $request
-     * @param \Psr\Http\Message\ResponseInterface|null $response
-     *
-     * @return \Psr\Http\Message\ResponseInterface
+     * {@inheritdoc}
      */
     public function handle(ServerRequestInterface $request, ResponseInterface $response = null): ResponseInterface
     {
@@ -127,10 +122,7 @@ class Kernel implements TerminableContract, KernelContract
     }
 
     /**
-     * Terminate the application.
-     *
-     * @param \Psr\Http\Message\ServerRequestInterface $request
-     * @param \Psr\Http\Message\ResponseInterface      $response
+     * {@inheritdoc}
      */
     public function terminate(ServerRequestInterface $request, ResponseInterface $response)
     {
@@ -147,16 +139,6 @@ class Kernel implements TerminableContract, KernelContract
         if (! $this->app->hasBeenBootstrapped()) {
             $this->app->bootstrapWith($this->bootstrappers);
         }
-    }
-
-    /**
-     * Get the Narrowspark application instance.
-     *
-     * @return \Viserio\Contracts\Foundation\Application
-     */
-    public function getApplication()
-    {
-        return $this->app;
     }
 
     /**

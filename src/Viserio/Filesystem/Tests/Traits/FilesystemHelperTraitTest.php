@@ -4,12 +4,11 @@ namespace Viserio\Filesystem\Tests\Traits;
 
 use org\bovigo\vfs\vfsStream;
 use org\bovigo\vfs\vfsStreamDirectory;
-use Viserio\Filesystem\Traits\FilesystemHelperTrait;
+use Viserio\Filesystem\Tests\Traits\Fixture\FilesystemHelperTraitClass;
 use Viserio\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
 class FilesystemHelperTraitTest extends \PHPUnit_Framework_TestCase
 {
-    use FilesystemHelperTrait;
     use NormalizePathAndDirectorySeparatorTrait;
 
     /**
@@ -17,12 +16,15 @@ class FilesystemHelperTraitTest extends \PHPUnit_Framework_TestCase
      */
     private $root;
 
+    private $trait;
+
     /**
      * Setup the environment.
      */
     public function setUp()
     {
         $this->root = vfsStream::setup();
+        $this->trait = new FilesystemHelperTraitClass();
     }
 
     /**
@@ -30,7 +32,7 @@ class FilesystemHelperTraitTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetRequireThrowsExceptionOnexisitingFile()
     {
-        $this->getRequire(vfsStream::url('foo/bar/tmp/file.php'));
+        $this->trait->getRequire(vfsStream::url('foo/bar/tmp/file.php'));
     }
 
     public function testGetRequire()
@@ -38,7 +40,7 @@ class FilesystemHelperTraitTest extends \PHPUnit_Framework_TestCase
         $file = vfsStream::newFile('pop.php')->withContent('<?php
 declare(strict_types=1); return "pop"; ?>')->at($this->root);
 
-        $pop = $this->getRequire($file->url());
+        $pop = $this->trait->getRequire($file->url());
 
         $this->assertSame('pop', $pop);
     }
@@ -47,11 +49,11 @@ declare(strict_types=1); return "pop"; ?>')->at($this->root);
     {
         $file = vfsStream::newFile('foo.txt', 0444)->withContent('foo')->at($this->root);
 
-        $this->assertFalse($this->isWritable($file->url()));
+        $this->assertFalse($this->trait->isWritable($file->url()));
 
         $file->chmod(0777);
 
-        $this->assertTrue($this->isWritable($file->url()));
+        $this->assertTrue($this->trait->isWritable($file->url()));
     }
 
     public function testIsFile()
@@ -60,35 +62,7 @@ declare(strict_types=1); return "pop"; ?>')->at($this->root);
         $dir = $this->root->getChild('assets');
         $file = vfsStream::newFile('foo.txt')->withContent('foo')->at($this->root);
 
-        $this->assertFalse($this->isFile($dir->url()));
-        $this->assertTrue($this->isFile($file->url()));
-    }
-
-    public function has(string $path)
-    {
-        return file_exists($path);
-    }
-
-    public function isDirectory(string $dirname)
-    {
-        return is_dir($dirname);
-    }
-
-    /**
-     * Get normalize or prefixed path.
-     *
-     * @param string $path
-     *
-     * @return string
-     */
-    protected function getNormalzedOrPrefixedPath(string $path): string
-    {
-        if (isset($this->driver)) {
-            $prefix = method_exists($this->driver, 'getPathPrefix') ? $this->driver->getPathPrefix() : '';
-
-            return $prefix . $path;
-        }
-
-        return self::normalizeDirectorySeparator($path);
+        $this->assertFalse($this->trait->isFile($dir->url()));
+        $this->assertTrue($this->trait->isFile($file->url()));
     }
 }

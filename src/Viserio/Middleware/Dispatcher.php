@@ -2,13 +2,15 @@
 declare(strict_types=1);
 namespace Viserio\Middleware;
 
+use Interop\Http\Middleware\DelegateInterface;
+use Interop\Http\Middleware\MiddlewareInterface;
+use Interop\Http\Middleware\ServerMiddlewareInterface;
+use LogicException;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use SplDoublyLinkedList;
 use SplStack;
 use Viserio\Contracts\Container\Traits\ContainerAwareTrait;
-use Viserio\Contracts\Middleware\Delegate as DelegateContract;
-use Viserio\Contracts\Middleware\Middleware as MiddlewareContract;
 use Viserio\Contracts\Middleware\Stack as StackContract;
 
 class Dispatcher implements StackContract
@@ -47,25 +49,33 @@ class Dispatcher implements StackContract
     /**
      * {@inheritdoc}
      */
-    public function withMiddleware(MiddlewareContract $middleware): StackContract
+    public function withMiddleware($middleware): StackContract
     {
-        $this->stack->push($this->isContainerAware($middleware));
+        if ($middleware instanceof MiddlewareInterface || $middleware instanceof ServerMiddlewareInterface) {
+            $this->stack->push($this->isContainerAware($middleware));
 
-        return $this;
+            return $this;
+        }
+
+        throw new LogicException('Unsupported middleware type.');
     }
 
     /**
      * {@inheritdoc}
      */
-    public function withoutMiddleware(MiddlewareContract $middleware): StackContract
+    public function withoutMiddleware($middleware): StackContract
     {
-        foreach ($this->stack as $key => $stackMiddleware) {
-            if (get_class($this->stack[$key]) === get_class($middleware)) {
-                unset($this->stack[$key]);
+        if ($middleware instanceof MiddlewareInterface || $middleware instanceof ServerMiddlewareInterface) {
+            foreach ($this->stack as $key => $stackMiddleware) {
+                if (get_class($this->stack[$key]) === get_class($middleware)) {
+                    unset($this->stack[$key]);
+                }
             }
+
+            return $this;
         }
 
-        return $this;
+        throw new LogicException('Unsupported middleware type.');
     }
 
     /**
@@ -73,7 +83,7 @@ class Dispatcher implements StackContract
      */
     public function process(RequestInterface $request): ResponseInterface
     {
-        return (new class($this->stack, $this->response) implements DelegateContract {
+        return (new class($this->stack, $this->response) implements DelegateInterface {
             private $middlewares;
 
             private $response;
@@ -86,16 +96,16 @@ class Dispatcher implements StackContract
                 $this->response = $response;
             }
 
-            public function next(RequestInterface $request): ResponseInterface
+            public function process(RequestInterface $request): ResponseInterface
             {
                 if (! isset($this->middlewares[$this->index])) {
                     return $this->response;
                 }
 
-                return $this->middlewares[$this->index]->process($request, $this->nextFrame());
+                return $this->middlewares[$this->index]->process($request, $this->nextProcess());
             }
 
-            private function nextFrame()
+            private function nextProcess()
             {
                 $new = clone $this;
                 ++$new->index;
@@ -103,17 +113,17 @@ class Dispatcher implements StackContract
                 return $new;
             }
         }
-        )->next($request);
+        )->process($request);
     }
 
     /**
      *  Check if middleware is aware of Interop\Container\ContainerInterface.
      *
-     * @param \Viserio\Contracts\Middleware\Middleware $middleware
+     * @param \Interop\Http\Middleware\MiddlewareInterface|\Interop\Http\Middleware\ServerMiddlewareInterface $middleware
      *
-     * @return \Viserio\Contracts\Middleware\Middleware
+     * @return \Interop\Http\Middleware\MiddlewareInterface|\Interop\Http\Middleware\ServerMiddlewareInterface
      */
-    private function isContainerAware($middleware): MiddlewareContract
+    private function isContainerAware($middleware)
     {
         if (method_exists($middleware, 'setContainer')) {
             $middleware->setContainer($this->getContainer());

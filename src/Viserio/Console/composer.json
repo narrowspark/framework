@@ -20,10 +20,12 @@
     "require": {
         "php"                                                : "7.0.0 - 7.0.5 || ^7.0.7",
         "container-interop/container-interop"                : "^1.1",
+        "danielstjules/stringy"                              : "^2.3",
         "php-di/invoker"                                     : "^1.3",
         "stecman/symfony-console-completion"                 : "^0.6",
         "symfony/console"                                    : "^3.1",
         "viserio/cotracts"                                   : "self.version",
+        "viserio/events"                                     : "self.version",
         "viserio/support"                                    : "self.version"
     },
     "require-dev": {
@@ -48,7 +50,6 @@
         "psr/container-implementation"                       : "^1.0"
     },
     "suggest": {
-        "container-interop/container-interop"                : "Required to use service-provider (^1.1).",
         "container-interop/service-provider"                 : "Required to use service-provider (^0.3).",
         "symfony/process"                                    : "Required to use scheduling component (^3.1)."
     },

@@ -274,13 +274,16 @@ class Application extends Container implements ApplicationContract
      */
     protected function registerBaseBindings()
     {
-        $this->singleton('app', function () {
-            return $this;
+        $app = $this;
+
+        $this->singleton(ApplicationContract::class, function () use ($app) {
+            return $app;
         });
 
-        $this->singleton(Container::class, $this);
+        $this->alias(ApplicationContract::class, self::class);
+        $this->alias(ApplicationContract::class, 'app');
 
-        $this->singleton(ApplicationContract::class, $this);
+        $this->singleton(Container::class, $this);
 
         $this->singleton(EmitterContract::class, Emitter::class);
 
