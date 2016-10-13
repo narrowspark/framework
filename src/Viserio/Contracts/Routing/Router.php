@@ -2,9 +2,9 @@
 declare(strict_types=1);
 namespace Viserio\Contracts\Routing;
 
+use Interop\Http\Middleware\MiddlewareInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Viserio\Contracts\Middleware\Middleware as MiddlewareContract;
 
 interface Router
 {
@@ -168,16 +168,24 @@ interface Router
     /**
      * Add a middleware to all routes.
      *
+     * @param \Interop\Http\Middleware\MiddlewareInterface|\Interop\Http\Middleware\ServerMiddlewareInterface $middleware
+     *
+     * @throws \LogicException
+     *
      * @return $this
      */
-    public function withMiddleware(MiddlewareContract $middleware): Router;
+    public function withMiddleware($middleware);
 
     /**
      * Remove a middleware from all routes.
      *
+     * @param \Interop\Http\Middleware\MiddlewareInterface|\Interop\Http\Middleware\ServerMiddlewareInterface $middleware
+     *
+     * @throws \LogicException
+     *
      * @return $this
      */
-    public function withoutMiddleware(MiddlewareContract $middleware): Router;
+    public function withoutMiddleware($middleware);
 
     /**
      * Get all with and without middlewares.

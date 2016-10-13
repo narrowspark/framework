@@ -3,11 +3,11 @@ declare(strict_types=1);
 namespace Viserio\Session\Middleware;
 
 use Cake\Chronos\Chronos;
+use Interop\Http\Middleware\DelegateInterface;
+use Interop\Http\Middleware\ServerMiddlewareInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Contracts\Config\Manager as ConfigContract;
-use Viserio\Contracts\Middleware\Delegate as DelegateContract;
-use Viserio\Contracts\Middleware\ServerMiddleware as ServerMiddlewareContract;
 use Viserio\Contracts\Session\Store as StoreContract;
 use Viserio\Cookie\Cookie;
 use Viserio\Session\Fingerprint\ClientIpGenerator;
@@ -15,7 +15,7 @@ use Viserio\Session\Fingerprint\UserAgentGenerator;
 use Viserio\Session\Handler\CookieSessionHandler;
 use Viserio\Session\SessionManager;
 
-class SessionMiddleware implements ServerMiddlewareContract
+class SessionMiddleware implements ServerMiddlewareInterface
 {
     /**
      * The session manager.
@@ -37,7 +37,7 @@ class SessionMiddleware implements ServerMiddlewareContract
     /**
      * {@inhertidoc}
      */
-    public function process(ServerRequestInterface $request, DelegateContract $frame): ResponseInterface
+    public function process(ServerRequestInterface $request, DelegateInterface $delegate): ResponseInterface
     {
         // If a session driver has been configured, we will need to start the session
         // so that the data is ready.
@@ -47,7 +47,7 @@ class SessionMiddleware implements ServerMiddlewareContract
             $session = $this->startSession($request);
         }
 
-        $response = $frame->next($request);
+        $response = $delegate->process($request);
 
         // Again, if the session has been configured we will need to close out the session
         // so that the attributes may be persisted to some storage medium. We will also

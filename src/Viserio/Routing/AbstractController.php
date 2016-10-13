@@ -2,43 +2,11 @@
 declare(strict_types=1);
 namespace Viserio\Routing;
 
-use Viserio\Contracts\Middleware\Middleware as MiddlewareContract;
+use Viserio\Routing\Traits\MiddlewareAwareTrait;
 
 abstract class AbstractController
 {
-    /**
-     * All middlewares.
-     *
-     * @var array
-     */
-    protected $middleware = [
-        'with' => [],
-        'without' => [],
-    ];
-
-    /**
-     * Add a middleware to route.
-     *
-     * @return $this
-     */
-    public function withMiddleware(MiddlewareContract $middleware)
-    {
-        $this->middleware['with'][] = $middleware;
-
-        return $this;
-    }
-
-    /**
-     * Remove a middleware from route.
-     *
-     * @return $this
-     */
-    public function withoutMiddleware(MiddlewareContract $middleware)
-    {
-        $this->middleware['without'][] = $middleware;
-
-        return $this;
-    }
+    use MiddlewareAwareTrait;
 
     /**
      * Get all middleware, including the ones from the controller.
@@ -47,6 +15,6 @@ abstract class AbstractController
      */
     public function gatherMiddleware(): array
     {
-        return $this->middleware;
+        return $this->middlewares;
     }
 }
