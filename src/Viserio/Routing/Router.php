@@ -15,8 +15,8 @@ use Viserio\Contracts\Routing\Route as RouteContract;
 use Viserio\Contracts\Routing\RouteCollection as RouteCollectionContract;
 use Viserio\Contracts\Routing\Router as RouterContract;
 use Viserio\Middleware\Dispatcher as MiddlewareDispatcher;
-use Viserio\Support\Invoker;
 use Viserio\Routing\Traits\MiddlewareAwareTrait;
+use Viserio\Support\Invoker;
 
 class Router implements RouterContract
 {

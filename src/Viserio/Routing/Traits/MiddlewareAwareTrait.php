@@ -6,7 +6,8 @@ use Interop\Http\Middleware\MiddlewareInterface;
 use Interop\Http\Middleware\ServerMiddlewareInterface;
 use LogicException;
 
-trait MiddlewareAwareTrait {
+trait MiddlewareAwareTrait
+{
     /**
      * All middlewares.
      *
@@ -22,7 +23,6 @@ trait MiddlewareAwareTrait {
      */
     public function withMiddleware($middleware)
     {
-
         if ($middleware instanceof MiddlewareInterface || $middleware instanceof ServerMiddlewareInterface) {
             $this->middlewares['with'][] = $middleware;
 

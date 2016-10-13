@@ -9,8 +9,8 @@ use Psr\Http\Message\ServerRequestInterface;
 use UnexpectedValueException;
 use Viserio\Contracts\Container\Traits\ContainerAwareTrait;
 use Viserio\Contracts\Routing\Route as RouteContract;
-use Viserio\Support\Invoker;
 use Viserio\Routing\Traits\MiddlewareAwareTrait;
+use Viserio\Support\Invoker;
 
 class Route implements RouteContract
 {
