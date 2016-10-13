@@ -3,9 +3,9 @@ declare(strict_types=1);
 namespace Viserio\Database;
 
 use Closure;
+use LogicException;
 use PDO;
 use RuntimeException;
-use LogicException;
 use Viserio\Contracts\Database\Connection as ConnectionContract;
 use Viserio\Contracts\Events\Traits\EventsAwareTrait;
 use Viserio\Database\Traits\DetectsDeadlocksTrait;
@@ -17,7 +17,7 @@ class Connection implements ConnectionContract
     use DetectsLostConnectionsTrait;
     use EventsAwareTrait;
 
-     /**
+    /**
      * The active PDO connection.
      *
      * @var \PDO
@@ -121,9 +121,9 @@ class Connection implements ConnectionContract
      *
      * @param \PDO|\Closure|null $pdo
      *
-     * @return $this
-     *
      * @throws \RuntimeException
+     *
+     * @return $this
      */
     public function setPdo($pdo): ConnectionContract
     {
