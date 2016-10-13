@@ -2,7 +2,6 @@
 declare(strict_types=1);
 namespace Viserio\Contracts\Routing;
 
-use Interop\Http\Middleware\MiddlewareInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
@@ -58,16 +57,24 @@ interface Route
     /**
      * Add a middleware to route.
      *
+     * @param \Interop\Http\Middleware\MiddlewareInterface|\Interop\Http\Middleware\ServerMiddlewareInterface $middleware
+     *
+     * @throws \LogicException
+     *
      * @return $this
      */
-    public function withMiddleware(MiddlewareInterface $middleware): Route;
+    public function withMiddleware($middleware);
 
     /**
      * Remove a middleware from route.
      *
+     * @param \Interop\Http\Middleware\MiddlewareInterface|\Interop\Http\Middleware\ServerMiddlewareInterface $middleware
+     *
+     * @throws \LogicException
+     *
      * @return $this
      */
-    public function withoutMiddleware(MiddlewareInterface $middleware): Route;
+    public function withoutMiddleware($middleware);
 
     /**
      * Get all middleware, including the ones from the controller.

@@ -2,57 +2,11 @@
 declare(strict_types=1);
 namespace Viserio\Routing;
 
-use Interop\Http\Middleware\MiddlewareInterface;
-use Interop\Http\Middleware\ServerMiddlewareInterface;
-use LogicException;
+use Viserio\Routing\Traits\MiddlewareAwareTrait;
 
 abstract class AbstractController
 {
-    /**
-     * All middlewares.
-     *
-     * @var array
-     */
-    protected $middleware = [
-        'with' => [],
-        'without' => [],
-    ];
-
-    /**
-     * Add a middleware to route.
-     *
-     * @throws \LogicException
-     *
-     * @return $this
-     */
-    public function withMiddleware($middleware)
-    {
-        if ($middleware instanceof MiddlewareInterface || $middleware instanceof ServerMiddlewareInterface) {
-            $this->middleware['with'][] = $middleware;
-
-            return $this;
-        }
-
-        throw new LogicException('Unsupported middleware type.');
-    }
-
-    /**
-     * Remove a middleware from route.
-     *
-     * @throws \LogicException
-     *
-     * @return $this
-     */
-    public function withoutMiddleware($middleware)
-    {
-        if ($middleware instanceof MiddlewareInterface || $middleware instanceof ServerMiddlewareInterface) {
-            $this->middleware['without'][] = $middleware;
-
-            return $this;
-        }
-
-        throw new LogicException('Unsupported middleware type.');
-    }
+    use MiddlewareAwareTrait;
 
     /**
      * Get all middleware, including the ones from the controller.
@@ -61,6 +15,6 @@ abstract class AbstractController
      */
     public function gatherMiddleware(): array
     {
-        return $this->middleware;
+        return $this->middlewares;
     }
 }

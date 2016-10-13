@@ -2,7 +2,6 @@
 declare(strict_types=1);
 namespace Viserio\Routing;
 
-use Interop\Http\Middleware\MiddlewareInterface;
 use LogicException;
 use Narrowspark\Arr\Arr;
 use Psr\Http\Message\ResponseInterface;
@@ -11,10 +10,12 @@ use UnexpectedValueException;
 use Viserio\Contracts\Container\Traits\ContainerAwareTrait;
 use Viserio\Contracts\Routing\Route as RouteContract;
 use Viserio\Support\Invoker;
+use Viserio\Routing\Traits\MiddlewareAwareTrait;
 
 class Route implements RouteContract
 {
     use ContainerAwareTrait;
+    use MiddlewareAwareTrait;
 
     /**
      * The URI pattern the route responds to.
@@ -57,16 +58,6 @@ class Route implements RouteContract
      * @var array
      */
     protected $wheres = [];
-
-    /**
-     * All middlewares.
-     *
-     * @var array
-     */
-    protected $middleware = [
-        'with' => [],
-        'without' => [],
-    ];
 
     /**
      * Invoker instance.
@@ -194,44 +185,25 @@ class Route implements RouteContract
     /**
      * {@inheritdoc}
      */
-    public function withMiddleware(MiddlewareInterface $middleware): RouteContract
-    {
-        $this->middleware['with'][] = $middleware;
-
-        return $this;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function withoutMiddleware(MiddlewareInterface $middleware): RouteContract
-    {
-        $this->middleware['without'][] = $middleware;
-
-        return $this;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function gatherMiddleware(): array
     {
         // Merge middlewares from Action.
         $with = Arr::get($this->action, 'middleware.with', []);
         $without = Arr::get($this->action, 'middleware.without', []);
 
-        $this->middleware = Arr::merge($this->middleware, $this->getControllerMiddleware());
+        $this->middlewares = Arr::merge($this->middlewares, $this->getControllerMiddleware());
 
-        $this->middleware['with'] = array_merge(
-            $this->middleware['with'],
+        $this->middlewares['with'] = array_merge(
+            $this->middlewares['with'],
             is_array($with) ? $with : [$with]
         );
-        $this->middleware['without'] = array_merge(
-            $this->middleware['without'],
+
+        $this->middlewares['without'] = array_merge(
+            $this->middlewares['without'],
             is_array($without) ? $without : [$without]
         );
 
-        return $this->middleware;
+        return $this->middlewares;
     }
 
     /**

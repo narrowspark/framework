@@ -174,7 +174,7 @@ interface Router
      *
      * @return $this
      */
-    public function withMiddleware($middleware): Router;
+    public function withMiddleware($middleware);
 
     /**
      * Remove a middleware from all routes.
@@ -185,7 +185,7 @@ interface Router
      *
      * @return $this
      */
-    public function withoutMiddleware($middleware): Router;
+    public function withoutMiddleware($middleware);
 
     /**
      * Get all with and without middlewares.

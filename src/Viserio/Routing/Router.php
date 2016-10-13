@@ -16,11 +16,13 @@ use Viserio\Contracts\Routing\RouteCollection as RouteCollectionContract;
 use Viserio\Contracts\Routing\Router as RouterContract;
 use Viserio\Middleware\Dispatcher as MiddlewareDispatcher;
 use Viserio\Support\Invoker;
+use Viserio\Routing\Traits\MiddlewareAwareTrait;
 
 class Router implements RouterContract
 {
     use ContainerAwareTrait;
     use EventsAwareTrait;
+    use MiddlewareAwareTrait;
 
     /**
      * The route collection instance.
@@ -49,13 +51,6 @@ class Router implements RouterContract
      * @var array
      */
     protected $groupStack = [];
-
-    /**
-     * All middlewares.
-     *
-     * @var array
-     */
-    protected $middlewares = [];
 
     /**
      * The globally available parameter patterns.
@@ -276,44 +271,6 @@ class Router implements RouterContract
     public function getParameters(): array
     {
         return $this->globalParameterConditions;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function withMiddleware($middleware): RouterContract
-    {
-        if ($middleware instanceof MiddlewareInterface || $middleware instanceof ServerMiddlewareInterface) {
-            $this->middlewares['with'][] = $middleware;
-
-            return $this;
-        }
-
-        throw new LogicException('Unsupported middleware type.');
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function withoutMiddleware($middleware): RouterContract
-    {
-        if ($middleware instanceof MiddlewareInterface || $middleware instanceof ServerMiddlewareInterface) {
-            $this->middlewares['without'][] = $middleware;
-
-            return $this;
-        }
-
-        throw new LogicException('Unsupported middleware type.');
-    }
-
-    /**
-     * {@inheritdoc}
-     *
-     * @codeCoverageIgnore
-     */
-    public function getMiddlewares(): array
-    {
-        return $this->middlewares;
     }
 
     /**
