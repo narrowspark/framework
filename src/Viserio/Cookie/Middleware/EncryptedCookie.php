@@ -7,7 +7,7 @@ use Defuse\Crypto\Exception\WrongKeyOrModifiedCiphertextException;
 use Interop\Http\Middleware\DelegateInterface;
 use Interop\Http\Middleware\MiddlewareInterface;
 use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Message\RequestInterface;
 use Viserio\Contracts\Cookie\Cookie as CookieContract;
 use Viserio\Contracts\Encryption\Encrypter as EncrypterContract;
 use Viserio\Cookie\Cookie;
@@ -41,7 +41,7 @@ class EncryptCookies implements MiddlewareInterface
     /**
      * {@inheritdoc}
      */
-    public function process(ServerRequestInterface $request, DelegateInterface $delegate)
+    public function process(RequestInterface $request, DelegateInterface $delegate)
     {
         return $this->encrypt($delegate->process($this->decrypt($request)));
     }
@@ -75,10 +75,10 @@ class EncryptCookies implements MiddlewareInterface
     /**
      * Duplicate a cookie with a new value.
      *
-     * @param CookieContract $cookie
-     * @param string         $value
+     * @param \Viserio\Contracts\Cookie\Cookie $cookie
+     * @param string                           $value
      *
-     * @return CookieContract
+     * @return \Viserio\Contracts\Cookie\Cookie
      */
     protected function duplicate(CookieContract $cookie, string $value): CookieContract
     {
@@ -96,11 +96,11 @@ class EncryptCookies implements MiddlewareInterface
     /**
      * Decrypt the cookies on the request.
      *
-     * @param ServerRequestInterface $request
+     * @param \Psr\Http\Message\RequestInterface $request
      *
-     * @return ServerRequestInterface
+     * @return \Psr\Http\Message\RequestInterface
      */
-    protected function decrypt(ServerRequestInterface $request): ServerRequestInterface
+    protected function decrypt(RequestInterface $request): RequestInterface
     {
         foreach ($request->cookies as $key => $cookie) {
             if ($this->isDisabled($key)) {
@@ -156,9 +156,9 @@ class EncryptCookies implements MiddlewareInterface
     /**
      * Encrypt the cookies on an outgoing response.
      *
-     * @param ResponseInterface $response
+     * @param \Psr\Http\Message\ResponseInterface $response
      *
-     * @return ResponseInterface
+     * @return \Psr\Http\Message\ResponseInterface
      */
     protected function encrypt(ResponseInterface $response): ResponseInterface
     {
