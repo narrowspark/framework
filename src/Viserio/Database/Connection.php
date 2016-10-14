@@ -53,6 +53,34 @@ class Connection implements ConnectionContract
     protected $fetchMode = PDO::FETCH_ASSOC;
 
     /**
+     * The name of the connected database.
+     *
+     * @var string
+     */
+    protected $database;
+
+    /**
+     * The table prefix for the connection.
+     *
+     * @var string
+     */
+    protected $tablePrefix = '';
+
+    /**
+     * Create a new database connection instance.
+     *
+     * @param \PDO|\Closure $pdo
+     * @param string        $database
+     * @param string        $tablePrefix
+     */
+    public function __construct($pdo, string $database = '', string $tablePrefix = '')
+    {
+        $this->pdo = $pdo;
+        $this->database = $database;
+        $this->tablePrefix = $tablePrefix;
+    }
+
+    /**
      * Get the default fetch mode for the connection.
      *
      * @return int
@@ -82,6 +110,16 @@ class Connection implements ConnectionContract
         }
 
         throw new LogicException('Lost connection and no reconnector available.');
+    }
+
+     /**
+     * Whether an actual connection to the database is established.
+     *
+     * @return bool
+     */
+    public function isConnected(): bool
+    {
+
     }
 
     /**
