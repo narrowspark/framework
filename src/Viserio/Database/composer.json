@@ -1,7 +1,7 @@
 {
-    "name"       : "viserio/encryption",
+    "name"       : "viserio/database",
     "type"       : "library",
-    "description": "The Viserio Encrypter package.",
+    "description": "The Viserio Database package.",
     "keywords"   : ["narrowspark", "viserio", "database"],
     "license"    : "MIT",
     "homepage"   : "http://github.com/narrowspark/framework",
@@ -30,13 +30,13 @@
     },
     "autoload": {
         "psr-4": {
-            "Viserio\\Encrypter\\"            : ""
+            "Viserio\\Database\\"             : ""
         },
         "exclude-from-classmap"               : ["/Tests/"]
     },
     "autoload-dev": {
         "psr-4": {
-            "Viserio\\Encrypter\\Tests\\"     : "Tests/"
+            "Viserio\\Database\\Tests\\"      : "Tests/"
         }
     },
     "suggest": {

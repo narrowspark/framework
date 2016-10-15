@@ -9,7 +9,7 @@ use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
 use Viserio\Config\Manager as ConfigManager;
 
-class DatabaseProvider implements ServiceProvider
+class DatabaseServiceProvider implements ServiceProvider
 {
     const PACKAGE = 'viserio.database';
 
@@ -38,7 +38,7 @@ class DatabaseProvider implements ServiceProvider
             $config = self::get($container, 'options');
         }
 
-        if (isset($config['dbal.dbname']) || empty($config['dbal.dbname'])) {
+        if (empty($config['dbal.dbname'])) {
             throw new DBALException('The "dbname" must be set in the container entry "dbal.dbname"');
         }
 
