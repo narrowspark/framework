@@ -33,9 +33,6 @@
         <testsuite name="Narrowspark Config Component Test Suite">
             <directory>./src/Viserio/Config/Tests</directory>
         </testsuite>
-        <testsuite name="Narrowspark Connect Component Test Suite">
-            <directory>./src/Viserio/Connect/Tests</directory>
-        </testsuite>
         <testsuite name="Narrowspark Console Component Test Suite">
             <directory>./src/Viserio/Console/Tests</directory>
         </testsuite>
