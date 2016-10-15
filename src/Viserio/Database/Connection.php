@@ -112,14 +112,13 @@ class Connection implements ConnectionContract
         throw new LogicException('Lost connection and no reconnector available.');
     }
 
-     /**
+    /**
      * Whether an actual connection to the database is established.
      *
      * @return bool
      */
     public function isConnected(): bool
     {
-
     }
 
     /**

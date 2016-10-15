@@ -29,7 +29,7 @@ interface ResultStatement extends Traversable
      * @param mixed $arg2
      * @param mixed $arg3
      *
-     * @return boolean
+     * @return bool
      *
      * @see PDO::FETCH_* constants.
      */
@@ -53,8 +53,8 @@ interface ResultStatement extends Traversable
      * Returns an array containing all of the result set rows.
      *
      * @param int|null $fetchMode Controls how the next row will be returned to the caller.
-     *                                The value must be one of the PDO::FETCH_* constants,
-     *                                defaulting to PDO::FETCH_BOTH.
+     *                            The value must be one of the PDO::FETCH_* constants,
+     *                            defaulting to PDO::FETCH_BOTH.
      *
      * @return array
      *
@@ -66,8 +66,8 @@ interface ResultStatement extends Traversable
      * Returns a single column from the next row of a result set or FALSE if there are no more rows.
      *
      * @param int $columnIndex 0-indexed number of the column you wish to retrieve from the row.
-     *                             If no value is supplied, PDOStatement->fetchColumn()
-     *                             fetches the first column.
+     *                         If no value is supplied, PDOStatement->fetchColumn()
+     *                         fetches the first column.
      *
      * @return string|bool A single column in the next row of a result set, or FALSE if there are no more rows.
      */
