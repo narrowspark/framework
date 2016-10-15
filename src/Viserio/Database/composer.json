@@ -2,7 +2,7 @@
     "name"       : "viserio/database",
     "type"       : "library",
     "description": "The Viserio Database package.",
-    "keywords"   : ["narrowspark", "viserio", "database"],
+    "keywords"   : ["narrowspark", "viserio", "database", "doctrine", "migrations"],
     "license"    : "MIT",
     "homepage"   : "http://github.com/narrowspark/framework",
     "support"    : {

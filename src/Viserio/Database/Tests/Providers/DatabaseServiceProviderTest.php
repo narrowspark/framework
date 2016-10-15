@@ -8,6 +8,7 @@ use Narrowspark\Collection\Collection;
 use Viserio\Config\Providers\ConfigServiceProvider;
 use Viserio\Container\Container;
 use Viserio\Database\Connection;
+use Symfony\Component\Console\Helper\HelperSet;
 use Viserio\Database\Providers\DatabaseServiceProvider;
 
 class DatabaseServiceProviderTest extends \PHPUnit_Framework_TestCase
@@ -39,6 +40,8 @@ class DatabaseServiceProviderTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(Connection::class, $container->get(Connection::class));
         $this->assertInstanceOf(Connection::class, $container->get('db'));
         $this->assertInstanceOf(Connection::class, $container->get('database'));
+        $this->assertInstanceOf(HelperSet::class, $container->get('database.command.helper'));
+        $this->assertTrue(is_array($container->get('database.commands')));
     }
 
     public function testProviderWithoutConfigManager()

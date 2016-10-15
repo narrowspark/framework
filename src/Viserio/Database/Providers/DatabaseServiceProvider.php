@@ -8,6 +8,7 @@ use Doctrine\DBAL\DBALException;
 use Doctrine\DBAL\DriverManager;
 use Doctrine\DBAL\Tools\Console\Command\ImportCommand;
 use Doctrine\DBAL\Tools\Console\Command\ReservedWordsCommand;
+use Doctrine\DBAL\Tools\Console\Helper\ConnectionHelper;
 use Doctrine\DBAL\Tools\Console\Command\RunSqlCommand;
 use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
@@ -75,7 +76,7 @@ class DatabaseServiceProvider implements ServiceProvider
 
     public static function createDatabaseCommandsHelpser(ContainerInterface $container): HelperSet
     {
-        new HelperSet([
+        return new HelperSet([
             'db' => new ConnectionHelper($container->get(Connection::class)),
         ]);
     }
