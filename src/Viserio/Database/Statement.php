@@ -31,9 +31,9 @@ class Statement
      *                            The value must be one of the PDO::FETCH_* constants,
      *                            defaulting to PDO::FETCH_BOTH.
      *
-     * @return object|integer|double|string|null|boolean The return value of this method on
-     *                                                   success depends on the fetch mode.
-     *                                                   In all cases, FALSE is returned on failure.
+     * @return object|int|float|string|null|bool The return value of this method on
+     *                                           success depends on the fetch mode.
+     *                                           In all cases, FALSE is returned on failure.
      *
      * @see PDO::FETCH_* constants.
      */
