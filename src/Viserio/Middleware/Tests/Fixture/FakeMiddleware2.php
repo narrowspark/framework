@@ -4,7 +4,6 @@ namespace Viserio\Middleware\Tests\Fixture;
 
 use Interop\Http\Middleware\DelegateInterface;
 use Interop\Http\Middleware\ServerMiddlewareInterface;
-use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
 class FakeMiddleware2 implements ServerMiddlewareInterface

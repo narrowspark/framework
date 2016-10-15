@@ -4,9 +4,6 @@ namespace Viserio\Routing;
 
 use Closure;
 use Interop\Container\ContainerInterface;
-use Interop\Http\Middleware\MiddlewareInterface;
-use Interop\Http\Middleware\ServerMiddlewareInterface;
-use LogicException;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Contracts\Container\Traits\ContainerAwareTrait;

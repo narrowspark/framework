@@ -1,13 +1,13 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Connect\Proxies;
+namespace Viserio\Database\Proxies;
 
 use Viserio\StaticalProxy\StaticalProxy;
 
-class Connect extends StaticalProxy
+class DB extends StaticalProxy
 {
     public static function getInstanceIdentifier()
     {
-        return 'connect';
+        return 'db';
     }
 }

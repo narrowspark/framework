@@ -2,7 +2,6 @@
 declare(strict_types=1);
 namespace Viserio\Contracts\Routing;
 
-use Interop\Http\Middleware\MiddlewareInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 

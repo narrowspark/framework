@@ -1,4 +1,4 @@
-# Viserio Connect package
+# Viserio Database package
 
 This package is part of the [Narrowspark framework](http://github.com/narrowspark/framework).
 
@@ -21,7 +21,7 @@ Thank you for considering contributing to the Narrowspark framework! The contrib
 Use [Composer](https://getcomposer.org/) to install this package:
 
 ```sh
-composer require viserio/connect
+composer require viserio/database
 ```
 
 ## Official Documentation
