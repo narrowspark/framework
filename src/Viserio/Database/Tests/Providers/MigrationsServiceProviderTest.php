@@ -36,11 +36,11 @@ class MigrationsServiceProviderTest extends \PHPUnit_Framework_TestCase
                 ],
             ],
             'migrations' => [
-                'path' => env('DB_MIGRATION_PATH', __DIR__.'/../Stub/'),
+                'path' => env('DB_MIGRATION_PATH', __DIR__ . '/../Stub/'),
                 'namespace' => 'Database\\Migrations',
                 'name' => 'migration',
                 'table_name' => 'migration',
-            ]
+            ],
         ]);
 
         $this->assertTrue(is_array($container->get('migrations.commands')));
@@ -67,7 +67,7 @@ class MigrationsServiceProviderTest extends \PHPUnit_Framework_TestCase
                 ],
             ],
             'migrations' => [
-                'path' => env('DB_MIGRATION_PATH', __DIR__.'/../Stub/'),
+                'path' => env('DB_MIGRATION_PATH', __DIR__ . '/../Stub/'),
                 'namespace' => 'Database\\Migrations',
                 'name' => 'migration',
                 'table_name' => 'migration',
@@ -106,7 +106,7 @@ class MigrationsServiceProviderTest extends \PHPUnit_Framework_TestCase
         ]);
         $container->instance('viserio.database.migrations.options', [
             'migrations' => [
-                'path' => env('DB_MIGRATION_PATH', __DIR__.'/../Stub/'),
+                'path' => env('DB_MIGRATION_PATH', __DIR__ . '/../Stub/'),
                 'namespace' => 'Database\\Migrations',
                 'name' => 'migration',
                 'table_name' => 'migration',
