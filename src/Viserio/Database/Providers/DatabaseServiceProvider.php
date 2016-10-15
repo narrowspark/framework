@@ -2,12 +2,14 @@
 declare(strict_types=1);
 namespace Viserio\Database\Providers;
 
-use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\DriverManager;
 use Doctrine\DBAL\DBALException;
-use Doctrine\DBAL\Driver;
+use Doctrine\DBAL\Configuration;
+use Doctrine\Common\EventManager;
 use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
 use Viserio\Config\Manager as ConfigManager;
+use Viserio\Database\Connection;
 
 class DatabaseServiceProvider implements ServiceProvider
 {
@@ -20,7 +22,8 @@ class DatabaseServiceProvider implements ServiceProvider
     {
         return [
             Connection::class => [self::class, 'createConnection'],
-            Driver::class => [self::class, 'getDriver'],
+            Configuration::class => [self::class, 'createConfiguration'],
+            EventManager::class => [self::class, 'createEventManager'],
             'db' => function (ContainerInterface $container) {
                 return $container->get(Connection::class);
             },
@@ -38,19 +41,48 @@ class DatabaseServiceProvider implements ServiceProvider
             $config = self::get($container, 'options');
         }
 
-        if (empty($config['dbal.dbname'])) {
-            throw new DBALException('The "dbname" must be set in the container entry "dbal.dbname"');
-        }
-
-        $driver = $container->get(Driver::class);
-        $connection = new Connection($config, $driver);
-
-        return $connection;
+        return DriverManager::getConnection(
+            self::parseConfig($config),
+            $container->get(Configuration::class),
+            $container->get(EventManager::class)
+        );
     }
 
-    public static function getDriver():Driver
+    public static function createConfiguration() : Configuration
     {
-        return new Driver\PDOMySql\Driver();
+        return new Configuration();
+    }
+
+    public static function createEventManager() : EventManager
+    {
+        return new EventManager();
+    }
+
+    private static function parseConfig($config): array
+    {
+        $connections = $config['connections'][$config['default']];
+        $config = array_merge($config, $connections);
+
+        if (strpos($config['default'], 'sqlite') === false) {
+            $config['user'] = $connections['username'];
+            $config['dbname'] = $connections['database'];
+
+            if (empty($config['dbname'])) {
+                throw new DBALException('The "database" must be set in the container entry "dbname"');
+            }
+        } else {
+            if (isset($connections['username'])) {
+                $config['user'] = $connections['username'];
+            }
+
+            $config['path'] = $connections['database'];
+        }
+
+        unset($config['default'], $config['connections'], $config['username'], $config['database']);
+
+        $config['wrapperClass'] = $config['wrapperClass'] ?? Connection::class;
+
+        return $config;
     }
 
     /**
