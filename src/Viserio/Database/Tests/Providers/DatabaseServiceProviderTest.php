@@ -4,7 +4,6 @@ namespace Viserio\Database\Tests\Providers;
 
 use Doctrine\Common\EventManager;
 use Doctrine\DBAL\Configuration;
-use Doctrine\DBAL\DBALException;
 use Narrowspark\Collection\Collection;
 use Viserio\Config\Providers\ConfigServiceProvider;
 use Viserio\Container\Container;

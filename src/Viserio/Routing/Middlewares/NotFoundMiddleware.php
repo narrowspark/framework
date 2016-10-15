@@ -5,7 +5,6 @@ namespace Viserio\Routing\Middlewares;
 use Interop\Http\Middleware\DelegateInterface;
 use Interop\Http\Middleware\ServerMiddlewareInterface;
 use Narrowspark\HttpStatus\Exception\NotFoundException;
-use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
 class NotFoundMiddleware implements ServerMiddlewareInterface

@@ -4,7 +4,6 @@ namespace Viserio\Routing\Middlewares;
 
 use Interop\Http\Middleware\DelegateInterface;
 use Interop\Http\Middleware\ServerMiddlewareInterface;
-use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Contracts\Routing\Route as RouteContract;
 

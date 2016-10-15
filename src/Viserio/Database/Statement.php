@@ -25,6 +25,19 @@ class Statement
     }
 
     /**
+     * Invoke doctrine statement functions.
+     *
+     * @param string $name
+     * @param array  $args
+     *
+     * @return mixed
+     */
+    public function __call($name, $args)
+    {
+        return call_user_func_array([$this->statement, $name], $args);
+    }
+
+    /**
      * Returns the next row of a result set.
      *
      * @param int|null $fetchMode Controls how the next row will be returned to the caller.
@@ -62,18 +75,5 @@ class Statement
     public function fetchAll(int $fetchMode = null): Collection
     {
         return new Collection($this->statement->fetch($fetchMode));
-    }
-
-    /**
-     * Invoke doctrine statement functions.
-     *
-     * @param string $name
-     * @param array  $args
-     *
-     * @return mixed
-     */
-    public function __call($name, $args)
-    {
-        return call_user_func_array([$this->statement, $name], $args);
     }
 }
