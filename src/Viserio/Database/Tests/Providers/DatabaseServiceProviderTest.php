@@ -5,10 +5,10 @@ namespace Viserio\Database\Tests\Providers;
 use Doctrine\Common\EventManager;
 use Doctrine\DBAL\Configuration;
 use Narrowspark\Collection\Collection;
+use Symfony\Component\Console\Helper\HelperSet;
 use Viserio\Config\Providers\ConfigServiceProvider;
 use Viserio\Container\Container;
 use Viserio\Database\Connection;
-use Symfony\Component\Console\Helper\HelperSet;
 use Viserio\Database\Providers\DatabaseServiceProvider;
 
 class DatabaseServiceProviderTest extends \PHPUnit_Framework_TestCase
