@@ -6,6 +6,9 @@ use Doctrine\Common\EventManager;
 use Doctrine\DBAL\Configuration;
 use Doctrine\DBAL\DBALException;
 use Doctrine\DBAL\DriverManager;
+use Doctrine\DBAL\Migrations\Configuration\Configuration as MigrationsConfiguration;
+use Doctrine\DBAL\Migrations\Tools\Console\Command;
+use Doctrine\ORM\Tools\Console\Helper\EntityManagerHelper;
 use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
 use Viserio\Config\Manager as ConfigManager;
@@ -30,10 +33,11 @@ class DatabaseServiceProvider implements ServiceProvider
             'database' => function (ContainerInterface $container) {
                 return $container->get(Connection::class);
             },
+            'migrations.commands'  => [self::class, 'createMigrations'],
         ];
     }
 
-    public static function createConnection(ContainerInterface $container) : Connection
+    public static function createConnection(ContainerInterface $container): Connection
     {
         if ($container->has(ConfigManager::class)) {
             $config = $container->get(ConfigManager::class)->get('database');
@@ -48,14 +52,23 @@ class DatabaseServiceProvider implements ServiceProvider
         );
     }
 
-    public static function createConfiguration() : Configuration
+    public static function createConfiguration(): Configuration
     {
         return new Configuration();
     }
 
-    public static function createEventManager() : EventManager
+    public static function createEventManager(): EventManager
     {
         return new EventManager();
+    }
+
+    public static function createMigrations(): array
+    {
+        if ($container->has(ConfigManager::class)) {
+            $config = $container->get(ConfigManager::class)->get('database');
+        } else {
+            $config = self::get($container, 'options');
+        }
     }
 
     private static function parseConfig($config): array

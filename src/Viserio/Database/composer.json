@@ -20,7 +20,9 @@
     "require": {
         "php"                                 : "7.0.0 - 7.0.5 || ^7.0.7",
         "doctrine/dbal"                       : "^2.5",
-        "narrowspark/collection"              : "^0.1"
+        "doctrine/migrations"                 : "^1.4",
+        "narrowspark/collection"              : "^0.1",
+        "ocramius/proxy-manager"              : "^2"
     },
     "require-dev": {
         "container-interop/container-interop" : "^1.1",

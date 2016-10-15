@@ -5,6 +5,8 @@ namespace Viserio\Console\Providers;
 use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
 use Stecman\Component\Symfony\Console\BashCompletion\CompletionCommand;
+use Symfony\Component\Console\Helper\DialogHelper;
+use Symfony\Component\Console\Helper\HelperSet;
 use Viserio\Config\Manager as ConfigManager;
 use Viserio\Console\Application;
 use Viserio\Contracts\Console\Application as ApplicationContract;
@@ -50,6 +52,7 @@ class ConsoleServiceProvider implements ServiceProvider
 
         // Add auto-complete for Symfony Console application
         $console->add(new CompletionCommand());
+        $console->setHelperSet(new HelperSet(['dialog' => new DialogHelper()]));
 
         return $console;
     }
