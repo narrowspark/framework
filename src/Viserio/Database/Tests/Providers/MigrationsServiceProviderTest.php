@@ -10,14 +10,16 @@ use Viserio\Config\Providers\ConfigServiceProvider;
 use Viserio\Container\Container;
 use Viserio\Database\Connection;
 use Viserio\Database\Providers\DatabaseServiceProvider;
+use Viserio\Database\Providers\MigrationsServiceProvider;
 
-class DatabaseServiceProviderTest extends \PHPUnit_Framework_TestCase
+class MigrationsServiceProviderTest extends \PHPUnit_Framework_TestCase
 {
     public function testProvider()
     {
         $container = new Container();
         $container->register(new ConfigServiceProvider());
         $container->register(new DatabaseServiceProvider());
+        $container->register(new MigrationsServiceProvider());
 
         $container->get('config')->set('database', [
             'default' => 'mysql',
@@ -33,21 +35,22 @@ class DatabaseServiceProviderTest extends \PHPUnit_Framework_TestCase
                     'driverOptions' => [1002 => 'SET NAMES utf8'],
                 ],
             ],
+            'migrations' => [
+                'path' => env('DB_MIGRATION_PATH', __DIR__.'/../Stub/'),
+                'namespace' => 'Database\\Migrations',
+                'name' => 'migration',
+                'table_name' => 'migration',
+            ]
         ]);
 
-        $this->assertInstanceOf(Configuration::class, $container->get(Configuration::class));
-        $this->assertInstanceOf(EventManager::class, $container->get(EventManager::class));
-        $this->assertInstanceOf(Connection::class, $container->get(Connection::class));
-        $this->assertInstanceOf(Connection::class, $container->get('db'));
-        $this->assertInstanceOf(Connection::class, $container->get('database'));
-        $this->assertInstanceOf(HelperSet::class, $container->get('database.command.helper'));
-        $this->assertTrue(is_array($container->get('database.commands')));
+        $this->assertTrue(is_array($container->get('migrations.commands')));
     }
 
     public function testProviderWithoutConfigManager()
     {
         $container = new Container();
         $container->register(new DatabaseServiceProvider());
+        $container->register(new MigrationsServiceProvider());
 
         $container->instance('options', [
             'default' => 'mysql',
@@ -63,17 +66,22 @@ class DatabaseServiceProviderTest extends \PHPUnit_Framework_TestCase
                     'driverOptions' => [1002 => 'SET NAMES utf8'],
                 ],
             ],
+            'migrations' => [
+                'path' => env('DB_MIGRATION_PATH', __DIR__.'/../Stub/'),
+                'namespace' => 'Database\\Migrations',
+                'name' => 'migration',
+                'table_name' => 'migration',
+            ],
         ]);
 
-        $this->assertInstanceOf(Connection::class, $container->get(Connection::class));
-        $this->assertInstanceOf(Connection::class, $container->get('db'));
-        $this->assertInstanceOf(Connection::class, $container->get('database'));
+        $this->assertTrue(is_array($container->get('migrations.commands')));
     }
 
     public function testProviderWithoutConfigManagerAndNamespace()
     {
         $container = new Container();
         $container->register(new DatabaseServiceProvider());
+        $container->register(new MigrationsServiceProvider());
 
         $container->instance('viserio.database.options', [
             'default' => 'sqlite',
@@ -96,47 +104,15 @@ class DatabaseServiceProviderTest extends \PHPUnit_Framework_TestCase
                 ],
             ],
         ]);
-
-        $this->assertInstanceOf(Connection::class, $container->get(Connection::class));
-        $this->assertInstanceOf(Connection::class, $container->get('db'));
-        $this->assertInstanceOf(Connection::class, $container->get('database'));
-    }
-
-    public function testDatabaseConnection()
-    {
-        $container = new Container();
-        $container->register(new DatabaseServiceProvider());
-
-        $container->instance('viserio.database.options', [
-            'default' => 'sqlite',
-            'connections' => [
-                'sqlite' => [
-                    'driver' => 'pdo_sqlite',
-                    'database' => __DIR__ . '/../Stub/database.sqlite',
-                    'memory' => true,
-                ],
+        $container->instance('viserio.database.migrations.options', [
+            'migrations' => [
+                'path' => env('DB_MIGRATION_PATH', __DIR__.'/../Stub/'),
+                'namespace' => 'Database\\Migrations',
+                'name' => 'migration',
+                'table_name' => 'migration',
             ],
         ]);
 
-        $conn = $container->get(Connection::class);
-        $sql = 'SELECT name FROM text WHERE id = 1';
-
-        $collection = $conn->fetchArray($sql);
-
-        $this->assertInstanceOf(Collection::class, $collection);
-        $this->assertSame([0 => 'narrowspark'], $collection->all());
-
-        $collection = $conn->fetchAssoc($sql);
-
-        $this->assertInstanceOf(Collection::class, $collection);
-        $this->assertSame(['name' => 'narrowspark'], $collection->all());
-
-        $stmt = $conn->prepare($sql);
-        $stmt->execute();
-
-        $collection = $stmt->fetchAll();
-
-        $this->assertInstanceOf(Collection::class, $collection);
-        $this->assertSame(['name' => 'narrowspark'], $collection->all());
+        $this->assertTrue(is_array($container->get('migrations.commands')));
     }
 }

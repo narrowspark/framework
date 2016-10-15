@@ -24,17 +24,19 @@ class MigrationsServiceProvider implements ServiceProvider
     public function getServices()
     {
         return [
-            'migrations.commands'  => [self::class, 'createMigrationsCommands'],
+            'migrations.commands' => [self::class, 'createMigrationsCommands'],
         ];
     }
 
     public static function createMigrationsCommands(ContainerInterface $container): array
     {
         if ($container->has(ConfigManager::class)) {
-            $config = $container->get(ConfigManager::class)->get('database.migrations');
+            $config = $container->get(ConfigManager::class)->get('database');
         } else {
             $config = self::get($container, 'options');
         }
+
+        $config = $config['migrations'];
 
         $doctrineConfig = new Configuration($container->get(Connection::class));
 
