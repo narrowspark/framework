@@ -11,9 +11,9 @@ use Doctrine\DBAL\Tools\Console\Command\ReservedWordsCommand;
 use Doctrine\DBAL\Tools\Console\Command\RunSqlCommand;
 use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
+use Symfony\Component\Console\Helper\HelperSet;
 use Viserio\Config\Manager as ConfigManager;
 use Viserio\Database\Connection;
-use Symfony\Component\Console\Helper\HelperSet;
 
 class DatabaseServiceProvider implements ServiceProvider
 {
@@ -69,14 +69,14 @@ class DatabaseServiceProvider implements ServiceProvider
         return [
             new RunSqlCommand(),
             new ImportCommand(),
-            new ReservedWordsCommand()
+            new ReservedWordsCommand(),
         ];
     }
 
     public static function createDatabaseCommandsHelpser(ContainerInterface $container): HelperSet
     {
         new HelperSet([
-            'db' => new ConnectionHelper($container->get(Connection::class))
+            'db' => new ConnectionHelper($container->get(Connection::class)),
         ]);
     }
 
