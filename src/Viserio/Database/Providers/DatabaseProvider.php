@@ -19,8 +19,8 @@ class DatabaseProvider implements ServiceProvider
     public function getServices()
     {
         return [
-            Connection::class => [self::class,'createConnection'],
-            Driver::class => [self::class,'getDriver'],
+            Connection::class => [self::class, 'createConnection'],
+            Driver::class => [self::class, 'getDriver'],
             'db' => function (ContainerInterface $container) {
                 return $container->get(Connection::class);
             },
