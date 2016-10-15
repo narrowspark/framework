@@ -46,6 +46,7 @@
         "league/flysystem"                                   : "^1.0.27",
         "monolog/monolog"                                    : "^1.17",
         "narrowspark/arr"                                    : "^2.1",
+        "narrowspark/collection"                             : "^0.1",
         "narrowspark/http-status"                            : "^2.0",
         "mtdowling/cron-expression"                          : "^1.1",
         "opis/closure"                                       : "^2.2.1",
@@ -73,7 +74,6 @@
     "replace": {
         "viserio/cache"                                      : "self.version",
         "viserio/conifg"                                     : "self.version",
-        "viserio/connect"                                    : "self.version",
         "viserio/console"                                    : "self.version",
         "viserio/container"                                  : "self.version",
         "viserio/contracts"                                  : "self.version",
