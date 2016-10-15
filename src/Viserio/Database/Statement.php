@@ -67,7 +67,7 @@ class Statement
      * Invoke doctrine statement functions.
      *
      * @param string $name
-     * @param array $args
+     * @param array  $args
      *
      * @return mixed
      */

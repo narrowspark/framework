@@ -2,13 +2,13 @@
 declare(strict_types=1);
 namespace Viserio\Database\Tests\Providers;
 
-use Doctrine\DBAL\DBALException;
 use Doctrine\Common\EventManager;
 use Doctrine\DBAL\Configuration;
-use Viserio\Config\Providers\ConfigServiceProvider;
-use Viserio\Database\Connection;
-use Viserio\Container\Container;
+use Doctrine\DBAL\DBALException;
 use Narrowspark\Collection\Collection;
+use Viserio\Config\Providers\ConfigServiceProvider;
+use Viserio\Container\Container;
+use Viserio\Database\Connection;
 use Viserio\Database\Providers\DatabaseServiceProvider;
 
 class DatabaseServiceProviderTest extends \PHPUnit_Framework_TestCase
@@ -31,8 +31,8 @@ class DatabaseServiceProviderTest extends \PHPUnit_Framework_TestCase
                     'password' => 'DB_DATABASE_PASSWORD',
                     'charset' => 'DB_CHARSET', 'UTF8',
                     'driverOptions' => [1002 => 'SET NAMES utf8'],
-                ]
-            ]
+                ],
+            ],
         ]);
 
         $this->assertInstanceOf(Configuration::class, $container->get(Configuration::class));
@@ -59,8 +59,8 @@ class DatabaseServiceProviderTest extends \PHPUnit_Framework_TestCase
                     'password' => 'DB_DATABASE_PASSWORD',
                     'charset' => 'DB_CHARSET', 'UTF8',
                     'driverOptions' => [1002 => 'SET NAMES utf8'],
-                ]
-            ]
+                ],
+            ],
         ]);
 
         $this->assertInstanceOf(Connection::class, $container->get(Connection::class));
@@ -85,8 +85,8 @@ class DatabaseServiceProviderTest extends \PHPUnit_Framework_TestCase
                     'password' => 'DB_DATABASE_PASSWORD',
                     'charset' => 'DB_CHARSET', 'UTF8',
                     'driverOptions' => [1002 => 'SET NAMES utf8'],
-                ]
-            ]
+                ],
+            ],
         ]);
 
         $this->assertInstanceOf(Connection::class, $container->get(Connection::class));
@@ -104,14 +104,14 @@ class DatabaseServiceProviderTest extends \PHPUnit_Framework_TestCase
             'connections' => [
                 'sqlite' => [
                     'driver' => 'pdo_sqlite',
-                    'database' => __DIR__.'/../Stub/database.sqlite',
+                    'database' => __DIR__ . '/../Stub/database.sqlite',
                     'memory' => true,
-                ]
-            ]
+                ],
+            ],
         ]);
 
         $conn = $container->get(Connection::class);
-        $sql = "SELECT name FROM text WHERE id = 1";
+        $sql = 'SELECT name FROM text WHERE id = 1';
 
         $collection = $conn->fetchArray($sql);
 
@@ -121,7 +121,7 @@ class DatabaseServiceProviderTest extends \PHPUnit_Framework_TestCase
         $collection = $conn->fetchAssoc($sql);
 
         $this->assertInstanceOf(Collection::class, $collection);
-        $this->assertSame(['name'=> 'narrowspark'], $collection->all());
+        $this->assertSame(['name' => 'narrowspark'], $collection->all());
 
         $stmt = $conn->prepare($sql);
         $stmt->execute();

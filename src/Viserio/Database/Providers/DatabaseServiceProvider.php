@@ -2,10 +2,10 @@
 declare(strict_types=1);
 namespace Viserio\Database\Providers;
 
-use Doctrine\DBAL\DriverManager;
-use Doctrine\DBAL\DBALException;
-use Doctrine\DBAL\Configuration;
 use Doctrine\Common\EventManager;
+use Doctrine\DBAL\Configuration;
+use Doctrine\DBAL\DBALException;
+use Doctrine\DBAL\DriverManager;
 use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
 use Viserio\Config\Manager as ConfigManager;

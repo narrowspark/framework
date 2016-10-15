@@ -3,8 +3,8 @@ declare(strict_types=1);
 namespace Viserio\Database;
 
 use Closure;
-use Doctrine\DBAL\Connection as DoctrineConnection;
 use Doctrine\DBAL\Cache\QueryCacheProfile;
+use Doctrine\DBAL\Connection as DoctrineConnection;
 use Narrowspark\Collection\Collection;
 
 class Connection extends DoctrineConnection
@@ -26,7 +26,7 @@ class Connection extends DoctrineConnection
     /**
      * {@inheritdoc}
      */
-    public function fetchArray($statement, array $params = array(), array $types = array())
+    public function fetchArray($statement, array $params = [], array $types = [])
     {
         return new Collection(parent::fetchArray($statement, $params, $types));
     }
@@ -34,7 +34,7 @@ class Connection extends DoctrineConnection
     /**
      * {@inheritdoc}
      */
-    public function fetchAll($sql, array $params = array(), $types = array())
+    public function fetchAll($sql, array $params = [], $types = [])
     {
         return new Collection(parent::fetchAll($sql, $params, $types));
     }
@@ -58,11 +58,10 @@ class Connection extends DoctrineConnection
     /**
      * {@inheritdoc}
      */
-    public function executeQuery($query, array $params = array(), $types = array(), QueryCacheProfile $qcp = null)
+    public function executeQuery($query, array $params = [], $types = [], QueryCacheProfile $qcp = null)
     {
         return new Statement(parent::executeQuery($query, $params, $types, $qcp));
     }
-
 
     /**
      * {@inheritdoc}
