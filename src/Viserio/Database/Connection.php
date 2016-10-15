@@ -11,6 +11,8 @@ class Connection extends DoctrineConnection
 {
     /**
      * {@inheritdoc}
+     *
+     * @return \Narrowspark\Collection\Collection|bool
      */
     public function fetchAssoc($statement, array $params = [], array $types = [])
     {
@@ -25,14 +27,24 @@ class Connection extends DoctrineConnection
 
     /**
      * {@inheritdoc}
+     *
+     * @return \Narrowspark\Collection\Collection|bool
      */
     public function fetchArray($statement, array $params = [], array $types = [])
     {
-        return new Collection(parent::fetchArray($statement, $params, $types));
+        $stmt = parent::fetchArray($statement, $params, $types);
+
+        if (is_array($stmt)) {
+            return new Collection($stmt);
+        }
+
+        return $stmt;
     }
 
     /**
      * {@inheritdoc}
+     *
+     * @return \Narrowspark\Collection\Collection
      */
     public function fetchAll($sql, array $params = [], $types = [])
     {
@@ -41,6 +53,8 @@ class Connection extends DoctrineConnection
 
     /**
      * {@inheritdoc}
+     *
+     * @return \Narrowspark\Collection\Collection
      */
     public function project($query, array $params, Closure $function)
     {
@@ -49,6 +63,8 @@ class Connection extends DoctrineConnection
 
     /**
      * {@inheritdoc}
+     *
+     * @return \Viserio\Database\Statement
      */
     public function prepare($statement)
     {
@@ -57,6 +73,8 @@ class Connection extends DoctrineConnection
 
     /**
      * {@inheritdoc}
+     *
+     * @return \Viserio\Database\Statement
      */
     public function executeQuery($query, array $params = [], $types = [], QueryCacheProfile $qcp = null)
     {
@@ -65,6 +83,8 @@ class Connection extends DoctrineConnection
 
     /**
      * {@inheritdoc}
+     *
+     * @return \Viserio\Database\Statement
      */
     public function query(...$args)
     {
