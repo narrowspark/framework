@@ -35,12 +35,18 @@ class LoadCommands implements BootstrapContract
                 if (preg_match('/command$/', $key)) {
                     $app->get(ApplicationContract::class)->add($app->get($key));
                 }
-            }
 
-            foreach ($app->getBindings() as $key => $binding) {
                 if (preg_match('/commands$/', $key) && is_array($commands = $app->get($key))) {
-                    foreach ($commands as $command) {
-                        $app->get(ApplicationContract::class)->add($command);
+                    $app->get(ApplicationContract::class)->addCommands($commands);
+                }
+
+                if (preg_match('/command.helper$/', $key)) {
+                    $app->get(ApplicationContract::class)->setHelperSet($app->get($key));
+                }
+
+                if (preg_match('/(command.helpers|commands.helpers)$/', $key) && is_array($helpers = $app->get($key))) {
+                    foreach ($helpers as $helper) {
+                        $app->get(ApplicationContract::class)->setHelperSet($helper);
                     }
                 }
             }

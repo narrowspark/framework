@@ -6,10 +6,14 @@ use Doctrine\Common\EventManager;
 use Doctrine\DBAL\Configuration;
 use Doctrine\DBAL\DBALException;
 use Doctrine\DBAL\DriverManager;
+use Doctrine\DBAL\Tools\Console\Command\ImportCommand;
+use Doctrine\DBAL\Tools\Console\Command\ReservedWordsCommand;
+use Doctrine\DBAL\Tools\Console\Command\RunSqlCommand;
 use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
 use Viserio\Config\Manager as ConfigManager;
 use Viserio\Database\Connection;
+use Symfony\Component\Console\Helper\HelperSet;
 
 class DatabaseServiceProvider implements ServiceProvider
 {
@@ -30,6 +34,8 @@ class DatabaseServiceProvider implements ServiceProvider
             'database' => function (ContainerInterface $container) {
                 return $container->get(Connection::class);
             },
+            'database.command.helper' => [self::class, 'createDatabaseCommandsHelpser'],
+            'database.commands' => [self::class, 'createDatabaseCommands'],
         ];
     }
 
@@ -56,6 +62,22 @@ class DatabaseServiceProvider implements ServiceProvider
     public static function createEventManager(): EventManager
     {
         return new EventManager();
+    }
+
+    public static function createDatabaseCommands(): array
+    {
+        return [
+            new RunSqlCommand(),
+            new ImportCommand(),
+            new ReservedWordsCommand()
+        ];
+    }
+
+    public static function createDatabaseCommandsHelpser(ContainerInterface $container): HelperSet
+    {
+        new HelperSet([
+            'db' => new ConnectionHelper($container->get(Connection::class))
+        ]);
     }
 
     private static function parseConfig($config): array
