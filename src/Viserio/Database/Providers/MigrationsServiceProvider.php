@@ -28,7 +28,7 @@ class MigrationsServiceProvider implements ServiceProvider
         ];
     }
 
-    public static function createMigrationsCommands(): array
+    public static function createMigrationsCommands(ContainerInterface $container): array
     {
         if ($container->has(ConfigManager::class)) {
             $config = $container->get(ConfigManager::class)->get('database.migrations');
@@ -40,16 +40,16 @@ class MigrationsServiceProvider implements ServiceProvider
 
         $doctrineConfig->setMigrationsNamespace($config['namespace']);
 
-        if ($config['path']) {
+        if (isset($config['path'])) {
             $doctrineConfig->setMigrationsDirectory($config['path']);
             $doctrineConfig->registerMigrationsFromDirectory($config['path']);
         }
 
-        if ($config['name']) {
+        if (isset($config['name'])) {
             $doctrineConfig->setName($config['name']);
         }
 
-        if ($config['table_name']) {
+        if (isset($config['table_name'])) {
             $doctrineConfig->setMigrationsTableName($config['table_name']);
         }
 
@@ -63,9 +63,9 @@ class MigrationsServiceProvider implements ServiceProvider
         ];
 
         foreach ($commands as $key => $command) {
-            unset($commands[$key]);
+            $command->setMigrationConfiguration($doctrineConfig);
 
-            $commands[] = $command->setMigrationConfiguration($doctrineConfig);
+            $commands[$key] = $command;
         }
 
         return $commands;

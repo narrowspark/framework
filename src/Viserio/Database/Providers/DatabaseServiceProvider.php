@@ -33,7 +33,6 @@ class DatabaseServiceProvider implements ServiceProvider
             'database' => function (ContainerInterface $container) {
                 return $container->get(Connection::class);
             },
-            'migrations.commands'  => [self::class, 'createMigrations'],
         ];
     }
 
@@ -62,15 +61,6 @@ class DatabaseServiceProvider implements ServiceProvider
         return new EventManager();
     }
 
-    public static function createMigrations(): array
-    {
-        if ($container->has(ConfigManager::class)) {
-            $config = $container->get(ConfigManager::class)->get('database');
-        } else {
-            $config = self::get($container, 'options');
-        }
-    }
-
     private static function parseConfig($config): array
     {
         $connections = $config['connections'][$config['default']];
@@ -81,7 +71,7 @@ class DatabaseServiceProvider implements ServiceProvider
             $config['dbname'] = $connections['database'];
 
             if (empty($config['dbname'])) {
-                throw new DBALException('The "database" must be set in the container entry "dbname"');
+                throw new DBALException('The "database" must be set in the config or container entry "database"');
             }
         } else {
             if (isset($connections['username'])) {
