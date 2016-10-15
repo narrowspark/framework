@@ -39,6 +39,7 @@
         "container-interop/service-provider"                 : "^0.3",
         "danielstjules/stringy"                              : "^2.3",
         "defuse/php-encryption"                              : "^2.0",
+        "doctrine/dbal"                                      : "^2.5",
         "egulias/email-validator"                            : "^2.1",
         "filp/whoops"                                        : "^2.0",
         "http-interop/http-factory"                          : "dev-master",

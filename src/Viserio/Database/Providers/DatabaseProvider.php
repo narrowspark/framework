@@ -24,6 +24,9 @@ class DatabaseProvider implements ServiceProvider
             'db' => function (ContainerInterface $container) {
                 return $container->get(Connection::class);
             },
+            'database' => function (ContainerInterface $container) {
+                return $container->get(Connection::class);
+            },
         ];
     }
 
