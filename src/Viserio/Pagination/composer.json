@@ -1,8 +1,8 @@
 {
-    "name"       : "viserio/database",
+    "name"       : "viserio/pagination",
     "type"       : "library",
-    "description": "The Viserio Database package.",
-    "keywords"   : ["narrowspark", "viserio", "database", "doctrine", "migrations"],
+    "description": "The Viserio Pagination package.",
+    "keywords"   : ["narrowspark", "viserio", "pagination", "doctrine"],
     "license"    : "MIT",
     "homepage"   : "http://github.com/narrowspark/framework",
     "support"    : {
@@ -19,38 +19,31 @@
     ],
     "require": {
         "php"                                 : "7.0.0 - 7.0.5 || ^7.0.7",
-        "doctrine/dbal"                       : "^2.5",
-        "doctrine/migrations"                 : "^1.4",
         "narrowspark/collection"              : "^0.1",
-        "ocramius/proxy-manager"              : "^2"
+        "viserio/contracts"                   : "self.version"
     },
     "require-dev": {
         "container-interop/container-interop" : "^1.1",
         "container-interop/service-provider"  : "^0.3",
+        "doctrine/dbal"                       : "^2.5",
+        "narrowspark/testing-helper"          : "^1.5",
         "phpunit/phpunit"                     : "^5.1",
         "viserio/container"                   : "self.version"
     },
     "autoload": {
         "psr-4": {
-            "Viserio\\Database\\"             : ""
+            "Viserio\\Pagination\\"           : ""
         },
         "exclude-from-classmap"               : ["/Tests/"]
     },
     "autoload-dev": {
         "psr-4": {
-            "Viserio\\Database\\Tests\\"      : "Tests/"
+            "Viserio\\Pagination\\Tests\\"    : "Tests/"
         }
     },
     "suggest": {
         "container-interop/container-interop" : "Required to use service-provider (^1.1).",
-        "container-interop/service-provider"  : "Required to use service-provider (^0.3).",
-        "ext-pdo"                             : "Required to use PDO adapters",
-        "ext-pdo_dblib"                       : "Required to use MSSQL databases on Liunx/UNIX platform",
-        "ext-pdo-firebird"                    : "Required to use Firebird databases",
-        "ext-pdo-mysql"                       : "Required to use MySQL or MariaDB databases",
-        "ext-pdo-pqsql"                       : "Required to use PostgreSQL databases",
-        "ext-pdo-sqlite"                      : "Required to use SQLite databases",
-        "ext-pdo_sqlsrv"                      : "Required to use MSSQL databases on Windows platform",
+        "container-interop/service-provider"  : "Required to use service-provider (^0.3)."
     },
     "extra": {
         "branch-alias": {

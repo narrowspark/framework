@@ -112,8 +112,7 @@ class Dispatcher implements StackContract
 
                 return $new;
             }
-        }
-        )->process($request);
+        })->process($request);
     }
 
     /**
