@@ -361,7 +361,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
      * @expectedException \Viserio\Contracts\Container\Exceptions\ContainerException
      * @expectedExceptionMessage The name parameter must be of type string, [stdClass] given.
      */
-    public function testHasToThrowExceptionOnNoStringType($value = '')
+    public function testHasToThrowExceptionOnNoStringType()
     {
         $container = new Container();
 
@@ -372,7 +372,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
      * @expectedException \Viserio\Contracts\Container\Exceptions\ContainerException
      * @expectedExceptionMessage The id parameter must be of type string, [stdClass] given.
      */
-    public function testGetToThrowExceptionOnNoStringType($value = '')
+    public function testGetToThrowExceptionOnNoStringType()
     {
         $container = new Container();
 
@@ -383,7 +383,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
      * @expectedException \Viserio\Contracts\Container\Exceptions\NotFoundException
      * @expectedExceptionMessage Abstract (test) is not being managed by the container
      */
-    public function testGetToThrowExceptionOnNotFoundId($value = '')
+    public function testGetToThrowExceptionOnNotFoundId()
     {
         $container = new Container();
 
