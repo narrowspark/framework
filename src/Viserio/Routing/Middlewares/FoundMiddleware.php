@@ -2,13 +2,12 @@
 declare(strict_types=1);
 namespace Viserio\Routing\Middlewares;
 
-use Psr\Http\Message\ResponseInterface;
+use Interop\Http\Middleware\DelegateInterface;
+use Interop\Http\Middleware\ServerMiddlewareInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Viserio\Contracts\Middleware\Delegate as DelegateContract;
-use Viserio\Contracts\Middleware\ServerMiddleware as ServerMiddlewareContract;
 use Viserio\Contracts\Routing\Route as RouteContract;
 
-class FoundMiddleware implements ServerMiddlewareContract
+class FoundMiddleware implements ServerMiddlewareInterface
 {
     /**
      * A route instance.
@@ -32,8 +31,8 @@ class FoundMiddleware implements ServerMiddlewareContract
      */
     public function process(
         ServerRequestInterface $request,
-        DelegateContract $frame
-    ): ResponseInterface {
+        DelegateInterface $delegate
+    ) {
         // Add route to the request's attributes in case a middleware or handler needs access to the route
         $request = $request->withAttribute('route', $this->route);
 

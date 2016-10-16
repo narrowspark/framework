@@ -37,7 +37,6 @@ class LoggerServiceProvider implements ServiceProvider
             Log::class => function (ContainerInterface $container) {
                 return $container->get(MonologWriter::class);
             },
-            'logger.options' => [self::class, 'createOptions'],
         ];
     }
 
@@ -56,13 +55,6 @@ class LoggerServiceProvider implements ServiceProvider
         }
 
         return $logger;
-    }
-
-    public static function createOptions(ContainerInterface $container) : array
-    {
-        return [
-            'env' => self::get($container, 'env'),
-        ];
     }
 
     /**

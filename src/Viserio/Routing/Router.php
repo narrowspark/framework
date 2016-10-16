@@ -8,17 +8,18 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Contracts\Container\Traits\ContainerAwareTrait;
 use Viserio\Contracts\Events\Traits\EventsAwareTrait;
-use Viserio\Contracts\Middleware\Middleware as MiddlewareContract;
 use Viserio\Contracts\Routing\Route as RouteContract;
 use Viserio\Contracts\Routing\RouteCollection as RouteCollectionContract;
 use Viserio\Contracts\Routing\Router as RouterContract;
 use Viserio\Middleware\Dispatcher as MiddlewareDispatcher;
+use Viserio\Routing\Traits\MiddlewareAwareTrait;
 use Viserio\Support\Invoker;
 
 class Router implements RouterContract
 {
     use ContainerAwareTrait;
     use EventsAwareTrait;
+    use MiddlewareAwareTrait;
 
     /**
      * The route collection instance.
@@ -47,13 +48,6 @@ class Router implements RouterContract
      * @var array
      */
     protected $groupStack = [];
-
-    /**
-     * All middlewares.
-     *
-     * @var array
-     */
-    protected $middlewares = [];
 
     /**
      * The globally available parameter patterns.
@@ -274,36 +268,6 @@ class Router implements RouterContract
     public function getParameters(): array
     {
         return $this->globalParameterConditions;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function withMiddleware(MiddlewareContract $middleware): RouterContract
-    {
-        $this->middlewares['with'][] = $middleware;
-
-        return $this;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function withoutMiddleware(MiddlewareContract $middleware): RouterContract
-    {
-        $this->middlewares['without'][] = $middleware;
-
-        return $this;
-    }
-
-    /**
-     * {@inheritdoc}
-     *
-     * @codeCoverageIgnore
-     */
-    public function getMiddlewares(): array
-    {
-        return $this->middlewares;
     }
 
     /**
