@@ -38,7 +38,7 @@ trait TranslationAwareTrait
     public function getTranslator(): TranslatorContract
     {
         if (! $this->translation) {
-            throw new RuntimeException('Loader is not set up.');
+            throw new RuntimeException('Translator is not set up.');
         }
 
         return $this->translation;
