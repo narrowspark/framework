@@ -10,4 +10,9 @@ class ContainerInjectVariableFixture
     {
         $this->something = $something;
     }
+
+    public function set(ContainerConcreteFixture $concrete)
+    {
+        $this->something = $something;
+    }
 }

@@ -20,6 +20,7 @@ use Viserio\Container\Tests\Fixture\ContainerNestedDependentFixture;
 use Viserio\Container\Tests\Fixture\ContainerPrivateConstructor;
 use Viserio\Container\Tests\Fixture\ContainerTestContextInjectOneFixture;
 use Viserio\Container\Tests\Fixture\ContainerTestContextInjectTwoFixture;
+use Viserio\Container\Tests\Fixture\ContainerTestNoConstructor;
 use Viserio\Container\Tests\Fixture\FactoryClass;
 
 class ContainerTest extends \PHPUnit_Framework_TestCase
@@ -113,6 +114,14 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('Hello', $container->make(FactoryClass::class . '::create'));
     }
 
+    public function testResolveMethodFromString()
+    {
+        $container = new Container();
+
+        $this->assertEquals('Hello', $container->resolveMethod(FactoryClass::class . '::staticCreate'));
+        $this->assertEquals('Hello', $container->resolveMethod(FactoryClass::class . '::staticCreateWitArg', ['name' => 'Hello']));
+    }
+
     public function testSharedConcreteResolution()
     {
         $container = $this->container;
@@ -133,6 +142,17 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf(ContainerNestedDependentFixture::class, $resolved);
         $this->assertEquals($mock, $resolved->inner->impl);
+    }
+
+    public function testResolveNonBoundWithClosure()
+    {
+        $container = new Container();
+
+        $class = $container->resolveNonBound(function ($container) {
+            return $container;
+        });
+
+        $this->assertInstanceOf(Container::class, $class);
     }
 
     public function testAbstractToConcreteResolution()
@@ -337,6 +357,39 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($container->has('object'));
     }
 
+    /**
+     * @expectedException \Viserio\Contracts\Container\Exceptions\ContainerException
+     * @expectedExceptionMessage The name parameter must be of type string, [stdClass] given.
+     */
+    public function testHasToThrowExceptionOnNoStringType($value='')
+    {
+        $container = new Container();
+
+        $this->assertFalse($container->has(new StdClass()));
+    }
+
+    /**
+     * @expectedException \Viserio\Contracts\Container\Exceptions\ContainerException
+     * @expectedExceptionMessage The id parameter must be of type string, [stdClass] given.
+     */
+    public function testGetToThrowExceptionOnNoStringType($value='')
+    {
+        $container = new Container();
+
+        $this->assertFalse($container->get(new StdClass()));
+    }
+
+    /**
+     * @expectedException \Viserio\Contracts\Container\Exceptions\NotFoundException
+     * @expectedExceptionMessage Abstract (test) is not being managed by the container
+     */
+    public function testGetToThrowExceptionOnNotFoundId($value='')
+    {
+        $container = new Container();
+
+        $this->assertFalse($container->get('test'));
+    }
+
     public function testBoundInstanceAndAliasCheckViaArrayAccess()
     {
         $container = new Container();
@@ -392,6 +445,67 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(ContainerConcreteFixture::class, $instance->something);
     }
 
+    public function testContainerCanInjectSimpleVariableToBinding()
+    {
+        $container = new Container();
+        $container->bind(ContainerInjectVariableFixture::class);
+
+        $container->when(ContainerInjectVariableFixture::class)
+            ->needs('$something')
+            ->give(100);
+        $instance = $container->make(ContainerInjectVariableFixture::class);
+
+        $this->assertEquals(100, $instance->something);
+    }
+
+    /**
+     * @expectedException \Viserio\Contracts\Container\Exceptions\UnresolvableDependencyException
+     * @expectedExceptionMessage Parameter [string] cannot be injected in [array].
+     */
+    public function testContainerWhenNeedsGiveToThrowException()
+    {
+        $container = new Container();
+
+        $container->when(ContainerInjectVariableFixture::class . '::set')
+            ->needs(ContainerConcreteFixture::class)
+            ->needs('$something')
+            ->give(100);
+        $instance = $container->make(ContainerInjectVariableFixture::class);
+
+        $this->assertEquals(100, $instance->something);
+    }
+
+    /**
+     * @expectedException \Viserio\Contracts\Container\Exceptions\UnresolvableDependencyException
+     * @expectedExceptionMessage [Viserio\Container\Tests\ContainerTestNotResolvable] is not resolvable.
+     */
+    public function testContainerCantInjectObjectIsNotResolvable()
+    {
+        $container = new Container();
+
+        $container->when(ContainerTestNotResolvable::class)
+            ->needs(ContainerConcreteFixture::class)
+            ->give(100);
+        $instance = $container->make(ContainerInjectVariableFixture::class);
+
+        $this->assertEquals(100, $instance->something);
+    }
+
+    /**
+     * @expectedException \Viserio\Contracts\Container\Exceptions\UnresolvableDependencyException
+     * @expectedExceptionMessage [Viserio\Container\Tests\Fixture\ContainerTestNoConstructor] must have a constructor.
+     */
+    public function testContainerCantInjectObjectWithoutConstructor()
+    {
+        $container = new Container();
+
+        $container->when(ContainerTestNoConstructor::class)
+            ->needs(ContainerConcreteFixture::class)
+            ->give(100);
+        $instance = $container->make(ContainerInjectVariableFixture::class);
+
+        $this->assertEquals(100, $instance->something);
+    }
     public function testContainerCanInjectDifferentImplementationsDependingOnContext()
     {
         $container = new Container();
@@ -512,6 +626,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
 
         $this->assertSame('value', $container->get('instance2'));
         $this->assertTrue($container->hasInDelegate('instance'));
+        $this->assertFalse($container->hasInDelegate('instance3'));
     }
 
     public function testExtendedBindingsKeptTypes()

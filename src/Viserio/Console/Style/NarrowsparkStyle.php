@@ -32,6 +32,8 @@ class NarrowsparkStyle extends SymfonyStyle
      * Formats an error result bar.
      *
      * @param string|array $message
+     *
+     * @codeCoverageIgnore
      */
     public function error($message)
     {
@@ -42,6 +44,8 @@ class NarrowsparkStyle extends SymfonyStyle
      * Returns whether verbosity is quiet (-q).
      *
      * @return bool
+     *
+     * @codeCoverageIgnore
      */
     public function isQuiet(): bool
     {
@@ -52,6 +56,8 @@ class NarrowsparkStyle extends SymfonyStyle
      * Returns whether verbosity is verbose (-v).
      *
      * @return bool
+     *
+     * @codeCoverageIgnore
      */
     public function isVerbose(): bool
     {
@@ -62,6 +68,8 @@ class NarrowsparkStyle extends SymfonyStyle
      * Returns whether verbosity is very verbose (-vv).
      *
      * @return bool
+     *
+     * @codeCoverageIgnore
      */
     public function isVeryVerbose(): bool
     {
@@ -72,6 +80,8 @@ class NarrowsparkStyle extends SymfonyStyle
      * Returns whether verbosity is debug (-vvv).
      *
      * @return bool
+     *
+     * @codeCoverageIgnore
      */
     public function isDebug(): bool
     {

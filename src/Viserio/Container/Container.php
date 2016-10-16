@@ -121,6 +121,8 @@ class Container extends ContainerResolver implements ArrayAccess, ContainerContr
 
     /**
      * {@inheritdoc}
+     *
+     * @codeCoverageIgnore
      */
     public function bindIf(string $abstract, $concrete = null)
     {
@@ -360,8 +362,8 @@ class Container extends ContainerResolver implements ArrayAccess, ContainerContr
 
         throw new UnresolvableDependencyException(sprintf(
             'Parameter [%s] cannot be injected in [%s].',
-            $this->parameter,
-            $this->concrete
+            is_object($this->parameter) ? get_class($this->parameter) : gettype($this->parameter),
+            is_object($this->concrete) ? get_class($this->concrete) : gettype($this->concrete)
         ));
     }
 
@@ -372,7 +374,7 @@ class Container extends ContainerResolver implements ArrayAccess, ContainerContr
     {
         if (! is_string($id)) {
             throw new ContainerException(sprintf(
-                'The id parameter must be of type string, %s given',
+                'The id parameter must be of type string, [%s] given.',
                 is_object($id) ? get_class($id) : gettype($id)
             ));
         }
@@ -395,7 +397,7 @@ class Container extends ContainerResolver implements ArrayAccess, ContainerContr
     {
         if (! is_string($id)) {
             throw new ContainerException(sprintf(
-                'The name parameter must be of type string, %s given',
+                'The name parameter must be of type string, [%s] given.',
                 is_object($id) ? get_class($id) : gettype($id)
             ));
         }
@@ -434,11 +436,11 @@ class Container extends ContainerResolver implements ArrayAccess, ContainerContr
                         return $previous;
                     };
 
-                    return call_user_func($callable, $container, $getPrevious);
+                    return $callable($container, $getPrevious);
                 });
             } else {
                 $this->singleton($key, function (ContainerInterface $container) use ($callable) {
-                    return call_user_func($callable, $container, null);
+                    return $callable($container, null);
                 });
             }
         }
@@ -460,6 +462,8 @@ class Container extends ContainerResolver implements ArrayAccess, ContainerContr
 
     /**
      * {@inheritdoc}
+     *
+     * @codeCoverageIgnore
      */
     public function getBindings(): array
     {
@@ -528,8 +532,9 @@ class Container extends ContainerResolver implements ArrayAccess, ContainerContr
             if ($container->has($abstract)) {
                 return $container->get($abstract);
             }
-
+            // @codeCoverageIgnoreStart
             continue;
+            // @codeCoverageIgnoreEnd
         }
 
         return false;
@@ -622,10 +627,6 @@ class Container extends ContainerResolver implements ArrayAccess, ContainerContr
     protected function resolveSingleton(string $abstract, array $parameters = [])
     {
         $binding = &$this->bindings[$abstract];
-
-        if ($binding[TypesContract::IS_RESOLVED]) {
-            return $binding[TypesContract::VALUE];
-        }
 
         $binding[TypesContract::VALUE] = parent::resolve($binding[TypesContract::VALUE], $parameters);
         $binding[TypesContract::IS_RESOLVED] = true;
