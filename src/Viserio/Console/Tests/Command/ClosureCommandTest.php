@@ -34,18 +34,6 @@ class ClosureCommandTest extends \PHPUnit_Framework_TestCase
             ->setContainer($this->application->getContainer());
     }
 
-    public function testCommand()
-    {
-        $command = new ClosureCommand('demo', function () {
-            $this->comment('hello');
-        });
-
-        $this->application->add($command);
-
-        $this->assertSame($command, $this->application->get('demo'));
-        $this->assertOutputIs('demo', 'hello' . "\n");
-    }
-
     /**
      * @param string $command
      * @param string $expected

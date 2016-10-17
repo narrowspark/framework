@@ -33,10 +33,6 @@ class AddQueuedCookiesToResponse implements MiddlewareInterface
     {
         $response = $delegate->process($request);
 
-        foreach ($this->cookies->getQueuedCookies() as $cookie) {
-            $response->withHeader('Cookie', $cookie);
-        }
-
-        return $response;
+        return $this->cookies->renderIntoCookieHeader($request);
     }
 }
