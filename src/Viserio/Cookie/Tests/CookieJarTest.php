@@ -3,9 +3,9 @@ declare(strict_types=1);
 namespace Viserio\Cookie\Tests;
 
 use Cake\Chronos\Chronos;
+use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
-use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use Viserio\Cookie\CookieJar;
 
 class CookieJarTest extends \PHPUnit_Framework_TestCase
