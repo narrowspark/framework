@@ -56,6 +56,7 @@
         "psr/http-message-implementation"                    : "^1.0"
     },
     "suggest": {
+        "container-interop/service-provider"                 : "Required to use service-provider (^0.3).",
         "cache/session-handler"                              : "Required to use the CacheBasedSessionHandler (^0.1).",
         "viserio/cookie"                                     : "Required to use the CookieSessionHandler (self.version).",
         "viserio/filesystem"                                 : "Required to use the FileSessionHandler (self.version)."

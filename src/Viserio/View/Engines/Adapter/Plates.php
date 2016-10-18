@@ -15,9 +15,9 @@ use Viserio\Contracts\View\Engine as EnginesContract;
 class Plates implements EnginesContract
 {
     /**
-     * Config manager instance.
+     * Config array.
      *
-     * @var \Viserio\Contracts\Config\Manager
+     * @var array
      */
     protected $config;
 
@@ -45,15 +45,15 @@ class Plates implements EnginesContract
     /**
      * Create a new plates view instance.
      *
-     * @param \Viserio\Contracts\Config\Manager             $config
+     * @param array                                         $config
      * @param \Psr\Http\Message\ServerRequestInterface|null $request
      */
-    public function __construct(ManagerContract $config, ServerRequestInterface $request = null)
+    public function __construct(array $config, ServerRequestInterface $request = null)
     {
         $this->config = $config;
         $this->request = $request;
 
-        $exceptions = $this->config->get('view.engine.plates.extensions', null);
+        $exceptions = $this->config['engine']['plates']['extensions'] ?? null;
 
         if ($exceptions !== null) {
             $this->availableExtensions = $exceptions;
@@ -73,7 +73,7 @@ class Plates implements EnginesContract
         }
 
         // Set asset extensions
-        $engine->loadExtension(new Asset($this->config->get('view.engine.plates.asset', null)));
+        $engine->loadExtension(new Asset($this->config['engine']['plates']['asset'] ?? null));
 
         // Get all extensions
         if (! empty($this->availableExtensions)) {
@@ -108,12 +108,13 @@ class Plates implements EnginesContract
     {
         if (! $this->engine) {
             $config = $this->config;
+
             $this->engine = new LeagueEngine(
-                $config->get('view.template.default', null),
-                $config->get('view.engine.plates.file_extension', null)
+                $config['template']['default'] ?? null,
+                $config['engine']['plates']['file_extension'] ?? null
             );
 
-            if (($paths = $config->get('view.template.paths', null)) !== null) {
+            if (($paths = $config['template']['paths'] ?? null) !== null) {
                 foreach ($paths as $name => $addPaths) {
                     $this->engine->addFolder($name, $addPaths);
                 }

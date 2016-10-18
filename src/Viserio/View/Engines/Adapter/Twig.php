@@ -13,9 +13,9 @@ use Viserio\Contracts\View\Engine as EngineContract;
 class Twig implements EngineContract
 {
     /**
-     * Config manager instance.
+     * Config array.
      *
-     * @var \Viserio\Contracts\Config\Manager
+     * @var array
      */
     protected $config;
 
@@ -29,9 +29,9 @@ class Twig implements EngineContract
     /**
      * Create a new twig view instance.
      *
-     * @param \Viserio\Contracts\Config\Manager $config
+     * @param array $config
      */
-    public function __construct(ManagerContract $config)
+    public function __construct(array $config)
     {
         $this->config = $config;
     }
@@ -64,12 +64,12 @@ class Twig implements EngineContract
             $config = $this->config;
             $twig = new Twig_Environment(
                 $this->loader(),
-                $config->get('view.engine.twig.options', [])
+                $config['engine']['twig']['options'] ?? []
             );
 
             $twig->addExtension(new Twig_Extension_Core());
             $twig->addExtension(new Twig_Extension_Optimizer());
-            $extensions = $config->get('view.engine.twig.extensions', []);
+            $extensions = $config['engine']['twig']['extensions'] ?? [];
 
             if (! empty($extensions)) {
                 foreach ($extensions as $extension) {
@@ -89,9 +89,9 @@ class Twig implements EngineContract
     protected function loader()
     {
         $config = $this->config;
-        $loader = new Twig_Loader_Filesystem($config->get('view.template.default', []));
+        $loader = new Twig_Loader_Filesystem($config['template']['default'] ?? []);
 
-        if (($paths = $config->get('view.template.paths', [])) !== null) {
+        if (($paths = $config['template']['paths'] ?? []) !== null) {
             foreach ($paths as $name => $path) {
                 $loader->addPath($path, $name);
             }

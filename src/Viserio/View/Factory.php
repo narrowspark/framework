@@ -5,7 +5,6 @@ namespace Viserio\View;
 use Closure;
 use InvalidArgumentException;
 use Narrowspark\Arr\Arr;
-use Viserio\Contracts\Events\Traits\EventsAwareTrait;
 use Viserio\Contracts\Support\Arrayable;
 use Viserio\Contracts\View\Engine as EngineContract;
 use Viserio\Contracts\View\EngineResolver as EngineResolverContract;
@@ -18,7 +17,6 @@ use Viserio\View\Traits\NormalizeNameTrait;
 class Factory implements FactoryContract
 {
     use NormalizeNameTrait;
-    use EventsAwareTrait;
 
     /**
      * The engines instance.

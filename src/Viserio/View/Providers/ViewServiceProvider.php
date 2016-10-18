@@ -17,6 +17,8 @@ use Viserio\View\ViewFinder;
 
 class ViewServiceProvider implements ServiceProvider
 {
+    const PACKAGE = 'viserio.view';
+
     /**
      * {@inheritdoc}
      */
@@ -52,7 +54,9 @@ class ViewServiceProvider implements ServiceProvider
             self::{'register' . ucfirst($engineClass) . 'Engine'}($engines, $container);
         }
 
-        if (($compilers = $container->get(ConfigManager::class)->get('view.compilers')) !== null) {
+        $config = $this->getConfig($container);
+
+        if (($compilers = $config['compilers']) !== null) {
             foreach ($compilers as $compilerName => $compilerClass) {
                 if ($compilerName === $compilerClass[0]) {
                     self::registercustomEngine(
@@ -69,10 +73,10 @@ class ViewServiceProvider implements ServiceProvider
 
     public static function createViewFinder(ContainerInterface $container)
     {
-        $config = $container->get(ConfigManager::class);
+        $config = $this->getConfig($container);
         $paths = array_merge(
-            [$config->get('view.template.default', [])],
-            $config->get('view.template.paths', [])
+            $config['template.default'] ?? [],
+            $config['template.paths'] ?? []
         );
 
         return new ViewFinder(
@@ -133,7 +137,7 @@ class ViewServiceProvider implements ServiceProvider
     protected static function registerTwigEngine(EngineResolver $engines, ContainerInterface $container)
     {
         $engines->register('twig', function () use ($container) {
-            return new TwigEngine($container->get(ConfigManager::class));
+            return new TwigEngine($this->getConfig($container));
         });
     }
 
@@ -153,9 +157,41 @@ class ViewServiceProvider implements ServiceProvider
 
         $engines->register('plates', function () use ($container, $request) {
             return new PlatesEngine(
-                $container->get(ConfigManager::class),
+                $this->getConfig($container),
                 $request
             );
         });
+    }
+
+    /**
+     * Get the config from config manager or container.
+     *
+     * @param \Interop\Container\ContainerInterface $container
+     *
+     * @return mixed
+     */
+    private static function getConfig(ContainerInterface $container)
+    {
+        if ($container->has(ConfigManagerContract::class)) {
+            return $container->get(ConfigManagerContract::class)->get('view');
+        }
+
+        return self::get($container, 'options');
+    }
+
+    /**
+     * Returns the entry named PACKAGE.$name, of simply $name if PACKAGE.$name is not found.
+     *
+     * @param ContainerInterface $container
+     * @param string             $name
+     *
+     * @return mixed
+     */
+    private static function get(ContainerInterface $container, string $name, $default = null)
+    {
+        $namespacedName = self::PACKAGE . '.' . $name;
+
+        return $container->has($namespacedName) ? $container->get($namespacedName) :
+            ($container->has($name) ? $container->get($name) : $default);
     }
 }
