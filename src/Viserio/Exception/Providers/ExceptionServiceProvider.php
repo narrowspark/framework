@@ -65,7 +65,7 @@ class ExceptionServiceProvider implements ServiceProvider
 
         return new HtmlDisplayer(
             $container->get(ExceptionInfo::class),
-            $config['template'] ??  __DIR__ . '/../Resources/error.html'
+            $config['template'] ?? __DIR__ . '/../Resources/error.html'
         );
     }
 

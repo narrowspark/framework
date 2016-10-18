@@ -6,13 +6,13 @@ use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Config\Manager as ConfigManager;
+use Viserio\Contracts\View\Factory as FactoryContract;
 use Viserio\Filesystem\Filesystem;
 use Viserio\View\Engines\Adapter\Php as PhpEngine;
 use Viserio\View\Engines\Adapter\Plates as PlatesEngine;
 use Viserio\View\Engines\Adapter\Twig as TwigEngine;
 use Viserio\View\Engines\EngineResolver;
 use Viserio\View\Factory;
-use Viserio\Contracts\View\Factory as FactoryContract;
 use Viserio\View\ViewFinder;
 
 class ViewServiceProvider implements ServiceProvider

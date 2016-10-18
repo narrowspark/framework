@@ -2,12 +2,11 @@
 declare(strict_types=1);
 namespace Viserio\Exception\Tests\Providers;
 
-use Viserio\Container\Container;
-use Viserio\Events\Dispatcher;
-use Viserio\Exception\Providers\ExceptionServiceProvider;
 use Viserio\Config\Providers\ConfigServiceProvider;
+use Viserio\Container\Container;
 use Viserio\Contracts\Exception\Handler as HandlerContract;
 use Viserio\Contracts\View\Factory as FactoryContract;
+use Viserio\Events\Dispatcher;
 use Viserio\Exception\Displayers\HtmlDisplayer;
 use Viserio\Exception\Displayers\JsonDisplayer;
 use Viserio\Exception\Displayers\ViewDisplayer;
@@ -17,9 +16,10 @@ use Viserio\Exception\ExceptionInfo;
 use Viserio\Exception\Filters\CanDisplayFilter;
 use Viserio\Exception\Filters\VerboseFilter;
 use Viserio\Exception\Handler;
+use Viserio\Exception\Providers\ExceptionServiceProvider;
+use Viserio\Exception\Transformers\CommandLineTransformer;
 use Viserio\Filesystem\Providers\FilesServiceProvider;
 use Viserio\View\Providers\ViewServiceProvider;
-use Viserio\Exception\Transformers\CommandLineTransformer;
 
 class ExceptionServiceProviderTest extends \PHPUnit_Framework_TestCase
 {
