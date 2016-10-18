@@ -54,7 +54,7 @@ class ViewServiceProvider implements ServiceProvider
             self::{'register' . ucfirst($engineClass) . 'Engine'}($engines, $container);
         }
 
-        $config = $this->getConfig($container);
+        $config = self::getConfig($container);
 
         if (($compilers = $config['compilers']) !== null) {
             foreach ($compilers as $compilerName => $compilerClass) {
@@ -73,7 +73,7 @@ class ViewServiceProvider implements ServiceProvider
 
     public static function createViewFinder(ContainerInterface $container)
     {
-        $config = $this->getConfig($container);
+        $config = self::getConfig($container);
         $paths = array_merge(
             $config['template.default'] ?? [],
             $config['template.paths'] ?? []
@@ -137,7 +137,7 @@ class ViewServiceProvider implements ServiceProvider
     protected static function registerTwigEngine(EngineResolver $engines, ContainerInterface $container)
     {
         $engines->register('twig', function () use ($container) {
-            return new TwigEngine($this->getConfig($container));
+            return new TwigEngine(self::getConfig($container));
         });
     }
 
@@ -157,7 +157,7 @@ class ViewServiceProvider implements ServiceProvider
 
         $engines->register('plates', function () use ($container, $request) {
             return new PlatesEngine(
-                $this->getConfig($container),
+                self::getConfig($container),
                 $request
             );
         });
