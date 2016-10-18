@@ -171,5 +171,7 @@ class Pipeline implements PipelineContract
                 $merge
             );
         }
+
+        return;
     }
 }

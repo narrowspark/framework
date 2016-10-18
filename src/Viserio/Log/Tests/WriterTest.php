@@ -257,20 +257,21 @@ class WriterTest extends \PHPUnit_Framework_TestCase
     public function testMessageInput()
     {
         $monolog = $this->mock(Logger::class);
-        $monolog
-            ->shouldReceive('pushProcessor')
+        $monolog->shouldReceive('pushProcessor')
             ->once();
-        $monolog
-            ->shouldReceive('info')
-            ->twice();
-        $monolog
-            ->shouldReceive('debug')
+        $monolog->shouldReceive('info')
             ->once();
+        $monolog->shouldReceive('warning')
+            ->once()
+            ->with("{\"message\": true}", []);
+        $monolog->shouldReceive('debug')
+            ->once()
+            ->with(var_export((new ArrayableClass())->toArray(), true), []);
 
         $writer = new Writer($monolog);
         $writer->log('info', ['message' => true]);
         $writer->log('debug', new ArrayableClass());
-        $writer->log('info', new JsonableClass());
+        $writer->log('warning', new JsonableClass());
     }
 
     protected function getEventsDispatcher()

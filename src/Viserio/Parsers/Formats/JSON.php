@@ -36,9 +36,11 @@ class JSON implements FormatContract, DumperContract
         $json = json_encode($data, JSON_PRETTY_PRINT);
 
         if (json_last_error() !== JSON_ERROR_NONE) {
+            // @codeCoverageIgnoreStart
             $jsonError = $this->getJsonError(json_last_error());
 
             throw new DumpException('JSON dumping failed: ' . $jsonError);
+            // @codeCoverageIgnoreEnd
         }
 
         $json = preg_replace('/\[\s+\]/', '[]', $json);

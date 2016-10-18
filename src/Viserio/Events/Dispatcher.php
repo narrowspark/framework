@@ -284,6 +284,7 @@ class Dispatcher implements DispatcherContract
         foreach ($this->patterns[$eventPattern] as $key => $pattern) {
             if ($listener == $pattern->getListener()) {
                 $pattern->unbind($this);
+
                 unset($this->patterns[$eventPattern][$key]);
             }
         }

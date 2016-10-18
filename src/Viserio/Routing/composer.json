@@ -34,6 +34,7 @@
         "mockery/mockery"                                    : "^0.9.5",
         "phpunit/phpunit"                                    : "^5.1",
         "viserio/container"                                  : "self.version",
+        "viserio/events"                                     : "self.version",
         "viserio/http-factory"                               : "self.version"
     },
     "autoload": {
