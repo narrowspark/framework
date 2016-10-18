@@ -263,7 +263,7 @@ class WriterTest extends \PHPUnit_Framework_TestCase
             ->once();
         $monolog->shouldReceive('warning')
             ->once()
-            ->with("{\"message\": true}", []);
+            ->with('{"message": true}', []);
         $monolog->shouldReceive('debug')
             ->once()
             ->with(var_export((new ArrayableClass())->toArray(), true), []);

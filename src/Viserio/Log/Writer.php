@@ -221,11 +221,11 @@ class Writer implements LogContract
             return var_export($message, true);
         // @codeCoverageIgnoreStart
         } elseif ($message instanceof Jsonable) {
-        // @codeCoverageIgnoreEnd
+            // @codeCoverageIgnoreEnd
             return $message->toJson();
         // @codeCoverageIgnoreStart
         } elseif ($message instanceof Arrayable) {
-        // @codeCoverageIgnoreEnd
+            // @codeCoverageIgnoreEnd
             return var_export($message->toArray(), true);
         }
 

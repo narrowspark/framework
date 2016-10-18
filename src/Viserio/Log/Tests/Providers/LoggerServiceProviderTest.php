@@ -7,11 +7,11 @@ use Psr\Log\LoggerInterface;
 use Viserio\Config\Manager as ConfigManager;
 use Viserio\Config\Providers\ConfigServiceProvider;
 use Viserio\Container\Container;
+use Viserio\Contracts\Events\Dispatcher as DispatcherContract;
 use Viserio\Contracts\Log\Log;
+use Viserio\Events\Providers\EventsServiceProvider;
 use Viserio\Log\Providers\LoggerServiceProvider;
 use Viserio\Log\Writer as MonologWriter;
-use Viserio\Contracts\Events\Dispatcher as DispatcherContract;
-use Viserio\Events\Providers\EventsServiceProvider;
 
 class LoggerServiceProviderTest extends \PHPUnit_Framework_TestCase
 {

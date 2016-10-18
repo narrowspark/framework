@@ -7,8 +7,8 @@ use Interop\Container\ServiceProvider;
 use Monolog\Logger;
 use Psr\Log\LoggerInterface;
 use Viserio\Config\Manager as ConfigManager;
-use Viserio\Contracts\Log\Log;
 use Viserio\Contracts\Events\Dispatcher as DispatcherContract;
+use Viserio\Contracts\Log\Log;
 use Viserio\Log\Writer as MonologWriter;
 
 class LoggerServiceProvider implements ServiceProvider
