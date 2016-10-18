@@ -12,6 +12,7 @@ use Viserio\View\Engines\Adapter\Plates as PlatesEngine;
 use Viserio\View\Engines\Adapter\Twig as TwigEngine;
 use Viserio\View\Engines\EngineResolver;
 use Viserio\View\Factory;
+use Viserio\Contracts\View\Factory as FactoryContract;
 use Viserio\View\ViewFinder;
 
 class ViewServiceProvider implements ServiceProvider
@@ -31,6 +32,9 @@ class ViewServiceProvider implements ServiceProvider
                 return $container->get(ViewFinder::class);
             },
             Factory::class => [self::class, 'createViewFactory'],
+            FactoryContract::class => function (ContainerInterface $container) {
+                return $container->get(Factory::class);
+            },
             'view' => function (ContainerInterface $container) {
                 return $container->get(Factory::class);
             },

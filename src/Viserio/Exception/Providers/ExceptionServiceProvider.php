@@ -20,6 +20,8 @@ use Viserio\Exception\Transformers\CommandLineTransformer;
 
 class ExceptionServiceProvider implements ServiceProvider
 {
+    const PACKAGE = 'viserio.exception';
+
     /**
      * {@inheritdoc}
      */
@@ -59,7 +61,12 @@ class ExceptionServiceProvider implements ServiceProvider
 
     public static function createHtmlDisplayer(ContainerInterface $container): HtmlDisplayer
     {
-        return new HtmlDisplayer($container->get(ExceptionInfo::class), __DIR__ . '/../Resources/error.html');
+        $config = self::getConfig($container);
+
+        return new HtmlDisplayer(
+            $container->get(ExceptionInfo::class),
+            $config['template'] ??  __DIR__ . '/../Resources/error.html'
+        );
     }
 
     public static function createJsonDisplayer(ContainerInterface $container): JsonDisplayer
@@ -84,11 +91,45 @@ class ExceptionServiceProvider implements ServiceProvider
 
     public static function createVerboseFilter(ContainerInterface $container): VerboseFilter
     {
-        return new VerboseFilter($container->get(ConfigManagerContract::class)->get('exception.debug', false));
+        $config = self::getConfig($container);
+
+        return new VerboseFilter($config['debug'] ?? false);
     }
 
     public static function createCanDisplayFilter(): CanDisplayFilter
     {
         return new CanDisplayFilter();
+    }
+
+    /**
+     * Get the config from config manager or container.
+     *
+     * @param \Interop\Container\ContainerInterface $container
+     *
+     * @return mixed
+     */
+    private static function getConfig(ContainerInterface $container)
+    {
+        if ($container->has(ConfigManagerContract::class)) {
+            return $container->get(ConfigManagerContract::class)->get('exception');
+        }
+
+        return self::get($container, 'options');
+    }
+
+    /**
+     * Returns the entry named PACKAGE.$name, of simply $name if PACKAGE.$name is not found.
+     *
+     * @param ContainerInterface $container
+     * @param string             $name
+     *
+     * @return mixed
+     */
+    private static function get(ContainerInterface $container, string $name, $default = null)
+    {
+        $namespacedName = self::PACKAGE . '.' . $name;
+
+        return $container->has($namespacedName) ? $container->get($namespacedName) :
+            ($container->has($name) ? $container->get($name) : $default);
     }
 }

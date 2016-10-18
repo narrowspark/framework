@@ -76,6 +76,7 @@ class Dispatcher implements DispatcherContract
             $this->addListenerPattern(new ListenerPattern($eventName, $listener, $priority));
         } else {
             $this->listeners[$eventName][$priority][] = $listener;
+
             unset($this->sorted[$eventName]);
         }
     }
