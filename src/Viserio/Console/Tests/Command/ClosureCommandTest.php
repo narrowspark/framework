@@ -8,6 +8,7 @@ use Viserio\Console\Application;
 use Viserio\Console\Tests\Fixture\SpyOutput;
 use Viserio\Events\Dispatcher;
 use Viserio\Support\Invoker;
+use Viserio\Console\Command\ClosureCommand;
 
 class ClosureCommandTest extends \PHPUnit_Framework_TestCase
 {
