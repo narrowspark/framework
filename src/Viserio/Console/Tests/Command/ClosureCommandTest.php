@@ -5,7 +5,6 @@ namespace Viserio\Console\Tests\Command;
 use Narrowspark\TestingHelper\ArrayContainer;
 use Symfony\Component\Console\Input\StringInput;
 use Viserio\Console\Application;
-use Viserio\Console\Command\ClosureCommand;
 use Viserio\Console\Tests\Fixture\SpyOutput;
 use Viserio\Events\Dispatcher;
 use Viserio\Support\Invoker;

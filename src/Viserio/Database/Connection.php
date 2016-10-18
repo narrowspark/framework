@@ -2,10 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Database;
 
-use Closure;
 use Doctrine\DBAL\Cache\QueryCacheProfile;
 use Doctrine\DBAL\Connection as DoctrineConnection;
-use Narrowspark\Collection\Collection;
 
 class Connection extends DoctrineConnection
 {

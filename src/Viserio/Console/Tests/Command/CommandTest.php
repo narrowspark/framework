@@ -7,7 +7,6 @@ use Symfony\Component\Console\Input\StringInput;
 use Symfony\Component\Console\Output\NullOutput;
 use Symfony\Component\Console\Output\OutputInterface;
 use Viserio\Console\Application;
-use Viserio\Console\Tests\Fixture\ViserioCommand;
 use Viserio\Console\Tests\Fixture\ViserioSecCommand;
 use Viserio\Events\Dispatcher;
 use Viserio\Support\Invoker;

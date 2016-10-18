@@ -4,9 +4,6 @@ namespace Viserio\Exception\Tests\Providers;
 
 use Viserio\Config\Providers\ConfigServiceProvider;
 use Viserio\Container\Container;
-use Viserio\Contracts\Exception\Handler as HandlerContract;
-use Viserio\Contracts\View\Factory as FactoryContract;
-use Viserio\Events\Dispatcher;
 use Viserio\Exception\Displayers\HtmlDisplayer;
 use Viserio\Exception\Displayers\JsonDisplayer;
 use Viserio\Exception\Displayers\ViewDisplayer;
