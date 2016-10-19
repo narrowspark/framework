@@ -9,8 +9,8 @@ use Psr\Log\LoggerInterface;
 use Viserio\Config\Manager as ConfigManager;
 use Viserio\Contracts\Events\Dispatcher as DispatcherContract;
 use Viserio\Contracts\Log\Log;
-use Viserio\Log\Writer as MonologWriter;
 use Viserio\Contracts\Support\Traits\ServiceProviderConfigAwareTrait;
+use Viserio\Log\Writer as MonologWriter;
 
 class LoggerServiceProvider implements ServiceProvider
 {

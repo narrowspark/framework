@@ -7,8 +7,8 @@ use Interop\Container\ServiceProvider;
 use Stecman\Component\Symfony\Console\BashCompletion\CompletionCommand;
 use Viserio\Console\Application;
 use Viserio\Contracts\Console\Application as ApplicationContract;
-use Viserio\Contracts\Support\Traits\ServiceProviderConfigAwareTrait;
 use Viserio\Contracts\Events\Dispatcher as DispatcherContract;
+use Viserio\Contracts\Support\Traits\ServiceProviderConfigAwareTrait;
 
 class ConsoleServiceProvider implements ServiceProvider
 {

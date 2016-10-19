@@ -3,14 +3,14 @@ declare(strict_types=1);
 namespace Viserio\View\Tests\Providers;
 
 use Defuse\Crypto\Key;
+use Narrowspark\TestingHelper\Traits\MockeryTrait;
+use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Container\Container;
 use Viserio\Filesystem\Providers\FilesServiceProvider;
 use Viserio\View\Engines\EngineResolver;
 use Viserio\View\Factory;
 use Viserio\View\Providers\ViewServiceProvider;
 use Viserio\View\ViewFinder;
-use Narrowspark\TestingHelper\Traits\MockeryTrait;
-use Psr\Http\Message\ServerRequestInterface;
 
 class ViewServiceProviderTest extends \PHPUnit_Framework_TestCase
 {

@@ -5,8 +5,8 @@ namespace Viserio\StaticalProxy\Providers;
 use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
 use Viserio\Config\Manager as ConfigManager;
-use Viserio\Contracts\Support\Traits\ServiceProviderConfigAwareTrait;
 use Viserio\Contracts\StaticalProxy\AliasLoader as AliasLoaderContract;
+use Viserio\Contracts\Support\Traits\ServiceProviderConfigAwareTrait;
 use Viserio\StaticalProxy\AliasLoader;
 
 class AliasLoaderServiceProvider implements ServiceProvider

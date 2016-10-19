@@ -6,9 +6,9 @@ use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
 use Viserio\Config\Manager as ConfigManager;
 use Viserio\Contracts\Cookie\QueueingFactory as JarContract;
+use Viserio\Contracts\Support\Traits\ServiceProviderConfigAwareTrait;
 use Viserio\Cookie\CookieJar;
 use Viserio\Cookie\RequestCookie;
-use Viserio\Contracts\Support\Traits\ServiceProviderConfigAwareTrait;
 
 class CookieServiceProvider implements ServiceProvider
 {
