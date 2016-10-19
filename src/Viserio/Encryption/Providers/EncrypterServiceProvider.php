@@ -7,10 +7,13 @@ use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
 use Viserio\Config\Manager as ConfigManager;
 use Viserio\Contracts\Encryption\Encrypter as EncrypterContract;
+use Viserio\Contracts\Support\Traits\ServiceProviderConfigAwareTrait;
 use Viserio\Encryption\Encrypter;
 
 class EncrypterServiceProvider implements ServiceProvider
 {
+    use ServiceProviderConfigAwareTrait;
+
     const PACKAGE = 'viserio.encryption';
 
     /**
@@ -31,34 +34,10 @@ class EncrypterServiceProvider implements ServiceProvider
 
     public static function createEncrypter(ContainerInterface $container): Encrypter
     {
-        if ($container->has(ConfigManager::class)) {
-            $config = $container->get(ConfigManager::class)->get('encrypter');
-        } else {
-            $config = self::get($container, 'options');
-        }
-
         $encrypt = new Encrypter(
-            Key::loadFromAsciiSafeString(
-                $config['key']
-            )
+            Key::loadFromAsciiSafeString(self::getConfig($container, 'key', ''))
         );
 
         return $encrypt;
-    }
-
-    /**
-     * Returns the entry named PACKAGE.$name, of simply $name if PACKAGE.$name is not found.
-     *
-     * @param ContainerInterface $container
-     * @param string             $name
-     *
-     * @return mixed
-     */
-    private static function get(ContainerInterface $container, string $name, $default = null)
-    {
-        $namespacedName = self::PACKAGE . '.' . $name;
-
-        return $container->has($namespacedName) ? $container->get($namespacedName) :
-            ($container->has($name) ? $container->get($name) : $default);
     }
 }

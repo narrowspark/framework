@@ -212,7 +212,7 @@ class SessionManager extends AbstractManager
      */
     protected function buildSession(SessionHandlerInterface $handler): StoreContract
     {
-        return new Store($this->config->get($this->getConfigName() . '.cookie', false), $handler, $this->encrypter);
+        return new Store($this->config->get($this->getConfigName() . '.cookie', ''), $handler, $this->encrypter);
     }
 
     /**

@@ -5,7 +5,6 @@ namespace Viserio\View\Providers;
 use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
 use Psr\Http\Message\ServerRequestInterface;
-use Viserio\Config\Manager as ConfigManager;
 use Viserio\Contracts\View\Factory as FactoryContract;
 use Viserio\Filesystem\Filesystem;
 use Viserio\View\Engines\Adapter\Php as PhpEngine;
@@ -14,9 +13,12 @@ use Viserio\View\Engines\Adapter\Twig as TwigEngine;
 use Viserio\View\Engines\EngineResolver;
 use Viserio\View\Factory;
 use Viserio\View\ViewFinder;
+use Viserio\Contracts\Support\Traits\ServiceProviderConfigAwareTrait;
 
 class ViewServiceProvider implements ServiceProvider
 {
+    use ServiceProviderConfigAwareTrait;
+
     const PACKAGE = 'viserio.view';
 
     /**
@@ -54,9 +56,7 @@ class ViewServiceProvider implements ServiceProvider
             self::{'register' . ucfirst($engineClass) . 'Engine'}($engines, $container);
         }
 
-        $config = self::getConfig($container);
-
-        if (($compilers = $config['compilers']) !== null) {
+        if (($compilers = self::getConfig($container, 'compilers')) !== null) {
             foreach ($compilers as $compilerName => $compilerClass) {
                 if ($compilerName === $compilerClass[0]) {
                     self::registercustomEngine(
@@ -73,16 +73,15 @@ class ViewServiceProvider implements ServiceProvider
 
     public static function createViewFinder(ContainerInterface $container)
     {
-        $config = self::getConfig($container);
         $paths = array_merge(
-            $config['template.default'] ?? [],
-            $config['template.paths'] ?? []
+            self::getConfig($container, 'template.default', []),
+            self::getConfig($container, 'template.paths', [])
         );
 
         return new ViewFinder(
             $container->get(Filesystem::class),
             $paths,
-            $config['file_extensions']
+            self::getConfig($container, 'file_extensions', null)
         );
     }
 
@@ -137,7 +136,7 @@ class ViewServiceProvider implements ServiceProvider
     protected static function registerTwigEngine(EngineResolver $engines, ContainerInterface $container)
     {
         $engines->register('twig', function () use ($container) {
-            return new TwigEngine(self::getConfig($container));
+            return new TwigEngine(self::getConfig($container, 'view', []));
         });
     }
 
@@ -157,41 +156,9 @@ class ViewServiceProvider implements ServiceProvider
 
         $engines->register('plates', function () use ($container, $request) {
             return new PlatesEngine(
-                self::getConfig($container),
+                self::getConfig($container, 'view', []),
                 $request
             );
         });
-    }
-
-    /**
-     * Get the config from config manager or container.
-     *
-     * @param \Interop\Container\ContainerInterface $container
-     *
-     * @return mixed
-     */
-    private static function getConfig(ContainerInterface $container)
-    {
-        if ($container->has(ConfigManagerContract::class)) {
-            return $container->get(ConfigManagerContract::class)->get('view');
-        }
-
-        return self::get($container, 'options');
-    }
-
-    /**
-     * Returns the entry named PACKAGE.$name, of simply $name if PACKAGE.$name is not found.
-     *
-     * @param ContainerInterface $container
-     * @param string             $name
-     *
-     * @return mixed
-     */
-    private static function get(ContainerInterface $container, string $name, $default = null)
-    {
-        $namespacedName = self::PACKAGE . '.' . $name;
-
-        return $container->has($namespacedName) ? $container->get($namespacedName) :
-            ($container->has($name) ? $container->get($name) : $default);
     }
 }

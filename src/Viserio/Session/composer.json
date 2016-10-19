@@ -25,7 +25,6 @@
         "psr/http-message"                                   : "^1.0",
         "schnittstabil/csrf-tokenservice"                    : "^2.0",
         "viserio/config"                                     : "self.version",
-        "viserio/cookie"                                     : "self.version",
         "viserio/cotracts"                                   : "self.version",
         "viserio/encrypter"                                  : "self.version",
         "viserio/support"                                    : "self.version"
@@ -36,6 +35,7 @@
         "mikey179/vfsStream"                                 : "^1.6",
         "phpunit/phpunit"                                    : "^5.1",
         "viserio/cache"                                      : "self.version",
+        "viserio/cookie"                                     : "self.version",
         "viserio/filesystem"                                 : "self.version"
     },
     "autoload": {

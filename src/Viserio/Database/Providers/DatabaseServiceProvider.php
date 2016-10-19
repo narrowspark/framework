@@ -14,10 +14,13 @@ use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
 use Symfony\Component\Console\Helper\HelperSet;
 use Viserio\Config\Manager as ConfigManager;
+use Viserio\Contracts\Support\Traits\ServiceProviderConfigAwareTrait;
 use Viserio\Database\Connection;
 
 class DatabaseServiceProvider implements ServiceProvider
 {
+    use ServiceProviderConfigAwareTrait;
+
     const PACKAGE = 'viserio.database';
 
     /**
@@ -42,14 +45,8 @@ class DatabaseServiceProvider implements ServiceProvider
 
     public static function createConnection(ContainerInterface $container): Connection
     {
-        if ($container->has(ConfigManager::class)) {
-            $config = $container->get(ConfigManager::class)->get('database');
-        } else {
-            $config = self::get($container, 'options');
-        }
-
         return DriverManager::getConnection(
-            self::parseConfig($config),
+            self::parseConfig(self::getConfig($container, 'database', [])),
             $container->get(Configuration::class),
             $container->get(EventManager::class)
         );
@@ -81,7 +78,7 @@ class DatabaseServiceProvider implements ServiceProvider
         ]);
     }
 
-    private static function parseConfig($config): array
+    private static function parseConfig(array $config): array
     {
         $connections = $config['connections'][$config['default']];
         $config = array_merge($config, $connections);
@@ -106,21 +103,5 @@ class DatabaseServiceProvider implements ServiceProvider
         $config['wrapperClass'] = $config['wrapperClass'] ?? Connection::class;
 
         return $config;
-    }
-
-    /**
-     * Returns the entry named PACKAGE.$name, of simply $name if PACKAGE.$name is not found.
-     *
-     * @param ContainerInterface $container
-     * @param string             $name
-     *
-     * @return mixed
-     */
-    private static function get(ContainerInterface $container, string $name, $default = null)
-    {
-        $namespacedName = self::PACKAGE . '.' . $name;
-
-        return $container->has($namespacedName) ? $container->get($namespacedName) :
-            ($container->has($name) ? $container->get($name) : $default);
     }
 }

@@ -18,6 +18,6 @@ class LoggerServiceProviderTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(FileLoader::class, $container->get(FileLoader::class));
         $this->assertInstanceOf(FileLoader::class, $container->get(LoaderContract::class));
         $this->assertInstanceOf(TaggableParser::class, $container->get(TaggableParser::class));
-        $this->assertInstanceOf(FileLoader::class, $container->get('parser'));
+        $this->assertInstanceOf(TaggableParser::class, $container->get('parser'));
     }
 }

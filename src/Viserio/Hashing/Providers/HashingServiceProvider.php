@@ -5,10 +5,14 @@ namespace Viserio\Hashing\Providers;
 use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
 use Viserio\Config\Manager as ConfigManager;
+use Viserio\Contracts\Support\Traits\ServiceProviderConfigAwareTrait;
+use Viserio\Contracts\Hashing\Password as PasswordContract;
 use Viserio\Hashing\Password;
 
 class HashingServiceProvider implements ServiceProvider
 {
+    use ServiceProviderConfigAwareTrait;
+
     const PACKAGE = 'viserio.hashing';
 
     /**
@@ -17,39 +21,18 @@ class HashingServiceProvider implements ServiceProvider
     public function getServices()
     {
         return [
-            Password::class => [self::class, 'createPassword'],
+            PasswordContract::class => [self::class, 'createPassword'],
+            Password::class => function (ContainerInterface $container) {
+                return $container->get(PasswordContract::class);
+            },
             'password' => function (ContainerInterface $container) {
-                return $container->get(Password::class);
+                return $container->get(PasswordContract::class);
             },
         ];
     }
 
     public static function createPassword(ContainerInterface $container): Password
     {
-        if ($container->has(ConfigManager::class)) {
-            $config = $container->get(ConfigManager::class)->get('hashing');
-        } else {
-            $config = self::get($container, 'options');
-        }
-
-        $encrypt = new Password($config['key']);
-
-        return $encrypt;
-    }
-
-    /**
-     * Returns the entry named PACKAGE.$name, of simply $name if PACKAGE.$name is not found.
-     *
-     * @param ContainerInterface $container
-     * @param string             $name
-     *
-     * @return mixed
-     */
-    private static function get(ContainerInterface $container, string $name, $default = null)
-    {
-        $namespacedName = self::PACKAGE . '.' . $name;
-
-        return $container->has($namespacedName) ? $container->get($namespacedName) :
-            ($container->has($name) ? $container->get($name) : $default);
+        return new Password(self::getConfig($container, 'key', ''));
     }
 }

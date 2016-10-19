@@ -98,8 +98,6 @@ class MigrationsServiceProviderTest extends \PHPUnit_Framework_TestCase
                     'memory' => true,
                 ],
             ],
-        ]);
-        $container->instance('viserio.database.migrations.options', [
             'migrations' => [
                 'path' => env('DB_MIGRATION_PATH', __DIR__ . '/../Stub/'),
                 'namespace' => 'Database\\Migrations',

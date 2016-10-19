@@ -274,19 +274,30 @@ class ViewFinderTest extends \PHPUnit_Framework_TestCase
     public function testPassingViewWithHintReturnsTrue()
     {
         $finder = $this->getFinder();
+
         $this->assertTrue($finder->hasHintInformation('hint::foo.bar'));
     }
 
     public function testPassingViewWithoutHintReturnsFalse()
     {
         $finder = $this->getFinder();
+
         $this->assertFalse($finder->hasHintInformation('foo.bar'));
     }
 
     public function testPassingViewWithFalseHintReturnsFalse()
     {
         $finder = $this->getFinder();
+
         $this->assertFalse($finder->hasHintInformation('::foo.bar'));
+    }
+
+    public function testPrependLocation()
+    {
+        $finder = $this->getFinder();
+        $finder->prependLocation('test');
+
+        $this->assertSame(['test', $this->getPath()], $finder->getPaths());
     }
 
     protected function getPath()
