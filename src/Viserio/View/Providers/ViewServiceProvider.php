@@ -82,7 +82,7 @@ class ViewServiceProvider implements ServiceProvider
         return new ViewFinder(
             $container->get(Filesystem::class),
             $paths,
-            $config->get('view.file_extensions')
+            $config['file_extensions']
         );
     }
 
