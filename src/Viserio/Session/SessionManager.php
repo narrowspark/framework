@@ -3,10 +3,11 @@ declare(strict_types=1);
 namespace Viserio\Session;
 
 use SessionHandlerInterface;
-use Viserio\Cache\CacheManager;
+use Viserio\Contracts\Cache\Manager as CacheManagerContract;
 use Viserio\Contracts\Config\Manager as ConfigContract;
 use Viserio\Contracts\Cookie\QueueingFactory as JarContract;
 use Viserio\Contracts\Encryption\Encrypter as EncrypterContract;
+use Viserio\Contracts\Container\Traits\ContainerAwareTrait;
 use Viserio\Contracts\Encryption\Traits\EncrypterAwareTrait;
 use Viserio\Contracts\Filesystem\Filesystem as FilesystemContract;
 use Viserio\Contracts\Session\Store as StoreContract;
@@ -17,6 +18,7 @@ use Viserio\Support\AbstractManager;
 
 class SessionManager extends AbstractManager
 {
+    use ContainerAwareTrait;
     use EncrypterAwareTrait;
 
     /**
@@ -48,14 +50,11 @@ class SessionManager extends AbstractManager
      */
     protected function createLocalDriver(): StoreContract
     {
-        $path = $this->config->get($this->getConfigName() . '.path');
-        $lifetime = $this->config->get($this->getConfigName() . '.lifetime');
-
         return $this->buildSession(
             new FileSessionHandler(
                 $this->getContainer()->get(FilesystemContract::class),
-                $path,
-                $lifetime
+                $this->config->get($this->getConfigName() . '.path'),
+                $this->config->get($this->getConfigName() . '.lifetime')
             )
         );
     }
@@ -67,12 +66,10 @@ class SessionManager extends AbstractManager
      */
     protected function createCookieDriver(): StoreContract
     {
-        $lifetime = $this->config->get($this->getConfigName() . '.lifetime');
-
         return $this->buildSession(
             new CookieSessionHandler(
                 $this->getContainer()->get(JarContract::class),
-                $lifetime
+                $this->config->get($this->getConfigName() . '.lifetime')
             )
         );
     }
@@ -81,6 +78,8 @@ class SessionManager extends AbstractManager
      * Create an instance of the Memcached session driver.
      *
      * @return \Viserio\Contracts\Session\Store
+     *
+     * @codeCoverageIgnore
      */
     protected function createMemcachedDriver(): StoreContract
     {
@@ -91,6 +90,8 @@ class SessionManager extends AbstractManager
      * Create an instance of the Memcache session driver.
      *
      * @return \Viserio\Contracts\Session\Store
+     *
+     * @codeCoverageIgnore
      */
     protected function createMemcacheDriver(): StoreContract
     {
@@ -101,48 +102,60 @@ class SessionManager extends AbstractManager
      * Create an instance of the Mongodb session driver.
      *
      * @return \Viserio\Contracts\Session\Store
+     *
+     * @codeCoverageIgnore
      */
     protected function createMongodbDriver(): StoreContract
     {
-        $options = $this->config->get($this->getConfigName() . '.mongodb');
-
-        return $this->createCacheBased('mongodb', $options);
+        return $this->createCacheBased(
+            'mongodb',
+            $this->config->get($this->getConfigName() . '.mongodb')
+        );
     }
 
     /**
      * Create an instance of the Predis session driver.
      *
      * @return \Viserio\Contracts\Session\Store
+     *
+     * @codeCoverageIgnore
      */
     protected function createPredisDriver(): StoreContract
     {
-        $options = $this->config->get($this->getConfigName() . '.predis');
-
-        return $this->createCacheBased('predis', $options);
+        return $this->createCacheBased(
+            'predis',
+            $this->config->get($this->getConfigName() . '.predis')
+        );
     }
 
     /**
      * Create an instance of the Redis session driver.
      *
      * @return \Viserio\Contracts\Session\Store
+     *
+     * @codeCoverageIgnore
      */
     protected function createRedisDriver(): StoreContract
     {
-        $options = $this->config->get($this->getConfigName() . '.redis');
-
-        return $this->createCacheBased('redis', $options);
+        return $this->createCacheBased(
+            'redis',
+            $this->config->get($this->getConfigName() . '.redis')
+        );
     }
 
     /**
      * Create an instance of the Filesystem session driver.
      *
      * @return \Viserio\Contracts\Session\Store
+     *
+     * @codeCoverageIgnore
      */
     protected function createFilesystemDriver(): StoreContract
     {
-        $options = $this->config->get($this->getConfigName() . '.flysystem');
-
-        return $this->createCacheBased('filesystem', $options);
+        return $this->createCacheBased(
+            'filesystem',
+            $this->config->get($this->getConfigName() . '.flysystem')
+        );
     }
 
     /**
@@ -159,6 +172,8 @@ class SessionManager extends AbstractManager
      * Create an instance of the APCu session driver.
      *
      * @return \Viserio\Contracts\Session\Store
+     *
+     * @codeCoverageIgnore
      */
     protected function createApcuDriver(): StoreContract
     {
@@ -169,6 +184,8 @@ class SessionManager extends AbstractManager
      * Create an instance of the APC session driver.
      *
      * @return \Viserio\Contracts\Session\Store
+     *
+     * @codeCoverageIgnore
      */
     protected function createApcDriver(): StoreContract
     {
@@ -193,12 +210,10 @@ class SessionManager extends AbstractManager
      */
     protected function createCacheBased($driver, array $options = []): StoreContract
     {
-        $lifetime = $this->config->get($this->getConfigName() . '.lifetime');
-
         return $this->buildSession(
             new CacheBasedSessionHandler(
-                clone $this->getContainer()->get(CacheManager::class)->driver($driver, $options),
-                $lifetime
+                clone $this->getContainer()->get(CacheManagerContract::class)->driver($driver, $options),
+                $this->config->get($this->getConfigName() . '.lifetime')
             )
         );
     }
@@ -212,7 +227,11 @@ class SessionManager extends AbstractManager
      */
     protected function buildSession(SessionHandlerInterface $handler): StoreContract
     {
-        return new Store($this->config->get($this->getConfigName() . '.cookie', ''), $handler, $this->encrypter);
+        return new Store(
+            $this->config->get($this->getConfigName() . '.cookie', ''),
+            $handler,
+            $this->encrypter
+        );
     }
 
     /**

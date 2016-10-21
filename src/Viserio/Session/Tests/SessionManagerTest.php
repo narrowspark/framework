@@ -6,7 +6,13 @@ use Defuse\Crypto\Key;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use Viserio\Contracts\Config\Manager as ConfigContract;
 use Viserio\Encryption\Encrypter;
+use Viserio\Contracts\Session\Store as StoreContract;
+use Narrowspark\TestingHelper\ArrayContainer;
+use Viserio\Contracts\Cookie\QueueingFactory as JarContract;
+use Viserio\Contracts\Cache\Manager as CacheManagerContract;
+use Viserio\Cache\CacheManager;
 use Viserio\Session\SessionManager;
+use Psr\Cache\CacheItemPoolInterface;
 
 class SessionManagerTest extends \PHPUnit_Framework_TestCase
 {
@@ -19,7 +25,62 @@ class SessionManagerTest extends \PHPUnit_Framework_TestCase
         parent::setUp();
 
         $encrypter = new Encrypter(Key::createNewRandomKey());
+        $config = $this->mock(ConfigContract::class);
+        $config->shouldReceive('get')
+            ->with('cache.drivers', []);
+        $config->shouldReceive('get')
+            ->with('cache.namespace');
 
-        $this->manager = new SessionManager($this->mock(ConfigContract::class), $encrypter);
+        $manager = new SessionManager($config, $encrypter);
+        $manager->setContainer(new ArrayContainer([
+            JarContract::class => $this->mock(JarContract::class),
+            CacheManagerContract::class => new CacheManager($config)
+        ]));
+
+        $this->manager = $manager;
+    }
+
+    public function testCookieStore()
+    {
+        $manager = $this->manager;
+        $manager->getConfig()
+            ->shouldReceive('get')
+            ->with('session.drivers', [])
+            ->once();
+        $manager->getConfig()
+            ->shouldReceive('get')
+            ->with('session.cookie', '')
+            ->once()
+            ->andReturn('test');
+        $manager->getConfig()
+            ->shouldReceive('get')
+            ->with('session.lifetime')
+            ->once()
+            ->andReturn(5);
+        $session = $manager->driver('cookie');
+
+        $this->assertInstanceOf(StoreContract::class, $session);
+    }
+
+    public function testArrayStore()
+    {
+        $manager = $this->manager;
+        $manager->getConfig()
+            ->shouldReceive('get')
+            ->with('session.drivers', [])
+            ->once();
+        $manager->getConfig()
+            ->shouldReceive('get')
+            ->with('session.lifetime')
+            ->once()
+            ->andReturn(5);
+        $manager->getConfig()
+            ->shouldReceive('get')
+            ->with('session.cookie', '')
+            ->once()
+            ->andReturn('test');
+        $session = $manager->driver('array');
+
+        $this->assertInstanceOf(StoreContract::class, $session);
     }
 }

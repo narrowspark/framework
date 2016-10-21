@@ -30,7 +30,8 @@
         "viserio/support"                                    : "self.version"
     },
     "require-dev": {
-        "cache/session-handler"                              : "^0.1",
+        "cache/array-adapter"                                : "^0.4",
+        "cache/session-handler"                              : "^0.2",
         "narrowspark/testing-helper"                         : "^1.5",
         "mockery/mockery"                                    : "^0.9.5",
         "mikey179/vfsStream"                                 : "^1.6",
@@ -58,7 +59,7 @@
     },
     "suggest": {
         "container-interop/service-provider"                 : "Required to use service-provider (^0.3).",
-        "cache/session-handler"                              : "Required to use the CacheBasedSessionHandler (^0.1).",
+        "cache/session-handler"                              : "Required to use the CacheBasedSessionHandler (^0.2).",
         "viserio/cookie"                                     : "Required to use the CookieSessionHandler (self.version).",
         "viserio/filesystem"                                 : "Required to use the FileSessionHandler (self.version)."
     },
