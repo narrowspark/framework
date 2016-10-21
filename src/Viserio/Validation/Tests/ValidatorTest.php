@@ -27,7 +27,7 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(
             [
                 'test' => true,
-                'foo' => true
+                'foo' => true,
             ],
             $validate->valid()
         );
@@ -55,7 +55,6 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
             $validate->valid()
         );
     }
-
 
     public function testNotValidate()
     {
