@@ -3,16 +3,16 @@ declare(strict_types=1);
 namespace Viserio\Session\Tests;
 
 use Defuse\Crypto\Key;
-use Narrowspark\TestingHelper\Traits\MockeryTrait;
-use Viserio\Contracts\Config\Manager as ConfigContract;
-use Viserio\Encryption\Encrypter;
-use Viserio\Contracts\Session\Store as StoreContract;
 use Narrowspark\TestingHelper\ArrayContainer;
-use Viserio\Contracts\Cookie\QueueingFactory as JarContract;
-use Viserio\Contracts\Cache\Manager as CacheManagerContract;
-use Viserio\Cache\CacheManager;
-use Viserio\Session\SessionManager;
+use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use Psr\Cache\CacheItemPoolInterface;
+use Viserio\Cache\CacheManager;
+use Viserio\Contracts\Cache\Manager as CacheManagerContract;
+use Viserio\Contracts\Config\Manager as ConfigContract;
+use Viserio\Contracts\Cookie\QueueingFactory as JarContract;
+use Viserio\Contracts\Session\Store as StoreContract;
+use Viserio\Encryption\Encrypter;
+use Viserio\Session\SessionManager;
 
 class SessionManagerTest extends \PHPUnit_Framework_TestCase
 {
@@ -34,7 +34,7 @@ class SessionManagerTest extends \PHPUnit_Framework_TestCase
         $manager = new SessionManager($config, $encrypter);
         $manager->setContainer(new ArrayContainer([
             JarContract::class => $this->mock(JarContract::class),
-            CacheManagerContract::class => new CacheManager($config)
+            CacheManagerContract::class => new CacheManager($config),
         ]));
 
         $this->manager = $manager;
