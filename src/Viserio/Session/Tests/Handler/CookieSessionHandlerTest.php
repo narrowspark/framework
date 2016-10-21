@@ -21,12 +21,10 @@ class CookieSessionHandlerTest extends \PHPUnit_Framework_TestCase
     {
         parent::setUp();
 
-        $handler = new CookieSessionHandler(
+        $this->handler = new CookieSessionHandler(
             $this->mock(JarContract::class),
             5
         );
-
-        $this->handler = $handler;
     }
 
     public function testOpenReturnsTrue()

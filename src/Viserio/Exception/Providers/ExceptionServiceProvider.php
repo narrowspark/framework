@@ -4,8 +4,8 @@ namespace Viserio\Exception\Providers;
 
 use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
-use Viserio\Contracts\Config\Manager as ConfigManagerContract;
 use Viserio\Contracts\Exception\Handler as HandlerContract;
+use Viserio\Contracts\Support\Traits\ServiceProviderConfigAwareTrait;
 use Viserio\Contracts\View\Factory as FactoryContract;
 use Viserio\Exception\Displayers\HtmlDisplayer;
 use Viserio\Exception\Displayers\JsonDisplayer;
@@ -20,6 +20,10 @@ use Viserio\Exception\Transformers\CommandLineTransformer;
 
 class ExceptionServiceProvider implements ServiceProvider
 {
+    use ServiceProviderConfigAwareTrait;
+
+    const PACKAGE = 'viserio.exception';
+
     /**
      * {@inheritdoc}
      */
@@ -59,7 +63,10 @@ class ExceptionServiceProvider implements ServiceProvider
 
     public static function createHtmlDisplayer(ContainerInterface $container): HtmlDisplayer
     {
-        return new HtmlDisplayer($container->get(ExceptionInfo::class), __DIR__ . '/../Resources/error.html');
+        return new HtmlDisplayer(
+            $container->get(ExceptionInfo::class),
+            self::getConfig($container, 'template', __DIR__ . '/../Resources/error.html')
+        );
     }
 
     public static function createJsonDisplayer(ContainerInterface $container): JsonDisplayer
@@ -84,7 +91,7 @@ class ExceptionServiceProvider implements ServiceProvider
 
     public static function createVerboseFilter(ContainerInterface $container): VerboseFilter
     {
-        return new VerboseFilter($container->get(ConfigManagerContract::class)->get('exception.debug', false));
+        return new VerboseFilter(self::getConfig($container, 'debug', false));
     }
 
     public static function createCanDisplayFilter(): CanDisplayFilter

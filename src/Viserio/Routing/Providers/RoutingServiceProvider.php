@@ -18,15 +18,15 @@ class RoutingServiceProvider implements ServiceProvider
     public function getServices()
     {
         return [
-            Router::class => [self::class, 'createRouter'],
+            RouterContract::class => [self::class, 'createRouter'],
             'router' => function (ContainerInterface $container) {
-                return $container->get(Router::class);
+                return $container->get(RouterContract::class);
             },
             'route' => function (ContainerInterface $container) {
                 return $container->get(Router::class);
             },
-            RouterContract::class => function (ContainerInterface $container) {
-                return $container->get(Router::class);
+            Router::class => function (ContainerInterface $container) {
+                return $container->get(RouterContract::class);
             },
         ];
     }

@@ -5,7 +5,6 @@ namespace Viserio\View;
 use Closure;
 use InvalidArgumentException;
 use Narrowspark\Arr\Arr;
-use Viserio\Contracts\Events\Traits\EventsAwareTrait;
 use Viserio\Contracts\Support\Arrayable;
 use Viserio\Contracts\View\Engine as EngineContract;
 use Viserio\Contracts\View\EngineResolver as EngineResolverContract;
@@ -18,7 +17,6 @@ use Viserio\View\Traits\NormalizeNameTrait;
 class Factory implements FactoryContract
 {
     use NormalizeNameTrait;
-    use EventsAwareTrait;
 
     /**
      * The engines instance.
@@ -214,17 +212,19 @@ class Factory implements FactoryContract
      */
     public function share($key, $value = null)
     {
-        if (! is_array($key)) {
-            return $this->shared[$key] = $value;
+        $keys = is_array($key) ? $key : [$key => $value];
+
+        foreach ($keys as $key => $value) {
+            $this->shared[$key] = $value;
         }
 
-        foreach ($key as $innerKey => $innerValue) {
-            $this->share($innerKey, $innerValue);
-        }
+        return $value;
     }
 
     /**
      * {@inheritdoc}
+     *
+     * @codeCoverageIgnore
      */
     public function addLocation(string $location): FactoryContract
     {
@@ -235,6 +235,8 @@ class Factory implements FactoryContract
 
     /**
      * {@inheritdoc}
+     *
+     * @codeCoverageIgnore
      */
     public function addNamespace(string $namespace, $hints): FactoryContract
     {
@@ -245,6 +247,8 @@ class Factory implements FactoryContract
 
     /**
      * {@inheritdoc}
+     *
+     * @codeCoverageIgnore
      */
     public function prependNamespace(string $namespace, $hints): FactoryContract
     {

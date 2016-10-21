@@ -45,7 +45,7 @@ abstract class AbstractManager
      *
      * @return mixed
      */
-    public function __call(string $method, array $parameters)
+    public function __call($method, $parameters)
     {
         return call_user_func_array([$this->driver(), $method], $parameters);
     }

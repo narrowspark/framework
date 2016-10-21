@@ -41,7 +41,7 @@ class ClientIpGenerator implements FingerprintContract
      */
     private function getIpAddress(): string
     {
-        if ($ip = $this->getIpAddressFromProxy()) {
+        if (($ip = $this->getIpAddressFromProxy()) !== false) {
             return $ip;
         }
 
@@ -79,17 +79,16 @@ class ClientIpGenerator implements FingerprintContract
         $ips = explode(',', $_SERVER[$header]);
         $ips = array_map('trim', $ips);
 
-        if (empty($ips)) {
+        // @codeCoverageIgnoreStart
+        if (count($ips) === 0) {
             return false;
         }
+        // @codeCoverageIgnoreEnd
 
-        // Since we've removed any known, trusted proxy servers, the right-most
-        // address represents the first IP we do not know about -- i.e., we do
-        // not know if it is a proxy server, or a client. As such, we treat it
-        // as the originating IP.
+        // The right-most address represents the first IP we do not know about
+        // -- i.e., we do not know if it is a proxy server, or a client. As such,
+        // we treat it as the originating IP.
         // @see http://en.wikipedia.org/wiki/X-Forwarded-For
-        $ip = array_pop($ips);
-
-        return filter_var(end($ip), FILTER_VALIDATE_IP | FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE);
+        return filter_var($ips[0], FILTER_VALIDATE_IP);
     }
 }

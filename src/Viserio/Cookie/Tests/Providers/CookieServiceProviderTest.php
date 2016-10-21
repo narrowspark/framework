@@ -16,7 +16,7 @@ class CookieServiceProviderTest extends \PHPUnit_Framework_TestCase
         $container->register(new ConfigServiceProvider());
         $container->register(new CookieServiceProvider());
 
-        $container->get('config')->set('session', [
+        $container->get('config')->set('cookie', [
             'domain' => '',
             'path' => '',
             'secure' => true,

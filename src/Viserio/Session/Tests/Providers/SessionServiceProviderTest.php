@@ -23,16 +23,17 @@ class SessionServiceProviderTest extends \PHPUnit_Framework_TestCase
 
         $key = Key::createNewRandomKey();
 
-        $container->get('config')->set('encrypter', [
+        $container->get('config')->set('encryption', [
             'key' => $key->saveToAsciiSafeString(),
         ]);
         $container->get('config')->set('session', [
             'path' => '',
-            'lifetime' => '',
+            'lifetime' => 3000,
+            'cookie' => 'test',
         ]);
 
         $this->assertInstanceOf(SessionManager::class, $container->get(SessionManager::class));
         $this->assertInstanceOf(SessionManager::class, $container->get('session'));
-        // $this->assertInstanceOf(StoreContract::class, $container->get('session.store'));
+        $this->assertInstanceOf(StoreContract::class, $container->get('session.store'));
     }
 }

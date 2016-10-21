@@ -44,6 +44,8 @@ class ByteCountingStreamException extends RuntimeException
      * Get expected bytes to be read.
      *
      * @return int
+     *
+     * @codeCoverageIgnore
      */
     public function getExpectBytes(): int
     {
@@ -54,6 +56,8 @@ class ByteCountingStreamException extends RuntimeException
      * Get remaining bytes available for read.
      *
      * @return int
+     *
+     * @codeCoverageIgnore
      */
     public function getRemainingBytes(): int
     {

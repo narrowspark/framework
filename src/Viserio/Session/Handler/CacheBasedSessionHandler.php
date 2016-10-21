@@ -44,6 +44,8 @@ class CacheBasedSessionHandler implements SessionHandlerInterface
 
     /**
      * {@inheritdoc}
+     *
+     * // @codeCoverageIgnore
      */
     public function read($sessionId)
     {
@@ -52,6 +54,8 @@ class CacheBasedSessionHandler implements SessionHandlerInterface
 
     /**
      * {@inheritdoc}
+     *
+     * // @codeCoverageIgnore
      */
     public function write($sessionId, $data)
     {
@@ -60,6 +64,8 @@ class CacheBasedSessionHandler implements SessionHandlerInterface
 
     /**
      * {@inheritdoc}
+     *
+     * // @codeCoverageIgnore
      */
     public function destroy($sessionId)
     {

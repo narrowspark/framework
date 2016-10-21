@@ -24,7 +24,6 @@
         "viserio/contracts"                   : "self.version"
     },
     "require-dev": {
-        "container-interop/container-interop" : "^1.1",
         "container-interop/service-provider"  : "^0.3",
         "narrowspark/testing-helper"          : "^1.5",
         "phpunit/phpunit"                     : "^5.1",
@@ -47,7 +46,6 @@
         }
     },
     "suggest": {
-        "container-interop/container-interop" : "Required to use service-provider (^1.1).",
         "container-interop/service-provider"  : "Required to use service-provider (^0.3)."
     },
     "minimum-stability"                       : "dev",

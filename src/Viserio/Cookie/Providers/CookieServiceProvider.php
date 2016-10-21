@@ -4,13 +4,15 @@ namespace Viserio\Cookie\Providers;
 
 use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
-use Viserio\Config\Manager as ConfigManager;
 use Viserio\Contracts\Cookie\QueueingFactory as JarContract;
+use Viserio\Contracts\Support\Traits\ServiceProviderConfigAwareTrait;
 use Viserio\Cookie\CookieJar;
 use Viserio\Cookie\RequestCookie;
 
 class CookieServiceProvider implements ServiceProvider
 {
+    use ServiceProviderConfigAwareTrait;
+
     const PACKAGE = 'viserio.cookie';
 
     /**
@@ -19,13 +21,13 @@ class CookieServiceProvider implements ServiceProvider
     public function getServices()
     {
         return [
-            CookieJar::class => [self::class, 'createCookieJar'],
+            JarContract::class => [self::class, 'createCookieJar'],
             RequestCookie::class => [self::class, 'createRequestCookie'],
             'cookie' => function (ContainerInterface $container) {
-                return $container->get(CookieJar::class);
+                return $container->get(JarContract::class);
             },
-            JarContract::class => function (ContainerInterface $container) {
-                return $container->get(CookieJar::class);
+            CookieJar::class => function (ContainerInterface $container) {
+                return $container->get(JarContract::class);
             },
             'request-cookie' => function (ContainerInterface $container) {
                 return $container->get(RequestCookie::class);
@@ -40,32 +42,10 @@ class CookieServiceProvider implements ServiceProvider
 
     public static function createCookieJar(ContainerInterface $container): CookieJar
     {
-        if ($container->has(ConfigManager::class)) {
-            $config = $container->get(ConfigManager::class)->get('session');
-        } else {
-            $config = self::get($container, 'options');
-        }
-
         return (new CookieJar())->setDefaultPathAndDomain(
-            $config['path'],
-            $config['domain'],
-            $config['secure']
+            self::getConfig($container, 'path', ''),
+            self::getConfig($container, 'domain', ''),
+            self::getConfig($container, 'secure', true)
         );
-    }
-
-    /**
-     * Returns the entry named PACKAGE.$name, of simply $name if PACKAGE.$name is not found.
-     *
-     * @param ContainerInterface $container
-     * @param string             $name
-     *
-     * @return mixed
-     */
-    private static function get(ContainerInterface $container, string $name, $default = null)
-    {
-        $namespacedName = self::PACKAGE . '.' . $name;
-
-        return $container->has($namespacedName) ? $container->get($namespacedName) :
-            ($container->has($name) ? $container->get($name) : $default);
     }
 }

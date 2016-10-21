@@ -12,6 +12,8 @@ class Po implements FormatContract
 {
     /**
      * Create a new Po loader.
+     *
+     * @codeCoverageIgnore
      */
     public function __construct()
     {
