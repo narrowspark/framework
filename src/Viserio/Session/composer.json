@@ -30,6 +30,7 @@
         "viserio/support"                                    : "self.version"
     },
     "require-dev": {
+        "cache/session-handler"                              : "^0.1",
         "narrowspark/testing-helper"                         : "^1.5",
         "mockery/mockery"                                    : "^0.9.5",
         "mikey179/vfsStream"                                 : "^1.6",

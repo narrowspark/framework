@@ -69,6 +69,7 @@ class Twig implements EngineContract
 
             $twig->addExtension(new Twig_Extension_Core());
             $twig->addExtension(new Twig_Extension_Optimizer());
+
             $extensions = $config['engine']['twig']['extensions'] ?? [];
 
             if (! empty($extensions)) {

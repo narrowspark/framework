@@ -38,10 +38,12 @@ class Validator implements ValidatorContract
      * Add your own rule's namespace.
      *
      * @param string $namespace
+     *
+     * @codeCoverageIgnore
      */
-    public function with(string $namespace)
+    public function with(string $namespace, bool $overwrite = false)
     {
-        RespectValidator::with($namespace);
+        RespectValidator::with($namespace, $overwrite);
     }
 
     /**
@@ -63,10 +65,16 @@ class Validator implements ValidatorContract
                 $rule = $this->createRule($fieldRules);
             }
 
-            $data = $preparedData[$fieldName];
+            $data = $preparedData[$fieldName] ?? $preparedData;
 
             try {
-                $rule->setName(ucfirst($fieldName))->assert($data);
+                if (is_array($data)) {
+                    foreach ($data as $value) {
+                        $rule->setName(ucfirst($fieldName))->assert($value);
+                    }
+                } else {
+                    $rule->setName(ucfirst($fieldName))->assert($data);
+                }
 
                 $this->validRules[$fieldName] = true;
             } catch (NestedValidationException $exception) {
@@ -122,7 +130,7 @@ class Validator implements ValidatorContract
 
         foreach ($data as $key => $value) {
             if (is_array($value)) {
-                $value = $this->parseData($value);
+                return $this->parseData($value);
             } else {
                 $newData[$key] = $value;
             }

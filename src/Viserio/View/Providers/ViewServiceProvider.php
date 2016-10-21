@@ -56,18 +56,6 @@ class ViewServiceProvider implements ServiceProvider
             self::{'register' . ucfirst($engineClass) . 'Engine'}($engines, $container);
         }
 
-        if (($compilers = self::getConfig($container, 'compilers')) !== null) {
-            foreach ($compilers as $compilerName => $compilerClass) {
-                if ($compilerName === $compilerClass[0]) {
-                    self::registercustomEngine(
-                        $compilerName,
-                        call_user_func_array($compilerClass[0], (array) $compilerClass[1]),
-                        $engines
-                    );
-                }
-            }
-        }
-
         return $engines;
     }
 
@@ -98,20 +86,6 @@ class ViewServiceProvider implements ServiceProvider
         $view->addExtension('plates.php', 'plates');
 
         return $view;
-    }
-
-    /**
-     * Register custom engine implementation.
-     *
-     * @param string                               $engineName
-     * @param string                               $engineClass
-     * @param \Viserio\View\Engines\EngineResolver $engines
-     */
-    protected static function registercustomEngine(string $engineName, string $engineClass, EngineResolver $engines)
-    {
-        $engines->register($engineName, function () use ($engineClass) {
-            return $engineClass;
-        });
     }
 
     /**

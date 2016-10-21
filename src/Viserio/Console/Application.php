@@ -61,6 +61,13 @@ class Application extends SymfonyConsole implements ApplicationContract
     protected $invoker;
 
     /**
+     * The console application bootstrappers.
+     *
+     * @var array
+     */
+    protected static $bootstrappers = [];
+
+    /**
      * Create a new Cerebro console application.
      *
      * @param \Interop\Container\ContainerInterface $container
@@ -87,6 +94,8 @@ class Application extends SymfonyConsole implements ApplicationContract
         $this->expressionParser = new Parser();
 
         $this->events->trigger('console.starting', [$this]);
+
+        $this->bootstrap();
     }
 
     /**
@@ -190,6 +199,16 @@ class Application extends SymfonyConsole implements ApplicationContract
     }
 
     /**
+     * Register an application starting bootstrapper.
+     *
+     * @param \Closure $callback
+     */
+    public static function starting(Closure $callback)
+    {
+        static::$bootstrappers[] = $callback;
+    }
+
+    /**
      * Get the default input definitions for the applications.
      *
      * This is used to add the --env option to every available command.
@@ -252,5 +271,15 @@ class Application extends SymfonyConsole implements ApplicationContract
         }
 
         return $this->invoker;
+    }
+
+    /**
+     * Bootstrap the console application.
+     */
+    protected function bootstrap()
+    {
+        foreach (static::$bootstrappers as $bootstrapper) {
+            $bootstrapper($this);
+        }
     }
 }
