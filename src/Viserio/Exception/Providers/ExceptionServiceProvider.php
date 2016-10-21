@@ -4,7 +4,6 @@ namespace Viserio\Exception\Providers;
 
 use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
-use Viserio\Contracts\Config\Manager as ConfigManagerContract;
 use Viserio\Contracts\Exception\Handler as HandlerContract;
 use Viserio\Contracts\Support\Traits\ServiceProviderConfigAwareTrait;
 use Viserio\Contracts\View\Factory as FactoryContract;

@@ -5,7 +5,6 @@ namespace Viserio\Translation\Providers;
 use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
 use Psr\Log\LoggerInterface as PsrLoggerInterface;
-use Viserio\Config\Manager as ConfigManager;
 use Viserio\Contracts\Support\Traits\ServiceProviderConfigAwareTrait;
 use Viserio\Contracts\Translation\TranslationManager as TranslationManagerContract;
 use Viserio\Contracts\Translation\Translator as TranslatorContract;

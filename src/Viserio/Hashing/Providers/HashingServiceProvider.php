@@ -4,7 +4,6 @@ namespace Viserio\Hashing\Providers;
 
 use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
-use Viserio\Config\Manager as ConfigManager;
 use Viserio\Contracts\Hashing\Password as PasswordContract;
 use Viserio\Contracts\Support\Traits\ServiceProviderConfigAwareTrait;
 use Viserio\Hashing\Password;

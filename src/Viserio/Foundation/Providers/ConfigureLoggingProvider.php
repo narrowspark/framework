@@ -6,7 +6,6 @@ use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
 use Monolog\Handler\ErrorLogHandler;
 use Viserio\Config\Manager as ConfigManager;
-use Viserio\Contracts\Events\Dispatcher as DispatcherContract;
 use Viserio\Contracts\Log\Log as LogContract;
 use Viserio\Log\Writer;
 

@@ -9,7 +9,6 @@ use League\Plates\Extension\URI;
 use League\Plates\Template\Template;
 use Psr\Http\Message\ServerRequestInterface;
 use Throwable;
-use Viserio\Contracts\Config\Manager as ManagerContract;
 use Viserio\Contracts\View\Engine as EnginesContract;
 
 class Plates implements EnginesContract

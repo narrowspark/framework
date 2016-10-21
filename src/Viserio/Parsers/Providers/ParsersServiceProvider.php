@@ -4,7 +4,6 @@ namespace Viserio\Parsers\Providers;
 
 use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
-use Viserio\Config\Manager as ConfigManager;
 use Viserio\Contracts\Parsers\Loader as LoaderContract;
 use Viserio\Contracts\Parsers\TaggableParser as TaggableParserContract;
 use Viserio\Contracts\Support\Traits\ServiceProviderConfigAwareTrait;

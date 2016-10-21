@@ -11,7 +11,7 @@ trait ServiceProviderConfigAwareTrait
      * Get the config from config manager or container.
      *
      * @param \Interop\Container\ContainerInterface $container
-     * @param string                                $name
+     * @param string                                $id
      * @param mixed                                 $default
      *
      * @return mixed

@@ -13,7 +13,6 @@ use Doctrine\DBAL\Tools\Console\Helper\ConnectionHelper;
 use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
 use Symfony\Component\Console\Helper\HelperSet;
-use Viserio\Config\Manager as ConfigManager;
 use Viserio\Contracts\Support\Traits\ServiceProviderConfigAwareTrait;
 use Viserio\Database\Connection;
 

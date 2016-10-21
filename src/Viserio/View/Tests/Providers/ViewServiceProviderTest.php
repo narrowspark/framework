@@ -2,7 +2,6 @@
 declare(strict_types=1);
 namespace Viserio\View\Tests\Providers;
 
-use Defuse\Crypto\Key;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Container\Container;

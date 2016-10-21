@@ -200,7 +200,5 @@ class StaticalProxy
         if ($root = static::getStaticalProxyRoot()) {
             return get_class($root);
         }
-
-        return;
     }
 }

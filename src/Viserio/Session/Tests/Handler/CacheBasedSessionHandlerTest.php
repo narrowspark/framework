@@ -2,7 +2,6 @@
 declare(strict_types=1);
 namespace Viserio\Session\Tests\Handler;
 
-use Cake\Chronos\Chronos;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use Psr\Cache\CacheItemPoolInterface;
 use Viserio\Session\Handler\CacheBasedSessionHandler;
