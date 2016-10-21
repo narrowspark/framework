@@ -3,16 +3,17 @@ declare(strict_types=1);
 namespace Viserio\Session\Tests;
 
 use Defuse\Crypto\Key;
-use Narrowspark\TestingHelper\ArrayContainer;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
-use Psr\Cache\CacheItemPoolInterface;
-use Viserio\Cache\CacheManager;
-use Viserio\Contracts\Cache\Manager as CacheManagerContract;
 use Viserio\Contracts\Config\Manager as ConfigContract;
-use Viserio\Contracts\Cookie\QueueingFactory as JarContract;
-use Viserio\Contracts\Session\Store as StoreContract;
 use Viserio\Encryption\Encrypter;
+use Viserio\Contracts\Session\Store as StoreContract;
+use Narrowspark\TestingHelper\ArrayContainer;
+use Viserio\Contracts\Cookie\QueueingFactory as JarContract;
+use Viserio\Contracts\Cache\Manager as CacheManagerContract;
+use Viserio\Cache\CacheManager;
 use Viserio\Session\SessionManager;
+use Psr\Cache\CacheItemPoolInterface;
+use Psr\Http\Message\ServerRequestInterface;
 
 class SessionManagerTest extends \PHPUnit_Framework_TestCase
 {
@@ -59,7 +60,10 @@ class SessionManagerTest extends \PHPUnit_Framework_TestCase
             ->andReturn(5);
         $session = $manager->driver('cookie');
 
+        $session->setRequestOnHandler($this->mock(ServerRequestInterface::class));
+
         $this->assertInstanceOf(StoreContract::class, $session);
+        $this->assertTrue($session->handlerNeedsRequest());
     }
 
     public function testArrayStore()

@@ -475,6 +475,8 @@ class Store implements StoreContract
 
     /**
      * {@inheritdoc}
+     *
+     * @codeCoverageIgnore
      */
     public function jsonSerialize()
     {
