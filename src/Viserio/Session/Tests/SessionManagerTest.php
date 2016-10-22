@@ -5,7 +5,6 @@ namespace Viserio\Session\Tests;
 use Defuse\Crypto\Key;
 use Narrowspark\TestingHelper\ArrayContainer;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
-use Psr\Cache\CacheItemPoolInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Cache\CacheManager;
 use Viserio\Contracts\Cache\Manager as CacheManagerContract;

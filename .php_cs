@@ -7,6 +7,7 @@ $config->getFinder()
     ->in(__DIR__)
     ->exclude('build')
     ->exclude('vendor')
+    ->notPath('src/Viserio/Validation/Sanitizer.php')
     ->name('*.php')
     ->ignoreDotFiles(true)
     ->ignoreVCS(true);
