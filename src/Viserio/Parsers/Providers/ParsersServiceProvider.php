@@ -4,13 +4,16 @@ namespace Viserio\Parsers\Providers;
 
 use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
-use Viserio\Config\Manager as ConfigManager;
 use Viserio\Contracts\Parsers\Loader as LoaderContract;
+use Viserio\Contracts\Parsers\TaggableParser as TaggableParserContract;
+use Viserio\Contracts\Support\Traits\ServiceProviderConfigAwareTrait;
 use Viserio\Parsers\FileLoader;
 use Viserio\Parsers\TaggableParser;
 
 class ParsersServiceProvider implements ServiceProvider
 {
+    use ServiceProviderConfigAwareTrait;
+
     const PACKAGE = 'viserio.parsers';
 
     /**
@@ -19,49 +22,30 @@ class ParsersServiceProvider implements ServiceProvider
     public function getServices()
     {
         return [
-            FileLoader::class => [self::class, 'createFileLoader'],
-            LoaderContract::class => function (ContainerInterface $container) {
-                return $container->get(FileLoader::class);
+            LoaderContract::class => [self::class, 'createFileLoader'],
+            FileLoader::class => function (ContainerInterface $container) {
+                return $container->get(LoaderContract::class);
+            },
+            TaggableParserContract::class => [self::class, 'createTaggableParser'],
+            TaggableParser::class => function (ContainerInterface $container) {
+                return $container->get(TaggableParserContract::class);
             },
             'parser' => function (ContainerInterface $container) {
-                return $container->get(FileLoader::class);
+                return $container->get(TaggableParserContract::class);
             },
-            TaggableParser::class => [self::class, 'createTaggableParser'],
         ];
     }
 
     public static function createFileLoader(ContainerInterface $container): FileLoader
     {
-        if ($container->has(ConfigManager::class)) {
-            $config = $container->get(ConfigManager::class)->get('parsers', []);
-        } else {
-            $config = self::get($container, 'options', []);
-        }
-
         return new FileLoader(
             $container->get(TaggableParser::class),
-            $config['directories'] ?? []
+            self::getConfig($container, 'directories', [])
         );
     }
 
     public static function createTaggableParser(): TaggableParser
     {
         return new TaggableParser();
-    }
-
-    /**
-     * Returns the entry named PACKAGE.$name, of simply $name if PACKAGE.$name is not found.
-     *
-     * @param ContainerInterface $container
-     * @param string             $name
-     *
-     * @return mixed
-     */
-    private static function get(ContainerInterface $container, string $name, $default = null)
-    {
-        $namespacedName = self::PACKAGE . '.' . $name;
-
-        return $container->has($namespacedName) ? $container->get($namespacedName) :
-            ($container->has($name) ? $container->get($name) : $default);
     }
 }

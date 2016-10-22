@@ -38,10 +38,12 @@ class Validator implements ValidatorContract
      * Add your own rule's namespace.
      *
      * @param string $namespace
+     *
+     * @codeCoverageIgnore
      */
-    public function with(string $namespace)
+    public function with(string $namespace, bool $overwrite = false)
     {
-        RespectValidator::with($namespace);
+        RespectValidator::with($namespace, $overwrite);
     }
 
     /**
@@ -55,18 +57,19 @@ class Validator implements ValidatorContract
             if ($fieldRules instanceof RespectValidator) {
                 $rule = $fieldRules;
             } else {
-                if (is_string($fieldRules)) {
-                    // remove duplicate
-                    $fieldRules = array_unique(explode('|', $fieldRules));
-                }
-
                 $rule = $this->createRule($fieldRules);
             }
 
-            $data = $preparedData[$fieldName];
+            $data = $preparedData[$fieldName] ?? $preparedData;
 
             try {
-                $rule->setName(ucfirst($fieldName))->assert($data);
+                if (is_array($data)) {
+                    foreach ($data as $value) {
+                        $rule->setName(ucfirst($fieldName))->assert($value);
+                    }
+                } else {
+                    $rule->setName(ucfirst($fieldName))->assert($data);
+                }
 
                 $this->validRules[$fieldName] = true;
             } catch (NestedValidationException $exception) {
@@ -122,10 +125,9 @@ class Validator implements ValidatorContract
 
         foreach ($data as $key => $value) {
             if (is_array($value)) {
-                $value = $this->parseData($value);
-            } else {
-                $newData[$key] = $value;
+                return $this->parseData($value);
             }
+            $newData[$key] = $value;
         }
 
         return $newData;
@@ -134,14 +136,19 @@ class Validator implements ValidatorContract
     /**
      * Create a rule object.
      *
-     * @param array $rules
+     * @param array|string $rules
      *
      * @return \Respect\Validation\Validator
      */
-    protected function createRule(array $rules): RespectValidator
+    protected function createRule($rules): RespectValidator
     {
         $notRules = [];
         $optionalRules = [];
+
+        if (is_string($rules)) {
+            // remove duplicate
+            $rules = array_unique(explode('|', $rules));
+        }
 
         foreach ($rules as $key => $rule) {
             if (strpos($rule, '!') !== false) {

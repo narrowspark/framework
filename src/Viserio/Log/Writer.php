@@ -200,6 +200,8 @@ class Writer implements LogContract
      * Get the handler parser instance.
      *
      * @return \Viserio\Log\HandlerParser
+     *
+     * @codeCoverageIgnore
      */
     public function getHandlerParser(): HandlerParser
     {
@@ -217,9 +219,13 @@ class Writer implements LogContract
     {
         if (is_array($message)) {
             return var_export($message, true);
+        // @codeCoverageIgnoreStart
         } elseif ($message instanceof Jsonable) {
+            // @codeCoverageIgnoreEnd
             return $message->toJson();
+        // @codeCoverageIgnoreStart
         } elseif ($message instanceof Arrayable) {
+            // @codeCoverageIgnoreEnd
             return var_export($message->toArray(), true);
         }
 

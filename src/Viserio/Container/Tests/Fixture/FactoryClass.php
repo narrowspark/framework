@@ -18,4 +18,9 @@ class FactoryClass
     {
         return 'Hello';
     }
+
+    public static function staticCreateWitArg($name)
+    {
+        return $name;
+    }
 }

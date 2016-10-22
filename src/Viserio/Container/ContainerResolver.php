@@ -106,7 +106,7 @@ class ContainerResolver
 
         array_pop($this->buildStack);
 
-        return call_user_func_array($method, $resolvedParameters);
+        return $method(...$resolvedParameters);
     }
 
     /**

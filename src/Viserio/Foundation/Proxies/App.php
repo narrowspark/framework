@@ -11,6 +11,11 @@ class App extends StaticalProxy
         return self::$container[$key];
     }
 
+    /**
+     * {@inheritdoc}
+     *
+     * @codeCoverageIgnore
+     */
     public static function getInstanceIdentifier()
     {
         return self::$container;

@@ -6,6 +6,9 @@ use Viserio\StaticalProxy\StaticalProxy;
 
 class ProxyStub extends StaticalProxy
 {
+    /**
+     * {@inheritdoc}
+     */
     public static function getInstanceIdentifier()
     {
         return 'baz';

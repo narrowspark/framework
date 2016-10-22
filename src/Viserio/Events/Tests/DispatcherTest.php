@@ -52,6 +52,7 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase
 
         $ee->attach('foo', $callback1, 100);
         $ee->attach('foo', $callback2, 200);
+        $ee->getListeners('*.foo');
 
         $this->assertEquals([$callback2, $callback1], $ee->getListeners('foo'));
     }
@@ -155,6 +156,7 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase
 
         $result = false;
 
+        $this->assertFalse($ee->detach('foo', self::class));
         $this->assertTrue($ee->detach('foo', $callBack));
 
         $ee->trigger('foo');
@@ -317,6 +319,7 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase
 
         $ee->attach('#', [$this->listener, 'onAny']);
         $ee->attach('core.*', [$this->listener, 'onCore']);
+        $ee->attach('core2.*', [$this->listener, 'onCore']);
         $ee->attach('*.exception', [$this->listener, 'onException']);
         $ee->attach(self::coreRequest, [$this->listener, 'onCoreRequest']);
 
@@ -352,6 +355,8 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase
         $this->assertNumberListenersAdded(0, self::coreException);
         $this->assertNumberListenersAdded(0, self::apiRequest);
         $this->assertNumberListenersAdded(0, self::apiException);
+
+        $ee->detach('empty.*', '');
     }
 
     public function testAddedListenersWithWildcardsAreRegisteredLazily()
@@ -373,7 +378,20 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase
         $this->assertNumberListenersAdded(1, self::apiException);
     }
 
-    public function testtrigger()
+    public function testAttachToUnsetSyncedEventsIfMatchRegex()
+    {
+        $ee = $this->dispatcher;
+
+        $ee->attach('core.*', [$this->listener, 'onCore']);
+
+        $this->assertNumberListenersAdded(1, self::coreRequest);
+
+        $ee->attach('core.*', [$this->listener, 'onCore']);
+
+        $this->assertNumberListenersAdded(2, self::coreRequest);
+    }
+
+    public function testTrigger()
     {
         $ee = $this->dispatcher;
 

@@ -163,7 +163,7 @@ class Kernel implements KernelContract, TerminableContract
     {
         $command = new ClosureCommand($signature, $callback);
 
-        $this->events->attach('console.starting', function ($console) use ($command) {
+        Cerebro::starting(function ($console) use ($command) {
             $console->add($command);
         });
 

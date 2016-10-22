@@ -10,6 +10,8 @@ class IOException extends RuntimeException
     private $path;
 
     /**
+     * Create a new IO exception.
+     *
      * @param string $message
      */
     public function __construct(string $message, $code = 0, Exception $previous = null, $path = null)
@@ -20,7 +22,9 @@ class IOException extends RuntimeException
     }
 
     /**
-     * {@inheritdoc}
+     * Get the file path.
+     *
+     * @codeCoverageIgnore
      */
     public function getPath()
     {

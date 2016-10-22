@@ -43,7 +43,7 @@ return [
 
         $container->get('config')->set('translation', [
             'locale' => 'en',
-            'path.lang' => $this->file->url(),
+            'lang_path' => $this->file->url(),
         ]);
 
         $this->assertInstanceOf(TranslationManager::class, $container->get(TranslationManager::class));
@@ -59,7 +59,7 @@ return [
 
         $container->instance('options', [
             'locale' => 'en',
-            'path.lang' => $this->file->url(),
+            'lang_path' => $this->file->url(),
         ]);
 
         $this->assertInstanceOf(TranslationManager::class, $container->get(TranslationManager::class));
@@ -73,7 +73,7 @@ return [
 
         $container->instance('viserio.translation.options', [
             'locale' => 'en',
-            'path.lang' => $this->file->url(),
+            'lang_path' => $this->file->url(),
         ]);
 
         $this->assertInstanceOf(TranslationManager::class, $container->get(TranslationManager::class));

@@ -6,6 +6,7 @@ use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
 use Viserio\Config\Manager as ConfigManager;
 use Viserio\Contracts\Encryption\Encrypter;
+use Viserio\Contracts\Session\Store as StoreContract;
 use Viserio\Session\SessionManager;
 
 class SessionServiceProvider implements ServiceProvider
@@ -36,8 +37,8 @@ class SessionServiceProvider implements ServiceProvider
         return $manager;
     }
 
-    public static function createSessionStore(ContainerInterface $container): SessionManager
+    public static function createSessionStore(ContainerInterface $container): StoreContract
     {
-        return $container->get(SessionManager::class)->getDriver();
+        return $container->get(SessionManager::class)->driver();
     }
 }

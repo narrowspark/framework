@@ -33,8 +33,10 @@ class Php implements EngineContract
             );
         }
 
+        // @codeCoverageIgnoreStart
         // Return temporary output buffer content, destroy output buffer
         return ltrim(ob_get_clean());
+        // @codeCoverageIgnoreEnd
     }
 
     /**
@@ -63,6 +65,7 @@ class Php implements EngineContract
      */
     private function getErrorException($exception): ErrorException
     {
+        // @codeCoverageIgnoreStart
         if ($exception instanceof ParseError) {
             $message = 'Parse error: ' . $exception->getMessage();
             $severity = E_PARSE;
@@ -73,6 +76,7 @@ class Php implements EngineContract
             $message = $exception->getMessage();
             $severity = E_ERROR;
         }
+        // @codeCoverageIgnoreEnd
 
         return new ErrorException(
             $message,

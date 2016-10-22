@@ -6,13 +6,15 @@ use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
 use Monolog\Logger;
 use Psr\Log\LoggerInterface;
-use Viserio\Config\Manager as ConfigManager;
+use Viserio\Contracts\Events\Dispatcher as DispatcherContract;
 use Viserio\Contracts\Log\Log;
-use Viserio\Events\Dispatcher;
+use Viserio\Contracts\Support\Traits\ServiceProviderConfigAwareTrait;
 use Viserio\Log\Writer as MonologWriter;
 
 class LoggerServiceProvider implements ServiceProvider
 {
+    use ServiceProviderConfigAwareTrait;
+
     const PACKAGE = 'viserio.log';
 
     /**
@@ -42,34 +44,12 @@ class LoggerServiceProvider implements ServiceProvider
 
     public static function createLogger(ContainerInterface $container): MonologWriter
     {
-        if ($container->has(ConfigManager::class)) {
-            $config = $container->get(ConfigManager::class)->get('log');
-        } else {
-            $config = self::get($container, 'options');
-        }
+        $logger = new MonologWriter(new Logger(self::getConfig($container, 'env', 'production')));
 
-        $logger = new MonologWriter(new Logger($config['env']));
-
-        if ($container->has(Dispatcher::class)) {
-            $logger->setEventsDispatcher($container->get(Dispatcher::class));
+        if ($container->has(DispatcherContract::class)) {
+            $logger->setEventsDispatcher($container->get(DispatcherContract::class));
         }
 
         return $logger;
-    }
-
-    /**
-     * Returns the entry named PACKAGE.$name, of simply $name if PACKAGE.$name is not found.
-     *
-     * @param ContainerInterface $container
-     * @param string             $name
-     *
-     * @return mixed
-     */
-    private static function get(ContainerInterface $container, string $name, $default = null)
-    {
-        $namespacedName = self::PACKAGE . '.' . $name;
-
-        return $container->has($namespacedName) ? $container->get($namespacedName) :
-            ($container->has($name) ? $container->get($name) : $default);
     }
 }

@@ -23,7 +23,6 @@
         "viserio/cotracts"                    : "self.version"
     },
     "require-dev": {
-        "container-interop/container-interop" : "^1.1",
         "container-interop/service-provider"  : "^0.3",
         "phpunit/phpunit"                     : "^5.1",
         "mikey179/vfsStream"                  : "^1.6",
@@ -43,7 +42,6 @@
         }
     },
     "suggest": {
-        "container-interop/container-interop" : "Required to use service-provider (^1.1).",
         "container-interop/service-provider"  : "Required to use service-provider (^0.3)."
     },
     "extra": {

@@ -40,6 +40,18 @@ class MiddelwareDispatcherTest extends \PHPUnit_Framework_TestCase
         $dispatcher->withoutMiddleware(new FakeMiddleware2());
     }
 
+    /**
+     * @expectedException \LogicException
+     * @expectedExceptionMessage Unsupported middleware type.
+     */
+    public function testWithMiddlewareToThrowException()
+    {
+        $response = $this->mock(Response::class);
+
+        $dispatcher = new Dispatcher($response);
+        $dispatcher->withMiddleware(self::class);
+    }
+
     public function testWithoutMiddleware()
     {
         $request = $this->mock(Request::class);
@@ -60,6 +72,18 @@ class MiddelwareDispatcherTest extends \PHPUnit_Framework_TestCase
 
         $this->assertTrue($newResponse->hasHeader('X-Foo'));
         $this->assertEquals('modified', $newResponse->getHeader('X-Foo'));
+    }
+
+    /**
+     * @expectedException \LogicException
+     * @expectedExceptionMessage Unsupported middleware type.
+     */
+    public function testWithoutMiddlewareToThrowException()
+    {
+        $response = $this->mock(Response::class);
+
+        $dispatcher = new Dispatcher($response);
+        $dispatcher->withoutMiddleware(self::class);
     }
 
     public function testPipeAddContainer()

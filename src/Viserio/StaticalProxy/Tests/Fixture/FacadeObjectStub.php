@@ -7,6 +7,9 @@ use Viserio\StaticalProxy\StaticalProxy;
 
 class FacadeObjectStub extends StaticalProxy
 {
+    /**
+     * {@inheritdoc}
+     */
     public static function getInstanceIdentifier()
     {
         return new StdClass();

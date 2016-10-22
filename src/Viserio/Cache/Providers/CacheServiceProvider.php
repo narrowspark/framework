@@ -16,18 +16,18 @@ class CacheServiceProvider implements ServiceProvider
     public function getServices()
     {
         return [
-            CacheManager::class => [self::class, 'registerCacheFactory'],
-            CacheManagerContract::class => function (ContainerInterface $container) {
-                return $container->get(CacheManager::class);
+            CacheManagerContract::class => [self::class, 'registerCacheFactory'],
+            CacheManager::class => function (ContainerInterface $container) {
+                return $container->get(CacheManagerContract::class);
             },
             'cache' => function (ContainerInterface $container) {
-                return $container->get(CacheManager::class);
+                return $container->get(CacheManagerContract::class);
             },
             'cache.store' => [self::class, 'registerDefaultCache'],
         ];
     }
 
-    public static function registerCacheFactory(ContainerInterface $container)
+    public static function registerCacheFactory(ContainerInterface $container): CacheManager
     {
         $cache = new CacheManager($container->get(ConfigManager::class));
         $cache->setContainer($container);
