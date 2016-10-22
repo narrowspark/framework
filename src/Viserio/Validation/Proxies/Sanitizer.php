@@ -13,6 +13,6 @@ class Sanitizer extends StaticalProxy
      */
     public static function getInstanceIdentifier()
     {
-        return 'validator';
+        return 'sanitizer';
     }
 }
