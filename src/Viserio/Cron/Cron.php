@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Cron;
 
-use Closure;
 use Cake\Chronos\Chronos;
+use Closure;
 use Cron\CronExpression;
 use Viserio\Contracts\Cron\Cron as CronContract;
 
@@ -246,8 +246,8 @@ class Cron implements CronContract
     {
         $segments = explode(':', $time);
 
-        return $this->spliceIntoPosition(2, (int)$segments[0])
-            ->spliceIntoPosition(1, count($segments) == 2 ? (int)$segments[1] : '0');
+        return $this->spliceIntoPosition(2, (int) $segments[0])
+            ->spliceIntoPosition(1, count($segments) == 2 ? (int) $segments[1] : '0');
     }
 
     /**
@@ -260,7 +260,7 @@ class Cron implements CronContract
      */
     public function twiceDaily(int $first = 1, int $second = 13): CronContract
     {
-        $hours = $first.','.$second;
+        $hours = $first . ',' . $second;
 
         return $this->spliceIntoPosition(1, 0)
             ->spliceIntoPosition(2, $hours);
@@ -464,6 +464,7 @@ class Cron implements CronContract
     public function timezone($timezone)
     {
         $this->timezone = $timezone;
+
         return $this;
     }
 
