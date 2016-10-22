@@ -57,11 +57,6 @@ class Validator implements ValidatorContract
             if ($fieldRules instanceof RespectValidator) {
                 $rule = $fieldRules;
             } else {
-                if (is_string($fieldRules)) {
-                    // remove duplicate
-                    $fieldRules = array_unique(explode('|', $fieldRules));
-                }
-
                 $rule = $this->createRule($fieldRules);
             }
 
@@ -141,14 +136,19 @@ class Validator implements ValidatorContract
     /**
      * Create a rule object.
      *
-     * @param array $rules
+     * @param array|string $rules
      *
      * @return \Respect\Validation\Validator
      */
-    protected function createRule(array $rules): RespectValidator
+    protected function createRule($rules): RespectValidator
     {
         $notRules = [];
         $optionalRules = [];
+
+        if (is_string($rules)) {
+            // remove duplicate
+            $rules = array_unique(explode('|', $rules));
+        }
 
         foreach ($rules as $key => $rule) {
             if (strpos($rule, '!') !== false) {
