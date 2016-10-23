@@ -114,7 +114,7 @@ class Cron implements CronContract
      */
     public function hourly(): CronContract
     {
-        return $this->spliceIntoPosition(1, 0);
+        return $this->spliceIntoPosition(1, '0');
     }
 
     /**
@@ -124,8 +124,8 @@ class Cron implements CronContract
      */
     public function daily(): CronContract
     {
-        return $this->spliceIntoPosition(1, 0)
-            ->spliceIntoPosition(2, 0);
+        return $this->spliceIntoPosition(1, '0')
+            ->spliceIntoPosition(2, '0');
     }
 
     /**
@@ -135,9 +135,9 @@ class Cron implements CronContract
      */
     public function monthly(): CronContract
     {
-        return $this->spliceIntoPosition(1, 0)
-            ->spliceIntoPosition(2, 0)
-            ->spliceIntoPosition(3, 1);
+        return $this->spliceIntoPosition(1, '0')
+            ->spliceIntoPosition(2, '0')
+            ->spliceIntoPosition(3, '1');
     }
 
     /**
@@ -147,10 +147,10 @@ class Cron implements CronContract
      */
     public function yearly(): CronContract
     {
-        return $this->spliceIntoPosition(1, 0)
-            ->spliceIntoPosition(2, 0)
-            ->spliceIntoPosition(3, 1)
-            ->spliceIntoPosition(4, 1);
+        return $this->spliceIntoPosition(1, '0')
+            ->spliceIntoPosition(2, '0')
+            ->spliceIntoPosition(3, '1')
+            ->spliceIntoPosition(4, '1');
     }
 
     /**
@@ -160,9 +160,9 @@ class Cron implements CronContract
      */
     public function quarterly(): CronContract
     {
-        return $this->spliceIntoPosition(1, 0)
-            ->spliceIntoPosition(2, 0)
-            ->spliceIntoPosition(3, 1)
+        return $this->spliceIntoPosition(1, '0')
+            ->spliceIntoPosition(2, '0')
+            ->spliceIntoPosition(3, '1')
             ->spliceIntoPosition(4, '*/3');
     }
 
@@ -232,7 +232,7 @@ class Cron implements CronContract
     {
         $this->dailyAt($time);
 
-        return $this->spliceIntoPosition(3, $day);
+        return $this->spliceIntoPosition(3, (string) $day);
     }
 
     /**
@@ -246,8 +246,8 @@ class Cron implements CronContract
     {
         $segments = explode(':', $time);
 
-        return $this->spliceIntoPosition(2, (int) $segments[0])
-            ->spliceIntoPosition(1, count($segments) == 2 ? (int) $segments[1] : '0');
+        return $this->spliceIntoPosition(2, (string) $segments[0])
+            ->spliceIntoPosition(1, count($segments) == 2 ? (string) $segments[1] : '0');
     }
 
     /**
@@ -262,7 +262,7 @@ class Cron implements CronContract
     {
         $hours = $first . ',' . $second;
 
-        return $this->spliceIntoPosition(1, 0)
+        return $this->spliceIntoPosition(1, '0')
             ->spliceIntoPosition(2, $hours);
     }
 
@@ -353,9 +353,24 @@ class Cron implements CronContract
      */
     public function weekly(): CronContract
     {
-        return $this->spliceIntoPosition(1, 0)
-            ->spliceIntoPosition(2, 0)
-            ->spliceIntoPosition(5, 0);
+        return $this->spliceIntoPosition(1, '0')
+            ->spliceIntoPosition(2, '0')
+            ->spliceIntoPosition(5, '0');
+    }
+
+    /**
+     * Schedule the cron job to run weekly on a given day and time.
+     *
+     * @param int    $day
+     * @param string $time
+     *
+     * @return $this
+     */
+    public function weeklyOn(int $day, string $time = '0:0'): CronContract
+    {
+        $this->dailyAt($time);
+
+        return $this->spliceIntoPosition(5, (string) $day);
     }
 
     /**
@@ -366,7 +381,7 @@ class Cron implements CronContract
      *
      * @return $this
      */
-    public function between(string $startTime, string $endTime)
+    public function between(string $startTime, string $endTime): CronContract
     {
         return $this->when($this->inTimeInterval($startTime, $endTime));
     }
@@ -379,7 +394,7 @@ class Cron implements CronContract
      *
      * @return $this
      */
-    public function unlessBetween(string $startTime, string $endTime)
+    public function unlessBetween(string $startTime, string $endTime): CronContract
     {
         return $this->skip($this->inTimeInterval($startTime, $endTime));
     }
@@ -391,7 +406,7 @@ class Cron implements CronContract
      *
      * @return $this
      */
-    public function when(Closure $callback)
+    public function when(Closure $callback): CronContract
     {
         $this->filters[] = $callback;
 
@@ -405,7 +420,7 @@ class Cron implements CronContract
      *
      * @return $this
      */
-    public function skip(Closure $callback)
+    public function skip(Closure $callback): CronContract
     {
         $this->rejects[] = $callback;
 
@@ -419,7 +434,7 @@ class Cron implements CronContract
      *
      * @return $this
      */
-    public function before(Closure $callback)
+    public function before(Closure $callback): CronContract
     {
         $this->beforeCallbacks[] = $callback;
 
@@ -433,7 +448,7 @@ class Cron implements CronContract
      *
      * @return $this
      */
-    public function after(Closure $callback)
+    public function after(Closure $callback): CronContract
     {
         $this->afterCallbacks[] = $callback;
 
@@ -447,7 +462,7 @@ class Cron implements CronContract
      *
      * @return $this
      */
-    public function description(string $description)
+    public function description(string $description): CronContract
     {
         $this->description = $description;
 
@@ -461,7 +476,7 @@ class Cron implements CronContract
      *
      * @return $this
      */
-    public function timezone($timezone)
+    public function timezone($timezone): CronContract
     {
         $this->timezone = $timezone;
 
