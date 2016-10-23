@@ -186,41 +186,33 @@ class CronTest extends \PHPUnit_Framework_TestCase
     {
         $cron = new Cron('');
         $cron->between('10:00', '12:00');
-
     }
 
     public function testUnlessBetween()
     {
-
     }
 
     public function testWhen()
     {
-
     }
 
     public function testSkip()
     {
-
     }
 
     public function testBefore()
     {
-
     }
 
     public function testAfter()
     {
-
     }
 
     public function testDescription()
     {
-
     }
 
     public function testTimezone()
     {
-
     }
 }

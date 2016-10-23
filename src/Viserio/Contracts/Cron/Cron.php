@@ -143,6 +143,7 @@ interface Cron
      * @return $this
      */
     public function tuesdays(): Cron;
+
     /**
      * Schedule the cron job to run only on Wednesdays.
      *
