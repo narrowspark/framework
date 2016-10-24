@@ -68,9 +68,16 @@ class Cron implements CronContract
     /**
      * The timezone the date should be evaluated on.
      *
-     * @var \DateTimeZone|string
+     * @var string
      */
     public $timezone;
+
+    /**
+     * The list of environments the command should run under.
+     *
+     * @var array
+     */
+    public $environments = [];
 
     /**
      * Create a new cron instance.
@@ -81,6 +88,30 @@ class Cron implements CronContract
     {
         $this->command = $command;
         $this->output = $this->getDefaultOutput();
+    }
+
+    /**
+     * Run the given event.
+     */
+    public function run()
+    {
+        if (! $this->runInBackground) {
+            $this->runCommandInForeground();
+        } else {
+            $this->runCommandInBackground();
+        }
+    }
+
+    /**
+     * State that the command should run in background.
+     *
+     * @return $this
+     */
+    public function runInBackground(): CronContract
+    {
+        $this->runInBackground = true;
+
+        return $this;
     }
 
     /**
@@ -472,11 +503,11 @@ class Cron implements CronContract
     /**
      * Set the timezone the date should be evaluated on.
      *
-     * @param \DateTimeZone|string $timezone
+     * @param string $timezone
      *
      * @return $this
      */
-    public function timezone($timezone): CronContract
+    public function timezone(string $timezone): CronContract
     {
         $this->timezone = $timezone;
 
