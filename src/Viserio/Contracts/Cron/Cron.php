@@ -68,7 +68,6 @@ interface Cron
      */
     public function sendOutputTo(string $location): Cron;
 
-
     /**
      * Determine if the given cron job should run based on the Cron expression.
      *
