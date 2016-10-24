@@ -20,12 +20,15 @@
     "require": {
         "php"                                 : "7.0.0 - 7.0.5 || ^7.0.7",
         "cakephp/chronos"                     : "^1.0",
+        "php-di/invoker"                      : "^1.3",
         "mtdowling/cron-expression"           : "^1.1",
-        "viserio/cotracts"                    : "self.version"
+        "psr/container-implementation"        : "^1.0",
+        "symfony/process"                     : "^3.1",
+        "viserio/cotracts"                    : "self.version",
+        "viserio/support"                     : "self.version"
     },
     "require-dev": {
         "container-interop/service-provider"  : "^0.3",
-        "psr/container-implementation"        : "^1.0",
         "narrowspark/testing-helper"          : "^1.5",
         "phpunit/phpunit"                     : "^5.1",
         "viserio/console"                     : "self.version"

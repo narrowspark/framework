@@ -5,10 +5,16 @@ namespace Viserio\Cron;
 use Cake\Chronos\Chronos;
 use Closure;
 use Cron\CronExpression;
+use Symfony\Component\Process\Process;
+use Symfony\Component\Process\ProcessUtils;
 use Viserio\Contracts\Cron\Cron as CronContract;
+use Viserio\Contracts\Container\Traits\ContainerAwareTrait;
+use Viserio\Support\Invoker;
 
 class Cron implements CronContract
 {
+    use ContainerAwareTrait;
+
     /**
      * The cron expression representing the cron job's frequency.
      *
@@ -63,21 +69,56 @@ class Cron implements CronContract
      *
      * @var string
      */
-    public $description;
+    protected $description;
 
     /**
      * The timezone the date should be evaluated on.
      *
      * @var string
      */
-    public $timezone;
+    protected $timezone;
 
     /**
      * The list of environments the command should run under.
      *
      * @var array
      */
-    public $environments = [];
+    protected $environments = [];
+
+    /**
+     * The working directory.
+     *
+     * @var stirng
+     */
+    protected $path;
+
+    /**
+     * The mutex directory.
+     *
+     * @var stirng
+     */
+    protected $mutexPath;
+
+    /**
+     * Indicates if the command should run in background.
+     *
+     * @var bool
+     */
+    protected $runInBackground = false;
+
+    /**
+     * Invoker instance.
+     *
+     * @var \Viserio\Support\Invoker
+     */
+    protected $invoker;
+
+    /**
+     * The user the command should run as.
+     *
+     * @var string
+     */
+    protected $user;
 
     /**
      * Create a new cron instance.
@@ -91,15 +132,65 @@ class Cron implements CronContract
     }
 
     /**
-     * Run the given event.
+     * Set working directory.
+     *
+     * @param string $path
+     *
+     * @return $this
      */
-    public function run()
+    public function setPath(string $path)
+    {
+        $this->path = $path;
+
+        return $this;
+    }
+
+    /**
+     * Get the working directory.
+     *
+     * @return string
+     */
+    public function getPath(): string
+    {
+        return $this->path;
+    }
+
+    /**
+     * Set which user the command should run as.
+     *
+     * @param string $user
+     *
+     * @return $this
+     */
+    public function setUser(string $user): CronContract
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * Get which user runs the command.
+     *
+     * @return stirng
+     */
+    public function getUser(): string
+    {
+        return $this->user;
+    }
+
+    /**
+     * Run the given event.
+     *
+     * @return int The exit status code
+     */
+    public function run(): int
     {
         if (! $this->runInBackground) {
-            $this->runCommandInForeground();
-        } else {
-            $this->runCommandInBackground();
+            return $this->runCommandInForeground($container);
         }
+
+        return $this->runCommandInBackground();
     }
 
     /**
@@ -112,6 +203,44 @@ class Cron implements CronContract
         $this->runInBackground = true;
 
         return $this;
+    }
+
+    /**
+     * Build the command string.
+     *
+     * @return string
+     */
+    public function buildCommand(): string
+    {
+        $output = ProcessUtils::escapeArgument($this->output);
+        $redirect = $this->shouldAppendOutput ? ' >> ' : ' > ';
+        $isWindows = strtolower(substr(PHP_OS, 0, 3)) === 'win';
+
+        if ($this->withoutOverlapping) {
+            if ($isWindows) {
+                $command = '(echo \'\' > "'.$this->getMutexPath().'" & '.$this->command.' & del "'.$this->getMutexPath().'")'.$redirect.$output.' 2>&1 &';
+            } else {
+                $command = '(touch '.$this->getMutexPath().'; '.$this->command.'; rm '.$this->getMutexPath().')'.$redirect.$output.' 2>&1 &';
+            }
+        } else {
+            $command = $this->command.$redirect.$output.' 2>&1 &';
+        }
+
+        return $this->user && ! $isWindows ? 'sudo -u '.$this->user.' -- sh -c \''.$command.'\'' : $command;
+    }
+
+    /**
+     * Do not allow the event to overlap each other.
+     *
+     * @return $this
+     */
+    public function withoutOverlapping(): CronContract
+    {
+        $this->withoutOverlapping = true;
+
+        return $this->skip(function () {
+            return file_exists($this->getMutexPath());
+        });
     }
 
     /**
@@ -515,6 +644,20 @@ class Cron implements CronContract
     }
 
     /**
+     * Set the mutex path.
+     *
+     * @param string $path
+     *
+     * @return $this
+     */
+    public function setMutexPath(string $path): CronContract
+    {
+        $this->mutexPath = $path;
+
+        return $this;
+    }
+
+    /**
      * Splice the given value into the given position of the expression.
      *
      * @param int    $position
@@ -557,6 +700,76 @@ class Cron implements CronContract
     }
 
     /**
+     * Run the command in the foreground.
+     *
+     * @return int The exit status code
+     */
+    protected function runCommandInForeground(): int
+    {
+        $this->callBeforeCallbacks();
+
+        $process = new Process(
+            trim($this->buildCommand(), '& '),
+            $this->path,
+            null,
+            null,
+            null
+        );
+
+        $run = $process->run();
+
+        $this->callAfterCallbacks();
+
+        return $run;
+    }
+
+    /**
+     * Run the command in the background.
+     *
+     * @return int The exit status code
+     */
+    protected function runCommandInBackground(): int
+    {
+        return (new Process(
+            $this->buildCommand(),
+            $this->path,
+            null,
+            null,
+            null
+        ))->run();
+    }
+
+    /**
+     * Call all of the "before" callbacks for the cron job.
+     */
+    protected function callBeforeCallbacks()
+    {
+        foreach ($this->beforeCallbacks as $callback) {
+            $this->getInvoker()->call($callback);
+        }
+    }
+
+    /**
+     * Call all of the "after" callbacks for the cron job.
+     */
+    protected function callAfterCallbacks()
+    {
+        foreach ($this->afterCallbacks as $callback) {
+            $this->getInvoker()->call($callback);
+        }
+    }
+
+    /**
+     * Get the mutex path for the scheduled command.
+     *
+     * @return string
+     */
+    protected function getMutexPath(): string
+    {
+        return $this->mutexPath.DIRECTORY_SEPARATOR.'schedule-'.sha1($this->expression.$this->command);
+    }
+
+    /**
      * Schedule the cron job to run between start and end time.
      *
      * @param string $startTime
@@ -564,12 +777,32 @@ class Cron implements CronContract
      *
      * @return \Closure
      */
-    private function inTimeInterval(string $startTime, string $endTime): Closure
+    protected function inTimeInterval(string $startTime, string $endTime): Closure
     {
         return function () use ($startTime, $endTime) {
             $now = Chronos::now()->getTimestamp();
 
             return $now >= strtotime($startTime) && $now <= strtotime($endTime);
         };
+    }
+
+    /**
+     * Get configured invoker.
+     *
+     * @return \Viserio\Support\Invoker
+     */
+    private function getInvoker(): Invoker
+    {
+        if (! $this->invoker) {
+            $this->invoker = new Invoker();
+
+            if ($this->container !== null) {
+                $this->invoker->setContainer($this->getContainer())
+                    ->injectByTypeHint(true)
+                    ->injectByParameterName(true);
+            }
+        }
+
+        return $this->invoker;
     }
 }
