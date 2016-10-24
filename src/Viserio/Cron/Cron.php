@@ -7,8 +7,8 @@ use Closure;
 use Cron\CronExpression;
 use Symfony\Component\Process\Process;
 use Symfony\Component\Process\ProcessUtils;
-use Viserio\Contracts\Cron\Cron as CronContract;
 use Viserio\Contracts\Container\Traits\ContainerAwareTrait;
+use Viserio\Contracts\Cron\Cron as CronContract;
 use Viserio\Support\Invoker;
 
 class Cron implements CronContract
@@ -218,15 +218,15 @@ class Cron implements CronContract
 
         if ($this->withoutOverlapping) {
             if ($isWindows) {
-                $command = '(echo \'\' > "'.$this->getMutexPath().'" & '.$this->command.' & del "'.$this->getMutexPath().'")'.$redirect.$output.' 2>&1 &';
+                $command = '(echo \'\' > "' . $this->getMutexPath() . '" & ' . $this->command . ' & del "' . $this->getMutexPath() . '")' . $redirect . $output . ' 2>&1 &';
             } else {
-                $command = '(touch '.$this->getMutexPath().'; '.$this->command.'; rm '.$this->getMutexPath().')'.$redirect.$output.' 2>&1 &';
+                $command = '(touch ' . $this->getMutexPath() . '; ' . $this->command . '; rm ' . $this->getMutexPath() . ')' . $redirect . $output . ' 2>&1 &';
             }
         } else {
-            $command = $this->command.$redirect.$output.' 2>&1 &';
+            $command = $this->command . $redirect . $output . ' 2>&1 &';
         }
 
-        return $this->user && ! $isWindows ? 'sudo -u '.$this->user.' -- sh -c \''.$command.'\'' : $command;
+        return $this->user && ! $isWindows ? 'sudo -u ' . $this->user . ' -- sh -c \'' . $command . '\'' : $command;
     }
 
     /**
@@ -766,7 +766,7 @@ class Cron implements CronContract
      */
     protected function getMutexPath(): string
     {
-        return $this->mutexPath.DIRECTORY_SEPARATOR.'schedule-'.sha1($this->expression.$this->command);
+        return $this->mutexPath . DIRECTORY_SEPARATOR . 'schedule-' . sha1($this->expression . $this->command);
     }
 
     /**
