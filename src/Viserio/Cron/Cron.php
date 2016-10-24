@@ -51,6 +51,14 @@ class Cron implements CronContract
     public $output = '/dev/null';
 
     /**
+     * Indicates whether output should be appended.
+     *
+     * @var bool
+     */
+    protected $shouldAppendOutput = false;
+
+
+    /**
      * The array of callbacks to be run before the cron is started.
      *
      * @var array
@@ -156,11 +164,21 @@ class Cron implements CronContract
     }
 
     /**
-     * Set which user the command should run as.
+     * Set the mutex path.
      *
-     * @param string $user
+     * @param string $path
      *
      * @return $this
+     */
+    public function setMutexPath(string $path): CronContract
+    {
+        $this->mutexPath = $path;
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
      */
     public function setUser(string $user): CronContract
     {
@@ -170,9 +188,7 @@ class Cron implements CronContract
     }
 
     /**
-     * Get which user runs the command.
-     *
-     * @return stirng
+     * {@inheritdoc}
      */
     public function getUser(): string
     {
@@ -180,9 +196,7 @@ class Cron implements CronContract
     }
 
     /**
-     * Run the given event.
-     *
-     * @return int The exit status code
+     * {@inheritdoc}
      */
     public function run(): int
     {
@@ -194,9 +208,7 @@ class Cron implements CronContract
     }
 
     /**
-     * State that the command should run in background.
-     *
-     * @return $this
+     * {@inheritdoc}
      */
     public function runInBackground(): CronContract
     {
@@ -206,9 +218,7 @@ class Cron implements CronContract
     }
 
     /**
-     * Build the command string.
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function buildCommand(): string
     {
@@ -230,9 +240,7 @@ class Cron implements CronContract
     }
 
     /**
-     * Do not allow the event to overlap each other.
-     *
-     * @return $this
+     * {@inheritdoc}
      */
     public function withoutOverlapping(): CronContract
     {
@@ -244,9 +252,40 @@ class Cron implements CronContract
     }
 
     /**
-     * Get the cron expression for the cron job.
-     *
-     * @return string
+     * {@inheritdoc}
+     */
+    public function sendOutputTo(string $location): CronContract
+    {
+        $this->output = $location;
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function appendOutputTo(string $location): CronContract
+    {
+        $this->output = $location;
+        $this->shouldAppendOutput = true;
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isDue(string $environment, bool $isMaintenance): bool
+    {
+        if (! $this->runsInMaintenanceMode() && $isMaintenance) {
+            return false;
+        }
+
+        return $this->expressionPasses() && $this->runsInEnvironment($environment);
+    }
+
+    /**
+     * {@inheritdoc}
      */
     public function getExpression(): string
     {
@@ -254,11 +293,7 @@ class Cron implements CronContract
     }
 
     /**
-     * The Cron expression representing the cron's frequency.
-     *
-     * @param string $expression
-     *
-     * @return $this
+     * {@inheritdoc}
      */
     public function cron(string $expression): CronContract
     {
@@ -268,9 +303,7 @@ class Cron implements CronContract
     }
 
     /**
-     * Schedule the cron job to run hourly.
-     *
-     * @return $this
+     * {@inheritdoc}
      */
     public function hourly(): CronContract
     {
@@ -278,9 +311,7 @@ class Cron implements CronContract
     }
 
     /**
-     * Schedule the cron job to run daily.
-     *
-     * @return $this
+     * {@inheritdoc}
      */
     public function daily(): CronContract
     {
@@ -289,9 +320,7 @@ class Cron implements CronContract
     }
 
     /**
-     * Schedule the cron job to run monthly.
-     *
-     * @return $this
+     * {@inheritdoc}
      */
     public function monthly(): CronContract
     {
@@ -301,9 +330,7 @@ class Cron implements CronContract
     }
 
     /**
-     * Schedule the cron job to run yearly.
-     *
-     * @return $this
+     * {@inheritdoc}
      */
     public function yearly(): CronContract
     {
@@ -314,9 +341,7 @@ class Cron implements CronContract
     }
 
     /**
-     * Schedule the cron job to run quarterly.
-     *
-     * @return $this
+     * {@inheritdoc}
      */
     public function quarterly(): CronContract
     {
@@ -327,9 +352,7 @@ class Cron implements CronContract
     }
 
     /**
-     * Schedule the cron job to run every minute.
-     *
-     * @return $this
+     * {@inheritdoc}
      */
     public function everyMinute(): CronContract
     {
@@ -337,9 +360,7 @@ class Cron implements CronContract
     }
 
     /**
-     * Schedule the cron job to run every five minutes.
-     *
-     * @return $this
+     * {@inheritdoc}
      */
     public function everyFiveMinutes(): CronContract
     {
@@ -347,9 +368,7 @@ class Cron implements CronContract
     }
 
     /**
-     * Schedule the cron job to run every ten minutes.
-     *
-     * @return $this
+     * {@inheritdoc}
      */
     public function everyTenMinutes(): CronContract
     {
@@ -357,9 +376,7 @@ class Cron implements CronContract
     }
 
     /**
-     * Schedule the cron job to run every thirty minutes.
-     *
-     * @return $this
+     * {@inheritdoc}
      */
     public function everyThirtyMinutes(): CronContract
     {
@@ -367,11 +384,7 @@ class Cron implements CronContract
     }
 
     /**
-     * Set the days of the week the command should run on.
-     *
-     * @param array|dynamic $days
-     *
-     * @return $this
+     * {@inheritdoc}
      */
     public function days($days): CronContract
     {
@@ -381,12 +394,7 @@ class Cron implements CronContract
     }
 
     /**
-     * Schedule the cron job to run monthly on a given day and time.
-     *
-     * @param int    $day
-     * @param string $time
-     *
-     * @return $this
+     * {@inheritdoc}
      */
     public function monthlyOn(int $day = 1, string $time = '0:0'): CronContract
     {
@@ -396,11 +404,7 @@ class Cron implements CronContract
     }
 
     /**
-     * Schedule the cron job to run daily at a given time (10:00, 19:30, etc).
-     *
-     * @param string $time
-     *
-     * @return $this
+     * {@inheritdoc}
      */
     public function dailyAt(string $time): CronContract
     {
@@ -411,12 +415,7 @@ class Cron implements CronContract
     }
 
     /**
-     * Schedule the cron job to run twice daily.
-     *
-     * @param int $first
-     * @param int $second
-     *
-     * @return $this
+     * {@inheritdoc}
      */
     public function twiceDaily(int $first = 1, int $second = 13): CronContract
     {
@@ -427,9 +426,7 @@ class Cron implements CronContract
     }
 
     /**
-     * Schedule the cron job to run only on weekdays.
-     *
-     * @return $this
+     * {@inheritdoc}
      */
     public function weekdays(): CronContract
     {
@@ -437,9 +434,7 @@ class Cron implements CronContract
     }
 
     /**
-     * Schedule the cron job to run only on Mondays.
-     *
-     * @return $this
+     * {@inheritdoc}
      */
     public function mondays(): CronContract
     {
@@ -447,9 +442,7 @@ class Cron implements CronContract
     }
 
     /**
-     * Schedule the cron job to run only on Tuesdays.
-     *
-     * @return $this
+     * {@inheritdoc}
      */
     public function tuesdays(): CronContract
     {
@@ -457,9 +450,7 @@ class Cron implements CronContract
     }
 
     /**
-     * Schedule the cron job to run only on Wednesdays.
-     *
-     * @return $this
+     * {@inheritdoc}
      */
     public function wednesdays(): CronContract
     {
@@ -467,9 +458,7 @@ class Cron implements CronContract
     }
 
     /**
-     * Schedule the cron job to run only on Thursdays.
-     *
-     * @return $this
+     * {@inheritdoc}
      */
     public function thursdays(): CronContract
     {
@@ -477,9 +466,7 @@ class Cron implements CronContract
     }
 
     /**
-     * Schedule the cron job to run only on Fridays.
-     *
-     * @return $this
+     * {@inheritdoc}
      */
     public function fridays(): CronContract
     {
@@ -487,9 +474,7 @@ class Cron implements CronContract
     }
 
     /**
-     * Schedule the cron job to run only on Saturdays.
-     *
-     * @return $this
+     * {@inheritdoc}
      */
     public function saturdays(): CronContract
     {
@@ -497,9 +482,7 @@ class Cron implements CronContract
     }
 
     /**
-     * Schedule the cron job to run only on Sundays.
-     *
-     * @return $this
+     * {@inheritdoc}
      */
     public function sundays(): CronContract
     {
@@ -507,9 +490,7 @@ class Cron implements CronContract
     }
 
     /**
-     * Schedule the cron job to run weekly.
-     *
-     * @return $this
+     * {@inheritdoc}
      */
     public function weekly(): CronContract
     {
@@ -519,12 +500,7 @@ class Cron implements CronContract
     }
 
     /**
-     * Schedule the cron job to run weekly on a given day and time.
-     *
-     * @param int    $day
-     * @param string $time
-     *
-     * @return $this
+     * {@inheritdoc}
      */
     public function weeklyOn(int $day, string $time = '0:0'): CronContract
     {
@@ -534,12 +510,7 @@ class Cron implements CronContract
     }
 
     /**
-     * Schedule the cron job to run between start and end time.
-     *
-     * @param string $startTime
-     * @param string $endTime
-     *
-     * @return $this
+     * {@inheritdoc}
      */
     public function between(string $startTime, string $endTime): CronContract
     {
@@ -547,12 +518,7 @@ class Cron implements CronContract
     }
 
     /**
-     * Schedule the cron job to not run between start and end time.
-     *
-     * @param string $startTime
-     * @param string $endTime
-     *
-     * @return $this
+     * {@inheritdoc}
      */
     public function unlessBetween(string $startTime, string $endTime): CronContract
     {
@@ -560,11 +526,7 @@ class Cron implements CronContract
     }
 
     /**
-     * Register a callback to further filter the schedule.
-     *
-     * @param \Closure $callback
-     *
-     * @return $this
+     * {@inheritdoc}
      */
     public function when(Closure $callback): CronContract
     {
@@ -574,11 +536,7 @@ class Cron implements CronContract
     }
 
     /**
-     * Register a callback to further filter the schedule.
-     *
-     * @param \Closure $callback
-     *
-     * @return $this
+     * {@inheritdoc}
      */
     public function skip(Closure $callback): CronContract
     {
@@ -588,11 +546,7 @@ class Cron implements CronContract
     }
 
     /**
-     * Register a callback to be called before the operation.
-     *
-     * @param \Closure $callback
-     *
-     * @return $this
+     * {@inheritdoc}
      */
     public function before(Closure $callback): CronContract
     {
@@ -602,11 +556,7 @@ class Cron implements CronContract
     }
 
     /**
-     * Register a callback to be called after the operation.
-     *
-     * @param \Closure $callback
-     *
-     * @return $this
+     * {@inheritdoc}
      */
     public function after(Closure $callback): CronContract
     {
@@ -616,11 +566,7 @@ class Cron implements CronContract
     }
 
     /**
-     * Set the human-friendly description of the cron.
-     *
-     * @param string $description
-     *
-     * @return $this
+     * {@inheritdoc}
      */
     public function description(string $description): CronContract
     {
@@ -630,29 +576,11 @@ class Cron implements CronContract
     }
 
     /**
-     * Set the timezone the date should be evaluated on.
-     *
-     * @param string $timezone
-     *
-     * @return $this
+     * {@inheritdoc}
      */
     public function timezone(string $timezone): CronContract
     {
         $this->timezone = $timezone;
-
-        return $this;
-    }
-
-    /**
-     * Set the mutex path.
-     *
-     * @param string $path
-     *
-     * @return $this
-     */
-    public function setMutexPath(string $path): CronContract
-    {
-        $this->mutexPath = $path;
 
         return $this;
     }

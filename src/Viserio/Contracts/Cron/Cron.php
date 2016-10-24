@@ -7,6 +7,79 @@ use Closure;
 interface Cron
 {
     /**
+     * Set which user the command should run as.
+     *
+     * @param string $user
+     *
+     * @return $this
+     */
+    public function setUser(string $user): Cron;
+
+    /**
+     * Get which user runs the command.
+     *
+     * @return stirng
+     */
+    public function getUser(): string;
+
+    /**
+     * Run the given cron job.
+     *
+     * @return int The exit status code
+     */
+    public function run(): int;
+
+    /**
+     * State that the command should run in background.
+     *
+     * @return $this
+     */
+    public function runInBackground(): Cron;
+
+    /**
+     * Build the command string.
+     *
+     * @return string
+     */
+    public function buildCommand(): string;
+
+    /**
+     * Do not allow the cron job to overlap each other.
+     *
+     * @return $this
+     */
+    public function withoutOverlapping(): Cron;
+
+    /**
+     * Append the output of the command to a given location.
+     *
+     * @param string $location
+     *
+     * @return $this
+     */
+    public function appendOutputTo(string $location): Cron;
+
+    /**
+     * Send the output of the command to a given location.
+     *
+     * @param string $location
+     *
+     * @return $this
+     */
+    public function sendOutputTo(string $location): Cron;
+
+
+    /**
+     * Determine if the given cron job should run based on the Cron expression.
+     *
+     * @param stirng $environment
+     * @param bool   $isMaintenance
+     *
+     * @return bool
+     */
+    public function isDue(string $environment, bool $isMaintenance): bool;
+
+    /**
      * Get the cron expression for the cron job.
      *
      * @return string
@@ -187,6 +260,16 @@ interface Cron
     public function weekly(): Cron;
 
     /**
+     * Schedule the cron job to run weekly on a given day and time.
+     *
+     * @param int    $day
+     * @param string $time
+     *
+     * @return $this
+     */
+    public function weeklyOn(int $day, string $time = '0:0'): Cron;
+
+    /**
      * Schedule the cron job to run between start and end time.
      *
      * @param string $startTime
@@ -254,9 +337,9 @@ interface Cron
     /**
      * Set the timezone the date should be evaluated on.
      *
-     * @param \DateTimeZone|string $timezone
+     * @param string $timezone
      *
      * @return $this
      */
-    public function timezone($timezone): Cron;
+    public function timezone(string $timezone): Cron;
 }
