@@ -23,6 +23,24 @@ interface Cron
     public function getUser(): string;
 
     /**
+     * Limit the environments the command should run in.
+     *
+     * @param array|mixed $environments
+     *
+     * @return $this
+     */
+    public function setEnvironments($environments): Cron;
+
+    /**
+     * Determine if the event runs in the given environment.
+     *
+     * @param string $environment
+     *
+     * @return bool
+     */
+    public function runsInEnvironment(string $environment): bool;
+
+    /**
      * Run the given cron job.
      *
      * @return int The exit status code

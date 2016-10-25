@@ -45,7 +45,6 @@
         }
     },
     "suggest": {
-        "container-interop/container-interop" : "Required to use service-provider (^1.1).",
         "container-interop/service-provider"  : "Required to use service-provider (^0.3)."
     },
     "extra": {

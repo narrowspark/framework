@@ -198,6 +198,24 @@ class Cron implements CronContract
     /**
      * {@inheritdoc}
      */
+    public function setEnvironments($environments): CronContract
+    {
+        $this->environments = is_array($environments) ? $environments : func_get_args();
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function runsInEnvironment(string $environment): bool
+    {
+        return empty($this->environments) || in_array($environment, $this->environments);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function run(): int
     {
         if (! $this->runInBackground) {
