@@ -73,7 +73,7 @@ class Schedule
             $command = $this->getContainer()->get($command)->getName();
         }
 
-        $binary = ProcessUtils::escapeArgument((new PhpExecutableFinder)->find(false));
+        $binary = ProcessUtils::escapeArgument((new PhpExecutableFinder())->find(false));
 
         if (defined('CEREBRO_BINARY')) {
             $console = ProcessUtils::escapeArgument(CEREBRO_BINARY);
@@ -97,7 +97,7 @@ class Schedule
     public function exec($command, array $parameters = []): CronContract
     {
         if (count($parameters)) {
-            $command .= ' '.$this->compileParameters($parameters);
+            $command .= ' ' . $this->compileParameters($parameters);
         }
 
         $cron = new Cron($command);
