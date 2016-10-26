@@ -3,9 +3,9 @@ declare(strict_types=1);
 namespace Viserio\Cron\Tests\Providers;
 
 use Viserio\Config\Providers\ConfigServiceProvider;
-use Viserio\Cron\Schedule;
 use Viserio\Container\Container;
 use Viserio\Cron\Providers\CronServiceProvider;
+use Viserio\Cron\Schedule;
 
 class ConsoleServiceProviderTest extends \PHPUnit_Framework_TestCase
 {
