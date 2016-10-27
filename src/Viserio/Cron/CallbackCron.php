@@ -69,9 +69,9 @@ class CallbackCron extends Cron
     /**
      * Do not allow the cron job to overlap each other.
      *
-     * @return $this
-     *
      * @throws \LogicException
+     *
+     * @return $this
      */
     public function withoutOverlapping(): CronContract
     {
