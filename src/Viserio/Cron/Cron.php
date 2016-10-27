@@ -216,10 +216,10 @@ class Cron implements CronContract
     /**
      * {@inheritdoc}
      */
-    public function run(): int
+    public function run()
     {
         if (! $this->runInBackground) {
-            return $this->runCommandInForeground($container);
+            return $this->runCommandInForeground();
         }
 
         return $this->runCommandInBackground();

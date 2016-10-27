@@ -43,9 +43,9 @@ interface Cron
     /**
      * Run the given cron job.
      *
-     * @return int The exit status code
+     * @return mixed
      */
-    public function run(): int;
+    public function run();
 
     /**
      * State that the command should run in background.
