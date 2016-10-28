@@ -53,9 +53,15 @@ class ScheduleTest extends \PHPUnit_Framework_TestCase
         $escape = '\\' === DIRECTORY_SEPARATOR ? '"' : '\'';
         $binary = $escape . PHP_BINARY . $escape;
 
-        $this->assertEquals($binary . ' cerebro clear:view', $cronJobs[0]->getCommand());
-        $this->assertEquals($binary . ' cerebro clear:view --tries=3', $cronJobs[1]->getCommand());
-        $this->assertEquals($binary . ' cerebro clear:view --tries=3', $cronJobs[2]->getCommand());
+        if (getenv('TRAVIS') || getenv('APPVEYOR')) {
+            $this->assertEquals($binary . ' "cerebro" clear:view', $cronJobs[0]->getCommand());
+            $this->assertEquals($binary . ' "cerebro" clear:view --tries=3', $cronJobs[1]->getCommand());
+            $this->assertEquals($binary . ' "cerebro" clear:view --tries=3', $cronJobs[2]->getCommand());
+        } else {
+            $this->assertEquals($binary . ' cerebro clear:view', $cronJobs[0]->getCommand());
+            $this->assertEquals($binary . ' cerebro clear:view --tries=3', $cronJobs[1]->getCommand());
+            $this->assertEquals($binary . ' cerebro clear:view --tries=3', $cronJobs[2]->getCommand());
+        }
     }
 
     public function testCreateNewCerebroCommandUsingCommandClass()
@@ -82,7 +88,11 @@ class ScheduleTest extends \PHPUnit_Framework_TestCase
         $escape = '\\' === DIRECTORY_SEPARATOR ? '"' : '\'';
         $binary = $escape . PHP_BINARY . $escape;
 
-        $this->assertEquals($binary . ' cerebro foo:bar --force', $cronJobs[0]->getCommand());
+        if (getenv('TRAVIS') || getenv('APPVEYOR')) {
+            $this->assertEquals($binary . ' "cerebro" foo:bar --force', $cronJobs[0]->getCommand());
+        } else {
+            $this->assertEquals($binary . ' cerebro foo:bar --force', $cronJobs[0]->getCommand());
+        }
 
         $this->assertEquals([$cron], $schedule->dueCronJobs('test'));
     }
@@ -94,6 +104,10 @@ class ScheduleTest extends \PHPUnit_Framework_TestCase
     public function testCommandToThrowException()
     {
         $schedule = new Schedule();
+
+        if (getenv('TRAVIS') || getenv('APPVEYOR')) {
+            define('CEREBRO_BINARY', false);
+        }
 
         $schedule->command('queue:listen');
     }
