@@ -7,7 +7,7 @@ git subsplit publish src/Viserio/Container:git@github.com:viserio/container.git
 git subsplit publish src/Viserio/Contracts:git@github.com:viserio/contracts.git
 git subsplit publish src/Viserio/Cookie:git@github.com:viserio/cookie.git
 git subsplit publish src/Viserio/Database:git@github.com:viserio/database.git
-git subsplit publish src/Viserio/Encrypter:git@github.com:viserio/encrypter.git
+git subsplit publish src/Viserio/Encryption:git@github.com:viserio/encryption.git
 git subsplit publish src/Viserio/Events:git@github.com:viserio/events.git
 git subsplit publish src/Viserio/Exception:git@github.com:viserio/exception.git
 git subsplit publish src/Viserio/Filesystem:git@github.com:viserio/filesystem.git
