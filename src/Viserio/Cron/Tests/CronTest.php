@@ -244,7 +244,7 @@ class CronTest extends \PHPUnit_Framework_TestCase
     {
         $cron = new Cron('php -i');
 
-        $this->assertSame('php -i > "NUL" 2>&1 &', $cron->getSummaryForDisplay());
+        $this->assertSame($cron->buildCommand(), $cron->getSummaryForDisplay());
 
         $cron->setDescription('test');
 
