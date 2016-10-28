@@ -6,5 +6,4 @@ use Viserio\Cron\CallbackCron;
 
 class CallbackCronTest extends \PHPUnit_Framework_TestCase
 {
-
 }
