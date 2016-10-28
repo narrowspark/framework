@@ -82,7 +82,9 @@ class Schedule
         } elseif ($this->console !== null) {
             $console = ProcessUtils::escapeArgument($this->console);
         } else {
+            // @codeCoverageIgnoreStart
             throw new LogicException('You need to set a console name or a path to a console, befor you call command.');
+            // @codeCoverageIgnoreEnd
         }
 
         return $this->exec("{$binary} {$console} {$command}", $parameters);

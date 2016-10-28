@@ -110,16 +110,6 @@ class ScheduleTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals([$cron], $schedule->dueCronJobs('test'));
     }
 
-    /**
-     * @expectedException \LogicException
-     * @expectedExceptionMessage You need to set a console name or a path to a console, befor you call command.
-     */
-    public function testCommandToThrowException()
-    {
-        $schedule = new Schedule();
-        $schedule->command('queue:listen');
-    }
-
     public function testCreateNewCerebroCommandUsingCallBack()
     {
         $schedule = new Schedule();
