@@ -48,7 +48,7 @@ class Cron implements CronContract
      *
      * @var string
      */
-    public $output = '/dev/null';
+    protected $output = '/dev/null';
 
     /**
      * Indicates whether output should be appended.
@@ -96,14 +96,14 @@ class Cron implements CronContract
     /**
      * The working directory.
      *
-     * @var stirng
+     * @var string
      */
     protected $path;
 
     /**
      * The mutex directory.
      *
-     * @var stirng
+     * @var string
      */
     protected $mutexPath;
 
@@ -133,7 +133,14 @@ class Cron implements CronContract
      *
      * @var bool
      */
-    public $evenInMaintenanceMode = false;
+    protected $evenInMaintenanceMode = false;
+
+    /**
+     * Indicates if the command should not overlap itself.
+     *
+     * @var bool
+     */
+    protected $withoutOverlapping = false;
 
     /**
      * Create a new cron instance.
@@ -788,7 +795,7 @@ class Cron implements CronContract
      *
      * @return \Viserio\Support\Invoker
      */
-    private function getInvoker(): Invoker
+    protected function getInvoker(): Invoker
     {
         if (! $this->invoker) {
             $this->invoker = new Invoker();

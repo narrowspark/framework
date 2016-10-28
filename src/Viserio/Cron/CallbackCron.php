@@ -11,7 +11,7 @@ class CallbackCron extends Cron
     /**
      * The callback to call.
      *
-     * @var string
+     * @var string|callable
      */
     protected $callback;
 
@@ -50,7 +50,7 @@ class CallbackCron extends Cron
     public function run()
     {
         if ($this->description) {
-            touch($this->mutexPath());
+            touch($this->getMutexPath());
         }
 
         try {
@@ -76,7 +76,9 @@ class CallbackCron extends Cron
     public function withoutOverlapping(): CronContract
     {
         if (! isset($this->description)) {
-            throw new LogicException("A scheduled cron job name is required to prevent overlapping. Use the 'name' method before 'withoutOverlapping'.");
+            throw new LogicException(
+                "A scheduled cron job name is required to prevent overlapping. Use the 'name' method before 'withoutOverlapping'."
+            );
         }
 
         return $this->skip(function () {

@@ -209,7 +209,7 @@ class TranslationManager implements TranslationManagerContract
     /**
      * Set fallback for a language.
      *
-     * @param stirng                                          $lang
+     * @param string                                          $lang
      * @param \Viserio\Contracts\Translation\MessageCatalogue $fallback
      *
      * @return $this

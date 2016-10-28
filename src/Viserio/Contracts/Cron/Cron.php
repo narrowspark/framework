@@ -18,7 +18,7 @@ interface Cron
     /**
      * Get which user runs the command.
      *
-     * @return stirng
+     * @return string
      */
     public function getUser(): string;
 
@@ -89,7 +89,7 @@ interface Cron
     /**
      * Determine if the given cron job should run based on the Cron expression.
      *
-     * @param stirng $environment
+     * @param string $environment
      * @param bool   $isMaintenance
      *
      * @return bool

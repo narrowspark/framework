@@ -75,7 +75,7 @@ class Schedule
             $command = $this->getContainer()->get($command)->getName();
         }
 
-        $binary = ProcessUtils::escapeArgument((new PhpExecutableFinder())->find(false));
+        $binary = ProcessUtils::escapeArgument((string) (new PhpExecutableFinder())->find(false));
 
         if (defined('CEREBRO_BINARY')) {
             $console = ProcessUtils::escapeArgument(CEREBRO_BINARY);
@@ -87,7 +87,7 @@ class Schedule
             // @codeCoverageIgnoreEnd
         }
 
-        return $this->exec("{$binary} {$console} {$command}", $parameters);
+        return $this->exec(sprintf("%s %s %s", $binary, $console, $command), $parameters);
     }
 
     /**
@@ -128,7 +128,7 @@ class Schedule
     /**
      * Get all of the cron jobs on the schedule that are due.
      *
-     * @param stirng $environment
+     * @param string $environment
      * @param bool   $isMaintenance
      *
      * @return array
@@ -162,7 +162,7 @@ class Schedule
                 $value = ProcessUtils::escapeArgument($value);
             }
 
-            return is_numeric($key) ? $value : "{$key}={$value}";
+            return is_numeric($key) ? $value : sprintf("%s=%s", $key, $value);
         }, $parameters, $keys);
 
         return implode(' ', array_combine($keys, $items));
