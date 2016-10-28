@@ -25,7 +25,7 @@ git subsplit publish --heads="master develop" --no-tags src/Viserio/Routing:git@
 git subsplit publish --heads="master develop" --no-tags src/Viserio/Session:git@github.com:viserio/session.git
 git subsplit publish --heads="master develop" --no-tags src/Viserio/StaticalProxy:git@github.com:viserio/statical-proxy.git
 git subsplit publish --heads="master develop" --no-tags src/Viserio/Support:git@github.com:viserio/support.git
-git subsplit publish --heads="master develop" --no-tags src/Viserio/Translator:git@github.com:viserio/translator.git
+git subsplit publish --heads="master develop" --no-tags src/Viserio/Translation:git@github.com:viserio/translation.git
 git subsplit publish --heads="master develop" --no-tags src/Viserio/Validation:git@github.com:viserio/validation.git
 git subsplit publish --heads="master develop" --no-tags src/Viserio/View:git@github.com:viserio/view.git
 rm -rf .subsplit/
