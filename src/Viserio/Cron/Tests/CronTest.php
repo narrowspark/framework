@@ -182,38 +182,14 @@ class CronTest extends \PHPUnit_Framework_TestCase
         $this->assertSame('0 0 * * 1 *', $cron->weeklyOn(1)->getExpression());
     }
 
-    public function testBetween()
+    public function testBuildCommand()
     {
-        $cron = new Cron('');
-        $cron->between('10:00', '12:00');
-    }
+        $quote = (DIRECTORY_SEPARATOR == '\\') ? '"' : "'";
 
-    public function testUnlessBetween()
-    {
-    }
+        $cron = new Cron('php -i');
+        $defaultOutput = (DIRECTORY_SEPARATOR == '\\') ? 'NUL' : '/dev/null';
 
-    public function testWhen()
-    {
-    }
-
-    public function testSkip()
-    {
-    }
-
-    public function testBefore()
-    {
-    }
-
-    public function testAfter()
-    {
-    }
-
-    public function testDescription()
-    {
-    }
-
-    public function testTimezone()
-    {
+        $this->assertSame("php -i > {$quote}{$defaultOutput}{$quote} 2>&1 &", $cron->buildCommand());
     }
 
     public function testGetAndSetUser()
@@ -237,5 +213,30 @@ class CronTest extends \PHPUnit_Framework_TestCase
         $cron->setEnvironments(['dev', 'prod']);
 
         $this->assertTrue($cron->runsInEnvironment('dev'));
+    }
+
+    public function testBuildCommandSendOutputTo()
+    {
+        $quote = (DIRECTORY_SEPARATOR == '\\') ? '"' : "'";
+
+        $cron = new Cron('php -i');
+        $cron->sendOutputTo('/dev/null');
+
+        $this->assertSame("php -i > {$quote}/dev/null{$quote} 2>&1 &", $cron->buildCommand());
+
+        $cron = new Cron('php -i');
+        $cron->sendOutputTo('/my folder/foo.log');
+
+        $this->assertSame("php -i > {$quote}/my folder/foo.log{$quote} 2>&1 &", $cron->buildCommand());
+    }
+
+    public function testBuildCommandAppendOutput()
+    {
+        $quote = (DIRECTORY_SEPARATOR == '\\') ? '"' : "'";
+
+        $cron = new Cron('php -i');
+        $cron->appendOutputTo('/dev/null');
+
+        $this->assertSame("php -i >> {$quote}/dev/null{$quote} 2>&1 &", $cron->buildCommand());
     }
 }

@@ -6,6 +6,13 @@ use Closure;
 
 interface Cron
 {
+        /**
+     * Get the command name.
+     *
+     * @return string
+     */
+    public function getCommand(): string;
+
     /**
      * Set which user the command should run as.
      *

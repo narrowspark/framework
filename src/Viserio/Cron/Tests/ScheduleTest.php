@@ -57,14 +57,10 @@ class ScheduleTest extends \PHPUnit_Framework_TestCase
             $this->assertEquals($binary . ' \'cerebro\' clear:view', $cronJobs[0]->getCommand());
             $this->assertEquals($binary . ' \'cerebro\' clear:view --tries=3', $cronJobs[1]->getCommand());
             $this->assertEquals($binary . ' \'cerebro\' clear:view --tries=3', $cronJobs[2]->getCommand());
-        } elseif (getenv('APPVEYOR')) {
+        } else {
             $this->assertEquals($binary . ' "cerebro" clear:view', $cronJobs[0]->getCommand());
             $this->assertEquals($binary . ' "cerebro" clear:view --tries=3', $cronJobs[1]->getCommand());
             $this->assertEquals($binary . ' "cerebro" clear:view --tries=3', $cronJobs[2]->getCommand());
-        } else {
-            $this->assertEquals($binary . ' cerebro clear:view', $cronJobs[0]->getCommand());
-            $this->assertEquals($binary . ' cerebro clear:view --tries=3', $cronJobs[1]->getCommand());
-            $this->assertEquals($binary . ' cerebro clear:view --tries=3', $cronJobs[2]->getCommand());
         }
     }
 
@@ -81,10 +77,8 @@ class ScheduleTest extends \PHPUnit_Framework_TestCase
 
         if (getenv('TRAVIS')) {
             $cron = new Cron($binary . ' \'cerebro\' foo:bar --force');
-        } elseif (getenv('APPVEYOR')) {
-            $cron = new Cron($binary . ' "cerebro" foo:bar --force');
         } else {
-            $cron = new Cron($binary . ' cerebro foo:bar --force');
+            $cron = new Cron($binary . ' "cerebro" foo:bar --force');
         }
 
         $cron->setContainer($container);
@@ -101,10 +95,8 @@ class ScheduleTest extends \PHPUnit_Framework_TestCase
 
         if (getenv('TRAVIS')) {
             $this->assertEquals($binary . ' \'cerebro\' foo:bar --force', $cronJobs[0]->getCommand());
-        } elseif (getenv('APPVEYOR')) {
-            $this->assertEquals($binary . ' "cerebro" foo:bar --force', $cronJobs[0]->getCommand());
         } else {
-            $this->assertEquals($binary . ' cerebro foo:bar --force', $cronJobs[0]->getCommand());
+            $this->assertEquals($binary . ' "cerebro" foo:bar --force', $cronJobs[0]->getCommand());
         }
 
         $this->assertEquals([$cron], $schedule->dueCronJobs('test'));

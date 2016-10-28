@@ -57,7 +57,6 @@ class Cron implements CronContract
      */
     protected $shouldAppendOutput = false;
 
-
     /**
      * The array of callbacks to be run before the cron is started.
      *
@@ -183,22 +182,14 @@ class Cron implements CronContract
      * @param string $path
      *
      * @return $this
+     *
+     * @codeCoverageIgnore
      */
     public function setMutexPath(string $path): CronContract
     {
         $this->mutexPath = $path;
 
         return $this;
-    }
-
-    /**
-     * Get the command name.
-     *
-     * @return string
-     */
-    public function getCommand(): string
-    {
-        return $this->command;
     }
 
     /**
@@ -215,12 +206,22 @@ class Cron implements CronContract
      * State that the cron job should run even in maintenance mode.
      *
      * @return $this
+     *
+     * @codeCoverageIgnore
      */
     public function evenInMaintenanceMode(): CronContract
     {
         $this->evenInMaintenanceMode = true;
 
         return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getCommand(): string
+    {
+        return $this->command;
     }
 
     /**
