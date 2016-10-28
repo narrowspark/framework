@@ -3,8 +3,8 @@ declare(strict_types=1);
 namespace Viserio\Cron;
 
 use LogicException;
-use Symfony\Component\Process\ProcessUtils;
 use Symfony\Component\Process\PhpExecutableFinder;
+use Symfony\Component\Process\ProcessUtils;
 use Viserio\Contracts\Container\Traits\ContainerAwareTrait;
 use Viserio\Contracts\Cron\Cron as CronContract;
 
