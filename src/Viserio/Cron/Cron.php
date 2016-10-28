@@ -592,6 +592,8 @@ class Cron implements CronContract
 
     /**
      * {@inheritdoc}
+     *
+     * @codeCoverageIgnore
      */
     public function when(Closure $callback): CronContract
     {
@@ -602,6 +604,8 @@ class Cron implements CronContract
 
     /**
      * {@inheritdoc}
+     *
+     * @codeCoverageIgnore
      */
     public function skip(Closure $callback): CronContract
     {
@@ -612,6 +616,8 @@ class Cron implements CronContract
 
     /**
      * {@inheritdoc}
+     *
+     * @codeCoverageIgnore
      */
     public function before(Closure $callback): CronContract
     {
@@ -622,6 +628,8 @@ class Cron implements CronContract
 
     /**
      * {@inheritdoc}
+     *
+     * @codeCoverageIgnore
      */
     public function after(Closure $callback): CronContract
     {
@@ -654,8 +662,10 @@ class Cron implements CronContract
 
     /**
      * {@inheritdoc}
+     *
+     * @codeCoverageIgnore
      */
-    public function timezone(string $timezone): CronContract
+    public function setTimezone(string $timezone): CronContract
     {
         $this->timezone = $timezone;
 

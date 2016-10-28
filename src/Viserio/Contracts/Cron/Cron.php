@@ -372,5 +372,5 @@ interface Cron
      *
      * @return $this
      */
-    public function timezone(string $timezone): Cron;
+    public function setTimezone(string $timezone): Cron;
 }
