@@ -87,7 +87,7 @@ class Schedule
             // @codeCoverageIgnoreEnd
         }
 
-        return $this->exec(sprintf("%s %s %s", $binary, $console, $command), $parameters);
+        return $this->exec(sprintf('%s %s %s', $binary, $console, $command), $parameters);
     }
 
     /**
@@ -162,7 +162,7 @@ class Schedule
                 $value = ProcessUtils::escapeArgument($value);
             }
 
-            return is_numeric($key) ? $value : sprintf("%s=%s", $key, $value);
+            return is_numeric($key) ? $value : sprintf('%s=%s', $key, $value);
         }, $parameters, $keys);
 
         return implode(' ', array_combine($keys, $items));
