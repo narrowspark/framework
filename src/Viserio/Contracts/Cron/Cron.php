@@ -6,7 +6,7 @@ use Closure;
 
 interface Cron
 {
-        /**
+    /**
      * Get the command name.
      *
      * @return string
