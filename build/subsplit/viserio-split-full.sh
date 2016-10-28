@@ -1,4 +1,5 @@
 git subsplit init git@github.com:narrowspark/framework.git
+git subsplit publish src/Viserio/Bus:git@github.com:viserio/bus.git
 git subsplit publish src/Viserio/Cache:git@github.com:viserio/cache.git
 git subsplit publish src/Viserio/Config:git@github.com:viserio/config.git
 git subsplit publish src/Viserio/Console:git@github.com:viserio/console.git
@@ -10,6 +11,7 @@ git subsplit publish src/Viserio/Encrypter:git@github.com:viserio/encrypter.git
 git subsplit publish src/Viserio/Events:git@github.com:viserio/events.git
 git subsplit publish src/Viserio/Exception:git@github.com:viserio/exception.git
 git subsplit publish src/Viserio/Filesystem:git@github.com:viserio/filesystem.git
+git subsplit publish src/Viserio/Foundation:git@github.com:viserio/foundation.git
 git subsplit publish src/Viserio/Hashing:git@github.com:viserio/hashing.git
 git subsplit publish src/Viserio/Http:git@github.com:viserio/http.git
 git subsplit publish src/Viserio/HttpFactory:git@github.com:viserio/http-factory.git
