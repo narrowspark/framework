@@ -85,6 +85,20 @@ class CallbackCron extends Cron
     }
 
     /**
+     * Get the summary of the event for display.
+     *
+     * @return string
+     */
+    public function getSummaryForDisplay(): string
+    {
+        if (is_string($this->description)) {
+            return $this->description;
+        }
+
+        return is_string($this->callback) ? $this->callback : 'Closure';
+    }
+
+    /**
      * Get the mutex path for the scheduled command.
      *
      * @return string

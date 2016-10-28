@@ -20,14 +20,14 @@ class Cron implements CronContract
      *
      * @var string
      */
-    public $expression = '* * * * * *';
+    protected $expression = '* * * * * *';
 
     /**
      * The command string.
      *
      * @var string
      */
-    public $command;
+    protected $command;
 
     /**
      * The array of filter callbacks.
@@ -129,6 +129,13 @@ class Cron implements CronContract
     protected $user;
 
     /**
+     * Indicates if the command should run in maintenance mode.
+     *
+     * @var bool
+     */
+    public $evenInMaintenanceMode = false;
+
+    /**
      * Create a new cron instance.
      *
      * @param string $command
@@ -173,6 +180,38 @@ class Cron implements CronContract
     public function setMutexPath(string $path): CronContract
     {
         $this->mutexPath = $path;
+
+        return $this;
+    }
+
+    /**
+     * Get the command name.
+     *
+     * @return string
+     */
+    public function getCommand(): string
+    {
+        return $this->command;
+    }
+
+    /**
+     * Determine if the cron job runs in maintenance mode.
+     *
+     * @return bool
+     */
+    public function runsInMaintenanceMode(): bool
+    {
+        return $this->evenInMaintenanceMode;
+    }
+
+    /**
+     * State that the cron job should run even in maintenance mode.
+     *
+     * @return $this
+     */
+    public function evenInMaintenanceMode(): CronContract
+    {
+        $this->evenInMaintenanceMode = true;
 
         return $this;
     }
@@ -586,11 +625,23 @@ class Cron implements CronContract
     /**
      * {@inheritdoc}
      */
-    public function description(string $description): CronContract
+    public function setDescription(string $description): CronContract
     {
         $this->description = $description;
 
         return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getSummaryForDisplay(): string
+    {
+        if (is_string($this->description)) {
+            return $this->description;
+        }
+
+        return $this->buildCommand();
     }
 
     /**

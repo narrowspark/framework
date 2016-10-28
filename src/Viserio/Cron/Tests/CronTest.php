@@ -215,4 +215,27 @@ class CronTest extends \PHPUnit_Framework_TestCase
     public function testTimezone()
     {
     }
+
+    public function testGetAndSetUser()
+    {
+        $cron = new Cron('');
+
+        $this->assertSame('root', $cron->setUser('root')->getUser());
+    }
+
+    public function testGetAndSetPath()
+    {
+        $cron = new Cron('');
+
+        $this->assertSame(__DIR__, $cron->setPath(__DIR__)->getPath());
+    }
+
+    public function testEnvironments()
+    {
+        $cron = new Cron('');
+
+        $cron->setEnvironments(['dev', 'prod']);
+
+        $this->assertTrue($cron->runsInEnvironment('dev'));
+    }
 }

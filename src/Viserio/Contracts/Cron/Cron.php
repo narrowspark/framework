@@ -349,7 +349,14 @@ interface Cron
      *
      * @return $this
      */
-    public function description(string $description): Cron;
+    public function setDescription(string $description): Cron;
+
+    /**
+     * Get the summary of the event for display.
+     *
+     * @return string
+     */
+    public function getSummaryForDisplay(): string;
 
     /**
      * Set the timezone the date should be evaluated on.

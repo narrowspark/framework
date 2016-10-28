@@ -3,6 +3,8 @@ declare(strict_types=1);
 namespace Viserio\Cron;
 
 use LogicException;
+use Symfony\Component\Process\ProcessUtils;
+use Symfony\Component\Process\PhpExecutableFinder;
 use Viserio\Contracts\Container\Traits\ContainerAwareTrait;
 use Viserio\Contracts\Cron\Cron as CronContract;
 
@@ -41,12 +43,12 @@ class Schedule
     /**
      * Add a new callback cron job to the schedule.
      *
-     * @param string $callback
-     * @param array  $parameters
+     * @param string|callable $callback
+     * @param array           $parameters
      *
      * @return \Viserio\Cron\CallbackCron
      */
-    public function call(string $callback, array $parameters = []): CallbackCron
+    public function call($callback, array $parameters = []): CallbackCron
     {
         $cron = new CallbackCron($callback, $parameters);
 
@@ -80,7 +82,7 @@ class Schedule
         } elseif ($this->console !== null) {
             $console = $this->console;
         } else {
-            throw new LogicException('You need to set a console name or a path to a console.');
+            throw new LogicException('You need to set a console name or a path to a console, befor you call command.');
         }
 
         return $this->exec("{$binary} {$console} {$command}", $parameters);
@@ -129,7 +131,7 @@ class Schedule
      *
      * @return array
      */
-    public function dueCronJobs(string $environment, bool $isMaintenance): array
+    public function dueCronJobs(string $environment, bool $isMaintenance = false): array
     {
         return array_filter($this->jobs, function ($job) use ($environment, $isMaintenance) {
             return $job->isDue($environment, $isMaintenance);
