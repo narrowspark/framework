@@ -80,7 +80,7 @@ class Schedule
         if (defined('CEREBRO_BINARY')) {
             $console = ProcessUtils::escapeArgument(CEREBRO_BINARY);
         } elseif ($this->console !== null) {
-            $console = $this->console;
+            $console = ProcessUtils::escapeArgument($this->console);
         } else {
             throw new LogicException('You need to set a console name or a path to a console, befor you call command.');
         }
@@ -96,7 +96,7 @@ class Schedule
      *
      * @return \Viserio\Contracts\Cron\Cron
      */
-    public function exec($command, array $parameters = []): CronContract
+    public function exec(string $command, array $parameters = []): CronContract
     {
         if (count($parameters)) {
             $command .= ' ' . $this->compileParameters($parameters);

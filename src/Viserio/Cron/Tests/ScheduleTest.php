@@ -76,6 +76,7 @@ class ScheduleTest extends \PHPUnit_Framework_TestCase
         $binary = ProcessUtils::escapeArgument((new PhpExecutableFinder())->find(false));
 
         $cron = new Cron($binary . ' cerebro foo:bar --force');
+
         $cron->setContainer($container);
 
         $schedule->setContainer($container);
@@ -104,11 +105,6 @@ class ScheduleTest extends \PHPUnit_Framework_TestCase
     public function testCommandToThrowException()
     {
         $schedule = new Schedule();
-
-        if (getenv('TRAVIS') || getenv('APPVEYOR')) {
-            define('CEREBRO_BINARY', false);
-        }
-
         $schedule->command('queue:listen');
     }
 
