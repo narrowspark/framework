@@ -2,10 +2,32 @@
 declare(strict_types=1);
 namespace Viserio\Cron\Tests;
 
+use Cake\Chronos\Chronos;
 use Viserio\Cron\Cron;
 
 class CronTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * The default configuration timezone.
+     *
+     * @var string
+     */
+    protected $defaultTimezone;
+
+    public function setUp()
+    {
+        $this->defaultTimezone = date_default_timezone_get();
+
+        date_default_timezone_set('UTC');
+    }
+
+    public function tearDown()
+    {
+        date_default_timezone_set($this->defaultTimezone);
+
+        Chronos::setTestNow(null);
+    }
+
     public function testGetExpression()
     {
         $cron = new Cron('');
@@ -249,5 +271,34 @@ class CronTest extends \PHPUnit_Framework_TestCase
         $cron->setDescription('test');
 
         $this->assertSame('test', $cron->getSummaryForDisplay());
+    }
+
+    public function testTimeBetweenChecks()
+    {
+        Chronos::setTestNow(Chronos::now()->startOfDay()->addHours(9));
+
+        $cron = new Cron('php foo');
+
+        $this->assertTrue($cron->between('8:00', '10:00')->filtersPass());
+        $this->assertTrue($cron->between('9:00', '9:00')->filtersPass());
+        $this->assertFalse($cron->between('10:00', '11:00')->filtersPass());
+        $this->assertFalse($cron->unlessBetween('8:00', '10:00')->filtersPass());
+        $this->assertTrue($cron->unlessBetween('10:00', '11:00')->isDue('test'));
+    }
+
+    public function testCronJobIsDueCheck()
+    {
+        Chronos::setTestNow(Chronos::create(2015, 1, 1, 0, 0, 0));
+
+        $cron = new Cron('php foo');
+
+        $this->assertEquals('* * * * 4 *', $cron->thursdays()->getExpression());
+        $this->assertTrue($cron->isDue('test'));
+
+        $cron = new Cron('php foo');
+        $cron->wednesdays()->dailyAt('19:00')->setTimezone('EST');
+
+        $this->assertEquals('0 19 * * 3 *', $cron->getExpression());
+        $this->assertTrue($cron->isDue('test'));
     }
 }

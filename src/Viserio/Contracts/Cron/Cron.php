@@ -101,7 +101,7 @@ interface Cron
      *
      * @return bool
      */
-    public function isDue(string $environment, bool $isMaintenance): bool;
+    public function isDue(string $environment, bool $isMaintenance = false): bool;
 
     /**
      * Get the cron expression for the cron job.
@@ -373,4 +373,11 @@ interface Cron
      * @return $this
      */
     public function setTimezone(string $timezone): Cron;
+
+    /**
+     * Determine if the filters pass for the event.
+     *
+     * @return bool
+     */
+    public function filtersPass(): bool;
 }

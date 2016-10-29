@@ -340,7 +340,7 @@ class Cron implements CronContract
     /**
      * {@inheritdoc}
      */
-    public function isDue(string $environment, bool $isMaintenance): bool
+    public function isDue(string $environment, bool $isMaintenance = false): bool
     {
         if (! $this->runsInMaintenanceMode() && $isMaintenance) {
             return false;
@@ -372,7 +372,7 @@ class Cron implements CronContract
      */
     public function hourly(): CronContract
     {
-        return $this->spliceIntoPosition(1, '0');
+        return $this->spliceIntoPosition(1, 0);
     }
 
     /**
@@ -380,8 +380,8 @@ class Cron implements CronContract
      */
     public function daily(): CronContract
     {
-        return $this->spliceIntoPosition(1, '0')
-            ->spliceIntoPosition(2, '0');
+        return $this->spliceIntoPosition(1, 0)
+            ->spliceIntoPosition(2, 0);
     }
 
     /**
@@ -389,9 +389,9 @@ class Cron implements CronContract
      */
     public function monthly(): CronContract
     {
-        return $this->spliceIntoPosition(1, '0')
-            ->spliceIntoPosition(2, '0')
-            ->spliceIntoPosition(3, '1');
+        return $this->spliceIntoPosition(1, 0)
+            ->spliceIntoPosition(2, 0)
+            ->spliceIntoPosition(3, 1);
     }
 
     /**
@@ -399,10 +399,10 @@ class Cron implements CronContract
      */
     public function yearly(): CronContract
     {
-        return $this->spliceIntoPosition(1, '0')
-            ->spliceIntoPosition(2, '0')
-            ->spliceIntoPosition(3, '1')
-            ->spliceIntoPosition(4, '1');
+        return $this->spliceIntoPosition(1, 0)
+            ->spliceIntoPosition(2, 0)
+            ->spliceIntoPosition(3, 1)
+            ->spliceIntoPosition(4, 1);
     }
 
     /**
@@ -410,9 +410,9 @@ class Cron implements CronContract
      */
     public function quarterly(): CronContract
     {
-        return $this->spliceIntoPosition(1, '0')
-            ->spliceIntoPosition(2, '0')
-            ->spliceIntoPosition(3, '1')
+        return $this->spliceIntoPosition(1, 0)
+            ->spliceIntoPosition(2, 0)
+            ->spliceIntoPosition(3, 1)
             ->spliceIntoPosition(4, '*/3');
     }
 
@@ -465,7 +465,7 @@ class Cron implements CronContract
     {
         $this->dailyAt($time);
 
-        return $this->spliceIntoPosition(3, (string) $day);
+        return $this->spliceIntoPosition(3, $day);
     }
 
     /**
@@ -475,8 +475,8 @@ class Cron implements CronContract
     {
         $segments = explode(':', $time);
 
-        return $this->spliceIntoPosition(2, (string) $segments[0])
-            ->spliceIntoPosition(1, count($segments) == 2 ? (string) $segments[1] : '0');
+        return $this->spliceIntoPosition(2, (int) $segments[0])
+            ->spliceIntoPosition(1, count($segments) == 2 ? (int) $segments[1] : 0);
     }
 
     /**
@@ -486,7 +486,7 @@ class Cron implements CronContract
     {
         $hours = $first . ',' . $second;
 
-        return $this->spliceIntoPosition(1, '0')
+        return $this->spliceIntoPosition(1, 0)
             ->spliceIntoPosition(2, $hours);
     }
 
@@ -559,9 +559,9 @@ class Cron implements CronContract
      */
     public function weekly(): CronContract
     {
-        return $this->spliceIntoPosition(1, '0')
-            ->spliceIntoPosition(2, '0')
-            ->spliceIntoPosition(5, '0');
+        return $this->spliceIntoPosition(1, 0)
+            ->spliceIntoPosition(2, 0)
+            ->spliceIntoPosition(5, 0);
     }
 
     /**
@@ -571,7 +571,7 @@ class Cron implements CronContract
     {
         $this->dailyAt($time);
 
-        return $this->spliceIntoPosition(5, (string) $day);
+        return $this->spliceIntoPosition(5, $day);
     }
 
     /**
@@ -673,14 +673,33 @@ class Cron implements CronContract
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function filtersPass(): bool
+    {
+        foreach ($this->filters as $callback) {
+            if (! $this->getInvoker()->call($callback)) {
+                return false;
+            }
+        }
+
+        foreach ($this->rejects as $callback) {
+            if ($this->getInvoker()->call($callback)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
      * Splice the given value into the given position of the expression.
      *
-     * @param int    $position
-     * @param string $value
+     * @param int        $position
+     * @param int|string $value
      *
      * @return $this
      */
-    protected function spliceIntoPosition(int $position, string $value): CronContract
+    protected function spliceIntoPosition(int $position, $value): CronContract
     {
         $segments = explode(' ', $this->expression);
         $segments[$position - 1] = $value;
@@ -808,7 +827,7 @@ class Cron implements CronContract
      */
     protected function getInvoker(): Invoker
     {
-        if (! $this->invoker) {
+        if ($this->invoker === null) {
             $this->invoker = new Invoker();
 
             if ($this->container !== null) {

@@ -97,7 +97,7 @@ class Invoker implements InvokerInterface
      */
     private function getInvoker(): InvokerInterface
     {
-        if ($this->invoker === null && $this->container !== null) {
+        if ($this->invoker === null) {
             $container = $this->container;
 
             $resolvers = array_merge([
@@ -106,15 +106,19 @@ class Invoker implements InvokerInterface
                 new DefaultValueResolver(),
             ], $this->resolvers);
 
-            if (isset($this->inject['type'])) {
-                $resolvers[] = new TypeHintContainerResolver($container);
-            }
+            if ($this->container !== null) {
+                if (isset($this->inject['type'])) {
+                    $resolvers[] = new TypeHintContainerResolver($container);
+                }
 
-            if (isset($this->inject['parameter'])) {
-                $resolvers[] = new ParameterNameContainerResolver($container);
-            }
+                if (isset($this->inject['parameter'])) {
+                    $resolvers[] = new ParameterNameContainerResolver($container);
+                }
 
-            $this->invoker = new DiInvoker(new ResolverChain($resolvers), $container);
+                $this->invoker = new DiInvoker(new ResolverChain($resolvers), $container);
+            } else {
+                $this->invoker = new DiInvoker(new ResolverChain($resolvers));
+            }
         }
 
         return $this->invoker;
