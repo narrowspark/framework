@@ -688,6 +688,7 @@ class Cron implements CronContract
                 return false;
             }
         }
+
         return true;
     }
 
