@@ -2,7 +2,7 @@
     "name"       : "viserio/pagination",
     "type"       : "library",
     "description": "The Viserio Pagination package.",
-    "keywords"   : ["narrowspark", "viserio", "pagination", "doctrine"],
+    "keywords"   : ["narrowspark", "viserio", "pagination", "doctrine", "array", "foundation5", "bootstrap3", "bootstrap4"],
     "license"    : "MIT",
     "homepage"   : "http://github.com/narrowspark/framework",
     "support"    : {
