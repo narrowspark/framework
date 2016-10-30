@@ -16,11 +16,11 @@ use Viserio\Contracts\Events\Dispatcher as DispatcherContract;
 use Viserio\Contracts\Events\Traits\EventsAwareTrait;
 use Viserio\Contracts\Exception\Handler as HandlerContract;
 use Viserio\Contracts\Foundation\Application as ApplicationContract;
+use Viserio\Cron\Providers\CronServiceProvider;
+use Viserio\Cron\Schedule;
 use Viserio\Foundation\Bootstrap\DetectEnvironment;
 use Viserio\Foundation\Bootstrap\HandleExceptions;
 use Viserio\Foundation\Bootstrap\LoadConfiguration;
-use Viserio\Cron\Schedule;
-use Viserio\Cron\Providers\CronServiceProvider;
 use Viserio\Foundation\Bootstrap\LoadServiceProvider;
 
 class Kernel implements KernelContract, TerminableContract
@@ -107,7 +107,7 @@ class Kernel implements KernelContract, TerminableContract
         }
     }
 
-     /**
+    /**
      * Define the application's command schedule.
      */
     protected function defineConsoleSchedule()

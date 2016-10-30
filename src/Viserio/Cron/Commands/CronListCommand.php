@@ -39,7 +39,7 @@ class CronListCommand extends Command
             $rows[] = [
                 $cronJob->getCommand(),
                 $cronJob->getExpression(),
-                $cronJob->getSummaryForDisplay()
+                $cronJob->getSummaryForDisplay(),
             ];
         }
 
