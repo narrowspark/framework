@@ -7,7 +7,6 @@ use Symfony\Component\Console\Input\StringInput;
 use Viserio\Console\Application;
 use Viserio\Console\Command\ClosureCommand;
 use Viserio\Console\Tests\Fixture\SpyOutput;
-use Viserio\Events\Dispatcher;
 use Viserio\Support\Invoker;
 
 class ClosureCommandTest extends \PHPUnit_Framework_TestCase
@@ -26,7 +25,7 @@ class ClosureCommandTest extends \PHPUnit_Framework_TestCase
     {
         $container = new ArrayContainer([]);
 
-        $this->application = new Application($container, new Dispatcher($container), '1.0.0');
+        $this->application = new Application($container, '1.0.0');
 
         $this->invoker = (new Invoker())
             ->injectByTypeHint(true)

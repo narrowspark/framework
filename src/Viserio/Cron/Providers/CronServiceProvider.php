@@ -6,6 +6,7 @@ use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
 use Viserio\Contracts\Support\Traits\ServiceProviderConfigAwareTrait;
 use Viserio\Cron\Schedule;
+use Viserio\Cron\Commands\ScheduleRunCommand;
 
 class CronServiceProvider implements ServiceProvider
 {
@@ -20,6 +21,7 @@ class CronServiceProvider implements ServiceProvider
     {
         return [
             Schedule::class => [self::class, 'createSchedule'],
+            'cron.commands' => [self::class, 'createCronCommands'],
         ];
     }
 
@@ -34,5 +36,13 @@ class CronServiceProvider implements ServiceProvider
         $scheduler->setContainer($container);
 
         return $scheduler;
+    }
+
+    public static function createCronCommands(): array
+    {
+        return [
+            new ScheduleRunCommand(),
+            new CronListCommand(),
+        ];
     }
 }
