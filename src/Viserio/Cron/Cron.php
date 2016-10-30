@@ -345,7 +345,7 @@ class Cron implements CronContract
         if (! $this->runsInMaintenanceMode() && $isMaintenance) {
             return false;
         }
-// var_dump($this->expressionPasses());
+
         return $this->expressionPasses() && $this->runsInEnvironment($environment);
     }
 

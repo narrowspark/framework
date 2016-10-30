@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Cron\Commands;
 
 use Viserio\Console\Command\Command;
+use Viserio\Contracts\Config\Manager as ManagerContract;
 use Viserio\Cron\Schedule;
 
 class ScheduleRunCommand extends Command
@@ -28,8 +29,8 @@ class ScheduleRunCommand extends Command
     {
         $container = $this->getContainer();
         $cronJobs = $container->get(Schedule::class)->dueCronJobs(
-            $container->get('env'),
-            $container->get('maintenance')
+            $container->get(ManagerContract::class)->get('app.env'),
+            $container->get(ManagerContract::class)->get('app.maintenance')
         );
 
         $cronJobsRan = 0;

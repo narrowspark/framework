@@ -5,6 +5,7 @@ namespace Viserio\Cron\Providers;
 use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
 use Viserio\Contracts\Support\Traits\ServiceProviderConfigAwareTrait;
+use Viserio\Cron\Commands\CronListCommand;
 use Viserio\Cron\Commands\ScheduleRunCommand;
 use Viserio\Cron\Schedule;
 
