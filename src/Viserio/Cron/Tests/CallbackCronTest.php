@@ -32,6 +32,7 @@ class CallbackCronTest extends \PHPUnit_Framework_TestCase
         $cron = new CallbackCron(function () {
             $_SERVER['test'] = true;
         });
+        $cron->setMutexPath(__DIR__)->setPath(__DIR__);
 
         $cron->run();
 
@@ -44,6 +45,7 @@ class CallbackCronTest extends \PHPUnit_Framework_TestCase
         $cron = new CallbackCron(function () {
             $_SERVER['test'] = true;
         });
+        $cron->setMutexPath(__DIR__)->setPath(__DIR__);
 
         $cron->setDescription('run test')->run();
 
