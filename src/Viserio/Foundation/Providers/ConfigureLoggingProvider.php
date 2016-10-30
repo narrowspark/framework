@@ -6,7 +6,6 @@ use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
 use Monolog\Handler\ErrorLogHandler;
 use Viserio\Config\Manager as ConfigManager;
-use Viserio\Contracts\Events\Dispatcher as DispatcherContract;
 use Viserio\Contracts\Log\Log as LogContract;
 use Viserio\Log\Writer;
 
@@ -26,24 +25,9 @@ class ConfigureLoggingProvider implements ServiceProvider
 
     public static function createConfiguredLogging(ContainerInterface $container)
     {
-        $log = self::registerLogger($container);
+        $log = $container->get(Writer::class);
 
         self::configureHandlers($container, $log);
-
-        return $log;
-    }
-
-    /**
-     * Register the logger instance in the container.
-     *
-     * @param \Interop\Container\ContainerInterface $container
-     *
-     * @return \Viserio\Contracts\Log\Log
-     */
-    protected static function registerLogger(ContainerInterface $container): LogContract
-    {
-        $log = $container->get(Writer::class);
-        $log->setEventsDispatcher($container->get(DispatcherContract::class));
 
         return $log;
     }
@@ -59,7 +43,7 @@ class ConfigureLoggingProvider implements ServiceProvider
         $config = $container->get(ConfigManager::class);
         $level = $config->get('app.log_level', 'debug');
 
-        $method = 'configure' . ucfirst($config->get('app.log')) . 'Handler';
+        $method = 'configure' . ucfirst($config->get('app.log', 'single')) . 'Handler';
 
         self::{$method}($container, $log, $level);
     }
@@ -89,11 +73,11 @@ class ConfigureLoggingProvider implements ServiceProvider
     protected static function configureDailyHandler(ContainerInterface $container, LogContract $log, string $level)
     {
         $config = $container->get(ConfigManager::class);
-        $maxFiles = $config->get('app.log_max_files');
+        $maxFiles = $config->get('app.log_max_files', 5);
 
         $log->useDailyFiles(
             $container->get(ConfigManager::class)->get('path.storage') . '/logs/narrowspark.log',
-            is_null($maxFiles) ? 5 : $maxFiles,
+            $maxFiles,
             $level
         );
     }

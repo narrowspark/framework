@@ -6,6 +6,11 @@ use Viserio\StaticalProxy\StaticalProxy;
 
 class Bus extends StaticalProxy
 {
+    /**
+     * {@inheritdoc}
+     *
+     * @codeCoverageIgnore
+     */
     public static function getInstanceIdentifier()
     {
         return 'bus';

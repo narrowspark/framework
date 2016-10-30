@@ -16,13 +16,10 @@ use Viserio\Console\Command\ExpressionParser as Parser;
 use Viserio\Console\Input\InputOption;
 use Viserio\Contracts\Console\Application as ApplicationContract;
 use Viserio\Contracts\Container\Traits\ContainerAwareTrait;
-use Viserio\Contracts\Events\Dispatcher as DispatcherContract;
-use Viserio\Contracts\Events\Traits\EventsAwareTrait;
 use Viserio\Support\Invoker;
 
 class Application extends SymfonyConsole implements ApplicationContract
 {
-    use EventsAwareTrait;
     use ContainerAwareTrait;
 
     /**
@@ -61,19 +58,28 @@ class Application extends SymfonyConsole implements ApplicationContract
     protected $invoker;
 
     /**
+     * The console application bootstrappers.
+     *
+     * @var array
+     */
+    protected static $bootstrappers = [];
+
+    /**
      * Create a new Cerebro console application.
      *
      * @param \Interop\Container\ContainerInterface $container
-     * @param \Viserio\Contracts\Events\Dispatcher  $events
      * @param string                                $version
      * @param string                                $name
      */
     public function __construct(
         ContainerContract $container,
-        DispatcherContract $events,
         string $version,
         string $name = 'Cerebro'
     ) {
+        if (! defined('CEREBRO_BINARY')) {
+            define('CEREBRO_BINARY', 'cerebro');
+        }
+
         $this->name = $name;
         $this->version = $version;
 
@@ -83,10 +89,9 @@ class Application extends SymfonyConsole implements ApplicationContract
         parent::__construct($name, $version);
 
         $this->container = $container;
-        $this->events = $events;
         $this->expressionParser = new Parser();
 
-        $this->events->trigger('console.starting', [$this]);
+        $this->bootstrap();
     }
 
     /**
@@ -190,6 +195,16 @@ class Application extends SymfonyConsole implements ApplicationContract
     }
 
     /**
+     * Register an application starting bootstrapper.
+     *
+     * @param \Closure $callback
+     */
+    public static function starting(Closure $callback)
+    {
+        static::$bootstrappers[] = $callback;
+    }
+
+    /**
      * Get the default input definitions for the applications.
      *
      * This is used to add the --env option to every available command.
@@ -252,5 +267,15 @@ class Application extends SymfonyConsole implements ApplicationContract
         }
 
         return $this->invoker;
+    }
+
+    /**
+     * Bootstrap the console application.
+     */
+    protected function bootstrap()
+    {
+        foreach (static::$bootstrappers as $bootstrapper) {
+            $bootstrapper($this);
+        }
     }
 }

@@ -30,6 +30,8 @@ class CyclicDependencyException extends Exception implements InteropContainerExc
      * Get the build stack that caused the exception.
      *
      * @return array
+     *
+     * @codeCoverageIgnore
      */
     public function getBuildStack()
     {

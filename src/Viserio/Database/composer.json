@@ -25,7 +25,6 @@
         "ocramius/proxy-manager"              : "^2"
     },
     "require-dev": {
-        "container-interop/container-interop" : "^1.1",
         "container-interop/service-provider"  : "^0.3",
         "phpunit/phpunit"                     : "^5.1",
         "viserio/container"                   : "self.version"
@@ -42,7 +41,6 @@
         }
     },
     "suggest": {
-        "container-interop/container-interop" : "Required to use service-provider (^1.1).",
         "container-interop/service-provider"  : "Required to use service-provider (^0.3).",
         "ext-pdo"                             : "Required to use PDO adapters",
         "ext-pdo_dblib"                       : "Required to use MSSQL databases on Liunx/UNIX platform",

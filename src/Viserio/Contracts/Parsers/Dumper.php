@@ -9,7 +9,7 @@ interface Dumper
      *
      * @param array $data
      *
-     * @throws \Viserio\Contracts\Parsers\Exception\DumpException If dumping fails
+     * @throws \Viserio\Contracts\Parsers\Exception\DumpException If dumping fails on some formats
      *
      * @return string|false
      */

@@ -18,7 +18,7 @@ class EncrypterServiceProviderTest extends \PHPUnit_Framework_TestCase
 
         $key = Key::createNewRandomKey();
 
-        $container->get('config')->set('encrypter', [
+        $container->get('config')->set('encryption', [
             'key' => $key->saveToAsciiSafeString(),
         ]);
 

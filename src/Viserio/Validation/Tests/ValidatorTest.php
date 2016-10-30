@@ -24,6 +24,36 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(Validator::class, $validate);
         $this->assertTrue($validate->passes());
         $this->assertFalse($validate->fails());
+        $this->assertEquals(
+            [
+                'test' => true,
+                'foo' => true,
+            ],
+            $validate->valid()
+        );
+    }
+
+    public function testValidateWithRegex()
+    {
+        $validator = new Validator();
+        $validate = $validator->validate(
+            [
+                'test' => 'foo',
+            ],
+            [
+                'test' => 'regex:/^[A-z]+$/',
+            ]
+        );
+
+        $this->assertInstanceOf(Validator::class, $validate);
+        $this->assertTrue($validate->passes());
+        $this->assertFalse($validate->fails());
+        $this->assertEquals(
+            [
+                'test' => true,
+            ],
+            $validate->valid()
+        );
     }
 
     public function testNotValidate()
@@ -63,7 +93,7 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
         $validate = $validator->validate(
             [
                 'test' => 'foo ',
-                'foo' => 'aa',
+                'foo' => ['aa', 'bbb'],
             ],
             [
                 'foo' => RespectValidator::not(RespectValidator::alpha()),

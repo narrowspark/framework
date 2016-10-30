@@ -7,7 +7,9 @@ use Psr\Log\LoggerInterface;
 use Viserio\Config\Manager as ConfigManager;
 use Viserio\Config\Providers\ConfigServiceProvider;
 use Viserio\Container\Container;
+use Viserio\Contracts\Events\Dispatcher as DispatcherContract;
 use Viserio\Contracts\Log\Log;
+use Viserio\Events\Providers\EventsServiceProvider;
 use Viserio\Log\Providers\LoggerServiceProvider;
 use Viserio\Log\Writer as MonologWriter;
 
@@ -33,7 +35,6 @@ class LoggerServiceProviderTest extends \PHPUnit_Framework_TestCase
     public function testProviderWithoutConfigManager()
     {
         $container = new Container();
-        $container->register(new ConfigServiceProvider());
         $container->register(new LoggerServiceProvider());
 
         $container->instance('options', [
@@ -50,8 +51,8 @@ class LoggerServiceProviderTest extends \PHPUnit_Framework_TestCase
     public function testProviderWithoutConfigManagerAndNamespace()
     {
         $container = new Container();
-        $container->register(new ConfigServiceProvider());
         $container->register(new LoggerServiceProvider());
+        $container->register(new EventsServiceProvider());
 
         $container->instance('viserio.log.options', [
             'env' => 'dev',
@@ -61,6 +62,6 @@ class LoggerServiceProviderTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(MonologWriter::class, $container->get(MonologWriter::class));
         $this->assertInstanceOf(MonologWriter::class, $container->get(Logger::class));
         $this->assertInstanceOf(MonologWriter::class, $container->get(Log::class));
-        $this->assertInstanceOf(MonologWriter::class, $container->get('logger'));
+        $this->assertInstanceOf(DispatcherContract::class, $container->get('logger')->getEventsDispatcher());
     }
 }

@@ -33,7 +33,6 @@
         "viserio/support"                     : "self.version"
     },
     "require-dev": {
-        "container-interop/container-interop" : "^1.1",
         "container-interop/service-provider"  : "^0.3",
         "mikey179/vfsStream"                  : "^1.6",
         "narrowspark/testing-helper"          : "^1.5",
@@ -60,7 +59,6 @@
         }
     },
     "suggest": {
-        "container-interop/container-interop" : "Required to use service-provider (^1.1).",
         "container-interop/service-provider"  : "Required to use service-provider (^0.3).",
         "symfony/yaml"                        : "Required to use the yaml parser (^3.1).",
         "sepia/po-parser"                     : "Required to use the PO parser (^4.2).",

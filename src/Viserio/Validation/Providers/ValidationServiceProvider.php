@@ -16,12 +16,12 @@ class ValidationServiceProvider implements ServiceProvider
     public function getServices()
     {
         return [
-            Validator::class => [self::class, 'createValidator'],
-            ValidatorContract::class => function (ContainerInterface $container) {
-                return $container->get(Validator::class);
+            ValidatorContract::class => [self::class, 'createValidator'],
+            Validator::class => function (ContainerInterface $container) {
+                return $container->get(ValidatorContract::class);
             },
             'validator' => function (ContainerInterface $container) {
-                return $container->get(Validator::class);
+                return $container->get(ValidatorContract::class);
             },
         ];
     }

@@ -16,6 +16,8 @@ use Viserio\Contracts\Events\Dispatcher as DispatcherContract;
 use Viserio\Contracts\Events\Traits\EventsAwareTrait;
 use Viserio\Contracts\Exception\Handler as HandlerContract;
 use Viserio\Contracts\Foundation\Application as ApplicationContract;
+use Viserio\Cron\Providers\CronServiceProvider;
+use Viserio\Cron\Schedule;
 use Viserio\Foundation\Bootstrap\DetectEnvironment;
 use Viserio\Foundation\Bootstrap\HandleExceptions;
 use Viserio\Foundation\Bootstrap\LoadConfiguration;
@@ -87,6 +89,8 @@ class Kernel implements KernelContract, TerminableContract
         try {
             $this->bootstrap();
 
+            $this->defineConsoleSchedule();
+
             if (! $this->commandsLoaded) {
                 $this->commands();
                 $this->commandsLoaded = true;
@@ -100,6 +104,18 @@ class Kernel implements KernelContract, TerminableContract
             $this->renderException($output, $exception);
 
             return 1;
+        }
+    }
+
+    /**
+     * Define the application's command schedule.
+     */
+    protected function defineConsoleSchedule()
+    {
+        if (class_exists(CronServiceProvider::class)) {
+            $this->app->register(new CronServiceProvider());
+
+            $this->schedule($this->app->get(Schedule::class));
         }
     }
 
@@ -163,7 +179,7 @@ class Kernel implements KernelContract, TerminableContract
     {
         $command = new ClosureCommand($signature, $callback);
 
-        $this->events->attach('console.starting', function ($console) use ($command) {
+        Cerebro::starting(function ($console) use ($command) {
             $console->add($command);
         });
 
@@ -185,7 +201,7 @@ class Kernel implements KernelContract, TerminableContract
      *
      * @return \Viserio\Console\Application
      */
-    protected function getconsole(): Cerebro
+    protected function getConsole(): Cerebro
     {
         if (is_null($this->console)) {
             $console = $this->app->get(Cerebro::class);
@@ -229,5 +245,15 @@ class Kernel implements KernelContract, TerminableContract
     protected function renderException(OutputInterface $output, Throwable $exception)
     {
         $this->getConsole()->renderException($exception, $output);
+    }
+
+    /**
+     * Define the application's command schedule.
+     *
+     * @param \Viserio\Cron\Schedule $schedule
+     */
+    protected function schedule(Schedule $schedule)
+    {
+        //
     }
 }

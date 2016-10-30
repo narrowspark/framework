@@ -5,7 +5,8 @@ namespace Viserio\View\Providers;
 use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
 use Psr\Http\Message\ServerRequestInterface;
-use Viserio\Config\Manager as ConfigManager;
+use Viserio\Contracts\Support\Traits\ServiceProviderConfigAwareTrait;
+use Viserio\Contracts\View\Factory as FactoryContract;
 use Viserio\Filesystem\Filesystem;
 use Viserio\View\Engines\Adapter\Php as PhpEngine;
 use Viserio\View\Engines\Adapter\Plates as PlatesEngine;
@@ -16,6 +17,10 @@ use Viserio\View\ViewFinder;
 
 class ViewServiceProvider implements ServiceProvider
 {
+    use ServiceProviderConfigAwareTrait;
+
+    const PACKAGE = 'viserio.view';
+
     /**
      * {@inheritdoc}
      */
@@ -31,6 +36,9 @@ class ViewServiceProvider implements ServiceProvider
                 return $container->get(ViewFinder::class);
             },
             Factory::class => [self::class, 'createViewFactory'],
+            FactoryContract::class => function (ContainerInterface $container) {
+                return $container->get(Factory::class);
+            },
             'view' => function (ContainerInterface $container) {
                 return $container->get(Factory::class);
             },
@@ -48,33 +56,20 @@ class ViewServiceProvider implements ServiceProvider
             self::{'register' . ucfirst($engineClass) . 'Engine'}($engines, $container);
         }
 
-        if (($compilers = $container->get(ConfigManager::class)->get('view.compilers')) !== null) {
-            foreach ($compilers as $compilerName => $compilerClass) {
-                if ($compilerName === $compilerClass[0]) {
-                    self::registercustomEngine(
-                        $compilerName,
-                        call_user_func_array($compilerClass[0], (array) $compilerClass[1]),
-                        $engines
-                    );
-                }
-            }
-        }
-
         return $engines;
     }
 
     public static function createViewFinder(ContainerInterface $container)
     {
-        $config = $container->get(ConfigManager::class);
         $paths = array_merge(
-            [$config->get('view.template.default', [])],
-            $config->get('view.template.paths', [])
+            self::getConfig($container, 'template.default', []),
+            self::getConfig($container, 'template.paths', [])
         );
 
         return new ViewFinder(
             $container->get(Filesystem::class),
             $paths,
-            $config->get('view.file_extensions')
+            self::getConfig($container, 'file_extensions', null)
         );
     }
 
@@ -91,20 +86,6 @@ class ViewServiceProvider implements ServiceProvider
         $view->addExtension('plates.php', 'plates');
 
         return $view;
-    }
-
-    /**
-     * Register custom engine implementation.
-     *
-     * @param string                               $engineName
-     * @param string                               $engineClass
-     * @param \Viserio\View\Engines\EngineResolver $engines
-     */
-    protected static function registercustomEngine(string $engineName, string $engineClass, EngineResolver $engines)
-    {
-        $engines->register($engineName, function () use ($engineClass) {
-            return $engineClass;
-        });
     }
 
     /**
@@ -129,7 +110,7 @@ class ViewServiceProvider implements ServiceProvider
     protected static function registerTwigEngine(EngineResolver $engines, ContainerInterface $container)
     {
         $engines->register('twig', function () use ($container) {
-            return new TwigEngine($container->get(ConfigManager::class));
+            return new TwigEngine(self::getConfig($container, 'view', []));
         });
     }
 
@@ -149,7 +130,7 @@ class ViewServiceProvider implements ServiceProvider
 
         $engines->register('plates', function () use ($container, $request) {
             return new PlatesEngine(
-                $container->get(ConfigManager::class),
+                self::getConfig($container, 'view', []),
                 $request
             );
         });

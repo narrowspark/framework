@@ -21,8 +21,9 @@ class CommandLineTransformer implements TransformerContract
 
             return $this->formatExceptions($exception);
         }
-
+        // @codeCoverageIgnoreStart
         return $exception;
+        // @codeCoverageIgnoreEnd
     }
 
     /**

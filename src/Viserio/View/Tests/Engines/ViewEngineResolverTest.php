@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\View\Tests;
+namespace Viserio\View\Tests\Engines;
 
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use Viserio\Contracts\View\Engine as EngineContract;

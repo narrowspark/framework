@@ -4,7 +4,6 @@ namespace Viserio\Parsers\Formats;
 
 use Throwable;
 use Viserio\Contracts\Parsers\Dumper as DumperContract;
-use Viserio\Contracts\Parsers\Exception\DumpException;
 use Viserio\Contracts\Parsers\Exception\ParseException;
 use Viserio\Contracts\Parsers\Format as FormatContract;
 
@@ -29,10 +28,6 @@ class Serialize implements FormatContract, DumperContract
      */
     public function dump(array $data): string
     {
-        try {
-            return serialize($data);
-        } catch (Throwable $exception) {
-            throw new DumpException($exception->getMessage());
-        }
+        return serialize($data);
     }
 }

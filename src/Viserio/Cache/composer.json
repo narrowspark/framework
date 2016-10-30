@@ -50,7 +50,6 @@
         "cache/filesystem-adapter"            : "^0.3",
         "cache/session-handler"               : "^0.2",
         "cache/void-adapter"                  : "^0.3",
-        "container-interop/container-interop" : "^1.1",
         "container-interop/service-provider"  : "^0.3",
         "narrowspark/testing-helper"          : "^1.5",
         "phpunit/phpunit"                     : "^5.1",
@@ -86,7 +85,6 @@
         "cache/predis-adapter"                : "Required to use the Predis cache (^0.4).",
         "cache/session-handler"               : "Required to use the Session cache (^0.2).",
         "cache/void-adapter"                  : "Required to use the Void cache (^0.3).",
-        "container-interop/container-interop" : "Required to use service-provider (^1.1).",
         "container-interop/service-provider"  : "Required to use service-provider (^0.3)."
     },
     "minimum-stability"                       : "dev",

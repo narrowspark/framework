@@ -126,6 +126,8 @@ abstract class Command extends BaseCommand implements CompletionAwareInterface
      * Get the output implementation.
      *
      * @return \Viserio\Console\Style\NarrowsparkStyle
+     *
+     * @codeCoverageIgnore
      */
     public function getOutput(): NarrowsparkStyle
     {
@@ -238,6 +240,8 @@ abstract class Command extends BaseCommand implements CompletionAwareInterface
 
     /**
      * {@inheritdoc}
+     *
+     * @codeCoverageIgnore
      */
     public function completeOptionValues($optionName, CompletionContext $context)
     {
@@ -246,6 +250,8 @@ abstract class Command extends BaseCommand implements CompletionAwareInterface
 
     /**
      * {@inheritdoc}
+     *
+     * @codeCoverageIgnore
      */
     public function completeArgumentValues($argumentName, CompletionContext $context)
     {
@@ -343,7 +349,7 @@ abstract class Command extends BaseCommand implements CompletionAwareInterface
         array $choices,
         string $default = null,
         $attempts = null,
-        $multiple = null
+        bool $multiple = null
     ): string {
         $question = new ChoiceQuestion($question, $choices, $default);
 
