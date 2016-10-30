@@ -23,10 +23,12 @@ class Env
             return $default instanceof Closure ? $default() : $default;
         }
 
-        $value = strtolower($value);
+        if (Str::startsWith($value, 'base64:')) {
+            return base64_decode(substr($value, 7));
+        }
 
         if (in_array(
-            $value,
+            strtolower($value),
             [
                 'false',
                 '(false)',
@@ -55,10 +57,6 @@ class Env
             return $value + 0;
         } elseif ($value === 'empty' || $value === '(empty)') {
             return '';
-        }
-
-        if (Str::startsWith($value, 'base64:')) {
-            return base64_decode(substr($value, 7));
         }
 
         if (strlen($value) > 1 &&
