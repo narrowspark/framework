@@ -4,5 +4,4 @@ namespace Viserio\Pagination\Adapter;
 
 class ArrayAdapter
 {
-
 }

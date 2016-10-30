@@ -4,5 +4,4 @@ namespace Viserio\Pagination\Template;
 
 class Foundation5
 {
-
 }
