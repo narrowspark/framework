@@ -3,11 +3,12 @@ declare(strict_types=1);
 namespace Viserio\Support;
 
 use Closure;
+use Viserio\Support\Str;
 
 class Env
 {
     /**
-     * Gets the value of an environment variable. Supports boolean, empty and null.
+     * Gets the value of an environment variable. Supports boolean, empty, null and base64 prefix.
      *
      * @param string $key
      * @param mixed  $default
@@ -54,6 +55,10 @@ class Env
             return $value + 0;
         } elseif ($value === 'empty' || $value === '(empty)') {
             return '';
+        }
+
+        if (Str::startsWith($value, 'base64:')) {
+            return base64_decode(substr($value, 7));
         }
 
         if (strlen($value) > 1 &&

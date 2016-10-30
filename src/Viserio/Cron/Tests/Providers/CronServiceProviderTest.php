@@ -22,6 +22,7 @@ class ConsoleServiceProviderTest extends \PHPUnit_Framework_TestCase
         ]);
 
         $this->assertInstanceOf(Schedule::class, $container->get(Schedule::class));
+        $this->assertTrue(is_array($container->get('cron.commands')));
     }
 
     public function testProviderWithoutConfigManager()

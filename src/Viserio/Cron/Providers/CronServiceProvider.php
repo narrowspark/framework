@@ -26,7 +26,7 @@ class CronServiceProvider implements ServiceProvider
         ];
     }
 
-    public static function createSchedule(ContainerInterface $container)
+    public static function createSchedule(ContainerInterface $container): Schedule
     {
         $scheduler = new Schedule(
             self::getConfig($container, 'path'),

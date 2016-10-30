@@ -43,11 +43,9 @@ class Schedule
     /**
      * Set the mutex path.
      *
-     * @param string $path
-     * @param string $mutexPath
-     * @param string $consoleName
-     *
-     * @return $this
+     * @param string      $path
+     * @param string      $mutexPath
+     * @param null|string $consoleName
      */
     public function __construct(string $path, string $mutexPath, string $consoleName = null)
     {
