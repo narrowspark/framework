@@ -36,7 +36,11 @@ class CronListCommand extends Command
         $rows = [];
 
         foreach ($cronJobs as $cronJob) {
-            $rows[] = [$cronJob->getCommand(), $cronJob->getExpression(), $cronJob->getSummaryForDisplay()];
+            $rows[] = [
+                $cronJob->getCommand(),
+                $cronJob->getExpression(),
+                $cronJob->getSummaryForDisplay()
+            ];
         }
 
         $table->setRows($rows);

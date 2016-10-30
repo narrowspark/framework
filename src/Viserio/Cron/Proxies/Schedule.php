@@ -1,8 +1,8 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Schedule\Proxies;
+namespace Viserio\Cron\Proxies;
 
-use Viserio\Cron\Schedule as ScheduleClass;
+use Viserio\Cron\Schedule as CronSchedule;
 use Viserio\StaticalProxy\StaticalProxy;
 
 class Schedule extends StaticalProxy
@@ -14,6 +14,6 @@ class Schedule extends StaticalProxy
      */
     public static function getInstanceIdentifier()
     {
-        return ScheduleClass::class;
+        return CronSchedule::class;
     }
 }
