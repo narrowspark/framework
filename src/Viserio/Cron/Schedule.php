@@ -27,17 +27,33 @@ class Schedule
     protected $console;
 
     /**
-     * Set the console name or path that should call the commands.
+     * The mutex directory.
      *
-     * @param string $name
+     * @var string
+     */
+    protected $mutexPath;
+
+    /**
+     * Path for the working directory.
+     *
+     * @var string
+     */
+    protected $workingDirPath;
+
+    /**
+     * Set the mutex path.
+     *
+     * @param string $path
+     * @param string $mutexPath
+     * @param string $consoleName
      *
      * @return $this
      */
-    public function setConsoleName(string $name): Schedule
+    public function __construct(string $path, string $mutexPath, string $consoleName = null)
     {
-        $this->console = $name;
-
-        return $this;
+        $this->workingDirPath = $path;
+        $this->mutexPath = $mutexPath;
+        $this->console = $consoleName;
     }
 
     /**
@@ -51,6 +67,8 @@ class Schedule
     public function call($callback, array $parameters = []): CallbackCron
     {
         $cron = new CallbackCron($callback, $parameters);
+        $cron->setMutexPath($this->mutexPath)
+            ->setPath($this->workingDirPath);
 
         if ($this->container !== null) {
             $cron->setContainer($this->getContainer());
@@ -105,6 +123,8 @@ class Schedule
         }
 
         $cron = new Cron($command);
+        $cron->setMutexPath($this->mutexPath)
+            ->setPath($this->workingDirPath);
 
         if ($this->container !== null) {
             $cron->setContainer($this->getContainer());

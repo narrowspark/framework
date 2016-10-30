@@ -98,15 +98,13 @@ class Invoker implements InvokerInterface
     private function getInvoker(): InvokerInterface
     {
         if ($this->invoker === null) {
-            $container = $this->container;
-
             $resolvers = array_merge([
                 new NumericArrayResolver(),
                 new AssociativeArrayResolver(),
                 new DefaultValueResolver(),
             ], $this->resolvers);
 
-            if ($this->container !== null) {
+            if (($container = $this->container) !== null) {
                 if (isset($this->inject['type'])) {
                     $resolvers[] = new TypeHintContainerResolver($container);
                 }

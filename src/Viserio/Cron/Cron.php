@@ -93,7 +93,7 @@ class Cron implements CronContract
     protected $environments = [];
 
     /**
-     * The working directory.
+     * Path for the working directory.
      *
      * @var string
      */
@@ -345,7 +345,7 @@ class Cron implements CronContract
         if (! $this->runsInMaintenanceMode() && $isMaintenance) {
             return false;
         }
-
+// var_dump($this->expressionPasses());
         return $this->expressionPasses() && $this->runsInEnvironment($environment);
     }
 
@@ -592,8 +592,6 @@ class Cron implements CronContract
 
     /**
      * {@inheritdoc}
-     *
-     * @codeCoverageIgnore
      */
     public function when(Closure $callback): CronContract
     {
@@ -604,8 +602,6 @@ class Cron implements CronContract
 
     /**
      * {@inheritdoc}
-     *
-     * @codeCoverageIgnore
      */
     public function skip(Closure $callback): CronContract
     {
@@ -616,8 +612,6 @@ class Cron implements CronContract
 
     /**
      * {@inheritdoc}
-     *
-     * @codeCoverageIgnore
      */
     public function before(Closure $callback): CronContract
     {
@@ -628,8 +622,6 @@ class Cron implements CronContract
 
     /**
      * {@inheritdoc}
-     *
-     * @codeCoverageIgnore
      */
     public function after(Closure $callback): CronContract
     {
@@ -662,8 +654,6 @@ class Cron implements CronContract
 
     /**
      * {@inheritdoc}
-     *
-     * @codeCoverageIgnore
      */
     public function setTimezone(string $timezone): CronContract
     {
@@ -727,7 +717,7 @@ class Cron implements CronContract
     {
         $date = Chronos::now();
 
-        if ($this->timezone) {
+        if ($this->timezone !== null) {
             $date->setTimezone($this->timezone);
         }
 

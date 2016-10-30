@@ -14,7 +14,7 @@ class ScheduleTest extends \PHPUnit_Framework_TestCase
 {
     public function testExecCreatesNewCommand()
     {
-        $schedule = new Schedule();
+        $schedule = new Schedule(__DIR__, __DIR__);
         $schedule->exec('path/to/command');
         $schedule->exec('path/to/command -f --foo="bar"');
         $schedule->exec('path/to/command', ['-f']);
@@ -41,8 +41,7 @@ class ScheduleTest extends \PHPUnit_Framework_TestCase
 
     public function testCommandCreatesNewCerebroCommand()
     {
-        $schedule = new Schedule();
-        $schedule->setConsoleName('cerebro');
+        $schedule = new Schedule(__DIR__, __DIR__, 'cerebro');
 
         $schedule->command('clear:view');
         $schedule->command('clear:view --tries=3');
@@ -66,7 +65,7 @@ class ScheduleTest extends \PHPUnit_Framework_TestCase
 
     public function testCreateNewCerebroCommandUsingCommandClass()
     {
-        $schedule = new Schedule();
+        $schedule = new Schedule(__DIR__, __DIR__, 'cerebro');
         $container = new ArrayContainer([
             ConsoleCerebroCommandFixture::class => new ConsoleCerebroCommandFixture(
                 new DummyClassFixture($schedule)
@@ -81,10 +80,9 @@ class ScheduleTest extends \PHPUnit_Framework_TestCase
             $cron = new Cron($binary . ' "cerebro" foo:bar --force');
         }
 
-        $cron->setContainer($container);
+        $cron->setContainer($container)->setMutexPath(__DIR__)->setPath(__DIR__);
 
-        $schedule->setContainer($container);
-        $schedule->setConsoleName('cerebro');
+        $schedule->setContainer($container, 'cerebro');
 
         $schedule->command(ConsoleCerebroCommandFixture::class, ['--force']);
 
@@ -104,9 +102,8 @@ class ScheduleTest extends \PHPUnit_Framework_TestCase
 
     public function testCreateNewCerebroCommandUsingCallBack()
     {
-        $schedule = new Schedule();
+        $schedule = new Schedule(__DIR__, __DIR__, 'cerebro');
         $schedule->setContainer(new ArrayContainer([]));
-        $schedule->setConsoleName('cerebro');
         $schedule->call(function () {
             return 'foo';
         });

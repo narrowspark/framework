@@ -17,6 +17,8 @@ class ConsoleServiceProviderTest extends \PHPUnit_Framework_TestCase
 
         $container->get('config')->set('cron', [
             'console' => 'cerebro',
+            'mutex_path' => __DIR__ . '/..',
+            'path' => __DIR__ . '..',
         ]);
 
         $this->assertInstanceOf(Schedule::class, $container->get(Schedule::class));
@@ -29,6 +31,8 @@ class ConsoleServiceProviderTest extends \PHPUnit_Framework_TestCase
 
         $container->instance('options', [
             'console' => 'cerebro',
+            'mutex_path' => __DIR__ . '..',
+            'path' => __DIR__ . '..',
         ]);
 
         $this->assertInstanceOf(Schedule::class, $container->get(Schedule::class));
@@ -41,6 +45,8 @@ class ConsoleServiceProviderTest extends \PHPUnit_Framework_TestCase
 
         $container->instance('viserio.cron.options', [
             'console' => 'cerebro',
+            'mutex_path' => __DIR__ . '/..',
+            'path' => __DIR__ . '..',
         ]);
 
         $this->assertInstanceOf(Schedule::class, $container->get(Schedule::class));

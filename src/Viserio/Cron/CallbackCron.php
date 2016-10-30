@@ -77,7 +77,8 @@ class CallbackCron extends Cron
     {
         if (! isset($this->description)) {
             throw new LogicException(
-                "A scheduled cron job name is required to prevent overlapping. Use the 'name' method before 'withoutOverlapping'."
+                'A scheduled cron job description is required to prevent overlapping. ' .
+                "Use the 'description' method before 'withoutOverlapping'."
             );
         }
 

@@ -25,10 +25,13 @@ class CronServiceProvider implements ServiceProvider
 
     public static function createSchedule(ContainerInterface $container)
     {
-        $scheduler = new Schedule();
+        $scheduler = new Schedule(
+            self::getConfig($container, 'path'),
+            self::getConfig($container, 'mutex_path'),
+            self::getConfig($container, 'console')
+        );
 
         $scheduler->setContainer($container);
-        $scheduler->setConsoleName(self::getConfig($container, 'console'));
 
         return $scheduler;
     }
