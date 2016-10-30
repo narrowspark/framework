@@ -5,8 +5,8 @@ namespace Viserio\Cron\Providers;
 use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
 use Viserio\Contracts\Support\Traits\ServiceProviderConfigAwareTrait;
-use Viserio\Cron\Schedule;
 use Viserio\Cron\Commands\ScheduleRunCommand;
+use Viserio\Cron\Schedule;
 
 class CronServiceProvider implements ServiceProvider
 {

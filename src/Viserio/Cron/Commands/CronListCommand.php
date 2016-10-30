@@ -31,7 +31,7 @@ class CronListCommand extends Command
         $cronJobs = $container->get(Schedule::class)->getCronJobs();
 
         $table = new Table($this->getOutput());
-        $table->setHeaders(array('Jobname', 'Expression', 'Summary'));
+        $table->setHeaders(['Jobname', 'Expression', 'Summary']);
 
         $rows = [];
 
