@@ -3,9 +3,9 @@ declare(strict_types=1);
 namespace Viserio\Foundation;
 
 use Closure;
-use Viserio\Config\Manager as ConfigManager;
 use Viserio\Config\Providers\ConfigServiceProvider;
 use Viserio\Container\Container;
+use Viserio\Contracts\Config\Manager as ConfigManagerContract;
 use Viserio\Contracts\Events\Dispatcher as DispatcherContract;
 use Viserio\Contracts\Foundation\Application as ApplicationContract;
 use Viserio\Contracts\Foundation\Emitter as EmitterContract;
@@ -65,17 +65,24 @@ class Application extends Container implements ApplicationContract
     {
         parent::__construct();
 
+        $this->registerBaseServiceProviders();
+
         /*
          * Here we are binding the paths configured in paths.php to the app. You
          * should not be changing these here. If you need to change these you
          * may do so within the paths.php file and they will be bound here.
          */
-        $this->registerBaseServiceProviders();
-
         $this->bindInstallPaths($paths);
         $this->registerCacheFilePaths();
 
         $this->registerBaseBindings();
+
+        $config = $this->get(ConfigManagerContract::class);
+        $config->set(
+            'app.maintenance',
+            file_exists($config->get('path.storage') . '/framework/down'),
+            false
+        );
     }
 
     /**
@@ -123,7 +130,7 @@ class Application extends Container implements ApplicationContract
      */
     public function getLocale(): string
     {
-        return $this->get(ConfigManager::class)->get('app.locale');
+        return $this->get(ConfigManagerContract::class)->get('app.locale');
     }
 
     /**
@@ -131,7 +138,7 @@ class Application extends Container implements ApplicationContract
      */
     public function setLocale(string $locale): ApplicationContract
     {
-        $this->get(ConfigManager::class)->set('app.locale', $locale);
+        $this->get(ConfigManagerContract::class)->set('app.locale', $locale);
 
         if ($this->has(TranslationManager::class)) {
             $this->get(TranslationManager::class)->setLocale($locale);
@@ -157,7 +164,7 @@ class Application extends Container implements ApplicationContract
      */
     public function environmentPath(): string
     {
-        return $this->environmentPath ?: $this->get(ConfigManager::class)->get('path.base');
+        return $this->environmentPath ?: $this->get(ConfigManagerContract::class)->get('path.base');
     }
 
     /**
@@ -250,7 +257,7 @@ class Application extends Container implements ApplicationContract
         // Each path key is prefixed with path
         // so that they have the consistent naming convention.
         foreach ($paths as $key => $value) {
-            $this->get(ConfigManager::class)->set(sprintf('path.%s', $key), realpath($value));
+            $this->get(ConfigManagerContract::class)->set(sprintf('path.%s', $key), realpath($value));
         }
 
         return $this;
@@ -295,7 +302,7 @@ class Application extends Container implements ApplicationContract
      */
     protected function registerCacheFilePaths()
     {
-        $config = $this->get(ConfigManager::class);
+        $config = $this->get(ConfigManagerContract::class);
 
         $config->set('patch.cached.config', $config->get('path.storage') . '/framework/cache/config.php');
 

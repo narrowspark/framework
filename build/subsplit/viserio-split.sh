@@ -6,6 +6,7 @@ git subsplit publish --heads="master develop" --no-tags src/Viserio/Console:git@
 git subsplit publish --heads="master develop" --no-tags src/Viserio/Container:git@github.com:viserio/container.git
 git subsplit publish --heads="master develop" --no-tags src/Viserio/Contracts:git@github.com:viserio/contracts.git
 git subsplit publish --heads="master develop" --no-tags src/Viserio/Cookie:git@github.com:viserio/cookie.git
+git subsplit publish --heads="master develop" --no-tags src/Viserio/Cron:git@github.com:viserio/cron.git
 git subsplit publish --heads="master develop" --no-tags src/Viserio/Database:git@github.com:viserio/database.git
 git subsplit publish --heads="master develop" --no-tags src/Viserio/Encryption:git@github.com:viserio/encryption.git
 git subsplit publish --heads="master develop" --no-tags src/Viserio/Events:git@github.com:viserio/events.git

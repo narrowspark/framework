@@ -4,7 +4,7 @@ namespace Viserio\Foundation\Tests;
 
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use StdClass;
-use Viserio\Config\Manager as ConfigManager;
+use Viserio\Contracts\Config\Manager as ConfigManagerContract;
 use Viserio\Contracts\Events\Dispatcher as DispatcherContract;
 use Viserio\Contracts\Translation\TranslationManager as TranslationManagerContract;
 use Viserio\Foundation\Application;
@@ -37,7 +37,7 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
             ->with('app.locale')
             ->andReturn('foo');
 
-        $app->instance(ConfigManager::class, $config);
+        $app->instance(ConfigManagerContract::class, $config);
 
         $trans = $this->mock(StdClass::class);
         $trans->shouldReceive('setLocale')

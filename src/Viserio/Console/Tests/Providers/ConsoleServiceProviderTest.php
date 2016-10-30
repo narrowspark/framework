@@ -6,7 +6,6 @@ use Viserio\Config\Providers\ConfigServiceProvider;
 use Viserio\Console\Application;
 use Viserio\Console\Providers\ConsoleServiceProvider;
 use Viserio\Container\Container;
-use Viserio\Events\Providers\EventsServiceProvider;
 
 class ConsoleServiceProviderTest extends \PHPUnit_Framework_TestCase
 {
@@ -14,7 +13,6 @@ class ConsoleServiceProviderTest extends \PHPUnit_Framework_TestCase
     {
         $container = new Container();
         $container->register(new ConfigServiceProvider());
-        $container->register(new EventsServiceProvider());
         $container->register(new ConsoleServiceProvider());
 
         $container->get('config')->set('console', [
@@ -31,7 +29,6 @@ class ConsoleServiceProviderTest extends \PHPUnit_Framework_TestCase
     public function testProviderWithoutConfigManager()
     {
         $container = new Container();
-        $container->register(new EventsServiceProvider());
         $container->register(new ConsoleServiceProvider());
 
         $container->instance('options', [
@@ -44,7 +41,6 @@ class ConsoleServiceProviderTest extends \PHPUnit_Framework_TestCase
     public function testProviderWithoutConfigManagerAndNamespace()
     {
         $container = new Container();
-        $container->register(new EventsServiceProvider());
         $container->register(new ConsoleServiceProvider());
 
         $container->instance('viserio.console.options', [

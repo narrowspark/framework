@@ -16,6 +16,7 @@ class EnvTest extends \PHPUnit_Framework_TestCase
         putenv('TEST_EMPTY=empty');
         putenv('TEST_NORMAL=teststring');
         putenv('TEST_QUOTES="teststring"');
+        putenv('TEST_BASE64=base64:dGVzdA==');
     }
 
     public function tearDown()
@@ -28,6 +29,7 @@ class EnvTest extends \PHPUnit_Framework_TestCase
         putenv('TEST_EMPTY=');
         putenv('TEST_NORMAL=');
         putenv('TEST_QUOTES=');
+        putenv('TEST_BASE64=');
         putenv('TEST_TRUE');
         putenv('TEST_FALSE');
         putenv('TEST_FALSE_2');
@@ -36,6 +38,7 @@ class EnvTest extends \PHPUnit_Framework_TestCase
         putenv('TEST_EMPTY');
         putenv('TEST_NORMAL');
         putenv('TEST_QUOTES');
+        putenv('TEST_BASE64');
     }
 
     public function testGet()
@@ -52,5 +55,6 @@ class EnvTest extends \PHPUnit_Framework_TestCase
         $this->assertSame('', Env::get('TEST_EMPTY'));
         $this->assertSame('teststring', Env::get('TEST_NORMAL'));
         $this->assertSame('teststring', Env::get('TEST_QUOTES'));
+        $this->assertSame('test', Env::get('TEST_BASE64'));
     }
 }
