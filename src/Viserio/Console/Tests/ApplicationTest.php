@@ -39,8 +39,7 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
 
     public function testAllowsToDefineViserioCommand()
     {
-        $viserioCommand = new ViserioCommand();
-        $command = $this->application->add($viserioCommand);
+        $command = $this->application->add(new ViserioCommand());
 
         $this->assertSame($command, $this->application->get('demo:greet'));
     }

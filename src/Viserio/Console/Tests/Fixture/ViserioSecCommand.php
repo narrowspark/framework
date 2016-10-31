@@ -24,8 +24,7 @@ class ViserioSecCommand extends Command
 
     public function handle()
     {
-        $this
-            ->addArgument(
+        $this->addArgument(
                 'name',
                 InputArgument::OPTIONAL,
                 'Who do you want to greet?'
