@@ -18,7 +18,7 @@ class ServerRequestFactoryTest extends \PHPUnit_Framework_TestCase
     public function dataGetUriFromGlobals()
     {
         $server = [
-            'PHP_SELF' => '/blog/article.php',
+            'PHP_SELF' => '/doc/framwork.php',
             'GATEWAY_INTERFACE' => 'CGI/1.1',
             'SERVER_ADDR' => 'Server IP: 127.0.0.1',
             'SERVER_NAME' => 'www.narrowspark.com',
@@ -42,34 +42,34 @@ class ServerRequestFactoryTest extends \PHPUnit_Framework_TestCase
             'SCRIPT_FILENAME' => '/path/to/this/script.php',
             'SERVER_ADMIN' => 'webmaster@narrowspark.com',
             'SERVER_PORT' => '80',
-            'SERVER_SIGNATURE' => 'Version signature: 5.123',
-            'SCRIPT_NAME' => '/blog/article.php',
-            'REQUEST_URI' => '/blog/article.php?id=10&user=foo',
+            'SERVER_SIGNATURE' => 'Version signature: 5.124',
+            'SCRIPT_NAME' => '/doc/framwork.php',
+            'REQUEST_URI' => '/doc/framwork.php?id=10&user=foo',
         ];
 
         return [
             'Normal request' => [
-                'http://www.narrowspark.com/blog/article.php?id=10&user=foo',
+                'http://www.narrowspark.com/doc/framwork.php?id=10&user=foo',
                 $server,
             ],
             'Secure request' => [
-                'https://www.narrowspark.com/blog/article.php?id=10&user=foo',
+                'https://www.narrowspark.com/doc/framwork.php?id=10&user=foo',
                 array_merge($server, ['HTTPS' => 'on', 'SERVER_PORT' => '443']),
             ],
             'No HTTPS param' => [
-                'http://www.narrowspark.com/blog/article.php?id=10&user=foo',
+                'http://www.narrowspark.com/doc/framwork.php?id=10&user=foo',
                 $server,
             ],
             'HTTP_HOST missing' => [
-                'http://www.narrowspark.com/blog/article.php?id=10&user=foo',
+                'http://www.narrowspark.com/doc/framwork.php?id=10&user=foo',
                 array_merge($server, ['HTTP_HOST' => null]),
             ],
             'No query String' => [
-                'http://www.narrowspark.com/blog/article.php',
-                array_merge($server, ['REQUEST_URI' => '/blog/article.php', 'QUERY_STRING' => '']),
+                'http://www.narrowspark.com/doc/framwork.php',
+                array_merge($server, ['REQUEST_URI' => '/doc/framwork.php', 'QUERY_STRING' => '']),
             ],
             'Different port' => [
-                'http://www.narrowspark.com:8324/blog/article.php?id=10&user=foo',
+                'http://www.narrowspark.com:8324/doc/framwork.php?id=10&user=foo',
                 array_merge($server, ['SERVER_PORT' => '8324']),
             ],
             'Empty server variable' => [
@@ -93,7 +93,7 @@ class ServerRequestFactoryTest extends \PHPUnit_Framework_TestCase
     public function testFromGlobals()
     {
         $_SERVER = [
-            'PHP_SELF' => '/blog/article.php',
+            'PHP_SELF' => '/doc/framwork.php',
             'GATEWAY_INTERFACE' => 'CGI/1.1',
             'SERVER_ADDR' => 'Server IP: 127.0.0.1',
             'SERVER_NAME' => 'www.narrowspark.com',
@@ -119,8 +119,8 @@ class ServerRequestFactoryTest extends \PHPUnit_Framework_TestCase
             'SERVER_ADMIN' => 'webmaster@narrowspark.com',
             'SERVER_PORT' => '80',
             'SERVER_SIGNATURE' => 'Version signature: 5.123',
-            'SCRIPT_NAME' => '/blog/article.php',
-            'REQUEST_URI' => '/blog/article.php?id=10&user=foo',
+            'SCRIPT_NAME' => '/doc/framwork.php',
+            'REQUEST_URI' => '/doc/framwork.php?id=10&user=foo',
         ];
         $_COOKIE = [
             'logged-in' => 'yes!',
@@ -153,7 +153,7 @@ class ServerRequestFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($_POST, $server->getParsedBody());
         $this->assertEquals($_GET, $server->getQueryParams());
         $this->assertEquals(
-            new Uri('http://www.narrowspark.com/blog/article.php?id=10&user=foo'),
+            new Uri('http://www.narrowspark.com/doc/framwork.php?id=10&user=foo'),
             $server->getUri()
         );
 

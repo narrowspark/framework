@@ -51,35 +51,30 @@ class ServerRequestFactory implements ServerRequestFactoryInterface, ServerReque
     protected function getUriFromGlobals(): UriInterface
     {
         $uri = new Uri('');
-        $server = $_SERVER;
-        $addProtocol = false;
+        $addSchema = false;
 
-        if (isset($server['HTTPS'])) {
-            $uri = $uri->withScheme($server['HTTPS'] == 'on' ? 'https' : 'http');
+        if (isset($_SERVER['HTTP_HOST'])) {
+            $uri = $uri->withHost($_SERVER['HTTP_HOST']);
+            $addSchema = true;
+        } elseif (isset($_SERVER['SERVER_NAME'])) {
+            $uri = $uri->withHost($_SERVER['SERVER_NAME']);
+            $addSchema = true;
         }
 
-        if (isset($server['HTTP_HOST'])) {
-            $uri = $uri->withHost($server['HTTP_HOST']);
-            $addProtocol = true;
-        } elseif (isset($server['SERVER_NAME'])) {
-            $uri = $uri->withHost($server['SERVER_NAME']);
-            $addProtocol = true;
-        }
-
-        if ($addProtocol) {
+        if ($addSchema) {
             $uri = $uri->withScheme(isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on' ? 'https' : 'http');
         }
 
-        if (isset($server['SERVER_PORT'])) {
-            $uri = $uri->withPort($server['SERVER_PORT']);
+        if (isset($_SERVER['SERVER_PORT'])) {
+            $uri = $uri->withPort($_SERVER['SERVER_PORT']);
         }
 
-        if (isset($server['REQUEST_URI'])) {
-            $uri = $uri->withPath(current(explode('?', $server['REQUEST_URI'])));
+        if (isset($_SERVER['REQUEST_URI'])) {
+            $uri = $uri->withPath(current(explode('?', $_SERVER['REQUEST_URI'])));
         }
 
-        if (isset($server['QUERY_STRING'])) {
-            $uri = $uri->withQuery($server['QUERY_STRING']);
+        if (isset($_SERVER['QUERY_STRING'])) {
+            $uri = $uri->withQuery($_SERVER['QUERY_STRING']);
         }
 
         return $uri;
