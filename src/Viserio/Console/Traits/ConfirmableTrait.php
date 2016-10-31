@@ -25,7 +25,7 @@ trait ConfirmableTrait
             }
 
             $this->comment(str_repeat('*', strlen($warning) + 12));
-            $this->comment('*     '.$warning.'     *');
+            $this->comment('*     ' . $warning . '     *');
             $this->comment(str_repeat('*', strlen($warning) + 12));
             $this->output->writeln('');
 

@@ -31,11 +31,11 @@ class ConfirmableTraitTest extends \PHPUnit_Framework_TestCase
 
         $this->assertOutputIs(
             'confirmable',
-            "**********************************************
+            '**********************************************
 *     Application is in Production mode!     *
 **********************************************
 
-"
+'
         );
     }
 
@@ -45,12 +45,12 @@ class ConfirmableTraitTest extends \PHPUnit_Framework_TestCase
 
         $this->assertOutputIs(
             'confirmable',
-            "**********************************************
+            '**********************************************
 *     Application is in Production mode!     *
 **********************************************
 
 Command Cancelled!
-"
+'
         );
     }
 
@@ -63,6 +63,7 @@ Command Cancelled!
             null
         );
     }
+
     /**
      * @param string $command
      * @param string $expected
