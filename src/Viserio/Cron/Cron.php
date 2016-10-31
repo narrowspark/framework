@@ -5,6 +5,7 @@ namespace Viserio\Cron;
 use Cake\Chronos\Chronos;
 use Closure;
 use Cron\CronExpression;
+use Psr\Cache\CacheItemPoolInterface;
 use Symfony\Component\Process\Process;
 use Symfony\Component\Process\ProcessUtils;
 use Viserio\Contracts\Container\Traits\ContainerAwareTrait;
@@ -100,13 +101,6 @@ class Cron implements CronContract
     protected $path;
 
     /**
-     * The mutex directory.
-     *
-     * @var string
-     */
-    protected $mutexPath;
-
-    /**
      * Indicates if the command should run in background.
      *
      * @var bool
@@ -142,13 +136,22 @@ class Cron implements CronContract
     protected $withoutOverlapping = false;
 
     /**
+     * The cache store implementation.
+     *
+     * @var \Psr\Cache\CacheItemPoolInterface
+     */
+    protected $cache;
+
+    /**
      * Create a new cron instance.
      *
-     * @param string $command
+     * @param string                            $command
+     * @param \Psr\Cache\CacheItemPoolInterface $cache
      */
-    public function __construct(string $command)
+    public function __construct(string $command, CacheItemPoolInterface $cache)
     {
         $this->command = $command;
+        $this->cache = $cache;
         $this->output = $this->getDefaultOutput();
     }
 
@@ -174,22 +177,6 @@ class Cron implements CronContract
     public function getPath(): string
     {
         return $this->path;
-    }
-
-    /**
-     * Set the mutex path.
-     *
-     * @param string $path
-     *
-     * @return $this
-     *
-     * @codeCoverageIgnore
-     */
-    public function setMutexPath(string $path): CronContract
-    {
-        $this->mutexPath = $path;
-
-        return $this;
     }
 
     /**
@@ -265,11 +252,25 @@ class Cron implements CronContract
      */
     public function run()
     {
+        if ($this->withoutOverlapping) {
+            $item = $this->cache->getItem($this->getMutexName());
+            $item->set($this->mutexName());
+            $item->expiresAfter(1440);
+
+            $this->cache->save($item);
+        }
+
         if (! $this->runInBackground) {
             return $this->runCommandInForeground();
         }
 
-        return $this->runCommandInBackground();
+        $run = $this->runCommandInBackground();
+
+        if ($this->withoutOverlapping) {
+            $this->cache->deleteItem($this->getMutexName());
+        }
+
+        return $run;
     }
 
     /**
@@ -291,15 +292,7 @@ class Cron implements CronContract
         $redirect = $this->shouldAppendOutput ? ' >> ' : ' > ';
         $isWindows = strtolower(substr(PHP_OS, 0, 3)) === 'win';
 
-        if ($this->withoutOverlapping) {
-            if ($isWindows) {
-                $command = '(echo \'\' > "' . $this->getMutexPath() . '" & ' . $this->command . ' & del "' . $this->getMutexPath() . '")' . $redirect . $output . ' 2>&1 &';
-            } else {
-                $command = '(touch ' . $this->getMutexPath() . '; ' . $this->command . '; rm ' . $this->getMutexPath() . ')' . $redirect . $output . ' 2>&1 &';
-            }
-        } else {
-            $command = $this->command . $redirect . $output . ' 2>&1 &';
-        }
+        $command = $this->command . $redirect . $output . ' 2>&1 &';
 
         return $this->user && ! $isWindows ? 'sudo -u ' . $this->user . ' -- sh -c \'' . $command . '\'' : $command;
     }
@@ -312,7 +305,7 @@ class Cron implements CronContract
         $this->withoutOverlapping = true;
 
         return $this->skip(function () {
-            return file_exists($this->getMutexPath());
+            return $this->cache->hasItem($this->getMutexName());
         });
     }
 
@@ -785,13 +778,13 @@ class Cron implements CronContract
     }
 
     /**
-     * Get the mutex path for the scheduled command.
+     * Get the mutex name for the scheduled command.
      *
      * @return string
      */
-    protected function getMutexPath(): string
+    protected function getMutexName(): string
     {
-        return $this->mutexPath . DIRECTORY_SEPARATOR . 'schedule-' . sha1($this->expression . $this->command);
+        return 'schedule-' . sha1($this->expression . $this->command);
     }
 
     /**
