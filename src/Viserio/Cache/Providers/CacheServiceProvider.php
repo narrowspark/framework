@@ -4,6 +4,7 @@ namespace Viserio\Cache\Providers;
 
 use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
+use Psr\Cache\CacheItemPoolInterface;
 use Viserio\Cache\CacheManager;
 use Viserio\Config\Manager as ConfigManager;
 use Viserio\Contracts\Cache\Manager as CacheManagerContract;
@@ -23,7 +24,10 @@ class CacheServiceProvider implements ServiceProvider
             'cache' => function (ContainerInterface $container) {
                 return $container->get(CacheManagerContract::class);
             },
-            'cache.store' => [self::class, 'registerDefaultCache'],
+            CacheItemPoolInterface::class => [self::class, 'registerDefaultCache'],
+            'cache.store' => function (ContainerInterface $container) {
+                return $container->get('cache.store');
+            },
         ];
     }
 
@@ -35,7 +39,7 @@ class CacheServiceProvider implements ServiceProvider
         return $cache;
     }
 
-    public static function registerDefaultCache(ContainerInterface $container)
+    public static function registerDefaultCache(ContainerInterface $container): CacheItemPoolInterface
     {
         return $container->get(CacheManager::class)->driver();
     }
