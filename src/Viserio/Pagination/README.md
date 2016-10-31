@@ -1,4 +1,4 @@
-# Viserio Middleware package
+# Viserio Pagination package
 
 This package is part of the [Narrowspark framework](http://github.com/narrowspark/framework).
 
@@ -21,7 +21,7 @@ Thank you for considering contributing to the Narrowspark framework! The contrib
 Use [Composer](https://getcomposer.org/) to install this package:
 
 ```sh
-composer require viserio/middleware
+composer require viserio/pagination
 ```
 
 ## Official Documentation
