@@ -264,9 +264,9 @@ abstract class Command extends BaseCommand implements CompletionAwareInterface
      * @param string $question
      * @param bool   $default
      *
-     * @return string
+     * @return string|bool
      */
-    public function confirm(string $question, bool $default = false): string
+    public function confirm(string $question, bool $default = false)
     {
         return $this->output->confirm($question, $default);
     }
