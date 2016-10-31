@@ -22,7 +22,7 @@
     </php>
 
     <testsuites>
-        <testsuite name="Narrowspark Middleware Test Suite">
+        <testsuite name="Narrowspark Pagination Component Test Suite">
             <directory suffix="Test.php">./Tests/</directory>
         </testsuite>
     </testsuites>
