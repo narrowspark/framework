@@ -153,7 +153,7 @@ class Dispatcher implements DispatcherContract
         }
 
         foreach ($segments as $key => $value) {
-            $route->setParameter($key, urldecode($value));
+            $route->setParameter($key, rawurldecode($value));
         }
 
         $this->current = $route;
@@ -163,7 +163,7 @@ class Dispatcher implements DispatcherContract
         $this->addMiddlewares($route->gatherMiddleware());
 
         if ($this->events !== null) {
-            $this->getEventsDispatcher()->emit('route.matched', [$route, $request]);
+            $this->getEventsDispatcher()->trigger('route.matched', [$route, $request]);
         }
 
         return $this->middlewareDispatcher;
@@ -205,7 +205,7 @@ class Dispatcher implements DispatcherContract
         if (! file_exists($this->path)) {
             $routerCompiler = new TreeRouteCompiler(new RouteTreeBuilder(), new RouteTreeOptimizer());
 
-            file_put_contents($this->path, $routerCompiler->compile($this->routes->getRoutes()));
+            file_put_contents($this->path, $routerCompiler->compile($this->routes->getRoutes()), LOCK_EX);
         }
 
         return require $this->path;
@@ -214,7 +214,7 @@ class Dispatcher implements DispatcherContract
     /**
      * If route has middlewares add it to the middleware dispatcher.
      *
-     * @param array $middelwares
+     * @param array $middlewares
      */
     private function addMiddlewares(array $middlewares)
     {

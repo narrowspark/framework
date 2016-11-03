@@ -3,38 +3,40 @@ declare(strict_types=1);
 namespace Viserio\Encryption\Providers;
 
 use Defuse\Crypto\Key;
-use Viserio\Application\ServiceProvider;
+use Interop\Container\ContainerInterface;
+use Interop\Container\ServiceProvider;
+use Viserio\Contracts\Encryption\Encrypter as EncrypterContract;
+use Viserio\Contracts\Support\Traits\ServiceProviderConfigAwareTrait;
 use Viserio\Encryption\Encrypter;
 
-class EncrypterServiceProvider extends ServiceProvider
+class EncrypterServiceProvider implements ServiceProvider
 {
+    use ServiceProviderConfigAwareTrait;
+
+    const PACKAGE = 'viserio.encryption';
+
     /**
      * {@inheritdoc}
      */
-    public function register()
-    {
-        $this->app->singleton('encrypter', function ($app) {
-            $config = $app->get('config');
-
-            $encrypt = new Encrypter(
-                Key::loadFromAsciiSafeString(
-                    $config->get('app::key')
-                )
-            );
-
-            return $encrypt;
-        });
-    }
-
-    /**
-     * Get the services provided by the provider.
-     *
-     * @return string[]
-     */
-    public function provides(): array
+    public function getServices()
     {
         return [
-            'encrypter',
+            Encrypter::class => [self::class, 'createEncrypter'],
+            EncrypterContract::class => function (ContainerInterface $container) {
+                return $container->get(Encrypter::class);
+            },
+            'encrypter' => function (ContainerInterface $container) {
+                return $container->get(Encrypter::class);
+            },
         ];
+    }
+
+    public static function createEncrypter(ContainerInterface $container): Encrypter
+    {
+        $encrypt = new Encrypter(
+            Key::loadFromAsciiSafeString(self::getConfig($container, 'key', ''))
+        );
+
+        return $encrypt;
     }
 }

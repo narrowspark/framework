@@ -2,34 +2,54 @@
 declare(strict_types=1);
 namespace Viserio\Log\Providers;
 
+use Interop\Container\ContainerInterface;
+use Interop\Container\ServiceProvider;
 use Monolog\Logger;
-use Viserio\Application\ServiceProvider;
+use Psr\Log\LoggerInterface;
+use Viserio\Contracts\Events\Dispatcher as DispatcherContract;
+use Viserio\Contracts\Log\Log;
+use Viserio\Contracts\Support\Traits\ServiceProviderConfigAwareTrait;
 use Viserio\Log\Writer as MonologWriter;
 
-class LoggerServiceProvider extends ServiceProvider
+class LoggerServiceProvider implements ServiceProvider
 {
+    use ServiceProviderConfigAwareTrait;
+
+    const PACKAGE = 'viserio.log';
+
     /**
      * {@inheritdoc}
      */
-    public function register()
-    {
-        $this->app->singleton('logger', function ($app) {
-            return new MonologWriter(
-                new Logger($app->get('env')),
-                $app->get('events')
-            );
-        });
-    }
-
-    /**
-     * Get the services provided by the provider.
-     *
-     * @return string[]
-     */
-    public function provides(): array
+    public function getServices()
     {
         return [
-            'logger',
+            MonologWriter::class => [self::class, 'createLogger'],
+            'logger' => function (ContainerInterface $container) {
+                return $container->get(MonologWriter::class);
+            },
+            'log' => function (ContainerInterface $container) {
+                return $container->get(MonologWriter::class);
+            },
+            Logger::class => function (ContainerInterface $container) {
+                return $container->get(MonologWriter::class);
+            },
+            LoggerInterface::class => function (ContainerInterface $container) {
+                return $container->get(MonologWriter::class);
+            },
+            Log::class => function (ContainerInterface $container) {
+                return $container->get(MonologWriter::class);
+            },
         ];
+    }
+
+    public static function createLogger(ContainerInterface $container): MonologWriter
+    {
+        $logger = new MonologWriter(new Logger(self::getConfig($container, 'env', 'production')));
+
+        if ($container->has(DispatcherContract::class)) {
+            $logger->setEventsDispatcher($container->get(DispatcherContract::class));
+        }
+
+        return $logger;
     }
 }

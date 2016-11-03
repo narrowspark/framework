@@ -97,25 +97,26 @@ class Invoker implements InvokerInterface
      */
     private function getInvoker(): InvokerInterface
     {
-        if ($this->invoker === null && $this->container !== null) {
-            $container = $this->container;
-
+        if ($this->invoker === null) {
             $resolvers = array_merge([
                 new NumericArrayResolver(),
                 new AssociativeArrayResolver(),
                 new DefaultValueResolver(),
             ], $this->resolvers);
 
+            if (($container = $this->container) !== null) {
+                if (isset($this->inject['type'])) {
+                    $resolvers[] = new TypeHintContainerResolver($container);
+                }
 
-            if (isset($this->inject['type'])) {
-                $resolvers[] = new TypeHintContainerResolver($container);
+                if (isset($this->inject['parameter'])) {
+                    $resolvers[] = new ParameterNameContainerResolver($container);
+                }
+
+                $this->invoker = new DiInvoker(new ResolverChain($resolvers), $container);
+            } else {
+                $this->invoker = new DiInvoker(new ResolverChain($resolvers));
             }
-
-            if (isset($this->inject['parameter'])) {
-                $resolvers[] = new ParameterNameContainerResolver($container);
-            }
-
-            $this->invoker = new DiInvoker(new ResolverChain($resolvers), $container);
         }
 
         return $this->invoker;

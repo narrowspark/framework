@@ -286,4 +286,35 @@ class FilesystemManagerTest extends \PHPUnit_Framework_TestCase
             $manager->getFlysystemAdapter('zip')
         );
     }
+
+    public function testCachedAdapter()
+    {
+        $config = $this->mock(ConfigManger::class);
+        $config->shouldReceive('get')
+            ->once()
+            ->with('filesystem.connections', [])
+            ->andReturn([
+                'local' => [
+                    'path' => __DIR__,
+                    'cache' => 'local',
+                ],
+            ]);
+        $config->shouldReceive('get')
+            ->once()
+            ->with('filesystem.cached')
+            ->andReturn([
+                'local' => [
+                    'driver' => 'local',
+                    'key' => 'test',
+                    'expire' => 6000,
+                ],
+            ]);
+
+        $manager = new FilesystemManager($config);
+
+        $this->assertInstanceOf(
+            FilesystemAdapter::class,
+            $manager->connection('local')
+        );
+    }
 }

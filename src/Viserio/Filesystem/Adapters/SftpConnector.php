@@ -4,7 +4,7 @@ namespace Viserio\Filesystem\Adapters;
 
 use InvalidArgumentException;
 use League\Flysystem\Sftp\SftpAdapter;
-use Narrowspark\Arr\StaticArr as Arr;
+use Narrowspark\Arr\Arr;
 use Viserio\Contracts\Filesystem\Connector as ConnectorContract;
 
 class SftpConnector implements ConnectorContract
@@ -14,7 +14,7 @@ class SftpConnector implements ConnectorContract
      *
      * @param string[] $config
      *
-     * @return object
+     * @return SftpAdapter
      */
     public function connect(array $config)
     {
@@ -50,13 +50,9 @@ class SftpConnector implements ConnectorContract
     }
 
     /**
-     * Get the sftp adapter.
-     *
-     * @param string[] $config
-     *
-     * @return \League\Flysystem\Sftp\SftpAdapter
+     * {@inheritdoc}
      */
-    protected function getAdapter(array $config): \League\Flysystem\Sftp\SftpAdapter
+    protected function getAdapter(array $config): SftpAdapter
     {
         return new SftpAdapter($config);
     }

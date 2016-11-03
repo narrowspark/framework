@@ -2,15 +2,16 @@
 declare(strict_types=1);
 namespace Viserio\Session\Middleware;
 
+use Cake\Chronos\Chronos;
+use Interop\Http\Middleware\DelegateInterface;
+use Interop\Http\Middleware\ServerMiddlewareInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Schnittstabil\Csrf\TokenService\TokenService;
-use Viserio\Contracts\Middleware\Delegate as DelegateContract;
-use Viserio\Contracts\Middleware\ServerMiddleware as ServerMiddlewareContract;
 use Viserio\Cookie\Cookie;
 use Viserio\Session\SessionManager;
 
-class VerifyCsrfTokenMiddleware implements ServerMiddlewareContract
+class VerifyCsrfTokenMiddleware implements ServerMiddlewareInterface
 {
     /**
      * The session manager.
@@ -39,7 +40,7 @@ class VerifyCsrfTokenMiddleware implements ServerMiddlewareContract
 
         $this->tokenService = new TokenService(
             $config->get('session::key'),
-            $config->get('session::csrf.livetime', time() + 60 * 120),
+            $config->get('session::csrf.livetime', Chronos::now()->getTimestamp() + 60 * 120),
             $config->get('session::csrf.algo', 'SHA512')
         );
     }
@@ -47,11 +48,11 @@ class VerifyCsrfTokenMiddleware implements ServerMiddlewareContract
     /**
      * {@inhertidoc}
      */
-    public function process(ServerRequestInterface $request, DelegateContract $frame): ResponseInterface
+    public function process(ServerRequestInterface $request, DelegateInterface $delegate): ResponseInterface
     {
         $request = $this->generateNewToken($request);
 
-        $response = $frame->next($request);
+        $response = $delegate->process($request);
 
         if ($this->isReading($request) ||
             $this->tokensMatch($request)
@@ -104,7 +105,7 @@ class VerifyCsrfTokenMiddleware implements ServerMiddlewareContract
         $setCookie = new Cookie(
             'XSRF-TOKEN',
             $this->tokenService->generate(),
-            $config->get('session::csrf.livetime', time() + 60 * 120),
+            $config->get('session::csrf.livetime', Chronos::now()->getTimestamp() + 60 * 120),
             $config->get('path'),
             $config->get('domain'),
             $config->get('secure', false),

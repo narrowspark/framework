@@ -14,11 +14,13 @@ interface Stack
      * immutability of the stack, and MUST return an instance that contains
      * the specified middleware.
      *
-     * @param Middleware $middleware
+     * @param \Interop\Http\Middleware\MiddlewareInterface|\Interop\Http\Middleware\ServerMiddlewareInterface $middleware
+     *
+     * @throws \LogicException
      *
      * @return $this
      */
-    public function withMiddleware(Middleware $middleware): Stack;
+    public function withMiddleware($middleware): Stack;
 
     /**
      * Return an instance without the specified middleware.
@@ -27,11 +29,13 @@ interface Stack
      * immutability of the stack, and MUST return an instance that does not
      * contain the specified middleware.
      *
-     * @param Middleware $middleware
+     * @param \Interop\Http\Middleware\MiddlewareInterface|\Interop\Http\Middleware\ServerMiddlewareInterface $middleware
+     *
+     * @throws \LogicException
      *
      * @return $this
      */
-    public function withoutMiddleware(Middleware $middleware): Stack;
+    public function withoutMiddleware($middleware): Stack;
 
     /**
      * Process the request through middleware and return the response.
@@ -39,9 +43,9 @@ interface Stack
      * This method MUST be implemented in such a way as to allow the same
      * stack to be reused for processing multiple requests in sequence.
      *
-     * @param RequestInterface $request
+     * @param \Psr\Http\Message\RequestInterface $request
      *
-     * @return ResponseInterface
+     * @return \Psr\Http\Message\ResponseInterface
      */
     public function process(RequestInterface $request): ResponseInterface;
 }

@@ -156,8 +156,10 @@ class Str
         }
 
         if (! ctype_lower($value)) {
-            $value = preg_replace('/\s+/u', '', $value);
+            $value = self::normalizeScreamingCase($value);
+            $value = trim($value);
             $value = (string) static::toLowerCase(preg_replace('/(.)(?=[A-Z0-9])/u', '$1' . $delimiter, $value));
+            $value = preg_replace('/[_\s-]+/', $delimiter, $value);
         }
 
         return static::$snakeCache[$key][$delimiter] = $value;
@@ -178,8 +180,25 @@ class Str
             return static::$studlyCache[$key];
         }
 
+        $value = self::normalizeScreamingCase($value);
         $value = ucwords(str_replace(['-', '_'], ' ', $value));
 
         return static::$studlyCache[$key] = str_replace(' ', '', $value);
+    }
+
+    /**
+     * Normalize screaming snake/kebab case value to regular snake/kebab case.
+     *
+     * @param string $value
+     *
+     * @return string
+     */
+    private static function normalizeScreamingCase(string $value): string
+    {
+        if (ctype_upper(str_replace(['_', '-'], '', $value))) {
+            return mb_strtolower($value);
+        }
+
+        return $value;
     }
 }

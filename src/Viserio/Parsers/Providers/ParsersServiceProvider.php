@@ -2,23 +2,50 @@
 declare(strict_types=1);
 namespace Viserio\Parsers\Providers;
 
-use Viserio\Application\ServiceProvider;
+use Interop\Container\ContainerInterface;
+use Interop\Container\ServiceProvider;
+use Viserio\Contracts\Parsers\Loader as LoaderContract;
+use Viserio\Contracts\Parsers\TaggableParser as TaggableParserContract;
+use Viserio\Contracts\Support\Traits\ServiceProviderConfigAwareTrait;
+use Viserio\Parsers\FileLoader;
+use Viserio\Parsers\TaggableParser;
 
-class ParsersServiceProvider extends ServiceProvider
+class ParsersServiceProvider implements ServiceProvider
 {
+    use ServiceProviderConfigAwareTrait;
+
+    const PACKAGE = 'viserio.parsers';
+
     /**
      * {@inheritdoc}
      */
-    public function register()
+    public function getServices()
     {
+        return [
+            LoaderContract::class => [self::class, 'createFileLoader'],
+            FileLoader::class => function (ContainerInterface $container) {
+                return $container->get(LoaderContract::class);
+            },
+            TaggableParserContract::class => [self::class, 'createTaggableParser'],
+            TaggableParser::class => function (ContainerInterface $container) {
+                return $container->get(TaggableParserContract::class);
+            },
+            'parser' => function (ContainerInterface $container) {
+                return $container->get(TaggableParserContract::class);
+            },
+        ];
     }
 
-    /**
-     * Get the services provided by the provider.
-     *
-     * @return string[]
-     */
-    public function provides(): array
+    public static function createFileLoader(ContainerInterface $container): FileLoader
     {
+        return new FileLoader(
+            $container->get(TaggableParser::class),
+            self::getConfig($container, 'directories', [])
+        );
+    }
+
+    public static function createTaggableParser(): TaggableParser
+    {
+        return new TaggableParser();
     }
 }

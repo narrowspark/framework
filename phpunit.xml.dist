@@ -24,9 +24,6 @@
     </php>
 
     <testsuites>
-<!--         <testsuite name="Narrowspark Application Component Test Suite">
-            <directory>./src/Viserio/Application/Tests</directory>
-        </testsuite> -->
         <testsuite name="Narrowspark Bus Component Test Suite">
             <directory>./src/Viserio/Bus/Tests</directory>
         </testsuite>
@@ -36,24 +33,24 @@
         <testsuite name="Narrowspark Config Component Test Suite">
             <directory>./src/Viserio/Config/Tests</directory>
         </testsuite>
-        <testsuite name="Narrowspark Connect Component Test Suite">
-            <directory>./src/Viserio/Connect/Tests</directory>
-        </testsuite>
         <testsuite name="Narrowspark Console Component Test Suite">
             <directory>./src/Viserio/Console/Tests</directory>
         </testsuite>
-<!--        <testsuite name="Narrowspark Container Component Test Suite">
+       <testsuite name="Narrowspark Container Component Test Suite">
             <directory>./src/Viserio/Container/Tests</directory>
-        </testsuite> -->
+        </testsuite>
         <testsuite name="Narrowspark Contracts Component Test Suite">
             <directory>./src/Viserio/Contracts/Tests</directory>
         </testsuite>
         <testsuite name="Narrowspark Cookie Component Test Suite">
             <directory>./src/Viserio/Cookie/Tests</directory>
         </testsuite>
-<!--        <testsuite name="Narrowspark Database Component Test Suite">
+        <testsuite name="Narrowspark Cron Component Test Suite">
+            <directory>./src/Viserio/Cron/Tests</directory>
+        </testsuite>
+       <testsuite name="Narrowspark Database Component Test Suite">
             <directory>./src/Viserio/Database/Tests</directory>
-        </testsuite> -->
+        </testsuite>
         <testsuite name="Narrowspark Encryption Component Test Suite">
             <directory>./src/Viserio/Encryption/Tests</directory>
         </testsuite>
@@ -65,6 +62,9 @@
         </testsuite>
         <testsuite name="Narrowspark Filesystem Component Test Suite">
             <directory>./src/Viserio/Filesystem/Tests</directory>
+        </testsuite>
+        <testsuite name="Narrowspark Foundation Component Test Suite">
+            <directory>./src/Viserio/Foundation/Tests</directory>
         </testsuite>
         <testsuite name="Narrowspark Hashing Component Test Suite">
             <directory>./src/Viserio/Hashing/Tests</directory>
@@ -107,6 +107,9 @@
         </testsuite>
        <testsuite name="Narrowspark Translation Component Test Suite">
             <directory>./src/Viserio/Translation/Tests</directory>
+        </testsuite>
+        <testsuite name="Narrowspark Validation Component Test Suite">
+            <directory>./src/Viserio/Validation/Tests</directory>
         </testsuite>
         <testsuite name="Narrowspark View Component Test Suite">
             <directory>./src/Viserio/View/Tests</directory>

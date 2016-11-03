@@ -32,7 +32,7 @@ trait ParseLevelTrait
      *
      * @return int
      */
-    protected function parseLevel(string $level): int
+    public function parseLevel(string $level): int
     {
         if (isset($this->levels[$level])) {
             return $this->levels[$level];

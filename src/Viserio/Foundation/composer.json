@@ -1,0 +1,60 @@
+{
+    "name"       : "viserio/foundation",
+    "type"       : "library",
+    "description": "The Viserio Foundation package.",
+    "keywords"   : ["narrowspark", "viserio", "foundation", "container", "config", "log", "exception", "events", "parsers", "routing"],
+    "license"    : "MIT",
+    "homepage"   : "http://github.com/narrowspark/framework",
+    "support"    : {
+        "issues": "https://github.com/narrowspark/framework/issues",
+        "source": "https://github.com/narrowspark/framework"
+    },
+    "authors"    : [
+        {
+          "name"    : "Daniel Bannert",
+          "email"   : "d.bannert@anolilab.de",
+          "homepage": "http://www.anolilab.de",
+          "role"    : "Developer"
+        }
+    ],
+    "require": {
+        "php"                                                : "7.0.0 - 7.0.5 || ^7.0.7",
+        "viserio/config"                                     : "self.version",
+        "viserio/container"                                  : "self.version",
+        "viserio/contracts"                                  : "self.version",
+        "viserio/events"                                     : "self.version",
+        "viserio/exception"                                  : "self.version",
+        "viserio/log"                                        : "self.version",
+        "viserio/parsers"                                    : "self.version",
+        "viserio/routing"                                    : "self.version",
+    },
+    "require-dev": {
+        "narrowspark/testing-helper"                         : "^1.5",
+        "phpunit/phpunit"                                    : "^5.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "Viserio\\Foundation\\"                          : ""
+        },
+        "exclude-from-classmap"                              : ["/Tests/"]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Viserio\\Foundation\\Tests\\"                   : "Tests/"
+        }
+    },
+    "provide": {
+        "container-interop/container-interop-implementation" : "^1.1",
+        "psr/container-implementation"                       : "^1.0"
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master"                                     : "1.0-dev"
+        }
+    },
+    "suggest": {
+        "viserio/statical-proxy"                             : "Required to use statical-proxy bootstrapper (self.version).",
+    },
+    "minimum-stability"                                      : "dev",
+    "prefer-stable"                                          : true
+}

@@ -165,110 +165,117 @@ class RequestTest extends AbstractMessageTest
         $this->assertSame($body, $request->getBody());
     }
 
-    /**
-     * @dataProvider hostHeaderPreservationWhenUriIsSetProvider
-     *
-     * @param \Psr\Http\Message\RequestInterface $request
-     * @param \Psr\Http\Message\UriInterface     $uri
-     * @param bool                               $preserveHost
-     * @param string[]                           $expectedHostHeaderLine
-     */
-    public function testHostHeaderPreservationWhenUriIsSet(
-        RequestInterface $request,
-        UriInterface $uri,
-        $preserveHost,
-        $expectedHostHeaderLine
-    ) {
-        $requestAfterUri = $request->withUri($uri, $preserveHost);
+    public function testEmptyRequestHostEmptyUriHostPreserveHostFalse()
+    {
+        $uri = $this->mock(UriInterface::class);
+        $uri->shouldReceive('getHost')
+            ->once()
+            ->andReturn('');
+        $requestAfterUri = $this->getEmptyHostHeader()->withUri($uri, false);
 
-        $this->assertEquals($expectedHostHeaderLine, $requestAfterUri->getHeaderLine('Host'));
+        $this->assertEquals('', $requestAfterUri->getHeaderLine('Host'));
     }
 
-    public function hostHeaderPreservationWhenUriIsSetProvider()
+    public function testEmptyRequestHostEmptyUriHostPreserveHostTrue()
     {
-        $emptyHostHeaderMockUri = $this->mock(UriInterface::class);
-        $emptyHostHeaderMockUri->shouldReceive('getHost')->andReturn('');
-        $emptyHostHeader = new Request($emptyHostHeaderMockUri);
+        $requestAfterUri = $this->getEmptyHostHeader()->withUri($this->mock(UriInterface::class), true);
 
-        $defaultRequestHostHeader = (new Request($this->mock(UriInterface::class)))->withHeader('Host', 'foo.com');
+        $this->assertEquals('', $requestAfterUri->getHeaderLine('Host'));
+    }
 
-        $emptyUriHost = $this->mock(UriInterface::class);
-        $defaultUriHost = $this->mock(UriInterface::class);
-        $defaultUriHost->shouldReceive('getHost')->andReturn('baz.com');
-        $defaultUriHost->shouldReceive('getPort')->andReturn(null);
+    public function testEmptyRequestHostDefaultUriHostPreserveHostFalse()
+    {
+        $uri = $this->mock(UriInterface::class);
+        $uri->shouldReceive('getHost')
+            ->once()
+            ->andReturn('');
 
-        $defaultUriPort = $this->mock(UriInterface::class);
-        $defaultUriPort->shouldReceive('getHost')->andReturn('foo.com');
-        $defaultUriPort->shouldReceive('getPort')->andReturn('8080');
+        $requestAfterUri = (new Request($uri))->withUri($this->getDefaultUriHost(), false);
 
-        $defaultUriHostAndPort = $this->mock(UriInterface::class);
-        $defaultUriHostAndPort->shouldReceive('getHost')->andReturn('baz.com');
-        $defaultUriHostAndPort->shouldReceive('getPort')->andReturn('8080');
+        $this->assertEquals('baz.com', $requestAfterUri->getHeaderLine('Host'));
+    }
 
-        return [
-            // Description => [request, with uri, host header line]
-            'empty request host / empty uri host / preserveHost false' => [
-                $emptyHostHeader,
-                $emptyUriHost,
-                false,
-                '',
-            ],
-            'empty request host / empty uri host / preserveHost true' => [
-                $emptyHostHeader,
-                $emptyUriHost,
-                true,
-                '',
-            ],
-            'empty request host / default uri host / preserveHost false' => [
-                $emptyHostHeader,
-                $defaultUriHost,
-                false,
-                'baz.com',
-            ],
-            'empty request host / default uri host / preserveHost true' => [
-                $emptyHostHeader,
-                $defaultUriHost,
-                true,
-                'baz.com',
-            ],
-            'default request host / empty uri host / preserveHost false' => [
-                $defaultRequestHostHeader,
-                $emptyUriHost,
-                false,
-                'foo.com',
-            ],
-            'default request host / empty uri host / preserveHost true' => [
-                $defaultRequestHostHeader,
-                $emptyUriHost,
-                true,
-                'foo.com',
-            ],
-            'default request host / default uri host / preserveHost false' => [
-                $defaultRequestHostHeader,
-                $defaultUriHost,
-                false,
-                'baz.com',
-            ],
-            'default request host / default uri host / preserveHost true' => [
-                $defaultRequestHostHeader,
-                $defaultUriHost,
-                true,
-                'foo.com',
-            ],
-            // URI port test cases
-            'URI port is ignored if host is empty' => [
-                $defaultRequestHostHeader,
-                $defaultUriPort,
-                false,
-                'foo.com',
-            ],
-            'URI port is used for build Host Header' => [
-                $defaultRequestHostHeader,
-                $defaultUriHostAndPort,
-                false,
-                'baz.com:8080',
-            ],
-        ];
+    public function testEmptyRequestHostDefaultUriHostPreserveHostTrue()
+    {
+        $uri = $this->mock(UriInterface::class);
+        $uri->shouldReceive('getHost')
+            ->once()
+            ->andReturn('');
+
+        $requestAfterUri = (new Request($uri))->withUri($this->getDefaultUriHost(), false);
+
+        $this->assertEquals('baz.com', $requestAfterUri->getHeaderLine('Host'));
+    }
+
+    public function testDefaultRequestHostEmptyUriHostPreserveHostFalse()
+    {
+        $uri = $this->mock(UriInterface::class);
+        $uri->shouldReceive('getHost')
+            ->once()
+            ->andReturn('');
+        $request = (new Request($uri))->withHeader('Host', 'foo.com');
+        $requestAfterUri = $request->withUri($uri, false);
+
+        $this->assertEquals('foo.com', $requestAfterUri->getHeaderLine('Host'));
+    }
+
+    public function testDefaultRequestHostEmptyUriHostPreserveHostTrue()
+    {
+        $uri = $this->mock(UriInterface::class);
+        $uri->shouldReceive('getHost')
+            ->once()
+            ->andReturn('');
+        $request = (new Request($uri))->withHeader('Host', 'foo.com');
+        $requestAfterUri = $request->withUri($uri, true);
+
+        $this->assertEquals('foo.com', $requestAfterUri->getHeaderLine('Host'));
+    }
+
+    public function testDefaultRequestHostDefaultUriHostPreserveHostFalse()
+    {
+        $uri = $this->mock(UriInterface::class);
+        $uri->shouldReceive('getHost')
+            ->once()
+            ->andReturn('');
+        $request = (new Request($uri))->withHeader('Host', 'foo.com');
+        $requestAfterUri = $request->withUri($this->getDefaultUriHost(), false);
+
+        $this->assertEquals('baz.com', $requestAfterUri->getHeaderLine('Host'));
+    }
+
+    public function testDefaultRequestHostDefaultUriHostPreserveHostTrue()
+    {
+        $uri = $this->mock(UriInterface::class);
+        $uri->shouldReceive('getHost')
+            ->once()
+            ->andReturn('');
+        $request = (new Request($uri))->withHeader('Host', 'foo.com');
+        $requestAfterUri = $request->withUri($this->getDefaultUriHost(), true);
+
+        $this->assertEquals('foo.com', $requestAfterUri->getHeaderLine('Host'));
+    }
+
+    public function testURIPortIsIgnoredIfHostIsEmpty()
+    {
+        $uri = $this->mock(UriInterface::class);
+        $uri->shouldReceive('getHost')
+            ->once();
+        $request = (new Request($uri))->withHeader('Host', 'foo.com');
+        $requestAfterUri = $request->withUri($this->getDefaultUriHost(), false);
+
+        $this->assertEquals('baz.com', $requestAfterUri->getHeaderLine('Host'));
+    }
+
+    public function testURIPortIsUsedForBuildHostHeader()
+    {
+        $uri = $this->mock(UriInterface::class);
+        $uri->shouldReceive('getHost')
+            ->once()
+            ->andReturn('');
+        $request = (new Request($uri))->withHeader('Host', 'foo.com');
+        $requestAfterUri = $request->withUri($this->getDefaultUriHostAndPort(), false);
+
+        $this->assertEquals('baz.com:8080', $requestAfterUri->getHeaderLine('Host'));
     }
 
     public function testHostHeaderSetFromUriOnCreationIfNoHostHeaderSpecified()
@@ -508,5 +515,36 @@ class RequestTest extends AbstractMessageTest
         $request = $request->withUri(new Uri('http://foo.com:8125/bar'));
 
         $this->assertEquals('foo.com:8125', $request->getHeaderLine('host'));
+    }
+
+    private function getEmptyHostHeader()
+    {
+        $emptyHostHeaderMockUri = $this->mock(UriInterface::class);
+        $emptyHostHeaderMockUri->shouldReceive('getHost')
+            ->andReturn('');
+
+        return new Request($emptyHostHeaderMockUri);
+    }
+
+    private function getDefaultUriHost()
+    {
+        $defaultUriHost = $this->mock(UriInterface::class);
+        $defaultUriHost->shouldReceive('getHost')
+            ->andReturn('baz.com');
+        $defaultUriHost->shouldReceive('getPort')
+            ->andReturn(null);
+
+        return $defaultUriHost;
+    }
+
+    private function getDefaultUriHostAndPort()
+    {
+        $defaultUriHostAndPort = $this->mock(UriInterface::class);
+        $defaultUriHostAndPort->shouldReceive('getHost')
+            ->andReturn('baz.com');
+        $defaultUriHostAndPort->shouldReceive('getPort')
+            ->andReturn('8080');
+
+        return $defaultUriHostAndPort;
     }
 }

@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Cookie\Tests;
 
+use Cake\Chronos\Chronos;
 use DateTime;
 use Viserio\Cookie\Cookie;
 
@@ -156,7 +157,6 @@ class CookieTest extends \PHPUnit_Framework_TestCase
     {
         $expire = new DateTime('+1 day');
         $cookie = new Cookie('foo', 'bar', new DateTime());
-
         $cookie = $cookie->withExpires($expire);
 
         $this->assertInstanceOf('DateTime', $cookie->getExpiresTime(), '->getExpiresTime() returns \DateTime');
@@ -326,9 +326,9 @@ class CookieTest extends \PHPUnit_Framework_TestCase
     public function testToString()
     {
         $time = new DateTime('Fri, 20-May-2011 15:25:52 GMT');
-        $cookie = new Cookie('foo', 'bar', $time, '/', '.myfoodomain.com', true, true);
+        $cookie = new Cookie('foo', 'bar', $time, '/', '.myfoodomain.com', true, true, Cookie::SAMESITE_STRICT);
         $this->assertEquals(
-            'foo=bar; Expires=Fri, 20-May-2011 15:25:52 GMT; Path=/; Domain=myfoodomain.com; Secure; HttpOnly',
+            'foo=bar; Expires=Fri, 20-May-2011 15:25:52 GMT; Path=/; Domain=myfoodomain.com; Secure; HttpOnly; SameSite=strict',
             $cookie->__toString(),
             '->__toString() returns string representation of the cookie'
         );
@@ -337,7 +337,7 @@ class CookieTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(
             'foo=deleted; Expires=' . gmdate(
                 'D, d-M-Y H:i:s T',
-                time() - 31536001
+                Chronos::now()->getTimestamp() - 31536001
             ) . '; Path=/admin; Domain=myfoodomain.com; Max-Age=1; HttpOnly',
             $cookie->__toString(),
             '->__toString() returns string representation of a cleared cookie if value is NULL'
@@ -345,7 +345,7 @@ class CookieTest extends \PHPUnit_Framework_TestCase
 
         $cookie = new Cookie('foo');
         $this->assertEquals(
-            'foo=deleted; Expires=' . gmdate('D, d-M-Y H:i:s T', time() - 31536001) . '; Path=/',
+            'foo=deleted; Expires=' . gmdate('D, d-M-Y H:i:s T', Chronos::now()->getTimestamp() - 31536001) . '; Path=/',
             $cookie->__toString()
         );
     }

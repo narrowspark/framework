@@ -2,8 +2,10 @@
 declare(strict_types=1);
 namespace Viserio\Queue\Connectors;
 
+use ErrorException;
+use ParseError;
 use Throwable;
-use Viserio\Contracts\Exception\Exception\FatalThrowableError;
+use TypeError;
 use Viserio\Contracts\Queue\Job as JobContract;
 use Viserio\Queue\Jobs\SyncJob;
 
@@ -26,7 +28,10 @@ class SyncQueue extends AbstractQueue
 
             $this->raiseAfterJobEvent($queueJob);
         } catch (Throwable $exception) {
-            $this->raiseExceptionOccurredJobEvent($queueJob, new FatalThrowableError($exception));
+            $this->raiseExceptionOccurredJobEvent(
+                $queueJob,
+                $this->getErrorException($exception)
+            );
             $this->handleFailedJob($queueJob);
 
             throw $exception;
@@ -67,7 +72,7 @@ class SyncQueue extends AbstractQueue
     protected function raiseBeforeJobEvent(JobContract $job)
     {
         if ($this->container->has('events')) {
-            $this->container->get('events')->emit(
+            $this->container->get('events')->trigger(
                 'viserio.job.processing',
                 [
                     'connection' => 'sync',
@@ -86,7 +91,7 @@ class SyncQueue extends AbstractQueue
     protected function raiseAfterJobEvent(JobContract $job)
     {
         if ($this->container->has('events')) {
-            $this->container->get('events')->emit(
+            $this->container->get('events')->trigger(
                 'viserio.job.processed',
                 [
                     'connection' => 'sync',
@@ -106,7 +111,7 @@ class SyncQueue extends AbstractQueue
     protected function raiseExceptionOccurredJobEvent(JobContract $job, Throwable $exception)
     {
         if ($this->container->has('events')) {
-            $this->container->get('events')->emit(
+            $this->container->get('events')->trigger(
                 'viserio.job.exception.occurred',
                 [
                     'connection' => 'sync',
@@ -128,7 +133,7 @@ class SyncQueue extends AbstractQueue
         $job->failed();
 
         if ($this->container->has('events')) {
-            $this->container->get('events')->emit(
+            $this->container->get('events')->trigger(
                 'viserio.job.failed',
                 [
                     'connection' => 'sync',
@@ -136,5 +141,34 @@ class SyncQueue extends AbstractQueue
                     'data' => json_decode($job->getRawBody(), true),
                 ]);
         }
+    }
+
+    /**
+     * Get a ErrorException instance.
+     *
+     * @param \ParseError|\TypeError|\Throwable $exception
+     *
+     * @return \ErrorException
+     */
+    private function getErrorException($exception): ErrorException
+    {
+        if ($exception instanceof ParseError) {
+            $message = 'Parse error: ' . $exception->getMessage();
+            $severity = E_PARSE;
+        } elseif ($exception instanceof TypeError) {
+            $message = 'Type error: ' . $exception->getMessage();
+            $severity = E_RECOVERABLE_ERROR;
+        } else {
+            $message = $exception->getMessage();
+            $severity = E_ERROR;
+        }
+
+        return new ErrorException(
+            $message,
+            $exception->getCode(),
+            $severity,
+            $exception->getFile(),
+            $exception->getLine()
+        );
     }
 }

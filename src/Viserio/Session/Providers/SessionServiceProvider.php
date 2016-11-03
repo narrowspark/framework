@@ -2,45 +2,43 @@
 declare(strict_types=1);
 namespace Viserio\Session\Providers;
 
-use Viserio\Application\ServiceProvider;
+use Interop\Container\ContainerInterface;
+use Interop\Container\ServiceProvider;
+use Viserio\Config\Manager as ConfigManager;
+use Viserio\Contracts\Encryption\Encrypter;
+use Viserio\Contracts\Session\Store as StoreContract;
+use Viserio\Session\SessionManager;
 
-class SessionServiceProvider extends ServiceProvider
+class SessionServiceProvider implements ServiceProvider
 {
     /**
      * {@inheritdoc}
      */
-    public function register()
-    {
-        $this->app->singleton('session', function () {
-        });
-
-        $this->registerCsrf();
-        $this->registerFlash();
-    }
-
-    public function registerCsrf()
-    {
-        $this->app->singleton('csrf', function () {
-        });
-    }
-
-    /**
-     * Get the services provided by the provider.
-     *
-     * @return string[]
-     */
-    public function provides(): array
+    public function getServices()
     {
         return [
-            'session',
-            'flash',
-            'csrf',
+            SessionManager::class => [self::class, 'createSessionManager'],
+            'session' => function (ContainerInterface $container) {
+                return $container->get(SessionManager::class);
+            },
+            'session.store' => [self::class, 'createSessionStore'],
         ];
     }
 
-    protected function registerFlash()
+    public static function createSessionManager(ContainerInterface $container): SessionManager
     {
-        $this->app->singleton('flash', function () {
-        });
+        $manager = new SessionManager(
+            $container->get(ConfigManager::class),
+            $container->get(Encrypter::class)
+        );
+
+        $manager->setContainer($container);
+
+        return $manager;
+    }
+
+    public static function createSessionStore(ContainerInterface $container): StoreContract
+    {
+        return $container->get(SessionManager::class)->driver();
     }
 }

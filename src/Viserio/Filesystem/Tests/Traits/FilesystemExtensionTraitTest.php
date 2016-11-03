@@ -4,9 +4,11 @@ namespace Viserio\Filesystem\Tests\Traits;
 
 use org\bovigo\vfs\vfsStream;
 use Viserio\Filesystem\Traits\FilesystemExtensionTrait;
+use Viserio\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
 class FilesystemExtensionTraitTest extends \PHPUnit_Framework_TestCase
 {
+    use NormalizePathAndDirectorySeparatorTrait;
     use FilesystemExtensionTrait;
 
     /**
@@ -51,5 +53,23 @@ class FilesystemExtensionTraitTest extends \PHPUnit_Framework_TestCase
         $this->assertSame(vfsStream::url('root/temp2.php'), $this->changeExtension($file->url(), 'php'));
 
         $this->assertSame(vfsStream::url('root/temp3/'), $this->changeExtension(vfsStream::url('root/temp3/'), 'php'));
+    }
+
+    /**
+     * Get normalize or prefixed path.
+     *
+     * @param string $path
+     *
+     * @return string
+     */
+    protected function getNormalzedOrPrefixedPath(string $path): string
+    {
+        if (isset($this->driver)) {
+            $prefix = method_exists($this->driver, 'getPathPrefix') ? $this->driver->getPathPrefix() : '';
+
+            return $prefix . $path;
+        }
+
+        return self::normalizeDirectorySeparator($path);
     }
 }

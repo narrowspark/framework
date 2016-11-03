@@ -2,7 +2,7 @@
     "name"       : "viserio/database",
     "type"       : "library",
     "description": "The Viserio Database package.",
-    "keywords"   : ["narrowspark", "viserio", "database", "SQL", "MySQL", "MSSQL", "SQLite", "Sybase", "Oracle", "Google Cloud SQL"],
+    "keywords"   : ["narrowspark", "viserio", "database", "doctrine", "migrations"],
     "license"    : "MIT",
     "homepage"   : "http://github.com/narrowspark/framework",
     "support"    : {
@@ -18,37 +18,44 @@
         }
     ],
     "require": {
-        "php"                    : "7.0.0 - 7.0.5 || ^7.0.7",
-        "ext-pdo"                : "*",
-        "viserio/cache"          : "self.version",
-        "viserio/config"         : "self.version",
-        "viserio/container"      : "self.version",
-        "viserio/contracts"      : "self.version",
-        "viserio/support"        : "self.version",
-        "psr/log"                : "^1.0"
+        "php"                                 : "7.0.0 - 7.0.5 || ^7.0.7",
+        "doctrine/dbal"                       : "^2.5",
+        "doctrine/migrations"                 : "^1.4",
+        "narrowspark/collection"              : "^0.1",
+        "ocramius/proxy-manager"              : "^2"
     },
     "require-dev": {
-        "phpunit/phpunit"        : "^5.1"
+        "container-interop/service-provider"  : "^0.3",
+        "narrowspark/testing-helper"          : "^1.5",
+        "phpunit/phpunit"                     : "^5.1",
+        "viserio/container"                   : "self.version"
     },
     "autoload": {
         "psr-4": {
-            "Viserio\\Database\\": ""
+            "Viserio\\Database\\"             : ""
         },
-        "exclude-from-classmap"  : ["/Tests/"]
+        "exclude-from-classmap"               : ["/Tests/"]
     },
-    "extra": {
-        "branch-alias": {
-            "dev-master"         : "1.0-dev"
+    "autoload-dev": {
+        "psr-4": {
+            "Viserio\\Database\\Tests\\"      : "Tests/"
         }
     },
     "suggest": {
-        "ext-pdo-mysql"          : "For MySQL or MariaDB databases",
-        "ext-pdo_sqlsrv"         : "For MSSQL databases on Windows platform",
-        "ext-pdo_dblib"          : "For MSSQL databases on Liunx/UNIX platform",
-        "ext-pdo-pqsql"          : "For PostgreSQL databases",
-        "ext-pdo-sqlite"         : "For SQLite databases",
-        "ext-pdo-firebird"       : "For Firebird databases"
+        "container-interop/service-provider"  : "Required to use service-provider (^0.3).",
+        "ext-pdo"                             : "Required to use PDO adapters",
+        "ext-pdo_dblib"                       : "Required to use MSSQL databases on Liunx/UNIX platform",
+        "ext-pdo-firebird"                    : "Required to use Firebird databases",
+        "ext-pdo-mysql"                       : "Required to use MySQL or MariaDB databases",
+        "ext-pdo-pqsql"                       : "Required to use PostgreSQL databases",
+        "ext-pdo-sqlite"                      : "Required to use SQLite databases",
+        "ext-pdo_sqlsrv"                      : "Required to use MSSQL databases on Windows platform",
     },
-    "minimum-stability"          : "dev",
-    "prefer-stable"              : true
+    "extra": {
+        "branch-alias": {
+            "dev-master"                      : "1.0-dev"
+        }
+    },
+    "minimum-stability"                       : "dev",
+    "prefer-stable"                           : true
 }

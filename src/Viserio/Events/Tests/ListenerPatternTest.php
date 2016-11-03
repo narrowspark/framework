@@ -84,10 +84,10 @@ class ListenerPatternTest extends \PHPUnit_Framework_TestCase
         $pattern = new ListenerPattern('core.*', $listener, $priority = 0);
 
         $dispatcher = $this->getMockBuilder(Dispatcher::class)
-            ->setMethods(['on', 'once', 'emit', 'getListeners', 'off', 'removeAllListeners', 'hasListeners'])
+            ->setMethods(['attach', 'once', 'trigger', 'getListeners', 'detach', 'removeAllListeners', 'hasListeners'])
             ->getMock();
         $dispatcher->expects($this->once())
-            ->method('on')
+            ->method('attach')
             ->with(
                 'core.request',
                 $listener,

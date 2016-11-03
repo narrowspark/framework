@@ -22,7 +22,7 @@ class ExpressionMatcherTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException RuntimeException
+     * @expectedException \RuntimeException
      * @expectedExceptionMessage Cannot merge parameters: matchers must be equivalent, 'Viserio\Routing\Matchers\StaticMatcher:two' expected, 'Viserio\Routing\Matchers\ExpressionMatcher:ctype_digit({segment})' given.
      */
     public function testMergeParameterKeys()

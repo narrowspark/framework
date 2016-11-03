@@ -2,7 +2,9 @@
 declare(strict_types=1);
 namespace Viserio\Cookie;
 
-use Narrowspark\Arr\StaticArr as Arr;
+use Cake\Chronos\Chronos;
+use Narrowspark\Arr\Arr;
+use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Viserio\Contracts\Cookie\Cookie as CookieContract;
 use Viserio\Contracts\Cookie\QueueingFactory as JarContract;
@@ -63,7 +65,7 @@ class CookieJar implements JarContract
     ): CookieContract {
         list($path, $domain, $secure) = $this->getPathAndDomain($path, $domain, $secure);
 
-        $time = ($minutes === 0) ? 0 : time() + ($minutes * 60);
+        $time = ($minutes === 0) ? 0 : Chronos::now()->getTimestamp() + ($minutes * 60);
 
         return new Cookie($name, $value, $time, $path, $domain, $secure, $httpOnly, $sameSite);
     }

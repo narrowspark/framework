@@ -6,7 +6,7 @@ use InvalidArgumentException;
 use League\Flysystem\GridFS\GridFSAdapter;
 use Mongo;
 use MongoClient;
-use Narrowspark\Arr\StaticArr as Arr;
+use Narrowspark\Arr\Arr;
 
 class GridFSConnector extends AbstractConnector
 {
@@ -47,7 +47,7 @@ class GridFSConnector extends AbstractConnector
     /**
      * {@inheritdoc}
      */
-    protected function getAdapter($client, array $config): \League\Flysystem\AdapterInterface
+    protected function getAdapter($client, array $config): GridFSAdapter
     {
         return new GridFSAdapter($client->selectDB($config['database'])->getGridFS());
     }

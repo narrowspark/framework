@@ -2,13 +2,12 @@
 declare(strict_types=1);
 namespace Viserio\Routing\Middlewares;
 
+use Interop\Http\Middleware\DelegateInterface;
+use Interop\Http\Middleware\ServerMiddlewareInterface;
 use Narrowspark\HttpStatus\Exception\MethodNotAllowedException;
-use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Viserio\Contracts\Middleware\Delegate as DelegateContract;
-use Viserio\Contracts\Middleware\ServerMiddleware as ServerMiddlewareContract;
 
-class NotAllowedMiddleware implements ServerMiddlewareContract
+class NotAllowedMiddleware implements ServerMiddlewareInterface
 {
     /**
      * All not allowed http methods.
@@ -32,8 +31,8 @@ class NotAllowedMiddleware implements ServerMiddlewareContract
      */
     public function process(
         ServerRequestInterface $request,
-        DelegateContract $frame
-    ): ResponseInterface {
+        DelegateInterface $delegate
+    ) {
         throw new MethodNotAllowedException();
     }
 }

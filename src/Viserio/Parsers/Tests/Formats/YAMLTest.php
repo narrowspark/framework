@@ -49,7 +49,7 @@ linting: true
     }
 
     /**
-     * @expectedException Viserio\Contracts\Parsers\Exception\ParseException
+     * @expectedException \Viserio\Contracts\Parsers\Exception\ParseException
      */
     public function testParseToThrowException()
     {
@@ -62,10 +62,5 @@ collection:
         )->at($this->root);
 
         $this->parser->parse($this->file->read($file->url()));
-    }
-
-    public function testDump()
-    {
-        // code...
     }
 }

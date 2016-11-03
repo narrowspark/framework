@@ -64,7 +64,7 @@ class JsonResponseTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException InvalidArgumentException
+     * @expectedException \InvalidArgumentException
      */
     public function testJsonErrorHandlingOfResources()
     {
@@ -74,7 +74,7 @@ class JsonResponseTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException InvalidArgumentException
+     * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage Unable to encode
      */
     public function testJsonErrorHandlingOfBadEmbeddedData()

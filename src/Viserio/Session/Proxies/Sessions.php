@@ -6,7 +6,12 @@ use Viserio\StaticalProxy\StaticalProxy;
 
 class Sessions extends StaticalProxy
 {
-    protected static function getFacadeAccessor()
+    /**
+     * {@inheritdoc}
+     *
+     * @codeCoverageIgnore
+     */
+    public static function getInstanceIdentifier()
     {
         return 'session';
     }

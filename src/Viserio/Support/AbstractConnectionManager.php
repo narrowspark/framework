@@ -5,10 +5,12 @@ namespace Viserio\Support;
 use Closure;
 use InvalidArgumentException;
 use Viserio\Contracts\Config\Manager as ConfigContract;
+use Viserio\Contracts\Config\Traits\ConfigAwareTrait;
 use Viserio\Contracts\Container\Traits\ContainerAwareTrait;
 
 abstract class AbstractConnectionManager
 {
+    use ConfigAwareTrait;
     use ContainerAwareTrait;
 
     /**
@@ -24,13 +26,6 @@ abstract class AbstractConnectionManager
      * @var array
      */
     protected $extensions = [];
-
-    /**
-     * Conifg instace.
-     *
-     * @var \Viserio\Contracts\Config\Manager
-     */
-    protected $config;
 
     /**
      * Create a new manager instance.
@@ -182,26 +177,6 @@ abstract class AbstractConnectionManager
     }
 
     /**
-     * Set a config manager
-     *
-     * @param \Viserio\Contracts\Config\Manager $config
-     */
-    public function setConfig(ConfigContract $config)
-    {
-        $this->config = $config;
-    }
-
-    /**
-     * Get the config instance.
-     *
-     * @return \Viserio\Contracts\Config\Manager
-     */
-    public function getConfig(): ConfigContract
-    {
-        return $this->config;
-    }
-
-    /**
      * Make the connection instance.
      *
      * @param array $config
@@ -210,7 +185,7 @@ abstract class AbstractConnectionManager
      *
      * @return mixed
      */
-    protected function createConnection(array $config)
+    public function createConnection(array $config)
     {
         $method = 'create' . Str::studly($config['name']) . 'Connection';
 

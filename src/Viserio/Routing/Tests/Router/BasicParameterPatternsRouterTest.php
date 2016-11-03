@@ -4,6 +4,7 @@ namespace Viserio\Routing\Tests\Router;
 
 use Viserio\Contracts\Routing\Pattern;
 use Viserio\HttpFactory\ResponseFactory;
+use Viserio\HttpFactory\ServerRequestFactory;
 use Viserio\HttpFactory\StreamFactory;
 
 class BasicParameterPatternsRouterTest extends RouteRouterBaseTest
@@ -51,6 +52,18 @@ class BasicParameterPatternsRouterTest extends RouteRouterBaseTest
             ['GET', '/custom/!!!!', '!!!! | custom'],
             ['GET', '/custom/!!!!!', '!!!!! | custom'],
         ];
+    }
+
+    /**
+     * @dataProvider routerMatching404Provider
+     * @expectedException \Narrowspark\HttpStatus\Exception\NotFoundException
+     */
+    public function testRouter404($httpMethod, $uri)
+    {
+        $this->router->dispatch(
+            (new ServerRequestFactory())->createServerRequest($httpMethod, $uri),
+            (new ResponseFactory())->createResponse()
+        );
     }
 
     public function routerMatching404Provider()

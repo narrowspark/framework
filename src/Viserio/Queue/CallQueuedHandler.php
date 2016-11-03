@@ -44,7 +44,11 @@ class CallQueuedHandler
     {
         $command = $this->setJobInstanceIfNecessary(
             $job,
-            unserialize($this->encrypter->decrypt($data['command']))
+            unserialize(
+                $this->encrypter->decrypt(
+                    array_key_exists('command64', $data) ? $data['command64'] : $data['command']
+                )
+            )
         );
 
         $this->dispatcher->dispatch($command);
@@ -61,7 +65,11 @@ class CallQueuedHandler
      */
     public function failed(array $data)
     {
-        $command = unserialize($this->encrypter->decrypt($data['command']));
+        $command = unserialize(
+            $this->encrypter->decrypt(
+                array_key_exists('command64', $data) ? $data['command64'] : $data['command']
+            )
+        );
 
         if (method_exists($command, 'failed')) {
             $command->failed();

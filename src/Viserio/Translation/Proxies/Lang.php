@@ -11,7 +11,12 @@ class Lang extends StaticalProxy
         return self::$container['translator']->getTranslation($orig, $language, $replacements);
     }
 
-    protected static function getFacadeAccessor()
+    /**
+     * {@inheritdoc}
+     *
+     * @codeCoverageIgnore
+     */
+    public static function getInstanceIdentifier()
     {
         return 'translator';
     }

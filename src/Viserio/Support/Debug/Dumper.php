@@ -17,7 +17,7 @@ class Dumper
      *
      * @return string|null
      */
-    public function dump($value)
+    public static function dump($value)
     {
         if (class_exists(CliDumper::class)) {
             $dumper = 'cli' === PHP_SAPI ? new CliDumper() : new HtmlDumper();

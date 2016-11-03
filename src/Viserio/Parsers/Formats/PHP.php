@@ -19,7 +19,7 @@ class PHP implements FormatContract, DumperContract
             ]);
         }
 
-        return (array) require_once $payload;
+        return (array) require $payload;
     }
 
     /**

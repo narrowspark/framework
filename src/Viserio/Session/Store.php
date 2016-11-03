@@ -3,7 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Session;
 
 use DateTimeImmutable;
-use Narrowspark\Arr\StaticArr as Arr;
+use Narrowspark\Arr\Arr;
 use Psr\Http\Message\ServerRequestInterface;
 use SessionHandlerInterface as SessionHandlerContract;
 use Viserio\Contracts\Encryption\Encrypter as EncrypterContract;
@@ -288,7 +288,7 @@ class Store implements StoreContract
     {
         $value = $this->get($name);
 
-        $this->values = Arr::forget($this->values, $name);
+        Arr::forget($this->values, $name);
 
         return $value;
     }
@@ -475,6 +475,8 @@ class Store implements StoreContract
 
     /**
      * {@inheritdoc}
+     *
+     * @codeCoverageIgnore
      */
     public function jsonSerialize()
     {

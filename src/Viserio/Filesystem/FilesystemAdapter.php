@@ -7,7 +7,8 @@ use League\Flysystem\Adapter\Local as LocalAdapter;
 use League\Flysystem\AdapterInterface;
 use League\Flysystem\AwsS3v3\AwsS3Adapter;
 use League\Flysystem\Config as FlyConfig;
-use Narrowspark\Arr\StaticArr as Arr;
+use Narrowspark\Arr\Arr;
+use RuntimeException;
 use Viserio\Contracts\Filesystem\Directorysystem as DirectorysystemContract;
 use Viserio\Contracts\Filesystem\Exception\FileNotFoundException;
 use Viserio\Contracts\Filesystem\Exception\IOException as ViserioIOException;
@@ -28,6 +29,13 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
      * @var \League\Flysystem\AdapterInterface
      */
     protected $driver;
+
+    /**
+     * LocalAdapter path.
+     *
+     * @var string
+     */
+    protected $localPath;
 
     /**
      * Create a new filesystem adapter instance.
@@ -79,11 +87,11 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
     /**
      * {@inheritdoc}
      */
-    public function write(string $path, string $contents, array $config = []): bool
+    public function write(string $path, $contents, array $config = []): bool
     {
-        $configs['visibility'] = $this->parseVisibility($config['visibility'] ?? null) ?: [];
+        $config['visibility'] = $this->parseVisibility($config['visibility'] ?? null) ?: [];
 
-        $flyConfig = new FlyConfig($configs);
+        $flyConfig = new FlyConfig($config);
 
         if (is_resource($contents)) {
             return $this->driver->writeStream($path, $contents, $flyConfig);
@@ -92,6 +100,30 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
         $write = $this->driver->write($path, $contents, $flyConfig);
 
         return ! $write ?: false;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function put(string $path, $contents, array $config = []): bool
+    {
+        $config['visibility'] = $this->parseVisibility($config['visibility'] ?? null) ?: [];
+
+        $flyConfig = new FlyConfig($config);
+
+        if (is_resource($contents)) {
+            if ($this->has($path)) {
+                return (bool) $this->driver->updateStream($path, $resource, $flyConfig);
+            }
+
+            return (bool) $this->driver->writeStream($path, $resource, $flyConfig);
+        }
+
+        if ($this->has($path)) {
+            return (bool) $this->driver->update($path, $contents, $flyConfig);
+        }
+
+        return (bool) $this->driver->write($path, $contents, $flyConfig);
     }
 
     /**
@@ -237,7 +269,7 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
 
             return $adapter->getClient()->getObjectUrl($adapter->getBucket(), $path);
         } elseif ($adapter instanceof LocalAdapter) {
-            return '/storage/' . $path;
+            return $adapter->getPathPrefix() . $path;
         } elseif (method_exists($adapter, 'getUrl')) {
             return $adapter->getUrl($path);
         }
@@ -250,13 +282,19 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
      */
     public function delete(array $paths): bool
     {
-        $deletes = [];
+        $success = true;
 
         foreach ($paths as $path) {
-            $deletes[] = $this->driver->delete($path);
+            try {
+                if (! $this->driver->delete($path)) {
+                    $success = false;
+                }
+            } catch (FileNotFoundException $e) {
+                $success = false;
+            }
         }
 
-        return ! in_array('false', $deletes, true);
+        return $success;
     }
 
     /**
@@ -332,7 +370,9 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
      */
     public function isDirectory(string $dirname): bool
     {
-        return $this->driver->getMetadata($dirname)['type'] === 'dir';
+        $prefix = method_exists($this->driver, 'getPathPrefix') ? $this->driver->getPathPrefix() : '';
+
+        return is_dir($prefix . $dirname);
     }
 
     /**
@@ -344,21 +384,31 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
             return false;
         }
 
-        if (! $this->isDirectory($destination)) {
+        if (! is_dir($destination)) {
             $this->createDirectory($destination, ['visibility' => 'public']);
         }
 
-        $recursive = true;
-
-        if (isset($options['recursive'])) {
-            $recursive = $options['recursive'];
-        }
+        $recursive = $options['recursive'] ?? true;
 
         $contents = $this->driver->listContents($directory, $recursive);
 
         foreach ($contents as $item) {
-            // code...
+            if ($item['type'] == 'dir') {
+                $this->createDirectory(
+                    $destination . str_replace($directory, '', $item['path']),
+                    ['visibility' => $this->getVisibility($item['path'])]
+                );
+            }
+
+            if ($item['type'] == 'file') {
+                $this->copy(
+                    $item['path'],
+                    $destination . str_replace($directory, '', $item['path'])
+                );
+            }
         }
+
+        return true;
     }
 
     /**
@@ -374,11 +424,14 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
             }
         }
 
-        if (@rename($directory, $destination) !== true) {
-            return false;
-        }
+        $copy = $this->copyDirectory(
+            $directory,
+            $destination,
+            ['visibility' => $this->getVisibility($directory)]
+        );
+        $delete = $this->deleteDirectory($directory);
 
-        return true;
+        return ! (! $copy && ! $delete);
     }
 
     /**
@@ -389,6 +442,24 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
     public function getDriver()
     {
         return $this->driver;
+    }
+
+    /**
+     * Get normalize or prefixed path.
+     *
+     * @param string $path
+     *
+     * @return string
+     */
+    protected function getNormalzedOrPrefixedPath(string $path): string
+    {
+        if (isset($this->driver)) {
+            $prefix = method_exists($this->driver, 'getPathPrefix') ? $this->driver->getPathPrefix() : '';
+
+            return $prefix . $path;
+        }
+
+        return self::normalizeDirectorySeparator($path);
     }
 
     /**

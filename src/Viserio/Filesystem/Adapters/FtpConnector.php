@@ -4,7 +4,7 @@ namespace Viserio\Filesystem\Adapters;
 
 use InvalidArgumentException;
 use League\Flysystem\Adapter\Ftp;
-use Narrowspark\Arr\StaticArr as Arr;
+use Narrowspark\Arr\Arr;
 use Viserio\Contracts\Filesystem\Connector as ConnectorContract;
 
 class FtpConnector implements ConnectorContract
@@ -44,13 +44,9 @@ class FtpConnector implements ConnectorContract
     }
 
     /**
-     * Get the ftp adapter.
-     *
-     * @param array $config
-     *
-     * @return \League\Flysystem\Adapter\Ftp
+     * {@inheritdoc}
      */
-    protected function getAdapter(array $config): \League\Flysystem\Adapter\Ftp
+    protected function getAdapter(array $config): Ftp
     {
         return new Ftp($config);
     }

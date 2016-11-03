@@ -60,6 +60,7 @@ class PluralizationRulesTest extends \PHPUnit_Framework_TestCase
     {
         $provide = [];
         $locales = $this->provideLocales();
+
         foreach ($locales as $parameters) {
             foreach ($parameters[0] as $lang) {
                 $provide[] = [$lang, $parameters[1]];
@@ -181,14 +182,5 @@ class PluralizationRulesTest extends \PHPUnit_Framework_TestCase
                 None::class,
             ],
         ];
-    }
-
-    /**
-     * @dataProvider successLangcodes
-     */
-    public function testLangcodes($nplural, $langCodes)
-    {
-        $matrix = $this->generateTestData($nplural, $langCodes);
-        $this->validateMatrix($nplural, $matrix);
     }
 }

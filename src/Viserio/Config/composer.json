@@ -18,35 +18,37 @@
         }
     ],
     "require": {
-        "php"                             : "7.0.0 - 7.0.5 || ^7.0.7",
-        "narrowspark/arr"                 : "^1.1",
-        "viserio/cotracts"                : "self.version"
+        "php"                                 : "7.0.0 - 7.0.5 || ^7.0.7",
+        "narrowspark/arr"                     : "^2.1",
+        "viserio/cotracts"                    : "self.version"
     },
     "require-dev": {
-        "phpunit/phpunit"                 : "^5.1",
-        "mikey179/vfsStream"              : "^1.6",
-        "narrowspark/testing-helper"      : "^1.5",
-        "viserio/parsers"                 : "self.version"
+        "container-interop/service-provider"  : "^0.3",
+        "phpunit/phpunit"                     : "^5.1",
+        "mikey179/vfsStream"                  : "^1.6",
+        "narrowspark/testing-helper"          : "^1.5",
+        "viserio/container"                   : "self.version",
+        "viserio/parsers"                     : "self.version"
     },
     "autoload": {
         "psr-4": {
-            "Viserio\\Config\\"           : ""
+            "Viserio\\Config\\"               : ""
         },
-        "exclude-from-classmap"           : ["/Tests/"]
+        "exclude-from-classmap"               : ["/Tests/"]
     },
     "autoload-dev": {
         "psr-4": {
-            "Viserio\\Config\\Tests\\"    : "Tests/"
-        }
-    },
-    "extra": {
-        "branch-alias": {
-            "dev-master"                  : "1.0-dev"
+            "Viserio\\Config\\Tests\\"        : "Tests/"
         }
     },
     "suggest": {
-        "viserio/parsers"                 : "Required to use FileLoader class (self.version)."
+        "container-interop/service-provider"  : "Required to use service-provider (^0.3)."
     },
-    "minimum-stability"                   : "dev",
-    "prefer-stable"                       : true
+    "extra": {
+        "branch-alias": {
+            "dev-master"                      : "1.0-dev"
+        }
+    },
+    "minimum-stability"                       : "dev",
+    "prefer-stable"                           : true
 }

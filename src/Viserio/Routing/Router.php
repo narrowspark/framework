@@ -4,22 +4,22 @@ namespace Viserio\Routing;
 
 use Closure;
 use Interop\Container\ContainerInterface;
-use Narrowspark\Arr\StaticArr as Arr;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Contracts\Container\Traits\ContainerAwareTrait;
 use Viserio\Contracts\Events\Traits\EventsAwareTrait;
-use Viserio\Contracts\Middleware\Middleware as MiddlewareContract;
 use Viserio\Contracts\Routing\Route as RouteContract;
 use Viserio\Contracts\Routing\RouteCollection as RouteCollectionContract;
 use Viserio\Contracts\Routing\Router as RouterContract;
 use Viserio\Middleware\Dispatcher as MiddlewareDispatcher;
+use Viserio\Routing\Traits\MiddlewareAwareTrait;
 use Viserio\Support\Invoker;
 
 class Router implements RouterContract
 {
     use ContainerAwareTrait;
     use EventsAwareTrait;
+    use MiddlewareAwareTrait;
 
     /**
      * The route collection instance.
@@ -48,13 +48,6 @@ class Router implements RouterContract
      * @var array
      */
     protected $groupStack = [];
-
-    /**
-     * All middlewares.
-     *
-     * @var array
-     */
-    protected $middlewares = [];
 
     /**
      * The globally available parameter patterns.
@@ -87,22 +80,44 @@ class Router implements RouterContract
     /**
      * Create a new Router instance.
      *
-     * @param string                                $path
      * @param \Interop\Container\ContainerInterface $container
      */
-    public function __construct(string $path, ContainerInterface $container)
+    public function __construct(ContainerInterface $container)
     {
-        $this->path = $path;
         $this->container = $container;
         $this->routes = new RouteCollection();
+    }
 
-        $this->initInvoker();
+    /**
+     * Set the cache path for compiled routes.
+     *
+     * @param string $path
+     *
+     * @return \Viserio\Contracts\Routing\Router
+     */
+    public function setCachePath(string $path): RouterContract
+    {
+        $this->path = $path;
+
+        return $this;
+    }
+
+    /**
+     * Get the cache path for the compiled routes.
+     *
+     * @return string
+     */
+    public function getCachePath(): string
+    {
+        return $this->path;
     }
 
     /**
      * Refresh cache file on development.
      *
      * @param bool $refreshCache
+     *
+     * @return \Viserio\Contracts\Routing\Router
      */
     public function refreshCache(bool $refreshCache): RouterContract
     {
@@ -141,6 +156,14 @@ class Router implements RouterContract
     public function patch(string $uri, $action = null): RouteContract
     {
         return $this->addRoute('PATCH', $uri, $action);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function head(string $uri, $action = null): RouteContract
+    {
+        return $this->addRoute('HEAD', $uri, $action);
     }
 
     /**
@@ -249,36 +272,6 @@ class Router implements RouterContract
 
     /**
      * {@inheritdoc}
-     */
-    public function withMiddleware(MiddlewareContract $middleware): RouterContract
-    {
-        $this->middlewares['with'][] = $middleware;
-
-        return $this;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function withoutMiddleware(MiddlewareContract $middleware): RouterContract
-    {
-        $this->middlewares['without'][] = $middleware;
-
-        return $this;
-    }
-
-    /**
-     * {@inheritdoc}
-     *
-     * @codeCoverageIgnore
-     */
-    public function getMiddlewares(): array
-    {
-        return $this->middlewares;
-    }
-
-    /**
-     * {@inheritdoc}
      *
      * @codeCoverageIgnore
      */
@@ -331,6 +324,7 @@ class Router implements RouterContract
         }
 
         $middlewareDispatcher = $dispatcher->handle($request);
+
         $this->current = $dispatcher->getCurrentRoute();
 
         return $middlewareDispatcher->process($request);
@@ -369,8 +363,8 @@ class Router implements RouterContract
         }
 
         $route = new Route($methods, $this->prefix($uri), $action);
-        $route->setContainer($this->container);
-        $route->setInvoker($this->invoker);
+        $route->setContainer($this->getContainer());
+        $route->setInvoker($this->getInvoker());
 
         $this->addWhereClausesToRoute($route);
 
@@ -450,7 +444,7 @@ class Router implements RouterContract
      *
      * @return \Viserio\Support\Invoker
      */
-    protected function initInvoker(): Invoker
+    protected function getInvoker(): Invoker
     {
         if ($this->invoker === null) {
             $this->invoker = (new Invoker())

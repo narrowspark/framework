@@ -51,7 +51,7 @@ class JSONTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException Viserio\Contracts\Parsers\Exception\ParseException
+     * @expectedException \Viserio\Contracts\Parsers\Exception\ParseException
      */
     public function testParseToThrowException()
     {
@@ -74,12 +74,4 @@ class JSONTest extends \PHPUnit_Framework_TestCase
     "edition": 6
 }', $dump);
     }
-
-    // /**
-    //  * @expectedException Viserio\Contracts\Parsers\Exception\DumpException
-    //  */
-    // public function testDumpToThrowException()
-    // {
-    //     $this->parser->dump([]);
-    // }
 }

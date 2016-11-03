@@ -342,21 +342,6 @@ abstract class AbstractMessage implements MessageInterface
     }
 
     /**
-     * Ensure header names and values are valid.
-     *
-     * @param array $headers
-     *
-     * @throws InvalidArgumentException
-     */
-    private function assertHeaders(array $headers)
-    {
-        foreach ($headers as $name => $headerValues) {
-            HeaderSecurity::assertValidName($name);
-            $this->assertValidHeaderValue($headerValues);
-        }
-    }
-
-    /**
      * Assert that the provided header values are valid.
      *
      * @see http://tools.ietf.org/html/rfc7230#section-3.2

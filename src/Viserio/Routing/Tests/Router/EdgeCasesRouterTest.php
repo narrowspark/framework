@@ -4,6 +4,7 @@ namespace Viserio\Routing\Tests\Router;
 
 use Viserio\Contracts\Routing\Pattern;
 use Viserio\HttpFactory\ResponseFactory;
+use Viserio\HttpFactory\ServerRequestFactory;
 use Viserio\HttpFactory\StreamFactory;
 
 class EdgeCasesRouterTest extends RouteRouterBaseTest
@@ -27,6 +28,18 @@ class EdgeCasesRouterTest extends RouteRouterBaseTest
         ];
     }
 
+    /**
+     * @dataProvider routerMatching404Provider
+     * @expectedException \Narrowspark\HttpStatus\Exception\NotFoundException
+     */
+    public function testRouter404($httpMethod, $uri)
+    {
+        $this->router->dispatch(
+            (new ServerRequestFactory())->createServerRequest($httpMethod, $uri),
+            (new ResponseFactory())->createResponse()
+        );
+    }
+
     public function routerMatching404Provider()
     {
         return [
@@ -43,6 +56,18 @@ class EdgeCasesRouterTest extends RouteRouterBaseTest
             ['PATCH', '/complex-methods/abc123/foo/bar'],
             ['PATCH', '/complex-methods/123/foo/abc'],
         ];
+    }
+
+    /**
+     * @dataProvider routerMatching405Provider
+     * @expectedException \Narrowspark\HttpStatus\Exception\MethodNotAllowedException
+     */
+    public function testRouter405($httpMethod, $uri)
+    {
+        $this->router->dispatch(
+            (new ServerRequestFactory())->createServerRequest($httpMethod, $uri),
+            (new ResponseFactory())->createResponse()
+        );
     }
 
     protected function definitions($router)

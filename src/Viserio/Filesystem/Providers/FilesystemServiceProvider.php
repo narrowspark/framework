@@ -2,87 +2,68 @@
 declare(strict_types=1);
 namespace Viserio\Filesystem\Providers;
 
-use Viserio\Application\ServiceProvider;
-use Viserio\Filesystem\Adapters\ConnectionFactory as Factory;
-use Viserio\Filesystem\FileLoader;
-use Viserio\Filesystem\Filesystem;
+use Interop\Container\ContainerInterface;
+use Interop\Container\ServiceProvider;
+use League\Flysystem\Filesystem;
+use League\Flysystem\FilesystemInterface;
+use Viserio\Config\Manager as ConfigManager;
+use Viserio\Contracts\Cache\Manager as CacheManagerContract;
+use Viserio\Filesystem\Cache\CachedFactory;
 use Viserio\Filesystem\FilesystemManager;
 
-class FilesystemServiceProvider extends ServiceProvider
+class FilesystemServiceProvider implements ServiceProvider
 {
     /**
      * {@inheritdoc}
      */
-    public function register()
-    {
-        $this->app->singleton('files', function () {
-            return new Filesystem();
-        });
-
-        $this->registerFlysystem();
-        $this->registerFileLoader();
-    }
-
-    /**
-     * Get the services provided by the provider.
-     *
-     * @return string[]
-     */
-    public function provides(): array
+    public function getServices()
     {
         return [
-            'flysystem',
-            'flysystem.factory',
-            'filesystem.disk',
-            'filesystem.cloud',
-            'file.loader',
+            FilesystemManager::class => [self::class, 'createFilesystemManager'],
+            'flysystem' => function (ContainerInterface $container) {
+                return $container->get(FilesystemManager::class);
+            },
+            'flysystem.connection' => [self::class, 'createFlysystemConnection'],
+            Filesystem::class => function (ContainerInterface $container) {
+                return $container->get(FilesystemManager::class);
+            },
+            FilesystemInterface::class => function (ContainerInterface $container) {
+                return $container->get(FilesystemManager::class);
+            },
+            CachedFactory::class => [self::class, 'createCachedFactory'],
+            'flysystem.cachedfactory' => function (ContainerInterface $container) {
+                return $container->get(CachedFactory::class);
+            },
         ];
     }
 
-    /**
-     * Register the driver based filesystem.
-     */
-    protected function registerFlysystem()
+    public static function createFilesystemManager(ContainerInterface $container): FilesystemManager
     {
-        $this->registerFactory();
+        $manager = new FilesystemManager($container->get(ConfigManager::class));
 
-        $this->registerManager();
+        if ($container->has(CacheManagerContract::class)) {
+            $manager->setCacheManager($container->get(CacheManagerContract::class));
+        }
 
-        $this->app->bind('filesystem.disk', function ($app) {
-            return $app->get('filesystem')->disk($app->get('config')->get('filesystems::default'));
-        });
-
-        $this->app->bind('filesystem.cloud', function ($app) {
-            return $app->get('filesystem')->disk($app->get('config')->get('filesystems::cloud'));
-        });
+        return $manager;
     }
 
-    /**
-     * Register the filesystem factory.
-     */
-    protected function registerFactory()
+    public static function createFlysystemConnection(ContainerInterface $container)
     {
-        $this->app->singleton('filesystem.factory', function () {
-            return new Factory();
-        });
+        return $container->get(FilesystemManager::class)->connection();
     }
 
-    /**
-     * Register the filesystem manager.
-     */
-    protected function registerManager()
+    public static function createCachedFactory(ContainerInterface $container): CachedFactory
     {
-        $this->app->singleton('filesystem', function ($app) {
-            return new FilesystemManager($app->get('config'), $app->get('filesystem.factory'));
-        });
-    }
+        $cache = null;
 
-    protected function registerFileLoader()
-    {
-        $this->app->singleton('file.loader', function ($app) {
-            $app->bind('files.path', '');
+        if ($container->has(CacheManagerContract::class)) {
+            $cache = $container->get(CacheManagerContract::class);
+        }
 
-            return new FileLoader($app->get('parser'), $app->get('files.path'));
-        });
+        return new CachedFactory(
+            $container->get(FilesystemManager::class),
+            $cache
+        );
     }
 }

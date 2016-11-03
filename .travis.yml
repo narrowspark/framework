@@ -19,10 +19,19 @@ matrix:
   include:
     - php: 7.0
       env: SETUP=basic CHECK_CS=true SEND_COVERAGE=true
+    # - php: 7.0
+    #   env: SETUP=basic HUMBUG=true
     - php: 7.0
       env: SETUP=stable
-    - php: 7.1.0beta2
-      env: SETUP=stable
+    - php: 7.0
+      env: SETUP=lowest
+    - php: 7.1
+      env: SETUP=basic
+  allow_failures:
+    - env: SETUP=lowest
+      php: 7.0
+    # - env: SETUP=basic HUMBUG=true
+    #   php: 7.0
   fast_finish: true
 
 cache:
@@ -33,13 +42,15 @@ before_install:
   - mkdir -p ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d
   - if [ -f build/travis/php/$TRAVIS_PHP_VERSION.sh]; then ./build/travis/php/$TRAVIS_PHP_VERSION.sh; fi
   - composer global require hirak/prestissimo # Now composer can install components parallel
+  - if [[ "$HUMBUG" = "true" ]]; then composer require humbug/humbug:1.0.0-alpha2; fi
   - git config --global user.name travis-ci
   - git config --global user.email travis@example.com
   - printf "\n" | pear install Crypt_GPG
 
 install:
-  - if [[ "$SETUP" = "basic" ]]; then travis_retry composer install --no-interaction --prefer-dist --no-progress --profile; fi
-  - if [[ "$SETUP" = "stable" ]]; then travis_retry composer update --prefer-dist --no-interaction --prefer-stable --no-progress --profile; fi
+  - if [[ "$SETUP" = "basic" ]]; then travis_retry composer install --no-interaction --prefer-dist --no-progress --profile --no-suggest; fi
+  - if [[ "$SETUP" = "stable" ]]; then travis_retry composer update --prefer-dist --no-interaction --prefer-stable --no-progress --profile --no-suggest; fi
+  - if [[ "$SETUP" = "lowest" ]]; then travis_retry composer update --prefer-dist --no-interaction --prefer-lowest --prefer-stable --no-suggest; fi
 
 before_script:
   - chmod a+x ./build/travis/all.sh && chmod a+x ./build/travis/php/7.x.sh && chmod a+x ./build/travis/script.sh && chmod a+x ./build/travis/after_success.sh

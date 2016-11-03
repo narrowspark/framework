@@ -7,7 +7,7 @@ use LogicException;
 trait NormalizePathAndDirectorySeparatorTrait
 {
     /**
-     * Fix directory separators for windows, linux and normalize path.     *
+     * Fix directory separators for windows, linux and normalize path.
      *
      * @param string|array $paths
      *

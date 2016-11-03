@@ -46,7 +46,7 @@ return [\'a\' => 1, "b" => 2, "c" => 3, "d" => 4, "e" => 5,];
     }
 
     /**
-     * @expectedException Viserio\Contracts\Parsers\Exception\ParseException
+     * @expectedException \Viserio\Contracts\Parsers\Exception\ParseException
      */
     public function testParseToThrowException()
     {

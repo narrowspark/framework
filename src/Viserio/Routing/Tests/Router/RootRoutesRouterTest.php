@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Routing\Tests\Router;
 
 use Viserio\HttpFactory\ResponseFactory;
+use Viserio\HttpFactory\ServerRequestFactory;
 use Viserio\HttpFactory\StreamFactory;
 use Viserio\Routing\Tests\Fixture\FakeMiddleware;
 use Viserio\Routing\Tests\Fixture\FooMiddleware;
@@ -22,6 +23,18 @@ class RootRoutesRouterTest extends RouteRouterBaseTest
             ['GET', '/middleware3', 'index-foo-middleware-controller-closure'],
             ['GET', '/middleware4', 'index--controller-closure'],
         ];
+    }
+
+    /**
+     * @dataProvider routerMatching404Provider
+     * @expectedException \Narrowspark\HttpStatus\Exception\NotFoundException
+     */
+    public function testRouter404($httpMethod, $uri)
+    {
+        $this->router->dispatch(
+            (new ServerRequestFactory())->createServerRequest($httpMethod, $uri),
+            (new ResponseFactory())->createResponse()
+        );
     }
 
     public function routerMatching404Provider()
@@ -68,7 +81,6 @@ class RootRoutesRouterTest extends RouteRouterBaseTest
                     ->createStream('Hello')
                 );
         })->setParameter('name', 'root-slash');
-
 
         $router->get('/middleware', ['middleware.with' => new FakeMiddleware(), function ($request, $args) {
             return (new ResponseFactory())

@@ -2,10 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Contracts\Routing;
 
-use Closure;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Viserio\Contracts\Middleware\Middleware as MiddlewareContract;
 
 interface Router
 {
@@ -55,6 +53,16 @@ interface Router
      * @return \Viserio\Contracts\Routing\Route
      */
     public function patch(string $uri, $action = null): Route;
+
+    /**
+     * Register a new HEAD route with the router.
+     *
+     * @param string                     $uri
+     * @param \Closure|array|string|null $action
+     *
+     * @return \Viserio\Contracts\Routing\Route
+     */
+    public function head(string $uri, $action = null): Route;
 
     /**
      * Register a new DELETE route with the router.
@@ -159,16 +167,24 @@ interface Router
     /**
      * Add a middleware to all routes.
      *
+     * @param \Interop\Http\Middleware\MiddlewareInterface|\Interop\Http\Middleware\ServerMiddlewareInterface $middleware
+     *
+     * @throws \LogicException
+     *
      * @return $this
      */
-    public function withMiddleware(MiddlewareContract $middleware): Router;
+    public function withMiddleware($middleware);
 
     /**
      * Remove a middleware from all routes.
      *
+     * @param \Interop\Http\Middleware\MiddlewareInterface|\Interop\Http\Middleware\ServerMiddlewareInterface $middleware
+     *
+     * @throws \LogicException
+     *
      * @return $this
      */
-    public function withoutMiddleware(MiddlewareContract $middleware): Router;
+    public function withoutMiddleware($middleware);
 
     /**
      * Get all with and without middlewares.

@@ -14,7 +14,7 @@ class FilesystemAdapterTest extends \PHPUnit_Framework_TestCase
     private $root;
 
     /**
-     * @var Viserio\Filesystem\FilesystemAdapter
+     * @var \Viserio\Filesystem\FilesystemAdapter
      */
     private $adapter;
 
@@ -58,8 +58,21 @@ class FilesystemAdapterTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('Hello World', $adapter->read('test.txt'));
     }
 
+    public function testPutStoresFiles()
+    {
+        $adapter = $this->adapter;
+
+        $adapter->put('test.txt', 'Hello World');
+
+        $this->assertEquals('Hello World', $adapter->read('test.txt'));
+
+        $adapter->put('test.txt', 'Hello World 2');
+
+        $this->assertEquals('Hello World 2', $adapter->read('test.txt'));
+    }
+
     /**
-     * @expectedException Viserio\Contracts\Filesystem\Exception\FileNotFoundException
+     * @expectedException \Viserio\Contracts\Filesystem\Exception\FileNotFoundException
      */
     public function testReadToThrowException()
     {
@@ -78,7 +91,7 @@ class FilesystemAdapterTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException Viserio\Contracts\Filesystem\Exception\FileNotFoundException
+     * @expectedException \Viserio\Contracts\Filesystem\Exception\FileNotFoundException
      */
     public function testUpdateToThrowException()
     {
@@ -208,7 +221,7 @@ class FilesystemAdapterTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException Viserio\Contracts\Filesystem\Exception\IOException
+     * @expectedException \Viserio\Contracts\Filesystem\Exception\IOException
      */
     public function testCopyToThrowIOException()
     {
@@ -220,7 +233,7 @@ class FilesystemAdapterTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException Viserio\Contracts\Filesystem\Exception\FileNotFoundException
+     * @expectedException \Viserio\Contracts\Filesystem\Exception\FileNotFoundException
      */
     public function testCopyToThrowFileNotFoundException()
     {
@@ -243,7 +256,7 @@ class FilesystemAdapterTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException InvalidArgumentException
+     * @expectedException \InvalidArgumentException
      */
     public function testSetVisibilityToThrowInvalidArgumentException()
     {
@@ -261,7 +274,7 @@ class FilesystemAdapterTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException Viserio\Contracts\Filesystem\Exception\FileNotFoundException
+     * @expectedException \Viserio\Contracts\Filesystem\Exception\FileNotFoundException
      */
     public function testGetMimetypeToThrowFileNotFoundException()
     {
@@ -278,7 +291,7 @@ class FilesystemAdapterTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException Viserio\Contracts\Filesystem\Exception\FileNotFoundException
+     * @expectedException \Viserio\Contracts\Filesystem\Exception\FileNotFoundException
      */
     public function testGetTimestampToThrowFileNotFoundException()
     {
@@ -300,78 +313,71 @@ class FilesystemAdapterTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse(in_array('languages/lang/c.txt', $this->adapter->files('languages')));
     }
 
-    // public function testMoveDirectoryMovesEntireDirectory()
-    // {
-    //     $this->root->addChild(new vfsStreamDirectory('tmp'));
-    //     $this->root->addChild(new vfsStreamDirectory('tmp2'));
+    public function testCopyDirectoryMovesEntireDirectory()
+    {
+        $adapter = $this->adapter;
 
-    //     $dir = $this->root->getChild('tmp');
-    //     $temp2 = $this->root->getChild('tmp2');
+        $adapter->createDirectory('languages');
+        $adapter->createDirectory('root');
+        $adapter->write('languages/php.txt', 'php');
+        $adapter->write('languages/c.txt', 'c');
+        $adapter->createDirectory('languages/lang');
+        $adapter->write('languages/lang/c.txt', 'c');
 
-    //     $file = vfsStream::newFile('foo.txt')
-    //         ->withContent('foo')
-    //         ->at($dir);
-    //     $file2 = vfsStream::newFile('bar.txt')
-    //         ->withContent('bar')
-    //         ->at($dir);
+        $adapter->copyDirectory('languages', 'root');
 
-    //     $dir->addChild(new vfsStreamDirectory('nested'));
-    //     $dir2 = $dir->getChild('nested');
+        $this->assertFalse($this->adapter->copyDirectory('dontmove', 'code'));
+        $this->assertSame($this->adapter->getVisibility('languages'), $this->adapter->getVisibility('root'));
+        $this->assertTrue(in_array('root/c.txt', $this->adapter->files('root')));
+        $this->assertTrue(in_array('root/php.txt', $this->adapter->files('root')));
+        $this->assertTrue(in_array('root/lang/c.txt', $this->adapter->files('root/lang')));
+    }
 
-    //     $file3 = vfsStream::newFile('baz.txt')
-    //         ->withContent('baz')
-    //         ->at($dir2);
+    public function testMoveDirectoryMovesEntireDirectory()
+    {
+        $adapter = $this->adapter;
 
-    //     $this->adapter->moveDirectory($dir->url(), $temp2->url());
+        $adapter->createDirectory('languages');
+        $adapter->createDirectory('root');
+        $adapter->write('languages/php.txt', 'php');
+        $adapter->write('languages/c.txt', 'c');
+        $adapter->createDirectory('languages/lang');
+        $adapter->write('languages/lang/c.txt', 'c');
 
-    //     $this->assertTrue(is_dir(vfsStream::url('root/tmp2')));
-    //     $this->assertFileExists(vfsStream::url('root/tmp2') . '/foo.txt');
-    //     $this->assertFileExists(vfsStream::url('root/tmp2') . '/bar.txt');
-    //     $this->assertTrue(is_dir(vfsStream::url('root/tmp2') . '/nested'));
-    //     $this->assertFileExists(vfsStream::url('root/tmp2') . '/nested/baz.txt');
-    //     $this->assertFalse(is_dir(vfsStream::url('root/tmp')));
-    // }
+        $this->adapter->moveDirectory('languages', 'root');
 
-    // public function testMoveDirectoryMovesEntireDirectoryAndOverwrites()
-    // {
-    //     $this->root->addChild(new vfsStreamDirectory('tmp'));
-    //     $this->root->addChild(new vfsStreamDirectory('tmp2'));
+        $this->assertTrue(in_array('root/c.txt', $this->adapter->files('root')));
+        $this->assertTrue(in_array('root/php.txt', $this->adapter->files('root')));
+        $this->assertTrue(in_array('root/lang/c.txt', $this->adapter->files('root/lang')));
+        $this->assertFalse(in_array('languages/c.txt', $this->adapter->files('languages')));
+        $this->assertFalse(in_array('languages/php.txt', $this->adapter->files('languages')));
+        $this->assertFalse(in_array('languages/lang/c.txt', $this->adapter->files('languages/lang')));
+    }
 
-    //     $dir = $this->root->getChild('tmp');
-    //     $temp2 = $this->root->getChild('tmp2');
+    public function testMoveDirectoryMovesEntireDirectoryAndOverwrites()
+    {
+        $adapter = $this->adapter;
 
-    //     vfsStream::newFile('foo.txt')
-    //         ->withContent('foo')
-    //         ->at($dir);
-    //     vfsStream::newFile('bar.txt')
-    //         ->withContent('bar')
-    //         ->at($dir);
+        $adapter->createDirectory('languages');
+        $adapter->write('languages/php.txt', 'php');
+        $adapter->write('languages/c.txt', 'c');
+        $adapter->createDirectory('languages/lang');
+        $adapter->write('languages/lang/c.txt', 'c');
 
-    //     $dir->addChild(new vfsStreamDirectory('nested'));
-    //     $dir2 = $dir->getChild('nested');
+        $adapter->createDirectory('code');
+        $adapter->write('code/javascript.txt', 'javascript');
 
-    //     vfsStream::newFile('baz.txt')
-    //         ->withContent('baz')
-    //         ->at($dir2);
+        $this->adapter->moveDirectory('languages', 'code', ['overwrite' => true]);
 
-    //     vfsStream::newFile('foo2.txt')
-    //         ->withContent('foo2')
-    //         ->at($temp2);
-    //     vfsStream::newFile('bar2.txt')
-    //         ->withContent('bar2')
-    //         ->at($temp2);
-
-    //     $this->adapter->moveDirectory($dir->url(), $temp2->url(), ['overwrite' => true]);
-
-    //     $this->assertTrue(is_dir(vfsStream::url('root/tmp2')));
-    //     $this->assertFileExists(vfsStream::url('root/tmp2') . '/foo.txt');
-    //     $this->assertFileExists(vfsStream::url('root/tmp2') . '/bar.txt');
-    //     $this->assertTrue(is_dir(vfsStream::url('root/tmp2') . '/nested'));
-    //     $this->assertFileExists(vfsStream::url('root/tmp2') . '/nested/baz.txt');
-    //     $this->assertFileNotExists(vfsStream::url('root/tmp2') . '/foo2.txt');
-    //     $this->assertFileNotExists(vfsStream::url('root/tmp2') . '/bar2.txt');
-    //     $this->assertFalse(is_dir(vfsStream::url('root/tmp')));
-    // }
+        $this->assertTrue($this->adapter->isWritable('code'));
+        $this->assertTrue(in_array('code/c.txt', $this->adapter->files('code')));
+        $this->assertTrue(in_array('code/php.txt', $this->adapter->files('code')));
+        $this->assertTrue(in_array('code/lang/c.txt', $this->adapter->files('code/lang')));
+        $this->assertFalse(in_array('code/javascript.txt', $this->adapter->files('code')));
+        $this->assertFalse(in_array('languages/c.txt', $this->adapter->files('languages')));
+        $this->assertFalse(in_array('languages/php.txt', $this->adapter->files('languages')));
+        $this->assertFalse(in_array('languages/lang/c.txt', $this->adapter->files('languages/lang')));
+    }
 
     private function delTree($dir)
     {

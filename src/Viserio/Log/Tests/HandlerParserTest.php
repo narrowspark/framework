@@ -22,7 +22,7 @@ class HandlerParserTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException InvalidArgumentException
+     * @expectedException \InvalidArgumentException
      */
     public function testParseHandlerToThrowExceptionForLog()
     {
@@ -35,7 +35,7 @@ class HandlerParserTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException RuntimeException
+     * @expectedException \RuntimeException
      */
     public function testParseHandlerToThrowExceptionForHandler()
     {
@@ -45,7 +45,7 @@ class HandlerParserTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException RuntimeException
+     * @expectedException \RuntimeException
      */
     public function testParseHandlerToThrowExceptionForHandlerWithObject()
     {
@@ -130,7 +130,7 @@ class HandlerParserTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException InvalidArgumentException
+     * @expectedException \InvalidArgumentException
      */
     public function testParseHandlerWithFormatterTothrowException()
     {

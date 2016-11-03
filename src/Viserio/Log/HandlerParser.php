@@ -244,13 +244,14 @@ class HandlerParser
         } elseif (is_string($handler) && isset($this->handler[$handler])) {
             return new $this->handler[$handler]($path, $this->parseLevel($level));
         }
+
         throw new RuntimeException(
-                sprintf(
-                    'Handler [%s] dont exist.',
-                    is_object($handler) ?
-                    get_class($handler) :
-                    $handler
-                )
-            );
+            sprintf(
+                'Handler [%s] dont exist.',
+                is_object($handler) ?
+                get_class($handler) :
+                $handler
+            )
+        );
     }
 }

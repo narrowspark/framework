@@ -11,6 +11,8 @@ use Symfony\Component\Console\Command\Command as SymfonyCommand;
 use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Process\PhpExecutableFinder;
+use Symfony\Component\Process\ProcessUtils;
 use Viserio\Console\Command\Command as ViserioCommand;
 use Viserio\Console\Command\ExpressionParser as Parser;
 use Viserio\Console\Input\InputOption;
@@ -58,6 +60,13 @@ class Application extends SymfonyConsole implements ApplicationContract
     protected $invoker;
 
     /**
+     * The console application bootstrappers.
+     *
+     * @var array
+     */
+    protected static $bootstrappers = [];
+
+    /**
      * Create a new Cerebro console application.
      *
      * @param \Interop\Container\ContainerInterface $container
@@ -67,18 +76,24 @@ class Application extends SymfonyConsole implements ApplicationContract
     public function __construct(
         ContainerContract $container,
         string $version,
-        string $name = 'cerebro'
+        string $name = 'Cerebro'
     ) {
+        if (! defined('CEREBRO_BINARY')) {
+            define('CEREBRO_BINARY', 'cerebro');
+        }
+
         $this->name = $name;
         $this->version = $version;
-        $this->container = $container;
-        $this->expressionParser = new Parser();
 
-        $this->initInvoker();
         $this->setAutoExit(false);
         $this->setCatchExceptions(false);
 
         parent::__construct($name, $version);
+
+        $this->container = $container;
+        $this->expressionParser = new Parser();
+
+        $this->bootstrap();
     }
 
     /**
@@ -182,6 +197,40 @@ class Application extends SymfonyConsole implements ApplicationContract
     }
 
     /**
+     * Register an application starting bootstrapper.
+     *
+     * @param \Closure $callback
+     */
+    public static function starting(Closure $callback)
+    {
+        static::$bootstrappers[] = $callback;
+    }
+
+    /**
+     * The PHP executable.
+     *
+     * @return string
+     *
+     * @codeCoverageIgnore
+     */
+    public static function phpBinary(): string
+    {
+        return ProcessUtils::escapeArgument((new PhpExecutableFinder())->find(false));
+    }
+
+    /**
+     * The Cerebro executable.
+     *
+     * @return string
+     *
+     * @codeCoverageIgnore
+     */
+    public static function cerebroBinary(): string
+    {
+        return defined('CEREBRO_BINARY') ? ProcessUtils::escapeArgument(CEREBRO_BINARY) : 'cerebro';
+    }
+
+    /**
      * Get the default input definitions for the applications.
      *
      * This is used to add the --env option to every available command.
@@ -229,24 +278,30 @@ class Application extends SymfonyConsole implements ApplicationContract
     }
 
     /**
-     * Set configured invoker.
-     */
-    protected function initInvoker()
-    {
-        $this->invoker = (new Invoker())
-            ->injectByTypeHint(true)
-            ->injectByParameterName(true)
-            ->addResolver(new HyphenatedInputResolver())
-            ->setContainer($this->getContainer());
-    }
-
-    /**
      * Get configured invoker.
      *
      * @return \Viserio\Support\Invoker
      */
     protected function getInvoker(): Invoker
     {
+        if (! $this->invoker) {
+            $this->invoker = (new Invoker())
+                ->injectByTypeHint(true)
+                ->injectByParameterName(true)
+                ->addResolver(new HyphenatedInputResolver())
+                ->setContainer($this->getContainer());
+        }
+
         return $this->invoker;
+    }
+
+    /**
+     * Bootstrap the console application.
+     */
+    protected function bootstrap()
+    {
+        foreach (static::$bootstrappers as $bootstrapper) {
+            $bootstrapper($this);
+        }
     }
 }

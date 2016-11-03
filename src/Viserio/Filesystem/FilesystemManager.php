@@ -4,12 +4,17 @@ namespace Viserio\Filesystem;
 
 use InvalidArgumentException;
 use League\Flysystem\AdapterInterface;
-use Narrowspark\Arr\StaticArr as Arr;
+use League\Flysystem\Cached\CachedAdapter;
+use Narrowspark\Arr\Arr;
+use Viserio\Contracts\Cache\Traits\CacheAwareTrait;
 use Viserio\Contracts\Filesystem\Filesystem as FilesystemContract;
+use Viserio\Filesystem\Cache\CachedFactory;
 use Viserio\Support\AbstractConnectionManager;
 
 class FilesystemManager extends AbstractConnectionManager
 {
+    use CacheAwareTrait;
+
     /**
      * {@inheritdoc}
      */
@@ -35,7 +40,21 @@ class FilesystemManager extends AbstractConnectionManager
      */
     public function connection(string $name = null)
     {
-        return $this->adapt(parent::connection($name));
+        $name = $name ?? $this->getDefaultConnection();
+
+        if (! isset($this->connections[$name])) {
+            $config = $this->getConnectionConfig($name);
+
+            $this->connections[$name] = [
+                'connection' => $this->createConnection($config),
+                'config' => $config,
+            ];
+        }
+
+        return $this->adapt(
+            $this->connections[$name]['connection'],
+            $this->connections[$name]['config']
+        );
     }
 
     /**
@@ -45,31 +64,9 @@ class FilesystemManager extends AbstractConnectionManager
     {
         $config = parent::getConnectionConfig($name);
 
-        if (is_string($cache = Arr::get($config, 'cache'))) {
-            $config['cache'] = $this->getCacheConfig($cache);
+        if (is_string($cacheName = Arr::get($config, 'cache'))) {
+            $config['cache'] = $this->getCacheConfig($cacheName);
         }
-
-        return $config;
-    }
-
-    /**
-     * Get the cache configuration.
-     *
-     * @param string $name
-     *
-     * @throws \InvalidArgumentException
-     *
-     * @return array
-     */
-    protected function getCacheConfig(string $name): array
-    {
-        $cache = $this->config->get($this->getConfigName() . '.cache');
-
-        if (! is_array($config = Arr::get($cache, $name)) && ! $config) {
-            throw new InvalidArgumentException("Cache [$name] not configured.");
-        }
-
-        $config['name'] = $name;
 
         return $config;
     }
@@ -83,15 +80,46 @@ class FilesystemManager extends AbstractConnectionManager
     }
 
     /**
+     * Get the cache configuration.
+     *
+     * @param string $name
+     *
+     * @throws \InvalidArgumentException
+     *
+     * @return array
+     */
+    protected function getCacheConfig(string $name): array
+    {
+        $cache = $this->config->get($this->getConfigName() . '.cached');
+
+        if (! is_array($config = Arr::get($cache, $name)) && ! $config) {
+            throw new InvalidArgumentException(sprintf('Cache [%s] not configured.', $name));
+        }
+
+        $config['name'] = $name;
+
+        return $config;
+    }
+
+    /**
      * Adapt the filesystem implementation.
      *
-     * @param \League\Flysystem\AdapterInterface $filesystem
+     * @param \League\Flysystem\AdapterInterface $adapter
+     * @param array                              $config
      *
      * @return \Viserio\Contracts\Filesystem\Filesystem
      */
-    protected function adapt(AdapterInterface $filesystem): FilesystemContract
+    protected function adapt(AdapterInterface $adapter, array $config): FilesystemContract
     {
-        return new FilesystemAdapter($filesystem);
+        if (isset($config['cache']) && is_array($config['cache'])) {
+            $cacheFactory = new CachedFactory($this, $this->cache);
+
+            $adapter = new CachedAdapter($adapter, $cacheFactory->connection($config));
+        }
+
+        $filesystemAdapter = new FilesystemAdapter($adapter);
+
+        return $filesystemAdapter;
     }
 
     /**

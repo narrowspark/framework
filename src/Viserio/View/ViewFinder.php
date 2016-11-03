@@ -44,7 +44,7 @@ class ViewFinder implements FinderContract
      *
      * @var array
      */
-    protected $extensions = ['php', 'phtml'];
+    protected $extensions = [];
 
     /**
      * Create a new file view loader instance.
@@ -59,14 +59,14 @@ class ViewFinder implements FinderContract
         $this->paths = $paths;
 
         if ($extensions !== null) {
-            $this->extensions = $extensions;
+            $this->extensions = array_merge($this->extensions, $extensions);
         }
     }
 
     /**
      * {@inheritdoc}
      */
-    public function find(string $name): string
+    public function find(string $name): array
     {
         if (isset($this->views[$name])) {
             return $this->views[$name];
@@ -198,9 +198,9 @@ class ViewFinder implements FinderContract
      *
      * @param string $name
      *
-     * @return string
+     * @return array
      */
-    protected function findNamedPathView(string $name): string
+    protected function findNamedPathView(string $name): array
     {
         list($namespace, $view) = $this->getNamespaceSegments($name);
 
@@ -239,18 +239,19 @@ class ViewFinder implements FinderContract
      *
      * @throws \InvalidArgumentException
      *
-     * @return string
+     * @return array
      */
-    protected function findInPaths(string $name, array $paths): string
+    protected function findInPaths(string $name, array $paths): array
     {
         foreach ($paths as $path) {
             foreach ($this->getPossibleViewFiles($name) as $file) {
-                if (
-                    $this->files->has(
-                        $viewPath = self::normalizeDirectorySeparator($path . '/' . $file)
-                    )
-                ) {
-                    return $viewPath;
+                $viewPath = self::normalizeDirectorySeparator($path . '/' . $file);
+
+                if ($this->files->has($viewPath)) {
+                    return [
+                        'path' => $viewPath,
+                        'name' => $file,
+                    ];
                 }
             }
         }

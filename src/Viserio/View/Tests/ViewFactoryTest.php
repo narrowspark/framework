@@ -2,97 +2,19 @@
 declare(strict_types=1);
 namespace Viserio\View\Tests;
 
-use Interop\Container\ContainerInterface;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use Viserio\Contracts\View\Engine;
 use Viserio\Contracts\View\Finder;
 use Viserio\Contracts\View\View as ViewContract;
-use Viserio\Events\Dispatcher as EventDispatcher;
 use Viserio\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 use Viserio\View\Engines\Adapter\Php;
 use Viserio\View\Engines\EngineResolver;
 use Viserio\View\Factory;
-use Viserio\View\Virtuoso;
 
 class ViewFactoryTest extends \PHPUnit_Framework_TestCase
 {
     use MockeryTrait;
     use NormalizePathAndDirectorySeparatorTrait;
-
-    public function testMakeCreatesNewViewInstanceWithProperPathVirtuosoAndEngine()
-    {
-        unset($_SERVER['__test.view']);
-
-        $factory = $this->getFactory();
-        $factory->getFinder()
-            ->shouldReceive('find')
-            ->once()
-            ->with('view')
-            ->andReturn('path.php');
-        $factory->getEngineResolver()
-            ->shouldReceive('resolve')
-            ->once()
-            ->with('php')
-            ->andReturn($engine = $this->mock(Engine::class));
-        $factory->getFinder()
-            ->shouldReceive('addExtension')
-            ->once()
-            ->with('php');
-        $factory->addExtension('php', 'php');
-
-        $virtuoso = new Virtuoso(
-            $this->mock(ContainerInterface::class),
-            $factory->getDispatcher()
-        );
-
-        $factory->setVirtuoso($virtuoso);
-
-        $factory->getVirtuoso()->creator('view', function ($view) {
-            $_SERVER['__test.view'] = $view;
-        });
-
-        $view = $factory->create('view', ['foo' => 'bar'], ['baz' => 'boom']);
-
-        $this->assertSame($engine, $view->getEngine());
-        $this->assertSame($_SERVER['__test.view'], $view);
-
-        unset($_SERVER['__test.view']);
-    }
-
-    public function testFileCreatesNewViewInstanceWithProperPathVirtuosoAndEngine()
-    {
-        unset($_SERVER['__test.view']);
-
-        $factory = $this->getFactory();
-        $factory->getEngineResolver()
-            ->shouldReceive('resolve')
-            ->once()
-            ->with('php')
-            ->andReturn($engine = $this->mock(Engine::class));
-        $factory->getFinder()
-            ->shouldReceive('addExtension')
-            ->once()
-            ->with('php');
-        $factory->addExtension('php', 'php');
-
-        $virtuoso = new Virtuoso(
-            $this->mock(ContainerInterface::class),
-            $factory->getDispatcher()
-        );
-
-        $factory->setVirtuoso($virtuoso);
-
-        $factory->getVirtuoso()->creator('path.php', function ($view) {
-            $_SERVER['__test.view'] = $view;
-        });
-
-        $view = $factory->file('path.php', ['foo' => 'bar'], ['baz' => 'boom']);
-
-        $this->assertSame($engine, $view->getEngine());
-        $this->assertSame($_SERVER['__test.view'], $view);
-
-        unset($_SERVER['__test.view']);
-    }
 
     public function testMakeCreatesNewViewInstanceWithProperPathAndEngine()
     {
@@ -101,7 +23,7 @@ class ViewFactoryTest extends \PHPUnit_Framework_TestCase
             ->shouldReceive('find')
             ->once()
             ->with('view')
-            ->andReturn('path.php');
+            ->andReturn(['path' => 'path.php']);
         $factory->getEngineResolver()
             ->shouldReceive('resolve')
             ->once()
@@ -138,7 +60,7 @@ class ViewFactoryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException Exception
+     * @expectedException \Exception
      */
     public function testExceptionsInSectionsAreThrown()
     {
@@ -149,18 +71,11 @@ class ViewFactoryTest extends \PHPUnit_Framework_TestCase
         $factory->getFinder()
             ->shouldReceive('find')
             ->with('layout')
-            ->andReturn(self::normalizeDirectorySeparator($this->getPath() . '/foo.php'));
+            ->andReturn(['path' => self::normalizeDirectorySeparator($this->getPath() . '/foo.php')]);
         $factory->getFinder()
             ->shouldReceive('find')
             ->with('view')
-            ->andReturn(self::normalizeDirectorySeparator($this->getPath() . '/bar/foo/fi.php'));
-
-        $virtuoso = new Virtuoso(
-            $this->mock(ContainerInterface::class),
-            $factory->getDispatcher()
-        );
-
-        $factory->setVirtuoso($virtuoso);
+            ->andReturn(['path' => self::normalizeDirectorySeparator($this->getPath() . '/bar/foo/fi.php')]);
 
         $factory->create('view')->render();
     }
@@ -177,7 +92,7 @@ class ViewFactoryTest extends \PHPUnit_Framework_TestCase
             ->shouldReceive('find')
             ->once()
             ->with('bar')
-            ->andReturn('path.php');
+            ->andReturn(['path' => 'path.php']);
 
         $this->assertFalse($factory->exists('foo'));
         $this->assertTrue($factory->exists('bar'));
@@ -236,7 +151,10 @@ class ViewFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $factory = $this->getFactory();
         $factory->getFinder()
-            ->shouldReceive('find')->once()->with('view')->andReturn('path.php');
+            ->shouldReceive('find')
+            ->once()
+            ->with('view')
+            ->andReturn(['path' => 'path.php']);
         $factory->getEngineResolver()
             ->shouldReceive('resolve')
             ->once()
@@ -276,7 +194,7 @@ class ViewFactoryTest extends \PHPUnit_Framework_TestCase
             ->shouldReceive('find')
             ->once()
             ->with('view')
-            ->andReturn('path.foo');
+            ->andReturn(['path' => 'path.foo']);
         $factory->getEngineResolver()
             ->shouldReceive('resolve')
             ->once()
@@ -331,7 +249,7 @@ class ViewFactoryTest extends \PHPUnit_Framework_TestCase
             ->shouldReceive('find')
             ->twice()
             ->with('foo.bar')
-            ->andReturn('path.php');
+            ->andReturn(['path' => 'path.php']);
         $factory->getEngineResolver()
             ->shouldReceive('resolve')
             ->twice()
@@ -349,7 +267,7 @@ class ViewFactoryTest extends \PHPUnit_Framework_TestCase
             ->shouldReceive('find')
             ->once()
             ->with('real')
-            ->andReturn('path.php');
+            ->andReturn(['path' => 'path.php']);
         $factory->getEngineResolver()
             ->shouldReceive('resolve')
             ->once()
@@ -362,7 +280,7 @@ class ViewFactoryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException InvalidArgumentException
+     * @expectedException \InvalidArgumentException
      */
     public function testExceptionIsThrownForUnknownExtension()
     {
@@ -371,7 +289,7 @@ class ViewFactoryTest extends \PHPUnit_Framework_TestCase
             ->shouldReceive('find')
             ->once()
             ->with('view')
-            ->andReturn('view.foo');
+            ->andReturn(['path' => 'view.foo']);
         $factory->create('view');
     }
 
@@ -387,8 +305,7 @@ class ViewFactoryTest extends \PHPUnit_Framework_TestCase
     {
         return new Factory(
             $this->mock(EngineResolver::class),
-            $this->mock(Finder::class),
-            new EventDispatcher($this->mock(ContainerInterface::class))
+            $this->mock(Finder::class)
         );
     }
 
@@ -397,7 +314,6 @@ class ViewFactoryTest extends \PHPUnit_Framework_TestCase
         return [
             $this->mock(EngineResolver::class),
             $this->mock(Finder::class),
-            new EventDispatcher($this->mock(ContainerInterface::class)),
         ];
     }
 

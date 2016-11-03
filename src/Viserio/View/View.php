@@ -4,6 +4,7 @@ namespace Viserio\View;
 
 use ArrayAccess;
 use BadMethodCallException;
+use Closure;
 use Throwable;
 use Viserio\Contracts\Support\Arrayable;
 use Viserio\Contracts\Support\Renderable;
@@ -43,11 +44,11 @@ class View implements ArrayAccess, ViewContract
     protected $data = [];
 
     /**
-     * The path to the view file.
+     * The file info to the view file.
      *
-     * @var string
+     * @var array
      */
-    protected $path;
+    protected $fileInfo;
 
     /**
      * Create a new view instance.
@@ -55,13 +56,13 @@ class View implements ArrayAccess, ViewContract
      * @param \Viserio\View\Factory                      $factory
      * @param \Viserio\Contracts\View\Engine             $engine
      * @param string                                     $view
-     * @param string                                     $path
+     * @param array                                      $fileInfo
      * @param array|\Viserio\Contracts\Support\Arrayable $data
      */
-    public function __construct(Factory $factory, EngineContract $engine, string $view, string $path, $data = [])
+    public function __construct(Factory $factory, EngineContract $engine, string $view, array $fileInfo, $data = [])
     {
         $this->view = $view;
-        $this->path = $path;
+        $this->fileInfo = $fileInfo;
         $this->engine = $engine;
         $this->factory = $factory;
 
@@ -207,7 +208,7 @@ class View implements ArrayAccess, ViewContract
      */
     public function getPath(): string
     {
-        return $this->path;
+        return $this->fileInfo['path'];
     }
 
     /**
@@ -215,7 +216,7 @@ class View implements ArrayAccess, ViewContract
      */
     public function setPath(string $path): ViewContract
     {
-        $this->path = $path;
+        $this->fileInfo['path'] = $path;
 
         return $this;
     }
@@ -284,7 +285,7 @@ class View implements ArrayAccess, ViewContract
      */
     protected function getContents(): string
     {
-        return $this->engine->get($this->path, $this->gatherData());
+        return $this->engine->get($this->fileInfo, $this->gatherData());
     }
 
     /**
@@ -299,6 +300,8 @@ class View implements ArrayAccess, ViewContract
         foreach ($data as $key => $value) {
             if ($value instanceof Renderable) {
                 $data[$key] = $value->render();
+            } elseif ($value instanceof Closure) {
+                $data[$key] = call_user_func($value);
             }
         }
 

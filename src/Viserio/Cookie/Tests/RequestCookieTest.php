@@ -4,23 +4,21 @@ namespace Viserio\Cookie\Tests;
 
 use DateTime;
 use Mockery as Mock;
+use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Viserio\Cookie\Cookie;
 use Viserio\Cookie\RequestCookie;
 
 class RequestCookieTest extends \PHPUnit_Framework_TestCase
 {
-    public function tearDown()
-    {
-        Mock::close();
-    }
+    use MockeryTrait;
 
     /**
      * @dataProvider provideParsesFromCookieStringData
      */
     public function testFromSetCookieHeader($cookieString, Cookie $expectedCookie)
     {
-        $request = Mock::mock(Request::class);
+        $request = $this->mock(Request::class);
         $request->shouldReceive('getHeader')->with('Set-Cookie')->andReturn($cookieString);
 
         $cookie = new RequestCookie();
@@ -34,7 +32,7 @@ class RequestCookieTest extends \PHPUnit_Framework_TestCase
      */
     public function testFromCookieHeader($cookieString, Cookie $expectedCookie)
     {
-        $request = Mock::mock(Request::class);
+        $request = $this->mock(Request::class);
         $request->shouldReceive('getHeaderLine')->with('Cookie')->andReturn($cookieString);
 
         $cookie = new RequestCookie();
@@ -46,6 +44,10 @@ class RequestCookieTest extends \PHPUnit_Framework_TestCase
     public function provideParsesFromCookieStringData()
     {
         return [
+            [
+                'some;',
+                (new Cookie('some')),
+            ],
             [
                 'someCookie=',
                 new Cookie('someCookie'),
@@ -134,6 +136,18 @@ class RequestCookieTest extends \PHPUnit_Framework_TestCase
                     ->withDomain('.example.com')
                     ->withSecure(true)
                     ->withHttpOnly(true),
+            ],
+            [
+                'lu=Rg3vHJZnehYLjVg7qi3bZjzg; Domain=.example.com; Path=/; Expires=Tue, 15 Jan 2013 21:47:38 GMT; Max-Age=500; Secure; HttpOnly; SameSite=strict',
+                (new Cookie('lu'))
+                    ->withValue('Rg3vHJZnehYLjVg7qi3bZjzg')
+                    ->withExpires(new DateTime('Tue, 15-Jan-2013 21:47:38 GMT'))
+                    ->withMaxAge(500)
+                    ->withPath('/')
+                    ->withDomain('.example.com')
+                    ->withSecure(true)
+                    ->withHttpOnly(true)
+                    ->withSameSite('strict'),
             ],
         ];
     }

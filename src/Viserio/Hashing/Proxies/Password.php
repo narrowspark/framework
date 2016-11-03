@@ -1,12 +1,17 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Crypter\Proxies;
+namespace Viserio\Hashing\Proxies;
 
 use Viserio\StaticalProxy\StaticalProxy;
 
 class Password extends StaticalProxy
 {
-    protected static function getFacadeAccessor()
+    /**
+     * {@inheritdoc}
+     *
+     * @codeCoverageIgnore
+     */
+    public static function getInstanceIdentifier()
     {
         return 'password';
     }

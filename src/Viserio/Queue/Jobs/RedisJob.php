@@ -3,7 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Queue\Jobs;
 
 use Interop\Container\ContainerInterface;
-use Narrowspark\Arr\StaticArr as Arr;
+use Narrowspark\Arr\Arr;
 use Viserio\Queue\Connectors\RedisQueue;
 
 class RedisJob extends AbstractJob

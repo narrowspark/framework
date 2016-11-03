@@ -2,30 +2,31 @@
 declare(strict_types=1);
 namespace Viserio\Pipeline\Providers;
 
-use Viserio\Application\ServiceProvider;
+use Interop\Container\ContainerInterface;
+use Interop\Container\ServiceProvider;
+use Viserio\Contracts\Pipeline\Pipeline as PipelineContract;
 use Viserio\Pipeline\Pipeline;
 
-class PipelineServiceProvider extends ServiceProvider
+class PipelineServiceProvider implements ServiceProvider
 {
     /**
      * {@inheritdoc}
      */
-    public function register()
-    {
-        $this->app->singleton('pipeline', function ($app) {
-            return new Pipeline($app);
-        });
-    }
-
-    /**
-     * Get the services provided by the provider.
-     *
-     * @return string[]
-     */
-    public function provides(): array
+    public function getServices()
     {
         return [
-            Pipeline::class,
+            PipelineContract::class => [self::class, 'createPipeline'],
+            Pipeline::class => function (ContainerInterface $container) {
+                return $container->get(PipelineContract::class);
+            },
+            'pipeline' => function (ContainerInterface $container) {
+                return $container->get(PipelineContract::class);
+            },
         ];
+    }
+
+    public static function createPipeline(ContainerInterface $container): Pipeline
+    {
+        return (new Pipeline())->setContainer($container);
     }
 }

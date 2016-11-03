@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Contracts\Container\Tests\Traits;
 
+use Interop\Container\ContainerInterface;
 use Narrowspark\TestingHelper\ArrayContainer;
 use Viserio\Contracts\Container\Traits\ContainerAwareTrait;
 
@@ -13,14 +14,14 @@ class ContainerAwareTraitTest extends \PHPUnit_Framework_TestCase
     {
         $this->setContainer(new ArrayContainer());
 
-        $this->assertInstanceOf('\Interop\Container\ContainerInterface', $this->getcontainer());
+        $this->assertInstanceOf(ContainerInterface::class, $this->getcontainer());
     }
 
     /**
-     * @expectedException RuntimeException
+     * @expectedException \RuntimeException
      * @expectedExceptionMessage Container is not set up.
      */
-    public function testGetSetContainerThrowExceptionIfContainerIsNotSet()
+    public function testGetContainerThrowExceptionIfContainerIsNotSet()
     {
         $this->getcontainer();
     }

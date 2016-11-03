@@ -2,10 +2,11 @@
 declare(strict_types=1);
 namespace Viserio\Queue\Connectors;
 
+use Cake\Chronos\Chronos;
 use Closure;
 use DateTimeInterface;
 use Exception;
-use SuperClosure\Serializer;
+use Opis\Closure\SerializableClosure;
 use Viserio\Contracts\Container\Traits\ContainerAwareTrait;
 use Viserio\Contracts\Encryption\Encrypter as EncrypterContract;
 use Viserio\Contracts\Queue\QueueConnector as QueueConnectorContract;
@@ -105,7 +106,7 @@ abstract class AbstractQueue implements QueueConnectorContract
      */
     protected function getTime(): int
     {
-        return time();
+        return Chronos::now()->getTimestamp();
     }
 
     /**
@@ -130,7 +131,7 @@ abstract class AbstractQueue implements QueueConnectorContract
                 'job' => sprintf('%s@call', CallQueuedHandler::class),
                 'data' => [
                     'commandName' => $encrypter->encrypt(get_class($job)),
-                    'command' => $encrypter->encrypt(serialize(clone $job)),
+                    'command64' => $encrypter->encrypt(base64_encode(serialize(clone $job))),
                 ],
             ]);
         }
@@ -162,7 +163,7 @@ abstract class AbstractQueue implements QueueConnectorContract
     protected function createClosurePayload(Closure $job, $data): array
     {
         $closure = $this->getEncrypter()->encrypt(
-            (new Serializer())->serialize($job)
+            serialize(new SerializableClosure($job))
         );
 
         return ['job' => QueueClosure::class, 'data' => compact('closure')];

@@ -4,7 +4,7 @@ namespace Viserio\Mail;
 
 use Closure;
 use InvalidArgumentException;
-use Narrowspark\Arr\StaticArr as Arr;
+use Narrowspark\Arr\Arr;
 use Swift_Mailer;
 use Swift_Message;
 use Swift_Mime_Message;
@@ -64,7 +64,7 @@ class Mailer implements MailerContract
      */
     public function alwaysFrom(string $address, string $name = null)
     {
-        $this->from = compact($address, $name);
+        $this->from = compact('address', 'name');
     }
 
     /**
@@ -220,7 +220,7 @@ class Mailer implements MailerContract
     protected function sendSwiftMessage(Swift_Mime_Message $message): int
     {
         if ($this->events) {
-            $this->events->emit('events.message.sending', [$message]);
+            $this->events->trigger('events.message.sending', [$message]);
         }
 
         try {
@@ -242,7 +242,7 @@ class Mailer implements MailerContract
         // If a global from address has been specified we will set it on every message
         // instances so the developer does not have to repeat themselves every time
         // they create a new message. We will just go ahead and push the address.
-        if (! empty($this->from['address'])) {
+        if (isset($this->from['address'])) {
             $message->from($this->from['address'], $this->from['name']);
         }
 

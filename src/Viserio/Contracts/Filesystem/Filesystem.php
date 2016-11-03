@@ -32,7 +32,7 @@ interface Filesystem
      *
      * @param string $path The path to the file.
      *
-     * @throws \Viserio\Contracts\Filesystem\FileNotFoundException
+     * @throws \Viserio\Contracts\Filesystem\Exception\FileNotFoundException
      *
      * @return string|false The file contents or false on failure.
      */
@@ -41,13 +41,24 @@ interface Filesystem
     /**
      * Write a new file.
      *
-     * @param string $path     The path of the new file.
-     * @param string $contents The file contents.
-     * @param array  $config   An optional configuration array.
+     * @param string          $path     The path of the new file.
+     * @param string|resource $contents The file contents.
+     * @param array           $config   An optional configuration array.
      *
      * @return bool True on success, false on failure.
      */
-    public function write(string $path, string $contents, array $config = []): bool;
+    public function write(string $path, $contents, array $config = []): bool;
+
+    /**
+     * Write the contents of a file.
+     *
+     * @param string          $path
+     * @param string|resource $contents
+     * @param array           $config   An optional configuration array.
+     *
+     * @return bool
+     */
+    public function put(string $path, $contents, array $config = []): bool;
 
     /**
      * Update an existing file.
@@ -56,7 +67,7 @@ interface Filesystem
      * @param string $contents The file contents.
      * @param array  $config   An optional configuration array.
      *
-     * @throws \Viserio\Contracts\Filesystem\FileNotFoundException
+     * @throws \Viserio\Contracts\Filesystem\Exception\FileNotFoundException
      *
      * @return bool True on success, false on failure.
      */

@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Http\Tests;
 
+use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use Psr\Http\Message\MessageInterface;
 use Psr\Http\Message\StreamInterface;
 use Viserio\Http\Tests\Constraint\HttpProtocolVersion;
@@ -9,6 +10,8 @@ use Viserio\Http\Tests\Constraint\Immutable;
 
 abstract class AbstractMessageTest extends \PHPUnit_Framework_TestCase
 {
+    use MockeryTrait;
+
     public $classToTest;
 
     // Test methods for default/empty instances
@@ -225,8 +228,8 @@ abstract class AbstractMessageTest extends \PHPUnit_Framework_TestCase
     {
         $message = $this->classToTest;
         $messageClone = clone $message;
-        /** @var StreamInterface $expectedBody */
-        $expectedBody = $this->createMock(StreamInterface::class);
+
+        $expectedBody = $this->mock(StreamInterface::class);
         $newMessage = $message->withBody($expectedBody);
 
         $this->assertImmutable($messageClone, $message, $newMessage);

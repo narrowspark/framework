@@ -4,8 +4,7 @@ namespace Viserio\Filesystem\Adapters;
 
 use InvalidArgumentException;
 use League\Flysystem\Rackspace\RackspaceAdapter;
-use Narrowspark\Arr\StaticArr as Arr;
-use OpenCloud\ObjectStore\Resource\Container;
+use Narrowspark\Arr\Arr;
 use OpenCloud\Rackspace;
 
 class RackspaceConnector extends AbstractConnector
@@ -60,7 +59,7 @@ class RackspaceConnector extends AbstractConnector
     /**
      * {@inheritdoc}
      */
-    protected function getAdapter($client, array $config): \League\Flysystem\AdapterInterface
+    protected function getAdapter($client, array $config): RackspaceAdapter
     {
         return new RackspaceAdapter($client);
     }

@@ -20,7 +20,8 @@ abstract class RouteRouterBaseTest extends \PHPUnit_Framework_TestCase
         parent::setUp();
 
         $name = (new ReflectionClass($this))->getShortName();
-        $router = new Router(__DIR__ . '/../Cache/' . $name . '.cache', $this->mock(ContainerInterface::class));
+        $router = new Router($this->mock(ContainerInterface::class));
+        $router->setCachePath(__DIR__ . '/../Cache/' . $name . '.cache');
         $router->refreshCache(true);
 
         $this->definitions($router);
@@ -40,30 +41,6 @@ abstract class RouteRouterBaseTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals($expectedResult, (string) $actualResult->getBody());
         $this->assertSame($status, $actualResult->getStatusCode());
-    }
-
-    /**
-     * @dataProvider routerMatching404Provider
-     * @expectedException \Narrowspark\HttpStatus\Exception\NotFoundException
-     */
-    public function testRouter404($httpMethod, $uri)
-    {
-        $this->router->dispatch(
-            (new ServerRequestFactory())->createServerRequest($httpMethod, $uri),
-            (new ResponseFactory())->createResponse()
-        );
-    }
-
-    /**
-     * @dataProvider routerMatching405Provider
-     * @expectedException \Narrowspark\HttpStatus\Exception\MethodNotAllowedException
-     */
-    public function testRouter405($httpMethod, $uri)
-    {
-        $this->router->dispatch(
-            (new ServerRequestFactory())->createServerRequest($httpMethod, $uri),
-            (new ResponseFactory())->createResponse()
-        );
     }
 
     abstract protected function definitions($routes);

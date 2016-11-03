@@ -5,8 +5,7 @@ namespace Viserio\Log;
 use Monolog\Handler\RotatingFileHandler;
 use Monolog\Logger as MonologLogger;
 use Monolog\Processor\PsrLogMessageProcessor;
-use RuntimeException;
-use Viserio\Contracts\Events\Dispatcher as DispatcherContract;
+use Viserio\Contracts\Events\Traits\EventsAwareTrait;
 use Viserio\Contracts\Log\Log as LogContract;
 use Viserio\Contracts\Support\Arrayable;
 use Viserio\Contracts\Support\Jsonable;
@@ -15,20 +14,7 @@ use Viserio\Log\Traits\ParseLevelTrait;
 class Writer implements LogContract
 {
     use ParseLevelTrait;
-
-    /**
-     * The Monolog logger instance.
-     *
-     * @var \Monolog\Logger
-     */
-    protected $monolog;
-
-    /**
-     * The event dispatcher instance.
-     *
-     * @var \Viserio\Contracts\Events\Dispatcher|null
-     */
-    protected $dispatcher;
+    use EventsAwareTrait;
 
     /**
      * The handler parser instance.
@@ -40,18 +26,14 @@ class Writer implements LogContract
     /**
      * Create a new log writer instance.
      *
-     * @param \Monolog\Logger                           $monolog
-     * @param \Viserio\Contracts\Events\Dispatcher|null $dispatcher
+     * @param \Monolog\Logger $monolog
      */
-    public function __construct(MonologLogger $monolog, DispatcherContract $dispatcher = null)
+    public function __construct(MonologLogger $monolog)
     {
         // PSR 3 log message formatting for all handlers
         $monolog->pushProcessor(new PsrLogMessageProcessor());
 
         $this->handlerParser = new HandlerParser($monolog);
-
-        $this->monolog = $this->handlerParser->getMonolog();
-        $this->dispatcher = $dispatcher;
     }
 
     /**
@@ -64,7 +46,7 @@ class Writer implements LogContract
      */
     public function __call($method, $parameters)
     {
-        return call_user_func_array([$this->monolog, $method], $parameters);
+        return call_user_func_array([$this->getMonolog(), $method], $parameters);
     }
 
     /**
@@ -207,50 +189,23 @@ class Writer implements LogContract
     /**
      * Get the underlying Monolog instance.
      *
-     * @return MonologLogger
+     * @return \Monolog\Logger
      */
     public function getMonolog(): MonologLogger
     {
-        return $this->monolog;
+        return $this->handlerParser->getMonolog();
     }
 
     /**
-     * Set the event dispatcher instance.
+     * Get the handler parser instance.
      *
-     * @param \Viserio\Contracts\Events\Dispatcher $dispatcher
-     */
-    public function setEventDispatcher(DispatcherContract $dispatcher)
-    {
-        $this->dispatcher = $dispatcher;
-    }
-
-    /**
-     * Get the event dispatcher instance.
+     * @return \Viserio\Log\HandlerParser
      *
-     * @return \Viserio\Contracts\Events\Dispatcher
+     * @codeCoverageIgnore
      */
-    public function getEventDispatcher(): DispatcherContract
+    public function getHandlerParser(): HandlerParser
     {
-        if ($this->dispatcher === null) {
-            throw new RuntimeException('Events dispatcher has not been set.');
-        }
-
-        return $this->dispatcher;
-    }
-
-    /**
-     * Emit a log event.
-     *
-     * @param string $level
-     * @param string $message
-     * @param array  $context
-     */
-    protected function emitLogEvent(string $level, string $message, array $context = [])
-    {
-        // If the event dispatcher is set, we will pass along the parameters to the
-        // log listeners. These are useful for building profilers or other tools
-        // that aggregate all of the log messages for a given "request" cycle.
-        $this->getEventDispatcher()->emit('viserio.log', compact('level', 'message', 'context'));
+        return $this->handlerParser;
     }
 
     /**
@@ -264,9 +219,13 @@ class Writer implements LogContract
     {
         if (is_array($message)) {
             return var_export($message, true);
+        // @codeCoverageIgnoreStart
         } elseif ($message instanceof Jsonable) {
+            // @codeCoverageIgnoreEnd
             return $message->toJson();
+        // @codeCoverageIgnoreStart
         } elseif ($message instanceof Arrayable) {
+            // @codeCoverageIgnoreEnd
             return var_export($message->toArray(), true);
         }
 
@@ -284,10 +243,13 @@ class Writer implements LogContract
     {
         $message = $this->formatMessage($message);
 
-        if ($this->dispatcher !== null) {
-            $this->emitLogEvent($level, $message, $context);
+        if ($this->events !== null) {
+            // If the event dispatcher is set, we will pass along the parameters to the
+            // log listeners. These are useful for building profilers or other tools
+            // that aggregate all of the log messages for a given "request" cycle.
+            $this->getEventsDispatcher()->trigger('viserio.log', compact('level', 'message', 'context'));
         }
 
-        $this->monolog->{$level}($message, $context);
+        $this->getMonolog()->{$level}($message, $context);
     }
 }

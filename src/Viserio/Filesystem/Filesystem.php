@@ -64,7 +64,7 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract, Direct
     /**
      * {@inheritdoc}
      */
-    public function write(string $path, string $contents, array $config = []): bool
+    public function write(string $path, $contents, array $config = []): bool
     {
         $path = self::normalizeDirectorySeparator($path);
         $lock = isset($config['lock']) ? LOCK_EX : 0;
@@ -78,6 +78,19 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract, Direct
         }
 
         return true;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function put(string $path, $contents, array $config = []): bool
+    {
+        $path = self::normalizeDirectorySeparator($path);
+        $lock = isset($config['lock']) ? LOCK_EX : 0;
+
+        $success = file_put_contents($path, $contents, $lock);
+
+        return (bool) $success;
     }
 
     /**
@@ -200,11 +213,7 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract, Direct
     }
 
     /**
-     * Get the URL for the file at the given path.
-     *
-     * @param string $path
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function url(string $path): string
     {
@@ -398,6 +407,24 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract, Direct
         }
 
         return true;
+    }
+
+    /**
+     * Get normalize or prefixed path.
+     *
+     * @param string $path
+     *
+     * @return string
+     */
+    protected function getNormalzedOrPrefixedPath(string $path): string
+    {
+        if (isset($this->driver)) {
+            $prefix = method_exists($this->driver, 'getPathPrefix') ? $this->driver->getPathPrefix() : '';
+
+            return $prefix . $path;
+        }
+
+        return self::normalizeDirectorySeparator($path);
     }
 
     /**

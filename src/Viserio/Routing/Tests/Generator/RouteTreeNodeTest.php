@@ -101,7 +101,7 @@ class RouteTreeNodeTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException RuntimeException
+     * @expectedException \RuntimeException
      * @expectedExceptionMessage Cannot construct Viserio\Routing\Generator\RouteTreeNode: matchers must not be empty.
      */
     public function testThrowsExceptionForEmptyMatchers()

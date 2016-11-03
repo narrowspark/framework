@@ -2,34 +2,18 @@
 declare(strict_types=1);
 namespace Viserio\View\Engines\Adapter;
 
+use ErrorException;
+use ParseError;
 use Throwable;
-use Viserio\Contracts\Exception\Exception\FatalThrowableError;
+use TypeError;
 use Viserio\Contracts\View\Engine as EngineContract;
 
 class Php implements EngineContract
 {
     /**
-     * Get the evaluated contents of the view.
-     *
-     * @param string $path
-     * @param array  $data
-     *
-     * @return string
+     * {@inheritdoc}
      */
-    public function get(string $path, array $data = []): string
-    {
-        return $this->evaluatePath($path, $data);
-    }
-
-    /**
-     * Get the evaluated contents of the view at the given path.
-     *
-     * @param string $phpPath
-     * @param array  $phpData
-     *
-     * @return string
-     */
-    protected function evaluatePath(string $phpPath, array $phpData): string
+    public function get(array $fileInfo, array $data = []): string
     {
         $obLevel = ob_get_level();
 
@@ -38,16 +22,21 @@ class Php implements EngineContract
         // We'll evaluate the contents of the view inside a try/catch block so we can
         // clear out any stray output that might get out before an error occurs or
         // an exception is thrown. This prevents any partial views from leaking.
-        extract($phpData, EXTR_PREFIX_SAME, 'narrowspark');
+        extract($data, EXTR_PREFIX_SAME, 'narrowspark');
 
         try {
-            require $phpPath;
+            require $fileInfo['path'];
         } catch (Throwable $exception) {
-            $this->handleViewException(new FatalThrowableError($exception), $obLevel);
+            $this->handleViewException(
+                $this->getErrorException($exception),
+                $obLevel
+            );
         }
 
+        // @codeCoverageIgnoreStart
         // Return temporary output buffer content, destroy output buffer
         return ltrim(ob_get_clean());
+        // @codeCoverageIgnoreEnd
     }
 
     /**
@@ -65,5 +54,36 @@ class Php implements EngineContract
         }
 
         throw $exception;
+    }
+
+    /**
+     * Get a ErrorException instance.
+     *
+     * @param \ParseError|\TypeError|\Throwable $exception
+     *
+     * @return \ErrorException
+     */
+    private function getErrorException($exception): ErrorException
+    {
+        // @codeCoverageIgnoreStart
+        if ($exception instanceof ParseError) {
+            $message = 'Parse error: ' . $exception->getMessage();
+            $severity = E_PARSE;
+        } elseif ($exception instanceof TypeError) {
+            $message = 'Type error: ' . $exception->getMessage();
+            $severity = E_RECOVERABLE_ERROR;
+        } else {
+            $message = $exception->getMessage();
+            $severity = E_ERROR;
+        }
+        // @codeCoverageIgnoreEnd
+
+        return new ErrorException(
+            $message,
+            $exception->getCode(),
+            $severity,
+            $exception->getFile(),
+            $exception->getLine()
+        );
     }
 }

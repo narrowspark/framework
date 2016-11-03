@@ -2,6 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Contracts\Exception;
 
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 use Throwable;
 
 interface Handler
@@ -122,4 +124,14 @@ interface Handler
      * Handle the PHP shutdown event.
      */
     public function handleShutdown();
+
+    /**
+     * Render an exception into a response.
+     *
+     * @param \Psr\Http\Message\ServerRequestInterface $request
+     * @param \Throwable                               $exception
+     *
+     * @return \Psr\Http\Message\ResponseInterface
+     */
+    public function render(ServerRequestInterface $request, Throwable $exception): ResponseInterface;
 }

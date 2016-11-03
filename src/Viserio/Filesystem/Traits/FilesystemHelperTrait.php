@@ -17,7 +17,7 @@ trait FilesystemHelperTrait
      */
     public function getRequire(string $path)
     {
-        $path = self::normalizeDirectorySeparator($path);
+        $path = $this->getNormalzedOrPrefixedPath($path);
 
         if ($this->isFile($path) && $this->has($path)) {
             return require $path;
@@ -39,7 +39,7 @@ trait FilesystemHelperTrait
      */
     public function requireOnce(string $path)
     {
-        $path = self::normalizeDirectorySeparator($path);
+        $path = $this->getNormalzedOrPrefixedPath($path);
 
         if ($this->isFile($path) && $this->has($path)) {
             require_once $path;
@@ -57,9 +57,7 @@ trait FilesystemHelperTrait
      */
     public function isWritable(string $path): bool
     {
-        $path = self::normalizeDirectorySeparator($path);
-
-        return is_writable($path);
+        return is_writable($this->getNormalzedOrPrefixedPath($path));
     }
 
     /**
@@ -71,9 +69,7 @@ trait FilesystemHelperTrait
      */
     public function isFile(string $file): bool
     {
-        $file = self::normalizeDirectorySeparator($file);
-
-        return is_file($file);
+        return is_file($this->getNormalzedOrPrefixedPath($file));
     }
 
     /**
@@ -88,6 +84,9 @@ trait FilesystemHelperTrait
      */
     public function link(string $target, string $link)
     {
+        $target = $this->getNormalzedOrPrefixedPath($target);
+        $link = $this->getNormalzedOrPrefixedPath($link);
+
         if (! $this->isWindows()) {
             return symlink($target, $link);
         }
@@ -135,4 +134,13 @@ trait FilesystemHelperTrait
     {
         return strtolower(substr(PHP_OS, 0, 3)) === 'win';
     }
+
+    /**
+     * Get normalize or prefixed path.
+     *
+     * @param string $path
+     *
+     * @return string
+     */
+    abstract protected function getNormalzedOrPrefixedPath(string $path): string;
 }

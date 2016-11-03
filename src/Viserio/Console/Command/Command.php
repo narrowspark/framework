@@ -126,6 +126,8 @@ abstract class Command extends BaseCommand implements CompletionAwareInterface
      * Get the output implementation.
      *
      * @return \Viserio\Console\Style\NarrowsparkStyle
+     *
+     * @codeCoverageIgnore
      */
     public function getOutput(): NarrowsparkStyle
     {
@@ -238,6 +240,8 @@ abstract class Command extends BaseCommand implements CompletionAwareInterface
 
     /**
      * {@inheritdoc}
+     *
+     * @codeCoverageIgnore
      */
     public function completeOptionValues($optionName, CompletionContext $context)
     {
@@ -246,6 +250,8 @@ abstract class Command extends BaseCommand implements CompletionAwareInterface
 
     /**
      * {@inheritdoc}
+     *
+     * @codeCoverageIgnore
      */
     public function completeArgumentValues($argumentName, CompletionContext $context)
     {
@@ -258,9 +264,9 @@ abstract class Command extends BaseCommand implements CompletionAwareInterface
      * @param string $question
      * @param bool   $default
      *
-     * @return string
+     * @return string|bool
      */
-    public function confirm(string $question, bool $default = false): string
+    public function confirm(string $question, bool $default = false)
     {
         return $this->output->confirm($question, $default);
     }
@@ -343,7 +349,7 @@ abstract class Command extends BaseCommand implements CompletionAwareInterface
         array $choices,
         string $default = null,
         $attempts = null,
-        $multiple = null
+        bool $multiple = null
     ): string {
         $question = new ChoiceQuestion($question, $choices, $default);
 
@@ -463,9 +469,7 @@ abstract class Command extends BaseCommand implements CompletionAwareInterface
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $method = method_exists($this, 'handle') ? 'handle' : 'fire';
-
-        return $this->getInvoker()->call([$this, $method]);
+        return $this->getInvoker()->call([$this, 'handle']);
     }
 
     /**
@@ -493,15 +497,15 @@ abstract class Command extends BaseCommand implements CompletionAwareInterface
      */
     protected function configureUsingFluentDefinition()
     {
-        list($name, $arguments, $options) = (new ExpressionParser())->parse($this->signature);
+        $arr = (new ExpressionParser())->parse($this->signature);
 
-        parent::__construct($name);
+        parent::__construct($arr['name']);
 
-        foreach ($arguments as $argument) {
+        foreach ($arr['arguments'] as $argument) {
             $this->getDefinition()->addArgument($argument);
         }
 
-        foreach ($options as $option) {
+        foreach ($arr['options'] as $option) {
             $this->getDefinition()->addOption($option);
         }
     }

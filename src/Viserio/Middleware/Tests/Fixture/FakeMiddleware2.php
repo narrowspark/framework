@@ -2,18 +2,17 @@
 declare(strict_types=1);
 namespace Viserio\Middleware\Tests\Fixture;
 
-use Psr\Http\Message\ResponseInterface;
+use Interop\Http\Middleware\DelegateInterface;
+use Interop\Http\Middleware\ServerMiddlewareInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Viserio\Contracts\Middleware\Delegate as DelegateContract;
-use Viserio\Contracts\Middleware\ServerMiddleware as ServerMiddlewareContract;
 
-class FakeMiddleware2 implements ServerMiddlewareContract
+class FakeMiddleware2 implements ServerMiddlewareInterface
 {
     public function process(
         ServerRequestInterface $request,
-        DelegateContract $frame
-    ): ResponseInterface {
-        $response = $frame->next($request);
+        DelegateInterface $delegate
+    ) {
+        $response = $delegate->process($request);
 
         return $response->withStatus(500);
     }

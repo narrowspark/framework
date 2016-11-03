@@ -5,8 +5,8 @@ namespace Viserio\Queue\Tests\Connectors;
 use Exception;
 use Interop\Container\ContainerInterface;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
+use Opis\Closure\SerializableClosure;
 use stdClass;
-use SuperClosure\Serializer;
 use Viserio\Contracts\Encryption\Encrypter as EncrypterContract;
 use Viserio\Queue\Connectors\SyncQueue;
 use Viserio\Queue\Jobs\SyncJob;
@@ -30,14 +30,14 @@ class SyncQueueTest extends \PHPUnit_Framework_TestCase
         };
 
         $events = $this->mock(stdClass::class);
-        $events->shouldReceive('emit');
+        $events->shouldReceive('trigger');
 
         $encrypter = $this->mock(EncrypterContract::class);
         $encrypter->shouldReceive('encrypt')
             ->once();
         $encrypter->shouldReceive('decrypt')
             ->once()
-            ->andReturn((new Serializer())->serialize($closure));
+            ->andReturn(serialize(new SerializableClosure($closure)));
 
         $container = $this->mock(ContainerInterface::class);
         $container->shouldReceive('has')
@@ -74,7 +74,7 @@ class SyncQueueTest extends \PHPUnit_Framework_TestCase
         unset($_SERVER['__sync.failed']);
 
         $events = $this->mock(stdClass::class);
-        $events->shouldReceive('emit')
+        $events->shouldReceive('trigger')
             ->times(3);
 
         $container = $this->mock(ContainerInterface::class);

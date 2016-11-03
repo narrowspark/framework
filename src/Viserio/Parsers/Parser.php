@@ -5,7 +5,6 @@ namespace Viserio\Parsers;
 use Viserio\Contracts\Parsers\Exception\NotSupportedException;
 use Viserio\Contracts\Parsers\Format as FormatContract;
 use Viserio\Contracts\Parsers\Parser as ParserContract;
-use Viserio\Parsers\Formats\BSON;
 use Viserio\Parsers\Formats\Csv;
 use Viserio\Parsers\Formats\INI;
 use Viserio\Parsers\Formats\JSON;
@@ -36,11 +35,6 @@ class Parser implements ParserContract
         'text/javascript' => 'json',
         'text/x-javascript' => 'json',
         'text/x-json' => 'json',
-        // BSON
-        'application/bson' => 'bson',
-        // MSGPACK
-        'application/msgpack' => 'msgpack',
-        'application/x-msgpack' => 'msgpack',
         // YAML
         'text/yaml' => 'yaml',
         'text/x-yaml' => 'yaml',
@@ -52,7 +46,6 @@ class Parser implements ParserContract
     ];
 
     private $supportedFileFormats = [
-        'bson',
         'csv',
         'ini',
         'json',
@@ -64,7 +57,6 @@ class Parser implements ParserContract
     ];
 
     private $supportedParsers = [
-        'bson' => BSON::class,
         'csv' => Csv::class,
         'ini' => INI::class,
         'json' => JSON::class,

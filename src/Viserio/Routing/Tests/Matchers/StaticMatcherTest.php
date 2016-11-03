@@ -7,7 +7,7 @@ use Viserio\Routing\Matchers\StaticMatcher;
 class StaticMatcherTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @expectedException RuntimeException
+     * @expectedException \RuntimeException
      */
     public function testCannotContainSlash()
     {

@@ -2,7 +2,6 @@
 declare(strict_types=1);
 namespace Viserio\Parsers\Tests;
 
-use Viserio\Filesystem\Filesystem;
 use Viserio\Parsers\Formats\BSON;
 use Viserio\Parsers\Formats\INI;
 use Viserio\Parsers\Formats\JSON;
@@ -21,7 +20,7 @@ class ParserTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->parser = new Parser(new Filesystem());
+        $this->parser = new Parser();
     }
 
     public function testParserEmptyData()
@@ -103,7 +102,7 @@ class ParserTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException Viserio\Contracts\Parsers\Exception\NotSupportedException
+     * @expectedException \Viserio\Contracts\Parsers\Exception\NotSupportedException
      */
     public function testGetParserToThrowException()
     {

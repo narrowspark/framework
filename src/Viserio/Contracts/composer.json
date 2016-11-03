@@ -36,7 +36,8 @@
         "narrowspark/testing-helper"                         : "^1.5",
         "container-interop/container-interop"                : "^1.1",
         "psr/http-message"                                   : "^1.0",
-        "psr/log"                                            : "^1.0"
+        "psr/log"                                            : "^1.0",
+        "symfony/console"                                    : "^3.1"
     },
     "autoload": {
         "psr-4": {
@@ -63,7 +64,8 @@
     "suggest": {
         "psr/log"                                            : "Required to use log contracts (^1.0).",
         "psr/http-message"                                   : "Required to use Http, Middleware, Routing contracts (^1.0).",
-        "container-interop/container-interop"                : "Required to use Container contract (^1.0)."
+        "container-interop/container-interop"                : "Required to use Container contract (^1.1).",
+        "container-interop/service-provider"                 : "Required to use Container contract (^0.3)."
     },
     "minimum-stability"                                      : "dev",
     "prefer-stable"                                          : true

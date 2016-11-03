@@ -2,12 +2,10 @@
 # Ignoring those within your global gitignore will make it so
 # they will never get commited within any project you have.
 
-.DS_Store
 .php_cs.cache
 
 composer.phar
 composer.lock
-Thumbs.db
 
 /build/logs
 /vendor

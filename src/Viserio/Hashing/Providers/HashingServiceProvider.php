@@ -2,42 +2,36 @@
 declare(strict_types=1);
 namespace Viserio\Hashing\Providers;
 
-use Defuse\Crypto\Key;
-use Viserio\Application\ServiceProvider;
+use Interop\Container\ContainerInterface;
+use Interop\Container\ServiceProvider;
+use Viserio\Contracts\Hashing\Password as PasswordContract;
+use Viserio\Contracts\Support\Traits\ServiceProviderConfigAwareTrait;
 use Viserio\Hashing\Password;
 
-class HashingServiceProvider extends ServiceProvider
+class HashingServiceProvider implements ServiceProvider
 {
+    use ServiceProviderConfigAwareTrait;
+
+    const PACKAGE = 'viserio.hashing';
+
     /**
      * {@inheritdoc}
      */
-    public function register()
-    {
-        $this->registerPassword();
-    }
-
-    /**
-     * Get the services provided by the provider.
-     *
-     * @return string[]
-     */
-    public function provides(): array
+    public function getServices()
     {
         return [
-            'password',
+            PasswordContract::class => [self::class, 'createPassword'],
+            Password::class => function (ContainerInterface $container) {
+                return $container->get(PasswordContract::class);
+            },
+            'password' => function (ContainerInterface $container) {
+                return $container->get(PasswordContract::class);
+            },
         ];
     }
 
-    protected function registerPassword()
+    public static function createPassword(ContainerInterface $container): Password
     {
-        $this->app->singleton('password', function () {
-            $config = $app->get('config');
-
-            return new Password(
-                Key::loadFromAsciiSafeString(
-                    $config->get('app::key')
-                )
-            );
-        });
+        return new Password(self::getConfig($container, 'key', ''));
     }
 }

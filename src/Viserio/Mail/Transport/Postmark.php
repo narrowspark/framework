@@ -222,7 +222,7 @@ class Postmark extends AbstractTransport
                     ];
 
                     if ($attachment->getDisposition() !== 'attachment' &&
-                        $attachment->getId() != null
+                        $attachment->getId() !== null
                     ) {
                         $attachments['ContentID'] = 'cid:' . $attachment->getId();
                     }

@@ -3,10 +3,10 @@ declare(strict_types=1);
 namespace Viserio\Http;
 
 use BadMethodCallException;
-use Exception;
 use InvalidArgumentException;
 use Psr\Http\Message\StreamInterface;
 use RuntimeException;
+use Throwable;
 
 class Stream implements StreamInterface
 {
@@ -152,7 +152,7 @@ class Stream implements StreamInterface
             $this->seek(0);
 
             return (string) stream_get_contents($this->stream);
-        } catch (Exception $e) {
+        } catch (Throwable $exception) {
             return '';
         }
     }
@@ -309,7 +309,21 @@ class Stream implements StreamInterface
             throw new RuntimeException('Cannot read from non-readable stream');
         }
 
-        return fread($this->stream, $length);
+        if ($length < 0) {
+            throw new RuntimeException('Length parameter cannot be negative');
+        }
+
+        if ($length === 0) {
+            return '';
+        }
+
+        $string = fread($this->stream, $length);
+
+        if ($string === false) {
+            throw new RuntimeException('Unable to read from stream');
+        }
+
+        return $string;
     }
 
     /**
