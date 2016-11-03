@@ -4,8 +4,10 @@ namespace Viserio\Cron\Providers;
 
 use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
+use Psr\Cache\CacheItemPoolInterface;
 use Viserio\Contracts\Support\Traits\ServiceProviderConfigAwareTrait;
 use Viserio\Cron\Commands\CronListCommand;
+use Viserio\Cron\Commands\ForgetCommand;
 use Viserio\Cron\Commands\ScheduleRunCommand;
 use Viserio\Cron\Schedule;
 
@@ -29,8 +31,8 @@ class CronServiceProvider implements ServiceProvider
     public static function createSchedule(ContainerInterface $container): Schedule
     {
         $scheduler = new Schedule(
+            $container->get(CacheItemPoolInterface::class),
             self::getConfig($container, 'path'),
-            self::getConfig($container, 'mutex_path'),
             self::getConfig($container, 'console')
         );
 
@@ -39,11 +41,12 @@ class CronServiceProvider implements ServiceProvider
         return $scheduler;
     }
 
-    public static function createCronCommands(): array
+    public static function createCronCommands(ContainerInterface $container): array
     {
         return [
-            new ScheduleRunCommand(),
             new CronListCommand(),
+            new ForgetCommand($container->get(CacheItemPoolInterface::class)),
+            new ScheduleRunCommand(),
         ];
     }
 }

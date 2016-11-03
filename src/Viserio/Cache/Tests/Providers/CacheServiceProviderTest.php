@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Cache\Tests\Providers;
 
 use Cache\Adapter\PHPArray\ArrayCachePool;
+use Psr\Cache\CacheItemPoolInterface;
 use Viserio\Cache\CacheManager;
 use Viserio\Cache\Providers\CacheServiceProvider;
 use Viserio\Config\Providers\ConfigServiceProvider;
@@ -20,5 +21,7 @@ class CacheServiceProviderTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(CacheManager::class, $container->get('cache'));
 
         $this->assertInstanceOf(ArrayCachePool::class, $container->get('cache.store'));
+        $this->assertInstanceOf(CacheItemPoolInterface::class, $container->get('cache.store'));
+        $this->assertInstanceOf(CacheItemPoolInterface::class, $container->get(CacheItemPoolInterface::class));
     }
 }

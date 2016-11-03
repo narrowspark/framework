@@ -3,8 +3,10 @@ declare(strict_types=1);
 namespace Viserio\Cron;
 
 use LogicException;
+use Psr\Cache\CacheItemPoolInterface;
 use Symfony\Component\Process\PhpExecutableFinder;
 use Symfony\Component\Process\ProcessUtils;
+use Viserio\Console\Application;
 use Viserio\Contracts\Container\Traits\ContainerAwareTrait;
 use Viserio\Contracts\Cron\Cron as CronContract;
 
@@ -27,13 +29,6 @@ class Schedule
     protected $console;
 
     /**
-     * The mutex directory.
-     *
-     * @var string
-     */
-    protected $mutexPath;
-
-    /**
      * Path for the working directory.
      *
      * @var string
@@ -41,16 +36,23 @@ class Schedule
     protected $workingDirPath;
 
     /**
+     * The cache store implementation.
+     *
+     * @var \Psr\Cache\CacheItemPoolInterface
+     */
+    protected $cache;
+
+    /**
      * Set the mutex path.
      *
-     * @param string      $path
-     * @param string      $mutexPath
-     * @param null|string $consoleName
+     * @param \Psr\Cache\CacheItemPoolInterface $cache
+     * @param string                            $path
+     * @param null|string                       $consoleName
      */
-    public function __construct(string $path, string $mutexPath, string $consoleName = null)
+    public function __construct(CacheItemPoolInterface $cache, string $path, string $consoleName = null)
     {
+        $this->cache = $cache;
         $this->workingDirPath = $path;
-        $this->mutexPath = $mutexPath;
         $this->console = $consoleName;
     }
 
@@ -64,9 +66,8 @@ class Schedule
      */
     public function call($callback, array $parameters = []): CallbackCron
     {
-        $cron = new CallbackCron($callback, $parameters);
-        $cron->setMutexPath($this->mutexPath)
-            ->setPath($this->workingDirPath);
+        $cron = new CallbackCron($this->cache, $callback, $parameters);
+        $cron->setPath($this->workingDirPath);
 
         if ($this->container !== null) {
             $cron->setContainer($this->getContainer());
@@ -94,7 +95,7 @@ class Schedule
         $binary = ProcessUtils::escapeArgument((string) (new PhpExecutableFinder())->find(false));
 
         if (defined('CEREBRO_BINARY')) {
-            $console = ProcessUtils::escapeArgument(CEREBRO_BINARY);
+            $console = Application::cerebroBinary();
         } elseif ($this->console !== null) {
             $console = ProcessUtils::escapeArgument($this->console);
         } else {
@@ -120,9 +121,8 @@ class Schedule
             $command .= ' ' . $this->compileParameters($parameters);
         }
 
-        $cron = new Cron($command);
-        $cron->setMutexPath($this->mutexPath)
-            ->setPath($this->workingDirPath);
+        $cron = new Cron($this->cache, $command);
+        $cron->setPath($this->workingDirPath);
 
         if ($this->container !== null) {
             $cron->setContainer($this->getContainer());

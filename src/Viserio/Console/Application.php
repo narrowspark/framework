@@ -11,6 +11,8 @@ use Symfony\Component\Console\Command\Command as SymfonyCommand;
 use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Process\PhpExecutableFinder;
+use Symfony\Component\Process\ProcessUtils;
 use Viserio\Console\Command\Command as ViserioCommand;
 use Viserio\Console\Command\ExpressionParser as Parser;
 use Viserio\Console\Input\InputOption;
@@ -202,6 +204,30 @@ class Application extends SymfonyConsole implements ApplicationContract
     public static function starting(Closure $callback)
     {
         static::$bootstrappers[] = $callback;
+    }
+
+    /**
+     * The PHP executable.
+     *
+     * @return string
+     *
+     * @codeCoverageIgnore
+     */
+    public static function phpBinary(): string
+    {
+        return ProcessUtils::escapeArgument((new PhpExecutableFinder())->find(false));
+    }
+
+    /**
+     * The Cerebro executable.
+     *
+     * @return string
+     *
+     * @codeCoverageIgnore
+     */
+    public static function cerebroBinary(): string
+    {
+        return defined('CEREBRO_BINARY') ? ProcessUtils::escapeArgument(CEREBRO_BINARY) : 'cerebro';
     }
 
     /**
