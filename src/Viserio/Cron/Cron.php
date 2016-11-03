@@ -254,7 +254,7 @@ class Cron implements CronContract
     {
         if ($this->withoutOverlapping) {
             $item = $this->cache->getItem($this->getMutexName());
-            $item->set($this->mutexName());
+            $item->set($this->getMutexName());
             $item->expiresAfter(1440);
 
             $this->cache->save($item);
