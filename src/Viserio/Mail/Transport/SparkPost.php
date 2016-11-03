@@ -89,11 +89,35 @@ class SparkPost extends AbstractTransport
      *
      * @param string $key
      *
-     * @return SparkPost
+     * @return $this
      */
     public function setKey(string $key): SparkPost
     {
         $this->key = $key;
+
+        return $this;
+    }
+
+    /**
+     * Get the transmission options being used by the transport.
+     *
+     * @return array
+     */
+    public function getOptions(): array
+    {
+        return $this->options;
+    }
+
+    /**
+     * Set the transmission options being used by the transport.
+     *
+     * @param array $options
+     *
+     * @return $this
+     */
+    public function setOptions(array $options): SparkPost
+    {
+        $this->options = $options;
 
         return $this;
     }
