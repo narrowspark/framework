@@ -2,10 +2,10 @@
 declare(strict_types=1);
 namespace Viserio\HttpFactory;
 
-use Interop\Http\Factory\StreamFactoryInterface;
+use Viserio\Contracts\HttpFactory\StreamFactory as StreamFactoryContract;
 use Viserio\Http\Stream;
 
-final class StreamFactory implements StreamFactoryInterface
+final class StreamFactory implements StreamFactoryContract
 {
     /**
      * {@inheritdoc}

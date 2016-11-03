@@ -19,7 +19,6 @@
     ],
     "require": {
         "php"                               : "7.0.0 - 7.0.5 || ^7.0.7",
-        "http-interop/http-factory"         : "^0.1",
         "viserio/http"                      : "self.version"
     },
     "require-dev": {
