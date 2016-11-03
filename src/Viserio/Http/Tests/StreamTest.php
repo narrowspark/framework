@@ -2,12 +2,14 @@
 declare(strict_types=1);
 namespace Viserio\Http\Tests;
 
-use Exception;
+use Throwable;
 use Viserio\Http\Stream;
 use Viserio\Http\Stream\NoSeekStream;
 
 class StreamTest extends \PHPUnit_Framework_TestCase
 {
+    public static $isFreadError = false;
+
     /**
      * @expectedException \InvalidArgumentException
      */
@@ -134,7 +136,7 @@ class StreamTest extends \PHPUnit_Framework_TestCase
             try {
                 $fn($stream);
                 $this->fail();
-            } catch (Exception $e) {
+            } catch (Throwable $e) {
             }
         };
 
@@ -189,4 +191,67 @@ class StreamTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals('foo', (string) $stream);
     }
+
+     public function testStreamReadingWithZeroLength()
+    {
+        $r = fopen('php://temp', 'r');
+        $stream = new Stream($r);
+
+        $this->assertSame('', $stream->read(0));
+
+        $stream->close();
+    }
+
+    /**
+     * @expectedException \RuntimeException
+     * @expectedExceptionMessage Length parameter cannot be negative
+     */
+    public function testStreamReadingWithNegativeLength()
+    {
+        $r = fopen('php://temp', 'r');
+        $stream = new Stream($r);
+
+        try {
+            $stream->read(-1);
+        } catch (Throwable $e) {
+            $stream->close();
+            throw $e;
+        }
+
+        $stream->close();
+    }
+
+    /**
+     * @expectedException \RuntimeException
+     * @expectedExceptionMessage Unable to read from stream
+     */
+    public function testStreamReadingFreadError()
+    {
+        self::$isFreadError = true;
+
+        $r = fopen('php://temp', 'r');
+        $stream = new Stream($r);
+
+        try {
+            $stream->read(1);
+        } catch (Throwable $e) {
+            self::$isFreadError = false;
+            $stream->close();
+
+            throw $e;
+        }
+
+        self::$isFreadError = false;
+
+        $stream->close();
+    }
+}
+
+namespace Viserio\Http;
+
+use Viserio\Http\Tests\StreamTest;
+
+function fread($handle, $length)
+{
+    return StreamTest::$isFreadError ? false : \fread($handle, $length);
 }
