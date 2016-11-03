@@ -3,9 +3,9 @@ declare(strict_types=1);
 namespace Viserio\HttpFactory;
 
 use InvalidArgumentException;
-use UnexpectedValueException;
-use Psr\Http\Message\UriInterface;
 use Psr\Http\Message\UploadedFileInterface;
+use Psr\Http\Message\UriInterface;
+use UnexpectedValueException;
 use Viserio\Contracts\HttpFactory\ServerRequestFactory as ServerRequestFactoryContract;
 use Viserio\Contracts\HttpFactory\ServerRequestGlobalFactory as ServerRequestGlobalFactoryContract;
 use Viserio\Http\ServerRequest;
