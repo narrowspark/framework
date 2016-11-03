@@ -192,7 +192,7 @@ class StreamTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('foo', (string) $stream);
     }
 
-     public function testStreamReadingWithZeroLength()
+    public function testStreamReadingWithZeroLength()
     {
         $r = fopen('php://temp', 'r');
         $stream = new Stream($r);
@@ -246,7 +246,6 @@ class StreamTest extends \PHPUnit_Framework_TestCase
         $stream->close();
     }
 }
-
 namespace Viserio\Http;
 
 use Viserio\Http\Tests\StreamTest;
