@@ -26,7 +26,7 @@ class CacheServiceProvider implements ServiceProvider
             },
             CacheItemPoolInterface::class => [self::class, 'registerDefaultCache'],
             'cache.store' => function (ContainerInterface $container) {
-                return $container->get('cache.store');
+                return $container->get(CacheItemPoolInterface::class);
             },
         ];
     }
