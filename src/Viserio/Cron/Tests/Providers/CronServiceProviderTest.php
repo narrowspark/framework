@@ -2,11 +2,11 @@
 declare(strict_types=1);
 namespace Viserio\Cron\Tests\Providers;
 
-use Psr\Cache\CacheItemPoolInterface;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
+use Psr\Cache\CacheItemPoolInterface;
+use Viserio\Cache\Providers\CacheServiceProvider;
 use Viserio\Config\Providers\ConfigServiceProvider;
 use Viserio\Container\Container;
-use Viserio\Cache\Providers\CacheServiceProvider;
 use Viserio\Cron\Providers\CronServiceProvider;
 use Viserio\Cron\Schedule;
 

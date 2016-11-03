@@ -2,9 +2,9 @@
 declare(strict_types=1);
 namespace Viserio\Cron\Tests;
 
-use Psr\Cache\CacheItemPoolInterface;
-use Psr\Cache\CacheItemInterface;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
+use Psr\Cache\CacheItemInterface;
+use Psr\Cache\CacheItemPoolInterface;
 use Viserio\Cron\CallbackCron;
 
 class CallbackCronTest extends \PHPUnit_Framework_TestCase

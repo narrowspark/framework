@@ -3,12 +3,12 @@ declare(strict_types=1);
 namespace Viserio\Cron;
 
 use LogicException;
+use Psr\Cache\CacheItemPoolInterface;
 use Symfony\Component\Process\PhpExecutableFinder;
 use Symfony\Component\Process\ProcessUtils;
 use Viserio\Console\Application;
 use Viserio\Contracts\Container\Traits\ContainerAwareTrait;
 use Viserio\Contracts\Cron\Cron as CronContract;
-use Psr\Cache\CacheItemPoolInterface;
 
 class Schedule
 {

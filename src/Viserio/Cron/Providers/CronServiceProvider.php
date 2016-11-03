@@ -44,9 +44,9 @@ class CronServiceProvider implements ServiceProvider
     public static function createCronCommands(): array
     {
         return [
-            new CronListCommand,
-            new ForgetCommand,
-            new ScheduleRunCommand,
+            new CronListCommand(),
+            new ForgetCommand(),
+            new ScheduleRunCommand(),
         ];
     }
 }

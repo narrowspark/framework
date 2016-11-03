@@ -11,14 +11,14 @@ use Symfony\Component\Console\Command\Command as SymfonyCommand;
 use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Process\PhpExecutableFinder;
+use Symfony\Component\Process\ProcessUtils;
 use Viserio\Console\Command\Command as ViserioCommand;
 use Viserio\Console\Command\ExpressionParser as Parser;
 use Viserio\Console\Input\InputOption;
 use Viserio\Contracts\Console\Application as ApplicationContract;
 use Viserio\Contracts\Container\Traits\ContainerAwareTrait;
 use Viserio\Support\Invoker;
-use Symfony\Component\Process\PhpExecutableFinder;
-use Symfony\Component\Process\ProcessUtils;
 
 class Application extends SymfonyConsole implements ApplicationContract
 {
@@ -215,7 +215,7 @@ class Application extends SymfonyConsole implements ApplicationContract
      */
     public static function phpBinary(): string
     {
-        return ProcessUtils::escapeArgument((new PhpExecutableFinder)->find(false));
+        return ProcessUtils::escapeArgument((new PhpExecutableFinder())->find(false));
     }
 
     /**
