@@ -2,7 +2,10 @@
 declare(strict_types=1);
 namespace Viserio\HttpFactory;
 
+use InvalidArgumentException;
+use UnexpectedValueException;
 use Psr\Http\Message\UriInterface;
+use Psr\Http\Message\UploadedFileInterface;
 use Viserio\Contracts\HttpFactory\ServerRequestFactory as ServerRequestFactoryContract;
 use Viserio\Contracts\HttpFactory\ServerRequestGlobalFactory as ServerRequestGlobalFactoryContract;
 use Viserio\Http\ServerRequest;
@@ -22,20 +25,25 @@ class ServerRequestFactory implements ServerRequestFactoryContract, ServerReques
         array $cookies = null,
         array $files = null
     ) {
-        $server = $_SERVER;
+        $server  = $this->normalizeServer($server ?? $_SERVER);
         $method = $server['REQUEST_METHOD'] ?? 'GET';
         $headers = function_exists('getallheaders') ? getallheaders() : [];
-        $uri = self::getUriFromGlobals();
-        $body = new LazyOpenStream('php://input', 'r+');
-        $protocol = isset($server['SERVER_PROTOCOL']) ? str_replace('HTTP/', '', $server['SERVER_PROTOCOL']) : '1.1';
+        $uri = $this->getUriFromGlobals();
 
-        $serverRequest = new ServerRequest($uri, $method, $headers, $body, $protocol, $server);
+        $serverRequest = new ServerRequest(
+            $uri,
+            $method,
+            $headers,
+            new LazyOpenStream('php://input', 'r+'),
+            $this->marshalProtocolVersion($server),
+            $server
+        );
 
         return $serverRequest
-            ->withCookieParams($_COOKIE)
-            ->withQueryParams($_GET)
-            ->withParsedBody($_POST)
-            ->withUploadedFiles(Util::normalizeFiles($_FILES));
+            ->withCookieParams($cookies ?? $_COOKIE)
+            ->withQueryParams($query ?? $_GET)
+            ->withParsedBody($body ?? $_POST)
+            ->withUploadedFiles(Util::normalizeFiles($files ?? $_FILES));
     }
 
     /**
@@ -83,5 +91,65 @@ class ServerRequestFactory implements ServerRequestFactoryContract, ServerReques
         }
 
         return $uri;
+    }
+
+    /**
+     * Marshal the $_SERVER array
+     *
+     * Pre-processes and returns the $_SERVER superglobal.
+     *
+     * @param array $server
+     *
+     * @return array
+     */
+    protected function normalizeServer(array $server): array
+    {
+        // This seems to be the only way to get the Authorization header on Apache
+        if (! function_exists('apache_request_headers') ||
+            isset($server['HTTP_AUTHORIZATION'])
+        ) {
+            return $server;
+        }
+
+        $headers = apache_request_headers();
+
+        if (isset($headers['Authorization'])) {
+            $server['HTTP_AUTHORIZATION'] = $headers['Authorization'];
+
+            return $server;
+        }
+
+        if (isset($headers['authorization'])) {
+            $server['HTTP_AUTHORIZATION'] = $headers['authorization'];
+
+            return $server;
+        }
+
+        return $server;
+    }
+
+    /**
+     * Return HTTP protocol version (X.Y).
+     *
+     * @param array $server
+     *
+     * @throws \UnexpectedValueException
+     *
+     * @return string
+     */
+    protected function marshalProtocolVersion(array $server): string
+    {
+        if (! isset($server['SERVER_PROTOCOL'])) {
+            return '1.1';
+        }
+
+        if (! preg_match('#^(HTTP/)?(?P<version>[1-9]\d*(?:\.\d)?)$#', $server['SERVER_PROTOCOL'], $matches)) {
+            throw new UnexpectedValueException(sprintf(
+                'Unrecognized protocol version (%s)',
+                $server['SERVER_PROTOCOL']
+            ));
+        }
+
+        return $matches['version'];
     }
 }
