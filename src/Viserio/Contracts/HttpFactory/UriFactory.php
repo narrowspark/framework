@@ -9,10 +9,10 @@ interface UriFactory
      *
      * @param string $uri
      *
-     * @return \Psr\Http\Message\UriInterface
-     *
      * @throws \InvalidArgumentException
-     *  If the given URI cannot be parsed.
+     *                                   If the given URI cannot be parsed.
+     *
+     * @return \Psr\Http\Message\UriInterface
      */
     public function createUri($uri = '');
 }

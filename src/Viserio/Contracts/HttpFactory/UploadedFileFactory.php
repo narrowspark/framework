@@ -17,15 +17,15 @@ interface UploadedFileFactory
      * @see http://php.net/manual/features.file-upload.errors.php
      *
      * @param string|resource $file
-     * @param integer $size in bytes
-     * @param integer $error PHP file upload error
-     * @param string $clientFilename
-     * @param string $clientMediaType
-     *
-     * @return \Psr\Http\Message\UploadedFileInterface
+     * @param int             $size            in bytes
+     * @param int             $error           PHP file upload error
+     * @param string          $clientFilename
+     * @param string          $clientMediaType
      *
      * @throws \InvalidArgumentException
-     *  If the file resource is not readable.
+     *                                   If the file resource is not readable.
+     *
+     * @return \Psr\Http\Message\UploadedFileInterface
      */
     public function createUploadedFile(
         $file,

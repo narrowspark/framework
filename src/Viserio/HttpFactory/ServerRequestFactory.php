@@ -2,9 +2,9 @@
 declare(strict_types=1);
 namespace Viserio\HttpFactory;
 
+use Psr\Http\Message\UriInterface;
 use Viserio\Contracts\HttpFactory\ServerRequestFactory as ServerRequestFactoryContract;
 use Viserio\Contracts\HttpFactory\ServerRequestGlobalFactory as ServerRequestGlobalFactoryContract;
-use Psr\Http\Message\UriInterface;
 use Viserio\Http\ServerRequest;
 use Viserio\Http\Stream\LazyOpenStream;
 use Viserio\Http\Uri;

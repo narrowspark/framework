@@ -7,7 +7,7 @@ interface ResponseFactory
     /**
      * Create a new response.
      *
-     * @param integer $code HTTP status code
+     * @param int $code HTTP status code
      *
      * @return \Psr\Http\Message\ResponseInterface
      */
