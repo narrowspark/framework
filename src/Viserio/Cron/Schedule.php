@@ -5,6 +5,7 @@ namespace Viserio\Cron;
 use LogicException;
 use Symfony\Component\Process\PhpExecutableFinder;
 use Symfony\Component\Process\ProcessUtils;
+use Viserio\Console\Application;
 use Viserio\Contracts\Container\Traits\ContainerAwareTrait;
 use Viserio\Contracts\Cron\Cron as CronContract;
 use Psr\Cache\CacheItemPoolInterface;
@@ -65,7 +66,7 @@ class Schedule
      */
     public function call($callback, array $parameters = []): CallbackCron
     {
-        $cron = new CallbackCron($callback, $this->cache, $parameters);
+        $cron = new CallbackCron($this->cache, $callback, $parameters);
         $cron->setPath($this->workingDirPath);
 
         if ($this->container !== null) {
@@ -94,7 +95,7 @@ class Schedule
         $binary = ProcessUtils::escapeArgument((string) (new PhpExecutableFinder())->find(false));
 
         if (defined('CEREBRO_BINARY')) {
-            $console = ProcessUtils::escapeArgument(CEREBRO_BINARY);
+            $console = Application::cerebroBinary();
         } elseif ($this->console !== null) {
             $console = ProcessUtils::escapeArgument($this->console);
         } else {
@@ -120,7 +121,7 @@ class Schedule
             $command .= ' ' . $this->compileParameters($parameters);
         }
 
-        $cron = new Cron($command, $this->cache);
+        $cron = new Cron($this->cache, $command);
         $cron->setPath($this->workingDirPath);
 
         if ($this->container !== null) {

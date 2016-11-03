@@ -32,7 +32,7 @@ class CallbackCron extends Cron
      *
      * @throws \InvalidArgumentException
      */
-    public function __construct($callback, CacheItemPoolInterface $cache, array $parameters = [])
+    public function __construct(CacheItemPoolInterface $cache, $callback, array $parameters = [])
     {
         if (! is_string($callback) && ! is_callable($callback)) {
             throw new InvalidArgumentException(
@@ -54,7 +54,7 @@ class CallbackCron extends Cron
     {
         if ($this->description) {
             $item = $this->cache->getItem($this->getMutexName());
-            $item->set($this->mutexName());
+            $item->set($this->getMutexName());
             $item->expiresAfter(1440);
 
             $this->cache->save($item);

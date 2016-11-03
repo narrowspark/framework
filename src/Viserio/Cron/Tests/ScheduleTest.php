@@ -3,6 +3,8 @@ declare(strict_types=1);
 namespace Viserio\Cron\Tests;
 
 use Narrowspark\TestingHelper\ArrayContainer;
+use Narrowspark\TestingHelper\Traits\MockeryTrait;
+use Psr\Cache\CacheItemPoolInterface;
 use Symfony\Component\Process\PhpExecutableFinder;
 use Symfony\Component\Process\ProcessUtils;
 use Viserio\Cron\Cron;
@@ -12,9 +14,27 @@ use Viserio\Cron\Tests\Fixture\DummyClassFixture;
 
 class ScheduleTest extends \PHPUnit_Framework_TestCase
 {
+    use MockeryTrait;
+
+    /**
+     * Mocked CacheItemPoolInterface.
+     *
+     * @var \Psr\Cache\CacheItemPoolInterface
+     */
+    protected $cache;
+
+    public function setUp()
+    {
+        parent::setUp();
+
+        $cache = $this->mock(CacheItemPoolInterface::class);
+
+        $this->cache = $cache;
+    }
+
     public function testExecCreatesNewCommand()
     {
-        $schedule = new Schedule(__DIR__, __DIR__);
+        $schedule = new Schedule($this->cache, __DIR__);
         $schedule->exec('path/to/command');
         $schedule->exec('path/to/command -f --foo="bar"');
         $schedule->exec('path/to/command', ['-f']);
@@ -41,7 +61,7 @@ class ScheduleTest extends \PHPUnit_Framework_TestCase
 
     public function testCommandCreatesNewCerebroCommand()
     {
-        $schedule = new Schedule(__DIR__, __DIR__, 'cerebro');
+        $schedule = new Schedule($this->cache, __DIR__, 'cerebro');
 
         $schedule->command('clear:view');
         $schedule->command('clear:view --tries=3');
@@ -65,7 +85,7 @@ class ScheduleTest extends \PHPUnit_Framework_TestCase
 
     public function testCreateNewCerebroCommandUsingCommandClass()
     {
-        $schedule = new Schedule(__DIR__, __DIR__, 'cerebro');
+        $schedule = new Schedule($this->cache, __DIR__, 'cerebro');
         $container = new ArrayContainer([
             ConsoleCerebroCommandFixture::class => new ConsoleCerebroCommandFixture(
                 new DummyClassFixture($schedule)
@@ -75,12 +95,12 @@ class ScheduleTest extends \PHPUnit_Framework_TestCase
         $binary = ProcessUtils::escapeArgument((new PhpExecutableFinder())->find(false));
 
         if (getenv('TRAVIS')) {
-            $cron = new Cron($binary . ' \'cerebro\' foo:bar --force');
+            $cron = new Cron($this->cache, $binary . ' \'cerebro\' foo:bar --force');
         } else {
-            $cron = new Cron($binary . ' "cerebro" foo:bar --force');
+            $cron = new Cron($this->cache, $binary . ' "cerebro" foo:bar --force');
         }
 
-        $cron->setContainer($container)->setMutexPath(__DIR__)->setPath(__DIR__);
+        $cron->setContainer($container)->setPath(__DIR__);
 
         $schedule->setContainer($container, 'cerebro');
 
@@ -102,7 +122,7 @@ class ScheduleTest extends \PHPUnit_Framework_TestCase
 
     public function testCreateNewCerebroCommandUsingCallBack()
     {
-        $schedule = new Schedule(__DIR__, __DIR__, 'cerebro');
+        $schedule = new Schedule($this->cache, __DIR__, 'cerebro');
         $schedule->setContainer(new ArrayContainer([]));
         $schedule->call(function () {
             return 'foo';

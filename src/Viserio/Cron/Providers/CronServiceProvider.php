@@ -7,6 +7,7 @@ use Interop\Container\ServiceProvider;
 use Psr\Cache\CacheItemPoolInterface;
 use Viserio\Contracts\Support\Traits\ServiceProviderConfigAwareTrait;
 use Viserio\Cron\Commands\CronListCommand;
+use Viserio\Cron\Commands\ForgetCommand;
 use Viserio\Cron\Commands\ScheduleRunCommand;
 use Viserio\Cron\Schedule;
 
@@ -43,8 +44,9 @@ class CronServiceProvider implements ServiceProvider
     public static function createCronCommands(): array
     {
         return [
-            new ScheduleRunCommand(),
-            new CronListCommand(),
+            new CronListCommand,
+            new ForgetCommand,
+            new ScheduleRunCommand,
         ];
     }
 }

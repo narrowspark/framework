@@ -17,6 +17,8 @@ use Viserio\Console\Input\InputOption;
 use Viserio\Contracts\Console\Application as ApplicationContract;
 use Viserio\Contracts\Container\Traits\ContainerAwareTrait;
 use Viserio\Support\Invoker;
+use Symfony\Component\Process\PhpExecutableFinder;
+use Symfony\Component\Process\ProcessUtils;
 
 class Application extends SymfonyConsole implements ApplicationContract
 {
@@ -202,6 +204,30 @@ class Application extends SymfonyConsole implements ApplicationContract
     public static function starting(Closure $callback)
     {
         static::$bootstrappers[] = $callback;
+    }
+
+    /**
+     * The PHP executable.
+     *
+     * @return string
+     *
+     * @codeCoverageIgnore
+     */
+    public static function phpBinary(): string
+    {
+        return ProcessUtils::escapeArgument((new PhpExecutableFinder)->find(false));
+    }
+
+    /**
+     * The Cerebro executable.
+     *
+     * @return string
+     *
+     * @codeCoverageIgnore
+     */
+    public static function cerebroBinary(): string
+    {
+        return defined('CEREBRO_BINARY') ? ProcessUtils::escapeArgument(CEREBRO_BINARY) : 'cerebro';
     }
 
     /**

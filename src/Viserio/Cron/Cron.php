@@ -136,7 +136,7 @@ class Cron implements CronContract
     protected $withoutOverlapping = false;
 
     /**
-     * The cache store implementation.
+     * The psr-6 implementation.
      *
      * @var \Psr\Cache\CacheItemPoolInterface
      */
@@ -148,10 +148,10 @@ class Cron implements CronContract
      * @param string                            $command
      * @param \Psr\Cache\CacheItemPoolInterface $cache
      */
-    public function __construct(string $command, CacheItemPoolInterface $cache)
+    public function __construct(CacheItemPoolInterface $cache, string $command)
     {
-        $this->command = $command;
         $this->cache = $cache;
+        $this->command = $command;
         $this->output = $this->getDefaultOutput();
     }
 

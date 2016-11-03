@@ -3,10 +3,14 @@ declare(strict_types=1);
 namespace Viserio\Cron\Tests;
 
 use Cake\Chronos\Chronos;
+use Narrowspark\TestingHelper\Traits\MockeryTrait;
+use Psr\Cache\CacheItemPoolInterface;
 use Viserio\Cron\Cron;
 
 class CronTest extends \PHPUnit_Framework_TestCase
 {
+    use MockeryTrait;
+
     /**
      * The default configuration timezone.
      *
@@ -14,11 +18,24 @@ class CronTest extends \PHPUnit_Framework_TestCase
      */
     protected $defaultTimezone;
 
+    /**
+     * Mocked CacheItemPoolInterface.
+     *
+     * @var \Psr\Cache\CacheItemPoolInterface
+     */
+    protected $cache;
+
     public function setUp()
     {
+        parent::setUp();
+
         $this->defaultTimezone = date_default_timezone_get();
 
         date_default_timezone_set('UTC');
+
+        $cache = $this->mock(CacheItemPoolInterface::class);
+
+        $this->cache = $cache;
     }
 
     public function tearDown()
@@ -30,7 +47,7 @@ class CronTest extends \PHPUnit_Framework_TestCase
 
     public function testBasicCronCompilation()
     {
-        $cron = new Cron('php foo');
+        $cron = new Cron($this->cache, 'php foo');
 
         $this->assertEquals('* * * * * *', $cron->getExpression());
         $this->assertTrue($cron->isDue('test'));
@@ -41,12 +58,12 @@ class CronTest extends \PHPUnit_Framework_TestCase
             return true;
         })->filtersPass());
 
-        $cron = new Cron('php foo');
+        $cron = new Cron($this->cache, 'php foo');
 
         $this->assertEquals('* * * * * *', $cron->getExpression());
         $this->assertFalse($cron->setEnvironments('local')->isDue('test'));
 
-        $cron = new Cron('php foo');
+        $cron = new Cron($this->cache, 'php foo');
 
         $this->assertEquals('* * * * * *', $cron->getExpression());
         $this->assertFalse($cron->when(function () {
@@ -56,16 +73,16 @@ class CronTest extends \PHPUnit_Framework_TestCase
 
     public function testCronChainedRulesShouldBeCommutative()
     {
-        $cronA = new Cron('php foo');
-        $cronB = new Cron('php foo');
+        $cronA = new Cron($this->cache, 'php foo');
+        $cronB = new Cron($this->cache, 'php foo');
 
         $this->assertEquals(
             $cronA->daily()->hourly()->getExpression(),
             $cronB->hourly()->daily()->getExpression()
         );
 
-        $cronA = new Cron('php foo');
-        $cronB = new Cron('php foo');
+        $cronA = new Cron($this->cache, 'php foo');
+        $cronB = new Cron($this->cache, 'php foo');
 
         $this->assertEquals(
             $cronA->weekdays()->hourly()->getExpression(),
@@ -75,14 +92,14 @@ class CronTest extends \PHPUnit_Framework_TestCase
 
     public function testGetExpression()
     {
-        $cron = new Cron('');
+        $cron = new Cron($this->cache, '');
 
         $this->assertSame('* * * * * *', $cron->getExpression());
     }
 
     public function testCron()
     {
-        $cron = new Cron('');
+        $cron = new Cron($this->cache, '');
         $cron->cron('*');
 
         $this->assertSame('*', $cron->getExpression());
@@ -90,161 +107,161 @@ class CronTest extends \PHPUnit_Framework_TestCase
 
     public function testHourly()
     {
-        $cron = new Cron('');
+        $cron = new Cron($this->cache, '');
 
         $this->assertSame('0 * * * * *', $cron->hourly()->getExpression());
     }
 
     public function testDaily()
     {
-        $cron = new Cron('');
+        $cron = new Cron($this->cache, '');
 
         $this->assertSame('0 0 * * * *', $cron->daily()->getExpression());
     }
 
     public function testMonthly()
     {
-        $cron = new Cron('');
+        $cron = new Cron($this->cache, '');
 
         $this->assertSame('0 0 1 * * *', $cron->monthly()->getExpression());
     }
 
     public function testYearly()
     {
-        $cron = new Cron('');
+        $cron = new Cron($this->cache, '');
 
         $this->assertSame('0 0 1 1 * *', $cron->yearly()->getExpression());
     }
 
     public function testQuarterly()
     {
-        $cron = new Cron('');
+        $cron = new Cron($this->cache, '');
 
         $this->assertSame('0 0 1 */3 * *', $cron->quarterly()->getExpression());
     }
 
     public function testEveryMinute()
     {
-        $cron = new Cron('');
+        $cron = new Cron($this->cache, '');
 
         $this->assertSame('* * * * * *', $cron->everyMinute()->getExpression());
     }
 
     public function testEveryFiveMinutes()
     {
-        $cron = new Cron('');
+        $cron = new Cron($this->cache, '');
 
         $this->assertSame('*/5 * * * * *', $cron->everyFiveMinutes()->getExpression());
     }
 
     public function testEveryTenMinutes()
     {
-        $cron = new Cron('');
+        $cron = new Cron($this->cache, '');
 
         $this->assertSame('*/10 * * * * *', $cron->everyTenMinutes()->getExpression());
     }
 
     public function testEveryThirtyMinutes()
     {
-        $cron = new Cron('');
+        $cron = new Cron($this->cache, '');
 
         $this->assertSame('0,30 * * * * *', $cron->everyThirtyMinutes()->getExpression());
     }
 
     public function testDays()
     {
-        $cron = new Cron('');
+        $cron = new Cron($this->cache, '');
 
         $this->assertSame('* * * * 1 *', $cron->days(1)->getExpression());
     }
 
     public function testMonthlyOn()
     {
-        $cron = new Cron('');
+        $cron = new Cron($this->cache, '');
 
         $this->assertSame('0 15 4 * * *', $cron->monthlyOn(4, '15:00')->getExpression());
     }
 
     public function testDailyAt()
     {
-        $cron = new Cron('');
+        $cron = new Cron($this->cache, '');
 
         $this->assertSame('30 10 * * * *', $cron->dailyAt('10:30')->getExpression());
     }
 
     public function testTwiceDaily()
     {
-        $cron = new Cron('');
+        $cron = new Cron($this->cache, '');
 
         $this->assertSame('0 1,13 * * * *', $cron->twiceDaily()->getExpression());
     }
 
     public function testWeekdays()
     {
-        $cron = new Cron('');
+        $cron = new Cron($this->cache, '');
 
         $this->assertSame('* * * * 1-5 *', $cron->weekdays()->getExpression());
     }
 
     public function testMondays()
     {
-        $cron = new Cron('');
+        $cron = new Cron($this->cache, '');
 
         $this->assertSame('* * * * 1 *', $cron->mondays()->getExpression());
     }
 
     public function testTuesdays()
     {
-        $cron = new Cron('');
+        $cron = new Cron($this->cache, '');
 
         $this->assertSame('* * * * 2 *', $cron->tuesdays()->getExpression());
     }
 
     public function testWednesdays()
     {
-        $cron = new Cron('');
+        $cron = new Cron($this->cache, '');
 
         $this->assertSame('* * * * 3 *', $cron->wednesdays()->getExpression());
     }
 
     public function testThursdays()
     {
-        $cron = new Cron('');
+        $cron = new Cron($this->cache, '');
 
         $this->assertSame('* * * * 4 *', $cron->thursdays()->getExpression());
     }
 
     public function testFridays()
     {
-        $cron = new Cron('');
+        $cron = new Cron($this->cache, '');
 
         $this->assertSame('* * * * 5 *', $cron->fridays()->getExpression());
     }
 
     public function testSaturdays()
     {
-        $cron = new Cron('');
+        $cron = new Cron($this->cache, '');
 
         $this->assertSame('* * * * 6 *', $cron->saturdays()->getExpression());
     }
 
     public function testSundays()
     {
-        $cron = new Cron('');
+        $cron = new Cron($this->cache, '');
 
         $this->assertSame('* * * * 0 *', $cron->sundays()->getExpression());
     }
 
     public function testWeekly()
     {
-        $cron = new Cron('');
+        $cron = new Cron($this->cache, '');
 
         $this->assertSame('0 0 * * 0 *', $cron->weekly()->getExpression());
     }
 
     public function testWeeklyOn()
     {
-        $cron = new Cron('');
+        $cron = new Cron($this->cache, '');
 
         $this->assertSame('0 0 * * 1 *', $cron->weeklyOn(1)->getExpression());
     }
@@ -253,7 +270,7 @@ class CronTest extends \PHPUnit_Framework_TestCase
     {
         $quote = (DIRECTORY_SEPARATOR == '\\') ? '"' : "'";
 
-        $cron = new Cron('php -i');
+        $cron = new Cron($this->cache, 'php -i');
         $defaultOutput = (DIRECTORY_SEPARATOR == '\\') ? 'NUL' : '/dev/null';
 
         $this->assertSame("php -i > {$quote}{$defaultOutput}{$quote} 2>&1 &", $cron->buildCommand());
@@ -261,21 +278,21 @@ class CronTest extends \PHPUnit_Framework_TestCase
 
     public function testGetAndSetUser()
     {
-        $cron = new Cron('');
+        $cron = new Cron($this->cache, '');
 
         $this->assertSame('root', $cron->setUser('root')->getUser());
     }
 
     public function testGetAndSetPath()
     {
-        $cron = new Cron('');
+        $cron = new Cron($this->cache, '');
 
         $this->assertSame(__DIR__, $cron->setPath(__DIR__)->getPath());
     }
 
     public function testEnvironments()
     {
-        $cron = new Cron('');
+        $cron = new Cron($this->cache, '');
 
         $cron->setEnvironments(['dev', 'prod']);
 
@@ -286,12 +303,12 @@ class CronTest extends \PHPUnit_Framework_TestCase
     {
         $quote = (DIRECTORY_SEPARATOR == '\\') ? '"' : "'";
 
-        $cron = new Cron('php -i');
+        $cron = new Cron($this->cache, 'php -i');
         $cron->sendOutputTo('/dev/null');
 
         $this->assertSame("php -i > {$quote}/dev/null{$quote} 2>&1 &", $cron->buildCommand());
 
-        $cron = new Cron('php -i');
+        $cron = new Cron($this->cache, 'php -i');
         $cron->sendOutputTo('/my folder/foo.log');
 
         $this->assertSame("php -i > {$quote}/my folder/foo.log{$quote} 2>&1 &", $cron->buildCommand());
@@ -301,7 +318,7 @@ class CronTest extends \PHPUnit_Framework_TestCase
     {
         $quote = (DIRECTORY_SEPARATOR == '\\') ? '"' : "'";
 
-        $cron = new Cron('php -i');
+        $cron = new Cron($this->cache, 'php -i');
         $cron->appendOutputTo('/dev/null');
 
         $this->assertSame("php -i >> {$quote}/dev/null{$quote} 2>&1 &", $cron->buildCommand());
@@ -309,7 +326,7 @@ class CronTest extends \PHPUnit_Framework_TestCase
 
     public function testGetSummaryForDisplay()
     {
-        $cron = new Cron('php -i');
+        $cron = new Cron($this->cache, 'php -i');
 
         $this->assertSame($cron->buildCommand(), $cron->getSummaryForDisplay());
 
@@ -322,7 +339,7 @@ class CronTest extends \PHPUnit_Framework_TestCase
     {
         Chronos::setTestNow(Chronos::now()->startOfDay()->addHours(9));
 
-        $cron = new Cron('php foo');
+        $cron = new Cron($this->cache, 'php foo');
 
         $this->assertTrue($cron->between('8:00', '10:00')->filtersPass());
         $this->assertTrue($cron->between('9:00', '9:00')->filtersPass());
@@ -335,13 +352,13 @@ class CronTest extends \PHPUnit_Framework_TestCase
     {
         Chronos::setTestNow(Chronos::create(2015, 1, 1, 0, 0, 0));
 
-        $cron = new Cron('php foo');
+        $cron = new Cron($this->cache, 'php foo');
 
         $this->assertEquals('* * * * 4 *', $cron->thursdays()->getExpression());
         $this->assertTrue($cron->isDue('test'));
 
         // TODO fix test
-        // $cron2 = new Cron('php foo');
+        // $cron2 = new Cron($this->cache, 'php foo');
         // $cron2->wednesdays()->dailyAt('19:00');
         // $cron2->setTimezone('UTC');
 
@@ -353,7 +370,7 @@ class CronTest extends \PHPUnit_Framework_TestCase
     {
         $_SERVER['test'] = false;
 
-        $cron = new Cron('php -i');
+        $cron = new Cron($this->cache, 'php -i');
 
         $cron->before(function () {
             $_SERVER['test'] = 'before';
