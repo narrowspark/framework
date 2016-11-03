@@ -41,11 +41,11 @@ class CronServiceProvider implements ServiceProvider
         return $scheduler;
     }
 
-    public static function createCronCommands(): array
+    public static function createCronCommands(ContainerInterface $container): array
     {
         return [
             new CronListCommand(),
-            new ForgetCommand(),
+            new ForgetCommand($container->get(CacheItemPoolInterface::class)),
             new ScheduleRunCommand(),
         ];
     }
