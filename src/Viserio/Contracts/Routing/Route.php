@@ -137,6 +137,22 @@ interface Route
     public function getPrefix(): string;
 
     /**
+     * Add a suffix to the route URI.
+     *
+     * @param string $suffix
+     *
+     * @return $this
+     */
+    public function addSuffix(string $suffix): Route;
+
+    /**
+     * Get the suffix of the route instance.
+     *
+     * @return string|null
+     */
+    public function getSuffix();
+
+    /**
      * Set a parameter to the given value.
      *
      * @param string $name

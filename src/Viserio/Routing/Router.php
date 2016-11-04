@@ -107,6 +107,8 @@ class Router implements RouterContract
      * Get the cache path for the compiled routes.
      *
      * @return string
+     *
+     * @codeCoverageIgnore
      */
     public function getCachePath(): string
     {
@@ -272,10 +274,7 @@ class Router implements RouterContract
     }
 
     /**
-     * Create a route group with shared attributes.
-     *
-     * @param array           $attributes
-     * @param \Closure|string $routes
+     * {@inheritdoc}
      */
     public function group(array $attributes, $routes)
     {
@@ -293,11 +292,7 @@ class Router implements RouterContract
     }
 
     /**
-     * Merge the given array with the last group stack.
-     *
-     * @param array $new
-     *
-     * @return array
+     * {@inheritdoc}
      */
     public function mergeWithLastGroup(array $new): array
     {
@@ -305,12 +300,7 @@ class Router implements RouterContract
     }
 
     /**
-     * Merge the given group attributes.
-     *
-     * @param array $new
-     * @param array $old
-     *
-     * @return array
+     * {@inheritdoc}
      */
     public function mergeGroup(array $new, array $old): array
     {
@@ -328,16 +318,14 @@ class Router implements RouterContract
         );
 
         if (isset($old['as'])) {
-            $new['as'] = $old['as'] . (isset($new['as']) ? $new['as'] : '');
+            $new['as'] = $old['as'] . ($new['as'] ?? '');
         }
 
         return array_merge_recursive(Arr::except($old, ['namespace', 'prefix', 'suffix', 'where', 'as']), $new);
     }
 
     /**
-     * Get the suffix from the last group on the stack.
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function getLastGroupSuffix(): string
     {
@@ -351,9 +339,7 @@ class Router implements RouterContract
     }
 
     /**
-     * Get the prefix from the last group on the stack.
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function getLastGroupPrefix(): string
     {
@@ -367,9 +353,7 @@ class Router implements RouterContract
     }
 
     /**
-     * Determine if the router currently has a group stack.
-     *
-     * @return bool
+     * {@inheritdoc}
      */
     public function hasGroupStack(): bool
     {
@@ -377,9 +361,7 @@ class Router implements RouterContract
     }
 
     /**
-     * Get the current group stack for the router.
-     *
-     * @return array
+     * {@inheritdoc}
      */
     public function getGroupStack(): array
     {
@@ -613,6 +595,10 @@ class Router implements RouterContract
     protected function formatUsesPrefix(array $new, array $old)
     {
         if (isset($new['namespace'])) {
+            if (strpos($new['namespace'], '\\') === 0) {
+                return trim($new['namespace'], '\\');
+            }
+
             return isset($old['namespace']) ?
                 trim($old['namespace'], '\\') . '\\' . trim($new['namespace'], '\\') :
                 trim($new['namespace'], '\\');

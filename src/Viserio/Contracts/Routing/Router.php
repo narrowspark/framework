@@ -165,6 +165,61 @@ interface Router
     public function getParameters(): array;
 
     /**
+     * Create a route group with shared attributes.
+     *
+     * @param array           $attributes
+     * @param \Closure|string $routes
+     */
+    public function group(array $attributes, $routes);
+
+    /**
+     * Merge the given array with the last group stack.
+     *
+     * @param array $new
+     *
+     * @return array
+     */
+    public function mergeWithLastGroup(array $new): array;
+
+    /**
+     * Merge the given group attributes.
+     *
+     * @param array $new
+     * @param array $old
+     *
+     * @return array
+     */
+    public function mergeGroup(array $new, array $old): array;
+
+    /**
+     * Get the suffix from the last group on the stack.
+     *
+     * @return string
+     */
+    public function getLastGroupSuffix(): string;
+
+    /**
+     * Get the prefix from the last group on the stack.
+     *
+     * @return string
+     */
+    public function getLastGroupPrefix(): string;
+
+    /**
+     * Determine if the router currently has a group stack.
+     *
+     * @return bool
+     */
+    public function hasGroupStack(): bool;
+
+    /**
+     * Get the current group stack for the router.
+     *
+     * @return array
+     */
+    public function getGroupStack(): array;
+
+    /**
      * Add a middleware to all routes.
      *
      * @param \Interop\Http\Middleware\MiddlewareInterface|\Interop\Http\Middleware\ServerMiddlewareInterface $middleware

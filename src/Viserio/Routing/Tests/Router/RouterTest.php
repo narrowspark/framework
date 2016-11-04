@@ -69,6 +69,60 @@ class RouterTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    public function testMergingControllerUses()
+    {
+        $router = $this->router;
+        $router->group(['namespace' => 'Namespace'], function () use ($router) {
+            $router->get('/foo/bar', 'Controller::action');
+        });
+        $routes = $router->getRoutes()->getRoutes();
+        $action = $routes[0]->getAction();
+
+        $this->assertEquals('Namespace\\Controller::action', $action['controller']);
+
+        $router = $this->router;
+        $router->group(['namespace' => 'Namespace'], function () use ($router) {
+            $router->get('foo/bar', '\\Controller::action');
+        });
+        $routes = $router->getRoutes()->getRoutes();
+        $action = $routes[0]->getAction();
+
+        $this->assertEquals('\Controller::action', $action['controller']);
+
+        $router = $this->router;
+        $router->group(['namespace' => 'Namespace'], function () use ($router) {
+            $router->group(['namespace' => 'Nested'], function () use ($router) {
+                $router->get('foo/bar', 'Controller::action');
+            });
+        });
+        $routes = $router->getRoutes()->getRoutes();
+        $action = $routes[0]->getAction();
+
+        $this->assertEquals('Namespace\\Nested\\Controller::action', $action['controller']);
+
+        $router = $this->router;
+        $router->group(['namespace' => 'Namespace'], function () use ($router) {
+            $router->group(['namespace' => '\GlobalScope'], function () use ($router) {
+                $router->get('foo/bar', 'Controller::action');
+            });
+        });
+        $routes = $router->getRoutes()->getRoutes();
+        $action = $routes[0]->getAction();
+
+        $this->assertEquals('GlobalScope\\Controller::action', $action['controller']);
+
+        $router = $this->router;
+        $router->group(['prefix' => 'baz'], function () use ($router) {
+            $router->group(['namespace' => 'Namespace'], function () use ($router) {
+                $router->get('foo/bar', 'Controller::action');
+            });
+        });
+        $routes = $router->getRoutes()->getRoutes();
+        $action = $routes[1]->getAction();
+
+        $this->assertEquals('Namespace\\Controller::action', $action['controller']);
+    }
+
     public function testRouteGroupingPrefixWithAs()
     {
         $router = $this->router;

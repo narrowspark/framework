@@ -277,11 +277,7 @@ class Route implements RouteContract
     }
 
     /**
-     * Add a suffix to the route URI.
-     *
-     * @param string $suffix
-     *
-     * @return $this
+     * {@inheritdoc}
      */
     public function addSuffix(string $suffix): RouteContract
     {
@@ -293,9 +289,7 @@ class Route implements RouteContract
     }
 
     /**
-     * Get the suffix of the route instance.
-     *
-     * @return string|null
+     * {@inheritdoc}
      */
     public function getSuffix()
     {
