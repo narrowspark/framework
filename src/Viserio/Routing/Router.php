@@ -362,6 +362,8 @@ class Router implements RouterContract
 
     /**
      * {@inheritdoc}
+     *
+     * @codeCoverageIgnore
      */
     public function getGroupStack(): array
     {

@@ -8,6 +8,7 @@ use ReflectionClass;
 use Viserio\HttpFactory\ResponseFactory;
 use Viserio\HttpFactory\ServerRequestFactory;
 use Viserio\Routing\Router;
+use Viserio\Events\Dispatcher;
 
 abstract class RouteRouterBaseTest extends \PHPUnit_Framework_TestCase
 {
@@ -20,9 +21,11 @@ abstract class RouteRouterBaseTest extends \PHPUnit_Framework_TestCase
         parent::setUp();
 
         $name = (new ReflectionClass($this))->getShortName();
-        $router = new Router($this->mock(ContainerInterface::class));
+        $container = $this->mock(ContainerInterface::class);
+        $router = new Router($container);
         $router->setCachePath(__DIR__ . '/../Cache/' . $name . '.cache');
         $router->refreshCache(true);
+        $router->setEventsDispatcher(new Dispatcher($container));
 
         $this->definitions($router);
 
