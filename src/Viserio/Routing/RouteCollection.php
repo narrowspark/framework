@@ -9,13 +9,6 @@ use Viserio\Contracts\Routing\RouteCollection as RouteCollectionContract;
 class RouteCollection implements RouteCollectionContract
 {
     /**
-     * An array of the routes keyed by method.
-     *
-     * @var array
-     */
-    protected $routes = [];
-
-    /**
      * An flattened array of all of the routes.
      *
      * @var array
@@ -42,6 +35,7 @@ class RouteCollection implements RouteCollectionContract
     public function add(RouteContract $route): RouteContract
     {
         $domainAndUri = $route->getDomain() . $route->getUri();
+
         $this->allRoutes[implode($route->getMethods(), '|') . $domainAndUri] = $route;
 
         $this->addLookups($route);
