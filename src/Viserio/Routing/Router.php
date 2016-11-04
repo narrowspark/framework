@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Routing;
 
 use Closure;
+use Narrowspark\Arr\Arr;
 use Interop\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -271,6 +272,121 @@ class Router implements RouterContract
     }
 
     /**
+     * Create a route group with shared attributes.
+     *
+     * @param array           $attributes
+     * @param \Closure|string $routes
+     */
+    public function group(array $attributes, $routes)
+    {
+        $this->updateGroupStack($attributes);
+
+        $router = $this;
+
+        if ($routes instanceof Closure) {
+            $routes($router);
+        } else {
+            require $routes;
+        }
+
+        array_pop($this->groupStack);
+    }
+
+    /**
+     * Merge the given array with the last group stack.
+     *
+     * @param array $new
+     *
+     * @return array
+     */
+    public function mergeWithLastGroup(array $new): array
+    {
+        return $this->mergeGroup($new, end($this->groupStack));
+    }
+
+    /**
+     * Merge the given group attributes.
+     *
+     * @param array  $new
+     * @param array $old
+     *
+     * @return array
+     */
+    public function mergeGroup(array $new, array $old): array
+    {
+        $new['namespace'] = $this->formatUsesPrefix($new, $old);
+        $new['prefix'] = $this->formatGroupPrefix($new, $old);
+        $new['suffix'] = $this->formatGroupSuffix($new, $old);
+
+        if (isset($new['domain'])) {
+            unset($old['domain']);
+        }
+
+        $new['where'] = array_merge(
+            isset($old['where']) ? $old['where'] : [],
+            isset($new['where']) ? $new['where'] : []
+        );
+
+        if (isset($old['as'])) {
+            $new['as'] = $old['as'].(isset($new['as']) ? $new['as'] : '');
+        }
+
+        return array_merge_recursive(Arr::except($old, ['namespace', 'prefix', 'suffix', 'where', 'as']), $new);
+    }
+
+    /**
+     * Get the suffix from the last group on the stack.
+     *
+     * @return string
+     */
+    public function getLastGroupSuffix(): string
+    {
+        if (! empty($this->groupStack)) {
+            $last = end($this->groupStack);
+
+            return $last['suffix'] ?? '';
+        }
+
+        return '';
+    }
+
+    /**
+     * Get the prefix from the last group on the stack.
+     *
+     * @return string
+     */
+    public function getLastGroupPrefix(): string
+    {
+        if (! empty($this->groupStack)) {
+            $last = end($this->groupStack);
+
+            return isset($last['prefix']) ? $last['prefix'] : '';
+        }
+
+        return '';
+    }
+
+    /**
+     * Determine if the router currently has a group stack.
+     *
+     * @return bool
+     */
+    public function hasGroupStack(): bool
+    {
+        return ! empty($this->groupStack);
+    }
+
+    /**
+     * Get the current group stack for the router.
+     *
+     * @return array
+     */
+    public function getGroupStack(): array
+    {
+        return $this->groupStack;
+    }
+
+    /**
      * {@inheritdoc}
      *
      * @codeCoverageIgnore
@@ -362,9 +478,13 @@ class Router implements RouterContract
             $action = $this->convertToControllerAction($action);
         }
 
-        $route = new Route($methods, $this->prefix($uri), $action);
+        $route = new Route($methods, $this->prefix($this->suffix($uri)), $action);
         $route->setContainer($this->getContainer());
         $route->setInvoker($this->getInvoker());
+
+        if ($this->hasGroupStack()) {
+            $this->mergeGroupAttributesIntoRoute($route);
+        }
 
         $this->addWhereClausesToRoute($route);
 
@@ -375,10 +495,8 @@ class Router implements RouterContract
      * Add the necessary where clauses to the route based on its initial registration.
      *
      * @param \Viserio\Contracts\Routing\Route $route
-     *
-     * @return \Viserio\Contracts\Routing\Route
      */
-    protected function addWhereClausesToRoute(RouteContract $route): RouteContract
+    protected function addWhereClausesToRoute(RouteContract $route)
     {
         $where = $route->getAction()['where'] ?? [];
         $patern = array_merge($this->patterns, $where);
@@ -386,9 +504,20 @@ class Router implements RouterContract
         foreach ($patern as $name => $value) {
             $route->where($name, $value);
         }
-
-        return $route;
     }
+
+    /**
+     * Merge the group stack with the controller action.
+     *
+     * @param \Viserio\Contracts\Routing\Route $route
+     */
+    protected function mergeGroupAttributesIntoRoute(RouteContract $route)
+    {
+        $action = $this->mergeWithLastGroup($route->getAction());
+
+        $route->setAction($action);
+    }
+
 
     /**
      * Determine if the action is routing to a controller.
@@ -419,12 +548,27 @@ class Router implements RouterContract
             $action = ['uses' => $action];
         }
 
-        // Here we will set this controller name on the action array just so we always
-        // have a copy of it for reference if we need it. This can be used while we
-        // search for a controller name or do some other type of fetch operation.
+        if (! empty($this->groupStack)) {
+            $action['uses'] = $this->prependGroupUses($action['uses']);
+        }
+
         $action['controller'] = $action['uses'];
 
         return $action;
+    }
+
+    /**
+     * Prepend the last group uses onto the use clause.
+     *
+     * @param string $uses
+     *
+     * @return string
+     */
+    protected function prependGroupUses(string $uses): string
+    {
+        $group = end($this->groupStack);
+
+        return isset($group['namespace']) && strpos($uses, '\\') !== 0 ? $group['namespace'] . '\\' . $uses : $uses;
     }
 
     /**
@@ -434,9 +578,98 @@ class Router implements RouterContract
      *
      * @return string
      */
-    protected function prefix($uri)
+    protected function prefix(string $uri): string
     {
-        return '/' . trim($uri, '/');
+        $trimed = trim($this->getLastGroupPrefix(), '/') . '/' . trim($uri, '/');
+
+        if (! $trimed) {
+            return '/';
+        } elseif (substr($trimed, 0, 1) === '/') {
+            return $trimed;
+        }
+
+        return '/' . $trimed;
+    }
+
+    /**
+     * Suffix the given URI with the last suffix.
+     *
+     * @param string $uri
+     *
+     * @return string
+     */
+    protected function suffix(string $uri): string
+    {
+        return trim($uri) . trim($this->getLastGroupSuffix());
+    }
+
+    /**
+     * Format the uses prefix for the new group attributes.
+     *
+     * @param array $new
+     * @param array $old
+     *
+     * @return string|null
+     */
+    protected function formatUsesPrefix(array $new, array $old)
+    {
+        if (isset($new['namespace'])) {
+            return isset($old['namespace']) ?
+                trim($old['namespace'], '\\').'\\'.trim($new['namespace'], '\\') :
+                trim($new['namespace'], '\\');
+        }
+
+        return $old['namespace'] ?? null;
+    }
+    /**
+     * Format the prefix for the new group attributes.
+     *
+     * @param array $new
+     * @param array $old
+     *
+     * @return string|null
+     */
+    protected function formatGroupPrefix(array $new, array $old)
+    {
+        $oldPrefix = $old['prefix'] ?? null;
+
+        if (isset($new['prefix'])) {
+            return trim($oldPrefix, '/') . '/' . trim($new['prefix'], '/');
+        }
+
+        return $oldPrefix;
+    }
+    /**
+     * Format the suffix for the new group attributes.
+     *
+     * @param array $new
+     * @param array $old
+     *
+     * @return string|null
+     */
+    protected function formatGroupSuffix(array $new, array $old)
+    {
+        $oldSuffix = $old['suffix'] ?? null;
+
+        if (isset($new['suffix'])) {
+            return trim($new['suffix']).trim($oldSuffix);
+        }
+
+        return $oldSuffix;
+    }
+
+    /**
+     * Update the group stack with the given attributes.
+     *
+     * @param array $attributes
+     */
+    protected function updateGroupStack(array $attributes)
+    {
+        if (! empty($this->groupStack)) {
+            $attributes = $this->mergeGroup($attributes, end($this->groupStack));
+        }
+
+        $this->groupStack[] = $attributes;
     }
 
     /**

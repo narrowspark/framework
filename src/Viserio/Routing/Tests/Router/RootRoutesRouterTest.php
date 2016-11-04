@@ -22,6 +22,9 @@ class RootRoutesRouterTest extends RouteRouterBaseTest
             ['GET', '/foo/bar/åαф', 'Hello'],
             ['GET', '/middleware3', 'index-foo-middleware-controller-closure'],
             ['GET', '/middleware4', 'index--controller-closure'],
+            ['HEAD', '/all/users', 'all-users'],
+            ['HEAD', '/noslash/users', 'all-users'],
+            ['HEAD', '/slash/users', 'all-users'],
         ];
     }
 
@@ -90,6 +93,7 @@ class RootRoutesRouterTest extends RouteRouterBaseTest
                     ->createStream('Middleware')
                 );
         }])->setParameter('name', 'middleware');
+
         $router->get('/middleware2', ['middleware.with' => new FakeMiddleware(), 'uses' => function ($request, $args) {
             return (new ResponseFactory())
                 ->createResponse()
@@ -107,10 +111,15 @@ class RootRoutesRouterTest extends RouteRouterBaseTest
             'uses' => RouteTestClosureMiddlewareController::class . '::index',
             'middleware.with' => new FooMiddleware(),
         ])->setParameter('name', 'middleware3');
+
         $router->get('/middleware4', [
             'uses' => RouteTestClosureMiddlewareController::class . '::index',
             'middleware.with' => new FooMiddleware(),
             'middleware.without' => new FooMiddleware(),
         ])->setParameter('name', 'middleware4');
+
+        $router->group(['prefix' => 'all/'], __DIR__ . '/../Fixture/routes.php');
+        $router->group(['prefix' => 'noslash'], __DIR__ . '/../Fixture/routes.php');
+        $router->group(['prefix' => '/slash'], __DIR__ . '/../Fixture/routes.php');
     }
 }

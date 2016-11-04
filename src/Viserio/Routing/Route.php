@@ -94,6 +94,10 @@ class Route implements RouteContract
         if (isset($this->action['prefix'])) {
             $this->addPrefix($this->action['prefix']);
         }
+
+        if (isset($this->action['suffix'])) {
+            $this->addSuffix($this->action['suffix']);
+        }
     }
 
     /**
@@ -133,7 +137,11 @@ class Route implements RouteContract
      */
     public function getDomain()
     {
-        return $this->action['domain'] ?? null;
+        if (isset($this->action['domain'])) {
+            return str_replace(['http://', 'https://'], '', $this->action['domain']);
+        }
+
+        return null;
     }
 
     /**
@@ -266,6 +274,32 @@ class Route implements RouteContract
     public function getPrefix(): string
     {
         return $this->action['prefix'] ?? '';
+    }
+
+    /**
+     * Add a suffix to the route URI.
+     *
+     * @param string $suffix
+     *
+     * @return $this
+     */
+    public function addSuffix(string $suffix): RouteContract
+    {
+        $uri = rtrim($this->uri).ltrim($suffix);
+
+        $this->uri = trim($uri);
+
+        return $this;
+    }
+
+    /**
+     * Get the suffix of the route instance.
+     *
+     * @return string|null
+     */
+    public function getSuffix()
+    {
+        return $this->action['suffix'] ?? null;
     }
 
     /**
