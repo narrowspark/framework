@@ -212,6 +212,13 @@ interface Route
     public function getSegments(): array;
 
     /**
+     * Get the controller instance for the route.
+     *
+     * @return mixed
+     */
+    public function getController();
+
+    /**
      * Run the route action and return the response.
      *
      * @param \Psr\Http\Message\ServerRequestInterface $request

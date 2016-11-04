@@ -359,6 +359,20 @@ class Route implements RouteContract
     /**
      * {@inheritdoc}
      */
+    public function getController()
+    {
+        list($class) = explode('::', $this->action['uses']);
+
+        if (! $this->controller) {
+            $this->controller = $this->getContainer()->get($class);
+        }
+
+        return $this->controller;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function run(ServerRequestInterface $request): ResponseInterface
     {
         if ($this->isControllerAction()) {
@@ -470,22 +484,6 @@ class Route implements RouteContract
     protected function isControllerAction(): bool
     {
         return is_string($this->action['uses']);
-    }
-
-    /**
-     * Get the controller instance for the route.
-     *
-     * @return mixed
-     */
-    protected function getController()
-    {
-        list($class) = explode('::', $this->action['uses']);
-
-        if (! $this->controller) {
-            $this->controller = $this->getContainer()->get($class);
-        }
-
-        return $this->controller;
     }
 
     /**
