@@ -3,8 +3,8 @@ declare(strict_types=1);
 namespace Viserio\Routing;
 
 use Closure;
-use Narrowspark\Arr\Arr;
 use Interop\Container\ContainerInterface;
+use Narrowspark\Arr\Arr;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Contracts\Container\Traits\ContainerAwareTrait;
@@ -307,7 +307,7 @@ class Router implements RouterContract
     /**
      * Merge the given group attributes.
      *
-     * @param array  $new
+     * @param array $new
      * @param array $old
      *
      * @return array
@@ -328,7 +328,7 @@ class Router implements RouterContract
         );
 
         if (isset($old['as'])) {
-            $new['as'] = $old['as'].(isset($new['as']) ? $new['as'] : '');
+            $new['as'] = $old['as'] . (isset($new['as']) ? $new['as'] : '');
         }
 
         return array_merge_recursive(Arr::except($old, ['namespace', 'prefix', 'suffix', 'where', 'as']), $new);
@@ -518,7 +518,6 @@ class Router implements RouterContract
         $route->setAction($action);
     }
 
-
     /**
      * Determine if the action is routing to a controller.
      *
@@ -615,12 +614,13 @@ class Router implements RouterContract
     {
         if (isset($new['namespace'])) {
             return isset($old['namespace']) ?
-                trim($old['namespace'], '\\').'\\'.trim($new['namespace'], '\\') :
+                trim($old['namespace'], '\\') . '\\' . trim($new['namespace'], '\\') :
                 trim($new['namespace'], '\\');
         }
 
         return $old['namespace'] ?? null;
     }
+
     /**
      * Format the prefix for the new group attributes.
      *
@@ -639,6 +639,7 @@ class Router implements RouterContract
 
         return $oldPrefix;
     }
+
     /**
      * Format the suffix for the new group attributes.
      *
@@ -652,7 +653,7 @@ class Router implements RouterContract
         $oldSuffix = $old['suffix'] ?? null;
 
         if (isset($new['suffix'])) {
-            return trim($new['suffix']).trim($oldSuffix);
+            return trim($new['suffix']) . trim($oldSuffix);
         }
 
         return $oldSuffix;

@@ -141,7 +141,7 @@ class Route implements RouteContract
             return str_replace(['http://', 'https://'], '', $this->action['domain']);
         }
 
-        return null;
+        return;
     }
 
     /**
@@ -285,7 +285,7 @@ class Route implements RouteContract
      */
     public function addSuffix(string $suffix): RouteContract
     {
-        $uri = rtrim($this->uri).ltrim($suffix);
+        $uri = rtrim($this->uri) . ltrim($suffix);
 
         $this->uri = trim($uri);
 

@@ -6,8 +6,8 @@ use Interop\Container\ContainerInterface;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use Viserio\HttpFactory\ResponseFactory;
 use Viserio\HttpFactory\ServerRequestFactory;
-use Viserio\Routing\Router;
 use Viserio\HttpFactory\StreamFactory;
+use Viserio\Routing\Router;
 
 class RouterTest extends \PHPUnit_Framework_TestCase
 {
