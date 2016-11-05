@@ -14,6 +14,9 @@ init:
   - REG ADD "HKEY_CURRENT_USER\Software\Microsoft\Command Processor" /v DelayedExpansion /t REG_DWORD /d 1 /f
 
 install:
+  - nuget install redis-64 -excludeversion
+  - redis-64\tools\redis-server.exe --service-install
+  - redis-64\tools\redis-server.exe --service-start
   - IF EXIST c:\php (SET PHP=0) ELSE (mkdir c:\php)
   - cinst -y OpenSSL.Light
   - cd c:\php

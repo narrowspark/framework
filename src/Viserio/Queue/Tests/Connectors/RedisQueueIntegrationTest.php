@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Queue\Tests\Connectors;
 
+use Exception;
 use Defuse\Crypto\Key;
 use Interop\Container\ContainerInterface;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
@@ -31,10 +32,6 @@ class RedisQueueIntegrationTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        if (! getenv('TRAVIS')) {
-            $this->markTestSkipped('Redis test runs on travis');
-        }
-
         $this->redis = new Client([
             'servers' => [
                 'default' => [
@@ -44,6 +41,13 @@ class RedisQueueIntegrationTest extends \PHPUnit_Framework_TestCase
                 ],
             ],
         ]);
+
+        try {
+            $this->redis->ping();
+        } catch (Exception $exception) {
+            $this->markTestSkipped('Test is only tested if redis is running.');
+        }
+
         $this->redis->flushdb();
 
         $this->queue = new RedisQueue($this->redis);
