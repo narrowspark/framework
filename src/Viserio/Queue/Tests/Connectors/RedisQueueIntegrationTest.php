@@ -25,8 +25,8 @@ class RedisQueueIntegrationTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        if (! class_exists('Redis')) {
-            $this->markTestSkipped('Redis not running.');
+        if (! getenv('TRAVIS')) {
+            $this->markTestSkipped('Redis test runs on travis');
         }
 
         $this->redis = new Client([
