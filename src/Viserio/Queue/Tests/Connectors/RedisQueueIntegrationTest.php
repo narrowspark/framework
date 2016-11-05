@@ -45,7 +45,6 @@ class RedisQueueIntegrationTest extends \PHPUnit_Framework_TestCase
 
         $encrypter = $this->mock(EncrypterContract::class);
         $encrypter->shouldReceive('encrypt');
-        $encrypter->shouldReceive('encrypt');
 
         $this->queue->setEncrypter($encrypter);
     }
