@@ -309,7 +309,21 @@ class Stream implements StreamInterface
             throw new RuntimeException('Cannot read from non-readable stream');
         }
 
-        return fread($this->stream, $length);
+        if ($length < 0) {
+            throw new RuntimeException('Length parameter cannot be negative');
+        }
+
+        if ($length === 0) {
+            return '';
+        }
+
+        $string = fread($this->stream, $length);
+
+        if ($string === false) {
+            throw new RuntimeException('Unable to read from stream');
+        }
+
+        return $string;
     }
 
     /**

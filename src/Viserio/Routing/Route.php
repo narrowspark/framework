@@ -94,6 +94,10 @@ class Route implements RouteContract
         if (isset($this->action['prefix'])) {
             $this->addPrefix($this->action['prefix']);
         }
+
+        if (isset($this->action['suffix'])) {
+            $this->addSuffix($this->action['suffix']);
+        }
     }
 
     /**
@@ -133,7 +137,11 @@ class Route implements RouteContract
      */
     public function getDomain()
     {
-        return $this->action['domain'] ?? null;
+        if (isset($this->action['domain'])) {
+            return str_replace(['http://', 'https://'], '', $this->action['domain']);
+        }
+
+        return;
     }
 
     /**
@@ -271,6 +279,26 @@ class Route implements RouteContract
     /**
      * {@inheritdoc}
      */
+    public function addSuffix(string $suffix): RouteContract
+    {
+        $uri = rtrim($this->uri) . ltrim($suffix);
+
+        $this->uri = trim($uri);
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getSuffix()
+    {
+        return $this->action['suffix'] ?? null;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function setParameter($name, $value): RouteContract
     {
         $this->parameters[$name] = $value;
@@ -326,6 +354,20 @@ class Route implements RouteContract
     public function getSegments(): array
     {
         return (new RouteParser())->parse($this->uri, $this->wheres);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getController()
+    {
+        list($class) = explode('::', $this->action['uses']);
+
+        if (! $this->controller) {
+            $this->controller = $this->getContainer()->get($class);
+        }
+
+        return $this->controller;
     }
 
     /**
@@ -442,22 +484,6 @@ class Route implements RouteContract
     protected function isControllerAction(): bool
     {
         return is_string($this->action['uses']);
-    }
-
-    /**
-     * Get the controller instance for the route.
-     *
-     * @return mixed
-     */
-    protected function getController()
-    {
-        list($class) = explode('::', $this->action['uses']);
-
-        if (! $this->controller) {
-            $this->controller = $this->getContainer()->get($class);
-        }
-
-        return $this->controller;
     }
 
     /**

@@ -1,3 +1,0 @@
-split:
-    # Split definition for http://gitsplit.com
-    src/Viserio/*: git@github.com:viserio/$i.git

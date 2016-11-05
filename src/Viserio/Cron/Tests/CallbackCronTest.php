@@ -2,17 +2,36 @@
 declare(strict_types=1);
 namespace Viserio\Cron\Tests;
 
+use Narrowspark\TestingHelper\Traits\MockeryTrait;
+use Psr\Cache\CacheItemInterface;
+use Psr\Cache\CacheItemPoolInterface;
 use Viserio\Cron\CallbackCron;
 
 class CallbackCronTest extends \PHPUnit_Framework_TestCase
 {
+    use MockeryTrait;
+
+    /**
+     * Mocked CacheItemPoolInterface.
+     *
+     * @var \Psr\Cache\CacheItemPoolInterface
+     */
+    protected $cache;
+
+    public function setUp()
+    {
+        parent::setUp();
+
+        $this->cache = $this->mock(CacheItemPoolInterface::class);
+    }
+
     /**
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage Invalid scheduled callback cron job. Must be string or callable.
      */
     public function testCallbackCronToThrowException()
     {
-        new CallbackCron(new CallbackCron('tests'));
+        new CallbackCron($this->cache, new CallbackCron($this->cache, 'tests'));
     }
 
     /**
@@ -21,7 +40,7 @@ class CallbackCronTest extends \PHPUnit_Framework_TestCase
      */
     public function testWithoutOverlappingToThrowException()
     {
-        $cron = new CallbackCron('tests');
+        $cron = new CallbackCron($this->cache, 'tests');
         $cron->withoutOverlapping();
     }
 
@@ -29,10 +48,26 @@ class CallbackCronTest extends \PHPUnit_Framework_TestCase
     {
         $_SERVER['test'] = false;
 
-        $cron = new CallbackCron(function () {
+        $item = $this->mock(CacheItemInterface::class);
+        $item->shouldReceive('set')
+            ->once();
+        $item->shouldReceive('expiresAfter')
+            ->once()
+            ->with(1440);
+        $cache = $this->mock(CacheItemPoolInterface::class);
+        $cache->shouldReceive('getItem')
+            ->once()
+            ->andReturn($item);
+        $cache->shouldReceive('save')
+            ->once()
+            ->with($item);
+        $cache->shouldReceive('deleteItem')
+            ->once();
+
+        $cron = new CallbackCron($cache, function () {
             $_SERVER['test'] = true;
         });
-        $cron->setMutexPath(__DIR__)->setPath(__DIR__);
+        $cron->setPath(__DIR__);
 
         $cron->run();
 
@@ -42,10 +77,10 @@ class CallbackCronTest extends \PHPUnit_Framework_TestCase
 
         $_SERVER['test'] = false;
 
-        $cron = new CallbackCron(function () {
+        $cron = new CallbackCron($cache, function () {
             $_SERVER['test'] = true;
         });
-        $cron->setMutexPath(__DIR__)->setPath(__DIR__);
+        $cron->setPath(__DIR__);
 
         $cron->setDescription('run test')->run();
 

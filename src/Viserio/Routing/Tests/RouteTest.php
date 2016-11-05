@@ -29,6 +29,14 @@ class RouteTest extends \PHPUnit_Framework_TestCase
         $route = new Route('GET', '/test', ['domain' => 'test.com']);
 
         $this->assertSame('test.com', $route->getDomain());
+
+        $route = new Route('GET', '/test', ['domain' => 'http://test.com']);
+
+        $this->assertSame('test.com', $route->getDomain());
+
+        $route = new Route('GET', '/test', ['domain' => 'https://test.com']);
+
+        $this->assertSame('test.com', $route->getDomain());
     }
 
     public function testGetAndSetUri()
@@ -117,7 +125,7 @@ class RouteTest extends \PHPUnit_Framework_TestCase
             'controller' => 'routeController',
         ]);
 
-        $this->assertSame('http://test.com', $route->getDomain());
+        $this->assertSame('test.com', $route->getDomain());
         $this->assertTrue(is_array($route->getAction()));
         $this->assertSame('routeController', $route->getActionName());
 

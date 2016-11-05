@@ -4,6 +4,7 @@ namespace Viserio\Cron;
 
 use InvalidArgumentException;
 use LogicException;
+use Psr\Cache\CacheItemPoolInterface;
 use Viserio\Contracts\Cron\Cron as CronContract;
 
 class CallbackCron extends Cron
@@ -25,12 +26,13 @@ class CallbackCron extends Cron
     /**
      * Create a new callback cron instance.
      *
-     * @param string|callable $callback
-     * @param array           $parameters
+     * @param string|callable                   $callback
+     * @param \Psr\Cache\CacheItemPoolInterface $cache
+     * @param array                             $parameters
      *
      * @throws \InvalidArgumentException
      */
-    public function __construct($callback, array $parameters = [])
+    public function __construct(CacheItemPoolInterface $cache, $callback, array $parameters = [])
     {
         if (! is_string($callback) && ! is_callable($callback)) {
             throw new InvalidArgumentException(
@@ -39,6 +41,7 @@ class CallbackCron extends Cron
         }
 
         $this->callback = $callback;
+        $this->cache = $cache;
         $this->parameters = $parameters;
     }
 
@@ -50,14 +53,18 @@ class CallbackCron extends Cron
     public function run()
     {
         if ($this->description) {
-            touch($this->getMutexPath());
+            $item = $this->cache->getItem($this->getMutexName());
+            $item->set($this->getMutexName());
+            $item->expiresAfter(1440);
+
+            $this->cache->save($item);
         }
 
         try {
             $response = $this->getInvoker()->call($this->callback, $this->parameters);
         } finally {
             if ($this->description) {
-                @unlink($this->getMutexPath());
+                $this->cache->deleteItem($this->getMutexName());
             }
         }
 
@@ -83,7 +90,7 @@ class CallbackCron extends Cron
         }
 
         return $this->skip(function () {
-            return file_exists($this->getMutexPath());
+            return $this->cache->hasItem($this->getMutexName());
         });
     }
 
@@ -102,12 +109,12 @@ class CallbackCron extends Cron
     }
 
     /**
-     * Get the mutex path for the scheduled command.
+     * Get the mutex name for the scheduled command.
      *
      * @return string
      */
-    protected function getMutexPath(): string
+    protected function getMutexName(): string
     {
-        return $this->mutexPath . DIRECTORY_SEPARATOR . 'schedule-' . sha1($this->description);
+        return 'schedule-' . sha1($this->description);
     }
 }

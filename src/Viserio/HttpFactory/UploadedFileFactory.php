@@ -2,10 +2,10 @@
 declare(strict_types=1);
 namespace Viserio\HttpFactory;
 
-use Interop\Http\Factory\UploadedFileFactoryInterface;
+use Viserio\Contracts\HttpFactory\UploadedFileFactory as UploadedFileFactoryContract;
 use Viserio\Http\UploadedFile;
 
-final class UploadedFileFactory implements UploadedFileFactoryInterface
+final class UploadedFileFactory implements UploadedFileFactoryContract
 {
     /**
      * {@inheritdoc}
