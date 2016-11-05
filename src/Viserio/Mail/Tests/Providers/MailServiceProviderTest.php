@@ -8,14 +8,14 @@ use Viserio\Config\Providers\ConfigServiceProvider;
 use Viserio\Container\Container;
 use Viserio\Contracts\Events\Dispatcher as DispatcherContract;
 use Viserio\Contracts\Mail\Mailer as MailerContract;
-use Viserio\Events\Providers\EventsServiceProvider;
-use Viserio\Mail\Mailer;
-use Viserio\Mail\QueueMailer;
-use Viserio\Filesystem\Providers\FilesServiceProvider;
-use Viserio\Mail\Providers\MailServiceProvider;
-use Viserio\View\Providers\ViewServiceProvider;
-use Viserio\Mail\TransportManager;
 use Viserio\Contracts\Queue\Queue as QueueContract;
+use Viserio\Events\Providers\EventsServiceProvider;
+use Viserio\Filesystem\Providers\FilesServiceProvider;
+use Viserio\Mail\Mailer;
+use Viserio\Mail\Providers\MailServiceProvider;
+use Viserio\Mail\QueueMailer;
+use Viserio\Mail\TransportManager;
+use Viserio\View\Providers\ViewServiceProvider;
 
 class MailServiceProviderTest extends \PHPUnit_Framework_TestCase
 {

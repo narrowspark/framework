@@ -4,8 +4,8 @@ namespace Viserio\Mail\Tests;
 
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use Swift_Attachment;
-use Swift_Mime_Message;
 use Swift_Message;
+use Swift_Mime_Message;
 use Viserio\Mail\Message;
 
 class MessageTest extends \PHPUnit_Framework_TestCase
