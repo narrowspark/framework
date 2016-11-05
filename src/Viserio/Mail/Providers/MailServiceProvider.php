@@ -2,18 +2,18 @@
 declare(strict_types=1);
 namespace Viserio\Mail\Providers;
 
-use Swift_Mailer;
 use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
+use Swift_Mailer;
+use Viserio\Contracts\Config\Manager as ManagerContract;
+use Viserio\Contracts\Events\Dispatcher as DispatcherContract;
 use Viserio\Contracts\Mail\Mailer as MailerContract;
+use Viserio\Contracts\Queue\Queue as QueueContract;
+use Viserio\Contracts\Support\Traits\ServiceProviderConfigAwareTrait;
+use Viserio\Contracts\View\Factory as ViewFactoryContract;
 use Viserio\Mail\Mailer;
 use Viserio\Mail\QueueMailer;
 use Viserio\Mail\TransportManager;
-use Viserio\Contracts\Queue\Queue as QueueContract;
-use Viserio\Contracts\Config\Manager as ManagerContract;
-use Viserio\Contracts\View\Factory as ViewFactoryContract;
-use Viserio\Contracts\Events\Dispatcher as DispatcherContract;
-use Viserio\Contracts\Support\Traits\ServiceProviderConfigAwareTrait;
 
 class MailServiceProvider implements ServiceProvider
 {

@@ -208,7 +208,7 @@ class MailerTest extends \PHPUnit_Framework_TestCase
     protected function getMocks(): array
     {
         return [
-            $this->mock(Swift_Mailer::class)
+            $this->mock(Swift_Mailer::class),
         ];
     }
 }
