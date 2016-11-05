@@ -40,7 +40,7 @@ class QueueMailerTest extends \PHPUnit_Framework_TestCase
             ->setConstructorArgs($this->getMocks())
             ->setMethods(['createMessage'])
             ->getMock();
-
+        $mailer->setViewFactory($this->mock(ViewFactoryContract::class));
         $mailer->setContainer($container);
 
         $mailer->expects($this->once())
@@ -166,18 +166,18 @@ class QueueMailerTest extends \PHPUnit_Framework_TestCase
 
     protected function getMailer()
     {
-        return new QueueMailer(
+        $mailer = new QueueMailer(
             $this->mock(Swift_Mailer::class),
-            $this->mock(ViewFactoryContract::class),
             $this->mock(QueueContract::class)
         );
+
+        return $mailer->setViewFactory($this->mock(ViewFactoryContract::class));
     }
 
     protected function getMocks(): array
     {
         return [
             $this->mock(Swift_Mailer::class),
-            $this->mock(ViewFactoryContract::class),
             $this->mock(QueueContract::class),
         ];
     }

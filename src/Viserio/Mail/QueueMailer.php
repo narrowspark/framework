@@ -11,26 +11,24 @@ use Viserio\Contracts\Mail\QueueMailer as QueueMailerContract;
 use Viserio\Contracts\Queue\Job as JobContract;
 use Viserio\Contracts\Queue\Queue as QueueContract;
 use Viserio\Contracts\View\Factory as ViewFactoryContract;
-use Viserio\Support\Invoker;
+use Viserio\Support\Traits\InvokerAwareTrait;
 
 class QueueMailer extends Mailer implements QueueMailerContract
 {
     use ContainerAwareTrait;
+    use InvokerAwareTrait;
 
     /**
      * Create a new Mailer instance.
      *
      * @param \Swift_Mailer                   $swift
-     * @param \Viserio\Contracts\View\Factory $views
      * @param \Viserio\Contracts\Queue\Queue  $queue
      */
     public function __construct(
         Swift_Mailer $swift,
-        ViewFactoryContract $views,
         QueueContract $queue
     ) {
         $this->swift = $swift;
-        $this->views = $views;
         $this->queue = $queue;
     }
 
@@ -162,16 +160,9 @@ class QueueMailer extends Mailer implements QueueMailerContract
     protected function callMessageBuilder($callback, $message)
     {
         if ($callback instanceof Closure) {
-            return call_user_func($callback, $message);
-        }
-
-        if ($this->container !== null) {
-            $invoker = (new Invoker())
-                ->injectByTypeHint(true)
-                ->injectByParameterName(true)
-                ->setContainer($this->container);
-
-            return $invoker->call($callback)->mail($message);
+            return $callback($message);
+        } elseif ($this->container !== null) {
+            return $this->getInvoker()->call($callback)->mail($message);
         }
 
         throw new InvalidArgumentException('Callback is not valid.');

@@ -50,13 +50,11 @@ class Mailer implements MailerContract
     /**
      * Create a new Mailer instance.
      *
-     * @param \Swift_Mailer                   $swift
-     * @param \Viserio\Contracts\View\Factory $views
+     * @param \Swift_Mailer $swift
      */
-    public function __construct(Swift_Mailer $swift, ViewFactoryContract $views)
+    public function __construct(Swift_Mailer $swift)
     {
         $this->swift = $swift;
-        $this->views = $views;
     }
 
     /**
@@ -194,13 +192,13 @@ class Mailer implements MailerContract
     protected function addContent(MessageContract $message, $view, $plain, $raw, array $data)
     {
         if ($view !== null) {
-            $message->setBody($this->views->create($view, $data)->render(), 'text/html');
+            $message->setBody($this->createView($view, $data), 'text/html');
         }
 
         if ($plain !== null) {
             $method = $view !== null ? 'addPart' : 'setBody';
 
-            $message->$method($this->views->create($plain, $data)->render(), 'text/plain');
+            $message->$method($this->createView($plain, $data), 'text/plain');
         }
 
         if ($raw !== null) {
@@ -219,7 +217,7 @@ class Mailer implements MailerContract
      */
     protected function sendSwiftMessage(Swift_Mime_Message $message): int
     {
-        if ($this->events) {
+        if ($this->events !== null) {
             $this->events->trigger('events.message.sending', [$message]);
         }
 
@@ -266,5 +264,26 @@ class Mailer implements MailerContract
         }
 
         throw new InvalidArgumentException('Callback is not valid.');
+    }
+
+    /**
+     * Creats a view string for the email body.
+     *
+     * @param string|null $view
+     * @param array       $data
+     *
+     * @return string
+     */
+    protected function createView($view, array $data): string
+    {
+        if (!is_string($view)) {
+            return '';
+        }
+
+        if ($this->views !== null) {
+            return $this->getViewFactory()->create($view, $data)->render();
+        }
+
+        return vsprintf($view, $data);
     }
 }

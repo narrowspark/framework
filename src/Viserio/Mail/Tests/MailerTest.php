@@ -23,6 +23,7 @@ class MailerTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['createMessage'])
             ->setConstructorArgs($this->getMocks())
             ->getMock();
+        $mailer->setViewFactory($this->mock(ViewFactoryContract::class));
 
         $message = $this->mock(MessageContract::class);
 
@@ -75,6 +76,7 @@ class MailerTest extends \PHPUnit_Framework_TestCase
             ->setConstructorArgs($this->getMocks())
             ->setMethods(['createMessage'])
             ->getMock();
+        $mailer->setViewFactory($this->mock(ViewFactoryContract::class));
 
         $message = $this->mock(MessageContract::class);
 
@@ -135,6 +137,7 @@ class MailerTest extends \PHPUnit_Framework_TestCase
             ->setConstructorArgs($this->getMocks())
             ->setMethods(['createMessage'])
             ->getMock();
+        $mailer->setViewFactory($this->mock(ViewFactoryContract::class));
 
         $message = $this->mock(MessageContract::class);
 
@@ -202,19 +205,10 @@ class MailerTest extends \PHPUnit_Framework_TestCase
         return $mailer;
     }
 
-    protected function getMailer()
-    {
-        return new Mailer(
-            $this->mock(Swift_Mailer::class),
-            $this->mock(ViewFactoryContract::class)
-        );
-    }
-
     protected function getMocks(): array
     {
         return [
-            $this->mock(Swift_Mailer::class),
-            $this->mock(ViewFactoryContract::class),
+            $this->mock(Swift_Mailer::class)
         ];
     }
 }

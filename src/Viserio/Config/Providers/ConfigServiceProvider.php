@@ -17,12 +17,12 @@ class ConfigServiceProvider implements ServiceProvider
     {
         return [
             Repository::class => [self::class, 'createRepository'],
-            ConfigManager::class => [self::class, 'createConfigManager'],
-            ManagerContract::class => function (ContainerInterface $container) {
-                return $container->get(ConfigManager::class);
+            ManagerContract::class => [self::class, 'createConfigManager'],
+            ConfigManager::class => function (ContainerInterface $container) {
+                return $container->get(ManagerContract::class);
             },
             'config' => function (ContainerInterface $container) {
-                return $container->get(ConfigManager::class);
+                return $container->get(ManagerContract::class);
             },
         ];
     }

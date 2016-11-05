@@ -1,0 +1,37 @@
+<?php
+declare(strict_types=1);
+namespace Viserio\Mail\Tests\Providers;
+
+use Viserio\Config\Manager as ConfigManager;
+use Viserio\Contracts\Mail\Mailer as MailerContract;
+use Viserio\Mail\Mailer;
+use Swift_Mailer;
+use Viserio\Mail\TransportManager;
+use Viserio\Config\Providers\ConfigServiceProvider;
+use Viserio\Container\Container;
+use Viserio\Contracts\Events\Dispatcher as DispatcherContract;
+use Viserio\Events\Providers\EventsServiceProvider;
+use Viserio\Mail\Providers\MailServiceProvider;
+
+class MailServiceProviderTest extends \PHPUnit_Framework_TestCase
+{
+    public function testProvider()
+    {
+        $container = new Container();
+        $container->register(new ConfigServiceProvider());
+        $container->register(new MailServiceProvider());
+
+        $container->get(ConfigManager::class)->set('mail', ['drivers' => [
+            'smtp' => [
+                'host' => 'smtp.mailgun.org',
+                'port' => '25'
+            ]
+        ]]);
+
+        $this->assertInstanceOf(MailerContract::class, $container->get(MailerContract::class));
+        $this->assertInstanceOf(MailerContract::class, $container->get(Mailer::class));
+        $this->assertInstanceOf(MailerContract::class, $container->get('mailer'));
+        $this->assertInstanceOf(TransportManager::class, $container->get(TransportManager::class));
+        $this->assertInstanceOf(Swift_Mailer::class, $container->get(Swift_Mailer::class));
+    }
+}
