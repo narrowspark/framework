@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Queue\Tests\Connectors;
 
-use Exception;
 use Defuse\Crypto\Key;
+use Exception;
 use Interop\Container\ContainerInterface;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use Predis\Client;
