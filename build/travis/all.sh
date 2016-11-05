@@ -5,9 +5,9 @@ if [[ "$DISABLE_XDEBUG" = true ]]; then
   phpenv config-rm xdebug.ini;
 fi
 
-chmod a+x ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
-
 echo "extension = memcached.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
 
 # Install mongodb
-pecl -q install mongodb && echo "extension=mongodb.so" >> `~/.phpenv/versions/$(phpenv version-name)/etc/php.ini | grep "Loaded Configuration" | sed -e "s|.*:\s*||"`
+pecl -q install mongodb
+
+echo "extension=mongodb.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
