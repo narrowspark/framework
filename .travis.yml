@@ -35,6 +35,7 @@ cache:
 
 before_install:
   - mkdir -p ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d
+  - chmod a+x ./build/travis/all.sh && chmod a+x ./build/travis/php/7.0.sh && chmod a+x ./build/travis/php/7.1.sh && chmod a+x ./build/travis/script.sh && chmod a+x ./build/travis/after_success.sh
   - if [ -f build/travis/php/$TRAVIS_PHP_VERSION.sh]; then ./build/travis/php/$TRAVIS_PHP_VERSION.sh; fi
   - ./build/travis/all.sh
   - composer global require hirak/prestissimo # Now composer can install components parallel
@@ -48,7 +49,6 @@ install:
   - if [[ "$SETUP" = "lowest" ]]; then travis_retry composer update --prefer-dist --no-interaction --prefer-lowest --prefer-stable --no-suggest; fi
 
 before_script:
-  - chmod a+x ./build/travis/all.sh && chmod a+x ./build/travis/php/7.x.sh && chmod a+x ./build/travis/script.sh && chmod a+x ./build/travis/after_success.sh
   - sleep 15
 
 script:
