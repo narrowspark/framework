@@ -110,6 +110,7 @@
         "psr/log-implementation"                             : "^1.0"
     },
     "require-dev": {
+        "alcaeus/mongo-php-adapter"                          : "^1.0",
         "aws/aws-sdk-php"                                    : "^3.18",
         "cache/array-adapter"                                : "^0.4",
         "cache/filesystem-adapter"                           : "^0.3",
@@ -158,6 +159,7 @@
         }
     },
     "suggest": {
+        "alcaeus/mongo-php-adapter"                          : "Required to use the ext-mongo interface on ext-mongodb interface (^1.0).",
         "aws/aws-sdk-php"                                    : "Required to use the SQS queue driver and SES mail driver (^3.18).",
         "cache/apc-adapter"                                  : "Required to use the Apc cache (^0.3).",
         "cache/apcu-adapter"                                 : "Required to use the Apcu cache (^0.3).",

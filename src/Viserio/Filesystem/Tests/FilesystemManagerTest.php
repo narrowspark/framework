@@ -5,6 +5,7 @@ namespace Viserio\Filesystem\Tests;
 use Guzzle\Http\Exception\ClientErrorResponseException;
 use Guzzle\Http\Exception\CurlException;
 use League\Flysystem\AdapterInterface;
+use MongoClient;
 use MongoConnectionException;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use Viserio\Contracts\Config\Manager as ConfigManger;
@@ -89,7 +90,7 @@ class FilesystemManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testGridFSConnectorDriver()
     {
-        if (! class_exists(MongoClient::class) || ! class_exists(Mongo::class)) {
+        if (! class_exists(MongoClient::class)) {
             $this->markTestSkipped('The MongoClient class does not exist');
         }
 
