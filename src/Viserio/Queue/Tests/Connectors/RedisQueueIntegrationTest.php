@@ -2,10 +2,11 @@
 declare(strict_types=1);
 namespace Viserio\Queue\Tests\Connectors;
 
+use Defuse\Crypto\Key;
 use Interop\Container\ContainerInterface;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use Predis\Client;
-use Viserio\Contracts\Encryption\Encrypter as EncrypterContract;
+use Viserio\Encryption\Encrypter;
 use Viserio\Queue\Connectors\RedisQueue;
 use Viserio\Queue\Tests\Fixture\RedisQueueIntegrationJob;
 
@@ -19,9 +20,14 @@ class RedisQueueIntegrationTest extends \PHPUnit_Framework_TestCase
     private $redis;
 
     /**
-     * @var Viserio\Queue\Connectors\RedisQueue
+     * @var \Viserio\Queue\Connectors\RedisQueue
      */
     private $queue;
+
+    /**
+     * @var \Viserio\Encryption\Encrypter
+     */
+    private $encrypter;
 
     public function setUp()
     {
@@ -43,10 +49,9 @@ class RedisQueueIntegrationTest extends \PHPUnit_Framework_TestCase
         $this->queue = new RedisQueue($this->redis);
         $this->queue->setContainer($this->mock(ContainerInterface::class));
 
-        $encrypter = $this->mock(EncrypterContract::class);
-        $encrypter->shouldReceive('encrypt');
+        $this->encrypter = new Encrypter(Key::createNewRandomKey());
 
-        $this->queue->setEncrypter($encrypter);
+        $this->queue->setEncrypter($this->encrypter);
     }
 
     public function tearDown()
@@ -70,11 +75,11 @@ class RedisQueueIntegrationTest extends \PHPUnit_Framework_TestCase
         $this->queue->later(-300, $jobs[2]);
         $this->queue->later(-100, $jobs[3]);
 
-        $this->assertEquals($jobs[2], unserialize(json_decode($this->queue->pop()->getRawBody())->data->command64));
-        $this->assertEquals($jobs[1], unserialize(json_decode($this->queue->pop()->getRawBody())->data->command64));
-        $this->assertEquals($jobs[3], unserialize(json_decode($this->queue->pop()->getRawBody())->data->command64));
+        $this->assertEquals($jobs[2], unserialize(base64_decode($this->encrypter->decrypt(json_decode($this->queue->pop()->getRawBody())->data->command64))));
+        $this->assertEquals($jobs[1], unserialize(base64_decode($this->encrypter->decrypt(json_decode($this->queue->pop()->getRawBody())->data->command64))));
+        $this->assertEquals($jobs[3], unserialize(base64_decode($this->encrypter->decrypt(json_decode($this->queue->pop()->getRawBody())->data->command64))));
         $this->assertNull($this->queue->pop());
-        $this->assertEquals(1, $this->redis->connection()->zcard('queues:default:delayed'));
-        $this->assertEquals(3, $this->redis->connection()->zcard('queues:default:reserved'));
+        $this->assertEquals(1, $this->redis->zcard('queues:default:delayed'));
+        $this->assertEquals(3, $this->redis->zcard('queues:default:reserved'));
     }
 }
