@@ -71,9 +71,9 @@ class RedisQueueIntegrationTest extends \PHPUnit_Framework_TestCase
         $this->queue->later(-300, $jobs[2]);
         $this->queue->later(-100, $jobs[3]);
 
-        $this->assertEquals($jobs[2], unserialize(json_decode($this->queue->pop()->getRawBody())->data->command));
-        $this->assertEquals($jobs[1], unserialize(json_decode($this->queue->pop()->getRawBody())->data->command));
-        $this->assertEquals($jobs[3], unserialize(json_decode($this->queue->pop()->getRawBody())->data->command));
+        $this->assertEquals($jobs[2], unserialize(json_decode($this->queue->pop()->getRawBody())->data->command64));
+        $this->assertEquals($jobs[1], unserialize(json_decode($this->queue->pop()->getRawBody())->data->command64));
+        $this->assertEquals($jobs[3], unserialize(json_decode($this->queue->pop()->getRawBody())->data->command64));
         $this->assertNull($this->queue->pop());
         $this->assertEquals(1, $this->redis->connection()->zcard('queues:default:delayed'));
         $this->assertEquals(3, $this->redis->connection()->zcard('queues:default:reserved'));
