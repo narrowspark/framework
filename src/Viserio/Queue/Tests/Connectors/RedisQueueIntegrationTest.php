@@ -42,7 +42,12 @@ class RedisQueueIntegrationTest extends \PHPUnit_Framework_TestCase
 
         $this->queue = new RedisQueue($this->redis);
         $this->queue->setContainer($this->mock(ContainerInterface::class));
-        $this->queue->setEncrypter($this->mock(EncrypterContract::class));
+
+        $encrypter = $this->mock(EncrypterContract::class);
+        $encrypter->shouldReceive('encrypt');
+        $encrypter->shouldReceive('encrypt');
+
+        $this->queue->setEncrypter($encrypter);
     }
 
     public function tearDown()

@@ -9,5 +9,3 @@ echo "extension = memcached.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc
 
 # Install mongodb
 pecl -q install mongodb
-
-echo "extension=mongodb.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
