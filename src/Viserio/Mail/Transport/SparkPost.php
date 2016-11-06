@@ -78,6 +78,8 @@ class SparkPost extends AbstractTransport
      * Get the API key being used by the transport.
      *
      * @return string
+     *
+     * @codeCoverageIgnore
      */
     public function getKey(): string
     {
@@ -90,6 +92,8 @@ class SparkPost extends AbstractTransport
      * @param string $key
      *
      * @return $this
+     *
+     * @codeCoverageIgnore
      */
     public function setKey(string $key): SparkPost
     {
@@ -102,6 +106,8 @@ class SparkPost extends AbstractTransport
      * Get the transmission options being used by the transport.
      *
      * @return array
+     *
+     * @codeCoverageIgnore
      */
     public function getOptions(): array
     {
@@ -114,6 +120,8 @@ class SparkPost extends AbstractTransport
      * @param array $options
      *
      * @return $this
+     *
+     * @codeCoverageIgnore
      */
     public function setOptions(array $options): SparkPost
     {
