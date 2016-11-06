@@ -50,6 +50,8 @@ abstract class AbstractTransport implements Swift_Transport
      * Register a plug-in with the transport.
      *
      * @param \Swift_Events_EventListener $plugin
+     *
+     * @codeCoverageIgnore
      */
     public function registerPlugin(Swift_Events_EventListener $plugin)
     {
