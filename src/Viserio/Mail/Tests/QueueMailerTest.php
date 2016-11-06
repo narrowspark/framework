@@ -3,9 +3,9 @@ declare(strict_types=1);
 namespace Viserio\Mail\Tests;
 
 use Interop\Container\ContainerInterface;
+use Mockery;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use StdClass;
-use Mockery;
 use Swift_Mailer;
 use Swift_Mime_Message;
 use Swift_Transport;
