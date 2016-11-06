@@ -77,7 +77,9 @@ class QueueMailer extends Mailer implements QueueMailerContract
         $callback = null,
         string $queue = null
     ) {
-        $callback = $this->buildQueueCallable($callback);
+        if ($callback !== null) {
+            $callback = $this->buildQueueCallable($callback);
+        }
 
         return $this->queue->later(
             $delay,
@@ -123,7 +125,7 @@ class QueueMailer extends Mailer implements QueueMailerContract
             return $callback;
         }
 
-        return serialize(new SerializableClosure($callback));
+        return new SerializableClosure($callback, true);
     }
 
     /**

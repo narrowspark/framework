@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Support\Traits;
 
+use Interop\Container\ContainerInterface;
 use Viserio\Support\Invoker;
 
 trait InvokerAwareTrait
@@ -26,6 +27,15 @@ trait InvokerAwareTrait
 
         return $this;
     }
+
+    /**
+     * Get the container instance.
+     *
+     * @throws \RuntimeException
+     *
+     * @return \Interop\Container\ContainerInterface
+     */
+    abstract public function getContainer(): ContainerInterface;
 
     /**
      * Get configured invoker.

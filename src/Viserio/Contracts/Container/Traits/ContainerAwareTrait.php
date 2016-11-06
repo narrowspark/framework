@@ -15,7 +15,7 @@ trait ContainerAwareTrait
     protected $container;
 
     /**
-     * Set a container.
+     * Set a container instance.
      *
      * @param \Interop\Container\ContainerInterface $container
      *
@@ -29,7 +29,7 @@ trait ContainerAwareTrait
     }
 
     /**
-     * Get the container.
+     * Get the container instance.
      *
      * @throws \RuntimeException
      *
