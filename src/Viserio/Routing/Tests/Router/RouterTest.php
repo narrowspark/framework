@@ -5,7 +5,6 @@ namespace Viserio\Routing\Tests\Router;
 use Interop\Container\ContainerInterface;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use Viserio\HttpFactory\ResponseFactory;
-use Viserio\HttpFactory\ServerRequestFactory;
 use Viserio\HttpFactory\StreamFactory;
 use Viserio\Routing\Router;
 

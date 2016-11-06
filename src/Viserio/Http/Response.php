@@ -21,12 +21,11 @@ class Response extends AbstractMessage implements ResponseInterface
     /**
      * Create a new response instance.
      *
-     * @param int                                                    $status  Status code for the response, if any.
-     * @param array                                                  $headers Headers for the response, if any.
-     * @param string|resource|\Psr\Http\Message\StreamInterface|null $body    Stream identifier and/or actual stream resource
-     * @param string                                                 $version Protocol version.
-
-     * @throws InvalidArgumentException on any invalid element.
+     * @param  int                                                    $status  Status code for the response, if any.
+     * @param  array                                                  $headers Headers for the response, if any.
+     * @param  string|resource|\Psr\Http\Message\StreamInterface|null $body    Stream identifier and/or actual stream resource
+     * @param  string                                                 $version Protocol version.
+     * @throws InvalidArgumentException                               on any invalid element.
      */
     public function __construct(
         int $status = 200,

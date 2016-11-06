@@ -9,3 +9,6 @@ echo "extension = memcached.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc
 
 # Install mongodb
 pecl -q install mongodb
+
+# Install mongo-php-adapter
+composer require alcaeus/mongo-php-adapter

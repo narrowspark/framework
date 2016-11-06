@@ -8,7 +8,6 @@ use Swift_Mailer;
 use Viserio\Contracts\Mail\QueueMailer as QueueMailerContract;
 use Viserio\Contracts\Queue\Job as JobContract;
 use Viserio\Contracts\Queue\Queue as QueueContract;
-use Viserio\Contracts\View\Factory as ViewFactoryContract;
 
 class QueueMailer extends Mailer implements QueueMailerContract
 {

@@ -12,7 +12,6 @@ use Viserio\Contracts\Container\Traits\ContainerAwareTrait;
 use Viserio\Contracts\Events\Traits\EventsAwareTrait;
 use Viserio\Contracts\Mail\Mailer as MailerContract;
 use Viserio\Contracts\Mail\Message as MessageContract;
-use Viserio\Contracts\View\Factory as ViewFactoryContract;
 use Viserio\Contracts\View\Traits\ViewAwareTrait;
 use Viserio\Support\Traits\InvokerAwareTrait;
 
@@ -282,7 +281,7 @@ class Mailer implements MailerContract
      */
     protected function createView($view, array $data): string
     {
-        if (!is_string($view)) {
+        if (! is_string($view)) {
             return '';
         }
 

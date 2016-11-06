@@ -110,7 +110,6 @@
         "psr/log-implementation"                             : "^1.0"
     },
     "require-dev": {
-        "alcaeus/mongo-php-adapter"                          : "^1.0",
         "aws/aws-sdk-php"                                    : "^3.18",
         "cache/array-adapter"                                : "^0.4",
         "cache/filesystem-adapter"                           : "^0.3",
@@ -129,7 +128,7 @@
         "league/plates"                                      : "^3.1",
         "mikey179/vfsStream"                                 : "^1.6",
         "mouf/picotainer"                                    : "^1.0",
-        "narrowspark/php-cs-fixer-config"                    : "^2.0",
+        "narrowspark/php-cs-fixer-config"                    : "^2.1",
         "narrowspark/testing-helper"                         : "^1.5",
         "mockery/mockery"                                    : "^0.9.5",
         "phpunit/phpunit"                                    : "^5.1",

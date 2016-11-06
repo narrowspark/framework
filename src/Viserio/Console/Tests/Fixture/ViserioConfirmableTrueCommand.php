@@ -2,7 +2,6 @@
 declare(strict_types=1);
 namespace Viserio\Console\Tests\Fixture;
 
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 use Viserio\Console\Command\Command;
 use Viserio\Console\Traits\ConfirmableTrait;
@@ -30,17 +29,17 @@ class ViserioConfirmableTrueCommand extends Command
         return true;
     }
 
-    protected function getOptions(): array
-    {
-        return [
-            ['force', null, InputOption::VALUE_NONE, 'Force the operation to run.'],
-        ];
-    }
-
     public function handle()
     {
         if (! $this->confirmToProceed()) {
             return 'not';
         }
+    }
+
+    protected function getOptions(): array
+    {
+        return [
+            ['force', null, InputOption::VALUE_NONE, 'Force the operation to run.'],
+        ];
     }
 }

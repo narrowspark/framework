@@ -6,7 +6,6 @@ use Swift_Mailer;
 use Viserio\Config\Manager as ConfigManager;
 use Viserio\Config\Providers\ConfigServiceProvider;
 use Viserio\Container\Container;
-use Viserio\Contracts\Events\Dispatcher as DispatcherContract;
 use Viserio\Contracts\Mail\Mailer as MailerContract;
 use Viserio\Contracts\Queue\Queue as QueueContract;
 use Viserio\Events\Providers\EventsServiceProvider;
