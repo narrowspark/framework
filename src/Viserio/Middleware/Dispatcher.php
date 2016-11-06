@@ -83,7 +83,7 @@ class Dispatcher implements StackContract
      */
     public function process(RequestInterface $request): ResponseInterface
     {
-        return (new class($this -> stack, $this -> response) implements DelegateInterface {
+        return (new class($this->stack, $this->response) implements DelegateInterface {
             private $middlewares;
 
             private $response;
