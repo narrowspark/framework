@@ -4,7 +4,8 @@ namespace Viserio\Mail\Tests;
 
 use Interop\Container\ContainerInterface;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
-use stdClass;
+use StdClass;
+use Mockery;
 use Swift_Mailer;
 use Swift_Mime_Message;
 use Swift_Transport;
@@ -23,7 +24,7 @@ class QueueMailerTest extends \PHPUnit_Framework_TestCase
     {
         $message = $this->mock(MessageContract::class);
 
-        $mockMailer = $this->mock(stdClass::class);
+        $mockMailer = $this->mock(StdClass::class);
         $mockMailer->shouldReceive('mail')
             ->once()
             ->with($message);
@@ -108,7 +109,7 @@ class QueueMailerTest extends \PHPUnit_Framework_TestCase
         $mailer->getSwiftMailer()
             ->shouldReceive('send')
             ->once()
-            ->with(\Mockery::type('Swift_Message'), [])
+            ->with(Mockery::type('Swift_Message'), [])
             ->andReturnUsing(function ($message) use ($me) {
                 $me->assertEquals(['info@narrowspark.de' => 'Daniel Bannert'], $message->getFrom());
 

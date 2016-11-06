@@ -25,6 +25,8 @@ class QueueMailer extends Mailer implements QueueMailerContract
 
     /**
      * {@inheritdoc}
+     *
+     * @codeCoverageIgnore
      */
     public function setQueue(QueueContract $queue): QueueMailerContract
     {
@@ -35,6 +37,8 @@ class QueueMailer extends Mailer implements QueueMailerContract
 
     /**
      * {@inheritdoc}
+     *
+     * @codeCoverageIgnore
      */
     public function getQueue(): QueueContract
     {
