@@ -2,19 +2,19 @@
 declare(strict_types=1);
 namespace Viserio\Mail\Tests;
 
-use Viserio\Mail\TransportManager;
-use Viserio\Contracts\Config\Manager as ConfigContract;
+use Narrowspark\TestingHelper\ArrayContainer;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use Psr\Log\LoggerInterface;
-use Viserio\Mail\Transport\Log as LogTransport;
-use Narrowspark\TestingHelper\ArrayContainer;
 use Swift_MailTransport;
 use Swift_SendmailTransport;
-use Viserio\Mail\Transport\Mandrill as MandrillTransport;
-use Viserio\Mail\Transport\SparkPost as SparkPostTransport;
-use Viserio\Mail\Transport\Ses as SesTransport;
-use Viserio\Mail\Transport\Mailgun as MailgunTransport;
 use Swift_SmtpTransport;
+use Viserio\Contracts\Config\Manager as ConfigContract;
+use Viserio\Mail\Transport\Log as LogTransport;
+use Viserio\Mail\Transport\Mailgun as MailgunTransport;
+use Viserio\Mail\Transport\Mandrill as MandrillTransport;
+use Viserio\Mail\Transport\Ses as SesTransport;
+use Viserio\Mail\Transport\SparkPost as SparkPostTransport;
+use Viserio\Mail\TransportManager;
 
 class TransportManagerTest extends \PHPUnit_Framework_TestCase
 {
@@ -37,7 +37,7 @@ class TransportManagerTest extends \PHPUnit_Framework_TestCase
             ->once()
             ->with('mail.drivers', []);
         $manager->setContainer(new ArrayContainer([
-            LoggerInterface::class => $this->mock(LoggerInterface::class)
+            LoggerInterface::class => $this->mock(LoggerInterface::class),
         ]));
 
         $this->assertInstanceOf(LogTransport::class, $manager->driver('log'));
@@ -75,7 +75,7 @@ class TransportManagerTest extends \PHPUnit_Framework_TestCase
                     'username' => '',
                     'password' => '',
                     'stream' => '',
-                ]
+                ],
             ]);
 
         $this->assertInstanceOf(Swift_SmtpTransport::class, $manager->driver('smtp'));
@@ -91,7 +91,7 @@ class TransportManagerTest extends \PHPUnit_Framework_TestCase
                 'mailgun' => [
                     'secret' => '',
                     'domain' => '',
-                ]
+                ],
             ]);
 
         $this->assertInstanceOf(MailgunTransport::class, $manager->driver('mailgun'));
@@ -106,7 +106,7 @@ class TransportManagerTest extends \PHPUnit_Framework_TestCase
             ->andReturn([
                 'mandrill' => [
                     'secret' => '',
-                ]
+                ],
             ]);
 
         $this->assertInstanceOf(MandrillTransport::class, $manager->driver('mandrill'));
@@ -121,7 +121,7 @@ class TransportManagerTest extends \PHPUnit_Framework_TestCase
             ->andReturn([
                 'sparkpost' => [
                     'secret' => '',
-                ]
+                ],
             ]);
 
         $this->assertInstanceOf(SparkPostTransport::class, $manager->driver('sparkpost'));
@@ -138,7 +138,7 @@ class TransportManagerTest extends \PHPUnit_Framework_TestCase
                     'secret' => '',
                     'key' => '',
                     'region' => 'us-west-2',
-                ]
+                ],
             ]);
 
         $this->assertInstanceOf(SesTransport::class, $manager->driver('ses'));
