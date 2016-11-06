@@ -38,11 +38,11 @@ class SparkPostTest extends \PHPUnit_Framework_TestCase
                         'json' => [
                             'recipients' => [
                                 [
-                                    'address' => 'me@example.com'
+                                    'address' => 'me@example.com',
                                 ],
                                 [
-                                    'address' => 'you@example.com'
-                                ]
+                                    'address' => 'you@example.com',
+                                ],
                             ],
                             'content' => [
                                 'email_rfc822' => (string) $message2,
