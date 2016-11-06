@@ -13,9 +13,13 @@ use Viserio\Contracts\Mail\Mailer as MailerContract;
 use Viserio\Contracts\Mail\Message as MessageContract;
 use Viserio\Contracts\View\Factory as ViewFactoryContract;
 use Viserio\Contracts\View\Traits\ViewAwareTrait;
+use Viserio\Contracts\Container\Traits\ContainerAwareTrait;
+use Viserio\Support\Traits\InvokerAwareTrait;
 
 class Mailer implements MailerContract
 {
+    use ContainerAwareTrait;
+    use InvokerAwareTrait;
     use EventsAwareTrait;
     use ViewAwareTrait;
 
@@ -260,7 +264,9 @@ class Mailer implements MailerContract
     protected function callMessageBuilder($callback, $message)
     {
         if ($callback instanceof Closure) {
-            return call_user_func($callback, $message);
+            return $callback($message);
+        } elseif ($this->container !== null) {
+            return $this->getInvoker()->call($callback)->mail($message);
         }
 
         throw new InvalidArgumentException('Callback is not valid.');

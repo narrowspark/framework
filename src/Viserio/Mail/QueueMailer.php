@@ -3,21 +3,15 @@ declare(strict_types=1);
 namespace Viserio\Mail;
 
 use Closure;
-use InvalidArgumentException;
 use Opis\Closure\SerializableClosure;
 use Swift_Mailer;
-use Viserio\Contracts\Container\Traits\ContainerAwareTrait;
 use Viserio\Contracts\Mail\QueueMailer as QueueMailerContract;
 use Viserio\Contracts\Queue\Job as JobContract;
 use Viserio\Contracts\Queue\Queue as QueueContract;
 use Viserio\Contracts\View\Factory as ViewFactoryContract;
-use Viserio\Support\Traits\InvokerAwareTrait;
 
 class QueueMailer extends Mailer implements QueueMailerContract
 {
-    use ContainerAwareTrait;
-    use InvokerAwareTrait;
-
     /**
      * Create a new Mailer instance.
      *
@@ -145,26 +139,5 @@ class QueueMailer extends Mailer implements QueueMailerContract
         }
 
         return $data['callback'];
-    }
-
-    /**
-     * Call the provided message builder.
-     *
-     * @param \Closure|string       $callback
-     * @param \Viserio\Mail\Message $message
-     *
-     * @throws \InvalidArgumentException
-     *
-     * @return mixed
-     */
-    protected function callMessageBuilder($callback, $message)
-    {
-        if ($callback instanceof Closure) {
-            return $callback($message);
-        } elseif ($this->container !== null) {
-            return $this->getInvoker()->call($callback)->mail($message);
-        }
-
-        throw new InvalidArgumentException('Callback is not valid.');
     }
 }
