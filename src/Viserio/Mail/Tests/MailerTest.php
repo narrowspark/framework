@@ -3,15 +3,15 @@ declare(strict_types=1);
 namespace Viserio\Mail\Tests;
 
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
+use StdClass;
 use Swift_Mailer;
 use Swift_Mime_Message;
 use Swift_Transport;
+use Viserio\Contracts\Events\Dispatcher as DispatcherContract;
 use Viserio\Contracts\Mail\Message as MessageContract;
 use Viserio\Contracts\View\Factory as ViewFactoryContract;
 use Viserio\Contracts\View\View as ViewContract;
 use Viserio\Mail\Mailer;
-use StdClass;
-use Viserio\Contracts\Events\Dispatcher as DispatcherContract;
 
 class MailerTest extends \PHPUnit_Framework_TestCase
 {
@@ -293,7 +293,7 @@ class MailerTest extends \PHPUnit_Framework_TestCase
     {
         $mailer = new Mailer($this->mock(Swift_Mailer::class));
 
-        $mailer->send(new StdClass);
+        $mailer->send(new StdClass());
     }
 
     /**
@@ -304,7 +304,7 @@ class MailerTest extends \PHPUnit_Framework_TestCase
     {
         $mailer = new Mailer($this->mock(Swift_Mailer::class));
 
-        $mailer->send('test', [], new StdClass);
+        $mailer->send('test', [], new StdClass());
     }
 
     protected function setSwiftMailer($mailer)
