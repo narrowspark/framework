@@ -25,7 +25,7 @@ class Response extends AbstractMessage implements ResponseInterface
      * @param array                                                  $headers Headers for the response, if any.
      * @param string|resource|\Psr\Http\Message\StreamInterface|null $body    Stream identifier and/or actual stream resource
      * @param string                                                 $version Protocol version.
-
+     *
      * @throws InvalidArgumentException on any invalid element.
      */
     public function __construct(

@@ -17,12 +17,9 @@ abstract class AbstractTransport implements Swift_Transport
     protected $plugins = [];
 
     /**
-     * @var string
-     */
-    protected $serverKeyFingerprint;
-
-    /**
      * {@inheritdoc}
+     *
+     * @codeCoverageIgnore
      */
     public function isStarted(): bool
     {
@@ -31,6 +28,8 @@ abstract class AbstractTransport implements Swift_Transport
 
     /**
      * {@inheritdoc}
+     *
+     * @codeCoverageIgnore
      */
     public function start()
     {
@@ -39,6 +38,8 @@ abstract class AbstractTransport implements Swift_Transport
 
     /**
      * {@inheritdoc}
+     *
+     * @codeCoverageIgnore
      */
     public function stop()
     {
@@ -49,6 +50,8 @@ abstract class AbstractTransport implements Swift_Transport
      * Register a plug-in with the transport.
      *
      * @param \Swift_Events_EventListener $plugin
+     *
+     * @codeCoverageIgnore
      */
     public function registerPlugin(Swift_Events_EventListener $plugin)
     {

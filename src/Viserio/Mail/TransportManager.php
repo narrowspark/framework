@@ -19,6 +19,16 @@ use Viserio\Support\AbstractManager;
 class TransportManager extends AbstractManager
 {
     /**
+     * Get the default driver name.
+     *
+     * @return string
+     */
+    public function getDefaultDriver(): string
+    {
+        return $this->config->get($this->getConfigName() . '.default', 'smtp');
+    }
+
+    /**
      * Create an instance of the Log Swift Transport driver.
      *
      * @return \Viserio\Mail\Transport\Log
@@ -60,8 +70,8 @@ class TransportManager extends AbstractManager
     protected function createSmtpDriver(array $config): Swift_SmtpTransport
     {
         // The Swift SMTP transport instance will allow us to use any SMTP backend
-        // for delivering mail such as Sendgrid, Amazon SES, or a custom server
-        // a developer has available. We will just pass this configured host.
+        // for delivering mail such as Amazon SES, Sendgrid or a custom server
+        // a developer has available.
         $transport = Swift_SmtpTransport::newInstance(
             $config['host'],
             $config['port']
@@ -72,8 +82,7 @@ class TransportManager extends AbstractManager
         }
 
         // Once we have the transport we will check for the presence of a username
-        // and password. If we have it we will set the credentials on the Swift
-        // transporter instance so that we'll properly authenticate delivery.
+        // and password.
         if (isset($config['username'], $config['password'])) {
             $transport->setUsername($config['username']);
             $transport->setPassword($config['password']);

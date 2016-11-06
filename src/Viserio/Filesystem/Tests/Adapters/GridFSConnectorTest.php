@@ -5,7 +5,6 @@ namespace Viserio\Filesystem\Tests\Adapters;
 use League\Flysystem\GridFS\GridFSAdapter;
 use MongoClient;
 use MongoConnectionException;
-use MongoDB\Driver\Manager as MongoDBManager;
 use Viserio\Filesystem\Adapters\GridFSConnector;
 
 class GridFSConnectorTest extends \PHPUnit_Framework_TestCase

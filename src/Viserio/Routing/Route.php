@@ -140,8 +140,6 @@ class Route implements RouteContract
         if (isset($this->action['domain'])) {
             return str_replace(['http://', 'https://'], '', $this->action['domain']);
         }
-
-        return;
     }
 
     /**

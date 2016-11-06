@@ -3,7 +3,6 @@ declare(strict_types=1);
 namespace Viserio\Support;
 
 use Closure;
-use Viserio\Support\Str;
 
 class Env
 {
