@@ -9,6 +9,20 @@ use Viserio\Contracts\Filesystem\Filesystem as FilesystemContract;
 class EncryptionWrapper
 {
     /**
+     * Encryption key.
+     *
+     * @var \Defuse\Crypto\Key
+     */
+    protected $key;
+
+    /**
+     * Filesystem instance.
+     *
+     * @var \Viserio\Contracts\Filesystem\Filesystem
+     */
+    protected $adapter;
+
+    /**
      * [__construct description]
      *
      * @param \Viserio\Contracts\Filesystem\Filesystem $adapter
@@ -16,6 +30,7 @@ class EncryptionWrapper
      */
     public function __construct(FilesystemContract $adapter, Key $key)
     {
+        $this->adapter = $adapter;
         $this->key = $key;
     }
 
@@ -24,7 +39,7 @@ class EncryptionWrapper
      */
     public function write(string $path, $contents, array $config = []): bool
     {
-        File::encryptFile($inputFilename, $outputFilename, $this->key)
+        File::encryptFile($inputFilename, $outputFilename, $this->key);
     }
 
     /**
@@ -32,6 +47,6 @@ class EncryptionWrapper
      */
     public function read(string $path): string
     {
-        File::decryptFile($inputFilename, $outputFilename, $this->key)
+        File::decryptFile($inputFilename, $outputFilename, $this->key);
     }
 }
