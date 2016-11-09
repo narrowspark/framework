@@ -38,6 +38,15 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Viserio\Contracts\Filesystem\Exception\FileNotFoundException
+     * expectedExceptionMessage
+     */
+    public function testReadStreamToThrowException()
+    {
+        $this->files->readStream(vfsStream::url('foo/bar/tmp/file.php'));
+    }
+
+        /**
+     * @expectedException \Viserio\Contracts\Filesystem\Exception\FileNotFoundException
      */
     public function testReadToThrowException()
     {
@@ -309,6 +318,21 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
 
         $this->assertSame('copy new visibility', $this->files->read($file->url()));
         $this->assertSame('private', $this->files->getVisibility($file->url()));
+    }
+
+    public function testWriteStreamAndReadStream()
+    {
+        $this->root->addChild(new vfsStreamDirectory('copy'));
+
+        $file = vfsStream::newFile('copy.txt')
+            ->withContent('copy')
+            ->at($this->root->getChild('copy'));
+        $stream = tmpfile();
+
+        $this->assertTrue($this->files->writeStream($file->url(), $stream));
+        $this->assertInternalType('resource', $this->files->readStream($file->url()));
+
+        fclose($stream);
     }
 
     public function testGetMimetype()

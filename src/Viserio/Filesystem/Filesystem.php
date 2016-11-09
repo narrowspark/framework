@@ -68,7 +68,7 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract, Direct
     {
         $path = self::normalizeDirectorySeparator($path);
 
-        if ($stream = fopen($path, 'rb')) {
+        if ($stream = @fopen($path, 'rb')) {
             return $stream;
         }
 
@@ -83,7 +83,7 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract, Direct
         $path = self::normalizeDirectorySeparator($path);
         $lock = isset($config['lock']) ? LOCK_EX : 0;
 
-        if (file_put_contents($path, $contents, $lock) === false) {
+        if (@file_put_contents($path, $contents, $lock) === false) {
             return false;
         }
 
@@ -101,9 +101,7 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract, Direct
     {
         $path = self::normalizeDirectorySeparator($path);
 
-        $this->ensureDirectory(dirname($path));
-
-        $stream = fopen($path, 'w+b');
+        $stream = @fopen($path, 'w+b');
 
         if (! $stream) {
             return false;
@@ -113,10 +111,6 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract, Direct
 
         if (! fclose($stream)) {
             return false;
-        }
-
-        if ($visibility = $config['visibility']) {
-            $this->setVisibility($path, $visibility);
         }
 
         return true;
