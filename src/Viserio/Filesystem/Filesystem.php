@@ -78,7 +78,7 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract, Direct
     /**
      * {@inheritdoc}
      */
-    public function write(string $path, $contents, array $config = []): bool
+    public function write(string $path, string $contents, array $config = []): bool
     {
         $path = self::normalizeDirectorySeparator($path);
         $lock = isset($config['lock']) ? LOCK_EX : 0;

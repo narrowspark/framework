@@ -101,7 +101,7 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
     /**
      * {@inheritdoc}
      */
-    public function write(string $path, $contents, array $config = []): bool
+    public function write(string $path, string $contents, array $config = []): bool
     {
         $config['visibility'] = $this->parseVisibility($config['visibility'] ?? null) ?: [];
 
