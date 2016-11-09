@@ -34,6 +34,21 @@ class EncryptionWrapper
         $this->key = $key;
     }
 
+     /**
+     * Call a Flysystem adapter plugin.
+     *
+     * @param string $method
+     * @param array  $arguments
+     *
+     * @throws \BadMethodCallException
+     *
+     * @return mixed
+     */
+    public function __call(string $method, array $arguments)
+    {
+        return call_user_func_array([$this->adapter, $method], $arguments);
+    }
+
     /**
      * {@inheritdoc}
      */
