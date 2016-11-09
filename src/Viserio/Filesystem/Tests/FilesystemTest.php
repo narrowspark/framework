@@ -45,7 +45,7 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
         $this->files->readStream(vfsStream::url('foo/bar/tmp/file.php'));
     }
 
-        /**
+    /**
      * @expectedException \Viserio\Contracts\Filesystem\Exception\FileNotFoundException
      */
     public function testReadToThrowException()
