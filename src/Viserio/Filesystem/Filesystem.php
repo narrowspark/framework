@@ -113,6 +113,10 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract, Direct
             return false;
         }
 
+        if (isset($config['visibility'])) {
+            $this->setVisibility($path, $config['visibility']);
+        }
+
         return true;
     }
 

@@ -330,9 +330,24 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
         $stream = tmpfile();
 
         $this->assertTrue($this->files->writeStream($file->url(), $stream));
+        $this->assertFalse($this->files->writeStream('', $stream));
         $this->assertInternalType('resource', $this->files->readStream($file->url()));
 
         fclose($stream);
+    }
+
+    public function testUpdateStream()
+    {
+        $this->root->addChild(new vfsStreamDirectory('copy'));
+
+        $file = vfsStream::newFile('copy.txt')
+            ->withContent('copy')
+            ->at($this->root->getChild('copy'));
+
+        $stream = tmpfile();
+
+        $this->assertTrue($this->files->updateStream($file->url(), $stream, ['visibility' => 'public']));
+        $this->assertFalse($this->files->updateStream('', $stream));
     }
 
     public function testGetMimetype()
