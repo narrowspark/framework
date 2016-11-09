@@ -62,7 +62,7 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract, Direct
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function readStream(string $path)
     {
@@ -105,13 +105,13 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract, Direct
 
         $stream = fopen($path, 'w+b');
 
-        if ( ! $stream) {
+        if (! $stream) {
             return false;
         }
 
         stream_copy_to_stream($resource, $stream);
 
-        if ( ! fclose($stream)) {
+        if (! fclose($stream)) {
             return false;
         }
 
@@ -136,7 +136,7 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract, Direct
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function updateStream($path, $resource, array $config = []): bool
     {
