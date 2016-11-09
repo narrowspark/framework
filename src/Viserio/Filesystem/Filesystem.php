@@ -128,6 +128,10 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract, Direct
         $path = self::normalizeDirectorySeparator($path);
         $lock = isset($config['lock']) ? LOCK_EX : 0;
 
+        if (is_resource($contents)) {
+            return $this->writeStream($path, $contents, $config);
+        }
+
         $success = file_put_contents($path, $contents, $lock);
 
         return (bool) $success;
