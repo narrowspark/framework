@@ -62,6 +62,20 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract, Direct
     }
 
     /**
+     * @inheritdoc
+     */
+    public function readStream(string $path)
+    {
+        $path = self::normalizeDirectorySeparator($path);
+
+        if ($stream = fopen($path, 'rb')) {
+            return $stream;
+        }
+
+        throw new FileNotFoundException($path);
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function write(string $path, $contents, array $config = []): bool
@@ -83,6 +97,34 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract, Direct
     /**
      * {@inheritdoc}
      */
+    public function writeStream(string $path, $resource, array $config = []): bool
+    {
+        $path = self::normalizeDirectorySeparator($path);
+
+        $this->ensureDirectory(dirname($path));
+
+        $stream = fopen($path, 'w+b');
+
+        if ( ! $stream) {
+            return false;
+        }
+
+        stream_copy_to_stream($resource, $stream);
+
+        if ( ! fclose($stream)) {
+            return false;
+        }
+
+        if ($visibility = $config['visibility']) {
+            $this->setVisibility($path, $visibility);
+        }
+
+        return true;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function put(string $path, $contents, array $config = []): bool
     {
         $path = self::normalizeDirectorySeparator($path);
@@ -91,6 +133,14 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract, Direct
         $success = file_put_contents($path, $contents, $lock);
 
         return (bool) $success;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function updateStream($path, $resource, array $config = []): bool
+    {
+        return $this->writeStream($path, $resource, $config);
     }
 
     /**

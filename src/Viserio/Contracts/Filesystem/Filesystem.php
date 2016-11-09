@@ -39,6 +39,17 @@ interface Filesystem
     public function read(string $path);
 
     /**
+     * Retrieves a read-stream for a path.
+     *
+     * @param string $path The path to the file.
+     *
+     * @throws \Viserio\Contracts\Filesystem\Exception\FileNotFoundException
+     *
+     * @return resource
+     */
+    public function readStream(string $path);
+
+    /**
      * Write a new file.
      *
      * @param string          $path     The path of the new file.
@@ -48,6 +59,17 @@ interface Filesystem
      * @return bool True on success, false on failure.
      */
     public function write(string $path, $contents, array $config = []): bool;
+
+    /**
+     * Write a new file using a stream.
+     *
+     * @param string   $path
+     * @param resource $resource
+     * @param array    $config
+     *
+     * @return bool
+     */
+    public function writeStream(string $path, $resource, array $config = []): bool;
 
     /**
      * Write the contents of a file.
@@ -72,6 +94,17 @@ interface Filesystem
      * @return bool True on success, false on failure.
      */
     public function update(string $path, string $contents, array $config = []): bool;
+
+    /**
+     * Update a file using a stream.
+     *
+     * @param string   $path
+     * @param resource $resource
+     * @param array    $config
+     *
+     * @return bool
+     */
+    public function updateStream($path, $resource, array $config = []): bool;
 
     /**
      * Get the visibility for the given path.
