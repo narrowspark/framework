@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Filesystem\Tests;
 
-use org\bovigo\vfs\content\LargeFileContent;
 use League\Flysystem\Util;
+use org\bovigo\vfs\content\LargeFileContent;
 use Viserio\Filesystem\Adapters\LocalConnector;
 use Viserio\Filesystem\FilesystemAdapter;
 

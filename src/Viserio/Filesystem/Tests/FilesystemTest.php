@@ -2,10 +2,10 @@
 declare(strict_types=1);
 namespace Viserio\Filesystem\Tests;
 
+use League\Flysystem\Util;
 use org\bovigo\vfs\content\LargeFileContent;
 use org\bovigo\vfs\vfsStream;
 use org\bovigo\vfs\vfsStreamDirectory;
-use League\Flysystem\Util;
 use Symfony\Component\Finder\SplFileInfo;
 use Viserio\Filesystem\Filesystem;
 
