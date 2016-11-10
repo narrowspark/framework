@@ -39,7 +39,6 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Viserio\Contracts\Filesystem\Exception\FileNotFoundException
-     * expectedExceptionMessage
      */
     public function testReadStreamToThrowException()
     {

@@ -89,13 +89,13 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
      */
     public function readStream(string $path)
     {
-        $content = $this->driver->readStream($path);
-
-        if (! $content) {
+        if (! $this->has($path)) {
             throw new FileNotFoundException($path);
         }
 
-        return $content;
+        $content = $this->driver->readStream($path);
+
+        return $content['stream'];
     }
 
     /**

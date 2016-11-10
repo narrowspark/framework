@@ -80,6 +80,14 @@ class FilesystemAdapterTest extends \PHPUnit_Framework_TestCase
         $this->adapter->read('test2.txt');
     }
 
+    /**
+     * @expectedException \Viserio\Contracts\Filesystem\Exception\FileNotFoundException
+     */
+    public function testReadStreamToThrowException()
+    {
+        $this->adapter->readStream('foo/bar/tmp/file.php');
+    }
+
     public function testUpdateStoresFiles()
     {
         $adapter = $this->adapter;
@@ -115,8 +123,7 @@ class FilesystemAdapterTest extends \PHPUnit_Framework_TestCase
 
         $this->assertTrue($adapter->updateStream('stream.txt', $temp, ['visibility' => 'public']));
 
-        $content = $adapter->readStream('stream.txt');
-        $stream = $content['stream'];
+        $stream = $adapter->readStream('stream.txt');
 
         $contents = stream_get_contents($stream);
         $size = Util::getStreamSize($stream);
