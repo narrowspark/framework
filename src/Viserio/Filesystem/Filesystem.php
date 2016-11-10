@@ -4,6 +4,7 @@ namespace Viserio\Filesystem;
 
 use FilesystemIterator;
 use InvalidArgumentException;
+use League\Flysystem\Util;
 use League\Flysystem\Util\MimeType;
 use Symfony\Component\Filesystem\Exception\FileNotFoundException as SymfonyFileNotFoundException;
 use Symfony\Component\Filesystem\Exception\IOException as SymfonyIOException;
@@ -64,12 +65,26 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract, Direct
     /**
      * {@inheritdoc}
      */
-    public function write(string $path, $contents, array $config = []): bool
+    public function readStream(string $path)
+    {
+        if (! $this->has($path)) {
+            throw new FileNotFoundException($path);
+        }
+
+        $stream = fopen($path, 'rb');
+
+        return $stream;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function write(string $path, string $contents, array $config = []): bool
     {
         $path = self::normalizeDirectorySeparator($path);
         $lock = isset($config['lock']) ? LOCK_EX : 0;
 
-        if (file_put_contents($path, $contents, $lock) === false) {
+        if (@file_put_contents($path, $contents, $lock) === false) {
             return false;
         }
 
@@ -83,14 +98,42 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract, Direct
     /**
      * {@inheritdoc}
      */
+    public function writeStream(string $path, $resource, array $config = []): bool
+    {
+        Util::rewindStream($resource);
+
+        $contents = stream_get_contents($resource);
+
+        return $this->write($path, $contents, $config);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function put(string $path, $contents, array $config = []): bool
     {
         $path = self::normalizeDirectorySeparator($path);
         $lock = isset($config['lock']) ? LOCK_EX : 0;
 
+        if (is_resource($contents)) {
+            return $this->writeStream($path, $contents, $config);
+        }
+
         $success = file_put_contents($path, $contents, $lock);
 
         return (bool) $success;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function updateStream($path, $resource, array $config = []): bool
+    {
+        Util::rewindStream($resource);
+
+        $contents = stream_get_contents($resource);
+
+        return $this->update($path, $contents, $config);
     }
 
     /**
