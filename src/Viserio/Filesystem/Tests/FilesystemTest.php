@@ -5,6 +5,7 @@ namespace Viserio\Filesystem\Tests;
 use org\bovigo\vfs\content\LargeFileContent;
 use org\bovigo\vfs\vfsStream;
 use org\bovigo\vfs\vfsStreamDirectory;
+use League\Flysystem\Util;
 use Symfony\Component\Finder\SplFileInfo;
 use Viserio\Filesystem\Filesystem;
 
@@ -325,15 +326,24 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
         $this->root->addChild(new vfsStreamDirectory('copy'));
 
         $file = vfsStream::newFile('copy.txt')
-            ->withContent('copy')
             ->at($this->root->getChild('copy'));
-        $stream = tmpfile();
 
-        $this->assertTrue($this->files->writeStream($file->url(), $stream));
-        $this->assertFalse($this->files->writeStream('', $stream));
-        $this->assertInternalType('resource', $this->files->readStream($file->url()));
+        $temp = tmpfile();
+        fwrite($temp, 'dummy');
+        rewind($temp);
+
+        $this->files->writeStream($file->url(), $temp);
+
+        $stream = $this->files->readStream($file->url());
+
+        $contents = stream_get_contents($stream);
+        $size = Util::getStreamSize($stream);
 
         fclose($stream);
+
+        $this->assertSame(5, $size);
+        $this->assertSame('dummy', $contents);
+        $this->assertInternalType('resource', $this->files->readStream($file->url()));
     }
 
     public function testUpdateStream()
@@ -344,10 +354,28 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
             ->withContent('copy')
             ->at($this->root->getChild('copy'));
 
-        $stream = tmpfile();
+        $this->assertSame('copy', $this->files->read($file->url()));
 
-        $this->assertTrue($this->files->updateStream($file->url(), $stream, ['visibility' => 'public']));
-        $this->assertFalse($this->files->updateStream('', $stream));
+        $temp = tmpfile();
+
+        fwrite($temp, 'dummy');
+        rewind($temp);
+
+        $this->assertTrue($this->files->updateStream(
+            $file->url(),
+            $temp,
+            ['visibility' => 'public']
+        ));
+
+        $stream = $this->files->readStream($file->url());
+
+        $contents = stream_get_contents($stream);
+        $size = Util::getStreamSize($stream);
+
+        fclose($stream);
+
+        $this->assertSame(9, $size);
+        $this->assertSame('copydummy', $contents);
     }
 
     public function testGetMimetype()

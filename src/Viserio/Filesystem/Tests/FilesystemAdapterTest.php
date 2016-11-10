@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Filesystem\Tests;
 
 use org\bovigo\vfs\content\LargeFileContent;
+use League\Flysystem\Util;
 use Viserio\Filesystem\Adapters\LocalConnector;
 use Viserio\Filesystem\FilesystemAdapter;
 
@@ -23,7 +24,7 @@ class FilesystemAdapterTest extends \PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
-        $this->root = __DIR__ . '/stubs/';
+        $this->root = __DIR__ . '/stubs';
 
         $connector = new LocalConnector();
 
@@ -98,6 +99,35 @@ class FilesystemAdapterTest extends \PHPUnit_Framework_TestCase
         $this->adapter->update($this->root . 'TestDontExists.txt', 'Hello World');
     }
 
+    public function testUpdateStream()
+    {
+        $adapter = $this->adapter;
+
+        $temp = tmpfile();
+
+        fwrite($temp, 'copy');
+        rewind($temp);
+
+        $adapter->writeStream('stream.txt', $temp);
+
+        fwrite($temp, 'dummy');
+        rewind($temp);
+
+        $this->assertTrue($adapter->updateStream('stream.txt', $temp, ['visibility' => 'public']));
+
+        $content = $adapter->readStream('stream.txt');
+        $stream = $content['stream'];
+
+        $contents = stream_get_contents($stream);
+        $size = Util::getStreamSize($stream);
+
+        fclose($stream);
+        fclose($temp);
+
+        $this->assertSame(9, $size);
+        $this->assertSame('copydummy', $contents);
+    }
+
     public function testDeleteDirectory()
     {
         $adapter = $this->adapter;
@@ -170,7 +200,7 @@ class FilesystemAdapterTest extends \PHPUnit_Framework_TestCase
 
         $adapter->write('2kb.txt', $content->content());
 
-        $this->assertEquals(filesize($this->root . '2kb.txt'), $adapter->getSize('2kb.txt'));
+        $this->assertEquals(filesize($this->root . '/2kb.txt'), $adapter->getSize('2kb.txt'));
     }
 
     public function testAllFilesFindsFiles()

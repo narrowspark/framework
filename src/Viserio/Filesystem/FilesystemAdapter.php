@@ -87,7 +87,7 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
     /**
      * {@inheritdoc}
      */
-    public function readStream(string $path): string
+    public function readStream(string $path)
     {
         $content = $this->driver->readStream($path);
 
@@ -177,7 +177,7 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
 
         $update = $this->driver->updateStream($path, $resource, $flyConfig);
 
-        return ! $update ?: false;
+        return is_array($update);
     }
 
     /**

@@ -4,6 +4,7 @@ namespace Viserio\Filesystem;
 
 use FilesystemIterator;
 use InvalidArgumentException;
+use League\Flysystem\Util;
 use League\Flysystem\Util\MimeType;
 use Symfony\Component\Filesystem\Exception\FileNotFoundException as SymfonyFileNotFoundException;
 use Symfony\Component\Filesystem\Exception\IOException as SymfonyIOException;
@@ -66,13 +67,13 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract, Direct
      */
     public function readStream(string $path)
     {
-        $path = self::normalizeDirectorySeparator($path);
-
-        if ($stream = @fopen($path, 'rb')) {
-            return $stream;
+        if (! $this->has($path)) {
+            throw new FileNotFoundException($path);
         }
 
-        throw new FileNotFoundException($path);
+        $stream = fopen($path, 'rb');
+
+        return $stream;
     }
 
     /**
@@ -99,25 +100,11 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract, Direct
      */
     public function writeStream(string $path, $resource, array $config = []): bool
     {
-        $path = self::normalizeDirectorySeparator($path);
+        Util::rewindStream($resource);
 
-        $stream = @fopen($path, 'w+b');
+        $contents = stream_get_contents($resource);
 
-        if (! $stream) {
-            return false;
-        }
-
-        stream_copy_to_stream($resource, $stream);
-
-        if (! fclose($stream)) {
-            return false;
-        }
-
-        if (isset($config['visibility'])) {
-            $this->setVisibility($path, $config['visibility']);
-        }
-
-        return true;
+        return $this->write($path, $contents, $config);
     }
 
     /**
@@ -142,7 +129,11 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract, Direct
      */
     public function updateStream($path, $resource, array $config = []): bool
     {
-        return $this->writeStream($path, $resource, $config);
+        Util::rewindStream($resource);
+
+        $contents = stream_get_contents($resource);
+
+        return $this->update($path, $contents, $config);
     }
 
     /**
