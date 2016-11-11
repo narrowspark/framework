@@ -67,6 +67,8 @@ class Mailgun extends AbstractTransport
 
         $this->client->post($this->url, $options);
 
+        $this->sendPerformed($message);
+
         return $this->numberOfRecipients($message);
     }
 

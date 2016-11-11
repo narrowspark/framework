@@ -59,6 +59,8 @@ class Postmark extends AbstractTransport
             'json' => $this->getMessagePayload($message),
         ]);
 
+        $this->sendPerformed($message);
+
         return $this->numberOfRecipients($message);
     }
 

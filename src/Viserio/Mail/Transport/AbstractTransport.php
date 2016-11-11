@@ -89,4 +89,21 @@ abstract class AbstractTransport implements Swift_Transport
             (array) $message->getBcc()
         ));
     }
+
+    /**
+     * Iterate through registered plugins and execute plugins' methods.
+     *
+     * @param \Swift_Mime-Message $message
+     * @return void
+     */
+    protected function sendPerformed(Swift_Mime_Message $message)
+    {
+        $event = new Swift_Events_SendEvent($this, $message);
+
+        foreach ($this->plugins as $plugin) {
+            if (method_exists($plugin, 'sendPerformed')) {
+                $plugin->sendPerformed($event);
+            }
+        }
+    }
 }
