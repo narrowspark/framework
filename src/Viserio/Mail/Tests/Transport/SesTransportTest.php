@@ -4,8 +4,8 @@ namespace Viserio\Mail\Tests\Transport;
 
 use Aws\Ses\SesClient;
 use Swift_Message;
-use Viserio\Mail\Transport\Ses as SesTransport;
 use Viserio\Mail\Tests\Transport\Fixture\SendRawEmailMock;
+use Viserio\Mail\Transport\Ses as SesTransport;
 use Viserio\Support\Str;
 
 class SesTransportTest extends \PHPUnit_Framework_TestCase
