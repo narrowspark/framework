@@ -34,6 +34,8 @@ class Log extends AbstractTransport
 
         $this->logger->debug($this->getMimeEntityString($message));
 
+        $this->sendPerformed($message);
+
         return $this->numberOfRecipients($message);
     }
 

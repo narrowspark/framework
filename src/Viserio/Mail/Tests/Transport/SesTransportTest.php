@@ -4,7 +4,9 @@ namespace Viserio\Mail\Tests\Transport;
 
 use Aws\Ses\SesClient;
 use Swift_Message;
+use Viserio\Mail\Tests\Transport\Fixture\SendRawEmailMock;
 use Viserio\Mail\Transport\Ses as SesTransport;
+use Viserio\Support\Str;
 
 class SesTransportTest extends \PHPUnit_Framework_TestCase
 {
@@ -22,6 +24,9 @@ class SesTransportTest extends \PHPUnit_Framework_TestCase
 
         $transport = new SesTransport($client);
 
+        $messageId = Str::random(32);
+        $sendRawEmailMock = new SendRawEmailMock($messageId);
+
         $client->expects($this->once())
             ->method('sendRawEmail')
             ->with(
@@ -29,8 +34,10 @@ class SesTransportTest extends \PHPUnit_Framework_TestCase
                     'Source' => 'myself@example.com',
                     'RawMessage' => ['Data' => (string) $message],
                 ])
-            );
+            )->willReturn($sendRawEmailMock);
 
         $transport->send($message);
+
+        $this->assertEquals($messageId, $message->getHeaders()->get('X-SES-Message-ID')->getFieldBody());
     }
 }

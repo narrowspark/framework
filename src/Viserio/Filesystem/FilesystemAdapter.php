@@ -87,19 +87,43 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
     /**
      * {@inheritdoc}
      */
-    public function write(string $path, $contents, array $config = []): bool
+    public function readStream(string $path)
+    {
+        if (! $this->has($path)) {
+            throw new FileNotFoundException($path);
+        }
+
+        $content = $this->driver->readStream($path);
+
+        return $content['stream'];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function write(string $path, string $contents, array $config = []): bool
     {
         $config['visibility'] = $this->parseVisibility($config['visibility'] ?? null) ?: [];
 
         $flyConfig = new FlyConfig($config);
 
-        if (is_resource($contents)) {
-            return $this->driver->writeStream($path, $contents, $flyConfig);
-        }
-
         $write = $this->driver->write($path, $contents, $flyConfig);
 
-        return ! $write ?: false;
+        return $write !== false;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function writeStream(string $path, $resource, array $config = []): bool
+    {
+        $config['visibility'] = $this->parseVisibility($config['visibility'] ?? null) ?: [];
+
+        $flyConfig = new FlyConfig($config);
+
+        $write = $this->driver->writeStream($path, $resource, $flyConfig);
+
+        return $write !== false;
     }
 
     /**
@@ -140,6 +164,20 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
         $update = $this->driver->update($path, $contents, $flyConfig);
 
         return ! $update ?: false;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function updateStream($path, $resource, array $config = []): bool
+    {
+        $config['visibility'] = $this->parseVisibility($config['visibility'] ?? null) ?: [];
+
+        $flyConfig = new FlyConfig($config);
+
+        $update = $this->driver->updateStream($path, $resource, $flyConfig);
+
+        return is_array($update);
     }
 
     /**
