@@ -202,7 +202,7 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
         return $this->driver->setVisibility(
             $path,
             $this->parseVisibility($visibility)
-        )!== false;
+        ) !== false;
     }
 
     /**

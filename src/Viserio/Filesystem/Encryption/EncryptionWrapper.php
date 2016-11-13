@@ -2,11 +2,11 @@
 declare(strict_types=1);
 namespace Viserio\Filesystem\Encryption;
 
-use Defuse\Crypto\Key;
 use Defuse\Crypto\File;
+use Defuse\Crypto\Key;
 use League\Flysystem\Util;
-use Viserio\Contracts\Filesystem\Filesystem as FilesystemContract;
 use Viserio\Contracts\Filesystem\Exception\FileNotFoundException;
+use Viserio\Contracts\Filesystem\Filesystem as FilesystemContract;
 
 class EncryptionWrapper
 {
