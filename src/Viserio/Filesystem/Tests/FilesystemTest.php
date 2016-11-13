@@ -375,7 +375,7 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
         fclose($stream);
 
         $this->assertSame(5, $size);
-        $this->assertSame('copydummy', $contents);
+        $this->assertSame('dummy', $contents);
     }
 
     public function testGetMimetype()
