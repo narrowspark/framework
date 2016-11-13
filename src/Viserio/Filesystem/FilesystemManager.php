@@ -23,7 +23,7 @@ class FilesystemManager extends AbstractConnectionManager
      * @param \Defuse\Crypto\Key $key
      * @param string|null        $name
      *
-     * @return mixed
+     * @return \Viserio\Filesystem\Encryption\EncryptionWrapper
      */
     public function cryptedConnection(Key $key, string $name = null)
     {

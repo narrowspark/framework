@@ -45,7 +45,7 @@ interface Filesystem
      *
      * @throws \Viserio\Contracts\Filesystem\Exception\FileNotFoundException
      *
-     * @return resource
+     * @return resource|bool
      */
     public function readStream(string $path);
 
