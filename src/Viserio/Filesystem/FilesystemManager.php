@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Filesystem;
 
+use Defuse\Crypto\Key;
 use InvalidArgumentException;
 use League\Flysystem\AdapterInterface;
 use League\Flysystem\Cached\CachedAdapter;
@@ -10,10 +11,24 @@ use Viserio\Contracts\Cache\Traits\CacheAwareTrait;
 use Viserio\Contracts\Filesystem\Filesystem as FilesystemContract;
 use Viserio\Filesystem\Cache\CachedFactory;
 use Viserio\Support\AbstractConnectionManager;
+use Viserio\Filesystem\Encryption\EncryptionWrapper;
 
 class FilesystemManager extends AbstractConnectionManager
 {
     use CacheAwareTrait;
+
+    /**
+     * Get a crypted aware connection instance.
+     *
+     * @param string|null $name
+     * @param Defuse\Crypto\Key $key
+     *
+     * @return mixed
+     */
+    public function cryptedConnection(string $name = null, Key $key)
+    {
+        return new EncryptionWrapper($this->connection($name), $key);
+    }
 
     /**
      * {@inheritdoc}
