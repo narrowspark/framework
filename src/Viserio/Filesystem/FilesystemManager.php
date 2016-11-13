@@ -10,8 +10,8 @@ use Narrowspark\Arr\Arr;
 use Viserio\Contracts\Cache\Traits\CacheAwareTrait;
 use Viserio\Contracts\Filesystem\Filesystem as FilesystemContract;
 use Viserio\Filesystem\Cache\CachedFactory;
-use Viserio\Support\AbstractConnectionManager;
 use Viserio\Filesystem\Encryption\EncryptionWrapper;
+use Viserio\Support\AbstractConnectionManager;
 
 class FilesystemManager extends AbstractConnectionManager
 {
@@ -20,7 +20,7 @@ class FilesystemManager extends AbstractConnectionManager
     /**
      * Get a crypted aware connection instance.
      *
-     * @param string|null $name
+     * @param string|null       $name
      * @param Defuse\Crypto\Key $key
      *
      * @return mixed

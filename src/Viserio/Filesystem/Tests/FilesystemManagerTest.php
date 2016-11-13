@@ -10,8 +10,8 @@ use MongoClient;
 use MongoConnectionException;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use Viserio\Contracts\Config\Manager as ConfigManger;
-use Viserio\Filesystem\FilesystemAdapter;
 use Viserio\Filesystem\Encryption\EncryptionWrapper;
+use Viserio\Filesystem\FilesystemAdapter;
 use Viserio\Filesystem\FilesystemManager;
 
 class FilesystemManagerTest extends \PHPUnit_Framework_TestCase
