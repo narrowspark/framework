@@ -338,7 +338,7 @@ class FilesystemManagerTest extends \PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf(
             EncryptionWrapper::class,
-            $manager->cryptedConnection('local', $key)
+            $manager->cryptedConnection($key, 'local')
         );
     }
 }

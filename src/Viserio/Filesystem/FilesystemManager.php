@@ -20,12 +20,12 @@ class FilesystemManager extends AbstractConnectionManager
     /**
      * Get a crypted aware connection instance.
      *
-     * @param string|null $name
-     * @param Defuse\Crypto\Key $key
+     * @param \Defuse\Crypto\Key $key
+     * @param string|null        $name
      *
      * @return mixed
      */
-    public function cryptedConnection(string $name = null, Key $key)
+    public function cryptedConnection(Key $key, string $name = null)
     {
         return new EncryptionWrapper($this->connection($name), $key);
     }
