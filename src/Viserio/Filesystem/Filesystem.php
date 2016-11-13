@@ -67,11 +67,13 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract, Direct
      */
     public function readStream(string $path)
     {
+        $path = self::normalizeDirectorySeparator($path);
+
         if (! $this->has($path)) {
             throw new FileNotFoundException($path);
         }
 
-        $stream = fopen($path, 'rb');
+        $stream = @fopen($path, 'rb');
 
         return $stream;
     }
@@ -84,7 +86,7 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract, Direct
         $path = self::normalizeDirectorySeparator($path);
         $lock = isset($config['lock']) ? LOCK_EX : 0;
 
-        if (@file_put_contents($path, $contents, $lock) === false) {
+        if (!is_int(@file_put_contents($path, $contents, $lock))) {
             return false;
         }
 
@@ -119,21 +121,7 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract, Direct
             return $this->writeStream($path, $contents, $config);
         }
 
-        $success = file_put_contents($path, $contents, $lock);
-
-        return (bool) $success;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function updateStream($path, $resource, array $config = []): bool
-    {
-        Util::rewindStream($resource);
-
-        $contents = stream_get_contents($resource);
-
-        return $this->update($path, $contents, $config);
+        return is_int(@file_put_contents($path, $contents, $lock));
     }
 
     /**
@@ -147,7 +135,19 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract, Direct
             throw new FileNotFoundException($path);
         }
 
-        return (bool) file_put_contents($path, $contents, FILE_APPEND);
+        return is_int(@file_put_contents($path, $contents));
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function updateStream(string $path, $resource, array $config = []): bool
+    {
+        Util::rewindStream($resource);
+
+        $contents = stream_get_contents($resource);
+
+        return $this->update($path, $contents, $config);
     }
 
     /**

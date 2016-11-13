@@ -65,7 +65,7 @@ interface Filesystem
      *
      * @param string   $path
      * @param resource $resource
-     * @param array    $config
+     * @param array    $config   An optional configuration array.
      *
      * @return bool
      */
@@ -104,7 +104,7 @@ interface Filesystem
      *
      * @return bool
      */
-    public function updateStream($path, $resource, array $config = []): bool;
+    public function updateStream(string $path, $resource, array $config = []): bool;
 
     /**
      * Get the visibility for the given path.

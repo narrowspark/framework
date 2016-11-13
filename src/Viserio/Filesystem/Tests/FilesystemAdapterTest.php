@@ -93,7 +93,6 @@ class FilesystemAdapterTest extends \PHPUnit_Framework_TestCase
         $adapter = $this->adapter;
 
         $adapter->write('test.txt', 'test');
-
         $adapter->update('test.txt', 'Hello World');
 
         $this->assertEquals('Hello World', $adapter->read('test.txt'));

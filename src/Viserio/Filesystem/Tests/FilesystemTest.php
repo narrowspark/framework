@@ -58,8 +58,9 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
         $file = vfsStream::newFile('temp.txt')->at($this->root);
 
         $this->files->update($file->url(), 'Hello World');
+        $this->files->update($file->url(), 'Hello World2');
 
-        $this->assertStringEqualsFile($file->url(), 'Hello World');
+        $this->assertStringEqualsFile($file->url(), 'Hello World2');
     }
 
     public function testPutStoresFiles()
@@ -373,7 +374,7 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
 
         fclose($stream);
 
-        $this->assertSame(9, $size);
+        $this->assertSame(5, $size);
         $this->assertSame('copydummy', $contents);
     }
 
