@@ -67,6 +67,7 @@ class EncryptionWrapper
         if (($result = $this->adapter->read($path)) === false) {
             return false;
         }
+
         return $this->decryptString($result);
     }
 
