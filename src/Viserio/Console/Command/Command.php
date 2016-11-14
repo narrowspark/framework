@@ -199,7 +199,7 @@ abstract class Command extends BaseCommand implements CompletionAwareInterface
      *
      * @param string|null $key
      *
-     * @return string|array
+     * @return string
      */
     public function argument(string $key = null)
     {
