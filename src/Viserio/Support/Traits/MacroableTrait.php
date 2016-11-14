@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Support\Traits;
 
-use Closure;
 use BadMethodCallException;
+use Closure;
 
 trait MacroableTrait
 {
@@ -43,9 +43,9 @@ trait MacroableTrait
      * @param string $method
      * @param array  $parameters
      *
-     * @return mixed
-     *
      * @throws \BadMethodCallException
+     *
+     * @return mixed
      */
     public static function __callStatic($method, $parameters)
     {
@@ -66,9 +66,9 @@ trait MacroableTrait
      * @param string $method
      * @param array  $parameters
      *
-     * @return mixed
-     *
      * @throws \BadMethodCallException
+     *
+     * @return mixed
      */
     public function __call($method, $parameters)
     {

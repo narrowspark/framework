@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Support\Tests\Traits;
 
-use Viserio\Support\Traits\MacroableTrait;
 use Viserio\Support\Tests\Fixture\MacroTest;
+use Viserio\Support\Traits\MacroableTrait;
 
 class MacroableTraitTest extends \PHPUnit_Framework_TestCase
 {
@@ -11,7 +11,7 @@ class MacroableTraitTest extends \PHPUnit_Framework_TestCase
 
     public function testRegisterMacro()
     {
-        $macroable = new self;
+        $macroable = new self();
 
         $macroable::macro(__CLASS__, function () {
             return 'Macro';
@@ -22,7 +22,7 @@ class MacroableTraitTest extends \PHPUnit_Framework_TestCase
 
     public function testRegisterMacroAndCallWithoutStatic()
     {
-        $macroable = new self;
+        $macroable = new self();
 
         $macroable::macro(__CLASS__, function () {
             return 'Macro';
@@ -41,7 +41,7 @@ class MacroableTraitTest extends \PHPUnit_Framework_TestCase
             return static::getProtectedStatic();
         });
 
-        $instance = new MacroTest;
+        $instance = new MacroTest();
         $result = $instance->tryInstance();
 
         $this->assertEquals('instance', $result);
@@ -57,7 +57,7 @@ class MacroableTraitTest extends \PHPUnit_Framework_TestCase
      */
     public function testBadFunctionCall()
     {
-        $instance = new MacroTest;
+        $instance = new MacroTest();
         $instance->dontExist();
     }
 
