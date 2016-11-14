@@ -10,12 +10,13 @@ use UnexpectedValueException;
 use Viserio\Contracts\Container\Traits\ContainerAwareTrait;
 use Viserio\Contracts\Routing\Route as RouteContract;
 use Viserio\Routing\Traits\MiddlewareAwareTrait;
-use Viserio\Support\Invoker;
+use Viserio\Support\Traits\InvokerAwareTrait;
 
 class Route implements RouteContract
 {
     use ContainerAwareTrait;
     use MiddlewareAwareTrait;
+    use InvokerAwareTrait;
 
     /**
      * The URI pattern the route responds to.
@@ -58,13 +59,6 @@ class Route implements RouteContract
      * @var array
      */
     protected $wheres = [];
-
-    /**
-     * Invoker instance.
-     *
-     * @var \Viserio\Support\Invoker
-     */
-    protected $invoker;
 
     /**
      * Route identifier.
@@ -113,16 +107,6 @@ class Route implements RouteContract
     }
 
     /**
-     * Set the invoker instance.
-     *
-     * @param \Viserio\Support\Invoker $invoker
-     */
-    public function setInvoker(Invoker $invoker)
-    {
-        $this->invoker = $invoker;
-    }
-
-    /**
      * Get route identifier
      *
      * @return string
@@ -140,8 +124,6 @@ class Route implements RouteContract
         if (isset($this->action['domain'])) {
             return str_replace(['http://', 'https://'], '', $this->action['domain']);
         }
-
-        return;
     }
 
     /**
@@ -379,7 +361,7 @@ class Route implements RouteContract
             return $this->getController()->{$this->getControllerMethod()}();
         }
 
-        return $this->invoker->call(
+        return $this->getInvoker()->call(
             $this->action['uses'],
             [$request, $this->parameters]
         );

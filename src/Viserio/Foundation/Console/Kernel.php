@@ -108,18 +108,6 @@ class Kernel implements KernelContract, TerminableContract
     }
 
     /**
-     * Define the application's command schedule.
-     */
-    protected function defineConsoleSchedule()
-    {
-        if (class_exists(CronServiceProvider::class)) {
-            $this->app->register(new CronServiceProvider());
-
-            $this->schedule($this->app->get(Schedule::class));
-        }
-    }
-
-    /**
      * {@inheritdoc}
      */
     public function terminate(InputInterface $input, int $status)
@@ -184,6 +172,18 @@ class Kernel implements KernelContract, TerminableContract
         });
 
         return $command;
+    }
+
+    /**
+     * Define the application's command schedule.
+     */
+    protected function defineConsoleSchedule()
+    {
+        if (class_exists(CronServiceProvider::class)) {
+            $this->app->register(new CronServiceProvider());
+
+            $this->schedule($this->app->get(Schedule::class));
+        }
     }
 
     /**

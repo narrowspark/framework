@@ -6,3 +6,9 @@ if [[ "$DISABLE_XDEBUG" = true ]]; then
 fi
 
 echo "extension = memcached.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
+
+# Install mongodb
+pecl -q install mongodb
+
+# Install mongo-php-adapter
+composer require alcaeus/mongo-php-adapter

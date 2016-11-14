@@ -3,7 +3,6 @@ declare(strict_types=1);
 namespace Viserio\Filesystem\Tests\Adapters;
 
 use League\Flysystem\GridFS\GridFSAdapter;
-use Mongo;
 use MongoClient;
 use MongoConnectionException;
 use Viserio\Filesystem\Adapters\GridFSConnector;
@@ -12,7 +11,7 @@ class GridFSConnectorTest extends \PHPUnit_Framework_TestCase
 {
     public function testConnectStandard()
     {
-        if (! class_exists(MongoClient::class) || ! class_exists(Mongo::class)) {
+        if (! class_exists(MongoClient::class)) {
             $this->markTestSkipped('The MongoClient class does not exist');
         }
 

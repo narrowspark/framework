@@ -9,6 +9,7 @@ use Viserio\Contracts\Config\Manager as ConfigManagerContract;
 use Viserio\Contracts\Events\Dispatcher as DispatcherContract;
 use Viserio\Contracts\Foundation\Application as ApplicationContract;
 use Viserio\Contracts\Foundation\Emitter as EmitterContract;
+use Viserio\Contracts\Parsers\Loader as LoaderContract;
 use Viserio\Contracts\Translation\TranslationManager;
 use Viserio\Events\Providers\EventsServiceProvider;
 use Viserio\Foundation\Http\Emitter;
@@ -270,6 +271,10 @@ class Application extends Container implements ApplicationContract
     {
         $this->register(new ParsersServiceProvider());
         $this->register(new ConfigServiceProvider());
+
+        $config = $this->get(ConfigManagerContract::class);
+        $config->setLoader($this->get(LoaderContract::class));
+
         $this->register(new EventsServiceProvider());
         $this->register(new LoggerServiceProvider());
         $this->register(new ConfigureLoggingProvider());

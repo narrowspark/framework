@@ -128,7 +128,7 @@
         "league/plates"                                      : "^3.1",
         "mikey179/vfsStream"                                 : "^1.6",
         "mouf/picotainer"                                    : "^1.0",
-        "narrowspark/php-cs-fixer-config"                    : "^2.0",
+        "narrowspark/php-cs-fixer-config"                    : "^2.1",
         "narrowspark/testing-helper"                         : "^1.5",
         "mockery/mockery"                                    : "^0.9.5",
         "phpunit/phpunit"                                    : "^5.1",
@@ -158,6 +158,7 @@
         }
     },
     "suggest": {
+        "alcaeus/mongo-php-adapter"                          : "Required to use the ext-mongo interface on ext-mongodb interface (^1.0).",
         "aws/aws-sdk-php"                                    : "Required to use the SQS queue driver and SES mail driver (^3.18).",
         "cache/apc-adapter"                                  : "Required to use the Apc cache (^0.3).",
         "cache/apcu-adapter"                                 : "Required to use the Apcu cache (^0.3).",

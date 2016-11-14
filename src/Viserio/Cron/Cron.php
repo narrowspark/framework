@@ -10,11 +10,12 @@ use Symfony\Component\Process\Process;
 use Symfony\Component\Process\ProcessUtils;
 use Viserio\Contracts\Container\Traits\ContainerAwareTrait;
 use Viserio\Contracts\Cron\Cron as CronContract;
-use Viserio\Support\Invoker;
+use Viserio\Support\Traits\InvokerAwareTrait;
 
 class Cron implements CronContract
 {
     use ContainerAwareTrait;
+    use InvokerAwareTrait;
 
     /**
      * The cron expression representing the cron job's frequency.
@@ -106,13 +107,6 @@ class Cron implements CronContract
      * @var bool
      */
     protected $runInBackground = false;
-
-    /**
-     * Invoker instance.
-     *
-     * @var \Viserio\Support\Invoker
-     */
-    protected $invoker;
 
     /**
      * The user the command should run as.
@@ -802,25 +796,5 @@ class Cron implements CronContract
 
             return $now >= strtotime($startTime) && $now <= strtotime($endTime);
         };
-    }
-
-    /**
-     * Get configured invoker.
-     *
-     * @return \Viserio\Support\Invoker
-     */
-    protected function getInvoker(): Invoker
-    {
-        if ($this->invoker === null) {
-            $this->invoker = new Invoker();
-
-            if ($this->container !== null) {
-                $this->invoker->setContainer($this->getContainer())
-                    ->injectByTypeHint(true)
-                    ->injectByParameterName(true);
-            }
-        }
-
-        return $this->invoker;
     }
 }

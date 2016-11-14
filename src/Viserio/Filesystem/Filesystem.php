@@ -4,6 +4,7 @@ namespace Viserio\Filesystem;
 
 use FilesystemIterator;
 use InvalidArgumentException;
+use League\Flysystem\Util;
 use League\Flysystem\Util\MimeType;
 use Symfony\Component\Filesystem\Exception\FileNotFoundException as SymfonyFileNotFoundException;
 use Symfony\Component\Filesystem\Exception\IOException as SymfonyIOException;
@@ -15,6 +16,7 @@ use Viserio\Contracts\Filesystem\Exception\IOException as ViserioIOException;
 use Viserio\Contracts\Filesystem\Filesystem as FilesystemContract;
 use Viserio\Filesystem\Traits\FilesystemExtensionTrait;
 use Viserio\Filesystem\Traits\FilesystemHelperTrait;
+use Viserio\Support\Traits\MacroableTrait;
 use Viserio\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
 class Filesystem extends SymfonyFilesystem implements FilesystemContract, DirectorysystemContract
@@ -22,6 +24,7 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract, Direct
     use NormalizePathAndDirectorySeparatorTrait;
     use FilesystemHelperTrait;
     use FilesystemExtensionTrait;
+    use MacroableTrait;
 
     /**
      * @var array
@@ -64,12 +67,28 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract, Direct
     /**
      * {@inheritdoc}
      */
-    public function write(string $path, $contents, array $config = []): bool
+    public function readStream(string $path)
+    {
+        $path = self::normalizeDirectorySeparator($path);
+
+        if (! $this->has($path)) {
+            throw new FileNotFoundException($path);
+        }
+
+        $stream = @fopen($path, 'rb');
+
+        return $stream;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function write(string $path, string $contents, array $config = []): bool
     {
         $path = self::normalizeDirectorySeparator($path);
         $lock = isset($config['lock']) ? LOCK_EX : 0;
 
-        if (file_put_contents($path, $contents, $lock) === false) {
+        if (!is_int(@file_put_contents($path, $contents, $lock))) {
             return false;
         }
 
@@ -83,14 +102,28 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract, Direct
     /**
      * {@inheritdoc}
      */
+    public function writeStream(string $path, $resource, array $config = []): bool
+    {
+        Util::rewindStream($resource);
+
+        $contents = stream_get_contents($resource);
+
+        return $this->write($path, $contents, $config);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function put(string $path, $contents, array $config = []): bool
     {
         $path = self::normalizeDirectorySeparator($path);
         $lock = isset($config['lock']) ? LOCK_EX : 0;
 
-        $success = file_put_contents($path, $contents, $lock);
+        if (is_resource($contents)) {
+            return $this->writeStream($path, $contents, $config);
+        }
 
-        return (bool) $success;
+        return is_int(@file_put_contents($path, $contents, $lock));
     }
 
     /**
@@ -104,7 +137,19 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract, Direct
             throw new FileNotFoundException($path);
         }
 
-        return (bool) file_put_contents($path, $contents, FILE_APPEND);
+        return is_int(@file_put_contents($path, $contents));
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function updateStream(string $path, $resource, array $config = []): bool
+    {
+        Util::rewindStream($resource);
+
+        $contents = stream_get_contents($resource);
+
+        return $this->update($path, $contents, $config);
     }
 
     /**

@@ -3,8 +3,9 @@ declare(strict_types=1);
 namespace Viserio\Mail\Tests;
 
 use Interop\Container\ContainerInterface;
+use Mockery;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
-use stdClass;
+use StdClass;
 use Swift_Mailer;
 use Swift_Mime_Message;
 use Swift_Transport;
@@ -23,7 +24,7 @@ class QueueMailerTest extends \PHPUnit_Framework_TestCase
     {
         $message = $this->mock(MessageContract::class);
 
-        $mockMailer = $this->mock(stdClass::class);
+        $mockMailer = $this->mock(StdClass::class);
         $mockMailer->shouldReceive('mail')
             ->once()
             ->with($message);
@@ -40,7 +41,7 @@ class QueueMailerTest extends \PHPUnit_Framework_TestCase
             ->setConstructorArgs($this->getMocks())
             ->setMethods(['createMessage'])
             ->getMock();
-
+        $mailer->setViewFactory($this->mock(ViewFactoryContract::class));
         $mailer->setContainer($container);
 
         $mailer->expects($this->once())
@@ -108,7 +109,7 @@ class QueueMailerTest extends \PHPUnit_Framework_TestCase
         $mailer->getSwiftMailer()
             ->shouldReceive('send')
             ->once()
-            ->with(\Mockery::type('Swift_Message'), [])
+            ->with(Mockery::type('Swift_Message'), [])
             ->andReturnUsing(function ($message) use ($me) {
                 $me->assertEquals(['info@narrowspark.de' => 'Daniel Bannert'], $message->getFrom());
 
@@ -166,18 +167,18 @@ class QueueMailerTest extends \PHPUnit_Framework_TestCase
 
     protected function getMailer()
     {
-        return new QueueMailer(
+        $mailer = new QueueMailer(
             $this->mock(Swift_Mailer::class),
-            $this->mock(ViewFactoryContract::class),
             $this->mock(QueueContract::class)
         );
+
+        return $mailer->setViewFactory($this->mock(ViewFactoryContract::class));
     }
 
     protected function getMocks(): array
     {
         return [
             $this->mock(Swift_Mailer::class),
-            $this->mock(ViewFactoryContract::class),
             $this->mock(QueueContract::class),
         ];
     }

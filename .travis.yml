@@ -10,11 +10,6 @@ services:
   - mongodb
   - redis-server
 
-addons:
-  apt:
-    packages:
-      - parallel
-
 matrix:
   include:
     - php: 7.0
@@ -40,12 +35,12 @@ cache:
 
 before_install:
   - mkdir -p ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d
-  - if [ -f build/travis/php/$TRAVIS_PHP_VERSION.sh]; then ./build/travis/php/$TRAVIS_PHP_VERSION.sh; fi
+  - chmod a+x ./build/travis/all.sh && chmod a+x ./build/travis/script.sh && chmod a+x ./build/travis/after_success.sh
+  - ./build/travis/all.sh
   - composer global require hirak/prestissimo # Now composer can install components parallel
   - if [[ "$HUMBUG" = "true" ]]; then composer require humbug/humbug:1.0.0-alpha2; fi
   - git config --global user.name travis-ci
   - git config --global user.email travis@example.com
-  - printf "\n" | pear install Crypt_GPG
 
 install:
   - if [[ "$SETUP" = "basic" ]]; then travis_retry composer install --no-interaction --prefer-dist --no-progress --profile --no-suggest; fi
@@ -53,11 +48,7 @@ install:
   - if [[ "$SETUP" = "lowest" ]]; then travis_retry composer update --prefer-dist --no-interaction --prefer-lowest --prefer-stable --no-suggest; fi
 
 before_script:
-  - chmod a+x ./build/travis/all.sh && chmod a+x ./build/travis/php/7.x.sh && chmod a+x ./build/travis/script.sh && chmod a+x ./build/travis/after_success.sh
   - sleep 15
-  - mongo mydb_test --eval 'db.addUser("travis", "test");'
-  - ./build/travis/all.sh
-  - if [ "$TRAVIS_PHP_VERSION" = "7.0" ]; then ./build/travis/php/7.x.sh; fi
 
 script:
   - ./build/travis/script.sh

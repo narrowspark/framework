@@ -8,11 +8,12 @@ use InvalidArgumentException;
 use Viserio\Contracts\Bus\Dispatcher as DispatcherContract;
 use Viserio\Contracts\Container\Traits\ContainerAwareTrait;
 use Viserio\Pipeline\Pipeline;
-use Viserio\Support\Invoker;
+use Viserio\Support\Traits\InvokerAwareTrait;
 
 class Dispatcher implements DispatcherContract
 {
     use ContainerAwareTrait;
+    use InvokerAwareTrait;
 
     /**
      * The pipeline instance.
@@ -20,13 +21,6 @@ class Dispatcher implements DispatcherContract
      * @var \Viserio\Pipeline\Pipeline
      */
     protected $pipeline;
-
-    /**
-     * The invoker instance.
-     *
-     * @var \Viserio\Support\Invoker
-     */
-    protected $invoker;
 
     /**
      * The pipes to send commands through before dispatching.
@@ -69,10 +63,6 @@ class Dispatcher implements DispatcherContract
         $pipeline->setContainer($container);
 
         $this->pipeline = $pipeline;
-        $this->invoker = (new Invoker())
-            ->injectByTypeHint(true)
-            ->injectByParameterName(true)
-            ->setContainer($container);
     }
 
     /**
@@ -144,7 +134,7 @@ class Dispatcher implements DispatcherContract
     {
         return $this->pipeline->send($command)->through($this->pipes)->then(function ($command) use ($afterResolving) {
             if (method_exists($command, $this->method)) {
-                return $this->invoker->call([$command, $this->method]);
+                return $this->getInvoker()->call([$command, $this->method]);
             }
 
             $handler = $this->resolveHandler($command);

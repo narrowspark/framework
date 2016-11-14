@@ -67,6 +67,8 @@ class Mailgun extends AbstractTransport
 
         $this->client->post($this->url, $options);
 
+        $this->sendPerformed($message);
+
         return $this->numberOfRecipients($message);
     }
 
@@ -74,6 +76,8 @@ class Mailgun extends AbstractTransport
      * Get the API key being used by the transport.
      *
      * @return string
+     *
+     * @codeCoverageIgnore
      */
     public function getKey(): string
     {
@@ -86,6 +90,8 @@ class Mailgun extends AbstractTransport
      * @param string $key
      *
      * @return $this
+     *
+     * @codeCoverageIgnore
      */
     public function setKey(string $key): Mailgun
     {
@@ -129,7 +135,7 @@ class Mailgun extends AbstractTransport
      */
     protected function getTo(Swift_Mime_Message $message): string
     {
-        return $this->formatAddress($message->getTo());
+        return $this->formatAddress((array) $message->getTo());
     }
 
     /**
@@ -141,7 +147,7 @@ class Mailgun extends AbstractTransport
      */
     protected function getCc(Swift_Mime_Message $message): string
     {
-        return $this->formatAddress($message->getCc());
+        return $this->formatAddress((array) $message->getCc());
     }
 
     /**
@@ -153,7 +159,7 @@ class Mailgun extends AbstractTransport
      */
     protected function getBcc(Swift_Mime_Message $message): string
     {
-        return $this->formatAddress($message->getBcc());
+        return $this->formatAddress((array) $message->getBcc());
     }
 
     /**

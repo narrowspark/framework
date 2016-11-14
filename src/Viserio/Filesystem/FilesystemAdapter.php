@@ -15,6 +15,7 @@ use Viserio\Contracts\Filesystem\Exception\IOException as ViserioIOException;
 use Viserio\Contracts\Filesystem\Filesystem as FilesystemContract;
 use Viserio\Filesystem\Traits\FilesystemExtensionTrait;
 use Viserio\Filesystem\Traits\FilesystemHelperTrait;
+use Viserio\Support\Traits\MacroableTrait;
 use Viserio\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
 class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
@@ -22,6 +23,7 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
     use NormalizePathAndDirectorySeparatorTrait;
     use FilesystemExtensionTrait;
     use FilesystemHelperTrait;
+    use MacroableTrait;
 
     /**
      * The Flysystem filesystem implementation.
@@ -73,7 +75,7 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
     /**
      * {@inheritdoc}
      */
-    public function read(string $path): string
+    public function read(string $path)
     {
         if (! $this->has($path)) {
             throw new FileNotFoundException($path);
@@ -81,25 +83,53 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
 
         $content = $this->driver->read($path);
 
-        return ! $content ?: $content['contents'];
+        if ($content !== false) {
+            return $content['contents'];
+        }
+
+        return false;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function write(string $path, $contents, array $config = []): bool
+    public function readStream(string $path)
+    {
+        if (! $this->has($path)) {
+            throw new FileNotFoundException($path);
+        }
+
+        $content = $this->driver->readStream($path);
+
+        if ($content !== false) {
+            return $content['stream'];
+        }
+
+        return false;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function write(string $path, string $contents, array $config = []): bool
     {
         $config['visibility'] = $this->parseVisibility($config['visibility'] ?? null) ?: [];
 
         $flyConfig = new FlyConfig($config);
 
-        if (is_resource($contents)) {
-            return $this->driver->writeStream($path, $contents, $flyConfig);
-        }
+        return $this->driver->write($path, $contents, $flyConfig) !== false;
+    }
 
-        $write = $this->driver->write($path, $contents, $flyConfig);
+    /**
+     * {@inheritdoc}
+     */
+    public function writeStream(string $path, $resource, array $config = []): bool
+    {
+        $config['visibility'] = $this->parseVisibility($config['visibility'] ?? null) ?: [];
 
-        return ! $write ?: false;
+        $flyConfig = new FlyConfig($config);
+
+        return $this->driver->writeStream($path, $resource, $flyConfig) !== false;
     }
 
     /**
@@ -113,17 +143,17 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
 
         if (is_resource($contents)) {
             if ($this->has($path)) {
-                return (bool) $this->driver->updateStream($path, $resource, $flyConfig);
+                return $this->driver->updateStream($path, $contents, $flyConfig) !== false;
             }
 
-            return (bool) $this->driver->writeStream($path, $resource, $flyConfig);
+            return $this->driver->writeStream($path, $contents, $flyConfig) !== false;
         }
 
         if ($this->has($path)) {
-            return (bool) $this->driver->update($path, $contents, $flyConfig);
+            return $this->driver->update($path, $contents, $flyConfig) !== false;
         }
 
-        return (bool) $this->driver->write($path, $contents, $flyConfig);
+        return $this->driver->write($path, $contents, $flyConfig) !== false;
     }
 
     /**
@@ -137,9 +167,19 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
 
         $flyConfig = new FlyConfig($config);
 
-        $update = $this->driver->update($path, $contents, $flyConfig);
+        return $this->driver->update($path, $contents, $flyConfig) !== false;
+    }
 
-        return ! $update ?: false;
+    /**
+     * {@inheritdoc}
+     */
+    public function updateStream(string $path, $resource, array $config = []): bool
+    {
+        $config['visibility'] = $this->parseVisibility($config['visibility'] ?? null) ?: [];
+
+        $flyConfig = new FlyConfig($config);
+
+        return $this->driver->updateStream($path, $resource, $flyConfig) !== false;
     }
 
     /**
@@ -161,9 +201,10 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
      */
     public function setVisibility(string $path, string $visibility): bool
     {
-        $visible = $this->driver->setVisibility($path, $this->parseVisibility($visibility));
-
-        return ! $visible ?: false;
+        return $this->driver->setVisibility(
+            $path,
+            $this->parseVisibility($visibility)
+        ) !== false;
     }
 
     /**
@@ -224,7 +265,11 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
     {
         $size = $this->driver->getSize($path);
 
-        return ! $size ?: $size['size'];
+        if ($size !== false) {
+            return $size['size'];
+        }
+
+        return false;
     }
 
     /**
@@ -238,7 +283,11 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
 
         $mimetype = $this->driver->getMimetype($path);
 
-        return ! $mimetype ?: $mimetype['mimetype'];
+        if ($mimetype !== false) {
+            return $mimetype['mimetype'];
+        }
+
+        return false;
     }
 
     /**
@@ -252,7 +301,11 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
 
         $getTimestamp = $this->driver->getTimestamp($path);
 
-        return ! $getTimestamp ?: $getTimestamp['timestamp'];
+        if ($getTimestamp !== false) {
+            return $getTimestamp['timestamp'];
+        }
+
+        return false;
     }
 
     /**
@@ -262,7 +315,7 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
      */
     public function url(string $path): string
     {
-        $adapter = $this->driver->getAdapter();
+        $adapter = $this->driver;
 
         if ($adapter instanceof AwsS3Adapter) {
             $path = $adapter->getPathPrefix() . $path;
@@ -334,9 +387,7 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
      */
     public function createDirectory(string $path, array $config = []): bool
     {
-        $dir = $this->driver->createDir($path, new FlyConfig($config));
-
-        return ! $dir ?: false;
+        return $this->driver->createDir($path, new FlyConfig($config)) !== false;
     }
 
     /**

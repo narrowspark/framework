@@ -8,14 +8,17 @@ use Narrowspark\Arr\Arr;
 use Swift_Mailer;
 use Swift_Message;
 use Swift_Mime_Message;
+use Viserio\Contracts\Container\Traits\ContainerAwareTrait;
 use Viserio\Contracts\Events\Traits\EventsAwareTrait;
 use Viserio\Contracts\Mail\Mailer as MailerContract;
 use Viserio\Contracts\Mail\Message as MessageContract;
-use Viserio\Contracts\View\Factory as ViewFactoryContract;
 use Viserio\Contracts\View\Traits\ViewAwareTrait;
+use Viserio\Support\Traits\InvokerAwareTrait;
 
 class Mailer implements MailerContract
 {
+    use ContainerAwareTrait;
+    use InvokerAwareTrait;
     use EventsAwareTrait;
     use ViewAwareTrait;
 
@@ -50,13 +53,11 @@ class Mailer implements MailerContract
     /**
      * Create a new Mailer instance.
      *
-     * @param \Swift_Mailer                   $swift
-     * @param \Viserio\Contracts\View\Factory $views
+     * @param \Swift_Mailer $swift
      */
-    public function __construct(Swift_Mailer $swift, ViewFactoryContract $views)
+    public function __construct(Swift_Mailer $swift)
     {
         $this->swift = $swift;
-        $this->views = $views;
     }
 
     /**
@@ -194,13 +195,13 @@ class Mailer implements MailerContract
     protected function addContent(MessageContract $message, $view, $plain, $raw, array $data)
     {
         if ($view !== null) {
-            $message->setBody($this->views->create($view, $data)->render(), 'text/html');
+            $message->setBody($this->createView($view, $data), 'text/html');
         }
 
         if ($plain !== null) {
             $method = $view !== null ? 'addPart' : 'setBody';
 
-            $message->$method($this->views->create($plain, $data)->render(), 'text/plain');
+            $message->$method($this->createView($plain, $data), 'text/plain');
         }
 
         if ($raw !== null) {
@@ -219,7 +220,7 @@ class Mailer implements MailerContract
      */
     protected function sendSwiftMessage(Swift_Mime_Message $message): int
     {
-        if ($this->events) {
+        if ($this->events !== null) {
             $this->events->trigger('events.message.sending', [$message]);
         }
 
@@ -262,9 +263,32 @@ class Mailer implements MailerContract
     protected function callMessageBuilder($callback, $message)
     {
         if ($callback instanceof Closure) {
-            return call_user_func($callback, $message);
+            return $callback($message);
+        } elseif ($this->container !== null) {
+            return $this->getInvoker()->call($callback)->mail($message);
         }
 
         throw new InvalidArgumentException('Callback is not valid.');
+    }
+
+    /**
+     * Creats a view string for the email body.
+     *
+     * @param string|null $view
+     * @param array       $data
+     *
+     * @return string
+     */
+    protected function createView($view, array $data): string
+    {
+        if (! is_string($view)) {
+            return '';
+        }
+
+        if ($this->views !== null) {
+            return $this->getViewFactory()->create($view, $data)->render();
+        }
+
+        return vsprintf($view, $data);
     }
 }

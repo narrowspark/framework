@@ -14,6 +14,9 @@ init:
   - REG ADD "HKEY_CURRENT_USER\Software\Microsoft\Command Processor" /v DelayedExpansion /t REG_DWORD /d 1 /f
 
 install:
+  - nuget install redis-64 -excludeversion
+  - redis-64\tools\redis-server.exe --service-install
+  - redis-64\tools\redis-server.exe --service-start
   - IF EXIST c:\php (SET PHP=0) ELSE (mkdir c:\php)
   - cinst -y OpenSSL.Light
   - cd c:\php
@@ -22,9 +25,7 @@ install:
   - IF %PHP%==1 7z x php-7.0.7-nts-Win32-VC14-x86.zip -y >nul
   - IF %PHP%==1 del /Q *.zip
   - IF %PHP%==1 cd ext
-  - IF %PHP%==1 appveyor DownloadFile http://windows.php.net/downloads/pecl/releases/memcache/3.0.8/php_memcache-3.0.8-5.6-nts-vc11-x86.zip
   - IF %PHP%==1 appveyor DownloadFile http://windows.php.net/downloads/pecl/releases/mongodb/1.1.6/php_mongodb-1.1.6-7.0-nts-vc14-x86.zip
-  - IF %PHP%==1 7z x php_memcache-3.0.8-5.6-nts-vc11-x86.zip -y >nul
   - IF %PHP%==1 7z x php_mongodb-1.1.6-7.0-nts-vc14-x86.zip -y >nul
   - IF %PHP%==1 del /Q *.zip
   - IF %PHP%==1 cd ..
@@ -36,7 +37,6 @@ install:
   - IF %PHP%==1 echo extension=php_openssl.dll >> php.ini
   - IF %PHP%==1 echo extension=php_mongodb.dll >> php.ini
   - IF %PHP%==1 echo apc.enable_cli=1 >> php.ini
-  - IF %PHP%==1 echo extension=php_memcache.dll >> php.ini
   - IF %PHP%==1 echo extension=php_intl.dll >> php.ini
   - IF %PHP%==1 echo extension=php_mbstring.dll >> php.ini
   - IF %PHP%==1 echo extension=php_fileinfo.dll >> php.ini
@@ -47,6 +47,7 @@ install:
   - mkdir %APPDATA%\Composer
   - composer self-update --no-progress --ansi
   - composer global require hirak/prestissimo:dev-master --no-progress --ansi
+  - composer require alcaeus/mongo-php-adapter
   - IF %APPVEYOR_REPO_BRANCH%==master (SET COMPOSER_ROOT_VERSION=dev-master) ELSE (SET COMPOSER_ROOT_VERSION=%APPVEYOR_REPO_BRANCH%.x-dev)
   - cd c:\projects\narrowspark
   - composer install --no-progress --ansi

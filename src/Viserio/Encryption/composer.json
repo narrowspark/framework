@@ -45,7 +45,8 @@
     },
     "suggest": {
         "container-interop/service-provider"  : "Required to use service-provider (^0.3).",
-        "viserio/config"                      : "Optional to use service-provider (self.version)."
+        "viserio/config"                      : "Optional to use service-provider (self.version).",
+        "viserio/statical-proxy"              : "Required to use the proxy instances (self.version)."
     },
     "extra": {
         "branch-alias": {

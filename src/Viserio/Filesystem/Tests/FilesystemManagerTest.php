@@ -2,12 +2,15 @@
 declare(strict_types=1);
 namespace Viserio\Filesystem\Tests;
 
+use Defuse\Crypto\Key;
 use Guzzle\Http\Exception\ClientErrorResponseException;
 use Guzzle\Http\Exception\CurlException;
 use League\Flysystem\AdapterInterface;
+use MongoClient;
 use MongoConnectionException;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use Viserio\Contracts\Config\Manager as ConfigManger;
+use Viserio\Filesystem\Encryption\EncryptionWrapper;
 use Viserio\Filesystem\FilesystemAdapter;
 use Viserio\Filesystem\FilesystemManager;
 
@@ -89,7 +92,7 @@ class FilesystemManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testGridFSConnectorDriver()
     {
-        if (! class_exists(MongoClient::class) || ! class_exists(Mongo::class)) {
+        if (! class_exists(MongoClient::class)) {
             $this->markTestSkipped('The MongoClient class does not exist');
         }
 
@@ -315,6 +318,27 @@ class FilesystemManagerTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(
             FilesystemAdapter::class,
             $manager->connection('local')
+        );
+    }
+
+    public function testGetCryptedConnection()
+    {
+        $key = Key::createNewRandomKey();
+        $config = $this->mock(ConfigManger::class);
+        $config->shouldReceive('get')
+            ->once()
+            ->with('filesystem.connections', [])
+            ->andReturn([
+                'local' => [
+                    'path' => __DIR__,
+                ],
+            ]);
+
+        $manager = new FilesystemManager($config);
+
+        $this->assertInstanceOf(
+            EncryptionWrapper::class,
+            $manager->cryptedConnection($key, 'local')
         );
     }
 }

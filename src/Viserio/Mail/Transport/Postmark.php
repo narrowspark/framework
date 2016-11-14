@@ -59,6 +59,8 @@ class Postmark extends AbstractTransport
             'json' => $this->getMessagePayload($message),
         ]);
 
+        $this->sendPerformed($message);
+
         return $this->numberOfRecipients($message);
     }
 
@@ -66,6 +68,8 @@ class Postmark extends AbstractTransport
      * Get the API key being used by the transport.
      *
      * @return string
+     *
+     * @codeCoverageIgnore
      */
     public function getServerToken(): string
     {
@@ -77,7 +81,9 @@ class Postmark extends AbstractTransport
      *
      * @param string $serverToken
      *
-     * @return Postmark
+     * @return \Viserio\Mail\Transport\Postmark
+     *
+     * @codeCoverageIgnore
      */
     public function setServerToken(string $serverToken): Postmark
     {

@@ -46,7 +46,8 @@
         }
     },
     "suggest": {
-        "container-interop/service-provider"  : "Required to use service-provider (^0.3)."
+        "container-interop/service-provider"  : "Required to use service-provider (^0.3).",
+        "viserio/statical-proxy"              : "Required to use the proxy instances (self.version)."
     },
     "minimum-stability"                       : "dev",
     "prefer-stable"                           : true

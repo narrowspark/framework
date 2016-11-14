@@ -17,12 +17,9 @@ abstract class AbstractTransport implements Swift_Transport
     protected $plugins = [];
 
     /**
-     * @var string
-     */
-    protected $serverKeyFingerprint;
-
-    /**
      * {@inheritdoc}
+     *
+     * @codeCoverageIgnore
      */
     public function isStarted(): bool
     {
@@ -31,6 +28,8 @@ abstract class AbstractTransport implements Swift_Transport
 
     /**
      * {@inheritdoc}
+     *
+     * @codeCoverageIgnore
      */
     public function start()
     {
@@ -39,6 +38,8 @@ abstract class AbstractTransport implements Swift_Transport
 
     /**
      * {@inheritdoc}
+     *
+     * @codeCoverageIgnore
      */
     public function stop()
     {
@@ -49,6 +50,8 @@ abstract class AbstractTransport implements Swift_Transport
      * Register a plug-in with the transport.
      *
      * @param \Swift_Events_EventListener $plugin
+     *
+     * @codeCoverageIgnore
      */
     public function registerPlugin(Swift_Events_EventListener $plugin)
     {
@@ -85,5 +88,21 @@ abstract class AbstractTransport implements Swift_Transport
             (array) $message->getCc(),
             (array) $message->getBcc()
         ));
+    }
+
+    /**
+     * Iterate through registered plugins and execute plugins' methods.
+     *
+     * @param \Swift_Mime_Message $message
+     */
+    protected function sendPerformed(Swift_Mime_Message $message)
+    {
+        $event = new Swift_Events_SendEvent($this, $message);
+
+        foreach ($this->plugins as $plugin) {
+            if (method_exists($plugin, 'sendPerformed')) {
+                $plugin->sendPerformed($event);
+            }
+        }
     }
 }

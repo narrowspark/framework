@@ -6,11 +6,12 @@ use Interop\Container\ContainerInterface;
 use Viserio\Contracts\Container\Traits\ContainerAwareTrait;
 use Viserio\Contracts\Events\Dispatcher as DispatcherContract;
 use Viserio\Events\Traits\ValidateNameTrait;
-use Viserio\Support\Invoker;
+use Viserio\Support\Traits\InvokerAwareTrait;
 
 class Dispatcher implements DispatcherContract
 {
     use ContainerAwareTrait;
+    use InvokerAwareTrait;
     use ValidateNameTrait;
 
     /**
@@ -35,13 +36,6 @@ class Dispatcher implements DispatcherContract
     protected $sorted = [];
 
     /**
-     * Invoker instance.
-     *
-     * @var \Viserio\Support\Invoker
-     */
-    protected $invoker;
-
-    /**
      * Wildcard patterns.
      *
      * @var array
@@ -56,13 +50,6 @@ class Dispatcher implements DispatcherContract
     public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
-
-        $invoker = new Invoker();
-        $invoker->injectByTypeHint(true)
-            ->injectByParameterName(true)
-            ->setContainer($container);
-
-        $this->invoker = $invoker;
     }
 
     /**
@@ -92,7 +79,7 @@ class Dispatcher implements DispatcherContract
         $wrapper = function () use ($eventName, $listener, &$wrapper) {
             $this->detach($eventName, $wrapper);
 
-            return $this->invoker->call($listener, func_get_args());
+            return $this->getInvoker()->call($listener, func_get_args());
         };
 
         $this->attach($eventName, $wrapper, $priority);
@@ -109,7 +96,7 @@ class Dispatcher implements DispatcherContract
             $result = false;
 
             if ($listener !== null) {
-                $result = $this->invoker->call($listener, $arguments);
+                $result = $this->getInvoker()->call($listener, $arguments);
             }
 
             if ($result === false) {

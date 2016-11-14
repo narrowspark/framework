@@ -51,6 +51,8 @@ class Mandrill extends AbstractTransport
 
         $this->client->post('https://mandrillapp.com/api/1.0/messages/send-raw.json', $options);
 
+        $this->sendPerformed($message);
+
         return $this->numberOfRecipients($message);
     }
 
@@ -58,6 +60,8 @@ class Mandrill extends AbstractTransport
      * Get the API key being used by the transport.
      *
      * @return string
+     *
+     * @codeCoverageIgnore
      */
     public function getKey(): string
     {
@@ -69,7 +73,9 @@ class Mandrill extends AbstractTransport
      *
      * @param string $key
      *
-     * @return Mandrill
+     * @return \Viserio\Mail\Transport\Mandrill
+     *
+     * @codeCoverageIgnore
      */
     public function setKey(string $key): Mandrill
     {

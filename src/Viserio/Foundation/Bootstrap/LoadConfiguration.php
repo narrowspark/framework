@@ -5,7 +5,6 @@ namespace Viserio\Foundation\Bootstrap;
 use Viserio\Config\Manager as ConfigManager;
 use Viserio\Contracts\Foundation\Application;
 use Viserio\Contracts\Foundation\Bootstrap as BootstrapContract;
-use Viserio\Contracts\Parsers\Loader as LoaderContract;
 
 class LoadConfiguration extends AbstractLoadFiles implements BootstrapContract
 {
@@ -16,7 +15,6 @@ class LoadConfiguration extends AbstractLoadFiles implements BootstrapContract
     {
         $loadedFromCache = false;
         $config = $app->get(ConfigManager::class);
-        $config->setLoader($app->get(LoaderContract::class));
 
         // First we will see if we have a cache configuration file.
         // If we do, we'll load the configuration items.

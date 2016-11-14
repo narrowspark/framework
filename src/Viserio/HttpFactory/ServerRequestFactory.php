@@ -2,8 +2,6 @@
 declare(strict_types=1);
 namespace Viserio\HttpFactory;
 
-use InvalidArgumentException;
-use Psr\Http\Message\UploadedFileInterface;
 use Psr\Http\Message\UriInterface;
 use UnexpectedValueException;
 use Viserio\Contracts\HttpFactory\ServerRequestFactory as ServerRequestFactoryContract;
@@ -25,7 +23,7 @@ class ServerRequestFactory implements ServerRequestFactoryContract, ServerReques
         array $cookies = null,
         array $files = null
     ) {
-        $server  = $this->normalizeServer($server ?? $_SERVER);
+        $server = $this->normalizeServer($server ?? $_SERVER);
         $method = $server['REQUEST_METHOD'] ?? 'GET';
         $headers = function_exists('getallheaders') ? getallheaders() : [];
         $uri = $this->getUriFromGlobals();

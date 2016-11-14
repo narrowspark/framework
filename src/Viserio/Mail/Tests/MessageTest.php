@@ -2,19 +2,22 @@
 declare(strict_types=1);
 namespace Viserio\Mail\Tests;
 
-use Swift_Attachment;
+use Narrowspark\TestingHelper\Traits\MockeryTrait;
+use Swift_Message;
 use Swift_Mime_Message;
 use Viserio\Mail\Message;
 
 class MessageTest extends \PHPUnit_Framework_TestCase
 {
+    use MockeryTrait;
+
     /**
      * @var \Swift_Mime_Message
      */
     protected $swift;
 
     /**
-     * @var \Illuminate\Mail\Message
+     * @var \Viserio\Mail\Message
      */
     protected $message;
 
@@ -22,149 +25,154 @@ class MessageTest extends \PHPUnit_Framework_TestCase
     {
         parent::setUp();
 
-        $this->swift = $this->getMockBuilder(Swift_Mime_Message::class)
-            ->getMock();
+        $this->swift = $this->mock(Swift_Mime_Message::class);
+
         $this->message = new Message($this->swift);
     }
 
-    // public function testBasicAttachment()
-    // {
-    //     $swift = $this->swift;
+    public function testBasicAttachment()
+    {
+        $message = new Message(new Swift_Message());
+        $message->attach(__DIR__ . '/Fixture/foo.jpg', ['mime' => 'image/jpeg', 'as' => 'bar.jpg']);
 
-    //     $attachment = $this->getMockBuilder(Swift_Attachment::class)->getMock();
-    //     $swift->expects($this->once())
-    //         ->method('attach')
-    //         ->with($attachment);
+        $stringMessage = (string) $message->getSwiftMessage();
 
-    //     $attachment->shouldReceive('setContentType')
-    //         ->once()
-    //         ->with('image/jpeg');
+        preg_match('/Content-Type: image\/jpeg;/', $stringMessage, $image);
+        preg_match('/name=bar.jpg/', $stringMessage, $name);
 
-    //     $attachment->shouldReceive('setFilename')
-    //         ->once()
-    //         ->with('bar.jpg');
+        $this->assertSame('Content-Type: image/jpeg;', $image[0]);
+        $this->assertSame('name=bar.jpg', $name[0]);
+    }
 
-    //     $message = $this->getMockBuilder(Message::class)
-    //         ->setConstructorArgs([$swift])
-    //         ->setMethods(['createAttachmentFromPath'])
-    //         ->setConstructorArgs([$swift])
-    //         ->getMock();
+    public function testDataAttachment()
+    {
+        $message = new Message(new Swift_Message());
+        $message->attachData(__DIR__ . '/Fixture/foo.jpg', 'name', ['mime' => 'image/jpeg']);
 
-    //     $message->expects($this->once())
-    //         ->method('createAttachmentFromPath')
-    //         ->with($this->equalTo('foo.jpg'))
-    //         ->will($this->returnValue($attachment));
+        $stringMessage = (string) $message->getSwiftMessage();
 
-    //     $message->attach('foo.jpg', ['mime' => 'image/jpeg', 'as' => 'bar.jpg']);
-    // }
+        preg_match('/Content-Type: image\/jpeg;/', $stringMessage, $image);
+        preg_match('/name=name/', $stringMessage, $name);
 
-    // public function testDataAttachment()
-    // {
-    //     $swift = $this->swift;
+        $this->assertSame('Content-Type: image/jpeg;', $image[0]);
+        $this->assertSame('name=name', $name[0]);
+    }
 
-    //     $message = $this->getMockBuilder(Message::class)
-    //         ->setConstructorArgs([$swift])
-    //         ->setMethods(['createAttachmentFromData'])
-    //         ->setConstructorArgs([$swift])
-    //         ->getMock();
+    public function testEmbed()
+    {
+        $message = new Message(new Swift_Message());
+        $message->embed(__DIR__ . '/Fixture/foo.jpg');
 
-    //     $attachment = $this->getMockBuilder(Swift_Attachment::class)->getMock();
+        $stringMessage = (string) $message->getSwiftMessage();
 
-    //     $message->expects($this->once())
-    //         ->method('createAttachmentFromData')
-    //         ->with($this->equalTo('foo'), $this->equalTo('name'))
-    //         ->will($this->returnValue($attachment));
+        preg_match('/Content-Type: image\/jpeg;/', $stringMessage, $image);
+        preg_match('/name=foo.jpg/', $stringMessage, $name);
 
-    //     $swift->expects($this->once())
-    //         ->method('attach')
-    //         ->with($attachment);
+        $this->assertSame('Content-Type: image/jpeg;', $image[0]);
+        $this->assertSame('name=foo.jpg', $name[0]);
+    }
 
-    //     $attachment->shouldReceive('setContentType')
-    //         ->once()
-    //         ->with('image/jpeg');
+    public function testEmbedData()
+    {
+        $message = new Message(new Swift_Message());
+        $message->embedData(__DIR__ . '/Fixture/foo.jpg', 'name', 'image/jpeg');
 
-    //     $message->attachData('foo', 'name', ['mime' => 'image/jpeg']);
-    // }
+        $stringMessage = (string) $message->getSwiftMessage();
+
+        preg_match('/Content-Type: image\/jpeg;/', $stringMessage, $image);
+        preg_match('/name=name/', $stringMessage, $name);
+
+        $this->assertSame('Content-Type: image/jpeg;', $image[0]);
+        $this->assertSame('name=name', $name[0]);
+    }
 
     public function testFromMethod()
     {
-        $this->swift->expects($this->once())
-            ->method('setFrom')
+        $this->swift->shouldReceive('setFrom')
+            ->once()
             ->with('foo@bar.baz', 'Foo');
+
         $this->assertInstanceOf(Message::class, $this->message->from('foo@bar.baz', 'Foo'));
     }
 
     public function testSenderMethod()
     {
-        $this->swift->expects($this->once())
-            ->method('setSender')
+        $this->swift->shouldReceive('setSender')
+            ->once()
             ->with('foo@bar.baz', 'Foo');
+
         $this->assertInstanceOf(Message::class, $this->message->sender('foo@bar.baz', 'Foo'));
     }
 
     public function testReturnPathMethod()
     {
-        $this->swift->expects($this->once())
-            ->method('setReturnPath')
+        $this->swift->shouldReceive('setReturnPath')
+            ->once()
             ->with('foo@bar.baz');
+
         $this->assertInstanceOf(Message::class, $this->message->returnPath('foo@bar.baz'));
     }
 
-    // public function testToMethod()
-    // {
-    //     $this->swift->expects($this->once())
-    //         ->method('addTo')
-    //         ->with('foo@bar.baz', 'Foo');
-    //     $this->assertInstanceOf(Message::class, $this->message->to('foo@bar.baz', 'Foo'));
-    // }
+    public function testToMethod()
+    {
+        $this->swift->shouldReceive('setTo')
+            ->once()
+            ->with(['foo@bar.baz', 'foobar@foobar.baz'], 'Foo');
+
+        $this->assertInstanceOf(Message::class, $this->message->to(['foo@bar.baz', 'foobar@foobar.baz'], 'Foo'));
+    }
 
     public function testToMethodWithOverride()
     {
-        $this->swift->expects($this->once())
-            ->method('setTo')
+        $this->swift->shouldReceive('setTo')
+            ->once()
             ->with('foo@bar.baz', 'Foo');
+
         $this->assertInstanceOf(Message::class, $this->message->to('foo@bar.baz', 'Foo', true));
     }
 
-    // public function testCcMethod()
-    // {
-    //     $this->swift->expects($this->once())
-    //         ->method('addCc')
-    //         ->with('foo@bar.baz', 'Foo');
-    //     $this->assertInstanceOf(Message::class, $this->message->cc('foo@bar.baz', 'Foo'));
-    // }
+    public function testCcMethod()
+    {
+        $this->swift->shouldReceive('addCc')
+            ->once()
+            ->with('foo@bar.baz', 'Foo');
 
-    // public function testBccMethod()
-    // {
-    //     $this->swift->expects($this->once())
-    //         ->method('addBcc')
-    //         ->with('foo@bar.baz', 'Foo');
-    //     $this->assertInstanceOf(Message::class, $this->message->bcc('foo@bar.baz', 'Foo'));
-    // }
+        $this->assertInstanceOf(Message::class, $this->message->cc('foo@bar.baz', 'Foo'));
+    }
 
-    // public function testReplyToMethod()
-    // {
-    //     $this->swift->expects($this->once())
-    //         ->method('addReplyTo')
-    //         ->with('foo@bar.baz', 'Foo');
-    //     $this->assertInstanceOf(Message::class, $this->message->replyTo('foo@bar.baz', 'Foo'));
-    // }
+    public function testBccMethod()
+    {
+        $this->swift->shouldReceive('addBcc')
+            ->once()
+            ->with('foo@bar.baz', 'Foo');
 
-    // public function testSubjectMethod()
-    // {
-    //     $this->swift->expects($this->once())
-    //         ->method('setSubject')
-    //         ->with('foo');
-    //     $this->assertInstanceOf(Message::class, $this->message->subject('foo'));
-    // }
+        $this->assertInstanceOf(Message::class, $this->message->bcc('foo@bar.baz', 'Foo'));
+    }
 
-    // public function testPriorityMethod()
-    // {
-    //     $this->swift->expects($this->once())
-    //         ->method('setPriority')
-    //         ->with(1);
-    //     $this->assertInstanceOf(Message::class, $this->message->priority(1));
-    // }
+    public function testReplyToMethod()
+    {
+        $this->swift->shouldReceive('addReplyTo')
+            ->with('foo@bar.baz', 'Foo');
+        $this->assertInstanceOf(Message::class, $this->message->replyTo('foo@bar.baz', 'Foo'));
+    }
+
+    public function testSubjectMethod()
+    {
+        $this->swift->shouldReceive('setSubject')
+            ->once()
+            ->with('foo');
+
+        $this->assertInstanceOf(Message::class, $this->message->subject('foo'));
+    }
+
+    public function testPriorityMethod()
+    {
+        $this->swift->shouldReceive('setPriority')
+            ->once()
+            ->with(1);
+
+        $this->assertInstanceOf(Message::class, $this->message->priority(1));
+    }
 
     public function testGetSwiftMessageMethod()
     {
