@@ -19,10 +19,12 @@ use Viserio\Console\Input\InputOption;
 use Viserio\Contracts\Console\Application as ApplicationContract;
 use Viserio\Contracts\Container\Traits\ContainerAwareTrait;
 use Viserio\Support\Invoker;
+use Viserio\Contracts\Events\Traits\EventsAwareTrait;
 
 class Application extends SymfonyConsole implements ApplicationContract
 {
     use ContainerAwareTrait;
+    use EventsAwareTrait;
 
     /**
      * Console name.
@@ -92,6 +94,10 @@ class Application extends SymfonyConsole implements ApplicationContract
 
         $this->container = $container;
         $this->expressionParser = new Parser();
+
+        if ($this->events !== null) {
+            $this->events->trigger('cerebro.starting', [$this]);
+        }
 
         $this->bootstrap();
     }
@@ -228,6 +234,26 @@ class Application extends SymfonyConsole implements ApplicationContract
     public static function cerebroBinary(): string
     {
         return defined('CEREBRO_BINARY') ? ProcessUtils::escapeArgument(CEREBRO_BINARY) : 'cerebro';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function run(InputInterface $input = null, OutputInterface $output = null)
+    {
+        $commandName = $this->getCommandName($input);
+
+        if ($this->events !== null) {
+            $this->events->trigger('command.starting', [$commandName, $input]);
+        }
+
+        $exitCode = parent::run($input, $output);
+
+        if ($this->events !== null) {
+            $this->events->trigger('command.terminating', [$commandName, $input, $exitCode]);
+        }
+
+        return $exitCode;
     }
 
     /**
