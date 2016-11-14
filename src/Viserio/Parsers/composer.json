@@ -65,7 +65,7 @@
         "spatie/array-to-xml"                 : "Required to use the XML dump (^2.1.1).",
         "yosymfony/toml"                      : "Required to use the TOML parser (^0.3).",
         "vlucas/phpdotenv"                    : "Required to use the .env parser (^2.3).",
-        "viserio/statical-proxy"              : "Required to use the proxies (self.version)."
+        "viserio/statical-proxy"              : "Required to use the proxy instances (self.version)."
     },
     "extra": {
         "branch-alias": {

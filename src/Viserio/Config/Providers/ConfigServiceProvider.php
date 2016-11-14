@@ -7,6 +7,8 @@ use Interop\Container\ServiceProvider;
 use Viserio\Config\Manager as ConfigManager;
 use Viserio\Config\Repository;
 use Viserio\Contracts\Config\Manager as ManagerContract;
+use Viserio\Contracts\Config\Repository as RepositoryContract;
+use Viserio\Contracts\Parsers\Loader as LoaderContract;
 
 class ConfigServiceProvider implements ServiceProvider
 {
@@ -16,7 +18,10 @@ class ConfigServiceProvider implements ServiceProvider
     public function getServices()
     {
         return [
-            Repository::class => [self::class, 'createRepository'],
+            RepositoryContract::class => [self::class, 'createRepository'],
+            Repository::class => function (ContainerInterface $container) {
+                return $container->get(RepositoryContract::class);
+            },
             ManagerContract::class => [self::class, 'createConfigManager'],
             ConfigManager::class => function (ContainerInterface $container) {
                 return $container->get(ManagerContract::class);

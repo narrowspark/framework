@@ -14,13 +14,14 @@ use Viserio\Contracts\Routing\RouteCollection as RouteCollectionContract;
 use Viserio\Contracts\Routing\Router as RouterContract;
 use Viserio\Middleware\Dispatcher as MiddlewareDispatcher;
 use Viserio\Routing\Traits\MiddlewareAwareTrait;
-use Viserio\Support\Invoker;
+use Viserio\Support\Traits\InvokerAwareTrait;
 
 class Router implements RouterContract
 {
     use ContainerAwareTrait;
     use EventsAwareTrait;
     use MiddlewareAwareTrait;
+    use InvokerAwareTrait;
 
     /**
      * The route collection instance.
@@ -28,13 +29,6 @@ class Router implements RouterContract
      * @var \Viserio\Routing\RouteCollection
      */
     protected $routes;
-
-    /**
-     * Invoker instance.
-     *
-     * @var \Viserio\Support\Invoker
-     */
-    protected $invoker;
 
     /**
      * The currently dispatched route instance.
@@ -659,22 +653,5 @@ class Router implements RouterContract
         }
 
         $this->groupStack[] = $attributes;
-    }
-
-    /**
-     * Set configured invoker.
-     *
-     * @return \Viserio\Support\Invoker
-     */
-    protected function getInvoker(): Invoker
-    {
-        if ($this->invoker === null) {
-            $this->invoker = (new Invoker())
-                ->injectByTypeHint(true)
-                ->injectByParameterName(true)
-                ->setContainer($this->getContainer());
-        }
-
-        return $this->invoker;
     }
 }
