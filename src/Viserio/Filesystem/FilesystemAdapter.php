@@ -15,6 +15,7 @@ use Viserio\Contracts\Filesystem\Exception\IOException as ViserioIOException;
 use Viserio\Contracts\Filesystem\Filesystem as FilesystemContract;
 use Viserio\Filesystem\Traits\FilesystemExtensionTrait;
 use Viserio\Filesystem\Traits\FilesystemHelperTrait;
+use Viserio\Support\Traits\MacroableTrait;
 use Viserio\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
 class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
@@ -22,6 +23,7 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
     use NormalizePathAndDirectorySeparatorTrait;
     use FilesystemExtensionTrait;
     use FilesystemHelperTrait;
+    use MacroableTrait;
 
     /**
      * The Flysystem filesystem implementation.
