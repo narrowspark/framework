@@ -16,6 +16,7 @@ use Viserio\Foundation\Providers\ConfigureLoggingProvider;
 use Viserio\Log\Providers\LoggerServiceProvider;
 use Viserio\Parsers\Providers\ParsersServiceProvider;
 use Viserio\Routing\Providers\RoutingServiceProvider;
+use Viserio\Contracts\Parsers\Loader as LoaderContract;
 
 class Application extends Container implements ApplicationContract
 {
@@ -270,6 +271,10 @@ class Application extends Container implements ApplicationContract
     {
         $this->register(new ParsersServiceProvider());
         $this->register(new ConfigServiceProvider());
+
+        $config = $this->get(ConfigManagerContract::class);
+        $config->setLoader($this->get(LoaderContract::class));
+
         $this->register(new EventsServiceProvider());
         $this->register(new LoggerServiceProvider());
         $this->register(new ConfigureLoggingProvider());

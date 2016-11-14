@@ -85,7 +85,8 @@
         "cache/predis-adapter"                : "Required to use the Predis cache (^0.4).",
         "cache/session-handler"               : "Required to use the Session cache (^0.2).",
         "cache/void-adapter"                  : "Required to use the Void cache (^0.3).",
-        "container-interop/service-provider"  : "Required to use service-provider (^0.3)."
+        "container-interop/service-provider"  : "Required to use service-provider (^0.3).",
+        "viserio/statical-proxy"              : "Required to use the proxy instances (self.version)."
     },
     "minimum-stability"                       : "dev",
     "prefer-stable"                           : true

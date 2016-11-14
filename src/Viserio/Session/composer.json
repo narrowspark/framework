@@ -61,7 +61,8 @@
         "container-interop/service-provider"                 : "Required to use service-provider (^0.3).",
         "cache/session-handler"                              : "Required to use the CacheBasedSessionHandler (^0.2).",
         "viserio/cookie"                                     : "Required to use the CookieSessionHandler (self.version).",
-        "viserio/filesystem"                                 : "Required to use the FileSessionHandler (self.version)."
+        "viserio/filesystem"                                 : "Required to use the FileSessionHandler (self.version).",
+        "viserio/statical-proxy"                             : "Required to use the proxy instances (self.version)."
     },
     "extra": {
         "branch-alias": {

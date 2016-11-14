@@ -6,11 +6,12 @@ use Closure;
 use ReflectionClass;
 use Viserio\Contracts\Container\Traits\ContainerAwareTrait;
 use Viserio\Contracts\Pipeline\Pipeline as PipelineContract;
-use Viserio\Support\Invoker;
+use Viserio\Support\Traits\InvokerAwareTrait;
 
 class Pipeline implements PipelineContract
 {
     use ContainerAwareTrait;
+    use InvokerAwareTrait;
 
     /**
      * The object being passed through the pipeline.
@@ -158,12 +159,7 @@ class Pipeline implements PipelineContract
         if ($this->container->has($name)) {
             $merge = array_merge([$traveler, $stack], $parameters);
 
-            $invoker = (new Invoker())
-                ->injectByTypeHint(true)
-                ->injectByParameterName(true)
-                ->setContainer($this->container);
-
-            return $invoker->call(
+            return $this->getInvoker()->call(
                 [
                     $this->container->get($name),
                     $this->method,

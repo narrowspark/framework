@@ -50,6 +50,7 @@
         "ext-pdo-pqsql"                       : "Required to use PostgreSQL databases",
         "ext-pdo-sqlite"                      : "Required to use SQLite databases",
         "ext-pdo_sqlsrv"                      : "Required to use MSSQL databases on Windows platform",
+        "viserio/statical-proxy"              : "Required to use the proxy instances (self.version)."
     },
     "extra": {
         "branch-alias": {
