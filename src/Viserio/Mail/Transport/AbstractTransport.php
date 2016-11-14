@@ -93,7 +93,7 @@ abstract class AbstractTransport implements Swift_Transport
     /**
      * Iterate through registered plugins and execute plugins' methods.
      *
-     * @param \Swift_Mime-Message $message
+     * @param \Swift_Mime_Message $message
      */
     protected function sendPerformed(Swift_Mime_Message $message)
     {
