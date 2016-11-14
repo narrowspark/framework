@@ -9,6 +9,7 @@ use Viserio\Contracts\Config\Manager as ConfigManagerContract;
 use Viserio\Contracts\Events\Dispatcher as DispatcherContract;
 use Viserio\Contracts\Foundation\Application as ApplicationContract;
 use Viserio\Contracts\Foundation\Emitter as EmitterContract;
+use Viserio\Contracts\Parsers\Loader as LoaderContract;
 use Viserio\Contracts\Translation\TranslationManager;
 use Viserio\Events\Providers\EventsServiceProvider;
 use Viserio\Foundation\Http\Emitter;
@@ -16,7 +17,6 @@ use Viserio\Foundation\Providers\ConfigureLoggingProvider;
 use Viserio\Log\Providers\LoggerServiceProvider;
 use Viserio\Parsers\Providers\ParsersServiceProvider;
 use Viserio\Routing\Providers\RoutingServiceProvider;
-use Viserio\Contracts\Parsers\Loader as LoaderContract;
 
 class Application extends Container implements ApplicationContract
 {
