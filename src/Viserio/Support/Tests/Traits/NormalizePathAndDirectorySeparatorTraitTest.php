@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Support\Tests;
+namespace Viserio\Support\Tests\Traits;
 
 use Viserio\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
