@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Pagination\Template;
+namespace Viserio\Pagination\Presenters;
 
 class Bootstrap4
 {

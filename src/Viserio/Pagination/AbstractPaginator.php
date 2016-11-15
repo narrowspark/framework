@@ -19,7 +19,7 @@ abstract class AbstractPaginator
      *
      * @var int
      */
-    protected $perPage;
+    protected $itemCountPerPage;
 
     /**
      * The current page being "viewed".
@@ -115,6 +115,64 @@ abstract class AbstractPaginator
     }
 
     /**
+     * Get the slice of items being paginated.
+     *
+     * @return array
+     */
+    public function items()
+    {
+        return $this->items->all();
+    }
+
+    /**
+     * Get the number of the first item in the slice.
+     *
+     * @return int
+     */
+    public function getFirstItem()
+    {
+        if (count($this->items) === 0) {
+            return;
+        }
+
+        return ($this->currentPage - 1) * $this->itemCountPerPage + 1;
+    }
+
+    /**
+     * Get the number of the last item in the slice.
+     *
+     * @return int
+     */
+    public function getLastItem()
+    {
+        if (count($this->items) === 0) {
+            return;
+        }
+
+        return $this->firstItem() + $this->count() - 1;
+    }
+
+    /**
+     * Get the number of items shown per page.
+     *
+     * @return int
+     */
+    public function getItemsPerPage(): int
+    {
+        return $this->itemCountPerPage;
+    }
+
+    /**
+     * Get the current page.
+     *
+     * @return int
+     */
+    public function getCurrentPage(): int
+    {
+        return $this->currentPage;
+    }
+
+    /**
      * Set the paginator's underlying collection.
      *
      * @param \Narrowspark\Collection\Collection $collection
@@ -204,5 +262,17 @@ abstract class AbstractPaginator
     public function __toString()
     {
         return (string) $this->render();
+    }
+
+    /**
+     * Determine if the given value is a valid page number.
+     *
+     * @param int $page
+     *
+     * @return bool
+     */
+    protected function isValidPageNumber(int $page): bool
+    {
+        return $page >= 1 && filter_var($page, FILTER_VALIDATE_INT) !== false;
     }
 }
