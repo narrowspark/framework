@@ -33,20 +33,21 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
     protected $driver;
 
     /**
-     * LocalAdapter path.
+     * Adapter configs.
      *
-     * @var string
+     * @var array
      */
-    protected $localPath;
+    protected $config;
 
     /**
      * Create a new filesystem adapter instance.
      *
      * @param \League\Flysystem\AdapterInterface $driver
      */
-    public function __construct(AdapterInterface $driver)
+    public function __construct(AdapterInterface $driver, array $config)
     {
         $this->driver = $driver;
+        $this->config = $config;
     }
 
     /**
@@ -322,6 +323,12 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
 
             return $adapter->getClient()->getObjectUrl($adapter->getBucket(), $path);
         } elseif ($adapter instanceof LocalAdapter) {
+            if (isset($this->config['url'])) {
+                return self::normalizeDirectorySeparator(
+                    $this->config['url'] . '/' . $path
+                );
+            }
+
             return $adapter->getPathPrefix() . $path;
         } elseif (method_exists($adapter, 'getUrl')) {
             return $adapter->getUrl($path);
