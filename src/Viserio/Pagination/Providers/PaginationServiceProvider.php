@@ -12,7 +12,7 @@ class PaginationServiceProvider implements ServiceProvider
 
     const PACKAGE = 'viserio.pagination';
 
-        /**
+    /**
      * {@inheritdoc}
      */
     public function getServices()
