@@ -130,11 +130,11 @@ class FilesystemManager extends AbstractConnectionManager
             $cacheFactory = new CachedFactory($this, $this->cache);
 
             $adapter = new CachedAdapter($adapter, $cacheFactory->connection($config));
+
+            unset($config['cache']);
         }
 
-        $filesystemAdapter = new FilesystemAdapter($adapter);
-
-        return $filesystemAdapter;
+        return new FilesystemAdapter($adapter, $config);
     }
 
     /**

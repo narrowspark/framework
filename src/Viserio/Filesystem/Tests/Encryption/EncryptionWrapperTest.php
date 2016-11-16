@@ -30,7 +30,8 @@ class EncryptionWrapperTest extends \PHPUnit_Framework_TestCase
 
         $this->adapter = new EncryptionWrapper(
             new FilesystemAdapter(
-                $connector->connect(['path' => $this->root])
+                $connector->connect(['path' => $this->root]),
+                []
             ),
             Key::createNewRandomKey()
         );

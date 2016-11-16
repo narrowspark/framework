@@ -25,11 +25,9 @@ class ScheduleRunCommand extends Command
     protected $description = 'Run Cron jobs';
 
     /**
-     * Get the console command options.
-     *
-     * @return array
+     * {@inheritdoc}
      */
-    public function getOptions()
+    public function getOptions(): array
     {
         return [
             ['daemon', null, InputOption::VALUE_NONE, 'Run schedule in daemon mode'],

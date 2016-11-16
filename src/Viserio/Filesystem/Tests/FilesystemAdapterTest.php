@@ -5,10 +5,13 @@ namespace Viserio\Filesystem\Tests;
 use League\Flysystem\Util;
 use org\bovigo\vfs\content\LargeFileContent;
 use Viserio\Filesystem\Adapters\LocalConnector;
+use Viserio\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 use Viserio\Filesystem\FilesystemAdapter;
 
 class FilesystemAdapterTest extends \PHPUnit_Framework_TestCase
 {
+    use NormalizePathAndDirectorySeparatorTrait;
+
     /**
      * @var string
      */
@@ -28,7 +31,7 @@ class FilesystemAdapterTest extends \PHPUnit_Framework_TestCase
 
         $connector = new LocalConnector();
 
-        $this->adapter = new FilesystemAdapter($connector->connect(['path' => $this->root]));
+        $this->adapter = new FilesystemAdapter($connector->connect(['path' => $this->root]), []);
     }
 
     public function tearDown()
@@ -413,6 +416,27 @@ class FilesystemAdapterTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse(in_array('languages/c.txt', $this->adapter->files('languages')));
         $this->assertFalse(in_array('languages/php.txt', $this->adapter->files('languages')));
         $this->assertFalse(in_array('languages/lang/c.txt', $this->adapter->files('languages/lang')));
+    }
+
+    public function testUrlLocal()
+    {
+        $connector = new LocalConnector();
+
+        $adapter = new FilesystemAdapter($connector->connect(['path' => $this->root]), []);
+
+        $adapter->write('url.txt', 'php');
+
+        $this->assertSame(
+            self::normalizeDirectorySeparator($this->root . '/url.txt'),
+            self::normalizeDirectorySeparator($adapter->url('url.txt'))
+        );
+
+        $adapter = new FilesystemAdapter($connector->connect(['path' => $this->root]), ['url' => 'test']);
+
+        $this->assertSame(
+            self::normalizeDirectorySeparator('test/url.txt'),
+            self::normalizeDirectorySeparator($adapter->url('url.txt'))
+        );
     }
 
     private function delTree($dir)
