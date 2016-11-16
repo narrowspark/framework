@@ -5,8 +5,8 @@ namespace Viserio\Filesystem\Tests;
 use League\Flysystem\Util;
 use org\bovigo\vfs\content\LargeFileContent;
 use Viserio\Filesystem\Adapters\LocalConnector;
-use Viserio\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 use Viserio\Filesystem\FilesystemAdapter;
+use Viserio\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
 class FilesystemAdapterTest extends \PHPUnit_Framework_TestCase
 {
