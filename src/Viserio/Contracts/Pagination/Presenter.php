@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Contracts\Pagination;
 
-interface Template
+interface Presenter
 {
     public function render();
 }

@@ -8,15 +8,37 @@ use IteratorAggregate;
 use JsonSerializable;
 use Narrowspark\Collection\Collection;
 use Viserio\Contracts\Pagination\Paginator as PaginatorContract;
+use Viserio\Contracts\Pagination\Presenter as PresenterContract;
+use Viserio\Contracts\View\Traits\ViewAwareTrait;
 
 class Paginator extends AbstractPaginator implements ArrayAccess, Countable, IteratorAggregate, JsonSerializable, PaginatorContract
 {
+    use ViewAwareTrait;
+
+    /**
+     * Render the paginator using the given view.
+     *
+     * @param \Viserio\Contracts\Pagination\Presenter|string|null $view
+     *
+     * @return string
+     */
+    public function render($view = null)
+    {
+        if (is_string($view) && $this->view !== null) {
+            return $this->getViewFactory()->render($view, $this);
+        } elseif ($view instanceof PresenterContract) {
+            return $view($this)->render();
+        }
+
+        return 'default';
+    }
+
     /**
      * Convert the object into something JSON serializable.
      *
      * @return array
      */
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         return $this->toArray();
     }

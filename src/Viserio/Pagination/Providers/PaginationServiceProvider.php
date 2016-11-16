@@ -11,4 +11,12 @@ class PaginationServiceProvider implements ServiceProvider
     use ServiceProviderConfigAwareTrait;
 
     const PACKAGE = 'viserio.pagination';
+
+        /**
+     * {@inheritdoc}
+     */
+    public function getServices()
+    {
+        return [];
+    }
 }

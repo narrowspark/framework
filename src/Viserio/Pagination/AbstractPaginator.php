@@ -119,7 +119,7 @@ abstract class AbstractPaginator
      *
      * @return array
      */
-    public function items()
+    public function getItems(): array
     {
         return $this->items->all();
     }
@@ -129,7 +129,7 @@ abstract class AbstractPaginator
      *
      * @return int
      */
-    public function getFirstItem()
+    public function getFirstItem(): int
     {
         if (count($this->items) === 0) {
             return;
@@ -143,7 +143,7 @@ abstract class AbstractPaginator
      *
      * @return int
      */
-    public function getLastItem()
+    public function getLastItem(): int
     {
         if (count($this->items) === 0) {
             return;
