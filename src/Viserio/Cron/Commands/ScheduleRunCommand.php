@@ -2,6 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Cron\Commands;
 
+use Symfony\Component\Console\Exception\InvalidArgumentException;
+use Symfony\Component\Console\Input\InputOption;
 use Viserio\Console\Command\Command;
 use Viserio\Contracts\Config\Manager as ManagerContract;
 use Viserio\Cron\Schedule;
@@ -23,9 +25,48 @@ class ScheduleRunCommand extends Command
     protected $description = 'Run Cron jobs';
 
     /**
+     * Get the console command options.
+     *
+     * @return array
+     */
+    public function getOptions()
+    {
+        return [
+            ['daemon', null, InputOption::VALUE_NONE, 'Run schedule in daemon mode'],
+            ['interval', null, InputOption::VALUE_REQUIRED, 'Run every interval seconds', 60],
+        ];
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function handle()
+    {
+        $daemon = $this->option('daemon');
+        $interval = $this->option('interval');
+
+        if (! is_numeric($interval)) {
+            throw new InvalidArgumentException('Interval must be a positive number');
+        }
+
+        while (true) {
+            $start = time();
+            $this->doScheduleDueJobs();
+
+            if (! $daemon) {
+                break;
+            }
+
+            // pause for a minimum of one second.
+            $sleepTime = max(1, $interval - (time() - $start));
+            sleep($sleepTime);
+        }
+    }
+
+    /**
+     * Trigger due jobs.
+     */
+    protected function doScheduleDueJobs()
     {
         $container = $this->getContainer();
         $cronJobs = $container->get(Schedule::class)->dueCronJobs(
