@@ -3,7 +3,6 @@ declare(strict_types=1);
 namespace Viserio\Middleware;
 
 use Interop\Http\Middleware\DelegateInterface;
-use Interop\Http\Middleware\MiddlewareInterface;
 use Interop\Http\Middleware\ServerMiddlewareInterface;
 use LogicException;
 use Psr\Http\Message\RequestInterface;
@@ -49,33 +48,25 @@ class Dispatcher implements StackContract
     /**
      * {@inheritdoc}
      */
-    public function withMiddleware($middleware): StackContract
+    public function withMiddleware(ServerMiddlewareInterface $middleware): StackContract
     {
-        if ($middleware instanceof MiddlewareInterface || $middleware instanceof ServerMiddlewareInterface) {
-            $this->stack->push($this->isContainerAware($middleware));
+        $this->stack->push($this->isContainerAware($middleware));
 
-            return $this;
-        }
-
-        throw new LogicException('Unsupported middleware type.');
+        return $this;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function withoutMiddleware($middleware): StackContract
+    public function withoutMiddleware(ServerMiddlewareInterface $middleware): StackContract
     {
-        if ($middleware instanceof MiddlewareInterface || $middleware instanceof ServerMiddlewareInterface) {
-            foreach ($this->stack as $key => $stackMiddleware) {
-                if (get_class($this->stack[$key]) === get_class($middleware)) {
-                    unset($this->stack[$key]);
-                }
+        foreach ($this->stack as $key => $stackMiddleware) {
+            if (get_class($this->stack[$key]) === get_class($middleware)) {
+                unset($this->stack[$key]);
             }
-
-            return $this;
         }
 
-        throw new LogicException('Unsupported middleware type.');
+        return $this;
     }
 
     /**
@@ -119,11 +110,11 @@ class Dispatcher implements StackContract
     /**
      *  Check if middleware is aware of Interop\Container\ContainerInterface.
      *
-     * @param \Interop\Http\Middleware\MiddlewareInterface|\Interop\Http\Middleware\ServerMiddlewareInterface $middleware
+     * @param \Interop\Http\Middleware\ServerMiddlewareInterface $middleware
      *
-     * @return \Interop\Http\Middleware\MiddlewareInterface|\Interop\Http\Middleware\ServerMiddlewareInterface
+     * @return \Interop\Http\Middleware\ServerMiddlewareInterface
      */
-    private function isContainerAware($middleware)
+    private function isContainerAware(ServerMiddlewareInterface $middleware): ServerMiddlewareInterface
     {
         if (method_exists($middleware, 'setContainer')) {
             $middleware->setContainer($this->getContainer());

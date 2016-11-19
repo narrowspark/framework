@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Contracts\Middleware;
 
+use Interop\Http\Middleware\ServerMiddlewareInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
@@ -14,13 +15,11 @@ interface Stack
      * immutability of the stack, and MUST return an instance that contains
      * the specified middleware.
      *
-     * @param \Interop\Http\Middleware\MiddlewareInterface|\Interop\Http\Middleware\ServerMiddlewareInterface $middleware
-     *
-     * @throws \LogicException
+     * @param \Interop\Http\Middleware\ServerMiddlewareInterface $middleware
      *
      * @return $this
      */
-    public function withMiddleware($middleware): Stack;
+    public function withMiddleware(ServerMiddlewareInterface $middleware): Stack;
 
     /**
      * Return an instance without the specified middleware.
@@ -29,13 +28,11 @@ interface Stack
      * immutability of the stack, and MUST return an instance that does not
      * contain the specified middleware.
      *
-     * @param \Interop\Http\Middleware\MiddlewareInterface|\Interop\Http\Middleware\ServerMiddlewareInterface $middleware
-     *
-     * @throws \LogicException
+     * @param \Interop\Http\Middleware\ServerMiddlewareInterface $middleware
      *
      * @return $this
      */
-    public function withoutMiddleware($middleware): Stack;
+    public function withoutMiddleware(ServerMiddlewareInterface $middleware): Stack;
 
     /**
      * Process the request through middleware and return the response.
