@@ -62,7 +62,7 @@ interface Application
     /**
      * Determine if the application supports the given locale.
      *
-     * @param string $Locale
+     * @param string $locale
      *
      * @return bool
      */
