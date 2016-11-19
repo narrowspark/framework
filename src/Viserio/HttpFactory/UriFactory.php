@@ -2,10 +2,10 @@
 declare(strict_types=1);
 namespace Viserio\HttpFactory;
 
-use Viserio\Contracts\HttpFactory\UriFactory as UriFactoryContract;
+use Interop\Http\Factory\UriFactoryInterface;
 use Viserio\Http\Uri;
 
-final class UriFactory implements UriFactoryContract
+final class UriFactory implements UriFactoryInterface
 {
     /**
      * {@inheritdoc}

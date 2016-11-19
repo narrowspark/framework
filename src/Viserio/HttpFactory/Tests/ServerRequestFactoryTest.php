@@ -85,7 +85,7 @@ class ServerRequestFactoryTest extends \PHPUnit_Framework_TestCase
     public function testGetUriFromGlobals($expected, $serverParams)
     {
         $_SERVER = $serverParams;
-        $serverRequest = $this->factory->createServerRequestFromGlobals();
+        $serverRequest = $this->factory->createServerRequest($_SERVER);
 
         $this->assertEquals(new Uri($expected), $serverRequest->getUri());
     }
@@ -143,7 +143,7 @@ class ServerRequestFactoryTest extends \PHPUnit_Framework_TestCase
             ],
         ];
 
-        $server = $this->factory->createServerRequestFromGlobals();
+        $server = $this->factory->createServerRequest($_SERVER);
 
         $this->assertEquals('POST', $server->getMethod());
         $this->assertEquals(['Host' => ['www.narrowspark.com']], $server->getHeaders());

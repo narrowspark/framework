@@ -6,6 +6,7 @@ if [[ "$DISABLE_XDEBUG" = true ]]; then
 fi
 
 echo "extension = memcached.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
+echo date.timezone = Europe/Paris >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
 
 # Install mongodb
 pecl -q install mongodb

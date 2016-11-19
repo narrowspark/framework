@@ -18,7 +18,7 @@ class StreamFactoryTest extends \PHPUnit_Framework_TestCase
     public function testCreateStream()
     {
         $resource = tmpfile();
-        $stream = $this->factory->createStream($resource);
+        $stream = $this->factory->createStreamFromResource($resource);
         $this->assertStream($stream, '');
     }
 
@@ -27,7 +27,7 @@ class StreamFactoryTest extends \PHPUnit_Framework_TestCase
         $resource = fopen(__FILE__, 'r');
         fseek($resource, 10);
 
-        $stream = $this->factory->createStream($resource);
+        $stream = $this->factory->createStreamFromResource($resource);
 
         $this->assertEquals(10, $stream->tell());
 
@@ -52,7 +52,7 @@ class StreamFactoryTest extends \PHPUnit_Framework_TestCase
     public function testFactoryCreatesFromResource()
     {
         $resource = fopen(__FILE__, 'r');
-        $stream = $this->factory->createStream($resource);
+        $stream = $this->factory->createStreamFromResource($resource);
 
         $this->assertInstanceOf(Stream::class, $stream);
         $this->assertSame(file_get_contents(__FILE__), (string) $stream);

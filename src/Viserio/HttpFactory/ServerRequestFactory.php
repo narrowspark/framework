@@ -2,35 +2,31 @@
 declare(strict_types=1);
 namespace Viserio\HttpFactory;
 
+use Interop\Http\Factory\ServerRequestFactoryInterface;
 use Psr\Http\Message\UriInterface;
 use UnexpectedValueException;
-use Viserio\Contracts\HttpFactory\ServerRequestFactory as ServerRequestFactoryContract;
-use Viserio\Contracts\HttpFactory\ServerRequestGlobalFactory as ServerRequestGlobalFactoryContract;
 use Viserio\Http\ServerRequest;
 use Viserio\Http\Stream\LazyOpenStream;
 use Viserio\Http\Uri;
 use Viserio\Http\Util;
 
-class ServerRequestFactory implements ServerRequestFactoryContract, ServerRequestGlobalFactoryContract
+class ServerRequestFactory implements ServerRequestFactoryInterface
 {
     /**
      * {@inheritdoc}
+     *
+     * @codeCoverageIgnore
      */
-    public function createServerRequestFromGlobals(
-        array $server = null,
-        array $query = null,
-        array $body = null,
-        array $cookies = null,
-        array $files = null
-    ) {
-        $server = $this->normalizeServer($server ?? $_SERVER);
-        $method = $server['REQUEST_METHOD'] ?? 'GET';
+    public function createServerRequest(array $server, $method = null, $uri = null)
+    {
+        $server = $this->normalizeServer($server);
+        $requestMethod = $method ?? $server['REQUEST_METHOD'] ?? 'GET';
         $headers = function_exists('getallheaders') ? getallheaders() : [];
-        $uri = $this->getUriFromGlobals();
+        $uri = $uri ?? $this->getUriFromGlobals();
 
         $serverRequest = new ServerRequest(
             $uri,
-            $method,
+            $requestMethod,
             $headers,
             new LazyOpenStream('php://input', 'r+'),
             $this->marshalProtocolVersion($server),
@@ -38,20 +34,10 @@ class ServerRequestFactory implements ServerRequestFactoryContract, ServerReques
         );
 
         return $serverRequest
-            ->withCookieParams($cookies ?? $_COOKIE)
-            ->withQueryParams($query ?? $_GET)
-            ->withParsedBody($body ?? $_POST)
-            ->withUploadedFiles(Util::normalizeFiles($files ?? $_FILES));
-    }
-
-    /**
-     * {@inheritdoc}
-     *
-     * @codeCoverageIgnore
-     */
-    public function createServerRequest($method, $uri)
-    {
-        return new ServerRequest($uri, $method);
+            ->withCookieParams($_COOKIE)
+            ->withQueryParams($_GET)
+            ->withParsedBody($_POST)
+            ->withUploadedFiles(Util::normalizeFiles($_FILES));
     }
 
     /**

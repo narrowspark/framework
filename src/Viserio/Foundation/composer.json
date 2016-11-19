@@ -30,7 +30,8 @@
     },
     "require-dev": {
         "narrowspark/testing-helper"                         : "^1.5",
-        "phpunit/phpunit"                                    : "^5.1"
+        "phpunit/phpunit"                                    : "^5.1",
+        "viserio/console"                                    : "self.version"
     },
     "autoload": {
         "psr-4": {

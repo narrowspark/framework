@@ -2,27 +2,42 @@
 declare(strict_types=1);
 namespace Viserio\HttpFactory;
 
-use Viserio\Contracts\HttpFactory\StreamFactory as StreamFactoryContract;
+use Interop\Http\Factory\StreamFactoryInterface;
 use Viserio\Http\Stream;
 
-final class StreamFactory implements StreamFactoryContract
+final class StreamFactory implements StreamFactoryInterface
 {
     /**
      * {@inheritdoc}
      */
-    public function createStream($resource)
+    public function createStream($content = '')
     {
-        if (gettype($resource) === 'resource') {
-            return new Stream($resource);
-        }
+        $stream = fopen('php://memory', 'r+');
 
-        $stream = fopen('php://temp', 'r+');
-
-        if ($resource !== '') {
-            fwrite($stream, $resource);
-            fseek($stream, 0);
-        }
+        fwrite($stream, $content);
+        fseek($stream, 0);
 
         return new Stream($stream);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function createStreamFromFile($file, $mode = 'r')
+    {
+        $stream = fopen('php://temp', $mode);
+
+        fwrite($stream, $file);
+        fseek($stream, 0);
+
+        return new Stream($stream);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function createStreamFromResource($resource)
+    {
+        return new Stream($resource);
     }
 }

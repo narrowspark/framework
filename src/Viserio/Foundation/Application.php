@@ -160,6 +160,22 @@ class Application extends Container implements ApplicationContract
 
     /**
      * {@inheritdoc}
+     */
+    public function getFallbackLocale(): string
+    {
+        return $this->get(ConfigManagerContract::class)->get('app.fallback_locale');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function hasLocale(string $locale): bool
+    {
+        return in_array($locale, $this->get(ConfigManagerContract::class)->get('app.locales'));
+    }
+
+    /**
+     * {@inheritdoc}
      *
      * @codeCoverageIgnore
      */
