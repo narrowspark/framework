@@ -2,10 +2,10 @@
 declare(strict_types=1);
 namespace Viserio\HttpFactory;
 
-use Viserio\Contracts\HttpFactory\ResponseFactory as ResponseFactoryContract;
+use Interop\Http\Factory\ResponseFactoryInterface;
 use Viserio\Http\Response;
 
-final class ResponseFactory implements ResponseFactoryContract
+final class ResponseFactory implements ResponseFactoryInterface
 {
     /**
      * {@inheritdoc}

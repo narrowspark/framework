@@ -38,7 +38,7 @@ abstract class RouteRouterBaseTest extends \PHPUnit_Framework_TestCase
     public function testRouter($httpMethod, $uri, $expectedResult, $status = 200)
     {
         $actualResult = $this->router->dispatch(
-            (new ServerRequestFactory())->createServerRequest($httpMethod, $uri),
+            (new ServerRequestFactory())->createServerRequest($_SERVER,$httpMethod, $uri),
             (new ResponseFactory())->createResponse()
         );
 

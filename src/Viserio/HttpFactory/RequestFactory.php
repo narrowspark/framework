@@ -2,10 +2,10 @@
 declare(strict_types=1);
 namespace Viserio\HttpFactory;
 
-use Viserio\Contracts\HttpFactory\RequestFactory as RequestFactoryContract;
+use Interop\Http\Factory\RequestFactoryInterface;
 use Viserio\Http\Request;
 
-final class RequestFactory implements RequestFactoryContract
+final class RequestFactory implements RequestFactoryInterface
 {
     /**
      * {@inheritdoc}
