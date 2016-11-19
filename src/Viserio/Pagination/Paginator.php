@@ -2,41 +2,119 @@
 declare(strict_types=1);
 namespace Viserio\Pagination;
 
-use ArrayAccess;
-use Countable;
-use IteratorAggregate;
-use JsonSerializable;
 use Narrowspark\Collection\Collection;
-use Viserio\Contracts\Pagination\Paginator as PaginatorContract;
 use Viserio\Contracts\Pagination\Presenter as PresenterContract;
 use Viserio\Contracts\View\Traits\ViewAwareTrait;
+use Viserio\Pagination\Presenters\Bootstrap3;
+use Viserio\Pagination\Presenters\Bootstrap4;
+use Viserio\Pagination\Presenters\Foundation5;
 
-class Paginator extends AbstractPaginator implements ArrayAccess, Countable, IteratorAggregate, JsonSerializable, PaginatorContract
+class Paginator extends AbstractPaginator
 {
     use ViewAwareTrait;
 
     /**
-     * Render the paginator using the given view.
+     * All pagination presenters.
      *
-     * @param \Viserio\Contracts\Pagination\Presenter|string|null $view
-     *
-     * @return string
+     * @var array
      */
-    public function render($view = null)
-    {
-        if (is_string($view) && $this->view !== null) {
-            return $this->getViewFactory()->render($view, $this);
-        } elseif ($view instanceof PresenterContract) {
-            return $view($this)->render();
-        }
+    protected $presenters = [
+        'bootstrap3'  => Bootstrap3::class,
+        'bootstrap4'  => Bootstrap4::class,
+        'foundation5' => Foundation5::class,
+    ];
 
-        return 'default';
+    /**
+     * The total number of items before slicing.
+     *
+     * @var int
+     */
+    protected $total;
+
+    /**
+     * The last available page.
+     *
+     * @var int
+     */
+    protected $lastPage;
+
+    /**
+     * The default pagination presenter.
+     *
+     * @var string
+     */
+    protected $presenter = 'bootstrap3';
+
+    /**
+     * Set a default presenter.
+     *
+     * @param string $presenter
+     *
+     * @return $this
+     */
+    public function setDefaultPresenter(string $presenter)
+    {
+        $this->presenter = $presenter;
+
+        return $this;
     }
 
     /**
-     * Convert the object into something JSON serializable.
+     * Get the default presenter.
      *
-     * @return array
+     * @return string
+     */
+    public function getDefaultPresenter(): string
+    {
+        return $this->presenter;
+    }
+
+    /**
+     * Get the URL for the next page.
+     *
+     * @return string|null
+     */
+    public function getNextPageUrl()
+    {
+        if ($this->getLastPage() > $this->getCurrentPage()) {
+            return $this->getUrl($this->getCurrentPage() + 1);
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function render(string $view = null): string
+    {
+        if (is_string($view)) {
+            if ($this->view !== null && !isset($this->presenters[$view])) {
+                return $this->getViewFactory()->create($view, ['paginator' => $this]);
+            } elseif (isset($this->presenters[$view])) {
+                return (new $this->presenters[$view]($this))->render();
+            }
+        }
+
+        return (new $this->presenters[$this->getDefaultPresenter()]($this))->render();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function toArray(): array
+    {
+        return [
+            'per_page' => $this->getItemsPerPage(),
+            'current_page' => $this->getCurrentPage(),
+            'next_page_url' => $this->getNextPageUrl(),
+            'prev_page_url' => $this->getPreviousPageUrl(),
+            'from' => $this->getFirstItem(),
+            'to' => $this->getLastItem(),
+            'data' => $this->items->toArray(),
+        ];
+    }
+
+    /**
+     * {@inheritdoc}
      */
     public function jsonSerialize(): array
     {
@@ -44,14 +122,40 @@ class Paginator extends AbstractPaginator implements ArrayAccess, Countable, Ite
     }
 
     /**
-     * Convert the object to its JSON representation.
-     *
-     * @param int $options
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function toJson(int $options = 0): string
     {
         return json_encode($this->jsonSerialize(), $options);
+    }
+
+    /**
+     * Determine if there are more items in the data source.
+     *
+     * @return bool
+     */
+    public function hasMorePages(): bool
+    {
+        return $this->getCurrentPage() < $this->getLastPage();
+    }
+
+    /**
+     * Get the last page.
+     *
+     * @return int
+     */
+    public function getLastPage(): int
+    {
+        return $this->lastPage;
+    }
+
+    /**
+     * Get the total number of items being paginated.
+     *
+     * @return int
+     */
+    public function getTotalItems(): int
+    {
+        return $this->total;
     }
 }

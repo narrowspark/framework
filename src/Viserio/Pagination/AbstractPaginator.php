@@ -2,10 +2,25 @@
 declare(strict_types=1);
 namespace Viserio\Pagination;
 
+use JsonSerializable;
 use ArrayIterator;
+use ArrayAccess;
+use Countable;
+use IteratorAggregate;
 use Narrowspark\Collection\Collection;
+use Viserio\Contracts\Pagination\Paginator as PaginatorContract;
+use Viserio\Contracts\Support\Arrayable as ArrayableContract;
+use Viserio\Contracts\Support\Jsonable as JsonableContract;
+use Viserio\Contracts\Support\Stringable as StringableContract;
 
-abstract class AbstractPaginator
+abstract class AbstractPaginator implements ArrayAccess,
+ Countable,
+ IteratorAggregate,
+ StringableContract,
+ ArrayableContract,
+ JsonSerializable,
+ JsonableContract,
+ PaginatorContract
 {
     /**
      * All of the items being paginated.
@@ -71,11 +86,115 @@ abstract class AbstractPaginator
     protected $currentPageResolver;
 
     /**
-     * Set the base path to assign to all URLs.
-     *
-     * @param string $path
-     *
-     * @return $this
+     * {@inheritdoc}
+     */
+    public function getUrlRange(int $start, int $end): string
+    {
+        $urls = [];
+
+        for ($page = $start; $page <= $end; $page++) {
+            $urls[$page] = $this->getUrl($page);
+        }
+
+        return $urls;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getUrl(int $page): string
+    {
+        if ($page <= 0) {
+            $page = 1;
+        }
+
+        // Extra information like sortings storage.
+        $parameters = [$this->pageName => $page];
+
+        if (count($this->query) > 0) {
+            $parameters = array_merge($this->query, $parameters);
+        }
+
+        $url  = $this->path;
+        $url .= (strpos($this->path, '?') !== false ? '&' : '?');
+        $url .= http_build_query($parameters, '', '&');
+        $url .= $this->buildFragment();
+
+        return $url;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getPreviousPageUrl()
+    {
+        if ($this->getCurrentPage() > 1) {
+            return $this->getUrl($this->getCurrentPage() - 1);
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function addQuery(string $key, string $value)
+    {
+        if ($key !== $this->pageName) {
+            $this->query[$key] = $value;
+        }
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setFragment(string $fragment)
+    {
+        $this->fragment = $fragment;
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getFragment()
+    {
+        return $this->fragment;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function appends($key, string $value = null)
+    {
+        if (is_array($key)) {
+            return $this->appendArray($key);
+        }
+
+        return $this->addQuery($key, $value);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getPageName(): string
+    {
+        return $this->pageName;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setPageName(string $name)
+    {
+        $this->pageName = $name;
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
      */
     public function setPath(string $path)
     {
@@ -95,9 +214,7 @@ abstract class AbstractPaginator
     }
 
     /**
-     * Determine if the list of items is empty or not.
-     *
-     * @return bool
+     * {@inheritdoc}
      */
     public function isEmpty(): bool
     {
@@ -115,9 +232,7 @@ abstract class AbstractPaginator
     }
 
     /**
-     * Get the slice of items being paginated.
-     *
-     * @return array
+     * {@inheritdoc}
      */
     public function getItems(): array
     {
@@ -125,9 +240,7 @@ abstract class AbstractPaginator
     }
 
     /**
-     * Get the number of the first item in the slice.
-     *
-     * @return int
+     * {@inheritdoc}
      */
     public function getFirstItem(): int
     {
@@ -139,9 +252,7 @@ abstract class AbstractPaginator
     }
 
     /**
-     * Get the number of the last item in the slice.
-     *
-     * @return int
+     * {@inheritdoc}
      */
     public function getLastItem(): int
     {
@@ -153,9 +264,15 @@ abstract class AbstractPaginator
     }
 
     /**
-     * Get the number of items shown per page.
-     *
-     * @return int
+     * {@inheritdoc}
+     */
+    public function onFirstPage(): bool
+    {
+        return $this->getCurrentPage() <= 1;
+    }
+
+    /**
+     * {@inheritdoc}
      */
     public function getItemsPerPage(): int
     {
@@ -163,13 +280,19 @@ abstract class AbstractPaginator
     }
 
     /**
-     * Get the current page.
-     *
-     * @return int
+     * {@inheritdoc}
      */
     public function getCurrentPage(): int
     {
         return $this->currentPage;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function hasPages(): bool
+    {
+        return ! ($this->getCurrentPage() == 1 && ! $this->hasMorePages());
     }
 
     /**
@@ -255,13 +378,36 @@ abstract class AbstractPaginator
     }
 
     /**
-     * Render the contents of the paginator when casting to string.
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function __toString()
     {
         return (string) $this->render();
+    }
+
+    /**
+     * Build the full fragment portion of a URL.
+     *
+     * @return string
+     */
+    protected function buildFragment(): string
+    {
+        return $this->fragment ? '#'.$this->fragment : '';
+    }
+
+    /**
+     * Add an array of query string values.
+     *
+     * @param  array  $keys
+     * @return $this
+     */
+    protected function appendArray(array $keys)
+    {
+        foreach ($keys as $key => $value) {
+            $this->addQuery($key, $value);
+        }
+
+        return $this;
     }
 
     /**
