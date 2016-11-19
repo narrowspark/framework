@@ -5,9 +5,11 @@ namespace Viserio\Pagination;
 use ArrayAccess;
 use ArrayIterator;
 use Countable;
+use Closure;
 use IteratorAggregate;
 use JsonSerializable;
 use Narrowspark\Collection\Collection;
+use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Contracts\Pagination\Paginator as PaginatorContract;
 use Viserio\Contracts\Support\Arrayable as ArrayableContract;
 use Viserio\Contracts\Support\Jsonable as JsonableContract;
@@ -77,14 +79,14 @@ abstract class AbstractPaginator implements
      *
      * @var \Closure
      */
-    protected $currentPathResolver;
+    protected $currentPageResolver;
 
     /**
-     * The current page resolver callback.
+     * The current request instance.
      *
-     * @var \Closure
+     * @var \Psr\Http\Message\ServerRequestInterface
      */
-    protected $currentPageResolver;
+    protected $request;
 
     /**
      * {@inheritdoc}
@@ -422,5 +424,51 @@ abstract class AbstractPaginator implements
     protected function isValidPageNumber(int $page): bool
     {
         return $page >= 1 && filter_var($page, FILTER_VALIDATE_INT) !== false;
+    }
+
+    /**
+     * Resolve the current page or return the default value.
+     *
+     * @return int
+     */
+    protected function resolveCurrentPage(): int
+    {
+       $query = $this->request->getQueryParams();
+
+       if (array_key_exists($this->pageName, $query)) {
+            $query = $this->secureInput($query);
+            $page = $query[$this->pageName];
+
+            if (filter_var($page, FILTER_VALIDATE_INT) !== false && (int) $page >= 1) {
+                return $page;
+            }
+       }
+
+        return 1;
+    }
+
+    /**
+     * At least check if the input string does not have null-byte
+     * and is a UTF-8 valid string.
+     *
+     * @param array $query
+     *
+     * @return array
+     */
+    private function secureInput(array $query): array
+    {
+        $secure = function (&$v) {
+            if (!is_string($v) && !is_numeric($v)) {
+                $v = '';
+            } elseif (strpos($v, "\0") !== false) {
+                $v = '';
+            } elseif (!mb_check_encoding($v, 'UTF-8')) {
+                $v = '';
+            }
+        };
+
+        array_walk_recursive($query, $secure);
+
+        return $query;
     }
 }

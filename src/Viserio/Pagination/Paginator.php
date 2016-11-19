@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Pagination;
 
 use Narrowspark\Collection\Collection;
+use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Contracts\Pagination\Presenter as PresenterContract;
 use Viserio\Contracts\View\Traits\ViewAwareTrait;
 use Viserio\Pagination\Presenters\Bootstrap3;
@@ -44,6 +45,18 @@ class Paginator extends AbstractPaginator
      * @var string
      */
     protected $presenter = 'bootstrap3';
+
+    /**
+     * [__construct description]
+     *
+     * @param [type]                 $adapter
+     * @param ServerRequestInterface $request
+     */
+    public function __construct($adapter, ServerRequestInterface $request)
+    {
+        $this->adapter = $adapter;
+        $this->request = $request;
+    }
 
     /**
      * Set a default presenter.
