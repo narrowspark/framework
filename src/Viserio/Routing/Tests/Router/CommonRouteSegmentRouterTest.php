@@ -28,7 +28,7 @@ class CommonrouteregmentRouterTest extends RouteRouterBaseTest
     public function testRouter404($httpMethod, $uri)
     {
         $this->router->dispatch(
-            (new ServerRequestFactory())->createServerRequest($_SERVER,$httpMethod, $uri),
+            (new ServerRequestFactory())->createServerRequest($_SERVER, $httpMethod, $uri),
             (new ResponseFactory())->createResponse()
         );
     }

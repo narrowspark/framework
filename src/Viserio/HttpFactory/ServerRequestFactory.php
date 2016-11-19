@@ -2,9 +2,9 @@
 declare(strict_types=1);
 namespace Viserio\HttpFactory;
 
+use Interop\Http\Factory\ServerRequestFactoryInterface;
 use Psr\Http\Message\UriInterface;
 use UnexpectedValueException;
-use Interop\Http\Factory\ServerRequestFactoryInterface;
 use Viserio\Http\ServerRequest;
 use Viserio\Http\Stream\LazyOpenStream;
 use Viserio\Http\Uri;
