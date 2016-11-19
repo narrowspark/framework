@@ -17,6 +17,7 @@ interface Application
      * Run the given array of bootstrap classes.
      *
      * @param array $bootstrappers
+     * @return void
      */
     public function bootstrapWith(array $bootstrappers);
 
@@ -62,7 +63,7 @@ interface Application
     /**
      * Determine if the application supports the given locale.
      *
-     * @param string $Locale
+     * @param string $locale
      *
      * @return bool
      */
