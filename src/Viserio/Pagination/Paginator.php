@@ -5,6 +5,7 @@ namespace Viserio\Pagination;
 use Narrowspark\Collection\Collection;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Contracts\Pagination\Presenter as PresenterContract;
+use Viserio\Contracts\Pagination\Adapter as AdapterContract;
 use Viserio\Contracts\View\Traits\ViewAwareTrait;
 use Viserio\Pagination\Presenters\Bootstrap3;
 use Viserio\Pagination\Presenters\Bootstrap4;
@@ -47,15 +48,22 @@ class Paginator extends AbstractPaginator
     protected $presenter = 'bootstrap3';
 
     /**
-     * [__construct description]
+     * Create a new paginator.
      *
-     * @param [type]                 $adapter
-     * @param ServerRequestInterface $request
+     * @param \Viserio\Contracts\Pagination\Adapter    $adapter
+     * @param \Psr\Http\Message\ServerRequestInterface $request
      */
-    public function __construct($adapter, ServerRequestInterface $request)
+    public function __construct(AdapterContract $adapter, ServerRequestInterface $request)
     {
-        $this->adapter = $adapter;
         $this->request = $request;
+        $this->path = (string) $this->request->getUri();
+
+        $this->items = new Collection($adapter->getItems());
+        $this->itemCountPerPage = $adapter->getItemsPerPage();
+        $this->currentPage = $this->getCurrentPage();
+        $this->path = $this->path != '/' ? rtrim($this->path, '/') : $this->path;
+
+        $this->checkForMorePages();
     }
 
     /**
@@ -170,5 +178,27 @@ class Paginator extends AbstractPaginator
     public function getTotalItems(): int
     {
         return $this->total;
+    }
+
+    /**
+     * Get the current page for the request.
+     *
+     * @return int
+     */
+    public function getCurrentPage(): int
+    {
+        $currentPage = $this->resolveCurrentPage();
+
+        return $this->isValidPageNumber($currentPage) ? (int) $currentPage : 1;
+    }
+
+    /**
+     * Check for more pages. The last item will be sliced off.
+     */
+    protected function checkForMorePages()
+    {
+        $this->hasMore = count($this->items) > ($this->itemCountPerPage);
+
+        $this->items = $this->items->slice(0, $this->itemCountPerPage);
     }
 }

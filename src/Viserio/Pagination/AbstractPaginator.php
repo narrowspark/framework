@@ -440,7 +440,7 @@ abstract class AbstractPaginator implements
             $page = $query[$this->pageName];
 
             if (filter_var($page, FILTER_VALIDATE_INT) !== false && (int) $page >= 1) {
-                return $page;
+                return (int) $page;
             }
         }
 
