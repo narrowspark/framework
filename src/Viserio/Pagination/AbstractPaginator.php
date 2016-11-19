@@ -14,14 +14,14 @@ use Viserio\Contracts\Support\Jsonable as JsonableContract;
 use Viserio\Contracts\Support\Stringable as StringableContract;
 
 abstract class AbstractPaginator implements
-ArrayAccess,
- Countable,
- IteratorAggregate,
- StringableContract,
- ArrayableContract,
- JsonSerializable,
- JsonableContract,
- PaginatorContract
+    ArrayAccess,
+    Countable,
+    IteratorAggregate,
+    StringableContract,
+    ArrayableContract,
+    JsonSerializable,
+    JsonableContract,
+    PaginatorContract
 {
     /**
      * All of the items being paginated.
