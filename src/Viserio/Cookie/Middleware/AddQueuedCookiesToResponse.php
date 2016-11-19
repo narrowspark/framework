@@ -4,7 +4,7 @@ namespace Viserio\Cookie\Middleware;
 
 use Interop\Http\Middleware\DelegateInterface;
 use Interop\Http\Middleware\ServerMiddlewareInterface;
-use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Contracts\Cookie\QueueingFactory as CookieJar;
 
 class AddQueuedCookiesToResponse implements ServerMiddlewareInterface
@@ -29,7 +29,7 @@ class AddQueuedCookiesToResponse implements ServerMiddlewareInterface
     /**
      * {@inheritdoc}
      */
-    public function process(RequestInterface $request, DelegateInterface $delegate)
+    public function process(ServerRequestInterface $request, DelegateInterface $delegate)
     {
         return $this->cookies->renderIntoCookieHeader($request);
     }

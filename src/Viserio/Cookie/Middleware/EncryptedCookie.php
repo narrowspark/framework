@@ -6,7 +6,7 @@ use Defuse\Crypto\Exception\EnvironmentIsBrokenException;
 use Defuse\Crypto\Exception\WrongKeyOrModifiedCiphertextException;
 use Interop\Http\Middleware\DelegateInterface;
 use Interop\Http\Middleware\ServerMiddlewareInterface;
-use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Viserio\Contracts\Cookie\Cookie as CookieContract;
 use Viserio\Contracts\Encryption\Encrypter as EncrypterContract;
@@ -41,7 +41,7 @@ class EncryptCookies implements ServerMiddlewareInterface
     /**
      * {@inheritdoc}
      */
-    public function process(RequestInterface $request, DelegateInterface $delegate)
+    public function process(ServerRequestInterface $request, DelegateInterface $delegate)
     {
         return $this->encrypt($delegate->process($this->decrypt($request)));
     }
