@@ -4,8 +4,8 @@ namespace Viserio\Pagination;
 
 use Narrowspark\Collection\Collection;
 use Psr\Http\Message\ServerRequestInterface;
-use Viserio\Contracts\Pagination\Presenter as PresenterContract;
 use Viserio\Contracts\Pagination\Adapter as AdapterContract;
+use Viserio\Contracts\Pagination\Presenter as PresenterContract;
 use Viserio\Contracts\View\Traits\ViewAwareTrait;
 use Viserio\Pagination\Presenters\Bootstrap3;
 use Viserio\Pagination\Presenters\Bootstrap4;

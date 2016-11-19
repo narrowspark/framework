@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Pagination\Adapters;
 
-use InvalidArgumentException;
 use Doctrine\DBAL\Query\QueryBuilder;
+use InvalidArgumentException;
 use Viserio\Contracts\Pagination\Adapter as AdapterContract;
 
 class DoctrineDbalAdapter implements AdapterContract
