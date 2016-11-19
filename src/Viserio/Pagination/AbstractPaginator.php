@@ -2,18 +2,19 @@
 declare(strict_types=1);
 namespace Viserio\Pagination;
 
-use JsonSerializable;
-use ArrayIterator;
 use ArrayAccess;
+use ArrayIterator;
 use Countable;
 use IteratorAggregate;
+use JsonSerializable;
 use Narrowspark\Collection\Collection;
 use Viserio\Contracts\Pagination\Paginator as PaginatorContract;
 use Viserio\Contracts\Support\Arrayable as ArrayableContract;
 use Viserio\Contracts\Support\Jsonable as JsonableContract;
 use Viserio\Contracts\Support\Stringable as StringableContract;
 
-abstract class AbstractPaginator implements ArrayAccess,
+abstract class AbstractPaginator implements
+ArrayAccess,
  Countable,
  IteratorAggregate,
  StringableContract,
@@ -392,13 +393,14 @@ abstract class AbstractPaginator implements ArrayAccess,
      */
     protected function buildFragment(): string
     {
-        return $this->fragment ? '#'.$this->fragment : '';
+        return $this->fragment ? '#' . $this->fragment : '';
     }
 
     /**
      * Add an array of query string values.
      *
-     * @param  array  $keys
+     * @param array $keys
+     *
      * @return $this
      */
     protected function appendArray(array $keys)
