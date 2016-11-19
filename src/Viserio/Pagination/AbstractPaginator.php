@@ -248,7 +248,7 @@ abstract class AbstractPaginator implements
     public function getFirstItem(): int
     {
         if (count($this->items) === 0) {
-            return;
+            return 0;
         }
 
         return ($this->currentPage - 1) * $this->itemCountPerPage + 1;
@@ -260,7 +260,7 @@ abstract class AbstractPaginator implements
     public function getLastItem(): int
     {
         if (count($this->items) === 0) {
-            return;
+            return 0;
         }
 
         return $this->firstItem() + $this->count() - 1;
