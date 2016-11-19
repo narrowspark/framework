@@ -53,6 +53,22 @@ interface Application
     public function isLocale(string $locale): bool;
 
     /**
+     * Get the application fallback locale.
+     *
+     * @return string
+     */
+    public function getFallbackLocale(): string;
+
+    /**
+     * Determine if the application supports the given locale.
+     *
+     * @param string $Locale
+     *
+     * @return bool
+     */
+    public function hasLocale(string $locale): bool;
+
+    /**
      * Get the path to the environment file directory.
      *
      * @return string
