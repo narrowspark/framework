@@ -2,7 +2,6 @@
 declare(strict_types=1);
 namespace Viserio\Routing\Traits;
 
-use Interop\Http\Middleware\MiddlewareInterface;
 use Interop\Http\Middleware\ServerMiddlewareInterface;
 use LogicException;
 
@@ -21,29 +20,21 @@ trait MiddlewareAwareTrait
     /**
      * {@inheritdoc}
      */
-    public function withMiddleware($middleware)
+    public function withMiddleware(ServerMiddlewareInterface $middleware)
     {
-        if ($middleware instanceof MiddlewareInterface || $middleware instanceof ServerMiddlewareInterface) {
-            $this->middlewares['with'][] = $middleware;
+        $this->middlewares['with'][] = $middleware;
 
-            return $this;
-        }
-
-        throw new LogicException('Unsupported middleware type.');
+        return $this;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function withoutMiddleware($middleware)
+    public function withoutMiddleware(ServerMiddlewareInterface $middleware)
     {
-        if ($middleware instanceof MiddlewareInterface || $middleware instanceof ServerMiddlewareInterface) {
-            $this->middlewares['without'][] = $middleware;
+        $this->middlewares['without'][] = $middleware;
 
-            return $this;
-        }
-
-        throw new LogicException('Unsupported middleware type.');
+        return $this;
     }
 
     /**

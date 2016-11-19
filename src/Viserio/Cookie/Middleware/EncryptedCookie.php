@@ -5,14 +5,14 @@ namespace Viserio\Cookie\Middleware;
 use Defuse\Crypto\Exception\EnvironmentIsBrokenException;
 use Defuse\Crypto\Exception\WrongKeyOrModifiedCiphertextException;
 use Interop\Http\Middleware\DelegateInterface;
-use Interop\Http\Middleware\MiddlewareInterface;
+use Interop\Http\Middleware\ServerMiddlewareInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Viserio\Contracts\Cookie\Cookie as CookieContract;
 use Viserio\Contracts\Encryption\Encrypter as EncrypterContract;
 use Viserio\Cookie\Cookie;
 
-class EncryptCookies implements MiddlewareInterface
+class EncryptCookies implements ServerMiddlewareInterface
 {
     /**
      * The encrypter instance.
