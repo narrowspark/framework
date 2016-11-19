@@ -4,8 +4,8 @@ namespace Viserio\Pagination;
 
 use ArrayAccess;
 use ArrayIterator;
-use Countable;
 use Closure;
+use Countable;
 use IteratorAggregate;
 use JsonSerializable;
 use Narrowspark\Collection\Collection;
@@ -433,16 +433,16 @@ abstract class AbstractPaginator implements
      */
     protected function resolveCurrentPage(): int
     {
-       $query = $this->request->getQueryParams();
+        $query = $this->request->getQueryParams();
 
-       if (array_key_exists($this->pageName, $query)) {
+        if (array_key_exists($this->pageName, $query)) {
             $query = $this->secureInput($query);
             $page = $query[$this->pageName];
 
             if (filter_var($page, FILTER_VALIDATE_INT) !== false && (int) $page >= 1) {
                 return $page;
             }
-       }
+        }
 
         return 1;
     }
