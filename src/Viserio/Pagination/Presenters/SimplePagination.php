@@ -38,12 +38,12 @@ class SimplePagination implements PresenterContract
             if ($paginator->onFirstPage()) {
                 $pagination .= '<li>&laquo;</li>';
             } else {
-                $pagination .= '<li><a href="'. $paginator->getPreviousPageUrl() . '" rel="prev">&laquo;</a></li>';
+                $pagination .= '<li><a href="' . $paginator->getPreviousPageUrl() . '" rel="prev">&laquo;</a></li>';
             }
 
             // Next Page Link
             if ($paginator->hasMorePages()) {
-                $pagination .= '<li><a href="'. $paginator->getNextPageUrl() . '" rel="next">&raquo;</a></li>';
+                $pagination .= '<li><a href="' . $paginator->getNextPageUrl() . '" rel="next">&raquo;</a></li>';
             } else {
                 $pagination .= '<li>&raquo;</li>';
             }

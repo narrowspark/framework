@@ -38,7 +38,7 @@ class Bootstrap3 implements PresenterContract
             if ($paginator->onFirstPage()) {
                 $pagination .= '<li class="page-item disabled"><span class="page-link">&laquo;</span></li>';
             } else {
-                $pagination .= '<li class="page-item"><a class="page-link" href="'. $paginator->getPreviousPageUrl() . '" rel="prev">&laquo;</a></li>';
+                $pagination .= '<li class="page-item"><a class="page-link" href="' . $paginator->getPreviousPageUrl() . '" rel="prev">&laquo;</a></li>';
             }
 
             if (method_exists($paginator, 'getElements')) {
@@ -47,7 +47,7 @@ class Bootstrap3 implements PresenterContract
 
             // Next Page Link
             if ($paginator->hasMorePages()) {
-                $pagination .= '<li class="page-item"><a class="page-link" href="'. $paginator->getNextPageUrl() . '" rel="next">&raquo;</a></li>';
+                $pagination .= '<li class="page-item"><a class="page-link" href="' . $paginator->getNextPageUrl() . '" rel="next">&raquo;</a></li>';
             } else {
                 $pagination .= '<li class="page-item disabled"><span class="page-link">&raquo;</span></li>';
             }
