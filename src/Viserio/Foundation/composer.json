@@ -26,7 +26,7 @@
         "viserio/exception"                                  : "self.version",
         "viserio/log"                                        : "self.version",
         "viserio/parsers"                                    : "self.version",
-        "viserio/routing"                                    : "self.version",
+        "viserio/routing"                                    : "self.version"
     },
     "require-dev": {
         "narrowspark/testing-helper"                         : "^1.5",

@@ -1,8 +1,8 @@
 {
-    "name"       : "viserio/container",
+    "name"       : "viserio/pagination",
     "type"       : "library",
-    "description": "The Viserio Container package.",
-    "keywords"   : ["framework", "narrowspark", "viserio", "container", "container-interop", "di", "dependency", "injection", "dependency injection"],
+    "description": "The Viserio Pagination package.",
+    "keywords"   : ["narrowspark", "viserio", "pagination", "doctrine", "array", "foundation5", "bootstrap3", "bootstrap4"],
     "license"    : "MIT",
     "homepage"   : "http://github.com/narrowspark/framework",
     "support"    : {
@@ -19,27 +19,32 @@
     ],
     "require": {
         "php"                                 : "7.0.0 - 7.0.5 || ^7.0.7",
-        "container-interop/container-interop" : "^1.1",
-        "container-interop/service-provider"  : "^0.3",
-        "php-di/invoker"                      : "^1.3.2",
+        "narrowspark/collection"              : "^0.1",
+        "psr/http-message"                    : "^1.0",
         "viserio/contracts"                   : "self.version"
     },
     "require-dev": {
-        "mockery/mockery"                     : "^0.9",
-        "mouf/picotainer"                     : "^1.0",
+        "container-interop/container-interop" : "^1.1",
+        "container-interop/service-provider"  : "^0.3",
+        "doctrine/dbal"                       : "^2.5",
+        "narrowspark/testing-helper"          : "^1.5",
         "phpunit/phpunit"                     : "^5.1",
-        "narrowspark/testing-helper"          : "^1.5"
+        "viserio/http-factory"                : "self.version"
     },
     "autoload": {
         "psr-4": {
-            "Viserio\\Container\\"            : ""
+            "Viserio\\Pagination\\"           : ""
         },
         "exclude-from-classmap"               : ["/Tests/"]
     },
     "autoload-dev": {
         "psr-4": {
-            "Viserio\\Container\\Tests\\"     : "Tests/"
+            "Viserio\\Pagination\\Tests\\"    : "Tests/"
         }
+    },
+    "provide": {
+        "psr/http-message"                : "^1.0",
+        "psr/http-message-implementation" : "^1.0"
     },
     "extra": {
         "branch-alias": {

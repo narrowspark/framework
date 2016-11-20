@@ -26,7 +26,6 @@
     },
     "require-dev": {
         "container-interop/service-provider"  : "^0.3",
-        "narrowspark/testing-helper"          : "^1.5",
         "phpunit/phpunit"                     : "^5.1",
         "viserio/container"                   : "self.version"
     },
