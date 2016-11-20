@@ -27,7 +27,7 @@ class PaginatorTest extends \PHPUnit_Framework_TestCase
 
         $pagi = new Paginator($array, $request);
 
-        $this->assertEquals('http://example.com/test?page=1', $pagi->getPreviousPageUrl());
+        $this->assertEquals('/test?page=1', $pagi->getPreviousPageUrl());
     }
 
     public function testPaginatorRemovesTrailingSlashes()
@@ -45,6 +45,6 @@ class PaginatorTest extends \PHPUnit_Framework_TestCase
 
         $pagi = new Paginator($array, $request);
 
-        $this->assertEquals('http://example.com/test?page=1', $pagi->getPreviousPageUrl());
+        $this->assertEquals('/test?page=1', $pagi->getPreviousPageUrl());
     }
 }

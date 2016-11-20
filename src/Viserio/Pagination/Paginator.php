@@ -56,10 +56,11 @@ class Paginator extends AbstractPaginator
     public function __construct(AdapterContract $adapter, ServerRequestInterface $request)
     {
         $this->request = $request;
-        $this->path = (string) $this->request->getUri();
+        $this->path = $this->request->getUri()->getPath();
 
         $this->items = new Collection($adapter->getItems());
         $this->itemCountPerPage = $adapter->getItemsPerPage();
+
         $this->currentPage = $this->getCurrentPage();
         $this->path = $this->path != '/' ? rtrim($this->path, '/') : $this->path;
 
