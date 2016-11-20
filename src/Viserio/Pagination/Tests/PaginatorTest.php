@@ -244,7 +244,7 @@ class PaginatorTest extends \PHPUnit_Framework_TestCase
             ->once()
             ->andReturn((new UriFactory())->createUri('http://example.com/'));
 
-        $pagi = new Paginator(new NullAdapter, $request);
+        $pagi = new Paginator(new NullAdapter(), $request);
 
         $this->assertEquals(1, $pagi->getCurrentPage());
         $this->assertFalse($pagi->hasPages());
