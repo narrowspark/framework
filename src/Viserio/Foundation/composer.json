@@ -56,5 +56,6 @@
     "suggest": {
         "viserio/statical-proxy"                             : "Required to use statical-proxy bootstrapper (self.version).",
     },
+    "minimum-stability"                                      : "dev",
     "prefer-stable"                                          : true
 }

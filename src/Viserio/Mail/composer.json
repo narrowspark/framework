@@ -62,5 +62,6 @@
         "viserio/queue"                      : "Required to send queue emails (self.version).",
         "viserio/statical-proxy"             : "Required to use the proxy instances (self.version)."
     },
+    "minimum-stability"                      : "dev",
     "prefer-stable"                          : true
 }
