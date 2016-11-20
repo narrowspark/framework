@@ -17,7 +17,7 @@ function printError {
 }
 
 # Run all test first
-sh ./build/runTest.sh "./"
+sh ./build/travis/runTest.sh "./"
 EXIT=$?
 
 # Do not run more tests if the "BUILD_ALL" failed
@@ -32,7 +32,7 @@ for line in $LINES; do
    DIR=$(dirname $line)
 
    # Go to that directory
-   sh ./build/runTest.sh "$DIR"
+   sh ./build/travis/runTest.sh "$DIR"
    EXITCODE=$?
 
    # If there is an error, make sure to return it.

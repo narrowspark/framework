@@ -55,7 +55,7 @@ before_script:
   - sleep 15
 
 script:
-  - ./build/runAllTests.sh
+  - ./build/travis/runAllTests.sh
 
 after_success:
   - ./build/travis/after_success.sh
