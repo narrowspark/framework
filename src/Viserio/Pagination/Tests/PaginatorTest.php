@@ -6,11 +6,48 @@ use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\HttpFactory\UriFactory;
 use Viserio\Pagination\Adapters\ArrayAdapter;
+use Viserio\Pagination\Adapters\NullAdapter;
 use Viserio\Pagination\Paginator;
 
 class PaginatorTest extends \PHPUnit_Framework_TestCase
 {
     use MockeryTrait;
+
+    public function testToJson()
+    {
+        $array = new ArrayAdapter(['item1', 'item2', 'item3'], 2);
+
+        $request = $this->mock(ServerRequestInterface::class);
+
+        $request->shouldReceive('getQueryParams')
+            ->times(5)
+            ->andReturn(['page' => '2']);
+        $request->shouldReceive('getUri')
+            ->once()
+            ->andReturn((new UriFactory())->createUri('http://example.com/test'));
+
+        $pagi = new Paginator($array, $request);
+
+        $this->isJson($pagi->toJson());
+    }
+
+    public function testJsonSerialize()
+    {
+        $array = new ArrayAdapter(['item1', 'item2', 'item3'], 2);
+
+        $request = $this->mock(ServerRequestInterface::class);
+
+        $request->shouldReceive('getQueryParams')
+            ->times(5)
+            ->andReturn(['page' => '2']);
+        $request->shouldReceive('getUri')
+            ->once()
+            ->andReturn((new UriFactory())->createUri('http://example.com/test'));
+
+        $pagi = new Paginator($array, $request);
+
+        $this->assertTrue(is_array($pagi->jsonSerialize()));
+    }
 
     public function testSetAndGetPath()
     {
@@ -119,14 +156,25 @@ class PaginatorTest extends \PHPUnit_Framework_TestCase
         ], $pagi->toArray());
     }
 
-    public function testPaginatorRender()
+    public function testPaginatorRenderSimplePagination()
     {
         $array = new ArrayAdapter(['item3', 'item4', 'item5'], 2);
 
         $request = $this->mock(ServerRequestInterface::class);
-
         $request->shouldReceive('getQueryParams')
-            ->times(11)
+            ->times(4)
+            ->andReturn(['page' => '1']);
+        $request->shouldReceive('getUri')
+            ->once()
+            ->andReturn((new UriFactory())->createUri('http://example.com/'));
+
+        $pagi = new Paginator($array, $request);
+
+        $this->assertSame('<ul class="pagination"><li>&laquo;</li><li><a href="/?page=2" rel="next">&raquo;</a></li></ul>', (string) $pagi);
+
+        $request = $this->mock(ServerRequestInterface::class);
+        $request->shouldReceive('getQueryParams')
+            ->times(6)
             ->andReturn(['page' => '2']);
         $request->shouldReceive('getUri')
             ->once()
@@ -136,6 +184,77 @@ class PaginatorTest extends \PHPUnit_Framework_TestCase
 
         $this->assertSame('<ul class="pagination"><li><a href="/?page=1" rel="prev">&laquo;</a></li><li><a href="/?page=3" rel="next">&raquo;</a></li></ul>', $pagi->render());
 
-        $this->assertSame('<ul class="pagination"><li class="page-item"><a class="page-link" href="/?page=1" rel="prev">&laquo;</a></li><li class="page-item"><a class="page-link" href="/?page=3" rel="next">&raquo;</a></li></ul>', $pagi->render('bootstrap3'));
+        $array = new ArrayAdapter(['item3', 'item4', 'item5'], 3);
+
+        $request = $this->mock(ServerRequestInterface::class);
+        $request->shouldReceive('getQueryParams')
+            ->times(5)
+            ->andReturn(['page' => '2']);
+        $request->shouldReceive('getUri')
+            ->once()
+            ->andReturn((new UriFactory())->createUri('http://example.com/'));
+
+        $pagi = new Paginator($array, $request);
+
+        $this->assertSame('<ul class="pagination"><li><a href="/?page=1" rel="prev">&laquo;</a></li><li>&raquo;</li></ul>', $pagi->render());
+    }
+
+    public function testPaginatorRenderBootstrap()
+    {
+        $array = new ArrayAdapter(['item3', 'item4', 'item5'], 2);
+
+        $request = $this->mock(ServerRequestInterface::class);
+
+        $request->shouldReceive('getQueryParams')
+            ->times(6)
+            ->andReturn(['page' => '2']);
+        $request->shouldReceive('getUri')
+            ->once()
+            ->andReturn((new UriFactory())->createUri('http://example.com/'));
+
+        $pagi = new Paginator($array, $request);
+
+        $this->assertSame('<ul class="pagination"><li class="page-item"><a class="page-link" href="/?page=1" rel="prev">&laquo;</a></li><li class="page-item"><a class="page-link" href="/?page=3" rel="next">&raquo;</a></li></ul>', $pagi->render('bootstrap4'));
+    }
+
+    public function testPaginatorRenderFoundation6()
+    {
+        $array = new ArrayAdapter(['item3', 'item4', 'item5'], 2);
+
+        $request = $this->mock(ServerRequestInterface::class);
+        $request->shouldReceive('getQueryParams')
+            ->times(6)
+            ->andReturn(['page' => '2']);
+        $request->shouldReceive('getUri')
+            ->once()
+            ->andReturn((new UriFactory())->createUri('http://example.com/'));
+
+        $pagi = new Paginator($array, $request);
+
+        $this->assertSame('<ul class="pagination" role="navigation"><li class="pagination-previous"><a href="/?page=1" rel="prev">&laquo;</a></li><li class="pagination-next"><a href="/?page=3" rel="next">&raquo;</a></li></ul>', $pagi->render('foundation6'));
+    }
+
+    public function testPaginatorWithNullAdapter()
+    {
+        $request = $this->mock(ServerRequestInterface::class);
+        $request->shouldReceive('getQueryParams')
+            ->times(6)
+            ->andReturn([]);
+        $request->shouldReceive('getUri')
+            ->once()
+            ->andReturn((new UriFactory())->createUri('http://example.com/'));
+
+        $pagi = new Paginator(new NullAdapter, $request);
+
+        $this->assertEquals(1, $pagi->getCurrentPage());
+        $this->assertFalse($pagi->hasPages());
+        $this->assertFalse($pagi->hasMorePages());
+        $this->assertEquals([], $pagi->getItems());
+        $this->assertEquals([
+            'per_page' => 0, 'current_page' => 1, 'next_page_url' => null,
+            'prev_page_url' => null, 'from' => 0, 'to' => 0, 'data' => [],
+        ], $pagi->toArray());
+
+        $this->assertSame('', (string) $pagi);
     }
 }

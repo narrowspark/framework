@@ -5,7 +5,7 @@ namespace Viserio\Pagination\Presenters;
 use Viserio\Contracts\Pagination\Paginator as PaginatorContract;
 use Viserio\Contracts\Pagination\Presenter as PresenterContract;
 
-class Bootstrap3 implements PresenterContract
+class Foundation6 implements PresenterContract
 {
     /**
      * Paginator instance.
@@ -15,7 +15,7 @@ class Bootstrap3 implements PresenterContract
     protected $paginator;
 
     /**
-     * Create a new Bootstrap 3 presenter.
+     * Create a new Foundation 6 presenter.
      *
      * @param \Viserio\Contracts\Pagination\Paginator $paginator
      */
@@ -32,13 +32,13 @@ class Bootstrap3 implements PresenterContract
         $paginator = $this->paginator;
 
         if ($paginator->hasPages()) {
-            $pagination = '<ul class="pagination">';
+            $pagination = '<ul class="pagination" role="navigation">';
 
             // Previous Page Link
             if ($paginator->onFirstPage()) {
-                $pagination .= '<li class="page-item disabled"><span class="page-link">&laquo;</span></li>';
+                $pagination .= '<li class="pagination-previous disabled">&laquo;</li>';
             } else {
-                $pagination .= '<li class="page-item"><a class="page-link" href="' . $paginator->getPreviousPageUrl() . '" rel="prev">&laquo;</a></li>';
+                $pagination .= '<li class="pagination-previous"><a href="' . $paginator->getPreviousPageUrl() . '" rel="prev">&laquo;</a></li>';
             }
 
             if (method_exists($paginator, 'getElements')) {
@@ -47,9 +47,9 @@ class Bootstrap3 implements PresenterContract
 
             // Next Page Link
             if ($paginator->hasMorePages()) {
-                $pagination .= '<li class="page-item"><a class="page-link" href="' . $paginator->getNextPageUrl() . '" rel="next">&raquo;</a></li>';
+                $pagination .= '<li class="pagination-next"><a href="' . $paginator->getNextPageUrl() . '" rel="next">&raquo;</a></li>';
             } else {
-                $pagination .= '<li class="page-item disabled"><span class="page-link">&raquo;</span></li>';
+                $pagination .= '<li class="pagination-next disabled">&raquo;</li>';
             }
 
             $pagination .= '</ul>';
@@ -69,17 +69,18 @@ class Bootstrap3 implements PresenterContract
     private function getPaginationsLinks(array $items, $pagination)
     {
         foreach ($items as $item) {
+            // "Three Dots" Separator
             if (is_string($item)) {
-                $pagination .= '<li class="page-item disabled"><span class="page-link">' . $item . '</span></li>';
+                $pagination .= '<li class="ellipsis"></li>';
             }
 
             // Array Of Links
             if (is_array($item)) {
                 foreach ($item as $page => $url) {
                     if ($paginator->getCurrentPage() == $page) {
-                        $pagination .= '<li class="page-item active"><span class="page-link">' . $page . '</span></li>';
+                        $pagination .= '<li class="current">' . $page . '</li>';
                     } else {
-                        $pagination .= '<li class="page-item"><a class="page-link" href="' . $url . '">' . $page . '</a></li>';
+                        $pagination .= '<li><a href="' . $url . '">' . $page . '</a></li>';
                     }
                 }
             }

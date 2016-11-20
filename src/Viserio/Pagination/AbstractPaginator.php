@@ -141,7 +141,7 @@ abstract class AbstractPaginator implements
      */
     public function addQuery(string $key, string $value)
     {
-        if ($key !== $this->pageName) {
+        if ($this->pageName !== $key) {
             $this->query[$key] = $value;
         }
 
@@ -150,6 +150,8 @@ abstract class AbstractPaginator implements
 
     /**
      * {@inheritdoc}
+     *
+     * @codeCoverageIgnore
      */
     public function setFragment(string $fragment)
     {
@@ -160,6 +162,8 @@ abstract class AbstractPaginator implements
 
     /**
      * {@inheritdoc}
+     *
+     * @codeCoverageIgnore
      */
     public function getFragment()
     {
@@ -180,6 +184,8 @@ abstract class AbstractPaginator implements
 
     /**
      * {@inheritdoc}
+     *
+     * @codeCoverageIgnore
      */
     public function getPageName(): string
     {
@@ -188,6 +194,8 @@ abstract class AbstractPaginator implements
 
     /**
      * {@inheritdoc}
+     *
+     * @codeCoverageIgnore
      */
     public function setPageName(string $name)
     {
@@ -218,6 +226,8 @@ abstract class AbstractPaginator implements
      * Get an iterator for the items.
      *
      * @return \ArrayIterator
+     *
+     * @codeCoverageIgnore
      */
     public function getIterator()
     {
@@ -226,6 +236,8 @@ abstract class AbstractPaginator implements
 
     /**
      * {@inheritdoc}
+     *
+     * @codeCoverageIgnore
      */
     public function isEmpty(): bool
     {
@@ -284,6 +296,8 @@ abstract class AbstractPaginator implements
 
     /**
      * {@inheritdoc}
+     *
+     * @codeCoverageIgnore
      */
     public function getItemsPerPage(): int
     {
@@ -292,6 +306,8 @@ abstract class AbstractPaginator implements
 
     /**
      * {@inheritdoc}
+     *
+     * @codeCoverageIgnore
      */
     public function getCurrentPage(): int
     {
@@ -312,6 +328,8 @@ abstract class AbstractPaginator implements
      * @param \Narrowspark\Collection\Collection $collection
      *
      * @return $this
+     *
+     * @codeCoverageIgnore
      */
     public function setCollection(Collection $collection)
     {
@@ -324,6 +342,8 @@ abstract class AbstractPaginator implements
      * Get the paginator's underlying collection.
      *
      * @return \Narrowspark\Collection\Collection
+     *
+     * @codeCoverageIgnore
      */
     public function getCollection(): Collection
     {
@@ -336,6 +356,8 @@ abstract class AbstractPaginator implements
      * @param mixed $key
      *
      * @return bool
+     *
+     * @codeCoverageIgnore
      */
     public function offsetExists($key)
     {
@@ -348,6 +370,8 @@ abstract class AbstractPaginator implements
      * @param mixed $key
      *
      * @return mixed
+     *
+     * @codeCoverageIgnore
      */
     public function offsetGet($key)
     {
@@ -359,6 +383,8 @@ abstract class AbstractPaginator implements
      *
      * @param mixed $key
      * @param mixed $value
+     *
+     * @codeCoverageIgnore
      */
     public function offsetSet($key, $value)
     {
@@ -369,6 +395,8 @@ abstract class AbstractPaginator implements
      * Unset the item at the given key.
      *
      * @param mixed $key
+     *
+     * @codeCoverageIgnore
      */
     public function offsetUnset($key)
     {
@@ -382,6 +410,8 @@ abstract class AbstractPaginator implements
      * @param array  $parameters
      *
      * @return mixed
+     *
+     * @codeCoverageIgnore
      */
     public function __call($method, $parameters)
     {

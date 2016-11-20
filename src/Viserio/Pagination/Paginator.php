@@ -7,9 +7,8 @@ use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Contracts\Pagination\Adapter as AdapterContract;
 use Viserio\Contracts\Pagination\Presenter as PresenterContract;
 use Viserio\Contracts\View\Traits\ViewAwareTrait;
-use Viserio\Pagination\Presenters\Bootstrap3;
 use Viserio\Pagination\Presenters\Bootstrap4;
-use Viserio\Pagination\Presenters\Foundation5;
+use Viserio\Pagination\Presenters\Foundation6;
 use Viserio\Pagination\Presenters\SimplePagination;
 
 class Paginator extends AbstractPaginator
@@ -22,9 +21,8 @@ class Paginator extends AbstractPaginator
      * @var array
      */
     protected $presenters = [
-        'bootstrap3' => Bootstrap3::class,
         'bootstrap4' => Bootstrap4::class,
-        'foundation5' => Foundation5::class,
+        'foundation6' => Foundation6::class,
         'simple' => SimplePagination::class,
     ];
 
@@ -60,7 +58,7 @@ class Paginator extends AbstractPaginator
      *
      * @return $this
      */
-    public function setDefaultPresenter(string $presenter)
+    public function setDefaultPresenter(string $presenter): Paginator
     {
         $this->presenter = $presenter;
 
@@ -94,12 +92,10 @@ class Paginator extends AbstractPaginator
      */
     public function render(string $view = null): string
     {
-        if (is_string($view)) {
-            if ($this->views !== null && !isset($this->presenters[$view])) {
-                return $this->getViewFactory()->create($view, ['paginator' => $this]);
-            } elseif (isset($this->presenters[$view])) {
-                return (new $this->presenters[$view]($this))->render();
-            }
+        if ($this->views !== null && !isset($this->presenters[$view])) {
+            return $this->getViewFactory()->create($view, ['paginator' => $this]);
+        } elseif (isset($this->presenters[$view])) {
+            return (new $this->presenters[$view]($this))->render();
         }
 
         return (new $this->presenters[$this->getDefaultPresenter()]($this))->render();
@@ -143,8 +139,10 @@ class Paginator extends AbstractPaginator
      * @param bool $value
      *
      * @return $this
+     *
+     * @codeCoverageIgnore
      */
-    public function hasMorePagesWhen(bool $value = true)
+    public function hasMorePagesWhen(bool $value = true): Paginator
     {
         $this->hasMore = $value;
 
