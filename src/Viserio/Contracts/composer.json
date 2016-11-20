@@ -68,6 +68,5 @@
         "container-interop/container-interop"                : "Required to use Container contract (^1.1).",
         "container-interop/service-provider"                 : "Required to use Container contract (^0.3)."
     },
-    "minimum-stability"                                      : "dev",
     "prefer-stable"                                          : true
 }
