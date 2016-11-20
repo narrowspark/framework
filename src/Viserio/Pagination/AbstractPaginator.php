@@ -201,9 +201,17 @@ abstract class AbstractPaginator implements
      */
     public function setPath(string $path)
     {
-        $this->path = $path;
+        $this->path = $path != '/' ? rtrim($path, '/') : $path;
 
         return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getPath(): string
+    {
+        return $this->path;
     }
 
     /**
@@ -263,7 +271,7 @@ abstract class AbstractPaginator implements
             return 0;
         }
 
-        return $this->firstItem() + $this->count() - 1;
+        return $this->getFirstItem() + $this->count() - 1;
     }
 
     /**

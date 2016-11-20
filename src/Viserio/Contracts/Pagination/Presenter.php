@@ -2,7 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Contracts\Pagination;
 
-interface Presenter
+use Viserio\Contracts\Support\Renderable;
+
+interface Presenter extends Renderable
 {
-    public function render();
 }

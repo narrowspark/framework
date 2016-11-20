@@ -10,6 +10,7 @@ use Viserio\Contracts\View\Traits\ViewAwareTrait;
 use Viserio\Pagination\Presenters\Bootstrap3;
 use Viserio\Pagination\Presenters\Bootstrap4;
 use Viserio\Pagination\Presenters\Foundation5;
+use Viserio\Pagination\Presenters\SimplePagination;
 
 class Paginator extends AbstractPaginator
 {
@@ -21,31 +22,18 @@ class Paginator extends AbstractPaginator
      * @var array
      */
     protected $presenters = [
-        'bootstrap3'  => Bootstrap3::class,
-        'bootstrap4'  => Bootstrap4::class,
+        'bootstrap3' => Bootstrap3::class,
+        'bootstrap4' => Bootstrap4::class,
         'foundation5' => Foundation5::class,
+        'simple' => SimplePagination::class,
     ];
-
-    /**
-     * The total number of items before slicing.
-     *
-     * @var int
-     */
-    protected $total;
-
-    /**
-     * The last available page.
-     *
-     * @var int
-     */
-    protected $lastPage;
 
     /**
      * The default pagination presenter.
      *
      * @var string
      */
-    protected $presenter = 'bootstrap3';
+    protected $presenter = 'simple';
 
     /**
      * Create a new paginator.
@@ -56,13 +44,11 @@ class Paginator extends AbstractPaginator
     public function __construct(AdapterContract $adapter, ServerRequestInterface $request)
     {
         $this->request = $request;
-        $this->path = $this->request->getUri()->getPath();
+        $this->setPath($this->request->getUri()->getPath());
 
         $this->items = new Collection($adapter->getItems());
         $this->itemCountPerPage = $adapter->getItemsPerPage();
-
         $this->currentPage = $this->getCurrentPage();
-        $this->path = $this->path != '/' ? rtrim($this->path, '/') : $this->path;
 
         $this->checkForMorePages();
     }
@@ -98,7 +84,7 @@ class Paginator extends AbstractPaginator
      */
     public function getNextPageUrl()
     {
-        if ($this->getLastPage() > $this->getCurrentPage()) {
+        if ($this->hasMorePages()) {
             return $this->getUrl($this->getCurrentPage() + 1);
         }
     }
@@ -109,7 +95,7 @@ class Paginator extends AbstractPaginator
     public function render(string $view = null): string
     {
         if (is_string($view)) {
-            if ($this->view !== null && !isset($this->presenters[$view])) {
+            if ($this->views !== null && !isset($this->presenters[$view])) {
                 return $this->getViewFactory()->create($view, ['paginator' => $this]);
             } elseif (isset($this->presenters[$view])) {
                 return (new $this->presenters[$view]($this))->render();
@@ -152,39 +138,31 @@ class Paginator extends AbstractPaginator
     }
 
     /**
+     * Manually indicate that the paginator does have more pages.
+     *
+     * @param bool $value
+     *
+     * @return $this
+     */
+    public function hasMorePagesWhen(bool $value = true)
+    {
+        $this->hasMore = $value;
+
+        return $this;
+    }
+
+    /**
      * Determine if there are more items in the data source.
      *
      * @return bool
      */
     public function hasMorePages(): bool
     {
-        return $this->getCurrentPage() < $this->getLastPage();
+        return $this->hasMore;
     }
 
     /**
-     * Get the last page.
-     *
-     * @return int
-     */
-    public function getLastPage(): int
-    {
-        return $this->lastPage;
-    }
-
-    /**
-     * Get the total number of items being paginated.
-     *
-     * @return int
-     */
-    public function getTotalItems(): int
-    {
-        return $this->total;
-    }
-
-    /**
-     * Get the current page for the request.
-     *
-     * @return int
+     * {@inheritdoc}
      */
     public function getCurrentPage(): int
     {

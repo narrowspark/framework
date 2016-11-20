@@ -32,6 +32,7 @@
         "php"                                                : "7.0.0 - 7.0.5 || ^7.0.7"
     },
     "require-dev": {
+        "mockery/mockery"                                    : "^0.9",
         "phpunit/phpunit"                                    : "^5.1",
         "narrowspark/testing-helper"                         : "^1.5",
         "container-interop/container-interop"                : "^1.1",

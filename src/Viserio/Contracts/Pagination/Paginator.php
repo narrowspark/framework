@@ -101,6 +101,13 @@ interface Paginator
     public function setPath(string $path);
 
     /**
+     * Gets the base path.
+     *
+     * @return string
+     */
+    public function getPath(): string;
+
+    /**
      * Determine if the list of items is empty or not.
      *
      * @return bool
