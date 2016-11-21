@@ -25,7 +25,7 @@ use Interop\Container\ServiceProvider;
 use Symfony\Component\Console\Helper\HelperSet;
 use Viserio\Contracts\Support\Traits\ServiceProviderConfigAwareTrait;
 
-class DatabaseServiceProvider implements ServiceProvider
+class DatabaseORMServiceProvicer implements ServiceProvider
 {
     use ServiceProviderConfigAwareTrait;
 
