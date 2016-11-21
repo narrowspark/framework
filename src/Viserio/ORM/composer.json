@@ -2,7 +2,7 @@
     "name"       : "viserio/database",
     "type"       : "library",
     "description": "The Viserio Database package.",
-    "keywords"   : ["narrowspark", "viserio", "database", "doctrine", "migrations"],
+    "keywords"   : ["narrowspark", "viserio", "database", "doctrine", "migrations", "orm"],
     "license"    : "MIT",
     "homepage"   : "http://github.com/narrowspark/framework",
     "support"    : {
@@ -19,11 +19,8 @@
     ],
     "require": {
         "php"                                 : "7.0.0 - 7.0.5 || ^7.0.7",
-        "ext-pdo"                             : "*",
-        "doctrine/dbal"                       : "^2.5",
-        "doctrine/migrations"                 : "^1.4",
-        "narrowspark/collection"              : "^0.1",
-        "ocramius/proxy-manager"              : "^2"
+        "doctrine/orm"                        : "^2.5",
+        "viserio/database"                    : "self.version"
     },
     "require-dev": {
         "container-interop/service-provider"  : "^0.3",
