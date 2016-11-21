@@ -239,10 +239,10 @@ class Kernel implements KernelContract, TerminableContract
     /**
      * Report the exception to the exception handler.
      *
-     * @param \Symfony\Component\Console\Output\OutputInterface $output
-     * @param \Throwable                                        $exception
+     * @param \Symfony\Component\Console\Output\OutputInterface|null $output
+     * @param \Throwable                                             $exception
      */
-    protected function renderException(OutputInterface $output, Throwable $exception)
+    protected function renderException($output, Throwable $exception)
     {
         $this->getConsole()->renderException($exception, $output);
     }

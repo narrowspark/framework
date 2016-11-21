@@ -38,7 +38,7 @@ class Po implements FormatContract
         }
 
         try {
-            return (new PoParser())->parseFile($filename);
+            return PoParser::parseFile($payload);
         } catch (Throwable $exception) {
             throw new ParseException([
                 'message' => 'Unable to parse the Po string',

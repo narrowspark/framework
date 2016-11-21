@@ -21,7 +21,7 @@ class Twig implements EngineContract
     /**
      * The Twig environment for rendering templates.
      *
-     * @var \TwigEnvironment
+     * @var \Twig_Environment
      */
     protected $parserInstance;
 
@@ -53,7 +53,7 @@ class Twig implements EngineContract
     }
 
     /**
-     * Creates new TwigEnvironment if it doesn't already exist, and returns it.
+     * Creates new Twig_Environment if it doesn't already exist, and returns it.
      *
      * @return \Twig_Environment
      */

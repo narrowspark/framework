@@ -22,7 +22,9 @@ class PhpInputStream extends AbstractStreamDecorator
      */
     public function __construct($stream = 'php://input')
     {
-        $stream = Util::tryFopen($stream, 'r');
+        if (is_string($stream)) {
+            $stream = Util::tryFopen($stream, 'r');
+        }
 
         $this->stream = new Stream($stream);
     }

@@ -11,15 +11,15 @@ class CacheBasedSessionHandler implements SessionHandlerInterface
     /**
      * The cache repository instance.
      *
-     * @var CacheItemPoolInterface
+     * @var \Cache\SessionHandler\Psr6SessionHandler
      */
     protected $psr6cache;
 
     /**
      * Create a new cache driven handler instance.
      *
-     * @param CacheItemPoolInterface $cache
-     * @param int                    $lifetime
+     * @param \Psr\Cache\CacheItemPoolInterface $cache
+     * @param int                               $lifetime
      */
     public function __construct(CacheItemPoolInterface $cache, int $lifetime)
     {

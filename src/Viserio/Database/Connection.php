@@ -12,7 +12,7 @@ class Connection extends DoctrineConnection
      *
      * @return \Viserio\Database\Statement
      */
-    public function prepare($statement)
+    public function prepare($statement): Statement
     {
         return new Statement(parent::prepare($statement));
     }
@@ -22,7 +22,7 @@ class Connection extends DoctrineConnection
      *
      * @return \Viserio\Database\Statement
      */
-    public function executeQuery($query, array $params = [], $types = [], QueryCacheProfile $qcp = null)
+    public function executeQuery($query, array $params = [], $types = [], QueryCacheProfile $qcp = null): Statement
     {
         return new Statement(parent::executeQuery($query, $params, $types, $qcp));
     }
@@ -32,7 +32,7 @@ class Connection extends DoctrineConnection
      *
      * @return \Viserio\Database\Statement
      */
-    public function query(...$args)
+    public function query(...$args): Statement
     {
         return new Statement(parent::query(...$args));
     }

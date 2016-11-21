@@ -35,7 +35,7 @@ class Route implements RouteContract
     /**
      * The route action array.
      *
-     * @var \Closure|array
+     * @var array
      */
     protected $action;
 

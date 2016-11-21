@@ -65,7 +65,7 @@ class Container extends ContainerResolver implements ArrayAccess, ContainerContr
     /**
      * The concrete instance.
      *
-     * @var string
+     * @var string|array
      */
     protected $concrete;
 
@@ -721,7 +721,7 @@ class Container extends ContainerResolver implements ArrayAccess, ContainerContr
             return $implementation;
         }
 
-        return function (ContainerInterface $container) use ($implementation) {
+        return function (ContainerContract $container) use ($implementation) {
             return $container->make($implementation);
         };
     }

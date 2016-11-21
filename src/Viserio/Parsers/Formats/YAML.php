@@ -4,20 +4,13 @@ namespace Viserio\Parsers\Formats;
 
 use RuntimeException;
 use Symfony\Component\Yaml\Exception\ParseException as YamlParseException;
-use Symfony\Component\Yaml\Parser;
+use Symfony\Component\Yaml\Yaml as SymfonyYaml;
 use Viserio\Contracts\Parsers\Dumper as DumperContract;
 use Viserio\Contracts\Parsers\Exception\ParseException;
 use Viserio\Contracts\Parsers\Format as FormatContract;
 
 class YAML implements FormatContract, DumperContract
 {
-    /**
-     * The filesystem instance.
-     *
-     * @var \Symfony\Component\Yaml\Parser
-     */
-    protected $parser;
-
     /**
      * Create a new Yaml parser.
      */
@@ -28,8 +21,6 @@ class YAML implements FormatContract, DumperContract
             throw new RuntimeException('Unable to read yaml as the Symfony Yaml Component is not installed.');
         }
         // @codeCoverageIgnoreEnd
-
-        $this->parser = new Parser();
     }
 
     /**
@@ -38,7 +29,7 @@ class YAML implements FormatContract, DumperContract
     public function parse(string $payload): array
     {
         try {
-            return $this->parser->parse(
+            return SymfonyYaml::parse(
                 trim(preg_replace('/\t+/', '', $payload))
             );
         } catch (YamlParseException $exception) {
@@ -55,6 +46,6 @@ class YAML implements FormatContract, DumperContract
      */
     public function dump(array $data): string
     {
-        return $this->parser->dump($data);
+        return SymfonyYaml::dump($data);
     }
 }

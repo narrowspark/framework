@@ -126,7 +126,7 @@ class Sanitizer
         // Get value from data array.
         $value = $data[$field];
 
-        foreach ($ruleset as $rule) {
+        foreach ((array) $ruleset as $rule) {
             $parametersSet = [];
 
             if (strpos($rule, ':') !== false) {

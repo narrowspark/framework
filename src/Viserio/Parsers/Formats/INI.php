@@ -15,7 +15,7 @@ class INI implements FormatContract, DumperContract
     {
         $ini = parse_ini_string($payload, true);
 
-        if (! $ini) {
+        if (empty($ini)) {
             throw new ParseException([
                 'message' => 'Invalid INI provided.',
             ]);
@@ -68,7 +68,7 @@ class INI implements FormatContract, DumperContract
             }
         }
 
-        if ($subsections) {
+        if (! empty($subsections)) {
             $output .= PHP_EOL;
 
             foreach ($subsections as $section => $array) {

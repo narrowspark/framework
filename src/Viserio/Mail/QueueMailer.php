@@ -12,6 +12,13 @@ use Viserio\Contracts\Queue\Queue as QueueContract;
 class QueueMailer extends Mailer implements QueueMailerContract
 {
     /**
+     * Queue instance.
+     *
+     * @var \Viserio\Contracts\Queue\Queue
+     */
+    protected $queue;
+
+    /**
      * Create a new Mailer instance.
      *
      * @param \Swift_Mailer                  $swift

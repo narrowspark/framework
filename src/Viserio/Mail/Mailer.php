@@ -253,7 +253,7 @@ class Mailer implements MailerContract
     /**
      * Call the provided message builder.
      *
-     * @param \Closure|string       $callback
+     * @param \Closure|string|null  $callback
      * @param \Viserio\Mail\Message $message
      *
      * @throws \InvalidArgumentException

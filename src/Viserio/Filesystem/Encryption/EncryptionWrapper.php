@@ -199,7 +199,11 @@ class EncryptionWrapper
     {
         $out = fopen('php://memory', 'r+b');
 
-        File::decryptResource($resource, $out, $this->key);
+        if ($resource !== false) {
+            File::decryptResource($resource, $out, $this->key);
+        } else {
+            $out = '';
+        }
 
         rewind($out);
 

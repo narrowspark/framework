@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Console\Traits;
 
 use Closure;
+use Interop\Container\ContainerInterface;
 
 trait ConfirmableTrait
 {
@@ -58,4 +59,40 @@ trait ConfirmableTrait
             return $container->get('app.env') == 'production';
         };
     }
+
+    /**
+     * Get the value of a command option.
+     *
+     * @param string|null $key
+     *
+     * @return string|array
+     */
+    abstract public function option($key = null);
+
+    /**
+     * Write a string as comment output.
+     *
+     * @param string          $string
+     * @param null|int|string $verbosityLevel
+     */
+    abstract public function comment(string $string, $verbosityLevel = null);
+
+    /**
+     * Confirm a question with the user.
+     *
+     * @param string $question
+     * @param bool   $default
+     *
+     * @return string|bool
+     */
+    abstract public function confirm(string $question, bool $default = false);
+
+    /**
+     * Get the container instance.
+     *
+     * @throws \RuntimeException
+     *
+     * @return \Interop\Container\ContainerInterface
+     */
+    abstract public function getContainer(): ContainerInterface;
 }

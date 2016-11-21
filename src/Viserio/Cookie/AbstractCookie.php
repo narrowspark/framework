@@ -26,7 +26,7 @@ abstract class AbstractCookie implements Stringable, CookieContract
     protected $domain;
 
     /**
-     * @var int|\DateTimeInterface
+     * @var int|\DateTimeInterface|null
      */
     protected $expires;
 
@@ -36,7 +36,7 @@ abstract class AbstractCookie implements Stringable, CookieContract
     protected $maxAge;
 
     /**
-     * @var string
+     * @var string|null
      */
     protected $path;
 
@@ -51,7 +51,7 @@ abstract class AbstractCookie implements Stringable, CookieContract
     protected $httpOnly;
 
     /**
-     * @var string
+     * @var bool|string
      */
     protected $sameSite;
 
@@ -411,7 +411,7 @@ abstract class AbstractCookie implements Stringable, CookieContract
 
     protected function appendFormattedDomainPartIfSet(array $cookieStringParts)
     {
-        if ($this->domain) {
+        if ($this->domain !== null) {
             $cookieStringParts[] = sprintf('Domain=%s', $this->domain);
         }
 
@@ -420,7 +420,7 @@ abstract class AbstractCookie implements Stringable, CookieContract
 
     protected function appendFormattedPathPartIfSet(array $cookieStringParts)
     {
-        if ($this->path) {
+        if ($this->path !== null) {
             $cookieStringParts[] = sprintf('Path=%s', $this->path);
         }
 

@@ -221,7 +221,9 @@ class Application extends SymfonyConsole implements ApplicationContract
      */
     public static function phpBinary(): string
     {
-        return ProcessUtils::escapeArgument((new PhpExecutableFinder())->find(false));
+        $finder = (new PhpExecutableFinder())->find(false);
+
+        return ProcessUtils::escapeArgument($finder ?? '');
     }
 
     /**
@@ -241,9 +243,11 @@ class Application extends SymfonyConsole implements ApplicationContract
      */
     public function run(InputInterface $input = null, OutputInterface $output = null)
     {
-        $commandName = $this->getCommandName($input);
-
         if ($this->events !== null) {
+            if ($input instanceof InputInterface) {
+                $commandName = $this->getCommandName($input);
+            }
+
             $this->events->trigger('command.starting', [$commandName, $input]);
         }
 

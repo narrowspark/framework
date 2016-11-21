@@ -10,16 +10,16 @@ class ListenerPattern
     /**
      * The event priority.
      *
-     * @var array
+     * @var int
      */
-    protected $priority = [];
+    protected $priority;
 
     /**
      * The regex for the event.
      *
-     * @var array
+     * @var string
      */
-    protected $regex = [];
+    protected $regex;
 
     /**
      * The event.

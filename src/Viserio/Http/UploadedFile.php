@@ -79,6 +79,20 @@ class UploadedFile implements UploadedFileInterface
     protected $moved = false;
 
     /**
+     * Client media type of a file.
+     *
+     * @var string|null
+     */
+    protected $clientMediaType;
+
+    /**
+     * Client filename.
+     *
+     * @var string|null
+     */
+    protected $clientFilename;
+
+    /**
      * Create a new uploadedfile instance.
      *
      * @param StreamInterface|string|resource $streamOrFile

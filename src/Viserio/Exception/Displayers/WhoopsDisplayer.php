@@ -21,7 +21,7 @@ class WhoopsDisplayer implements DisplayerContract
         return new Response(
             $code,
             array_merge($headers, ['Content-Type' => $this->contentType()]),
-            $content
+            $content ?? ''
         );
     }
 

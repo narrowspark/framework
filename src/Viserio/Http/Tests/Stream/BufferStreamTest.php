@@ -64,7 +64,7 @@ class BufferStreamTest extends \PHPUnit_Framework_TestCase
         $buffer = new BufferStream(5);
 
         $this->assertEquals(3, $buffer->write('hi '));
-        $this->assertFalse($buffer->write('hello'));
+        $this->assertSame(0, $buffer->write('hello'));
         $this->assertEquals('hi hello', (string) $buffer);
         $this->assertEquals(4, $buffer->write('test'));
     }
