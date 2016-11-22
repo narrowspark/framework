@@ -32,11 +32,11 @@ class JavascriptRenderer extends BaseJavascriptRenderer
     public function renderHead()
     {
         $cssRoute = route('debugbar.assets.css', [
-            'v' => $this->getModifiedTime('css')
+            'v' => $this->getModifiedTime('css'),
         ]);
 
         $jsRoute = route('debugbar.assets.js', [
-            'v' => $this->getModifiedTime('js')
+            'v' => $this->getModifiedTime('js'),
         ]);
 
         $cssRoute = preg_replace('/\Ahttps?:/', '', $cssRoute);
@@ -56,6 +56,7 @@ class JavascriptRenderer extends BaseJavascriptRenderer
      * Get the last modified time of any assets.
      *
      * @param string $type 'js' or 'css'
+     *
      * @return int
      */
     protected function getModifiedTime($type)

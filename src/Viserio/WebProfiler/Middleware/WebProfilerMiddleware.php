@@ -4,8 +4,8 @@ namespace Viserio\WebProfiler\Middleware;
 
 use Interop\Http\Middleware\DelegateInterface;
 use Interop\Http\Middleware\ServerMiddlewareInterface;
-use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 
 class WebProfilerMiddleware implements ServerMiddlewareInterface
 {
@@ -14,7 +14,6 @@ class WebProfilerMiddleware implements ServerMiddlewareInterface
      */
     public function process(ServerRequestInterface $request, DelegateInterface $delegate): ResponseInterface
     {
-
     }
 
     /**
