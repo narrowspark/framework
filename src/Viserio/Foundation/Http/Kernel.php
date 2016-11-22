@@ -84,11 +84,11 @@ class Kernel implements TerminableContract, KernelContract
         $this->events = $events;
 
         foreach ($this->routeWithMiddlewares as $routeWithMiddleware) {
-            $router->withMiddleware($routeWithMiddleware);
+            $router->withMiddleware($this->app->make($routeWithMiddleware));
         }
 
         foreach ($this->routeWithoutMiddlewares as $routeWithoutMiddleware) {
-            $router->withMiddleware($routeWithoutMiddleware);
+            $router->withoutMiddleware($this->app->make($routeWithoutMiddleware));
         }
 
         $this->router = $router;
