@@ -5,6 +5,10 @@ sudo: false
 git:
   depth: 1
 
+env:
+  global:
+    - TEST="./vendor/bin/phpunit"
+
 services:
   - memcached
   - mongodb
@@ -14,19 +18,21 @@ matrix:
   include:
     - php: 7.0
       env: SETUP=basic CHECK_CS=true SEND_COVERAGE=true
-    # - php: 7.0
-    #   env: SETUP=basic HUMBUG=true
     - php: 7.0
       env: SETUP=stable
     - php: 7.0
       env: SETUP=lowest
     - php: 7.1
-      env: SETUP=basic
+      env: SETUP=basic CHECK_CS=true SEND_COVERAGE=true
+    - php: 7.1
+      env: SETUP=stable
+    - php: 7.1
+      env: SETUP=lowest
   allow_failures:
     - env: SETUP=lowest
       php: 7.0
-    # - env: SETUP=basic HUMBUG=true
-    #   php: 7.0
+    - env: SETUP=lowest
+      php: 7.1
   fast_finish: true
 
 cache:
@@ -35,12 +41,9 @@ cache:
 
 before_install:
   - mkdir -p ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d
-  - chmod a+x ./build/travis/all.sh && chmod a+x ./build/travis/script.sh && chmod a+x ./build/travis/after_success.sh
+  - chmod a+x ./build/travis/all.sh && chmod a+x ./build/travis/runAllTests.sh && chmod a+x ./build/travis/runTest.sh && chmod a+x ./build/travis/after_success.sh
   - ./build/travis/all.sh
   - composer global require hirak/prestissimo # Now composer can install components parallel
-  - if [[ "$HUMBUG" = "true" ]]; then composer require humbug/humbug:1.0.0-alpha2; fi
-  - git config --global user.name travis-ci
-  - git config --global user.email travis@example.com
 
 install:
   - if [[ "$SETUP" = "basic" ]]; then travis_retry composer install --no-interaction --prefer-dist --no-progress --profile --no-suggest; fi
@@ -48,10 +51,11 @@ install:
   - if [[ "$SETUP" = "lowest" ]]; then travis_retry composer update --prefer-dist --no-interaction --prefer-lowest --prefer-stable --no-suggest; fi
 
 before_script:
+  - if [[ $TRAVIS_PHP_VERSION = 7.1 ]]; then git clone git://github.com/xdebug/xdebug.git && cd xdebug && phpize && ./configure --enable-xdebug  && make && make install && echo "zend_extension = xdebug.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini && cd ..; fi
   - sleep 15
 
 script:
-  - ./build/travis/script.sh
+  - ./build/travis/runAllTests.sh
 
 after_success:
   - ./build/travis/after_success.sh

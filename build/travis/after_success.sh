@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-if [[ "$CHECK_CS" = true && "$SEND_COVERAGE" = true ]]; then
+if [[ "$CHECK_CS" = true && "$SEND_COVERAGE" = true]]; then
     # Run codecov
     bash <(curl -s https://codecov.io/bash)
     wget https://scrutinizer-ci.com/ocular.phar
