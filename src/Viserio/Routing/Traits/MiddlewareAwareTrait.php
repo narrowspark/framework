@@ -18,6 +18,22 @@ trait MiddlewareAwareTrait
     ];
 
     /**
+     * All of the middleware groups.
+     *
+     * @var array
+     */
+    protected $middlewareGroups = [];
+
+    /**
+     * The priority-sorted list of middleware.
+     *
+     * Forces the listed middleware to always be in the given order.
+     *
+     * @var array
+     */
+    public $middlewarePriority = [];
+
+    /**
      * {@inheritdoc}
      */
     public function withMiddleware(ServerMiddlewareInterface $middleware)

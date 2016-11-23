@@ -18,7 +18,6 @@ git subsplit publish --heads="master develop" --no-tags src/Viserio/Http:git@git
 git subsplit publish --heads="master develop" --no-tags src/Viserio/HttpFactory:git@github.com:viserio/http-factory.git
 git subsplit publish --heads="master develop" --no-tags src/Viserio/Log:git@github.com:viserio/log.git
 git subsplit publish --heads="master develop" --no-tags src/Viserio/Mail:git@github.com:viserio/mail.git
-git subsplit publish --heads="master develop" --no-tags src/Viserio/Middleware:git@github.com:viserio/middleware.git
 git subsplit publish --heads="master develop" --no-tags src/Viserio/Parsers:git@github.com:viserio/parsers.git
 git subsplit publish --heads="master develop" --no-tags src/Viserio/Pagination:git@github.com:viserio/pagination.git
 git subsplit publish --heads="master develop" --no-tags src/Viserio/Pipeline:git@github.com:viserio/pipeline.git

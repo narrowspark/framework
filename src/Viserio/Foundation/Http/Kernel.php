@@ -4,6 +4,7 @@ namespace Viserio\Foundation\Http;
 
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Interop\Http\Middleware\DelegateInterface;
 use Symfony\Component\Debug\Exception\FatalThrowableError;
 use Throwable;
 use Viserio\Config\Manager as ConfigManager;
@@ -22,6 +23,7 @@ use Viserio\Foundation\Bootstrap\LoadServiceProvider;
 use Viserio\HttpFactory\ResponseFactory;
 use Viserio\Routing\Router;
 use Viserio\StaticalProxy\StaticalProxy;
+use Viserio\Middleware\Dispatcher as MiddlewareDispatcher;
 
 class Kernel implements TerminableContract, KernelContract
 {
@@ -40,6 +42,20 @@ class Kernel implements TerminableContract, KernelContract
      * @var \Viserio\Contracts\Routing\Router
      */
     protected $router;
+
+    /**
+     * The application's middleware stack.
+     *
+     * @var array
+     */
+    protected $middleware = [];
+
+    /**
+     * The application's route middleware groups.
+     *
+     * @var array
+     */
+    protected $middlewareGroups = [];
 
     /**
      * The application's route middleware.
@@ -124,6 +140,13 @@ class Kernel implements TerminableContract, KernelContract
     /**
      * {@inheritdoc}
      */
+    public function process(ServerRequestInterface $request, DelegateInterface $delegate)
+    {
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function terminate(ServerRequestInterface $request, ResponseInterface $response)
     {
         $this->events->trigger(self::TERMINATE, [$request, $response]);
@@ -173,6 +196,8 @@ class Kernel implements TerminableContract, KernelContract
             $response = $exceptionHandler->render($request, $exception);
         }
 
-        return $response;
+        $middlewareDispatcher = new MiddlewareDispatcher($response);
+
+        return $middlewareDispatcher->process($request);
     }
 }

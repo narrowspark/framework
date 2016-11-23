@@ -89,7 +89,6 @@
         "viserio/http-factory"                               : "self.version",
         "viserio/log"                                        : "self.version",
         "viserio/mail"                                       : "self.version",
-        "viserio/middleware"                                 : "self.version",
         "viserio/parsers"                                    : "self.version",
         "viserio/pipeline"                                   : "self.version",
         "viserio/routing"                                    : "self.version",
