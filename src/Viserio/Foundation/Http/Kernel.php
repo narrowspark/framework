@@ -157,7 +157,7 @@ class Kernel implements TerminableContract, KernelContract
         $config = $this->app->get(ConfigManager::class);
 
         $router->setCachePath($config->get('routing.path'));
-        $router->refreshCache($config->get('app.env', 'production') === 'production' ? false : true);
+        $router->refreshCache($config->get('app.env', 'production') !== 'production');
 
         try {
             $response = $router->dispatch($request, $response);
