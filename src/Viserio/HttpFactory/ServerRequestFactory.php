@@ -21,7 +21,7 @@ class ServerRequestFactory implements ServerRequestFactoryInterface
     {
         $server = $this->normalizeServer($server);
         $requestMethod = $method ?? $server['REQUEST_METHOD'] ?? 'GET';
-        $headers = function_exists('getallheaders') ? getallheaders() : [];
+        $headers = function_exists('getallheaders') ? getallheaders() : $this->getAllHeaders($server);
         $uri = $uri ?? $this->getUriFromGlobals();
 
         $serverRequest = new ServerRequest(
@@ -135,5 +135,49 @@ class ServerRequestFactory implements ServerRequestFactoryInterface
         }
 
         return $matches['version'];
+    }
+
+    /**
+     * Get all HTTP header key/values as an associative array for the current request.
+     *
+     * @param array $server
+     *
+     * @return string[string]
+     */
+    protected function getAllHeaders(array $server) : array
+    {
+        $headers = [];
+        $content = [
+            'CONTENT_LENGTH' => 'Content-Length',
+            'CONTENT_MD5'    => 'Content-Md5',
+            'CONTENT_TYPE'   => 'Content-Type',
+        ];
+
+        foreach ($server as $key => $value) {
+            if (substr($key, 0, 5) === 'HTTP_') {
+                $key = substr($key, 5);
+
+                if (!isset($content[$key]) || !isset($server[$key])) {
+                    $key = str_replace(' ', '-', ucwords(strtolower(str_replace('_', ' ', $key))));
+                    $headers[$key] = $value;
+                }
+
+            } elseif (isset($content[$key])) {
+                $headers[$content[$key]] = $value;
+            }
+        }
+
+        if (!isset($headers['Authorization'])) {
+            if (isset($server['REDIRECT_HTTP_AUTHORIZATION'])) {
+                $headers['Authorization'] = $server['REDIRECT_HTTP_AUTHORIZATION'];
+            } elseif (isset($server['PHP_AUTH_USER'])) {
+                $basicPass = isset($server['PHP_AUTH_PW']) ? $server['PHP_AUTH_PW'] : '';
+                $headers['Authorization'] = 'Basic ' . base64_encode($server['PHP_AUTH_USER'] . ':' . $basicPass);
+            } elseif (isset($server['PHP_AUTH_DIGEST'])) {
+                $headers['Authorization'] = $server['PHP_AUTH_DIGEST'];
+            }
+        }
+
+        return $headers;
     }
 }
