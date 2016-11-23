@@ -2,9 +2,9 @@
 declare(strict_types=1);
 namespace Viserio\Foundation\Http;
 
+use Interop\Http\Middleware\DelegateInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Interop\Http\Middleware\DelegateInterface;
 use Symfony\Component\Debug\Exception\FatalThrowableError;
 use Throwable;
 use Viserio\Config\Manager as ConfigManager;
@@ -21,9 +21,9 @@ use Viserio\Foundation\Bootstrap\LoadConfiguration;
 use Viserio\Foundation\Bootstrap\LoadRoutes;
 use Viserio\Foundation\Bootstrap\LoadServiceProvider;
 use Viserio\HttpFactory\ResponseFactory;
+use Viserio\Middleware\Dispatcher as MiddlewareDispatcher;
 use Viserio\Routing\Router;
 use Viserio\StaticalProxy\StaticalProxy;
-use Viserio\Middleware\Dispatcher as MiddlewareDispatcher;
 
 class Kernel implements TerminableContract, KernelContract
 {

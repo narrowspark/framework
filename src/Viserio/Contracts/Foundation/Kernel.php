@@ -2,9 +2,9 @@
 declare(strict_types=1);
 namespace Viserio\Contracts\Foundation;
 
+use Interop\Http\Middleware\ServerMiddlewareInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Interop\Http\Middleware\ServerMiddlewareInterface;
 
 interface Kernel extends ServerMiddlewareInterface
 {
