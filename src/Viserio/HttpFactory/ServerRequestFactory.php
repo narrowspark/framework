@@ -161,7 +161,6 @@ class ServerRequestFactory implements ServerRequestFactoryInterface
                     $key = str_replace(' ', '-', ucwords(strtolower(str_replace('_', ' ', $key))));
                     $headers[$key] = $value;
                 }
-
             } elseif (isset($content[$key])) {
                 $headers[$content[$key]] = $value;
             }
