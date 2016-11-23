@@ -44,7 +44,7 @@
         "psr/container-implementation"                       : "^1.0"
     },
     "suggest": {
-        "danielstjules/stringy"                              : "Required to use the Stringy Class in Str (^2.3)",
+        "danielstjules/stringy"                              : "Required to use the Stringy Class in Str and Env (^2.3)",
         "php-di/invoker"                                     : "Required to use the Invoker Class (^1.3)",
         "symfony/var-dumper"                                 : "Improves the Dumper::dump() (^3.1)."
     },
