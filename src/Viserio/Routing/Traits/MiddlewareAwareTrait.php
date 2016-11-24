@@ -34,6 +34,28 @@ trait MiddlewareAwareTrait
     public $middlewarePriority = [];
 
     /**
+     * Set a list of middleware priorities.
+     *
+     * @param array $middlewarePriority
+     */
+    public function setMiddlewarePriorities(array $middlewarePriority)
+    {
+        $this->middlewarePriority = middlewarePriority;
+
+        return $this;
+    }
+
+    /**
+     * Get a list of middleware priorities.
+     *
+     * @return array
+     */
+    public function getMiddlewarePriorities(): array
+    {
+        return $this->middlewarePriority;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function withMiddleware(ServerMiddlewareInterface $middleware)
