@@ -3,9 +3,13 @@ declare(strict_types=1);
 namespace Viserio\Routing;
 
 use Closure;
+use Interop\Container\ContainerInterface;
+use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Viserio\Contracts\Container\Traits\ContainerAwareTrait;
 use Viserio\Contracts\Events\Traits\EventsAwareTrait;
 use Viserio\Contracts\Routing\Dispatcher as DispatcherContract;
+use Viserio\Contracts\Routing\Route as RouteContract;
 use Viserio\Contracts\Routing\RouteCollection as RouteCollectionContract;
 use Viserio\Routing\Generator\RouteTreeBuilder;
 use Viserio\Routing\Generator\RouteTreeOptimizer;
@@ -13,10 +17,6 @@ use Viserio\Routing\Middlewares\FoundMiddleware;
 use Viserio\Routing\Middlewares\InternalServerErrorMiddleware;
 use Viserio\Routing\Middlewares\NotAllowedMiddleware;
 use Viserio\Routing\Middlewares\NotFoundMiddleware;
-use Viserio\Contracts\Container\Traits\ContainerAwareTrait;
-use Viserio\Contracts\Routing\Route as RouteContract;
-use Psr\Http\Message\ResponseInterface;
-use Interop\Container\ContainerInterface;
 
 class Dispatcher implements DispatcherContract
 {
@@ -250,7 +250,7 @@ class Dispatcher implements DispatcherContract
     {
         $middleware = $this->getRouteMiddlewares($route);
 
-        return (new Pipeline)
+        return (new Pipeline())
             ->setContainer($this->container)
             ->send($request)
             ->through($middleware)
