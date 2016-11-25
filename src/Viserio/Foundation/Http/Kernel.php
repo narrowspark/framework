@@ -79,7 +79,7 @@ class Kernel implements TerminableContract, KernelContract
      * @var array
      */
     protected $middlewarePriority = [
-        SessionMiddleware::class
+        SessionMiddleware::class,
     ];
 
     /**
