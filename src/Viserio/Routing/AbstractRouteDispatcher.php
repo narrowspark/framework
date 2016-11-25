@@ -4,34 +4,28 @@ namespace Viserio\Routing;
 
 use Closure;
 use Interop\Container\ContainerInterface;
-use Interop\Http\Middleware\ServerMiddlewareInterface;
-use LogicException;
 use Narrowspark\Arr\Arr;
-use Narrowspark\HttpStatus\Exception\InternalServerErrorException;
-use Narrowspark\HttpStatus\Exception\MethodNotAllowedException;
-use Narrowspark\HttpStatus\Exception\NotFoundException;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Contracts\Container\Traits\ContainerAwareTrait;
 use Viserio\Contracts\Events\Traits\EventsAwareTrait;
 use Viserio\Contracts\Routing\Route as RouteContract;
 use Viserio\Contracts\Routing\RouteCollection as RouteCollectionContract;
-use Viserio\Contracts\Routing\Router as RouterContract;
 use Viserio\Routing\Generator\RouteTreeBuilder;
 use Viserio\Routing\Generator\RouteTreeOptimizer;
+use Narrowspark\HttpStatus\Exception\InternalServerErrorException;
+use Narrowspark\HttpStatus\Exception\MethodNotAllowedException;
+use Narrowspark\HttpStatus\Exception\NotFoundException;
 use Viserio\Routing\Traits\MiddlewareAwareTrait;
+use Viserio\Contracts\Routing\Router as RouterContract;
+use Interop\Http\Middleware\ServerMiddlewareInterface;
+use LogicException;
 
 abstract class AbstractRouteDispatcher
 {
     use ContainerAwareTrait;
     use EventsAwareTrait;
-
-    /**
-     * All middlewares.
-     *
-     * @var array
-     */
-    protected $middlewares = [];
+    use MiddlewareAwareTrait;
 
     /**
      * All of the middleware groups.
@@ -76,29 +70,9 @@ abstract class AbstractRouteDispatcher
     /**
      * {@inheritdoc}
      */
-    public function withMiddleware(string $middleware)
+    public function getMiddlewares(): array
     {
-        if (class_implements($middleware) !== ServerMiddlewareInterface::class) {
-            # code...
-        }
-
-        $this->middlewares[] = $middleware;
-
-        return $this;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function withoutMiddleware(string $middleware)
-    {
-        foreach ($this->middlewares as $key => $value) {
-            if ($value === $middleware) {
-                unset($this->middlewares[$key]);
-            }
-        }
-
-        return $this;
+        return $this->middlewares;
     }
 
     /**
@@ -154,7 +128,8 @@ abstract class AbstractRouteDispatcher
         string $identifier,
         array $segments,
         ServerRequestInterface $request
-    ): ResponseInterface {
+    ): ResponseInterface
+    {
         $route = $this->routes->match($identifier);
 
         foreach ($this->globalParameterConditions as $key => $value) {
@@ -204,12 +179,12 @@ abstract class AbstractRouteDispatcher
      */
     protected function runRouteWithinStack(RouteContract $route, ServerRequestInterface $request): ResponseInterface
     {
-        $middleware = $this->getRouteMiddlewares($route);
+        $middlewares = $this->getRouteMiddlewares($route);
 
         return (new Pipeline())
             ->setContainer($this->getContainer())
             ->send($request)
-            ->through($middleware)
+            ->through($middlewares)
             ->then(function ($request) use ($route) {
                 // Add route to the request's attributes in case a middleware or handler needs access to the route
                 $request = $request->withAttribute('route', $route);
@@ -227,11 +202,24 @@ abstract class AbstractRouteDispatcher
      */
     protected function getRouteMiddlewares(Route $route): array
     {
-        $middleware = Arr::map($route->gatherMiddleware(), function ($value) {
-            return (array) $this->resolveMiddlewareClassName($name);
+        $middlewares = [];
+        $routeMiddlewares = $route->gatherMiddleware();
+
+        $middleware = Arr::map($routeMiddlewares['middlewares'], function ($name) use (&$middlewares) {
+            $middlewares[] = $this->resolveMiddlewareClassName($name);
         });
 
-        return $this->doSortMiddleware($this->middlewarePriority, $middleware);
+        if (count($routeMiddlewares['without_middlewares']) !== 0) {
+            $withoutMiddlewares = [];
+
+            $middleware = Arr::map($routeMiddlewares['without_middlewares'], function ($name) use (&$withoutMiddlewares) {
+                $withoutMiddlewares[] = $this->resolveMiddlewareClassName($name);
+            });
+
+            $middlewares = array_diff($middlewares, $withoutMiddlewares);
+        }
+
+        return $this->doSortMiddleware($this->middlewarePriority, $middlewares);
     }
 
     /**
@@ -249,14 +237,8 @@ abstract class AbstractRouteDispatcher
         $lastIndex = 0;
 
         foreach ($middlewares as $index => $middleware) {
-            if (! is_string($middleware)) {
-                continue;
-            }
-
-            $stripped = head(explode(':', $middleware));
-
-            if (in_array($stripped, $priorityMap)) {
-                $priorityIndex = array_search($stripped, $priorityMap);
+            if (in_array($middleware, $priorityMap)) {
+                $priorityIndex = array_search($middleware, $priorityMap);
 
                 // This middleware is in the priority map. If we have encountered another middleware
                 // that was also in the priority map and was at a lower priority than the current
@@ -306,30 +288,15 @@ abstract class AbstractRouteDispatcher
      *
      * @return string|array
      */
-    public function resolveMiddlewareClassName($name)
+    protected function resolveMiddlewareClassName(string $name)
     {
-        $map = $this->middleware;
-        // When the middleware is simply a Closure, we will return this Closure instance
-        // directly so that Closures can be registered as middleware inline, which is
-        // convenient on occasions when the developers are experimenting with them.
-        if ($name instanceof Closure) {
-            return $name;
-        } elseif (isset($map[$name]) && $map[$name] instanceof Closure) {
-            return $map[$name];
-        // If the middleware is the name of a middleware group, we will return the array
-        // of middlewares that belong to the group. This allows developers to group a
-        // set of middleware under single keys that can be conveniently referenced.
-        } elseif (isset($this->middlewareGroups[$name])) {
-            return $this->parseMiddlewareGroup($name);
-        // Finally, when the middleware is simply a string mapped to a class name the
-        // middleware name will get parsed into the full class name and parameters
-        // which may be run using the Pipeline which accepts this string format.
-        } else {
-            list($name, $parameters) = array_pad(explode(':', $name, 2), 2, null);
+        $map = $this->middlewares;
 
-            return (isset($map[$name]) ? $map[$name] : $name) .
-                   (! is_null($parameters) ? ':' . $parameters : '');
+        if (isset($this->middlewareGroups[$name])) {
+            return $this->parseMiddlewareGroup($name);
         }
+
+        return $map[$name] ?? $name;
     }
 
     /**
@@ -339,7 +306,7 @@ abstract class AbstractRouteDispatcher
      *
      * @return array
      */
-    protected function parseMiddlewareGroup($name)
+    protected function parseMiddlewareGroup(string $name): array
     {
         $results = [];
 
@@ -352,14 +319,10 @@ abstract class AbstractRouteDispatcher
                     $results,
                     $this->parseMiddlewareGroup($middleware)
                 );
+
                 continue;
             }
 
-            list($middleware, $parameters) = array_pad(
-                explode(':', $middleware, 2),
-                2,
-                null
-            );
             // If this middleware is actually a route middleware, we will extract the full
             // class name out of the middleware list now. Then we'll add the parameters
             // back onto this class' name so the pipeline will properly extract them.
@@ -367,7 +330,7 @@ abstract class AbstractRouteDispatcher
                 $middleware = $this->middleware[$middleware];
             }
 
-            $results[] = $middleware . ($parameters ? ':' . $parameters : '');
+            $results[] = $middleware;
         }
 
         return $results;

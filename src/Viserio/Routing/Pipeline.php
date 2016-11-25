@@ -39,9 +39,9 @@ class Pipeline extends BasePipeline
      *
      * @param callable $middleware
      *
-     * @return \Psr\Http\Message\RequestInterface
+     * @return class@anonymous
      */
-    private function getCallableMiddleware(callable $middleware): RequestInterface
+    private function getCallableMiddleware(callable $middleware)
     {
         return new class ($middleware) implements DelegateInterface {
             /**

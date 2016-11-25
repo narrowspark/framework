@@ -8,6 +8,7 @@ use Viserio\HttpFactory\StreamFactory;
 use Viserio\Routing\Tests\Fixture\FakeMiddleware;
 use Viserio\Routing\Tests\Fixture\FooMiddleware;
 use Viserio\Routing\Tests\Fixture\RouteTestClosureMiddlewareController;
+use Viserio\Routing\Tests\Fixture\ControllerClosureMiddleware;
 
 class RootRoutesRouterTest extends RouteRouterBaseTest
 {
@@ -85,7 +86,14 @@ class RootRoutesRouterTest extends RouteRouterBaseTest
                 );
         })->setParameter('name', 'root-slash');
 
-        $router->get('/middleware', ['middleware.with' => FakeMiddleware::class, function ($request, $args) {
+        $router->getContainer()->shouldReceive('has')
+            ->with(FakeMiddleware::class)
+            ->andReturn(true);
+        $router->getContainer()->shouldReceive('get')
+            ->with(FakeMiddleware::class)
+            ->andReturn(new FakeMiddleware());
+
+        $router->get('/middleware', ['middlewares' => FakeMiddleware::class, function ($request, $args) {
             return (new ResponseFactory())
                 ->createResponse()
                 ->withBody(
@@ -94,7 +102,7 @@ class RootRoutesRouterTest extends RouteRouterBaseTest
                 );
         }])->setParameter('name', 'middleware');
 
-        $router->get('/middleware2', ['middleware.with' => FakeMiddleware::class, 'uses' => function ($request, $args) {
+        $router->get('/middleware2', ['middlewares' => FakeMiddleware::class, 'uses' => function ($request, $args) {
             return (new ResponseFactory())
                 ->createResponse()
                 ->withBody(
@@ -103,19 +111,31 @@ class RootRoutesRouterTest extends RouteRouterBaseTest
                 );
         }])->setParameter('name', 'middleware2');
 
+        $router->getContainer()->shouldReceive('has')
+            ->with(ControllerClosureMiddleware::class)
+            ->andReturn(true);
+        $router->getContainer()->shouldReceive('get')
+            ->with(ControllerClosureMiddleware::class)
+            ->andReturn(new ControllerClosureMiddleware());
         $router->getContainer()->shouldReceive('get')
             ->with(RouteTestClosureMiddlewareController::class)
             ->andReturn(new RouteTestClosureMiddlewareController());
+        $router->getContainer()->shouldReceive('has')
+            ->with(FooMiddleware::class)
+            ->andReturn(true);
+        $router->getContainer()->shouldReceive('get')
+            ->with(FooMiddleware::class)
+            ->andReturn(new FooMiddleware());
 
         $router->get('/middleware3', [
             'uses' => RouteTestClosureMiddlewareController::class . '::index',
-            'middleware' => FooMiddleware::class,
+            'middlewares' => FooMiddleware::class,
         ])->setParameter('name', 'middleware3');
 
         $router->get('/middleware4', [
             'uses' => RouteTestClosureMiddlewareController::class . '::index',
-            'middleware' => FooMiddleware::class,
-            'middleware.without' => FooMiddleware::class,
+            'middlewares' => FooMiddleware::class,
+            'without_middlewares' => FooMiddleware::class,
         ])->setParameter('name', 'middleware4');
 
         $router->group(['prefix' => 'all/'], __DIR__ . '/../Fixture/routes.php');
