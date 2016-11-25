@@ -9,13 +9,11 @@ use Psr\Http\Message\ServerRequestInterface;
 use UnexpectedValueException;
 use Viserio\Contracts\Container\Traits\ContainerAwareTrait;
 use Viserio\Contracts\Routing\Route as RouteContract;
-use Viserio\Routing\Traits\MiddlewareAwareTrait;
 use Viserio\Support\Traits\InvokerAwareTrait;
 
 class Route implements RouteContract
 {
     use ContainerAwareTrait;
-    use MiddlewareAwareTrait;
     use InvokerAwareTrait;
 
     /**
@@ -66,6 +64,13 @@ class Route implements RouteContract
      * @var string
      */
     protected $identifier;
+
+    /**
+     * All middlewares.
+     *
+     * @var array
+     */
+    protected $middlewares = [];
 
     /**
      * Create a new Route instance.
@@ -178,20 +183,13 @@ class Route implements RouteContract
     public function gatherMiddleware(): array
     {
         // Merge middlewares from Action.
-        $with = Arr::get($this->action, 'middleware.with', []);
-        $without = Arr::get($this->action, 'middleware.without', []);
+        $middleware = Arr::get($this->action, 'middleware', []);
 
-        $this->middlewares = Arr::merge($this->middlewares, $this->getControllerMiddleware());
-
-        $this->middlewares['with'] = array_merge(
-            $this->middlewares['with'],
-            is_array($with) ? $with : [$with]
-        );
-
-        $this->middlewares['without'] = array_merge(
-            $this->middlewares['without'],
-            is_array($without) ? $without : [$without]
-        );
+        $this->middlewares = array_unique(array_merge(
+            $this->middlewares,
+            is_array($middleware) ? $middleware : [$middleware],
+            $this->getControllerMiddleware()
+        ));
 
         return $this->middlewares;
     }

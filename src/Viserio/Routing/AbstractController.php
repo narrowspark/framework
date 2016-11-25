@@ -6,8 +6,6 @@ use Viserio\Routing\Traits\MiddlewareAwareTrait;
 
 abstract class AbstractController
 {
-    use MiddlewareAwareTrait;
-
     /**
      * Get all middleware, including the ones from the controller.
      *

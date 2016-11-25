@@ -85,7 +85,7 @@ class RootRoutesRouterTest extends RouteRouterBaseTest
                 );
         })->setParameter('name', 'root-slash');
 
-        $router->get('/middleware', ['middleware.with' => new FakeMiddleware(), function ($request, $args) {
+        $router->get('/middleware', ['middleware.with' => FakeMiddleware::class, function ($request, $args) {
             return (new ResponseFactory())
                 ->createResponse()
                 ->withBody(
@@ -94,7 +94,7 @@ class RootRoutesRouterTest extends RouteRouterBaseTest
                 );
         }])->setParameter('name', 'middleware');
 
-        $router->get('/middleware2', ['middleware.with' => new FakeMiddleware(), 'uses' => function ($request, $args) {
+        $router->get('/middleware2', ['middleware.with' => FakeMiddleware::class, 'uses' => function ($request, $args) {
             return (new ResponseFactory())
                 ->createResponse()
                 ->withBody(
@@ -109,13 +109,13 @@ class RootRoutesRouterTest extends RouteRouterBaseTest
 
         $router->get('/middleware3', [
             'uses' => RouteTestClosureMiddlewareController::class . '::index',
-            'middleware.with' => new FooMiddleware(),
+            'middleware' => FooMiddleware::class,
         ])->setParameter('name', 'middleware3');
 
         $router->get('/middleware4', [
             'uses' => RouteTestClosureMiddlewareController::class . '::index',
-            'middleware.with' => new FooMiddleware(),
-            'middleware.without' => new FooMiddleware(),
+            'middleware' => FooMiddleware::class,
+            'middleware.without' => FooMiddleware::class,
         ])->setParameter('name', 'middleware4');
 
         $router->group(['prefix' => 'all/'], __DIR__ . '/../Fixture/routes.php');

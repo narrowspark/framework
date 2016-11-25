@@ -7,20 +7,16 @@ use Interop\Container\ContainerInterface;
 use Narrowspark\Arr\Arr;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Viserio\Contracts\Container\Traits\ContainerAwareTrait;
-use Viserio\Contracts\Events\Traits\EventsAwareTrait;
 use Viserio\Contracts\Routing\Route as RouteContract;
 use Viserio\Contracts\Routing\RouteCollection as RouteCollectionContract;
 use Viserio\Contracts\Routing\Router as RouterContract;
-use Viserio\Routing\Traits\MiddlewareAwareTrait;
 use Viserio\Support\Traits\InvokerAwareTrait;
+use Viserio\Support\Traits\MacroableTrait;
 
-class Router implements RouterContract
+class Router extends AbstractRouteDispatcher implements RouterContract
 {
-    use ContainerAwareTrait;
-    use EventsAwareTrait;
-    use MiddlewareAwareTrait;
     use InvokerAwareTrait;
+    use MacroableTrait;
 
     /**
      * The route collection instance.
@@ -386,28 +382,9 @@ class Router implements RouterContract
     /**
      * {@inheritdoc}
      */
-    public function dispatch(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
+    public function dispatch(ServerRequestInterface $request): ResponseInterface
     {
-        $dispatcher = new Dispatcher(
-            $this->path,
-            $this->container,
-            $this->routes,
-            $this->refreshCache,
-            $this->globalParameterConditions,
-            $this->middlewarePriority
-        );
-
-        if ($this->events !== null) {
-            $dispatcher->setEventsDispatcher($this->events);
-
-            $this->events = $dispatcher->getEventsDispatcher();
-        }
-
-        $response = $dispatcher->handle($request);
-
-        $this->current = $dispatcher->getCurrentRoute();
-
-        return $response;
+        return $this->dispatchToRoute($request);
     }
 
     /**

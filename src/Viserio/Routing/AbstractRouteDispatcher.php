@@ -1,0 +1,375 @@
+<?php
+declare(strict_types=1);
+namespace Viserio\Routing;
+
+use Closure;
+use Interop\Container\ContainerInterface;
+use Narrowspark\Arr\Arr;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use Viserio\Contracts\Container\Traits\ContainerAwareTrait;
+use Viserio\Contracts\Events\Traits\EventsAwareTrait;
+use Viserio\Contracts\Routing\Route as RouteContract;
+use Viserio\Contracts\Routing\RouteCollection as RouteCollectionContract;
+use Viserio\Routing\Generator\RouteTreeBuilder;
+use Viserio\Routing\Generator\RouteTreeOptimizer;
+use Narrowspark\HttpStatus\Exception\InternalServerErrorException;
+use Narrowspark\HttpStatus\Exception\MethodNotAllowedException;
+use Narrowspark\HttpStatus\Exception\NotFoundException;
+use Viserio\Routing\Traits\MiddlewareAwareTrait;
+use Viserio\Contracts\Routing\Router as RouterContract;
+use Interop\Http\Middleware\ServerMiddlewareInterface;
+use LogicException;
+
+abstract class AbstractRouteDispatcher
+{
+    use ContainerAwareTrait;
+    use EventsAwareTrait;
+
+    /**
+     * All middlewares.
+     *
+     * @var array
+     */
+    protected $middlewares = [];
+
+    /**
+     * All of the middleware groups.
+     *
+     * @var array
+     */
+    protected $middlewareGroups = [];
+
+    /**
+     * The priority-sorted list of middleware.
+     *
+     * Forces the listed middleware to always be in the given order.
+     *
+     * @var array
+     */
+    protected $middlewarePriority = [];
+
+    /**
+     * Set a list of middleware priorities.
+     *
+     * @param array $middlewarePriorities
+     *
+     * @return $this
+     */
+    public function setMiddlewarePriorities(array $middlewarePriorities)
+    {
+        $this->middlewarePriority = middlewarePriorities;
+
+        return $this;
+    }
+
+    /**
+     * Get a list of middleware priorities.
+     *
+     * @return array
+     */
+    public function getMiddlewarePriorities(): array
+    {
+        return $this->middlewarePriority;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function withMiddleware(string $middleware)
+    {
+        if (class_implements($middleware) !== ServerMiddlewareInterface::class) {
+            # code...
+        }
+
+        $this->middlewares[] = $middleware;
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function withoutMiddleware(string $middleware)
+    {
+        foreach ($this->middlewares as $key => $value) {
+            if ($value === $middleware) {
+                unset($this->middlewares[$key]);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * Match and dispatch a route matching the given http method and
+     * uri, retruning an execution chain.
+     *
+     * @param \Psr\Http\Message\ServerRequestInterface $request
+     *
+     * @throws \Narrowspark\HttpStatus\Exception\MethodNotAllowedException
+     * @throws \Narrowspark\HttpStatus\Exception\NotFoundException
+     * @throws \Narrowspark\HttpStatus\Exception\InternalServerErrorException
+     *
+     * @return \Psr\Http\Message\ResponseInterface
+     */
+    protected function dispatchToRoute(ServerRequestInterface $request): ResponseInterface
+    {
+        $router = $this->generateRouterFile();
+        $match = $router(
+            $request->getMethod(),
+           '/' . ltrim($request->getUri()->getPath(), '/')
+        );
+        $requestPath = ltrim($request->getUri()->getPath(), '/');
+
+        switch ($match[0]) {
+            case RouterContract::FOUND:
+                return $this->handleFound($match[1], $match[2], $request);
+            case RouterContract::HTTP_METHOD_NOT_ALLOWED:
+                throw new MethodNotAllowedException(sprintf(
+                    '405 Method [%s] Not Allowed: For requested route [/%s]',
+                    implode(',', $match[1]),
+                    $requestPath
+                ));
+            case RouterContract::NOT_FOUND:
+                throw new NotFoundException(sprintf(
+                    '404 Not Found: Requested route [/%s]',
+                    $requestPath
+                ));
+            default:
+                throw new InternalServerErrorException();
+        }
+    }
+
+    /**
+     * Handle dispatching of a found route.
+     *
+     * @param string                                   $identifier
+     * @param array                                    $segments
+     * @param \Psr\Http\Message\ServerRequestInterface $request
+     *
+     * @return \Psr\Http\Message\ResponseInterface
+     */
+    protected function handleFound(
+        string $identifier,
+        array $segments,
+        ServerRequestInterface $request
+    ): ResponseInterface
+    {
+        $route = $this->routes->match($identifier);
+
+        foreach ($this->globalParameterConditions as $key => $value) {
+            $route->setParameter($key, $value);
+        }
+
+        foreach ($segments as $key => $value) {
+            $route->setParameter($key, rawurldecode($value));
+        }
+
+        $this->current = $route;
+
+        if ($this->events !== null) {
+            $this->getEventsDispatcher()->trigger('route.matched', [$route, $request]);
+        }
+
+        return $this->runRouteWithinStack($route, $request);
+    }
+
+    /**
+     * Generates a router file with all routes.
+     *
+     * @return \Closure
+     */
+    protected function generateRouterFile(): Closure
+    {
+        if ($this->refreshCache && file_exists($this->path)) {
+            @unlink($this->path);
+        }
+
+        if (! file_exists($this->path)) {
+            $routerCompiler = new TreeRouteCompiler(new RouteTreeBuilder(), new RouteTreeOptimizer());
+
+            file_put_contents($this->path, $routerCompiler->compile($this->routes->getRoutes()), LOCK_EX);
+        }
+
+        return require $this->path;
+    }
+
+    /**
+     * Run the given route within a Stack "onion" instance.
+     *
+     * @param \Viserio\Contracts\Routing\Route         $route
+     * @param \Psr\Http\Message\ServerRequestInterface $request
+     *
+     * @return \Psr\Http\Message\ResponseInterface
+     */
+    protected function runRouteWithinStack(RouteContract $route, ServerRequestInterface $request): ResponseInterface
+    {
+        $middleware = $this->getRouteMiddlewares($route);
+
+        return (new Pipeline())
+            ->setContainer($this->getContainer())
+            ->send($request)
+            ->through($middleware)
+            ->then(function ($request) use ($route) {
+                // Add route to the request's attributes in case a middleware or handler needs access to the route
+                $request = $request->withAttribute('route', $route);
+
+                return $route->run($request);
+            });
+    }
+
+    /**
+     * Gather the middleware for the given route.
+     *
+     * @param \Viserio\Contracts\Routing\Route $route
+     *
+     * @return array
+     */
+    protected function getRouteMiddlewares(Route $route): array
+    {
+        $middleware = Arr::map($route->gatherMiddleware(), function($value) {
+            return (array) $this->resolveMiddlewareClassName($name);
+        });
+
+        return $this->doSortMiddleware($this->middlewarePriority, $middleware);
+    }
+
+    /**
+     * Sort the middlewares by the given priority map.
+     *
+     * Each call to this method makes one discrete middleware movement if necessary.
+     *
+     * @param array $priorityMap
+     * @param array $middlewares
+     *
+     * @return array
+     */
+    protected function doSortMiddleware(array $priorityMap, array $middlewares): array
+    {
+        $lastIndex = 0;
+
+        foreach ($middlewares as $index => $middleware) {
+            if (! is_string($middleware)) {
+                continue;
+            }
+
+            $stripped = head(explode(':', $middleware));
+
+            if (in_array($stripped, $priorityMap)) {
+                $priorityIndex = array_search($stripped, $priorityMap);
+
+                // This middleware is in the priority map. If we have encountered another middleware
+                // that was also in the priority map and was at a lower priority than the current
+                // middleware, we will move this middleware to be above the previous encounter.
+                if (isset($lastPriorityIndex) && $priorityIndex < $lastPriorityIndex) {
+                    return $this->doSortMiddleware(
+                        $priorityMap,
+                        array_values(
+                            $this->doMoveMiddleware($middlewares, $index, $lastIndex)
+                        )
+                    );
+
+                // This middleware is in the priority map; but, this is the first middleware we have
+                // encountered from the map thus far. We'll save its current index plus its index
+                // from the priority map so we can compare against them on the next iterations.
+                } else {
+                    $lastIndex = $index;
+                    $lastPriorityIndex = $priorityIndex;
+                }
+            }
+        }
+
+        return array_values(array_unique($middlewares, SORT_REGULAR));
+    }
+
+    /**
+     * Splice a middleware into a new position and remove the old entry.
+     *
+     * @param array $middlewares
+     * @param int   $from
+     * @param int   $to
+     *
+     * @return array
+     */
+    protected function doMoveMiddleware(array $middlewares, int $from, int $to): array
+    {
+        array_splice($middlewares, $to, 0, $middlewares[$from]);
+        unset($middlewares[$from + 1]);
+
+        return $middlewares;
+    }
+
+    /**
+     * Resolve the middleware name to a class name(s) preserving passed parameters.
+     *
+     * @param string $name
+     *
+     * @return string|array
+     */
+    public function resolveMiddlewareClassName($name)
+    {
+        $map = $this->middleware;
+        // When the middleware is simply a Closure, we will return this Closure instance
+        // directly so that Closures can be registered as middleware inline, which is
+        // convenient on occasions when the developers are experimenting with them.
+        if ($name instanceof Closure) {
+            return $name;
+        } elseif (isset($map[$name]) && $map[$name] instanceof Closure) {
+            return $map[$name];
+        // If the middleware is the name of a middleware group, we will return the array
+        // of middlewares that belong to the group. This allows developers to group a
+        // set of middleware under single keys that can be conveniently referenced.
+        } elseif (isset($this->middlewareGroups[$name])) {
+            return $this->parseMiddlewareGroup($name);
+        // Finally, when the middleware is simply a string mapped to a class name the
+        // middleware name will get parsed into the full class name and parameters
+        // which may be run using the Pipeline which accepts this string format.
+        } else {
+            list($name, $parameters) = array_pad(explode(':', $name, 2), 2, null);
+
+            return (isset($map[$name]) ? $map[$name] : $name).
+                   (! is_null($parameters) ? ':'.$parameters : '');
+        }
+    }
+
+    /**
+     * Parse the middleware group and format it for usage.
+     *
+     * @param string $name
+     *
+     * @return array
+     */
+    protected function parseMiddlewareGroup($name)
+    {
+        $results = [];
+
+        foreach ($this->middlewareGroups[$name] as $middleware) {
+            // If the middleware is another middleware group we will pull in the group and
+            // merge its middleware into the results. This allows groups to conveniently
+            // reference other groups without needing to repeat all their middlewares.
+            if (isset($this->middlewareGroups[$middleware])) {
+                $results = array_merge(
+                    $results,
+                    $this->parseMiddlewareGroup($middleware)
+                );
+                continue;
+            }
+
+            list($middleware, $parameters) = array_pad(
+                explode(':', $middleware, 2),
+                2,
+                null
+            );
+            // If this middleware is actually a route middleware, we will extract the full
+            // class name out of the middleware list now. Then we'll add the parameters
+            // back onto this class' name so the pipeline will properly extract them.
+            if (isset($this->middleware[$middleware])) {
+                $middleware = $this->middleware[$middleware];
+            }
+
+            $results[] = $middleware.($parameters ? ':'.$parameters : '');
+        }
+        return $results;
+    }
+}
