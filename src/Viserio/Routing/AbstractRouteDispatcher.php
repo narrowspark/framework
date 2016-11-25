@@ -40,6 +40,21 @@ abstract class AbstractRouteDispatcher
     protected $middlewarePriority = [];
 
     /**
+     * Register a group of middleware.
+     *
+     * @param string $name
+     * @param array  $middleware
+     *
+     * @return $this
+     */
+    public function middlewareGroup(string $name, array $middleware)
+    {
+        $this->middlewareGroups[$name] = $middleware;
+
+        return $this;
+    }
+
+    /**
      * Set a list of middleware priorities.
      *
      * @param array $middlewarePriorities
@@ -48,7 +63,7 @@ abstract class AbstractRouteDispatcher
      */
     public function setMiddlewarePriorities(array $middlewarePriorities)
     {
-        $this->middlewarePriority = middlewarePriorities;
+        $this->middlewarePriority = $middlewarePriorities;
 
         return $this;
     }
@@ -64,7 +79,9 @@ abstract class AbstractRouteDispatcher
     }
 
     /**
-     * {@inheritdoc}
+     * Get all with and without middlewares.
+     *
+     * @return array
      */
     public function getMiddlewares(): array
     {

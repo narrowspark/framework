@@ -2,11 +2,10 @@
 declare(strict_types=1);
 namespace Viserio\Contracts\Foundation;
 
-use Interop\Http\Middleware\ServerMiddlewareInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
-interface Kernel extends ServerMiddlewareInterface
+interface Kernel
 {
     /**
      * The REQUEST event occurs at the very beginning of request
@@ -54,9 +53,8 @@ interface Kernel extends ServerMiddlewareInterface
      * Handle an incoming HTTP request.
      *
      * @param \Psr\Http\Message\ServerRequestInterface $request
-     * @param \Psr\Http\Message\ResponseInterface|null $response
      *
      * @return \Psr\Http\Message\ResponseInterface
      */
-    public function handle(ServerRequestInterface $request, ResponseInterface $response = null): ResponseInterface;
+    public function handle(ServerRequestInterface $request): ResponseInterface;
 }

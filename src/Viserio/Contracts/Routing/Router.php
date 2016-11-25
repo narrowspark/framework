@@ -266,6 +266,25 @@ interface Router
     public function getMiddlewares(): array;
 
     /**
+     * Register a group of middleware.
+     *
+     * @param string $name
+     * @param array  $middleware
+     *
+     * @return $this
+     */
+    public function middlewareGroup(string $name, array $middleware);
+
+    /**
+     * Set a list of middleware priorities.
+     *
+     * @param array $middlewarePriorities
+     *
+     * @return $this
+     */
+    public function setMiddlewarePriorities(array $middlewarePriorities);
+
+    /**
      * Get the currently dispatched route instance.
      *
      * @return \Viserio\Contracts\Routing\Route|null

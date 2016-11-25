@@ -46,7 +46,8 @@
     },
     "provide": {
         "container-interop/container-interop-implementation" : "^1.1",
-        "psr/container-implementation"                       : "^1.0"
+        "psr/container-implementation"                       : "^1.0",
+        "psr/http-message-implementation"                    : "^1.0"
     },
     "extra": {
         "branch-alias": {
