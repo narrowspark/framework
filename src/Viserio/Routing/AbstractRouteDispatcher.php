@@ -4,22 +4,22 @@ namespace Viserio\Routing;
 
 use Closure;
 use Interop\Container\ContainerInterface;
+use Interop\Http\Middleware\ServerMiddlewareInterface;
+use LogicException;
 use Narrowspark\Arr\Arr;
+use Narrowspark\HttpStatus\Exception\InternalServerErrorException;
+use Narrowspark\HttpStatus\Exception\MethodNotAllowedException;
+use Narrowspark\HttpStatus\Exception\NotFoundException;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Contracts\Container\Traits\ContainerAwareTrait;
 use Viserio\Contracts\Events\Traits\EventsAwareTrait;
 use Viserio\Contracts\Routing\Route as RouteContract;
 use Viserio\Contracts\Routing\RouteCollection as RouteCollectionContract;
+use Viserio\Contracts\Routing\Router as RouterContract;
 use Viserio\Routing\Generator\RouteTreeBuilder;
 use Viserio\Routing\Generator\RouteTreeOptimizer;
-use Narrowspark\HttpStatus\Exception\InternalServerErrorException;
-use Narrowspark\HttpStatus\Exception\MethodNotAllowedException;
-use Narrowspark\HttpStatus\Exception\NotFoundException;
 use Viserio\Routing\Traits\MiddlewareAwareTrait;
-use Viserio\Contracts\Routing\Router as RouterContract;
-use Interop\Http\Middleware\ServerMiddlewareInterface;
-use LogicException;
 
 abstract class AbstractRouteDispatcher
 {
@@ -128,8 +128,7 @@ abstract class AbstractRouteDispatcher
         string $identifier,
         array $segments,
         ServerRequestInterface $request
-    ): ResponseInterface
-    {
+    ): ResponseInterface {
         $route = $this->routes->match($identifier);
 
         foreach ($this->globalParameterConditions as $key => $value) {

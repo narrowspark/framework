@@ -5,10 +5,10 @@ namespace Viserio\Routing\Tests\Router;
 use Viserio\HttpFactory\ResponseFactory;
 use Viserio\HttpFactory\ServerRequestFactory;
 use Viserio\HttpFactory\StreamFactory;
+use Viserio\Routing\Tests\Fixture\ControllerClosureMiddleware;
 use Viserio\Routing\Tests\Fixture\FakeMiddleware;
 use Viserio\Routing\Tests\Fixture\FooMiddleware;
 use Viserio\Routing\Tests\Fixture\RouteTestClosureMiddlewareController;
-use Viserio\Routing\Tests\Fixture\ControllerClosureMiddleware;
 
 class RootRoutesRouterTest extends RouteRouterBaseTest
 {

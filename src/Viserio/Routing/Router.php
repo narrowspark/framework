@@ -4,6 +4,8 @@ namespace Viserio\Routing;
 
 use Closure;
 use Interop\Container\ContainerInterface;
+use Interop\Http\Middleware\DelegateInterface;
+use Interop\Http\Middleware\ServerMiddlewareInterface;
 use Narrowspark\Arr\Arr;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -12,8 +14,6 @@ use Viserio\Contracts\Routing\RouteCollection as RouteCollectionContract;
 use Viserio\Contracts\Routing\Router as RouterContract;
 use Viserio\Support\Traits\InvokerAwareTrait;
 use Viserio\Support\Traits\MacroableTrait;
-use Interop\Http\Middleware\DelegateInterface;
-use Interop\Http\Middleware\ServerMiddlewareInterface;
 
 class Router extends AbstractRouteDispatcher implements RouterContract, ServerMiddlewareInterface
 {
