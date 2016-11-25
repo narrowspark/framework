@@ -22,8 +22,8 @@ use Viserio\Foundation\Bootstrap\LoadRoutes;
 use Viserio\Foundation\Bootstrap\LoadServiceProvider;
 use Viserio\HttpFactory\ResponseFactory;
 use Viserio\Middleware\Dispatcher as MiddlewareDispatcher;
-use Viserio\Routing\Router;
 use Viserio\Routing\Pipeline;
+use Viserio\Routing\Router;
 use Viserio\StaticalProxy\StaticalProxy;
 
 class Kernel implements TerminableContract, KernelContract
@@ -182,7 +182,6 @@ class Kernel implements TerminableContract, KernelContract
 
             $this->events->trigger(self::RESPONSE, [$request, $response]);
         } catch (Throwable $exception) {
-
             $exceptionHandler = $this->app->get(HandlerContract::class);
             $exceptionHandler->report($exception = new FatalThrowableError($exception));
 
