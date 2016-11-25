@@ -24,9 +24,9 @@ use Viserio\HttpFactory\ResponseFactory;
 use Viserio\Middleware\Dispatcher as MiddlewareDispatcher;
 use Viserio\Routing\Pipeline;
 use Viserio\Routing\Router;
-use Viserio\StaticalProxy\StaticalProxy;
 use Viserio\Session\Middleware\SessionMiddleware;
 use Viserio\Session\Middleware\VerifyCsrfTokenMiddleware;
+use Viserio\StaticalProxy\StaticalProxy;
 
 class Kernel implements TerminableContract, KernelContract
 {
@@ -83,7 +83,7 @@ class Kernel implements TerminableContract, KernelContract
      */
     protected $middlewarePriority = [
         SessionMiddleware::class,
-        VerifyCsrfTokenMiddleware::class
+        VerifyCsrfTokenMiddleware::class,
     ];
 
     /**
