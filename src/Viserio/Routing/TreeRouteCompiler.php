@@ -2,11 +2,11 @@
 declare(strict_types=1);
 namespace Viserio\Routing;
 
+use Viserio\Contracts\Routing\Router as RouterContract;
 use Viserio\Routing\Generator\ChildrenNodeCollection;
 use Viserio\Routing\Generator\MatchedRouteDataMap;
 use Viserio\Routing\Generator\RouteTreeBuilder;
 use Viserio\Routing\Generator\RouteTreeOptimizer;
-use Viserio\Contracts\Routing\Router as RouterContract;
 
 class TreeRouteCompiler
 {
