@@ -361,7 +361,7 @@ abstract class AbstractMessage implements MessageInterface
     private function filterHeaderValue(array $values)
     {
         $values = array_filter($values, function ($value) {
-            return !is_null($value);
+            return ! is_null($value);
         });
 
         return array_map([HeaderSecurity::class, 'filter'], array_values($values));

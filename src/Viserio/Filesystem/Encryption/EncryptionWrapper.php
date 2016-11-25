@@ -4,7 +4,6 @@ namespace Viserio\Filesystem\Encryption;
 
 use Defuse\Crypto\File;
 use Defuse\Crypto\Key;
-use Viserio\Contracts\Filesystem\Exception\FileNotFoundException;
 use Viserio\Contracts\Filesystem\Filesystem as FilesystemContract;
 
 class EncryptionWrapper

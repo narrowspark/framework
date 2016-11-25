@@ -4,12 +4,10 @@ namespace Viserio\Pagination;
 
 use ArrayAccess;
 use ArrayIterator;
-use Closure;
 use Countable;
 use IteratorAggregate;
 use JsonSerializable;
 use Narrowspark\Collection\Collection;
-use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Contracts\Pagination\Paginator as PaginatorContract;
 use Viserio\Contracts\Support\Arrayable as ArrayableContract;
 use Viserio\Contracts\Support\Jsonable as JsonableContract;
@@ -89,13 +87,36 @@ abstract class AbstractPaginator implements
     protected $request;
 
     /**
+     * Make dynamic calls into the collection.
+     *
+     * @param string $method
+     * @param array  $parameters
+     *
+     * @return mixed
+     *
+     * @codeCoverageIgnore
+     */
+    public function __call($method, $parameters)
+    {
+        return $this->items->$method(...$parameters);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function __toString()
+    {
+        return (string) $this->render();
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function getUrlRange(int $start, int $end): string
     {
         $urls = [];
 
-        for ($page = $start; $page <= $end; $page++) {
+        for ($page = $start; $page <= $end; ++$page) {
             $urls[$page] = $this->getUrl($page);
         }
 
@@ -118,7 +139,7 @@ abstract class AbstractPaginator implements
             $parameters = array_merge($this->query, $parameters);
         }
 
-        $url  = $this->path;
+        $url = $this->path;
         $url .= (strpos($this->path, '?') !== false ? '&' : '?');
         $url .= http_build_query($parameters, '', '&');
         $url .= $this->buildFragment();
@@ -404,29 +425,6 @@ abstract class AbstractPaginator implements
     }
 
     /**
-     * Make dynamic calls into the collection.
-     *
-     * @param string $method
-     * @param array  $parameters
-     *
-     * @return mixed
-     *
-     * @codeCoverageIgnore
-     */
-    public function __call($method, $parameters)
-    {
-        return $this->items->$method(...$parameters);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function __toString()
-    {
-        return (string) $this->render();
-    }
-
-    /**
      * Build the full fragment portion of a URL.
      *
      * @return string
@@ -496,11 +494,11 @@ abstract class AbstractPaginator implements
     private function secureInput(array $query): array
     {
         $secure = function (&$v) {
-            if (!is_string($v) && !is_numeric($v)) {
+            if (! is_string($v) && ! is_numeric($v)) {
                 $v = '';
             } elseif (strpos($v, "\0") !== false) {
                 $v = '';
-            } elseif (!mb_check_encoding($v, 'UTF-8')) {
+            } elseif (! mb_check_encoding($v, 'UTF-8')) {
                 $v = '';
             }
         };

@@ -2,7 +2,6 @@
 declare(strict_types=1);
 namespace Viserio\Contracts\Routing;
 
-use Interop\Http\Middleware\ServerMiddlewareInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
@@ -240,6 +239,24 @@ interface Router
      * @return array
      */
     public function getGroupStack(): array;
+
+    /**
+     * Add a middleware to all routes.
+     *
+     * @param string $middleware
+     *
+     * @return $this
+     */
+    public function withMiddleware(string $middleware);
+
+    /**
+     * Remove a middleware from all routes.
+     *
+     * @param string $middleware
+     *
+     * @return $this
+     */
+    public function withoutMiddleware(string $middleware);
 
     /**
      * Get all with and without middlewares.

@@ -290,7 +290,7 @@ PHP;
 
         $code->appendLine(
             'return ['
-            . VarExporter::export(Router::FOUND)
+            . VarExporter::export(RouterContract::FOUND)
             . ', '
             . VarExporter::export($foundRoute[1])
             . ', '

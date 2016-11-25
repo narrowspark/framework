@@ -43,7 +43,7 @@ class Pipeline extends BasePipeline
      */
     private function getCallableMiddleware(callable $middleware)
     {
-        return new class ($middleware) implements DelegateInterface {
+        return new class($middleware) implements DelegateInterface {
             /**
              * @var callable
              */

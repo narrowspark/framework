@@ -8,7 +8,6 @@ use Viserio\Config\Manager as ConfigManager;
 use Viserio\Config\Repository;
 use Viserio\Contracts\Config\Manager as ManagerContract;
 use Viserio\Contracts\Config\Repository as RepositoryContract;
-use Viserio\Contracts\Parsers\Loader as LoaderContract;
 
 class ConfigServiceProvider implements ServiceProvider
 {

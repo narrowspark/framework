@@ -5,7 +5,6 @@ namespace Viserio\Pagination;
 use Narrowspark\Collection\Collection;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Contracts\Pagination\Adapter as AdapterContract;
-use Viserio\Contracts\Pagination\Presenter as PresenterContract;
 use Viserio\Contracts\View\Traits\ViewAwareTrait;
 use Viserio\Pagination\Presenters\Bootstrap4;
 use Viserio\Pagination\Presenters\Foundation6;
@@ -92,7 +91,7 @@ class Paginator extends AbstractPaginator
      */
     public function render(string $view = null): string
     {
-        if ($this->views !== null && !isset($this->presenters[$view])) {
+        if ($this->views !== null && ! isset($this->presenters[$view])) {
             return $this->getViewFactory()->create($view, ['paginator' => $this]);
         } elseif (isset($this->presenters[$view])) {
             return (new $this->presenters[$view]($this))->render();

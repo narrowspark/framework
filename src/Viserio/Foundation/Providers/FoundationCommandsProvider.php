@@ -2,7 +2,6 @@
 declare(strict_types=1);
 namespace Viserio\Foundation\Providers;
 
-use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
 use Viserio\Foundation\Commands\DownCommand;
 use Viserio\Foundation\Commands\UpCommand;

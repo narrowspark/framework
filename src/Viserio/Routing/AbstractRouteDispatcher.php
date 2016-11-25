@@ -3,9 +3,6 @@ declare(strict_types=1);
 namespace Viserio\Routing;
 
 use Closure;
-use Interop\Container\ContainerInterface;
-use Interop\Http\Middleware\ServerMiddlewareInterface;
-use LogicException;
 use Narrowspark\Arr\Arr;
 use Narrowspark\HttpStatus\Exception\InternalServerErrorException;
 use Narrowspark\HttpStatus\Exception\MethodNotAllowedException;
@@ -15,7 +12,6 @@ use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Contracts\Container\Traits\ContainerAwareTrait;
 use Viserio\Contracts\Events\Traits\EventsAwareTrait;
 use Viserio\Contracts\Routing\Route as RouteContract;
-use Viserio\Contracts\Routing\RouteCollection as RouteCollectionContract;
 use Viserio\Contracts\Routing\Router as RouterContract;
 use Viserio\Routing\Generator\RouteTreeBuilder;
 use Viserio\Routing\Generator\RouteTreeOptimizer;
@@ -253,10 +249,9 @@ abstract class AbstractRouteDispatcher
                 // This middleware is in the priority map; but, this is the first middleware we have
                 // encountered from the map thus far. We'll save its current index plus its index
                 // from the priority map so we can compare against them on the next iterations.
-                } else {
-                    $lastIndex = $index;
-                    $lastPriorityIndex = $priorityIndex;
                 }
+                $lastIndex = $index;
+                $lastPriorityIndex = $priorityIndex;
             }
         }
 

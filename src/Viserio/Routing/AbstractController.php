@@ -9,16 +9,6 @@ abstract class AbstractController
     use MiddlewareAwareTrait;
 
     /**
-     * Get all middleware, including the ones from the controller.
-     *
-     * @return array
-     */
-    public function gatherMiddleware(): array
-    {
-        return $this->middlewares;
-    }
-
-    /**
      * Handle calls to missing methods on the controller.
      *
      * @param string $method
@@ -31,5 +21,15 @@ abstract class AbstractController
     public function __call($method, $parameters)
     {
         throw new BadMethodCallException("Method [{$method}] does not exist.");
+    }
+
+    /**
+     * Get all middleware, including the ones from the controller.
+     *
+     * @return array
+     */
+    public function gatherMiddleware(): array
+    {
+        return $this->middlewares;
     }
 }

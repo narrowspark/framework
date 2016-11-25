@@ -43,24 +43,6 @@ trait ConfirmableTrait
     }
 
     /**
-     * Get the default confirmation callback.
-     *
-     * @return \Closure
-     */
-    protected function getDefaultConfirmCallback(): Closure
-    {
-        return function () {
-            $container = $this->getContainer();
-
-            if ($container->has('env')) {
-                return $container->get('env') == 'production';
-            }
-
-            return $container->get('app.env') == 'production';
-        };
-    }
-
-    /**
      * Get the value of a command option.
      *
      * @param string|null $key
@@ -95,4 +77,22 @@ trait ConfirmableTrait
      * @return \Interop\Container\ContainerInterface
      */
     abstract public function getContainer(): ContainerInterface;
+
+    /**
+     * Get the default confirmation callback.
+     *
+     * @return \Closure
+     */
+    protected function getDefaultConfirmCallback(): Closure
+    {
+        return function () {
+            $container = $this->getContainer();
+
+            if ($container->has('env')) {
+                return $container->get('env') == 'production';
+            }
+
+            return $container->get('app.env') == 'production';
+        };
+    }
 }

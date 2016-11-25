@@ -149,15 +149,15 @@ class ServerRequestFactory implements ServerRequestFactoryInterface
         $headers = [];
         $content = [
             'CONTENT_LENGTH' => 'Content-Length',
-            'CONTENT_MD5'    => 'Content-Md5',
-            'CONTENT_TYPE'   => 'Content-Type',
+            'CONTENT_MD5' => 'Content-Md5',
+            'CONTENT_TYPE' => 'Content-Type',
         ];
 
         foreach ($server as $key => $value) {
             if (substr($key, 0, 5) === 'HTTP_') {
                 $key = substr($key, 5);
 
-                if (!isset($content[$key]) || !isset($server[$key])) {
+                if (! isset($content[$key]) || ! isset($server[$key])) {
                     $key = str_replace(' ', '-', ucwords(strtolower(str_replace('_', ' ', $key))));
                     $headers[$key] = $value;
                 }
@@ -166,7 +166,7 @@ class ServerRequestFactory implements ServerRequestFactoryInterface
             }
         }
 
-        if (!isset($headers['Authorization'])) {
+        if (! isset($headers['Authorization'])) {
             if (isset($server['REDIRECT_HTTP_AUTHORIZATION'])) {
                 $headers['Authorization'] = $server['REDIRECT_HTTP_AUTHORIZATION'];
             } elseif (isset($server['PHP_AUTH_USER'])) {
