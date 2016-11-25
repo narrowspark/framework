@@ -39,7 +39,7 @@ class Pipeline extends BasePipeline
      *
      * @param callable $middleware
      *
-     * @return class@anonymous
+     * @return object
      */
     private function getCallableMiddleware(callable $middleware)
     {

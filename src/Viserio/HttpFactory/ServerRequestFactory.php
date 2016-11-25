@@ -142,7 +142,7 @@ class ServerRequestFactory implements ServerRequestFactoryInterface
      *
      * @param array $server
      *
-     * @return string[string]
+     * @return array
      */
     protected function getAllHeaders(array $server) : array
     {

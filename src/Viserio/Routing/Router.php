@@ -21,20 +21,6 @@ class Router extends AbstractRouteDispatcher implements RouterContract, ServerMi
     use MacroableTrait;
 
     /**
-     * The route collection instance.
-     *
-     * @var \Viserio\Routing\RouteCollection
-     */
-    protected $routes;
-
-    /**
-     * The currently dispatched route instance.
-     *
-     * @var \Viserio\Contracts\Routing\Route
-     */
-    protected $current;
-
-    /**
      * The route group attribute stack.
      *
      * @var array
@@ -44,23 +30,9 @@ class Router extends AbstractRouteDispatcher implements RouterContract, ServerMi
     /**
      * The globally available parameter patterns.
      *
-     * @var string[]
-     */
-    protected $globalParameterConditions = [];
-
-    /**
-     * The globally available parameter patterns.
-     *
      * @var array
      */
     protected $patterns = [];
-
-    /**
-     * Flag for refresh the cache file on every call.
-     *
-     * @var bool
-     */
-    protected $refreshCache = false;
 
     /**
      * Path to the cached router file.

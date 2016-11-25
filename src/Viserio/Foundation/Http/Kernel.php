@@ -25,6 +25,8 @@ use Viserio\Middleware\Dispatcher as MiddlewareDispatcher;
 use Viserio\Routing\Pipeline;
 use Viserio\Routing\Router;
 use Viserio\StaticalProxy\StaticalProxy;
+use Viserio\Session\Middleware\SessionMiddleware;
+use Viserio\Session\Middleware\VerifyCsrfTokenMiddleware;
 
 class Kernel implements TerminableContract, KernelContract
 {
@@ -79,7 +81,10 @@ class Kernel implements TerminableContract, KernelContract
      *
      * @var array
      */
-    protected $middlewarePriority = [];
+    protected $middlewarePriority = [
+        SessionMiddleware::class,
+        VerifyCsrfTokenMiddleware::class
+    ];
 
     /**
      * The bootstrap classes for the application.

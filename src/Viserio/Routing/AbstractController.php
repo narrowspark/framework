@@ -20,7 +20,7 @@ abstract class AbstractController
      */
     public function __call($method, $parameters)
     {
-        throw new BadMethodCallException("Method [{$method}] does not exist.");
+        throw new BadMethodCallException(sprintf('Method [%s] does not exist.', $method));
     }
 
     /**

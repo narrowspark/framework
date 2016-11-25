@@ -24,6 +24,34 @@ abstract class AbstractRouteDispatcher
     use MiddlewareAwareTrait;
 
     /**
+     * The route collection instance.
+     *
+     * @var \Viserio\Routing\RouteCollection
+     */
+    protected $routes;
+
+    /**
+     * The globally available parameter patterns.
+     *
+     * @var string[]
+     */
+    protected $globalParameterConditions = [];
+
+    /**
+     * The currently dispatched route instance.
+     *
+     * @var \Viserio\Contracts\Routing\Route
+     */
+    protected $current;
+
+    /**
+     * Flag for refresh the cache file on every call.
+     *
+     * @var bool
+     */
+    protected $refreshCache = false;
+
+    /**
      * All of the middleware groups.
      *
      * @var array
@@ -212,19 +240,19 @@ abstract class AbstractRouteDispatcher
      *
      * @return array
      */
-    protected function getRouteMiddlewares(Route $route): array
+    protected function getRouteMiddlewares(RouteContract $route): array
     {
         $middlewares = [];
         $routeMiddlewares = $route->gatherMiddleware();
 
-        $middleware = Arr::map($routeMiddlewares['middlewares'], function ($name) use (&$middlewares) {
+        Arr::map($routeMiddlewares['middlewares'], function ($name) use (&$middlewares) {
             $middlewares[] = $this->resolveMiddlewareClassName($name);
         });
 
         if (count($routeMiddlewares['without_middlewares']) !== 0) {
             $withoutMiddlewares = [];
 
-            $middleware = Arr::map($routeMiddlewares['without_middlewares'], function ($name) use (&$withoutMiddlewares) {
+            Arr::map($routeMiddlewares['without_middlewares'], function ($name) use (&$withoutMiddlewares) {
                 $withoutMiddlewares[] = $this->resolveMiddlewareClassName($name);
             });
 
@@ -337,8 +365,8 @@ abstract class AbstractRouteDispatcher
             // If this middleware is actually a route middleware, we will extract the full
             // class name out of the middleware list now. Then we'll add the parameters
             // back onto this class' name so the pipeline will properly extract them.
-            if (isset($this->middleware[$middleware])) {
-                $middleware = $this->middleware[$middleware];
+            if (isset($this->middlewares[$middleware])) {
+                $middleware = $this->middlewares[$middleware];
             }
 
             $results[] = $middleware;
