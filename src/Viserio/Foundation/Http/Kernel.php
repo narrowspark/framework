@@ -2,7 +2,6 @@
 declare(strict_types=1);
 namespace Viserio\Foundation\Http;
 
-use Interop\Http\Middleware\DelegateInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Symfony\Component\Debug\Exception\FatalThrowableError;
@@ -20,8 +19,6 @@ use Viserio\Foundation\Bootstrap\HandleExceptions;
 use Viserio\Foundation\Bootstrap\LoadConfiguration;
 use Viserio\Foundation\Bootstrap\LoadRoutes;
 use Viserio\Foundation\Bootstrap\LoadServiceProvider;
-use Viserio\HttpFactory\ResponseFactory;
-use Viserio\Middleware\Dispatcher as MiddlewareDispatcher;
 use Viserio\Routing\Pipeline;
 use Viserio\Routing\Router;
 use Viserio\Session\Middleware\SessionMiddleware;
@@ -82,8 +79,7 @@ class Kernel implements TerminableContract, KernelContract
      * @var array
      */
     protected $middlewarePriority = [
-        SessionMiddleware::class,
-        VerifyCsrfTokenMiddleware::class,
+        SessionMiddleware::class
     ];
 
     /**
