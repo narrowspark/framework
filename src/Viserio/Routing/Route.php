@@ -30,7 +30,7 @@ class Route implements RouteContract
      *
      * @var array
      */
-    protected $httpMethods;
+    protected $httpMethods = [];
 
     /**
      * The route action array.
