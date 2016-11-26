@@ -32,6 +32,10 @@ class VerifyCsrfTokenMiddlewareTest extends \PHPUnit_Framework_TestCase
      */
     private $files;
 
+    private $key;
+
+    private $manager;
+
     public function setUp()
     {
         parent::setUp();
@@ -40,27 +44,38 @@ class VerifyCsrfTokenMiddlewareTest extends \PHPUnit_Framework_TestCase
         $this->files = new Filesystem();
 
         $this->files->createDirectory(__DIR__ . '/stubs');
+
+        $this->key = Key::createNewRandomKey();
+        $encrypter = new Encrypter($this->key);
+        $config = $this->mock(ConfigManagerContract::class);
+
+        $manager = new SessionManager($config, $encrypter);
+        $manager->setContainer(new ArrayContainer([
+            FilesystemContract::class => $this->files,
+        ]));
+
+        $this->manager = $manager;
     }
 
     public function tearDown()
     {
         $this->files->deleteDirectory(__DIR__ . '/stubs');
+        $this->files = $this->key = $this->manager = null;
 
         parent::tearDown();
     }
 
-    public function testSessionCsrfMiddleware()
+    public function testSessionCsrfMiddlewareSetCookie()
     {
-        $key = Key::createNewRandomKey();
+        $manager = $this->manager;
+        $config = $manager->getConfig();
 
-        $encrypter = new Encrypter($key);
-        $config = $this->mock(ConfigManagerContract::class);
         $config->shouldReceive('get')
             ->with('session.drivers', []);
         $config->shouldReceive('get')
             ->with('session.key')
             ->once()
-            ->andReturn($key->saveToAsciiSafeString());
+            ->andReturn($this->key->saveToAsciiSafeString());
         $config->shouldReceive('get')
             ->with('session.csrf.livetime', $time = Chronos::now()->getTimestamp() + 60 * 120)
             ->andReturn($time);
@@ -81,11 +96,6 @@ class VerifyCsrfTokenMiddlewareTest extends \PHPUnit_Framework_TestCase
             ->with('session.csrf.samesite', false)
             ->andReturn(false);
 
-        $manager = new SessionManager($config, $encrypter);
-        $manager->setContainer(new ArrayContainer([
-            FilesystemContract::class => $this->files,
-        ]));
-
         $middleware = new VerifyCsrfTokenMiddleware($manager);
         $request = (new ServerRequestFactory())->createServerRequest($_SERVER);
 
@@ -94,6 +104,40 @@ class VerifyCsrfTokenMiddlewareTest extends \PHPUnit_Framework_TestCase
         }));
 
         $this->assertTrue(isset($response->getHeaders()['Set-Cookie']));
+    }
+
+    public function testSessionCsrfMiddlewareReadsXXsrfToken()
+    {
+        $manager = $this->manager;
+        $config = $manager->getConfig();
+
+        $config->shouldReceive('get')
+            ->with('session.drivers', []);
+        $config->shouldReceive('get')
+            ->with('session.key')
+            ->once()
+            ->andReturn($this->key->saveToAsciiSafeString());
+        $config->shouldReceive('get')
+            ->with('session.csrf.livetime', $time = Chronos::now()->getTimestamp() + 60 * 120)
+            ->andReturn($time);
+        $config->shouldReceive('get')
+            ->with('session.csrf.algo', 'SHA512')
+            ->once()
+            ->andReturn('SHA512');
+        $config->shouldReceive('get')
+            ->with('session.path')
+            ->andReturn($this->root->url());
+        $config->shouldReceive('get')
+            ->with('session.domain')
+            ->andReturn('/');
+        $config->shouldReceive('get')
+            ->with('session.secure', false)
+            ->andReturn(false);
+        $config->shouldReceive('get')
+            ->with('session.csrf.samesite', false)
+            ->andReturn(false);
+
+        $middleware = new VerifyCsrfTokenMiddleware($manager);
 
         $request = (new ServerRequestFactory())->createServerRequest($_SERVER);
         $request = $request->withMethod('PUT');

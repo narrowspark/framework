@@ -31,6 +31,10 @@ class SessionMiddlewareTest extends \PHPUnit_Framework_TestCase
      */
     private $files;
 
+    private $key;
+
+    private $manager;
+
     public function setUp()
     {
         parent::setUp();
@@ -39,21 +43,38 @@ class SessionMiddlewareTest extends \PHPUnit_Framework_TestCase
         $this->files = new Filesystem();
 
         $this->files->createDirectory(__DIR__ . '/stubs');
+
+        $this->key = Key::createNewRandomKey();
+
+        $encrypter = new Encrypter($this->key);
+        $config = $this->mock(ConfigManagerContract::class);
+
+        $jar = $this->mock(JarContract::class);
+        $jar->shouldReceive('queue')
+            ->andReturn(true);
+
+        $manager = new SessionManager($config, $encrypter);
+        $manager->setContainer(new ArrayContainer([
+            FilesystemContract::class => $this->files,
+            JarContract::class => $jar,
+        ]));
+
+        $this->manager = $manager;
     }
 
     public function tearDown()
     {
         $this->files->deleteDirectory(__DIR__ . '/stubs');
+        $this->files = $this->key = $this->manager = null;
 
         parent::tearDown();
     }
 
     public function testAddSessionToResponse()
     {
-        $key = Key::createNewRandomKey();
+        $manager = $this->manager;
+        $config = $manager->getConfig();
 
-        $encrypter = new Encrypter($key);
-        $config = $this->mock(ConfigManagerContract::class);
         $config->shouldReceive('get')
             ->with('session.drivers', []);
         $config->shouldReceive('get')
@@ -82,7 +103,7 @@ class SessionMiddlewareTest extends \PHPUnit_Framework_TestCase
         $config->shouldReceive('get')
             ->with('session.key')
             ->once()
-            ->andReturn($key->saveToAsciiSafeString());
+            ->andReturn($this->key->saveToAsciiSafeString());
         $config->shouldReceive('get')
             ->with('session.lottery')
             ->once()
@@ -103,11 +124,6 @@ class SessionMiddlewareTest extends \PHPUnit_Framework_TestCase
             ->once()
             ->andReturn(false);
 
-        $manager = new SessionManager($config, $encrypter);
-        $manager->setContainer(new ArrayContainer([
-            FilesystemContract::class => $this->files,
-        ]));
-
         $middleware = new SessionMiddleware($manager);
         $request = (new ServerRequestFactory())->createServerRequest($_SERVER);
 
@@ -120,10 +136,9 @@ class SessionMiddlewareTest extends \PHPUnit_Framework_TestCase
 
     public function testAddSessionToCookie()
     {
-        $key = Key::createNewRandomKey();
+        $manager = $this->manager;
+        $config = $manager->getConfig();
 
-        $encrypter = new Encrypter($key);
-        $config = $this->mock(ConfigManagerContract::class);
         $config->shouldReceive('get')
             ->with('session.drivers', []);
         $config->shouldReceive('get')
@@ -144,20 +159,11 @@ class SessionMiddlewareTest extends \PHPUnit_Framework_TestCase
         $config->shouldReceive('get')
             ->with('session.key')
             ->once()
-            ->andReturn($key->saveToAsciiSafeString());
+            ->andReturn($this->key->saveToAsciiSafeString());
         $config->shouldReceive('get')
             ->with('session.lottery')
             ->once()
             ->andReturn([2, 100]);
-        $jar = $this->mock(JarContract::class);
-        $jar->shouldReceive('queue')
-            ->once()
-            ->andReturn(true);
-
-        $manager = new SessionManager($config, $encrypter);
-        $manager->setContainer(new ArrayContainer([
-            JarContract::class => $jar,
-        ]));
 
         $middleware = new SessionMiddleware($manager);
         $request = (new ServerRequestFactory())->createServerRequest($_SERVER);
