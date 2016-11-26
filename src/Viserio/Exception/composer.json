@@ -28,7 +28,7 @@
     "require-dev": {
         "container-interop/service-provider"  : "^0.3",
         "filp/whoops"                         : "^2.0",
-        "narrowspark/testing-helper"          : "^1.5",
+        "narrowspark/testing-helper"          : "^2.0",
         "phpunit/phpunit"                     : "^5.1",
         "viserio/container"                   : "self.version",
         "viserio/view"                        : "self.version"

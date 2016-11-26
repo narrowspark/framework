@@ -121,7 +121,7 @@ class Kernel implements TerminableContract, KernelContract
         }
 
         foreach ($this->middlewareGroups as $key => $middleware) {
-            $router->middlewareGroup($key, $middleware);
+            $router->setMiddlewareGroup($key, $middleware);
         }
 
         $this->router = $router;

@@ -94,7 +94,7 @@ class SessionMiddleware implements ServerMiddlewareInterface
     {
         $session = $this->manager->driver();
 
-        $key = $session->getConfig()->get('session::key');
+        $key = $this->manager->getConfig()->get('session.key');
 
         $session->addFingerprintGenerator(new ClientIpGenerator($key));
         $session->addFingerprintGenerator(new UserAgentGenerator($key));
@@ -110,7 +110,7 @@ class SessionMiddleware implements ServerMiddlewareInterface
     protected function collectGarbage(StoreContract $session)
     {
         $config = $this->manager->getConfig();
-        $lottery = $config->get('session::lottery');
+        $lottery = $config->get('session.lottery');
         $hitsLottery = random_int(1, $lottery[1]) <= $lottery[0];
 
         // Here we will see if this request hits the garbage collection lottery by hitting
@@ -134,7 +134,7 @@ class SessionMiddleware implements ServerMiddlewareInterface
         if ($session->getHandler() instanceof CookieSessionHandler) {
             $session->save();
 
-            return response;
+            return $response;
         }
 
         $config = $this->manager->getConfig();
@@ -143,15 +143,13 @@ class SessionMiddleware implements ServerMiddlewareInterface
             $session->getName(),
             $session->getId(),
             $this->getCookieExpirationDate($config),
-            $config->get('path'),
-            $config->get('domain'),
-            $config->get('secure', false),
-            $config->get('http_only', false)
+            $config->get('session.path'),
+            $config->get('session.domain'),
+            $config->get('session.secure', false),
+            $config->get('session.http_only', false)
         );
 
-        $response = $response->withAddedHeader('Set-Cookie', (string) $setCookie);
-
-        return $response;
+        return $response->withAddedHeader('Set-Cookie', (string) $setCookie);
     }
 
     /**
@@ -162,7 +160,7 @@ class SessionMiddleware implements ServerMiddlewareInterface
     protected function getSessionLifetimeInSeconds(): int
     {
         // Default 1 day
-        $lifetime = $this->manager->getConfig()->get('lifetime', 1440);
+        $lifetime = $this->manager->getConfig()->get('session.lifetime', 1440);
 
         return Chronos::now()->subMinutes($lifetime)->getTimestamp();
     }
@@ -172,11 +170,13 @@ class SessionMiddleware implements ServerMiddlewareInterface
      *
      * @param \Viserio\Contracts\Config\Manager $config
      *
-     * @return int
+     * @return int|\Datatime
      */
-    protected function getCookieExpirationDate(ConfigContract $config): int
+    protected function getCookieExpirationDate(ConfigContract $config)
     {
-        return $config->get('expire_on_close', false) ? 0 : Chronos::now()->addMinutes($config->get('lifetime'));
+        return $config->get('session.expire_on_close', false) ?
+            0 :
+            Chronos::now()->addMinutes($config->get('session.lifetime'));
     }
 
     /**
@@ -186,6 +186,6 @@ class SessionMiddleware implements ServerMiddlewareInterface
      */
     private function isSessionConfigured(): bool
     {
-        return $this->manager->getConfig()->get('session::driver', null) !== null;
+        return $this->manager->getConfig()->get('session.driver', null) !== null;
     }
 }

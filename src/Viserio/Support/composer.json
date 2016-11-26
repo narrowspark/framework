@@ -23,7 +23,7 @@
     },
     "require-dev": {
         "danielstjules/stringy"                              : "^2.3",
-        "narrowspark/testing-helper"                         : "^1.5",
+        "narrowspark/testing-helper"                         : "^2.0",
         "php-di/invoker"                                     : "^1.3",
         "phpunit/phpunit"                                    : "^5.1",
         "symfony/var-dumper"                                 : "^3.1"

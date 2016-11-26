@@ -273,7 +273,7 @@ interface Router
      *
      * @return $this
      */
-    public function middlewareGroup(string $name, array $middleware);
+    public function setMiddlewareGroup(string $name, array $middleware);
 
     /**
      * Set a list of middleware priorities.

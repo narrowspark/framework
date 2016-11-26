@@ -17,6 +17,8 @@ abstract class AbstractController
      * @throws \BadMethodCallException
      *
      * @return mixed
+     *
+     * @codeCoverageIgnore
      */
     public function __call($method, $parameters)
     {
