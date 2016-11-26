@@ -2,10 +2,10 @@
 declare(strict_types=1);
 namespace Viserio\Cookie;
 
+use Cake\Chronos\Chronos;
 use DateTime;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Contracts\Cookie\Cookie as CookieContract;
-use Cake\Chronos\Chronos;
 
 class RequestCookie
 {
