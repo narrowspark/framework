@@ -95,6 +95,9 @@ class VerifyCsrfTokenMiddlewareTest extends \PHPUnit_Framework_TestCase
         $config->shouldReceive('get')
             ->with('session.csrf.samesite', false)
             ->andReturn(false);
+        $config->shouldReceive('get')
+            ->with('session.lifetime', 1440)
+            ->andReturn(1440);
 
         $middleware = new VerifyCsrfTokenMiddleware($manager);
         $request = (new ServerRequestFactory())->createServerRequest($_SERVER);
@@ -103,7 +106,7 @@ class VerifyCsrfTokenMiddlewareTest extends \PHPUnit_Framework_TestCase
             return (new ResponseFactory())->createResponse(200);
         }));
 
-        $this->assertTrue(isset($response->getHeaders()['Set-Cookie']));
+        $this->assertTrue(is_array($response->getHeader('Set-Cookie')));
     }
 
     public function testSessionCsrfMiddlewareReadsXXsrfToken()
