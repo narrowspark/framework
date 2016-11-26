@@ -63,7 +63,6 @@ class VerifyCsrfTokenMiddlewareTest extends \PHPUnit_Framework_TestCase
             ->andReturn($key->saveToAsciiSafeString());
         $config->shouldReceive('get')
             ->with('session.csrf.livetime', $time = Chronos::now()->getTimestamp() + 60 * 120)
-            ->times(3)
             ->andReturn($time);
         $config->shouldReceive('get')
             ->with('session.csrf.algo', 'SHA512')
