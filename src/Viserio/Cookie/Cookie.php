@@ -24,7 +24,7 @@ final class Cookie extends AbstractCookie
      */
     public function __construct(
         string $name,
-        $value = null,
+        string $value = null,
         $expiration = 0,
         $path = '/',
         $domain = null,

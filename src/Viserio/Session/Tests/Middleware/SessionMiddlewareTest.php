@@ -131,7 +131,7 @@ class SessionMiddlewareTest extends \PHPUnit_Framework_TestCase
             return (new ResponseFactory())->createResponse(200);
         }));
 
-        $this->assertTrue(isset($response->getHeaders()['Set-Cookie']));
+        $this->assertTrue(is_array($response->getHeader('Set-Cookie')));
     }
 
     public function testAddSessionToCookie()

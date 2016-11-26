@@ -5,6 +5,7 @@ namespace Viserio\Cookie;
 use DateTime;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Contracts\Cookie\Cookie as CookieContract;
+use Cake\Chronos\Chronos;
 
 class RequestCookie
 {
@@ -59,7 +60,7 @@ class RequestCookie
 
             switch ($attributeKey) {
                 case 'expires':
-                    $cookie = $cookie->withExpires(new DateTime($attributeValue));
+                    $cookie = $cookie->withExpires(new Chronos($attributeValue));
                     break;
                 case 'max-age':
                     $age = is_numeric($attributeValue) ? (int) $attributeValue : null;
@@ -110,10 +111,14 @@ class RequestCookie
         $pairParts = explode('=', $string, 2);
 
         if (count($pairParts) === 1) {
-            $pairParts[1] = '';
+            $pairParts[1] = null;
         }
 
         return array_map(function ($part) {
+            if ($part === null) {
+                return;
+            }
+
             return urldecode($part);
         }, $pairParts);
     }

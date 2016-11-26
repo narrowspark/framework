@@ -131,64 +131,40 @@ class CookieTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(3600, $cookie->getMaxAge(), '->getMaxAge() returns max age value if is set');
     }
 
-    public function testGetExpiresTime()
-    {
-        $time = new DateTime('3600');
-        $cookie = new Cookie('foo', 'bar', $time);
-
-        $this->assertInstanceOf('DateTime', $cookie->getExpiresTime(), '->getExpiresTime() returns \DateTime');
-        $this->assertEquals(
-            $time->format('s'),
-            $cookie->getExpiresTime()->format('s'),
-            '->getExpiresTime() returns the expire date'
-        );
-    }
-
-    public function testWithExpiration()
-    {
-        $cookie = new Cookie('Cookie', 'Value');
-        $cookie = $cookie->withExpiration(3600);
-
-        $this->assertEquals(3600, $cookie->getMaxAge(), '->getMaxAge() returns max age value if is set');
-        $this->assertInstanceOf('DateTime', $cookie->getExpiresTime(), '->getExpiresTime() returns \DateTime');
-    }
-
     public function testWithExpires()
     {
-        $expire = new DateTime('+1 day');
-        $cookie = new Cookie('foo', 'bar', new DateTime());
+        $expire = Chronos::now();
+        $expire = $expire->addDay(1);
+        $cookie = new Cookie('foo', 'bar', Chronos::now());
         $cookie = $cookie->withExpires($expire);
 
-        $this->assertInstanceOf('DateTime', $cookie->getExpiresTime(), '->getExpiresTime() returns \DateTime');
         $this->assertEquals(
-            $expire->format('U'),
-            $cookie->getExpiresTime()->format('U'),
+            $expire->toCookieString(),
+            $cookie->getExpiresTime(),
             '->getExpiresTime() returns the expire date'
         );
     }
 
     public function testConstructorWithDateTime()
     {
-        $expire = new DateTime();
+        $expire = Chronos::now();
         $cookie = new Cookie('foo', 'bar', $expire);
 
-        $this->assertInstanceOf('DateTime', $cookie->getExpiresTime(), '->getExpiresTime() returns \DateTime');
         $this->assertEquals(
-            $expire->format('U'),
-            $cookie->getExpiresTime()->format('U'),
+            $expire->toCookieString(),
+            $cookie->getExpiresTime(),
             '->getExpiresTime() returns the expire date'
         );
     }
 
     public function testGetExpiresTimeWithStringValue()
     {
-        $value = '+1 day';
-        $cookie = new Cookie('foo', 'bar', new DateTime($value));
-        $expire = strtotime($value);
+        $expire = new Chronos('+1 day');
+        $cookie = new Cookie('foo', 'bar', $expire);
 
         $this->assertEquals(
-            $expire,
-            $cookie->getExpiresTime()->format('U'),
+            $expire->toCookieString(),
+            $cookie->getExpiresTime(),
             '->getExpiresTime() returns the expire date',
             1
         );
@@ -318,7 +294,7 @@ class CookieTest extends \PHPUnit_Framework_TestCase
 
     public function testCookieIsExpired()
     {
-        $cookie = new Cookie('foo', 'bar', -1);
+        $cookie = new Cookie('foo', 'bar', -100);
 
         $this->assertTrue($cookie->isExpired(), '->isExpired() returns true if the cookie has expired');
     }
@@ -328,24 +304,27 @@ class CookieTest extends \PHPUnit_Framework_TestCase
         $time = new DateTime('Fri, 20-May-2011 15:25:52 GMT');
         $cookie = new Cookie('foo', 'bar', $time, '/', '.myfoodomain.com', true, true, Cookie::SAMESITE_STRICT);
         $this->assertEquals(
-            'foo=bar; Expires=Fri, 20-May-2011 15:25:52 GMT; Path=/; Domain=myfoodomain.com; Secure; HttpOnly; SameSite=strict',
+            'foo=bar; Expires=Friday, 20-May-2011 15:25:52 ' . date_default_timezone_get() . '; Path=/; Domain=myfoodomain.com; Secure; HttpOnly; SameSite=strict',
             $cookie->__toString(),
             '->__toString() returns string representation of the cookie'
         );
 
         $cookie = new Cookie('foo', null, 1, '/admin/', '.myfoodomain.com', false, true);
         $this->assertEquals(
-            'foo=deleted; Expires=' . gmdate(
+            'foo=deleted; Expires=' . (new Chronos(gmdate(
                 'D, d-M-Y H:i:s T',
                 Chronos::now()->getTimestamp() - 31536001
-            ) . '; Path=/admin; Domain=myfoodomain.com; Max-Age=1; HttpOnly',
+            )))->toCookieString() . '; Path=/admin; Domain=myfoodomain.com; Max-Age=1; HttpOnly',
             $cookie->__toString(),
             '->__toString() returns string representation of a cleared cookie if value is NULL'
         );
 
         $cookie = new Cookie('foo');
         $this->assertEquals(
-            'foo=deleted; Expires=' . gmdate('D, d-M-Y H:i:s T', Chronos::now()->getTimestamp() - 31536001) . '; Path=/',
+            'foo=deleted; Expires=' . (new Chronos(gmdate(
+                'D, d-M-Y H:i:s T',
+                Chronos::now()->getTimestamp() - 31536001
+            )))->toCookieString() . '; Path=/',
             $cookie->__toString()
         );
     }

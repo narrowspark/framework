@@ -8,10 +8,18 @@ use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Viserio\Cookie\Cookie;
 use Viserio\Cookie\RequestCookie;
+use Cake\Chronos\Chronos;
 
 class RequestCookieTest extends \PHPUnit_Framework_TestCase
 {
     use MockeryTrait;
+
+    public function setUp()
+    {
+        parent::setUp();
+
+        Chronos::setTestNow(new Chronos('Friday, 20-May-2011 15:25:52'));
+    }
 
     /**
      * @dataProvider provideParsesFromCookieStringData
@@ -23,6 +31,7 @@ class RequestCookieTest extends \PHPUnit_Framework_TestCase
 
         $cookie = new RequestCookie();
         $setCookie = $cookie->fromSetCookieHeader($request);
+        // $setCookie = $setCookie->withExpires($setCookie->getExpiresTime() - 1);
 
         $this->assertEquals($expectedCookie, $setCookie);
     }

@@ -33,7 +33,7 @@ class CookieJarTest extends \PHPUnit_Framework_TestCase
 
         $c3 = $cookie->delete('color');
         $this->assertNull($c3->getValue());
-        $this->assertNotEquals($c3->getExpiresTime()->getTimestamp(), Chronos::now()->getTimestamp());
+        $this->assertNotEquals($c3->getExpiresTime(), Chronos::now()->getTimestamp());
     }
 
     public function testCookiesAreCreatedWithProperOptionsUsingDefaultPathAndDomain()

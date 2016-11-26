@@ -64,16 +64,7 @@ interface Cookie
     public function hasMaxAge(): bool;
 
     /**
-     * Sets both the max age and the expires attributes.
-     *
-     * @param int|string|\DateTimeInterface|null $expiration
-     *
-     * @return $this
-     */
-    public function withExpiration($expiration = null): Cookie;
-
-    /**
-     * Sets the expires
+     * Sets the expires.
      *
      * @param int|string|\DateTimeInterface|null $expires.
      *
@@ -84,9 +75,9 @@ interface Cookie
     /**
      * Returns the expiration time
      *
-     * @return int|\DateTimeInterface|null
+     * @return string
      */
-    public function getExpiresTime();
+    public function getExpiresTime(): string;
 
     /**
      * Checks if there is an expiration time.
