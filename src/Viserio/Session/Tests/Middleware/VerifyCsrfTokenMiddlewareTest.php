@@ -70,19 +70,15 @@ class VerifyCsrfTokenMiddlewareTest extends \PHPUnit_Framework_TestCase
             ->andReturn('SHA512');
         $config->shouldReceive('get')
             ->with('session.path')
-            ->twice()
             ->andReturn($this->root->url());
         $config->shouldReceive('get')
             ->with('session.domain')
-            ->twice()
             ->andReturn('/');
         $config->shouldReceive('get')
             ->with('session.secure', false)
-            ->twice()
             ->andReturn(false);
         $config->shouldReceive('get')
             ->with('session.csrf.samesite', false)
-            ->twice()
             ->andReturn(false);
 
         $manager = new SessionManager($config, $encrypter);
