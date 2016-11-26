@@ -4,19 +4,18 @@ namespace Viserio\Session\Tests;
 
 use Defuse\Crypto\Key;
 use Narrowspark\TestingHelper\ArrayContainer;
-use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use Narrowspark\TestingHelper\Middleware\DelegateMiddleware;
-use Viserio\Contracts\Config\Manager as ConfigManagerContract;
-use Viserio\Encryption\Encrypter;
-use Viserio\Session\SessionManager;
-use Viserio\Session\Middleware\SessionMiddleware;
-use Viserio\HttpFactory\ServerRequestFactory;
-use Cake\Chronos\Chronos;
-use Viserio\HttpFactory\ResponseFactory;
+use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use org\bovigo\vfs\vfsStream;
-use Viserio\Contracts\Filesystem\Filesystem as FilesystemContract;
-use Viserio\Filesystem\Filesystem;
+use Viserio\Contracts\Config\Manager as ConfigManagerContract;
 use Viserio\Contracts\Cookie\QueueingFactory as JarContract;
+use Viserio\Contracts\Filesystem\Filesystem as FilesystemContract;
+use Viserio\Encryption\Encrypter;
+use Viserio\Filesystem\Filesystem;
+use Viserio\HttpFactory\ResponseFactory;
+use Viserio\HttpFactory\ServerRequestFactory;
+use Viserio\Session\Middleware\SessionMiddleware;
+use Viserio\Session\SessionManager;
 
 class SessionMiddlewareTest extends \PHPUnit_Framework_TestCase
 {
@@ -106,14 +105,14 @@ class SessionMiddlewareTest extends \PHPUnit_Framework_TestCase
 
         $manager = new SessionManager($config, $encrypter);
         $manager->setContainer(new ArrayContainer([
-            FilesystemContract::class => $this->files
+            FilesystemContract::class => $this->files,
         ]));
 
         $middleware = new SessionMiddleware($manager);
-        $request = (new ServerRequestFactory)->createServerRequest($_SERVER);
+        $request = (new ServerRequestFactory())->createServerRequest($_SERVER);
 
         $response = $middleware->process($request, new DelegateMiddleware(function ($request) {
-            return (new ResponseFactory)->createResponse(200);
+            return (new ResponseFactory())->createResponse(200);
         }));
 
         $this->assertTrue(isset($response->getHeaders()['Set-Cookie']));
@@ -157,14 +156,14 @@ class SessionMiddlewareTest extends \PHPUnit_Framework_TestCase
 
         $manager = new SessionManager($config, $encrypter);
         $manager->setContainer(new ArrayContainer([
-            JarContract::class => $jar
+            JarContract::class => $jar,
         ]));
 
         $middleware = new SessionMiddleware($manager);
-        $request = (new ServerRequestFactory)->createServerRequest($_SERVER);
+        $request = (new ServerRequestFactory())->createServerRequest($_SERVER);
 
         $response = $middleware->process($request, new DelegateMiddleware(function ($request) {
-            return (new ResponseFactory)->createResponse(200);
+            return (new ResponseFactory())->createResponse(200);
         }));
     }
 }

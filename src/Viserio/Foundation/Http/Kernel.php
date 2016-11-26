@@ -22,7 +22,6 @@ use Viserio\Foundation\Bootstrap\LoadServiceProvider;
 use Viserio\Routing\Pipeline;
 use Viserio\Routing\Router;
 use Viserio\Session\Middleware\SessionMiddleware;
-use Viserio\Session\Middleware\VerifyCsrfTokenMiddleware;
 use Viserio\StaticalProxy\StaticalProxy;
 
 class Kernel implements TerminableContract, KernelContract
