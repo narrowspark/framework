@@ -75,7 +75,7 @@ abstract class AbstractRouteDispatcher
      *
      * @return $this
      */
-    public function middlewareGroup(string $name, array $middleware)
+    public function setMiddlewareGroup(string $name, array $middleware)
     {
         $this->middlewareGroups[$name] = $middleware;
 

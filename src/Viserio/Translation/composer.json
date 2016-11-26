@@ -24,9 +24,8 @@
     },
     "require-dev": {
         "container-interop/service-provider"  : "^0.3",
-        "narrowspark/testing-helper"          : "^1.5",
         "mikey179/vfsStream"                  : "^1.6",
-        "narrowspark/testing-helper"          : "^1.5",
+        "narrowspark/testing-helper"          : "^2.0",
         "phpunit/phpunit"                     : "^5.1",
         "viserio/container"                   : "self.version",
         "viserio/parsers"                     : "self.version"

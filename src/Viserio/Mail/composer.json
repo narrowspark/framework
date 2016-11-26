@@ -30,7 +30,7 @@
         "aws/aws-sdk-php"                    : "^3.0",
         "container-interop/service-provider" : "^0.3",
         "guzzlehttp/guzzle"                  : "^6.0",
-        "narrowspark/testing-helper"         : "^1.5",
+        "narrowspark/testing-helper"         : "^2.0",
         "opis/closure"                       : "^2.2.1",
         "phpunit/phpunit"                    : "^5.1",
         "viserio/events"                     : "self.version",

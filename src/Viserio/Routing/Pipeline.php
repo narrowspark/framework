@@ -27,7 +27,7 @@ class Pipeline extends BasePipeline
             return function ($passable) use ($stack, $pipe) {
                 $slice = parent::getSlice();
 
-                $callable = $slice($this->getCallableMiddleware($stack), $pipe);
+                $callable = $slice($this->getDelegateMiddleware($stack), $pipe);
 
                 return $callable($passable);
             };
@@ -35,13 +35,13 @@ class Pipeline extends BasePipeline
     }
 
     /**
-     * Private callable middleware for the pipe.
+     * Private delegate callable middleware for the pipe.
      *
      * @param callable $middleware
      *
      * @return object
      */
-    private function getCallableMiddleware(callable $middleware)
+    private function getDelegateMiddleware(callable $middleware)
     {
         return new class($middleware) implements DelegateInterface {
             /**
@@ -50,7 +50,7 @@ class Pipeline extends BasePipeline
             private $middleware;
 
             /**
-             * Create a new callable middleware instance.
+             * Create a new delegate callable middleware instance.
              *
              * @param callable $middleware
              */

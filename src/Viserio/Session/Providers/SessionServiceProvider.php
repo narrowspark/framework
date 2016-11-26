@@ -4,7 +4,7 @@ namespace Viserio\Session\Providers;
 
 use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
-use Viserio\Config\Manager as ConfigManager;
+use Viserio\Config\Manager as ConfigManagerContract;
 use Viserio\Contracts\Encryption\Encrypter;
 use Viserio\Contracts\Session\Store as StoreContract;
 use Viserio\Session\SessionManager;
@@ -28,7 +28,7 @@ class SessionServiceProvider implements ServiceProvider
     public static function createSessionManager(ContainerInterface $container): SessionManager
     {
         $manager = new SessionManager(
-            $container->get(ConfigManager::class),
+            $container->get(ConfigManagerContract::class),
             $container->get(Encrypter::class)
         );
 
