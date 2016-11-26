@@ -32,6 +32,7 @@
     "require-dev": {
         "cache/array-adapter"                                : "^0.4",
         "cache/session-handler"                              : "^0.2",
+        "container-interop/service-provider"                 : "^0.3",
         "narrowspark/testing-helper"                         : "^2.0",
         "mockery/mockery"                                    : "^0.9",
         "mikey179/vfsStream"                                 : "^1.6",

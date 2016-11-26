@@ -39,9 +39,9 @@ class VerifyCsrfTokenMiddleware implements ServerMiddlewareInterface
         $config = $manager->getConfig();
 
         $this->tokenService = new TokenService(
-            $config->get('session::key'),
-            $config->get('session::csrf.livetime', Chronos::now()->getTimestamp() + 60 * 120),
-            $config->get('session::csrf.algo', 'SHA512')
+            $config->get('session.key'),
+            $config->get('session.csrf.livetime', Chronos::now()->getTimestamp() + 60 * 120),
+            $config->get('session.csrf.algo', 'SHA512')
         );
     }
 
@@ -54,9 +54,7 @@ class VerifyCsrfTokenMiddleware implements ServerMiddlewareInterface
 
         $response = $delegate->process($request);
 
-        if ($this->isReading($request) ||
-            $this->tokensMatch($request)
-        ) {
+        if ($this->isReading($request) || $this->tokensMatch($request)) {
             $response = $this->addCookieToResponse($response);
         }
 
@@ -72,9 +70,7 @@ class VerifyCsrfTokenMiddleware implements ServerMiddlewareInterface
      */
     public function generateNewToken(ServerRequestInterface $request): ServerRequestInterface
     {
-        $request = $request->withAttribute('X-XSRF-TOKEN', $this->tokenService->generate());
-
-        return $request;
+        return $request->withAttribute('X-XSRF-TOKEN', $this->tokenService->generate());
     }
 
     /**
@@ -86,7 +82,7 @@ class VerifyCsrfTokenMiddleware implements ServerMiddlewareInterface
      */
     protected function tokensMatch(ServerRequestInterface $request): bool
     {
-        foreach ($request->getHeader('X-XSRF-TOKEN') as $token) {
+        foreach ($request->getAttributes('X-XSRF-TOKEN') as $token) {
             return $this->tokenService->validate($token);
         }
     }
@@ -105,12 +101,12 @@ class VerifyCsrfTokenMiddleware implements ServerMiddlewareInterface
         $setCookie = new Cookie(
             'XSRF-TOKEN',
             $this->tokenService->generate(),
-            $config->get('session::csrf.livetime', Chronos::now()->getTimestamp() + 60 * 120),
-            $config->get('path'),
-            $config->get('domain'),
-            $config->get('secure', false),
+            $config->get('session.csrf.livetime', Chronos::now()->getTimestamp() + 60 * 120),
+            $config->get('session.path'),
+            $config->get('session.domain'),
+            $config->get('session.secure', false),
             false,
-            $config->get('session::csrf.samesite', false)
+            $config->get('session.csrf.samesite', false)
         );
 
         return $response->withAddedHeader('Set-Cookie', (string) $setCookie);

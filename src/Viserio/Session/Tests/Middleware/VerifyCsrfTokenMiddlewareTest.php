@@ -14,10 +14,11 @@ use Viserio\Encryption\Encrypter;
 use Viserio\Filesystem\Filesystem;
 use Viserio\HttpFactory\ResponseFactory;
 use Viserio\HttpFactory\ServerRequestFactory;
-use Viserio\Session\Middleware\SessionMiddleware;
+use Viserio\Session\Middleware\VerifyCsrfTokenMiddleware;
 use Viserio\Session\SessionManager;
+use Cake\Chronos\Chronos;
 
-class SessionMiddlewareTest extends \PHPUnit_Framework_TestCase
+class VerifyCsrfTokenMiddlewareTest extends \PHPUnit_Framework_TestCase
 {
     use MockeryTrait;
 
@@ -48,7 +49,7 @@ class SessionMiddlewareTest extends \PHPUnit_Framework_TestCase
         parent::tearDown();
     }
 
-    public function testAddSessionToResponse()
+    public function testSessionCsrfMiddleware()
     {
         $key = Key::createNewRandomKey();
 
@@ -57,50 +58,32 @@ class SessionMiddlewareTest extends \PHPUnit_Framework_TestCase
         $config->shouldReceive('get')
             ->with('session.drivers', []);
         $config->shouldReceive('get')
-            ->with('session.driver', 'local')
+            ->with('session.key')
             ->once()
-            ->andReturn('local');
+            ->andReturn($key->saveToAsciiSafeString());
         $config->shouldReceive('get')
-            ->with('session.driver', null)
-            ->twice()
-            ->andReturn('local');
+            ->with('session.csrf.livetime', $time = Chronos::now()->getTimestamp() + 60 * 120)
+            ->times(3)
+            ->andReturn($time);
         $config->shouldReceive('get')
-            ->with('session.lifetime')
-            ->andReturn(5);
-        $config->shouldReceive('get')
-            ->with('session.cookie', '')
+            ->with('session.csrf.algo', 'SHA512')
             ->once()
-            ->andReturn('test');
+            ->andReturn('SHA512');
         $config->shouldReceive('get')
             ->with('session.path')
             ->twice()
             ->andReturn($this->root->url());
         $config->shouldReceive('get')
-            ->with('session.expire_on_close', false)
-            ->once()
-            ->andReturn(false);
-        $config->shouldReceive('get')
-            ->with('session.key')
-            ->once()
-            ->andReturn($key->saveToAsciiSafeString());
-        $config->shouldReceive('get')
-            ->with('session.lottery')
-            ->once()
-            ->andReturn([2, 100]);
-        $config->shouldReceive('get')
-            ->with('session.lifetime', 1440)
-            ->andReturn(1440);
-        $config->shouldReceive('get')
             ->with('session.domain')
-            ->once()
+            ->twice()
             ->andReturn('/');
         $config->shouldReceive('get')
             ->with('session.secure', false)
-            ->once()
+            ->twice()
             ->andReturn(false);
         $config->shouldReceive('get')
-            ->with('session.http_only', false)
-            ->once()
+            ->with('session.csrf.samesite', false)
+            ->twice()
             ->andReturn(false);
 
         $manager = new SessionManager($config, $encrypter);
@@ -108,7 +91,7 @@ class SessionMiddlewareTest extends \PHPUnit_Framework_TestCase
             FilesystemContract::class => $this->files,
         ]));
 
-        $middleware = new SessionMiddleware($manager);
+        $middleware = new VerifyCsrfTokenMiddleware($manager);
         $request = (new ServerRequestFactory())->createServerRequest($_SERVER);
 
         $response = $middleware->process($request, new DelegateMiddleware(function ($request) {
@@ -116,53 +99,13 @@ class SessionMiddlewareTest extends \PHPUnit_Framework_TestCase
         }));
 
         $this->assertTrue(isset($response->getHeaders()['Set-Cookie']));
-    }
 
-    public function testAddSessionToCookie()
-    {
-        $key = Key::createNewRandomKey();
-
-        $encrypter = new Encrypter($key);
-        $config = $this->mock(ConfigManagerContract::class);
-        $config->shouldReceive('get')
-            ->with('session.drivers', []);
-        $config->shouldReceive('get')
-            ->with('session.driver', 'local')
-            ->once()
-            ->andReturn('cookie');
-        $config->shouldReceive('get')
-            ->with('session.driver', null)
-            ->twice()
-            ->andReturn('cookie');
-        $config->shouldReceive('get')
-            ->with('session.lifetime')
-            ->andReturn(5);
-        $config->shouldReceive('get')
-            ->with('session.cookie', '')
-            ->once()
-            ->andReturn('test');
-        $config->shouldReceive('get')
-            ->with('session.key')
-            ->once()
-            ->andReturn($key->saveToAsciiSafeString());
-        $config->shouldReceive('get')
-            ->with('session.lottery')
-            ->once()
-            ->andReturn([2, 100]);
-        $jar = $this->mock(JarContract::class);
-        $jar->shouldReceive('queue')
-            ->once()
-            ->andReturn(true);
-
-        $manager = new SessionManager($config, $encrypter);
-        $manager->setContainer(new ArrayContainer([
-            JarContract::class => $jar,
-        ]));
-
-        $middleware = new SessionMiddleware($manager);
         $request = (new ServerRequestFactory())->createServerRequest($_SERVER);
+        $request = $request->withMethod('PUT');
 
         $response = $middleware->process($request, new DelegateMiddleware(function ($request) {
+            $this->assertTrue(isset($request->getAttributes()['X-XSRF-TOKEN']));
+
             return (new ResponseFactory())->createResponse(200);
         }));
     }
