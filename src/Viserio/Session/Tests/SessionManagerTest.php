@@ -45,7 +45,6 @@ class SessionManagerTest extends \PHPUnit_Framework_TestCase
         $this->manager = null;
     }
 
-
     public function testCookieStore()
     {
         $manager = $this->manager;
