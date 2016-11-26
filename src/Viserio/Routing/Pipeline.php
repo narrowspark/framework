@@ -39,7 +39,7 @@ class Pipeline extends BasePipeline
      *
      * @param callable $middleware
      *
-     * @return object
+     * @return anonymous//src/Viserio/Routing/Pipeline.php@return object
      */
     private function getDelegateMiddleware(callable $middleware)
     {
