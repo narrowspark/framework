@@ -82,7 +82,7 @@ class VerifyCsrfTokenMiddleware implements ServerMiddlewareInterface
      */
     protected function tokensMatch(ServerRequestInterface $request): bool
     {
-        foreach ($request->getAttributes('X-XSRF-TOKEN') as $token) {
+        foreach ($request->getAttribute('X-XSRF-TOKEN') as $token) {
             return $this->tokenService->validate($token);
         }
 

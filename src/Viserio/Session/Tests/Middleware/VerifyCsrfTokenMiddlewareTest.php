@@ -103,7 +103,7 @@ class VerifyCsrfTokenMiddlewareTest extends \PHPUnit_Framework_TestCase
         $request = $request->withMethod('PUT');
 
         $response = $middleware->process($request, new DelegateMiddleware(function ($request) {
-            $this->assertTrue(isset($request->getAttributes()['X-XSRF-TOKEN']));
+            $this->assertTrue($request->getAttribute('X-XSRF-TOKEN') !== null);
 
             return (new ResponseFactory())->createResponse(200);
         }));
