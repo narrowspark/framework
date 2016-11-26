@@ -31,9 +31,29 @@ class RequestCookieTest extends \PHPUnit_Framework_TestCase
 
         $cookie = new RequestCookie();
         $setCookie = $cookie->fromSetCookieHeader($request);
-        // $setCookie = $setCookie->withExpires($setCookie->getExpiresTime() - 1);
 
         $this->assertEquals($expectedCookie, $setCookie);
+    }
+
+    /**
+     * @dataProvider provideParsesFromCookieStringWithoutExpireData
+     */
+    public function testFromSetCookieHeaderWithoutExpire($cookieString, Cookie $expectedCookie)
+    {
+        $request = $this->mock(Request::class);
+        $request->shouldReceive('getHeader')->with('Set-Cookie')->andReturn($cookieString);
+
+        $cookie = new RequestCookie();
+        $setCookie = $cookie->fromSetCookieHeader($request);
+
+        $this->assertEquals($expectedCookie->getName(), $setCookie->getName());
+        $this->assertEquals($expectedCookie->getValue(), $setCookie->getValue());
+        $this->assertEquals($expectedCookie->getDomain(), $setCookie->getDomain());
+        $this->assertEquals($expectedCookie->getMaxAge(), $setCookie->getMaxAge());
+        $this->assertEquals($expectedCookie->getPath(), $setCookie->getPath());
+        $this->assertEquals($expectedCookie->isSecure(), $setCookie->isSecure());
+        $this->assertEquals($expectedCookie->isHttpOnly(), $setCookie->isHttpOnly());
+        $this->assertEquals($expectedCookie->getSameSite(), $setCookie->getSameSite());
     }
 
     /**
@@ -50,22 +70,30 @@ class RequestCookieTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedCookie, $setCookie);
     }
 
+    /**
+     * @dataProvider provideParsesFromCookieStringWithoutExpireData
+     */
+    public function testFromCookieHeaderWithoutExpire($cookieString, Cookie $expectedCookie)
+    {
+        $request = $this->mock(Request::class);
+        $request->shouldReceive('getHeaderLine')->with('Cookie')->andReturn($cookieString);
+
+        $cookie = new RequestCookie();
+        $setCookie = $cookie->fromCookieHeader($request);
+
+        $this->assertEquals($expectedCookie->getName(), $setCookie->getName());
+        $this->assertEquals($expectedCookie->getValue(), $setCookie->getValue());
+        $this->assertEquals($expectedCookie->getDomain(), $setCookie->getDomain());
+        $this->assertEquals($expectedCookie->getMaxAge(), $setCookie->getMaxAge());
+        $this->assertEquals($expectedCookie->getPath(), $setCookie->getPath());
+        $this->assertEquals($expectedCookie->isSecure(), $setCookie->isSecure());
+        $this->assertEquals($expectedCookie->isHttpOnly(), $setCookie->isHttpOnly());
+        $this->assertEquals($expectedCookie->getSameSite(), $setCookie->getSameSite());
+    }
+
     public function provideParsesFromCookieStringData()
     {
         return [
-            [
-                'some;',
-                (new Cookie('some')),
-            ],
-            [
-                'someCookie=',
-                new Cookie('someCookie'),
-            ],
-            [
-                'someCookie=someValue',
-                (new Cookie('someCookie'))
-                    ->withValue('someValue'),
-            ],
             [
                 'LSID=DQAAAK%2FEaem_vYg; Expires=Wed, 13 Jan 2021 22:23:01 GMT; Path=/accounts; Secure; HttpOnly',
                 (new Cookie('LSID'))
@@ -91,36 +119,6 @@ class RequestCookieTest extends \PHPUnit_Framework_TestCase
                     ->withDomain('foo.com')
                     ->withPath('/')
                     ->withExpires(new DateTime('Wed, 13 Jan 2021 22:23:01 GMT'))
-                    ->withSecure(true)
-                    ->withHttpOnly(true),
-            ],
-            [
-                'lu=Rg3vHJZnehYLjVg7qi3bZjzg; Domain=.example.com; Path=/; Expires=Tue, 15 Jan 2013 21:47:38 GMT; HttpOnly',
-                (new Cookie('lu'))
-                    ->withValue('Rg3vHJZnehYLjVg7qi3bZjzg')
-                    ->withExpires(new DateTime('Tue, 15-Jan-2013 21:47:38 GMT'))
-                    ->withPath('/')
-                    ->withDomain('.example.com')
-                    ->withHttpOnly(true),
-            ],
-            [
-                'lu=Rg3vHJZnehYLjVg7qi3bZjzg; Domain=.example.com; Path=/; Max-Age=500; Secure; HttpOnly',
-                (new Cookie('lu'))
-                    ->withValue('Rg3vHJZnehYLjVg7qi3bZjzg')
-                    ->withMaxAge(500)
-                    ->withPath('/')
-                    ->withDomain('.example.com')
-                    ->withSecure(true)
-                    ->withHttpOnly(true),
-            ],
-            [
-                'lu=Rg3vHJZnehYLjVg7qi3bZjzg; Domain=.example.com; Path=/; Expires=Tue, 15 Jan 2013 21:47:38 GMT; Max-Age=500; Secure; HttpOnly',
-                (new Cookie('lu'))
-                    ->withValue('Rg3vHJZnehYLjVg7qi3bZjzg')
-                    ->withExpires(new DateTime('Tue, 15-Jan-2013 21:47:38 GMT'))
-                    ->withMaxAge(500)
-                    ->withPath('/')
-                    ->withDomain('.example.com')
                     ->withSecure(true)
                     ->withHttpOnly(true),
             ],
@@ -157,6 +155,56 @@ class RequestCookieTest extends \PHPUnit_Framework_TestCase
                     ->withSecure(true)
                     ->withHttpOnly(true)
                     ->withSameSite('strict'),
+            ],
+        ];
+    }
+
+    public function provideParsesFromCookieStringWithoutExpireData()
+    {
+        return [
+            [
+                'some;',
+                (new Cookie('some')),
+            ],
+            [
+                'someCookie=',
+                new Cookie('someCookie'),
+            ],
+            [
+                'someCookie=someValue',
+                (new Cookie('someCookie'))
+                    ->withValue('someValue'),
+            ],
+            [
+                'lu=Rg3vHJZnehYLjVg7qi3bZjzg; Domain=.example.com; Path=/; Max-Age=500; Secure; HttpOnly',
+                (new Cookie('lu'))
+                    ->withValue('Rg3vHJZnehYLjVg7qi3bZjzg')
+                    ->withMaxAge(500)
+                    ->withPath('/')
+                    ->withDomain('.example.com')
+                    ->withSecure(true)
+                    ->withHttpOnly(true),
+            ],
+            [
+                'lu=Rg3vHJZnehYLjVg7qi3bZjzg; Domain=.example.com; Path=/; Max-Age=500; Secure; HttpOnly',
+                (new Cookie('lu'))
+                    ->withValue('Rg3vHJZnehYLjVg7qi3bZjzg')
+                    ->withMaxAge(500)
+                    ->withPath('/')
+                    ->withDomain('.example.com')
+                    ->withSecure(true)
+                    ->withHttpOnly(true),
+            ],
+            [
+                'lu=Rg3vHJZnehYLjVg7qi3bZjzg; Domain=.example.com; Path=/; Expires=Tue, 15 Jan 2013 21:47:38 GMT; Max-Age=500; Secure; HttpOnly',
+                (new Cookie('lu'))
+                    ->withValue('Rg3vHJZnehYLjVg7qi3bZjzg')
+                    ->withExpires(new DateTime('Tue, 15-Jan-2013 21:47:38 GMT'))
+                    ->withMaxAge(500)
+                    ->withPath('/')
+                    ->withDomain('.example.com')
+                    ->withSecure(true)
+                    ->withHttpOnly(true),
             ],
         ];
     }
