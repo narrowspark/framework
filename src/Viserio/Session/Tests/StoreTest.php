@@ -215,7 +215,7 @@ class StoreTest extends \PHPUnit_Framework_TestCase
 
         $oldFingerprint = $session->getFingerprint();
 
-        $session->addFingerprintGenerator(new UserAgentGenerator(Key::createNewRandomKey(), 'test'));
+        $session->addFingerprintGenerator(new UserAgentGenerator('test'));
 
         $session->start();
 
@@ -362,28 +362,28 @@ class StoreTest extends \PHPUnit_Framework_TestCase
         $session = $this->session;
         $session->flash('foo', 'bar');
         $session->set('fu', 'baz');
-        $session->set('flash.old', ['qu']);
+        $session->set('_flash.old', ['qu']);
 
-        $this->assertNotFalse(array_search('foo', $session->get('flash.new')));
-        $this->assertFalse(array_search('fu', $session->get('flash.new')));
+        $this->assertNotFalse(array_search('foo', $session->get('_flash.new')));
+        $this->assertFalse(array_search('fu', $session->get('_flash.new')));
 
         $session->keep(['fu', 'qu']);
 
-        $this->assertNotFalse(array_search('foo', $session->get('flash.new')));
-        $this->assertNotFalse(array_search('fu', $session->get('flash.new')));
-        $this->assertNotFalse(array_search('qu', $session->get('flash.new')));
-        $this->assertFalse(array_search('qu', $session->get('flash.old')));
+        $this->assertNotFalse(array_search('foo', $session->get('_flash.new')));
+        $this->assertNotFalse(array_search('fu', $session->get('_flash.new')));
+        $this->assertNotFalse(array_search('qu', $session->get('_flash.new')));
+        $this->assertFalse(array_search('qu', $session->get('_flash.old')));
     }
 
     public function testReflash()
     {
         $session = $this->session;
         $session->flash('foo', 'bar');
-        $session->set('flash.old', ['foo']);
+        $session->set('_flash.old', ['foo']);
         $session->reflash();
 
-        $this->assertNotFalse(array_search('foo', $session->get('flash.new')));
-        $this->assertFalse(array_search('foo', $session->get('flash.old')));
+        $this->assertNotFalse(array_search('foo', $session->get('_flash.new')));
+        $this->assertFalse(array_search('foo', $session->get('_flash.old')));
     }
 
     public function testReflashWithNow()
@@ -392,8 +392,8 @@ class StoreTest extends \PHPUnit_Framework_TestCase
         $session->now('foo', 'bar');
         $session->reflash();
 
-        $this->assertNotFalse(array_search('foo', $session->get('flash.new')));
-        $this->assertFalse(array_search('foo', $session->get('flash.old')));
+        $this->assertNotFalse(array_search('foo', $session->get('_flash.new')));
+        $this->assertFalse(array_search('foo', $session->get('_flash.old')));
     }
 
     private function encryptedSession()

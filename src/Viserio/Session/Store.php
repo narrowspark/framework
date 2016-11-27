@@ -142,9 +142,11 @@ class Store implements StoreContract
 
         $this->fingerprint = $this->generateFingerprint();
 
-        $this->started = true;
+        if (! $this->has('_token')) {
+            $this->regenerateToken();
+        }
 
-        return $this->started;
+        return $this->started = true;
     }
 
     /**
@@ -370,13 +372,13 @@ class Store implements StoreContract
      */
     public function ageFlashData()
     {
-        foreach ($this->get('flash.old', []) as $old) {
+        foreach ($this->get('_flash.old', []) as $old) {
             $this->remove($old);
         }
 
-        $this->set('flash.old', $this->get('flash.new', []));
+        $this->set('_flash.old', $this->get('_flash.new', []));
 
-        $this->set('flash.new', []);
+        $this->set('_flash.new', []);
     }
 
     /**
@@ -386,7 +388,7 @@ class Store implements StoreContract
     {
         $this->set($key, $value);
 
-        $this->push('flash.new', $key);
+        $this->push('_flash.new', $key);
 
         $this->removeFromOldFlashData([$key]);
     }
@@ -398,7 +400,7 @@ class Store implements StoreContract
     {
         $this->set($key, $value);
 
-        $this->push('flash.old', $key);
+        $this->push('_flash.old', $key);
     }
 
     /**
@@ -406,9 +408,9 @@ class Store implements StoreContract
      */
     public function reflash()
     {
-        $this->mergeNewFlashes($this->get('flash.old', []));
+        $this->mergeNewFlashes($this->get('_flash.old', []));
 
-        $this->set('flash.old', []);
+        $this->set('_flash.old', []);
     }
 
     /**
@@ -484,6 +486,46 @@ class Store implements StoreContract
     }
 
     /**
+     * Get the CSRF token value.
+     *
+     * @return string
+     */
+    public function getToken(): string
+    {
+        return $this->get('_token');
+    }
+
+    /**
+     * Regenerate the CSRF token value.
+     *
+     * @return void
+     */
+    public function regenerateToken()
+    {
+        $this->set('_token', Str::random(40));
+    }
+
+    /**
+     * Get the previous URL from the session.
+     *
+     * @return string|null
+     */
+    public function getPreviousUrl()
+    {
+        return $this->get('_previous.url');
+    }
+
+    /**
+     * Set the "previous" URL in the session.
+     *
+     * @param string $url
+     */
+    public function setPreviousUrl($url)
+    {
+        $this->set('_previous.url', $url);
+    }
+
+    /**
      * Determine if this is a valid session ID.
      *
      * @param string $id
@@ -520,9 +562,9 @@ class Store implements StoreContract
      */
     private function mergeNewFlashes(array $keys)
     {
-        $values = array_unique(array_merge($this->get('flash.new', []), $keys));
+        $values = array_unique(array_merge($this->get('_flash.new', []), $keys));
 
-        $this->set('flash.new', $values);
+        $this->set('_flash.new', $values);
     }
 
     /**
@@ -532,7 +574,7 @@ class Store implements StoreContract
      */
     private function removeFromOldFlashData(array $keys)
     {
-        $this->set('flash.old', array_diff($this->get('flash.old', []), $keys));
+        $this->set('_flash.old', array_diff($this->get('_flash.old', []), $keys));
     }
 
     /**

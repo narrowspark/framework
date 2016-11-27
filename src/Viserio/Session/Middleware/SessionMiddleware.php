@@ -3,7 +3,6 @@ declare(strict_types=1);
 namespace Viserio\Session\Middleware;
 
 use Cake\Chronos\Chronos;
-use Defuse\Crypto\Key;
 use Interop\Http\Middleware\DelegateInterface;
 use Interop\Http\Middleware\ServerMiddlewareInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -94,10 +93,12 @@ class SessionMiddleware implements ServerMiddlewareInterface
     protected function getSession(ServerRequestInterface $request): StoreContract
     {
         $session = $this->manager->driver();
-        $key = Key::loadFromAsciiSafeString($this->manager->getConfig()->get('session.key'));
+        $cookies = RequestCookies::fromSetCookieHeader($request);
 
-        $session->addFingerprintGenerator(new ClientIpGenerator($key));
-        $session->addFingerprintGenerator(new UserAgentGenerator($key));
+        $session->setId($request->getHeader('Set-Cookie')->get($session->getName()));
+
+        $session->addFingerprintGenerator(new ClientIpGenerator());
+        $session->addFingerprintGenerator(new UserAgentGenerator());
 
         return $session;
     }

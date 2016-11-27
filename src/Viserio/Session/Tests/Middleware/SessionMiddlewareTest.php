@@ -31,8 +31,6 @@ class SessionMiddlewareTest extends \PHPUnit_Framework_TestCase
      */
     private $files;
 
-    private $key;
-
     private $manager;
 
     public function setUp()
@@ -44,9 +42,7 @@ class SessionMiddlewareTest extends \PHPUnit_Framework_TestCase
 
         $this->files->createDirectory(__DIR__ . '/stubs');
 
-        $this->key = Key::createNewRandomKey();
-
-        $encrypter = new Encrypter($this->key);
+        $encrypter = new Encrypter(Key::createNewRandomKey());
         $config = $this->mock(ConfigManagerContract::class);
 
         $jar = $this->mock(JarContract::class);
@@ -65,7 +61,7 @@ class SessionMiddlewareTest extends \PHPUnit_Framework_TestCase
     public function tearDown()
     {
         $this->files->deleteDirectory(__DIR__ . '/stubs');
-        $this->files = $this->key = $this->manager = null;
+        $this->files = $this->manager = null;
 
         parent::tearDown();
     }
@@ -100,10 +96,6 @@ class SessionMiddlewareTest extends \PHPUnit_Framework_TestCase
             ->with('session.expire_on_close', false)
             ->once()
             ->andReturn(false);
-        $config->shouldReceive('get')
-            ->with('session.key')
-            ->once()
-            ->andReturn($this->key->saveToAsciiSafeString());
         $config->shouldReceive('get')
             ->with('session.lottery')
             ->once()
@@ -157,10 +149,6 @@ class SessionMiddlewareTest extends \PHPUnit_Framework_TestCase
             ->once()
             ->andReturn('test');
         $config->shouldReceive('get')
-            ->with('session.key')
-            ->once()
-            ->andReturn($this->key->saveToAsciiSafeString());
-        $config->shouldReceive('get')
             ->with('session.lottery')
             ->once()
             ->andReturn([2, 100]);
@@ -169,6 +157,7 @@ class SessionMiddlewareTest extends \PHPUnit_Framework_TestCase
         $request = (new ServerRequestFactory())->createServerRequest($_SERVER);
 
         $response = $middleware->process($request, new DelegateMiddleware(function ($request) {
+            var_dump($request);
             return (new ResponseFactory())->createResponse(200);
         }));
     }

@@ -2,133 +2,66 @@
 declare(strict_types=1);
 namespace Viserio\Cookie;
 
-use Cake\Chronos\Chronos;
-use DateTime;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Contracts\Cookie\Cookie as CookieContract;
 
-class RequestCookies
+class RequestCookies extends AbstractCookieCollector
 {
     /**
-     * Private constructor; non-instantiable.
-     *
-     * @codeCoverageIgnore
-     */
-    private function __construct()
-    {
-    }
-
-    /**
      * Creates a Cookie instance from a Set-Cookie header value.
      *
      * @param \Psr\Http\Message\ServerRequestInterface $request
      *
-     * @return \Viserio\Contracts\Cookie\Cookie
+     * @return self
      */
-    public static function fromSetCookieHeader(ServerRequestInterface $request): CookieContract
+    public static function fromRequest(ServerRequestInterface $request): RequestCookies
     {
-        return self::fromStringCookie($request->getHeader('Set-Cookie'));
+        return new static(self::listFromCookieString($request->getHeaderLine('Cookie')));
     }
 
     /**
-     * Creates a Cookie instance from a Set-Cookie header value.
+     * Render Cookies into a Request.
      *
      * @param \Psr\Http\Message\ServerRequestInterface $request
      *
-     * @return \Viserio\Contracts\Cookie\Cookie
+     * @return \Psr\Http\Message\ServerRequestInterface
      */
-    public static function fromCookieHeader(ServerRequestInterface $request): CookieContract
+    public function renderIntoCookieHeader(ServerRequestInterface $request): ServerRequestInterface
     {
-        return self::fromStringCookie($request->getHeaderLine('Cookie'));
+        $cookieString = implode('; ', $this->cookies);
+
+        $request = $request->withHeader('Cookie', $cookieString);
+
+        return $request;
     }
 
     /**
-     * Creates a Cookie instance from a Set-Cookie header value.
-     *
-     * @param string $string
-     *
-     * @return \Viserio\Contracts\Cookie\Cookie
-     */
-    protected static function fromStringCookie(string $string): CookieContract
-    {
-        $rawAttributes = self::splitOnAttributeDelimiter($string);
-
-        list($cookieName, $cookieValue) = self::splitCookiePair($rawAttributes[0]);
-
-        $cookie = new Cookie($cookieName);
-
-        if (! is_null($cookieValue)) {
-            $cookie = $cookie->withValue($cookieValue);
-        }
-
-        foreach ($rawAttributes as $value) {
-            $rawAttributePair = explode('=', $value, 2);
-            $attributeKey = $rawAttributePair[0];
-            $attributeValue = count($rawAttributePair) > 1 ? $rawAttributePair[1] : null;
-            $attributeKey = strtolower($attributeKey);
-
-            switch ($attributeKey) {
-                case 'expires':
-                    $cookie = $cookie->withExpires(new Chronos($attributeValue));
-                    break;
-                case 'max-age':
-                    $age = is_numeric($attributeValue) ? (int) $attributeValue : null;
-                    $cookie = $cookie->withMaxAge($age);
-                    break;
-                case 'domain':
-                    $cookie = $cookie->withDomain($attributeValue);
-                    break;
-                case 'path':
-                    $cookie = $cookie->withPath($attributeValue);
-                    break;
-                case 'secure':
-                    $cookie = $cookie->withSecure(true);
-                    break;
-                case 'httponly':
-                    $cookie = $cookie->withHttpOnly(true);
-                    break;
-                case 'samesite':
-                    $cookie = $cookie->withSameSite($attributeValue);
-                    break;
-            }
-        }
-
-        return $cookie;
-    }
-
-    /**
-     * spplit string on attributes delimiter to array.
+     * Create a list of Cookies from a Cookie header value string.
      *
      * @param string $string
      *
      * @return array
      */
-    protected static function splitOnAttributeDelimiter(string $string): array
+    protected static function listFromCookieString(string $string)
     {
-        return array_filter(preg_split('@\s*[;]\s*@', $string));
+        $cookies = self::splitOnAttributeDelimiter($string);
+
+        return array_map(function ($cookiePair) {
+            return self::oneFromCookiePair($cookiePair);
+        }, $cookies);
     }
 
     /**
-     * Split a string to array.
+     * Create one Cookie from a cookie key/value header value string.
      *
      * @param string $string
      *
-     * @return array
+     * @return \Viserio\Contracts\Cookie\Cookie
      */
-    protected static function splitCookiePair(string $string): array
+    protected static function oneFromCookiePair(string $string): CookieContract
     {
-        $pairParts = explode('=', $string, 2);
+        list($name, $value) = self::splitCookiePair($string);
 
-        if (count($pairParts) === 1) {
-            $pairParts[1] = null;
-        }
-
-        return array_map(function ($part) {
-            if ($part === null) {
-                return;
-            }
-
-            return urldecode($part);
-        }, $pairParts);
+        return new Cookie($name, $value);
     }
 }

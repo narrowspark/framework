@@ -23,7 +23,6 @@
         "cakephp/chronos"                                    : "^1.0",
         "narrowspark/arr"                                    : "^1.0",
         "psr/http-message"                                   : "^1.0",
-        "schnittstabil/csrf-tokenservice"                    : "^2.0",
         "viserio/config"                                     : "self.version",
         "viserio/cotracts"                                   : "self.version",
         "viserio/encrypter"                                  : "self.version",
