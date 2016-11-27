@@ -22,7 +22,6 @@ class CookieServiceProviderTest extends \PHPUnit_Framework_TestCase
             'secure' => true,
         ]);
 
-        $this->assertInstanceOf(RequestCookie::class, $container->get(RequestCookie::class));
         $this->assertInstanceOf(CookieJar::class, $container->get(CookieJar::class));
     }
 
@@ -37,7 +36,6 @@ class CookieServiceProviderTest extends \PHPUnit_Framework_TestCase
             'secure' => true,
         ]);
 
-        $this->assertInstanceOf(RequestCookie::class, $container->get(RequestCookie::class));
         $this->assertInstanceOf(CookieJar::class, $container->get(CookieJar::class));
     }
 
@@ -52,7 +50,6 @@ class CookieServiceProviderTest extends \PHPUnit_Framework_TestCase
             'secure' => true,
         ]);
 
-        $this->assertInstanceOf(RequestCookie::class, $container->get(RequestCookie::class));
         $this->assertInstanceOf(CookieJar::class, $container->get(CookieJar::class));
     }
 }

@@ -8,9 +8,9 @@ use Mockery as Mock;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Viserio\Cookie\Cookie;
-use Viserio\Cookie\RequestCookie;
+use Viserio\Cookie\RequestCookies;
 
-class RequestCookieTest extends \PHPUnit_Framework_TestCase
+class RequestCookiesTest extends \PHPUnit_Framework_TestCase
 {
     use MockeryTrait;
 
@@ -29,22 +29,22 @@ class RequestCookieTest extends \PHPUnit_Framework_TestCase
         $request = $this->mock(Request::class);
         $request->shouldReceive('getHeader')->with('Set-Cookie')->andReturn($cookieString);
 
-        $cookie = new RequestCookie();
-        $setCookie = $cookie->fromSetCookieHeader($request);
+        $setCookie = RequestCookies::fromSetCookieHeader($request);
 
         $this->assertEquals($expectedCookie, $setCookie);
     }
 
     /**
      * @dataProvider provideParsesFromCookieStringWithoutExpireData
+     *
+     * Cant test with automatic expires, test are one sec to slow.
      */
     public function testFromSetCookieHeaderWithoutExpire($cookieString, Cookie $expectedCookie)
     {
         $request = $this->mock(Request::class);
         $request->shouldReceive('getHeader')->with('Set-Cookie')->andReturn($cookieString);
 
-        $cookie = new RequestCookie();
-        $setCookie = $cookie->fromSetCookieHeader($request);
+        $setCookie = RequestCookies::fromSetCookieHeader($request);
 
         $this->assertEquals($expectedCookie->getName(), $setCookie->getName());
         $this->assertEquals($expectedCookie->getValue(), $setCookie->getValue());
@@ -64,22 +64,22 @@ class RequestCookieTest extends \PHPUnit_Framework_TestCase
         $request = $this->mock(Request::class);
         $request->shouldReceive('getHeaderLine')->with('Cookie')->andReturn($cookieString);
 
-        $cookie = new RequestCookie();
-        $setCookie = $cookie->fromCookieHeader($request);
+        $setCookie = RequestCookies::fromCookieHeader($request);
 
         $this->assertEquals($expectedCookie, $setCookie);
     }
 
     /**
      * @dataProvider provideParsesFromCookieStringWithoutExpireData
+     *
+     * Cant test with automatic expires, test are one sec to slow.
      */
     public function testFromCookieHeaderWithoutExpire($cookieString, Cookie $expectedCookie)
     {
         $request = $this->mock(Request::class);
         $request->shouldReceive('getHeaderLine')->with('Cookie')->andReturn($cookieString);
 
-        $cookie = new RequestCookie();
-        $setCookie = $cookie->fromCookieHeader($request);
+        $setCookie = RequestCookies::fromCookieHeader($request);
 
         $this->assertEquals($expectedCookie->getName(), $setCookie->getName());
         $this->assertEquals($expectedCookie->getValue(), $setCookie->getValue());

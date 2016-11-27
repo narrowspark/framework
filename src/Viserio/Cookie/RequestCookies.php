@@ -7,18 +7,15 @@ use DateTime;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Contracts\Cookie\Cookie as CookieContract;
 
-class RequestCookie
+class RequestCookies
 {
     /**
-     * Creates a Cookie instance from a Set-Cookie header value.
+     * Private constructor; non-instantiable.
      *
-     * @param \Psr\Http\Message\ServerRequestInterface $request
-     *
-     * @return \Viserio\Contracts\Cookie\Cookie
+     * @codeCoverageIgnore
      */
-    public function fromSetCookieHeader(ServerRequestInterface $request): CookieContract
+    private function __construct()
     {
-        return $this->fromStringCookie($request->getHeader('Set-Cookie'));
     }
 
     /**
@@ -28,9 +25,21 @@ class RequestCookie
      *
      * @return \Viserio\Contracts\Cookie\Cookie
      */
-    public function fromCookieHeader(ServerRequestInterface $request): CookieContract
+    public static function fromSetCookieHeader(ServerRequestInterface $request): CookieContract
     {
-        return $this->fromStringCookie($request->getHeaderLine('Cookie'));
+        return self::fromStringCookie($request->getHeader('Set-Cookie'));
+    }
+
+    /**
+     * Creates a Cookie instance from a Set-Cookie header value.
+     *
+     * @param \Psr\Http\Message\ServerRequestInterface $request
+     *
+     * @return \Viserio\Contracts\Cookie\Cookie
+     */
+    public static function fromCookieHeader(ServerRequestInterface $request): CookieContract
+    {
+        return self::fromStringCookie($request->getHeaderLine('Cookie'));
     }
 
     /**
@@ -40,11 +49,11 @@ class RequestCookie
      *
      * @return \Viserio\Contracts\Cookie\Cookie
      */
-    protected function fromStringCookie(string $string): CookieContract
+    protected static function fromStringCookie(string $string): CookieContract
     {
-        $rawAttributes = $this->splitOnAttributeDelimiter($string);
+        $rawAttributes = self::splitOnAttributeDelimiter($string);
 
-        list($cookieName, $cookieValue) = $this->splitCookiePair($rawAttributes[0]);
+        list($cookieName, $cookieValue) = self::splitCookiePair($rawAttributes[0]);
 
         $cookie = new Cookie($cookieName);
 
@@ -94,7 +103,7 @@ class RequestCookie
      *
      * @return array
      */
-    protected function splitOnAttributeDelimiter(string $string): array
+    protected static function splitOnAttributeDelimiter(string $string): array
     {
         return array_filter(preg_split('@\s*[;]\s*@', $string));
     }
@@ -106,7 +115,7 @@ class RequestCookie
      *
      * @return array
      */
-    protected function splitCookiePair(string $string): array
+    protected static function splitCookiePair(string $string): array
     {
         $pairParts = explode('=', $string, 2);
 
