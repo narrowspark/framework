@@ -158,6 +158,7 @@ class SessionMiddlewareTest extends \PHPUnit_Framework_TestCase
 
         $response = $middleware->process($request, new DelegateMiddleware(function ($request) {
             var_dump($request);
+
             return (new ResponseFactory())->createResponse(200);
         }));
     }

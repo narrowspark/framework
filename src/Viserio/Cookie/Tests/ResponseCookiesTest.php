@@ -139,7 +139,7 @@ class ResponseCookiesTest extends \PHPUnit_Framework_TestCase
         return [
             [
                 [],
-                []
+                [],
             ],
             [
                 [
@@ -164,7 +164,7 @@ class ResponseCookiesTest extends \PHPUnit_Framework_TestCase
             [
                 ['someCookie=someValue'],
                 [
-                    (new Cookie('someCookie'))->withValue('someValue')
+                    (new Cookie('someCookie'))->withValue('someValue'),
                 ],
             ],
             [
@@ -176,7 +176,7 @@ class ResponseCookiesTest extends \PHPUnit_Framework_TestCase
                         ->withPath('/')
                         ->withDomain('.example.com')
                         ->withSecure(true)
-                        ->withHttpOnly(true)
+                        ->withHttpOnly(true),
                 ],
             ],
             [
@@ -206,7 +206,7 @@ class ResponseCookiesTest extends \PHPUnit_Framework_TestCase
             [
                 [
                     'someCookie=someValue',
-                    'HSID=AYQEVn%2F.DKrdst; Expires=Wed, 13 Jan 2021 22:23:01 GMT; Path=/accounts; Domain=foo.com; HttpOnly'
+                    'HSID=AYQEVn%2F.DKrdst; Expires=Wed, 13 Jan 2021 22:23:01 GMT; Path=/accounts; Domain=foo.com; HttpOnly',
                 ],
                 [
                     new Cookie('someCookie', 'someValue'),
@@ -223,7 +223,7 @@ class ResponseCookiesTest extends \PHPUnit_Framework_TestCase
 
     public function testGetsAndUpdatesSetCookieValueOnResponse()
     {
-        $response = (new ResponseFactory)->createResponse();
+        $response = (new ResponseFactory())->createResponse();
         $response = $response->withAddedHeader('Set-Cookie', 'theme=light');
         $response = $response->withAddedHeader('Set-Cookie', 'sessionToken=ENCRYPTED');
         $response = $response->withAddedHeader('Set-Cookie', 'hello=world');

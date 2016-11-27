@@ -47,7 +47,7 @@ class AbstractCookieCollector
     public function get(string $name)
     {
         if (! $this->has($name)) {
-            return null;
+            return;
         }
 
         return $this->cookies[$name];

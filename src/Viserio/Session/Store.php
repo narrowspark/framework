@@ -497,8 +497,6 @@ class Store implements StoreContract
 
     /**
      * Regenerate the CSRF token value.
-     *
-     * @return void
      */
     public function regenerateToken()
     {

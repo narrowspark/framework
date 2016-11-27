@@ -14,8 +14,6 @@ class RequestCookiesTest extends \PHPUnit_Framework_TestCase
 {
     use MockeryTrait;
 
-
-
     /**
      * @dataProvider provideParsesFromCookieStringWithoutExpireData
      *
@@ -96,7 +94,7 @@ class RequestCookiesTest extends \PHPUnit_Framework_TestCase
                 'someCookie=someValue; someCookie3=someValue3',
                 [
                     new Cookie('someCookie', 'someValue'),
-                    new Cookie('someCookie3', 'someValue3')
+                    new Cookie('someCookie3', 'someValue3'),
                 ],
             ],
         ];
