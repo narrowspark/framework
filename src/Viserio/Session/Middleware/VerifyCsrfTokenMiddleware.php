@@ -62,7 +62,7 @@ class VerifyCsrfTokenMiddleware implements ServerMiddlewareInterface
      */
     protected function runningUnitTests(): bool
     {
-        return php_sapi_name() == 'cli' && $this->config->get('app.env') == 'testing';
+        return php_sapi_name() == 'cli' && $this->manager->getConfig()->get('app.env') == 'testing';
     }
 
     /**
