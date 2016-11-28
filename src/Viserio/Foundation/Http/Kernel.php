@@ -2,6 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Foundation\Http;
 
+use Interop\Http\Middleware\DelegateInterface;
+use Interop\Http\Middleware\ServerMiddlewareInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Symfony\Component\Debug\Exception\FatalThrowableError;
@@ -23,8 +25,6 @@ use Viserio\Routing\Pipeline;
 use Viserio\Routing\Router;
 use Viserio\Session\Middleware\SessionMiddleware;
 use Viserio\StaticalProxy\StaticalProxy;
-use Interop\Http\Middleware\ServerMiddlewareInterface;
-use Interop\Http\Middleware\DelegateInterface;
 
 class Kernel implements TerminableContract, KernelContract, ServerMiddlewareInterface
 {
@@ -133,7 +133,6 @@ class Kernel implements TerminableContract, KernelContract, ServerMiddlewareInte
      */
     public function process(ServerRequestInterface $request, DelegateInterface $delegate)
     {
-
     }
 
     /**
