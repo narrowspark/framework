@@ -80,6 +80,9 @@ class VerifyCsrfTokenMiddlewareTest extends \PHPUnit_Framework_TestCase
         $config->shouldReceive('get')
             ->with('session.drivers', []);
         $config->shouldReceive('get')
+            ->with('app.env')
+            ->andReturn('dev');
+        $config->shouldReceive('get')
             ->with('session.driver', null);
         $config->shouldReceive('get')
             ->with('session.path')
