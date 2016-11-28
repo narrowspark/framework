@@ -11,6 +11,8 @@ use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Contracts\Cookie\Cookie as CookieContract;
 use Viserio\Contracts\Encryption\Encrypter as EncrypterContract;
 use Viserio\Cookie\Cookie;
+use Viserio\Cookie\RequestCookies;
+use Viserio\Cookie\ResponseCookies;
 
 class EncryptCookiesMiddleware implements ServerMiddlewareInterface
 {
@@ -29,7 +31,7 @@ class EncryptCookiesMiddleware implements ServerMiddlewareInterface
     protected $except = [];
 
     /**
-     * Create a new CookieGuard instance.
+     * Create a new encrypt Cookies instance.
      *
      * @param \Viserio\Contracts\Encryption\Encrypter $encrypter
      */
@@ -102,21 +104,26 @@ class EncryptCookiesMiddleware implements ServerMiddlewareInterface
      */
     protected function decrypt(RequestInterface $request): RequestInterface
     {
-        foreach ($request->cookies as $key => $cookie) {
+        $cookies = RequestCookies::fromRequest($request);
+
+        foreach ($cookies->getAll() as $key => $cookie) {
             if ($this->isDisabled($key)) {
                 continue;
             }
 
             try {
-                $request->cookies->set($key, $this->decryptCookie($cookie));
+                $cookies->forget($key);
+                $cookie = $cookie->withValue($this->decryptCookie($cookie->getValue()));
+
+                $cookies->add($key, $cookie);
             } catch (EnvironmentIsBrokenException $exception) {
-                $request->cookies->set($key, null);
+                $cookies->add($key, null);
             } catch (WrongKeyOrModifiedCiphertextException $exception) {
-                $request->cookies->set($key, null);
+                $cookies->add($key, null);
             }
         }
 
-        return $request;
+        return $cookies->renderIntoCookieHeader($request);
     }
 
     /**
@@ -162,12 +169,17 @@ class EncryptCookiesMiddleware implements ServerMiddlewareInterface
      */
     protected function encrypt(ResponseInterface $response): ResponseInterface
     {
-        foreach ($response->headers->getCookies() as $cookie) {
+        $cookies = ResponseCookies::fromResponse($response);
+
+        foreach ($cookies->getAll() as $key => $cookie) {
             if ($this->isDisabled($cookie->getName())) {
                 continue;
             }
 
-            $response->headers->setCookie(
+            $cookies->forget($key);
+
+            $cookies->add(
+                $key,
                 $this->duplicate(
                     $cookie,
                     $this->encrypter->encrypt($cookie->getValue())
@@ -175,6 +187,6 @@ class EncryptCookiesMiddleware implements ServerMiddlewareInterface
             );
         }
 
-        return $response;
+        return $cookies->renderIntoSetCookieHeader($response);
     }
 }
