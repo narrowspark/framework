@@ -18,18 +18,18 @@ class StaticMatcherTest extends \PHPUnit_Framework_TestCase
     {
         $matcher = new StaticMatcher('one');
 
-        $this->assertSame('one === \'one\'', $matcher->getConditionExpression('one'));
+        self::assertSame('one === \'one\'', $matcher->getConditionExpression('one'));
     }
 
     public function testGetMatchedParameterExpressions()
     {
         $matcher = new StaticMatcher('two', [1]);
 
-        $this->assertSame([1 => 'two'], $matcher->getMatchedParameterExpressions('two'));
+        self::assertSame([1 => 'two'], $matcher->getMatchedParameterExpressions('two'));
 
         $matcher = new StaticMatcher('three');
 
-        $this->assertSame([], $matcher->getMatchedParameterExpressions('three'));
+        self::assertSame([], $matcher->getMatchedParameterExpressions('three'));
     }
 
     public function testMergeParameterKeys()
@@ -38,6 +38,6 @@ class StaticMatcherTest extends \PHPUnit_Framework_TestCase
         $matcher2 = new StaticMatcher('two', [3]);
         $matcher->mergeParameterKeys($matcher2);
 
-        $this->assertSame([2 => 'two'], $matcher->getMatchedParameterExpressions('two'));
+        self::assertSame([2 => 'two'], $matcher->getMatchedParameterExpressions('two'));
     }
 }

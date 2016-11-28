@@ -26,7 +26,7 @@ class ResponseCookiesTest extends \PHPUnit_Framework_TestCase
         $setCookies = ResponseCookies::fromResponse($response);
 
         foreach ($setCookies->getAll() as $name => $cookie) {
-            $this->assertEquals($expectedCookies[$name], $cookie);
+            self::assertEquals($expectedCookies[$name], $cookie);
         }
     }
 
@@ -43,14 +43,14 @@ class ResponseCookiesTest extends \PHPUnit_Framework_TestCase
         $setCookies = ResponseCookies::fromResponse($response);
 
         foreach ($setCookies->getAll() as $name => $cookie) {
-            $this->assertEquals($expectedCookies[$name]->getName(), $cookie->getName());
-            $this->assertEquals($expectedCookies[$name]->getValue(), $cookie->getValue());
-            $this->assertEquals($expectedCookies[$name]->getDomain(), $cookie->getDomain());
-            $this->assertEquals($expectedCookies[$name]->getMaxAge(), $cookie->getMaxAge());
-            $this->assertEquals($expectedCookies[$name]->getPath(), $cookie->getPath());
-            $this->assertEquals($expectedCookies[$name]->isSecure(), $cookie->isSecure());
-            $this->assertEquals($expectedCookies[$name]->isHttpOnly(), $cookie->isHttpOnly());
-            $this->assertEquals($expectedCookies[$name]->getSameSite(), $cookie->getSameSite());
+            self::assertEquals($expectedCookies[$name]->getName(), $cookie->getName());
+            self::assertEquals($expectedCookies[$name]->getValue(), $cookie->getValue());
+            self::assertEquals($expectedCookies[$name]->getDomain(), $cookie->getDomain());
+            self::assertEquals($expectedCookies[$name]->getMaxAge(), $cookie->getMaxAge());
+            self::assertEquals($expectedCookies[$name]->getPath(), $cookie->getPath());
+            self::assertEquals($expectedCookies[$name]->isSecure(), $cookie->isSecure());
+            self::assertEquals($expectedCookies[$name]->isHttpOnly(), $cookie->isHttpOnly());
+            self::assertEquals($expectedCookies[$name]->getSameSite(), $cookie->getSameSite());
         }
     }
 
@@ -237,13 +237,13 @@ class ResponseCookiesTest extends \PHPUnit_Framework_TestCase
         $setCookies = $setCookies->add($encryptedSessionToken);
         $setCookies = $setCookies->forget('hello');
 
-        $this->assertFalse($setCookies->has('hello'));
-        $this->assertTrue(is_null($setCookies->get('hello')));
+        self::assertFalse($setCookies->has('hello'));
+        self::assertTrue(is_null($setCookies->get('hello')));
 
         $response = $setCookies->renderIntoSetCookieHeader($response);
 
-        $this->assertSame('theme=light', $this->splitOnAttributeDelimiter($response->getHeader('Set-Cookie')[0])[0]);
-        $this->assertSame('sessionToken=RAPELCGRQ', $this->splitOnAttributeDelimiter($response->getHeader('Set-Cookie')[1])[0]);
+        self::assertSame('theme=light', $this->splitOnAttributeDelimiter($response->getHeader('Set-Cookie')[0])[0]);
+        self::assertSame('sessionToken=RAPELCGRQ', $this->splitOnAttributeDelimiter($response->getHeader('Set-Cookie')[1])[0]);
     }
 
     protected function splitOnAttributeDelimiter(string $string): array

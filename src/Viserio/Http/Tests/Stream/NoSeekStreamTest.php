@@ -22,7 +22,7 @@ class NoSeekStreamTest extends \PHPUnit_Framework_TestCase
         $s->expects($this->never())->method('isSeekable');
 
         $wrapped = new NoSeekStream($s);
-        $this->assertFalse($wrapped->isSeekable());
+        self::assertFalse($wrapped->isSeekable());
         $wrapped->seek(2);
     }
 

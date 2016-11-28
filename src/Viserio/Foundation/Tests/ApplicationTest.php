@@ -21,7 +21,7 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
             DetectEnvironment::class,
         ]);
 
-        $this->assertTrue($app->hasBeenBootstrapped());
+        self::assertTrue($app->hasBeenBootstrapped());
     }
 
     public function testSetLocaleSetsLocaleAndFiresLocaleChangedEvent()
@@ -55,8 +55,8 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
 
         $app->setLocale('foo');
 
-        $this->assertSame('foo', $app->getLocale());
-        $this->assertFalse($app->isLocale('de'));
+        self::assertSame('foo', $app->getLocale());
+        self::assertFalse($app->isLocale('de'));
     }
 
     protected function getApplication()

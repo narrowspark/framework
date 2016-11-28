@@ -44,8 +44,8 @@ class XMLTest extends \PHPUnit_Framework_TestCase
 
         $parsed = $this->parser->parse($this->file->read($file->url()));
 
-        $this->assertTrue(is_array($parsed));
-        $this->assertSame(['to' => 'Tove', 'from' => 'Jani', 'heading' => 'Reminder'], $parsed);
+        self::assertTrue(is_array($parsed));
+        self::assertSame(['to' => 'Tove', 'from' => 'Jani', 'heading' => 'Reminder'], $parsed);
     }
 
     /**
@@ -76,7 +76,7 @@ class XMLTest extends \PHPUnit_Framework_TestCase
 
         $dump = vfsStream::newFile('dump.xml')->withContent($this->parser->dump($array))->at($this->root);
 
-        $this->assertEquals(str_replace("\r\n", '', $this->file->read($file->url())), str_replace("\r\n", '', $this->file->read($dump->url())));
+        self::assertEquals(str_replace("\r\n", '', $this->file->read($file->url())), str_replace("\r\n", '', $this->file->read($dump->url())));
     }
 
     public function testDumpToThrowException()

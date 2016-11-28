@@ -49,7 +49,7 @@ class HeaderSecurityTest extends \PHPUnit_Framework_TestCase
      */
     public function testFiltersValuesPerRfc7230($value, $expected)
     {
-        $this->assertEquals($expected, HeaderSecurity::filter($value));
+        self::assertEquals($expected, HeaderSecurity::filter($value));
     }
 
     public function validateValues()

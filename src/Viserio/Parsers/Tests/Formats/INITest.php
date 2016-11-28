@@ -41,8 +41,8 @@ animal = BIRD'
 
         $parsed = $this->parser->parse($this->file->read($file->url()));
 
-        $this->assertTrue(is_array($parsed));
-        $this->assertSame(['one' => '1', 'five' => '5', 'animal' => 'BIRD'], $parsed);
+        self::assertTrue(is_array($parsed));
+        self::assertSame(['one' => '1', 'five' => '5', 'animal' => 'BIRD'], $parsed);
     }
 
     public function testParseWithSection()
@@ -60,8 +60,8 @@ value=5'
 
         $parsed = $this->parser->parse($this->file->read($file->url()));
 
-        $this->assertTrue(is_array($parsed));
-        $this->assertSame(
+        self::assertTrue(is_array($parsed));
+        self::assertSame(
             ['main' => ['explore' => '1'], 'main.sub' => [], 'main.sub.sub' => ['value' => '5']],
             $parsed
         );
@@ -83,6 +83,6 @@ value=5'
 value=true
 five=5')->at($this->root);
 
-        $this->assertEquals(preg_replace('/^\s+|\n|\r|\s+$/m', '', $this->file->read($file->url())), preg_replace('/^\s+|\n|\r|\s+$/m', '', $dump));
+        self::assertEquals(preg_replace('/^\s+|\n|\r|\s+$/m', '', $this->file->read($file->url())), preg_replace('/^\s+|\n|\r|\s+$/m', '', $dump));
     }
 }

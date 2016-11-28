@@ -16,8 +16,8 @@ class ParameterSegmentTest extends \PHPUnit_Framework_TestCase
         ] as $segment) {
             $parameters = [];
 
-            $this->assertInstanceOf(RegexMatcher::class, $segment->getMatcher($parameters));
-            $this->assertSame([0 => 'param'], $parameters);
+            self::assertInstanceOf(RegexMatcher::class, $segment->getMatcher($parameters));
+            self::assertSame([0 => 'param'], $parameters);
         }
     }
 }

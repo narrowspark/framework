@@ -59,14 +59,14 @@ class SyncQueueTest extends \PHPUnit_Framework_TestCase
         $sync->setEncrypter($encrypter);
         $sync->push($closure);
 
-        $this->assertTrue($_SERVER['__sync.test']);
+        self::assertTrue($_SERVER['__sync.test']);
 
         unset($_SERVER['__sync.test']);
 
         $sync->push('SyncQueueHandler', ['foo' => 'bar']);
 
-        $this->assertInstanceOf(SyncJob::class, $_SERVER['__sync.test'][0]);
-        $this->assertEquals(['foo' => 'bar'], $_SERVER['__sync.test'][1]);
+        self::assertInstanceOf(SyncJob::class, $_SERVER['__sync.test'][0]);
+        self::assertEquals(['foo' => 'bar'], $_SERVER['__sync.test'][1]);
     }
 
     public function testFailedJobGetsHandledWhenAnExceptionIsThrown()
@@ -98,7 +98,7 @@ class SyncQueueTest extends \PHPUnit_Framework_TestCase
         try {
             $sync->push('FailingSyncQueueHandler', ['foo' => 'bar']);
         } catch (Exception $e) {
-            $this->assertTrue($_SERVER['__sync.failed']);
+            self::assertTrue($_SERVER['__sync.failed']);
         }
     }
 }

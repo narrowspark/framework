@@ -32,8 +32,8 @@ class SessionServiceProviderTest extends \PHPUnit_Framework_TestCase
             'cookie' => 'test',
         ]);
 
-        $this->assertInstanceOf(SessionManager::class, $container->get(SessionManager::class));
-        $this->assertInstanceOf(SessionManager::class, $container->get('session'));
-        $this->assertInstanceOf(StoreContract::class, $container->get('session.store'));
+        self::assertInstanceOf(SessionManager::class, $container->get(SessionManager::class));
+        self::assertInstanceOf(SessionManager::class, $container->get('session'));
+        self::assertInstanceOf(StoreContract::class, $container->get('session.store'));
     }
 }

@@ -41,8 +41,8 @@ class ClosureCommandTest extends \PHPUnit_Framework_TestCase
 
         $this->application->add($command);
 
-        $this->assertSame($command, $this->application->get('demo'));
-        $this->assertOutputIs('demo', 'hello' . "\n");
+        self::assertSame($command, $this->application->get('demo'));
+        self::assertOutputIs('demo', 'hello' . "\n");
     }
 
     /**
@@ -55,6 +55,6 @@ class ClosureCommandTest extends \PHPUnit_Framework_TestCase
 
         $this->application->run(new StringInput($command), $output);
 
-        $this->assertEquals($expected, $output->output);
+        self::assertEquals($expected, $output->output);
     }
 }

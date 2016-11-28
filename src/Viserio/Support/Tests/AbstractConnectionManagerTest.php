@@ -40,8 +40,8 @@ class AbstractConnectionManagerTest extends \PHPUnit_Framework_TestCase
 
         $manager = new TestConnectionManager($config);
 
-        $this->assertTrue($manager->connection());
-        $this->assertTrue(is_array($manager->getConnections('class')));
+        self::assertTrue($manager->connection());
+        self::assertTrue(is_array($manager->getConnections('class')));
     }
 
     public function testExtend()
@@ -59,7 +59,7 @@ class AbstractConnectionManagerTest extends \PHPUnit_Framework_TestCase
             return new stdClass();
         });
 
-        $this->assertInstanceOf(stdClass::class, $manager->connection('test'));
+        self::assertInstanceOf(stdClass::class, $manager->connection('test'));
     }
 
     public function testGetConfig()
@@ -68,11 +68,11 @@ class AbstractConnectionManagerTest extends \PHPUnit_Framework_TestCase
 
         $manager = new TestConnectionManager($config);
 
-        $this->assertInstanceOf(ConfigContract::class, $manager->getConfig());
+        self::assertInstanceOf(ConfigContract::class, $manager->getConfig());
 
         $manager->setConfig($config);
 
-        $this->assertInstanceOf(ConfigContract::class, $manager->getConfig());
+        self::assertInstanceOf(ConfigContract::class, $manager->getConfig());
     }
 
     public function testGetConnectionConfig()
@@ -89,7 +89,7 @@ class AbstractConnectionManagerTest extends \PHPUnit_Framework_TestCase
 
         $manager = new TestConnectionManager($config);
 
-        $this->assertTrue(is_array($manager->getConnectionConfig('pdo')));
+        self::assertTrue(is_array($manager->getConnectionConfig('pdo')));
     }
 
     public function testCall()
@@ -106,13 +106,13 @@ class AbstractConnectionManagerTest extends \PHPUnit_Framework_TestCase
 
         $manager = new TestConnectionManager($config);
 
-        $this->assertSame([], $manager->getConnections());
+        self::assertSame([], $manager->getConnections());
 
         $return = $manager->getName();
 
-        $this->assertSame('manager', $return);
-        $this->assertArrayHasKey('foo', $manager->getConnections());
-        $this->assertTrue($manager->hasConnection('foo'));
+        self::assertSame('manager', $return);
+        self::assertArrayHasKey('foo', $manager->getConnections());
+        self::assertTrue($manager->hasConnection('foo'));
     }
 
     public function testDefaultConnection()
@@ -125,7 +125,7 @@ class AbstractConnectionManagerTest extends \PHPUnit_Framework_TestCase
 
         $manager = new TestConnectionManager($config);
 
-        $this->assertSame('example', $manager->getDefaultConnection());
+        self::assertSame('example', $manager->getDefaultConnection());
 
         $config->shouldReceive('set')
             ->once()
@@ -136,7 +136,7 @@ class AbstractConnectionManagerTest extends \PHPUnit_Framework_TestCase
             ->with('connection.default', '')
             ->andReturn('new');
 
-        $this->assertSame('new', $manager->getDefaultConnection());
+        self::assertSame('new', $manager->getDefaultConnection());
     }
 
     public function testExtensionsConnection()
@@ -156,11 +156,11 @@ class AbstractConnectionManagerTest extends \PHPUnit_Framework_TestCase
             return new stdClass();
         });
 
-        $this->assertTrue($manager->hasConnection('stdclass2'));
-        $this->assertInstanceOf(stdClass::class, $manager->connection('stdclass2'));
+        self::assertTrue($manager->hasConnection('stdclass2'));
+        self::assertInstanceOf(stdClass::class, $manager->connection('stdclass2'));
 
         $manager->reconnect('stdclass2');
 
-        $this->assertInstanceOf(stdClass::class, $manager->connection('stdclass2'));
+        self::assertInstanceOf(stdClass::class, $manager->connection('stdclass2'));
     }
 }

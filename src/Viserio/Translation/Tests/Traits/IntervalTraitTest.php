@@ -13,7 +13,7 @@ class IntervalTraitTest extends \PHPUnit_Framework_TestCase
      */
     public function testIntervalTest($expected, $number, $interval)
     {
-        $this->assertEquals($expected, $this->intervalTest($number, $interval));
+        self::assertEquals($expected, $this->intervalTest($number, $interval));
     }
 
     /**

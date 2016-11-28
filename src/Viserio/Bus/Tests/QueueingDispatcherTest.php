@@ -36,7 +36,7 @@ class QueueingDispatcherTest extends \PHPUnit_Framework_TestCase
             return 'Handler@handle';
         });
 
-        $this->assertEquals(
+        self::assertEquals(
             'foo',
             $dispatcher->dispatch($this->mock(ShouldQueueContract::class))
         );

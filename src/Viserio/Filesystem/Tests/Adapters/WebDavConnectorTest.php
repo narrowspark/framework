@@ -17,7 +17,7 @@ class WebDavConnectorTest extends \PHPUnit_Framework_TestCase
             'password' => 'your-password',
         ]);
 
-        $this->assertInstanceOf(WebDAVAdapter::class, $return);
+        self::assertInstanceOf(WebDAVAdapter::class, $return);
     }
 
     public function testConnectWithPrefix()
@@ -31,7 +31,7 @@ class WebDavConnectorTest extends \PHPUnit_Framework_TestCase
             'prefix' => 'your-prefix',
         ]);
 
-        $this->assertInstanceOf(WebDAVAdapter::class, $return);
+        self::assertInstanceOf(WebDAVAdapter::class, $return);
     }
 
     /**

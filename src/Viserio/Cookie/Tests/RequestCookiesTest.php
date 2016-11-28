@@ -27,14 +27,14 @@ class RequestCookiesTest extends \PHPUnit_Framework_TestCase
         $cookies = RequestCookies::fromRequest($request);
 
         foreach ($cookies->getAll() as $name => $cookie) {
-            $this->assertEquals($expectedCookies[$name]->getName(), $cookie->getName());
-            $this->assertEquals($expectedCookies[$name]->getValue(), $cookie->getValue());
-            $this->assertEquals($expectedCookies[$name]->getDomain(), $cookie->getDomain());
-            $this->assertEquals($expectedCookies[$name]->getMaxAge(), $cookie->getMaxAge());
-            $this->assertEquals($expectedCookies[$name]->getPath(), $cookie->getPath());
-            $this->assertEquals($expectedCookies[$name]->isSecure(), $cookie->isSecure());
-            $this->assertEquals($expectedCookies[$name]->isHttpOnly(), $cookie->isHttpOnly());
-            $this->assertEquals($expectedCookies[$name]->getSameSite(), $cookie->getSameSite());
+            self::assertEquals($expectedCookies[$name]->getName(), $cookie->getName());
+            self::assertEquals($expectedCookies[$name]->getValue(), $cookie->getValue());
+            self::assertEquals($expectedCookies[$name]->getDomain(), $cookie->getDomain());
+            self::assertEquals($expectedCookies[$name]->getMaxAge(), $cookie->getMaxAge());
+            self::assertEquals($expectedCookies[$name]->getPath(), $cookie->getPath());
+            self::assertEquals($expectedCookies[$name]->isSecure(), $cookie->isSecure());
+            self::assertEquals($expectedCookies[$name]->isHttpOnly(), $cookie->isHttpOnly());
+            self::assertEquals($expectedCookies[$name]->getSameSite(), $cookie->getSameSite());
         }
     }
 
@@ -48,14 +48,14 @@ class RequestCookiesTest extends \PHPUnit_Framework_TestCase
 
         $cookies = RequestCookies::fromRequest($request);
 
-        $this->assertEquals($expectedCookie->getName(), $cookies->get($cookieName)->getName());
-        $this->assertEquals($expectedCookie->getValue(), $cookies->get($cookieName)->getValue());
-        $this->assertEquals($expectedCookie->getDomain(), $cookies->get($cookieName)->getDomain());
-        $this->assertEquals($expectedCookie->getMaxAge(), $cookies->get($cookieName)->getMaxAge());
-        $this->assertEquals($expectedCookie->getPath(), $cookies->get($cookieName)->getPath());
-        $this->assertEquals($expectedCookie->isSecure(), $cookies->get($cookieName)->isSecure());
-        $this->assertEquals($expectedCookie->isHttpOnly(), $cookies->get($cookieName)->isHttpOnly());
-        $this->assertEquals($expectedCookie->getSameSite(), $cookies->get($cookieName)->getSameSite());
+        self::assertEquals($expectedCookie->getName(), $cookies->get($cookieName)->getName());
+        self::assertEquals($expectedCookie->getValue(), $cookies->get($cookieName)->getValue());
+        self::assertEquals($expectedCookie->getDomain(), $cookies->get($cookieName)->getDomain());
+        self::assertEquals($expectedCookie->getMaxAge(), $cookies->get($cookieName)->getMaxAge());
+        self::assertEquals($expectedCookie->getPath(), $cookies->get($cookieName)->getPath());
+        self::assertEquals($expectedCookie->isSecure(), $cookies->get($cookieName)->isSecure());
+        self::assertEquals($expectedCookie->isHttpOnly(), $cookies->get($cookieName)->isHttpOnly());
+        self::assertEquals($expectedCookie->getSameSite(), $cookies->get($cookieName)->getSameSite());
     }
 
     /**
@@ -69,10 +69,10 @@ class RequestCookiesTest extends \PHPUnit_Framework_TestCase
         $setCookies = RequestCookies::fromRequest($request);
 
         foreach ($expectedSetCookies as $expectedSetCookie) {
-            $this->assertTrue($setCookies->has($expectedSetCookie->getName()));
+            self::assertTrue($setCookies->has($expectedSetCookie->getName()));
         }
 
-        $this->assertFalse($setCookies->has('i know this cookie does not exist'));
+        self::assertFalse($setCookies->has('i know this cookie does not exist'));
     }
 
     public function provideParsesFromCookieStringWithoutExpireData()

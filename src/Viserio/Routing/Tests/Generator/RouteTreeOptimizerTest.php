@@ -324,6 +324,6 @@ class RouteTreeOptimizerTest extends \PHPUnit_Framework_TestCase
      */
     public function testRouteTreeOptimizer(array $original, array $expected)
     {
-        $this->assertEquals($expected, (new RouteTreeOptimizer())->optimize($original));
+        self::assertEquals($expected, (new RouteTreeOptimizer())->optimize($original));
     }
 }

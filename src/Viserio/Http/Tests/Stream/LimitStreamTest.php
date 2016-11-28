@@ -32,15 +32,15 @@ class LimitStreamTest extends \PHPUnit_Framework_TestCase
 
         $body = new LimitStream(new Stream($stream), -1, 1);
 
-        $this->assertEquals('oo', (string) $body);
-        $this->assertTrue($body->eof());
+        self::assertEquals('oo', (string) $body);
+        self::assertTrue($body->eof());
 
         $body->seek(0);
 
-        $this->assertFalse($body->eof());
-        $this->assertEquals('oo', $body->read(100));
-        $this->assertSame('', $body->read(1));
-        $this->assertTrue($body->eof());
+        self::assertFalse($body->eof());
+        self::assertEquals('oo', $body->read(100));
+        self::assertSame('', $body->read(1));
+        self::assertTrue($body->eof());
     }
 
     public function testReturnsSubsetWhenCastToString()
@@ -53,7 +53,7 @@ class LimitStreamTest extends \PHPUnit_Framework_TestCase
 
         $limited = new LimitStream(new Stream($stream), 3, 4);
 
-        $this->assertEquals('baz', (string) $limited);
+        self::assertEquals('baz', (string) $limited);
     }
 
     /**
@@ -75,7 +75,7 @@ class LimitStreamTest extends \PHPUnit_Framework_TestCase
 
         $limited = new LimitStream(new Stream($stream), 0, 10);
 
-        $this->assertEquals('', (string) $limited);
+        self::assertEquals('', (string) $limited);
     }
 
     public function testReturnsSpecificSubsetOBodyWhenCastToString()
@@ -88,23 +88,23 @@ class LimitStreamTest extends \PHPUnit_Framework_TestCase
 
         $limited = new LimitStream(new Stream($stream), 3, 10);
 
-        $this->assertEquals('abc', (string) $limited);
+        self::assertEquals('abc', (string) $limited);
     }
 
     public function testSeeksWhenConstructed()
     {
-        $this->assertEquals(0, $this->body->tell());
-        $this->assertEquals(3, $this->decorated->tell());
+        self::assertEquals(0, $this->body->tell());
+        self::assertEquals(3, $this->decorated->tell());
     }
 
     public function testAllowsBoundedSeek()
     {
         $this->body->seek(100);
-        $this->assertEquals(10, $this->body->tell());
-        $this->assertEquals(13, $this->decorated->tell());
+        self::assertEquals(10, $this->body->tell());
+        self::assertEquals(13, $this->decorated->tell());
         $this->body->seek(0);
-        $this->assertEquals(0, $this->body->tell());
-        $this->assertEquals(3, $this->decorated->tell());
+        self::assertEquals(0, $this->body->tell());
+        self::assertEquals(3, $this->decorated->tell());
 
         try {
             $this->body->seek(-10);
@@ -112,11 +112,11 @@ class LimitStreamTest extends \PHPUnit_Framework_TestCase
         } catch (RuntimeException $e) {
         }
 
-        $this->assertEquals(0, $this->body->tell());
-        $this->assertEquals(3, $this->decorated->tell());
+        self::assertEquals(0, $this->body->tell());
+        self::assertEquals(3, $this->decorated->tell());
         $this->body->seek(5);
-        $this->assertEquals(5, $this->body->tell());
-        $this->assertEquals(8, $this->decorated->tell());
+        self::assertEquals(5, $this->body->tell());
+        self::assertEquals(8, $this->decorated->tell());
 
         // Fail
         try {
@@ -130,14 +130,14 @@ class LimitStreamTest extends \PHPUnit_Framework_TestCase
     {
         $data = $this->body->read(100);
 
-        $this->assertEquals(10, strlen($data));
-        $this->assertSame('', $this->body->read(1000));
+        self::assertEquals(10, strlen($data));
+        self::assertSame('', $this->body->read(1000));
         $this->body->setOffset(10);
 
         $newData = $this->body->read(100);
 
-        $this->assertEquals(10, strlen($newData));
-        $this->assertNotSame($data, $newData);
+        self::assertEquals(10, strlen($newData));
+        self::assertNotSame($data, $newData);
     }
 
     /**
@@ -172,21 +172,21 @@ class LimitStreamTest extends \PHPUnit_Framework_TestCase
         $stream2 = new NoSeekStream($stream1);
         $stream3 = new LimitStream($stream2);
 
-        $this->assertEquals('foo_bar', $stream3->getContents());
+        self::assertEquals('foo_bar', $stream3->getContents());
     }
 
     public function testClaimsConsumedWhenReadLimitIsReached()
     {
-        $this->assertFalse($this->body->eof());
+        self::assertFalse($this->body->eof());
 
         $this->body->read(1000);
 
-        $this->assertTrue($this->body->eof());
+        self::assertTrue($this->body->eof());
     }
 
     public function testContentLengthIsBounded()
     {
-        $this->assertEquals(10, $this->body->getSize());
+        self::assertEquals(10, $this->body->getSize());
     }
 
     public function testGetContentsIsBasedOnSubset()
@@ -199,7 +199,7 @@ class LimitStreamTest extends \PHPUnit_Framework_TestCase
 
         $body = new LimitStream(new Stream($stream), 3, 3);
 
-        $this->assertEquals('baz', $body->getContents());
+        self::assertEquals('baz', $body->getContents());
     }
 
     public function testReturnsNullIfSizeCannotBeDetermined()
@@ -213,7 +213,7 @@ class LimitStreamTest extends \PHPUnit_Framework_TestCase
         ]);
         $stream2 = new LimitStream($stream);
 
-        $this->assertNull($stream2->getSize());
+        self::assertNull($stream2->getSize());
     }
 
     public function testLengthLessOffsetWhenNoLimitSize()
@@ -227,6 +227,6 @@ class LimitStreamTest extends \PHPUnit_Framework_TestCase
         $a = new Stream($stream);
         $b = new LimitStream($a, -1, 4);
 
-        $this->assertEquals(3, $b->getSize());
+        self::assertEquals(3, $b->getSize());
     }
 }

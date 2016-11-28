@@ -22,7 +22,7 @@ class CookieServiceProviderTest extends \PHPUnit_Framework_TestCase
             'secure' => true,
         ]);
 
-        $this->assertInstanceOf(CookieJar::class, $container->get(CookieJar::class));
+        self::assertInstanceOf(CookieJar::class, $container->get(CookieJar::class));
     }
 
     public function testProviderWithoutConfigManager()
@@ -36,7 +36,7 @@ class CookieServiceProviderTest extends \PHPUnit_Framework_TestCase
             'secure' => true,
         ]);
 
-        $this->assertInstanceOf(CookieJar::class, $container->get(CookieJar::class));
+        self::assertInstanceOf(CookieJar::class, $container->get(CookieJar::class));
     }
 
     public function testProviderWithoutConfigManagerAndNamespace()
@@ -50,6 +50,6 @@ class CookieServiceProviderTest extends \PHPUnit_Framework_TestCase
             'secure' => true,
         ]);
 
-        $this->assertInstanceOf(CookieJar::class, $container->get(CookieJar::class));
+        self::assertInstanceOf(CookieJar::class, $container->get(CookieJar::class));
     }
 }

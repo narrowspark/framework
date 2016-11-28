@@ -114,7 +114,7 @@ class VerifyCsrfTokenMiddlewareTest extends \PHPUnit_Framework_TestCase
 
         $response = $dispatcher->dispatch($request);
 
-        $this->assertTrue(is_array($response->getHeader('Set-Cookie')));
+        self::assertTrue(is_array($response->getHeader('Set-Cookie')));
     }
 
     // public function testSessionCsrfMiddlewareReadsXXsrfToken()
@@ -143,7 +143,7 @@ class VerifyCsrfTokenMiddlewareTest extends \PHPUnit_Framework_TestCase
     //     $request = $request->withMethod('PUT');
 
     //     $response = $middleware->process($request, new DelegateMiddleware(function ($request) {
-    //         $this->assertTrue($request->getAttribute('X-XSRF-TOKEN') !== null);
+    //         self::assertTrue($request->getAttribute('X-XSRF-TOKEN') !== null);
 
     //         return (new ResponseFactory())->createResponse(200);
     //     }));

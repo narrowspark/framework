@@ -66,8 +66,8 @@ class SessionManagerTest extends \PHPUnit_Framework_TestCase
 
         $session->setRequestOnHandler($this->mock(ServerRequestInterface::class));
 
-        $this->assertInstanceOf(StoreContract::class, $session);
-        $this->assertTrue($session->handlerNeedsRequest());
+        self::assertInstanceOf(StoreContract::class, $session);
+        self::assertTrue($session->handlerNeedsRequest());
     }
 
     public function testArrayStore()
@@ -89,6 +89,6 @@ class SessionManagerTest extends \PHPUnit_Framework_TestCase
             ->andReturn('test');
         $session = $manager->driver('array');
 
-        $this->assertInstanceOf(StoreContract::class, $session);
+        self::assertInstanceOf(StoreContract::class, $session);
     }
 }

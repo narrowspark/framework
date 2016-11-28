@@ -13,10 +13,10 @@ class MiddlewareAwareTraitTest extends \PHPUnit_Framework_TestCase
     {
         $this->withMiddleware(FooMiddleware::class);
 
-        $this->assertSame([FooMiddleware::class], $this->middlewares);
+        self::assertSame([FooMiddleware::class], $this->middlewares);
 
         $this->withoutMiddleware(FooMiddleware::class);
 
-        $this->assertSame([], $this->middlewares);
+        self::assertSame([], $this->middlewares);
     }
 }

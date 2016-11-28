@@ -15,7 +15,7 @@ class EncrypterAwareTraitTest extends \PHPUnit_Framework_TestCase
     {
         $this->setEncrypter($this->mock(Encrypter::class));
 
-        $this->assertInstanceOf(Encrypter::class, $this->getEncrypter());
+        self::assertInstanceOf(Encrypter::class, $this->getEncrypter());
     }
 
     /**

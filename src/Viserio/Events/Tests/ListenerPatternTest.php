@@ -15,14 +15,14 @@ class ListenerPatternTest extends \PHPUnit_Framework_TestCase
         $pattern = new ListenerPattern($eventPattern, null);
 
         foreach ($expectedMatches as $eventName) {
-            $this->assertTrue(
+            self::assertTrue(
                 $pattern->test($eventName),
                 sprintf('Pattern "%s" should match event "%s"', $eventPattern, $eventName)
             );
         }
 
         foreach ($expectedMisses as $eventName) {
-            $this->assertFalse(
+            self::assertFalse(
                 $pattern->test($eventName),
                 sprintf('Pattern "%s" should not match event "%s"', $eventPattern, $eventName)
             );

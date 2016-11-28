@@ -156,8 +156,8 @@ class RouteTreeBuilderTest extends \PHPUnit_Framework_TestCase
     {
         list($rootRouteData, $segmentDepthNodeMap) = (new RouteTreeBuilder())->build($routes);
 
-        $this->assertSame($rootRoute !== null, $rootRouteData !== null);
-        $this->assertEquals($rootRoute, $rootRouteData);
-        $this->assertEquals($segmentDepthNodesMap, $segmentDepthNodeMap);
+        self::assertSame($rootRoute !== null, $rootRouteData !== null);
+        self::assertEquals($rootRoute, $rootRouteData);
+        self::assertEquals($segmentDepthNodesMap, $segmentDepthNodeMap);
     }
 }

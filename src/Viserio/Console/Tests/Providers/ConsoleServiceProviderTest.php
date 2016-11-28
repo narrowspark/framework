@@ -21,9 +21,9 @@ class ConsoleServiceProviderTest extends \PHPUnit_Framework_TestCase
 
         $console = $container->get(Application::class);
 
-        $this->assertInstanceOf(Application::class, $console);
-        $this->assertSame('1', $console->getVersion());
-        $this->assertSame('Cerebro', $console->getName());
+        self::assertInstanceOf(Application::class, $console);
+        self::assertSame('1', $console->getVersion());
+        self::assertSame('Cerebro', $console->getName());
     }
 
     public function testProviderWithoutConfigManager()
@@ -35,7 +35,7 @@ class ConsoleServiceProviderTest extends \PHPUnit_Framework_TestCase
             'version' => '1',
         ]);
 
-        $this->assertInstanceOf(Application::class, $container->get(Application::class));
+        self::assertInstanceOf(Application::class, $container->get(Application::class));
     }
 
     public function testProviderWithoutConfigManagerAndNamespace()
@@ -47,6 +47,6 @@ class ConsoleServiceProviderTest extends \PHPUnit_Framework_TestCase
             'version' => '1',
         ]);
 
-        $this->assertInstanceOf(Application::class, $container->get(Application::class));
+        self::assertInstanceOf(Application::class, $container->get(Application::class));
     }
 }

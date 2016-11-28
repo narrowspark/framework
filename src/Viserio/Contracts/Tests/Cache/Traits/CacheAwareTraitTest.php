@@ -15,7 +15,7 @@ class CacheAwareTraitTest extends \PHPUnit_Framework_TestCase
     {
         $this->setCacheManager($this->mock(Manager::class));
 
-        $this->assertInstanceOf(Manager::class, $this->getCacheManager());
+        self::assertInstanceOf(Manager::class, $this->getCacheManager());
     }
 
     /**

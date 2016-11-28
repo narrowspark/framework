@@ -33,7 +33,7 @@ class ConfigManagerTest extends \PHPUnit_Framework_TestCase
 
         $config->setArray($values);
 
-        $this->assertSame($values['param'], $config['param']);
+        self::assertSame($values['param'], $config['param']);
     }
 
     public function testGetAndSetLoader()
@@ -41,7 +41,7 @@ class ConfigManagerTest extends \PHPUnit_Framework_TestCase
         $config = new ConfigManager(new Repository());
         $config->setLoader($this->fileloader);
 
-        $this->assertInstanceOf(FileLoader::class, $config->getLoader());
+        self::assertInstanceOf(FileLoader::class, $config->getLoader());
     }
 
     public function testSetArray()
@@ -56,7 +56,7 @@ class ConfigManagerTest extends \PHPUnit_Framework_TestCase
             ],
         ]);
 
-        $this->assertTrue($config->has('123'));
+        self::assertTrue($config->has('123'));
     }
 
     public function testImport()
@@ -76,9 +76,9 @@ class ConfigManagerTest extends \PHPUnit_Framework_TestCase
 
         $config->import($file->url());
 
-        $this->assertTrue($config->has('a'));
-        $this->assertTrue($config->has('b'));
-        $this->assertTrue($config->has('c'));
+        self::assertTrue($config->has('a'));
+        self::assertTrue($config->has('b'));
+        self::assertTrue($config->has('c'));
     }
 
     public function testImportWithGroup()
@@ -98,9 +98,9 @@ class ConfigManagerTest extends \PHPUnit_Framework_TestCase
 
         $config->import($file->url(), 'test');
 
-        $this->assertTrue($config->has('test::a'));
-        $this->assertSame(2, $config->get('test::b'));
-        $this->assertTrue($config->has('test::c'));
+        self::assertTrue($config->has('test::a'));
+        self::assertSame(2, $config->get('test::b'));
+        self::assertTrue($config->has('test::c'));
     }
 
     public function testGet()
@@ -119,9 +119,9 @@ class ConfigManagerTest extends \PHPUnit_Framework_TestCase
             },
         ]);
 
-        $this->assertSame('bar', $config->get('foo'));
-        $this->assertSame('foo', $config->get('novalue', 'foo'));
-        $this->assertSame('func', $config->get('func'));
+        self::assertSame('bar', $config->get('foo'));
+        self::assertSame('foo', $config->get('novalue', 'foo'));
+        self::assertSame('func', $config->get('func'));
     }
 
     public function testSet()
@@ -131,8 +131,8 @@ class ConfigManagerTest extends \PHPUnit_Framework_TestCase
         $config->set('foo', 'bar')
             ->set('bar', 'doo');
 
-        $this->assertTrue($config->has('foo'));
-        $this->assertTrue($config->has('bar'));
+        self::assertTrue($config->has('foo'));
+        self::assertTrue($config->has('bar'));
     }
 
     public function testRemove()
@@ -141,18 +141,18 @@ class ConfigManagerTest extends \PHPUnit_Framework_TestCase
 
         $config->set('foo', 'bar');
 
-        $this->assertTrue($config->has('foo'));
+        self::assertTrue($config->has('foo'));
 
         $config->delete('foo');
 
-        $this->assertFalse($config->has('foo'));
+        self::assertFalse($config->has('foo'));
     }
 
     public function testGetIterator()
     {
         $config = new ConfigManager(new Repository());
 
-        $this->assertInstanceOf('ArrayIterator', $config->getIterator());
+        self::assertInstanceOf('ArrayIterator', $config->getIterator());
     }
 
     public function testCall()
@@ -161,9 +161,9 @@ class ConfigManagerTest extends \PHPUnit_Framework_TestCase
 
         $config->set('foo', 'bar');
 
-        $this->assertSame(1, count($config->getKeys()));
+        self::assertSame(1, count($config->getKeys()));
         $config->setLoader($this->fileloader);
 
-        $this->assertInstanceOf(TaggableParser::class, $config->getParser());
+        self::assertInstanceOf(TaggableParser::class, $config->getParser());
     }
 }

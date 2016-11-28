@@ -18,7 +18,7 @@ class HandlerParserTest extends \PHPUnit_Framework_TestCase
     {
         $handler = new HandlerParser($this->mock(Logger::class));
 
-        $this->assertInstanceOf(Logger::class, $handler->getMonolog());
+        self::assertInstanceOf(Logger::class, $handler->getMonolog());
     }
 
     /**
@@ -28,7 +28,7 @@ class HandlerParserTest extends \PHPUnit_Framework_TestCase
     {
         $handler = new HandlerParser($this->mock(Logger::class));
 
-        $this->assertInstanceOf(
+        self::assertInstanceOf(
             HandlerInterface::class,
             $handler->parseHandler('chromePHP', '')
         );

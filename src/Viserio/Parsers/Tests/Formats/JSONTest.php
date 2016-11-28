@@ -46,8 +46,8 @@ class JSONTest extends \PHPUnit_Framework_TestCase
 
         $parsed = $this->parser->parse($this->file->read($file->url()));
 
-        $this->assertTrue(is_array($parsed));
-        $this->assertSame(['a' => 1, 'b' => 2, 'c' => 3, 'd' => 4, 'e' => 5], $parsed);
+        self::assertTrue(is_array($parsed));
+        self::assertSame(['a' => 1, 'b' => 2, 'c' => 3, 'd' => 4, 'e' => 5], $parsed);
     }
 
     /**
@@ -68,7 +68,7 @@ class JSONTest extends \PHPUnit_Framework_TestCase
 
         $dump = $this->parser->dump($book);
 
-        $this->assertJsonStringEqualsJsonString('{
+        self::assertJsonStringEqualsJsonString('{
     "title": "bar",
     "author": "foo",
     "edition": 6

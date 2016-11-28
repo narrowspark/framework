@@ -68,7 +68,7 @@ class RedisQueueTest extends \PHPUnit_Framework_TestCase
 
         $id = $queue->push('foo', ['data']);
 
-        $this->assertEquals('foo', $id);
+        self::assertEquals('foo', $id);
     }
 
     public function testDelayedPushProperlyPushesJobOntoRedis()
@@ -104,6 +104,6 @@ class RedisQueueTest extends \PHPUnit_Framework_TestCase
 
         $id = $queue->later(1, 'foo', ['data']);
 
-        $this->assertEquals('foo', $id);
+        self::assertEquals('foo', $id);
     }
 }

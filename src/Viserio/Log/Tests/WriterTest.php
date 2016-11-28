@@ -21,7 +21,7 @@ class WriterTest extends \PHPUnit_Framework_TestCase
     {
         $writer = new Writer(new Logger('name'));
 
-        $this->assertInstanceOf(Logger::class, $writer->getMonolog());
+        self::assertInstanceOf(Logger::class, $writer->getMonolog());
     }
 
     public function testCallToMonolog()
@@ -238,18 +238,18 @@ class WriterTest extends \PHPUnit_Framework_TestCase
         $writer->setEventsDispatcher($events);
         $writer->error('foo');
 
-        $this->assertTrue(isset($_SERVER['__log.level']));
-        $this->assertEquals('error', $_SERVER['__log.level']);
+        self::assertTrue(isset($_SERVER['__log.level']));
+        self::assertEquals('error', $_SERVER['__log.level']);
 
         unset($_SERVER['__log.level']);
 
-        $this->assertTrue(isset($_SERVER['__log.message']));
-        $this->assertEquals('foo', $_SERVER['__log.message']);
+        self::assertTrue(isset($_SERVER['__log.message']));
+        self::assertEquals('foo', $_SERVER['__log.message']);
 
         unset($_SERVER['__log.message']);
 
-        $this->assertTrue(isset($_SERVER['__log.context']));
-        $this->assertEquals([], $_SERVER['__log.context']);
+        self::assertTrue(isset($_SERVER['__log.context']));
+        self::assertEquals([], $_SERVER['__log.context']);
 
         unset($_SERVER['__log.context']);
     }

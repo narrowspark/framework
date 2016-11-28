@@ -28,31 +28,31 @@ class RouterTest extends \PHPUnit_Framework_TestCase
     public function testGroupMerging()
     {
         $old = ['prefix' => 'foo/bar/'];
-        $this->assertEquals(
+        self::assertEquals(
             ['prefix' => 'foo/bar/baz', 'suffix' => null, 'namespace' => null, 'where' => []],
             $this->router->mergeGroup(['prefix' => 'baz'], $old)
         );
 
         $old = ['suffix' => '.bar'];
-        $this->assertEquals(
+        self::assertEquals(
             ['prefix' => null, 'suffix' => '.foo.bar', 'namespace' => null, 'where' => []],
             $this->router->mergeGroup(['suffix' => '.foo'], $old)
         );
 
         $old = ['domain' => 'foo'];
-        $this->assertEquals(
+        self::assertEquals(
             ['domain' => 'baz', 'prefix' => null, 'suffix' => null, 'namespace' => null, 'where' => []],
             $this->router->mergeGroup(['domain' => 'baz'], $old)
         );
 
         $old = ['as' => 'foo.'];
-        $this->assertEquals(
+        self::assertEquals(
             ['as' => 'foo.bar', 'prefix' => null, 'suffix' => null, 'namespace' => null, 'where' => []],
             $this->router->mergeGroup(['as' => 'bar'], $old)
         );
 
         $old = ['where' => ['var1' => 'foo', 'var2' => 'bar']];
-        $this->assertEquals(
+        self::assertEquals(
             ['prefix' => null, 'suffix' => null, 'namespace' => null, 'where' => [
                 'var1' => 'foo', 'var2' => 'baz', 'var3' => 'qux',
             ]],
@@ -60,7 +60,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase
         );
 
         $old = [];
-        $this->assertEquals(
+        self::assertEquals(
             ['prefix' => null, 'suffix' => null, 'namespace' => null, 'where' => [
                 'var1' => 'foo', 'var2' => 'bar',
             ]],
@@ -77,7 +77,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase
         $routes = $router->getRoutes()->getRoutes();
         $action = $routes[0]->getAction();
 
-        $this->assertEquals('Namespace\\Controller::action', $action['controller']);
+        self::assertEquals('Namespace\\Controller::action', $action['controller']);
 
         $router = $this->router;
         $router->group(['namespace' => 'Namespace'], function () use ($router) {
@@ -86,7 +86,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase
         $routes = $router->getRoutes()->getRoutes();
         $action = $routes[0]->getAction();
 
-        $this->assertEquals('\Controller::action', $action['controller']);
+        self::assertEquals('\Controller::action', $action['controller']);
 
         $router = $this->router;
         $router->group(['namespace' => 'Namespace'], function () use ($router) {
@@ -97,7 +97,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase
         $routes = $router->getRoutes()->getRoutes();
         $action = $routes[0]->getAction();
 
-        $this->assertEquals('Namespace\\Nested\\Controller::action', $action['controller']);
+        self::assertEquals('Namespace\\Nested\\Controller::action', $action['controller']);
 
         $router = $this->router;
         $router->group(['namespace' => 'Namespace'], function () use ($router) {
@@ -108,7 +108,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase
         $routes = $router->getRoutes()->getRoutes();
         $action = $routes[0]->getAction();
 
-        $this->assertEquals('GlobalScope\\Controller::action', $action['controller']);
+        self::assertEquals('GlobalScope\\Controller::action', $action['controller']);
 
         $router = $this->router;
         $router->group(['prefix' => 'baz'], function () use ($router) {
@@ -119,7 +119,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase
         $routes = $router->getRoutes()->getRoutes();
         $action = $routes[1]->getAction();
 
-        $this->assertEquals('Namespace\\Controller::action', $action['controller']);
+        self::assertEquals('Namespace\\Controller::action', $action['controller']);
     }
 
     public function testRouteGroupingPrefixWithAs()
@@ -138,7 +138,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase
 
         $route = $router->getRoutes()->getByName('Foo::bar');
 
-        $this->assertEquals('/foo/bar', $route->getUri());
+        self::assertEquals('/foo/bar', $route->getUri());
     }
 
     public function testNestedRouteGroupingPrefixWithAs()
@@ -161,7 +161,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase
         });
         $routes = $router->getRoutes();
         $route = $routes->getByName('Foo::Bar::baz');
-        $this->assertEquals('/foo/bar/baz', $route->getUri());
+        self::assertEquals('/foo/bar/baz', $route->getUri());
 
         /*
          * nested with layer skipped
@@ -182,7 +182,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase
         $routes = $router->getRoutes();
         $route = $routes->getByName('Foo::baz');
 
-        $this->assertEquals('/foo/bar/baz', $route->getUri());
+        self::assertEquals('/foo/bar/baz', $route->getUri());
     }
 
     public function testRouteGroupingSuffix()
@@ -204,7 +204,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase
         $routes = $router->getRoutes();
         $routes = $routes->getRoutes();
 
-        $this->assertEquals('.foo', $routes[0]->getSuffix());
+        self::assertEquals('.foo', $routes[0]->getSuffix());
     }
 
     public function testRouteGroupingSuffixWithAs()
@@ -223,7 +223,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase
         $routes = $router->getRoutes();
         $route = $routes->getByName('Foo::bar');
 
-        $this->assertEquals('/bar.foo', $route->getUri());
+        self::assertEquals('/bar.foo', $route->getUri());
     }
 
     public function testNestedRouteGroupingSuffixWithAs()
@@ -247,7 +247,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase
         $routes = $router->getRoutes();
         $route = $routes->getByName('Foo::Bar::baz');
 
-        $this->assertEquals('/baz.bar.foo', $route->getUri());
+        self::assertEquals('/baz.bar.foo', $route->getUri());
 
         /*
          * nested with layer skipped
@@ -268,7 +268,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase
         $routes = $router->getRoutes();
         $route = $routes->getByName('Foo::baz');
 
-        $this->assertEquals('/baz.bar.foo', $route->getUri());
+        self::assertEquals('/baz.bar.foo', $route->getUri());
     }
 
     public function testRouteSuffixing()
@@ -290,7 +290,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase
         $routes = $routes->getRoutes();
         $routes[0]->addSuffix('.baz');
 
-        $this->assertEquals('/foo.bar.baz', $routes[0]->getUri());
+        self::assertEquals('/foo.bar.baz', $routes[0]->getUri());
 
         /*
          * Use empty suffix
@@ -306,7 +306,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase
         $routes = $router->getRoutes()->getRoutes();
         $routes[0]->addSuffix('');
 
-        $this->assertEquals('/foo.bar', $routes[0]->getUri());
+        self::assertEquals('/foo.bar', $routes[0]->getUri());
 
         /*
          * suffix homepage
@@ -322,6 +322,6 @@ class RouterTest extends \PHPUnit_Framework_TestCase
         $routes = $router->getRoutes()->getRoutes();
         $routes[1]->addSuffix('bar');
 
-        $this->assertEquals('/bar', $routes[1]->getUri());
+        self::assertEquals('/bar', $routes[1]->getUri());
     }
 }

@@ -27,6 +27,6 @@ class AddQueuedCookiesToResponseTest extends \PHPUnit_Framework_TestCase
             return (new ResponseFactory())->createResponse(200);
         }));
 
-        $this->assertTrue(is_string($response->getHeader('Cookie')[0]));
+        self::assertTrue(is_string($response->getHeader('Cookie')[0]));
     }
 }

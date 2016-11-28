@@ -46,9 +46,9 @@ return [
             'lang_path' => $this->file->url(),
         ]);
 
-        $this->assertInstanceOf(TranslationManager::class, $container->get(TranslationManager::class));
-        $this->assertInstanceOf(TranslatorContract::class, $container->get('translator'));
-        $this->assertInstanceOf(TranslatorContract::class, $container->get(TranslatorContract::class));
+        self::assertInstanceOf(TranslationManager::class, $container->get(TranslationManager::class));
+        self::assertInstanceOf(TranslatorContract::class, $container->get('translator'));
+        self::assertInstanceOf(TranslatorContract::class, $container->get(TranslatorContract::class));
     }
 
     public function testProviderWithoutConfigManager()
@@ -62,7 +62,7 @@ return [
             'lang_path' => $this->file->url(),
         ]);
 
-        $this->assertInstanceOf(TranslationManager::class, $container->get(TranslationManager::class));
+        self::assertInstanceOf(TranslationManager::class, $container->get(TranslationManager::class));
     }
 
     public function testProviderWithoutConfigManagerAndNamespace()
@@ -76,6 +76,6 @@ return [
             'lang_path' => $this->file->url(),
         ]);
 
-        $this->assertInstanceOf(TranslationManager::class, $container->get(TranslationManager::class));
+        self::assertInstanceOf(TranslationManager::class, $container->get(TranslationManager::class));
     }
 }

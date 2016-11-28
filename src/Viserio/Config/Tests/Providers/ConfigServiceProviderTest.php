@@ -19,12 +19,12 @@ class ConfigServiceProviderTest extends \PHPUnit_Framework_TestCase
         $config->set('foo', 'bar');
         $alias = $container->get('config');
 
-        $this->assertInstanceOf(Repository::class, $container->get(Repository::class));
-        $this->assertInstanceOf(ConfigManager::class, $config);
-        $this->assertInstanceOf(ConfigManager::class, $container->get(ManagerContract::class));
-        $this->assertEquals($config, $alias);
-        $this->assertTrue($config->has('foo'));
-        $this->assertTrue($alias->has('foo'));
-        $this->assertSame('bar', $config->get('foo'));
+        self::assertInstanceOf(Repository::class, $container->get(Repository::class));
+        self::assertInstanceOf(ConfigManager::class, $config);
+        self::assertInstanceOf(ConfigManager::class, $container->get(ManagerContract::class));
+        self::assertEquals($config, $alias);
+        self::assertTrue($config->has('foo'));
+        self::assertTrue($alias->has('foo'));
+        self::assertSame('bar', $config->get('foo'));
     }
 }

@@ -41,23 +41,23 @@ class CommandTest extends \PHPUnit_Framework_TestCase
     public function testGetNormalVerbosity()
     {
         $command = new ViserioSecCommand();
-        $this->assertSame(32, $command->getVerbosity());
+        self::assertSame(32, $command->getVerbosity());
     }
 
     public function testGetVerbosityLevelFromCommand()
     {
         $command = new ViserioSecCommand();
-        $this->assertSame(128, $command->getVerbosity(128));
+        self::assertSame(128, $command->getVerbosity(128));
 
         $command = new ViserioSecCommand();
-        $this->assertSame(128, $command->getVerbosity('vv'));
+        self::assertSame(128, $command->getVerbosity('vv'));
     }
 
     public function testSetVerbosityLevelToCommand()
     {
         $command = new ViserioSecCommand();
         $command->setVerbosity(256);
-        $this->assertSame(256, $command->getVerbosity());
+        self::assertSame(256, $command->getVerbosity());
     }
 
     public function testGetOptionFromCommand()
@@ -68,8 +68,8 @@ class CommandTest extends \PHPUnit_Framework_TestCase
 
         $command->run(new StringInput(''), new NullOutput());
 
-        $this->assertSame(false, $command->option('yell'));
-        $this->assertInternalType('array', $command->option());
+        self::assertSame(false, $command->option('yell'));
+        self::assertInternalType('array', $command->option());
     }
 
     public function testGetArgumentFromCommand()
@@ -80,7 +80,7 @@ class CommandTest extends \PHPUnit_Framework_TestCase
 
         $command->run(new StringInput(''), new NullOutput());
 
-        $this->assertSame(null, $command->argument('name'));
-        $this->assertInternalType('array', $command->argument());
+        self::assertSame(null, $command->argument('name'));
+        self::assertInternalType('array', $command->argument());
     }
 }

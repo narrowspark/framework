@@ -26,9 +26,9 @@ class HtmlDisplayerTest extends \PHPUnit_Framework_TestCase
             $expected = str_replace("{{ $$key }}", $val, $expected);
         }
 
-        $this->assertSame($expected, (string) $response->getBody());
-        $this->assertSame(502, $response->getStatusCode());
-        $this->assertSame('text/html', $response->getHeaderLine('Content-Type'));
+        self::assertSame($expected, (string) $response->getBody());
+        self::assertSame(502, $response->getStatusCode());
+        self::assertSame('text/html', $response->getHeaderLine('Content-Type'));
     }
 
     public function testClientError()
@@ -49,9 +49,9 @@ class HtmlDisplayerTest extends \PHPUnit_Framework_TestCase
             $expected = str_replace("{{ $$key }}", $val, $expected);
         }
 
-        $this->assertSame($expected, (string) $response->getBody());
-        $this->assertSame(404, $response->getStatusCode());
-        $this->assertSame('text/html', $response->getHeaderLine('Content-Type'));
+        self::assertSame($expected, (string) $response->getBody());
+        self::assertSame(404, $response->getStatusCode());
+        self::assertSame('text/html', $response->getHeaderLine('Content-Type'));
     }
 
     public function testProperties()
@@ -60,8 +60,8 @@ class HtmlDisplayerTest extends \PHPUnit_Framework_TestCase
         $displayer = new HtmlDisplayer(new ExceptionInfo(), $file);
         $exception = new Exception();
 
-        $this->assertFalse($displayer->isVerbose());
-        $this->assertTrue($displayer->canDisplay($exception, $exception, 500));
-        $this->assertSame('text/html', $displayer->contentType());
+        self::assertFalse($displayer->isVerbose());
+        self::assertTrue($displayer->canDisplay($exception, $exception, 500));
+        self::assertSame('text/html', $displayer->contentType());
     }
 }

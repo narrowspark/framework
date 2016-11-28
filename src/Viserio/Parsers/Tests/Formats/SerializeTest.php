@@ -20,8 +20,8 @@ class SerializeTest extends \PHPUnit_Framework_TestCase
     {
         $parsed = $this->parser->parse('a:2:{s:6:"status";i:123;s:7:"message";s:11:"hello world";}');
 
-        $this->assertTrue(is_array($parsed));
-        $this->assertSame(['status' => 123, 'message' => 'hello world'], $parsed);
+        self::assertTrue(is_array($parsed));
+        self::assertSame(['status' => 123, 'message' => 'hello world'], $parsed);
     }
 
     /**
@@ -35,6 +35,6 @@ class SerializeTest extends \PHPUnit_Framework_TestCase
     public function testDump()
     {
         $dump = $this->parser->dump(['status' => 123, 'message' => 'hello world']);
-        $this->assertEquals('a:2:{s:6:"status";i:123;s:7:"message";s:11:"hello world";}', $dump);
+        self::assertEquals('a:2:{s:6:"status";i:123;s:7:"message";s:11:"hello world";}', $dump);
     }
 }

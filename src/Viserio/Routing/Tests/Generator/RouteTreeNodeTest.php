@@ -20,8 +20,8 @@ class RouteTreeNodeTest extends \PHPUnit_Framework_TestCase
 
         $node = new RouteTreeNode([1 => $matcher2, 0 => $matcher1], new ChildrenNodeCollection());
 
-        $this->assertSame([1 => $matcher2, 0 => $matcher1], $node->getMatchers());
-        $this->assertSame($matcher1, $node->getFirstMatcher());
+        self::assertSame([1 => $matcher2, 0 => $matcher1], $node->getMatchers());
+        self::assertSame($matcher1, $node->getFirstMatcher());
     }
 
     public function testParentRouteTreeNode()
@@ -30,11 +30,11 @@ class RouteTreeNodeTest extends \PHPUnit_Framework_TestCase
         $contents = new ChildrenNodeCollection();
         $node = new RouteTreeNode([$matcher], $contents);
 
-        $this->assertSame([$matcher], $node->getMatchers());
-        $this->assertSame($matcher, $node->getFirstMatcher());
-        $this->assertSame($contents, $node->getContents());
-        $this->assertTrue($node->isParentNode());
-        $this->assertFalse($node->isLeafNode());
+        self::assertSame([$matcher], $node->getMatchers());
+        self::assertSame($matcher, $node->getFirstMatcher());
+        self::assertSame($contents, $node->getContents());
+        self::assertTrue($node->isParentNode());
+        self::assertFalse($node->isLeafNode());
     }
 
     public function testLeafRouteTreeNode()
@@ -43,11 +43,11 @@ class RouteTreeNodeTest extends \PHPUnit_Framework_TestCase
         $contents = new MatchedRouteDataMap();
         $node = new RouteTreeNode([$matcher], $contents);
 
-        $this->assertSame([$matcher], $node->getMatchers());
-        $this->assertSame($matcher, $node->getFirstMatcher());
-        $this->assertSame($contents, $node->getContents());
-        $this->assertTrue($node->isLeafNode());
-        $this->assertFalse($node->isParentNode());
+        self::assertSame([$matcher], $node->getMatchers());
+        self::assertSame($matcher, $node->getFirstMatcher());
+        self::assertSame($contents, $node->getContents());
+        self::assertTrue($node->isLeafNode());
+        self::assertFalse($node->isParentNode());
     }
 
     public function testChildrenCollectionOperations()
@@ -66,13 +66,13 @@ class RouteTreeNodeTest extends \PHPUnit_Framework_TestCase
         $child = new RouteTreeNode([$matcher2], new ChildrenNodeCollection());
         $node->getContents()->addChild($child);
 
-        $this->assertSame([$child->getFirstMatcher()->getHash() => $child], $node->getContents()->getChildren());
-        $this->assertTrue($node->getContents()->hasChild($child));
-        $this->assertTrue($node->getContents()->hasChildFor($child->getFirstMatcher()));
-        $this->assertTrue($node->getContents()->hasChild(clone $child));
-        $this->assertTrue($node->getContents()->hasChildFor(clone $child->getFirstMatcher()));
-        $this->assertFalse($node->getContents()->hasChildFor($matcher3));
-        $this->assertSame($child, $node->getContents()->getChild($child->getFirstMatcher()));
+        self::assertSame([$child->getFirstMatcher()->getHash() => $child], $node->getContents()->getChildren());
+        self::assertTrue($node->getContents()->hasChild($child));
+        self::assertTrue($node->getContents()->hasChildFor($child->getFirstMatcher()));
+        self::assertTrue($node->getContents()->hasChild(clone $child));
+        self::assertTrue($node->getContents()->hasChildFor(clone $child->getFirstMatcher()));
+        self::assertFalse($node->getContents()->hasChildFor($matcher3));
+        self::assertSame($child, $node->getContents()->getChild($child->getFirstMatcher()));
     }
 
     public function testMatchedRouteDataMapOperations()
@@ -80,8 +80,8 @@ class RouteTreeNodeTest extends \PHPUnit_Framework_TestCase
         $node = new RouteTreeNode([$this->mock(AbstractMatcher::class)], new MatchedRouteDataMap());
         $node->getContents()->addRoute((new Route(['GET', 'POST'], '', null)), []);
 
-        $this->assertSame(['GET', 'POST', 'HEAD'], $node->getContents()->getAllowedHttpMethods());
-        $this->assertEquals(
+        self::assertSame(['GET', 'POST', 'HEAD'], $node->getContents()->getAllowedHttpMethods());
+        self::assertEquals(
             [
                 [['GET', 'POST', 'HEAD'], [[], 'GET|POST|HEAD']],
             ],
@@ -90,8 +90,8 @@ class RouteTreeNodeTest extends \PHPUnit_Framework_TestCase
 
         $node->getContents()->addRoute((new Route('PATCH', '', null)), [0 => 'param']);
 
-        $this->assertSame(['GET', 'POST', 'HEAD', 'PATCH'], $node->getContents()->getAllowedHttpMethods());
-        $this->assertEquals(
+        self::assertSame(['GET', 'POST', 'HEAD', 'PATCH'], $node->getContents()->getAllowedHttpMethods());
+        self::assertEquals(
             [
                 [['GET', 'POST', 'HEAD'], [[], 'GET|POST|HEAD']],
                 [['PATCH'], [[0 => 'param'], 'PATCH']],

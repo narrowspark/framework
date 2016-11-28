@@ -18,12 +18,12 @@ class UtilTest extends \PHPUnit_Framework_TestCase
         fseek($stream, 0);
 
         $s = new Stream($stream);
-        $this->assertEquals('foobaz', Util::copyToString($s));
+        self::assertEquals('foobaz', Util::copyToString($s));
         $s->seek(0);
 
-        $this->assertEquals('foo', Util::copyToString($s, 3));
-        $this->assertEquals('baz', Util::copyToString($s, 3));
-        $this->assertEquals('', Util::copyToString($s));
+        self::assertEquals('foo', Util::copyToString($s, 3));
+        self::assertEquals('baz', Util::copyToString($s, 3));
+        self::assertEquals('', Util::copyToString($s));
     }
 
     public function testCopiesToStringStopsWhenReadFails()
@@ -42,7 +42,7 @@ class UtilTest extends \PHPUnit_Framework_TestCase
         ]);
         $result = Util::copyToString($s1);
 
-        $this->assertEquals('', $result);
+        self::assertEquals('', $result);
     }
 
     public function testCopiesToStream()
@@ -56,16 +56,16 @@ class UtilTest extends \PHPUnit_Framework_TestCase
         $s1 = new Stream($stream);
         $s2 = new Stream(fopen('php://temp', 'r+'));
         Util::copyToStream($s1, $s2);
-        $this->assertEquals('foobaz', (string) $s2);
+        self::assertEquals('foobaz', (string) $s2);
 
         $s2 = new Stream(fopen('php://temp', 'r+'));
         $s1->seek(0);
 
         Util::copyToStream($s1, $s2, 3);
-        $this->assertEquals('foo', (string) $s2);
+        self::assertEquals('foo', (string) $s2);
 
         Util::copyToStream($s1, $s2, 3);
-        $this->assertEquals('foobaz', (string) $s2);
+        self::assertEquals('foobaz', (string) $s2);
     }
 
     public function testCopyToStreamReadsInChunksInsteadOfAllInMemory()
@@ -88,10 +88,10 @@ class UtilTest extends \PHPUnit_Framework_TestCase
         Util::copyToStream($s1, $s2, 16394);
         $s2->seek(0);
 
-        $this->assertEquals(16394, strlen($s2->getContents()));
-        $this->assertEquals(8192, $sizes[0]);
-        $this->assertEquals(8192, $sizes[1]);
-        $this->assertEquals(10, $sizes[2]);
+        self::assertEquals(16394, strlen($s2->getContents()));
+        self::assertEquals(8192, $sizes[0]);
+        self::assertEquals(8192, $sizes[1]);
+        self::assertEquals(10, $sizes[2]);
     }
 
     public function testStopsCopyToStreamWhenWriteFails()
@@ -109,7 +109,7 @@ class UtilTest extends \PHPUnit_Framework_TestCase
         }]);
         Util::copyToStream($s1, $s2);
 
-        $this->assertEquals('', (string) $s2);
+        self::assertEquals('', (string) $s2);
     }
 
     public function testStopsCopyToSteamWhenWriteFailsWithMaxLen()
@@ -127,7 +127,7 @@ class UtilTest extends \PHPUnit_Framework_TestCase
         }]);
 
         Util::copyToStream($s1, $s2, 10);
-        $this->assertEquals('', (string) $s2);
+        self::assertEquals('', (string) $s2);
     }
 
     public function testStopsCopyToSteamWhenReadFailsWithMaxLen()
@@ -145,13 +145,13 @@ class UtilTest extends \PHPUnit_Framework_TestCase
         $s2 = new Stream(fopen('php://temp', 'r+'));
 
         Util::copyToStream($s1, $s2, 10);
-        $this->assertEquals('', (string) $s2);
+        self::assertEquals('', (string) $s2);
     }
 
     public function testOpensFilesSuccessfully()
     {
         $r = Util::tryFopen(__FILE__, 'r');
-        $this->assertInternalType('resource', $r);
+        self::assertInternalType('resource', $r);
         fclose($r);
     }
 
@@ -414,7 +414,7 @@ class UtilTest extends \PHPUnit_Framework_TestCase
     public function testNormalizeFiles($files, $expected)
     {
         $result = Util::normalizeFiles($files);
-        $this->assertEquals($expected, $result);
+        self::assertEquals($expected, $result);
     }
 
     /**

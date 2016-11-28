@@ -40,38 +40,38 @@ class TranslatorTest extends \PHPUnit_Framework_TestCase
 
     public function testGetSelectorAndCatalogue()
     {
-        $this->assertInstanceOf(MessageCatalogue::class, $this->translator->getCatalogue());
-        $this->assertInstanceOf(MessageSelector::class, $this->translator->getSelector());
+        self::assertInstanceOf(MessageCatalogue::class, $this->translator->getCatalogue());
+        self::assertInstanceOf(MessageSelector::class, $this->translator->getSelector());
     }
 
     public function testTrans()
     {
-        $this->assertSame('bar', $this->translator->trans('foo'));
+        self::assertSame('bar', $this->translator->trans('foo'));
     }
 
     public function testTransWithDomain()
     {
-        $this->assertSame('foo', $this->translator->trans('foo', [], 'admin'));
+        self::assertSame('foo', $this->translator->trans('foo', [], 'admin'));
     }
 
     public function testTransWithVars()
     {
-        $this->assertSame('Hallo Daniel', $this->translator->trans('Hallo %name%', ['%name%' => 'Daniel']));
+        self::assertSame('Hallo Daniel', $this->translator->trans('Hallo %name%', ['%name%' => 'Daniel']));
     }
 
     public function testTransChoice()
     {
-        $this->assertSame(
+        self::assertSame(
             'There is one apple',
             $this->translator->transChoice('{0} There are no apples|{1} There is one apple', 1)
         );
 
-        $this->assertSame(
+        self::assertSame(
             'There are no apples',
             $this->translator->transChoice('{0} There are no apples|{1} There is one apple', 0)
         );
 
-        $this->assertSame(
+        self::assertSame(
             'There is one apple',
             $this->translator->transChoice('{0} There are no apples|{1} There is one apple', ['one'])
         );
@@ -88,17 +88,17 @@ class TranslatorTest extends \PHPUnit_Framework_TestCase
             ->twice();
         $this->translator->setLogger($logger);
 
-        $this->assertInstanceOf(LoggerInterface::class, $this->translator->getLogger());
+        self::assertInstanceOf(LoggerInterface::class, $this->translator->getLogger());
 
-        $this->assertSame('bar', $this->translator->trans('test'));
-        $this->assertSame('dont', $this->translator->trans('dont'));
+        self::assertSame('bar', $this->translator->trans('test'));
+        self::assertSame('dont', $this->translator->trans('dont'));
 
-        $this->assertSame(
+        self::assertSame(
             'There is one apple',
             $this->translator->transChoice('{0} There are no apples|{1} There is one apple', ['one'])
         );
 
-        $this->assertSame('bar', $this->translator->trans('foo'));
+        self::assertSame('bar', $this->translator->trans('foo'));
     }
 
     public function testTranslateAddHelper()
@@ -110,8 +110,8 @@ class TranslatorTest extends \PHPUnit_Framework_TestCase
             return substr($translation, 0, (int) $length);
         });
 
-        $this->assertSame('He', $this->translator->trans('hello[truncate:2|firstUpper]'));
-        $this->assertSame('hello[nohelper]', $this->translator->trans('hello[nohelper]'));
+        self::assertSame('He', $this->translator->trans('hello[truncate:2|firstUpper]'));
+        self::assertSame('hello[nohelper]', $this->translator->trans('hello[nohelper]'));
     }
 
     public function testTranslateAddHelperWithTransChoice()
@@ -123,7 +123,7 @@ class TranslatorTest extends \PHPUnit_Framework_TestCase
             return substr($translation, 0, (int) $length);
         });
 
-        $this->assertSame(
+        self::assertSame(
             'Th',
             $this->translator->transChoice(
                 '{0} There are no apples|{1} There is one apple[truncate:2|firstUpper]',
@@ -138,6 +138,6 @@ class TranslatorTest extends \PHPUnit_Framework_TestCase
             return strrev($message);
         });
 
-        $this->assertSame('olleh', $this->translator->trans('hello'));
+        self::assertSame('olleh', $this->translator->trans('hello'));
     }
 }

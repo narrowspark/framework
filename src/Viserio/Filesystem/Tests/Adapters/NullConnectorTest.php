@@ -13,6 +13,6 @@ class NullConnectorTest extends \PHPUnit_Framework_TestCase
 
         $return = $connector->connect([]);
 
-        $this->assertInstanceOf(NullAdapter::class, $return);
+        self::assertInstanceOf(NullAdapter::class, $return);
     }
 }

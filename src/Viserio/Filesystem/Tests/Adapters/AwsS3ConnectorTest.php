@@ -19,7 +19,7 @@ class AwsS3ConnectorTest extends \PHPUnit_Framework_TestCase
             'version' => 'latest',
         ]);
 
-        $this->assertInstanceOf(AwsS3Adapter::class, $return);
+        self::assertInstanceOf(AwsS3Adapter::class, $return);
     }
 
     public function testConnectWithPrefix()
@@ -34,7 +34,7 @@ class AwsS3ConnectorTest extends \PHPUnit_Framework_TestCase
             'version' => 'latest',
             'prefix' => 'your-prefix',
         ]);
-        $this->assertInstanceOf(AwsS3Adapter::class, $return);
+        self::assertInstanceOf(AwsS3Adapter::class, $return);
     }
 
     public function testConnectWithBucketEndPoint()
@@ -50,7 +50,7 @@ class AwsS3ConnectorTest extends \PHPUnit_Framework_TestCase
             'bucket_endpoint' => false,
         ]);
 
-        $this->assertInstanceOf(AwsS3Adapter::class, $return);
+        self::assertInstanceOf(AwsS3Adapter::class, $return);
     }
 
     public function testConnectWithCalculateMD5()
@@ -66,7 +66,7 @@ class AwsS3ConnectorTest extends \PHPUnit_Framework_TestCase
             'calculate_md5' => true,
         ]);
 
-        $this->assertInstanceOf(AwsS3Adapter::class, $return);
+        self::assertInstanceOf(AwsS3Adapter::class, $return);
     }
 
     public function testConnectWithScheme()
@@ -82,7 +82,7 @@ class AwsS3ConnectorTest extends \PHPUnit_Framework_TestCase
             'scheme' => 'https',
         ]);
 
-        $this->assertInstanceOf(AwsS3Adapter::class, $return);
+        self::assertInstanceOf(AwsS3Adapter::class, $return);
     }
 
     public function testConnectWithEndPoint()
@@ -97,7 +97,7 @@ class AwsS3ConnectorTest extends \PHPUnit_Framework_TestCase
             'version' => 'latest',
             'endpoint' => 'https://example.com',
         ]);
-        $this->assertInstanceOf(AwsS3Adapter::class, $return);
+        self::assertInstanceOf(AwsS3Adapter::class, $return);
     }
 
     public function testConnectWithEverything()
@@ -116,7 +116,7 @@ class AwsS3ConnectorTest extends \PHPUnit_Framework_TestCase
             'endpoint' => 'https://example.com',
         ]);
 
-        $this->assertInstanceOf(AwsS3Adapter::class, $return);
+        self::assertInstanceOf(AwsS3Adapter::class, $return);
     }
 
     /**

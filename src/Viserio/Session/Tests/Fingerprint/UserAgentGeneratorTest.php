@@ -10,12 +10,12 @@ class UserAgentGeneratorTest extends \PHPUnit_Framework_TestCase
     {
         $generator = new UserAgentGenerator('test');
 
-        $this->assertInternalType('string', $generator->generate());
-        $this->assertSame(40, strlen($generator->generate()));
+        self::assertInternalType('string', $generator->generate());
+        self::assertSame(40, strlen($generator->generate()));
 
         $generator = new UserAgentGenerator();
 
-        $this->assertInternalType('string', $generator->generate());
-        $this->assertSame(40, strlen($generator->generate()));
+        self::assertInternalType('string', $generator->generate());
+        self::assertSame(40, strlen($generator->generate()));
     }
 }

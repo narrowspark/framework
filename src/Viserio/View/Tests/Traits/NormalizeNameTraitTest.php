@@ -15,7 +15,7 @@ class NormalizeNameTraitTest extends \PHPUnit_Framework_TestCase
     {
         $validatedName = $this->normalizeName($name);
 
-        $this->assertSame($validated, $validatedName);
+        self::assertSame($validated, $validatedName);
     }
 
     public function getMatchingNames()

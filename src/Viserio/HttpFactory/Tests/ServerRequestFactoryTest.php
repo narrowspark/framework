@@ -87,7 +87,7 @@ class ServerRequestFactoryTest extends \PHPUnit_Framework_TestCase
         $_SERVER = $serverParams;
         $serverRequest = $this->factory->createServerRequest($_SERVER);
 
-        $this->assertEquals(new Uri($expected), $serverRequest->getUri());
+        self::assertEquals(new Uri($expected), $serverRequest->getUri());
     }
 
     public function testFromGlobals()
@@ -145,8 +145,8 @@ class ServerRequestFactoryTest extends \PHPUnit_Framework_TestCase
 
         $server = $this->factory->createServerRequest($_SERVER);
 
-        $this->assertEquals('POST', $server->getMethod());
-        $this->assertEquals([
+        self::assertEquals('POST', $server->getMethod());
+        self::assertEquals([
                 'Accept' => [
                     'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
                 ],
@@ -174,12 +174,12 @@ class ServerRequestFactoryTest extends \PHPUnit_Framework_TestCase
             ],
             $server->getHeaders()
         );
-        $this->assertEquals('', (string) $server->getBody());
-        $this->assertEquals('1.0', $server->getProtocolVersion());
-        $this->assertEquals($_COOKIE, $server->getCookieParams());
-        $this->assertEquals($_POST, $server->getParsedBody());
-        $this->assertEquals($_GET, $server->getQueryParams());
-        $this->assertEquals(
+        self::assertEquals('', (string) $server->getBody());
+        self::assertEquals('1.0', $server->getProtocolVersion());
+        self::assertEquals($_COOKIE, $server->getCookieParams());
+        self::assertEquals($_POST, $server->getParsedBody());
+        self::assertEquals($_GET, $server->getQueryParams());
+        self::assertEquals(
             new Uri('http://www.narrowspark.com/doc/framwork.php?id=10&user=foo'),
             $server->getUri()
         );
@@ -194,6 +194,6 @@ class ServerRequestFactoryTest extends \PHPUnit_Framework_TestCase
             ),
         ];
 
-        $this->assertEquals($expectedFiles, $server->getUploadedFiles());
+        self::assertEquals($expectedFiles, $server->getUploadedFiles());
     }
 }

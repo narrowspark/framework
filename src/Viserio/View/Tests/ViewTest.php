@@ -25,7 +25,7 @@ class ViewTest extends \PHPUnit_Framework_TestCase
         $view->with('foo', 'bar');
         $view->with(['baz' => 'boom']);
 
-        $this->assertEquals(['foo' => 'bar', 'baz' => 'boom'], $view->getData());
+        self::assertEquals(['foo' => 'bar', 'baz' => 'boom'], $view->getData());
 
         $view = new View(
             $this->mock(Factory::class),
@@ -36,7 +36,7 @@ class ViewTest extends \PHPUnit_Framework_TestCase
         );
         $view->withFoo('bar')->withBaz('boom');
 
-        $this->assertEquals(['foo' => 'bar', 'baz' => 'boom'], $view->getData());
+        self::assertEquals(['foo' => 'bar', 'baz' => 'boom'], $view->getData());
     }
 
     public function testRenderProperlyRendersView()
@@ -59,7 +59,7 @@ class ViewTest extends \PHPUnit_Framework_TestCase
             $me->assertEquals('contents', $contents);
         };
 
-        $this->assertEquals('contents', $view->render($callback));
+        self::assertEquals('contents', $view->render($callback));
     }
 
     public function testViewNestBindsASubView()
@@ -69,7 +69,7 @@ class ViewTest extends \PHPUnit_Framework_TestCase
 
         $result = $view->nest('key', 'foo', ['data']);
 
-        $this->assertInstanceOf('Viserio\View\View', $result);
+        self::assertInstanceOf('Viserio\View\View', $result);
     }
 
     public function testViewAcceptsArrayableImplementations()
@@ -85,60 +85,60 @@ class ViewTest extends \PHPUnit_Framework_TestCase
             $arrayable
         );
 
-        $this->assertEquals('bar', $view->foo);
-        $this->assertEquals(['qux', 'corge'], $view->baz);
+        self::assertEquals('bar', $view->foo);
+        self::assertEquals(['qux', 'corge'], $view->baz);
     }
 
     public function testViewGettersSetters()
     {
         $view = $this->getView();
 
-        $this->assertEquals($view->getName(), 'view');
-        $this->assertEquals($view->getPath(), 'path');
+        self::assertEquals($view->getName(), 'view');
+        self::assertEquals($view->getPath(), 'path');
 
         $data = $view->getData();
 
-        $this->assertEquals($data['foo'], 'bar');
+        self::assertEquals($data['foo'], 'bar');
 
         $view->setPath('newPath');
 
-        $this->assertEquals($view->getPath(), 'newPath');
+        self::assertEquals($view->getPath(), 'newPath');
     }
 
     public function testViewArrayAccess()
     {
         $view = $this->getView();
 
-        $this->assertInstanceOf('ArrayAccess', $view);
-        $this->assertTrue($view->offsetExists('foo'));
+        self::assertInstanceOf('ArrayAccess', $view);
+        self::assertTrue($view->offsetExists('foo'));
 
-        $this->assertEquals($view->offsetGet('foo'), 'bar');
+        self::assertEquals($view->offsetGet('foo'), 'bar');
 
         $view->offsetSet('foo', 'baz');
 
-        $this->assertEquals($view->offsetGet('foo'), 'baz');
+        self::assertEquals($view->offsetGet('foo'), 'baz');
 
         $view->offsetUnset('foo');
 
-        $this->assertFalse($view->offsetExists('foo'));
+        self::assertFalse($view->offsetExists('foo'));
     }
 
     public function testViewMagicMethods()
     {
         $view = $this->getView();
 
-        $this->assertTrue(isset($view->foo));
-        $this->assertEquals($view->foo, 'bar');
+        self::assertTrue(isset($view->foo));
+        self::assertEquals($view->foo, 'bar');
 
         $view->foo = 'baz';
 
-        $this->assertEquals($view->foo, 'baz');
-        $this->assertEquals($view['foo'], $view->foo);
+        self::assertEquals($view->foo, 'baz');
+        self::assertEquals($view['foo'], $view->foo);
 
         unset($view->foo);
 
-        $this->assertFalse(isset($view->foo));
-        $this->assertFalse($view->offsetExists('foo'));
+        self::assertFalse(isset($view->foo));
+        self::assertFalse($view->offsetExists('foo'));
     }
 
     /**
@@ -165,8 +165,8 @@ class ViewTest extends \PHPUnit_Framework_TestCase
         $view->renderable->shouldReceive('render')
             ->andReturn('text');
 
-        $this->assertEquals('contents', $view->render());
-        $this->assertEquals('contents', (string) $view);
+        self::assertEquals('contents', $view->render());
+        self::assertEquals('contents', (string) $view);
     }
 
     protected function getView()

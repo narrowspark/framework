@@ -40,7 +40,7 @@ class TransportManagerTest extends \PHPUnit_Framework_TestCase
             LoggerInterface::class => $this->mock(LoggerInterface::class),
         ]));
 
-        $this->assertInstanceOf(LogTransport::class, $manager->driver('log'));
+        self::assertInstanceOf(LogTransport::class, $manager->driver('log'));
     }
 
     public function testMailTransport()
@@ -49,7 +49,7 @@ class TransportManagerTest extends \PHPUnit_Framework_TestCase
         $manager->getConfig()->shouldReceive('get')
             ->once()
             ->with('mail.drivers', []);
-        $this->assertInstanceOf(Swift_MailTransport::class, $manager->driver('mail'));
+        self::assertInstanceOf(Swift_MailTransport::class, $manager->driver('mail'));
     }
 
     public function testSendmailTransport()
@@ -58,7 +58,7 @@ class TransportManagerTest extends \PHPUnit_Framework_TestCase
         $manager->getConfig()->shouldReceive('get')
             ->once()
             ->with('mail.drivers', []);
-        $this->assertInstanceOf(Swift_SendmailTransport::class, $manager->driver('sendmail'));
+        self::assertInstanceOf(Swift_SendmailTransport::class, $manager->driver('sendmail'));
     }
 
     public function testSmtpTransport()
@@ -78,7 +78,7 @@ class TransportManagerTest extends \PHPUnit_Framework_TestCase
                 ],
             ]);
 
-        $this->assertInstanceOf(Swift_SmtpTransport::class, $manager->driver('smtp'));
+        self::assertInstanceOf(Swift_SmtpTransport::class, $manager->driver('smtp'));
     }
 
     public function testMailgunTransport()
@@ -94,7 +94,7 @@ class TransportManagerTest extends \PHPUnit_Framework_TestCase
                 ],
             ]);
 
-        $this->assertInstanceOf(MailgunTransport::class, $manager->driver('mailgun'));
+        self::assertInstanceOf(MailgunTransport::class, $manager->driver('mailgun'));
     }
 
     public function testMandrillTransport()
@@ -109,7 +109,7 @@ class TransportManagerTest extends \PHPUnit_Framework_TestCase
                 ],
             ]);
 
-        $this->assertInstanceOf(MandrillTransport::class, $manager->driver('mandrill'));
+        self::assertInstanceOf(MandrillTransport::class, $manager->driver('mandrill'));
     }
 
     public function testSparkPostTransport()
@@ -124,7 +124,7 @@ class TransportManagerTest extends \PHPUnit_Framework_TestCase
                 ],
             ]);
 
-        $this->assertInstanceOf(SparkPostTransport::class, $manager->driver('sparkpost'));
+        self::assertInstanceOf(SparkPostTransport::class, $manager->driver('sparkpost'));
     }
 
     public function testSesTransport()
@@ -141,6 +141,6 @@ class TransportManagerTest extends \PHPUnit_Framework_TestCase
                 ],
             ]);
 
-        $this->assertInstanceOf(SesTransport::class, $manager->driver('ses'));
+        self::assertInstanceOf(SesTransport::class, $manager->driver('ses'));
     }
 }

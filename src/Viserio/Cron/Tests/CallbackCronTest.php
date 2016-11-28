@@ -71,7 +71,7 @@ class CallbackCronTest extends \PHPUnit_Framework_TestCase
 
         $cron->run();
 
-        $this->assertTrue($_SERVER['test']);
+        self::assertTrue($_SERVER['test']);
 
         unset($_SERVER['test']);
 
@@ -84,8 +84,8 @@ class CallbackCronTest extends \PHPUnit_Framework_TestCase
 
         $cron->setDescription('run test')->run();
 
-        $this->assertTrue($_SERVER['test']);
-        $this->assertSame('run test', $cron->getSummaryForDisplay());
+        self::assertTrue($_SERVER['test']);
+        self::assertSame('run test', $cron->getSummaryForDisplay());
 
         unset($_SERVER['test']);
     }

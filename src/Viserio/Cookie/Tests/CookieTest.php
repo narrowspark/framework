@@ -60,8 +60,8 @@ class CookieTest extends \PHPUnit_Framework_TestCase
         $value = 'MyValue';
         $cookie = new Cookie('MyCookie', $value);
 
-        $this->assertSame($value, $cookie->getValue(), '->getValue() returns the proper value');
-        $this->assertTrue($cookie->hasValue(), '->hasValue() returns true if the value exist');
+        self::assertSame($value, $cookie->getValue(), '->getValue() returns the proper value');
+        self::assertTrue($cookie->hasValue(), '->hasValue() returns true if the value exist');
     }
 
     public function testWithValue()
@@ -70,26 +70,26 @@ class CookieTest extends \PHPUnit_Framework_TestCase
         $cookie = new Cookie('MyCookie');
         $cookie = $cookie->withValue($value);
 
-        $this->assertSame($value, $cookie->getValue(), '->getValue() returns the proper value');
+        self::assertSame($value, $cookie->getValue(), '->getValue() returns the proper value');
     }
 
     public function testGetPatchAndWithPath()
     {
         $cookie = new Cookie('foo', 'bar');
 
-        $this->assertSame('/', $cookie->getPath(), '->getPath() returns / as the default path');
+        self::assertSame('/', $cookie->getPath(), '->getPath() returns / as the default path');
 
         $cookie = $cookie->withPath('/tests/');
 
-        $this->assertSame('/tests', $cookie->getPath(), '->getPath() returns / as the default path');
+        self::assertSame('/tests', $cookie->getPath(), '->getPath() returns / as the default path');
     }
 
     public function testMatchPath()
     {
         $cookie = new Cookie('foo', 'bar', 0, '/');
 
-        $this->assertTrue($cookie->matchPath('/'), '->matchPath() returns true if the paths match');
-        $this->assertFalse(
+        self::assertTrue($cookie->matchPath('/'), '->matchPath() returns true if the paths match');
+        self::assertFalse(
             $cookie->matchPath('/path/to/somewhere'),
             '->matchPath() returns false if the paths not match'
         );
@@ -100,8 +100,8 @@ class CookieTest extends \PHPUnit_Framework_TestCase
         $cookie = new Cookie('foo', 'bar', 0, '/');
         $cookie2 = new Cookie('bar', 'foo', 0, '/');
 
-        $this->assertTrue($cookie->matchCookie($cookie), '->matchCookie() returns true if both cookies are identical');
-        $this->assertFalse(
+        self::assertTrue($cookie->matchCookie($cookie), '->matchCookie() returns true if both cookies are identical');
+        self::assertFalse(
             $cookie->matchCookie($cookie2),
             '->matchCookie() returns false if both cookies are not identical'
         );
@@ -110,25 +110,25 @@ class CookieTest extends \PHPUnit_Framework_TestCase
     public function testHasAndGetMaxAge()
     {
         $cookie = new Cookie('MyCookie', 'MyValue');
-        $this->assertTrue($cookie->hasMaxAge(), '->hasMaxAge() returns true if max age is not empty');
+        self::assertTrue($cookie->hasMaxAge(), '->hasMaxAge() returns true if max age is not empty');
 
         $cookie = new Cookie('Cookie', 'Value', new DateTime('3600'));
-        $this->assertFalse($cookie->hasMaxAge(), '->hasMaxAge() returns false if max age is empty');
-        $this->assertEquals(
+        self::assertFalse($cookie->hasMaxAge(), '->hasMaxAge() returns false if max age is empty');
+        self::assertEquals(
             null,
             $cookie->getMaxAge(),
             '->getMaxAge() returns max age null if time is a DateTime object'
         );
 
         $cookie = new Cookie('Cookie', 'Value', 3600);
-        $this->assertEquals(3600, $cookie->getMaxAge(), '->getMaxAge() returns max age value if is set');
+        self::assertEquals(3600, $cookie->getMaxAge(), '->getMaxAge() returns max age value if is set');
     }
 
     public function testWithMaxAge()
     {
         $cookie = new Cookie('Cookie', 'Value');
         $cookie = $cookie->withMaxAge(3600);
-        $this->assertEquals(3600, $cookie->getMaxAge(), '->getMaxAge() returns max age value if is set');
+        self::assertEquals(3600, $cookie->getMaxAge(), '->getMaxAge() returns max age value if is set');
     }
 
     public function testWithExpires()
@@ -138,7 +138,7 @@ class CookieTest extends \PHPUnit_Framework_TestCase
         $cookie = new Cookie('foo', 'bar', Chronos::now());
         $cookie = $cookie->withExpires($expire);
 
-        $this->assertEquals(
+        self::assertEquals(
             $expire->toCookieString(),
             $cookie->getExpiresTime(),
             '->getExpiresTime() returns the expire date'
@@ -150,7 +150,7 @@ class CookieTest extends \PHPUnit_Framework_TestCase
         $expire = Chronos::now();
         $cookie = new Cookie('foo', 'bar', $expire);
 
-        $this->assertEquals(
+        self::assertEquals(
             $expire->toCookieString(),
             $cookie->getExpiresTime(),
             '->getExpiresTime() returns the expire date'
@@ -162,7 +162,7 @@ class CookieTest extends \PHPUnit_Framework_TestCase
         $expire = new Chronos('+1 day');
         $cookie = new Cookie('foo', 'bar', $expire);
 
-        $this->assertEquals(
+        self::assertEquals(
             $expire->toCookieString(),
             $cookie->getExpiresTime(),
             '->getExpiresTime() returns the expire date',
@@ -175,7 +175,7 @@ class CookieTest extends \PHPUnit_Framework_TestCase
         $cookie = new Cookie('foo', 'bar', 0, '/', '.MyFooDoMaiN.cOm');
         $cookie = $cookie->withDomain('google.com');
 
-        $this->assertEquals(
+        self::assertEquals(
             'google.com',
             $cookie->getDomain(),
             '->getDomain() returns the domain name on which the cookie is valid'
@@ -186,28 +186,28 @@ class CookieTest extends \PHPUnit_Framework_TestCase
     {
         $cookie = new Cookie('foo', 'bar', 0, '/', '.MyFooDoMaiN.cOm');
 
-        $this->assertEquals(
+        self::assertEquals(
             'myfoodomain.com',
             $cookie->getDomain(),
             '->getDomain() returns the domain name on which the cookie is valid'
         );
 
-        $this->assertTrue($cookie->hasDomain(), '->hasDomain() returns true if domain is set');
+        self::assertTrue($cookie->hasDomain(), '->hasDomain() returns true if domain is set');
 
         $cookie = new Cookie('foo', 'bar', 0, '/');
 
-        $this->assertFalse($cookie->hasDomain(), '->hasDomain() returns false if domain is not set');
+        self::assertFalse($cookie->hasDomain(), '->hasDomain() returns false if domain is not set');
     }
 
     public function testMatchDomain()
     {
         $cookie = new Cookie('foo', 'bar', 0, '/', '.MyFooDoMaiN.com');
 
-        $this->assertTrue(
+        self::assertTrue(
             $cookie->matchDomain('myfoodomain.com'),
             '->matchDomain() returns true if both cookies are identical'
         );
-        $this->assertTrue(
+        self::assertTrue(
             $cookie->matchDomain('www.myfoodomain.com'),
             '->matchDomain() returns true if both cookies are identical'
         );
@@ -217,32 +217,32 @@ class CookieTest extends \PHPUnit_Framework_TestCase
     {
         $cookie = new Cookie('foo', 'bar', 0, '/', '.myfoodomain.com');
 
-        $this->assertFalse($cookie->matchDomain('127.0.0.1'), '->matchDomain() returns false if match is a IP');
+        self::assertFalse($cookie->matchDomain('127.0.0.1'), '->matchDomain() returns false if match is a IP');
     }
 
     public function testIsSecure()
     {
         $cookie = new Cookie('foo', 'bar', 0, '/', '.myfoodomain.com', true);
 
-        $this->assertTrue($cookie->isSecure(), '->isSecure() returns whether the cookie is transmitted over HTTPS');
+        self::assertTrue($cookie->isSecure(), '->isSecure() returns whether the cookie is transmitted over HTTPS');
 
         $cookie = $cookie->withSecure(false);
 
-        $this->assertFalse($cookie->isSecure(), '->isSecure() returns whether the cookie is transmitted over HTTPS');
+        self::assertFalse($cookie->isSecure(), '->isSecure() returns whether the cookie is transmitted over HTTPS');
     }
 
     public function testIsHttpOnly()
     {
         $cookie = new Cookie('foo', 'bar', 0, '/', '.myfoodomain.com', false, true);
 
-        $this->assertTrue(
+        self::assertTrue(
             $cookie->isHttpOnly(),
             '->isHttpOnly() returns whether the cookie is only transmitted over HTTP'
         );
 
         $cookie = $cookie->withHttpOnly(false);
 
-        $this->assertFalse(
+        self::assertFalse(
             $cookie->isHttpOnly(),
             '->isHttpOnly() returns whether the cookie is only transmitted over HTTP'
         );
@@ -252,14 +252,14 @@ class CookieTest extends \PHPUnit_Framework_TestCase
     {
         $cookie = new Cookie('foo', 'bar', 0, '/', '.myfoodomain.com', false, true, Cookie::SAMESITE_STRICT);
 
-        $this->assertTrue(
+        self::assertTrue(
             $cookie->isSameSite(),
             '->isSameSite() returns whether the cookie is set with samesite value'
         );
 
         $cookie = $cookie->withSameSite(false);
 
-        $this->assertFalse(
+        self::assertFalse(
             $cookie->isSameSite(),
             '->isHttpOnly() returns whether the cookie is send normal without samesite'
         );
@@ -269,7 +269,7 @@ class CookieTest extends \PHPUnit_Framework_TestCase
     {
         $cookie = new Cookie('foo', 'bar', 0, '/', '.myfoodomain.com', false, true, Cookie::SAMESITE_STRICT);
 
-        $this->assertSame(
+        self::assertSame(
             Cookie::SAMESITE_STRICT,
             $cookie->getSameSite(),
             '->getSameSite() returns cookies samesite which is set to strict'
@@ -277,7 +277,7 @@ class CookieTest extends \PHPUnit_Framework_TestCase
 
         $cookie = $cookie->withSameSite(Cookie::SAMESITE_LAX);
 
-        $this->assertSame(
+        self::assertSame(
             Cookie::SAMESITE_LAX,
             $cookie->getSameSite(),
             '->getSameSite() returns cookies samesite which is set to lax'
@@ -288,29 +288,29 @@ class CookieTest extends \PHPUnit_Framework_TestCase
     {
         $cookie = new Cookie('foo', 'bar', new DateTime('+360 day'));
 
-        $this->assertFalse($cookie->isExpired(), '->isExpired() returns false if the cookie did not expire yet');
-        $this->assertTrue($cookie->hasExpires(), '->hasExpires() returns true if the cookie has a expire time set');
+        self::assertFalse($cookie->isExpired(), '->isExpired() returns false if the cookie did not expire yet');
+        self::assertTrue($cookie->hasExpires(), '->hasExpires() returns true if the cookie has a expire time set');
     }
 
     public function testCookieIsExpired()
     {
         $cookie = new Cookie('foo', 'bar', -100);
 
-        $this->assertTrue($cookie->isExpired(), '->isExpired() returns true if the cookie has expired');
+        self::assertTrue($cookie->isExpired(), '->isExpired() returns true if the cookie has expired');
     }
 
     public function testToString()
     {
         $time = new DateTime('Fri, 20-May-2011 15:25:52 GMT');
         $cookie = new Cookie('foo', 'bar', $time, '/', '.myfoodomain.com', true, true, Cookie::SAMESITE_STRICT);
-        $this->assertEquals(
+        self::assertEquals(
             'foo=bar; Expires=Friday, 20-May-2011 15:25:52 ' . date_default_timezone_get() . '; Path=/; Domain=myfoodomain.com; Secure; HttpOnly; SameSite=strict',
             $cookie->__toString(),
             '->__toString() returns string representation of the cookie'
         );
 
         $cookie = new Cookie('foo', null, 1, '/admin/', '.myfoodomain.com', false, true);
-        $this->assertEquals(
+        self::assertEquals(
             'foo=deleted; Expires=' . (new Chronos(gmdate(
                 'D, d-M-Y H:i:s T',
                 Chronos::now()->getTimestamp() - 31536001
@@ -320,7 +320,7 @@ class CookieTest extends \PHPUnit_Framework_TestCase
         );
 
         $cookie = new Cookie('foo');
-        $this->assertEquals(
+        self::assertEquals(
             'foo=deleted; Expires=' . (new Chronos(gmdate(
                 'D, d-M-Y H:i:s T',
                 Chronos::now()->getTimestamp() - 31536001

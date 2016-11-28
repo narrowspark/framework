@@ -127,7 +127,7 @@ class SessionMiddlewareTest extends \PHPUnit_Framework_TestCase
             return (new ResponseFactory())->createResponse(200);
         }));
 
-        $this->assertTrue(is_array($response->getHeader('Set-Cookie')));
+        self::assertTrue(is_array($response->getHeader('Set-Cookie')));
     }
 
     public function testAddSessionToCookie()
@@ -161,7 +161,7 @@ class SessionMiddlewareTest extends \PHPUnit_Framework_TestCase
         $request = (new ServerRequestFactory())->createServerRequest($_SERVER);
 
         $response = $middleware->process($request, new DelegateMiddleware(function ($request) {
-            $this->assertInstanceOf(StoreContract::class, $request->getAttribute('session'));
+            self::assertInstanceOf(StoreContract::class, $request->getAttribute('session'));
 
             return (new ResponseFactory())->createResponse(200);
         }));

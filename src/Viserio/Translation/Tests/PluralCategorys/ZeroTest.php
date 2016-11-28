@@ -12,7 +12,7 @@ class ZeroTest extends \PHPUnit_Framework_TestCase
     public function testGetCategory($count, $expected)
     {
         $actual = (new Zero())->category($count);
-        $this->assertEquals($expected, $this->intToString($actual));
+        self::assertEquals($expected, $this->intToString($actual));
     }
 
     public function category()

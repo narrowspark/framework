@@ -46,7 +46,7 @@ class PaginatorTest extends \PHPUnit_Framework_TestCase
 
         $pagi = new Paginator($array, $request);
 
-        $this->assertTrue(is_array($pagi->jsonSerialize()));
+        self::assertTrue(is_array($pagi->jsonSerialize()));
     }
 
     public function testSetAndGetPath()
@@ -66,11 +66,11 @@ class PaginatorTest extends \PHPUnit_Framework_TestCase
 
         $pagi->setPath('http://example.com/test');
 
-        $this->assertSame('http://example.com/test', $pagi->getPath());
+        self::assertSame('http://example.com/test', $pagi->getPath());
 
         $pagi->setPath('http://example.com/test/');
 
-        $this->assertSame('http://example.com/test', $pagi->getPath());
+        self::assertSame('http://example.com/test', $pagi->getPath());
     }
 
     public function testSetAndGetDefaultPresenter()
@@ -88,11 +88,11 @@ class PaginatorTest extends \PHPUnit_Framework_TestCase
 
         $pagi = new Paginator($array, $request);
 
-        $this->assertSame('simple', $pagi->getDefaultPresenter());
+        self::assertSame('simple', $pagi->getDefaultPresenter());
 
         $pagi->setDefaultPresenter('foundation5');
 
-        $this->assertSame('foundation5', $pagi->getDefaultPresenter());
+        self::assertSame('foundation5', $pagi->getDefaultPresenter());
     }
 
     public function testPaginatorGeneratesUrlsWithoutTrailingSlash()
@@ -110,7 +110,7 @@ class PaginatorTest extends \PHPUnit_Framework_TestCase
 
         $pagi = new Paginator($array, $request);
 
-        $this->assertEquals('/test?page=1', $pagi->getPreviousPageUrl());
+        self::assertEquals('/test?page=1', $pagi->getPreviousPageUrl());
     }
 
     public function testPaginatorRemovesTrailingSlashes()
@@ -128,7 +128,7 @@ class PaginatorTest extends \PHPUnit_Framework_TestCase
 
         $pagi = new Paginator($array, $request);
 
-        $this->assertEquals('/test?page=1', $pagi->getPreviousPageUrl());
+        self::assertEquals('/test?page=1', $pagi->getPreviousPageUrl());
     }
 
     public function testSimplePaginatorReturnsRelevantContextInformation()
@@ -146,11 +146,11 @@ class PaginatorTest extends \PHPUnit_Framework_TestCase
 
         $pagi = new Paginator($array, $request);
 
-        $this->assertEquals(2, $pagi->getCurrentPage());
-        $this->assertTrue($pagi->hasPages());
-        $this->assertTrue($pagi->hasMorePages());
-        $this->assertEquals(['item3', 'item4'], $pagi->getItems());
-        $this->assertEquals([
+        self::assertEquals(2, $pagi->getCurrentPage());
+        self::assertTrue($pagi->hasPages());
+        self::assertTrue($pagi->hasMorePages());
+        self::assertEquals(['item3', 'item4'], $pagi->getItems());
+        self::assertEquals([
             'per_page' => 2, 'current_page' => 2, 'next_page_url' => '/?page=3',
             'prev_page_url' => '/?page=1', 'from' => 3, 'to' => 4, 'data' => ['item3', 'item4'],
         ], $pagi->toArray());
@@ -170,7 +170,7 @@ class PaginatorTest extends \PHPUnit_Framework_TestCase
 
         $pagi = new Paginator($array, $request);
 
-        $this->assertSame('<ul class="pagination"><li>&laquo;</li><li><a href="/?page=2" rel="next">&raquo;</a></li></ul>', (string) $pagi);
+        self::assertSame('<ul class="pagination"><li>&laquo;</li><li><a href="/?page=2" rel="next">&raquo;</a></li></ul>', (string) $pagi);
 
         $request = $this->mock(ServerRequestInterface::class);
         $request->shouldReceive('getQueryParams')
@@ -182,7 +182,7 @@ class PaginatorTest extends \PHPUnit_Framework_TestCase
 
         $pagi = new Paginator($array, $request);
 
-        $this->assertSame('<ul class="pagination"><li><a href="/?page=1" rel="prev">&laquo;</a></li><li><a href="/?page=3" rel="next">&raquo;</a></li></ul>', $pagi->render());
+        self::assertSame('<ul class="pagination"><li><a href="/?page=1" rel="prev">&laquo;</a></li><li><a href="/?page=3" rel="next">&raquo;</a></li></ul>', $pagi->render());
 
         $array = new ArrayAdapter(['item3', 'item4', 'item5'], 3);
 
@@ -196,7 +196,7 @@ class PaginatorTest extends \PHPUnit_Framework_TestCase
 
         $pagi = new Paginator($array, $request);
 
-        $this->assertSame('<ul class="pagination"><li><a href="/?page=1" rel="prev">&laquo;</a></li><li>&raquo;</li></ul>', $pagi->render());
+        self::assertSame('<ul class="pagination"><li><a href="/?page=1" rel="prev">&laquo;</a></li><li>&raquo;</li></ul>', $pagi->render());
     }
 
     public function testPaginatorRenderBootstrap()
@@ -214,7 +214,7 @@ class PaginatorTest extends \PHPUnit_Framework_TestCase
 
         $pagi = new Paginator($array, $request);
 
-        $this->assertSame('<ul class="pagination"><li class="page-item"><a class="page-link" href="/?page=1" rel="prev">&laquo;</a></li><li class="page-item"><a class="page-link" href="/?page=3" rel="next">&raquo;</a></li></ul>', $pagi->render('bootstrap4'));
+        self::assertSame('<ul class="pagination"><li class="page-item"><a class="page-link" href="/?page=1" rel="prev">&laquo;</a></li><li class="page-item"><a class="page-link" href="/?page=3" rel="next">&raquo;</a></li></ul>', $pagi->render('bootstrap4'));
     }
 
     public function testPaginatorRenderFoundation6()
@@ -231,7 +231,7 @@ class PaginatorTest extends \PHPUnit_Framework_TestCase
 
         $pagi = new Paginator($array, $request);
 
-        $this->assertSame('<ul class="pagination" role="navigation"><li class="pagination-previous"><a href="/?page=1" rel="prev">&laquo;</a></li><li class="pagination-next"><a href="/?page=3" rel="next">&raquo;</a></li></ul>', $pagi->render('foundation6'));
+        self::assertSame('<ul class="pagination" role="navigation"><li class="pagination-previous"><a href="/?page=1" rel="prev">&laquo;</a></li><li class="pagination-next"><a href="/?page=3" rel="next">&raquo;</a></li></ul>', $pagi->render('foundation6'));
     }
 
     public function testPaginatorWithNullAdapter()
@@ -246,15 +246,15 @@ class PaginatorTest extends \PHPUnit_Framework_TestCase
 
         $pagi = new Paginator(new NullAdapter(), $request);
 
-        $this->assertEquals(1, $pagi->getCurrentPage());
-        $this->assertFalse($pagi->hasPages());
-        $this->assertFalse($pagi->hasMorePages());
-        $this->assertEquals([], $pagi->getItems());
-        $this->assertEquals([
+        self::assertEquals(1, $pagi->getCurrentPage());
+        self::assertFalse($pagi->hasPages());
+        self::assertFalse($pagi->hasMorePages());
+        self::assertEquals([], $pagi->getItems());
+        self::assertEquals([
             'per_page' => 0, 'current_page' => 1, 'next_page_url' => null,
             'prev_page_url' => null, 'from' => 0, 'to' => 0, 'data' => [],
         ], $pagi->toArray());
 
-        $this->assertSame('', (string) $pagi);
+        self::assertSame('', (string) $pagi);
     }
 }

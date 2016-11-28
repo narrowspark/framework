@@ -15,8 +15,8 @@ class MessageSelectorTest extends \PHPUnit_Framework_TestCase
         $selector = new MessageSelector();
         $selector->setPluralization(new PluralizationRules());
 
-        $this->assertEquals($expected, $selector->choose($id, $number, 'en'));
-        $this->assertInstanceOf(PluralizationRules::class, $selector->getPluralization());
+        self::assertEquals($expected, $selector->choose($id, $number, 'en'));
+        self::assertInstanceOf(PluralizationRules::class, $selector->getPluralization());
     }
 
     public function testReturnMessageIfExactlyOneStandardRuleIsGiven()
@@ -24,7 +24,7 @@ class MessageSelectorTest extends \PHPUnit_Framework_TestCase
         $selector = new MessageSelector();
         $selector->setPluralization(new PluralizationRules());
 
-        $this->assertEquals('There are two apples', $selector->choose('There are two apples', 2, 'en'));
+        self::assertEquals('There are two apples', $selector->choose('There are two apples', 2, 'en'));
     }
 
     /**

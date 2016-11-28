@@ -40,7 +40,7 @@ class VarExporterTest extends \PHPUnit_Framework_TestCase
         $exported = VarExporter::export($value);
         $evaluated = eval('return ' . $exported . ';');
 
-        $this->assertSame($code, $exported, '');
-        $this->assertEquals($value, $evaluated);
+        self::assertSame($code, $exported, '');
+        self::assertEquals($value, $evaluated);
     }
 }

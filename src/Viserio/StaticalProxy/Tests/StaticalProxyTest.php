@@ -29,10 +29,10 @@ class StaticalProxyTest extends \PHPUnit_Framework_TestCase
     public function testSwap()
     {
         ProxyStub::swap(new FacadeStub());
-        $this->assertEquals(new FacadeStub(), ProxyStub::getResolvedInstance()['baz']);
+        self::assertEquals(new FacadeStub(), ProxyStub::getResolvedInstance()['baz']);
 
         ProxyStub::clearResolvedInstance('baz');
-        $this->assertTrue(empty(ProxyStub::getResolvedInstance()['baz']));
+        self::assertTrue(empty(ProxyStub::getResolvedInstance()['baz']));
     }
 
     public function testgetInstance()
@@ -41,7 +41,7 @@ class StaticalProxyTest extends \PHPUnit_Framework_TestCase
         $container->shouldReceive('get')->with('baz')->andReturn(new StdClass());
         ProxyStub::setContainer($container);
 
-        $this->assertEquals(new StdClass(), ProxyStub::getInstance());
+        self::assertEquals(new StdClass(), ProxyStub::getInstance());
     }
 
     public function testCallStatic()
@@ -50,11 +50,11 @@ class StaticalProxyTest extends \PHPUnit_Framework_TestCase
         $container->shouldReceive('get')->with('foo')->andReturn(new ProxyStub());
         FacadeStub::setContainer($container);
 
-        $this->assertEquals(1, FacadeStub::oneArg(1));
-        $this->assertEquals(2, FacadeStub::twoArg(1, 1));
-        $this->assertEquals(3, FacadeStub::threeArg(1, 1, 1));
-        $this->assertEquals(4, FacadeStub::fourArg(1, 1, 1, 1));
-        $this->assertEquals(5, FacadeStub::moreArg(1, 1, 1, 1, 1));
+        self::assertEquals(1, FacadeStub::oneArg(1));
+        self::assertEquals(2, FacadeStub::twoArg(1, 1));
+        self::assertEquals(3, FacadeStub::threeArg(1, 1, 1));
+        self::assertEquals(4, FacadeStub::fourArg(1, 1, 1, 1));
+        self::assertEquals(5, FacadeStub::moreArg(1, 1, 1, 1, 1));
     }
 
     /**
@@ -67,7 +67,7 @@ class StaticalProxyTest extends \PHPUnit_Framework_TestCase
         $container->shouldReceive('get')->with('foo')->andReturn(new ProxyStub());
         ExceptionFacadeStub::setContainer($container);
 
-        $this->assertEquals(1, ExceptionFacadeStub::arg(1));
+        self::assertEquals(1, ExceptionFacadeStub::arg(1));
     }
 
     /**
@@ -81,7 +81,7 @@ class StaticalProxyTest extends \PHPUnit_Framework_TestCase
 
     public function testGetStaticalProxyRoot()
     {
-        $this->assertEquals(new StdClass(), FacadeObjectStub::getStaticalProxyRoot());
+        self::assertEquals(new StdClass(), FacadeObjectStub::getStaticalProxyRoot());
     }
 
     public function testFacadeCallsUnderlyingApplication()
@@ -92,7 +92,7 @@ class StaticalProxyTest extends \PHPUnit_Framework_TestCase
         $container->shouldReceive('get')->once()->andReturn($mock);
 
         FacadeStub::setContainer($container);
-        $this->assertEquals('baz', FacadeStub::bar());
+        self::assertEquals('baz', FacadeStub::bar());
     }
 
     public function testShouldReceiveReturnsAMockeryMock()
@@ -102,7 +102,7 @@ class StaticalProxyTest extends \PHPUnit_Framework_TestCase
 
         FacadeStub::setContainer($container);
 
-        $this->assertInstanceOf(
+        self::assertInstanceOf(
             'Mockery\MockInterface',
             FacadeStub::shouldReceive('foo')->with('bar')->andReturn('baz')->getMock()
         );
@@ -115,11 +115,11 @@ class StaticalProxyTest extends \PHPUnit_Framework_TestCase
 
         FacadeStub::setContainer($container);
 
-        $this->assertInstanceOf(
+        self::assertInstanceOf(
             'Mockery\MockInterface',
             $mock = FacadeStub::shouldReceive('foo')->with('bar')->andReturn('baz')->getMock()
         );
-        $this->assertInstanceOf(
+        self::assertInstanceOf(
             'Mockery\MockInterface',
             $mock = FacadeStub::shouldReceive('foo2')->with('bar2')->andReturn('baz2')->getMock()
         );
@@ -129,6 +129,6 @@ class StaticalProxyTest extends \PHPUnit_Framework_TestCase
     {
         FacadeStub::shouldReceive('foo')->andReturn('bar');
 
-        $this->assertEquals('bar', FacadeStub::foo());
+        self::assertEquals('bar', FacadeStub::foo());
     }
 }

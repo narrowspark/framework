@@ -17,11 +17,11 @@ class CacheServiceProviderTest extends \PHPUnit_Framework_TestCase
         $container->register(new CacheServiceProvider());
         $container->register(new ConfigServiceProvider());
 
-        $this->assertInstanceOf(CacheManager::class, $container->get(CacheManager::class));
-        $this->assertInstanceOf(CacheManager::class, $container->get('cache'));
+        self::assertInstanceOf(CacheManager::class, $container->get(CacheManager::class));
+        self::assertInstanceOf(CacheManager::class, $container->get('cache'));
 
-        $this->assertInstanceOf(ArrayCachePool::class, $container->get('cache.store'));
-        $this->assertInstanceOf(CacheItemPoolInterface::class, $container->get('cache.store'));
-        $this->assertInstanceOf(CacheItemPoolInterface::class, $container->get(CacheItemPoolInterface::class));
+        self::assertInstanceOf(ArrayCachePool::class, $container->get('cache.store'));
+        self::assertInstanceOf(CacheItemPoolInterface::class, $container->get('cache.store'));
+        self::assertInstanceOf(CacheItemPoolInterface::class, $container->get(CacheItemPoolInterface::class));
     }
 }

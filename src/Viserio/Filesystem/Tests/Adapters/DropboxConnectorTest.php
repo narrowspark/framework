@@ -16,7 +16,7 @@ class DropboxConnectorTest extends \PHPUnit_Framework_TestCase
             'app' => 'your-app',
         ]);
 
-        $this->assertInstanceOf(DropboxAdapter::class, $return);
+        self::assertInstanceOf(DropboxAdapter::class, $return);
     }
 
     public function testConnectWithPrefix()
@@ -29,7 +29,7 @@ class DropboxConnectorTest extends \PHPUnit_Framework_TestCase
             'prefix' => 'your-prefix',
         ]);
 
-        $this->assertInstanceOf(DropboxAdapter::class, $return);
+        self::assertInstanceOf(DropboxAdapter::class, $return);
     }
 
     /**

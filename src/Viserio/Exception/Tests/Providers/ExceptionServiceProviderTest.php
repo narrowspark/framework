@@ -28,16 +28,16 @@ class ExceptionServiceProviderTest extends \PHPUnit_Framework_TestCase
         $container->register(new ViewServiceProvider());
         $container->register(new FilesServiceProvider());
 
-        $this->assertInstanceOf(ExceptionIdentifier::class, $container->get(ExceptionIdentifier::class));
-        $this->assertInstanceOf(ExceptionInfo::class, $container->get(ExceptionInfo::class));
-        $this->assertInstanceOf(HtmlDisplayer::class, $container->get(HtmlDisplayer::class));
-        $this->assertInstanceOf(JsonDisplayer::class, $container->get(JsonDisplayer::class));
-        $this->assertInstanceOf(ViewDisplayer::class, $container->get(ViewDisplayer::class));
-        $this->assertInstanceOf(WhoopsDisplayer::class, $container->get(WhoopsDisplayer::class));
-        $this->assertInstanceOf(VerboseFilter::class, $container->get(VerboseFilter::class));
-        $this->assertInstanceOf(CanDisplayFilter::class, $container->get(CanDisplayFilter::class));
-        $this->assertInstanceOf(CommandLineTransformer::class, $container->get(CommandLineTransformer::class));
-        $this->assertInstanceOf(Handler::class, $container->get(Handler::class));
+        self::assertInstanceOf(ExceptionIdentifier::class, $container->get(ExceptionIdentifier::class));
+        self::assertInstanceOf(ExceptionInfo::class, $container->get(ExceptionInfo::class));
+        self::assertInstanceOf(HtmlDisplayer::class, $container->get(HtmlDisplayer::class));
+        self::assertInstanceOf(JsonDisplayer::class, $container->get(JsonDisplayer::class));
+        self::assertInstanceOf(ViewDisplayer::class, $container->get(ViewDisplayer::class));
+        self::assertInstanceOf(WhoopsDisplayer::class, $container->get(WhoopsDisplayer::class));
+        self::assertInstanceOf(VerboseFilter::class, $container->get(VerboseFilter::class));
+        self::assertInstanceOf(CanDisplayFilter::class, $container->get(CanDisplayFilter::class));
+        self::assertInstanceOf(CommandLineTransformer::class, $container->get(CommandLineTransformer::class));
+        self::assertInstanceOf(Handler::class, $container->get(Handler::class));
     }
 
     public function testProviderWithoutConfigManager()
@@ -51,7 +51,7 @@ class ExceptionServiceProviderTest extends \PHPUnit_Framework_TestCase
             'debug' => true,
         ]);
 
-        $this->assertInstanceOf(VerboseFilter::class, $container->get(VerboseFilter::class));
+        self::assertInstanceOf(VerboseFilter::class, $container->get(VerboseFilter::class));
     }
 
     public function testProviderWithoutConfigManagerAndNamespace()
@@ -65,6 +65,6 @@ class ExceptionServiceProviderTest extends \PHPUnit_Framework_TestCase
             'debug' => true,
         ]);
 
-        $this->assertInstanceOf(VerboseFilter::class, $container->get(VerboseFilter::class));
+        self::assertInstanceOf(VerboseFilter::class, $container->get(VerboseFilter::class));
     }
 }

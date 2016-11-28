@@ -36,7 +36,7 @@ class TaggableParserTest extends \PHPUnit_Framework_TestCase
 
         $parsed = $this->parser->setTag('foo')->parse($file->url());
 
-        $this->assertTrue(is_array($parsed));
-        $this->assertSame(['foo::a' => 1, 'foo::e' => 5], $parsed);
+        self::assertTrue(is_array($parsed));
+        self::assertSame(['foo::a' => 1, 'foo::e' => 5], $parsed);
     }
 }

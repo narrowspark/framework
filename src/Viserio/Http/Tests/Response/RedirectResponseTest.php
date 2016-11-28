@@ -11,9 +11,9 @@ class RedirectResponseTest extends \PHPUnit_Framework_TestCase
     {
         $response = new RedirectResponse('/foo/bar');
 
-        $this->assertEquals(302, $response->getStatusCode());
-        $this->assertTrue($response->hasHeader('Location'));
-        $this->assertEquals('/foo/bar', $response->getHeaderLine('Location'));
+        self::assertEquals(302, $response->getStatusCode());
+        self::assertTrue($response->hasHeader('Location'));
+        self::assertEquals('/foo/bar', $response->getHeaderLine('Location'));
     }
 
     public function testConstructorAcceptsUriInstanceAndProduces302ResponseWithLocationHeader()
@@ -21,29 +21,29 @@ class RedirectResponseTest extends \PHPUnit_Framework_TestCase
         $uri = new Uri('https://example.com:10082/foo/bar');
         $response = new RedirectResponse($uri);
 
-        $this->assertEquals(302, $response->getStatusCode());
-        $this->assertTrue($response->hasHeader('Location'));
-        $this->assertEquals((string) $uri, $response->getHeaderLine('Location'));
+        self::assertEquals(302, $response->getStatusCode());
+        self::assertTrue($response->hasHeader('Location'));
+        self::assertEquals((string) $uri, $response->getHeaderLine('Location'));
     }
 
     public function testConstructorAllowsSpecifyingAlternateStatusCode()
     {
         $response = new RedirectResponse('/foo/bar', 301);
 
-        $this->assertEquals(301, $response->getStatusCode());
-        $this->assertTrue($response->hasHeader('Location'));
-        $this->assertEquals('/foo/bar', $response->getHeaderLine('Location'));
+        self::assertEquals(301, $response->getStatusCode());
+        self::assertTrue($response->hasHeader('Location'));
+        self::assertEquals('/foo/bar', $response->getHeaderLine('Location'));
     }
 
     public function testConstructorAllowsSpecifyingHeaders()
     {
         $response = new RedirectResponse('/foo/bar', 302, ['X-Foo' => ['Bar']]);
 
-        $this->assertEquals(302, $response->getStatusCode());
-        $this->assertTrue($response->hasHeader('Location'));
-        $this->assertEquals('/foo/bar', $response->getHeaderLine('Location'));
-        $this->assertTrue($response->hasHeader('X-Foo'));
-        $this->assertEquals('Bar', $response->getHeaderLine('X-Foo'));
+        self::assertEquals(302, $response->getStatusCode());
+        self::assertTrue($response->hasHeader('Location'));
+        self::assertEquals('/foo/bar', $response->getHeaderLine('Location'));
+        self::assertTrue($response->hasHeader('X-Foo'));
+        self::assertEquals('Bar', $response->getHeaderLine('X-Foo'));
     }
 
     public function invalidUris()

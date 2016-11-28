@@ -35,13 +35,13 @@ class DatabaseServiceProviderTest extends \PHPUnit_Framework_TestCase
             ],
         ]);
 
-        $this->assertInstanceOf(Configuration::class, $container->get(Configuration::class));
-        $this->assertInstanceOf(EventManager::class, $container->get(EventManager::class));
-        $this->assertInstanceOf(Connection::class, $container->get(Connection::class));
-        $this->assertInstanceOf(Connection::class, $container->get('db'));
-        $this->assertInstanceOf(Connection::class, $container->get('database'));
-        $this->assertInstanceOf(HelperSet::class, $container->get('database.command.helper'));
-        $this->assertTrue(is_array($container->get('database.commands')));
+        self::assertInstanceOf(Configuration::class, $container->get(Configuration::class));
+        self::assertInstanceOf(EventManager::class, $container->get(EventManager::class));
+        self::assertInstanceOf(Connection::class, $container->get(Connection::class));
+        self::assertInstanceOf(Connection::class, $container->get('db'));
+        self::assertInstanceOf(Connection::class, $container->get('database'));
+        self::assertInstanceOf(HelperSet::class, $container->get('database.command.helper'));
+        self::assertTrue(is_array($container->get('database.commands')));
     }
 
     public function testProviderWithoutConfigManager()
@@ -65,9 +65,9 @@ class DatabaseServiceProviderTest extends \PHPUnit_Framework_TestCase
             ],
         ]);
 
-        $this->assertInstanceOf(Connection::class, $container->get(Connection::class));
-        $this->assertInstanceOf(Connection::class, $container->get('db'));
-        $this->assertInstanceOf(Connection::class, $container->get('database'));
+        self::assertInstanceOf(Connection::class, $container->get(Connection::class));
+        self::assertInstanceOf(Connection::class, $container->get('db'));
+        self::assertInstanceOf(Connection::class, $container->get('database'));
     }
 
     public function testProviderWithoutConfigManagerAndNamespace()
@@ -97,9 +97,9 @@ class DatabaseServiceProviderTest extends \PHPUnit_Framework_TestCase
             ],
         ]);
 
-        $this->assertInstanceOf(Connection::class, $container->get(Connection::class));
-        $this->assertInstanceOf(Connection::class, $container->get('db'));
-        $this->assertInstanceOf(Connection::class, $container->get('database'));
+        self::assertInstanceOf(Connection::class, $container->get(Connection::class));
+        self::assertInstanceOf(Connection::class, $container->get('db'));
+        self::assertInstanceOf(Connection::class, $container->get('database'));
     }
 
     public function testDatabaseConnection()
@@ -123,35 +123,35 @@ class DatabaseServiceProviderTest extends \PHPUnit_Framework_TestCase
 
         $collection = $conn->fetchArray($sql);
 
-        $this->assertInstanceOf(Collection::class, $collection);
-        $this->assertSame([0 => 'narrowspark'], $collection->all());
+        self::assertInstanceOf(Collection::class, $collection);
+        self::assertSame([0 => 'narrowspark'], $collection->all());
 
         $collection = $conn->fetchAll($sql);
 
-        $this->assertInstanceOf(Collection::class, $collection);
-        $this->assertSame(['name' => 'narrowspark'], $collection->all());
+        self::assertInstanceOf(Collection::class, $collection);
+        self::assertSame(['name' => 'narrowspark'], $collection->all());
 
         $collection = $conn->fetchAssoc($sql);
 
-        $this->assertInstanceOf(Collection::class, $collection);
-        $this->assertSame(['name' => 'narrowspark'], $collection->all());
+        self::assertInstanceOf(Collection::class, $collection);
+        self::assertSame(['name' => 'narrowspark'], $collection->all());
 
         $stmt = $conn->prepare($sql);
         $stmt->execute();
 
         $collection = $stmt->fetchAll();
 
-        $this->assertInstanceOf(Collection::class, $collection);
-        $this->assertSame(['name' => 'narrowspark'], $collection->all());
+        self::assertInstanceOf(Collection::class, $collection);
+        self::assertSame(['name' => 'narrowspark'], $collection->all());
 
         $stmt = $conn->query($sql);
         $collection = $stmt->fetch();
 
-        $this->assertInstanceOf(Collection::class, $collection);
-        $this->assertSame(['name' => 'narrowspark'], $collection->all());
+        self::assertInstanceOf(Collection::class, $collection);
+        self::assertSame(['name' => 'narrowspark'], $collection->all());
 
         $stmt = $conn->query('SELECT name FROM text WHERE id = 2');
 
-        $this->assertFalse($stmt->fetch());
+        self::assertFalse($stmt->fetch());
     }
 }

@@ -14,7 +14,7 @@ class BusServiceProviderTest extends \PHPUnit_Framework_TestCase
         $container = new Container();
         $container->register(new BusServiceProvider());
 
-        $this->assertInstanceOf(Dispatcher::class, $container->get(Dispatcher::class));
-        $this->assertInstanceOf(DispatcherContract::class, $container->get(DispatcherContract::class));
+        self::assertInstanceOf(Dispatcher::class, $container->get(Dispatcher::class));
+        self::assertInstanceOf(DispatcherContract::class, $container->get(DispatcherContract::class));
     }
 }

@@ -10,8 +10,8 @@ class ClientIpGeneratorTest extends \PHPUnit_Framework_TestCase
     {
         $generator = new ClientIpGenerator();
 
-        $this->assertInternalType('string', $generator->generate());
-        $this->assertSame(40, strlen($generator->generate()));
+        self::assertInternalType('string', $generator->generate());
+        self::assertSame(40, strlen($generator->generate()));
     }
 
     public function testGenerateWithProxyIp()
@@ -20,8 +20,8 @@ class ClientIpGeneratorTest extends \PHPUnit_Framework_TestCase
 
         $generator = new ClientIpGenerator();
 
-        $this->assertInternalType('string', $generator->generate());
-        $this->assertSame(40, strlen($generator->generate()));
+        self::assertInternalType('string', $generator->generate());
+        self::assertSame(40, strlen($generator->generate()));
 
         unset($_SERVER['HTTP_X_FORWARDED_FOR']);
     }
@@ -32,13 +32,13 @@ class ClientIpGeneratorTest extends \PHPUnit_Framework_TestCase
 
         $generator = new ClientIpGenerator();
 
-        $this->assertInternalType('string', $generator->generate());
-        $this->assertSame(40, strlen($generator->generate()));
+        self::assertInternalType('string', $generator->generate());
+        self::assertSame(40, strlen($generator->generate()));
 
         unset($_SERVER['REMOTE_ADDR']);
 
         // return empty ip string
-        $this->assertInternalType('string', $generator->generate());
-        $this->assertSame(40, strlen($generator->generate()));
+        self::assertInternalType('string', $generator->generate());
+        self::assertSame(40, strlen($generator->generate()));
     }
 }

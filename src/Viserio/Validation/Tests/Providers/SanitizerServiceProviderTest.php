@@ -13,7 +13,7 @@ class SanitizerServiceProviderTest extends \PHPUnit_Framework_TestCase
         $container = new Container();
         $container->register(new SanitizerServiceProvider());
 
-        $this->assertInstanceOf(Sanitizer::class, $container->get(Sanitizer::class));
-        $this->assertInstanceOf(Sanitizer::class, $container->get('sanitizer'));
+        self::assertInstanceOf(Sanitizer::class, $container->get(Sanitizer::class));
+        self::assertInstanceOf(Sanitizer::class, $container->get('sanitizer'));
     }
 }

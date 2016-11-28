@@ -19,8 +19,8 @@ class AliasLoaderServiceProviderTest extends \PHPUnit_Framework_TestCase
             'aliases' => [],
         ]);
 
-        $this->assertInstanceOf(AliasLoader::class, $container->get(AliasLoader::class));
-        $this->assertInstanceOf(AliasLoader::class, $container->get('alias'));
+        self::assertInstanceOf(AliasLoader::class, $container->get(AliasLoader::class));
+        self::assertInstanceOf(AliasLoader::class, $container->get('alias'));
     }
 
     public function testProviderWithoutConfigManager()
@@ -32,7 +32,7 @@ class AliasLoaderServiceProviderTest extends \PHPUnit_Framework_TestCase
             'aliases' => [],
         ]);
 
-        $this->assertInstanceOf(AliasLoader::class, $container->get(AliasLoader::class));
+        self::assertInstanceOf(AliasLoader::class, $container->get(AliasLoader::class));
     }
 
     public function testProviderWithoutConfigManagerAndNamespace()
@@ -44,6 +44,6 @@ class AliasLoaderServiceProviderTest extends \PHPUnit_Framework_TestCase
             'aliases' => [],
         ]);
 
-        $this->assertInstanceOf(AliasLoader::class, $container->get(AliasLoader::class));
+        self::assertInstanceOf(AliasLoader::class, $container->get(AliasLoader::class));
     }
 }
