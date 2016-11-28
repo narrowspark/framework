@@ -22,6 +22,8 @@ matrix:
       env: SETUP=lowest
     - php: 7.1
       env: SETUP=basic
+    - php: 7.1
+      env: SETUP=stable
   allow_failures:
     - env: SETUP=lowest
       php: 7.0

@@ -8,6 +8,7 @@ use Mockery as Mock;
 use Narrowspark\TestingHelper\ArrayContainer;
 use Narrowspark\TestingHelper\Middleware\CallableMiddleware;
 use Narrowspark\TestingHelper\Middleware\Dispatcher;
+use Narrowspark\TestingHelper\Middleware\DelegateMiddleware;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use org\bovigo\vfs\vfsStream;
 use Viserio\Contracts\Config\Manager as ConfigManagerContract;
@@ -137,8 +138,12 @@ class VerifyCsrfTokenMiddlewareTest extends \PHPUnit_Framework_TestCase
             ->with('session.secure', false)
             ->twice()
             ->andReturn(false);
+        $config->shouldReceive('get')
+            ->with('session.lifetime', 1440)
+            ->andReturn(1440);
 
         $request = (new ServerRequestFactory())->createServerRequest($_SERVER);
+        $request = $request->withMethod('PUT');
 
         $dispatcher = new Dispatcher(
             [
@@ -160,35 +165,146 @@ class VerifyCsrfTokenMiddlewareTest extends \PHPUnit_Framework_TestCase
         self::assertTrue(is_array($response->getHeader('Set-Cookie')));
     }
 
-    // public function testSessionCsrfMiddlewareReadsXXsrfToken()
-    // {
-    //     $manager = $this->manager;
-    //     $config = $manager->getConfig();
+    public function testSessionCsrfMiddlewareReadsXCSRFTOKEN()
+    {
+        $manager = $this->manager;
+        $config = $manager->getConfig();
 
-    //     $config->shouldReceive('get')
-    //         ->with('session.drivers', []);
-    //     $config->shouldReceive('get')
-    //         ->with('session.path')
-    //         ->andReturn($this->root->url());
-    //     $config->shouldReceive('get')
-    //         ->with('session.domain')
-    //         ->andReturn('/');
-    //     $config->shouldReceive('get')
-    //         ->with('session.secure', false)
-    //         ->andReturn(false);
-    //     $config->shouldReceive('get')
-    //         ->with('session.csrf.samesite', false)
-    //         ->andReturn(false);
+        $config->shouldReceive('get')
+            ->once()
+            ->with('session.drivers', []);
+        $config->shouldReceive('get')
+            ->with('app.env')
+            ->andReturn('dev');
+        $config->shouldReceive('get')
+            ->with('session.driver', null)
+            ->twice()
+            ->andReturn('local');
+        $config->shouldReceive('get')
+            ->with('session.driver', 'local')
+            ->once()
+            ->andReturn('local');
+        $config->shouldReceive('get')
+            ->with('session.path')
+            ->times(3)
+            ->andReturn($this->root->url());
+        $config->shouldReceive('get')
+            ->with('session.csrf.samesite', false)
+            ->once()
+            ->andReturn(false);
+        $config->shouldReceive('get')
+            ->with('session.csrf.livetime', $time = Chronos::now()->getTimestamp() + 60 * 120)
+            ->once()
+            ->andReturn($time);
+        $config->shouldReceive('get')
+            ->with('session.cookie', '')
+            ->once()
+            ->andReturn('session');
+        $config->shouldReceive('get')
+            ->with('session.expire_on_close', false)
+            ->once()
+            ->andReturn(false);
+        $config->shouldReceive('get')
+            ->with('session.lottery')
+            ->once()
+            ->andReturn([2, 100]);
+        $config->shouldReceive('get')
+            ->with('session.lifetime')
+            ->twice()
+            ->andReturn(5);
+        $config->shouldReceive('get')
+            ->with('session.http_only', false)
+            ->once()
+            ->andReturn(false);
+        $config->shouldReceive('get')
+            ->with('session.domain')
+            ->twice()
+            ->andReturn('/');
+        $config->shouldReceive('get')
+            ->with('session.secure', false)
+            ->twice()
+            ->andReturn(false);
+        $config->shouldReceive('get')
+            ->with('session.lifetime', 1440)
+            ->andReturn(1440);
 
-    //     $middleware = new VerifyCsrfTokenMiddleware($manager);
+        $request = (new ServerRequestFactory())->createServerRequest($_SERVER);
+        $request = $request->withMethod('PUT');
 
-    //     $request = (new ServerRequestFactory())->createServerRequest($_SERVER);
-    //     $request = $request->withMethod('PUT');
+        $dispatcher = new Dispatcher(
+            [
+                new SessionMiddleware($manager),
+                new CallableMiddleware(function ($request, $delegate) {
+                    $request = $request->withAddedHeader('X-CSRF-TOKEN', $request->getAttribute('session')->getToken());
 
-    //     $response = $middleware->process($request, new DelegateMiddleware(function ($request) {
-    //         self::assertTrue($request->getAttribute('X-XSRF-TOKEN') !== null);
+                    return $delegate->process($request);
+                }),
+                new VerifyCsrfTokenMiddleware($manager),
+                new CallableMiddleware(function ($request, $delegate) {
+                    return (new ResponseFactory())->createResponse(200);
+                }),
+            ]
+        );
 
-    //         return (new ResponseFactory())->createResponse(200);
-    //     }));
-    // }
+        $response = $dispatcher->dispatch($request);
+
+        self::assertTrue(is_array($response->getHeader('Set-Cookie')));
+    }
+
+    /**
+     * @expectedException \Viserio\Contracts\Session\Exception\TokenMismatchException
+     */
+    public function testSessionCsrfMiddlewareToThrowException()
+    {
+        $manager = $this->manager;
+        $config = $manager->getConfig();
+
+        $config->shouldReceive('get')
+            ->once()
+            ->with('session.drivers', []);
+        $config->shouldReceive('get')
+            ->with('app.env')
+            ->andReturn('dev');
+        $config->shouldReceive('get')
+            ->with('session.driver', null)
+            ->once()
+            ->andReturn('local');
+        $config->shouldReceive('get')
+            ->with('session.driver', 'local')
+            ->once()
+            ->andReturn('local');
+        $config->shouldReceive('get')
+            ->with('session.path')
+            ->once()
+            ->andReturn($this->root->url());
+        $config->shouldReceive('get')
+            ->with('session.lifetime')
+            ->once()
+            ->andReturn(1440);
+        $config->shouldReceive('get')
+            ->with('session.cookie', '')
+            ->once()
+            ->andReturn('test');
+        $config->shouldReceive('get')
+            ->with('session.lottery')
+            ->once()
+            ->andReturn([2, 100]);
+
+        $request = (new ServerRequestFactory())->createServerRequest($_SERVER);
+        $request = $request->withMethod('PUT');
+
+        $dispatcher = new Dispatcher(
+            [
+                new SessionMiddleware($manager),
+                new VerifyCsrfTokenMiddleware($manager),
+                new CallableMiddleware(function ($request, $delegate) {
+                    return (new ResponseFactory())->createResponse(200);
+                }),
+            ]
+        );
+
+        $response = $dispatcher->dispatch($request);
+
+        self::assertTrue(is_array($response->getHeader('Set-Cookie')));
+    }
 }

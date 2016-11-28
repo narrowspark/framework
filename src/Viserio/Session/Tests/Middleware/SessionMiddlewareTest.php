@@ -166,6 +166,9 @@ class SessionMiddlewareTest extends \PHPUnit_Framework_TestCase
             ->with('session.lottery')
             ->once()
             ->andReturn([2, 100]);
+        $config->shouldReceive('get')
+            ->with('session.lifetime', 1440)
+            ->andReturn(1440);
 
         $middleware = new SessionMiddleware($manager);
         $request = (new ServerRequestFactory())->createServerRequest($_SERVER);
