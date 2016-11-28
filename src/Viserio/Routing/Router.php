@@ -35,13 +35,6 @@ class Router extends AbstractRouteDispatcher implements RouterContract, ServerMi
     protected $patterns = [];
 
     /**
-     * Path to the cached router file.
-     *
-     * @var string
-     */
-    protected $path;
-
-    /**
      * Create a new Router instance.
      *
      * @param \Interop\Container\ContainerInterface $container

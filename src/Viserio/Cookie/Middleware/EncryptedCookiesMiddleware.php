@@ -112,14 +112,14 @@ class EncryptedCookiesMiddleware implements ServerMiddlewareInterface
             }
 
             try {
-                $cookies->forget($key);
+                $cookies = $cookies->forget($key);
                 $cookie = $cookie->withValue($this->decryptCookie($cookie->getValue()));
 
-                $cookies->add($key, $cookie);
+                $cookies = $cookies->add($cookie);
             } catch (EnvironmentIsBrokenException $exception) {
-                $cookies->add($key, null);
+                $cookies = $cookies->add(new Cookie($key, null));
             } catch (WrongKeyOrModifiedCiphertextException $exception) {
-                $cookies->add($key, null);
+                $cookies = $cookies->add(new Cookie($key, null));
             }
         }
 
@@ -176,9 +176,9 @@ class EncryptedCookiesMiddleware implements ServerMiddlewareInterface
                 continue;
             }
 
-            $cookies->forget($key);
+            $cookies = $cookies->forget($key);
 
-            $cookies->add(
+            $cookies = $cookies->add(
                 $key,
                 $this->duplicate(
                     $cookie,

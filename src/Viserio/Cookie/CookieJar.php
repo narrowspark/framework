@@ -110,40 +110,6 @@ class CookieJar implements JarContract
     }
 
     /**
-     * Render Set-Cookies into a Response.
-     *
-     * @param \Psr\Http\Message\ResponseInterface $response
-     *
-     * @return \Psr\Http\Message\ResponseInterface
-     */
-    public function renderIntoSetCookieHeader(ResponseInterface $response): ResponseInterface
-    {
-        $response = $response->withoutHeader('Set-Cookie');
-
-        foreach ($this->queued as $cookie) {
-            $response = $response->withAddedHeader('Set-Cookie', $cookie->__toString());
-        }
-
-        return $response;
-    }
-
-    /**
-     * Render Cookies into a Request.
-     *
-     * @param \Psr\Http\Message\RequestInterface $request
-     *
-     * @return \Psr\Http\Message\RequestInterface
-     */
-    public function renderIntoCookieHeader(RequestInterface $request): RequestInterface
-    {
-        $cookieString = implode('; ', $this->queued);
-
-        $request = $request->withHeader('Cookie', $cookieString);
-
-        return $request;
-    }
-
-    /**
      * Determine if a cookie has been queued.
      *
      * @param string $key

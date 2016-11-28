@@ -42,7 +42,7 @@ class RequestCookies extends AbstractCookieCollector
      *
      * @return array
      */
-    protected static function listFromCookieString(string $string)
+    protected static function listFromCookieString(string $string): array
     {
         $cookies = self::splitOnAttributeDelimiter($string);
 

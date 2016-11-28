@@ -45,6 +45,13 @@ abstract class AbstractRouteDispatcher
     protected $current;
 
     /**
+     * Path to the cached router file.
+     *
+     * @var string
+     */
+    protected $path;
+
+    /**
      * Flag for refresh the cache file on every call.
      *
      * @var bool
