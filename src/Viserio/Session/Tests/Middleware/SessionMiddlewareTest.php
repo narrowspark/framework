@@ -16,6 +16,7 @@ use Viserio\HttpFactory\ResponseFactory;
 use Viserio\HttpFactory\ServerRequestFactory;
 use Viserio\Session\Middleware\SessionMiddleware;
 use Viserio\Session\SessionManager;
+use Viserio\Contracts\Session\Store as StoreContract;
 
 class SessionMiddlewareTest extends \PHPUnit_Framework_TestCase
 {
@@ -157,7 +158,7 @@ class SessionMiddlewareTest extends \PHPUnit_Framework_TestCase
         $request = (new ServerRequestFactory())->createServerRequest($_SERVER);
 
         $response = $middleware->process($request, new DelegateMiddleware(function ($request) {
-            var_dump($request);
+            $this->assertInstanceOf(StoreContract::class, $request->getAttribute('session'));
 
             return (new ResponseFactory())->createResponse(200);
         }));

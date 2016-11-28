@@ -10,6 +10,7 @@ use Psr\Http\Message\ServerRequestInterface;
 use Schnittstabil\Csrf\TokenService\TokenService;
 use Viserio\Cookie\Cookie;
 use Viserio\Session\SessionManager;
+use Viserio\Contracts\Session\Exception\TokenMismatchException;
 
 class VerifyCsrfTokenMiddleware implements ServerMiddlewareInterface
 {
@@ -21,11 +22,11 @@ class VerifyCsrfTokenMiddleware implements ServerMiddlewareInterface
     protected $manager;
 
     /**
-     * TokenService for building.
+     * The URIs that should be excluded from CSRF verification.
      *
-     * @var \Schnittstabil\Csrf\TokenService\TokenServiceInterface
+     * @var array
      */
-    protected $tokenService;
+    protected $except = [];
 
     /**
      * Create a new session middleware.
@@ -35,14 +36,6 @@ class VerifyCsrfTokenMiddleware implements ServerMiddlewareInterface
     public function __construct(SessionManager $manager)
     {
         $this->manager = $manager;
-
-        $config = $manager->getConfig();
-
-        $this->tokenService = new TokenService(
-            $config->get('session.key'),
-            $config->get('session.csrf.livetime', Chronos::now()->getTimestamp() + 60 * 120),
-            $config->get('session.csrf.algo', 'SHA512')
-        );
     }
 
     /**
@@ -50,27 +43,49 @@ class VerifyCsrfTokenMiddleware implements ServerMiddlewareInterface
      */
     public function process(ServerRequestInterface $request, DelegateInterface $delegate): ResponseInterface
     {
-        $request = $this->generateNewToken($request);
-
         $response = $delegate->process($request);
 
-        if ($this->isReading($request) || $this->tokensMatch($request)) {
-            $response = $this->addCookieToResponse($response);
+        if ($this->isReading($request) ||
+            $this->runningUnitTests() ||
+            $this->shouldPassThrough($request) ||
+            $this->tokensMatch($request)
+        ) {
+            return $this->addCookieToResponse($request, $response);
         }
 
-        return $response;
+        throw new TokenMismatchException;
     }
 
     /**
-     * Generates a new CSRF token and attaches it to the Request Object
+     * Determine if the application is running unit tests.
+     *
+     * @return bool
+     */
+    protected function runningUnitTests(): bool
+    {
+        return php_sapi_name() == 'cli' && $this->config->get('app.env') == 'testing';
+    }
+
+    /**
+     * Determine if the request has a URI that should pass through CSRF verification.
      *
      * @param \Psr\Http\Message\ServerRequestInterface $request
      *
-     * @return \Psr\Http\Message\ServerRequestInterface
+     * @return bool
      */
-    public function generateNewToken(ServerRequestInterface $request): ServerRequestInterface
+    protected function shouldPassThrough(ServerRequestInterface $request): bool
     {
-        return $request->withAttribute('X-XSRF-TOKEN', $this->tokenService->generate());
+        foreach ($this->except as $except) {
+            if ($except !== '/') {
+                $except = trim($except, '/');
+            }
+
+            if ($request->getUri()->getPath() === $except) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
@@ -82,27 +97,36 @@ class VerifyCsrfTokenMiddleware implements ServerMiddlewareInterface
      */
     protected function tokensMatch(ServerRequestInterface $request): bool
     {
-        foreach ($request->getHeader('X-XSRF-TOKEN') as $token) {
-            return $this->tokenService->validate($token);
+        $sessionToken = $request->getAttribute('session')->getToken();
+        $data = $request->getParsedBody();
+        $token = $data['_token'] ?? $request->getHeader('X-CSRF-TOKEN');
+
+        if (! $token && $header = $request->getHeader('X-XSRF-TOKEN')) {
+            $token = $this->manager->getEncrypter()->decrypt($header);
         }
 
-        return false;
+        if (! is_string($sessionToken) || ! is_string($token)) {
+            return false;
+        }
+
+        return hash_equals($sessionToken, $token);
     }
 
     /**
      * Add the CSRF token to the response cookies.
      *
-     * @param \Psr\Http\Message\ResponseInterface $response
+     * @param \Psr\Http\Message\ServerRequestInterface $request
+     * @param \Psr\Http\Message\ResponseInterface      $response
      *
      * @return \Psr\Http\Message\ResponseInterface
      */
-    protected function addCookieToResponse(ResponseInterface $response): ResponseInterface
+    protected function addCookieToResponse(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
     {
         $config = $this->manager->getConfig();
 
         $setCookie = new Cookie(
             'XSRF-TOKEN',
-            $this->tokenService->generate(),
+            $request->getAttribute('session')->getToken(),
             $config->get('session.csrf.livetime', Chronos::now()->getTimestamp() + 60 * 120),
             $config->get('session.path'),
             $config->get('session.domain'),
