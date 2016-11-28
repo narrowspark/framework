@@ -99,7 +99,7 @@ class VerifyCsrfTokenMiddleware implements ServerMiddlewareInterface
         $sessionToken = $request->getAttribute('session')->getToken();
         $data = $request->getParsedBody();
         $token = $data['_token'] ?? $request->getHeader('X-CSRF-TOKEN');
-var_dump($sessionToken, $token, $data);
+        var_dump($sessionToken, $token, $data);
         if (! $token && $header = $request->getHeader('X-XSRF-TOKEN')) {
             $token = $this->manager->getEncrypter()->decrypt($header);
         }

@@ -145,6 +145,7 @@ class VerifyCsrfTokenMiddlewareTest extends \PHPUnit_Framework_TestCase
                 new SessionMiddleware($manager),
                 new CallableMiddleware(function ($request, $delegate) {
                     $request = $request->withParsedBody(['_token' => $request->getAttribute('session')->getToken()]);
+
                     return $delegate->process($request);
                 }),
                 new VerifyCsrfTokenMiddleware($manager),
