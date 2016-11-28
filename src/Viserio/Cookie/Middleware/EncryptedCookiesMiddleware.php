@@ -12,7 +12,7 @@ use Viserio\Contracts\Cookie\Cookie as CookieContract;
 use Viserio\Contracts\Encryption\Encrypter as EncrypterContract;
 use Viserio\Cookie\Cookie;
 
-class EncryptCookies implements ServerMiddlewareInterface
+class EncryptCookiesMiddleware implements ServerMiddlewareInterface
 {
     /**
      * The encrypter instance.

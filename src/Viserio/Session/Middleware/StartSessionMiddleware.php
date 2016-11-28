@@ -16,7 +16,7 @@ use Viserio\Session\Fingerprint\UserAgentGenerator;
 use Viserio\Session\Handler\CookieSessionHandler;
 use Viserio\Session\SessionManager;
 
-class SessionMiddleware implements ServerMiddlewareInterface
+class StartSessionMiddleware implements ServerMiddlewareInterface
 {
     /**
      * The session manager.

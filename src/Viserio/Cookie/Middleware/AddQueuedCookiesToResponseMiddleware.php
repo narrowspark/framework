@@ -7,7 +7,7 @@ use Interop\Http\Middleware\ServerMiddlewareInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Contracts\Cookie\QueueingFactory as CookieJar;
 
-class AddQueuedCookiesToResponse implements ServerMiddlewareInterface
+class AddQueuedCookiesToResponseMiddleware implements ServerMiddlewareInterface
 {
     /**
      * The cookie jar instance.

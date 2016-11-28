@@ -16,10 +16,10 @@ use Viserio\Encryption\Encrypter;
 use Viserio\Filesystem\Filesystem;
 use Viserio\HttpFactory\ResponseFactory;
 use Viserio\HttpFactory\ServerRequestFactory;
-use Viserio\Session\Middleware\SessionMiddleware;
+use Viserio\Session\Middleware\StartSessionMiddleware;
 use Viserio\Session\SessionManager;
 
-class SessionMiddlewareTest extends \PHPUnit_Framework_TestCase
+class StartSessionMiddlewareTest extends \PHPUnit_Framework_TestCase
 {
     use MockeryTrait;
 
@@ -128,7 +128,7 @@ class SessionMiddlewareTest extends \PHPUnit_Framework_TestCase
             ->once()
             ->andReturn(false);
 
-        $middleware = new SessionMiddleware($manager);
+        $middleware = new StartSessionMiddleware($manager);
         $request = (new ServerRequestFactory())->createServerRequest($_SERVER);
 
         $response = $middleware->process($request, new DelegateMiddleware(function ($request) {
@@ -170,7 +170,7 @@ class SessionMiddlewareTest extends \PHPUnit_Framework_TestCase
             ->with('session.lifetime', 1440)
             ->andReturn(1440);
 
-        $middleware = new SessionMiddleware($manager);
+        $middleware = new StartSessionMiddleware($manager);
         $request = (new ServerRequestFactory())->createServerRequest($_SERVER);
 
         $response = $middleware->process($request, new DelegateMiddleware(function ($request) {

@@ -18,7 +18,7 @@ use Viserio\Encryption\Encrypter;
 use Viserio\Filesystem\Filesystem;
 use Viserio\HttpFactory\ResponseFactory;
 use Viserio\HttpFactory\ServerRequestFactory;
-use Viserio\Session\Middleware\SessionMiddleware;
+use Viserio\Session\Middleware\StartSessionMiddleware;
 use Viserio\Session\Middleware\VerifyCsrfTokenMiddleware;
 use Viserio\Session\SessionManager;
 
@@ -147,7 +147,7 @@ class VerifyCsrfTokenMiddlewareTest extends \PHPUnit_Framework_TestCase
 
         $dispatcher = new Dispatcher(
             [
-                new SessionMiddleware($manager),
+                new StartSessionMiddleware($manager),
                 new CallableMiddleware(function ($request, $delegate) {
                     $request = $request->withParsedBody(['_token' => $request->getAttribute('session')->getToken()]);
 
@@ -233,7 +233,7 @@ class VerifyCsrfTokenMiddlewareTest extends \PHPUnit_Framework_TestCase
 
         $dispatcher = new Dispatcher(
             [
-                new SessionMiddleware($manager),
+                new StartSessionMiddleware($manager),
                 new CallableMiddleware(function ($request, $delegate) {
                     $request = $request->withAddedHeader('X-CSRF-TOKEN', $request->getAttribute('session')->getToken());
 
@@ -319,7 +319,7 @@ class VerifyCsrfTokenMiddlewareTest extends \PHPUnit_Framework_TestCase
 
         $dispatcher = new Dispatcher(
             [
-                new SessionMiddleware($manager),
+                new StartSessionMiddleware($manager),
                 new CallableMiddleware(function ($request, $delegate) {
                     $request = $request->withAddedHeader(
                         'X-XSRF-TOKEN',
@@ -387,7 +387,7 @@ class VerifyCsrfTokenMiddlewareTest extends \PHPUnit_Framework_TestCase
 
         $dispatcher = new Dispatcher(
             [
-                new SessionMiddleware($manager),
+                new StartSessionMiddleware($manager),
                 new VerifyCsrfTokenMiddleware($manager),
                 new CallableMiddleware(function ($request, $delegate) {
                     return (new ResponseFactory())->createResponse(200);
