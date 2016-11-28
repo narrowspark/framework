@@ -39,6 +39,8 @@ class FileSessionHandlerTest extends \PHPUnit_Framework_TestCase
     public function tearDown()
     {
         $this->files->deleteDirectory(__DIR__ . '/stubs');
+
+        parent::tearDown();
     }
 
     public function testOpenReturnsTrue()

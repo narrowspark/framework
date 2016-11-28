@@ -10,6 +10,7 @@ use Predis\Client;
 use Viserio\Encryption\Encrypter;
 use Viserio\Queue\Connectors\RedisQueue;
 use Viserio\Queue\Tests\Fixture\RedisQueueIntegrationJob;
+use Mockery as Mock;
 
 class RedisQueueIntegrationTest extends \PHPUnit_Framework_TestCase
 {
@@ -60,9 +61,14 @@ class RedisQueueIntegrationTest extends \PHPUnit_Framework_TestCase
 
     public function tearDown()
     {
+        $this->redis->flushdb();
+
         parent::tearDown();
 
-        $this->redis->flushdb();
+        $this->allowMockingNonExistentMethods(true);
+
+        // Verify Mockery expectations.
+        Mock::close();
     }
 
     public function testExpiredJobsArePopped()

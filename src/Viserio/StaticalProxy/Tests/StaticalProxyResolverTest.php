@@ -7,21 +7,23 @@ use StdClass;
 use Viserio\StaticalProxy\StaticalProxy;
 use Viserio\StaticalProxy\StaticalProxyResolver;
 use Viserio\StaticalProxy\Tests\Fixture\FacadeStub;
+use Interop\Container\ContainerInterface;
+use Narrowspark\TestingHelper\Traits\MockeryTrait;
 
 class StaticalProxyResolverTest extends \PHPUnit_Framework_TestCase
 {
+    use MockeryTrait;
+
     public function setUp()
     {
+        parent::setUp();
+
         StaticalProxy::clearResolvedInstances();
 
-        $container = Mock::mock('Interop\Container\ContainerInterface');
+        $container = $this->mock(ContainerInterface::class);
         $container->shouldReceive('get')->andReturn(new StdClass());
-        FacadeStub::setContainer($container);
-    }
 
-    public function tearDown()
-    {
-        Mock::close();
+        FacadeStub::setContainer($container);
     }
 
     public function testResolve()

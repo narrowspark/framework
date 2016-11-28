@@ -22,6 +22,8 @@ class LazyOpenStreamTest extends \PHPUnit_Framework_TestCase
         if (file_exists($this->fname)) {
             unlink($this->fname);
         }
+
+        parent::tearDown();
     }
 
     public function testOpensLazily()

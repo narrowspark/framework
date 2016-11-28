@@ -17,6 +17,7 @@ use Viserio\HttpFactory\ResponseFactory;
 use Viserio\HttpFactory\ServerRequestFactory;
 use Viserio\Session\Middleware\SessionMiddleware;
 use Viserio\Session\SessionManager;
+use Mockery as Mock;
 
 class SessionMiddlewareTest extends \PHPUnit_Framework_TestCase
 {
@@ -68,6 +69,11 @@ class SessionMiddlewareTest extends \PHPUnit_Framework_TestCase
         $this->files = $this->manager = null;
 
         parent::tearDown();
+
+        $this->allowMockingNonExistentMethods(true);
+
+        // Verify Mockery expectations.
+        Mock::close();
     }
 
     public function testAddSessionToResponse()
@@ -76,6 +82,7 @@ class SessionMiddlewareTest extends \PHPUnit_Framework_TestCase
         $config = $manager->getConfig();
 
         $config->shouldReceive('get')
+            ->once()
             ->with('session.drivers', []);
         $config->shouldReceive('get')
             ->with('session.driver', 'local')
@@ -87,6 +94,7 @@ class SessionMiddlewareTest extends \PHPUnit_Framework_TestCase
             ->andReturn('local');
         $config->shouldReceive('get')
             ->with('session.lifetime')
+            ->twice()
             ->andReturn(5);
         $config->shouldReceive('get')
             ->with('session.cookie', '')
@@ -136,6 +144,7 @@ class SessionMiddlewareTest extends \PHPUnit_Framework_TestCase
         $config = $manager->getConfig();
 
         $config->shouldReceive('get')
+            ->once()
             ->with('session.drivers', []);
         $config->shouldReceive('get')
             ->with('session.driver', 'local')
@@ -147,6 +156,7 @@ class SessionMiddlewareTest extends \PHPUnit_Framework_TestCase
             ->andReturn('cookie');
         $config->shouldReceive('get')
             ->with('session.lifetime')
+            ->once()
             ->andReturn(5);
         $config->shouldReceive('get')
             ->with('session.cookie', '')

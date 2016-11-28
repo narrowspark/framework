@@ -119,8 +119,10 @@ class VerifyCsrfTokenMiddleware implements ServerMiddlewareInterface
      *
      * @return \Psr\Http\Message\ResponseInterface
      */
-    protected function addCookieToResponse(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
-    {
+    protected function addCookieToResponse(
+        ServerRequestInterface $request,
+        ResponseInterface $response
+    ): ResponseInterface {
         $config = $this->manager->getConfig();
 
         $setCookie = new Cookie(

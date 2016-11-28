@@ -11,6 +11,7 @@ use Viserio\Contracts\Session\Fingerprint as FingerprintContract;
 use Viserio\Contracts\Session\Store as StoreContract;
 use Viserio\Session\Handler\CookieSessionHandler;
 use Viserio\Support\Str;
+use Viserio\Contracts\Support\CharacterType;
 
 class Store implements StoreContract
 {
@@ -500,7 +501,7 @@ class Store implements StoreContract
      */
     public function regenerateToken()
     {
-        $this->set('_token', Str::random(40));
+        $this->set('_token', Str::random(40, CharacterType::ALPHANUMERIC));
     }
 
     /**

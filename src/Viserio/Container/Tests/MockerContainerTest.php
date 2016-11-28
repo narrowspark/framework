@@ -40,6 +40,8 @@ class MockerContainerTest extends \PHPUnit_Framework_TestCase
         $property = $reflection->getProperty('mockedServices');
         $property->setAccessible(true);
         $property->setValue($reflection, []);
+
+        parent::tearDown();
     }
 
     public function testThatBehaviorDoesNotChangeByDefault()

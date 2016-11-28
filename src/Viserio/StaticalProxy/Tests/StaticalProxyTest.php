@@ -9,21 +9,22 @@ use Viserio\StaticalProxy\Tests\Fixture\ExceptionFacadeStub;
 use Viserio\StaticalProxy\Tests\Fixture\FacadeObjectStub;
 use Viserio\StaticalProxy\Tests\Fixture\FacadeStub;
 use Viserio\StaticalProxy\Tests\Fixture\ProxyStub;
+use Interop\Container\ContainerInterface;
+use Narrowspark\TestingHelper\Traits\MockeryTrait;
 
 class StaticalProxyTest extends \PHPUnit_Framework_TestCase
 {
+    use MockeryTrait;
+
     public function setUp()
     {
+        parent::setUp();
+
         StaticalProxy::clearResolvedInstances();
 
-        $container = Mock::mock('Interop\Container\ContainerInterface');
+        $container = $this->mock(ContainerInterface::class);
         $container->shouldReceive('get')->andReturn(new StdClass());
         FacadeStub::setContainer($container);
-    }
-
-    public function tearDown()
-    {
-        Mock::close();
     }
 
     public function testSwap()
@@ -37,7 +38,7 @@ class StaticalProxyTest extends \PHPUnit_Framework_TestCase
 
     public function testgetInstance()
     {
-        $container = Mock::mock('Interop\Container\ContainerInterface');
+        $container = $this->mock(ContainerInterface::class);
         $container->shouldReceive('get')->with('baz')->andReturn(new StdClass());
         ProxyStub::setContainer($container);
 
@@ -46,7 +47,7 @@ class StaticalProxyTest extends \PHPUnit_Framework_TestCase
 
     public function testCallStatic()
     {
-        $container = Mock::mock('Interop\Container\ContainerInterface');
+        $container = $this->mock(ContainerInterface::class);
         $container->shouldReceive('get')->with('foo')->andReturn(new ProxyStub());
         FacadeStub::setContainer($container);
 
@@ -63,7 +64,7 @@ class StaticalProxyTest extends \PHPUnit_Framework_TestCase
      */
     public function testCallStaticToThrowException()
     {
-        $container = Mock::mock('Interop\Container\ContainerInterface');
+        $container = $this->mock(ContainerInterface::class);
         $container->shouldReceive('get')->with('foo')->andReturn(new ProxyStub());
         ExceptionFacadeStub::setContainer($container);
 
@@ -86,7 +87,7 @@ class StaticalProxyTest extends \PHPUnit_Framework_TestCase
 
     public function testFacadeCallsUnderlyingApplication()
     {
-        $container = Mock::mock('Interop\Container\ContainerInterface');
+        $container = $this->mock(ContainerInterface::class);
         $mock = Mock::mock('StdClass');
         $mock->shouldReceive('bar')->once()->andReturn('baz');
         $container->shouldReceive('get')->once()->andReturn($mock);
@@ -97,7 +98,7 @@ class StaticalProxyTest extends \PHPUnit_Framework_TestCase
 
     public function testShouldReceiveReturnsAMockeryMock()
     {
-        $container = Mock::mock('Interop\Container\ContainerInterface');
+        $container = $this->mock(ContainerInterface::class);
         $container->shouldReceive('get')->with('foo')->andReturn(new StdClass());
 
         FacadeStub::setContainer($container);
@@ -110,7 +111,7 @@ class StaticalProxyTest extends \PHPUnit_Framework_TestCase
 
     public function testShouldReceiveCanBeCalledTwice()
     {
-        $container = Mock::mock('Interop\Container\ContainerInterface');
+        $container = $this->mock(ContainerInterface::class);
         $container->shouldReceive('get')->with('foo')->andReturn(new StdClass());
 
         FacadeStub::setContainer($container);

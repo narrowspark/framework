@@ -19,6 +19,7 @@ use Viserio\HttpFactory\ServerRequestFactory;
 use Viserio\Session\Middleware\SessionMiddleware;
 use Viserio\Session\Middleware\VerifyCsrfTokenMiddleware;
 use Viserio\Session\SessionManager;
+use Mockery as Mock;
 
 class VerifyCsrfTokenMiddlewareTest extends \PHPUnit_Framework_TestCase
 {
@@ -70,6 +71,11 @@ class VerifyCsrfTokenMiddlewareTest extends \PHPUnit_Framework_TestCase
         $this->files = $this->key = $this->manager = null;
 
         parent::tearDown();
+
+        $this->allowMockingNonExistentMethods(true);
+
+        // Verify Mockery expectations.
+        Mock::close();
     }
 
     public function testSessionCsrfMiddlewareSetCookie()
@@ -78,27 +84,52 @@ class VerifyCsrfTokenMiddlewareTest extends \PHPUnit_Framework_TestCase
         $config = $manager->getConfig();
 
         $config->shouldReceive('get')
+            ->once()
             ->with('session.drivers', []);
         $config->shouldReceive('get')
             ->with('app.env')
+            ->once()
             ->andReturn('dev');
         $config->shouldReceive('get')
-            ->with('session.driver', null);
+            ->with('session.driver', null)
+            ->twice()
+            ->andReturn('local');
+        $config->shouldReceive('get')
+            ->with('session.driver', 'local')
+            ->once()
+            ->andReturn('local');
         $config->shouldReceive('get')
             ->with('session.path')
+            ->once()
             ->andReturn($this->root->url());
         $config->shouldReceive('get')
-            ->with('session.domain')
-            ->andReturn('/');
-        $config->shouldReceive('get')
-            ->with('session.secure', false)
-            ->andReturn(false);
-        $config->shouldReceive('get')
             ->with('session.csrf.samesite', false)
+            ->once()
             ->andReturn(false);
         $config->shouldReceive('get')
-            ->with('session.lifetime', 1440)
-            ->andReturn(1440);
+            ->with('session.csrf.livetime', $time = Chronos::now()->getTimestamp() + 60 * 120)
+            ->once()
+            ->andReturn($time);
+        $config->shouldReceive('get')
+            ->with('session.cookie', '')
+            ->once()
+            ->andReturn('session');
+        $config->shouldReceive('get')
+            ->with('session.expire_on_close', false)
+            ->once()
+            ->andReturn(false);
+        $config->shouldReceive('get')
+            ->with('session.lottery')
+            ->once()
+            ->andReturn([2, 100]);
+        $config->shouldReceive('get')
+            ->with('session.lifetime')
+            ->twice()
+            ->andReturn(5);
+        $config->shouldReceive('get')
+            ->with('session.http_only', false)
+            ->once()
+            ->andReturn(false);
 
         $request = (new ServerRequestFactory())->createServerRequest($_SERVER);
 

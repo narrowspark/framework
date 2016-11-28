@@ -6,6 +6,7 @@ use Cake\Chronos\Chronos;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use Psr\Cache\CacheItemPoolInterface;
 use Viserio\Cron\Cron;
+use Mockery as Mock;
 
 class CronTest extends \PHPUnit_Framework_TestCase
 {
@@ -43,6 +44,13 @@ class CronTest extends \PHPUnit_Framework_TestCase
         date_default_timezone_set($this->defaultTimezone);
 
         Chronos::setTestNow(null);
+
+        parent::tearDown();
+
+        $this->allowMockingNonExistentMethods(true);
+
+        // Verify Mockery expectations.
+        Mock::close();
     }
 
     public function testBasicCronCompilation()

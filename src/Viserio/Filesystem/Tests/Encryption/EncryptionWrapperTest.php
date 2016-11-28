@@ -40,6 +40,8 @@ class EncryptionWrapperTest extends \PHPUnit_Framework_TestCase
     public function tearDown()
     {
         $this->delTree($this->root);
+
+        parent::tearDown();
     }
 
     public function testWriteStream()

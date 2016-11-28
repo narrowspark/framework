@@ -169,9 +169,10 @@ class StoreTest extends \PHPUnit_Framework_TestCase
         $session->set('foo2', 'bar');
         $session->set('foo3', 'bar');
 
+        // generates new token
         $session->start();
 
-        self::assertEquals(0, count($session->all()));
+        self::assertEquals(1, count($session->all()));
     }
 
     public function testStartMethodResetsLastTraceAndFirstTrace()

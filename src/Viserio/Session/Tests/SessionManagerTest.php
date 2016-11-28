@@ -13,6 +13,7 @@ use Viserio\Contracts\Cookie\QueueingFactory as JarContract;
 use Viserio\Contracts\Session\Store as StoreContract;
 use Viserio\Encryption\Encrypter;
 use Viserio\Session\SessionManager;
+use Mockery as Mock;
 
 class SessionManagerTest extends \PHPUnit_Framework_TestCase
 {
@@ -43,6 +44,13 @@ class SessionManagerTest extends \PHPUnit_Framework_TestCase
     public function tearDown()
     {
         $this->manager = null;
+
+        parent::tearDown();
+
+        $this->allowMockingNonExistentMethods(true);
+
+        // Verify Mockery expectations.
+        Mock::close();
     }
 
     public function testCookieStore()
