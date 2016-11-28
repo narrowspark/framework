@@ -192,7 +192,7 @@ class SessionMiddleware implements ServerMiddlewareInterface
      *
      * @param \Viserio\Contracts\Config\Manager $config
      *
-     * @return int|\Datatime
+     * @return int|\Cake\Chronos\Chronos
      */
     protected function getCookieExpirationDate(ConfigContract $config)
     {

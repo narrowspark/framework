@@ -11,7 +11,7 @@ class ResponseCookies extends AbstractCookieCollector
     /**
      * Creates a Cookie instance from a Set-Cookie header value.
      *
-     * @param \Psr\Http\Message\ServerRequestInterface $request
+     * @param \Psr\Http\Message\ResponseInterface $response
      *
      * @return $this
      */

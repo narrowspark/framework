@@ -32,6 +32,9 @@ class SessionMiddlewareTest extends \PHPUnit_Framework_TestCase
      */
     private $files;
 
+    /**
+     * @var \Viserio\Session\SessionManager
+     */
     private $manager;
 
     public function setUp()
