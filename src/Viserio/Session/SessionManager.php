@@ -194,6 +194,8 @@ class SessionManager extends AbstractManager
 
     /**
      * {@inheritdoc}
+     *
+     * @codeCoverageIgnore
      */
     protected function callCustomCreator(string $driver, array $options = [])
     {

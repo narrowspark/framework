@@ -23,8 +23,10 @@ use Viserio\Routing\Pipeline;
 use Viserio\Routing\Router;
 use Viserio\Session\Middleware\SessionMiddleware;
 use Viserio\StaticalProxy\StaticalProxy;
+use Interop\Http\Middleware\ServerMiddlewareInterface;
+use Interop\Http\Middleware\DelegateInterface;
 
-class Kernel implements TerminableContract, KernelContract
+class Kernel implements TerminableContract, KernelContract, ServerMiddlewareInterface
 {
     use EventsAwareTrait;
 
@@ -129,6 +131,14 @@ class Kernel implements TerminableContract, KernelContract
     /**
      * {@inheritdoc}
      */
+    public function process(ServerRequestInterface $request, DelegateInterface $delegate)
+    {
+
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
         // Passes the request to the container
@@ -211,7 +221,7 @@ class Kernel implements TerminableContract, KernelContract
         return (new Pipeline())
             ->setContainer($this->app)
             ->send($request)
-            ->through($config->get('app.skip_middleware', false) ? [] : $this->middlewares)
+            ->through($config->get('app.skip_middlewares', false) ? [] : $this->middlewares)
             ->then(function ($request) use ($router) {
                 return $router->dispatch($request);
             });
