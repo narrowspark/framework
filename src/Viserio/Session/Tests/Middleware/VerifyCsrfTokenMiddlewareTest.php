@@ -88,7 +88,6 @@ class VerifyCsrfTokenMiddlewareTest extends \PHPUnit_Framework_TestCase
             ->with('session.drivers', []);
         $config->shouldReceive('get')
             ->with('app.env')
-            ->once()
             ->andReturn('dev');
         $config->shouldReceive('get')
             ->with('session.driver', null)
@@ -100,7 +99,7 @@ class VerifyCsrfTokenMiddlewareTest extends \PHPUnit_Framework_TestCase
             ->andReturn('local');
         $config->shouldReceive('get')
             ->with('session.path')
-            ->once()
+            ->times(3)
             ->andReturn($this->root->url());
         $config->shouldReceive('get')
             ->with('session.csrf.samesite', false)
@@ -130,12 +129,24 @@ class VerifyCsrfTokenMiddlewareTest extends \PHPUnit_Framework_TestCase
             ->with('session.http_only', false)
             ->once()
             ->andReturn(false);
+        $config->shouldReceive('get')
+            ->with('session.domain')
+            ->twice()
+            ->andReturn('/');
+        $config->shouldReceive('get')
+            ->with('session.secure', false)
+            ->twice()
+            ->andReturn(false);
 
         $request = (new ServerRequestFactory())->createServerRequest($_SERVER);
 
         $dispatcher = new Dispatcher(
             [
                 new SessionMiddleware($manager),
+                new CallableMiddleware(function ($request, $delegate) {
+                    $request = $request->withParsedBody(['_token' => $request->getAttribute('session')->getToken()]);
+                    return $delegate->process($request);
+                }),
                 new VerifyCsrfTokenMiddleware($manager),
                 new CallableMiddleware(function ($request, $delegate) {
                     return (new ResponseFactory())->createResponse(200);

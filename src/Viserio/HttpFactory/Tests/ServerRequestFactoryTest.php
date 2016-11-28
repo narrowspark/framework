@@ -126,8 +126,8 @@ class ServerRequestFactoryTest extends \PHPUnit_Framework_TestCase
             'logged-in' => 'yes!',
         ];
         $_POST = [
-            'name' => 'Pesho',
-            'email' => 'pesho@example.com',
+            'name' => 'Narrowspark',
+            'email' => 'parrowspark@example.com',
         ];
         $_GET = [
             'id' => 10,
