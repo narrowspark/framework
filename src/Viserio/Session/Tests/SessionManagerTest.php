@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Session\Tests;
 
 use Defuse\Crypto\Key;
+use Mockery as Mock;
 use Narrowspark\TestingHelper\ArrayContainer;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use Psr\Http\Message\ServerRequestInterface;
@@ -13,7 +14,6 @@ use Viserio\Contracts\Cookie\QueueingFactory as JarContract;
 use Viserio\Contracts\Session\Store as StoreContract;
 use Viserio\Encryption\Encrypter;
 use Viserio\Session\SessionManager;
-use Mockery as Mock;
 
 class SessionManagerTest extends \PHPUnit_Framework_TestCase
 {

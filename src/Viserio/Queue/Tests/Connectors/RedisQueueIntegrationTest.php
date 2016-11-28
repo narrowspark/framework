@@ -5,12 +5,12 @@ namespace Viserio\Queue\Tests\Connectors;
 use Defuse\Crypto\Key;
 use Exception;
 use Interop\Container\ContainerInterface;
+use Mockery as Mock;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use Predis\Client;
 use Viserio\Encryption\Encrypter;
 use Viserio\Queue\Connectors\RedisQueue;
 use Viserio\Queue\Tests\Fixture\RedisQueueIntegrationJob;
-use Mockery as Mock;
 
 class RedisQueueIntegrationTest extends \PHPUnit_Framework_TestCase
 {

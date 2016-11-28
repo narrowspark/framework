@@ -4,6 +4,7 @@ namespace Viserio\Session\Tests;
 
 use Cake\Chronos\Chronos;
 use Defuse\Crypto\Key;
+use Mockery as Mock;
 use Narrowspark\TestingHelper\ArrayContainer;
 use Narrowspark\TestingHelper\Middleware\CallableMiddleware;
 use Narrowspark\TestingHelper\Middleware\Dispatcher;
@@ -19,7 +20,6 @@ use Viserio\HttpFactory\ServerRequestFactory;
 use Viserio\Session\Middleware\SessionMiddleware;
 use Viserio\Session\Middleware\VerifyCsrfTokenMiddleware;
 use Viserio\Session\SessionManager;
-use Mockery as Mock;
 
 class VerifyCsrfTokenMiddlewareTest extends \PHPUnit_Framework_TestCase
 {

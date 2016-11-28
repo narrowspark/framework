@@ -2,15 +2,15 @@
 declare(strict_types=1);
 namespace Viserio\StaticalProxy\Tests;
 
+use Interop\Container\ContainerInterface;
 use Mockery as Mock;
+use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use StdClass;
 use Viserio\StaticalProxy\StaticalProxy;
 use Viserio\StaticalProxy\Tests\Fixture\ExceptionFacadeStub;
 use Viserio\StaticalProxy\Tests\Fixture\FacadeObjectStub;
 use Viserio\StaticalProxy\Tests\Fixture\FacadeStub;
 use Viserio\StaticalProxy\Tests\Fixture\ProxyStub;
-use Interop\Container\ContainerInterface;
-use Narrowspark\TestingHelper\Traits\MockeryTrait;
 
 class StaticalProxyTest extends \PHPUnit_Framework_TestCase
 {

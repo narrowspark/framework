@@ -3,10 +3,10 @@ declare(strict_types=1);
 namespace Viserio\Cron\Tests;
 
 use Cake\Chronos\Chronos;
+use Mockery as Mock;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use Psr\Cache\CacheItemPoolInterface;
 use Viserio\Cron\Cron;
-use Mockery as Mock;
 
 class CronTest extends \PHPUnit_Framework_TestCase
 {

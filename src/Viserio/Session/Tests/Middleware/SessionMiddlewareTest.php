@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Session\Tests;
 
 use Defuse\Crypto\Key;
+use Mockery as Mock;
 use Narrowspark\TestingHelper\ArrayContainer;
 use Narrowspark\TestingHelper\Middleware\DelegateMiddleware;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
@@ -17,7 +18,6 @@ use Viserio\HttpFactory\ResponseFactory;
 use Viserio\HttpFactory\ServerRequestFactory;
 use Viserio\Session\Middleware\SessionMiddleware;
 use Viserio\Session\SessionManager;
-use Mockery as Mock;
 
 class SessionMiddlewareTest extends \PHPUnit_Framework_TestCase
 {
