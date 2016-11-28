@@ -14,7 +14,7 @@ use Viserio\Cookie\Cookie;
 use Viserio\Cookie\RequestCookies;
 use Viserio\Cookie\ResponseCookies;
 
-class EncryptCookiesMiddleware implements ServerMiddlewareInterface
+class EncryptedCookiesMiddleware implements ServerMiddlewareInterface
 {
     /**
      * The encrypter instance.
