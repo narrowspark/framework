@@ -5,9 +5,9 @@ namespace Viserio\Session\Tests;
 use Cake\Chronos\Chronos;
 use Defuse\Crypto\Key;
 use Narrowspark\TestingHelper\ArrayContainer;
-use Narrowspark\TestingHelper\Traits\MockeryTrait;
-use Narrowspark\TestingHelper\Middleware\Dispatcher;
 use Narrowspark\TestingHelper\Middleware\CallableMiddleware;
+use Narrowspark\TestingHelper\Middleware\Dispatcher;
+use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use org\bovigo\vfs\vfsStream;
 use Viserio\Contracts\Config\Manager as ConfigManagerContract;
 use Viserio\Contracts\Cookie\QueueingFactory as JarContract;
@@ -16,9 +16,9 @@ use Viserio\Encryption\Encrypter;
 use Viserio\Filesystem\Filesystem;
 use Viserio\HttpFactory\ResponseFactory;
 use Viserio\HttpFactory\ServerRequestFactory;
+use Viserio\Session\Middleware\SessionMiddleware;
 use Viserio\Session\Middleware\VerifyCsrfTokenMiddleware;
 use Viserio\Session\SessionManager;
-use Viserio\Session\Middleware\SessionMiddleware;
 
 class VerifyCsrfTokenMiddlewareTest extends \PHPUnit_Framework_TestCase
 {
@@ -105,7 +105,7 @@ class VerifyCsrfTokenMiddlewareTest extends \PHPUnit_Framework_TestCase
                 new VerifyCsrfTokenMiddleware($manager),
                 new CallableMiddleware(function ($request, $delegate) {
                     return (new ResponseFactory())->createResponse(200);
-                })
+                }),
             ]
         );
 

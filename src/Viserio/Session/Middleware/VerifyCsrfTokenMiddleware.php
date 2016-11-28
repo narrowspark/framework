@@ -8,9 +8,9 @@ use Interop\Http\Middleware\ServerMiddlewareInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Schnittstabil\Csrf\TokenService\TokenService;
+use Viserio\Contracts\Session\Exception\TokenMismatchException;
 use Viserio\Cookie\Cookie;
 use Viserio\Session\SessionManager;
-use Viserio\Contracts\Session\Exception\TokenMismatchException;
 
 class VerifyCsrfTokenMiddleware implements ServerMiddlewareInterface
 {
@@ -53,7 +53,7 @@ class VerifyCsrfTokenMiddleware implements ServerMiddlewareInterface
             return $this->addCookieToResponse($request, $response);
         }
 
-        throw new TokenMismatchException;
+        throw new TokenMismatchException();
     }
 
     /**

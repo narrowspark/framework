@@ -10,13 +10,13 @@ use org\bovigo\vfs\vfsStream;
 use Viserio\Contracts\Config\Manager as ConfigManagerContract;
 use Viserio\Contracts\Cookie\QueueingFactory as JarContract;
 use Viserio\Contracts\Filesystem\Filesystem as FilesystemContract;
+use Viserio\Contracts\Session\Store as StoreContract;
 use Viserio\Encryption\Encrypter;
 use Viserio\Filesystem\Filesystem;
 use Viserio\HttpFactory\ResponseFactory;
 use Viserio\HttpFactory\ServerRequestFactory;
 use Viserio\Session\Middleware\SessionMiddleware;
 use Viserio\Session\SessionManager;
-use Viserio\Contracts\Session\Store as StoreContract;
 
 class SessionMiddlewareTest extends \PHPUnit_Framework_TestCase
 {
