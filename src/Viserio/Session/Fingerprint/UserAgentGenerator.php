@@ -17,7 +17,6 @@ class UserAgentGenerator implements FingerprintContract
     /**
      * Create a new UserAgentGenerator instance.
      *
-     * @param Key         $secretKey
      * @param string|null $userAgent
      */
     public function __construct(string $userAgent = null)

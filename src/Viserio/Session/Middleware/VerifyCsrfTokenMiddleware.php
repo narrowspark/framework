@@ -7,7 +7,6 @@ use Interop\Http\Middleware\DelegateInterface;
 use Interop\Http\Middleware\ServerMiddlewareInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Schnittstabil\Csrf\TokenService\TokenService;
 use Viserio\Contracts\Session\Exception\TokenMismatchException;
 use Viserio\Cookie\Cookie;
 use Viserio\Session\SessionManager;
