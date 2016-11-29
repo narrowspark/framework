@@ -23,8 +23,9 @@ use Viserio\Foundation\Bootstrap\LoadRoutes;
 use Viserio\Foundation\Bootstrap\LoadServiceProvider;
 use Viserio\Routing\Pipeline;
 use Viserio\Routing\Router;
-use Viserio\Session\Middleware\SessionMiddleware;
+use Viserio\Session\Middleware\StartSessionMiddleware;
 use Viserio\StaticalProxy\StaticalProxy;
+use Viserio\View\Middleware\ShareErrorsFromSessionMiddleware;
 
 class Kernel implements TerminableContract, KernelContract, ServerMiddlewareInterface
 {
@@ -80,7 +81,8 @@ class Kernel implements TerminableContract, KernelContract, ServerMiddlewareInte
      * @var array
      */
     protected $middlewarePriority = [
-        SessionMiddleware::class,
+        StartSessionMiddleware::class,
+        ShareErrorsFromSessionMiddleware::class
     ];
 
     /**
