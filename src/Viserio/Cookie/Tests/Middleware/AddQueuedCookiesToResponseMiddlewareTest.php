@@ -6,6 +6,7 @@ use DateTime;
 use Narrowspark\TestingHelper\Middleware\DelegateMiddleware;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use Viserio\Cookie\CookieJar;
+use Viserio\Cookie\ResponseCookies;
 use Viserio\Cookie\Middleware\AddQueuedCookiesToResponseMiddleware;
 use Viserio\HttpFactory\ResponseFactory;
 use Viserio\HttpFactory\ServerRequestFactory;
@@ -27,6 +28,9 @@ class AddQueuedCookiesToResponseMiddlewareTest extends \PHPUnit_Framework_TestCa
             return (new ResponseFactory())->createResponse(200);
         }));
 
-        self::assertTrue(is_string($response->getHeader('Set-Cookie')[0]));
+        $cookies = ResponseCookies::fromResponse($response);
+
+        self::assertSame('test-v', $cookies->get('test')->getValue());
+        self::assertSame('test', $cookies->get('test')->getName());
     }
 }

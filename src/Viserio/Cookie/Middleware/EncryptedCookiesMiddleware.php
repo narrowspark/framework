@@ -179,7 +179,6 @@ class EncryptedCookiesMiddleware implements ServerMiddlewareInterface
             $cookies = $cookies->forget($key);
 
             $cookies = $cookies->add(
-                $key,
                 $this->duplicate(
                     $cookie,
                     $this->encrypter->encrypt($cookie->getValue())

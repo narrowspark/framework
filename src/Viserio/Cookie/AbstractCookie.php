@@ -408,7 +408,7 @@ abstract class AbstractCookie implements Stringable, CookieContract
         } else {
             $cookieStringParts[] .= $name . urlencode($this->getValue());
 
-            if ($this->getExpiresTime() !== 0) {
+            if ($this->expires !== 0) {
                 $cookieStringParts[] .= 'Expires=' . $this->getExpiresTime();
             }
         }
