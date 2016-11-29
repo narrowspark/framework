@@ -28,6 +28,7 @@
         "mockery/mockery"                     : "^0.9",
         "narrowspark/testing-helper"          : "^2.0",
         "phpunit/phpunit"                     : "^5.1",
+        "http-interop/http-middleware"        : "^0.3",
         "viserio/config"                      : "self.version",
         "viserio/container"                   : "self.version",
         "viserio/encrypter"                   : "self.version",
