@@ -82,7 +82,7 @@ class Kernel implements TerminableContract, KernelContract, ServerMiddlewareInte
      */
     protected $middlewarePriority = [
         StartSessionMiddleware::class,
-        ShareErrorsFromSessionMiddleware::class
+        ShareErrorsFromSessionMiddleware::class,
     ];
 
     /**
