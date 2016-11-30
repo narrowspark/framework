@@ -5,11 +5,11 @@ namespace Viserio\WebProfiler;
 use DebugBar\DebugBar;
 use DebugBar\Storage\PdoStorage;
 use DebugBar\Storage\RedisStorage;
+use Psr\Http\Message\MessageInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\StreamInterface;
 use Viserio\HttpFactory\StreamFactory;
-use Psr\Http\Message\MessageInterface;
 
 class WebProfiler extends DebugBar
 {
@@ -18,7 +18,7 @@ class WebProfiler extends DebugBar
      *
      * @param \Psr\Http\Message\StreamInterface $factory
      */
-    public function setStreamFactory(StreamInterface $factory )
+    public function setStreamFactory(StreamInterface $factory)
     {
         return $this->streamFactory;
     }
@@ -49,7 +49,6 @@ class WebProfiler extends DebugBar
         ServerRequestInterface $request,
         ResponseInterface $response
     ) : ResponseInterface {
-
         return $this->injectWebProfiler($response);
     }
 
@@ -74,7 +73,7 @@ class WebProfiler extends DebugBar
      * Injects the web debug toolbar into the given Response.
      *
      * @param \Psr\Http\Message\ResponseInterface $response
-     * Based on https://github.com/symfony/WebProfilerBundle/blob/master/EventListener/WebDebugToolbarListener.php
+     *                                                      Based on https://github.com/symfony/WebProfilerBundle/blob/master/EventListener/WebDebugToolbarListener.php
      */
     public function injectWebProfiler(ResponseInterface $response)
     {

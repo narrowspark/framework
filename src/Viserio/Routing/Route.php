@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Routing;
 
+use Interop\Container\Exception\NotFoundException;
 use LogicException;
 use Narrowspark\Arr\Arr;
 use Psr\Http\Message\ResponseInterface;
@@ -11,7 +12,6 @@ use Viserio\Contracts\Container\Traits\ContainerAwareTrait;
 use Viserio\Contracts\Routing\Route as RouteContract;
 use Viserio\Routing\Traits\MiddlewareAwareTrait;
 use Viserio\Support\Traits\InvokerAwareTrait;
-use Interop\Container\Exception\NotFoundException;
 
 class Route implements RouteContract
 {
@@ -352,7 +352,7 @@ class Route implements RouteContract
                 if (method_exists($container, 'make')) {
                     $this->controller = $container->make($class);
                 } else {
-                    throw new $exception;
+                    throw new $exception();
                 }
             }
         }
