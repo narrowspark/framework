@@ -253,10 +253,8 @@ class ResponseCookiesTest extends \PHPUnit_Framework_TestCase
         $decryptedValue = $decryptedSessionToken->getValue();
         $encryptedValue = str_rot13($decryptedValue);
         $encryptedSessionToken = $decryptedSessionToken->withValue($encryptedValue);
+
         $setCookies = $setCookies->add($encryptedSessionToken);
-
-        self::assertSame($setCookies, $setCookies->forget('dont'));
-
         $setCookies = $setCookies->forget('hello');
 
         self::assertFalse($setCookies->has('hello'));
