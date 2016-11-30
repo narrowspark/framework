@@ -44,7 +44,7 @@ class CookieJarTest extends \PHPUnit_Framework_TestCase
         self::assertEquals('/path', $c2->getPath());
 
         $c3 = $cookie->delete('color');
-        self::assertSame('', $c3->getValue());
+        self::assertNull($c3->getValue());
         self::assertNotEquals($c3->getExpiresTime(), Chronos::now()->getTimestamp());
     }
 

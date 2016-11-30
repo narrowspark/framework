@@ -44,10 +44,10 @@ class CookieJar implements JarContract
      */
     public function create(
         string $name,
-        string $value,
+        string $value = null,
         int $minutes = 0,
-        $path = null,
-        $domain = null,
+        string $path = null,
+        string $domain = null,
         bool $secure = false,
         bool $httpOnly = true,
         $sameSite = false
@@ -64,9 +64,9 @@ class CookieJar implements JarContract
      */
     public function forever(
         string $name,
-        string $value,
-        $path = null,
-        $domain = null,
+        string $value = null,
+        string $path = null,
+        string $domain = null,
         bool $secure = false,
         bool $httpOnly = true,
         $sameSite = false
@@ -79,7 +79,7 @@ class CookieJar implements JarContract
      */
     public function delete(string $name, $path = null, $domain = null): CookieContract
     {
-        return $this->create($name, '', -2628000, $path, $domain);
+        return $this->create($name, null, -2628000, $path, $domain);
     }
 
     /**
