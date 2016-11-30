@@ -40,8 +40,8 @@ class TOMLTest extends \PHPUnit_Framework_TestCase
 
         $parsed = $this->parser->parse($this->file->read($file->url()));
 
-        $this->assertTrue(is_array($parsed));
-        $this->assertSame(['backspace' => 'This string has a \b backspace character.'], $parsed);
+        self::assertTrue(is_array($parsed));
+        self::assertSame(['backspace' => 'This string has a \b backspace character.'], $parsed);
     }
 
     /**

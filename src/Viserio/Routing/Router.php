@@ -4,38 +4,21 @@ namespace Viserio\Routing;
 
 use Closure;
 use Interop\Container\ContainerInterface;
+use Interop\Http\Middleware\DelegateInterface;
+use Interop\Http\Middleware\ServerMiddlewareInterface;
 use Narrowspark\Arr\Arr;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Viserio\Contracts\Container\Traits\ContainerAwareTrait;
-use Viserio\Contracts\Events\Traits\EventsAwareTrait;
 use Viserio\Contracts\Routing\Route as RouteContract;
 use Viserio\Contracts\Routing\RouteCollection as RouteCollectionContract;
 use Viserio\Contracts\Routing\Router as RouterContract;
-use Viserio\Middleware\Dispatcher as MiddlewareDispatcher;
-use Viserio\Routing\Traits\MiddlewareAwareTrait;
 use Viserio\Support\Traits\InvokerAwareTrait;
+use Viserio\Support\Traits\MacroableTrait;
 
-class Router implements RouterContract
+class Router extends AbstractRouteDispatcher implements RouterContract, ServerMiddlewareInterface
 {
-    use ContainerAwareTrait;
-    use EventsAwareTrait;
-    use MiddlewareAwareTrait;
     use InvokerAwareTrait;
-
-    /**
-     * The route collection instance.
-     *
-     * @var \Viserio\Routing\RouteCollection
-     */
-    protected $routes;
-
-    /**
-     * The currently dispatched route instance.
-     *
-     * @var \Viserio\Contracts\Routing\Route
-     */
-    protected $current;
+    use MacroableTrait;
 
     /**
      * The route group attribute stack.
@@ -47,30 +30,9 @@ class Router implements RouterContract
     /**
      * The globally available parameter patterns.
      *
-     * @var string[]
-     */
-    protected $globalParameterConditions = [];
-
-    /**
-     * The globally available parameter patterns.
-     *
      * @var array
      */
     protected $patterns = [];
-
-    /**
-     * Flag for refresh the cache file on every call.
-     *
-     * @var bool
-     */
-    protected $refreshCache = false;
-
-    /**
-     * Path to the cached router file.
-     *
-     * @var string
-     */
-    protected $path;
 
     /**
      * Create a new Router instance.
@@ -387,41 +349,17 @@ class Router implements RouterContract
     /**
      * {@inheritdoc}
      */
-    public function dispatch(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
+    public function process(ServerRequestInterface $request, DelegateInterface $delegate)
     {
-        $middlewareDispatcher = new MiddlewareDispatcher($response);
+        return $this->dispatchToRoute($request);
+    }
 
-        if (isset($this->middlewares['with'])) {
-            foreach ($this->middlewares['with'] as $middleware) {
-                $middlewareDispatcher->withMiddleware($middleware);
-            }
-        }
-
-        if (isset($this->middlewares['without'])) {
-            foreach ($this->middlewares['without'] as $middleware) {
-                $middlewareDispatcher->withoutMiddleware($middleware);
-            }
-        }
-
-        $dispatcher = new Dispatcher(
-            $this->path,
-            $this->routes,
-            $middlewareDispatcher,
-            $this->refreshCache,
-            $this->globalParameterConditions
-        );
-
-        if ($this->events !== null) {
-            $dispatcher->setEventsDispatcher($this->events);
-
-            $this->events = $dispatcher->getEventsDispatcher();
-        }
-
-        $middlewareDispatcher = $dispatcher->handle($request);
-
-        $this->current = $dispatcher->getCurrentRoute();
-
-        return $middlewareDispatcher->process($request);
+    /**
+     * {@inheritdoc}
+     */
+    public function dispatch(ServerRequestInterface $request): ResponseInterface
+    {
+        return $this->dispatchToRoute($request);
     }
 
     /**

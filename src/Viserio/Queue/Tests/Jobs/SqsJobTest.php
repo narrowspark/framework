@@ -57,7 +57,7 @@ class QueueSqsJobTest extends \PHPUnit_Framework_TestCase
             ->with(['QueueUrl' => $this->queueUrl, 'ReceiptHandle' => $this->mockedReceiptHandle, 'VisibilityTimeout' => 0]);
         $job->release(0);
 
-        $this->assertTrue($job->isReleased());
+        self::assertTrue($job->isReleased());
     }
 
     protected function getJob()

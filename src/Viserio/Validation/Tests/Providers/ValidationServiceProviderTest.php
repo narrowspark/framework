@@ -14,8 +14,8 @@ class ValidationServiceProviderTest extends \PHPUnit_Framework_TestCase
         $container = new Container();
         $container->register(new ValidationServiceProvider());
 
-        $this->assertInstanceOf(Validator::class, $container->get(Validator::class));
-        $this->assertInstanceOf(Validator::class, $container->get(ValidatorContract::class));
-        $this->assertInstanceOf(Validator::class, $container->get('validator'));
+        self::assertInstanceOf(Validator::class, $container->get(Validator::class));
+        self::assertInstanceOf(Validator::class, $container->get(ValidatorContract::class));
+        self::assertInstanceOf(Validator::class, $container->get('validator'));
     }
 }

@@ -27,7 +27,7 @@
     },
     "require-dev": {
         "mockery/mockery"                 : "^0.9",
-        "narrowspark/testing-helper"      : "^1.6",
+        "narrowspark/testing-helper"      : "^2.0",
         "phpunit/phpunit"                 : "^5.1"
     },
     "autoload": {

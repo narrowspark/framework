@@ -36,7 +36,7 @@ class FilesystemManagerTest extends \PHPUnit_Framework_TestCase
 
         $manager = new FilesystemManager($config);
 
-        $this->assertInstanceOf(
+        self::assertInstanceOf(
             FilesystemAdapter::class,
             $manager->connection('awss3')
         );
@@ -57,7 +57,7 @@ class FilesystemManagerTest extends \PHPUnit_Framework_TestCase
 
         $manager = new FilesystemManager($config);
 
-        $this->assertInstanceOf(
+        self::assertInstanceOf(
             FilesystemAdapter::class,
             $manager->connection('dropbox')
         );
@@ -84,7 +84,7 @@ class FilesystemManagerTest extends \PHPUnit_Framework_TestCase
 
         $manager = new FilesystemManager($config);
 
-        $this->assertInstanceOf(
+        self::assertInstanceOf(
             FilesystemAdapter::class,
             $manager->connection('ftp')
         );
@@ -110,7 +110,7 @@ class FilesystemManagerTest extends \PHPUnit_Framework_TestCase
         $manager = new FilesystemManager($config);
 
         try {
-            $this->assertInstanceOf(
+            self::assertInstanceOf(
                 FilesystemAdapter::class,
                 $manager->connection('gridfs')
             );
@@ -133,7 +133,7 @@ class FilesystemManagerTest extends \PHPUnit_Framework_TestCase
 
         $manager = new FilesystemManager($config);
 
-        $this->assertInstanceOf(
+        self::assertInstanceOf(
             FilesystemAdapter::class,
             $manager->connection('local')
         );
@@ -151,7 +151,7 @@ class FilesystemManagerTest extends \PHPUnit_Framework_TestCase
 
         $manager = new FilesystemManager($config);
 
-        $this->assertInstanceOf(
+        self::assertInstanceOf(
             FilesystemAdapter::class,
             $manager->connection('null')
         );
@@ -176,7 +176,7 @@ class FilesystemManagerTest extends \PHPUnit_Framework_TestCase
         $manager = new FilesystemManager($config);
 
         try {
-            $this->assertInstanceOf(
+            self::assertInstanceOf(
                 FilesystemAdapter::class,
                 $manager->connection('rackspace')
             );
@@ -204,7 +204,7 @@ class FilesystemManagerTest extends \PHPUnit_Framework_TestCase
 
         $manager = new FilesystemManager($config);
 
-        $this->assertInstanceOf(
+        self::assertInstanceOf(
             FilesystemAdapter::class,
             $manager->connection('sftp')
         );
@@ -222,7 +222,7 @@ class FilesystemManagerTest extends \PHPUnit_Framework_TestCase
 
         $manager = new FilesystemManager($config);
 
-        $this->assertInstanceOf(
+        self::assertInstanceOf(
             FilesystemAdapter::class,
             $manager->connection('vfs')
         );
@@ -244,7 +244,7 @@ class FilesystemManagerTest extends \PHPUnit_Framework_TestCase
 
         $manager = new FilesystemManager($config);
 
-        $this->assertInstanceOf(
+        self::assertInstanceOf(
             FilesystemAdapter::class,
             $manager->connection('webdav')
         );
@@ -264,7 +264,7 @@ class FilesystemManagerTest extends \PHPUnit_Framework_TestCase
 
         $manager = new FilesystemManager($config);
 
-        $this->assertInstanceOf(
+        self::assertInstanceOf(
             FilesystemAdapter::class,
             $manager->connection('zip')
         );
@@ -284,7 +284,7 @@ class FilesystemManagerTest extends \PHPUnit_Framework_TestCase
 
         $manager = new FilesystemManager($config);
 
-        $this->assertInstanceOf(
+        self::assertInstanceOf(
             AdapterInterface::class,
             $manager->getFlysystemAdapter('zip')
         );
@@ -315,7 +315,7 @@ class FilesystemManagerTest extends \PHPUnit_Framework_TestCase
 
         $manager = new FilesystemManager($config);
 
-        $this->assertInstanceOf(
+        self::assertInstanceOf(
             FilesystemAdapter::class,
             $manager->connection('local')
         );
@@ -336,7 +336,7 @@ class FilesystemManagerTest extends \PHPUnit_Framework_TestCase
 
         $manager = new FilesystemManager($config);
 
-        $this->assertInstanceOf(
+        self::assertInstanceOf(
             EncryptionWrapper::class,
             $manager->cryptedConnection($key, 'local')
         );

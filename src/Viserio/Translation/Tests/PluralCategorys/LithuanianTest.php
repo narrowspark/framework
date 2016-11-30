@@ -12,7 +12,7 @@ class LithuanianTest extends \PHPUnit_Framework_TestCase
     public function testGetCategory($count, $expected)
     {
         $actual = (new Lithuanian())->category($count);
-        $this->assertEquals($expected, $this->intToString($actual));
+        self::assertEquals($expected, $this->intToString($actual));
     }
 
     public function category()

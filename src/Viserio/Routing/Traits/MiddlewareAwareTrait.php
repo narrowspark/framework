@@ -12,17 +12,21 @@ trait MiddlewareAwareTrait
      *
      * @var array
      */
-    protected $middlewares = [
-        'with' => [],
-        'without' => [],
-    ];
+    protected $middlewares = [];
 
     /**
      * {@inheritdoc}
      */
-    public function withMiddleware(ServerMiddlewareInterface $middleware)
+    public function withMiddleware(string $middleware)
     {
-        $this->middlewares['with'][] = $middleware;
+        if (! in_array(ServerMiddlewareInterface::class, class_implements($middleware))) {
+            throw new LogicException(sprintf(
+                '[%s] should implement \Interop\Http\Middleware\ServerMiddlewareInterface',
+                $middleware
+            ));
+        }
+
+        $this->middlewares[] = $middleware;
 
         return $this;
     }
@@ -30,20 +34,14 @@ trait MiddlewareAwareTrait
     /**
      * {@inheritdoc}
      */
-    public function withoutMiddleware(ServerMiddlewareInterface $middleware)
+    public function withoutMiddleware(string $middleware)
     {
-        $this->middlewares['without'][] = $middleware;
+        foreach ($this->middlewares as $key => $value) {
+            if ($value === $middleware) {
+                unset($this->middlewares[$key]);
 
-        return $this;
-    }
-
-    /**
-     * {@inheritdoc}
-     *
-     * @codeCoverageIgnore
-     */
-    public function getMiddlewares(): array
-    {
-        return $this->middlewares;
+                return $this;
+            }
+        }
     }
 }

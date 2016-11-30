@@ -37,7 +37,7 @@ class ViewFactoryTest extends \PHPUnit_Framework_TestCase
 
         $view = $factory->create('view', ['foo' => 'bar'], ['baz' => 'boom']);
 
-        $this->assertSame($engine, $view->getEngine());
+        self::assertSame($engine, $view->getEngine());
     }
 
     public function testFileCreatesNewViewInstanceWithProperPathAndEngine()
@@ -56,7 +56,7 @@ class ViewFactoryTest extends \PHPUnit_Framework_TestCase
 
         $view = $factory->file('path.php', ['foo' => 'bar'], ['baz' => 'boom']);
 
-        $this->assertSame($engine, $view->getEngine());
+        self::assertSame($engine, $view->getEngine());
     }
 
     /**
@@ -94,8 +94,8 @@ class ViewFactoryTest extends \PHPUnit_Framework_TestCase
             ->with('bar')
             ->andReturn(['path' => 'path.php']);
 
-        $this->assertFalse($factory->exists('foo'));
-        $this->assertTrue($factory->exists('bar'));
+        self::assertFalse($factory->exists('foo'));
+        self::assertTrue($factory->exists('bar'));
     }
 
     public function testRenderEachCreatesViewForEachItemInArray()
@@ -123,7 +123,7 @@ class ViewFactoryTest extends \PHPUnit_Framework_TestCase
 
         $result = $factory->renderEach('foo', ['bar' => 'baz', 'breeze' => 'boom'], 'value');
 
-        $this->assertEquals('daylerees', $result);
+        self::assertEquals('daylerees', $result);
     }
 
     public function testEmptyViewsCanBeReturnedFromRenderEach()
@@ -137,14 +137,14 @@ class ViewFactoryTest extends \PHPUnit_Framework_TestCase
             ->once()
             ->andReturn('empty');
 
-        $this->assertEquals('empty', $factory->renderEach('view', [], 'iterator', 'foo'));
+        self::assertEquals('empty', $factory->renderEach('view', [], 'iterator', 'foo'));
     }
 
     public function testAddANamedViews()
     {
         $factory = $this->getFactory();
         $factory->name('bar', 'foo');
-        $this->assertEquals(['foo' => 'bar'], $factory->getNames());
+        self::assertEquals(['foo' => 'bar'], $factory->getNames());
     }
 
     public function testMakeAViewFromNamedView()
@@ -169,12 +169,12 @@ class ViewFactoryTest extends \PHPUnit_Framework_TestCase
 
         $view = $factory->of('foo', ['data']);
 
-        $this->assertSame($engine, $view->getEngine());
+        self::assertSame($engine, $view->getEngine());
     }
 
     public function testRawStringsMayBeReturnedFromRenderEach()
     {
-        $this->assertEquals('foo', $this->getFactory()->renderEach('foo', [], 'item', 'raw|foo'));
+        self::assertEquals('foo', $this->getFactory()->renderEach('foo', [], 'item', 'raw|foo'));
     }
 
     public function testEnvironmentAddsExtensionWithCustomResolver()
@@ -204,7 +204,7 @@ class ViewFactoryTest extends \PHPUnit_Framework_TestCase
 
         $view = $factory->create('view', ['data']);
 
-        $this->assertSame($engine, $view->getEngine());
+        self::assertSame($engine, $view->getEngine());
     }
 
     public function testAddingExtensionPrependsNotAppends()
@@ -218,8 +218,8 @@ class ViewFactoryTest extends \PHPUnit_Framework_TestCase
 
         $extensions = $factory->getExtensions();
 
-        $this->assertEquals('bar', reset($extensions));
-        $this->assertEquals('foo', key($extensions));
+        self::assertEquals('bar', reset($extensions));
+        self::assertEquals('foo', key($extensions));
     }
 
     public function testPrependedExtensionOverridesExistingExtensions()
@@ -238,8 +238,8 @@ class ViewFactoryTest extends \PHPUnit_Framework_TestCase
 
         $extensions = $factory->getExtensions();
 
-        $this->assertEquals('bar', reset($extensions));
-        $this->assertEquals('baz', key($extensions));
+        self::assertEquals('bar', reset($extensions));
+        self::assertEquals('baz', key($extensions));
     }
 
     public function testMakeWithSlashAndDot()
@@ -276,7 +276,7 @@ class ViewFactoryTest extends \PHPUnit_Framework_TestCase
 
         $view = $factory->create('alias');
 
-        $this->assertEquals('real', $view->getName());
+        self::assertEquals('real', $view->getName());
     }
 
     /**
@@ -298,7 +298,7 @@ class ViewFactoryTest extends \PHPUnit_Framework_TestCase
         $factory = $this->getFactory();
         $factory->share(['test' => 'foo']);
 
-        $this->assertEquals('foo', $factory->shared('test'));
+        self::assertEquals('foo', $factory->shared('test'));
     }
 
     protected function getFactory()

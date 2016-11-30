@@ -9,13 +9,14 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Contracts\Config\Manager as ConfigContract;
 use Viserio\Contracts\Session\Store as StoreContract;
-use Viserio\Cookie\Cookie;
+use Viserio\Cookie\RequestCookies;
+use Viserio\Cookie\SetCookie;
 use Viserio\Session\Fingerprint\ClientIpGenerator;
 use Viserio\Session\Fingerprint\UserAgentGenerator;
 use Viserio\Session\Handler\CookieSessionHandler;
 use Viserio\Session\SessionManager;
 
-class SessionMiddleware implements ServerMiddlewareInterface
+class StartSessionMiddleware implements ServerMiddlewareInterface
 {
     /**
      * The session manager.
@@ -45,6 +46,10 @@ class SessionMiddleware implements ServerMiddlewareInterface
             // Note that the Narrowspark sessions do not make use of PHP
             // "native" sessions in any way since they are crappy.
             $session = $this->startSession($request);
+
+            $request = $request->withAttribute('session', $session);
+
+            $this->collectGarbage($session);
         }
 
         $response = $delegate->process($request);
@@ -53,7 +58,7 @@ class SessionMiddleware implements ServerMiddlewareInterface
         // so that the attributes may be persisted to some storage medium. We will also
         // add the session identifier cookie to the application response headers now.
         if ($this->isSessionConfigured()) {
-            $this->collectGarbage($session);
+            $this->storeCurrentUrl($request, $session);
 
             $response = $this->addCookieToResponse($response, $session);
 
@@ -68,7 +73,7 @@ class SessionMiddleware implements ServerMiddlewareInterface
      *
      * @param \Psr\Http\Message\ServerRequestInterface $request
      *
-     * @return \Psr\Http\Message\ResponseInterface
+     * @return \Viserio\Contracts\Session\Store
      */
     protected function startSession(ServerRequestInterface $request): StoreContract
     {
@@ -88,29 +93,46 @@ class SessionMiddleware implements ServerMiddlewareInterface
      *
      * @param \Psr\Http\Message\ServerRequestInterface $request
      *
-     * @return \Psr\Http\Message\ServerRequestInterface
+     * @return \Viserio\Contracts\Session\Store
      */
     protected function getSession(ServerRequestInterface $request): StoreContract
     {
         $session = $this->manager->driver();
+        $cookies = RequestCookies::fromRequest($request);
 
-        $key = $session->getConfig()->get('session::key');
+        $session->setId($cookies->get($session->getName()) ?? '');
 
-        $session->addFingerprintGenerator(new ClientIpGenerator($key));
-        $session->addFingerprintGenerator(new UserAgentGenerator($key));
+        $session->addFingerprintGenerator(new ClientIpGenerator());
+        $session->addFingerprintGenerator(new UserAgentGenerator());
 
         return $session;
     }
 
     /**
+     * Store the current URL for the request if necessary.
+     *
+     * @param \Psr\Http\Message\ServerRequestInterface $request
+     * @param \Viserio\Contracts\Session\Store         $session
+     */
+    protected function storeCurrentUrl(ServerRequestInterface $request, StoreContract $session)
+    {
+        if ($request->getMethod() === 'GET' &&
+            $request->getAttribute('route') &&
+            ! $request->getHeaderLine('HTTP_X_REQUESTED_WITH') == 'xmlhttprequest'
+        ) {
+            $session->setPreviousUrl((string) $request->getUri());
+        }
+    }
+
+    /**
      * Remove the garbage from the session if necessary.
      *
-     * @param StoreContract $session
+     * @param \Viserio\Contracts\Session\Store $session
      */
     protected function collectGarbage(StoreContract $session)
     {
         $config = $this->manager->getConfig();
-        $lottery = $config->get('session::lottery');
+        $lottery = $config->get('session.lottery');
         $hitsLottery = random_int(1, $lottery[1]) <= $lottery[0];
 
         // Here we will see if this request hits the garbage collection lottery by hitting
@@ -125,7 +147,7 @@ class SessionMiddleware implements ServerMiddlewareInterface
      * Add the session cookie to the application response.
      *
      * @param \Psr\Http\Message\ResponseInterface $response
-     * @param StoreContract                       $session
+     * @param \Viserio\Contracts\Session\Store    $session
      *
      * @return \Psr\Http\Message\ResponseInterface
      */
@@ -134,24 +156,22 @@ class SessionMiddleware implements ServerMiddlewareInterface
         if ($session->getHandler() instanceof CookieSessionHandler) {
             $session->save();
 
-            return response;
+            return $response;
         }
 
         $config = $this->manager->getConfig();
 
-        $setCookie = new Cookie(
+        $setCookie = new SetCookie(
             $session->getName(),
             $session->getId(),
             $this->getCookieExpirationDate($config),
-            $config->get('path'),
-            $config->get('domain'),
-            $config->get('secure', false),
-            $config->get('http_only', false)
+            $config->get('session.path'),
+            $config->get('session.domain'),
+            $config->get('session.secure', false),
+            $config->get('session.http_only', false)
         );
 
-        $response = $response->withAddedHeader('Set-Cookie', (string) $setCookie);
-
-        return $response;
+        return $response->withAddedHeader('Set-Cookie', (string) $setCookie);
     }
 
     /**
@@ -162,7 +182,7 @@ class SessionMiddleware implements ServerMiddlewareInterface
     protected function getSessionLifetimeInSeconds(): int
     {
         // Default 1 day
-        $lifetime = $this->manager->getConfig()->get('lifetime', 1440);
+        $lifetime = $this->manager->getConfig()->get('session.lifetime', 1440);
 
         return Chronos::now()->subMinutes($lifetime)->getTimestamp();
     }
@@ -172,11 +192,13 @@ class SessionMiddleware implements ServerMiddlewareInterface
      *
      * @param \Viserio\Contracts\Config\Manager $config
      *
-     * @return int
+     * @return int|\Cake\Chronos\Chronos
      */
-    protected function getCookieExpirationDate(ConfigContract $config): int
+    protected function getCookieExpirationDate(ConfigContract $config)
     {
-        return $config->get('expire_on_close', false) ? 0 : Chronos::now()->addMinutes($config->get('lifetime'));
+        return $config->get('session.expire_on_close', false) ?
+            0 :
+            Chronos::now()->addMinutes($config->get('session.lifetime'));
     }
 
     /**
@@ -186,6 +208,6 @@ class SessionMiddleware implements ServerMiddlewareInterface
      */
     private function isSessionConfigured(): bool
     {
-        return $this->manager->getConfig()->get('session::driver', null) !== null;
+        return $this->manager->getConfig()->get('session.driver', null) !== null;
     }
 }

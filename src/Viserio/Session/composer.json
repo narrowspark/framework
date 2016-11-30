@@ -23,7 +23,6 @@
         "cakephp/chronos"                                    : "^1.0",
         "narrowspark/arr"                                    : "^1.0",
         "psr/http-message"                                   : "^1.0",
-        "schnittstabil/csrf-tokenservice"                    : "^2.0",
         "viserio/config"                                     : "self.version",
         "viserio/cotracts"                                   : "self.version",
         "viserio/encrypter"                                  : "self.version",
@@ -32,13 +31,16 @@
     "require-dev": {
         "cache/array-adapter"                                : "^0.4",
         "cache/session-handler"                              : "^0.2",
-        "narrowspark/testing-helper"                         : "^1.5",
-        "mockery/mockery"                                    : "^0.9.5",
+        "container-interop/service-provider"                 : "^0.3",
+        "narrowspark/testing-helper"                         : "^2.0",
+        "mockery/mockery"                                    : "^0.9",
         "mikey179/vfsStream"                                 : "^1.6",
         "phpunit/phpunit"                                    : "^5.1",
+        "http-interop/http-middleware"                       : "^0.3",
         "viserio/cache"                                      : "self.version",
         "viserio/cookie"                                     : "self.version",
-        "viserio/filesystem"                                 : "self.version"
+        "viserio/filesystem"                                 : "self.version",
+        "viserio/http-factory"                               : "self.version"
     },
     "autoload": {
         "psr-4": {

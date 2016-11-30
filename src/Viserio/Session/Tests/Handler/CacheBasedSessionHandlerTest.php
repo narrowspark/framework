@@ -29,20 +29,20 @@ class CacheBasedSessionHandlerTest extends \PHPUnit_Framework_TestCase
     {
         $handler = $this->handler;
 
-        $this->assertTrue($handler->open('test', 'temp'));
+        self::assertTrue($handler->open('test', 'temp'));
     }
 
     public function testCloseReturnsTrue()
     {
         $handler = $this->handler;
 
-        $this->assertTrue($handler->close());
+        self::assertTrue($handler->close());
     }
 
     public function testGcSuccessfullyReturnsTrue()
     {
         $handler = $this->handler;
 
-        $this->assertTrue($handler->gc(2));
+        self::assertTrue($handler->gc(2));
     }
 }

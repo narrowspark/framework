@@ -28,7 +28,7 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase
             return 'Handler@handle';
         });
 
-        $this->assertEquals(
+        self::assertEquals(
             'foo',
             $dispatcher->dispatch(new BusDispatcherBasicCommand())
         );
@@ -66,7 +66,7 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase
             return 'Handler@test';
         });
 
-        $this->assertEquals(
+        self::assertEquals(
             'foo',
             $dispatcher->dispatch(new BusDispatcherBasicCommand())
         );
@@ -76,7 +76,7 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase
     {
         $dispatcher = new Dispatcher(new ArrayContainer());
 
-        $this->assertInstanceOf(
+        self::assertInstanceOf(
             BusDispatcherSetCommand::class,
             $dispatcher->resolveHandler(new BusDispatcherSetCommand())
         );
@@ -86,7 +86,7 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase
     {
         $dispatcher = new Dispatcher(new ArrayContainer());
 
-        $this->assertSame(
+        self::assertSame(
             BusDispatcherSetCommand::class,
             $dispatcher->getHandlerClass(new BusDispatcherSetCommand())
         );
@@ -96,7 +96,7 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase
     {
         $dispatcher = new Dispatcher(new ArrayContainer());
 
-        $this->assertSame('handle', $dispatcher->getHandlerMethod(new BusDispatcherSetCommand()));
+        self::assertSame('handle', $dispatcher->getHandlerMethod(new BusDispatcherSetCommand()));
     }
 
     /**
@@ -108,7 +108,7 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase
         $dispatcher = new Dispatcher(new ArrayContainer());
         $dispatcher->via('test');
 
-        $this->assertSame('handle', $dispatcher->getHandlerMethod(new BusDispatcherBasicCommand()));
+        self::assertSame('handle', $dispatcher->getHandlerMethod(new BusDispatcherBasicCommand()));
     }
 
     public function testPipeThrough()
@@ -122,7 +122,7 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase
             },
         ]);
 
-        $this->assertEquals(
+        self::assertEquals(
             'test',
             $dispatcher->dispatch(new BusDispatcherSetCommand())
         );
@@ -143,7 +143,7 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase
             BusDispatcherBasicCommand::class => 'Handler@test',
         ]);
 
-        $this->assertEquals(
+        self::assertEquals(
             'bar',
             $dispatcher->dispatch(new BusDispatcherBasicCommand())
         );

@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Log\Tests;
 
+use Mockery as Mock;
 use Monolog\Formatter\ChromePHPFormatter;
 use Monolog\Handler\HandlerInterface;
 use Monolog\Logger;
@@ -14,11 +15,21 @@ class HandlerParserTest extends \PHPUnit_Framework_TestCase
 {
     use MockeryTrait;
 
+    public function tearDown()
+    {
+        parent::tearDown();
+
+        $this->allowMockingNonExistentMethods(true);
+
+        // Verify Mockery expectations.
+        Mock::close();
+    }
+
     public function testGetMonolog()
     {
         $handler = new HandlerParser($this->mock(Logger::class));
 
-        $this->assertInstanceOf(Logger::class, $handler->getMonolog());
+        self::assertInstanceOf(Logger::class, $handler->getMonolog());
     }
 
     /**
@@ -28,7 +39,7 @@ class HandlerParserTest extends \PHPUnit_Framework_TestCase
     {
         $handler = new HandlerParser($this->mock(Logger::class));
 
-        $this->assertInstanceOf(
+        self::assertInstanceOf(
             HandlerInterface::class,
             $handler->parseHandler('chromePHP', '')
         );

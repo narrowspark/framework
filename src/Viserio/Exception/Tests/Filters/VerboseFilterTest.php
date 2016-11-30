@@ -23,7 +23,7 @@ class VerboseFilterTest extends \PHPUnit_Framework_TestCase
         $standard = new JsonDisplayer(new ExceptionInfo());
         $displayers = (new VerboseFilter(true))->filter([$verbose, $standard], $request, $exception, $exception, 500);
 
-        $this->assertSame([$verbose, $standard], $displayers);
+        self::assertSame([$verbose, $standard], $displayers);
     }
 
     public function testDebugIsRemoved()
@@ -34,7 +34,7 @@ class VerboseFilterTest extends \PHPUnit_Framework_TestCase
         $standard = new JsonDisplayer(new ExceptionInfo());
         $displayers = (new VerboseFilter(false))->filter([$verbose, $standard], $request, $exception, $exception, 500);
 
-        $this->assertSame([$standard], $displayers);
+        self::assertSame([$standard], $displayers);
     }
 
     public function testNoChangeInDebugMode()
@@ -45,7 +45,7 @@ class VerboseFilterTest extends \PHPUnit_Framework_TestCase
         $html = new HtmlDisplayer(new ExceptionInfo(), 'foo');
         $displayers = (new VerboseFilter(true))->filter([$json, $html], $request, $exception, $exception, 500);
 
-        $this->assertSame([$json, $html], $displayers);
+        self::assertSame([$json, $html], $displayers);
     }
 
     public function testNoChangeNotInDebugMode()
@@ -55,6 +55,6 @@ class VerboseFilterTest extends \PHPUnit_Framework_TestCase
         $json = new JsonDisplayer(new ExceptionInfo());
         $displayers = (new VerboseFilter(false))->filter([$json], $request, $exception, $exception, 500);
 
-        $this->assertSame([$json], $displayers);
+        self::assertSame([$json], $displayers);
     }
 }

@@ -18,6 +18,6 @@ class InvokerTest extends \PHPUnit_Framework_TestCase
             return 'Hello ' . $name;
         }, ['John']);
 
-        $this->assertEquals('Hello John', $call);
+        self::assertEquals('Hello John', $call);
     }
 }

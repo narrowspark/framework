@@ -15,7 +15,7 @@ class EventsAwareTraitTest extends \PHPUnit_Framework_TestCase
     {
         $this->setEventsDispatcher($this->mock(Dispatcher::class));
 
-        $this->assertInstanceOf(Dispatcher::class, $this->getEventsDispatcher());
+        self::assertInstanceOf(Dispatcher::class, $this->getEventsDispatcher());
     }
 
     /**

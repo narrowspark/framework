@@ -12,8 +12,8 @@ class AliasLoaderTest extends \PHPUnit_Framework_TestCase
         $aliasloader = new AliasLoader();
         $aliasloader->alias('Test', Foo::class);
 
-        $this->assertTrue($aliasloader->load('Test'));
-        $this->assertFalse($aliasloader->load('Unknown'));
+        self::assertTrue($aliasloader->load('Test'));
+        self::assertFalse($aliasloader->load('Unknown'));
     }
 
     public function testMatchedLiteral()
@@ -23,8 +23,8 @@ class AliasLoaderTest extends \PHPUnit_Framework_TestCase
             'Tester\*' => Foo::class,
         ]);
 
-        $this->assertTrue($aliasloader->load('Tester\ThisClass'));
-        $this->assertFalse($aliasloader->load('Unknown\ThisClass'));
+        self::assertTrue($aliasloader->load('Tester\ThisClass'));
+        self::assertFalse($aliasloader->load('Unknown\ThisClass'));
     }
 
     public function testMatchedReplacement()
@@ -34,8 +34,8 @@ class AliasLoaderTest extends \PHPUnit_Framework_TestCase
             'Test\*' => 'Viserio\StaticalProxy\Tests\Fixture\$1',
         ]);
 
-        $this->assertTrue($aliasloader->load('Test\Foo'));
-        $this->assertFalse($aliasloader->load('Test\Unknown'));
+        self::assertTrue($aliasloader->load('Test\Foo'));
+        self::assertFalse($aliasloader->load('Test\Unknown'));
     }
 
     public function testNonExistingResolving()
@@ -43,7 +43,7 @@ class AliasLoaderTest extends \PHPUnit_Framework_TestCase
         $aliasloader = new AliasLoader();
         $aliasloader->alias('ThisClass', 'ToSomethingThatDoesntExist');
 
-        $this->assertFalse($aliasloader->load('ThisClass'));
+        self::assertFalse($aliasloader->load('ThisClass'));
     }
 
     public function testAliasContainingTarget()
@@ -51,7 +51,7 @@ class AliasLoaderTest extends \PHPUnit_Framework_TestCase
         $aliasloader = new AliasLoader();
         $aliasloader->alias('FakeFoo::class', Foo::class);
 
-        $this->assertTrue($aliasloader->load('FakeFoo::class'));
+        self::assertTrue($aliasloader->load('FakeFoo::class'));
     }
 
     public function testRemoveloader()
@@ -63,17 +63,17 @@ class AliasLoaderTest extends \PHPUnit_Framework_TestCase
             'ResolvableThree' => Foo::class,
             'ResolvableFour' => Foo::class,
         ]);
-        $this->assertTrue(is_array($aliasloader->getAliases()));
-        $this->assertTrue($aliasloader->load('Resolvable'));
+        self::assertTrue(is_array($aliasloader->getAliases()));
+        self::assertTrue($aliasloader->load('Resolvable'));
 
         $aliasloader->removeAlias('ResolvableTwo');
-        $this->assertFalse($aliasloader->load('ResolvableTwo'));
+        self::assertFalse($aliasloader->load('ResolvableTwo'));
 
         $aliasloader->removeAlias('ResolvableThree');
-        $this->assertFalse($aliasloader->load('ResolvableThree'));
+        self::assertFalse($aliasloader->load('ResolvableThree'));
 
         $aliasloader->removeAlias('ResolvableFour', Foo::class);
-        $this->assertFalse($aliasloader->load('ResolvableFour'));
+        self::assertFalse($aliasloader->load('ResolvableFour'));
     }
 
     public function testRemovePatternloadr()
@@ -85,16 +85,16 @@ class AliasLoaderTest extends \PHPUnit_Framework_TestCase
             'PatternResolvableThree' => Foo::class,
             'PatternResolvableFour' => Foo::class,
         ]);
-        $this->assertTrue($aliasloader->load('PatternResolvable'));
+        self::assertTrue($aliasloader->load('PatternResolvable'));
 
         $aliasloader->removeAliasPattern('PatternResolvableTwo');
-        $this->assertFalse($aliasloader->load('PatternResolvableTwo'));
+        self::assertFalse($aliasloader->load('PatternResolvableTwo'));
 
         $aliasloader->removeAliasPattern('PatternResolvableThree');
-        $this->assertFalse($aliasloader->load('PatternResolvableThree'));
+        self::assertFalse($aliasloader->load('PatternResolvableThree'));
 
         $aliasloader->removeAliasPattern('PatternResolvableFour', Foo::class);
-        $this->assertFalse($aliasloader->load('PatternResolvableFour'));
+        self::assertFalse($aliasloader->load('PatternResolvableFour'));
     }
 
     public function testloadAutoloader()
@@ -105,16 +105,16 @@ class AliasLoaderTest extends \PHPUnit_Framework_TestCase
             'Second\Autoloaded\Foo' => Foo::class,
             'Third\Autoloaded\Foo' => Foo::class,
         ]);
-        $this->assertFalse(class_exists('Autoloaded\Foo', true));
-        $this->assertTrue($aliasloader->load('Autoloaded\Foo'));
+        self::assertFalse(class_exists('Autoloaded\Foo', true));
+        self::assertTrue($aliasloader->load('Autoloaded\Foo'));
 
         $aliasloader->register();
-        $this->assertTrue(class_exists('Second\Autoloaded\Foo', true));
-        $this->assertTrue($aliasloader->isRegistered());
+        self::assertTrue(class_exists('Second\Autoloaded\Foo', true));
+        self::assertTrue($aliasloader->isRegistered());
 
         $aliasloader->unregister();
-        $this->assertFalse(class_exists('Third\Autoloaded\Foo', true));
-        $this->assertFalse($aliasloader->isRegistered());
+        self::assertFalse(class_exists('Third\Autoloaded\Foo', true));
+        self::assertFalse($aliasloader->isRegistered());
     }
 
     public function testStopRecursion()
@@ -126,8 +126,8 @@ class AliasLoaderTest extends \PHPUnit_Framework_TestCase
         $aliasloader->aliasPattern('*', '$1');
         $aliasloader->register();
 
-        $this->assertFalse($aliasloader->load('Unre\Solvable'));
-        $this->assertFalse($aliasloader->load('Unresolvable'));
+        self::assertFalse($aliasloader->load('Unre\Solvable'));
+        self::assertFalse($aliasloader->load('Unresolvable'));
     }
 
     public function testNamespaceAliasing()
@@ -138,8 +138,8 @@ class AliasLoaderTest extends \PHPUnit_Framework_TestCase
         $aliasloader->aliasNamespace('Some\\Space', '');
         $aliasloader->removeNamespaceAlias('Some\\Space');
 
-        $this->assertTrue($aliasloader->load('Foo'));
-        $this->assertTrue($aliasloader->load('Some\\Other\\Space\\OtherNameSpace'));
-        $this->assertFalse($aliasloader->load('OtherFoo'));
+        self::assertTrue($aliasloader->load('Foo'));
+        self::assertTrue($aliasloader->load('Some\\Other\\Space\\OtherNameSpace'));
+        self::assertFalse($aliasloader->load('OtherFoo'));
     }
 }

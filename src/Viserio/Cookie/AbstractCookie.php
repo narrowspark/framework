@@ -5,10 +5,11 @@ namespace Viserio\Cookie;
 use Cake\Chronos\Chronos;
 use DateTime;
 use DateTimeInterface;
+use InvalidArgumentException;
 use Viserio\Contracts\Cookie\Cookie as CookieContract;
-use Viserio\Contracts\Support\Stringable;
+use Viserio\Contracts\Support\Stringable as StringableContract;
 
-abstract class AbstractCookie implements Stringable, CookieContract
+abstract class AbstractCookie implements StringableContract, CookieContract
 {
     /**
      * @var string
@@ -26,7 +27,7 @@ abstract class AbstractCookie implements Stringable, CookieContract
     protected $domain;
 
     /**
-     * @var int|\DateTimeInterface|null
+     * @var int|null
      */
     protected $expires;
 
@@ -58,7 +59,7 @@ abstract class AbstractCookie implements Stringable, CookieContract
     /**
      * {@inheritdoc}
      */
-    abstract public function __toString(): string;
+    abstract public function __toString();
 
     /**
      * {@inheritdoc}
@@ -119,18 +120,6 @@ abstract class AbstractCookie implements Stringable, CookieContract
     /**
      * {@inheritdoc}
      */
-    public function withExpiration($expiration = null): CookieContract
-    {
-        $new = clone $this;
-        $new->maxAge = is_int($expiration) ? $expiration : null;
-        $new->expires = $this->normalizeExpires($expiration);
-
-        return $new;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function withExpires($expires): CookieContract
     {
         $new = clone $this;
@@ -160,7 +149,8 @@ abstract class AbstractCookie implements Stringable, CookieContract
      */
     public function isExpired(): bool
     {
-        return $this->expires !== 0 && $this->expires < new DateTime();
+        return $this->expires !== 0 &&
+            Chronos::parse(gmdate('D, d-M-Y H:i:s', $this->expires)) < Chronos::now();
     }
 
     /**
@@ -215,7 +205,7 @@ abstract class AbstractCookie implements Stringable, CookieContract
     public function withSecure(bool $secure): CookieContract
     {
         $new = clone $this;
-        $new->secure = filter_var($secure, FILTER_VALIDATE_BOOLEAN);
+        $new->secure = $secure;
 
         return $new;
     }
@@ -234,7 +224,7 @@ abstract class AbstractCookie implements Stringable, CookieContract
     public function withHttpOnly(bool $httpOnly): CookieContract
     {
         $new = clone $this;
-        $new->httpOnly = filter_var($httpOnly, FILTER_VALIDATE_BOOLEAN);
+        $new->httpOnly = $httpOnly;
 
         return $new;
     }
@@ -331,24 +321,38 @@ abstract class AbstractCookie implements Stringable, CookieContract
      *
      * @param int|string|\DateTimeInterface|null $expiration
      *
-     * @return \DateTimeInterface|null
+     * @return int
      */
-    protected function normalizeExpires($expiration = null)
+    protected function normalizeExpires($expiration = null): int
     {
         $expires = null;
 
         if (is_int($expiration)) {
-            $expires = new DateTime(sprintf('%d seconds', $expiration));
-
-            // According to RFC 2616 date should be set to earliest representable date
-            if ($expiration <= 0) {
-                $expires->setTimestamp(-PHP_INT_MAX);
-            }
+            $expires = (new Chronos(sprintf('%d seconds', $expiration)))->toCookieString();
         } elseif ($expiration instanceof DateTimeInterface) {
-            $expires = $expiration;
+            $expires = $expiration->format(DateTime::COOKIE);
         }
 
-        return $expires;
+        $tsExpires = $expires;
+
+        if (is_string($expires)) {
+            $tsExpires = strtotime($expires);
+
+            // if $tsExpires is invalid and PHP is compiled as 32bit. Check if it fail reason is the 2038 bug
+            if (! is_int($tsExpires) && PHP_INT_SIZE === 4) {
+                $dateTime = new DateTime($expires);
+
+                if ($dateTime->format('Y') > 2038) {
+                    $tsExpires = PHP_INT_MAX;
+                }
+            }
+        }
+
+        if (! is_int($tsExpires) || $tsExpires < 0) {
+            throw new InvalidArgumentException('Invalid expires time specified.');
+        }
+
+        return $tsExpires;
     }
 
     /**
@@ -396,13 +400,15 @@ abstract class AbstractCookie implements Stringable, CookieContract
     {
         $name = urlencode($this->name) . '=';
 
-        if ((string) $this->getValue() === '') {
-            $cookieStringParts[] .= $name . 'deleted; Expires=' . gmdate('D, d-M-Y H:i:s T', Chronos::now()->getTimestamp() - 31536001);
+        if ($this->getValue() === null) {
+            $time = Chronos::now()->getTimestamp() - 31536001;
+
+            $cookieStringParts[] .= $name . 'deleted; Expires=' . (new Chronos(gmdate('D, d-M-Y H:i:s', $time)))->toCookieString();
         } else {
             $cookieStringParts[] .= $name . urlencode($this->getValue());
 
-            if ($this->getExpiresTime()->format('s') !== 0) {
-                $cookieStringParts[] .= 'Expires=' . $this->getExpiresTime()->format('D, d-M-Y H:i:s T');
+            if (! is_null($this->getExpiresTime())) {
+                $cookieStringParts[] .= 'Expires=' . (new Chronos(gmdate('D, d-M-Y H:i:s', $this->getExpiresTime())))->toCookieString();
             }
         }
 

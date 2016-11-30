@@ -44,8 +44,8 @@ linting: true
 
         $parsed = $this->parser->parse($this->file->read($file->url()));
 
-        $this->assertTrue(is_array($parsed));
-        $this->assertSame(['preset' => 'psr2', 'risky' => false, 'linting' => true], $parsed);
+        self::assertTrue(is_array($parsed));
+        self::assertSame(['preset' => 'psr2', 'risky' => false, 'linting' => true], $parsed);
     }
 
     /**

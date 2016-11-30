@@ -43,7 +43,7 @@ class FileLoaderTest extends \PHPUnit_Framework_TestCase
 
         $data = $this->fileloader->load($file->url());
 
-        $this->assertSame(['a' => 1, 'b' => 2, 'c' => 3, 'd' => 4, 'e' => 5], $data);
+        self::assertSame(['a' => 1, 'b' => 2, 'c' => 3, 'd' => 4, 'e' => 5], $data);
     }
 
     public function testLoadwithGroup()
@@ -62,7 +62,7 @@ class FileLoaderTest extends \PHPUnit_Framework_TestCase
 
         $data = $this->fileloader->load($file->url(), 'Test');
 
-        $this->assertSame(['Test::a' => 1, 'Test::b' => 2, 'Test::c' => 3, 'Test::d' => 4, 'Test::e' => 5], $data);
+        self::assertSame(['Test::a' => 1, 'Test::b' => 2, 'Test::c' => 3, 'Test::d' => 4, 'Test::e' => 5], $data);
     }
 
     public function testExistsWithCache()
@@ -80,10 +80,10 @@ class FileLoaderTest extends \PHPUnit_Framework_TestCase
         )->at($this->root);
 
         $exist = $this->fileloader->exists($file->url());
-        $this->assertSame(self::normalizeDirectorySeparator($file->url()), $exist);
+        self::assertSame(self::normalizeDirectorySeparator($file->url()), $exist);
 
         $exist2 = $this->fileloader->exists($file->url());
-        $this->assertSame(self::normalizeDirectorySeparator($file->url()), $exist2);
+        self::assertSame(self::normalizeDirectorySeparator($file->url()), $exist2);
     }
 
     /**
@@ -106,12 +106,12 @@ class FileLoaderTest extends \PHPUnit_Framework_TestCase
 
         $exist = $this->fileloader->exists('temp.json');
 
-        $this->assertSame(self::normalizeDirectorySeparator($file->url()), $exist);
+        self::assertSame(self::normalizeDirectorySeparator($file->url()), $exist);
     }
 
     public function testGetParser()
     {
-        $this->assertInstanceOf(TaggableParser::class, $this->fileloader->getParser());
+        self::assertInstanceOf(TaggableParser::class, $this->fileloader->getParser());
     }
 
     public function testGetSetAndAddDirectories()
@@ -123,13 +123,13 @@ class FileLoaderTest extends \PHPUnit_Framework_TestCase
 
         $directory = $this->fileloader->getDirectories();
 
-        $this->assertSame('foo/bar/', $directory[0]);
-        $this->assertSame('bar/foo/', $directory[1]);
+        self::assertSame('foo/bar/', $directory[0]);
+        self::assertSame('bar/foo/', $directory[1]);
 
         $this->fileloader->addDirectory('added/directory');
 
         $directory = $this->fileloader->getDirectories();
 
-        $this->assertSame('added/directory', $directory[2]);
+        self::assertSame('added/directory', $directory[2]);
     }
 }

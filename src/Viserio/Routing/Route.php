@@ -15,8 +15,8 @@ use Viserio\Support\Traits\InvokerAwareTrait;
 class Route implements RouteContract
 {
     use ContainerAwareTrait;
-    use MiddlewareAwareTrait;
     use InvokerAwareTrait;
+    use MiddlewareAwareTrait;
 
     /**
      * The URI pattern the route responds to.
@@ -30,7 +30,7 @@ class Route implements RouteContract
      *
      * @var array
      */
-    protected $httpMethods;
+    protected $httpMethods = [];
 
     /**
      * The route action array.
@@ -178,20 +178,17 @@ class Route implements RouteContract
     public function gatherMiddleware(): array
     {
         // Merge middlewares from Action.
-        $with = Arr::get($this->action, 'middleware.with', []);
-        $without = Arr::get($this->action, 'middleware.without', []);
+        $middlewares = Arr::get($this->action, 'middlewares', []);
+        $withoutMiddlewares = Arr::get($this->action, 'without_middlewares', []);
 
-        $this->middlewares = Arr::merge($this->middlewares, $this->getControllerMiddleware());
-
-        $this->middlewares['with'] = array_merge(
-            $this->middlewares['with'],
-            is_array($with) ? $with : [$with]
-        );
-
-        $this->middlewares['without'] = array_merge(
-            $this->middlewares['without'],
-            is_array($without) ? $without : [$without]
-        );
+        $this->middlewares = [
+            'middlewares' => array_unique(array_merge(
+                $this->middlewares,
+                is_array($middlewares) ? $middlewares : [$middlewares],
+                $this->getControllerMiddleware()
+            )),
+            'without_middlewares' => is_array($withoutMiddlewares) ? $withoutMiddlewares : [$withoutMiddlewares],
+        ];
 
         return $this->middlewares;
     }

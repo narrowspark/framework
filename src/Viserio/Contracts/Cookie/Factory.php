@@ -19,10 +19,10 @@ interface Factory
      */
     public function create(
         string $name,
-        $value,
+        string $value = null,
         int $minutes = 0,
-        $path = null,
-        $domain = null,
+        string $path = null,
+        string $domain = null,
         bool $secure = false,
         bool $httpOnly = true
     ): Cookie;
@@ -31,7 +31,7 @@ interface Factory
      * Create a cookie that lasts "forever" (five years).
      *
      * @param string      $name
-     * @param string      $value
+     * @param string|null $value
      * @param string|null $path
      * @param string|null $domain
      * @param bool        $secure
@@ -41,9 +41,9 @@ interface Factory
      */
     public function forever(
         string $name,
-        string $value,
-        $path = null,
-        $domain = null,
+        string $value = null,
+        string $path = null,
+        string $domain = null,
         bool $secure = false,
         bool $httpOnly = true
     ): Cookie;
@@ -59,7 +59,7 @@ interface Factory
      */
     public function delete(
         string $name,
-        $path = null,
-        $domain = null
+        string $path = null,
+        string $domain = null
     ): Cookie;
 }

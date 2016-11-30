@@ -14,8 +14,8 @@ class FilesServiceProviderTest extends \PHPUnit_Framework_TestCase
         $container = new Container();
         $container->register(new FilesServiceProvider());
 
-        $this->assertInstanceOf(Filesystem::class, $container->get(Filesystem::class));
-        $this->assertInstanceOf(Filesystem::class, $container->get(FilesystemContract::class));
-        $this->assertInstanceOf(Filesystem::class, $container->get('files'));
+        self::assertInstanceOf(Filesystem::class, $container->get(Filesystem::class));
+        self::assertInstanceOf(Filesystem::class, $container->get(FilesystemContract::class));
+        self::assertInstanceOf(Filesystem::class, $container->get('files'));
     }
 }

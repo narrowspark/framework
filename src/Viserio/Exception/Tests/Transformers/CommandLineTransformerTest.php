@@ -17,7 +17,7 @@ class CommandLineTransformerTest extends \PHPUnit_Framework_TestCase
 
         $expected = "\n+-------------+\n| FATAL ERROR |\n+-------------+\ntest message in test.php on line 15\n";
 
-        $this->assertEquals($expected, $format->getMessage());
+        self::assertEquals($expected, $format->getMessage());
     }
 
     public function testHandleExceptionsReturnsValidErrorMessage()
@@ -27,7 +27,7 @@ class CommandLineTransformerTest extends \PHPUnit_Framework_TestCase
         $transformer = new CommandLineTransformer();
         $format = $transformer->transform($exception);
 
-        $this->assertTrue(strlen($format->getMessage()) > 0);
-        $this->assertTrue((strpos($format->getMessage(), 'UNHANDLED EXCEPTION') !== false));
+        self::assertTrue(strlen($format->getMessage()) > 0);
+        self::assertTrue((strpos($format->getMessage(), 'UNHANDLED EXCEPTION') !== false));
     }
 }

@@ -14,8 +14,8 @@ class EncrypterTest extends \PHPUnit_Framework_TestCase
         $encrypted2 = $e->encrypt('foo');
         $encrypted3 = $e->encrypt('bar');
 
-        $this->assertTrue($e->compare($encrypted1, $encrypted2));
-        $this->assertFalse($e->compare($encrypted1, $encrypted3));
+        self::assertTrue($e->compare($encrypted1, $encrypted2));
+        self::assertFalse($e->compare($encrypted1, $encrypted3));
     }
 
     public function testEncryptionAndDecrypt()
@@ -24,7 +24,7 @@ class EncrypterTest extends \PHPUnit_Framework_TestCase
 
         $encrypted = $e->encrypt('foo');
 
-        $this->assertNotEquals('foo', $encrypted);
-        $this->assertEquals('foo', $e->decrypt($encrypted));
+        self::assertNotEquals('foo', $encrypted);
+        self::assertEquals('foo', $e->decrypt($encrypted));
     }
 }

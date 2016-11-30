@@ -15,7 +15,7 @@ class ViewAwareTraitTest extends \PHPUnit_Framework_TestCase
     {
         $this->setViewFactory($this->mock(ViewFactoryContract::class));
 
-        $this->assertInstanceOf(ViewFactoryContract::class, $this->getViewFactory());
+        self::assertInstanceOf(ViewFactoryContract::class, $this->getViewFactory());
     }
 
     /**

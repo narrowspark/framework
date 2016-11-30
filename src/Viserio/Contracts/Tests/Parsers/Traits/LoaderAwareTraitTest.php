@@ -15,7 +15,7 @@ class LoaderAwareTraitTest extends \PHPUnit_Framework_TestCase
     {
         $this->setLoader($this->mock(LoaderContract::class));
 
-        $this->assertInstanceOf(LoaderContract::class, $this->getLoader());
+        self::assertInstanceOf(LoaderContract::class, $this->getLoader());
     }
 
     /**

@@ -19,7 +19,7 @@ class StreamFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $resource = tmpfile();
         $stream = $this->factory->createStreamFromResource($resource);
-        $this->assertStream($stream, '');
+        self::assertStream($stream, '');
     }
 
     public function testKeepsPositionOfResource()
@@ -29,7 +29,7 @@ class StreamFactoryTest extends \PHPUnit_Framework_TestCase
 
         $stream = $this->factory->createStreamFromResource($resource);
 
-        $this->assertEquals(10, $stream->tell());
+        self::assertEquals(10, $stream->tell());
 
         $stream->close();
     }
@@ -38,15 +38,15 @@ class StreamFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $stream = $this->factory->createStream('foo');
 
-        $this->assertInstanceOf(Stream::class, $stream);
-        $this->assertEquals('foo', $stream->getContents());
+        self::assertInstanceOf(Stream::class, $stream);
+        self::assertEquals('foo', $stream->getContents());
 
         $stream->close();
     }
 
     public function testFactoryCreatesFromEmptyString()
     {
-        $this->assertInstanceOf(Stream::class, $this->factory->createStream(''));
+        self::assertInstanceOf(Stream::class, $this->factory->createStream(''));
     }
 
     public function testFactoryCreatesFromResource()
@@ -54,13 +54,13 @@ class StreamFactoryTest extends \PHPUnit_Framework_TestCase
         $resource = fopen(__FILE__, 'r');
         $stream = $this->factory->createStreamFromResource($resource);
 
-        $this->assertInstanceOf(Stream::class, $stream);
-        $this->assertSame(file_get_contents(__FILE__), (string) $stream);
+        self::assertInstanceOf(Stream::class, $stream);
+        self::assertSame(file_get_contents(__FILE__), (string) $stream);
     }
 
     private function assertStream($stream, $content)
     {
-        $this->assertInstanceOf(StreamInterface::class, $stream);
-        $this->assertSame($content, (string) $stream);
+        self::assertInstanceOf(StreamInterface::class, $stream);
+        self::assertSame($content, (string) $stream);
     }
 }

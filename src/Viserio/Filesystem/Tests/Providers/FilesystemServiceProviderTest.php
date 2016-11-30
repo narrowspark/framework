@@ -29,15 +29,15 @@ class FilesystemServiceProviderTest extends \PHPUnit_Framework_TestCase
             ],
         ]);
 
-        $this->assertInstanceOf(FilesystemManager::class, $container->get(FilesystemManager::class));
-        $this->assertInstanceOf(FilesystemManager::class, $container->get(Filesystem::class));
-        $this->assertInstanceOf(FilesystemManager::class, $container->get(FilesystemInterface::class));
-        $this->assertInstanceOf(FilesystemManager::class, $container->get('flysystem'));
-        $this->assertInstanceOf(FilesystemAdapter::class, $container->get('flysystem.connection'));
-        $this->assertInstanceOf(CachedFactory::class, $container->get(CachedFactory::class));
-        $this->assertInstanceOf(CachedFactory::class, $container->get('flysystem.cachedfactory'));
+        self::assertInstanceOf(FilesystemManager::class, $container->get(FilesystemManager::class));
+        self::assertInstanceOf(FilesystemManager::class, $container->get(Filesystem::class));
+        self::assertInstanceOf(FilesystemManager::class, $container->get(FilesystemInterface::class));
+        self::assertInstanceOf(FilesystemManager::class, $container->get('flysystem'));
+        self::assertInstanceOf(FilesystemAdapter::class, $container->get('flysystem.connection'));
+        self::assertInstanceOf(CachedFactory::class, $container->get(CachedFactory::class));
+        self::assertInstanceOf(CachedFactory::class, $container->get('flysystem.cachedfactory'));
 
-        $this->assertInstanceOf(FilesystemManager::class, $container->get(FilesystemManager::class));
-        $this->assertInstanceOf(CachedFactory::class, $container->get(CachedFactory::class));
+        self::assertInstanceOf(FilesystemManager::class, $container->get(FilesystemManager::class));
+        self::assertInstanceOf(CachedFactory::class, $container->get(CachedFactory::class));
     }
 }

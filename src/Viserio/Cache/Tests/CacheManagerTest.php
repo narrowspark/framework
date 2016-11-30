@@ -39,7 +39,7 @@ class CacheManagerTest extends \PHPUnit_Framework_TestCase
             ->with('cache.namespace')
             ->andReturn(null);
 
-        $this->assertInstanceOf(ArrayCachePool::class, $this->manager->driver('array'));
+        self::assertInstanceOf(ArrayCachePool::class, $this->manager->driver('array'));
     }
 
     public function testNamespacedArrayPoolCall()
@@ -53,7 +53,7 @@ class CacheManagerTest extends \PHPUnit_Framework_TestCase
             ->with('cache.namespace')
             ->andReturn('viserio');
 
-        $this->assertInstanceOf(NamespacedCachePool::class, $this->manager->driver('array'));
+        self::assertInstanceOf(NamespacedCachePool::class, $this->manager->driver('array'));
     }
 
     public function testDontNamespceSessionHandler()
@@ -72,7 +72,7 @@ class CacheManagerTest extends \PHPUnit_Framework_TestCase
             ->with('cache.namespace')
             ->andReturn('viserio');
 
-        $this->assertInstanceOf(Psr6SessionHandler::class, $this->manager->driver('session'));
+        self::assertInstanceOf(Psr6SessionHandler::class, $this->manager->driver('session'));
     }
 
     public function testNamespacedNullPoolCall()
@@ -86,7 +86,7 @@ class CacheManagerTest extends \PHPUnit_Framework_TestCase
             ->with('cache.namespace')
             ->andReturn('viserio');
 
-        $this->assertInstanceOf(NamespacedCachePool::class, $this->manager->driver('null'));
+        self::assertInstanceOf(NamespacedCachePool::class, $this->manager->driver('null'));
     }
 
     public function testChain()
@@ -107,7 +107,7 @@ class CacheManagerTest extends \PHPUnit_Framework_TestCase
 
         $chain = $this->manager->chain(['array', 'null', new VoidCachePool()]);
 
-        $this->assertInstanceOf(CachePoolChain::class, $chain);
+        self::assertInstanceOf(CachePoolChain::class, $chain);
     }
 
     public function testFilesystem()
@@ -134,6 +134,6 @@ class CacheManagerTest extends \PHPUnit_Framework_TestCase
 
         $this->manager->setContainer($container);
 
-        $this->assertInstanceOf(FilesystemCachePool::class, $this->manager->driver('filesystem'));
+        self::assertInstanceOf(FilesystemCachePool::class, $this->manager->driver('filesystem'));
     }
 }

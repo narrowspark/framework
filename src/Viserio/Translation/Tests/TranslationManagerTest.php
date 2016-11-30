@@ -45,7 +45,7 @@ class TranslationManagerTest extends \PHPUnit_Framework_TestCase
             __DIR__ . '/stubs',
         ]);
 
-        $this->assertSame(
+        self::assertSame(
             self::normalizeDirectorySeparator(__DIR__ . '/stubs'),
             $this->manager->getDirectories()[0]
         );
@@ -55,7 +55,7 @@ class TranslationManagerTest extends \PHPUnit_Framework_TestCase
     {
         $this->manager->setLoader($this->mock(LoaderContract::class));
 
-        $this->assertInstanceOf(LoaderContract::class, $this->manager->getLoader());
+        self::assertInstanceOf(LoaderContract::class, $this->manager->getLoader());
     }
 
     /**
@@ -95,9 +95,9 @@ declare(strict_types=1); return [
 
         $this->manager->import('en.php');
 
-        $this->assertInstanceOf(TranslatorContract::class, $this->manager->getTranslator('en'));
-        $this->assertSame('en', $this->manager->getTranslator('en')->getLocale());
-        $this->assertSame('en', $this->manager->getTranslator()->getLocale());
+        self::assertInstanceOf(TranslatorContract::class, $this->manager->getTranslator('en'));
+        self::assertSame('en', $this->manager->getTranslator('en')->getLocale());
+        self::assertSame('en', $this->manager->getTranslator()->getLocale());
     }
 
     public function testImportWithDefaultFallback()
@@ -168,33 +168,33 @@ declare(strict_types=1); return [
     {
         $this->manager->setDefaultFallback($this->mock(MessageCatalogueContract::class));
 
-        $this->assertInstanceOf(MessageCatalogueContract::class, $this->manager->getDefaultFallback());
+        self::assertInstanceOf(MessageCatalogueContract::class, $this->manager->getDefaultFallback());
     }
 
     public function testSetAndLanguageFallback()
     {
         $this->manager->setLanguageFallback('de', $this->mock(MessageCatalogueContract::class));
 
-        $this->assertInstanceOf(MessageCatalogueContract::class, $this->manager->getLanguageFallback('de'));
+        self::assertInstanceOf(MessageCatalogueContract::class, $this->manager->getLanguageFallback('de'));
     }
 
     public function testSetAndGetLocale()
     {
         $this->manager->setLocale('de');
 
-        $this->assertSame('de', $this->manager->getLocale());
+        self::assertSame('de', $this->manager->getLocale());
     }
 
     public function testGetPluralization()
     {
-        $this->assertInstanceOf(PluralizationRules::class, $this->manager->getPluralization());
+        self::assertInstanceOf(PluralizationRules::class, $this->manager->getPluralization());
     }
 
     public function testSetAndGetLogger()
     {
         $this->manager->setLogger($this->mock(LoggerInterface::class));
 
-        $this->assertInstanceOf(LoggerInterface::class, $this->manager->getLogger());
+        self::assertInstanceOf(LoggerInterface::class, $this->manager->getLogger());
 
         $message = $this->mock(MessageCatalogueContract::class);
         $message

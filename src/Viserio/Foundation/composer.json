@@ -29,7 +29,7 @@
         "viserio/routing"                                    : "self.version"
     },
     "require-dev": {
-        "narrowspark/testing-helper"                         : "^1.5",
+        "narrowspark/testing-helper"                         : "^2.0",
         "phpunit/phpunit"                                    : "^5.1",
         "viserio/console"                                    : "self.version"
     },
@@ -46,7 +46,8 @@
     },
     "provide": {
         "container-interop/container-interop-implementation" : "^1.1",
-        "psr/container-implementation"                       : "^1.0"
+        "psr/container-implementation"                       : "^1.0",
+        "psr/http-message-implementation"                    : "^1.0"
     },
     "extra": {
         "branch-alias": {

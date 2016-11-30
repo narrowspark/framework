@@ -20,7 +20,7 @@ class SanitizerTest extends \PHPUnit_Framework_TestCase
 
         $data = $sanitizer->sanitize(['name' => 'reverse'], $data);
 
-        $this->assertEquals('krapsworran', $data['name']);
+        self::assertEquals('krapsworran', $data['name']);
     }
 
     public function testThatSanitizerCanSanitizeWithClass()
@@ -35,7 +35,7 @@ class SanitizerTest extends \PHPUnit_Framework_TestCase
 
         $data = $sanitizer->sanitize(['name' => 'reverse'], $data);
 
-        $this->assertEquals('krapsworran', $data['name']);
+        self::assertEquals('krapsworran', $data['name']);
     }
 
     public function testThatSanitizerCanSanitizeWithClosureAndParameters()
@@ -49,7 +49,7 @@ class SanitizerTest extends \PHPUnit_Framework_TestCase
 
         $data = $sanitizer->sanitize(['name' => 'substring:2,3'], $data);
 
-        $this->assertEquals('rro', $data['name']);
+        self::assertEquals('rro', $data['name']);
     }
 
     public function testThatSanitizerCanSanitizeWithClassAndParameters()
@@ -64,7 +64,7 @@ class SanitizerTest extends \PHPUnit_Framework_TestCase
 
         $data = $sanitizer->sanitize(['name' => 'suffix:Rees'], $data);
 
-        $this->assertEquals('Dayle Rees', $data['name']);
+        self::assertEquals('Dayle Rees', $data['name']);
     }
 
     public function testThatSanitizerCanSanitizeWithACallback()
@@ -76,7 +76,7 @@ class SanitizerTest extends \PHPUnit_Framework_TestCase
 
         $data = $sanitizer->sanitize(['name' => 'reverse'], $data);
 
-        $this->assertEquals('krapsworraN', $data['name']);
+        self::assertEquals('krapsworraN', $data['name']);
     }
 
     public function testThatSanitizerCanSanitizeWithACallbackAndParameters()
@@ -88,7 +88,7 @@ class SanitizerTest extends \PHPUnit_Framework_TestCase
 
         $data = $sanitizer->sanitize(['name' => 'suffix:Spark'], $data);
 
-        $this->assertEquals('Narrow Spark', $data['name']);
+        self::assertEquals('Narrow Spark', $data['name']);
     }
 
     public function testThatACallableRuleCanBeUsed()
@@ -98,7 +98,7 @@ class SanitizerTest extends \PHPUnit_Framework_TestCase
 
         $data = $sanitizer->sanitize(['name' => 'strrev'], $data);
 
-        $this->assertEquals('krapsworraN', $data['name']);
+        self::assertEquals('krapsworraN', $data['name']);
     }
 
     public function testThatACallableRuleCanBeUsedWithParameters()
@@ -108,7 +108,7 @@ class SanitizerTest extends \PHPUnit_Framework_TestCase
 
         $data = $sanitizer->sanitize(['number' => 'str_pad:10,0,0'], $data);
 
-        $this->assertEquals('0000002435', $data['number']);
+        self::assertEquals('0000002435', $data['number']);
     }
 
     public function testThatSanitizerFunctionsWithMultipleRules()
@@ -122,7 +122,7 @@ class SanitizerTest extends \PHPUnit_Framework_TestCase
 
         $data = $sanitizer->sanitize(['name' => 'strrev|alphabetize|trim'], $data);
 
-        $this->assertEquals('krapsworraN', $data['name']);
+        self::assertEquals('krapsworraN', $data['name']);
     }
 
     public function testThatSanitizerFunctionsWithMultipleRulesWithParameters()
@@ -138,7 +138,7 @@ class SanitizerTest extends \PHPUnit_Framework_TestCase
 
         $data = $sanitizer->sanitize(['name' => 'suffix: Rees |strrev|alphabetize|trim'], $data);
 
-        $this->assertEquals('seeRelyaD', $data['name']);
+        self::assertEquals('seeRelyaD', $data['name']);
     }
 
     public function testThatGlobalRulesCanBeSet()
@@ -154,7 +154,7 @@ class SanitizerTest extends \PHPUnit_Framework_TestCase
             'last_name' => 'strrev',
         ], $data);
 
-        $this->assertEquals([
+        self::assertEquals([
             'first_name' => 'narrow',
             'last_name' => 'worran',
         ], $data);
@@ -173,7 +173,7 @@ class SanitizerTest extends \PHPUnit_Framework_TestCase
             'last_name' => 'strrev',
         ], $data);
 
-        $this->assertEquals([
+        self::assertEquals([
             'first_name' => 'arrow',
             'last_name' => 'worra',
         ], $data);

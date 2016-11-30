@@ -130,7 +130,7 @@ class UploadedFileTest extends \PHPUnit_Framework_TestCase
         $stream = new Stream(fopen('php://temp', 'r'));
         $upload = new UploadedFile($stream, 0, UPLOAD_ERR_OK);
 
-        $this->assertSame($stream, $upload->getStream());
+        self::assertSame($stream, $upload->getStream());
     }
 
     public function testGetStreamReturnsWrappedPhpStream()
@@ -139,7 +139,7 @@ class UploadedFileTest extends \PHPUnit_Framework_TestCase
         $upload = new UploadedFile($stream, 0, UPLOAD_ERR_OK);
         $uploadStream = $upload->getStream()->detach();
 
-        $this->assertSame($stream, $uploadStream);
+        self::assertSame($stream, $uploadStream);
     }
 
     public function testGetStreamReturnsStreamForFile()
@@ -152,7 +152,7 @@ class UploadedFileTest extends \PHPUnit_Framework_TestCase
         $r = new ReflectionProperty($uploadStream, 'filename');
         $r->setAccessible(true);
 
-        $this->assertSame($stream, $r->getValue($uploadStream));
+        self::assertSame($stream, $r->getValue($uploadStream));
     }
 
     public function testSuccessful()
@@ -166,15 +166,15 @@ class UploadedFileTest extends \PHPUnit_Framework_TestCase
         $stream = new Stream($stream);
         $upload = new UploadedFile($stream, $stream->getSize(), UPLOAD_ERR_OK, 'filename.txt', 'text/plain');
 
-        $this->assertEquals($stream->getSize(), $upload->getSize());
-        $this->assertEquals('filename.txt', $upload->getClientFilename());
-        $this->assertEquals('text/plain', $upload->getClientMediaType());
+        self::assertEquals($stream->getSize(), $upload->getSize());
+        self::assertEquals('filename.txt', $upload->getClientFilename());
+        self::assertEquals('text/plain', $upload->getClientMediaType());
         $this->cleanup[] = $to = tempnam(sys_get_temp_dir(), 'successful');
 
         $upload->moveTo($to);
 
-        $this->assertFileExists($to);
-        $this->assertEquals($stream->__toString(), file_get_contents($to));
+        self::assertFileExists($to);
+        self::assertEquals($stream->__toString(), file_get_contents($to));
     }
 
     public function invalidMovePaths()
@@ -232,7 +232,7 @@ class UploadedFileTest extends \PHPUnit_Framework_TestCase
 
         $upload->moveTo($to);
 
-        $this->assertTrue(file_exists($to));
+        self::assertTrue(file_exists($to));
 
         $upload->moveTo($to);
     }
@@ -256,7 +256,7 @@ class UploadedFileTest extends \PHPUnit_Framework_TestCase
 
         $upload->moveTo($to);
 
-        $this->assertFileExists($to);
+        self::assertFileExists($to);
 
         $upload->getStream();
     }
@@ -280,7 +280,7 @@ class UploadedFileTest extends \PHPUnit_Framework_TestCase
     public function testConstructorDoesNotRaiseExceptionForInvalidStreamWhenErrorStatusPresent($status)
     {
         $uploadedFile = new UploadedFile('not ok', 0, $status);
-        $this->assertSame($status, $uploadedFile->getError());
+        self::assertSame($status, $uploadedFile->getError());
     }
 
     /**
@@ -316,6 +316,6 @@ class UploadedFileTest extends \PHPUnit_Framework_TestCase
         copy(__FILE__, $from);
         $uploadedFile = new UploadedFile($from, 100, UPLOAD_ERR_OK, basename($from), 'text/plain');
         $uploadedFile->moveTo($to);
-        $this->assertFileEquals(__FILE__, $to);
+        self::assertFileEquals(__FILE__, $to);
     }
 }

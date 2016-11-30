@@ -18,8 +18,8 @@ class ByteCountingStreamExceptionTest extends \PHPUnit_Framework_TestCase
         $prev = new RuntimeException('prev');
         $exception = new ByteCountingStreamException($expect, $actual, $prev);
 
-        $this->assertEquals($msg, $exception->getMessage());
-        $this->assertSame($prev, $exception->getPrevious());
+        self::assertEquals($msg, $exception->getMessage());
+        self::assertSame($prev, $exception->getPrevious());
     }
 
     public function getTestCases()

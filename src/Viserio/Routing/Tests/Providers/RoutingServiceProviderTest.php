@@ -15,7 +15,7 @@ class RoutingServiceProviderTest extends \PHPUnit_Framework_TestCase
         $container->register(new RoutingServiceProvider());
         $container->register(new EventsServiceProvider());
 
-        $this->assertInstanceOf(Router::class, $container->get(Router::class));
-        $this->assertInstanceOf(Router::class, $container->get('router'));
+        self::assertInstanceOf(Router::class, $container->get(Router::class));
+        self::assertInstanceOf(Router::class, $container->get('router'));
     }
 }

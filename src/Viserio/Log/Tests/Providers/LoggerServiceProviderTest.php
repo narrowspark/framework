@@ -25,11 +25,11 @@ class LoggerServiceProviderTest extends \PHPUnit_Framework_TestCase
             'env' => 'dev',
         ]);
 
-        $this->assertInstanceOf(MonologWriter::class, $container->get(LoggerInterface::class));
-        $this->assertInstanceOf(MonologWriter::class, $container->get(MonologWriter::class));
-        $this->assertInstanceOf(MonologWriter::class, $container->get(Logger::class));
-        $this->assertInstanceOf(MonologWriter::class, $container->get(Log::class));
-        $this->assertInstanceOf(MonologWriter::class, $container->get('logger'));
+        self::assertInstanceOf(MonologWriter::class, $container->get(LoggerInterface::class));
+        self::assertInstanceOf(MonologWriter::class, $container->get(MonologWriter::class));
+        self::assertInstanceOf(MonologWriter::class, $container->get(Logger::class));
+        self::assertInstanceOf(MonologWriter::class, $container->get(Log::class));
+        self::assertInstanceOf(MonologWriter::class, $container->get('logger'));
     }
 
     public function testProviderWithoutConfigManager()
@@ -41,11 +41,11 @@ class LoggerServiceProviderTest extends \PHPUnit_Framework_TestCase
             'env' => 'dev',
         ]);
 
-        $this->assertInstanceOf(MonologWriter::class, $container->get(LoggerInterface::class));
-        $this->assertInstanceOf(MonologWriter::class, $container->get(MonologWriter::class));
-        $this->assertInstanceOf(MonologWriter::class, $container->get(Logger::class));
-        $this->assertInstanceOf(MonologWriter::class, $container->get(Log::class));
-        $this->assertInstanceOf(MonologWriter::class, $container->get('logger'));
+        self::assertInstanceOf(MonologWriter::class, $container->get(LoggerInterface::class));
+        self::assertInstanceOf(MonologWriter::class, $container->get(MonologWriter::class));
+        self::assertInstanceOf(MonologWriter::class, $container->get(Logger::class));
+        self::assertInstanceOf(MonologWriter::class, $container->get(Log::class));
+        self::assertInstanceOf(MonologWriter::class, $container->get('logger'));
     }
 
     public function testProviderWithoutConfigManagerAndNamespace()
@@ -58,10 +58,10 @@ class LoggerServiceProviderTest extends \PHPUnit_Framework_TestCase
             'env' => 'dev',
         ]);
 
-        $this->assertInstanceOf(MonologWriter::class, $container->get(LoggerInterface::class));
-        $this->assertInstanceOf(MonologWriter::class, $container->get(MonologWriter::class));
-        $this->assertInstanceOf(MonologWriter::class, $container->get(Logger::class));
-        $this->assertInstanceOf(MonologWriter::class, $container->get(Log::class));
-        $this->assertInstanceOf(DispatcherContract::class, $container->get('logger')->getEventsDispatcher());
+        self::assertInstanceOf(MonologWriter::class, $container->get(LoggerInterface::class));
+        self::assertInstanceOf(MonologWriter::class, $container->get(MonologWriter::class));
+        self::assertInstanceOf(MonologWriter::class, $container->get(Logger::class));
+        self::assertInstanceOf(MonologWriter::class, $container->get(Log::class));
+        self::assertInstanceOf(DispatcherContract::class, $container->get('logger')->getEventsDispatcher());
     }
 }

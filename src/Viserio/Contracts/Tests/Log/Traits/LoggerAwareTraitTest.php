@@ -15,7 +15,7 @@ class LoggerAwareTraitTest extends \PHPUnit_Framework_TestCase
     {
         $this->setLogger($this->mock(PsrLoggerInterface::class));
 
-        $this->assertInstanceOf(PsrLoggerInterface::class, $this->getLogger());
+        self::assertInstanceOf(PsrLoggerInterface::class, $this->getLogger());
     }
 
     /**

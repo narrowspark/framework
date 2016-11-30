@@ -22,17 +22,6 @@ class Request extends AbstractMessage implements RequestInterface
     ];
 
     /**
-     * Array of possible CSRF Header names
-     *
-     * @var array
-     */
-    protected static $csrfHeaderNames = [
-        'X-CSRF-Token',
-        'X-CSRFToken',
-        'X-XSRF-TOKEN',
-    ];
-
-    /**
      * The request method
      *
      * @var string

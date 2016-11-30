@@ -40,6 +40,8 @@ class EncryptionWrapperTest extends \PHPUnit_Framework_TestCase
     public function tearDown()
     {
         $this->delTree($this->root);
+
+        parent::tearDown();
     }
 
     public function testWriteStream()
@@ -48,38 +50,38 @@ class EncryptionWrapperTest extends \PHPUnit_Framework_TestCase
         fwrite($temp, 'dummy');
         rewind($temp);
 
-        $this->assertTrue($this->adapter->writeStream('encrypt.txt', $temp));
-        $this->assertSame('dummy', stream_get_contents($this->adapter->readStream('encrypt.txt')));
+        self::assertTrue($this->adapter->writeStream('encrypt.txt', $temp));
+        self::assertSame('dummy', stream_get_contents($this->adapter->readStream('encrypt.txt')));
     }
 
     public function testWrite()
     {
-        $this->assertTrue($this->adapter->write('encrypt.txt', 'dummy'));
-        $this->assertSame('dummy', $this->adapter->read('encrypt.txt'));
+        self::assertTrue($this->adapter->write('encrypt.txt', 'dummy'));
+        self::assertSame('dummy', $this->adapter->read('encrypt.txt'));
     }
 
     public function testUpdate()
     {
-        $this->assertTrue($this->adapter->write('encrypt_update.txt', 'dummy'));
-        $this->assertTrue($this->adapter->update('encrypt_update.txt', 'file'));
+        self::assertTrue($this->adapter->write('encrypt_update.txt', 'dummy'));
+        self::assertTrue($this->adapter->update('encrypt_update.txt', 'file'));
 
-        $this->assertSame('file', $this->adapter->read('encrypt_update.txt'));
+        self::assertSame('file', $this->adapter->read('encrypt_update.txt'));
     }
 
     public function testPut()
     {
-        $this->assertTrue($this->adapter->put('encrypt_put.txt', 'file'));
-        $this->assertSame('file', $this->adapter->read('encrypt_put.txt'));
+        self::assertTrue($this->adapter->put('encrypt_put.txt', 'file'));
+        self::assertSame('file', $this->adapter->read('encrypt_put.txt'));
 
         $temp = tmpfile();
         fwrite($temp, 'dummy');
         rewind($temp);
 
-        $this->assertTrue($this->adapter->put('encrypt_put.txt', $temp));
-        $this->assertSame('dummy', $this->adapter->read('encrypt_put.txt'));
+        self::assertTrue($this->adapter->put('encrypt_put.txt', $temp));
+        self::assertSame('dummy', $this->adapter->read('encrypt_put.txt'));
 
-        $this->assertTrue($this->adapter->put('encrypt_put2.txt', $temp));
-        $this->assertSame('dummy', $this->adapter->read('encrypt_put.txt'));
+        self::assertTrue($this->adapter->put('encrypt_put2.txt', $temp));
+        self::assertSame('dummy', $this->adapter->read('encrypt_put.txt'));
     }
 
     public function testUpdateStream()
@@ -88,15 +90,15 @@ class EncryptionWrapperTest extends \PHPUnit_Framework_TestCase
         fwrite($temp, 'dummy');
         rewind($temp);
 
-        $this->assertTrue($this->adapter->updateStream('encrypt_u_stream.txt', $temp));
-        $this->assertSame('dummy', $this->adapter->read('encrypt_u_stream.txt'));
+        self::assertTrue($this->adapter->updateStream('encrypt_u_stream.txt', $temp));
+        self::assertSame('dummy', $this->adapter->read('encrypt_u_stream.txt'));
 
         $temp = tmpfile();
         fwrite($temp, 'file');
         rewind($temp);
 
-        $this->assertTrue($this->adapter->updateStream('encrypt_u_stream.txt', $temp));
-        $this->assertSame('file', $this->adapter->read('encrypt_u_stream.txt'));
+        self::assertTrue($this->adapter->updateStream('encrypt_u_stream.txt', $temp));
+        self::assertSame('file', $this->adapter->read('encrypt_u_stream.txt'));
     }
 
     /**
@@ -104,7 +106,7 @@ class EncryptionWrapperTest extends \PHPUnit_Framework_TestCase
      */
     public function testRead()
     {
-        $this->assertFalse($this->adapter->read('dont.txt'));
+        self::assertFalse($this->adapter->read('dont.txt'));
     }
 
     /**
@@ -112,7 +114,7 @@ class EncryptionWrapperTest extends \PHPUnit_Framework_TestCase
      */
     public function testReadStream()
     {
-        $this->assertFalse($this->adapter->readStream('dont.txt'));
+        self::assertFalse($this->adapter->readStream('dont.txt'));
     }
 
     private function delTree($dir)

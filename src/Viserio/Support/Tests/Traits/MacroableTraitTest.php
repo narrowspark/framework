@@ -17,7 +17,7 @@ class MacroableTraitTest extends \PHPUnit_Framework_TestCase
             return 'Macro';
         });
 
-        $this->assertEquals('Macro', $macroable::{__CLASS__}());
+        self::assertEquals('Macro', $macroable::{__CLASS__}());
     }
 
     public function testRegisterMacroAndCallWithoutStatic()
@@ -28,7 +28,7 @@ class MacroableTraitTest extends \PHPUnit_Framework_TestCase
             return 'Macro';
         });
 
-        $this->assertEquals('Macro', $macroable->{__CLASS__}());
+        self::assertEquals('Macro', $macroable->{__CLASS__}());
     }
 
     public function testWhenCallingMacroClosureIsBoundToObject()
@@ -44,11 +44,11 @@ class MacroableTraitTest extends \PHPUnit_Framework_TestCase
         $instance = new MacroTest();
         $result = $instance->tryInstance();
 
-        $this->assertEquals('instance', $result);
+        self::assertEquals('instance', $result);
 
         $result = MacroTest::tryStatic();
 
-        $this->assertEquals('static', $result);
+        self::assertEquals('static', $result);
     }
 
     /**

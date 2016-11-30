@@ -11,8 +11,8 @@ class HtmlResponseTest extends \PHPUnit_Framework_TestCase
         $body = '<html>Uh oh not found</html>';
         $response = new HtmlResponse($body);
 
-        $this->assertSame($body, (string) $response->getBody());
-        $this->assertEquals(200, $response->getStatusCode());
+        self::assertSame($body, (string) $response->getBody());
+        self::assertEquals(200, $response->getStatusCode());
     }
 
     public function testConstructorAllowsPassingStatus()
@@ -21,8 +21,8 @@ class HtmlResponseTest extends \PHPUnit_Framework_TestCase
         $status = 404;
         $response = new HtmlResponse($body, $status);
 
-        $this->assertEquals(404, $response->getStatusCode());
-        $this->assertSame($body, (string) $response->getBody());
+        self::assertEquals(404, $response->getStatusCode());
+        self::assertSame($body, (string) $response->getBody());
     }
 
     public function testConstructorAllowsPassingHeaders()
@@ -34,10 +34,10 @@ class HtmlResponseTest extends \PHPUnit_Framework_TestCase
         ];
         $response = new HtmlResponse($body, $status, $headers);
 
-        $this->assertEquals(['foo-bar'], $response->getHeader('x-custom'));
-        $this->assertEquals('text/html; charset=utf-8', $response->getHeaderLine('content-type'));
-        $this->assertEquals(404, $response->getStatusCode());
-        $this->assertSame($body, (string) $response->getBody());
+        self::assertEquals(['foo-bar'], $response->getHeader('x-custom'));
+        self::assertEquals('text/html; charset=utf-8', $response->getHeaderLine('content-type'));
+        self::assertEquals(404, $response->getStatusCode());
+        self::assertSame($body, (string) $response->getBody());
     }
 
     public function testAllowsStreamsForResponseBody()
@@ -45,7 +45,7 @@ class HtmlResponseTest extends \PHPUnit_Framework_TestCase
         $stream = $this->getMockBuilder('Psr\Http\Message\StreamInterface')->getMock();
         $response = new HtmlResponse($stream);
 
-        $this->assertSame($stream, $response->getBody());
+        self::assertSame($stream, $response->getBody());
     }
 
     public function invalidHtmlContent()
@@ -78,6 +78,6 @@ class HtmlResponseTest extends \PHPUnit_Framework_TestCase
         $response = new HtmlResponse($html);
 
         $actual = $response->getBody()->getContents();
-        $this->assertEquals($html, $actual);
+        self::assertEquals($html, $actual);
     }
 }

@@ -86,7 +86,7 @@ class SqsQueueTest extends \PHPUnit_Framework_TestCase
 
         $result = $queue->pop($this->queueName);
 
-        $this->assertInstanceOf(SqsJob::class, $result);
+        self::assertInstanceOf(SqsJob::class, $result);
     }
 
     public function testDelayedPushWithDateTimeProperlyPushesJobOntoSqs()
@@ -118,7 +118,7 @@ class SqsQueueTest extends \PHPUnit_Framework_TestCase
 
         $id = $queue->later($now, $this->mockedJob, $this->mockedData, $this->queueName);
 
-        $this->assertEquals($this->mockedMessageId, $id);
+        self::assertEquals($this->mockedMessageId, $id);
     }
 
     public function testPopProperlyPopsJobOffOfSqsWithCustomJobCreator()
@@ -143,7 +143,7 @@ class SqsQueueTest extends \PHPUnit_Framework_TestCase
 
         $result = $queue->pop($this->queueName);
 
-        $this->assertEquals('job!', $result);
+        self::assertEquals('job!', $result);
     }
 
     public function testDelayedPushProperlyPushesJobOntoSqs()
@@ -172,7 +172,7 @@ class SqsQueueTest extends \PHPUnit_Framework_TestCase
 
         $id = $queue->later($this->mockedDelay, $this->mockedJob, $this->mockedData, $this->queueName);
 
-        $this->assertEquals($this->mockedMessageId, $id);
+        self::assertEquals($this->mockedMessageId, $id);
     }
 
     public function testPushProperlyPushesJobOntoSqs()
@@ -197,28 +197,28 @@ class SqsQueueTest extends \PHPUnit_Framework_TestCase
 
         $id = $queue->push($this->mockedJob, $this->mockedData, $this->queueName);
 
-        $this->assertEquals($this->mockedMessageId, $id);
+        self::assertEquals($this->mockedMessageId, $id);
     }
 
     public function testGetQueueProperlyResolvesUrlWithPrefix()
     {
         $queue = new SqsQueue($this->sqs, $this->queueName, $this->prefix);
 
-        $this->assertEquals($this->queueUrl, $queue->getQueue(null));
+        self::assertEquals($this->queueUrl, $queue->getQueue(null));
 
         $queueUrl = $this->baseUrl . '/' . $this->account . '/test';
 
-        $this->assertEquals($queueUrl, $queue->getQueue('test'));
+        self::assertEquals($queueUrl, $queue->getQueue('test'));
     }
 
     public function testGetQueueProperlyResolvesUrlWithoutPrefix()
     {
         $queue = new SqsQueue($this->sqs, $this->queueUrl);
 
-        $this->assertEquals($this->queueUrl, $queue->getQueue(null));
+        self::assertEquals($this->queueUrl, $queue->getQueue(null));
 
         $queueUrl = $this->baseUrl . '/' . $this->account . '/test';
 
-        $this->assertEquals($queueUrl, $queue->getQueue($queueUrl));
+        self::assertEquals($queueUrl, $queue->getQueue($queueUrl));
     }
 }

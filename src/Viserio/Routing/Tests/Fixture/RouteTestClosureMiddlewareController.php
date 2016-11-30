@@ -10,7 +10,7 @@ class RouteTestClosureMiddlewareController extends AbstractController
 {
     public function __construct()
     {
-        $this->withMiddleware(new ControllerClosureMiddleware());
+        $this->withMiddleware(ControllerClosureMiddleware::class);
     }
 
     public function index()

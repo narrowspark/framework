@@ -18,7 +18,7 @@ class ExceptionInfoTest extends \PHPUnit_Framework_TestCase
             'summary' => 'Houston, We Have A Problem.',
         ];
 
-        $this->assertSame($expected, $info);
+        self::assertSame($expected, $info);
     }
 
     public function testHiddenError()
@@ -33,6 +33,6 @@ class ExceptionInfoTest extends \PHPUnit_Framework_TestCase
             'summary' => 'Houston, We Have A Problem.',
         ];
 
-        $this->assertSame($expected, $info);
+        self::assertSame($expected, $info);
     }
 }

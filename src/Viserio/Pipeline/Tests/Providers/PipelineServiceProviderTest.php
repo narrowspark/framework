@@ -14,8 +14,8 @@ class PipelineServiceProviderTest extends \PHPUnit_Framework_TestCase
         $container = new Container();
         $container->register(new PipelineServiceProvider());
 
-        $this->assertInstanceOf(Pipeline::class, $container->get(Pipeline::class));
-        $this->assertInstanceOf(Pipeline::class, $container->get(PipelineContract::class));
-        $this->assertInstanceOf(Pipeline::class, $container->get('pipeline'));
+        self::assertInstanceOf(Pipeline::class, $container->get(Pipeline::class));
+        self::assertInstanceOf(Pipeline::class, $container->get(PipelineContract::class));
+        self::assertInstanceOf(Pipeline::class, $container->get('pipeline'));
     }
 }

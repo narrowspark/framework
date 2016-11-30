@@ -17,9 +17,9 @@ class PumpStreamTest extends \PHPUnit_Framework_TestCase
             'size' => 100,
         ]);
 
-        $this->assertEquals('bar', $pump->getMetadata('foo'));
-        $this->assertEquals(['foo' => 'bar'], $pump->getMetadata());
-        $this->assertEquals(100, $pump->getSize());
+        self::assertEquals('bar', $pump->getMetadata('foo'));
+        self::assertEquals(['foo' => 'bar'], $pump->getMetadata());
+        self::assertEquals(100, $pump->getSize());
     }
 
     public function testCanReadFromCallable()
@@ -28,10 +28,10 @@ class PumpStreamTest extends \PHPUnit_Framework_TestCase
             return 'a';
         });
 
-        $this->assertEquals('a', $pump->read(1));
-        $this->assertEquals(1, $pump->tell());
-        $this->assertEquals('aaaaa', $pump->read(5));
-        $this->assertEquals(6, $pump->tell());
+        self::assertEquals('a', $pump->read(1));
+        self::assertEquals(1, $pump->tell());
+        self::assertEquals('aaaaa', $pump->read(5));
+        self::assertEquals(6, $pump->tell());
     }
 
     public function testStoresExcessDataInBuffer()
@@ -44,11 +44,11 @@ class PumpStreamTest extends \PHPUnit_Framework_TestCase
             return 'abcdef';
         });
 
-        $this->assertEquals('a', $pump->read(1));
-        $this->assertEquals('b', $pump->read(1));
-        $this->assertEquals('cdef', $pump->read(4));
-        $this->assertEquals('abcdefabc', $pump->read(9));
-        $this->assertEquals([1, 9, 3], $called);
+        self::assertEquals('a', $pump->read(1));
+        self::assertEquals('b', $pump->read(1));
+        self::assertEquals('cdef', $pump->read(4));
+        self::assertEquals('abcdefabc', $pump->read(9));
+        self::assertEquals([1, 9, 3], $called);
     }
 
     public function testInifiniteStreamWrappedInLimitStream()
@@ -58,7 +58,7 @@ class PumpStreamTest extends \PHPUnit_Framework_TestCase
         });
         $s = new LimitStream($pump, 5);
 
-        $this->assertEquals('aaaaa', (string) $s);
+        self::assertEquals('aaaaa', (string) $s);
     }
 
     public function testDescribesCapabilities()
@@ -66,20 +66,20 @@ class PumpStreamTest extends \PHPUnit_Framework_TestCase
         $pump = new PumpStream(function () {
         });
 
-        $this->assertTrue($pump->isReadable());
-        $this->assertFalse($pump->isSeekable());
-        $this->assertFalse($pump->isWritable());
-        $this->assertNull($pump->getSize());
-        $this->assertEquals('', $pump->getContents());
-        $this->assertEquals('', (string) $pump);
+        self::assertTrue($pump->isReadable());
+        self::assertFalse($pump->isSeekable());
+        self::assertFalse($pump->isWritable());
+        self::assertNull($pump->getSize());
+        self::assertEquals('', $pump->getContents());
+        self::assertEquals('', (string) $pump);
 
         $pump->close();
 
-        $this->assertEquals('', $pump->read(10));
-        $this->assertTrue($pump->eof());
+        self::assertEquals('', $pump->read(10));
+        self::assertTrue($pump->eof());
 
         try {
-            $this->assertFalse($pump->write('aa'));
+            self::assertFalse($pump->write('aa'));
             $this->fail();
         } catch (RuntimeException $e) {
         }
@@ -100,15 +100,15 @@ class PumpStreamTest extends \PHPUnit_Framework_TestCase
             return $result;
         });
 
-        $this->assertInstanceOf(PumpStream::class, $stream);
-        $this->assertEquals('foo', $stream->read(3));
-        $this->assertFalse($stream->eof());
-        $this->assertEquals('b', $stream->read(1));
-        $this->assertEquals('a', $stream->read(1));
-        $this->assertEquals('r12', $stream->read(3));
-        $this->assertFalse($stream->eof());
-        $this->assertEquals('3', $stream->getContents());
-        $this->assertTrue($stream->eof());
-        $this->assertEquals(9, $stream->tell());
+        self::assertInstanceOf(PumpStream::class, $stream);
+        self::assertEquals('foo', $stream->read(3));
+        self::assertFalse($stream->eof());
+        self::assertEquals('b', $stream->read(1));
+        self::assertEquals('a', $stream->read(1));
+        self::assertEquals('r12', $stream->read(3));
+        self::assertFalse($stream->eof());
+        self::assertEquals('3', $stream->getContents());
+        self::assertTrue($stream->eof());
+        self::assertEquals(9, $stream->tell());
     }
 }

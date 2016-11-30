@@ -31,14 +31,14 @@ class CookieSessionHandlerTest extends \PHPUnit_Framework_TestCase
     {
         $handler = $this->handler;
 
-        $this->assertTrue($handler->open('test', 'temp'));
+        self::assertTrue($handler->open('test', 'temp'));
     }
 
     public function testCloseReturnsTrue()
     {
         $handler = $this->handler;
 
-        $this->assertTrue($handler->close());
+        self::assertTrue($handler->close());
     }
 
     public function testReadExistingSessionReturnsTheData()
@@ -56,7 +56,7 @@ class CookieSessionHandlerTest extends \PHPUnit_Framework_TestCase
         $handler = $this->handler;
         $handler->setRequest($request);
 
-        $this->assertSame('Foo Bar', $handler->read('temp'));
+        self::assertSame('Foo Bar', $handler->read('temp'));
     }
 
     public function testReadMissingSessionReturnsAnEmptyString()
@@ -69,7 +69,7 @@ class CookieSessionHandlerTest extends \PHPUnit_Framework_TestCase
         $handler = $this->handler;
         $handler->setRequest($request);
 
-        $this->assertSame('', $handler->read('12'));
+        self::assertSame('', $handler->read('12'));
     }
 
     public function testWriteSuccessfullyReturnsTrue()
@@ -93,14 +93,14 @@ class CookieSessionHandlerTest extends \PHPUnit_Framework_TestCase
             5
         );
 
-        $this->assertTrue($handler->write('write.sess', ['user_id' => 1]));
+        self::assertTrue($handler->write('write.sess', ['user_id' => 1]));
     }
 
     public function testGcSuccessfullyReturnsTrue()
     {
         $handler = $this->handler;
 
-        $this->assertTrue($handler->gc(2));
+        self::assertTrue($handler->gc(2));
     }
 
     public function testDestroySuccessfullReturnsTrue()
@@ -120,6 +120,6 @@ class CookieSessionHandlerTest extends \PHPUnit_Framework_TestCase
             5
         );
 
-        $this->assertTrue($handler->destroy('cookie.sess'));
+        self::assertTrue($handler->destroy('cookie.sess'));
     }
 }

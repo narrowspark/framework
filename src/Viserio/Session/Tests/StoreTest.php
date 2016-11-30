@@ -81,9 +81,9 @@ class StoreTest extends \PHPUnit_Framework_TestCase
         $session->setId(self::SESSION_ID);
         $session->open();
 
-        $this->assertEquals('bar', $session->get('foo'));
-        $this->assertTrue($session->isStarted());
-        $this->assertInstanceOf(EncrypterContract::class, $session->getEncrypter());
+        self::assertEquals('bar', $session->get('foo'));
+        self::assertTrue($session->isStarted());
+        self::assertInstanceOf(EncrypterContract::class, $session->getEncrypter());
 
         $session->getHandler()
             ->shouldReceive('write')
@@ -91,18 +91,18 @@ class StoreTest extends \PHPUnit_Framework_TestCase
 
         $session->save();
 
-        $this->assertFalse($session->isStarted());
+        self::assertFalse($session->isStarted());
     }
 
     public function testName()
     {
         $session = $this->session;
 
-        $this->assertEquals($session->getName(), 'name');
+        self::assertEquals($session->getName(), 'name');
 
         $session->setName('foo');
 
-        $this->assertEquals($session->getName(), 'foo');
+        self::assertEquals($session->getName(), 'foo');
     }
 
     public function testSessionMigration()
@@ -113,15 +113,15 @@ class StoreTest extends \PHPUnit_Framework_TestCase
         $oldId = $session->getId();
         $session->getHandler()->shouldReceive('destroy')->never();
 
-        $this->assertTrue($session->migrate());
-        $this->assertNotEquals($oldId, $session->getId());
+        self::assertTrue($session->migrate());
+        self::assertNotEquals($oldId, $session->getId());
 
         $session = $this->session;
         $oldId = $session->getId();
         $session->getHandler()->shouldReceive('destroy')->once()->with($oldId);
 
-        $this->assertTrue($session->migrate(true));
-        $this->assertNotEquals($oldId, $session->getId());
+        self::assertTrue($session->migrate(true));
+        self::assertNotEquals($oldId, $session->getId());
     }
 
     public function testCantSetInvalidId()
@@ -130,7 +130,7 @@ class StoreTest extends \PHPUnit_Framework_TestCase
 
         $session->setId('wrong');
 
-        $this->assertNotEquals('wrong', $session->getId());
+        self::assertNotEquals('wrong', $session->getId());
     }
 
     public function testSessionInvalidate()
@@ -141,25 +141,25 @@ class StoreTest extends \PHPUnit_Framework_TestCase
 
         $oldId = $session->getId();
 
-        $this->assertGreaterThan(0, count($session->all()));
+        self::assertGreaterThan(0, count($session->all()));
 
         $session->getHandler()->shouldReceive('destroy')->once()->with($oldId);
 
-        $this->assertTrue($session->invalidate());
-        $this->assertFalse($session->has('foo'));
-        $this->assertNotEquals($oldId, $session->getId());
-        $this->assertCount(0, $session->all());
+        self::assertTrue($session->invalidate());
+        self::assertFalse($session->has('foo'));
+        self::assertNotEquals($oldId, $session->getId());
+        self::assertCount(0, $session->all());
     }
 
     public function testCanGetRequestsCount()
     {
         $session = $this->session;
 
-        $this->assertEquals(0, $session->getRequestsCount());
+        self::assertEquals(0, $session->getRequestsCount());
 
         $session->start();
 
-        $this->assertEquals(1, $session->getRequestsCount());
+        self::assertEquals(1, $session->getRequestsCount());
     }
 
     public function testStartMethodUnsetsAllValues()
@@ -169,9 +169,10 @@ class StoreTest extends \PHPUnit_Framework_TestCase
         $session->set('foo2', 'bar');
         $session->set('foo3', 'bar');
 
+        // generates new token
         $session->start();
 
-        $this->assertEquals(0, count($session->all()));
+        self::assertEquals(1, count($session->all()));
     }
 
     public function testStartMethodResetsLastTraceAndFirstTrace()
@@ -184,8 +185,8 @@ class StoreTest extends \PHPUnit_Framework_TestCase
 
         $session->start();
 
-        $this->assertNotEquals($lastTrace, $session->getLastTrace());
-        $this->assertNotEquals($firstTrace, $session->getFirstTrace());
+        self::assertNotEquals($lastTrace, $session->getLastTrace());
+        self::assertNotEquals($firstTrace, $session->getFirstTrace());
     }
 
     public function testStartMethodResetsRequestsCount()
@@ -193,7 +194,7 @@ class StoreTest extends \PHPUnit_Framework_TestCase
         $session = $this->session;
         $session->start();
 
-        $this->assertEquals(1, $session->getRequestsCount());
+        self::assertEquals(1, $session->getRequestsCount());
     }
 
     public function testStartMethodResetsIdRegenerationTrace()
@@ -205,8 +206,8 @@ class StoreTest extends \PHPUnit_Framework_TestCase
 
         $session->start();
 
-        $this->assertNotEquals($regenerationTrace, $session->getRegenerationTrace());
-        $this->assertGreaterThanOrEqual(Chronos::now()->getTimestamp() - 1, $session->getRegenerationTrace());
+        self::assertNotEquals($regenerationTrace, $session->getRegenerationTrace());
+        self::assertGreaterThanOrEqual(Chronos::now()->getTimestamp() - 1, $session->getRegenerationTrace());
     }
 
     public function testStartMethodGeneratesFingerprint()
@@ -215,13 +216,13 @@ class StoreTest extends \PHPUnit_Framework_TestCase
 
         $oldFingerprint = $session->getFingerprint();
 
-        $session->addFingerprintGenerator(new UserAgentGenerator(Key::createNewRandomKey(), 'test'));
+        $session->addFingerprintGenerator(new UserAgentGenerator('test'));
 
         $session->start();
 
-        $this->assertSame('', $oldFingerprint);
-        $this->assertEquals(40, strlen($session->getFingerprint()));
-        $this->assertNotEquals($oldFingerprint, $session->getFingerprint());
+        self::assertSame('', $oldFingerprint);
+        self::assertEquals(40, strlen($session->getFingerprint()));
+        self::assertNotEquals($oldFingerprint, $session->getFingerprint());
     }
 
     public function testStartMethodOpensSession()
@@ -230,7 +231,7 @@ class StoreTest extends \PHPUnit_Framework_TestCase
 
         $session->start();
 
-        $this->assertTrue($session->isStarted());
+        self::assertTrue($session->isStarted());
     }
 
     public function testRemove()
@@ -240,8 +241,8 @@ class StoreTest extends \PHPUnit_Framework_TestCase
 
         $pulled = $session->remove('foo');
 
-        $this->assertFalse($session->has('foo'));
-        $this->assertEquals('bar', $pulled);
+        self::assertFalse($session->has('foo'));
+        self::assertEquals('bar', $pulled);
     }
 
     public function testClear()
@@ -250,7 +251,7 @@ class StoreTest extends \PHPUnit_Framework_TestCase
         $session->set('foo', 'bar');
         $session->clear();
 
-        $this->assertFalse($session->has('foo'));
+        self::assertFalse($session->has('foo'));
     }
 
     public function testSessionIdShouldBeRegeneratedIfIdRequestsLimitReached()
@@ -269,26 +270,26 @@ class StoreTest extends \PHPUnit_Framework_TestCase
             ->times(1);
 
         $session->open();
-        $this->assertSame(1, $session->getRequestsCount());
-        $this->assertSame(self::SESSION_ID, $session->getId());
+        self::assertSame(1, $session->getRequestsCount());
+        self::assertSame(self::SESSION_ID, $session->getId());
 
         $session->save();
         $session->open();
 
-        $this->assertSame(2, $session->getRequestsCount());
-        $this->assertSame(self::SESSION_ID, $session->getId());
+        self::assertSame(2, $session->getRequestsCount());
+        self::assertSame(self::SESSION_ID, $session->getId());
 
         $session->save();
         $session->open();
 
-        $this->assertSame(3, $session->getRequestsCount());
-        $this->assertSame(self::SESSION_ID, $session->getId());
+        self::assertSame(3, $session->getRequestsCount());
+        self::assertSame(self::SESSION_ID, $session->getId());
 
         $session->save();
         $session->open();
 
-        $this->assertSame(4, $session->getRequestsCount());
-        $this->assertNotSame(self::SESSION_ID, $session->getId());
+        self::assertSame(4, $session->getRequestsCount());
+        self::assertNotSame(self::SESSION_ID, $session->getId());
     }
 
     public function testSessionIdShouldBeRegeneratedIfIdTtlLimitReached()
@@ -308,15 +309,15 @@ class StoreTest extends \PHPUnit_Framework_TestCase
             ->times(1);
         $session->open();
 
-        $this->assertSame(1, $session->getRequestsCount());
-        $this->assertSame(self::SESSION_ID, $session->getId());
+        self::assertSame(1, $session->getRequestsCount());
+        self::assertSame(self::SESSION_ID, $session->getId());
 
         sleep(10);
 
         $session->save();
         $session->open();
 
-        $this->assertNotSame(self::SESSION_ID, $session->getId());
+        self::assertNotSame(self::SESSION_ID, $session->getId());
     }
 
     public function testDataFlashing()
@@ -325,20 +326,20 @@ class StoreTest extends \PHPUnit_Framework_TestCase
         $session->flash('foo', 'bar');
         $session->flash('bar', 0);
 
-        $this->assertTrue($session->has('foo'));
-        $this->assertEquals('bar', $session->get('foo'));
-        $this->assertEquals(0, $session->get('bar'));
+        self::assertTrue($session->has('foo'));
+        self::assertEquals('bar', $session->get('foo'));
+        self::assertEquals(0, $session->get('bar'));
 
         $session->ageFlashData();
 
-        $this->assertTrue($session->has('foo'));
-        $this->assertEquals('bar', $session->get('foo'));
-        $this->assertEquals(0, $session->get('bar'));
+        self::assertTrue($session->has('foo'));
+        self::assertEquals('bar', $session->get('foo'));
+        self::assertEquals(0, $session->get('bar'));
 
         $session->ageFlashData();
 
-        $this->assertFalse($session->has('foo'));
-        $this->assertNull($session->get('foo'));
+        self::assertFalse($session->has('foo'));
+        self::assertNull($session->get('foo'));
     }
 
     public function testDataFlashingNow()
@@ -347,14 +348,14 @@ class StoreTest extends \PHPUnit_Framework_TestCase
         $session->now('foo', 'bar');
         $session->now('bar', 0);
 
-        $this->assertTrue($session->has('foo'));
-        $this->assertEquals('bar', $session->get('foo'));
-        $this->assertEquals(0, $session->get('bar'));
+        self::assertTrue($session->has('foo'));
+        self::assertEquals('bar', $session->get('foo'));
+        self::assertEquals(0, $session->get('bar'));
 
         $session->ageFlashData();
 
-        $this->assertFalse($session->has('foo'));
-        $this->assertNull($session->get('foo'));
+        self::assertFalse($session->has('foo'));
+        self::assertNull($session->get('foo'));
     }
 
     public function testDataMergeNewFlashes()
@@ -362,28 +363,28 @@ class StoreTest extends \PHPUnit_Framework_TestCase
         $session = $this->session;
         $session->flash('foo', 'bar');
         $session->set('fu', 'baz');
-        $session->set('flash.old', ['qu']);
+        $session->set('_flash.old', ['qu']);
 
-        $this->assertNotFalse(array_search('foo', $session->get('flash.new')));
-        $this->assertFalse(array_search('fu', $session->get('flash.new')));
+        self::assertNotFalse(array_search('foo', $session->get('_flash.new')));
+        self::assertFalse(array_search('fu', $session->get('_flash.new')));
 
         $session->keep(['fu', 'qu']);
 
-        $this->assertNotFalse(array_search('foo', $session->get('flash.new')));
-        $this->assertNotFalse(array_search('fu', $session->get('flash.new')));
-        $this->assertNotFalse(array_search('qu', $session->get('flash.new')));
-        $this->assertFalse(array_search('qu', $session->get('flash.old')));
+        self::assertNotFalse(array_search('foo', $session->get('_flash.new')));
+        self::assertNotFalse(array_search('fu', $session->get('_flash.new')));
+        self::assertNotFalse(array_search('qu', $session->get('_flash.new')));
+        self::assertFalse(array_search('qu', $session->get('_flash.old')));
     }
 
     public function testReflash()
     {
         $session = $this->session;
         $session->flash('foo', 'bar');
-        $session->set('flash.old', ['foo']);
+        $session->set('_flash.old', ['foo']);
         $session->reflash();
 
-        $this->assertNotFalse(array_search('foo', $session->get('flash.new')));
-        $this->assertFalse(array_search('foo', $session->get('flash.old')));
+        self::assertNotFalse(array_search('foo', $session->get('_flash.new')));
+        self::assertFalse(array_search('foo', $session->get('_flash.old')));
     }
 
     public function testReflashWithNow()
@@ -392,8 +393,8 @@ class StoreTest extends \PHPUnit_Framework_TestCase
         $session->now('foo', 'bar');
         $session->reflash();
 
-        $this->assertNotFalse(array_search('foo', $session->get('flash.new')));
-        $this->assertFalse(array_search('foo', $session->get('flash.old')));
+        self::assertNotFalse(array_search('foo', $session->get('_flash.new')));
+        self::assertFalse(array_search('foo', $session->get('_flash.old')));
     }
 
     private function encryptedSession()

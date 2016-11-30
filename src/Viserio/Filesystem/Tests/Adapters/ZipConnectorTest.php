@@ -13,7 +13,7 @@ class ZipConnectorTest extends \PHPUnit_Framework_TestCase
 
         $return = $connector->connect(['path' => __DIR__ . '\stubs\test.zip']);
 
-        $this->assertInstanceOf(ZipArchiveAdapter::class, $return);
+        self::assertInstanceOf(ZipArchiveAdapter::class, $return);
     }
 
     public function testConnectWithPrefix()
@@ -22,7 +22,7 @@ class ZipConnectorTest extends \PHPUnit_Framework_TestCase
 
         $return = $connector->connect(['path' => __DIR__ . '\stubs\test.zip', 'prefix' => 'your-prefix']);
 
-        $this->assertInstanceOf(ZipArchiveAdapter::class, $return);
+        self::assertInstanceOf(ZipArchiveAdapter::class, $return);
     }
 
     /**

@@ -40,25 +40,14 @@ class CookieJar implements JarContract
     protected $queued = [];
 
     /**
-     * Create a new cookie instance.
-     *
-     * @param string      $name
-     * @param string|null $value
-     * @param int         $minutes
-     * @param string|null $path
-     * @param string|null $domain
-     * @param bool        $secure
-     * @param bool        $httpOnly
-     * @param string|bool $sameSite
-     *
-     * @return Cookie
+     * {@inheritdoc}
      */
     public function create(
         string $name,
-        $value,
+        string $value = null,
         int $minutes = 0,
-        $path = null,
-        $domain = null,
+        string $path = null,
+        string $domain = null,
         bool $secure = false,
         bool $httpOnly = true,
         $sameSite = false
@@ -67,27 +56,17 @@ class CookieJar implements JarContract
 
         $time = ($minutes === 0) ? 0 : Chronos::now()->getTimestamp() + ($minutes * 60);
 
-        return new Cookie($name, $value, $time, $path, $domain, $secure, $httpOnly, $sameSite);
+        return new SetCookie($name, $value, $time, $path, $domain, $secure, $httpOnly, $sameSite);
     }
 
     /**
-     * Create a cookie that lasts "forever" (five years).
-     *
-     * @param string      $name
-     * @param string      $value
-     * @param string|null $path
-     * @param string|null $domain
-     * @param bool        $secure
-     * @param bool        $httpOnly
-     * @param string|bool $sameSite
-     *
-     * @return Cookie
+     * {@inheritdoc}
      */
     public function forever(
         string $name,
-        string $value,
-        $path = null,
-        $domain = null,
+        string $value = null,
+        string $path = null,
+        string $domain = null,
         bool $secure = false,
         bool $httpOnly = true,
         $sameSite = false
@@ -96,59 +75,18 @@ class CookieJar implements JarContract
     }
 
     /**
-     * Expire the given cookie.
-     *
-     * @param string      $name
-     * @param string|null $path
-     * @param string|null $domain
-     *
-     * @return Cookie
+     * {@inheritdoc}
      */
-    public function delete(string $name, $path = null, $domain = null): CookieContract
-    {
+    public function delete(
+        string $name,
+        string $path = null,
+        string $domain = null
+    ): CookieContract {
         return $this->create($name, null, -2628000, $path, $domain);
     }
 
     /**
-     * Render Set-Cookies into a Response.
-     *
-     * @param \Psr\Http\Message\ResponseInterface $response
-     *
-     * @return \Psr\Http\Message\ResponseInterface
-     */
-    public function renderIntoSetCookieHeader(ResponseInterface $response): ResponseInterface
-    {
-        $response = $response->withoutHeader('Set-Cookie');
-
-        foreach ($this->queued as $cookie) {
-            $response = $response->withAddedHeader('Set-Cookie', $cookie->__toString());
-        }
-
-        return $response;
-    }
-
-    /**
-     * Render Cookies into a Request.
-     *
-     * @param \Psr\Http\Message\RequestInterface $request
-     *
-     * @return \Psr\Http\Message\RequestInterface
-     */
-    public function renderIntoCookieHeader(RequestInterface $request): RequestInterface
-    {
-        $cookieString = implode('; ', $this->queued);
-
-        $request = $request->withHeader('Cookie', $cookieString);
-
-        return $request;
-    }
-
-    /**
-     * Determine if a cookie has been queued.
-     *
-     * @param string $key
-     *
-     * @return bool
+     * {@inheritdoc}
      */
     public function hasQueued(string $key): bool
     {
@@ -156,12 +94,7 @@ class CookieJar implements JarContract
     }
 
     /**
-     * Get a queued cookie instance.
-     *
-     * @param string     $key
-     * @param mixed|null $default
-     *
-     * @return CookieContract|null
+     * {@inheritdoc}
      */
     public function queued(string $key, $default = null)
     {
@@ -183,9 +116,7 @@ class CookieJar implements JarContract
     }
 
     /**
-     * Remove a cookie from the queue.
-     *
-     * @param string $name
+     * {@inheritdoc}
      */
     public function unqueue(string $name)
     {
@@ -209,9 +140,7 @@ class CookieJar implements JarContract
     }
 
     /**
-     * Get the cookies which have been queued for the next request.
-     *
-     * @return array
+     * {@inheritdoc}
      */
     public function getQueuedCookies(): array
     {

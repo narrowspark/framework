@@ -2,12 +2,32 @@
 declare(strict_types=1);
 namespace Viserio\Contracts\Routing;
 
-use Interop\Http\Middleware\ServerMiddlewareInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
 interface Router
 {
+    /**
+     * Match number for a not found route.
+     *
+     * @var int
+     */
+    const NOT_FOUND = 0;
+
+    /**
+     * Match number for a found route.
+     *
+     * @var int
+     */
+    const FOUND = 1;
+
+    /**
+     * Match number for a not allowed http method.
+     *
+     * @var int
+     */
+    const HTTP_METHOD_NOT_ALLOWED = 2;
+
     /**
      * All of the verbs supported by the router.
      *
@@ -223,20 +243,20 @@ interface Router
     /**
      * Add a middleware to all routes.
      *
-     * @param \Interop\Http\Middleware\ServerMiddlewareInterface $middleware
+     * @param string $middleware
      *
      * @return $this
      */
-    public function withMiddleware(ServerMiddlewareInterface $middleware);
+    public function withMiddleware(string $middleware);
 
     /**
      * Remove a middleware from all routes.
      *
-     * @param \Interop\Http\Middleware\ServerMiddlewareInterface $middleware
+     * @param string $middleware
      *
      * @return $this
      */
-    public function withoutMiddleware(ServerMiddlewareInterface $middleware);
+    public function withoutMiddleware(string $middleware);
 
     /**
      * Get all with and without middlewares.
@@ -244,6 +264,25 @@ interface Router
      * @return array
      */
     public function getMiddlewares(): array;
+
+    /**
+     * Register a group of middleware.
+     *
+     * @param string $name
+     * @param array  $middleware
+     *
+     * @return $this
+     */
+    public function setMiddlewareGroup(string $name, array $middleware);
+
+    /**
+     * Set a list of middleware priorities.
+     *
+     * @param array $middlewarePriorities
+     *
+     * @return $this
+     */
+    public function setMiddlewarePriorities(array $middlewarePriorities);
 
     /**
      * Get the currently dispatched route instance.
@@ -256,11 +295,10 @@ interface Router
      * Dispatch router for HTTP request.
      *
      * @param \Psr\Http\Message\ServerRequestInterface $request
-     * @param \Psr\Http\Message\ResponseInterface      $response
      *
      * @return \Psr\Http\Message\ResponseInterface
      */
-    public function dispatch(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface;
+    public function dispatch(ServerRequestInterface $request): ResponseInterface;
 
     /**
      * Get the underlying route collection.

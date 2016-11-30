@@ -14,7 +14,7 @@ class QueueingBusServiceProviderTest extends \PHPUnit_Framework_TestCase
         $container = new Container();
         $container->register(new QueueingBusServiceProvider());
 
-        $this->assertInstanceOf(QueueingDispatcher::class, $container->get(QueueingDispatcher::class));
-        $this->assertInstanceOf(QueueingDispatcherContract::class, $container->get(QueueingDispatcherContract::class));
+        self::assertInstanceOf(QueueingDispatcher::class, $container->get(QueueingDispatcher::class));
+        self::assertInstanceOf(QueueingDispatcherContract::class, $container->get(QueueingDispatcherContract::class));
     }
 }

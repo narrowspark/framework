@@ -16,7 +16,7 @@ class PathTest extends \PHPUnit_Framework_TestCase
     {
         $path = new Path();
 
-        $this->assertSame($parsed, $path->filter($raw));
+        self::assertSame($parsed, $path->filter($raw));
     }
 
     public function validPathEncoding()

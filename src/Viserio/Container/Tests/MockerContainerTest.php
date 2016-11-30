@@ -40,26 +40,28 @@ class MockerContainerTest extends \PHPUnit_Framework_TestCase
         $property = $reflection->getProperty('mockedServices');
         $property->setAccessible(true);
         $property->setValue($reflection, []);
+
+        parent::tearDown();
     }
 
     public function testThatBehaviorDoesNotChangeByDefault()
     {
-        $this->assertTrue($this->container->has('test.service_1'));
-        $this->assertTrue($this->container->has('test.service_2'));
-        $this->assertTrue($this->container->has('test.service_3'));
+        self::assertTrue($this->container->has('test.service_1'));
+        self::assertTrue($this->container->has('test.service_2'));
+        self::assertTrue($this->container->has('test.service_3'));
 
-        $this->assertSame($this->services['test.service_1'], $this->container->get('test.service_1'));
-        $this->assertSame($this->services['test.service_2'], $this->container->get('test.service_2'));
-        $this->assertSame($this->services['test.service_3'], $this->container->get('test.service_3'));
+        self::assertSame($this->services['test.service_1'], $this->container->get('test.service_1'));
+        self::assertSame($this->services['test.service_2'], $this->container->get('test.service_2'));
+        self::assertSame($this->services['test.service_3'], $this->container->get('test.service_3'));
     }
 
     public function testThatServiceCanBeMocked()
     {
         $mock = $this->container->mock('test.service_1', StdClass::class);
 
-        $this->assertTrue($this->container->has('test.service_1'));
-        $this->assertNotSame($this->services['test.service_1'], $mock);
-        $this->assertSame($mock, $this->container->get('test.service_1'));
+        self::assertTrue($this->container->has('test.service_1'));
+        self::assertNotSame($this->services['test.service_1'], $mock);
+        self::assertSame($mock, $this->container->get('test.service_1'));
     }
 
     /**
@@ -77,7 +79,7 @@ class MockerContainerTest extends \PHPUnit_Framework_TestCase
         $mock2 = $this->container->mock('test.service_2', StdClass::class);
         $mockedServices = $this->container->getMockedServices();
 
-        $this->assertEquals(['mock::test.service_1' => $mock1, 'mock::test.service_2' => $mock2], $mockedServices);
+        self::assertEquals(['mock::test.service_1' => $mock1, 'mock::test.service_2' => $mock2], $mockedServices);
     }
 
     public function testThatServiceCanBeMockedOnce()
@@ -85,8 +87,8 @@ class MockerContainerTest extends \PHPUnit_Framework_TestCase
         $mock1 = $this->container->mock('test.service_1', StdClass::class);
         $mock2 = $this->container->mock('test.service_1', StdClass::class);
 
-        $this->assertSame($mock1, $mock2);
-        $this->assertSame($mock2, $this->container->get('test.service_1'));
+        self::assertSame($mock1, $mock2);
+        self::assertSame($mock2, $this->container->get('test.service_1'));
     }
 
     public function testThatMockCanBeRemovedAndContainerFallsBackToTheOriginalService()
@@ -94,7 +96,7 @@ class MockerContainerTest extends \PHPUnit_Framework_TestCase
         $mock = $this->container->mock('test.service_1', StdClass::class);
         $this->container->unmock('test.service_1');
 
-        $this->assertTrue($this->container->has('test.service_1'));
-        $this->assertEquals($this->services['test.service_1'], $this->container->get('test.service_1'));
+        self::assertTrue($this->container->has('test.service_1'));
+        self::assertEquals($this->services['test.service_1'], $this->container->get('test.service_1'));
     }
 }

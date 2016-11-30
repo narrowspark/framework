@@ -38,7 +38,7 @@ class MigrationsServiceProviderTest extends \PHPUnit_Framework_TestCase
             ],
         ]);
 
-        $this->assertTrue(is_array($container->get('migrations.commands')));
+        self::assertTrue(is_array($container->get('migrations.commands')));
     }
 
     public function testProviderWithoutConfigManager()
@@ -69,7 +69,7 @@ class MigrationsServiceProviderTest extends \PHPUnit_Framework_TestCase
             ],
         ]);
 
-        $this->assertTrue(is_array($container->get('migrations.commands')));
+        self::assertTrue(is_array($container->get('migrations.commands')));
     }
 
     public function testProviderWithoutConfigManagerAndNamespace()
@@ -106,6 +106,6 @@ class MigrationsServiceProviderTest extends \PHPUnit_Framework_TestCase
             ],
         ]);
 
-        $this->assertTrue(is_array($container->get('migrations.commands')));
+        self::assertTrue(is_array($container->get('migrations.commands')));
     }
 }
