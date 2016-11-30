@@ -77,8 +77,11 @@ class CookieJar implements JarContract
     /**
      * {@inheritdoc}
      */
-    public function delete(string $name, $path = null, $domain = null): CookieContract
-    {
+    public function delete(
+        string $name,
+        string $path = null,
+        string $domain = null
+    ): CookieContract {
         return $this->create($name, null, -2628000, $path, $domain);
     }
 

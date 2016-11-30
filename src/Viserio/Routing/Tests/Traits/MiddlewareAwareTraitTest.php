@@ -19,4 +19,13 @@ class MiddlewareAwareTraitTest extends \PHPUnit_Framework_TestCase
 
         self::assertSame([], $this->middlewares);
     }
+
+    /**
+     * @expectedException \LogicException
+     * @expectedExceptionMessage [Viserio\Routing\Tests\Traits\MiddlewareAwareTraitTest] should implement \Interop\Http\Middleware\ServerMiddlewareInterface
+     */
+    public function testWithAndWithoutMiddlewareToThrowException()
+    {
+        $this->withMiddleware(self::class);
+    }
 }

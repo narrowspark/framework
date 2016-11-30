@@ -21,7 +21,7 @@ trait MiddlewareAwareTrait
     {
         if (! in_array(ServerMiddlewareInterface::class, class_implements($middleware))) {
             throw new LogicException(sprintf(
-                '[%s] should implement Interop\Http\Middleware\ServerMiddlewareInterface',
+                '[%s] should implement \Interop\Http\Middleware\ServerMiddlewareInterface',
                 $middleware
             ));
         }
