@@ -62,7 +62,7 @@ class ViewServiceProvider implements ServiceProvider
     public static function createViewFinder(ContainerInterface $container)
     {
         $paths = array_merge(
-            self::getConfig($container, 'template.default', []),
+            [self::getConfig($container, 'template.default', '')],
             self::getConfig($container, 'template.paths', [])
         );
 
