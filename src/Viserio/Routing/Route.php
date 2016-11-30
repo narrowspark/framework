@@ -186,7 +186,7 @@ class Route implements RouteContract
                 $this->middlewares,
                 is_array($middlewares) ? $middlewares : [$middlewares],
                 $this->getControllerMiddleware()
-            )),
+            ), SORT_REGULAR),
             'without_middlewares' => is_array($withoutMiddlewares) ? $withoutMiddlewares : [$withoutMiddlewares],
         ];
 

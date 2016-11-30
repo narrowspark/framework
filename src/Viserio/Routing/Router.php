@@ -86,6 +86,16 @@ class Router extends AbstractRouteDispatcher implements RouterContract, ServerMi
     }
 
     /**
+     * [addMiddlewares description]
+     *
+     * @param array $middlewares
+     */
+    public function addMiddlewares(array $middlewares)
+    {
+        $this->middlewares = $middlewares;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function get(string $uri, $action = null): RouteContract

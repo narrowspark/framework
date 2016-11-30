@@ -35,6 +35,36 @@ class Pipeline extends BasePipeline
     }
 
     /**
+     * Resolve from container.
+     *
+     * @param mixed  $traveler
+     * @param mixed  $stack
+     * @param string $stage
+     *
+     * @return mixed
+     */
+    protected function sliceThroughContainer($traveler, $stack, string $stage)
+    {
+        list($name, $parameters) = $this->parseStageString($stage);
+        $parameters = array_merge([$traveler, $stack], $parameters);
+
+        if ($this->container->has($name)) {
+            return $this->getInvoker()->call(
+                [
+                    $this->container->get($name),
+                    $this->method,
+                ],
+                $parameters
+            );
+        }
+
+        // Check if container has a make function.
+        if (method_exists($this->container, 'make')) {
+            return call_user_func_array([$this->container->make($name), $this->method], $parameters);
+        }
+    }
+
+    /**
      * Private delegate callable middleware for the pipe.
      *
      * @param callable $middleware

@@ -114,10 +114,7 @@ class Kernel implements TerminableContract, KernelContract, ServerMiddlewareInte
         $this->events = $events;
 
         $router->setMiddlewarePriorities($this->middlewarePriority);
-
-        foreach ($this->routeMiddlewares as $routeMiddleware) {
-            $router->withMiddleware($routeMiddleware);
-        }
+        $router->addMiddlewares($this->routeMiddlewares);
 
         foreach ($this->routeWithoutMiddlewares as $routeWithoutMiddleware) {
             $router->withoutMiddleware($routeWithoutMiddleware);
