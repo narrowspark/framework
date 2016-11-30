@@ -19,7 +19,7 @@ class AbstractManagerTest extends \PHPUnit_Framework_TestCase
         $manager = new TestManager($config);
         $manager->setConfig($config);
 
-        $this->assertSame($config, $manager->getConfig());
+        self::assertSame($config, $manager->getConfig());
     }
 
     public function testDriver()
@@ -34,7 +34,7 @@ class AbstractManagerTest extends \PHPUnit_Framework_TestCase
 
         $manager = new TestManager($config);
 
-        $this->assertTrue($manager->driver('test'));
+        self::assertTrue($manager->driver('test'));
 
         $config->shouldReceive('get')
             ->once()
@@ -43,7 +43,7 @@ class AbstractManagerTest extends \PHPUnit_Framework_TestCase
                 'config' => ['driver' => 'config'],
             ]);
 
-        $this->assertEquals(['name' => 'config', 'driver' => 'config'], $manager->driver('config'));
+        self::assertEquals(['name' => 'config', 'driver' => 'config'], $manager->driver('config'));
 
         $config->shouldReceive('get')
             ->once()
@@ -52,9 +52,9 @@ class AbstractManagerTest extends \PHPUnit_Framework_TestCase
                 'value' => ['driver' => 'foo'],
             ]);
 
-        $this->assertEquals(['name' => 'value', 'driver' => 'foo'], $manager->driver('value'));
-        $this->assertTrue($manager->hasDriver('value'));
-        $this->assertEquals([
+        self::assertEquals(['name' => 'value', 'driver' => 'foo'], $manager->driver('value'));
+        self::assertTrue($manager->hasDriver('value'));
+        self::assertEquals([
             'test' => true,
             'config' => ['name' => 'config', 'driver' => 'config'],
             'value' => ['name' => 'value', 'driver' => 'foo'],
@@ -67,7 +67,7 @@ class AbstractManagerTest extends \PHPUnit_Framework_TestCase
                 'testmanager' => ['driver' => 'testmanager'],
             ]);
 
-        $this->assertInstanceOf('stdClass', $manager->driver('testmanager'));
+        self::assertInstanceOf('stdClass', $manager->driver('testmanager'));
     }
 
     public function testCustomeDriver()
@@ -85,7 +85,7 @@ class AbstractManagerTest extends \PHPUnit_Framework_TestCase
             return 'custom';
         });
 
-        $this->assertSame('custom', $manager->driver('custom'));
+        self::assertSame('custom', $manager->driver('custom'));
     }
 
     /**
@@ -126,8 +126,8 @@ class AbstractManagerTest extends \PHPUnit_Framework_TestCase
 
         $driver = $manager->driver('call');
 
-        $this->assertInstanceOf(ArrayContainer::class, $driver);
-        $this->assertFalse($manager->has('test'));
+        self::assertInstanceOf(ArrayContainer::class, $driver);
+        self::assertFalse($manager->has('test'));
     }
 
     public function testCustomDriverClosureBoundObjectIsCacheManager()
@@ -147,8 +147,8 @@ class AbstractManagerTest extends \PHPUnit_Framework_TestCase
         };
         $manager->extend(__CLASS__, $driver);
 
-        $this->assertEquals($manager, $manager->driver(__CLASS__));
-        $this->assertTrue($manager->hasDriver(__CLASS__));
+        self::assertEquals($manager, $manager->driver(__CLASS__));
+        self::assertTrue($manager->hasDriver(__CLASS__));
     }
 
     public function testGetDriverConfig()
@@ -165,7 +165,7 @@ class AbstractManagerTest extends \PHPUnit_Framework_TestCase
 
         $manager = new TestManager($config);
 
-        $this->assertTrue(is_array($manager->getDriverConfig('pdo')));
+        self::assertTrue(is_array($manager->getDriverConfig('pdo')));
     }
 
     public function testDefaultDriver()
@@ -178,7 +178,7 @@ class AbstractManagerTest extends \PHPUnit_Framework_TestCase
 
         $manager = new TestManager($config);
 
-        $this->assertSame('example', $manager->getDefaultDriver());
+        self::assertSame('example', $manager->getDefaultDriver());
 
         $config->shouldReceive('set')
             ->once()
@@ -189,6 +189,6 @@ class AbstractManagerTest extends \PHPUnit_Framework_TestCase
             ->with('test.default', '')
             ->andReturn('new');
 
-        $this->assertSame('new', $manager->getDefaultDriver());
+        self::assertSame('new', $manager->getDefaultDriver());
     }
 }

@@ -22,7 +22,7 @@ class Env
             return $default instanceof Closure ? $default() : $default;
         }
 
-        if (Str::startsWith($value, 'base64:')) {
+        if (Str::containsAny($value, ['base64:', "'base64:", '"base64:'])) {
             return base64_decode(substr($value, 7));
         }
 

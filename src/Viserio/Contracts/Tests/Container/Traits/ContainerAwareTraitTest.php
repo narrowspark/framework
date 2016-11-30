@@ -14,7 +14,7 @@ class ContainerAwareTraitTest extends \PHPUnit_Framework_TestCase
     {
         $this->setContainer(new ArrayContainer());
 
-        $this->assertInstanceOf(ContainerInterface::class, $this->getcontainer());
+        self::assertInstanceOf(ContainerInterface::class, $this->getcontainer());
     }
 
     /**

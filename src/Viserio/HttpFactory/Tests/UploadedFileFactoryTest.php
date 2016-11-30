@@ -24,7 +24,7 @@ class UploadedFileFactoryTest extends \PHPUnit_Framework_TestCase
 
         $file = $this->factory->createUploadedFile($filename);
 
-        $this->assertUploadedFile($file, $content, $size);
+        self::assertUploadedFile($file, $content, $size);
 
         unlink($filename);
     }
@@ -46,7 +46,7 @@ class UploadedFileFactoryTest extends \PHPUnit_Framework_TestCase
             $clientMediaType
         );
 
-        $this->assertUploadedFile($file, $content, null, $error, $clientFilename, $clientMediaType);
+        self::assertUploadedFile($file, $content, null, $error, $clientFilename, $clientMediaType);
     }
 
     public function testCreateUploadedFileWithError()
@@ -57,8 +57,8 @@ class UploadedFileFactoryTest extends \PHPUnit_Framework_TestCase
 
         // Cannot use assertUploadedFile() here because the error prevents
         // fetching the content stream.
-        $this->assertInstanceOf(UploadedFileInterface::class, $file);
-        $this->assertSame($error, $file->getError());
+        self::assertInstanceOf(UploadedFileInterface::class, $file);
+        self::assertSame($error, $file->getError());
     }
 
     private function assertUploadedFile(
@@ -69,11 +69,11 @@ class UploadedFileFactoryTest extends \PHPUnit_Framework_TestCase
         $clientFilename = null,
         $clientMediaType = null
     ) {
-        $this->assertInstanceOf(UploadedFileInterface::class, $file);
-        $this->assertSame($content, (string) $file->getStream());
-        $this->assertSame($size ?: strlen($content), $file->getSize());
-        $this->assertSame($error ?: UPLOAD_ERR_OK, $file->getError());
-        $this->assertSame($clientFilename, $file->getClientFilename());
-        $this->assertSame($clientMediaType, $file->getClientMediaType());
+        self::assertInstanceOf(UploadedFileInterface::class, $file);
+        self::assertSame($content, (string) $file->getStream());
+        self::assertSame($size ?: strlen($content), $file->getSize());
+        self::assertSame($error ?: UPLOAD_ERR_OK, $file->getError());
+        self::assertSame($clientFilename, $file->getClientFilename());
+        self::assertSame($clientMediaType, $file->getClientMediaType());
     }
 }

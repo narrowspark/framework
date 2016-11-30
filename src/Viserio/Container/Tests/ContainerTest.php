@@ -59,7 +59,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
             return 'Narrowspark';
         });
 
-        $this->assertEquals('Narrowspark', $container->make('name'));
+        self::assertEquals('Narrowspark', $container->make('name'));
     }
 
     public function testBindIfDoesntRegisterIfServiceAlreadyRegistered()
@@ -74,7 +74,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
             return 'Viserio';
         });
 
-        $this->assertEquals('Narrowspark', $container->make('name'));
+        self::assertEquals('Narrowspark', $container->make('name'));
     }
 
     public function testSharedClosureResolution()
@@ -86,14 +86,14 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
             return $class;
         });
 
-        $this->assertSame($class, $container->make('class'));
+        self::assertSame($class, $container->make('class'));
     }
 
     public function testAutoConcreteResolution()
     {
         $container = $this->container;
 
-        $this->assertInstanceOf(ContainerConcreteFixture::class, $container->make(ContainerConcreteFixture::class));
+        self::assertInstanceOf(ContainerConcreteFixture::class, $container->make(ContainerConcreteFixture::class));
     }
 
     public function testSlashesAreHandled()
@@ -104,22 +104,22 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
             return 'hello';
         });
 
-        $this->assertEquals('hello', $container->make('Foo'));
+        self::assertEquals('hello', $container->make('Foo'));
     }
 
     public function testResolveMethod()
     {
         $container = new Container();
 
-        $this->assertEquals('Hello', $container->make(FactoryClass::class . '::create'));
+        self::assertEquals('Hello', $container->make(FactoryClass::class . '::create'));
     }
 
     public function testResolveMethodFromString()
     {
         $container = new Container();
 
-        $this->assertEquals('Hello', $container->resolveMethod(FactoryClass::class . '::staticCreate'));
-        $this->assertEquals('Hello', $container->resolveMethod(FactoryClass::class . '::staticCreateWitArg', ['name' => 'Hello']));
+        self::assertEquals('Hello', $container->resolveMethod(FactoryClass::class . '::staticCreate'));
+        self::assertEquals('Hello', $container->resolveMethod(FactoryClass::class . '::staticCreateWitArg', ['name' => 'Hello']));
     }
 
     public function testSharedConcreteResolution()
@@ -130,7 +130,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
         $var1 = $container->make(ContainerConcreteFixture::class);
         $var2 = $container->make(ContainerConcreteFixture::class);
 
-        $this->assertSame($var1, $var2);
+        self::assertSame($var1, $var2);
     }
 
     public function testParametersCanOverrideDependencies()
@@ -140,8 +140,8 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
         $stub = new ContainerDependentFixture($mock);
         $resolved = $container->make(ContainerNestedDependentFixture::class, [$stub]);
 
-        $this->assertInstanceOf(ContainerNestedDependentFixture::class, $resolved);
-        $this->assertEquals($mock, $resolved->inner->impl);
+        self::assertInstanceOf(ContainerNestedDependentFixture::class, $resolved);
+        self::assertEquals($mock, $resolved->inner->impl);
     }
 
     public function testResolveNonBoundWithClosure()
@@ -152,7 +152,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
             return $container;
         });
 
-        $this->assertInstanceOf(Container::class, $class);
+        self::assertInstanceOf(Container::class, $class);
     }
 
     public function testAbstractToConcreteResolution()
@@ -161,7 +161,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
         $container->bind(ContainerContractFixtureInterface::class, ContainerImplementationFixture::class);
         $class = $container->make(ContainerDependentFixture::class);
 
-        $this->assertInstanceOf(ContainerImplementationFixture::class, $class->impl);
+        self::assertInstanceOf(ContainerImplementationFixture::class, $class->impl);
     }
 
     public function testNestedDependencyResolution()
@@ -170,8 +170,8 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
         $container->bind(ContainerContractFixtureInterface::class, ContainerImplementationFixture::class);
         $class = $container->make(ContainerNestedDependentFixture::class);
 
-        $this->assertInstanceOf(ContainerDependentFixture::class, $class->inner);
-        $this->assertInstanceOf(ContainerImplementationFixture::class, $class->inner->impl);
+        self::assertInstanceOf(ContainerDependentFixture::class, $class->inner);
+        self::assertInstanceOf(ContainerImplementationFixture::class, $class->inner->impl);
     }
 
     public function testContainerIsPassedToResolvers()
@@ -183,7 +183,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
 
         $c = $container->make('something');
 
-        $this->assertSame($c, $container);
+        self::assertSame($c, $container);
     }
 
     public function testArrayAccess()
@@ -193,17 +193,17 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
             return 'foo';
         };
 
-        $this->assertTrue(isset($container['something']));
-        $this->assertEquals('foo', $container['something']);
+        self::assertTrue(isset($container['something']));
+        self::assertEquals('foo', $container['something']);
 
         unset($container['something']);
 
-        $this->assertFalse(isset($container['something']));
+        self::assertFalse(isset($container['something']));
 
         $container['foo'] = 'foo';
         $result = $container->make('foo');
 
-        $this->assertSame($result, $container->make('foo'));
+        self::assertSame($result, $container->make('foo'));
     }
 
     public function testAliases()
@@ -213,21 +213,21 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
         $container->alias('foo', 'baz');
         $container->alias('baz', 'bat');
 
-        $this->assertEquals('bar', $container->make('foo'));
-        $this->assertEquals('bar', $container->make('baz'));
-        $this->assertEquals('bar', $container->make('bat'));
+        self::assertEquals('bar', $container->make('foo'));
+        self::assertEquals('bar', $container->make('baz'));
+        self::assertEquals('bar', $container->make('bat'));
 
         $container->bind(['bam' => 'boom'], function () {
             return 'pow';
         });
 
-        $this->assertEquals('pow', $container->make('bam'));
-        $this->assertEquals('pow', $container->make('boom'));
+        self::assertEquals('pow', $container->make('bam'));
+        self::assertEquals('pow', $container->make('boom'));
 
         $container->instance(['zoom' => 'zing'], 'wow');
 
-        $this->assertEquals('wow', $container->make('zoom'));
-        $this->assertEquals('wow', $container->make('zing'));
+        self::assertEquals('wow', $container->make('zoom'));
+        self::assertEquals('wow', $container->make('zing'));
     }
 
     public function testBindingsCanBeOverridden()
@@ -237,7 +237,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
         $foo = $container['foo'];
         $container['foo'] = 'baz';
 
-        $this->assertEquals('baz', $container['foo']);
+        self::assertEquals('baz', $container['foo']);
     }
 
     public function testExtendedBindings()
@@ -248,7 +248,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
             return $old . 'bar';
         });
 
-        $this->assertEquals('foobar', $container->make('foo'));
+        self::assertEquals('foobar', $container->make('foo'));
 
         $container = $this->container;
         $container['foo'] = function () {
@@ -263,8 +263,8 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
 
         $result = $container->make('foo');
 
-        $this->assertEquals('narrowspark', $result->name);
-        $this->assertEquals('viserio', $result->oldName);
+        self::assertEquals('narrowspark', $result->name);
+        self::assertEquals('viserio', $result->oldName);
     }
 
     public function testMultipleExtends()
@@ -280,7 +280,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
             return $old . 'baz';
         });
 
-        $this->assertEquals('foobarbaz', $container->make('foo'));
+        self::assertEquals('foobarbaz', $container->make('foo'));
     }
 
     public function testExtendInstancesArePreserved()
@@ -308,9 +308,9 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
             return $obj;
         });
 
-        $this->assertEquals('foo', $container->make('foo')->foo);
-        $this->assertEquals('baz', $container->make('foo')->bar);
-        $this->assertEquals('foo', $container->make('foo')->baz);
+        self::assertEquals('foo', $container->make('foo')->foo);
+        self::assertEquals('baz', $container->make('foo')->bar);
+        self::assertEquals('foo', $container->make('foo')->baz);
     }
 
     public function testExtendCanBeCalledBeforeBind()
@@ -321,7 +321,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
         });
         $container['foo'] = 'foo';
 
-        $this->assertEquals('foobar', $container->make('foo'));
+        self::assertEquals('foobar', $container->make('foo'));
     }
 
     public function testParametersCanBePassedThroughToClosure()
@@ -331,7 +331,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
             return [$a, $b, $c];
         });
 
-        $this->assertEquals([1, 2, 3], $container->make('foo', [1, 2, 3]));
+        self::assertEquals([1, 2, 3], $container->make('foo', [1, 2, 3]));
     }
 
     public function testResolutionOfDefaultParameters()
@@ -339,8 +339,8 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
         $container = new Container();
         $instance = $container->make(ContainerDefaultValueFixture::class);
 
-        $this->assertInstanceOf(ContainerConcreteFixture::class, $instance->stub);
-        $this->assertEquals('narrowspark', $instance->default);
+        self::assertInstanceOf(ContainerConcreteFixture::class, $instance->stub);
+        self::assertEquals('narrowspark', $instance->default);
     }
 
     public function testUnsetRemoveBoundInstances()
@@ -349,12 +349,12 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
         $container->instance('object', new StdClass());
         unset($container['object']);
 
-        $this->assertFalse($container->has('object'));
+        self::assertFalse($container->has('object'));
 
         $container->instance('object', new StdClass());
         $container->forget('object');
 
-        $this->assertFalse($container->has('object'));
+        self::assertFalse($container->has('object'));
     }
 
     /**
@@ -365,7 +365,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
     {
         $container = new Container();
 
-        $this->assertFalse($container->has(new StdClass()));
+        self::assertFalse($container->has(new StdClass()));
     }
 
     /**
@@ -376,7 +376,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
     {
         $container = new Container();
 
-        $this->assertFalse($container->get(new StdClass()));
+        self::assertFalse($container->get(new StdClass()));
     }
 
     /**
@@ -387,7 +387,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
     {
         $container = new Container();
 
-        $this->assertFalse($container->get('test'));
+        self::assertFalse($container->get('test'));
     }
 
     public function testBoundInstanceAndAliasCheckViaArrayAccess()
@@ -396,8 +396,8 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
         $container->instance('object', new StdClass());
         $container->alias('object', 'alias');
 
-        $this->assertTrue(isset($container['object']));
-        $this->assertTrue(isset($container['alias']));
+        self::assertTrue(isset($container['object']));
+        self::assertTrue(isset($container['alias']));
     }
 
     /**
@@ -432,7 +432,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
             ->give(100);
         $instance = $container->make(ContainerInjectVariableFixture::class);
 
-        $this->assertEquals(100, $instance->something);
+        self::assertEquals(100, $instance->something);
 
         $container = new Container();
         $container->when(ContainerInjectVariableFixture::class)
@@ -442,7 +442,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
 
         $instance = $container->make(ContainerInjectVariableFixture::class);
 
-        $this->assertInstanceOf(ContainerConcreteFixture::class, $instance->something);
+        self::assertInstanceOf(ContainerConcreteFixture::class, $instance->something);
     }
 
     public function testContainerCanInjectSimpleVariableToBinding()
@@ -455,7 +455,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
             ->give(100);
         $instance = $container->make(ContainerInjectVariableFixture::class);
 
-        $this->assertEquals(100, $instance->something);
+        self::assertEquals(100, $instance->something);
     }
 
     /**
@@ -472,7 +472,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
             ->give(100);
         $instance = $container->make(ContainerInjectVariableFixture::class);
 
-        $this->assertEquals(100, $instance->something);
+        self::assertEquals(100, $instance->something);
     }
 
     /**
@@ -488,7 +488,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
             ->give(100);
         $instance = $container->make(ContainerInjectVariableFixture::class);
 
-        $this->assertEquals(100, $instance->something);
+        self::assertEquals(100, $instance->something);
     }
 
     /**
@@ -504,7 +504,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
             ->give(100);
         $instance = $container->make(ContainerInjectVariableFixture::class);
 
-        $this->assertEquals(100, $instance->something);
+        self::assertEquals(100, $instance->something);
     }
 
     public function testContainerCanInjectDifferentImplementationsDependingOnContext()
@@ -523,8 +523,8 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
         $one = $container->make(ContainerTestContextInjectOneFixture::class);
         $two = $container->make(ContainerTestContextInjectTwoFixture::class);
 
-        $this->assertInstanceOf(ContainerImplementationFixture::class, $one->impl);
-        $this->assertInstanceOf(ContainerImplementationTwoFixture::class, $two->impl);
+        self::assertInstanceOf(ContainerImplementationFixture::class, $one->impl);
+        self::assertInstanceOf(ContainerImplementationTwoFixture::class, $two->impl);
 
         /*
          * Test With Closures
@@ -543,8 +543,8 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
         $one = $container->make(ContainerTestContextInjectOneFixture::class);
         $two = $container->make(ContainerTestContextInjectTwoFixture::class);
 
-        $this->assertInstanceOf(ContainerImplementationFixture::class, $one->impl);
-        $this->assertInstanceOf(ContainerImplementationTwoFixture::class, $two->impl);
+        self::assertInstanceOf(ContainerImplementationFixture::class, $one->impl);
+        self::assertInstanceOf(ContainerImplementationTwoFixture::class, $two->impl);
     }
 
     public function testContextualBindingWorksRegardlessOfLeadingBackslash()
@@ -559,15 +559,15 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
             ->needs('\Viserio\Container\Tests\Fixture\ContainerContractFixtureInterface')
             ->give(ContainerImplementationTwoFixture::class);
 
-        $this->assertInstanceOf(
+        self::assertInstanceOf(
             ContainerImplementationTwoFixture::class,
             $container->make(ContainerTestContextInjectOneFixture::class)->impl
         );
-        $this->assertInstanceOf(
+        self::assertInstanceOf(
             ContainerImplementationTwoFixture::class,
             $container->make(ContainerTestContextInjectTwoFixture::class)->impl
         );
-        $this->assertInstanceOf(
+        self::assertInstanceOf(
             ContainerImplementationTwoFixture::class,
             $container->make('\Viserio\Container\Tests\Fixture\ContainerTestContextInjectTwoFixture')->impl
         );
@@ -625,9 +625,9 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
         $container->delegate($picotainer);
         $container->instance('instance2', $container->get('instance'));
 
-        $this->assertSame('value', $container->get('instance2'));
-        $this->assertTrue($container->hasInDelegate('instance'));
-        $this->assertFalse($container->hasInDelegate('instance3'));
+        self::assertSame('value', $container->get('instance2'));
+        self::assertTrue($container->hasInDelegate('instance'));
+        self::assertFalse($container->hasInDelegate('instance3'));
     }
 
     public function testExtendedBindingsKeptTypes()
@@ -654,8 +654,8 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
             return $old;
         });
 
-        $this->assertSame($container->make('foo'), $container->make('foo'));
-        $this->assertSame($container->make('foo'), $container->make('foo2'));
-        $this->assertNotSame($container->make('bar'), $container->make('bar'));
+        self::assertSame($container->make('foo'), $container->make('foo'));
+        self::assertSame($container->make('foo'), $container->make('foo2'));
+        self::assertNotSame($container->make('bar'), $container->make('bar'));
     }
 }

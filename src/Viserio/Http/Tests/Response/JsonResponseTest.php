@@ -19,9 +19,9 @@ class JsonResponseTest extends \PHPUnit_Framework_TestCase
         $json = '{"nested":{"json":["tree"]}}';
         $response = new JsonResponse($data);
 
-        $this->assertEquals(200, $response->getStatusCode());
-        $this->assertEquals('application/json', $response->getHeaderLine('content-type'));
-        $this->assertSame($json, (string) $response->getBody());
+        self::assertEquals(200, $response->getStatusCode());
+        self::assertEquals('application/json', $response->getHeaderLine('content-type'));
+        self::assertSame($json, (string) $response->getBody());
     }
 
     public function scalarValuesForJSON()
@@ -45,22 +45,22 @@ class JsonResponseTest extends \PHPUnit_Framework_TestCase
     public function testScalarValuePassedToConstructorJsonEncodesDirectly($value)
     {
         $response = new JsonResponse($value);
-        $this->assertEquals(200, $response->getStatusCode());
-        $this->assertEquals('application/json', $response->getHeaderLine('content-type'));
+        self::assertEquals(200, $response->getStatusCode());
+        self::assertEquals('application/json', $response->getHeaderLine('content-type'));
         // 15 is the default mask used by JsonResponse
-        $this->assertSame(json_encode($value, 15), (string) $response->getBody());
+        self::assertSame(json_encode($value, 15), (string) $response->getBody());
     }
 
     public function testCanProvideStatusCodeToConstructor()
     {
         $response = new JsonResponse(null, 404);
-        $this->assertEquals(404, $response->getStatusCode());
+        self::assertEquals(404, $response->getStatusCode());
     }
 
     public function testCanProvideAlternateContentTypeViaHeadersPassedToConstructor()
     {
         $response = new JsonResponse(null, 200, ['content-type' => 'foo/json']);
-        $this->assertEquals('foo/json', $response->getHeaderLine('content-type'));
+        self::assertEquals('foo/json', $response->getHeaderLine('content-type'));
     }
 
     /**
@@ -106,7 +106,7 @@ class JsonResponseTest extends \PHPUnit_Framework_TestCase
         $stream = $response->getBody();
         $contents = (string) $stream;
         $expected = json_encode($value, $defaultFlags);
-        $this->assertContains(
+        self::assertContains(
             $expected,
             $contents,
             sprintf('Did not encode %s properly; expected (%s), received (%s)', $key, $expected, $contents)
@@ -118,6 +118,6 @@ class JsonResponseTest extends \PHPUnit_Framework_TestCase
         $json = ['test' => 'data'];
         $response = new JsonResponse($json);
         $actual = json_decode($response->getBody()->getContents(), true);
-        $this->assertEquals($json, $actual);
+        self::assertEquals($json, $actual);
     }
 }

@@ -88,7 +88,7 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract, Direct
         $path = self::normalizeDirectorySeparator($path);
         $lock = isset($config['lock']) ? LOCK_EX : 0;
 
-        if (!is_int(@file_put_contents($path, $contents, $lock))) {
+        if (! is_int(@file_put_contents($path, $contents, $lock))) {
             return false;
         }
 

@@ -27,8 +27,8 @@ class ConsoleServiceProviderTest extends \PHPUnit_Framework_TestCase
             'path' => __DIR__ . '..',
         ]);
 
-        $this->assertInstanceOf(Schedule::class, $container->get(Schedule::class));
-        $this->assertTrue(is_array($container->get('cron.commands')));
+        self::assertInstanceOf(Schedule::class, $container->get(Schedule::class));
+        self::assertTrue(is_array($container->get('cron.commands')));
     }
 
     public function testProviderWithoutConfigManager()
@@ -43,7 +43,7 @@ class ConsoleServiceProviderTest extends \PHPUnit_Framework_TestCase
         ]);
         $container->instance(CacheItemPoolInterface::class, $this->mock(CacheItemPoolInterface::class));
 
-        $this->assertInstanceOf(Schedule::class, $container->get(Schedule::class));
+        self::assertInstanceOf(Schedule::class, $container->get(Schedule::class));
     }
 
     public function testProviderWithoutConfigManagerAndNamespace()
@@ -58,6 +58,6 @@ class ConsoleServiceProviderTest extends \PHPUnit_Framework_TestCase
         ]);
         $container->instance(CacheItemPoolInterface::class, $this->mock(CacheItemPoolInterface::class));
 
-        $this->assertInstanceOf(Schedule::class, $container->get(Schedule::class));
+        self::assertInstanceOf(Schedule::class, $container->get(Schedule::class));
     }
 }

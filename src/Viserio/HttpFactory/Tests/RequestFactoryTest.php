@@ -35,7 +35,7 @@ class RequestFactoryTest extends \PHPUnit_Framework_TestCase
         $uri = 'http://example.com/';
         $request = $this->factory->createRequest($method, $uri);
 
-        $this->assertRequest($request, $method, $uri);
+        self::assertRequest($request, $method, $uri);
     }
 
     public function testCreateRequestWithUri()
@@ -45,13 +45,13 @@ class RequestFactoryTest extends \PHPUnit_Framework_TestCase
         $uri = 'http://example.com/';
         $request = $this->factory->createRequest($method, $uriFactory->createUri($uri));
 
-        $this->assertRequest($request, $method, $uri);
+        self::assertRequest($request, $method, $uri);
     }
 
     private function assertRequest($request, $method, $uri)
     {
-        $this->assertInstanceOf(RequestInterface::class, $request);
-        $this->assertSame($method, $request->getMethod());
-        $this->assertSame($uri, (string) $request->getUri());
+        self::assertInstanceOf(RequestInterface::class, $request);
+        self::assertSame($method, $request->getMethod());
+        self::assertSame($uri, (string) $request->getUri());
     }
 }

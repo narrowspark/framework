@@ -110,6 +110,6 @@ class BeanstalkdQueueTest extends \PHPUnit_Framework_TestCase
 
         $result = $queue->pop();
 
-        $this->assertInstanceOf(BeanstalkdJob::class, $result);
+        self::assertInstanceOf(BeanstalkdJob::class, $result);
     }
 }

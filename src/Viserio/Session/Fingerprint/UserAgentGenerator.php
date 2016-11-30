@@ -17,16 +17,15 @@ class UserAgentGenerator implements FingerprintContract
     /**
      * Create a new UserAgentGenerator instance.
      *
-     * @param Key         $secretKey
      * @param string|null $userAgent
      */
-    public function __construct(Key $secretKey, string $userAgent = null)
+    public function __construct(string $userAgent = null)
     {
         if ($userAgent !== null) {
             $userAgent = $_SERVER['HTTP_USER_AGENT'] ?? '';
         }
 
-        $this->userAgent = $secretKey->saveToAsciiSafeString() . $userAgent;
+        $this->userAgent = random_bytes(32) . $userAgent;
     }
 
     /**

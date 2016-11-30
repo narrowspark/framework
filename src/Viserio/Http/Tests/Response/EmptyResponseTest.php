@@ -11,18 +11,18 @@ class EmptyResponseTest extends \PHPUnit_Framework_TestCase
     {
         $response = new EmptyResponse([], 201);
 
-        $this->assertInstanceOf(Response::class, $response);
-        $this->assertEquals('', (string) $response->getBody());
-        $this->assertEquals(201, $response->getStatusCode());
+        self::assertInstanceOf(Response::class, $response);
+        self::assertEquals('', (string) $response->getBody());
+        self::assertEquals(201, $response->getStatusCode());
     }
 
     public function testHeaderConstructor()
     {
         $response = new EmptyResponse(['x-empty' => ['true']]);
 
-        $this->assertInstanceOf(Response::class, $response);
-        $this->assertEquals('', (string) $response->getBody());
-        $this->assertEquals(204, $response->getStatusCode());
-        $this->assertEquals('true', $response->getHeaderLine('x-empty'));
+        self::assertInstanceOf(Response::class, $response);
+        self::assertEquals('', (string) $response->getBody());
+        self::assertEquals(204, $response->getStatusCode());
+        self::assertEquals('true', $response->getHeaderLine('x-empty'));
     }
 }

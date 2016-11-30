@@ -13,8 +13,8 @@ class ServiceProviderTest extends \PHPUnit_Framework_TestCase
         $container = new Container();
         $container->register(new SimpleFixtureServiceProvider());
 
-        $this->assertEquals('value', $container->get('param'));
-        $this->assertInstanceOf(ServiceFixture::class, $container->get('service'));
+        self::assertEquals('value', $container->get('param'));
+        self::assertInstanceOf(ServiceFixture::class, $container->get('service'));
     }
 
     public function testProviderWithRegisterMethod()
@@ -24,9 +24,9 @@ class ServiceProviderTest extends \PHPUnit_Framework_TestCase
             'anotherParameter' => 'anotherValue',
         ]);
 
-        $this->assertEquals('value', $container->get('param'));
-        $this->assertEquals('anotherValue', $container->get('anotherParameter'));
-        $this->assertInstanceOf(ServiceFixture::class, $container->get('service'));
+        self::assertEquals('value', $container->get('param'));
+        self::assertEquals('anotherValue', $container->get('anotherParameter'));
+        self::assertInstanceOf(ServiceFixture::class, $container->get('service'));
     }
 
     public function testExtendingValue()
@@ -37,7 +37,7 @@ class ServiceProviderTest extends \PHPUnit_Framework_TestCase
 
         $getPrevious = $container->get('previous');
 
-        $this->assertEquals('foo', $getPrevious());
+        self::assertEquals('foo', $getPrevious());
     }
 
     public function testExtendingNothing()
@@ -45,6 +45,6 @@ class ServiceProviderTest extends \PHPUnit_Framework_TestCase
         $container = new Container();
         $container->register(new SimpleFixtureServiceProvider());
 
-        $this->assertNull($container->get('previous'));
+        self::assertNull($container->get('previous'));
     }
 }

@@ -254,7 +254,7 @@ class TranslationManager implements TranslationManagerContract
      */
     public function setLocale(string $locale): TranslationManager
     {
-        $this->assertValidLocale($locale);
+        self::assertValidLocale($locale);
 
         $this->locale = $locale;
 

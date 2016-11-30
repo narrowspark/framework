@@ -18,7 +18,7 @@ class RouteParserTest extends \PHPUnit_Framework_TestCase
     {
         $parser = new RouteParser();
 
-        $this->assertEquals($expectedSegments, $parser->parse($pattern, $conditions));
+        self::assertEquals($expectedSegments, $parser->parse($pattern, $conditions));
     }
 
     public function routeParsingProvider()

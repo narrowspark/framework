@@ -31,13 +31,13 @@ class ResponseFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $response = $this->factory->createResponse($code);
 
-        $this->assertResponse($response, $code);
+        self::assertResponse($response, $code);
     }
 
     private function assertResponse($response, $code)
     {
-        $this->assertInstanceOf(ResponseInterface::class, $response);
+        self::assertInstanceOf(ResponseInterface::class, $response);
 
-        $this->assertSame($code, $response->getStatusCode());
+        self::assertSame($code, $response->getStatusCode());
     }
 }

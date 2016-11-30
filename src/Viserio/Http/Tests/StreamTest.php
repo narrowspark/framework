@@ -24,13 +24,13 @@ class StreamTest extends \PHPUnit_Framework_TestCase
         fwrite($handle, 'data');
 
         $stream = new Stream($handle);
-        $this->assertTrue($stream->isReadable());
-        $this->assertTrue($stream->isWritable());
-        $this->assertTrue($stream->isSeekable());
-        $this->assertEquals('php://temp', $stream->getMetadata('uri'));
-        $this->assertInternalType('array', $stream->getMetadata());
-        $this->assertEquals(4, $stream->getSize());
-        $this->assertFalse($stream->eof());
+        self::assertTrue($stream->isReadable());
+        self::assertTrue($stream->isWritable());
+        self::assertTrue($stream->isSeekable());
+        self::assertEquals('php://temp', $stream->getMetadata('uri'));
+        self::assertInternalType('array', $stream->getMetadata());
+        self::assertEquals(4, $stream->getSize());
+        self::assertFalse($stream->eof());
         $stream->close();
     }
 
@@ -39,7 +39,7 @@ class StreamTest extends \PHPUnit_Framework_TestCase
         $handle = fopen('php://temp', 'r');
         $stream = new Stream($handle);
         unset($stream);
-        $this->assertFalse(is_resource($handle));
+        self::assertFalse(is_resource($handle));
     }
 
     public function testConvertsToString()
@@ -48,8 +48,8 @@ class StreamTest extends \PHPUnit_Framework_TestCase
         fwrite($handle, 'data');
 
         $stream = new Stream($handle);
-        $this->assertEquals('data', (string) $stream);
-        $this->assertEquals('data', (string) $stream);
+        self::assertEquals('data', (string) $stream);
+        self::assertEquals('data', (string) $stream);
         $stream->close();
     }
 
@@ -59,10 +59,10 @@ class StreamTest extends \PHPUnit_Framework_TestCase
         fwrite($handle, 'data');
 
         $stream = new Stream($handle);
-        $this->assertEquals('', $stream->getContents());
+        self::assertEquals('', $stream->getContents());
         $stream->seek(0);
-        $this->assertEquals('data', $stream->getContents());
-        $this->assertEquals('', $stream->getContents());
+        self::assertEquals('data', $stream->getContents());
+        self::assertEquals('', $stream->getContents());
     }
 
     public function testChecksEof()
@@ -71,9 +71,9 @@ class StreamTest extends \PHPUnit_Framework_TestCase
         fwrite($handle, 'data');
 
         $stream = new Stream($handle);
-        $this->assertFalse($stream->eof());
+        self::assertFalse($stream->eof());
         $stream->read(4);
-        $this->assertTrue($stream->eof());
+        self::assertTrue($stream->eof());
         $stream->close();
     }
 
@@ -83,22 +83,22 @@ class StreamTest extends \PHPUnit_Framework_TestCase
         $handle = fopen(__FILE__, 'r');
 
         $stream = new Stream($handle);
-        $this->assertEquals($size, $stream->getSize());
+        self::assertEquals($size, $stream->getSize());
         // Load from cache
-        $this->assertEquals($size, $stream->getSize());
+        self::assertEquals($size, $stream->getSize());
         $stream->close();
     }
 
     public function testEnsuresSizeIsConsistent()
     {
         $h = fopen('php://temp', 'w+');
-        $this->assertEquals(3, fwrite($h, 'foo'));
+        self::assertEquals(3, fwrite($h, 'foo'));
 
         $stream = new Stream($h);
-        $this->assertEquals(3, $stream->getSize());
-        $this->assertEquals(4, $stream->write('test'));
-        $this->assertEquals(7, $stream->getSize());
-        $this->assertEquals(7, $stream->getSize());
+        self::assertEquals(3, $stream->getSize());
+        self::assertEquals(4, $stream->write('test'));
+        self::assertEquals(7, $stream->getSize());
+        self::assertEquals(7, $stream->getSize());
         $stream->close();
     }
 
@@ -107,14 +107,14 @@ class StreamTest extends \PHPUnit_Framework_TestCase
         $handle = fopen('php://temp', 'w+');
         $stream = new Stream($handle);
 
-        $this->assertEquals(0, $stream->tell());
+        self::assertEquals(0, $stream->tell());
 
         $stream->write('foo');
-        $this->assertEquals(3, $stream->tell());
+        self::assertEquals(3, $stream->tell());
 
         $stream->seek(1);
-        $this->assertEquals(1, $stream->tell());
-        $this->assertSame(ftell($handle), $stream->tell());
+        self::assertEquals(1, $stream->tell());
+        self::assertSame(ftell($handle), $stream->tell());
 
         $stream->close();
     }
@@ -125,12 +125,12 @@ class StreamTest extends \PHPUnit_Framework_TestCase
         $stream = new Stream($r);
 
         $stream->write('foo');
-        $this->assertTrue($stream->isReadable());
-        $this->assertSame($r, $stream->detach());
+        self::assertTrue($stream->isReadable());
+        self::assertSame($r, $stream->detach());
         $stream->detach();
-        $this->assertFalse($stream->isReadable());
-        $this->assertFalse($stream->isWritable());
-        $this->assertFalse($stream->isSeekable());
+        self::assertFalse($stream->isReadable());
+        self::assertFalse($stream->isWritable());
+        self::assertFalse($stream->isSeekable());
 
         $throws = function (callable $fn) use ($stream) {
             try {
@@ -161,7 +161,7 @@ class StreamTest extends \PHPUnit_Framework_TestCase
         $throws(function ($stream) {
             $stream->getContents();
         });
-        $this->assertSame('', (string) $stream);
+        self::assertSame('', (string) $stream);
         $stream->close();
     }
 
@@ -171,11 +171,11 @@ class StreamTest extends \PHPUnit_Framework_TestCase
         $stream = new Stream($handle);
         $stream->close();
 
-        $this->assertFalse($stream->isSeekable());
-        $this->assertFalse($stream->isReadable());
-        $this->assertFalse($stream->isWritable());
-        $this->assertNull($stream->getSize());
-        $this->assertEmpty($stream->getMetadata());
+        self::assertFalse($stream->isSeekable());
+        self::assertFalse($stream->isReadable());
+        self::assertFalse($stream->isWritable());
+        self::assertNull($stream->getSize());
+        self::assertEmpty($stream->getMetadata());
     }
 
     public function testDoesNotThrowInToString()
@@ -189,7 +189,7 @@ class StreamTest extends \PHPUnit_Framework_TestCase
         $stream = new Stream($stream);
         $stream = new NoSeekStream($stream);
 
-        $this->assertEquals('foo', (string) $stream);
+        self::assertEquals('foo', (string) $stream);
     }
 
     public function testStreamReadingWithZeroLength()
@@ -197,7 +197,7 @@ class StreamTest extends \PHPUnit_Framework_TestCase
         $r = fopen('php://temp', 'r');
         $stream = new Stream($r);
 
-        $this->assertSame('', $stream->read(0));
+        self::assertSame('', $stream->read(0));
 
         $stream->close();
     }

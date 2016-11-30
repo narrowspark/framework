@@ -14,7 +14,7 @@ class QueryTest extends \PHPUnit_Framework_TestCase
         $filter = new Query();
         $query = $filter->parse($input);
 
-        $this->assertSame($expected, $filter->build($query));
+        self::assertSame($expected, $filter->build($query));
     }
 
     public function queryProvider()

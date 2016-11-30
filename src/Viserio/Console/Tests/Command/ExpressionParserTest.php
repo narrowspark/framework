@@ -10,7 +10,7 @@ class ExpressionParserTest extends \PHPUnit_Framework_TestCase
 {
     public function testItParsesCommandNames()
     {
-        $this->assertParsesTo('greet', [
+        self::assertParsesTo('greet', [
             'name' => 'greet',
             'arguments' => [],
             'options' => [],
@@ -19,7 +19,7 @@ class ExpressionParserTest extends \PHPUnit_Framework_TestCase
 
     public function testItParsesCommandNamesContainingNamespaces()
     {
-        $this->assertParsesTo('demo:greet', [
+        self::assertParsesTo('demo:greet', [
             'name' => 'demo:greet',
             'arguments' => [],
             'options' => [],
@@ -28,7 +28,7 @@ class ExpressionParserTest extends \PHPUnit_Framework_TestCase
 
     public function testItParsesMandatoryArguments()
     {
-        $this->assertParsesTo('greet firstname lastname', [
+        self::assertParsesTo('greet firstname lastname', [
             'name' => 'greet',
             'arguments' => [
                 new InputArgument('firstname', InputArgument::REQUIRED),
@@ -40,7 +40,7 @@ class ExpressionParserTest extends \PHPUnit_Framework_TestCase
 
     public function testItParsesOptionalArguments()
     {
-        $this->assertParsesTo('greet [firstname] [lastname]', [
+        self::assertParsesTo('greet [firstname] [lastname]', [
             'name' => 'greet',
             'arguments' => [
                 new InputArgument('firstname', InputArgument::OPTIONAL),
@@ -52,7 +52,7 @@ class ExpressionParserTest extends \PHPUnit_Framework_TestCase
 
     public function testItParsesArrayArguments()
     {
-        $this->assertParsesTo('greet [names]*', [
+        self::assertParsesTo('greet [names]*', [
             'name' => 'greet',
             'arguments' => [
                 new InputArgument('names', InputArgument::IS_ARRAY),
@@ -63,7 +63,7 @@ class ExpressionParserTest extends \PHPUnit_Framework_TestCase
 
     public function testItParsesArrayArgumentsWithAtLeastOneValue()
     {
-        $this->assertParsesTo('greet names*', [
+        self::assertParsesTo('greet names*', [
             'name' => 'greet',
             'arguments' => [
                 new InputArgument('names', InputArgument::IS_ARRAY | InputArgument::REQUIRED),
@@ -74,7 +74,7 @@ class ExpressionParserTest extends \PHPUnit_Framework_TestCase
 
     public function testItParsesOptions()
     {
-        $this->assertParsesTo('greet [--yell]', [
+        self::assertParsesTo('greet [--yell]', [
             'name' => 'greet',
             'arguments' => [],
             'options' => [
@@ -85,7 +85,7 @@ class ExpressionParserTest extends \PHPUnit_Framework_TestCase
 
     public function testItParsesOptionsWithMandatoryValues()
     {
-        $this->assertParsesTo('greet [--iterations=]', [
+        self::assertParsesTo('greet [--iterations=]', [
             'name' => 'greet',
             'arguments' => [],
             'options' => [
@@ -96,7 +96,7 @@ class ExpressionParserTest extends \PHPUnit_Framework_TestCase
 
     public function testItParsesOptionsWithMultipleValues()
     {
-        $this->assertParsesTo('greet [--name=]*', [
+        self::assertParsesTo('greet [--name=]*', [
             'name' => 'greet',
             'arguments' => [],
             'options' => [
@@ -107,7 +107,7 @@ class ExpressionParserTest extends \PHPUnit_Framework_TestCase
 
     public function testItParsesOptionsWithShortcuts()
     {
-        $this->assertParsesTo('greet [-y|--yell] [-it|--iterations=] [-n|--name=]*', [
+        self::assertParsesTo('greet [-y|--yell] [-it|--iterations=] [-n|--name=]*', [
             'name' => 'greet',
             'arguments' => [],
             'options' => [
@@ -141,6 +141,6 @@ class ExpressionParserTest extends \PHPUnit_Framework_TestCase
     public function assertParsesTo($expression, $expected)
     {
         $parser = new ExpressionParser();
-        $this->assertEquals($expected, $parser->parse($expression));
+        self::assertEquals($expected, $parser->parse($expression));
     }
 }

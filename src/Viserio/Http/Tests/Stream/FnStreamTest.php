@@ -20,13 +20,13 @@ class FnStreamTest extends \PHPUnit_Framework_TestCase
     {
         $stream = new FnStream([
             'read' => function ($len) {
-                $this->assertEquals(3, $len);
+                self::assertEquals(3, $len);
 
                 return 'foo';
             },
         ]);
 
-        $this->assertEquals('foo', $stream->read(3));
+        self::assertEquals('foo', $stream->read(3));
     }
 
     public function testCanCloseOnDestruct()
@@ -40,7 +40,7 @@ class FnStreamTest extends \PHPUnit_Framework_TestCase
         ]);
         unset($stream);
 
-        $this->assertTrue($called);
+        self::assertTrue($called);
     }
 
     public function doesNotRequireClose()
@@ -59,25 +59,25 @@ class FnStreamTest extends \PHPUnit_Framework_TestCase
         $stream1 = new Stream($stream);
         $stream2 = FnStream::decorate($stream1, []);
 
-        $this->assertEquals(3, $stream2->getSize());
-        $this->assertEquals($stream2->isWritable(), true);
-        $this->assertEquals($stream2->isReadable(), true);
-        $this->assertEquals($stream2->isSeekable(), true);
-        $this->assertEquals($stream2->read(3), 'foo');
-        $this->assertEquals($stream2->tell(), 3);
-        $this->assertEquals($stream1->tell(), 3);
-        $this->assertSame('', $stream1->read(1));
-        $this->assertEquals($stream2->eof(), true);
-        $this->assertEquals($stream1->eof(), true);
+        self::assertEquals(3, $stream2->getSize());
+        self::assertEquals($stream2->isWritable(), true);
+        self::assertEquals($stream2->isReadable(), true);
+        self::assertEquals($stream2->isSeekable(), true);
+        self::assertEquals($stream2->read(3), 'foo');
+        self::assertEquals($stream2->tell(), 3);
+        self::assertEquals($stream1->tell(), 3);
+        self::assertSame('', $stream1->read(1));
+        self::assertEquals($stream2->eof(), true);
+        self::assertEquals($stream1->eof(), true);
         $stream2->seek(0);
-        $this->assertEquals('foo', (string) $stream2);
+        self::assertEquals('foo', (string) $stream2);
         $stream2->seek(0);
-        $this->assertEquals('foo', $stream2->getContents());
-        $this->assertEquals($stream1->getMetadata(), $stream2->getMetadata());
+        self::assertEquals('foo', $stream2->getContents());
+        self::assertEquals($stream1->getMetadata(), $stream2->getMetadata());
         $stream2->seek(0, SEEK_END);
         $stream2->write('bar');
-        $this->assertEquals('foobar', (string) $stream2);
-        $this->assertInternalType('resource', $stream2->detach());
+        self::assertEquals('foobar', (string) $stream2);
+        self::assertInternalType('resource', $stream2->detach());
         $stream2->close();
     }
 
@@ -100,7 +100,7 @@ class FnStreamTest extends \PHPUnit_Framework_TestCase
             },
         ]);
 
-        $this->assertEquals('foo', $stream2->read(3));
-        $this->assertTrue($called);
+        self::assertEquals('foo', $stream2->read(3));
+        self::assertTrue($called);
     }
 }

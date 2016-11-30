@@ -22,7 +22,7 @@ class FtpConnectorTest extends \PHPUnit_Framework_TestCase
             'password' => 'your-password',
         ]);
 
-        $this->assertInstanceOf(Ftp::class, $return);
+        self::assertInstanceOf(Ftp::class, $return);
     }
 
     /**

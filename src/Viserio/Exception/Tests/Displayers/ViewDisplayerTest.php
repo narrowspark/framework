@@ -33,12 +33,12 @@ class ViewDisplayerTest extends \PHPUnit_Framework_TestCase
 
         $response = $displayer->display(new Exception(), 'foo', 502, []);
 
-        $this->assertSame(
+        self::assertSame(
             "The server was acting as a gateway or proxy and received an invalid response from the upstream server.\n",
             (string) $response->getBody()
         );
-        $this->assertSame(502, $response->getStatusCode());
-        $this->assertSame('text/html', $response->getHeaderLine('Content-Type'));
+        self::assertSame(502, $response->getStatusCode());
+        self::assertSame('text/html', $response->getHeaderLine('Content-Type'));
     }
 
     public function testPropertiesTrue()
@@ -52,9 +52,9 @@ class ViewDisplayerTest extends \PHPUnit_Framework_TestCase
         $displayer = new ViewDisplayer(new ExceptionInfo(), $factory);
         $exception = new Exception();
 
-        $this->assertFalse($displayer->isVerbose());
-        $this->assertTrue($displayer->canDisplay($exception, $exception, 500));
-        $this->assertSame('text/html', $displayer->contentType());
+        self::assertFalse($displayer->isVerbose());
+        self::assertTrue($displayer->canDisplay($exception, $exception, 500));
+        self::assertSame('text/html', $displayer->contentType());
     }
 
     public function testPropertiesFalse()
@@ -68,8 +68,8 @@ class ViewDisplayerTest extends \PHPUnit_Framework_TestCase
         $displayer = new ViewDisplayer(new ExceptionInfo(), $factory);
         $exception = new Exception();
 
-        $this->assertFalse($displayer->isVerbose());
-        $this->assertFalse($displayer->canDisplay($exception, $exception, 500));
-        $this->assertSame('text/html', $displayer->contentType());
+        self::assertFalse($displayer->isVerbose());
+        self::assertFalse($displayer->canDisplay($exception, $exception, 500));
+        self::assertSame('text/html', $displayer->contentType());
     }
 }

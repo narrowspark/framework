@@ -21,10 +21,10 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
             ]
         );
 
-        $this->assertInstanceOf(Validator::class, $validate);
-        $this->assertTrue($validate->passes());
-        $this->assertFalse($validate->fails());
-        $this->assertEquals(
+        self::assertInstanceOf(Validator::class, $validate);
+        self::assertTrue($validate->passes());
+        self::assertFalse($validate->fails());
+        self::assertEquals(
             [
                 'test' => true,
                 'foo' => true,
@@ -45,10 +45,10 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
             ]
         );
 
-        $this->assertInstanceOf(Validator::class, $validate);
-        $this->assertTrue($validate->passes());
-        $this->assertFalse($validate->fails());
-        $this->assertEquals(
+        self::assertInstanceOf(Validator::class, $validate);
+        self::assertTrue($validate->passes());
+        self::assertFalse($validate->fails());
+        self::assertEquals(
             [
                 'test' => true,
             ],
@@ -70,10 +70,10 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
             ]
         );
 
-        $this->assertInstanceOf(Validator::class, $validate);
-        $this->assertFalse($validate->passes());
-        $this->assertTrue($validate->fails());
-        $this->assertEquals(
+        self::assertInstanceOf(Validator::class, $validate);
+        self::assertFalse($validate->passes());
+        self::assertTrue($validate->fails());
+        self::assertEquals(
             [
                 'test' => [
                     'Test must not contain letters (a-z)',
@@ -100,10 +100,10 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
             ]
         );
 
-        $this->assertInstanceOf(Validator::class, $validate);
-        $this->assertFalse($validate->passes());
-        $this->assertTrue($validate->fails());
-        $this->assertEquals(
+        self::assertInstanceOf(Validator::class, $validate);
+        self::assertFalse($validate->passes());
+        self::assertTrue($validate->fails());
+        self::assertEquals(
             [
                 'foo' => [
                     'Foo must not contain letters (a-z)',
@@ -127,9 +127,9 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
             ]
         );
 
-        $this->assertInstanceOf(Validator::class, $validate);
-        $this->assertTrue($validate->passes());
-        $this->assertFalse($validate->fails());
+        self::assertInstanceOf(Validator::class, $validate);
+        self::assertTrue($validate->passes());
+        self::assertFalse($validate->fails());
     }
 
     /**

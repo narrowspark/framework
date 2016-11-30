@@ -49,14 +49,14 @@ class ScheduleTest extends \PHPUnit_Framework_TestCase
         $escape = '\\' === DIRECTORY_SEPARATOR ? '"' : '\'';
         $escapeReal = '\\' === DIRECTORY_SEPARATOR ? '\\"' : '"';
 
-        $this->assertEquals('path/to/command', $cronJobs[0]->getCommand());
-        $this->assertEquals('path/to/command -f --foo="bar"', $cronJobs[1]->getCommand());
-        $this->assertEquals('path/to/command -f', $cronJobs[2]->getCommand());
-        $this->assertEquals("path/to/command --foo={$escape}bar{$escape}", $cronJobs[3]->getCommand());
-        $this->assertEquals("path/to/command {$escape}-1 minute{$escape}", $cronJobs[7]->getCommand());
-        $this->assertEquals("path/to/command -f --foo={$escape}bar{$escape}", $cronJobs[4]->getCommand());
-        $this->assertEquals("path/to/command {$escape}one{$escape} {$escape}two{$escape}", $cronJobs[6]->getCommand());
-        $this->assertEquals("path/to/command --title={$escape}A {$escapeReal}real{$escapeReal} test{$escape}", $cronJobs[5]->getCommand());
+        self::assertEquals('path/to/command', $cronJobs[0]->getCommand());
+        self::assertEquals('path/to/command -f --foo="bar"', $cronJobs[1]->getCommand());
+        self::assertEquals('path/to/command -f', $cronJobs[2]->getCommand());
+        self::assertEquals("path/to/command --foo={$escape}bar{$escape}", $cronJobs[3]->getCommand());
+        self::assertEquals("path/to/command {$escape}-1 minute{$escape}", $cronJobs[7]->getCommand());
+        self::assertEquals("path/to/command -f --foo={$escape}bar{$escape}", $cronJobs[4]->getCommand());
+        self::assertEquals("path/to/command {$escape}one{$escape} {$escape}two{$escape}", $cronJobs[6]->getCommand());
+        self::assertEquals("path/to/command --title={$escape}A {$escapeReal}real{$escapeReal} test{$escape}", $cronJobs[5]->getCommand());
     }
 
     public function testCommandCreatesNewCerebroCommand()
@@ -73,13 +73,13 @@ class ScheduleTest extends \PHPUnit_Framework_TestCase
         $binary = $escape . PHP_BINARY . $escape;
 
         if (getenv('TRAVIS')) {
-            $this->assertEquals($binary . ' \'cerebro\' clear:view', $cronJobs[0]->getCommand());
-            $this->assertEquals($binary . ' \'cerebro\' clear:view --tries=3', $cronJobs[1]->getCommand());
-            $this->assertEquals($binary . ' \'cerebro\' clear:view --tries=3', $cronJobs[2]->getCommand());
+            self::assertEquals($binary . ' \'cerebro\' clear:view', $cronJobs[0]->getCommand());
+            self::assertEquals($binary . ' \'cerebro\' clear:view --tries=3', $cronJobs[1]->getCommand());
+            self::assertEquals($binary . ' \'cerebro\' clear:view --tries=3', $cronJobs[2]->getCommand());
         } else {
-            $this->assertEquals($binary . ' "cerebro" clear:view', $cronJobs[0]->getCommand());
-            $this->assertEquals($binary . ' "cerebro" clear:view --tries=3', $cronJobs[1]->getCommand());
-            $this->assertEquals($binary . ' "cerebro" clear:view --tries=3', $cronJobs[2]->getCommand());
+            self::assertEquals($binary . ' "cerebro" clear:view', $cronJobs[0]->getCommand());
+            self::assertEquals($binary . ' "cerebro" clear:view --tries=3', $cronJobs[1]->getCommand());
+            self::assertEquals($binary . ' "cerebro" clear:view --tries=3', $cronJobs[2]->getCommand());
         }
     }
 
@@ -112,12 +112,12 @@ class ScheduleTest extends \PHPUnit_Framework_TestCase
         $binary = $escape . PHP_BINARY . $escape;
 
         if (getenv('TRAVIS')) {
-            $this->assertEquals($binary . ' \'cerebro\' foo:bar --force', $cronJobs[0]->getCommand());
+            self::assertEquals($binary . ' \'cerebro\' foo:bar --force', $cronJobs[0]->getCommand());
         } else {
-            $this->assertEquals($binary . ' "cerebro" foo:bar --force', $cronJobs[0]->getCommand());
+            self::assertEquals($binary . ' "cerebro" foo:bar --force', $cronJobs[0]->getCommand());
         }
 
-        $this->assertEquals([$cron], $schedule->dueCronJobs('test'));
+        self::assertEquals([$cron], $schedule->dueCronJobs('test'));
     }
 
     public function testCreateNewCerebroCommandUsingCallBack()
@@ -130,6 +130,6 @@ class ScheduleTest extends \PHPUnit_Framework_TestCase
 
         $cronJobs = $schedule->getCronJobs();
 
-        $this->assertSame('Closure', $cronJobs[0]->getSummaryForDisplay());
+        self::assertSame('Closure', $cronJobs[0]->getSummaryForDisplay());
     }
 }

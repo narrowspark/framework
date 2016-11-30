@@ -13,6 +13,6 @@ class VfsConnectorTest extends \PHPUnit_Framework_TestCase
 
         $return = $connector->connect([]);
 
-        $this->assertInstanceOf(VfsAdapter::class, $return);
+        self::assertInstanceOf(VfsAdapter::class, $return);
     }
 }

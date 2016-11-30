@@ -39,20 +39,22 @@ class FileSessionHandlerTest extends \PHPUnit_Framework_TestCase
     public function tearDown()
     {
         $this->files->deleteDirectory(__DIR__ . '/stubs');
+
+        parent::tearDown();
     }
 
     public function testOpenReturnsTrue()
     {
         $handler = $this->handler;
 
-        $this->assertTrue($handler->open($this->root->url(), 'temp'));
+        self::assertTrue($handler->open($this->root->url(), 'temp'));
     }
 
     public function testCloseReturnsTrue()
     {
         $handler = $this->handler;
 
-        $this->assertTrue($handler->close());
+        self::assertTrue($handler->close());
     }
 
     public function testReadExistingSessionReturnsTheData()
@@ -61,7 +63,7 @@ class FileSessionHandlerTest extends \PHPUnit_Framework_TestCase
 
         $handler = $this->handler;
 
-        $this->assertSame('Foo Bar', $handler->read('temp'));
+        self::assertSame('Foo Bar', $handler->read('temp'));
     }
 
     public function testReadMissingSessionReturnsAnEmptyString()
@@ -70,7 +72,7 @@ class FileSessionHandlerTest extends \PHPUnit_Framework_TestCase
 
         $handler = $this->handler;
 
-        $this->assertSame('', $handler->read('12'));
+        self::assertSame('', $handler->read('12'));
     }
 
     public function testWriteSuccessfullyReturnsTrue()
@@ -81,7 +83,7 @@ class FileSessionHandlerTest extends \PHPUnit_Framework_TestCase
             2
         );
 
-        $this->assertTrue($handler->write('write.sess', json_encode(['user_id' => 1])));
+        self::assertTrue($handler->write('write.sess', json_encode(['user_id' => 1])));
     }
 
     public function testGcSuccessfullyReturnsTrue()
@@ -97,12 +99,12 @@ class FileSessionHandlerTest extends \PHPUnit_Framework_TestCase
         );
         $handler->write('temp.sess', json_encode(['user_id' => 1]));
 
-        $this->assertSame('{"user_id":1}', $handler->read('temp.sess'));
+        self::assertSame('{"user_id":1}', $handler->read('temp.sess'));
 
         sleep(2);
 
-        $this->assertTrue($handler->gc(2));
-        $this->assertSame('', $handler->read('temp.sess'));
+        self::assertTrue($handler->gc(2));
+        self::assertSame('', $handler->read('temp.sess'));
     }
 
     public function testDestroySuccessfullReturnsTrue()
@@ -111,6 +113,6 @@ class FileSessionHandlerTest extends \PHPUnit_Framework_TestCase
 
         $handler = $this->handler;
 
-        $this->assertTrue($handler->destroy('destroy.sess'));
+        self::assertTrue($handler->destroy('destroy.sess'));
     }
 }

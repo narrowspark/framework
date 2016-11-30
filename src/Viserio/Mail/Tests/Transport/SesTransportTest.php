@@ -38,6 +38,6 @@ class SesTransportTest extends \PHPUnit_Framework_TestCase
 
         $transport->send($message);
 
-        $this->assertEquals($messageId, $message->getHeaders()->get('X-SES-Message-ID')->getFieldBody());
+        self::assertEquals($messageId, $message->getHeaders()->get('X-SES-Message-ID')->getFieldBody());
     }
 }

@@ -15,7 +15,7 @@ class TranslationAwareTraitTest extends \PHPUnit_Framework_TestCase
     {
         $this->setTranslator($this->mock(TranslatorContract::class));
 
-        $this->assertInstanceOf(TranslatorContract::class, $this->getTranslator());
+        self::assertInstanceOf(TranslatorContract::class, $this->getTranslator());
     }
 
     /**

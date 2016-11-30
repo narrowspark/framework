@@ -17,7 +17,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
                 ],
             ],
         ]);
-        $this->assertArrayHasKey('123.456.789', $repository->getAllFlat());
+        self::assertArrayHasKey('123.456.789', $repository->getAllFlat());
     }
 
     public function testMergeArray()
@@ -51,7 +51,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
           ],
         ]);
 
-        $this->assertEquals($expected, $repository->getAllNested());
+        self::assertEquals($expected, $repository->getAllNested());
 
         // test 2 - merge values keyed numeric
         $original = [
@@ -90,7 +90,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
             ],
         ]);
 
-        $this->assertEquals($expected, $repository->getAllNested());
+        self::assertEquals($expected, $repository->getAllNested());
     }
 
     public function testSetArray()
@@ -101,7 +101,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
             'foo' => 'bar',
         ]);
 
-        $this->assertEquals($repository['foo'], 'bar');
+        self::assertEquals($repository['foo'], 'bar');
     }
 
     public function testSetAndGet()
@@ -110,7 +110,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
 
         $repository['foo'] = 'bar';
 
-        $this->assertEquals($repository['foo'], 'bar');
+        self::assertEquals($repository['foo'], 'bar');
     }
 
     public function testGetKeys()
@@ -125,8 +125,8 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
         ]);
         $keys = $repository->getKeys();
 
-        $this->assertEquals($keys[0], 'foo');
-        $this->assertEquals($keys[1], 'bar.baz');
+        self::assertEquals($keys[0], 'foo');
+        self::assertEquals($keys[1], 'bar.baz');
     }
 
     public function testWithNamespacedKey()
@@ -137,7 +137,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
         $this->arrayHasKey($repository, 'my');
         $this->arrayHasKey($repository['my'], 'namespaced');
         $this->arrayHasKey($repository['my.namespaced'], 'keyname');
-        $this->assertEquals('My Value', $repository['my.namespaced.keyname']);
+        self::assertEquals('My Value', $repository['my.namespaced.keyname']);
     }
 
     public function testWithString()
@@ -146,7 +146,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
 
         $repository['keyname'] = 'My Value';
 
-        $this->assertEquals('My Value', $repository['keyname']);
+        self::assertEquals('My Value', $repository['keyname']);
     }
 
     public function testIsset()
@@ -154,8 +154,8 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
         $repository = new Repository();
 
         $repository['param'] = 'value';
-        $this->assertTrue(isset($repository['param']));
-        $this->assertFalse(isset($repository['non_existent']));
+        self::assertTrue(isset($repository['param']));
+        self::assertFalse(isset($repository['non_existent']));
     }
 
     public function testUnset()
@@ -166,23 +166,23 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
 
         unset($repository['param'], $repository['service']);
 
-        $this->assertFalse(isset($repository['param']));
-        $this->assertFalse(isset($repository['service']));
+        self::assertFalse(isset($repository['param']));
+        self::assertFalse(isset($repository['service']));
 
         $repository['foo.bar'] = 'baz';
 
         $repository->offsetUnset('foo.bar');
 
-        $this->assertFalse(isset($repository['foo.bar']));
+        self::assertFalse(isset($repository['foo.bar']));
 
         $repository->offsetUnset('foo');
-        $this->assertFalse(isset($repository['foo']));
+        self::assertFalse(isset($repository['foo']));
     }
 
     public function testGetIterator()
     {
         $repository = new Repository();
 
-        $this->assertInstanceOf('ArrayIterator', $repository->getIterator());
+        self::assertInstanceOf('ArrayIterator', $repository->getIterator());
     }
 }

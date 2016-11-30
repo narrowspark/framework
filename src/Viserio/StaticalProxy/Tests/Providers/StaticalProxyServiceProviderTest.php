@@ -14,10 +14,10 @@ class StaticalProxyServiceProviderTest extends \PHPUnit_Framework_TestCase
         $container = new Container();
         $container->register(new StaticalProxyServiceProvider());
 
-        $this->assertInstanceOf(StaticalProxyResolver::class, $container->get(StaticalProxyResolver::class));
-        $this->assertInstanceOf(StaticalProxy::class, $container->get(StaticalProxy::class));
-        $this->assertInstanceOf(StaticalProxyResolver::class, $container->get('staticalproxy.resolver'));
-        $this->assertInstanceOf(StaticalProxy::class, $container->get('staticalproxy'));
-        $this->assertInstanceOf(StaticalProxy::class, $container->get('facade'));
+        self::assertInstanceOf(StaticalProxyResolver::class, $container->get(StaticalProxyResolver::class));
+        self::assertInstanceOf(StaticalProxy::class, $container->get(StaticalProxy::class));
+        self::assertInstanceOf(StaticalProxyResolver::class, $container->get('staticalproxy.resolver'));
+        self::assertInstanceOf(StaticalProxy::class, $container->get('staticalproxy'));
+        self::assertInstanceOf(StaticalProxy::class, $container->get('facade'));
     }
 }

@@ -41,8 +41,8 @@ return [\'a\' => 1, "b" => 2, "c" => 3, "d" => 4, "e" => 5,];
 
         $parsed = $this->parser->parse($file->url());
 
-        $this->assertTrue(is_array($parsed));
-        $this->assertSame(['a' => 1, 'b' => 2, 'c' => 3, 'd' => 4, 'e' => 5], $parsed);
+        self::assertTrue(is_array($parsed));
+        self::assertSame(['a' => 1, 'b' => 2, 'c' => 3, 'd' => 4, 'e' => 5], $parsed);
     }
 
     /**
@@ -70,6 +70,6 @@ declare(strict_types=1); return array (
             $this->parser->dump(['a' => 1, 'b' => 2, 'c' => 3, 'd' => 4, 'e' => 5])
         )->at($this->root);
 
-        $this->assertSame($this->file->read($file->url()), $this->file->read($dump->url()));
+        self::assertSame($this->file->read($file->url()), $this->file->read($dump->url()));
     }
 }

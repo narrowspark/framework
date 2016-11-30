@@ -17,7 +17,7 @@ abstract class AbstractMessageTest extends \PHPUnit_Framework_TestCase
     // Test methods for default/empty instances
     public function testMessageImplementsInterface()
     {
-        $this->assertInstanceOf(MessageInterface::class, $this->classToTest);
+        self::assertInstanceOf(MessageInterface::class, $this->classToTest);
     }
 
     public function testValidDefaultProtocolVersion()
@@ -25,7 +25,7 @@ abstract class AbstractMessageTest extends \PHPUnit_Framework_TestCase
         $message = $this->classToTest;
         $version = $message->getProtocolVersion();
 
-        $this->assertInternalType('string', $version, 'getProtocolVersion must return a string');
+        self::assertInternalType('string', $version, 'getProtocolVersion must return a string');
         HttpProtocolVersion::assertValid($version);
     }
 
@@ -34,11 +34,11 @@ abstract class AbstractMessageTest extends \PHPUnit_Framework_TestCase
         $message = $this->classToTest;
         $headers = $message->getHeaders();
 
-        $this->assertInternalType('array', $headers, "getHeaders an associative array of the message's headers");
+        self::assertInternalType('array', $headers, "getHeaders an associative array of the message's headers");
 
         foreach ($headers as $name => $values) {
-            $this->assertInternalType('string', $name, 'Each key MUST be a header name');
-            $this->assertValidHeaderValue($values);
+            self::assertInternalType('string', $name, 'Each key MUST be a header name');
+            self::assertValidHeaderValue($values);
         }
     }
 
@@ -47,7 +47,7 @@ abstract class AbstractMessageTest extends \PHPUnit_Framework_TestCase
         $message = $this->classToTest;
         $values = $message->getHeader('not exist');
 
-        $this->assertValidHeaderValue($values);
+        self::assertValidHeaderValue($values);
     }
 
     public function testValidNonExistHeaderLine()
@@ -55,8 +55,8 @@ abstract class AbstractMessageTest extends \PHPUnit_Framework_TestCase
         $message = $this->classToTest;
         $headerLine = $message->getHeaderLine('not exist');
 
-        $this->assertInternalType('string', $headerLine, 'getHeaderLine must return a string');
-        $this->assertEmpty(
+        self::assertInternalType('string', $headerLine, 'getHeaderLine must return a string');
+        self::assertEmpty(
             $headerLine,
             'If the header does not appear in the message, this method MUST return an empty string'
         );
@@ -67,7 +67,7 @@ abstract class AbstractMessageTest extends \PHPUnit_Framework_TestCase
         $message = $this->classToTest;
         $body = $message->getBody();
 
-        $this->assertInstanceOf(
+        self::assertInstanceOf(
             StreamInterface::class,
             $body,
             'getBody must return instance of Psr\Http\Message\StreamInterface'
@@ -85,7 +85,7 @@ abstract class AbstractMessageTest extends \PHPUnit_Framework_TestCase
         $messageClone = clone $message;
         $newMessage = $message->withProtocolVersion($expectedVersion);
 
-        $this->assertEquals(
+        self::assertEquals(
             $expectedVersion,
             $newMessage->getProtocolVersion(),
             'getProtocolVersion does not match version set in withProtocolVersion'
@@ -116,8 +116,8 @@ abstract class AbstractMessageTest extends \PHPUnit_Framework_TestCase
 
         $newMessage = $message->withHeader($headerName, $headerValue);
 
-        $this->assertImmutable($messageClone, $message, $newMessage);
-        $this->assertEquals(
+        self::assertImmutable($messageClone, $message, $newMessage);
+        self::assertEquals(
             $expectedHeaderValue,
             $newMessage->getHeader($headerName),
             'getHeader does not match header set in withHeader'
@@ -137,8 +137,8 @@ abstract class AbstractMessageTest extends \PHPUnit_Framework_TestCase
         $messageClone = clone $message;
         $newMessage = $message->withAddedHeader($headerName, $headerValue);
 
-        $this->assertImmutable($messageClone, $message, $newMessage);
-        $this->assertEquals(
+        self::assertImmutable($messageClone, $message, $newMessage);
+        self::assertEquals(
             $expectedHeaderValue,
             $newMessage->getHeader($headerName),
             'getHeader does not match header set in withAddedHeader'
@@ -155,11 +155,11 @@ abstract class AbstractMessageTest extends \PHPUnit_Framework_TestCase
     {
         $message = $this->classToTest;
 
-        $this->assertFalse($message->hasHeader($headerName));
+        self::assertFalse($message->hasHeader($headerName));
 
         $newMessage = $message->withHeader($headerName, $headerValue);
 
-        $this->assertTrue($newMessage->hasHeader($headerName));
+        self::assertTrue($newMessage->hasHeader($headerName));
     }
 
     /**
@@ -175,7 +175,7 @@ abstract class AbstractMessageTest extends \PHPUnit_Framework_TestCase
         $message = $this->classToTest;
         $newMessage = $message->withHeader($headerName, $headerValue);
 
-        $this->assertEquals($expectedHeaderLine, $newMessage->getHeaderLine($headerName));
+        self::assertEquals($expectedHeaderLine, $newMessage->getHeaderLine($headerName));
     }
 
     /**
@@ -190,7 +190,7 @@ abstract class AbstractMessageTest extends \PHPUnit_Framework_TestCase
         $message = $this->classToTest;
         $newMessage = $message->withHeader($headerName, $headerValue);
 
-        $this->assertEquals([$headerName => $expectedHeaderValue], $newMessage->getHeaders());
+        self::assertEquals([$headerName => $expectedHeaderValue], $newMessage->getHeaders());
     }
 
     /**
@@ -205,13 +205,13 @@ abstract class AbstractMessageTest extends \PHPUnit_Framework_TestCase
         $messageWithHeader = $message->withHeader($headerName, $headerValue);
         $messageClone = clone $messageWithHeader;
 
-        $this->assertTrue($messageWithHeader->hasHeader($headerName));
+        self::assertTrue($messageWithHeader->hasHeader($headerName));
 
         $newMessage = $messageWithHeader->withoutHeader($headerName);
 
-        $this->assertImmutable($messageClone, $messageWithHeader, $newMessage);
-        $this->assertFalse($newMessage->hasHeader($headerName));
-        $this->assertEquals($message, $newMessage);
+        self::assertImmutable($messageClone, $messageWithHeader, $newMessage);
+        self::assertFalse($newMessage->hasHeader($headerName));
+        self::assertEquals($message, $newMessage);
     }
 
     public function validHeaderProvider()
@@ -232,8 +232,8 @@ abstract class AbstractMessageTest extends \PHPUnit_Framework_TestCase
         $expectedBody = $this->mock(StreamInterface::class);
         $newMessage = $message->withBody($expectedBody);
 
-        $this->assertImmutable($messageClone, $message, $newMessage);
-        $this->assertEquals(
+        self::assertImmutable($messageClone, $message, $newMessage);
+        self::assertEquals(
             $expectedBody,
             $newMessage->getBody(),
             'getBody does not match body set in withBody'
@@ -247,8 +247,8 @@ abstract class AbstractMessageTest extends \PHPUnit_Framework_TestCase
      */
     protected function assertValidHeaderValue($values)
     {
-        $this->assertInternalType('array', $values, 'header values MUST be an array of strings');
-        $this->assertContainsOnly('string', $values, true, 'MUST be an array of strings');
+        self::assertInternalType('array', $values, 'header values MUST be an array of strings');
+        self::assertContainsOnly('string', $values, true, 'MUST be an array of strings');
     }
 
     /**
@@ -258,7 +258,7 @@ abstract class AbstractMessageTest extends \PHPUnit_Framework_TestCase
      */
     protected function assertImmutable($messageClone, $message, $newMessage)
     {
-        $this->assertEquals($messageClone, $message, 'Original message must be immutable');
+        self::assertEquals($messageClone, $message, 'Original message must be immutable');
         Immutable::assertImmutable($message, $newMessage);
     }
 }

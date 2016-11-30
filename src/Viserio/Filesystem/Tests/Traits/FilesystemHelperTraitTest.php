@@ -42,18 +42,18 @@ declare(strict_types=1); return "pop"; ?>')->at($this->root);
 
         $pop = $this->trait->getRequire($file->url());
 
-        $this->assertSame('pop', $pop);
+        self::assertSame('pop', $pop);
     }
 
     public function testIsWritable()
     {
         $file = vfsStream::newFile('foo.txt', 0444)->withContent('foo')->at($this->root);
 
-        $this->assertFalse($this->trait->isWritable($file->url()));
+        self::assertFalse($this->trait->isWritable($file->url()));
 
         $file->chmod(0777);
 
-        $this->assertTrue($this->trait->isWritable($file->url()));
+        self::assertTrue($this->trait->isWritable($file->url()));
     }
 
     public function testIsFile()
@@ -62,7 +62,7 @@ declare(strict_types=1); return "pop"; ?>')->at($this->root);
         $dir = $this->root->getChild('assets');
         $file = vfsStream::newFile('foo.txt')->withContent('foo')->at($this->root);
 
-        $this->assertFalse($this->trait->isFile($dir->url()));
-        $this->assertTrue($this->trait->isFile($file->url()));
+        self::assertFalse($this->trait->isFile($dir->url()));
+        self::assertTrue($this->trait->isFile($file->url()));
     }
 }

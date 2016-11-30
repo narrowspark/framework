@@ -34,7 +34,7 @@ class CanDisplayFilterTest extends \PHPUnit_Framework_TestCase
 
         $displayers = (new CanDisplayFilter())->filter([$html, $json], $request, $exception, $exception, 500);
 
-        $this->assertSame([$json], $displayers);
+        self::assertSame([$json], $displayers);
     }
 
     public function testNoChange()
@@ -58,6 +58,6 @@ class CanDisplayFilterTest extends \PHPUnit_Framework_TestCase
 
         $displayers = (new CanDisplayFilter())->filter([$html, $json], $request, $exception, $exception, 500);
 
-        $this->assertSame([$html, $json], $displayers);
+        self::assertSame([$html, $json], $displayers);
     }
 }

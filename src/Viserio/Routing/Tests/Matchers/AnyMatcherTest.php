@@ -10,7 +10,7 @@ class AnyMatcherTest extends \PHPUnit_Framework_TestCase
     {
         $matcher = new AnyMatcher([0]);
 
-        $this->assertSame('segment/[test] !== \'\'', $matcher->getConditionExpression('segment/[test]'));
+        self::assertSame('segment/[test] !== \'\'', $matcher->getConditionExpression('segment/[test]'));
     }
 
     public function testAnyMergingParameterKeys()
@@ -19,6 +19,6 @@ class AnyMatcherTest extends \PHPUnit_Framework_TestCase
         $matcher2 = new AnyMatcher([12, 3]);
         $matcher1->mergeParameterKeys($matcher2);
 
-        $this->assertSame([123, 12, 3], $matcher1->getParameterKeys());
+        self::assertSame([123, 12, 3], $matcher1->getParameterKeys());
     }
 }

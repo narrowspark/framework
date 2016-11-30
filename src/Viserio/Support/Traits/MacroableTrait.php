@@ -15,29 +15,6 @@ trait MacroableTrait
     protected static $macros = [];
 
     /**
-     * Register a custom macro.
-     *
-     * @param string   $name
-     * @param callable $macro
-     */
-    public static function macro(string $name, callable $macro)
-    {
-        static::$macros[$name] = $macro;
-    }
-
-    /**
-     * Checks if macro is registered.
-     *
-     * @param string $name
-     *
-     * @return bool
-     */
-    public static function hasMacro(string $name): bool
-    {
-        return isset(static::$macros[$name]);
-    }
-
-    /**
      * Dynamically handle calls to the class.
      *
      * @param string $method
@@ -81,5 +58,28 @@ trait MacroableTrait
         }
 
         return call_user_func_array(static::$macros[$method], $parameters);
+    }
+
+    /**
+     * Register a custom macro.
+     *
+     * @param string   $name
+     * @param callable $macro
+     */
+    public static function macro(string $name, callable $macro)
+    {
+        static::$macros[$name] = $macro;
+    }
+
+    /**
+     * Checks if macro is registered.
+     *
+     * @param string $name
+     *
+     * @return bool
+     */
+    public static function hasMacro(string $name): bool
+    {
+        return isset(static::$macros[$name]);
     }
 }

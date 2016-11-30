@@ -23,11 +23,11 @@ class ViewServiceProviderTest extends \PHPUnit_Framework_TestCase
 
         $container->instance(ServerRequestInterface::class, $this->mock(ServerRequestInterface::class));
 
-        $this->assertInstanceOf(Factory::class, $container->get(Factory::class));
-        $this->assertInstanceOf(Factory::class, $container->get('view'));
-        $this->assertInstanceOf(ViewFinder::class, $container->get('view.finder'));
-        $this->assertInstanceOf(ViewFinder::class, $container->get(ViewFinder::class));
-        $this->assertInstanceOf(EngineResolver::class, $container->get('view.engine.resolver'));
-        $this->assertInstanceOf(EngineResolver::class, $container->get(EngineResolver::class));
+        self::assertInstanceOf(Factory::class, $container->get(Factory::class));
+        self::assertInstanceOf(Factory::class, $container->get('view'));
+        self::assertInstanceOf(ViewFinder::class, $container->get('view.finder'));
+        self::assertInstanceOf(ViewFinder::class, $container->get(ViewFinder::class));
+        self::assertInstanceOf(EngineResolver::class, $container->get('view.engine.resolver'));
+        self::assertInstanceOf(EngineResolver::class, $container->get(EngineResolver::class));
     }
 }

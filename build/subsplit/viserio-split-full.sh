@@ -18,7 +18,6 @@ git subsplit publish src/Viserio/Http:git@github.com:viserio/http.git
 git subsplit publish src/Viserio/HttpFactory:git@github.com:viserio/http-factory.git
 git subsplit publish src/Viserio/Log:git@github.com:viserio/log.git
 git subsplit publish src/Viserio/Mail:git@github.com:viserio/mail.git
-git subsplit publish src/Viserio/Middleware:git@github.com:viserio/middleware.git
 git subsplit publish src/Viserio/Pagination:git@github.com:viserio/pagination.git
 git subsplit publish src/Viserio/Parsers:git@github.com:viserio/parsers.git
 git subsplit publish src/Viserio/Pipeline:git@github.com:viserio/pipeline.git

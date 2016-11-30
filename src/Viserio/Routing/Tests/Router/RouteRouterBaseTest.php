@@ -42,8 +42,8 @@ abstract class RouteRouterBaseTest extends \PHPUnit_Framework_TestCase
             (new ResponseFactory())->createResponse()
         );
 
-        $this->assertEquals($expectedResult, (string) $actualResult->getBody());
-        $this->assertSame($status, $actualResult->getStatusCode());
+        self::assertEquals($expectedResult, (string) $actualResult->getBody());
+        self::assertSame($status, $actualResult->getStatusCode());
     }
 
     abstract protected function definitions($routes);

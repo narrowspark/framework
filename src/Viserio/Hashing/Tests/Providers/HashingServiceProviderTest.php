@@ -21,8 +21,8 @@ class HashingServiceProviderTest extends \PHPUnit_Framework_TestCase
             'key' => Key::createNewRandomKey(),
         ]);
 
-        $this->assertInstanceOf(Password::class, $container->get(Password::class));
-        $this->assertInstanceOf(Password::class, $container->get('password'));
+        self::assertInstanceOf(Password::class, $container->get(Password::class));
+        self::assertInstanceOf(Password::class, $container->get('password'));
     }
 
     public function testProviderWithoutConfigManager()
@@ -34,8 +34,8 @@ class HashingServiceProviderTest extends \PHPUnit_Framework_TestCase
             'key' => Key::createNewRandomKey(),
         ]);
 
-        $this->assertInstanceOf(Password::class, $container->get(Password::class));
-        $this->assertInstanceOf(Password::class, $container->get('password'));
+        self::assertInstanceOf(Password::class, $container->get(Password::class));
+        self::assertInstanceOf(Password::class, $container->get('password'));
     }
 
     public function testProviderWithoutConfigManagerAndNamespace()
@@ -47,7 +47,7 @@ class HashingServiceProviderTest extends \PHPUnit_Framework_TestCase
             'key' => Key::createNewRandomKey(),
         ]);
 
-        $this->assertInstanceOf(Password::class, $container->get(Password::class));
-        $this->assertInstanceOf(Password::class, $container->get('password'));
+        self::assertInstanceOf(Password::class, $container->get(Password::class));
+        self::assertInstanceOf(Password::class, $container->get('password'));
     }
 }

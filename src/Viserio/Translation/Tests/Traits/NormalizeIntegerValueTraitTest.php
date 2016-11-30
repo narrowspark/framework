@@ -14,7 +14,7 @@ class NormalizeIntegerValueTraitTest extends \PHPUnit_Framework_TestCase
     public function testNormalizeInteger($value, $expected)
     {
         $actual = $this->normalizeInteger($value);
-        $this->assertSame($expected, $actual);
+        self::assertSame($expected, $actual);
     }
 
     public function provideIsInteger()

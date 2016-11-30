@@ -22,7 +22,7 @@ class GridFSConnectorTest extends \PHPUnit_Framework_TestCase
                 'server' => 'mongodb://localhost:27017',
                 'database' => 'your-database',
             ]);
-            $this->assertInstanceOf(GridFSAdapter::class, $return);
+            self::assertInstanceOf(GridFSAdapter::class, $return);
         } catch (MongoConnectionException $e) {
             $this->markTestSkipped('No mongo serer running');
         }

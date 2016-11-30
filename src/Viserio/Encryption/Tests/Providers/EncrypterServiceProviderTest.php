@@ -22,8 +22,8 @@ class EncrypterServiceProviderTest extends \PHPUnit_Framework_TestCase
             'key' => $key->saveToAsciiSafeString(),
         ]);
 
-        $this->assertInstanceOf(Encrypter::class, $container->get(Encrypter::class));
-        $this->assertInstanceOf(Encrypter::class, $container->get('encrypter'));
+        self::assertInstanceOf(Encrypter::class, $container->get(Encrypter::class));
+        self::assertInstanceOf(Encrypter::class, $container->get('encrypter'));
     }
 
     public function testProviderWithoutConfigManager()
@@ -37,8 +37,8 @@ class EncrypterServiceProviderTest extends \PHPUnit_Framework_TestCase
             'key' => $key->saveToAsciiSafeString(),
         ]);
 
-        $this->assertInstanceOf(Encrypter::class, $container->get(Encrypter::class));
-        $this->assertInstanceOf(Encrypter::class, $container->get('encrypter'));
+        self::assertInstanceOf(Encrypter::class, $container->get(Encrypter::class));
+        self::assertInstanceOf(Encrypter::class, $container->get('encrypter'));
     }
 
     public function testProviderWithoutConfigManagerAndNamespace()
@@ -52,7 +52,7 @@ class EncrypterServiceProviderTest extends \PHPUnit_Framework_TestCase
             'key' => $key->saveToAsciiSafeString(),
         ]);
 
-        $this->assertInstanceOf(Encrypter::class, $container->get(Encrypter::class));
-        $this->assertInstanceOf(Encrypter::class, $container->get('encrypter'));
+        self::assertInstanceOf(Encrypter::class, $container->get(Encrypter::class));
+        self::assertInstanceOf(Encrypter::class, $container->get('encrypter'));
     }
 }

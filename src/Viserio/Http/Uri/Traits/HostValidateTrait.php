@@ -78,7 +78,7 @@ trait HostValidateTrait
             return idn_to_ascii($value);
         }, $rawLabels);
 
-        $this->assertValidHost($labels);
+        self::assertValidHost($labels);
         $this->isIdn = $rawLabels !== $labels;
 
         return array_reverse(array_map(function ($label) {
@@ -137,7 +137,7 @@ trait HostValidateTrait
             throw new InvalidArgumentException('Invalid Hostname, empty labels are not allowed');
         }
 
-        $this->assertLabelsCount($labels);
+        self::assertLabelsCount($labels);
         $this->isValidContent($labels);
     }
 

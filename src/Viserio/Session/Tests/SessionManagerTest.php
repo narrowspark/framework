@@ -3,12 +3,13 @@ declare(strict_types=1);
 namespace Viserio\Session\Tests;
 
 use Defuse\Crypto\Key;
+use Mockery as Mock;
 use Narrowspark\TestingHelper\ArrayContainer;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Cache\CacheManager;
 use Viserio\Contracts\Cache\Manager as CacheManagerContract;
-use Viserio\Contracts\Config\Manager as ConfigContract;
+use Viserio\Contracts\Config\Manager as ConfigManagerContract;
 use Viserio\Contracts\Cookie\QueueingFactory as JarContract;
 use Viserio\Contracts\Session\Store as StoreContract;
 use Viserio\Encryption\Encrypter;
@@ -25,7 +26,7 @@ class SessionManagerTest extends \PHPUnit_Framework_TestCase
         parent::setUp();
 
         $encrypter = new Encrypter(Key::createNewRandomKey());
-        $config = $this->mock(ConfigContract::class);
+        $config = $this->mock(ConfigManagerContract::class);
         $config->shouldReceive('get')
             ->with('cache.drivers', []);
         $config->shouldReceive('get')
@@ -38,6 +39,18 @@ class SessionManagerTest extends \PHPUnit_Framework_TestCase
         ]));
 
         $this->manager = $manager;
+    }
+
+    public function tearDown()
+    {
+        $this->manager = null;
+
+        parent::tearDown();
+
+        $this->allowMockingNonExistentMethods(true);
+
+        // Verify Mockery expectations.
+        Mock::close();
     }
 
     public function testCookieStore()
@@ -61,8 +74,8 @@ class SessionManagerTest extends \PHPUnit_Framework_TestCase
 
         $session->setRequestOnHandler($this->mock(ServerRequestInterface::class));
 
-        $this->assertInstanceOf(StoreContract::class, $session);
-        $this->assertTrue($session->handlerNeedsRequest());
+        self::assertInstanceOf(StoreContract::class, $session);
+        self::assertTrue($session->handlerNeedsRequest());
     }
 
     public function testArrayStore()
@@ -84,6 +97,6 @@ class SessionManagerTest extends \PHPUnit_Framework_TestCase
             ->andReturn('test');
         $session = $manager->driver('array');
 
-        $this->assertInstanceOf(StoreContract::class, $session);
+        self::assertInstanceOf(StoreContract::class, $session);
     }
 }

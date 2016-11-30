@@ -65,7 +65,7 @@ class CachedFactoryTest extends \PHPUnit_Framework_TestCase
             ],
         ]);
 
-        $this->assertInstanceOf(CacheInterface::class, $adapter);
+        self::assertInstanceOf(CacheInterface::class, $adapter);
     }
 
     public function testConnectionWithFilesystemManagerAndCacheManager()
@@ -91,6 +91,6 @@ class CachedFactoryTest extends \PHPUnit_Framework_TestCase
             ],
         ]);
 
-        $this->assertInstanceOf(CacheInterface::class, $adapter);
+        self::assertInstanceOf(CacheInterface::class, $adapter);
     }
 }

@@ -178,6 +178,6 @@ class RabbitMQQueueTest extends \PHPUnit_Framework_TestCase
 
         $result = $queue->pop();
 
-        $this->assertInstanceOf(RabbitMQJob::class, $result);
+        self::assertInstanceOf(RabbitMQJob::class, $result);
     }
 }

@@ -13,6 +13,6 @@ class EventsServiceProviderTest extends \PHPUnit_Framework_TestCase
         $container = new Container();
         $container->register(new EventsServiceProvider());
 
-        $this->assertInstanceOf(Dispatcher::class, $container->get(Dispatcher::class));
+        self::assertInstanceOf(Dispatcher::class, $container->get(Dispatcher::class));
     }
 }

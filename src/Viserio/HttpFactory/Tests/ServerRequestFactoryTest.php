@@ -87,7 +87,7 @@ class ServerRequestFactoryTest extends \PHPUnit_Framework_TestCase
         $_SERVER = $serverParams;
         $serverRequest = $this->factory->createServerRequest($_SERVER);
 
-        $this->assertEquals(new Uri($expected), $serverRequest->getUri());
+        self::assertEquals(new Uri($expected), $serverRequest->getUri());
     }
 
     public function testFromGlobals()
@@ -126,8 +126,8 @@ class ServerRequestFactoryTest extends \PHPUnit_Framework_TestCase
             'logged-in' => 'yes!',
         ];
         $_POST = [
-            'name' => 'Pesho',
-            'email' => 'pesho@example.com',
+            'name' => 'Narrowspark',
+            'email' => 'parrowspark@example.com',
         ];
         $_GET = [
             'id' => 10,
@@ -145,14 +145,41 @@ class ServerRequestFactoryTest extends \PHPUnit_Framework_TestCase
 
         $server = $this->factory->createServerRequest($_SERVER);
 
-        $this->assertEquals('POST', $server->getMethod());
-        $this->assertEquals(['Host' => ['www.narrowspark.com']], $server->getHeaders());
-        $this->assertEquals('', (string) $server->getBody());
-        $this->assertEquals('1.0', $server->getProtocolVersion());
-        $this->assertEquals($_COOKIE, $server->getCookieParams());
-        $this->assertEquals($_POST, $server->getParsedBody());
-        $this->assertEquals($_GET, $server->getQueryParams());
-        $this->assertEquals(
+        self::assertEquals('POST', $server->getMethod());
+        self::assertEquals([
+                'Accept' => [
+                    'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+                ],
+                'Accept-Charset' => [
+                    'ISO-8859-1,utf-8;q=0.7,*;q=0.7',
+                ],
+                'Accept-Encoding' => [
+                    'gzip,deflate',
+                ],
+                'Accept-Language' => [
+                    'en-gb,en;q=0.5',
+                ],
+                'Connection' => [
+                    'keep-alive',
+                ],
+                'Host' => [
+                    'www.narrowspark.com',
+                ],
+                'Referer' => [
+                    'http://previous.url.com',
+                ],
+                'User-Agent' => [
+                    'Mozilla/5.0 (Windows; U; Windows NT 6.0; en-GB; rv:1.9.2.6) Gecko/20100625 Firefox/3.6.6 ( .NET CLR 3.5.30729)',
+                ],
+            ],
+            $server->getHeaders()
+        );
+        self::assertEquals('', (string) $server->getBody());
+        self::assertEquals('1.0', $server->getProtocolVersion());
+        self::assertEquals($_COOKIE, $server->getCookieParams());
+        self::assertEquals($_POST, $server->getParsedBody());
+        self::assertEquals($_GET, $server->getQueryParams());
+        self::assertEquals(
             new Uri('http://www.narrowspark.com/doc/framwork.php?id=10&user=foo'),
             $server->getUri()
         );
@@ -167,6 +194,6 @@ class ServerRequestFactoryTest extends \PHPUnit_Framework_TestCase
             ),
         ];
 
-        $this->assertEquals($expectedFiles, $server->getUploadedFiles());
+        self::assertEquals($expectedFiles, $server->getUploadedFiles());
     }
 }

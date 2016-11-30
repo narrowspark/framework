@@ -26,11 +26,13 @@
     "require-dev": {
         "container-interop/service-provider"  : "^0.3",
         "mockery/mockery"                     : "^0.9",
-        "narrowspark/testing-helper"          : "^1.5",
+        "narrowspark/testing-helper"          : "^2.0",
         "phpunit/phpunit"                     : "^5.1",
+        "http-interop/http-middleware"        : "^0.3",
         "viserio/config"                      : "self.version",
         "viserio/container"                   : "self.version",
-        "viserio/encrypter"                   : "self.version"
+        "viserio/encrypter"                   : "self.version",
+        "viserio/http-factory"                : "self.version"
     },
     "autoload": {
         "psr-4": {
@@ -51,7 +53,6 @@
         "container-interop/service-provider"  : "Required to use service-provider (^0.3).",
         "viserio/config"                      : "Optional to use service-provider (self.version).",
         "viserio/encrypter"                   : "Required to use the EncryptCookies Middleware (self.version).",
-        "viserio/middleware"                  : "Required to use the Middleware (self.version).",
         "viserio/statical-proxy"              : "Required to use the proxy instances (self.version)."
     },
     "extra": {

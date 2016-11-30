@@ -36,9 +36,9 @@ class PipelineTest extends \PHPUnit_Framework_TestCase
                 return $piped;
             });
 
-        $this->assertEquals('foo', $result);
-        $this->assertEquals('foo', $_SERVER['__test.pipe.one']);
-        $this->assertEquals('foo', $_SERVER['__test.pipe.two']);
+        self::assertEquals('foo', $result);
+        self::assertEquals('foo', $_SERVER['__test.pipe.one']);
+        self::assertEquals('foo', $_SERVER['__test.pipe.two']);
 
         unset($_SERVER['__test.pipe.one'], $_SERVER['__test.pipe.two']);
     }
@@ -55,8 +55,8 @@ class PipelineTest extends \PHPUnit_Framework_TestCase
                 return $piped;
             });
 
-        $this->assertEquals('foo', $result);
-        $this->assertEquals($parameters, $_SERVER['__test.pipe.parameters']);
+        self::assertEquals('foo', $result);
+        self::assertEquals($parameters, $_SERVER['__test.pipe.parameters']);
 
         unset($_SERVER['__test.pipe.parameters']);
     }
@@ -72,7 +72,7 @@ class PipelineTest extends \PHPUnit_Framework_TestCase
                 return $piped;
             });
 
-        $this->assertEquals('data', $result);
+        self::assertEquals('data', $result);
     }
 
     public function testPipelineViaObject()
@@ -84,8 +84,8 @@ class PipelineTest extends \PHPUnit_Framework_TestCase
                 return $piped;
             });
 
-        $this->assertEquals('foo', $result);
-        $this->assertEquals('foo', $_SERVER['__test.pipe.one']);
+        self::assertEquals('foo', $result);
+        self::assertEquals('foo', $_SERVER['__test.pipe.one']);
 
         unset($_SERVER['__test.pipe.one']);
     }
@@ -101,8 +101,8 @@ class PipelineTest extends \PHPUnit_Framework_TestCase
                 return $piped;
             });
 
-        $this->assertEquals('foo', $result);
-        $this->assertEquals($parameters, $_SERVER['__test.pipe.parameters']);
+        self::assertEquals('foo', $result);
+        self::assertEquals($parameters, $_SERVER['__test.pipe.parameters']);
 
         unset($_SERVER['__test.pipe.one']);
     }

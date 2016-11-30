@@ -43,18 +43,18 @@ class EnvTest extends \PHPUnit_Framework_TestCase
 
     public function testGet()
     {
-        $this->assertTrue(Env::get('TEST_TRUE'));
-        $this->assertFalse(Env::get('NOT_SET', false));
-        $this->assertSame('test', Env::get('NOT_SET2', function () {
+        self::assertTrue(Env::get('TEST_TRUE'));
+        self::assertFalse(Env::get('NOT_SET', false));
+        self::assertSame('test', Env::get('NOT_SET2', function () {
             return 'test';
         }));
-        $this->assertFalse(Env::get('TEST_FALSE'));
-        $this->assertFalse(Env::get('TEST_FALSE_2'));
-        $this->assertSame(null, Env::get('TEST_NULL'));
-        $this->assertSame(25, Env::get('TEST_NUM'));
-        $this->assertSame('', Env::get('TEST_EMPTY'));
-        $this->assertSame('teststring', Env::get('TEST_NORMAL'));
-        $this->assertSame('teststring', Env::get('TEST_QUOTES'));
-        $this->assertSame('test', Env::get('TEST_BASE64'));
+        self::assertFalse(Env::get('TEST_FALSE'));
+        self::assertFalse(Env::get('TEST_FALSE_2'));
+        self::assertSame(null, Env::get('TEST_NULL'));
+        self::assertSame(25, Env::get('TEST_NUM'));
+        self::assertSame('', Env::get('TEST_EMPTY'));
+        self::assertSame('teststring', Env::get('TEST_NORMAL'));
+        self::assertSame('teststring', Env::get('TEST_QUOTES'));
+        self::assertSame('test', Env::get('TEST_BASE64'));
     }
 }

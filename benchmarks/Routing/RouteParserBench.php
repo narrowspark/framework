@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-namespace Narrowspark\Routing;
+namespace Narrowspark\Benchmark\Routing;
 
 use Benchmark;
 

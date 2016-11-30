@@ -12,7 +12,7 @@ class TachelhitTest extends \PHPUnit_Framework_TestCase
     public function testGetCategory($count, $expected)
     {
         $actual = (new Tachelhit())->category($count);
-        $this->assertEquals($expected, $this->intToString($actual));
+        self::assertEquals($expected, $this->intToString($actual));
     }
 
     public function category()

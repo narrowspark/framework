@@ -35,10 +35,10 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase
     {
         $ee = $this->dispatcher;
 
-        $this->assertFalse($ee->hasListeners(self::coreRequest));
-        $this->assertFalse($ee->hasListeners(self::coreException));
-        $this->assertFalse($ee->hasListeners(self::apiRequest));
-        $this->assertFalse($ee->hasListeners(self::apiException));
+        self::assertFalse($ee->hasListeners(self::coreRequest));
+        self::assertFalse($ee->hasListeners(self::coreException));
+        self::assertFalse($ee->hasListeners(self::apiRequest));
+        self::assertFalse($ee->hasListeners(self::apiException));
     }
 
     public function testListeners()
@@ -54,7 +54,7 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase
         $ee->attach('foo', $callback2, 200);
         $ee->getListeners('*.foo');
 
-        $this->assertEquals([$callback2, $callback1], $ee->getListeners('foo'));
+        self::assertEquals([$callback2, $callback1], $ee->getListeners('foo'));
     }
 
     public function testHandleEvent()
@@ -67,8 +67,8 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase
             $argResult = $arg;
         });
 
-        $this->assertTrue($ee->trigger('foo', ['bar']));
-        $this->assertEquals('bar', $argResult);
+        self::assertTrue($ee->trigger('foo', ['bar']));
+        self::assertEquals('bar', $argResult);
     }
 
     /**
@@ -88,8 +88,8 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase
             $argResult = 2;
         });
 
-        $this->assertFalse($ee->trigger('foo', ['bar']));
-        $this->assertEquals(1, $argResult);
+        self::assertFalse($ee->trigger('foo', ['bar']));
+        self::assertEquals(1, $argResult);
     }
 
     /**
@@ -111,8 +111,8 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase
             return false;
         }, 1);
 
-        $this->assertFalse($ee->trigger('foo', ['bar']));
-        $this->assertEquals(2, $argResult);
+        self::assertFalse($ee->trigger('foo', ['bar']));
+        self::assertEquals(2, $argResult);
     }
 
     /**
@@ -137,7 +137,7 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase
         });
         $ee->trigger('foo');
 
-        $this->assertEquals(['c', 'a', 'b', 'd'], $result);
+        self::assertEquals(['c', 'a', 'b', 'd'], $result);
     }
 
     public function testoff()
@@ -152,16 +152,16 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase
         $ee->attach('foo', $callBack);
         $ee->trigger('foo');
 
-        $this->assertTrue($result);
+        self::assertTrue($result);
 
         $result = false;
 
-        $this->assertFalse($ee->detach('foo', self::class));
-        $this->assertTrue($ee->detach('foo', $callBack));
+        self::assertFalse($ee->detach('foo', self::class));
+        self::assertTrue($ee->detach('foo', $callBack));
 
         $ee->trigger('foo');
 
-        $this->assertFalse($result);
+        self::assertFalse($result);
     }
 
     public function testRemoveUnknownListener()
@@ -176,15 +176,15 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase
         $ee->attach('foo', $callBack);
         $ee->trigger('foo');
 
-        $this->assertTrue($result);
+        self::assertTrue($result);
 
         $result = false;
 
-        $this->assertFalse($ee->detach('bar', $callBack));
+        self::assertFalse($ee->detach('bar', $callBack));
 
         $ee->trigger('foo');
 
-        $this->assertTrue($result);
+        self::assertTrue($result);
     }
 
     public function testRemoveListenerTwice()
@@ -199,16 +199,16 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase
         $ee->attach('foo', $callBack);
         $ee->trigger('foo');
 
-        $this->assertTrue($result);
+        self::assertTrue($result);
 
         $result = false;
 
-        $this->assertTrue($ee->detach('foo', $callBack));
-        $this->assertFalse($ee->detach('foo', $callBack));
+        self::assertTrue($ee->detach('foo', $callBack));
+        self::assertFalse($ee->detach('foo', $callBack));
 
         $ee->trigger('foo');
 
-        $this->assertFalse($result);
+        self::assertFalse($result);
     }
 
     public function testRemoveAllListeners()
@@ -223,14 +223,14 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase
         $ee->attach('foo', $callBack);
         $ee->trigger('foo');
 
-        $this->assertTrue($result);
+        self::assertTrue($result);
 
         $result = false;
 
         $ee->removeAllListeners('foo');
         $ee->trigger('foo');
 
-        $this->assertFalse($result);
+        self::assertFalse($result);
     }
 
     public function testRemoveAllListenersNoArg()
@@ -245,14 +245,14 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase
         $ee->attach('foo', $callBack);
         $ee->trigger('foo');
 
-        $this->assertTrue($result);
+        self::assertTrue($result);
 
         $result = false;
 
         $ee->removeAllListeners();
         $ee->trigger('foo');
 
-        $this->assertFalse($result);
+        self::assertFalse($result);
     }
 
     public function testOnce()
@@ -268,7 +268,7 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase
         $ee->trigger('foo');
         $ee->trigger('foo');
 
-        $this->assertEquals(1, $result);
+        self::assertEquals(1, $result);
     }
 
     /**
@@ -291,9 +291,9 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase
             return false;
         }, 1);
 
-        $this->assertFalse($ee->trigger('foo', ['bar']));
+        self::assertFalse($ee->trigger('foo', ['bar']));
 
-        $this->assertEquals(2, $argResult);
+        self::assertEquals(2, $argResult);
     }
 
     public function testRegisterSameListenerTwice()
@@ -310,7 +310,7 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase
         $ee->attach('foo', $callback);
         $ee->trigger('foo');
 
-        $this->assertEquals(2, $argResult);
+        self::assertEquals(2, $argResult);
     }
 
     public function testAddingAndRemovingWildcardListeners()
@@ -323,38 +323,38 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase
         $ee->attach('*.exception', [$this->listener, 'onException']);
         $ee->attach(self::coreRequest, [$this->listener, 'onCoreRequest']);
 
-        $this->assertNumberListenersAdded(3, self::coreRequest);
-        $this->assertNumberListenersAdded(3, self::coreException);
-        $this->assertNumberListenersAdded(1, self::apiRequest);
-        $this->assertNumberListenersAdded(2, self::apiException);
+        self::assertNumberListenersAdded(3, self::coreRequest);
+        self::assertNumberListenersAdded(3, self::coreException);
+        self::assertNumberListenersAdded(1, self::apiRequest);
+        self::assertNumberListenersAdded(2, self::apiException);
 
         $ee->detach('#', [$this->listener, 'onAny']);
 
-        $this->assertNumberListenersAdded(2, self::coreRequest);
-        $this->assertNumberListenersAdded(2, self::coreException);
-        $this->assertNumberListenersAdded(0, self::apiRequest);
-        $this->assertNumberListenersAdded(1, self::apiException);
+        self::assertNumberListenersAdded(2, self::coreRequest);
+        self::assertNumberListenersAdded(2, self::coreException);
+        self::assertNumberListenersAdded(0, self::apiRequest);
+        self::assertNumberListenersAdded(1, self::apiException);
 
         $ee->detach('core.*', [$this->listener, 'onCore']);
 
-        $this->assertNumberListenersAdded(1, self::coreRequest);
-        $this->assertNumberListenersAdded(1, self::coreException);
-        $this->assertNumberListenersAdded(0, self::apiRequest);
-        $this->assertNumberListenersAdded(1, self::apiException);
+        self::assertNumberListenersAdded(1, self::coreRequest);
+        self::assertNumberListenersAdded(1, self::coreException);
+        self::assertNumberListenersAdded(0, self::apiRequest);
+        self::assertNumberListenersAdded(1, self::apiException);
 
         $ee->detach('*.exception', [$this->listener, 'onException']);
 
-        $this->assertNumberListenersAdded(1, self::coreRequest);
-        $this->assertNumberListenersAdded(0, self::coreException);
-        $this->assertNumberListenersAdded(0, self::apiRequest);
-        $this->assertNumberListenersAdded(0, self::apiException);
+        self::assertNumberListenersAdded(1, self::coreRequest);
+        self::assertNumberListenersAdded(0, self::coreException);
+        self::assertNumberListenersAdded(0, self::apiRequest);
+        self::assertNumberListenersAdded(0, self::apiException);
 
         $ee->detach(self::coreRequest, [$this->listener, 'onCoreRequest']);
 
-        $this->assertNumberListenersAdded(0, self::coreRequest);
-        $this->assertNumberListenersAdded(0, self::coreException);
-        $this->assertNumberListenersAdded(0, self::apiRequest);
-        $this->assertNumberListenersAdded(0, self::apiException);
+        self::assertNumberListenersAdded(0, self::coreRequest);
+        self::assertNumberListenersAdded(0, self::coreException);
+        self::assertNumberListenersAdded(0, self::apiRequest);
+        self::assertNumberListenersAdded(0, self::apiException);
 
         $ee->detach('empty.*', '');
     }
@@ -365,17 +365,17 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase
 
         $ee->attach('#', [$this->listener, 'onAny']);
 
-        $this->assertTrue($ee->hasListeners(self::coreRequest));
-        $this->assertNumberListenersAdded(1, self::coreRequest);
+        self::assertTrue($ee->hasListeners(self::coreRequest));
+        self::assertNumberListenersAdded(1, self::coreRequest);
 
-        $this->assertTrue($ee->hasListeners(self::coreException));
-        $this->assertNumberListenersAdded(1, self::coreException);
+        self::assertTrue($ee->hasListeners(self::coreException));
+        self::assertNumberListenersAdded(1, self::coreException);
 
-        $this->assertTrue($ee->hasListeners(self::apiRequest));
-        $this->assertNumberListenersAdded(1, self::apiRequest);
+        self::assertTrue($ee->hasListeners(self::apiRequest));
+        self::assertNumberListenersAdded(1, self::apiRequest);
 
-        $this->assertTrue($ee->hasListeners(self::apiException));
-        $this->assertNumberListenersAdded(1, self::apiException);
+        self::assertTrue($ee->hasListeners(self::apiException));
+        self::assertNumberListenersAdded(1, self::apiException);
     }
 
     public function testAttachToUnsetSyncedEventsIfMatchRegex()
@@ -384,11 +384,11 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase
 
         $ee->attach('core.*', [$this->listener, 'onCore']);
 
-        $this->assertNumberListenersAdded(1, self::coreRequest);
+        self::assertNumberListenersAdded(1, self::coreRequest);
 
         $ee->attach('core.*', [$this->listener, 'onCore']);
 
-        $this->assertNumberListenersAdded(2, self::coreRequest);
+        self::assertNumberListenersAdded(2, self::coreRequest);
     }
 
     public function testTrigger()
@@ -405,10 +405,10 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase
         $ee->trigger(self::apiRequest);
         $ee->trigger(self::apiException);
 
-        $this->assertEquals(4, $this->listener->onAnyInvoked);
-        $this->assertEquals(2, $this->listener->onCoreInvoked);
-        $this->assertEquals(1, $this->listener->onCoreRequestInvoked);
-        $this->assertEquals(2, $this->listener->onExceptionInvoked);
+        self::assertEquals(4, $this->listener->onAnyInvoked);
+        self::assertEquals(2, $this->listener->onCoreInvoked);
+        self::assertEquals(1, $this->listener->onCoreRequestInvoked);
+        self::assertEquals(2, $this->listener->onExceptionInvoked);
     }
 
     public function testLazyListenerInitializatiattach()
@@ -424,7 +424,7 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase
         $ee = new Dispatcher(new ArrayContainer([]));
         $ee->attach('foo', $listenerProvider);
 
-        $this->assertEquals(
+        self::assertEquals(
             0,
             $listenerProviderInvoked,
             'The listener provider should not be invoked until the listener is requested'
@@ -432,15 +432,15 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase
 
         $ee->trigger('foo');
 
-        $this->assertEquals([$listenerProvider], $ee->getListeners('foo'));
-        $this->assertEquals(
+        self::assertEquals([$listenerProvider], $ee->getListeners('foo'));
+        self::assertEquals(
             1,
             $listenerProviderInvoked,
             'The listener provider should be invoked when the listener is requested'
         );
 
-        $this->assertEquals([$listenerProvider], $ee->getListeners('foo'));
-        $this->assertEquals(1, $listenerProviderInvoked, 'The listener provider should only be invoked once');
+        self::assertEquals([$listenerProvider], $ee->getListeners('foo'));
+        self::assertEquals(1, $listenerProviderInvoked, 'The listener provider should only be invoked once');
     }
 
     /**
@@ -454,6 +454,6 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase
     {
         $ee = $this->dispatcher;
 
-        return $this->assertEquals($expected, count($ee->getListeners($eventName)));
+        return self::assertEquals($expected, count($ee->getListeners($eventName)));
     }
 }

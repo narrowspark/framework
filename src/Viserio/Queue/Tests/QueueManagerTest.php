@@ -33,8 +33,8 @@ class QueueManagerTest extends \PHPUnit_Framework_TestCase
 
         $connection = $manager->connection('testqueue');
 
-        $this->assertInstanceOf(ContainerInteropInterface::class, $connection->getContainer());
-        $this->assertInstanceOf(EncrypterContract::class, $connection->getEncrypter());
+        self::assertInstanceOf(ContainerInteropInterface::class, $connection->getContainer());
+        self::assertInstanceOf(EncrypterContract::class, $connection->getEncrypter());
     }
 
     public function testSetAndGetEncrypter()
@@ -47,10 +47,10 @@ class QueueManagerTest extends \PHPUnit_Framework_TestCase
             $this->mock(EncrypterContract::class)
         );
 
-        $this->assertInstanceOf(EncrypterContract::class, $manager->getEncrypter());
+        self::assertInstanceOf(EncrypterContract::class, $manager->getEncrypter());
 
         $manager->setEncrypter($this->mock(EncrypterContract::class));
 
-        $this->assertInstanceOf(EncrypterContract::class, $manager->getEncrypter());
+        self::assertInstanceOf(EncrypterContract::class, $manager->getEncrypter());
     }
 }

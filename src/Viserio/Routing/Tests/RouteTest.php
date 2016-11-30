@@ -13,81 +13,81 @@ class RouteTest extends \PHPUnit_Framework_TestCase
     {
         $route = new Route('GET', '/test', ['uses' => Controller::class . '::string']);
 
-        $this->assertSame(['GET', 'HEAD'], $route->getMethods());
+        self::assertSame(['GET', 'HEAD'], $route->getMethods());
 
         $route = new Route('PUT', '/test', ['uses' => Controller::class . '::string']);
 
-        $this->assertSame(['PUT'], $route->getMethods());
+        self::assertSame(['PUT'], $route->getMethods());
 
         $route = new Route(['GET', 'POST'], '/test', ['uses' => Controller::class . '::string']);
 
-        $this->assertSame(['GET', 'POST', 'HEAD'], $route->getMethods());
+        self::assertSame(['GET', 'POST', 'HEAD'], $route->getMethods());
     }
 
     public function testGetDomain()
     {
         $route = new Route('GET', '/test', ['domain' => 'test.com']);
 
-        $this->assertSame('test.com', $route->getDomain());
+        self::assertSame('test.com', $route->getDomain());
 
         $route = new Route('GET', '/test', ['domain' => 'http://test.com']);
 
-        $this->assertSame('test.com', $route->getDomain());
+        self::assertSame('test.com', $route->getDomain());
 
         $route = new Route('GET', '/test', ['domain' => 'https://test.com']);
 
-        $this->assertSame('test.com', $route->getDomain());
+        self::assertSame('test.com', $route->getDomain());
     }
 
     public function testGetAndSetUri()
     {
         $route = new Route('GET', '/test', ['domain' => 'test.com']);
 
-        $this->assertSame('/test', $route->getUri());
+        self::assertSame('/test', $route->getUri());
     }
 
     public function testGetAndSetName()
     {
         $route = new Route('GET', '/test', ['as' => 'test']);
 
-        $this->assertSame('test', $route->getName());
+        self::assertSame('test', $route->getName());
 
         $route->setName('foo');
 
-        $this->assertSame('testfoo', $route->getName());
+        self::assertSame('testfoo', $route->getName());
 
         $route = new Route('GET', '/test', null);
         $route->setName('test');
 
-        $this->assertSame('test', $route->getName());
+        self::assertSame('test', $route->getName());
     }
 
     public function testHttpAndHttps()
     {
         $route = new Route('GET', '/test', ['http']);
 
-        $this->assertTrue($route->isHttpOnly());
+        self::assertTrue($route->isHttpOnly());
 
         $route = new Route('GET', '/test', ['https']);
 
-        $this->assertTrue($route->isHttpsOnly());
+        self::assertTrue($route->isHttpsOnly());
     }
 
     public function testSetAndGetPrefix()
     {
         $route = new Route('GET', '/test', ['prefix' => 'test']);
 
-        $this->assertSame('test', $route->getPrefix());
-        $this->assertSame('test/test', $route->getUri());
+        self::assertSame('test', $route->getPrefix());
+        self::assertSame('test/test', $route->getUri());
 
         $route = new Route('GET', '/test', null);
         $route->addPrefix('foo');
 
-        $this->assertSame('foo/test', $route->getUri());
+        self::assertSame('foo/test', $route->getUri());
 
         $route->addPrefix('test');
 
-        $this->assertSame('test/foo/test', $route->getUri());
+        self::assertSame('test/foo/test', $route->getUri());
     }
 
     public function testWhere()
@@ -97,8 +97,8 @@ class RouteTest extends \PHPUnit_Framework_TestCase
 
         $segments = $route->getSegments();
 
-        $this->assertEquals(new ParameterSegment('param1', '/^(.+)$/'), $segments[1]);
-        $this->assertEquals(new ParameterSegment('param2', '/^(.+)$/'), $segments[2]);
+        self::assertEquals(new ParameterSegment('param1', '/^(.+)$/'), $segments[1]);
+        self::assertEquals(new ParameterSegment('param2', '/^(.+)$/'), $segments[2]);
     }
 
     public function testParametersFunctions()
@@ -107,14 +107,14 @@ class RouteTest extends \PHPUnit_Framework_TestCase
         $route->setParameter('test1', 'test1');
         $route->setParameter('test2', 'test2');
 
-        $this->assertTrue($route->hasParameters());
-        $this->assertTrue($route->hasParameter('test1'));
-        $this->assertSame(['test1' => 'test1', 'test2' => 'test2'], $route->getParameters());
-        $this->assertSame('test1', $route->getParameter('test1'));
+        self::assertTrue($route->hasParameters());
+        self::assertTrue($route->hasParameter('test1'));
+        self::assertSame(['test1' => 'test1', 'test2' => 'test2'], $route->getParameters());
+        self::assertSame('test1', $route->getParameter('test1'));
 
         $route->forgetParameter('test1');
 
-        $this->assertFalse($route->hasParameter('test1'));
+        self::assertFalse($route->hasParameter('test1'));
     }
 
     public function testSetAndGetAction()
@@ -125,14 +125,14 @@ class RouteTest extends \PHPUnit_Framework_TestCase
             'controller' => 'routeController',
         ]);
 
-        $this->assertSame('test.com', $route->getDomain());
-        $this->assertTrue(is_array($route->getAction()));
-        $this->assertSame('routeController', $route->getActionName());
+        self::assertSame('test.com', $route->getDomain());
+        self::assertTrue(is_array($route->getAction()));
+        self::assertSame('routeController', $route->getActionName());
 
         $route->setAction([
             'controller' => null,
         ]);
 
-        $this->assertSame('Closure', $route->getActionName());
+        self::assertSame('Closure', $route->getActionName());
     }
 }

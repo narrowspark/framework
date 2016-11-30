@@ -25,78 +25,78 @@ class ParserTest extends \PHPUnit_Framework_TestCase
 
     public function testParserEmptyData()
     {
-        $this->assertEquals([], $this->parser->parse(''));
+        self::assertEquals([], $this->parser->parse(''));
     }
 
     public function testGetParser()
     {
-        $this->assertInstanceOf(INI::class, $this->parser->getParser('ini'));
-        $this->assertInstanceOf(JSON::class, $this->parser->getParser('json'));
-        $this->assertInstanceOf(JSON::class, $this->parser->getParser('application/json'));
-        $this->assertInstanceOf(JSON::class, $this->parser->getParser('application/x-javascript'));
-        $this->assertInstanceOf(JSON::class, $this->parser->getParser('text/javascript'));
-        $this->assertInstanceOf(JSON::class, $this->parser->getParser('text/x-javascript'));
-        $this->assertInstanceOf(JSON::class, $this->parser->getParser('text/x-json'));
-        $this->assertInstanceOf(PHP::class, $this->parser->getParser('php'));
-        $this->assertInstanceOf(Serialize::class, $this->parser->getParser('application/vnd.php.serialized'));
-        $this->assertInstanceOf(QueryStr::class, $this->parser->getParser('application/x-www-form-urlencoded'));
-        $this->assertInstanceOf(TOML::class, $this->parser->getParser('toml'));
-        $this->assertInstanceOf(XML::class, $this->parser->getParser('xml'));
-        $this->assertInstanceOf(XML::class, $this->parser->getParser('application/xml'));
-        $this->assertInstanceOf(XML::class, $this->parser->getParser('text/xml'));
-        $this->assertInstanceOf(YAML::class, $this->parser->getParser('yaml'));
-        $this->assertInstanceOf(YAML::class, $this->parser->getParser('text/yaml'));
-        $this->assertInstanceOf(YAML::class, $this->parser->getParser('text/x-yaml'));
-        $this->assertInstanceOf(YAML::class, $this->parser->getParser('application/yaml'));
-        $this->assertInstanceOf(YAML::class, $this->parser->getParser('application/x-yaml'));
+        self::assertInstanceOf(INI::class, $this->parser->getParser('ini'));
+        self::assertInstanceOf(JSON::class, $this->parser->getParser('json'));
+        self::assertInstanceOf(JSON::class, $this->parser->getParser('application/json'));
+        self::assertInstanceOf(JSON::class, $this->parser->getParser('application/x-javascript'));
+        self::assertInstanceOf(JSON::class, $this->parser->getParser('text/javascript'));
+        self::assertInstanceOf(JSON::class, $this->parser->getParser('text/x-javascript'));
+        self::assertInstanceOf(JSON::class, $this->parser->getParser('text/x-json'));
+        self::assertInstanceOf(PHP::class, $this->parser->getParser('php'));
+        self::assertInstanceOf(Serialize::class, $this->parser->getParser('application/vnd.php.serialized'));
+        self::assertInstanceOf(QueryStr::class, $this->parser->getParser('application/x-www-form-urlencoded'));
+        self::assertInstanceOf(TOML::class, $this->parser->getParser('toml'));
+        self::assertInstanceOf(XML::class, $this->parser->getParser('xml'));
+        self::assertInstanceOf(XML::class, $this->parser->getParser('application/xml'));
+        self::assertInstanceOf(XML::class, $this->parser->getParser('text/xml'));
+        self::assertInstanceOf(YAML::class, $this->parser->getParser('yaml'));
+        self::assertInstanceOf(YAML::class, $this->parser->getParser('text/yaml'));
+        self::assertInstanceOf(YAML::class, $this->parser->getParser('text/x-yaml'));
+        self::assertInstanceOf(YAML::class, $this->parser->getParser('application/yaml'));
+        self::assertInstanceOf(YAML::class, $this->parser->getParser('application/x-yaml'));
     }
 
     public function testGetFormat()
     {
         $_SERVER['HTTP_CONTENT_TYPE'] = 'application/json';
-        $this->assertEquals('application/json', $this->parser->getFormat());
+        self::assertEquals('application/json', $this->parser->getFormat());
         $_SERVER['HTTP_CONTENT_TYPE'] = 'application/x-javascript';
-        $this->assertEquals('application/x-javascript', $this->parser->getFormat());
+        self::assertEquals('application/x-javascript', $this->parser->getFormat());
         $_SERVER['HTTP_CONTENT_TYPE'] = 'text/javascript';
-        $this->assertEquals('text/javascript', $this->parser->getFormat());
+        self::assertEquals('text/javascript', $this->parser->getFormat());
         $_SERVER['HTTP_CONTENT_TYPE'] = 'text/x-javascript';
-        $this->assertEquals('text/x-javascript', $this->parser->getFormat());
+        self::assertEquals('text/x-javascript', $this->parser->getFormat());
         $_SERVER['HTTP_CONTENT_TYPE'] = 'text/x-json';
-        $this->assertEquals('text/x-json', $this->parser->getFormat());
+        self::assertEquals('text/x-json', $this->parser->getFormat());
 
         $_SERVER['HTTP_CONTENT_TYPE'] = 'application/x-www-form-urlencoded';
-        $this->assertEquals('application/x-www-form-urlencoded', $this->parser->getFormat());
+        self::assertEquals('application/x-www-form-urlencoded', $this->parser->getFormat());
 
         $_SERVER['HTTP_CONTENT_TYPE'] = 'application/vnd.php.serialized';
-        $this->assertEquals('application/vnd.php.serialized', $this->parser->getFormat());
+        self::assertEquals('application/vnd.php.serialized', $this->parser->getFormat());
 
         $_SERVER['HTTP_CONTENT_TYPE'] = 'application/xml';
-        $this->assertEquals('application/xml', $this->parser->getFormat());
+        self::assertEquals('application/xml', $this->parser->getFormat());
         $_SERVER['HTTP_CONTENT_TYPE'] = 'application/xml; charset=utf8';
-        $this->assertEquals('application/xml; charset=utf8', $this->parser->getFormat());
+        self::assertEquals('application/xml; charset=utf8', $this->parser->getFormat());
         $_SERVER['HTTP_CONTENT_TYPE'] = 'charset=utf8; application/xml';
-        $this->assertEquals('charset=utf8; application/xml', $this->parser->getFormat());
+        self::assertEquals('charset=utf8; application/xml', $this->parser->getFormat());
         $_SERVER['HTTP_CONTENT_TYPE'] = 'APPLICATION/XML';
-        $this->assertEquals('APPLICATION/XML', $this->parser->getFormat());
+        self::assertEquals('APPLICATION/XML', $this->parser->getFormat());
         $_SERVER['HTTP_CONTENT_TYPE'] = 'text/xml';
-        $this->assertEquals('text/xml', $this->parser->getFormat());
+        self::assertEquals('text/xml', $this->parser->getFormat());
 
         $_SERVER['HTTP_CONTENT_TYPE'] = 'text/yaml';
-        $this->assertEquals('text/yaml', $this->parser->getFormat());
+        self::assertEquals('text/yaml', $this->parser->getFormat());
         $_SERVER['HTTP_CONTENT_TYPE'] = 'text/x-yaml';
-        $this->assertEquals('text/x-yaml', $this->parser->getFormat());
+        self::assertEquals('text/x-yaml', $this->parser->getFormat());
         $_SERVER['HTTP_CONTENT_TYPE'] = 'application/yaml';
-        $this->assertEquals('application/yaml', $this->parser->getFormat());
+        self::assertEquals('application/yaml', $this->parser->getFormat());
         $_SERVER['HTTP_CONTENT_TYPE'] = 'application/x-yaml';
-        $this->assertEquals('application/x-yaml', $this->parser->getFormat());
+        self::assertEquals('application/x-yaml', $this->parser->getFormat());
 
         $_SERVER['HTTP_CONTENT_TYPE'] = 'application/msgpack';
-        $this->assertEquals('application/msgpack', $this->parser->getFormat());
+        self::assertEquals('application/msgpack', $this->parser->getFormat());
         $_SERVER['HTTP_CONTENT_TYPE'] = 'application/x-msgpack';
-        $this->assertEquals('application/x-msgpack', $this->parser->getFormat());
+        self::assertEquals('application/x-msgpack', $this->parser->getFormat());
 
         $_SERVER['HTTP_CONTENT_TYPE'] = 'application/bson';
-        $this->assertEquals('application/bson', $this->parser->getFormat());
+        self::assertEquals('application/bson', $this->parser->getFormat());
 
         unset($_SERVER['HTTP_CONTENT_TYPE']);
     }

@@ -23,11 +23,11 @@ class ViewFinderTest extends \PHPUnit_Framework_TestCase
             ->with($path)
             ->andReturn(true);
 
-        $this->assertEquals(
+        self::assertEquals(
             $path,
             $finder->find('foo')['path']
         );
-        $this->assertEquals(
+        self::assertEquals(
             $path,
             $finder->find('foo')['path']
         );
@@ -50,7 +50,7 @@ class ViewFinderTest extends \PHPUnit_Framework_TestCase
             ->with($path2)
             ->andReturn(false);
 
-        $this->assertEquals(
+        self::assertEquals(
             $path,
             $finder->find('foo')['path']
         );
@@ -80,7 +80,7 @@ class ViewFinderTest extends \PHPUnit_Framework_TestCase
             ->with($path2)
             ->andReturn(true);
 
-        $this->assertEquals(
+        self::assertEquals(
             $path2,
             $finder->find('foo')['path']
         );
@@ -101,7 +101,7 @@ class ViewFinderTest extends \PHPUnit_Framework_TestCase
             ->with($path)
             ->andReturn(true);
 
-        $this->assertEquals(
+        self::assertEquals(
             $path,
             $finder->find('foo::bar.baz')['path']
         );
@@ -122,11 +122,11 @@ class ViewFinderTest extends \PHPUnit_Framework_TestCase
             ->with($path)
             ->andReturn(true);
 
-        $this->assertEquals(
+        self::assertEquals(
             $path,
             $finder->find('foo::bar.baz')['path']
         );
-        $this->assertEquals(
+        self::assertEquals(
             self::normalizeDirectorySeparator('bar\baz.php'),
             self::normalizeDirectorySeparator($finder->find('foo::bar.baz')['name'])
         );
@@ -166,7 +166,7 @@ class ViewFinderTest extends \PHPUnit_Framework_TestCase
             ->with($path2)
             ->andReturn(true);
 
-        $this->assertEquals(
+        self::assertEquals(
             $path2,
             $finder->find('foo::bar.baz')['path']
         );
@@ -177,7 +177,7 @@ class ViewFinderTest extends \PHPUnit_Framework_TestCase
         $finder = $this->getFinder();
         $finder->setPaths(['test', 'foo']);
 
-        $this->assertCount(2, $finder->getPaths());
+        self::assertCount(2, $finder->getPaths());
     }
 
     /**
@@ -215,7 +215,7 @@ class ViewFinderTest extends \PHPUnit_Framework_TestCase
             ->with($path)
             ->andReturn(true);
 
-        $this->assertEquals(
+        self::assertEquals(
             $path,
             $finder->find('foo')['path']
         );
@@ -249,7 +249,7 @@ class ViewFinderTest extends \PHPUnit_Framework_TestCase
         $finder->addExtension('baz');
         $extensions = $finder->getExtensions();
 
-        $this->assertEquals('baz', reset($extensions));
+        self::assertEquals('baz', reset($extensions));
     }
 
     public function testAddingExtensionsReplacesOldOnes()
@@ -258,7 +258,7 @@ class ViewFinderTest extends \PHPUnit_Framework_TestCase
         $finder->addExtension('baz');
         $finder->addExtension('baz');
 
-        $this->assertCount(3, $finder->getExtensions());
+        self::assertCount(3, $finder->getExtensions());
     }
 
     public function testPrependNamespace()
@@ -268,28 +268,28 @@ class ViewFinderTest extends \PHPUnit_Framework_TestCase
         $finder->prependNamespace('testb', 'baz');
         $finder->prependNamespace('test', 'baa');
 
-        $this->assertCount(2, $finder->getHints());
+        self::assertCount(2, $finder->getHints());
     }
 
     public function testPassingViewWithHintReturnsTrue()
     {
         $finder = $this->getFinder();
 
-        $this->assertTrue($finder->hasHintInformation('hint::foo.bar'));
+        self::assertTrue($finder->hasHintInformation('hint::foo.bar'));
     }
 
     public function testPassingViewWithoutHintReturnsFalse()
     {
         $finder = $this->getFinder();
 
-        $this->assertFalse($finder->hasHintInformation('foo.bar'));
+        self::assertFalse($finder->hasHintInformation('foo.bar'));
     }
 
     public function testPassingViewWithFalseHintReturnsFalse()
     {
         $finder = $this->getFinder();
 
-        $this->assertFalse($finder->hasHintInformation('::foo.bar'));
+        self::assertFalse($finder->hasHintInformation('::foo.bar'));
     }
 
     public function testPrependLocation()
@@ -297,7 +297,7 @@ class ViewFinderTest extends \PHPUnit_Framework_TestCase
         $finder = $this->getFinder();
         $finder->prependLocation('test');
 
-        $this->assertSame(['test', $this->getPath()], $finder->getPaths());
+        self::assertSame(['test', $this->getPath()], $finder->getPaths());
     }
 
     protected function getPath()

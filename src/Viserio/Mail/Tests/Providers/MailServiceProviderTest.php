@@ -42,11 +42,11 @@ class MailServiceProviderTest extends \PHPUnit_Framework_TestCase
             ],
         ]);
 
-        $this->assertInstanceOf(MailerContract::class, $container->get(MailerContract::class));
-        $this->assertInstanceOf(MailerContract::class, $container->get(Mailer::class));
-        $this->assertInstanceOf(MailerContract::class, $container->get('mailer'));
-        $this->assertInstanceOf(TransportManager::class, $container->get(TransportManager::class));
-        $this->assertInstanceOf(Swift_Mailer::class, $container->get(Swift_Mailer::class));
+        self::assertInstanceOf(MailerContract::class, $container->get(MailerContract::class));
+        self::assertInstanceOf(MailerContract::class, $container->get(Mailer::class));
+        self::assertInstanceOf(MailerContract::class, $container->get('mailer'));
+        self::assertInstanceOf(TransportManager::class, $container->get(TransportManager::class));
+        self::assertInstanceOf(Swift_Mailer::class, $container->get(Swift_Mailer::class));
     }
 
     public function testProviderWithQueue()
@@ -65,8 +65,8 @@ class MailServiceProviderTest extends \PHPUnit_Framework_TestCase
         ]]);
         $container->instance(QueueContract::class, $this->getMockBuilder(QueueContract::class)->getMock());
 
-        $this->assertInstanceOf(QueueMailer::class, $container->get(MailerContract::class));
-        $this->assertInstanceOf(QueueMailer::class, $container->get(Mailer::class));
-        $this->assertInstanceOf(QueueMailer::class, $container->get('mailer'));
+        self::assertInstanceOf(QueueMailer::class, $container->get(MailerContract::class));
+        self::assertInstanceOf(QueueMailer::class, $container->get(Mailer::class));
+        self::assertInstanceOf(QueueMailer::class, $container->get('mailer'));
     }
 }

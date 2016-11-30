@@ -20,8 +20,8 @@ class QueryStrTest extends \PHPUnit_Framework_TestCase
     {
         $parsed = $this->parser->parse('status=123&message=hello world');
 
-        $this->assertTrue(is_array($parsed));
-        $this->assertSame(['status' => '123', 'message' => 'hello world'], $parsed);
+        self::assertTrue(is_array($parsed));
+        self::assertSame(['status' => '123', 'message' => 'hello world'], $parsed);
     }
 
     public function testDump()
@@ -30,6 +30,6 @@ class QueryStrTest extends \PHPUnit_Framework_TestCase
         $payload = http_build_query($expected);
         $dump = $this->parser->dump($expected);
 
-        $this->assertEquals($payload, $dump);
+        self::assertEquals($payload, $dump);
     }
 }

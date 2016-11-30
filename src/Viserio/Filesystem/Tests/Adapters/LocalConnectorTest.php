@@ -13,7 +13,7 @@ class LocalConnectorTest extends \PHPUnit_Framework_TestCase
 
         $return = $connector->connect(['path' => __DIR__]);
 
-        $this->assertInstanceOf(Local::class, $return);
+        self::assertInstanceOf(Local::class, $return);
     }
 
     public function testConnectWithPrefix()
@@ -22,7 +22,7 @@ class LocalConnectorTest extends \PHPUnit_Framework_TestCase
 
         $return = $connector->connect(['path' => __DIR__, 'prefix' => 'your-prefix']);
 
-        $this->assertInstanceOf(Local::class, $return);
+        self::assertInstanceOf(Local::class, $return);
     }
 
     /**

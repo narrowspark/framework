@@ -31,12 +31,12 @@ class PhpInputStreamTest extends \PHPUnit_Framework_TestCase
     {
         $content = $this->getFileContents();
 
-        $this->assertEquals($content, $test, $message);
+        self::assertEquals($content, $test, $message);
     }
 
     public function testStreamIsNeverWritable()
     {
-        $this->assertFalse($this->stream->isWritable());
+        self::assertFalse($this->stream->isWritable());
     }
 
     public function testCanReadStreamIteratively()
@@ -47,7 +47,7 @@ class PhpInputStreamTest extends \PHPUnit_Framework_TestCase
             $body .= $this->stream->read(128);
         }
 
-        $this->assertStreamContents($body);
+        self::assertStreamContents($body);
     }
 
     public function testGetContentsReturnsRemainingContentsOfStream()
@@ -56,14 +56,14 @@ class PhpInputStreamTest extends \PHPUnit_Framework_TestCase
         $remainder = $this->stream->getContents();
         $contents = $this->getFileContents();
 
-        $this->assertEquals(substr($contents, 128), $remainder);
+        self::assertEquals(substr($contents, 128), $remainder);
     }
 
     public function testCastingToStringReturnsFullContentsRegardlesOfPriorReads()
     {
         $start = $this->stream->read(128);
 
-        $this->assertStreamContents($this->stream->__toString());
+        self::assertStreamContents($this->stream->__toString());
     }
 
     public function testMultipleCastsToStringReturnSameContentsEvenIfReadsOccur()
@@ -72,6 +72,6 @@ class PhpInputStreamTest extends \PHPUnit_Framework_TestCase
         $read = $this->stream->read(128);
         $second = (string) $this->stream;
 
-        $this->assertSame($first, $second);
+        self::assertSame($first, $second);
     }
 }

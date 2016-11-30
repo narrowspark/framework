@@ -147,7 +147,7 @@ class QueueMailerTest extends \PHPUnit_Framework_TestCase
         $mailer->send('foo', ['data'], function ($m) {
         });
 
-        $this->assertEquals(['info@narrowspark.de'], $mailer->failures());
+        self::assertEquals(['info@narrowspark.de'], $mailer->failures());
     }
 
     protected function setSwiftMailer($mailer)

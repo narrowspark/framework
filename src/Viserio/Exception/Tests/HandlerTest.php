@@ -56,7 +56,7 @@ class HandlerTest extends \PHPUnit_Framework_TestCase
         $handler->addDisplayer(new JsonDisplayer($info));
         $handler->addDisplayer(new WhoopsDisplayer($info));
 
-        $this->assertSame(3, count($handler->getDisplayers()));
+        self::assertSame(3, count($handler->getDisplayers()));
     }
 
     public function testAddAndGetTransformer()
@@ -66,7 +66,7 @@ class HandlerTest extends \PHPUnit_Framework_TestCase
         $handler->addTransformer(new CommandLineTransformer());
         $handler->addTransformer(new CommandLineTransformer());
 
-        $this->assertSame(2, count($handler->getTransformers()));
+        self::assertSame(2, count($handler->getTransformers()));
     }
 
     public function testAddAndGetFilter()
@@ -76,7 +76,7 @@ class HandlerTest extends \PHPUnit_Framework_TestCase
         $handler->addFilter(new VerboseFilter(true));
         $handler->addFilter(new VerboseFilter(true));
 
-        $this->assertSame(3, count($handler->getFilters()));
+        self::assertSame(3, count($handler->getFilters()));
     }
 
     public function testReportError($value = '')
@@ -167,7 +167,7 @@ class HandlerTest extends \PHPUnit_Framework_TestCase
         try {
             $handler->handleError(E_PARSE, 'test', '', 0, null);
         } catch (ErrorException $e) {
-            $this->assertInstanceOf(ErrorException::class, $e);
+            self::assertInstanceOf(ErrorException::class, $e);
         }
     }
 }

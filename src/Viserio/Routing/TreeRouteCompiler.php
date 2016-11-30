@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Routing;
 
+use Viserio\Contracts\Routing\Router as RouterContract;
 use Viserio\Routing\Generator\ChildrenNodeCollection;
 use Viserio\Routing\Generator\MatchedRouteDataMap;
 use Viserio\Routing\Generator\RouteTreeBuilder;
@@ -242,7 +243,7 @@ PHP;
      */
     protected function compileNotFound($code)
     {
-        $code->appendLine('return [' . VarExporter::export(Dispatcher::NOT_FOUND) . '];');
+        $code->appendLine('return [' . VarExporter::export(RouterContract::NOT_FOUND) . '];');
     }
 
     /**
@@ -257,11 +258,11 @@ PHP;
             'isset($allowedHttpMethods) '
             . '? '
             . '['
-            . VarExporter::export(Dispatcher::HTTP_METHOD_NOT_ALLOWED)
+            . VarExporter::export(RouterContract::HTTP_METHOD_NOT_ALLOWED)
             . ', $allowedHttpMethods] '
             . ': '
             . '['
-            . VarExporter::export(Dispatcher::NOT_FOUND)
+            . VarExporter::export(RouterContract::NOT_FOUND)
             . '];'
         );
     }
@@ -289,7 +290,7 @@ PHP;
 
         $code->appendLine(
             'return ['
-            . VarExporter::export(Dispatcher::FOUND)
+            . VarExporter::export(RouterContract::FOUND)
             . ', '
             . VarExporter::export($foundRoute[1])
             . ', '

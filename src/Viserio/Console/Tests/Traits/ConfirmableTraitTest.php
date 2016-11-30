@@ -29,7 +29,7 @@ class ConfirmableTraitTest extends \PHPUnit_Framework_TestCase
     {
         $this->application->add(new ViserioConfirmableTrueCommand());
 
-        $this->assertOutputIs(
+        self::assertOutputIs(
             'confirmable',
             '**********************************************
 *     Application is in Production mode!     *
@@ -43,7 +43,7 @@ class ConfirmableTraitTest extends \PHPUnit_Framework_TestCase
     {
         $this->application->add(new ViserioConfirmableFalseCommand());
 
-        $this->assertOutputIs(
+        self::assertOutputIs(
             'confirmable',
             '**********************************************
 *     Application is in Production mode!     *
@@ -58,7 +58,7 @@ Command Cancelled!
     {
         $this->application->add(new ViserioConfirmableFalseCommand());
 
-        $this->assertOutputIs(
+        self::assertOutputIs(
             'confirmable --force',
             null
         );
@@ -74,6 +74,6 @@ Command Cancelled!
 
         $this->application->run(new StringInput($command), $output);
 
-        $this->assertEquals($expected, $output->output);
+        self::assertEquals($expected, $output->output);
     }
 }

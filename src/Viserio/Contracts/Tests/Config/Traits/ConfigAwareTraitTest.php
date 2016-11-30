@@ -15,7 +15,7 @@ class ConfigAwareTraitTest extends \PHPUnit_Framework_TestCase
     {
         $this->setConfig($this->mock(Manager::class));
 
-        $this->assertInstanceOf(Manager::class, $this->getConfig());
+        self::assertInstanceOf(Manager::class, $this->getConfig());
     }
 
     /**

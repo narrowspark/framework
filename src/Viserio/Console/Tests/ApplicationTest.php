@@ -41,7 +41,7 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
     {
         $command = $this->application->add(new ViserioCommand());
 
-        $this->assertSame($command, $this->application->get('demo:greet'));
+        self::assertSame($command, $this->application->get('demo:greet'));
     }
 
     public function testAllowsToDefineCommands()
@@ -50,7 +50,7 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
             return 1;
         });
 
-        $this->assertSame($command, $this->application->get('foo'));
+        self::assertSame($command, $this->application->get('foo'));
     }
 
     public function testAllowsToDefineDefaultValues()
@@ -64,8 +64,8 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
 
         $definition = $this->application->get('greet')->getDefinition();
 
-        $this->assertEquals('John', $definition->getArgument('firstname')->getDefault());
-        $this->assertEquals('Doe', $definition->getArgument('lastname')->getDefault());
+        self::assertEquals('John', $definition->getArgument('firstname')->getDefault());
+        self::assertEquals('Doe', $definition->getArgument('lastname')->getDefault());
     }
 
     public function testItShouldRunSimpleCommand()
@@ -74,7 +74,7 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
             $output->write('hello');
         });
 
-        $this->assertOutputIs('greet', 'hello');
+        self::assertOutputIs('greet', 'hello');
     }
 
     public function testItShouldRunACommandWithAnArgument()
@@ -83,7 +83,7 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
             $output->write('hello ' . $name);
         });
 
-        $this->assertOutputIs('greet john', 'hello john');
+        self::assertOutputIs('greet john', 'hello john');
     }
 
     public function testItShouldRunACommandWithAnOptionalArgument()
@@ -92,8 +92,8 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
             $output->write('hello ' . $name);
         });
 
-        $this->assertOutputIs('greet', 'hello ');
-        $this->assertOutputIs('greet john', 'hello john');
+        self::assertOutputIs('greet', 'hello ');
+        self::assertOutputIs('greet john', 'hello john');
     }
 
     public function testItShouldRunACommandWithAFlag()
@@ -102,9 +102,9 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
             $output->write(var_export($yell, true));
         });
 
-        $this->assertOutputIs('greet', 'false');
-        $this->assertOutputIs('greet -y', 'true');
-        $this->assertOutputIs('greet --yell', 'true');
+        self::assertOutputIs('greet', 'false');
+        self::assertOutputIs('greet -y', 'true');
+        self::assertOutputIs('greet --yell', 'true');
     }
 
     public function testItShouldRunACommandWithAnOption()
@@ -113,9 +113,9 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
             $output->write($iterations === null ? 'null' : $iterations);
         });
 
-        $this->assertOutputIs('greet', 'null');
-        $this->assertOutputIs('greet -i 123', '123');
-        $this->assertOutputIs('greet --iterations=123', '123');
+        self::assertOutputIs('greet', 'null');
+        self::assertOutputIs('greet -i 123', '123');
+        self::assertOutputIs('greet --iterations=123', '123');
     }
 
     public function testItShouldRunACommandWitMultipleOptions()
@@ -124,10 +124,10 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
             $output->write('[' . implode(', ', $dir) . ']');
         });
 
-        $this->assertOutputIs('greet', '[]');
-        $this->assertOutputIs('greet -d foo', '[foo]');
-        $this->assertOutputIs('greet -d foo -d bar', '[foo, bar]');
-        $this->assertOutputIs('greet --dir=foo --dir=bar', '[foo, bar]');
+        self::assertOutputIs('greet', '[]');
+        self::assertOutputIs('greet -d foo', '[foo]');
+        self::assertOutputIs('greet -d foo -d bar', '[foo, bar]');
+        self::assertOutputIs('greet --dir=foo --dir=bar', '[foo, bar]');
     }
 
     public function testItShouldInjectTypeHintInPriority()
@@ -136,21 +136,21 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
             $output->write($param->foo);
         });
 
-        $this->assertOutputIs('greet', 'hello');
+        self::assertOutputIs('greet', 'hello');
     }
 
     public function testItCanResolveCallableStringFromContainer()
     {
         $this->application->command('greet', 'command.greet');
 
-        $this->assertOutputIs('greet', 'hello');
+        self::assertOutputIs('greet', 'hello');
     }
 
     public function testItCanResolveCallableArrayFromContainer()
     {
         $this->application->command('greet', 'command.arr.greet');
 
-        $this->assertOutputIs('greet', 'hello');
+        self::assertOutputIs('greet', 'hello');
     }
 
     public function testItcanInjectUsingTypeHints()
@@ -159,7 +159,7 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
             $output->write($stdClass->foo);
         });
 
-        $this->assertOutputIs('greet', 'hello');
+        self::assertOutputIs('greet', 'hello');
     }
 
     public function testItCanInjectUsingParameterNames()
@@ -168,7 +168,7 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
             $output->write($stdClass->foo);
         });
 
-        $this->assertOutputIs('greet', 'hello');
+        self::assertOutputIs('greet', 'hello');
     }
 
     public function testItShouldMatchHyphenatedArgumentsToLowercaseParameters()
@@ -177,7 +177,7 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
             $output->write('hello ' . $firstname);
         });
 
-        $this->assertOutputIs('greet john', 'hello john');
+        self::assertOutputIs('greet john', 'hello john');
     }
 
     public function testItShouldMatchHyphenatedArgumentsToMixedcaseParameters()
@@ -186,7 +186,7 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
             $output->write('hello ' . $firstName);
         });
 
-        $this->assertOutputIs('greet john', 'hello john');
+        self::assertOutputIs('greet john', 'hello john');
     }
 
     public function testItShouldMatchHyphenatedOptionToLowercaseParameters()
@@ -195,8 +195,8 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
             $output->write(var_export($yelllouder, true));
         });
 
-        $this->assertOutputIs('greet', 'false');
-        $this->assertOutputIs('greet --yell-louder', 'true');
+        self::assertOutputIs('greet', 'false');
+        self::assertOutputIs('greet --yell-louder', 'true');
     }
 
     public function testItShouldMatchHyphenatedOptionToMixedCaseParameters()
@@ -205,8 +205,8 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
             $output->write(var_export($yellLouder, true));
         });
 
-        $this->assertOutputIs('greet', 'false');
-        $this->assertOutputIs('greet --yell-louder', 'true');
+        self::assertOutputIs('greet', 'false');
+        self::assertOutputIs('greet --yell-louder', 'true');
     }
 
     /**
@@ -218,7 +218,7 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
         $this->application->command('greet', function ($fbo) {
         });
 
-        $this->assertOutputIs('greet', '');
+        self::assertOutputIs('greet', '');
     }
 
     public function testRunsACommandViaItsAliasAndReturnsExitCode()
@@ -227,7 +227,7 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
             $output->write(1);
         }, ['bar']);
 
-        $this->assertOutputIs('bar', 1);
+        self::assertOutputIs('bar', 1);
     }
 
     public function testitShouldRunACommandInTheScopeOfTheApplication()
@@ -238,8 +238,8 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
             $whatIsThis = $this;
         });
 
-        $this->assertOutputIs('foo', '');
-        $this->assertSame($this->application, $whatIsThis);
+        self::assertOutputIs('foo', '');
+        self::assertSame($this->application, $whatIsThis);
     }
 
     /**
@@ -262,6 +262,6 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
 
         $this->application->run(new StringInput($command), $output);
 
-        $this->assertEquals($expected, $output->output);
+        self::assertEquals($expected, $output->output);
     }
 }

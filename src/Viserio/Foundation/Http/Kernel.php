@@ -2,6 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Foundation\Http;
 
+use Interop\Http\Middleware\DelegateInterface;
+use Interop\Http\Middleware\ServerMiddlewareInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Symfony\Component\Debug\Exception\FatalThrowableError;
@@ -19,11 +21,13 @@ use Viserio\Foundation\Bootstrap\HandleExceptions;
 use Viserio\Foundation\Bootstrap\LoadConfiguration;
 use Viserio\Foundation\Bootstrap\LoadRoutes;
 use Viserio\Foundation\Bootstrap\LoadServiceProvider;
-use Viserio\HttpFactory\ResponseFactory;
+use Viserio\Routing\Pipeline;
 use Viserio\Routing\Router;
+use Viserio\Session\Middleware\StartSessionMiddleware;
 use Viserio\StaticalProxy\StaticalProxy;
+use Viserio\View\Middleware\ShareErrorsFromSessionMiddleware;
 
-class Kernel implements TerminableContract, KernelContract
+class Kernel implements TerminableContract, KernelContract, ServerMiddlewareInterface
 {
     use EventsAwareTrait;
 
@@ -42,18 +46,44 @@ class Kernel implements TerminableContract, KernelContract
     protected $router;
 
     /**
+     * The application's middleware stack.
+     *
+     * @var array
+     */
+    protected $middlewares = [];
+
+    /**
+     * The application's route middleware groups.
+     *
+     * @var array
+     */
+    protected $middlewareGroups = [];
+
+    /**
      * The application's route middleware.
      *
      * @var array
      */
-    protected $routeWithMiddlewares = [];
+    protected $routeMiddlewares = [];
 
     /**
-     * The application's route without middleware.
+     * The application's route without a middleware.
      *
      * @var array
      */
     protected $routeWithoutMiddlewares = [];
+
+    /**
+     * The priority-sorted list of middleware.
+     *
+     * Forces the listed middleware to always be in the given order.
+     *
+     * @var array
+     */
+    protected $middlewarePriority = [
+        StartSessionMiddleware::class,
+        ShareErrorsFromSessionMiddleware::class,
+    ];
 
     /**
      * The bootstrap classes for the application.
@@ -83,12 +113,18 @@ class Kernel implements TerminableContract, KernelContract
         $this->app = $app;
         $this->events = $events;
 
-        foreach ($this->routeWithMiddlewares as $routeWithMiddleware) {
-            $router->withMiddleware($routeWithMiddleware);
+        $router->setMiddlewarePriorities($this->middlewarePriority);
+
+        foreach ($this->routeMiddlewares as $routeMiddleware) {
+            $router->withMiddleware($routeMiddleware);
         }
 
         foreach ($this->routeWithoutMiddlewares as $routeWithoutMiddleware) {
-            $router->withMiddleware($routeWithoutMiddleware);
+            $router->withoutMiddleware($routeWithoutMiddleware);
+        }
+
+        foreach ($this->middlewareGroups as $key => $middleware) {
+            $router->setMiddlewareGroup($key, $middleware);
         }
 
         $this->router = $router;
@@ -97,23 +133,25 @@ class Kernel implements TerminableContract, KernelContract
     /**
      * {@inheritdoc}
      */
-    public function handle(ServerRequestInterface $request, ResponseInterface $response = null): ResponseInterface
+    public function process(ServerRequestInterface $request, DelegateInterface $delegate)
+    {
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function handle(ServerRequestInterface $request): ResponseInterface
     {
         // Passes the request to the container
         $this->app->instance(ServerRequestInterface::class, $request);
+
         StaticalProxy::clearResolvedInstance('request');
 
         $this->events->trigger(self::REQUEST, [$request]);
 
-        if ($response === null) {
-            $response = (new ResponseFactory())->createResponse();
-        }
+        $this->bootstrap();
 
-        $this->app->instance(ResponseInterface::class, $response);
-
-        StaticalProxy::clearResolvedInstance('response');
-
-        $response = $this->handleRequest($request, $response);
+        $response = $this->handleRequest($request);
 
         // stop PHP sending a Content-Type automatically
         ini_set('default_mimetype', '');
@@ -145,34 +183,48 @@ class Kernel implements TerminableContract, KernelContract
      * Convert request into response.
      *
      * @param \Psr\Http\Message\ServerRequestInterface $request
-     * @param \Psr\Http\Message\ResponseInterface      $response
      *
      * @return \Psr\Http\Message\ResponseInterface
      */
-    protected function handleRequest(ServerRequestInterface $request, ResponseInterface $response)
+    protected function handleRequest(ServerRequestInterface $request): ResponseInterface
     {
-        $this->bootstrap();
+        try {
+            $response = $this->sendRequestThroughRouter($request);
 
+            $this->events->trigger(self::RESPONSE, [$request, $response]);
+        } catch (Throwable $exception) {
+            $exceptionHandler = $this->app->get(HandlerContract::class);
+            $exceptionHandler->report($exception = new FatalThrowableError($exception));
+
+            $response = $exceptionHandler->render($request, $exception);
+
+            $this->events->trigger(self::EXCEPTION, [$request, $response]);
+        }
+
+        return $response;
+    }
+
+    /**
+     * Send the given request through the middleware / router.
+     *
+     * @param \Psr\Http\Message\ServerRequestInterface $request
+     *
+     * @return \Psr\Http\Message\ResponseInterface
+     */
+    protected function sendRequestThroughRouter(ServerRequestInterface $request): ResponseInterface
+    {
         $router = $this->router;
         $config = $this->app->get(ConfigManager::class);
 
         $router->setCachePath($config->get('routing.path'));
-        $router->refreshCache($config->get('app.env', 'production') === 'production' ? false : true);
+        $router->refreshCache($config->get('app.env', 'production') !== 'production');
 
-        try {
-            $response = $router->dispatch($request, $response);
-
-            $this->events->trigger(self::RESPONSE, [$request, $response]);
-        } catch (Throwable $exception) {
-            $this->events->trigger(self::EXCEPTION, [$request, $response]);
-
-            $exceptionHandler = $this->app->get(HandlerContract::class);
-
-            $exceptionHandler->report($exception = new FatalThrowableError($exception));
-
-            $response = $exceptionHandler->render($request, $exception);
-        }
-
-        return $response;
+        return (new Pipeline())
+            ->setContainer($this->app)
+            ->send($request)
+            ->through($config->get('app.skip_middlewares', false) ? [] : $this->middlewares)
+            ->then(function ($request) use ($router) {
+                return $router->dispatch($request);
+            });
     }
 }

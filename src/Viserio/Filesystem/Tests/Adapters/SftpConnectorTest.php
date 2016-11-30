@@ -18,7 +18,7 @@ class SftpConnectorTest extends \PHPUnit_Framework_TestCase
             'password' => 'your-password',
         ]);
 
-        $this->assertInstanceOf(SftpAdapter::class, $return);
+        self::assertInstanceOf(SftpAdapter::class, $return);
     }
 
     /**
