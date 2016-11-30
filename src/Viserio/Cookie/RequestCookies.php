@@ -21,7 +21,7 @@ class RequestCookies extends AbstractCookieCollector
                 throw new RuntimeException(sprintf(
                     'The object [%s] must be an instance of \Viserio\Cookie\Cookie',
                     get_class($cookie)
-                );
+                ));
             }
 
             $this->cookies[$cookie->getName()] = $cookie;

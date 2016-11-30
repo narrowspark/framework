@@ -23,7 +23,7 @@ class ResponseCookies extends AbstractCookieCollector
                 throw new RuntimeException(sprintf(
                     'The object [%s] must implement Viserio\Contracts\Cookie\Cookie',
                     get_class($cookie)
-                );
+                ));
             }
 
             $this->cookies[$cookie->getName()] = $cookie;
