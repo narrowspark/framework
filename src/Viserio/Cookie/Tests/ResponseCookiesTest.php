@@ -7,6 +7,7 @@ use Mockery as Mock;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use Psr\Http\Message\ResponseInterface as Response;
 use Viserio\Cookie\ResponseCookies;
+use Viserio\Cookie\Cookie;
 use Viserio\Cookie\SetCookie;
 use Viserio\HttpFactory\ResponseFactory;
 
@@ -22,6 +23,15 @@ class ResponseCookiesTest extends \PHPUnit_Framework_TestCase
 
         // Verify Mockery expectations.
         Mock::close();
+    }
+
+    /**
+     * @expectedException \RuntimeException
+     * @expectedExceptionMessage The object [Viserio\Cookie\Cookie] must implement Viserio\Contracts\Cookie\Cookie
+     */
+    public function testRequestCookiesToThrowException()
+    {
+        new ResponseCookies([new Cookie('test', 'test')]);
     }
 
     /**

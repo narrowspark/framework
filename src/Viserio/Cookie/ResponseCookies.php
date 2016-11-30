@@ -5,6 +5,7 @@ namespace Viserio\Cookie;
 use Cake\Chronos\Chronos;
 use Psr\Http\Message\ResponseInterface;
 use Viserio\Contracts\Cookie\Cookie as CookieContract;
+use RuntimeException;
 
 class ResponseCookies extends AbstractCookieCollector
 {
@@ -12,12 +13,17 @@ class ResponseCookies extends AbstractCookieCollector
      * Create a new cookie collection instance.
      *
      * @param array $cookies
+     *
+     * @throws \RuntimeException
      */
     public function __construct(array $cookies = [])
     {
         foreach ($cookies as $cookie) {
             if (! ($cookie instanceof CookieContract)) {
-                # code...
+                throw new RuntimeException(sprintf(
+                    'The object [%s] must implement Viserio\Contracts\Cookie\Cookie',
+                    get_class($cookie)
+                );
             }
 
             $this->cookies[$cookie->getName()] = $cookie;
