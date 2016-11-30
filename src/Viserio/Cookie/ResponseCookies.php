@@ -4,8 +4,8 @@ namespace Viserio\Cookie;
 
 use Cake\Chronos\Chronos;
 use Psr\Http\Message\ResponseInterface;
-use Viserio\Contracts\Cookie\Cookie as CookieContract;
 use RuntimeException;
+use Viserio\Contracts\Cookie\Cookie as CookieContract;
 
 class ResponseCookies extends AbstractCookieCollector
 {
