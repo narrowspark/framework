@@ -10,6 +10,16 @@ final class Cookie implements StringableContract
     use CookieValidatorTratis;
 
     /**
+     * @var string
+     */
+    protected $name;
+
+    /**
+     * @var string|null
+     */
+    protected $value;
+
+    /**
      * Create a new cookie instance.
      *
      * @param string      $name  The name of the cookie.
@@ -51,7 +61,7 @@ final class Cookie implements StringableContract
     /**
      * Sets the value.
      *
-     * @param string $value
+     * @param string|null $value
      *
      * @return $this
      */

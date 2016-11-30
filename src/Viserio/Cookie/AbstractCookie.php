@@ -17,9 +17,9 @@ abstract class AbstractCookie implements StringableContract, CookieContract
     protected $name;
 
     /**
-     * @var string
+     * @var string|null
      */
-    protected $value = '';
+    protected $value;
 
     /**
      * @var string|null
@@ -27,7 +27,7 @@ abstract class AbstractCookie implements StringableContract, CookieContract
     protected $domain;
 
     /**
-     * @var int|\DateTimeInterface|null
+     * @var int|null
      */
     protected $expires;
 
@@ -321,9 +321,9 @@ abstract class AbstractCookie implements StringableContract, CookieContract
      *
      * @param int|string|\DateTimeInterface|null $expiration
      *
-     * @return \DateTimeInterface|int|null
+     * @return int
      */
-    protected function normalizeExpires($expiration = null)
+    protected function normalizeExpires($expiration = null): int
     {
         $expires = null;
 
@@ -349,7 +349,6 @@ abstract class AbstractCookie implements StringableContract, CookieContract
         }
 
         if (! is_int($tsExpires) || $tsExpires < 0) {
-            var_dump($expiration);
             throw new InvalidArgumentException('Invalid expires time specified.');
         }
 
