@@ -11,6 +11,7 @@ use Viserio\Contracts\Container\Traits\ContainerAwareTrait;
 use Viserio\Contracts\Routing\Route as RouteContract;
 use Viserio\Routing\Traits\MiddlewareAwareTrait;
 use Viserio\Support\Traits\InvokerAwareTrait;
+use Interop\Container\Exception\NotFoundException;
 
 class Route implements RouteContract
 {
@@ -343,7 +344,17 @@ class Route implements RouteContract
         list($class) = explode('::', $this->action['uses']);
 
         if (! $this->controller) {
-            $this->controller = $this->getContainer()->get($class);
+            $container = $this->getContainer();
+
+            try {
+                $this->controller = $container->get($class);
+            } catch (NotFoundException $exception) {
+                if (method_exists($container, 'make')) {
+                    $this->controller = $container->make($class);
+                } else {
+                    throw new $exception;
+                }
+            }
         }
 
         return $this->controller;
