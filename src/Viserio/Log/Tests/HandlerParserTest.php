@@ -9,6 +9,7 @@ use Monolog\Processor\GitProcessor;
 use Monolog\Processor\PsrLogMessageProcessor;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use Viserio\Log\HandlerParser;
+use Mockery as Mock;
 
 class HandlerParserTest extends \PHPUnit_Framework_TestCase
 {
