@@ -210,7 +210,7 @@ class HandlerParser
         ];
 
         $width = getenv('COLUMNS') ?: 60; // Console width from env, or 60 chars.
-        $separator = str_repeat('━', $width); // A nice separator line
+        $separator = str_repeat('━', (int) $width); // A nice separator line
 
         $format = $options['bold'];
         $format .= $options['green'] . '[%datetime%]';

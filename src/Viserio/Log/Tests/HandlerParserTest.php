@@ -14,6 +14,16 @@ class HandlerParserTest extends \PHPUnit_Framework_TestCase
 {
     use MockeryTrait;
 
+    public function tearDown()
+    {
+        parent::tearDown();
+
+        $this->allowMockingNonExistentMethods(true);
+
+        // Verify Mockery expectations.
+        Mock::close();
+    }
+
     public function testGetMonolog()
     {
         $handler = new HandlerParser($this->mock(Logger::class));

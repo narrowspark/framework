@@ -17,6 +17,16 @@ class WriterTest extends \PHPUnit_Framework_TestCase
 {
     use MockeryTrait;
 
+    public function tearDown()
+    {
+        parent::tearDown();
+
+        $this->allowMockingNonExistentMethods(true);
+
+        // Verify Mockery expectations.
+        Mock::close();
+    }
+
     public function testGetMonolog()
     {
         $writer = new Writer(new Logger('name'));
