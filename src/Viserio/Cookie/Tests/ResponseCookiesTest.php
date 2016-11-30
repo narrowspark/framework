@@ -6,8 +6,8 @@ use DateTime;
 use Mockery as Mock;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use Psr\Http\Message\ResponseInterface as Response;
-use Viserio\Cookie\SetCookie;
 use Viserio\Cookie\ResponseCookies;
+use Viserio\Cookie\SetCookie;
 use Viserio\HttpFactory\ResponseFactory;
 
 class ResponseCookiesTest extends \PHPUnit_Framework_TestCase

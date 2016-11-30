@@ -15,14 +15,14 @@ final class Cookie implements StringableContract
      *
      * @throws \InvalidArgumentException
      */
-    public function __construct(string $name, string $value = '') {
+    public function __construct(string $name, string $value = '')
+    {
         $this->validateName($name);
         $this->validateValue($value);
 
         $this->name = $name;
         $this->value = $value;
     }
-
 
     /**
      * Returns the cookie as a string.

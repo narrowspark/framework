@@ -11,9 +11,9 @@ use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Contracts\Cookie\Cookie as CookieContract;
 use Viserio\Contracts\Encryption\Encrypter as EncrypterContract;
 use Viserio\Cookie\Cookie;
-use Viserio\Cookie\SetCookie;
 use Viserio\Cookie\RequestCookies;
 use Viserio\Cookie\ResponseCookies;
+use Viserio\Cookie\SetCookie;
 
 class EncryptedCookiesMiddleware implements ServerMiddlewareInterface
 {
@@ -137,7 +137,6 @@ class EncryptedCookiesMiddleware implements ServerMiddlewareInterface
             $cookie->isHttpOnly()
         );
     }
-
 
     /**
      * Determine whether encryption has been disabled for the given cookie.

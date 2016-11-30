@@ -4,17 +4,17 @@ namespace Viserio\Cookie\Tests\Middleware;
 
 use Defuse\Crypto\Key;
 use Mockery as Mock;
-use Viserio\Encryption\Encrypter;
 use Narrowspark\TestingHelper\Middleware\CallableMiddleware;
 use Narrowspark\TestingHelper\Middleware\Dispatcher;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
+use Viserio\Cookie\Cookie;
 use Viserio\Cookie\Middleware\EncryptedCookiesMiddleware;
+use Viserio\Cookie\RequestCookies;
+use Viserio\Cookie\ResponseCookies;
+use Viserio\Cookie\SetCookie;
+use Viserio\Encryption\Encrypter;
 use Viserio\HttpFactory\ResponseFactory;
 use Viserio\HttpFactory\ServerRequestFactory;
-use Viserio\Cookie\ResponseCookies;
-use Viserio\Cookie\RequestCookies;
-use Viserio\Cookie\Cookie;
-use Viserio\Cookie\SetCookie;
 
 class EncryptedCookiesMiddlewareTest extends \PHPUnit_Framework_TestCase
 {
