@@ -9,10 +9,36 @@ use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Viserio\Cookie\Cookie;
 use Viserio\Cookie\RequestCookies;
+use Viserio\HttpFactory\ServerRequestFactory;
 
 class RequestCookiesTest extends \PHPUnit_Framework_TestCase
 {
     use MockeryTrait;
+
+    public function tearDown()
+    {
+        parent::tearDown();
+
+        $this->allowMockingNonExistentMethods(true);
+
+        // Verify Mockery expectations.
+        Mock::close();
+    }
+
+    public function testAddCookieToHeaderAndBack()
+    {
+        $cookie = new Cookie('encrypted', 'jiafs89320jadfa');
+        $cookie2 = new Cookie('encrypted2', 'jiafs89320jadfa');
+        $request = (new ServerRequestFactory())->createServerRequest($_SERVER);
+        $cookies = RequestCookies::fromRequest($request);
+        $cookies = $cookies->add($cookie);
+        $cookies = $cookies->add($cookie2);
+        $request = $cookies->renderIntoCookieHeader($request);
+        $cookies = RequestCookies::fromRequest($request);
+
+        self::assertSame($cookie->getName(), $cookies->get('encrypted')->getName());
+        self::assertSame($cookie->getValue(), $cookies->get('encrypted')->getValue());
+    }
 
     /**
      * @dataProvider provideParsesFromCookieStringWithoutExpireData
@@ -29,12 +55,6 @@ class RequestCookiesTest extends \PHPUnit_Framework_TestCase
         foreach ($cookies->getAll() as $name => $cookie) {
             self::assertEquals($expectedCookies[$name]->getName(), $cookie->getName());
             self::assertEquals($expectedCookies[$name]->getValue(), $cookie->getValue());
-            self::assertEquals($expectedCookies[$name]->getDomain(), $cookie->getDomain());
-            self::assertEquals($expectedCookies[$name]->getMaxAge(), $cookie->getMaxAge());
-            self::assertEquals($expectedCookies[$name]->getPath(), $cookie->getPath());
-            self::assertEquals($expectedCookies[$name]->isSecure(), $cookie->isSecure());
-            self::assertEquals($expectedCookies[$name]->isHttpOnly(), $cookie->isHttpOnly());
-            self::assertEquals($expectedCookies[$name]->getSameSite(), $cookie->getSameSite());
         }
     }
 
@@ -50,12 +70,6 @@ class RequestCookiesTest extends \PHPUnit_Framework_TestCase
 
         self::assertEquals($expectedCookie->getName(), $cookies->get($cookieName)->getName());
         self::assertEquals($expectedCookie->getValue(), $cookies->get($cookieName)->getValue());
-        self::assertEquals($expectedCookie->getDomain(), $cookies->get($cookieName)->getDomain());
-        self::assertEquals($expectedCookie->getMaxAge(), $cookies->get($cookieName)->getMaxAge());
-        self::assertEquals($expectedCookie->getPath(), $cookies->get($cookieName)->getPath());
-        self::assertEquals($expectedCookie->isSecure(), $cookies->get($cookieName)->isSecure());
-        self::assertEquals($expectedCookie->isHttpOnly(), $cookies->get($cookieName)->isHttpOnly());
-        self::assertEquals($expectedCookie->getSameSite(), $cookies->get($cookieName)->getSameSite());
     }
 
     /**

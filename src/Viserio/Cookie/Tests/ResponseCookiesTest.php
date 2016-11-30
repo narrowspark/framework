@@ -2,18 +2,27 @@
 declare(strict_types=1);
 namespace Viserio\Cookie\Tests;
 
-use Cake\Chronos\Chronos;
 use DateTime;
 use Mockery as Mock;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use Psr\Http\Message\ResponseInterface as Response;
-use Viserio\Cookie\Cookie;
+use Viserio\Cookie\SetCookie;
 use Viserio\Cookie\ResponseCookies;
 use Viserio\HttpFactory\ResponseFactory;
 
 class ResponseCookiesTest extends \PHPUnit_Framework_TestCase
 {
     use MockeryTrait;
+
+    public function tearDown()
+    {
+        parent::tearDown();
+
+        $this->allowMockingNonExistentMethods(true);
+
+        // Verify Mockery expectations.
+        Mock::close();
+    }
 
     /**
      * @dataProvider provideParsesFromCookieStringData
@@ -60,7 +69,7 @@ class ResponseCookiesTest extends \PHPUnit_Framework_TestCase
             [
                 ['LSID=DQAAAK%2FEaem_vYg; Expires=Wed, 13 Jan 2021 22:23:01 GMT; Path=/accounts; Secure; HttpOnly'],
                 [
-                    (new Cookie('LSID'))
+                    (new SetCookie('LSID'))
                         ->withValue('DQAAAK/Eaem_vYg')
                         ->withPath('/accounts')
                         ->withExpires(new DateTime('Wed, 13 Jan 2021 22:23:01 GMT'))
@@ -71,7 +80,7 @@ class ResponseCookiesTest extends \PHPUnit_Framework_TestCase
             [
                 ['HSID=AYQEVn%2F.DKrdst; Expires=Wed, 13 Jan 2021 22:23:01 GMT; Path=/; Domain=foo.com; HttpOnly'],
                 [
-                   (new Cookie('HSID'))
+                   (new SetCookie('HSID'))
                         ->withValue('AYQEVn/.DKrdst')
                         ->withDomain('.foo.com')
                         ->withPath('/')
@@ -82,7 +91,7 @@ class ResponseCookiesTest extends \PHPUnit_Framework_TestCase
             [
                 ['SSID=Ap4P%2F.GTEq; Expires=Wed, 13 Jan 2021 22:23:01 GMT; Path=/; Domain=foo.com; Secure; HttpOnly'],
                 [
-                    (new Cookie('SSID'))
+                    (new SetCookie('SSID'))
                         ->withValue('Ap4P/.GTEq')
                         ->withDomain('foo.com')
                         ->withPath('/')
@@ -94,7 +103,7 @@ class ResponseCookiesTest extends \PHPUnit_Framework_TestCase
             [
                 ['lu=Rg3vHJZnehYLjVg7qi3bZjzg; Domain=.example.com; Path=/; Expires=Tue, 15 Jan 2013 21:47:38 GMT; Max-Age=500; Secure; HttpOnly'],
                 [
-                    (new Cookie('lu'))
+                    (new SetCookie('lu'))
                         ->withValue('Rg3vHJZnehYLjVg7qi3bZjzg')
                         ->withExpires(new DateTime('Tue, 15 Jan 2013 21:47:38 GMT'))
                         ->withMaxAge(500)
@@ -107,7 +116,7 @@ class ResponseCookiesTest extends \PHPUnit_Framework_TestCase
             [
                 ['lu=Rg3vHJZnehYLjVg7qi3bZjzg; Domain=.example.com; Path=/; Expires=Tue, 15 Jan 2013 21:47:38 GMT; Max-Age=500; Secure; HttpOnly'],
                 [
-                    (new Cookie('lu'))
+                    (new SetCookie('lu'))
                         ->withValue('Rg3vHJZnehYLjVg7qi3bZjzg')
                         ->withExpires(new DateTime('Tue, 15-Jan-2013 21:47:38 GMT'))
                         ->withMaxAge(500)
@@ -120,7 +129,7 @@ class ResponseCookiesTest extends \PHPUnit_Framework_TestCase
             [
                 ['lu=Rg3vHJZnehYLjVg7qi3bZjzg; Domain=.example.com; Path=/; Expires=Tue, 15 Jan 2013 21:47:38 GMT; Max-Age=500; Secure; HttpOnly; SameSite=strict'],
                 [
-                    (new Cookie('lu'))
+                    (new SetCookie('lu'))
                         ->withValue('Rg3vHJZnehYLjVg7qi3bZjzg')
                         ->withExpires(new DateTime('Tue, 15-Jan-2013 21:47:38 GMT'))
                         ->withMaxAge(500)
@@ -148,29 +157,29 @@ class ResponseCookiesTest extends \PHPUnit_Framework_TestCase
                     'c=CCC',
                 ],
                 [
-                    new Cookie('a', 'AAA'),
-                    new Cookie('b', 'BBB'),
-                    new Cookie('c', 'CCC'),
+                    new SetCookie('a', 'AAA'),
+                    new SetCookie('b', 'BBB'),
+                    new SetCookie('c', 'CCC'),
                 ],
             ],
             [
                 ['some;'],
-                [new Cookie('some')],
+                [new SetCookie('some')],
             ],
             [
                 ['someCookie='],
-                [new Cookie('someCookie')],
+                [new SetCookie('someCookie')],
             ],
             [
                 ['someCookie=someValue'],
                 [
-                    (new Cookie('someCookie'))->withValue('someValue'),
+                    (new SetCookie('someCookie'))->withValue('someValue'),
                 ],
             ],
             [
                 ['lu=Rg3vHJZnehYLjVg7qi3bZjzg; Domain=.example.com; Path=/; Max-Age=500; Secure; HttpOnly'],
                 [
-                    (new Cookie('lu'))
+                    (new SetCookie('lu'))
                         ->withValue('Rg3vHJZnehYLjVg7qi3bZjzg')
                         ->withMaxAge(500)
                         ->withPath('/')
@@ -182,7 +191,7 @@ class ResponseCookiesTest extends \PHPUnit_Framework_TestCase
             [
                 ['lu=Rg3vHJZnehYLjVg7qi3bZjzg; Domain=.example.com; Path=/; Max-Age=500; Secure; HttpOnly'],
                 [
-                    (new Cookie('lu'))
+                    (new SetCookie('lu'))
                         ->withValue('Rg3vHJZnehYLjVg7qi3bZjzg')
                         ->withMaxAge(500)
                         ->withPath('/')
@@ -193,7 +202,7 @@ class ResponseCookiesTest extends \PHPUnit_Framework_TestCase
             ],
             [
                 ['lu=Rg3vHJZnehYLjVg7qi3bZjzg; Domain=.example.com; Path=/; Expires=Tue, 15 Jan 2013 21:47:38 GMT; Max-Age=500; Secure; HttpOnly'],
-                [(new Cookie('lu'))
+                [(new SetCookie('lu'))
                     ->withValue('Rg3vHJZnehYLjVg7qi3bZjzg')
                     ->withExpires(new DateTime('Tue, 15-Jan-2013 21:47:38 GMT'))
                     ->withMaxAge(500)
@@ -209,8 +218,8 @@ class ResponseCookiesTest extends \PHPUnit_Framework_TestCase
                     'HSID=AYQEVn%2F.DKrdst; Expires=Wed, 13 Jan 2021 22:23:01 GMT; Path=/accounts; Domain=foo.com; HttpOnly',
                 ],
                 [
-                    new Cookie('someCookie', 'someValue'),
-                    (new Cookie('HSID'))
+                    new SetCookie('someCookie', 'someValue'),
+                    (new SetCookie('HSID'))
                         ->withValue('AYQEVn/.DKrdst')
                         ->withDomain('.foo.com')
                         ->withPath('/accounts')

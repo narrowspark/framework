@@ -2,74 +2,58 @@
 declare(strict_types=1);
 namespace Viserio\Cookie;
 
-use InvalidArgumentException;
-use Viserio\Contracts\Cookie\Cookie as CookieContract;
+use Viserio\Contracts\Support\Stringable as StringableContract;
+use Viserio\Cookie\Traits\CookieValidatorTratis;
 
-final class Cookie extends AbstractCookie
+final class Cookie implements StringableContract
 {
+    use CookieValidatorTratis;
+
     /**
-     * @param string                             $name       The name of the cookie.
-     * @param string|null                        $value      The value of the cookie.
-     * @param int|string|\DateTimeInterface|null $expiration The time the cookie expires.
-     * @param string                             $path       The path on the server in which the cookie will
-     *                                                       be available on.
-     * @param string|null                        $domain     The domain that the cookie is available to.
-     * @param bool                               $secure     Whether the cookie should only be transmitted
-     *                                                       over a secure HTTPS connection from the client.
-     * @param bool                               $httpOnly   Whether the cookie will be made accessible only.
-     *                                                       through the HTTP protocol.
-     * @param string|bool                        $sameSite   Whether the cookie will be available for cross-site requests
+     * @param string $name  The name of the cookie.
+     * @param string $value The value of the cookie.
      *
      * @throws \InvalidArgumentException
      */
-    public function __construct(
-        string $name,
-        string $value = null,
-        $expiration = 0,
-        $path = '/',
-        $domain = null,
-        bool $secure = false,
-        bool $httpOnly = false,
-        $sameSite = false
-    ) {
+    public function __construct(string $name, string $value = '') {
         $this->validateName($name);
         $this->validateValue($value);
 
         $this->name = $name;
         $this->value = $value;
-        $this->maxAge = is_int($expiration) ? $expiration : null;
-        $this->expires = $this->normalizeExpires($expiration);
-        $this->domain = $this->normalizeDomain($domain);
-        $this->path = $this->normalizePath($path);
-        $this->secure = $secure;
-        $this->httpOnly = $httpOnly;
-        $this->sameSite = $this->validateSameSite($sameSite);
     }
+
 
     /**
      * Returns the cookie as a string.
      *
      * @return string The cookie
      */
-    public function __toString(): string
+    public function __toString()
     {
-        $cookieStringParts = [];
+        $name = urlencode($this->name) . '=';
 
-        $cookieStringParts = $this->appendFormattedNameAndValuePartIfSet($cookieStringParts);
-        $cookieStringParts = $this->appendFormattedPathPartIfSet($cookieStringParts);
-        $cookieStringParts = $this->appendFormattedDomainPartIfSet($cookieStringParts);
-        $cookieStringParts = $this->appendFormattedMaxAgePartIfSet($cookieStringParts);
-        $cookieStringParts = $this->appendFormattedSecurePartIfSet($cookieStringParts);
-        $cookieStringParts = $this->appendFormattedHttpOnlyPartIfSet($cookieStringParts);
-        $cookieStringParts = $this->appendFormattedSameSitePartIfSet($cookieStringParts);
-
-        return implode('; ', $cookieStringParts);
+        return $name . urlencode($this->getValue());
     }
 
     /**
-     * {@inheritdoc}
+     * Returns the name.
+     *
+     * @return string
      */
-    public function withValue(string $value = null): CookieContract
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
+    /**
+     * Sets the value.
+     *
+     * @param string $value
+     *
+     * @return $this
+     */
+    public function withValue(string $value = null): Cookie
     {
         $this->validateValue($value);
 
@@ -80,46 +64,12 @@ final class Cookie extends AbstractCookie
     }
 
     /**
-     * Validates the name attribute
+     * Returns the value.
      *
-     * @param string $name
-     *
-     * @throws \InvalidArgumentException
-     *
-     * @link http://tools.ietf.org/search/rfc2616#section-2.2
+     * @return string
      */
-    private function validateName(string $name)
+    public function getValue(): string
     {
-        if (strlen($name) < 1) {
-            throw new InvalidArgumentException('The name cannot be empty');
-        }
-
-        // Name attribute is a token as per spec in RFC 2616
-        if (preg_match('/[\x00-\x20\x22\x28-\x29\x2c\x2f\x3a-\x40\x5b-\x5d\x7b\x7d\x7f]/', $name)) {
-            throw new InvalidArgumentException(sprintf('The cookie name "%s" contains invalid characters.', $name));
-        }
-    }
-
-    /**
-     * Validates a value
-     *
-     * @param string|null $value
-     *
-     * @throws \InvalidArgumentException
-     *
-     * @link http://tools.ietf.org/html/rfc6265#section-4.1.1
-     */
-    private function validateValue(string $value = null)
-    {
-        if (isset($value)) {
-            if (preg_match('/[^\x21\x23-\x2B\x2D-\x3A\x3C-\x5B\x5D-\x7E]/', $value)) {
-                throw new InvalidArgumentException(
-                    sprintf(
-                        'The cookie value "%s" contains invalid characters.',
-                        $value
-                    )
-                );
-            }
-        }
+        return $this->value;
     }
 }

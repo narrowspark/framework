@@ -14,18 +14,6 @@ class AbstractCookieCollector
     protected $cookies = [];
 
     /**
-     * Create a new cookie collection instance.
-     *
-     * @param array $cookies
-     */
-    public function __construct(array $cookies = [])
-    {
-        foreach ($cookies as $cookie) {
-            $this->cookies[$cookie->getName()] = $cookie;
-        }
-    }
-
-    /**
      * Checking if request cookie exist.
      *
      * @param string $name
@@ -66,11 +54,11 @@ class AbstractCookieCollector
     /**
      * Add a request cookie to the stack.
      *
-     * @param \Viserio\Contracts\Cookie\Cookie $cookie
+     * @param \Viserio\Contracts\Cookie\Cookie|\Viserio\Cookie\Cookie $cookie
      *
      * @return $this
      */
-    public function add(CookieContract $cookie)
+    public function add($cookie)
     {
         $clone = clone $this;
         $clone->cookies[$cookie->getName()] = $cookie;
@@ -122,12 +110,12 @@ class AbstractCookieCollector
         $pairParts = explode('=', $string, 2);
 
         if (count($pairParts) === 1) {
-            $pairParts[1] = null;
+            $pairParts[1] = '';
         }
 
         return array_map(function ($part) {
             if ($part === null) {
-                return;
+                return '';
             }
 
             return urldecode($part);

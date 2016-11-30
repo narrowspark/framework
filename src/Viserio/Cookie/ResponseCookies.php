@@ -9,6 +9,22 @@ use Viserio\Contracts\Cookie\Cookie as CookieContract;
 class ResponseCookies extends AbstractCookieCollector
 {
     /**
+     * Create a new cookie collection instance.
+     *
+     * @param array $cookies
+     */
+    public function __construct(array $cookies = [])
+    {
+        foreach ($cookies as $cookie) {
+            if (! ($cookie instanceof CookieContract)) {
+                # code...
+            }
+
+            $this->cookies[$cookie->getName()] = $cookie;
+        }
+    }
+
+    /**
      * Creates a Cookie instance from a Set-Cookie header value.
      *
      * @param \Psr\Http\Message\ResponseInterface $response
@@ -53,7 +69,7 @@ class ResponseCookies extends AbstractCookieCollector
 
         list($cookieName, $cookieValue) = self::splitCookiePair(array_shift($rawAttributes));
 
-        $cookie = new Cookie($cookieName);
+        $cookie = new SetCookie($cookieName);
 
         if (! is_null($cookieValue)) {
             $cookie = $cookie->withValue($cookieValue);

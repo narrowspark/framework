@@ -7,9 +7,9 @@ use DateTime;
 use DateTimeInterface;
 use InvalidArgumentException;
 use Viserio\Contracts\Cookie\Cookie as CookieContract;
-use Viserio\Contracts\Support\Stringable;
+use Viserio\Contracts\Support\Stringable as StringableContract;
 
-abstract class AbstractCookie implements Stringable, CookieContract
+abstract class AbstractCookie implements StringableContract, CookieContract
 {
     /**
      * @var string
@@ -17,9 +17,9 @@ abstract class AbstractCookie implements Stringable, CookieContract
     protected $name;
 
     /**
-     * @var string|null
+     * @var string
      */
-    protected $value;
+    protected $value = '';
 
     /**
      * @var string|null
@@ -59,7 +59,7 @@ abstract class AbstractCookie implements Stringable, CookieContract
     /**
      * {@inheritdoc}
      */
-    abstract public function __toString(): string;
+    abstract public function __toString();
 
     /**
      * {@inheritdoc}
@@ -131,9 +131,9 @@ abstract class AbstractCookie implements Stringable, CookieContract
     /**
      * {@inheritdoc}
      */
-    public function getExpiresTime(): string
+    public function getExpiresTime()
     {
-        return (new Chronos(gmdate('D, d-M-Y H:i:s', $this->expires)))->toCookieString();
+        return $this->expires;
     }
 
     /**
@@ -205,7 +205,7 @@ abstract class AbstractCookie implements Stringable, CookieContract
     public function withSecure(bool $secure): CookieContract
     {
         $new = clone $this;
-        $new->secure = filter_var($secure, FILTER_VALIDATE_BOOLEAN);
+        $new->secure = $secure;
 
         return $new;
     }
@@ -224,7 +224,7 @@ abstract class AbstractCookie implements Stringable, CookieContract
     public function withHttpOnly(bool $httpOnly): CookieContract
     {
         $new = clone $this;
-        $new->httpOnly = filter_var($httpOnly, FILTER_VALIDATE_BOOLEAN);
+        $new->httpOnly = $httpOnly;
 
         return $new;
     }
@@ -327,11 +327,10 @@ abstract class AbstractCookie implements Stringable, CookieContract
     {
         $expires = null;
 
-
         if (is_int($expiration)) {
             $expires = (new Chronos(sprintf('%d seconds', $expiration)))->toCookieString();
         } elseif ($expiration instanceof DateTimeInterface) {
-            $expires = (new Chronos($expiration->format(DateTime::COOKIE)))->toCookieString();
+            $expires = $expiration->format(DateTime::COOKIE);
         }
 
         $tsExpires = $expires;
@@ -340,7 +339,7 @@ abstract class AbstractCookie implements Stringable, CookieContract
             $tsExpires = strtotime($expires);
 
             // if $tsExpires is invalid and PHP is compiled as 32bit. Check if it fail reason is the 2038 bug
-            if (!is_int($tsExpires) && PHP_INT_SIZE === 4) {
+            if (! is_int($tsExpires) && PHP_INT_SIZE === 4) {
                 $dateTime = new DateTime($expires);
 
                 if ($dateTime->format('Y') > 2038) {
@@ -350,6 +349,7 @@ abstract class AbstractCookie implements Stringable, CookieContract
         }
 
         if (! is_int($tsExpires) || $tsExpires < 0) {
+            var_dump($expiration);
             throw new InvalidArgumentException('Invalid expires time specified.');
         }
 
@@ -401,15 +401,15 @@ abstract class AbstractCookie implements Stringable, CookieContract
     {
         $name = urlencode($this->name) . '=';
 
-        if ((string) $this->getValue() === '') {
+        if ($this->getValue() === null) {
             $time = Chronos::now()->getTimestamp() - 31536001;
 
             $cookieStringParts[] .= $name . 'deleted; Expires=' . (new Chronos(gmdate('D, d-M-Y H:i:s', $time)))->toCookieString();
         } else {
             $cookieStringParts[] .= $name . urlencode($this->getValue());
 
-            if ($this->expires !== 0) {
-                $cookieStringParts[] .= 'Expires=' . $this->getExpiresTime();
+            if (! is_null($this->getExpiresTime())) {
+                $cookieStringParts[] .= 'Expires=' . (new Chronos(gmdate('D, d-M-Y H:i:s', $this->getExpiresTime())))->toCookieString();
             }
         }
 

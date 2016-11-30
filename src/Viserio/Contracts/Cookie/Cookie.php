@@ -20,11 +20,11 @@ interface Cookie
     /**
      * Sets the value.
      *
-     * @param string|null $value
+     * @param string $value
      *
      * @return $this
      */
-    public function withValue(string $value = null): Cookie;
+    public function withValue(string $value = ''): Cookie;
 
     /**
      * Returns the value.
@@ -75,9 +75,9 @@ interface Cookie
     /**
      * Returns the expiration time
      *
-     * @return string
+     * @return string|int
      */
-    public function getExpiresTime(): string;
+    public function getExpiresTime();
 
     /**
      * Checks if there is an expiration time.

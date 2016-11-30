@@ -7,7 +7,6 @@ use Defuse\Crypto\Key;
 use Mockery as Mock;
 use Narrowspark\TestingHelper\ArrayContainer;
 use Narrowspark\TestingHelper\Middleware\CallableMiddleware;
-use Narrowspark\TestingHelper\Middleware\DelegateMiddleware;
 use Narrowspark\TestingHelper\Middleware\Dispatcher;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use org\bovigo\vfs\vfsStream;

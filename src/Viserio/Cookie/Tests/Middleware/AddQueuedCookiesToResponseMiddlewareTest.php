@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Cookie\Tests\Middleware;
 
+use Mockery as Mock;
 use DateTime;
 use Narrowspark\TestingHelper\Middleware\DelegateMiddleware;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
@@ -14,6 +15,16 @@ use Viserio\HttpFactory\ServerRequestFactory;
 class AddQueuedCookiesToResponseMiddlewareTest extends \PHPUnit_Framework_TestCase
 {
     use MockeryTrait;
+
+    public function tearDown()
+    {
+        parent::tearDown();
+
+        $this->allowMockingNonExistentMethods(true);
+
+        // Verify Mockery expectations.
+        Mock::close();
+    }
 
     public function testAddQueuedCookiesToResponseMiddleware()
     {

@@ -7,10 +7,22 @@ use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Viserio\Cookie\CookieJar;
+use Viserio\Contracts\Cookie\Cookie as CookieContract;
+use Mockery as Mock;
 
 class CookieJarTest extends \PHPUnit_Framework_TestCase
 {
     use MockeryTrait;
+
+    public function tearDown()
+    {
+        parent::tearDown();
+
+        $this->allowMockingNonExistentMethods(true);
+
+        // Verify Mockery expectations.
+        Mock::close();
+    }
 
     public function testCookiesAreCreatedWithProperOptions()
     {
@@ -32,7 +44,7 @@ class CookieJarTest extends \PHPUnit_Framework_TestCase
         self::assertEquals('/path', $c2->getPath());
 
         $c3 = $cookie->delete('color');
-        self::assertNull($c3->getValue());
+        self::assertSame('', $c3->getValue());
         self::assertNotEquals($c3->getExpiresTime(), Chronos::now()->getTimestamp());
     }
 
@@ -58,12 +70,12 @@ class CookieJarTest extends \PHPUnit_Framework_TestCase
         $cookie->queue($cookie->create('foo', 'bar'));
         self::assertArrayHasKey('foo', $cookie->getQueuedCookies());
         self::assertTrue($cookie->hasQueued('foo'));
-        self::assertInstanceOf('Viserio\Cookie\Cookie', $cookie->queued('foo'));
+        self::assertInstanceOf(CookieContract::class, $cookie->queued('foo'));
 
         $cookie->queue('qu', 'ux');
         self::assertArrayHasKey('qu', $cookie->getQueuedCookies());
         self::assertTrue($cookie->hasQueued('qu'));
-        self::assertInstanceOf('Viserio\Contracts\Cookie\Cookie', $cookie->queued('qu'));
+        self::assertInstanceOf(CookieContract::class, $cookie->queued('qu'));
     }
 
     public function testUnqueue()

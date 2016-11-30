@@ -8,7 +8,7 @@ interface Factory
      * Create a new cookie instance.
      *
      * @param string      $name
-     * @param string|null $value
+     * @param string      $value
      * @param int         $minutes
      * @param string|null $path
      * @param string|null $domain
@@ -19,7 +19,7 @@ interface Factory
      */
     public function create(
         string $name,
-        $value,
+        string $value,
         int $minutes = 0,
         $path = null,
         $domain = null,

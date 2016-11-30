@@ -3,10 +3,27 @@ declare(strict_types=1);
 namespace Viserio\Cookie;
 
 use Psr\Http\Message\ServerRequestInterface;
-use Viserio\Contracts\Cookie\Cookie as CookieContract;
 
 class RequestCookies extends AbstractCookieCollector
 {
+    /**
+     * Create a new cookie collection instance.
+     *
+     * @param array $cookies
+     *
+     * @throws
+     */
+    public function __construct(array $cookies = [])
+    {
+        foreach ($cookies as $cookie) {
+            if (! ($cookie instanceof Cookie)) {
+                # code...
+            }
+
+            $this->cookies[$cookie->getName()] = $cookie;
+        }
+    }
+
     /**
      * Creates a Cookie instance from a Set-Cookie header value.
      *
@@ -56,12 +73,18 @@ class RequestCookies extends AbstractCookieCollector
      *
      * @param string $string
      *
-     * @return \Viserio\Contracts\Cookie\Cookie
+     * @return \Viserio\Cookie\Cookie
      */
-    protected static function oneFromCookiePair(string $string): CookieContract
+    protected static function oneFromCookiePair(string $string): Cookie
     {
         list($name, $value) = self::splitCookiePair($string);
 
-        return new Cookie($name, $value);
+        $cookie = new Cookie($name);
+
+        if ($value !== null || $value !== '') {
+            $cookie = $cookie->withValue($value);
+        }
+
+        return $cookie;
     }
 }

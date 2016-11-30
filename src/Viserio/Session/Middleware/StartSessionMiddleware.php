@@ -9,7 +9,7 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Contracts\Config\Manager as ConfigContract;
 use Viserio\Contracts\Session\Store as StoreContract;
-use Viserio\Cookie\Cookie;
+use Viserio\Cookie\SetCookie;
 use Viserio\Cookie\RequestCookies;
 use Viserio\Session\Fingerprint\ClientIpGenerator;
 use Viserio\Session\Fingerprint\UserAgentGenerator;
@@ -161,7 +161,7 @@ class StartSessionMiddleware implements ServerMiddlewareInterface
 
         $config = $this->manager->getConfig();
 
-        $setCookie = new Cookie(
+        $setCookie = new SetCookie(
             $session->getName(),
             $session->getId(),
             $this->getCookieExpirationDate($config),

@@ -8,7 +8,7 @@ use Interop\Http\Middleware\ServerMiddlewareInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Contracts\Session\Exception\TokenMismatchException;
-use Viserio\Cookie\Cookie;
+use Viserio\Cookie\SetCookie;
 use Viserio\Session\SessionManager;
 
 class VerifyCsrfTokenMiddleware implements ServerMiddlewareInterface
@@ -125,7 +125,7 @@ class VerifyCsrfTokenMiddleware implements ServerMiddlewareInterface
     ): ResponseInterface {
         $config = $this->manager->getConfig();
 
-        $setCookie = new Cookie(
+        $setCookie = new SetCookie(
             'XSRF-TOKEN',
             $request->getAttribute('session')->getToken(),
             $config->get('session.csrf.livetime', Chronos::now()->getTimestamp() + 60 * 120),
