@@ -8,8 +8,8 @@ use Mockery as Mock;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Viserio\Cookie\Cookie;
-use Viserio\Cookie\SetCookie;
 use Viserio\Cookie\RequestCookies;
+use Viserio\Cookie\SetCookie;
 use Viserio\HttpFactory\ServerRequestFactory;
 
 class RequestCookiesTest extends \PHPUnit_Framework_TestCase
