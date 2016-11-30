@@ -11,6 +11,8 @@ final class SetCookie extends AbstractCookie
     use CookieValidatorTratis;
 
     /**
+     * Create a new set-cookie instance.
+     *
      * @param string                             $name       The name of the cookie.
      * @param string|null                        $value      The value of the cookie.
      * @param int|string|\DateTimeInterface|null $expiration The time the cookie expires.

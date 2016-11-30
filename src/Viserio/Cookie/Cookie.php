@@ -10,12 +10,14 @@ final class Cookie implements StringableContract
     use CookieValidatorTratis;
 
     /**
-     * @param string $name  The name of the cookie.
-     * @param string $value The value of the cookie.
+     * Create a new cookie instance.
+     *
+     * @param string      $name  The name of the cookie.
+     * @param string|null $value The value of the cookie.
      *
      * @throws \InvalidArgumentException
      */
-    public function __construct(string $name, string $value = '')
+    public function __construct(string $name, string $value = null)
     {
         $this->validateName($name);
         $this->validateValue($value);
@@ -66,9 +68,9 @@ final class Cookie implements StringableContract
     /**
      * Returns the value.
      *
-     * @return string
+     * @return string|null
      */
-    public function getValue(): string
+    public function getValue()
     {
         return $this->value;
     }
