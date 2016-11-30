@@ -19,13 +19,6 @@ trait MiddlewareAwareTrait
      */
     public function withMiddleware(string $middleware)
     {
-        if (! in_array(ServerMiddlewareInterface::class, class_implements($middleware))) {
-            throw new LogicException(sprintf(
-                '[%s] should implement \Interop\Http\Middleware\ServerMiddlewareInterface',
-                $middleware
-            ));
-        }
-
         $this->middlewares[] = $middleware;
 
         return $this;
