@@ -35,9 +35,9 @@ class OpenHandlerController extends AbstractController
     /**
      * [__construct description]
      *
-     * @param \Interop\Http\Factory\ResponseFactoryInterface      $responseFactory
-     * @param \Interop\Http\Factory\StreamFactoryInterface        $streamFactory
-     * @param \Viserio\WebProfiler\WebProfiler                    $webprofiler
+     * @param \Interop\Http\Factory\ResponseFactoryInterface $responseFactory
+     * @param \Interop\Http\Factory\StreamFactoryInterface   $streamFactory
+     * @param \Viserio\WebProfiler\WebProfiler               $webprofiler
      */
     public function __construct(
         ResponseFactoryInterface $responseFactory,
@@ -56,7 +56,6 @@ class OpenHandlerController extends AbstractController
      */
     public function handle(): ResponseInterface
     {
-
     }
 
     /**
@@ -70,6 +69,5 @@ class OpenHandlerController extends AbstractController
      */
     public function clockwork(int $id): ResponseInterface
     {
-
     }
 }

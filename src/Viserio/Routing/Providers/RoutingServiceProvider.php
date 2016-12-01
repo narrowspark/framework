@@ -4,13 +4,13 @@ namespace Viserio\Routing\Providers;
 
 use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
+use Interop\Http\Factory\UriFactoryInterface;
+use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Contracts\Events\Dispatcher as DispatcherContract;
 use Viserio\Contracts\Routing\Router as RouterContract;
 use Viserio\Contracts\Routing\UrlGenerator as UrlGeneratorContract;
 use Viserio\Routing\Router;
 use Viserio\Routing\UrlGenerator;
-use Psr\Http\Message\ServerRequestInterface;
-use Interop\Http\Factory\UriFactoryInterface;
 
 class RoutingServiceProvider implements ServiceProvider
 {

@@ -2,14 +2,14 @@
 declare(strict_types=1);
 namespace Viserio\Routing;
 
+use Interop\Http\Factory\UriFactoryInterface;
 use InvalidArgumentException;
 use Psr\Http\Message\ServerRequestInterface;
-use Viserio\Contracts\Routing\UrlGenerator as UrlGeneratorContract;
-use Viserio\Support\Traits\MacroableTrait;
-use Viserio\Contracts\Routing\Route as RouteContract;
-use Viserio\Routing\Exceptions\UrlGenerationException;
-use Interop\Http\Factory\UriFactoryInterface;
 use Psr\Http\Message\UriInterface;
+use Viserio\Contracts\Routing\Route as RouteContract;
+use Viserio\Contracts\Routing\UrlGenerator as UrlGeneratorContract;
+use Viserio\Routing\Exceptions\UrlGenerationException;
+use Viserio\Support\Traits\MacroableTrait;
 
 class UrlGenerator implements UrlGeneratorContract
 {
@@ -39,8 +39,8 @@ class UrlGenerator implements UrlGeneratorContract
     /**
      * Create a new URL Generator instance.
      *
-     * @param \Viserio\Routing\RouteCollection         $routes
-     * @param \Psr\Http\Message\ServerRequestInterface $request
+     * @param \Viserio\Routing\RouteCollection          $routes
+     * @param \Psr\Http\Message\ServerRequestInterface  $request
      * @param \Interop\Http\Factory\UriFactoryInterface $uriFactory
      */
     public function __construct(
@@ -60,9 +60,9 @@ class UrlGenerator implements UrlGeneratorContract
      * @param array  $parameters
      * @param bool   $absolute
      *
-     * @return string
-     *
      * @throws \InvalidArgumentException
+     *
+     * @return string
      */
     public function route(string $name, array $parameters = [], bool $absolute = true): string
     {
@@ -80,9 +80,9 @@ class UrlGenerator implements UrlGeneratorContract
      * @param array                            $parameters
      * @param bool                             $absolute
      *
-     * @return string
-     *
      * @throws \Viserio\Routing\Exceptions\UrlGenerationException
+     *
+     * @return string
      */
     protected function toRoute(RouteContract $route, array $parameters, bool $absolute): string
     {

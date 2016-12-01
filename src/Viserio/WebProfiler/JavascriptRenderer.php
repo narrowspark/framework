@@ -118,8 +118,8 @@ class JavascriptRenderer extends BaseJavascriptRenderer
      */
     protected function renderIntoHtml(): string
     {
-        $html  = "<style>" . $this->dumpAssetsToString('css') . "</style>";
-        $html .= "<script type='text/javascript'>" . $this->dumpAssetsToString('js') . "</script>";
+        $html  = '<style>' . $this->dumpAssetsToString('css') . '</style>';
+        $html .= "<script type='text/javascript'>" . $this->dumpAssetsToString('js') . '</script>';
 
         return $html;
     }

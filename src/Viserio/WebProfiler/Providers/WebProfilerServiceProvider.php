@@ -6,9 +6,9 @@ use DebugBar\DebugBar;
 use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
 use Interop\Http\Factory\StreamFactoryInterface;
-use Viserio\WebProfiler\WebProfiler;
 use Viserio\Contracts\Routing\Router as RouterContract;
 use Viserio\Contracts\Routing\UrlGenerator as UrlGeneratorContract;
+use Viserio\WebProfiler\WebProfiler;
 
 class WebProfilerServiceProvider implements ServiceProvider
 {
@@ -21,7 +21,7 @@ class WebProfilerServiceProvider implements ServiceProvider
             WebProfiler::class => [self::class, 'createWebProfiler'],
             DebugBar::class => function (ContainerInterface $container) {
                 return $container->get(WebProfiler::class);
-            }
+            },
         ];
     }
 
@@ -51,7 +51,7 @@ class WebProfilerServiceProvider implements ServiceProvider
         $router->group(
             [
                 'namespace' => 'Viserio\WebProfiler\Controllers',
-                'prefix' => 'webprofiler'
+                'prefix' => 'webprofiler',
             ],
             function ($router) {
                 $router->get('assets/stylesheets', [

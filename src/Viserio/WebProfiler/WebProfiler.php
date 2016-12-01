@@ -83,7 +83,6 @@ class WebProfiler extends DebugBar
         ServerRequestInterface $request,
         ResponseInterface $response
     ) : ResponseInterface {
-
         return $this->injectWebProfiler($response);
     }
 
