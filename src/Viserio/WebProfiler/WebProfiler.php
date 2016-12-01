@@ -9,6 +9,7 @@ use Interop\Http\Factory\StreamFactoryInterface;
 use Psr\Http\Message\MessageInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Viserio\Contracts\Routing\UrlGenerator as UrlGeneratorContract;
 
 class WebProfiler extends DebugBar
 {
@@ -20,17 +21,48 @@ class WebProfiler extends DebugBar
     protected $streamFactory;
 
     /**
-     * [setStreamFactory description]
+     * Url generator instance.
+     *
+     * @var \Viserio\Contracts\Routing\UrlGenerator
+     */
+    protected $urlGenerator;
+
+    /**
+     * Set a url generator instance.
+     *
+     * @param \Viserio\Contracts\Routing\UrlGenerator $urlGenerator
+     */
+    public function setUrlGenerator(UrlGeneratorContract $urlGenerator)
+    {
+        $this->urlGenerator = $urlGenerator;
+
+        return $this;
+    }
+
+    /**
+     * Get a url generator instance.
+     *
+     * @return \Viserio\Contracts\Routing\UrlGenerator|null
+     */
+    public function getUrlGenerator()
+    {
+        return $this->urlGenerator;
+    }
+
+    /**
+     * Set stream factory instance.
      *
      * @param \Interop\Http\Factory\StreamFactoryInterface $factory
      */
     public function setStreamFactory(StreamFactoryInterface $factory)
     {
-        return $this->streamFactory = $factory;
+        $this->streamFactory = $factory;
+
+        return $this;
     }
 
     /**
-     * [getStreamFactory description]
+     * Get stream factory instance.
      *
      * @return \Interop\Http\Factory\StreamFactoryInterface
      */
@@ -51,6 +83,7 @@ class WebProfiler extends DebugBar
         ServerRequestInterface $request,
         ResponseInterface $response
     ) : ResponseInterface {
+
         return $this->injectWebProfiler($response);
     }
 
@@ -86,9 +119,9 @@ class WebProfiler extends DebugBar
         $renderer = $this->getJavascriptRenderer();
 
         // if ($this->getStorage()) {
-        //     $openHandlerUrl = route('debugbar.openhandler');
+            // $openHandlerUrl = $this->urlGenerator->route('webprofiler.openhandler');
 
-        //     $renderer->setOpenHandlerUrl($openHandlerUrl);
+            // $renderer->setOpenHandlerUrl($openHandlerUrl);
         // }
 
         $renderedContent = $renderer->renderHead() . $renderer->render();

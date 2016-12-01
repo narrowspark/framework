@@ -12,7 +12,12 @@ class JavascriptRenderer extends BaseJavascriptRenderer
     protected $ajaxHandlerBindToJquery = false;
     protected $ajaxHandlerBindToXHR = true;
 
-    protected $urlGenerator;
+    /**
+     * The debugbar instance.
+     *
+     * @var \DebugBar\DebugBar
+     */
+    protected $webprofiler;
 
     /**
      * Create a new file javascript renderer instance.
@@ -29,36 +34,59 @@ class JavascriptRenderer extends BaseJavascriptRenderer
     ) {
         parent::__construct($webprofiler, $baseUrl, $basePath);
 
-        // $this->urlGenerator = $webprofiler->getUrlGenerator();
+        $this->webprofiler = $webprofiler;
+
         $this->cssFiles['narrowspark'] = __DIR__ . '/Resources/narrowspark-debugbar.css';
-        $this->cssVendors['fontawesome'] = __DIR__ . '/Resources/vendor/font-awesome/style.css';
+        $this->jsVendors['jquery'] = __DIR__ . '/Resources/jquery/jquery-3.1.1.min.js';
     }
 
     /**
      * {@inheritdoc}
      */
-    // public function renderHead()
-    // {
-    //     $cssRoute = $this->urlGenerator->route('debugbar.assets.css', [
-    //         'v' => $this->getModifiedTime('css'),
-    //     ]);
+    public function renderHead()
+    {
+        if (($urlGenerator = $this->webprofiler->getUrlGenerator()) !== null) {
+            $cssRoute = $urlGenerator->route('webprofiler.assets.css', [
+                'v' => $this->getModifiedTime('css'),
+            ]);
+            $jsRoute = $urlGenerator->route('webprofiler.assets.js', [
+                'v' => $this->getModifiedTime('js'),
+            ]);
 
-    //     $jsRoute = $this->urlGenerator->route('debugbar.assets.js', [
-    //         'v' => $this->getModifiedTime('js'),
-    //     ]);
+            $cssRoute = preg_replace('/\Ahttps?:/', '', $cssRoute);
+            $jsRoute  = preg_replace('/\Ahttps?:/', '', $jsRoute);
 
-    //     $cssRoute = preg_replace('/\Ahttps?:/', '', $cssRoute);
-    //     $jsRoute  = preg_replace('/\Ahttps?:/', '', $jsRoute);
+            $html  = "<link rel='stylesheet' type='text/css' property='stylesheet' href='{$cssRoute}'>";
+            $html .= "<script type='text/javascript' src='{$jsRoute}'></script>";
+        } else {
+            $html = $this->renderIntoHtml();
+        }
 
-    //     $html  = "<link rel='stylesheet' type='text/css' property='stylesheet' href='{$cssRoute}'>";
-    //     $html .= "<script type='text/javascript' src='{$jsRoute}'></script>";
+        if ($this->isJqueryNoConflictEnabled()) {
+            $html .= '<script type="text/javascript">jQuery.noConflict(true);</script>' . "\n";
+        }
 
-    //     if ($this->isJqueryNoConflictEnabled()) {
-    //         $html .= '<script type="text/javascript">jQuery.noConflict(true);</script>' . "\n";
-    //     }
+        return $html;
+    }
 
-    //     return $html;
-    // }
+    /**
+     * Return assets as a string
+     *
+     * @param string $type 'js' or 'css'
+     *
+     * @return string
+     */
+    public function dumpAssetsToString($type)
+    {
+        $files = $this->getAssets($type);
+        $content = '';
+
+        foreach ($files as $file) {
+            $content .= file_get_contents($file) . "\n";
+        }
+
+        return $content;
+    }
 
     /**
      * Get the last modified time of any assets.
@@ -84,21 +112,15 @@ class JavascriptRenderer extends BaseJavascriptRenderer
     }
 
     /**
-     * Return assets as a string
-     *
-     * @param string $type 'js' or 'css'
+     * Render css and js into html elements.
      *
      * @return string
      */
-    public function dumpAssetsToString($type)
+    protected function renderIntoHtml(): string
     {
-        $files = $this->getAssets($type);
-        $content = '';
+        $html  = "<style>" . $this->dumpAssetsToString('css') . "</style>";
+        $html .= "<script type='text/javascript'>" . $this->dumpAssetsToString('js') . "</script>";
 
-        foreach ($files as $file) {
-            $content .= file_get_contents($file) . "\n";
-        }
-
-        return $content;
+        return $html;
     }
 }

@@ -19,16 +19,19 @@
     ],
     "require": {
         "php"                                 : "7.0.0 - 7.0.5 || ^7.0.7",
-        "http-interop/http-middleware"        : "^0.3",
+        "http-interop/http-factory"           : "^0.2",
         "maximebf/debugbar"                   : "^1.13",
         "psr/http-message"                    : "^1.0",
         "symfony/finder"                      : "^3.1",
-        "viserio/config"                      : "self.version"
+        "viserio/config"                      : "self.version",
+        "viserio/contracts"                   : "self.version"
     },
     "require-dev": {
         "narrowspark/testing-helper"          : "^1.5",
         "phpunit/phpunit"                     : "^5.1",
-        "viserio/container"                   : "self.version"
+        "http-interop/http-middleware"        : "^0.3",
+        "viserio/container"                   : "self.version",
+        "viserio/routing"                     : "self.version"
     },
     "autoload": {
         "psr-4": {
@@ -48,7 +51,9 @@
     },
     "suggest": {
         "container-interop/service-provider"  : "Required to use service-provider (^0.3).",
-        "viserio/statical-proxy"              : "Required to use the proxy instances (self.version)."
+        "http-interop/http-middleware"        : "Required to use middleware (^0.3).",
+        "viserio/statical-proxy"              : "Required to use the proxy instances (self.version).",
+        "viserio/routing"                     : "Required to use the webprofiler assets controllers (self.version)."
     },
     "extra": {
         "branch-alias": {
