@@ -6,6 +6,8 @@ use DebugBar\DebugBar;
 use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
 use Viserio\WebProfiler\WebProfiler;
+use DebugBar\DebugBar;
+use Interop\Http\Factory\StreamFactoryInterface;
 
 class WebProfilerServiceProvider implements ServiceProvider
 {
@@ -25,6 +27,9 @@ class WebProfilerServiceProvider implements ServiceProvider
     public static function createWebProfiler(ContainerInterface $container)
     {
         $profiler = new WebProfiler();
+        $profiler->setStreamFactory(
+            $container->get(StreamFactoryInterface::class)->createStream()
+        );
 
         return $profiler;
     }

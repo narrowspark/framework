@@ -13,6 +13,8 @@ use Viserio\HttpFactory\StreamFactory;
 
 class WebProfiler extends DebugBar
 {
+    protected $streamFactory;
+
     /**
      * [setStreamFactory description]
      *
@@ -20,7 +22,7 @@ class WebProfiler extends DebugBar
      */
     public function setStreamFactory(StreamInterface $factory)
     {
-        return $this->streamFactory;
+        return $this->streamFactory = $factory;
     }
 
     /**
@@ -30,10 +32,6 @@ class WebProfiler extends DebugBar
      */
     public function getStreamFactory(): StreamInterface
     {
-        if ($this->streamFactory !== null) {
-            return (new StreamFactory())->createStream();
-        }
-
         return $this->streamFactory;
     }
 
