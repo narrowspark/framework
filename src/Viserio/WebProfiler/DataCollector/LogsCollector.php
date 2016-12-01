@@ -8,5 +8,4 @@ use ReflectionClass;
 
 class LogsCollector extends MessagesCollector
 {
-
 }

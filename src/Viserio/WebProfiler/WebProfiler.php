@@ -2,6 +2,10 @@
 declare(strict_types=1);
 namespace Viserio\WebProfiler;
 
+use DebugBar\DataCollector\MemoryCollector;
+use DebugBar\DataCollector\MessagesCollector;
+use DebugBar\DataCollector\PhpInfoCollector;
+use DebugBar\DataCollector\TimeDataCollector;
 use DebugBar\DebugBar;
 use DebugBar\Storage\PdoStorage;
 use DebugBar\Storage\RedisStorage;
@@ -9,14 +13,10 @@ use Interop\Http\Factory\StreamFactoryInterface;
 use Psr\Http\Message\MessageInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Viserio\Contracts\Routing\UrlGenerator as UrlGeneratorContract;
 use Viserio\Config\Manager as ConfigManagerContract;
 use Viserio\Contracts\Config\Traits\ConfigAwareTrait;
+use Viserio\Contracts\Routing\UrlGenerator as UrlGeneratorContract;
 use Viserio\Foundation\Application;
-use DebugBar\DataCollector\PhpInfoCollector;
-use DebugBar\DataCollector\MessagesCollector;
-use DebugBar\DataCollector\MemoryCollector;
-use DebugBar\DataCollector\TimeDataCollector;
 
 class WebProfiler extends DebugBar
 {
@@ -67,7 +67,7 @@ class WebProfiler extends DebugBar
     /**
      * Create a new web profiler instance.
      *
-     * @param \Viserio\Config\Manager $config
+     * @param \Viserio\Config\Manager                  $config
      * @param \Psr\Http\Message\ServerRequestInterface $request
      */
     public function __construct(ConfigManagerContract $config, ServerRequestInterface $serverRequset)
@@ -138,7 +138,7 @@ class WebProfiler extends DebugBar
                 'method' => $request->getMethod(),
                 'uri' => (string) $request->getUri(),
                 // 'ip' => $request->getClientIp()
-            ]
+            ],
         ];
 
         foreach ($this->collectors as $name => $collector) {

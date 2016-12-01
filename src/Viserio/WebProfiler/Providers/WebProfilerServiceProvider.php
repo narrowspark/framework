@@ -6,11 +6,11 @@ use DebugBar\DebugBar;
 use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
 use Interop\Http\Factory\StreamFactoryInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use Viserio\Config\Manager as ConfigManagerContract;
 use Viserio\Contracts\Routing\Router as RouterContract;
 use Viserio\Contracts\Routing\UrlGenerator as UrlGeneratorContract;
 use Viserio\WebProfiler\WebProfiler;
-use Viserio\Config\Manager as ConfigManagerContract;
-use Psr\Http\Message\ServerRequestInterface;
 
 class WebProfilerServiceProvider implements ServiceProvider
 {
