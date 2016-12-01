@@ -4,6 +4,7 @@ namespace Viserio\WebProfiler;
 
 use DebugBar\DebugBar;
 use DebugBar\JavascriptRenderer as BaseJavascriptRenderer;
+use Viserio\Contracts\Routing\Router as RouterContract;
 
 class JavascriptRenderer extends BaseJavascriptRenderer
 {
@@ -11,17 +12,24 @@ class JavascriptRenderer extends BaseJavascriptRenderer
     protected $ajaxHandlerBindToJquery = false;
     protected $ajaxHandlerBindToXHR = true;
 
+    protected $urlGenerator;
+
     /**
      * Create a new file javascript renderer instance.
      *
-     * @param \DebugBar\DebugBar $debugBar
+     * @param \DebugBar\DebugBar $webprofiler
+     * @param  $urlGenerator
      * @param string|null        $baseUrl
      * @param string|null        $basePath
      */
-    public function __construct(DebugBar $debugBar, string $baseUrl = null, string $basePath = null)
-    {
-        parent::__construct($debugBar, $baseUrl, $basePath);
+    public function __construct(
+        DebugBar $webprofiler,
+        string $baseUrl = null,
+        string $basePath = null
+    ) {
+        parent::__construct($webprofiler, $baseUrl, $basePath);
 
+        // $this->urlGenerator = $webprofiler->getUrlGenerator();
         $this->cssFiles['narrowspark'] = __DIR__ . '/Resources/narrowspark-debugbar.css';
         $this->cssVendors['fontawesome'] = __DIR__ . '/Resources/vendor/font-awesome/style.css';
     }
@@ -31,11 +39,11 @@ class JavascriptRenderer extends BaseJavascriptRenderer
      */
     // public function renderHead()
     // {
-    //     $cssRoute = route('debugbar.assets.css', [
+    //     $cssRoute = $this->urlGenerator->route('debugbar.assets.css', [
     //         'v' => $this->getModifiedTime('css'),
     //     ]);
 
-    //     $jsRoute = route('debugbar.assets.js', [
+    //     $jsRoute = $this->urlGenerator->route('debugbar.assets.js', [
     //         'v' => $this->getModifiedTime('js'),
     //     ]);
 
@@ -59,7 +67,7 @@ class JavascriptRenderer extends BaseJavascriptRenderer
      *
      * @return int
      */
-    protected function getModifiedTime($type)
+    protected function getModifiedTime(string $type): int
     {
         $files = $this->getAssets($type);
         $latest = 0;
@@ -73,5 +81,24 @@ class JavascriptRenderer extends BaseJavascriptRenderer
         }
 
         return $latest;
+    }
+
+    /**
+     * Return assets as a string
+     *
+     * @param string $type 'js' or 'css'
+     *
+     * @return string
+     */
+    public function dumpAssetsToString($type)
+    {
+        $files = $this->getAssets($type);
+        $content = '';
+
+        foreach ($files as $file) {
+            $content .= file_get_contents($file) . "\n";
+        }
+
+        return $content;
     }
 }

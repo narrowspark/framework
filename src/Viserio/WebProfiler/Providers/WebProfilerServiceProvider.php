@@ -3,7 +3,6 @@ declare(strict_types=1);
 namespace Viserio\WebProfiler\Providers;
 
 use DebugBar\DebugBar;
-use DebugBar\DebugBar;
 use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
 use Interop\Http\Factory\StreamFactoryInterface;

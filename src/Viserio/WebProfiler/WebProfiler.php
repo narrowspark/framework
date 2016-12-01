@@ -8,19 +8,23 @@ use DebugBar\Storage\RedisStorage;
 use Psr\Http\Message\MessageInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Psr\Http\Message\StreamInterface;
-use Viserio\HttpFactory\StreamFactory;
+use Interop\Http\Factory\StreamFactoryInterface;
 
 class WebProfiler extends DebugBar
 {
+    /**
+     * Stream factory instance.
+     *
+     * @var \Interop\Http\Factory\StreamFactoryInterface
+     */
     protected $streamFactory;
 
     /**
      * [setStreamFactory description]
      *
-     * @param \Psr\Http\Message\StreamInterface $factory
+     * @param \Interop\Http\Factory\StreamFactoryInterface $factory
      */
-    public function setStreamFactory(StreamInterface $factory)
+    public function setStreamFactory(StreamFactoryInterface $factory)
     {
         return $this->streamFactory = $factory;
     }
@@ -28,9 +32,9 @@ class WebProfiler extends DebugBar
     /**
      * [getStreamFactory description]
      *
-     * @return \Psr\Http\Message\StreamInterface
+     * @return \Interop\Http\Factory\StreamFactoryInterface
      */
-    public function getStreamFactory(): StreamInterface
+    public function getStreamFactory(): StreamFactoryInterface
     {
         return $this->streamFactory;
     }
@@ -51,7 +55,7 @@ class WebProfiler extends DebugBar
     }
 
     /**
-     * Returns a JavascriptRenderer for this instance
+     * Returns a JavascriptRenderer for this instance.
      *
      * @param string $baseUrl
      * @param string $basePathng
@@ -71,9 +75,12 @@ class WebProfiler extends DebugBar
      * Injects the web debug toolbar into the given Response.
      *
      * @param \Psr\Http\Message\ResponseInterface $response
-     *                                                      Based on https://github.com/symfony/WebProfilerBundle/blob/master/EventListener/WebDebugToolbarListener.php
+     *
+     * @return \Psr\Http\Message\ResponseInterface
+     *
+     * @link https://github.com/symfony/WebProfilerBundle/blob/master/EventListener/WebDebugToolbarListener.php
      */
-    public function injectWebProfiler(ResponseInterface $response)
+    public function injectWebProfiler(ResponseInterface $response): ResponseInterface
     {
         $content = (string) $response->getBody();
         $renderer = $this->getJavascriptRenderer();
@@ -89,13 +96,14 @@ class WebProfiler extends DebugBar
         $pos = strripos($content, '</body>');
 
         if ($pos !== false) {
-            $body = $this->getStreamFactory();
-            $body->write(substr($content, 0, $pos) . $renderedContent . substr($content, $pos));
+            $stream = $this->getStreamFactory()->createStream(
+                substr($content, 0, $pos) . $renderedContent . substr($content, $pos)
+            );
 
             // Update the new content and reset the content length
             $response = $response->withoutHeader('Content-Length');
 
-            return $response->withBody($body);
+            return $response->withBody($stream);
         }
 
         $response->getBody()->write($renderedContent);
