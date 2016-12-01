@@ -9,6 +9,8 @@ use Interop\Http\Factory\StreamFactoryInterface;
 use Viserio\Contracts\Routing\Router as RouterContract;
 use Viserio\Contracts\Routing\UrlGenerator as UrlGeneratorContract;
 use Viserio\WebProfiler\WebProfiler;
+use Viserio\Config\Manager as ConfigManagerContract;
+use Psr\Http\Message\ServerRequestInterface;
 
 class WebProfilerServiceProvider implements ServiceProvider
 {
@@ -27,7 +29,10 @@ class WebProfilerServiceProvider implements ServiceProvider
 
     public static function createWebProfiler(ContainerInterface $container)
     {
-        $profiler = new WebProfiler();
+        $profiler = new WebProfiler(
+            $container->get(ConfigManagerContract::class),
+            $container->get(ServerRequestInterface::class)
+        );
 
         $profiler->setStreamFactory(
             $container->get(StreamFactoryInterface::class)
@@ -40,6 +45,8 @@ class WebProfilerServiceProvider implements ServiceProvider
             //     $container->get(UrlGeneratorContract::class)
             // );
         }
+
+        $profiler->enable();
 
         return $profiler;
     }

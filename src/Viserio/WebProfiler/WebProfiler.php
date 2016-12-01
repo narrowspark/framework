@@ -10,9 +10,32 @@ use Psr\Http\Message\MessageInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Contracts\Routing\UrlGenerator as UrlGeneratorContract;
+use Viserio\Config\Manager as ConfigManagerContract;
+use Viserio\Contracts\Config\Traits\ConfigAwareTrait;
+use Viserio\Foundation\Application;
+use DebugBar\DataCollector\PhpInfoCollector;
+use DebugBar\DataCollector\MessagesCollector;
+use DebugBar\DataCollector\MemoryCollector;
+use DebugBar\DataCollector\TimeDataCollector;
 
 class WebProfiler extends DebugBar
 {
+    use ConfigAwareTrait;
+
+    /**
+     * Normalized Version.
+     *
+     * @var string
+     */
+    protected $version;
+
+    /**
+     * A ServerRequest instance.
+     *
+     * @var string
+     */
+    protected $serverRequset;
+
     /**
      * Stream factory instance.
      *
@@ -26,6 +49,118 @@ class WebProfiler extends DebugBar
      * @var \Viserio\Contracts\Routing\UrlGenerator
      */
     protected $urlGenerator;
+
+    /**
+     * True when booted.
+     *
+     * @var bool
+     */
+    protected $booted = false;
+
+    /**
+     * True when enabled, false for disabled.
+     *
+     * @var bool
+     */
+    protected $enabled = false;
+
+    /**
+     * Create a new web profiler instance.
+     *
+     * @param \Viserio\Config\Manager $config
+     * @param \Psr\Http\Message\ServerRequestInterface $request
+     */
+    public function __construct(ConfigManagerContract $config, ServerRequestInterface $serverRequset)
+    {
+        $this->config = $config;
+        $this->serverRequset = $serverRequset;
+
+        $version = class_exists(Application::class) ? Application::VERSION : 0;
+
+        $this->version = $config->get('webprofiler.version', $version);
+    }
+
+    /**
+     * Enable the Debugbar and boot, if not already booted.
+     */
+    public function enable()
+    {
+        $this->enabled = true;
+
+        if (!$this->booted) {
+            $this->boot();
+        }
+    }
+
+    /**
+     * Check if the Debugbar is enabled
+     *
+     * @return bool
+     */
+    public function isEnabled(): bool
+    {
+        return $this->config->get('webprofiler.enabled', $this->enabled);
+    }
+
+    public function boot()
+    {
+        $webprofiler = $this;
+
+        if ($this->shouldCollect('phpinfo', true)) {
+            $this->addCollector(new PhpInfoCollector());
+        }
+
+        if ($this->shouldCollect('messages', true)) {
+            $this->addCollector(new MessagesCollector());
+        }
+
+        if ($this->shouldCollect('time', true)) {
+            $this->addCollector(new TimeDataCollector());
+        }
+
+        if ($this->shouldCollect('memory', true)) {
+            $this->addCollector(new MemoryCollector());
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function collect()
+    {
+        $request = $this->serverRequset;
+
+        $this->data = [
+            '__meta' => [
+                'id' => $this->getCurrentRequestId(),
+                'datetime' => date('Y-m-d H:i:s'),
+                'utime' => microtime(true),
+                'method' => $request->getMethod(),
+                'uri' => (string) $request->getUri(),
+                // 'ip' => $request->getClientIp()
+            ]
+        ];
+
+        foreach ($this->collectors as $name => $collector) {
+            $this->data[$name] = $collector->collect();
+        }
+
+        // Remove all invalid (non UTF-8) characters
+        array_walk_recursive(
+            $this->data,
+            function (&$item) {
+                if (is_string($item) && !mb_check_encoding($item, 'UTF-8')) {
+                    $item = mb_convert_encoding($item, 'UTF-8', 'UTF-8');
+                }
+            }
+        );
+
+        if ($this->storage !== null) {
+            $this->storage->save($this->getCurrentRequestId(), $this->data);
+        }
+
+        return $this->data;
+    }
 
     /**
      * Set a url generator instance.
@@ -83,6 +218,10 @@ class WebProfiler extends DebugBar
         ServerRequestInterface $request,
         ResponseInterface $response
     ) : ResponseInterface {
+        if ($this->runningInConsole() || ! $this->isEnabled()) {
+            return $response;
+        }
+
         return $this->injectWebProfiler($response);
     }
 
@@ -112,7 +251,7 @@ class WebProfiler extends DebugBar
      *
      * @link https://github.com/symfony/WebProfilerBundle/blob/master/EventListener/WebDebugToolbarListener.php
      */
-    public function injectWebProfiler(ResponseInterface $response): ResponseInterface
+    protected function injectWebProfiler(ResponseInterface $response): ResponseInterface
     {
         $content = (string) $response->getBody();
         $renderer = $this->getJavascriptRenderer();
@@ -141,6 +280,14 @@ class WebProfiler extends DebugBar
         $response->getBody()->write($renderedContent);
 
         return $response;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    private function runningInConsole(): bool
+    {
+        return substr(PHP_SAPI, 0, 3) === 'cgi';
     }
 
     /**
@@ -190,5 +337,18 @@ class WebProfiler extends DebugBar
     private function isRedirect(ResponseInterface $response): bool
     {
         return in_array($response->getStatusCode(), [301, 302, 303, 307, 308]);
+    }
+
+    /**
+     * Check if a collector should be activated.
+     *
+     * @param string $name
+     * @param bool   $default
+     *
+     * @return bool
+     */
+    private function shouldCollect(string $name, bool $default = false): bool
+    {
+        return $this->config->get('webprofiler.collectors.' . $name, $default);
     }
 }

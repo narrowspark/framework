@@ -12,6 +12,8 @@ class JavascriptRenderer extends BaseJavascriptRenderer
     protected $ajaxHandlerBindToJquery = false;
     protected $ajaxHandlerBindToXHR = true;
 
+    protected $cssFiles = ['widgets.css', 'openhandler.css'];
+
     /**
      * The debugbar instance.
      *
@@ -37,6 +39,7 @@ class JavascriptRenderer extends BaseJavascriptRenderer
         $this->webprofiler = $webprofiler;
 
         $this->cssFiles['narrowspark'] = __DIR__ . '/Resources/narrowspark-debugbar.css';
+        $this->cssFiles['fontawesome'] = __DIR__ . '/Resources/narrowspark-debugbar.css';
         $this->jsVendors['jquery'] = __DIR__ . '/Resources/jquery/jquery-3.1.1.min.js';
     }
 
