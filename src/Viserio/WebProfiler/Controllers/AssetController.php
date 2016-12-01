@@ -2,11 +2,11 @@
 declare(strict_types=1);
 namespace Viserio\WebProfiler\Controllers;
 
-use Viserio\Routing\AbstractController;
 use Interop\Http\Factory\ResponseFactoryInterface;
 use Interop\Http\Factory\ServerRequestFactoryInterface;
 use Interop\Http\Factory\StreamFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
+use Viserio\Routing\AbstractController;
 use Viserio\WebProfiler\WebProfiler;
 
 class AssetController extends AbstractController

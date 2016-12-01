@@ -19,8 +19,8 @@ class JavascriptRenderer extends BaseJavascriptRenderer
      *
      * @param \DebugBar\DebugBar $webprofiler
      * @param  $urlGenerator
-     * @param string|null        $baseUrl
-     * @param string|null        $basePath
+     * @param string|null $baseUrl
+     * @param string|null $basePath
      */
     public function __construct(
         DebugBar $webprofiler,

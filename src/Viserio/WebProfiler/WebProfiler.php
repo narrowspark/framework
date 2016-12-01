@@ -5,10 +5,10 @@ namespace Viserio\WebProfiler;
 use DebugBar\DebugBar;
 use DebugBar\Storage\PdoStorage;
 use DebugBar\Storage\RedisStorage;
+use Interop\Http\Factory\StreamFactoryInterface;
 use Psr\Http\Message\MessageInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Interop\Http\Factory\StreamFactoryInterface;
 
 class WebProfiler extends DebugBar
 {
