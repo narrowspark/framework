@@ -29,28 +29,28 @@ class JavascriptRenderer extends BaseJavascriptRenderer
     /**
      * {@inheritdoc}
      */
-    public function renderHead()
-    {
-        $cssRoute = route('debugbar.assets.css', [
-            'v' => $this->getModifiedTime('css'),
-        ]);
+    // public function renderHead()
+    // {
+    //     $cssRoute = route('debugbar.assets.css', [
+    //         'v' => $this->getModifiedTime('css'),
+    //     ]);
 
-        $jsRoute = route('debugbar.assets.js', [
-            'v' => $this->getModifiedTime('js'),
-        ]);
+    //     $jsRoute = route('debugbar.assets.js', [
+    //         'v' => $this->getModifiedTime('js'),
+    //     ]);
 
-        $cssRoute = preg_replace('/\Ahttps?:/', '', $cssRoute);
-        $jsRoute  = preg_replace('/\Ahttps?:/', '', $jsRoute);
+    //     $cssRoute = preg_replace('/\Ahttps?:/', '', $cssRoute);
+    //     $jsRoute  = preg_replace('/\Ahttps?:/', '', $jsRoute);
 
-        $html  = "<link rel='stylesheet' type='text/css' property='stylesheet' href='{$cssRoute}'>";
-        $html .= "<script type='text/javascript' src='{$jsRoute}'></script>";
+    //     $html  = "<link rel='stylesheet' type='text/css' property='stylesheet' href='{$cssRoute}'>";
+    //     $html .= "<script type='text/javascript' src='{$jsRoute}'></script>";
 
-        if ($this->isJqueryNoConflictEnabled()) {
-            $html .= '<script type="text/javascript">jQuery.noConflict(true);</script>' . "\n";
-        }
+    //     if ($this->isJqueryNoConflictEnabled()) {
+    //         $html .= '<script type="text/javascript">jQuery.noConflict(true);</script>' . "\n";
+    //     }
 
-        return $html;
-    }
+    //     return $html;
+    // }
 
     /**
      * Get the last modified time of any assets.
