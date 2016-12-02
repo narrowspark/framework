@@ -12,7 +12,24 @@ class JavascriptRenderer extends BaseJavascriptRenderer
     protected $ajaxHandlerBindToJquery = false;
     protected $ajaxHandlerBindToXHR = true;
 
-    protected $cssFiles = ['widgets.css', 'openhandler.css'];
+    /**
+     * Needed css files.
+     *
+     * @var array
+     */
+    protected $cssFiles = [
+        'openhandler.css'
+    ];
+
+    /**
+     * Needed js files.
+     *
+     * @var array
+     */
+    protected $jsFiles = [
+        'debugbar.js',
+        'openhandler.js'
+    ];
 
     /**
      * The debugbar instance.
@@ -38,9 +55,11 @@ class JavascriptRenderer extends BaseJavascriptRenderer
 
         $this->webprofiler = $webprofiler;
 
-        $this->cssFiles['narrowspark'] = __DIR__ . '/Resources/narrowspark-debugbar.css';
-        $this->cssFiles['fontawesome'] = __DIR__ . '/Resources/narrowspark-debugbar.css';
-        $this->jsVendors['jquery'] = __DIR__ . '/Resources/jquery/jquery-3.1.1.min.js';
+        $this->cssFiles['narrowspark'] = __DIR__ . '/Resources/css/webprofiler.css';
+        $this->cssFiles['fontawesome'] = __DIR__ . '/Resources/css/webprofiler.css';
+        $this->cssFiles['widgets.css'] = __DIR__ . '/Resources/css/widgets.css';
+
+        $this->jsVendors['jquery'] = __DIR__ . '/Resources/js/jquery-3.1.1.min.js';
     }
 
     /**

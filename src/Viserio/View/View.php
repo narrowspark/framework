@@ -222,6 +222,16 @@ class View implements ArrayAccess, ViewContract
     }
 
     /**
+     * Get file extension.
+     *
+     * @return string
+     */
+    public function getExtension(): string
+    {
+        return $this->fileInfo['extension'];
+    }
+
+    /**
      * Determine if a piece of data is bound.
      *
      * @param string $key
