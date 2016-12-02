@@ -5,8 +5,8 @@ namespace Viserio\WebProfiler\DataCollector;
 use DebugBar\DataCollector\AssetProvider;
 use DebugBar\DataCollector\DataCollector;
 use DebugBar\DataCollector\Renderable;
-use Viserio\Contracts\View\View as ViewContract;
 use Symfony\Component\HttpKernel\DataCollector\Util\ValueExporter;
+use Viserio\Contracts\View\View as ViewContract;
 
 class ViewCollector extends DataCollector implements Renderable, AssetProvider
 {
@@ -53,12 +53,12 @@ class ViewCollector extends DataCollector implements Renderable, AssetProvider
                 'icon' => 'leaf',
                 'widget' => 'PhpDebugBar.Widgets.TemplatesWidget',
                 'map' => 'views',
-                'default' => '[]'
+                'default' => '[]',
             ],
             'views:badge' => [
                 'map' => 'views.nb_templates',
-                'default' => 0
-            ]
+                'default' => 0,
+            ],
         ];
     }
 
@@ -79,7 +79,7 @@ class ViewCollector extends DataCollector implements Renderable, AssetProvider
     {
         return [
             'css' => 'widgets/templates/widget.css',
-            'js' => 'widgets/templates/widget.js'
+            'js' => 'widgets/templates/widget.js',
         ];
     }
 
@@ -103,7 +103,6 @@ class ViewCollector extends DataCollector implements Renderable, AssetProvider
             if ($type === null) {
                 $type = pathinfo($path, PATHINFO_EXTENSION);
             }
-
         } else {
             $type = get_class($view);
             $path = '';
@@ -144,7 +143,7 @@ class ViewCollector extends DataCollector implements Renderable, AssetProvider
     public function getXdebugLink($file, $line = 1)
     {
         if (ini_get('xdebug.file_link_format') || extension_loaded('xdebug')) {
-            return e(str_replace(array('%f', '%l'), array($file, $line), ini_get('xdebug.file_link_format')));
+            return e(str_replace(['%f', '%l'], [$file, $line], ini_get('xdebug.file_link_format')));
         }
     }
 }

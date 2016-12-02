@@ -18,7 +18,7 @@ class JavascriptRenderer extends BaseJavascriptRenderer
      * @var array
      */
     protected $cssFiles = [
-        'openhandler.css'
+        'openhandler.css',
     ];
 
     /**
@@ -28,7 +28,7 @@ class JavascriptRenderer extends BaseJavascriptRenderer
      */
     protected $jsFiles = [
         'debugbar.js',
-        'openhandler.js'
+        'openhandler.js',
     ];
 
     /**
