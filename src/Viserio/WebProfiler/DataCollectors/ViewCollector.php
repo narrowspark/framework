@@ -1,14 +1,10 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\WebProfiler\DataCollector;
+namespace Viserio\WebProfiler\DataCollectors;
 
-use DebugBar\DataCollector\AssetProvider;
-use DebugBar\DataCollector\DataCollector;
-use DebugBar\DataCollector\Renderable;
-use Symfony\Component\HttpKernel\DataCollector\Util\ValueExporter;
 use Viserio\Contracts\View\View as ViewContract;
 
-class ViewCollector extends DataCollector implements Renderable, AssetProvider
+class ViewCollector extends DataCollector
 {
     /**
      * Array of all templates.
@@ -32,7 +28,6 @@ class ViewCollector extends DataCollector implements Renderable, AssetProvider
     public function __construct(bool $collectData = true)
     {
         $this->collectData = $collectData;
-        $this->exporter = new ValueExporter();
     }
 
     /**
@@ -114,7 +109,7 @@ class ViewCollector extends DataCollector implements Renderable, AssetProvider
             $data = [];
 
             foreach ($view->getData() as $key => $value) {
-                $data[$key] = $this->exporter->exportValue($value);
+                $data[$key] = $value;
             }
 
             $params = $data;

@@ -1,12 +1,8 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\WebProfiler\DataCollector;
+namespace Viserio\WebProfiler\DataCollectors;
 
-use DebugBar\DataCollector\AssetProvider;
-use DebugBar\DataCollector\DataCollector;
-use DebugBar\DataCollector\Renderable;
-
-class TranslationCollector extends DataCollector implements Renderable, AssetProvider
+class TranslationCollector extends DataCollector
 {
     /**
      * All translation for the actual page.

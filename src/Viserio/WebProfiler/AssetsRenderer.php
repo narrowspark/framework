@@ -4,7 +4,6 @@ namespace Viserio\WebProfiler;
 
 use DebugBar\JavascriptRenderer as BaseJavascriptRenderer;
 use Viserio\Contracts\Routing\Router as RouterContract;
-use Viserio\Contracts\WebProfiler\WebProfiler;
 use Viserio\Contracts\WebProfiler\WebProfiler as WebProfilerContract;
 
 class JavascriptRenderer extends BaseJavascriptRenderer
@@ -19,6 +18,8 @@ class JavascriptRenderer extends BaseJavascriptRenderer
      * @var array
      */
     protected $cssFiles = [
+        __DIR__ . '/Resources/css/webprofiler.css',
+        'widgets.css',
         'openhandler.css',
     ];
 
@@ -28,7 +29,9 @@ class JavascriptRenderer extends BaseJavascriptRenderer
      * @var array
      */
     protected $jsFiles = [
+        __DIR__ . '/Resources/js/jquery-3.1.1.min.js',
         'debugbar.js',
+        __DIR__ . '/Resources/js/widgets.js',
         'openhandler.js',
     ];
 
@@ -54,12 +57,6 @@ class JavascriptRenderer extends BaseJavascriptRenderer
         parent::__construct($webprofiler, $baseUrl, $basePath);
 
         $this->webprofiler = $webprofiler;
-
-        $this->cssFiles['narrowspark'] = __DIR__ . '/Resources/css/webprofiler.css';
-        $this->cssFiles['fontawesome'] = __DIR__ . '/Resources/css/webprofiler.css';
-        $this->cssFiles['widgets.css'] = __DIR__ . '/Resources/css/widgets.css';
-
-        $this->jsVendors['jquery'] = __DIR__ . '/Resources/js/jquery-3.1.1.min.js';
     }
 
     /**

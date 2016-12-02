@@ -2,13 +2,6 @@
 declare(strict_types=1);
 namespace Viserio\WebProfiler;
 
-use DebugBar\DataCollector\MemoryCollector;
-use DebugBar\DataCollector\MessagesCollector;
-use DebugBar\DataCollector\PhpInfoCollector;
-use DebugBar\DataCollector\TimeDataCollector;
-use DebugBar\DebugBar;
-use DebugBar\Storage\PdoStorage;
-use DebugBar\Storage\RedisStorage;
 use Interop\Http\Factory\StreamFactoryInterface;
 use Psr\Http\Message\MessageInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -18,10 +11,14 @@ use Viserio\Contracts\Config\Traits\ConfigAwareTrait;
 use Viserio\Contracts\Routing\UrlGenerator as UrlGeneratorContract;
 use Viserio\Contracts\WebProfiler\WebProfiler as WebProfilerContract;
 use Viserio\Foundation\Application;
+use Viserio\WebProfiler\DataCollector\ViewCollector;
+use Viserio\WebProfiler\DataCollector\NarrowsparkCollector;
+use Viserio\Contracts\Events\Traits\EventsAwareTrait;
 
-class WebProfiler extends DebugBar implements WebProfilerContract
+class WebProfiler implements WebProfilerContract
 {
     use ConfigAwareTrait;
+    use EventsAwareTrait;
 
     /**
      * Normalized Version.
@@ -71,14 +68,16 @@ class WebProfiler extends DebugBar implements WebProfilerContract
      * @param \Viserio\Config\Manager                  $config
      * @param \Psr\Http\Message\ServerRequestInterface $request
      */
-    public function __construct(ConfigManagerContract $config, ServerRequestInterface $serverRequset)
-    {
+    public function __construct(
+        ConfigManagerContract $config,
+        ServerRequestInterface $serverRequset
+    ) {
         $this->config = $config;
         $this->serverRequset = $serverRequset;
 
         $version = class_exists(Application::class) ? Application::VERSION : 0;
 
-        $this->version = $config->get('webprofiler.version', $version);
+        $this->version = (string) $config->get('webprofiler.version', $version);
     }
 
     /**
@@ -103,27 +102,6 @@ class WebProfiler extends DebugBar implements WebProfilerContract
         return $this->config->get('webprofiler.enabled', $this->enabled);
     }
 
-    public function boot()
-    {
-        $webprofiler = $this;
-
-        if ($this->shouldCollect('phpinfo', true)) {
-            $this->addCollector(new PhpInfoCollector());
-        }
-
-        if ($this->shouldCollect('messages', true)) {
-            $this->addCollector(new MessagesCollector());
-        }
-
-        if ($this->shouldCollect('time', true)) {
-            $this->addCollector(new TimeDataCollector());
-        }
-
-        if ($this->shouldCollect('memory', true)) {
-            $this->addCollector(new MemoryCollector());
-        }
-    }
-
     /**
      * {@inheritdoc}
      */
@@ -138,7 +116,7 @@ class WebProfiler extends DebugBar implements WebProfilerContract
                 'utime' => microtime(true),
                 'method' => $request->getMethod(),
                 'uri' => (string) $request->getUri(),
-                // 'ip' => $request->getClientIp()
+                'ip' => '',
             ],
         ];
 

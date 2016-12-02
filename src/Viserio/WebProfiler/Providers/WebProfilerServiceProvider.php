@@ -2,7 +2,6 @@
 declare(strict_types=1);
 namespace Viserio\WebProfiler\Providers;
 
-use DebugBar\DebugBar;
 use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
 use Interop\Http\Factory\StreamFactoryInterface;
@@ -21,9 +20,6 @@ class WebProfilerServiceProvider implements ServiceProvider
     {
         return [
             WebProfiler::class => [self::class, 'createWebProfiler'],
-            DebugBar::class => function (ContainerInterface $container) {
-                return $container->get(WebProfiler::class);
-            },
         ];
     }
 
@@ -45,8 +41,6 @@ class WebProfilerServiceProvider implements ServiceProvider
             //     $container->get(UrlGeneratorContract::class)
             // );
         }
-
-        $profiler->enable();
 
         return $profiler;
     }
