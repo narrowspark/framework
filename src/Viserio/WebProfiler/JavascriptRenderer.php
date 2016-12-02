@@ -2,9 +2,10 @@
 declare(strict_types=1);
 namespace Viserio\WebProfiler;
 
-use DebugBar\DebugBar;
+use Viserio\Contracts\WebProfiler\WebProfiler;
 use DebugBar\JavascriptRenderer as BaseJavascriptRenderer;
 use Viserio\Contracts\Routing\Router as RouterContract;
+use Viserio\Contracts\WebProfiler\WebProfiler as WebProfilerContract;
 
 class JavascriptRenderer extends BaseJavascriptRenderer
 {
@@ -34,20 +35,19 @@ class JavascriptRenderer extends BaseJavascriptRenderer
     /**
      * The debugbar instance.
      *
-     * @var \DebugBar\DebugBar
+     * @var \Viserio\Contracts\WebProfiler\WebProfiler
      */
     protected $webprofiler;
 
     /**
      * Create a new file javascript renderer instance.
      *
-     * @param \DebugBar\DebugBar $webprofiler
-     * @param  $urlGenerator
-     * @param string|null $baseUrl
-     * @param string|null $basePath
+     * @param \Viserio\Contracts\WebProfiler\WebProfiler $webprofiler
+     * @param string|null                                $baseUrl
+     * @param string|null                                $basePath
      */
     public function __construct(
-        DebugBar $webprofiler,
+        WebProfilerContract $webprofiler,
         string $baseUrl = null,
         string $basePath = null
     ) {

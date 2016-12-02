@@ -17,8 +17,9 @@ use Viserio\Config\Manager as ConfigManagerContract;
 use Viserio\Contracts\Config\Traits\ConfigAwareTrait;
 use Viserio\Contracts\Routing\UrlGenerator as UrlGeneratorContract;
 use Viserio\Foundation\Application;
+use Viserio\Contracts\WebProfiler\WebProfiler as WebProfilerContract;
 
-class WebProfiler extends DebugBar
+class WebProfiler extends DebugBar implements WebProfilerContract
 {
     use ConfigAwareTrait;
 
