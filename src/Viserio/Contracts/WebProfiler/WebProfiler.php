@@ -4,5 +4,4 @@ namespace Viserio\Contracts\View;
 
 interface WebProfiler
 {
-
 }

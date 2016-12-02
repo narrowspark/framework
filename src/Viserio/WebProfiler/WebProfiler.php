@@ -16,8 +16,8 @@ use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Config\Manager as ConfigManagerContract;
 use Viserio\Contracts\Config\Traits\ConfigAwareTrait;
 use Viserio\Contracts\Routing\UrlGenerator as UrlGeneratorContract;
-use Viserio\Foundation\Application;
 use Viserio\Contracts\WebProfiler\WebProfiler as WebProfilerContract;
+use Viserio\Foundation\Application;
 
 class WebProfiler extends DebugBar implements WebProfilerContract
 {

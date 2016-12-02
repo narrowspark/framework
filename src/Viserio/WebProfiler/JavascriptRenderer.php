@@ -2,9 +2,9 @@
 declare(strict_types=1);
 namespace Viserio\WebProfiler;
 
-use Viserio\Contracts\WebProfiler\WebProfiler;
 use DebugBar\JavascriptRenderer as BaseJavascriptRenderer;
 use Viserio\Contracts\Routing\Router as RouterContract;
+use Viserio\Contracts\WebProfiler\WebProfiler;
 use Viserio\Contracts\WebProfiler\WebProfiler as WebProfilerContract;
 
 class JavascriptRenderer extends BaseJavascriptRenderer
