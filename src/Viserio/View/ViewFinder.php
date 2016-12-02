@@ -272,7 +272,7 @@ class ViewFinder implements FinderContract
         return array_map(function ($extension) use ($name) {
             return [
                 'extension' => $extension,
-                'file' => str_replace('.', DIRECTORY_SEPARATOR, $name) . '.' . $extension
+                'file' => str_replace('.', DIRECTORY_SEPARATOR, $name) . '.' . $extension,
             ];
         }, $this->extensions);
     }
