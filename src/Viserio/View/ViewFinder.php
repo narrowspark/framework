@@ -251,7 +251,7 @@ class ViewFinder implements FinderContract
                     return [
                         'path' => $viewPath,
                         'name' => $fileInfos['file'],
-                        'extension' => $fileInfos['extension'];
+                        'extension' => $fileInfos['extension'],
                     ];
                 }
             }
