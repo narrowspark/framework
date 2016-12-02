@@ -8,12 +8,12 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Config\Manager as ConfigManagerContract;
 use Viserio\Contracts\Config\Traits\ConfigAwareTrait;
+use Viserio\Contracts\Events\Traits\EventsAwareTrait;
 use Viserio\Contracts\Routing\UrlGenerator as UrlGeneratorContract;
 use Viserio\Contracts\WebProfiler\WebProfiler as WebProfilerContract;
 use Viserio\Foundation\Application;
-use Viserio\WebProfiler\DataCollector\ViewCollector;
 use Viserio\WebProfiler\DataCollector\NarrowsparkCollector;
-use Viserio\Contracts\Events\Traits\EventsAwareTrait;
+use Viserio\WebProfiler\DataCollector\ViewCollector;
 
 class WebProfiler implements WebProfilerContract
 {
