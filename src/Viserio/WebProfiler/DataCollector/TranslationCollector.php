@@ -28,19 +28,19 @@ class TranslationCollector extends DataCollector implements Renderable, AssetPro
      */
     public function getWidgets()
     {
-        return array(
-            'translations' => array(
+        return [
+            'translations' => [
                 'icon' => 'leaf',
                 'tooltip' => 'Translations',
                 'widget' => 'PhpDebugBar.Widgets.TranslationsWidget',
                 'map' => 'translations',
-                'default' => '[]'
-            ),
-            'translations:badge' => array(
+                'default' => '[]',
+            ],
+            'translations:badge' => [
                 'map' => 'translations.nb_translations',
-                'default' => 0
-            )
-        );
+                'default' => 0,
+            ],
+        ];
     }
 
     /**
@@ -48,11 +48,11 @@ class TranslationCollector extends DataCollector implements Renderable, AssetPro
      */
     public function getAssets()
     {
-        return array(
-            'base_path' => __DIR__."/../Resources",
+        return [
+            'base_path' => __DIR__ . '/../Resources',
             'css' => 'widgets/translations/widget.css',
-            'js' => 'widgets/translations/widget.js'
-        );
+            'js' => 'widgets/translations/widget.js',
+        ];
     }
 
     /**
@@ -62,9 +62,9 @@ class TranslationCollector extends DataCollector implements Renderable, AssetPro
     {
         $translations = $this->translations;
 
-        return array(
+        return [
             'nb_translations' => count($translations),
             'translations' => $translations,
-        );
+        ];
     }
 }
