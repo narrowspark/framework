@@ -11,9 +11,7 @@ use Viserio\Contracts\Config\Traits\ConfigAwareTrait;
 use Viserio\Contracts\Events\Traits\EventsAwareTrait;
 use Viserio\Contracts\Routing\UrlGenerator as UrlGeneratorContract;
 use Viserio\Contracts\WebProfiler\WebProfiler as WebProfilerContract;
-use Viserio\Foundation\Application;
-use Viserio\WebProfiler\DataCollector\NarrowsparkCollector;
-use Viserio\WebProfiler\DataCollector\ViewCollector;
+use Viserio\Contracts\WebProfiler\DataCollector as DataCollectorContract;
 
 class WebProfiler implements WebProfilerContract
 {
@@ -21,11 +19,11 @@ class WebProfiler implements WebProfilerContract
     use EventsAwareTrait;
 
     /**
-     * Normalized Version.
+     * All registered data collectors.
      *
-     * @var string
+     * @var array
      */
-    protected $version;
+    protected $collectors = [];
 
     /**
      * A ServerRequest instance.
@@ -47,6 +45,13 @@ class WebProfiler implements WebProfilerContract
      * @var \Viserio\Contracts\Routing\UrlGenerator
      */
     protected $urlGenerator;
+
+    /**
+     * Url generator instance.
+     *
+     * @var \Viserio\WebProfiler\AssetsRenderer
+     */
+    protected $assetsRenderer;
 
     /**
      * True when booted.
@@ -74,71 +79,7 @@ class WebProfiler implements WebProfilerContract
     ) {
         $this->config = $config;
         $this->serverRequset = $serverRequset;
-
-        $version = class_exists(Application::class) ? Application::VERSION : 0;
-
-        $this->version = (string) $config->get('webprofiler.version', $version);
-    }
-
-    /**
-     * Enable the Debugbar and boot, if not already booted.
-     */
-    public function enable()
-    {
-        $this->enabled = true;
-
-        if (!$this->booted) {
-            $this->boot();
-        }
-    }
-
-    /**
-     * Check if the Debugbar is enabled
-     *
-     * @return bool
-     */
-    public function isEnabled(): bool
-    {
-        return $this->config->get('webprofiler.enabled', $this->enabled);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function collect()
-    {
-        $request = $this->serverRequset;
-
-        $this->data = [
-            '__meta' => [
-                'id' => $this->getCurrentRequestId(),
-                'datetime' => date('Y-m-d H:i:s'),
-                'utime' => microtime(true),
-                'method' => $request->getMethod(),
-                'uri' => (string) $request->getUri(),
-                'ip' => '',
-            ],
-        ];
-
-        foreach ($this->collectors as $name => $collector) {
-            $this->data[$name] = $collector->collect();
-        }
-
-        // Remove all invalid (non UTF-8) characters
-        array_walk_recursive(
-            $this->data,
-            function (&$item) {
-                if (is_string($item) && !mb_check_encoding($item, 'UTF-8')) {
-                    $item = mb_convert_encoding($item, 'UTF-8', 'UTF-8');
-                }
-            }
-        );
-
-        if ($this->storage !== null) {
-            $this->storage->save($this->getCurrentRequestId(), $this->data);
-        }
-
-        return $this->data;
+        $this->templatePath = __DIR__ . '/Resources/views/webprofiler.html.php';
     }
 
     /**
@@ -186,6 +127,103 @@ class WebProfiler implements WebProfilerContract
     }
 
     /**
+     * Set the webprofiler template path.
+     *
+     * @param string $path
+     *
+     * @return $this
+     */
+    public function setTemplate(string $path): WebProfilerContract
+    {
+        $this->templatePath = $path;
+
+        return $this;
+    }
+
+    /**
+     * Get the webprofiler template path.
+     *
+     * @return string
+     */
+    public function getTemplate(): string
+    {
+        return $this->templatePath;
+    }
+
+    /**
+     * Adds a data collector
+     *
+     * @param \Viserio\Contracts\WebProfiler\DataCollector $collector
+     *
+     * @throws \RuntimeException
+     *
+     * @return $this
+     */
+    public function addCollector(DataCollectorContract $collector): WebProfilerContract
+    {
+        if ($collector->getName() === '__meta') {
+            throw new RuntimeException("'__meta' is a reserved name and cannot be used as a collector name");
+        }
+
+        if (isset($this->collectors[$collector->getName()])) {
+            throw new RuntimeException(sprintf('[%s] is already a registered collector', $collector->getName()));
+        }
+
+        $this->collectors[$collector->getName()] = $collector;
+
+        return $this;
+    }
+
+    /**
+     * Returns an array of all data collectors
+     *
+     * @return array
+     */
+    public function getCollectors(): array
+    {
+        return $this->collectors;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function collect()
+    {
+        $request = $this->serverRequset;
+
+        $this->data = [
+            '__meta' => [
+                'id' => $this->getCurrentRequestId(),
+                'datetime' => date('Y-m-d H:i:s'),
+                'utime' => microtime(true),
+                'method' => $request->getMethod(),
+                'uri' => (string) $request->getUri(),
+                'ip' => '',
+            ],
+        ];
+
+        foreach ($this->collectors as $name => $collector) {
+            $this->data[$name] = $collector->collect();
+        }
+
+        // Remove all invalid (non UTF-8) characters
+        array_walk_recursive(
+            $this->data,
+            function (&$item) {
+                if (is_string($item) && ! mb_check_encoding($item, 'UTF-8')) {
+                    $item = mb_convert_encoding($item, 'UTF-8', 'UTF-8');
+                }
+            }
+        );
+
+        if ($this->storage !== null) {
+            $this->storage->save($this->getCurrentRequestId(), $this->data);
+        }
+
+        return $this->data;
+    }
+
+    /**
      * Modify the response and inject the debugbar (or data in headers)
      *
      * @param \Psr\Http\Message\ServerRequestInterface $request
@@ -197,7 +235,7 @@ class WebProfiler implements WebProfilerContract
         ServerRequestInterface $request,
         ResponseInterface $response
     ) : ResponseInterface {
-        if ($this->runningInConsole() || ! $this->isEnabled()) {
+        if ($this->runningInConsole()) {
             return $response;
         }
 
@@ -205,20 +243,20 @@ class WebProfiler implements WebProfilerContract
     }
 
     /**
-     * Returns a JavascriptRenderer for this instance.
+     * Returns a AssetsRenderer for this instance.
      *
      * @param string $baseUrl
      * @param string $basePathng
      *
-     * @return \Viserio\WebProfiler\JavascriptRenderer
+     * @return \Viserio\WebProfiler\AssetsRenderer
      */
-    public function getJavascriptRenderer($baseUrl = null, $basePath = null): JavascriptRenderer
+    public function getAssetsRenderer($baseUrl = null, $basePath = null): AssetsRenderer
     {
-        if ($this->jsRenderer === null) {
-            $this->jsRenderer = new JavascriptRenderer($this, $baseUrl, $basePath);
+        if ($this->assetsRenderer === null) {
+            $this->assetsRenderer = new AssetsRenderer($this, $baseUrl, $basePath);
         }
 
-        return $this->jsRenderer;
+        return $this->assetsRenderer;
     }
 
     /**
@@ -233,15 +271,10 @@ class WebProfiler implements WebProfilerContract
     protected function injectWebProfiler(ResponseInterface $response): ResponseInterface
     {
         $content = (string) $response->getBody();
-        $renderer = $this->getJavascriptRenderer();
 
-        // if ($this->getStorage()) {
-            // $openHandlerUrl = $this->urlGenerator->route('webprofiler.openhandler');
+        $template = new TemplateManager($this->collectors, $this->templatePath);
 
-            // $renderer->setOpenHandlerUrl($openHandlerUrl);
-        // }
-
-        $renderedContent = $renderer->renderHead() . $renderer->render();
+        $renderedContent = $this->getAssetsRenderer()->render() . $template->render();
 
         $pos = strripos($content, '</body>');
 

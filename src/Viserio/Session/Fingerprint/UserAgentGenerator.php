@@ -2,7 +2,6 @@
 declare(strict_types=1);
 namespace Viserio\Session\Fingerprint;
 
-use Defuse\Crypto\Key;
 use Viserio\Contracts\Session\Fingerprint as FingerprintContract;
 
 class UserAgentGenerator implements FingerprintContract

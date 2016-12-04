@@ -6,7 +6,6 @@ use Viserio\Config\Providers\ConfigServiceProvider;
 use Viserio\Container\Container;
 use Viserio\Cookie\CookieJar;
 use Viserio\Cookie\Providers\CookieServiceProvider;
-use Viserio\Cookie\RequestCookie;
 
 class CookieServiceProviderTest extends \PHPUnit_Framework_TestCase
 {

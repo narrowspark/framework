@@ -2,9 +2,6 @@
 declare(strict_types=1);
 namespace Viserio\Routing\Traits;
 
-use Interop\Http\Middleware\ServerMiddlewareInterface;
-use LogicException;
-
 trait MiddlewareAwareTrait
 {
     /**

@@ -2,8 +2,6 @@
 declare(strict_types=1);
 namespace Viserio\View\Proxies;
 
-use Interop\Http\Factory\ResponseFactoryInterface;
-use Interop\Http\Factory\StreamFactoryInterface;
 use Viserio\HttpFactory\ResponseFactory;
 use Viserio\HttpFactory\StreamFactory;
 use Viserio\StaticalProxy\StaticalProxy;

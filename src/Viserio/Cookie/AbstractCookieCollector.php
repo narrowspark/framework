@@ -2,8 +2,6 @@
 declare(strict_types=1);
 namespace Viserio\Cookie;
 
-use Viserio\Contracts\Cookie\Cookie as CookieContract;
-
 class AbstractCookieCollector
 {
     /**

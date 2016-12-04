@@ -2,37 +2,27 @@
 declare(strict_types=1);
 namespace Viserio\WebProfiler;
 
-use DebugBar\JavascriptRenderer as BaseJavascriptRenderer;
-use Viserio\Contracts\Routing\Router as RouterContract;
 use Viserio\Contracts\WebProfiler\WebProfiler as WebProfilerContract;
+use Viserio\Contracts\Support\Renderable as RenderableContract;
 
-class JavascriptRenderer extends BaseJavascriptRenderer
+class AssetsRenderer implements RenderableContract
 {
-    // Use XHR handler by default, instead of jQuery
-    protected $ajaxHandlerBindToJquery = false;
-    protected $ajaxHandlerBindToXHR = true;
-
     /**
-     * Needed css files.
+     * All css files.
      *
      * @var array
      */
     protected $cssFiles = [
-        __DIR__ . '/Resources/css/webprofiler.css',
-        'widgets.css',
-        'openhandler.css',
+        'css/webprofiler.css',
     ];
 
     /**
-     * Needed js files.
+     * All js files.
      *
      * @var array
      */
     protected $jsFiles = [
-        __DIR__ . '/Resources/js/jquery-3.1.1.min.js',
-        'debugbar.js',
-        __DIR__ . '/Resources/js/widgets.js',
-        'openhandler.js',
+        'js/vue.min.js'
     ];
 
     /**
@@ -43,26 +33,34 @@ class JavascriptRenderer extends BaseJavascriptRenderer
     protected $webprofiler;
 
     /**
+     * [$rootPath description]
+     *
+     * @var string
+     */
+    protected $rootPath;
+
+    /**
+     * [$additionalAssets description]
+     *
+     * @var array
+     */
+    protected $additionalAssets = [];
+
+    /**
      * Create a new file javascript renderer instance.
      *
      * @param \Viserio\Contracts\WebProfiler\WebProfiler $webprofiler
-     * @param string|null                                $baseUrl
-     * @param string|null                                $basePath
+     * @param string|null                                $rootPath
      */
-    public function __construct(
-        WebProfilerContract $webprofiler,
-        string $baseUrl = null,
-        string $basePath = null
-    ) {
-        parent::__construct($webprofiler, $baseUrl, $basePath);
-
+    public function __construct(WebProfilerContract $webprofiler, string $rootPath = null) {
         $this->webprofiler = $webprofiler;
+        $this->rootPath = $rootPath ?? __DIR__ . '/Resources';
     }
 
     /**
      * {@inheritdoc}
      */
-    public function renderHead()
+    public function render(): string
     {
         if (($urlGenerator = $this->webprofiler->getUrlGenerator()) !== null) {
             $cssRoute = $urlGenerator->route('webprofiler.assets.css', [
@@ -73,16 +71,12 @@ class JavascriptRenderer extends BaseJavascriptRenderer
             ]);
 
             $cssRoute = preg_replace('/\Ahttps?:/', '', $cssRoute);
-            $jsRoute  = preg_replace('/\Ahttps?:/', '', $jsRoute);
+            $jsRoute = preg_replace('/\Ahttps?:/', '', $jsRoute);
 
-            $html  = "<link rel='stylesheet' type='text/css' property='stylesheet' href='{$cssRoute}'>";
+            $html = "<link rel='stylesheet' type='text/css' property='stylesheet' href='{$cssRoute}'>";
             $html .= "<script type='text/javascript' src='{$jsRoute}'></script>";
         } else {
             $html = $this->renderIntoHtml();
-        }
-
-        if ($this->isJqueryNoConflictEnabled()) {
-            $html .= '<script type="text/javascript">jQuery.noConflict(true);</script>' . "\n";
         }
 
         return $html;
@@ -95,7 +89,7 @@ class JavascriptRenderer extends BaseJavascriptRenderer
      *
      * @return string
      */
-    public function dumpAssetsToString($type)
+    public function dumpAssetsToString(string $type): string
     {
         $files = $this->getAssets($type);
         $content = '';
@@ -105,6 +99,93 @@ class JavascriptRenderer extends BaseJavascriptRenderer
         }
 
         return $content;
+    }
+
+    /**
+     * Returns the list of asset files
+     *
+     * @param string|null $type Only return css or js files
+     *
+     * @return array
+     */
+    public function getAssets(string $type = null): array
+    {
+        $cssFiles = array_map(
+            function($css) {
+                return rtrim($this->rootPath, '/') . '/' . $css;
+            },
+            $this->cssFiles
+        );
+        $jsFiles = array_map(
+            function($css) {
+                return rtrim($this->rootPath, '/') . '/' . $css;
+            },
+            $this->jsFiles
+        );
+
+        $additionalAssets = $this->additionalAssets;
+
+        // finds assets provided by collectors
+        foreach ($this->webprofiler->getCollectors() as $collector) {
+            if (($collector instanceof AssetProvider) && !in_array($collector->getName(), $this->ignoredCollectors)) {
+                $additionalAssets[] = $collector->getAssets();
+            }
+        }
+
+        foreach ($additionalAssets as $assets) {
+            $root = $assets['path'] ?? $this->rootPath;
+
+            $cssFiles = array_merge($cssFiles, array_map(
+                function($css) use($root) {
+                    return rtrim($root, '/') . '/' . $css;
+                },
+                (array) $assets['css']
+            ));
+            $jsFiles = array_merge($jsFiles, array_map(
+                function($css) use($root) {
+                    return rtrim($root, '/') . '/' . $css;
+                },
+                (array) $assets['js']
+            ));
+        }
+
+        return $this->filterAssetArray(array($cssFiles, $jsFiles), $type);
+    }
+
+    /**
+     * Render css and js into html elements.
+     *
+     * @return string
+     */
+    protected function renderIntoHtml(): string
+    {
+        $html = '<style>' . $this->dumpAssetsToString('css') . '</style>';
+        $html .= "<script type='text/javascript'>" . $this->dumpAssetsToString('js') . '</script>';
+
+        return $html;
+    }
+
+    /**
+     * Filters a tuple of (css, js) assets according to $type
+     *
+     * @param array       $array
+     * @param string|null $type 'css', 'js' or null for both
+     *
+     * @return array
+     */
+    protected function filterAssetArray(array $array, string $type = null): array
+    {
+        $type = strtolower($type);
+
+        if ($type === 'css') {
+            return $array[0];
+        }
+
+        if ($type === 'js') {
+            return $array[1];
+        }
+
+        return $array;
     }
 
     /**
@@ -128,18 +209,5 @@ class JavascriptRenderer extends BaseJavascriptRenderer
         }
 
         return $latest;
-    }
-
-    /**
-     * Render css and js into html elements.
-     *
-     * @return string
-     */
-    protected function renderIntoHtml(): string
-    {
-        $html  = '<style>' . $this->dumpAssetsToString('css') . '</style>';
-        $html .= "<script type='text/javascript'>" . $this->dumpAssetsToString('js') . '</script>';
-
-        return $html;
     }
 }

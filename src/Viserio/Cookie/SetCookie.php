@@ -2,7 +2,6 @@
 declare(strict_types=1);
 namespace Viserio\Cookie;
 
-use InvalidArgumentException;
 use Viserio\Contracts\Cookie\Cookie as CookieContract;
 use Viserio\Cookie\Traits\CookieValidatorTratis;
 

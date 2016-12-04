@@ -2,8 +2,6 @@
 declare(strict_types=1);
 namespace Viserio\Cookie\Tests;
 
-use Cake\Chronos\Chronos;
-use DateTime;
 use Mockery as Mock;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use Psr\Http\Message\ServerRequestInterface as Request;

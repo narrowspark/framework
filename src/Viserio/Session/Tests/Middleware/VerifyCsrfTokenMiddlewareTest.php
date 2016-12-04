@@ -11,7 +11,6 @@ use Narrowspark\TestingHelper\Middleware\Dispatcher;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use org\bovigo\vfs\vfsStream;
 use Viserio\Contracts\Config\Manager as ConfigManagerContract;
-use Viserio\Contracts\Cookie\QueueingFactory as JarContract;
 use Viserio\Contracts\Filesystem\Filesystem as FilesystemContract;
 use Viserio\Encryption\Encrypter;
 use Viserio\Filesystem\Filesystem;

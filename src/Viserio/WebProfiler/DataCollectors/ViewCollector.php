@@ -4,7 +4,7 @@ namespace Viserio\WebProfiler\DataCollectors;
 
 use Viserio\Contracts\View\View as ViewContract;
 
-class ViewCollector extends DataCollector
+class ViewCollector extends AbstractDataCollector
 {
     /**
      * Array of all templates.
@@ -103,7 +103,7 @@ class ViewCollector extends DataCollector
             $path = '';
         }
 
-        if (!$this->collect_data) {
+        if (! $this->collect_data) {
             $params = array_keys($view->getData());
         } else {
             $data = [];
@@ -125,7 +125,6 @@ class ViewCollector extends DataCollector
         if ($this->getXdebugLink($path)) {
             $template['xdebug_link'] = $this->getXdebugLink($path);
         }
-
 
         $this->templates[] = $template;
     }

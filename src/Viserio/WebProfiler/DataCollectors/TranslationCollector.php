@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\WebProfiler\DataCollectors;
 
-class TranslationCollector extends DataCollector
+class TranslationCollector extends AbstractDataCollector
 {
     /**
      * All translation for the actual page.

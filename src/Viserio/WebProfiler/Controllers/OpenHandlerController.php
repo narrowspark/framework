@@ -2,7 +2,6 @@
 declare(strict_types=1);
 namespace Viserio\WebProfiler\Controllers;
 
-use DebugBar\OpenHandler;
 use Interop\Http\Factory\ResponseFactoryInterface;
 use Interop\Http\Factory\StreamFactoryInterface;
 use Psr\Http\Message\ResponseInterface;

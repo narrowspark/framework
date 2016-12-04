@@ -1,0 +1,126 @@
+.webprofiler * {
+    -webkit-box-sizing: content-box;
+    -moz-box-sizing: content-box;
+    box-sizing: content-box;
+    vertical-align: baseline;
+}
+
+.webprofiler .webprofiler-header {
+    background-color: #222;
+    bottom: 0;
+    box-shadow: 0 -1px 0 rgba(0, 0, 0, 0.2);
+    color: #EEE;
+    font: 11px Arial, sans-serif;
+    left: 0;
+    margin: 0;
+    padding: 0 36px 0 0;
+    position: fixed;
+    right: 0;
+    text-align: left;
+    text-transform: none;
+    z-index: 99999;
+
+    /* neutralize the aliasing defined by external CSS styles */
+    -webkit-font-smoothing: subpixel-antialiased;
+    -moz-osx-font-smoothing: auto;
+}
+
+.webprofiler-tab {
+    cursor: default;
+    display: block;
+    height: 36px;
+    margin-right: 0;
+    float: left;
+    white-space: nowrap;
+}
+.webprofiler-tab .status-red,
+.webprofiler-tab .status-green {
+    display: inline-block;
+    color: #FFF;
+    background-color: #666;
+    padding: 3px 6px;
+    margin-bottom: 2px;
+    vertical-align: middle;
+    min-width: 15px;
+    min-height: 13px;
+    text-align: center;
+}
+.webprofiler-tab .status-green {
+    background-color: #4F805D;
+}
+.webprofiler-tab .status-red {
+    background-color: #B0413E;
+}
+.webprofiler-tab:hover {
+    background-color: #444;
+    position: relative;
+    z-index: 10002;
+}
+.webprofiler-tab.webprofiler-tab-has-tooltip:hover {
+    cursor: pointer;
+}
+.webprofiler-tab.webprofiler-tab-has-tooltip .webprofiler-tab-tooltip {
+    display: none;
+}
+.webprofiler-tab.webprofiler-tab-has-tooltip:hover .webprofiler-tab-tooltip {
+    display: block;
+    padding: 10px;
+    max-width: 480px;
+    max-height: 480px;
+    word-wrap: break-word;
+    overflow: hidden;
+    overflow-y: auto;
+    background-color: #444;
+    bottom: 36px;
+    color: #F5F5F5;
+    position: absolute;
+}
+.webprofiler-tab.webprofiler-tab-has-tooltip:hover .webprofiler-tab-tooltip .webprofiler-tab-tooltip-group {
+    margin-bottom: 4px;
+    padding-bottom: 2px;
+    border-bottom: 1px solid #333333;
+}
+.webprofiler-tab.webprofiler-tab-has-tooltip:hover .webprofiler-tab-tooltip .webprofiler-tab-tooltip-group:last-child {
+    margin-bottom: 0;
+    padding-bottom: 0;
+    border-bottom: none;
+}
+.webprofiler-tab.webprofiler-tab-has-tooltip:hover .webprofiler-tab-tooltip .webprofiler-tab-tooltip-group b {
+    color: #AAA;
+    display: table-cell;
+    font-size: 11px;
+    padding: 4px 8px 4px 0;
+}.webprofiler-tab.webprofiler-tab-has-tooltip:hover .webprofiler-tab-tooltip .webprofiler-tab-tooltip-group span {
+    color: #F5F5F5;
+    font-size: 12px;
+    display: table-cell;
+}
+.webprofiler-tab.webprofiler-tab-positoin-left.webprofiler-tab-has-tooltip:hover .webprofiler-tab-tooltip {
+    left: 0;
+}
+.webprofiler-tab.webprofiler-tab-positoin-right.webprofiler-tab-has-tooltip:hover .webprofiler-tab-tooltip {
+    right: 0;
+}
+.webprofiler-tab.webprofiler-tab-positoin-left {
+    float: left;
+}
+.webprofiler-tab.webprofiler-tab-positoin-right {
+    float: right;
+}
+.webprofiler-tab .webprofiler-tab-icon {
+    display: block;
+    height: 36px;
+    line-height: 36px;
+    padding: 0 7px;
+}
+.webprofiler-tab .webprofiler-tab-icon .webprofiler-toolbar-label,
+.webprofiler-tab .webprofiler-tab-icon .webprofiler-toolbar-value {
+    display: inline;
+    color: #F5F5F5;
+    font-size: 13px;
+    line-height: 36px;
+    padding: 0;
+}
+.webprofiler-tab .webprofiler-tab-icon .webprofiler-toolbar-value {
+    margin-left: 4px;
+}

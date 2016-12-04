@@ -4,8 +4,6 @@ namespace Viserio\Cookie;
 
 use Cake\Chronos\Chronos;
 use Narrowspark\Arr\Arr;
-use Psr\Http\Message\RequestInterface;
-use Psr\Http\Message\ResponseInterface;
 use Viserio\Contracts\Cookie\Cookie as CookieContract;
 use Viserio\Contracts\Cookie\QueueingFactory as JarContract;
 

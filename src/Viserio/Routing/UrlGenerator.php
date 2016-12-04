@@ -8,7 +8,6 @@ use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\UriInterface;
 use Viserio\Contracts\Routing\Route as RouteContract;
 use Viserio\Contracts\Routing\UrlGenerator as UrlGeneratorContract;
-use Viserio\Routing\Exceptions\UrlGenerationException;
 use Viserio\Support\Traits\MacroableTrait;
 
 class UrlGenerator implements UrlGeneratorContract
