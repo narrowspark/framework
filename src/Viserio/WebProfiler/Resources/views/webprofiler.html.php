@@ -20,6 +20,9 @@
                     <span class="webprofiler-tab-value">
                         <?php echo $tab['tab']['value'] ?>
                     </span>
+                    <span class="webprofiler-tab-counter">
+                        <?php echo $tab['tab']['count'] ?>
+                    </span>
                 </div>
                 <?php
                     if ($tooltip) {

@@ -75,11 +75,11 @@ class AssetsRenderer implements RenderableContract
 
             $html = "<link rel='stylesheet' type='text/css' property='stylesheet' href='{$cssRoute}'>";
             $html .= "<script type='text/javascript' src='{$jsRoute}'></script>";
-        } else {
-            $html = $this->renderIntoHtml();
+
+            return $html;
         }
 
-        return $html;
+        return $this->renderIntoHtml();
     }
 
     /**

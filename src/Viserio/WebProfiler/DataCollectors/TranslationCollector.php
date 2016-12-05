@@ -2,7 +2,10 @@
 declare(strict_types=1);
 namespace Viserio\WebProfiler\DataCollectors;
 
-class TranslationCollector extends AbstractDataCollector
+use Viserio\Contracts\WebProfiler\AssetAware as AssetAwareContract;
+use Viserio\Contracts\WebProfiler\TabAware as TabAwareContract;
+
+class TranslationCollector extends AbstractDataCollector implements AssetAwareContract, TabAwareContract
 {
     /**
      * All translation for the actual page.
@@ -14,38 +17,28 @@ class TranslationCollector extends AbstractDataCollector
     /**
      * {@inheritdoc}
      */
-    public function getName()
+    public function getTabPosition(): string
     {
-        return 'views';
+        return 'left';
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getWidgets()
+    public function getTab(): array
     {
         return [
-            'translations' => [
-                'icon' => 'leaf',
-                'tooltip' => 'Translations',
-                'widget' => 'PhpDebugBar.Widgets.TranslationsWidget',
-                'map' => 'translations',
-                'default' => '[]',
-            ],
-            'translations:badge' => [
-                'map' => 'translations.nb_translations',
-                'default' => 0,
-            ],
+            'label' => '',
+            'count' => count($this->translations),
         ];
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getAssets()
+    public function getAssets(): array
     {
         return [
-            'base_path' => __DIR__ . '/../Resources',
             'css' => 'widgets/translations/widget.css',
             'js' => 'widgets/translations/widget.js',
         ];
@@ -54,13 +47,8 @@ class TranslationCollector extends AbstractDataCollector
     /**
      * {@inheritdoc}
      */
-    public function collect()
+    public function getName(): string
     {
-        $translations = $this->translations;
-
-        return [
-            'nb_translations' => count($translations),
-            'translations' => $translations,
-        ];
+        return 'views';
     }
 }

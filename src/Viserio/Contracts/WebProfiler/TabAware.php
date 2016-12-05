@@ -7,7 +7,9 @@ interface TabAware
     /**
      * Returns infos for a tab.
      *  - label: use it for a icon
-     *  - value: can be used to show a name or counte
+     *  - value: can be used to show a name
+     *  - count: can be used to show a counter
+     *
      * @return array
      */
     public function getTab(): array;

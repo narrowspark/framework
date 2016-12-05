@@ -2,12 +2,12 @@
 declare(strict_types=1);
 namespace Viserio\Contracts\WebProfiler;
 
-interface Widget
+interface PanelAware
 {
     /**
      * @ToDo
      *
-     * @return array
+     * @return string
      */
-    function getWidgets(): array;
+    function getPanel(): string;
 }

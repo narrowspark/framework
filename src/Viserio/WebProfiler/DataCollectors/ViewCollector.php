@@ -41,35 +41,6 @@ class ViewCollector extends AbstractDataCollector
     /**
      * {@inheritdoc}
      */
-    public function getWidgets()
-    {
-        return [
-            'views' => [
-                'icon' => 'leaf',
-                'widget' => 'PhpDebugBar.Widgets.TemplatesWidget',
-                'map' => 'views',
-                'default' => '[]',
-            ],
-            'views:badge' => [
-                'map' => 'views.nb_templates',
-                'default' => 0,
-            ],
-        ];
-    }
-
-    public function collect()
-    {
-        $templates = $this->templates;
-
-        return [
-            'nb_templates' => count($templates),
-            'templates' => $templates,
-        ];
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getAssets()
     {
         return [

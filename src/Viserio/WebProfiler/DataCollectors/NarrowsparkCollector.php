@@ -9,18 +9,6 @@ use Viserio\Foundation\Application;
 class NarrowsparkCollector extends AbstractDataCollector implements TooltipAwareContract, TabAwareContract
 {
     /**
-     * Normalized Version.
-     *
-     * @var string
-     */
-    protected $version;
-
-    public function __construct(string $version)
-    {
-        $this->version = Application::VERSION;
-    }
-
-    /**
      * {@inheritdoc}
      */
     public function getTabPosition(): string
@@ -35,7 +23,7 @@ class NarrowsparkCollector extends AbstractDataCollector implements TooltipAware
     {
         return [
             'label' => '',
-            'value' => $this->version
+            'value' => Application::VERSION
         ];
     }
 
@@ -72,15 +60,5 @@ class NarrowsparkCollector extends AbstractDataCollector implements TooltipAware
     public function getName(): string
     {
         return 'narrowspark';
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function collect(): array
-    {
-        return [
-            'narrowspark' => 'test',
-        ];
     }
 }
