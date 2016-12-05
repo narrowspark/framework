@@ -16,5 +16,5 @@ composer require alcaeus/mongo-php-adapter
 
 if [[ "$SETUP" = "basic" && "$PHPSTAN" = true ]]; then
     # Install phpstan
-    composer require phpstan/phpstan
+    composer global require phpstan/phpstan
 fi

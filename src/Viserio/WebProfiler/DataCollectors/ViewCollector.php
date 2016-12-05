@@ -33,7 +33,7 @@ class ViewCollector extends AbstractDataCollector
     /**
      * {@inheritdoc}
      */
-    public function getName()
+    public function getName(): string
     {
         return 'views';
     }
