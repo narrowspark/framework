@@ -19,5 +19,5 @@ if [ $? -ne 0 ]; then
 fi
 
 if [[ "$SETUP" = "basic" && "$PHPSTAN" = true ]]; then
-    vendor/bin/phpstan analyse src/Viserio
+    phpstan analyse src/Viserio
 fi
