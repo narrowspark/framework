@@ -14,8 +14,8 @@ matrix:
   include:
     - php: 7.0
       env: SETUP=basic CHECK_CS=true SEND_COVERAGE=true
-    # - php: 7.0
-    #   env: SETUP=basic HUMBUG=true
+    - php: 7.0
+      env: SETUP=basic PHPSTAN=true
     - php: 7.0
       env: SETUP=stable
     - php: 7.0
@@ -48,7 +48,6 @@ install:
   - if [[ "$SETUP" = "basic" ]]; then travis_retry composer install --no-interaction --prefer-dist --no-progress --profile --no-suggest; fi
   - if [[ "$SETUP" = "stable" ]]; then travis_retry composer update --prefer-dist --no-interaction --prefer-stable --no-progress --profile --no-suggest; fi
   - if [[ "$SETUP" = "lowest" ]]; then travis_retry composer update --prefer-dist --no-interaction --prefer-lowest --prefer-stable --no-suggest; fi
-
 before_script:
   - sleep 15
 

@@ -17,3 +17,7 @@ TRY
 if [ $? -ne 0 ]; then
   exit 1
 fi
+
+if [[ "$SETUP" = "basic" && "$PHPSTAN" = true ]]; then
+    vendor/bin/phpstan analyse src/Viserio
+fi

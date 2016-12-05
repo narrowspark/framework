@@ -40,11 +40,18 @@ class AssetsRenderer implements RenderableContract
     protected $rootPath;
 
     /**
-     * [$additionalAssets description]
+     * Additional assets form collectors.
      *
      * @var array
      */
     protected $additionalAssets = [];
+
+    /**
+     * List of ignored collectors.
+     *
+     * @var array
+     */
+    protected $ignoredCollectors = [];
 
     /**
      * Create a new file javascript renderer instance.
@@ -55,6 +62,30 @@ class AssetsRenderer implements RenderableContract
     public function __construct(WebProfilerContract $webprofiler, string $rootPath = null) {
         $this->webprofiler = $webprofiler;
         $this->rootPath = $rootPath ?? __DIR__ . '/Resources';
+    }
+
+    /**
+     * Ignores widgets provided by a collector
+     *
+     * @param string $name
+     *
+     * @return $this
+     */
+    public function setIgnoredCollector(string $name)
+    {
+        $this->ignoredCollectors[] = $name;
+
+        return $this;
+    }
+
+    /**
+     * Returns the list of ignored collectors.
+     *
+     * @return array
+     */
+    public function getIgnoredCollectors(): array
+    {
+        return $this->ignoredCollectors;
     }
 
     /**

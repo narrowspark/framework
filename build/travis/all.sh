@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # Disable xdebug when hhvm or when SEND_COVERAGE is false
-if [[ "$DISABLE_XDEBUG" = true ]]; then
+if [[ "$SEND_COVERAGE" = false ]]; then
   phpenv config-rm xdebug.ini;
 fi
 
@@ -13,3 +13,8 @@ pecl -q install mongodb
 
 # Install mongo-php-adapter
 composer require alcaeus/mongo-php-adapter
+
+if [[ "$SETUP" = "basic" && "$PHPSTAN" = true ]]; then
+    # Install phpstan
+    composer require phpstan/phpstan
+fi
