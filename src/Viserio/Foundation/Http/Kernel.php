@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Foundation\Http;
 
+use Exception;
 use Interop\Http\Middleware\DelegateInterface;
 use Interop\Http\Middleware\ServerMiddlewareInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -189,16 +190,46 @@ class Kernel implements TerminableContract, KernelContract, ServerMiddlewareInte
             $response = $this->sendRequestThroughRouter($request);
 
             $this->events->trigger(self::RESPONSE, [$request, $response]);
-        } catch (Throwable $exception) {
-            $exceptionHandler = $this->app->get(HandlerContract::class);
-            $exceptionHandler->report($exception = new FatalThrowableError($exception));
+        } catch (Exception $exception) {
+            $this->reportException($exception);
 
-            $response = $exceptionHandler->render($request, $exception);
+            $response = $this->renderException($request, $exception);
+
+            $this->events->trigger(self::EXCEPTION, [$request, $response]);
+        } catch (Throwable $exception) {
+            $this->reportException($exception = new FatalThrowableError($exception));
+
+            $response = $this->renderException($request, $exception);
 
             $this->events->trigger(self::EXCEPTION, [$request, $response]);
         }
 
         return $response;
+    }
+
+    /**
+     * Report the exception to the exception handler.
+     *
+     * @param \Exception $exception
+     */
+    protected function reportException(Exception $exception)
+    {
+        $this->app->get(HandlerContract::class)->report($e);
+    }
+
+    /**
+     * Render the exception to a response.
+     *
+     * @param \Psr\Http\Message\ServerRequestInterface $request
+     * @param \Exception  $exception
+     *
+     * @return \Psr\Http\Message\ResponseInterface
+     */
+    protected function renderException(
+        ServerRequestInterface $request,
+        Exception $exception
+    ): ResponseInterface {
+        return $this->app->get(HandlerContract::class)->render($request, $exception);
     }
 
     /**

@@ -28,9 +28,9 @@ class TemplateManager implements RenderableContract
     private $templatePath = [];
 
     /**
-     * [__construct description]
+     * Create a new template manager instance.
      *
-     * @param array $collectors
+     * @param array  $collectors
      * @param string $templatePath
      */
     public function __construct(array $collectors, string $templatePath)
