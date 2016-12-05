@@ -11,5 +11,5 @@ interface AssetAware
      *
      * @return array
      */
-    function getAssets(): array;
+    public function getAssets(): array;
 }

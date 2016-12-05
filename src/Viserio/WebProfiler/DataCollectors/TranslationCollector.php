@@ -3,9 +3,10 @@ declare(strict_types=1);
 namespace Viserio\WebProfiler\DataCollectors;
 
 use Viserio\Contracts\WebProfiler\AssetAware as AssetAwareContract;
+use Viserio\Contracts\WebProfiler\DataCollector as DataCollectorContract;
 use Viserio\Contracts\WebProfiler\TabAware as TabAwareContract;
 
-class TranslationCollector extends AbstractDataCollector implements AssetAwareContract, TabAwareContract
+class TranslationCollector implements AssetAwareContract, TabAwareContract, DataCollectorContract
 {
     /**
      * All translation for the actual page.

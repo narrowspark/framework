@@ -10,8 +10,8 @@ use Viserio\Config\Manager as ConfigManagerContract;
 use Viserio\Contracts\Config\Traits\ConfigAwareTrait;
 use Viserio\Contracts\Events\Traits\EventsAwareTrait;
 use Viserio\Contracts\Routing\UrlGenerator as UrlGeneratorContract;
-use Viserio\Contracts\WebProfiler\WebProfiler as WebProfilerContract;
 use Viserio\Contracts\WebProfiler\DataCollector as DataCollectorContract;
+use Viserio\Contracts\WebProfiler\WebProfiler as WebProfilerContract;
 
 class WebProfiler implements WebProfilerContract
 {

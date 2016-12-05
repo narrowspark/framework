@@ -3,8 +3,10 @@ declare(strict_types=1);
 namespace Viserio\WebProfiler\DataCollectors;
 
 use Viserio\Contracts\View\View as ViewContract;
+use Viserio\Contracts\WebProfiler\DataCollector as DataCollectorContract;
+use Viserio\Contracts\WebProfiler\TabAware as TabAwareContract;
 
-class ViewCollector extends AbstractDataCollector
+class ViewCollector implements TabAwareContract, DataCollectorContract
 {
     /**
      * Array of all templates.

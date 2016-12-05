@@ -9,6 +9,8 @@ use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Config\Manager as ConfigManagerContract;
 use Viserio\Contracts\Routing\Router as RouterContract;
 use Viserio\Contracts\Routing\UrlGenerator as UrlGeneratorContract;
+use Viserio\WebProfiler\DataCollectors\MemoryCollector;
+use Viserio\WebProfiler\DataCollectors\NarrowsparkCollector;
 use Viserio\WebProfiler\WebProfiler;
 
 class WebProfilerServiceProvider implements ServiceProvider
@@ -29,6 +31,8 @@ class WebProfilerServiceProvider implements ServiceProvider
             $container->get(ConfigManagerContract::class),
             $container->get(ServerRequestInterface::class)
         );
+        $profiler->addCollector(new NarrowsparkCollector());
+        $profiler->addCollector(new MemoryCollector());
 
         $profiler->setStreamFactory(
             $container->get(StreamFactoryInterface::class)

@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\WebProfiler;
 
-use Viserio\Contracts\WebProfiler\WebProfiler as WebProfilerContract;
 use Viserio\Contracts\Support\Renderable as RenderableContract;
+use Viserio\Contracts\WebProfiler\WebProfiler as WebProfilerContract;
 
 class AssetsRenderer implements RenderableContract
 {
@@ -22,7 +22,7 @@ class AssetsRenderer implements RenderableContract
      * @var array
      */
     protected $jsFiles = [
-        'js/vue.min.js'
+        'js/vue.min.js',
     ];
 
     /**
@@ -59,7 +59,8 @@ class AssetsRenderer implements RenderableContract
      * @param \Viserio\Contracts\WebProfiler\WebProfiler $webprofiler
      * @param string|null                                $rootPath
      */
-    public function __construct(WebProfilerContract $webprofiler, string $rootPath = null) {
+    public function __construct(WebProfilerContract $webprofiler, string $rootPath = null)
+    {
         $this->webprofiler = $webprofiler;
         $this->rootPath = $rootPath ?? __DIR__ . '/Resources';
     }
@@ -142,13 +143,13 @@ class AssetsRenderer implements RenderableContract
     public function getAssets(string $type = null): array
     {
         $cssFiles = array_map(
-            function($css) {
+            function ($css) {
                 return rtrim($this->rootPath, '/') . '/' . $css;
             },
             $this->cssFiles
         );
         $jsFiles = array_map(
-            function($css) {
+            function ($css) {
                 return rtrim($this->rootPath, '/') . '/' . $css;
             },
             $this->jsFiles
@@ -158,7 +159,7 @@ class AssetsRenderer implements RenderableContract
 
         // finds assets provided by collectors
         foreach ($this->webprofiler->getCollectors() as $collector) {
-            if (($collector instanceof AssetProvider) && !in_array($collector->getName(), $this->ignoredCollectors)) {
+            if (($collector instanceof AssetProvider) && ! in_array($collector->getName(), $this->ignoredCollectors)) {
                 $additionalAssets[] = $collector->getAssets();
             }
         }
@@ -167,20 +168,20 @@ class AssetsRenderer implements RenderableContract
             $root = $assets['path'] ?? $this->rootPath;
 
             $cssFiles = array_merge($cssFiles, array_map(
-                function($css) use($root) {
+                function ($css) use ($root) {
                     return rtrim($root, '/') . '/' . $css;
                 },
                 (array) $assets['css']
             ));
             $jsFiles = array_merge($jsFiles, array_map(
-                function($css) use($root) {
+                function ($css) use ($root) {
                     return rtrim($root, '/') . '/' . $css;
                 },
                 (array) $assets['js']
             ));
         }
 
-        return $this->filterAssetArray(array($cssFiles, $jsFiles), $type);
+        return $this->filterAssetArray([$cssFiles, $jsFiles], $type);
     }
 
     /**
@@ -200,7 +201,7 @@ class AssetsRenderer implements RenderableContract
      * Filters a tuple of (css, js) assets according to $type
      *
      * @param array       $array
-     * @param string|null $type 'css', 'js' or null for both
+     * @param string|null $type  'css', 'js' or null for both
      *
      * @return array
      */

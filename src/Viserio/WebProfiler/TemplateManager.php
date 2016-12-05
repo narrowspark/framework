@@ -7,9 +7,9 @@ use ParseError;
 use Throwable;
 use TypeError;
 use Viserio\Contracts\Support\Renderable as RenderableContract;
+use Viserio\Contracts\WebProfiler\PanelAware as PanelAwareContract;
 use Viserio\Contracts\WebProfiler\TabAware as TabAwareContract;
 use Viserio\Contracts\WebProfiler\TooltipAware as TooltipAwareContract;
-use Viserio\Contracts\WebProfiler\PanelAware as PanelAwareContract;
 
 class TemplateManager implements RenderableContract
 {
@@ -52,7 +52,7 @@ class TemplateManager implements RenderableContract
             array_merge(
                 $this->getSortedData(),
                 [
-                    'token' => '1'
+                    'token' => '1',
                 ]
             ),
             EXTR_PREFIX_SAME,
@@ -72,6 +72,39 @@ class TemplateManager implements RenderableContract
         // Return temporary output buffer content, destroy output buffer
         return ltrim(ob_get_clean());
         // @codeCoverageIgnoreEnd
+    }
+
+    public function getSortedData(): array
+    {
+        $data = [
+            'tabs' => [],
+            'panels' => [],
+        ];
+
+        foreach ($this->collectors as $name => $collector) {
+            if ($collector instanceof TabAwareContract) {
+                if ($collector instanceof TooltipAwareContract) {
+                    $data['tabs'][] = [
+                        'name' => $collector->getName(),
+                        'tab' => $collector->getTab(),
+                        'tooltip' => $collector->getTooltip(),
+                        'position' => $collector->getTabPosition(),
+                    ];
+                } else {
+                    $data['tabs'][] = [
+                        'name' => $collector->getName(),
+                        'tab' => $collector->getTab(),
+                        'position' => $collector->getTabPosition(),
+                    ];
+                }
+            }
+
+            if ($collector instanceof PanelAwareContract) {
+                $data['tabsRight'][] = $collector->getPanel();
+            }
+        }
+
+        return $data;
     }
 
     /**
@@ -120,38 +153,5 @@ class TemplateManager implements RenderableContract
             $exception->getFile(),
             $exception->getLine()
         );
-    }
-
-    public function getSortedData(): array
-    {
-        $data = [
-            'tabs' => [],
-            'panels' => [],
-        ];
-
-        foreach ($this->collectors as $name => $collector) {
-            if ($collector instanceof TabAwareContract) {
-                if ($collector instanceof TooltipAwareContract) {
-                    $data['tabs'][] = [
-                        'name' => $collector->getName(),
-                        'tab' => $collector->getTab(),
-                        'tooltip' => $collector->getTooltip(),
-                        'position' => $collector->getTabPosition(),
-                    ];
-                } else {
-                    $data['tabs'][] = [
-                        'name' => $collector->getName(),
-                        'tab' => $collector->getTab(),
-                        'position' => $collector->getTabPosition(),
-                    ];
-                }
-            }
-
-            if ($collector instanceof PanelAwareContract) {
-                $data['tabsRight'][]  = $collector->getPanel();
-            }
-        }
-
-        return $data;
     }
 }

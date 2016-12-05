@@ -214,14 +214,14 @@ class Kernel implements TerminableContract, KernelContract, ServerMiddlewareInte
      */
     protected function reportException(Exception $exception)
     {
-        $this->app->get(HandlerContract::class)->report($e);
+        $this->app->get(HandlerContract::class)->report($exception);
     }
 
     /**
      * Render the exception to a response.
      *
      * @param \Psr\Http\Message\ServerRequestInterface $request
-     * @param \Exception  $exception
+     * @param \Exception                               $exception
      *
      * @return \Psr\Http\Message\ResponseInterface
      */

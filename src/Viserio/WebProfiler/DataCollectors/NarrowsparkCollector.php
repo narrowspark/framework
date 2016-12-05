@@ -2,11 +2,12 @@
 declare(strict_types=1);
 namespace Viserio\WebProfiler\DataCollectors;
 
+use Viserio\Contracts\WebProfiler\DataCollector as DataCollectorContract;
 use Viserio\Contracts\WebProfiler\TabAware as TabAwareContract;
 use Viserio\Contracts\WebProfiler\TooltipAware as TooltipAwareContract;
 use Viserio\Foundation\Application;
 
-class NarrowsparkCollector extends AbstractDataCollector implements TooltipAwareContract, TabAwareContract
+class NarrowsparkCollector implements TooltipAwareContract, TabAwareContract, DataCollectorContract
 {
     /**
      * {@inheritdoc}
@@ -23,7 +24,7 @@ class NarrowsparkCollector extends AbstractDataCollector implements TooltipAware
     {
         return [
             'label' => '',
-            'value' => Application::VERSION
+            'value' => Application::VERSION,
         ];
     }
 

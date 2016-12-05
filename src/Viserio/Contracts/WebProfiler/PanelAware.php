@@ -9,5 +9,5 @@ interface PanelAware
      *
      * @return string
      */
-    function getPanel(): string;
+    public function getPanel(): string;
 }

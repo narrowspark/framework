@@ -9,5 +9,5 @@ interface DataCollector
      *
      * @return string
      */
-    function getName(): string;
+    public function getName(): string;
 }
