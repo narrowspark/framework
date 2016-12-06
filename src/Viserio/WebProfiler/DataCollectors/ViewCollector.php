@@ -40,6 +40,23 @@ class ViewCollector implements TabAwareContract, DataCollectorContract
         return 'views';
     }
 
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getTabPosition(): string
+    {
+        return 'left';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getTab(): array
+    {
+        return [];
+    }
+
     /**
      * {@inheritdoc}
      */
