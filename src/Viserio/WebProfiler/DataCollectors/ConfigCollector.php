@@ -2,6 +2,9 @@
 declare(strict_types=1);
 namespace Viserio\WebProfiler\DataCollectors;
 
+use Viserio\Contracts\WebProfiler\DataCollector as DataCollectorContract;
+use Viserio\Contracts\WebProfiler\TabAware as TabAwareContract;
+
 class ConfigCollector implements TabAwareContract, DataCollectorContract
 {
     /**
@@ -15,7 +18,7 @@ class ConfigCollector implements TabAwareContract, DataCollectorContract
      * @param array  $data
      * @param string $name
      */
-    public function __construct(array $data = [], $name = 'config')
+    public function __construct(array $data = [])
     {
         $this->data = $data;
     }
@@ -43,8 +46,6 @@ class ConfigCollector implements TabAwareContract, DataCollectorContract
      */
     public function getTab(): array
     {
-        $memory = $this->data['memory'] / 1024 / 1024;
-
         return [
             'icon' => file_get_contents(__DIR__ . '/../Resources/icons/ic_settings_applications_white_24px.svg'),
             'label' => 'Configs',

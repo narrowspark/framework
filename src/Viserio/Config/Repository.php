@@ -3,11 +3,22 @@ declare(strict_types=1);
 namespace Viserio\Config;
 
 use ArrayIterator;
+use IteratorAggregate;
+use Viserio\Contracts\Parsers\Traits\LoaderAwareTrait;
 use Narrowspark\Arr\Arr;
 use Viserio\Contracts\Config\Repository as RepositoryContract;
 
-class Repository implements RepositoryContract
+class Repository implements RepositoryContract, IteratorAggregate
 {
+    use LoaderAwareTrait;
+
+    /**
+     * Config folder path.
+     *
+     * @var string
+     */
+    protected $path;
+
     /**
      * Cache of previously parsed keys.
      *
@@ -23,12 +34,63 @@ class Repository implements RepositoryContract
     protected $data = [];
 
     /**
-     * Set an array of configuration options
-     * Merge provided values with the defaults to ensure all required values are set.
+     * Import configuation from file.
+     * Can be grouped together.
      *
-     * @param array $values
+     * @param string      $file
+     * @param string|null $group
      *
      * @return $this
+     */
+    public function import(string $file, string $group = null): ManagerContract
+    {
+        $config = $this->getLoader()->load($file, $group);
+
+        $this->setArray($config);
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function set(string $key, $value): ManagerContract
+    {
+        $this->offsetSet($key, $value);
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function get(string $key, $default = null)
+    {
+        if (! $this->offsetExists($key)) {
+            return $default;
+        }
+
+        return $this->offsetGet($key);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function has(string $key): bool
+    {
+        return $this->offsetExists($key);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function delete(string $key)
+    {
+        $this->offsetUnset($key);
+    }
+
+    /**
+     * {@inheritdoc}
      */
     public function setArray(array $values = []): RepositoryContract
     {
@@ -38,9 +100,7 @@ class Repository implements RepositoryContract
     }
 
     /**
-     * Get all values as nested array.
-     *
-     * @return array
+     * {@inheritdoc}
      */
     public function getAllNested(): array
     {
@@ -48,9 +108,7 @@ class Repository implements RepositoryContract
     }
 
     /**
-     * Get all values as flattened key array.
-     *
-     * @return array
+     * {@inheritdoc}
      */
     public function getAllFlat(): array
     {
@@ -58,9 +116,7 @@ class Repository implements RepositoryContract
     }
 
     /**
-     * Get all as flattened array keys.
-     *
-     * @return array
+     * {@inheritdoc}
      */
     public function getKeys(): array
     {

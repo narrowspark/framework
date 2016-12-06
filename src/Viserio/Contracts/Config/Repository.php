@@ -7,6 +7,44 @@ use ArrayAccess;
 interface Repository extends ArrayAccess
 {
     /**
+     * Setting configuration values, using
+     * either simple or nested keys.
+     *
+     * @param string $key
+     * @param mixed  $value
+     *
+     * @return $this
+     */
+    public function set(string $key, $value): Manager;
+
+    /**
+     * Gets a configuration setting using a simple or nested key.
+     *
+     * @param string     $key
+     * @param mixed|null $default
+     *
+     * @return mixed The value of a setting
+     */
+    public function get(string $key, $default = null);
+
+    /**
+     * Checking if configuration values exist, using
+     * either simple or nested keys.
+     *
+     * @param string $key
+     *
+     * @return bool
+     */
+    public function has(string $key): bool;
+
+    /**
+     * delete a key and all his values.
+     *
+     * @param string $key
+     */
+    public function delete(string $key);
+
+    /**
      * Set an array of configuration options
      * Merge provided values with the defaults to ensure all required values are set.
      *

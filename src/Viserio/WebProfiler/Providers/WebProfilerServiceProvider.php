@@ -12,9 +12,14 @@ use Viserio\Contracts\Routing\UrlGenerator as UrlGeneratorContract;
 use Viserio\WebProfiler\DataCollectors\MemoryCollector;
 use Viserio\WebProfiler\DataCollectors\NarrowsparkCollector;
 use Viserio\WebProfiler\WebProfiler;
+use Viserio\Contracts\Support\Traits\ServiceProviderConfigAwareTrait;
 
 class WebProfilerServiceProvider implements ServiceProvider
 {
+    use ServiceProviderConfigAwareTrait;
+
+    const PACKAGE = 'viserio.webprofiler';
+
     /**
      * {@inheritdoc}
      */
@@ -31,8 +36,16 @@ class WebProfilerServiceProvider implements ServiceProvider
             $container->get(ConfigManagerContract::class),
             $container->get(ServerRequestInterface::class)
         );
+
         $profiler->addCollector(new NarrowsparkCollector());
+
         $profiler->addCollector(new MemoryCollector());
+
+        if ($container->has()) {
+            $profiler->addCollector(new ConfigCollector(
+                $container->get()->getAll();
+            ));
+        }
 
         $profiler->setStreamFactory(
             $container->get(StreamFactoryInterface::class)
