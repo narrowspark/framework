@@ -17,9 +17,11 @@
                     <span class="webprofiler-tab-label">
                         <?php echo $tab['tab']['label'] ?>
                     </span>
+                    <?php if (isset($tab['tab']['value'])) { ?>
                     <span class="webprofiler-tab-value">
                         <?php echo $tab['tab']['value'] ?>
                     </span>
+                    <?php } ?>
                     <?php if (isset($tab['tab']['count'])) { ?>
                     <span class="webprofiler-tab-counter">
                         <?php echo $tab['tab']['count'] ?>
