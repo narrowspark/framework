@@ -22,5 +22,5 @@ composer require alcaeus/mongo-php-adapter
 
 if [[ "$PHPSTAN" = true ]]; then
     # Install phpstan
-    composer global require phpstan/phpstan
+    composer require phpstan/phpstan
 fi

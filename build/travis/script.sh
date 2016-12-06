@@ -5,7 +5,7 @@ mkdir -p build/logs
 #!/bin/bash
 
 if [[ "$PHPSTAN" = true ]]; then
-    phpstan analyse src/Viserio
+    vendor/bin/phpstan analyse src/Viserio
 fi
 
 set +e
