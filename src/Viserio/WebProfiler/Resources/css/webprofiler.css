@@ -5,15 +5,13 @@
     vertical-align: baseline;
 }
 
-.webprofiler .webprofiler-header {
-    background-color: #222;
+.webprofiler {
     bottom: 0;
-    box-shadow: 0 -1px 0 rgba(0, 0, 0, 0.2);
     color: #EEE;
     font: 11px Arial, sans-serif;
     left: 0;
     margin: 0;
-    padding: 0 36px 0 0;
+    padding: 0;
     position: fixed;
     right: 0;
     text-align: left;
@@ -25,20 +23,29 @@
     -moz-osx-font-smoothing: auto;
 }
 
+.webprofiler .webprofiler-header {
+    bottom: 0;
+    left: 0;
+    position: absolute;
+    right: 0;
+    border-top: 1px solid #383838;
+    box-shadow: 0 -1px 0 rgba(0, 0, 0, 0.2);
+    background-color: #222;
+}
+
 .webprofiler .webprofiler-header .hide-button {
     background: #444;
     display: block;
-    position: absolute;
-    top: 0;
-    right: 0;
     width: 36px;
     height: 36px;
     cursor: pointer;
     text-align: center;
+    float: right;
 }
 .webprofiler .webprofiler-header .hide-button svg,
 .webprofiler .webprofiler-header .webprofiler-tab svg {
-    margin-top: 6px;
+    position: relative;
+    top: 6px;
     max-height: 24px;
 }
 
@@ -77,6 +84,9 @@
     position: relative;
     z-index: 10002;
 }
+.webprofiler .webprofiler-header .webprofiler-tab.webprofiler-tab-has-panel {
+    cursor: pointer;
+}
 .webprofiler .webprofiler-header .webprofiler-tab.webprofiler-tab-has-tooltip:hover {
     cursor: help;
 }
@@ -111,37 +121,50 @@
     display: table-cell;
     font-size: 11px;
     padding: 4px 8px 4px 0;
-}.webprofiler .webprofiler-header .webprofiler-tab.webprofiler-tab-has-tooltip:hover .webprofiler-tab-tooltip .webprofiler-tab-tooltip-group span {
+}
+.webprofiler .webprofiler-header .webprofiler-tab.webprofiler-tab-has-tooltip:hover .webprofiler-tab-tooltip .webprofiler-tab-tooltip-group span {
     color: #F5F5F5;
     font-size: 12px;
     display: table-cell;
 }
-.webprofiler .webprofiler-header .webprofiler-tab.webprofiler-tab-positoin-left.webprofiler-tab-has-tooltip:hover .webprofiler-tab-tooltip {
+.webprofiler .webprofiler-header .webprofiler-tab.webprofiler-tab-position-left.webprofiler-tab-has-tooltip:hover .webprofiler-tab-tooltip {
     left: 0;
 }
-.webprofiler .webprofiler-header .webprofiler-tab.webprofiler-tab-positoin-right.webprofiler-tab-has-tooltip:hover .webprofiler-tab-tooltip {
+.webprofiler .webprofiler-header .webprofiler-tab.webprofiler-tab-position-right.webprofiler-tab-has-tooltip:hover .webprofiler-tab-tooltip {
     right: 0;
 }
-.webprofiler .webprofiler-header .webprofiler-tab.webprofiler-tab-positoin-left {
+.webprofiler .webprofiler-header .webprofiler-tab.webprofiler-tab-position-left {
     float: left;
 }
-.webprofiler .webprofiler-header .webprofiler-tab.webprofiler-tab-positoin-right {
+.webprofiler .webprofiler-header .webprofiler-tab.webprofiler-tab-position-right {
     float: right;
 }
-.webprofiler .webprofiler-header .webprofiler-tab .webprofiler-tab-icon {
+.webprofiler .webprofiler-header .webprofiler-tab .webprofiler-tab-menu {
     display: block;
     height: 36px;
     line-height: 36px;
     padding: 0 7px;
 }
-.webprofiler .webprofiler-header .webprofiler-tab .webprofiler-tab-icon .webprofiler-toolbar-label,
-.webprofiler .webprofiler-header .webprofiler-tab .webprofiler-tab-icon .webprofiler-toolbar-value {
-    display: inline;
+.webprofiler .webprofiler-header .webprofiler-tab .webprofiler-tab-menu .webprofiler-tab-label,
+.webprofiler .webprofiler-header .webprofiler-tab .webprofiler-tab-menu .webprofiler-tab-value,
+.webprofiler .webprofiler-header .webprofiler-tab .webprofiler-tab-menu .webprofiler-tab-icon,
+.webprofiler .webprofiler-header .webprofiler-tab .webprofiler-tab-menu .webprofiler-tab-counter {
+    display: inline-block;
     color: #F5F5F5;
     font-size: 13px;
     line-height: 36px;
     padding: 0;
 }
-.webprofiler .webprofiler-header .webprofiler-tab .webprofiler-tab-icon .webprofiler-toolbar-value {
+.webprofiler .webprofiler-header .webprofiler-tab .webprofiler-tab-icon .webprofiler-tab-value {
     margin-left: 4px;
+}
+
+.webprofiler .webprofiler-body {
+    height: 300px;
+    overflow: auto;
+    background-color: #222;
+    display: none;
+}
+.webprofiler .webprofiler-body.active {
+    display: block;
 }

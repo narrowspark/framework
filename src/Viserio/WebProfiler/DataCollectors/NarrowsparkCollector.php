@@ -23,6 +23,7 @@ class NarrowsparkCollector implements TooltipAwareContract, TabAwareContract, Da
     public function getTab(): array
     {
         return [
+            'icon' => file_get_contents(__DIR__ . '/../Resources/icons/ic_memory_white_24px.svg'),
             'label' => '',
             'value' => Application::VERSION,
         ];

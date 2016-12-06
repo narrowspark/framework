@@ -9,6 +9,7 @@ use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Contracts\Routing\Router as RouterContract;
 use Viserio\Contracts\Routing\UrlGenerator as UrlGeneratorContract;
+use Viserio\WebProfiler\DataCollectors\ConfigCollector;
 use Viserio\WebProfiler\DataCollectors\MemoryCollector;
 use Viserio\WebProfiler\DataCollectors\NarrowsparkCollector;
 use Viserio\WebProfiler\WebProfiler;

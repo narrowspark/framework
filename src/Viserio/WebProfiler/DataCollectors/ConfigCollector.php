@@ -2,10 +2,10 @@
 declare(strict_types=1);
 namespace Viserio\WebProfiler\DataCollectors;
 
-use Viserio\Contracts\WebProfiler\DataCollector as DataCollectorContract;
+use Viserio\Contracts\WebProfiler\PanelAware as PanelAwareContract;
 use Viserio\Contracts\WebProfiler\TabAware as TabAwareContract;
 
-class ConfigCollector implements TabAwareContract, DataCollectorContract
+class ConfigCollector extends AbstractDataCollector implements TabAwareContract, PanelAwareContract
 {
     /**
      * Collected data.
@@ -49,8 +49,17 @@ class ConfigCollector implements TabAwareContract, DataCollectorContract
         return [
             'icon' => file_get_contents(__DIR__ . '/../Resources/icons/ic_settings_applications_white_24px.svg'),
             'label' => 'Configs',
-            'count' => count($this->data),
         ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getPanel(): string
+    {
+        $html = '';
+
+        return $html;
     }
 
     /**
@@ -59,5 +68,25 @@ class ConfigCollector implements TabAwareContract, DataCollectorContract
     public function getName(): string
     {
         return 'config';
+    }
+
+    /**
+     * Format config values.
+     *
+     * @return array
+     */
+    private function formatConfigs(): array
+    {
+        $data = [];
+
+        foreach ($this->data as $key => $value) {
+            if (!is_string($value)) {
+                $value = $this->formatVar($value);
+            }
+
+            $data[$key] = $value;
+        }
+
+        return $data;
     }
 }

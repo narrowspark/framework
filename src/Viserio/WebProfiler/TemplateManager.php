@@ -84,15 +84,13 @@ class TemplateManager implements RenderableContract
         foreach ($this->collectors as $name => $collector) {
             if ($collector instanceof TabAwareContract) {
                 if ($collector instanceof TooltipAwareContract) {
-                    $data['tabs'][] = [
-                        'name' => $collector->getName(),
+                    $data['tabs'][$collector->getName()] = [
                         'tab' => $collector->getTab(),
                         'tooltip' => $collector->getTooltip(),
                         'position' => $collector->getTabPosition(),
                     ];
                 } else {
-                    $data['tabs'][] = [
-                        'name' => $collector->getName(),
+                    $data['tabs'][$collector->getName()] = [
                         'tab' => $collector->getTab(),
                         'position' => $collector->getTabPosition(),
                     ];
@@ -100,7 +98,7 @@ class TemplateManager implements RenderableContract
             }
 
             if ($collector instanceof PanelAwareContract) {
-                $data['tabsRight'][] = $collector->getPanel();
+                $data['panels'][$collector->getName()] = $collector->getPanel();
             }
         }
 
