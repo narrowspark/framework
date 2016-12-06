@@ -15,7 +15,7 @@ interface Repository extends ArrayAccess
      *
      * @return $this
      */
-    public function set(string $key, $value): Manager;
+    public function set(string $key, $value): Repository;
 
     /**
      * Gets a configuration setting using a simple or nested key.
@@ -41,8 +41,10 @@ interface Repository extends ArrayAccess
      * delete a key and all his values.
      *
      * @param string $key
+     *
+     * @return $this
      */
-    public function delete(string $key);
+    public function delete(string $key): Repository;
 
     /**
      * Set an array of configuration options

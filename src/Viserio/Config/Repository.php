@@ -42,7 +42,7 @@ class Repository implements RepositoryContract, IteratorAggregate
      *
      * @return $this
      */
-    public function import(string $file, string $group = null): ManagerContract
+    public function import(string $file, string $group = null): RepositoryContract
     {
         $config = $this->getLoader()->load($file, $group);
 
@@ -54,7 +54,7 @@ class Repository implements RepositoryContract, IteratorAggregate
     /**
      * {@inheritdoc}
      */
-    public function set(string $key, $value): ManagerContract
+    public function set(string $key, $value): RepositoryContract
     {
         $this->offsetSet($key, $value);
 
@@ -84,9 +84,9 @@ class Repository implements RepositoryContract, IteratorAggregate
     /**
      * {@inheritdoc}
      */
-    public function delete(string $key)
+    public function delete(string $key): RepositoryContract
     {
-        $this->offsetUnset($key);
+        return $this->offsetUnset($key);
     }
 
     /**
@@ -166,10 +166,14 @@ class Repository implements RepositoryContract, IteratorAggregate
      * Remove nested array value based on a separated key.
      *
      * @param string $key
+     *
+     * @return $this
      */
-    public function offsetUnset($key)
+    public function offsetUnset($key): RepositoryContract
     {
         Arr::forget($this->data, $key);
+
+        return $this;
     }
 
     /**
