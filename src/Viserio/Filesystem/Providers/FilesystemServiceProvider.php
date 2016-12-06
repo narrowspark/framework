@@ -6,7 +6,7 @@ use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
 use League\Flysystem\Filesystem;
 use League\Flysystem\FilesystemInterface;
-use Viserio\Config\Manager as ConfigManager;
+use Viserio\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Contracts\Cache\Manager as CacheManagerContract;
 use Viserio\Filesystem\Cache\CachedFactory;
 use Viserio\Filesystem\FilesystemManager;
@@ -39,7 +39,7 @@ class FilesystemServiceProvider implements ServiceProvider
 
     public static function createFilesystemManager(ContainerInterface $container): FilesystemManager
     {
-        $manager = new FilesystemManager($container->get(ConfigManager::class));
+        $manager = new FilesystemManager($container->get(RepositoryContract::class));
 
         if ($container->has(CacheManagerContract::class)) {
             $manager->setCacheManager($container->get(CacheManagerContract::class));

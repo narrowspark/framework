@@ -9,7 +9,7 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Symfony\Component\Debug\Exception\FatalThrowableError;
 use Throwable;
-use Viserio\Config\Manager as ConfigManager;
+use Viserio\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Contracts\Events\Dispatcher as DispatcherContract;
 use Viserio\Contracts\Events\Traits\EventsAwareTrait;
 use Viserio\Contracts\Exception\Handler as HandlerContract;
@@ -242,7 +242,7 @@ class Kernel implements TerminableContract, KernelContract, ServerMiddlewareInte
     protected function sendRequestThroughRouter(ServerRequestInterface $request): ResponseInterface
     {
         $router = $this->router;
-        $config = $this->app->get(ConfigManager::class);
+        $config = $this->app->get(RepositoryContract::class);
 
         $router->setCachePath($config->get('routing.path'));
         $router->refreshCache($config->get('app.env', 'production') !== 'production');

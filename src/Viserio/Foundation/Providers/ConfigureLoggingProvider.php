@@ -5,7 +5,7 @@ namespace Viserio\Foundation\Providers;
 use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
 use Monolog\Handler\ErrorLogHandler;
-use Viserio\Config\Manager as ConfigManager;
+use Viserio\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Contracts\Log\Log as LogContract;
 use Viserio\Log\Writer;
 
@@ -40,7 +40,7 @@ class ConfigureLoggingProvider implements ServiceProvider
      */
     protected static function configureHandlers(ContainerInterface $container, LogContract $log)
     {
-        $config = $container->get(ConfigManager::class);
+        $config = $container->get(RepositoryContract::class);
         $level = $config->get('app.log_level', 'debug');
 
         $method = 'configure' . ucfirst($config->get('app.log', 'single')) . 'Handler';
@@ -58,7 +58,7 @@ class ConfigureLoggingProvider implements ServiceProvider
     protected static function configureSingleHandler(ContainerInterface $container, LogContract $log, string $level)
     {
         $log->useFiles(
-            $container->get(ConfigManager::class)->get('path.storage') . '/logs/narrowspark.log',
+            $container->get(RepositoryContract::class)->get('path.storage') . '/logs/narrowspark.log',
             $level
         );
     }
@@ -72,11 +72,11 @@ class ConfigureLoggingProvider implements ServiceProvider
      */
     protected static function configureDailyHandler(ContainerInterface $container, LogContract $log, string $level)
     {
-        $config = $container->get(ConfigManager::class);
+        $config = $container->get(RepositoryContract::class);
         $maxFiles = $config->get('app.log_max_files', 5);
 
         $log->useDailyFiles(
-            $container->get(ConfigManager::class)->get('path.storage') . '/logs/narrowspark.log',
+            $container->get(RepositoryContract::class)->get('path.storage') . '/logs/narrowspark.log',
             $maxFiles,
             $level
         );

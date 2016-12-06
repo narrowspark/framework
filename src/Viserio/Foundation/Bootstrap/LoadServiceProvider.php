@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Foundation\Bootstrap;
 
-use Viserio\Config\Manager as ConfigManager;
+use Viserio\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Contracts\Foundation\Application;
 use Viserio\Contracts\Foundation\Bootstrap as BootstrapContract;
 
@@ -13,7 +13,7 @@ class LoadServiceProvider implements BootstrapContract
      */
     public function bootstrap(Application $app)
     {
-        $config = $app->get(ConfigManager::class);
+        $config = $app->get(RepositoryContract::class);
         $providers = $config->get('app.serviceproviders', []);
 
         if (count($providers) > 0) {

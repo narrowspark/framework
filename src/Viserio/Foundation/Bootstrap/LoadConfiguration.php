@@ -43,14 +43,14 @@ class LoadConfiguration extends AbstractLoadFiles implements BootstrapContract
      * Load the configuration items from all of the files.
      *
      * @param \Viserio\Contracts\Foundation\Application $app
-     * @param \Viserio\Contracts\Config\Repository      $configManager
+     * @param \Viserio\Contracts\Config\Repository      $config
      */
-    protected function loadConfigurationFiles(Application $app, RepositoryContract $configManager)
+    protected function loadConfigurationFiles(Application $app, RepositoryContract $config)
     {
         $configPath = realpath($app->get(RepositoryContract::class)->get('path.config'));
 
         foreach ($this->getFiles($configPath) as $key => $path) {
-            $configManager->import($path);
+            $config->import($path);
         }
     }
 }

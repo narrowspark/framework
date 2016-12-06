@@ -4,7 +4,7 @@ namespace Viserio\Foundation\Bootstrap;
 
 use Dotenv\Dotenv;
 use Dotenv\Exception\InvalidPathException;
-use Viserio\Config\Manager as ConfigManager;
+use Viserio\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Contracts\Foundation\Application;
 use Viserio\Contracts\Foundation\Bootstrap as BootstrapContract;
 
@@ -15,7 +15,7 @@ class DetectEnvironment implements BootstrapContract
      */
     public function bootstrap(Application $app)
     {
-        $config = $app->get(ConfigManager::class);
+        $config = $app->get(RepositoryContract::class);
 
         if (! file_exists($config->get('patch.cached.config'))) {
             $this->checkForSpecificEnvironmentFile($app);

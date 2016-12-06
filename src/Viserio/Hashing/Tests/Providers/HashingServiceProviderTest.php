@@ -3,7 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Hashing\Tests\Providers;
 
 use Defuse\Crypto\Key;
-use Viserio\Config\Manager as ConfigManager;
+use Viserio\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Config\Providers\ConfigServiceProvider;
 use Viserio\Container\Container;
 use Viserio\Hashing\Password;
@@ -17,7 +17,7 @@ class HashingServiceProviderTest extends \PHPUnit_Framework_TestCase
         $container->register(new ConfigServiceProvider());
         $container->register(new HashingServiceProvider());
 
-        $container->get(ConfigManager::class)->set('hashing', [
+        $container->get(RepositoryContract::class)->set('hashing', [
             'key' => Key::createNewRandomKey(),
         ]);
 
@@ -25,7 +25,7 @@ class HashingServiceProviderTest extends \PHPUnit_Framework_TestCase
         self::assertInstanceOf(Password::class, $container->get('password'));
     }
 
-    public function testProviderWithoutConfigManager()
+    public function testProviderWithoutRepositoryContract()
     {
         $container = new Container();
         $container->register(new HashingServiceProvider());
@@ -38,7 +38,7 @@ class HashingServiceProviderTest extends \PHPUnit_Framework_TestCase
         self::assertInstanceOf(Password::class, $container->get('password'));
     }
 
-    public function testProviderWithoutConfigManagerAndNamespace()
+    public function testProviderWithoutRepositoryContractAndNamespace()
     {
         $container = new Container();
         $container->register(new HashingServiceProvider());

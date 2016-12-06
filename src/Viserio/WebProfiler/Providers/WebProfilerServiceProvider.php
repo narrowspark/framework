@@ -6,7 +6,7 @@ use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
 use Interop\Http\Factory\StreamFactoryInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Viserio\Config\Manager as ConfigManagerContract;
+use Viserio\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Contracts\Routing\Router as RouterContract;
 use Viserio\Contracts\Routing\UrlGenerator as UrlGeneratorContract;
 use Viserio\WebProfiler\DataCollectors\MemoryCollector;
@@ -33,7 +33,7 @@ class WebProfilerServiceProvider implements ServiceProvider
     public static function createWebProfiler(ContainerInterface $container)
     {
         $profiler = new WebProfiler(
-            $container->get(ConfigManagerContract::class),
+            $container->get(RepositoryContract::class),
             $container->get(ServerRequestInterface::class)
         );
 

@@ -6,7 +6,7 @@ use Interop\Http\Factory\StreamFactoryInterface;
 use Psr\Http\Message\MessageInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Viserio\Config\Manager as ConfigManagerContract;
+use Viserio\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Contracts\Config\Traits\ConfigAwareTrait;
 use Viserio\Contracts\Events\Traits\EventsAwareTrait;
 use Viserio\Contracts\Routing\UrlGenerator as UrlGeneratorContract;
@@ -70,11 +70,11 @@ class WebProfiler implements WebProfilerContract
     /**
      * Create a new web profiler instance.
      *
-     * @param \Viserio\Config\Manager                  $config
+     * @param \Viserio\Contracts\Config\Repository     $config
      * @param \Psr\Http\Message\ServerRequestInterface $request
      */
     public function __construct(
-        ConfigManagerContract $config,
+        RepositoryContract $config,
         ServerRequestInterface $serverRequset
     ) {
         $this->config = $config;
