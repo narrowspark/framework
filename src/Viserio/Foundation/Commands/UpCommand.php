@@ -3,7 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Foundation\Commands;
 
 use Viserio\Console\Command\Command;
-use Viserio\Contracts\Config\Manager as ConfigManagerContract;
+use Viserio\Contracts\Config\Repository as RepositoryContract;
 
 class UpCommand extends Command
 {
@@ -22,7 +22,7 @@ class UpCommand extends Command
      */
     public function handle()
     {
-        $config = $this->container->get(ConfigManagerContract::class);
+        $config = $this->container->get(RepositoryContract::class);
 
         @unlink($config->get('path.storage') . '/framework/down');
 

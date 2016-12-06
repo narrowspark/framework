@@ -17,7 +17,7 @@ use Symfony\Component\Debug\Exception\FatalErrorException;
 use Symfony\Component\Debug\Exception\FatalThrowableError;
 use Symfony\Component\Debug\Exception\FlattenException;
 use Throwable;
-use Viserio\Contracts\Config\Manager as ConfigManagerContract;
+use Viserio\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Contracts\Config\Traits\ConfigAwareTrait;
 use Viserio\Contracts\Container\Traits\ContainerAwareTrait;
 use Viserio\Contracts\Exception\Displayer as DisplayerContract;
@@ -220,7 +220,7 @@ class Handler implements HandlerContract
         // Register the PHP shutdown handler.
         register_shutdown_function([$this, 'handleShutdown']);
 
-        if ($this->getContainer()->get(ConfigManagerContract::class)->get('exception.env', null) !== 'testing') {
+        if ($this->getContainer()->get(RepositoryContract::class)->get('exception.env', null) !== 'testing') {
             ini_set('display_errors', 'Off');
         }
     }
@@ -348,7 +348,7 @@ class Handler implements HandlerContract
      */
     protected function shouldntReport(Throwable $exception): bool
     {
-        $dontReport = array_merge($this->dontReport, $this->getContainer()->get(ConfigManagerContract::class)->get('', []));
+        $dontReport = array_merge($this->dontReport, $this->getContainer()->get(RepositoryContract::class)->get('', []));
 
         foreach ($dontReport as $type) {
             if ($exception instanceof $type) {
@@ -370,7 +370,7 @@ class Handler implements HandlerContract
     {
         $levels = array_merge(
             $this->defaultLevels,
-            $this->getContainer()->get(ConfigManagerContract::class)->get('exception.levels', [])
+            $this->getContainer()->get(RepositoryContract::class)->get('exception.levels', [])
         );
 
         foreach ($levels as $class => $level) {
@@ -425,7 +425,7 @@ class Handler implements HandlerContract
         Throwable $transformed,
         int $code
     ): DisplayerContract {
-        $config = $this->getContainer()->get(ConfigManagerContract::class);
+        $config = $this->getContainer()->get(RepositoryContract::class);
 
         $displayers = array_merge(
             $this->displayers,
@@ -460,7 +460,7 @@ class Handler implements HandlerContract
         $container = $this->getContainer();
         $filters = array_merge(
             $this->filters,
-            $container->get(ConfigManagerContract::class)->get('exception.filters', [])
+            $container->get(RepositoryContract::class)->get('exception.filters', [])
         );
 
         foreach ($filters as $filter) {
@@ -483,7 +483,7 @@ class Handler implements HandlerContract
         $container = $this->getContainer();
         $transformers = array_merge(
             $this->transformers,
-            $container->get(ConfigManagerContract::class)->get('exception.transformers', [])
+            $container->get(RepositoryContract::class)->get('exception.transformers', [])
         );
 
         foreach ($transformers as $transformer) {

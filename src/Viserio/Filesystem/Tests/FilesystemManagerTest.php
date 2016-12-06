@@ -9,7 +9,7 @@ use League\Flysystem\AdapterInterface;
 use MongoClient;
 use MongoConnectionException;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
-use Viserio\Contracts\Config\Manager as ConfigManger;
+use Viserio\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Filesystem\Encryption\EncryptionWrapper;
 use Viserio\Filesystem\FilesystemAdapter;
 use Viserio\Filesystem\FilesystemManager;
@@ -20,7 +20,7 @@ class FilesystemManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testAwsS3ConnectorDriver()
     {
-        $config = $this->mock(ConfigManger::class);
+        $config = $this->mock(RepositoryContract::class);
         $config->shouldReceive('get')
             ->once()
             ->with('filesystem.connections', [])
@@ -44,7 +44,7 @@ class FilesystemManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testDropboxConnectorDriver()
     {
-        $config = $this->mock(ConfigManger::class);
+        $config = $this->mock(RepositoryContract::class);
         $config->shouldReceive('get')
             ->once()
             ->with('filesystem.connections', [])
@@ -69,7 +69,7 @@ class FilesystemManagerTest extends \PHPUnit_Framework_TestCase
             $this->markTestSkipped('The FTP_BINARY constant is not defined');
         }
 
-        $config = $this->mock(ConfigManger::class);
+        $config = $this->mock(RepositoryContract::class);
         $config->shouldReceive('get')
             ->once()
             ->with('filesystem.connections', [])
@@ -96,7 +96,7 @@ class FilesystemManagerTest extends \PHPUnit_Framework_TestCase
             $this->markTestSkipped('The MongoClient class does not exist');
         }
 
-        $config = $this->mock(ConfigManger::class);
+        $config = $this->mock(RepositoryContract::class);
         $config->shouldReceive('get')
             ->once()
             ->with('filesystem.connections', [])
@@ -121,7 +121,7 @@ class FilesystemManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testLocalConnectorDriver()
     {
-        $config = $this->mock(ConfigManger::class);
+        $config = $this->mock(RepositoryContract::class);
         $config->shouldReceive('get')
             ->once()
             ->with('filesystem.connections', [])
@@ -141,7 +141,7 @@ class FilesystemManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testNullConnectorDriver()
     {
-        $config = $this->mock(ConfigManger::class);
+        $config = $this->mock(RepositoryContract::class);
         $config->shouldReceive('get')
             ->once()
             ->with('filesystem.connections', [])
@@ -159,7 +159,7 @@ class FilesystemManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testRackspaceConnectorDriver()
     {
-        $config = $this->mock(ConfigManger::class);
+        $config = $this->mock(RepositoryContract::class);
         $config->shouldReceive('get')
             ->once()
             ->with('filesystem.connections', [])
@@ -189,7 +189,7 @@ class FilesystemManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testSftpConnectorDriver()
     {
-        $config = $this->mock(ConfigManger::class);
+        $config = $this->mock(RepositoryContract::class);
         $config->shouldReceive('get')
             ->once()
             ->with('filesystem.connections', [])
@@ -212,7 +212,7 @@ class FilesystemManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testVfsConnectorDriver()
     {
-        $config = $this->mock(ConfigManger::class);
+        $config = $this->mock(RepositoryContract::class);
         $config->shouldReceive('get')
             ->once()
             ->with('filesystem.connections', [])
@@ -230,7 +230,7 @@ class FilesystemManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testWebDavConnectorDriver()
     {
-        $config = $this->mock(ConfigManger::class);
+        $config = $this->mock(RepositoryContract::class);
         $config->shouldReceive('get')
             ->once()
             ->with('filesystem.connections', [])
@@ -252,7 +252,7 @@ class FilesystemManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testZipConnectorDriver()
     {
-        $config = $this->mock(ConfigManger::class);
+        $config = $this->mock(RepositoryContract::class);
         $config->shouldReceive('get')
             ->once()
             ->with('filesystem.connections', [])
@@ -272,7 +272,7 @@ class FilesystemManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testgetFlysystemAdapter()
     {
-        $config = $this->mock(ConfigManger::class);
+        $config = $this->mock(RepositoryContract::class);
         $config->shouldReceive('get')
             ->once()
             ->with('filesystem.connections', [])
@@ -292,7 +292,7 @@ class FilesystemManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testCachedAdapter()
     {
-        $config = $this->mock(ConfigManger::class);
+        $config = $this->mock(RepositoryContract::class);
         $config->shouldReceive('get')
             ->once()
             ->with('filesystem.connections', [])
@@ -324,7 +324,7 @@ class FilesystemManagerTest extends \PHPUnit_Framework_TestCase
     public function testGetCryptedConnection()
     {
         $key = Key::createNewRandomKey();
-        $config = $this->mock(ConfigManger::class);
+        $config = $this->mock(RepositoryContract::class);
         $config->shouldReceive('get')
             ->once()
             ->with('filesystem.connections', [])

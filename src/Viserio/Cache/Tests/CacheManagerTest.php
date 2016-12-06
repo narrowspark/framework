@@ -12,7 +12,7 @@ use Interop\Container\ContainerInterface;
 use League\Flysystem\Adapter\Local;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use Viserio\Cache\CacheManager;
-use Viserio\Contracts\Config\Manager as ConfigManager;
+use Viserio\Contracts\Config\Repository as RepositoryContract;
 
 class CacheManagerTest extends \PHPUnit_Framework_TestCase
 {
@@ -25,7 +25,7 @@ class CacheManagerTest extends \PHPUnit_Framework_TestCase
         parent::setUp();
 
         $this->manager = new CacheManager(
-            $this->mock(ConfigManager::class)
+            $this->mock(RepositoryContract::class)
         );
     }
 

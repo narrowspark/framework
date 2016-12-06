@@ -4,7 +4,7 @@ namespace Viserio\Queue\Tests;
 
 use Interop\Container\ContainerInterface as ContainerInteropInterface;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
-use Viserio\Contracts\Config\Manager as ConfigContract;
+use Viserio\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Contracts\Encryption\Encrypter as EncrypterContract;
 use Viserio\Queue\QueueManager;
 use Viserio\Queue\Tests\Fixture\TestQueue;
@@ -15,7 +15,7 @@ class QueueManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testConnection()
     {
-        $config = $this->mock(ConfigContract::class);
+        $config = $this->mock(RepositoryContract::class);
         $config->shouldReceive('get')
             ->once()
             ->with('queue.connections', [])
@@ -39,10 +39,10 @@ class QueueManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testSetAndGetEncrypter()
     {
-        $config = $this->mock(ConfigContract::class);
+        $config = $this->mock(RepositoryContract::class);
 
         $manager = new QueueManager(
-            $this->mock(ConfigContract::class),
+            $this->mock(RepositoryContract::class),
             $this->mock(ContainerInteropInterface::class),
             $this->mock(EncrypterContract::class)
         );

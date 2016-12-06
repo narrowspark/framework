@@ -10,7 +10,7 @@ use Pheanstalk\PheanstalkInterface;
 use PhpAmqpLib\Connection\AMQPStreamConnection;
 use RuntimeException;
 use Viserio\Connect\ConnectManager;
-use Viserio\Contracts\Config\Manager as ConfigContract;
+use Viserio\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Contracts\Container\Traits\ContainerAwareTrait;
 use Viserio\Contracts\Encryption\Encrypter as EncrypterContract;
 use Viserio\Contracts\Encryption\Traits\EncrypterAwareTrait;
@@ -35,12 +35,12 @@ class QueueManager extends AbstractConnectionManager implements MonitorContract,
     /**
      * Create a new queue manager instance.
      *
-     * @param \Viserio\Contracts\Config\Manager       $config
+     * @param \Viserio\Contracts\Config\Repository       $config
      * @param \Interop\Container\ContainerInterface   $container
      * @param \Viserio\Contracts\Encryption\Encrypter $encrypter
      */
     public function __construct(
-        ConfigContract $config,
+        RepositoryContract $config,
         ContainerInteropInterface $container,
         EncrypterContract $encrypter
     ) {

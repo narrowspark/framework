@@ -158,6 +158,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
                 ],
             ],
         ]);
+
         self::assertArrayHasKey('123.456.789', $repository->getAllFlat());
     }
 
@@ -234,17 +235,6 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
         self::assertEquals($expected, $repository->getAllNested());
     }
 
-    public function testSetArray()
-    {
-        $repository = new Repository();
-
-        $repository->setArray([
-            'foo' => 'bar',
-        ]);
-
-        self::assertEquals($repository['foo'], 'bar');
-    }
-
     public function testSetAndGet()
     {
         $repository = new Repository();
@@ -275,9 +265,11 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
         $repository = new Repository();
 
         $repository['my.namespaced.keyname'] = 'My Value';
-        $this->arrayHasKey($repository, 'my');
-        $this->arrayHasKey($repository['my'], 'namespaced');
-        $this->arrayHasKey($repository['my.namespaced'], 'keyname');
+
+        self::assertArrayHasKey($repository, 'my');
+        self::assertArrayHasKey($repository['my'], 'namespaced');
+        self::assertArrayHasKey($repository['my.namespaced'], 'keyname');
+
         self::assertEquals('My Value', $repository['my.namespaced.keyname']);
     }
 
@@ -295,6 +287,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
         $repository = new Repository();
 
         $repository['param'] = 'value';
+
         self::assertTrue(isset($repository['param']));
         self::assertFalse(isset($repository['non_existent']));
     }
@@ -317,6 +310,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
         self::assertFalse(isset($repository['foo.bar']));
 
         $repository->offsetUnset('foo');
+
         self::assertFalse(isset($repository['foo']));
     }
 

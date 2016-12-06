@@ -10,7 +10,7 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Debug\Exception\FatalThrowableError;
-use Viserio\Contracts\Config\Manager as ConfigManagerContract;
+use Viserio\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Exception\Displayers\HtmlDisplayer;
 use Viserio\Exception\Displayers\JsonDisplayer;
 use Viserio\Exception\Displayers\WhoopsDisplayer;
@@ -89,13 +89,13 @@ class HandlerTest extends \PHPUnit_Framework_TestCase
             ->shouldReceive('error')
             ->once($exception, ['identification' => ['id' => $id]]);
 
-        $config = $this->mock(ConfigManagerContract::class);
+        $config = $this->mock(RepositoryContract::class);
         $config->shouldReceive('get')
             ->twice()
             ->andReturn([]);
         $container = $this->getContainer();
         $container->shouldReceive('get')
-            ->with(ConfigManagerContract::class)
+            ->with(RepositoryContract::class)
             ->andReturn($config);
         $container->shouldReceive('get')
             ->with(LoggerInterface::class)
@@ -115,14 +115,14 @@ class HandlerTest extends \PHPUnit_Framework_TestCase
         $log->shouldReceive('critical')
             ->once($exception, ['identification' => ['id' => $id]]);
 
-        $config = $this->mock(ConfigManagerContract::class);
+        $config = $this->mock(RepositoryContract::class);
         $config->shouldReceive('get')
             ->twice()
             ->andReturn([]);
 
         $container = $this->getContainer();
         $container->shouldReceive('get')
-            ->with(ConfigManagerContract::class)
+            ->with(RepositoryContract::class)
             ->andReturn($config);
         $container->shouldReceive('get')
             ->with(LoggerInterface::class)
@@ -141,14 +141,14 @@ class HandlerTest extends \PHPUnit_Framework_TestCase
         $log->shouldReceive('critical')
             ->never();
 
-        $config = $this->mock(ConfigManagerContract::class);
+        $config = $this->mock(RepositoryContract::class);
         $config->shouldReceive('get')
             ->once()
             ->andReturn([]);
 
         $container = $this->getContainer();
         $container->shouldReceive('get')
-            ->with(ConfigManagerContract::class)
+            ->with(RepositoryContract::class)
             ->andReturn($config);
         $container->shouldReceive('get')
             ->with(LoggerInterface::class)

@@ -10,7 +10,7 @@ use Narrowspark\TestingHelper\Middleware\CallableMiddleware;
 use Narrowspark\TestingHelper\Middleware\Dispatcher;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use org\bovigo\vfs\vfsStream;
-use Viserio\Contracts\Config\Manager as ConfigManagerContract;
+use Viserio\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Contracts\Filesystem\Filesystem as FilesystemContract;
 use Viserio\Encryption\Encrypter;
 use Viserio\Filesystem\Filesystem;
@@ -54,7 +54,7 @@ class VerifyCsrfTokenMiddlewareTest extends \PHPUnit_Framework_TestCase
         $this->files->createDirectory(__DIR__ . '/stubs');
 
         $this->encrypter = new Encrypter(Key::createNewRandomKey());
-        $config = $this->mock(ConfigManagerContract::class);
+        $config = $this->mock(RepositoryContract::class);
 
         $manager = new SessionManager($config, $this->encrypter);
         $manager->setContainer(new ArrayContainer([

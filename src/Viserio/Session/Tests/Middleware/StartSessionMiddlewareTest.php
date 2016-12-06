@@ -8,7 +8,7 @@ use Narrowspark\TestingHelper\ArrayContainer;
 use Narrowspark\TestingHelper\Middleware\DelegateMiddleware;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use org\bovigo\vfs\vfsStream;
-use Viserio\Contracts\Config\Manager as ConfigManagerContract;
+use Viserio\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Contracts\Cookie\QueueingFactory as JarContract;
 use Viserio\Contracts\Filesystem\Filesystem as FilesystemContract;
 use Viserio\Contracts\Session\Store as StoreContract;
@@ -48,7 +48,7 @@ class StartSessionMiddlewareTest extends \PHPUnit_Framework_TestCase
         $this->files->createDirectory(__DIR__ . '/stubs');
 
         $encrypter = new Encrypter(Key::createNewRandomKey());
-        $config = $this->mock(ConfigManagerContract::class);
+        $config = $this->mock(RepositoryContract::class);
 
         $jar = $this->mock(JarContract::class);
         $jar->shouldReceive('queue')

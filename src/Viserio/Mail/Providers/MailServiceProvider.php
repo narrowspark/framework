@@ -5,7 +5,7 @@ namespace Viserio\Mail\Providers;
 use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
 use Swift_Mailer;
-use Viserio\Contracts\Config\Manager as ManagerContract;
+use Viserio\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Contracts\Events\Dispatcher as DispatcherContract;
 use Viserio\Contracts\Mail\Mailer as MailerContract;
 use Viserio\Contracts\Queue\Queue as QueueContract;
@@ -47,7 +47,7 @@ class MailServiceProvider implements ServiceProvider
 
     public static function createTransportManager(ContainerInterface $container): TransportManager
     {
-        return new TransportManager($container->get(ManagerContract::class));
+        return new TransportManager($container->get(RepositoryContract::class));
     }
 
     public static function createSwiftMailer(ContainerInterface $container): Swift_Mailer
