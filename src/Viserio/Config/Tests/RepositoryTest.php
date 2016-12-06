@@ -193,7 +193,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
           ],
         ]);
 
-        self::assertEquals($expected, $repository->getAllNested());
+        self::assertEquals($expected, $repository->getAll());
 
         // test 2 - merge values keyed numeric
         $original = [
@@ -232,7 +232,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
             ],
         ]);
 
-        self::assertEquals($expected, $repository->getAllNested());
+        self::assertEquals($expected, $repository->getAll());
     }
 
     public function testSetAndGet()

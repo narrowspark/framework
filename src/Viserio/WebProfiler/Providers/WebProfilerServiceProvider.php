@@ -33,7 +33,6 @@ class WebProfilerServiceProvider implements ServiceProvider
     public static function createWebProfiler(ContainerInterface $container)
     {
         $profiler = new WebProfiler(
-            $container->get(RepositoryContract::class),
             $container->get(ServerRequestInterface::class)
         );
 
@@ -41,9 +40,9 @@ class WebProfilerServiceProvider implements ServiceProvider
 
         $profiler->addCollector(new MemoryCollector());
 
-        if ($container->has()) {
+        if ($container->has(RepositoryContract::class)) {
             $profiler->addCollector(new ConfigCollector(
-                $container->get()->getAll();
+                $container->get(RepositoryContract::class)->getAll()
             ));
         }
 

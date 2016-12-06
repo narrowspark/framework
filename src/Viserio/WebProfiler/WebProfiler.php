@@ -6,8 +6,6 @@ use Interop\Http\Factory\StreamFactoryInterface;
 use Psr\Http\Message\MessageInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Viserio\Contracts\Config\Repository as RepositoryContract;
-use Viserio\Contracts\Config\Traits\ConfigAwareTrait;
 use Viserio\Contracts\Events\Traits\EventsAwareTrait;
 use Viserio\Contracts\Routing\UrlGenerator as UrlGeneratorContract;
 use Viserio\Contracts\WebProfiler\DataCollector as DataCollectorContract;
@@ -15,7 +13,6 @@ use Viserio\Contracts\WebProfiler\WebProfiler as WebProfilerContract;
 
 class WebProfiler implements WebProfilerContract
 {
-    use ConfigAwareTrait;
     use EventsAwareTrait;
 
     /**
@@ -70,14 +67,11 @@ class WebProfiler implements WebProfilerContract
     /**
      * Create a new web profiler instance.
      *
-     * @param \Viserio\Contracts\Config\Repository     $config
      * @param \Psr\Http\Message\ServerRequestInterface $request
      */
     public function __construct(
-        RepositoryContract $config,
         ServerRequestInterface $serverRequset
     ) {
-        $this->config = $config;
         $this->serverRequset = $serverRequset;
         $this->templatePath = __DIR__ . '/Resources/views/webprofiler.html.php';
     }
@@ -349,18 +343,5 @@ class WebProfiler implements WebProfilerContract
     private function isRedirect(ResponseInterface $response): bool
     {
         return in_array($response->getStatusCode(), [301, 302, 303, 307, 308]);
-    }
-
-    /**
-     * Check if a collector should be activated.
-     *
-     * @param string $name
-     * @param bool   $default
-     *
-     * @return bool
-     */
-    private function shouldCollect(string $name, bool $default = false): bool
-    {
-        return $this->config->get('webprofiler.collectors.' . $name, $default);
     }
 }
