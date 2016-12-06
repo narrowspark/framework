@@ -11,10 +11,16 @@ echo date.timezone = Europe/Paris >> ~/.phpenv/versions/$(phpenv version-name)/e
 # Install mongodb
 pecl -q install mongodb
 
+composer global require hirak/prestissimo # Now composer can install components parallel
+
+if [[ "$HUMBUG" = true ]]; then
+    composer require humbug/humbug:1.0.0-alpha2;
+fi
+
 # Install mongo-php-adapter
 composer require alcaeus/mongo-php-adapter
 
-if [[ "$SETUP" = "basic" && "$PHPSTAN" = true ]]; then
+if [[ "$PHPSTAN" = true ]]; then
     # Install phpstan
     composer global require phpstan/phpstan
 fi

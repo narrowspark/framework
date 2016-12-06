@@ -4,7 +4,7 @@
 mkdir -p build/logs
 #!/bin/bash
 
-if [[ "$PHPSTAN" = "true" ]]; then
+if [[ "$PHPSTAN" = true ]]; then
     phpstan analyse src/Viserio
 fi
 
