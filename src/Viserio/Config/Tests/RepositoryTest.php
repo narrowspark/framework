@@ -266,9 +266,9 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
 
         $repository['my.namespaced.keyname'] = 'My Value';
 
-        self::assertArrayHasKey($repository, 'my');
-        self::assertArrayHasKey($repository['my'], 'namespaced');
-        self::assertArrayHasKey($repository['my.namespaced'], 'keyname');
+        self::assertArrayHasKey('my', $repository);
+        self::assertArrayHasKey('namespaced', $repository['my']);
+        self::assertArrayHasKey('keyname', $repository['my.namespaced']);
 
         self::assertEquals('My Value', $repository['my.namespaced.keyname']);
     }
