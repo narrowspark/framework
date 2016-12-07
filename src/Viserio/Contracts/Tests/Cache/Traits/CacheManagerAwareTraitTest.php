@@ -4,12 +4,12 @@ namespace Viserio\Contracts\Cache\Tests\Traits;
 
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use Viserio\Contracts\Cache\Manager;
-use Viserio\Contracts\Cache\Traits\CacheAwareTrait;
+use Viserio\Contracts\Cache\Traits\CacheManagerAwareTrait;
 
-class CacheAwareTraitTest extends \PHPUnit_Framework_TestCase
+class CacheManagerAwareTraitTest extends \PHPUnit_Framework_TestCase
 {
     use MockeryTrait;
-    use CacheAwareTrait;
+    use CacheManagerAwareTrait;
 
     public function testGetAndSetCache()
     {

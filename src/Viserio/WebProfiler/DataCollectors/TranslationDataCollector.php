@@ -6,7 +6,7 @@ use Viserio\Contracts\WebProfiler\AssetAware as AssetAwareContract;
 use Viserio\Contracts\WebProfiler\DataCollector as DataCollectorContract;
 use Viserio\Contracts\WebProfiler\TabAware as TabAwareContract;
 
-class TranslationCollector implements AssetAwareContract, TabAwareContract, DataCollectorContract
+class TranslationDataCollector implements AssetAwareContract, TabAwareContract, DataCollectorContract
 {
     /**
      * All translation for the actual page.

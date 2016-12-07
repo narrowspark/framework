@@ -7,7 +7,7 @@ use Viserio\Contracts\WebProfiler\TabAware as TabAwareContract;
 use Viserio\Contracts\WebProfiler\TooltipAware as TooltipAwareContract;
 use Viserio\Foundation\Application;
 
-class NarrowsparkCollector implements TooltipAwareContract, TabAwareContract, DataCollectorContract
+class NarrowsparkDataCollector implements TooltipAwareContract, TabAwareContract, DataCollectorContract
 {
     /**
      * {@inheritdoc}

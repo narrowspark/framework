@@ -7,7 +7,7 @@ use InvalidArgumentException;
 use League\Flysystem\AdapterInterface;
 use League\Flysystem\Cached\CachedAdapter;
 use Narrowspark\Arr\Arr;
-use Viserio\Contracts\Cache\Traits\CacheAwareTrait;
+use Viserio\Contracts\Cache\Traits\CacheManagerAwareTrait;
 use Viserio\Contracts\Filesystem\Filesystem as FilesystemContract;
 use Viserio\Filesystem\Cache\CachedFactory;
 use Viserio\Filesystem\Encryption\EncryptionWrapper;
@@ -15,7 +15,7 @@ use Viserio\Support\AbstractConnectionManager;
 
 class FilesystemManager extends AbstractConnectionManager
 {
-    use CacheAwareTrait;
+    use CacheManagerAwareTrait;
 
     /**
      * Get a crypted aware connection instance.
@@ -127,7 +127,7 @@ class FilesystemManager extends AbstractConnectionManager
     protected function adapt(AdapterInterface $adapter, array $config): FilesystemContract
     {
         if (isset($config['cache']) && is_array($config['cache'])) {
-            $cacheFactory = new CachedFactory($this, $this->cache);
+            $cacheFactory = new CachedFactory($this, $this->getCacheManager());
 
             $adapter = new CachedAdapter($adapter, $cacheFactory->connection($config));
 

@@ -5,7 +5,7 @@ namespace Viserio\WebProfiler\DataCollectors;
 use Viserio\Contracts\WebProfiler\PanelAware as PanelAwareContract;
 use Viserio\Contracts\WebProfiler\TabAware as TabAwareContract;
 
-class ConfigCollector extends AbstractDataCollector implements TabAwareContract, PanelAwareContract
+class ConfigDataCollector extends AbstractDataCollector implements TabAwareContract, PanelAwareContract
 {
     /**
      * Collected data.

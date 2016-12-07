@@ -7,7 +7,7 @@ use Viserio\Contracts\WebProfiler\LateDataCollector as LateDataCollectorContract
 use Viserio\Contracts\WebProfiler\TabAware as TabAwareContract;
 use Viserio\Contracts\WebProfiler\TooltipAware as TooltipAwareContract;
 
-class MemoryCollector implements TooltipAwareContract, TabAwareContract, DataCollectorContract, LateDataCollectorContract
+class MemoryDataCollector implements TooltipAwareContract, TabAwareContract, DataCollectorContract, LateDataCollectorContract
 {
     /**
      * Collected data.

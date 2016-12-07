@@ -5,25 +5,25 @@ namespace Viserio\Contracts\Cache\Traits;
 use RuntimeException;
 use Viserio\Contracts\Cache\Manager;
 
-trait CacheAwareTrait
+trait CacheManagerAwareTrait
 {
     /**
      * Cache Manager instance.
      *
      * @var \Viserio\Contracts\Cache\Manager|null
      */
-    protected $cache;
+    protected $cacheManager;
 
     /**
      * Set a Cache Manager.
      *
-     * @param \Viserio\Contracts\Cache\Manager $cache
+     * @param \Viserio\Contracts\Cache\Manager $cacheManager
      *
      * @return $this
      */
-    public function setCacheManager(Manager $cache)
+    public function setCacheManager(Manager $cacheManager)
     {
-        $this->cache = $cache;
+        $this->cacheManager = $cacheManager;
 
         return $this;
     }
@@ -37,10 +37,10 @@ trait CacheAwareTrait
      */
     public function getCacheManager(): Manager
     {
-        if (! $this->cache) {
+        if (! $this->cacheManager) {
             throw new RuntimeException('Cache Manager is not set up.');
         }
 
-        return $this->cache;
+        return $this->cacheManager;
     }
 }

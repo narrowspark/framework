@@ -6,7 +6,7 @@ use Viserio\Contracts\View\View as ViewContract;
 use Viserio\Contracts\WebProfiler\DataCollector as DataCollectorContract;
 use Viserio\Contracts\WebProfiler\TabAware as TabAwareContract;
 
-class ViewCollector implements TabAwareContract, DataCollectorContract
+class ViewDataCollector implements TabAwareContract, DataCollectorContract
 {
     /**
      * Array of all templates.
