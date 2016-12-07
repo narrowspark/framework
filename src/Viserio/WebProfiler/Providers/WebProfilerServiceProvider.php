@@ -17,6 +17,7 @@ use Viserio\WebProfiler\WebProfiler;
 use Viserio\Contracts\Support\Traits\ServiceProviderConfigAwareTrait;
 use Viserio\Foundation\Application;
 use Viserio\Contracts\WebProfiler\WebProfiler as WebProfilerContract;
+use Psr\Log\LoggerInterface as PsrLoggerInterface;
 
 class WebProfilerServiceProvider implements ServiceProvider
 {
@@ -39,10 +40,15 @@ class WebProfilerServiceProvider implements ServiceProvider
 
     public static function createWebProfiler(ContainerInterface $container): WebProfilerContract
     {
-        $profiler = new WebProfiler(
-            $container->get(ServerRequestInterface::class),
-            $container->get(CacheItemPoolInterface::class)
-        );
+        $profiler = new WebProfiler();
+
+        // if ($container->has(CacheItemPoolInterface::class)) {
+        //     $profiler->setCachePool($container->get(CacheItemPoolInterface::class));
+        // }
+
+        if ($container->has(PsrLoggerInterface::class)) {
+            $profiler->setLogger($container->get(PsrLoggerInterface::class));
+        }
 
         $profiler->setStreamFactory(
             $container->get(StreamFactoryInterface::class)

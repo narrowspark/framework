@@ -13,6 +13,7 @@ use Viserio\Contracts\Routing\UrlGenerator as UrlGeneratorContract;
 use Viserio\Contracts\WebProfiler\DataCollector as DataCollectorContract;
 use Viserio\Contracts\WebProfiler\WebProfiler as WebProfilerContract;
 use Viserio\Contracts\Log\Traits\LoggerAwareTrait;
+use Psr\Cache\CacheItemPoolInterface;
 
 class WebProfiler implements WebProfilerContract
 {
@@ -63,6 +64,13 @@ class WebProfiler implements WebProfilerContract
     protected $enabled = false;
 
     /**
+     * Template for webprofiler.
+     *
+     * @var string
+     */
+    protected $template = __DIR__ . '/Resources/views/webprofiler.html.php';
+
+    /**
      * Disables the profiler.
      */
     public function disable()
@@ -76,16 +84,6 @@ class WebProfiler implements WebProfilerContract
     public function enable()
     {
         $this->enabled = true;
-    }
-
-    /**
-     * Create a new web profiler instance.
-     *
-     * @param \Psr\Http\Message\ServerRequestInterface $serverRequest
-     */
-    public function __construct(ServerRequestInterface $serverRequest) {
-        $this->serverRequest = $serverRequest;
-        $this->templatePath = __DIR__ . '/Resources/views/webprofiler.html.php';
     }
 
     /**
@@ -141,7 +139,7 @@ class WebProfiler implements WebProfilerContract
      */
     public function setTemplate(string $path): WebProfilerContract
     {
-        $this->templatePath = $path;
+        $this->template = $path;
 
         return $this;
     }
@@ -153,7 +151,7 @@ class WebProfiler implements WebProfilerContract
      */
     public function getTemplate(): string
     {
-        return $this->templatePath;
+        return $this->template;
     }
 
     /**
@@ -207,21 +205,18 @@ class WebProfiler implements WebProfilerContract
      */
     public function collect(ServerRequestInterface $serverRequest)
     {
-
+        $this->serverRequest = $serverRequest;
     }
 
     /**
      * Modify the response and inject the debugbar (or data in headers)
      *
-     * @param \Psr\Http\Message\ServerRequestInterface $serverRequest
-     * @param \Psr\Http\Message\ResponseInterface      $response
+     * @param \Psr\Http\Message\ResponseInterface $response
      *
      * @return \Psr\Http\Message\ResponseInterface
      */
-    public function modifyResponse(
-        ServerRequestInterface $serverRequest,
-        ResponseInterface $response
-    ) : ResponseInterface {
+    public function modifyResponse(ResponseInterface $response) : ResponseInterface
+    {
         if ($this->runningInConsole()) {
             return $response;
         }

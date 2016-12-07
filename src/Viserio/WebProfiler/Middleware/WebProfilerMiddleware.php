@@ -25,9 +25,11 @@ class WebProfilerMiddleware implements ServerMiddlewareInterface
      */
     public function process(ServerRequestInterface $request, DelegateInterface $delegate): ResponseInterface
     {
+        $this->webprofiler->collect($request);
+
         $response = $delegate->process($request);
 
         // Modify the response to add the webprofiler
-        return $this->webprofiler->modifyResponse($request, $response);
+        return $this->webprofiler->modifyResponse($response);
     }
 }
