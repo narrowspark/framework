@@ -17,6 +17,8 @@ use Viserio\Exception\Filters\CanDisplayFilter;
 use Viserio\Exception\Filters\VerboseFilter;
 use Viserio\Exception\Handler;
 use Viserio\Exception\Transformers\CommandLineTransformer;
+use Interop\Http\Factory\StreamFactoryInterface;
+use Interop\Http\Factory\ResponseFactoryInterface;
 
 class ExceptionServiceProvider implements ServiceProvider
 {
@@ -65,6 +67,8 @@ class ExceptionServiceProvider implements ServiceProvider
     {
         return new HtmlDisplayer(
             $container->get(ExceptionInfo::class),
+            $container->get(ResponseFactoryInterface::class),
+            $container->get(StreamFactoryInterface::class),
             self::getConfig($container, 'template', __DIR__ . '/../Resources/error.html')
         );
     }

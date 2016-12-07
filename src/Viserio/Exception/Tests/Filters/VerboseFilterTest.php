@@ -10,6 +10,8 @@ use Viserio\Exception\Displayers\JsonDisplayer;
 use Viserio\Exception\Displayers\WhoopsDisplayer;
 use Viserio\Exception\ExceptionInfo;
 use Viserio\Exception\Filters\VerboseFilter;
+use Viserio\HttpFactory\ResponseFactory;
+use Viserio\HttpFactory\StreamFactory;
 
 class VerboseFilterTest extends \PHPUnit_Framework_TestCase
 {
@@ -42,7 +44,7 @@ class VerboseFilterTest extends \PHPUnit_Framework_TestCase
         $request = $this->mock(RequestInterface::class);
         $exception = new Exception();
         $json = new JsonDisplayer(new ExceptionInfo());
-        $html = new HtmlDisplayer(new ExceptionInfo(), 'foo');
+        $html = new HtmlDisplayer(new ExceptionInfo(), new ResponseFactory(), new StreamFactory(),'foo');
         $displayers = (new VerboseFilter(true))->filter([$json, $html], $request, $exception, $exception, 500);
 
         self::assertSame([$json, $html], $displayers);

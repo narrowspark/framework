@@ -8,6 +8,7 @@ use Narrowspark\HttpStatus\Exception\AbstractClientErrorException;
 use Narrowspark\HttpStatus\Exception\AbstractServerErrorException;
 use Narrowspark\HttpStatus\Exception\NotFoundException;
 use Narrowspark\HttpStatus\HttpStatus;
+use Interop\Http\Factory\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\LoggerInterface;
@@ -17,6 +18,8 @@ use Symfony\Component\Debug\Exception\FatalErrorException;
 use Symfony\Component\Debug\Exception\FatalThrowableError;
 use Symfony\Component\Debug\Exception\FlattenException;
 use Throwable;
+use TypeError;
+use Error;
 use Viserio\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Contracts\Config\Traits\ConfigAwareTrait;
 use Viserio\Contracts\Container\Traits\ContainerAwareTrait;
@@ -190,6 +193,7 @@ class Handler implements HandlerContract
             try {
                 $logger = $this->getContainer()->get(LoggerInterface::class);
             } catch (Throwable $exception) {
+                // throw the original exception
                 throw $exception;
             }
         }
@@ -255,8 +259,6 @@ class Handler implements HandlerContract
      */
     public function handleException(Throwable $exception)
     {
-        $exception = new FatalThrowableError($exception);
-
         $this->report($exception);
 
         $transformed = $this->getTransformed($exception);
@@ -264,24 +266,9 @@ class Handler implements HandlerContract
         if (php_sapi_name() === 'cli') {
             (new ConsoleApplication())->renderException($transformed, new ConsoleOutput());
         } else {
-            $container = $this->getContainer();
+            $response = $this->getPreparedResponse($this->getContainer(), $exception, $transformed);
 
-            try {
-                $response = $this->getResponse(
-                    $container->get(ServerRequestInterface::class),
-                    $exception,
-                    $transformed
-                );
-
-                return (string) $response->getBody();
-            } catch (Throwable $error) {
-                $this->report($error);
-
-                $response = $container->get(ResponseInterface::class);
-                $response = $response->withStatus(500, HttpStatus::getReasonPhrase(500));
-
-                return (string) $response->getBody();
-            }
+            return (string) $response->getBody();
         }
     }
 
@@ -321,22 +308,7 @@ class Handler implements HandlerContract
     {
         $transformed = $this->getTransformed($exception);
 
-        try {
-            $response = $this->getResponse(
-                $this->getContainer()->get(ServerRequestInterface::class),
-                $exception,
-                $transformed
-            );
-
-            return $response;
-        } catch (Throwable $error) {
-            $this->report($error);
-
-            $response = $this->getContainer()->get(ResponseInterface::class);
-            $response = $response->withStatus(500, HttpStatus::getReasonPhrase(500));
-
-            return $response;
-        }
+        return $this->getPreparedResponse($this->getContainer(), $exception, $transformed);
     }
 
     /**
@@ -397,6 +369,18 @@ class Handler implements HandlerContract
         Throwable $transformed
     ): ResponseInterface {
         $id = $this->getContainer()->get(ExceptionIdentifier::class)->identify($exception);
+
+        if ($transformed instanceof Error) {
+            $transformed = new FatalErrorException(
+                $transformed->getMessage(),
+                $transformed->getCode(),
+                E_ERROR,
+                $transformed->getFile(),
+                $transformed->getLine(),
+                $transformed->getTrace()
+            );
+        }
+
         $flattened = FlattenException::create($transformed);
         $code = $flattened->getStatusCode();
         $headers = $flattened->getHeaders();
@@ -506,5 +490,35 @@ class Handler implements HandlerContract
     protected function isFatal(int $type): bool
     {
         return in_array($type, [E_ERROR, E_CORE_ERROR, E_COMPILE_ERROR, E_PARSE], true);
+    }
+
+    /**
+     * Get a prepared response with the transformed exception.
+     *
+     * @param \Interop\Container\ContainerInterface $container
+     * @param \Throwable                            $exception
+     * @param \Throwable                            $transformed
+     *
+     * @return \Interop\Container\ContainerInterface
+     */
+    protected function getPreparedResponse(
+        ContainerInterface $container,
+        Throwable $exception,
+        Throwable $transformed
+    ): ResponseInterface {
+        try {
+            $response = $this->getResponse(
+                $container->get(ServerRequestInterface::class),
+                $exception,
+                $transformed
+            );
+        } catch (Throwable $exception) {
+            $this->report($exception);
+
+            $response = $container->get(ResponseFactoryInterface::class)->createResponse();
+            $response = $response->withStatus(500, HttpStatus::getReasonPhrase(500));
+        }
+
+        return $response;
     }
 }

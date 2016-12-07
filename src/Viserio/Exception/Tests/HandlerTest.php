@@ -19,6 +19,8 @@ use Viserio\Exception\ExceptionInfo;
 use Viserio\Exception\Filters\VerboseFilter;
 use Viserio\Exception\Handler;
 use Viserio\Exception\Transformers\CommandLineTransformer;
+use Viserio\HttpFactory\ResponseFactory;
+use Viserio\HttpFactory\StreamFactory;
 
 class HandlerTest extends \PHPUnit_Framework_TestCase
 {
@@ -51,7 +53,7 @@ class HandlerTest extends \PHPUnit_Framework_TestCase
 
         $info = $this->mock(ExceptionInfo::class);
 
-        $handler->addDisplayer(new HtmlDisplayer($info, ''));
+        $handler->addDisplayer(new HtmlDisplayer($info, new ResponseFactory(), new StreamFactory(), ''));
         $handler->addDisplayer(new JsonDisplayer($info));
         $handler->addDisplayer(new JsonDisplayer($info));
         $handler->addDisplayer(new WhoopsDisplayer($info));

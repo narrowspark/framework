@@ -2,12 +2,10 @@
 declare(strict_types=1);
 namespace Viserio\Foundation\Http;
 
-use Exception;
 use Interop\Http\Middleware\DelegateInterface;
 use Interop\Http\Middleware\ServerMiddlewareInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Symfony\Component\Debug\Exception\FatalThrowableError;
 use Throwable;
 use Viserio\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Contracts\Events\Dispatcher as DispatcherContract;
@@ -190,14 +188,8 @@ class Kernel implements TerminableContract, KernelContract, ServerMiddlewareInte
             $response = $this->sendRequestThroughRouter($request);
 
             $this->events->trigger(self::RESPONSE, [$request, $response]);
-        } catch (Exception $exception) {
-            $this->reportException($exception);
-
-            $response = $this->renderException($request, $exception);
-
-            $this->events->trigger(self::EXCEPTION, [$request, $response]);
         } catch (Throwable $exception) {
-            $this->reportException($exception = new FatalThrowableError($exception));
+            $this->reportException($exception);
 
             $response = $this->renderException($request, $exception);
 
@@ -210,9 +202,9 @@ class Kernel implements TerminableContract, KernelContract, ServerMiddlewareInte
     /**
      * Report the exception to the exception handler.
      *
-     * @param \Exception $exception
+     * @param \Throwable $exception
      */
-    protected function reportException(Exception $exception)
+    protected function reportException(Throwable $exception)
     {
         $this->app->get(HandlerContract::class)->report($exception);
     }
@@ -221,14 +213,15 @@ class Kernel implements TerminableContract, KernelContract, ServerMiddlewareInte
      * Render the exception to a response.
      *
      * @param \Psr\Http\Message\ServerRequestInterface $request
-     * @param \Exception                               $exception
+     * @param \Throwable                               $exception
      *
      * @return \Psr\Http\Message\ResponseInterface
      */
     protected function renderException(
         ServerRequestInterface $request,
-        Exception $exception
+        Throwable $exception
     ): ResponseInterface {
+
         return $this->app->get(HandlerContract::class)->render($request, $exception);
     }
 

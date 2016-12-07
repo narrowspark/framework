@@ -242,7 +242,7 @@ abstract class AbstractRouteDispatcher
             ->through($middlewares)
             ->then(function ($request) use ($route) {
                 // Add route to the request's attributes in case a middleware or handler needs access to the route
-                $request = $request->withAttribute('route', $route);
+                $request = $request->withAttribute('_route', $route);
 
                 return $route->run($request);
             });
@@ -274,7 +274,10 @@ abstract class AbstractRouteDispatcher
             $middlewares = array_diff($middlewares, $withoutMiddlewares);
         }
 
-        return (new SortedMiddleware($this->middlewarePriority, $middlewares))->getAll();
+        return (new SortedMiddleware(
+            $this->middlewarePriority,
+            array_values(Arr::flatten($middlewares))
+        ))->getAll();
     }
 
     /**

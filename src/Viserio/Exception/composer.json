@@ -20,6 +20,7 @@
     "require": {
         "php"                                 : "7.0.0 - 7.0.5 || ^7.0.7",
         "narrowspark/http-status"             : "^2.0",
+        "http-interop/http-factory"           : "^0.2",
         "ramsey/uuid"                         : "^3.4",
         "symfony/debug"                       : "^3.1",
         "viserio/config"                      : "self.version",
@@ -31,6 +32,7 @@
         "narrowspark/testing-helper"          : "^2.0",
         "phpunit/phpunit"                     : "^5.1",
         "viserio/container"                   : "self.version",
+        "viserio/http-factory"                : "self.version",
         "viserio/view"                        : "self.version"
     },
     "autoload": {

@@ -6,9 +6,9 @@ interface TabAware
 {
     /**
      * Returns infos for a tab.
-     *  - label: use it for a icon
-     *  - value: can be used to show a name
-     *  - count: can be used to show a counter
+     *  - icon
+     *  - label
+     *  - value
      *
      * @return array
      */

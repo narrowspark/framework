@@ -26,11 +26,6 @@
                         <?php echo $tab['tab']['value'] ?>
                     </span>
                     <?php } ?>
-                    <?php if (isset($tab['tab']['count'])) { ?>
-                    <span class="webprofiler-tab-counter">
-                        <?php echo $tab['tab']['count'] ?>
-                    </span>
-                    <?php } ?>
                 </div>
                 <?php
                     if ($tooltip) {
