@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace Viserio\WebProfiler\DataCollectors;
 
 use Psr\Http\Message\ServerRequestInterface;
+use Viserio\Contracts\WebProfiler\TabAware as TabAwareContract;
 use Viserio\Contracts\Session\Store as StoreContract;
 
 class SessionDataCollector extends AbstractDataCollector implements TabAwareContract
@@ -21,6 +22,7 @@ class SessionDataCollector extends AbstractDataCollector implements TabAwareCont
     {
         $sessions = [];
 
+            var_dump($serverRequest);
         foreach ($serverRequest->getAttributes() as $name => $value) {
             if ($value instanceof StoreContract) {
                 $sessions[] = $value;
@@ -52,6 +54,7 @@ class SessionDataCollector extends AbstractDataCollector implements TabAwareCont
     public function getTab(): array
     {
         return [
+            'icon' => '',
             'label' => 'Sessions',
             'count' => count($this->sessions),
         ];

@@ -8,16 +8,16 @@ use Psr\Http\Message\MessageInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Contracts\Events\Traits\EventsAwareTrait;
-use Viserio\Contracts\Cache\Traits\CachePoolAwareTrait;
+use Viserio\Contracts\Cache\Traits\CacheItemPoolAwareTrait;
 use Viserio\Contracts\Routing\UrlGenerator as UrlGeneratorContract;
 use Viserio\Contracts\WebProfiler\DataCollector as DataCollectorContract;
 use Viserio\Contracts\WebProfiler\WebProfiler as WebProfilerContract;
 use Viserio\Contracts\Log\Traits\LoggerAwareTrait;
-use Psr\Cache\CacheItemPoolInterface;
+use Viserio\Contracts\WebProfiler\LateDataCollector as LateDataCollectorContract;
 
 class WebProfiler implements WebProfilerContract
 {
-    use CachePoolAwareTrait;
+    use CacheItemPoolAwareTrait;
     use EventsAwareTrait;
     use LoggerAwareTrait;
 
@@ -206,6 +206,12 @@ class WebProfiler implements WebProfilerContract
     public function collect(ServerRequestInterface $serverRequest)
     {
         $this->serverRequest = $serverRequest;
+
+        foreach ($this->collectors as $name => $collector) {
+            $collector->collect($serverRequest);
+
+            $this->collectors[$name] = $collector;
+        }
     }
 
     /**
@@ -219,6 +225,14 @@ class WebProfiler implements WebProfilerContract
     {
         if ($this->runningInConsole()) {
             return $response;
+        }
+
+        foreach ($this->collectors as $name => $collector) {
+            if ($collector instanceof LateDataCollectorContract) {
+                $collector->lateCollect();
+
+                $this->collectors[$name] = $collector;
+            }
         }
 
         return $this->injectWebProfiler($response);
@@ -253,7 +267,7 @@ class WebProfiler implements WebProfilerContract
     {
         $content = (string) $response->getBody();
 
-        $template = new TemplateManager($this->collectors, $this->templatePath);
+        $template = new TemplateManager($this->collectors, $this->template);
 
         $renderedContent = $this->getAssetsRenderer()->render() . $template->render();
 

@@ -12,6 +12,7 @@ use Viserio\Contracts\Routing\Router as RouterContract;
 use Viserio\Contracts\Routing\UrlGenerator as UrlGeneratorContract;
 use Viserio\WebProfiler\DataCollectors\ConfigDataCollector;
 use Viserio\WebProfiler\DataCollectors\MemoryDataCollector;
+use Viserio\WebProfiler\DataCollectors\SessionDataCollector;
 use Viserio\WebProfiler\DataCollectors\NarrowsparkDataCollector;
 use Viserio\WebProfiler\WebProfiler;
 use Viserio\Contracts\Support\Traits\ServiceProviderConfigAwareTrait;
@@ -42,9 +43,9 @@ class WebProfilerServiceProvider implements ServiceProvider
     {
         $profiler = new WebProfiler();
 
-        // if ($container->has(CacheItemPoolInterface::class)) {
-        //     $profiler->setCachePool($container->get(CacheItemPoolInterface::class));
-        // }
+        if ($container->has(CacheItemPoolInterface::class)) {
+            $profiler->setCacheItemPool($container->get(CacheItemPoolInterface::class));
+        }
 
         if ($container->has(PsrLoggerInterface::class)) {
             $profiler->setLogger($container->get(PsrLoggerInterface::class));
@@ -69,15 +70,19 @@ class WebProfilerServiceProvider implements ServiceProvider
 
     protected static function registerCollectors(ContainerInterface $container, WebProfiler $profiler)
     {
-        if ($this->getConfig($container, 'collector.narrowspark', true) && class_exists(Application::class)) {
+        if (self::getConfig($container, 'collector.narrowspark', true) && class_exists(Application::class)) {
             $profiler->addCollector(new NarrowsparkDataCollector());
         }
 
-        if ($this->getConfig($container, 'collector.memory', true)) {
+        if (self::getConfig($container, 'collector.memory', true)) {
             $profiler->addCollector(new MemoryDataCollector());
         }
 
-        if ($this->getConfig($container, 'collector.config', true) && $container->has(RepositoryContract::class)) {
+        if (self::getConfig($container, 'collector.session', true)) {
+            $profiler->addCollector(new SessionDataCollector());
+        }
+
+        if (self::getConfig($container, 'collector.config', true) && $container->has(RepositoryContract::class)) {
             $profiler->addCollector(new ConfigDataCollector(
                 $container->get(RepositoryContract::class)->getAll()
             ));

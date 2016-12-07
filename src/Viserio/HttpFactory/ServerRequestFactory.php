@@ -51,10 +51,21 @@ class ServerRequestFactory implements ServerRequestFactoryInterface
         $addSchema = false;
 
         if (isset($_SERVER['HTTP_HOST'])) {
-            $uri = $uri->withHost($_SERVER['HTTP_HOST']);
+            $http = explode(':', $_SERVER['HTTP_HOST']);
+            $uri = $uri->withHost($http[0]);
+
+            if (isset($http[1])) {
+                $uri = $uri->withPort($http[1]);
+            }
+
             $addSchema = true;
         } elseif (isset($_SERVER['SERVER_NAME'])) {
             $uri = $uri->withHost($_SERVER['SERVER_NAME']);
+
+            if (isset($_SERVER['SERVER_PORT'])) {
+                $uri = $uri->withPort($_SERVER['SERVER_PORT']);
+            }
+
             $addSchema = true;
         }
 

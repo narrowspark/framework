@@ -13,6 +13,7 @@ use Viserio\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Filesystem\Encryption\EncryptionWrapper;
 use Viserio\Filesystem\FilesystemAdapter;
 use Viserio\Filesystem\FilesystemManager;
+use Viserio\Contracts\Cache\Manager as CacheManager;
 
 class FilesystemManagerTest extends \PHPUnit_Framework_TestCase
 {
@@ -314,6 +315,12 @@ class FilesystemManagerTest extends \PHPUnit_Framework_TestCase
             ]);
 
         $manager = new FilesystemManager($config);
+
+        $cacheManager = $this->mock(CacheManager::class);
+        $cacheManager->shouldReceive('hasDriver')
+            ->once();
+
+        $manager->setCacheManager($cacheManager);
 
         self::assertInstanceOf(
             FilesystemAdapter::class,
