@@ -2,11 +2,11 @@
 declare(strict_types=1);
 namespace Viserio\WebProfiler\DataCollectors;
 
+use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Contracts\View\View as ViewContract;
-use Viserio\Contracts\WebProfiler\DataCollector as DataCollectorContract;
 use Viserio\Contracts\WebProfiler\TabAware as TabAwareContract;
 
-class ViewDataCollector implements TabAwareContract, DataCollectorContract
+class ViewDataCollector extends AbstractDataCollector implements TabAwareContract
 {
     /**
      * Array of all templates.
@@ -30,6 +30,14 @@ class ViewDataCollector implements TabAwareContract, DataCollectorContract
     public function __construct(bool $collectData = true)
     {
         $this->collectData = $collectData;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function collect(ServerRequestInterface $serverRequest)
+    {
+
     }
 
     /**

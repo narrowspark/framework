@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\WebProfiler\DataCollectors;
 
+use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Contracts\WebProfiler\PanelAware as PanelAwareContract;
 use Viserio\Contracts\WebProfiler\TabAware as TabAwareContract;
 
@@ -21,6 +22,22 @@ class ConfigDataCollector extends AbstractDataCollector implements TabAwareContr
     public function __construct(array $data = [])
     {
         $this->data = $data;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function collect(ServerRequestInterface $serverRequest)
+    {
+
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getName(): string
+    {
+        return 'config';
     }
 
     /**
@@ -60,14 +77,6 @@ class ConfigDataCollector extends AbstractDataCollector implements TabAwareContr
         $html = '';
 
         return $html;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getName(): string
-    {
-        return 'config';
     }
 
     /**

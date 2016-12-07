@@ -9,6 +9,13 @@ use Viserio\Contracts\WebProfiler\DataCollector as DataCollectorContract;
 abstract class AbstractDataCollector implements DataCollectorContract
 {
     /**
+     * Array of all collected datas.
+     *
+     * @var array
+     */
+    protected $data;
+
+    /**
      * [formatVar description]
      *
      * @param mixed $data

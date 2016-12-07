@@ -2,12 +2,12 @@
 declare(strict_types=1);
 namespace Viserio\WebProfiler\DataCollectors;
 
-use Viserio\Contracts\WebProfiler\DataCollector as DataCollectorContract;
+use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Contracts\WebProfiler\LateDataCollector as LateDataCollectorContract;
 use Viserio\Contracts\WebProfiler\TabAware as TabAwareContract;
 use Viserio\Contracts\WebProfiler\TooltipAware as TooltipAwareContract;
 
-class MemoryDataCollector implements TooltipAwareContract, TabAwareContract, DataCollectorContract, LateDataCollectorContract
+class MemoryDataCollector extends AbstractDataCollector implements TooltipAwareContract, TabAwareContract, LateDataCollectorContract
 {
     /**
      * Collected data.
@@ -22,6 +22,22 @@ class MemoryDataCollector implements TooltipAwareContract, TabAwareContract, Dat
             'memory' => 0,
             'memory_limit' => $this->convertToBytes(ini_get('memory_limit')),
         ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function collect(ServerRequestInterface $serverRequest)
+    {
+
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getName(): string
+    {
+        return 'memory';
     }
 
     /**
@@ -58,14 +74,6 @@ class MemoryDataCollector implements TooltipAwareContract, TabAwareContract, Dat
         $tooltip .= '</div>';
 
         return $tooltip;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getName(): string
-    {
-        return 'memory';
     }
 
     /**

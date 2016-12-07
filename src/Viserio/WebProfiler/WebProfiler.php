@@ -32,7 +32,7 @@ class WebProfiler implements WebProfilerContract
      *
      * @var \Psr\Http\Message\ServerRequestInterface
      */
-    protected $serverRequset;
+    protected $serverRequest;
 
     /**
      * Stream factory instance.
@@ -81,10 +81,10 @@ class WebProfiler implements WebProfilerContract
     /**
      * Create a new web profiler instance.
      *
-     * @param \Psr\Http\Message\ServerRequestInterface $request
+     * @param \Psr\Http\Message\ServerRequestInterface $serverRequest
      */
-    public function __construct(ServerRequestInterface $serverRequset) {
-        $this->serverRequset = $serverRequset;
+    public function __construct(ServerRequestInterface $serverRequest) {
+        $this->serverRequest = $serverRequest;
         $this->templatePath = __DIR__ . '/Resources/views/webprofiler.html.php';
     }
 
@@ -203,15 +203,23 @@ class WebProfiler implements WebProfilerContract
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function collect(ServerRequestInterface $serverRequest)
+    {
+
+    }
+
+    /**
      * Modify the response and inject the debugbar (or data in headers)
      *
-     * @param \Psr\Http\Message\ServerRequestInterface $request
+     * @param \Psr\Http\Message\ServerRequestInterface $serverRequest
      * @param \Psr\Http\Message\ResponseInterface      $response
      *
      * @return \Psr\Http\Message\ResponseInterface
      */
     public function modifyResponse(
-        ServerRequestInterface $request,
+        ServerRequestInterface $serverRequest,
         ResponseInterface $response
     ) : ResponseInterface {
         if ($this->runningInConsole()) {

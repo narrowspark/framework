@@ -2,13 +2,29 @@
 declare(strict_types=1);
 namespace Viserio\WebProfiler\DataCollectors;
 
-use Viserio\Contracts\WebProfiler\DataCollector as DataCollectorContract;
+use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Contracts\WebProfiler\TabAware as TabAwareContract;
 use Viserio\Contracts\WebProfiler\TooltipAware as TooltipAwareContract;
 use Viserio\Foundation\Application;
 
-class NarrowsparkDataCollector implements TooltipAwareContract, TabAwareContract, DataCollectorContract
+class NarrowsparkDataCollector extends AbstractDataCollector implements TooltipAwareContract, TabAwareContract
 {
+    /**
+     * {@inheritdoc}
+     */
+    public function collect(ServerRequestInterface $serverRequest)
+    {
+
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getName(): string
+    {
+        return 'narrowspark';
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -54,13 +70,5 @@ class NarrowsparkDataCollector implements TooltipAwareContract, TabAwareContract
         $tooltip .= '</div>';
 
         return $tooltip;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getName(): string
-    {
-        return 'narrowspark';
     }
 }

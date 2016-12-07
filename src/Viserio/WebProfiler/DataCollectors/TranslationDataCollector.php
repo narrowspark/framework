@@ -2,11 +2,11 @@
 declare(strict_types=1);
 namespace Viserio\WebProfiler\DataCollectors;
 
+use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Contracts\WebProfiler\AssetAware as AssetAwareContract;
-use Viserio\Contracts\WebProfiler\DataCollector as DataCollectorContract;
 use Viserio\Contracts\WebProfiler\TabAware as TabAwareContract;
 
-class TranslationDataCollector implements AssetAwareContract, TabAwareContract, DataCollectorContract
+class TranslationDataCollector extends AbstractDataCollector implements AssetAwareContract, TabAwareContract
 {
     /**
      * All translation for the actual page.
@@ -14,6 +14,22 @@ class TranslationDataCollector implements AssetAwareContract, TabAwareContract, 
      * @var array
      */
     protected $translations = [];
+
+    /**
+     * {@inheritdoc}
+     */
+    public function collect(ServerRequestInterface $serverRequest)
+    {
+
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getName(): string
+    {
+        return 'translations';
+    }
 
     /**
      * {@inheritdoc}
@@ -43,13 +59,5 @@ class TranslationDataCollector implements AssetAwareContract, TabAwareContract, 
             'css' => 'widgets/translations/widget.css',
             'js' => 'widgets/translations/widget.js',
         ];
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getName(): string
-    {
-        return 'views';
     }
 }

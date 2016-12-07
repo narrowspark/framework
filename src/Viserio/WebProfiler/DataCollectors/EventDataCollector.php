@@ -2,8 +2,26 @@
 declare(strict_types=1);
 namespace Viserio\WebProfiler\DataCollectors;
 
+use Psr\Http\Message\ServerRequestInterface;
+
 class EventDataCollector extends AbstractDataCollector implements TabAwareContract, PanelAwareContract
 {
+    /**
+     * {@inheritdoc}
+     */
+    public function collect(ServerRequestInterface $serverRequest)
+    {
+
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getName(): string
+    {
+        return 'events';
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -31,13 +49,5 @@ class EventDataCollector extends AbstractDataCollector implements TabAwareContra
         $html = '';
 
         return $html;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getName(): string
-    {
-        return 'events';
     }
 }
