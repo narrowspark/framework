@@ -15,17 +15,22 @@
         ?>
             <a <?php echo (isset($panels[$name]) ? 'href="#webprofiler-panel-' . $name . '"' : ''); ?> class="webprofiler-tab webprofiler-tab-<?php echo $name ?> webprofiler-tab-position-<?php echo $tab['position']?> <?php echo (isset($panels[$name]) ? 'webprofiler-tab-has-panel' : ''); ?><?php if ($tooltip) { ?> webprofiler-tab-has-tooltip<?php } ?><?php if (isset($tab['tab']['class'])) { echo $tab['tab']['class']; } ?>">
                 <div class="webprofiler-tab-menu">
+                    <?php if (isset($tab['tab']['icon'])) { ?>
                     <span class="webprofiler-tab-icon">
                         <?php echo $tab['tab']['icon'] ?>
                     </span>
+                    <?php } ?>
+                    <?php if (isset($tab['tab']['status'])) { ?>
+                    <span class="webprofiler-tab-status">
+                        <?php echo $tab['tab']['status'] ?>
+                    </span>
+                    <?php } ?>
                     <span class="webprofiler-tab-label">
                         <?php echo $tab['tab']['label'] ?>
                     </span>
-                    <?php if (isset($tab['tab']['value'])) { ?>
                     <span class="webprofiler-tab-value">
                         <?php echo $tab['tab']['value'] ?>
                     </span>
-                    <?php } ?>
                 </div>
                 <?php
                     if ($tooltip) {

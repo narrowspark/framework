@@ -6,16 +6,16 @@ use Interop\Http\Middleware\DelegateInterface;
 use Interop\Http\Middleware\ServerMiddlewareInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Viserio\WebProfiler\WebProfiler;
+use Viserio\Contracts\WebProfiler\WebProfiler as WebProfilerContract;
 
 class WebProfilerMiddleware implements ServerMiddlewareInterface
 {
     /**
      * Create a new middleware instance.
      *
-     * @param \Viserio\WebProfiler\WebProfiler $webprofiler
+     * @param \Viserio\Contracts\WebProfiler\WebProfiler $webprofiler
      */
-    public function __construct(WebProfiler $webprofiler)
+    public function __construct(WebProfilerContract $webprofiler)
     {
         $this->webprofiler = $webprofiler;
     }
@@ -25,11 +25,9 @@ class WebProfilerMiddleware implements ServerMiddlewareInterface
      */
     public function process(ServerRequestInterface $request, DelegateInterface $delegate): ResponseInterface
     {
-        $this->webprofiler->collect($request);
-
         $response = $delegate->process($request);
 
         // Modify the response to add the webprofiler
-        return $this->webprofiler->modifyResponse($response);
+        return $this->webprofiler->modifyResponse($request, $response);
     }
 }

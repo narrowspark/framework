@@ -1,0 +1,13 @@
+.webprofiler-tab-viserio-request .webprofiler-tab-status {
+    background-color: #000;
+}
+.webprofiler .webprofiler-header .webprofiler-tab.webprofiler-tab-viserio-request .webprofiler-tab-green {
+    background-color: #4F805D;
+}
+.webprofiler .webprofiler-header .webprofiler-tab.webprofiler-tab-viserio-request .webprofiler-tab-yellow {
+    background-color: #A46A1F;
+    color: #FFF;
+}
+.webprofiler .webprofiler-header .webprofiler-tab.webprofiler-tab-viserio-request .webprofiler-tab-red {
+    background-color: #B0413E;
+}

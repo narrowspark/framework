@@ -72,12 +72,12 @@
 .webprofiler .webprofiler-header .webprofiler-tab .status-green {
     background-color: #4F805D;
 }
-.webprofiler .webprofiler-header .webprofiler-tab .status-red {
-    background-color: #B0413E;
-}
 .webprofiler .webprofiler-header .webprofiler-tab .status-yellow {
     background-color: #A46A1F;
     color: #FFF;
+}
+.webprofiler .webprofiler-header .webprofiler-tab .status-red {
+    background-color: #B0413E;
 }
 .webprofiler .webprofiler-header .webprofiler-tab:hover {
     background-color: #444;

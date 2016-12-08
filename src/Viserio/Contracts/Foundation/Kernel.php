@@ -52,9 +52,9 @@ interface Kernel
     /**
      * Handle an incoming HTTP request.
      *
-     * @param \Psr\Http\Message\ServerRequestInterface $request
+     * @param \Psr\Http\Message\ServerRequestInterface $serverRequest
      *
      * @return \Psr\Http\Message\ResponseInterface
      */
-    public function handle(ServerRequestInterface $request): ResponseInterface;
+    public function handle(ServerRequestInterface $serverRequest): ResponseInterface;
 }

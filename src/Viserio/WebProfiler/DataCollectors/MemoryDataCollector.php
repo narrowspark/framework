@@ -3,11 +3,11 @@ declare(strict_types=1);
 namespace Viserio\WebProfiler\DataCollectors;
 
 use Psr\Http\Message\ServerRequestInterface;
-use Viserio\Contracts\WebProfiler\LateDataCollector as LateDataCollectorContract;
+use Psr\Http\Message\ResponseInterface;
 use Viserio\Contracts\WebProfiler\TabAware as TabAwareContract;
 use Viserio\Contracts\WebProfiler\TooltipAware as TooltipAwareContract;
 
-class MemoryDataCollector extends AbstractDataCollector implements TooltipAwareContract, TabAwareContract, LateDataCollectorContract
+class MemoryDataCollector extends AbstractDataCollector implements TooltipAwareContract, TabAwareContract
 {
     /**
      * Collected data.
@@ -27,7 +27,7 @@ class MemoryDataCollector extends AbstractDataCollector implements TooltipAwareC
     /**
      * {@inheritdoc}
      */
-    public function collect(ServerRequestInterface $serverRequest)
+    public function collect(ServerRequestInterface $serverRequest, ResponseInterface $response)
     {
         $this->updateMemoryUsage();
     }

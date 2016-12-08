@@ -12,8 +12,9 @@ use Viserio\Contracts\Routing\Router as RouterContract;
 use Viserio\Contracts\Routing\UrlGenerator as UrlGeneratorContract;
 use Viserio\WebProfiler\DataCollectors\ConfigDataCollector;
 use Viserio\WebProfiler\DataCollectors\MemoryDataCollector;
-use Viserio\WebProfiler\DataCollectors\RequestDataCollector;
+use Viserio\WebProfiler\DataCollectors\ViserioRequestDataCollector;
 use Viserio\WebProfiler\DataCollectors\NarrowsparkDataCollector;
+use Viserio\WebProfiler\DataCollectors\ViserioViewDataCollector;
 use Viserio\WebProfiler\WebProfiler;
 use Viserio\Contracts\Support\Traits\ServiceProviderConfigAwareTrait;
 use Viserio\Foundation\Application;
@@ -70,8 +71,8 @@ class WebProfilerServiceProvider implements ServiceProvider
 
     protected static function registerCollectors(ContainerInterface $container, WebProfiler $profiler)
     {
-        if (self::getConfig($container, 'collector.request', true)) {
-            $profiler->addCollector(new RequestDataCollector());
+        if (self::getConfig($container, 'collector.viserio.request', true)) {
+            $profiler->addCollector(new ViserioRequestDataCollector());
         }
 
         if (self::getConfig($container, 'collector.narrowspark', true) && class_exists(Application::class)) {
@@ -85,6 +86,12 @@ class WebProfilerServiceProvider implements ServiceProvider
         if (self::getConfig($container, 'collector.config', true) && $container->has(RepositoryContract::class)) {
             $profiler->addCollector(new ConfigDataCollector(
                 $container->get(RepositoryContract::class)->getAll()
+            ));
+        }
+
+        if (self::getConfig($container, 'collector.viserio.view', true)) {
+            $profiler->addCollector(new ViserioViewDataCollector(
+                self::getConfig($container, 'collector.view.collect_data', true)
             ));
         }
     }

@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace Viserio\WebProfiler\DataCollectors;
 
 use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Message\ResponseInterface;
 use Viserio\Contracts\WebProfiler\AssetAware as AssetAwareContract;
 use Viserio\Contracts\WebProfiler\TabAware as TabAwareContract;
 
@@ -18,7 +19,7 @@ class TranslationDataCollector extends AbstractDataCollector implements AssetAwa
     /**
      * {@inheritdoc}
      */
-    public function collect(ServerRequestInterface $serverRequest)
+    public function collect(ServerRequestInterface $serverRequest, ResponseInterface $response)
     {
 
     }

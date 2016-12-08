@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace Viserio\WebProfiler\DataCollectors;
 
 use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Message\ResponseInterface;
 use Viserio\Contracts\WebProfiler\TabAware as TabAwareContract;
 use Viserio\Contracts\WebProfiler\TooltipAware as TooltipAwareContract;
 use Viserio\Foundation\Application;
@@ -12,7 +13,7 @@ class NarrowsparkDataCollector extends AbstractDataCollector implements TooltipA
     /**
      * {@inheritdoc}
      */
-    public function collect(ServerRequestInterface $serverRequest)
+    public function collect(ServerRequestInterface $serverRequest, ResponseInterface $response)
     {
 
     }

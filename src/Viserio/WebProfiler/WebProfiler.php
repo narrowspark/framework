@@ -201,38 +201,25 @@ class WebProfiler implements WebProfilerContract
     }
 
     /**
-     * {@inheritdoc}
-     */
-    public function collect(ServerRequestInterface $serverRequest)
-    {
-        $this->serverRequest = $serverRequest;
-
-        foreach ($this->collectors as $name => $collector) {
-            $collector->collect($serverRequest);
-
-            $this->collectors[$name] = $collector;
-        }
-    }
-
-    /**
      * Modify the response and inject the debugbar (or data in headers)
      *
-     * @param \Psr\Http\Message\ResponseInterface $response
+     * @param \Psr\Http\Message\ServerRequestInterface $serverRequest
+     * @param \Psr\Http\Message\ResponseInterface      $response
      *
      * @return \Psr\Http\Message\ResponseInterface
      */
-    public function modifyResponse(ResponseInterface $response) : ResponseInterface
-    {
+    public function modifyResponse(
+        ServerRequestInterface $serverRequest,
+        ResponseInterface $response
+    ): ResponseInterface {
         if ($this->runningInConsole()) {
             return $response;
         }
 
         foreach ($this->collectors as $name => $collector) {
-            if ($collector instanceof LateDataCollectorContract) {
-                $collector->lateCollect();
+            $collector->collect($serverRequest, $response);
 
-                $this->collectors[$name] = $collector;
-            }
+            $this->collectors[$name] = $collector;
         }
 
         return $this->injectWebProfiler($response);

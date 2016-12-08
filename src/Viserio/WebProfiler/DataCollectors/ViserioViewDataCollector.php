@@ -3,10 +3,11 @@ declare(strict_types=1);
 namespace Viserio\WebProfiler\DataCollectors;
 
 use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Message\ResponseInterface;
 use Viserio\Contracts\View\View as ViewContract;
 use Viserio\Contracts\WebProfiler\TabAware as TabAwareContract;
 
-class ViewDataCollector extends AbstractDataCollector implements TabAwareContract
+class ViserioViewDataCollector extends AbstractDataCollector implements TabAwareContract
 {
     /**
      * Array of all templates.
@@ -35,7 +36,7 @@ class ViewDataCollector extends AbstractDataCollector implements TabAwareContrac
     /**
      * {@inheritdoc}
      */
-    public function collect(ServerRequestInterface $serverRequest)
+    public function collect(ServerRequestInterface $serverRequest, ResponseInterface $response)
     {
 
     }
@@ -62,7 +63,10 @@ class ViewDataCollector extends AbstractDataCollector implements TabAwareContrac
      */
     public function getTab(): array
     {
-        return [];
+        return [
+            'label' => '',
+            'value' => '',
+        ];
     }
 
     /**

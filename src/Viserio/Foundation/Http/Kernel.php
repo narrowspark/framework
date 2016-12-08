@@ -127,6 +127,38 @@ class Kernel implements TerminableContract, KernelContract, ServerMiddlewareInte
     }
 
     /**
+     * Add a new middleware to beginning of the stack if it does not already exist.
+     *
+     * @param string $middleware
+     *
+     * @return $this
+     */
+    public function prependMiddleware(string $middleware)
+    {
+        if (array_search($middleware, $this->middlewares) === false) {
+            array_unshift($this->middlewares, $middleware);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Add a new middleware to end of the stack if it does not already exist.
+     *
+     * @param string $middleware
+     *
+     * @return $this
+     */
+    public function pushMiddleware(string $middleware)
+    {
+        if (array_search($middleware, $this->middlewares) === false) {
+            $this->middlewares[] = $middleware;
+        }
+
+        return $this;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function process(ServerRequestInterface $request, DelegateInterface $delegate)
@@ -136,18 +168,20 @@ class Kernel implements TerminableContract, KernelContract, ServerMiddlewareInte
     /**
      * {@inheritdoc}
      */
-    public function handle(ServerRequestInterface $request): ResponseInterface
+    public function handle(ServerRequestInterface $serverRequest): ResponseInterface
     {
+        $serverRequest = $serverRequest->withAddedHeader('X-Php-Ob-Level', ob_get_level());
+
         // Passes the request to the container
-        $this->app->instance(ServerRequestInterface::class, $request);
+        $this->app->instance(ServerRequestInterface::class, $serverRequest);
 
         StaticalProxy::clearResolvedInstance('request');
 
-        $this->events->trigger(self::REQUEST, [$request]);
+        $this->events->trigger(self::REQUEST, [$serverRequest]);
 
         $this->bootstrap();
 
-        $response = $this->handleRequest($request);
+        $response = $this->handleRequest($serverRequest);
 
         // stop PHP sending a Content-Type automatically
         ini_set('default_mimetype', '');
@@ -158,9 +192,9 @@ class Kernel implements TerminableContract, KernelContract, ServerMiddlewareInte
     /**
      * {@inheritdoc}
      */
-    public function terminate(ServerRequestInterface $request, ResponseInterface $response)
+    public function terminate(ServerRequestInterface $serverRequest, ResponseInterface $response)
     {
-        $this->events->trigger(self::TERMINATE, [$request, $response]);
+        $this->events->trigger(self::TERMINATE, [$serverRequest, $response]);
 
         $this->app->get(HandlerContract::class)->unregister();
     }
