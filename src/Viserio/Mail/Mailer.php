@@ -115,6 +115,8 @@ class Mailer implements MailerContract
         // any recipient addresses previously set and use this one instead.
         if (isset($this->to['address'])) {
             $message->to($this->to['address'], $this->to['name'], true);
+            $message->cc($this->to['address'], $this->to['name'], true);
+            $message->bcc($this->to['address'], $this->to['name'], true);
         }
 
         return $this->sendSwiftMessage($message->getSwiftMessage());

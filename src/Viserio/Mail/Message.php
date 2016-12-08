@@ -86,16 +86,28 @@ class Message implements MessageContract
     /**
      * {@inheritdoc}
      */
-    public function cc(string $address, string $name = null): MessageContract
+    public function cc($address, string $name = null, bool $override = false): MessageContract
     {
+        if ($override) {
+            $this->swift->setCc($address, $name);
+
+            return $this;
+        }
+
         return $this->addAddresses($address, $name, 'Cc');
     }
 
     /**
      * {@inheritdoc}
      */
-    public function bcc(string $address, string $name = null): MessageContract
+    public function bcc($address, string $name = null, bool $override = false): MessageContract
     {
+        if ($override) {
+            $this->swift->setBcc($address, $name);
+
+            return $this;
+        }
+
         return $this->addAddresses($address, $name, 'Bcc');
     }
 

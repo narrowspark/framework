@@ -47,22 +47,24 @@ interface Message
     /**
      * Add a Chronos copy to the message.
      *
-     * @param string      $address
-     * @param string|null $name
+     * @param string|array $address
+     * @param string|null  $name
+     * @param bool         $override Will force ignoring the previous recipients
      *
      * @return $this
      */
-    public function cc(string $address, string $name = null): Message;
+    public function cc($address, string $name = null, bool $override = false): Message;
 
     /**
      * Add a blind Chronos copy to the message.
      *
-     * @param string      $address
-     * @param string|null $name
+     * @param string|array $address
+     * @param string|null  $name
+     * @param bool         $override Will force ignoring the previous recipients
      *
      * @return $this
      */
-    public function bcc(string $address, string $name = null): Message;
+    public function bcc($address, string $name = null, bool $override = false): Message;
 
     /**
      * Add a reply to address to the message.
