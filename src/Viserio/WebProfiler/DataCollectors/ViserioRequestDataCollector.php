@@ -19,6 +19,7 @@ class ViserioRequestDataCollector extends AbstractDataCollector implements TabAw
      * @var \Psr\Http\Message\ServerRequestInterface
      */
     protected $serverRequest;
+
     /**
      * A response instance.
      *
