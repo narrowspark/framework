@@ -54,14 +54,6 @@ class ConfigDataCollector extends AbstractDataCollector implements TabAwareContr
     /**
      * {@inheritdoc}
      */
-    public function getTabPosition(): string
-    {
-        return 'left';
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getTab(): array
     {
         return [

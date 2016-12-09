@@ -28,14 +28,6 @@ class EventDataCollector extends AbstractDataCollector implements TabAwareContra
     /**
      * {@inheritdoc}
      */
-    public function getTabPosition(): string
-    {
-        return 'left';
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getTab(): array
     {
         return [

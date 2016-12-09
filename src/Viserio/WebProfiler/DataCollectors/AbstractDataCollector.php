@@ -16,6 +16,64 @@ abstract class AbstractDataCollector implements DataCollectorContract
     protected $data;
 
     /**
+     * {@inheritdoc}
+     */
+    public function getTabPosition(): string
+    {
+        return 'left';
+    }
+
+    /**
+     * @param float $seconds
+     *
+     * @return string
+     */
+    protected function formatDuration(float $seconds): string
+    {
+        if ($seconds < 0.001) {
+            return round($seconds * 1000000) . 'μs';
+        } elseif ($seconds < 1) {
+            return round($seconds * 1000, 2) . 'ms';
+        }
+
+        return round($seconds, 2) . 's';
+    }
+
+    /**
+     * Convert a number string to bytes.
+     *
+     * @param string
+     *
+     * @return int
+     */
+    protected function convertToBytes(string $memoryLimit): int
+    {
+        if ($memoryLimit === '-1') {
+            return -1;
+        }
+
+        $memoryLimit = strtolower($memoryLimit);
+        $max = strtolower(ltrim($memoryLimit, '+'));
+
+        if (0 === strpos($max, '0x')) {
+            $max = intval($max, 16);
+        } elseif (0 === strpos($max, '0')) {
+            $max = intval($max, 8);
+        } else {
+            $max = (int) $max;
+        }
+
+        switch (substr($memoryLimit, -1)) {
+            case 't': $max *= 1024;
+            case 'g': $max *= 1024;
+            case 'm': $max *= 1024;
+            case 'k': $max *= 1024;
+        }
+
+        return $max;
+    }
+
+    /**
      * [formatVar description]
      *
      * @param mixed $data
