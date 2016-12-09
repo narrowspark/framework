@@ -162,6 +162,10 @@ abstract class AbstractRouteDispatcher
         );
         $requestPath = ltrim($request->getUri()->getPath(), '/');
 
+        if ($match[0] === RouterContract::FOUND) {
+            return $this->handleFound($match[1], $match[2], $request);
+        }
+
         if ($match[0] === RouterContract::HTTP_METHOD_NOT_ALLOWED) {
             throw new MethodNotAllowedException(sprintf(
                 '405 Method [%s] Not Allowed: For requested route [/%s]',
@@ -170,14 +174,10 @@ abstract class AbstractRouteDispatcher
             ));
         }
 
-        if ($match[0] === RouterContract::NOT_FOUND) {
-            throw new NotFoundException(sprintf(
-                '404 Not Found: Requested route [/%s]',
-                $requestPath
-            ));
-        }
-
-        return $this->handleFound($match[1], $match[2], $request);
+        throw new NotFoundException(sprintf(
+            '404 Not Found: Requested route [/%s]',
+            $requestPath
+        ));
     }
 
     /**
