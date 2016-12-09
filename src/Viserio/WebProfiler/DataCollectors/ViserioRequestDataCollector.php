@@ -119,12 +119,24 @@ class ViserioRequestDataCollector extends AbstractDataCollector implements TabAw
             $status = 'request-status-red';
         }
 
-        return [
+        $tabInfos = [
             'status' => $statusCode,
             'class' => $status,
-            'label' => '@',
-            'value' => $this->route->getName(),
+            'label' => '',
+            'value' => ''
         ];
+
+        if ($this->route !== null) {
+            $tabInfos = array_merge(
+                $tabInfos,
+                [
+                    'label' => '@',
+                    'value' => $this->route->getName(),
+                ]
+            );
+        }
+
+        return $tabInfos;
     }
 
     /**
