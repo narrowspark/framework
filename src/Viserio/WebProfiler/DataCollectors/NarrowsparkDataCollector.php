@@ -15,7 +15,7 @@ class NarrowsparkDataCollector extends AbstractDataCollector implements TooltipA
      */
     public function collect(ServerRequestInterface $serverRequest, ResponseInterface $response)
     {
-
+        //
     }
 
     /**
@@ -51,24 +51,35 @@ class NarrowsparkDataCollector extends AbstractDataCollector implements TooltipA
      */
     public function getTooltip(): string
     {
-        $hasXdebug = extension_loaded('xdebug') ? 'status-green' : 'status-red';
+        $debug = env('APP_DEBUG', 'false');
 
-        $tooltip = '<div class="webprofiler-tab-tooltip-group">';
-        $tooltip .= '<b>Profiler token</b><span>teste</span> <br>';
-        $tooltip .= '<b>Application name</b><span></span> <br>';
-        $tooltip .= '<b>Environment</b><span>' . env('APP_ENV', 'develop') . '</span> <br>';
-        $tooltip .= '</div>';
-        // php infos
-        $tooltip .= '<div class="webprofiler-tab-tooltip-group">';
-        $tooltip .= '<b>PHP version</b><span>' . phpversion() . '</span> <br>';
-        $tooltip .= '<b>PHP Extensions</b><span class="' . $hasXdebug . '">xdebug</span> <br>';
-        $tooltip .= '<b>PHP SAPI</b><span>' . php_sapi_name() . '</span> <br>';
-        $tooltip .= '</div>';
+        $tooltip = $this->createTooltipGroup([
+            'Profiler token' => '',
+            'Application name' => '',
+            'Environment' => env('APP_ENV', 'develop'),
+            'Debug' => [
+                [
+                    'class' => $debug !== 'false' ? 'status-green' : 'status-red',
+                    'value' => $debug !== 'false' ? 'enabled' : 'disabled',
+                ],
+            ]
+        ]);
 
-        $tooltip .= '<div class="webprofiler-tab-tooltip-group">';
-        $tooltip .= '<b>Resources</b><span>teste</span> <br>';
-        $tooltip .= '<b>Help</b><span></span> <br>';
-        $tooltip .= '</div>';
+        $tooltip .= $this->createTooltipGroup([
+            'PHP version' => phpversion(),
+            'PHP Extensions' => [
+                [
+                    'class' => extension_loaded('xdebug') ? 'status-green' : 'status-red',
+                    'value' => 'xdebug',
+                ],
+            ],
+            'PHP SAPI' => php_sapi_name(),
+        ]);
+
+        $tooltip .= $this->createTooltipGroup([
+            'Resources' => '',
+            'Help' => '',
+        ]);
 
         return $tooltip;
     }

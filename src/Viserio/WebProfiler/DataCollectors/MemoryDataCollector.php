@@ -68,20 +68,10 @@ class MemoryDataCollector extends AbstractDataCollector implements TooltipAwareC
      */
     public function getTooltip(): string
     {
-        $tooltip = '<div class="webprofiler-tab-tooltip-group">';
-        $tooltip .= '<b>Peak memory usage</b><span>' . $this->data['memory'] / 1024 / 1024 . ' MB</span> <br>';
-        $tooltip .= '<b>PHP memory limit</b><span>' . ($this->data['memory_limit'] == -1 ? 'Unlimited' : $this->data['memory_limit'] / 1024 / 1024) . ' MB</span> <br>';
-        $tooltip .= '</div>';
-
-        return $tooltip;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function lateCollect()
-    {
-        $this->updateMemoryUsage();
+        return $this->createTooltipGroup([
+            'Peak memory usage' => $this->data['memory'] / 1024 / 1024 . ' MB',
+            'PHP memory limit' => ($this->data['memory_limit'] == -1 ? 'Unlimited' : $this->data['memory_limit'] / 1024 / 1024) . ' MB',
+        ]);
     }
 
     /**

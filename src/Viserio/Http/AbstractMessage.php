@@ -300,7 +300,7 @@ abstract class AbstractMessage implements MessageInterface
      *
      * @return array
      */
-    private function checkHeaderData($header, $value): array
+    private function checkHeaderData(string $header, $value): array
     {
         if (is_string($value)) {
             $value = [$value];

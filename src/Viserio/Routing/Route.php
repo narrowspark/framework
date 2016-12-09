@@ -182,16 +182,19 @@ class Route implements RouteContract
         $middlewares = Arr::get($this->action, 'middlewares', []);
         $withoutMiddlewares = Arr::get($this->action, 'without_middlewares', []);
 
-        $this->middlewares = [
+        $mergedMiddlewares = [
             'middlewares' => array_unique(array_merge(
-                $this->middlewares,
+                $this->middlewares['middlewares'] ?? [],
                 is_array($middlewares) ? $middlewares : [$middlewares],
                 $this->getControllerMiddleware()
             ), SORT_REGULAR),
-            'without_middlewares' => is_array($withoutMiddlewares) ? $withoutMiddlewares : [$withoutMiddlewares],
+            'without_middlewares' => array_unique(array_merge(
+                $this->middlewares['without_middlewares'] ?? [],
+                is_array($withoutMiddlewares) ? $withoutMiddlewares : [$withoutMiddlewares]
+            ), SORT_REGULAR)
         ];
 
-        return $this->middlewares;
+        return $this->middlewares = $mergedMiddlewares;
     }
 
     /**
@@ -341,7 +344,7 @@ class Route implements RouteContract
      */
     public function getController()
     {
-        list($class) = explode('::', $this->action['uses']);
+        list($class) = explode('@', $this->action['uses']);
 
         if (! $this->controller) {
             $container = $this->getContainer();
@@ -409,7 +412,7 @@ class Route implements RouteContract
             });
         }
 
-        if (is_string($action['uses']) && strpos($action['uses'], '::') === false) {
+        if (is_string($action['uses']) && strpos($action['uses'], '@') === false) {
             if (! method_exists($action, '__invoke')) {
                 throw new UnexpectedValueException(sprintf(
                     'Invalid route action: [%s]',
@@ -483,6 +486,6 @@ class Route implements RouteContract
      */
     protected function getControllerMethod(): string
     {
-        return explode('::', $this->action['uses'])[1];
+        return explode('@', $this->action['uses'])[1];
     }
 }

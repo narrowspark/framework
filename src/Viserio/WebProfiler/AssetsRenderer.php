@@ -4,6 +4,7 @@ namespace Viserio\WebProfiler;
 
 use Viserio\Contracts\Support\Renderable as RenderableContract;
 use Viserio\Contracts\WebProfiler\WebProfiler as WebProfilerContract;
+use Viserio\Contracts\WebProfiler\AssetAware as AssetAwareContract;
 
 class AssetsRenderer implements RenderableContract
 {
@@ -159,7 +160,7 @@ class AssetsRenderer implements RenderableContract
 
         // finds assets provided by collectors
         foreach ($this->webprofiler->getCollectors() as $collector) {
-            if (($collector instanceof AssetProvider) && ! in_array($collector->getName(), $this->ignoredCollectors)) {
+            if (($collector instanceof AssetAwareContract) && ! in_array($collector->getName(), $this->ignoredCollectors)) {
                 $additionalAssets[] = $collector->getAssets();
             }
         }
@@ -167,18 +168,13 @@ class AssetsRenderer implements RenderableContract
         foreach ($additionalAssets as $assets) {
             $root = $assets['path'] ?? $this->rootPath;
 
-            $cssFiles = array_merge($cssFiles, array_map(
-                function ($css) use ($root) {
-                    return rtrim($root, '/') . '/' . $css;
-                },
-                (array) $assets['css']
-            ));
-            $jsFiles = array_merge($jsFiles, array_map(
-                function ($css) use ($root) {
-                    return rtrim($root, '/') . '/' . $css;
-                },
-                (array) $assets['js']
-            ));
+            if (isset($assets['css'])) {
+                $cssFiles = array_merge($cssFiles, (array) $assets['css']);
+            }
+
+            if (isset($assets['js'])) {
+                $jsFiles = array_merge($jsFiles, (array) $assets['js']);
+            }
         }
 
         return $this->filterAssetArray([$cssFiles, $jsFiles], $type);

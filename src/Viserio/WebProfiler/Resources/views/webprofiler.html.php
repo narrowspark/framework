@@ -13,7 +13,7 @@
                         $tooltip = true;
                     }
         ?>
-            <a <?php echo (isset($panels[$name]) ? 'href="#webprofiler-panel-' . $name . '"' : ''); ?> class="webprofiler-tab webprofiler-tab-<?php echo $name ?> webprofiler-tab-position-<?php echo $tab['position']?> <?php echo (isset($panels[$name]) ? 'webprofiler-tab-has-panel' : ''); ?><?php if ($tooltip) { ?> webprofiler-tab-has-tooltip<?php } ?><?php if (isset($tab['tab']['class'])) { echo $tab['tab']['class']; } ?>">
+            <a <?php echo (isset($panels[$name]) ? 'href="#webprofiler-panel-' . $name . '"' : ''); ?> class="webprofiler-tab webprofiler-tab-<?php echo $name ?> webprofiler-tab-position-<?php echo $tab['position']?> <?php echo (isset($panels[$name]) ? 'webprofiler-tab-has-panel' : ''); ?><?php if ($tooltip) { ?> webprofiler-tab-has-tooltip<?php } ?> <?php if (isset($tab['tab']['class'])) { echo $tab['tab']['class']; } ?>">
                 <div class="webprofiler-tab-menu">
                     <?php if (isset($tab['tab']['icon'])) { ?>
                     <span class="webprofiler-tab-icon">

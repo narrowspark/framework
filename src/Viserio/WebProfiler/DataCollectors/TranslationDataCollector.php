@@ -47,7 +47,7 @@ class TranslationDataCollector extends AbstractDataCollector implements AssetAwa
     {
         return [
             'label' => '',
-            'count' => count($this->translations),
+            'value' => count($this->translations),
         ];
     }
 

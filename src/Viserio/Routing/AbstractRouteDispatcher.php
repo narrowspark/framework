@@ -195,6 +195,9 @@ abstract class AbstractRouteDispatcher
             $route->setParameter($key, rawurldecode($value));
         }
 
+        // Add route to the request's attributes in case a middleware or handler needs access to the route
+        $request = $request->withAttribute('_route', $route);
+
         $this->current = $route;
 
         if ($this->events !== null) {
@@ -241,9 +244,6 @@ abstract class AbstractRouteDispatcher
             ->send($request)
             ->through($middlewares)
             ->then(function ($request) use ($route) {
-                // Add route to the request's attributes in case a middleware or handler needs access to the route
-                $request = $request->withAttribute('_route', $route);
-
                 return $route->run($request);
             });
     }

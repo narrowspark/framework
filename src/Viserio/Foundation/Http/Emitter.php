@@ -86,6 +86,7 @@ class Emitter implements EmitterContract
                     $name,
                     $value
                 ), $first);
+
                 $first = false;
             }
         }

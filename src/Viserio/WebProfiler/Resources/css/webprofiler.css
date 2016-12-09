@@ -43,22 +43,22 @@
     float: right;
 }
 .webprofiler .webprofiler-header .hide-button svg,
-.webprofiler .webprofiler-header .webprofiler-tab svg {
+.webprofiler .webprofiler-header .webprofiler-tabs a.webprofiler-tab svg {
     position: relative;
     top: 6px;
     max-height: 24px;
 }
 
-.webprofiler .webprofiler-header .webprofiler-tab {
+.webprofiler .webprofiler-header .webprofiler-tabs a.webprofiler-tab {
     cursor: default;
     display: block;
     height: 36px;
     margin-right: 0;
-    float: left;
     white-space: nowrap;
 }
-.webprofiler .webprofiler-header .webprofiler-tab .status-red,
-.webprofiler .webprofiler-header .webprofiler-tab .status-green {
+.webprofiler .webprofiler-header .webprofiler-tabs a.webprofiler-tab .status-red,
+.webprofiler .webprofiler-header .webprofiler-tabs a.webprofiler-tab .status-yellow,
+.webprofiler .webprofiler-header .webprofiler-tabs a.webprofiler-tab .status-green {
     display: inline-block;
     color: #FFF;
     background-color: #666;
@@ -69,31 +69,34 @@
     min-height: 13px;
     text-align: center;
 }
-.webprofiler .webprofiler-header .webprofiler-tab .status-green {
+.webprofiler .webprofiler-header .webprofiler-tabs a.webprofiler-tab .status-green {
     background-color: #4F805D;
 }
-.webprofiler .webprofiler-header .webprofiler-tab .status-yellow {
+.webprofiler .webprofiler-header .webprofiler-tabs a.webprofiler-tab .status-yellow {
     background-color: #A46A1F;
     color: #FFF;
 }
-.webprofiler .webprofiler-header .webprofiler-tab .status-red {
+.webprofiler .webprofiler-header .webprofiler-tabs a.webprofiler-tab .status-red {
     background-color: #B0413E;
 }
-.webprofiler .webprofiler-header .webprofiler-tab:hover {
+.webprofiler .webprofiler-header .webprofiler-tabs a.webprofiler-tab:hover {
     background-color: #444;
     position: relative;
     z-index: 10002;
 }
-.webprofiler .webprofiler-header .webprofiler-tab.webprofiler-tab-has-panel {
+.webprofiler .webprofiler-header .webprofiler-tabs .webprofiler-tab:nth-of-type(2) .webprofiler-tab-menu {
+    padding-left: 0;
+}
+.webprofiler .webprofiler-header .webprofiler-tabs a.webprofiler-tab.webprofiler-tab-has-panel {
     cursor: pointer;
 }
-.webprofiler .webprofiler-header .webprofiler-tab.webprofiler-tab-has-tooltip:hover {
+.webprofiler .webprofiler-header .webprofiler-tabs a.webprofiler-tab.webprofiler-tab-has-tooltip:hover {
     cursor: help;
 }
-.webprofiler .webprofiler-header .webprofiler-tab.webprofiler-tab-has-tooltip .webprofiler-tab-tooltip {
+.webprofiler .webprofiler-header .webprofiler-tabs a.webprofiler-tab.webprofiler-tab-has-tooltip .webprofiler-tab-tooltip {
     display: none;
 }
-.webprofiler .webprofiler-header .webprofiler-tab.webprofiler-tab-has-tooltip:hover .webprofiler-tab-tooltip {
+.webprofiler .webprofiler-header .webprofiler-tabs a.webprofiler-tab.webprofiler-tab-has-tooltip:hover .webprofiler-tab-tooltip {
     display: block;
     padding: 10px;
     max-width: 480px;
@@ -106,56 +109,60 @@
     color: #F5F5F5;
     position: absolute;
 }
-.webprofiler .webprofiler-header .webprofiler-tab.webprofiler-tab-has-tooltip:hover .webprofiler-tab-tooltip .webprofiler-tab-tooltip-group {
+.webprofiler .webprofiler-header .webprofiler-tabs a.webprofiler-tab.webprofiler-tab-has-tooltip:hover .webprofiler-tab-tooltip .webprofiler-tab-tooltip-group {
     margin-bottom: 4px;
-    padding-bottom: 2px;
+    padding-bottom: 4px;
     border-bottom: 1px solid #333333;
 }
-.webprofiler .webprofiler-header .webprofiler-tab.webprofiler-tab-has-tooltip:hover .webprofiler-tab-tooltip .webprofiler-tab-tooltip-group:last-child {
+.webprofiler .webprofiler-header .webprofiler-tabs a.webprofiler-tab.webprofiler-tab-has-tooltip:hover .webprofiler-tab-tooltip .webprofiler-tab-tooltip-group:last-child {
     margin-bottom: 0;
     padding-bottom: 0;
     border-bottom: none;
 }
-.webprofiler .webprofiler-header .webprofiler-tab.webprofiler-tab-has-tooltip:hover .webprofiler-tab-tooltip .webprofiler-tab-tooltip-group b {
+.webprofiler .webprofiler-header .webprofiler-tabs a.webprofiler-tab.webprofiler-tab-has-tooltip:hover .webprofiler-tab-tooltip .webprofiler-tab-tooltip-group-piece {
+    border-bottom: solid transparent 3px;
+    display: table-row;
+}
+.webprofiler .webprofiler-header .webprofiler-tabs a.webprofiler-tab.webprofiler-tab-has-tooltip:hover .webprofiler-tab-tooltip .webprofiler-tab-tooltip-group b {
     color: #AAA;
     display: table-cell;
     font-size: 11px;
     padding: 4px 8px 4px 0;
 }
-.webprofiler .webprofiler-header .webprofiler-tab.webprofiler-tab-has-tooltip:hover .webprofiler-tab-tooltip .webprofiler-tab-tooltip-group span {
+.webprofiler .webprofiler-header .webprofiler-tabs a.webprofiler-tab.webprofiler-tab-has-tooltip:hover .webprofiler-tab-tooltip .webprofiler-tab-tooltip-group span {
     color: #F5F5F5;
     font-size: 12px;
     display: table-cell;
 }
-.webprofiler .webprofiler-header .webprofiler-tab.webprofiler-tab-position-left.webprofiler-tab-has-tooltip:hover .webprofiler-tab-tooltip {
+.webprofiler .webprofiler-header .webprofiler-tabs a.webprofiler-tab.webprofiler-tab-position-left.webprofiler-tab-has-tooltip:hover .webprofiler-tab-tooltip {
     left: 0;
 }
-.webprofiler .webprofiler-header .webprofiler-tab.webprofiler-tab-position-right.webprofiler-tab-has-tooltip:hover .webprofiler-tab-tooltip {
+.webprofiler .webprofiler-header .webprofiler-tabs a.webprofiler-tab.webprofiler-tab-position-right.webprofiler-tab-has-tooltip:hover .webprofiler-tab-tooltip {
     right: 0;
 }
-.webprofiler .webprofiler-header .webprofiler-tab.webprofiler-tab-position-left {
+.webprofiler .webprofiler-header .webprofiler-tabs a.webprofiler-tab.webprofiler-tab-position-left {
     float: left;
 }
-.webprofiler .webprofiler-header .webprofiler-tab.webprofiler-tab-position-right {
+.webprofiler .webprofiler-header .webprofiler-tabs a.webprofiler-tab.webprofiler-tab-position-right {
     float: right;
 }
-.webprofiler .webprofiler-header .webprofiler-tab .webprofiler-tab-menu {
+.webprofiler .webprofiler-header .webprofiler-tabs a.webprofiler-tab .webprofiler-tab-menu {
     display: block;
     height: 36px;
     line-height: 36px;
     padding: 0 7px;
 }
-.webprofiler .webprofiler-header .webprofiler-tab .webprofiler-tab-menu .webprofiler-tab-label,
-.webprofiler .webprofiler-header .webprofiler-tab .webprofiler-tab-menu .webprofiler-tab-value,
-.webprofiler .webprofiler-header .webprofiler-tab .webprofiler-tab-menu .webprofiler-tab-icon,
-.webprofiler .webprofiler-header .webprofiler-tab .webprofiler-tab-menu .webprofiler-tab-counter {
+.webprofiler .webprofiler-header .webprofiler-tabs a.webprofiler-tab .webprofiler-tab-menu .webprofiler-tab-icon,
+.webprofiler .webprofiler-header .webprofiler-tabs a.webprofiler-tab .webprofiler-tab-menu .webprofiler-tab-status,
+.webprofiler .webprofiler-header .webprofiler-tabs a.webprofiler-tab .webprofiler-tab-menu .webprofiler-tab-label,
+.webprofiler .webprofiler-header .webprofiler-tabs a.webprofiler-tab .webprofiler-tab-menu .webprofiler-tab-value {
     display: inline-block;
     color: #F5F5F5;
     font-size: 13px;
     line-height: 36px;
     padding: 0;
 }
-.webprofiler .webprofiler-header .webprofiler-tab .webprofiler-tab-icon .webprofiler-tab-value {
+.webprofiler .webprofiler-header .webprofiler-tabs a.webprofiler-tab .webprofiler-tab-icon .webprofiler-tab-value {
     margin-left: 4px;
 }
 

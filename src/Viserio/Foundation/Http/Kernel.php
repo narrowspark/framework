@@ -25,6 +25,7 @@ use Viserio\Routing\Router;
 use Viserio\Session\Middleware\StartSessionMiddleware;
 use Viserio\StaticalProxy\StaticalProxy;
 use Viserio\View\Middleware\ShareErrorsFromSessionMiddleware;
+use Viserio\Contracts\WebProfiler\WebProfiler as WebProfilerContract;
 
 class Kernel implements TerminableContract, KernelContract, ServerMiddlewareInterface
 {
@@ -93,7 +94,6 @@ class Kernel implements TerminableContract, KernelContract, ServerMiddlewareInte
         LoadConfiguration::class,
         DetectEnvironment::class,
         HandleExceptions::class,
-        LoadRoutes::class,
         LoadServiceProvider::class,
     ];
 
@@ -170,7 +170,7 @@ class Kernel implements TerminableContract, KernelContract, ServerMiddlewareInte
      */
     public function handle(ServerRequestInterface $serverRequest): ResponseInterface
     {
-        $serverRequest = $serverRequest->withAddedHeader('X-Php-Ob-Level', ob_get_level());
+        $serverRequest = $serverRequest->withAddedHeader('X-Php-Ob-Level', (string) ob_get_level());
 
         // Passes the request to the container
         $this->app->instance(ServerRequestInterface::class, $serverRequest);
@@ -185,6 +185,11 @@ class Kernel implements TerminableContract, KernelContract, ServerMiddlewareInte
 
         // stop PHP sending a Content-Type automatically
         ini_set('default_mimetype', '');
+
+        if ($this->app->has(WebProfilerContract::class)) {
+            // Modify the response to add the webprofiler
+            return $this->app->get(WebProfilerContract::class)->modifyResponse($serverRequest, $response);
+        }
 
         return $response;
     }
@@ -255,7 +260,6 @@ class Kernel implements TerminableContract, KernelContract, ServerMiddlewareInte
         ServerRequestInterface $request,
         Throwable $exception
     ): ResponseInterface {
-
         return $this->app->get(HandlerContract::class)->render($request, $exception);
     }
 
@@ -279,6 +283,8 @@ class Kernel implements TerminableContract, KernelContract, ServerMiddlewareInte
             ->send($request)
             ->through($config->get('app.skip_middlewares', false) ? [] : $this->middlewares)
             ->then(function ($request) use ($router) {
+                $this->app->instance(ServerRequestInterface::class, $request);
+
                 return $router->dispatch($request);
             });
     }

@@ -67,6 +67,7 @@ class ConfigDataCollector extends AbstractDataCollector implements TabAwareContr
         return [
             'icon' => file_get_contents(__DIR__ . '/../Resources/icons/ic_settings_applications_white_24px.svg'),
             'label' => 'Configs',
+            'value' => ''
         ];
     }
 

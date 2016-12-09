@@ -72,7 +72,10 @@ class WebProfilerServiceProvider implements ServiceProvider
     protected static function registerCollectors(ContainerInterface $container, WebProfiler $profiler)
     {
         if (self::getConfig($container, 'collector.viserio.request', true)) {
-            $profiler->addCollector(new ViserioRequestDataCollector());
+            $profiler->addCollector(new ViserioRequestDataCollector(
+                $container->get(RouterContract::class),
+                $container->get(RepositoryContract::class)
+            ));
         }
 
         if (self::getConfig($container, 'collector.narrowspark', true) && class_exists(Application::class)) {
