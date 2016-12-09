@@ -75,6 +75,16 @@ abstract class AbstractRouteDispatcher
     protected $middlewarePriority = [];
 
     /**
+     * Add a list of middlewares.
+     *
+     * @param array $middlewares
+     */
+    public function addMiddlewares(array $middlewares)
+    {
+        $this->middlewares = $middlewares;
+    }
+
+    /**
      * Register a group of middleware.
      *
      * @param string $name
@@ -152,23 +162,22 @@ abstract class AbstractRouteDispatcher
         );
         $requestPath = ltrim($request->getUri()->getPath(), '/');
 
-        switch ($match[0]) {
-            case RouterContract::FOUND:
-                return $this->handleFound($match[1], $match[2], $request);
-            case RouterContract::HTTP_METHOD_NOT_ALLOWED:
-                throw new MethodNotAllowedException(sprintf(
-                    '405 Method [%s] Not Allowed: For requested route [/%s]',
-                    implode(',', $match[1]),
-                    $requestPath
-                ));
-            case RouterContract::NOT_FOUND:
-                throw new NotFoundException(sprintf(
-                    '404 Not Found: Requested route [/%s]',
-                    $requestPath
-                ));
-            default:
-                throw new InternalServerErrorException();
+        if ($match[0] === RouterContract::HTTP_METHOD_NOT_ALLOWED) {
+            throw new MethodNotAllowedException(sprintf(
+                '405 Method [%s] Not Allowed: For requested route [/%s]',
+                implode(',', $match[1]),
+                $requestPath
+            ));
         }
+
+        if ($match[0] === RouterContract::NOT_FOUND) {
+            throw new NotFoundException(sprintf(
+                '404 Not Found: Requested route [/%s]',
+                $requestPath
+            ));
+        }
+
+        return $this->handleFound($match[1], $match[2], $request);
     }
 
     /**
