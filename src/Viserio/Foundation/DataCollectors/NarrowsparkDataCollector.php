@@ -1,12 +1,13 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\WebProfiler\DataCollectors;
+namespace Viserio\Foundation\DataCollectors;
 
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Viserio\Contracts\WebProfiler\TabAware as TabAwareContract;
 use Viserio\Contracts\WebProfiler\TooltipAware as TooltipAwareContract;
 use Viserio\Foundation\Application;
+use Viserio\WebProfiler\DataCollectors\AbstractDataCollector;
 
 class NarrowsparkDataCollector extends AbstractDataCollector implements TooltipAwareContract, TabAwareContract
 {
@@ -40,7 +41,7 @@ class NarrowsparkDataCollector extends AbstractDataCollector implements TooltipA
     public function getTab(): array
     {
         return [
-            'icon' => file_get_contents(__DIR__ . '/../Resources/icons/ic_memory_white_24px.svg'),
+            'icon' => file_get_contents(__DIR__ . '/Resources/icons/ic_narrowspark_white_24px.svg'),
             'label' => '',
             'value' => Application::VERSION,
         ];

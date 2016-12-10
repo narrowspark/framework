@@ -10,11 +10,8 @@ use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Contracts\Routing\Router as RouterContract;
 use Viserio\Contracts\Routing\UrlGenerator as UrlGeneratorContract;
-use Viserio\WebProfiler\DataCollectors\ConfigDataCollector;
 use Viserio\WebProfiler\DataCollectors\MemoryDataCollector;
-use Viserio\WebProfiler\DataCollectors\ViserioRequestDataCollector;
-use Viserio\WebProfiler\DataCollectors\NarrowsparkDataCollector;
-use Viserio\WebProfiler\DataCollectors\ViserioViewDataCollector;
+use Viserio\WebProfiler\DataCollectors\TimeDataCollector;
 use Viserio\WebProfiler\WebProfiler;
 use Viserio\Contracts\Support\Traits\ServiceProviderConfigAwareTrait;
 use Viserio\Foundation\Application;
@@ -64,6 +61,7 @@ class WebProfilerServiceProvider implements ServiceProvider
             // );
         }
 
+        self::registerCollectorsFromConfig($container, $profiler);
         self::registerCollectors($container, $profiler);
 
         return $profiler;
@@ -71,31 +69,23 @@ class WebProfilerServiceProvider implements ServiceProvider
 
     protected static function registerCollectors(ContainerInterface $container, WebProfiler $profiler)
     {
-        if (self::getConfig($container, 'collector.viserio.request', true)) {
-            $profiler->addCollector(new ViserioRequestDataCollector(
-                $container->get(RouterContract::class),
-                $container->get(RepositoryContract::class)
+        if (self::getConfig($container, 'collector.time', true)) {
+            $profiler->addCollector(new TimeDataCollector(
+                $container->get(ServerRequestInterface::class)
             ));
-        }
-
-        if (self::getConfig($container, 'collector.narrowspark', true) && class_exists(Application::class)) {
-            $profiler->addCollector(new NarrowsparkDataCollector());
         }
 
         if (self::getConfig($container, 'collector.memory', true)) {
             $profiler->addCollector(new MemoryDataCollector());
         }
+    }
 
-        if (self::getConfig($container, 'collector.config', true) && $container->has(RepositoryContract::class)) {
-            $profiler->addCollector(new ConfigDataCollector(
-                $container->get(RepositoryContract::class)->getAll()
-            ));
-        }
-
-        if (self::getConfig($container, 'collector.viserio.view', true)) {
-            $profiler->addCollector(new ViserioViewDataCollector(
-                self::getConfig($container, 'collector.view.collect_data', true)
-            ));
+    protected static function registerCollectorsFromConfig(ContainerInterface $container, WebProfiler $profiler)
+    {
+        if (($collectors = self::getConfig($container, 'collectors', null)) !== null ) {
+            foreach ($collectors as $collector) {
+                $profiler->addCollector($container->get($collector));
+            }
         }
     }
 

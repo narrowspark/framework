@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\WebProfiler\DataCollectors;
+namespace Viserio\Foundation\DataCollectors;
 
 use Closure;
 use ReflectionFunction;
@@ -15,6 +15,7 @@ use Viserio\Contracts\Routing\Route as RouteContract;
 use Viserio\Contracts\Routing\Router as RouterContract;
 use Viserio\Contracts\WebProfiler\PanelAware as PanelAwareContract;
 use Viserio\Contracts\Config\Repository as RepositoryContract;
+use Viserio\WebProfiler\DataCollectors\AbstractDataCollector;
 
 class ViserioRequestDataCollector extends AbstractDataCollector implements TabAwareContract, TooltipAwareContract, AssetAwareContract, PanelAwareContract
 {
@@ -126,12 +127,20 @@ class ViserioRequestDataCollector extends AbstractDataCollector implements TabAw
             'value' => ''
         ];
 
-        if ($this->route !== null) {
+        if ($this->route !== null && $this->route->getName() !== null) {
             $tabInfos = array_merge(
                 $tabInfos,
                 [
                     'label' => '@',
                     'value' => $this->route->getName(),
+                ]
+            );
+        } elseif ($this->route !== null) {
+            $tabInfos = array_merge(
+                $tabInfos,
+                [
+                    'label' => '',
+                    'value' => implode(' | ', $this->route->getMethods())
                 ]
             );
         }
@@ -147,6 +156,7 @@ class ViserioRequestDataCollector extends AbstractDataCollector implements TabAw
         $routeInfos = $this->getRouteInformation($this->route);
 
         $html = $this->createTooltipGroup([
+            'Methods' => $routeInfos['methods'],
             'Uri' => $routeInfos['uri'],
             'With Middlewares' => $routeInfos['middlewares'],
             'Without Middlewares' => $routeInfos['without_middlewares'] ?? '',
@@ -174,7 +184,7 @@ class ViserioRequestDataCollector extends AbstractDataCollector implements TabAw
     public function getAssets(): array
     {
         return [
-            'css' => __DIR__ . '/../Resources/css/widgets/viserio/request.css',
+            'css' => __DIR__ . '/Resources/css/widgets/viserio/request.css',
         ];
     }
 
@@ -188,13 +198,11 @@ class ViserioRequestDataCollector extends AbstractDataCollector implements TabAw
     protected function getRouteInformation(RouteContract $route): array
     {
         $routesPath = realpath($this->config->get('path.app', ''));
-
-        $methods = $route->getMethods();
-        $uri = reset($methods) . ' ' . $route->getUri();
         $action = $route->getAction();
 
         $result = [
-           'uri' => $uri ?: '-',
+           'uri' => $route->getUri() ?: '-',
+           'methods' => implode(' | ', $route->getMethods()),
         ];
 
         $result = array_merge($result, $action);
@@ -214,7 +222,7 @@ class ViserioRequestDataCollector extends AbstractDataCollector implements TabAw
 
         if (isset($reflector)) {
             $filename = ltrim(str_replace($routesPath, '', $reflector->getFileName()), '/');
-            $result['file'] = $filename . ':' . $reflector->getStartLine() . '-' . $reflector->getEndLine();
+            $result['file'] = $filename . ': ' . $reflector->getStartLine() . ' - ' . $reflector->getEndLine();
         }
 
         if ($middleware = $this->getMiddlewares($route)) {

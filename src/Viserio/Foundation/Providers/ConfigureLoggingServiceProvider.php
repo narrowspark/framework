@@ -9,7 +9,7 @@ use Viserio\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Contracts\Log\Log as LogContract;
 use Viserio\Log\Writer;
 
-class ConfigureLoggingProvider implements ServiceProvider
+class ConfigureLoggingServiceProvider implements ServiceProvider
 {
     const PACKAGE = 'viserio.log.configured';
 

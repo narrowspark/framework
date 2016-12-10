@@ -1,11 +1,12 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\WebProfiler\DataCollectors;
+namespace Viserio\Foundation\DataCollectors;
 
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Viserio\Contracts\View\View as ViewContract;
 use Viserio\Contracts\WebProfiler\TabAware as TabAwareContract;
+use Viserio\WebProfiler\DataCollectors\AbstractDataCollector;
 
 class ViserioViewDataCollector extends AbstractDataCollector implements TabAwareContract
 {
@@ -74,10 +75,7 @@ class ViserioViewDataCollector extends AbstractDataCollector implements TabAware
      */
     public function getAssets()
     {
-        return [
-            'css' => 'widgets/templates/widget.css',
-            'js' => 'widgets/templates/widget.js',
-        ];
+        return [];
     }
 
     /**

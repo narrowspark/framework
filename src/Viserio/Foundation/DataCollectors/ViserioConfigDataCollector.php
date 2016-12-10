@@ -1,13 +1,13 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\WebProfiler\DataCollectors;
+namespace Viserio\Foundation\DataCollectors;
 
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Viserio\Contracts\WebProfiler\PanelAware as PanelAwareContract;
 use Viserio\Contracts\WebProfiler\TabAware as TabAwareContract;
 
-class ConfigDataCollector extends AbstractDataCollector implements TabAwareContract, PanelAwareContract
+class ViserioConfigDataCollector extends AbstractDataCollector implements TabAwareContract, PanelAwareContract
 {
     /**
      * Collected data.
@@ -57,7 +57,7 @@ class ConfigDataCollector extends AbstractDataCollector implements TabAwareContr
     public function getTab(): array
     {
         return [
-            'icon' => file_get_contents(__DIR__ . '/../Resources/icons/ic_settings_applications_white_24px.svg'),
+            'icon' => file_get_contents(__DIR__ . '/Resources/icons/ic_settings_applications_white_24px.svg'),
             'label' => 'Configs',
             'value' => ''
         ];

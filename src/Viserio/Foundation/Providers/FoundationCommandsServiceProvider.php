@@ -6,7 +6,7 @@ use Interop\Container\ServiceProvider;
 use Viserio\Foundation\Commands\DownCommand;
 use Viserio\Foundation\Commands\UpCommand;
 
-class FoundationCommandsProvider implements ServiceProvider
+class FoundationCommandsServiceProvider implements ServiceProvider
 {
     /**
      * {@inheritdoc}

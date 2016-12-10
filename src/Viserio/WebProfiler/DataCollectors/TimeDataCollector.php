@@ -36,7 +36,7 @@ class TimeDataCollector extends AbstractDataCollector implements TabAwareContrac
      */
     public function __construct(ServerRequestInterface $serverRequest)
     {
-        if ($requestTimeFloat = $serverRequest->getHeaderLine('REQUEST_TIME_FLOAT') !=== '') {
+        if ($requestTimeFloat = $serverRequest->getHeaderLine('REQUEST_TIME_FLOAT') !== '') {
             $time = $requestTimeFloat;
         } elseif ($requestTime = $serverRequest->getHeaderLine('REQUEST_TIME') !== '') {
             $time = $requestTime;
@@ -44,7 +44,7 @@ class TimeDataCollector extends AbstractDataCollector implements TabAwareContrac
             $time = microtime(true);
         }
 
-        $this->requestStartTime = $time * 1000;
+        $this->requestStartTime = $time;
     }
 
     /**
@@ -67,7 +67,7 @@ class TimeDataCollector extends AbstractDataCollector implements TabAwareContrac
         return [
             'icon' => file_get_contents(__DIR__ . '/../Resources/icons/ic_schedule_white_24px.svg'),
             'label' => $this->formatDuration($this->getRequestDuration()),
-            'value' => 'ms',
+            'value' => '',
         ];
     }
 
@@ -77,6 +77,14 @@ class TimeDataCollector extends AbstractDataCollector implements TabAwareContrac
     public function getName(): string
     {
         return 'time';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getTabPosition(): string
+    {
+        return 'right';
     }
 
     /**

@@ -84,9 +84,6 @@
     position: relative;
     z-index: 10002;
 }
-.webprofiler .webprofiler-header .webprofiler-tabs .webprofiler-tab:nth-of-type(2) .webprofiler-tab-menu {
-    padding-left: 0;
-}
 .webprofiler .webprofiler-header .webprofiler-tabs a.webprofiler-tab.webprofiler-tab-has-panel {
     cursor: pointer;
 }
@@ -150,7 +147,14 @@
     display: block;
     height: 36px;
     line-height: 36px;
+}
+.webprofiler .webprofiler-header .webprofiler-tabs > a.webprofiler-tab.webprofiler-tab-position-left ~ a.webprofiler-tab.webprofiler-tab-position-left .webprofiler-tab-menu,
+.webprofiler .webprofiler-header .webprofiler-tabs a.webprofiler-tab.webprofiler-tab-position-right .webprofiler-tab-menu {
     padding: 0 7px;
+}
+.webprofiler .webprofiler-header .webprofiler-tabs .webprofiler-tab-position-left.webprofiler-tab-viserio-request .webprofiler-tab-menu {
+    padding-left: 0;
+    padding-right: 7px;
 }
 .webprofiler .webprofiler-header .webprofiler-tabs a.webprofiler-tab .webprofiler-tab-menu .webprofiler-tab-icon,
 .webprofiler .webprofiler-header .webprofiler-tabs a.webprofiler-tab .webprofiler-tab-menu .webprofiler-tab-status,

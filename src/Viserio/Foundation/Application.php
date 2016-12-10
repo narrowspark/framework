@@ -13,7 +13,7 @@ use Viserio\Contracts\Parsers\Loader as LoaderContract;
 use Viserio\Contracts\Translation\TranslationManager;
 use Viserio\Events\Providers\EventsServiceProvider;
 use Viserio\Foundation\Http\Emitter;
-use Viserio\Foundation\Providers\ConfigureLoggingProvider;
+use Viserio\Foundation\Providers\ConfigureLoggingServiceProvider;
 use Viserio\Log\Providers\LoggerServiceProvider;
 use Viserio\Parsers\Providers\ParsersServiceProvider;
 use Viserio\Routing\Providers\RoutingServiceProvider;
@@ -293,7 +293,7 @@ class Application extends Container implements ApplicationContract
 
         $this->register(new EventsServiceProvider());
         $this->register(new LoggerServiceProvider());
-        $this->register(new ConfigureLoggingProvider());
+        $this->register(new ConfigureLoggingServiceProvider());
         $this->register(new RoutingServiceProvider());
     }
 
