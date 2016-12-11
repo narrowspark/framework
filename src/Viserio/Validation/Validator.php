@@ -5,12 +5,12 @@ namespace Viserio\Validation;
 use Respect\Validation\Exceptions\NestedValidationException;
 use Respect\Validation\Validator as RespectValidator;
 use RuntimeException;
-use Viserio\Contracts\Translation\Traits\TranslationAwareTrait;
+use Viserio\Contracts\Translation\Traits\TranslatorAwareTrait;
 use Viserio\Contracts\Validation\Validator as ValidatorContract;
 
 class Validator implements ValidatorContract
 {
-    use TranslationAwareTrait;
+    use TranslatorAwareTrait;
 
     /**
      * The failed validation rules.

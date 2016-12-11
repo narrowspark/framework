@@ -1,0 +1,250 @@
+<?php
+declare(strict_types=1);
+namespace Viserio\Translation\DataCollectors;
+
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use Viserio\Contracts\Translation\Traits\TranslatorAwareTrait;
+use Viserio\Contracts\Translation\Translator as TranslatorContract;
+use Viserio\Contracts\WebProfiler\AssetAware as AssetAwareContract;
+use Viserio\Contracts\WebProfiler\MenuAware as MenuAwareContract;
+use Viserio\Contracts\WebProfiler\PanelAware as PanelAwareContract;
+use Viserio\Contracts\WebProfiler\TooltipAware as TooltipAwareContract;
+use Viserio\WebProfiler\DataCollectors\AbstractDataCollector;
+
+class ViserioTranslationDataCollector extends AbstractDataCollector implements MenuAwareContract, TooltipAwareContract, PanelAwareContract, AssetAwareContract
+{
+    use TranslatorAwareTrait;
+
+    /**
+     * All collected messages.
+     *
+     * @var array
+     */
+    protected $messages;
+
+    /**
+     * [__construct description]
+     *
+     * @param \Viserio\Contracts\Translation\Translator $translator
+     */
+    public function __construct(TranslatorContract $translator)
+    {
+        $this->translator = $translator;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function collect(ServerRequestInterface $serverRequest, ResponseInterface $response)
+    {
+        $this->messages = $this->sanitizeCollectedMessages($this->translator->getCollectedMessages());
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getMenu(): array
+    {
+        $counter = $this->computeCount($this->messages);
+
+        return [
+            'icon' => file_get_contents(__DIR__ . '/Resources/icons/ic_translate_white_24px.svg'),
+            'label' => '',
+            'value' => $counter[TranslatorContract::MESSAGE_DEFINED],
+        ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getTooltip(): string
+    {
+        $counter = $this->computeCount($this->messages);
+
+        return $this->createTooltipGroup([
+            'Missing messages' => $counter[TranslatorContract::MESSAGE_MISSING],
+            'Fallback messages' => $counter[TranslatorContract::MESSAGE_EQUALS_FALLBACK],
+            'Defined messages' => $counter[TranslatorContract::MESSAGE_DEFINED],
+        ]);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getPanel(): string
+    {
+        $messages = $this->messages;
+        $counter = $this->computeCount($messages);
+        $sortedMessages = $this->getSortedMessages($messages);
+
+        $tableHeaders = [
+            'Locale',
+            'Domain',
+            'Times used',
+            'Message ID',
+            'Message Preview',
+        ];
+        $html = $this->createTabs([
+            [
+                'name' => 'Defined <span>' . $counter[TranslatorContract::MESSAGE_DEFINED] . '</span>',
+                'content' => $this->createTable(
+                    array_values($sortedMessages[TranslatorContract::MESSAGE_DEFINED]),
+                    'These messages are correctly translated into the given locale.',
+                    $tableHeaders
+                ),
+            ],
+            [
+                'name' => 'Fallback <span>' . $counter[TranslatorContract::MESSAGE_EQUALS_FALLBACK] . '</span>',
+                'content' => $this->createTable(
+                    array_values($sortedMessages[TranslatorContract::MESSAGE_EQUALS_FALLBACK]),
+                    'These messages are not available for the given locale but Symfony found them in the fallback locale catalog.',
+                    $tableHeaders
+                ),
+            ],
+            [
+                'name' => 'Missing <span>' . $counter[TranslatorContract::MESSAGE_MISSING] . '</span>',
+                'content' => $this->createTable(
+                    array_values($sortedMessages[TranslatorContract::MESSAGE_MISSING]),
+                    'These messages are not available for the given locale and cannot be found in the fallback locales. <br> Add them to the translation catalogue to avoid Narrowspark outputting untranslated contents.',
+                    $tableHeaders
+                ),
+            ],
+        ]);
+
+        return $html;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getAssets(): array
+    {
+        return [
+            'css' => __DIR__ . '/Resources/css/widgets/translation.css',
+        ];
+    }
+
+    /**
+     * [sanitizeCollectedMessages description]
+     *
+     * @param array $messages
+     *
+     * @return array
+     */
+    protected function sanitizeCollectedMessages(array $messages): array
+    {
+        $result = [];
+
+        foreach ($messages as $key => $message) {
+            $messageId = $message['locale'] . '.' . $message['domain'] . '.' . $message['id'];
+
+            if (! isset($result[$messageId])) {
+                $message['count'] = 1;
+                $message['parameters'] = ! empty($message['parameters']) ? [$message['parameters']] : [];
+                $messages[$key]['translation'] = $this->sanitizeString($message['translation']);
+                $result[$messageId] = $message;
+            } else {
+                if (! empty($message['parameters'])) {
+                    $result[$messageId]['parameters'][] = $message['parameters'];
+                }
+
+                ++$result[$messageId]['count'];
+            }
+            unset($messages[$key]);
+        }
+
+        return $result;
+    }
+
+    /**
+     * Counter for message types.
+     *
+     * @param array $messages
+     *
+     * @return array
+     */
+    protected function computeCount(array $messages): array
+    {
+        $count = [
+            TranslatorContract::MESSAGE_DEFINED => 0,
+            TranslatorContract::MESSAGE_MISSING => 0,
+            TranslatorContract::MESSAGE_EQUALS_FALLBACK => 0,
+        ];
+
+        foreach ($messages as $message) {
+            ++$count[$message['state']];
+        }
+
+        return $count;
+    }
+
+    /**
+     * [sanitizeString description]
+     *
+     * @param string $string
+     * @param int    $length
+     *
+     * @return string
+     */
+    protected function sanitizeString(string $string, int $length = 80): string
+    {
+        $string = trim(preg_replace('/\s+/', ' ', $string));
+
+        if (false !== $encoding = mb_detect_encoding($string, null, true)) {
+            if (mb_strlen($string, $encoding) > $length) {
+                return mb_substr($string, 0, $length - 3, $encoding) . '...';
+            }
+        } elseif (strlen($string) > $length) {
+            return substr($string, 0, $length - 3) . '...';
+        }
+
+        return $string;
+    }
+
+    /**
+     * [getSortedMessages description]
+     *
+     * @param array $messages
+     *
+     * @return array
+     */
+    protected function getSortedMessages(array $messages): array
+    {
+        $sortedMessages = [
+            TranslatorContract::MESSAGE_MISSING => [],
+            TranslatorContract::MESSAGE_EQUALS_FALLBACK => [],
+            TranslatorContract::MESSAGE_DEFINED => [],
+        ];
+
+        foreach ($messages as $key => $value) {
+            if ($value['state'] === TranslatorContract::MESSAGE_MISSING) {
+                $sortedMessages[TranslatorContract::MESSAGE_MISSING][$value['id']] = [
+                    $value['locale'],
+                    $value['domain'],
+                    $value['count'],
+                    $value['id'],
+                    $value['translation'],
+                ];
+            } elseif ($value['state'] === TranslatorContract::MESSAGE_EQUALS_FALLBACK) {
+                $sortedMessages[TranslatorContract::MESSAGE_EQUALS_FALLBACK][$value['id']] = [
+                    $value['locale'],
+                    $value['domain'],
+                    $value['count'],
+                    $value['id'],
+                    $value['translation'],
+                ];
+            } elseif ($value['state'] === TranslatorContract::MESSAGE_DEFINED) {
+                $sortedMessages[TranslatorContract::MESSAGE_DEFINED][$value['id']] = [
+                    $value['locale'],
+                    $value['domain'],
+                    $value['count'],
+                    $value['id'],
+                    $value['translation'],
+                ];
+            }
+        }
+
+        return $sortedMessages;
+    }
+}

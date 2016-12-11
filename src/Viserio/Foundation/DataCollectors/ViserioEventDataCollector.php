@@ -4,24 +4,16 @@ namespace Viserio\Foundation\DataCollectors;
 
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Viserio\Contracts\WebProfiler\MenuAware as MenuAwareContract;
 use Viserio\Contracts\WebProfiler\PanelAware as PanelAwareContract;
+use Viserio\WebProfiler\DataCollectors\TimeDataCollector;
 
-class ViserioEventDataCollector extends AbstractDataCollector implements MenuAwareContract, PanelAwareContract
+class ViserioEventDataCollector extends TimeDataCollector implements PanelAwareContract
 {
     /**
      * {@inheritdoc}
      */
     public function collect(ServerRequestInterface $serverRequest, ResponseInterface $response)
     {
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getName(): string
-    {
-        return 'events';
     }
 
     /**

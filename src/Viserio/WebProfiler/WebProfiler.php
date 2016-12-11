@@ -2,11 +2,11 @@
 declare(strict_types=1);
 namespace Viserio\WebProfiler;
 
-use RuntimeException;
 use Interop\Http\Factory\StreamFactoryInterface;
 use Psr\Http\Message\MessageInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use RuntimeException;
 use Viserio\Contracts\Cache\Traits\CacheItemPoolAwareTrait;
 use Viserio\Contracts\Events\Traits\EventsAwareTrait;
 use Viserio\Contracts\Log\Traits\LoggerAwareTrait;

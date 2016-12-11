@@ -147,9 +147,7 @@ class TranslationManager implements TranslationManagerContract
             throw new RuntimeException(sprintf('File [%s] cant be imported. Key for language is missing.', $file));
         }
 
-        $message = new MessageCatalogue($langFile['lang'], $langFile);
-
-        $this->addMessageCatalogue($message);
+        $this->addMessageCatalogue(new MessageCatalogue($langFile['lang'], $langFile));
 
         return $this;
     }
@@ -211,6 +209,8 @@ class TranslationManager implements TranslationManagerContract
      *
      * @param string                                          $lang
      * @param \Viserio\Contracts\Translation\MessageCatalogue $fallback
+     *
+     * @throws \RuntimeException
      *
      * @return $this
      */

@@ -175,7 +175,9 @@ abstract class AbstractDataCollector implements DataCollectorContract
         $html = '<div class="webprofiler-tabs' . ($grid !== '' ? ' row' : '') . '">';
         $checked = false;
 
-        foreach ($data as $id => $value) {
+        foreach ($data as $key => $value) {
+            $id = uniqid($key . '-');
+
             $html .= '<div class="webprofiler-tabs-tab' . $grid . '">';
             $html .= '<input type="radio" name="tabgroup" id="tab-' . $id . '"' . ($checked !== 'checked' ? $checked = 'checked' : '') . '>';
             $html .= '<label for="tab-' . $id . '">' . $value['name'] . '</label>';
@@ -189,21 +191,34 @@ abstract class AbstractDataCollector implements DataCollectorContract
         return $html;
     }
 
-    protected function createTable(array $data, string $name = null, array $header = null)
+    protected function createTable(array $data, string $name = null, array $headers = ['Key', 'Value'])
     {
         $html = $name ? '<h3>' . $name . '</h3>' : '';
 
         if (count($data) !== 0) {
             $html .= '<table><thead><tr>';
-            $html .= '<th scope="col" class="key">' . (isset($header['key']) ? $header['key'] : 'Key') . '</th>';
-            $html .= '<th scope="col">' . (isset($header['key']) ? $header['value'] : 'Value') . '</th>';
+
+            foreach ($headers as $header) {
+                $html .= '<th scope="col" class="' . $header . '">' . $header . '</th>';
+            }
+
             $html .= '</tr></thead><tbody>';
 
-            foreach ($data as $key => $value) {
-                $html .= '<tr>';
-                $html .= '<th>' . $key . '</th>';
-                $html .= '<td>' . $this->formatVar($value) . '</td>';
-                $html .= '</tr>';
+            foreach ($data as $key => $values) {
+                if (is_string($key)) {
+                    $html .= '<tr>';
+                    $html .= '<th>' . $key . '</th>';
+                    $html .= '<td>' . $this->formatVar($values) . '</td>';
+                    $html .= '</tr>';
+                } else {
+                    $html .= '<tr>';
+
+                    foreach ($values as $key => $value) {
+                        $html .= '<td>' . $this->formatVar($value) . '</td>';
+                    }
+
+                    $html .= '</tr>';
+                }
             }
 
             $html .= '</tbody></table>';

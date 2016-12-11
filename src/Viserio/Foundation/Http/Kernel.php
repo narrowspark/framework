@@ -185,14 +185,6 @@ class Kernel implements TerminableContract, KernelContract, ServerMiddlewareInte
         // stop PHP sending a Content-Type automatically
         ini_set('default_mimetype', '');
 
-        if ($this->app->has(WebProfilerContract::class)) {
-            // Modify the response to add the webprofiler
-            return $this->app->get(WebProfilerContract::class)->modifyResponse(
-                $this->app->get(ServerRequestInterface::class),
-                $response
-            );
-        }
-
         return $response;
     }
 
@@ -227,6 +219,14 @@ class Kernel implements TerminableContract, KernelContract, ServerMiddlewareInte
     {
         try {
             $response = $this->sendRequestThroughRouter($request);
+
+            if ($this->app->has(WebProfilerContract::class)) {
+                // Modify the response to add the webprofiler
+                $response = $this->app->get(WebProfilerContract::class)->modifyResponse(
+                    $this->app->get(ServerRequestInterface::class),
+                    $response
+                );
+            }
 
             $this->events->trigger(self::RESPONSE, [$request, $response]);
         } catch (Throwable $exception) {

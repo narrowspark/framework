@@ -176,6 +176,7 @@
 .webprofiler .webprofiler-body .webprofiler-panel {
     height: 100%;
     width: 100%;
+    display: none;
 }
 .webprofiler .webprofiler-body .webprofiler-panel .webprofiler-tabs {
     position: relative;
@@ -237,7 +238,6 @@
 }
 .webprofiler .webprofiler-body .webprofiler-panel table {
     background: #FFF;
-    border: 1px solid #E0E0E0;
     box-shadow: 0px 0px 1px rgba(128, 128, 128, .2);
     margin: 0;
     width: 100%;
@@ -251,8 +251,8 @@
     text-align: left;
 }
 .webprofiler .webprofiler-body .webprofiler-panel table thead th {
-    background-color: #E0E0E0;
-    color: #2B2A28;
+    background-color: #2B2A28;
+    color: #FFF;
 }
 .webprofiler .webprofiler-body .webprofiler-panel table thead th.key {
     width: 19%;

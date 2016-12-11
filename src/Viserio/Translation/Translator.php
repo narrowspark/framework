@@ -50,6 +50,13 @@ class Translator implements TranslatorContract
     private $locale;
 
     /**
+     * All collected massages.
+     *
+     * @var array
+     */
+    private $messages = [];
+
+    /**
      * Creat new Translator instance.
      *
      * @param \Viserio\Contracts\Translation\MessageCatalogue $catalogue
@@ -117,6 +124,8 @@ class Translator implements TranslatorContract
             $this->log($id, $domain);
         }
 
+        $this->collectMessage($this->locale, $domain, $id, $trans, $parameters);
+
         return $trans;
     }
 
@@ -153,6 +162,8 @@ class Translator implements TranslatorContract
             $this->log($id, $domain);
         }
 
+        $this->collectMessage($this->locale, $domain, $id, $trans, $parameters, $number);
+
         return $trans;
     }
 
@@ -174,6 +185,14 @@ class Translator implements TranslatorContract
         $this->filters[] = $filter;
 
         return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getCollectedMessages(): array
+    {
+        return $this->messages;
     }
 
     /**
@@ -272,15 +291,62 @@ class Translator implements TranslatorContract
         }
 
         if ($catalogue->has($id, $domain)) {
-            $this->logger->debug(
+            $this->getLogger()->debug(
                 'Translation use fallback catalogue.',
                 ['id' => $id, 'domain' => $domain, 'locale' => $catalogue->getLocale()]
             );
         } else {
-            $this->logger->warning(
+            $this->getLogger()->warning(
                 'Translation not found.',
                 ['id' => $id, 'domain' => $domain, 'locale' => $catalogue->getLocale()]
             );
         }
+    }
+
+    /**
+     * Collect messages about all translations.
+     *
+     * @param string|null $locale
+     * @param string|null $domain
+     * @param string      $id
+     * @param string      $translation
+     * @param array       $parameters
+     * @param int|null    $number
+     */
+    private function collectMessage($locale, $domain, string $id, string $translation, array $parameters = [], int $number = null)
+    {
+        if (null === $domain) {
+            $domain = 'messages';
+        }
+
+        $catalogue = $this->catalogue;
+
+        if ($catalogue->defines($id, $domain)) {
+            $state = self::MESSAGE_DEFINED;
+        } elseif ($catalogue->has($id, $domain)) {
+            $state = self::MESSAGE_EQUALS_FALLBACK;
+            $fallbackCatalogue = $catalogue->getFallbackCatalogue();
+
+            while ($fallbackCatalogue) {
+                if ($fallbackCatalogue->defines($id, $domain)) {
+                    $locale = $fallbackCatalogue->getLocale();
+                    break;
+                }
+
+                $fallbackCatalogue = $fallbackCatalogue->getFallbackCatalogue();
+            }
+        } else {
+            $state = self::MESSAGE_MISSING;
+        }
+
+        $this->messages[] = [
+            'locale' => $locale,
+            'domain' => $domain,
+            'id' => $id,
+            'translation' => $translation,
+            'parameters' => $parameters,
+            'transChoiceNumber' => $number,
+            'state' => $state,
+        ];
     }
 }

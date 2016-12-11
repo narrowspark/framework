@@ -5,25 +5,25 @@ namespace Viserio\Contracts\Translation\Traits;
 use RuntimeException;
 use Viserio\Contracts\Translation\Translator as TranslatorContract;
 
-trait TranslationAwareTrait
+trait TranslatorAwareTrait
 {
     /**
      * Translation instance.
      *
      * @var \Viserio\Contracts\Translation\Translator|null
      */
-    protected $translation;
+    protected $translator;
 
     /**
      * Set a translation instance.
      *
-     * @param \Viserio\Contracts\Translation\Translator $translation
+     * @param \Viserio\Contracts\Translation\Translator $translator
      *
      * @return $this
      */
-    public function setTranslator(TranslatorContract $translation)
+    public function setTranslator(TranslatorContract $translator)
     {
-        $this->translation = $translation;
+        $this->translator = $translator;
 
         return $this;
     }
@@ -37,10 +37,10 @@ trait TranslationAwareTrait
      */
     public function getTranslator(): TranslatorContract
     {
-        if (! $this->translation) {
+        if (! $this->translator) {
             throw new RuntimeException('Translator is not set up.');
         }
 
-        return $this->translation;
+        return $this->translator;
     }
 }
