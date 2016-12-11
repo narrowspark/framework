@@ -2,15 +2,14 @@
 declare(strict_types=1);
 namespace Viserio\Exception\Displayers;
 
+use Interop\Http\Factory\ResponseFactoryInterface;
+use Interop\Http\Factory\StreamFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Throwable;
 use Viserio\Contracts\Exception\Displayer as DisplayerContract;
-use Viserio\Exception\ExceptionInfo;
-use Viserio\Http\Response\HtmlResponse;
-use Interop\Http\Factory\StreamFactoryInterface;
-use Interop\Http\Factory\ResponseFactoryInterface;
 use Viserio\Contracts\HttpFactory\Traits\ResponseFactoryAwareTrait;
 use Viserio\Contracts\HttpFactory\Traits\StreamFactoryAwareTrait;
+use Viserio\Exception\ExceptionInfo;
 
 class HtmlDisplayer implements DisplayerContract
 {

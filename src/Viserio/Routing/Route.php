@@ -20,6 +20,13 @@ class Route implements RouteContract
     use MiddlewareAwareTrait;
 
     /**
+     * A server request instance.
+     *
+     * @var \Psr\Http\Message\ServerRequestInterface
+     */
+    protected $serverRequest;
+
+    /**
      * The URI pattern the route responds to.
      *
      * @var string
@@ -120,6 +127,14 @@ class Route implements RouteContract
     /**
      * {@inheritdoc}
      */
+    public function getServerRequest(): ServerRequestInterface
+    {
+        return $this->serverRequest;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getDomain()
     {
         if (isset($this->action['domain'])) {
@@ -191,7 +206,7 @@ class Route implements RouteContract
             'without_middlewares' => array_unique(array_merge(
                 $this->middlewares['without_middlewares'] ?? [],
                 is_array($withoutMiddlewares) ? $withoutMiddlewares : [$withoutMiddlewares]
-            ), SORT_REGULAR)
+            ), SORT_REGULAR),
         ];
 
         return $this->middlewares = $mergedMiddlewares;
@@ -368,6 +383,8 @@ class Route implements RouteContract
      */
     public function run(ServerRequestInterface $request): ResponseInterface
     {
+        $this->serverRequest = $request;
+
         if ($this->isControllerAction()) {
             return $this->getController()->{$this->getControllerMethod()}();
         }

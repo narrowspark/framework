@@ -2,12 +2,12 @@
 declare(strict_types=1);
 namespace Viserio\WebProfiler\DataCollectors;
 
-use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\ResponseInterface;
-use Viserio\Contracts\WebProfiler\TabAware as TabAwareContract;
+use Psr\Http\Message\ServerRequestInterface;
+use Viserio\Contracts\WebProfiler\MenuAware as MenuAwareContract;
 use Viserio\Contracts\WebProfiler\TooltipAware as TooltipAwareContract;
 
-class MemoryDataCollector extends AbstractDataCollector implements TooltipAwareContract, TabAwareContract
+class MemoryDataCollector extends AbstractDataCollector implements TooltipAwareContract, MenuAwareContract
 {
     /**
      * Collected data.
@@ -35,15 +35,7 @@ class MemoryDataCollector extends AbstractDataCollector implements TooltipAwareC
     /**
      * {@inheritdoc}
      */
-    public function getName(): string
-    {
-        return 'memory';
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getTab(): array
+    public function getMenu(): array
     {
         $memory = $this->data['memory'] / 1024 / 1024;
 

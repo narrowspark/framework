@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Contracts\Cache\Traits;
 
-use RuntimeException;
 use Psr\Cache\CacheItemPoolInterface;
+use RuntimeException;
 
 trait CacheItemPoolAwareTrait
 {

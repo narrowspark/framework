@@ -1,0 +1,15 @@
+.webprofiler .webprofiler-header .webprofiler-menus a.webprofiler-menu.webprofiler-menu-viserio-request-response-data-collector .webprofiler-menu-status {
+    color: #F5F5F5;
+    padding: 0 10px;
+    margin-right: 5px;
+}
+.webprofiler .webprofiler-header .webprofiler-menus a.webprofiler-menu.webprofiler-menu-viserio-request-response-data-collector.request-status-green .webprofiler-menu-status {
+    background-color: #4F805D;
+}
+.webprofiler .webprofiler-header .webprofiler-menus a.webprofiler-menu.webprofiler-menu-viserio-request-response-data-collector.request-status-yellow .webprofiler-menu-status {
+    background-color: #A46A1F;
+    color: #FFF;
+}
+.webprofiler .webprofiler-header .webprofiler-menus a.webprofiler-menu.webprofiler-menu-viserio-request-response-data-collector.request-status-red .webprofiler-menu-status {
+    background-color: #B0413E;
+}

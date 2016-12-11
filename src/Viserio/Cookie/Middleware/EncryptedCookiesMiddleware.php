@@ -64,7 +64,7 @@ class EncryptedCookiesMiddleware implements ServerMiddlewareInterface
     {
         $cookies = RequestCookies::fromRequest($request);
 
-        foreach ($cookies->getAll() as $cookie) {
+        foreach ($cookies->all() as $cookie) {
             $name = $cookie->getName();
 
             if ($this->isDisabled($name)) {
@@ -97,7 +97,7 @@ class EncryptedCookiesMiddleware implements ServerMiddlewareInterface
     {
         $cookies = ResponseCookies::fromResponse($response);
 
-        foreach ($cookies->getAll() as $cookie) {
+        foreach ($cookies->all() as $cookie) {
             $name = $cookie->getName();
 
             if ($this->isDisabled($name)) {

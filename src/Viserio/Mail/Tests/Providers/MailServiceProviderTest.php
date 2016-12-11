@@ -3,9 +3,9 @@ declare(strict_types=1);
 namespace Viserio\Mail\Tests\Providers;
 
 use Swift_Mailer;
-use Viserio\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Config\Providers\ConfigServiceProvider;
 use Viserio\Container\Container;
+use Viserio\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Contracts\Mail\Mailer as MailerContract;
 use Viserio\Contracts\Queue\Queue as QueueContract;
 use Viserio\Events\Providers\EventsServiceProvider;

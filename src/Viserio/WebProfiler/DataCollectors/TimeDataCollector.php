@@ -2,12 +2,12 @@
 declare(strict_types=1);
 namespace Viserio\WebProfiler\DataCollectors;
 
-use RuntimeException;
-use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\ResponseInterface;
-use Viserio\Contracts\WebProfiler\TabAware as TabAwareContract;
+use Psr\Http\Message\ServerRequestInterface;
+use RuntimeException;
+use Viserio\Contracts\WebProfiler\MenuAware as MenuAwareContract;
 
-class TimeDataCollector extends AbstractDataCollector implements TabAwareContract
+class TimeDataCollector extends AbstractDataCollector implements MenuAwareContract
 {
     /**
      * @var float
@@ -62,7 +62,7 @@ class TimeDataCollector extends AbstractDataCollector implements TabAwareContrac
     /**
      * {@inheritdoc}
      */
-    public function getTab(): array
+    public function getMenu(): array
     {
         return [
             'icon' => file_get_contents(__DIR__ . '/../Resources/icons/ic_schedule_white_24px.svg'),
@@ -74,15 +74,7 @@ class TimeDataCollector extends AbstractDataCollector implements TabAwareContrac
     /**
      * {@inheritdoc}
      */
-    public function getName(): string
-    {
-        return 'time';
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getTabPosition(): string
+    public function getMenuPosition(): string
     {
         return 'right';
     }
@@ -104,19 +96,19 @@ class TimeDataCollector extends AbstractDataCollector implements TabAwareContrac
     /**
      * Starts a measure.
      *
-     * @param string $name Internal name, used to stop the measure
-     * @param string|null $label Public name
+     * @param string      $name      Internal name, used to stop the measure
+     * @param string|null $label     Public name
      * @param string|null $collector The source of the collector
      */
     public function startMeasure(string $name, string $label = null, string $collector = null)
     {
         $start = microtime(true);
 
-        $this->startedMeasures[$name] = array(
+        $this->startedMeasures[$name] = [
             'label' => $label ?: $name,
             'start' => $start,
-            'collector' => $collector
-        );
+            'collector' => $collector,
+        ];
     }
 
     /**
@@ -135,7 +127,7 @@ class TimeDataCollector extends AbstractDataCollector implements TabAwareContrac
      * Stops a measure
      *
      * @param string $name
-     * @param array $params
+     * @param array  $params
      *
      * @throws \RuntimeException
      */
@@ -143,7 +135,7 @@ class TimeDataCollector extends AbstractDataCollector implements TabAwareContrac
     {
         $end = microtime(true);
 
-        if (!$this->hasStartedMeasure($name)) {
+        if (! $this->hasStartedMeasure($name)) {
             throw new RuntimeException("Failed stopping measure '$name' because it hasn't been started");
         }
 

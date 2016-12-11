@@ -16,8 +16,8 @@ use Viserio\Exception\Handler;
 use Viserio\Exception\Providers\ExceptionServiceProvider;
 use Viserio\Exception\Transformers\CommandLineTransformer;
 use Viserio\Filesystem\Providers\FilesServiceProvider;
-use Viserio\View\Providers\ViewServiceProvider;
 use Viserio\HttpFactory\Providers\HttpFactoryServiceProvider;
+use Viserio\View\Providers\ViewServiceProvider;
 
 class ExceptionServiceProviderTest extends \PHPUnit_Framework_TestCase
 {

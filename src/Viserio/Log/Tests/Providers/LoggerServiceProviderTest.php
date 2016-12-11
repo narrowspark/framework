@@ -4,9 +4,9 @@ namespace Viserio\Log\Tests\Providers;
 
 use Monolog\Logger;
 use Psr\Log\LoggerInterface;
-use Viserio\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Config\Providers\ConfigServiceProvider;
 use Viserio\Container\Container;
+use Viserio\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Contracts\Events\Dispatcher as DispatcherContract;
 use Viserio\Contracts\Log\Log;
 use Viserio\Events\Providers\EventsServiceProvider;

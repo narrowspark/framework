@@ -2,12 +2,12 @@
 declare(strict_types=1);
 namespace Viserio\Foundation\DataCollectors;
 
-use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Contracts\WebProfiler\AssetAware as AssetAwareContract;
-use Viserio\Contracts\WebProfiler\TabAware as TabAwareContract;
+use Viserio\Contracts\WebProfiler\MenuAware as MenuAwareContract;
 
-class ViserioTranslationDataCollector extends AbstractDataCollector implements AssetAwareContract, TabAwareContract
+class ViserioTranslationDataCollector extends AbstractDataCollector implements AssetAwareContract, MenuAwareContract
 {
     /**
      * All translation for the actual page.
@@ -21,21 +21,12 @@ class ViserioTranslationDataCollector extends AbstractDataCollector implements A
      */
     public function collect(ServerRequestInterface $serverRequest, ResponseInterface $response)
     {
-
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getName(): string
-    {
-        return 'translations';
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getTab(): array
+    public function getMenu(): array
     {
         return [
             'label' => '',

@@ -1,42 +1,42 @@
 <div id="webprofiler-<?php echo $token ?>" class="webprofiler">
     <div class="webprofiler-header">
         <?php
-            if (count($tabs) !== 0) {
+            if (count($menus) !== 0) {
         ?>
-        <div class="webprofiler-tabs">
+        <div class="webprofiler-menus">
             <a class="hide-button" title="Close WebProfiler" tabindex="-1" accesskey="D"><?php echo file_get_contents(__DIR__ . '/../icons/ic_clear_white_24px.svg') ?></a>
         <?php
-                foreach ($tabs as $name => $tab) {
+                foreach ($menus as $name => $menu) {
                     $tooltip = false;
 
-                    if (isset($tab['tooltip'])) {
+                    if (isset($menu['tooltip'])) {
                         $tooltip = true;
                     }
         ?>
-            <a <?php echo (isset($panels[$name]) ? 'href="#webprofiler-panel-' . $name . '"' : ''); ?> class="webprofiler-tab webprofiler-tab-<?php echo $name ?> webprofiler-tab-position-<?php echo $tab['position']?> <?php echo (isset($panels[$name]) ? 'webprofiler-tab-has-panel' : ''); ?><?php if ($tooltip) { ?> webprofiler-tab-has-tooltip<?php } ?> <?php if (isset($tab['tab']['class'])) { echo $tab['tab']['class']; } ?>">
-                <div class="webprofiler-tab-menu">
-                    <?php if (isset($tab['tab']['icon'])) { ?>
-                    <span class="webprofiler-tab-icon">
-                        <?php echo $tab['tab']['icon'] ?>
+            <a <?php echo isset($panels[$name]) ? 'href="#webprofiler-panel-' . $name . '"' : ''; ?> class="webprofiler-menu webprofiler-menu-<?php echo $name ?> webprofiler-menu-position-<?php echo $menu['position']?><?php echo isset($panels[$name]) ? ' webprofiler-menu-has-panel' : ''; ?><?php if ($tooltip) { ?> webprofiler-menu-has-tooltip <?php } ?><?php if (isset($menu['menu']['class'])) { echo $menu['menu']['class']; } ?>">
+                <div class="webprofiler-menu-content">
+                    <?php if (isset($menu['menu']['icon'])) { ?>
+                    <span class="webprofiler-menu-icon">
+                        <?php echo $menu['menu']['icon'] ?>
                     </span>
                     <?php } ?>
-                    <?php if (isset($tab['tab']['status'])) { ?>
-                    <span class="webprofiler-tab-status">
-                        <?php echo $tab['tab']['status'] ?>
+                    <?php if (isset($menu['menu']['status'])) { ?>
+                    <span class="webprofiler-menu-status">
+                        <?php echo $menu['menu']['status'] ?>
                     </span>
                     <?php } ?>
-                    <span class="webprofiler-tab-label">
-                        <?php echo $tab['tab']['label'] ?>
+                    <span class="webprofiler-menu-label">
+                        <?php echo $menu['menu']['label'] ?>
                     </span>
-                    <span class="webprofiler-tab-value">
-                        <?php echo $tab['tab']['value'] ?>
+                    <span class="webprofiler-menu-value">
+                        <?php echo $menu['menu']['value'] ?>
                     </span>
                 </div>
                 <?php
                     if ($tooltip) {
                 ?>
-                    <div class="webprofiler-tab-tooltip">
-                        <?php echo $tab['tooltip'] ?>
+                    <div class="webprofiler-menu-tooltip">
+                        <?php echo $menu['tooltip'] ?>
                     </div>
                 <?php
                     }

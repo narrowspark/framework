@@ -15,17 +15,16 @@ use Viserio\Contracts\Foundation\Application as ApplicationContract;
 use Viserio\Contracts\Foundation\Kernel as KernelContract;
 use Viserio\Contracts\Foundation\Terminable as TerminableContract;
 use Viserio\Contracts\Routing\Router as RouterContract;
+use Viserio\Contracts\WebProfiler\WebProfiler as WebProfilerContract;
 use Viserio\Foundation\Bootstrap\DetectEnvironment;
 use Viserio\Foundation\Bootstrap\HandleExceptions;
 use Viserio\Foundation\Bootstrap\LoadConfiguration;
-use Viserio\Foundation\Bootstrap\LoadRoutes;
 use Viserio\Foundation\Bootstrap\LoadServiceProvider;
 use Viserio\Routing\Pipeline;
 use Viserio\Routing\Router;
 use Viserio\Session\Middleware\StartSessionMiddleware;
 use Viserio\StaticalProxy\StaticalProxy;
 use Viserio\View\Middleware\ShareErrorsFromSessionMiddleware;
-use Viserio\Contracts\WebProfiler\WebProfiler as WebProfilerContract;
 
 class Kernel implements TerminableContract, KernelContract, ServerMiddlewareInterface
 {
@@ -188,7 +187,10 @@ class Kernel implements TerminableContract, KernelContract, ServerMiddlewareInte
 
         if ($this->app->has(WebProfilerContract::class)) {
             // Modify the response to add the webprofiler
-            return $this->app->get(WebProfilerContract::class)->modifyResponse($serverRequest, $response);
+            return $this->app->get(WebProfilerContract::class)->modifyResponse(
+                $this->app->get(ServerRequestInterface::class),
+                $response
+            );
         }
 
         return $response;

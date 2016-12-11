@@ -21,7 +21,7 @@ class ServerRequestFactory implements ServerRequestFactoryInterface
     {
         $server = $this->normalizeServer($server);
         $requestMethod = $method ?? $server['REQUEST_METHOD'] ?? 'GET';
-        $headers = function_exists('getallheaders') ? getallheaders() : $this->getAllHeaders($server);
+        $headers = function_exists('allheaders') ? allheaders() : $this->allHeaders($server);
         $uri = $uri ?? $this->getUriFromGlobals();
 
         $serverRequest = new ServerRequest(
@@ -155,7 +155,7 @@ class ServerRequestFactory implements ServerRequestFactoryInterface
      *
      * @return array
      */
-    protected function getAllHeaders(array $server) : array
+    protected function allHeaders(array $server) : array
     {
         $headers = [];
         $content = [

@@ -3,21 +3,21 @@ declare(strict_types=1);
 namespace Viserio\Foundation\DataCollectors;
 
 use Closure;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 use ReflectionFunction;
 use ReflectionMethod;
-use Psr\Http\Message\ServerRequestInterface;
-use Psr\Http\Message\ResponseInterface;
-use Viserio\Contracts\WebProfiler\TabAware as TabAwareContract;
-use Viserio\Contracts\Session\Store as StoreContract;
-use Viserio\Contracts\WebProfiler\TooltipAware as TooltipAwareContract;
-use Viserio\Contracts\WebProfiler\AssetAware as AssetAwareContract;
+use Viserio\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Contracts\Routing\Route as RouteContract;
 use Viserio\Contracts\Routing\Router as RouterContract;
+use Viserio\Contracts\Session\Store as StoreContract;
+use Viserio\Contracts\WebProfiler\AssetAware as AssetAwareContract;
+use Viserio\Contracts\WebProfiler\MenuAware as MenuAwareContract;
 use Viserio\Contracts\WebProfiler\PanelAware as PanelAwareContract;
-use Viserio\Contracts\Config\Repository as RepositoryContract;
+use Viserio\Contracts\WebProfiler\TooltipAware as TooltipAwareContract;
 use Viserio\WebProfiler\DataCollectors\AbstractDataCollector;
 
-class ViserioRequestDataCollector extends AbstractDataCollector implements TabAwareContract, TooltipAwareContract, AssetAwareContract, PanelAwareContract
+class ViserioRequestResponseDataCollector extends AbstractDataCollector implements MenuAwareContract, TooltipAwareContract, AssetAwareContract, PanelAwareContract
 {
     /**
      * A server request instance.
@@ -55,7 +55,7 @@ class ViserioRequestDataCollector extends AbstractDataCollector implements TabAw
     protected $config;
 
     /**
-     * [__construct description]
+     * Create a new viserio request and response data collector.
      *
      * @param \Viserio\Contracts\Routing\Router    $router
      * @param \Viserio\Contracts\Config\Repository $config
@@ -63,6 +63,7 @@ class ViserioRequestDataCollector extends AbstractDataCollector implements TabAw
     public function __construct(RouterContract $router, RepositoryContract $config)
     {
         $this->route = $router->getCurrentRoute();
+        $this->serverRequest = $router->getCurrentRoute()->getServerRequest();
         $this->config = $config;
     }
 
@@ -71,7 +72,6 @@ class ViserioRequestDataCollector extends AbstractDataCollector implements TabAw
      */
     public function collect(ServerRequestInterface $serverRequest, ResponseInterface $response)
     {
-        $this->serverRequest = $serverRequest;
         $this->response = $response;
 
         $sessions = [];
@@ -88,15 +88,7 @@ class ViserioRequestDataCollector extends AbstractDataCollector implements TabAw
     /**
      * {@inheritdoc}
      */
-    public function getName(): string
-    {
-        return 'viserio-request';
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getTabPosition(): string
+    public function getMenuPosition(): string
     {
         return 'left';
     }
@@ -104,7 +96,7 @@ class ViserioRequestDataCollector extends AbstractDataCollector implements TabAw
     /**
      * {@inheritdoc}
      */
-    public function getTab(): array
+    public function getMenu(): array
     {
         $statusCode = $this->response->getStatusCode();
         $status = '';
@@ -124,7 +116,7 @@ class ViserioRequestDataCollector extends AbstractDataCollector implements TabAw
             'status' => $statusCode,
             'class' => $status,
             'label' => '',
-            'value' => ''
+            'value' => '',
         ];
 
         if ($this->route !== null && $this->route->getName() !== null) {
@@ -140,7 +132,7 @@ class ViserioRequestDataCollector extends AbstractDataCollector implements TabAw
                 $tabInfos,
                 [
                     'label' => '',
-                    'value' => implode(' | ', $this->route->getMethods())
+                    'value' => implode(' | ', $this->route->getMethods()),
                 ]
             );
         }
@@ -173,7 +165,73 @@ class ViserioRequestDataCollector extends AbstractDataCollector implements TabAw
      */
     public function getPanel(): string
     {
-        $html = '';
+        $session = $this->serverRequest->getAttribute('session');
+        $sessionMeta = [];
+
+        if ($session !== null) {
+            $sessionMeta = [
+                'firstTrace' => $session->getFirstTrace(),
+                'lastTrace' => $session->getLastTrace(),
+                'regenerationTrace' => $session->getRegenerationTrace(),
+                'requestsCount' => $session->getRequestsCount(),
+                'fingerprint' => $session->getFingerprint(),
+            ];
+        }
+
+        $html = $this->createTabs([
+            [
+                'name' => 'Request',
+                'content' => $this->createTable(
+                    $this->serverRequest->getQueryParams(),
+                    'Get Parameters'
+                ) . $this->createTable(
+                    $this->serverRequest->getParsedBody(),
+                    'Post Parameters'
+                ) . $this->createTable(
+                    $this->prepareRequestAttributes($this->serverRequest->getAttributes()),
+                    'Request Attributes'
+                ) . $this->createTable(
+                    $this->splitOnAttributeDelimiter($this->serverRequest->getHeaderLine('Cookie')),
+                    'Cookies'
+                ) . $this->createTable(
+                    $this->serverRequest->getHeaders(),
+                    'Request Headers'
+                ) . $this->createTable(
+                    $this->prepareServerParams($this->serverRequest->getServerParams()),
+                    'Server Parameters'
+                ),
+            ],
+            [
+                'name' => 'Response',
+                'content' => $this->createTable(
+                    $this->response->getHeaders(),
+                    'Response Headers',
+                    [
+                        'key' => 'Header',
+                    ]
+                ) . $this->createTable(
+                    $this->serverRequest->getHeader('Set-Cookie'),
+                    'Cookies'
+                ),
+            ],
+            [
+                'name' => 'Session',
+                'content' => $this->createTable(
+                    $sessionMeta,
+                    'Session Metadata'
+                ) . $this->createTable(
+                    $session !== null ? $session->all() : [],
+                    'Session Attributes'
+                ),
+            ],
+            [
+                'name' => 'Flashes',
+                'content' => $this->createTable(
+                    $session !== null ? $session->get('_flash') : [],
+                    'Flashes'
+                ),
+            ],
+        ]);
 
         return $html;
     }
@@ -184,7 +242,7 @@ class ViserioRequestDataCollector extends AbstractDataCollector implements TabAw
     public function getAssets(): array
     {
         return [
-            'css' => __DIR__ . '/Resources/css/widgets/viserio/request.css',
+            'css' => __DIR__ . '/Resources/css/widgets/viserio/request-response.css',
         ];
     }
 
@@ -236,7 +294,7 @@ class ViserioRequestDataCollector extends AbstractDataCollector implements TabAw
         return $result;
     }
 
-     /**
+    /**
      * Get middleware
      *
      * @param \Viserio\Contracts\Routing\Route $route
@@ -250,7 +308,7 @@ class ViserioRequestDataCollector extends AbstractDataCollector implements TabAw
         return implode(', ', $middleware);
     }
 
-     /**
+    /**
      * Get without middleware
      *
      * @param \Viserio\Contracts\Routing\Route $route
@@ -262,5 +320,69 @@ class ViserioRequestDataCollector extends AbstractDataCollector implements TabAw
         $middleware = array_keys($route->gatherMiddleware()['without_middlewares']);
 
         return implode(', ', $middleware);
+    }
+
+    /**
+     * spplit string on attributes delimiter to array.
+     *
+     * @param string $string
+     *
+     * @return array
+     */
+    protected function splitOnAttributeDelimiter(string $string): array
+    {
+        return array_filter(preg_split('@\s*[;]\s*@', $string));
+    }
+
+    /**
+     * [prepareRequestAttributes description]
+     *
+     * @param array $attributes
+     *
+     * @return array
+     */
+    protected function prepareRequestAttributes(array $attributes): array
+    {
+        $preparedAttributes = [];
+
+        foreach ($attributes as $key => $value) {
+            if ($key === '_route') {
+                if (is_object($value)) {
+                    $value = [
+                        'Uri' => $value->getUri(),
+                        'Parameters' => $value->getParameters(),
+                    ];
+                }
+
+                $preparedAttributes[$key] = $value;
+            } else {
+                $preparedAttributes[$key] = $value;
+            }
+        }
+
+        return $preparedAttributes;
+    }
+
+    /**
+     * Prepare server parameter.
+     * Hide all keys with a _KEY|_PASSWORD|_PW|_SECRET in it.
+     *
+     * @param array $params
+     *
+     * @return array
+     */
+    protected function prepareServerParams(array $params): array
+    {
+        $preparedParams = [];
+
+        foreach ($params as $key => $value) {
+            if (preg_match('/(_KEY|_PASSWORD|_PW|_SECRET)/s', $key)) {
+                $preparedParams[$key] = '******';
+            } else {
+                $preparedParams[$key] = $value;
+            }
+        }
+
+        return $preparedParams;
     }
 }

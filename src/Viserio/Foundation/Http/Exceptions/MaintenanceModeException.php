@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Foundation\Http\Exceptions;
 
-use Throwable;
 use Narrowspark\HttpStatus\Exception\ServiceUnavailableException;
+use Throwable;
 
 class MaintenanceModeException extends ServiceUnavailableException
 {

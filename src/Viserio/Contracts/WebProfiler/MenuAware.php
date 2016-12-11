@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Contracts\WebProfiler;
 
-interface TabAware
+interface MenuAware
 {
     /**
      * Returns infos for a tab.
@@ -12,7 +12,7 @@ interface TabAware
      *
      * @return array
      */
-    public function getTab(): array;
+    public function getMenu(): array;
 
     /**
      * Get the Tab postion from a collector.
@@ -20,5 +20,5 @@ interface TabAware
      *
      * @return string
      */
-    public function getTabPosition(): string;
+    public function getMenuPosition(): string;
 }

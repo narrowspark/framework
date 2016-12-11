@@ -8,6 +8,13 @@ use Psr\Http\Message\ServerRequestInterface;
 interface Route
 {
     /**
+     * Get the route server request.
+     *
+     * @return \Psr\Http\Message\ServerRequestInterface
+     */
+    public function getServerRequest(): ServerRequestInterface;
+
+    /**
      * Get the domain defined for the route.
      *
      * @return string|null

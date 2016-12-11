@@ -4,7 +4,6 @@ namespace Viserio\Routing;
 
 use Closure;
 use Narrowspark\Arr\Arr;
-use Narrowspark\HttpStatus\Exception\InternalServerErrorException;
 use Narrowspark\HttpStatus\Exception\MethodNotAllowedException;
 use Narrowspark\HttpStatus\Exception\NotFoundException;
 use Psr\Http\Message\ResponseInterface;
@@ -286,7 +285,7 @@ abstract class AbstractRouteDispatcher
         return (new SortedMiddleware(
             $this->middlewarePriority,
             array_values(Arr::flatten($middlewares))
-        ))->getAll();
+        ))->all();
     }
 
     /**

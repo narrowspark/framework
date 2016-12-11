@@ -4,9 +4,9 @@ namespace Viserio\Config;
 
 use ArrayIterator;
 use IteratorAggregate;
-use Viserio\Contracts\Parsers\Traits\LoaderAwareTrait;
 use Narrowspark\Arr\Arr;
 use Viserio\Contracts\Config\Repository as RepositoryContract;
+use Viserio\Contracts\Parsers\Traits\LoaderAwareTrait;
 
 class Repository implements RepositoryContract, IteratorAggregate
 {
@@ -102,7 +102,7 @@ class Repository implements RepositoryContract, IteratorAggregate
     /**
      * {@inheritdoc}
      */
-    public function getAll(): array
+    public function all(): array
     {
         return $this->data;
     }
@@ -110,7 +110,7 @@ class Repository implements RepositoryContract, IteratorAggregate
     /**
      * {@inheritdoc}
      */
-    public function getAllFlat(): array
+    public function allFlat(): array
     {
         return Arr::flatten($this->data, '.');
     }
@@ -183,6 +183,6 @@ class Repository implements RepositoryContract, IteratorAggregate
      */
     public function getIterator(): ArrayIterator
     {
-        return new ArrayIterator($this->getAll());
+        return new ArrayIterator($this->all());
     }
 }

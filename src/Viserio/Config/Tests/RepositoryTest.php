@@ -3,9 +3,9 @@ declare(strict_types=1);
 namespace Viserio\Config\Tests;
 
 use org\bovigo\vfs\vfsStream;
+use Viserio\Config\Repository;
 use Viserio\Parsers\FileLoader;
 use Viserio\Parsers\TaggableParser;
-use Viserio\Config\Repository;
 
 class RepositoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -159,7 +159,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
             ],
         ]);
 
-        self::assertArrayHasKey('123.456.789', $repository->getAllFlat());
+        self::assertArrayHasKey('123.456.789', $repository->allFlat());
     }
 
     public function testMergeArray()
@@ -193,7 +193,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
           ],
         ]);
 
-        self::assertEquals($expected, $repository->getAll());
+        self::assertEquals($expected, $repository->all());
 
         // test 2 - merge values keyed numeric
         $original = [
@@ -232,7 +232,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
             ],
         ]);
 
-        self::assertEquals($expected, $repository->getAll());
+        self::assertEquals($expected, $repository->all());
     }
 
     public function testSetAndGet()

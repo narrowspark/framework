@@ -6,8 +6,8 @@ use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
 use League\Flysystem\Filesystem;
 use League\Flysystem\FilesystemInterface;
-use Viserio\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Contracts\Cache\Manager as CacheManagerContract;
+use Viserio\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Filesystem\Cache\CachedFactory;
 use Viserio\Filesystem\FilesystemManager;
 

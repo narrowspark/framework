@@ -44,7 +44,7 @@ class ResponseCookiesTest extends \PHPUnit_Framework_TestCase
 
         $setCookies = ResponseCookies::fromResponse($response);
 
-        foreach ($setCookies->getAll() as $name => $cookie) {
+        foreach ($setCookies->all() as $name => $cookie) {
             self::assertEquals($expectedCookies[$name], $cookie);
         }
     }
@@ -61,7 +61,7 @@ class ResponseCookiesTest extends \PHPUnit_Framework_TestCase
 
         $setCookies = ResponseCookies::fromResponse($response);
 
-        foreach ($setCookies->getAll() as $name => $cookie) {
+        foreach ($setCookies->all() as $name => $cookie) {
             self::assertEquals($expectedCookies[$name]->getName(), $cookie->getName());
             self::assertEquals($expectedCookies[$name]->getValue(), $cookie->getValue());
             self::assertEquals($expectedCookies[$name]->getDomain(), $cookie->getDomain());

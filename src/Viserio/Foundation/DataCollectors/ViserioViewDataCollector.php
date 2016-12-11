@@ -2,13 +2,13 @@
 declare(strict_types=1);
 namespace Viserio\Foundation\DataCollectors;
 
-use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Contracts\View\View as ViewContract;
-use Viserio\Contracts\WebProfiler\TabAware as TabAwareContract;
+use Viserio\Contracts\WebProfiler\MenuAware as MenuAwareContract;
 use Viserio\WebProfiler\DataCollectors\AbstractDataCollector;
 
-class ViserioViewDataCollector extends AbstractDataCollector implements TabAwareContract
+class ViserioViewDataCollector extends AbstractDataCollector implements MenuAwareContract
 {
     /**
      * Array of all templates.
@@ -39,22 +39,12 @@ class ViserioViewDataCollector extends AbstractDataCollector implements TabAware
      */
     public function collect(ServerRequestInterface $serverRequest, ResponseInterface $response)
     {
-
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getName(): string
-    {
-        return 'views';
-    }
-
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getTabPosition(): string
+    public function getMenuPosition(): string
     {
         return 'left';
     }
@@ -62,7 +52,7 @@ class ViserioViewDataCollector extends AbstractDataCollector implements TabAware
     /**
      * {@inheritdoc}
      */
-    public function getTab(): array
+    public function getMenu(): array
     {
         return [
             'label' => '',

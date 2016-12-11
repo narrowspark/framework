@@ -44,7 +44,7 @@ class VerboseFilterTest extends \PHPUnit_Framework_TestCase
         $request = $this->mock(RequestInterface::class);
         $exception = new Exception();
         $json = new JsonDisplayer(new ExceptionInfo());
-        $html = new HtmlDisplayer(new ExceptionInfo(), new ResponseFactory(), new StreamFactory(),'foo');
+        $html = new HtmlDisplayer(new ExceptionInfo(), new ResponseFactory(), new StreamFactory(), 'foo');
         $displayers = (new VerboseFilter(true))->filter([$json, $html], $request, $exception, $exception, 500);
 
         self::assertSame([$json, $html], $displayers);

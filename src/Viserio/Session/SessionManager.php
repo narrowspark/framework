@@ -24,7 +24,7 @@ class SessionManager extends AbstractManager
     /**
      * Constructor.
      *
-     * @param \Viserio\Contracts\Config\Repository       $config
+     * @param \Viserio\Contracts\Config\Repository    $config
      * @param \Viserio\Contracts\Encryption\Encrypter $encrypter
      */
     public function __construct(

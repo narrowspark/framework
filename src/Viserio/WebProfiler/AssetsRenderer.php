@@ -3,8 +3,8 @@ declare(strict_types=1);
 namespace Viserio\WebProfiler;
 
 use Viserio\Contracts\Support\Renderable as RenderableContract;
-use Viserio\Contracts\WebProfiler\WebProfiler as WebProfilerContract;
 use Viserio\Contracts\WebProfiler\AssetAware as AssetAwareContract;
+use Viserio\Contracts\WebProfiler\WebProfiler as WebProfilerContract;
 
 class AssetsRenderer implements RenderableContract
 {
@@ -15,6 +15,7 @@ class AssetsRenderer implements RenderableContract
      */
     protected $cssFiles = [
         'css/webprofiler.css',
+        'css/webprofiler-grid.css',
     ];
 
     /**

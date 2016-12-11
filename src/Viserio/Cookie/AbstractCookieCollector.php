@@ -44,7 +44,7 @@ class AbstractCookieCollector
      *
      * @return array
      */
-    public function getAll(): array
+    public function all(): array
     {
         return array_values($this->cookies);
     }

@@ -61,14 +61,14 @@ interface Repository extends ArrayAccess
      *
      * @return array
      */
-    public function getAll(): array;
+    public function all(): array;
 
     /**
      * Get all values as flattened key array.
      *
      * @return array
      */
-    public function getAllFlat(): array;
+    public function allFlat(): array;
 
     /**
      * Get all flattened array keys.

@@ -7,8 +7,8 @@ use ParseError;
 use Throwable;
 use TypeError;
 use Viserio\Contracts\Support\Renderable as RenderableContract;
+use Viserio\Contracts\WebProfiler\MenuAware as MenuAwareContract;
 use Viserio\Contracts\WebProfiler\PanelAware as PanelAwareContract;
-use Viserio\Contracts\WebProfiler\TabAware as TabAwareContract;
 use Viserio\Contracts\WebProfiler\TooltipAware as TooltipAwareContract;
 
 class TemplateManager implements RenderableContract
@@ -77,22 +77,22 @@ class TemplateManager implements RenderableContract
     public function getSortedData(): array
     {
         $data = [
-            'tabs' => [],
+            'menus' => [],
             'panels' => [],
         ];
 
         foreach ($this->collectors as $name => $collector) {
-            if ($collector instanceof TabAwareContract) {
+            if ($collector instanceof MenuAwareContract) {
                 if ($collector instanceof TooltipAwareContract) {
-                    $data['tabs'][$collector->getName()] = [
-                        'tab' => $collector->getTab(),
+                    $data['menus'][$collector->getName()] = [
+                        'menu' => $collector->getMenu(),
                         'tooltip' => $collector->getTooltip(),
-                        'position' => $collector->getTabPosition(),
+                        'position' => $collector->getMenuPosition(),
                     ];
                 } else {
-                    $data['tabs'][$collector->getName()] = [
-                        'tab' => $collector->getTab(),
-                        'position' => $collector->getTabPosition(),
+                    $data['menus'][$collector->getName()] = [
+                        'menu' => $collector->getMenu(),
+                        'position' => $collector->getMenuPosition(),
                     ];
                 }
             }

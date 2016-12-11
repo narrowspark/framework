@@ -7,16 +7,14 @@ use Interop\Container\ServiceProvider;
 use Interop\Http\Factory\StreamFactoryInterface;
 use Psr\Cache\CacheItemPoolInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Viserio\Contracts\Config\Repository as RepositoryContract;
+use Psr\Log\LoggerInterface as PsrLoggerInterface;
 use Viserio\Contracts\Routing\Router as RouterContract;
 use Viserio\Contracts\Routing\UrlGenerator as UrlGeneratorContract;
+use Viserio\Contracts\Support\Traits\ServiceProviderConfigAwareTrait;
+use Viserio\Contracts\WebProfiler\WebProfiler as WebProfilerContract;
 use Viserio\WebProfiler\DataCollectors\MemoryDataCollector;
 use Viserio\WebProfiler\DataCollectors\TimeDataCollector;
 use Viserio\WebProfiler\WebProfiler;
-use Viserio\Contracts\Support\Traits\ServiceProviderConfigAwareTrait;
-use Viserio\Foundation\Application;
-use Viserio\Contracts\WebProfiler\WebProfiler as WebProfilerContract;
-use Psr\Log\LoggerInterface as PsrLoggerInterface;
 
 class WebProfilerServiceProvider implements ServiceProvider
 {
@@ -82,7 +80,7 @@ class WebProfilerServiceProvider implements ServiceProvider
 
     protected static function registerCollectorsFromConfig(ContainerInterface $container, WebProfiler $profiler)
     {
-        if (($collectors = self::getConfig($container, 'collectors', null)) !== null ) {
+        if (($collectors = self::getConfig($container, 'collectors', null)) !== null) {
             foreach ($collectors as $collector) {
                 $profiler->addCollector($container->get($collector));
             }

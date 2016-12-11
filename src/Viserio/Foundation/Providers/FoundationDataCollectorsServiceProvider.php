@@ -4,13 +4,13 @@ namespace Viserio\Foundation\Providers;
 
 use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
-use Viserio\Foundation\DataCollectors\NarrowsparkDataCollector;
-use Viserio\Foundation\DataCollectors\ViserioRequestDataCollector;
-use Viserio\Foundation\DataCollectors\ViserioViewDataCollector;
-use Viserio\WebProfiler\DataCollectors\ViserioConfigDataCollector;
 use Viserio\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Contracts\Routing\Router as RouterContract;
 use Viserio\Contracts\Support\Traits\ServiceProviderConfigAwareTrait;
+use Viserio\Foundation\DataCollectors\NarrowsparkDataCollector;
+use Viserio\Foundation\DataCollectors\ViserioRequestResponseDataCollector;
+use Viserio\Foundation\DataCollectors\ViserioViewDataCollector;
+use Viserio\WebProfiler\DataCollectors\ViserioConfigDataCollector;
 
 class FoundationDataCollectorsServiceProvider implements ServiceProvider
 {
@@ -25,7 +25,7 @@ class FoundationDataCollectorsServiceProvider implements ServiceProvider
     {
         return [
             NarrowsparkDataCollector::class => [self::class, 'createNarrowsparkDataCollector'],
-            ViserioRequestDataCollector::class => [self::class, 'createViserioRequestDataCollector'],
+            ViserioRequestResponseDataCollector::class => [self::class, 'createViserioRequestResponseDataCollector'],
             ViserioConfigDataCollector::class => [self::class, 'createViserioConfigDataCollector'],
             ViserioViewDataCollector::class => [self::class, 'createViserioViewDataCollector'],
         ];
@@ -36,9 +36,9 @@ class FoundationDataCollectorsServiceProvider implements ServiceProvider
         return new NarrowsparkDataCollector();
     }
 
-    public static function createViserioRequestDataCollector(ContainerInterface $container): ViserioRequestDataCollector
+    public static function createViserioRequestResponseDataCollector(ContainerInterface $container): ViserioRequestResponseDataCollector
     {
-        return new ViserioRequestDataCollector(
+        return new ViserioRequestResponseDataCollector(
             $container->get(RouterContract::class),
             $container->get(RepositoryContract::class)
         );
@@ -53,12 +53,12 @@ class FoundationDataCollectorsServiceProvider implements ServiceProvider
 
     public static function createViserioConfigDataCollector(ContainerInterface $container)
     {
-        if (!$container->has(RepositoryContract::class)) {
+        if (! $container->has(RepositoryContract::class)) {
             return;
         }
 
         return new ViserioConfigDataCollector(
-            $container->get(RepositoryContract::class)->getAll()
+            $container->get(RepositoryContract::class)->all()
         );
     }
 }

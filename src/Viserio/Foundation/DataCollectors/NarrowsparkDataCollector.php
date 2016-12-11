@@ -2,14 +2,14 @@
 declare(strict_types=1);
 namespace Viserio\Foundation\DataCollectors;
 
-use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\ResponseInterface;
-use Viserio\Contracts\WebProfiler\TabAware as TabAwareContract;
+use Psr\Http\Message\ServerRequestInterface;
+use Viserio\Contracts\WebProfiler\MenuAware as MenuAwareContract;
 use Viserio\Contracts\WebProfiler\TooltipAware as TooltipAwareContract;
 use Viserio\Foundation\Application;
 use Viserio\WebProfiler\DataCollectors\AbstractDataCollector;
 
-class NarrowsparkDataCollector extends AbstractDataCollector implements TooltipAwareContract, TabAwareContract
+class NarrowsparkDataCollector extends AbstractDataCollector implements TooltipAwareContract, MenuAwareContract
 {
     /**
      * {@inheritdoc}
@@ -30,7 +30,7 @@ class NarrowsparkDataCollector extends AbstractDataCollector implements TooltipA
     /**
      * {@inheritdoc}
      */
-    public function getTabPosition(): string
+    public function getMenuPosition(): string
     {
         return 'right';
     }
@@ -38,7 +38,7 @@ class NarrowsparkDataCollector extends AbstractDataCollector implements TooltipA
     /**
      * {@inheritdoc}
      */
-    public function getTab(): array
+    public function getMenu(): array
     {
         return [
             'icon' => file_get_contents(__DIR__ . '/Resources/icons/ic_narrowspark_white_24px.svg'),
@@ -63,7 +63,7 @@ class NarrowsparkDataCollector extends AbstractDataCollector implements TooltipA
                     'class' => $debug !== 'false' ? 'status-green' : 'status-red',
                     'value' => $debug !== 'false' ? 'enabled' : 'disabled',
                 ],
-            ]
+            ],
         ]);
 
         $tooltip .= $this->createTooltipGroup([

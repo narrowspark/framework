@@ -6,8 +6,8 @@ use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
 use Psr\Cache\CacheItemPoolInterface;
 use Viserio\Cache\CacheManager;
-use Viserio\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Contracts\Cache\Manager as CacheManagerContract;
+use Viserio\Contracts\Config\Repository as RepositoryContract;
 
 class CacheServiceProvider implements ServiceProvider
 {

@@ -2,12 +2,12 @@
 declare(strict_types=1);
 namespace Viserio\Foundation\DataCollectors;
 
-use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use Viserio\Contracts\WebProfiler\MenuAware as MenuAwareContract;
 use Viserio\Contracts\WebProfiler\PanelAware as PanelAwareContract;
-use Viserio\Contracts\WebProfiler\TabAware as TabAwareContract;
 
-class ViserioConfigDataCollector extends AbstractDataCollector implements TabAwareContract, PanelAwareContract
+class ViserioConfigDataCollector extends AbstractDataCollector implements MenuAwareContract, PanelAwareContract
 {
     /**
      * Collected data.
@@ -30,7 +30,6 @@ class ViserioConfigDataCollector extends AbstractDataCollector implements TabAwa
      */
     public function collect(ServerRequestInterface $serverRequest, ResponseInterface $response)
     {
-
     }
 
     /**
@@ -54,12 +53,12 @@ class ViserioConfigDataCollector extends AbstractDataCollector implements TabAwa
     /**
      * {@inheritdoc}
      */
-    public function getTab(): array
+    public function getMenu(): array
     {
         return [
             'icon' => file_get_contents(__DIR__ . '/Resources/icons/ic_settings_applications_white_24px.svg'),
             'label' => 'Configs',
-            'value' => ''
+            'value' => '',
         ];
     }
 
@@ -83,7 +82,7 @@ class ViserioConfigDataCollector extends AbstractDataCollector implements TabAwa
         $data = [];
 
         foreach ($this->data as $key => $value) {
-            if (!is_string($value)) {
+            if (! is_string($value)) {
                 $value = $this->formatVar($value);
             }
 

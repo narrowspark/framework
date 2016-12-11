@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Contracts\HttpFactory\Traits;
 
-use RuntimeException;
 use Interop\Http\Factory\ResponseFactoryInterface;
+use RuntimeException;
 
 trait ResponseFactoryAwareTrait
 {

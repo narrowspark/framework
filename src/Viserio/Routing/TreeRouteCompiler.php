@@ -224,7 +224,7 @@ PHP;
 
         ++$code->indent;
 
-        foreach ($routeDataMap->getAllowedHttpMethods() as $method) {
+        foreach ($routeDataMap->allowedHttpMethods() as $method) {
             $code->appendLine('$allowedHttpMethods[] = ' . VarExporter::export($method) . ';');
         }
 

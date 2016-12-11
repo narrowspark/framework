@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Foundation\Bootstrap;
 
-use Viserio\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Console\Providers\ConsoleServiceProvider;
+use Viserio\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Contracts\Console\Application as ApplicationContract;
 use Viserio\Contracts\Foundation\Application;
 use Viserio\Contracts\Foundation\Bootstrap as BootstrapContract;

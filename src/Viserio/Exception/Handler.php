@@ -2,13 +2,14 @@
 declare(strict_types=1);
 namespace Viserio\Exception;
 
+use Error;
 use ErrorException;
 use Interop\Container\ContainerInterface;
+use Interop\Http\Factory\ResponseFactoryInterface;
 use Narrowspark\HttpStatus\Exception\AbstractClientErrorException;
 use Narrowspark\HttpStatus\Exception\AbstractServerErrorException;
 use Narrowspark\HttpStatus\Exception\NotFoundException;
 use Narrowspark\HttpStatus\HttpStatus;
-use Interop\Http\Factory\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\LoggerInterface;
@@ -18,8 +19,6 @@ use Symfony\Component\Debug\Exception\FatalErrorException;
 use Symfony\Component\Debug\Exception\FatalThrowableError;
 use Symfony\Component\Debug\Exception\FlattenException;
 use Throwable;
-use TypeError;
-use Error;
 use Viserio\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Contracts\Config\Traits\ConfigAwareTrait;
 use Viserio\Contracts\Container\Traits\ContainerAwareTrait;

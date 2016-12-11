@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Foundation\Bootstrap;
 
-use Viserio\Contracts\Foundation\Application;
 use Viserio\Contracts\Config\Repository as RepositoryContract;
+use Viserio\Contracts\Foundation\Application;
 use Viserio\Contracts\Foundation\Bootstrap as BootstrapContract;
 
 class LoadConfiguration extends AbstractLoadFiles implements BootstrapContract

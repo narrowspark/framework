@@ -4,6 +4,8 @@ namespace Viserio\Exception\Providers;
 
 use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
+use Interop\Http\Factory\ResponseFactoryInterface;
+use Interop\Http\Factory\StreamFactoryInterface;
 use Viserio\Contracts\Exception\Handler as HandlerContract;
 use Viserio\Contracts\Support\Traits\ServiceProviderConfigAwareTrait;
 use Viserio\Contracts\View\Factory as FactoryContract;
@@ -17,8 +19,6 @@ use Viserio\Exception\Filters\CanDisplayFilter;
 use Viserio\Exception\Filters\VerboseFilter;
 use Viserio\Exception\Handler;
 use Viserio\Exception\Transformers\CommandLineTransformer;
-use Interop\Http\Factory\StreamFactoryInterface;
-use Interop\Http\Factory\ResponseFactoryInterface;
 
 class ExceptionServiceProvider implements ServiceProvider
 {
