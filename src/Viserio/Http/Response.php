@@ -32,7 +32,7 @@ class Response extends AbstractMessage implements ResponseInterface
         int $status = 200,
         array $headers = [],
         $body = null,
-        $version = '1.1'
+        string $version = '1.1'
     ) {
         $this->statusCode = HttpStatus::filterStatusCode($status);
 
@@ -47,7 +47,7 @@ class Response extends AbstractMessage implements ResponseInterface
     /**
      * {@inheritdoc}
      */
-    public function getStatusCode()
+    public function getStatusCode(): int
     {
         return $this->statusCode;
     }
@@ -55,7 +55,7 @@ class Response extends AbstractMessage implements ResponseInterface
     /**
      * {@inheritdoc}
      */
-    public function getReasonPhrase()
+    public function getReasonPhrase(): string
     {
         if ($this->reasonPhrase == '') {
             $this->reasonPhrase = HttpStatus::getReasonPhrase($this->statusCode);
@@ -67,7 +67,7 @@ class Response extends AbstractMessage implements ResponseInterface
     /**
      * {@inheritdoc}
      */
-    public function withStatus($code, $reasonPhrase = '')
+    public function withStatus($code, $reasonPhrase = ''): ResponseInterface
     {
         $new = clone $this;
         $new->statusCode = HttpStatus::filterStatusCode($code);

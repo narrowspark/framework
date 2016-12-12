@@ -353,7 +353,7 @@ class Uri implements UriInterface
     /**
      * {@inheritdoc}
      */
-    public function getPort()
+    public function getPort(): ?int
     {
         return $this->port;
     }
@@ -391,8 +391,10 @@ class Uri implements UriInterface
      * Create a new instance from a hash of parse_url parts
      *
      * @param array $components a hash representation of the URI similar to PHP parse_url function result
+     *
+     * @return void
      */
-    private function createFromComponents(array $components)
+    private function createFromComponents(array $components): void
     {
         $queryFilter = $this->filterClass['query'];
 
@@ -463,7 +465,7 @@ class Uri implements UriInterface
      *
      * @param string|null $string
      */
-    private function isValidString($string)
+    private function isValidString($string): ?string
     {
         if (! is_string($string)) {
             throw new InvalidArgumentException(sprintf(
@@ -478,8 +480,10 @@ class Uri implements UriInterface
      * Validate uri state.
      *
      * @throws InvalidArgumentException
+     *
+     * @return void
      */
-    private function validateState()
+    private function validateState(): void
     {
         if ($this->host === '' && ($this->scheme === 'http' || $this->scheme === 'https')) {
             $this->host = self::HTTP_DEFAULT_HOST;

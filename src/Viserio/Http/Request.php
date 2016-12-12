@@ -53,7 +53,7 @@ class Request extends AbstractMessage implements RequestInterface
      */
     public function __construct(
         $uri,
-        $method = 'GET',
+        ?string $method = 'GET',
         array $headers = [],
         $body = null,
         string $version = '1.1'
@@ -75,7 +75,7 @@ class Request extends AbstractMessage implements RequestInterface
     /**
      * {@inheritdoc}
      */
-    public function getRequestTarget()
+    public function getRequestTarget(): string
     {
         if ($this->requestTarget !== null) {
             return $this->requestTarget;
@@ -97,7 +97,7 @@ class Request extends AbstractMessage implements RequestInterface
     /**
      * {@inheritdoc}
      */
-    public function withRequestTarget($requestTarget)
+    public function withRequestTarget($requestTarget): RequestInterface
     {
         if (preg_match('#\s#', $requestTarget)) {
             throw new InvalidArgumentException(
@@ -114,7 +114,7 @@ class Request extends AbstractMessage implements RequestInterface
     /**
      * {@inheritdoc}
      */
-    public function getMethod()
+    public function getMethod(): string
     {
         return $this->method;
     }
@@ -122,7 +122,7 @@ class Request extends AbstractMessage implements RequestInterface
     /**
      * {@inheritdoc}
      */
-    public function withMethod($method)
+    public function withMethod($method): RequestInterface
     {
         $method = $this->filterMethod($method);
 
@@ -135,7 +135,7 @@ class Request extends AbstractMessage implements RequestInterface
     /**
      * {@inheritdoc}
      */
-    public function getUri()
+    public function getUri(): UriInterface
     {
         return $this->uri;
     }
@@ -143,7 +143,7 @@ class Request extends AbstractMessage implements RequestInterface
     /**
      * {@inheritdoc}
      */
-    public function withUri(UriInterface $uri, $preserveHost = false)
+    public function withUri(UriInterface $uri, $preserveHost = false): RequestInterface
     {
         if ($this->uri === $uri) {
             return $this;
@@ -161,8 +161,10 @@ class Request extends AbstractMessage implements RequestInterface
 
     /**
      * Retrieve the host from the URI instance
+     *
+     * @return void
      */
-    private function updateHostFromUri()
+    private function updateHostFromUri(): void
     {
         $host = $this->uri->getHost();
 
@@ -195,7 +197,7 @@ class Request extends AbstractMessage implements RequestInterface
      *
      * @return string
      */
-    private function filterMethod($method): string
+    private function filterMethod(?string $method): string
     {
         if ($method === null) {
             return 'GET';
@@ -227,11 +229,11 @@ class Request extends AbstractMessage implements RequestInterface
      *
      * @param null|string|UriInterface $uri
      *
-     * @throws InvalidArgumentException
+     * @throws \InvalidArgumentException
      *
-     * @return UriInterface
+     * @return \Psr\Http\Message\UriInterface
      */
-    private function createUri($uri)
+    private function createUri($uri): UriInterface
     {
         if ($uri instanceof UriInterface) {
             return $uri;

@@ -67,7 +67,7 @@ class Util
      *
      * @return string
      */
-    public static function copyToString(StreamInterface $stream, $maxLen = -1): string
+    public static function copyToString(StreamInterface $stream, int $maxLen = -1): string
     {
         $buffer = '';
 

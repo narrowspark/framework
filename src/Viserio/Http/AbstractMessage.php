@@ -48,7 +48,7 @@ abstract class AbstractMessage implements MessageInterface
     /**
      * {@inheritdoc}
      */
-    public function getProtocolVersion()
+    public function getProtocolVersion(): string
     {
         return $this->protocol;
     }
@@ -56,7 +56,7 @@ abstract class AbstractMessage implements MessageInterface
     /**
      * {@inheritdoc}
      */
-    public function withProtocolVersion($version)
+    public function withProtocolVersion($version): self
     {
         $this->validateProtocolVersion($version);
 
@@ -73,7 +73,7 @@ abstract class AbstractMessage implements MessageInterface
     /**
      * {@inheritdoc}
      */
-    public function getHeaders()
+    public function getHeaders(): array
     {
         return $this->headers;
     }
@@ -81,7 +81,7 @@ abstract class AbstractMessage implements MessageInterface
     /**
      * {@inheritdoc}
      */
-    public function hasHeader($header)
+    public function hasHeader($header): bool
     {
         return isset($this->headerNames[strtolower($header)]);
     }
@@ -89,7 +89,7 @@ abstract class AbstractMessage implements MessageInterface
     /**
      * {@inheritdoc}
      */
-    public function getHeader($header)
+    public function getHeader($header): array
     {
         if (! $this->hasHeader($header)) {
             return [];
@@ -106,7 +106,7 @@ abstract class AbstractMessage implements MessageInterface
     /**
      * {@inheritdoc}
      */
-    public function getHeaderLine($name)
+    public function getHeaderLine($name): string
     {
         $value = $this->getHeader($name);
 
@@ -120,7 +120,7 @@ abstract class AbstractMessage implements MessageInterface
     /**
      * {@inheritdoc}
      */
-    public function withHeader($header, $value)
+    public function withHeader($header, $value): self
     {
         $value = $this->checkHeaderData($header, $value);
 
@@ -144,7 +144,7 @@ abstract class AbstractMessage implements MessageInterface
     /**
      * {@inheritdoc}
      */
-    public function withAddedHeader($header, $value)
+    public function withAddedHeader($header, $value): self
     {
         $value = $this->checkHeaderData($header, $value);
         $normalized = strtolower($header);
@@ -164,7 +164,7 @@ abstract class AbstractMessage implements MessageInterface
     /**
      * {@inheritdoc}
      */
-    public function withoutHeader($header)
+    public function withoutHeader($header): self
     {
         $normalized = strtolower($header);
 
@@ -183,7 +183,7 @@ abstract class AbstractMessage implements MessageInterface
     /**
      * {@inheritdoc}
      */
-    public function getBody()
+    public function getBody(): StreamInterface
     {
         if (! $this->stream) {
             $this->stream = new Stream(fopen('php://temp', 'r+'));
@@ -195,7 +195,7 @@ abstract class AbstractMessage implements MessageInterface
     /**
      * {@inheritdoc}
      */
-    public function withBody(StreamInterface $body)
+    public function withBody(StreamInterface $body): self
     {
         if ($body === $this->stream) {
             return $this;
@@ -208,6 +208,8 @@ abstract class AbstractMessage implements MessageInterface
     }
 
     /**
+     * Set validated headers.
+     *
      * @param array $headers
      */
     protected function setHeaders(array $headers)
@@ -274,7 +276,7 @@ abstract class AbstractMessage implements MessageInterface
      *
      * @param string $version
      *
-     * @throws InvalidArgumentException on invalid HTTP protocol version
+     * @throws \InvalidArgumentException on invalid HTTP protocol version
      */
     private function validateProtocolVersion(string $version)
     {
@@ -356,7 +358,11 @@ abstract class AbstractMessage implements MessageInterface
     }
 
     /**
+     * Filter array headers.
+     *
      * @param array $values
+     *
+     * @return array|bool
      */
     private function filterHeaderValue(array $values)
     {
@@ -381,7 +387,7 @@ abstract class AbstractMessage implements MessageInterface
      *
      * @see https://tools.ietf.org/html/rfc7230#section-3.2.4
      */
-    private function trimHeaderValues(array $values)
+    private function trimHeaderValues(array $values): array
     {
         return array_map(function ($value) {
             return trim($value, " \t");

@@ -241,7 +241,7 @@ trait HostValidateTrait
      *
      * @return bool
      */
-    protected function isLocalLink($ipv6): bool
+    protected function isLocalLink(string $ipv6): bool
     {
         if (! filter_var($ipv6, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6)) {
             return false;

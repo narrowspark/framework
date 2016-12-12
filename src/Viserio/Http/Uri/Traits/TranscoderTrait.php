@@ -92,7 +92,7 @@ trait TranscoderTrait
      *
      * @return string
      */
-    protected static function encodeComponent(string $subject, string $regexp)
+    protected static function encodeComponent(string $subject, string $regexp): string
     {
         $encoder = function (array $matches) {
             return rawurlencode($matches[0]);

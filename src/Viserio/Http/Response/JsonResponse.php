@@ -45,7 +45,7 @@ class JsonResponse extends Response
         $data,
         int $status = 200,
         array $headers = [],
-        $encodingOptions = self::DEFAULT_JSON_FLAGS
+        int $encodingOptions = self::DEFAULT_JSON_FLAGS
     ) {
         $body = new Stream(fopen('php://temp', 'wb+'));
         $body->write($this->jsonEncode($data, $encodingOptions));

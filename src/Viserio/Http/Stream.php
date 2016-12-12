@@ -99,7 +99,7 @@ class Stream implements StreamInterface
      *
      * @throws \InvalidArgumentException if the stream is not a stream resource
      */
-    public function __construct($stream, array $options = [])
+    public function __construct(resource $stream, array $options = [])
     {
         if (! is_resource($stream) || get_resource_type($stream) !== 'stream') {
             throw new InvalidArgumentException(
@@ -160,7 +160,7 @@ class Stream implements StreamInterface
     /**
      * {@inheritdoc}
      */
-    public function getContents()
+    public function getContents(): string
     {
         $contents = stream_get_contents($this->stream);
 
@@ -188,7 +188,7 @@ class Stream implements StreamInterface
     /**
      * {@inheritdoc}
      */
-    public function detach()
+    public function detach(): ?resource
     {
         if (! isset($this->stream)) {
             return;
@@ -207,7 +207,7 @@ class Stream implements StreamInterface
     /**
      * {@inheritdoc}
      */
-    public function getSize()
+    public function getSize(): ?int
     {
         if ($this->size !== null) {
             return $this->size;
@@ -234,7 +234,7 @@ class Stream implements StreamInterface
     /**
      * {@inheritdoc}
      */
-    public function isReadable()
+    public function isReadable(): bool
     {
         return $this->readable;
     }
@@ -242,7 +242,7 @@ class Stream implements StreamInterface
     /**
      * {@inheritdoc}
      */
-    public function isWritable()
+    public function isWritable(): bool
     {
         return $this->writable;
     }
@@ -250,7 +250,7 @@ class Stream implements StreamInterface
     /**
      * {@inheritdoc}
      */
-    public function isSeekable()
+    public function isSeekable(): bool
     {
         return $this->seekable;
     }
@@ -258,7 +258,7 @@ class Stream implements StreamInterface
     /**
      * {@inheritdoc}
      */
-    public function eof()
+    public function eof(): bool
     {
         return ! $this->stream || feof($this->stream);
     }
@@ -266,7 +266,7 @@ class Stream implements StreamInterface
     /**
      * {@inheritdoc}
      */
-    public function tell()
+    public function tell(): int
     {
         $result = ftell($this->stream);
 
@@ -303,7 +303,7 @@ class Stream implements StreamInterface
     /**
      * {@inheritdoc}
      */
-    public function read($length)
+    public function read($length): string
     {
         if (! $this->readable) {
             throw new RuntimeException('Cannot read from non-readable stream');
@@ -329,7 +329,7 @@ class Stream implements StreamInterface
     /**
      * {@inheritdoc}
      */
-    public function write($string)
+    public function write($string): int
     {
         if (! $this->writable) {
             throw new RuntimeException('Cannot write to a non-writable stream');

@@ -102,7 +102,7 @@ class WebProfiler implements WebProfilerContract
      *
      * @return \Viserio\Contracts\Routing\UrlGenerator|null
      */
-    public function getUrlGenerator()
+    public function getUrlGenerator(): ?UrlGenerator
     {
         return $this->urlGenerator;
     }
@@ -111,8 +111,10 @@ class WebProfiler implements WebProfilerContract
      * Set stream factory instance.
      *
      * @param \Interop\Http\Factory\StreamFactoryInterface $factory
+     *
+     * @return \Viserio\Contracts\WebProfiler\WebProfiler
      */
-    public function setStreamFactory(StreamFactoryInterface $factory)
+    public function setStreamFactory(StreamFactoryInterface $factory): WebProfiler
     {
         $this->streamFactory = $factory;
 
@@ -231,7 +233,7 @@ class WebProfiler implements WebProfilerContract
      *
      * @return \Viserio\WebProfiler\AssetsRenderer
      */
-    public function getAssetsRenderer(string $rootUrl = null): AssetsRenderer
+    public function getAssetsRenderer(?string $rootUrl = null): AssetsRenderer
     {
         if ($this->assetsRenderer === null) {
             $this->assetsRenderer = new AssetsRenderer($this, $rootUrl);

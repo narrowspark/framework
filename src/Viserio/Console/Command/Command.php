@@ -201,7 +201,7 @@ abstract class Command extends BaseCommand implements CompletionAwareInterface
      *
      * @return string|array
      */
-    public function argument(string $key = null)
+    public function argument(?string $key = null)
     {
         if ($key === null) {
             return $this->input->getArguments();
@@ -279,7 +279,7 @@ abstract class Command extends BaseCommand implements CompletionAwareInterface
      *
      * @return string
      */
-    public function ask(string $question, string $default = null): string
+    public function ask(string $question, ?string $default = null): string
     {
         return $this->output->ask($question, $default);
     }
@@ -307,7 +307,7 @@ abstract class Command extends BaseCommand implements CompletionAwareInterface
      *
      * @return string
      */
-    public function askWithCompletion(string $question, array $choices, string $default = null): string
+    public function askWithCompletion(string $question, array $choices, ?string $default = null): string
     {
         $question = new Question($question, $default);
 
@@ -347,9 +347,9 @@ abstract class Command extends BaseCommand implements CompletionAwareInterface
     public function choice(
         string $question,
         array $choices,
-        string $default = null,
+        ?string $default = null,
         $attempts = null,
-        bool $multiple = null
+        ?bool $multiple = null
     ): string {
         $question = new ChoiceQuestion($question, $choices, $default);
 
@@ -383,7 +383,7 @@ abstract class Command extends BaseCommand implements CompletionAwareInterface
      * @param string|null     $style          The output style of the string
      * @param null|int|string $verbosityLevel
      */
-    public function line(string $string, string $style = null, $verbosityLevel = null)
+    public function line(string $string, ?string $style = null, $verbosityLevel = null)
     {
         $styledString = $style ? "<$style>$string</$style>" : $string;
         $this->output->writeln($styledString, $this->getVerbosity($verbosityLevel));

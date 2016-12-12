@@ -44,7 +44,7 @@ class Path
      *
      * @return array
      */
-    protected function validate($data)
+    protected function validate(string $data): array
     {
         $filterSegment = function ($segment) {
             return isset($segment);

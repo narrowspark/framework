@@ -34,7 +34,7 @@ trait PortValidateTrait
      *
      * @return bool
      */
-    protected function isNonStandardPort($scheme, $port): bool
+    protected function isNonStandardPort(string $scheme, int $port): bool
     {
         return ! isset($this->allowedSchemes[$scheme]) || $this->allowedSchemes[$scheme] !== $port;
     }
@@ -48,7 +48,7 @@ trait PortValidateTrait
      *
      * @return null|int
      */
-    protected function validatePort($port)
+    protected function validatePort($port): ?int
     {
         if (is_bool($port)) {
             throw new InvalidArgumentException('The submitted port is invalid');

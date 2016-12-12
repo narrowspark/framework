@@ -106,8 +106,8 @@ class UploadedFile implements UploadedFileInterface
         $streamOrFile,
         int $size,
         int $errorStatus = \UPLOAD_ERR_OK,
-        string $clientFilename = null,
-        string $clientMediaType = null
+        ?string $clientFilename = null,
+        ?string $clientMediaType = null
     ) {
         $this->setError($errorStatus);
         $this->size = $size;
@@ -145,14 +145,20 @@ class UploadedFile implements UploadedFileInterface
 
     /**
      * {@inheritdoc}
+     *
+     * @return int|null The file size in bytes or null if unknown.
      */
-    public function getSize() : int
+    public function getSize(): ?int
     {
         return $this->size;
     }
 
     /**
      * {@inheritdoc}
+     *
+     * @see http://php.net/manual/en/features.file-upload.errors.php
+     *
+     * @return int One of PHP's UPLOAD_ERR_XXX constants.
      */
     public function getError(): int
     {
@@ -161,6 +167,9 @@ class UploadedFile implements UploadedFileInterface
 
     /**
      * {@inheritdoc}
+     *
+     * @return string|null The filename sent by the client or null if none
+     *     was provided.
      */
     public function getClientFilename(): ?string
     {
