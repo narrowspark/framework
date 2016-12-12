@@ -2,9 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\WebProfiler\DataCollectors;
 
-use Symfony\Component\VarDumper\Cloner\VarCloner;
-use Symfony\Component\VarDumper\Dumper\CliDumper;
 use Viserio\Contracts\WebProfiler\DataCollector as DataCollectorContract;
+use Viserio\WebProfiler\Util\TemplateHelper;
 use Viserio\Support\Str;
 
 abstract class AbstractDataCollector implements DataCollectorContract
@@ -86,33 +85,6 @@ abstract class AbstractDataCollector implements DataCollectorContract
         }
 
         return $max;
-    }
-
-    /**
-     * [formatVar description]
-     *
-     * @param mixed $data
-     *
-     * @return string
-     */
-    protected function formatVar($data): string
-    {
-        $output = '';
-        $dumper = new CliDumper();
-        $cloner = new VarCloner();
-
-        $dumper->dump(
-            $cloner->cloneVar($data),
-            function ($line, $depth) use (&$output) {
-                // A negative depth means "end of dump"
-                if ($depth >= 0) {
-                    // Adds a two spaces indentation to the line
-                    $output .= str_repeat('  ', $depth) . $line . "\n";
-                }
-            }
-        );
-
-        return trim($output);
     }
 
     /**
@@ -208,13 +180,13 @@ abstract class AbstractDataCollector implements DataCollectorContract
                 if (is_string($key)) {
                     $html .= '<tr>';
                     $html .= '<th>' . $key . '</th>';
-                    $html .= '<td>' . $this->formatVar($values) . '</td>';
+                    $html .= '<td>' . TemplateHelper::dump($values) . '</td>';
                     $html .= '</tr>';
                 } else {
                     $html .= '<tr>';
 
                     foreach ($values as $key => $value) {
-                        $html .= '<td>' . $this->formatVar($value) . '</td>';
+                        $html .= '<td>' . TemplateHelper::dump($value) . '</td>';
                     }
 
                     $html .= '</tr>';

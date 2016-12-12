@@ -52,7 +52,7 @@ class TemplateManager implements RenderableContract
             array_merge(
                 $this->getSortedData(),
                 [
-                    'token' => uniqid('', true),
+                    'token' => uniqid(''),
                 ]
             ),
             EXTR_PREFIX_SAME,

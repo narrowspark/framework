@@ -275,7 +275,7 @@ class ViserioRequestResponseDataCollector extends AbstractDataCollector implemen
             unset($result['uses']);
         } elseif (isset($action['uses']) && $action['uses'] instanceof Closure) {
             $reflector = new ReflectionFunction($action['uses']);
-            $result['uses'] = $this->formatVar($result['uses']);
+            $result['uses'] = $this->dump($result['uses']);
         }
 
         if (isset($reflector)) {

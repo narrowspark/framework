@@ -24,7 +24,8 @@ class AssetsRenderer implements RenderableContract
      * @var array
      */
     protected $jsFiles = [
-        'js/vue.min.js',
+        'js/zepto.min.js',
+        'js/webprofiler.js'
     ];
 
     /**

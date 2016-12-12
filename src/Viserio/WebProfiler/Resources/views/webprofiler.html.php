@@ -13,12 +13,12 @@
                         $tooltip = true;
                     }
 
-                    $href = isset($panels[$name]) ? 'href="#webprofiler-panel-' . $name . '"' : '';
+                    $href = isset($panels[$name]) ? 'data-panel-target-id="webprofiler-panel-' . $name . '"' : '';
                     $hasPanels = isset($panels[$name]) ? ' webprofiler-menu-has-panel' : '';
-                    $hasTooltip = $tooltip ? 'webprofiler-menu-has-tooltip' : '';
-                    $cssClasses = $menu['menu']['class'] ?? '';
+                    $hasTooltip = $tooltip ? ' webprofiler-menu-has-tooltip' : '';
+                    $cssClasses = isset($menu['menu']['class']) ? ' ' . $menu['menu']['class'] : '';
         ?>
-            <a <?php echo $href ?> class="webprofiler-menu webprofiler-menu-<?php echo $name ?> webprofiler-menu-position-<?php echo $menu['position']?><?php echo $hasPanels ?><?php echo $hasTooltip ?><?php $cssClasses ?>">
+            <a <?php echo $href ?> class="webprofiler-menu webprofiler-menu-<?php echo $name ?> webprofiler-menu-position-<?php echo $menu['position']; echo $hasPanels; echo $hasTooltip; echo $cssClasses ?>">
                 <div class="webprofiler-menu-content">
                     <?php if (isset($menu['menu']['icon'])) { ?>
                     <span class="webprofiler-menu-icon">
