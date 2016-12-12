@@ -12,13 +12,11 @@ services:
 
 matrix:
   include:
-    - php: 7.0
+    - php: 7.1
       env: SETUP=basic CHECK_CS=true SEND_COVERAGE=true
-    - php: 7.0
+    - php: 7.1
       env: SETUP=basic PHPSTAN=true
-    - php: 7.0
-      env: SETUP=stable
-    - php: 7.0
+    - php: 7.1
       env: SETUP=lowest
     - php: 7.1
       env: SETUP=basic
@@ -26,7 +24,7 @@ matrix:
       env: SETUP=stable
   allow_failures:
     - env: SETUP=lowest
-      php: 7.0
+      php: 7.1
     # - env: SETUP=basic HUMBUG=true
     #   php: 7.0
   fast_finish: true

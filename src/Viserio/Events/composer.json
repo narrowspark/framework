@@ -18,7 +18,7 @@
         }
     ],
     "require": {
-        "php"                                                : "7.0.0 - 7.0.5 || ^7.0.7",
+        "php"                                                : "^7.1",
         "container-interop/container-interop"                : "^1.1",
         "danielstjules/stringy"                              : "^2.3",
         "php-di/invoker"                                     : "^1.3",

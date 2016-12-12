@@ -1,5 +1,7 @@
 # Viserio Http package
 
+> **Note:** A lot of this code was adopted from [Guzzle's PSR-7](https://github.com/guzzle/psr7) library, with strict type enforcement.
+
 This package is part of the [Narrowspark framework](http://github.com/narrowspark/framework).
 
 [![Author](http://img.shields.io/badge/author-@anolilab-blue.svg?style=flat-square)](https://twitter.com/anolilab)
