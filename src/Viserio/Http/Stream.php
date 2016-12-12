@@ -188,7 +188,7 @@ class Stream implements StreamInterface
     /**
      * {@inheritdoc}
      */
-    public function detach(): ?resource
+    public function detach()
     {
         if (! isset($this->stream)) {
             return null;

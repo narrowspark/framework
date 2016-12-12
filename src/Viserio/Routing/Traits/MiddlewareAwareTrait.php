@@ -68,8 +68,13 @@ trait MiddlewareAwareTrait
      */
     private function checkMiddlewareClass(string $middleware)
     {
-        if (in_array(ServerMiddlewareInterface::class, class_implements($middleware))) {
-            throw new LogicException(sprintf('\Interop\Http\Middleware\ServerMiddlewareInterface is not implemented in [%s]', $middleware));
+        if (!in_array(ServerMiddlewareInterface::class, class_implements($middleware))) {
+            throw new LogicException(
+                sprintf(
+                    '\Interop\Http\Middleware\ServerMiddlewareInterface is not implemented in [%s]',
+                    $middleware
+                )
+            );
         }
     }
 }

@@ -126,7 +126,7 @@ class DatabaseServiceProviderTest extends \PHPUnit_Framework_TestCase
         self::assertInstanceOf(Collection::class, $collection);
         self::assertSame([0 => 'narrowspark'], $collection->all());
 
-        $collection = $conn->fetchgetAll($sql);
+        $collection = $conn->fetchAll($sql);
 
         self::assertInstanceOf(Collection::class, $collection);
         self::assertSame(['name' => 'narrowspark'], $collection->all());
@@ -139,7 +139,7 @@ class DatabaseServiceProviderTest extends \PHPUnit_Framework_TestCase
         $stmt = $conn->prepare($sql);
         $stmt->execute();
 
-        $collection = $stmt->fetchgetAll();
+        $collection = $stmt->fetchAll();
 
         self::assertInstanceOf(Collection::class, $collection);
         self::assertSame(['name' => 'narrowspark'], $collection->all());

@@ -7,11 +7,28 @@ use Viserio\HttpFactory\UploadedFileFactory;
 
 class UploadedFileFactoryTest extends \PHPUnit_Framework_TestCase
 {
+    private $fname;
+
     private $factory;
 
-    public function setUp()
+    public function setup()
     {
+        mkdir(__DIR__ . '/tmp');
+
         $this->factory = new UploadedFileFactory();
+
+        $this->fname = tempnam(__DIR__ . '/tmp', 'tfile');
+    }
+
+    public function tearDown()
+    {
+        if (file_exists($this->fname)) {
+            unlink($this->fname);
+        }
+
+        rmdir(__DIR__ . '/tmp');
+
+        parent::tearDown();
     }
 
     public function testCreateUploadedFileWithString()
@@ -31,13 +48,15 @@ class UploadedFileFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testCreateUploadedFileWithClientFilenameAndMediaType()
     {
-        $tmpfname = tempnam('/tmp', 'foo');
+        $tmpfname = $this->fname;
         $upload = fopen($tmpfname, 'w+');
         $content = 'this is your capitan speaking';
         $error = \UPLOAD_ERR_OK;
         $clientFilename = 'test.txt';
         $clientMediaType = 'text/plain';
+
         fwrite($upload, $content);
+
         $file = $this->factory->createUploadedFile(
             $tmpfname,
             strlen($content),

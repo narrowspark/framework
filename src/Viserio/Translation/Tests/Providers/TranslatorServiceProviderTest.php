@@ -28,7 +28,9 @@ declare(strict_types=1);
 
 return [
     "lang" => "en",
-    "Hallo" => "hallo",
+    "message" => [
+        "Hallo" => "hallo",
+    ]
 ];
             '
         )->at($this->root);
@@ -43,7 +45,7 @@ return [
 
         $container->get('config')->set('translation', [
             'locale' => 'en',
-            'lang_path' => $this->file->url(),
+            'files' => $this->file->url(),
         ]);
 
         self::assertInstanceOf(TranslationManager::class, $container->get(TranslationManager::class));
@@ -59,7 +61,7 @@ return [
 
         $container->instance('options', [
             'locale' => 'en',
-            'lang_path' => $this->file->url(),
+            'files' => $this->file->url(),
         ]);
 
         self::assertInstanceOf(TranslationManager::class, $container->get(TranslationManager::class));
@@ -73,7 +75,7 @@ return [
 
         $container->instance('viserio.translation.options', [
             'locale' => 'en',
-            'lang_path' => $this->file->url(),
+            'files' => $this->file->url(),
         ]);
 
         self::assertInstanceOf(TranslationManager::class, $container->get(TranslationManager::class));

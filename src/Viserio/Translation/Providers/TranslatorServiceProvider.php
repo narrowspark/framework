@@ -56,7 +56,7 @@ class TranslatorServiceProvider implements ServiceProvider
         }
 
         if (($imports = self::getConfig($container, 'files')) !== null) {
-            foreach ($imports as $import) {
+            foreach ((array) $imports as $import) {
                 $manager->import($import);
             }
         }

@@ -437,7 +437,7 @@ class Route implements RouteContract
                 ));
             }
 
-            $action['uses'] = $action . '::__invoke';
+            $action['uses'] = $action . '@__invoke';
         }
 
         return $action;

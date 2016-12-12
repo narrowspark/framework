@@ -10,11 +10,9 @@ class LazyOpenStreamTest extends \PHPUnit_Framework_TestCase
 
     public function setup()
     {
-        $this->fname = tempnam('/tmp', 'tfile');
+        mkdir(__DIR__ . '/tmp');
 
-        if (file_exists($this->fname)) {
-            unlink($this->fname);
-        }
+        $this->fname = tempnam(__DIR__ . '/tmp', 'tfile');
     }
 
     public function tearDown()
@@ -22,6 +20,8 @@ class LazyOpenStreamTest extends \PHPUnit_Framework_TestCase
         if (file_exists($this->fname)) {
             unlink($this->fname);
         }
+
+        rmdir(__DIR__ . '/tmp');
 
         parent::tearDown();
     }

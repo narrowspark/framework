@@ -53,6 +53,10 @@ class MailerTest extends \PHPUnit_Framework_TestCase
         $message->shouldReceive('to')
             ->once()
             ->with('foo@bar.baz', null, true);
+        $message->shouldReceive('cc')
+            ->once();
+        $message->shouldReceive('bcc')
+            ->once();
 
         $this->setSwiftMailer($mailer);
 

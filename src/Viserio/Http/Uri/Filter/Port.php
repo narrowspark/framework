@@ -14,12 +14,12 @@ class Port
      * @param string $scheme
      * @param mixed  $port
      *
-     * @return bool
+     * @return null|int
      */
-    public function filter(string $scheme, $port = null): bool
+    public function filter(string $scheme, $port = null): ?int
     {
         $port = $this->validatePort($port);
 
-        return $this->isNonStandardPort($scheme, $port) ? $port : false;
+        return $this->isNonStandardPort($scheme, $port) ? $port : null;
     }
 }

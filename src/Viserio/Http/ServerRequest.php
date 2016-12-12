@@ -116,7 +116,7 @@ class ServerRequest extends Request implements ServerRequestInterface
     /**
      * {@inheritdoc}
      */
-    public function getAttributes(): array
+    public function getAttributes(): ?array
     {
         return $this->attributes;
     }
@@ -170,7 +170,7 @@ class ServerRequest extends Request implements ServerRequestInterface
     /**
      * {@inheritdoc}
      */
-    public function getAttribute($attribute, $default = null): array
+    public function getAttribute($attribute, $default = null)
     {
         if (! array_key_exists($attribute, $this->attributes)) {
             return $default;

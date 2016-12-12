@@ -11,15 +11,15 @@ class RouteTest extends \PHPUnit_Framework_TestCase
 {
     public function testGetMethods()
     {
-        $route = new Route('GET', '/test', ['uses' => Controller::class . '::string']);
+        $route = new Route('GET', '/test', ['uses' => Controller::class . '@string']);
 
         self::assertSame(['GET', 'HEAD'], $route->getMethods());
 
-        $route = new Route('PUT', '/test', ['uses' => Controller::class . '::string']);
+        $route = new Route('PUT', '/test', ['uses' => Controller::class . '@string']);
 
         self::assertSame(['PUT'], $route->getMethods());
 
-        $route = new Route(['GET', 'POST'], '/test', ['uses' => Controller::class . '::string']);
+        $route = new Route(['GET', 'POST'], '/test', ['uses' => Controller::class . '@string']);
 
         self::assertSame(['GET', 'POST', 'HEAD'], $route->getMethods());
     }
