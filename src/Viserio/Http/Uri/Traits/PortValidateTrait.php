@@ -29,12 +29,12 @@ trait PortValidateTrait
     /**
      * Is a given port non-standard for the current scheme?
      *
-     * @param string $scheme
-     * @param int    $port
+     * @param string   $scheme
+     * @param int|null $port
      *
      * @return bool
      */
-    protected function isNonStandardPort(string $scheme, int $port): bool
+    protected function isNonStandardPort(string $scheme, ?int $port): bool
     {
         return ! isset($this->allowedSchemes[$scheme]) || $this->allowedSchemes[$scheme] !== $port;
     }

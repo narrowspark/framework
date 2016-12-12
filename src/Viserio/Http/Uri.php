@@ -465,7 +465,7 @@ class Uri implements UriInterface
      *
      * @param string|null $string
      */
-    private function isValidString($string): ?string
+    private function isValidString($string): void
     {
         if (! is_string($string)) {
             throw new InvalidArgumentException(sprintf(

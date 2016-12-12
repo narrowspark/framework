@@ -20,6 +20,6 @@ class Port
     {
         $port = $this->validatePort($port);
 
-        return $this->isNonStandardPort($scheme, $port) ? $port : null;
+        return $this->isNonStandardPort($scheme, $port) ? $port : false;
     }
 }
