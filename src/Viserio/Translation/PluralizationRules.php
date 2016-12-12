@@ -54,7 +54,7 @@ class PluralizationRules implements PluralizationRulesContract
                 return (new Zero())->category(0);
             }
 
-            return $return null;
+            return $return;
         }
 
         return $this->createRules($language)->category($count);
