@@ -99,7 +99,7 @@ class Stream implements StreamInterface
      *
      * @throws \InvalidArgumentException if the stream is not a stream resource
      */
-    public function __construct(resource $stream, array $options = [])
+    public function __construct($stream, array $options = [])
     {
         if (! is_resource($stream) || get_resource_type($stream) !== 'stream') {
             throw new InvalidArgumentException(
