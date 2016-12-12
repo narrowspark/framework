@@ -124,17 +124,17 @@ class DatabaseServiceProviderTest extends \PHPUnit_Framework_TestCase
         $collection = $conn->fetchArray($sql);
 
         self::assertInstanceOf(Collection::class, $collection);
-        self::assertSame([0 => 'narrowspark'], $collection->getAll());
+        self::assertSame([0 => 'narrowspark'], $collection->all());
 
         $collection = $conn->fetchgetAll($sql);
 
         self::assertInstanceOf(Collection::class, $collection);
-        self::assertSame(['name' => 'narrowspark'], $collection->getAll());
+        self::assertSame(['name' => 'narrowspark'], $collection->all());
 
         $collection = $conn->fetchAssoc($sql);
 
         self::assertInstanceOf(Collection::class, $collection);
-        self::assertSame(['name' => 'narrowspark'], $collection->getAll());
+        self::assertSame(['name' => 'narrowspark'], $collection->all());
 
         $stmt = $conn->prepare($sql);
         $stmt->execute();
@@ -142,13 +142,13 @@ class DatabaseServiceProviderTest extends \PHPUnit_Framework_TestCase
         $collection = $stmt->fetchgetAll();
 
         self::assertInstanceOf(Collection::class, $collection);
-        self::assertSame(['name' => 'narrowspark'], $collection->getAll());
+        self::assertSame(['name' => 'narrowspark'], $collection->all());
 
         $stmt = $conn->query($sql);
         $collection = $stmt->fetch();
 
         self::assertInstanceOf(Collection::class, $collection);
-        self::assertSame(['name' => 'narrowspark'], $collection->getAll());
+        self::assertSame(['name' => 'narrowspark'], $collection->all());
 
         $stmt = $conn->query('SELECT name FROM text WHERE id = 2');
 
