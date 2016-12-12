@@ -191,7 +191,7 @@ class Stream implements StreamInterface
     public function detach(): ?resource
     {
         if (! isset($this->stream)) {
-            return;
+            return null;
         }
 
         $result = $this->stream;
@@ -214,7 +214,7 @@ class Stream implements StreamInterface
         }
 
         if (! isset($this->stream)) {
-            return;
+            return null;
         }
 
         // Clear the stat cache if the stream has a URI

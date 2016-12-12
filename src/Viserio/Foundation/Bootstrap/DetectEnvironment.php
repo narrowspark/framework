@@ -36,7 +36,7 @@ class DetectEnvironment implements BootstrapContract
     protected function checkForSpecificEnvironmentFile(Application $app)
     {
         if (! getenv('APP_ENV')) {
-            return;
+            return null;
         }
 
         $file = $app->environmentFile() . '.' . getenv('APP_ENV');
