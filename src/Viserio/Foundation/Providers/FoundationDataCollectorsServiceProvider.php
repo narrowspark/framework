@@ -58,7 +58,7 @@ class FoundationDataCollectorsServiceProvider implements ServiceProvider
         }
 
         return new ViserioConfigDataCollector(
-            $container->get(RepositoryContract::class)->all()
+            $container->get(RepositoryContract::class)->getAll()
         );
     }
 }

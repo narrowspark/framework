@@ -34,13 +34,13 @@ class RoutingSortedMiddlewareTest extends \PHPUnit_Framework_TestCase
             'Third',
         ];
 
-        $this->assertEquals($expected, (new SortedMiddleware($priority, $middleware))->all());
-        $this->assertEquals([], (new SortedMiddleware(['First'], []))->all());
-        $this->assertEquals(['First'], (new SortedMiddleware(['First'], ['First']))->all());
-        $this->assertEquals(['First', 'Second'], (new SortedMiddleware(['First', 'Second'], ['Second', 'First']))->all());
+        $this->assertEquals($expected, (new SortedMiddleware($priority, $middleware))->getAll());
+        $this->assertEquals([], (new SortedMiddleware(['First'], []))->getAll());
+        $this->assertEquals(['First'], (new SortedMiddleware(['First'], ['First']))->getAll());
+        $this->assertEquals(['First', 'Second'], (new SortedMiddleware(['First', 'Second'], ['Second', 'First']))->getAll());
 
         $closure = function () {
         };
-        $this->assertEquals(['Second', $closure], (new SortedMiddleware(['First', 'Second'], ['Second', $closure]))->all());
+        $this->assertEquals(['Second', $closure], (new SortedMiddleware(['First', 'Second'], ['Second', $closure]))->getAll());
     }
 }

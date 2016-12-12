@@ -102,7 +102,7 @@ class Repository implements RepositoryContract, IteratorAggregate
     /**
      * {@inheritdoc}
      */
-    public function all(): array
+    public function getAll(): array
     {
         return $this->data;
     }
@@ -183,6 +183,6 @@ class Repository implements RepositoryContract, IteratorAggregate
      */
     public function getIterator(): ArrayIterator
     {
-        return new ArrayIterator($this->all());
+        return new ArrayIterator($this->getAll());
     }
 }

@@ -135,7 +135,7 @@ interface Store extends JsonSerializable
      *
      * @return array Attributes
      */
-    public function all(): array;
+    public function getAll(): array;
 
     /**
      * Clears all attributes.

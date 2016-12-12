@@ -72,7 +72,7 @@ class MessageCatalogue implements MessageCatalogueContract
     /**
      * {@inheritdoc}
      */
-    public function all(string $domain = null): array
+    public function getAll(string $domain = null): array
     {
         if ($domain === null) {
             return $this->messages;
@@ -171,7 +171,7 @@ class MessageCatalogue implements MessageCatalogueContract
             ));
         }
 
-        foreach ($catalogue->all() as $domain => $messages) {
+        foreach ($catalogue->getAll() as $domain => $messages) {
             $this->add($messages, $domain);
         }
     }

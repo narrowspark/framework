@@ -141,14 +141,14 @@ class StoreTest extends \PHPUnit_Framework_TestCase
 
         $oldId = $session->getId();
 
-        self::assertGreaterThan(0, count($session->all()));
+        self::assertGreaterThan(0, count($session->getAll()));
 
         $session->getHandler()->shouldReceive('destroy')->once()->with($oldId);
 
         self::assertTrue($session->invalidate());
         self::assertFalse($session->has('foo'));
         self::assertNotEquals($oldId, $session->getId());
-        self::assertCount(0, $session->all());
+        self::assertCount(0, $session->getAll());
     }
 
     public function testCanGetRequestsCount()
@@ -172,7 +172,7 @@ class StoreTest extends \PHPUnit_Framework_TestCase
         // generates new token
         $session->start();
 
-        self::assertEquals(1, count($session->all()));
+        self::assertEquals(1, count($session->getAll()));
     }
 
     public function testStartMethodResetsLastTraceAndFirstTrace()

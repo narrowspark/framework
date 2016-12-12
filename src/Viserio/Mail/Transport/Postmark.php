@@ -253,7 +253,7 @@ class Postmark extends AbstractTransport
     {
         $headers = [];
 
-        foreach ($message->getHeaders()->all() as $key => $value) {
+        foreach ($message->getHeaders()->getAll() as $key => $value) {
             $fieldName = $value->getFieldName();
             $excludedHeaders = ['Subject', 'Content-Type', 'MIME-Version', 'Date'];
 

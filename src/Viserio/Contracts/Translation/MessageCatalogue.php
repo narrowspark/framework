@@ -27,7 +27,7 @@ interface MessageCatalogue
      *
      * @return array An array of messages
      */
-    public function all(string $domain = null): array;
+    public function getAll(string $domain = null): array;
 
     /**
      * Sets a message translation.

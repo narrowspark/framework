@@ -27,7 +27,7 @@ class SortedMiddleware
      *
      * @return array
      */
-    public function all(): array
+    public function getAll(): array
     {
         return $this->middlewares;
     }

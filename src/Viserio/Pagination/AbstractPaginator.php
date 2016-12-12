@@ -252,7 +252,7 @@ abstract class AbstractPaginator implements
      */
     public function getIterator()
     {
-        return new ArrayIterator($this->items->all());
+        return new ArrayIterator($this->items->getAll());
     }
 
     /**
@@ -280,7 +280,7 @@ abstract class AbstractPaginator implements
      */
     public function getItems(): array
     {
-        return $this->items->all();
+        return $this->items->getAll();
     }
 
     /**

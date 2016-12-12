@@ -60,7 +60,7 @@ class RequestCookiesTest extends \PHPUnit_Framework_TestCase
 
         $cookies = RequestCookies::fromRequest($request);
 
-        foreach ($cookies->all() as $name => $cookie) {
+        foreach ($cookies->getAll() as $name => $cookie) {
             self::assertEquals($expectedCookies[$name]->getName(), $cookie->getName());
             self::assertEquals($expectedCookies[$name]->getValue(), $cookie->getValue());
         }

@@ -298,7 +298,7 @@ class Store implements StoreContract
     /**
      * {@inheritdoc}
      */
-    public function all(): array
+    public function getAll(): array
     {
         return $this->values;
     }

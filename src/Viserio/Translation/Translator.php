@@ -33,28 +33,28 @@ class Translator implements TranslatorContract
      *
      * @var array
      */
-    private $filters = [];
+    protected $filters = [];
 
     /**
      * All registred helpers.
      *
      * @var array
      */
-    private $helpers = [];
+    protected $helpers = [];
 
     /**
      * Default language to translate into. (e.g. 'en').
      *
      * @var string
      */
-    private $locale;
+    protected $locale;
 
     /**
      * All collected massages.
      *
      * @var array
      */
-    private $messages = [];
+    protected $messages = [];
 
     /**
      * Creat new Translator instance.
@@ -202,7 +202,7 @@ class Translator implements TranslatorContract
      *
      * @return mixed
      */
-    private function applyHelpers(string $translation)
+    protected function applyHelpers(string $translation)
     {
         $helpers = $this->filterHelpersFromString($translation);
 
@@ -230,7 +230,7 @@ class Translator implements TranslatorContract
      *
      * @return array
      */
-    private function filterHelpersFromString(string $translation): array
+    protected function filterHelpersFromString(string $translation): array
     {
         $helpers = [];
 
@@ -263,7 +263,7 @@ class Translator implements TranslatorContract
      *
      * @return string
      */
-    private function applyFilters(string $translation): string
+    protected function applyFilters(string $translation): string
     {
         if (empty($this->filters)) {
             return $translation;
@@ -282,7 +282,7 @@ class Translator implements TranslatorContract
      * @param string $id
      * @param string $domain
      */
-    private function log(string $id, string $domain)
+    protected function log(string $id, string $domain)
     {
         $catalogue = $this->catalogue;
 
@@ -313,9 +313,15 @@ class Translator implements TranslatorContract
      * @param array       $parameters
      * @param int|null    $number
      */
-    private function collectMessage($locale, $domain, string $id, string $translation, array $parameters = [], int $number = null)
-    {
-        if (null === $domain) {
+    protected function collectMessage(
+        $locale,
+        $domain,
+        string $id,
+        string $translation,
+        array $parameters = [],
+        int $number = null
+    ) {
+        if ($domain === null) {
             $domain = 'messages';
         }
 

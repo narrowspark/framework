@@ -12,8 +12,13 @@
                     if (isset($menu['tooltip'])) {
                         $tooltip = true;
                     }
+
+                    $href = isset($panels[$name]) ? 'href="#webprofiler-panel-' . $name . '"' : '';
+                    $hasPanels = isset($panels[$name]) ? ' webprofiler-menu-has-panel' : '';
+                    $hasTooltip = $tooltip ? 'webprofiler-menu-has-tooltip' : '';
+                    $cssClasses = $menu['menu']['class'] ?? '';
         ?>
-            <a <?php echo isset($panels[$name]) ? 'href="#webprofiler-panel-' . $name . '"' : ''; ?> class="webprofiler-menu webprofiler-menu-<?php echo $name ?> webprofiler-menu-position-<?php echo $menu['position']?><?php echo isset($panels[$name]) ? ' webprofiler-menu-has-panel' : ''; ?><?php if ($tooltip) { ?> webprofiler-menu-has-tooltip <?php } ?><?php if (isset($menu['menu']['class'])) { echo $menu['menu']['class']; } ?>">
+            <a <?php echo $href ?> class="webprofiler-menu webprofiler-menu-<?php echo $name ?> webprofiler-menu-position-<?php echo $menu['position']?><?php echo $hasPanels ?><?php echo $hasTooltip ?><?php $cssClasses ?>">
                 <div class="webprofiler-menu-content">
                     <?php if (isset($menu['menu']['icon'])) { ?>
                     <span class="webprofiler-menu-icon">
@@ -54,7 +59,7 @@
         <?php
         foreach ($panels as $name => $panel) {
         ?>
-            <div id="webprofiler-panel-<?php echo $name ?>" class="webprofiler-panel">
+            <div id="webprofiler-panel-<?php echo $name ?>" class="webprofiler-panel webprofiler-panel-<?php echo $name ?>">
                 <?php echo $panel ?>
             </div>
         <?php

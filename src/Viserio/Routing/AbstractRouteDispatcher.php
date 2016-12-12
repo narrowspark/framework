@@ -285,7 +285,7 @@ abstract class AbstractRouteDispatcher
         return (new SortedMiddleware(
             $this->middlewarePriority,
             array_values(Arr::flatten($middlewares))
-        ))->all();
+        ))->getAll();
     }
 
     /**

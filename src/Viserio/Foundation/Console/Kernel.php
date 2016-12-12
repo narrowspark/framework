@@ -118,11 +118,11 @@ class Kernel implements KernelContract, TerminableContract
     /**
      * {@inheritdoc}
      */
-    public function all(): array
+    public function getAll(): array
     {
         $this->bootstrap();
 
-        return $this->getConsole()->all();
+        return $this->getConsole()->getAll();
     }
 
     /**

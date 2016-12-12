@@ -17,7 +17,7 @@ class NullFailedJobProvider implements FailedJobProviderContract
     /**
      * {@inheritdoc}
      */
-    public function all(): array
+    public function getAll(): array
     {
         return [];
     }

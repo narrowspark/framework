@@ -220,7 +220,7 @@ class ViserioRequestResponseDataCollector extends AbstractDataCollector implemen
                     $sessionMeta,
                     'Session Metadata'
                 ) . $this->createTable(
-                    $session !== null ? $session->all() : [],
+                    $session !== null ? $session->getAll() : [],
                     'Session Attributes'
                 ),
             ],
