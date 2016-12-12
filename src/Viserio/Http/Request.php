@@ -162,9 +162,9 @@ class Request extends AbstractMessage implements RequestInterface
     /**
      * Retrieve the host from the URI instance
      *
-     * @return void
+     * @return null|void
      */
-    private function updateHostFromUri(): ?void
+    private function updateHostFromUri()
     {
         $host = $this->uri->getHost();
 
