@@ -68,10 +68,16 @@ class NarrowsparkDataCollector extends AbstractDataCollector implements TooltipA
 
         $tooltip .= $this->createTooltipGroup([
             'PHP version' => phpversion(),
+            'Architecture' => PHP_INT_SIZE * 8,
+            'Timezone' => date_default_timezone_get(),
             'PHP Extensions' => [
                 [
                     'class' => extension_loaded('xdebug') ? 'status-green' : 'status-red',
-                    'value' => 'xdebug',
+                    'value' => 'Xdebug',
+                ],
+                [
+                    'class' => (extension_loaded('Zend OPcache') && ini_get('opcache.enable')) ? 'status-green' : 'status-red',
+                    'value' => 'OPcache',
                 ],
             ],
             'PHP SAPI' => php_sapi_name(),
