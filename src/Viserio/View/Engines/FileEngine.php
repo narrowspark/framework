@@ -2,7 +2,9 @@
 declare(strict_types=1);
 namespace Viserio\View\Engines;
 
-class FileEngine implements EngineInterface
+use Viserio\Contracts\View\Engine as EngineContract;
+
+class FileEngine implements EngineContract
 {
     /**
      * {@inheritdoc}
