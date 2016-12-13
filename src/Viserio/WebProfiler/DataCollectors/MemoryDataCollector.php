@@ -16,6 +16,9 @@ class MemoryDataCollector extends AbstractDataCollector implements TooltipAwareC
      */
     protected $data;
 
+    /**
+     * Create new memory data collector.
+     */
     public function __construct()
     {
         $this->data = [

@@ -34,6 +34,8 @@ abstract class AbstractDataCollector implements DataCollectorContract
     }
 
     /**
+     * Add measurement to float time.
+     *
      * @param float $seconds
      *
      * @return string
@@ -91,10 +93,10 @@ abstract class AbstractDataCollector implements DataCollectorContract
      * Creates a tooltip group from array.
      *
      * array[]
-     *          ['key']           string          Defines the name of <b> html element.
-     *          ['value']         array|string    Defines the content to be shown in the <span> html element.
-     *              ['class']     string          Adds a class to the <span> html element.
-     *              ['value']     string          Adds the content.
+     *     ['key']       string          Defines the name of <b> html element.
+     *     ['value']     array|string    Defines the content to be shown in the <span> html element.
+     *         ['class'] string          Adds a class to the <span> html element.
+     *         ['value'] string          Adds the content.
      *
      * @param array $data (See above)
      *
@@ -128,9 +130,9 @@ abstract class AbstractDataCollector implements DataCollectorContract
     /**
      * Creates a tab slider.
      *
-     *  array['id']            array     Defines witch tabs a shown.
-     *          ['name']       string    Name of the tab
-     *          ['content']    string    Tab content.
+     * array['id']     array     Defines witch tabs a shown.
+     *     ['name']    string    Name of the tab
+     *     ['content'] string    Tab content.
      *
      * @param array $data (See above)
      *
