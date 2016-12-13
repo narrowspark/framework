@@ -156,7 +156,7 @@ class WebProfiler implements WebProfilerContract
     }
 
     /**
-     * Adds a data collector
+     * Adds a data collector.
      *
      * @param \Viserio\Contracts\WebProfiler\DataCollector $collector
      *
@@ -180,7 +180,7 @@ class WebProfiler implements WebProfilerContract
     }
 
     /**
-     * Checks if a data collector has been added
+     * Checks if a data collector has been added.
      *
      * @param string $name
      *
@@ -192,7 +192,7 @@ class WebProfiler implements WebProfilerContract
     }
 
     /**
-     * Returns an array of all data collectors
+     * Returns an array of all data collectors.
      *
      * @return array
      */
@@ -202,7 +202,7 @@ class WebProfiler implements WebProfilerContract
     }
 
     /**
-     * Modify the response and inject the debugbar (or data in headers)
+     * Modify the response and inject the debugbar.
      *
      * @param \Psr\Http\Message\ServerRequestInterface $serverRequest
      * @param \Psr\Http\Message\ResponseInterface      $response
@@ -286,6 +286,8 @@ class WebProfiler implements WebProfilerContract
     }
 
     /**
+     * Check if response is a html response.
+     *
      * @param \Psr\Http\Message\ResponseInterface $response
      *
      * @return bool
@@ -296,6 +298,8 @@ class WebProfiler implements WebProfilerContract
     }
 
     /**
+     * Check if request accept html.
+     *
      * @param \Psr\Http\Message\ServerRequestInterface $request
      *
      * @return bool
@@ -306,6 +310,8 @@ class WebProfiler implements WebProfilerContract
     }
 
     /**
+     * Checks if headers contains searched header.
+     *
      * @param \Psr\Http\Message\MessageInterface $message
      * @param string                             $headerName
      * @param string                             $value
