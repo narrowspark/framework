@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\View\Engines\Adapter;
+namespace Viserio\View\Engines;
 
 use ErrorException;
 use ParseError;
@@ -8,7 +8,7 @@ use Throwable;
 use TypeError;
 use Viserio\Contracts\View\Engine as EngineContract;
 
-class Php implements EngineContract
+class PhpEngine implements EngineContract
 {
     /**
      * {@inheritdoc}

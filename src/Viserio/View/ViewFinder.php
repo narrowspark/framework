@@ -44,7 +44,10 @@ class ViewFinder implements FinderContract
      *
      * @var array
      */
-    protected $extensions = [];
+    protected $extensions = [
+        'php',
+        'css'
+    ];
 
     /**
      * Create a new file view loader instance.
@@ -191,6 +194,24 @@ class ViewFinder implements FinderContract
     public function getExtensions(): array
     {
         return $this->extensions;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function replaceNamespace(string $namespace, $hints): FinderContract
+    {
+        $this->hints[$namespace] = (array) $hints;
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function flush(): void
+    {
+        $this->views = [];
     }
 
     /**

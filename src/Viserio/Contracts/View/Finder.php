@@ -112,4 +112,21 @@ interface Finder
      * @return array
      */
     public function getExtensions(): array;
+
+    /**
+     * Replace the namespace hints for the given namespace.
+     *
+     * @param string       $namespace
+     * @param string|array $hints
+     *
+     * @return $this
+     */
+    public function replaceNamespace(string $namespace, $hints): Finder;
+
+    /**
+     * Flush the cache of located views.
+     *
+     * @return void
+     */
+    public function flush(): void;
 }

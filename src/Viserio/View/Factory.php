@@ -61,6 +61,7 @@ class Factory implements FactoryContract
     protected $extensions = [
         'php' => 'php',
         'phtml' => 'php',
+        'css' => 'file',
     ];
 
     /**
@@ -92,7 +93,7 @@ class Factory implements FactoryContract
     public function exists(string $view): bool
     {
         try {
-            $this->finder->find($view);
+            $this->getFinder()->find($view);
         } catch (InvalidArgumentException $exception) {
             return false;
         }
@@ -121,7 +122,7 @@ class Factory implements FactoryContract
         }
 
         $view = $this->normalizeName($view);
-        $fileInfo = $this->finder->find($view);
+        $fileInfo = $this->getFinder()->find($view);
 
         return $this->getView(
             $this,
@@ -228,7 +229,7 @@ class Factory implements FactoryContract
      */
     public function addLocation(string $location): FactoryContract
     {
-        $this->finder->addLocation($location);
+        $this->getFinder()->addLocation($location);
 
         return $this;
     }
@@ -240,7 +241,19 @@ class Factory implements FactoryContract
      */
     public function addNamespace(string $namespace, $hints): FactoryContract
     {
-        $this->finder->addNamespace($namespace, $hints);
+        $this->getFinder()->addNamespace($namespace, $hints);
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @codeCoverageIgnore
+     */
+    public function replaceNamespace(string $namespace, $hints): FactoryContract
+    {
+        $this->getFinder()->replaceNamespace($namespace, $hints);
 
         return $this;
     }
@@ -252,9 +265,19 @@ class Factory implements FactoryContract
      */
     public function prependNamespace(string $namespace, $hints): FactoryContract
     {
-        $this->finder->prependNamespace($namespace, $hints);
+        $this->getFinder()->prependNamespace($namespace, $hints);
 
         return $this;
+    }
+
+    /**
+     * Flush the cache of views located by the finder.
+     *
+     * @return void
+     */
+    public function flushFinderCache()
+    {
+        $this->getFinder()->flush();
     }
 
     /**
@@ -262,7 +285,7 @@ class Factory implements FactoryContract
      */
     public function addExtension(string $extension, string $engine, Closure $resolver = null): FactoryContract
     {
-        $this->finder->addExtension($extension);
+        $this->getFinder()->addExtension($extension);
 
         if (isset($resolver)) {
             $this->engines->register($engine, $resolver);

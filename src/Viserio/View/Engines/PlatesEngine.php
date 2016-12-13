@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\View\Engines\Adapter;
+namespace Viserio\View\Engines;
 
 use Exception;
 use League\Plates\Engine as LeagueEngine;
@@ -11,7 +11,7 @@ use Psr\Http\Message\ServerRequestInterface;
 use Throwable;
 use Viserio\Contracts\View\Engine as EnginesContract;
 
-class Plates implements EnginesContract
+class PlatesEngine implements EnginesContract
 {
     /**
      * Config array.
