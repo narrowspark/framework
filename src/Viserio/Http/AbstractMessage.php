@@ -215,7 +215,7 @@ abstract class AbstractMessage implements MessageInterface
     protected function setHeaders(array $headers)
     {
         if (empty($headers)) {
-            return;
+            return null;
         }
 
         $this->headerNames = $this->headers = [];

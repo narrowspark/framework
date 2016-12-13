@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Http\DataCollectors;
+namespace Viserio\Foundation\DataCollectors;
 
 use Closure;
 use Psr\Http\Message\ResponseInterface;
@@ -17,7 +17,7 @@ use Viserio\Contracts\WebProfiler\PanelAware as PanelAwareContract;
 use Viserio\Contracts\WebProfiler\TooltipAware as TooltipAwareContract;
 use Viserio\WebProfiler\DataCollectors\AbstractDataCollector;
 
-class ViserioRequestResponseDataCollector extends AbstractDataCollector implements MenuAwareContract, TooltipAwareContract, AssetAwareContract, PanelAwareContract
+class ViserioHttpDataCollector extends AbstractDataCollector implements MenuAwareContract, TooltipAwareContract, AssetAwareContract, PanelAwareContract
 {
     /**
      * A server request instance.
@@ -103,13 +103,13 @@ class ViserioRequestResponseDataCollector extends AbstractDataCollector implemen
 
         // Successful 2xx
         if ($statusCode >= 200 && $statusCode <= 226) {
-            $status = 'request-status-green';
+            $status = 'response-status-green';
         // Redirection 3xx
         } elseif ($statusCode >= 300 && $statusCode <= 308) {
-            $status = 'request-status-yellow';
+            $status = 'response-status-yellow';
         // Client Error 4xx
         } elseif ($statusCode >= 400 && $statusCode <= 511) {
-            $status = 'request-status-red';
+            $status = 'response-status-red';
         }
 
         $tabInfos = [

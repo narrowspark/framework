@@ -2,7 +2,7 @@
     display: inline-block;
 }
 .webprofiler .webprofiler-header .webprofiler-menus a.webprofiler-menu.webprofiler-menu-viserio-translation-data-collector.webprofiler-menu-has-tooltip:hover .webprofiler-menu-tooltip .webprofiler-menu-tooltip-group span,
-.webprofiler .webprofiler-body .webprofiler-panel.webprofiler-panel-viserio-translation-data-collector .webprofiler-tabs-tab span {
+.webprofiler .webprofiler-body .webprofiler-panel.webprofiler-panel-viserio-translation-data-collector .webprofiler-tabs-tab label span {
     display: inline-block;
     color: #FFF;
     background-color: #666;
@@ -13,7 +13,7 @@
     min-height: 13px;
     text-align: center;
 }
-.webprofiler .webprofiler-body .webprofiler-panel.webprofiler-panel-viserio-translation-data-collector .webprofiler-tabs-tab span {
+.webprofiler .webprofiler-body .webprofiler-panel.webprofiler-panel-viserio-translation-data-collector .webprofiler-tabs-tab label span {
     margin-bottom: 0;
     margin-left: 10px;
 }

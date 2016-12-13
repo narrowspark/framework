@@ -5,9 +5,12 @@ namespace Viserio\WebProfiler;
 use Viserio\Contracts\Support\Renderable as RenderableContract;
 use Viserio\Contracts\WebProfiler\AssetAware as AssetAwareContract;
 use Viserio\Contracts\WebProfiler\WebProfiler as WebProfilerContract;
+use Viserio\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
 class AssetsRenderer implements RenderableContract
 {
+    use NormalizePathAndDirectorySeparatorTrait;
+
     /**
      * All css files.
      *
@@ -26,6 +29,20 @@ class AssetsRenderer implements RenderableContract
     protected $jsFiles = [
         'js/zepto.min.js',
         'js/webprofiler.js',
+    ];
+
+    /**
+     * List of all icons.
+     *
+     * @var array
+     */
+    protected $icons = [
+        'ic_clear_white_24px.svg' => __DIR__ . '/Resources/icons/ic_clear_white_24px.svg',
+        'ic_memory_white_24px.svg' => __DIR__ . '/Resources/icons/ic_memory_white_24px.svg',
+        'ic_message_white_24px.svg' => __DIR__ . '/Resources/icons/ic_message_white_24px.svg',
+        'ic_narrowspark_white_24px.svg' => __DIR__ . '/Resources/icons/ic_narrowspark_white_24px.svg',
+        'ic_schedule_white_24px.svg' => __DIR__ . '/Resources/icons/ic_schedule_white_24px.svg',
+        'ic_storage_white_24px.svg' => __DIR__ . '/Resources/icons/ic_storage_white_24px.svg',
     ];
 
     /**
@@ -57,15 +74,59 @@ class AssetsRenderer implements RenderableContract
     protected $ignoredCollectors = [];
 
     /**
+     * jQuery is used, remove zapto js.
+     *
+     * @var bool
+     */
+    protected $jqueryIsUsed;
+
+    /**
      * Create a new file javascript renderer instance.
      *
-     * @param \Viserio\Contracts\WebProfiler\WebProfiler $webprofiler
-     * @param string|null                                $rootPath
+     * @param bool        $jqueryIsUsed
+     * @param string|null $rootPath
      */
-    public function __construct(WebProfilerContract $webprofiler, string $rootPath = null)
+    public function __construct(bool $jqueryIsUsed = false, string $rootPath = null)
+    {
+        $this->jqueryIsUsed = $jqueryIsUsed;
+        $this->rootPath = $rootPath ?? __DIR__ . '/Resources';
+    }
+
+    /**
+     * Set the WebProfiler.
+     *
+     * @param \Viserio\Contracts\WebProfiler\WebProfiler $webprofiler
+     *
+     * @return $this
+     */
+    public function setWebProfiler(WebProfiler $webprofiler): self
     {
         $this->webprofiler = $webprofiler;
-        $this->rootPath = $rootPath ?? __DIR__ . '/Resources';
+
+        return $this;
+    }
+
+    /**
+     * Add icon to list.
+     *
+     * @param string $name
+     * @param string $path
+     *
+     * @return $this
+     */
+    public function setIcon($name, $path): self
+    {
+        $this->icons[$name] = self::normalizeDirectorySeparator($path . '/' . $name);
+    }
+
+    /**
+     * Get all registered icons.
+     *
+     * @return array
+     */
+    public function getIcons(): array
+    {
+        return $this->icons;
     }
 
     /**
@@ -151,9 +212,14 @@ class AssetsRenderer implements RenderableContract
             },
             $this->cssFiles
         );
+
+        if ($this->jqueryIsUsed) {
+            $this->jsFiles = array_diff($this->jsFiles, ['js/zepto.min.js']);
+        }
+
         $jsFiles = array_map(
-            function ($css) {
-                return rtrim($this->rootPath, '/') . '/' . $css;
+            function ($js) {
+                return rtrim($this->rootPath, '/') . '/' . $js;
             },
             $this->jsFiles
         );
@@ -162,14 +228,14 @@ class AssetsRenderer implements RenderableContract
 
         // finds assets provided by collectors
         foreach ($this->webprofiler->getCollectors() as $collector) {
-            if (($collector instanceof AssetAwareContract) && ! in_array($collector->getName(), $this->ignoredCollectors)) {
+            if ($collector instanceof AssetAwareContract &&
+                ! in_array($collector->getName(), $this->ignoredCollectors)
+            ) {
                 $additionalAssets[] = $collector->getAssets();
             }
         }
 
         foreach ($additionalAssets as $assets) {
-            $root = $assets['path'] ?? $this->rootPath;
-
             if (isset($assets['css'])) {
                 $cssFiles = array_merge($cssFiles, (array) $assets['css']);
             }

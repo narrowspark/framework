@@ -39,7 +39,7 @@ class DetectEnvironment implements BootstrapContract
         $env = Env::get('APP_ENV');
 
         if (! $env) {
-            return;
+            return null;
         }
 
         $file = $app->environmentFile() . '.' . $env;

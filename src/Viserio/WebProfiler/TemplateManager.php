@@ -25,18 +25,27 @@ class TemplateManager implements RenderableContract
      *
      * @var string
      */
-    private $templatePath = [];
+    private $templatePath;
+
+    /**
+     * List of icons.
+     *
+     * @var array
+     */
+    private $icons = [];
 
     /**
      * Create a new template manager instance.
      *
      * @param array  $collectors
      * @param string $templatePath
+     * @param array  $icons
      */
-    public function __construct(array $collectors, string $templatePath)
+    public function __construct(array $collectors, string $templatePath, array $icons = [])
     {
         $this->collectors = $collectors;
         $this->templatePath = $templatePath;
+        $this->icons = $icons;
     }
 
     /**
@@ -52,7 +61,7 @@ class TemplateManager implements RenderableContract
             array_merge(
                 $this->getSortedData(),
                 [
-                    'token' => hash('ripemd160', random_bytes(32)),
+                    'token' => hash('ripemd160', random_bytes(10)),
                 ]
             ),
             EXTR_PREFIX_SAME,
@@ -79,6 +88,7 @@ class TemplateManager implements RenderableContract
         $data = [
             'menus' => [],
             'panels' => [],
+            'icons' => $this->icons,
         ];
 
         foreach ($this->collectors as $name => $collector) {

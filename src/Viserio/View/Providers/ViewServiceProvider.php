@@ -8,6 +8,7 @@ use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Contracts\Support\Traits\ServiceProviderConfigAwareTrait;
 use Viserio\Contracts\View\Factory as FactoryContract;
 use Viserio\Filesystem\Filesystem;
+use Viserio\View\DataCollectors\ViserioViewDataCollector;
 use Viserio\View\Engines\EngineResolver;
 use Viserio\View\Engines\FileEngine;
 use Viserio\View\Engines\PhpEngine;
@@ -43,7 +44,15 @@ class ViewServiceProvider implements ServiceProvider
             'view' => function (ContainerInterface $container) {
                 return $container->get(Factory::class);
             },
+            ViserioViewDataCollector::class => [self::class, 'createViserioViewDataCollector'],
         ];
+    }
+
+    public static function createViserioViewDataCollector(ContainerInterface $container): ViserioViewDataCollector
+    {
+        return new ViserioViewDataCollector(
+            self::getConfig($container, 'collector.collect_data', true)
+        );
     }
 
     public static function createEngineResolver(ContainerInterface $container)

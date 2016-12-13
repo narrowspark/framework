@@ -25,7 +25,10 @@ class ViserioCacheDataCollector extends AbstractDataCollector implements MenuAwa
      */
     public function getMenu(): array
     {
-        return [];
+        return [
+            'label' => 'cache',
+            'value' => '',
+        ];
     }
 
     /**
@@ -50,7 +53,7 @@ class ViserioCacheDataCollector extends AbstractDataCollector implements MenuAwa
     public function getAssets(): array
     {
         return [
-            'css' => __DIR__ . '/Resources/css/widgets/cache.css',
+            'css' => __DIR__ . '/Resources/css/widgets/viserio/cache.css',
         ];
     }
 }

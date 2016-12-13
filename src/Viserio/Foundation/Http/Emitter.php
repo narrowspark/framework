@@ -111,7 +111,7 @@ class Emitter implements EmitterContract
     {
         // Command line output buffering is disabled in cli by default
         if (substr(PHP_SAPI, 0, 3) === 'cgi') {
-            return;
+            return null;
         }
 
         // avoid infinite loop on clearing

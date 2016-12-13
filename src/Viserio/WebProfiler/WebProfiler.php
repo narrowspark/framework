@@ -70,6 +70,16 @@ class WebProfiler implements WebProfilerContract
     protected $template = __DIR__ . '/Resources/views/webprofiler.html.php';
 
     /**
+     * Create new webprofiler instance.
+     *
+     * @param \Viserio\WebProfiler\AssetsRenderer $assetsRenderer
+     */
+    public function __construct($assetsRenderer)
+    {
+        $this->assetsRenderer = $assetsRenderer->setWebProfiler($this);
+    }
+
+    /**
      * Disables the profiler.
      */
     public function disable()
@@ -229,16 +239,10 @@ class WebProfiler implements WebProfilerContract
     /**
      * Returns a AssetsRenderer for this instance.
      *
-     * @param string|null $rootUrl
-     *
      * @return \Viserio\WebProfiler\AssetsRenderer
      */
-    public function getAssetsRenderer(?string $rootUrl = null): AssetsRenderer
+    public function getAssetsRenderer(): AssetsRenderer
     {
-        if ($this->assetsRenderer === null) {
-            $this->assetsRenderer = new AssetsRenderer($this, $rootUrl);
-        }
-
         return $this->assetsRenderer;
     }
 
@@ -255,9 +259,14 @@ class WebProfiler implements WebProfilerContract
     {
         $content = (string) $response->getBody();
 
-        $template = new TemplateManager($this->collectors, $this->template);
+        $assets = $this->getAssetsRenderer();
+        $template = new TemplateManager(
+            $this->collectors,
+            $this->template,
+            $assets->getIcons()
+        );
 
-        $renderedContent = $this->getAssetsRenderer()->render() . $template->render();
+        $renderedContent = $assets->render() . $template->render();
 
         $pos = strripos($content, '</body>');
 

@@ -555,7 +555,7 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
     private function parseVisibility(string $visibility = null)
     {
         if ($visibility === null) {
-            return;
+            return null;
         }
 
         switch ($visibility) {

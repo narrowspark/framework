@@ -667,7 +667,7 @@ class Container extends ContainerResolver implements ArrayAccess, ContainerContr
     protected function extendResolved($abstract, &$resolved)
     {
         if (! isset($this->extenders[$abstract])) {
-            return;
+            return null;
         }
 
         $binding = $this->bindings[$abstract];

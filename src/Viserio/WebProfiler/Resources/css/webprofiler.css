@@ -16,6 +16,15 @@
     -moz-osx-font-smoothing: auto;
 }
 
+.webprofiler .webprofiler-header.hide {
+    display: none;
+}
+.webprofiler .show-button.active,
+.webprofiler .webprofiler-body.active,
+.webprofiler .webprofiler-body .webprofiler-panel.active {
+    display: block;
+}
+
 .webprofiler .webprofiler-header {
     bottom: 0;
     left: 0;
@@ -26,6 +35,21 @@
     background-color: #222;
 }
 
+.webprofiler .show-button {
+    background-color: #222;
+    border-top-left-radius: 4px;
+    bottom: 0;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    display: none;
+    height: 36px;
+    padding: 6px;
+    position: fixed;
+    right: 0;
+    z-index: 99999;
+    cursor: pointer;
+}
 .webprofiler .webprofiler-header .hide-button {
     background: #444;
     display: block;
@@ -62,6 +86,11 @@
     min-height: 13px;
     text-align: center;
 }
+.webprofiler .webprofiler-header .webprofiler-menus a.webprofiler-menu .status-red + .status-red,
+.webprofiler .webprofiler-header .webprofiler-menus a.webprofiler-menu .status-yellow + .status-yellow,
+.webprofiler .webprofiler-header .webprofiler-menus a.webprofiler-menu .status-green + .status-green {
+    border-left: 5px solid #444;
+}
 .webprofiler .webprofiler-header .webprofiler-menus a.webprofiler-menu .status-green {
     background-color: #4F805D;
 }
@@ -77,11 +106,11 @@
     position: relative;
     z-index: 10002;
 }
-.webprofiler .webprofiler-header .webprofiler-menus a.webprofiler-menu.webprofiler-menu-has-panel {
-    cursor: pointer;
-}
 .webprofiler .webprofiler-header .webprofiler-menus a.webprofiler-menu.webprofiler-menu-has-tooltip:hover {
     cursor: help;
+}
+.webprofiler .webprofiler-header .webprofiler-menus a.webprofiler-menu.webprofiler-menu-has-panel:hover {
+    cursor: pointer;
 }
 .webprofiler .webprofiler-header .webprofiler-menus a.webprofiler-menu.webprofiler-menu-has-tooltip .webprofiler-menu-tooltip {
     display: none;
@@ -170,9 +199,21 @@
     margin-bottom: 37px;
     display: none;
 }
-.webprofiler .webprofiler-body.active,
-.webprofiler .webprofiler-body .webprofiler-panel.active {
-    display: block;
+.webprofiler .webprofiler-body pre.sf-dump,
+.webprofiler .webprofiler-body pre.sf-dump .sf-dump-num,
+.webprofiler .webprofiler-body pre.sf-dump .sf-dump-const,
+.webprofiler .webprofiler-body pre.sf-dump .sf-dump-str,
+.webprofiler .webprofiler-body pre.sf-dump .sf-dump-note,
+.webprofiler .webprofiler-body pre.sf-dump .sf-dump-ref,
+.webprofiler .webprofiler-body pre.sf-dump .sf-dump-public,
+.webprofiler .webprofiler-body pre.sf-dump .sf-dump-protected,
+.webprofiler .webprofiler-body pre.sf-dump .sf-dump-private,
+.webprofiler .webprofiler-body pre.sf-dump .sf-dump-meta,
+.webprofiler .webprofiler-body pre.sf-dump .sf-dump-key,
+.webprofiler .webprofiler-body pre.sf-dump .sf-dump-index {
+    margin: 0;
+    padding: 0;
+    color: #2B2A28;
 }
 .webprofiler .webprofiler-body .webprofiler-panel {
     height: 100%;
@@ -260,7 +301,7 @@
 }
 .webprofiler .webprofiler-body .webprofiler-panel table tbody th,
 .webprofiler .webprofiler-body .webprofiler-panel table tbody td {
-    font-family: monospace;
+    font-family: "Inconsolata", "Fira Mono", "Source Code Pro", Monaco, Consolas, "Lucida Console", monospace;
     font-size: 13px;
     font-size-adjust: 0.5;
     border: 1px solid #E0E0E0;

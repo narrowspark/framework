@@ -219,7 +219,7 @@ class Dispatcher implements DispatcherContract
     protected function bindPatterns(string $eventName)
     {
         if (isset($this->syncedEvents[$eventName])) {
-            return;
+            return null;
         }
 
         foreach ($this->patterns as $eventPattern => $patterns) {
@@ -265,7 +265,7 @@ class Dispatcher implements DispatcherContract
     protected function removeListenerPattern(string $eventPattern, $listener)
     {
         if (! isset($this->patterns[$eventPattern])) {
-            return;
+            return null;
         }
 
         foreach ($this->patterns[$eventPattern] as $key => $pattern) {

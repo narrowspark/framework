@@ -8,9 +8,7 @@ use Viserio\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Contracts\Routing\Router as RouterContract;
 use Viserio\Contracts\Support\Traits\ServiceProviderConfigAwareTrait;
 use Viserio\Foundation\DataCollectors\NarrowsparkDataCollector;
-use Viserio\Foundation\DataCollectors\ViserioRequestResponseDataCollector;
-use Viserio\Foundation\DataCollectors\ViserioViewDataCollector;
-use Viserio\WebProfiler\DataCollectors\ViserioConfigDataCollector;
+use Viserio\Foundation\DataCollectors\ViserioHttpDataCollector;
 
 class FoundationDataCollectorsServiceProvider implements ServiceProvider
 {
@@ -25,9 +23,7 @@ class FoundationDataCollectorsServiceProvider implements ServiceProvider
     {
         return [
             NarrowsparkDataCollector::class => [self::class, 'createNarrowsparkDataCollector'],
-            ViserioRequestResponseDataCollector::class => [self::class, 'createViserioRequestResponseDataCollector'],
-            ViserioConfigDataCollector::class => [self::class, 'createViserioConfigDataCollector'],
-            ViserioViewDataCollector::class => [self::class, 'createViserioViewDataCollector'],
+            ViserioHttpDataCollector::class => [self::class, 'createViserioHttpDataCollector'],
         ];
     }
 
@@ -36,29 +32,11 @@ class FoundationDataCollectorsServiceProvider implements ServiceProvider
         return new NarrowsparkDataCollector();
     }
 
-    public static function createViserioRequestResponseDataCollector(ContainerInterface $container): ViserioRequestResponseDataCollector
+    public static function createViserioHttpDataCollector(ContainerInterface $container): ViserioHttpDataCollector
     {
-        return new ViserioRequestResponseDataCollector(
+        return new ViserioHttpDataCollector(
             $container->get(RouterContract::class),
             $container->get(RepositoryContract::class)
-        );
-    }
-
-    public static function createViserioViewDataCollector(ContainerInterface $container): ViserioViewDataCollector
-    {
-        return new ViserioViewDataCollector(
-            self::getConfig($container, 'collector.view.collect_data', true)
-        );
-    }
-
-    public static function createViserioConfigDataCollector(ContainerInterface $container)
-    {
-        if (! $container->has(RepositoryContract::class)) {
-            return;
-        }
-
-        return new ViserioConfigDataCollector(
-            $container->get(RepositoryContract::class)->getAll()
         );
     }
 }

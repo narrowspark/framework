@@ -76,7 +76,7 @@ class RouteTreeBuilder
         if (empty($segments)) {
             $node->getContents()->addRoute($route, $parameterIndexNameMap);
 
-            return;
+            return null;
         }
 
         $childSegmentMatcher = $this->getMatcher(array_shift($segments), $parameterIndexNameMap);

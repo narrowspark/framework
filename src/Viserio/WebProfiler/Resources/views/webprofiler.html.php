@@ -1,10 +1,11 @@
 <div id="webprofiler-<?php echo $token ?>" class="webprofiler">
+    <a class="show-button" title="Show WebProfiler" tabindex="-1" accesskey="D"><?php echo file_get_contents($icons['ic_narrowspark_white_24px.svg']) ?></a>
     <div class="webprofiler-header">
         <?php
             if (count($menus) !== 0) {
                 ?>
         <div class="webprofiler-menus">
-            <a class="hide-button" title="Close WebProfiler" tabindex="-1" accesskey="D"><?php echo file_get_contents(__DIR__ . '/../icons/ic_clear_white_24px.svg') ?></a>
+            <a class="hide-button" title="Close WebProfiler" tabindex="-1" accesskey="D"><?php echo file_get_contents($icons['ic_clear_white_24px.svg']) ?></a>
         <?php
                 foreach ($menus as $name => $menu) {
                     $tooltip = false;
@@ -27,14 +28,14 @@
                     <span class="webprofiler-menu-icon">
                         <?php echo $menu['menu']['icon'] ?>
                     </span>
-                    <?php 
+                    <?php
                     } ?>
                     <?php if (isset($menu['menu']['status'])) {
                         ?>
                     <span class="webprofiler-menu-status">
                         <?php echo $menu['menu']['status'] ?>
                     </span>
-                    <?php 
+                    <?php
                     } ?>
                     <span class="webprofiler-menu-label">
                         <?php echo $menu['menu']['label'] ?>

@@ -15,6 +15,7 @@ use Viserio\Contracts\WebProfiler\WebProfiler as WebProfilerContract;
 use Viserio\WebProfiler\DataCollectors\MemoryDataCollector;
 use Viserio\WebProfiler\DataCollectors\TimeDataCollector;
 use Viserio\WebProfiler\WebProfiler;
+use Viserio\WebProfiler\AssetsRenderer;
 
 class WebProfilerServiceProvider implements ServiceProvider
 {
@@ -28,6 +29,7 @@ class WebProfilerServiceProvider implements ServiceProvider
     public function getServices()
     {
         return [
+            AssetsRenderer::class => [self::class, 'createAssetsRenderer'],
             WebProfiler::class => [self::class, 'createWebProfiler'],
             WebProfilerContract::class => function (ContainerInterface $container) {
                 return $container->get(WebProfiler::class);
@@ -37,7 +39,7 @@ class WebProfilerServiceProvider implements ServiceProvider
 
     public static function createWebProfiler(ContainerInterface $container): WebProfilerContract
     {
-        $profiler = new WebProfiler();
+        $profiler = new WebProfiler($container->get(AssetsRenderer::class));
 
         if ($container->has(CacheItemPoolInterface::class)) {
             $profiler->setCacheItemPool($container->get(CacheItemPoolInterface::class));
@@ -63,6 +65,11 @@ class WebProfilerServiceProvider implements ServiceProvider
         self::registerCollectors($container, $profiler);
 
         return $profiler;
+    }
+
+    public static function createAssetsRenderer(ContainerInterface $container): AssetsRenderer
+    {
+        return new AssetsRenderer(self::getConfig($container, 'jquery_is_used', false), self::getConfig($container, 'path'));
     }
 
     protected static function registerCollectors(ContainerInterface $container, WebProfiler $profiler)

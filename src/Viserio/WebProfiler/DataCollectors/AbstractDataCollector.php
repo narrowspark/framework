@@ -147,13 +147,12 @@ abstract class AbstractDataCollector implements DataCollectorContract
         }
 
         $html = '<div class="webprofiler-tabs' . ($grid !== '' ? ' row' : '') . '">';
-        $checked = false;
 
         foreach ($data as $key => $value) {
             $id = uniqid($key . '-');
 
             $html .= '<div class="webprofiler-tabs-tab' . $grid . '">';
-            $html .= '<input type="radio" name="tabgroup" id="tab-' . $id . '"' . ($checked !== 'checked' ? $checked = 'checked' : '') . '>';
+            $html .= '<input type="radio" name="tabgroup" id="tab-' . $id . '">';
             $html .= '<label for="tab-' . $id . '">' . $value['name'] . '</label>';
             $html .= '<div class="webprofiler-tabs-tab-content">';
             $html .= $value['content'];
