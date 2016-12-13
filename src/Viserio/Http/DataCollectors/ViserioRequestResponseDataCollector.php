@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Foundation\DataCollectors;
+namespace Viserio\Http\DataCollectors;
 
 use Closure;
 use Psr\Http\Message\ResponseInterface;

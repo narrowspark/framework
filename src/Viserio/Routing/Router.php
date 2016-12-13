@@ -4,8 +4,6 @@ namespace Viserio\Routing;
 
 use Closure;
 use Interop\Container\ContainerInterface;
-use Interop\Http\Middleware\DelegateInterface;
-use Interop\Http\Middleware\ServerMiddlewareInterface;
 use Narrowspark\Arr\Arr;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -15,7 +13,7 @@ use Viserio\Contracts\Routing\Router as RouterContract;
 use Viserio\Support\Traits\InvokerAwareTrait;
 use Viserio\Support\Traits\MacroableTrait;
 
-class Router extends AbstractRouteDispatcher implements RouterContract, ServerMiddlewareInterface
+class Router extends AbstractRouteDispatcher implements RouterContract
 {
     use InvokerAwareTrait;
     use MacroableTrait;
@@ -344,14 +342,6 @@ class Router extends AbstractRouteDispatcher implements RouterContract, ServerMi
     public function getRoutes(): RouteCollectionContract
     {
         return $this->routes;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function process(ServerRequestInterface $request, DelegateInterface $delegate)
-    {
-        return $this->dispatchToRoute($request);
     }
 
     /**

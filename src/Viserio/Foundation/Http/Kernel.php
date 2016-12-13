@@ -2,8 +2,6 @@
 declare(strict_types=1);
 namespace Viserio\Foundation\Http;
 
-use Interop\Http\Middleware\DelegateInterface;
-use Interop\Http\Middleware\ServerMiddlewareInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Throwable;
@@ -26,7 +24,7 @@ use Viserio\Session\Middleware\StartSessionMiddleware;
 use Viserio\StaticalProxy\StaticalProxy;
 use Viserio\View\Middleware\ShareErrorsFromSessionMiddleware;
 
-class Kernel implements TerminableContract, KernelContract, ServerMiddlewareInterface
+class Kernel implements TerminableContract, KernelContract
 {
     use EventsAwareTrait;
 
@@ -160,13 +158,6 @@ class Kernel implements TerminableContract, KernelContract, ServerMiddlewareInte
     /**
      * {@inheritdoc}
      */
-    public function process(ServerRequestInterface $request, DelegateInterface $delegate)
-    {
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function handle(ServerRequestInterface $serverRequest): ResponseInterface
     {
         $serverRequest = $serverRequest->withAddedHeader('X-Php-Ob-Level', (string) ob_get_level());
@@ -223,7 +214,7 @@ class Kernel implements TerminableContract, KernelContract, ServerMiddlewareInte
             if ($this->app->has(WebProfilerContract::class)) {
                 // Modify the response to add the webprofiler
                 $response = $this->app->get(WebProfilerContract::class)->modifyResponse(
-                    $this->app->get(ServerRequestInterface::class),
+                    $request,
                     $response
                 );
             }
