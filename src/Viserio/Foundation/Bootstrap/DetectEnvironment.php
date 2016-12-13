@@ -7,6 +7,7 @@ use Dotenv\Exception\InvalidPathException;
 use Viserio\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Contracts\Foundation\Application;
 use Viserio\Contracts\Foundation\Bootstrap as BootstrapContract;
+use Viserio\Support\Env;
 
 class DetectEnvironment implements BootstrapContract
 {
@@ -35,11 +36,13 @@ class DetectEnvironment implements BootstrapContract
      */
     protected function checkForSpecificEnvironmentFile(Application $app)
     {
-        if (! getenv('APP_ENV')) {
+        $env = Env::get('APP_ENV');
+
+        if (! $env) {
             return null;
         }
 
-        $file = $app->environmentFile() . '.' . getenv('APP_ENV');
+        $file = $app->environmentFile() . '.' . $env;
 
         if (file_exists($app->environmentPath() . '/' . $file)) {
             $app->loadEnvironmentFrom($file);

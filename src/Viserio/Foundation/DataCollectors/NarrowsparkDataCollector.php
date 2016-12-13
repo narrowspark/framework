@@ -8,6 +8,7 @@ use Viserio\Contracts\WebProfiler\MenuAware as MenuAwareContract;
 use Viserio\Contracts\WebProfiler\TooltipAware as TooltipAwareContract;
 use Viserio\Foundation\Application;
 use Viserio\WebProfiler\DataCollectors\AbstractDataCollector;
+use Viserio\Support\Env;
 
 class NarrowsparkDataCollector extends AbstractDataCollector implements TooltipAwareContract, MenuAwareContract
 {
@@ -52,16 +53,16 @@ class NarrowsparkDataCollector extends AbstractDataCollector implements TooltipA
      */
     public function getTooltip(): string
     {
-        $debug = env('APP_DEBUG', 'false');
+        $debug = Env::get('APP_DEBUG', false);
 
         $tooltip = $this->createTooltipGroup([
             'Profiler token' => '',
             'Application name' => '',
-            'Environment' => env('APP_ENV', 'develop'),
+            'Environment' => Env::get('APP_ENV', 'develop'),
             'Debug' => [
                 [
-                    'class' => $debug !== 'false' ? 'status-green' : 'status-red',
-                    'value' => $debug !== 'false' ? 'enabled' : 'disabled',
+                    'class' => $debug !== false ? 'status-green' : 'status-red',
+                    'value' => $debug !== false ? 'enabled' : 'disabled',
                 ],
             ],
         ]);

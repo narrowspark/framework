@@ -6,6 +6,7 @@ use Viserio\Config\Providers\ConfigServiceProvider;
 use Viserio\Container\Container;
 use Viserio\Database\Providers\DatabaseServiceProvider;
 use Viserio\Database\Providers\MigrationsServiceProvider;
+use Viserio\Support\Env;
 
 class MigrationsServiceProviderTest extends \PHPUnit_Framework_TestCase
 {
@@ -31,7 +32,7 @@ class MigrationsServiceProviderTest extends \PHPUnit_Framework_TestCase
                 ],
             ],
             'migrations' => [
-                'path' => env('DB_MIGRATION_PATH', __DIR__ . '/../Stub/'),
+                'path' => Env::get('DB_MIGRATION_PATH', __DIR__ . '/../Stub/'),
                 'namespace' => 'Database\\Migrations',
                 'name' => 'migration',
                 'table_name' => 'migration',
@@ -62,7 +63,7 @@ class MigrationsServiceProviderTest extends \PHPUnit_Framework_TestCase
                 ],
             ],
             'migrations' => [
-                'path' => env('DB_MIGRATION_PATH', __DIR__ . '/../Stub/'),
+                'path' => Env::get('DB_MIGRATION_PATH', __DIR__ . '/../Stub/'),
                 'namespace' => 'Database\\Migrations',
                 'name' => 'migration',
                 'table_name' => 'migration',
@@ -99,7 +100,7 @@ class MigrationsServiceProviderTest extends \PHPUnit_Framework_TestCase
                 ],
             ],
             'migrations' => [
-                'path' => env('DB_MIGRATION_PATH', __DIR__ . '/../Stub/'),
+                'path' => Env::get('DB_MIGRATION_PATH', __DIR__ . '/../Stub/'),
                 'namespace' => 'Database\\Migrations',
                 'name' => 'migration',
                 'table_name' => 'migration',
