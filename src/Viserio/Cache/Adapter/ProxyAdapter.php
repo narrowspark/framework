@@ -57,7 +57,7 @@ class ProxyAdapter implements CacheItemPoolInterface
     /**
      * {@inheritdoc}
      */
-    public function getItems(array $keys = array())
+    public function getItems(array $keys = [])
     {
         return $this->generateItems($this->pool->getItems($keys));
     }

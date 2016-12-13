@@ -29,6 +29,7 @@
                         <?php echo $menu['menu']['icon'] ?>
                     </span>
                     <?php
+
                     } ?>
                     <?php if (isset($menu['menu']['status'])) {
                         ?>
@@ -36,6 +37,7 @@
                         <?php echo $menu['menu']['status'] ?>
                     </span>
                     <?php
+
                     } ?>
                     <span class="webprofiler-menu-label">
                         <?php echo $menu['menu']['label'] ?>
