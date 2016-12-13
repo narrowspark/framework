@@ -51,6 +51,7 @@
         "cache/session-handler"               : "^0.2",
         "cache/void-adapter"                  : "^0.3",
         "container-interop/service-provider"  : "^0.3",
+        "micheh/psr7-cache"                   : "^0.5",
         "narrowspark/testing-helper"          : "^2.0",
         "phpunit/phpunit"                     : "^5.1",
         "viserio/container"                   : "self.version"
