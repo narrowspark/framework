@@ -125,8 +125,6 @@ interface Finder
 
     /**
      * Flush the cache of located views.
-     *
-     * @return void
      */
     public function flush(): void;
 }

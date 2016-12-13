@@ -43,8 +43,6 @@ class HtmlDumperOutput
 
     /**
      * [clear description]
-     *
-     * @return void
      */
     public function clear(): void
     {

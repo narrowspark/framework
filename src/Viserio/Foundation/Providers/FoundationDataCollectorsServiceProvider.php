@@ -54,7 +54,7 @@ class FoundationDataCollectorsServiceProvider implements ServiceProvider
     public static function createViserioConfigDataCollector(ContainerInterface $container)
     {
         if (! $container->has(RepositoryContract::class)) {
-            return null;
+            return;
         }
 
         return new ViserioConfigDataCollector(

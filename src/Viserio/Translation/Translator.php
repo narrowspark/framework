@@ -287,7 +287,7 @@ class Translator implements TranslatorContract
         $catalogue = $this->catalogue;
 
         if ($catalogue->defines($id, $domain)) {
-            return null;
+            return;
         }
 
         if ($catalogue->has($id, $domain)) {

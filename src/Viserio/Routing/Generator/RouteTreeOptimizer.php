@@ -119,7 +119,7 @@ class RouteTreeOptimizer
         $commonMatchers = array_uintersect_assoc($node1->getMatchers(), $node2->getMatchers(), $matcherCompare);
 
         if (empty($commonMatchers)) {
-            return null;
+            return;
         }
 
         $children = [];

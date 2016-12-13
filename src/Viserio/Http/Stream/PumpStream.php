@@ -201,7 +201,7 @@ class PumpStream implements StreamInterface
                 if ($data === false || $data === null) {
                     $this->source = null;
 
-                    return null;
+                    return;
                 }
 
                 $this->buffer->write($data);

@@ -169,7 +169,7 @@ class Request extends AbstractMessage implements RequestInterface
         $host = $this->uri->getHost();
 
         if ($host == '') {
-            return null;
+            return;
         }
 
         if (($port = $this->uri->getPort()) !== null) {

@@ -7,8 +7,8 @@ use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Contracts\WebProfiler\MenuAware as MenuAwareContract;
 use Viserio\Contracts\WebProfiler\TooltipAware as TooltipAwareContract;
 use Viserio\Foundation\Application;
-use Viserio\WebProfiler\DataCollectors\AbstractDataCollector;
 use Viserio\Support\Env;
+use Viserio\WebProfiler\DataCollectors\AbstractDataCollector;
 
 class NarrowsparkDataCollector extends AbstractDataCollector implements TooltipAwareContract, MenuAwareContract
 {

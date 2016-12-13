@@ -6,7 +6,7 @@ use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use Viserio\Contracts\Translation\Traits\TranslatorAwareTrait;
 use Viserio\Contracts\Translation\Translator as TranslatorContract;
 
-class TranslatorAwareTraitTest extends \PHPUnit_Framework_TestCase
+class TranslationAwareTraitTest extends \PHPUnit_Framework_TestCase
 {
     use MockeryTrait;
     use TranslatorAwareTrait;

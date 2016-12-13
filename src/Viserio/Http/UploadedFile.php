@@ -169,7 +169,7 @@ class UploadedFile implements UploadedFileInterface
      * {@inheritdoc}
      *
      * @return string|null The filename sent by the client or null if none
-     *     was provided.
+     *                     was provided.
      */
     public function getClientFilename(): ?string
     {
@@ -192,10 +192,10 @@ class UploadedFile implements UploadedFileInterface
      *
      * @param string $targetPath Path to which to move the uploaded file.
      *
-     * @throws \RuntimeException if the upload was not successful.
+     * @throws \RuntimeException         if the upload was not successful.
      * @throws \InvalidArgumentException if the $path specified is invalid.
-     * @throws \RuntimeException on any error during the move operation, or on
-     *     the second or subsequent call to the method.
+     * @throws \RuntimeException         on any error during the move operation, or on
+     *                                   the second or subsequent call to the method.
      */
     public function moveTo($targetPath): void
     {

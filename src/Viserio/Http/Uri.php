@@ -391,8 +391,6 @@ class Uri implements UriInterface
      * Create a new instance from a hash of parse_url parts
      *
      * @param array $components a hash representation of the URI similar to PHP parse_url function result
-     *
-     * @return void
      */
     private function createFromComponents(array $components): void
     {
@@ -480,8 +478,6 @@ class Uri implements UriInterface
      * Validate uri state.
      *
      * @throws InvalidArgumentException
-     *
-     * @return void
      */
     private function validateState(): void
     {

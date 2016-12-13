@@ -3,8 +3,8 @@ declare(strict_types=1);
 namespace Viserio\WebProfiler\DataCollectors;
 
 use Viserio\Contracts\WebProfiler\DataCollector as DataCollectorContract;
-use Viserio\WebProfiler\Util\TemplateHelper;
 use Viserio\Support\Str;
+use Viserio\WebProfiler\Util\TemplateHelper;
 
 abstract class AbstractDataCollector implements DataCollectorContract
 {

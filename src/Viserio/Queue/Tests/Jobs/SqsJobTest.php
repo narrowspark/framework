@@ -8,7 +8,7 @@ use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use stdClass;
 use Viserio\Queue\Jobs\SqsJob;
 
-class QueueSqsJobTest extends \PHPUnit_Framework_TestCase
+class SqsJobTest extends \PHPUnit_Framework_TestCase
 {
     use MockeryTrait;
 

@@ -185,7 +185,7 @@ class Handler implements HandlerContract
     public function report(Throwable $exception)
     {
         if ($this->shouldntReport($exception)) {
-            return null;
+            return;
         }
 
         if ($this->getContainer()->has(LoggerInterface::class)) {

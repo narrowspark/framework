@@ -7,7 +7,7 @@ use Viserio\HttpFactory\ResponseFactory;
 use Viserio\HttpFactory\ServerRequestFactory;
 use Viserio\HttpFactory\StreamFactory;
 
-class CommonrouteregmentRouterTest extends RouteRouterBaseTest
+class CommonRouteSegmentRouterTest extends RouteRouterBaseTest
 {
     public function routerMatchingProvider(): array
     {

@@ -8,11 +8,11 @@ use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Contracts\Support\Traits\ServiceProviderConfigAwareTrait;
 use Viserio\Contracts\View\Factory as FactoryContract;
 use Viserio\Filesystem\Filesystem;
+use Viserio\View\Engines\EngineResolver;
 use Viserio\View\Engines\FileEngine;
 use Viserio\View\Engines\PhpEngine;
 use Viserio\View\Engines\PlatesEngine;
 use Viserio\View\Engines\TwigEngine;
-use Viserio\View\Engines\EngineResolver;
 use Viserio\View\Factory;
 use Viserio\View\ViewFinder;
 

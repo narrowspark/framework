@@ -25,7 +25,7 @@ class AssetsRenderer implements RenderableContract
      */
     protected $jsFiles = [
         'js/zepto.min.js',
-        'js/webprofiler.js'
+        'js/webprofiler.js',
     ];
 
     /**

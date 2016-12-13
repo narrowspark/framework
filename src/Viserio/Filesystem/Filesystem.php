@@ -487,7 +487,7 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract, Direct
         }
 
         if ($visibility === null || $type === '') {
-            return null;
+            return;
         }
 
         switch ($visibility) {

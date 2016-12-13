@@ -314,7 +314,7 @@ class Worker implements WorkerContract
     protected function logFailedJob(string $connection, JobContract $job)
     {
         if ($this->failed === null) {
-            return null;
+            return;
         }
 
         $failedId = $this->failed->log($connection, $job->getQueue(), $job->getRawBody());

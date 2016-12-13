@@ -272,8 +272,6 @@ class Factory implements FactoryContract
 
     /**
      * Flush the cache of views located by the finder.
-     *
-     * @return void
      */
     public function flushFinderCache()
     {

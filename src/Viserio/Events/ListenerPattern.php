@@ -127,7 +127,7 @@ class ListenerPattern
     public function bind(DispatcherContract $dispatcher, string $eventName)
     {
         if (isset($this->events[$eventName])) {
-            return null;
+            return;
         }
 
         $dispatcher->attach($eventName, $this->getListener(), $this->priority);

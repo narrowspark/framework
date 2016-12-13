@@ -10,7 +10,7 @@ use Viserio\Container\Container;
 use Viserio\Cron\Providers\CronServiceProvider;
 use Viserio\Cron\Schedule;
 
-class ConsoleServiceProviderTest extends \PHPUnit_Framework_TestCase
+class CronServiceProviderTest extends \PHPUnit_Framework_TestCase
 {
     use MockeryTrait;
 

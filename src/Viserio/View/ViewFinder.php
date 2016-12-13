@@ -46,7 +46,7 @@ class ViewFinder implements FinderContract
      */
     protected $extensions = [
         'php',
-        'css'
+        'css',
     ];
 
     /**

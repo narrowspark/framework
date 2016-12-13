@@ -123,7 +123,7 @@ class Util
                 }
             }
 
-            return null;
+            return;
         }
 
         $bufferSize = 8192;

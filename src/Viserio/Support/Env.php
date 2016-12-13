@@ -51,7 +51,7 @@ class Env
                 FILTER_NULL_ON_FAILURE
             );
         } elseif ($value === 'null' || $value === '(null)') {
-            return null;
+            return;
         } elseif (is_numeric($value)) {
             return $value + 0;
         } elseif ($value === 'empty' || $value === '(empty)') {
