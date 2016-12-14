@@ -25,8 +25,8 @@ install:
   - IF %PHP%==1 7z x php-7.1.0-Win32-VC14-x86.zip -y >nul
   - IF %PHP%==1 del /Q *.zip
   - IF %PHP%==1 cd ext
-  - IF %PHP%==1 appveyor DownloadFile http://windows.php.net/downloads/pecl/releases/mongodb/1.1.6/php_mongodb-1.1.6-7.0-nts-vc14-x86.zip
-  - IF %PHP%==1 7z x php_mongodb-1.1.6-7.0-nts-vc14-x86.zip -y >nul
+  - IF %PHP%==1 appveyor DownloadFile http://windows.php.net/downloads/pecl/releases/mongodb/1.2.2/php_mongodb-1.2.2-7.1-ts-vc14-x86.zip
+  - IF %PHP%==1 7z x php_mongodb-1.2.2-7.1-ts-vc14-x86.zip -y >nul
   - IF %PHP%==1 del /Q *.zip
   - IF %PHP%==1 cd ..
   - IF %PHP%==1 echo @php %%~dp0composer.phar %%* > composer.bat
