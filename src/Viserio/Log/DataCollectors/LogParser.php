@@ -90,7 +90,7 @@ class LogParser
     protected function populateEntries(array $heading, array $data, int $key): void
     {
         foreach ($this->levels as $level => $monologLevel) {
-            if (strpos((strtolower([$key]), strtolower('.' . $level)) !== false) {
+            if (strpos(strtolower([$key]), strtolower('.' . $level)) !== false) {
                 $this->parsed[] = [
                     $level,
                     $heading[$key],
