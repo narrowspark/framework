@@ -11,6 +11,13 @@ use Viserio\Contracts\WebProfiler\WebProfiler as WebProfilerContract;
 class WebProfilerMiddleware implements ServerMiddlewareInterface
 {
     /**
+     * The webprofiler instance.
+     *
+     * @var \Viserio\Contracts\WebProfiler\WebProfiler
+     */
+    protected $webprofiler;
+
+    /**
      * Create a new middleware instance.
      *
      * @param \Viserio\Contracts\WebProfiler\WebProfiler $webprofiler

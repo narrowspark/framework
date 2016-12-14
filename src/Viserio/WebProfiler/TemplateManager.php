@@ -56,14 +56,15 @@ class TemplateManager implements RenderableContract
         $obLevel = ob_get_level();
 
         ob_start();
+        $data = array_merge(
+            $this->getSortedData(),
+            [
+                'token' => hash('ripemd160', random_bytes(10)),
+            ]
+        );
 
         extract(
-            array_merge(
-                $this->getSortedData(),
-                [
-                    'token' => hash('ripemd160', random_bytes(10)),
-                ]
-            ),
+            $data,
             EXTR_PREFIX_SAME,
             'viserio'
         );

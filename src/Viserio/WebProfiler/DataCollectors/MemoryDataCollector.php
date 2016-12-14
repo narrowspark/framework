@@ -55,9 +55,11 @@ class MemoryDataCollector extends AbstractDataCollector implements TooltipAwareC
      */
     public function getTooltip(): string
     {
+        $limit = $this->data['memory_limit'] == -1 ? 'Unlimited' : $this->data['memory_limit'] / 1024 / 1024;
+
         return $this->createTooltipGroup([
             'Peak memory usage' => $this->data['memory'] / 1024 / 1024 . ' MB',
-            'PHP memory limit' => ($this->data['memory_limit'] == -1 ? 'Unlimited' : $this->data['memory_limit'] / 1024 / 1024) . ' MB',
+            'PHP memory limit' => $limit . ' MB',
         ]);
     }
 

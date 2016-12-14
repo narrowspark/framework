@@ -73,8 +73,11 @@ class TranslatorServiceProvider implements ServiceProvider
         return $container->get(TranslationManager::class)->getTranslator();
     }
 
-    public static function createViserioTranslationDataCollector(ContainerInterface $container): ViserioTranslationDataCollector
-    {
-        return new ViserioTranslationDataCollector($container->get(TranslatorContract::class));
+    public static function createViserioTranslationDataCollector(
+        ContainerInterface $container
+    ): ViserioTranslationDataCollector {
+        return new ViserioTranslationDataCollector(
+            $container->get(TranslatorContract::class)
+        );
     }
 }

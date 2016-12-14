@@ -10,7 +10,9 @@ use Viserio\Foundation\Application;
 use Viserio\Support\Env;
 use Viserio\WebProfiler\DataCollectors\AbstractDataCollector;
 
-class NarrowsparkDataCollector extends AbstractDataCollector implements TooltipAwareContract, MenuAwareContract
+class NarrowsparkDataCollector extends AbstractDataCollector implements
+    TooltipAwareContract,
+    MenuAwareContract
 {
     /**
      * {@inheritdoc}
@@ -54,6 +56,7 @@ class NarrowsparkDataCollector extends AbstractDataCollector implements TooltipA
     public function getTooltip(): string
     {
         $debug = Env::get('APP_DEBUG', false);
+        $opcache = extension_loaded('Zend OPcache') && ini_get('opcache.enable');
 
         $tooltip = $this->createTooltipGroup([
             'Profiler token' => '',
@@ -77,7 +80,7 @@ class NarrowsparkDataCollector extends AbstractDataCollector implements TooltipA
                     'value' => 'Xdebug',
                 ],
                 [
-                    'class' => (extension_loaded('Zend OPcache') && ini_get('opcache.enable')) ? 'status-green' : 'status-red',
+                    'class' => $opcache ? 'status-green' : 'status-red',
                     'value' => 'OPcache',
                 ],
             ],

@@ -69,7 +69,10 @@ class WebProfilerServiceProvider implements ServiceProvider
 
     public static function createAssetsRenderer(ContainerInterface $container): AssetsRenderer
     {
-        return new AssetsRenderer(self::getConfig($container, 'jquery_is_used', false), self::getConfig($container, 'path'));
+        return new AssetsRenderer(
+            self::getConfig($container, 'jquery_is_used', false),
+            self::getConfig($container, 'path')
+        );
     }
 
     protected static function registerCollectors(ContainerInterface $container, WebProfiler $profiler)

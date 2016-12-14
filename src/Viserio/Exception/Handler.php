@@ -265,7 +265,11 @@ class Handler implements HandlerContract
         if (php_sapi_name() === 'cli') {
             (new ConsoleApplication())->renderException($transformed, new ConsoleOutput());
         } else {
-            $response = $this->getPreparedResponse($this->getContainer(), $exception, $transformed);
+            $response = $this->getPreparedResponse(
+                $this->getContainer(),
+                $exception,
+                $transformed
+            );
 
             return (string) $response->getBody();
         }
@@ -307,7 +311,11 @@ class Handler implements HandlerContract
     {
         $transformed = $this->getTransformed($exception);
 
-        return $this->getPreparedResponse($this->getContainer(), $exception, $transformed);
+        return $this->getPreparedResponse(
+            $this->getContainer(),
+            $exception,
+            $transformed
+        );
     }
 
     /**
@@ -319,7 +327,10 @@ class Handler implements HandlerContract
      */
     protected function shouldntReport(Throwable $exception): bool
     {
-        $dontReport = array_merge($this->dontReport, $this->getContainer()->get(RepositoryContract::class)->get('', []));
+        $dontReport = array_merge(
+            $this->dontReport,
+            $this->getContainer()->get(RepositoryContract::class)->get('', [])
+        );
 
         foreach ($dontReport as $type) {
             if ($exception instanceof $type) {
@@ -498,7 +509,7 @@ class Handler implements HandlerContract
      * @param \Throwable                            $exception
      * @param \Throwable                            $transformed
      *
-     * @return \Interop\Container\ContainerInterface
+     * @return \Psr\Http\Message\ResponseInterface
      */
     protected function getPreparedResponse(
         ContainerInterface $container,

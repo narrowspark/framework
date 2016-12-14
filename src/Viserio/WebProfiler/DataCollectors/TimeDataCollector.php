@@ -136,7 +136,10 @@ class TimeDataCollector extends AbstractDataCollector implements MenuAwareContra
         $end = microtime(true);
 
         if (! $this->hasStartedMeasure($name)) {
-            throw new RuntimeException("Failed stopping measure '$name' because it hasn't been started");
+            throw new RuntimeException(sprintf(
+                'Failed stopping measure "%s" because it hasn\'t been started',
+                $name
+            ));
         }
 
         $this->addMeasure(

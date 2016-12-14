@@ -74,7 +74,7 @@ class WebProfiler implements WebProfilerContract
      *
      * @param \Viserio\WebProfiler\AssetsRenderer $assetsRenderer
      */
-    public function __construct($assetsRenderer)
+    public function __construct(AssetsRenderer $assetsRenderer)
     {
         $this->assetsRenderer = $assetsRenderer->setWebProfiler($this);
     }
@@ -340,7 +340,7 @@ class WebProfiler implements WebProfilerContract
      *
      * @see https://en.wikipedia.org/wiki/List_of_HTTP_status_codes#3xx_Redirection
      *
-     * @param \Psr\Http\Message\ResponseInterface $message
+     * @param \Psr\Http\Message\ResponseInterface $response
      *
      * @return bool
      */

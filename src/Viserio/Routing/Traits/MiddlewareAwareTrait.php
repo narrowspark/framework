@@ -28,7 +28,7 @@ trait MiddlewareAwareTrait
     {
         $this->checkMiddlewareClass($middleware);
 
-        $this->middleware[$name] = $middleware;
+        $this->middlewares[$name] = $middleware;
 
         return $this;
     }

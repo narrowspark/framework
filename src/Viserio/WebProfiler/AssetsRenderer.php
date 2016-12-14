@@ -46,7 +46,7 @@ class AssetsRenderer implements RenderableContract
     ];
 
     /**
-     * The debugbar instance.
+     * The webprofiler instance.
      *
      * @var \Viserio\Contracts\WebProfiler\WebProfiler
      */
@@ -99,7 +99,7 @@ class AssetsRenderer implements RenderableContract
      *
      * @return $this
      */
-    public function setWebProfiler(WebProfiler $webprofiler): self
+    public function setWebProfiler(WebProfilerContract $webprofiler): self
     {
         $this->webprofiler = $webprofiler;
 
@@ -166,11 +166,14 @@ class AssetsRenderer implements RenderableContract
                 'v' => $this->getModifiedTime('js'),
             ]);
 
-            $cssRoute = preg_replace('/\Ahttps?:/', '', $cssRoute);
-            $jsRoute = preg_replace('/\Ahttps?:/', '', $jsRoute);
-
-            $html = "<link rel='stylesheet' type='text/css' property='stylesheet' href='{$cssRoute}'>";
-            $html .= "<script type='text/javascript' src='{$jsRoute}'></script>";
+            $html = sprintf(
+                '<link rel="stylesheet" type="text/css" property="stylesheet" href="%s">',
+                preg_replace('/\Ahttps?:/', '', $cssRoute)
+            );
+            $html .= sprintf(
+                '<script type="text/javascript" src="{$jsRoute}"></script>',
+                preg_replace('/\Ahttps?:/', '', $jsRoute)
+            );
 
             return $html;
         }

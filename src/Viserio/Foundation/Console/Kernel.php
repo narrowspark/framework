@@ -122,7 +122,7 @@ class Kernel implements KernelContract, TerminableContract
     {
         $this->bootstrap();
 
-        return $this->getConsole()->getAll();
+        return $this->getConsole()->all();
     }
 
     /**

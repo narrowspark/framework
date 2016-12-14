@@ -35,13 +35,13 @@ class AssetController extends AbstractController
     /**
      * [__construct description]
      *
-     * @param \Interop\Http\Factory\ServerRequestFactoryInterface $request
+     * @param \Interop\Http\Factory\ServerRequestFactoryInterface $serverRequest
      * @param \Interop\Http\Factory\ResponseFactoryInterface      $responseFactory
      * @param \Interop\Http\Factory\StreamFactoryInterface        $streamFactory
      * @param \Viserio\WebProfiler\WebProfiler                    $webprofiler
      */
     public function __construct(
-        ServerRequestFactoryInterface $request,
+        ServerRequestFactoryInterface $serverRequest,
         ResponseFactoryInterface $responseFactory,
         StreamFactoryInterface $streamFactory,
         WebProfiler $webprofiler
@@ -50,7 +50,7 @@ class AssetController extends AbstractController
         $this->streamFactory = $streamFactory;
         $this->webprofiler = $webprofiler;
 
-        if ($session = $request->getAttribute('session')) {
+        if ($session = $serverRequest->getAttribute('session')) {
             $session->reflash();
         }
     }
@@ -62,7 +62,7 @@ class AssetController extends AbstractController
      */
     public function js(): ResponseInterface
     {
-        $renderer = $this->webprofiler->getJavascriptRenderer();
+        $renderer = $this->webprofiler->getAssetsRenderer();
 
         $stream = $this->streamFactory->createStream(
             $renderer->dumpAssetsToString('js')
@@ -81,7 +81,7 @@ class AssetController extends AbstractController
      */
     public function css(): ResponseInterface
     {
-        $renderer = $this->webprofiler->getJavascriptRenderer();
+        $renderer = $this->webprofiler->getAssetsRenderer();
 
         $stream = $this->streamFactory->createStream(
             $renderer->dumpAssetsToString('css')

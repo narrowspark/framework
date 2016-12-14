@@ -45,7 +45,7 @@ class ProxyAdapter implements CacheItemPoolInterface
     {
         $item = $this->pool->getItem($key);
 
-        if ($isHit = $item->isHit()) {
+        if ($item->isHit()) {
             ++$this->hits;
         } else {
             ++$this->misses;
@@ -128,7 +128,7 @@ class ProxyAdapter implements CacheItemPoolInterface
     private function generateItems(array $items)
     {
         foreach ($items as $key => $item) {
-            if ($isHit = $item->isHit()) {
+            if ($item->isHit()) {
                 ++$this->hits;
             } else {
                 ++$this->misses;

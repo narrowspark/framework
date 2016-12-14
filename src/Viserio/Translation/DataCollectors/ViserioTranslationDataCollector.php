@@ -12,7 +12,11 @@ use Viserio\Contracts\WebProfiler\PanelAware as PanelAwareContract;
 use Viserio\Contracts\WebProfiler\TooltipAware as TooltipAwareContract;
 use Viserio\WebProfiler\DataCollectors\AbstractDataCollector;
 
-class ViserioTranslationDataCollector extends AbstractDataCollector implements MenuAwareContract, TooltipAwareContract, PanelAwareContract, AssetAwareContract
+class ViserioTranslationDataCollector extends AbstractDataCollector implements
+    MenuAwareContract,
+    TooltipAwareContract,
+    PanelAwareContract,
+    AssetAwareContract
 {
     use TranslatorAwareTrait;
 

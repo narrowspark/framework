@@ -232,7 +232,7 @@ class SessionManager extends AbstractManager
         return new Store(
             $this->config->get($this->getConfigName() . '.cookie', ''),
             $handler,
-            $this->encrypter
+            $this->getEncrypter()
         );
     }
 

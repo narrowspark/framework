@@ -16,8 +16,13 @@ use Viserio\Contracts\WebProfiler\MenuAware as MenuAwareContract;
 use Viserio\Contracts\WebProfiler\PanelAware as PanelAwareContract;
 use Viserio\Contracts\WebProfiler\TooltipAware as TooltipAwareContract;
 use Viserio\WebProfiler\DataCollectors\AbstractDataCollector;
+use Viserio\WebProfiler\Util\TemplateHelper;
 
-class ViserioHttpDataCollector extends AbstractDataCollector implements MenuAwareContract, TooltipAwareContract, AssetAwareContract, PanelAwareContract
+class ViserioHttpDataCollector extends AbstractDataCollector implements
+    MenuAwareContract,
+    TooltipAwareContract,
+    AssetAwareContract,
+    PanelAwareContract
 {
     /**
      * A server request instance.
@@ -185,7 +190,7 @@ class ViserioHttpDataCollector extends AbstractDataCollector implements MenuAwar
                     $this->serverRequest->getQueryParams(),
                     'Get Parameters'
                 ) . $this->createTable(
-                    $this->serverRequest->getParsedBody(),
+                    $this->serverRequest->getParsedBody() ?? [],
                     'Post Parameters'
                 ) . $this->createTable(
                     $this->prepareRequestAttributes($this->serverRequest->getAttributes()),
@@ -275,7 +280,7 @@ class ViserioHttpDataCollector extends AbstractDataCollector implements MenuAwar
             unset($result['uses']);
         } elseif (isset($action['uses']) && $action['uses'] instanceof Closure) {
             $reflector = new ReflectionFunction($action['uses']);
-            $result['uses'] = $this->dump($result['uses']);
+            $result['uses'] = TemplateHelper::dump($result['uses']);
         }
 
         if (isset($reflector)) {

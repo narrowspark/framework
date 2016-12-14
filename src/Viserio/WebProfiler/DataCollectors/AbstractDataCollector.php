@@ -78,12 +78,16 @@ abstract class AbstractDataCollector implements DataCollectorContract
         switch (substr($memoryLimit, -1)) {
             case 't':
                 $max *= 1024;
+                break;
             case 'g':
                 $max *= 1024;
+                break;
             case 'm':
                 $max *= 1024;
+                break;
             case 'k':
                 $max *= 1024;
+                break;
         }
 
         return $max;
