@@ -81,7 +81,7 @@ class FilesLoadedCollector extends AbstractDataCollector implements
                     $included,
                     '',
                     ['File']
-                );
+                ),
             ],
             [
                 'name' => 'Compiled Files <span class="counter">' . count($compiled) . '</span>',
@@ -89,7 +89,7 @@ class FilesLoadedCollector extends AbstractDataCollector implements
                     $compiled,
                     '',
                     ['File']
-                );
+                ),
             ],
         ]);
     }
