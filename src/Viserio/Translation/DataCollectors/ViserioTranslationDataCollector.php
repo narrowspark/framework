@@ -24,7 +24,7 @@ class ViserioTranslationDataCollector extends AbstractDataCollector implements M
     protected $messages;
 
     /**
-     * [__construct description]
+     * Create new translation data collector.
      *
      * @param \Viserio\Contracts\Translation\Translator $translator
      */

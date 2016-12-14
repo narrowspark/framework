@@ -54,7 +54,8 @@ final class TemplateHelper
         );
 
         $output = self::$htmlDumperOutput->getOutput();
-        self::$htmlDumperOutput->clear();
+
+        self::$htmlDumperOutput->flush();
 
         return $output;
     }

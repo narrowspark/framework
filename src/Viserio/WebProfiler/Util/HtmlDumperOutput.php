@@ -10,7 +10,7 @@ namespace Viserio\WebProfiler\Util;
 class HtmlDumperOutput
 {
     /**
-     * [$output description]
+     * Output of the dump.
      *
      * @var string|null
      */
@@ -32,7 +32,7 @@ class HtmlDumperOutput
     }
 
     /**
-     * [getOutput description]
+     * Get the dump output.
      *
      * @return string|null
      */
@@ -42,9 +42,9 @@ class HtmlDumperOutput
     }
 
     /**
-     * [clear description]
+     * Clear the output.
      */
-    public function clear(): void
+    public function flush(): void
     {
         $this->output = null;
     }

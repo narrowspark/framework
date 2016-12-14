@@ -36,7 +36,11 @@ class ViserioCacheDataCollector extends AbstractDataCollector implements MenuAwa
      */
     public function getTooltip(): string
     {
-        return '';
+        return $this->createTooltipGroup([
+            'Cache Calls' => '',
+            'Cache hits' => '',
+            'Cache writes' => '',
+        ]);
     }
 
     /**

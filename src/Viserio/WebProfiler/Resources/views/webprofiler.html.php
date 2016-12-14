@@ -26,7 +26,7 @@
                     <?php if (isset($menu['menu']['icon'])) {
                         ?>
                     <span class="webprofiler-menu-icon">
-                        <?php echo $menu['menu']['icon'] ?>
+                        <?php echo $icons[$menu['menu']['icon']] ?? $menu['menu']['icon'] ?>
                     </span>
                     <?php
 
