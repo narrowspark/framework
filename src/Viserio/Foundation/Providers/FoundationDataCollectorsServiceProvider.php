@@ -6,16 +6,12 @@ use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
 use Viserio\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Contracts\Routing\Router as RouterContract;
-use Viserio\Contracts\Support\Traits\ServiceProviderConfigAwareTrait;
 use Viserio\Foundation\DataCollectors\NarrowsparkDataCollector;
 use Viserio\Foundation\DataCollectors\ViserioHttpDataCollector;
+use Viserio\Foundation\DataCollectors\FilesLoadedCollector;
 
 class FoundationDataCollectorsServiceProvider implements ServiceProvider
 {
-    use ServiceProviderConfigAwareTrait;
-
-    const PACKAGE = 'viserio.webprofiler';
-
     /**
      * {@inheritdoc}
      */
@@ -24,6 +20,7 @@ class FoundationDataCollectorsServiceProvider implements ServiceProvider
         return [
             NarrowsparkDataCollector::class => [self::class, 'createNarrowsparkDataCollector'],
             ViserioHttpDataCollector::class => [self::class, 'createViserioHttpDataCollector'],
+            FilesLoadedCollector::class => [self::class, 'createFilesLoadedCollector'],
         ];
     }
 
@@ -38,5 +35,10 @@ class FoundationDataCollectorsServiceProvider implements ServiceProvider
             $container->get(RouterContract::class),
             $container->get(RepositoryContract::class)
         );
+    }
+
+    public static function createFilesLoadedCollector(): FilesLoadedCollector
+    {
+        return new FilesLoadedCollector();
     }
 }

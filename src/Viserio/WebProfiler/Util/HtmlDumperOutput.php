@@ -17,7 +17,7 @@ class HtmlDumperOutput
     private $output;
 
     /**
-     * [__invoke description]
+     * Check for end of dump.
      *
      * @param int $line
      * @param int $depth
