@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Cache\DataCollectors;
 
+use Psr\Cache\CacheItemPoolInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Contracts\WebProfiler\AssetAware as AssetAwareContract;
@@ -9,7 +10,6 @@ use Viserio\Contracts\WebProfiler\MenuAware as MenuAwareContract;
 use Viserio\Contracts\WebProfiler\PanelAware as PanelAwareContract;
 use Viserio\Contracts\WebProfiler\TooltipAware as TooltipAwareContract;
 use Viserio\WebProfiler\DataCollectors\AbstractDataCollector;
-use Psr\Cache\CacheItemPoolInterface;
 
 class ViserioCacheDataCollector extends AbstractDataCollector implements
     MenuAwareContract,
