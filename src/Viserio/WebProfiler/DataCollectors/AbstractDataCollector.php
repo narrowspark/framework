@@ -169,8 +169,8 @@ abstract class AbstractDataCollector implements DataCollectorContract
     }
 
     /**
-     * @param array       $data description
-     * @param string|null $name description
+     * @param array       $data      description
+     * @param string|null $name      description
      * @param array       $paramname description
      */
     protected function createTable(array $data, ?string $name = null, array $headers = ['Key', 'Value'])

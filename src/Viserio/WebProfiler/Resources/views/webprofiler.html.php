@@ -69,7 +69,8 @@
         <?php
         foreach ($panels as $name => $panel) {
             ?>
-            <div class="webprofiler-panel webprofiler-panel-<?php echo $name; echo $panel['class']; ?>">
+            <div class="webprofiler-panel webprofiler-panel-<?php echo $name;
+            echo $panel['class']; ?>">
                 <?php echo $panel['content'] ?>
             </div>
         <?php

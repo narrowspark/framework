@@ -72,7 +72,7 @@ class LogsDataCollector extends AbstractDataCollector implements
             $html .= $this->createTable(
                 $logs,
                 null,
-                [$name,]
+                [$name]
             );
         }
 

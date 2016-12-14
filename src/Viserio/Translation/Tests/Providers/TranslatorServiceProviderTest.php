@@ -10,7 +10,7 @@ use Viserio\Parsers\Providers\ParsersServiceProvider;
 use Viserio\Translation\Providers\TranslationServiceProvider;
 use Viserio\Translation\TranslationManager;
 
-class TranslationServiceProviderTest extends \PHPUnit_Framework_TestCase
+class TranslatorServiceProviderTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var org\bovigo\vfs\vfsStreamDirectory

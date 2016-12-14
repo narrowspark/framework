@@ -4,10 +4,10 @@ namespace Viserio\Log\Providers;
 
 use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
+use Viserio\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Contracts\Support\Traits\ServiceProviderConfigAwareTrait;
 use Viserio\Log\DataCollectors\LogParser;
 use Viserio\Log\DataCollectors\LogsDataCollector;
-use Viserio\Contracts\Config\Repository as RepositoryContract;
 
 class LogCollectorServiceProvider implements ServiceProvider
 {
