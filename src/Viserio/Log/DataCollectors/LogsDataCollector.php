@@ -7,8 +7,8 @@ use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Contracts\WebProfiler\MenuAware as MenuAwareContract;
 use Viserio\Contracts\WebProfiler\PanelAware as PanelAwareContract;
 use Viserio\Contracts\WebProfiler\TooltipAware as TooltipAwareContract;
-use Viserio\WebProfiler\DataCollectors\AbstractDataCollector;
 use Viserio\Log\DataCollectors\LogParser;
+use Viserio\WebProfiler\DataCollectors\AbstractDataCollector;
 
 class LogsDataCollector extends AbstractDataCollector implements
     MenuAwareContract,
@@ -73,8 +73,8 @@ class LogsDataCollector extends AbstractDataCollector implements
             [
                 'Level',
                 'Date',
-                'Message'
-            ]
+                'Message',
+            ],
         ]);
 
         return $html;

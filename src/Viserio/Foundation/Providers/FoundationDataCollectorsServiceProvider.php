@@ -6,9 +6,9 @@ use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
 use Viserio\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Contracts\Routing\Router as RouterContract;
+use Viserio\Foundation\DataCollectors\FilesLoadedCollector;
 use Viserio\Foundation\DataCollectors\NarrowsparkDataCollector;
 use Viserio\Foundation\DataCollectors\ViserioHttpDataCollector;
-use Viserio\Foundation\DataCollectors\FilesLoadedCollector;
 
 class FoundationDataCollectorsServiceProvider implements ServiceProvider
 {
