@@ -109,7 +109,19 @@ class TemplateManager implements RenderableContract
             }
 
             if ($collector instanceof PanelAwareContract) {
-                $data['panels'][$collector->getName()] = $collector->getPanel();
+                $class = '';
+                $panel = $collector->getPanel();
+
+                if (strpos($panel, '<div class="webprofiler-tabs') !== false) {
+                    $class = ' webprofiler-body-has-tabs';
+                } elseif (strpos($panel, '<table class="row">') !== false) {
+                    $class = ' webprofiler-body-has-table';
+                }
+
+                $data['panels'][$collector->getName()] = [
+                    'content' => $panel,
+                    'class' => $class,
+                ];
             }
         }
 

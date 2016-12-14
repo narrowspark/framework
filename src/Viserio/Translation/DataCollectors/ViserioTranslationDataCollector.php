@@ -6,7 +6,6 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Contracts\Translation\Traits\TranslatorAwareTrait;
 use Viserio\Contracts\Translation\Translator as TranslatorContract;
-use Viserio\Contracts\WebProfiler\AssetAware as AssetAwareContract;
 use Viserio\Contracts\WebProfiler\MenuAware as MenuAwareContract;
 use Viserio\Contracts\WebProfiler\PanelAware as PanelAwareContract;
 use Viserio\Contracts\WebProfiler\TooltipAware as TooltipAwareContract;
@@ -15,8 +14,7 @@ use Viserio\WebProfiler\DataCollectors\AbstractDataCollector;
 class ViserioTranslationDataCollector extends AbstractDataCollector implements
     MenuAwareContract,
     TooltipAwareContract,
-    PanelAwareContract,
-    AssetAwareContract
+    PanelAwareContract
 {
     use TranslatorAwareTrait;
 
@@ -117,16 +115,6 @@ class ViserioTranslationDataCollector extends AbstractDataCollector implements
         ]);
 
         return $html;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getAssets(): array
-    {
-        return [
-            'css' => __DIR__ . '/Resources/css/widgets/translation.css',
-        ];
     }
 
     /**

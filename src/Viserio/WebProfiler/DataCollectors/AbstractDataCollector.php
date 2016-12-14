@@ -147,7 +147,7 @@ abstract class AbstractDataCollector implements DataCollectorContract
         $grid = '';
 
         if (($counted = count($data)) < 12) {
-            $grid = ' col span_' . (12 / $counted);
+            $grid = ' col span_' . floor(12 / $counted);
         }
 
         $html = '<div class="webprofiler-tabs' . ($grid !== '' ? ' row' : '') . '">';
@@ -168,12 +168,17 @@ abstract class AbstractDataCollector implements DataCollectorContract
         return $html;
     }
 
-    protected function createTable(array $data, string $name = null, array $headers = ['Key', 'Value'])
+    /**
+     * @param array       $data description
+     * @param string|null $name description
+     * @param array       $paramname description
+     */
+    protected function createTable(array $data, ?string $name = null, array $headers = ['Key', 'Value'])
     {
-        $html = $name ? '<h3>' . $name . '</h3>' : '';
+        $html = $name !== null ? '<h3>' . $name . '</h3>' : '';
 
         if (count($data) !== 0) {
-            $html .= '<table><thead><tr>';
+            $html .= '<table class="row"><thead><tr>';
 
             foreach ($headers as $header) {
                 $html .= '<th scope="col" class="' . $header . '">' . $header . '</th>';
@@ -190,8 +195,12 @@ abstract class AbstractDataCollector implements DataCollectorContract
                 } else {
                     $html .= '<tr>';
 
-                    foreach ($values as $key => $value) {
-                        $html .= '<td>' . TemplateHelper::dump($value) . '</td>';
+                    if (is_array($values)) {
+                        foreach ($values as $key => $value) {
+                            $html .= '<td>' . TemplateHelper::dump($value) . '</td>';
+                        }
+                    } else {
+                        $html .= '<td>' . TemplateHelper::dump($values) . '</td>';
                     }
 
                     $html .= '</tr>';

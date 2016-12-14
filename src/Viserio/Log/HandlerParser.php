@@ -170,7 +170,7 @@ class HandlerParser
 
         switch ($formatter) {
             case 'line':
-                return new $this->formatter['line']($this->lineFormatterSettings(), 'H:i:s', true);
+                return new $this->formatter['line']($this->lineFormatterSettings(), 'H:i:s', true, true);
             case 'html':
                 return new $this->formatter['html'](DateTime::RFC2822);
             case 'normalizer':

@@ -7,10 +7,10 @@ use Viserio\Config\Providers\ConfigServiceProvider;
 use Viserio\Container\Container;
 use Viserio\Contracts\Translation\Translator as TranslatorContract;
 use Viserio\Parsers\Providers\ParsersServiceProvider;
-use Viserio\Translation\Providers\TranslatorServiceProvider;
+use Viserio\Translation\Providers\TranslationServiceProvider;
 use Viserio\Translation\TranslationManager;
 
-class TranslatorServiceProviderTest extends \PHPUnit_Framework_TestCase
+class TranslationServiceProviderTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var org\bovigo\vfs\vfsStreamDirectory
@@ -39,7 +39,7 @@ return [
     public function testProvider()
     {
         $container = new Container();
-        $container->register(new TranslatorServiceProvider());
+        $container->register(new TranslationServiceProvider());
         $container->register(new ParsersServiceProvider());
         $container->register(new ConfigServiceProvider());
 
@@ -57,7 +57,7 @@ return [
     {
         $container = new Container();
         $container->register(new ParsersServiceProvider());
-        $container->register(new TranslatorServiceProvider());
+        $container->register(new TranslationServiceProvider());
 
         $container->instance('options', [
             'locale' => 'en',
@@ -71,7 +71,7 @@ return [
     {
         $container = new Container();
         $container->register(new ParsersServiceProvider());
-        $container->register(new TranslatorServiceProvider());
+        $container->register(new TranslationServiceProvider());
 
         $container->instance('viserio.translation.options', [
             'locale' => 'en',

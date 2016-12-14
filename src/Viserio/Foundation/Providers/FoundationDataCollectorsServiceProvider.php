@@ -37,8 +37,10 @@ class FoundationDataCollectorsServiceProvider implements ServiceProvider
         );
     }
 
-    public static function createFilesLoadedCollector(): FilesLoadedCollector
+    public static function createFilesLoadedCollector(ContainerInterface $container): FilesLoadedCollector
     {
-        return new FilesLoadedCollector();
+        $config = $container->get(RepositoryContract::class);
+
+        return new FilesLoadedCollector($config->get('path.base'));
     }
 }

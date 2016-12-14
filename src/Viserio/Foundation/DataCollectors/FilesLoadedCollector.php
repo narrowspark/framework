@@ -29,6 +29,23 @@ class FilesLoadedCollector extends AbstractDataCollector implements
     protected $included = [];
 
     /**
+     * [$basePath description]
+     *
+     * @var string
+     */
+    protected $basePath;
+
+    /**
+     * Create new files loaded collector instance.
+     *
+     * @param string $basePath
+     */
+    public function __construct(string $basePath)
+    {
+        $this->basePath = $basePath;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function collect(ServerRequestInterface $serverRequest, ResponseInterface $response)
@@ -38,11 +55,16 @@ class FilesLoadedCollector extends AbstractDataCollector implements
         $compiled = $this->getCompiledFiles();
 
         $included = [];
-        $files = [];
+        $files = [
+            'included' => [],
+            'compiled' => [],
+        ];
 
         foreach ($includedFiles as $file) {
             // Skip the files from webprofiler, they are only loaded for Debugging and confuse the output.
-            if (strpos($file, 'vendor/narrowspark/webprofiler') !== false || strpos($file, 'vendor/viserio/web-profiler') !== false) {
+            if (strpos($file, 'vendor/narrowspark/framework/src/Viserio/WebProfiler') !== false ||
+                strpos($file, 'vendor/viserio/web-profiler') !== false
+            ) {
                 continue;
             } elseif (!in_array($file, $compiled)) {
                 $included[] = $files['included'][] = $this->stripBasePath($file);
@@ -61,6 +83,7 @@ class FilesLoadedCollector extends AbstractDataCollector implements
     public function getMenu(): array
     {
         return [
+            'icon' => file_get_contents(__DIR__ . '/Resources/icons/ic_insert_drive_file_white_24px.svg'),
             'label' => '',
             'value' => (string) count($this->included),
         ];
@@ -80,7 +103,7 @@ class FilesLoadedCollector extends AbstractDataCollector implements
                 'content' => $this->createTable(
                     $included,
                     '',
-                    ['File']
+                    ['Files']
                 ),
             ],
             [
@@ -88,7 +111,7 @@ class FilesLoadedCollector extends AbstractDataCollector implements
                 'content' => $this->createTable(
                     $compiled,
                     '',
-                    ['File']
+                    ['Files']
                 ),
             ],
         ]);
@@ -102,5 +125,17 @@ class FilesLoadedCollector extends AbstractDataCollector implements
     protected function getCompiledFiles(): array
     {
         return [];
+    }
+
+    /**
+     * Remove the base path from the paths, so they are relative to the base.
+     *
+     * @param string $path
+     *
+     * @return string
+     */
+    protected function stripBasePath(string $path): string
+    {
+        return ltrim(str_replace($this->basePath, '', $path), '/');
     }
 }

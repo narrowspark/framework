@@ -21,6 +21,16 @@ class LogParser
     const MAX_FILE_SIZE = 52428800;
 
     /**
+     *
+     */
+    const REGEX_DATE_PATTERN = '\b\d{4}\-\d{1,2}\-\d{1,2}\b';
+
+    /**
+     *
+     */
+    const REGEX_TIME_PATTERN = '\d{1,2}\:\d{1,2}\:\d{1,2}\b';
+
+    /**
      * Parse log file content.
      *
      * @param string $path
@@ -36,23 +46,25 @@ class LogParser
             $raw = $this->tailFile($path, 124);
         }
 
-        list($headings, $data) = $this->parseRawData($raw);
+        $log = $this->parseRawData($raw);
 
         // @codeCoverageIgnoreStart
-        if (! is_array($headings)) {
-            return $this->parsed;
+        if (! is_array($log)) {
+            return [];
         }
         // @codeCoverageIgnoreEnd
 
-        foreach ($headings as $heading) {
+        $parsed = [];
+
+        foreach ($log as $heading) {
             for ($i = 0, $j = count($heading); $i < $j; $i++) {
-                $this->populateEntries($heading, $data, $i);
+                $parsed[] = $this->populateEntries($heading, $i);
             }
         }
 
-        unset($headings, $data);
+        unset($log);
 
-        return array_reverse($this->parsed);
+        return array_reverse($parsed);
     }
 
     /**
@@ -64,35 +76,28 @@ class LogParser
      */
     protected function parseRawData(string $raw): array
     {
-        $pattern = '/\[' . REGEX_DATE_PATTERN . ' ' . REGEX_TIME_PATTERN . '\].*/';
+        $pattern = '/\[' . self::REGEX_DATE_PATTERN . '\ ' . self::REGEX_TIME_PATTERN . '\].*/';
 
-        preg_match_all($pattern, $raw, $headings);
+        preg_match_all($pattern, $raw, $log);
 
-        $data = preg_split($pattern, $raw);
-
-        if ($data[0] < 1) {
-            $trash = array_shift($data);
-            unset($trash);
-        }
-
-        return [$headings, $data];
+        return $log;
     }
 
     /**
      * Populate entries.
      *
      * @param array $heading
-     * @param array $data
      * @param int   $key
+     *
+     * @return array
      */
-    protected function populateEntries(array $heading, array $data, int $key): void
+    protected function populateEntries(array $heading, int $key): array
     {
         foreach ($this->levels as $level => $monologLevel) {
-            if (strpos(strtolower([$key]), strtolower('.' . $level)) !== false) {
-                $this->parsed[] = [
+            if (strpos(strtolower($heading[$key]), strtolower('.' . $level)) !== false) {
+                return [
                     $level,
                     $heading[$key],
-                    $data[$key],
                 ];
             }
         }

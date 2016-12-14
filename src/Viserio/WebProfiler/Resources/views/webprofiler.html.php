@@ -26,7 +26,7 @@
                     <?php if (isset($menu['menu']['icon'])) {
                         ?>
                     <span class="webprofiler-menu-icon">
-                        <?php echo $icons[$menu['menu']['icon']] ?? $menu['menu']['icon'] ?>
+                        <?php echo isset($icons[$menu['menu']['icon']]) ? file_get_contents($icons[$menu['menu']['icon']]) : $menu['menu']['icon'] ?>
                     </span>
                     <?php
 
@@ -69,8 +69,8 @@
         <?php
         foreach ($panels as $name => $panel) {
             ?>
-            <div id="webprofiler-panel-<?php echo $name ?>" class="webprofiler-panel webprofiler-panel-<?php echo $name ?>">
-                <?php echo $panel ?>
+            <div class="webprofiler-panel webprofiler-panel-<?php echo $name; echo $panel['class']; ?>">
+                <?php echo $panel['content'] ?>
             </div>
         <?php
 

@@ -41,8 +41,6 @@ class LoggerServiceProvider implements ServiceProvider
             Log::class => function (ContainerInterface $container) {
                 return $container->get(MonologWriter::class);
             },
-            LogParser::class => [self::class, 'createLogParser'],
-            LogsDataCollector::class => [self::class, 'createLogsDataCollector'],
         ];
     }
 
@@ -55,18 +53,5 @@ class LoggerServiceProvider implements ServiceProvider
         }
 
         return $logger;
-    }
-
-    public static function createLogParser(): LogParser
-    {
-        return new LogParser();
-    }
-
-    public static function createLogsDataCollector(ContainerInterface $container): LogsDataCollector
-    {
-        return new LogsDataCollector(
-            $container->get(LogParser::class),
-            self::getConfig($container, 'storages', [])
-        );
     }
 }

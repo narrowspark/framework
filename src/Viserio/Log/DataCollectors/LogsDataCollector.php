@@ -25,12 +25,12 @@ class LogsDataCollector extends AbstractDataCollector implements
      * Create a new logs data collector instance.
      *
      * @param \Viserio\Log\DataCollectors\LogParser $logParser
-     * @param array                                 $storages
+     * @param string|array                          $storages
      */
-    public function __construct(LogParser $logParser, array $storages)
+    public function __construct(LogParser $logParser, $storages)
     {
         $this->logParser = $logParser;
-        $this->storages = $storages;
+        $this->storages = (array) $storages;
     }
 
     /**
@@ -48,7 +48,7 @@ class LogsDataCollector extends AbstractDataCollector implements
     {
         return [
             'label' => 'Logs',
-            'value' => '',
+            'value' => count($this->getLogsFiles()),
         ];
     }
 
@@ -57,25 +57,24 @@ class LogsDataCollector extends AbstractDataCollector implements
      */
     public function getPanel(): string
     {
+        $html = '';
         $logs = [];
 
         foreach ($this->getLogsFiles() as $file) {
-            $log = $this->logParser->parse($file);
+            foreach ($this->storages as $storage) {
+                $name = $this->stripBasePath($storage, $file);
+            }
 
-            $logs[$log[2]] = $log;
+            foreach ($this->logParser->parse($file) as $log) {
+                $logs[] = $log[1];
+            }
+
+            $html .= $this->createTable(
+                $logs,
+                null,
+                [$name,]
+            );
         }
-
-        $html = '';
-
-        $html .= $this->createTable([
-            $logs,
-            '',
-            [
-                'Level',
-                'Date',
-                'Message',
-            ],
-        ]);
 
         return $html;
     }
@@ -97,5 +96,20 @@ class LogsDataCollector extends AbstractDataCollector implements
         $files = array_filter($files, 'is_file');
 
         return array_values($files);
+    }
+
+    /**
+     * Remove the base path from the paths, so they are relative to the base.
+     *
+     * @param string $storage
+     * @param string $path
+     *
+     * @return string
+     */
+    protected function stripBasePath(string $storage, string $path): string
+    {
+        $storage = str_replace('*', '', $storage);
+
+        return ltrim(str_replace($storage, '', $path), '/');
     }
 }

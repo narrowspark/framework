@@ -9,12 +9,11 @@ use Viserio\Contracts\Support\Traits\ServiceProviderConfigAwareTrait;
 use Viserio\Contracts\Translation\TranslationManager as TranslationManagerContract;
 use Viserio\Contracts\Translation\Translator as TranslatorContract;
 use Viserio\Parsers\FileLoader;
-use Viserio\Translation\DataCollectors\ViserioTranslationDataCollector;
 use Viserio\Translation\MessageSelector;
 use Viserio\Translation\PluralizationRules;
 use Viserio\Translation\TranslationManager;
 
-class TranslatorServiceProvider implements ServiceProvider
+class TranslationServiceProvider implements ServiceProvider
 {
     use ServiceProviderConfigAwareTrait;
 
@@ -34,7 +33,6 @@ class TranslatorServiceProvider implements ServiceProvider
             'translator' => function (ContainerInterface $container) {
                 return $container->get(TranslatorContract::class);
             },
-            ViserioTranslationDataCollector::class => [self::class, 'createViserioTranslationDataCollector'],
         ];
     }
 
@@ -71,13 +69,5 @@ class TranslatorServiceProvider implements ServiceProvider
     public static function createTranslator(ContainerInterface $container): TranslatorContract
     {
         return $container->get(TranslationManager::class)->getTranslator();
-    }
-
-    public static function createViserioTranslationDataCollector(
-        ContainerInterface $container
-    ): ViserioTranslationDataCollector {
-        return new ViserioTranslationDataCollector(
-            $container->get(TranslatorContract::class)
-        );
     }
 }
