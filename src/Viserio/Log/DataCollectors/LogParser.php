@@ -39,7 +39,7 @@ class LogParser
         list($headings, $data) = $this->parseRawData($raw);
 
         // @codeCoverageIgnoreStart
-        if ( ! is_array($headings)) {
+        if (! is_array($headings)) {
             return $this->parsed;
         }
         // @codeCoverageIgnoreEnd
@@ -48,7 +48,7 @@ class LogParser
             for ($i = 0, $j = count($heading); $i < $j; $i++) {
                 $this->populateEntries($heading, $data, $i);
             }
-        };
+        }
 
         unset($headings, $data);
 
@@ -64,7 +64,7 @@ class LogParser
      */
     protected function parseRawData(string $raw): array
     {
-        $pattern = '/\['.REGEX_DATE_PATTERN.' '.REGEX_TIME_PATTERN.'\].*/';
+        $pattern = '/\[' . REGEX_DATE_PATTERN . ' ' . REGEX_TIME_PATTERN . '\].*/';
 
         preg_match_all($pattern, $raw, $headings);
 
@@ -84,8 +84,6 @@ class LogParser
      * @param array $heading
      * @param array $data
      * @param int   $key
-     *
-     * @return void
      */
     protected function populateEntries(array $heading, array $data, int $key): void
     {
@@ -94,7 +92,7 @@ class LogParser
                 $this->parsed[] = [
                     $level,
                     $heading[$key],
-                    $data[$key]
+                    $data[$key],
                 ];
             }
         }
@@ -112,14 +110,14 @@ class LogParser
      */
     protected function tailFile(string $file, int $lines): array
     {
-        $handle = fopen($file, "r");
+        $handle = fopen($file, 'r');
         $linecounter = $lines;
         $pos = -2;
         $beginning = false;
         $text = [];
 
         while ($linecounter > 0) {
-            $t = " ";
+            $t = ' ';
 
             while ($t != "\n") {
                 if (fseek($handle, $pos, SEEK_END) == -1) {
