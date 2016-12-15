@@ -216,4 +216,38 @@ abstract class AbstractDataCollector implements DataCollectorContract
 
         return $html;
     }
+
+    /**
+     * Create a dropdown menu content.
+     *
+     * @param array $data
+     *
+     * @return string
+     */
+    protected function createDropdownMenuContent(array $data)
+    {
+        $selects = $content = [];
+        $selected = false;
+
+        foreach ($data as $key => $value) {
+            $id = 'content-' . $key . '- ' . uniqid('');
+
+            $selects[$key] = '<option value="' . $id . '"' . echo ($selected ? $selected = 'selected' : '') .'>' . $key . '</option>';
+            $content[$key] = '<div id="' . $id . '" class="">' . $value . '</div>';
+        }
+
+        $html = '<select name="' . $this->getName() . '">';
+
+        foreach ($selects as $key => $value) {
+            $html .= $value;
+        }
+
+        $html .= '</select>';
+
+        foreach ($content as $key => $value) {
+            $html .= $value;
+        }
+
+        return $html;
+    }
 }

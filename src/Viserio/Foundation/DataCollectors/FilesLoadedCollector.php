@@ -83,7 +83,7 @@ class FilesLoadedCollector extends AbstractDataCollector implements
     public function getMenu(): array
     {
         return [
-            'icon' => file_get_contents(__DIR__ . '/Resources/icons/ic_insert_drive_file_white_24px.svg'),
+            'icon' => 'ic_insert_drive_file_white_24px.svg',
             'label' => '',
             'value' => (string) count($this->included),
         ];

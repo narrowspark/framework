@@ -110,7 +110,7 @@ class Repository implements RepositoryContract, IteratorAggregate
     /**
      * {@inheritdoc}
      */
-    public function allFlat(): array
+    public function getAllFlat(): array
     {
         return Arr::flatten($this->data, '.');
     }

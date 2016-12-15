@@ -247,7 +247,7 @@ class ViserioHttpDataCollector extends AbstractDataCollector implements
     public function getAssets(): array
     {
         return [
-            'css' => __DIR__ . '/Resources/css/widgets/viserio/request-response.css',
+            'css' => __DIR__ . '/Resources/css/request-response.css',
         ];
     }
 

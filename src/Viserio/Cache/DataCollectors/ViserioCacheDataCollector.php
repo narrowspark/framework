@@ -5,7 +5,6 @@ namespace Viserio\Cache\DataCollectors;
 use Psr\Cache\CacheItemPoolInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Viserio\Contracts\WebProfiler\AssetAware as AssetAwareContract;
 use Viserio\Contracts\WebProfiler\MenuAware as MenuAwareContract;
 use Viserio\Contracts\WebProfiler\PanelAware as PanelAwareContract;
 use Viserio\Contracts\WebProfiler\TooltipAware as TooltipAwareContract;
@@ -14,8 +13,7 @@ use Viserio\WebProfiler\DataCollectors\AbstractDataCollector;
 class ViserioCacheDataCollector extends AbstractDataCollector implements
     MenuAwareContract,
     TooltipAwareContract,
-    PanelAwareContract,
-    AssetAwareContract
+    PanelAwareContract
 {
     /**
      * Create a new cache data collector.
@@ -64,15 +62,5 @@ class ViserioCacheDataCollector extends AbstractDataCollector implements
     public function getPanel(): string
     {
         return '';
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getAssets(): array
-    {
-        return [
-            'css' => __DIR__ . '/Resources/css/widgets/viserio/cache.css',
-        ];
     }
 }

@@ -22,7 +22,7 @@ class ViserioEventDataCollector extends TimeDataCollector implements PanelAwareC
     public function getMenu(): array
     {
         return [
-            'icon' => file_get_contents(__DIR__ . '/../Resources/icons/ic_settings_applications_white_24px.svg'),
+            'icon' => 'ic_settings_applications_white_24px.svg',
             'label' => 'Events',
             'value' => '',
         ];
