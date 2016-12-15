@@ -66,6 +66,7 @@
         ?>
     </div>
     <div class="webprofiler-body">
+        <div id="webprofiler-body-dragbar"></div>
         <?php
         foreach ($panels as $name => $panel) {
             ?>

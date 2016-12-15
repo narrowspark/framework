@@ -128,7 +128,7 @@
         "mouf/picotainer"                                    : "^1.0",
         "narrowspark/php-cs-fixer-config"                    : "^2.1",
         "narrowspark/testing-helper"                         : "^2.0",
-        "mockery/mockery"                                    : "^0.9.5",
+        "mockery/mockery"                                    : "dev-master",
         "phpunit/phpunit"                                    : "^5.1",
         "phpbench/phpbench"                                  : "^0.12",
         "predis/predis"                                      : "^1.0",
