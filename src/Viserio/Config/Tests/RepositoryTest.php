@@ -159,7 +159,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
             ],
         ]);
 
-        self::assertArrayHasKey('123.456.789', $repository->allFlat());
+        self::assertArrayHasKey('123.456.789', $repository->getAllFlat());
     }
 
     public function testMergeArray()
