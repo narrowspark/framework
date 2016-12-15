@@ -15,14 +15,8 @@ class ViewFinderTest extends \PHPUnit_Framework_TestCase
     public function testBasicViewFinding()
     {
         $path = self::normalizeDirectorySeparator($this->getPath() . '/' . 'foo.php');
-        $path2 = self::normalizeDirectorySeparator($this->getPath() . '/' . 'foo.css');
 
         $finder = $this->getFinder();
-        $finder->getFilesystem()
-            ->shouldReceive('has')
-            ->once()
-            ->with($path2)
-            ->andReturn(false);
         $finder->getFilesystem()
             ->shouldReceive('has')
             ->once()
@@ -49,11 +43,6 @@ class ViewFinderTest extends \PHPUnit_Framework_TestCase
         $finder->getFilesystem()
             ->shouldReceive('has')
             ->once()
-            ->with($path)
-            ->andReturn(true);
-        $finder->getFilesystem()
-            ->shouldReceive('has')
-            ->once()
             ->with($path2)
             ->andReturn(false);
         $finder->getFilesystem()
@@ -61,6 +50,11 @@ class ViewFinderTest extends \PHPUnit_Framework_TestCase
             ->once()
             ->with($path3)
             ->andReturn(false);
+        $finder->getFilesystem()
+            ->shouldReceive('has')
+            ->once()
+            ->with($path)
+            ->andReturn(true);
 
         self::assertEquals(
             $path,
@@ -72,7 +66,7 @@ class ViewFinderTest extends \PHPUnit_Framework_TestCase
     {
         $path = self::normalizeDirectorySeparator($this->getPath() . '/' . 'foo.php');
         $path2 = self::normalizeDirectorySeparator($this->getPath() . '/' . 'Nested/foo.php');
-        $path3 = self::normalizeDirectorySeparator($this->getPath() . '/' . 'foo.php');
+        $path3 = self::normalizeDirectorySeparator($this->getPath() . '/' . 'foo.phtml');
         $path4 = self::normalizeDirectorySeparator($this->getPath() . '/' . 'foo.css');
 
         $finder = $this->getFinder();
@@ -107,18 +101,12 @@ class ViewFinderTest extends \PHPUnit_Framework_TestCase
     public function testNamespacedBasicFileLoading()
     {
         $path = self::normalizeDirectorySeparator($this->getPath() . '/' . 'foo/bar/baz.php');
-        $path2 = self::normalizeDirectorySeparator($this->getPath() . '/' . 'foo.css');
 
         $finder = $this->getFinder();
         $finder->addNamespace(
             'foo',
             self::normalizeDirectorySeparator($this->getPath() . '/' . 'foo')
         );
-        $finder->getFilesystem()
-            ->shouldReceive('has')
-            ->once()
-            ->with($path2)
-            ->andReturn(false);
         $finder->getFilesystem()
             ->shouldReceive('has')
             ->once()
@@ -134,18 +122,12 @@ class ViewFinderTest extends \PHPUnit_Framework_TestCase
     public function testCascadingNamespacedFileLoading()
     {
         $path = self::normalizeDirectorySeparator($this->getPath() . '/' . 'foo/bar/baz.php');
-        $path2 = self::normalizeDirectorySeparator($this->getPath() . '/' . 'foo.css');
 
         $finder = $this->getFinder();
         $finder->addNamespace(
             'foo',
             self::normalizeDirectorySeparator($this->getPath() . '/' . 'foo')
         );
-        $finder->getFilesystem()
-            ->shouldReceive('has')
-            ->once()
-            ->with($path2)
-            ->andReturn(false);
         $finder->getFilesystem()
             ->shouldReceive('has')
             ->once()
@@ -167,7 +149,8 @@ class ViewFinderTest extends \PHPUnit_Framework_TestCase
         $path = self::normalizeDirectorySeparator($this->getPath() . '/' . 'foo/bar/baz.php');
         $path2 = self::normalizeDirectorySeparator($this->getPath() . '/' . 'bar/bar/baz.php');
         $path3 = self::normalizeDirectorySeparator($this->getPath() . '/' . 'foo/bar/baz.phtml');
-        $path4 = self::normalizeDirectorySeparator($this->getPath() . '/' . 'foo.css');
+        $path4 = self::normalizeDirectorySeparator($this->getPath() . '/' . 'foo/bar/foo.css');
+        $path5 = self::normalizeDirectorySeparator($this->getPath() . '/' . 'bar/bar/baz.css');
 
         $finder = $this->getFinder();
         $finder->addNamespace(
@@ -195,6 +178,11 @@ class ViewFinderTest extends \PHPUnit_Framework_TestCase
             ->shouldReceive('has')
             ->once()
             ->with($path4)
+            ->andReturn(false);
+        $finder->getFilesystem()
+            ->shouldReceive('has')
+            ->once()
+            ->with($path5)
             ->andReturn(false);
         $finder->getFilesystem()
             ->shouldReceive('has')
@@ -248,14 +236,8 @@ class ViewFinderTest extends \PHPUnit_Framework_TestCase
     public function testExceptionThrownWhenViewHasAInvalidName()
     {
         $path = self::normalizeDirectorySeparator($this->getPath() . '/' . 'foo.php');
-        $path2 = self::normalizeDirectorySeparator($this->getPath() . '/' . 'foo.css');
 
         $finder = $this->getFinder();
-        $finder->getFilesystem()
-            ->shouldReceive('has')
-            ->once()
-            ->with($path2)
-            ->andReturn(false);
         $finder->getFilesystem()
             ->shouldReceive('has')
             ->once()
