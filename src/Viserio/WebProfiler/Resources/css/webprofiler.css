@@ -9,19 +9,20 @@
     right: 0;
     text-align: left;
     text-transform: none;
-    z-index: 99999;
 
     /* neutralize the aliasing defined by external CSS styles */
     -webkit-font-smoothing: subpixel-antialiased;
     -moz-osx-font-smoothing: auto;
 }
 
-.webprofiler .webprofiler-header.hide {
+.webprofiler .webprofiler-header.hide,
+.webprofiler .webprofiler-body .webprofiler-panel .selected-content {
     display: none;
 }
 .webprofiler .show-button.active,
 .webprofiler .webprofiler-body.active,
-.webprofiler .webprofiler-body .webprofiler-panel.active {
+.webprofiler .webprofiler-body .webprofiler-panel.active,
+.webprofiler .webprofiler-body .webprofiler-panel .selected-content.active {
     display: block;
 }
 
@@ -33,6 +34,7 @@
     border-top: 1px solid #383838;
     box-shadow: 0 -1px 0 rgba(0, 0, 0, 0.2);
     background-color: #222;
+    z-index: 9999;
 }
 
 .webprofiler .show-button {
@@ -197,6 +199,8 @@
     background-color: #222;
     margin-bottom: 37px;
     display: none;
+    position: relative;
+    z-index: 9998;
 }
 .webprofiler .webprofiler-body pre.sf-dump,
 .webprofiler .webprofiler-body pre.sf-dump .sf-dump-num,
@@ -218,8 +222,10 @@
     height: 270px;
     display: none;
 }
-.webprofiler .webprofiler-body .webprofiler-panel.webprofiler-body-has-table {
-    overflow: auto;
+.webprofiler .webprofiler-body .webprofiler-panel.webprofiler-body-has-table,
+.webprofiler .webprofiler-body .webprofiler-panel.webprofiler-body-has-selector {
+    overflow-y: auto;
+    overflow-x: hidden;
     padding: 15px;
 }
 .webprofiler .webprofiler-body .webprofiler-panel .webprofiler-tabs {
@@ -355,4 +361,29 @@
     padding: .5em 2em;
     text-align: center;
     font-weight: bold;
+}
+
+.webprofiler .webprofiler-body .webprofiler-panel select {
+    width: 100%;
+    padding: 10px 0;
+    cursor: pointer;
+    margin-bottom: 15px;
+    font-weight: bold;
+    border: 0;
+}
+
+.webprofiler .webprofiler-body #webprofiler-body-dragbar {
+    display: block;
+    width: 100%;
+    height: 5px;
+    cursor: row-resize;
+}
+.webprofiler .webprofiler-body #webprofiler-body-ghostbar{
+    width: 100%;
+    height: 5px;
+    opacity: 0.5;
+    position: absolute;
+    cursor: row-resize;
+    z-index: 999;
+    top: 0;
 }

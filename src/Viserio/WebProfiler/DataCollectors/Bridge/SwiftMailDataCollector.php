@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\WebProfiler\DataCollectors;
+namespace Viserio\WebProfiler\DataCollectors\Bridge;
 
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -8,6 +8,7 @@ use Swift_Mailer;
 use Swift_Plugins_MessageLogger;
 use Viserio\Contracts\WebProfiler\MenuAware as MenuAwareContract;
 use Viserio\Contracts\WebProfiler\PanelAware as PanelAwareContract;
+use Viserio\WebProfiler\DataCollectors\AbstractDataCollector;
 
 class SwiftMailDataCollector extends AbstractDataCollector implements MenuAwareContract, PanelAwareContract
 {
@@ -57,7 +58,7 @@ class SwiftMailDataCollector extends AbstractDataCollector implements MenuAwareC
     public function getMenu(): array
     {
         return [
-            'icon' => file_get_contents(__DIR__ . '/../Resources/icons/ic_schedule_white_24px.svg'),
+            'icon' => 'ic_mail_outline_white_24px.svg',
             'label' => 'Mails',
             'value' => $this->data['count'],
         ];

@@ -230,13 +230,13 @@ abstract class AbstractDataCollector implements DataCollectorContract
         $selected = false;
 
         foreach ($data as $key => $value) {
-            $id = 'content-' . $key . '- ' . uniqid('');
+            $id = 'content-' . $key . '-' . uniqid('');
 
             $selects[$key] = '<option value="' . $id . '"' . ($selected === false ? $selected = 'selected' : '') . '>' . $key . '</option>';
-            $content[$key] = '<div id="' . $id . '" class="">' . $value . '</div>';
+            $content[$key] = '<div class="' . $id . ' selected-content">' . $value . '</div>';
         }
 
-        $html = '<select name="' . $this->getName() . '">';
+        $html = '<select class="content-selector" name="' . $this->getName() . '">';
 
         foreach ($selects as $key => $value) {
             $html .= $value;

@@ -65,16 +65,14 @@ class LogsDataCollector extends AbstractDataCollector implements
                 $name = $this->stripBasePath($storage, $file);
             }
 
-            foreach ($this->logParser->parse($file) as $log) {
-                $logs[] = $log[1];
-            }
-
-            $html .= $this->createTable(
-                $logs,
+            $logs[str_replace('.log', '', $name)] = $this->createTable(
+                $this->logParser->parse($file),
                 null,
-                [$name]
+                ['Type', 'Message']
             );
         }
+
+        $html .= $this->createDropdownMenuContent($logs);
 
         return $html;
     }
