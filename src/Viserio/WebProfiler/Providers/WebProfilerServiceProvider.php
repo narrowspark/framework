@@ -15,7 +15,9 @@ use Viserio\Contracts\WebProfiler\WebProfiler as WebProfilerContract;
 use Viserio\WebProfiler\AssetsRenderer;
 use Viserio\WebProfiler\DataCollectors\MemoryDataCollector;
 use Viserio\WebProfiler\DataCollectors\TimeDataCollector;
+use Viserio\WebProfiler\DataCollectors\Bridge\SwiftMailDataCollector;
 use Viserio\WebProfiler\WebProfiler;
+use Swift_Mailer;
 
 class WebProfilerServiceProvider implements ServiceProvider
 {
@@ -85,6 +87,12 @@ class WebProfilerServiceProvider implements ServiceProvider
 
         if (self::getConfig($container, 'collector.memory', true)) {
             $profiler->addCollector(new MemoryDataCollector());
+        }
+
+        if (self::getConfig($container, 'collector.swiftmail', false)) {
+            $profiler->addCollector(new SwiftMailDataCollector(
+                $container->get(Swift_Mailer::class)
+            ));
         }
     }
 

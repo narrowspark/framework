@@ -65,7 +65,7 @@ class TimeDataCollector extends AbstractDataCollector implements MenuAwareContra
     public function getMenu(): array
     {
         return [
-            'icon' => file_get_contents(__DIR__ . '/../Resources/icons/ic_schedule_white_24px.svg'),
+            'icon' => 'ic_schedule_white_24px.svg',
             'label' => $this->formatDuration($this->getRequestDuration()),
             'value' => '',
         ];
