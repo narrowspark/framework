@@ -232,7 +232,7 @@ abstract class AbstractDataCollector implements DataCollectorContract
         foreach ($data as $key => $value) {
             $id = 'content-' . $key . '- ' . uniqid('');
 
-            $selects[$key] = '<option value="' . $id . '"' . echo ($selected ? $selected = 'selected' : '') .'>' . $key . '</option>';
+            $selects[$key] = '<option value="' . $id . '"' . ($selected === false ? $selected = 'selected' : '') .'>' . $key . '</option>';
             $content[$key] = '<div id="' . $id . '" class="">' . $value . '</div>';
         }
 
