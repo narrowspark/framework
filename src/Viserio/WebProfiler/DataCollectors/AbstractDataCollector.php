@@ -134,7 +134,7 @@ abstract class AbstractDataCollector implements DataCollectorContract
     /**
      * Creates a tab slider.
      *
-     * array['id']     array     Defines witch tabs a shown.
+     * array[]         array     Defines witch tabs a shown.
      *     ['name']    string    Name of the tab
      *     ['content'] string    Tab content.
      *
@@ -169,9 +169,11 @@ abstract class AbstractDataCollector implements DataCollectorContract
     }
 
     /**
-     * @param array       $data      description
-     * @param string|null $name      description
-     * @param array       $paramname description
+     * Creates a table.
+     *
+     * @param array       $data
+     * @param string|null $name
+     * @param array       $headers
      */
     protected function createTable(array $data, ?string $name = null, array $headers = ['Key', 'Value'])
     {
