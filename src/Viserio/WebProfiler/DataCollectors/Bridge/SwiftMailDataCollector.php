@@ -4,8 +4,8 @@ namespace Viserio\WebProfiler\DataCollectors;
 
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Swift_Plugins_MessageLogger;
 use Swift_Mailer;
+use Swift_Plugins_MessageLogger;
 use Viserio\Contracts\WebProfiler\MenuAware as MenuAwareContract;
 use Viserio\Contracts\WebProfiler\PanelAware as PanelAwareContract;
 
@@ -41,13 +41,13 @@ class SwiftMailDataCollector extends AbstractDataCollector implements MenuAwareC
             $mails[] = [
                 'to' => $this->formatTo($message->getTo()),
                 'subject' => $message->getSubject(),
-                'headers' => $message->getHeaders()->toString()
+                'headers' => $message->getHeaders()->toString(),
             ];
         }
 
         $this->data = [
             'count' => count($mails),
-            'mails' => $mails
+            'mails' => $mails,
         ];
     }
 

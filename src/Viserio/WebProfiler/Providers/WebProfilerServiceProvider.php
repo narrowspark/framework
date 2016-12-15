@@ -8,16 +8,16 @@ use Interop\Http\Factory\StreamFactoryInterface;
 use Psr\Cache\CacheItemPoolInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\LoggerInterface as PsrLoggerInterface;
+use Swift_Mailer;
 use Viserio\Contracts\Routing\Router as RouterContract;
 use Viserio\Contracts\Routing\UrlGenerator as UrlGeneratorContract;
 use Viserio\Contracts\Support\Traits\ServiceProviderConfigAwareTrait;
 use Viserio\Contracts\WebProfiler\WebProfiler as WebProfilerContract;
 use Viserio\WebProfiler\AssetsRenderer;
+use Viserio\WebProfiler\DataCollectors\Bridge\SwiftMailDataCollector;
 use Viserio\WebProfiler\DataCollectors\MemoryDataCollector;
 use Viserio\WebProfiler\DataCollectors\TimeDataCollector;
-use Viserio\WebProfiler\DataCollectors\Bridge\SwiftMailDataCollector;
 use Viserio\WebProfiler\WebProfiler;
-use Swift_Mailer;
 
 class WebProfilerServiceProvider implements ServiceProvider
 {
