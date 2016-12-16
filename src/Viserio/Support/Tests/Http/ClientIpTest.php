@@ -7,7 +7,7 @@ use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Support\Http\ClientIp;
 
-class ClassLoaderTest extends \PHPUnit_Framework_TestCase
+class ClientIpTest extends \PHPUnit_Framework_TestCase
 {
     use MockeryTrait;
 
