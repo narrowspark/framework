@@ -60,8 +60,6 @@ class Profile
      * Sets the token.
      *
      * @param string $token The token
-     *
-     * @return void
      */
     public function setToken(string $token): void
     {
@@ -92,8 +90,6 @@ class Profile
      * Sets the IP.
      *
      * @param string $ip
-     *
-     * @return void
      */
     public function setIp(string $ip): void
     {
@@ -114,8 +110,6 @@ class Profile
      * [setMethod description]
      *
      * @param string $method
-     *
-     * @return void
      */
     public function setMethod(string $method): void
     {
@@ -136,8 +130,6 @@ class Profile
      * [setUrl description]
      *
      * @param string $url
-     *
-     * @return void
      */
     public function setUrl(string $url): void
     {
@@ -162,8 +154,6 @@ class Profile
      * [setTime description]
      *
      * @param string $time
-     *
-     * @return void
      */
     public function setTime(string $time): void
     {
@@ -171,10 +161,7 @@ class Profile
     }
 
     /**
-     *
      * @param string $statusCode
-     *
-     * @return void
      */
     public function setStatusCode(string $statusCode): void
     {
@@ -182,7 +169,6 @@ class Profile
     }
 
     /**
-     *
      * @return string
      */
     public function getStatusCode(): string
@@ -268,7 +254,7 @@ class Profile
             'method',
             'url',
             'time',
-            'statusCode'
+            'statusCode',
         ];
     }
 }
