@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Session\Tests;
 
-use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use Mockery as Mock;
+use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Session\Fingerprint\ClientIpGenerator;
 
