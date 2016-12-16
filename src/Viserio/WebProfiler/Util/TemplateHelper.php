@@ -7,6 +7,10 @@ use Symfony\Component\VarDumper\Cloner\AbstractCloner;
 use Symfony\Component\VarDumper\Cloner\VarCloner;
 use Viserio\Support\Debug\HtmlDumper;
 
+/**
+ * Ported.
+ * @see https://github.com/filp/whoops/blob/master/src/Whoops/Util/TemplateHelper.php
+ */
 final class TemplateHelper
 {
     /**
