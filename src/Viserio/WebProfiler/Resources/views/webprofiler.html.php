@@ -1,15 +1,22 @@
 <?php
 use Viserio\WebProfiler\Util\TemplateHelper;
 
+if (! isset($token, $menus, $icons, $panels)) {
+    return;
+}
 ?>
-<div id="webprofiler-<?php echo isset($token) ? TemplateHelper::escape($token) : ''; ?>" class="webprofiler">
-    <a class="show-button" title="Show WebProfiler" tabindex="-1" accesskey="D"><?php echo isset($icons) ? file_get_contents($icons['ic_narrowspark_white_24px.svg']) : '' ?></a>
+<div id="webprofiler-<?php echo TemplateHelper::escape($token); ?>" class="webprofiler">
+    <a class="webprofiler-show-button" title="Show WebProfiler" tabindex="-1" accesskey="D">
+        <?php echo file_get_contents($icons['ic_narrowspark_white_24px.svg']); ?>
+    </a>
     <div class="webprofiler-header">
         <?php
-            if (isset($menus) && count($menus) !== 0) {
+            if (count($menus) !== 0) {
                 ?>
         <div class="webprofiler-menus">
-            <a class="hide-button" title="Close WebProfiler" tabindex="-1" accesskey="D"><?php echo isset($icons) ? file_get_contents($icons['ic_clear_white_24px.svg']) : '' ?></a>
+            <a class="webprofiler-hide-button" title="Close WebProfiler" tabindex="-1" accesskey="D">
+                <?php echo file_get_contents($icons['ic_clear_white_24px.svg']); ?>
+            </a>
         <?php
                 foreach ($menus as $name => $menu) {
                     $tooltip = false;
@@ -69,15 +76,12 @@ use Viserio\WebProfiler\Util\TemplateHelper;
     <div class="webprofiler-body">
         <div id="webprofiler-body-dragbar"></div>
         <?php
-            if (isset($panels)) {
-                foreach ($panels as $name => $panel) {
-                    ?>
+            foreach ($panels as $name => $panel) {
+                ?>
         <div class="webprofiler-panel webprofiler-panel-<?php echo TemplateHelper::escape($name) . TemplateHelper::escape($panel['class']); ?>">
             <?php echo TemplateHelper::escape($panel['content']) ?>
         </div>
         <?php
-
-                }
             }
         ?>
     </div>

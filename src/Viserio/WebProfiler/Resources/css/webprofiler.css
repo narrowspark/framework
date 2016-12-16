@@ -19,7 +19,7 @@
 .webprofiler .webprofiler-body .webprofiler-panel .selected-content {
     display: none;
 }
-.webprofiler .show-button.active,
+.webprofiler .webprofiler-show-button.active,
 .webprofiler .webprofiler-body.active,
 .webprofiler .webprofiler-body .webprofiler-panel.active,
 .webprofiler .webprofiler-body .webprofiler-panel .selected-content.active {
@@ -37,7 +37,7 @@
     z-index: 9999;
 }
 
-.webprofiler .show-button {
+.webprofiler .webprofiler-show-button {
     background-color: #222;
     border-top-left-radius: 4px;
     bottom: 0;
@@ -52,7 +52,7 @@
     z-index: 99999;
     cursor: pointer;
 }
-.webprofiler .webprofiler-header .hide-button {
+.webprofiler .webprofiler-header .webprofiler-hide-button {
     background: #444;
     display: block;
     width: 36px;
@@ -61,7 +61,7 @@
     text-align: center;
     float: right;
 }
-.webprofiler .webprofiler-header .hide-button svg,
+.webprofiler .webprofiler-header .webprofiler-hide-button svg,
 .webprofiler .webprofiler-header .webprofiler-menus a.webprofiler-menu svg {
     position: relative;
     top: 6px;
