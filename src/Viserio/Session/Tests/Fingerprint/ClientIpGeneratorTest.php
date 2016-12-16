@@ -24,6 +24,14 @@ class ClientIpGeneratorTest extends \PHPUnit_Framework_TestCase
     public function testGenerate()
     {
         $request = $this->mock(ServerRequestInterface::class);
+        $request->shouldReceive('hasHeader')
+            ->with('HTTP_X_FORWARDED_FOR')
+            ->once()
+            ->andReturn(false);
+        $request->shouldReceive('hasHeader')
+            ->with('REMOTE_ADDR')
+            ->once()
+            ->andReturn(false);
 
         $generator = new ClientIpGenerator($request);
 
@@ -33,30 +41,40 @@ class ClientIpGeneratorTest extends \PHPUnit_Framework_TestCase
 
     public function testGenerateWithProxyIp()
     {
-        $_SERVER['HTTP_X_FORWARDED_FOR'] = '111.111.111.111,123.45.67.178';
-
         $request = $this->mock(ServerRequestInterface::class);
+        $request->shouldReceive('hasHeader')
+            ->with('HTTP_X_FORWARDED_FOR')
+            ->once()
+            ->andReturn(true);
+        $request->shouldReceive('getHeader')
+            ->with('HTTP_X_FORWARDED_FOR')
+            ->andReturn('111.111.111.111,123.45.67.178');
 
         $generator = new ClientIpGenerator($request);
 
         self::assertInternalType('string', $generator->generate());
         self::assertSame(40, strlen($generator->generate()));
-
-        unset($_SERVER['HTTP_X_FORWARDED_FOR']);
     }
 
     public function testGenerateWithIp()
     {
-        $_SERVER['REMOTE_ADDR'] = '192.0.2.60';
-
         $request = $this->mock(ServerRequestInterface::class);
+        $request->shouldReceive('hasHeader')
+            ->with('HTTP_X_FORWARDED_FOR')
+            ->once()
+            ->andReturn(false);
+        $request->shouldReceive('hasHeader')
+            ->with('REMOTE_ADDR')
+            ->once()
+            ->andReturn(true);
+        $request->shouldReceive('getHeader')
+            ->with('REMOTE_ADDR')
+            ->andReturn('100.8.116.127');
 
         $generator = new ClientIpGenerator($request);
 
         self::assertInternalType('string', $generator->generate());
         self::assertSame(40, strlen($generator->generate()));
-
-        unset($_SERVER['REMOTE_ADDR']);
 
         // return empty ip string
         self::assertInternalType('string', $generator->generate());

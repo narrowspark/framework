@@ -35,14 +35,15 @@ class ClientIp
         }
 
         // direct IP address
-        if (isset($_SERVER['REMOTE_ADDR'])) {
+        if ($this->serverRequest->hasHeader('REMOTE_ADDR')) {
             $ip = filter_var(
-                $_SERVER['REMOTE_ADDR'],
-                FILTER_VALIDATE_IP | FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE
+                $this->serverRequest->getHeader('REMOTE_ADDR'),
+                FILTER_VALIDATE_IP,
+                FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE
             );
 
-            if ($ip === false) {
-                return '';
+            if ($ip !== false) {
+                return $ip;
             }
         }
 
@@ -58,14 +59,12 @@ class ClientIp
      */
     private function getIpAddressFromProxy(): ?string
     {
-        $header = 'HTTP_X_FORWARDED_FOR';
-
-        if (! isset($_SERVER[$header]) || empty($_SERVER[$header])) {
+        if (! $this->serverRequest->hasHeader('HTTP_X_FORWARDED_FOR')) {
             return null;
         }
 
         // Extract IPs
-        $ips = explode(',', $_SERVER[$header]);
+        $ips = explode(',', $this->serverRequest->getHeader('HTTP_X_FORWARDED_FOR'));
         $ips = array_map('trim', $ips);
 
         // @codeCoverageIgnoreStart
@@ -78,6 +77,10 @@ class ClientIp
         // -- i.e., we do not know if it is a proxy server, or a client. As such,
         // we treat it as the originating IP.
         // @see http://en.wikipedia.org/wiki/X-Forwarded-For
-        return filter_var($ips[0], FILTER_VALIDATE_IP);
+        if ($ip = filter_var($ips[0], FILTER_VALIDATE_IP)) {
+            return $ip;
+        }
+
+        return null;
     }
 }
