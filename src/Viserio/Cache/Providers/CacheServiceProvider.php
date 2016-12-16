@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Cache\Providers;
 
+use Cache\Adapter\Chain\CachePoolChain;
 use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
 use Psr\Cache\CacheItemPoolInterface;
@@ -9,7 +10,6 @@ use Viserio\Cache\CacheManager;
 use Viserio\Contracts\Cache\Manager as CacheManagerContract;
 use Viserio\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Contracts\Support\Traits\ServiceProviderConfigAwareTrait;
-use Cache\Adapter\Chain\CachePoolChain;
 
 class CacheServiceProvider implements ServiceProvider
 {
