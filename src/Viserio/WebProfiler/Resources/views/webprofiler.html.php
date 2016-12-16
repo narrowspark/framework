@@ -82,6 +82,7 @@ if (! isset($token, $menus, $icons, $panels)) {
             <?php echo TemplateHelper::escape($panel['content']) ?>
         </div>
         <?php
+
             }
         ?>
     </div>
