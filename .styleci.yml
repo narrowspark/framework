@@ -4,6 +4,14 @@ risky: true
 
 linting: true
 
+finder:
+  exclude:
+    - vendor
+    - build
+  not-path:
+    - src/Viserio/Validation/Sanitizer.php
+    - src/Viserio/WebProfiler/Resources/views/webprofiler.html.php
+
 enabled:
   - concat_with_spaces
   - function_typehint_space
