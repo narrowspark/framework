@@ -2,9 +2,9 @@
 declare(strict_types=1);
 namespace Viserio\Session\Tests;
 
+use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Session\Fingerprint\ClientIpGenerator;
-use Narrowspark\TestingHelper\Traits\MockeryTrait;
 
 class ClientIpGeneratorTest extends \PHPUnit_Framework_TestCase
 {
