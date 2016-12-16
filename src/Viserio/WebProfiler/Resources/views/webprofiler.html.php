@@ -2,7 +2,7 @@
 use Viserio\WebProfiler\Util\TemplateHelper;
 
 ?>
-<div id="webprofiler-<?php echo (isset($token) ? TemplateHelper::escape($token) : ''); ?>" class="webprofiler">
+<div id="webprofiler-<?php echo isset($token) ? TemplateHelper::escape($token) : ''; ?>" class="webprofiler">
     <a class="show-button" title="Show WebProfiler" tabindex="-1" accesskey="D"><?php echo file_get_contents($icons['ic_narrowspark_white_24px.svg']) ?></a>
     <div class="webprofiler-header">
         <?php
@@ -71,11 +71,12 @@ use Viserio\WebProfiler\Util\TemplateHelper;
         <?php
             if (isset($panels)) {
                 foreach ($panels as $name => $panel) {
-        ?>
+                    ?>
         <div class="webprofiler-panel webprofiler-panel-<?php echo TemplateHelper::escape($name) . TemplateHelper::escape($panel['class']); ?>">
             <?php echo TemplateHelper::escape($panel['content']) ?>
         </div>
         <?php
+
                 }
             }
         ?>

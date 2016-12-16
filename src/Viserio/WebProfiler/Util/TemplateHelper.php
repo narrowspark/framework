@@ -9,6 +9,7 @@ use Viserio\Support\Debug\HtmlDumper;
 
 /**
  * Ported.
+ *
  * @see https://github.com/filp/whoops/blob/master/src/Whoops/Util/TemplateHelper.php
  */
 final class TemplateHelper
