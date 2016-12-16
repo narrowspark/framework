@@ -73,7 +73,7 @@ final class TemplateHelper
 
         // HHVM has all constants defined, but only ENT_IGNORE
         // works at the moment
-        if (defined("ENT_SUBSTITUTE") && !defined("HHVM_VERSION")) {
+        if (defined('ENT_SUBSTITUTE') && !defined('HHVM_VERSION')) {
             $flags |= ENT_SUBSTITUTE;
         } else {
             // This is for 5.3.
@@ -85,7 +85,7 @@ final class TemplateHelper
 
         $raw = str_replace(chr(9), '    ', $raw);
 
-        return htmlspecialchars($raw, $flags, "UTF-8");
+        return htmlspecialchars($raw, $flags, 'UTF-8');
     }
 
     /**

@@ -1,5 +1,6 @@
 <?php
 use Viserio\WebProfiler\Util\TemplateHelper;
+
 ?>
 <div id="webprofiler-<?php echo TemplateHelper::escape($token); ?>" class="webprofiler">
     <a class="show-button" title="Show WebProfiler" tabindex="-1" accesskey="D"><?php echo file_get_contents($icons['ic_narrowspark_white_24px.svg']) ?></a>
@@ -53,12 +54,15 @@ use Viserio\WebProfiler\Util\TemplateHelper;
                         <?php echo TemplateHelper::escape($menu['tooltip']) ?>
                     </div>
                 <?php
+
                     } ?>
             </a>
         <?php
+
                 } ?>
         </div>
         <?php
+
             }
         ?>
     </div>
@@ -67,10 +71,12 @@ use Viserio\WebProfiler\Util\TemplateHelper;
         <?php
         foreach ($panels as $name => $panel) {
             ?>
-            <div class="webprofiler-panel webprofiler-panel-<?php echo TemplateHelper::escape($name); echo TemplateHelper::escape($panel['class']); ?>">
+            <div class="webprofiler-panel webprofiler-panel-<?php echo TemplateHelper::escape($name);
+            echo TemplateHelper::escape($panel['class']); ?>">
                 <?php echo TemplateHelper::escape($panel['content']) ?>
             </div>
         <?php
+
         }
         ?>
     </div>
