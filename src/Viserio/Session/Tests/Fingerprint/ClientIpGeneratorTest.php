@@ -2,13 +2,29 @@
 declare(strict_types=1);
 namespace Viserio\Session\Tests;
 
+use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Session\Fingerprint\ClientIpGenerator;
+use Narrowspark\TestingHelper\Traits\MockeryTrait;
 
 class ClientIpGeneratorTest extends \PHPUnit_Framework_TestCase
 {
+    use MockeryTrait;
+
+    public function tearDown()
+    {
+        parent::tearDown();
+
+        $this->allowMockingNonExistentMethods(true);
+
+        // Verify Mockery expectations.
+        Mock::close();
+    }
+
     public function testGenerate()
     {
-        $generator = new ClientIpGenerator();
+        $request = $this->mock(ServerRequestInterface::class);
+
+        $generator = new ClientIpGenerator($request);
 
         self::assertInternalType('string', $generator->generate());
         self::assertSame(40, strlen($generator->generate()));
@@ -18,7 +34,9 @@ class ClientIpGeneratorTest extends \PHPUnit_Framework_TestCase
     {
         $_SERVER['HTTP_X_FORWARDED_FOR'] = '111.111.111.111,123.45.67.178';
 
-        $generator = new ClientIpGenerator();
+        $request = $this->mock(ServerRequestInterface::class);
+
+        $generator = new ClientIpGenerator($request);
 
         self::assertInternalType('string', $generator->generate());
         self::assertSame(40, strlen($generator->generate()));
@@ -30,7 +48,9 @@ class ClientIpGeneratorTest extends \PHPUnit_Framework_TestCase
     {
         $_SERVER['REMOTE_ADDR'] = '192.0.2.60';
 
-        $generator = new ClientIpGenerator();
+        $request = $this->mock(ServerRequestInterface::class);
+
+        $generator = new ClientIpGenerator($request);
 
         self::assertInternalType('string', $generator->generate());
         self::assertSame(40, strlen($generator->generate()));

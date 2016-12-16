@@ -102,7 +102,7 @@ class StartSessionMiddleware implements ServerMiddlewareInterface
 
         $session->setId($cookies->get($session->getName()) ?? '');
 
-        $session->addFingerprintGenerator(new ClientIpGenerator());
+        $session->addFingerprintGenerator(new ClientIpGenerator($request));
         $session->addFingerprintGenerator(new UserAgentGenerator());
 
         return $session;

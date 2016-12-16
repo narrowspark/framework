@@ -265,7 +265,9 @@ class ViserioHttpDataCollector extends AbstractDataCollector implements
 
         $result = [
            'uri' => $route->getUri() ?: '-',
-           'methods' => implode(' | ', $route->getMethods()),
+           'methods' => count($route->getMethods()) > 2 ?
+                implode(' | ', $route->getMethods()) :
+                $route->getMethods(),
         ];
 
         $result = array_merge($result, $action);

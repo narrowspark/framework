@@ -13,6 +13,7 @@ use Viserio\Contracts\Log\Traits\LoggerAwareTrait;
 use Viserio\Contracts\Routing\UrlGenerator as UrlGeneratorContract;
 use Viserio\Contracts\WebProfiler\DataCollector as DataCollectorContract;
 use Viserio\Contracts\WebProfiler\WebProfiler as WebProfilerContract;
+use Viserio\Support\Http\ClientIp;
 
 class WebProfiler implements WebProfilerContract
 {
@@ -229,6 +230,27 @@ class WebProfiler implements WebProfilerContract
             $this->collectors[$name] = $collector;
         }
 
+        if ($this->cachePool !== null) {
+            $method = count($serverRequest->getMethods()) ?
+                implode(' | ', $serverRequest->getMethods()) :
+                $serverRequest->getMethods();
+            $id = hash(
+                'ripemd160',
+                $serverRequest->getUri() . $method . random_bytes(32) . microtime()
+            );
+
+            $profile = $this->createProfile(
+                $id,
+                (new ClientIp($serverRequest))->getIpAddress(),
+                $method,
+                (string) $serverRequest->getUri(),
+                $response->getStatusCode(),
+                microtime(true),
+                date('Y-m-d H:i:s'),
+                $this->collectors
+            );
+        }
+
         return $this->injectWebProfiler($response);
     }
 
@@ -343,5 +365,40 @@ class WebProfiler implements WebProfilerContract
     private function isRedirect(ResponseInterface $response): bool
     {
         return in_array($response->getStatusCode(), [301, 302, 303, 307, 308]);
+    }
+
+    /**
+     * Create profile with all datas.
+     *
+     * @param string $token
+     * @param string $ip
+     * @param string $method
+     * @param string $url
+     * @param string $statusCode
+     * @param string $time
+     * @param string $date
+     * @param array  $collectors
+     *
+     * @return \Viserio\WebProfiler\Profile
+     */
+    private function createProfile(
+        string $token,
+        string $ip,
+        string $method,
+        string $url,
+        string $statusCode,
+        string $time,
+        string $date,
+        array $collectors
+    ): Profile {
+        $profile = new Profile($token);
+        $profile->setIp($ip);
+        $profile->setMethod($method);
+        $profile->setUrl($url);
+        $profile->setTime($time);
+        $profile->setStatusCode($statusCode);
+        $profile->setCollectors($collectors);
+
+        return $profile;
     }
 }
