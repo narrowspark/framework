@@ -61,6 +61,34 @@ final class TemplateHelper
     }
 
     /**
+     * Escapes a string for output in an HTML document
+     *
+     * @param string $raw
+     *
+     * @return string
+     */
+    public static function escape(string $raw): string
+    {
+        $flags = ENT_QUOTES;
+
+        // HHVM has all constants defined, but only ENT_IGNORE
+        // works at the moment
+        if (defined("ENT_SUBSTITUTE") && !defined("HHVM_VERSION")) {
+            $flags |= ENT_SUBSTITUTE;
+        } else {
+            // This is for 5.3.
+            // The documentation warns of a potential security issue,
+            // but it seems it does not apply in our case, because
+            // we do not blacklist anything anywhere.
+            $flags |= ENT_IGNORE;
+        }
+
+        $raw = str_replace(chr(9), '    ', $raw);
+
+        return htmlspecialchars($raw, $flags, "UTF-8");
+    }
+
+    /**
      * Get the cloner used for dumping variables.
      *
      * @return \Symfony\Component\VarDumper\Cloner\AbstractCloner

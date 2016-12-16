@@ -1,4 +1,7 @@
-<div id="webprofiler-<?php echo $token ?>" class="webprofiler">
+<?php
+use Viserio\WebProfiler\Util\TemplateHelper;
+?>
+<div id="webprofiler-<?php echo TemplateHelper::escape($token); ?>" class="webprofiler">
     <a class="show-button" title="Show WebProfiler" tabindex="-1" accesskey="D"><?php echo file_get_contents($icons['ic_narrowspark_white_24px.svg']) ?></a>
     <div class="webprofiler-header">
         <?php
@@ -14,14 +17,11 @@
                         $tooltip = true;
                     }
 
-                    $href = isset($panels[$name]) ? 'data-panel-target-id="webprofiler-panel-' . $name . '"' : '';
+                    $data = isset($panels[$name]) ? 'data-panel-target-id="webprofiler-panel-' . $name . '"' : '';
                     $hasPanels = isset($panels[$name]) ? ' webprofiler-menu-has-panel' : '';
                     $hasTooltip = $tooltip ? ' webprofiler-menu-has-tooltip' : '';
                     $cssClasses = isset($menu['menu']['class']) ? ' ' . $menu['menu']['class'] : ''; ?>
-            <a <?php echo $href ?> class="webprofiler-menu webprofiler-menu-<?php echo $name ?> webprofiler-menu-position-<?php echo $menu['position'];
-                    echo $hasPanels;
-                    echo $hasTooltip;
-                    echo $cssClasses ?>">
+            <a <?php echo TemplateHelper::escape($data) ?> class="webprofiler-menu webprofiler-menu-<?php echo TemplateHelper::escape($name) ?> webprofiler-menu-position-<?php echo TemplateHelper::escape($menu['position']) . TemplateHelper::escape($hasPanels) . TemplateHelper::escape($hasTooltip) . TemplateHelper::escape($cssClasses); ?>">
                 <div class="webprofiler-menu-content">
                     <?php if (isset($menu['menu']['icon'])) {
                         ?>
@@ -34,34 +34,31 @@
                     <?php if (isset($menu['menu']['status'])) {
                         ?>
                     <span class="webprofiler-menu-status">
-                        <?php echo $menu['menu']['status'] ?>
+                        <?php echo TemplateHelper::escape($menu['menu']['status']) ?>
                     </span>
                     <?php
 
                     } ?>
                     <span class="webprofiler-menu-label">
-                        <?php echo $menu['menu']['label'] ?>
+                        <?php echo TemplateHelper::escape($menu['menu']['label']) ?>
                     </span>
                     <span class="webprofiler-menu-value">
-                        <?php echo $menu['menu']['value'] ?>
+                        <?php echo TemplateHelper::escape($menu['menu']['value']) ?>
                     </span>
                 </div>
                 <?php
                     if ($tooltip) {
                         ?>
                     <div class="webprofiler-menu-tooltip">
-                        <?php echo $menu['tooltip'] ?>
+                        <?php echo TemplateHelper::escape($menu['tooltip']) ?>
                     </div>
                 <?php
-
                     } ?>
             </a>
         <?php
-
                 } ?>
         </div>
         <?php
-
             }
         ?>
     </div>
@@ -70,12 +67,10 @@
         <?php
         foreach ($panels as $name => $panel) {
             ?>
-            <div class="webprofiler-panel webprofiler-panel-<?php echo $name;
-            echo $panel['class']; ?>">
-                <?php echo $panel['content'] ?>
+            <div class="webprofiler-panel webprofiler-panel-<?php echo TemplateHelper::escape($name); echo TemplateHelper::escape($panel['class']); ?>">
+                <?php echo TemplateHelper::escape($panel['content']) ?>
             </div>
         <?php
-
         }
         ?>
     </div>
