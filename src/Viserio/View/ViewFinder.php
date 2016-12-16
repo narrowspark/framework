@@ -44,10 +44,7 @@ class ViewFinder implements FinderContract
      *
      * @var array
      */
-    protected $extensions = [
-        'php',
-        'css',
-    ];
+    protected $extensions = [];
 
     /**
      * Create a new file view loader instance.

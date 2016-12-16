@@ -19,25 +19,6 @@ use Viserio\Support\AbstractManager;
 class TransportManager extends AbstractManager
 {
     /**
-     * Get the configuration for a driver.
-     *
-     * @param string $name
-     *
-     * @return array
-     */
-    public function getDriverConfig(string $name): array
-    {
-        $name = $name ?? $this->getDefaultDriver();
-
-        $drivers = $this->config->get($this->getConfigName(), []);
-
-        $config = $drivers;
-        $config['name'] = $name;
-
-        return $config;
-    }
-
-    /**
      * Get the default driver name.
      *
      * @return string

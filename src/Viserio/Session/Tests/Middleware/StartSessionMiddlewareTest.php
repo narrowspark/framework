@@ -7,7 +7,6 @@ use Mockery as Mock;
 use Narrowspark\TestingHelper\ArrayContainer;
 use Narrowspark\TestingHelper\Middleware\DelegateMiddleware;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
-use org\bovigo\vfs\vfsStream;
 use Viserio\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Contracts\Cookie\QueueingFactory as JarContract;
 use Viserio\Contracts\Filesystem\Filesystem as FilesystemContract;
@@ -24,11 +23,6 @@ class StartSessionMiddlewareTest extends \PHPUnit_Framework_TestCase
     use MockeryTrait;
 
     /**
-     * @var string
-     */
-    private $root;
-
-    /**
      * @var \Viserio\Filesystem\Filesystem
      */
     private $files;
@@ -42,7 +36,6 @@ class StartSessionMiddlewareTest extends \PHPUnit_Framework_TestCase
     {
         parent::setUp();
 
-        $this->root = vfsStream::setup();
         $this->files = new Filesystem();
 
         $this->files->createDirectory(__DIR__ . '/stubs');
@@ -103,7 +96,7 @@ class StartSessionMiddlewareTest extends \PHPUnit_Framework_TestCase
         $config->shouldReceive('get')
             ->with('session.path')
             ->twice()
-            ->andReturn($this->root->url());
+            ->andReturn(__DIR__ . '/stubs');
         $config->shouldReceive('get')
             ->with('session.expire_on_close', false)
             ->once()
