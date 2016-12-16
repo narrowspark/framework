@@ -61,6 +61,7 @@
         "psy/psysh"                                          : "^0.8",
         "ramsey/uuid"                                        : "^3.4",
         "respect/validation"                                 : "^1.1",
+        "sandrokeil/interop-config"                          : "^2.0",
         "schnittstabil/csrf-tokenservice"                    : "^2.0",
         "stecman/symfony-console-completion"                 : "^0.6",
         "symfony/console"                                    : "^3.1",

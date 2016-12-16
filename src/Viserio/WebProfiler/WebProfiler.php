@@ -176,10 +176,6 @@ class WebProfiler implements WebProfilerContract
      */
     public function addCollector(DataCollectorContract $collector): WebProfilerContract
     {
-        if ($collector->getName() === '__meta') {
-            throw new RuntimeException('"__meta" is a reserved name and cannot be used as a collector name');
-        }
-
         if (isset($this->collectors[$collector->getName()])) {
             throw new RuntimeException(sprintf('[%s] is already a registered collector', $collector->getName()));
         }
