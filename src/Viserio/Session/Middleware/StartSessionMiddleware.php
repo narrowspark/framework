@@ -37,6 +37,7 @@ class StartSessionMiddleware implements ServerMiddlewareInterface
 
     /**
      * {@inhertidoc}.
+     *
      * @param ServerRequestInterface $request
      * @param DelegateInterface      $delegate
      */

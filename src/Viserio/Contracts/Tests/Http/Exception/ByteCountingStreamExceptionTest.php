@@ -9,6 +9,7 @@ class ByteCountingStreamExceptionTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @dataProvider getTestCases
+     *
      * @param mixed $expect
      * @param mixed $actual
      */

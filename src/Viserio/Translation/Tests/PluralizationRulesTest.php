@@ -48,6 +48,7 @@ class PluralizationRulesTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider provideCreateRules
+     *
      * @param mixed $lang
      * @param mixed $expected
      */

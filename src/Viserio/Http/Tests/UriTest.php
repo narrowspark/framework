@@ -81,6 +81,7 @@ class UriTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException \InvalidArgumentException
      * @dataProvider getInvalidUris
+     *
      * @param mixed $invalidUri
      */
     public function testInvalidUrisThrowException($invalidUri)
@@ -264,6 +265,7 @@ class UriTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider userInfoProvider
      * @group userinfo
+     *
      * @param mixed $user
      * @param mixed $pass
      * @param mixed $expected
@@ -328,6 +330,7 @@ class UriTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider uriComponentsEncodingProvider
+     *
      * @param mixed $input
      * @param mixed $path
      * @param mixed $query
@@ -502,6 +505,7 @@ class UriTest extends \PHPUnit_Framework_TestCase
      * RFC 3986, Sections 2 and 3.3.
      *
      * @dataProvider pathProvider
+     *
      * @param mixed $url
      * @param mixed $path
      */
@@ -524,6 +528,7 @@ class UriTest extends \PHPUnit_Framework_TestCase
      * The value returned MUST be percent-encoded, but MUST NOT double-encode
      * any characters. To determine what characters to encode, please refer to
      * RFC 3986, Sections 2 and 3.4.
+     *
      * @param mixed $query
      * @param mixed $expected
      */
@@ -563,6 +568,7 @@ class UriTest extends \PHPUnit_Framework_TestCase
      * Some of these example return invalid Url
      *
      * @dataProvider authorityProvider
+     *
      * @param mixed $url
      */
     public function testAuthorityDelimiterPresence($url)
@@ -604,6 +610,7 @@ class UriTest extends \PHPUnit_Framework_TestCase
      *       present, the starting slashes MUST be reduced to one.
      * - If a query is present, it MUST be prefixed by "?".
      * - If a fragment is present, it MUST be prefixed by "#".
+     *
      * @param mixed $scheme
      * @param mixed $user
      * @param mixed $pass
@@ -659,6 +666,7 @@ class UriTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider invalidStringProvider
      * @expectedException \InvalidArgumentException
+     *
      * @param mixed $scheme
      * @param mixed $user
      * @param mixed $pass
@@ -719,6 +727,7 @@ class UriTest extends \PHPUnit_Framework_TestCase
      * @dataProvider hostProvider
      *
      * Host MUST be normalized to lowercase if present
+     *
      * @param mixed $host
      * @param mixed $expected
      */
@@ -742,6 +751,7 @@ class UriTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider withHostFailedProvider
      * @expectedException \InvalidArgumentException
+     *
      * @param mixed $host
      */
     public function testWithHostFailed($host)
@@ -775,6 +785,7 @@ class UriTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider utf8PathsDataProvider
+     *
      * @param mixed $url
      * @param mixed $result
      */

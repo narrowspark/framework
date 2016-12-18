@@ -29,6 +29,7 @@ class CheckForMaintenanceModeMiddleware implements ServerMiddlewareInterface
 
     /**
      * {@inhertidoc}.
+     *
      * @param ServerRequestInterface $request
      * @param DelegateInterface      $delegate
      */

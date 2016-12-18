@@ -9,6 +9,7 @@ class MessageSelectorTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @dataProvider getChooseTests
+     *
      * @param mixed $expected
      * @param mixed $id
      * @param mixed $number
@@ -33,6 +34,7 @@ class MessageSelectorTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider getNonMatchingMessages
      * @expectedException \InvalidArgumentException
+     *
      * @param mixed $id
      * @param mixed $number
      */

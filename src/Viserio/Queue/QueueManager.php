@@ -128,8 +128,9 @@ class QueueManager extends AbstractConnectionManager implements MonitorContract,
     /**
      * Create Beanstalkd connection.
      *
+     * @param array $config
+     *
      * @return \Viserio\Queue\Connectors\BeanstalkdQueue
-     * @param  array                                     $config
      */
     protected function createBeanstalkdConnection(array $config): BeanstalkdQueue
     {
@@ -148,8 +149,9 @@ class QueueManager extends AbstractConnectionManager implements MonitorContract,
     /**
      * Create Null connection.
      *
+     * @param array $config
+     *
      * @return \Viserio\Queue\Connectors\NullQueue
-     * @param  array                               $config
      */
     protected function createNullConnection(array $config): NullQueue
     {
@@ -159,8 +161,9 @@ class QueueManager extends AbstractConnectionManager implements MonitorContract,
     /**
      * Create Sync connection.
      *
+     * @param array $config
+     *
      * @return \Viserio\Queue\Connectors\SyncQueue
-     * @param  array                               $config
      */
     protected function createSyncConnection(array $config): SyncQueue
     {
@@ -170,8 +173,9 @@ class QueueManager extends AbstractConnectionManager implements MonitorContract,
     /**
      * Create Sqs connection.
      *
+     * @param array $config
+     *
      * @return \Viserio\Queue\Connectors\SqsQueue
-     * @param  array                              $config
      */
     protected function createSqsConnection(array $config): SqsQueue
     {
@@ -197,8 +201,9 @@ class QueueManager extends AbstractConnectionManager implements MonitorContract,
     /**
      * Create Redis connection.
      *
+     * @param array $config
+     *
      * @return \Viserio\Queue\Connectors\RedisQueue
-     * @param  array                                $config
      */
     protected function createRedisConnection(array $config): RedisQueue
     {
@@ -216,8 +221,9 @@ class QueueManager extends AbstractConnectionManager implements MonitorContract,
     /**
      * Create RabbitMQ connection.
      *
+     * @param array $config
+     *
      * @return \Viserio\Queue\Connectors\RabbitMQQueue
-     * @param  array                                   $config
      */
     protected function createRabitmqConnection(array $config): RabbitMQQueue
     {

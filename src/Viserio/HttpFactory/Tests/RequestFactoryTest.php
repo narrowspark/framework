@@ -29,6 +29,7 @@ class RequestFactoryTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider dataMethods
+     *
      * @param mixed $method
      */
     public function testCreateRequest($method)

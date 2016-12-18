@@ -26,6 +26,7 @@ class ResponseFactoryTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider dataCodes
+     *
      * @param mixed $code
      */
     public function testCreateResponse($code)

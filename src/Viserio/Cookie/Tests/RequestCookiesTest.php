@@ -52,6 +52,7 @@ class RequestCookiesTest extends \PHPUnit_Framework_TestCase
      * @dataProvider provideParsesFromCookieStringWithoutExpireData
      *
      * Cant test with automatic expires, test are one sec to slow.
+     *
      * @param mixed $cookieString
      * @param array $expectedCookies
      */
@@ -70,6 +71,7 @@ class RequestCookiesTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider provideGetsCookieByNameData
+     *
      * @param string $cookieString
      * @param string $cookieName
      * @param Cookie $expectedCookie
@@ -87,6 +89,7 @@ class RequestCookiesTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider provideParsesFromCookieStringWithoutExpireData
+     *
      * @param string $setCookieStrings
      * @param array  $expectedSetCookies
      */

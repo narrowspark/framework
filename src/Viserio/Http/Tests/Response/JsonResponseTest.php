@@ -41,6 +41,7 @@ class JsonResponseTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider scalarValuesForJSON
+     *
      * @param mixed $value
      */
     public function testScalarValuePassedToConstructorJsonEncodesDirectly($value)
@@ -99,6 +100,7 @@ class JsonResponseTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider valuesToJsonEncode
+     *
      * @param mixed $value
      * @param mixed $key
      */

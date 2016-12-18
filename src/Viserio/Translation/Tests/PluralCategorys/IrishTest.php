@@ -8,6 +8,7 @@ class IrishTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @dataProvider category
+     *
      * @param mixed $count
      * @param mixed $expected
      */

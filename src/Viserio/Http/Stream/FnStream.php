@@ -51,8 +51,9 @@ class FnStream implements StreamInterface
     /**
      * Lazily determine which methods are not implemented.
      *
+     * @param mixed $name
+     *
      * @throws \BadMethodCallException
-     * @param  mixed                   $name
      */
     public function __get($name)
     {

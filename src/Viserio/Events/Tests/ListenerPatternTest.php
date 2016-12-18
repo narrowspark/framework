@@ -9,6 +9,7 @@ class ListenerPatternTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @dataProvider providePatternsAndMatches
+     *
      * @param mixed $eventPattern
      * @param array $expectedMatches
      * @param array $expectedMisses

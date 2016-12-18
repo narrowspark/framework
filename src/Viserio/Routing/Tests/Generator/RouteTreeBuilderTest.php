@@ -151,6 +151,7 @@ class RouteTreeBuilderTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider routeTreeBuilderCases
+     *
      * @param mixed $routes
      * @param mixed $rootRoute
      * @param mixed $segmentDepthNodesMap

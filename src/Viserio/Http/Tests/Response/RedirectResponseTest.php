@@ -64,6 +64,7 @@ class RedirectResponseTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider invalidUris
      * @expectedException \InvalidArgumentException Uri
+     *
      * @param mixed $uri
      */
     public function testConstructorRaisesExceptionOnInvalidUri($uri)

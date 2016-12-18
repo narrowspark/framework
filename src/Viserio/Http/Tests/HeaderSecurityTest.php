@@ -46,6 +46,7 @@ class HeaderSecurityTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider getFilterValues
      * @group ZF2015-04
+     *
      * @param mixed $value
      * @param mixed $expected
      */
@@ -77,6 +78,7 @@ class HeaderSecurityTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider validateValues
      * @group ZF2015-04
+     *
      * @param mixed $value
      * @param mixed $assertion
      */
@@ -106,6 +108,7 @@ class HeaderSecurityTest extends \PHPUnit_Framework_TestCase
      * @group ZF2015-04
      *
      * @expectedException \InvalidArgumentException
+     *
      * @param mixed $value
      */
     public function testAssertValidRaisesExceptionForInvalidValue($value)

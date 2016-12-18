@@ -160,6 +160,7 @@ class HandlerParserTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider formatterProvider
+     *
      * @param mixed $formatter
      */
     public function testParseHandlerWithFormatterWithDataProvider($formatter)

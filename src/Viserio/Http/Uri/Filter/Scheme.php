@@ -5,8 +5,9 @@ namespace Viserio\Http\Uri\Filter;
 class Scheme
 {
     /**
+     * @param string $scheme
+     *
      * @return string
-     * @param  string $scheme
      */
     public function filter(string $scheme): string
     {

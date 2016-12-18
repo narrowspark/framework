@@ -410,6 +410,7 @@ class UtilTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider dataNormalizeFiles
+     *
      * @param mixed $files
      * @param mixed $expected
      */

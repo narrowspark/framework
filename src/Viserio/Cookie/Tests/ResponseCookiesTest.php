@@ -36,6 +36,7 @@ class ResponseCookiesTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider provideParsesFromCookieStringData
+     *
      * @param array $cookieStrings
      * @param array $expectedCookies
      */
@@ -55,6 +56,7 @@ class ResponseCookiesTest extends \PHPUnit_Framework_TestCase
      * @dataProvider provideParsesFromCookieStringWithoutExpireData
      *
      * Cant test with automatic expires, test are one sec to slow.
+     *
      * @param array $cookieStrings
      * @param array $expectedCookies
      */

@@ -12,6 +12,7 @@ class ValidateLocaleTraitTest extends \PHPUnit_Framework_TestCase
      * @dataProvider wrongLocales
      *
      * @expectedException \InvalidArgumentException
+     *
      * @param mixed $locale
      */
     public function testAssertValidLocaleToThrowException($locale)

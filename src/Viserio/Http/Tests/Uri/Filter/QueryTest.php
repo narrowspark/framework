@@ -8,6 +8,7 @@ class QueryTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @dataProvider queryProvider
+     *
      * @param mixed $input
      * @param mixed $expected
      */

@@ -34,6 +34,7 @@ abstract class RouteRouterBaseTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider routerMatchingProvider
+     *
      * @param mixed $httpMethod
      * @param mixed $uri
      * @param mixed $expectedResult

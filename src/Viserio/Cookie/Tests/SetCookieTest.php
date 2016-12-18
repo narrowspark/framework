@@ -26,6 +26,7 @@ class SetCookieTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider invalidNames
      * @expectedException \InvalidArgumentException
+     *
      * @param mixed $name
      */
     public function testInstantiationThrowsExceptionIfCookieNameContainsInvalidCharacters($name)
@@ -50,6 +51,7 @@ class SetCookieTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider invalidValues
      * @expectedException \InvalidArgumentException
+     *
      * @param mixed $value
      */
     public function testInstantiationThrowsExceptionIfCookieValueContainsInvalidCharacters($value)

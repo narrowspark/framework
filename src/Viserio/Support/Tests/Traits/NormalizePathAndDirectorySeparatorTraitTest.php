@@ -37,6 +37,7 @@ class NormalizePathAndDirectorySeparatorTraitTest extends \PHPUnit_Framework_Tes
 
     /**
      * @dataProvider  pathProvider
+     *
      * @param mixed $input
      * @param mixed $expected
      */

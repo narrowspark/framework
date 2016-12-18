@@ -54,6 +54,7 @@ class Dispatcher implements DispatcherContract
 
     /**
      * {@inhertidoc}.
+     *
      * @param string $eventName
      * @param mixed  $listener
      * @param int    $priority
@@ -73,6 +74,7 @@ class Dispatcher implements DispatcherContract
 
     /**
      * {@inhertidoc}.
+     *
      * @param string $eventName
      * @param mixed  $listener
      * @param int    $priority
@@ -93,6 +95,7 @@ class Dispatcher implements DispatcherContract
 
     /**
      * {@inhertidoc}.
+     *
      * @param string $eventName
      * @param array  $arguments
      */
@@ -117,6 +120,7 @@ class Dispatcher implements DispatcherContract
 
     /**
      * {@inhertidoc}.
+     *
      * @param string $eventName
      */
     public function getListeners(string $eventName): array
@@ -138,6 +142,7 @@ class Dispatcher implements DispatcherContract
 
     /**
      * {@inhertidoc}.
+     *
      * @param string $eventName
      * @param mixed  $listener
      */
@@ -168,6 +173,7 @@ class Dispatcher implements DispatcherContract
 
     /**
      * {@inhertidoc}.
+     *
      * @param null|mixed $eventName
      */
     public function removeAllListeners($eventName = null)
@@ -183,6 +189,7 @@ class Dispatcher implements DispatcherContract
 
     /**
      * {@inhertidoc}.
+     *
      * @param string $eventName
      */
     public function hasListeners(string $eventName): bool

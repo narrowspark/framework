@@ -175,6 +175,7 @@ class MessageCatalogueTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider getValidLocalesTests
+     *
      * @param mixed $locale
      */
     public function testSetValidLocale($locale)

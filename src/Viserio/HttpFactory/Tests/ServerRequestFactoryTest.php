@@ -85,6 +85,7 @@ class ServerRequestFactoryTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider dataGetUriFromGlobals
+     *
      * @param mixed $expected
      * @param mixed $serverParams
      */

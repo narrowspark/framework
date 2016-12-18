@@ -42,6 +42,7 @@ class UploadedFileTest extends \PHPUnit_Framework_TestCase
      * @dataProvider invalidStreams
      *
      * @expectedException \InvalidArgumentException
+     *
      * @param mixed $streamOrFile
      */
     public function testRaisesExceptionOnInvalidStreamOrFile($streamOrFile)
@@ -120,6 +121,7 @@ class UploadedFileTest extends \PHPUnit_Framework_TestCase
      *
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage path
+     *
      * @param mixed $path
      */
     public function testMoveRaisesExceptionForInvalidPath($path)
@@ -201,6 +203,7 @@ class UploadedFileTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider nonOkErrorStatus
+     *
      * @param mixed $status
      */
     public function testConstructorDoesNotRaiseExceptionForInvalidStreamWhenErrorStatusPresent($status)
@@ -214,6 +217,7 @@ class UploadedFileTest extends \PHPUnit_Framework_TestCase
      *
      * @expectedException \RuntimeException
      * @expectedExceptionMessage upload error
+     *
      * @param mixed $status
      */
     public function testMoveToRaisesExceptionWhenErrorStatusPresent($status)
@@ -228,6 +232,7 @@ class UploadedFileTest extends \PHPUnit_Framework_TestCase
      *
      * @expectedException \RuntimeException
      * @expectedExceptionMessage upload error
+     *
      * @param mixed $status
      */
     public function testGetStreamRaisesExceptionWhenErrorStatusPresent($status)
