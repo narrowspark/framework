@@ -37,14 +37,14 @@ class AssetsRenderer implements RenderableContract
      * @var array
      */
     protected $icons = [
-        'ic_clear_white_24px.svg'        => __DIR__ . '/Resources/icons/ic_clear_white_24px.svg',
-        'ic_memory_white_24px.svg'       => __DIR__ . '/Resources/icons/ic_memory_white_24px.svg',
-        'ic_message_white_24px.svg'      => __DIR__ . '/Resources/icons/ic_message_white_24px.svg',
-        'ic_narrowspark_white_24px.svg'  => __DIR__ . '/Resources/icons/ic_narrowspark_white_24px.svg',
-        'ic_schedule_white_24px.svg'     => __DIR__ . '/Resources/icons/ic_schedule_white_24px.svg',
-        'ic_storage_white_24px.svg'      => __DIR__ . '/Resources/icons/ic_storage_white_24px.svg',
-        'ic_mail_outline_white_24px.svg' => __DIR__ . '/Resources/icons/ic_mail_outline_white_24px.svg',
-        'ic_keyboard_arrow_up_white_24px.svg' => __DIR__ . '/Resources/icons/ic_keyboard_arrow_up_white_24px.svg',
+        'ic_clear_white_24px.svg'               => __DIR__ . '/Resources/icons/ic_clear_white_24px.svg',
+        'ic_memory_white_24px.svg'              => __DIR__ . '/Resources/icons/ic_memory_white_24px.svg',
+        'ic_message_white_24px.svg'             => __DIR__ . '/Resources/icons/ic_message_white_24px.svg',
+        'ic_narrowspark_white_24px.svg'         => __DIR__ . '/Resources/icons/ic_narrowspark_white_24px.svg',
+        'ic_schedule_white_24px.svg'            => __DIR__ . '/Resources/icons/ic_schedule_white_24px.svg',
+        'ic_storage_white_24px.svg'             => __DIR__ . '/Resources/icons/ic_storage_white_24px.svg',
+        'ic_mail_outline_white_24px.svg'        => __DIR__ . '/Resources/icons/ic_mail_outline_white_24px.svg',
+        'ic_keyboard_arrow_up_white_24px.svg'   => __DIR__ . '/Resources/icons/ic_keyboard_arrow_up_white_24px.svg',
         'ic_keyboard_arrow_down_white_24px.svg' => __DIR__ . '/Resources/icons/ic_keyboard_arrow_down_white_24px.svg',
     ];
 

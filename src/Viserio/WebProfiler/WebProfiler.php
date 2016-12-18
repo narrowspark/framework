@@ -234,7 +234,7 @@ class WebProfiler implements WebProfilerContract
             $this->collectors[$name] = $collector;
         }
 
-        $token = substr(hash('sha256', uniqid((string) mt_rand(), true)), 0, 6);
+        $token = mb_substr(hash('sha256', uniqid((string) mt_rand(), true)), 0, 6);
 
         if ($this->cachePool !== null) {
             $this->createProfile(

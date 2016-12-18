@@ -2,9 +2,9 @@
 declare(strict_types=1);
 namespace Viserio\Contracts\HttpFactory\Tests\Traits;
 
+use Interop\Http\Factory\UploadedFactoryInterface;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use Viserio\Contracts\HttpFactory\Traits\UploadedFileFactoryAwareTrait;
-use Interop\Http\Factory\UploadedFactoryInterface;
 
 class UploadedFileFactoryAwareTraitTest extends \PHPUnit_Framework_TestCase
 {

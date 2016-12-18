@@ -8,9 +8,9 @@ use Viserio\Contracts\WebProfiler\MenuAware as MenuAwareContract;
 use Viserio\Contracts\WebProfiler\TooltipAware as TooltipAwareContract;
 use Viserio\Foundation\Application;
 use Viserio\Support\Env;
-use Viserio\WebProfiler\DataCollectors\AbstractDataCollector;
+use Viserio\WebProfiler\DataCollectors\PhpInfoCollector;
 
-class NarrowsparkDataCollector extends AbstractDataCollector implements
+class NarrowsparkDataCollector extends PhpInfoCollector implements
     TooltipAwareContract,
     MenuAwareContract
 {
@@ -26,6 +26,8 @@ class NarrowsparkDataCollector extends AbstractDataCollector implements
      */
     public function collect(ServerRequestInterface $serverRequest, ResponseInterface $response)
     {
+        parent::collect($serverRequest, $response);
+
         $this->serverRequest = $serverRequest;
     }
 

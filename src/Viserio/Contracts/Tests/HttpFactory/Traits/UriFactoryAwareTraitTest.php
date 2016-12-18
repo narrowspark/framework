@@ -2,9 +2,9 @@
 declare(strict_types=1);
 namespace Viserio\Contracts\HttpFactory\Tests\Traits;
 
+use Interop\Http\Factory\UriFactoryInterface;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use Viserio\Contracts\HttpFactory\Traits\UriFactoryAwareTrait;
-use Interop\Http\Factory\UriFactoryInterface;
 
 class UriFactoryAwareTraitTest extends \PHPUnit_Framework_TestCase
 {
