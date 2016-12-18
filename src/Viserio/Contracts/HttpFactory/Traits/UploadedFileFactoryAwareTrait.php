@@ -38,7 +38,7 @@ trait UploadedFileFactoryAwareTrait
     public function getUploadedFactory(): UploadedFactoryInterface
     {
         if (! $this->uploaded) {
-            throw new RuntimeException('UploadedFactory is not set up.');
+            throw new RuntimeException('Instance implementing \Interop\Http\Factory\UploadedFactoryInterface is not set up.');
         }
 
         return $this->uploaded;

@@ -38,7 +38,7 @@ trait ResponseFactoryAwareTrait
     public function getResponseFactory(): ResponseFactoryInterface
     {
         if (! $this->responseFactory) {
-            throw new RuntimeException('ResponseFactory is not set up.');
+            throw new RuntimeException('Instance implementing \Interop\Http\Factory\ResponseFactoryInterface is not set up.');
         }
 
         return $this->responseFactory;

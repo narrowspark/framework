@@ -38,7 +38,7 @@ trait ServerRequestFactoryAwareTrait
     public function getServerRequest(): ServerRequestInterface
     {
         if (! $this->serverRequest) {
-            throw new RuntimeException('ServerRequest is not set up.');
+            throw new RuntimeException('Instance implementing \Interop\Http\Factory\ServerRequestInterface is not set up.');
         }
 
         return $this->serverRequest;

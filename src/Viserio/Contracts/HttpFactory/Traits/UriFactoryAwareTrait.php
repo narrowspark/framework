@@ -38,7 +38,7 @@ trait UriFactoryAwareTrait
     public function getUriFactory(): UriFactoryInterface
     {
         if (! $this->uriFactory) {
-            throw new RuntimeException('UriFactory is not set up.');
+            throw new RuntimeException('Instance implementing \Interop\Http\Factory\UriFactoryInterface is not set up.');
         }
 
         return $this->uriFactory;
