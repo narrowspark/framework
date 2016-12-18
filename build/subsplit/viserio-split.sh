@@ -29,4 +29,5 @@ git subsplit publish --heads="master develop" --no-tags src/Viserio/Support:git@
 git subsplit publish --heads="master develop" --no-tags src/Viserio/Translation:git@github.com:viserio/translation.git
 git subsplit publish --heads="master develop" --no-tags src/Viserio/Validation:git@github.com:viserio/validation.git
 git subsplit publish --heads="master develop" --no-tags src/Viserio/View:git@github.com:viserio/view.git
+git subsplit publish --heads="master develop" --no-tags src/Viserio/WebProfiler:git@github.com:viserio/web-profiler.git
 rm -rf .subsplit/
