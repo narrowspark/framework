@@ -52,7 +52,9 @@
     z-index: 99999;
     cursor: pointer;
 }
-.webprofiler .webprofiler-header .webprofiler-hide-button {
+.webprofiler .webprofiler-header .webprofiler-hide-button,
+.webprofiler .webprofiler-body .webprofiler-body-close-panel,
+.webprofiler .webprofiler-body .webprofiler-body-menu .webprofiler-body-resize-panel {
     background: #444;
     display: block;
     width: 36px;
@@ -103,6 +105,7 @@
 .webprofiler .webprofiler-header .webprofiler-menus a.webprofiler-menu .status-red {
     background-color: #B0413E;
 }
+.webprofiler .webprofiler-header .webprofiler-menus a.webprofiler-menu.active,
 .webprofiler .webprofiler-header .webprofiler-menus a.webprofiler-menu:hover {
     background-color: #444;
     position: relative;
@@ -195,7 +198,7 @@
 }
 
 .webprofiler .webprofiler-body {
-    height: 300px;
+    height: 324px;
     background-color: #222;
     margin-bottom: 37px;
     display: none;
@@ -372,18 +375,18 @@
     border: 0;
 }
 
-.webprofiler .webprofiler-body #webprofiler-body-dragbar {
-    display: block;
-    width: 100%;
-    height: 5px;
-    cursor: row-resize;
+.webprofiler .webprofiler-body .webprofiler-body-menu {
+    height: 24px;
+    border-bottom: 1px solid #383838;
+    box-shadow: 0 1px 0 rgba(0, 0, 0, 0.2);
+    background-color: #222;
 }
-.webprofiler .webprofiler-body #webprofiler-body-ghostbar{
-    width: 100%;
-    height: 5px;
-    opacity: 0.5;
-    position: absolute;
-    cursor: row-resize;
-    z-index: 999;
-    top: 0;
+.webprofiler .webprofiler-body .webprofiler-body-menu .webprofiler-body-close-panel,
+.webprofiler .webprofiler-body .webprofiler-body-menu .webprofiler-body-resize-panel {
+    width: 24px;
+    height: 24px;
+    float: right;
+}
+.webprofiler .webprofiler-body .webprofiler-body-menu .webprofiler-body-resize-panel.orginal-size-panel svg {
+    transform: rotate(180deg);
 }

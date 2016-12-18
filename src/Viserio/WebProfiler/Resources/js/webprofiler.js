@@ -2,8 +2,13 @@ Zepto(function($) {
     var openPanel = false;
     var panelBodyClass = '.webprofiler .webprofiler-body';
     var panelClass = panelBodyClass + ' .webprofiler-panel';
-    var i = 0;
-    var dragging = false;
+    var menuHasPanel = '.webprofiler .webprofiler-header .webprofiler-menus a.webprofiler-menu.webprofiler-menu-has-panel';
+    var bodyMenu = panelBodyClass + ' .webprofiler-body-menu';
+    var resizeIsActive = false;
+    var resizeBodyAndTabContent = function() {
+        $(panelBodyClass).height($(window).height() - 38);
+        $('.webprofiler-tabs-tab-content').height($(panelBodyClass).height() - 87);
+    };
 
     // Symfony VarDumper: Close the by default expanded objects
     $('.sf-dump-expanded')
@@ -13,22 +18,23 @@ Zepto(function($) {
     $('.sf-dump-toggle span').html('&#9654;');
 
     // Toggle Panel
-    $('.webprofiler .webprofiler-header .webprofiler-menus a.webprofiler-menu.webprofiler-menu-has-panel').on('click', function(e) {
+    $(menuHasPanel).on('click', function(e) {
         e.preventDefault();
 
-        var body = $('.webprofiler .webprofiler-body');
         var panel = '.' + $(this).attr('data-panel-target-id');
         var input = $(panel + ' input[type=radio]');
+
+        $(menuHasPanel).removeClass('active');
+        $(this).addClass('active');
 
         if (openPanel === panel) {
             openPanel = false;
 
-            body.removeClass('active');
-            $(panelClass).removeClass('active');
+            $(menuHasPanel + ', ' + panelBodyClass + ', ' + openPanel).removeClass('active');
             // remove checked on all input elements
             input.prop('checked', null);
         } else {
-            body.addClass('active');
+            $(panelBodyClass).addClass('active');
 
             if (openPanel !== false) {
                 $(openPanel).removeClass('active');
@@ -41,7 +47,35 @@ Zepto(function($) {
         }
     });
 
-    // close button
+    // close webprofiler-body panel
+    $(bodyMenu + ' .webprofiler-body-close-panel').on('click', function(e) {
+        $(menuHasPanel + ', ' + panelBodyClass + ', ' + openPanel).removeClass('active');
+
+        openPanel = false;
+    });
+
+    $(bodyMenu + ' .webprofiler-body-resize-panel').on('click', function(e) {
+        if (resizeIsActive) {
+            resizeIsActive = false;
+
+            $(panelBodyClass).height(null);
+            $('.webprofiler-tabs-tab-content').height(null);
+            $(this).removeClass('orginal-size-panel')
+        } else {
+            resizeIsActive = true;
+            resizeBodyAndTabContent();
+
+            $(this).addClass('orginal-size-panel');
+        }
+    });
+
+    $(window).resize(function() {
+        if (resizeIsActive) {
+            resizeBodyAndTabContent();
+        }
+    });
+
+    // close webprofiler button
     $('.webprofiler .webprofiler-header .webprofiler-hide-button').on('click', function(e) {
         e.preventDefault();
 
@@ -77,39 +111,5 @@ Zepto(function($) {
         }
 
         $(panelClass + ' .' + content.val()).addClass('active');
-    });
-
-    // resize webprofiler body
-    var selector = $('#webprofiler-body-dragbar');
-    var startY;
-    var startHeight;
-    var initDrag = function (e) {
-        e.preventDefault();
-
-       startY = e.clientY;
-       startHeight = parseInt($(panelBodyClass).height(), 10);
-
-       $('body').on('mousemove', doDrag);
-       $('body').on('mouseup', stopDrag);
-    };
-    var doDrag =function (e) {
-       $(panelBodyClass).height((startHeight + startY - e.clientY) + 'px');
-    };
-    var stopDrag = function (e) {
-        $('body').off('mousemove', doDrag);
-        $('body').off('mouseup', stopDrag);
-        $('#webprofiler-body-ghostbar').remove();
-    };
-
-    selector.on('mousedown', function init(e) {
-        e.preventDefault();
-
-        selector.className = selector.className + ' resizable';
-
-        $('#webprofiler-body-ghostbar').remove();
-
-        var ghostbar = $('<div>', {id:'webprofiler-body-ghostbar'}).appendTo($(panelBodyClass));
-
-        ghostbar.on('mousedown', initDrag);
     });
 });

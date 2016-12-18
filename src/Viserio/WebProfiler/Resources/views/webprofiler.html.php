@@ -6,13 +6,13 @@ if (! isset($token, $menus, $icons, $panels)) {
 }
 ?>
 <div id="webprofiler" data-token="webprofiler-<?php echo TemplateHelper::escape($token); ?>" class="webprofiler">
-    <a class="webprofiler-show-button" title="Show WebProfiler" tabindex="-1" accesskey="D">
+    <a class="webprofiler-show-button" title="Show WebProfiler" tabindex="-1">
         <?php echo file_get_contents($icons['ic_narrowspark_white_24px.svg']); ?>
     </a>
     <div class="webprofiler-header">
         <?php if (count($menus) !== 0): ?>
         <div class="webprofiler-menus">
-            <a class="webprofiler-hide-button" title="Close WebProfiler" tabindex="-1" accesskey="D">
+            <a class="webprofiler-hide-button" title="Close WebProfiler" tabindex="-1">
                 <?php echo file_get_contents($icons['ic_clear_white_24px.svg']); ?>
             </a>
             <?php foreach ($menus as $name => $menu):
@@ -57,7 +57,14 @@ if (! isset($token, $menus, $icons, $panels)) {
         <?php endif; ?>
     </div>
     <div class="webprofiler-body">
-        <div id="webprofiler-body-dragbar"></div>
+        <div class="row webprofiler-body-menu">
+            <a class="webprofiler-body-close-panel"  title="Close panel" tabindex="-1">
+                <?php echo file_get_contents($icons['ic_clear_white_24px.svg']); ?>
+            </a>
+            <a class="webprofiler-body-resize-panel"  title="Resize body" tabindex="-1">
+                <?php echo file_get_contents($icons['ic_keyboard_arrow_up_white_24px.svg']); ?>
+            </a>
+        </div>
         <?php foreach ($panels as $name => $panel): ?>
         <div class="webprofiler-panel webprofiler-panel-<?php echo TemplateHelper::escape($name) . TemplateHelper::escape($panel['class']); ?>">
             <?php echo $panel['content'] ?>

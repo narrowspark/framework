@@ -44,6 +44,8 @@ class AssetsRenderer implements RenderableContract
         'ic_schedule_white_24px.svg'     => __DIR__ . '/Resources/icons/ic_schedule_white_24px.svg',
         'ic_storage_white_24px.svg'      => __DIR__ . '/Resources/icons/ic_storage_white_24px.svg',
         'ic_mail_outline_white_24px.svg' => __DIR__ . '/Resources/icons/ic_mail_outline_white_24px.svg',
+        'ic_keyboard_arrow_up_white_24px.svg' => __DIR__ . '/Resources/icons/ic_keyboard_arrow_up_white_24px.svg',
+        'ic_keyboard_arrow_down_white_24px.svg' => __DIR__ . '/Resources/icons/ic_keyboard_arrow_down_white_24px.svg',
     ];
 
     /**
