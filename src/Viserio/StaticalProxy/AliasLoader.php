@@ -196,12 +196,12 @@ class AliasLoader implements AliasLoaderContract
         foreach ($this->namespaces as $namespace) {
             list($nsClass, $nsAlias) = $namespace;
 
-            if (! $nsAlias || strpos($alias, (string) $nsAlias) === 0) {
+            if (! $nsAlias || mb_strpos($alias, (string) $nsAlias) === 0) {
                 if ($nsAlias) {
-                    $alias = substr($alias, strlen($nsAlias) + 1);
+                    $alias = mb_substr($alias, mb_strlen($nsAlias) + 1);
                 }
 
-                $class = $nsClass . '\\' . $alias;
+                $class             = $nsClass . '\\' . $alias;
                 $this->resolving[] = $class;
 
                 if ($this->exists($class, true)) {
@@ -220,7 +220,7 @@ class AliasLoader implements AliasLoaderContract
      */
     public function removeNamespaceAlias()
     {
-        $class = func_get_args();
+        $class  = func_get_args();
         $filter = function ($namespace) use ($class) {
             return ! in_array($namespace[0], $class);
         };

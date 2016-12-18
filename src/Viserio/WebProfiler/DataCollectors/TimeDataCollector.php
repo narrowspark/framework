@@ -65,7 +65,7 @@ class TimeDataCollector extends AbstractDataCollector implements MenuAwareContra
     public function getMenu(): array
     {
         return [
-            'icon' => 'ic_schedule_white_24px.svg',
+            'icon'  => 'ic_schedule_white_24px.svg',
             'label' => $this->formatDuration($this->getRequestDuration()),
             'value' => '',
         ];
@@ -80,7 +80,7 @@ class TimeDataCollector extends AbstractDataCollector implements MenuAwareContra
     }
 
     /**
-     * Returns the duration of a request
+     * Returns the duration of a request.
      *
      * @return float
      */
@@ -105,14 +105,14 @@ class TimeDataCollector extends AbstractDataCollector implements MenuAwareContra
         $start = microtime(true);
 
         $this->startedMeasures[$name] = [
-            'label' => $label ?: $name,
-            'start' => $start,
+            'label'     => $label ?: $name,
+            'start'     => $start,
             'collector' => $collector,
         ];
     }
 
     /**
-     * Check a measure exists
+     * Check a measure exists.
      *
      * @param string $name
      *
@@ -124,7 +124,7 @@ class TimeDataCollector extends AbstractDataCollector implements MenuAwareContra
     }
 
     /**
-     * Stops a measure
+     * Stops a measure.
      *
      * @param string $name
      * @param array  $params

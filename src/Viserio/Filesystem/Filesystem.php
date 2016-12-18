@@ -31,11 +31,11 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract, Direct
      */
     protected $permissions = [
         'file' => [
-            'public' => 0744,
+            'public'  => 0744,
             'private' => 0700,
         ],
         'dir' => [
-            'public' => 0755,
+            'public'  => 0755,
             'private' => 0700,
         ],
     ];
@@ -159,7 +159,7 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract, Direct
     {
         $path = self::normalizeDirectorySeparator($path);
         clearstatcache(false, $path);
-        $permissions = octdec(substr(sprintf('%o', fileperms($path)), -4));
+        $permissions = octdec(mb_substr(sprintf('%o', fileperms($path)), -4));
 
         return $permissions & 0044 ?
             FilesystemContract::VISIBILITY_PUBLIC :
@@ -171,7 +171,7 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract, Direct
      */
     public function setVisibility(string $path, string $visibility): bool
     {
-        $path = self::normalizeDirectorySeparator($path);
+        $path       = self::normalizeDirectorySeparator($path);
         $visibility = $this->parseVisibility($path, $visibility);
 
         try {
@@ -189,7 +189,7 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract, Direct
     public function copy($originFile, $targetFile, $override = false): bool
     {
         $from = self::normalizeDirectorySeparator($originFile);
-        $to = self::normalizeDirectorySeparator($targetFile);
+        $to   = self::normalizeDirectorySeparator($targetFile);
 
         try {
             parent::copy($from, $to, $override);
@@ -208,7 +208,7 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract, Direct
     public function move(string $from, string $to): bool
     {
         $from = self::normalizeDirectorySeparator($from);
-        $to = self::normalizeDirectorySeparator($to);
+        $to   = self::normalizeDirectorySeparator($to);
 
         return rename($from, $to);
     }
@@ -237,7 +237,7 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract, Direct
         $explode = explode('.', $path);
 
         if ($extension = end($explode)) {
-            $extension = strtolower($extension);
+            $extension = mb_strtolower($extension);
         }
 
         return MimeType::detectByFileExtension($extension);
@@ -303,7 +303,7 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract, Direct
      */
     public function allFiles(string $directory, bool $showHiddenFiles = false): array
     {
-        $files = [];
+        $files  = [];
         $finder = Finder::create()->files()->ignoreDotFiles(! $showHiddenFiles)->in($directory);
 
         foreach ($finder as $dir) {
@@ -319,7 +319,7 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract, Direct
     public function createDirectory(string $dirname, array $config = []): bool
     {
         $dirname = self::normalizeDirectorySeparator($dirname);
-        $mode = $this->permissions['dir']['public'];
+        $mode    = $this->permissions['dir']['public'];
 
         if (isset($config['visibility'])) {
             $mode = $this->permissions['dir'][$config['visibility']];
@@ -437,9 +437,9 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract, Direct
      */
     public function moveDirectory(string $directory, string $destination, array $options = []): bool
     {
-        $directory = self::normalizeDirectorySeparator($directory);
+        $directory   = self::normalizeDirectorySeparator($directory);
         $destination = self::normalizeDirectorySeparator($destination);
-        $overwrite = $options['overwrite'] ?? false;
+        $overwrite   = $options['overwrite'] ?? false;
 
         if ($overwrite && $this->isDirectory($destination)) {
             if (! $this->deleteDirectory($destination)) {
@@ -487,13 +487,12 @@ class Filesystem extends SymfonyFilesystem implements FilesystemContract, Direct
         }
 
         if ($visibility === null || $type === '') {
-            return null;
+            return;
         }
 
         switch ($visibility) {
             case FilesystemContract::VISIBILITY_PUBLIC:
                 return $this->permissions[$type][$visibility];
-
             case FilesystemContract::VISIBILITY_PRIVATE:
                 return $this->permissions[$type][$visibility];
         }

@@ -6,8 +6,6 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Contracts\WebProfiler\MenuAware as MenuAwareContract;
 use Viserio\Contracts\WebProfiler\PanelAware as PanelAwareContract;
-use Viserio\Foundation\Application;
-use Viserio\Support\Env;
 use Viserio\WebProfiler\DataCollectors\AbstractDataCollector;
 
 class FilesLoadedCollector extends AbstractDataCollector implements
@@ -29,7 +27,7 @@ class FilesLoadedCollector extends AbstractDataCollector implements
     protected $included = [];
 
     /**
-     * [$basePath description]
+     * [$basePath description].
      *
      * @var string
      */
@@ -52,21 +50,21 @@ class FilesLoadedCollector extends AbstractDataCollector implements
     {
         // Get the files included on load.
         $includedFiles = get_included_files();
-        $compiled = $this->getCompiledFiles();
+        $compiled      = $this->getCompiledFiles();
 
         $included = [];
-        $files = [
+        $files    = [
             'included' => [],
             'compiled' => [],
         ];
 
         foreach ($includedFiles as $file) {
             // Skip the files from webprofiler, they are only loaded for Debugging and confuse the output.
-            if (strpos($file, 'vendor/narrowspark/framework/src/Viserio/WebProfiler') !== false ||
-                strpos($file, 'vendor/viserio/web-profiler') !== false
+            if (mb_strpos($file, 'vendor/narrowspark/framework/src/Viserio/WebProfiler') !== false ||
+                mb_strpos($file, 'vendor/viserio/web-profiler') !== false
             ) {
                 continue;
-            } elseif (!in_array($file, $compiled)) {
+            } elseif (! in_array($file, $compiled)) {
                 $included[] = $files['included'][] = $this->stripBasePath($file);
             } else {
                 $files['compiled'][] = $this->stripBasePath($file);
@@ -74,7 +72,7 @@ class FilesLoadedCollector extends AbstractDataCollector implements
         }
 
         $this->included = $included;
-        $this->files = $files;
+        $this->files    = $files;
     }
 
     /**
@@ -83,7 +81,7 @@ class FilesLoadedCollector extends AbstractDataCollector implements
     public function getMenu(): array
     {
         return [
-            'icon' => 'ic_insert_drive_file_white_24px.svg',
+            'icon'  => 'ic_insert_drive_file_white_24px.svg',
             'label' => '',
             'value' => (string) count($this->included),
         ];
@@ -99,7 +97,7 @@ class FilesLoadedCollector extends AbstractDataCollector implements
 
         return $this->createTabs([
             [
-                'name' => 'Included Files <span class="counter">' . count($included) . '</span>',
+                'name'    => 'Included Files <span class="counter">' . count($included) . '</span>',
                 'content' => $this->createTable(
                     $included,
                     '',
@@ -107,7 +105,7 @@ class FilesLoadedCollector extends AbstractDataCollector implements
                 ),
             ],
             [
-                'name' => 'Compiled Files <span class="counter">' . count($compiled) . '</span>',
+                'name'    => 'Compiled Files <span class="counter">' . count($compiled) . '</span>',
                 'content' => $this->createTable(
                     $compiled,
                     '',

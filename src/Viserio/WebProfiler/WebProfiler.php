@@ -231,16 +231,14 @@ class WebProfiler implements WebProfilerContract
         }
 
         if ($this->cachePool !== null) {
-            $method = count($serverRequest->getMethods()) ?
-                implode(' | ', $serverRequest->getMethods()) :
-                $serverRequest->getMethods();
-            $id = hash(
+            $method = $serverRequest->getMethod();
+            $token  = hash(
                 'ripemd160',
                 $serverRequest->getUri() . $method . random_bytes(32) . microtime()
             );
 
             $profile = $this->createProfile(
-                $id,
+                $token,
                 (new ClientIp($serverRequest))->getIpAddress(),
                 $method,
                 (string) $serverRequest->getUri(),
@@ -251,7 +249,7 @@ class WebProfiler implements WebProfilerContract
             );
         }
 
-        return $this->injectWebProfiler($response);
+        return $this->injectWebProfiler($response, $token);
     }
 
     /**
@@ -268,29 +266,31 @@ class WebProfiler implements WebProfilerContract
      * Injects the web debug toolbar into the given Response.
      *
      * @param \Psr\Http\Message\ResponseInterface $response
+     * @param string                              $token
      *
      * @return \Psr\Http\Message\ResponseInterface
      *
      * @link https://github.com/symfony/WebProfilerBundle/blob/master/EventListener/WebDebugToolbarListener.php
      */
-    protected function injectWebProfiler(ResponseInterface $response): ResponseInterface
+    protected function injectWebProfiler(ResponseInterface $response, string $token): ResponseInterface
     {
         $content = (string) $response->getBody();
 
-        $assets = $this->getAssetsRenderer();
+        $assets   = $this->getAssetsRenderer();
         $template = new TemplateManager(
             $this->collectors,
             $this->template,
             $assets->getIcons()
         );
+        $template->setToken($token);
 
         $renderedContent = $assets->render() . $template->render();
 
-        $pos = strripos($content, '</body>');
+        $pos = mb_strripos($content, '</body>');
 
         if ($pos !== false) {
             $stream = $this->getStreamFactory()->createStream(
-                substr($content, 0, $pos) . $renderedContent . substr($content, $pos)
+                mb_substr($content, 0, $pos) . $renderedContent . mb_substr($content, $pos)
             );
 
             // Update the new content and reset the content length
@@ -309,7 +309,7 @@ class WebProfiler implements WebProfilerContract
      */
     private function runningInConsole(): bool
     {
-        return substr(PHP_SAPI, 0, 3) === 'cgi';
+        return mb_substr(PHP_SAPI, 0, 3) === 'cgi';
     }
 
     /**
@@ -347,7 +347,7 @@ class WebProfiler implements WebProfilerContract
      */
     private function hasHeaderContains(MessageInterface $message, string $headerName, string $value): bool
     {
-        return strpos($message->getHeaderLine($headerName), $value) !== false;
+        return mb_strpos($message->getHeaderLine($headerName), $value) !== false;
     }
 
     /**
@@ -374,7 +374,7 @@ class WebProfiler implements WebProfilerContract
      * @param string $ip
      * @param string $method
      * @param string $url
-     * @param string $statusCode
+     * @param int    $statusCode
      * @param string $time
      * @param string $date
      * @param array  $collectors
@@ -386,8 +386,8 @@ class WebProfiler implements WebProfilerContract
         string $ip,
         string $method,
         string $url,
-        string $statusCode,
-        string $time,
+        int $statusCode,
+        float $time,
         string $date,
         array $collectors
     ): Profile {

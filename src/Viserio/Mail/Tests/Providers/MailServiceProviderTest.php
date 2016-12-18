@@ -34,11 +34,11 @@ class MailServiceProviderTest extends \PHPUnit_Framework_TestCase
             ],
             'from' => [
                 'address' => '',
-                'name' => '',
+                'name'    => '',
             ],
             'to' => [
                 'address' => '',
-                'name' => '',
+                'name'    => '',
             ],
         ]);
 

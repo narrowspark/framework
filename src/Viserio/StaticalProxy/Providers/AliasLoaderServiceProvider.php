@@ -21,7 +21,7 @@ class AliasLoaderServiceProvider implements ServiceProvider
     {
         return [
             AliasLoaderContract::class => [self::class, 'createAliasLoader'],
-            AliasLoader::class => function (ContainerInterface $container) {
+            AliasLoader::class         => function (ContainerInterface $container) {
                 return $container->get(AliasLoaderContract::class);
             },
             'alias' => function (ContainerInterface $container) {

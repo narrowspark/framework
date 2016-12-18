@@ -8,7 +8,7 @@ interface MenuAware
      * Returns infos for a tab.
      *  - icon
      *  - label
-     *  - value
+     *  - value.
      *
      * @return array
      */

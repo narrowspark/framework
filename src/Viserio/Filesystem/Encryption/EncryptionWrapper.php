@@ -31,7 +31,7 @@ class EncryptionWrapper
     public function __construct(FilesystemContract $adapter, Key $key)
     {
         $this->adapter = $adapter;
-        $this->key = $key;
+        $this->key     = $key;
     }
 
     /**
@@ -54,11 +54,11 @@ class EncryptionWrapper
     /**
      * Read a file.
      *
-     * @param string $path The path to the file.
+     * @param string $path the path to the file
      *
      * @throws \Viserio\Contracts\Filesystem\Exception\FileNotFoundException
      *
-     * @return string|false The file contents or false on failure.
+     * @return string|false the file contents or false on failure
      */
     public function read(string $path)
     {
@@ -72,7 +72,7 @@ class EncryptionWrapper
     /**
      * Retrieves a read-stream for a path.
      *
-     * @param string $path The path to the file.
+     * @param string $path the path to the file
      *
      * @throws \Viserio\Contracts\Filesystem\Exception\FileNotFoundException
      *
@@ -86,11 +86,11 @@ class EncryptionWrapper
     /**
      * Write a new file.
      *
-     * @param string $path     The path of the new file.
-     * @param string $contents The file contents.
-     * @param array  $config   An optional configuration array.
+     * @param string $path     the path of the new file
+     * @param string $contents the file contents
+     * @param array  $config   an optional configuration array
      *
-     * @return bool True on success, false on failure.
+     * @return bool true on success, false on failure
      */
     public function write(string $path, $contents, array $config = []): bool
     {
@@ -104,7 +104,7 @@ class EncryptionWrapper
      *
      * @param string   $path
      * @param resource $resource
-     * @param array    $config   An optional configuration array.
+     * @param array    $config   an optional configuration array
      *
      * @return bool
      */
@@ -120,7 +120,7 @@ class EncryptionWrapper
      *
      * @param string          $path
      * @param string|resource $contents
-     * @param array           $config   An optional configuration array.
+     * @param array           $config   an optional configuration array
      *
      * @return bool
      */
@@ -138,13 +138,13 @@ class EncryptionWrapper
     /**
      * Update an existing file.
      *
-     * @param string $path     The path of the existing file.
-     * @param string $contents The file contents.
-     * @param array  $config   An optional configuration array.
+     * @param string $path     the path of the existing file
+     * @param string $contents the file contents
+     * @param array  $config   an optional configuration array
      *
      * @throws \Viserio\Contracts\Filesystem\Exception\FileNotFoundException
      *
-     * @return bool True on success, false on failure.
+     * @return bool true on success, false on failure
      */
     public function update(string $path, string $contents, array $config = []): bool
     {
@@ -190,7 +190,7 @@ class EncryptionWrapper
     /**
      * Decrypts a stream.
      *
-     * @param resource $resource The stream to decrypt.
+     * @param resource $resource the stream to decrypt
      *
      * @return resource
      */
@@ -212,7 +212,7 @@ class EncryptionWrapper
     /**
      * Encrypts a stream.
      *
-     * @param resource $resource The stream to encrypt.
+     * @param resource $resource the stream to encrypt
      *
      * @return resource
      */
@@ -230,7 +230,7 @@ class EncryptionWrapper
     /**
      * Decrypts a string.
      *
-     * @param string $contents The string to decrypt.
+     * @param string $contents the string to decrypt
      *
      * @return string
      */
@@ -244,7 +244,7 @@ class EncryptionWrapper
     /**
      * Encrypts a string.
      *
-     * @param string $contents The string to encrypt.
+     * @param string $contents the string to encrypt
      *
      * @return string
      */

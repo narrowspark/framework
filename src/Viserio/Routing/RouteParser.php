@@ -15,16 +15,16 @@ class RouteParser implements RouteParserContract
      */
     public function parse(string $route, array $conditions): array
     {
-        if (strlen($route) > 1 && $route[0] !== '/') {
+        if (mb_strlen($route) > 1 && $route[0] !== '/') {
             throw new InvalidRoutePatternException(sprintf(
                 'Invalid route pattern: non-root route must be prefixed with \'/\', \'%s\' given',
                 $route
             ));
         }
 
-        $segments = [];
-        $matches = [];
-        $names = [];
+        $segments        = [];
+        $matches         = [];
+        $names           = [];
         $patternSegments = explode('/', $route);
 
         array_shift($patternSegments);
@@ -62,24 +62,24 @@ class RouteParser implements RouteParserContract
         array &$names
     ): bool {
         $matchedParameter = false;
-        $names = [];
-        $matches = [];
-        $current = '';
-        $inParameter = false;
+        $names            = [];
+        $matches          = [];
+        $current          = '';
+        $inParameter      = false;
 
         foreach (str_split($patternSegment) as $character) {
             if ($inParameter) {
                 if ($character === '}') {
-                    if (strpos($current, ':') !== false) {
-                        $regex = substr($current, strpos($current, ':') + 1);
-                        $current = substr($current, 0, strpos($current, ':'));
+                    if (mb_strpos($current, ':') !== false) {
+                        $regex                = mb_substr($current, mb_strpos($current, ':') + 1);
+                        $current              = mb_substr($current, 0, mb_strpos($current, ':'));
                         $conditions[$current] = $regex;
                     }
 
-                    $matches[] = [self::PARAMETER_PART, $current];
-                    $names[] = $current;
-                    $current = '';
-                    $inParameter = false;
+                    $matches[]        = [self::PARAMETER_PART, $current];
+                    $names[]          = $current;
+                    $current          = '';
+                    $inParameter      = false;
                     $matchedParameter = true;
 
                     continue;
@@ -91,8 +91,8 @@ class RouteParser implements RouteParserContract
                 }
             } else {
                 if ($character === '{') {
-                    $matches[] = [self::STATIC_PART, $current];
-                    $current = '';
+                    $matches[]   = [self::STATIC_PART, $current];
+                    $current     = '';
                     $inParameter = true;
 
                     continue;

@@ -44,10 +44,10 @@ class HtmlDisplayer implements DisplayerContract
         StreamFactoryInterface $streamFactory,
         string $path
     ) {
-        $this->info = $info;
+        $this->info            = $info;
         $this->responseFactory = $responseFactory;
-        $this->streamFactory = $streamFactory;
-        $this->path = $path;
+        $this->streamFactory   = $streamFactory;
+        $this->path            = $path;
     }
 
     /**
@@ -58,7 +58,7 @@ class HtmlDisplayer implements DisplayerContract
         $info = $this->info->generate($id, $code);
 
         $response = $this->getResponseFactory()->createResponse($code);
-        $stream = $this->getStreamFactory()->createStream($this->render($info));
+        $stream   = $this->getStreamFactory()->createStream($this->render($info));
 
         foreach (array_merge($headers, ['Content-Type' => $this->contentType()]) as $header => $value) {
             $response = $response->withAddedHeader($header, $value);

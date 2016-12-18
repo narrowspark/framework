@@ -4,8 +4,8 @@ namespace Viserio\Contracts\Translation;
 
 interface Translator
 {
-    const MESSAGE_DEFINED = 0;
-    const MESSAGE_MISSING = 1;
+    const MESSAGE_DEFINED         = 0;
+    const MESSAGE_MISSING         = 1;
     const MESSAGE_EQUALS_FALLBACK = 2;
 
     /**

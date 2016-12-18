@@ -67,7 +67,7 @@ final class MatcherOptimizer
      *
      * @return \Viserio\Contracts\Routing\SegmentMatcher
      */
-    protected static function optimizeMatcher(SegmentMatcherContract $matcher): SegmentMatcherContract
+    private static function optimizeMatcher(SegmentMatcherContract $matcher): SegmentMatcherContract
     {
         if ($matcher instanceof RegexMatcher && $matcher->getGroupCount() === 1) {
             $parameterKeys = $matcher->getParameterKeys();
@@ -100,7 +100,7 @@ final class MatcherOptimizer
      *
      * @return array
      */
-    protected static function optimizeMatcherOrder(array $matchers): array
+    private static function optimizeMatcherOrder(array $matchers): array
     {
         $computationalCostOrder = [
             AnyMatcher::class,

@@ -160,7 +160,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase
             });
         });
         $routes = $router->getRoutes();
-        $route = $routes->getByName('Foo::Bar::baz');
+        $route  = $routes->getByName('Foo::Bar::baz');
         self::assertEquals('/foo/bar/baz', $route->getUri());
 
         /*
@@ -180,7 +180,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase
             });
         });
         $routes = $router->getRoutes();
-        $route = $routes->getByName('Foo::baz');
+        $route  = $routes->getByName('Foo::baz');
 
         self::assertEquals('/foo/bar/baz', $route->getUri());
     }
@@ -221,7 +221,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase
             }]);
         });
         $routes = $router->getRoutes();
-        $route = $routes->getByName('Foo::bar');
+        $route  = $routes->getByName('Foo::bar');
 
         self::assertEquals('/bar.foo', $route->getUri());
     }
@@ -245,7 +245,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase
             });
         });
         $routes = $router->getRoutes();
-        $route = $routes->getByName('Foo::Bar::baz');
+        $route  = $routes->getByName('Foo::Bar::baz');
 
         self::assertEquals('/baz.bar.foo', $route->getUri());
 
@@ -266,7 +266,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase
             });
         });
         $routes = $router->getRoutes();
-        $route = $routes->getByName('Foo::baz');
+        $route  = $routes->getByName('Foo::baz');
 
         self::assertEquals('/baz.bar.foo', $route->getUri());
     }

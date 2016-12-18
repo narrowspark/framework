@@ -20,7 +20,7 @@ class ContainerResolver
     protected $buildStack = [];
 
     /**
-     * Resolve a closure, function, method or a class
+     * Resolve a closure, function, method or a class.
      *
      * @param string|array $subject
      * @param array        $parameters
@@ -79,7 +79,7 @@ class ContainerResolver
 
         if ($reflectionMethod) {
             $reflectionParameters = $reflectionMethod->getParameters();
-            $parameters = $this->resolveParameters($reflectionParameters, $parameters);
+            $parameters           = $this->resolveParameters($reflectionParameters, $parameters);
         }
 
         array_pop($this->buildStack);
@@ -97,7 +97,7 @@ class ContainerResolver
      */
     public function resolveMethod($method, array $parameters = [])
     {
-        $reflectionMethod = $this->getMethodReflector($method);
+        $reflectionMethod     = $this->getMethodReflector($method);
         $reflectionParameters = $reflectionMethod->getParameters();
 
         array_push($this->buildStack, $reflectionMethod->name);
@@ -119,7 +119,7 @@ class ContainerResolver
      */
     public function resolveFunction($function, array $parameters = [])
     {
-        $reflectionFunction = new ReflectionFunction($function);
+        $reflectionFunction   = new ReflectionFunction($function);
         $reflectionParameters = $reflectionFunction->getParameters();
 
         array_push($this->buildStack, $reflectionFunction->name);
@@ -152,7 +152,7 @@ class ContainerResolver
     }
 
     /**
-     * Resolve a parameter
+     * Resolve a parameter.
      *
      * @param \ReflectionParameter $parameter
      * @param array                $parameters
@@ -161,7 +161,7 @@ class ContainerResolver
      */
     protected function resolveParameter(ReflectionParameter $parameter, array $parameters = [])
     {
-        $name = $parameter->name;
+        $name  = $parameter->name;
         $index = $parameter->getPosition();
 
         if (isset($parameters[$name])) {

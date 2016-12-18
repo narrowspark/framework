@@ -29,15 +29,15 @@ class ViewServiceProvider implements ServiceProvider
     public function getServices()
     {
         return [
-            EngineResolver::class => [self::class, 'createEngineResolver'],
+            EngineResolver::class  => [self::class, 'createEngineResolver'],
             'view.engine.resolver' => function (ContainerInterface $container) {
                 return $container->get(EngineResolver::class);
             },
             ViewFinder::class => [self::class, 'createViewFinder'],
-            'view.finder' => function (ContainerInterface $container) {
+            'view.finder'     => function (ContainerInterface $container) {
                 return $container->get(ViewFinder::class);
             },
-            Factory::class => [self::class, 'createViewFactory'],
+            Factory::class         => [self::class, 'createViewFactory'],
             FactoryContract::class => function (ContainerInterface $container) {
                 return $container->get(Factory::class);
             },

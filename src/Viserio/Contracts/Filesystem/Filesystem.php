@@ -30,18 +30,18 @@ interface Filesystem
     /**
      * Read a file.
      *
-     * @param string $path The path to the file.
+     * @param string $path the path to the file
      *
      * @throws \Viserio\Contracts\Filesystem\Exception\FileNotFoundException
      *
-     * @return string|false The file contents or false on failure.
+     * @return string|false the file contents or false on failure
      */
     public function read(string $path);
 
     /**
      * Retrieves a read-stream for a path.
      *
-     * @param string $path The path to the file.
+     * @param string $path the path to the file
      *
      * @throws \Viserio\Contracts\Filesystem\Exception\FileNotFoundException
      *
@@ -52,11 +52,11 @@ interface Filesystem
     /**
      * Write a new file.
      *
-     * @param string $path     The path of the new file.
-     * @param string $contents The file contents.
-     * @param array  $config   An optional configuration array.
+     * @param string $path     the path of the new file
+     * @param string $contents the file contents
+     * @param array  $config   an optional configuration array
      *
-     * @return bool True on success, false on failure.
+     * @return bool true on success, false on failure
      */
     public function write(string $path, string $contents, array $config = []): bool;
 
@@ -65,7 +65,7 @@ interface Filesystem
      *
      * @param string   $path
      * @param resource $resource
-     * @param array    $config   An optional configuration array.
+     * @param array    $config   an optional configuration array
      *
      * @return bool
      */
@@ -76,7 +76,7 @@ interface Filesystem
      *
      * @param string          $path
      * @param string|resource $contents
-     * @param array           $config   An optional configuration array.
+     * @param array           $config   an optional configuration array
      *
      * @return bool
      */
@@ -85,13 +85,13 @@ interface Filesystem
     /**
      * Update an existing file.
      *
-     * @param string $path     The path of the existing file.
-     * @param string $contents The file contents.
-     * @param array  $config   An optional configuration array.
+     * @param string $path     the path of the existing file
+     * @param string $contents the file contents
+     * @param array  $config   an optional configuration array
      *
      * @throws \Viserio\Contracts\Filesystem\Exception\FileNotFoundException
      *
-     * @return bool True on success, false on failure.
+     * @return bool true on success, false on failure
      */
     public function update(string $path, string $contents, array $config = []): bool;
 
@@ -156,31 +156,31 @@ interface Filesystem
     /**
      * Get a file's size.
      *
-     * @param string $path The path to the file.
+     * @param string $path the path to the file
      *
-     * @return int|false The file size or false on failure.
+     * @return int|false the file size or false on failure
      */
     public function getSize(string $path);
 
     /**
      * Get a file's mime-type.
      *
-     * @param string $path The path to the file.
+     * @param string $path the path to the file
      *
      * @throws \Viserio\Contracts\Filesystem\Exception\FileNotFoundException
      *
-     * @return string|false The file mime-type or false on failure.
+     * @return string|false the file mime-type or false on failure
      */
     public function getMimetype(string $path);
 
     /**
      * Get a file's timestamp.
      *
-     * @param string $path The path to the file.
+     * @param string $path the path to the file
      *
      * @throws \Viserio\Contracts\Filesystem\Exception\FileNotFoundException
      *
-     * @return string|false The timestamp or false on failure.
+     * @return string|false the timestamp or false on failure
      */
     public function getTimestamp(string $path);
 

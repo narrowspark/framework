@@ -12,7 +12,7 @@ final class ChildrenNodeCollection implements NodeContentsContract
      *
      * @var \Viserio\Routing\Generator\RouteTreeNode[]
      */
-    protected $children = [];
+    private $children = [];
 
     /**
      * Create a new child node collection instance.

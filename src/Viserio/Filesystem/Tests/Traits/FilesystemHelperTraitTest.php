@@ -23,7 +23,7 @@ class FilesystemHelperTraitTest extends \PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
-        $this->root = vfsStream::setup();
+        $this->root  = vfsStream::setup();
         $this->trait = new FilesystemHelperTraitClass();
     }
 
@@ -59,7 +59,7 @@ declare(strict_types=1); return "pop"; ?>')->at($this->root);
     public function testIsFile()
     {
         $this->root->addChild(new vfsStreamDirectory('assets'));
-        $dir = $this->root->getChild('assets');
+        $dir  = $this->root->getChild('assets');
         $file = vfsStream::newFile('foo.txt')->withContent('foo')->at($this->root);
 
         self::assertFalse($this->trait->isFile($dir->url()));

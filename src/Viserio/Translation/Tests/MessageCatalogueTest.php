@@ -158,7 +158,7 @@ class MessageCatalogueTest extends \PHPUnit_Framework_TestCase
      */
     public function testAddFallbackCatalogueWithCircularReference()
     {
-        $main = new MessageCatalogue('en_US');
+        $main     = new MessageCatalogue('en_US');
         $fallback = new MessageCatalogue('fr_FR');
         $fallback->addFallbackCatalogue($main);
         $main->addFallbackCatalogue($fallback);
@@ -175,6 +175,7 @@ class MessageCatalogueTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider getValidLocalesTests
+     * @param mixed $locale
      */
     public function testSetValidLocale($locale)
     {

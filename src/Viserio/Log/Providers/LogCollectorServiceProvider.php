@@ -21,7 +21,7 @@ class LogCollectorServiceProvider implements ServiceProvider
     public function getServices()
     {
         return [
-            LogParser::class => [self::class, 'createLogParser'],
+            LogParser::class         => [self::class, 'createLogParser'],
             LogsDataCollector::class => [self::class, 'createLogsDataCollector'],
         ];
     }

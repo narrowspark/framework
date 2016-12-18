@@ -28,7 +28,7 @@ class CronListCommand extends Command
     public function handle()
     {
         $container = $this->getContainer();
-        $cronJobs = $container->get(Schedule::class)->getCronJobs();
+        $cronJobs  = $container->get(Schedule::class)->getCronJobs();
 
         $table = new Table($this->getOutput());
         $table->setHeaders(['Jobname', 'Expression', 'Summary']);

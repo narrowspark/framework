@@ -10,6 +10,8 @@ class NormalizeNameTraitTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider getMatchingNames
+     * @param mixed $name
+     * @param mixed $validated
      */
     public function testNormalizeName($name, $validated)
     {

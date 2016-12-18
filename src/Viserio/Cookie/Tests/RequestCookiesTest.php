@@ -35,7 +35,7 @@ class RequestCookiesTest extends \PHPUnit_Framework_TestCase
 
     public function testAddCookieToHeaderAndBack()
     {
-        $cookie = new Cookie('encrypted', 'jiafs89320jadfa');
+        $cookie  = new Cookie('encrypted', 'jiafs89320jadfa');
         $cookie2 = new Cookie('encrypted2', 'jiafs89320jadfa');
         $request = (new ServerRequestFactory())->createServerRequest($_SERVER);
         $cookies = RequestCookies::fromRequest($request);
@@ -52,6 +52,8 @@ class RequestCookiesTest extends \PHPUnit_Framework_TestCase
      * @dataProvider provideParsesFromCookieStringWithoutExpireData
      *
      * Cant test with automatic expires, test are one sec to slow.
+     * @param mixed $cookieString
+     * @param array $expectedCookies
      */
     public function testFromCookieHeaderWithoutExpire($cookieString, array $expectedCookies)
     {
@@ -68,6 +70,9 @@ class RequestCookiesTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider provideGetsCookieByNameData
+     * @param string $cookieString
+     * @param string $cookieName
+     * @param Cookie $expectedCookie
      */
     public function testItGetsCookieByName(string $cookieString, string $cookieName, Cookie $expectedCookie)
     {
@@ -82,6 +87,8 @@ class RequestCookiesTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider provideParsesFromCookieStringWithoutExpireData
+     * @param string $setCookieStrings
+     * @param array  $expectedSetCookies
      */
     public function testItKnowsWhichCookiesAreAvailable(string $setCookieStrings, array $expectedSetCookies)
     {

@@ -30,7 +30,7 @@ class TranslationManagerTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->root = vfsStream::setup();
+        $this->root    = vfsStream::setup();
         $this->manager = new TranslationManager(
             new PluralizationRules(),
             new MessageSelector()

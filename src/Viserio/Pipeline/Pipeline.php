@@ -90,14 +90,13 @@ class Pipeline implements PipelineContract
                 // If the $stage is an instance of a Closure, we will just call it directly.
                 if ($stage instanceof Closure) {
                     return $stage($traveler, $stack);
-
                 // Otherwise we'll resolve the stages out of the container and call it with
                 // the appropriate method and arguments, returning the results back out.
                 } elseif ($this->container && ! is_object($stage)) {
                     return $this->sliceThroughContainer($traveler, $stack, $stage);
                 } elseif (is_array($stage)) {
                     $reflectionClass = new ReflectionClass(array_shift($stage));
-                    $parameters = [$traveler, $stack];
+                    $parameters      = [$traveler, $stack];
 
                     return $reflectionClass->newInstanceArgs($stage)(...$parameters);
                 }

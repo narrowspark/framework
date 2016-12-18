@@ -119,26 +119,6 @@ class ProxyAdapter implements CacheItemPoolInterface
     }
 
     /**
-     * Count hints or misses on array.
-     *
-     * @param array $items
-     *
-     * @return array
-     */
-    private function generateItems(array $items)
-    {
-        foreach ($items as $key => $item) {
-            if ($item->isHit()) {
-                ++$this->hits;
-            } else {
-                ++$this->misses;
-            }
-        }
-
-        return $items;
-    }
-
-    /**
      * Returns the number of cache read hits.
      *
      * @return int
@@ -156,5 +136,25 @@ class ProxyAdapter implements CacheItemPoolInterface
     public function getMisses(): int
     {
         return $this->misses;
+    }
+
+    /**
+     * Count hints or misses on array.
+     *
+     * @param array $items
+     *
+     * @return array
+     */
+    private function generateItems(array $items)
+    {
+        foreach ($items as $key => $item) {
+            if ($item->isHit()) {
+                ++$this->hits;
+            } else {
+                ++$this->misses;
+            }
+        }
+
+        return $items;
     }
 }

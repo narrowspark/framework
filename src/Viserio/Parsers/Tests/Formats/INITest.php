@@ -25,8 +25,8 @@ class INITest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->file = new Filesystem();
-        $this->root = vfsStream::setup();
+        $this->file   = new Filesystem();
+        $this->root   = vfsStream::setup();
         $this->parser = new INI();
     }
 

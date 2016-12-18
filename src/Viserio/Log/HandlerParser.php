@@ -48,20 +48,20 @@ class HandlerParser
      * @var array
      */
     protected $handler = [
-        'stream' => StreamHandler::class,
-        'amqp' => AmqpHandler::class,
-        'gelf' => GelfHandler::class,
-        'cube' => CubeHandler::class,
-        'raven' => RavenHandler::class,
+        'stream'      => StreamHandler::class,
+        'amqp'        => AmqpHandler::class,
+        'gelf'        => GelfHandler::class,
+        'cube'        => CubeHandler::class,
+        'raven'       => RavenHandler::class,
         'zendMonitor' => ZendMonitorHandler::class,
-        'newRelic' => NewRelicHandler::class,
+        'newRelic'    => NewRelicHandler::class,
         //Log
-        'errorLog' => ErrorLogHandler::class,
-        'loggly' => LogglyHandler::class,
+        'errorLog'  => ErrorLogHandler::class,
+        'loggly'    => LogglyHandler::class,
         'syslogUdp' => SyslogUdpHandler::class,
         //Browser
-        'browser' => BrowserConsoleHandler::class,
-        'firePHP' => FirePHPHandler::class,
+        'browser'   => BrowserConsoleHandler::class,
+        'firePHP'   => FirePHPHandler::class,
         'chromePHP' => ChromePHPHandler::class,
     ];
 
@@ -71,14 +71,14 @@ class HandlerParser
      * @var array
      */
     protected $formatter = [
-        'line' => LineFormatter::class,
-        'html' => HtmlFormatter::class,
+        'line'       => LineFormatter::class,
+        'html'       => HtmlFormatter::class,
         'normalizer' => NormalizerFormatter::class,
-        'scalar' => ScalarFormatter::class,
-        'json' => JsonFormatter::class,
-        'wildfire' => WildfireFormatter::class,
-        'chrome' => ChromePHPFormatter::class,
-        'gelf' => GelfMessageFormatter::class,
+        'scalar'     => ScalarFormatter::class,
+        'json'       => JsonFormatter::class,
+        'wildfire'   => WildfireFormatter::class,
+        'chrome'     => ChromePHPFormatter::class,
+        'gelf'       => GelfMessageFormatter::class,
     ];
 
     /**
@@ -185,7 +185,6 @@ class HandlerParser
                 return new $this->formatter['chrome']();
             case 'gelf':
                 return new $this->formatter['gelf']();
-
             default:
                 throw new InvalidArgumentException('Invalid formatter.');
         }
@@ -199,17 +198,17 @@ class HandlerParser
     protected function lineFormatterSettings(): string
     {
         $options = [
-            'gray' => "\033[37m",
-            'green' => "\033[32m",
+            'gray'   => "\033[37m",
+            'green'  => "\033[32m",
             'yellow' => "\033[93m",
-            'blue' => "\033[94m",
+            'blue'   => "\033[94m",
             'purple' => "\033[95m",
-            'white' => "\033[97m",
-            'bold' => "\033[1m",
-            'reset' => "\033[0m",
+            'white'  => "\033[97m",
+            'bold'   => "\033[1m",
+            'reset'  => "\033[0m",
         ];
 
-        $width = getenv('COLUMNS') ?: 60; // Console width from env, or 60 chars.
+        $width     = getenv('COLUMNS') ?: 60; // Console width from env, or 60 chars.
         $separator = str_repeat('━', (int) $width); // A nice separator line
 
         $format = $options['bold'];

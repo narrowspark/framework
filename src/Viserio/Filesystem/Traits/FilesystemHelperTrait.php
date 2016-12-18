@@ -85,7 +85,7 @@ trait FilesystemHelperTrait
     public function link(string $target, string $link)
     {
         $target = $this->getNormalzedOrPrefixedPath($target);
-        $link = $this->getNormalzedOrPrefixedPath($link);
+        $link   = $this->getNormalzedOrPrefixedPath($link);
 
         if (! $this->isWindows()) {
             return symlink($target, $link);
@@ -115,7 +115,7 @@ trait FilesystemHelperTrait
     abstract public function isDirectory(string $dirname): bool;
 
     /**
-     * Fix directory separators for windows and linux
+     * Fix directory separators for windows and linux.
      *
      * @param string|array $paths
      *
@@ -132,7 +132,7 @@ trait FilesystemHelperTrait
      */
     protected function isWindows(): bool
     {
-        return strtolower(substr(PHP_OS, 0, 3)) === 'win';
+        return mb_strtolower(mb_substr(PHP_OS, 0, 3)) === 'win';
     }
 
     /**

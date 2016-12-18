@@ -321,6 +321,8 @@ class RouteTreeOptimizerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider optimizationCasesProvider
+     * @param array $original
+     * @param array $expected
      */
     public function testRouteTreeOptimizer(array $original, array $expected)
     {

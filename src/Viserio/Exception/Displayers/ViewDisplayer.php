@@ -33,7 +33,7 @@ class ViewDisplayer implements DisplayerContract
      */
     public function __construct(ExceptionInfo $info, FactoryContract $factory)
     {
-        $this->info = $info;
+        $this->info    = $info;
         $this->factory = $factory;
     }
 

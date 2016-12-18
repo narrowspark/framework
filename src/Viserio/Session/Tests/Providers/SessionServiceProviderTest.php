@@ -27,9 +27,9 @@ class SessionServiceProviderTest extends \PHPUnit_Framework_TestCase
             'key' => $key->saveToAsciiSafeString(),
         ]);
         $container->get('config')->set('session', [
-            'path' => '',
+            'path'     => '',
             'lifetime' => 3000,
-            'cookie' => 'test',
+            'cookie'   => 'test',
         ]);
 
         self::assertInstanceOf(SessionManager::class, $container->get(SessionManager::class));

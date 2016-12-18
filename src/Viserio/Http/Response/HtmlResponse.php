@@ -18,11 +18,11 @@ class HtmlResponse extends Response
      * Produces an HTML response with a Content-Type of text/html and a default
      * status of 200.
      *
-     * @param string|StreamInterface $html    HTML or stream for the message body.
-     * @param int                    $status  Integer status code for the response; 200 by default.
-     * @param array                  $headers Array of headers to use at initialization.
+     * @param string|StreamInterface $html    hTML or stream for the message body
+     * @param int                    $status  integer status code for the response; 200 by default
+     * @param array                  $headers array of headers to use at initialization
      *
-     * @throws InvalidArgumentException if $html is neither a string or stream.
+     * @throws InvalidArgumentException if $html is neither a string or stream
      */
     public function __construct($html, int $status = 200, array $headers = [])
     {
@@ -38,7 +38,7 @@ class HtmlResponse extends Response
      *
      * @param string|StreamInterface $html
      *
-     * @throws InvalidArgumentException if $html is neither a string or stream.
+     * @throws InvalidArgumentException if $html is neither a string or stream
      *
      * @return StreamInterface
      */

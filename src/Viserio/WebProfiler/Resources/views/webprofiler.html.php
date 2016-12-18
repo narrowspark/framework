@@ -5,7 +5,7 @@ if (! isset($token, $menus, $icons, $panels)) {
     return;
 }
 ?>
-<div id="webprofiler-<?php echo TemplateHelper::escape($token); ?>" class="webprofiler">
+<div id="webprofiler" data-token="webprofiler-<?php echo TemplateHelper::escape($token); ?>" class="webprofiler">
     <a class="webprofiler-show-button" title="Show WebProfiler" tabindex="-1" accesskey="D">
         <?php echo file_get_contents($icons['ic_narrowspark_white_24px.svg']); ?>
     </a>
@@ -22,12 +22,12 @@ if (! isset($token, $menus, $icons, $panels)) {
                     $tooltip = true;
                 }
 
-                $data = isset($panels[$name]) ? 'data-panel-target-id="webprofiler-panel-' . $name . '"' : '';
+                $data = isset($panels[$name]) ? 'data-panel-target-id="webprofiler-panel-' . TemplateHelper::escape($name) . '"' : '';
                 $hasPanels = isset($panels[$name]) ? ' webprofiler-menu-has-panel' : '';
                 $hasTooltip = $tooltip ? ' webprofiler-menu-has-tooltip' : '';
                 $cssClasses = isset($menu['menu']['class']) ? ' ' . $menu['menu']['class'] : '';
             ?>
-            <a <?php echo TemplateHelper::escape($data) ?> class="webprofiler-menu webprofiler-menu-<?php echo TemplateHelper::escape($name) ?> webprofiler-menu-position-<?php echo TemplateHelper::escape($menu['position']) . TemplateHelper::escape($hasPanels) . TemplateHelper::escape($hasTooltip) . TemplateHelper::escape($cssClasses); ?>">
+            <a <?php echo $data ?> class="webprofiler-menu webprofiler-menu-<?php echo TemplateHelper::escape($name) ?> webprofiler-menu-position-<?php echo $menu['position'] . $hasPanels . $hasTooltip . $cssClasses; ?>">
                 <div class="webprofiler-menu-content">
                     <?php if (isset($menu['menu']['icon'])): ?>
                     <span class="webprofiler-menu-icon">
@@ -48,7 +48,7 @@ if (! isset($token, $menus, $icons, $panels)) {
                 </div>
                 <?php if ($tooltip): ?>
                     <div class="webprofiler-menu-tooltip">
-                        <?php echo TemplateHelper::escape($menu['tooltip']) ?>
+                        <?php echo $menu['tooltip'] ?>
                     </div>
                 <?php endif; ?>
             </a>
@@ -60,7 +60,7 @@ if (! isset($token, $menus, $icons, $panels)) {
         <div id="webprofiler-body-dragbar"></div>
         <?php foreach ($panels as $name => $panel): ?>
         <div class="webprofiler-panel webprofiler-panel-<?php echo TemplateHelper::escape($name) . TemplateHelper::escape($panel['class']); ?>">
-            <?php echo TemplateHelper::escape($panel['content']) ?>
+            <?php echo $panel['content'] ?>
         </div>
         <?php endforeach; ?>
     </div>

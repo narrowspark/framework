@@ -59,8 +59,8 @@ class CachedFactoryTest extends \PHPUnit_Framework_TestCase
         $adapter = $cache->connection([
             'cache' => [
                 'driver' => 'local',
-                'name' => 'local',
-                'key' => 'test',
+                'name'   => 'local',
+                'key'    => 'test',
                 'expire' => 6000,
             ],
         ]);
@@ -70,7 +70,7 @@ class CachedFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testConnectionWithFilesystemManagerAndCacheManager()
     {
-        $manager = $this->mock(FilesystemManager::class);
+        $manager      = $this->mock(FilesystemManager::class);
         $cacheManager = $this->mock(CacheManagerContract::class);
         $cacheManager->shouldReceive('hasDriver')
             ->once()
@@ -85,8 +85,8 @@ class CachedFactoryTest extends \PHPUnit_Framework_TestCase
         $adapter = $cache->connection([
             'cache' => [
                 'driver' => 'array',
-                'name' => 'array',
-                'key' => 'test',
+                'name'   => 'array',
+                'key'    => 'test',
                 'expire' => 6000,
             ],
         ]);

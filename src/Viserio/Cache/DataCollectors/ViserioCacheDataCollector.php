@@ -22,7 +22,7 @@ class ViserioCacheDataCollector extends AbstractDataCollector implements
      */
     public function __construct(CacheItemPoolInterface $cache)
     {
-        # code...
+        // code...
     }
 
     /**
@@ -30,7 +30,6 @@ class ViserioCacheDataCollector extends AbstractDataCollector implements
      */
     public function collect(ServerRequestInterface $serverRequest, ResponseInterface $response)
     {
-        //
     }
 
     /**
@@ -50,8 +49,8 @@ class ViserioCacheDataCollector extends AbstractDataCollector implements
     public function getTooltip(): string
     {
         return $this->createTooltipGroup([
-            'Cache Calls' => '',
-            'Cache hits' => '',
+            'Cache Calls'  => '',
+            'Cache hits'   => '',
             'Cache writes' => '',
         ]);
     }

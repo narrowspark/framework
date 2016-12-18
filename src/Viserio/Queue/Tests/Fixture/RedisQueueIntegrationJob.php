@@ -13,6 +13,5 @@ class RedisQueueIntegrationJob
 
     public function handle()
     {
-        //
     }
 }

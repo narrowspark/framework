@@ -170,7 +170,6 @@ class Mailer implements MailerContract
         // array as is, since must should contain both views with numeric keys.
         if (is_array($view) && isset($view[0])) {
             return [$view[0], $view[1], null];
-
             // If the view is an array, but doesn't contain numeric keys, we will assume
             // the the views are being explicitly specified and will extract them via
             // named keys instead, allowing the developers to use one or the other.

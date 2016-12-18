@@ -19,7 +19,7 @@ trait ServiceProviderConfigAwareTrait
     protected static function getConfig(ContainerInterface $container, string $id = '', $default = null)
     {
         $configName = str_replace('viserio.', '', self::PACKAGE);
-        $isPrefix = $configName === $id;
+        $isPrefix   = $configName === $id;
 
         if ($container->has(RepositoryContract::class)) {
             $id = ($isPrefix ? $configName : $configName . '.' . $id);

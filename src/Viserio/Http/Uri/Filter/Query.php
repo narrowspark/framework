@@ -57,7 +57,7 @@ class Query
     }
 
     /**
-     * Build a query key/pair association
+     * Build a query key/pair association.
      *
      * @param callable $encoder a callable to encode the key/pair association
      * @param array    $value   The query string value
@@ -83,7 +83,7 @@ class Query
     }
 
     /**
-     * Parse a query string pair
+     * Parse a query string pair.
      *
      * @param array    $res     The associative array to add the pair to
      * @param callable $decoder a Callable to decode the query string pair
@@ -94,7 +94,7 @@ class Query
     protected function parsePair(array $res, callable $decoder, string $pair): array
     {
         $param = explode('=', $pair, 2);
-        $key = $decoder(array_shift($param));
+        $key   = $decoder(array_shift($param));
         $value = array_shift($param);
 
         if ($value !== null) {

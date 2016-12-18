@@ -25,9 +25,9 @@ class YAMLTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->file = new Filesystem();
+        $this->file   = new Filesystem();
         $this->parser = new YAML();
-        $this->root = vfsStream::setup();
+        $this->root   = vfsStream::setup();
     }
 
     public function testParse()

@@ -16,11 +16,11 @@ class StaticalProxyServiceProvider implements ServiceProvider
     {
         return [
             StaticalProxyResolver::class => [self::class, 'createStaticalProxyResolver'],
-            'staticalproxy.resolver' => function (ContainerInterface $container) {
+            'staticalproxy.resolver'     => function (ContainerInterface $container) {
                 return $container->get(StaticalProxyResolver::class);
             },
             StaticalProxy::class => [self::class, 'createStaticalProxy'],
-            'staticalproxy' => function (ContainerInterface $container) {
+            'staticalproxy'      => function (ContainerInterface $container) {
                 return $container->get(StaticalProxy::class);
             },
             'facade' => function (ContainerInterface $container) {

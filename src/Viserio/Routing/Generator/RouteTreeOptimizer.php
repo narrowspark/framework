@@ -45,7 +45,7 @@ class RouteTreeOptimizer
     }
 
     /**
-     * [optimizeNode description]
+     * [optimizeNode description].
      *
      * @param RouteTreeNode $node
      *
@@ -62,8 +62,8 @@ class RouteTreeOptimizer
 
             if (count($children) === 1) {
                 $childNode = reset($children);
-                $matchers = MatcherOptimizer::mergeMatchers($node->getMatchers(), $childNode->getMatchers());
-                $contents = $childNode->getContents();
+                $matchers  = MatcherOptimizer::mergeMatchers($node->getMatchers(), $childNode->getMatchers());
+                $contents  = $childNode->getContents();
             }
         }
 
@@ -95,7 +95,7 @@ class RouteTreeOptimizer
                 $previous = $parent;
             } else {
                 $children[] = $previous;
-                $previous = $node;
+                $previous   = $node;
             }
         }
 
@@ -119,14 +119,14 @@ class RouteTreeOptimizer
         $commonMatchers = array_uintersect_assoc($node1->getMatchers(), $node2->getMatchers(), $matcherCompare);
 
         if (empty($commonMatchers)) {
-            return null;
+            return;
         }
 
         $children = [];
-        $nodes = [$node1, $node2];
+        $nodes    = [$node1, $node2];
 
         foreach ($nodes as $node) {
-            $specificMatchers = array_udiff_assoc($node->getMatchers(), $commonMatchers, $matcherCompare);
+            $specificMatchers  = array_udiff_assoc($node->getMatchers(), $commonMatchers, $matcherCompare);
             $duplicateMatchers = array_uintersect_assoc($node->getMatchers(), $commonMatchers, $matcherCompare);
 
             foreach ($duplicateMatchers as $segmentDepth => $matcher) {

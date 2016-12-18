@@ -12,9 +12,10 @@ class SendRawEmailMock
     }
 
     /**
-     * Mock the get() call for the sendRawEmail response
+     * Mock the get() call for the sendRawEmail response.
      *
      * @param string
+     * @param mixed $key
      *
      * @return string
      */

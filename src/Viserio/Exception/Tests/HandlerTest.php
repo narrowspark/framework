@@ -29,7 +29,7 @@ class HandlerTest extends \PHPUnit_Framework_TestCase
     public function getContainer()
     {
         $container = $this->mock(ContainerInterface::class);
-        $log = $this->mock(LoggerInterface::class);
+        $log       = $this->mock(LoggerInterface::class);
         $log->shouldReceive('error');
         $container->shouldReceive('has')
             ->with(LoggerInterface::class)
@@ -84,7 +84,7 @@ class HandlerTest extends \PHPUnit_Framework_TestCase
     public function testReportError($value = '')
     {
         $exception = new Exception();
-        $id = (new ExceptionIdentifier())->identify($exception);
+        $id        = (new ExceptionIdentifier())->identify($exception);
 
         $log = $this->mock(LoggerInterface::class);
         $log
@@ -111,7 +111,7 @@ class HandlerTest extends \PHPUnit_Framework_TestCase
     public function testReportCritical($value = '')
     {
         $exception = new FatalThrowableError(new Exception());
-        $id = (new ExceptionIdentifier())->identify($exception);
+        $id        = (new ExceptionIdentifier())->identify($exception);
 
         $log = $this->mock(LoggerInterface::class);
         $log->shouldReceive('critical')
@@ -137,7 +137,7 @@ class HandlerTest extends \PHPUnit_Framework_TestCase
     public function testShouldntReport()
     {
         $exception = new FatalThrowableError(new Exception());
-        $id = (new ExceptionIdentifier())->identify($exception);
+        $id        = (new ExceptionIdentifier())->identify($exception);
 
         $log = $this->mock(LoggerInterface::class);
         $log->shouldReceive('critical')

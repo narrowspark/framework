@@ -142,7 +142,7 @@ abstract class AbstractManager
         $drivers = $this->config->get($this->getConfigName() . '.drivers', []);
 
         if (isset($drivers[$name]) && is_array($drivers[$name])) {
-            $config = $drivers[$name];
+            $config         = $drivers[$name];
             $config['name'] = $name;
 
             return $config;

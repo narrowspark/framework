@@ -37,8 +37,8 @@ class SparkPost extends AbstractTransport
      */
     public function __construct(ClientInterface $client, string $key, array $options = [])
     {
-        $this->key = $key;
-        $this->client = $client;
+        $this->key     = $key;
+        $this->client  = $client;
         $this->options = $options;
     }
 
@@ -59,7 +59,7 @@ class SparkPost extends AbstractTransport
             ],
             'json' => [
                 'recipients' => $recipients,
-                'content' => [
+                'content'    => [
                     'email_rfc822' => $message->toString(),
                 ],
             ],

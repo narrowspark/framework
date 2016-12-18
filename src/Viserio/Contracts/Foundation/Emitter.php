@@ -5,7 +5,7 @@ namespace Viserio\Contracts\Foundation;
 use Psr\Http\Message\ResponseInterface;
 
 /**
- * Zend Framework (http://framework.zend.com/)
+ * Zend Framework (http://framework.zend.com/).
  *
  * @see       http://github.com/zendframework/zend-diactoros for the canonical source repository
  *

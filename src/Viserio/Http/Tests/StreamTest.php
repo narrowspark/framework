@@ -79,7 +79,7 @@ class StreamTest extends \PHPUnit_Framework_TestCase
 
     public function testGetSize()
     {
-        $size = filesize(__FILE__);
+        $size   = filesize(__FILE__);
         $handle = fopen(__FILE__, 'r');
 
         $stream = new Stream($handle);
@@ -121,7 +121,7 @@ class StreamTest extends \PHPUnit_Framework_TestCase
 
     public function testCanDetachStream()
     {
-        $r = fopen('php://temp', 'w+');
+        $r      = fopen('php://temp', 'w+');
         $stream = new Stream($r);
 
         $stream->write('foo');
@@ -180,7 +180,7 @@ class StreamTest extends \PHPUnit_Framework_TestCase
 
     public function testDoesNotThrowInToString()
     {
-        $body = 'foo';
+        $body   = 'foo';
         $stream = fopen('php://temp', 'r+');
 
         fwrite($stream, $body);
@@ -194,7 +194,7 @@ class StreamTest extends \PHPUnit_Framework_TestCase
 
     public function testStreamReadingWithZeroLength()
     {
-        $r = fopen('php://temp', 'r');
+        $r      = fopen('php://temp', 'r');
         $stream = new Stream($r);
 
         self::assertSame('', $stream->read(0));
@@ -208,7 +208,7 @@ class StreamTest extends \PHPUnit_Framework_TestCase
      */
     public function testStreamReadingWithNegativeLength()
     {
-        $r = fopen('php://temp', 'r');
+        $r      = fopen('php://temp', 'r');
         $stream = new Stream($r);
 
         try {
@@ -229,7 +229,7 @@ class StreamTest extends \PHPUnit_Framework_TestCase
     {
         self::$isFreadError = true;
 
-        $r = fopen('php://temp', 'r');
+        $r      = fopen('php://temp', 'r');
         $stream = new Stream($r);
 
         try {

@@ -87,7 +87,7 @@ class Route implements RouteContract
         $this->uri = $uri;
         // According to RFC methods are defined in uppercase (See RFC 7231)
         $this->httpMethods = array_map('strtoupper', (array) $methods);
-        $this->action = $this->parseAction($action);
+        $this->action      = $this->parseAction($action);
 
         if (in_array('GET', $this->httpMethods) && ! in_array('HEAD', $this->httpMethods)) {
             $this->httpMethods[] = 'HEAD';
@@ -115,7 +115,7 @@ class Route implements RouteContract
     }
 
     /**
-     * Get route identifier
+     * Get route identifier.
      *
      * @return string
      */
@@ -194,7 +194,7 @@ class Route implements RouteContract
     public function gatherMiddleware(): array
     {
         // Merge middlewares from Action.
-        $middlewares = Arr::get($this->action, 'middlewares', []);
+        $middlewares        = Arr::get($this->action, 'middlewares', []);
         $withoutMiddlewares = Arr::get($this->action, 'without_middlewares', []);
 
         $mergedMiddlewares = [
@@ -429,7 +429,7 @@ class Route implements RouteContract
             });
         }
 
-        if (is_string($action['uses']) && strpos($action['uses'], '@') === false) {
+        if (is_string($action['uses']) && mb_strpos($action['uses'], '@') === false) {
             if (! method_exists($action, '__invoke')) {
                 throw new UnexpectedValueException(sprintf(
                     'Invalid route action: [%s]',

@@ -18,7 +18,7 @@ class SessionServiceProvider implements ServiceProvider
     {
         return [
             SessionManager::class => [self::class, 'createSessionManager'],
-            'session' => function (ContainerInterface $container) {
+            'session'             => function (ContainerInterface $container) {
                 return $container->get(SessionManager::class);
             },
             'session.store' => [self::class, 'createSessionStore'],

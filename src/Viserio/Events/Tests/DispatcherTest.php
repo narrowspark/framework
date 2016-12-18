@@ -8,10 +8,10 @@ use Viserio\Events\Tests\Fixture\EventListener;
 
 class DispatcherTest extends \PHPUnit_Framework_TestCase
 {
-    const coreRequest = 'core.request';
+    const coreRequest   = 'core.request';
     const coreException = 'core.exception';
-    const apiRequest = 'api.request';
-    const apiException = 'api.exception';
+    const apiRequest    = 'api.request';
+    const apiException  = 'api.exception';
 
     private $dispatcher;
     private $listener;
@@ -19,7 +19,7 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase
     public function setup()
     {
         $this->dispatcher = new Dispatcher(new ArrayContainer([]));
-        $this->listener = new EventListener();
+        $this->listener   = new EventListener();
     }
 
     /**

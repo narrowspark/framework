@@ -93,7 +93,7 @@ interface Container extends ContainerInterface
     public function extend(string $binding, Closure $closure);
 
     /**
-     * Intercept the resolve call to add some features
+     * Intercept the resolve call to add some features.
      *
      * @param mixed $abstract
      * @param array $parameters

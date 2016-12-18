@@ -31,7 +31,7 @@ class CallQueuedHandler
     public function __construct(QueueingDispatcherContract $dispatcher, EncrypterContract $encrypter)
     {
         $this->dispatcher = $dispatcher;
-        $this->encrypter = $encrypter;
+        $this->encrypter  = $encrypter;
     }
 
     /**

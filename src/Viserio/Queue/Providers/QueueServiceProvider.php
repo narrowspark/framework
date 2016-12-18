@@ -17,7 +17,7 @@ class QueueServiceProvider implements ServiceProvider
     {
         return [
             QueueManager::class => [self::class, 'createQueueManager'],
-            'queue' => function (ContainerInterface $container) {
+            'queue'             => function (ContainerInterface $container) {
                 return $container->get(QueueManager::class);
             },
             'queue.connection' => [self::class, 'createQueueConnection'],

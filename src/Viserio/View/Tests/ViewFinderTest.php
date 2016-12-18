@@ -35,7 +35,7 @@ class ViewFinderTest extends \PHPUnit_Framework_TestCase
 
     public function testCascadingFileLoading()
     {
-        $path = self::normalizeDirectorySeparator($this->getPath() . '/' . 'foo.phtml');
+        $path  = self::normalizeDirectorySeparator($this->getPath() . '/' . 'foo.phtml');
         $path2 = self::normalizeDirectorySeparator($this->getPath() . '/' . 'foo.php');
 
         $finder = $this->getFinder();
@@ -58,7 +58,7 @@ class ViewFinderTest extends \PHPUnit_Framework_TestCase
 
     public function testDirectoryCascadingFileLoading()
     {
-        $path = self::normalizeDirectorySeparator($this->getPath() . '/' . 'foo.php');
+        $path  = self::normalizeDirectorySeparator($this->getPath() . '/' . 'foo.php');
         $path2 = self::normalizeDirectorySeparator($this->getPath() . '/' . 'Nested/foo.php');
         $path3 = self::normalizeDirectorySeparator($this->getPath() . '/' . 'foo.phtml');
         $path4 = self::normalizeDirectorySeparator($this->getPath() . '/' . 'foo.css');
@@ -140,7 +140,7 @@ class ViewFinderTest extends \PHPUnit_Framework_TestCase
 
     public function testDirectoryCascadingNamespacedFileLoading()
     {
-        $path = self::normalizeDirectorySeparator($this->getPath() . '/' . 'foo/bar/baz.php');
+        $path  = self::normalizeDirectorySeparator($this->getPath() . '/' . 'foo/bar/baz.php');
         $path2 = self::normalizeDirectorySeparator($this->getPath() . '/' . 'bar/bar/baz.php');
         $path3 = self::normalizeDirectorySeparator($this->getPath() . '/' . 'foo/bar/baz.phtml');
         $path4 = self::normalizeDirectorySeparator($this->getPath() . '/' . 'foo/bar/baz.css');

@@ -47,8 +47,8 @@ class UrlGenerator implements UrlGeneratorContract
         ServerRequestInterface $request,
         UriFactoryInterface $uriFactory
     ) {
-        $this->routes = $routes;
-        $this->request = $request;
+        $this->routes     = $routes;
+        $this->request    = $request;
         $this->uriFactory = $uriFactory;
     }
 
@@ -117,11 +117,11 @@ class UrlGenerator implements UrlGeneratorContract
      *
      * @return \Psr\Http\Message\UriInterface
      */
-    protected function addPortAndSchemeToUri(UriInterface $uri):UriInterface
+    protected function addPortAndSchemeToUri(UriInterface $uri): UriInterface
     {
         $requestUri = $this->request->getUri();
-        $secure = $requestUri->getScheme();
-        $port = (int) $requestUri->getPort();
+        $secure     = $requestUri->getScheme();
+        $port       = (int) $requestUri->getPort();
 
         if (($secure === 'https' && $port === 443) || ($secure !== 'https' && $port === 80)) {
             return $uri;

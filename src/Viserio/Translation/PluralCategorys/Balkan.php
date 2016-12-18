@@ -36,7 +36,7 @@ class Balkan implements CategoryContract
     public function category($count): int
     {
         $count = $this->normalizeInteger($count);
-        $i = 0;
+        $i     = 0;
 
         if (! is_float($count) && $count % 10 === 1 && $count % 100 !== 11) {
             return 0;

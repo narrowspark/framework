@@ -19,7 +19,7 @@ trait NormalizePathAndDirectorySeparatorTrait
             return self::normalizeAndAddDirectorySeparatorOnArray($paths);
         }
 
-        if (is_string($paths) && strpos($paths, 'vfs:') !== false) {
+        if (is_string($paths) && mb_strpos($paths, 'vfs:') !== false) {
             return $paths;
         }
 
@@ -87,7 +87,7 @@ trait NormalizePathAndDirectorySeparatorTrait
         $newPaths = [];
 
         foreach ($paths as $path) {
-            if (strpos($path, 'vfs:') !== false) {
+            if (mb_strpos($path, 'vfs:') !== false) {
                 $newPaths[] = $path;
             } else {
                 $newPaths[] = self::normalizePath(str_replace('\\', '/', $path));

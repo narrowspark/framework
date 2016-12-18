@@ -41,7 +41,7 @@ class ConfigureLoggingServiceProvider implements ServiceProvider
     protected static function configureHandlers(ContainerInterface $container, LogContract $log)
     {
         $config = $container->get(RepositoryContract::class);
-        $level = $config->get('app.log_level', 'debug');
+        $level  = $config->get('app.log_level', 'debug');
 
         $method = 'configure' . ucfirst($config->get('app.log', 'single')) . 'Handler';
 
@@ -72,7 +72,7 @@ class ConfigureLoggingServiceProvider implements ServiceProvider
      */
     protected static function configureDailyHandler(ContainerInterface $container, LogContract $log, string $level)
     {
-        $config = $container->get(RepositoryContract::class);
+        $config   = $container->get(RepositoryContract::class);
         $maxFiles = $config->get('app.log_max_files', 5);
 
         $log->useDailyFiles(

@@ -52,14 +52,14 @@ class StrTest extends \PHPUnit_Framework_TestCase
 
     public function testRandom()
     {
-        self::assertEquals(64, strlen(Str::random()));
+        self::assertEquals(64, mb_strlen(Str::random()));
         $randomInteger = mt_rand(1, 100);
-        self::assertEquals($randomInteger, strlen(Str::random($randomInteger)));
+        self::assertEquals($randomInteger, mb_strlen(Str::random($randomInteger)));
         self::assertInternalType('string', Str::random());
 
         $result = Str::random(20);
         self::assertTrue(is_string($result));
-        self::assertEquals(20, strlen($result));
+        self::assertEquals(20, mb_strlen($result));
     }
 
     public function testSubstr()

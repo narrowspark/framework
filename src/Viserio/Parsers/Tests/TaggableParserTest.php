@@ -19,7 +19,7 @@ class TaggableParserTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->root = vfsStream::setup();
+        $this->root   = vfsStream::setup();
         $this->parser = new TaggableParser();
     }
 

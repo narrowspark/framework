@@ -140,7 +140,7 @@ abstract class AbstractPaginator implements
         }
 
         $url = $this->path;
-        $url .= (strpos($this->path, '?') !== false ? '&' : '?');
+        $url .= (mb_strpos($this->path, '?') !== false ? '&' : '?');
         $url .= http_build_query($parameters, '', '&');
         $url .= $this->buildFragment();
 
@@ -473,7 +473,7 @@ abstract class AbstractPaginator implements
 
         if (array_key_exists($this->pageName, $query)) {
             $query = $this->secureInput($query);
-            $page = $query[$this->pageName];
+            $page  = $query[$this->pageName];
 
             if (filter_var($page, FILTER_VALIDATE_INT) !== false && (int) $page >= 1) {
                 return (int) $page;
@@ -496,7 +496,7 @@ abstract class AbstractPaginator implements
         $secure = function (&$v) {
             if (! is_string($v) && ! is_numeric($v)) {
                 $v = '';
-            } elseif (strpos($v, "\0") !== false) {
+            } elseif (mb_strpos($v, "\0") !== false) {
                 $v = '';
             } elseif (! mb_check_encoding($v, 'UTF-8')) {
                 $v = '';

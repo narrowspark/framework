@@ -9,6 +9,9 @@ class MessageSelectorTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @dataProvider getChooseTests
+     * @param mixed $expected
+     * @param mixed $id
+     * @param mixed $number
      */
     public function testChoose($expected, $id, $number)
     {
@@ -30,6 +33,8 @@ class MessageSelectorTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider getNonMatchingMessages
      * @expectedException \InvalidArgumentException
+     * @param mixed $id
+     * @param mixed $number
      */
     public function testThrowExceptionIfMatchingMessageCannotBeFound($id, $number)
     {

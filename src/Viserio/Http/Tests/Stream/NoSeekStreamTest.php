@@ -32,13 +32,13 @@ class NoSeekStreamTest extends \PHPUnit_Framework_TestCase
      */
     public function testHandlesClose()
     {
-        $body = 'foo';
+        $body   = 'foo';
         $stream = fopen('php://temp', 'r+');
 
         fwrite($stream, $body);
         fseek($stream, 0);
 
-        $s = new Stream($stream);
+        $s       = new Stream($stream);
         $wrapped = new NoSeekStream($s);
         $wrapped->close();
         $wrapped->write('foo');

@@ -13,7 +13,7 @@ class CommandLineTransformerTest extends \PHPUnit_Framework_TestCase
         $exception = new ErrorException('test message', 0, E_ERROR, 'test.php', 15);
 
         $transformer = new CommandLineTransformer();
-        $format = $transformer->transform($exception);
+        $format      = $transformer->transform($exception);
 
         $expected = "\n+-------------+\n| FATAL ERROR |\n+-------------+\ntest message in test.php on line 15\n";
 
@@ -25,9 +25,9 @@ class CommandLineTransformerTest extends \PHPUnit_Framework_TestCase
         $exception = new Exception('test message');
 
         $transformer = new CommandLineTransformer();
-        $format = $transformer->transform($exception);
+        $format      = $transformer->transform($exception);
 
-        self::assertTrue(strlen($format->getMessage()) > 0);
-        self::assertTrue((strpos($format->getMessage(), 'UNHANDLED EXCEPTION') !== false));
+        self::assertTrue(mb_strlen($format->getMessage()) > 0);
+        self::assertTrue((mb_strpos($format->getMessage(), 'UNHANDLED EXCEPTION') !== false));
     }
 }

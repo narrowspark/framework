@@ -6,10 +6,11 @@ class Scheme
 {
     /**
      * @return string
+     * @param  string $scheme
      */
     public function filter(string $scheme): string
     {
-        $scheme = strtolower($scheme);
+        $scheme = mb_strtolower($scheme);
         $scheme = preg_replace('#:(//)?$#', '', $scheme);
 
         if (empty($scheme)) {

@@ -30,7 +30,7 @@ class Mandrill extends AbstractTransport
     public function __construct(ClientInterface $client, string $key)
     {
         $this->client = $client;
-        $this->key = $key;
+        $this->key    = $key;
     }
 
     /**
@@ -41,10 +41,10 @@ class Mandrill extends AbstractTransport
         $this->beforeSendPerformed($message);
 
         $data = [
-            'key' => $this->key,
-            'to' => $this->getToAddresses($message),
+            'key'         => $this->key,
+            'to'          => $this->getToAddresses($message),
             'raw_message' => $message->toString(),
-            'async' => false,
+            'async'       => false,
         ];
 
         $options = ['form_params' => $data];

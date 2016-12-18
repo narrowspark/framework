@@ -62,14 +62,14 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
     protected function getApplication()
     {
         $paths = [
-            'app' => __DIR__ . '/../app',
-            'config' => __DIR__ . '/../config',
-            'routes' => __DIR__ . '/../routes',
+            'app'      => __DIR__ . '/../app',
+            'config'   => __DIR__ . '/../config',
+            'routes'   => __DIR__ . '/../routes',
             'database' => __DIR__ . '/../database',
-            'lang' => __DIR__ . '/../resources/lang',
-            'public' => __DIR__ . '/../public',
-            'base' => __DIR__ . '/..',
-            'storage' => __DIR__ . '/../storage',
+            'lang'     => __DIR__ . '/../resources/lang',
+            'public'   => __DIR__ . '/../public',
+            'base'     => __DIR__ . '/..',
+            'storage'  => __DIR__ . '/../storage',
         ];
 
         return new Application($paths);

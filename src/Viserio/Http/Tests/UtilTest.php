@@ -11,7 +11,7 @@ class UtilTest extends \PHPUnit_Framework_TestCase
 {
     public function testCopiesToString()
     {
-        $body = 'foobaz';
+        $body   = 'foobaz';
         $stream = fopen('php://temp', 'r+');
 
         fwrite($stream, $body);
@@ -28,7 +28,7 @@ class UtilTest extends \PHPUnit_Framework_TestCase
 
     public function testCopiesToStringStopsWhenReadFails()
     {
-        $body = 'foobaz';
+        $body   = 'foobaz';
         $stream = fopen('php://temp', 'r+');
 
         fwrite($stream, $body);
@@ -47,7 +47,7 @@ class UtilTest extends \PHPUnit_Framework_TestCase
 
     public function testCopiesToStream()
     {
-        $body = 'foobaz';
+        $body   = 'foobaz';
         $stream = fopen('php://temp', 'r+');
 
         fwrite($stream, $body);
@@ -88,7 +88,7 @@ class UtilTest extends \PHPUnit_Framework_TestCase
         Util::copyToStream($s1, $s2, 16394);
         $s2->seek(0);
 
-        self::assertEquals(16394, strlen($s2->getContents()));
+        self::assertEquals(16394, mb_strlen($s2->getContents()));
         self::assertEquals(8192, $sizes[0]);
         self::assertEquals(8192, $sizes[1]);
         self::assertEquals(10, $sizes[2]);
@@ -96,7 +96,7 @@ class UtilTest extends \PHPUnit_Framework_TestCase
 
     public function testStopsCopyToStreamWhenWriteFails()
     {
-        $body = 'foobaz';
+        $body   = 'foobaz';
         $stream = fopen('php://temp', 'r+');
 
         fwrite($stream, $body);
@@ -114,7 +114,7 @@ class UtilTest extends \PHPUnit_Framework_TestCase
 
     public function testStopsCopyToSteamWhenWriteFailsWithMaxLen()
     {
-        $body = 'foobaz';
+        $body   = 'foobaz';
         $stream = fopen('php://temp', 'r+');
 
         fwrite($stream, $body);
@@ -132,7 +132,7 @@ class UtilTest extends \PHPUnit_Framework_TestCase
 
     public function testStopsCopyToSteamWhenReadFailsWithMaxLen()
     {
-        $body = 'foobaz';
+        $body   = 'foobaz';
         $stream = fopen('php://temp', 'r+');
 
         fwrite($stream, $body);
@@ -170,11 +170,11 @@ class UtilTest extends \PHPUnit_Framework_TestCase
             'Single file' => [
                 [
                     'file' => [
-                        'name' => 'MyFile.txt',
-                        'type' => 'text/plain',
+                        'name'     => 'MyFile.txt',
+                        'type'     => 'text/plain',
                         'tmp_name' => '/tmp/php/php1h4j1o',
-                        'error' => '0',
-                        'size' => '123',
+                        'error'    => '0',
+                        'size'     => '123',
                     ],
                 ],
                 [
@@ -190,11 +190,11 @@ class UtilTest extends \PHPUnit_Framework_TestCase
             'Empty file' => [
                 [
                     'image_file' => [
-                        'name' => '',
-                        'type' => '',
+                        'name'     => '',
+                        'type'     => '',
                         'tmp_name' => '',
-                        'error' => '4',
-                        'size' => '0',
+                        'error'    => '4',
+                        'size'     => '0',
                     ],
                 ],
                 [
@@ -268,18 +268,18 @@ class UtilTest extends \PHPUnit_Framework_TestCase
             'Multiple files' => [
                 [
                     'text_file' => [
-                        'name' => 'MyFile.txt',
-                        'type' => 'text/plain',
+                        'name'     => 'MyFile.txt',
+                        'type'     => 'text/plain',
                         'tmp_name' => '/tmp/php/php1h4j1o',
-                        'error' => '0',
-                        'size' => '123',
+                        'error'    => '0',
+                        'size'     => '123',
                     ],
                     'image_file' => [
-                        'name' => '',
-                        'type' => '',
+                        'name'     => '',
+                        'type'     => '',
                         'tmp_name' => '',
-                        'error' => '4',
-                        'size' => '0',
+                        'error'    => '4',
+                        'size'     => '0',
                     ],
                 ],
                 [
@@ -326,35 +326,35 @@ class UtilTest extends \PHPUnit_Framework_TestCase
                     'nested' => [
                         'name' => [
                             'other' => 'Flag.txt',
-                            'test' => [
+                            'test'  => [
                                 0 => 'Stuff.txt',
                                 1 => '',
                             ],
                         ],
                         'type' => [
                             'other' => 'text/plain',
-                            'test' => [
+                            'test'  => [
                                 0 => 'text/plain',
                                 1 => '',
                             ],
                         ],
                         'tmp_name' => [
                             'other' => '/tmp/php/hp9hskjhf',
-                            'test' => [
+                            'test'  => [
                                 0 => '/tmp/php/asifu2gp3',
                                 1 => '',
                             ],
                         ],
                         'error' => [
                             'other' => '0',
-                            'test' => [
+                            'test'  => [
                                 0 => '0',
                                 1 => '4',
                             ],
                         ],
                         'size' => [
                             'other' => '421',
-                            'test' => [
+                            'test'  => [
                                 0 => '32',
                                 1 => '0',
                             ],
@@ -410,6 +410,8 @@ class UtilTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider dataNormalizeFiles
+     * @param mixed $files
+     * @param mixed $expected
      */
     public function testNormalizeFiles($files, $expected)
     {

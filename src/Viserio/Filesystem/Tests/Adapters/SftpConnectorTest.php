@@ -12,8 +12,8 @@ class SftpConnectorTest extends \PHPUnit_Framework_TestCase
         $connector = new SftpConnector();
 
         $return = $connector->connect([
-            'host' => 'sftp.example.com',
-            'port' => 22,
+            'host'     => 'sftp.example.com',
+            'port'     => 22,
             'username' => 'your-username',
             'password' => 'your-password',
         ]);
@@ -68,8 +68,8 @@ class SftpConnectorTest extends \PHPUnit_Framework_TestCase
         $connector = new SftpConnector();
 
         $connector->connect([
-            'host' => 'ftp.example.com',
-            'port' => 21,
+            'host'     => 'ftp.example.com',
+            'port'     => 21,
             'username' => 'your-username',
         ]);
     }

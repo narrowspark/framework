@@ -61,7 +61,7 @@ class TwigEngine implements EngineContract
     {
         if (! $this->parserInstance) {
             $config = $this->config;
-            $twig = new Twig_Environment(
+            $twig   = new Twig_Environment(
                 $this->loader(),
                 $config['engine']['twig']['options'] ?? []
             );

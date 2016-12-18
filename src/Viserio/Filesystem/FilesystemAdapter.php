@@ -43,6 +43,7 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
      * Create a new filesystem adapter instance.
      *
      * @param \League\Flysystem\AdapterInterface $driver
+     * @param array                              $config
      */
     public function __construct(AdapterInterface $driver, array $config)
     {
@@ -218,7 +219,7 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
         }
 
         $orginal = $this->driver->applyPathPrefix($originFile);
-        $target = $this->driver->applyPathPrefix($targetFile);
+        $target  = $this->driver->applyPathPrefix($targetFile);
 
         // https://bugs.php.net/bug.php?id=64634
         if (@fopen($orginal, 'r') === false) {
@@ -555,13 +556,12 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
     private function parseVisibility(string $visibility = null)
     {
         if ($visibility === null) {
-            return null;
+            return;
         }
 
         switch ($visibility) {
             case FilesystemContract::VISIBILITY_PUBLIC:
                 return AdapterInterface::VISIBILITY_PUBLIC;
-
             case FilesystemContract::VISIBILITY_PRIVATE:
                 return AdapterInterface::VISIBILITY_PRIVATE;
         }

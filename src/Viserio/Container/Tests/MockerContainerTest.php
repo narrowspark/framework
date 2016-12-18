@@ -18,10 +18,10 @@ class MockerContainerTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->container = new MockContainer();
-        $this->services = ['test.service_1' => null, 'test.service_2' => null, 'test.service_3' => null];
+        $this->services  = ['test.service_1' => null, 'test.service_2' => null, 'test.service_3' => null];
 
         foreach (array_keys($this->services) as $id) {
-            $service = new StdClass();
+            $service     = new StdClass();
             $service->id = $id;
 
             $this->services[$id] = $service;
@@ -75,8 +75,8 @@ class MockerContainerTest extends \PHPUnit_Framework_TestCase
 
     public function testThatMockedServicesAreAccessible()
     {
-        $mock1 = $this->container->mock('test.service_1', StdClass::class);
-        $mock2 = $this->container->mock('test.service_2', StdClass::class);
+        $mock1          = $this->container->mock('test.service_1', StdClass::class);
+        $mock2          = $this->container->mock('test.service_2', StdClass::class);
         $mockedServices = $this->container->getMockedServices();
 
         self::assertEquals(['mock::test.service_1' => $mock1, 'mock::test.service_2' => $mock2], $mockedServices);

@@ -49,7 +49,7 @@ class MatchedRouteDataMap implements NodeContentsContract
     }
 
     /**
-     * Adds the supplied route to the matched route data map
+     * Adds the supplied route to the matched route data map.
      *
      * @param \Viserio\Contracts\Routing\Route $route
      * @param array                            $parameterIndexNameMap

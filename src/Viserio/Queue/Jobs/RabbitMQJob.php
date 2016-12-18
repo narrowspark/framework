@@ -46,11 +46,11 @@ class RabbitMQJob extends AbstractJob
         $queue,
         AMQPMessage $message
     ) {
-        $this->container = $container;
+        $this->container  = $container;
         $this->connection = $connection;
-        $this->channel = $channel;
-        $this->queue = $queue;
-        $this->message = $message;
+        $this->channel    = $channel;
+        $this->queue      = $queue;
+        $this->message    = $message;
     }
 
     /**
@@ -86,14 +86,14 @@ class RabbitMQJob extends AbstractJob
     {
         $this->delete();
 
-        $body = $this->message->body;
-        $body = json_decode($body, true);
+        $body     = $this->message->body;
+        $body     = json_decode($body, true);
         $attempts = $this->attempts();
-        $job = unserialize($body['data']['command']);
+        $job      = unserialize($body['data']['command']);
 
         // write attempts to job
         $job->attempts = $attempts + 1;
-        $data = $body['data'];
+        $data          = $body['data'];
 
         if ($delay > 0) {
             $this->connection->later($delay, $job, $data, $this->getQueue());
@@ -108,7 +108,7 @@ class RabbitMQJob extends AbstractJob
     public function attempts(): int
     {
         $body = json_decode($this->message->body, true);
-        $job = unserialize($body['data']['command']);
+        $job  = unserialize($body['data']['command']);
 
         if (is_object($job) && property_exists($job, 'attempts')) {
             return (int) $job->attempts;

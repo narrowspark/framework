@@ -54,7 +54,7 @@ class ClassLoader
     public static function normalizeClass(string $class): string
     {
         if ($class[0] === '\\') {
-            $class = substr($class, 1);
+            $class = mb_substr($class, 1);
         }
 
         return self::normalizeDirectorySeparator(

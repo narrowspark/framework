@@ -66,7 +66,7 @@ final class TemplateHelper
     }
 
     /**
-     * Escapes a string for output in an HTML document
+     * Escapes a string for output in an HTML document.
      *
      * @param string $raw
      *
@@ -78,7 +78,7 @@ final class TemplateHelper
 
         // HHVM has all constants defined, but only ENT_IGNORE
         // works at the moment
-        if (defined('ENT_SUBSTITUTE') && !defined('HHVM_VERSION')) {
+        if (defined('ENT_SUBSTITUTE') && ! defined('HHVM_VERSION')) {
             $flags |= ENT_SUBSTITUTE;
         } else {
             // This is for 5.3.
@@ -98,9 +98,9 @@ final class TemplateHelper
      *
      * @return \Symfony\Component\VarDumper\Cloner\AbstractCloner
      */
-    protected static function getCloner()
+    private static function getCloner()
     {
-        if (!self::$cloner) {
+        if (! self::$cloner) {
             self::$cloner = new VarCloner();
         }
 
@@ -108,7 +108,7 @@ final class TemplateHelper
     }
 
     /**
-     * [getDumper description]
+     * [getDumper description].
      *
      * @return \Viserio\Support\Debug\HtmlDumper
      */

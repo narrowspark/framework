@@ -24,6 +24,8 @@ class InlineParameterRouterTest extends RouteRouterBaseTest
     /**
      * @dataProvider routerMatching404Provider
      * @expectedException \Narrowspark\HttpStatus\Exception\NotFoundException
+     * @param mixed $httpMethod
+     * @param mixed $uri
      */
     public function testRouter404($httpMethod, $uri)
     {
@@ -58,6 +60,8 @@ class InlineParameterRouterTest extends RouteRouterBaseTest
     /**
      * @dataProvider routerMatching405Provider
      * @expectedException \Narrowspark\HttpStatus\Exception\MethodNotAllowedException
+     * @param mixed $httpMethod
+     * @param mixed $uri
      */
     public function testRouter405($httpMethod, $uri)
     {

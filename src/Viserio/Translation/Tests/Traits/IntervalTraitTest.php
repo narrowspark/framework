@@ -10,6 +10,9 @@ class IntervalTraitTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider getTests
+     * @param mixed $expected
+     * @param mixed $number
+     * @param mixed $interval
      */
     public function testIntervalTest($expected, $number, $interval)
     {

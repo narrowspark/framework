@@ -66,9 +66,9 @@ class Listener
      */
     public function __construct(string $commandPath, string $consoleName = 'cerebro')
     {
-        $this->commandPath = $commandPath;
+        $this->commandPath   = $commandPath;
         $this->workerCommand = $this->buildWorkerCommand();
-        $this->consoleName = $consoleName;
+        $this->consoleName   = $consoleName;
     }
 
     /**

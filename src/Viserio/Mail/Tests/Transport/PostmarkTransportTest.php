@@ -37,7 +37,7 @@ class PostmarkTransportTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $version = phpversion() ?? 'Unknown PHP version';
-        $os = PHP_OS ?? 'Unknown OS';
+        $os      = PHP_OS ?? 'Unknown OS';
 
         $client->expects($this->once())
             ->method('post')
@@ -46,17 +46,17 @@ class PostmarkTransportTest extends \PHPUnit_Framework_TestCase
                 $this->equalTo([
                     'headers' => [
                         'X-Postmark-Server-Token' => 'TESTING_SERVER',
-                        'User-Agent' => "postmark (PHP Version: $version, OS: $os)",
-                        'Content-Type' => 'application/json',
+                        'User-Agent'              => "postmark (PHP Version: $version, OS: $os)",
+                        'Content-Type'            => 'application/json',
                     ],
                     'json' => [
-                        'From' => '"Me #5" <me@example.com>',
-                        'To' => '"A. Friend" <you@example.com>,you+two@example.com',
-                        'Cc' => 'another+1@example.com,"Extra 2" <another+2@example.com>',
-                        'Bcc' => 'another+3@example.com,"Extra 4" <another+4@example.com>',
-                        'Subject' => 'Is alive!',
+                        'From'     => '"Me #5" <me@example.com>',
+                        'To'       => '"A. Friend" <you@example.com>,you+two@example.com',
+                        'Cc'       => 'another+1@example.com,"Extra 2" <another+2@example.com>',
+                        'Bcc'      => 'another+3@example.com,"Extra 4" <another+4@example.com>',
+                        'Subject'  => 'Is alive!',
                         'HtmlBody' => '<q>Narrowspark</q>',
-                        'Headers' => [
+                        'Headers'  => [
                             ['Name' => 'Message-ID', 'Value' => '<' . $headers->get('Message-ID')->getId() . '>'],
                             ['Name' => 'X-PM-KeepID', 'Value' => 'true'],
                             ['Name' => 'X-Priority', 'Value' => '1 (Highest)'],
@@ -64,14 +64,14 @@ class PostmarkTransportTest extends \PHPUnit_Framework_TestCase
                         'Attachments' => [
                             [
                                 'ContentType' => 'text/plain',
-                                'Content' => 'VGhpcyBpcyB0aGUgcGxhaW4gdGV4dCBhdHRhY2htZW50Lg==',
-                                'Name' => 'hello.txt',
+                                'Content'     => 'VGhpcyBpcyB0aGUgcGxhaW4gdGV4dCBhdHRhY2htZW50Lg==',
+                                'Name'        => 'hello.txt',
                             ],
                             [
                                 'ContentType' => 'text/plain',
-                                'Content' => 'VGhpcyBpcyB0aGUgcGxhaW4gdGV4dCBhdHRhY2htZW50Lg==',
-                                'Name' => 'hello.txt',
-                                'ContentID' => 'cid:' . $attachment2->getId(),
+                                'Content'     => 'VGhpcyBpcyB0aGUgcGxhaW4gdGV4dCBhdHRhY2htZW50Lg==',
+                                'Name'        => 'hello.txt',
+                                'ContentID'   => 'cid:' . $attachment2->getId(),
                             ],
                         ],
                     ],

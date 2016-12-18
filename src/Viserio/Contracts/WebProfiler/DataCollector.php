@@ -16,7 +16,7 @@ interface DataCollector
     public function collect(ServerRequestInterface $serverRequest, ResponseInterface $response);
 
     /**
-     * Returns the unique name of the collector
+     * Returns the unique name of the collector.
      *
      * @return string
      */

@@ -26,11 +26,11 @@ class TranslationServiceProvider implements ServiceProvider
     {
         return [
             TranslationManagerContract::class => [self::class, 'createTranslationManager'],
-            TranslationManager::class => function (ContainerInterface $container) {
+            TranslationManager::class         => function (ContainerInterface $container) {
                 return $container->get(TranslationManagerContract::class);
             },
             TranslatorContract::class => [self::class, 'createTranslator'],
-            'translator' => function (ContainerInterface $container) {
+            'translator'              => function (ContainerInterface $container) {
                 return $container->get(TranslatorContract::class);
             },
         ];

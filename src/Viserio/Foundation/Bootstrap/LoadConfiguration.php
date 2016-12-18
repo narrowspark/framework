@@ -14,7 +14,7 @@ class LoadConfiguration extends AbstractLoadFiles implements BootstrapContract
     public function bootstrap(Application $app)
     {
         $loadedFromCache = false;
-        $config = $app->get(RepositoryContract::class);
+        $config          = $app->get(RepositoryContract::class);
 
         // First we will see if we have a cache configuration file.
         // If we do, we'll load the configuration items.

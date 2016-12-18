@@ -45,7 +45,6 @@ class SyncQueue extends AbstractQueue
      */
     public function pushRaw(string $payload, string $queue = null, array $options = [])
     {
-        //
     }
 
     /**
@@ -61,7 +60,6 @@ class SyncQueue extends AbstractQueue
      */
     public function pop(string $queue = null)
     {
-        //
     }
 
     /**
@@ -76,8 +74,8 @@ class SyncQueue extends AbstractQueue
                 'viserio.job.processing',
                 [
                     'connection' => 'sync',
-                    'job' => $job,
-                    'data' => json_decode($job->getRawBody(), true),
+                    'job'        => $job,
+                    'data'       => json_decode($job->getRawBody(), true),
                 ]
             );
         }
@@ -95,8 +93,8 @@ class SyncQueue extends AbstractQueue
                 'viserio.job.processed',
                 [
                     'connection' => 'sync',
-                    'job' => $job,
-                    'data' => json_decode($job->getRawBody(), true),
+                    'job'        => $job,
+                    'data'       => json_decode($job->getRawBody(), true),
                 ]
             );
         }
@@ -115,9 +113,9 @@ class SyncQueue extends AbstractQueue
                 'viserio.job.exception.occurred',
                 [
                     'connection' => 'sync',
-                    'job' => $job,
-                    'data' => json_decode($job->getRawBody(), true),
-                    'exception' => $exception,
+                    'job'        => $job,
+                    'data'       => json_decode($job->getRawBody(), true),
+                    'exception'  => $exception,
                 ]
             );
         }
@@ -137,8 +135,8 @@ class SyncQueue extends AbstractQueue
                 'viserio.job.failed',
                 [
                     'connection' => 'sync',
-                    'job' => $job,
-                    'data' => json_decode($job->getRawBody(), true),
+                    'job'        => $job,
+                    'data'       => json_decode($job->getRawBody(), true),
                 ]);
         }
     }
@@ -153,13 +151,13 @@ class SyncQueue extends AbstractQueue
     private function getErrorException($exception): ErrorException
     {
         if ($exception instanceof ParseError) {
-            $message = 'Parse error: ' . $exception->getMessage();
+            $message  = 'Parse error: ' . $exception->getMessage();
             $severity = E_PARSE;
         } elseif ($exception instanceof TypeError) {
-            $message = 'Type error: ' . $exception->getMessage();
+            $message  = 'Type error: ' . $exception->getMessage();
             $severity = E_RECOVERABLE_ERROR;
         } else {
-            $message = $exception->getMessage();
+            $message  = $exception->getMessage();
             $severity = E_ERROR;
         }
 

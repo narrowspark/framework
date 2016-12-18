@@ -35,6 +35,13 @@ class TemplateManager implements RenderableContract
     private $icons = [];
 
     /**
+     * Request token.
+     *
+     * @var string
+     */
+    private $token = '';
+
+    /**
      * Create a new template manager instance.
      *
      * @param array  $collectors
@@ -43,9 +50,29 @@ class TemplateManager implements RenderableContract
      */
     public function __construct(array $collectors, string $templatePath, array $icons = [])
     {
-        $this->collectors = $collectors;
+        $this->collectors   = $collectors;
         $this->templatePath = $templatePath;
-        $this->icons = $icons;
+        $this->icons        = $icons;
+    }
+
+    /**
+     * Sets the token.
+     *
+     * @param string $token The token
+     */
+    public function setToken(string $token): void
+    {
+        $this->token = $token;
+    }
+
+    /**
+     * Gets the token.
+     *
+     * @return string The token
+     */
+    public function getToken(): string
+    {
+        return $this->token;
     }
 
     /**
@@ -59,7 +86,7 @@ class TemplateManager implements RenderableContract
         $data = array_merge(
             $this->getSortedData(),
             [
-                'token' => hash('ripemd160', random_bytes(10)),
+                'token' => $this->getToken(),
             ]
         );
 
@@ -87,22 +114,22 @@ class TemplateManager implements RenderableContract
     public function getSortedData(): array
     {
         $data = [
-            'menus' => [],
+            'menus'  => [],
             'panels' => [],
-            'icons' => $this->icons,
+            'icons'  => $this->icons,
         ];
 
         foreach ($this->collectors as $name => $collector) {
             if ($collector instanceof MenuAwareContract) {
                 if ($collector instanceof TooltipAwareContract) {
                     $data['menus'][$collector->getName()] = [
-                        'menu' => $collector->getMenu(),
-                        'tooltip' => $collector->getTooltip(),
+                        'menu'     => $collector->getMenu(),
+                        'tooltip'  => $collector->getTooltip(),
                         'position' => $collector->getMenuPosition(),
                     ];
                 } else {
                     $data['menus'][$collector->getName()] = [
-                        'menu' => $collector->getMenu(),
+                        'menu'     => $collector->getMenu(),
                         'position' => $collector->getMenuPosition(),
                     ];
                 }
@@ -112,17 +139,17 @@ class TemplateManager implements RenderableContract
                 $class = '';
                 $panel = $collector->getPanel();
 
-                if (strpos($panel, '<div class="webprofiler-tabs') !== false) {
+                if (mb_strpos($panel, '<div class="webprofiler-tabs') !== false) {
                     $class = ' webprofiler-body-has-tabs';
-                } elseif (strpos($panel, '<select class="content-selector"') !== false) {
+                } elseif (mb_strpos($panel, '<select class="content-selector"') !== false) {
                     $class = ' webprofiler-body-has-selector';
-                } elseif (strpos($panel, '<table class="row">') !== false) {
+                } elseif (mb_strpos($panel, '<table class="row">') !== false) {
                     $class = ' webprofiler-body-has-table';
                 }
 
                 $data['panels'][$collector->getName()] = [
                     'content' => $panel,
-                    'class' => $class,
+                    'class'   => $class,
                 ];
             }
         }
@@ -158,13 +185,13 @@ class TemplateManager implements RenderableContract
     {
         // @codeCoverageIgnoreStart
         if ($exception instanceof ParseError) {
-            $message = 'Parse error: ' . $exception->getMessage();
+            $message  = 'Parse error: ' . $exception->getMessage();
             $severity = E_PARSE;
         } elseif ($exception instanceof TypeError) {
-            $message = 'Type error: ' . $exception->getMessage();
+            $message  = 'Type error: ' . $exception->getMessage();
             $severity = E_RECOVERABLE_ERROR;
         } else {
-            $message = $exception->getMessage();
+            $message  = $exception->getMessage();
             $severity = E_ERROR;
         }
         // @codeCoverageIgnoreEnd

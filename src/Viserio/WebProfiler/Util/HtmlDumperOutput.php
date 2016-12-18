@@ -3,7 +3,7 @@ declare(strict_types=1);
 namespace Viserio\WebProfiler\Util;
 
 /**
- * Used as output callable for Symfony\Component\VarDumper\Dumper\HtmlDumper::dump()
+ * Used as output callable for Symfony\Component\VarDumper\Dumper\HtmlDumper::dump().
  *
  * @see TemplateHelper::dump()
  */

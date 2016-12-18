@@ -6,8 +6,6 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Contracts\WebProfiler\MenuAware as MenuAwareContract;
 use Viserio\Contracts\WebProfiler\PanelAware as PanelAwareContract;
-use Viserio\Contracts\WebProfiler\TooltipAware as TooltipAwareContract;
-use Viserio\Log\DataCollectors\LogParser;
 use Viserio\WebProfiler\DataCollectors\AbstractDataCollector;
 
 class LogsDataCollector extends AbstractDataCollector implements
@@ -30,7 +28,7 @@ class LogsDataCollector extends AbstractDataCollector implements
     public function __construct(LogParser $logParser, $storages)
     {
         $this->logParser = $logParser;
-        $this->storages = (array) $storages;
+        $this->storages  = (array) $storages;
     }
 
     /**
@@ -38,7 +36,6 @@ class LogsDataCollector extends AbstractDataCollector implements
      */
     public function collect(ServerRequestInterface $serverRequest, ResponseInterface $response)
     {
-        //
     }
 
     /**

@@ -121,7 +121,7 @@ class RouteTest extends \PHPUnit_Framework_TestCase
     {
         $route = new Route('GET', '/test/{param1}/{param2}', null);
         $route->setAction([
-            'domain' => 'http://test.com',
+            'domain'     => 'http://test.com',
             'controller' => 'routeController',
         ]);
 

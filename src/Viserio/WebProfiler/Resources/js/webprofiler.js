@@ -42,22 +42,22 @@ Zepto(function($) {
     });
 
     // close button
-    $('.webprofiler .webprofiler-header .hide-button').on('click', function(e) {
+    $('.webprofiler .webprofiler-header .webprofiler-hide-button').on('click', function(e) {
         e.preventDefault();
 
         openPanel = false;
 
         $('.webprofiler .webprofiler-body, ' + panelClass).removeClass('active');
         $('.webprofiler .webprofiler-header').addClass('hide');
-        $('.webprofiler .show-button').addClass('active');
+        $('.webprofiler .webprofiler-show-button').addClass('active');
     });
 
     // open button
-    $('.webprofiler .show-button').on('click', function(e) {
+    $('.webprofiler .webprofiler-show-button').on('click', function(e) {
         e.preventDefault();
 
         $('.webprofiler .webprofiler-header').removeClass('hide');
-        $('.webprofiler .show-button').removeClass('active');
+        $('.webprofiler .webprofiler-show-button').removeClass('active');
     });
 
     // select content

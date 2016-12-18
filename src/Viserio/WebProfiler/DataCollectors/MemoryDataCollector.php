@@ -22,7 +22,7 @@ class MemoryDataCollector extends AbstractDataCollector implements TooltipAwareC
     public function __construct()
     {
         $this->data = [
-            'memory' => 0,
+            'memory'       => 0,
             'memory_limit' => $this->convertToBytes(ini_get('memory_limit')),
         ];
     }
@@ -43,7 +43,7 @@ class MemoryDataCollector extends AbstractDataCollector implements TooltipAwareC
         $memory = $this->data['memory'] / 1024 / 1024;
 
         return [
-            'icon' => file_get_contents(__DIR__ . '/../Resources/icons/ic_memory_white_24px.svg'),
+            'icon'  => file_get_contents(__DIR__ . '/../Resources/icons/ic_memory_white_24px.svg'),
             'label' => $memory,
             'value' => 'MB',
             'class' => $memory > 50 ? 'yellow' : '',
@@ -59,7 +59,7 @@ class MemoryDataCollector extends AbstractDataCollector implements TooltipAwareC
 
         return $this->createTooltipGroup([
             'Peak memory usage' => $this->data['memory'] / 1024 / 1024 . ' MB',
-            'PHP memory limit' => $limit . ' MB',
+            'PHP memory limit'  => $limit . ' MB',
         ]);
     }
 

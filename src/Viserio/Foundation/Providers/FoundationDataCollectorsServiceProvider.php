@@ -20,7 +20,7 @@ class FoundationDataCollectorsServiceProvider implements ServiceProvider
         return [
             NarrowsparkDataCollector::class => [self::class, 'createNarrowsparkDataCollector'],
             ViserioHttpDataCollector::class => [self::class, 'createViserioHttpDataCollector'],
-            FilesLoadedCollector::class => [self::class, 'createFilesLoadedCollector'],
+            FilesLoadedCollector::class     => [self::class, 'createFilesLoadedCollector'],
         ];
     }
 

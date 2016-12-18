@@ -16,7 +16,7 @@ class ConfigServiceProvider implements ServiceProvider
     {
         return [
             RepositoryContract::class => [self::class, 'createRepository'],
-            Repository::class => function (ContainerInterface $container) {
+            Repository::class         => function (ContainerInterface $container) {
                 return $container->get(RepositoryContract::class);
             },
             'config' => function (ContainerInterface $container) {

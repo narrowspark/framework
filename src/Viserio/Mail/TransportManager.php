@@ -29,6 +29,25 @@ class TransportManager extends AbstractManager
     }
 
     /**
+     * Get the configuration for a driver.
+     *
+     * @param string $name
+     *
+     * @return array
+     */
+    public function getDriverConfig(string $name): array
+    {
+        $name = $name ?? $this->getDefaultDriver();
+
+        $drivers = $this->config->get($this->getConfigName(), []);
+
+        $config         = $drivers;
+        $config['name'] = $name;
+
+        return $config;
+    }
+
+    /**
      * Create an instance of the Log Swift Transport driver.
      *
      * @return \Viserio\Mail\Transport\Log

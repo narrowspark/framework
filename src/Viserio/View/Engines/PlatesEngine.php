@@ -49,7 +49,7 @@ class PlatesEngine implements EnginesContract
      */
     public function __construct(array $config, ServerRequestInterface $request = null)
     {
-        $this->config = $config;
+        $this->config  = $config;
         $this->request = $request;
 
         $exceptions = $this->config['engine']['plates']['extensions'] ?? null;

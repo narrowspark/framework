@@ -37,8 +37,8 @@ class SqsQueue extends AbstractQueue
      */
     public function __construct(SqsClient $sqs, $default, $prefix = '')
     {
-        $this->sqs = $sqs;
-        $this->prefix = $prefix;
+        $this->sqs     = $sqs;
+        $this->prefix  = $prefix;
         $this->default = $default;
     }
 

@@ -29,8 +29,8 @@ class RegexMatcher extends AbstractMatcher
      */
     public function __construct(string $regex, $parameterKeyGroupMap)
     {
-        if ((strpos($regex, '/^(') !== false && strpos($regex, ')$/') !== false) ||
-            (strpos($regex, '/^') !== false && strpos($regex, '$/') !== false)
+        if ((mb_strpos($regex, '/^(') !== false && mb_strpos($regex, ')$/') !== false) ||
+            (mb_strpos($regex, '/^') !== false && mb_strpos($regex, '$/') !== false)
         ) {
             $this->regex = $regex;
         } else {
@@ -40,7 +40,7 @@ class RegexMatcher extends AbstractMatcher
         $map = is_array($parameterKeyGroupMap) ? $parameterKeyGroupMap : [$parameterKeyGroupMap => 0];
 
         $this->parameterKeyGroupMap = $map;
-        $this->parameterKeys = array_keys($map);
+        $this->parameterKeys        = array_keys($map);
     }
 
     /**

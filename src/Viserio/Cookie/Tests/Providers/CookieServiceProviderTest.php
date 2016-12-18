@@ -17,7 +17,7 @@ class CookieServiceProviderTest extends \PHPUnit_Framework_TestCase
 
         $container->get('config')->set('cookie', [
             'domain' => '',
-            'path' => '',
+            'path'   => '',
             'secure' => true,
         ]);
 
@@ -31,7 +31,7 @@ class CookieServiceProviderTest extends \PHPUnit_Framework_TestCase
 
         $container->instance('options', [
             'domain' => '',
-            'path' => '',
+            'path'   => '',
             'secure' => true,
         ]);
 
@@ -45,7 +45,7 @@ class CookieServiceProviderTest extends \PHPUnit_Framework_TestCase
 
         $container->instance('viserio.cookie.options', [
             'domain' => '',
-            'path' => '',
+            'path'   => '',
             'secure' => true,
         ]);
 

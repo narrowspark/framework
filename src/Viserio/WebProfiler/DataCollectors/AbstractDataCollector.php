@@ -28,7 +28,7 @@ abstract class AbstractDataCollector implements DataCollectorContract
      */
     public function getName(): string
     {
-        $namespace = substr(get_called_class(), 0, strrpos(get_called_class(), '\\'));
+        $namespace = mb_substr(get_called_class(), 0, mb_strrpos(get_called_class(), '\\'));
 
         return Str::snake(str_replace($namespace . '\\', '', get_class($this)), '-');
     }
@@ -55,6 +55,7 @@ abstract class AbstractDataCollector implements DataCollectorContract
      * Convert a number string to bytes.
      *
      * @param string
+     * @param string $memoryLimit
      *
      * @return int
      */
@@ -64,18 +65,18 @@ abstract class AbstractDataCollector implements DataCollectorContract
             return -1;
         }
 
-        $memoryLimit = strtolower($memoryLimit);
-        $max = strtolower(ltrim($memoryLimit, '+'));
+        $memoryLimit = mb_strtolower($memoryLimit);
+        $max         = mb_strtolower(ltrim($memoryLimit, '+'));
 
-        if (0 === strpos($max, '0x')) {
+        if (0 === mb_strpos($max, '0x')) {
             $max = intval($max, 16);
-        } elseif (0 === strpos($max, '0')) {
+        } elseif (0 === mb_strpos($max, '0')) {
             $max = intval($max, 8);
         } else {
             $max = (int) $max;
         }
 
-        switch (substr($memoryLimit, -1)) {
+        switch (mb_substr($memoryLimit, -1)) {
             case 't':
                 $max *= 1024;
                 break;
@@ -226,7 +227,7 @@ abstract class AbstractDataCollector implements DataCollectorContract
      */
     protected function createDropdownMenuContent(array $data)
     {
-        $selects = $content = [];
+        $selects  = $content  = [];
         $selected = false;
 
         foreach ($data as $key => $value) {

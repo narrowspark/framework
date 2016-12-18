@@ -45,7 +45,7 @@ class Mailgun extends AbstractTransport
     public function __construct(ClientInterface $client, string $key, string $domain)
     {
         $this->client = $client;
-        $this->key = $key;
+        $this->key    = $key;
         $this->setDomain($domain);
     }
 

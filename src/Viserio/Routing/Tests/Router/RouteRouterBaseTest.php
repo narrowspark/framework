@@ -20,9 +20,9 @@ abstract class RouteRouterBaseTest extends \PHPUnit_Framework_TestCase
     {
         parent::setUp();
 
-        $name = (new ReflectionClass($this))->getShortName();
+        $name      = (new ReflectionClass($this))->getShortName();
         $container = $this->mock(ContainerInterface::class);
-        $router = new Router($container);
+        $router    = new Router($container);
         $router->setCachePath(__DIR__ . '/../Cache/' . $name . '.cache');
         $router->refreshCache(true);
         $router->setEventsDispatcher(new Dispatcher($container));
@@ -34,6 +34,10 @@ abstract class RouteRouterBaseTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider routerMatchingProvider
+     * @param mixed $httpMethod
+     * @param mixed $uri
+     * @param mixed $expectedResult
+     * @param mixed $status
      */
     public function testRouter($httpMethod, $uri, $expectedResult, $status = 200)
     {

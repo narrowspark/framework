@@ -17,8 +17,8 @@ class ExceptionIdentifierTest extends \PHPUnit_Framework_TestCase
 
     public function testIdentifyTwo()
     {
-        $i = new ExceptionIdentifier();
-        $first = new Exception();
+        $i      = new ExceptionIdentifier();
+        $first  = new Exception();
         $second = new Exception();
 
         self::assertSame($i->identify($first), $i->identify($first));
@@ -28,7 +28,7 @@ class ExceptionIdentifierTest extends \PHPUnit_Framework_TestCase
 
     public function testIdentifyMany()
     {
-        $i = new ExceptionIdentifier();
+        $i   = new ExceptionIdentifier();
         $arr = [];
 
         for ($j = 0; $j < 20; ++$j) {

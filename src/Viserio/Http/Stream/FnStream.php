@@ -26,7 +26,7 @@ class FnStream implements StreamInterface
     private $methods;
 
     /**
-     * @param array $methods Hash of method name to a callable.
+     * @param array $methods hash of method name to a callable
      */
     public function __construct(array $methods)
     {
@@ -52,6 +52,7 @@ class FnStream implements StreamInterface
      * Lazily determine which methods are not implemented.
      *
      * @throws \BadMethodCallException
+     * @param  mixed                   $name
      */
     public function __get($name)
     {

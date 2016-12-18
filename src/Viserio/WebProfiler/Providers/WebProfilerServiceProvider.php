@@ -31,8 +31,8 @@ class WebProfilerServiceProvider implements ServiceProvider
     public function getServices()
     {
         return [
-            AssetsRenderer::class => [self::class, 'createAssetsRenderer'],
-            WebProfiler::class => [self::class, 'createWebProfiler'],
+            AssetsRenderer::class      => [self::class, 'createAssetsRenderer'],
+            WebProfiler::class         => [self::class, 'createWebProfiler'],
             WebProfilerContract::class => function (ContainerInterface $container) {
                 return $container->get(WebProfiler::class);
             },
@@ -112,16 +112,16 @@ class WebProfilerServiceProvider implements ServiceProvider
         $router->group(
             [
                 'namespace' => 'Viserio\WebProfiler\Controllers',
-                'prefix' => 'webprofiler',
+                'prefix'    => 'webprofiler',
             ],
             function ($router) {
                 $router->get('assets/stylesheets', [
                     'uses' => 'AssetController::css',
-                    'as' => 'webprofiler.assets.css',
+                    'as'   => 'webprofiler.assets.css',
                 ]);
                 $router->get('assets/javascript', [
                     'uses' => 'AssetController::js',
-                    'as' => 'webprofiler.assets.js',
+                    'as'   => 'webprofiler.assets.js',
                 ]);
             }
         );

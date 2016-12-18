@@ -8,7 +8,7 @@ use Viserio\Routing\VarExporter;
 class StaticMatcher extends AbstractMatcher
 {
     /**
-     * The static string
+     * The static string.
      *
      * @var string
      */
@@ -22,14 +22,14 @@ class StaticMatcher extends AbstractMatcher
      */
     public function __construct(string $segment, array $parameterKeys = null)
     {
-        if (strpos($segment, '/') !== false) {
+        if (mb_strpos($segment, '/') !== false) {
             throw new RuntimeException(
                 sprintf('Cannot create %s: segment cannot contain \'/\', \'%s\' given', __CLASS__, $segment)
             );
         }
 
         $this->parameterKeys = $parameterKeys ?? [];
-        $this->segment = $segment;
+        $this->segment       = $segment;
     }
 
     /**

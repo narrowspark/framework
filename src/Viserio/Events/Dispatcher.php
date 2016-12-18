@@ -53,7 +53,10 @@ class Dispatcher implements DispatcherContract
     }
 
     /**
-     * {@inhertidoc}
+     * {@inhertidoc}.
+     * @param string $eventName
+     * @param mixed  $listener
+     * @param int    $priority
      */
     public function attach(string $eventName, $listener, int $priority = 0)
     {
@@ -69,7 +72,10 @@ class Dispatcher implements DispatcherContract
     }
 
     /**
-     * {@inhertidoc}
+     * {@inhertidoc}.
+     * @param string $eventName
+     * @param mixed  $listener
+     * @param int    $priority
      */
     public function once(string $eventName, $listener, int $priority = 0)
     {
@@ -86,7 +92,9 @@ class Dispatcher implements DispatcherContract
     }
 
     /**
-     * {@inhertidoc}
+     * {@inhertidoc}.
+     * @param string $eventName
+     * @param array  $arguments
      */
     public function trigger(string $eventName, array $arguments = []): bool
     {
@@ -108,7 +116,8 @@ class Dispatcher implements DispatcherContract
     }
 
     /**
-     * {@inhertidoc}
+     * {@inhertidoc}.
+     * @param string $eventName
      */
     public function getListeners(string $eventName): array
     {
@@ -128,7 +137,9 @@ class Dispatcher implements DispatcherContract
     }
 
     /**
-     * {@inhertidoc}
+     * {@inhertidoc}.
+     * @param string $eventName
+     * @param mixed  $listener
      */
     public function detach(string $eventName, $listener): bool
     {
@@ -156,7 +167,8 @@ class Dispatcher implements DispatcherContract
     }
 
     /**
-     * {@inhertidoc}
+     * {@inhertidoc}.
+     * @param null|mixed $eventName
      */
     public function removeAllListeners($eventName = null)
     {
@@ -170,7 +182,8 @@ class Dispatcher implements DispatcherContract
     }
 
     /**
-     * {@inhertidoc}
+     * {@inhertidoc}.
+     * @param string $eventName
      */
     public function hasListeners(string $eventName): bool
     {
@@ -208,7 +221,7 @@ class Dispatcher implements DispatcherContract
      */
     protected function hasWildcards(string $subject): bool
     {
-        return strpos($subject, '*') !== false || strpos($subject, '#') !== false;
+        return mb_strpos($subject, '*') !== false || mb_strpos($subject, '#') !== false;
     }
 
     /**
@@ -219,7 +232,7 @@ class Dispatcher implements DispatcherContract
     protected function bindPatterns(string $eventName)
     {
         if (isset($this->syncedEvents[$eventName])) {
-            return null;
+            return;
         }
 
         foreach ($this->patterns as $eventPattern => $patterns) {
@@ -265,7 +278,7 @@ class Dispatcher implements DispatcherContract
     protected function removeListenerPattern(string $eventPattern, $listener)
     {
         if (! isset($this->patterns[$eventPattern])) {
-            return null;
+            return;
         }
 
         foreach ($this->patterns[$eventPattern] as $key => $pattern) {

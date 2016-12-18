@@ -29,7 +29,7 @@ class SyncJob extends AbstractJob
     public function __construct(ContainerInterface $container, $payload)
     {
         $this->container = $container;
-        $this->payload = $payload;
+        $this->payload   = $payload;
     }
 
     /**

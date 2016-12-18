@@ -51,7 +51,7 @@ class ViserioTranslationDataCollector extends AbstractDataCollector implements
         $counter = $this->computeCount($this->messages);
 
         return [
-            'icon' => file_get_contents(__DIR__ . '/Resources/icons/ic_translate_white_24px.svg'),
+            'icon'  => file_get_contents(__DIR__ . '/Resources/icons/ic_translate_white_24px.svg'),
             'label' => '',
             'value' => $counter[TranslatorContract::MESSAGE_DEFINED],
         ];
@@ -65,9 +65,9 @@ class ViserioTranslationDataCollector extends AbstractDataCollector implements
         $counter = $this->computeCount($this->messages);
 
         return $this->createTooltipGroup([
-            'Missing messages' => $counter[TranslatorContract::MESSAGE_MISSING],
+            'Missing messages'  => $counter[TranslatorContract::MESSAGE_MISSING],
             'Fallback messages' => $counter[TranslatorContract::MESSAGE_EQUALS_FALLBACK],
-            'Defined messages' => $counter[TranslatorContract::MESSAGE_DEFINED],
+            'Defined messages'  => $counter[TranslatorContract::MESSAGE_DEFINED],
         ]);
     }
 
@@ -76,8 +76,8 @@ class ViserioTranslationDataCollector extends AbstractDataCollector implements
      */
     public function getPanel(): string
     {
-        $messages = $this->messages;
-        $counter = $this->computeCount($messages);
+        $messages       = $this->messages;
+        $counter        = $this->computeCount($messages);
         $sortedMessages = $this->getSortedMessages($messages);
 
         $tableHeaders = [
@@ -89,7 +89,7 @@ class ViserioTranslationDataCollector extends AbstractDataCollector implements
         ];
         $html = $this->createTabs([
             [
-                'name' => 'Defined <span class="counter">' . $counter[TranslatorContract::MESSAGE_DEFINED] . '</span>',
+                'name'    => 'Defined <span class="counter">' . $counter[TranslatorContract::MESSAGE_DEFINED] . '</span>',
                 'content' => $this->createTable(
                     array_values($sortedMessages[TranslatorContract::MESSAGE_DEFINED]),
                     'These messages are correctly translated into the given locale.',
@@ -97,7 +97,7 @@ class ViserioTranslationDataCollector extends AbstractDataCollector implements
                 ),
             ],
             [
-                'name' => 'Fallback <span class="counter">' . $counter[TranslatorContract::MESSAGE_EQUALS_FALLBACK] . '</span>',
+                'name'    => 'Fallback <span class="counter">' . $counter[TranslatorContract::MESSAGE_EQUALS_FALLBACK] . '</span>',
                 'content' => $this->createTable(
                     array_values($sortedMessages[TranslatorContract::MESSAGE_EQUALS_FALLBACK]),
                     'These messages are not available for the given locale but Symfony found them in the fallback locale catalog.',
@@ -105,7 +105,7 @@ class ViserioTranslationDataCollector extends AbstractDataCollector implements
                 ),
             ],
             [
-                'name' => 'Missing <span class="counter">' . $counter[TranslatorContract::MESSAGE_MISSING] . '</span>',
+                'name'    => 'Missing <span class="counter">' . $counter[TranslatorContract::MESSAGE_MISSING] . '</span>',
                 'content' => $this->createTable(
                     array_values($sortedMessages[TranslatorContract::MESSAGE_MISSING]),
                     'These messages are not available for the given locale and cannot be found in the fallback locales. <br> Add them to the translation catalogue to avoid Narrowspark outputting untranslated contents.',
@@ -118,7 +118,7 @@ class ViserioTranslationDataCollector extends AbstractDataCollector implements
     }
 
     /**
-     * [sanitizeCollectedMessages description]
+     * [sanitizeCollectedMessages description].
      *
      * @param array $messages
      *
@@ -132,10 +132,10 @@ class ViserioTranslationDataCollector extends AbstractDataCollector implements
             $messageId = $message['locale'] . '.' . $message['domain'] . '.' . $message['id'];
 
             if (! isset($result[$messageId])) {
-                $message['count'] = 1;
-                $message['parameters'] = ! empty($message['parameters']) ? [$message['parameters']] : [];
+                $message['count']              = 1;
+                $message['parameters']         = ! empty($message['parameters']) ? [$message['parameters']] : [];
                 $messages[$key]['translation'] = $this->sanitizeString($message['translation']);
-                $result[$messageId] = $message;
+                $result[$messageId]            = $message;
             } else {
                 if (! empty($message['parameters'])) {
                     $result[$messageId]['parameters'][] = $message['parameters'];
@@ -159,8 +159,8 @@ class ViserioTranslationDataCollector extends AbstractDataCollector implements
     protected function computeCount(array $messages): array
     {
         $count = [
-            TranslatorContract::MESSAGE_DEFINED => 0,
-            TranslatorContract::MESSAGE_MISSING => 0,
+            TranslatorContract::MESSAGE_DEFINED         => 0,
+            TranslatorContract::MESSAGE_MISSING         => 0,
             TranslatorContract::MESSAGE_EQUALS_FALLBACK => 0,
         ];
 
@@ -172,7 +172,7 @@ class ViserioTranslationDataCollector extends AbstractDataCollector implements
     }
 
     /**
-     * [sanitizeString description]
+     * [sanitizeString description].
      *
      * @param string $string
      * @param int    $length
@@ -187,15 +187,15 @@ class ViserioTranslationDataCollector extends AbstractDataCollector implements
             if (mb_strlen($string, $encoding) > $length) {
                 return mb_substr($string, 0, $length - 3, $encoding) . '...';
             }
-        } elseif (strlen($string) > $length) {
-            return substr($string, 0, $length - 3) . '...';
+        } elseif (mb_strlen($string) > $length) {
+            return mb_substr($string, 0, $length - 3) . '...';
         }
 
         return $string;
     }
 
     /**
-     * [getSortedMessages description]
+     * [getSortedMessages description].
      *
      * @param array $messages
      *
@@ -204,9 +204,9 @@ class ViserioTranslationDataCollector extends AbstractDataCollector implements
     protected function getSortedMessages(array $messages): array
     {
         $sortedMessages = [
-            TranslatorContract::MESSAGE_MISSING => [],
+            TranslatorContract::MESSAGE_MISSING         => [],
             TranslatorContract::MESSAGE_EQUALS_FALLBACK => [],
-            TranslatorContract::MESSAGE_DEFINED => [],
+            TranslatorContract::MESSAGE_DEFINED         => [],
         ];
 
         foreach ($messages as $key => $value) {

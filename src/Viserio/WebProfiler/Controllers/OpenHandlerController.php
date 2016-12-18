@@ -32,7 +32,7 @@ class OpenHandlerController extends AbstractController
     protected $webprofiler;
 
     /**
-     * [__construct description]
+     * [__construct description].
      *
      * @param \Interop\Http\Factory\ResponseFactoryInterface $responseFactory
      * @param \Interop\Http\Factory\StreamFactoryInterface   $streamFactory
@@ -44,12 +44,12 @@ class OpenHandlerController extends AbstractController
         WebProfiler $webprofiler
     ) {
         $this->responseFactory = $responseFactory;
-        $this->streamFactory = $streamFactory;
-        $this->webprofiler = $webprofiler;
+        $this->streamFactory   = $streamFactory;
+        $this->webprofiler     = $webprofiler;
     }
 
     /**
-     * [handle description]
+     * [handle description].
      *
      * @return \Psr\Http\Message\ResponseInterface
      */
@@ -58,7 +58,7 @@ class OpenHandlerController extends AbstractController
     }
 
     /**
-     * Return Clockwork output
+     * Return Clockwork output.
      *
      * @param int $id
      *

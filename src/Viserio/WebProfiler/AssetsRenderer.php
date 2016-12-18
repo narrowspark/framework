@@ -37,12 +37,12 @@ class AssetsRenderer implements RenderableContract
      * @var array
      */
     protected $icons = [
-        'ic_clear_white_24px.svg' => __DIR__ . '/Resources/icons/ic_clear_white_24px.svg',
-        'ic_memory_white_24px.svg' => __DIR__ . '/Resources/icons/ic_memory_white_24px.svg',
-        'ic_message_white_24px.svg' => __DIR__ . '/Resources/icons/ic_message_white_24px.svg',
-        'ic_narrowspark_white_24px.svg' => __DIR__ . '/Resources/icons/ic_narrowspark_white_24px.svg',
-        'ic_schedule_white_24px.svg' => __DIR__ . '/Resources/icons/ic_schedule_white_24px.svg',
-        'ic_storage_white_24px.svg' => __DIR__ . '/Resources/icons/ic_storage_white_24px.svg',
+        'ic_clear_white_24px.svg'        => __DIR__ . '/Resources/icons/ic_clear_white_24px.svg',
+        'ic_memory_white_24px.svg'       => __DIR__ . '/Resources/icons/ic_memory_white_24px.svg',
+        'ic_message_white_24px.svg'      => __DIR__ . '/Resources/icons/ic_message_white_24px.svg',
+        'ic_narrowspark_white_24px.svg'  => __DIR__ . '/Resources/icons/ic_narrowspark_white_24px.svg',
+        'ic_schedule_white_24px.svg'     => __DIR__ . '/Resources/icons/ic_schedule_white_24px.svg',
+        'ic_storage_white_24px.svg'      => __DIR__ . '/Resources/icons/ic_storage_white_24px.svg',
         'ic_mail_outline_white_24px.svg' => __DIR__ . '/Resources/icons/ic_mail_outline_white_24px.svg',
     ];
 
@@ -54,7 +54,7 @@ class AssetsRenderer implements RenderableContract
     protected $webprofiler;
 
     /**
-     * [$rootPath description]
+     * [$rootPath description].
      *
      * @var string
      */
@@ -90,7 +90,7 @@ class AssetsRenderer implements RenderableContract
     public function __construct(bool $jqueryIsUsed = false, string $rootPath = null)
     {
         $this->jqueryIsUsed = $jqueryIsUsed;
-        $this->rootPath = $rootPath ?? __DIR__ . '/Resources';
+        $this->rootPath     = $rootPath ?? __DIR__ . '/Resources';
     }
 
     /**
@@ -131,7 +131,7 @@ class AssetsRenderer implements RenderableContract
     }
 
     /**
-     * Ignores widgets provided by a collector
+     * Ignores widgets provided by a collector.
      *
      * @param string $name
      *
@@ -183,7 +183,7 @@ class AssetsRenderer implements RenderableContract
     }
 
     /**
-     * Return assets as a string
+     * Return assets as a string.
      *
      * @param string $type 'js' or 'css'
      *
@@ -191,7 +191,7 @@ class AssetsRenderer implements RenderableContract
      */
     public function dumpAssetsToString(string $type): string
     {
-        $files = $this->getAssets($type);
+        $files   = $this->getAssets($type);
         $content = '';
 
         foreach ($files as $file) {
@@ -202,7 +202,7 @@ class AssetsRenderer implements RenderableContract
     }
 
     /**
-     * Returns the list of asset files
+     * Returns the list of asset files.
      *
      * @param string|null $type Only return css or js files
      *
@@ -266,7 +266,7 @@ class AssetsRenderer implements RenderableContract
     }
 
     /**
-     * Filters a tuple of (css, js) assets according to $type
+     * Filters a tuple of (css, js) assets according to $type.
      *
      * @param array       $array
      * @param string|null $type  'css', 'js' or null for both
@@ -275,7 +275,7 @@ class AssetsRenderer implements RenderableContract
      */
     protected function filterAssetArray(array $array, string $type = null): array
     {
-        $type = strtolower($type);
+        $type = mb_strtolower($type);
 
         if ($type === 'css') {
             return $array[0];
@@ -297,7 +297,7 @@ class AssetsRenderer implements RenderableContract
      */
     protected function getModifiedTime(string $type): int
     {
-        $files = $this->getAssets($type);
+        $files  = $this->getAssets($type);
         $latest = 0;
 
         foreach ($files as $file) {

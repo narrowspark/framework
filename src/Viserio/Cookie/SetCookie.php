@@ -12,14 +12,14 @@ final class SetCookie extends AbstractCookie
     /**
      * Create a new set-cookie instance.
      *
-     * @param string                             $name       The name of the cookie.
-     * @param string|null                        $value      The value of the cookie.
-     * @param int|string|\DateTimeInterface|null $expiration The time the cookie expires.
-     * @param string                             $path       The path on the server in which the cookie will
-     *                                                       be available on.
-     * @param string|null                        $domain     The domain that the cookie is available to.
-     * @param bool                               $secure     Whether the cookie should only be transmitted
-     *                                                       over a secure HTTPS connection from the client.
+     * @param string                             $name       the name of the cookie
+     * @param string|null                        $value      the value of the cookie
+     * @param int|string|\DateTimeInterface|null $expiration the time the cookie expires
+     * @param string                             $path       the path on the server in which the cookie will
+     *                                                       be available on
+     * @param string|null                        $domain     the domain that the cookie is available to
+     * @param bool                               $secure     whether the cookie should only be transmitted
+     *                                                       over a secure HTTPS connection from the client
      * @param bool                               $httpOnly   Whether the cookie will be made accessible only.
      *                                                       through the HTTP protocol.
      * @param string|bool                        $sameSite   Whether the cookie will be available for cross-site requests
@@ -39,13 +39,13 @@ final class SetCookie extends AbstractCookie
         $this->validateName($name);
         $this->validateValue($value);
 
-        $this->name = $name;
-        $this->value = $value;
-        $this->maxAge = is_int($expiration) ? $expiration : null;
-        $this->expires = $this->normalizeExpires($expiration);
-        $this->domain = $this->normalizeDomain($domain);
-        $this->path = $this->normalizePath($path);
-        $this->secure = $secure;
+        $this->name     = $name;
+        $this->value    = $value;
+        $this->maxAge   = is_int($expiration) ? $expiration : null;
+        $this->expires  = $this->normalizeExpires($expiration);
+        $this->domain   = $this->normalizeDomain($domain);
+        $this->path     = $this->normalizePath($path);
+        $this->secure   = $secure;
         $this->httpOnly = $httpOnly;
         $this->sameSite = $this->validateSameSite($sameSite);
     }
@@ -77,7 +77,7 @@ final class SetCookie extends AbstractCookie
     {
         $this->validateValue($value);
 
-        $new = clone $this;
+        $new        = clone $this;
         $new->value = $value;
 
         return $new;

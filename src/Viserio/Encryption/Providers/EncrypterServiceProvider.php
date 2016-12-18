@@ -21,7 +21,7 @@ class EncrypterServiceProvider implements ServiceProvider
     public function getServices()
     {
         return [
-            Encrypter::class => [self::class, 'createEncrypter'],
+            Encrypter::class         => [self::class, 'createEncrypter'],
             EncrypterContract::class => function (ContainerInterface $container) {
                 return $container->get(Encrypter::class);
             },

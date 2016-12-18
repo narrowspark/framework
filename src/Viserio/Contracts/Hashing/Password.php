@@ -6,7 +6,7 @@ interface Password
 {
     /**
      * 1. Hash password using bcrypt-base64-SHA256
-     * 2. Encrypt-then-MAC the hash
+     * 2. Encrypt-then-MAC the hash.
      *
      * @param string $password
      *
@@ -19,7 +19,7 @@ interface Password
 
     /**
      * 1. VerifyHMAC-then-Decrypt the ciphertext to get the hash
-     * 2. Verify that the password matches the hash
+     * 2. Verify that the password matches the hash.
      *
      * @param string $password
      * @param string $hashedValue

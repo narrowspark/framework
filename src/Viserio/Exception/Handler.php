@@ -49,10 +49,10 @@ class Handler implements HandlerContract
      * @var array
      */
     protected $defaultLevels = [
-        FatalThrowableError::class => 'critical',
-        FatalErrorException::class => 'error',
-        Throwable::class => 'error',
-        NotFoundException::class => 'notice',
+        FatalThrowableError::class          => 'critical',
+        FatalErrorException::class          => 'error',
+        Throwable::class                    => 'error',
+        NotFoundException::class            => 'notice',
         AbstractClientErrorException::class => 'notice',
         AbstractServerErrorException::class => 'error',
     ];
@@ -185,7 +185,7 @@ class Handler implements HandlerContract
     public function report(Throwable $exception)
     {
         if ($this->shouldntReport($exception)) {
-            return null;
+            return;
         }
 
         if ($this->getContainer()->has(LoggerInterface::class)) {
@@ -198,7 +198,7 @@ class Handler implements HandlerContract
         }
 
         $level = $this->getLevel($exception);
-        $id = $this->getContainer()->get(ExceptionIdentifier::class)->identify($exception);
+        $id    = $this->getContainer()->get(ExceptionIdentifier::class)->identify($exception);
 
         if ($this->getContainer()->has(LoggerInterface::class)) {
             $logger->{$level}($exception, ['identification' => ['id' => $id]]);
@@ -392,8 +392,8 @@ class Handler implements HandlerContract
         }
 
         $flattened = FlattenException::create($transformed);
-        $code = $flattened->getStatusCode();
-        $headers = $flattened->getHeaders();
+        $code      = $flattened->getStatusCode();
+        $headers   = $flattened->getHeaders();
 
         return $this->getDisplayer(
             $request,
@@ -452,14 +452,14 @@ class Handler implements HandlerContract
         int $code
     ): array {
         $container = $this->getContainer();
-        $filters = array_merge(
+        $filters   = array_merge(
             $this->filters,
             $container->get(RepositoryContract::class)->get('exception.filters', [])
         );
 
         foreach ($filters as $filter) {
             $filterClass = is_object($filter) ? $filter : $container->get($filter);
-            $displayers = $filterClass->filter($displayers, $request, $original, $transformed, $code);
+            $displayers  = $filterClass->filter($displayers, $request, $original, $transformed, $code);
         }
 
         return array_values($displayers);
@@ -474,7 +474,7 @@ class Handler implements HandlerContract
      */
     protected function getTransformed(Throwable $exception): Throwable
     {
-        $container = $this->getContainer();
+        $container    = $this->getContainer();
         $transformers = array_merge(
             $this->transformers,
             $container->get(RepositoryContract::class)->get('exception.transformers', [])
@@ -482,7 +482,7 @@ class Handler implements HandlerContract
 
         foreach ($transformers as $transformer) {
             $transformerClass = is_object($transformer) ? $transformer : $container->get($transformer);
-            $exception = $transformerClass->transform($exception);
+            $exception        = $transformerClass->transform($exception);
         }
 
         return $exception;

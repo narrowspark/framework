@@ -33,7 +33,7 @@ class AssetController extends AbstractController
     protected $webprofiler;
 
     /**
-     * [__construct description]
+     * [__construct description].
      *
      * @param \Interop\Http\Factory\ServerRequestFactoryInterface $serverRequest
      * @param \Interop\Http\Factory\ResponseFactoryInterface      $responseFactory
@@ -47,8 +47,8 @@ class AssetController extends AbstractController
         WebProfiler $webprofiler
     ) {
         $this->responseFactory = $responseFactory;
-        $this->streamFactory = $streamFactory;
-        $this->webprofiler = $webprofiler;
+        $this->streamFactory   = $streamFactory;
+        $this->webprofiler     = $webprofiler;
 
         if ($session = $serverRequest->getAttribute('session')) {
             $session->reflash();
@@ -56,7 +56,7 @@ class AssetController extends AbstractController
     }
 
     /**
-     * Return the javascript for the Debugbar
+     * Return the javascript for the Debugbar.
      *
      * @return \Psr\Http\Message\ResponseInterface
      */
@@ -75,7 +75,7 @@ class AssetController extends AbstractController
     }
 
     /**
-     * Return the stylesheets for the Debugbar
+     * Return the stylesheets for the Debugbar.
      *
      * @return \Psr\Http\Message\ResponseInterface
      */

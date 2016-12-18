@@ -9,7 +9,7 @@ class ContainerDefaultValueFixture
 
     public function __construct(ContainerConcreteFixture $stub, $default = 'narrowspark')
     {
-        $this->stub = $stub;
+        $this->stub    = $stub;
         $this->default = $default;
     }
 }

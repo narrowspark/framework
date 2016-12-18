@@ -36,6 +36,8 @@ class ResponseCookiesTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider provideParsesFromCookieStringData
+     * @param array $cookieStrings
+     * @param array $expectedCookies
      */
     public function testFromSetCookieHeader(array $cookieStrings, array $expectedCookies)
     {
@@ -53,6 +55,8 @@ class ResponseCookiesTest extends \PHPUnit_Framework_TestCase
      * @dataProvider provideParsesFromCookieStringWithoutExpireData
      *
      * Cant test with automatic expires, test are one sec to slow.
+     * @param array $cookieStrings
+     * @param array $expectedCookies
      */
     public function testFromSetCookieHeaderWithoutExpire(array $cookieStrings, array $expectedCookies)
     {
@@ -250,8 +254,8 @@ class ResponseCookiesTest extends \PHPUnit_Framework_TestCase
         $setCookies = ResponseCookies::fromResponse($response);
 
         $decryptedSessionToken = $setCookies->get('sessionToken');
-        $decryptedValue = $decryptedSessionToken->getValue();
-        $encryptedValue = str_rot13($decryptedValue);
+        $decryptedValue        = $decryptedSessionToken->getValue();
+        $encryptedValue        = str_rot13($decryptedValue);
         $encryptedSessionToken = $decryptedSessionToken->withValue($encryptedValue);
 
         $setCookies = $setCookies->add($encryptedSessionToken);

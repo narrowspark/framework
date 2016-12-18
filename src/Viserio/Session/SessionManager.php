@@ -31,7 +31,7 @@ class SessionManager extends AbstractManager
         RepositoryContract $config,
         EncrypterContract $encrypter
     ) {
-        $this->config = $config;
+        $this->config    = $config;
         $this->encrypter = $encrypter;
     }
 

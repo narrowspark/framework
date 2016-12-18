@@ -5,7 +5,7 @@ namespace Viserio\Contracts\Parsers;
 interface Loader
 {
     /**
-     * Set directories
+     * Set directories.
      *
      * @param array $directories
      *

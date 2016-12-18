@@ -128,10 +128,10 @@ abstract class AbstractQueue implements QueueConnectorContract
 
         if (is_object($job)) {
             return json_encode([
-                'job' => sprintf('%s@call', CallQueuedHandler::class),
+                'job'  => sprintf('%s@call', CallQueuedHandler::class),
                 'data' => [
                     'commandName' => $encrypter->encrypt(get_class($job)),
-                    'command64' => $encrypter->encrypt(base64_encode(serialize(clone $job))),
+                    'command64'   => $encrypter->encrypt(base64_encode(serialize(clone $job))),
                 ],
             ]);
         }

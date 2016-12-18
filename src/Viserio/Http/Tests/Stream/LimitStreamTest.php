@@ -19,12 +19,12 @@ class LimitStreamTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->decorated = new Stream(fopen(__FILE__, 'r'));
-        $this->body = new LimitStream($this->decorated, 10, 3);
+        $this->body      = new LimitStream($this->decorated, 10, 3);
     }
 
     public function testReturnsSubset()
     {
-        $body = 'foo';
+        $body   = 'foo';
         $stream = fopen('php://temp', 'r+');
 
         fwrite($stream, $body);
@@ -45,7 +45,7 @@ class LimitStreamTest extends \PHPUnit_Framework_TestCase
 
     public function testReturnsSubsetWhenCastToString()
     {
-        $body = 'foo_baz_bar';
+        $body   = 'foo_baz_bar';
         $stream = fopen('php://temp', 'r+');
 
         fwrite($stream, $body);
@@ -67,7 +67,7 @@ class LimitStreamTest extends \PHPUnit_Framework_TestCase
 
     public function testReturnsSubsetOfEmptyBodyWhenCastToString()
     {
-        $body = '01234567891234';
+        $body   = '01234567891234';
         $stream = fopen('php://temp', 'r+');
 
         fwrite($stream, $body);
@@ -80,7 +80,7 @@ class LimitStreamTest extends \PHPUnit_Framework_TestCase
 
     public function testReturnsSpecificSubsetOBodyWhenCastToString()
     {
-        $body = '0123456789abcdef';
+        $body   = '0123456789abcdef';
         $stream = fopen('php://temp', 'r+');
 
         fwrite($stream, $body);
@@ -130,13 +130,13 @@ class LimitStreamTest extends \PHPUnit_Framework_TestCase
     {
         $data = $this->body->read(100);
 
-        self::assertEquals(10, strlen($data));
+        self::assertEquals(10, mb_strlen($data));
         self::assertSame('', $this->body->read(1000));
         $this->body->setOffset(10);
 
         $newData = $this->body->read(100);
 
-        self::assertEquals(10, strlen($newData));
+        self::assertEquals(10, mb_strlen($newData));
         self::assertNotSame($data, $newData);
     }
 
@@ -146,7 +146,7 @@ class LimitStreamTest extends \PHPUnit_Framework_TestCase
      */
     public function testThrowsWhenCurrentGreaterThanOffsetSeek()
     {
-        $body = 'foo_bar';
+        $body   = 'foo_bar';
         $stream = fopen('php://temp', 'r+');
 
         fwrite($stream, $body);
@@ -162,7 +162,7 @@ class LimitStreamTest extends \PHPUnit_Framework_TestCase
 
     public function testCanGetContentsWithoutSeeking()
     {
-        $body = 'foo_bar';
+        $body   = 'foo_bar';
         $stream = fopen('php://temp', 'r+');
 
         fwrite($stream, $body);
@@ -191,7 +191,7 @@ class LimitStreamTest extends \PHPUnit_Framework_TestCase
 
     public function testGetContentsIsBasedOnSubset()
     {
-        $body = 'foobazbar';
+        $body   = 'foobazbar';
         $stream = fopen('php://temp', 'r+');
 
         fwrite($stream, $body);
@@ -218,7 +218,7 @@ class LimitStreamTest extends \PHPUnit_Framework_TestCase
 
     public function testLengthLessOffsetWhenNoLimitSize()
     {
-        $body = 'foo_bar';
+        $body   = 'foo_bar';
         $stream = fopen('php://temp', 'r+');
 
         fwrite($stream, $body);

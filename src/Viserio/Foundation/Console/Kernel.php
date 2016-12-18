@@ -77,7 +77,7 @@ class Kernel implements KernelContract, TerminableContract
         ApplicationContract $app,
         DispatcherContract $events
     ) {
-        $this->app = $app;
+        $this->app    = $app;
         $this->events = $events;
     }
 
@@ -254,6 +254,5 @@ class Kernel implements KernelContract, TerminableContract
      */
     protected function schedule(Schedule $schedule)
     {
-        //
     }
 }

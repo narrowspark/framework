@@ -34,9 +34,9 @@ class UriTest extends \PHPUnit_Framework_TestCase
     public function invalidURIProvider()
     {
         return [
-            'invalid uri' => ['///'],
-            'invalid uri no host' => ['http:///example.com'],
-            'invalid uri no host with port' => ['http://:80'],
+            'invalid uri'                                  => ['///'],
+            'invalid uri no host'                          => ['http:///example.com'],
+            'invalid uri no host with port'                => ['http://:80'],
             'invalid uri no host with port and wrong auth' => ['http://user@:80'],
         ];
     }
@@ -81,6 +81,7 @@ class UriTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException \InvalidArgumentException
      * @dataProvider getInvalidUris
+     * @param mixed $invalidUri
      */
     public function testInvalidUrisThrowException($invalidUri)
     {
@@ -263,6 +264,9 @@ class UriTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider userInfoProvider
      * @group userinfo
+     * @param mixed $user
+     * @param mixed $pass
+     * @param mixed $expected
      */
     public function testGetUserInfo($user, $pass, $expected)
     {
@@ -275,10 +279,10 @@ class UriTest extends \PHPUnit_Framework_TestCase
     {
         return [
             'with userinfo' => ['iGoR', 'rAsMuZeN', 'iGoR:rAsMuZeN'],
-            'no userinfo' => ['', '', ''],
-            'no pass' => ['iGoR', '', 'iGoR'],
-            'pass is null' => ['iGoR', null, 'iGoR'],
-            'upercased' => ['IgOr', 'RaSm0537', 'IgOr:RaSm0537'],
+            'no userinfo'   => ['', '', ''],
+            'no pass'       => ['iGoR', '', 'iGoR'],
+            'pass is null'  => ['iGoR', null, 'iGoR'],
+            'upercased'     => ['IgOr', 'RaSm0537', 'IgOr:RaSm0537'],
         ];
     }
 
@@ -324,6 +328,11 @@ class UriTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider uriComponentsEncodingProvider
+     * @param mixed $input
+     * @param mixed $path
+     * @param mixed $query
+     * @param mixed $fragment
+     * @param mixed $output
      */
     public function testUriComponentsGetEncodedProperly($input, $path, $query, $fragment, $output)
     {
@@ -468,7 +477,7 @@ class UriTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * As Per PSR7 UriInterface the host MUST be lowercased
+     * As Per PSR7 UriInterface the host MUST be lowercased.
      */
     public function testHostnameMustBeLowerCasedAsPerPsr7Interface()
     {
@@ -478,7 +487,7 @@ class UriTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * As Per PSR7 UriInterface the scheme MUST be lowercased
+     * As Per PSR7 UriInterface the scheme MUST be lowercased.
      */
     public function testSchemeMustBeLowerCasedAsPerPsr7Interface()
     {
@@ -493,6 +502,8 @@ class UriTest extends \PHPUnit_Framework_TestCase
      * RFC 3986, Sections 2 and 3.3.
      *
      * @dataProvider pathProvider
+     * @param mixed $url
+     * @param mixed $path
      */
     public function testPathNormalizationPerPsr7Interface($url, $path)
     {
@@ -513,6 +524,8 @@ class UriTest extends \PHPUnit_Framework_TestCase
      * The value returned MUST be percent-encoded, but MUST NOT double-encode
      * any characters. To determine what characters to encode, please refer to
      * RFC 3986, Sections 2 and 3.4.
+     * @param mixed $query
+     * @param mixed $expected
      */
     public function testGetQuery($query, $expected)
     {
@@ -525,7 +538,7 @@ class UriTest extends \PHPUnit_Framework_TestCase
     {
         return [
             'normalized query' => ['foo.bar=%7evalue', 'foo.bar=~value'],
-            'empty query' => ['', ''],
+            'empty query'      => ['', ''],
             'same param query' => ['foo.bar=1&foo.bar=1', 'foo.bar=1&foo.bar=1'],
         ];
     }
@@ -534,7 +547,7 @@ class UriTest extends \PHPUnit_Framework_TestCase
      * This assertion MAY need clarification as it is not stated in
      * the interface if for the string representation indivual
      * normalization MUST be applied prior to generate the string
-     * with the __toString() method
+     * with the __toString() method.
      */
     public function testUrlStandardNormalization()
     {
@@ -550,6 +563,7 @@ class UriTest extends \PHPUnit_Framework_TestCase
      * Some of these example return invalid Url
      *
      * @dataProvider authorityProvider
+     * @param mixed $url
      */
     public function testAuthorityDelimiterPresence($url)
     {
@@ -567,7 +581,7 @@ class UriTest extends \PHPUnit_Framework_TestCase
 
     /**
      * As Per PSR7 UriInterface the null value remove the port info
-     * no InvalidArgumentException should be thrown
+     * no InvalidArgumentException should be thrown.
      */
     public function testWithPortWithNullValue()
     {
@@ -590,6 +604,15 @@ class UriTest extends \PHPUnit_Framework_TestCase
      *       present, the starting slashes MUST be reduced to one.
      * - If a query is present, it MUST be prefixed by "?".
      * - If a fragment is present, it MUST be prefixed by "#".
+     * @param mixed $scheme
+     * @param mixed $user
+     * @param mixed $pass
+     * @param mixed $host
+     * @param mixed $port
+     * @param mixed $path
+     * @param mixed $query
+     * @param mixed $fragment
+     * @param mixed $expected
      */
     public function testToString($scheme, $user, $pass, $host, $port, $path, $query, $fragment, $expected)
     {
@@ -609,26 +632,26 @@ class UriTest extends \PHPUnit_Framework_TestCase
     {
         return [
             'URL normalized' => [
-                'scheme' => 'HtTps',
-                'user' => 'iGoR',
-                'pass' => 'rAsMuZeN',
-                'host' => 'MaStEr.eXaMpLe.CoM',
-                'port' => 443,
-                'path' => '/%7ejohndoe/%a1/index.php',
-                'query' => 'foo.bar=%7evalue',
+                'scheme'   => 'HtTps',
+                'user'     => 'iGoR',
+                'pass'     => 'rAsMuZeN',
+                'host'     => 'MaStEr.eXaMpLe.CoM',
+                'port'     => 443,
+                'path'     => '/%7ejohndoe/%a1/index.php',
+                'query'    => 'foo.bar=%7evalue',
                 'fragment' => 'fragment',
-                'uri' => 'https://iGoR:rAsMuZeN@master.example.com/~johndoe/%A1/index.php?foo.bar=~value#fragment',
+                'uri'      => 'https://iGoR:rAsMuZeN@master.example.com/~johndoe/%A1/index.php?foo.bar=~value#fragment',
             ],
             'URL without scheme' => [
-                'scheme' => '',
-                'user' => '',
-                'pass' => '',
-                'host' => 'www.example.com',
-                'port' => 443,
-                'path' => '/foo/bar',
-                'query' => 'param=value',
+                'scheme'   => '',
+                'user'     => '',
+                'pass'     => '',
+                'host'     => 'www.example.com',
+                'port'     => 443,
+                'path'     => '/foo/bar',
+                'query'    => 'param=value',
                 'fragment' => 'fragment',
-                'uri' => '//www.example.com:443/foo/bar?param=value#fragment',
+                'uri'      => '//www.example.com:443/foo/bar?param=value#fragment',
             ],
         ];
     }
@@ -636,6 +659,15 @@ class UriTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider invalidStringProvider
      * @expectedException \InvalidArgumentException
+     * @param mixed $scheme
+     * @param mixed $user
+     * @param mixed $pass
+     * @param mixed $host
+     * @param mixed $port
+     * @param mixed $path
+     * @param mixed $query
+     * @param mixed $fragment
+     * @param mixed $expected
      */
     public function testInvalidToString($scheme, $user, $pass, $host, $port, $path, $query, $fragment, $expected)
     {
@@ -659,26 +691,26 @@ class UriTest extends \PHPUnit_Framework_TestCase
     {
         return [
             'URL without rootless path' => [
-                'scheme' => 'http',
-                'user' => '',
-                'pass' => '',
-                'host' => 'www.example.com',
-                'port' => null,
-                'path' => 'foo/bar',
-                'query' => '',
+                'scheme'   => 'http',
+                'user'     => '',
+                'pass'     => '',
+                'host'     => 'www.example.com',
+                'port'     => null,
+                'path'     => 'foo/bar',
+                'query'    => '',
                 'fragment' => '',
-                'uri' => 'http://www.example.com/foo/bar',
+                'uri'      => 'http://www.example.com/foo/bar',
             ],
             'URL without authority and scheme' => [
-                'scheme' => '',
-                'user' => '',
-                'pass' => '',
-                'host' => '',
-                'port' => null,
-                'path' => '//foo/bar',
-                'query' => '',
+                'scheme'   => '',
+                'user'     => '',
+                'pass'     => '',
+                'host'     => '',
+                'port'     => null,
+                'path'     => '//foo/bar',
+                'query'    => '',
                 'fragment' => '',
-                'uri' => '/foo/bar',
+                'uri'      => '/foo/bar',
             ],
         ];
     }
@@ -687,6 +719,8 @@ class UriTest extends \PHPUnit_Framework_TestCase
      * @dataProvider hostProvider
      *
      * Host MUST be normalized to lowercase if present
+     * @param mixed $host
+     * @param mixed $expected
      */
     public function testGetHost($host, $expected)
     {
@@ -699,15 +733,16 @@ class UriTest extends \PHPUnit_Framework_TestCase
     {
         return [
             'normalized host' => ['MaStEr.eXaMpLe.CoM', 'master.example.com'],
-            'simple host' => ['www.example.com', 'www.example.com'],
-            'IDN hostname' => ['مثال.إختبار', 'مثال.إختبار'],
-            'IPv6 Host' => ['[::1]', '[::1]'],
+            'simple host'     => ['www.example.com', 'www.example.com'],
+            'IDN hostname'    => ['مثال.إختبار', 'مثال.إختبار'],
+            'IPv6 Host'       => ['[::1]', '[::1]'],
         ];
     }
 
     /**
      * @dataProvider withHostFailedProvider
      * @expectedException \InvalidArgumentException
+     * @param mixed $host
      */
     public function testWithHostFailed($host)
     {
@@ -717,29 +752,31 @@ class UriTest extends \PHPUnit_Framework_TestCase
     public function withHostFailedProvider()
     {
         return [
-            'dot in front' => ['.example.com'],
-            'hyphen suffix' => ['host.com-'],
-            'multiple dot' => ['.......'],
-            'one dot' => ['.'],
-            'empty label' => ['tot.    .coucou.com'],
-            'space in the label' => ['re view'],
-            'underscore in label' => ['_bad.host.com'],
-            'label too long' => [implode('', array_fill(0, 12, 'banana')) . '.secure.example.com'],
-            'too many labels' => [implode('.', array_fill(0, 128, 'a'))],
-            'Invalid IPv4 format' => ['[127.0.0.1]'],
-            'Invalid IPv6 format' => ['[[::1]]'],
-            'Invalid IPv6 format 2' => ['[::1'],
-            'space character in starting label' => ['example. com'],
-            'invalid character in host label' => ["examp\0le.com"],
-            'invalid IP with scope' => ['[127.2.0.1%253]'],
-            'invalid scope IPv6' => ['ab23::1234%251'],
-            'invalid scope ID' => ['fe80::1234%25?@'],
+            'dot in front'                         => ['.example.com'],
+            'hyphen suffix'                        => ['host.com-'],
+            'multiple dot'                         => ['.......'],
+            'one dot'                              => ['.'],
+            'empty label'                          => ['tot.    .coucou.com'],
+            'space in the label'                   => ['re view'],
+            'underscore in label'                  => ['_bad.host.com'],
+            'label too long'                       => [implode('', array_fill(0, 12, 'banana')) . '.secure.example.com'],
+            'too many labels'                      => [implode('.', array_fill(0, 128, 'a'))],
+            'Invalid IPv4 format'                  => ['[127.0.0.1]'],
+            'Invalid IPv6 format'                  => ['[[::1]]'],
+            'Invalid IPv6 format 2'                => ['[::1'],
+            'space character in starting label'    => ['example. com'],
+            'invalid character in host label'      => ["examp\0le.com"],
+            'invalid IP with scope'                => ['[127.2.0.1%253]'],
+            'invalid scope IPv6'                   => ['ab23::1234%251'],
+            'invalid scope ID'                     => ['fe80::1234%25?@'],
             'invalid scope ID with utf8 character' => ['fe80::1234%25€'],
         ];
     }
 
     /**
      * @dataProvider utf8PathsDataProvider
+     * @param mixed $url
+     * @param mixed $result
      */
     public function testUtf8Path($url, $result)
     {

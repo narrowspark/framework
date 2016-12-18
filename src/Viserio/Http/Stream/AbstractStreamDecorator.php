@@ -44,7 +44,7 @@ abstract class AbstractStreamDecorator implements StreamInterface
     }
 
     /**
-     * Allow decorators to implement custom methods
+     * Allow decorators to implement custom methods.
      *
      * @param string $method Missing method name
      * @param array  $args   Method arguments

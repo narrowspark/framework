@@ -9,26 +9,20 @@ class LogParser
     use ParseLevelTrait;
 
     /**
+     * The max size of a log file.
+     */
+    const MAX_FILE_SIZE = 52428800;
+
+    const REGEX_DATE_PATTERN = '\b\d{4}\-\d{1,2}\-\d{1,2}\b';
+
+    const REGEX_TIME_PATTERN = '\d{1,2}\:\d{1,2}\:\d{1,2}\b';
+
+    /**
      * Parsed data.
      *
      * @var array
      */
     protected $parsed = [];
-
-    /**
-     * The max size of a log file.
-     */
-    const MAX_FILE_SIZE = 52428800;
-
-    /**
-     *
-     */
-    const REGEX_DATE_PATTERN = '\b\d{4}\-\d{1,2}\-\d{1,2}\b';
-
-    /**
-     *
-     */
-    const REGEX_TIME_PATTERN = '\d{1,2}\:\d{1,2}\:\d{1,2}\b';
 
     /**
      * Parse log file content.
@@ -57,7 +51,7 @@ class LogParser
         $parsed = [];
 
         foreach ($log as $heading) {
-            for ($i = 0, $j = count($heading); $i < $j; $i++) {
+            for ($i = 0, $j = count($heading); $i < $j; ++$i) {
                 $parsed[] = $this->populateEntries($heading, $i);
             }
         }
@@ -94,7 +88,7 @@ class LogParser
     protected function populateEntries(array $heading, int $key): array
     {
         foreach ($this->levels as $level => $monologLevel) {
-            if (strpos(strtolower($heading[$key]), strtolower('.' . $level)) !== false) {
+            if (mb_strpos(mb_strtolower($heading[$key]), mb_strtolower('.' . $level)) !== false) {
                 return [
                     $level,
                     $heading[$key],
@@ -104,7 +98,7 @@ class LogParser
     }
 
     /**
-     * By Ain Tohvri (ain)
+     * By Ain Tohvri (ain).
      *
      * @see http://tekkie.flashbit.net/php/tail-functionality-in-php
      *
@@ -115,11 +109,11 @@ class LogParser
      */
     protected function tailFile(string $file, int $lines): array
     {
-        $handle = fopen($file, 'r');
+        $handle      = fopen($file, 'r');
         $linecounter = $lines;
-        $pos = -2;
-        $beginning = false;
-        $text = [];
+        $pos         = -2;
+        $beginning   = false;
+        $text        = [];
 
         while ($linecounter > 0) {
             $t = ' ';
@@ -131,10 +125,10 @@ class LogParser
                 }
 
                 $t = fgetc($handle);
-                $pos--;
+                --$pos;
             }
 
-            $linecounter--;
+            --$linecounter;
 
             if ($beginning) {
                 rewind($handle);

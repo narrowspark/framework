@@ -63,7 +63,7 @@ class CacheManagerTest extends \PHPUnit_Framework_TestCase
             ->with('cache.drivers', [])
             ->andReturn([
                 'session' => [
-                    'pool' => 'array',
+                    'pool'   => 'array',
                     'config' => [],
                 ],
             ]);

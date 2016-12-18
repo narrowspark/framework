@@ -12,18 +12,18 @@ trait PortValidateTrait
      * @var array
      */
     protected $allowedSchemes = [
-        'http' => 80,
-        'https' => 443,
-        'ftp' => 21,
-        'sftp' => 22,
+        'http'   => 80,
+        'https'  => 443,
+        'ftp'    => 21,
+        'sftp'   => 22,
         'gopher' => 70,
-        'nntp' => 119,
-        'news' => 119,
+        'nntp'   => 119,
+        'news'   => 119,
         'telnet' => 23,
         'tn3270' => 23,
-        'imap' => 143,
-        'pop' => 110,
-        'ldap' => 389,
+        'imap'   => 143,
+        'pop'    => 110,
+        'ldap'   => 389,
     ];
 
     /**
@@ -40,7 +40,7 @@ trait PortValidateTrait
     }
 
     /**
-     * Validate a Port number
+     * Validate a Port number.
      *
      * @param mixed $port the port numberhast
      *

@@ -26,9 +26,9 @@ class RouteTreeNodeTest extends \PHPUnit_Framework_TestCase
 
     public function testParentRouteTreeNode()
     {
-        $matcher = $this->mock(AbstractMatcher::class);
+        $matcher  = $this->mock(AbstractMatcher::class);
         $contents = new ChildrenNodeCollection();
-        $node = new RouteTreeNode([$matcher], $contents);
+        $node     = new RouteTreeNode([$matcher], $contents);
 
         self::assertSame([$matcher], $node->getMatchers());
         self::assertSame($matcher, $node->getFirstMatcher());
@@ -39,9 +39,9 @@ class RouteTreeNodeTest extends \PHPUnit_Framework_TestCase
 
     public function testLeafRouteTreeNode()
     {
-        $matcher = $this->mock(AbstractMatcher::class);
+        $matcher  = $this->mock(AbstractMatcher::class);
         $contents = new MatchedRouteDataMap();
-        $node = new RouteTreeNode([$matcher], $contents);
+        $node     = new RouteTreeNode([$matcher], $contents);
 
         self::assertSame([$matcher], $node->getMatchers());
         self::assertSame($matcher, $node->getFirstMatcher());
@@ -62,7 +62,7 @@ class RouteTreeNodeTest extends \PHPUnit_Framework_TestCase
             ->once()
             ->andReturn('some-other-hash');
 
-        $node = new RouteTreeNode([$matcher1], new ChildrenNodeCollection());
+        $node  = new RouteTreeNode([$matcher1], new ChildrenNodeCollection());
         $child = new RouteTreeNode([$matcher2], new ChildrenNodeCollection());
         $node->getContents()->addChild($child);
 

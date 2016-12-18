@@ -28,11 +28,11 @@ class HyphenatedInputResolver implements ParameterResolver
         $parameters = [];
 
         foreach ($reflection->getParameters() as $index => $parameter) {
-            $parameters[strtolower($parameter->name)] = $index;
+            $parameters[mb_strtolower($parameter->name)] = $index;
         }
 
         foreach ($providedParameters as $name => $value) {
-            $normalizedName = strtolower(str_replace('-', '', $name));
+            $normalizedName = mb_strtolower(str_replace('-', '', $name));
 
             // Skip parameters that do not exist with the normalized name
             if (! array_key_exists($normalizedName, $parameters)) {

@@ -6,6 +6,5 @@ class BeanstalkdJobTestFailed
 {
     public function failed(array $data)
     {
-        //
     }
 }

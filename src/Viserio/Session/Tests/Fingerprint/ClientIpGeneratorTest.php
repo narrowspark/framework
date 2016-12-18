@@ -36,7 +36,7 @@ class ClientIpGeneratorTest extends \PHPUnit_Framework_TestCase
         $generator = new ClientIpGenerator($request);
 
         self::assertInternalType('string', $generator->generate());
-        self::assertSame(40, strlen($generator->generate()));
+        self::assertSame(40, mb_strlen($generator->generate()));
     }
 
     public function testGenerateWithProxyIp()
@@ -53,7 +53,7 @@ class ClientIpGeneratorTest extends \PHPUnit_Framework_TestCase
         $generator = new ClientIpGenerator($request);
 
         self::assertInternalType('string', $generator->generate());
-        self::assertSame(40, strlen($generator->generate()));
+        self::assertSame(40, mb_strlen($generator->generate()));
     }
 
     public function testGenerateWithIp()
@@ -74,10 +74,10 @@ class ClientIpGeneratorTest extends \PHPUnit_Framework_TestCase
         $generator = new ClientIpGenerator($request);
 
         self::assertInternalType('string', $generator->generate());
-        self::assertSame(40, strlen($generator->generate()));
+        self::assertSame(40, mb_strlen($generator->generate()));
 
         // return empty ip string
         self::assertInternalType('string', $generator->generate());
-        self::assertSame(40, strlen($generator->generate()));
+        self::assertSame(40, mb_strlen($generator->generate()));
     }
 }

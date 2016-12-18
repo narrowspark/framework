@@ -86,7 +86,7 @@ class TranslationManager implements TranslationManagerContract
     }
 
     /**
-     * Set directories
+     * Set directories.
      *
      * @param array $directories
      *

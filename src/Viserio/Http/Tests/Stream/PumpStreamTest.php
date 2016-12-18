@@ -14,7 +14,7 @@ class PumpStreamTest extends \PHPUnit_Framework_TestCase
         $pump = new PumpStream(function () {
         }, [
             'metadata' => ['foo' => 'bar'],
-            'size' => 100,
+            'size'     => 100,
         ]);
 
         self::assertEquals('bar', $pump->getMetadata('foo'));

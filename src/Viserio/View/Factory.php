@@ -59,9 +59,9 @@ class Factory implements FactoryContract
      * @var array
      */
     protected $extensions = [
-        'php' => 'php',
+        'php'   => 'php',
         'phtml' => 'php',
-        'css' => 'file',
+        'css'   => 'file',
     ];
 
     /**
@@ -82,7 +82,7 @@ class Factory implements FactoryContract
         FinderContract $finder
     ) {
         $this->engines = $engines;
-        $this->finder = $finder;
+        $this->finder  = $finder;
 
         $this->share('__env', $this);
     }
@@ -106,7 +106,7 @@ class Factory implements FactoryContract
      */
     public function file(string $path, array $data = [], array $mergeData = []): ViewContract
     {
-        $data = array_merge($mergeData, $this->parseData($data));
+        $data   = array_merge($mergeData, $this->parseData($data));
         $engine = $this->getEngineFromPath($path);
 
         return $this->getView($this, $engine, $path, ['path' => $path], $data);
@@ -121,7 +121,7 @@ class Factory implements FactoryContract
             $view = $this->aliases[$view];
         }
 
-        $view = $this->normalizeName($view);
+        $view     = $this->normalizeName($view);
         $fileInfo = $this->getFinder()->find($view);
 
         return $this->getView(
@@ -182,7 +182,7 @@ class Factory implements FactoryContract
         // with "raw|" for convenience and to let this know that it is a string.
         } else {
             if (Str::startsWith($empty, 'raw|')) {
-                $result = substr($empty, 4);
+                $result = mb_substr($empty, 4);
             } else {
                 $result = $this->create($empty)->render();
             }
@@ -197,7 +197,7 @@ class Factory implements FactoryContract
     public function getEngineFromPath(string $path): EngineContract
     {
         $engine = explode('|', $path);
-        $path = isset($engine[1]) ? $engine[1] : $path;
+        $path   = isset($engine[1]) ? $engine[1] : $path;
 
         if (! $extension = $this->getExtension($path)) {
             throw new InvalidArgumentException(sprintf('Unrecognized extension in file: [%s]', $path));

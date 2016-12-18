@@ -28,7 +28,7 @@ class UserAgentGenerator implements FingerprintContract
     }
 
     /**
-     * {@inhertiddoc}
+     * {@inhertiddoc}.
      */
     public function generate(): string
     {

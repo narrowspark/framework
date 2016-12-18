@@ -28,15 +28,15 @@ class MailServiceProvider implements ServiceProvider
     {
         return [
             TransportManager::class => [self::class, 'createTransportManager'],
-            'swift.transport' => function (ContainerInterface $container) {
+            'swift.transport'       => function (ContainerInterface $container) {
                 return $container->get(TransportManager::class);
             },
             Swift_Mailer::class => [self::class, 'createSwiftMailer'],
-            'swift.mailer' => function (ContainerInterface $container) {
+            'swift.mailer'      => function (ContainerInterface $container) {
                 return $container->get(Swift_Mailer::class);
             },
             MailerContract::class => [self::class, 'createMailer'],
-            Mailer::class => function (ContainerInterface $container) {
+            Mailer::class         => function (ContainerInterface $container) {
                 return $container->get(MailerContract::class);
             },
             'mailer' => function (ContainerInterface $container) {

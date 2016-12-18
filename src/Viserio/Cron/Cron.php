@@ -144,9 +144,9 @@ class Cron implements CronContract
      */
     public function __construct(CacheItemPoolInterface $cache, string $command)
     {
-        $this->cache = $cache;
+        $this->cache   = $cache;
         $this->command = $command;
-        $this->output = $this->getDefaultOutput();
+        $this->output  = $this->getDefaultOutput();
     }
 
     /**
@@ -282,9 +282,9 @@ class Cron implements CronContract
      */
     public function buildCommand(): string
     {
-        $output = ProcessUtils::escapeArgument($this->output);
-        $redirect = $this->shouldAppendOutput ? ' >> ' : ' > ';
-        $isWindows = strtolower(substr(PHP_OS, 0, 3)) === 'win';
+        $output    = ProcessUtils::escapeArgument($this->output);
+        $redirect  = $this->shouldAppendOutput ? ' >> ' : ' > ';
+        $isWindows = mb_strtolower(mb_substr(PHP_OS, 0, 3)) === 'win';
 
         $command = $this->command . $redirect . $output . ' 2>&1 &';
 
@@ -318,7 +318,7 @@ class Cron implements CronContract
      */
     public function appendOutputTo(string $location): CronContract
     {
-        $this->output = $location;
+        $this->output             = $location;
         $this->shouldAppendOutput = true;
 
         return $this;
@@ -679,7 +679,7 @@ class Cron implements CronContract
      */
     protected function spliceIntoPosition(int $position, $value): CronContract
     {
-        $segments = explode(' ', $this->expression);
+        $segments                = explode(' ', $this->expression);
         $segments[$position - 1] = $value;
 
         return $this->cron(implode(' ', $segments));

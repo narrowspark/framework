@@ -10,7 +10,7 @@ class SimpleFixtureServiceProvider implements ServiceProvider
     public function getServices()
     {
         return [
-            'param' => [SimpleFixtureServiceProvider::class, 'getParam'],
+            'param'   => [SimpleFixtureServiceProvider::class, 'getParam'],
             'service' => function () {
                 return new ServiceFixture();
             },

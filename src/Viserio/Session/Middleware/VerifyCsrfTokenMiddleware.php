@@ -38,7 +38,9 @@ class VerifyCsrfTokenMiddleware implements ServerMiddlewareInterface
     }
 
     /**
-     * {@inhertidoc}
+     * {@inhertidoc}.
+     * @param ServerRequestInterface $request
+     * @param DelegateInterface      $delegate
      */
     public function process(ServerRequestInterface $request, DelegateInterface $delegate): ResponseInterface
     {
@@ -97,8 +99,8 @@ class VerifyCsrfTokenMiddleware implements ServerMiddlewareInterface
     protected function tokensMatch(ServerRequestInterface $request): bool
     {
         $sessionToken = $request->getAttribute('session')->getToken();
-        $data = $request->getParsedBody();
-        $token = $data['_token'] ?? $request->getHeaderLine('X-CSRF-TOKEN');
+        $data         = $request->getParsedBody();
+        $token        = $data['_token'] ?? $request->getHeaderLine('X-CSRF-TOKEN');
 
         if (! $token && $header = $request->getHeaderLine('X-XSRF-TOKEN')) {
             $token = $this->manager->getEncrypter()->decrypt($header);
@@ -148,6 +150,6 @@ class VerifyCsrfTokenMiddleware implements ServerMiddlewareInterface
      */
     protected function isReading(ServerRequestInterface $request): bool
     {
-        return in_array(strtoupper($request->getMethod()), ['HEAD', 'GET', 'OPTIONS'], true);
+        return in_array(mb_strtoupper($request->getMethod()), ['HEAD', 'GET', 'OPTIONS'], true);
     }
 }

@@ -99,7 +99,7 @@ class Uri implements UriInterface
     protected $fragment = '';
 
     /**
-     * generated uri string cache
+     * generated uri string cache.
      *
      * @var string|null
      */
@@ -121,11 +121,11 @@ class Uri implements UriInterface
     {
         $this->filterClass = [
             'fragment' => new Fragment(),
-            'host' => new Host(),
-            'path' => new Path(),
-            'port' => new Port(),
-            'scheme' => new Scheme(),
-            'query' => new Query(),
+            'host'     => new Host(),
+            'path'     => new Path(),
+            'port'     => new Port(),
+            'scheme'   => new Scheme(),
+            'query'    => new Query(),
         ];
 
         if ($url !== '') {
@@ -177,9 +177,9 @@ class Uri implements UriInterface
             return $this;
         }
 
-        $new = clone $this;
+        $new         = clone $this;
         $new->scheme = $scheme;
-        $new->port = $this->filterClass['port']->filter($new->scheme, $new->port);
+        $new->port   = $this->filterClass['port']->filter($new->scheme, $new->port);
         $new->validateState();
 
         return $new;
@@ -204,7 +204,7 @@ class Uri implements UriInterface
             return $this;
         }
 
-        $new = clone $this;
+        $new           = clone $this;
         $new->userInfo = $info;
         $new->validateState();
 
@@ -224,7 +224,7 @@ class Uri implements UriInterface
             return $this;
         }
 
-        $new = clone $this;
+        $new       = clone $this;
         $new->host = $host;
         $new->validateState();
 
@@ -242,7 +242,7 @@ class Uri implements UriInterface
             return $this;
         }
 
-        $new = clone $this;
+        $new       = clone $this;
         $new->port = $port;
         $new->validateState();
 
@@ -262,7 +262,7 @@ class Uri implements UriInterface
             return $this;
         }
 
-        $new = clone $this;
+        $new       = clone $this;
         $new->path = $path;
         $new->validateState();
 
@@ -282,9 +282,9 @@ class Uri implements UriInterface
 
         $filter = $this->filterClass['query'];
 
-        $new = clone $this;
+        $new            = clone $this;
         $new->queryVars = $filter->parse($query);
-        $new->query = $filter->build($new->queryVars);
+        $new->query     = $filter->build($new->queryVars);
 
         return $new;
     }
@@ -302,7 +302,7 @@ class Uri implements UriInterface
             return $this;
         }
 
-        $new = clone $this;
+        $new           = clone $this;
         $new->fragment = $fragment;
 
         return $new;
@@ -388,7 +388,7 @@ class Uri implements UriInterface
     }
 
     /**
-     * Create a new instance from a hash of parse_url parts
+     * Create a new instance from a hash of parse_url parts.
      *
      * @param array $components a hash representation of the URI similar to PHP parse_url function result
      */
@@ -399,16 +399,16 @@ class Uri implements UriInterface
         // Parse the query
         if (isset($components['query'])) {
             $this->queryVars = $queryFilter->parse($components['query']);
-            $this->query = $queryFilter->build($this->queryVars);
+            $this->query     = $queryFilter->build($this->queryVars);
         } else {
             $this->query = '';
         }
 
-        $this->scheme = isset($components['scheme']) ? $this->filterClass['scheme']->filter($components['scheme']) : '';
+        $this->scheme   = isset($components['scheme']) ? $this->filterClass['scheme']->filter($components['scheme']) : '';
         $this->userInfo = $components['user'] ?? '';
-        $this->host = isset($components['host']) ? $this->filterClass['host']->filter($components['host']) : '';
-        $this->port = isset($components['port']) ? $this->filterClass['port']->filter($this->scheme, $components['port']) : null;
-        $this->path = isset($components['path']) ? $this->filterClass['path']->filter($components['path']) : '';
+        $this->host     = isset($components['host']) ? $this->filterClass['host']->filter($components['host']) : '';
+        $this->port     = isset($components['port']) ? $this->filterClass['port']->filter($this->scheme, $components['port']) : null;
+        $this->path     = isset($components['path']) ? $this->filterClass['path']->filter($components['path']) : '';
 
         $this->fragment = isset($components['fragment']) ? $this->filterClass['fragment']->filter($components['fragment']) : '';
 
@@ -418,7 +418,7 @@ class Uri implements UriInterface
     }
 
     /**
-     * Create a URI string from its various parts
+     * Create a URI string from its various parts.
      *
      * @param string $scheme
      * @param string $authority
@@ -486,13 +486,13 @@ class Uri implements UriInterface
         }
 
         if ($this->getAuthority() === '') {
-            if (strpos($this->path, '//') === 0) {
+            if (mb_strpos($this->path, '//') === 0) {
                 throw new InvalidArgumentException(
                     'The path of a URI without an authority must not start with two slashes "//"'
                 );
             }
 
-            if ($this->scheme === '' && strpos(explode('/', $this->path, 2)[0], ':') !== false) {
+            if ($this->scheme === '' && mb_strpos(explode('/', $this->path, 2)[0], ':') !== false) {
                 throw new InvalidArgumentException(
                     'A relative URI must not have a path beginning with a segment containing a colon'
                 );

@@ -77,7 +77,7 @@ class Emitter implements EmitterContract
     protected function emitHeaders(ResponseInterface $response)
     {
         foreach ($response->getHeaders() as $header => $values) {
-            $name = $this->filterHeader($header);
+            $name  = $this->filterHeader($header);
             $first = true;
 
             foreach ($values as $value) {
@@ -110,8 +110,8 @@ class Emitter implements EmitterContract
     protected function terminateOutputBuffering(int $maxBufferLevel = 0)
     {
         // Command line output buffering is disabled in cli by default
-        if (substr(PHP_SAPI, 0, 3) === 'cgi') {
-            return null;
+        if (mb_substr(PHP_SAPI, 0, 3) === 'cgi') {
+            return;
         }
 
         // avoid infinite loop on clearing
@@ -144,7 +144,7 @@ class Emitter implements EmitterContract
     }
 
     /**
-     * Filter a header name to wordcase
+     * Filter a header name to wordcase.
      *
      * @param string $header
      *

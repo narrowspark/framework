@@ -179,7 +179,7 @@ class ViewFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testEnvironmentAddsExtensionWithCustomResolver()
     {
-        $factory = $this->getFactory();
+        $factory  = $this->getFactory();
         $resolver = function () {
         };
         $factory->getFinder()

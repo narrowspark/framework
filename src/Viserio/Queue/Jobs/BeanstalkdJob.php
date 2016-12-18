@@ -36,9 +36,9 @@ class BeanstalkdJob extends AbstractJob
         PheanstalkJob $job,
         string $queue
     ) {
-        $this->job = $job;
-        $this->queue = $queue;
-        $this->container = $container;
+        $this->job        = $job;
+        $this->queue      = $queue;
+        $this->container  = $container;
         $this->pheanstalk = $pheanstalk;
     }
 

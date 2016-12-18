@@ -31,7 +31,7 @@ class Polish implements CategoryContract
         $count = $this->normalizeInteger($count);
 
         $i10 = $count % 10;
-        $i = $count % 100;
+        $i   = $count % 100;
 
         if ($count === 1) {
             return 0;

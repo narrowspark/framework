@@ -21,7 +21,7 @@ class CookieServiceProvider implements ServiceProvider
     {
         return [
             JarContract::class => [self::class, 'createCookieJar'],
-            'cookie' => function (ContainerInterface $container) {
+            'cookie'           => function (ContainerInterface $container) {
                 return $container->get(JarContract::class);
             },
             CookieJar::class => function (ContainerInterface $container) {

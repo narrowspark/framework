@@ -11,7 +11,6 @@ class NullFailedJobProvider implements FailedJobProviderContract
      */
     public function log(string $connection, string $queue, string $payload)
     {
-        //
     }
 
     /**
@@ -27,7 +26,6 @@ class NullFailedJobProvider implements FailedJobProviderContract
      */
     public function find($id): array
     {
-        //
     }
 
     /**
@@ -43,6 +41,5 @@ class NullFailedJobProvider implements FailedJobProviderContract
      */
     public function clear()
     {
-        //
     }
 }

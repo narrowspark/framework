@@ -12,7 +12,10 @@ class IOException extends RuntimeException
     /**
      * Create a new IO exception.
      *
-     * @param string $message
+     * @param string         $message
+     * @param mixed          $code
+     * @param null|Exception $previous
+     * @param null|mixed     $path
      */
     public function __construct(string $message, $code = 0, Exception $previous = null, $path = null)
     {

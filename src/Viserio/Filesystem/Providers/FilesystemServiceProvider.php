@@ -20,17 +20,17 @@ class FilesystemServiceProvider implements ServiceProvider
     {
         return [
             FilesystemManager::class => [self::class, 'createFilesystemManager'],
-            'flysystem' => function (ContainerInterface $container) {
+            'flysystem'              => function (ContainerInterface $container) {
                 return $container->get(FilesystemManager::class);
             },
             'flysystem.connection' => [self::class, 'createFlysystemConnection'],
-            Filesystem::class => function (ContainerInterface $container) {
+            Filesystem::class      => function (ContainerInterface $container) {
                 return $container->get(FilesystemManager::class);
             },
             FilesystemInterface::class => function (ContainerInterface $container) {
                 return $container->get(FilesystemManager::class);
             },
-            CachedFactory::class => [self::class, 'createCachedFactory'],
+            CachedFactory::class      => [self::class, 'createCachedFactory'],
             'flysystem.cachedfactory' => function (ContainerInterface $container) {
                 return $container->get(CachedFactory::class);
             },

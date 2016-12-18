@@ -106,7 +106,7 @@ class Kernel implements TerminableContract, KernelContract
         RouterContract $router,
         DispatcherContract $events
     ) {
-        $this->app = $app;
+        $this->app    = $app;
         $this->events = $events;
 
         $router->setMiddlewarePriorities($this->middlewarePriority);

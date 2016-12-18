@@ -24,6 +24,7 @@ class CookieTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider invalidNames
      * @expectedException \InvalidArgumentException
+     * @param mixed $name
      */
     public function testInstantiationThrowsExceptionIfCookieNameContainsInvalidCharacters($name)
     {
@@ -47,6 +48,7 @@ class CookieTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider invalidValues
      * @expectedException \InvalidArgumentException
+     * @param mixed $value
      */
     public function testInstantiationThrowsExceptionIfCookieValueContainsInvalidCharacters($value)
     {
@@ -55,7 +57,7 @@ class CookieTest extends \PHPUnit_Framework_TestCase
 
     public function testGetValue()
     {
-        $value = 'MyValue';
+        $value  = 'MyValue';
         $cookie = new Cookie('MyCookie', $value);
 
         self::assertSame($value, $cookie->getValue(), '->getValue() returns the proper value');
@@ -63,7 +65,7 @@ class CookieTest extends \PHPUnit_Framework_TestCase
 
     public function testWithValue()
     {
-        $value = 'MyValue';
+        $value  = 'MyValue';
         $cookie = new Cookie('MyCookie');
         $cookie = $cookie->withValue($value);
 

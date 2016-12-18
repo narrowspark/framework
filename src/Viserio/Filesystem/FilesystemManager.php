@@ -62,7 +62,7 @@ class FilesystemManager extends AbstractConnectionManager
 
             $this->connections[$name] = [
                 'connection' => $this->createConnection($config),
-                'config' => $config,
+                'config'     => $config,
             ];
         }
 

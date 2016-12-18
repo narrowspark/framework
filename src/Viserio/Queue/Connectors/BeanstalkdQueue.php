@@ -31,8 +31,8 @@ class BeanstalkdQueue extends AbstractQueue
      */
     public function __construct(Pheanstalk $pheanstalk, string $default, int $timeToRun)
     {
-        $this->default = $default;
-        $this->timeToRun = $timeToRun;
+        $this->default    = $default;
+        $this->timeToRun  = $timeToRun;
         $this->pheanstalk = $pheanstalk;
     }
 

@@ -20,9 +20,9 @@ class Paginator extends AbstractPaginator
      * @var array
      */
     protected $presenters = [
-        'bootstrap4' => Bootstrap4::class,
+        'bootstrap4'  => Bootstrap4::class,
         'foundation6' => Foundation6::class,
-        'simple' => SimplePagination::class,
+        'simple'      => SimplePagination::class,
     ];
 
     /**
@@ -43,9 +43,9 @@ class Paginator extends AbstractPaginator
         $this->request = $request;
         $this->setPath($this->request->getUri()->getPath());
 
-        $this->items = new Collection($adapter->getItems());
+        $this->items            = new Collection($adapter->getItems());
         $this->itemCountPerPage = $adapter->getItemsPerPage();
-        $this->currentPage = $this->getCurrentPage();
+        $this->currentPage      = $this->getCurrentPage();
 
         $this->checkForMorePages();
     }
@@ -106,13 +106,13 @@ class Paginator extends AbstractPaginator
     public function toArray(): array
     {
         return [
-            'per_page' => $this->getItemsPerPage(),
-            'current_page' => $this->getCurrentPage(),
+            'per_page'      => $this->getItemsPerPage(),
+            'current_page'  => $this->getCurrentPage(),
             'next_page_url' => $this->getNextPageUrl(),
             'prev_page_url' => $this->getPreviousPageUrl(),
-            'from' => $this->getFirstItem(),
-            'to' => $this->getLastItem(),
-            'data' => $this->items->toArray(),
+            'from'          => $this->getFirstItem(),
+            'to'            => $this->getLastItem(),
+            'data'          => $this->items->toArray(),
         ];
     }
 

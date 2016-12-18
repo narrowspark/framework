@@ -70,7 +70,7 @@ class EnvironmentDetector implements EnvironmentContract
      */
     public function runningInConsole(): bool
     {
-        return substr(PHP_SAPI, 0, 3) === 'cgi';
+        return mb_substr(PHP_SAPI, 0, 3) === 'cgi';
     }
 
     /**

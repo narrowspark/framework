@@ -5,7 +5,7 @@ namespace Viserio\Contracts\Mail;
 interface GPGMailer extends Mailer
 {
     /**
-     * Import a public key, return the fingerprint
+     * Import a public key, return the fingerprint.
      *
      * @param string $gpgKey An ASCII armored public key
      *
@@ -63,7 +63,7 @@ interface GPGMailer extends Mailer
     public function setPrivateKey(string $serverKey): GPGMailer;
 
     /**
-     * Sign a message (but don't encrypt)
+     * Sign a message (but don't encrypt).
      *
      * @param string $text
      *
@@ -74,7 +74,7 @@ interface GPGMailer extends Mailer
     public function sign($text): string;
 
     /**
-     * Verify a message
+     * Verify a message.
      *
      * @param string $text
      * @param string $fingerprint

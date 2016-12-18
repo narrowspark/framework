@@ -43,7 +43,7 @@ class BufferStream implements StreamInterface
      */
     public function getContents()
     {
-        $buffer = $this->buffer;
+        $buffer       = $this->buffer;
         $this->buffer = '';
 
         return $buffer;
@@ -70,7 +70,7 @@ class BufferStream implements StreamInterface
      */
     public function getSize()
     {
-        return strlen($this->buffer);
+        return mb_strlen($this->buffer);
     }
 
     /**
@@ -118,7 +118,7 @@ class BufferStream implements StreamInterface
      */
     public function eof()
     {
-        return strlen($this->buffer) === 0;
+        return mb_strlen($this->buffer) === 0;
     }
 
     /**
@@ -131,19 +131,20 @@ class BufferStream implements StreamInterface
 
     /**
      * Reads data from the buffer.
+     * @param mixed $length
      */
     public function read($length)
     {
-        $currentLength = strlen($this->buffer);
+        $currentLength = mb_strlen($this->buffer);
 
         if ($length >= $currentLength) {
             // No need to slice the buffer because we don't have enough data.
-            $result = $this->buffer;
+            $result       = $this->buffer;
             $this->buffer = '';
         } else {
             // Slice up the result to provide a subset of the buffer.
-            $result = substr($this->buffer, 0, $length);
-            $this->buffer = substr($this->buffer, $length);
+            $result       = mb_substr($this->buffer, 0, $length);
+            $this->buffer = mb_substr($this->buffer, $length);
         }
 
         return $result;
@@ -151,16 +152,17 @@ class BufferStream implements StreamInterface
 
     /**
      * Writes data to the buffer.
+     * @param mixed $string
      */
     public function write($string)
     {
         $this->buffer .= $string;
 
-        if (strlen($this->buffer) >= $this->hwm) {
+        if (mb_strlen($this->buffer) >= $this->hwm) {
             return 0;
         }
 
-        return strlen($string);
+        return mb_strlen($string);
     }
 
     /**

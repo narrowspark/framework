@@ -88,7 +88,7 @@ class StaticalProxyTest extends \PHPUnit_Framework_TestCase
     public function testFacadeCallsUnderlyingApplication()
     {
         $container = $this->mock(ContainerInterface::class);
-        $mock = Mock::mock('StdClass');
+        $mock      = Mock::mock('StdClass');
         $mock->shouldReceive('bar')->once()->andReturn('baz');
         $container->shouldReceive('get')->once()->andReturn($mock);
 

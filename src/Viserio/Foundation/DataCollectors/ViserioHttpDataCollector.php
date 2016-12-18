@@ -67,9 +67,9 @@ class ViserioHttpDataCollector extends AbstractDataCollector implements
      */
     public function __construct(RouterContract $router, RepositoryContract $config)
     {
-        $this->route = $router->getCurrentRoute();
+        $this->route         = $router->getCurrentRoute();
         $this->serverRequest = $router->getCurrentRoute()->getServerRequest();
-        $this->config = $config;
+        $this->config        = $config;
     }
 
     /**
@@ -104,7 +104,7 @@ class ViserioHttpDataCollector extends AbstractDataCollector implements
     public function getMenu(): array
     {
         $statusCode = $this->response->getStatusCode();
-        $status = '';
+        $status     = '';
 
         // Successful 2xx
         if ($statusCode >= 200 && $statusCode <= 226) {
@@ -119,9 +119,9 @@ class ViserioHttpDataCollector extends AbstractDataCollector implements
 
         $tabInfos = [
             'status' => $statusCode,
-            'class' => $status,
-            'label' => '',
-            'value' => '',
+            'class'  => $status,
+            'label'  => '',
+            'value'  => '',
         ];
 
         if ($this->route !== null && $this->route->getName() !== null) {
@@ -153,13 +153,13 @@ class ViserioHttpDataCollector extends AbstractDataCollector implements
         $routeInfos = $this->getRouteInformation($this->route);
 
         $html = $this->createTooltipGroup([
-            'Methods' => $routeInfos['methods'],
-            'Uri' => $routeInfos['uri'],
-            'With Middlewares' => $routeInfos['middlewares'],
+            'Methods'             => $routeInfos['methods'],
+            'Uri'                 => $routeInfos['uri'],
+            'With Middlewares'    => $routeInfos['middlewares'],
             'Without Middlewares' => $routeInfos['without_middlewares'] ?? '',
-            'Namespace' => $routeInfos['namespace'],
-            'Prefix' => $routeInfos['prefix'] ?? 'null',
-            'File' => $routeInfos['file'] ?? '',
+            'Namespace'           => $routeInfos['namespace'],
+            'Prefix'              => $routeInfos['prefix'] ?? 'null',
+            'File'                => $routeInfos['file'] ?? '',
         ]);
 
         return $html;
@@ -170,22 +170,22 @@ class ViserioHttpDataCollector extends AbstractDataCollector implements
      */
     public function getPanel(): string
     {
-        $session = $this->serverRequest->getAttribute('session');
+        $session     = $this->serverRequest->getAttribute('session');
         $sessionMeta = [];
 
         if ($session !== null) {
             $sessionMeta = [
-                'firstTrace' => $session->getFirstTrace(),
-                'lastTrace' => $session->getLastTrace(),
+                'firstTrace'        => $session->getFirstTrace(),
+                'lastTrace'         => $session->getLastTrace(),
                 'regenerationTrace' => $session->getRegenerationTrace(),
-                'requestsCount' => $session->getRequestsCount(),
-                'fingerprint' => $session->getFingerprint(),
+                'requestsCount'     => $session->getRequestsCount(),
+                'fingerprint'       => $session->getFingerprint(),
             ];
         }
 
         $html = $this->createTabs([
             [
-                'name' => 'Request',
+                'name'    => 'Request',
                 'content' => $this->createTable(
                     $this->serverRequest->getQueryParams(),
                     'Get Parameters'
@@ -207,7 +207,7 @@ class ViserioHttpDataCollector extends AbstractDataCollector implements
                 ),
             ],
             [
-                'name' => 'Response',
+                'name'    => 'Response',
                 'content' => $this->createTable(
                     $this->response->getHeaders(),
                     'Response Headers',
@@ -220,7 +220,7 @@ class ViserioHttpDataCollector extends AbstractDataCollector implements
                 ),
             ],
             [
-                'name' => 'Session',
+                'name'    => 'Session',
                 'content' => $this->createTable(
                     $sessionMeta,
                     'Session Metadata'
@@ -230,7 +230,7 @@ class ViserioHttpDataCollector extends AbstractDataCollector implements
                 ),
             ],
             [
-                'name' => 'Flashes',
+                'name'    => 'Flashes',
                 'content' => $this->createTable(
                     $session !== null ? $session->get('_flash') : [],
                     'Flashes'
@@ -261,18 +261,18 @@ class ViserioHttpDataCollector extends AbstractDataCollector implements
     protected function getRouteInformation(RouteContract $route): array
     {
         $routesPath = realpath($this->config->get('path.app', ''));
-        $action = $route->getAction();
+        $action     = $route->getAction();
 
         $result = [
-           'uri' => $route->getUri() ?: '-',
-           'methods' => count($route->getMethods()) > 2 ?
+           'uri'     => $route->getUri() ?: '-',
+           'methods' => count($route->getMethods()) > 1 ?
                 implode(' | ', $route->getMethods()) :
                 $route->getMethods(),
         ];
 
         $result = array_merge($result, $action);
 
-        if (isset($action['controller']) && strpos($action['controller'], '@') !== false) {
+        if (isset($action['controller']) && mb_strpos($action['controller'], '@') !== false) {
             list($controller, $method) = explode('@', $action['controller']);
 
             if (class_exists($controller) && method_exists($controller, $method)) {
@@ -281,12 +281,12 @@ class ViserioHttpDataCollector extends AbstractDataCollector implements
 
             unset($result['uses']);
         } elseif (isset($action['uses']) && $action['uses'] instanceof Closure) {
-            $reflector = new ReflectionFunction($action['uses']);
+            $reflector      = new ReflectionFunction($action['uses']);
             $result['uses'] = TemplateHelper::dump($result['uses']);
         }
 
         if (isset($reflector)) {
-            $filename = ltrim(str_replace($routesPath, '', $reflector->getFileName()), '/');
+            $filename       = ltrim(str_replace($routesPath, '', $reflector->getFileName()), '/');
             $result['file'] = $filename . ': ' . $reflector->getStartLine() . ' - ' . $reflector->getEndLine();
         }
 
@@ -302,7 +302,7 @@ class ViserioHttpDataCollector extends AbstractDataCollector implements
     }
 
     /**
-     * Get middleware
+     * Get middleware.
      *
      * @param \Viserio\Contracts\Routing\Route $route
      *
@@ -316,7 +316,7 @@ class ViserioHttpDataCollector extends AbstractDataCollector implements
     }
 
     /**
-     * Get without middleware
+     * Get without middleware.
      *
      * @param \Viserio\Contracts\Routing\Route $route
      *
@@ -342,7 +342,7 @@ class ViserioHttpDataCollector extends AbstractDataCollector implements
     }
 
     /**
-     * [prepareRequestAttributes description]
+     * [prepareRequestAttributes description].
      *
      * @param array $attributes
      *
@@ -356,7 +356,7 @@ class ViserioHttpDataCollector extends AbstractDataCollector implements
             if ($key === '_route') {
                 if (is_object($value)) {
                     $value = [
-                        'Uri' => $value->getUri(),
+                        'Uri'        => $value->getUri(),
                         'Parameters' => $value->getParameters(),
                     ];
                 }

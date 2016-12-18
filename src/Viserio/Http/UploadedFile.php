@@ -29,7 +29,7 @@ class UploadedFile implements UploadedFileInterface
     ];
 
     /**
-     * The client-provided full path to the file
+     * The client-provided full path to the file.
      *
      * @note this is public to maintain BC with 3.1.0 and earlier.
      *
@@ -110,8 +110,8 @@ class UploadedFile implements UploadedFileInterface
         ?string $clientMediaType = null
     ) {
         $this->setError($errorStatus);
-        $this->size = $size;
-        $this->clientFilename = $clientFilename;
+        $this->size            = $size;
+        $this->clientFilename  = $clientFilename;
         $this->clientMediaType = $clientMediaType;
 
         if ($this->isOk()) {
@@ -130,7 +130,7 @@ class UploadedFile implements UploadedFileInterface
     /**
      * {@inheritdoc}
      *
-     * @throws \RuntimeException if the upload was not successful.
+     * @throws \RuntimeException if the upload was not successful
      */
     public function getStream(): StreamInterface
     {
@@ -146,7 +146,7 @@ class UploadedFile implements UploadedFileInterface
     /**
      * {@inheritdoc}
      *
-     * @return int|null The file size in bytes or null if unknown.
+     * @return int|null the file size in bytes or null if unknown
      */
     public function getSize(): ?int
     {
@@ -158,7 +158,7 @@ class UploadedFile implements UploadedFileInterface
      *
      * @see http://php.net/manual/en/features.file-upload.errors.php
      *
-     * @return int One of PHP's UPLOAD_ERR_XXX constants.
+     * @return int one of PHP's UPLOAD_ERR_XXX constants
      */
     public function getError(): int
     {
@@ -168,8 +168,8 @@ class UploadedFile implements UploadedFileInterface
     /**
      * {@inheritdoc}
      *
-     * @return string|null The filename sent by the client or null if none
-     *                     was provided.
+     * @return string|null the filename sent by the client or null if none
+     *                     was provided
      */
     public function getClientFilename(): ?string
     {
@@ -190,12 +190,12 @@ class UploadedFile implements UploadedFileInterface
      * @see http://php.net/is_uploaded_file
      * @see http://php.net/move_uploaded_file
      *
-     * @param string $targetPath Path to which to move the uploaded file.
+     * @param string $targetPath path to which to move the uploaded file
      *
-     * @throws \RuntimeException         if the upload was not successful.
-     * @throws \InvalidArgumentException if the $path specified is invalid.
+     * @throws \RuntimeException         if the upload was not successful
+     * @throws \InvalidArgumentException if the $path specified is invalid
      * @throws \RuntimeException         on any error during the move operation, or on
-     *                                   the second or subsequent call to the method.
+     *                                   the second or subsequent call to the method
      */
     public function moveTo($targetPath): void
     {
@@ -280,7 +280,7 @@ class UploadedFile implements UploadedFileInterface
     }
 
     /**
-     * Return true if there is no upload error
+     * Return true if there is no upload error.
      *
      * @return bool
      */

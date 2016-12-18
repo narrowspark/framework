@@ -13,7 +13,7 @@ class LoadServiceProvider implements BootstrapContract
      */
     public function bootstrap(Application $app)
     {
-        $config = $app->get(RepositoryContract::class);
+        $config    = $app->get(RepositoryContract::class);
         $providers = $config->get('app.serviceproviders', []);
 
         if (count($providers) > 0) {

@@ -55,9 +55,9 @@ class AbstractManagerTest extends \PHPUnit_Framework_TestCase
         self::assertEquals(['name' => 'value', 'driver' => 'foo'], $manager->driver('value'));
         self::assertTrue($manager->hasDriver('value'));
         self::assertEquals([
-            'test' => true,
+            'test'   => true,
             'config' => ['name' => 'config', 'driver' => 'config'],
-            'value' => ['name' => 'value', 'driver' => 'foo'],
+            'value'  => ['name' => 'value', 'driver' => 'foo'],
         ], $manager->getDrivers());
 
         $config->shouldReceive('get')

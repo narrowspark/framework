@@ -36,7 +36,7 @@ class CallQueuedHandlerTest extends \PHPUnit_Framework_TestCase
             ->andReturn($command);
 
         $container = new ArrayContainer();
-        $handler = $this->mock(stdClass::class);
+        $handler   = $this->mock(stdClass::class);
         $handler->shouldReceive('handle')
             ->once()
             ->andReturn('foo');
@@ -108,7 +108,7 @@ class CallQueuedHandlerTest extends \PHPUnit_Framework_TestCase
             ->andReturn($command);
 
         $container = new ArrayContainer();
-        $handler = $this->mock(stdClass::class);
+        $handler   = $this->mock(stdClass::class);
         $handler->shouldReceive('handle')
             ->once()
             ->andReturn('foo');

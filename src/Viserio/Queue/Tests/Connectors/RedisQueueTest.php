@@ -14,7 +14,7 @@ class RedisQueueTest extends \PHPUnit_Framework_TestCase
 
     public function testDelayedPushWithDateTimeProperlyPushesJobOntoRedis()
     {
-        $date = Chronos::now();
+        $date      = Chronos::now();
         $encrypter = $this->mock(EncrypterContract::class);
         $encrypter->shouldReceive('encrypt');
 

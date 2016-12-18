@@ -28,7 +28,7 @@ class ClientIpGenerator implements FingerprintContract
     }
 
     /**
-     * {@inhertiddoc}
+     * {@inhertiddoc}.
      */
     public function generate(): string
     {

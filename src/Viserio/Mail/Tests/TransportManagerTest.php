@@ -69,12 +69,12 @@ class TransportManagerTest extends \PHPUnit_Framework_TestCase
             ->with('mail.drivers', [])
             ->andReturn([
                 'smtp' => [
-                    'host' => '',
-                    'port' => '',
+                    'host'       => '',
+                    'port'       => '',
                     'encryption' => '',
-                    'username' => '',
-                    'password' => '',
-                    'stream' => '',
+                    'username'   => '',
+                    'password'   => '',
+                    'stream'     => '',
                 ],
             ]);
 
@@ -136,7 +136,7 @@ class TransportManagerTest extends \PHPUnit_Framework_TestCase
             ->andReturn([
                 'ses' => [
                     'secret' => '',
-                    'key' => '',
+                    'key'    => '',
                     'region' => 'us-west-2',
                 ],
             ]);

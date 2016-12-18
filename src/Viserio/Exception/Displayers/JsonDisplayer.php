@@ -32,7 +32,7 @@ class JsonDisplayer implements DisplayerContract
      */
     public function display(Throwable $exception, string $id, int $code, array $headers): ResponseInterface
     {
-        $info = $this->info->generate($id, $code);
+        $info  = $this->info->generate($id, $code);
         $error = ['id' => $id, 'status' => $info['code'], 'title' => $info['name'], 'detail' => $info['detail']];
 
         return new JsonResponse(

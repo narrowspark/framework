@@ -36,16 +36,16 @@ class CommandLineTransformer implements TransformerContract
     protected function handleErrors(ErrorException $exception): ErrorException
     {
         $errorString = "%s%s in %s on line %d\n";
-        $severity = $this->determineSeverityTextValue($exception->getSeverity());
+        $severity    = $this->determineSeverityTextValue($exception->getSeverity());
 
         // Let's calculate the length of the box, and set the box border.
-        $dashes = "\n+" . str_repeat('-', strlen($severity) + 2) . "+\n";
-        $severity = $dashes . '| ' . strtoupper($severity) . ' |' . $dashes;
+        $dashes   = "\n+" . str_repeat('-', mb_strlen($severity) + 2) . "+\n";
+        $severity = $dashes . '| ' . mb_strtoupper($severity) . ' |' . $dashes;
 
         // Okay, now let's prep the message components.
         $error = $exception->getMessage();
-        $file = $exception->getFile();
-        $line = $exception->getLine();
+        $file  = $exception->getFile();
+        $line  = $exception->getLine();
         $error = sprintf($errorString, $severity, $error, $file, $line);
 
         return new ErrorException($error);
@@ -63,12 +63,12 @@ class CommandLineTransformer implements TransformerContract
         $errorString = "+---------------------+\n| UNHANDLED EXCEPTION |\n+---------------------+\n";
         $errorString .= "Fatal error: Uncaught exception '%s' with message '%s' in %s on line %d\n\n";
         $errorString .= "Stack Trace:\n%s\n";
-        $type = get_class($exception);
+        $type    = get_class($exception);
         $message = $exception->getMessage();
-        $file = $exception->getFile();
-        $line = $exception->getLine();
-        $trace = $exception->getTraceAsString();
-        $error = sprintf($errorString, $type, $message, $file, $line, $trace);
+        $file    = $exception->getFile();
+        $line    = $exception->getLine();
+        $trace   = $exception->getTraceAsString();
+        $error   = sprintf($errorString, $type, $message, $file, $line, $trace);
 
         return new Exception($error);
     }

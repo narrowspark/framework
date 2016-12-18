@@ -12,7 +12,7 @@ class JsonResponse extends Response
     use InjectContentTypeTrait;
 
     /**
-     * Default flags for json_encode; value of:
+     * Default flags for json_encode; value of:.
      *
      * <code>
      * JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT | JSON_UNESCAPED_SLASHES
@@ -34,12 +34,12 @@ class JsonResponse extends Response
      * - JSON_HEX_QUOT
      * - JSON_UNESCAPED_SLASHES
      *
-     * @param mixed $data            Data to convert to JSON.
-     * @param int   $status          Integer status code for the response; 200 by default.
-     * @param array $headers         Array of headers to use at initialization.
-     * @param int   $encodingOptions JSON encoding options to use.
+     * @param mixed $data            data to convert to JSON
+     * @param int   $status          integer status code for the response; 200 by default
+     * @param array $headers         array of headers to use at initialization
+     * @param int   $encodingOptions jSON encoding options to use
      *
-     * @throws InvalidArgumentException if unable to encode the $data to JSON.
+     * @throws InvalidArgumentException if unable to encode the $data to JSON
      */
     public function __construct(
         $data,
@@ -62,7 +62,7 @@ class JsonResponse extends Response
      * @param mixed $data
      * @param int   $encodingOptions
      *
-     * @throws InvalidArgumentException if unable to encode the $data to JSON.
+     * @throws InvalidArgumentException if unable to encode the $data to JSON
      *
      * @return string
      */

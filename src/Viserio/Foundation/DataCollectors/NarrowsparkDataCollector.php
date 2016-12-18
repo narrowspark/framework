@@ -19,7 +19,6 @@ class NarrowsparkDataCollector extends AbstractDataCollector implements
      */
     public function collect(ServerRequestInterface $serverRequest, ResponseInterface $response)
     {
-        //
     }
 
     /**
@@ -44,7 +43,7 @@ class NarrowsparkDataCollector extends AbstractDataCollector implements
     public function getMenu(): array
     {
         return [
-            'icon' => 'ic_narrowspark_white_24px.svg',
+            'icon'  => 'ic_narrowspark_white_24px.svg',
             'label' => '',
             'value' => Application::VERSION,
         ];
@@ -55,14 +54,14 @@ class NarrowsparkDataCollector extends AbstractDataCollector implements
      */
     public function getTooltip(): string
     {
-        $debug = Env::get('APP_DEBUG', false);
+        $debug   = Env::get('APP_DEBUG', false);
         $opcache = extension_loaded('Zend OPcache') && ini_get('opcache.enable');
 
         $tooltip = $this->createTooltipGroup([
-            'Profiler token' => '',
+            'Profiler token'   => '',
             'Application name' => '',
-            'Environment' => Env::get('APP_ENV', 'develop'),
-            'Debug' => [
+            'Environment'      => Env::get('APP_ENV', 'develop'),
+            'Debug'            => [
                 [
                     'class' => $debug !== false ? 'status-green' : 'status-red',
                     'value' => $debug !== false ? 'enabled' : 'disabled',
@@ -71,9 +70,9 @@ class NarrowsparkDataCollector extends AbstractDataCollector implements
         ]);
 
         $tooltip .= $this->createTooltipGroup([
-            'PHP version' => phpversion(),
-            'Architecture' => PHP_INT_SIZE * 8,
-            'Timezone' => date_default_timezone_get(),
+            'PHP version'    => phpversion(),
+            'Architecture'   => PHP_INT_SIZE * 8,
+            'Timezone'       => date_default_timezone_get(),
             'PHP Extensions' => [
                 [
                     'class' => extension_loaded('xdebug') ? 'status-green' : 'status-red',
@@ -89,7 +88,7 @@ class NarrowsparkDataCollector extends AbstractDataCollector implements
 
         $tooltip .= $this->createTooltipGroup([
             'Resources' => '',
-            'Help' => '',
+            'Help'      => '',
         ]);
 
         return $tooltip;

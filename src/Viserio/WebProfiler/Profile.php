@@ -15,46 +15,66 @@ class Profile
     private $token;
 
     /**
-     * [$ip description]
+     * [$ip description].
      *
      * @var string
      */
     private $ip;
 
     /**
-     * [$method description]
+     * [$method description].
      *
      * @var string
      */
     private $method;
 
     /**
-     * [$url description]
+     * [$url description].
      *
      * @var string
      */
     private $url;
 
     /**
-     * [$time description]
+     * [$time description].
      *
      * @var string
      */
     private $time;
 
     /**
-     * [$statusCode description]
+     * [$statusCode description].
      *
      * @var string
      */
     private $statusCode;
 
     /**
-     * [$collectors description]
+     * [$collectors description].
      *
      * @var array
      */
     private $collectors = [];
+
+    /**
+     * [__sleep description].
+     *
+     * @return array
+     */
+    public function __sleep()
+    {
+        return [
+            'token',
+            'parent',
+            'children',
+            'collectors',
+            'ip',
+            'method',
+            'url',
+            'time',
+            'statusCode',
+        ];
+    }
 
     /**
      * Sets the token.
@@ -107,7 +127,7 @@ class Profile
     }
 
     /**
-     * [setMethod description]
+     * [setMethod description].
      *
      * @param string $method
      */
@@ -127,7 +147,7 @@ class Profile
     }
 
     /**
-     * [setUrl description]
+     * [setUrl description].
      *
      * @param string $url
      */
@@ -151,21 +171,21 @@ class Profile
     }
 
     /**
-     * [setTime description]
+     * [setTime description].
      *
-     * @param string $time
+     * @param float $time
      */
-    public function setTime(string $time): void
+    public function setTime(float $time): void
     {
         $this->time = $time;
     }
 
     /**
-     * @param string $statusCode
+     * @param int $statusCode
      */
-    public function setStatusCode(string $statusCode): void
+    public function setStatusCode(int $statusCode): void
     {
-        $this->statusCode = $statusCode;
+        $this->statusCode = (string) $statusCode;
     }
 
     /**
@@ -187,7 +207,7 @@ class Profile
      */
     public function getCollector($name)
     {
-        if (!isset($this->collectors[$name])) {
+        if (! isset($this->collectors[$name])) {
             throw new InvalidArgumentException(sprintf('Collector "%s" does not exist.', $name));
         }
 
@@ -236,25 +256,5 @@ class Profile
     public function hasCollector(string $name): bool
     {
         return isset($this->collectors[$name]);
-    }
-
-    /**
-     * [__sleep description]
-     *
-     * @return array
-     */
-    public function __sleep()
-    {
-        return [
-            'token',
-            'parent',
-            'children',
-            'collectors',
-            'ip',
-            'method',
-            'url',
-            'time',
-            'statusCode',
-        ];
     }
 }

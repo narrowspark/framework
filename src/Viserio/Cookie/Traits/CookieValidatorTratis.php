@@ -7,7 +7,7 @@ use InvalidArgumentException;
 trait CookieValidatorTratis
 {
     /**
-     * Validates the name attribute
+     * Validates the name attribute.
      *
      * @param string $name
      *
@@ -17,7 +17,7 @@ trait CookieValidatorTratis
      */
     protected function validateName(string $name)
     {
-        if (strlen($name) < 1) {
+        if (mb_strlen($name) < 1) {
             throw new InvalidArgumentException('The name cannot be empty');
         }
 
@@ -28,7 +28,7 @@ trait CookieValidatorTratis
     }
 
     /**
-     * Validates a value
+     * Validates a value.
      *
      * @param string|null $value
      *

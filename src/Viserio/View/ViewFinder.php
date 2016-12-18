@@ -148,7 +148,7 @@ class ViewFinder implements FinderContract
      */
     public function hasHintInformation(string $name): bool
     {
-        return strpos($name, FinderContract::HINT_PATH_DELIMITER) > 0;
+        return mb_strpos($name, FinderContract::HINT_PATH_DELIMITER) > 0;
     }
 
     /**
@@ -267,8 +267,8 @@ class ViewFinder implements FinderContract
 
                 if ($this->files->has($viewPath)) {
                     return [
-                        'path' => $viewPath,
-                        'name' => $fileInfos['file'],
+                        'path'      => $viewPath,
+                        'name'      => $fileInfos['file'],
                         'extension' => $fileInfos['extension'],
                     ];
                 }
@@ -290,7 +290,7 @@ class ViewFinder implements FinderContract
         return array_map(function ($extension) use ($name) {
             return [
                 'extension' => $extension,
-                'file' => str_replace('.', DIRECTORY_SEPARATOR, $name) . '.' . $extension,
+                'file'      => str_replace('.', DIRECTORY_SEPARATOR, $name) . '.' . $extension,
             ];
         }, $this->extensions);
     }

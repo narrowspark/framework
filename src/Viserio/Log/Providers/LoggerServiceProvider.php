@@ -9,8 +9,6 @@ use Psr\Log\LoggerInterface;
 use Viserio\Contracts\Events\Dispatcher as DispatcherContract;
 use Viserio\Contracts\Log\Log;
 use Viserio\Contracts\Support\Traits\ServiceProviderConfigAwareTrait;
-use Viserio\Log\DataCollectors\LogParser;
-use Viserio\Log\DataCollectors\LogsDataCollector;
 use Viserio\Log\Writer as MonologWriter;
 
 class LoggerServiceProvider implements ServiceProvider
@@ -26,7 +24,7 @@ class LoggerServiceProvider implements ServiceProvider
     {
         return [
             MonologWriter::class => [self::class, 'createLogger'],
-            'logger' => function (ContainerInterface $container) {
+            'logger'             => function (ContainerInterface $container) {
                 return $container->get(MonologWriter::class);
             },
             'log' => function (ContainerInterface $container) {

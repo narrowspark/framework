@@ -21,7 +21,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->root = vfsStream::setup();
+        $this->root       = vfsStream::setup();
         $this->fileloader = new FileLoader(new TaggableParser(), []);
     }
 
@@ -112,7 +112,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
                     '789' => 1,
                 ],
             ],
-            'foo' => 'bar',
+            'foo'  => 'bar',
             'func' => function () {
                 return 'func';
             },
@@ -170,7 +170,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
             'default' => 'Memcached',
             'drivers' => [
               'Memcached' => [],
-              'File' => [],
+              'File'      => [],
             ],
           ],
         ];
@@ -180,7 +180,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
             'default' => 'File',
             'drivers' => [
               'Memcached' => [],
-              'File' => [],
+              'File'      => [],
             ],
           ],
         ];

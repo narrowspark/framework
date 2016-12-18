@@ -27,14 +27,14 @@ final class UploadedFileFactory implements UploadedFileFactoryInterface
     }
 
     /**
-     * Detect the Uploaded file size
+     * Detect the Uploaded file size.
      *
      * @param mixed    $file
      * @param int|null $size
      *
      * @return int
      */
-    protected function getSize($file, $size): int
+    private function getSize($file, $size): int
     {
         if (null !== $size) {
             return $size;

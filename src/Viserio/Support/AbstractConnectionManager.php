@@ -167,7 +167,7 @@ abstract class AbstractConnectionManager
         $connections = $this->config->get($this->getConfigName() . '.connections', []);
 
         if (isset($connections[$name]) && is_array($connections[$name])) {
-            $config = $connections[$name];
+            $config         = $connections[$name];
             $config['name'] = $name;
 
             return $config;

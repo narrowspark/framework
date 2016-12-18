@@ -61,10 +61,10 @@ class View implements ArrayAccess, ViewContract
      */
     public function __construct(Factory $factory, EngineContract $engine, string $view, array $fileInfo, $data = [])
     {
-        $this->view = $view;
+        $this->view     = $view;
         $this->fileInfo = $fileInfo;
-        $this->engine = $engine;
-        $this->factory = $factory;
+        $this->engine   = $engine;
+        $this->factory  = $factory;
 
         $this->data = $data instanceof Arrayable ? $data->toArray() : (array) $data;
     }
@@ -117,7 +117,7 @@ class View implements ArrayAccess, ViewContract
     public function __call(string $method, array $parameters): ViewContract
     {
         if (Str::startsWith($method, 'with')) {
-            return $this->with(Str::snake(substr($method, 4)), $parameters[0]);
+            return $this->with(Str::snake(mb_substr($method, 4)), $parameters[0]);
         }
 
         throw new BadMethodCallException(sprintf('Method [%s] does not exist on view.', $method));

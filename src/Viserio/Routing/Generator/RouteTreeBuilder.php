@@ -18,7 +18,7 @@ class RouteTreeBuilder
     public function build(array $routes): array
     {
         $rootRouteData = null;
-        $nodes = [];
+        $nodes         = [];
         $groupedRoutes = [];
 
         foreach ($routes as $route) {
@@ -37,9 +37,9 @@ class RouteTreeBuilder
 
             foreach ($group as $route) {
                 $parameterIndexNameMap = [];
-                $segments = $route->getSegments();
-                $segmentMatcher = $this->getMatcher(array_shift($segments), $parameterIndexNameMap);
-                $firstSegmentHash = $segmentMatcher->getHash();
+                $segments              = $route->getSegments();
+                $segmentMatcher        = $this->getMatcher(array_shift($segments), $parameterIndexNameMap);
+                $firstSegmentHash      = $segmentMatcher->getHash();
 
                 if (! isset($groupNodes[$firstSegmentHash])) {
                     $groupNodes[$firstSegmentHash] = new RouteTreeNode(
@@ -76,7 +76,7 @@ class RouteTreeBuilder
         if (empty($segments)) {
             $node->getContents()->addRoute($route, $parameterIndexNameMap);
 
-            return null;
+            return;
         }
 
         $childSegmentMatcher = $this->getMatcher(array_shift($segments), $parameterIndexNameMap);

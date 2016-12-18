@@ -28,12 +28,12 @@ class UploadedFileTest extends \PHPUnit_Framework_TestCase
     public function invalidStreams()
     {
         return [
-            'null' => [null],
-            'true' => [true],
-            'false' => [false],
-            'int' => [1],
-            'float' => [1.1],
-            'array' => [['filename']],
+            'null'   => [null],
+            'true'   => [true],
+            'false'  => [false],
+            'int'    => [1],
+            'float'  => [1.1],
+            'array'  => [['filename']],
             'object' => [(object) ['filename']],
         ];
     }
@@ -42,6 +42,7 @@ class UploadedFileTest extends \PHPUnit_Framework_TestCase
      * @dataProvider invalidStreams
      *
      * @expectedException \InvalidArgumentException
+     * @param mixed $streamOrFile
      */
     public function testRaisesExceptionOnInvalidStreamOrFile($streamOrFile)
     {
@@ -58,8 +59,8 @@ class UploadedFileTest extends \PHPUnit_Framework_TestCase
 
     public function testGetStreamReturnsWrappedPhpStream()
     {
-        $stream = fopen('php://temp', 'wb+');
-        $upload = new UploadedFile($stream, 0, UPLOAD_ERR_OK);
+        $stream       = fopen('php://temp', 'wb+');
+        $upload       = new UploadedFile($stream, 0, UPLOAD_ERR_OK);
         $uploadStream = $upload->getStream()->detach();
 
         self::assertSame($stream, $uploadStream);
@@ -69,7 +70,7 @@ class UploadedFileTest extends \PHPUnit_Framework_TestCase
     {
         $this->cleanup[] = $stream = tempnam(sys_get_temp_dir(), 'stream_file');
 
-        $upload = new UploadedFile($stream, 0, UPLOAD_ERR_OK);
+        $upload       = new UploadedFile($stream, 0, UPLOAD_ERR_OK);
         $uploadStream = $upload->getStream();
 
         $r = new ReflectionProperty($uploadStream, 'filename');
@@ -80,7 +81,7 @@ class UploadedFileTest extends \PHPUnit_Framework_TestCase
 
     public function testSuccessful()
     {
-        $body = 'Foo bar!';
+        $body   = 'Foo bar!';
         $stream = fopen('php://temp', 'r+');
 
         fwrite($stream, $body);
@@ -103,13 +104,13 @@ class UploadedFileTest extends \PHPUnit_Framework_TestCase
     public function invalidMovePaths()
     {
         return [
-            'null' => [null],
-            'true' => [true],
-            'false' => [false],
-            'int' => [1],
-            'float' => [1.1],
-            'empty' => [''],
-            'array' => [['filename']],
+            'null'   => [null],
+            'true'   => [true],
+            'false'  => [false],
+            'int'    => [1],
+            'float'  => [1.1],
+            'empty'  => [''],
+            'array'  => [['filename']],
             'object' => [(object) ['filename']],
         ];
     }
@@ -119,10 +120,11 @@ class UploadedFileTest extends \PHPUnit_Framework_TestCase
      *
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage path
+     * @param mixed $path
      */
     public function testMoveRaisesExceptionForInvalidPath($path)
     {
-        $body = 'Foo bar!';
+        $body   = 'Foo bar!';
         $stream = fopen('php://temp', 'r+');
 
         fwrite($stream, $body);
@@ -142,7 +144,7 @@ class UploadedFileTest extends \PHPUnit_Framework_TestCase
      */
     public function testMoveCannotBeCalledMoreThanOnce()
     {
-        $body = 'Foo bar!';
+        $body   = 'Foo bar!';
         $stream = fopen('php://temp', 'r+');
 
         fwrite($stream, $body);
@@ -166,7 +168,7 @@ class UploadedFileTest extends \PHPUnit_Framework_TestCase
      */
     public function testCannotRetrieveStreamAfterMove()
     {
-        $body = 'Foo bar!';
+        $body   = 'Foo bar!';
         $stream = fopen('php://temp', 'r+');
 
         fwrite($stream, $body);
@@ -187,18 +189,19 @@ class UploadedFileTest extends \PHPUnit_Framework_TestCase
     public function nonOkErrorStatus()
     {
         return [
-            'UPLOAD_ERR_INI_SIZE' => [UPLOAD_ERR_INI_SIZE],
-            'UPLOAD_ERR_FORM_SIZE' => [UPLOAD_ERR_FORM_SIZE],
-            'UPLOAD_ERR_PARTIAL' => [UPLOAD_ERR_PARTIAL],
-            'UPLOAD_ERR_NO_FILE' => [UPLOAD_ERR_NO_FILE],
+            'UPLOAD_ERR_INI_SIZE'   => [UPLOAD_ERR_INI_SIZE],
+            'UPLOAD_ERR_FORM_SIZE'  => [UPLOAD_ERR_FORM_SIZE],
+            'UPLOAD_ERR_PARTIAL'    => [UPLOAD_ERR_PARTIAL],
+            'UPLOAD_ERR_NO_FILE'    => [UPLOAD_ERR_NO_FILE],
             'UPLOAD_ERR_NO_TMP_DIR' => [UPLOAD_ERR_NO_TMP_DIR],
             'UPLOAD_ERR_CANT_WRITE' => [UPLOAD_ERR_CANT_WRITE],
-            'UPLOAD_ERR_EXTENSION' => [UPLOAD_ERR_EXTENSION],
+            'UPLOAD_ERR_EXTENSION'  => [UPLOAD_ERR_EXTENSION],
         ];
     }
 
     /**
      * @dataProvider nonOkErrorStatus
+     * @param mixed $status
      */
     public function testConstructorDoesNotRaiseExceptionForInvalidStreamWhenErrorStatusPresent($status)
     {
@@ -211,6 +214,7 @@ class UploadedFileTest extends \PHPUnit_Framework_TestCase
      *
      * @expectedException \RuntimeException
      * @expectedExceptionMessage upload error
+     * @param mixed $status
      */
     public function testMoveToRaisesExceptionWhenErrorStatusPresent($status)
     {
@@ -224,6 +228,7 @@ class UploadedFileTest extends \PHPUnit_Framework_TestCase
      *
      * @expectedException \RuntimeException
      * @expectedExceptionMessage upload error
+     * @param mixed $status
      */
     public function testGetStreamRaisesExceptionWhenErrorStatusPresent($status)
     {

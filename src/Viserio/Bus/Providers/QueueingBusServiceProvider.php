@@ -16,7 +16,7 @@ class QueueingBusServiceProvider implements ServiceProvider
     public function getServices()
     {
         return [
-            QueueingDispatcher::class => [self::class, 'registerBusDispatcher'],
+            QueueingDispatcher::class         => [self::class, 'registerBusDispatcher'],
             QueueingDispatcherContract::class => function (ContainerInterface $container) {
                 return $container->get(QueueingDispatcher::class);
             },

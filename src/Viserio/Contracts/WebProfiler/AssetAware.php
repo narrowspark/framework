@@ -7,7 +7,7 @@ interface AssetAware
     /**
      * Returns an array with the following keys:
      *  - css: an array of filenames
-     *  - js: an array of filenames
+     *  - js: an array of filenames.
      *
      * @return array
      */

@@ -40,7 +40,7 @@ class SwiftMailDataCollector extends AbstractDataCollector implements MenuAwareC
 
         foreach ($this->messagesLogger->getMessages() as $message) {
             $mails[] = [
-                'to' => $this->formatTo($message->getTo()),
+                'to'      => $this->formatTo($message->getTo()),
                 'subject' => $message->getSubject(),
                 'headers' => $message->getHeaders()->toString(),
             ];
@@ -58,7 +58,7 @@ class SwiftMailDataCollector extends AbstractDataCollector implements MenuAwareC
     public function getMenu(): array
     {
         return [
-            'icon' => 'ic_mail_outline_white_24px.svg',
+            'icon'  => 'ic_mail_outline_white_24px.svg',
             'label' => 'Mails',
             'value' => $this->data['count'],
         ];

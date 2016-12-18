@@ -47,7 +47,7 @@ class VerifyCsrfTokenMiddlewareTest extends \PHPUnit_Framework_TestCase
         $this->files->createDirectory(__DIR__ . '/stubs');
 
         $this->encrypter = new Encrypter(Key::createNewRandomKey());
-        $config = $this->mock(RepositoryContract::class);
+        $config          = $this->mock(RepositoryContract::class);
 
         $manager = new SessionManager($config, $this->encrypter);
         $manager->setContainer(new ArrayContainer([
@@ -73,7 +73,7 @@ class VerifyCsrfTokenMiddlewareTest extends \PHPUnit_Framework_TestCase
     public function testSessionCsrfMiddlewareSetCookie()
     {
         $manager = $this->manager;
-        $config = $manager->getConfig();
+        $config  = $manager->getConfig();
 
         $config->shouldReceive('get')
             ->once()
@@ -159,7 +159,7 @@ class VerifyCsrfTokenMiddlewareTest extends \PHPUnit_Framework_TestCase
     public function testSessionCsrfMiddlewareReadsXCSRFTOKEN()
     {
         $manager = $this->manager;
-        $config = $manager->getConfig();
+        $config  = $manager->getConfig();
 
         $config->shouldReceive('get')
             ->once()
@@ -245,7 +245,7 @@ class VerifyCsrfTokenMiddlewareTest extends \PHPUnit_Framework_TestCase
     public function testSessionCsrfMiddlewareReadsXXSRFTOKEN()
     {
         $manager = $this->manager;
-        $config = $manager->getConfig();
+        $config  = $manager->getConfig();
 
         $config->shouldReceive('get')
             ->once()
@@ -337,7 +337,7 @@ class VerifyCsrfTokenMiddlewareTest extends \PHPUnit_Framework_TestCase
     public function testSessionCsrfMiddlewareToThrowException()
     {
         $manager = $this->manager;
-        $config = $manager->getConfig();
+        $config  = $manager->getConfig();
 
         $config->shouldReceive('get')
             ->once()

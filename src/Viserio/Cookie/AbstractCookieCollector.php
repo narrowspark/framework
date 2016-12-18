@@ -33,7 +33,7 @@ class AbstractCookieCollector
     public function get(string $name)
     {
         if (! $this->has($name)) {
-            return null;
+            return;
         }
 
         return $this->cookies[$name];
@@ -58,7 +58,7 @@ class AbstractCookieCollector
      */
     public function add($cookie)
     {
-        $clone = clone $this;
+        $clone                              = clone $this;
         $clone->cookies[$cookie->getName()] = $cookie;
 
         return $clone;

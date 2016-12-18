@@ -23,7 +23,7 @@ class RoutingServiceProvider implements ServiceProvider
     {
         return [
             RouterContract::class => [self::class, 'createRouter'],
-            'router' => function (ContainerInterface $container) {
+            'router'              => function (ContainerInterface $container) {
                 return $container->get(RouterContract::class);
             },
             'route' => function (ContainerInterface $container) {
@@ -33,7 +33,7 @@ class RoutingServiceProvider implements ServiceProvider
                 return $container->get(RouterContract::class);
             },
             UrlGeneratorContract::class => [self::class, 'createUrlGenerator'],
-            UrlGenerator::class => function (ContainerInterface $container) {
+            UrlGenerator::class         => function (ContainerInterface $container) {
                 return $container->get(UrlGeneratorContract::class);
             },
         ];

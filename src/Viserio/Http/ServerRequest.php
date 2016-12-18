@@ -53,11 +53,11 @@ class ServerRequest extends Request implements ServerRequestInterface
     /**
      * Create a new server request instance.
      *
-     * @param null|string|UriInterface             $uri          URI for the request.
-     * @param string|null                          $method       HTTP method for the request.
-     * @param array                                $headers      Headers for the message.
-     * @param string|null|resource|StreamInterface $body         Message body.
-     * @param string                               $version      HTTP protocol version.
+     * @param null|string|UriInterface             $uri          uRI for the request
+     * @param string|null                          $method       hTTP method for the request
+     * @param array                                $headers      headers for the message
+     * @param string|null|resource|StreamInterface $body         message body
+     * @param string                               $version      hTTP protocol version
      * @param array                                $serverParams Typically the $_SERVER superglobal
      */
     public function __construct(
@@ -128,7 +128,7 @@ class ServerRequest extends Request implements ServerRequestInterface
     {
         $this->validateUploadedFiles($uploadedFiles);
 
-        $new = clone $this;
+        $new                = clone $this;
         $new->uploadedFiles = $uploadedFiles;
 
         return $new;
@@ -139,7 +139,7 @@ class ServerRequest extends Request implements ServerRequestInterface
      */
     public function withCookieParams(array $cookies): ServerRequestInterface
     {
-        $new = clone $this;
+        $new               = clone $this;
         $new->cookieParams = $cookies;
 
         return $new;
@@ -150,7 +150,7 @@ class ServerRequest extends Request implements ServerRequestInterface
      */
     public function withQueryParams(array $query): ServerRequestInterface
     {
-        $new = clone $this;
+        $new              = clone $this;
         $new->queryParams = $query;
 
         return $new;
@@ -161,7 +161,7 @@ class ServerRequest extends Request implements ServerRequestInterface
      */
     public function withParsedBody($data): ServerRequestInterface
     {
-        $new = clone $this;
+        $new             = clone $this;
         $new->parsedBody = $data;
 
         return $new;
@@ -184,7 +184,7 @@ class ServerRequest extends Request implements ServerRequestInterface
      */
     public function withAttribute($attribute, $value): ServerRequestInterface
     {
-        $new = clone $this;
+        $new                         = clone $this;
         $new->attributes[$attribute] = $value;
 
         return $new;
@@ -210,7 +210,7 @@ class ServerRequest extends Request implements ServerRequestInterface
      *
      * @param array $uploadedFiles
      *
-     * @throws \InvalidArgumentException if any leaf is not an UploadedFileInterface instance.
+     * @throws \InvalidArgumentException if any leaf is not an UploadedFileInterface instance
      */
     private function validateUploadedFiles(array $uploadedFiles)
     {

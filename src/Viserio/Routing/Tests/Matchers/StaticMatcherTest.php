@@ -34,7 +34,7 @@ class StaticMatcherTest extends \PHPUnit_Framework_TestCase
 
     public function testMergeParameterKeys()
     {
-        $matcher = new StaticMatcher('two', [2]);
+        $matcher  = new StaticMatcher('two', [2]);
         $matcher2 = new StaticMatcher('two', [3]);
         $matcher->mergeParameterKeys($matcher2);
 

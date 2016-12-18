@@ -10,14 +10,14 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
     public function testValidate()
     {
         $validator = new Validator();
-        $validate = $validator->validate(
+        $validate  = $validator->validate(
             [
                 'test' => 'foo',
-                'foo' => 'foo',
+                'foo'  => 'foo',
             ],
             [
                 'test' => 'alpha|noWhitespace|length:1,32',
-                'foo' => RespectValidator::alpha(),
+                'foo'  => RespectValidator::alpha(),
             ]
         );
 
@@ -27,7 +27,7 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
         self::assertEquals(
             [
                 'test' => true,
-                'foo' => true,
+                'foo'  => true,
             ],
             $validate->valid()
         );
@@ -36,7 +36,7 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
     public function testValidateWithRegex()
     {
         $validator = new Validator();
-        $validate = $validator->validate(
+        $validate  = $validator->validate(
             [
                 'test' => 'foo',
             ],
@@ -59,14 +59,14 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
     public function testNotValidate()
     {
         $validator = new Validator();
-        $validate = $validator->validate(
+        $validate  = $validator->validate(
             [
                 'test' => 'foo ',
-                'foo' => 'aa',
+                'foo'  => 'aa',
             ],
             [
                 'test' => '!alpha|noWhitespace|length:1,32',
-                'foo' => RespectValidator::not(RespectValidator::alpha()),
+                'foo'  => RespectValidator::not(RespectValidator::alpha()),
             ]
         );
 
@@ -90,10 +90,10 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
     public function testNotValidateWith2DatasAndOneRule()
     {
         $validator = new Validator();
-        $validate = $validator->validate(
+        $validate  = $validator->validate(
             [
                 'test' => 'foo ',
-                'foo' => ['aa', 'bbb'],
+                'foo'  => ['aa', 'bbb'],
             ],
             [
                 'foo' => RespectValidator::not(RespectValidator::alpha()),
@@ -116,14 +116,14 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
     public function testOptionalValidate()
     {
         $validator = new Validator();
-        $validate = $validator->validate(
+        $validate  = $validator->validate(
             [
                 'test' => ' ',
-                'foo' => '1',
+                'foo'  => '1',
             ],
             [
                 'test' => '?alpha',
-                'foo' => '?numeric',
+                'foo'  => '?numeric',
             ]
         );
 
@@ -142,7 +142,7 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
         $validator->validate(
             [
                 'test' => ' ',
-                'foo' => '1',
+                'foo'  => '1',
             ],
             [
                 'test' => '?alpha|!numeric',

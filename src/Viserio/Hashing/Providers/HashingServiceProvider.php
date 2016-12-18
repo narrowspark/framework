@@ -21,7 +21,7 @@ class HashingServiceProvider implements ServiceProvider
     {
         return [
             PasswordContract::class => [self::class, 'createPassword'],
-            Password::class => function (ContainerInterface $container) {
+            Password::class         => function (ContainerInterface $container) {
                 return $container->get(PasswordContract::class);
             },
             'password' => function (ContainerInterface $container) {

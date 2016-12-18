@@ -44,7 +44,7 @@ class QueueManager extends AbstractConnectionManager implements MonitorContract,
         ContainerInteropInterface $container,
         EncrypterContract $encrypter
     ) {
-        $this->config = $config;
+        $this->config    = $config;
         $this->container = $container;
         $this->encrypter = $encrypter;
     }
@@ -101,7 +101,7 @@ class QueueManager extends AbstractConnectionManager implements MonitorContract,
         $name = $name ?? $this->getDefaultConnection();
 
         if (! isset($this->connections[$name])) {
-            $config = $this->getConnectionConfig($name);
+            $config  = $this->getConnectionConfig($name);
             $connect = $this->createConnection($config);
 
             $connect->setContainer($this->container);
@@ -129,6 +129,7 @@ class QueueManager extends AbstractConnectionManager implements MonitorContract,
      * Create Beanstalkd connection.
      *
      * @return \Viserio\Queue\Connectors\BeanstalkdQueue
+     * @param  array                                     $config
      */
     protected function createBeanstalkdConnection(array $config): BeanstalkdQueue
     {
@@ -148,6 +149,7 @@ class QueueManager extends AbstractConnectionManager implements MonitorContract,
      * Create Null connection.
      *
      * @return \Viserio\Queue\Connectors\NullQueue
+     * @param  array                               $config
      */
     protected function createNullConnection(array $config): NullQueue
     {
@@ -158,6 +160,7 @@ class QueueManager extends AbstractConnectionManager implements MonitorContract,
      * Create Sync connection.
      *
      * @return \Viserio\Queue\Connectors\SyncQueue
+     * @param  array                               $config
      */
     protected function createSyncConnection(array $config): SyncQueue
     {
@@ -168,13 +171,14 @@ class QueueManager extends AbstractConnectionManager implements MonitorContract,
      * Create Sqs connection.
      *
      * @return \Viserio\Queue\Connectors\SqsQueue
+     * @param  array                              $config
      */
     protected function createSqsConnection(array $config): SqsQueue
     {
         $config = array_merge([
             'version' => 'latest',
-            'http' => [
-                'timeout' => 60,
+            'http'    => [
+                'timeout'         => 60,
                 'connect_timeout' => 60,
             ],
         ], $config);
@@ -194,6 +198,7 @@ class QueueManager extends AbstractConnectionManager implements MonitorContract,
      * Create Redis connection.
      *
      * @return \Viserio\Queue\Connectors\RedisQueue
+     * @param  array                                $config
      */
     protected function createRedisConnection(array $config): RedisQueue
     {
@@ -212,6 +217,7 @@ class QueueManager extends AbstractConnectionManager implements MonitorContract,
      * Create RabbitMQ connection.
      *
      * @return \Viserio\Queue\Connectors\RabbitMQQueue
+     * @param  array                                   $config
      */
     protected function createRabitmqConnection(array $config): RabbitMQQueue
     {

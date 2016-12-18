@@ -73,7 +73,7 @@ class EncryptedCookiesMiddleware implements ServerMiddlewareInterface
 
             try {
                 $cookies = $cookies->forget($name);
-                $cookie = $cookie->withValue($this->encrypter->decrypt($cookie->getValue()));
+                $cookie  = $cookie->withValue($this->encrypter->decrypt($cookie->getValue()));
 
                 $cookies = $cookies->add($cookie);
             } catch (EnvironmentIsBrokenException | WrongKeyOrModifiedCiphertextException $exception) {

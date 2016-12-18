@@ -48,7 +48,7 @@ class RackspaceConnector extends AbstractConnector
     {
         $client = new Rackspace($auth['endpoint'], [
             'username' => $auth['username'],
-            'apiKey' => $auth['apiKey'],
+            'apiKey'   => $auth['apiKey'],
         ]);
 
         $urlType = Arr::get($auth, 'internal', false) ? 'internalURL' : 'publicURL';

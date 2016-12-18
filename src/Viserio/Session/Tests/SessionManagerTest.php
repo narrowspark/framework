@@ -26,7 +26,7 @@ class SessionManagerTest extends \PHPUnit_Framework_TestCase
         parent::setUp();
 
         $encrypter = new Encrypter(Key::createNewRandomKey());
-        $config = $this->mock(RepositoryContract::class);
+        $config    = $this->mock(RepositoryContract::class);
         $config->shouldReceive('get')
             ->with('cache.drivers', []);
         $config->shouldReceive('get')
@@ -34,7 +34,7 @@ class SessionManagerTest extends \PHPUnit_Framework_TestCase
 
         $manager = new SessionManager($config, $encrypter);
         $manager->setContainer(new ArrayContainer([
-            JarContract::class => $this->mock(JarContract::class),
+            JarContract::class          => $this->mock(JarContract::class),
             CacheManagerContract::class => new CacheManager($config),
         ]));
 

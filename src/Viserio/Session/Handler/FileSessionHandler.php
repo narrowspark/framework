@@ -39,8 +39,8 @@ class FileSessionHandler implements SessionHandlerInterface
      */
     public function __construct(FilesystemContract $files, string $path, int $lifetime)
     {
-        $this->path = $path;
-        $this->files = $files;
+        $this->path     = $path;
+        $this->files    = $files;
         $this->lifetime = $lifetime;
     }
 

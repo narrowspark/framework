@@ -25,8 +25,8 @@ class JSONTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->file = new Filesystem();
-        $this->root = vfsStream::setup();
+        $this->file   = new Filesystem();
+        $this->root   = vfsStream::setup();
         $this->parser = new JSON();
     }
 
@@ -61,8 +61,8 @@ class JSONTest extends \PHPUnit_Framework_TestCase
     public function testDump()
     {
         $book = [
-            'title' => 'bar',
-            'author' => 'foo',
+            'title'   => 'bar',
+            'author'  => 'foo',
             'edition' => 6,
         ];
 

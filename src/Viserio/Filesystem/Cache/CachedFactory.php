@@ -29,10 +29,11 @@ class CachedFactory
      * Create a new cached factory instance.
      *
      * @param \Viserio\Filesystem\FilesystemManager $manager
+     * @param null|CacheManagerContract             $cacheManager
      */
     public function __construct(FilesystemManager $manager, CacheManagerContract $cacheManager = null)
     {
-        $this->manager = $manager;
+        $this->manager      = $manager;
         $this->cacheManager = $cacheManager;
     }
 

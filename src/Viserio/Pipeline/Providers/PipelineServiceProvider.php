@@ -16,7 +16,7 @@ class PipelineServiceProvider implements ServiceProvider
     {
         return [
             PipelineContract::class => [self::class, 'createPipeline'],
-            Pipeline::class => function (ContainerInterface $container) {
+            Pipeline::class         => function (ContainerInterface $container) {
                 return $container->get(PipelineContract::class);
             },
             'pipeline' => function (ContainerInterface $container) {

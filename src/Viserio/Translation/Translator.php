@@ -69,7 +69,7 @@ class Translator implements TranslatorContract
         $this->setLocale($catalogue->getLocale());
 
         $this->catalogue = $catalogue;
-        $this->selector = $selector;
+        $this->selector  = $selector;
     }
 
     /**
@@ -236,8 +236,8 @@ class Translator implements TranslatorContract
 
         if (preg_match("/^(.*?)\[(.*?)\]$/", $translation, $match)) {
             $translation = $match[1];
-            $helpers = explode('|', $match[2]);
-            $helpers = array_map(function ($helper) {
+            $helpers     = explode('|', $match[2]);
+            $helpers     = array_map(function ($helper) {
                 $name = $helper;
                 $arguments = [];
 
@@ -247,7 +247,7 @@ class Translator implements TranslatorContract
                 }
 
                 return [
-                    'name' => $name,
+                    'name'      => $name,
                     'arguments' => $arguments,
                 ];
             }, $helpers);
@@ -287,7 +287,7 @@ class Translator implements TranslatorContract
         $catalogue = $this->catalogue;
 
         if ($catalogue->defines($id, $domain)) {
-            return null;
+            return;
         }
 
         if ($catalogue->has($id, $domain)) {
@@ -330,7 +330,7 @@ class Translator implements TranslatorContract
         if ($catalogue->defines($id, $domain)) {
             $state = self::MESSAGE_DEFINED;
         } elseif ($catalogue->has($id, $domain)) {
-            $state = self::MESSAGE_EQUALS_FALLBACK;
+            $state             = self::MESSAGE_EQUALS_FALLBACK;
             $fallbackCatalogue = $catalogue->getFallbackCatalogue();
 
             while ($fallbackCatalogue) {
@@ -346,13 +346,13 @@ class Translator implements TranslatorContract
         }
 
         $this->messages[] = [
-            'locale' => $locale,
-            'domain' => $domain,
-            'id' => $id,
-            'translation' => $translation,
-            'parameters' => $parameters,
+            'locale'            => $locale,
+            'domain'            => $domain,
+            'id'                => $id,
+            'translation'       => $translation,
+            'parameters'        => $parameters,
             'transChoiceNumber' => $number,
-            'state' => $state,
+            'state'             => $state,
         ];
     }
 }

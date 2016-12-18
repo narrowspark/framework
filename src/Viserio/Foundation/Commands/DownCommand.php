@@ -42,9 +42,9 @@ class DownCommand extends Command
     protected function getDownPayload(): array
     {
         return [
-            'time' => Chronos::now()->getTimestamp(),
+            'time'    => Chronos::now()->getTimestamp(),
             'message' => $this->option('message'),
-            'retry' => $this->getRetryTime(),
+            'retry'   => $this->getRetryTime(),
         ];
     }
 

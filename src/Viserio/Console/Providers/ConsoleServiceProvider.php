@@ -22,7 +22,7 @@ class ConsoleServiceProvider implements ServiceProvider
     {
         return [
             ApplicationContract::class => [self::class, 'createCerebro'],
-            Application::class => function (ContainerInterface $container) {
+            Application::class         => function (ContainerInterface $container) {
                 return $container->get(ApplicationContract::class);
             },
             'console' => function (ContainerInterface $container) {

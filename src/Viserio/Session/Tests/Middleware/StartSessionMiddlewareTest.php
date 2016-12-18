@@ -41,7 +41,7 @@ class StartSessionMiddlewareTest extends \PHPUnit_Framework_TestCase
         $this->files->createDirectory(__DIR__ . '/stubs');
 
         $encrypter = new Encrypter(Key::createNewRandomKey());
-        $config = $this->mock(RepositoryContract::class);
+        $config    = $this->mock(RepositoryContract::class);
 
         $jar = $this->mock(JarContract::class);
         $jar->shouldReceive('queue')
@@ -50,7 +50,7 @@ class StartSessionMiddlewareTest extends \PHPUnit_Framework_TestCase
         $manager = new SessionManager($config, $encrypter);
         $manager->setContainer(new ArrayContainer([
             FilesystemContract::class => $this->files,
-            JarContract::class => $jar,
+            JarContract::class        => $jar,
         ]));
 
         $this->manager = $manager;
@@ -72,7 +72,7 @@ class StartSessionMiddlewareTest extends \PHPUnit_Framework_TestCase
     public function testAddSessionToResponse()
     {
         $manager = $this->manager;
-        $config = $manager->getConfig();
+        $config  = $manager->getConfig();
 
         $config->shouldReceive('get')
             ->once()
@@ -122,7 +122,7 @@ class StartSessionMiddlewareTest extends \PHPUnit_Framework_TestCase
             ->andReturn(false);
 
         $middleware = new StartSessionMiddleware($manager);
-        $request = (new ServerRequestFactory())->createServerRequest($_SERVER);
+        $request    = (new ServerRequestFactory())->createServerRequest($_SERVER);
 
         $response = $middleware->process($request, new DelegateMiddleware(function ($request) {
             return (new ResponseFactory())->createResponse(200);
@@ -134,7 +134,7 @@ class StartSessionMiddlewareTest extends \PHPUnit_Framework_TestCase
     public function testAddSessionToCookie()
     {
         $manager = $this->manager;
-        $config = $manager->getConfig();
+        $config  = $manager->getConfig();
 
         $config->shouldReceive('get')
             ->once()
@@ -164,7 +164,7 @@ class StartSessionMiddlewareTest extends \PHPUnit_Framework_TestCase
             ->andReturn(1440);
 
         $middleware = new StartSessionMiddleware($manager);
-        $request = (new ServerRequestFactory())->createServerRequest($_SERVER);
+        $request    = (new ServerRequestFactory())->createServerRequest($_SERVER);
 
         $response = $middleware->process($request, new DelegateMiddleware(function ($request) {
             self::assertInstanceOf(StoreContract::class, $request->getAttribute('session'));

@@ -28,7 +28,7 @@ class ArrayAdapter implements AdapterContract
      */
     public function __construct(array $array, int $itemsPerPage)
     {
-        $this->array = $array;
+        $this->array        = $array;
         $this->itemsPerPage = $itemsPerPage;
     }
 

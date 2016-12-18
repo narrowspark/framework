@@ -22,7 +22,7 @@ class SyncQueueTest extends \PHPUnit_Framework_TestCase
     {
         unset($_SERVER['__sync.test']);
 
-        $sync = new SyncQueue();
+        $sync    = new SyncQueue();
         $closure = function ($job) {
             $_SERVER['__sync.test'] = true;
 

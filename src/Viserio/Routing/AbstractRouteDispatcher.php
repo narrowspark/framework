@@ -155,7 +155,7 @@ abstract class AbstractRouteDispatcher
     protected function dispatchToRoute(ServerRequestInterface $request): ResponseInterface
     {
         $router = $this->generateRouterFile();
-        $match = $router(
+        $match  = $router(
             $request->getMethod(),
            '/' . ltrim($request->getUri()->getPath(), '/')
         );
@@ -265,7 +265,7 @@ abstract class AbstractRouteDispatcher
      */
     protected function getRouteMiddlewares(RouteContract $route): array
     {
-        $middlewares = [];
+        $middlewares      = [];
         $routeMiddlewares = $route->gatherMiddleware();
 
         Arr::map($routeMiddlewares['middlewares'], function ($name) use (&$middlewares) {

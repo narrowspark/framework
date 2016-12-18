@@ -24,14 +24,14 @@ class SesTransportTest extends \PHPUnit_Framework_TestCase
 
         $transport = new SesTransport($client);
 
-        $messageId = Str::random(32);
+        $messageId        = Str::random(32);
         $sendRawEmailMock = new SendRawEmailMock($messageId);
 
         $client->expects($this->once())
             ->method('sendRawEmail')
             ->with(
                 $this->equalTo([
-                    'Source' => 'myself@example.com',
+                    'Source'     => 'myself@example.com',
                     'RawMessage' => ['Data' => (string) $message],
                 ])
             )->willReturn($sendRawEmailMock);

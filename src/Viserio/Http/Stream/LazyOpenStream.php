@@ -27,14 +27,14 @@ class LazyOpenStream implements StreamInterface
     public function __construct(string $filename, string $mode)
     {
         $this->filename = $filename;
-        $this->mode = $mode;
+        $this->mode     = $mode;
     }
 
     /**
      * Magic method used to create a new stream if streams are not added in
      * the constructor of LazyOpenStream.
      *
-     * @param string $name Name of the property (allows "stream" only).
+     * @param string $name name of the property (allows "stream" only)
      *
      * @return \Psr\Http\Message\StreamInterface
      */

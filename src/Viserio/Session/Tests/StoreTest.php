@@ -26,7 +26,7 @@ class StoreTest extends \PHPUnit_Framework_TestCase
     {
         parent::setUp();
 
-        $reflection = new ReflectionClass(Store::class);
+        $reflection      = new ReflectionClass(Store::class);
         $this->encrypter = new Encrypter(Key::createNewRandomKey());
 
         $this->session = $reflection->newInstanceArgs(
@@ -40,14 +40,14 @@ class StoreTest extends \PHPUnit_Framework_TestCase
         $this->encryptString = $this->encrypter->encrypt(
             json_encode(
                 [
-                    'foo' => 'bar',
-                    'bagged' => ['name' => 'viserio'],
+                    'foo'          => 'bar',
+                    'bagged'       => ['name' => 'viserio'],
                     '__metadata__' => [
-                        'firstTrace' => 0,
-                        'lastTrace' => 0,
+                        'firstTrace'        => 0,
+                        'lastTrace'         => 0,
                         'regenerationTrace' => 1,
-                        'requestsCount' => 0,
-                        'fingerprint' => 0,
+                        'requestsCount'     => 0,
+                        'fingerprint'       => 0,
                     ],
                 ],
                 \JSON_PRESERVE_ZERO_FRACTION
@@ -57,18 +57,18 @@ class StoreTest extends \PHPUnit_Framework_TestCase
 
     public function testSessionIsLoadedFromHandler()
     {
-        $session = $this->session;
+        $session       = $this->session;
         $encryptString = $this->encrypter->encrypt(
             json_encode(
                 [
-                    'foo' => 'bar',
-                    'bagged' => ['name' => 'viserio'],
+                    'foo'          => 'bar',
+                    'bagged'       => ['name' => 'viserio'],
                     '__metadata__' => [
-                        'firstTrace' => 0,
-                        'lastTrace' => 0,
+                        'firstTrace'        => 0,
+                        'lastTrace'         => 0,
                         'regenerationTrace' => 0,
-                        'requestsCount' => 0,
-                        'fingerprint' => 0,
+                        'requestsCount'     => 0,
+                        'fingerprint'       => 0,
                     ],
                 ],
                 \JSON_PRESERVE_ZERO_FRACTION
@@ -117,7 +117,7 @@ class StoreTest extends \PHPUnit_Framework_TestCase
         self::assertNotEquals($oldId, $session->getId());
 
         $session = $this->session;
-        $oldId = $session->getId();
+        $oldId   = $session->getId();
         $session->getHandler()->shouldReceive('destroy')->once()->with($oldId);
 
         self::assertTrue($session->migrate(true));
@@ -180,7 +180,7 @@ class StoreTest extends \PHPUnit_Framework_TestCase
         $session = $this->encryptedSession();
         $session->open();
 
-        $lastTrace = $session->getLastTrace();
+        $lastTrace  = $session->getLastTrace();
         $firstTrace = $session->getLastTrace();
 
         $session->start();
@@ -221,7 +221,7 @@ class StoreTest extends \PHPUnit_Framework_TestCase
         $session->start();
 
         self::assertSame('', $oldFingerprint);
-        self::assertEquals(40, strlen($session->getFingerprint()));
+        self::assertEquals(40, mb_strlen($session->getFingerprint()));
         self::assertNotEquals($oldFingerprint, $session->getFingerprint());
     }
 

@@ -28,7 +28,7 @@ class ScheduleRunCommand extends Command
     public function handle()
     {
         $container = $this->getContainer();
-        $cronJobs = $container->get(Schedule::class)->dueCronJobs(
+        $cronJobs  = $container->get(Schedule::class)->dueCronJobs(
             $container->get(RepositoryContract::class)->get('app.env'),
             $container->get(RepositoryContract::class)->get('app.maintenance')
         );

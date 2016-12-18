@@ -19,18 +19,18 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $stdClass = new StdClass();
-        $stdClass->foo = 'hello';
-        $stdClass2 = new StdClass();
+        $stdClass       = new StdClass();
+        $stdClass->foo  = 'hello';
+        $stdClass2      = new StdClass();
         $stdClass2->foo = 'nope!';
 
         $container = new ArrayContainer([
             'command.greet' => function (OutputInterface $output) {
                 $output->write('hello');
             },
-            'stdClass' => $stdClass,
-            'param' => 'bob',
-            'stdClass2' => $stdClass2,
+            'stdClass'          => $stdClass,
+            'param'             => 'bob',
+            'stdClass2'         => $stdClass2,
             'command.arr.greet' => [$this, 'foo'],
         ]);
 
@@ -59,7 +59,7 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
         });
         $this->application->defaults('greet', [
             'firstname' => 'John',
-            'lastname' => 'Doe',
+            'lastname'  => 'Doe',
         ]);
 
         $definition = $this->application->get('greet')->getDefinition();

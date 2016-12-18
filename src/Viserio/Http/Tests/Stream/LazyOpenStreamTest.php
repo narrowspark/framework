@@ -63,7 +63,7 @@ class LazyOpenStreamTest extends \PHPUnit_Framework_TestCase
     {
         file_put_contents($this->fname, 'foo');
         $lazy = new LazyOpenStream($this->fname, 'r');
-        $r = $lazy->detach();
+        $r    = $lazy->detach();
 
         self::assertInternalType('resource', $r);
         fseek($r, 0);

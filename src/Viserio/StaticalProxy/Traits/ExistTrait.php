@@ -5,7 +5,7 @@ namespace Viserio\StaticalProxy\Traits;
 trait ExistTrait
 {
     /**
-     * Checks various object types for existence
+     * Checks various object types for existence.
      *
      * @param mixed $object
      * @param bool  $autoload

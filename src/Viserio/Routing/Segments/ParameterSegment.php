@@ -35,13 +35,13 @@ class ParameterSegment implements RouteSegmentContract
      */
     public function getMatcher(array &$parameterIndexNameMap): SegmentMatcherContract
     {
-        $parameterKey = empty($parameterIndexNameMap) ? 0 : max(array_keys($parameterIndexNameMap)) + 1;
+        $parameterKey         = empty($parameterIndexNameMap) ? 0 : max(array_keys($parameterIndexNameMap)) + 1;
         $parameterKeyGroupMap = [];
-        $group = 0;
+        $group                = 0;
 
         foreach ($this->names as $name) {
             $parameterIndexNameMap[$parameterKey] = $name;
-            $parameterKeyGroupMap[$parameterKey] = $group++;
+            $parameterKeyGroupMap[$parameterKey]  = $group++;
             ++$parameterKey;
         }
 

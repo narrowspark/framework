@@ -36,7 +36,9 @@ class StartSessionMiddleware implements ServerMiddlewareInterface
     }
 
     /**
-     * {@inhertidoc}
+     * {@inhertidoc}.
+     * @param ServerRequestInterface $request
+     * @param DelegateInterface      $delegate
      */
     public function process(ServerRequestInterface $request, DelegateInterface $delegate): ResponseInterface
     {
@@ -131,8 +133,8 @@ class StartSessionMiddleware implements ServerMiddlewareInterface
      */
     protected function collectGarbage(StoreContract $session)
     {
-        $config = $this->manager->getConfig();
-        $lottery = $config->get('session.lottery');
+        $config      = $this->manager->getConfig();
+        $lottery     = $config->get('session.lottery');
         $hitsLottery = random_int(1, $lottery[1]) <= $lottery[0];
 
         // Here we will see if this request hits the garbage collection lottery by hitting

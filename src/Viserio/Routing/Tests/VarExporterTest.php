@@ -34,10 +34,12 @@ class VarExporterTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider exportCases
+     * @param mixed $value
+     * @param mixed $code
      */
     public function testConvertsValueToValidPhp($value, $code)
     {
-        $exported = VarExporter::export($value);
+        $exported  = VarExporter::export($value);
         $evaluated = eval('return ' . $exported . ';');
 
         self::assertSame($code, $exported, '');
