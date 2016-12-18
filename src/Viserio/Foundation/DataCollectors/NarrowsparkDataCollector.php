@@ -15,10 +15,18 @@ class NarrowsparkDataCollector extends AbstractDataCollector implements
     MenuAwareContract
 {
     /**
+     * A server request instance.
+     *
+     * @var \Psr\Http\Message\ServerRequestInterface
+     */
+    protected $serverRequest;
+
+    /**
      * {@inheritdoc}
      */
     public function collect(ServerRequestInterface $serverRequest, ResponseInterface $response)
     {
+        $this->serverRequest = $serverRequest;
     }
 
     /**
@@ -58,7 +66,7 @@ class NarrowsparkDataCollector extends AbstractDataCollector implements
         $opcache = extension_loaded('Zend OPcache') && ini_get('opcache.enable');
 
         $tooltip = $this->createTooltipGroup([
-            'Profiler token'   => '',
+            'Profiler token'   => $this->serverRequest->getHeaderLine('X-Debug-Token'),
             'Application name' => '',
             'Environment'      => Env::get('APP_ENV', 'develop'),
             'Debug'            => [

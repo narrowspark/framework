@@ -43,6 +43,13 @@ class Profile
     private $time;
 
     /**
+     * [$time description].
+     *
+     * @var string
+     */
+    private $date;
+
+    /**
      * [$statusCode description].
      *
      * @var string
@@ -178,6 +185,26 @@ class Profile
     public function setTime(float $time): void
     {
         $this->time = $time;
+    }
+
+    /**
+     * Returns the date.
+     *
+     * @return string The date
+     */
+    public function getDate(): string
+    {
+        return $this->date;
+    }
+
+    /**
+     * [setdate description].
+     *
+     * @param string $date
+     */
+    public function setDate(string $date): void
+    {
+        $this->date = $date;
     }
 
     /**

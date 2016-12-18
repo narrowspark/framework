@@ -82,16 +82,20 @@ class WebProfiler implements WebProfilerContract
 
     /**
      * Disables the profiler.
+     *
+     * @return void
      */
-    public function disable()
+    public function disable(): void
     {
         $this->enabled = false;
     }
 
     /**
      * Enables the profiler.
+     *
+     * @return void
      */
-    public function enable()
+    public function enable(): void
     {
         $this->enabled = true;
     }
@@ -220,7 +224,7 @@ class WebProfiler implements WebProfilerContract
         ServerRequestInterface $serverRequest,
         ResponseInterface $response
     ): ResponseInterface {
-        if ($this->runningInConsole()) {
+        if ($this->runningInConsole() || ! $this->enabled) {
             return $response;
         }
 
@@ -230,17 +234,13 @@ class WebProfiler implements WebProfilerContract
             $this->collectors[$name] = $collector;
         }
 
-        if ($this->cachePool !== null) {
-            $method = $serverRequest->getMethod();
-            $token  = hash(
-                'ripemd160',
-                $serverRequest->getUri() . $method . random_bytes(32) . microtime()
-            );
+        $token = substr(hash('sha256', uniqid((string) mt_rand(), true)), 0, 6);
 
-            $profile = $this->createProfile(
+        if ($this->cachePool !== null) {
+            $this->createProfile(
                 $token,
                 (new ClientIp($serverRequest))->getIpAddress(),
-                $method,
+                $serverRequest->getMethod(),
                 (string) $serverRequest->getUri(),
                 $response->getStatusCode(),
                 microtime(true),
@@ -248,6 +248,8 @@ class WebProfiler implements WebProfilerContract
                 $this->collectors
             );
         }
+
+        $response->withHeader('X-Debug-Token', $token);
 
         return $this->injectWebProfiler($response, $token);
     }
@@ -379,7 +381,7 @@ class WebProfiler implements WebProfilerContract
      * @param string $date
      * @param array  $collectors
      *
-     * @return \Viserio\WebProfiler\Profile
+     * @return void
      */
     private function createProfile(
         string $token,
@@ -390,15 +392,20 @@ class WebProfiler implements WebProfilerContract
         float $time,
         string $date,
         array $collectors
-    ): Profile {
+    ): void {
         $profile = new Profile($token);
         $profile->setIp($ip);
         $profile->setMethod($method);
         $profile->setUrl($url);
         $profile->setTime($time);
+        $profile->setDate($date);
         $profile->setStatusCode($statusCode);
         $profile->setCollectors($collectors);
 
-        return $profile;
+        $item = $this->cachePool->getItem($token);
+        $item->set($profile);
+        $item->expiresAfter(60);
+
+        $this->cachePool->save($item);
     }
 }

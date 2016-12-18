@@ -43,6 +43,10 @@ class WebProfilerServiceProvider implements ServiceProvider
     {
         $profiler = new WebProfiler($container->get(AssetsRenderer::class));
 
+        if (self::getConfig($container, 'enable')) {
+            $profiler->enable();
+        }
+
         if ($container->has(CacheItemPoolInterface::class)) {
             $profiler->setCacheItemPool($container->get(CacheItemPoolInterface::class));
         }
