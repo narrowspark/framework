@@ -44,11 +44,26 @@ class DataCollectorTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    public function testCreateTabs($value='')
+    {
+        $collector = new FixtureDataCollector();
+
+        $this->assertSame(
+            $this->removeTabId('<div class="webprofiler-tabs row"><div class="webprofiler-tabs-tab col span_12"><input type="radio" name="tabgroup" id="tab-0-5857be8b2c3d4"><label for="tab-0-5857be8b2c3d4">test</label><div class="webprofiler-tabs-tab-content">test</div></div></div>'),
+            $this->removeTabId($collector->getTabs())
+        );
+    }
+
     private function removeSymfonyVarDumper(string $html): string
     {
         $html = preg_replace('/<script\b[^>]*>(.*?)<\/script>/', '', $html);
         $html = preg_replace('/<style\b[^>]*>(.*?)<\/style>/', '', $html);
 
         return trim(preg_replace('/id=sf-dump-(?:\d+) /', '', $html));
+    }
+
+    private function removeTabId(string $html): string
+    {
+        return trim(preg_replace('/id="tab-0-(?:\d+)"/', '', $html));
     }
 }

@@ -42,4 +42,14 @@ class FixtureDataCollector extends AbstractDataCollector
             ],
         ]);
     }
+
+    public function getTabs()
+    {
+        return $this->createTabs([
+            [
+                'name'    => 'test',
+                'content' => 'test',
+            ],
+        ]);
+    }
 }
