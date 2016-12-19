@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\WebProfiler\DataCollectors;
+namespace Viserio\WebProfiler\Tests\DataCollectors;
 
 use Viserio\WebProfiler\DataCollectors\PhpInfoCollector;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;

@@ -36,6 +36,10 @@ class LogsDataCollector extends AbstractDataCollector implements
      */
     public function collect(ServerRequestInterface $serverRequest, ResponseInterface $response)
     {
+        $this->data = [
+            'logs' => $this->getLogsFiles(),
+            'counted' => count($this->getLogsFiles()),
+        ];
     }
 
     /**
@@ -45,7 +49,7 @@ class LogsDataCollector extends AbstractDataCollector implements
     {
         return [
             'label' => 'Logs',
-            'value' => count($this->getLogsFiles()),
+            'value' => $this->data['counted'],
         ];
     }
 
@@ -57,7 +61,7 @@ class LogsDataCollector extends AbstractDataCollector implements
         $html = '';
         $logs = [];
 
-        foreach ($this->getLogsFiles() as $file) {
+        foreach ($this->data['logs'] as $file) {
             foreach ($this->storages as $storage) {
                 $name = $this->stripBasePath($storage, $file);
             }
@@ -72,6 +76,16 @@ class LogsDataCollector extends AbstractDataCollector implements
         $html .= $this->createDropdownMenuContent($logs);
 
         return $html;
+    }
+
+    /**
+     * Get counted logs.
+     *
+     * @return int
+     */
+    public function getCountedLogs(): int
+    {
+        return $this->data['counted'] ?? 0;
     }
 
     /**
