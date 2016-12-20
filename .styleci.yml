@@ -41,6 +41,7 @@ disabled:
   - unalign_equals
   - self_accessor
   - concat_without_spaces
+  - print_to_echo
 
 finder:
   exclude:
