@@ -26,7 +26,6 @@ enabled:
   - no_blank_lines_after_return
   - no_blank_lines_before_namespace
   - no_empty_comment
-  - no_unneeded_control_parentheses
   - no_unreachable_default_argument_value
   - no_unused_imports
   - no_useless_else
