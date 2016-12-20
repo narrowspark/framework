@@ -38,6 +38,7 @@ enabled:
 
 disabled:
   - blank_line_after_opening_tag
+  - unalign_equals
   - self_accessor
 
 finder:
