@@ -8,7 +8,7 @@ class HtmlResponseTest extends \PHPUnit_Framework_TestCase
 {
     public function testConstructorAcceptsHtmlString()
     {
-        $body = '<html>Uh oh not found</html>';
+        $body     = '<html>Uh oh not found</html>';
         $response = new HtmlResponse($body);
 
         self::assertSame($body, (string) $response->getBody());
@@ -17,8 +17,8 @@ class HtmlResponseTest extends \PHPUnit_Framework_TestCase
 
     public function testConstructorAllowsPassingStatus()
     {
-        $body = '<html>Uh oh not found</html>';
-        $status = 404;
+        $body     = '<html>Uh oh not found</html>';
+        $status   = 404;
         $response = new HtmlResponse($body, $status);
 
         self::assertEquals(404, $response->getStatusCode());
@@ -27,8 +27,8 @@ class HtmlResponseTest extends \PHPUnit_Framework_TestCase
 
     public function testConstructorAllowsPassingHeaders()
     {
-        $body = '<html>Uh oh not found</html>';
-        $status = 404;
+        $body    = '<html>Uh oh not found</html>';
+        $status  = 404;
         $headers = [
             'x-custom' => ['foo-bar'],
         ];
@@ -42,7 +42,7 @@ class HtmlResponseTest extends \PHPUnit_Framework_TestCase
 
     public function testAllowsStreamsForResponseBody()
     {
-        $stream = $this->getMockBuilder('Psr\Http\Message\StreamInterface')->getMock();
+        $stream   = $this->getMockBuilder('Psr\Http\Message\StreamInterface')->getMock();
         $response = new HtmlResponse($stream);
 
         self::assertSame($stream, $response->getBody());
@@ -51,21 +51,23 @@ class HtmlResponseTest extends \PHPUnit_Framework_TestCase
     public function invalidHtmlContent()
     {
         return [
-            'null' => [null],
-            'true' => [true],
-            'false' => [false],
-            'zero' => [0],
-            'int' => [1],
+            'null'       => [null],
+            'true'       => [true],
+            'false'      => [false],
+            'zero'       => [0],
+            'int'        => [1],
             'zero-float' => [0.0],
-            'float' => [1.1],
-            'array' => [['php://temp']],
-            'object' => [(object) ['php://temp']],
+            'float'      => [1.1],
+            'array'      => [['php://temp']],
+            'object'     => [(object) ['php://temp']],
         ];
     }
 
     /**
      * @dataProvider invalidHtmlContent
      * @expectedException \InvalidArgumentException
+     *
+     * @param mixed $body
      */
     public function testRaisesExceptionforNonStringNonStreamBodyContent($body)
     {
@@ -74,7 +76,7 @@ class HtmlResponseTest extends \PHPUnit_Framework_TestCase
 
     public function testConstructorRewindsBodyStream()
     {
-        $html = '<p>test data</p>';
+        $html     = '<p>test data</p>';
         $response = new HtmlResponse($html);
 
         $actual = $response->getBody()->getContents();

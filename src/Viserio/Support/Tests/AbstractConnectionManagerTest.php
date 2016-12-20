@@ -4,7 +4,7 @@ namespace Viserio\Support\Tests;
 
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use stdClass;
-use Viserio\Contracts\Config\Manager as ConfigContract;
+use Viserio\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Support\Tests\Fixture\TestConnectionManager;
 
 class AbstractConnectionManagerTest extends \PHPUnit_Framework_TestCase
@@ -17,7 +17,7 @@ class AbstractConnectionManagerTest extends \PHPUnit_Framework_TestCase
      */
     public function testConnectionToThrowRuntimeException()
     {
-        $config = $this->mock(ConfigContract::class);
+        $config = $this->mock(RepositoryContract::class);
         $config->shouldReceive('get')->once();
 
         $manager = new TestConnectionManager($config);
@@ -26,7 +26,7 @@ class AbstractConnectionManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testConnection()
     {
-        $config = $this->mock(ConfigContract::class);
+        $config = $this->mock(RepositoryContract::class);
         $config->shouldReceive('get')
             ->once()
             ->with('connection.default', '')
@@ -46,7 +46,7 @@ class AbstractConnectionManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testExtend()
     {
-        $config = $this->mock(ConfigContract::class);
+        $config = $this->mock(RepositoryContract::class);
         $config->shouldReceive('get')
             ->once()
             ->with('connection.connections', [])
@@ -64,20 +64,20 @@ class AbstractConnectionManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testGetConfig()
     {
-        $config = $this->mock(ConfigContract::class);
+        $config = $this->mock(RepositoryContract::class);
 
         $manager = new TestConnectionManager($config);
 
-        self::assertInstanceOf(ConfigContract::class, $manager->getConfig());
+        self::assertInstanceOf(RepositoryContract::class, $manager->getConfig());
 
         $manager->setConfig($config);
 
-        self::assertInstanceOf(ConfigContract::class, $manager->getConfig());
+        self::assertInstanceOf(RepositoryContract::class, $manager->getConfig());
     }
 
     public function testGetConnectionConfig()
     {
-        $config = $this->mock(ConfigContract::class);
+        $config = $this->mock(RepositoryContract::class);
         $config->shouldReceive('get')
             ->once()
             ->with('connection.connections', [])
@@ -94,7 +94,7 @@ class AbstractConnectionManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testCall()
     {
-        $config = $this->mock(ConfigContract::class);
+        $config = $this->mock(RepositoryContract::class);
         $config->shouldReceive('get')
             ->once()
             ->with('connection.default', '')
@@ -117,7 +117,7 @@ class AbstractConnectionManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testDefaultConnection()
     {
-        $config = $this->mock(ConfigContract::class);
+        $config = $this->mock(RepositoryContract::class);
         $config->shouldReceive('get')
             ->once()
             ->with('connection.default', '')
@@ -141,7 +141,7 @@ class AbstractConnectionManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testExtensionsConnection()
     {
-        $config = $this->mock(ConfigContract::class);
+        $config = $this->mock(RepositoryContract::class);
         $config->shouldReceive('get')
             ->twice()
             ->with('connection.connections', [])

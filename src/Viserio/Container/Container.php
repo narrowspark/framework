@@ -167,7 +167,7 @@ class Container extends ContainerResolver implements ArrayAccess, ContainerContr
      */
     public function alias(string $abstract, string $alias)
     {
-        $alias = $this->normalize($alias);
+        $alias    = $this->normalize($alias);
         $abstract = $this->normalize($abstract);
 
         $this->bindings[$alias] = &$this->bindings[$abstract];
@@ -250,8 +250,8 @@ class Container extends ContainerResolver implements ArrayAccess, ContainerContr
      */
     public function resolveBound(string $abstract, array $parameters = [])
     {
-        $binding = $this->bindings[$abstract];
-        $concrete = $binding[TypesContract::VALUE];
+        $binding     = $this->bindings[$abstract];
+        $concrete    = $binding[TypesContract::VALUE];
         $bindingType = $binding[TypesContract::BINDING_TYPE];
 
         if ($this->isComputed($binding)) {
@@ -286,8 +286,8 @@ class Container extends ContainerResolver implements ArrayAccess, ContainerContr
             array_unshift($parameters, $this);
         }
 
-        if (is_string($abstract) && strpos($abstract, '::')) {
-            $parts = explode('::', $abstract, 2);
+        if (is_string($abstract) && mb_strpos($abstract, '::')) {
+            $parts    = explode('::', $abstract, 2);
             $abstract = [$this->resolve($parts[0]), $parts[1]];
         }
 
@@ -309,7 +309,7 @@ class Container extends ContainerResolver implements ArrayAccess, ContainerContr
 
         if (isset($this->bindings[$this->abstract])) {
             $this->concrete = $this->bindings[$this->abstract][TypesContract::VALUE];
-        } elseif (strpos($this->abstract, '::')) {
+        } elseif (mb_strpos($this->abstract, '::')) {
             $this->concrete = explode('::', $this->abstract, 2);
         } else {
             $this->concrete = $this->abstract;
@@ -326,7 +326,7 @@ class Container extends ContainerResolver implements ArrayAccess, ContainerContr
         $this->parameter = $this->normalize($abstract);
 
         if ($this->parameter[0] === '$') {
-            $this->parameter = substr($this->parameter, 1);
+            $this->parameter = mb_substr($this->parameter, 1);
         }
 
         return $this;
@@ -549,8 +549,8 @@ class Container extends ContainerResolver implements ArrayAccess, ContainerContr
     protected function bindPlain(string $abstract, $concrete)
     {
         $this->bindings[$abstract] = [
-            TypesContract::VALUE => $concrete,
-            TypesContract::IS_RESOLVED => false,
+            TypesContract::VALUE        => $concrete,
+            TypesContract::IS_RESOLVED  => false,
             TypesContract::BINDING_TYPE => TypesContract::PLAIN,
         ];
     }
@@ -564,8 +564,8 @@ class Container extends ContainerResolver implements ArrayAccess, ContainerContr
     protected function bindService(string $abstract, $concrete)
     {
         $this->bindings[$abstract] = [
-            TypesContract::VALUE => $concrete,
-            TypesContract::IS_RESOLVED => false,
+            TypesContract::VALUE        => $concrete,
+            TypesContract::IS_RESOLVED  => false,
             TypesContract::BINDING_TYPE => TypesContract::SERVICE,
         ];
     }
@@ -579,8 +579,8 @@ class Container extends ContainerResolver implements ArrayAccess, ContainerContr
     protected function bindSingleton(string $abstract, $concrete)
     {
         $this->bindings[$abstract] = [
-            TypesContract::VALUE => $concrete,
-            TypesContract::IS_RESOLVED => false,
+            TypesContract::VALUE        => $concrete,
+            TypesContract::IS_RESOLVED  => false,
             TypesContract::BINDING_TYPE => TypesContract::SINGLETON,
         ];
     }
@@ -594,7 +594,7 @@ class Container extends ContainerResolver implements ArrayAccess, ContainerContr
      */
     protected function resolvePlain(string $abstract)
     {
-        $binding = &$this->bindings[$abstract];
+        $binding                             = &$this->bindings[$abstract];
         $binding[TypesContract::IS_RESOLVED] = true;
 
         return $binding[TypesContract::VALUE];
@@ -610,7 +610,7 @@ class Container extends ContainerResolver implements ArrayAccess, ContainerContr
      */
     protected function resolveService(string $abstract, array $parameters = [])
     {
-        $binding = &$this->bindings[$abstract];
+        $binding                             = &$this->bindings[$abstract];
         $binding[TypesContract::IS_RESOLVED] = true;
 
         return parent::resolve($binding[TypesContract::VALUE], $parameters);
@@ -628,7 +628,7 @@ class Container extends ContainerResolver implements ArrayAccess, ContainerContr
     {
         $binding = &$this->bindings[$abstract];
 
-        $binding[TypesContract::VALUE] = parent::resolve($binding[TypesContract::VALUE], $parameters);
+        $binding[TypesContract::VALUE]       = parent::resolve($binding[TypesContract::VALUE], $parameters);
         $binding[TypesContract::IS_RESOLVED] = true;
 
         return $binding[TypesContract::VALUE];
@@ -659,7 +659,7 @@ class Container extends ContainerResolver implements ArrayAccess, ContainerContr
     }
 
     /**
-     * Extend a resolved subject
+     * Extend a resolved subject.
      *
      * @param string $abstract
      * @param mixed  &$resolved
@@ -695,7 +695,7 @@ class Container extends ContainerResolver implements ArrayAccess, ContainerContr
     }
 
     /**
-     * Call the given closure
+     * Call the given closure.
      *
      * @param mixed    $concrete
      * @param \Closure $closure

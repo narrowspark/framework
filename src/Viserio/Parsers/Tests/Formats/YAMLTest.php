@@ -6,7 +6,7 @@ use org\bovigo\vfs\vfsStream;
 use Viserio\Filesystem\Filesystem;
 use Viserio\Parsers\Formats\YAML;
 
-class YAMlTest extends \PHPUnit_Framework_TestCase
+class YAMLTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var \org\bovigo\vfs\vfsStreamDirectory
@@ -25,9 +25,9 @@ class YAMlTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->file = new Filesystem();
+        $this->file   = new Filesystem();
         $this->parser = new YAML();
-        $this->root = vfsStream::setup();
+        $this->root   = vfsStream::setup();
     }
 
     public function testParse()

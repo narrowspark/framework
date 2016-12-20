@@ -9,7 +9,6 @@ class NullQueue extends AbstractQueue
      */
     public function push($job, $data = '', string $queue = null)
     {
-        //
     }
 
     /**
@@ -17,7 +16,6 @@ class NullQueue extends AbstractQueue
      */
     public function pushRaw(string $payload, string $queue = null, array $options = [])
     {
-        //
     }
 
     /**
@@ -25,7 +23,6 @@ class NullQueue extends AbstractQueue
      */
     public function later($delay, $job, $data = '', string $queue = null)
     {
-        //
     }
 
     /**
@@ -33,6 +30,5 @@ class NullQueue extends AbstractQueue
      */
     public function pop(string $queue = null)
     {
-        //
     }
 }

@@ -10,7 +10,7 @@ class WhoopsDisplayerTest extends \PHPUnit_Framework_TestCase
     public function testServerError()
     {
         $displayer = new WhoopsDisplayer();
-        $response = $displayer->display(new Exception(), 'foo', 503, []);
+        $response  = $displayer->display(new Exception(), 'foo', 503, []);
 
         self::assertInternalType('string', (string) $response->getBody());
         self::assertSame(503, $response->getStatusCode());
@@ -20,7 +20,7 @@ class WhoopsDisplayerTest extends \PHPUnit_Framework_TestCase
     public function testClientError()
     {
         $displayer = new WhoopsDisplayer();
-        $response = $displayer->display(new Exception(), 'bar', 403, []);
+        $response  = $displayer->display(new Exception(), 'bar', 403, []);
 
         self::assertInternalType('string', (string) $response->getBody());
         self::assertSame(403, $response->getStatusCode());

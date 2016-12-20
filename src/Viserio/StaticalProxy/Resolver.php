@@ -36,14 +36,14 @@ class Resolver
      */
     public function __construct(string $pattern, $translation)
     {
-        $regex = preg_quote($pattern, '#');
-        $this->regex = '#^' . str_replace('\\*', '(.*)', $regex) . '$#uD';
-        $this->pattern = $pattern;
+        $regex             = preg_quote($pattern, '#');
+        $this->regex       = '#^' . str_replace('\\*', '(.*)', $regex) . '$#uD';
+        $this->pattern     = $pattern;
         $this->translation = $translation;
     }
 
     /**
-     * Resolves an alias
+     * Resolves an alias.
      *
      * @param string $alias
      *
@@ -59,7 +59,7 @@ class Resolver
         // Get the translation
         $translation = $this->translation;
 
-        if (strpos($translation, '$') === false) {
+        if (mb_strpos($translation, '$') === false) {
             $class = $translation;
         } else {
             // Make sure namespace seperators are escaped
@@ -77,7 +77,7 @@ class Resolver
     }
 
     /**
-     * Checks whether the resolver matches a given pattern and optional translation
+     * Checks whether the resolver matches a given pattern and optional translation.
      *
      * @param string      $pattern
      * @param string|null $translation

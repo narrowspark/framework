@@ -83,16 +83,16 @@ class ResponseCookies extends AbstractCookieCollector
 
         foreach ($rawAttributes as $value) {
             $rawAttributePair = explode('=', $value, 2);
-            $attributeKey = $rawAttributePair[0];
-            $attributeValue = count($rawAttributePair) > 1 ? $rawAttributePair[1] : null;
-            $attributeKey = strtolower($attributeKey);
+            $attributeKey     = $rawAttributePair[0];
+            $attributeValue   = count($rawAttributePair) > 1 ? $rawAttributePair[1] : null;
+            $attributeKey     = mb_strtolower($attributeKey);
 
             switch ($attributeKey) {
                 case 'expires':
                     $cookie = $cookie->withExpires(new Chronos($attributeValue));
                     break;
                 case 'max-age':
-                    $age = is_numeric($attributeValue) ? (int) $attributeValue : null;
+                    $age    = is_numeric($attributeValue) ? (int) $attributeValue : null;
                     $cookie = $cookie->withMaxAge($age);
                     break;
                 case 'domain':

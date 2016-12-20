@@ -19,7 +19,7 @@ class Uri implements UriInterface
      * we apply this default host when no host is given yet to form a
      * valid URI.
      */
-    const HTTP_DEFAULT_HOST = 'localhost';
+    public const HTTP_DEFAULT_HOST = 'localhost';
 
     /**
      * Uri scheme (without "://" suffix).
@@ -99,7 +99,7 @@ class Uri implements UriInterface
     protected $fragment = '';
 
     /**
-     * generated uri string cache
+     * generated uri string cache.
      *
      * @var string|null
      */
@@ -121,11 +121,11 @@ class Uri implements UriInterface
     {
         $this->filterClass = [
             'fragment' => new Fragment(),
-            'host' => new Host(),
-            'path' => new Path(),
-            'port' => new Port(),
-            'scheme' => new Scheme(),
-            'query' => new Query(),
+            'host'     => new Host(),
+            'path'     => new Path(),
+            'port'     => new Port(),
+            'scheme'   => new Scheme(),
+            'query'    => new Query(),
         ];
 
         if ($url !== '') {
@@ -167,7 +167,7 @@ class Uri implements UriInterface
     /**
      * {@inheritdoc}
      */
-    public function withScheme($scheme)
+    public function withScheme($scheme): UriInterface
     {
         $this->isValidString($scheme);
 
@@ -177,9 +177,9 @@ class Uri implements UriInterface
             return $this;
         }
 
-        $new = clone $this;
+        $new         = clone $this;
         $new->scheme = $scheme;
-        $new->port = $this->filterClass['port']->filter($new->scheme, $new->port);
+        $new->port   = $this->filterClass['port']->filter($new->scheme, $new->port);
         $new->validateState();
 
         return $new;
@@ -188,7 +188,7 @@ class Uri implements UriInterface
     /**
      * {@inheritdoc}
      */
-    public function withUserInfo($user, $password = null)
+    public function withUserInfo($user, $password = null): UriInterface
     {
         $this->isValidString($user);
 
@@ -204,7 +204,7 @@ class Uri implements UriInterface
             return $this;
         }
 
-        $new = clone $this;
+        $new           = clone $this;
         $new->userInfo = $info;
         $new->validateState();
 
@@ -214,7 +214,7 @@ class Uri implements UriInterface
     /**
      * {@inheritdoc}
      */
-    public function withHost($host)
+    public function withHost($host): UriInterface
     {
         $this->isValidString($host);
 
@@ -224,7 +224,7 @@ class Uri implements UriInterface
             return $this;
         }
 
-        $new = clone $this;
+        $new       = clone $this;
         $new->host = $host;
         $new->validateState();
 
@@ -234,7 +234,7 @@ class Uri implements UriInterface
     /**
      * {@inheritdoc}
      */
-    public function withPort($port)
+    public function withPort($port): UriInterface
     {
         $port = $this->filterClass['port']->filter($this->scheme, $port);
 
@@ -242,7 +242,7 @@ class Uri implements UriInterface
             return $this;
         }
 
-        $new = clone $this;
+        $new       = clone $this;
         $new->port = $port;
         $new->validateState();
 
@@ -252,7 +252,7 @@ class Uri implements UriInterface
     /**
      * {@inheritdoc}
      */
-    public function withPath($path)
+    public function withPath($path): UriInterface
     {
         $this->isValidString($path);
 
@@ -262,7 +262,7 @@ class Uri implements UriInterface
             return $this;
         }
 
-        $new = clone $this;
+        $new       = clone $this;
         $new->path = $path;
         $new->validateState();
 
@@ -272,7 +272,7 @@ class Uri implements UriInterface
     /**
      * {@inheritdoc}
      */
-    public function withQuery($query)
+    public function withQuery($query): UriInterface
     {
         $this->isValidString($query);
 
@@ -282,9 +282,9 @@ class Uri implements UriInterface
 
         $filter = $this->filterClass['query'];
 
-        $new = clone $this;
+        $new            = clone $this;
         $new->queryVars = $filter->parse($query);
-        $new->query = $filter->build($new->queryVars);
+        $new->query     = $filter->build($new->queryVars);
 
         return $new;
     }
@@ -292,7 +292,7 @@ class Uri implements UriInterface
     /**
      * {@inheritdoc}
      */
-    public function withFragment($fragment)
+    public function withFragment($fragment): UriInterface
     {
         $this->isValidString($fragment);
 
@@ -302,7 +302,7 @@ class Uri implements UriInterface
             return $this;
         }
 
-        $new = clone $this;
+        $new           = clone $this;
         $new->fragment = $fragment;
 
         return $new;
@@ -311,7 +311,7 @@ class Uri implements UriInterface
     /**
      * {@inheritdoc}
      */
-    public function getScheme()
+    public function getScheme(): string
     {
         return $this->scheme;
     }
@@ -319,7 +319,7 @@ class Uri implements UriInterface
     /**
      * {@inheritdoc}
      */
-    public function getAuthority()
+    public function getAuthority(): string
     {
         $authority = $this->host;
 
@@ -337,7 +337,7 @@ class Uri implements UriInterface
     /**
      * {@inheritdoc}
      */
-    public function getUserInfo()
+    public function getUserInfo(): string
     {
         return $this->userInfo;
     }
@@ -345,7 +345,7 @@ class Uri implements UriInterface
     /**
      * {@inheritdoc}
      */
-    public function getHost()
+    public function getHost(): string
     {
         return $this->host;
     }
@@ -353,7 +353,7 @@ class Uri implements UriInterface
     /**
      * {@inheritdoc}
      */
-    public function getPort()
+    public function getPort(): ?int
     {
         return $this->port;
     }
@@ -361,7 +361,7 @@ class Uri implements UriInterface
     /**
      * {@inheritdoc}
      */
-    public function getPath()
+    public function getPath(): string
     {
         return $this->path;
     }
@@ -369,7 +369,7 @@ class Uri implements UriInterface
     /**
      * {@inheritdoc}
      */
-    public function getQuery()
+    public function getQuery(): string
     {
         // If the query is empty build it first
         if (is_null($this->query)) {
@@ -382,33 +382,33 @@ class Uri implements UriInterface
     /**
      * {@inheritdoc}
      */
-    public function getFragment()
+    public function getFragment(): string
     {
         return $this->fragment;
     }
 
     /**
-     * Create a new instance from a hash of parse_url parts
+     * Create a new instance from a hash of parse_url parts.
      *
      * @param array $components a hash representation of the URI similar to PHP parse_url function result
      */
-    private function createFromComponents(array $components)
+    private function createFromComponents(array $components): void
     {
         $queryFilter = $this->filterClass['query'];
 
         // Parse the query
         if (isset($components['query'])) {
             $this->queryVars = $queryFilter->parse($components['query']);
-            $this->query = $queryFilter->build($this->queryVars);
+            $this->query     = $queryFilter->build($this->queryVars);
         } else {
             $this->query = '';
         }
 
-        $this->scheme = isset($components['scheme']) ? $this->filterClass['scheme']->filter($components['scheme']) : '';
+        $this->scheme   = isset($components['scheme']) ? $this->filterClass['scheme']->filter($components['scheme']) : '';
         $this->userInfo = $components['user'] ?? '';
-        $this->host = isset($components['host']) ? $this->filterClass['host']->filter($components['host']) : '';
-        $this->port = isset($components['port']) ? $this->filterClass['port']->filter($this->scheme, $components['port']) : null;
-        $this->path = isset($components['path']) ? $this->filterClass['path']->filter($components['path']) : '';
+        $this->host     = isset($components['host']) ? $this->filterClass['host']->filter($components['host']) : '';
+        $this->port     = isset($components['port']) ? $this->filterClass['port']->filter($this->scheme, $components['port']) : null;
+        $this->path     = isset($components['path']) ? $this->filterClass['path']->filter($components['path']) : '';
 
         $this->fragment = isset($components['fragment']) ? $this->filterClass['fragment']->filter($components['fragment']) : '';
 
@@ -418,7 +418,7 @@ class Uri implements UriInterface
     }
 
     /**
-     * Create a URI string from its various parts
+     * Create a URI string from its various parts.
      *
      * @param string $scheme
      * @param string $authority
@@ -459,9 +459,11 @@ class Uri implements UriInterface
     }
 
     /**
+     * Validate if is string.
+     *
      * @param string|null $string
      */
-    private function isValidString($string)
+    private function isValidString($string): void
     {
         if (! is_string($string)) {
             throw new InvalidArgumentException(sprintf(
@@ -473,22 +475,24 @@ class Uri implements UriInterface
     }
 
     /**
+     * Validate uri state.
+     *
      * @throws InvalidArgumentException
      */
-    private function validateState()
+    private function validateState(): void
     {
         if ($this->host === '' && ($this->scheme === 'http' || $this->scheme === 'https')) {
             $this->host = self::HTTP_DEFAULT_HOST;
         }
 
         if ($this->getAuthority() === '') {
-            if (strpos($this->path, '//') === 0) {
+            if (mb_strpos($this->path, '//') === 0) {
                 throw new InvalidArgumentException(
                     'The path of a URI without an authority must not start with two slashes "//"'
                 );
             }
 
-            if ($this->scheme === '' && strpos(explode('/', $this->path, 2)[0], ':') !== false) {
+            if ($this->scheme === '' && mb_strpos(explode('/', $this->path, 2)[0], ':') !== false) {
                 throw new InvalidArgumentException(
                     'A relative URI must not have a path beginning with a segment containing a colon'
                 );

@@ -7,42 +7,42 @@ use InvalidArgumentException;
 trait HostValidateTrait
 {
     /**
-     * Tells whether we have a IDN or not
+     * Tells whether we have a IDN or not.
      *
      * @var bool
      */
     protected $isIdn = false;
 
     /**
-     * Is the Host an IPv4
+     * Is the Host an IPv4.
      *
      * @var bool
      */
     protected $hostAsIpv4 = false;
 
     /**
-     * Is the Host an IPv6
+     * Is the Host an IPv6.
      *
      * @var bool
      */
     protected $hostAsIpv6 = false;
 
     /**
-     * Tell whether the IP has a zone Identifier
+     * Tell whether the IP has a zone Identifier.
      *
      * @var bool
      */
     protected $hasZoneIdentifier = false;
 
     /**
-     * IPv6 Local Link binary-like prefix
+     * IPv6 Local Link binary-like prefix.
      *
      * @var string
      */
     protected static $localLinkPrefix = '1111111010';
 
     /**
-     * validate the host component
+     * validate the host component.
      *
      * @param string $host
      *
@@ -58,7 +58,7 @@ trait HostValidateTrait
     }
 
     /**
-     * Validate a string only host
+     * Validate a string only host.
      *
      * @param string $str
      *
@@ -107,7 +107,7 @@ trait HostValidateTrait
     }
 
     /**
-     * Convert to lowercase a string without modifying unicode characters
+     * Convert to lowercase a string without modifying unicode characters.
      *
      * @param string $str
      *
@@ -116,12 +116,12 @@ trait HostValidateTrait
     protected function lower(string $str): string
     {
         return preg_replace_callback('/[A-Z]+/', function ($matches) {
-            return strtolower($matches[0]);
+            return mb_strtolower($matches[0]);
         }, $str);
     }
 
     /**
-     * Validate a String Label
+     * Validate a String Label.
      *
      * @param array $labels found host labels
      *
@@ -142,7 +142,7 @@ trait HostValidateTrait
     }
 
     /**
-     * Validated the Host Label Pattern
+     * Validated the Host Label Pattern.
      *
      * @param array $data host labels
      *
@@ -156,7 +156,7 @@ trait HostValidateTrait
     }
 
     /**
-     * Validate a Host as an IP
+     * Validate a Host as an IP.
      *
      * @param string $str
      *
@@ -184,7 +184,7 @@ trait HostValidateTrait
     }
 
     /**
-     * validate and filter a Ipv6 Hostname
+     * validate and filter a Ipv6 Hostname.
      *
      * @param string $str
      *
@@ -194,11 +194,11 @@ trait HostValidateTrait
     {
         preg_match(',^(?P<ldelim>[\[]?)(?P<ipv6>.*?)(?P<rdelim>[\]]?)$,', $str, $matches);
 
-        if (! in_array(strlen($matches['ldelim'] . $matches['rdelim']), [0, 2])) {
+        if (! in_array(mb_strlen($matches['ldelim'] . $matches['rdelim']), [0, 2])) {
             return false;
         }
 
-        if (! strpos($str, '%')) {
+        if (! mb_strpos($str, '%')) {
             return filter_var($matches['ipv6'], FILTER_VALIDATE_IP, FILTER_FLAG_IPV6);
         }
 
@@ -206,7 +206,7 @@ trait HostValidateTrait
     }
 
     /**
-     * Scope Ip validation according to RFC6874 rules
+     * Scope Ip validation according to RFC6874 rules.
      *
      * @see http://tools.ietf.org/html/rfc6874#section-2
      * @see http://tools.ietf.org/html/rfc6874#section-4
@@ -217,13 +217,13 @@ trait HostValidateTrait
      */
     protected function validateScopedIpv6(string $ip)
     {
-        $pos = strpos($ip, '%');
+        $pos = mb_strpos($ip, '%');
 
-        if (preg_match(',[^\x20-\x7f]|[?#@\[\]],', rawurldecode(substr($ip, $pos)))) {
+        if (preg_match(',[^\x20-\x7f]|[?#@\[\]],', rawurldecode(mb_substr($ip, $pos)))) {
             return false;
         }
 
-        $ipv6 = substr($ip, 0, $pos);
+        $ipv6 = mb_substr($ip, 0, $pos);
 
         if (! $this->isLocalLink($ipv6)) {
             return false;
@@ -231,17 +231,17 @@ trait HostValidateTrait
 
         $this->hasZoneIdentifier = true;
 
-        return strtolower(rawurldecode($ip));
+        return mb_strtolower(rawurldecode($ip));
     }
 
     /**
-     * Tell whether the submitted string is a local link IPv6
+     * Tell whether the submitted string is a local link IPv6.
      *
      * @param string $ipv6
      *
      * @return bool
      */
-    protected function isLocalLink($ipv6): bool
+    protected function isLocalLink(string $ipv6): bool
     {
         if (! filter_var($ipv6, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6)) {
             return false;
@@ -253,11 +253,11 @@ trait HostValidateTrait
 
         $res = array_reduce(str_split(unpack('A16', inet_pton($ipv6))[1]), $convert, '');
 
-        return substr($res, 0, 10) === self::$localLinkPrefix;
+        return mb_substr($res, 0, 10) === self::$localLinkPrefix;
     }
 
     /**
-     * Format an IP for string representation of the Host
+     * Format an IP for string representation of the Host.
      *
      * @param string $ipAddress IP address
      *

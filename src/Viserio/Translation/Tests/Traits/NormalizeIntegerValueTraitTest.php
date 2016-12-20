@@ -10,6 +10,9 @@ class NormalizeIntegerValueTraitTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider provideIsInteger
+     *
+     * @param mixed $value
+     * @param mixed $expected
      */
     public function testNormalizeInteger($value, $expected)
     {

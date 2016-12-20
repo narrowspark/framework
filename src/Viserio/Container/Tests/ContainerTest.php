@@ -44,7 +44,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
         $this->services = ['test.service_1' => null, 'test.service_2' => null, 'test.service_3' => null];
 
         foreach (array_keys($this->services) as $id) {
-            $service = new StdClass();
+            $service     = new StdClass();
             $service->id = $id;
 
             $this->services[$id] = $service;
@@ -80,7 +80,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
     public function testSharedClosureResolution()
     {
         $container = $this->container;
-        $class = new StdClass();
+        $class     = new StdClass();
 
         $container->singleton('class', function () use ($class) {
             return $class;
@@ -136,9 +136,9 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
     public function testParametersCanOverrideDependencies()
     {
         $container = new Container();
-        $mock = $this->mock(ContainerContractFixtureInterface::class);
-        $stub = new ContainerDependentFixture($mock);
-        $resolved = $container->make(ContainerNestedDependentFixture::class, [$stub]);
+        $mock      = $this->mock(ContainerContractFixtureInterface::class);
+        $stub      = new ContainerDependentFixture($mock);
+        $resolved  = $container->make(ContainerNestedDependentFixture::class, [$stub]);
 
         self::assertInstanceOf(ContainerNestedDependentFixture::class, $resolved);
         self::assertEquals($mock, $resolved->inner->impl);
@@ -188,7 +188,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
 
     public function testArrayAccess()
     {
-        $container = $this->container;
+        $container              = $this->container;
         $container['something'] = function () {
             return 'foo';
         };
@@ -201,14 +201,14 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
         self::assertFalse(isset($container['something']));
 
         $container['foo'] = 'foo';
-        $result = $container->make('foo');
+        $result           = $container->make('foo');
 
         self::assertSame($result, $container->make('foo'));
     }
 
     public function testAliases()
     {
-        $container = new Container();
+        $container        = new Container();
         $container['foo'] = 'bar';
         $container->alias('foo', 'baz');
         $container->alias('baz', 'bat');
@@ -232,9 +232,9 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
 
     public function testBindingsCanBeOverridden()
     {
-        $container = $this->container;
+        $container        = $this->container;
         $container['foo'] = 'bar';
-        $foo = $container['foo'];
+        $foo              = $container['foo'];
         $container['foo'] = 'baz';
 
         self::assertEquals('baz', $container['foo']);
@@ -242,7 +242,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
 
     public function testExtendedBindings()
     {
-        $container = $this->container;
+        $container        = $this->container;
         $container['foo'] = 'foo';
         $container->extend('foo', function ($old, $container) {
             return $old . 'bar';
@@ -250,7 +250,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
 
         self::assertEquals('foobar', $container->make('foo'));
 
-        $container = $this->container;
+        $container        = $this->container;
         $container['foo'] = function () {
             return (object) ['name' => 'narrowspark'];
         };
@@ -269,7 +269,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
 
     public function testMultipleExtends()
     {
-        $container = $this->container;
+        $container        = $this->container;
         $container['foo'] = 'foo';
 
         $container->extend('foo', function ($old, $container) {
@@ -293,7 +293,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
             return $obj;
         });
 
-        $obj = new StdClass();
+        $obj      = new StdClass();
         $obj->foo = 'foo';
 
         $container->instance('foo', $obj);
@@ -337,7 +337,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
     public function testResolutionOfDefaultParameters()
     {
         $container = new Container();
-        $instance = $container->make(ContainerDefaultValueFixture::class);
+        $instance  = $container->make(ContainerDefaultValueFixture::class);
 
         self::assertInstanceOf(ContainerConcreteFixture::class, $instance->stub);
         self::assertEquals('narrowspark', $instance->default);

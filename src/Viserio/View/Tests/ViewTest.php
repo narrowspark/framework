@@ -176,7 +176,7 @@ class ViewTest extends \PHPUnit_Framework_TestCase
             $this->mock(Engine::class),
             'view',
             ['path' => 'path', 'name' => 'name'],
-            ['foo' => 'bar']
+            ['foo'  => 'bar']
         );
     }
 }

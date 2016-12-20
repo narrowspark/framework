@@ -38,7 +38,7 @@ class CookieSessionHandler implements SessionHandlerInterface
      */
     public function __construct(JarContract $cookie, int $lifetime)
     {
-        $this->cookie = $cookie;
+        $this->cookie   = $cookie;
         $this->lifetime = $lifetime;
     }
 
@@ -87,7 +87,7 @@ class CookieSessionHandler implements SessionHandlerInterface
             $sessionId,
             json_encode(
                 [
-                    'data' => $data,
+                    'data'    => $data,
                     'expires' => Chronos::now()->addMinutes($this->lifetime)->getTimestamp(),
                 ],
                 \JSON_PRESERVE_ZERO_FRACTION

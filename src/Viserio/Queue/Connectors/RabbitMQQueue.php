@@ -67,11 +67,11 @@ class RabbitMQQueue extends AbstractQueue
      */
     public function __construct(AMQPStreamConnection $amqpConnection, $config)
     {
-        $this->connection = $amqpConnection;
-        $this->default = $config['queue'];
-        $this->configQueue = $config['queue_params'];
-        $this->configExchange = $config['exchange_params'];
-        $this->declareExchange = $config['exchange_declare'];
+        $this->connection       = $amqpConnection;
+        $this->default          = $config['queue'];
+        $this->configQueue      = $config['queue_params'];
+        $this->configExchange   = $config['exchange_params'];
+        $this->declareExchange  = $config['exchange_declare'];
         $this->declareBindQueue = $config['queue_declare_bind'];
 
         $this->channel = $this->connection->channel();
@@ -101,7 +101,7 @@ class RabbitMQQueue extends AbstractQueue
         }
 
         $headers = [
-            'Content-Type' => 'application/json',
+            'Content-Type'  => 'application/json',
             'delivery_mode' => 2,
         ];
 
@@ -148,7 +148,7 @@ class RabbitMQQueue extends AbstractQueue
     }
 
     /**
-     * Sets the attempts member variable to be used in message generation
+     * Sets the attempts member variable to be used in message generation.
      *
      * @param int $count
      */
@@ -204,12 +204,12 @@ class RabbitMQQueue extends AbstractQueue
      */
     protected function declareDelayedQueue(string $destination, $delay): array
     {
-        $delay = $this->getSeconds($delay);
+        $delay       = $this->getSeconds($delay);
         $destination = $this->getQueue($destination);
-        $name = $this->getQueue($destination) . '_deferred_' . $delay;
+        $name        = $this->getQueue($destination) . '_deferred_' . $delay;
 
         $destinationExchange = $this->configExchange['name'] ?: $destination;
-        $exchange = $this->configExchange['name'] ?: $destination;
+        $exchange            = $this->configExchange['name'] ?: $destination;
 
         // declare exchange
         $this->channel->exchange_declare(
@@ -229,9 +229,9 @@ class RabbitMQQueue extends AbstractQueue
             $this->configQueue['auto_delete'],
             false,
             new AMQPTable([
-                'x-dead-letter-exchange' => $destinationExchange,
+                'x-dead-letter-exchange'    => $destinationExchange,
                 'x-dead-letter-routing-key' => $destination,
-                'x-message-ttl' => $delay * 1000,
+                'x-message-ttl'             => $delay * 1000,
             ])
         );
 

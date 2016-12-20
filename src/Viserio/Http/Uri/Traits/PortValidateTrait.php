@@ -12,35 +12,35 @@ trait PortValidateTrait
      * @var array
      */
     protected $allowedSchemes = [
-        'http' => 80,
-        'https' => 443,
-        'ftp' => 21,
-        'sftp' => 22,
+        'http'   => 80,
+        'https'  => 443,
+        'ftp'    => 21,
+        'sftp'   => 22,
         'gopher' => 70,
-        'nntp' => 119,
-        'news' => 119,
+        'nntp'   => 119,
+        'news'   => 119,
         'telnet' => 23,
         'tn3270' => 23,
-        'imap' => 143,
-        'pop' => 110,
-        'ldap' => 389,
+        'imap'   => 143,
+        'pop'    => 110,
+        'ldap'   => 389,
     ];
 
     /**
      * Is a given port non-standard for the current scheme?
      *
-     * @param string $scheme
-     * @param int    $port
+     * @param string   $scheme
+     * @param int|null $port
      *
      * @return bool
      */
-    protected function isNonStandardPort($scheme, $port): bool
+    protected function isNonStandardPort(string $scheme, ?int $port): bool
     {
         return ! isset($this->allowedSchemes[$scheme]) || $this->allowedSchemes[$scheme] !== $port;
     }
 
     /**
-     * Validate a Port number
+     * Validate a Port number.
      *
      * @param mixed $port the port numberhast
      *
@@ -48,14 +48,14 @@ trait PortValidateTrait
      *
      * @return null|int
      */
-    protected function validatePort($port)
+    protected function validatePort($port): ?int
     {
         if (is_bool($port)) {
             throw new InvalidArgumentException('The submitted port is invalid');
         }
 
         if ($port === null || $port === '') {
-            return;
+            return null;
         }
 
         $res = filter_var($port, FILTER_VALIDATE_INT, ['options' => [

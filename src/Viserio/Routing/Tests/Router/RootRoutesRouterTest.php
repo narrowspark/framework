@@ -32,6 +32,9 @@ class RootRoutesRouterTest extends RouteRouterBaseTest
     /**
      * @dataProvider routerMatching404Provider
      * @expectedException \Narrowspark\HttpStatus\Exception\NotFoundException
+     *
+     * @param mixed $httpMethod
+     * @param mixed $uri
      */
     public function testRouter404($httpMethod, $uri)
     {
@@ -128,13 +131,13 @@ class RootRoutesRouterTest extends RouteRouterBaseTest
             ->andReturn(new FooMiddleware());
 
         $router->get('/middleware3', [
-            'uses' => RouteTestClosureMiddlewareController::class . '::index',
+            'uses'        => RouteTestClosureMiddlewareController::class . '@index',
             'middlewares' => FooMiddleware::class,
         ])->setParameter('name', 'middleware3');
 
         $router->get('/middleware4', [
-            'uses' => RouteTestClosureMiddlewareController::class . '::index',
-            'middlewares' => FooMiddleware::class,
+            'uses'                => RouteTestClosureMiddlewareController::class . '@index',
+            'middlewares'         => FooMiddleware::class,
             'without_middlewares' => FooMiddleware::class,
         ])->setParameter('name', 'middleware4');
 

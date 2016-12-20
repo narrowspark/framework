@@ -50,10 +50,10 @@ abstract class Command extends BaseCommand implements CompletionAwareInterface
      * @var array
      */
     protected $verbosityMap = [
-        'v' => OutputInterface::VERBOSITY_VERBOSE,
-        'vv' => OutputInterface::VERBOSITY_VERY_VERBOSE,
-        'vvv' => OutputInterface::VERBOSITY_DEBUG,
-        'quiet' => OutputInterface::VERBOSITY_QUIET,
+        'v'      => OutputInterface::VERBOSITY_VERBOSE,
+        'vv'     => OutputInterface::VERBOSITY_VERY_VERBOSE,
+        'vvv'    => OutputInterface::VERBOSITY_DEBUG,
+        'quiet'  => OutputInterface::VERBOSITY_QUIET,
         'normal' => OutputInterface::VERBOSITY_NORMAL,
     ];
 
@@ -116,7 +116,7 @@ abstract class Command extends BaseCommand implements CompletionAwareInterface
      */
     public function run(InputInterface $input, OutputInterface $output): int
     {
-        $this->input = $input;
+        $this->input  = $input;
         $this->output = new NarrowsparkStyle($input, $output);
 
         return parent::run($input, $output);
@@ -172,7 +172,7 @@ abstract class Command extends BaseCommand implements CompletionAwareInterface
      */
     public function call(string $command, array $arguments = []): int
     {
-        $instance = $this->getApplication()->find($command);
+        $instance             = $this->getApplication()->find($command);
         $arguments['command'] = $command;
 
         return $instance->run(new ArrayInput($arguments), $this->output);
@@ -188,7 +188,7 @@ abstract class Command extends BaseCommand implements CompletionAwareInterface
      */
     public function callSilent(string $command, array $arguments = []): int
     {
-        $instance = $this->getApplication()->find($command);
+        $instance             = $this->getApplication()->find($command);
         $arguments['command'] = $command;
 
         return $instance->run(new ArrayInput($arguments), new NullOutput());
@@ -201,7 +201,7 @@ abstract class Command extends BaseCommand implements CompletionAwareInterface
      *
      * @return string|array
      */
-    public function argument(string $key = null)
+    public function argument(?string $key = null)
     {
         if ($key === null) {
             return $this->input->getArguments();
@@ -245,7 +245,6 @@ abstract class Command extends BaseCommand implements CompletionAwareInterface
      */
     public function completeOptionValues($optionName, CompletionContext $context)
     {
-        //
     }
 
     /**
@@ -255,7 +254,6 @@ abstract class Command extends BaseCommand implements CompletionAwareInterface
      */
     public function completeArgumentValues($argumentName, CompletionContext $context)
     {
-        //
     }
 
     /**
@@ -279,7 +277,7 @@ abstract class Command extends BaseCommand implements CompletionAwareInterface
      *
      * @return string
      */
-    public function ask(string $question, string $default = null): string
+    public function ask(string $question, ?string $default = null): string
     {
         return $this->output->ask($question, $default);
     }
@@ -307,7 +305,7 @@ abstract class Command extends BaseCommand implements CompletionAwareInterface
      *
      * @return string
      */
-    public function askWithCompletion(string $question, array $choices, string $default = null): string
+    public function askWithCompletion(string $question, array $choices, ?string $default = null): string
     {
         $question = new Question($question, $default);
 
@@ -347,9 +345,9 @@ abstract class Command extends BaseCommand implements CompletionAwareInterface
     public function choice(
         string $question,
         array $choices,
-        string $default = null,
+        ?string $default = null,
         $attempts = null,
-        bool $multiple = null
+        ?bool $multiple = null
     ): string {
         $question = new ChoiceQuestion($question, $choices, $default);
 
@@ -383,7 +381,7 @@ abstract class Command extends BaseCommand implements CompletionAwareInterface
      * @param string|null     $style          The output style of the string
      * @param null|int|string $verbosityLevel
      */
-    public function line(string $string, string $style = null, $verbosityLevel = null)
+    public function line(string $string, ?string $style = null, $verbosityLevel = null)
     {
         $styledString = $style ? "<$style>$string</$style>" : $string;
         $this->output->writeln($styledString, $this->getVerbosity($verbosityLevel));
@@ -453,6 +451,7 @@ abstract class Command extends BaseCommand implements CompletionAwareInterface
      * Set invoker.
      *
      * @param \Viserio\Support\Invoker
+     * @param Invoker $invoker
      */
     public function setInvoker(Invoker $invoker)
     {

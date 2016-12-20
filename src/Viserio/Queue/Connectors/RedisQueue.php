@@ -32,9 +32,9 @@ class RedisQueue extends AbstractQueue
      */
     public function __construct(Client $redis, string $default = 'default', int $expire = 90)
     {
-        $this->redis = $redis;
+        $this->redis   = $redis;
         $this->default = $default;
-        $this->expire = $expire;
+        $this->expire  = $expire;
     }
 
     /**
@@ -129,7 +129,7 @@ LUA;
      */
     public function deleteAndRelease(string $queue, string $job, int $delay)
     {
-        $queue = $this->getQueue($queue);
+        $queue  = $this->getQueue($queue);
         $script = <<<'LUA'
 redis.call('zrem', KEYS[2], KEYS[3])
 redis.call('zadd', KEYS[1], KEYS[4], KEYS[3])

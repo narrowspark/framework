@@ -21,7 +21,7 @@ class MockContainer extends Container
     public function mock()
     {
         $arguments = func_get_args();
-        $id = array_shift($arguments);
+        $id        = array_shift($arguments);
 
         if (! $this->has($id)) {
             throw new InvalidArgumentException(sprintf('Cannot mock a non-existent service: "%s"', $id));

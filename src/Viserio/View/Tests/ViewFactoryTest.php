@@ -7,8 +7,8 @@ use Viserio\Contracts\View\Engine;
 use Viserio\Contracts\View\Finder;
 use Viserio\Contracts\View\View as ViewContract;
 use Viserio\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
-use Viserio\View\Engines\Adapter\Php;
 use Viserio\View\Engines\EngineResolver;
+use Viserio\View\Engines\PhpEngine;
 use Viserio\View\Factory;
 
 class ViewFactoryTest extends \PHPUnit_Framework_TestCase
@@ -67,7 +67,7 @@ class ViewFactoryTest extends \PHPUnit_Framework_TestCase
         $factory = $this->getFactory();
         $factory->getEngineResolver()
             ->shouldReceive('resolve')
-            ->andReturn(new Php());
+            ->andReturn(new PhpEngine());
         $factory->getFinder()
             ->shouldReceive('find')
             ->with('layout')
@@ -179,7 +179,7 @@ class ViewFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testEnvironmentAddsExtensionWithCustomResolver()
     {
-        $factory = $this->getFactory();
+        $factory  = $this->getFactory();
         $resolver = function () {
         };
         $factory->getFinder()

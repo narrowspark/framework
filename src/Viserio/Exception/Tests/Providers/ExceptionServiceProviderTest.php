@@ -16,6 +16,7 @@ use Viserio\Exception\Handler;
 use Viserio\Exception\Providers\ExceptionServiceProvider;
 use Viserio\Exception\Transformers\CommandLineTransformer;
 use Viserio\Filesystem\Providers\FilesServiceProvider;
+use Viserio\HttpFactory\Providers\HttpFactoryServiceProvider;
 use Viserio\View\Providers\ViewServiceProvider;
 
 class ExceptionServiceProviderTest extends \PHPUnit_Framework_TestCase
@@ -27,6 +28,7 @@ class ExceptionServiceProviderTest extends \PHPUnit_Framework_TestCase
         $container->register(new ConfigServiceProvider());
         $container->register(new ViewServiceProvider());
         $container->register(new FilesServiceProvider());
+        $container->register(new HttpFactoryServiceProvider());
 
         self::assertInstanceOf(ExceptionIdentifier::class, $container->get(ExceptionIdentifier::class));
         self::assertInstanceOf(ExceptionInfo::class, $container->get(ExceptionInfo::class));

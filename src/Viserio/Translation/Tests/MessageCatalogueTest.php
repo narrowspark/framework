@@ -20,16 +20,16 @@ class MessageCatalogueTest extends \PHPUnit_Framework_TestCase
         self::assertEquals(['domain1', 'domain2'], $catalogue->getDomains());
     }
 
-    public function testAll()
+    public function testGetAll()
     {
         $catalogue = new MessageCatalogue('en', $messages = [
             'domain1' => ['foo' => 'foo'],
             'domain2' => ['bar' => 'bar'],
         ]);
 
-        self::assertEquals(['foo' => 'foo'], $catalogue->all('domain1'));
-        self::assertEquals([], $catalogue->all('domain88'));
-        self::assertEquals($messages, $catalogue->all());
+        self::assertEquals(['foo' => 'foo'], $catalogue->getAll('domain1'));
+        self::assertEquals([], $catalogue->getAll('domain88'));
+        self::assertEquals($messages, $catalogue->getAll());
     }
 
     public function testHas()
@@ -122,7 +122,7 @@ class MessageCatalogueTest extends \PHPUnit_Framework_TestCase
         ]);
         $catalogue->replace($messages = ['foo1' => 'foo1'], 'domain1');
 
-        self::assertEquals($messages, $catalogue->all('domain1'));
+        self::assertEquals($messages, $catalogue->getAll('domain1'));
     }
 
     public function testAddCatalogue()
@@ -158,7 +158,7 @@ class MessageCatalogueTest extends \PHPUnit_Framework_TestCase
      */
     public function testAddFallbackCatalogueWithCircularReference()
     {
-        $main = new MessageCatalogue('en_US');
+        $main     = new MessageCatalogue('en_US');
         $fallback = new MessageCatalogue('fr_FR');
         $fallback->addFallbackCatalogue($main);
         $main->addFallbackCatalogue($fallback);
@@ -175,6 +175,8 @@ class MessageCatalogueTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider getValidLocalesTests
+     *
+     * @param mixed $locale
      */
     public function testSetValidLocale($locale)
     {

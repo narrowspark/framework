@@ -26,6 +26,8 @@ class SetCookieTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider invalidNames
      * @expectedException \InvalidArgumentException
+     *
+     * @param mixed $name
      */
     public function testInstantiationThrowsExceptionIfCookieNameContainsInvalidCharacters($name)
     {
@@ -49,6 +51,8 @@ class SetCookieTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider invalidValues
      * @expectedException \InvalidArgumentException
+     *
+     * @param mixed $value
      */
     public function testInstantiationThrowsExceptionIfCookieValueContainsInvalidCharacters($value)
     {
@@ -57,7 +61,7 @@ class SetCookieTest extends \PHPUnit_Framework_TestCase
 
     public function testGetValue()
     {
-        $value = 'MyValue';
+        $value  = 'MyValue';
         $cookie = new SetCookie('MyCookie', $value);
 
         self::assertSame($value, $cookie->getValue(), '->getValue() returns the proper value');
@@ -66,7 +70,7 @@ class SetCookieTest extends \PHPUnit_Framework_TestCase
 
     public function testWithValue()
     {
-        $value = 'MyValue';
+        $value  = 'MyValue';
         $cookie = new SetCookie('MyCookie');
         $cookie = $cookie->withValue($value);
 
@@ -97,7 +101,7 @@ class SetCookieTest extends \PHPUnit_Framework_TestCase
 
     public function testMatchCookie()
     {
-        $cookie = new SetCookie('foo', 'bar', 0, '/');
+        $cookie  = new SetCookie('foo', 'bar', 0, '/');
         $cookie2 = new SetCookie('bar', 'foo', 0, '/');
 
         self::assertTrue($cookie->matchCookie($cookie), '->matchCookie() returns true if both cookies are identical');
@@ -301,7 +305,7 @@ class SetCookieTest extends \PHPUnit_Framework_TestCase
 
     public function testToString()
     {
-        $time = new DateTime('Fri, 20-May-2011 15:25:52 GMT');
+        $time   = new DateTime('Fri, 20-May-2011 15:25:52 GMT');
         $cookie = new SetCookie('foo', 'bar', $time, '/', '.myfoodomain.com', true, true, SetCookie::SAMESITE_STRICT);
         self::assertEquals(
             'foo=bar; Expires=Friday, 20-May-2011 15:25:52 ' . date_default_timezone_get() . '; Path=/; Domain=myfoodomain.com; Secure; HttpOnly; SameSite=strict',

@@ -8,7 +8,7 @@ use Psr\Log\LoggerInterface;
 use Swift_MailTransport;
 use Swift_SendmailTransport;
 use Swift_SmtpTransport;
-use Viserio\Contracts\Config\Manager as ConfigContract;
+use Viserio\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Mail\Transport\Log as LogTransport;
 use Viserio\Mail\Transport\Mailgun as MailgunTransport;
 use Viserio\Mail\Transport\Mandrill as MandrillTransport;
@@ -27,7 +27,7 @@ class TransportManagerTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->manager = new TransportManager($this->mock(ConfigContract::class));
+        $this->manager = new TransportManager($this->mock(RepositoryContract::class));
     }
 
     public function testLogTransporter()
@@ -69,12 +69,12 @@ class TransportManagerTest extends \PHPUnit_Framework_TestCase
             ->with('mail.drivers', [])
             ->andReturn([
                 'smtp' => [
-                    'host' => '',
-                    'port' => '',
+                    'host'       => '',
+                    'port'       => '',
                     'encryption' => '',
-                    'username' => '',
-                    'password' => '',
-                    'stream' => '',
+                    'username'   => '',
+                    'password'   => '',
+                    'stream'     => '',
                 ],
             ]);
 
@@ -136,7 +136,7 @@ class TransportManagerTest extends \PHPUnit_Framework_TestCase
             ->andReturn([
                 'ses' => [
                     'secret' => '',
-                    'key' => '',
+                    'key'    => '',
                     'region' => 'us-west-2',
                 ],
             ]);

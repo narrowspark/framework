@@ -121,8 +121,8 @@ class Store implements StoreContract
      */
     public function __construct(string $name, SessionHandlerContract $handler, EncrypterContract $encrypter)
     {
-        $this->name = $name;
-        $this->handler = $handler;
+        $this->name      = $name;
+        $this->handler   = $handler;
         $this->encrypter = $encrypter;
     }
 
@@ -131,13 +131,13 @@ class Store implements StoreContract
      */
     public function start(): bool
     {
-        $this->id = $this->generateSessionId();
+        $this->id     = $this->generateSessionId();
         $this->values = [];
 
         $this->firstTrace = $this->timestamp();
         $this->updateLastTrace();
 
-        $this->requestsCount = 1;
+        $this->requestsCount     = 1;
         $this->regenerationTrace = $this->timestamp();
 
         $this->fingerprint = $this->generateFingerprint();
@@ -242,7 +242,7 @@ class Store implements StoreContract
             $this->ageFlashData();
             $this->writeToHandler();
 
-            $this->values = [];
+            $this->values  = [];
             $this->started = false;
         }
     }
@@ -298,7 +298,7 @@ class Store implements StoreContract
     /**
      * {@inheritdoc}
      */
-    public function all(): array
+    public function getAll(): array
     {
         return $this->values;
     }
@@ -576,7 +576,7 @@ class Store implements StoreContract
     }
 
     /**
-     * Determine if session id should be regenerated? (based on request_counter or regenerationTrace)
+     * Determine if session id should be regenerated? (based on request_counter or regenerationTrace).
      *
      * @return bool
      */
@@ -608,11 +608,11 @@ class Store implements StoreContract
 
         $metadata = $values[self::METADATA_NAMESPACE];
 
-        $this->firstTrace = $metadata['firstTrace'];
-        $this->lastTrace = $metadata['lastTrace'];
+        $this->firstTrace        = $metadata['firstTrace'];
+        $this->lastTrace         = $metadata['lastTrace'];
         $this->regenerationTrace = $metadata['regenerationTrace'];
-        $this->requestsCount = $metadata['requestsCount'];
-        $this->fingerprint = $metadata['fingerprint'];
+        $this->requestsCount     = $metadata['requestsCount'];
+        $this->fingerprint       = $metadata['fingerprint'];
 
         $this->values = array_merge($this->values, $values);
 
@@ -643,11 +643,11 @@ class Store implements StoreContract
         $values = $this->values;
 
         $values[self::METADATA_NAMESPACE] = [
-            'firstTrace' => $this->firstTrace,
-            'lastTrace' => $this->lastTrace,
+            'firstTrace'        => $this->firstTrace,
+            'lastTrace'         => $this->lastTrace,
             'regenerationTrace' => $this->regenerationTrace,
-            'requestsCount' => $this->requestsCount,
-            'fingerprint' => $this->fingerprint,
+            'requestsCount'     => $this->requestsCount,
+            'fingerprint'       => $this->fingerprint,
         ];
 
         $this->handler->write(
@@ -677,7 +677,7 @@ class Store implements StoreContract
      *
      * @return int
      */
-    private function timestamp() : int
+    private function timestamp(): int
     {
         return (new DateTimeImmutable())->getTimestamp();
     }

@@ -4,8 +4,6 @@ namespace Viserio\View\Proxies;
 
 use Interop\Http\Factory\ResponseFactoryInterface;
 use Interop\Http\Factory\StreamFactoryInterface;
-use Viserio\HttpFactory\ResponseFactory;
-use Viserio\HttpFactory\StreamFactory;
 use Viserio\StaticalProxy\StaticalProxy;
 use Viserio\View\Factory;
 
@@ -23,9 +21,9 @@ class View extends StaticalProxy
 
     public static function createResponseView(string $template)
     {
-        $response = (new ResponseFactory())->createResponse();
+        $response = self::$container->get(ResponseFactoryInterface::class)->createResponse();
 
-        $stream = (new StreamFactory())->createStream();
+        $stream = self::$container->get(StreamFactoryInterface::class)->createStream();
         $stream->write((string) self::$container->get(Factory::class)->create($template));
 
         return $response->withBody($stream);

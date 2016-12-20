@@ -4,7 +4,6 @@ namespace Viserio\Routing;
 
 use Closure;
 use Narrowspark\Arr\Arr;
-use Narrowspark\HttpStatus\Exception\InternalServerErrorException;
 use Narrowspark\HttpStatus\Exception\MethodNotAllowedException;
 use Narrowspark\HttpStatus\Exception\NotFoundException;
 use Psr\Http\Message\ResponseInterface;
@@ -73,6 +72,16 @@ abstract class AbstractRouteDispatcher
      * @var array
      */
     protected $middlewarePriority = [];
+
+    /**
+     * Add a list of middlewares.
+     *
+     * @param array $middlewares
+     */
+    public function addMiddlewares(array $middlewares)
+    {
+        $this->middlewares = $middlewares;
+    }
 
     /**
      * Register a group of middleware.
@@ -146,29 +155,28 @@ abstract class AbstractRouteDispatcher
     protected function dispatchToRoute(ServerRequestInterface $request): ResponseInterface
     {
         $router = $this->generateRouterFile();
-        $match = $router(
+        $match  = $router(
             $request->getMethod(),
            '/' . ltrim($request->getUri()->getPath(), '/')
         );
         $requestPath = ltrim($request->getUri()->getPath(), '/');
 
-        switch ($match[0]) {
-            case RouterContract::FOUND:
-                return $this->handleFound($match[1], $match[2], $request);
-            case RouterContract::HTTP_METHOD_NOT_ALLOWED:
-                throw new MethodNotAllowedException(sprintf(
-                    '405 Method [%s] Not Allowed: For requested route [/%s]',
-                    implode(',', $match[1]),
-                    $requestPath
-                ));
-            case RouterContract::NOT_FOUND:
-                throw new NotFoundException(sprintf(
-                    '404 Not Found: Requested route [/%s]',
-                    $requestPath
-                ));
-            default:
-                throw new InternalServerErrorException();
+        if ($match[0] === RouterContract::FOUND) {
+            return $this->handleFound($match[1], $match[2], $request);
         }
+
+        if ($match[0] === RouterContract::HTTP_METHOD_NOT_ALLOWED) {
+            throw new MethodNotAllowedException(sprintf(
+                '405 Method [%s] Not Allowed: For requested route [/%s]',
+                implode(',', $match[1]),
+                $requestPath
+            ));
+        }
+
+        throw new NotFoundException(sprintf(
+            '404 Not Found: Requested route [/%s]',
+            $requestPath
+        ));
     }
 
     /**
@@ -194,6 +202,9 @@ abstract class AbstractRouteDispatcher
         foreach ($segments as $key => $value) {
             $route->setParameter($key, rawurldecode($value));
         }
+
+        // Add route to the request's attributes in case a middleware or handler needs access to the route
+        $request = $request->withAttribute('_route', $route);
 
         $this->current = $route;
 
@@ -241,9 +252,6 @@ abstract class AbstractRouteDispatcher
             ->send($request)
             ->through($middlewares)
             ->then(function ($request) use ($route) {
-                // Add route to the request's attributes in case a middleware or handler needs access to the route
-                $request = $request->withAttribute('route', $route);
-
                 return $route->run($request);
             });
     }
@@ -257,7 +265,7 @@ abstract class AbstractRouteDispatcher
      */
     protected function getRouteMiddlewares(RouteContract $route): array
     {
-        $middlewares = [];
+        $middlewares      = [];
         $routeMiddlewares = $route->gatherMiddleware();
 
         Arr::map($routeMiddlewares['middlewares'], function ($name) use (&$middlewares) {
@@ -274,7 +282,10 @@ abstract class AbstractRouteDispatcher
             $middlewares = array_diff($middlewares, $withoutMiddlewares);
         }
 
-        return (new SortedMiddleware($this->middlewarePriority, $middlewares))->getAll();
+        return (new SortedMiddleware(
+            $this->middlewarePriority,
+            array_values(Arr::flatten($middlewares))
+        ))->getAll();
     }
 
     /**

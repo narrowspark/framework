@@ -15,7 +15,7 @@ class LoggerServiceProvider implements ServiceProvider
 {
     use ServiceProviderConfigAwareTrait;
 
-    const PACKAGE = 'viserio.log';
+    public const PACKAGE = 'viserio.log';
 
     /**
      * {@inheritdoc}
@@ -24,7 +24,7 @@ class LoggerServiceProvider implements ServiceProvider
     {
         return [
             MonologWriter::class => [self::class, 'createLogger'],
-            'logger' => function (ContainerInterface $container) {
+            'logger'             => function (ContainerInterface $container) {
                 return $container->get(MonologWriter::class);
             },
             'log' => function (ContainerInterface $container) {

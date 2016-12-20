@@ -10,7 +10,7 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Debug\Exception\FatalThrowableError;
-use Viserio\Contracts\Config\Manager as ConfigManagerContract;
+use Viserio\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Exception\Displayers\HtmlDisplayer;
 use Viserio\Exception\Displayers\JsonDisplayer;
 use Viserio\Exception\Displayers\WhoopsDisplayer;
@@ -19,6 +19,8 @@ use Viserio\Exception\ExceptionInfo;
 use Viserio\Exception\Filters\VerboseFilter;
 use Viserio\Exception\Handler;
 use Viserio\Exception\Transformers\CommandLineTransformer;
+use Viserio\HttpFactory\ResponseFactory;
+use Viserio\HttpFactory\StreamFactory;
 
 class HandlerTest extends \PHPUnit_Framework_TestCase
 {
@@ -27,7 +29,7 @@ class HandlerTest extends \PHPUnit_Framework_TestCase
     public function getContainer()
     {
         $container = $this->mock(ContainerInterface::class);
-        $log = $this->mock(LoggerInterface::class);
+        $log       = $this->mock(LoggerInterface::class);
         $log->shouldReceive('error');
         $container->shouldReceive('has')
             ->with(LoggerInterface::class)
@@ -51,7 +53,7 @@ class HandlerTest extends \PHPUnit_Framework_TestCase
 
         $info = $this->mock(ExceptionInfo::class);
 
-        $handler->addDisplayer(new HtmlDisplayer($info, ''));
+        $handler->addDisplayer(new HtmlDisplayer($info, new ResponseFactory(), new StreamFactory(), ''));
         $handler->addDisplayer(new JsonDisplayer($info));
         $handler->addDisplayer(new JsonDisplayer($info));
         $handler->addDisplayer(new WhoopsDisplayer($info));
@@ -82,20 +84,20 @@ class HandlerTest extends \PHPUnit_Framework_TestCase
     public function testReportError($value = '')
     {
         $exception = new Exception();
-        $id = (new ExceptionIdentifier())->identify($exception);
+        $id        = (new ExceptionIdentifier())->identify($exception);
 
         $log = $this->mock(LoggerInterface::class);
         $log
             ->shouldReceive('error')
             ->once($exception, ['identification' => ['id' => $id]]);
 
-        $config = $this->mock(ConfigManagerContract::class);
+        $config = $this->mock(RepositoryContract::class);
         $config->shouldReceive('get')
             ->twice()
             ->andReturn([]);
         $container = $this->getContainer();
         $container->shouldReceive('get')
-            ->with(ConfigManagerContract::class)
+            ->with(RepositoryContract::class)
             ->andReturn($config);
         $container->shouldReceive('get')
             ->with(LoggerInterface::class)
@@ -109,20 +111,20 @@ class HandlerTest extends \PHPUnit_Framework_TestCase
     public function testReportCritical($value = '')
     {
         $exception = new FatalThrowableError(new Exception());
-        $id = (new ExceptionIdentifier())->identify($exception);
+        $id        = (new ExceptionIdentifier())->identify($exception);
 
         $log = $this->mock(LoggerInterface::class);
         $log->shouldReceive('critical')
             ->once($exception, ['identification' => ['id' => $id]]);
 
-        $config = $this->mock(ConfigManagerContract::class);
+        $config = $this->mock(RepositoryContract::class);
         $config->shouldReceive('get')
             ->twice()
             ->andReturn([]);
 
         $container = $this->getContainer();
         $container->shouldReceive('get')
-            ->with(ConfigManagerContract::class)
+            ->with(RepositoryContract::class)
             ->andReturn($config);
         $container->shouldReceive('get')
             ->with(LoggerInterface::class)
@@ -135,20 +137,20 @@ class HandlerTest extends \PHPUnit_Framework_TestCase
     public function testShouldntReport()
     {
         $exception = new FatalThrowableError(new Exception());
-        $id = (new ExceptionIdentifier())->identify($exception);
+        $id        = (new ExceptionIdentifier())->identify($exception);
 
         $log = $this->mock(LoggerInterface::class);
         $log->shouldReceive('critical')
             ->never();
 
-        $config = $this->mock(ConfigManagerContract::class);
+        $config = $this->mock(RepositoryContract::class);
         $config->shouldReceive('get')
             ->once()
             ->andReturn([]);
 
         $container = $this->getContainer();
         $container->shouldReceive('get')
-            ->with(ConfigManagerContract::class)
+            ->with(RepositoryContract::class)
             ->andReturn($config);
         $container->shouldReceive('get')
             ->with(LoggerInterface::class)

@@ -11,25 +11,25 @@ class ExpressionParserTest extends \PHPUnit_Framework_TestCase
     public function testItParsesCommandNames()
     {
         self::assertParsesTo('greet', [
-            'name' => 'greet',
+            'name'      => 'greet',
             'arguments' => [],
-            'options' => [],
+            'options'   => [],
         ]);
     }
 
     public function testItParsesCommandNamesContainingNamespaces()
     {
         self::assertParsesTo('demo:greet', [
-            'name' => 'demo:greet',
+            'name'      => 'demo:greet',
             'arguments' => [],
-            'options' => [],
+            'options'   => [],
         ]);
     }
 
     public function testItParsesMandatoryArguments()
     {
         self::assertParsesTo('greet firstname lastname', [
-            'name' => 'greet',
+            'name'      => 'greet',
             'arguments' => [
                 new InputArgument('firstname', InputArgument::REQUIRED),
                 new InputArgument('lastname', InputArgument::REQUIRED),
@@ -41,7 +41,7 @@ class ExpressionParserTest extends \PHPUnit_Framework_TestCase
     public function testItParsesOptionalArguments()
     {
         self::assertParsesTo('greet [firstname] [lastname]', [
-            'name' => 'greet',
+            'name'      => 'greet',
             'arguments' => [
                 new InputArgument('firstname', InputArgument::OPTIONAL),
                 new InputArgument('lastname', InputArgument::OPTIONAL),
@@ -53,7 +53,7 @@ class ExpressionParserTest extends \PHPUnit_Framework_TestCase
     public function testItParsesArrayArguments()
     {
         self::assertParsesTo('greet [names]*', [
-            'name' => 'greet',
+            'name'      => 'greet',
             'arguments' => [
                 new InputArgument('names', InputArgument::IS_ARRAY),
             ],
@@ -64,7 +64,7 @@ class ExpressionParserTest extends \PHPUnit_Framework_TestCase
     public function testItParsesArrayArgumentsWithAtLeastOneValue()
     {
         self::assertParsesTo('greet names*', [
-            'name' => 'greet',
+            'name'      => 'greet',
             'arguments' => [
                 new InputArgument('names', InputArgument::IS_ARRAY | InputArgument::REQUIRED),
             ],
@@ -75,9 +75,9 @@ class ExpressionParserTest extends \PHPUnit_Framework_TestCase
     public function testItParsesOptions()
     {
         self::assertParsesTo('greet [--yell]', [
-            'name' => 'greet',
+            'name'      => 'greet',
             'arguments' => [],
-            'options' => [
+            'options'   => [
                 new InputOption('yell', null, InputOption::VALUE_NONE),
             ],
         ]);
@@ -86,9 +86,9 @@ class ExpressionParserTest extends \PHPUnit_Framework_TestCase
     public function testItParsesOptionsWithMandatoryValues()
     {
         self::assertParsesTo('greet [--iterations=]', [
-            'name' => 'greet',
+            'name'      => 'greet',
             'arguments' => [],
-            'options' => [
+            'options'   => [
                 new InputOption('iterations', null, InputOption::VALUE_REQUIRED),
             ],
         ]);
@@ -97,9 +97,9 @@ class ExpressionParserTest extends \PHPUnit_Framework_TestCase
     public function testItParsesOptionsWithMultipleValues()
     {
         self::assertParsesTo('greet [--name=]*', [
-            'name' => 'greet',
+            'name'      => 'greet',
             'arguments' => [],
-            'options' => [
+            'options'   => [
                 new InputOption('name', null, InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY),
             ],
         ]);
@@ -108,9 +108,9 @@ class ExpressionParserTest extends \PHPUnit_Framework_TestCase
     public function testItParsesOptionsWithShortcuts()
     {
         self::assertParsesTo('greet [-y|--yell] [-it|--iterations=] [-n|--name=]*', [
-            'name' => 'greet',
+            'name'      => 'greet',
             'arguments' => [],
-            'options' => [
+            'options'   => [
                 new InputOption('yell', 'y', InputOption::VALUE_NONE),
                 new InputOption('iterations', 'it', InputOption::VALUE_REQUIRED),
                 new InputOption('name', 'n', InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY),

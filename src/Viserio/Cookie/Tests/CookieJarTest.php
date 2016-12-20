@@ -5,8 +5,6 @@ namespace Viserio\Cookie\Tests;
 use Cake\Chronos\Chronos;
 use Mockery as Mock;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
-use Psr\Http\Message\RequestInterface;
-use Psr\Http\Message\ResponseInterface;
 use Viserio\Contracts\Cookie\Cookie as CookieContract;
 use Viserio\Cookie\CookieJar;
 

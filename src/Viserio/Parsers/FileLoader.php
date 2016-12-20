@@ -40,7 +40,7 @@ class FileLoader implements LoaderContract
      */
     public function __construct(TaggableParserContract $parser, array $directories = [])
     {
-        $this->parser = $parser;
+        $this->parser      = $parser;
         $this->directories = $directories;
     }
 

@@ -144,7 +144,7 @@ class QueueMailer extends Mailer implements QueueMailerContract
      */
     protected function getQueuedCallable(array $data)
     {
-        if (strpos($data['callback'], 'SerializableClosure') !== false) {
+        if (mb_strpos($data['callback'], 'SerializableClosure') !== false) {
             return unserialize($data['callback']);
         }
 

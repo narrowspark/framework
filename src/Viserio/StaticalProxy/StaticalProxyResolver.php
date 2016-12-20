@@ -41,7 +41,7 @@ class StaticalProxyResolver
             return $staticName;
         }
 
-        return ucfirst((string) Str::camelize(strtolower($staticName)));
+        return ucfirst((string) Str::camelize(mb_strtolower($staticName)));
     }
 
     /**
@@ -69,6 +69,6 @@ class StaticalProxyResolver
      */
     private function isUppercase($string)
     {
-        return strtoupper($string) === $string;
+        return mb_strtoupper($string) === $string;
     }
 }

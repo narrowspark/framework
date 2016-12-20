@@ -35,7 +35,7 @@ class MatchedRouteDataMap implements NodeContentsContract
      *
      * @return array
      */
-    public function getAllowedHttpMethods(): array
+    public function allowedHttpMethods(): array
     {
         $allowedHttpMethods = [];
 
@@ -49,7 +49,7 @@ class MatchedRouteDataMap implements NodeContentsContract
     }
 
     /**
-     * Adds the supplied route to the matched route data map
+     * Adds the supplied route to the matched route data map.
      *
      * @param \Viserio\Contracts\Routing\Route $route
      * @param array                            $parameterIndexNameMap

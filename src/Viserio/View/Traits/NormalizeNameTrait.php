@@ -17,7 +17,7 @@ trait NormalizeNameTrait
     {
         $delimiter = FinderContract::HINT_PATH_DELIMITER;
 
-        if (strpos($name, $delimiter) === false) {
+        if (mb_strpos($name, $delimiter) === false) {
             return str_replace('/', '.', $name);
         }
 

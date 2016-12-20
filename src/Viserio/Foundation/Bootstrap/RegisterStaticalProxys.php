@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Foundation\Bootstrap;
 
-use Viserio\Config\Manager as ConfigManager;
+use Viserio\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Contracts\Foundation\Application;
 use Viserio\Contracts\Foundation\Bootstrap as BootstrapContract;
 use Viserio\StaticalProxy\AliasLoader;
@@ -19,6 +19,6 @@ class RegisterStaticalProxys implements BootstrapContract
 
         StaticalProxy::setContainer($app);
 
-        (new AliasLoader($app->get(ConfigManager::class)->get('app.aliases', [])))->register();
+        (new AliasLoader($app->get(RepositoryContract::class)->get('app.aliases', [])))->register();
     }
 }

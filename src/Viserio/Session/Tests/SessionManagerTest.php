@@ -9,7 +9,7 @@ use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Cache\CacheManager;
 use Viserio\Contracts\Cache\Manager as CacheManagerContract;
-use Viserio\Contracts\Config\Manager as ConfigManagerContract;
+use Viserio\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Contracts\Cookie\QueueingFactory as JarContract;
 use Viserio\Contracts\Session\Store as StoreContract;
 use Viserio\Encryption\Encrypter;
@@ -26,7 +26,7 @@ class SessionManagerTest extends \PHPUnit_Framework_TestCase
         parent::setUp();
 
         $encrypter = new Encrypter(Key::createNewRandomKey());
-        $config = $this->mock(ConfigManagerContract::class);
+        $config    = $this->mock(RepositoryContract::class);
         $config->shouldReceive('get')
             ->with('cache.drivers', []);
         $config->shouldReceive('get')
@@ -34,7 +34,7 @@ class SessionManagerTest extends \PHPUnit_Framework_TestCase
 
         $manager = new SessionManager($config, $encrypter);
         $manager->setContainer(new ArrayContainer([
-            JarContract::class => $this->mock(JarContract::class),
+            JarContract::class          => $this->mock(JarContract::class),
             CacheManagerContract::class => new CacheManager($config),
         ]));
 

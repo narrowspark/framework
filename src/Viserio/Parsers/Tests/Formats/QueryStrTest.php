@@ -27,8 +27,8 @@ class QueryStrTest extends \PHPUnit_Framework_TestCase
     public function testDump()
     {
         $expected = ['status' => 123, 'message' => 'hello world'];
-        $payload = http_build_query($expected);
-        $dump = $this->parser->dump($expected);
+        $payload  = http_build_query($expected);
+        $dump     = $this->parser->dump($expected);
 
         self::assertEquals($payload, $dump);
     }

@@ -25,8 +25,8 @@ class XMLTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->file = new Filesystem();
-        $this->root = vfsStream::setup();
+        $this->file   = new Filesystem();
+        $this->root   = vfsStream::setup();
         $this->parser = new XML();
     }
 
@@ -60,11 +60,11 @@ class XMLTest extends \PHPUnit_Framework_TestCase
     {
         $array = [
             'Good guy' => [
-                'name' => 'Luke Skywalker',
+                'name'   => 'Luke Skywalker',
                 'weapon' => 'Lightsaber',
             ],
             'Bad guy' => [
-                'name' => 'Sauron',
+                'name'   => 'Sauron',
                 'weapon' => 'Evil Eye',
             ],
         ];

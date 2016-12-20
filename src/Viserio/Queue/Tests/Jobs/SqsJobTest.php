@@ -8,7 +8,7 @@ use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use stdClass;
 use Viserio\Queue\Jobs\SqsJob;
 
-class QueueSqsJobTest extends \PHPUnit_Framework_TestCase
+class SqsJobTest extends \PHPUnit_Framework_TestCase
 {
     use MockeryTrait;
 
@@ -65,11 +65,11 @@ class QueueSqsJobTest extends \PHPUnit_Framework_TestCase
         $mockedPayload = json_encode(['job' => 'foo', 'data' => ['data'], 'attempts' => 1]);
 
         $mockedJobData = [
-            'Body' => $mockedPayload,
-            'MD5OfBody' => md5($mockedPayload),
+            'Body'          => $mockedPayload,
+            'MD5OfBody'     => md5($mockedPayload),
             'ReceiptHandle' => $this->mockedReceiptHandle,
-            'MessageId' => 'e3cd03ee-59a3-4ad8-b0aa-ee2e3808ac81',
-            'Attributes' => ['ApproximateReceiveCount' => 1],
+            'MessageId'     => 'e3cd03ee-59a3-4ad8-b0aa-ee2e3808ac81',
+            'Attributes'    => ['ApproximateReceiveCount' => 1],
         ];
 
         return new SqsJob(

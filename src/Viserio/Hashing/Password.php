@@ -42,7 +42,7 @@ class Password implements PasswordContract
     }
 
     /**
-     * Key rotation method -- decrypt with your old key then re-encrypt with your new key
+     * Key rotation method -- decrypt with your old key then re-encrypt with your new key.
      *
      * @param string             $hashedValue
      * @param \Defuse\Crypto\Key $newKey

@@ -20,6 +20,13 @@ class Route implements RouteContract
     use MiddlewareAwareTrait;
 
     /**
+     * A server request instance.
+     *
+     * @var \Psr\Http\Message\ServerRequestInterface
+     */
+    protected $serverRequest;
+
+    /**
      * The URI pattern the route responds to.
      *
      * @var string
@@ -80,7 +87,7 @@ class Route implements RouteContract
         $this->uri = $uri;
         // According to RFC methods are defined in uppercase (See RFC 7231)
         $this->httpMethods = array_map('strtoupper', (array) $methods);
-        $this->action = $this->parseAction($action);
+        $this->action      = $this->parseAction($action);
 
         if (in_array('GET', $this->httpMethods) && ! in_array('HEAD', $this->httpMethods)) {
             $this->httpMethods[] = 'HEAD';
@@ -108,13 +115,21 @@ class Route implements RouteContract
     }
 
     /**
-     * Get route identifier
+     * Get route identifier.
      *
      * @return string
      */
     public function getIdentifier(): string
     {
         return implode($this->httpMethods, '|') . $this->getDomain() . $this->uri;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getServerRequest(): ServerRequestInterface
+    {
+        return $this->serverRequest;
     }
 
     /**
@@ -179,19 +194,22 @@ class Route implements RouteContract
     public function gatherMiddleware(): array
     {
         // Merge middlewares from Action.
-        $middlewares = Arr::get($this->action, 'middlewares', []);
+        $middlewares        = Arr::get($this->action, 'middlewares', []);
         $withoutMiddlewares = Arr::get($this->action, 'without_middlewares', []);
 
-        $this->middlewares = [
+        $mergedMiddlewares = [
             'middlewares' => array_unique(array_merge(
-                $this->middlewares,
+                $this->middlewares['middlewares'] ?? [],
                 is_array($middlewares) ? $middlewares : [$middlewares],
                 $this->getControllerMiddleware()
             ), SORT_REGULAR),
-            'without_middlewares' => is_array($withoutMiddlewares) ? $withoutMiddlewares : [$withoutMiddlewares],
+            'without_middlewares' => array_unique(array_merge(
+                $this->middlewares['without_middlewares'] ?? [],
+                is_array($withoutMiddlewares) ? $withoutMiddlewares : [$withoutMiddlewares]
+            ), SORT_REGULAR),
         ];
 
-        return $this->middlewares;
+        return $this->middlewares = $mergedMiddlewares;
     }
 
     /**
@@ -341,7 +359,7 @@ class Route implements RouteContract
      */
     public function getController()
     {
-        list($class) = explode('::', $this->action['uses']);
+        list($class) = explode('@', $this->action['uses']);
 
         if (! $this->controller) {
             $container = $this->getContainer();
@@ -365,6 +383,8 @@ class Route implements RouteContract
      */
     public function run(ServerRequestInterface $request): ResponseInterface
     {
+        $this->serverRequest = $request;
+
         if ($this->isControllerAction()) {
             return $this->getController()->{$this->getControllerMethod()}();
         }
@@ -409,7 +429,7 @@ class Route implements RouteContract
             });
         }
 
-        if (is_string($action['uses']) && strpos($action['uses'], '::') === false) {
+        if (is_string($action['uses']) && mb_strpos($action['uses'], '@') === false) {
             if (! method_exists($action, '__invoke')) {
                 throw new UnexpectedValueException(sprintf(
                     'Invalid route action: [%s]',
@@ -417,7 +437,7 @@ class Route implements RouteContract
                 ));
             }
 
-            $action['uses'] = $action . '::__invoke';
+            $action['uses'] = $action . '@__invoke';
         }
 
         return $action;
@@ -483,6 +503,6 @@ class Route implements RouteContract
      */
     protected function getControllerMethod(): string
     {
-        return explode('::', $this->action['uses'])[1];
+        return explode('@', $this->action['uses'])[1];
     }
 }

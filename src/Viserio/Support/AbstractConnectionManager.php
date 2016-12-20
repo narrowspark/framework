@@ -4,7 +4,7 @@ namespace Viserio\Support;
 
 use Closure;
 use InvalidArgumentException;
-use Viserio\Contracts\Config\Manager as ConfigContract;
+use Viserio\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Contracts\Config\Traits\ConfigAwareTrait;
 use Viserio\Contracts\Container\Traits\ContainerAwareTrait;
 
@@ -30,9 +30,9 @@ abstract class AbstractConnectionManager
     /**
      * Create a new manager instance.
      *
-     * @param \Viserio\Contracts\Config\Manager $config
+     * @param \Viserio\Contracts\Config\Repository $config
      */
-    public function __construct(ConfigContract $config)
+    public function __construct(RepositoryContract $config)
     {
         $this->config = $config;
     }
@@ -167,7 +167,7 @@ abstract class AbstractConnectionManager
         $connections = $this->config->get($this->getConfigName() . '.connections', []);
 
         if (isset($connections[$name]) && is_array($connections[$name])) {
-            $config = $connections[$name];
+            $config         = $connections[$name];
             $config['name'] = $name;
 
             return $config;

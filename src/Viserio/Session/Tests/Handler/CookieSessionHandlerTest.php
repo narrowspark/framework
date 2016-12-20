@@ -81,7 +81,7 @@ class CookieSessionHandlerTest extends \PHPUnit_Framework_TestCase
                 'write.sess',
                 json_encode(
                     [
-                        'data' => ['user_id' => 1],
+                        'data'    => ['user_id' => 1],
                         'expires' => Chronos::now()->addMinutes(5)->getTimestamp(),
                     ],
                     \JSON_PRESERVE_ZERO_FRACTION

@@ -15,9 +15,9 @@ trait ConfirmableTrait
      *
      * @return bool
      */
-    public function confirmToProceed($warning = 'Application is in Production mode!', $callback = null): bool
+    public function confirmToProceed(string $warning = 'Application is in Production mode!', $callback = null): bool
     {
-        $callback = is_null($callback) ? $this->getDefaultConfirmCallback() : $callback;
+        $callback      = is_null($callback) ? $this->getDefaultConfirmCallback() : $callback;
         $shouldConfirm = $callback instanceof Closure ? call_user_func($callback) : $callback;
 
         if ($shouldConfirm) {
@@ -25,9 +25,9 @@ trait ConfirmableTrait
                 return true;
             }
 
-            $this->comment(str_repeat('*', strlen($warning) + 12));
+            $this->comment(str_repeat('*', mb_strlen($warning) + 12));
             $this->comment('*     ' . $warning . '     *');
-            $this->comment(str_repeat('*', strlen($warning) + 12));
+            $this->comment(str_repeat('*', mb_strlen($warning) + 12));
             $this->output->writeln('');
 
             $confirmed = $this->confirm('Do you really wish to run this command?');

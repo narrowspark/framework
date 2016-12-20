@@ -59,8 +59,9 @@ class Factory implements FactoryContract
      * @var array
      */
     protected $extensions = [
-        'php' => 'php',
+        'php'   => 'php',
         'phtml' => 'php',
+        'css'   => 'file',
     ];
 
     /**
@@ -81,7 +82,7 @@ class Factory implements FactoryContract
         FinderContract $finder
     ) {
         $this->engines = $engines;
-        $this->finder = $finder;
+        $this->finder  = $finder;
 
         $this->share('__env', $this);
     }
@@ -92,7 +93,7 @@ class Factory implements FactoryContract
     public function exists(string $view): bool
     {
         try {
-            $this->finder->find($view);
+            $this->getFinder()->find($view);
         } catch (InvalidArgumentException $exception) {
             return false;
         }
@@ -105,7 +106,7 @@ class Factory implements FactoryContract
      */
     public function file(string $path, array $data = [], array $mergeData = []): ViewContract
     {
-        $data = array_merge($mergeData, $this->parseData($data));
+        $data   = array_merge($mergeData, $this->parseData($data));
         $engine = $this->getEngineFromPath($path);
 
         return $this->getView($this, $engine, $path, ['path' => $path], $data);
@@ -120,8 +121,8 @@ class Factory implements FactoryContract
             $view = $this->aliases[$view];
         }
 
-        $view = $this->normalizeName($view);
-        $fileInfo = $this->finder->find($view);
+        $view     = $this->normalizeName($view);
+        $fileInfo = $this->getFinder()->find($view);
 
         return $this->getView(
             $this,
@@ -181,7 +182,7 @@ class Factory implements FactoryContract
         // with "raw|" for convenience and to let this know that it is a string.
         } else {
             if (Str::startsWith($empty, 'raw|')) {
-                $result = substr($empty, 4);
+                $result = mb_substr($empty, 4);
             } else {
                 $result = $this->create($empty)->render();
             }
@@ -196,7 +197,7 @@ class Factory implements FactoryContract
     public function getEngineFromPath(string $path): EngineContract
     {
         $engine = explode('|', $path);
-        $path = isset($engine[1]) ? $engine[1] : $path;
+        $path   = isset($engine[1]) ? $engine[1] : $path;
 
         if (! $extension = $this->getExtension($path)) {
             throw new InvalidArgumentException(sprintf('Unrecognized extension in file: [%s]', $path));
@@ -228,7 +229,7 @@ class Factory implements FactoryContract
      */
     public function addLocation(string $location): FactoryContract
     {
-        $this->finder->addLocation($location);
+        $this->getFinder()->addLocation($location);
 
         return $this;
     }
@@ -240,7 +241,19 @@ class Factory implements FactoryContract
      */
     public function addNamespace(string $namespace, $hints): FactoryContract
     {
-        $this->finder->addNamespace($namespace, $hints);
+        $this->getFinder()->addNamespace($namespace, $hints);
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @codeCoverageIgnore
+     */
+    public function replaceNamespace(string $namespace, $hints): FactoryContract
+    {
+        $this->getFinder()->replaceNamespace($namespace, $hints);
 
         return $this;
     }
@@ -252,9 +265,17 @@ class Factory implements FactoryContract
      */
     public function prependNamespace(string $namespace, $hints): FactoryContract
     {
-        $this->finder->prependNamespace($namespace, $hints);
+        $this->getFinder()->prependNamespace($namespace, $hints);
 
         return $this;
+    }
+
+    /**
+     * Flush the cache of views located by the finder.
+     */
+    public function flushFinderCache()
+    {
+        $this->getFinder()->flush();
     }
 
     /**
@@ -262,7 +283,7 @@ class Factory implements FactoryContract
      */
     public function addExtension(string $extension, string $engine, Closure $resolver = null): FactoryContract
     {
-        $this->finder->addExtension($extension);
+        $this->getFinder()->addExtension($extension);
 
         if (isset($resolver)) {
             $this->engines->register($engine, $resolver);

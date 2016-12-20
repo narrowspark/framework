@@ -43,8 +43,8 @@ class PluralizationRules implements PluralizationRulesContract
      */
     public function get(int $count, string $language): int
     {
-        if (strlen($language) > 3) {
-            $language = substr($language, 0, -strlen(strrchr($language, '_')));
+        if (mb_strlen($language) > 3) {
+            $language = mb_substr($language, 0, -mb_strlen(mb_strrchr($language, '_')));
         }
 
         if (isset($this->rules[$language])) {
@@ -65,8 +65,8 @@ class PluralizationRules implements PluralizationRulesContract
      */
     public function set(string $language, callable $rule): PluralizationRulesContract
     {
-        if (strlen($language) > 3) {
-            $language = substr($language, 0, -strlen(strrchr($language, '_')));
+        if (mb_strlen($language) > 3) {
+            $language = mb_substr($language, 0, -mb_strlen(mb_strrchr($language, '_')));
         }
 
         $this->rules[$language] = $rule;

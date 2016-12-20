@@ -24,9 +24,9 @@ class ExpressionParser
             throw new InvalidCommandExpression('The expression was empty');
         }
 
-        $name = array_shift($tokens);
+        $name      = array_shift($tokens);
         $arguments = [];
-        $options = [];
+        $options   = [];
 
         foreach ($tokens as $token) {
             if (Str::startsWith($token, '--')) {
@@ -41,9 +41,9 @@ class ExpressionParser
         }
 
         return [
-            'name' => $name,
+            'name'      => $name,
             'arguments' => $arguments,
-            'options' => $options,
+            'options'   => $options,
         ];
     }
 
@@ -97,9 +97,9 @@ class ExpressionParser
         $token = trim($token, '[]');
 
         // Shortcut [-y|--yell]
-        if (strpos($token, '|') !== false) {
+        if (mb_strpos($token, '|') !== false) {
             list($shortcut, $token) = explode('|', $token, 2);
-            $shortcut = ltrim($shortcut, '-');
+            $shortcut               = ltrim($shortcut, '-');
         } else {
             $shortcut = null;
         }
@@ -108,7 +108,7 @@ class ExpressionParser
 
         if (Str::endsWith($token, '=]*')) {
             $mode = InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY;
-            $name = substr($name, 0, -3);
+            $name = mb_substr($name, 0, -3);
         } elseif (Str::endsWith($token, '=')) {
             $mode = InputOption::VALUE_REQUIRED;
             $name = rtrim($name, '=');

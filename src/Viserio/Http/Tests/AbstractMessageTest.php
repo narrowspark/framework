@@ -45,14 +45,14 @@ abstract class AbstractMessageTest extends \PHPUnit_Framework_TestCase
     public function testValidNonExistHeader()
     {
         $message = $this->classToTest;
-        $values = $message->getHeader('not exist');
+        $values  = $message->getHeader('not exist');
 
         self::assertValidHeaderValue($values);
     }
 
     public function testValidNonExistHeaderLine()
     {
-        $message = $this->classToTest;
+        $message    = $this->classToTest;
         $headerLine = $message->getHeaderLine('not exist');
 
         self::assertInternalType('string', $headerLine, 'getHeaderLine must return a string');
@@ -65,7 +65,7 @@ abstract class AbstractMessageTest extends \PHPUnit_Framework_TestCase
     public function testValidDefaultBody()
     {
         $message = $this->classToTest;
-        $body = $message->getBody();
+        $body    = $message->getBody();
 
         self::assertInstanceOf(
             StreamInterface::class,
@@ -81,9 +81,9 @@ abstract class AbstractMessageTest extends \PHPUnit_Framework_TestCase
      */
     public function testValidWithProtocolVersion($expectedVersion)
     {
-        $message = $this->classToTest;
+        $message      = $this->classToTest;
         $messageClone = clone $message;
-        $newMessage = $message->withProtocolVersion($expectedVersion);
+        $newMessage   = $message->withProtocolVersion($expectedVersion);
 
         self::assertEquals(
             $expectedVersion,
@@ -111,7 +111,7 @@ abstract class AbstractMessageTest extends \PHPUnit_Framework_TestCase
      */
     public function testValidWithHeader($headerName, $headerValue, $expectedHeaderValue)
     {
-        $message = $this->classToTest;
+        $message      = $this->classToTest;
         $messageClone = clone $message;
 
         $newMessage = $message->withHeader($headerName, $headerValue);
@@ -133,9 +133,9 @@ abstract class AbstractMessageTest extends \PHPUnit_Framework_TestCase
      */
     public function testValidWithAddedHeader($headerName, $headerValue, $expectedHeaderValue)
     {
-        $message = $this->classToTest;
+        $message      = $this->classToTest;
         $messageClone = clone $message;
-        $newMessage = $message->withAddedHeader($headerName, $headerValue);
+        $newMessage   = $message->withAddedHeader($headerName, $headerValue);
 
         self::assertImmutable($messageClone, $message, $newMessage);
         self::assertEquals(
@@ -172,7 +172,7 @@ abstract class AbstractMessageTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetHeaderLine($headerName, $headerValue, $expectedHeaderValue, $expectedHeaderLine)
     {
-        $message = $this->classToTest;
+        $message    = $this->classToTest;
         $newMessage = $message->withHeader($headerName, $headerValue);
 
         self::assertEquals($expectedHeaderLine, $newMessage->getHeaderLine($headerName));
@@ -187,7 +187,7 @@ abstract class AbstractMessageTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetHeaders($headerName, $headerValue, $expectedHeaderValue)
     {
-        $message = $this->classToTest;
+        $message    = $this->classToTest;
         $newMessage = $message->withHeader($headerName, $headerValue);
 
         self::assertEquals([$headerName => $expectedHeaderValue], $newMessage->getHeaders());
@@ -201,9 +201,9 @@ abstract class AbstractMessageTest extends \PHPUnit_Framework_TestCase
      */
     public function testWithoutHeader($headerName, $headerValue)
     {
-        $message = $this->classToTest;
+        $message           = $this->classToTest;
         $messageWithHeader = $message->withHeader($headerName, $headerValue);
-        $messageClone = clone $messageWithHeader;
+        $messageClone      = clone $messageWithHeader;
 
         self::assertTrue($messageWithHeader->hasHeader($headerName));
 
@@ -219,18 +219,18 @@ abstract class AbstractMessageTest extends \PHPUnit_Framework_TestCase
         return [
             // Description => [header name, header value, getHeader(), getHeaderLine()],
             'Basic: value' => ['Basic', 'value', ['value'], 'value'],
-            'array value' => ['Basic', ['value'], ['value'], 'value'],
-            'two value' => ['Basic', ['value1', 'value2'], ['value1', 'value2'], 'value1,value2'],
+            'array value'  => ['Basic', ['value'], ['value'], 'value'],
+            'two value'    => ['Basic', ['value1', 'value2'], ['value1', 'value2'], 'value1,value2'],
         ];
     }
 
     public function testWithBody()
     {
-        $message = $this->classToTest;
+        $message      = $this->classToTest;
         $messageClone = clone $message;
 
         $expectedBody = $this->mock(StreamInterface::class);
-        $newMessage = $message->withBody($expectedBody);
+        $newMessage   = $message->withBody($expectedBody);
 
         self::assertImmutable($messageClone, $message, $newMessage);
         self::assertEquals(

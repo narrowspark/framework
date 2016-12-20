@@ -42,7 +42,7 @@ class MacroableTraitTest extends \PHPUnit_Framework_TestCase
         });
 
         $instance = new MacroTest();
-        $result = $instance->tryInstance();
+        $result   = $instance->tryInstance();
 
         self::assertEquals('instance', $result);
 

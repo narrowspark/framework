@@ -25,7 +25,7 @@ final class HeaderSecurity
     }
 
     /**
-     * Filter a header value
+     * Filter a header value.
      *
      * Ensures CRLF header injection vectors are filtered.
      *
@@ -44,7 +44,7 @@ final class HeaderSecurity
      */
     public static function filter(string $value): string
     {
-        $length = strlen($value);
+        $length = mb_strlen($value);
         $string = '';
 
         for ($i = 0; $i < $length; $i += 1) {

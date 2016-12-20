@@ -2,13 +2,10 @@
 declare(strict_types=1);
 namespace Viserio\Foundation\Http;
 
-use Interop\Http\Middleware\DelegateInterface;
-use Interop\Http\Middleware\ServerMiddlewareInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Symfony\Component\Debug\Exception\FatalThrowableError;
 use Throwable;
-use Viserio\Config\Manager as ConfigManager;
+use Viserio\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Contracts\Events\Dispatcher as DispatcherContract;
 use Viserio\Contracts\Events\Traits\EventsAwareTrait;
 use Viserio\Contracts\Exception\Handler as HandlerContract;
@@ -16,10 +13,10 @@ use Viserio\Contracts\Foundation\Application as ApplicationContract;
 use Viserio\Contracts\Foundation\Kernel as KernelContract;
 use Viserio\Contracts\Foundation\Terminable as TerminableContract;
 use Viserio\Contracts\Routing\Router as RouterContract;
+use Viserio\Contracts\WebProfiler\WebProfiler as WebProfilerContract;
 use Viserio\Foundation\Bootstrap\DetectEnvironment;
 use Viserio\Foundation\Bootstrap\HandleExceptions;
 use Viserio\Foundation\Bootstrap\LoadConfiguration;
-use Viserio\Foundation\Bootstrap\LoadRoutes;
 use Viserio\Foundation\Bootstrap\LoadServiceProvider;
 use Viserio\Routing\Pipeline;
 use Viserio\Routing\Router;
@@ -27,7 +24,7 @@ use Viserio\Session\Middleware\StartSessionMiddleware;
 use Viserio\StaticalProxy\StaticalProxy;
 use Viserio\View\Middleware\ShareErrorsFromSessionMiddleware;
 
-class Kernel implements TerminableContract, KernelContract, ServerMiddlewareInterface
+class Kernel implements TerminableContract, KernelContract
 {
     use EventsAwareTrait;
 
@@ -94,7 +91,6 @@ class Kernel implements TerminableContract, KernelContract, ServerMiddlewareInte
         LoadConfiguration::class,
         DetectEnvironment::class,
         HandleExceptions::class,
-        LoadRoutes::class,
         LoadServiceProvider::class,
     ];
 
@@ -110,7 +106,7 @@ class Kernel implements TerminableContract, KernelContract, ServerMiddlewareInte
         RouterContract $router,
         DispatcherContract $events
     ) {
-        $this->app = $app;
+        $this->app    = $app;
         $this->events = $events;
 
         $router->setMiddlewarePriorities($this->middlewarePriority);
@@ -128,27 +124,54 @@ class Kernel implements TerminableContract, KernelContract, ServerMiddlewareInte
     }
 
     /**
-     * {@inheritdoc}
+     * Add a new middleware to beginning of the stack if it does not already exist.
+     *
+     * @param string $middleware
+     *
+     * @return $this
      */
-    public function process(ServerRequestInterface $request, DelegateInterface $delegate)
+    public function prependMiddleware(string $middleware)
     {
+        if (array_search($middleware, $this->middlewares) === false) {
+            array_unshift($this->middlewares, $middleware);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Add a new middleware to end of the stack if it does not already exist.
+     *
+     * @param string $middleware
+     *
+     * @return $this
+     */
+    public function pushMiddleware(string $middleware)
+    {
+        if (array_search($middleware, $this->middlewares) === false) {
+            $this->middlewares[] = $middleware;
+        }
+
+        return $this;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function handle(ServerRequestInterface $request): ResponseInterface
+    public function handle(ServerRequestInterface $serverRequest): ResponseInterface
     {
+        $serverRequest = $serverRequest->withAddedHeader('X-Php-Ob-Level', (string) ob_get_level());
+
         // Passes the request to the container
-        $this->app->instance(ServerRequestInterface::class, $request);
+        $this->app->instance(ServerRequestInterface::class, $serverRequest);
 
         StaticalProxy::clearResolvedInstance('request');
 
-        $this->events->trigger(self::REQUEST, [$request]);
+        $this->events->trigger(self::REQUEST, [$serverRequest]);
 
         $this->bootstrap();
 
-        $response = $this->handleRequest($request);
+        $response = $this->handleRequest($serverRequest);
 
         // stop PHP sending a Content-Type automatically
         ini_set('default_mimetype', '');
@@ -159,9 +182,9 @@ class Kernel implements TerminableContract, KernelContract, ServerMiddlewareInte
     /**
      * {@inheritdoc}
      */
-    public function terminate(ServerRequestInterface $request, ResponseInterface $response)
+    public function terminate(ServerRequestInterface $serverRequest, ResponseInterface $response)
     {
-        $this->events->trigger(self::TERMINATE, [$request, $response]);
+        $this->events->trigger(self::TERMINATE, [$serverRequest, $response]);
 
         $this->app->get(HandlerContract::class)->unregister();
     }
@@ -188,17 +211,49 @@ class Kernel implements TerminableContract, KernelContract, ServerMiddlewareInte
         try {
             $response = $this->sendRequestThroughRouter($request);
 
+            if ($this->app->has(WebProfilerContract::class)) {
+                // Modify the response to add the webprofiler
+                $response = $this->app->get(WebProfilerContract::class)->modifyResponse(
+                    $request,
+                    $response
+                );
+            }
+
             $this->events->trigger(self::RESPONSE, [$request, $response]);
         } catch (Throwable $exception) {
-            $exceptionHandler = $this->app->get(HandlerContract::class);
-            $exceptionHandler->report($exception = new FatalThrowableError($exception));
+            $this->reportException($exception);
 
-            $response = $exceptionHandler->render($request, $exception);
+            $response = $this->renderException($request, $exception);
 
             $this->events->trigger(self::EXCEPTION, [$request, $response]);
         }
 
         return $response;
+    }
+
+    /**
+     * Report the exception to the exception handler.
+     *
+     * @param \Throwable $exception
+     */
+    protected function reportException(Throwable $exception)
+    {
+        $this->app->get(HandlerContract::class)->report($exception);
+    }
+
+    /**
+     * Render the exception to a response.
+     *
+     * @param \Psr\Http\Message\ServerRequestInterface $request
+     * @param \Throwable                               $exception
+     *
+     * @return \Psr\Http\Message\ResponseInterface
+     */
+    protected function renderException(
+        ServerRequestInterface $request,
+        Throwable $exception
+    ): ResponseInterface {
+        return $this->app->get(HandlerContract::class)->render($request, $exception);
     }
 
     /**
@@ -211,7 +266,7 @@ class Kernel implements TerminableContract, KernelContract, ServerMiddlewareInte
     protected function sendRequestThroughRouter(ServerRequestInterface $request): ResponseInterface
     {
         $router = $this->router;
-        $config = $this->app->get(ConfigManager::class);
+        $config = $this->app->get(RepositoryContract::class);
 
         $router->setCachePath($config->get('routing.path'));
         $router->refreshCache($config->get('app.env', 'production') !== 'production');
@@ -221,6 +276,8 @@ class Kernel implements TerminableContract, KernelContract, ServerMiddlewareInte
             ->send($request)
             ->through($config->get('app.skip_middlewares', false) ? [] : $this->middlewares)
             ->then(function ($request) use ($router) {
+                $this->app->instance(ServerRequestInterface::class, $request);
+
                 return $router->dispatch($request);
             });
     }

@@ -20,7 +20,7 @@ class DatabaseServiceProvider implements ServiceProvider
 {
     use ServiceProviderConfigAwareTrait;
 
-    const PACKAGE = 'viserio.database';
+    public const PACKAGE = 'viserio.database';
 
     /**
      * {@inheritdoc}
@@ -28,17 +28,17 @@ class DatabaseServiceProvider implements ServiceProvider
     public function getServices()
     {
         return [
-            Connection::class => [self::class, 'createConnection'],
+            Connection::class    => [self::class, 'createConnection'],
             Configuration::class => [self::class, 'createConfiguration'],
-            EventManager::class => [self::class, 'createEventManager'],
-            'db' => function (ContainerInterface $container) {
+            EventManager::class  => [self::class, 'createEventManager'],
+            'db'                 => function (ContainerInterface $container) {
                 return $container->get(Connection::class);
             },
             'database' => function (ContainerInterface $container) {
                 return $container->get(Connection::class);
             },
             'database.command.helper' => [self::class, 'createDatabaseCommandsHelpser'],
-            'database.commands' => [self::class, 'createDatabaseCommands'],
+            'database.commands'       => [self::class, 'createDatabaseCommands'],
         ];
     }
 
@@ -80,10 +80,10 @@ class DatabaseServiceProvider implements ServiceProvider
     private static function parseConfig(array $config): array
     {
         $connections = $config['connections'][$config['default']];
-        $config = array_merge($config, $connections);
+        $config      = array_merge($config, $connections);
 
-        if (strpos($config['default'], 'sqlite') === false) {
-            $config['user'] = $connections['username'];
+        if (mb_strpos($config['default'], 'sqlite') === false) {
+            $config['user']   = $connections['username'];
             $config['dbname'] = $connections['database'];
 
             if (empty($config['dbname'])) {

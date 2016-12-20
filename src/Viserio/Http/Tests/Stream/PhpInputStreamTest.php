@@ -18,7 +18,7 @@ class PhpInputStreamTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->file = dirname(__DIR__) . '/Fixture/php-input-stream.txt';
+        $this->file   = dirname(__DIR__) . '/Fixture/php-input-stream.txt';
         $this->stream = new PhpInputStream($this->file);
     }
 
@@ -52,11 +52,11 @@ class PhpInputStreamTest extends \PHPUnit_Framework_TestCase
 
     public function testGetContentsReturnsRemainingContentsOfStream()
     {
-        $start = $this->stream->read(128);
+        $start     = $this->stream->read(128);
         $remainder = $this->stream->getContents();
-        $contents = $this->getFileContents();
+        $contents  = $this->getFileContents();
 
-        self::assertEquals(substr($contents, 128), $remainder);
+        self::assertEquals(mb_substr($contents, 128), $remainder);
     }
 
     public function testCastingToStringReturnsFullContentsRegardlesOfPriorReads()
@@ -68,8 +68,8 @@ class PhpInputStreamTest extends \PHPUnit_Framework_TestCase
 
     public function testMultipleCastsToStringReturnSameContentsEvenIfReadsOccur()
     {
-        $first = (string) $this->stream;
-        $read = $this->stream->read(128);
+        $first  = (string) $this->stream;
+        $read   = $this->stream->read(128);
         $second = (string) $this->stream;
 
         self::assertSame($first, $second);

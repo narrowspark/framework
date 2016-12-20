@@ -4,7 +4,7 @@ namespace Viserio\Support\Tests;
 
 use Narrowspark\TestingHelper\ArrayContainer;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
-use Viserio\Contracts\Config\Manager as ConfigContract;
+use Viserio\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Support\Tests\Fixture\TestManager;
 
 class AbstractManagerTest extends \PHPUnit_Framework_TestCase
@@ -13,7 +13,7 @@ class AbstractManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testConfigSetGet()
     {
-        $config = $this->mock(ConfigContract::class);
+        $config = $this->mock(RepositoryContract::class);
         $config->shouldReceive('get');
 
         $manager = new TestManager($config);
@@ -24,7 +24,7 @@ class AbstractManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testDriver()
     {
-        $config = $this->mock(ConfigContract::class);
+        $config = $this->mock(RepositoryContract::class);
         $config->shouldReceive('get')
             ->once()
             ->with('test.drivers', [])
@@ -55,9 +55,9 @@ class AbstractManagerTest extends \PHPUnit_Framework_TestCase
         self::assertEquals(['name' => 'value', 'driver' => 'foo'], $manager->driver('value'));
         self::assertTrue($manager->hasDriver('value'));
         self::assertEquals([
-            'test' => true,
+            'test'   => true,
             'config' => ['name' => 'config', 'driver' => 'config'],
-            'value' => ['name' => 'value', 'driver' => 'foo'],
+            'value'  => ['name' => 'value', 'driver' => 'foo'],
         ], $manager->getDrivers());
 
         $config->shouldReceive('get')
@@ -72,7 +72,7 @@ class AbstractManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testCustomeDriver()
     {
-        $config = $this->mock(ConfigContract::class);
+        $config = $this->mock(RepositoryContract::class);
         $config->shouldReceive('get')
             ->once()
             ->with('test.drivers', [])
@@ -93,7 +93,7 @@ class AbstractManagerTest extends \PHPUnit_Framework_TestCase
      */
     public function testDriverToThrowException()
     {
-        $config = $this->mock(ConfigContract::class);
+        $config = $this->mock(RepositoryContract::class);
         $config->shouldReceive('get');
 
         $manager = new TestManager($config);
@@ -102,7 +102,7 @@ class AbstractManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testCall()
     {
-        $config = $this->mock(ConfigContract::class);
+        $config = $this->mock(RepositoryContract::class);
         $config->shouldReceive('get')
             ->once()
             ->with('test.drivers', [])
@@ -132,7 +132,7 @@ class AbstractManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testCustomDriverClosureBoundObjectIsCacheManager()
     {
-        $config = $this->mock(ConfigContract::class);
+        $config = $this->mock(RepositoryContract::class);
         $config->shouldReceive('get')
             ->once()
             ->with('test.drivers', [])
@@ -153,7 +153,7 @@ class AbstractManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testGetDriverConfig()
     {
-        $config = $this->mock(ConfigContract::class);
+        $config = $this->mock(RepositoryContract::class);
         $config->shouldReceive('get')
             ->once()
             ->with('test.drivers', [])
@@ -170,7 +170,7 @@ class AbstractManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testDefaultDriver()
     {
-        $config = $this->mock(ConfigContract::class);
+        $config = $this->mock(RepositoryContract::class);
         $config->shouldReceive('get')
             ->once()
             ->with('test.default', '')

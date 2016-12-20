@@ -6,6 +6,7 @@ use Viserio\Config\Providers\ConfigServiceProvider;
 use Viserio\Container\Container;
 use Viserio\Database\Providers\DatabaseServiceProvider;
 use Viserio\Database\Providers\MigrationsServiceProvider;
+use Viserio\Support\Env;
 
 class MigrationsServiceProviderTest extends \PHPUnit_Framework_TestCase
 {
@@ -17,23 +18,23 @@ class MigrationsServiceProviderTest extends \PHPUnit_Framework_TestCase
         $container->register(new MigrationsServiceProvider());
 
         $container->get('config')->set('database', [
-            'default' => 'mysql',
+            'default'     => 'mysql',
             'connections' => [
                 'mysql' => [
-                    'driver' => 'pdo_mysql',
-                    'host' => 'DB_HOST',
-                    'port' => 'DB_PORT',
-                    'database' => 'DB_DATABASE_NAME',
-                    'username' => 'DB_DATABASE_USER',
-                    'password' => 'DB_DATABASE_PASSWORD',
-                    'charset' => 'DB_CHARSET', 'UTF8',
+                    'driver'        => 'pdo_mysql',
+                    'host'          => 'DB_HOST',
+                    'port'          => 'DB_PORT',
+                    'database'      => 'DB_DATABASE_NAME',
+                    'username'      => 'DB_DATABASE_USER',
+                    'password'      => 'DB_DATABASE_PASSWORD',
+                    'charset'       => 'DB_CHARSET', 'UTF8',
                     'driverOptions' => [1002 => 'SET NAMES utf8'],
                 ],
             ],
             'migrations' => [
-                'path' => env('DB_MIGRATION_PATH', __DIR__ . '/../Stub/'),
-                'namespace' => 'Database\\Migrations',
-                'name' => 'migration',
+                'path'       => Env::get('DB_MIGRATION_PATH', __DIR__ . '/../Stub/'),
+                'namespace'  => 'Database\\Migrations',
+                'name'       => 'migration',
                 'table_name' => 'migration',
             ],
         ]);
@@ -48,23 +49,23 @@ class MigrationsServiceProviderTest extends \PHPUnit_Framework_TestCase
         $container->register(new MigrationsServiceProvider());
 
         $container->instance('options', [
-            'default' => 'mysql',
+            'default'     => 'mysql',
             'connections' => [
                 'mysql' => [
-                    'driver' => 'pdo_mysql',
-                    'host' => 'DB_HOST',
-                    'port' => 'DB_PORT',
-                    'database' => 'DB_DATABASE_NAME',
-                    'username' => 'DB_DATABASE_USER',
-                    'password' => 'DB_DATABASE_PASSWORD',
-                    'charset' => 'DB_CHARSET', 'UTF8',
+                    'driver'        => 'pdo_mysql',
+                    'host'          => 'DB_HOST',
+                    'port'          => 'DB_PORT',
+                    'database'      => 'DB_DATABASE_NAME',
+                    'username'      => 'DB_DATABASE_USER',
+                    'password'      => 'DB_DATABASE_PASSWORD',
+                    'charset'       => 'DB_CHARSET', 'UTF8',
                     'driverOptions' => [1002 => 'SET NAMES utf8'],
                 ],
             ],
             'migrations' => [
-                'path' => env('DB_MIGRATION_PATH', __DIR__ . '/../Stub/'),
-                'namespace' => 'Database\\Migrations',
-                'name' => 'migration',
+                'path'       => Env::get('DB_MIGRATION_PATH', __DIR__ . '/../Stub/'),
+                'namespace'  => 'Database\\Migrations',
+                'name'       => 'migration',
                 'table_name' => 'migration',
             ],
         ]);
@@ -79,29 +80,29 @@ class MigrationsServiceProviderTest extends \PHPUnit_Framework_TestCase
         $container->register(new MigrationsServiceProvider());
 
         $container->instance('viserio.database.options', [
-            'default' => 'sqlite',
+            'default'     => 'sqlite',
             'connections' => [
                 'mysql' => [
-                    'driver' => 'pdo_mysql',
-                    'host' => 'DB_HOST',
-                    'port' => 'DB_PORT',
-                    'database' => 'DB_DATABASE_NAME',
-                    'username' => 'DB_DATABASE_USER',
-                    'password' => 'DB_DATABASE_PASSWORD',
-                    'charset' => 'DB_CHARSET', 'UTF8',
+                    'driver'        => 'pdo_mysql',
+                    'host'          => 'DB_HOST',
+                    'port'          => 'DB_PORT',
+                    'database'      => 'DB_DATABASE_NAME',
+                    'username'      => 'DB_DATABASE_USER',
+                    'password'      => 'DB_DATABASE_PASSWORD',
+                    'charset'       => 'DB_CHARSET', 'UTF8',
                     'driverOptions' => [1002 => 'SET NAMES utf8'],
                 ],
                 'sqlite' => [
-                    'driver' => 'pdo_sqlite',
+                    'driver'   => 'pdo_sqlite',
                     'username' => 'DB_DATABASE_USER',
                     'database' => __DIR__ . '/../Stub/database.sqlite',
-                    'memory' => true,
+                    'memory'   => true,
                 ],
             ],
             'migrations' => [
-                'path' => env('DB_MIGRATION_PATH', __DIR__ . '/../Stub/'),
-                'namespace' => 'Database\\Migrations',
-                'name' => 'migration',
+                'path'       => Env::get('DB_MIGRATION_PATH', __DIR__ . '/../Stub/'),
+                'namespace'  => 'Database\\Migrations',
+                'name'       => 'migration',
                 'table_name' => 'migration',
             ],
         ]);

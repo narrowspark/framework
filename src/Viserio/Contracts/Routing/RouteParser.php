@@ -4,9 +4,9 @@ namespace Viserio\Contracts\Routing;
 
 interface RouteParser
 {
-    const STATIC_PART = 0;
+    public const STATIC_PART = 0;
 
-    const PARAMETER_PART = 1;
+    public const PARAMETER_PART = 1;
 
     /**
      * Parses the supplied route pattern into an array of route segments.

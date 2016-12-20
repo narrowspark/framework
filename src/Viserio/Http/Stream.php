@@ -11,42 +11,42 @@ use Throwable;
 class Stream implements StreamInterface
 {
     /**
-     * Bit mask to determine if the stream is a pipe
+     * Bit mask to determine if the stream is a pipe.
      *
      * This is octal as per header stat.h
      */
-    const FSTAT_MODE_S_IFIFO = 0010000;
+    public const FSTAT_MODE_S_IFIFO = 0010000;
 
     /**
-     * Resource modes
+     * Resource modes.
      *
      * @var array
      *
      * @link http://php.net/manual/function.fopen.php
      */
-    const READABLE_MODES = [
-        'r' => true, 'w+' => true, 'r+' => true, 'x+' => true, 'c+' => true,
-        'rb' => true, 'w+b' => true, 'r+b' => true, 'x+b' => true,
+    public const READABLE_MODES = [
+        'r'   => true, 'w+' => true, 'r+' => true, 'x+' => true, 'c+' => true,
+        'rb'  => true, 'w+b' => true, 'r+b' => true, 'x+b' => true,
         'c+b' => true, 'rt' => true, 'w+t' => true, 'r+t' => true,
         'x+t' => true, 'c+t' => true, 'a+' => true,
     ];
 
-    const WRITABLE_MODES = [
-        'w' => true, 'w+' => true, 'rw' => true, 'r+' => true, 'x+' => true,
-        'c+' => true, 'wb' => true, 'w+b' => true, 'r+b' => true,
+    public const WRITABLE_MODES = [
+        'w'   => true, 'w+' => true, 'rw' => true, 'r+' => true, 'x+' => true,
+        'c+'  => true, 'wb' => true, 'w+b' => true, 'r+b' => true,
         'x+b' => true, 'c+b' => true, 'w+t' => true, 'r+t' => true,
         'x+t' => true, 'c+t' => true, 'a' => true, 'a+' => true,
     ];
 
     /**
-     * The underlying stream resource
+     * The underlying stream resource.
      *
      * @var resource
      */
     protected $stream;
 
     /**
-     * Stream metadata
+     * Stream metadata.
      *
      * @var array
      */
@@ -74,7 +74,7 @@ class Stream implements StreamInterface
     protected $seekable;
 
     /**
-     * The size of the stream if known
+     * The size of the stream if known.
      *
      * @var null|int
      */
@@ -94,8 +94,8 @@ class Stream implements StreamInterface
      * - metadata: (array) Any additional metadata to return when the metadata
      *   of the stream is accessed.
      *
-     * @param resource $stream  Stream resource to wrap.
-     * @param array    $options Associative array of options.
+     * @param resource $stream  stream resource to wrap
+     * @param array    $options associative array of options
      *
      * @throws \InvalidArgumentException if the stream is not a stream resource
      */
@@ -127,7 +127,7 @@ class Stream implements StreamInterface
     }
 
     /**
-     * Closes the stream when the destructed
+     * Closes the stream when the destructed.
      */
     public function __destruct()
     {
@@ -160,7 +160,7 @@ class Stream implements StreamInterface
     /**
      * {@inheritdoc}
      */
-    public function getContents()
+    public function getContents(): string
     {
         $contents = stream_get_contents($this->stream);
 
@@ -174,7 +174,7 @@ class Stream implements StreamInterface
     /**
      * {@inheritdoc}
      */
-    public function close()
+    public function close(): void
     {
         if (isset($this->stream)) {
             if (is_resource($this->stream)) {
@@ -198,7 +198,7 @@ class Stream implements StreamInterface
 
         unset($this->stream);
 
-        $this->size = $this->uri = null;
+        $this->size     = $this->uri     = null;
         $this->readable = $this->writable = $this->seekable = false;
 
         return $result;
@@ -207,14 +207,14 @@ class Stream implements StreamInterface
     /**
      * {@inheritdoc}
      */
-    public function getSize()
+    public function getSize(): ?int
     {
         if ($this->size !== null) {
             return $this->size;
         }
 
         if (! isset($this->stream)) {
-            return;
+            return null;
         }
 
         // Clear the stat cache if the stream has a URI
@@ -234,7 +234,7 @@ class Stream implements StreamInterface
     /**
      * {@inheritdoc}
      */
-    public function isReadable()
+    public function isReadable(): bool
     {
         return $this->readable;
     }
@@ -242,7 +242,7 @@ class Stream implements StreamInterface
     /**
      * {@inheritdoc}
      */
-    public function isWritable()
+    public function isWritable(): bool
     {
         return $this->writable;
     }
@@ -250,7 +250,7 @@ class Stream implements StreamInterface
     /**
      * {@inheritdoc}
      */
-    public function isSeekable()
+    public function isSeekable(): bool
     {
         return $this->seekable;
     }
@@ -258,7 +258,7 @@ class Stream implements StreamInterface
     /**
      * {@inheritdoc}
      */
-    public function eof()
+    public function eof(): bool
     {
         return ! $this->stream || feof($this->stream);
     }
@@ -266,7 +266,7 @@ class Stream implements StreamInterface
     /**
      * {@inheritdoc}
      */
-    public function tell()
+    public function tell(): int
     {
         $result = ftell($this->stream);
 
@@ -303,7 +303,7 @@ class Stream implements StreamInterface
     /**
      * {@inheritdoc}
      */
-    public function read($length)
+    public function read($length): string
     {
         if (! $this->readable) {
             throw new RuntimeException('Cannot read from non-readable stream');
@@ -329,7 +329,7 @@ class Stream implements StreamInterface
     /**
      * {@inheritdoc}
      */
-    public function write($string)
+    public function write($string): int
     {
         if (! $this->writable) {
             throw new RuntimeException('Cannot write to a non-writable stream');
@@ -337,7 +337,7 @@ class Stream implements StreamInterface
 
         // We can't know the size after writing anything
         $this->size = null;
-        $result = fwrite($this->stream, $string);
+        $result     = fwrite($this->stream, $string);
 
         if ($result === false) {
             throw new RuntimeException('Unable to write to stream');

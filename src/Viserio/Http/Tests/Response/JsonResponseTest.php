@@ -16,7 +16,7 @@ class JsonResponseTest extends \PHPUnit_Framework_TestCase
             ],
         ];
 
-        $json = '{"nested":{"json":["tree"]}}';
+        $json     = '{"nested":{"json":["tree"]}}';
         $response = new JsonResponse($data);
 
         self::assertEquals(200, $response->getStatusCode());
@@ -27,20 +27,22 @@ class JsonResponseTest extends \PHPUnit_Framework_TestCase
     public function scalarValuesForJSON()
     {
         return [
-            'null' => [null],
-            'false' => [false],
-            'true' => [true],
-            'zero' => [0],
-            'int' => [1],
-            'zero-float' => [0.0],
-            'float' => [1.1],
+            'null'         => [null],
+            'false'        => [false],
+            'true'         => [true],
+            'zero'         => [0],
+            'int'          => [1],
+            'zero-float'   => [0.0],
+            'float'        => [1.1],
             'empty-string' => [''],
-            'string' => ['string'],
+            'string'       => ['string'],
         ];
     }
 
     /**
      * @dataProvider scalarValuesForJSON
+     *
+     * @param mixed $value
      */
     public function testScalarValuePassedToConstructorJsonEncodesDirectly($value)
     {
@@ -90,22 +92,25 @@ class JsonResponseTest extends \PHPUnit_Framework_TestCase
     public function valuesToJsonEncode()
     {
         return [
-            'uri' => ['https://example.com/foo?bar=baz&baz=bat', 'uri'],
-            'html' => ['<p class="test">content</p>', 'html'],
+            'uri'    => ['https://example.com/foo?bar=baz&baz=bat', 'uri'],
+            'html'   => ['<p class="test">content</p>', 'html'],
             'string' => ["Don't quote!", 'string'],
         ];
     }
 
     /**
      * @dataProvider valuesToJsonEncode
+     *
+     * @param mixed $value
+     * @param mixed $key
      */
     public function testUsesSaneDefaultJsonEncodingFlags($value, $key)
     {
         $defaultFlags = JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP | JSON_UNESCAPED_SLASHES;
-        $response = new JsonResponse([$key => $value]);
-        $stream = $response->getBody();
-        $contents = (string) $stream;
-        $expected = json_encode($value, $defaultFlags);
+        $response     = new JsonResponse([$key => $value]);
+        $stream       = $response->getBody();
+        $contents     = (string) $stream;
+        $expected     = json_encode($value, $defaultFlags);
         self::assertContains(
             $expected,
             $contents,
@@ -115,9 +120,9 @@ class JsonResponseTest extends \PHPUnit_Framework_TestCase
 
     public function testConstructorRewindsBodyStream()
     {
-        $json = ['test' => 'data'];
+        $json     = ['test' => 'data'];
         $response = new JsonResponse($json);
-        $actual = json_decode($response->getBody()->getContents(), true);
+        $actual   = json_decode($response->getBody()->getContents(), true);
         self::assertEquals($json, $actual);
     }
 }

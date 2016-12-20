@@ -4,9 +4,9 @@ namespace Viserio\Log\Tests\Providers;
 
 use Monolog\Logger;
 use Psr\Log\LoggerInterface;
-use Viserio\Config\Manager as ConfigManager;
 use Viserio\Config\Providers\ConfigServiceProvider;
 use Viserio\Container\Container;
+use Viserio\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Contracts\Events\Dispatcher as DispatcherContract;
 use Viserio\Contracts\Log\Log;
 use Viserio\Events\Providers\EventsServiceProvider;
@@ -21,7 +21,7 @@ class LoggerServiceProviderTest extends \PHPUnit_Framework_TestCase
         $container->register(new ConfigServiceProvider());
         $container->register(new LoggerServiceProvider());
 
-        $container->get(ConfigManager::class)->set('logger', [
+        $container->get(RepositoryContract::class)->set('logger', [
             'env' => 'dev',
         ]);
 

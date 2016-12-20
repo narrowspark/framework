@@ -18,8 +18,7 @@ class TestConnectionManager extends AbstractConnectionManager
             {
                 return 'manager';
             }
-        }
-        ;
+        };
     }
 
     /**

@@ -19,10 +19,10 @@ class ServerRequestFactory implements ServerRequestFactoryInterface
      */
     public function createServerRequest(array $server, $method = null, $uri = null)
     {
-        $server = $this->normalizeServer($server);
+        $server        = $this->normalizeServer($server);
         $requestMethod = $method ?? $server['REQUEST_METHOD'] ?? 'GET';
-        $headers = function_exists('getallheaders') ? getallheaders() : $this->getAllHeaders($server);
-        $uri = $uri ?? $this->getUriFromGlobals();
+        $headers       = function_exists('allheaders') ? allheaders() : $this->allHeaders($server);
+        $uri           = $uri ?? $this->getUriFromGlobals();
 
         $serverRequest = new ServerRequest(
             $uri,
@@ -47,14 +47,25 @@ class ServerRequestFactory implements ServerRequestFactoryInterface
      */
     protected function getUriFromGlobals(): UriInterface
     {
-        $uri = new Uri('');
+        $uri       = new Uri('');
         $addSchema = false;
 
         if (isset($_SERVER['HTTP_HOST'])) {
-            $uri = $uri->withHost($_SERVER['HTTP_HOST']);
+            $http = explode(':', $_SERVER['HTTP_HOST']);
+            $uri  = $uri->withHost($http[0]);
+
+            if (isset($http[1])) {
+                $uri = $uri->withPort($http[1]);
+            }
+
             $addSchema = true;
         } elseif (isset($_SERVER['SERVER_NAME'])) {
             $uri = $uri->withHost($_SERVER['SERVER_NAME']);
+
+            if (isset($_SERVER['SERVER_PORT'])) {
+                $uri = $uri->withPort($_SERVER['SERVER_PORT']);
+            }
+
             $addSchema = true;
         }
 
@@ -78,7 +89,7 @@ class ServerRequestFactory implements ServerRequestFactoryInterface
     }
 
     /**
-     * Marshal the $_SERVER array
+     * Marshal the $_SERVER array.
      *
      * Pre-processes and returns the $_SERVER superglobal.
      *
@@ -144,21 +155,21 @@ class ServerRequestFactory implements ServerRequestFactoryInterface
      *
      * @return array
      */
-    protected function getAllHeaders(array $server) : array
+    protected function allHeaders(array $server): array
     {
         $headers = [];
         $content = [
             'CONTENT_LENGTH' => 'Content-Length',
-            'CONTENT_MD5' => 'Content-Md5',
-            'CONTENT_TYPE' => 'Content-Type',
+            'CONTENT_MD5'    => 'Content-Md5',
+            'CONTENT_TYPE'   => 'Content-Type',
         ];
 
         foreach ($server as $key => $value) {
-            if (substr($key, 0, 5) === 'HTTP_') {
-                $key = substr($key, 5);
+            if (mb_substr($key, 0, 5) === 'HTTP_') {
+                $key = mb_substr($key, 5);
 
                 if (! isset($content[$key]) || ! isset($server[$key])) {
-                    $key = str_replace(' ', '-', ucwords(strtolower(str_replace('_', ' ', $key))));
+                    $key           = str_replace(' ', '-', ucwords(mb_strtolower(str_replace('_', ' ', $key))));
                     $headers[$key] = $value;
                 }
             } elseif (isset($content[$key])) {
@@ -170,7 +181,7 @@ class ServerRequestFactory implements ServerRequestFactoryInterface
             if (isset($server['REDIRECT_HTTP_AUTHORIZATION'])) {
                 $headers['Authorization'] = $server['REDIRECT_HTTP_AUTHORIZATION'];
             } elseif (isset($server['PHP_AUTH_USER'])) {
-                $basicPass = isset($server['PHP_AUTH_PW']) ? $server['PHP_AUTH_PW'] : '';
+                $basicPass                = isset($server['PHP_AUTH_PW']) ? $server['PHP_AUTH_PW'] : '';
                 $headers['Authorization'] = 'Basic ' . base64_encode($server['PHP_AUTH_USER'] . ':' . $basicPass);
             } elseif (isset($server['PHP_AUTH_DIGEST'])) {
                 $headers['Authorization'] = $server['PHP_AUTH_DIGEST'];

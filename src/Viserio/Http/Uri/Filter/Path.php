@@ -9,7 +9,7 @@ class Path
     use TranscoderTrait;
 
     /**
-     * Dot Segment pattern
+     * Dot Segment pattern.
      *
      * @var array
      */
@@ -24,7 +24,7 @@ class Path
      */
     public function filter(string $path): string
     {
-        $input = explode('/', $path);
+        $input   = explode('/', $path);
         $newPath = implode('/', array_reduce($input, [$this, 'filterDotSegments'], []));
 
         if (isset(static::$dotSegments[end($input)])) {
@@ -38,13 +38,13 @@ class Path
     }
 
     /**
-     * validate the submitted data
+     * validate the submitted data.
      *
      * @param string $data
      *
      * @return array
      */
-    protected function validate($data)
+    protected function validate(string $data): array
     {
         $filterSegment = function ($segment) {
             return isset($segment);
@@ -56,7 +56,7 @@ class Path
     }
 
     /**
-     * Filter Dot segment according to RFC3986
+     * Filter Dot segment according to RFC3986.
      *
      * @see http://tools.ietf.org/html/rfc3986#section-5.2.4
      *
@@ -90,7 +90,7 @@ class Path
     protected function upper(string $path): string
     {
         return preg_replace_callback('/%[A-Fa-f0-9]{2}/', function ($match) {
-            return strtoupper($match[0]);
+            return mb_strtoupper($match[0]);
         }, $path);
     }
 }

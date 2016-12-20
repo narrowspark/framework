@@ -25,7 +25,7 @@ class CompoundMatcher extends AbstractMatcher
         }
 
         $this->parameterKeys = $parameterKeys;
-        $this->matchers = $matchers;
+        $this->matchers      = $matchers;
     }
 
     /**

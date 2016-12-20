@@ -4,7 +4,7 @@ namespace Viserio\Foundation\Commands;
 
 use Cake\Chronos\Chronos;
 use Viserio\Console\Command\Command;
-use Viserio\Contracts\Config\Manager as ConfigManagerContract;
+use Viserio\Contracts\Config\Repository as RepositoryContract;
 
 class DownCommand extends Command
 {
@@ -24,7 +24,7 @@ class DownCommand extends Command
      */
     public function handle()
     {
-        $config = $this->container->get(ConfigManagerContract::class);
+        $config = $this->container->get(RepositoryContract::class);
 
         file_put_contents(
             $config->get('path.storage') . '/framework/down',
@@ -42,9 +42,9 @@ class DownCommand extends Command
     protected function getDownPayload(): array
     {
         return [
-            'time' => Chronos::now()->getTimestamp(),
+            'time'    => Chronos::now()->getTimestamp(),
             'message' => $this->option('message'),
-            'retry' => $this->getRetryTime(),
+            'retry'   => $this->getRetryTime(),
         ];
     }
 

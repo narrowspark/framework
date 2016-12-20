@@ -10,8 +10,8 @@ class ContainerMixedPrimitiveFixture
 
     public function __construct($first, ContainerConcreteFixture $stub, $last)
     {
-        $this->stub = $stub;
-        $this->last = $last;
+        $this->stub  = $stub;
+        $this->last  = $last;
         $this->first = $first;
     }
 }

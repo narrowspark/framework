@@ -33,7 +33,7 @@ class EncryptedCookiesMiddlewareTest extends \PHPUnit_Framework_TestCase
     public function testEncryptedCookieRequest()
     {
         $encrypter = new Encrypter(Key::createNewRandomKey());
-        $request = (new ServerRequestFactory())->createServerRequest($_SERVER);
+        $request   = (new ServerRequestFactory())->createServerRequest($_SERVER);
 
         $dispatcher = new Dispatcher([
             new CallableMiddleware(function ($request, $delegate) use ($encrypter) {
@@ -59,7 +59,7 @@ class EncryptedCookiesMiddlewareTest extends \PHPUnit_Framework_TestCase
     public function testEncryptedCookieResponse()
     {
         $encrypter = new Encrypter(Key::createNewRandomKey());
-        $request = (new ServerRequestFactory())->createServerRequest($_SERVER);
+        $request   = (new ServerRequestFactory())->createServerRequest($_SERVER);
 
         $dispatcher = new Dispatcher([
             new EncryptedCookiesMiddleware($encrypter),
@@ -74,7 +74,7 @@ class EncryptedCookiesMiddlewareTest extends \PHPUnit_Framework_TestCase
         ]);
 
         $response = $dispatcher->dispatch($request);
-        $cookies = ResponseCookies::fromResponse($response);
+        $cookies  = ResponseCookies::fromResponse($response);
 
         self::assertSame('encrypted', $cookies->get('encrypted')->getName());
         self::assertSame('test', $encrypter->decrypt($cookies->get('encrypted')->getValue()));

@@ -94,7 +94,7 @@ class Str
     {
         preg_match('/^\s*+(?:\S++\s*+){1,' . $words . '}/u', $value, $matches);
 
-        if (! isset($matches[0]) || strlen($value) === strlen($matches[0])) {
+        if (! isset($matches[0]) || mb_strlen($value) === mb_strlen($matches[0])) {
             return $value;
         }
 
@@ -115,7 +115,7 @@ class Str
     }
 
     /**
-     * Generate a random string of a given length and character set
+     * Generate a random string of a given length and character set.
      *
      * @param int    $length     How many characters do you want?
      * @param string $characters Which characters to choose from
@@ -127,7 +127,7 @@ class Str
         string $characters = CharacterType::PRINTABLE_ASCII
     ): string {
         $str = '';
-        $l = self::length($characters) - 1;
+        $l   = self::length($characters) - 1;
 
         for ($i = 0; $i < $length; ++$i) {
             $r = random_int(0, $l);

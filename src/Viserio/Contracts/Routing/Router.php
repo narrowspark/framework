@@ -12,28 +12,28 @@ interface Router
      *
      * @var int
      */
-    const NOT_FOUND = 0;
+    public const NOT_FOUND = 0;
 
     /**
      * Match number for a found route.
      *
      * @var int
      */
-    const FOUND = 1;
+    public const FOUND = 1;
 
     /**
      * Match number for a not allowed http method.
      *
      * @var int
      */
-    const HTTP_METHOD_NOT_ALLOWED = 2;
+    public const HTTP_METHOD_NOT_ALLOWED = 2;
 
     /**
      * All of the verbs supported by the router.
      *
      * @var array
      */
-    const HTTP_METHOD_VARS = ['GET', 'HEAD', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'];
+    public const HTTP_METHOD_VARS = ['GET', 'HEAD', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'];
 
     /**
      * Register a new GET route with the router.

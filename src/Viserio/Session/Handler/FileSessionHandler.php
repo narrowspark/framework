@@ -39,15 +39,15 @@ class FileSessionHandler implements SessionHandlerInterface
      */
     public function __construct(FilesystemContract $files, string $path, int $lifetime)
     {
-        $this->path = $path;
-        $this->files = $files;
+        $this->path     = $path;
+        $this->files    = $files;
         $this->lifetime = $lifetime;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function open($savePath, $name)
+    public function open($savePath, $name): bool
     {
         return true;
     }
@@ -55,7 +55,7 @@ class FileSessionHandler implements SessionHandlerInterface
     /**
      * {@inheritdoc}
      */
-    public function close()
+    public function close(): bool
     {
         return true;
     }
@@ -63,12 +63,14 @@ class FileSessionHandler implements SessionHandlerInterface
     /**
      * {@inheritdoc}
      */
-    public function read($sessionId)
+    public function read($sessionId): string
     {
         $path = $this->path . '/' . $sessionId;
 
         if ($this->files->has($path)) {
-            if (strtotime($this->files->getTimestamp($path)) >= Chronos::now()->subMinutes($this->lifetime)->getTimestamp()) {
+            if (strtotime($this->files->getTimestamp($path)) >=
+                Chronos::now()->subMinutes($this->lifetime)->getTimestamp()
+            ) {
                 return $this->files->read($path);
             }
         }
@@ -79,7 +81,7 @@ class FileSessionHandler implements SessionHandlerInterface
     /**
      * {@inheritdoc}
      */
-    public function write($sessionId, $sessionData)
+    public function write($sessionId, $sessionData): bool
     {
         return $this->files->write($this->path . '/' . $sessionId, $sessionData, ['lock' => true]);
     }
@@ -87,7 +89,7 @@ class FileSessionHandler implements SessionHandlerInterface
     /**
      * {@inheritdoc}
      */
-    public function destroy($sessionId)
+    public function destroy($sessionId): bool
     {
         return $this->files->delete([$this->path . '/' . $sessionId]);
     }
@@ -95,7 +97,7 @@ class FileSessionHandler implements SessionHandlerInterface
     /**
      * {@inheritdoc}
      */
-    public function gc($maxlifetime)
+    public function gc($maxlifetime): bool
     {
         $files = Finder::create()
             ->in($this->path)

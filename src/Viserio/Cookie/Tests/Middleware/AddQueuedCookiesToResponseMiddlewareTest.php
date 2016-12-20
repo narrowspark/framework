@@ -2,7 +2,6 @@
 declare(strict_types=1);
 namespace Viserio\Cookie\Tests\Middleware;
 
-use DateTime;
 use Mockery as Mock;
 use Narrowspark\TestingHelper\Middleware\DelegateMiddleware;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;

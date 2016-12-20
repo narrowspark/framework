@@ -102,7 +102,7 @@ class RouteTreeNode
             return $this;
         }
 
-        $clone = clone $this;
+        $clone           = clone $this;
         $clone->matchers = $matchers;
         $clone->contents = $contents;
 

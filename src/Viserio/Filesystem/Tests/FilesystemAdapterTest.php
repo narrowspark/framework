@@ -130,7 +130,7 @@ class FilesystemAdapterTest extends \PHPUnit_Framework_TestCase
         $stream = $adapter->readStream('stream.txt');
 
         $contents = stream_get_contents($stream);
-        $size = Util::getStreamSize($stream);
+        $size     = Util::getStreamSize($stream);
 
         fclose($stream);
         fclose($temp);

@@ -278,7 +278,7 @@ class CronTest extends \PHPUnit_Framework_TestCase
     {
         $quote = (DIRECTORY_SEPARATOR == '\\') ? '"' : "'";
 
-        $cron = new Cron($this->cache, 'php -i');
+        $cron          = new Cron($this->cache, 'php -i');
         $defaultOutput = (DIRECTORY_SEPARATOR == '\\') ? 'NUL' : '/dev/null';
 
         self::assertSame("php -i > {$quote}{$defaultOutput}{$quote} 2>&1 &", $cron->buildCommand());

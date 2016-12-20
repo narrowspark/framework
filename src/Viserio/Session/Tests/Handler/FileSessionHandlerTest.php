@@ -25,8 +25,8 @@ class FileSessionHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->root = vfsStream::setup();
-        $this->files = new Filesystem();
+        $this->root    = vfsStream::setup();
+        $this->files   = new Filesystem();
         $this->handler = new FileSessionHandler(
             $this->files,
             $this->root->url(),

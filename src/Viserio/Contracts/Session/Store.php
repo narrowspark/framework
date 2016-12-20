@@ -9,14 +9,14 @@ use Viserio\Contracts\Encryption\Encrypter as EncrypterContract;
 
 interface Store extends JsonSerializable
 {
-    const METADATA_NAMESPACE = '__metadata__';
+    public const METADATA_NAMESPACE = '__metadata__';
 
     /**
      * Starts the session storage.
      * It should be called only once at the beginning. If called for existing
      * session it ovewrites it (clears all values etc).
      *
-     * @return bool True if session started.
+     * @return bool true if session started
      */
     public function start(): bool;
 
@@ -25,7 +25,7 @@ interface Store extends JsonSerializable
      *
      * If called earlier, then second (and next ones) call does nothing.
      *
-     * @return bool True if session started.
+     * @return bool true if session started
      */
     public function open(): bool;
 
@@ -39,7 +39,7 @@ interface Store extends JsonSerializable
     /**
      * Returns the session ID.
      *
-     * @return string The session ID.
+     * @return string the session ID
      */
     public function getId(): string;
 
@@ -53,7 +53,7 @@ interface Store extends JsonSerializable
     /**
      * Returns the session name.
      *
-     * @return string The session name.
+     * @return string the session name
      */
     public function getName();
 
@@ -63,7 +63,7 @@ interface Store extends JsonSerializable
      * Clears all session attributes and flashes and regenerates the
      * session and deletes the old session from persistence.
      *
-     * @return bool True if session invalidated, false if error.
+     * @return bool true if session invalidated, false if error
      */
     public function invalidate(): bool;
 
@@ -71,9 +71,9 @@ interface Store extends JsonSerializable
      * Migrates the current session to a new session id while maintaining all
      * session attributes.
      *
-     * @param bool $destroy Whether to delete the old session or leave it to garbage collection.
+     * @param bool $destroy whether to delete the old session or leave it to garbage collection
      *
-     * @return bool True if session migrated, false if error.
+     * @return bool true if session migrated, false if error
      */
     public function migrate(bool $destroy = false): bool;
 
@@ -99,7 +99,7 @@ interface Store extends JsonSerializable
      * Returns an attribute.
      *
      * @param string $name    The attribute name
-     * @param mixed  $default The default value if not found.
+     * @param mixed  $default the default value if not found
      *
      * @return mixed
      */
@@ -135,7 +135,7 @@ interface Store extends JsonSerializable
      *
      * @return array Attributes
      */
-    public function all(): array;
+    public function getAll(): array;
 
     /**
      * Clears all attributes.

@@ -5,21 +5,23 @@ namespace Viserio\Exception\Tests\Displayers;
 use Exception;
 use Viserio\Exception\Displayers\HtmlDisplayer;
 use Viserio\Exception\ExceptionInfo;
+use Viserio\HttpFactory\ResponseFactory;
+use Viserio\HttpFactory\StreamFactory;
 
 class HtmlDisplayerTest extends \PHPUnit_Framework_TestCase
 {
     public function testServerError()
     {
-        $file = __DIR__ . '/../../Resources/error.html';
-        $displayer = new HtmlDisplayer(new ExceptionInfo(), $file);
-        $response = $displayer->display(new Exception(), 'foo', 502, []);
-        $expected = file_get_contents($file);
-        $infos = [
-            'code' => '502',
+        $file      = __DIR__ . '/../../Resources/error.html';
+        $displayer = new HtmlDisplayer(new ExceptionInfo(), new ResponseFactory(), new StreamFactory(), $file);
+        $response  = $displayer->display(new Exception(), 'foo', 502, []);
+        $expected  = file_get_contents($file);
+        $infos     = [
+            'code'    => '502',
             'summary' => 'Houston, We Have A Problem.',
-            'name' => 'Bad Gateway',
-            'detail' => 'The server was acting as a gateway or proxy and received an invalid response from the upstream server.',
-            'id' => 'foo',
+            'name'    => 'Bad Gateway',
+            'detail'  => 'The server was acting as a gateway or proxy and received an invalid response from the upstream server.',
+            'id'      => 'foo',
         ];
 
         foreach ($infos as $key => $val) {
@@ -33,16 +35,16 @@ class HtmlDisplayerTest extends \PHPUnit_Framework_TestCase
 
     public function testClientError()
     {
-        $file = __DIR__ . '/../../Resources/error.html';
-        $displayer = new HtmlDisplayer(new ExceptionInfo(), $file);
-        $response = $displayer->display(new Exception(), 'bar', 404, []);
-        $expected = file_get_contents($file);
-        $infos = [
-            'code' => '404',
+        $file      = __DIR__ . '/../../Resources/error.html';
+        $displayer = new HtmlDisplayer(new ExceptionInfo(), new ResponseFactory(), new StreamFactory(), $file);
+        $response  = $displayer->display(new Exception(), 'bar', 404, []);
+        $expected  = file_get_contents($file);
+        $infos     = [
+            'code'    => '404',
             'summary' => 'Houston, We Have A Problem.',
-            'name' => 'Not Found',
-            'detail' => 'The requested resource could not be found but may be available again in the future.',
-            'id' => 'bar',
+            'name'    => 'Not Found',
+            'detail'  => 'The requested resource could not be found but may be available again in the future.',
+            'id'      => 'bar',
         ];
 
         foreach ($infos as $key => $val) {
@@ -56,8 +58,8 @@ class HtmlDisplayerTest extends \PHPUnit_Framework_TestCase
 
     public function testProperties()
     {
-        $file = __DIR__ . '/../../Resources/error.html';
-        $displayer = new HtmlDisplayer(new ExceptionInfo(), $file);
+        $file      = __DIR__ . '/../../Resources/error.html';
+        $displayer = new HtmlDisplayer(new ExceptionInfo(), new ResponseFactory(), new StreamFactory(), $file);
         $exception = new Exception();
 
         self::assertFalse($displayer->isVerbose());

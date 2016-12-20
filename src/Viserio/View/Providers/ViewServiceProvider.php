@@ -8,10 +8,12 @@ use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Contracts\Support\Traits\ServiceProviderConfigAwareTrait;
 use Viserio\Contracts\View\Factory as FactoryContract;
 use Viserio\Filesystem\Filesystem;
-use Viserio\View\Engines\Adapter\Php as PhpEngine;
-use Viserio\View\Engines\Adapter\Plates as PlatesEngine;
-use Viserio\View\Engines\Adapter\Twig as TwigEngine;
+use Viserio\View\DataCollectors\ViserioViewDataCollector;
 use Viserio\View\Engines\EngineResolver;
+use Viserio\View\Engines\FileEngine;
+use Viserio\View\Engines\PhpEngine;
+use Viserio\View\Engines\PlatesEngine;
+use Viserio\View\Engines\TwigEngine;
 use Viserio\View\Factory;
 use Viserio\View\ViewFinder;
 
@@ -19,7 +21,7 @@ class ViewServiceProvider implements ServiceProvider
 {
     use ServiceProviderConfigAwareTrait;
 
-    const PACKAGE = 'viserio.view';
+    public const PACKAGE = 'viserio.view';
 
     /**
      * {@inheritdoc}
@@ -27,22 +29,30 @@ class ViewServiceProvider implements ServiceProvider
     public function getServices()
     {
         return [
-            EngineResolver::class => [self::class, 'createEngineResolver'],
+            EngineResolver::class  => [self::class, 'createEngineResolver'],
             'view.engine.resolver' => function (ContainerInterface $container) {
                 return $container->get(EngineResolver::class);
             },
             ViewFinder::class => [self::class, 'createViewFinder'],
-            'view.finder' => function (ContainerInterface $container) {
+            'view.finder'     => function (ContainerInterface $container) {
                 return $container->get(ViewFinder::class);
             },
-            Factory::class => [self::class, 'createViewFactory'],
+            Factory::class         => [self::class, 'createViewFactory'],
             FactoryContract::class => function (ContainerInterface $container) {
                 return $container->get(Factory::class);
             },
             'view' => function (ContainerInterface $container) {
                 return $container->get(Factory::class);
             },
+            ViserioViewDataCollector::class => [self::class, 'createViserioViewDataCollector'],
         ];
+    }
+
+    public static function createViserioViewDataCollector(ContainerInterface $container): ViserioViewDataCollector
+    {
+        return new ViserioViewDataCollector(
+            self::getConfig($container, 'collector.collect_data', true)
+        );
     }
 
     public static function createEngineResolver(ContainerInterface $container)
@@ -52,7 +62,7 @@ class ViewServiceProvider implements ServiceProvider
         // Next we will register the various engines with the engines so that the
         // environment can resolve the engines it needs for various views based
         // on the extension of view files. We call a method for each engines.
-        foreach (['php', 'twig', 'plates'] as $engineClass) {
+        foreach (['file', 'php', 'twig', 'plates'] as $engineClass) {
             self::{'register' . ucfirst($engineClass) . 'Engine'}($engines, $container);
         }
 
@@ -98,6 +108,19 @@ class ViewServiceProvider implements ServiceProvider
     {
         $engines->register('php', function () {
             return new PhpEngine();
+        });
+    }
+
+    /**
+     * Register the File engine implementation.
+     *
+     * @param \Viserio\View\Engines\EngineResolver  $engines
+     * @param \Interop\Container\ContainerInterface $container
+     */
+    protected static function registerFileEngine(EngineResolver $engines, ContainerInterface $container)
+    {
+        $engines->register('file', function () {
+            return new FileEngine();
         });
     }
 

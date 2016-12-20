@@ -2,14 +2,20 @@
 declare(strict_types=1);
 namespace Viserio\Exception\Displayers;
 
+use Interop\Http\Factory\ResponseFactoryInterface;
+use Interop\Http\Factory\StreamFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Throwable;
 use Viserio\Contracts\Exception\Displayer as DisplayerContract;
+use Viserio\Contracts\HttpFactory\Traits\ResponseFactoryAwareTrait;
+use Viserio\Contracts\HttpFactory\Traits\StreamFactoryAwareTrait;
 use Viserio\Exception\ExceptionInfo;
-use Viserio\Http\Response\HtmlResponse;
 
 class HtmlDisplayer implements DisplayerContract
 {
+    use ResponseFactoryAwareTrait;
+    use StreamFactoryAwareTrait;
+
     /**
      * The exception info instance.
      *
@@ -27,13 +33,21 @@ class HtmlDisplayer implements DisplayerContract
     /**
      * Create a new html displayer instance.
      *
-     * @param \Viserio\Exception\ExceptionInfo $info
-     * @param string                           $path
+     * @param \Viserio\Exception\ExceptionInfo               $info
+     * @param \Interop\Http\Factory\ResponseFactoryInterface $responseFactory
+     * @param \Interop\Http\Factory\StreamFactoryInterface   $streamFactory
+     * @param string                                         $path
      */
-    public function __construct(ExceptionInfo $info, string $path)
-    {
-        $this->info = $info;
-        $this->path = $path;
+    public function __construct(
+        ExceptionInfo $info,
+        ResponseFactoryInterface $responseFactory,
+        StreamFactoryInterface $streamFactory,
+        string $path
+    ) {
+        $this->info            = $info;
+        $this->responseFactory = $responseFactory;
+        $this->streamFactory   = $streamFactory;
+        $this->path            = $path;
     }
 
     /**
@@ -43,11 +57,14 @@ class HtmlDisplayer implements DisplayerContract
     {
         $info = $this->info->generate($id, $code);
 
-        return new HtmlResponse(
-            $this->render($info),
-            $code,
-            array_merge($headers, ['Content-Type' => $this->contentType()])
-        );
+        $response = $this->getResponseFactory()->createResponse($code);
+        $stream   = $this->getStreamFactory()->createStream($this->render($info));
+
+        foreach (array_merge($headers, ['Content-Type' => $this->contentType()]) as $header => $value) {
+            $response = $response->withAddedHeader($header, $value);
+        }
+
+        return $response->withBody($stream);
     }
 
     /**

@@ -16,7 +16,7 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase
     public function testBasicDispatchingOfCommandsToHandlers()
     {
         $container = new ArrayContainer();
-        $handler = $this->mock(stdClass::class);
+        $handler   = $this->mock(stdClass::class);
         $handler->shouldReceive('handle')
             ->once()
             ->andReturn('foo');
@@ -37,7 +37,7 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase
     public function testDispatchShouldCallAfterResolvingIfCommand()
     {
         $container = new ArrayContainer();
-        $handler = $this->mock(stdClass::class)->shouldIgnoreMissing();
+        $handler   = $this->mock(stdClass::class)->shouldIgnoreMissing();
         $handler->shouldReceive('after')
             ->once();
 
@@ -56,7 +56,7 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase
     public function testDispatcherShouldNotCallHanlde()
     {
         $container = new ArrayContainer();
-        $handler = $this->mock(stdClass::class);
+        $handler   = $this->mock(stdClass::class);
         $handler->shouldReceive('test')->once()->andReturn('foo');
 
         $container->set('Handler', $handler);
@@ -131,7 +131,7 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase
     public function testMaps()
     {
         $container = new ArrayContainer();
-        $handler = $this->mock(stdClass::class);
+        $handler   = $this->mock(stdClass::class);
         $handler->shouldReceive('handle')->andReturn('foo');
         $handler->shouldReceive('test')->andReturn('bar');
 

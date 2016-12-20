@@ -18,7 +18,7 @@ class FnStream implements StreamInterface
      *
      * @var array
      */
-    const SLOTS = ['__toString', 'close', 'detach', 'rewind',
+    public const SLOTS = ['__toString', 'close', 'detach', 'rewind',
         'getSize', 'tell', 'eof', 'isSeekable', 'seek', 'isWritable', 'write',
         'isReadable', 'read', 'getContents', 'getMetadata', ];
 
@@ -26,7 +26,7 @@ class FnStream implements StreamInterface
     private $methods;
 
     /**
-     * @param array $methods Hash of method name to a callable.
+     * @param array $methods hash of method name to a callable
      */
     public function __construct(array $methods)
     {
@@ -50,6 +50,8 @@ class FnStream implements StreamInterface
 
     /**
      * Lazily determine which methods are not implemented.
+     *
+     * @param mixed $name
      *
      * @throws \BadMethodCallException
      */

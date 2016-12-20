@@ -50,7 +50,7 @@ class QueueingDispatcher extends Dispatcher implements QueueingDispatcherContrac
     public function dispatchToQueue($command)
     {
         $connection = isset($command->connection) ? $command->connection : null;
-        $queue = call_user_func($this->queueResolver, $connection);
+        $queue      = call_user_func($this->queueResolver, $connection);
 
         if (! $queue instanceof QueueContract) {
             throw new RuntimeException('Queue resolver did not return a Queue implementation.');

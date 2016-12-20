@@ -6,7 +6,6 @@ use Viserio\Config\Providers\ConfigServiceProvider;
 use Viserio\Container\Container;
 use Viserio\Cookie\CookieJar;
 use Viserio\Cookie\Providers\CookieServiceProvider;
-use Viserio\Cookie\RequestCookie;
 
 class CookieServiceProviderTest extends \PHPUnit_Framework_TestCase
 {
@@ -18,7 +17,7 @@ class CookieServiceProviderTest extends \PHPUnit_Framework_TestCase
 
         $container->get('config')->set('cookie', [
             'domain' => '',
-            'path' => '',
+            'path'   => '',
             'secure' => true,
         ]);
 
@@ -32,7 +31,7 @@ class CookieServiceProviderTest extends \PHPUnit_Framework_TestCase
 
         $container->instance('options', [
             'domain' => '',
-            'path' => '',
+            'path'   => '',
             'secure' => true,
         ]);
 
@@ -46,7 +45,7 @@ class CookieServiceProviderTest extends \PHPUnit_Framework_TestCase
 
         $container->instance('viserio.cookie.options', [
             'domain' => '',
-            'path' => '',
+            'path'   => '',
             'secure' => true,
         ]);
 

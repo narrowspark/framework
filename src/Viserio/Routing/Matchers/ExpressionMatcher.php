@@ -19,7 +19,7 @@ class ExpressionMatcher extends AbstractMatcher
      */
     public function __construct(string $expression, array $parameterKeys)
     {
-        $this->expression = $expression;
+        $this->expression    = $expression;
         $this->parameterKeys = $parameterKeys;
     }
 

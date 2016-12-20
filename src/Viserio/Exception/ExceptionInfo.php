@@ -19,16 +19,16 @@ class ExceptionInfo
     {
         try {
             $info = [
-                'id' => $id,
-                'code' => $code,
-                'name' => HttpStatus::getReasonPhrase($code),
+                'id'     => $id,
+                'code'   => $code,
+                'name'   => HttpStatus::getReasonPhrase($code),
                 'detail' => HttpStatus::getReasonMessage($code),
             ];
         } catch (InvalidArgumentException $error) {
             $info = [
-                'id' => $id,
-                'code' => 500,
-                'name' => HttpStatus::getReasonPhrase(500),
+                'id'     => $id,
+                'code'   => 500,
+                'name'   => HttpStatus::getReasonPhrase(500),
                 'detail' => HttpStatus::getReasonMessage(500),
             ];
         }

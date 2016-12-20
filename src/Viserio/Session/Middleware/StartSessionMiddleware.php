@@ -7,7 +7,7 @@ use Interop\Http\Middleware\DelegateInterface;
 use Interop\Http\Middleware\ServerMiddlewareInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Viserio\Contracts\Config\Manager as ConfigContract;
+use Viserio\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Contracts\Session\Store as StoreContract;
 use Viserio\Cookie\RequestCookies;
 use Viserio\Cookie\SetCookie;
@@ -36,7 +36,10 @@ class StartSessionMiddleware implements ServerMiddlewareInterface
     }
 
     /**
-     * {@inhertidoc}
+     * {@inhertidoc}.
+     *
+     * @param ServerRequestInterface $request
+     * @param DelegateInterface      $delegate
      */
     public function process(ServerRequestInterface $request, DelegateInterface $delegate): ResponseInterface
     {
@@ -102,7 +105,7 @@ class StartSessionMiddleware implements ServerMiddlewareInterface
 
         $session->setId($cookies->get($session->getName()) ?? '');
 
-        $session->addFingerprintGenerator(new ClientIpGenerator());
+        $session->addFingerprintGenerator(new ClientIpGenerator($request));
         $session->addFingerprintGenerator(new UserAgentGenerator());
 
         return $session;
@@ -131,8 +134,8 @@ class StartSessionMiddleware implements ServerMiddlewareInterface
      */
     protected function collectGarbage(StoreContract $session)
     {
-        $config = $this->manager->getConfig();
-        $lottery = $config->get('session.lottery');
+        $config      = $this->manager->getConfig();
+        $lottery     = $config->get('session.lottery');
         $hitsLottery = random_int(1, $lottery[1]) <= $lottery[0];
 
         // Here we will see if this request hits the garbage collection lottery by hitting
@@ -190,11 +193,11 @@ class StartSessionMiddleware implements ServerMiddlewareInterface
     /**
      * Get the cookie lifetime in seconds.
      *
-     * @param \Viserio\Contracts\Config\Manager $config
+     * @param \Viserio\Contracts\Config\Repository $config
      *
      * @return int|\Cake\Chronos\Chronos
      */
-    protected function getCookieExpirationDate(ConfigContract $config)
+    protected function getCookieExpirationDate(RepositoryContract $config)
     {
         return $config->get('session.expire_on_close', false) ?
             0 :

@@ -12,7 +12,7 @@ interface SegmentMatcher
     public function getParameterKeys(): array;
 
     /**
-     * Get a metched parameter key back,
+     * Get a metched parameter key back,.
      *
      * @param string   $segmentVariable
      * @param int|null $uniqueKey

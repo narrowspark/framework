@@ -18,8 +18,8 @@ class AwsS3Connector extends AbstractConnector
         $this->checkForKeyinConfigArray($config);
 
         $auth = [
-            'region' => $config['region'],
-            'version' => $config['version'],
+            'region'      => $config['region'],
+            'version'     => $config['version'],
             'credentials' => Arr::only($config, ['key', 'secret']),
         ];
 

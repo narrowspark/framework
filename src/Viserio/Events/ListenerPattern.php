@@ -89,8 +89,8 @@ class ListenerPattern
         }
 
         $this->eventPattern = $eventPattern;
-        $this->priority = $priority;
-        $this->regex = $this->createRegex($eventPattern);
+        $this->priority     = $priority;
+        $this->regex        = $this->createRegex($eventPattern);
     }
 
     /**

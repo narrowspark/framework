@@ -2,8 +2,10 @@
 declare(strict_types=1);
 namespace Viserio\Exception;
 
+use Error;
 use ErrorException;
 use Interop\Container\ContainerInterface;
+use Interop\Http\Factory\ResponseFactoryInterface;
 use Narrowspark\HttpStatus\Exception\AbstractClientErrorException;
 use Narrowspark\HttpStatus\Exception\AbstractServerErrorException;
 use Narrowspark\HttpStatus\Exception\NotFoundException;
@@ -17,7 +19,7 @@ use Symfony\Component\Debug\Exception\FatalErrorException;
 use Symfony\Component\Debug\Exception\FatalThrowableError;
 use Symfony\Component\Debug\Exception\FlattenException;
 use Throwable;
-use Viserio\Contracts\Config\Manager as ConfigManagerContract;
+use Viserio\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Contracts\Config\Traits\ConfigAwareTrait;
 use Viserio\Contracts\Container\Traits\ContainerAwareTrait;
 use Viserio\Contracts\Exception\Displayer as DisplayerContract;
@@ -47,10 +49,10 @@ class Handler implements HandlerContract
      * @var array
      */
     protected $defaultLevels = [
-        FatalThrowableError::class => 'critical',
-        FatalErrorException::class => 'error',
-        Throwable::class => 'error',
-        NotFoundException::class => 'notice',
+        FatalThrowableError::class          => 'critical',
+        FatalErrorException::class          => 'error',
+        Throwable::class                    => 'error',
+        NotFoundException::class            => 'notice',
         AbstractClientErrorException::class => 'notice',
         AbstractServerErrorException::class => 'error',
     ];
@@ -190,12 +192,13 @@ class Handler implements HandlerContract
             try {
                 $logger = $this->getContainer()->get(LoggerInterface::class);
             } catch (Throwable $exception) {
+                // throw the original exception
                 throw $exception;
             }
         }
 
         $level = $this->getLevel($exception);
-        $id = $this->getContainer()->get(ExceptionIdentifier::class)->identify($exception);
+        $id    = $this->getContainer()->get(ExceptionIdentifier::class)->identify($exception);
 
         if ($this->getContainer()->has(LoggerInterface::class)) {
             $logger->{$level}($exception, ['identification' => ['id' => $id]]);
@@ -220,7 +223,7 @@ class Handler implements HandlerContract
         // Register the PHP shutdown handler.
         register_shutdown_function([$this, 'handleShutdown']);
 
-        if ($this->getContainer()->get(ConfigManagerContract::class)->get('exception.env', null) !== 'testing') {
+        if ($this->getContainer()->get(RepositoryContract::class)->get('exception.env', null) !== 'testing') {
             ini_set('display_errors', 'Off');
         }
     }
@@ -255,8 +258,6 @@ class Handler implements HandlerContract
      */
     public function handleException(Throwable $exception)
     {
-        $exception = new FatalThrowableError($exception);
-
         $this->report($exception);
 
         $transformed = $this->getTransformed($exception);
@@ -264,24 +265,13 @@ class Handler implements HandlerContract
         if (php_sapi_name() === 'cli') {
             (new ConsoleApplication())->renderException($transformed, new ConsoleOutput());
         } else {
-            $container = $this->getContainer();
+            $response = $this->getPreparedResponse(
+                $this->getContainer(),
+                $exception,
+                $transformed
+            );
 
-            try {
-                $response = $this->getResponse(
-                    $container->get(ServerRequestInterface::class),
-                    $exception,
-                    $transformed
-                );
-
-                return (string) $response->getBody();
-            } catch (Throwable $error) {
-                $this->report($error);
-
-                $response = $container->get(ResponseInterface::class);
-                $response = $response->withStatus(500, HttpStatus::getReasonPhrase(500));
-
-                return (string) $response->getBody();
-            }
+            return (string) $response->getBody();
         }
     }
 
@@ -321,22 +311,11 @@ class Handler implements HandlerContract
     {
         $transformed = $this->getTransformed($exception);
 
-        try {
-            $response = $this->getResponse(
-                $this->getContainer()->get(ServerRequestInterface::class),
-                $exception,
-                $transformed
-            );
-
-            return $response;
-        } catch (Throwable $error) {
-            $this->report($error);
-
-            $response = $this->getContainer()->get(ResponseInterface::class);
-            $response = $response->withStatus(500, HttpStatus::getReasonPhrase(500));
-
-            return $response;
-        }
+        return $this->getPreparedResponse(
+            $this->getContainer(),
+            $exception,
+            $transformed
+        );
     }
 
     /**
@@ -348,7 +327,10 @@ class Handler implements HandlerContract
      */
     protected function shouldntReport(Throwable $exception): bool
     {
-        $dontReport = array_merge($this->dontReport, $this->getContainer()->get(ConfigManagerContract::class)->get('', []));
+        $dontReport = array_merge(
+            $this->dontReport,
+            $this->getContainer()->get(RepositoryContract::class)->get('', [])
+        );
 
         foreach ($dontReport as $type) {
             if ($exception instanceof $type) {
@@ -370,7 +352,7 @@ class Handler implements HandlerContract
     {
         $levels = array_merge(
             $this->defaultLevels,
-            $this->getContainer()->get(ConfigManagerContract::class)->get('exception.levels', [])
+            $this->getContainer()->get(RepositoryContract::class)->get('exception.levels', [])
         );
 
         foreach ($levels as $class => $level) {
@@ -397,9 +379,21 @@ class Handler implements HandlerContract
         Throwable $transformed
     ): ResponseInterface {
         $id = $this->getContainer()->get(ExceptionIdentifier::class)->identify($exception);
+
+        if ($transformed instanceof Error) {
+            $transformed = new FatalErrorException(
+                $transformed->getMessage(),
+                $transformed->getCode(),
+                E_ERROR,
+                $transformed->getFile(),
+                $transformed->getLine(),
+                $transformed->getTrace()
+            );
+        }
+
         $flattened = FlattenException::create($transformed);
-        $code = $flattened->getStatusCode();
-        $headers = $flattened->getHeaders();
+        $code      = $flattened->getStatusCode();
+        $headers   = $flattened->getHeaders();
 
         return $this->getDisplayer(
             $request,
@@ -425,7 +419,7 @@ class Handler implements HandlerContract
         Throwable $transformed,
         int $code
     ): DisplayerContract {
-        $config = $this->getContainer()->get(ConfigManagerContract::class);
+        $config = $this->getContainer()->get(RepositoryContract::class);
 
         $displayers = array_merge(
             $this->displayers,
@@ -458,14 +452,14 @@ class Handler implements HandlerContract
         int $code
     ): array {
         $container = $this->getContainer();
-        $filters = array_merge(
+        $filters   = array_merge(
             $this->filters,
-            $container->get(ConfigManagerContract::class)->get('exception.filters', [])
+            $container->get(RepositoryContract::class)->get('exception.filters', [])
         );
 
         foreach ($filters as $filter) {
             $filterClass = is_object($filter) ? $filter : $container->get($filter);
-            $displayers = $filterClass->filter($displayers, $request, $original, $transformed, $code);
+            $displayers  = $filterClass->filter($displayers, $request, $original, $transformed, $code);
         }
 
         return array_values($displayers);
@@ -480,15 +474,15 @@ class Handler implements HandlerContract
      */
     protected function getTransformed(Throwable $exception): Throwable
     {
-        $container = $this->getContainer();
+        $container    = $this->getContainer();
         $transformers = array_merge(
             $this->transformers,
-            $container->get(ConfigManagerContract::class)->get('exception.transformers', [])
+            $container->get(RepositoryContract::class)->get('exception.transformers', [])
         );
 
         foreach ($transformers as $transformer) {
             $transformerClass = is_object($transformer) ? $transformer : $container->get($transformer);
-            $exception = $transformerClass->transform($exception);
+            $exception        = $transformerClass->transform($exception);
         }
 
         return $exception;
@@ -506,5 +500,35 @@ class Handler implements HandlerContract
     protected function isFatal(int $type): bool
     {
         return in_array($type, [E_ERROR, E_CORE_ERROR, E_COMPILE_ERROR, E_PARSE], true);
+    }
+
+    /**
+     * Get a prepared response with the transformed exception.
+     *
+     * @param \Interop\Container\ContainerInterface $container
+     * @param \Throwable                            $exception
+     * @param \Throwable                            $transformed
+     *
+     * @return \Psr\Http\Message\ResponseInterface
+     */
+    protected function getPreparedResponse(
+        ContainerInterface $container,
+        Throwable $exception,
+        Throwable $transformed
+    ): ResponseInterface {
+        try {
+            $response = $this->getResponse(
+                $container->get(ServerRequestInterface::class),
+                $exception,
+                $transformed
+            );
+        } catch (Throwable $exception) {
+            $this->report($exception);
+
+            $response = $container->get(ResponseFactoryInterface::class)->createResponse();
+            $response = $response->withStatus(500, HttpStatus::getReasonPhrase(500));
+        }
+
+        return $response;
     }
 }

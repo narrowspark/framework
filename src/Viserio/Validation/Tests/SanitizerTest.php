@@ -42,7 +42,7 @@ class SanitizerTest extends \PHPUnit_Framework_TestCase
     {
         $sanitizer = new Sanitizer();
         $sanitizer->register('substring', function ($string, $start, $length) {
-            return substr($string, (int) $start, (int) $length);
+            return mb_substr($string, (int) $start, (int) $length);
         });
 
         $data = ['name' => 'narrowspark'];
@@ -94,7 +94,7 @@ class SanitizerTest extends \PHPUnit_Framework_TestCase
     public function testThatACallableRuleCanBeUsed()
     {
         $sanitizer = new Sanitizer();
-        $data = ['name' => 'Narrowspark'];
+        $data      = ['name' => 'Narrowspark'];
 
         $data = $sanitizer->sanitize(['name' => 'strrev'], $data);
 
@@ -104,7 +104,7 @@ class SanitizerTest extends \PHPUnit_Framework_TestCase
     public function testThatACallableRuleCanBeUsedWithParameters()
     {
         $sanitizer = new Sanitizer();
-        $data = ['number' => '2435'];
+        $data      = ['number' => '2435'];
 
         $data = $sanitizer->sanitize(['number' => 'str_pad:10,0,0'], $data);
 
@@ -114,7 +114,7 @@ class SanitizerTest extends \PHPUnit_Framework_TestCase
     public function testThatSanitizerFunctionsWithMultipleRules()
     {
         $sanitizer = new Sanitizer();
-        $data = ['name' => '  Narrowspark_ !'];
+        $data      = ['name' => '  Narrowspark_ !'];
 
         $sanitizer->register('alphabetize', function ($field) {
             return preg_replace('/[^a-zA-Z]/', null, $field);
@@ -128,7 +128,7 @@ class SanitizerTest extends \PHPUnit_Framework_TestCase
     public function testThatSanitizerFunctionsWithMultipleRulesWithParameters()
     {
         $sanitizer = new Sanitizer();
-        $data = ['name' => '  Dayle_ !'];
+        $data      = ['name' => '  Dayle_ !'];
 
         $sanitizer->register('suffix', [new SuffixFixture(), 'sanitize']);
 
@@ -144,38 +144,38 @@ class SanitizerTest extends \PHPUnit_Framework_TestCase
     public function testThatGlobalRulesCanBeSet()
     {
         $sanitizer = new Sanitizer();
-        $data = [
+        $data      = [
             'first_name' => ' Narrow',
-            'last_name' => 'Narrow ',
+            'last_name'  => 'Narrow ',
         ];
 
         $data = $sanitizer->sanitize([
-            '*' => 'trim|strtolower',
+            '*'         => 'trim|strtolower',
             'last_name' => 'strrev',
         ], $data);
 
         self::assertEquals([
             'first_name' => 'narrow',
-            'last_name' => 'worran',
+            'last_name'  => 'worran',
         ], $data);
     }
 
     public function testThatGlobalRulesCanBeSetWithParameters()
     {
         $sanitizer = new Sanitizer();
-        $data = [
+        $data      = [
             'first_name' => ' Narrow',
-            'last_name' => 'Narrow ',
+            'last_name'  => 'Narrow ',
         ];
 
         $data = $sanitizer->sanitize([
-            '*' => 'trim|strtolower|substr:1',
+            '*'         => 'trim|strtolower|substr:1',
             'last_name' => 'strrev',
         ], $data);
 
         self::assertEquals([
             'first_name' => 'arrow',
-            'last_name' => 'worra',
+            'last_name'  => 'worra',
         ], $data);
     }
 }

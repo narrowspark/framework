@@ -151,7 +151,7 @@ class PaginatorTest extends \PHPUnit_Framework_TestCase
         self::assertTrue($pagi->hasMorePages());
         self::assertEquals(['item3', 'item4'], $pagi->getItems());
         self::assertEquals([
-            'per_page' => 2, 'current_page' => 2, 'next_page_url' => '/?page=3',
+            'per_page'      => 2, 'current_page' => 2, 'next_page_url' => '/?page=3',
             'prev_page_url' => '/?page=1', 'from' => 3, 'to' => 4, 'data' => ['item3', 'item4'],
         ], $pagi->toArray());
     }
@@ -251,7 +251,7 @@ class PaginatorTest extends \PHPUnit_Framework_TestCase
         self::assertFalse($pagi->hasMorePages());
         self::assertEquals([], $pagi->getItems());
         self::assertEquals([
-            'per_page' => 0, 'current_page' => 1, 'next_page_url' => null,
+            'per_page'      => 0, 'current_page' => 1, 'next_page_url' => null,
             'prev_page_url' => null, 'from' => 0, 'to' => 0, 'data' => [],
         ], $pagi->toArray());
 

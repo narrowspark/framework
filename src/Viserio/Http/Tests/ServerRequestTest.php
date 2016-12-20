@@ -10,8 +10,8 @@ class ServerRequestTest extends \PHPUnit_Framework_TestCase
     public function testUploadedFiles()
     {
         $request1 = new ServerRequest('', 'GET');
-        $files = [
-            'file' => new UploadedFile('test', 123, UPLOAD_ERR_OK),
+        $files    = [
+            'file'  => new UploadedFile('test', 123, UPLOAD_ERR_OK),
             'file2' => [
                 new UploadedFile('test', 123, UPLOAD_ERR_OK),
             ],
@@ -25,7 +25,7 @@ class ServerRequestTest extends \PHPUnit_Framework_TestCase
 
     public function testServerParams()
     {
-        $params = ['name' => 'value'];
+        $params  = ['name' => 'value'];
         $request = new ServerRequest('/', 'GET', [], null, '1.1', $params);
 
         self::assertSame($params, $request->getServerParams());
@@ -34,7 +34,7 @@ class ServerRequestTest extends \PHPUnit_Framework_TestCase
     public function testCookieParams()
     {
         $request1 = new ServerRequest('/', 'GET');
-        $params = ['name' => 'value'];
+        $params   = ['name' => 'value'];
         $request2 = $request1->withCookieParams($params);
 
         self::assertNotSame($request2, $request1);
@@ -45,7 +45,7 @@ class ServerRequestTest extends \PHPUnit_Framework_TestCase
     public function testQueryParams()
     {
         $request1 = new ServerRequest('/', 'GET');
-        $params = ['name' => 'value'];
+        $params   = ['name' => 'value'];
         $request2 = $request1->withQueryParams($params);
 
         self::assertNotSame($request2, $request1);
@@ -56,7 +56,7 @@ class ServerRequestTest extends \PHPUnit_Framework_TestCase
     public function testParsedBody()
     {
         $request1 = new ServerRequest('/', 'GET');
-        $params = ['name' => 'value'];
+        $params   = ['name' => 'value'];
         $request2 = $request1->withParsedBody($params);
 
         self::assertNotSame($request2, $request1);

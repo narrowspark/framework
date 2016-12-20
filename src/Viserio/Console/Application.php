@@ -84,7 +84,7 @@ class Application extends SymfonyConsole implements ApplicationContract
             define('CEREBRO_BINARY', 'cerebro');
         }
 
-        $this->name = $name;
+        $this->name    = $name;
         $this->version = $version;
 
         $this->setAutoExit(false);
@@ -92,7 +92,7 @@ class Application extends SymfonyConsole implements ApplicationContract
 
         parent::__construct($name, $version);
 
-        $this->container = $container;
+        $this->container        = $container;
         $this->expressionParser = new Parser();
 
         if ($this->events !== null) {
@@ -122,11 +122,11 @@ class Application extends SymfonyConsole implements ApplicationContract
     /**
      * Add a command to the console.
      *
-     * @param string                $expression Defines the arguments and options of the command.
+     * @param string                $expression defines the arguments and options of the command
      * @param callable|string|array $callable   Called when the command is called.
      *                                          When using a container, this can be a "pseudo-callable"
      *                                          i.e. the name of the container entry to invoke.
-     * @param array                 $aliases    An array of aliases for the command.
+     * @param array                 $aliases    an array of aliases for the command
      *
      * @return \Symfony\Component\Console\Command\Command
      */
@@ -135,7 +135,7 @@ class Application extends SymfonyConsole implements ApplicationContract
         $commandFunction = function (InputInterface $input, OutputInterface $output) use ($callable) {
             $parameters = array_merge(
                 [
-                    'input' => $input,
+                    'input'  => $input,
                     'output' => $output,
                 ],
                 $input->getArguments(),
@@ -168,12 +168,12 @@ class Application extends SymfonyConsole implements ApplicationContract
     /**
      * Define default values for the arguments of the command.
      *
-     * @param string $commandName      Name of the command.
-     * @param array  $argumentDefaults Default argument values.
+     * @param string $commandName      name of the command
+     * @param array  $argumentDefaults default argument values
      */
     public function defaults(string $commandName, array $argumentDefaults = [])
     {
-        $command = $this->get($commandName);
+        $command           = $this->get($commandName);
         $commandDefinition = $command->getDefinition();
 
         foreach ($argumentDefaults as $name => $default) {

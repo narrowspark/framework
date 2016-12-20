@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Foundation\Bootstrap;
 
-use Viserio\Config\Manager as ConfigManager;
 use Viserio\Console\Providers\ConsoleServiceProvider;
+use Viserio\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Contracts\Console\Application as ApplicationContract;
 use Viserio\Contracts\Foundation\Application;
 use Viserio\Contracts\Foundation\Bootstrap as BootstrapContract;
@@ -16,7 +16,7 @@ class LoadCommands implements BootstrapContract
     public function bootstrap(Application $app)
     {
         $app->register(new ConsoleServiceProvider());
-        $config = $app->get(ConfigManager::class);
+        $config = $app->get(RepositoryContract::class);
 
         $loadedFromCache = false;
 

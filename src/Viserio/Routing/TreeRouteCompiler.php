@@ -32,7 +32,7 @@ class TreeRouteCompiler
      */
     public function __construct(RouteTreeBuilder $treeBuilder, RouteTreeOptimizer $treeOptimizer)
     {
-        $this->treeBuilder = $treeBuilder;
+        $this->treeBuilder   = $treeBuilder;
         $this->treeOptimizer = $treeOptimizer;
     }
 
@@ -49,17 +49,17 @@ class TreeRouteCompiler
             $this->treeBuilder->build($routes)
         );
 
-        $code = $this->phpBuilder();
+        $code         = $this->phpBuilder();
         $code->indent = 1;
 
         $this->compileRouteTree($code, $routeTree);
 
-        $rootRouteCode = $this->phpBuilder();
+        $rootRouteCode         = $this->phpBuilder();
         $rootRouteCode->indent = 2;
 
         $this->compileNotFound($rootRouteCode);
 
-        return $this->createRouterClassTemplate(substr($rootRouteCode->code, 0, -strlen(PHP_EOL)), $code->code);
+        return $this->createRouterClassTemplate(mb_substr($rootRouteCode->code, 0, -mb_strlen(PHP_EOL)), $code->code);
     }
 
     /**
@@ -93,6 +93,7 @@ PHP;
      *
      * @param anonymous//src/Viserio/Routing/TreeRouteCompiler.php$0 $code
      * @param array $routeTree
+     * @param mixed $code
      */
     protected function compileRouteTree($code, array $routeTree)
     {
@@ -152,11 +153,11 @@ PHP;
         $originalParameters = $parameters;
 
         foreach ($nodes->getChildren() as $node) {
-            $parameters = $originalParameters;
-            $segmentMatchers = $node->getMatchers();
-            $conditions = [];
+            $parameters       = $originalParameters;
+            $segmentMatchers  = $node->getMatchers();
+            $conditions       = [];
             $currentParameter = empty($parameters) ? 0 : max(array_keys($parameters)) + 1;
-            $count = $currentParameter;
+            $count            = $currentParameter;
 
             foreach ($segmentMatchers as $segmentDepth => $matcher) {
                 $conditions[] = $matcher->getConditionExpression($segmentVariables[$segmentDepth], $count++);
@@ -224,7 +225,7 @@ PHP;
 
         ++$code->indent;
 
-        foreach ($routeDataMap->getAllowedHttpMethods() as $method) {
+        foreach ($routeDataMap->allowedHttpMethods() as $method) {
             $code->appendLine('$allowedHttpMethods[] = ' . VarExporter::export($method) . ';');
         }
 
@@ -282,8 +283,8 @@ PHP;
             $parameters .= VarExporter::export($parameterName) . ' => ' . $parameterExpressions[$index] . ', ';
         }
 
-        if (strlen($parameters) > 2) {
-            $parameters = substr($parameters, 0, -2);
+        if (mb_strlen($parameters) > 2) {
+            $parameters = mb_substr($parameters, 0, -2);
         }
 
         $parameters .= ']';
@@ -315,7 +316,7 @@ PHP;
             public $code = '';
 
             /**
-             * The current indentation level of the code
+             * The current indentation level of the code.
              *
              * @var int
              */

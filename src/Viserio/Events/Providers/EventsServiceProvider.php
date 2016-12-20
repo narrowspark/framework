@@ -16,7 +16,7 @@ class EventsServiceProvider implements ServiceProvider
     {
         return [
             DispatcherContract::class => [self::class, 'createEventDispatcher'],
-            Dispatcher::class => function (ContainerInterface $container) {
+            Dispatcher::class         => function (ContainerInterface $container) {
                 return $container->get(DispatcherContract::class);
             },
             'events' => function (ContainerInterface $container) {

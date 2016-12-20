@@ -33,21 +33,28 @@ class Translator implements TranslatorContract
      *
      * @var array
      */
-    private $filters = [];
+    protected $filters = [];
 
     /**
      * All registred helpers.
      *
      * @var array
      */
-    private $helpers = [];
+    protected $helpers = [];
 
     /**
      * Default language to translate into. (e.g. 'en').
      *
      * @var string
      */
-    private $locale;
+    protected $locale;
+
+    /**
+     * All collected massages.
+     *
+     * @var array
+     */
+    protected $messages = [];
 
     /**
      * Creat new Translator instance.
@@ -62,7 +69,7 @@ class Translator implements TranslatorContract
         $this->setLocale($catalogue->getLocale());
 
         $this->catalogue = $catalogue;
-        $this->selector = $selector;
+        $this->selector  = $selector;
     }
 
     /**
@@ -117,6 +124,8 @@ class Translator implements TranslatorContract
             $this->log($id, $domain);
         }
 
+        $this->collectMessage($this->locale, $domain, $id, $trans, $parameters);
+
         return $trans;
     }
 
@@ -153,6 +162,8 @@ class Translator implements TranslatorContract
             $this->log($id, $domain);
         }
 
+        $this->collectMessage($this->locale, $domain, $id, $trans, $parameters, $number);
+
         return $trans;
     }
 
@@ -177,13 +188,21 @@ class Translator implements TranslatorContract
     }
 
     /**
+     * @return array
+     */
+    public function getCollectedMessages(): array
+    {
+        return $this->messages;
+    }
+
+    /**
      * Apply helpers.
      *
      * @param string $translation
      *
      * @return mixed
      */
-    private function applyHelpers(string $translation)
+    protected function applyHelpers(string $translation)
     {
         $helpers = $this->filterHelpersFromString($translation);
 
@@ -211,14 +230,14 @@ class Translator implements TranslatorContract
      *
      * @return array
      */
-    private function filterHelpersFromString(string $translation): array
+    protected function filterHelpersFromString(string $translation): array
     {
         $helpers = [];
 
         if (preg_match("/^(.*?)\[(.*?)\]$/", $translation, $match)) {
             $translation = $match[1];
-            $helpers = explode('|', $match[2]);
-            $helpers = array_map(function ($helper) {
+            $helpers     = explode('|', $match[2]);
+            $helpers     = array_map(function ($helper) {
                 $name = $helper;
                 $arguments = [];
 
@@ -228,7 +247,7 @@ class Translator implements TranslatorContract
                 }
 
                 return [
-                    'name' => $name,
+                    'name'      => $name,
                     'arguments' => $arguments,
                 ];
             }, $helpers);
@@ -244,7 +263,7 @@ class Translator implements TranslatorContract
      *
      * @return string
      */
-    private function applyFilters(string $translation): string
+    protected function applyFilters(string $translation): string
     {
         if (empty($this->filters)) {
             return $translation;
@@ -263,7 +282,7 @@ class Translator implements TranslatorContract
      * @param string $id
      * @param string $domain
      */
-    private function log(string $id, string $domain)
+    protected function log(string $id, string $domain)
     {
         $catalogue = $this->catalogue;
 
@@ -272,15 +291,68 @@ class Translator implements TranslatorContract
         }
 
         if ($catalogue->has($id, $domain)) {
-            $this->logger->debug(
+            $this->getLogger()->debug(
                 'Translation use fallback catalogue.',
                 ['id' => $id, 'domain' => $domain, 'locale' => $catalogue->getLocale()]
             );
         } else {
-            $this->logger->warning(
+            $this->getLogger()->warning(
                 'Translation not found.',
                 ['id' => $id, 'domain' => $domain, 'locale' => $catalogue->getLocale()]
             );
         }
+    }
+
+    /**
+     * Collect messages about all translations.
+     *
+     * @param string|null $locale
+     * @param string|null $domain
+     * @param string      $id
+     * @param string      $translation
+     * @param array       $parameters
+     * @param int|null    $number
+     */
+    protected function collectMessage(
+        $locale,
+        $domain,
+        string $id,
+        string $translation,
+        array $parameters = [],
+        int $number = null
+    ) {
+        if ($domain === null) {
+            $domain = 'messages';
+        }
+
+        $catalogue = $this->catalogue;
+
+        if ($catalogue->defines($id, $domain)) {
+            $state = self::MESSAGE_DEFINED;
+        } elseif ($catalogue->has($id, $domain)) {
+            $state             = self::MESSAGE_EQUALS_FALLBACK;
+            $fallbackCatalogue = $catalogue->getFallbackCatalogue();
+
+            while ($fallbackCatalogue) {
+                if ($fallbackCatalogue->defines($id, $domain)) {
+                    $locale = $fallbackCatalogue->getLocale();
+                    break;
+                }
+
+                $fallbackCatalogue = $fallbackCatalogue->getFallbackCatalogue();
+            }
+        } else {
+            $state = self::MESSAGE_MISSING;
+        }
+
+        $this->messages[] = [
+            'locale'            => $locale,
+            'domain'            => $domain,
+            'id'                => $id,
+            'translation'       => $translation,
+            'parameters'        => $parameters,
+            'transChoiceNumber' => $number,
+            'state'             => $state,
+        ];
     }
 }

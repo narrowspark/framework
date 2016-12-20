@@ -20,16 +20,16 @@ class DatabaseServiceProviderTest extends \PHPUnit_Framework_TestCase
         $container->register(new DatabaseServiceProvider());
 
         $container->get('config')->set('database', [
-            'default' => 'mysql',
+            'default'     => 'mysql',
             'connections' => [
                 'mysql' => [
-                    'driver' => 'pdo_mysql',
-                    'host' => 'DB_HOST',
-                    'port' => 'DB_PORT',
-                    'database' => 'DB_DATABASE_NAME',
-                    'username' => 'DB_DATABASE_USER',
-                    'password' => 'DB_DATABASE_PASSWORD',
-                    'charset' => 'DB_CHARSET', 'UTF8',
+                    'driver'        => 'pdo_mysql',
+                    'host'          => 'DB_HOST',
+                    'port'          => 'DB_PORT',
+                    'database'      => 'DB_DATABASE_NAME',
+                    'username'      => 'DB_DATABASE_USER',
+                    'password'      => 'DB_DATABASE_PASSWORD',
+                    'charset'       => 'DB_CHARSET', 'UTF8',
                     'driverOptions' => [1002 => 'SET NAMES utf8'],
                 ],
             ],
@@ -50,16 +50,16 @@ class DatabaseServiceProviderTest extends \PHPUnit_Framework_TestCase
         $container->register(new DatabaseServiceProvider());
 
         $container->instance('options', [
-            'default' => 'mysql',
+            'default'     => 'mysql',
             'connections' => [
                 'mysql' => [
-                    'driver' => 'pdo_mysql',
-                    'host' => 'DB_HOST',
-                    'port' => 'DB_PORT',
-                    'database' => 'DB_DATABASE_NAME',
-                    'username' => 'DB_DATABASE_USER',
-                    'password' => 'DB_DATABASE_PASSWORD',
-                    'charset' => 'DB_CHARSET', 'UTF8',
+                    'driver'        => 'pdo_mysql',
+                    'host'          => 'DB_HOST',
+                    'port'          => 'DB_PORT',
+                    'database'      => 'DB_DATABASE_NAME',
+                    'username'      => 'DB_DATABASE_USER',
+                    'password'      => 'DB_DATABASE_PASSWORD',
+                    'charset'       => 'DB_CHARSET', 'UTF8',
                     'driverOptions' => [1002 => 'SET NAMES utf8'],
                 ],
             ],
@@ -76,23 +76,23 @@ class DatabaseServiceProviderTest extends \PHPUnit_Framework_TestCase
         $container->register(new DatabaseServiceProvider());
 
         $container->instance('viserio.database.options', [
-            'default' => 'sqlite',
+            'default'     => 'sqlite',
             'connections' => [
                 'mysql' => [
-                    'driver' => 'pdo_mysql',
-                    'host' => 'DB_HOST',
-                    'port' => 'DB_PORT',
-                    'database' => 'DB_DATABASE_NAME',
-                    'username' => 'DB_DATABASE_USER',
-                    'password' => 'DB_DATABASE_PASSWORD',
-                    'charset' => 'DB_CHARSET', 'UTF8',
+                    'driver'        => 'pdo_mysql',
+                    'host'          => 'DB_HOST',
+                    'port'          => 'DB_PORT',
+                    'database'      => 'DB_DATABASE_NAME',
+                    'username'      => 'DB_DATABASE_USER',
+                    'password'      => 'DB_DATABASE_PASSWORD',
+                    'charset'       => 'DB_CHARSET', 'UTF8',
                     'driverOptions' => [1002 => 'SET NAMES utf8'],
                 ],
                 'sqlite' => [
-                    'driver' => 'pdo_sqlite',
+                    'driver'   => 'pdo_sqlite',
                     'username' => 'DB_DATABASE_USER',
                     'database' => __DIR__ . '/../Stub/database.sqlite',
-                    'memory' => true,
+                    'memory'   => true,
                 ],
             ],
         ]);
@@ -108,18 +108,18 @@ class DatabaseServiceProviderTest extends \PHPUnit_Framework_TestCase
         $container->register(new DatabaseServiceProvider());
 
         $container->instance('viserio.database.options', [
-            'default' => 'sqlite',
+            'default'     => 'sqlite',
             'connections' => [
                 'sqlite' => [
-                    'driver' => 'pdo_sqlite',
+                    'driver'   => 'pdo_sqlite',
                     'database' => __DIR__ . '/../Stub/database.sqlite',
-                    'memory' => true,
+                    'memory'   => true,
                 ],
             ],
         ]);
 
         $conn = $container->get(Connection::class);
-        $sql = 'SELECT name FROM text WHERE id = 1';
+        $sql  = 'SELECT name FROM text WHERE id = 1';
 
         $collection = $conn->fetchArray($sql);
 
@@ -144,7 +144,7 @@ class DatabaseServiceProviderTest extends \PHPUnit_Framework_TestCase
         self::assertInstanceOf(Collection::class, $collection);
         self::assertSame(['name' => 'narrowspark'], $collection->all());
 
-        $stmt = $conn->query($sql);
+        $stmt       = $conn->query($sql);
         $collection = $stmt->fetch();
 
         self::assertInstanceOf(Collection::class, $collection);

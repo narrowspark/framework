@@ -95,7 +95,7 @@ abstract class AbstractCookie implements StringableContract, CookieContract
      */
     public function withMaxAge(int $maxAge = null): CookieContract
     {
-        $new = clone $this;
+        $new         = clone $this;
         $new->maxAge = $maxAge;
 
         return $new;
@@ -122,7 +122,7 @@ abstract class AbstractCookie implements StringableContract, CookieContract
      */
     public function withExpires($expires): CookieContract
     {
-        $new = clone $this;
+        $new          = clone $this;
         $new->expires = $this->normalizeExpires($expires);
 
         return $new;
@@ -158,7 +158,7 @@ abstract class AbstractCookie implements StringableContract, CookieContract
      */
     public function withDomain(string $domain = null): CookieContract
     {
-        $new = clone $this;
+        $new         = clone $this;
         $new->domain = $this->normalizeDomain($domain);
 
         return $new;
@@ -185,7 +185,7 @@ abstract class AbstractCookie implements StringableContract, CookieContract
      */
     public function withPath(string $path = '/'): CookieContract
     {
-        $new = clone $this;
+        $new       = clone $this;
         $new->path = $this->normalizePath($path);
 
         return $new;
@@ -204,7 +204,7 @@ abstract class AbstractCookie implements StringableContract, CookieContract
      */
     public function withSecure(bool $secure): CookieContract
     {
-        $new = clone $this;
+        $new         = clone $this;
         $new->secure = $secure;
 
         return $new;
@@ -223,7 +223,7 @@ abstract class AbstractCookie implements StringableContract, CookieContract
      */
     public function withHttpOnly(bool $httpOnly): CookieContract
     {
-        $new = clone $this;
+        $new           = clone $this;
         $new->httpOnly = $httpOnly;
 
         return $new;
@@ -242,7 +242,7 @@ abstract class AbstractCookie implements StringableContract, CookieContract
      */
     public function withSameSite($sameSite): CookieContract
     {
-        $new = clone $this;
+        $new           = clone $this;
         $new->sameSite = $this->validateSameSite($sameSite);
 
         return $new;
@@ -269,7 +269,7 @@ abstract class AbstractCookie implements StringableContract, CookieContract
      */
     public function matchPath(string $path): bool
     {
-        return $this->path === $path || (strpos($path, $this->path . '/') === 0);
+        return $this->path === $path || (mb_strpos($path, $this->path . '/') === 0);
     }
 
     /**
@@ -317,7 +317,7 @@ abstract class AbstractCookie implements StringableContract, CookieContract
     }
 
     /**
-     * Normalizes the expiration value
+     * Normalizes the expiration value.
      *
      * @param int|string|\DateTimeInterface|null $expiration
      *
@@ -356,7 +356,7 @@ abstract class AbstractCookie implements StringableContract, CookieContract
     }
 
     /**
-     * Remove the leading '.' and lowercase the domain as per spec in RFC 6265
+     * Remove the leading '.' and lowercase the domain as per spec in RFC 6265.
      *
      * @param string|null $domain
      *
@@ -369,14 +369,14 @@ abstract class AbstractCookie implements StringableContract, CookieContract
     protected function normalizeDomain(string $domain = null)
     {
         if (isset($domain)) {
-            $domain = ltrim(strtolower($domain), '.');
+            $domain = ltrim(mb_strtolower($domain), '.');
         }
 
         return $domain;
     }
 
     /**
-     * Processes path as per spec in RFC 6265
+     * Processes path as per spec in RFC 6265.
      *
      * @param string $path
      *
@@ -389,7 +389,7 @@ abstract class AbstractCookie implements StringableContract, CookieContract
     {
         $path = rtrim($path, '/');
 
-        if (empty($path) || substr($path, 0, 1) !== '/') {
+        if (empty($path) || mb_substr($path, 0, 1) !== '/') {
             $path = '/';
         }
 

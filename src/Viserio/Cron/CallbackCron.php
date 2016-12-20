@@ -40,8 +40,8 @@ class CallbackCron extends Cron
             );
         }
 
-        $this->callback = $callback;
-        $this->cache = $cache;
+        $this->callback   = $callback;
+        $this->cache      = $cache;
         $this->parameters = $parameters;
     }
 

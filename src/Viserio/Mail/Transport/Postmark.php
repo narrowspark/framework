@@ -36,7 +36,7 @@ class Postmark extends AbstractTransport
      */
     public function __construct(ClientInterface $client, $serverToken)
     {
-        $this->client = $client;
+        $this->client      = $client;
         $this->serverToken = $serverToken;
     }
 
@@ -48,13 +48,13 @@ class Postmark extends AbstractTransport
         $this->beforeSendPerformed($message);
 
         $version = phpversion() ?? 'Unknown PHP version';
-        $os = PHP_OS ?? 'Unknown OS';
+        $os      = PHP_OS ?? 'Unknown OS';
 
         $this->client->post('https://api.postmarkapp.com/email', [
             'headers' => [
                 'X-Postmark-Server-Token' => $this->serverToken,
-                'Content-Type' => 'application/json',
-                'User-Agent' => "postmark (PHP Version: $version, OS: $os)",
+                'Content-Type'            => 'application/json',
+                'User-Agent'              => "postmark (PHP Version: $version, OS: $os)",
             ],
             'json' => $this->getMessagePayload($message),
         ]);
@@ -126,7 +126,7 @@ class Postmark extends AbstractTransport
     protected function getMIMEPart(Swift_Mime_Message $message, $mimeType)
     {
         foreach ($message->getChildren() as $part) {
-            if (strpos($part->getContentType(), $mimeType) === 0 &&
+            if (mb_strpos($part->getContentType(), $mimeType) === 0 &&
                 ! ($part instanceof Swift_Mime_Attachment)
             ) {
                 return $part;
@@ -165,8 +165,8 @@ class Postmark extends AbstractTransport
      */
     protected function processRecipients(array $payload, Swift_Mime_Message $message): array
     {
-        $payload['From'] = implode(',', $this->convertEmailsArray($message->getFrom()));
-        $payload['To'] = implode(',', $this->convertEmailsArray($message->getTo()));
+        $payload['From']    = implode(',', $this->convertEmailsArray($message->getFrom()));
+        $payload['To']      = implode(',', $this->convertEmailsArray($message->getTo()));
         $payload['Subject'] = $message->getSubject();
 
         if ($cc = $message->getCc()) {
@@ -222,8 +222,8 @@ class Postmark extends AbstractTransport
             foreach ($message->getChildren() as $attachment) {
                 if (is_object($attachment) && $attachment instanceof Swift_Mime_Attachment) {
                     $attachments = [
-                        'Name' => $attachment->getFilename(),
-                        'Content' => base64_encode($attachment->getBody()),
+                        'Name'        => $attachment->getFilename(),
+                        'Content'     => base64_encode($attachment->getBody()),
                         'ContentType' => $attachment->getContentType(),
                     ];
 
@@ -254,7 +254,7 @@ class Postmark extends AbstractTransport
         $headers = [];
 
         foreach ($message->getHeaders()->getAll() as $key => $value) {
-            $fieldName = $value->getFieldName();
+            $fieldName       = $value->getFieldName();
             $excludedHeaders = ['Subject', 'Content-Type', 'MIME-Version', 'Date'];
 
             if (! in_array($fieldName, $excludedHeaders)) {
@@ -262,7 +262,7 @@ class Postmark extends AbstractTransport
                     $value instanceof Swift_Mime_Headers_OpenDKIMHeader
                 ) {
                     array_push($headers, [
-                        'Name' => $fieldName,
+                        'Name'  => $fieldName,
                         'Value' => $value->getValue(),
                     ]);
                 } elseif ($value instanceof Swift_Mime_Headers_DateHeader ||
@@ -271,13 +271,13 @@ class Postmark extends AbstractTransport
                     $value instanceof Swift_Mime_Headers_PathHeader
                 ) {
                     array_push($headers, [
-                        'Name' => $fieldName,
+                        'Name'  => $fieldName,
                         'Value' => $value->getFieldBody(),
                     ]);
 
                     if ($value->getFieldName() === 'Message-ID') {
                         array_push($headers, [
-                            'Name' => 'X-PM-KeepID',
+                            'Name'  => 'X-PM-KeepID',
                             'Value' => 'true',
                         ]);
                     }

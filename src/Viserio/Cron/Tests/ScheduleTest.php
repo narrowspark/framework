@@ -46,7 +46,7 @@ class ScheduleTest extends \PHPUnit_Framework_TestCase
 
         $cronJobs = $schedule->getCronJobs();
 
-        $escape = '\\' === DIRECTORY_SEPARATOR ? '"' : '\'';
+        $escape     = '\\' === DIRECTORY_SEPARATOR ? '"' : '\'';
         $escapeReal = '\\' === DIRECTORY_SEPARATOR ? '\\"' : '"';
 
         self::assertEquals('path/to/command', $cronJobs[0]->getCommand());
@@ -85,7 +85,7 @@ class ScheduleTest extends \PHPUnit_Framework_TestCase
 
     public function testCreateNewCerebroCommandUsingCommandClass()
     {
-        $schedule = new Schedule($this->cache, __DIR__, 'cerebro');
+        $schedule  = new Schedule($this->cache, __DIR__, 'cerebro');
         $container = new ArrayContainer([
             ConsoleCerebroCommandFixture::class => new ConsoleCerebroCommandFixture(
                 new DummyClassFixture($schedule)

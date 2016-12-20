@@ -13,6 +13,10 @@ class RouteParserTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @dataProvider routeParsingProvider
+     *
+     * @param mixed $pattern
+     * @param array $conditions
+     * @param array $expectedSegments
      */
     public function testRouteParser($pattern, array $conditions, array $expectedSegments)
     {
@@ -132,6 +136,9 @@ class RouteParserTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider invalidParsingProvider
+     *
+     * @param mixed $uri
+     * @param mixed $expectedExceptionType
      */
     public function testInvalidRouteParsing($uri, $expectedExceptionType)
     {

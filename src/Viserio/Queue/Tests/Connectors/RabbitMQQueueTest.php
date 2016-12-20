@@ -47,21 +47,21 @@ class RabbitMQQueueTest extends \PHPUnit_Framework_TestCase
         $queue = new RabbitMQQueue(
             $connection,
             [
-                'queue' => 'cnc',
+                'queue'        => 'cnc',
                 'queue_params' => [
-                    'passive' => false,
-                    'durable' => true,
-                    'exclusive' => false,
+                    'passive'     => false,
+                    'durable'     => true,
+                    'exclusive'   => false,
                     'auto_delete' => false,
                 ],
                 'exchange_params' => [
-                    'name' => 'messages.exchange',
-                    'type' => 'direct',
-                    'passive' => false,
-                    'durable' => true,
+                    'name'        => 'messages.exchange',
+                    'type'        => 'direct',
+                    'passive'     => false,
+                    'durable'     => true,
                     'auto_delete' => false,
                 ],
-                'exchange_declare' => true,
+                'exchange_declare'   => true,
                 'queue_declare_bind' => 'cnc',
             ]
         );
@@ -102,21 +102,21 @@ class RabbitMQQueueTest extends \PHPUnit_Framework_TestCase
         $queue = new RabbitMQQueue(
             $connection,
             [
-                'queue' => 'cnc',
+                'queue'        => 'cnc',
                 'queue_params' => [
-                    'passive' => false,
-                    'durable' => true,
-                    'exclusive' => false,
+                    'passive'     => false,
+                    'durable'     => true,
+                    'exclusive'   => false,
                     'auto_delete' => false,
                 ],
                 'exchange_params' => [
-                    'name' => 'messages.exchange',
-                    'type' => 'direct',
-                    'passive' => false,
-                    'durable' => true,
+                    'name'        => 'messages.exchange',
+                    'type'        => 'direct',
+                    'passive'     => false,
+                    'durable'     => true,
                     'auto_delete' => false,
                 ],
-                'exchange_declare' => true,
+                'exchange_declare'   => true,
                 'queue_declare_bind' => 'cnc',
             ]
         );
@@ -155,21 +155,21 @@ class RabbitMQQueueTest extends \PHPUnit_Framework_TestCase
         $queue = new RabbitMQQueue(
             $connection,
             [
-                'queue' => 'cnc',
+                'queue'        => 'cnc',
                 'queue_params' => [
-                    'passive' => false,
-                    'durable' => true,
-                    'exclusive' => false,
+                    'passive'     => false,
+                    'durable'     => true,
+                    'exclusive'   => false,
                     'auto_delete' => false,
                 ],
                 'exchange_params' => [
-                    'name' => 'messages.exchange',
-                    'type' => 'direct',
-                    'passive' => false,
-                    'durable' => true,
+                    'name'        => 'messages.exchange',
+                    'type'        => 'direct',
+                    'passive'     => false,
+                    'durable'     => true,
                     'auto_delete' => false,
                 ],
-                'exchange_declare' => true,
+                'exchange_declare'   => true,
                 'queue_declare_bind' => 'cnc',
             ]
         );

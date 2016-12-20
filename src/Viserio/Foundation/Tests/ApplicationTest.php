@@ -4,7 +4,7 @@ namespace Viserio\Foundation\Tests;
 
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use StdClass;
-use Viserio\Contracts\Config\Manager as ConfigManagerContract;
+use Viserio\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Contracts\Events\Dispatcher as DispatcherContract;
 use Viserio\Contracts\Translation\TranslationManager as TranslationManagerContract;
 use Viserio\Foundation\Application;
@@ -37,7 +37,7 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
             ->with('app.locale')
             ->andReturn('foo');
 
-        $app->instance(ConfigManagerContract::class, $config);
+        $app->instance(RepositoryContract::class, $config);
 
         $trans = $this->mock(StdClass::class);
         $trans->shouldReceive('setLocale')
@@ -62,14 +62,14 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
     protected function getApplication()
     {
         $paths = [
-            'app' => __DIR__ . '/../app',
-            'config' => __DIR__ . '/../config',
-            'routes' => __DIR__ . '/../routes',
+            'app'      => __DIR__ . '/../app',
+            'config'   => __DIR__ . '/../config',
+            'routes'   => __DIR__ . '/../routes',
             'database' => __DIR__ . '/../database',
-            'lang' => __DIR__ . '/../resources/lang',
-            'public' => __DIR__ . '/../public',
-            'base' => __DIR__ . '/..',
-            'storage' => __DIR__ . '/../storage',
+            'lang'     => __DIR__ . '/../resources/lang',
+            'public'   => __DIR__ . '/../public',
+            'base'     => __DIR__ . '/..',
+            'storage'  => __DIR__ . '/../storage',
         ];
 
         return new Application($paths);

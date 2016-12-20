@@ -3,9 +3,9 @@ declare(strict_types=1);
 namespace Viserio\Mail\Tests\Providers;
 
 use Swift_Mailer;
-use Viserio\Config\Manager as ConfigManager;
 use Viserio\Config\Providers\ConfigServiceProvider;
 use Viserio\Container\Container;
+use Viserio\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Contracts\Mail\Mailer as MailerContract;
 use Viserio\Contracts\Queue\Queue as QueueContract;
 use Viserio\Events\Providers\EventsServiceProvider;
@@ -25,7 +25,7 @@ class MailServiceProviderTest extends \PHPUnit_Framework_TestCase
         $container->register(new EventsServiceProvider());
         $container->register(new MailServiceProvider());
 
-        $container->get(ConfigManager::class)->set('mail', [
+        $container->get(RepositoryContract::class)->set('mail', [
             'drivers' => [
                 'smtp' => [
                     'host' => 'smtp.mailgun.org',
@@ -34,11 +34,11 @@ class MailServiceProviderTest extends \PHPUnit_Framework_TestCase
             ],
             'from' => [
                 'address' => '',
-                'name' => '',
+                'name'    => '',
             ],
             'to' => [
                 'address' => '',
-                'name' => '',
+                'name'    => '',
             ],
         ]);
 
@@ -57,7 +57,7 @@ class MailServiceProviderTest extends \PHPUnit_Framework_TestCase
         $container->register(new FilesServiceProvider());
         $container->register(new ViewServiceProvider());
 
-        $container->get(ConfigManager::class)->set('mail', ['drivers' => [
+        $container->get(RepositoryContract::class)->set('mail', ['drivers' => [
             'smtp' => [
                 'host' => 'smtp.mailgun.org',
                 'port' => '25',

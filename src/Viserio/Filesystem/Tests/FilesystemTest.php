@@ -26,7 +26,7 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
-        $this->root = vfsStream::setup();
+        $this->root  = vfsStream::setup();
         $this->files = new Filesystem();
     }
 
@@ -84,7 +84,7 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
     {
         $this->root->addChild(new vfsStreamDirectory('temp'));
 
-        $dir = $this->root->getChild('temp');
+        $dir  = $this->root->getChild('temp');
         $file = vfsStream::newFile('bar.txt')->withContent('bar')->at($dir);
 
         self::assertTrue(is_dir($dir->url()));
@@ -100,7 +100,7 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
     {
         $this->root->addChild(new vfsStreamDirectory('tempdir'));
 
-        $dir = $this->root->getChild('tempdir');
+        $dir  = $this->root->getChild('tempdir');
         $file = vfsStream::newFile('tempfoo.txt')->withContent('tempfoo')->at($dir);
 
         self::assertFalse($this->files->cleanDirectory($file->url()));
@@ -154,7 +154,7 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
     public function testGetSizeOutputsSize()
     {
         $content = LargeFileContent::withKilobytes(2);
-        $file = vfsStream::newFile('2kb.txt')->withContent($content)->at($this->root);
+        $file    = vfsStream::newFile('2kb.txt')->withContent($content)->at($this->root);
 
         self::assertEquals($file->size(), $this->files->getSize($file->url()));
     }
@@ -162,7 +162,7 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
     public function testIsDirectory()
     {
         $this->root->addChild(new vfsStreamDirectory('assets'));
-        $dir = $this->root->getChild('assets');
+        $dir  = $this->root->getChild('assets');
         $file = vfsStream::newFile('foo.txt')->withContent('foo')->at($this->root);
 
         self::assertTrue($this->files->isDirectory($dir->url()));
@@ -173,7 +173,7 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
     {
         $this->root->addChild(new vfsStreamDirectory('languages'));
 
-        $dir = $this->root->getChild('languages');
+        $dir   = $this->root->getChild('languages');
         $file1 = vfsStream::newFile('php.txt')->withContent('PHP')->at($dir);
         $file2 = vfsStream::newFile('c.txt')->withContent('C')->at($dir);
 
@@ -337,7 +337,7 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
         $stream = $this->files->readStream($file->url());
 
         $contents = stream_get_contents($stream);
-        $size = Util::getStreamSize($stream);
+        $size     = Util::getStreamSize($stream);
 
         fclose($stream);
 
@@ -370,7 +370,7 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
         $stream = $this->files->readStream($file->url());
 
         $contents = stream_get_contents($stream);
-        $size = Util::getStreamSize($stream);
+        $size     = Util::getStreamSize($stream);
 
         fclose($stream);
 
@@ -425,7 +425,7 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
         $this->root->addChild(new vfsStreamDirectory('tmp'));
         $this->root->addChild(new vfsStreamDirectory('tmp2'));
 
-        $dir = $this->root->getChild('tmp');
+        $dir   = $this->root->getChild('tmp');
         $temp2 = $this->root->getChild('tmp2');
 
         vfsStream::newFile('foo.txt')
@@ -457,7 +457,7 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
         $this->root->addChild(new vfsStreamDirectory('tmp'));
         $this->root->addChild(new vfsStreamDirectory('tmp2'));
 
-        $dir = $this->root->getChild('tmp');
+        $dir   = $this->root->getChild('tmp');
         $temp2 = $this->root->getChild('tmp2');
 
         vfsStream::newFile('foo.txt')
@@ -503,7 +503,7 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
         $this->root->addChild(new vfsStreamDirectory('tmp'));
         $this->root->addChild(new vfsStreamDirectory('tmp2'));
 
-        $dir = $this->root->getChild('tmp');
+        $dir   = $this->root->getChild('tmp');
         $temp2 = $this->root->getChild('tmp2');
 
         vfsStream::newFile('foo.txt')

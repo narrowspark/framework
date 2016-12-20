@@ -24,7 +24,7 @@ use Viserio\Http\HeaderSecurity;
 class HeaderSecurityTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * Data for filter value
+     * Data for filter value.
      */
     public function getFilterValues()
     {
@@ -46,6 +46,9 @@ class HeaderSecurityTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider getFilterValues
      * @group ZF2015-04
+     *
+     * @param mixed $value
+     * @param mixed $expected
      */
     public function testFiltersValuesPerRfc7230($value, $expected)
     {
@@ -75,6 +78,9 @@ class HeaderSecurityTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider validateValues
      * @group ZF2015-04
+     *
+     * @param mixed $value
+     * @param mixed $assertion
      */
     public function testValidatesValuesPerRfc7230($value, $assertion)
     {
@@ -102,6 +108,8 @@ class HeaderSecurityTest extends \PHPUnit_Framework_TestCase
      * @group ZF2015-04
      *
      * @expectedException \InvalidArgumentException
+     *
+     * @param mixed $value
      */
     public function testAssertValidRaisesExceptionForInvalidValue($value)
     {

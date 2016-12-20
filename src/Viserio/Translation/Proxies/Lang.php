@@ -2,15 +2,11 @@
 declare(strict_types=1);
 namespace Viserio\Translation\Proxies;
 
+use Viserio\Contracts\Translation\Translator as TranslatorContract;
 use Viserio\StaticalProxy\StaticalProxy;
 
 class Lang extends StaticalProxy
 {
-    public function get($orig, $language = false, $replacements = null)
-    {
-        return self::$container['translator']->getTranslation($orig, $language, $replacements);
-    }
-
     /**
      * {@inheritdoc}
      *
@@ -18,6 +14,6 @@ class Lang extends StaticalProxy
      */
     public static function getInstanceIdentifier()
     {
-        return 'translator';
+        return TranslatorContract::class;
     }
 }

@@ -10,7 +10,7 @@ use Viserio\Container\Container;
 use Viserio\Cron\Providers\CronServiceProvider;
 use Viserio\Cron\Schedule;
 
-class ConsoleServiceProviderTest extends \PHPUnit_Framework_TestCase
+class CronServiceProviderTest extends \PHPUnit_Framework_TestCase
 {
     use MockeryTrait;
 
@@ -22,9 +22,9 @@ class ConsoleServiceProviderTest extends \PHPUnit_Framework_TestCase
         $container->register(new CronServiceProvider());
 
         $container->get('config')->set('cron', [
-            'console' => 'cerebro',
+            'console'    => 'cerebro',
             'mutex_path' => __DIR__ . '/..',
-            'path' => __DIR__ . '..',
+            'path'       => __DIR__ . '..',
         ]);
 
         self::assertInstanceOf(Schedule::class, $container->get(Schedule::class));
@@ -37,9 +37,9 @@ class ConsoleServiceProviderTest extends \PHPUnit_Framework_TestCase
         $container->register(new CronServiceProvider());
 
         $container->instance('options', [
-            'console' => 'cerebro',
+            'console'    => 'cerebro',
             'mutex_path' => __DIR__ . '..',
-            'path' => __DIR__ . '..',
+            'path'       => __DIR__ . '..',
         ]);
         $container->instance(CacheItemPoolInterface::class, $this->mock(CacheItemPoolInterface::class));
 
@@ -52,9 +52,9 @@ class ConsoleServiceProviderTest extends \PHPUnit_Framework_TestCase
         $container->register(new CronServiceProvider());
 
         $container->instance('viserio.cron.options', [
-            'console' => 'cerebro',
+            'console'    => 'cerebro',
             'mutex_path' => __DIR__ . '/..',
-            'path' => __DIR__ . '..',
+            'path'       => __DIR__ . '..',
         ]);
         $container->instance(CacheItemPoolInterface::class, $this->mock(CacheItemPoolInterface::class));
 

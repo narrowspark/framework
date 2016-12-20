@@ -28,20 +28,20 @@ class Parser implements ParserContract
     private $supportedFormats = [
         // XML
         'application/xml' => 'xml',
-        'text/xml' => 'xml',
+        'text/xml'        => 'xml',
         // JSON
-        'application/json' => 'json',
+        'application/json'         => 'json',
         'application/x-javascript' => 'json',
-        'text/javascript' => 'json',
-        'text/x-javascript' => 'json',
-        'text/x-json' => 'json',
+        'text/javascript'          => 'json',
+        'text/x-javascript'        => 'json',
+        'text/x-json'              => 'json',
         // YAML
-        'text/yaml' => 'yaml',
-        'text/x-yaml' => 'yaml',
-        'application/yaml' => 'yaml',
+        'text/yaml'          => 'yaml',
+        'text/x-yaml'        => 'yaml',
+        'application/yaml'   => 'yaml',
         'application/x-yaml' => 'yaml',
         // MISC
-        'application/vnd.php.serialized' => 'serialize',
+        'application/vnd.php.serialized'    => 'serialize',
         'application/x-www-form-urlencoded' => 'querystr',
     ];
 
@@ -57,17 +57,17 @@ class Parser implements ParserContract
     ];
 
     private $supportedParsers = [
-        'csv' => Csv::class,
-        'ini' => INI::class,
-        'json' => JSON::class,
-        'msgpack' => MSGPack::class,
-        'php' => PHP::class,
-        'po' => Po::class,
-        'querystr' => QueryStr::class,
+        'csv'       => Csv::class,
+        'ini'       => INI::class,
+        'json'      => JSON::class,
+        'msgpack'   => MSGPack::class,
+        'php'       => PHP::class,
+        'po'        => Po::class,
+        'querystr'  => QueryStr::class,
         'serialize' => Serialize::class,
-        'toml' => TOML::class,
-        'xml' => XML::class,
-        'yaml' => YAML::class,
+        'toml'      => TOML::class,
+        'xml'       => XML::class,
+        'yaml'      => YAML::class,
     ];
 
     /**
@@ -76,7 +76,7 @@ class Parser implements ParserContract
     public function getFormat(string $format = null): string
     {
         if ($format !== null) {
-            $format = strtolower($format);
+            $format = mb_strtolower($format);
         } else {
             $format = '';
         }

@@ -94,7 +94,7 @@ class HandlerParserTest extends \PHPUnit_Framework_TestCase
             'info',
             [
                 PsrLogMessageProcessor::class => '',
-                GitProcessor::class => '',
+                GitProcessor::class           => '',
             ]
         );
     }
@@ -145,7 +145,7 @@ class HandlerParserTest extends \PHPUnit_Framework_TestCase
      */
     public function testParseHandlerWithFormatterTothrowException()
     {
-        $logger = $this->mock(Logger::class);
+        $logger  = $this->mock(Logger::class);
         $handler = $this->mock(HandlerInterface::class);
 
         $parser = new HandlerParser($logger);
@@ -160,6 +160,8 @@ class HandlerParserTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider formatterProvider
+     *
+     * @param mixed $formatter
      */
     public function testParseHandlerWithFormatterWithDataProvider($formatter)
     {

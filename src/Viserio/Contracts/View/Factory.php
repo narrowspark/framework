@@ -120,6 +120,16 @@ interface Factory
     public function addNamespace(string $namespace, $hints): Factory;
 
     /**
+     * Replace the namespace hints for the given namespace.
+     *
+     * @param string       $namespace
+     * @param string|array $hints
+     *
+     * @return $this
+     */
+    public function replaceNamespace(string $namespace, $hints): Factory;
+
+    /**
      * Prepend a new namespace to the loader.
      *
      * @param string       $namespace

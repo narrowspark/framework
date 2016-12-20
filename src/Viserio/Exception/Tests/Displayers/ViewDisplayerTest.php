@@ -16,7 +16,7 @@ class ViewDisplayerTest extends \PHPUnit_Framework_TestCase
     public function testError()
     {
         $factory = $this->mock(Factory::class);
-        $view = $this->mock(View::class);
+        $view    = $this->mock(View::class);
         $view
             ->shouldReceive('__toString')
             ->once()

@@ -51,7 +51,7 @@ class FnStreamTest extends \PHPUnit_Framework_TestCase
 
     public function testDecoratesStream()
     {
-        $body = 'foo';
+        $body   = 'foo';
         $stream = fopen('php://temp', 'r+');
 
         fwrite($stream, $body);
@@ -85,7 +85,7 @@ class FnStreamTest extends \PHPUnit_Framework_TestCase
     {
         $called = false;
 
-        $body = 'foo';
+        $body   = 'foo';
         $stream = fopen('php://temp', 'r+');
 
         fwrite($stream, $body);

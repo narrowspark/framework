@@ -15,7 +15,7 @@ class PipelineTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->container = new ArrayContainer([
-            'PipelineTestPipeOne' => new PipelineTestPipeOne(),
+            'PipelineTestPipeOne'       => new PipelineTestPipeOne(),
             'PipelineTestParameterPipe' => new PipelineTestParameterPipe(),
         ]);
     }

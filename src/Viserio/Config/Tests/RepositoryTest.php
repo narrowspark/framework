@@ -2,10 +2,151 @@
 declare(strict_types=1);
 namespace Viserio\Config\Tests;
 
+use org\bovigo\vfs\vfsStream;
 use Viserio\Config\Repository;
+use Viserio\Parsers\FileLoader;
+use Viserio\Parsers\TaggableParser;
 
 class RepositoryTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @var org\bovigo\vfs\vfsStreamDirectory
+     */
+    private $root;
+
+    /**
+     * @var \Viserio\Parsers\FileLoader
+     */
+    private $fileloader;
+
+    public function setUp()
+    {
+        $this->root       = vfsStream::setup();
+        $this->fileloader = new FileLoader(new TaggableParser(), []);
+    }
+
+    public function testConstructorInjection()
+    {
+        $values = ['param' => 'value'];
+        $config = new Repository();
+
+        $config->setArray($values);
+
+        self::assertSame($values['param'], $config['param']);
+    }
+
+    public function testGetAndSetLoader()
+    {
+        $config = new Repository();
+        $config->setLoader($this->fileloader);
+
+        self::assertInstanceOf(FileLoader::class, $config->getLoader());
+    }
+
+    public function testSetArray()
+    {
+        $config = new Repository();
+
+        $config->setArray([
+            '123' => [
+                '456' => [
+                    '789' => 1,
+                ],
+            ],
+        ]);
+
+        self::assertTrue($config->has('123'));
+    }
+
+    public function testImport()
+    {
+        $config = new Repository();
+        $config->setLoader($this->fileloader);
+
+        $file = vfsStream::newFile('temp.json')->withContent(
+            '
+{
+    "a":1,
+    "b":2,
+    "c":3
+}
+            '
+        )->at($this->root);
+
+        $config->import($file->url());
+
+        self::assertTrue($config->has('a'));
+        self::assertTrue($config->has('b'));
+        self::assertTrue($config->has('c'));
+    }
+
+    public function testImportWithGroup()
+    {
+        $config = new Repository();
+        $config->setLoader($this->fileloader);
+
+        $file = vfsStream::newFile('temp.json')->withContent(
+            '
+{
+    "a":1,
+    "b":2,
+    "c":3
+}
+            '
+        )->at($this->root);
+
+        $config->import($file->url(), 'test');
+
+        self::assertTrue($config->has('test::a'));
+        self::assertSame(2, $config->get('test::b'));
+        self::assertTrue($config->has('test::c'));
+    }
+
+    public function testGet()
+    {
+        $config = new Repository();
+
+        $config->setArray([
+            '123' => [
+                '456' => [
+                    '789' => 1,
+                ],
+            ],
+            'foo'  => 'bar',
+            'func' => function () {
+                return 'func';
+            },
+        ]);
+
+        self::assertSame('bar', $config->get('foo'));
+        self::assertSame('foo', $config->get('novalue', 'foo'));
+        self::assertSame('func', $config->get('func'));
+    }
+
+    public function testSet()
+    {
+        $config = new Repository();
+
+        $config->set('foo', 'bar')
+            ->set('bar', 'doo');
+
+        self::assertTrue($config->has('foo'));
+        self::assertTrue($config->has('bar'));
+    }
+
+    public function testRemove()
+    {
+        $config = new Repository();
+
+        $config->set('foo', 'bar');
+
+        self::assertTrue($config->has('foo'));
+
+        $config->delete('foo');
+
+        self::assertFalse($config->has('foo'));
+    }
+
     public function testFlattenArray()
     {
         $repository = new Repository();
@@ -17,6 +158,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
                 ],
             ],
         ]);
+
         self::assertArrayHasKey('123.456.789', $repository->getAllFlat());
     }
 
@@ -28,7 +170,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
             'default' => 'Memcached',
             'drivers' => [
               'Memcached' => [],
-              'File' => [],
+              'File'      => [],
             ],
           ],
         ];
@@ -38,7 +180,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
             'default' => 'File',
             'drivers' => [
               'Memcached' => [],
-              'File' => [],
+              'File'      => [],
             ],
           ],
         ];
@@ -51,7 +193,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
           ],
         ]);
 
-        self::assertEquals($expected, $repository->getAllNested());
+        self::assertEquals($expected, $repository->getAll());
 
         // test 2 - merge values keyed numeric
         $original = [
@@ -90,18 +232,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
             ],
         ]);
 
-        self::assertEquals($expected, $repository->getAllNested());
-    }
-
-    public function testSetArray()
-    {
-        $repository = new Repository();
-
-        $repository->setArray([
-            'foo' => 'bar',
-        ]);
-
-        self::assertEquals($repository['foo'], 'bar');
+        self::assertEquals($expected, $repository->getAll());
     }
 
     public function testSetAndGet()
@@ -134,9 +265,11 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
         $repository = new Repository();
 
         $repository['my.namespaced.keyname'] = 'My Value';
-        $this->arrayHasKey($repository, 'my');
-        $this->arrayHasKey($repository['my'], 'namespaced');
-        $this->arrayHasKey($repository['my.namespaced'], 'keyname');
+
+        self::assertArrayHasKey('my', $repository);
+        self::assertArrayHasKey('namespaced', $repository['my']);
+        self::assertArrayHasKey('keyname', $repository['my.namespaced']);
+
         self::assertEquals('My Value', $repository['my.namespaced.keyname']);
     }
 
@@ -154,6 +287,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
         $repository = new Repository();
 
         $repository['param'] = 'value';
+
         self::assertTrue(isset($repository['param']));
         self::assertFalse(isset($repository['non_existent']));
     }
@@ -176,6 +310,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
         self::assertFalse(isset($repository['foo.bar']));
 
         $repository->offsetUnset('foo');
+
         self::assertFalse(isset($repository['foo']));
     }
 

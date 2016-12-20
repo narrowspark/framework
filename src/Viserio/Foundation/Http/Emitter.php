@@ -77,7 +77,7 @@ class Emitter implements EmitterContract
     protected function emitHeaders(ResponseInterface $response)
     {
         foreach ($response->getHeaders() as $header => $values) {
-            $name = $this->filterHeader($header);
+            $name  = $this->filterHeader($header);
             $first = true;
 
             foreach ($values as $value) {
@@ -86,6 +86,7 @@ class Emitter implements EmitterContract
                     $name,
                     $value
                 ), $first);
+
                 $first = false;
             }
         }
@@ -98,7 +99,7 @@ class Emitter implements EmitterContract
      */
     protected function emitBody(ResponseInterface $response)
     {
-        echo $response->getBody();
+        print $response->getBody();
     }
 
     /**
@@ -109,7 +110,7 @@ class Emitter implements EmitterContract
     protected function terminateOutputBuffering(int $maxBufferLevel = 0)
     {
         // Command line output buffering is disabled in cli by default
-        if (substr(PHP_SAPI, 0, 3) === 'cgi') {
+        if (mb_substr(PHP_SAPI, 0, 3) === 'cgi') {
             return;
         }
 
@@ -143,7 +144,7 @@ class Emitter implements EmitterContract
     }
 
     /**
-     * Filter a header name to wordcase
+     * Filter a header name to wordcase.
      *
      * @param string $header
      *

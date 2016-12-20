@@ -3,7 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Contracts\Support\Traits;
 
 use Interop\Container\ContainerInterface;
-use Viserio\Contracts\Config\Manager as ConfigManagerContract;
+use Viserio\Contracts\Config\Repository as RepositoryContract;
 
 trait ServiceProviderConfigAwareTrait
 {
@@ -19,12 +19,12 @@ trait ServiceProviderConfigAwareTrait
     protected static function getConfig(ContainerInterface $container, string $id = '', $default = null)
     {
         $configName = str_replace('viserio.', '', self::PACKAGE);
-        $isPrefix = $configName === $id;
+        $isPrefix   = $configName === $id;
 
-        if ($container->has(ConfigManagerContract::class)) {
+        if ($container->has(RepositoryContract::class)) {
             $id = ($isPrefix ? $configName : $configName . '.' . $id);
 
-            return $container->get(ConfigManagerContract::class)->get($id, $default);
+            return $container->get(RepositoryContract::class)->get($id, $default);
         }
 
         if ($isPrefix) {

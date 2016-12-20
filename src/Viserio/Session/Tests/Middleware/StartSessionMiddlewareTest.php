@@ -7,8 +7,7 @@ use Mockery as Mock;
 use Narrowspark\TestingHelper\ArrayContainer;
 use Narrowspark\TestingHelper\Middleware\DelegateMiddleware;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
-use org\bovigo\vfs\vfsStream;
-use Viserio\Contracts\Config\Manager as ConfigManagerContract;
+use Viserio\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Contracts\Cookie\QueueingFactory as JarContract;
 use Viserio\Contracts\Filesystem\Filesystem as FilesystemContract;
 use Viserio\Contracts\Session\Store as StoreContract;
@@ -24,11 +23,6 @@ class StartSessionMiddlewareTest extends \PHPUnit_Framework_TestCase
     use MockeryTrait;
 
     /**
-     * @var string
-     */
-    private $root;
-
-    /**
      * @var \Viserio\Filesystem\Filesystem
      */
     private $files;
@@ -42,13 +36,12 @@ class StartSessionMiddlewareTest extends \PHPUnit_Framework_TestCase
     {
         parent::setUp();
 
-        $this->root = vfsStream::setup();
         $this->files = new Filesystem();
 
         $this->files->createDirectory(__DIR__ . '/stubs');
 
         $encrypter = new Encrypter(Key::createNewRandomKey());
-        $config = $this->mock(ConfigManagerContract::class);
+        $config    = $this->mock(RepositoryContract::class);
 
         $jar = $this->mock(JarContract::class);
         $jar->shouldReceive('queue')
@@ -57,7 +50,7 @@ class StartSessionMiddlewareTest extends \PHPUnit_Framework_TestCase
         $manager = new SessionManager($config, $encrypter);
         $manager->setContainer(new ArrayContainer([
             FilesystemContract::class => $this->files,
-            JarContract::class => $jar,
+            JarContract::class        => $jar,
         ]));
 
         $this->manager = $manager;
@@ -79,7 +72,7 @@ class StartSessionMiddlewareTest extends \PHPUnit_Framework_TestCase
     public function testAddSessionToResponse()
     {
         $manager = $this->manager;
-        $config = $manager->getConfig();
+        $config  = $manager->getConfig();
 
         $config->shouldReceive('get')
             ->once()
@@ -103,7 +96,7 @@ class StartSessionMiddlewareTest extends \PHPUnit_Framework_TestCase
         $config->shouldReceive('get')
             ->with('session.path')
             ->twice()
-            ->andReturn($this->root->url());
+            ->andReturn(__DIR__ . '/stubs');
         $config->shouldReceive('get')
             ->with('session.expire_on_close', false)
             ->once()
@@ -129,7 +122,7 @@ class StartSessionMiddlewareTest extends \PHPUnit_Framework_TestCase
             ->andReturn(false);
 
         $middleware = new StartSessionMiddleware($manager);
-        $request = (new ServerRequestFactory())->createServerRequest($_SERVER);
+        $request    = (new ServerRequestFactory())->createServerRequest($_SERVER);
 
         $response = $middleware->process($request, new DelegateMiddleware(function ($request) {
             return (new ResponseFactory())->createResponse(200);
@@ -141,7 +134,7 @@ class StartSessionMiddlewareTest extends \PHPUnit_Framework_TestCase
     public function testAddSessionToCookie()
     {
         $manager = $this->manager;
-        $config = $manager->getConfig();
+        $config  = $manager->getConfig();
 
         $config->shouldReceive('get')
             ->once()
@@ -171,7 +164,7 @@ class StartSessionMiddlewareTest extends \PHPUnit_Framework_TestCase
             ->andReturn(1440);
 
         $middleware = new StartSessionMiddleware($manager);
-        $request = (new ServerRequestFactory())->createServerRequest($_SERVER);
+        $request    = (new ServerRequestFactory())->createServerRequest($_SERVER);
 
         $response = $middleware->process($request, new DelegateMiddleware(function ($request) {
             self::assertInstanceOf(StoreContract::class, $request->getAttribute('session'));

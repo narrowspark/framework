@@ -10,7 +10,7 @@ use Pheanstalk\PheanstalkInterface;
 use PhpAmqpLib\Connection\AMQPStreamConnection;
 use RuntimeException;
 use Viserio\Connect\ConnectManager;
-use Viserio\Contracts\Config\Manager as ConfigContract;
+use Viserio\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Contracts\Container\Traits\ContainerAwareTrait;
 use Viserio\Contracts\Encryption\Encrypter as EncrypterContract;
 use Viserio\Contracts\Encryption\Traits\EncrypterAwareTrait;
@@ -35,16 +35,16 @@ class QueueManager extends AbstractConnectionManager implements MonitorContract,
     /**
      * Create a new queue manager instance.
      *
-     * @param \Viserio\Contracts\Config\Manager       $config
+     * @param \Viserio\Contracts\Config\Repository    $config
      * @param \Interop\Container\ContainerInterface   $container
      * @param \Viserio\Contracts\Encryption\Encrypter $encrypter
      */
     public function __construct(
-        ConfigContract $config,
+        RepositoryContract $config,
         ContainerInteropInterface $container,
         EncrypterContract $encrypter
     ) {
-        $this->config = $config;
+        $this->config    = $config;
         $this->container = $container;
         $this->encrypter = $encrypter;
     }
@@ -101,7 +101,7 @@ class QueueManager extends AbstractConnectionManager implements MonitorContract,
         $name = $name ?? $this->getDefaultConnection();
 
         if (! isset($this->connections[$name])) {
-            $config = $this->getConnectionConfig($name);
+            $config  = $this->getConnectionConfig($name);
             $connect = $this->createConnection($config);
 
             $connect->setContainer($this->container);
@@ -128,6 +128,8 @@ class QueueManager extends AbstractConnectionManager implements MonitorContract,
     /**
      * Create Beanstalkd connection.
      *
+     * @param array $config
+     *
      * @return \Viserio\Queue\Connectors\BeanstalkdQueue
      */
     protected function createBeanstalkdConnection(array $config): BeanstalkdQueue
@@ -147,6 +149,8 @@ class QueueManager extends AbstractConnectionManager implements MonitorContract,
     /**
      * Create Null connection.
      *
+     * @param array $config
+     *
      * @return \Viserio\Queue\Connectors\NullQueue
      */
     protected function createNullConnection(array $config): NullQueue
@@ -156,6 +160,8 @@ class QueueManager extends AbstractConnectionManager implements MonitorContract,
 
     /**
      * Create Sync connection.
+     *
+     * @param array $config
      *
      * @return \Viserio\Queue\Connectors\SyncQueue
      */
@@ -167,14 +173,16 @@ class QueueManager extends AbstractConnectionManager implements MonitorContract,
     /**
      * Create Sqs connection.
      *
+     * @param array $config
+     *
      * @return \Viserio\Queue\Connectors\SqsQueue
      */
     protected function createSqsConnection(array $config): SqsQueue
     {
         $config = array_merge([
             'version' => 'latest',
-            'http' => [
-                'timeout' => 60,
+            'http'    => [
+                'timeout'         => 60,
                 'connect_timeout' => 60,
             ],
         ], $config);
@@ -193,6 +201,8 @@ class QueueManager extends AbstractConnectionManager implements MonitorContract,
     /**
      * Create Redis connection.
      *
+     * @param array $config
+     *
      * @return \Viserio\Queue\Connectors\RedisQueue
      */
     protected function createRedisConnection(array $config): RedisQueue
@@ -210,6 +220,8 @@ class QueueManager extends AbstractConnectionManager implements MonitorContract,
 
     /**
      * Create RabbitMQ connection.
+     *
+     * @param array $config
      *
      * @return \Viserio\Queue\Connectors\RabbitMQQueue
      */

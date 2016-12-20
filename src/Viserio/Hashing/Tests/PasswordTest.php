@@ -18,12 +18,12 @@ class PasswordTest extends \PHPUnit_Framework_TestCase
     {
         $hash = $this->password->create('totally-insecure-but-lengthy-password');
 
-        self::assertEquals(288, strlen($hash));
+        self::assertEquals(288, mb_strlen($hash));
     }
 
     public function testVerify()
     {
-        $password = 'totally-insecure-but-lengthy-password';
+        $password      = 'totally-insecure-but-lengthy-password';
         $otherPassword = 'totally-awesome-password';
 
         $hash = $this->password->create($password);
@@ -34,7 +34,7 @@ class PasswordTest extends \PHPUnit_Framework_TestCase
 
     public function testShouldRecreate()
     {
-        $key = Key::createNewRandomKey();
+        $key  = Key::createNewRandomKey();
         $hash = $this->password->create('totally-insecure-but-lengthy-password');
 
         self::assertNotSame($hash, $this->password->shouldRecreate($hash, $key));

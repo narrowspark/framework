@@ -138,7 +138,7 @@ abstract class AbstractJob implements JobContract
      */
     public function resolveName(): string
     {
-        $name = $this->getName();
+        $name    = $this->getName();
         $payload = json_decode($this->getRawBody(), true);
 
         if ($name === sprintf('%s@call', CallQueuedHandler::class)) {

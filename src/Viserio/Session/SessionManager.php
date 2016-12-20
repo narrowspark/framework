@@ -4,7 +4,7 @@ namespace Viserio\Session;
 
 use SessionHandlerInterface;
 use Viserio\Contracts\Cache\Manager as CacheManagerContract;
-use Viserio\Contracts\Config\Manager as ConfigContract;
+use Viserio\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Contracts\Container\Traits\ContainerAwareTrait;
 use Viserio\Contracts\Cookie\QueueingFactory as JarContract;
 use Viserio\Contracts\Encryption\Encrypter as EncrypterContract;
@@ -24,14 +24,14 @@ class SessionManager extends AbstractManager
     /**
      * Constructor.
      *
-     * @param \Viserio\Contracts\Config\Manager       $config
+     * @param \Viserio\Contracts\Config\Repository    $config
      * @param \Viserio\Contracts\Encryption\Encrypter $encrypter
      */
     public function __construct(
-        ConfigContract $config,
+        RepositoryContract $config,
         EncrypterContract $encrypter
     ) {
-        $this->config = $config;
+        $this->config    = $config;
         $this->encrypter = $encrypter;
     }
 
@@ -232,7 +232,7 @@ class SessionManager extends AbstractManager
         return new Store(
             $this->config->get($this->getConfigName() . '.cookie', ''),
             $handler,
-            $this->encrypter
+            $this->getEncrypter()
         );
     }
 

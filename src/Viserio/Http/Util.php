@@ -67,7 +67,7 @@ class Util
      *
      * @return string
      */
-    public static function copyToString(StreamInterface $stream, $maxLen = -1): string
+    public static function copyToString(StreamInterface $stream, int $maxLen = -1): string
     {
         $buffer = '';
 
@@ -94,7 +94,7 @@ class Util
             }
 
             $buffer .= $buf;
-            $len = strlen($buffer);
+            $len = mb_strlen($buffer);
         }
 
         return $buffer;
@@ -139,7 +139,7 @@ class Util
 
             while ($remaining > 0 && ! $source->eof()) {
                 $buf = $source->read(min($bufferSize, $remaining));
-                $len = strlen($buf);
+                $len = mb_strlen($buf);
 
                 if (! $len) {
                     break;
@@ -221,10 +221,10 @@ class Util
         foreach (array_keys($files['tmp_name']) as $key) {
             $spec = [
                 'tmp_name' => $files['tmp_name'][$key],
-                'size' => $files['size'][$key],
-                'error' => $files['error'][$key],
-                'name' => $files['name'][$key],
-                'type' => $files['type'][$key],
+                'size'     => $files['size'][$key],
+                'error'    => $files['error'][$key],
+                'name'     => $files['name'][$key],
+                'type'     => $files['type'][$key],
             ];
 
             $normalizedFiles[$key] = self::createUploadedFileFromSpec($spec);

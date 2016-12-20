@@ -4,7 +4,7 @@ namespace Viserio\Routing\Tests;
 
 use Viserio\Routing\SortedMiddleware;
 
-class RoutingSortedMiddlewareTest extends \PHPUnit_Framework_TestCase
+class SortedMiddlewareTest extends \PHPUnit_Framework_TestCase
 {
     public function testMiddlewareCanBeSortedByPriority()
     {

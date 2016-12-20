@@ -12,7 +12,7 @@ class HashingServiceProvider implements ServiceProvider
 {
     use ServiceProviderConfigAwareTrait;
 
-    const PACKAGE = 'viserio.hashing';
+    public const PACKAGE = 'viserio.hashing';
 
     /**
      * {@inheritdoc}
@@ -21,7 +21,7 @@ class HashingServiceProvider implements ServiceProvider
     {
         return [
             PasswordContract::class => [self::class, 'createPassword'],
-            Password::class => function (ContainerInterface $container) {
+            Password::class         => function (ContainerInterface $container) {
                 return $container->get(PasswordContract::class);
             },
             'password' => function (ContainerInterface $container) {

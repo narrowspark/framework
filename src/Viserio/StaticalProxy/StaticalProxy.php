@@ -11,7 +11,7 @@ use RuntimeException;
 class StaticalProxy
 {
     /**
-     * @var ContainerInterface The Container that provides the Proxy Subjects.
+     * @var ContainerInterface the Container that provides the Proxy Subjects
      */
     protected static $container;
 
@@ -52,7 +52,7 @@ class StaticalProxy
     }
 
     /**
-     * Retrieves the instance of the Proxy Subject from the Container that the Static Proxy is associated with
+     * Retrieves the instance of the Proxy Subject from the Container that the Static Proxy is associated with.
      *
      * @return mixed
      */
@@ -62,7 +62,7 @@ class StaticalProxy
     }
 
     /**
-     * Retrieves the Instance Identifier that is used to retrieve the Proxy Subject from the Container
+     * Retrieves the Instance Identifier that is used to retrieve the Proxy Subject from the Container.
      *
      * @throws \BadMethodCallException if the method has not been implemented by a subclass
      *

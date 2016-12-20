@@ -49,8 +49,8 @@ trait FilesystemExtensionTrait
     {
         $path = $this->getNormalzedOrPrefixedPath($path);
 
-        $explode = explode('.', $path);
-        $substrPath = substr($path, -1);
+        $explode    = explode('.', $path);
+        $substrPath = mb_substr($path, -1);
 
         // No extension for paths
         if ($substrPath === '/' || is_dir($path)) {
@@ -58,10 +58,10 @@ trait FilesystemExtensionTrait
         }
 
         $actualExtension = null;
-        $extension = ltrim($extension, '.');
+        $extension       = ltrim($extension, '.');
 
         if (count($explode) >= 2 && ! is_dir($path)) {
-            $actualExtension = strtolower($extension);
+            $actualExtension = mb_strtolower($extension);
         }
 
         // No actual extension in path
@@ -69,7 +69,7 @@ trait FilesystemExtensionTrait
             return $path . ($substrPath === '.' ? '' : '.') . $extension;
         }
 
-        return substr($path, 0, -strlen($actualExtension)) . $extension;
+        return mb_substr($path, 0, -mb_strlen($actualExtension)) . $extension;
     }
 
     /**

@@ -22,12 +22,12 @@ class Env
             return $default instanceof Closure ? $default() : $default;
         }
 
-        if (Str::containsAny($value, ['base64:', "'base64:", '"base64:'])) {
-            return base64_decode(substr($value, 7));
+        if (preg_match('/base64:|\'base64:|"base64:/s', $value)) {
+            return base64_decode(mb_substr($value, 7));
         }
 
         if (in_array(
-            strtolower($value),
+            mb_strtolower($value),
             [
                 'false',
                 '(false)',
@@ -58,9 +58,9 @@ class Env
             return '';
         }
 
-        if (strlen($value) > 1 &&
-            mb_substr($value, 0, strlen('"')) === '"' &&
-            mb_substr($value, -strlen('"')) === '"'
+        if (mb_strlen($value) > 1 &&
+            mb_substr($value, 0, mb_strlen('"')) === '"' &&
+            mb_substr($value, -mb_strlen('"')) === '"'
         ) {
             return mb_substr($value, 1, -1);
         }

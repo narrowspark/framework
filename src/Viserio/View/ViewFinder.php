@@ -148,7 +148,7 @@ class ViewFinder implements FinderContract
      */
     public function hasHintInformation(string $name): bool
     {
-        return strpos($name, FinderContract::HINT_PATH_DELIMITER) > 0;
+        return mb_strpos($name, FinderContract::HINT_PATH_DELIMITER) > 0;
     }
 
     /**
@@ -191,6 +191,24 @@ class ViewFinder implements FinderContract
     public function getExtensions(): array
     {
         return $this->extensions;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function replaceNamespace(string $namespace, $hints): FinderContract
+    {
+        $this->hints[$namespace] = (array) $hints;
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function flush(): void
+    {
+        $this->views = [];
     }
 
     /**
@@ -244,13 +262,14 @@ class ViewFinder implements FinderContract
     protected function findInPaths(string $name, array $paths): array
     {
         foreach ($paths as $path) {
-            foreach ($this->getPossibleViewFiles($name) as $file) {
-                $viewPath = self::normalizeDirectorySeparator($path . '/' . $file);
+            foreach ($this->getPossibleViewFiles($name) as $fileInfos) {
+                $viewPath = self::normalizeDirectorySeparator($path . '/' . $fileInfos['file']);
 
                 if ($this->files->has($viewPath)) {
                     return [
-                        'path' => $viewPath,
-                        'name' => $file,
+                        'path'      => $viewPath,
+                        'name'      => $fileInfos['file'],
+                        'extension' => $fileInfos['extension'],
                     ];
                 }
             }
@@ -269,7 +288,10 @@ class ViewFinder implements FinderContract
     protected function getPossibleViewFiles(string $name): array
     {
         return array_map(function ($extension) use ($name) {
-            return str_replace('.', DIRECTORY_SEPARATOR, $name) . '.' . $extension;
+            return [
+                'extension' => $extension,
+                'file'      => str_replace('.', DIRECTORY_SEPARATOR, $name) . '.' . $extension,
+            ];
         }, $this->extensions);
     }
 }

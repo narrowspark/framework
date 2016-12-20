@@ -51,9 +51,9 @@ class Schedule
      */
     public function __construct(CacheItemPoolInterface $cache, string $path, string $consoleName = null)
     {
-        $this->cache = $cache;
+        $this->cache          = $cache;
         $this->workingDirPath = $path;
-        $this->console = $consoleName;
+        $this->console        = $consoleName;
     }
 
     /**

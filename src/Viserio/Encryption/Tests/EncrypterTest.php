@@ -9,7 +9,7 @@ class EncrypterTest extends \PHPUnit_Framework_TestCase
 {
     public function testCompareEncryptedValues()
     {
-        $e = new Encrypter(Key::createNewRandomKey());
+        $e          = new Encrypter(Key::createNewRandomKey());
         $encrypted1 = $e->encrypt('foo');
         $encrypted2 = $e->encrypt('foo');
         $encrypted3 = $e->encrypt('bar');

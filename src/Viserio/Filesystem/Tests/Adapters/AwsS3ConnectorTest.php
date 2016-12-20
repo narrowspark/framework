@@ -12,10 +12,10 @@ class AwsS3ConnectorTest extends \PHPUnit_Framework_TestCase
         $connector = new AwsS3Connector();
 
         $return = $connector->connect([
-            'key' => 'your-key',
-            'secret' => 'your-secret',
-            'bucket' => 'your-bucket',
-            'region' => 'us-east-1',
+            'key'     => 'your-key',
+            'secret'  => 'your-secret',
+            'bucket'  => 'your-bucket',
+            'region'  => 'us-east-1',
             'version' => 'latest',
         ]);
 
@@ -27,12 +27,12 @@ class AwsS3ConnectorTest extends \PHPUnit_Framework_TestCase
         $connector = new AwsS3Connector();
 
         $return = $connector->connect([
-            'key' => 'your-key',
-            'secret' => 'your-secret',
-            'bucket' => 'your-bucket',
-            'region' => 'us-east-1',
+            'key'     => 'your-key',
+            'secret'  => 'your-secret',
+            'bucket'  => 'your-bucket',
+            'region'  => 'us-east-1',
             'version' => 'latest',
-            'prefix' => 'your-prefix',
+            'prefix'  => 'your-prefix',
         ]);
         self::assertInstanceOf(AwsS3Adapter::class, $return);
     }
@@ -42,11 +42,11 @@ class AwsS3ConnectorTest extends \PHPUnit_Framework_TestCase
         $connector = new AwsS3Connector();
 
         $return = $connector->connect([
-            'key' => 'your-key',
-            'secret' => 'your-secret',
-            'bucket' => 'your-bucket',
-            'region' => 'us-east-1',
-            'version' => 'latest',
+            'key'             => 'your-key',
+            'secret'          => 'your-secret',
+            'bucket'          => 'your-bucket',
+            'region'          => 'us-east-1',
+            'version'         => 'latest',
             'bucket_endpoint' => false,
         ]);
 
@@ -58,11 +58,11 @@ class AwsS3ConnectorTest extends \PHPUnit_Framework_TestCase
         $connector = new AwsS3Connector();
 
         $return = $connector->connect([
-            'key' => 'your-key',
-            'secret' => 'your-secret',
-            'bucket' => 'your-bucket',
-            'region' => 'us-east-1',
-            'version' => 'latest',
+            'key'           => 'your-key',
+            'secret'        => 'your-secret',
+            'bucket'        => 'your-bucket',
+            'region'        => 'us-east-1',
+            'version'       => 'latest',
             'calculate_md5' => true,
         ]);
 
@@ -74,12 +74,12 @@ class AwsS3ConnectorTest extends \PHPUnit_Framework_TestCase
         $connector = new AwsS3Connector();
 
         $return = $connector->connect([
-            'key' => 'your-key',
-            'secret' => 'your-secret',
-            'bucket' => 'your-bucket',
-            'region' => 'us-east-1',
+            'key'     => 'your-key',
+            'secret'  => 'your-secret',
+            'bucket'  => 'your-bucket',
+            'region'  => 'us-east-1',
             'version' => 'latest',
-            'scheme' => 'https',
+            'scheme'  => 'https',
         ]);
 
         self::assertInstanceOf(AwsS3Adapter::class, $return);
@@ -90,11 +90,11 @@ class AwsS3ConnectorTest extends \PHPUnit_Framework_TestCase
         $connector = new AwsS3Connector();
 
         $return = $connector->connect([
-            'key' => 'your-key',
-            'secret' => 'your-secret',
-            'bucket' => 'your-bucket',
-            'region' => 'us-east-1',
-            'version' => 'latest',
+            'key'      => 'your-key',
+            'secret'   => 'your-secret',
+            'bucket'   => 'your-bucket',
+            'region'   => 'us-east-1',
+            'version'  => 'latest',
             'endpoint' => 'https://example.com',
         ]);
         self::assertInstanceOf(AwsS3Adapter::class, $return);
@@ -105,15 +105,15 @@ class AwsS3ConnectorTest extends \PHPUnit_Framework_TestCase
         $connector = new AwsS3Connector();
 
         $return = $connector->connect([
-            'key' => 'your-key',
-            'secret' => 'your-secret',
-            'bucket' => 'your-bucket',
-            'region' => 'your-region',
-            'version' => 'latest',
+            'key'             => 'your-key',
+            'secret'          => 'your-secret',
+            'bucket'          => 'your-bucket',
+            'region'          => 'your-region',
+            'version'         => 'latest',
             'bucket_endpoint' => false,
-            'calculate_md5' => true,
-            'scheme' => 'https',
-            'endpoint' => 'https://example.com',
+            'calculate_md5'   => true,
+            'scheme'          => 'https',
+            'endpoint'        => 'https://example.com',
         ]);
 
         self::assertInstanceOf(AwsS3Adapter::class, $return);
@@ -128,9 +128,9 @@ class AwsS3ConnectorTest extends \PHPUnit_Framework_TestCase
         $connector = new AwsS3Connector();
 
         $connector->connect([
-            'key' => 'your-key',
-            'secret' => 'your-secret',
-            'region' => 'us-east-1',
+            'key'     => 'your-key',
+            'secret'  => 'your-secret',
+            'region'  => 'us-east-1',
             'version' => 'latest',
         ]);
     }
@@ -144,9 +144,9 @@ class AwsS3ConnectorTest extends \PHPUnit_Framework_TestCase
         $connector = new AwsS3Connector();
 
         $connector->connect([
-            'secret' => 'your-secret',
-            'bucket' => 'your-bucket',
-            'region' => 'us-east-1',
+            'secret'  => 'your-secret',
+            'bucket'  => 'your-bucket',
+            'region'  => 'us-east-1',
             'version' => 'latest',
         ]);
     }
@@ -160,9 +160,9 @@ class AwsS3ConnectorTest extends \PHPUnit_Framework_TestCase
         $connector = new AwsS3Connector();
 
         $connector->connect([
-            'key' => 'your-key',
-            'bucket' => 'your-bucket',
-            'region' => 'us-east-1',
+            'key'     => 'your-key',
+            'bucket'  => 'your-bucket',
+            'region'  => 'us-east-1',
             'version' => 'latest',
         ]);
     }
@@ -176,7 +176,7 @@ class AwsS3ConnectorTest extends \PHPUnit_Framework_TestCase
         $connector = new AwsS3Connector();
 
         $connector->connect([
-            'key' => 'your-key',
+            'key'    => 'your-key',
             'secret' => 'your-secret',
             'bucket' => 'your-bucket',
             'region' => 'us-east-1',
@@ -192,9 +192,9 @@ class AwsS3ConnectorTest extends \PHPUnit_Framework_TestCase
         $connector = new AwsS3Connector();
 
         $connector->connect([
-            'key' => 'your-key',
-            'secret' => 'your-secret',
-            'bucket' => 'your-bucket',
+            'key'     => 'your-key',
+            'secret'  => 'your-secret',
+            'bucket'  => 'your-bucket',
             'version' => 'latest',
         ]);
     }

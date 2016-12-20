@@ -27,7 +27,7 @@ class ExpressionMatcherTest extends \PHPUnit_Framework_TestCase
      */
     public function testMergeParameterKeys()
     {
-        $matcher = new ExpressionMatcher('ctype_digit({segment})', [1]);
+        $matcher  = new ExpressionMatcher('ctype_digit({segment})', [1]);
         $matcher2 = new StaticMatcher('two', [3]);
         $matcher->mergeParameterKeys($matcher2);
     }

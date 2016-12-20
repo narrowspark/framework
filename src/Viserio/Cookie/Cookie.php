@@ -22,8 +22,8 @@ final class Cookie implements StringableContract
     /**
      * Create a new cookie instance.
      *
-     * @param string      $name  The name of the cookie.
-     * @param string|null $value The value of the cookie.
+     * @param string      $name  the name of the cookie
+     * @param string|null $value the value of the cookie
      *
      * @throws \InvalidArgumentException
      */
@@ -32,7 +32,7 @@ final class Cookie implements StringableContract
         $this->validateName($name);
         $this->validateValue($value);
 
-        $this->name = $name;
+        $this->name  = $name;
         $this->value = $value;
     }
 
@@ -69,7 +69,7 @@ final class Cookie implements StringableContract
     {
         $this->validateValue($value);
 
-        $new = clone $this;
+        $new        = clone $this;
         $new->value = $value;
 
         return $new;

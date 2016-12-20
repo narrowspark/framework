@@ -4,8 +4,6 @@ namespace Viserio\Routing;
 
 use Closure;
 use Interop\Container\ContainerInterface;
-use Interop\Http\Middleware\DelegateInterface;
-use Interop\Http\Middleware\ServerMiddlewareInterface;
 use Narrowspark\Arr\Arr;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -15,7 +13,7 @@ use Viserio\Contracts\Routing\Router as RouterContract;
 use Viserio\Support\Traits\InvokerAwareTrait;
 use Viserio\Support\Traits\MacroableTrait;
 
-class Router extends AbstractRouteDispatcher implements RouterContract, ServerMiddlewareInterface
+class Router extends AbstractRouteDispatcher implements RouterContract
 {
     use InvokerAwareTrait;
     use MacroableTrait;
@@ -42,7 +40,7 @@ class Router extends AbstractRouteDispatcher implements RouterContract, ServerMi
     public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
-        $this->routes = new RouteCollection();
+        $this->routes    = new RouteCollection();
     }
 
     /**
@@ -83,16 +81,6 @@ class Router extends AbstractRouteDispatcher implements RouterContract, ServerMi
         $this->refreshCache = $refreshCache;
 
         return $this;
-    }
-
-    /**
-     * [addMiddlewares description]
-     *
-     * @param array $middlewares
-     */
-    public function addMiddlewares(array $middlewares)
-    {
-        $this->middlewares = $middlewares;
     }
 
     /**
@@ -271,8 +259,8 @@ class Router extends AbstractRouteDispatcher implements RouterContract, ServerMi
     public function mergeGroup(array $new, array $old): array
     {
         $new['namespace'] = $this->formatUsesPrefix($new, $old);
-        $new['prefix'] = $this->formatGroupPrefix($new, $old);
-        $new['suffix'] = $this->formatGroupSuffix($new, $old);
+        $new['prefix']    = $this->formatGroupPrefix($new, $old);
+        $new['suffix']    = $this->formatGroupSuffix($new, $old);
 
         if (isset($new['domain'])) {
             unset($old['domain']);
@@ -359,14 +347,6 @@ class Router extends AbstractRouteDispatcher implements RouterContract, ServerMi
     /**
      * {@inheritdoc}
      */
-    public function process(ServerRequestInterface $request, DelegateInterface $delegate)
-    {
-        return $this->dispatchToRoute($request);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function dispatch(ServerRequestInterface $request): ResponseInterface
     {
         return $this->dispatchToRoute($request);
@@ -424,7 +404,7 @@ class Router extends AbstractRouteDispatcher implements RouterContract, ServerMi
      */
     protected function addWhereClausesToRoute(RouteContract $route)
     {
-        $where = $route->getAction()['where'] ?? [];
+        $where  = $route->getAction()['where'] ?? [];
         $patern = array_merge($this->patterns, $where);
 
         foreach ($patern as $name => $value) {
@@ -493,7 +473,7 @@ class Router extends AbstractRouteDispatcher implements RouterContract, ServerMi
     {
         $group = end($this->groupStack);
 
-        return isset($group['namespace']) && strpos($uses, '\\') !== 0 ? $group['namespace'] . '\\' . $uses : $uses;
+        return isset($group['namespace']) && mb_strpos($uses, '\\') !== 0 ? $group['namespace'] . '\\' . $uses : $uses;
     }
 
     /**
@@ -509,7 +489,7 @@ class Router extends AbstractRouteDispatcher implements RouterContract, ServerMi
 
         if (! $trimed) {
             return '/';
-        } elseif (substr($trimed, 0, 1) === '/') {
+        } elseif (mb_substr($trimed, 0, 1) === '/') {
             return $trimed;
         }
 
@@ -539,7 +519,7 @@ class Router extends AbstractRouteDispatcher implements RouterContract, ServerMi
     protected function formatUsesPrefix(array $new, array $old)
     {
         if (isset($new['namespace'])) {
-            if (strpos($new['namespace'], '\\') === 0) {
+            if (mb_strpos($new['namespace'], '\\') === 0) {
                 return trim($new['namespace'], '\\');
             }
 

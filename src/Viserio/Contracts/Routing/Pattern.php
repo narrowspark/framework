@@ -4,25 +4,25 @@ namespace Viserio\Contracts\Routing;
 
 interface Pattern
 {
-    const ANY = '.+';
+    public const ANY = '.+';
 
-    const ALPHA = '[a-zA-Z]+';
+    public const ALPHA = '[a-zA-Z]+';
 
-    const ALPHA_NUM = '[a-zA-Z\d]+';
+    public const ALPHA_NUM = '[a-zA-Z\d]+';
 
-    const ALPHA_NUM_DASH = '[a-zA-Z\d\-]+';
+    public const ALPHA_NUM_DASH = '[a-zA-Z\d\-]+';
 
-    const ALPHA_UPPER = '[A-Z]+';
+    public const ALPHA_UPPER = '[A-Z]+';
 
-    const ALPHA_LOWER = '[a-z]+';
+    public const ALPHA_LOWER = '[a-z]+';
 
-    const DIGITS = '\d+';
+    public const DIGITS = '\d+';
 
-    const NUMBER = '[0-9]+';
+    public const NUMBER = '[0-9]+';
 
-    const WORD = '[a-zA-Z]+';
+    public const WORD = '[a-zA-Z]+';
 
-    const SLUG = '[a-z0-9-]+';
+    public const SLUG = '[a-z0-9-]+';
 
-    const UUID = '[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}+';
+    public const UUID = '[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}+';
 }

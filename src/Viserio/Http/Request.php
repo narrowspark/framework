@@ -9,34 +9,34 @@ use Psr\Http\Message\UriInterface;
 class Request extends AbstractMessage implements RequestInterface
 {
     protected static $validMethods = [
-        'OPTIONS' => true,
-        'GET' => true,
-        'HEAD' => true,
-        'POST' => true,
-        'PUT' => true,
-        'DELETE' => true,
-        'TRACE' => true,
-        'CONNECT' => true,
-        'PATCH' => true,
+        'OPTIONS'  => true,
+        'GET'      => true,
+        'HEAD'     => true,
+        'POST'     => true,
+        'PUT'      => true,
+        'DELETE'   => true,
+        'TRACE'    => true,
+        'CONNECT'  => true,
+        'PATCH'    => true,
         'PROPFIND' => true,
     ];
 
     /**
-     * The request method
+     * The request method.
      *
      * @var string
      */
     protected $method;
 
     /**
-     * The request URI target (path + query string)
+     * The request URI target (path + query string).
      *
      * @var string
      */
     protected $requestTarget;
 
     /**
-     * The request URI object
+     * The request URI object.
      *
      * @var \Psr\Http\Message\UriInterface|null
      */
@@ -45,21 +45,21 @@ class Request extends AbstractMessage implements RequestInterface
     /**
      * Create a new request instance.
      *
-     * @param null|string|UriInterface                               $uri     URI for the request.
-     * @param string|null                                            $method  HTTP method for the request.
-     * @param array                                                  $headers Headers for the message.
-     * @param string|null|resource|\Psr\Http\Message\StreamInterface $body    Message body.
-     * @param string                                                 $version HTTP protocol version.
+     * @param null|string|UriInterface                               $uri     uRI for the request
+     * @param string|null                                            $method  hTTP method for the request
+     * @param array                                                  $headers headers for the message
+     * @param string|null|resource|\Psr\Http\Message\StreamInterface $body    message body
+     * @param string                                                 $version hTTP protocol version
      */
     public function __construct(
         $uri,
-        $method = 'GET',
+        ?string $method = 'GET',
         array $headers = [],
         $body = null,
         string $version = '1.1'
     ) {
         $this->method = $this->filterMethod($method);
-        $this->uri = $this->createUri($uri);
+        $this->uri    = $this->createUri($uri);
         $this->setHeaders($headers);
         $this->protocol = $version;
 
@@ -75,7 +75,7 @@ class Request extends AbstractMessage implements RequestInterface
     /**
      * {@inheritdoc}
      */
-    public function getRequestTarget()
+    public function getRequestTarget(): string
     {
         if ($this->requestTarget !== null) {
             return $this->requestTarget;
@@ -97,7 +97,7 @@ class Request extends AbstractMessage implements RequestInterface
     /**
      * {@inheritdoc}
      */
-    public function withRequestTarget($requestTarget)
+    public function withRequestTarget($requestTarget): RequestInterface
     {
         if (preg_match('#\s#', $requestTarget)) {
             throw new InvalidArgumentException(
@@ -105,7 +105,7 @@ class Request extends AbstractMessage implements RequestInterface
             );
         }
 
-        $new = clone $this;
+        $new                = clone $this;
         $new->requestTarget = $requestTarget;
 
         return $new;
@@ -114,7 +114,7 @@ class Request extends AbstractMessage implements RequestInterface
     /**
      * {@inheritdoc}
      */
-    public function getMethod()
+    public function getMethod(): string
     {
         return $this->method;
     }
@@ -122,11 +122,11 @@ class Request extends AbstractMessage implements RequestInterface
     /**
      * {@inheritdoc}
      */
-    public function withMethod($method)
+    public function withMethod($method): RequestInterface
     {
         $method = $this->filterMethod($method);
 
-        $new = clone $this;
+        $new         = clone $this;
         $new->method = $method;
 
         return $new;
@@ -135,7 +135,7 @@ class Request extends AbstractMessage implements RequestInterface
     /**
      * {@inheritdoc}
      */
-    public function getUri()
+    public function getUri(): UriInterface
     {
         return $this->uri;
     }
@@ -143,13 +143,13 @@ class Request extends AbstractMessage implements RequestInterface
     /**
      * {@inheritdoc}
      */
-    public function withUri(UriInterface $uri, $preserveHost = false)
+    public function withUri(UriInterface $uri, $preserveHost = false): RequestInterface
     {
         if ($this->uri === $uri) {
             return $this;
         }
 
-        $new = clone $this;
+        $new      = clone $this;
         $new->uri = $uri;
 
         if (! $preserveHost) {
@@ -160,7 +160,9 @@ class Request extends AbstractMessage implements RequestInterface
     }
 
     /**
-     * Retrieve the host from the URI instance
+     * Retrieve the host from the URI instance.
+     *
+     * @return null|void
      */
     private function updateHostFromUri()
     {
@@ -177,7 +179,7 @@ class Request extends AbstractMessage implements RequestInterface
         if (isset($this->headerNames['host'])) {
             $header = $this->headerNames['host'];
         } else {
-            $header = 'Host';
+            $header                    = 'Host';
             $this->headerNames['host'] = 'Host';
         }
 
@@ -187,21 +189,21 @@ class Request extends AbstractMessage implements RequestInterface
     }
 
     /**
-     * Validate the HTTP method
+     * Validate the HTTP method.
      *
      * @param null|string $method
      *
-     * @throws InvalidArgumentException on invalid HTTP method.
+     * @throws InvalidArgumentException on invalid HTTP method
      *
      * @return string
      */
-    private function filterMethod($method): string
+    private function filterMethod(?string $method): string
     {
         if ($method === null) {
             return 'GET';
         }
 
-        $method = strtoupper($method);
+        $method = mb_strtoupper($method);
 
         if (! isset(static::$validMethods[$method])) {
             throw new InvalidArgumentException(sprintf(
@@ -227,11 +229,11 @@ class Request extends AbstractMessage implements RequestInterface
      *
      * @param null|string|UriInterface $uri
      *
-     * @throws InvalidArgumentException
+     * @throws \InvalidArgumentException
      *
-     * @return UriInterface
+     * @return \Psr\Http\Message\UriInterface
      */
-    private function createUri($uri)
+    private function createUri($uri): UriInterface
     {
         if ($uri instanceof UriInterface) {
             return $uri;

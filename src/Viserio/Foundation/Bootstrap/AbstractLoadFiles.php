@@ -19,7 +19,7 @@ abstract class AbstractLoadFiles
         $files = [];
 
         foreach (Finder::create()->files()->name('*.php')->in($path) as $file) {
-            $nesting = $this->getNesting($file, $path);
+            $nesting                                                  = $this->getNesting($file, $path);
             $files[$nesting . basename($file->getRealPath(), '.php')] = $file->getRealPath();
         }
 

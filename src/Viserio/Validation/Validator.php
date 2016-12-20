@@ -5,12 +5,12 @@ namespace Viserio\Validation;
 use Respect\Validation\Exceptions\NestedValidationException;
 use Respect\Validation\Validator as RespectValidator;
 use RuntimeException;
-use Viserio\Contracts\Translation\Traits\TranslationAwareTrait;
+use Viserio\Contracts\Translation\Traits\TranslatorAwareTrait;
 use Viserio\Contracts\Validation\Validator as ValidatorContract;
 
 class Validator implements ValidatorContract
 {
-    use TranslationAwareTrait;
+    use TranslatorAwareTrait;
 
     /**
      * The failed validation rules.
@@ -38,6 +38,7 @@ class Validator implements ValidatorContract
      * Add your own rule's namespace.
      *
      * @param string $namespace
+     * @param bool   $overwrite
      *
      * @codeCoverageIgnore
      */
@@ -142,7 +143,7 @@ class Validator implements ValidatorContract
      */
     protected function createRule($rules): RespectValidator
     {
-        $notRules = [];
+        $notRules      = [];
         $optionalRules = [];
 
         if (is_string($rules)) {
@@ -151,11 +152,11 @@ class Validator implements ValidatorContract
         }
 
         foreach ($rules as $key => $rule) {
-            if (strpos($rule, '!') !== false) {
+            if (mb_strpos($rule, '!') !== false) {
                 $notRules[] = $rule;
 
                 unset($rules[$key]);
-            } elseif (strpos($rule, '?') !== false) {
+            } elseif (mb_strpos($rule, '?') !== false) {
                 $optionalRules[] = $rule;
 
                 unset($rules[$key]);
@@ -274,7 +275,7 @@ class Validator implements ValidatorContract
         // The format for specifying validation rules and parameters follows an
         // easy {rule}:{parameters} formatting convention. For instance the
         // rule "Min:3" states that the value may only be three letters.
-        if (strpos($rules, ':') !== false) {
+        if (mb_strpos($rules, ':') !== false) {
             list($rules, $parameter) = explode(':', $rules, 2);
 
             $parameters = $this->parseParameters($rules, $parameter);
@@ -293,7 +294,7 @@ class Validator implements ValidatorContract
      */
     protected function parseParameters(string $rule, string $parameter): array
     {
-        if (strtolower($rule) == 'regex') {
+        if (mb_strtolower($rule) == 'regex') {
             return [$parameter];
         }
 

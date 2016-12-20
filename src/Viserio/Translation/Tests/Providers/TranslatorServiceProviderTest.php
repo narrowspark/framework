@@ -7,7 +7,7 @@ use Viserio\Config\Providers\ConfigServiceProvider;
 use Viserio\Container\Container;
 use Viserio\Contracts\Translation\Translator as TranslatorContract;
 use Viserio\Parsers\Providers\ParsersServiceProvider;
-use Viserio\Translation\Providers\TranslatorServiceProvider;
+use Viserio\Translation\Providers\TranslationServiceProvider;
 use Viserio\Translation\TranslationManager;
 
 class TranslatorServiceProviderTest extends \PHPUnit_Framework_TestCase
@@ -28,7 +28,9 @@ declare(strict_types=1);
 
 return [
     "lang" => "en",
-    "Hallo" => "hallo",
+    "message" => [
+        "Hallo" => "hallo",
+    ]
 ];
             '
         )->at($this->root);
@@ -37,13 +39,13 @@ return [
     public function testProvider()
     {
         $container = new Container();
-        $container->register(new TranslatorServiceProvider());
+        $container->register(new TranslationServiceProvider());
         $container->register(new ParsersServiceProvider());
         $container->register(new ConfigServiceProvider());
 
         $container->get('config')->set('translation', [
             'locale' => 'en',
-            'lang_path' => $this->file->url(),
+            'files'  => $this->file->url(),
         ]);
 
         self::assertInstanceOf(TranslationManager::class, $container->get(TranslationManager::class));
@@ -55,11 +57,11 @@ return [
     {
         $container = new Container();
         $container->register(new ParsersServiceProvider());
-        $container->register(new TranslatorServiceProvider());
+        $container->register(new TranslationServiceProvider());
 
         $container->instance('options', [
             'locale' => 'en',
-            'lang_path' => $this->file->url(),
+            'files'  => $this->file->url(),
         ]);
 
         self::assertInstanceOf(TranslationManager::class, $container->get(TranslationManager::class));
@@ -69,11 +71,11 @@ return [
     {
         $container = new Container();
         $container->register(new ParsersServiceProvider());
-        $container->register(new TranslatorServiceProvider());
+        $container->register(new TranslationServiceProvider());
 
         $container->instance('viserio.translation.options', [
             'locale' => 'en',
-            'lang_path' => $this->file->url(),
+            'files'  => $this->file->url(),
         ]);
 
         self::assertInstanceOf(TranslationManager::class, $container->get(TranslationManager::class));

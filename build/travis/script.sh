@@ -4,6 +4,10 @@
 mkdir -p build/logs
 #!/bin/bash
 
+if [[ "$PHPSTAN" = true ]]; then
+    vendor/bin/phpstan analyse src/Viserio
+fi
+
 set +e
 bash -e <<TRY
     if [[ "$CHECK_CS" = true && "$SEND_COVERAGE" = true ]]; then

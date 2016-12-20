@@ -57,8 +57,8 @@ class Worker implements WorkerContract
         DispatcherContract $events = null
     ) {
         $this->manager = $manager;
-        $this->failed = $failed;
-        $this->events = $events;
+        $this->failed  = $failed;
+        $this->events  = $events;
     }
 
     /**
@@ -328,9 +328,9 @@ class Worker implements WorkerContract
                 'viserio.job.failed',
                 [
                     'connection' => $connection,
-                    'job' => $job,
-                    'data' => json_decode($job->getRawBody(), true),
-                    'failedId' => $failedId,
+                    'job'        => $job,
+                    'data'       => json_decode($job->getRawBody(), true),
+                    'failedId'   => $failedId,
                 ]
             );
         }
@@ -349,8 +349,8 @@ class Worker implements WorkerContract
                 'viserio.job.processing',
                 [
                     'connection' => $connection,
-                    'job' => $job,
-                    'data' => json_decode($job->getRawBody(), true),
+                    'job'        => $job,
+                    'data'       => json_decode($job->getRawBody(), true),
                 ]
             );
         }
@@ -369,8 +369,8 @@ class Worker implements WorkerContract
                 'viserio.job.processed',
                 [
                     'connection' => $connection,
-                    'job' => $job,
-                    'data' => json_decode($job->getRawBody(), true),
+                    'job'        => $job,
+                    'data'       => json_decode($job->getRawBody(), true),
                 ]
             );
         }
@@ -397,9 +397,9 @@ class Worker implements WorkerContract
                     'viserio.job.exception.occurred',
                     [
                         'connection' => $connection,
-                        'job' => $job,
-                        'data' => json_decode($job->getRawBody(), true),
-                        'exception' => $exception,
+                        'job'        => $job,
+                        'data'       => json_decode($job->getRawBody(), true),
+                        'exception'  => $exception,
                     ]
                 );
             }
@@ -422,13 +422,13 @@ class Worker implements WorkerContract
     private function getErrorException($exception): ErrorException
     {
         if ($exception instanceof ParseError) {
-            $message = 'Parse error: ' . $exception->getMessage();
+            $message  = 'Parse error: ' . $exception->getMessage();
             $severity = E_PARSE;
         } elseif ($exception instanceof TypeError) {
-            $message = 'Type error: ' . $exception->getMessage();
+            $message  = 'Type error: ' . $exception->getMessage();
             $severity = E_RECOVERABLE_ERROR;
         } else {
-            $message = $exception->getMessage();
+            $message  = $exception->getMessage();
             $severity = E_ERROR;
         }
 

@@ -14,7 +14,7 @@ class ParsersServiceProvider implements ServiceProvider
 {
     use ServiceProviderConfigAwareTrait;
 
-    const PACKAGE = 'viserio.parsers';
+    public const PACKAGE = 'viserio.parsers';
 
     /**
      * {@inheritdoc}
@@ -23,11 +23,11 @@ class ParsersServiceProvider implements ServiceProvider
     {
         return [
             LoaderContract::class => [self::class, 'createFileLoader'],
-            FileLoader::class => function (ContainerInterface $container) {
+            FileLoader::class     => function (ContainerInterface $container) {
                 return $container->get(LoaderContract::class);
             },
             TaggableParserContract::class => [self::class, 'createTaggableParser'],
-            TaggableParser::class => function (ContainerInterface $container) {
+            TaggableParser::class         => function (ContainerInterface $container) {
                 return $container->get(TaggableParserContract::class);
             },
             'parser' => function (ContainerInterface $container) {

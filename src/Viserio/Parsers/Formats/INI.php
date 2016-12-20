@@ -47,11 +47,11 @@ class INI implements FormatContract, DumperContract
     protected function writeSection(string $section, array $array): string
     {
         $subsections = [];
-        $output = '[' . $section . ']' . PHP_EOL;
+        $output      = '[' . $section . ']' . PHP_EOL;
 
         foreach ($array as $key => $value) {
             if (is_array($value) || is_object($value)) {
-                $key = $section . '.' . $key;
+                $key               = $section . '.' . $key;
                 $subsections[$key] = (array) $value;
             } else {
                 $output .= str_replace('=', '_', $key) . '=';

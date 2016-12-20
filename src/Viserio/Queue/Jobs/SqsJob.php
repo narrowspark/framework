@@ -34,9 +34,9 @@ class SqsJob extends AbstractJob
         string $queue,
         array $job
     ) {
-        $this->sqs = $sqs;
-        $this->job = $job;
-        $this->queue = $queue;
+        $this->sqs       = $sqs;
+        $this->job       = $job;
+        $this->queue     = $queue;
         $this->container = $container;
     }
 
@@ -73,8 +73,8 @@ class SqsJob extends AbstractJob
         parent::release($delay);
 
         $this->sqs->changeMessageVisibility([
-            'QueueUrl' => $this->queue,
-            'ReceiptHandle' => $this->job['ReceiptHandle'],
+            'QueueUrl'          => $this->queue,
+            'ReceiptHandle'     => $this->job['ReceiptHandle'],
             'VisibilityTimeout' => $delay,
         ]);
     }

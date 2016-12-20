@@ -15,7 +15,7 @@ class CanDisplayFilterTest extends \PHPUnit_Framework_TestCase
 
     public function testFirstIsRemoved()
     {
-        $request = $this->mock(RequestInterface::class);
+        $request   = $this->mock(RequestInterface::class);
         $exception = new Exception();
 
         $html = $this->mock(HtmlDisplayer::class);
@@ -39,7 +39,7 @@ class CanDisplayFilterTest extends \PHPUnit_Framework_TestCase
 
     public function testNoChange()
     {
-        $request = $this->mock(RequestInterface::class);
+        $request   = $this->mock(RequestInterface::class);
         $exception = new Exception();
 
         $html = $this->mock(HtmlDisplayer::class);

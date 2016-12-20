@@ -115,6 +115,8 @@ class Mailer implements MailerContract
         // any recipient addresses previously set and use this one instead.
         if (isset($this->to['address'])) {
             $message->to($this->to['address'], $this->to['name'], true);
+            $message->cc($this->to['address'], $this->to['name'], true);
+            $message->bcc($this->to['address'], $this->to['name'], true);
         }
 
         return $this->sendSwiftMessage($message->getSwiftMessage());
@@ -168,7 +170,6 @@ class Mailer implements MailerContract
         // array as is, since must should contain both views with numeric keys.
         if (is_array($view) && isset($view[0])) {
             return [$view[0], $view[1], null];
-
             // If the view is an array, but doesn't contain numeric keys, we will assume
             // the the views are being explicitly specified and will extract them via
             // named keys instead, allowing the developers to use one or the other.

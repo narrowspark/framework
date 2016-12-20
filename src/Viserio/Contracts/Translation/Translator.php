@@ -4,6 +4,10 @@ namespace Viserio\Contracts\Translation;
 
 interface Translator
 {
+    public const MESSAGE_DEFINED         = 0;
+    public const MESSAGE_MISSING         = 1;
+    public const MESSAGE_EQUALS_FALLBACK = 2;
+
     /**
      * Gets the string dictating the default language to translate into. (e.g. 'en').
      *

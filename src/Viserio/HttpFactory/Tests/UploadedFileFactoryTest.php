@@ -7,18 +7,35 @@ use Viserio\HttpFactory\UploadedFileFactory;
 
 class UploadedFileFactoryTest extends \PHPUnit_Framework_TestCase
 {
+    private $fname;
+
     private $factory;
 
-    public function setUp()
+    public function setup()
     {
+        mkdir(__DIR__ . '/tmp');
+
         $this->factory = new UploadedFileFactory();
+
+        $this->fname = tempnam(__DIR__ . '/tmp', 'tfile');
+    }
+
+    public function tearDown()
+    {
+        if (file_exists($this->fname)) {
+            unlink($this->fname);
+        }
+
+        rmdir(__DIR__ . '/tmp');
+
+        parent::tearDown();
     }
 
     public function testCreateUploadedFileWithString()
     {
         $filename = tempnam(sys_get_temp_dir(), 'http-factory-test');
-        $content = 'i made this!';
-        $size = strlen($content);
+        $content  = 'i made this!';
+        $size     = mb_strlen($content);
 
         file_put_contents($filename, $content);
 
@@ -31,16 +48,18 @@ class UploadedFileFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testCreateUploadedFileWithClientFilenameAndMediaType()
     {
-        $tmpfname = tempnam('/tmp', 'foo');
-        $upload = fopen($tmpfname, 'w+');
-        $content = 'this is your capitan speaking';
-        $error = \UPLOAD_ERR_OK;
-        $clientFilename = 'test.txt';
+        $tmpfname        = $this->fname;
+        $upload          = fopen($tmpfname, 'w+');
+        $content         = 'this is your capitan speaking';
+        $error           = \UPLOAD_ERR_OK;
+        $clientFilename  = 'test.txt';
         $clientMediaType = 'text/plain';
+
         fwrite($upload, $content);
+
         $file = $this->factory->createUploadedFile(
             $tmpfname,
-            strlen($content),
+            mb_strlen($content),
             $error,
             $clientFilename,
             $clientMediaType
@@ -52,8 +71,8 @@ class UploadedFileFactoryTest extends \PHPUnit_Framework_TestCase
     public function testCreateUploadedFileWithError()
     {
         $upload = tmpfile();
-        $error = \UPLOAD_ERR_NO_FILE;
-        $file = $this->factory->createUploadedFile($upload, null, $error);
+        $error  = \UPLOAD_ERR_NO_FILE;
+        $file   = $this->factory->createUploadedFile($upload, null, $error);
 
         // Cannot use assertUploadedFile() here because the error prevents
         // fetching the content stream.
@@ -71,7 +90,7 @@ class UploadedFileFactoryTest extends \PHPUnit_Framework_TestCase
     ) {
         self::assertInstanceOf(UploadedFileInterface::class, $file);
         self::assertSame($content, (string) $file->getStream());
-        self::assertSame($size ?: strlen($content), $file->getSize());
+        self::assertSame($size ?: mb_strlen($content), $file->getSize());
         self::assertSame($error ?: UPLOAD_ERR_OK, $file->getError());
         self::assertSame($clientFilename, $file->getClientFilename());
         self::assertSame($clientMediaType, $file->getClientMediaType());

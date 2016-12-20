@@ -4,6 +4,8 @@ namespace Viserio\Exception\Providers;
 
 use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
+use Interop\Http\Factory\ResponseFactoryInterface;
+use Interop\Http\Factory\StreamFactoryInterface;
 use Viserio\Contracts\Exception\Handler as HandlerContract;
 use Viserio\Contracts\Support\Traits\ServiceProviderConfigAwareTrait;
 use Viserio\Contracts\View\Factory as FactoryContract;
@@ -22,7 +24,7 @@ class ExceptionServiceProvider implements ServiceProvider
 {
     use ServiceProviderConfigAwareTrait;
 
-    const PACKAGE = 'viserio.exception';
+    public const PACKAGE = 'viserio.exception';
 
     /**
      * {@inheritdoc}
@@ -31,17 +33,17 @@ class ExceptionServiceProvider implements ServiceProvider
     {
         return [
             ExceptionIdentifier::class => [self::class, 'createExceptionIdentifier'],
-            ExceptionInfo::class => [self::class, 'createExceptionInfo'],
-            Handler::class => [self::class, 'createExceptionHandler'],
-            HandlerContract::class => function (ContainerInterface $container) {
+            ExceptionInfo::class       => [self::class, 'createExceptionInfo'],
+            Handler::class             => [self::class, 'createExceptionHandler'],
+            HandlerContract::class     => function (ContainerInterface $container) {
                 return $container->get(Handler::class);
             },
-            HtmlDisplayer::class => [self::class, 'createHtmlDisplayer'],
-            JsonDisplayer::class => [self::class, 'createJsonDisplayer'],
-            ViewDisplayer::class => [self::class, 'createViewDisplayer'],
-            WhoopsDisplayer::class => [self::class, 'createWhoopsDisplayer'],
-            VerboseFilter::class => [self::class, 'createVerboseFilter'],
-            CanDisplayFilter::class => [self::class, 'createCanDisplayFilter'],
+            HtmlDisplayer::class          => [self::class, 'createHtmlDisplayer'],
+            JsonDisplayer::class          => [self::class, 'createJsonDisplayer'],
+            ViewDisplayer::class          => [self::class, 'createViewDisplayer'],
+            WhoopsDisplayer::class        => [self::class, 'createWhoopsDisplayer'],
+            VerboseFilter::class          => [self::class, 'createVerboseFilter'],
+            CanDisplayFilter::class       => [self::class, 'createCanDisplayFilter'],
             CommandLineTransformer::class => [self::class, 'createCommandLineTransformer'],
         ];
     }
@@ -65,6 +67,8 @@ class ExceptionServiceProvider implements ServiceProvider
     {
         return new HtmlDisplayer(
             $container->get(ExceptionInfo::class),
+            $container->get(ResponseFactoryInterface::class),
+            $container->get(StreamFactoryInterface::class),
             self::getConfig($container, 'template', __DIR__ . '/../Resources/error.html')
         );
     }

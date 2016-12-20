@@ -13,14 +13,14 @@ trait TranscoderTrait
     protected static $unreservedRegexp = '/[\w\.~]+/';
 
     /**
-     * Reserved characters list
+     * Reserved characters list.
      *
      * @var string
      */
     protected static $reservedCharactersRegex = "\!\$&'\(\)\*\+,;\=:";
 
     /**
-     * Encode a string according to RFC3986 Rules
+     * Encode a string according to RFC3986 Rules.
      *
      * @param string|int $subject
      *
@@ -32,7 +32,7 @@ trait TranscoderTrait
     }
 
     /**
-     * Encoding string according to RFC3986
+     * Encoding string according to RFC3986.
      *
      * @param string $subject
      *
@@ -47,7 +47,7 @@ trait TranscoderTrait
     }
 
     /**
-     * Decode a string according to RFC3986 Rules
+     * Decode a string according to RFC3986 Rules.
      *
      * @param string $subject
      *
@@ -73,7 +73,7 @@ trait TranscoderTrait
     }
 
     /**
-     * Encode a path string according to RFC3986
+     * Encode a path string according to RFC3986.
      *
      * @param string $subject can be a string or an array
      *
@@ -85,21 +85,21 @@ trait TranscoderTrait
     }
 
     /**
-     * Encode a component string
+     * Encode a component string.
      *
      * @param string $subject The string to encode
      * @param string $regexp  The component specific regular expression
      *
      * @return string
      */
-    protected static function encodeComponent(string $subject, string $regexp)
+    protected static function encodeComponent(string $subject, string $regexp): string
     {
         $encoder = function (array $matches) {
             return rawurlencode($matches[0]);
         };
 
         $formatter = function (array $matches) {
-            return strtoupper($matches[0]);
+            return mb_strtoupper($matches[0]);
         };
 
         $subject = str_replace(
@@ -126,7 +126,7 @@ trait TranscoderTrait
     }
 
     /**
-     * Decode a path string according to RFC3986
+     * Decode a path string according to RFC3986.
      *
      * @param string $subject can be a string or an array
      *

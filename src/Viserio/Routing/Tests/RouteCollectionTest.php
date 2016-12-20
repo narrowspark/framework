@@ -10,7 +10,7 @@ class RouteCollectionTest extends \PHPUnit_Framework_TestCase
     public function testGet()
     {
         $collection = new RouteCollection();
-        $route = new Route('GET', '/test', ['domain' => 'test.com']);
+        $route      = new Route('GET', '/test', ['domain' => 'test.com']);
 
         self::assertInstanceOf(Route::class, $collection->add($route));
     }

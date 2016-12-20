@@ -11,7 +11,7 @@ interface Finder
      *
      * @var string
      */
-    const HINT_PATH_DELIMITER = '::';
+    public const HINT_PATH_DELIMITER = '::';
 
     /**
      * Get the fully qualified location of the view.
@@ -112,4 +112,19 @@ interface Finder
      * @return array
      */
     public function getExtensions(): array;
+
+    /**
+     * Replace the namespace hints for the given namespace.
+     *
+     * @param string       $namespace
+     * @param string|array $hints
+     *
+     * @return $this
+     */
+    public function replaceNamespace(string $namespace, $hints): Finder;
+
+    /**
+     * Flush the cache of located views.
+     */
+    public function flush(): void;
 }

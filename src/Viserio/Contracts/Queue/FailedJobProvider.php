@@ -20,7 +20,7 @@ interface FailedJobProvider
      *
      * @return array
      */
-    public function all(): array;
+    public function getAll(): array;
 
     /**
      * Get a single failed job.

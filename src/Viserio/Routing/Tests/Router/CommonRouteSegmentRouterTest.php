@@ -7,7 +7,7 @@ use Viserio\HttpFactory\ResponseFactory;
 use Viserio\HttpFactory\ServerRequestFactory;
 use Viserio\HttpFactory\StreamFactory;
 
-class CommonrouteregmentRouterTest extends RouteRouterBaseTest
+class CommonRouteSegmentRouterTest extends RouteRouterBaseTest
 {
     public function routerMatchingProvider(): array
     {
@@ -24,6 +24,9 @@ class CommonrouteregmentRouterTest extends RouteRouterBaseTest
     /**
      * @dataProvider routerMatching404Provider
      * @expectedException \Narrowspark\HttpStatus\Exception\NotFoundException
+     *
+     * @param mixed $httpMethod
+     * @param mixed $uri
      */
     public function testRouter404($httpMethod, $uri)
     {

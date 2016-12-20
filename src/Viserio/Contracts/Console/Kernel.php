@@ -22,5 +22,5 @@ interface Kernel
      *
      * @return array
      */
-    public function all(): array;
+    public function getAll(): array;
 }

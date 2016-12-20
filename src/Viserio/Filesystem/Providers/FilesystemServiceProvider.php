@@ -6,8 +6,8 @@ use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
 use League\Flysystem\Filesystem;
 use League\Flysystem\FilesystemInterface;
-use Viserio\Config\Manager as ConfigManager;
 use Viserio\Contracts\Cache\Manager as CacheManagerContract;
+use Viserio\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Filesystem\Cache\CachedFactory;
 use Viserio\Filesystem\FilesystemManager;
 
@@ -20,17 +20,17 @@ class FilesystemServiceProvider implements ServiceProvider
     {
         return [
             FilesystemManager::class => [self::class, 'createFilesystemManager'],
-            'flysystem' => function (ContainerInterface $container) {
+            'flysystem'              => function (ContainerInterface $container) {
                 return $container->get(FilesystemManager::class);
             },
             'flysystem.connection' => [self::class, 'createFlysystemConnection'],
-            Filesystem::class => function (ContainerInterface $container) {
+            Filesystem::class      => function (ContainerInterface $container) {
                 return $container->get(FilesystemManager::class);
             },
             FilesystemInterface::class => function (ContainerInterface $container) {
                 return $container->get(FilesystemManager::class);
             },
-            CachedFactory::class => [self::class, 'createCachedFactory'],
+            CachedFactory::class      => [self::class, 'createCachedFactory'],
             'flysystem.cachedfactory' => function (ContainerInterface $container) {
                 return $container->get(CachedFactory::class);
             },
@@ -39,7 +39,7 @@ class FilesystemServiceProvider implements ServiceProvider
 
     public static function createFilesystemManager(ContainerInterface $container): FilesystemManager
     {
-        $manager = new FilesystemManager($container->get(ConfigManager::class));
+        $manager = new FilesystemManager($container->get(RepositoryContract::class));
 
         if ($container->has(CacheManagerContract::class)) {
             $manager->setCacheManager($container->get(CacheManagerContract::class));

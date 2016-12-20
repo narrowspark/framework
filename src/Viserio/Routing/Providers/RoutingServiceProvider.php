@@ -4,13 +4,17 @@ namespace Viserio\Routing\Providers;
 
 use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
+use Interop\Http\Factory\UriFactoryInterface;
+use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Contracts\Events\Dispatcher as DispatcherContract;
 use Viserio\Contracts\Routing\Router as RouterContract;
+use Viserio\Contracts\Routing\UrlGenerator as UrlGeneratorContract;
 use Viserio\Routing\Router;
+use Viserio\Routing\UrlGenerator;
 
 class RoutingServiceProvider implements ServiceProvider
 {
-    const PACKAGE = 'viserio.routing';
+    public const PACKAGE = 'viserio.routing';
 
     /**
      * {@inheritdoc}
@@ -19,7 +23,7 @@ class RoutingServiceProvider implements ServiceProvider
     {
         return [
             RouterContract::class => [self::class, 'createRouter'],
-            'router' => function (ContainerInterface $container) {
+            'router'              => function (ContainerInterface $container) {
                 return $container->get(RouterContract::class);
             },
             'route' => function (ContainerInterface $container) {
@@ -27,6 +31,10 @@ class RoutingServiceProvider implements ServiceProvider
             },
             Router::class => function (ContainerInterface $container) {
                 return $container->get(RouterContract::class);
+            },
+            UrlGeneratorContract::class => [self::class, 'createUrlGenerator'],
+            UrlGenerator::class         => function (ContainerInterface $container) {
+                return $container->get(UrlGeneratorContract::class);
             },
         ];
     }
@@ -40,5 +48,14 @@ class RoutingServiceProvider implements ServiceProvider
         }
 
         return $router;
+    }
+
+    public static function createUrlGenerator(ContainerInterface $container): UrlGenerator
+    {
+        return new UrlGenerator(
+            $container->get(RouterContract::class)->getRoutes(),
+            $container->get(ServerRequestInterface::class),
+            $container->get(UriFactoryInterface::class)
+        );
     }
 }

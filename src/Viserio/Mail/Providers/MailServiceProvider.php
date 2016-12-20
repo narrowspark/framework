@@ -5,7 +5,7 @@ namespace Viserio\Mail\Providers;
 use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
 use Swift_Mailer;
-use Viserio\Contracts\Config\Manager as ManagerContract;
+use Viserio\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Contracts\Events\Dispatcher as DispatcherContract;
 use Viserio\Contracts\Mail\Mailer as MailerContract;
 use Viserio\Contracts\Queue\Queue as QueueContract;
@@ -19,7 +19,7 @@ class MailServiceProvider implements ServiceProvider
 {
     use ServiceProviderConfigAwareTrait;
 
-    const PACKAGE = 'viserio.mail';
+    public const PACKAGE = 'viserio.mail';
 
     /**
      * {@inheritdoc}
@@ -28,15 +28,15 @@ class MailServiceProvider implements ServiceProvider
     {
         return [
             TransportManager::class => [self::class, 'createTransportManager'],
-            'swift.transport' => function (ContainerInterface $container) {
+            'swift.transport'       => function (ContainerInterface $container) {
                 return $container->get(TransportManager::class);
             },
             Swift_Mailer::class => [self::class, 'createSwiftMailer'],
-            'swift.mailer' => function (ContainerInterface $container) {
+            'swift.mailer'      => function (ContainerInterface $container) {
                 return $container->get(Swift_Mailer::class);
             },
             MailerContract::class => [self::class, 'createMailer'],
-            Mailer::class => function (ContainerInterface $container) {
+            Mailer::class         => function (ContainerInterface $container) {
                 return $container->get(MailerContract::class);
             },
             'mailer' => function (ContainerInterface $container) {
@@ -47,7 +47,7 @@ class MailServiceProvider implements ServiceProvider
 
     public static function createTransportManager(ContainerInterface $container): TransportManager
     {
-        return new TransportManager($container->get(ManagerContract::class));
+        return new TransportManager($container->get(RepositoryContract::class));
     }
 
     public static function createSwiftMailer(ContainerInterface $container): Swift_Mailer

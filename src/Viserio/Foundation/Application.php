@@ -5,7 +5,7 @@ namespace Viserio\Foundation;
 use Closure;
 use Viserio\Config\Providers\ConfigServiceProvider;
 use Viserio\Container\Container;
-use Viserio\Contracts\Config\Manager as ConfigManagerContract;
+use Viserio\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Contracts\Events\Dispatcher as DispatcherContract;
 use Viserio\Contracts\Foundation\Application as ApplicationContract;
 use Viserio\Contracts\Foundation\Emitter as EmitterContract;
@@ -13,7 +13,7 @@ use Viserio\Contracts\Parsers\Loader as LoaderContract;
 use Viserio\Contracts\Translation\TranslationManager;
 use Viserio\Events\Providers\EventsServiceProvider;
 use Viserio\Foundation\Http\Emitter;
-use Viserio\Foundation\Providers\ConfigureLoggingProvider;
+use Viserio\Foundation\Providers\ConfigureLoggingServiceProvider;
 use Viserio\Log\Providers\LoggerServiceProvider;
 use Viserio\Parsers\Providers\ParsersServiceProvider;
 use Viserio\Routing\Providers\RoutingServiceProvider;
@@ -25,7 +25,7 @@ class Application extends Container implements ApplicationContract
      *
      * @var string
      */
-    const VERSION = '1.0.0';
+    public const VERSION = '1.0.0';
 
     /**
      * The environment file to load during bootstrapping.
@@ -78,7 +78,7 @@ class Application extends Container implements ApplicationContract
 
         $this->registerBaseBindings();
 
-        $config = $this->get(ConfigManagerContract::class);
+        $config = $this->get(RepositoryContract::class);
         $config->set(
             'app.maintenance',
             file_exists($config->get('path.storage') . '/framework/down'),
@@ -131,7 +131,7 @@ class Application extends Container implements ApplicationContract
      */
     public function getLocale(): string
     {
-        return $this->get(ConfigManagerContract::class)->get('app.locale');
+        return $this->get(RepositoryContract::class)->get('app.locale');
     }
 
     /**
@@ -139,7 +139,7 @@ class Application extends Container implements ApplicationContract
      */
     public function setLocale(string $locale): ApplicationContract
     {
-        $this->get(ConfigManagerContract::class)->set('app.locale', $locale);
+        $this->get(RepositoryContract::class)->set('app.locale', $locale);
 
         if ($this->has(TranslationManager::class)) {
             $this->get(TranslationManager::class)->setLocale($locale);
@@ -163,7 +163,7 @@ class Application extends Container implements ApplicationContract
      */
     public function getFallbackLocale(): string
     {
-        return $this->get(ConfigManagerContract::class)->get('app.fallback_locale');
+        return $this->get(RepositoryContract::class)->get('app.fallback_locale');
     }
 
     /**
@@ -171,7 +171,7 @@ class Application extends Container implements ApplicationContract
      */
     public function hasLocale(string $locale): bool
     {
-        return in_array($locale, $this->get(ConfigManagerContract::class)->get('app.locales'));
+        return in_array($locale, $this->get(RepositoryContract::class)->get('app.locales'));
     }
 
     /**
@@ -181,7 +181,7 @@ class Application extends Container implements ApplicationContract
      */
     public function environmentPath(): string
     {
-        return $this->environmentPath ?: $this->get(ConfigManagerContract::class)->get('path.base');
+        return $this->environmentPath ?: $this->get(RepositoryContract::class)->get('path.base');
     }
 
     /**
@@ -274,7 +274,7 @@ class Application extends Container implements ApplicationContract
         // Each path key is prefixed with path
         // so that they have the consistent naming convention.
         foreach ($paths as $key => $value) {
-            $this->get(ConfigManagerContract::class)->set(sprintf('path.%s', $key), realpath($value));
+            $this->get(RepositoryContract::class)->set(sprintf('path.%s', $key), realpath($value));
         }
 
         return $this;
@@ -288,12 +288,12 @@ class Application extends Container implements ApplicationContract
         $this->register(new ParsersServiceProvider());
         $this->register(new ConfigServiceProvider());
 
-        $config = $this->get(ConfigManagerContract::class);
+        $config = $this->get(RepositoryContract::class);
         $config->setLoader($this->get(LoaderContract::class));
 
         $this->register(new EventsServiceProvider());
         $this->register(new LoggerServiceProvider());
-        $this->register(new ConfigureLoggingProvider());
+        $this->register(new ConfigureLoggingServiceProvider());
         $this->register(new RoutingServiceProvider());
     }
 
@@ -323,7 +323,7 @@ class Application extends Container implements ApplicationContract
      */
     protected function registerCacheFilePaths()
     {
-        $config = $this->get(ConfigManagerContract::class);
+        $config = $this->get(RepositoryContract::class);
 
         $config->set('patch.cached.config', $config->get('path.storage') . '/framework/cache/config.php');
 

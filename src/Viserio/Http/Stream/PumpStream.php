@@ -36,10 +36,10 @@ class PumpStream implements StreamInterface
      */
     public function __construct(callable $source, array $options = [])
     {
-        $this->source = $source;
-        $this->size = isset($options['size']) ? $options['size'] : null;
+        $this->source   = $source;
+        $this->size     = isset($options['size']) ? $options['size'] : null;
         $this->metadata = isset($options['metadata']) ? $options['metadata'] : [];
-        $this->buffer = new BufferStream();
+        $this->buffer   = new BufferStream();
     }
 
     /**
@@ -68,7 +68,7 @@ class PumpStream implements StreamInterface
     public function detach()
     {
         $this->tellPos = false;
-        $this->source = null;
+        $this->source  = null;
     }
 
     /**
@@ -148,15 +148,15 @@ class PumpStream implements StreamInterface
      */
     public function read($length)
     {
-        $data = $this->buffer->read($length);
-        $readLen = strlen($data);
+        $data    = $this->buffer->read($length);
+        $readLen = mb_strlen($data);
         $this->tellPos += $readLen;
         $remaining = $length - $readLen;
 
         if ($remaining) {
             $this->pump($remaining);
             $data .= $this->buffer->read($remaining);
-            $this->tellPos += strlen($data) - $readLen;
+            $this->tellPos += mb_strlen($data) - $readLen;
         }
 
         return $data;
@@ -206,7 +206,7 @@ class PumpStream implements StreamInterface
 
                 $this->buffer->write($data);
 
-                $length -= strlen($data);
+                $length -= mb_strlen($data);
             } while ($length > 0);
         }
     }

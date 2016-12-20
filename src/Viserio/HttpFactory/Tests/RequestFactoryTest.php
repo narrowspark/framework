@@ -29,10 +29,12 @@ class RequestFactoryTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider dataMethods
+     *
+     * @param mixed $method
      */
     public function testCreateRequest($method)
     {
-        $uri = 'http://example.com/';
+        $uri     = 'http://example.com/';
         $request = $this->factory->createRequest($method, $uri);
 
         self::assertRequest($request, $method, $uri);
@@ -41,9 +43,9 @@ class RequestFactoryTest extends \PHPUnit_Framework_TestCase
     public function testCreateRequestWithUri()
     {
         $uriFactory = new UriFactory();
-        $method = 'GET';
-        $uri = 'http://example.com/';
-        $request = $this->factory->createRequest($method, $uriFactory->createUri($uri));
+        $method     = 'GET';
+        $uri        = 'http://example.com/';
+        $request    = $this->factory->createRequest($method, $uriFactory->createUri($uri));
 
         self::assertRequest($request, $method, $uri);
     }

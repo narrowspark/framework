@@ -9,9 +9,7 @@ use Narrowspark\TestingHelper\ArrayContainer;
 use Narrowspark\TestingHelper\Middleware\CallableMiddleware;
 use Narrowspark\TestingHelper\Middleware\Dispatcher;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
-use org\bovigo\vfs\vfsStream;
-use Viserio\Contracts\Config\Manager as ConfigManagerContract;
-use Viserio\Contracts\Cookie\QueueingFactory as JarContract;
+use Viserio\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Contracts\Filesystem\Filesystem as FilesystemContract;
 use Viserio\Encryption\Encrypter;
 use Viserio\Filesystem\Filesystem;
@@ -24,11 +22,6 @@ use Viserio\Session\SessionManager;
 class VerifyCsrfTokenMiddlewareTest extends \PHPUnit_Framework_TestCase
 {
     use MockeryTrait;
-
-    /**
-     * @var string
-     */
-    private $root;
 
     /**
      * @var \Viserio\Filesystem\Filesystem
@@ -49,13 +42,12 @@ class VerifyCsrfTokenMiddlewareTest extends \PHPUnit_Framework_TestCase
     {
         parent::setUp();
 
-        $this->root = vfsStream::setup();
         $this->files = new Filesystem();
 
         $this->files->createDirectory(__DIR__ . '/stubs');
 
         $this->encrypter = new Encrypter(Key::createNewRandomKey());
-        $config = $this->mock(ConfigManagerContract::class);
+        $config          = $this->mock(RepositoryContract::class);
 
         $manager = new SessionManager($config, $this->encrypter);
         $manager->setContainer(new ArrayContainer([
@@ -81,7 +73,7 @@ class VerifyCsrfTokenMiddlewareTest extends \PHPUnit_Framework_TestCase
     public function testSessionCsrfMiddlewareSetCookie()
     {
         $manager = $this->manager;
-        $config = $manager->getConfig();
+        $config  = $manager->getConfig();
 
         $config->shouldReceive('get')
             ->once()
@@ -100,7 +92,7 @@ class VerifyCsrfTokenMiddlewareTest extends \PHPUnit_Framework_TestCase
         $config->shouldReceive('get')
             ->with('session.path')
             ->times(3)
-            ->andReturn($this->root->url());
+            ->andReturn(__DIR__ . '/stubs');
         $config->shouldReceive('get')
             ->with('session.csrf.samesite', false)
             ->once()
@@ -167,7 +159,7 @@ class VerifyCsrfTokenMiddlewareTest extends \PHPUnit_Framework_TestCase
     public function testSessionCsrfMiddlewareReadsXCSRFTOKEN()
     {
         $manager = $this->manager;
-        $config = $manager->getConfig();
+        $config  = $manager->getConfig();
 
         $config->shouldReceive('get')
             ->once()
@@ -186,7 +178,7 @@ class VerifyCsrfTokenMiddlewareTest extends \PHPUnit_Framework_TestCase
         $config->shouldReceive('get')
             ->with('session.path')
             ->times(3)
-            ->andReturn($this->root->url());
+            ->andReturn(__DIR__ . '/stubs');
         $config->shouldReceive('get')
             ->with('session.csrf.samesite', false)
             ->once()
@@ -253,7 +245,7 @@ class VerifyCsrfTokenMiddlewareTest extends \PHPUnit_Framework_TestCase
     public function testSessionCsrfMiddlewareReadsXXSRFTOKEN()
     {
         $manager = $this->manager;
-        $config = $manager->getConfig();
+        $config  = $manager->getConfig();
 
         $config->shouldReceive('get')
             ->once()
@@ -272,7 +264,7 @@ class VerifyCsrfTokenMiddlewareTest extends \PHPUnit_Framework_TestCase
         $config->shouldReceive('get')
             ->with('session.path')
             ->times(3)
-            ->andReturn($this->root->url());
+            ->andReturn(__DIR__ . '/stubs');
         $config->shouldReceive('get')
             ->with('session.csrf.samesite', false)
             ->once()
@@ -345,7 +337,7 @@ class VerifyCsrfTokenMiddlewareTest extends \PHPUnit_Framework_TestCase
     public function testSessionCsrfMiddlewareToThrowException()
     {
         $manager = $this->manager;
-        $config = $manager->getConfig();
+        $config  = $manager->getConfig();
 
         $config->shouldReceive('get')
             ->once()
@@ -364,7 +356,7 @@ class VerifyCsrfTokenMiddlewareTest extends \PHPUnit_Framework_TestCase
         $config->shouldReceive('get')
             ->with('session.path')
             ->once()
-            ->andReturn($this->root->url());
+            ->andReturn(__DIR__ . '/stubs');
         $config->shouldReceive('get')
             ->with('session.lifetime')
             ->once()

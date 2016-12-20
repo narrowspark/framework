@@ -17,8 +17,8 @@ class Fragment
      */
     public function filter(string $fragment): string
     {
-        if ($fragment != '' && strpos($fragment, '#') === 0) {
-            $fragment = '%23' . substr($fragment, 1);
+        if ($fragment != '' && mb_strpos($fragment, '#') === 0) {
+            $fragment = '%23' . mb_substr($fragment, 1);
         }
 
         return self::encodeQueryFragment($fragment);
