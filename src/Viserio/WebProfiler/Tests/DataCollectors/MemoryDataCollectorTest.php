@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\WebProfiler\Tests\DataCollectors;
 
+use Mockery as Mock;
 use Viserio\WebProfiler\DataCollectors\MemoryDataCollector;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use Psr\Http\Message\ResponseInterface;
@@ -10,6 +11,16 @@ use Psr\Http\Message\ServerRequestInterface;
 class MemoryDataCollectorTest extends \PHPUnit_Framework_TestCase
 {
     use MockeryTrait;
+
+    public function tearDown()
+    {
+        parent::tearDown();
+
+        $this->allowMockingNonExistentMethods(true);
+
+        // Verify Mockery expectations.
+        Mock::close();
+    }
 
     public function testGetMenu()
     {
