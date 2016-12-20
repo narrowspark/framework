@@ -33,9 +33,11 @@ class ViserioTranslationDataCollector extends AbstractDataCollector implements
      */
     public function collect(ServerRequestInterface $serverRequest, ResponseInterface $response)
     {
+        $messages = $this->sanitizeCollectedMessages($this->translator->getCollectedMessages());
+
         $this->data = [
-            'messages' => $this->sanitizeCollectedMessages($this->translator->getCollectedMessages()),
-            'counter' => $this->computeCount($this->data['messages']),
+            'messages' => $messages,
+            'counted' => $this->computeCount($messages),
         ];
     }
 

@@ -94,11 +94,11 @@ class TimeDataCollector extends AbstractDataCollector implements MenuAwareContra
      */
     public function getRequestDuration(): float
     {
-        if ($this->data['end'] !== null) {
-            return $this->data['end'] - $this->data['start'];
+        if ($this->requestEndTime !== null) {
+            return $this->requestEndTime - $this->requestStartTime;
         }
 
-        return microtime(true) - $this->data['start'];
+        return microtime(true) - $this->requestStartTime;
     }
 
     /**
@@ -182,7 +182,7 @@ class TimeDataCollector extends AbstractDataCollector implements MenuAwareContra
      */
     public function getRequestStartTime(): float
     {
-        return $this->data['start'];
+        return $this->requestStartTime;
     }
 
     /**
@@ -192,6 +192,6 @@ class TimeDataCollector extends AbstractDataCollector implements MenuAwareContra
      */
     public function getRequestEndTime(): float
     {
-        return $this->data['end'];
+        return $this->requestEndTime;
     }
 }
