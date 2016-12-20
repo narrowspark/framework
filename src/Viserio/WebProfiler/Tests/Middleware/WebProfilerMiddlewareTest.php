@@ -38,7 +38,7 @@ class WebProfilerMiddlewareTest extends \PHPUnit_Framework_TestCase
         }));
 
         $this->assertSame(
-            $this->removeId(file_get_contents(__DIR__ . '/../Fixture/view/profiler.html')),
+            $this->removeId(file_get_contents(__DIR__ . '/../Fixture/View/profiler.html')),
             $this->removeId((string) $response->getBody())
         );
     }

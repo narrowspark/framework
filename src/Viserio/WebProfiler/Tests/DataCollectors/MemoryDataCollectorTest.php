@@ -40,7 +40,7 @@ class MemoryDataCollectorTest extends \PHPUnit_Framework_TestCase
 </svg>',
                 'label' => $data['memory'] / 1024 / 1024,
                 'value' => 'MB',
-                'class' => '',
+                'class' => ($data['memory'] / 1024 / 1024) > 50 ? 'yellow' : '',
             ],
             $collect->getMenu()
         );
