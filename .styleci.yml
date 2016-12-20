@@ -24,7 +24,6 @@ enabled:
   - mb_str_functions
   - modernize_types_casting
   - no_blank_lines_after_return
-  - no_trailing_whitespace_in_comment
   - no_blank_lines_before_namespace
   - no_empty_comment
   - no_unneeded_control_parentheses
