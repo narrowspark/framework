@@ -39,7 +39,7 @@ class HttpProtocolVersion extends \PHPUnit_Framework_Constraint
 
     protected function matches($other)
     {
-        if (!is_string($other)) {
+        if (! is_string($other)) {
             return false;
         }
 

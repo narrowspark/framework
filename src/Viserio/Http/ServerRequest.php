@@ -172,7 +172,7 @@ class ServerRequest extends Request implements ServerRequestInterface
      */
     public function getAttribute($attribute, $default = null)
     {
-        if (!array_key_exists($attribute, $this->attributes)) {
+        if (! array_key_exists($attribute, $this->attributes)) {
             return $default;
         }
 
@@ -195,7 +195,7 @@ class ServerRequest extends Request implements ServerRequestInterface
      */
     public function withoutAttribute($attribute): ServerRequestInterface
     {
-        if (!array_key_exists($attribute, $this->attributes)) {
+        if (! array_key_exists($attribute, $this->attributes)) {
             return $this;
         }
 
@@ -220,7 +220,7 @@ class ServerRequest extends Request implements ServerRequestInterface
                 continue;
             }
 
-            if (!$file instanceof UploadedFileInterface) {
+            if (! $file instanceof UploadedFileInterface) {
                 throw new InvalidArgumentException('Invalid leaf in uploaded files structure');
             }
         }

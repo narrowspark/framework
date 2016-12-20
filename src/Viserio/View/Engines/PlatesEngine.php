@@ -75,13 +75,13 @@ class PlatesEngine implements EnginesContract
         $engine->loadExtension(new Asset($this->config['engine']['plates']['asset'] ?? null));
 
         // Get all extensions
-        if (!empty($this->availableExtensions)) {
+        if (! empty($this->availableExtensions)) {
             foreach ($this->availableExtensions as $extension) {
                 $engine->loadExtension(is_object($extension) ? $extension : new $extension());
             }
         }
 
-        if (!$engine->exists($fileInfo['name'])) {
+        if (! $engine->exists($fileInfo['name'])) {
             throw new Exception('Template "' . $fileInfo['name'] . '" dont exist!');
         }
 
@@ -105,7 +105,7 @@ class PlatesEngine implements EnginesContract
      */
     protected function getLoader(): LeagueEngine
     {
-        if (!$this->engine) {
+        if (! $this->engine) {
             $config = $this->config;
 
             $this->engine = new LeagueEngine(

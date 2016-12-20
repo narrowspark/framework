@@ -143,13 +143,13 @@ class ViserioTranslationDataCollector extends AbstractDataCollector implements
         foreach ($messages as $key => $message) {
             $messageId = $message['locale'] . '.' . $message['domain'] . '.' . $message['id'];
 
-            if (!isset($result[$messageId])) {
+            if (! isset($result[$messageId])) {
                 $message['count']              = 1;
-                $message['parameters']         = !empty($message['parameters']) ? [$message['parameters']] : [];
+                $message['parameters']         = ! empty($message['parameters']) ? [$message['parameters']] : [];
                 $messages[$key]['translation'] = $this->sanitizeString($message['translation']);
                 $result[$messageId]            = $message;
             } else {
-                if (!empty($message['parameters'])) {
+                if (! empty($message['parameters'])) {
                     $result[$messageId]['parameters'][] = $message['parameters'];
                 }
 

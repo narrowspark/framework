@@ -91,7 +91,7 @@ class Paginator extends AbstractPaginator
      */
     public function render(string $view = null): string
     {
-        if ($this->views !== null && !isset($this->presenters[$view])) {
+        if ($this->views !== null && ! isset($this->presenters[$view])) {
             return $this->getViewFactory()->create($view, ['paginator' => $this]);
         } elseif (isset($this->presenters[$view])) {
             return (new $this->presenters[$view]($this))->render();

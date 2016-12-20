@@ -30,7 +30,7 @@ class LoadCommands implements BootstrapContract
             $loadedFromCache = true;
         }
 
-        if (!$loadedFromCache) {
+        if (! $loadedFromCache) {
             foreach ($app->getBindings() as $key => $binding) {
                 if (preg_match('/command$/', $key)) {
                     $app->get(ApplicationContract::class)->add($app->get($key));

@@ -37,7 +37,7 @@ trait EventsAwareTrait
      */
     public function getEventsDispatcher(): DispatcherContract
     {
-        if (!$this->events) {
+        if (! $this->events) {
             throw new RuntimeException('Events dispatcher is not set up.');
         }
 

@@ -87,7 +87,7 @@ trait FilesystemHelperTrait
         $target = $this->getNormalzedOrPrefixedPath($target);
         $link   = $this->getNormalzedOrPrefixedPath($link);
 
-        if (!$this->isWindows()) {
+        if (! $this->isWindows()) {
             return symlink($target, $link);
         }
 

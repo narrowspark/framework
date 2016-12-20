@@ -53,7 +53,7 @@ class CallQueuedHandler
 
         $this->dispatcher->dispatch($command);
 
-        if (!$job->isDeletedOrReleased()) {
+        if (! $job->isDeletedOrReleased()) {
             $job->delete();
         }
     }

@@ -62,7 +62,7 @@ trait ServiceProviderConfigAwareTrait
     private static function getDotedConfig(array $array, $id, $default)
     {
         foreach (explode('.', $id) as $segment) {
-            if (!array_key_exists($segment, $array)) {
+            if (! array_key_exists($segment, $array)) {
                 return $default;
             }
 

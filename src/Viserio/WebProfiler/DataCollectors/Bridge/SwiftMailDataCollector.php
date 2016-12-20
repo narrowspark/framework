@@ -85,7 +85,7 @@ class SwiftMailDataCollector extends AbstractDataCollector implements MenuAwareC
      */
     protected function formatTo(?array $to): string
     {
-        if (!$to) {
+        if (! $to) {
             return '';
         }
 

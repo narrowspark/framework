@@ -194,11 +194,11 @@ trait HostValidateTrait
     {
         preg_match(',^(?P<ldelim>[\[]?)(?P<ipv6>.*?)(?P<rdelim>[\]]?)$,', $str, $matches);
 
-        if (!in_array(mb_strlen($matches['ldelim'] . $matches['rdelim']), [0, 2])) {
+        if (! in_array(mb_strlen($matches['ldelim'] . $matches['rdelim']), [0, 2])) {
             return false;
         }
 
-        if (!mb_strpos($str, '%')) {
+        if (! mb_strpos($str, '%')) {
             return filter_var($matches['ipv6'], FILTER_VALIDATE_IP, FILTER_FLAG_IPV6);
         }
 
@@ -225,7 +225,7 @@ trait HostValidateTrait
 
         $ipv6 = mb_substr($ip, 0, $pos);
 
-        if (!$this->isLocalLink($ipv6)) {
+        if (! $this->isLocalLink($ipv6)) {
             return false;
         }
 
@@ -243,7 +243,7 @@ trait HostValidateTrait
      */
     protected function isLocalLink(string $ipv6): bool
     {
-        if (!filter_var($ipv6, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6)) {
+        if (! filter_var($ipv6, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6)) {
             return false;
         }
 

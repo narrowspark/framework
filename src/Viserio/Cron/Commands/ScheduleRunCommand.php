@@ -36,7 +36,7 @@ class ScheduleRunCommand extends Command
         $cronJobsRan = 0;
 
         foreach ($cronJobs as $cronJob) {
-            if (!$cronJob->filtersPass()) {
+            if (! $cronJob->filtersPass()) {
                 continue;
             }
 

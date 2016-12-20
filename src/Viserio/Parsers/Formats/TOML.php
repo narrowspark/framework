@@ -17,7 +17,7 @@ class TOML implements FormatContract
      */
     public function __construct()
     {
-        if (!class_exists('Yosymfony\\Toml\\Toml')) {
+        if (! class_exists('Yosymfony\\Toml\\Toml')) {
             throw new RuntimeException('Unable to read toml, the Toml Parser is not installed.');
         }
     }

@@ -34,7 +34,7 @@ class CallbackCron extends Cron
      */
     public function __construct(CacheItemPoolInterface $cache, $callback, array $parameters = [])
     {
-        if (!is_string($callback) && !is_callable($callback)) {
+        if (! is_string($callback) && ! is_callable($callback)) {
             throw new InvalidArgumentException(
                 'Invalid scheduled callback cron job. Must be string or callable.'
             );
@@ -82,7 +82,7 @@ class CallbackCron extends Cron
      */
     public function withoutOverlapping(): CronContract
     {
-        if (!isset($this->description)) {
+        if (! isset($this->description)) {
             throw new LogicException(
                 'A scheduled cron job description is required to prevent overlapping. ' .
                 "Use the 'description' method before 'withoutOverlapping'."

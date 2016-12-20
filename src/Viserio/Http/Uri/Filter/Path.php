@@ -73,7 +73,7 @@ class Path
             return $carry;
         }
 
-        if (!isset(static::$dotSegments[$segment])) {
+        if (! isset(static::$dotSegments[$segment])) {
             $carry[] = $segment;
         }
 

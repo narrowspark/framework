@@ -101,7 +101,7 @@ abstract class Command extends BaseCommand implements CompletionAwareInterface
 
         $this->setDescription($this->description);
 
-        if (!isset($this->signature)) {
+        if (! isset($this->signature)) {
             $this->specifyParameters();
         }
     }
@@ -155,7 +155,7 @@ abstract class Command extends BaseCommand implements CompletionAwareInterface
     {
         if (isset($this->verbosityMap[$level])) {
             return $this->verbosityMap[$level];
-        } elseif (!is_int($level)) {
+        } elseif (! is_int($level)) {
             return $this->verbosity;
         }
 
@@ -439,7 +439,7 @@ abstract class Command extends BaseCommand implements CompletionAwareInterface
      */
     public function warn(string $string, $verbosityLevel = null)
     {
-        if (!$this->output->getFormatter()->hasStyle('warning')) {
+        if (! $this->output->getFormatter()->hasStyle('warning')) {
             $style = new OutputFormatterStyle('yellow');
             $this->output->getFormatter()->setStyle('warning', $style);
         }

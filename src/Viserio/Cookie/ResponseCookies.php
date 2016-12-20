@@ -19,7 +19,7 @@ class ResponseCookies extends AbstractCookieCollector
     public function __construct(array $cookies = [])
     {
         foreach ($cookies as $cookie) {
-            if (!($cookie instanceof CookieContract)) {
+            if (! ($cookie instanceof CookieContract)) {
                 throw new RuntimeException(sprintf(
                     'The object [%s] must implement Viserio\Contracts\Cookie\Cookie',
                     get_class($cookie)
@@ -77,7 +77,7 @@ class ResponseCookies extends AbstractCookieCollector
 
         $cookie = new SetCookie($cookieName);
 
-        if (!is_null($cookieValue)) {
+        if (! is_null($cookieValue)) {
             $cookie = $cookie->withValue($cookieValue);
         }
 

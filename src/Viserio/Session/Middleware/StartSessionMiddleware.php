@@ -121,7 +121,7 @@ class StartSessionMiddleware implements ServerMiddlewareInterface
     {
         if ($request->getMethod() === 'GET' &&
             $request->getAttribute('route') &&
-            !$request->getHeaderLine('HTTP_X_REQUESTED_WITH') == 'xmlhttprequest'
+            ! $request->getHeaderLine('HTTP_X_REQUESTED_WITH') == 'xmlhttprequest'
         ) {
             $session->setPreviousUrl((string) $request->getUri());
         }

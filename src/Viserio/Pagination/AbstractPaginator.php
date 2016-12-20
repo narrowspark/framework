@@ -340,7 +340,7 @@ abstract class AbstractPaginator implements
      */
     public function hasPages(): bool
     {
-        return !($this->getCurrentPage() == 1 && !$this->hasMorePages());
+        return ! ($this->getCurrentPage() == 1 && ! $this->hasMorePages());
     }
 
     /**
@@ -494,11 +494,11 @@ abstract class AbstractPaginator implements
     private function secureInput(array $query): array
     {
         $secure = function (&$v) {
-            if (!is_string($v) && !is_numeric($v)) {
+            if (! is_string($v) && ! is_numeric($v)) {
                 $v = '';
             } elseif (mb_strpos($v, "\0") !== false) {
                 $v = '';
-            } elseif (!mb_check_encoding($v, 'UTF-8')) {
+            } elseif (! mb_check_encoding($v, 'UTF-8')) {
                 $v = '';
             }
         };

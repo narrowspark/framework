@@ -224,7 +224,7 @@ class WebProfiler implements WebProfilerContract
         ServerRequestInterface $serverRequest,
         ResponseInterface $response
     ): ResponseInterface {
-        if ($this->runningInConsole() || !$this->enabled) {
+        if ($this->runningInConsole() || ! $this->enabled) {
             return $response;
         }
 

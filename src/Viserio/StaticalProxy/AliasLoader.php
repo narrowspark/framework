@@ -79,7 +79,7 @@ class AliasLoader implements AliasLoaderContract
             // is the most powerful one.
         } elseif ($class = $this->resolveNamespaceAlias($alias)) {
             // We've got a namespace alias, we can skip pattern matching.
-        } elseif (!$class = $this->resolvePatternAlias($alias)) {
+        } elseif (! $class = $this->resolvePatternAlias($alias)) {
             // Lastly we'll try to resolve it through pattern matching. This is the most
             // expensive match type. Caching is recommended if you use this.
             return false;
@@ -88,14 +88,14 @@ class AliasLoader implements AliasLoaderContract
         // Remove the resolving class
         array_pop($this->resolving);
 
-        if (!$this->exists($class)) {
+        if (! $this->exists($class)) {
             return false;
         }
 
         // Create the actual alias
         class_alias($class, $alias);
 
-        if (!isset($this->cache[$alias])) {
+        if (! isset($this->cache[$alias])) {
             $this->cache[$alias] = $class;
         }
 
@@ -152,12 +152,12 @@ class AliasLoader implements AliasLoaderContract
      */
     public function aliasPattern($patterns, string $translation = null)
     {
-        if (!is_array($patterns)) {
+        if (! is_array($patterns)) {
             $patterns = [$patterns => $translation];
         }
 
         foreach ($patterns as $patternKey => $resolver) {
-            if (!$resolver instanceof Resolver) {
+            if (! $resolver instanceof Resolver) {
                 $resolver = new Resolver($patternKey, $resolver);
             }
 
@@ -196,7 +196,7 @@ class AliasLoader implements AliasLoaderContract
         foreach ($this->namespaces as $namespace) {
             list($nsClass, $nsAlias) = $namespace;
 
-            if (!$nsAlias || mb_strpos($alias, (string) $nsAlias) === 0) {
+            if (! $nsAlias || mb_strpos($alias, (string) $nsAlias) === 0) {
                 if ($nsAlias) {
                     $alias = mb_substr($alias, mb_strlen($nsAlias) + 1);
                 }
@@ -222,7 +222,7 @@ class AliasLoader implements AliasLoaderContract
     {
         $class  = func_get_args();
         $filter = function ($namespace) use ($class) {
-            return !in_array($namespace[0], $class);
+            return ! in_array($namespace[0], $class);
         };
 
         $this->namespaces = array_filter($this->namespaces, $filter);
@@ -233,7 +233,7 @@ class AliasLoader implements AliasLoaderContract
      */
     public function register()
     {
-        if (!$this->registered) {
+        if (! $this->registered) {
             spl_autoload_register([$this, 'load'], true, true);
 
             $this->registered = true;

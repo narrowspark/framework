@@ -100,7 +100,7 @@ class QueueManager extends AbstractConnectionManager implements MonitorContract,
     {
         $name = $name ?? $this->getDefaultConnection();
 
-        if (!isset($this->connections[$name])) {
+        if (! isset($this->connections[$name])) {
             $config  = $this->getConnectionConfig($name);
             $connect = $this->createConnection($config);
 
@@ -118,7 +118,7 @@ class QueueManager extends AbstractConnectionManager implements MonitorContract,
      */
     public function getEventsDispatcher(): DispatcherContract
     {
-        if (!$this->events || $this->container->has(DispatcherContract::class)) {
+        if (! $this->events || $this->container->has(DispatcherContract::class)) {
             throw new RuntimeException('Events dispatcher is not set up.');
         }
 

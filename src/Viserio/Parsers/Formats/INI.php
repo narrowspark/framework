@@ -68,7 +68,7 @@ class INI implements FormatContract, DumperContract
             }
         }
 
-        if (!empty($subsections)) {
+        if (! empty($subsections)) {
             $output .= PHP_EOL;
 
             foreach ($subsections as $section => $array) {

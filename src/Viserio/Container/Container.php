@@ -126,7 +126,7 @@ class Container extends ContainerResolver implements ArrayAccess, ContainerContr
      */
     public function bindIf(string $abstract, $concrete = null)
     {
-        if (!$this->has($abstract)) {
+        if (! $this->has($abstract)) {
             $this->bind($abstract, $concrete);
         }
     }
@@ -337,11 +337,11 @@ class Container extends ContainerResolver implements ArrayAccess, ContainerContr
      */
     public function give($implementation)
     {
-        if (!($reflector = $this->getReflector($this->concrete))) {
+        if (! ($reflector = $this->getReflector($this->concrete))) {
             throw new UnresolvableDependencyException(sprintf('[%s] is not resolvable.', $this->concrete));
         }
 
-        if ($reflector instanceof ReflectionClass && !($reflector = $reflector->getConstructor())) {
+        if ($reflector instanceof ReflectionClass && ! ($reflector = $reflector->getConstructor())) {
             throw new UnresolvableDependencyException(sprintf('[%s] must have a constructor.', $this->concrete));
         }
 
@@ -372,7 +372,7 @@ class Container extends ContainerResolver implements ArrayAccess, ContainerContr
      */
     public function get($id)
     {
-        if (!is_string($id)) {
+        if (! is_string($id)) {
             throw new ContainerException(sprintf(
                 'The id parameter must be of type string, [%s] given.',
                 is_object($id) ? get_class($id) : gettype($id)
@@ -395,7 +395,7 @@ class Container extends ContainerResolver implements ArrayAccess, ContainerContr
      */
     public function has($id)
     {
-        if (!is_string($id)) {
+        if (! is_string($id)) {
             throw new ContainerException(sprintf(
                 'The name parameter must be of type string, [%s] given.',
                 is_object($id) ? get_class($id) : gettype($id)
@@ -643,7 +643,7 @@ class Container extends ContainerResolver implements ArrayAccess, ContainerContr
      */
     protected function getInvoker(): InvokerInterface
     {
-        if (!$this->invoker) {
+        if (! $this->invoker) {
             $parameterResolver = [
                 new NumericArrayResolver(),
                 new AssociativeArrayResolver(),
@@ -666,7 +666,7 @@ class Container extends ContainerResolver implements ArrayAccess, ContainerContr
      */
     protected function extendResolved($abstract, &$resolved)
     {
-        if (!isset($this->extenders[$abstract])) {
+        if (! isset($this->extenders[$abstract])) {
             return;
         }
 

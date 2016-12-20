@@ -17,7 +17,7 @@ class Po implements FormatContract
      */
     public function __construct()
     {
-        if (!class_exists('Sepia\\PoParser')) {
+        if (! class_exists('Sepia\\PoParser')) {
             throw new RuntimeException(
                 'Loading translations from the Po format requires the Sepia PoParser component.'
             );
@@ -31,7 +31,7 @@ class Po implements FormatContract
      */
     public function parse(string $payload): array
     {
-        if (!file_exists($payload)) {
+        if (! file_exists($payload)) {
             throw new ParseException([
                 'message' => 'File not found.',
             ]);

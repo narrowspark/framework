@@ -52,7 +52,7 @@ class Resolver
     public function resolve(string $alias)
     {
         // Check wether the alias matches the pattern
-        if (!preg_match($this->regex, $alias, $matches)) {
+        if (! preg_match($this->regex, $alias, $matches)) {
             return false;
         }
 
@@ -86,6 +86,6 @@ class Resolver
      */
     public function matches(string $pattern, string $translation = null): bool
     {
-        return $this->pattern === $pattern && (!$translation || $translation === $this->translation);
+        return $this->pattern === $pattern && (! $translation || $translation === $this->translation);
     }
 }

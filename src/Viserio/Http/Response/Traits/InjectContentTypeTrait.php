@@ -18,7 +18,7 @@ trait InjectContentTypeTrait
             return $carry ?: (mb_strtolower($item) === 'content-type');
         }, false);
 
-        if (!$hasContentType) {
+        if (! $hasContentType) {
             $headers['content-type'] = [$contentType];
         }
 

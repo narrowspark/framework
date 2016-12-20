@@ -38,7 +38,7 @@ class KeyGenerateCommand extends Command
         // Next, we will replace the application key in the environment file so it is
         // automatically setup for this developer. This key gets generated using a
         // secure random byte generator and is later base64 encoded for storage.
-        if (!$this->setKeyInEnvironmentFile($key)) {
+        if (! $this->setKeyInEnvironmentFile($key)) {
             return;
         }
 
@@ -59,7 +59,7 @@ class KeyGenerateCommand extends Command
         $config     = $this->getContainer()->get(RepositoryContract::class);
         $currentKey = $config->get('app.key');
 
-        if (mb_strlen($currentKey) !== 0 && (!$this->confirmToProceed())) {
+        if (mb_strlen($currentKey) !== 0 && (! $this->confirmToProceed())) {
             return false;
         }
 

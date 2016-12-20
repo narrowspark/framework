@@ -79,7 +79,7 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
      */
     public function read(string $path)
     {
-        if (!$this->has($path)) {
+        if (! $this->has($path)) {
             throw new FileNotFoundException($path);
         }
 
@@ -97,7 +97,7 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
      */
     public function readStream(string $path)
     {
-        if (!$this->has($path)) {
+        if (! $this->has($path)) {
             throw new FileNotFoundException($path);
         }
 
@@ -163,7 +163,7 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
      */
     public function update(string $path, string $contents, array $config = []): bool
     {
-        if (!$this->has($path)) {
+        if (! $this->has($path)) {
             throw new FileNotFoundException($path);
         }
 
@@ -214,7 +214,7 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
      */
     public function copy($originFile, $targetFile, $override = false)
     {
-        if (!$this->has($originFile)) {
+        if (! $this->has($originFile)) {
             throw new FileNotFoundException($originFile);
         }
 
@@ -241,7 +241,7 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
 
         $this->driver->copy($originFile, $targetFile);
 
-        if (!is_file($target)) {
+        if (! is_file($target)) {
             throw new ViserioIOException(sprintf(
                 'Failed to copy "%s" to "%s".',
                 $originFile,
@@ -279,7 +279,7 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
      */
     public function getMimetype(string $path)
     {
-        if (!$this->has($path)) {
+        if (! $this->has($path)) {
             throw new FileNotFoundException($path);
         }
 
@@ -297,7 +297,7 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
      */
     public function getTimestamp(string $path)
     {
-        if (!$this->has($path)) {
+        if (! $this->has($path)) {
             throw new FileNotFoundException($path);
         }
 
@@ -347,7 +347,7 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
 
         foreach ($paths as $path) {
             try {
-                if (!$this->driver->delete($path)) {
+                if (! $this->driver->delete($path)) {
                     $success = false;
                 }
             } catch (FileNotFoundException $e) {
@@ -411,7 +411,7 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
      */
     public function cleanDirectory(string $dirname): bool
     {
-        if (!$this->isDirectory($dirname)) {
+        if (! $this->isDirectory($dirname)) {
             return false;
         }
 
@@ -439,11 +439,11 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
      */
     public function copyDirectory(string $directory, string $destination, array $options = []): bool
     {
-        if (!$this->isDirectory($directory)) {
+        if (! $this->isDirectory($directory)) {
             return false;
         }
 
-        if (!is_dir($destination)) {
+        if (! is_dir($destination)) {
             $this->createDirectory($destination, ['visibility' => 'public']);
         }
 
@@ -478,7 +478,7 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
         $overwrite = $options['overwrite'] ?? false;
 
         if ($overwrite && $this->isDirectory($destination)) {
-            if (!$this->deleteDirectory($destination)) {
+            if (! $this->deleteDirectory($destination)) {
                 return false;
             }
         }
@@ -490,7 +490,7 @@ class FilesystemAdapter implements FilesystemContract, DirectorysystemContract
         );
         $delete = $this->deleteDirectory($directory);
 
-        return !(!$copy && !$delete);
+        return ! (! $copy && ! $delete);
     }
 
     /**

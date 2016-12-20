@@ -89,7 +89,7 @@ class Route implements RouteContract
         $this->httpMethods = array_map('strtoupper', (array) $methods);
         $this->action      = $this->parseAction($action);
 
-        if (in_array('GET', $this->httpMethods) && !in_array('HEAD', $this->httpMethods)) {
+        if (in_array('GET', $this->httpMethods) && ! in_array('HEAD', $this->httpMethods)) {
             $this->httpMethods[] = 'HEAD';
         }
 
@@ -361,7 +361,7 @@ class Route implements RouteContract
     {
         list($class) = explode('@', $this->action['uses']);
 
-        if (!$this->controller) {
+        if (! $this->controller) {
             $container = $this->getContainer();
 
             try {
@@ -423,14 +423,14 @@ class Route implements RouteContract
 
         // If no "uses" property has been set, we will dig through the array to find a
         // Closure instance within this list. We will set the first Closure we come across.
-        if (!isset($action['uses'])) {
+        if (! isset($action['uses'])) {
             $action['uses'] = Arr::first($action, function ($key, $value) {
                 return is_callable($value) && is_numeric($key);
             });
         }
 
         if (is_string($action['uses']) && mb_strpos($action['uses'], '@') === false) {
-            if (!method_exists($action, '__invoke')) {
+            if (! method_exists($action, '__invoke')) {
                 throw new UnexpectedValueException(sprintf(
                     'Invalid route action: [%s]',
                     $action['uses']
@@ -473,7 +473,7 @@ class Route implements RouteContract
      */
     protected function getControllerMiddleware(): array
     {
-        if (!$this->isControllerAction()) {
+        if (! $this->isControllerAction()) {
             return [];
         }
 

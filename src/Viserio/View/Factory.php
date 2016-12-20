@@ -199,7 +199,7 @@ class Factory implements FactoryContract
         $engine = explode('|', $path);
         $path   = isset($engine[1]) ? $engine[1] : $path;
 
-        if (!$extension = $this->getExtension($path)) {
+        if (! $extension = $this->getExtension($path)) {
             throw new InvalidArgumentException(sprintf('Unrecognized extension in file: [%s]', $path));
         }
 

@@ -37,7 +37,7 @@ trait TranslatorAwareTrait
      */
     public function getTranslator(): TranslatorContract
     {
-        if (!$this->translator) {
+        if (! $this->translator) {
             throw new RuntimeException('Translator is not set up.');
         }
 

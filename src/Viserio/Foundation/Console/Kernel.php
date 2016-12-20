@@ -91,7 +91,7 @@ class Kernel implements KernelContract, TerminableContract
 
             $this->defineConsoleSchedule();
 
-            if (!$this->commandsLoaded) {
+            if (! $this->commandsLoaded) {
                 $this->commands();
                 $this->commandsLoaded = true;
             }
@@ -140,7 +140,7 @@ class Kernel implements KernelContract, TerminableContract
      */
     public function bootstrap()
     {
-        if (!$this->app->hasBeenBootstrapped()) {
+        if (! $this->app->hasBeenBootstrapped()) {
             $this->app->bootstrapWith($this->bootstrappers);
         }
     }

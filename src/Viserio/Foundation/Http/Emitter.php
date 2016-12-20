@@ -35,7 +35,7 @@ class Emitter implements EmitterContract
      */
     protected function injectContentLength(ResponseInterface $response): ResponseInterface
     {
-        if (!$response->hasHeader('Content-Length')) {
+        if (! $response->hasHeader('Content-Length')) {
             // PSR-7 indicates int OR null for the stream size; for null values,
             // we will not auto-inject the Content-Length.
             if (null !== $response->getBody()->getSize()) {
@@ -133,7 +133,7 @@ class Emitter implements EmitterContract
     protected function cleanUp()
     {
         // try to enable garbage collection
-        if (!gc_enabled()) {
+        if (! gc_enabled()) {
             @gc_enable();
         }
         // collect garbage only if garbage

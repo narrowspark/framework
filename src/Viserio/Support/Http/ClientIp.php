@@ -59,7 +59,7 @@ class ClientIp
      */
     private function getIpAddressFromProxy(): ?string
     {
-        if (!$this->serverRequest->hasHeader('HTTP_X_FORWARDED_FOR')) {
+        if (! $this->serverRequest->hasHeader('HTTP_X_FORWARDED_FOR')) {
             return;
         }
 

@@ -30,7 +30,7 @@ class TaggableParser extends Parser implements TaggableParserContract
      */
     public function parse(string $payload): array
     {
-        if (!$this->taggedKey) {
+        if (! $this->taggedKey) {
             return parent::parse($payload);
         }
 

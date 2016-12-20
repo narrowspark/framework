@@ -254,7 +254,7 @@ class Cron implements CronContract
             $this->cache->save($item);
         }
 
-        if (!$this->runInBackground) {
+        if (! $this->runInBackground) {
             return $this->runCommandInForeground();
         }
 
@@ -288,7 +288,7 @@ class Cron implements CronContract
 
         $command = $this->command . $redirect . $output . ' 2>&1 &';
 
-        return $this->user && !$isWindows ? 'sudo -u ' . $this->user . ' -- sh -c \'' . $command . '\'' : $command;
+        return $this->user && ! $isWindows ? 'sudo -u ' . $this->user . ' -- sh -c \'' . $command . '\'' : $command;
     }
 
     /**
@@ -329,7 +329,7 @@ class Cron implements CronContract
      */
     public function isDue(string $environment, bool $isMaintenance = false): bool
     {
-        if (!$this->runsInMaintenanceMode() && $isMaintenance) {
+        if (! $this->runsInMaintenanceMode() && $isMaintenance) {
             return false;
         }
 
@@ -655,7 +655,7 @@ class Cron implements CronContract
     public function filtersPass(): bool
     {
         foreach ($this->filters as $callback) {
-            if (!$this->getInvoker()->call($callback)) {
+            if (! $this->getInvoker()->call($callback)) {
                 return false;
             }
         }

@@ -37,7 +37,7 @@ trait StreamFactoryAwareTrait
      */
     public function getStreamFactory(): StreamFactoryInterface
     {
-        if (!$this->streamFactory) {
+        if (! $this->streamFactory) {
             throw new RuntimeException('Instance implementing \Interop\Http\Factory\StreamFactoryInterface is not set up.');
         }
 

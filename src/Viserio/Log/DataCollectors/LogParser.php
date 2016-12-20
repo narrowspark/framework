@@ -43,7 +43,7 @@ class LogParser
         $log = $this->parseRawData($raw);
 
         // @codeCoverageIgnoreStart
-        if (!is_array($log)) {
+        if (! is_array($log)) {
             return [];
         }
         // @codeCoverageIgnoreEnd

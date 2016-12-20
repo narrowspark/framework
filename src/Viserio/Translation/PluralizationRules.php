@@ -50,7 +50,7 @@ class PluralizationRules implements PluralizationRulesContract
         if (isset($this->rules[$language])) {
             $return = call_user_func($this->rules[$language], $count);
 
-            if (!is_int($return) || $return < 0) {
+            if (! is_int($return) || $return < 0) {
                 return (new Zero())->category(0);
             }
 

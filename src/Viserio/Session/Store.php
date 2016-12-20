@@ -142,7 +142,7 @@ class Store implements StoreContract
 
         $this->fingerprint = $this->generateFingerprint();
 
-        if (!$this->has('_token')) {
+        if (! $this->has('_token')) {
             $this->regenerateToken();
         }
 
@@ -154,7 +154,7 @@ class Store implements StoreContract
      */
     public function open(): bool
     {
-        if (!$this->started) {
+        if (! $this->started) {
             if ($this->id) {
                 $this->loadSession();
 
@@ -171,7 +171,7 @@ class Store implements StoreContract
      */
     public function setId(string $id)
     {
-        if (!$this->isValidId($id)) {
+        if (! $this->isValidId($id)) {
             $id = $this->generateSessionId();
         }
 

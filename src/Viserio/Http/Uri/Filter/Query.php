@@ -20,7 +20,7 @@ class Query
     public function build(array $query): string
     {
         $arr = array_map(function ($value) {
-            return !is_array($value) ? [$value] : $value;
+            return ! is_array($value) ? [$value] : $value;
         }, $query);
 
         $pairs = [];
@@ -101,13 +101,13 @@ class Query
             $value = $decoder($value);
         }
 
-        if (!array_key_exists($key, $res)) {
+        if (! array_key_exists($key, $res)) {
             $res[$key] = $value;
 
             return $res;
         }
 
-        if (!is_array($res[$key])) {
+        if (! is_array($res[$key])) {
             $res[$key] = [$res[$key]];
         }
 

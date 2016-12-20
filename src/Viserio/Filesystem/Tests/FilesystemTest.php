@@ -142,7 +142,7 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
 
     public function testGetMimeTypeOutputsMimeType()
     {
-        if (!class_exists('Finfo')) {
+        if (! class_exists('Finfo')) {
             $this->markTestSkipped('The PHP extension fileinfo is not installed.');
         }
 

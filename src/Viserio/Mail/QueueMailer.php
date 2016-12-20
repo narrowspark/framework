@@ -128,7 +128,7 @@ class QueueMailer extends Mailer implements QueueMailerContract
      */
     protected function buildQueueCallable($callback): string
     {
-        if (!$callback instanceof Closure) {
+        if (! $callback instanceof Closure) {
             return $callback;
         }
 

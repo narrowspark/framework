@@ -211,7 +211,7 @@ class Translator implements TranslatorContract
         }
 
         foreach ($helpers as $helper) {
-            if (!isset($this->helpers[$helper['name']])) {
+            if (! isset($this->helpers[$helper['name']])) {
                 return $translation;
             }
 

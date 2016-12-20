@@ -37,7 +37,7 @@ trait ConfigAwareTrait
      */
     public function getConfig(): RepositoryContract
     {
-        if (!$this->config) {
+        if (! $this->config) {
             throw new RuntimeException('Config is not set up.');
         }
 

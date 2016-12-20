@@ -465,7 +465,7 @@ class Uri implements UriInterface
      */
     private function isValidString($string): void
     {
-        if (!is_string($string)) {
+        if (! is_string($string)) {
             throw new InvalidArgumentException(sprintf(
                 '%s expects a string argument; received %s',
                 __METHOD__,
@@ -523,7 +523,7 @@ class Uri implements UriInterface
 
         $components = parse_url($encodeUrl);
 
-        if (!$components) {
+        if (! $components) {
             throw new InvalidArgumentException(sprintf('Unable to parse URI: %s.', $url));
         }
 

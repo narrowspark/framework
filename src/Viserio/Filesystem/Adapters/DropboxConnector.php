@@ -14,11 +14,11 @@ class DropboxConnector extends AbstractConnector
      */
     protected function getAuth(array $config): array
     {
-        if (!array_key_exists('token', $config) || !array_key_exists('app', $config)) {
+        if (! array_key_exists('token', $config) || ! array_key_exists('app', $config)) {
             throw new InvalidArgumentException('The dropbox connector requires authentication.');
         }
 
-        if (!array_key_exists('locale', $config)) {
+        if (! array_key_exists('locale', $config)) {
             $config['locale'] = null;
         }
 
@@ -38,7 +38,7 @@ class DropboxConnector extends AbstractConnector
      */
     protected function getConfig(array $config): array
     {
-        if (!array_key_exists('prefix', $config)) {
+        if (! array_key_exists('prefix', $config)) {
             $config['prefix'] = null;
         }
 

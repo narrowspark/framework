@@ -17,7 +17,7 @@ class RequestCookies extends AbstractCookieCollector
     public function __construct(array $cookies = [])
     {
         foreach ($cookies as $cookie) {
-            if (!($cookie instanceof Cookie)) {
+            if (! ($cookie instanceof Cookie)) {
                 throw new RuntimeException(sprintf(
                     'The object [%s] must be an instance of \Viserio\Cookie\Cookie',
                     get_class($cookie)

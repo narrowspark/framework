@@ -226,7 +226,7 @@ abstract class AbstractRouteDispatcher
             @unlink($this->path);
         }
 
-        if (!file_exists($this->path)) {
+        if (! file_exists($this->path)) {
             $routerCompiler = new TreeRouteCompiler(new RouteTreeBuilder(), new RouteTreeOptimizer());
 
             file_put_contents($this->path, $routerCompiler->compile($this->routes->getRoutes()), LOCK_EX);
