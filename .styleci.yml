@@ -42,7 +42,6 @@ enabled:
 
 disabled:
   - blank_line_after_opening_tag
-  - phpdoc_no_empty_return
   - self_accessor
 
 finder:
