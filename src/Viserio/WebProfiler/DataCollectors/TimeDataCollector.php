@@ -57,6 +57,14 @@ class TimeDataCollector extends AbstractDataCollector implements MenuAwareContra
         foreach (array_keys($this->startedMeasures) as $name) {
             $this->stopMeasure($name);
         }
+
+        $this->data = [
+            'start' => $this->requestStartTime,
+            'end' => $this->requestEndTime,
+            'duration' => $this->getRequestDuration(),
+            'duration_str' => $this->formatDuration($this->getRequestDuration()),
+            'measures' => array_values($this->measures)
+        ];
     }
 
     /**
@@ -66,8 +74,8 @@ class TimeDataCollector extends AbstractDataCollector implements MenuAwareContra
     {
         return [
             'icon'  => 'ic_schedule_white_24px.svg',
-            'label' => $this->formatDuration($this->getRequestDuration()),
-            'value' => '',
+            'label' => '',
+            'value' => $this->data['duration_str'],
         ];
     }
 
@@ -84,13 +92,13 @@ class TimeDataCollector extends AbstractDataCollector implements MenuAwareContra
      *
      * @return float
      */
-    public function getRequestDuration()
+    public function getRequestDuration(): float
     {
-        if ($this->requestEndTime !== null) {
-            return $this->requestEndTime - $this->requestStartTime;
+        if ($this->data['end'] !== null) {
+            return $this->data['end'] - $this->data['start'];
         }
 
-        return microtime(true) - $this->requestStartTime;
+        return microtime(true) - $this->data['start'];
     }
 
     /**
@@ -99,13 +107,15 @@ class TimeDataCollector extends AbstractDataCollector implements MenuAwareContra
      * @param string      $name      Internal name, used to stop the measure
      * @param string|null $label     Public name
      * @param string|null $collector The source of the collector
+     *
+     * @return void
      */
-    public function startMeasure(string $name, string $label = null, string $collector = null)
+    public function startMeasure(string $name, string $label = null, string $collector = null): void
     {
         $start = microtime(true);
 
         $this->startedMeasures[$name] = [
-            'label'     => $label ?: $name,
+            'label'     => $label ?? $name,
             'start'     => $start,
             'collector' => $collector,
         ];
@@ -130,8 +140,10 @@ class TimeDataCollector extends AbstractDataCollector implements MenuAwareContra
      * @param array  $params
      *
      * @throws \RuntimeException
+     *
+     * @return void
      */
-    public function stopMeasure(string $name, array $params = [])
+    public function stopMeasure(string $name, array $params = []): void
     {
         $end = microtime(true);
 
@@ -170,7 +182,7 @@ class TimeDataCollector extends AbstractDataCollector implements MenuAwareContra
      */
     public function getRequestStartTime(): float
     {
-        return $this->requestStartTime;
+        return $this->data['start'];
     }
 
     /**
@@ -180,6 +192,6 @@ class TimeDataCollector extends AbstractDataCollector implements MenuAwareContra
      */
     public function getRequestEndTime(): float
     {
-        return $this->requestEndTime;
+        return $this->data['end'];
     }
 }

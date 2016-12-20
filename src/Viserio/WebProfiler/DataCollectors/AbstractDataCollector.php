@@ -34,11 +34,23 @@ abstract class AbstractDataCollector implements DataCollectorContract
     }
 
     /**
+     * Get all collected data.
+     *
+     * @return array
+     */
+    public function getData(): array
+    {
+        return $this->data;
+    }
+
+    /**
      * Add measurement to float time.
      *
      * @param float $seconds
      *
      * @return string
+     *
+     * @codeCoverageIgnore
      */
     protected function formatDuration(float $seconds): string
     {
@@ -58,6 +70,8 @@ abstract class AbstractDataCollector implements DataCollectorContract
      * @param string $memoryLimit
      *
      * @return int
+     *
+     * @codeCoverageIgnore
      */
     protected function convertToBytes(string $memoryLimit): int
     {
@@ -68,9 +82,9 @@ abstract class AbstractDataCollector implements DataCollectorContract
         $memoryLimit = mb_strtolower($memoryLimit);
         $max         = mb_strtolower(ltrim($memoryLimit, '+'));
 
-        if (0 === mb_strpos($max, '0x')) {
+        if (mb_strpos($max, '0x') === 0) {
             $max = intval($max, 16);
-        } elseif (0 === mb_strpos($max, '0')) {
+        } elseif (mb_strpos($max, '0') === 0) {
             $max = intval($max, 8);
         } else {
             $max = (int) $max;
@@ -234,7 +248,7 @@ abstract class AbstractDataCollector implements DataCollectorContract
             $id = 'content-' . $key . '-' . uniqid('');
 
             $selects[$key] = '<option value="' . $id . '"' . ($selected === false ? $selected = 'selected' : '') . '>' . $key . '</option>';
-            $content[$key] = '<div class="' . $id . ' selected-content">' . $value . '</div>';
+            $content[$key] = '<div id="' . $id . '" class="selected-content">' . $value . '</div>';
         }
 
         $html = '<select class="content-selector" name="' . $this->getName() . '">';

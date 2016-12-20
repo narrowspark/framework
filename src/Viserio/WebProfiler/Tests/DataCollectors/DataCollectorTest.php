@@ -13,6 +13,11 @@ class DataCollectorTest extends \PHPUnit_Framework_TestCase
         $this->assertSame('fixture-data-collector', $collector->getName());
     }
 
+    public function testGetMenuPosition($value='')
+    {
+        $this->assertSame('left', (new FixtureDataCollector())->getMenuPosition());
+    }
+
     public function testCreateTable()
     {
         $collector = new FixtureDataCollector();
@@ -44,13 +49,23 @@ class DataCollectorTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testCreateTabs($value='')
+    public function testCreateTabs()
     {
         $collector = new FixtureDataCollector();
 
         $this->assertSame(
             $this->removeTabId('<div class="webprofiler-tabs row"><div class="webprofiler-tabs-tab col span_12"><input type="radio" name="tabgroup" id="tab-0-5857be8b2c3d4"><label for="tab-0-5857be8b2c3d4">test</label><div class="webprofiler-tabs-tab-content">test</div></div></div>'),
             $this->removeTabId($collector->getTabs())
+        );
+    }
+
+    public function testCreateDropdownMenuContent()
+    {
+        $collector = new FixtureDataCollector();
+
+        $this->assertSame(
+            $this->removeDropdownMenuId('<select class="content-selector" name="fixture-data-collector"><option value="content-dropdown-5858e9e677a84"selected>dropdown</option></select><div id="content-dropdown-5858e9e677a84" class="selected-content">content</div>'),
+            $this->removeDropdownMenuId($collector->getDropdownMenuContent())
         );
     }
 
@@ -64,6 +79,11 @@ class DataCollectorTest extends \PHPUnit_Framework_TestCase
 
     private function removeTabId(string $html): string
     {
-        return trim(preg_replace('/id="tab-0-(?:\d+)"/', '', $html));
+        return trim(preg_replace('/="tab-0(.*?)"/', '', $html));
+    }
+
+    private function removeDropdownMenuId(string $html): string
+    {
+        return trim(preg_replace('/="content-dropdown(.*?)"/', '', $html));
     }
 }

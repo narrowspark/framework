@@ -60,7 +60,7 @@ Zepto(function($) {
 
             $(panelBodyClass).height(null);
             $('.webprofiler-tabs-tab-content').height(null);
-            $(this).removeClass('orginal-size-panel')
+            $(this).removeClass('orginal-size-panel');
         } else {
             resizeIsActive = true;
             resizeBodyAndTabContent();
@@ -96,20 +96,20 @@ Zepto(function($) {
 
     // select content
     var selected = $(panelClass + ' .content-selector option').not(function () {
-        return !this.selected
+        return !this.selected;
     });
 
-    $('.' + selected.val()).addClass('active');
+    $('#' + selected.val()).addClass('active');
 
     $(panelClass + ' .content-selector').on('change', function () {
         var content = $(panelClass + ' .content-selector option').not(function () {
-            return !this.selected
+            return !this.selected;
         });
 
         if ($(panelClass + ' .selected-content').hasClass('active')) {
             $(panelClass + ' .selected-content').removeClass('active');
         }
 
-        $(panelClass + ' .' + content.val()).addClass('active');
+        $(panelClass + ' #' + content.val()).addClass('active');
     });
 });

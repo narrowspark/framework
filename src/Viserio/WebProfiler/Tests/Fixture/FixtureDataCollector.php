@@ -52,4 +52,11 @@ class FixtureDataCollector extends AbstractDataCollector
             ],
         ]);
     }
+
+    public function getDropdownMenuContent()
+    {
+        return $this->createDropdownMenuContent([
+            'dropdown' => 'content'
+        ]);
+    }
 }
