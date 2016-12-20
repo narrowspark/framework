@@ -31,6 +31,8 @@ Zepto(function($) {
             openPanel = false;
 
             $(menuHasPanel + ', ' + panelBodyClass + ', ' + openPanel).removeClass('active');
+            $(panel).removeClass('active');
+
             // remove checked on all input elements
             input.prop('checked', null);
         } else {

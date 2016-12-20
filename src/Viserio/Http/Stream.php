@@ -214,7 +214,7 @@ class Stream implements StreamInterface
         }
 
         if (! isset($this->stream)) {
-            return;
+            return null;
         }
 
         // Clear the stat cache if the stream has a URI

@@ -60,7 +60,7 @@ class ClientIp
     private function getIpAddressFromProxy(): ?string
     {
         if (! $this->serverRequest->hasHeader('HTTP_X_FORWARDED_FOR')) {
-            return;
+            return null;
         }
 
         // Extract IPs
@@ -69,7 +69,7 @@ class ClientIp
 
         // @codeCoverageIgnoreStart
         if (count($ips) === 0) {
-            return;
+            return null;
         }
         // @codeCoverageIgnoreEnd
 
