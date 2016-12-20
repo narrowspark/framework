@@ -42,6 +42,7 @@ disabled:
   - self_accessor
   - concat_without_spaces
   - print_to_echo
+  - single_blank_line_before_namespace
 
 finder:
   exclude:
