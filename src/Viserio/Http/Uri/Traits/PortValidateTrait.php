@@ -55,7 +55,7 @@ trait PortValidateTrait
         }
 
         if ($port === null || $port === '') {
-            return;
+            return null;
         }
 
         $res = filter_var($port, FILTER_VALIDATE_INT, ['options' => [
