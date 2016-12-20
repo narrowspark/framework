@@ -127,7 +127,7 @@ class Postmark extends AbstractTransport
     {
         foreach ($message->getChildren() as $part) {
             if (mb_strpos($part->getContentType(), $mimeType) === 0 &&
-                ! ($part instanceof Swift_Mime_Attachment)
+                !($part instanceof Swift_Mime_Attachment)
             ) {
                 return $part;
             }
@@ -257,7 +257,7 @@ class Postmark extends AbstractTransport
             $fieldName       = $value->getFieldName();
             $excludedHeaders = ['Subject', 'Content-Type', 'MIME-Version', 'Date'];
 
-            if (! in_array($fieldName, $excludedHeaders)) {
+            if (!in_array($fieldName, $excludedHeaders)) {
                 if ($value instanceof Swift_Mime_Headers_UnstructuredHeader ||
                     $value instanceof Swift_Mime_Headers_OpenDKIMHeader
                 ) {

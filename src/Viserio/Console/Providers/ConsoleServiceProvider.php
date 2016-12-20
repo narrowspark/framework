@@ -13,7 +13,7 @@ class ConsoleServiceProvider implements ServiceProvider
 {
     use ServiceProviderConfigAwareTrait;
 
-    const PACKAGE = 'viserio.console';
+    public const PACKAGE = 'viserio.console';
 
     /**
      * {@inheritdoc}

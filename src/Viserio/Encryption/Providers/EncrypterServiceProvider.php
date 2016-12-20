@@ -13,7 +13,7 @@ class EncrypterServiceProvider implements ServiceProvider
 {
     use ServiceProviderConfigAwareTrait;
 
-    const PACKAGE = 'viserio.encryption';
+    public const PACKAGE = 'viserio.encryption';
 
     /**
      * {@inheritdoc}

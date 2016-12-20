@@ -19,7 +19,7 @@ class Uri implements UriInterface
      * we apply this default host when no host is given yet to form a
      * valid URI.
      */
-    const HTTP_DEFAULT_HOST = 'localhost';
+    public const HTTP_DEFAULT_HOST = 'localhost';
 
     /**
      * Uri scheme (without "://" suffix).
@@ -465,7 +465,7 @@ class Uri implements UriInterface
      */
     private function isValidString($string): void
     {
-        if (! is_string($string)) {
+        if (!is_string($string)) {
             throw new InvalidArgumentException(sprintf(
                 '%s expects a string argument; received %s',
                 __METHOD__,
@@ -523,7 +523,7 @@ class Uri implements UriInterface
 
         $components = parse_url($encodeUrl);
 
-        if (! $components) {
+        if (!$components) {
             throw new InvalidArgumentException(sprintf('Unable to parse URI: %s.', $url));
         }
 

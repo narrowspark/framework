@@ -59,7 +59,7 @@ class TwigEngine implements EngineContract
      */
     protected function getInstance(): Twig_Environment
     {
-        if (! $this->parserInstance) {
+        if (!$this->parserInstance) {
             $config = $this->config;
             $twig   = new Twig_Environment(
                 $this->loader(),
@@ -71,7 +71,7 @@ class TwigEngine implements EngineContract
 
             $extensions = $config['engine']['twig']['extensions'] ?? [];
 
-            if (! empty($extensions)) {
+            if (!empty($extensions)) {
                 foreach ($extensions as $extension) {
                     $twig->addExtension(is_object($extension) ? $extension : new $extension());
                 }

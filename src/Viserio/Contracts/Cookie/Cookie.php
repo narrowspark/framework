@@ -7,8 +7,8 @@ interface Cookie
     /**
      * Const for samesite.
      */
-    const SAMESITE_STRICT = 'strict';
-    const SAMESITE_LAX    = 'lax';
+    public const SAMESITE_STRICT = 'strict';
+    public const SAMESITE_LAX    = 'lax';
 
     /**
      * Returns the name.

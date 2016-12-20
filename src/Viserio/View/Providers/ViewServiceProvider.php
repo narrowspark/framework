@@ -21,7 +21,7 @@ class ViewServiceProvider implements ServiceProvider
 {
     use ServiceProviderConfigAwareTrait;
 
-    const PACKAGE = 'viserio.view';
+    public const PACKAGE = 'viserio.view';
 
     /**
      * {@inheritdoc}

@@ -16,7 +16,7 @@ interface Kernel
      *
      * @var string
      */
-    const REQUEST = 'kernel.request';
+    public const REQUEST = 'kernel.request';
 
     /**
      * The EXCEPTION event occurs when an uncaught exception appears.
@@ -26,7 +26,7 @@ interface Kernel
      *
      * @var string
      */
-    const EXCEPTION = 'kernel.exception';
+    public const EXCEPTION = 'kernel.exception';
 
     /**
      * The RESPONSE event occurs once a response was created for
@@ -37,7 +37,7 @@ interface Kernel
      *
      * @var string
      */
-    const RESPONSE = 'kernel.response';
+    public const RESPONSE = 'kernel.response';
 
     /**
      * The FINISH_REQUEST event occurs when a response was generated for a request.
@@ -47,7 +47,7 @@ interface Kernel
      *
      * @var string
      */
-    const FINISH_REQUEST = 'kernel.finish_request';
+    public const FINISH_REQUEST = 'kernel.finish_request';
 
     /**
      * Handle an incoming HTTP request.

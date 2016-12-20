@@ -17,7 +17,7 @@ class UploadedFile implements UploadedFileInterface
      *
      * @var int[]
      */
-    const ERRORS = [
+    public const ERRORS = [
         UPLOAD_ERR_OK,
         UPLOAD_ERR_INI_SIZE,
         UPLOAD_ERR_FORM_SIZE,
@@ -252,13 +252,13 @@ class UploadedFile implements UploadedFileInterface
      */
     private function setError($error)
     {
-        if (! is_int($error)) {
+        if (!is_int($error)) {
             throw new InvalidArgumentException(
                 'Upload file error status must be an integer'
             );
         }
 
-        if (! in_array($error, self::ERRORS)) {
+        if (!in_array($error, self::ERRORS)) {
             throw new InvalidArgumentException(
                 'Invalid error status for UploadedFile'
             );

@@ -35,7 +35,7 @@ class HyphenatedInputResolver implements ParameterResolver
             $normalizedName = mb_strtolower(str_replace('-', '', $name));
 
             // Skip parameters that do not exist with the normalized name
-            if (! array_key_exists($normalizedName, $parameters)) {
+            if (!array_key_exists($normalizedName, $parameters)) {
                 continue;
             }
 

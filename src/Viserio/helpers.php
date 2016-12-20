@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 use Viserio\Support\Env;
 
-if (! function_exists('env')) {
+if (!function_exists('env')) {
     /**
      * Gets the value of an environment variable. Supports boolean, empty and null.
      *

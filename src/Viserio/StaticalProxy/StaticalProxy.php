@@ -34,7 +34,7 @@ class StaticalProxy
     {
         $instance = static::getStaticalProxyRoot();
 
-        if (! $instance) {
+        if (!$instance) {
             throw new RuntimeException('A statical proxy root has not been set.');
         }
 

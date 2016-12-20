@@ -234,7 +234,7 @@ class Profile
      */
     public function getCollector($name)
     {
-        if (! isset($this->collectors[$name])) {
+        if (!isset($this->collectors[$name])) {
             throw new InvalidArgumentException(sprintf('Collector "%s" does not exist.', $name));
         }
 

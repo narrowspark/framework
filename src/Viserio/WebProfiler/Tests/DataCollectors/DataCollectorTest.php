@@ -20,7 +20,7 @@ class DataCollectorTest extends \PHPUnit_Framework_TestCase
 
     public function testCreateTable()
     {
-        $collector = new FixtureDataCollector();
+        $collector    = new FixtureDataCollector();
         $defaultTable = file_get_contents(__DIR__ . '/../Fixture/View/default_table.html');
 
         $this->assertSame(

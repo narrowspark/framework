@@ -18,7 +18,7 @@ class MigrationsServiceProvider implements ServiceProvider
 {
     use ServiceProviderConfigAwareTrait;
 
-    const PACKAGE = 'viserio.database';
+    public const PACKAGE = 'viserio.database';
 
     /**
      * {@inheritdoc}

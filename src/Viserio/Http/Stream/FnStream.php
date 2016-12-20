@@ -18,7 +18,7 @@ class FnStream implements StreamInterface
      *
      * @var array
      */
-    const SLOTS = ['__toString', 'close', 'detach', 'rewind',
+    public const SLOTS = ['__toString', 'close', 'detach', 'rewind',
         'getSize', 'tell', 'eof', 'isSeekable', 'seek', 'isWritable', 'write',
         'isReadable', 'read', 'getContents', 'getMetadata', ];
 

@@ -9,7 +9,7 @@ class FtpConnectorTest extends \PHPUnit_Framework_TestCase
 {
     public function testConnect()
     {
-        if (! defined('FTP_BINARY')) {
+        if (!defined('FTP_BINARY')) {
             $this->markTestSkipped('The FTP_BINARY constant is not defined');
         }
 

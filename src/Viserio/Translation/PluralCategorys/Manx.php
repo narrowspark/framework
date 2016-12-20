@@ -30,7 +30,7 @@ class Manx implements CategoryContract
         $count = $this->normalizeInteger($count);
 
         if (
-            ! is_float($count) &&
+            !is_float($count) &&
             (
                 in_array($count % 10, [1, 2], true) ||
                 ($count % 20 === 0)

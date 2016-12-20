@@ -120,7 +120,7 @@ class TranslationManager implements TranslationManagerContract
      */
     public function addDirectory(string $directory): TranslationManager
     {
-        if (! in_array($directory, $this->directories)) {
+        if (!in_array($directory, $this->directories)) {
             $this->directories[] = self::normalizeDirectorySeparator($directory);
         }
 
@@ -143,7 +143,7 @@ class TranslationManager implements TranslationManagerContract
 
         $langFile = $loader->load($file);
 
-        if (! isset($langFile['lang'])) {
+        if (!isset($langFile['lang'])) {
             throw new RuntimeException(sprintf('File [%s] cant be imported. Key for language is missing.', $file));
         }
 

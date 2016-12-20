@@ -242,7 +242,7 @@ class ViewFinder implements FinderContract
             throw new InvalidArgumentException(sprintf('View [%s] has an invalid name.', $name));
         }
 
-        if (! isset($this->hints[$segments[0]])) {
+        if (!isset($this->hints[$segments[0]])) {
             throw new InvalidArgumentException(sprintf('No hint path defined for [%s].', $segments[0]));
         }
 

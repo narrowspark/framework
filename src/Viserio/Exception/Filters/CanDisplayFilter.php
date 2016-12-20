@@ -19,7 +19,7 @@ class CanDisplayFilter implements FilterContract
         int $code
     ): array {
         foreach ($displayers as $index => $displayer) {
-            if (! $displayer->canDisplay($original, $transformed, $code)) {
+            if (!$displayer->canDisplay($original, $transformed, $code)) {
                 unset($displayers[$index]);
             }
         }

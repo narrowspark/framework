@@ -37,7 +37,7 @@ trait LoggerAwareTrait
      */
     public function getLogger(): PsrLoggerInterface
     {
-        if (! $this->logger) {
+        if (!$this->logger) {
             throw new RuntimeException('Logger is not set up.');
         }
 

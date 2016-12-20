@@ -9,7 +9,7 @@ use Viserio\Contracts\Encryption\Encrypter as EncrypterContract;
 
 interface Store extends JsonSerializable
 {
-    const METADATA_NAMESPACE = '__metadata__';
+    public const METADATA_NAMESPACE = '__metadata__';
 
     /**
      * Starts the session storage.

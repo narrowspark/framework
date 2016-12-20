@@ -48,7 +48,7 @@ class HtmlResponse extends Response
             return $html;
         }
 
-        if (! is_string($html)) {
+        if (!is_string($html)) {
             throw new InvalidArgumentException(sprintf(
                 'Invalid content (%s) provided to %s',
                 (is_object($html) ? get_class($html) : gettype($html)),

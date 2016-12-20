@@ -35,11 +35,11 @@ class Polish implements CategoryContract
 
         if ($count === 1) {
             return 0;
-        } elseif (! is_float($count) &&
+        } elseif (!is_float($count) &&
             $i10 >= 2 &&
             $i10 <= 4 &&
-            ! ($i >= 12 && $i <= 14) &&
-            ! ($i >= 22 && $i <= 24)
+            !($i >= 12 && $i <= 14) &&
+            !($i >= 22 && $i <= 24)
         ) {
             return 1;
         }

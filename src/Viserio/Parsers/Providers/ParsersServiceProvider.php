@@ -14,7 +14,7 @@ class ParsersServiceProvider implements ServiceProvider
 {
     use ServiceProviderConfigAwareTrait;
 
-    const PACKAGE = 'viserio.parsers';
+    public const PACKAGE = 'viserio.parsers';
 
     /**
      * {@inheritdoc}

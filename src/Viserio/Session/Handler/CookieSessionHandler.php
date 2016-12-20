@@ -65,7 +65,7 @@ class CookieSessionHandler implements SessionHandlerInterface
     {
         $cookies = $this->request->getCookieParams();
 
-        if (! is_null($decoded = json_decode($cookies, true)) && is_array($decoded)) {
+        if (!is_null($decoded = json_decode($cookies, true)) && is_array($decoded)) {
             if (isset($decoded[$sessionId])) {
                 $data = $decoded[$sessionId];
 

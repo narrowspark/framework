@@ -14,7 +14,7 @@ use Viserio\Routing\UrlGenerator;
 
 class RoutingServiceProvider implements ServiceProvider
 {
-    const PACKAGE = 'viserio.routing';
+    public const PACKAGE = 'viserio.routing';
 
     /**
      * {@inheritdoc}

@@ -15,7 +15,7 @@ class LoggerServiceProvider implements ServiceProvider
 {
     use ServiceProviderConfigAwareTrait;
 
-    const PACKAGE = 'viserio.log';
+    public const PACKAGE = 'viserio.log';
 
     /**
      * {@inheritdoc}

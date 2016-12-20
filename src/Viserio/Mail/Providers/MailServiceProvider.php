@@ -19,7 +19,7 @@ class MailServiceProvider implements ServiceProvider
 {
     use ServiceProviderConfigAwareTrait;
 
-    const PACKAGE = 'viserio.mail';
+    public const PACKAGE = 'viserio.mail';
 
     /**
      * {@inheritdoc}

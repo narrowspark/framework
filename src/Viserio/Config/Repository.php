@@ -66,7 +66,7 @@ class Repository implements RepositoryContract, IteratorAggregate
      */
     public function get(string $key, $default = null)
     {
-        if (! $this->offsetExists($key)) {
+        if (!$this->offsetExists($key)) {
             return $default;
         }
 

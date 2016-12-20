@@ -65,7 +65,7 @@ class SparkPost extends AbstractTransport
             ],
         ];
 
-        if (! empty($this->options)) {
+        if (!empty($this->options)) {
             $options['json']['options'] = $this->options;
         }
 

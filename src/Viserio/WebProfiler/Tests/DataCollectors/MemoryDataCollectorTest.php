@@ -3,10 +3,10 @@ declare(strict_types=1);
 namespace Viserio\WebProfiler\Tests\DataCollectors;
 
 use Mockery as Mock;
-use Viserio\WebProfiler\DataCollectors\MemoryDataCollector;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Viserio\WebProfiler\DataCollectors\MemoryDataCollector;
 
 class MemoryDataCollectorTest extends \PHPUnit_Framework_TestCase
 {

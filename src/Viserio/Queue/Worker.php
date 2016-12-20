@@ -254,7 +254,7 @@ class Worker implements WorkerContract
         }
 
         foreach (explode(',', $queue) as $queue) {
-            if (! is_null($job = $connection->pop($queue))) {
+            if (!is_null($job = $connection->pop($queue))) {
                 return $job;
             }
         }
@@ -404,7 +404,7 @@ class Worker implements WorkerContract
                 );
             }
         } finally {
-            if (! $job->isDeleted()) {
+            if (!$job->isDeleted()) {
                 $job->release($delay);
             }
         }

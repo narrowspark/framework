@@ -72,7 +72,7 @@ class Util
         $buffer = '';
 
         if ($maxLen === -1) {
-            while (! $stream->eof()) {
+            while (!$stream->eof()) {
                 $buf = $stream->read(1048576);
                 // Using a loose equality here to match on '' and false.
                 if ($buf == null) {
@@ -86,7 +86,7 @@ class Util
 
         $len = 0;
 
-        while (! $stream->eof() && $len < $maxLen) {
+        while (!$stream->eof() && $len < $maxLen) {
             $buf = $stream->read($maxLen - $len);
             // Using a loose equality here to match on '' and false.
             if ($buf == null) {
@@ -117,8 +117,8 @@ class Util
         int $maxLen = -1
     ) {
         if ($maxLen === -1) {
-            while (! $source->eof()) {
-                if (! $dest->write($source->read(1048576))) {
+            while (!$source->eof()) {
+                if (!$dest->write($source->read(1048576))) {
                     break;
                 }
             }
@@ -129,19 +129,19 @@ class Util
         $bufferSize = 8192;
 
         if ($maxLen === -1) {
-            while (! $source->eof()) {
-                if (! $dest->write($source->read($bufferSize))) {
+            while (!$source->eof()) {
+                if (!$dest->write($source->read($bufferSize))) {
                     break;
                 }
             }
         } else {
             $remaining = $maxLen;
 
-            while ($remaining > 0 && ! $source->eof()) {
+            while ($remaining > 0 && !$source->eof()) {
                 $buf = $source->read(min($bufferSize, $remaining));
                 $len = mb_strlen($buf);
 
-                if (! $len) {
+                if (!$len) {
                     break;
                 }
 

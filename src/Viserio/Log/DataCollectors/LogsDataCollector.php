@@ -37,7 +37,7 @@ class LogsDataCollector extends AbstractDataCollector implements
     public function collect(ServerRequestInterface $serverRequest, ResponseInterface $response)
     {
         $this->data = [
-            'logs' => $this->getLogsFiles(),
+            'logs'    => $this->getLogsFiles(),
             'counted' => count($this->getLogsFiles()),
         ];
     }

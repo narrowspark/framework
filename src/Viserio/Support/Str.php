@@ -94,7 +94,7 @@ class Str
     {
         preg_match('/^\s*+(?:\S++\s*+){1,' . $words . '}/u', $value, $matches);
 
-        if (! isset($matches[0]) || mb_strlen($value) === mb_strlen($matches[0])) {
+        if (!isset($matches[0]) || mb_strlen($value) === mb_strlen($matches[0])) {
             return $value;
         }
 
@@ -155,7 +155,7 @@ class Str
             return static::$snakeCache[$key][$delimiter];
         }
 
-        if (! ctype_lower($value)) {
+        if (!ctype_lower($value)) {
             $value = self::normalizeScreamingCase($value);
             $value = trim($value);
             $value = (string) static::toLowerCase(preg_replace('/(.)(?=[A-Z0-9])/u', '$1' . $delimiter, $value));

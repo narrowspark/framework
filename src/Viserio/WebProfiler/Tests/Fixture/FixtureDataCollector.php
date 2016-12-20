@@ -2,9 +2,9 @@
 declare(strict_types=1);
 namespace Viserio\WebProfiler\Tests\Fixture;
 
-use Viserio\WebProfiler\DataCollectors\AbstractDataCollector;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Viserio\WebProfiler\DataCollectors\AbstractDataCollector;
 
 class FixtureDataCollector extends AbstractDataCollector
 {
@@ -33,12 +33,12 @@ class FixtureDataCollector extends AbstractDataCollector
             'test' => [
                 [
                     'class' => 'test',
-                    'value' => 'test'
+                    'value' => 'test',
                 ],
                 [
                     'class' => 'test2',
-                    'value' => 'test2'
-                ]
+                    'value' => 'test2',
+                ],
             ],
         ]);
     }
@@ -56,7 +56,7 @@ class FixtureDataCollector extends AbstractDataCollector
     public function getDropdownMenuContent()
     {
         return $this->createDropdownMenuContent([
-            'dropdown' => 'content'
+            'dropdown' => 'content',
         ]);
     }
 }

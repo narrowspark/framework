@@ -65,7 +65,7 @@ class UrlGenerator implements UrlGeneratorContract
      */
     public function route(string $name, array $parameters = [], bool $absolute = true): string
     {
-        if (! is_null($route = $this->routes->getByName($name))) {
+        if (!is_null($route = $this->routes->getByName($name))) {
             return $this->toRoute($route, $parameters, $absolute);
         }
 

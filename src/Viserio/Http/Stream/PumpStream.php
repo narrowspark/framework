@@ -92,7 +92,7 @@ class PumpStream implements StreamInterface
      */
     public function eof()
     {
-        return ! $this->source;
+        return !$this->source;
     }
 
     /**
@@ -168,7 +168,7 @@ class PumpStream implements StreamInterface
     public function getContents()
     {
         $result = '';
-        while (! $this->eof()) {
+        while (!$this->eof()) {
             $result .= $this->read(1000000);
         }
 
@@ -180,7 +180,7 @@ class PumpStream implements StreamInterface
      */
     public function getMetadata($key = null)
     {
-        if (! $key) {
+        if (!$key) {
             return $this->metadata;
         }
 

@@ -15,7 +15,7 @@ class CacheServiceProvider implements ServiceProvider
 {
     use ServiceProviderConfigAwareTrait;
 
-    const PACKAGE = 'viserio.cache';
+    public const PACKAGE = 'viserio.cache';
 
     /**
      * {@inheritdoc}

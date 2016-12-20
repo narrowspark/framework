@@ -37,10 +37,10 @@ class Maltese implements CategoryContract
             return 0;
         } elseif (
             $count === 0 ||
-            ! is_float($count) && $i >= 2 && $i <= 10
+            !is_float($count) && $i >= 2 && $i <= 10
         ) {
             return 1;
-        } elseif (! is_float($count) && $i >= 11 && $i <= 19) {
+        } elseif (!is_float($count) && $i >= 11 && $i <= 19) {
             return 2;
         }
 

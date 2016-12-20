@@ -282,7 +282,7 @@ class Mailer implements MailerContract
      */
     protected function createView($view, array $data): string
     {
-        if (! is_string($view)) {
+        if (!is_string($view)) {
             return '';
         }
 

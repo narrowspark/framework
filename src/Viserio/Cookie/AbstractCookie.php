@@ -87,7 +87,7 @@ abstract class AbstractCookie implements StringableContract, CookieContract
      */
     public function hasValue(): bool
     {
-        return ! empty($this->value);
+        return !empty($this->value);
     }
 
     /**
@@ -288,7 +288,7 @@ abstract class AbstractCookie implements StringableContract, CookieContract
     public function matchDomain(string $domain): bool
     {
         // Domain is not set or exact match
-        if (! $this->hasDomain() || strcasecmp($domain, $this->getDomain()) === 0) {
+        if (!$this->hasDomain() || strcasecmp($domain, $this->getDomain()) === 0) {
             return true;
         }
 
@@ -309,7 +309,7 @@ abstract class AbstractCookie implements StringableContract, CookieContract
      */
     protected function validateSameSite($sameSite)
     {
-        if (! in_array($sameSite, [self::SAMESITE_STRICT, self::SAMESITE_LAX])) {
+        if (!in_array($sameSite, [self::SAMESITE_STRICT, self::SAMESITE_LAX])) {
             return false;
         }
 
@@ -339,7 +339,7 @@ abstract class AbstractCookie implements StringableContract, CookieContract
             $tsExpires = strtotime($expires);
 
             // if $tsExpires is invalid and PHP is compiled as 32bit. Check if it fail reason is the 2038 bug
-            if (! is_int($tsExpires) && PHP_INT_SIZE === 4) {
+            if (!is_int($tsExpires) && PHP_INT_SIZE === 4) {
                 $dateTime = new DateTime($expires);
 
                 if ($dateTime->format('Y') > 2038) {
@@ -348,7 +348,7 @@ abstract class AbstractCookie implements StringableContract, CookieContract
             }
         }
 
-        if (! is_int($tsExpires) || $tsExpires < 0) {
+        if (!is_int($tsExpires) || $tsExpires < 0) {
             throw new InvalidArgumentException('Invalid expires time specified.');
         }
 
@@ -407,7 +407,7 @@ abstract class AbstractCookie implements StringableContract, CookieContract
         } else {
             $cookieStringParts[] .= $name . urlencode($this->getValue());
 
-            if (! is_null($this->getExpiresTime())) {
+            if (!is_null($this->getExpiresTime())) {
                 $cookieStringParts[] .= 'Expires=' . (new Chronos(gmdate('D, d-M-Y H:i:s', $this->getExpiresTime())))->toCookieString();
             }
         }

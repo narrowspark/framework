@@ -11,11 +11,11 @@ class LogParser
     /**
      * The max size of a log file.
      */
-    const MAX_FILE_SIZE = 52428800;
+    public const MAX_FILE_SIZE = 52428800;
 
-    const REGEX_DATE_PATTERN = '\b\d{4}\-\d{1,2}\-\d{1,2}\b';
+    public const REGEX_DATE_PATTERN = '\b\d{4}\-\d{1,2}\-\d{1,2}\b';
 
-    const REGEX_TIME_PATTERN = '\d{1,2}\:\d{1,2}\:\d{1,2}\b';
+    public const REGEX_TIME_PATTERN = '\d{1,2}\:\d{1,2}\:\d{1,2}\b';
 
     /**
      * Parsed data.
@@ -43,7 +43,7 @@ class LogParser
         $log = $this->parseRawData($raw);
 
         // @codeCoverageIgnoreStart
-        if (! is_array($log)) {
+        if (!is_array($log)) {
             return [];
         }
         // @codeCoverageIgnoreEnd

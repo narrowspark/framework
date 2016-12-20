@@ -26,7 +26,7 @@ class LoadConfiguration extends AbstractLoadFiles implements BootstrapContract
 
         // Next we will spin through all of the configuration files in the configuration
         // directory and load each one into the config manager.
-        if (! $loadedFromCache) {
+        if (!$loadedFromCache) {
             $this->loadConfigurationFiles($app, $config);
         }
 

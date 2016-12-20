@@ -100,7 +100,7 @@ class ServerRequestFactory implements ServerRequestFactoryInterface
     protected function normalizeServer(array $server): array
     {
         // This seems to be the only way to get the Authorization header on Apache
-        if (! function_exists('apache_request_headers') ||
+        if (!function_exists('apache_request_headers') ||
             isset($server['HTTP_AUTHORIZATION'])
         ) {
             return $server;
@@ -134,11 +134,11 @@ class ServerRequestFactory implements ServerRequestFactoryInterface
      */
     protected function marshalProtocolVersion(array $server): string
     {
-        if (! isset($server['SERVER_PROTOCOL'])) {
+        if (!isset($server['SERVER_PROTOCOL'])) {
             return '1.1';
         }
 
-        if (! preg_match('#^(HTTP/)?(?P<version>[1-9]\d*(?:\.\d)?)$#', $server['SERVER_PROTOCOL'], $matches)) {
+        if (!preg_match('#^(HTTP/)?(?P<version>[1-9]\d*(?:\.\d)?)$#', $server['SERVER_PROTOCOL'], $matches)) {
             throw new UnexpectedValueException(sprintf(
                 'Unrecognized protocol version (%s)',
                 $server['SERVER_PROTOCOL']
@@ -168,7 +168,7 @@ class ServerRequestFactory implements ServerRequestFactoryInterface
             if (mb_substr($key, 0, 5) === 'HTTP_') {
                 $key = mb_substr($key, 5);
 
-                if (! isset($content[$key]) || ! isset($server[$key])) {
+                if (!isset($content[$key]) || !isset($server[$key])) {
                     $key           = str_replace(' ', '-', ucwords(mb_strtolower(str_replace('_', ' ', $key))));
                     $headers[$key] = $value;
                 }
@@ -177,7 +177,7 @@ class ServerRequestFactory implements ServerRequestFactoryInterface
             }
         }
 
-        if (! isset($headers['Authorization'])) {
+        if (!isset($headers['Authorization'])) {
             if (isset($server['REDIRECT_HTTP_AUTHORIZATION'])) {
                 $headers['Authorization'] = $server['REDIRECT_HTTP_AUTHORIZATION'];
             } elseif (isset($server['PHP_AUTH_USER'])) {

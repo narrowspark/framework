@@ -129,11 +129,11 @@ class Dispatcher implements DispatcherContract
 
         $this->bindPatterns($eventName);
 
-        if (! isset($this->listeners[$eventName])) {
+        if (!isset($this->listeners[$eventName])) {
             return [];
         }
 
-        if (! isset($this->sorted[$eventName])) {
+        if (!isset($this->sorted[$eventName])) {
             $this->sortListeners($eventName);
         }
 
@@ -156,7 +156,7 @@ class Dispatcher implements DispatcherContract
             return true;
         }
 
-        if (! $this->hasListeners($eventName)) {
+        if (!$this->hasListeners($eventName)) {
             return false;
         }
 
@@ -284,7 +284,7 @@ class Dispatcher implements DispatcherContract
      */
     protected function removeListenerPattern(string $eventPattern, $listener)
     {
-        if (! isset($this->patterns[$eventPattern])) {
+        if (!isset($this->patterns[$eventPattern])) {
             return;
         }
 

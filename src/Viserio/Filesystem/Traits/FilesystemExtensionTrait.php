@@ -60,7 +60,7 @@ trait FilesystemExtensionTrait
         $actualExtension = null;
         $extension       = ltrim($extension, '.');
 
-        if (count($explode) >= 2 && ! is_dir($path)) {
+        if (count($explode) >= 2 && !is_dir($path)) {
             $actualExtension = mb_strtolower($extension);
         }
 

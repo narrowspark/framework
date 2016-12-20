@@ -91,7 +91,7 @@ abstract class AbstractMessage implements MessageInterface
      */
     public function getHeader($header): array
     {
-        if (! $this->hasHeader($header)) {
+        if (!$this->hasHeader($header)) {
             return [];
         }
 
@@ -168,7 +168,7 @@ abstract class AbstractMessage implements MessageInterface
     {
         $normalized = mb_strtolower($header);
 
-        if (! isset($this->headerNames[$normalized])) {
+        if (!isset($this->headerNames[$normalized])) {
             return $this;
         }
 
@@ -185,7 +185,7 @@ abstract class AbstractMessage implements MessageInterface
      */
     public function getBody(): StreamInterface
     {
-        if (! $this->stream) {
+        if (!$this->stream) {
             $this->stream = new Stream(fopen('php://temp', 'r+'));
         }
 
@@ -221,7 +221,7 @@ abstract class AbstractMessage implements MessageInterface
         $this->headerNames = $this->headers = [];
 
         foreach ($headers as $header => $value) {
-            if (! is_array($value)) {
+            if (!is_array($value)) {
                 $value = [$value];
             }
 
@@ -286,7 +286,7 @@ abstract class AbstractMessage implements MessageInterface
             ));
         }
 
-        if (! isset(self::$validProtocolVersions[$version])) {
+        if (!isset(self::$validProtocolVersions[$version])) {
             throw new InvalidArgumentException(
                 'Invalid HTTP version. Must be one of: '
                 . implode(', ', array_keys(self::$validProtocolVersions))
@@ -308,7 +308,7 @@ abstract class AbstractMessage implements MessageInterface
             $value = [$value];
         }
 
-        if (! $this->arrayContainsOnlyStrings($value)) {
+        if (!$this->arrayContainsOnlyStrings($value)) {
             throw new InvalidArgumentException(
                 'Invalid header value; must be a string or array of strings'
             );
@@ -333,7 +333,7 @@ abstract class AbstractMessage implements MessageInterface
     {
         // Test if a value is a string.
         $filterStringValue = function (bool $carry, $item) {
-            if (! is_string($item)) {
+            if (!is_string($item)) {
                 return false;
             }
 
@@ -367,7 +367,7 @@ abstract class AbstractMessage implements MessageInterface
     private function filterHeaderValue(array $values): array
     {
         $values = array_filter($values, function ($value) {
-            return ! is_null($value);
+            return !is_null($value);
         });
 
         return array_map([HeaderSecurity::class, 'filter'], array_values($values));

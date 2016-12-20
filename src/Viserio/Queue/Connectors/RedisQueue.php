@@ -80,7 +80,7 @@ class RedisQueue extends AbstractQueue
 
         $this->migrateExpiredJobs($queue . ':delayed', $queue);
 
-        if (! is_null($this->expire)) {
+        if (!is_null($this->expire)) {
             $this->migrateExpiredJobs($queue . ':reserved', $queue);
         }
 

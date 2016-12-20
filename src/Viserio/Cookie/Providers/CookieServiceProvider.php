@@ -12,7 +12,7 @@ class CookieServiceProvider implements ServiceProvider
 {
     use ServiceProviderConfigAwareTrait;
 
-    const PACKAGE = 'viserio.cookie';
+    public const PACKAGE = 'viserio.cookie';
 
     /**
      * {@inheritdoc}

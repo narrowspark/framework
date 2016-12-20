@@ -283,7 +283,7 @@ class Router extends AbstractRouteDispatcher implements RouterContract
      */
     public function getLastGroupSuffix(): string
     {
-        if (! empty($this->groupStack)) {
+        if (!empty($this->groupStack)) {
             $last = end($this->groupStack);
 
             return $last['suffix'] ?? '';
@@ -297,7 +297,7 @@ class Router extends AbstractRouteDispatcher implements RouterContract
      */
     public function getLastGroupPrefix(): string
     {
-        if (! empty($this->groupStack)) {
+        if (!empty($this->groupStack)) {
             $last = end($this->groupStack);
 
             return isset($last['prefix']) ? $last['prefix'] : '';
@@ -311,7 +311,7 @@ class Router extends AbstractRouteDispatcher implements RouterContract
      */
     public function hasGroupStack(): bool
     {
-        return ! empty($this->groupStack);
+        return !empty($this->groupStack);
     }
 
     /**
@@ -453,7 +453,7 @@ class Router extends AbstractRouteDispatcher implements RouterContract
             $action = ['uses' => $action];
         }
 
-        if (! empty($this->groupStack)) {
+        if (!empty($this->groupStack)) {
             $action['uses'] = $this->prependGroupUses($action['uses']);
         }
 
@@ -487,7 +487,7 @@ class Router extends AbstractRouteDispatcher implements RouterContract
     {
         $trimed = trim($this->getLastGroupPrefix(), '/') . '/' . trim($uri, '/');
 
-        if (! $trimed) {
+        if (!$trimed) {
             return '/';
         } elseif (mb_substr($trimed, 0, 1) === '/') {
             return $trimed;
@@ -576,7 +576,7 @@ class Router extends AbstractRouteDispatcher implements RouterContract
      */
     protected function updateGroupStack(array $attributes)
     {
-        if (! empty($this->groupStack)) {
+        if (!empty($this->groupStack)) {
             $attributes = $this->mergeGroup($attributes, end($this->groupStack));
         }
 

@@ -4,15 +4,15 @@ namespace Viserio\Contracts\Container;
 
 interface Types
 {
-    const PLAIN = 0;
+    public const PLAIN = 0;
 
-    const SERVICE = 1;
+    public const SERVICE = 1;
 
-    const SINGLETON = 2;
+    public const SINGLETON = 2;
 
-    const VALUE = 0;
+    public const VALUE = 0;
 
-    const IS_RESOLVED = 1;
+    public const IS_RESOLVED = 1;
 
-    const BINDING_TYPE = 2;
+    public const BINDING_TYPE = 2;
 }

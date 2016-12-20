@@ -15,7 +15,7 @@ class Stream implements StreamInterface
      *
      * This is octal as per header stat.h
      */
-    const FSTAT_MODE_S_IFIFO = 0010000;
+    public const FSTAT_MODE_S_IFIFO = 0010000;
 
     /**
      * Resource modes.
@@ -24,14 +24,14 @@ class Stream implements StreamInterface
      *
      * @link http://php.net/manual/function.fopen.php
      */
-    const READABLE_MODES = [
+    public const READABLE_MODES = [
         'r'   => true, 'w+' => true, 'r+' => true, 'x+' => true, 'c+' => true,
         'rb'  => true, 'w+b' => true, 'r+b' => true, 'x+b' => true,
         'c+b' => true, 'rt' => true, 'w+t' => true, 'r+t' => true,
         'x+t' => true, 'c+t' => true, 'a+' => true,
     ];
 
-    const WRITABLE_MODES = [
+    public const WRITABLE_MODES = [
         'w'   => true, 'w+' => true, 'rw' => true, 'r+' => true, 'x+' => true,
         'c+'  => true, 'wb' => true, 'w+b' => true, 'r+b' => true,
         'x+b' => true, 'c+b' => true, 'w+t' => true, 'r+t' => true,
@@ -101,7 +101,7 @@ class Stream implements StreamInterface
      */
     public function __construct($stream, array $options = [])
     {
-        if (! is_resource($stream) || get_resource_type($stream) !== 'stream') {
+        if (!is_resource($stream) || get_resource_type($stream) !== 'stream') {
             throw new InvalidArgumentException(
                 'Invalid stream provided; must be a string stream identifier or stream resource'
             );
@@ -190,8 +190,8 @@ class Stream implements StreamInterface
      */
     public function detach()
     {
-        if (! isset($this->stream)) {
-            return null;
+        if (!isset($this->stream)) {
+            return;
         }
 
         $result = $this->stream;
@@ -213,8 +213,8 @@ class Stream implements StreamInterface
             return $this->size;
         }
 
-        if (! isset($this->stream)) {
-            return null;
+        if (!isset($this->stream)) {
+            return;
         }
 
         // Clear the stat cache if the stream has a URI
@@ -260,7 +260,7 @@ class Stream implements StreamInterface
      */
     public function eof(): bool
     {
-        return ! $this->stream || feof($this->stream);
+        return !$this->stream || feof($this->stream);
     }
 
     /**
@@ -290,7 +290,7 @@ class Stream implements StreamInterface
      */
     public function seek($offset, $whence = SEEK_SET)
     {
-        if (! $this->seekable) {
+        if (!$this->seekable) {
             throw new RuntimeException('Stream is not seekable');
         } elseif (fseek($this->stream, $offset, $whence) === -1) {
             throw new RuntimeException(
@@ -305,7 +305,7 @@ class Stream implements StreamInterface
      */
     public function read($length): string
     {
-        if (! $this->readable) {
+        if (!$this->readable) {
             throw new RuntimeException('Cannot read from non-readable stream');
         }
 
@@ -331,7 +331,7 @@ class Stream implements StreamInterface
      */
     public function write($string): int
     {
-        if (! $this->writable) {
+        if (!$this->writable) {
             throw new RuntimeException('Cannot write to a non-writable stream');
         }
 
@@ -351,9 +351,9 @@ class Stream implements StreamInterface
      */
     public function getMetadata($key = null)
     {
-        if (! isset($this->stream)) {
+        if (!isset($this->stream)) {
             return $key ? null : [];
-        } elseif (! $key) {
+        } elseif (!$key) {
             return $this->meta + stream_get_meta_data($this->stream);
         } elseif (isset($this->meta[$key])) {
             return $this->meta[$key];

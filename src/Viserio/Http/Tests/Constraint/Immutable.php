@@ -36,7 +36,7 @@ class Immutable extends \PHPUnit_Framework_Constraint
 
     protected function matches($other)
     {
-        if (! ($other instanceof $this->new)) {
+        if (!($other instanceof $this->new)) {
             return false;
         }
 

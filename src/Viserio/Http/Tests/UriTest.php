@@ -8,7 +8,7 @@ use Viserio\Http\Uri;
 
 class UriTest extends \PHPUnit_Framework_TestCase
 {
-    const RFC3986_BASE = 'http://a/b/c/d;p?q';
+    public const RFC3986_BASE = 'http://a/b/c/d;p?q';
 
     public function createDefaultUri()
     {

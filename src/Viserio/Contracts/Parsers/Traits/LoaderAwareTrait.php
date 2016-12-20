@@ -37,7 +37,7 @@ trait LoaderAwareTrait
      */
     public function getLoader(): LoaderContract
     {
-        if (! $this->loader) {
+        if (!$this->loader) {
             throw new RuntimeException('Loader is not set up.');
         }
 

@@ -43,7 +43,7 @@ class PhpInputStreamTest extends \PHPUnit_Framework_TestCase
     {
         $body = '';
 
-        while (! $this->stream->eof()) {
+        while (!$this->stream->eof()) {
             $body .= $this->stream->read(128);
         }
 

@@ -79,7 +79,7 @@ class FileLoader implements LoaderContract
      */
     public function addDirectory(string $directory): LoaderContract
     {
-        if (! in_array($directory, $this->directories)) {
+        if (!in_array($directory, $this->directories)) {
             $this->directories[] = self::normalizeDirectorySeparator($directory);
         }
 

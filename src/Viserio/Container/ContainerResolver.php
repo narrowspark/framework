@@ -58,7 +58,7 @@ class ContainerResolver
     {
         $reflectionClass = new ReflectionClass($class);
 
-        if (! $reflectionClass->isInstantiable()) {
+        if (!$reflectionClass->isInstantiable()) {
             throw new BindingResolutionException(
                 sprintf(
                     'Unable to reflect on the class [%s], does the class exist and is it properly autoloaded?',
@@ -243,7 +243,7 @@ class ContainerResolver
      */
     protected function isMethod($value): bool
     {
-        return is_callable($value) && ! $this->isFunction($value);
+        return is_callable($value) && !$this->isFunction($value);
     }
 
     /**
@@ -269,7 +269,7 @@ class ContainerResolver
     private function mergeParameters(array $rootParameters, array $parameters = []): array
     {
         foreach ($parameters as $key => $value) {
-            if (! isset($rootParameters[$key]) && is_int($key)) {
+            if (!isset($rootParameters[$key]) && is_int($key)) {
                 $rootParameters[$key] = $value;
             }
         }

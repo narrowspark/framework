@@ -80,7 +80,7 @@ class Application extends SymfonyConsole implements ApplicationContract
         string $version,
         string $name = 'Cerebro'
     ) {
-        if (! defined('CEREBRO_BINARY')) {
+        if (!defined('CEREBRO_BINARY')) {
             define('CEREBRO_BINARY', 'cerebro');
         }
 
@@ -314,7 +314,7 @@ class Application extends SymfonyConsole implements ApplicationContract
      */
     protected function getInvoker(): Invoker
     {
-        if (! $this->invoker) {
+        if (!$this->invoker) {
             $this->invoker = (new Invoker())
                 ->injectByTypeHint(true)
                 ->injectByParameterName(true)

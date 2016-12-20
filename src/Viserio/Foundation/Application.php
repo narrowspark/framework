@@ -25,7 +25,7 @@ class Application extends Container implements ApplicationContract
      *
      * @var string
      */
-    const VERSION = '1.0.0';
+    public const VERSION = '1.0.0';
 
     /**
      * The environment file to load during bootstrapping.

@@ -12,7 +12,7 @@ class TranslationCollectorServiceProvider implements ServiceProvider
 {
     use ServiceProviderConfigAwareTrait;
 
-    const PACKAGE = 'webprofiler.translation';
+    public const PACKAGE = 'webprofiler.translation';
 
     /**
      * {@inheritdoc}

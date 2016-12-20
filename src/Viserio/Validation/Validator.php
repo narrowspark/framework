@@ -102,7 +102,7 @@ class Validator implements ValidatorContract
      */
     public function fails(): bool
     {
-        return ! empty($this->failedRules);
+        return !empty($this->failedRules);
     }
 
     /**

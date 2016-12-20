@@ -9,5 +9,5 @@ interface TaggableParser
      *
      * @var string
      */
-    const TAG_DELIMITER = '::';
+    public const TAG_DELIMITER = '::';
 }

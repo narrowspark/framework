@@ -235,7 +235,7 @@ class AssetsRenderer implements RenderableContract
         // finds assets provided by collectors
         foreach ($this->webprofiler->getCollectors() as $collector) {
             if ($collector instanceof AssetAwareContract &&
-                ! in_array($collector->getName(), $this->ignoredCollectors)
+                !in_array($collector->getName(), $this->ignoredCollectors)
             ) {
                 $additionalAssets[] = $collector->getAssets();
             }

@@ -63,7 +63,7 @@ class Request extends AbstractMessage implements RequestInterface
         $this->setHeaders($headers);
         $this->protocol = $version;
 
-        if (! $this->hasHeader('Host')) {
+        if (!$this->hasHeader('Host')) {
             $this->updateHostFromUri();
         }
 
@@ -152,7 +152,7 @@ class Request extends AbstractMessage implements RequestInterface
         $new      = clone $this;
         $new->uri = $uri;
 
-        if (! $preserveHost) {
+        if (!$preserveHost) {
             $new->updateHostFromUri();
         }
 
@@ -205,7 +205,7 @@ class Request extends AbstractMessage implements RequestInterface
 
         $method = mb_strtoupper($method);
 
-        if (! isset(static::$validMethods[$method])) {
+        if (!isset(static::$validMethods[$method])) {
             throw new InvalidArgumentException(sprintf(
                 'Unsupported HTTP method "%s".',
                 $method

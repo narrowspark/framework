@@ -17,7 +17,7 @@ class TranslationServiceProvider implements ServiceProvider
 {
     use ServiceProviderConfigAwareTrait;
 
-    const PACKAGE = 'viserio.translation';
+    public const PACKAGE = 'viserio.translation';
 
     /**
      * {@inheritdoc}

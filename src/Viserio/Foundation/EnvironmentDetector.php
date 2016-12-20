@@ -62,7 +62,7 @@ class EnvironmentDetector implements EnvironmentContract
      */
     public function isPHP(): bool
     {
-        return ! $this->isHHVM();
+        return !$this->isHHVM();
     }
 
     /**

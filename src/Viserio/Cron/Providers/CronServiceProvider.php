@@ -15,7 +15,7 @@ class CronServiceProvider implements ServiceProvider
 {
     use ServiceProviderConfigAwareTrait;
 
-    const PACKAGE = 'viserio.cron';
+    public const PACKAGE = 'viserio.cron';
 
     /**
      * {@inheritdoc}

@@ -37,7 +37,7 @@ trait EncrypterAwareTrait
      */
     public function getEncrypter(): EncrypterContract
     {
-        if (! $this->encrypter) {
+        if (!$this->encrypter) {
             throw new RuntimeException('Encrypter is not set up.');
         }
 

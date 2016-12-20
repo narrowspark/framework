@@ -90,7 +90,7 @@ class PumpStreamTest extends \PHPUnit_Framework_TestCase
         $resource = new ArrayIterator(['foo', 'bar', '123']);
 
         $stream = new PumpStream(function () use ($resource) {
-            if (! $resource->valid()) {
+            if (!$resource->valid()) {
                 return false;
             }
 

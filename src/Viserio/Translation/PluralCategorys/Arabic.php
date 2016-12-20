@@ -39,9 +39,9 @@ class Arabic implements CategoryContract
             return 1;
         } elseif ($count === 2) {
             return 2;
-        } elseif (! is_float($count) && ($i = $count % 100) >= 3 && $i <= 10) {
+        } elseif (!is_float($count) && ($i = $count % 100) >= 3 && $i <= 10) {
             return 3;
-        } elseif (! is_float($count) && ($i = $count % 100) >= 11 && $i <= 99) {
+        } elseif (!is_float($count) && ($i = $count % 100) >= 11 && $i <= 99) {
             return 4;
         }
 

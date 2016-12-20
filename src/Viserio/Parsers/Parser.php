@@ -95,7 +95,7 @@ class Parser implements ParserContract
      */
     public function parse(string $payload): array
     {
-        if (! $payload) {
+        if (!$payload) {
             return [];
         }
 

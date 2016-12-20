@@ -7,9 +7,9 @@ use Narrowspark\TestingHelper\Middleware\DelegateMiddleware;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use Viserio\HttpFactory\ResponseFactory;
 use Viserio\HttpFactory\ServerRequestFactory;
-use Viserio\WebProfiler\WebProfiler;
-use Viserio\WebProfiler\Middleware\WebProfilerMiddleware;
 use Viserio\WebProfiler\AssetsRenderer;
+use Viserio\WebProfiler\Middleware\WebProfilerMiddleware;
+use Viserio\WebProfiler\WebProfiler;
 
 class WebProfilerMiddlewareTest extends \PHPUnit_Framework_TestCase
 {

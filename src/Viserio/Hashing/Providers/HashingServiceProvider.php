@@ -12,7 +12,7 @@ class HashingServiceProvider implements ServiceProvider
 {
     use ServiceProviderConfigAwareTrait;
 
-    const PACKAGE = 'viserio.hashing';
+    public const PACKAGE = 'viserio.hashing';
 
     /**
      * {@inheritdoc}

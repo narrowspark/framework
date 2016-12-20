@@ -41,7 +41,7 @@ class RouteTreeBuilder
                 $segmentMatcher        = $this->getMatcher(array_shift($segments), $parameterIndexNameMap);
                 $firstSegmentHash      = $segmentMatcher->getHash();
 
-                if (! isset($groupNodes[$firstSegmentHash])) {
+                if (!isset($groupNodes[$firstSegmentHash])) {
                     $groupNodes[$firstSegmentHash] = new RouteTreeNode(
                         [0 => $segmentMatcher],
                         $segmentDepth === 1 ? new MatchedRouteDataMap() : new ChildrenNodeCollection()

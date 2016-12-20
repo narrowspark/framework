@@ -14,7 +14,7 @@ interface Terminable
      *
      * @var string
      */
-    const TERMINATE = 'kernel.terminate';
+    public const TERMINATE = 'kernel.terminate';
 
     /**
      * Terminates a request/response cycle.

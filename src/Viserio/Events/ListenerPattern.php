@@ -110,7 +110,7 @@ class ListenerPattern
      */
     public function getListener()
     {
-        if (! isset($this->listener) && isset($this->provider)) {
+        if (!isset($this->listener) && isset($this->provider)) {
             $this->listener = $this->provider;
             $this->provider = null;
         }

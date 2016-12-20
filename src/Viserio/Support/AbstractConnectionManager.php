@@ -61,7 +61,7 @@ abstract class AbstractConnectionManager
     {
         $name = $name ?? $this->getDefaultConnection();
 
-        if (! isset($this->connections[$name])) {
+        if (!isset($this->connections[$name])) {
             $this->connections[$name] = $this->createConnection(
                 $this->getConnectionConfig($name)
             );

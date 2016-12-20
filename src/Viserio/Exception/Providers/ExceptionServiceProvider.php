@@ -24,7 +24,7 @@ class ExceptionServiceProvider implements ServiceProvider
 {
     use ServiceProviderConfigAwareTrait;
 
-    const PACKAGE = 'viserio.exception';
+    public const PACKAGE = 'viserio.exception';
 
     /**
      * {@inheritdoc}

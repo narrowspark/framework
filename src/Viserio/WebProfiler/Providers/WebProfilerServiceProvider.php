@@ -23,7 +23,7 @@ class WebProfilerServiceProvider implements ServiceProvider
 {
     use ServiceProviderConfigAwareTrait;
 
-    const PACKAGE = 'viserio.webprofiler';
+    public const PACKAGE = 'viserio.webprofiler';
 
     /**
      * {@inheritdoc}

@@ -59,11 +59,11 @@ class TimeDataCollector extends AbstractDataCollector implements MenuAwareContra
         }
 
         $this->data = [
-            'start' => $this->requestStartTime,
-            'end' => $this->requestEndTime,
-            'duration' => $this->getRequestDuration(),
+            'start'        => $this->requestStartTime,
+            'end'          => $this->requestEndTime,
+            'duration'     => $this->getRequestDuration(),
             'duration_str' => $this->formatDuration($this->getRequestDuration()),
-            'measures' => array_values($this->measures)
+            'measures'     => array_values($this->measures),
         ];
     }
 
@@ -147,7 +147,7 @@ class TimeDataCollector extends AbstractDataCollector implements MenuAwareContra
     {
         $end = microtime(true);
 
-        if (! $this->hasStartedMeasure($name)) {
+        if (!$this->hasStartedMeasure($name)) {
             throw new RuntimeException(sprintf(
                 'Failed stopping measure "%s" because it hasn\'t been started',
                 $name

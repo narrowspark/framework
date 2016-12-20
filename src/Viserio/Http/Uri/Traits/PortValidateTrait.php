@@ -36,7 +36,7 @@ trait PortValidateTrait
      */
     protected function isNonStandardPort(string $scheme, ?int $port): bool
     {
-        return ! isset($this->allowedSchemes[$scheme]) || $this->allowedSchemes[$scheme] !== $port;
+        return !isset($this->allowedSchemes[$scheme]) || $this->allowedSchemes[$scheme] !== $port;
     }
 
     /**
@@ -55,7 +55,7 @@ trait PortValidateTrait
         }
 
         if ($port === null || $port === '') {
-            return null;
+            return;
         }
 
         $res = filter_var($port, FILTER_VALIDATE_INT, ['options' => [
@@ -63,7 +63,7 @@ trait PortValidateTrait
             'max_range' => 65535,
         ]]);
 
-        if (! $res) {
+        if (!$res) {
             throw new InvalidArgumentException(
                 sprintf('Invalid port: %d. Must be between 1 and 65535', $port)
             );

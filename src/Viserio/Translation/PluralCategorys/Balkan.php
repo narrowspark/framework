@@ -38,11 +38,11 @@ class Balkan implements CategoryContract
         $count = $this->normalizeInteger($count);
         $i     = 0;
 
-        if (! is_float($count) && $count % 10 === 1 && $count % 100 !== 11) {
+        if (!is_float($count) && $count % 10 === 1 && $count % 100 !== 11) {
             return 0;
-        } elseif (! is_float($count) && ($i = $count % 10) >= 2 && $i <= 4 && ! (($i = $count % 100) >= 12 && $i <= 14)) {
+        } elseif (!is_float($count) && ($i = $count % 10) >= 2 && $i <= 4 && !(($i = $count % 100) >= 12 && $i <= 14)) {
             return 1;
-        } elseif (! is_float($count) && ($i = $count % 10) === 0 || ($i >= 5 && $i <= 9) || (($i = $count % 100) >= 11 && $i <= 14)) {
+        } elseif (!is_float($count) && ($i = $count % 10) === 0 || ($i >= 5 && $i <= 9) || (($i = $count % 100) >= 11 && $i <= 14)) {
             return 2;
         }
 

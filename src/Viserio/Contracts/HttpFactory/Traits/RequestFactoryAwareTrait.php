@@ -37,7 +37,7 @@ trait RequestFactoryAwareTrait
      */
     public function getRequestFactory(): RequestFactoryInterface
     {
-        if (! $this->requestFactory) {
+        if (!$this->requestFactory) {
             throw new RuntimeException('Instance implementing \Interop\Http\Factory\RequestFactoryInterface is not set up.');
         }
 

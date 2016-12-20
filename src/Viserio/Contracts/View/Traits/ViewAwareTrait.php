@@ -37,7 +37,7 @@ trait ViewAwareTrait
      */
     public function getViewFactory(): ViewFactoryContract
     {
-        if (! $this->views) {
+        if (!$this->views) {
             throw new RuntimeException('View factory is not set up.');
         }
 

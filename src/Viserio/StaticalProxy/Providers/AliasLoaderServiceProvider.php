@@ -12,7 +12,7 @@ class AliasLoaderServiceProvider implements ServiceProvider
 {
     use ServiceProviderConfigAwareTrait;
 
-    const PACKAGE = 'viserio.staticalproxy';
+    public const PACKAGE = 'viserio.staticalproxy';
 
     /**
      * {@inheritdoc}

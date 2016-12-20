@@ -11,7 +11,7 @@ interface Finder
      *
      * @var string
      */
-    const HINT_PATH_DELIMITER = '::';
+    public const HINT_PATH_DELIMITER = '::';
 
     /**
      * Get the fully qualified location of the view.

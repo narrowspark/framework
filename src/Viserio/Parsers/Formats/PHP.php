@@ -13,7 +13,7 @@ class PHP implements FormatContract, DumperContract
      */
     public function parse(string $payload): array
     {
-        if (! file_exists($payload)) {
+        if (!file_exists($payload)) {
             throw new ParseException([
                 'message' => 'File not found.',
             ]);

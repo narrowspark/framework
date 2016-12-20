@@ -57,7 +57,7 @@ class FilesystemManager extends AbstractConnectionManager
     {
         $name = $name ?? $this->getDefaultConnection();
 
-        if (! isset($this->connections[$name])) {
+        if (!isset($this->connections[$name])) {
             $config = $this->getConnectionConfig($name);
 
             $this->connections[$name] = [
@@ -107,7 +107,7 @@ class FilesystemManager extends AbstractConnectionManager
     {
         $cache = $this->config->get($this->getConfigName() . '.cached');
 
-        if (! is_array($config = Arr::get($cache, $name)) && ! $config) {
+        if (!is_array($config = Arr::get($cache, $name)) && !$config) {
             throw new InvalidArgumentException(sprintf('Cache [%s] not configured.', $name));
         }
 

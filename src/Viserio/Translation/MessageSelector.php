@@ -47,7 +47,7 @@ class MessageSelector implements MessageSelectorContract
         $standardRules = $this->getStandardRules($parts);
 
         // try to match an explicit rule, then fallback to the standard ones
-        if (! empty($explicitRules)) {
+        if (!empty($explicitRules)) {
             foreach ($explicitRules as $interval => $string) {
                 if ($this->intervalTest($number, $interval)) {
                     return $string;
@@ -57,7 +57,7 @@ class MessageSelector implements MessageSelectorContract
 
         $position = $this->pluralization->get($number, $locale);
 
-        if (! isset($standardRules[$position])) {
+        if (!isset($standardRules[$position])) {
             // when there's exactly one rule given, and that rule is a standard
             // rule, use this rule
             if (count($parts) === 1 && isset($standardRules[0])) {
@@ -121,7 +121,7 @@ class MessageSelector implements MessageSelectorContract
 
             if (preg_match('/^\w+\:\s*(.*?)$/', $part, $matches)) {
                 $standardRules[] = $matches[1];
-            } elseif (! preg_match(
+            } elseif (!preg_match(
                 '/^(?P<interval>' . $this->getIntervalRegexp() . ')\s*(?P<message>.*?)$/x',
                 $part
             )) {

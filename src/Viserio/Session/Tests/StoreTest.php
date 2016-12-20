@@ -16,7 +16,7 @@ class StoreTest extends \PHPUnit_Framework_TestCase
 {
     use MockeryTrait;
 
-    const SESSION_ID = 'cfdddff0a844531c4a985eae2806a8c761b754df';
+    public const SESSION_ID = 'cfdddff0a844531c4a985eae2806a8c761b754df';
 
     private $encrypter;
     private $encryptString;

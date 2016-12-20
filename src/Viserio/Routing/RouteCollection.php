@@ -60,7 +60,7 @@ class RouteCollection implements RouteCollectionContract
      */
     public function hasNamedRoute(string $name): bool
     {
-        return ! is_null($this->getByName($name));
+        return !is_null($this->getByName($name));
     }
 
     /**

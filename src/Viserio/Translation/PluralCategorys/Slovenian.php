@@ -31,12 +31,12 @@ class Slovenian implements CategoryContract
     {
         $count = $this->normalizeInteger($count);
 
-        if (! is_float($count) && $count % 100 === 1) {
+        if (!is_float($count) && $count % 100 === 1) {
             return 0;
-        } elseif (! is_float($count) && $count % 100 === 2) {
+        } elseif (!is_float($count) && $count % 100 === 2) {
             return 1;
         } elseif (
-            (! is_float($count) &&
+            (!is_float($count) &&
             ($i = $count % 100) >= 3 && $i <= 4)
         ) {
             return 2;
