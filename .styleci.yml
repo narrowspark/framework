@@ -35,6 +35,7 @@ enabled:
   - protected_to_private
   - random_api_migration
   - return_type_declaration
+  - not_operator_with_successor_space
 
 disabled:
   - blank_line_after_opening_tag
@@ -43,6 +44,7 @@ disabled:
   - concat_without_spaces
   - print_to_echo
   - single_blank_line_before_namespace
+  - simplified_null_return
 
 finder:
   exclude:
