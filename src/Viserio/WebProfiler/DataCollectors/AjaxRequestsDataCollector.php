@@ -61,7 +61,7 @@ class AjaxRequestsDataCollector extends AbstractDataCollector implements AssetAw
     {
         return [
             'css' => __DIR__ . '/Resources/css/ajax-requests.css',
-            'js' => __DIR__ . '/Resources/js/ajaxHandler.js',
+            'js'  => __DIR__ . '/Resources/js/ajaxHandler.js',
         ];
     }
 }
