@@ -35,17 +35,17 @@ class TransportManager extends AbstractManager
      *
      * @return array
      */
-    public function getDriverConfig(string $name): array
-    {
-        $name = $name ?? $this->getDefaultDriver();
+    // public function getDriverConfig(string $name): array
+    // {
+    //     $name = $name ?? $this->getDefaultDriver();
 
-        $drivers = $this->config->get($this->getConfigName(), []);
+    //     $drivers = $this->config->get($this->getConfigName(), []);
 
-        $config         = $drivers;
-        $config['name'] = $name;
+    //     $config         = $drivers;
+    //     $config['name'] = $name;
 
-        return $config;
-    }
+    //     return $config;
+    // }
 
     /**
      * Create an instance of the Log Swift Transport driver.
