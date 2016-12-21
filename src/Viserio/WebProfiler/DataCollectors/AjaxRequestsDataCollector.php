@@ -4,9 +4,9 @@ namespace Viserio\WebProfiler\DataCollectors;
 
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Viserio\Contracts\WebProfiler\AssetAware as AssetAwareContract;
 use Viserio\Contracts\WebProfiler\MenuAware as MenuAwareContract;
 use Viserio\Contracts\WebProfiler\TooltipAware as TooltipAwareContract;
-use Viserio\Contracts\WebProfiler\AssetAware as AssetAwareContract;
 
 class AjaxRequestsDataCollector extends AbstractDataCollector implements AssetAwareContract, TooltipAwareContract, MenuAwareContract
 {
@@ -15,7 +15,6 @@ class AjaxRequestsDataCollector extends AbstractDataCollector implements AssetAw
      */
     public function collect(ServerRequestInterface $serverRequest, ResponseInterface $response)
     {
-
     }
 
     /**
@@ -30,7 +29,7 @@ class AjaxRequestsDataCollector extends AbstractDataCollector implements AssetAw
         ];
     }
 
-     /**
+    /**
      * {@inheritdoc}
      */
     public function getTooltip(): string
