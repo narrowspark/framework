@@ -13,6 +13,7 @@ interface Log extends PsrLoggerInterface
      * @param string      $level
      * @param object|null $processor
      * @param object|null $formatter
+     *
      * @return void
      */
     public function useFiles(
@@ -30,6 +31,7 @@ interface Log extends PsrLoggerInterface
      * @param string      $level
      * @param object|null $processor
      * @param object|null $formatter
+     *
      * @return void
      */
     public function useDailyFiles(
