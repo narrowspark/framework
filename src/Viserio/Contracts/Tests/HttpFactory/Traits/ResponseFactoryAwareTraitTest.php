@@ -15,7 +15,7 @@ class ResponseFactoryAwareTraitTest extends \PHPUnit_Framework_TestCase
     {
         $this->setResponseFactory($this->mock(ResponseFactoryInterface::class));
 
-        $this->assertInstanceOf(ResponseFactoryInterface::class, $this->getResponseFactory());
+        static::assertInstanceOf(ResponseFactoryInterface::class, $this->getResponseFactory());
     }
 
     /**

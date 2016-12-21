@@ -15,7 +15,7 @@ class ServerRequestFactoryAwareTraitTest extends \PHPUnit_Framework_TestCase
     {
         $this->setServerRequest($this->mock(ServerRequestInterface::class));
 
-        $this->assertInstanceOf(ServerRequestInterface::class, $this->getServerRequest());
+        static::assertInstanceOf(ServerRequestInterface::class, $this->getServerRequest());
     }
 
     /**

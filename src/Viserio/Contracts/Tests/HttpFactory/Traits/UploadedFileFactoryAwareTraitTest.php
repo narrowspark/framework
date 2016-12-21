@@ -15,7 +15,7 @@ class UploadedFileFactoryAwareTraitTest extends \PHPUnit_Framework_TestCase
     {
         $this->setUploadedFactory($this->mock(UploadedFactoryInterface::class));
 
-        $this->assertInstanceOf(UploadedFactoryInterface::class, $this->getUploadedFactory());
+        static::assertInstanceOf(UploadedFactoryInterface::class, $this->getUploadedFactory());
     }
 
     /**

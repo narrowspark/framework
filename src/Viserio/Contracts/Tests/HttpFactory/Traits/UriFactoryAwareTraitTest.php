@@ -15,7 +15,7 @@ class UriFactoryAwareTraitTest extends \PHPUnit_Framework_TestCase
     {
         $this->setUriFactory($this->mock(UriFactoryInterface::class));
 
-        $this->assertInstanceOf(UriFactoryInterface::class, $this->getUriFactory());
+        static::assertInstanceOf(UriFactoryInterface::class, $this->getUriFactory());
     }
 
     /**

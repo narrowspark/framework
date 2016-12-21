@@ -32,7 +32,7 @@ class MemoryDataCollectorTest extends \PHPUnit_Framework_TestCase
 
         $data = $collect->getData();
 
-        $this->assertSame(
+        static::assertSame(
             [
                 'icon' => '<svg fill="#FFFFFF" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
     <path d="M0 0h24v24H0z" fill="none"/>
@@ -57,7 +57,7 @@ class MemoryDataCollectorTest extends \PHPUnit_Framework_TestCase
         $collect->updateMemoryUsage();
         $data = $collect->getData();
 
-        $this->assertSame(
+        static::assertSame(
             '<div class="webprofiler-menu-tooltip-group"><div class="webprofiler-menu-tooltip-group-piece"><b>Peak memory usage</b><span>' . $data['memory'] / 1024 / 1024 . ' MB</span></div><div class="webprofiler-menu-tooltip-group-piece"><b>PHP memory limit</b><span>Unlimited MB</span></div></div>',
             $collect->getTooltip()
         );

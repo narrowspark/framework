@@ -37,7 +37,7 @@ class WebProfilerMiddlewareTest extends \PHPUnit_Framework_TestCase
             return (new ResponseFactory())->createResponse(200);
         }));
 
-        $this->assertSame(
+        static::assertSame(
             $this->removeId(file_get_contents(__DIR__ . '/../Fixture/View/profiler.html')),
             $this->removeId((string) $response->getBody())
         );

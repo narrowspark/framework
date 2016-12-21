@@ -15,7 +15,7 @@ class RequestFactoryAwareTraitTest extends \PHPUnit_Framework_TestCase
     {
         $this->setRequestFactory($this->mock(RequestFactoryInterface::class));
 
-        $this->assertInstanceOf(RequestFactoryInterface::class, $this->getRequestFactory());
+        static::assertInstanceOf(RequestFactoryInterface::class, $this->getRequestFactory());
     }
 
     /**

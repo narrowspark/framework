@@ -15,7 +15,7 @@ class StreamFactoryAwareTraitTest extends \PHPUnit_Framework_TestCase
     {
         $this->setStreamFactory($this->mock(StreamFactoryInterface::class));
 
-        $this->assertInstanceOf(StreamFactoryInterface::class, $this->getStreamFactory());
+        static::assertInstanceOf(StreamFactoryInterface::class, $this->getStreamFactory());
     }
 
     /**
