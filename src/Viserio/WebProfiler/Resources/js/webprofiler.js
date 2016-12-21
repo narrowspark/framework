@@ -1,4 +1,19 @@
-Zepto(function($) {
+if (typeof(WebProfiler) == 'undefined') {
+    // namespace
+    var WebProfiler = {};
+
+    WebProfiler.$ = Zepto;
+}
+
+(function($) {
+    if (typeof(localStorage) == 'undefined') {
+        // provide mock localStorage object for dumb browsers
+        localStorage = {
+            setItem: function(key, value) {},
+            getItem: function(key) { return null; }
+        };
+    }
+
     var openPanel = false;
     var panelBodyClass = '.webprofiler .webprofiler-body';
     var panelClass = panelBodyClass + ' .webprofiler-panel';
@@ -114,4 +129,4 @@ Zepto(function($) {
 
         $(panelClass + ' #' + content.val()).addClass('active');
     });
-});
+})(WebProfiler.$);
