@@ -18,7 +18,7 @@ class ViserioCacheDataCollector extends AbstractDataCollector implements
     /**
      * Create a new cache data collector.
      *
-     * @param string $cache
+     * @param CacheItemPoolInterface $cache
      */
     public function __construct(CacheItemPoolInterface $cache)
     {

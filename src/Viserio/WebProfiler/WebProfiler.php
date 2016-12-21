@@ -377,7 +377,7 @@ class WebProfiler implements WebProfilerContract
      * @param string $method
      * @param string $url
      * @param int    $statusCode
-     * @param string $time
+     * @param double $time
      * @param string $date
      * @param array  $collectors
      *
