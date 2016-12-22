@@ -10,21 +10,29 @@ use Viserio\Contracts\WebProfiler\MenuAware as MenuAwareContract;
 class TimeDataCollector extends AbstractDataCollector implements MenuAwareContract
 {
     /**
+     * The request start time.
+     *
      * @var float
      */
     protected $requestStartTime;
 
     /**
+     * The request end time.
+     *
      * @var float
      */
     protected $requestEndTime;
 
     /**
+     * Collection of started measures.
+     *
      * @var array
      */
     protected $startedMeasures = [];
 
     /**
+     * Collection of measures.
+     *
      * @var array
      */
     protected $measures = [];
@@ -166,6 +174,37 @@ class TimeDataCollector extends AbstractDataCollector implements MenuAwareContra
     }
 
     /**
+     * Adds a measure.
+     *
+     * @param string $label
+     * @param float $start
+     * @param float $end
+     * @param array $params
+     * @param string|null $collector
+     *
+     * @return void
+     */
+    public function addMeasure(
+        string $label,
+        float $start,
+        float $end,
+        array $params = [],
+        ?string $collector = null
+    ): void {
+        $this->measures[] = [
+            'label' => $label,
+            'start' => $start,
+            'relative_start' => $start - $this->requestStartTime,
+            'end' => $end,
+            'relative_end' => $end - $this->requestEndTime,
+            'duration' => $end - $start,
+            'duration_str' => $this->formatDuration($end - $start),
+            'params' => $params,
+            'collector' => $collector
+        ];
+    }
+
+    /**
      * Returns an array of all measures.
      *
      * @return array
@@ -179,6 +218,8 @@ class TimeDataCollector extends AbstractDataCollector implements MenuAwareContra
      * Returns the request start time.
      *
      * @return float
+     *
+     * @codeCoverageIgnore
      */
     public function getRequestStartTime(): float
     {
@@ -189,6 +230,8 @@ class TimeDataCollector extends AbstractDataCollector implements MenuAwareContra
      * Returns the request end time.
      *
      * @return float
+     *
+     * @codeCoverageIgnore
      */
     public function getRequestEndTime(): float
     {

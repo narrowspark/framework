@@ -96,9 +96,11 @@ class NarrowsparkDataCollector extends PhpInfoCollector implements
             'PHP SAPI' => php_sapi_name(),
         ]);
 
+        $version = Application::VERSION;
+
         $tooltip .= $this->createTooltipGroup([
-            'Resources' => '',
-            'Help'      => '',
+            'Resources' => '<a href="//narrowspark.de/doc/' . $version . '/">Read Narrowspark Doc\'s ' . $version . '</a>',
+            'Help'      => '<a href="//narrowspark.de/support">Narrowspark Support Channels</a>',
         ]);
 
         return $tooltip;

@@ -10,6 +10,7 @@ use Viserio\HttpFactory\ServerRequestFactory;
 use Viserio\WebProfiler\AssetsRenderer;
 use Viserio\WebProfiler\Middleware\WebProfilerMiddleware;
 use Viserio\WebProfiler\WebProfiler;
+use Viserio\WebProfiler\TemplateManager;
 
 class WebProfilerMiddlewareTest extends \PHPUnit_Framework_TestCase
 {
@@ -27,9 +28,18 @@ class WebProfilerMiddlewareTest extends \PHPUnit_Framework_TestCase
 
     public function testProcess()
     {
-        $profiler = new WebProfiler(new AssetsRenderer());
+        $assets = new AssetsRenderer();
+        $profiler = new WebProfiler($assets);
         $profiler->enable();
         $middleware = new WebProfilerMiddleware($profiler);
+        $template = new TemplateManager(
+            [],
+            $profiler->getTemplate(),
+            $assets->getIcons()
+        );
+        $template->setToken('12213435415');
+
+        $renderedContent = $assets->render() . $template->render();
 
         $request = (new ServerRequestFactory())->createServerRequest($_SERVER);
 
@@ -37,8 +47,8 @@ class WebProfilerMiddlewareTest extends \PHPUnit_Framework_TestCase
             return (new ResponseFactory())->createResponse(200);
         }));
 
-        static::assertSame(
-            $this->removeId(file_get_contents(__DIR__ . '/../Fixture/View/profiler.html')),
+        static::assertEquals(
+            $this->removeId($renderedContent),
             $this->removeId((string) $response->getBody())
         );
     }

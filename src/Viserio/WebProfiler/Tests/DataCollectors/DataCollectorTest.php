@@ -13,12 +13,12 @@ class DataCollectorTest extends \PHPUnit_Framework_TestCase
         static::assertSame('fixture-data-collector', $collector->getName());
     }
 
-    public function testGetMenuPosition($value='')
+    public function testGetMenuPosition()
     {
         static::assertSame('left', (new FixtureDataCollector())->getMenuPosition());
     }
 
-    public function testCreateTable()
+    public function testCreateTableDefault()
     {
         $collector    = new FixtureDataCollector();
         $defaultTable = file_get_contents(__DIR__ . '/../Fixture/View/default_table.html');
@@ -26,6 +26,17 @@ class DataCollectorTest extends \PHPUnit_Framework_TestCase
         static::assertSame(
             $this->removeSymfonyVarDumper($defaultTable),
             $this->removeSymfonyVarDumper($collector->getTableDefault())
+        );
+    }
+
+    public function testCreateTableArray()
+    {
+        $collector    = new FixtureDataCollector();
+        $defaultTable = file_get_contents(__DIR__ . '/../Fixture/View/array_table.html');
+
+        static::assertSame(
+            $this->removeSymfonyVarDumper($defaultTable),
+            $this->removeSymfonyVarDumper($collector->getTableArray())
         );
     }
 

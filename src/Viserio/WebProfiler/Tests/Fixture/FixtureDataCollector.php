@@ -20,6 +20,11 @@ class FixtureDataCollector extends AbstractDataCollector
         return $this->createTable(['test key' => 'test value'], 'test');
     }
 
+    public function getTableArray()
+    {
+        return $this->createTable([['test key' => 'test value']], 'array');
+    }
+
     public function getTooltippGroupDefault()
     {
         return $this->createTooltipGroup([
