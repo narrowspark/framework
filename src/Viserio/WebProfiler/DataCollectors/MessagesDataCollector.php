@@ -4,8 +4,8 @@ namespace Viserio\WebProfiler\DataCollectors;
 
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Viserio\WebProfiler\Util\TemplateHelper;
 use Viserio\Contracts\WebProfiler\MenuAware as MenuAwareContract;
+use Viserio\WebProfiler\Util\TemplateHelper;
 
 class MessagesDataCollector extends AbstractDataCollector implements MenuAwareContract
 {
@@ -42,7 +42,7 @@ class MessagesDataCollector extends AbstractDataCollector implements MenuAwareCo
 
         $this->data = [
             'count'    => count($messages),
-            'messages' => $messages
+            'messages' => $messages,
         ];
     }
 
@@ -69,14 +69,14 @@ class MessagesDataCollector extends AbstractDataCollector implements MenuAwareCo
      */
     public function addMessage($message, string $label = 'info'): void
     {
-        if (!is_string($message)) {
+        if (! is_string($message)) {
             $message = TemplateHelper::dump($message);
         }
 
         $this->messages[] = [
             'message' => $message,
             'label'   => $label,
-            'time'    => microtime(true)
+            'time'    => microtime(true),
         ];
     }
 

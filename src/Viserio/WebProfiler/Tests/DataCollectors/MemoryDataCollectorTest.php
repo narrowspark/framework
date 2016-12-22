@@ -34,7 +34,7 @@ class MemoryDataCollectorTest extends \PHPUnit_Framework_TestCase
 
         static::assertSame(
             [
-                'icon' => 'ic_memory_white_24px.svg',
+                'icon'  => 'ic_memory_white_24px.svg',
                 'label' => $data['memory'] / 1024 / 1024,
                 'value' => 'MB',
                 'class' => ($data['memory'] / 1024 / 1024) > 50 ? 'yellow' : '',

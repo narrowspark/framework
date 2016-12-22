@@ -9,8 +9,8 @@ use Viserio\HttpFactory\ResponseFactory;
 use Viserio\HttpFactory\ServerRequestFactory;
 use Viserio\WebProfiler\AssetsRenderer;
 use Viserio\WebProfiler\Middleware\WebProfilerMiddleware;
-use Viserio\WebProfiler\WebProfiler;
 use Viserio\WebProfiler\TemplateManager;
+use Viserio\WebProfiler\WebProfiler;
 
 class WebProfilerMiddlewareTest extends \PHPUnit_Framework_TestCase
 {
@@ -28,11 +28,11 @@ class WebProfilerMiddlewareTest extends \PHPUnit_Framework_TestCase
 
     public function testProcess()
     {
-        $assets = new AssetsRenderer();
+        $assets   = new AssetsRenderer();
         $profiler = new WebProfiler($assets);
         $profiler->enable();
         $middleware = new WebProfilerMiddleware($profiler);
-        $template = new TemplateManager(
+        $template   = new TemplateManager(
             [],
             $profiler->getTemplate(),
             $assets->getIcons()

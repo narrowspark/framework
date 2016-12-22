@@ -8,7 +8,8 @@ use Viserio\Contracts\WebProfiler\AssetAware as AssetAwareContract;
 use Viserio\Contracts\WebProfiler\MenuAware as MenuAwareContract;
 use Viserio\Contracts\WebProfiler\TooltipAware as TooltipAwareContract;
 
-class AjaxRequestsDataCollector extends AbstractDataCollector implements AssetAwareContract,
+class AjaxRequestsDataCollector extends AbstractDataCollector implements
+    AssetAwareContract,
     TooltipAwareContract,
     MenuAwareContract
 {

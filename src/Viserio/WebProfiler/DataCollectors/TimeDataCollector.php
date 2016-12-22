@@ -176,10 +176,10 @@ class TimeDataCollector extends AbstractDataCollector implements MenuAwareContra
     /**
      * Adds a measure.
      *
-     * @param string $label
-     * @param float $start
-     * @param float $end
-     * @param array $params
+     * @param string      $label
+     * @param float       $start
+     * @param float       $end
+     * @param array       $params
      * @param string|null $collector
      *
      * @return void
@@ -192,15 +192,15 @@ class TimeDataCollector extends AbstractDataCollector implements MenuAwareContra
         ?string $collector = null
     ): void {
         $this->measures[] = [
-            'label' => $label,
-            'start' => $start,
+            'label'          => $label,
+            'start'          => $start,
             'relative_start' => $start - $this->requestStartTime,
-            'end' => $end,
-            'relative_end' => $end - $this->requestEndTime,
-            'duration' => $end - $start,
-            'duration_str' => $this->formatDuration($end - $start),
-            'params' => $params,
-            'collector' => $collector
+            'end'            => $end,
+            'relative_end'   => $end - $this->requestEndTime,
+            'duration'       => $end - $start,
+            'duration_str'   => $this->formatDuration($end - $start),
+            'params'         => $params,
+            'collector'      => $collector,
         ];
     }
 

@@ -25,7 +25,7 @@ class TimeDataCollectorTest extends \PHPUnit_Framework_TestCase
     public function testGetMenuAndPosition()
     {
         $collect = $this->getTimeDataCollector();
-        $data = $collect->getData();
+        $data    = $collect->getData();
 
         static::assertSame('right', $collect->getMenuPosition());
         static::assertSame(
@@ -41,7 +41,7 @@ class TimeDataCollectorTest extends \PHPUnit_Framework_TestCase
     public function testGetRequestDuration()
     {
         $collect = $this->getTimeDataCollector();
-        $data = $collect->getData();
+        $data    = $collect->getData();
 
         static::assertSame($data['duration'], $collect->getRequestDuration());
 
