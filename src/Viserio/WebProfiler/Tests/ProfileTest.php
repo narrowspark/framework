@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\WebProfiler\Tests;
 
-use Viserio\WebProfiler\Profile;
 use Viserio\WebProfiler\DataCollectors\PhpInfoDataCollector;
+use Viserio\WebProfiler\Profile;
 
 class ProfileTest extends \PHPUnit_Framework_TestCase
 {
@@ -83,14 +83,14 @@ class ProfileTest extends \PHPUnit_Framework_TestCase
         $collector = new PhpInfoDataCollector();
 
         $profile->setCollectors([
-            $collector
+            $collector,
         ]);
 
         static::assertInstanceof(PhpInfoDataCollector::class, $profile->getCollector('php-info-data-collector'));
         static::assertTrue($profile->hasCollector('php-info-data-collector'));
         static::assertEquals(
             [
-                'php-info-data-collector' => new PhpInfoDataCollector()
+                'php-info-data-collector' => new PhpInfoDataCollector(),
             ],
             $profile->getCollectors()
         );

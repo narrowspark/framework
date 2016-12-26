@@ -2,21 +2,18 @@
 declare(strict_types=1);
 namespace Viserio\WebProfiler;
 
-use Interop\Http\Factory\StreamFactoryInterface;
 use Psr\Http\Message\MessageInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use RuntimeException;
 use Viserio\Contracts\Cache\Traits\CacheItemPoolAwareTrait;
 use Viserio\Contracts\Events\Traits\EventsAwareTrait;
+use Viserio\Contracts\HttpFactory\Traits\StreamFactoryAwareTrait;
 use Viserio\Contracts\Log\Traits\LoggerAwareTrait;
 use Viserio\Contracts\Routing\UrlGenerator as UrlGeneratorContract;
 use Viserio\Contracts\WebProfiler\DataCollector as DataCollectorContract;
 use Viserio\Contracts\WebProfiler\WebProfiler as WebProfilerContract;
 use Viserio\Support\Http\ClientIp;
-use Viserio\Contracts\HttpFactory\Traits\StreamFactoryAwareTrait;
-use Viserio\HttpFactory\ResponseFactory;
-use Viserio\HttpFactory\ServerRequestFactory;
 
 class WebProfiler implements WebProfilerContract
 {

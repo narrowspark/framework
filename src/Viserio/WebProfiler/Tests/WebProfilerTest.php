@@ -4,14 +4,14 @@ namespace Viserio\WebProfiler\Tests;
 
 use Mockery as Mock;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
-use Viserio\WebProfiler\AssetsRenderer;
-use Viserio\WebProfiler\WebProfiler;
 use Viserio\Contracts\Routing\UrlGenerator as UrlGeneratorContract;
-use Viserio\WebProfiler\DataCollectors\PhpInfoDataCollector;
 use Viserio\HttpFactory\ResponseFactory;
 use Viserio\HttpFactory\ServerRequestFactory;
 use Viserio\HttpFactory\StreamFactory;
+use Viserio\WebProfiler\AssetsRenderer;
+use Viserio\WebProfiler\DataCollectors\PhpInfoDataCollector;
 use Viserio\WebProfiler\TemplateManager;
+use Viserio\WebProfiler\WebProfiler;
 
 class WebProfilerTest extends \PHPUnit_Framework_TestCase
 {
@@ -47,7 +47,7 @@ class WebProfilerTest extends \PHPUnit_Framework_TestCase
 
     public function testAddHasAndGetCollectors()
     {
-        $profiler = $this->getWebProfiler();
+        $profiler  = $this->getWebProfiler();
         $collector = new PhpInfoDataCollector();
 
         $profiler->addCollector($collector);
@@ -68,7 +68,7 @@ class WebProfilerTest extends \PHPUnit_Framework_TestCase
      */
     public function testAddCollectorThrowsException()
     {
-        $profiler = $this->getWebProfiler();
+        $profiler  = $this->getWebProfiler();
         $collector = new PhpInfoDataCollector();
 
         $profiler->addCollector($collector);

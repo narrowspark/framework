@@ -4,9 +4,9 @@ namespace Viserio\WebProfiler\Tests;
 
 use Mockery as Mock;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
-use Viserio\WebProfiler\AssetsRenderer;
-use Viserio\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 use Viserio\Contracts\WebProfiler\WebProfiler as WebProfilerContract;
+use Viserio\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
+use Viserio\WebProfiler\AssetsRenderer;
 use Viserio\WebProfiler\DataCollectors\AjaxRequestsDataCollector;
 
 class AssetsRendererTest extends \PHPUnit_Framework_TestCase
@@ -76,11 +76,11 @@ class AssetsRendererTest extends \PHPUnit_Framework_TestCase
         $cssAssets = [
             __DIR__ . '/css/webprofiler.css',
             __DIR__ . '/css/webprofiler-grid.css',
-            str_replace('Tests' , 'DataCollectors' , __DIR__) . '/../Resources/css/ajax-requests.css',
+            str_replace('Tests', 'DataCollectors', __DIR__) . '/../Resources/css/ajax-requests.css',
         ];
         $jsAssets = [
             __DIR__ . '/js/webprofiler.js',
-            str_replace('Tests' , 'DataCollectors' , __DIR__) . '/../Resources/js/ajaxHandler.js',
+            str_replace('Tests', 'DataCollectors', __DIR__) . '/../Resources/js/ajaxHandler.js',
         ];
 
         static::assertSame([$cssAssets, $jsAssets], $assets->getAssets());

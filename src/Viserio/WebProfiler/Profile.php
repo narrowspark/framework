@@ -64,6 +64,16 @@ class Profile
     private $collectors = [];
 
     /**
+     * Create new WebProfiler profile.
+     *
+     * @param string $token
+     */
+    public function __construct(string $token)
+    {
+        $this->token = $token;
+    }
+
+    /**
      * [__sleep description].
      *
      * @return array
@@ -82,16 +92,6 @@ class Profile
             'statusCode',
             'date',
         ];
-    }
-
-    /**
-     * Create new WebProfiler profile.
-     *
-     * @param string $token
-     */
-    public function __construct(string $token)
-    {
-        $this->token = $token;
     }
 
     /**
