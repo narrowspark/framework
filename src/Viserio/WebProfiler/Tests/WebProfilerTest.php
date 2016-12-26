@@ -91,9 +91,9 @@ class WebProfilerTest extends \PHPUnit_Framework_TestCase
         $template   = new TemplateManager(
             [],
             $profiler->getTemplate(),
+            '12213435415',
             $assets->getIcons()
         );
-        $template->setToken('12213435415');
 
         $renderedContent = $assets->render() . $template->render();
 
@@ -124,9 +124,9 @@ class WebProfilerTest extends \PHPUnit_Framework_TestCase
         $template   = new TemplateManager(
             [],
             $profiler->getTemplate(),
+            '12213435415',
             $assets->getIcons()
         );
-        $template->setToken('12213435415');
 
         $renderedContent = $assets->render() . $template->render();
 

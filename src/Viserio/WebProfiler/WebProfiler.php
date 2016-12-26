@@ -247,16 +247,7 @@ class WebProfiler implements WebProfilerContract
     protected function injectWebProfiler(ResponseInterface $response, string $token): ResponseInterface
     {
         $content = (string) $response->getBody();
-
-        $assets   = $this->getAssetsRenderer();
-        $template = new TemplateManager(
-            $this->collectors,
-            $this->template,
-            $assets->getIcons()
-        );
-        $template->setToken($token);
-
-        $renderedContent = $assets->render() . $template->render();
+        $renderedContent = $this->createTemplate($token);
 
         $pos = mb_strripos($content, '</body>');
 
@@ -274,6 +265,26 @@ class WebProfiler implements WebProfilerContract
         $response->getBody()->write($renderedContent);
 
         return $response;
+    }
+
+    /**
+     * Create template.
+     *
+     * @param string $token
+     *
+     * @return string
+     */
+    private function createTemplate(string $token): string
+    {
+        $assets   = $this->getAssetsRenderer();
+        $template = new TemplateManager(
+            $this->collectors,
+            $this->template,
+            $token,
+            $assets->getIcons()
+        );
+
+        return $assets->render() . $template->render();
     }
 
     /**

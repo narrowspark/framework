@@ -46,36 +46,19 @@ class TemplateManager implements RenderableContract
      *
      * @param array  $collectors
      * @param string $templatePath
+     * @param string $token
      * @param array  $icons
      */
     public function __construct(
         array $collectors,
         string $templatePath,
+        string $token,
         array $icons = []
     ) {
         $this->collectors   = $collectors;
         $this->templatePath = $templatePath;
+        $this->token        = $token;
         $this->icons        = $icons;
-    }
-
-    /**
-     * Sets the token.
-     *
-     * @param string $token The token
-     */
-    public function setToken(string $token): void
-    {
-        $this->token = $token;
-    }
-
-    /**
-     * Gets the token.
-     *
-     * @return string The token
-     */
-    public function getToken(): string
-    {
-        return $this->token;
     }
 
     /**
@@ -89,7 +72,7 @@ class TemplateManager implements RenderableContract
         $data = array_merge(
             $this->getSortedData(),
             [
-                'token' => $this->getToken(),
+                'token' => $this->token,
             ]
         );
 
@@ -114,6 +97,11 @@ class TemplateManager implements RenderableContract
         // @codeCoverageIgnoreEnd
     }
 
+    /**
+     * Sort all datas from collectors.
+     *
+     * @return array
+     */
     public function getSortedData(): array
     {
         $data = [

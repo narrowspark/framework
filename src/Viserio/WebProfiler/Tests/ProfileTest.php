@@ -95,4 +95,14 @@ class ProfileTest extends \PHPUnit_Framework_TestCase
             $profile->getCollectors()
         );
     }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage Collector "dont" does not exist.
+     */
+    public function testGetCollectorTothrowException()
+    {
+        $profile = new Profile('d5adas96');
+        $profile->getCollector('dont');
+    }
 }

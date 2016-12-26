@@ -74,9 +74,9 @@ class Profile
     }
 
     /**
-     * [__sleep description].
-     *
      * @return array
+     *
+     * @codeCoverageIgnore
      */
     public function __sleep()
     {

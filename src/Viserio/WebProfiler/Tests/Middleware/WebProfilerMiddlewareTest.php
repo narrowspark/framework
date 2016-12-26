@@ -37,9 +37,9 @@ class WebProfilerMiddlewareTest extends \PHPUnit_Framework_TestCase
         $template   = new TemplateManager(
             [],
             $profiler->getTemplate(),
+            '12213435415',
             $assets->getIcons()
         );
-        $template->setToken('12213435415');
 
         $renderedContent = $assets->render() . $template->render();
 
@@ -57,6 +57,12 @@ class WebProfilerMiddlewareTest extends \PHPUnit_Framework_TestCase
 
     private function removeId(string $html): string
     {
-        return trim(preg_replace('/="webprofiler-(.*?)"/', '', $html));
+        return trim(
+            str_replace(
+                "\r\n",
+                '',
+                preg_replace('/="webprofiler-(.*?)"/', '', $html)
+            )
+        );
     }
 }
