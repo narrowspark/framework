@@ -242,6 +242,17 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
         self::assertSame($this->application, $whatIsThis);
     }
 
+    public function testItCanRunasASingleCommandApplication()
+    {
+        $this->application->command('run', function (OutputInterface $output) {
+            $output->write('hello');
+        });
+
+        $this->application->setDefaultCommand('run');
+
+        $this->assertOutputIs('', 'hello');
+    }
+
     /**
      * Fixture method.
      *

@@ -96,17 +96,6 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
         self::assertInstanceOf(ContainerConcreteFixture::class, $container->make(ContainerConcreteFixture::class));
     }
 
-    public function testSlashesAreHandled()
-    {
-        $container = new Container();
-
-        $container->bind('\Foo', function () {
-            return 'hello';
-        });
-
-        self::assertEquals('hello', $container->make('Foo'));
-    }
-
     public function testResolveMethod()
     {
         $container = new Container();
@@ -545,32 +534,6 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
 
         self::assertInstanceOf(ContainerImplementationFixture::class, $one->impl);
         self::assertInstanceOf(ContainerImplementationTwoFixture::class, $two->impl);
-    }
-
-    public function testContextualBindingWorksRegardlessOfLeadingBackslash()
-    {
-        $container = new Container();
-        $container->bind(ContainerContractFixtureInterface::class, ContainerImplementationFixture::class);
-
-        $container->when('\Viserio\Container\Tests\Fixture\ContainerTestContextInjectOneFixture')
-            ->needs(ContainerContractFixtureInterface::class)
-            ->give(ContainerImplementationTwoFixture::class);
-        $container->when(ContainerTestContextInjectTwoFixture::class)
-            ->needs('\Viserio\Container\Tests\Fixture\ContainerContractFixtureInterface')
-            ->give(ContainerImplementationTwoFixture::class);
-
-        self::assertInstanceOf(
-            ContainerImplementationTwoFixture::class,
-            $container->make(ContainerTestContextInjectOneFixture::class)->impl
-        );
-        self::assertInstanceOf(
-            ContainerImplementationTwoFixture::class,
-            $container->make(ContainerTestContextInjectTwoFixture::class)->impl
-        );
-        self::assertInstanceOf(
-            ContainerImplementationTwoFixture::class,
-            $container->make('\Viserio\Container\Tests\Fixture\ContainerTestContextInjectTwoFixture')->impl
-        );
     }
 
     /**

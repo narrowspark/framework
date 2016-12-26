@@ -48,8 +48,11 @@ class TemplateManager implements RenderableContract
      * @param string $templatePath
      * @param array  $icons
      */
-    public function __construct(array $collectors, string $templatePath, array $icons = [])
-    {
+    public function __construct(
+        array $collectors,
+        string $templatePath,
+        array $icons = []
+    ) {
         $this->collectors   = $collectors;
         $this->templatePath = $templatePath;
         $this->icons        = $icons;

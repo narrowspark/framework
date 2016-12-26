@@ -64,13 +64,6 @@ class AssetsRenderer implements RenderableContract
     protected $rootPath;
 
     /**
-     * Additional assets form collectors.
-     *
-     * @var array
-     */
-    protected $additionalAssets = [];
-
-    /**
      * List of ignored collectors.
      *
      * @var array
@@ -118,9 +111,11 @@ class AssetsRenderer implements RenderableContract
      *
      * @return $this
      */
-    public function setIcon($name, $path): self
+    public function setIcon(string $name, string $path): self
     {
-        $this->icons[$name] = self::normalizeDirectorySeparator($path . '/' . $name);
+        $this->icons[$name] = self::normalizePath($path . '/' . $name);
+
+        return $this;
     }
 
     /**
@@ -207,11 +202,11 @@ class AssetsRenderer implements RenderableContract
     /**
      * Returns the list of asset files.
      *
-     * @param string|null $type Only return css or js files
+     * @param string $type Only return css or js files
      *
      * @return array
      */
-    public function getAssets(string $type = null): array
+    public function getAssets(string $type = ''): array
     {
         $cssFiles = array_map(
             function ($css) {
@@ -231,7 +226,7 @@ class AssetsRenderer implements RenderableContract
             $this->jsFiles
         );
 
-        $additionalAssets = $this->additionalAssets;
+        $additionalAssets = [];
 
         // finds assets provided by collectors
         foreach ($this->webprofiler->getCollectors() as $collector) {
@@ -271,12 +266,12 @@ class AssetsRenderer implements RenderableContract
     /**
      * Filters a tuple of (css, js) assets according to $type.
      *
-     * @param array       $array
-     * @param string|null $type  'css', 'js' or null for both
+     * @param array  $array
+     * @param string $type  'css', 'js' or null for both
      *
      * @return array
      */
-    protected function filterAssetArray(array $array, string $type = null): array
+    protected function filterAssetArray(array $array, string $type = ''): array
     {
         $type = mb_strtolower($type);
 

@@ -8,9 +8,9 @@ use Viserio\Contracts\WebProfiler\MenuAware as MenuAwareContract;
 use Viserio\Contracts\WebProfiler\TooltipAware as TooltipAwareContract;
 use Viserio\Foundation\Application;
 use Viserio\Support\Env;
-use Viserio\WebProfiler\DataCollectors\PhpInfoCollector;
+use Viserio\WebProfiler\DataCollectors\PhpInfoDataCollector;
 
-class NarrowsparkDataCollector extends PhpInfoCollector implements
+class NarrowsparkDataCollector extends PhpInfoDataCollector implements
     TooltipAwareContract,
     MenuAwareContract
 {
@@ -99,7 +99,7 @@ class NarrowsparkDataCollector extends PhpInfoCollector implements
         $version = Application::VERSION;
 
         $tooltip .= $this->createTooltipGroup([
-            'Resources' => '<a href="//narrowspark.de/doc/' . $version . '/">Read Narrowspark Doc\'s ' . $version . '</a>',
+            'Resources' => '<a href="//narrowspark.de/doc/' . $version . '">Read Narrowspark Doc\'s ' . $version . '</a>',
             'Help'      => '<a href="//narrowspark.de/support">Narrowspark Support Channels</a>',
         ]);
 

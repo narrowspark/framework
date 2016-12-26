@@ -33,8 +33,9 @@
         "viserio/cache"                       : "self.version",
         "viserio/config"                      : "self.version",
         "viserio/container"                   : "self.version",
+        "viserio/events"                      : "self.version",
         "viserio/routing"                     : "self.version",
-        "viserio/events"                      : "self.version"
+        "viserio/http-factory"                : "self.version"
     },
     "autoload": {
         "psr-4": {

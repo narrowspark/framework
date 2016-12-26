@@ -15,49 +15,49 @@ class Profile
     private $token;
 
     /**
-     * [$ip description].
+     * Client ip.
      *
      * @var string
      */
     private $ip;
 
     /**
-     * [$method description].
+     * Request method.
      *
      * @var string
      */
     private $method;
 
     /**
-     * [$url description].
+     * Request url.
      *
      * @var string
      */
     private $url;
 
     /**
-     * [$time description].
+     * Needed time.
      *
      * @var string
      */
     private $time;
 
     /**
-     * [$time description].
+     * Creation date.
      *
      * @var string
      */
     private $date;
 
     /**
-     * [$statusCode description].
+     * Response status code.
      *
      * @var string
      */
     private $statusCode;
 
     /**
-     * [$collectors description].
+     * All collected collectors.
      *
      * @var array
      */
@@ -80,13 +80,26 @@ class Profile
             'url',
             'time',
             'statusCode',
+            'date',
         ];
+    }
+
+    /**
+     * Create new WebProfiler profile.
+     *
+     * @param string $token
+     */
+    public function __construct(string $token)
+    {
+        $this->token = $token;
     }
 
     /**
      * Sets the token.
      *
      * @param string $token The token
+     *
+     * @return void
      */
     public function setToken(string $token): void
     {
@@ -117,6 +130,8 @@ class Profile
      * Sets the IP.
      *
      * @param string $ip
+     *
+     * @return void
      */
     public function setIp(string $ip): void
     {
@@ -134,9 +149,11 @@ class Profile
     }
 
     /**
-     * [setMethod description].
+     * Set the request method.
      *
      * @param string $method
+     *
+     * @return void
      */
     public function setMethod(string $method): void
     {
@@ -144,19 +161,21 @@ class Profile
     }
 
     /**
-     * Returns the URL.
+     * Returns the url.
      *
-     * @return string The URL
+     * @return string
      */
-    public function getUrl()
+    public function getUrl(): string
     {
         return $this->url;
     }
 
     /**
-     * [setUrl description].
+     * Set the request url.
      *
      * @param string $url
+     *
+     * @return void
      */
     public function setUrl(string $url): void
     {
@@ -178,13 +197,15 @@ class Profile
     }
 
     /**
-     * [setTime description].
+     * Set the needed time.
      *
-     * @param float $time
+     * @param float|string $time
+     *
+     * @return void
      */
-    public function setTime(float $time): void
+    public function setTime($time): void
     {
-        $this->time = $time;
+        $this->time = (string) $time;
     }
 
     /**
@@ -198,9 +219,11 @@ class Profile
     }
 
     /**
-     * [setdate description].
+     * Set the creation date.
      *
      * @param string $date
+     *
+     * @return void
      */
     public function setDate(string $date): void
     {
@@ -208,7 +231,11 @@ class Profile
     }
 
     /**
+     * Set the responce status code.
+     *
      * @param int $statusCode
+     *
+     * @return void
      */
     public function setStatusCode(int $statusCode): void
     {
@@ -216,6 +243,8 @@ class Profile
     }
 
     /**
+     * Get the response status code.
+     *
      * @return string
      */
     public function getStatusCode(): string
@@ -232,7 +261,7 @@ class Profile
      *
      * @return \Viserio\Contracts\WebProfiler\DataCollector
      */
-    public function getCollector($name)
+    public function getCollector(string $name): DataCollectorContract
     {
         if (! isset($this->collectors[$name])) {
             throw new InvalidArgumentException(sprintf('Collector "%s" does not exist.', $name));
@@ -255,8 +284,10 @@ class Profile
      * Sets the Collectors associated with this profile.
      *
      * @param \Viserio\Contracts\WebProfiler\DataCollector[] $collectors
+     *
+     * @return void
      */
-    public function setCollectors(array $collectors)
+    public function setCollectors(array $collectors): void
     {
         foreach ($collectors as $collector) {
             $this->addCollector($collector);
@@ -267,8 +298,10 @@ class Profile
      * Adds a Collector.
      *
      * @param \Viserio\Contracts\WebProfiler\DataCollector $collector
+     *
+     * @return void
      */
-    public function addCollector(DataCollectorContract $collector)
+    public function addCollector(DataCollectorContract $collector): void
     {
         $this->collectors[$collector->getName()] = $collector;
     }

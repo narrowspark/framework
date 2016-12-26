@@ -49,7 +49,11 @@ class TimeDataCollectorTest extends \PHPUnit_Framework_TestCase
         $request->shouldReceive('getHeaderLine')
             ->once()
             ->with('REQUEST_TIME_FLOAT')
-            ->andReturn(false);
+            ->andReturn('');
+        $request->shouldReceive('getHeaderLine')
+            ->once()
+            ->with('REQUEST_TIME')
+            ->andReturn('');
         $collect = new TimeDataCollector($request);
 
         static::assertTrue(is_float($collect->getRequestDuration()));
@@ -88,7 +92,7 @@ class TimeDataCollectorTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \RuntimeException
-     * @expectedExceptionMessage Failed stopping measure "dontexist" because it hasn't been started
+     * @expectedExceptionMessage Failed stopping measure "dontexist" because it hasn't been started.
      */
     public function testStopMeasureThrowsException()
     {
@@ -102,7 +106,11 @@ class TimeDataCollectorTest extends \PHPUnit_Framework_TestCase
         $request->shouldReceive('getHeaderLine')
             ->once()
             ->with('REQUEST_TIME_FLOAT')
-            ->andReturn(false);
+            ->andReturn('');
+        $request->shouldReceive('getHeaderLine')
+            ->once()
+            ->with('REQUEST_TIME')
+            ->andReturn('');
         $collect = new TimeDataCollector($request);
         $collect->collect($request, $this->mock(ResponseInterface::class));
 

@@ -15,7 +15,6 @@ use Invoker\ParameterResolver\DefaultValueResolver;
 use Invoker\ParameterResolver\NumericArrayResolver;
 use Invoker\ParameterResolver\ResolverChain;
 use ReflectionClass;
-use Viserio\Container\Traits\NormalizeClassNameTrait;
 use Viserio\Contracts\Container\Container as ContainerContract;
 use Viserio\Contracts\Container\ContextualBindingBuilder as ContextualBindingBuilderContract;
 use Viserio\Contracts\Container\Exceptions\ContainerException;
@@ -25,8 +24,6 @@ use Viserio\Contracts\Container\Types as TypesContract;
 
 class Container extends ContainerResolver implements ArrayAccess, ContainerContract, InvokerInterface, ContextualBindingBuilderContract
 {
-    use NormalizeClassNameTrait;
-
     /**
      * The container's bindings.
      *
@@ -108,8 +105,7 @@ class Container extends ContainerResolver implements ArrayAccess, ContainerContr
      */
     public function bind($abstract, $concrete = null)
     {
-        $abstract = $this->normalize($abstract);
-        $concrete = ($concrete) ? $this->normalize($concrete) : $abstract;
+        $concrete = ($concrete) ? $concrete : $abstract;
 
         if (is_array($abstract)) {
             $this->bindService(key($abstract), $concrete);
@@ -136,8 +132,6 @@ class Container extends ContainerResolver implements ArrayAccess, ContainerContr
      */
     public function instance($abstract, $instance)
     {
-        $abstract = $this->normalize($abstract);
-
         if (is_array($abstract)) {
             $this->bindPlain(key($abstract), $instance);
             $this->alias(key($abstract), current($abstract));
@@ -151,8 +145,7 @@ class Container extends ContainerResolver implements ArrayAccess, ContainerContr
      */
     public function singleton($abstract, $concrete = null)
     {
-        $abstract = $this->normalize($abstract);
-        $concrete = ($concrete) ? $this->normalize($concrete) : $abstract;
+        $concrete = ($concrete) ? $concrete : $abstract;
 
         if (is_array($abstract)) {
             $this->bindSingleton(key($abstract), $concrete);
@@ -167,9 +160,6 @@ class Container extends ContainerResolver implements ArrayAccess, ContainerContr
      */
     public function alias(string $abstract, string $alias)
     {
-        $alias    = $this->normalize($alias);
-        $abstract = $this->normalize($abstract);
-
         $this->bindings[$alias] = &$this->bindings[$abstract];
     }
 
@@ -178,7 +168,7 @@ class Container extends ContainerResolver implements ArrayAccess, ContainerContr
      */
     public function make(string $abstract, array $parameters = [])
     {
-        return $this->resolve($this->normalize($abstract), $parameters);
+        return $this->resolve($abstract, $parameters);
     }
 
     /**
@@ -186,7 +176,7 @@ class Container extends ContainerResolver implements ArrayAccess, ContainerContr
      */
     public function extend(string $abstract, Closure $closure)
     {
-        $this->extendAbstract($this->normalize($abstract), $closure);
+        $this->extendAbstract($abstract, $closure);
     }
 
     /**
@@ -305,7 +295,7 @@ class Container extends ContainerResolver implements ArrayAccess, ContainerContr
      */
     public function when(string $concrete): ContainerContract
     {
-        $this->abstract = $this->normalize($concrete);
+        $this->abstract = $concrete;
 
         if (isset($this->bindings[$this->abstract])) {
             $this->concrete = $this->bindings[$this->abstract][TypesContract::VALUE];
@@ -323,7 +313,7 @@ class Container extends ContainerResolver implements ArrayAccess, ContainerContr
      */
     public function needs(string $abstract): ContextualBindingBuilderContract
     {
-        $this->parameter = $this->normalize($abstract);
+        $this->parameter = $abstract;
 
         if ($this->parameter[0] === '$') {
             $this->parameter = mb_substr($this->parameter, 1);
@@ -402,7 +392,7 @@ class Container extends ContainerResolver implements ArrayAccess, ContainerContr
             ));
         }
 
-        $abstract = $this->normalize($id);
+        $abstract = $id;
 
         if (isset($this->bindings[$abstract])) {
             return true;

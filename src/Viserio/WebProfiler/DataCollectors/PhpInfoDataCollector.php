@@ -6,7 +6,7 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Contracts\WebProfiler\MenuAware as MenuAwareContract;
 
-class PhpInfoCollector extends AbstractDataCollector implements MenuAwareContract
+class PhpInfoDataCollector extends AbstractDataCollector implements MenuAwareContract
 {
     /**
      * {@inheritdoc}

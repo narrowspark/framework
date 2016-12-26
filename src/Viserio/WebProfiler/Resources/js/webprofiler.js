@@ -23,7 +23,7 @@ if (typeof(WebProfiler) == 'undefined') {
     // helper vars for long class names
     var panelBodyClass = '.webprofiler .webprofiler-body';
     var panelClass = panelBodyClass + ' .webprofiler-panel';
-    var menuHasPanel = '.webprofiler .webprofiler-header .webprofiler-menus a.webprofiler-menu.webprofiler-menu-has-panel';
+    var menuHasPanel = '.webprofiler .webprofiler-header .webprofiler-menus .webprofiler-menu.webprofiler-menu-has-panel';
     var bodyMenu = panelBodyClass + ' .webprofiler-body-menu';
     var getPreference = function(name) {
         if (!window.localStorage) {

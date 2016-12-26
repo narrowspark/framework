@@ -6,9 +6,9 @@ use Mockery as Mock;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Viserio\WebProfiler\DataCollectors\PhpInfoCollector;
+use Viserio\WebProfiler\DataCollectors\PhpInfoDataCollector;
 
-class PhpInfoCollectorTest extends \PHPUnit_Framework_TestCase
+class PhpInfoDataCollectorTest extends \PHPUnit_Framework_TestCase
 {
     use MockeryTrait;
 
@@ -24,7 +24,7 @@ class PhpInfoCollectorTest extends \PHPUnit_Framework_TestCase
 
     public function testCollect()
     {
-        $collect = new PhpInfoCollector();
+        $collect = new PhpInfoDataCollector();
         $collect->collect(
             $this->mock(ServerRequestInterface::class),
             $this->mock(ResponseInterface::class)
@@ -38,7 +38,7 @@ class PhpInfoCollectorTest extends \PHPUnit_Framework_TestCase
 
     public function testGetMenu()
     {
-        $collect = new PhpInfoCollector();
+        $collect = new PhpInfoDataCollector();
         $collect->collect(
             $this->mock(ServerRequestInterface::class),
             $this->mock(ResponseInterface::class)

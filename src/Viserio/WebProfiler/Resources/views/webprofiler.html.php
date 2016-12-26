@@ -1,6 +1,8 @@
 <?php
 use Viserio\WebProfiler\Util\TemplateHelper;
 
+// @codeCoverageIgnore
+
 if (! isset($token, $menus, $icons, $panels)) {
     return;
 }
@@ -27,7 +29,7 @@ if (! isset($token, $menus, $icons, $panels)) {
                 $hasTooltip = $tooltip ? ' webprofiler-menu-has-tooltip' : '';
                 $cssClasses = isset($menu['menu']['class']) ? ' ' . $menu['menu']['class'] : '';
             ?>
-            <a <?php echo $data ?> class="webprofiler-menu webprofiler-menu-<?php echo TemplateHelper::escape($name) ?> webprofiler-menu-position-<?php echo $menu['position'] . $hasPanels . $hasTooltip . $cssClasses; ?>">
+            <div <?php echo $data ?> class="webprofiler-menu webprofiler-menu-<?php echo TemplateHelper::escape($name) ?> webprofiler-menu-position-<?php echo $menu['position'] . $hasPanels . $hasTooltip . $cssClasses; ?>">
                 <div class="webprofiler-menu-content">
                     <?php if (isset($menu['menu']['icon'])): ?>
                     <span class="webprofiler-menu-icon">
@@ -51,7 +53,7 @@ if (! isset($token, $menus, $icons, $panels)) {
                         <?php echo $menu['tooltip'] ?>
                     </div>
                 <?php endif; ?>
-            </a>
+            </div>
             <?php endforeach; ?>
         </div>
         <?php endif; ?>

@@ -14,12 +14,16 @@ use Viserio\Contracts\Routing\UrlGenerator as UrlGeneratorContract;
 use Viserio\Contracts\WebProfiler\DataCollector as DataCollectorContract;
 use Viserio\Contracts\WebProfiler\WebProfiler as WebProfilerContract;
 use Viserio\Support\Http\ClientIp;
+use Viserio\Contracts\HttpFactory\Traits\StreamFactoryAwareTrait;
+use Viserio\HttpFactory\ResponseFactory;
+use Viserio\HttpFactory\ServerRequestFactory;
 
 class WebProfiler implements WebProfilerContract
 {
     use CacheItemPoolAwareTrait;
     use EventsAwareTrait;
     use LoggerAwareTrait;
+    use StreamFactoryAwareTrait;
 
     /**
      * All registered data collectors.
@@ -34,13 +38,6 @@ class WebProfiler implements WebProfilerContract
      * @var \Psr\Http\Message\ServerRequestInterface
      */
     protected $serverRequest;
-
-    /**
-     * Stream factory instance.
-     *
-     * @var \Interop\Http\Factory\StreamFactoryInterface
-     */
-    protected $streamFactory;
 
     /**
      * Url generator instance.
@@ -117,33 +114,9 @@ class WebProfiler implements WebProfilerContract
      *
      * @return \Viserio\Contracts\Routing\UrlGenerator|null
      */
-    public function getUrlGenerator(): ?UrlGenerator
+    public function getUrlGenerator(): ?UrlGeneratorContract
     {
         return $this->urlGenerator;
-    }
-
-    /**
-     * Set stream factory instance.
-     *
-     * @param \Interop\Http\Factory\StreamFactoryInterface $factory
-     *
-     * @return \Viserio\Contracts\WebProfiler\WebProfiler
-     */
-    public function setStreamFactory(StreamFactoryInterface $factory): WebProfiler
-    {
-        $this->streamFactory = $factory;
-
-        return $this;
-    }
-
-    /**
-     * Get stream factory instance.
-     *
-     * @return \Interop\Http\Factory\StreamFactoryInterface
-     */
-    public function getStreamFactory(): StreamFactoryInterface
-    {
-        return $this->streamFactory;
     }
 
     /**
@@ -182,7 +155,7 @@ class WebProfiler implements WebProfilerContract
     public function addCollector(DataCollectorContract $collector): WebProfilerContract
     {
         if (isset($this->collectors[$collector->getName()])) {
-            throw new RuntimeException(sprintf('[%s] is already a registered collector', $collector->getName()));
+            throw new RuntimeException(sprintf('[%s] is already a registered collector.', $collector->getName()));
         }
 
         $this->collectors[$collector->getName()] = $collector;

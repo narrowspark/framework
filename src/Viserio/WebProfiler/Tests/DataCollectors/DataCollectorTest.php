@@ -50,6 +50,16 @@ class DataCollectorTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    public function testCreateTooltipGroupDefaultWithLink()
+    {
+        $collector = new FixtureDataCollector();
+
+        static::assertSame(
+            '<div class="webprofiler-menu-tooltip-group"><div class="webprofiler-menu-tooltip-group-piece"><b>Resources</b><span><a href="//narrowspark.de/doc/">Read Narrowspark Doc\'s </a></span></div><div class="webprofiler-menu-tooltip-group-piece"><b>Help</b><span><a href="//narrowspark.de/support">Narrowspark Support Channels</a></span></div></div>',
+            $collector->getTooltippGroupDefaultWithLink()
+        );
+    }
+
     public function testCreateTooltipGroupArray()
     {
         $collector = new FixtureDataCollector();

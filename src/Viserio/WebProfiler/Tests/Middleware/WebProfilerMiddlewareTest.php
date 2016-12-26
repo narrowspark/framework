@@ -30,7 +30,9 @@ class WebProfilerMiddlewareTest extends \PHPUnit_Framework_TestCase
     {
         $assets   = new AssetsRenderer();
         $profiler = new WebProfiler($assets);
+
         $profiler->enable();
+
         $middleware = new WebProfilerMiddleware($profiler);
         $template   = new TemplateManager(
             [],

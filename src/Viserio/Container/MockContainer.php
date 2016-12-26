@@ -41,7 +41,7 @@ class MockContainer extends Container
      */
     public function unmock($id)
     {
-        unset($this->mockedServices['mock::' . $this->normalize($id)]);
+        unset($this->mockedServices['mock::' . $id]);
     }
 
     /**
@@ -57,7 +57,7 @@ class MockContainer extends Container
      */
     public function get($id)
     {
-        return $this->mockedServices['mock::' . $this->normalize($id)] ?? parent::get($id);
+        return $this->mockedServices['mock::' . $id] ?? parent::get($id);
     }
 
     /**
@@ -65,7 +65,7 @@ class MockContainer extends Container
      */
     public function has($id)
     {
-        if (isset($this->mockedServices['mock::' . $this->normalize($this->normalize($id))])) {
+        if (isset($this->mockedServices['mock::' . $id])) {
             return true;
         }
 
@@ -79,8 +79,6 @@ class MockContainer extends Container
      */
     public function offsetUnset($offset)
     {
-        $offset = $this->normalize($offset);
-
         unset($this->bindings[$offset], $this->mockedServices['mock::' . $offset]);
     }
 }

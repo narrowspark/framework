@@ -132,7 +132,9 @@ abstract class AbstractDataCollector implements DataCollectorContract
                 $tooltip .= '<b>' . $strong . '</b>';
 
                 foreach ($infos as $info) {
-                    $tooltip .= '<span' . (isset($info['class']) ? ' class="' . $info['class'] . '"' : '') . '>' . $info['value'] . '</span>';
+                    $class = isset($info['class']) ? ' class="' . $info['class'] . '"' : '';
+
+                    $tooltip .= '<span' . $class . '>' . $info['value'] . '</span>';
                 }
             } elseif (is_int($strong) && is_string($infos)) {
                 $tooltip .= $infos;
