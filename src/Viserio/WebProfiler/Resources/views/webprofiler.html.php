@@ -36,11 +36,6 @@ if (! isset($token, $menus, $icons, $panels)) {
                         <?php echo isset($icons[$menu['menu']['icon']]) ? file_get_contents($icons[$menu['menu']['icon']]) : $menu['menu']['icon'] ?>
                     </span>
                     <?php endif; ?>
-                    <?php if (isset($menu['menu']['status'])): ?>
-                    <span class="webprofiler-menu-status">
-                        <?php echo TemplateHelper::escape($menu['menu']['status']) ?>
-                    </span>
-                    <?php endif; ?>
                     <span class="webprofiler-menu-label">
                         <?php echo TemplateHelper::escape($menu['menu']['label']) ?>
                     </span>

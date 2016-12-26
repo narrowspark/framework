@@ -118,10 +118,8 @@ class ViserioHttpDataCollector extends AbstractDataCollector implements
         }
 
         $tabInfos = [
-            'status' => $statusCode,
-            'class'  => $status,
-            'label'  => '',
-            'value'  => '',
+            'label' => $statusCode,
+            'value' => '',
         ];
 
         if ($this->route !== null && $this->route->getName() !== null) {
@@ -136,7 +134,7 @@ class ViserioHttpDataCollector extends AbstractDataCollector implements
             $tabInfos = array_merge(
                 $tabInfos,
                 [
-                    'label' => '',
+                    'class'  => $status,
                     'value' => implode(' | ', $this->route->getMethods()),
                 ]
             );
