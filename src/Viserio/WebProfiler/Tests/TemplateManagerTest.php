@@ -2,14 +2,14 @@
 declare(strict_types=1);
 namespace Viserio\WebProfiler\Tests;
 
-use Viserio\WebProfiler\AssetsRenderer;
-use Viserio\WebProfiler\TemplateManager;
 use Mockery as Mock;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Viserio\WebProfiler\DataCollectors\PhpInfoDataCollector;
+use Viserio\WebProfiler\AssetsRenderer;
 use Viserio\WebProfiler\DataCollectors\AjaxRequestsDataCollector;
+use Viserio\WebProfiler\DataCollectors\PhpInfoDataCollector;
+use Viserio\WebProfiler\TemplateManager;
 
 class TemplateManagerTest extends \PHPUnit_Framework_TestCase
 {

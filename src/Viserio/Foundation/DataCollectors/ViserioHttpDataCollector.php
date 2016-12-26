@@ -135,7 +135,7 @@ class ViserioHttpDataCollector extends AbstractDataCollector implements
                 $tabInfos,
                 [
                     'class'  => $status,
-                    'value' => implode(' | ', $this->route->getMethods()),
+                    'value'  => implode(' | ', $this->route->getMethods()),
                 ]
             );
         }
