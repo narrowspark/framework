@@ -23,7 +23,7 @@ class TemplateHelperTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(
             TemplateHelper::escape($original),
-            "This is a &lt;a href=&#039;&#039;&gt;Foo&lt;/a&gt; test string"
+            'This is a &lt;a href=&#039;&#039;&gt;Foo&lt;/a&gt; test string'
         );
     }
 
@@ -36,7 +36,7 @@ class TemplateHelperTest extends \PHPUnit_Framework_TestCase
         // Test that the escaped string is kinda similar in length, not empty
         $this->assertLessThan(
             10,
-            abs(strlen($original) - strlen(TemplateHelper::escape($original)))
+            abs(mb_strlen($original) - mb_strlen(TemplateHelper::escape($original)))
         );
     }
 

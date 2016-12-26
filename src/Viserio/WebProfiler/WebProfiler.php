@@ -246,7 +246,7 @@ class WebProfiler implements WebProfilerContract
      */
     protected function injectWebProfiler(ResponseInterface $response, string $token): ResponseInterface
     {
-        $content = (string) $response->getBody();
+        $content         = (string) $response->getBody();
         $renderedContent = $this->createTemplate($token);
 
         $pos = mb_strripos($content, '</body>');

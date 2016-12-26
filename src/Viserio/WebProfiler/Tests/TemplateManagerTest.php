@@ -9,7 +9,7 @@ class TemplateManagerTest extends \PHPUnit_Framework_TestCase
 {
     public function testRender()
     {
-        $assets = new AssetsRenderer();
+        $assets   = new AssetsRenderer();
         $template = new TemplateManager(
             [],
             __DIR__ . '/../Resources/views/webprofiler.html.php',
@@ -26,6 +26,7 @@ class TemplateManagerTest extends \PHPUnit_Framework_TestCase
     private function removeId(string $html): string
     {
         $html = preg_replace('/[ \t]+/', ' ', preg_replace('/[\r\n]+/', "\n", $html));
+
         return trim(preg_replace('/="webprofiler-(.*?)"/', '', $html));
     }
 }

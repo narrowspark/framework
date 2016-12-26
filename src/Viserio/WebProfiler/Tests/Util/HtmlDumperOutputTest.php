@@ -11,7 +11,7 @@ class HtmlDumperOutputTest extends \PHPUnit_Framework_TestCase
         $htmlDumperOutput = new HtmlDumperOutput();
         $htmlDumperOutput('first line', 0);
         $htmlDumperOutput('second line', 2);
-        $expectedOutput = <<<string
+        $expectedOutput = <<<'string'
 first line
     second line
 
