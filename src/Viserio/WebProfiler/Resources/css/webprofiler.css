@@ -158,6 +158,9 @@
     font-size: 12px;
     display: table-cell;
 }
+.webprofiler .webprofiler-header .webprofiler-menus .webprofiler-menu.webprofiler-menu-has-tooltip:hover .webprofiler-menu-tooltip .webprofiler-menu-tooltip-group a {
+    color: #FFF;
+}
 .webprofiler .webprofiler-header .webprofiler-menus .webprofiler-menu.webprofiler-menu-position-left.webprofiler-menu-has-tooltip:hover .webprofiler-menu-tooltip {
     left: 0;
 }

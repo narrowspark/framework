@@ -15,9 +15,9 @@ class Dumper
      *
      * @param mixed $value
      *
-     * @return string|null
+     * @return void
      */
-    public static function dump($value)
+    public static function dump($value): void
     {
         if (class_exists(CliDumper::class)) {
             $dumper = 'cli' === PHP_SAPI ? new CliDumper() : new HtmlDumper();

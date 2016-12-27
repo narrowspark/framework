@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Cache\DataCollectors;
+namespace Viserio\WebProfiler\DataCollectors\Bridge;
 
 use Psr\Cache\CacheItemPoolInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -9,6 +9,7 @@ use Viserio\Contracts\WebProfiler\MenuAware as MenuAwareContract;
 use Viserio\Contracts\WebProfiler\PanelAware as PanelAwareContract;
 use Viserio\Contracts\WebProfiler\TooltipAware as TooltipAwareContract;
 use Viserio\WebProfiler\DataCollectors\AbstractDataCollector;
+use Viserio\WebProfiler\DataCollectors\Bridge\Recording\RecordingAdapter;
 
 /**
  * Ported from.
@@ -32,7 +33,7 @@ class Psr6CacheDataCollector extends AbstractDataCollector implements
      */
     public function addPool(CacheItemPoolInterface $cache)
     {
-        $this->pools[$name] = $cache;
+        $this->pools[get_class($cache)] = new RecordingAdapter($cache);
     }
 
     /**
@@ -62,9 +63,12 @@ class Psr6CacheDataCollector extends AbstractDataCollector implements
      */
     public function getMenu(): array
     {
+        $static = $this->data['total']['statistics'];
+
         return [
-            'label' => 'cache',
-            'value' => '',
+            'icon'  => '',
+            'label' => $static['calls'] . ' in',
+            'value' => $this->formatDuration($static['time']),
         ];
     }
 
@@ -73,10 +77,13 @@ class Psr6CacheDataCollector extends AbstractDataCollector implements
      */
     public function getTooltip(): string
     {
+        $static = $this->data['total']['statistics'];
+
         return $this->createTooltipGroup([
-            'Cache calls'  => '',
-            'Cache hits'   => '',
-            'Cache writes' => '',
+            'Cache calls'  => $static['calls'],
+            'Total time'   => $this->formatDuration($static['time']),
+            'Cache hits'   => $static['hits'],
+            'Cache writes' => $static['writes'],
         ]);
     }
 
@@ -85,7 +92,17 @@ class Psr6CacheDataCollector extends AbstractDataCollector implements
      */
     public function getPanel(): string
     {
-        return '';
+        $html = '';
+
+        foreach ($this->data['pools']['statistics'] as $key => $value) {
+            $html .= $this->createTable(
+                [array_values($value)],
+                $key,
+                ['Calls', 'Time', 'Reads', 'Hits', 'Misses', 'Writes', 'Deletes', 'Ratio']
+            );
+        }
+
+        return $html;
     }
 
     /**
@@ -177,7 +194,14 @@ class Psr6CacheDataCollector extends AbstractDataCollector implements
     private function calculateTotalStatistics(): array
     {
         $statistics = $this->getStatistics();
-        $totals     = ['calls' => 0, 'time' => 0, 'reads' => 0, 'hits' => 0, 'misses' => 0, 'writes' => 0];
+        $totals     = [
+            'calls' => 0,
+            'time' => 0,
+            'reads' => 0,
+            'hits' => 0,
+            'misses' => 0,
+            'writes' => 0
+        ];
 
         foreach ($statistics as $name => $values) {
             foreach ($totals as $key => $value) {

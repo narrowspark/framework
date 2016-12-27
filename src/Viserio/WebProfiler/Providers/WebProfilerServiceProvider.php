@@ -9,7 +9,7 @@ use Psr\Cache\CacheItemPoolInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\LoggerInterface as PsrLoggerInterface;
 use Swift_Mailer;
-use Viserio\Cache\DataCollectors\ViserioCacheDataCollector;
+use Viserio\WebProfiler\DataCollectors\Bridge\Psr6CacheDataCollector;
 use Viserio\Contracts\Routing\Router as RouterContract;
 use Viserio\Contracts\Routing\UrlGenerator as UrlGeneratorContract;
 use Viserio\Contracts\Support\Traits\ServiceProviderConfigAwareTrait;
@@ -96,11 +96,7 @@ class WebProfilerServiceProvider implements ServiceProvider
             $profiler->addCollector(new MemoryDataCollector());
         }
 
-        if (self::getConfig($container, 'collector.swiftmail', false)) {
-            $profiler->addCollector(new SwiftMailDataCollector(
-                $container->get(Swift_Mailer::class)
-            ));
-        }
+        self::registerSwiftmail($container, $profiler);
 
         if (self::getConfig($container, 'collector.ajax', false)) {
             $profiler->addCollector(new AjaxRequestsDataCollector());
@@ -110,14 +106,32 @@ class WebProfilerServiceProvider implements ServiceProvider
             $profiler->addCollector(new PhpInfoDataCollector());
         }
 
-        if ($container->has(CacheItemPoolInterface::class) &&
-            self::getConfig($container, 'collector.cache', false)
-        ) {
-            $profiler->addCollector(new ViserioCacheDataCollector($container->get(CacheItemPoolInterface::class)));
+        self::registerCache($container, $profiler);
+    }
+
+    private static function registerSwiftmail(ContainerInterface $container, WebProfiler $profiler)
+    {
+        if (self::getConfig($container, 'collector.swiftmail', false)) {
+            $profiler->addCollector(new SwiftMailDataCollector(
+                $container->get(Swift_Mailer::class)
+            ));
         }
     }
 
-    protected static function registerCollectorsFromConfig(ContainerInterface $container, WebProfiler $profiler)
+    private static function registerCache(ContainerInterface $container, WebProfiler $profiler)
+    {
+        if (self::getConfig($container, 'collector.cache', false)) {
+            $cache = new Psr6CacheDataCollector();
+
+            if ($container->has(CacheItemPoolInterface::class)) {
+                $cache->addPool($container->get(CacheItemPoolInterface::class));
+            }
+
+            $profiler->addCollector($cache);
+        }
+    }
+
+    private static function registerCollectorsFromConfig(ContainerInterface $container, WebProfiler $profiler)
     {
         if (($collectors = self::getConfig($container, 'collectors', null)) !== null) {
             foreach ($collectors as $collector) {
@@ -126,7 +140,7 @@ class WebProfilerServiceProvider implements ServiceProvider
         }
     }
 
-    protected static function registerControllers(ContainerInterface $container)
+    private static function registerControllers(ContainerInterface $container)
     {
         $router = $container->get(RouterContract::class);
 
