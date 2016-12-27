@@ -20,6 +20,7 @@ use Viserio\WebProfiler\DataCollectors\MemoryDataCollector;
 use Viserio\WebProfiler\DataCollectors\PhpInfoDataCollector;
 use Viserio\WebProfiler\DataCollectors\TimeDataCollector;
 use Viserio\WebProfiler\WebProfiler;
+use Viserio\Cache\DataCollectors\ViserioCacheDataCollector;
 
 class WebProfilerServiceProvider implements ServiceProvider
 {
@@ -107,6 +108,12 @@ class WebProfilerServiceProvider implements ServiceProvider
 
         if (self::getConfig($container, 'collector.phpinfo', false)) {
             $profiler->addCollector(new PhpInfoDataCollector());
+        }
+
+        if ($container->has(CacheItemPoolInterface::class) &&
+            self::getConfig($container, 'collector.cache', false)
+        ) {
+            $profiler->addCollector(new ViserioCacheDataCollector($container->get(CacheItemPoolInterface::class)));
         }
     }
 
