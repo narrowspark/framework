@@ -4,8 +4,8 @@ namespace Viserio\WebProfiler\DataCollectors\Bridge\Recording;
 
 use Psr\Cache\CacheItemInterface;
 use Psr\Cache\CacheItemPoolInterface;
-use Viserio\WebProfiler\Util\TemplateHelper;
 use StdClass;
+use Viserio\WebProfiler\Util\TemplateHelper;
 
 final class RecordingAdapter implements CacheItemPoolInterface
 {
@@ -34,8 +34,8 @@ final class RecordingAdapter implements CacheItemPoolInterface
      */
     public function getItem($key): CacheItemInterface
     {
-        $call = $this->timeCall(__FUNCTION__, array($key));
-        $result = $call->result;
+        $call        = $this->timeCall(__FUNCTION__, [$key]);
+        $result      = $call->result;
         $call->isHit = $result->isHit();
 
         // Display the result in a good way depending on the data type
@@ -55,7 +55,7 @@ final class RecordingAdapter implements CacheItemPoolInterface
      */
     public function hasItem($key): bool
     {
-        $call = $this->timeCall(__FUNCTION__, array($key));
+        $call = $this->timeCall(__FUNCTION__, [$key]);
         $this->addCall($call);
 
         return $call->result;
@@ -66,7 +66,7 @@ final class RecordingAdapter implements CacheItemPoolInterface
      */
     public function deleteItem($key): bool
     {
-        $call = $this->timeCall(__FUNCTION__, array($key));
+        $call = $this->timeCall(__FUNCTION__, [$key]);
         $this->addCall($call);
 
         return $call->result;
@@ -77,8 +77,8 @@ final class RecordingAdapter implements CacheItemPoolInterface
      */
     public function save(CacheItemInterface $item): bool
     {
-        $key = $item->getKey();
-        $call = $this->timeCall(__FUNCTION__, array($item));
+        $key             = $item->getKey();
+        $call            = $this->timeCall(__FUNCTION__, [$item]);
         $call->arguments = ['<CacheItem>', $key, TemplateHelper::dump($item->get())];
         $this->addCall($call);
 
@@ -90,9 +90,9 @@ final class RecordingAdapter implements CacheItemPoolInterface
      */
     public function saveDeferred(CacheItemInterface $item): bool
     {
-        $key = $item->getKey();
-        $call = $this->timeCall(__FUNCTION__, array($item));
-        $call->arguments = array('<CacheItem>', $key, TemplateHelper::dump($item->get()));
+        $key             = $item->getKey();
+        $call            = $this->timeCall(__FUNCTION__, [$item]);
+        $call->arguments = ['<CacheItem>', $key, TemplateHelper::dump($item->get())];
         $this->addCall($call);
 
         return $call->result;
@@ -103,8 +103,8 @@ final class RecordingAdapter implements CacheItemPoolInterface
      */
     public function getItems(array $keys = [])
     {
-        $call = $this->timeCall(__FUNCTION__, [$keys]);
-        $result = $call->result;
+        $call         = $this->timeCall(__FUNCTION__, [$keys]);
+        $result       = $call->result;
         $call->result = sprintf('<DATA:%s>', gettype($result));
         $this->addCall($call);
 
@@ -170,9 +170,9 @@ final class RecordingAdapter implements CacheItemPoolInterface
      */
     private function timeCall(string $name, array $arguments = []): StdClass
     {
-        $start = microtime(true);
-        $result = call_user_func_array(array($this->cachePool, $name), $arguments);
-        $time = microtime(true) - $start;
+        $start  = microtime(true);
+        $result = call_user_func_array([$this->cachePool, $name], $arguments);
+        $time   = microtime(true) - $start;
 
         $object = (object) compact('name', 'arguments', 'start', 'time', 'result');
 

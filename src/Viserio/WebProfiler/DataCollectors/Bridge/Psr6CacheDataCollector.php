@@ -195,12 +195,12 @@ class Psr6CacheDataCollector extends AbstractDataCollector implements
     {
         $statistics = $this->getStatistics();
         $totals     = [
-            'calls' => 0,
-            'time' => 0,
-            'reads' => 0,
-            'hits' => 0,
+            'calls'  => 0,
+            'time'   => 0,
+            'reads'  => 0,
+            'hits'   => 0,
             'misses' => 0,
-            'writes' => 0
+            'writes' => 0,
         ];
 
         foreach ($statistics as $name => $values) {

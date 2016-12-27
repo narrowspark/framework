@@ -2,11 +2,11 @@
 declare(strict_types=1);
 namespace Viserio\WebProfiler\Tests\DataCollectors\Bridge\Recording;
 
+use Cache\Adapter\PHPArray\ArrayCachePool;
 use Mockery as Mock;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
-use Viserio\WebProfiler\DataCollectors\Bridge\Recording\RecordingAdapter;
-use Cache\Adapter\PHPArray\ArrayCachePool;
 use Psr\Cache\CacheItemInterface;
+use Viserio\WebProfiler\DataCollectors\Bridge\Recording\RecordingAdapter;
 
 class RecordingAdapterTest extends \PHPUnit_Framework_TestCase
 {
@@ -61,7 +61,7 @@ class RecordingAdapterTest extends \PHPUnit_Framework_TestCase
     public function testSave()
     {
         $adapter = $this->getRecordingAdapter();
-        $item = $this->mock(CacheItemInterface::class);
+        $item    = $this->mock(CacheItemInterface::class);
         $item->shouldReceive('getKey')
             ->twice();
         $item->shouldReceive('get')
@@ -79,7 +79,7 @@ class RecordingAdapterTest extends \PHPUnit_Framework_TestCase
     public function testSaveDeferred()
     {
         $adapter = $this->getRecordingAdapter();
-        $item = $this->mock(CacheItemInterface::class);
+        $item    = $this->mock(CacheItemInterface::class);
         $item->shouldReceive('getKey')
             ->times(3);
         $item->shouldReceive('get')
