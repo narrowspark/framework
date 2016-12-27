@@ -2,12 +2,12 @@
 declare(strict_types=1);
 namespace Viserio\WebProfiler\Providers;
 
-use Viserio\WebProfiler\Middleware\WebProfilerMiddleware;
-use Viserio\WebProfiler\AssetsRenderer;
-use Viserio\WebProfiler\WebProfiler;
+use Narrowspark\TestingHelper\Middleware\DelegateMiddleware;
 use Viserio\HttpFactory\ResponseFactory;
 use Viserio\HttpFactory\ServerRequestFactory;
-use Narrowspark\TestingHelper\Middleware\DelegateMiddleware;
+use Viserio\WebProfiler\AssetsRenderer;
+use Viserio\WebProfiler\Middleware\WebProfilerMiddleware;
+use Viserio\WebProfiler\WebProfiler;
 
 class WebProfilerServiceProviderTest extends \PHPUnit_Framework_TestCase
 {
