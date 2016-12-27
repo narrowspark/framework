@@ -9,6 +9,7 @@ use Psr\Cache\CacheItemPoolInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\LoggerInterface as PsrLoggerInterface;
 use Swift_Mailer;
+use Viserio\Cache\DataCollectors\ViserioCacheDataCollector;
 use Viserio\Contracts\Routing\Router as RouterContract;
 use Viserio\Contracts\Routing\UrlGenerator as UrlGeneratorContract;
 use Viserio\Contracts\Support\Traits\ServiceProviderConfigAwareTrait;
@@ -20,7 +21,6 @@ use Viserio\WebProfiler\DataCollectors\MemoryDataCollector;
 use Viserio\WebProfiler\DataCollectors\PhpInfoDataCollector;
 use Viserio\WebProfiler\DataCollectors\TimeDataCollector;
 use Viserio\WebProfiler\WebProfiler;
-use Viserio\Cache\DataCollectors\ViserioCacheDataCollector;
 
 class WebProfilerServiceProvider implements ServiceProvider
 {

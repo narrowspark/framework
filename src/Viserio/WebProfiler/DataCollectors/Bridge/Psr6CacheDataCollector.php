@@ -11,7 +11,8 @@ use Viserio\Contracts\WebProfiler\TooltipAware as TooltipAwareContract;
 use Viserio\WebProfiler\DataCollectors\AbstractDataCollector;
 
 /**
- * Ported from
+ * Ported from.
+ *
  * @link https://github.com/php-cache/cache-bundle/blob/master/src/DataCollector/CacheDataCollector.php
  */
 class Psr6CacheDataCollector extends AbstractDataCollector implements
@@ -161,7 +162,7 @@ class Psr6CacheDataCollector extends AbstractDataCollector implements
             }
 
             if ($statistics[$name]['reads']) {
-                $statistics[$name]['ratio'] = round(100 * $statistics[$name]['hits'] / $statistics[$name]['reads'], 2).'%';
+                $statistics[$name]['ratio'] = round(100 * $statistics[$name]['hits'] / $statistics[$name]['reads'], 2) . '%';
             } else {
                 $statistics[$name]['ratio'] = 'N/A';
             }
@@ -185,7 +186,7 @@ class Psr6CacheDataCollector extends AbstractDataCollector implements
         }
 
         if ($totals['reads']) {
-            $totals['ratio'] = round(100 * $totals['hits'] / $totals['reads'], 2).'%';
+            $totals['ratio'] = round(100 * $totals['hits'] / $totals['reads'], 2) . '%';
         } else {
             $totals['ratio'] = 'N/A';
         }
