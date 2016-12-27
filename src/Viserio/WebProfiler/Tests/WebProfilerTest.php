@@ -159,8 +159,6 @@ class WebProfilerTest extends \PHPUnit_Framework_TestCase
 
     private function getWebProfiler()
     {
-        $assets = new AssetsRenderer();
-
-        return new WebProfiler($assets);
+        return new WebProfiler(new AssetsRenderer());
     }
 }
