@@ -2,13 +2,13 @@
 declare(strict_types=1);
 namespace Viserio\WebProfiler\Tests\DataCollectors\Bridge\Recording;
 
+use Cache\Adapter\PHPArray\ArrayCachePool;
 use Mockery as Mock;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
-use Cache\Adapter\PHPArray\ArrayCachePool;
-use Viserio\WebProfiler\DataCollectors\Bridge\Cache\Psr6CacheDataCollector;
-use Symfony\Component\Stopwatch\Stopwatch;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Symfony\Component\Stopwatch\Stopwatch;
+use Viserio\WebProfiler\DataCollectors\Bridge\Cache\Psr6CacheDataCollector;
 
 class Psr6CacheDataCollectorTest extends \PHPUnit_Framework_TestCase
 {
@@ -28,9 +28,9 @@ class Psr6CacheDataCollectorTest extends \PHPUnit_Framework_TestCase
 
         static::assertSame(
             [
-                'icon' => '',
+                'icon'  => '',
                 'label' => '0 in',
-                'value' => '0μs'
+                'value' => '0μs',
             ],
             $collector->getMenu()
         );
