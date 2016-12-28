@@ -7,8 +7,11 @@ use Symfony\Component\VarDumper\Caster\LinkStub;
 use Symfony\Component\VarDumper\Caster\StubCaster;
 use Symfony\Component\VarDumper\Cloner\Stub;
 use Symfony\Component\VarDumper\Cloner\VarCloner;
+use Viserio\Support\Debug\HtmlDumper;
 use Viserio\Contracts\WebProfiler\DataCollector as DataCollectorContract;
 use Viserio\Support\Str;
+use Viserio\WebProfiler\Util\HtmlDumperOutput;
+use Symfony\Component\VarDumper\Caster\Caster;
 
 abstract class AbstractDataCollector implements DataCollectorContract
 {
@@ -20,11 +23,29 @@ abstract class AbstractDataCollector implements DataCollectorContract
     protected $data;
 
     /**
+     * Configured VarCloner instance.
+     *
      * @var \Symfony\Component\VarDumper\Cloner\ClonerInterface
      */
-    private $cloner;
+    private static $cloner;
 
     /**
+     * HtmlDumper instance.
+     *
+     * @var \Viserio\Support\Debug\HtmlDumper
+     */
+    private static $htmlDumper;
+
+    /**
+     * HtmlDumperOutput instance.
+     *
+     * @var \Viserio\WebProfiler\Util\HtmlDumperOutput
+     */
+    private static $htmlDumperOutput;
+
+    /**
+     * The cache of stubs.
+     *
      * @var array
      */
     private static $stubsCache = [];
@@ -289,19 +310,59 @@ abstract class AbstractDataCollector implements DataCollectorContract
      *
      * @param mixed $var
      *
-     * @return \Symfony\Component\VarDumper\Cloner\Data
+     * @return null|string
      */
-    protected function cloneVar($var)
+    protected function cloneVar($var): ?string
     {
-        $this->cloner = new VarCloner();
-        $this->cloner->setMaxItems(250);
-        $this->cloner->addCasters([
-            Stub::class => function (Stub $v, array $a, Stub $s, $isNested) {
-                return $isNested ? $a : StubCaster::castStub($v, $a, $s, true);
-            },
-        ]);
+        $cloneVar = self::getCloner()->cloneVar($this->decorateVar($var), Caster::EXCLUDE_VERBOSE);
+        $dumper   = self::getDumper();
 
-        return $this->cloner->cloneVar($this->decorateVar($var));
+        $dumper->dump(
+            $cloneVar,
+            self::$htmlDumperOutput
+        );
+
+        $output = self::$htmlDumperOutput->getOutput();
+        self::$htmlDumperOutput->flush();
+
+        return $output;
+    }
+
+    /**
+     * Get the cloner used for dumping variables.
+     *
+     * @return \Symfony\Component\VarDumper\Cloner\AbstractCloner
+     */
+    private static function getCloner()
+    {
+        if (! self::$cloner) {
+            self::$cloner = new VarCloner();
+            self::$cloner->setMaxItems(250);
+            self::$cloner->addCasters([
+                Stub::class => function (Stub $v, array $a, Stub $s, $isNested) {
+                    return $isNested ? $a : StubCaster::castStub($v, $a, $s, true);
+                },
+            ]);;
+        }
+
+        return self::$cloner;
+    }
+
+    /**
+     * Get a HtmlDumper instance.
+     *
+     * @return \Viserio\Support\Debug\HtmlDumper
+     */
+    private static function getDumper(): HtmlDumper
+    {
+        if (self::$htmlDumper === null) {
+            self::$htmlDumperOutput = new HtmlDumperOutput();
+
+            // re-use the same var-dumper instance, so it won't re-render the global styles/scripts on each dump.
+            self::$htmlDumper = new HtmlDumper(self::$htmlDumperOutput);
+        }
+
+        return self::$htmlDumper;
     }
 
     /**

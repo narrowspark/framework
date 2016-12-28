@@ -6,9 +6,10 @@ use Cache\Adapter\PHPArray\ArrayCachePool;
 use Mockery as Mock;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use Psr\Cache\CacheItemInterface;
-use Viserio\WebProfiler\DataCollectors\Bridge\Recording\RecordingAdapter;
+use Viserio\WebProfiler\DataCollectors\Bridge\Cache\TraceableCacheItemDecorater;
+use Symfony\Component\Stopwatch\Stopwatch;
 
-class RecordingAdapterTest extends \PHPUnit_Framework_TestCase
+class TraceableCacheItemDecoraterTest extends \PHPUnit_Framework_TestCase
 {
     use MockeryTrait;
 
@@ -24,7 +25,7 @@ class RecordingAdapterTest extends \PHPUnit_Framework_TestCase
 
     public function testGetItem()
     {
-        $adapter = $this->getRecordingAdapter();
+        $adapter = $this->getTraceableCacheItemDecorater();
 
         static::assertInstanceOf(CacheItemInterface::class, $adapter->getItem('test'));
         $object = $adapter->getCalls()[0];
@@ -36,7 +37,7 @@ class RecordingAdapterTest extends \PHPUnit_Framework_TestCase
 
     public function testHasItem()
     {
-        $adapter = $this->getRecordingAdapter();
+        $adapter = $this->getTraceableCacheItemDecorater();
 
         static::assertFalse($adapter->hasItem('test'));
         $object = $adapter->getCalls()[0];
@@ -48,7 +49,7 @@ class RecordingAdapterTest extends \PHPUnit_Framework_TestCase
 
     public function testDeleteItem()
     {
-        $adapter = $this->getRecordingAdapter();
+        $adapter = $this->getTraceableCacheItemDecorater();
 
         $adapter->deleteItem('test');
         $object = $adapter->getCalls()[0];
@@ -60,12 +61,10 @@ class RecordingAdapterTest extends \PHPUnit_Framework_TestCase
 
     public function testSave()
     {
-        $adapter = $this->getRecordingAdapter();
+        $adapter = $this->getTraceableCacheItemDecorater();
         $item    = $this->mock(CacheItemInterface::class);
         $item->shouldReceive('getKey')
             ->twice();
-        $item->shouldReceive('get')
-            ->once();
 
         static::assertTrue($adapter->save($item));
 
@@ -78,12 +77,10 @@ class RecordingAdapterTest extends \PHPUnit_Framework_TestCase
 
     public function testSaveDeferred()
     {
-        $adapter = $this->getRecordingAdapter();
+        $adapter = $this->getTraceableCacheItemDecorater();
         $item    = $this->mock(CacheItemInterface::class);
         $item->shouldReceive('getKey')
             ->times(3);
-        $item->shouldReceive('get')
-            ->once();
 
         static::assertTrue($adapter->saveDeferred($item));
 
@@ -96,20 +93,20 @@ class RecordingAdapterTest extends \PHPUnit_Framework_TestCase
 
     public function testGetItems()
     {
-        $adapter = $this->getRecordingAdapter();
+        $adapter = $this->getTraceableCacheItemDecorater();
 
         static::assertInstanceOf(CacheItemInterface::class, $adapter->getItems(['item'])['item']);
 
         $object = $adapter->getCalls()[0];
 
-        static::assertTrue(is_string($object->result));
+        static::assertTrue(is_array($object->result));
         static::assertSame('getItems', $object->name);
         static::assertTrue(is_array($object->arguments));
     }
 
     public function testClear()
     {
-        $adapter = $this->getRecordingAdapter();
+        $adapter = $this->getTraceableCacheItemDecorater();
 
         static::assertTrue($adapter->clear());
 
@@ -122,7 +119,7 @@ class RecordingAdapterTest extends \PHPUnit_Framework_TestCase
 
     public function testDeleteItems()
     {
-        $adapter = $this->getRecordingAdapter();
+        $adapter = $this->getTraceableCacheItemDecorater();
 
         static::assertTrue($adapter->deleteItems(['test']));
 
@@ -135,7 +132,7 @@ class RecordingAdapterTest extends \PHPUnit_Framework_TestCase
 
     public function testCommit()
     {
-        $adapter = $this->getRecordingAdapter();
+        $adapter = $this->getTraceableCacheItemDecorater();
 
         static::assertTrue($adapter->commit());
 
@@ -146,8 +143,8 @@ class RecordingAdapterTest extends \PHPUnit_Framework_TestCase
         static::assertTrue(is_array($object->arguments));
     }
 
-    private function getRecordingAdapter()
+    private function getTraceableCacheItemDecorater()
     {
-        return new RecordingAdapter(new ArrayCachePool());
+        return new TraceableCacheItemDecorater(new ArrayCachePool(), new Stopwatch());
     }
 }

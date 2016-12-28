@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\WebProfiler\DataCollectors\Bridge;
+namespace Viserio\WebProfiler\DataCollectors\Bridge\Cache;
 
 use Psr\Cache\CacheItemPoolInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -10,7 +10,6 @@ use Viserio\Contracts\WebProfiler\MenuAware as MenuAwareContract;
 use Viserio\Contracts\WebProfiler\PanelAware as PanelAwareContract;
 use Viserio\Contracts\WebProfiler\TooltipAware as TooltipAwareContract;
 use Viserio\WebProfiler\DataCollectors\AbstractDataCollector;
-use Viserio\WebProfiler\DataCollectors\Bridge\Recording\RecordingAdapter;
 
 /**
  * Ported from.
@@ -23,11 +22,15 @@ class Psr6CacheDataCollector extends AbstractDataCollector implements
     PanelAwareContract
 {
     /**
+     * Collection of CacheItemPoolInterfaces.
+     *
      * @var \Psr\Cache\CacheItemPoolInterface[]
      */
     private $pools = [];
 
     /**
+     * Stopwatch instance.
+     *
      * @var \Symfony\Component\Stopwatch\Stopwatch
      */
     private $stopwatch;
@@ -49,7 +52,7 @@ class Psr6CacheDataCollector extends AbstractDataCollector implements
      */
     public function addPool(CacheItemPoolInterface $cache)
     {
-        $this->pools[get_class($cache)] = new RecordingAdapter($cache, $this->stopwatch);
+        $this->pools[get_class($cache)] = new TraceableCacheItemDecorater($cache, $this->stopwatch);
     }
 
     /**
@@ -154,7 +157,7 @@ class Psr6CacheDataCollector extends AbstractDataCollector implements
     /**
      * @return array
      */
-    private function calculateStatistics()
+    private function calculateStatistics(): array
     {
         $statistics = [];
 
