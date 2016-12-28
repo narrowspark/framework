@@ -2,16 +2,16 @@
 declare(strict_types=1);
 namespace Viserio\WebProfiler\DataCollectors;
 
+use Symfony\Component\VarDumper\Caster\Caster;
 use Symfony\Component\VarDumper\Caster\ClassStub;
 use Symfony\Component\VarDumper\Caster\LinkStub;
 use Symfony\Component\VarDumper\Caster\StubCaster;
 use Symfony\Component\VarDumper\Cloner\Stub;
 use Symfony\Component\VarDumper\Cloner\VarCloner;
-use Viserio\Support\Debug\HtmlDumper;
 use Viserio\Contracts\WebProfiler\DataCollector as DataCollectorContract;
+use Viserio\Support\Debug\HtmlDumper;
 use Viserio\Support\Str;
 use Viserio\WebProfiler\Util\HtmlDumperOutput;
-use Symfony\Component\VarDumper\Caster\Caster;
 
 abstract class AbstractDataCollector implements DataCollectorContract
 {
@@ -342,7 +342,7 @@ abstract class AbstractDataCollector implements DataCollectorContract
                 Stub::class => function (Stub $v, array $a, Stub $s, $isNested) {
                     return $isNested ? $a : StubCaster::castStub($v, $a, $s, true);
                 },
-            ]);;
+            ]);
         }
 
         return self::$cloner;

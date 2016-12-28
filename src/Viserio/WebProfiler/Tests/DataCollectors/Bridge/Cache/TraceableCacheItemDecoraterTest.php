@@ -6,8 +6,8 @@ use Cache\Adapter\PHPArray\ArrayCachePool;
 use Mockery as Mock;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use Psr\Cache\CacheItemInterface;
-use Viserio\WebProfiler\DataCollectors\Bridge\Cache\TraceableCacheItemDecorater;
 use Symfony\Component\Stopwatch\Stopwatch;
+use Viserio\WebProfiler\DataCollectors\Bridge\Cache\TraceableCacheItemDecorater;
 
 class TraceableCacheItemDecoraterTest extends \PHPUnit_Framework_TestCase
 {
