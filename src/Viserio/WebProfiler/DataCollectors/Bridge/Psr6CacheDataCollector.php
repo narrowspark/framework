@@ -5,12 +5,12 @@ namespace Viserio\WebProfiler\DataCollectors\Bridge;
 use Psr\Cache\CacheItemPoolInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Symfony\Component\Stopwatch\Stopwatch;
 use Viserio\Contracts\WebProfiler\MenuAware as MenuAwareContract;
 use Viserio\Contracts\WebProfiler\PanelAware as PanelAwareContract;
 use Viserio\Contracts\WebProfiler\TooltipAware as TooltipAwareContract;
 use Viserio\WebProfiler\DataCollectors\AbstractDataCollector;
 use Viserio\WebProfiler\DataCollectors\Bridge\Recording\RecordingAdapter;
-use Symfony\Component\Stopwatch\Stopwatch;
 
 /**
  * Ported from.

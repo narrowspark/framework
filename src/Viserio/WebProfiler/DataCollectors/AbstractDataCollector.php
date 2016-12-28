@@ -25,7 +25,6 @@ abstract class AbstractDataCollector implements DataCollectorContract
     private $cloner;
 
     /**
-     *
      * @var array
      */
     private static $stubsCache = [];
@@ -306,7 +305,6 @@ abstract class AbstractDataCollector implements DataCollectorContract
     }
 
     /**
-     *
      * @param mixed $var
      *
      * @return mixed
@@ -332,17 +330,17 @@ abstract class AbstractDataCollector implements DataCollectorContract
                 return self::$stubsCache[$var];
             }
 
-            if (strpos($var, '\\') !== false) {
-                $c = ($i = strpos($var, '::')  !== false) ? substr($var, 0, $i) : $var;
+            if (mb_strpos($var, '\\') !== false) {
+                $c = ($i = mb_strpos($var, '::') !== false) ? mb_substr($var, 0, $i) : $var;
 
                 if (class_exists($c, false) || interface_exists($c, false) || trait_exists($c, false)) {
                     return self::$stubsCache[$var] = new ClassStub($var);
                 }
             }
 
-            if (strpos($var, DIRECTORY_SEPARATOR) !== false &&
-                strpos($var, '://') !== false &&
-                strpos($var, "\0") && @is_file($var) === false
+            if (mb_strpos($var, DIRECTORY_SEPARATOR) !== false &&
+                mb_strpos($var, '://') !== false &&
+                mb_strpos($var, "\0") && @is_file($var) === false
             ) {
                 return self::$stubsCache[$var] = new LinkStub($var);
             }
