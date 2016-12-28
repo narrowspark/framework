@@ -10,6 +10,7 @@ use Viserio\Contracts\WebProfiler\PanelAware as PanelAwareContract;
 use Viserio\Contracts\WebProfiler\TooltipAware as TooltipAwareContract;
 use Viserio\WebProfiler\DataCollectors\AbstractDataCollector;
 use Viserio\WebProfiler\DataCollectors\Bridge\Recording\RecordingAdapter;
+use Symfony\Component\Stopwatch\Stopwatch;
 
 /**
  * Ported from.
@@ -27,13 +28,28 @@ class Psr6CacheDataCollector extends AbstractDataCollector implements
     private $pools = [];
 
     /**
+     * @var \Symfony\Component\Stopwatch\Stopwatch
+     */
+    private $stopwatch;
+
+    /**
+     * Create a new Psr6CacheDataCollector instance.
+     *
+     * @param \Symfony\Component\Stopwatch\Stopwatch $stopwatch
+     */
+    public function __construct(Stopwatch $stopwatch)
+    {
+        $this->stopwatch = $stopwatch;
+    }
+
+    /**
      * Create a new cache data collector.
      *
      * @param \Psr\Cache\CacheItemPoolInterface $cache
      */
     public function addPool(CacheItemPoolInterface $cache)
     {
-        $this->pools[get_class($cache)] = new RecordingAdapter($cache);
+        $this->pools[get_class($cache)] = new RecordingAdapter($cache, $this->stopwatch);
     }
 
     /**

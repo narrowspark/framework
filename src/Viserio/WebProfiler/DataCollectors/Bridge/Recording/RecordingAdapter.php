@@ -5,8 +5,14 @@ namespace Viserio\WebProfiler\DataCollectors\Bridge\Recording;
 use Psr\Cache\CacheItemInterface;
 use Psr\Cache\CacheItemPoolInterface;
 use StdClass;
-use Viserio\WebProfiler\Util\TemplateHelper;
+use Symfony\Component\Stopwatch\Stopwatch;
 
+/**
+ * An adapter that collects all your cache calls.
+ *
+ * @author Aaron Scherer <aequasi@gmail.com>
+ * @author Tobias Nyholm <tobias.nyholm@gmail.com>
+ */
 final class RecordingAdapter implements CacheItemPoolInterface
 {
     /**
@@ -20,13 +26,19 @@ final class RecordingAdapter implements CacheItemPoolInterface
     private $cachePool;
 
     /**
+     * @var \Symfony\Component\Stopwatch\Stopwatch
+     */
+    private $stopwatch;
+
+    /**
      * RecordingAdapter constructor.
      *
      * @param \Psr\Cache\CacheItemPoolInterface $cachePool
      */
-    public function __construct(CacheItemPoolInterface $cachePool)
+    public function __construct(CacheItemPoolInterface $cachePool, Stopwatch $stopwatch)
     {
         $this->cachePool = $cachePool;
+        $this->stopwatch = $stopwatch;
     }
 
     /**
@@ -40,12 +52,12 @@ final class RecordingAdapter implements CacheItemPoolInterface
 
         // Display the result in a good way depending on the data type
         if ($call->isHit) {
-            $call->result = TemplateHelper::dump($result->get());
+            $call->result = $this->getValueRepresentation($result);
         } else {
             $call->result = null;
         }
 
-        $this->addCall($call);
+        $this->calls[] = $call;
 
         return $result;
     }
@@ -56,7 +68,7 @@ final class RecordingAdapter implements CacheItemPoolInterface
     public function hasItem($key): bool
     {
         $call = $this->timeCall(__FUNCTION__, [$key]);
-        $this->addCall($call);
+        $this->calls[] = $call;
 
         return $call->result;
     }
@@ -67,7 +79,7 @@ final class RecordingAdapter implements CacheItemPoolInterface
     public function deleteItem($key): bool
     {
         $call = $this->timeCall(__FUNCTION__, [$key]);
-        $this->addCall($call);
+        $this->calls[] = $call;
 
         return $call->result;
     }
@@ -77,10 +89,12 @@ final class RecordingAdapter implements CacheItemPoolInterface
      */
     public function save(CacheItemInterface $item): bool
     {
+        $arg = $this->getValueRepresentation($item);
+
         $key             = $item->getKey();
         $call            = $this->timeCall(__FUNCTION__, [$item]);
-        $call->arguments = ['<CacheItem>', $key, TemplateHelper::dump($item->get())];
-        $this->addCall($call);
+        $call->arguments = [$arg];
+        $this->calls[] = $call;
 
         return $call->result;
     }
@@ -90,10 +104,12 @@ final class RecordingAdapter implements CacheItemPoolInterface
      */
     public function saveDeferred(CacheItemInterface $item): bool
     {
+        $arg = $this->getValueRepresentation($item);
+
         $key             = $item->getKey();
         $call            = $this->timeCall(__FUNCTION__, [$item]);
-        $call->arguments = ['<CacheItem>', $key, TemplateHelper::dump($item->get())];
-        $this->addCall($call);
+        $call->arguments = [$arg];
+        $this->calls[] = $call;
 
         return $call->result;
     }
@@ -103,10 +119,24 @@ final class RecordingAdapter implements CacheItemPoolInterface
      */
     public function getItems(array $keys = [])
     {
-        $call         = $this->timeCall(__FUNCTION__, [$keys]);
-        $result       = $call->result;
-        $call->result = sprintf('<DATA:%s>', gettype($result));
-        $this->addCall($call);
+        $call = $this->timeCall(__FUNCTION__, array($keys));
+        $result = $call->result;
+        $hits = 0;
+        $items = array();
+
+        foreach ($result as $item) {
+            $items[] = $item;
+
+            if ($item->isHit()) {
+               +$hits;
+            }
+        }
+
+        $call->result = $this->getValueRepresentation($items);
+        $call->hits = $hits;
+        $call->count = count($items);
+
+        $this->calls[] = $call;
 
         return $result;
     }
@@ -117,7 +147,7 @@ final class RecordingAdapter implements CacheItemPoolInterface
     public function clear(): bool
     {
         $call = $this->timeCall(__FUNCTION__, []);
-        $this->addCall($call);
+        $this->calls[] = $call;
 
         return $call->result;
     }
@@ -128,7 +158,7 @@ final class RecordingAdapter implements CacheItemPoolInterface
     public function deleteItems(array $keys): bool
     {
         $call = $this->timeCall(__FUNCTION__, [$keys]);
-        $this->addCall($call);
+        $this->calls[] = $call;
 
         return $call->result;
     }
@@ -139,7 +169,7 @@ final class RecordingAdapter implements CacheItemPoolInterface
     public function commit(): bool
     {
         $call = $this->timeCall(__FUNCTION__);
-        $this->addCall($call);
+        $this->calls[] = $call;
 
         return $call->result;
     }
@@ -153,16 +183,6 @@ final class RecordingAdapter implements CacheItemPoolInterface
     }
 
     /**
-     * Record a call.
-     *
-     * @param \StdClass $call
-     */
-    private function addCall(StdClass $call)
-    {
-        $this->calls[] = $call;
-    }
-
-    /**
      * @param string $name
      * @param array  $arguments
      *
@@ -170,12 +190,37 @@ final class RecordingAdapter implements CacheItemPoolInterface
      */
     private function timeCall(string $name, array $arguments = []): StdClass
     {
-        $start  = microtime(true);
-        $result = call_user_func_array([$this->cachePool, $name], $arguments);
-        $time   = microtime(true) - $start;
+        $time = 0;
+        $event = $this->stopwatch->start(get_class($this->cachePool), 'cache');
+        $result = call_user_func_array(array($this->cachePool, $name), $arguments);
+
+        if ($event->isStarted()) {
+            $event->stop();
+            $time = $event->getEndTime() - $event->getStartTime();
+        }
 
         $object = (object) compact('name', 'arguments', 'start', 'time', 'result');
 
         return $object;
+    }
+
+    /**
+     * Get a string to represent the value.
+     *
+     * @param mixed $value
+     *
+     * @return string
+     */
+    private function getValueRepresentation($value): string
+    {
+        $type = gettype($value);
+        if (in_array($type, array('array', 'boolean', 'integer', 'double', 'string', 'NULL'))) {
+            $rep = $value;
+        } elseif ($type === 'object') {
+            $rep = clone $value;
+        } else {
+            $rep = sprintf('<DATA:%s>', $type);
+        }
+        return $rep;
     }
 }

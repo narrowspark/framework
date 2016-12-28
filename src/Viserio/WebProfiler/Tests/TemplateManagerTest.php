@@ -25,6 +25,29 @@ class TemplateManagerTest extends \PHPUnit_Framework_TestCase
         Mock::close();
     }
 
+    public function testEscape()
+    {
+        $original = "This is a <a href=''>Foo</a> test string";
+
+        $this->assertEquals(
+            TemplateManager::escape($original),
+            'This is a &lt;a href=&#039;&#039;&gt;Foo&lt;/a&gt; test string'
+        );
+    }
+
+    public function testEscapeBrokenUtf8()
+    {
+        // The following includes an illegal utf-8 sequence to test.
+        // Encoded in base64 to survive possible encoding changes of this file.
+        $original = base64_decode('VGhpcyBpcyBhbiBpbGxlZ2FsIHV0Zi04IHNlcXVlbmNlOiDD');
+
+        // Test that the escaped string is kinda similar in length, not empty
+        $this->assertLessThan(
+            10,
+            abs(mb_strlen($original) - mb_strlen(TemplateManager::escape($original)))
+        );
+    }
+
     public function testRender()
     {
         $assets   = new AssetsRenderer();

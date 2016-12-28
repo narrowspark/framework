@@ -65,8 +65,8 @@
         "symfony/debug"                                      : "^3.1",
         "symfony/finder"                                     : "^3.1",
         "symfony/filesystem"                                 : "^3.1",
-        "symfony/polyfill-intl-icu"                          : "^1.0",
         "symfony/polyfill-mbstring"                          : "^1.0",
+        "symfony/stopwatch"                                  : "^3.1",
         "symfony/var-dumper"                                 : "^3.1",
         "swiftmailer/swiftmailer"                            : "^5.4",
         "vlucas/phpdotenv"                                   : "^2.3"

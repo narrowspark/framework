@@ -9,6 +9,7 @@ use Psr\Cache\CacheItemPoolInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\LoggerInterface as PsrLoggerInterface;
 use Swift_Mailer;
+use Symfony\Component\Stopwatch\Stopwatch;
 use Viserio\Contracts\Routing\Router as RouterContract;
 use Viserio\Contracts\Routing\UrlGenerator as UrlGeneratorContract;
 use Viserio\Contracts\Support\Traits\ServiceProviderConfigAwareTrait;
@@ -36,10 +37,16 @@ class WebProfilerServiceProvider implements ServiceProvider
         return [
             AssetsRenderer::class      => [self::class, 'createAssetsRenderer'],
             WebProfiler::class         => [self::class, 'createWebProfiler'],
+            Stopwatch::class           => [self::class, 'createStopwatch'],
             WebProfilerContract::class => function (ContainerInterface $container) {
                 return $container->get(WebProfiler::class);
             },
         ];
+    }
+
+    public static function createStopwatch()
+    {
+        return new Stopwatch();
     }
 
     public static function createWebProfiler(ContainerInterface $container): WebProfilerContract
@@ -121,7 +128,7 @@ class WebProfilerServiceProvider implements ServiceProvider
     private static function registerCache(ContainerInterface $container, WebProfiler $profiler)
     {
         if (self::getConfig($container, 'collector.cache', false)) {
-            $cache = new Psr6CacheDataCollector();
+            $cache = new Psr6CacheDataCollector($container->get(Stopwatch::class));
 
             if ($container->has(CacheItemPoolInterface::class)) {
                 $cache->addPool($container->get(CacheItemPoolInterface::class));

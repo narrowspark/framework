@@ -2,9 +2,13 @@
 declare(strict_types=1);
 namespace Viserio\WebProfiler\DataCollectors;
 
+use Symfony\Component\VarDumper\Caster\ClassStub;
+use Symfony\Component\VarDumper\Caster\LinkStub;
+use Symfony\Component\VarDumper\Caster\StubCaster;
+use Symfony\Component\VarDumper\Cloner\Stub;
+use Symfony\Component\VarDumper\Cloner\VarCloner;
 use Viserio\Contracts\WebProfiler\DataCollector as DataCollectorContract;
 use Viserio\Support\Str;
-use Viserio\WebProfiler\Util\TemplateHelper;
 
 abstract class AbstractDataCollector implements DataCollectorContract
 {
@@ -14,6 +18,17 @@ abstract class AbstractDataCollector implements DataCollectorContract
      * @var array
      */
     protected $data;
+
+    /**
+     * @var \Symfony\Component\VarDumper\Cloner\ClonerInterface
+     */
+    private $cloner;
+
+    /**
+     *
+     * @var array
+     */
+    private static $stubsCache = [];
 
     /**
      * {@inheritdoc}
@@ -211,17 +226,17 @@ abstract class AbstractDataCollector implements DataCollectorContract
                 if (is_string($key)) {
                     $html .= '<tr>';
                     $html .= '<th>' . $key . '</th>';
-                    $html .= '<td>' . TemplateHelper::dump($values) . '</td>';
+                    $html .= '<td>' . $this->cloneVar($values) . '</td>';
                     $html .= '</tr>';
                 } else {
                     $html .= '<tr>';
 
                     if (is_array($values)) {
                         foreach ($values as $key => $value) {
-                            $html .= '<td>' . TemplateHelper::dump($value) . '</td>';
+                            $html .= '<td>' . $this->cloneVar($value) . '</td>';
                         }
                     } else {
-                        $html .= '<td>' . TemplateHelper::dump($values) . '</td>';
+                        $html .= '<td>' . $this->cloneVar($values) . '</td>';
                     }
 
                     $html .= '</tr>';
@@ -268,5 +283,71 @@ abstract class AbstractDataCollector implements DataCollectorContract
         }
 
         return $html;
+    }
+
+    /**
+     * Converts the variable into a serializable Data instance.
+     *
+     * @param mixed $var
+     *
+     * @return \Symfony\Component\VarDumper\Cloner\Data
+     */
+    protected function cloneVar($var)
+    {
+        $this->cloner = new VarCloner();
+        $this->cloner->setMaxItems(250);
+        $this->cloner->addCasters([
+            Stub::class => function (Stub $v, array $a, Stub $s, $isNested) {
+                return $isNested ? $a : StubCaster::castStub($v, $a, $s, true);
+            },
+        ]);
+
+        return $this->cloner->cloneVar($this->decorateVar($var));
+    }
+
+    /**
+     *
+     * @param mixed $var
+     *
+     * @return mixed
+     */
+    private function decorateVar($var)
+    {
+        if (is_array($var)) {
+            if (isset($var[0], $var[1]) && is_callable($var)) {
+                return ClassStub::wrapCallable($var);
+            }
+
+            foreach ($var as $k => $v) {
+                if ($v !== $d = $this->decorateVar($v)) {
+                    $var[$k] = $d;
+                }
+            }
+
+            return $var;
+        }
+
+        if (is_string($var)) {
+            if (isset(self::$stubsCache[$var])) {
+                return self::$stubsCache[$var];
+            }
+
+            if (strpos($var, '\\') !== false) {
+                $c = ($i = strpos($var, '::')  !== false) ? substr($var, 0, $i) : $var;
+
+                if (class_exists($c, false) || interface_exists($c, false) || trait_exists($c, false)) {
+                    return self::$stubsCache[$var] = new ClassStub($var);
+                }
+            }
+
+            if (strpos($var, DIRECTORY_SEPARATOR) !== false &&
+                strpos($var, '://') !== false &&
+                strpos($var, "\0") && @is_file($var) === false
+            ) {
+                return self::$stubsCache[$var] = new LinkStub($var);
+            }
+        }
+
+        return $var;
     }
 }

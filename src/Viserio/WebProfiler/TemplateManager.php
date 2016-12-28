@@ -62,6 +62,28 @@ class TemplateManager implements RenderableContract
     }
 
     /**
+     * Escapes a string for output in an HTML document.
+     *
+     * @param string $raw
+     *
+     * @return string
+     */
+    public static function escape(string $raw): string
+    {
+        $flags = ENT_QUOTES;
+
+        // HHVM has all constants defined, but only ENT_IGNORE
+        // works at the moment
+        if (defined('ENT_SUBSTITUTE') && ! defined('HHVM_VERSION')) {
+            $flags |= ENT_SUBSTITUTE;
+        }
+
+        $raw = str_replace(chr(9), '    ', $raw);
+
+        return htmlspecialchars($raw, $flags, 'UTF-8');
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function render(): string
