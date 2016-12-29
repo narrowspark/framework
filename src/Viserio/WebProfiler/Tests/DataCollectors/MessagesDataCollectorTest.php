@@ -31,7 +31,7 @@ class MessagesDataCollectorTest extends \PHPUnit_Framework_TestCase
 
         static::assertCount(1, $msgs);
 
-        $collector->addMessage('hello', 'notice');
+        $collector->addMessage(['hello'], 'notice');
 
         static::assertCount(2, $collector->getMessages());
 
@@ -54,7 +54,19 @@ class MessagesDataCollectorTest extends \PHPUnit_Framework_TestCase
 
         $data = $collector->getData();
 
-        static::assertEquals(1, $data['count']);
+        static::assertEquals(1, $data['counted']);
         static::assertEquals($collector->getMessages(), $data['messages']);
+    }
+
+    public function testGetMenu()
+    {
+        $collector = new MessagesDataCollector();
+
+        $collector->collect(
+            $this->mock(ServerRequestInterface::class),
+            $this->mock(ResponseInterface::class)
+        );
+
+        static::assertSame(['label' => 'Messages', 'value' => 0], $collector->getMenu());
     }
 }

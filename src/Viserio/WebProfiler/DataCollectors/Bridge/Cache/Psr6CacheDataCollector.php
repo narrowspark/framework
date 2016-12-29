@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\WebProfiler\DataCollectors\Bridge\Cache;
 
+use ReflectionClass;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Contracts\WebProfiler\MenuAware as MenuAwareContract;
@@ -92,31 +93,41 @@ class Psr6CacheDataCollector extends AbstractDataCollector implements
      */
     public function getPanel(): string
     {
-        $html = '';
+        $data = [];
 
         foreach ($this->data['pools']['calls'] as $name => $calls) {
+            $html = '';
             $statistic         = $this->data['pools']['statistics'][$name];
             $statistic['time'] = $this->formatDuration($statistic['time']);
 
             $html .= $this->createMetrics(
                 $statistic,
-                'Statistics for "' . $name . '"'
+                'Statistics'
             );
 
-            $data = [];
-
+            $calledCalls = [];
             foreach ($calls as $i => $call) {
-                $data[] =[$call->name, $call->argument, $call->result, $this->formatDuration($call->end - $call->start)];
+                $calledCalls[] =[
+                    $call->name,
+                    $call->argument,
+                    $call->result,
+                    $this->formatDuration($call->end - $call->start)
+                ];
             }
 
             $html .= $this->createTable(
-                $data,
-                'Calls for "' . $name . '"',
+                $calledCalls,
+                'Calls',
                 ['Method', 'Argument', 'Result', 'Time']
             );
+
+            $data[] = [
+                'name' => (new ReflectionClass($name))->getShortName(),
+                'content' => $html,
+            ];
         }
 
-        return $html;
+        return $this->createTabs($data);
     }
 
     /**

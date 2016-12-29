@@ -40,7 +40,7 @@ class MessagesDataCollector extends AbstractDataCollector implements MenuAwareCo
         $messages = $this->getMessages();
 
         $this->data = [
-            'count'    => count($messages),
+            'counted'  => count($messages),
             'messages' => $messages,
         ];
     }
