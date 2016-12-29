@@ -96,7 +96,7 @@ class Psr6CacheDataCollector extends AbstractDataCollector implements
         $html = '';
 
         foreach ($this->data['pools']['calls'] as $name => $calls) {
-            $statistic = $this->data['pools']['statistics'][$name];
+            $statistic         = $this->data['pools']['statistics'][$name];
             $statistic['time'] = $this->formatDuration($statistic['time']);
 
             $html .= $this->createMetrics(
