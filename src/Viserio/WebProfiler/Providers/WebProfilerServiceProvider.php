@@ -2,10 +2,10 @@
 declare(strict_types=1);
 namespace Viserio\WebProfiler\Providers;
 
-use PDO;
 use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
 use Interop\Http\Factory\StreamFactoryInterface;
+use PDO;
 use Psr\Cache\CacheItemPoolInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\LoggerInterface as PsrLoggerInterface;
@@ -15,6 +15,9 @@ use Viserio\Contracts\Routing\UrlGenerator as UrlGeneratorContract;
 use Viserio\Contracts\Support\Traits\ServiceProviderConfigAwareTrait;
 use Viserio\Contracts\WebProfiler\WebProfiler as WebProfilerContract;
 use Viserio\WebProfiler\AssetsRenderer;
+use Viserio\WebProfiler\Bridge\DataCollectors\PDO\PDODataCollector;
+use Viserio\WebProfiler\Bridge\DataCollectors\PDO\TraceablePDODecorater;
+use Viserio\WebProfiler\Bridge\DataCollectors\PDO\TraceablePDOStatementDecorater;
 use Viserio\WebProfiler\DataCollectors\AjaxRequestsDataCollector;
 use Viserio\WebProfiler\DataCollectors\Bridge\Cache\Psr6CacheDataCollector;
 use Viserio\WebProfiler\DataCollectors\Bridge\Cache\TraceableCacheItemDecorater;
@@ -23,9 +26,6 @@ use Viserio\WebProfiler\DataCollectors\MemoryDataCollector;
 use Viserio\WebProfiler\DataCollectors\PhpInfoDataCollector;
 use Viserio\WebProfiler\DataCollectors\TimeDataCollector;
 use Viserio\WebProfiler\WebProfiler;
-use Viserio\WebProfiler\Bridge\DataCollectors\PDO\PDODataCollector;
-use Viserio\WebProfiler\Bridge\DataCollectors\PDO\TraceablePDODecorater;
-use Viserio\WebProfiler\Bridge\DataCollectors\PDO\TraceablePDOStatementDecorater;
 
 class WebProfilerServiceProvider implements ServiceProvider
 {
