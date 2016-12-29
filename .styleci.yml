@@ -19,7 +19,6 @@ enabled:
   - const_visibility_required
   - declare_strict_types
   - dir_constant
-  - print_to_echo
   - ereg_to_preg
   - mb_str_functions
   - modernize_types_casting
