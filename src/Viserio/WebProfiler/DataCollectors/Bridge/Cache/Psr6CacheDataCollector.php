@@ -2,9 +2,9 @@
 declare(strict_types=1);
 namespace Viserio\WebProfiler\DataCollectors\Bridge\Cache;
 
-use ReflectionClass;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use ReflectionClass;
 use Viserio\Contracts\WebProfiler\MenuAware as MenuAwareContract;
 use Viserio\Contracts\WebProfiler\PanelAware as PanelAwareContract;
 use Viserio\Contracts\WebProfiler\TooltipAware as TooltipAwareContract;
@@ -96,7 +96,7 @@ class Psr6CacheDataCollector extends AbstractDataCollector implements
         $data = [];
 
         foreach ($this->data['pools']['calls'] as $name => $calls) {
-            $html = '';
+            $html              = '';
             $statistic         = $this->data['pools']['statistics'][$name];
             $statistic['time'] = $this->formatDuration($statistic['time']);
 
@@ -111,7 +111,7 @@ class Psr6CacheDataCollector extends AbstractDataCollector implements
                     $call->name,
                     $call->argument,
                     $call->result,
-                    $this->formatDuration($call->end - $call->start)
+                    $this->formatDuration($call->end - $call->start),
                 ];
             }
 
@@ -122,7 +122,7 @@ class Psr6CacheDataCollector extends AbstractDataCollector implements
             );
 
             $data[] = [
-                'name' => (new ReflectionClass($name))->getShortName(),
+                'name'    => (new ReflectionClass($name))->getShortName(),
                 'content' => $html,
             ];
         }
