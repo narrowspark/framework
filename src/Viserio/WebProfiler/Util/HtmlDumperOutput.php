@@ -7,7 +7,7 @@ namespace Viserio\WebProfiler\Util;
  *
  * @see TemplateHelper::dump()
  */
-class HtmlDumperOutput
+final class HtmlDumperOutput
 {
     /**
      * Output of the dump.

@@ -2,7 +2,6 @@
 declare(strict_types=1);
 namespace Viserio\WebProfiler\DataCollectors\Bridge\Cache;
 
-use Psr\Cache\CacheItemPoolInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Contracts\WebProfiler\MenuAware as MenuAwareContract;
@@ -21,18 +20,18 @@ class Psr6CacheDataCollector extends AbstractDataCollector implements
     PanelAwareContract
 {
     /**
-     * Collection of CacheItemPoolInterfaces.
+     * Collection of TraceableCacheItemDecorater.
      *
-     * @var \Psr\Cache\CacheItemPoolInterface[]
+     * @var \Viserio\WebProfiler\DataCollectors\Bridge\Cache\TraceableCacheItemDecorater[]
      */
     private $pools = [];
 
     /**
      * Create a new cache data collector.
      *
-     * @param \Psr\Cache\CacheItemPoolInterface $cache
+     * @param \Viserio\WebProfiler\DataCollectors\Bridge\Cache\TraceableCacheItemDecorater $cache
      */
-    public function addPool(CacheItemPoolInterface $cache)
+    public function addPool(TraceableCacheItemDecorater $cache)
     {
         $this->pools[$cache->getName()] = $cache;
     }

@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\WebProfiler\Providers;
 
+use PDO;
 use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
 use Interop\Http\Factory\StreamFactoryInterface;
@@ -22,6 +23,9 @@ use Viserio\WebProfiler\DataCollectors\MemoryDataCollector;
 use Viserio\WebProfiler\DataCollectors\PhpInfoDataCollector;
 use Viserio\WebProfiler\DataCollectors\TimeDataCollector;
 use Viserio\WebProfiler\WebProfiler;
+use Viserio\WebProfiler\Bridge\DataCollectors\PDO\PDODataCollector;
+use Viserio\WebProfiler\Bridge\DataCollectors\PDO\TraceablePDODecorater;
+use Viserio\WebProfiler\Bridge\DataCollectors\PDO\TraceablePDOStatementDecorater;
 
 class WebProfilerServiceProvider implements ServiceProvider
 {
@@ -35,10 +39,16 @@ class WebProfilerServiceProvider implements ServiceProvider
     public function getServices()
     {
         return [
-            CacheItemPoolInterface::class => [self::class, 'createCacheItemPoolDecorater'],
-            AssetsRenderer::class         => [self::class, 'createAssetsRenderer'],
-            WebProfiler::class            => [self::class, 'createWebProfiler'],
-            WebProfilerContract::class    => function (ContainerInterface $container) {
+            CacheItemPoolInterface::class         => [self::class, 'createCacheItemPoolDecorater'],
+            TraceablePDODecorater::class          => [self::class, 'createTraceablePDODecorater'],
+            PDO::class                            => function (ContainerInterface $container) {
+                return $container->get(TraceablePDODecorater::class);
+            },
+            RouterContract::class                 => [self::class, 'registerWebProfilerAssetsControllers'],
+            TraceablePDOStatementDecorater::class => [self::class, 'createTraceablePDOStatementDecorater'],
+            AssetsRenderer::class                 => [self::class, 'createAssetsRenderer'],
+            WebProfiler::class                    => [self::class, 'createWebProfiler'],
+            WebProfilerContract::class            => function (ContainerInterface $container) {
                 return $container->get(WebProfiler::class);
             },
         ];
@@ -47,6 +57,16 @@ class WebProfilerServiceProvider implements ServiceProvider
     public static function createCacheItemPoolDecorater(ContainerInterface $container): CacheItemPoolInterface
     {
         return new TraceableCacheItemDecorater($container->get(CacheItemPoolInterface::class));
+    }
+
+    public static function createTraceablePDODecorater(ContainerInterface $container): TraceablePDODecorater
+    {
+        return new TraceablePDODecorater($container->get(PDO::class));
+    }
+
+    public static function createTraceablePDOStatementDecorater(ContainerInterface $container): TraceablePDOStatementDecorater
+    {
+        return new TraceablePDOStatementDecorater($container->get(TraceablePDODecorater::class));
     }
 
     public static function createWebProfiler(ContainerInterface $container): WebProfilerContract
@@ -70,8 +90,6 @@ class WebProfilerServiceProvider implements ServiceProvider
         );
 
         if ($container->has(UrlGeneratorContract::class)) {
-            // self::registerControllers($container);
-
             // $profiler->setUrlGenerator(
             //     $container->get(UrlGeneratorContract::class)
             // );
@@ -89,6 +107,30 @@ class WebProfilerServiceProvider implements ServiceProvider
             self::getConfig($container, 'jquery_is_used', false),
             self::getConfig($container, 'path')
         );
+    }
+
+    public static function registerWebProfilerAssetsControllers(ContainerInterface $container): RouterContract
+    {
+        $router = $container->get(RouterContract::class);
+
+        $router->group(
+            [
+                'namespace' => 'Viserio\WebProfiler\Controllers',
+                'prefix'    => 'webprofiler',
+            ],
+            function ($router) {
+                $router->get('assets/stylesheets', [
+                    'uses' => 'AssetController::css',
+                    'as'   => 'webprofiler.assets.css',
+                ]);
+                $router->get('assets/javascript', [
+                    'uses' => 'AssetController::js',
+                    'as'   => 'webprofiler.assets.js',
+                ]);
+            }
+        );
+
+        return $router;
     }
 
     protected static function registerCollectors(ContainerInterface $container, WebProfiler $profiler)
@@ -114,6 +156,15 @@ class WebProfilerServiceProvider implements ServiceProvider
         }
 
         self::registerCache($container, $profiler);
+    }
+
+    private static function registerPDO(ContainerInterface $container, WebProfiler $profiler)
+    {
+        if (self::getConfig($container, 'collector.pdo', false)) {
+            $profiler->addCollector(new PDODataCollector(
+                $container->get(TraceablePDODecorater::class)
+            ));
+        }
     }
 
     private static function registerSwiftmail(ContainerInterface $container, WebProfiler $profiler)
@@ -145,27 +196,5 @@ class WebProfilerServiceProvider implements ServiceProvider
                 $profiler->addCollector($container->get($collector));
             }
         }
-    }
-
-    private static function registerControllers(ContainerInterface $container)
-    {
-        $router = $container->get(RouterContract::class);
-
-        $router->group(
-            [
-                'namespace' => 'Viserio\WebProfiler\Controllers',
-                'prefix'    => 'webprofiler',
-            ],
-            function ($router) {
-                $router->get('assets/stylesheets', [
-                    'uses' => 'AssetController::css',
-                    'as'   => 'webprofiler.assets.css',
-                ]);
-                $router->get('assets/javascript', [
-                    'uses' => 'AssetController::js',
-                    'as'   => 'webprofiler.assets.js',
-                ]);
-            }
-        );
     }
 }

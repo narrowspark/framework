@@ -32,8 +32,7 @@ final class TraceableCacheItemDecorater implements CacheItemPoolInterface
     /**
      * RecordingAdapter constructor.
      *
-     * @param \Psr\Cache\CacheItemPoolInterface $cachePool
-     * @param CacheItemPoolInterface            $pool
+     * @param \Psr\Cache\CacheItemPoolInterface $pool
      */
     public function __construct(CacheItemPoolInterface $pool)
     {
