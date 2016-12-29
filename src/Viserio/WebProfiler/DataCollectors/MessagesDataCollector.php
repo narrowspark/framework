@@ -73,7 +73,7 @@ class MessagesDataCollector extends AbstractDataCollector implements MenuAwareCo
         }
 
         $this->messages[] = [
-            'message' => $message,
+            'message' => is_string($message) ? $message : $this->cloneVar($message),
             'label'   => $label,
             'time'    => microtime(true),
         ];
