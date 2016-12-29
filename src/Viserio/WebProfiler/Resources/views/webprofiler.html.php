@@ -1,8 +1,6 @@
 <?php
 use Viserio\WebProfiler\TemplateManager;
 
-// @codeCoverageIgnore
-
 if (! isset($token, $menus, $icons, $panels)) {
     return;
 }

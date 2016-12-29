@@ -99,7 +99,7 @@ class Emitter implements EmitterContract
      */
     protected function emitBody(ResponseInterface $response)
     {
-        print $response->getBody();
+        echo $response->getBody();
     }
 
     /**

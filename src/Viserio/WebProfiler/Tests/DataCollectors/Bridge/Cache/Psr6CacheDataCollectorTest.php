@@ -9,6 +9,7 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Symfony\Component\Stopwatch\Stopwatch;
 use Viserio\WebProfiler\DataCollectors\Bridge\Cache\Psr6CacheDataCollector;
+use Viserio\WebProfiler\DataCollectors\Bridge\Cache\TraceableCacheItemDecorater;
 
 class Psr6CacheDataCollectorTest extends \PHPUnit_Framework_TestCase
 {
@@ -28,7 +29,7 @@ class Psr6CacheDataCollectorTest extends \PHPUnit_Framework_TestCase
 
         static::assertSame(
             [
-                'icon'  => '',
+                'icon'  => 'ic_layers_white_24px.svg',
                 'label' => '0 in',
                 'value' => '0μs',
             ],
@@ -51,23 +52,7 @@ class Psr6CacheDataCollectorTest extends \PHPUnit_Framework_TestCase
         $collector = $this->getPsr6CacheDataCollector();
 
         static::assertSame(
-            '<h3>Cache\Adapter\PHPArray\ArrayCachePool</h3><table class="row"><thead><tr><th scope="col" class="Calls">Calls</th><th scope="col" class="Time">Time</th><th scope="col" class="Reads">Reads</th><th scope="col" class="Hits">Hits</th><th scope="col" class="Misses">Misses</th><th scope="col" class="Writes">Writes</th><th scope="col" class="Deletes">Deletes</th><th scope="col" class="Ratio">Ratio</th></tr></thead><tbody><tr><td><pre class=sf-dump data-indent-pad="  "><span class=sf-dump-num>0</span>
-</pre>
-</td><td><pre class=sf-dump data-indent-pad="  "><span class=sf-dump-num>0</span>
-</pre>
-</td><td><pre class=sf-dump data-indent-pad="  "><span class=sf-dump-num>0</span>
-</pre>
-</td><td><pre class=sf-dump data-indent-pad="  "><span class=sf-dump-num>0</span>
-</pre>
-</td><td><pre class=sf-dump data-indent-pad="  "><span class=sf-dump-num>0</span>
-</pre>
-</td><td><pre class=sf-dump data-indent-pad="  "><span class=sf-dump-num>0</span>
-</pre>
-</td><td><pre class=sf-dump data-indent-pad="  "><span class=sf-dump-num>0</span>
-</pre>
-</td><td><pre class=sf-dump data-indent-pad="  ">"<span class=sf-dump-str title="3 characters">N/A</span>"
-</pre>
-</td></tr></tbody></table>',
+            '<h3>Statistics for "Cache\Adapter\PHPArray\ArrayCachePool"</h3><ul class="metrics"><li class="metric"><span class="value">0</span><span class="label">calls</span></li><li class="metric"><span class="value">0μs</span><span class="label">time</span></li><li class="metric"><span class="value">0</span><span class="label">reads</span></li><li class="metric"><span class="value">0</span><span class="label">hits</span></li><li class="metric"><span class="value">0</span><span class="label">misses</span></li><li class="metric"><span class="value">0</span><span class="label">writes</span></li><li class="metric"><span class="value">0</span><span class="label">deletes</span></li><li class="metric"><span class="value">N/A</span><span class="label">hits/reads</span></li></ul><h3>Calls for "Cache\Adapter\PHPArray\ArrayCachePool"</h3><div class="empty">Empty</div>',
             $this->removeSymfonyVarDumper($collector->getPanel())
         );
     }
@@ -75,7 +60,7 @@ class Psr6CacheDataCollectorTest extends \PHPUnit_Framework_TestCase
     private function getPsr6CacheDataCollector()
     {
         $collector = new Psr6CacheDataCollector(new Stopwatch());
-        $collector->addPool(new ArrayCachePool());
+        $collector->addPool(new TraceableCacheItemDecorater(new ArrayCachePool()));
         $collector->collect(
             $this->mock(ServerRequestInterface::class),
             $this->mock(ResponseInterface::class)

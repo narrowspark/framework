@@ -156,6 +156,8 @@ class TemplateManager implements RenderableContract
                     $class = ' webprofiler-body-has-tabs';
                 } elseif (mb_strpos($panel, '<select class="content-selector"') !== false) {
                     $class = ' webprofiler-body-has-selector';
+                } elseif (mb_strpos($panel, '<ul class="metrics"') !== false) {
+                    $class = ' webprofiler-body-has-metrics';
                 } elseif (mb_strpos($panel, '<table class="row">') !== false) {
                     $class = ' webprofiler-body-has-table';
                 }

@@ -9,14 +9,14 @@ use Psr\Cache\CacheItemPoolInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\LoggerInterface as PsrLoggerInterface;
 use Swift_Mailer;
-use Symfony\Component\Stopwatch\Stopwatch;
 use Viserio\Contracts\Routing\Router as RouterContract;
 use Viserio\Contracts\Routing\UrlGenerator as UrlGeneratorContract;
 use Viserio\Contracts\Support\Traits\ServiceProviderConfigAwareTrait;
 use Viserio\Contracts\WebProfiler\WebProfiler as WebProfilerContract;
 use Viserio\WebProfiler\AssetsRenderer;
 use Viserio\WebProfiler\DataCollectors\AjaxRequestsDataCollector;
-use Viserio\WebProfiler\DataCollectors\Bridge\Psr6CacheDataCollector;
+use Viserio\WebProfiler\DataCollectors\Bridge\Cache\Psr6CacheDataCollector;
+use Viserio\WebProfiler\DataCollectors\Bridge\Cache\TraceableCacheItemDecorater;
 use Viserio\WebProfiler\DataCollectors\Bridge\SwiftMailDataCollector;
 use Viserio\WebProfiler\DataCollectors\MemoryDataCollector;
 use Viserio\WebProfiler\DataCollectors\PhpInfoDataCollector;
@@ -35,18 +35,18 @@ class WebProfilerServiceProvider implements ServiceProvider
     public function getServices()
     {
         return [
-            AssetsRenderer::class      => [self::class, 'createAssetsRenderer'],
-            WebProfiler::class         => [self::class, 'createWebProfiler'],
-            Stopwatch::class           => [self::class, 'createStopwatch'],
-            WebProfilerContract::class => function (ContainerInterface $container) {
+            CacheItemPoolInterface::class => [self::class, 'createCacheItemPoolDecorater'],
+            AssetsRenderer::class         => [self::class, 'createAssetsRenderer'],
+            WebProfiler::class            => [self::class, 'createWebProfiler'],
+            WebProfilerContract::class    => function (ContainerInterface $container) {
                 return $container->get(WebProfiler::class);
             },
         ];
     }
 
-    public static function createStopwatch()
+    public static function createCacheItemPoolDecorater(ContainerInterface $container): CacheItemPoolInterface
     {
-        return new Stopwatch();
+        return new TraceableCacheItemDecorater($container->get(CacheItemPoolInterface::class));
     }
 
     public static function createWebProfiler(ContainerInterface $container): WebProfilerContract
@@ -128,7 +128,7 @@ class WebProfilerServiceProvider implements ServiceProvider
     private static function registerCache(ContainerInterface $container, WebProfiler $profiler)
     {
         if (self::getConfig($container, 'collector.cache', false)) {
-            $cache = new Psr6CacheDataCollector($container->get(Stopwatch::class));
+            $cache = new Psr6CacheDataCollector();
 
             if ($container->has(CacheItemPoolInterface::class)) {
                 $cache->addPool($container->get(CacheItemPoolInterface::class));

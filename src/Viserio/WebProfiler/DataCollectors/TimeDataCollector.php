@@ -66,6 +66,14 @@ class TimeDataCollector extends AbstractDataCollector implements MenuAwareContra
             $this->stopMeasure($name);
         }
 
+        usort($this->measures, function ($a, $b) {
+            if ($a['start'] == $b['start']) {
+                return 0;
+            }
+
+            return $a['start'] < $b['start'] ? -1 : 1;
+        });
+
         $this->data = [
             'start'        => $this->requestStartTime,
             'end'          => $this->requestEndTime,

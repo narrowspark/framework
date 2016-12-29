@@ -278,7 +278,7 @@ abstract class AbstractDataCollector implements DataCollectorContract
      *
      * @return string
      */
-    protected function createDropdownMenuContent(array $data)
+    protected function createDropdownMenuContent(array $data): string
     {
         $selects  = $content  = [];
         $selected = false;
@@ -286,7 +286,9 @@ abstract class AbstractDataCollector implements DataCollectorContract
         foreach ($data as $key => $value) {
             $id = 'content-' . $key . '-' . uniqid('');
 
-            $selects[$key] = '<option value="' . $id . '"' . ($selected === false ? $selected = 'selected' : '') . '>' . $key . '</option>';
+            $selected = $selected === false ? $selected = 'selected' : '';
+
+            $selects[$key] = '<option value="' . $id . '"' . $selected . '>' . $key . '</option>';
             $content[$key] = '<div id="' . $id . '" class="selected-content">' . $value . '</div>';
         }
 
@@ -301,6 +303,30 @@ abstract class AbstractDataCollector implements DataCollectorContract
         foreach ($content as $key => $value) {
             $html .= $value;
         }
+
+        return $html;
+    }
+
+    /**
+     * Create a metrics.
+     *
+     * @param array       $data
+     * @param string|null $name
+     *
+     * @return string
+     */
+    protected function createMetrics(array $data, ?string $name = null): string
+    {
+        $html = $name !== null ? '<h3>' . $name . '</h3>' : '';
+        $html .= '<ul class="metrics">';
+
+        foreach ($data as $key => $value) {
+            $html .= '<li class="metric">';
+            $html .= '<span class="value">' . $value . '</span><span class="label">' . $key . '</span>';
+            $html .= '</li>';
+        }
+
+        $html .= '</ul>';
 
         return $html;
     }

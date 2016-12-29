@@ -5,7 +5,6 @@ namespace Viserio\WebProfiler\DataCollectors\Bridge\Cache;
 use Psr\Cache\CacheItemPoolInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Symfony\Component\Stopwatch\Stopwatch;
 use Viserio\Contracts\WebProfiler\MenuAware as MenuAwareContract;
 use Viserio\Contracts\WebProfiler\PanelAware as PanelAwareContract;
 use Viserio\Contracts\WebProfiler\TooltipAware as TooltipAwareContract;
@@ -29,30 +28,13 @@ class Psr6CacheDataCollector extends AbstractDataCollector implements
     private $pools = [];
 
     /**
-     * Stopwatch instance.
-     *
-     * @var \Symfony\Component\Stopwatch\Stopwatch
-     */
-    private $stopwatch;
-
-    /**
-     * Create a new Psr6CacheDataCollector instance.
-     *
-     * @param \Symfony\Component\Stopwatch\Stopwatch $stopwatch
-     */
-    public function __construct(Stopwatch $stopwatch)
-    {
-        $this->stopwatch = $stopwatch;
-    }
-
-    /**
      * Create a new cache data collector.
      *
      * @param \Psr\Cache\CacheItemPoolInterface $cache
      */
     public function addPool(CacheItemPoolInterface $cache)
     {
-        $this->pools[get_class($cache)] = new TraceableCacheItemDecorater($cache, $this->stopwatch);
+        $this->pools[$cache->getName()] = $cache;
     }
 
     /**
@@ -85,7 +67,7 @@ class Psr6CacheDataCollector extends AbstractDataCollector implements
         $static = $this->data['total']['statistics'];
 
         return [
-            'icon'  => '',
+            'icon'  => 'ic_layers_white_24px.svg',
             'label' => $static['calls'] . ' in',
             'value' => $this->formatDuration($static['time']),
         ];
@@ -113,11 +95,25 @@ class Psr6CacheDataCollector extends AbstractDataCollector implements
     {
         $html = '';
 
-        foreach ($this->data['pools']['statistics'] as $key => $value) {
+        foreach ($this->data['pools']['calls'] as $name => $calls) {
+            $statistic = $this->data['pools']['statistics'][$name];
+            $statistic['time'] = $this->formatDuration($statistic['time']);
+
+            $html .= $this->createMetrics(
+                $statistic,
+                'Statistics for "' . $name . '"'
+            );
+
+            $data = [];
+
+            foreach ($calls as $i => $call) {
+                $data[] =[$call->name, $call->argument, $call->result, $this->formatDuration($call->end - $call->start)];
+            }
+
             $html .= $this->createTable(
-                [array_values($value)],
-                $key,
-                ['Calls', 'Time', 'Reads', 'Hits', 'Misses', 'Writes', 'Deletes', 'Ratio']
+                $data,
+                'Calls for "' . $name . '"',
+                ['Method', 'Argument', 'Result', 'Time']
             );
         }
 
@@ -128,6 +124,8 @@ class Psr6CacheDataCollector extends AbstractDataCollector implements
      * Method returns amount of logged Cache reads: "get" calls.
      *
      * @return array
+     *
+     * @codeCoverageIgnore
      */
     public function getStatistics(): array
     {
@@ -138,6 +136,8 @@ class Psr6CacheDataCollector extends AbstractDataCollector implements
      * Method returns the statistic totals.
      *
      * @return array
+     *
+     * @codeCoverageIgnore
      */
     public function getTotals(): array
     {
@@ -148,6 +148,8 @@ class Psr6CacheDataCollector extends AbstractDataCollector implements
      * Method returns all logged Cache call objects.
      *
      * @return int
+     *
+     * @codeCoverageIgnore
      */
     public function getCalls(): int
     {
@@ -174,16 +176,21 @@ class Psr6CacheDataCollector extends AbstractDataCollector implements
 
             foreach ($calls as $call) {
                 $statistics[$name]['calls'] += 1;
-                $statistics[$name]['time'] += $call->time;
+                $statistics[$name]['time'] += $call->end - $call->start;
 
                 if ($call->name === 'getItem') {
                     $statistics[$name]['reads'] += 1;
 
-                    if ($call->isHit) {
+                    if ($call->hits) {
                         $statistics[$name]['hits'] += 1;
                     } else {
                         $statistics[$name]['misses'] += 1;
                     }
+                } elseif ($call->name === 'getItems') {
+                    $count = $call->hits + $call->misses;
+                    $statistics[$name]['reads'] += $count;
+                    $statistics[$name]['hits'] += $call->hits;
+                    $statistics[$name]['misses'] += $count - $call->misses;
                 } elseif ($call->name === 'hasItem') {
                     $statistics[$name]['reads'] += 1;
 
@@ -197,10 +204,13 @@ class Psr6CacheDataCollector extends AbstractDataCollector implements
                 }
             }
 
+            $statistics[$name]['time'] = $statistics[$name]['time'];
+
             if ($statistics[$name]['reads']) {
-                $statistics[$name]['ratio'] = round(100 * $statistics[$name]['hits'] / $statistics[$name]['reads'], 2) . '%';
+                $statistics[$name]['hits/reads'] =
+                    round(100 * $statistics[$name]['hits'] / $statistics[$name]['reads'], 2) . '%';
             } else {
-                $statistics[$name]['ratio'] = 'N/A';
+                $statistics[$name]['hits/reads'] = 'N/A';
             }
         }
 
@@ -229,9 +239,9 @@ class Psr6CacheDataCollector extends AbstractDataCollector implements
         }
 
         if ($totals['reads']) {
-            $totals['ratio'] = round(100 * $totals['hits'] / $totals['reads'], 2) . '%';
+            $totals['hits/reads'] = round(100 * $totals['hits'] / $totals['reads'], 2) . '%';
         } else {
-            $totals['ratio'] = 'N/A';
+            $totals['hits/reads'] = 'N/A';
         }
 
         return $totals;

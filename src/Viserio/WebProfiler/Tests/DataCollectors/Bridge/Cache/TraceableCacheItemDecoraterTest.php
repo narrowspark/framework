@@ -5,8 +5,6 @@ namespace Viserio\WebProfiler\Tests\DataCollectors\Bridge\Recording;
 use Cache\Adapter\PHPArray\ArrayCachePool;
 use Mockery as Mock;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
-use Psr\Cache\CacheItemInterface;
-use Symfony\Component\Stopwatch\Stopwatch;
 use Viserio\WebProfiler\DataCollectors\Bridge\Cache\TraceableCacheItemDecorater;
 
 class TraceableCacheItemDecoraterTest extends \PHPUnit_Framework_TestCase
@@ -23,128 +21,212 @@ class TraceableCacheItemDecoraterTest extends \PHPUnit_Framework_TestCase
         Mock::close();
     }
 
-    public function testGetItem()
+    public function testGetItemMiss()
     {
-        $adapter = $this->getTraceableCacheItemDecorater();
+        $pool = $this->createCachePool();
+        $pool->getItem('k');
+        $calls = $pool->getCalls();
 
-        static::assertInstanceOf(CacheItemInterface::class, $adapter->getItem('test'));
-        $object = $adapter->getCalls()[0];
+        static::assertCount(1, $calls);
 
-        static::assertFalse($object->isHit);
-        static::assertSame('getItem', $object->name);
-        static::assertSame(['test'], $object->arguments);
+        $call = $calls[0];
+
+        static::assertEquals('getItem', $call->name);
+        static::assertEquals('k', $call->argument);
+        static::assertEquals(0, $call->hits);
+        static::assertEquals(1, $call->misses);
+        static::assertNull($call->result);
+        static::assertNotEmpty($call->start);
+        static::assertNotEmpty($call->end);
     }
 
-    public function testHasItem()
+    public function testGetItemHit()
     {
-        $adapter = $this->getTraceableCacheItemDecorater();
+        $pool = $this->createCachePool();
+        $item = $pool->getItem('k')->set('foo');
+        $pool->save($item);
+        $pool->getItem('k');
+        $calls = $pool->getCalls();
 
-        static::assertFalse($adapter->hasItem('test'));
-        $object = $adapter->getCalls()[0];
+        static::assertCount(3, $calls);
 
-        static::assertFalse($object->result);
-        static::assertSame('hasItem', $object->name);
-        static::assertSame(['test'], $object->arguments);
+        $call = $calls[2];
+
+        static::assertEquals(1, $call->hits);
+        static::assertEquals(0, $call->misses);
+    }
+
+    public function testGetItemsMiss()
+    {
+        $pool  = $this->createCachePool();
+        $arg   = ['k0', 'k1'];
+        $items = $pool->getItems($arg);
+
+        foreach ($items as $item) {
+        }
+
+        $calls = $pool->getCalls();
+
+        static::assertCount(1, $calls);
+
+        $call = $calls[0];
+
+        static::assertEquals('getItems', $call->name);
+        static::assertEquals($arg, $call->argument);
+        static::assertEquals(2, $call->misses);
+        static::assertNotEmpty($call->start);
+        static::assertNotEmpty($call->end);
+    }
+
+    public function testHasItemMiss()
+    {
+        $pool = $this->createCachePool();
+        $pool->hasItem('k');
+        $calls = $pool->getCalls();
+
+        static::assertCount(1, $calls);
+
+        $call = $calls[0];
+
+        static::assertEquals('hasItem', $call->name);
+        static::assertEquals('k', $call->argument);
+        static::assertFalse($call->result);
+        static::assertNotEmpty($call->start);
+        static::assertNotEmpty($call->end);
+    }
+
+    public function testHasItemHit()
+    {
+        $pool = $this->createCachePool();
+        $item = $pool->getItem('k')->set('foo');
+        $pool->save($item);
+        $pool->hasItem('k');
+        $calls = $pool->getCalls();
+
+        static::assertCount(3, $calls);
+
+        $call = $calls[2];
+
+        static::assertEquals('hasItem', $call->name);
+        static::assertEquals('k', $call->argument);
+        static::assertTrue($call->result);
+        static::assertNotEmpty($call->start);
+        static::assertNotEmpty($call->end);
     }
 
     public function testDeleteItem()
     {
-        $adapter = $this->getTraceableCacheItemDecorater();
+        $pool = $this->createCachePool();
+        $pool->deleteItem('k');
+        $calls = $pool->getCalls();
 
-        $adapter->deleteItem('test');
-        $object = $adapter->getCalls()[0];
+        static::assertCount(1, $calls);
 
-        static::assertTrue($object->result);
-        static::assertSame('deleteItem', $object->name);
-        static::assertSame(['test'], $object->arguments);
-    }
+        $call = $calls[0];
 
-    public function testSave()
-    {
-        $adapter = $this->getTraceableCacheItemDecorater();
-        $item    = $this->mock(CacheItemInterface::class);
-        $item->shouldReceive('getKey')
-            ->twice();
-
-        static::assertTrue($adapter->save($item));
-
-        $object = $adapter->getCalls()[0];
-
-        static::assertTrue($object->result);
-        static::assertSame('save', $object->name);
-        static::assertTrue(is_array($object->arguments));
-    }
-
-    public function testSaveDeferred()
-    {
-        $adapter = $this->getTraceableCacheItemDecorater();
-        $item    = $this->mock(CacheItemInterface::class);
-        $item->shouldReceive('getKey')
-            ->times(3);
-
-        static::assertTrue($adapter->saveDeferred($item));
-
-        $object = $adapter->getCalls()[0];
-
-        static::assertTrue($object->result);
-        static::assertSame('saveDeferred', $object->name);
-        static::assertTrue(is_array($object->arguments));
-    }
-
-    public function testGetItems()
-    {
-        $adapter = $this->getTraceableCacheItemDecorater();
-
-        static::assertInstanceOf(CacheItemInterface::class, $adapter->getItems(['item'])['item']);
-
-        $object = $adapter->getCalls()[0];
-
-        static::assertTrue(is_array($object->result));
-        static::assertSame('getItems', $object->name);
-        static::assertTrue(is_array($object->arguments));
-    }
-
-    public function testClear()
-    {
-        $adapter = $this->getTraceableCacheItemDecorater();
-
-        static::assertTrue($adapter->clear());
-
-        $object = $adapter->getCalls()[0];
-
-        static::assertTrue($object->result);
-        static::assertSame('clear', $object->name);
-        static::assertTrue(is_array($object->arguments));
+        static::assertEquals('deleteItem', $call->name);
+        static::assertEquals('k', $call->argument);
+        static::assertEquals(0, $call->hits);
+        static::assertEquals(0, $call->misses);
+        static::assertNotEmpty($call->start);
+        static::assertNotEmpty($call->end);
     }
 
     public function testDeleteItems()
     {
-        $adapter = $this->getTraceableCacheItemDecorater();
+        $pool = $this->createCachePool();
+        $arg  = ['k0', 'k1'];
+        $pool->deleteItems($arg);
+        $calls = $pool->getCalls();
 
-        static::assertTrue($adapter->deleteItems(['test']));
+        static::assertCount(1, $calls);
 
-        $object = $adapter->getCalls()[0];
+        $call = $calls[0];
 
-        static::assertTrue($object->result);
-        static::assertSame('deleteItems', $object->name);
-        static::assertTrue(is_array($object->arguments));
+        static::assertEquals('deleteItems', $call->name);
+        static::assertEquals($arg, $call->argument);
+        static::assertEquals(0, $call->hits);
+        static::assertEquals(0, $call->misses);
+        static::assertNotEmpty($call->start);
+        static::assertNotEmpty($call->end);
+    }
+
+    public function testSave()
+    {
+        $pool = $this->createCachePool();
+        $item = $pool->getItem('k')->set('foo');
+        $pool->save($item);
+        $calls = $pool->getCalls();
+
+        static::assertCount(2, $calls);
+
+        $call = $calls[1];
+
+        static::assertEquals('save', $call->name);
+        static::assertEquals($item, $call->argument);
+        static::assertEquals(0, $call->hits);
+        static::assertEquals(0, $call->misses);
+        static::assertNotEmpty($call->start);
+        static::assertNotEmpty($call->end);
+    }
+
+    public function testSaveDeferred()
+    {
+        $pool = $this->createCachePool();
+        $item = $pool->getItem('k')->set('foo');
+        $pool->saveDeferred($item);
+        $calls = $pool->getCalls();
+
+        static::assertCount(2, $calls);
+
+        $call = $calls[1];
+
+        static::assertEquals('saveDeferred', $call->name);
+        static::assertEquals($item, $call->argument);
+        static::assertEquals(0, $call->hits);
+        static::assertEquals(0, $call->misses);
+        static::assertNotEmpty($call->start);
+        static::assertNotEmpty($call->end);
     }
 
     public function testCommit()
     {
-        $adapter = $this->getTraceableCacheItemDecorater();
+        $pool = $this->createCachePool();
+        $pool->commit();
+        $calls = $pool->getCalls();
 
-        static::assertTrue($adapter->commit());
+        static::assertCount(1, $calls);
 
-        $object = $adapter->getCalls()[0];
+        $call = $calls[0];
 
-        static::assertTrue($object->result);
-        static::assertSame('commit', $object->name);
-        static::assertTrue(is_array($object->arguments));
+        static::assertEquals('commit', $call->name);
+        static::assertNull(null, $call->argument);
+        static::assertEquals(0, $call->hits);
+        static::assertEquals(0, $call->misses);
+        static::assertNotEmpty($call->start);
+        static::assertNotEmpty($call->end);
     }
 
-    private function getTraceableCacheItemDecorater()
+    public function testClear()
     {
-        return new TraceableCacheItemDecorater(new ArrayCachePool(), new Stopwatch());
+        $pool = $this->createCachePool();
+        $pool->clear();
+        $calls = $pool->getCalls();
+
+        static::assertCount(1, $calls);
+
+        $call = $calls[0];
+
+        static::assertEquals('clear', $call->name);
+        static::assertNull(null, $call->argument);
+        static::assertEquals(0, $call->hits);
+        static::assertEquals(0, $call->misses);
+        static::assertNotEmpty($call->start);
+        static::assertNotEmpty($call->end);
+    }
+
+    private function createCachePool()
+    {
+        return new TraceableCacheItemDecorater(new ArrayCachePool());
     }
 }

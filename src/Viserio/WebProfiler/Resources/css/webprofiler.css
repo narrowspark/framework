@@ -228,7 +228,8 @@
     display: none;
 }
 .webprofiler .webprofiler-body .webprofiler-panel.webprofiler-body-has-table,
-.webprofiler .webprofiler-body .webprofiler-panel.webprofiler-body-has-selector {
+.webprofiler .webprofiler-body .webprofiler-panel.webprofiler-body-has-selector,
+.webprofiler .webprofiler-body .webprofiler-panel.webprofiler-body-has-metrics {
     overflow-y: auto;
     overflow-x: hidden;
     padding: 15px;
@@ -366,6 +367,36 @@
     padding: .5em 2em;
     text-align: center;
     font-weight: bold;
+}
+
+.webprofiler .webprofiler-body .webprofiler-panel .metrics {
+    overflow: auto;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+.webprofiler .webprofiler-body .webprofiler-panel .metrics .metric {
+    margin: 0 1em 1em 0;
+    background: #FFF;
+    box-shadow: 0px 0px 1px rgba(128, 128, 128, .2);
+    min-width: 100px;
+    min-height: 65px;
+    display: inline-block;
+}
+.webprofiler .webprofiler-body .webprofiler-panel .metrics .metric .value {
+    display: block;
+    font-size: 28px;
+    padding: 8px 15px 4px;
+    text-align: center;
+    color: #2B2A28;
+}
+.webprofiler .webprofiler-body .webprofiler-panel .metrics .metric .label {
+    background: #444;
+    color: #FFF;
+    display: block;
+    font-size: 12px;
+    padding: 5px;
+    text-align: center;
 }
 
 .webprofiler .webprofiler-body .webprofiler-panel select {
