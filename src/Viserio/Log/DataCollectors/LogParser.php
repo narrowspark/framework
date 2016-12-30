@@ -29,7 +29,7 @@ class LogParser
      *
      * @param string $path
      *
-     * @return array
+     * @return string
      */
     public function parse(string $path): array
     {
