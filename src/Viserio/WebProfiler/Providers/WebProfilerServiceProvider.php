@@ -5,23 +5,14 @@ namespace Viserio\WebProfiler\Providers;
 use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
 use Interop\Http\Factory\StreamFactoryInterface;
-use PDO;
-use Psr\Cache\CacheItemPoolInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\LoggerInterface as PsrLoggerInterface;
-use Swift_Mailer;
 use Viserio\Contracts\Routing\Router as RouterContract;
 use Viserio\Contracts\Routing\UrlGenerator as UrlGeneratorContract;
 use Viserio\Contracts\Support\Traits\ServiceProviderConfigAwareTrait;
 use Viserio\Contracts\WebProfiler\WebProfiler as WebProfilerContract;
 use Viserio\WebProfiler\AssetsRenderer;
-use Viserio\WebProfiler\Bridge\DataCollectors\PDO\PDODataCollector;
-use Viserio\WebProfiler\Bridge\DataCollectors\PDO\TraceablePDODecorater;
-use Viserio\WebProfiler\Bridge\DataCollectors\PDO\TraceablePDOStatementDecorater;
 use Viserio\WebProfiler\DataCollectors\AjaxRequestsDataCollector;
-use Viserio\WebProfiler\DataCollectors\Bridge\Cache\Psr6CacheDataCollector;
-use Viserio\WebProfiler\DataCollectors\Bridge\Cache\TraceableCacheItemDecorater;
-use Viserio\WebProfiler\DataCollectors\Bridge\SwiftMailDataCollector;
 use Viserio\WebProfiler\DataCollectors\MemoryDataCollector;
 use Viserio\WebProfiler\DataCollectors\PhpInfoDataCollector;
 use Viserio\WebProfiler\DataCollectors\TimeDataCollector;
@@ -39,34 +30,13 @@ class WebProfilerServiceProvider implements ServiceProvider
     public function getServices()
     {
         return [
-            CacheItemPoolInterface::class         => [self::class, 'createCacheItemPoolDecorater'],
-            TraceablePDODecorater::class          => [self::class, 'createTraceablePDODecorater'],
-            PDO::class                            => function (ContainerInterface $container) {
-                return $container->get(TraceablePDODecorater::class);
-            },
-            RouterContract::class                 => [self::class, 'registerWebProfilerAssetsControllers'],
-            TraceablePDOStatementDecorater::class => [self::class, 'createTraceablePDOStatementDecorater'],
-            AssetsRenderer::class                 => [self::class, 'createAssetsRenderer'],
-            WebProfiler::class                    => [self::class, 'createWebProfiler'],
-            WebProfilerContract::class            => function (ContainerInterface $container) {
-                return $container->get(WebProfiler::class);
+            RouterContract::class      => [self::class, 'registerWebProfilerAssetsControllers'],
+            AssetsRenderer::class      => [self::class, 'createAssetsRenderer'],
+            WebProfilerContract::class => [self::class, 'createWebProfiler'],
+            WebProfiler::class         => function (ContainerInterface $container) {
+                return $container->get(WebProfilerContract::class);
             },
         ];
-    }
-
-    public static function createCacheItemPoolDecorater(ContainerInterface $container): CacheItemPoolInterface
-    {
-        return new TraceableCacheItemDecorater($container->get(CacheItemPoolInterface::class));
-    }
-
-    public static function createTraceablePDODecorater(ContainerInterface $container): TraceablePDODecorater
-    {
-        return new TraceablePDODecorater($container->get(PDO::class));
-    }
-
-    public static function createTraceablePDOStatementDecorater(ContainerInterface $container): TraceablePDOStatementDecorater
-    {
-        return new TraceablePDOStatementDecorater($container->get(TraceablePDODecorater::class));
     }
 
     public static function createWebProfiler(ContainerInterface $container): WebProfilerContract
@@ -120,11 +90,11 @@ class WebProfilerServiceProvider implements ServiceProvider
             ],
             function ($router) {
                 $router->get('assets/stylesheets', [
-                    'uses' => 'AssetController::css',
+                    'uses' => 'AssetController@css',
                     'as'   => 'webprofiler.assets.css',
                 ]);
                 $router->get('assets/javascript', [
-                    'uses' => 'AssetController::js',
+                    'uses' => 'AssetController@js',
                     'as'   => 'webprofiler.assets.js',
                 ]);
             }
@@ -145,47 +115,12 @@ class WebProfilerServiceProvider implements ServiceProvider
             $profiler->addCollector(new MemoryDataCollector());
         }
 
-        self::registerSwiftmail($container, $profiler);
-
         if (self::getConfig($container, 'collector.ajax', false)) {
             $profiler->addCollector(new AjaxRequestsDataCollector());
         }
 
         if (self::getConfig($container, 'collector.phpinfo', false)) {
             $profiler->addCollector(new PhpInfoDataCollector());
-        }
-
-        self::registerCache($container, $profiler);
-    }
-
-    private static function registerPDO(ContainerInterface $container, WebProfiler $profiler)
-    {
-        if (self::getConfig($container, 'collector.pdo', false)) {
-            $profiler->addCollector(new PDODataCollector(
-                $container->get(TraceablePDODecorater::class)
-            ));
-        }
-    }
-
-    private static function registerSwiftmail(ContainerInterface $container, WebProfiler $profiler)
-    {
-        if (self::getConfig($container, 'collector.swiftmail', false)) {
-            $profiler->addCollector(new SwiftMailDataCollector(
-                $container->get(Swift_Mailer::class)
-            ));
-        }
-    }
-
-    private static function registerCache(ContainerInterface $container, WebProfiler $profiler)
-    {
-        if (self::getConfig($container, 'collector.cache', false)) {
-            $cache = new Psr6CacheDataCollector();
-
-            if ($container->has(CacheItemPoolInterface::class)) {
-                $cache->addPool($container->get(CacheItemPoolInterface::class));
-            }
-
-            $profiler->addCollector($cache);
         }
     }
 

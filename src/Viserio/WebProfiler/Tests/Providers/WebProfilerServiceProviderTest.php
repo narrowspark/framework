@@ -1,42 +1,77 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\WebProfiler\Providers;
+namespace Viserio\WebProfiler\Tests\Providers;
 
-use Narrowspark\TestingHelper\Middleware\DelegateMiddleware;
-use Viserio\HttpFactory\ResponseFactory;
-use Viserio\HttpFactory\ServerRequestFactory;
+use Viserio\Container\Container;
+use Viserio\WebProfiler\Providers\WebProfilerServiceProvider;
+use Viserio\Contracts\Routing\Router as RouterContract;
 use Viserio\WebProfiler\AssetsRenderer;
-use Viserio\WebProfiler\Middleware\WebProfilerMiddleware;
+use Viserio\Contracts\WebProfiler\WebProfiler as WebProfilerContract;
 use Viserio\WebProfiler\WebProfiler;
+use Viserio\Events\Providers\EventsServiceProvider;
+use Viserio\Routing\Providers\RoutingServiceProvider;
+use Viserio\Config\Providers\ConfigServiceProvider;
+use Viserio\HttpFactory\Providers\HttpFactoryServiceProvider;
+use Mockery as Mock;
+use Narrowspark\TestingHelper\Traits\MockeryTrait;
+use Psr\Http\Message\ServerRequestInterface;
 
 class WebProfilerServiceProviderTest extends \PHPUnit_Framework_TestCase
 {
-    public function testProcess()
+    use MockeryTrait;
+
+    public function tearDown()
     {
-        $profiler = new WebProfiler(new AssetsRenderer());
-        $profiler->enable();
-        $middleware = new WebProfilerMiddleware($profiler);
+        parent::tearDown();
 
-        $response = $middleware->process(
-            (new ServerRequestFactory())->createServerRequest($_SERVER),
-            new DelegateMiddleware(function ($request) {
-                return (new ResponseFactory())->createResponse(200);
-            })
-        );
+        $this->allowMockingNonExistentMethods(true);
 
-        $profilerResponse = $profiler->modifyResponse(
-            (new ServerRequestFactory())->createServerRequest($_SERVER),
-            (new ResponseFactory())->createResponse(200)
-        );
-
-        static::assertEquals(
-            $this->removeId((string) $profilerResponse->getBody()),
-            $this->removeId((string) $response->getBody())
-        );
+        // Verify Mockery expectations.
+        Mock::close();
     }
 
-    private function removeId(string $html): string
+    public function testProvider()
     {
-        return trim(preg_replace('/="webprofiler-(.*?)"/', '', $html));
+        $container = new Container();
+        $container->instance(ServerRequestInterface::class, $this->getRequest());
+        $container->register(new HttpFactoryServiceProvider());
+        $container->register(new EventsServiceProvider());
+        $container->register(new ConfigServiceProvider());
+        $container->register(new WebProfilerServiceProvider());
+
+        self::assertInstanceOf(AssetsRenderer::class, $container->get(AssetsRenderer::class));
+        self::assertInstanceOf(WebProfiler::class, $container->get(WebProfiler::class));
+        self::assertInstanceOf(WebProfilerContract::class, $container->get(WebProfilerContract::class));
+    }
+
+    public function testRouteGroups()
+    {
+        $container = new Container();
+        $container->instance(ServerRequestInterface::class, $this->getRequest());
+        $container->register(new HttpFactoryServiceProvider());
+        $container->register(new RoutingServiceProvider());
+        $container->register(new EventsServiceProvider());
+        $container->register(new WebProfilerServiceProvider());
+
+        $router = $container->get(RouterContract::class);
+        $routes = $router->getRoutes()->getRoutes();
+        $action1 = $routes[0]->getAction();
+        $action2 = $routes[1]->getAction();
+
+        self::assertEquals('Viserio\WebProfiler\Controllers\AssetController@css', $action1['controller']);
+        self::assertEquals('Viserio\WebProfiler\Controllers\AssetController@js', $action2['controller']);
+    }
+
+    private function getRequest()
+    {
+        $request = $this->mock(ServerRequestInterface::class);
+        $request->shouldReceive('getHeaderLine')
+            ->with('REQUEST_TIME_FLOAT')
+            ->andReturn(false);
+        $request->shouldReceive('getHeaderLine')
+            ->with('REQUEST_TIME')
+            ->andReturn(false);
+
+        return $request;
     }
 }
