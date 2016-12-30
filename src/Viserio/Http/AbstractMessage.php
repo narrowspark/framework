@@ -362,7 +362,7 @@ abstract class AbstractMessage implements MessageInterface
      *
      * @param array $values
      *
-     * @return array
+     * @return string[]
      */
     private function filterHeaderValue(array $values): array
     {
