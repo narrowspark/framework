@@ -3,9 +3,9 @@ declare(strict_types=1);
 namespace Viserio\Log\Tests\Providers;
 
 use Viserio\Container\Container;
-use Viserio\Log\Providers\LogsDataCollectorServiceProvider;
 use Viserio\Log\DataCollectors\LogParser;
 use Viserio\Log\DataCollectors\LogsDataCollector;
+use Viserio\Log\Providers\LogsDataCollectorServiceProvider;
 
 class LogsDataCollectorServiceProviderTest extends \PHPUnit_Framework_TestCase
 {
