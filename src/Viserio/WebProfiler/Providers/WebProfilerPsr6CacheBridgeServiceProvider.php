@@ -5,17 +5,12 @@ namespace Viserio\WebProfiler\Providers;
 use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
 use Psr\Cache\CacheItemPoolInterface;
-use Viserio\Contracts\Support\Traits\ServiceProviderConfigAwareTrait;
 use Viserio\Contracts\WebProfiler\WebProfiler as WebProfilerContract;
 use Viserio\WebProfiler\DataCollectors\Bridge\Cache\Psr6CacheDataCollector;
 use Viserio\WebProfiler\DataCollectors\Bridge\Cache\TraceableCacheItemDecorater;
 
 class WebProfilerPsr6CacheBridgeServiceProvider implements ServiceProvider
 {
-    use ServiceProviderConfigAwareTrait;
-
-    public const PACKAGE = 'viserio.webprofiler';
-
     /**
      * {@inheritdoc}
      */
@@ -36,15 +31,13 @@ class WebProfilerPsr6CacheBridgeServiceProvider implements ServiceProvider
     {
         $profiler = $container->get(WebProfilerContract::class);
 
-        if (self::getConfig($container, 'collector.cache', false)) {
-            $cache = new Psr6CacheDataCollector();
+        $cache = new Psr6CacheDataCollector();
 
-            if ($container->has(CacheItemPoolInterface::class)) {
-                $cache->addPool($container->get(CacheItemPoolInterface::class));
-            }
-
-            $profiler->addCollector($cache);
+        if ($container->has(CacheItemPoolInterface::class)) {
+            $cache->addPool($container->get(CacheItemPoolInterface::class));
         }
+
+        $profiler->addCollector($cache);
 
         return $profiler;
     }

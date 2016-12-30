@@ -1,13 +1,12 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\WebProfiler\Tests\DataCollectors\Bridge\Recording;
+namespace Viserio\WebProfiler\Tests\DataCollectors\Bridge\Cache;
 
 use Cache\Adapter\PHPArray\ArrayCachePool;
 use Mockery as Mock;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Symfony\Component\Stopwatch\Stopwatch;
 use Viserio\WebProfiler\DataCollectors\Bridge\Cache\Psr6CacheDataCollector;
 use Viserio\WebProfiler\DataCollectors\Bridge\Cache\TraceableCacheItemDecorater;
 
@@ -64,7 +63,7 @@ class Psr6CacheDataCollectorTest extends \PHPUnit_Framework_TestCase
 
     private function getPsr6CacheDataCollector()
     {
-        $collector = new Psr6CacheDataCollector(new Stopwatch());
+        $collector = new Psr6CacheDataCollector();
         $collector->addPool(new TraceableCacheItemDecorater(new ArrayCachePool()));
         $collector->collect(
             $this->mock(ServerRequestInterface::class),

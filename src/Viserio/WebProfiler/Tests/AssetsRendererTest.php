@@ -8,6 +8,7 @@ use Viserio\Contracts\WebProfiler\WebProfiler as WebProfilerContract;
 use Viserio\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 use Viserio\WebProfiler\AssetsRenderer;
 use Viserio\WebProfiler\DataCollectors\AjaxRequestsDataCollector;
+use Viserio\Routing\UrlGenerator;
 
 class AssetsRendererTest extends \PHPUnit_Framework_TestCase
 {
@@ -84,5 +85,26 @@ class AssetsRendererTest extends \PHPUnit_Framework_TestCase
         ];
 
         static::assertSame([$cssAssets, $jsAssets], $assets->getAssets());
+    }
+
+    public function testRenderWithUrlGenerator()
+    {
+        $generator = $this->mock(UrlGenerator::class);
+        $generator->shouldReceive('route')
+            ->once()
+            ->andReturn('path_css');
+        $generator->shouldReceive('route')
+            ->once()
+            ->andReturn('path_js');
+        $profiler = $this->mock(WebProfilerContract::class);
+        $profiler->shouldReceive('getUrlGenerator')
+            ->once()
+            ->andReturn($generator);
+        $profiler->shouldReceive('getCollectors')
+            ->twice();
+        $assets = new AssetsRenderer();
+        $assets->setWebProfiler($profiler);
+
+        static::assertSame('<link rel="stylesheet" type="text/css" property="stylesheet" href="path_css"><script type="text/javascript" src="path_js"></script>', $assets->render());
     }
 }

@@ -5,16 +5,11 @@ namespace Viserio\WebProfiler\Providers;
 use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
 use Swift_Mailer;
-use Viserio\Contracts\Support\Traits\ServiceProviderConfigAwareTrait;
 use Viserio\Contracts\WebProfiler\WebProfiler as WebProfilerContract;
 use Viserio\WebProfiler\DataCollectors\Bridge\SwiftMailDataCollector;
 
 class WebProfilerSwiftMailerBridgeServiceProvider implements ServiceProvider
 {
-    use ServiceProviderConfigAwareTrait;
-
-    public const PACKAGE = 'viserio.webprofiler';
-
     /**
      * {@inheritdoc}
      */
@@ -34,18 +29,5 @@ class WebProfilerSwiftMailerBridgeServiceProvider implements ServiceProvider
         ));
 
         return $profiler;
-    }
-
-    private function getRequest()
-    {
-        $request = $this->mock(ServerRequestInterface::class);
-        $request->shouldReceive('getHeaderLine')
-            ->with('REQUEST_TIME_FLOAT')
-            ->andReturn(false);
-        $request->shouldReceive('getHeaderLine')
-            ->with('REQUEST_TIME')
-            ->andReturn(false);
-
-        return $request;
     }
 }
