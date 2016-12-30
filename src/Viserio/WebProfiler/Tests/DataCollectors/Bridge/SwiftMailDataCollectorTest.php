@@ -4,11 +4,11 @@ namespace Viserio\WebProfiler\Tests\DataCollectors\Bridge;
 
 use Mockery as Mock;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
-use Viserio\WebProfiler\DataCollectors\Bridge\SwiftMailDataCollector;
-use Swift_Mailer;
-use Swift_SmtpTransport;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Swift_Mailer;
+use Swift_SmtpTransport;
+use Viserio\WebProfiler\DataCollectors\Bridge\SwiftMailDataCollector;
 
 class SwiftMailDataCollectorTest extends \PHPUnit_Framework_TestCase
 {
@@ -28,7 +28,7 @@ class SwiftMailDataCollectorTest extends \PHPUnit_Framework_TestCase
 
         static::assertSame(
             [
-                'icon' => 'ic_mail_outline_white_24px.svg',
+                'icon'  => 'ic_mail_outline_white_24px.svg',
                 'label' => 'Mails',
                 'value' => 0,
             ],

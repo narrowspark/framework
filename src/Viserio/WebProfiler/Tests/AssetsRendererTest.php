@@ -5,10 +5,10 @@ namespace Viserio\WebProfiler\Tests;
 use Mockery as Mock;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use Viserio\Contracts\WebProfiler\WebProfiler as WebProfilerContract;
+use Viserio\Routing\UrlGenerator;
 use Viserio\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 use Viserio\WebProfiler\AssetsRenderer;
 use Viserio\WebProfiler\DataCollectors\AjaxRequestsDataCollector;
-use Viserio\Routing\UrlGenerator;
 
 class AssetsRendererTest extends \PHPUnit_Framework_TestCase
 {
