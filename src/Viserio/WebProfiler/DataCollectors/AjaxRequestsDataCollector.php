@@ -54,8 +54,6 @@ class AjaxRequestsDataCollector extends AbstractDataCollector implements
                 <tbody class="webprofiler-ajax-request-list"></tbody>
             </table>',
         ]);
-
-        return $html;
     }
 
     /**

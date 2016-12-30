@@ -9,7 +9,7 @@ use Viserio\Contracts\Support\Traits\ServiceProviderConfigAwareTrait;
 use Viserio\Log\DataCollectors\LogParser;
 use Viserio\Log\DataCollectors\LogsDataCollector;
 
-class LogCollectorServiceProvider implements ServiceProvider
+class LogsDataCollectorServiceProvider implements ServiceProvider
 {
     use ServiceProviderConfigAwareTrait;
 
