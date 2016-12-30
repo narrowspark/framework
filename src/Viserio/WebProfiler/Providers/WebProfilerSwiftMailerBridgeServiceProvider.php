@@ -2,11 +2,11 @@
 declare(strict_types=1);
 namespace Viserio\WebProfiler\Providers;
 
-use Swift_Mailer;
-use Viserio\Contracts\WebProfiler\WebProfiler as WebProfilerContract;
-use Viserio\Contracts\Support\Traits\ServiceProviderConfigAwareTrait;
 use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
+use Swift_Mailer;
+use Viserio\Contracts\Support\Traits\ServiceProviderConfigAwareTrait;
+use Viserio\Contracts\WebProfiler\WebProfiler as WebProfilerContract;
 use Viserio\WebProfiler\DataCollectors\Bridge\SwiftMailDataCollector;
 
 class WebProfilerSwiftMailerBridgeServiceProvider implements ServiceProvider

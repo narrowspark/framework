@@ -3,7 +3,6 @@ declare(strict_types=1);
 namespace Viserio\WebProfiler\DataCollectors\Bridge\PDO;
 
 use PDO;
-use PDOException;
 
 class TraceablePDODecorater extends PDO
 {
@@ -15,7 +14,7 @@ class TraceablePDODecorater extends PDO
     protected $pdo;
 
     /**
-     * [$executedStatements description]
+     * [$executedStatements description].
      *
      * @var array
      */
@@ -33,7 +32,7 @@ class TraceablePDODecorater extends PDO
     }
 
     /**
-     * {@inhritdoc}
+     * {@inhritdoc}.
      */
     public function beginTransaction()
     {
@@ -41,7 +40,7 @@ class TraceablePDODecorater extends PDO
     }
 
     /**
-     * {@inhritdoc}
+     * {@inhritdoc}.
      */
     public function commit()
     {
@@ -49,7 +48,7 @@ class TraceablePDODecorater extends PDO
     }
 
     /**
-     * {@inhritdoc}
+     * {@inhritdoc}.
      */
     public function errorCode()
     {
@@ -57,7 +56,7 @@ class TraceablePDODecorater extends PDO
     }
 
     /**
-     * {@inhritdoc}
+     * {@inhritdoc}.
      */
     public function errorInfo()
     {
@@ -65,7 +64,8 @@ class TraceablePDODecorater extends PDO
     }
 
     /**
-     * {@inhritdoc}
+     * {@inhritdoc}.
+     * @param mixed $statement
      */
     public function exec($statement)
     {
@@ -73,7 +73,8 @@ class TraceablePDODecorater extends PDO
     }
 
     /**
-     * {@inhritdoc}
+     * {@inhritdoc}.
+     * @param mixed $attribute
      */
     public function getAttribute($attribute)
     {
@@ -81,7 +82,7 @@ class TraceablePDODecorater extends PDO
     }
 
     /**
-     * {@inhritdoc}
+     * {@inhritdoc}.
      */
     public function inTransaction()
     {
@@ -89,7 +90,8 @@ class TraceablePDODecorater extends PDO
     }
 
     /**
-     * {@inhritdoc}
+     * {@inhritdoc}.
+     * @param null|mixed $name
      */
     public function lastInsertId($name = null)
     {
@@ -97,15 +99,18 @@ class TraceablePDODecorater extends PDO
     }
 
     /**
-     * {@inhritdoc}
+     * {@inhritdoc}.
+     * @param mixed $statement
+     * @param mixed $driver_options
      */
-    public function prepare($statement, $driver_options = array())
+    public function prepare($statement, $driver_options = [])
     {
         return $this->pdo->prepare($statement, $driver_options);
     }
 
     /**
-     * {@inhritdoc}
+     * {@inhritdoc}.
+     * @param mixed $statement
      */
     public function query($statement)
     {
@@ -113,7 +118,9 @@ class TraceablePDODecorater extends PDO
     }
 
     /**
-     * {@inhritdoc}
+     * {@inhritdoc}.
+     * @param mixed $string
+     * @param mixed $parameter_type
      */
     public function quote($string, $parameter_type = PDO::PARAM_STR)
     {
@@ -121,7 +128,7 @@ class TraceablePDODecorater extends PDO
     }
 
     /**
-     * {@inhritdoc}
+     * {@inhritdoc}.
      */
     public function rollBack()
     {
@@ -129,7 +136,9 @@ class TraceablePDODecorater extends PDO
     }
 
     /**
-     * {@inhritdoc}
+     * {@inhritdoc}.
+     * @param mixed $attribute
+     * @param mixed $value
      */
     public function setAttribute($attribute, $value)
     {

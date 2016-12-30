@@ -2,16 +2,16 @@
 declare(strict_types=1);
 namespace Viserio\WebProfiler\Tests\Providers;
 
-use Viserio\Container\Container;
-use Psr\Cache\CacheItemPoolInterface;
-use Viserio\WebProfiler\DataCollectors\Bridge\Cache\TraceableCacheItemDecorater;
 use Mockery as Mock;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
+use Psr\Cache\CacheItemPoolInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use Viserio\Container\Container;
+use Viserio\Contracts\WebProfiler\WebProfiler as WebProfilerContract;
+use Viserio\HttpFactory\Providers\HttpFactoryServiceProvider;
+use Viserio\WebProfiler\DataCollectors\Bridge\Cache\TraceableCacheItemDecorater;
 use Viserio\WebProfiler\Providers\WebProfilerPsr6CacheBridgeServiceProvider;
 use Viserio\WebProfiler\Providers\WebProfilerServiceProvider;
-use Psr\Http\Message\ServerRequestInterface;
-use Viserio\HttpFactory\Providers\HttpFactoryServiceProvider;
-use Viserio\Contracts\WebProfiler\WebProfiler as WebProfilerContract;
 
 class WebProfilerPsr6CacheBridgeServiceProviderTest extends \PHPUnit_Framework_TestCase
 {

@@ -2,16 +2,16 @@
 declare(strict_types=1);
 namespace Viserio\WebProfiler\Tests\Providers;
 
-use Viserio\Container\Container;
-use Swift_Mailer;
-use Swift_SmtpTransport;
-use Viserio\Contracts\WebProfiler\WebProfiler as WebProfilerContract;
-use Viserio\WebProfiler\Providers\WebProfilerSwiftMailerBridgeServiceProvider;
 use Mockery as Mock;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
-use Viserio\WebProfiler\Providers\WebProfilerServiceProvider;
 use Psr\Http\Message\ServerRequestInterface;
+use Swift_Mailer;
+use Swift_SmtpTransport;
+use Viserio\Container\Container;
+use Viserio\Contracts\WebProfiler\WebProfiler as WebProfilerContract;
 use Viserio\HttpFactory\Providers\HttpFactoryServiceProvider;
+use Viserio\WebProfiler\Providers\WebProfilerServiceProvider;
+use Viserio\WebProfiler\Providers\WebProfilerSwiftMailerBridgeServiceProvider;
 
 class WebProfilerSwiftMailerBridgeServiceProviderTest extends \PHPUnit_Framework_TestCase
 {

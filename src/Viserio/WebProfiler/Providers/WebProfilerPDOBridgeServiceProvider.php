@@ -2,14 +2,13 @@
 declare(strict_types=1);
 namespace Viserio\WebProfiler\Providers;
 
-use PDO;
-use PDOStatement;
-use Viserio\WebProfiler\DataCollectors\Bridge\PDO\PDODataCollector;
-use Viserio\WebProfiler\DataCollectors\Bridge\PDO\TraceablePDODecorater;
-use Viserio\Contracts\WebProfiler\WebProfiler as WebProfilerContract;
-use Viserio\Contracts\Support\Traits\ServiceProviderConfigAwareTrait;
 use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
+use PDO;
+use Viserio\Contracts\Support\Traits\ServiceProviderConfigAwareTrait;
+use Viserio\Contracts\WebProfiler\WebProfiler as WebProfilerContract;
+use Viserio\WebProfiler\DataCollectors\Bridge\PDO\PDODataCollector;
+use Viserio\WebProfiler\DataCollectors\Bridge\PDO\TraceablePDODecorater;
 
 class WebProfilerPDOBridgeServiceProvider implements ServiceProvider
 {

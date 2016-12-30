@@ -2,13 +2,13 @@
 declare(strict_types=1);
 namespace Viserio\WebProfiler\Providers;
 
-use Viserio\Contracts\WebProfiler\WebProfiler as WebProfilerContract;
-use Psr\Cache\CacheItemPoolInterface;
-use Viserio\Contracts\Support\Traits\ServiceProviderConfigAwareTrait;
 use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
-use Viserio\WebProfiler\DataCollectors\Bridge\Cache\TraceableCacheItemDecorater;
+use Psr\Cache\CacheItemPoolInterface;
+use Viserio\Contracts\Support\Traits\ServiceProviderConfigAwareTrait;
+use Viserio\Contracts\WebProfiler\WebProfiler as WebProfilerContract;
 use Viserio\WebProfiler\DataCollectors\Bridge\Cache\Psr6CacheDataCollector;
+use Viserio\WebProfiler\DataCollectors\Bridge\Cache\TraceableCacheItemDecorater;
 
 class WebProfilerPsr6CacheBridgeServiceProvider implements ServiceProvider
 {

@@ -2,19 +2,16 @@
 declare(strict_types=1);
 namespace Viserio\WebProfiler\Tests\Providers;
 
-use Viserio\Container\Container;
-use PDO;
-use PDOStatement;
-use Viserio\WebProfiler\DataCollectors\Bridge\PDO\PDODataCollector;
-use Viserio\WebProfiler\DataCollectors\Bridge\PDO\TraceablePDODecorater;
-use Viserio\WebProfiler\DataCollectors\Bridge\PDO\TraceablePDOStatementDecorater;
-use Viserio\WebProfiler\Providers\WebProfilerPDOBridgeServiceProvider;
-use Viserio\WebProfiler\Providers\WebProfilerServiceProvider;
-use Psr\Http\Message\ServerRequestInterface;
-use Viserio\HttpFactory\Providers\HttpFactoryServiceProvider;
-use Viserio\Contracts\WebProfiler\WebProfiler as WebProfilerContract;
 use Mockery as Mock;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
+use PDO;
+use Psr\Http\Message\ServerRequestInterface;
+use Viserio\Container\Container;
+use Viserio\Contracts\WebProfiler\WebProfiler as WebProfilerContract;
+use Viserio\HttpFactory\Providers\HttpFactoryServiceProvider;
+use Viserio\WebProfiler\DataCollectors\Bridge\PDO\TraceablePDODecorater;
+use Viserio\WebProfiler\Providers\WebProfilerPDOBridgeServiceProvider;
+use Viserio\WebProfiler\Providers\WebProfilerServiceProvider;
 
 class WebProfilerPDOBridgeServiceProviderTest extends \PHPUnit_Framework_TestCase
 {

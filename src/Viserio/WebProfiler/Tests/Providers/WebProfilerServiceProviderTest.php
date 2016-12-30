@@ -2,19 +2,19 @@
 declare(strict_types=1);
 namespace Viserio\WebProfiler\Tests\Providers;
 
-use Viserio\Container\Container;
-use Viserio\WebProfiler\Providers\WebProfilerServiceProvider;
-use Viserio\Contracts\Routing\Router as RouterContract;
-use Viserio\WebProfiler\AssetsRenderer;
-use Viserio\Contracts\WebProfiler\WebProfiler as WebProfilerContract;
-use Viserio\WebProfiler\WebProfiler;
-use Viserio\Events\Providers\EventsServiceProvider;
-use Viserio\Routing\Providers\RoutingServiceProvider;
-use Viserio\Config\Providers\ConfigServiceProvider;
-use Viserio\HttpFactory\Providers\HttpFactoryServiceProvider;
 use Mockery as Mock;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use Psr\Http\Message\ServerRequestInterface;
+use Viserio\Config\Providers\ConfigServiceProvider;
+use Viserio\Container\Container;
+use Viserio\Contracts\Routing\Router as RouterContract;
+use Viserio\Contracts\WebProfiler\WebProfiler as WebProfilerContract;
+use Viserio\Events\Providers\EventsServiceProvider;
+use Viserio\HttpFactory\Providers\HttpFactoryServiceProvider;
+use Viserio\Routing\Providers\RoutingServiceProvider;
+use Viserio\WebProfiler\AssetsRenderer;
+use Viserio\WebProfiler\Providers\WebProfilerServiceProvider;
+use Viserio\WebProfiler\WebProfiler;
 
 class WebProfilerServiceProviderTest extends \PHPUnit_Framework_TestCase
 {
@@ -53,8 +53,8 @@ class WebProfilerServiceProviderTest extends \PHPUnit_Framework_TestCase
         $container->register(new EventsServiceProvider());
         $container->register(new WebProfilerServiceProvider());
 
-        $router = $container->get(RouterContract::class);
-        $routes = $router->getRoutes()->getRoutes();
+        $router  = $container->get(RouterContract::class);
+        $routes  = $router->getRoutes()->getRoutes();
         $action1 = $routes[0]->getAction();
         $action2 = $routes[1]->getAction();
 
