@@ -2,9 +2,9 @@
 declare(strict_types=1);
 namespace Viserio\WebProfiler\DataCollectors\Bridge;
 
-use SessionHandlerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use SessionHandlerInterface;
 use Viserio\WebProfiler\DataCollectors\AbstractDataCollector;
 
 class ClockworkDataCollector extends AbstractDataCollector
