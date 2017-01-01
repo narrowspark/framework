@@ -6,11 +6,11 @@ use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
 use Viserio\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Contracts\Routing\Router as RouterContract;
+use Viserio\Contracts\Support\Traits\ServiceProviderConfigAwareTrait;
+use Viserio\Contracts\WebProfiler\WebProfiler as WebProfilerContract;
 use Viserio\Foundation\DataCollectors\FilesLoadedCollector;
 use Viserio\Foundation\DataCollectors\NarrowsparkDataCollector;
 use Viserio\Foundation\DataCollectors\ViserioHttpDataCollector;
-use Viserio\Contracts\WebProfiler\WebProfiler as WebProfilerContract;
-use Viserio\Contracts\Support\Traits\ServiceProviderConfigAwareTrait;
 
 class FoundationDataCollectorsServiceProvider implements ServiceProvider
 {

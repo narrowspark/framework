@@ -6,7 +6,7 @@ use Viserio\Contracts\WebProfiler\DataCollector as DataCollectorContract;
 
 interface WebProfiler
 {
-        /**
+    /**
      * Adds a data collector.
      *
      * @param \Viserio\Contracts\WebProfiler\DataCollector $collector

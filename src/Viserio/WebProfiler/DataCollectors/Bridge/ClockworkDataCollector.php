@@ -7,12 +7,11 @@ use SessionHandlerInterface;
 class ClockworkDataCollector extends AbstractDataCollector
 {
     /**
-     *
      * @param \SessionHandlerInterface $session
      */
     public function __construct(SessionHandlerInterface $session)
     {
-        # code...
+        // code...
     }
 
     /**

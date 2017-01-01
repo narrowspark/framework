@@ -4,8 +4,8 @@ namespace Viserio\Foundation\Providers;
 
 use Interop\Container\ServiceProvider;
 use Viserio\Foundation\Commands\DownCommand;
-use Viserio\Foundation\Commands\UpCommand;
 use Viserio\Foundation\Commands\KeyGenerateCommand;
+use Viserio\Foundation\Commands\UpCommand;
 
 class FoundationCommandsServiceProvider implements ServiceProvider
 {

@@ -158,7 +158,7 @@ class WebProfiler implements WebProfilerContract
 
         $this->collectors[$collector->getName()] = [
             'collector' => $collector,
-            'priority' => $priority,
+            'priority'  => $priority,
         ];
 
         return $this;
@@ -283,7 +283,7 @@ class WebProfiler implements WebProfilerContract
         ResponseInterface $response
     ): void {
         // sort on priority
-        usort($this->collectors, function($a, $b) {
+        usort($this->collectors, function ($a, $b) {
             return $a['priority'] <=> $b['priority'];
         });
 

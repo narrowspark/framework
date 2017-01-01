@@ -57,9 +57,8 @@ class FilesLoadedCollector extends AbstractDataCollector implements
                 mb_strpos($file, 'vendor/viserio/web-profiler') !== false
             ) {
                 continue;
-            } else {
-                $included[] = $this->stripBasePath($file);
             }
+            $included[] = $this->stripBasePath($file);
         }
 
         $this->included = $included;

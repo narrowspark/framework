@@ -2,11 +2,11 @@
 declare(strict_types=1);
 namespace Viserio\Foundation\Tests\Providers;
 
+use Viserio\Container\Container;
 use Viserio\Foundation\Commands\DownCommand;
+use Viserio\Foundation\Commands\KeyGenerateCommand;
 use Viserio\Foundation\Commands\UpCommand;
 use Viserio\Foundation\Providers\FoundationCommandsServiceProvider;
-use Viserio\Container\Container;
-use Viserio\Foundation\Commands\KeyGenerateCommand;
 
 class FoundationCommandsServiceProviderTest extends \PHPUnit_Framework_TestCase
 {

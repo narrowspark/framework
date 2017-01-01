@@ -28,7 +28,7 @@ class FilesLoadedCollectorTest extends \PHPUnit_Framework_TestCase
 
         static::assertSame(
             [
-                'icon' => 'ic_insert_drive_file_white_24px.svg',
+                'icon'  => 'ic_insert_drive_file_white_24px.svg',
                 'label' => '',
                 'value' => '0',
             ],
