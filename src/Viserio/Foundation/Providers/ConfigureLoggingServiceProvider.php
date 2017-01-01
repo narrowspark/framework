@@ -38,7 +38,7 @@ class ConfigureLoggingServiceProvider implements ServiceProvider
      * @param \Interop\Container\ContainerInterface $container
      * @param \Viserio\Contracts\Log\Log            $log
      */
-    protected static function configureHandlers(ContainerInterface $container, LogContract $log)
+    private static function configureHandlers(ContainerInterface $container, LogContract $log)
     {
         $config = $container->get(RepositoryContract::class);
         $level  = $config->get('app.log_level', 'debug');
@@ -55,7 +55,7 @@ class ConfigureLoggingServiceProvider implements ServiceProvider
      * @param \Viserio\Contracts\Log\Log            $log
      * @param string                                $level
      */
-    protected static function configureSingleHandler(ContainerInterface $container, LogContract $log, string $level)
+    private static function configureSingleHandler(ContainerInterface $container, LogContract $log, string $level)
     {
         $log->useFiles(
             $container->get(RepositoryContract::class)->get('path.storage') . '/logs/narrowspark.log',
@@ -70,7 +70,7 @@ class ConfigureLoggingServiceProvider implements ServiceProvider
      * @param \Viserio\Contracts\Log\Log            $log
      * @param string                                $level
      */
-    protected static function configureDailyHandler(ContainerInterface $container, LogContract $log, string $level)
+    private static function configureDailyHandler(ContainerInterface $container, LogContract $log, string $level)
     {
         $config   = $container->get(RepositoryContract::class);
         $maxFiles = $config->get('app.log_max_files', 5);
@@ -89,7 +89,7 @@ class ConfigureLoggingServiceProvider implements ServiceProvider
      * @param \Viserio\Contracts\Log\Log            $log
      * @param string                                $level
      */
-    protected static function configureErrorlogHandler(ContainerInterface $container, LogContract $log, string $level)
+    private static function configureErrorlogHandler(ContainerInterface $container, LogContract $log, string $level)
     {
         $log->getHandlerParser()->parseHandler(
             new ErrorLogHandler(ErrorLogHandler::OPERATING_SYSTEM, $level),

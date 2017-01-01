@@ -14,3 +14,7 @@
 .webprofiler-menu.webprofiler-menu-viserio-http-data-collector.response-status-red .webprofiler-menu-label {
     background-color: #B0413E;
 }
+.webprofiler .webprofiler-header .webprofiler-menus .webprofiler-menu-position-left.webprofiler-menu-viserio-http-data-collector .webprofiler-menu-content {
+    padding-left: 0;
+    padding-right: 7px;
+}

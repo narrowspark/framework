@@ -178,11 +178,7 @@
     height: 36px;
     line-height: 36px;
 }
-.webprofiler .webprofiler-header .webprofiler-menus .webprofiler-menu-position-left .webprofiler-menu-content {
-    padding-left: 0;
-    padding-right: 7px;
-}
-.webprofiler .webprofiler-header .webprofiler-menus > .webprofiler-menu.webprofiler-menu-position-left ~ .webprofiler-menu.webprofiler-menu-position-left .webprofiler-menu-content,
+.webprofiler .webprofiler-header .webprofiler-menus .webprofiler-menu.webprofiler-menu-position-left .webprofiler-menu-content,
 .webprofiler .webprofiler-header .webprofiler-menus .webprofiler-menu.webprofiler-menu-position-right .webprofiler-menu-content {
     padding: 0 7px;
 }

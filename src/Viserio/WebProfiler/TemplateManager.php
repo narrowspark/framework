@@ -87,6 +87,7 @@ class TemplateManager implements RenderableContract
         $obLevel = ob_get_level();
 
         ob_start();
+
         $data = array_merge(
             $this->getSortedData(),
             [

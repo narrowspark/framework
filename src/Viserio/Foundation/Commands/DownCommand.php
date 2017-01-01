@@ -11,8 +11,8 @@ class DownCommand extends Command
     /**
      * {@inheritdoc}
      */
-    protected $signature = 'down {--message= : The message for the maintenance mode. }
-            {--retry= : The number of seconds after which the request may be retried.}';
+    protected $signature = 'down [--message="The message for the maintenance mode."]
+            [--retry="The number of seconds after which the request may be retried."]';
 
     /**
      * {@inheritdoc}

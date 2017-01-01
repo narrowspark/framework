@@ -68,7 +68,7 @@ class ViserioHttpDataCollector extends AbstractDataCollector implements
     public function __construct(RouterContract $router, RepositoryContract $config)
     {
         $this->route         = $router->getCurrentRoute();
-        $this->serverRequest = $router->getCurrentRoute()->getServerRequest();
+        $this->serverRequest = $this->route->getServerRequest();
         $this->config        = $config;
     }
 
@@ -88,14 +88,6 @@ class ViserioHttpDataCollector extends AbstractDataCollector implements
         }
 
         return $this->sessions = $sessions;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getMenuPosition(): string
-    {
-        return 'left';
     }
 
     /**

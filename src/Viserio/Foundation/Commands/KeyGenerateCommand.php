@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-namespace Viserio\Encryption\Commands;
+namespace Viserio\Foundation\Commands;
 
 use Viserio\Console\Command\Command;
 use Viserio\Console\Traits\ConfirmableTrait;
@@ -16,8 +16,8 @@ class KeyGenerateCommand extends Command
      * @var string
      */
     protected $signature = 'key:generate
-        {--show : Display the key instead of modifying files}
-        {--force : Force the operation to run when in production}';
+        [--show=Display the key instead of modifying files]
+        [--force=Force the operation to run when in production]';
 
     /**
      * {@inheritdoc}

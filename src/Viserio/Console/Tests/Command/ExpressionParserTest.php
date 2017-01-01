@@ -141,6 +141,7 @@ class ExpressionParserTest extends \PHPUnit_Framework_TestCase
     public function assertParsesTo($expression, $expected)
     {
         $parser = new ExpressionParser();
+
         self::assertEquals($expected, $parser->parse($expression));
     }
 }
