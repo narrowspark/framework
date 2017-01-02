@@ -113,6 +113,8 @@ class ViserioTranslationDataCollector extends AbstractDataCollector implements
      * Get all collected messages.
      *
      * @return array
+     *
+     * @codeCoverageIgnore
      */
     public function getMessages(): array
     {
@@ -123,6 +125,8 @@ class ViserioTranslationDataCollector extends AbstractDataCollector implements
      * Get counted messages.
      *
      * @return array
+     *
+     * @codeCoverageIgnore
      */
     public function getCountedMessages(): array
     {
