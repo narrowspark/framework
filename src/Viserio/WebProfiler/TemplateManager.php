@@ -142,6 +142,7 @@ class TemplateManager implements RenderableContract
                 $class = '';
                 $panel = $collector->getPanel();
 
+                // @codeCoverageIgnoreStart
                 if (mb_strpos($panel, '<div class="webprofiler-tabs') !== false) {
                     $class = ' webprofiler-body-has-tabs';
                 } elseif (mb_strpos($panel, '<select class="content-selector"') !== false) {
@@ -151,6 +152,7 @@ class TemplateManager implements RenderableContract
                 } elseif (mb_strpos($panel, '<table class="row">') !== false) {
                     $class = ' webprofiler-body-has-table';
                 }
+                // @codeCoverageIgnoreEnd
 
                 $data['panels'][$collector->getName()] = [
                     'content' => $panel,

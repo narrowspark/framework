@@ -11,6 +11,9 @@ use Viserio\WebProfiler\AssetsRenderer;
 use Viserio\WebProfiler\DataCollectors\AjaxRequestsDataCollector;
 use Viserio\WebProfiler\DataCollectors\PhpInfoDataCollector;
 use Viserio\WebProfiler\TemplateManager;
+use Swift_Mailer;
+use Swift_SmtpTransport;
+use Viserio\WebProfiler\DataCollectors\Bridge\SwiftMailDataCollector;
 
 class TemplateManagerTest extends TestCase
 {
@@ -105,6 +108,30 @@ class TemplateManagerTest extends TestCase
 
         static::assertSame(
             $this->removeId(file_get_contents(__DIR__ . '/Fixture/View/profilewithajaxcollector.html')),
+            $this->removeId($template->render())
+        );
+    }
+
+    public function testRenderWithAPanelCollector()
+    {
+        $collector = new SwiftMailDataCollector(
+            Swift_Mailer::newInstance(Swift_SmtpTransport::newInstance('smtp.example.org', 25))
+        );
+        $collector->collect(
+            $this->mock(ServerRequestInterface::class),
+            $this->mock(ResponseInterface::class)
+        );
+
+        $assets   = new AssetsRenderer();
+        $template = new TemplateManager(
+            ['php-info-data-collector' => $collector],
+            __DIR__ . '/../Resources/views/webprofiler.html.php',
+            'fds4f6as',
+            $assets->getIcons()
+        );
+
+        static::assertSame(
+            $this->removeId(file_get_contents(__DIR__ . '/Fixture/View/profilewithpanelcollector.html')),
             $this->removeId($template->render())
         );
     }

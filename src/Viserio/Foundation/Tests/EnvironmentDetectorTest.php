@@ -40,11 +40,6 @@ class EnvironmentDetectorTest extends TestCase
 
     public function testCanBeDetected()
     {
-        self::assertInternalType('boolean', $this->env->isHHVM());
-    }
-
-    public function testCanBeDetected2()
-    {
         self::assertInternalType('boolean', $this->env->isPHP());
     }
 

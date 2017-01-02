@@ -26,7 +26,7 @@ class EnvironmentDetector implements EnvironmentContract
      */
     public function canCollectCodeCoverage(): bool
     {
-        return $this->isHHVM() || $this->hasXdebug();
+        return $this->hasXdebug();
     }
 
     /**
@@ -34,10 +34,6 @@ class EnvironmentDetector implements EnvironmentContract
      */
     public function getVersion(): string
     {
-        if ($this->isHHVM()) {
-            return HHVM_VERSION;
-        }
-
         return PHP_VERSION;
     }
 
@@ -52,17 +48,9 @@ class EnvironmentDetector implements EnvironmentContract
     /**
      * {@inheritdoc}
      */
-    public function isHHVM(): bool
-    {
-        return defined('HHVM_VERSION');
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function isPHP(): bool
     {
-        return ! $this->isHHVM();
+        return ! defined('HHVM_VERSION');
     }
 
     /**
