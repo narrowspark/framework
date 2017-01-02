@@ -5,8 +5,9 @@ namespace Viserio\Validation\Tests\Providers;
 use Viserio\Container\Container;
 use Viserio\Validation\Providers\SanitizerServiceProvider;
 use Viserio\Validation\Sanitizer;
+use PHPUnit\Framework\TestCase;
 
-class SanitizerServiceProviderTest extends \PHPUnit_Framework_TestCase
+class SanitizerServiceProviderTest extends TestCase
 {
     public function testProvider()
     {

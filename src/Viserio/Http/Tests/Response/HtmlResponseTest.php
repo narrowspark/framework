@@ -3,8 +3,9 @@ declare(strict_types=1);
 namespace Viserio\Http\Tests\Response;
 
 use Viserio\Http\Response\HtmlResponse;
+use PHPUnit\Framework\TestCase;
 
-class HtmlResponseTest extends \PHPUnit_Framework_TestCase
+class HtmlResponseTest extends TestCase
 {
     public function testConstructorAcceptsHtmlString()
     {

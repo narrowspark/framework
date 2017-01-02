@@ -8,8 +8,9 @@ use Viserio\Console\Application;
 use Viserio\Console\Tests\Fixture\SpyOutput;
 use Viserio\Console\Tests\Fixture\ViserioConfirmableFalseCommand;
 use Viserio\Console\Tests\Fixture\ViserioConfirmableTrueCommand;
+use PHPUnit\Framework\TestCase;
 
-class ConfirmableTraitTest extends \PHPUnit_Framework_TestCase
+class ConfirmableTraitTest extends TestCase
 {
     /**
      * @var Application

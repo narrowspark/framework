@@ -9,8 +9,9 @@ use Viserio\Contracts\Translation\Translator as TranslatorContract;
 use Viserio\Parsers\Providers\ParsersServiceProvider;
 use Viserio\Translation\Providers\TranslationServiceProvider;
 use Viserio\Translation\TranslationManager;
+use PHPUnit\Framework\TestCase;
 
-class TranslatorServiceProviderTest extends \PHPUnit_Framework_TestCase
+class TranslatorServiceProviderTest extends TestCase
 {
     /**
      * @var org\bovigo\vfs\vfsStreamDirectory

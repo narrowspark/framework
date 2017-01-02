@@ -10,8 +10,9 @@ use Viserio\View\Engines\EngineResolver;
 use Viserio\View\Factory;
 use Viserio\View\Providers\ViewServiceProvider;
 use Viserio\View\ViewFinder;
+use PHPUnit\Framework\TestCase;
 
-class ViewServiceProviderTest extends \PHPUnit_Framework_TestCase
+class ViewServiceProviderTest extends TestCase
 {
     use MockeryTrait;
 

@@ -7,8 +7,9 @@ use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Contracts\Cookie\QueueingFactory as JarContract;
 use Viserio\Session\Handler\CookieSessionHandler;
+use PHPUnit\Framework\TestCase;
 
-class CookieSessionHandlerTest extends \PHPUnit_Framework_TestCase
+class CookieSessionHandlerTest extends TestCase
 {
     use MockeryTrait;
 

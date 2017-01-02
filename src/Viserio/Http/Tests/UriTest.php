@@ -5,8 +5,9 @@ namespace Viserio\Http\Tests;
 use Psr\Http\Message\UriInterface;
 use Viserio\Http\Tests\Fixture\ExtendedUriTest;
 use Viserio\Http\Uri;
+use PHPUnit\Framework\TestCase;
 
-class UriTest extends \PHPUnit_Framework_TestCase
+class UriTest extends TestCase
 {
     public const RFC3986_BASE = 'http://a/b/c/d;p?q';
 

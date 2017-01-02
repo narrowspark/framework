@@ -6,8 +6,9 @@ use League\Flysystem\GridFS\GridFSAdapter;
 use MongoClient;
 use MongoConnectionException;
 use Viserio\Filesystem\Adapters\GridFSConnector;
+use PHPUnit\Framework\TestCase;
 
-class GridFSConnectorTest extends \PHPUnit_Framework_TestCase
+class GridFSConnectorTest extends TestCase
 {
     public function testConnectStandard()
     {

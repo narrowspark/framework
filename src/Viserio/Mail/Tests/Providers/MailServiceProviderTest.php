@@ -15,8 +15,9 @@ use Viserio\Mail\Providers\MailServiceProvider;
 use Viserio\Mail\QueueMailer;
 use Viserio\Mail\TransportManager;
 use Viserio\View\Providers\ViewServiceProvider;
+use PHPUnit\Framework\TestCase;
 
-class MailServiceProviderTest extends \PHPUnit_Framework_TestCase
+class MailServiceProviderTest extends TestCase
 {
     public function testProvider()
     {

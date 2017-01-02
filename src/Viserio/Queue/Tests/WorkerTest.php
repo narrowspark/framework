@@ -9,8 +9,9 @@ use Viserio\Contracts\Queue\FailedJobProvider as FailedJobProviderContract;
 use Viserio\Contracts\Queue\Job as JobContract;
 use Viserio\Queue\QueueManager;
 use Viserio\Queue\Worker;
+use PHPUnit\Framework\TestCase;
 
-class WorkerTest extends \PHPUnit_Framework_TestCase
+class WorkerTest extends TestCase
 {
     use MockeryTrait;
 

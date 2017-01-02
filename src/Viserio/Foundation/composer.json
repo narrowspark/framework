@@ -29,8 +29,9 @@
     },
     "require-dev": {
         "narrowspark/testing-helper"                         : "^2.0",
-        "phpunit/phpunit"                                    : "^5.1",
-        "viserio/console"                                    : "self.version"
+        "phpunit/phpunit"                                    : "^5.7",
+        "viserio/console"                                    : "self.version",
+        "viserio/web-profiler"                               : "self.version"
     },
     "autoload": {
         "psr-4": {

@@ -4,8 +4,9 @@ namespace Viserio\Parsers\Tests;
 
 use org\bovigo\vfs\vfsStream;
 use Viserio\Parsers\TaggableParser;
+use PHPUnit\Framework\TestCase;
 
-class TaggableParserTest extends \PHPUnit_Framework_TestCase
+class TaggableParserTest extends TestCase
 {
     /**
      * @var \org\bovigo\vfs\vfsStreamDirectory

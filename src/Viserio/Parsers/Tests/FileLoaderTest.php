@@ -6,8 +6,9 @@ use org\bovigo\vfs\vfsStream;
 use Viserio\Parsers\FileLoader;
 use Viserio\Parsers\TaggableParser;
 use Viserio\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
+use PHPUnit\Framework\TestCase;
 
-class FileLoaderTest extends \PHPUnit_Framework_TestCase
+class FileLoaderTest extends TestCase
 {
     use NormalizePathAndDirectorySeparatorTrait;
 

@@ -6,8 +6,9 @@ use org\bovigo\vfs\vfsStream;
 use Viserio\Config\Repository;
 use Viserio\Parsers\FileLoader;
 use Viserio\Parsers\TaggableParser;
+use PHPUnit\Framework\TestCase;
 
-class RepositoryTest extends \PHPUnit_Framework_TestCase
+class RepositoryTest extends TestCase
 {
     /**
      * @var org\bovigo\vfs\vfsStreamDirectory

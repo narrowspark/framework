@@ -3,8 +3,9 @@ declare(strict_types=1);
 namespace Viserio\Exception\Tests;
 
 use Viserio\Exception\ExceptionInfo;
+use PHPUnit\Framework\TestCase;
 
-class ExceptionInfoTest extends \PHPUnit_Framework_TestCase
+class ExceptionInfoTest extends TestCase
 {
     public function testBadError()
     {

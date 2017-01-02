@@ -9,8 +9,9 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Viserio\Console\Application;
 use Viserio\Console\Tests\Fixture\ViserioSecCommand;
 use Viserio\Support\Invoker;
+use PHPUnit\Framework\TestCase;
 
-class CommandTest extends \PHPUnit_Framework_TestCase
+class CommandTest extends TestCase
 {
     /**
      * @var Application

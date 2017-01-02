@@ -8,8 +8,9 @@ use Viserio\Container\Container;
 use Viserio\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Hashing\Password;
 use Viserio\Hashing\Providers\HashingServiceProvider;
+use PHPUnit\Framework\TestCase;
 
-class HashingServiceProviderTest extends \PHPUnit_Framework_TestCase
+class HashingServiceProviderTest extends TestCase
 {
     public function testProvider()
     {

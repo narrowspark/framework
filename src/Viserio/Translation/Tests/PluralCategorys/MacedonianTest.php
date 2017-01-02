@@ -3,8 +3,9 @@ declare(strict_types=1);
 namespace Viserio\Translation\Tests\PluralCategorys;
 
 use Viserio\Translation\PluralCategorys\Macedonian;
+use PHPUnit\Framework\TestCase;
 
-class MacedonianTest extends \PHPUnit_Framework_TestCase
+class MacedonianTest extends TestCase
 {
     /**
      * @dataProvider category

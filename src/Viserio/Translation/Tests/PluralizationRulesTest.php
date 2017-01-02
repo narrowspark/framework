@@ -29,8 +29,9 @@ use Viserio\Translation\PluralCategorys\Two;
 use Viserio\Translation\PluralCategorys\Welsh;
 use Viserio\Translation\PluralCategorys\Zero;
 use Viserio\Translation\PluralizationRules;
+use PHPUnit\Framework\TestCase;
 
-class PluralizationRulesTest extends \PHPUnit_Framework_TestCase
+class PluralizationRulesTest extends TestCase
 {
     protected $createRules;
 

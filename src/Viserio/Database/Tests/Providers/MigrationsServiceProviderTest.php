@@ -7,8 +7,9 @@ use Viserio\Container\Container;
 use Viserio\Database\Providers\DatabaseServiceProvider;
 use Viserio\Database\Providers\MigrationsServiceProvider;
 use Viserio\Support\Env;
+use PHPUnit\Framework\TestCase;
 
-class MigrationsServiceProviderTest extends \PHPUnit_Framework_TestCase
+class MigrationsServiceProviderTest extends TestCase
 {
     public function testProvider()
     {

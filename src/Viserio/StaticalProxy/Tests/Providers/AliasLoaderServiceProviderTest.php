@@ -6,8 +6,9 @@ use Viserio\Config\Providers\ConfigServiceProvider;
 use Viserio\Container\Container;
 use Viserio\StaticalProxy\AliasLoader;
 use Viserio\StaticalProxy\Providers\AliasLoaderServiceProvider;
+use PHPUnit\Framework\TestCase;
 
-class AliasLoaderServiceProviderTest extends \PHPUnit_Framework_TestCase
+class AliasLoaderServiceProviderTest extends TestCase
 {
     public function testProvider()
     {

@@ -3,8 +3,9 @@ declare(strict_types=1);
 namespace Viserio\Translation\Tests\PluralCategorys;
 
 use Viserio\Translation\PluralCategorys\One;
+use PHPUnit\Framework\TestCase;
 
-class OneTest extends \PHPUnit_Framework_TestCase
+class OneTest extends TestCase
 {
     /**
      * @dataProvider category

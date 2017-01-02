@@ -5,8 +5,9 @@ namespace Viserio\Parsers\Tests\Formats;
 use org\bovigo\vfs\vfsStream;
 use Viserio\Filesystem\Filesystem;
 use Viserio\Parsers\Formats\TOML;
+use PHPUnit\Framework\TestCase;
 
-class TOMLTest extends \PHPUnit_Framework_TestCase
+class TOMLTest extends TestCase
 {
     /**
      * @var \org\bovigo\vfs\vfsStreamDirectory

@@ -18,8 +18,9 @@ use Viserio\Exception\Transformers\CommandLineTransformer;
 use Viserio\Filesystem\Providers\FilesServiceProvider;
 use Viserio\HttpFactory\Providers\HttpFactoryServiceProvider;
 use Viserio\View\Providers\ViewServiceProvider;
+use PHPUnit\Framework\TestCase;
 
-class ExceptionServiceProviderTest extends \PHPUnit_Framework_TestCase
+class ExceptionServiceProviderTest extends TestCase
 {
     public function testProvider()
     {

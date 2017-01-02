@@ -9,8 +9,9 @@ use Viserio\Cookie\Cookie;
 use Viserio\Cookie\RequestCookies;
 use Viserio\Cookie\SetCookie;
 use Viserio\HttpFactory\ServerRequestFactory;
+use PHPUnit\Framework\TestCase;
 
-class RequestCookiesTest extends \PHPUnit_Framework_TestCase
+class RequestCookiesTest extends TestCase
 {
     use MockeryTrait;
 

@@ -3,8 +3,9 @@ declare(strict_types=1);
 namespace Viserio\Translation\Tests\PluralCategorys;
 
 use Viserio\Translation\PluralCategorys\Arabic;
+use PHPUnit\Framework\TestCase;
 
-class ArabicTest extends \PHPUnit_Framework_TestCase
+class ArabicTest extends TestCase
 {
     /**
      * @dataProvider category

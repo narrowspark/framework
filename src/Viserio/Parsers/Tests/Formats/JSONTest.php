@@ -5,8 +5,9 @@ namespace Viserio\Parsers\Tests\Formats;
 use org\bovigo\vfs\vfsStream;
 use Viserio\Filesystem\Filesystem;
 use Viserio\Parsers\Formats\JSON;
+use PHPUnit\Framework\TestCase;
 
-class JSONTest extends \PHPUnit_Framework_TestCase
+class JSONTest extends TestCase
 {
     /**
      * @var \org\bovigo\vfs\vfsStreamDirectory

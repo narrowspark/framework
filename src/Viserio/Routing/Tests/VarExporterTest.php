@@ -5,8 +5,9 @@ namespace Viserio\Routing\Tests;
 use StdClass;
 use Viserio\Routing\Tests\Fixture\Controller;
 use Viserio\Routing\VarExporter;
+use PHPUnit\Framework\TestCase;
 
-class VarExporterTest extends \PHPUnit_Framework_TestCase
+class VarExporterTest extends TestCase
 {
     public function exportCases()
     {

@@ -7,8 +7,9 @@ use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\WebProfiler\DataCollectors\TimeDataCollector;
+use PHPUnit\Framework\TestCase;
 
-class TimeDataCollectorTest extends \PHPUnit_Framework_TestCase
+class TimeDataCollectorTest extends TestCase
 {
     use MockeryTrait;
 

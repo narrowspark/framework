@@ -7,8 +7,9 @@ use Mockery as Mock;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use Psr\Cache\CacheItemPoolInterface;
 use Viserio\Cron\Cron;
+use PHPUnit\Framework\TestCase;
 
-class CronTest extends \PHPUnit_Framework_TestCase
+class CronTest extends TestCase
 {
     use MockeryTrait;
 

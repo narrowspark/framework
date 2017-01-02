@@ -9,8 +9,9 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Viserio\Console\Application;
 use Viserio\Console\Tests\Fixture\SpyOutput;
 use Viserio\Console\Tests\Fixture\ViserioCommand;
+use PHPUnit\Framework\TestCase;
 
-class ApplicationTest extends \PHPUnit_Framework_TestCase
+class ApplicationTest extends TestCase
 {
     /**
      * @var Application

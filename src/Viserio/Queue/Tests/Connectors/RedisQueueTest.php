@@ -7,8 +7,9 @@ use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use Predis\Client;
 use Viserio\Contracts\Encryption\Encrypter as EncrypterContract;
 use Viserio\Queue\Connectors\RedisQueue;
+use PHPUnit\Framework\TestCase;
 
-class RedisQueueTest extends \PHPUnit_Framework_TestCase
+class RedisQueueTest extends TestCase
 {
     use MockeryTrait;
 

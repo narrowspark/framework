@@ -4,8 +4,9 @@ namespace Viserio\Support\Tests\Traits;
 
 use Viserio\Support\Tests\Fixture\MacroTest;
 use Viserio\Support\Traits\MacroableTrait;
+use PHPUnit\Framework\TestCase;
 
-class MacroableTraitTest extends \PHPUnit_Framework_TestCase
+class MacroableTraitTest extends TestCase
 {
     use MacroableTrait;
 

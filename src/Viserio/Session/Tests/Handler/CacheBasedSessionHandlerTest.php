@@ -5,8 +5,9 @@ namespace Viserio\Session\Tests\Handler;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use Psr\Cache\CacheItemPoolInterface;
 use Viserio\Session\Handler\CacheBasedSessionHandler;
+use PHPUnit\Framework\TestCase;
 
-class CacheBasedSessionHandlerTest extends \PHPUnit_Framework_TestCase
+class CacheBasedSessionHandlerTest extends TestCase
 {
     use MockeryTrait;
 

@@ -5,8 +5,9 @@ namespace Viserio\Contracts\View\Tests\Traits;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use Viserio\Contracts\View\Factory as ViewFactoryContract;
 use Viserio\Contracts\View\Traits\ViewAwareTrait;
+use PHPUnit\Framework\TestCase;
 
-class ViewAwareTraitTest extends \PHPUnit_Framework_TestCase
+class ViewAwareTraitTest extends TestCase
 {
     use MockeryTrait;
     use ViewAwareTrait;

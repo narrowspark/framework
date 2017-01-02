@@ -8,8 +8,9 @@ use Viserio\Contracts\View\Factory;
 use Viserio\Contracts\View\View;
 use Viserio\Exception\Displayers\ViewDisplayer;
 use Viserio\Exception\ExceptionInfo;
+use PHPUnit\Framework\TestCase;
 
-class ViewDisplayerTest extends \PHPUnit_Framework_TestCase
+class ViewDisplayerTest extends TestCase
 {
     use MockeryTrait;
 

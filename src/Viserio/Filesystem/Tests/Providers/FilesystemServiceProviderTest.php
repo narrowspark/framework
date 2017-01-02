@@ -11,8 +11,9 @@ use Viserio\Filesystem\Cache\CachedFactory;
 use Viserio\Filesystem\FilesystemAdapter;
 use Viserio\Filesystem\FilesystemManager;
 use Viserio\Filesystem\Providers\FilesystemServiceProvider;
+use PHPUnit\Framework\TestCase;
 
-class FilesystemServiceProviderTest extends \PHPUnit_Framework_TestCase
+class FilesystemServiceProviderTest extends TestCase
 {
     public function testProvider()
     {

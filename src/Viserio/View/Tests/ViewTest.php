@@ -8,8 +8,9 @@ use Viserio\Contracts\Support\Renderable;
 use Viserio\Contracts\View\Engine;
 use Viserio\View\Factory;
 use Viserio\View\View;
+use PHPUnit\Framework\TestCase;
 
-class ViewTest extends \PHPUnit_Framework_TestCase
+class ViewTest extends TestCase
 {
     use MockeryTrait;
 

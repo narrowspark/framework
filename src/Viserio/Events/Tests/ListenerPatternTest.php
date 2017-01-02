@@ -4,8 +4,9 @@ namespace Viserio\Events\Tests;
 
 use Viserio\Contracts\Events\Dispatcher;
 use Viserio\Events\ListenerPattern;
+use PHPUnit\Framework\TestCase;
 
-class ListenerPatternTest extends \PHPUnit_Framework_TestCase
+class ListenerPatternTest extends TestCase
 {
     /**
      * @dataProvider providePatternsAndMatches

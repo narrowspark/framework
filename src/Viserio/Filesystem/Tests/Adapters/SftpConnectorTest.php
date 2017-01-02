@@ -4,8 +4,9 @@ namespace Viserio\Filesystem\Tests\Adapters;
 
 use League\Flysystem\Sftp\SftpAdapter;
 use Viserio\Filesystem\Adapters\SftpConnector;
+use PHPUnit\Framework\TestCase;
 
-class SftpConnectorTest extends \PHPUnit_Framework_TestCase
+class SftpConnectorTest extends TestCase
 {
     public function testConnect()
     {

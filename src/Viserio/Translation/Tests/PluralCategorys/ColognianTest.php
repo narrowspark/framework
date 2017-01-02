@@ -3,8 +3,9 @@ declare(strict_types=1);
 namespace Viserio\Translation\Tests\PluralCategorys;
 
 use Viserio\Translation\PluralCategorys\Colognian;
+use PHPUnit\Framework\TestCase;
 
-class ColognianTest extends \PHPUnit_Framework_TestCase
+class ColognianTest extends TestCase
 {
     /**
      * @dataProvider category

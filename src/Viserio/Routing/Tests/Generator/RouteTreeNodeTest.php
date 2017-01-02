@@ -8,8 +8,9 @@ use Viserio\Routing\Generator\MatchedRouteDataMap;
 use Viserio\Routing\Generator\RouteTreeNode;
 use Viserio\Routing\Matchers\AbstractMatcher;
 use Viserio\Routing\Route;
+use PHPUnit\Framework\TestCase;
 
-class RouteTreeNodeTest extends \PHPUnit_Framework_TestCase
+class RouteTreeNodeTest extends TestCase
 {
     use MockeryTrait;
 

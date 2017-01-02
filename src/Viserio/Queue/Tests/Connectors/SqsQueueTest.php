@@ -9,8 +9,9 @@ use Interop\Container\ContainerInterface;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use Viserio\Queue\Connectors\SqsQueue;
 use Viserio\Queue\Jobs\SqsJob;
+use PHPUnit\Framework\TestCase;
 
-class SqsQueueTest extends \PHPUnit_Framework_TestCase
+class SqsQueueTest extends TestCase
 {
     use MockeryTrait;
 

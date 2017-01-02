@@ -14,8 +14,9 @@ use Viserio\Routing\Matchers\CompoundMatcher;
 use Viserio\Routing\Matchers\ExpressionMatcher;
 use Viserio\Routing\Matchers\RegexMatcher;
 use Viserio\Routing\Matchers\StaticMatcher;
+use PHPUnit\Framework\TestCase;
 
-class RouteTreeOptimizerTest extends \PHPUnit_Framework_TestCase
+class RouteTreeOptimizerTest extends TestCase
 {
     use MockeryTrait;
 

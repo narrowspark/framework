@@ -12,8 +12,9 @@ use Viserio\HttpFactory\Providers\HttpFactoryServiceProvider;
 use Viserio\WebProfiler\DataCollectors\Bridge\PDO\TraceablePDODecorater;
 use Viserio\WebProfiler\Providers\WebProfilerPDOBridgeServiceProvider;
 use Viserio\WebProfiler\Providers\WebProfilerServiceProvider;
+use PHPUnit\Framework\TestCase;
 
-class WebProfilerPDOBridgeServiceProviderTest extends \PHPUnit_Framework_TestCase
+class WebProfilerPDOBridgeServiceProviderTest extends TestCase
 {
     use MockeryTrait;
 

@@ -6,8 +6,9 @@ use Viserio\Container\Container;
 use Viserio\Events\Providers\EventsServiceProvider;
 use Viserio\Routing\Providers\RoutingServiceProvider;
 use Viserio\Routing\Router;
+use PHPUnit\Framework\TestCase;
 
-class RoutingServiceProviderTest extends \PHPUnit_Framework_TestCase
+class RoutingServiceProviderTest extends TestCase
 {
     public function testProvider()
     {

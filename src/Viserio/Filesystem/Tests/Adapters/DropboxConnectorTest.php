@@ -4,8 +4,9 @@ namespace Viserio\Filesystem\Tests\Adapters;
 
 use League\Flysystem\Dropbox\DropboxAdapter;
 use Viserio\Filesystem\Adapters\DropboxConnector;
+use PHPUnit\Framework\TestCase;
 
-class DropboxConnectorTest extends \PHPUnit_Framework_TestCase
+class DropboxConnectorTest extends TestCase
 {
     public function testConnectStandard()
     {

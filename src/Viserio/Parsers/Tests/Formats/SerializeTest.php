@@ -3,8 +3,9 @@ declare(strict_types=1);
 namespace Viserio\Parsers\Tests\Formats;
 
 use Viserio\Parsers\Formats\Serialize;
+use PHPUnit\Framework\TestCase;
 
-class SerializeTest extends \PHPUnit_Framework_TestCase
+class SerializeTest extends TestCase
 {
     /**
      * @var \Viserio\Parsers\Formats\Serialize

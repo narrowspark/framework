@@ -13,8 +13,9 @@ use Viserio\Parsers\Formats\TOML;
 use Viserio\Parsers\Formats\XML;
 use Viserio\Parsers\Formats\YAML;
 use Viserio\Parsers\Parser;
+use PHPUnit\Framework\TestCase;
 
-class ParserTest extends \PHPUnit_Framework_TestCase
+class ParserTest extends TestCase
 {
     private $parser;
 

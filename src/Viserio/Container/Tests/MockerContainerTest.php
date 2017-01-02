@@ -5,8 +5,9 @@ namespace Viserio\Container\Tests;
 use ReflectionClass;
 use StdClass;
 use Viserio\Container\MockContainer;
+use PHPUnit\Framework\TestCase;
 
-class MockerContainerTest extends \PHPUnit_Framework_TestCase
+class MockerContainerTest extends TestCase
 {
     private $container;
 

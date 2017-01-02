@@ -12,8 +12,9 @@ use Viserio\Exception\ExceptionInfo;
 use Viserio\Exception\Filters\VerboseFilter;
 use Viserio\HttpFactory\ResponseFactory;
 use Viserio\HttpFactory\StreamFactory;
+use PHPUnit\Framework\TestCase;
 
-class VerboseFilterTest extends \PHPUnit_Framework_TestCase
+class VerboseFilterTest extends TestCase
 {
     use MockeryTrait;
 

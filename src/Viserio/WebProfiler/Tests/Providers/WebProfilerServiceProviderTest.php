@@ -15,8 +15,9 @@ use Viserio\Routing\Providers\RoutingServiceProvider;
 use Viserio\WebProfiler\AssetsRenderer;
 use Viserio\WebProfiler\Providers\WebProfilerServiceProvider;
 use Viserio\WebProfiler\WebProfiler;
+use PHPUnit\Framework\TestCase;
 
-class WebProfilerServiceProviderTest extends \PHPUnit_Framework_TestCase
+class WebProfilerServiceProviderTest extends TestCase
 {
     use MockeryTrait;
 

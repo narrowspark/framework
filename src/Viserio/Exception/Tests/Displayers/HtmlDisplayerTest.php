@@ -7,8 +7,9 @@ use Viserio\Exception\Displayers\HtmlDisplayer;
 use Viserio\Exception\ExceptionInfo;
 use Viserio\HttpFactory\ResponseFactory;
 use Viserio\HttpFactory\StreamFactory;
+use PHPUnit\Framework\TestCase;
 
-class HtmlDisplayerTest extends \PHPUnit_Framework_TestCase
+class HtmlDisplayerTest extends TestCase
 {
     public function testServerError()
     {

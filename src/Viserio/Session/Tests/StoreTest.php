@@ -11,8 +11,9 @@ use Viserio\Contracts\Encryption\Encrypter as EncrypterContract;
 use Viserio\Encryption\Encrypter;
 use Viserio\Session\Fingerprint\UserAgentGenerator;
 use Viserio\Session\Store;
+use PHPUnit\Framework\TestCase;
 
-class StoreTest extends \PHPUnit_Framework_TestCase
+class StoreTest extends TestCase
 {
     use MockeryTrait;
 

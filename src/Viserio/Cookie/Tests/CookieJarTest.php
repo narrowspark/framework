@@ -7,8 +7,9 @@ use Mockery as Mock;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use Viserio\Contracts\Cookie\Cookie as CookieContract;
 use Viserio\Cookie\CookieJar;
+use PHPUnit\Framework\TestCase;
 
-class CookieJarTest extends \PHPUnit_Framework_TestCase
+class CookieJarTest extends TestCase
 {
     use MockeryTrait;
 

@@ -9,8 +9,9 @@ use Psr\Http\Message\ServerRequestInterface;
 use Swift_Mailer;
 use Swift_SmtpTransport;
 use Viserio\WebProfiler\DataCollectors\Bridge\SwiftMailDataCollector;
+use PHPUnit\Framework\TestCase;
 
-class SwiftMailDataCollectorTest extends \PHPUnit_Framework_TestCase
+class SwiftMailDataCollectorTest extends TestCase
 {
     use MockeryTrait;
 

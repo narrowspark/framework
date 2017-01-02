@@ -5,8 +5,9 @@ namespace Viserio\Container\Tests;
 use Viserio\Container\Container;
 use Viserio\Container\Tests\Fixture\ServiceFixture;
 use Viserio\Container\Tests\Fixture\SimpleFixtureServiceProvider;
+use PHPUnit\Framework\TestCase;
 
-class ServiceProviderTest extends \PHPUnit_Framework_TestCase
+class ServiceProviderTest extends TestCase
 {
     public function testProvider()
     {

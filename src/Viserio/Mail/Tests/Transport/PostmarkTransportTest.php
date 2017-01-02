@@ -6,8 +6,9 @@ use GuzzleHttp\Client as HttpClient;
 use Swift_Attachment;
 use Swift_Message;
 use Viserio\Mail\Transport\Postmark;
+use PHPUnit\Framework\TestCase;
 
-class PostmarkTransportTest extends \PHPUnit_Framework_TestCase
+class PostmarkTransportTest extends TestCase
 {
     public function testSend()
     {

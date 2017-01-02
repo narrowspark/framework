@@ -4,8 +4,9 @@ namespace Viserio\Filesystem\Tests\Adapters;
 
 use League\Flysystem\Adapter\Local;
 use Viserio\Filesystem\Adapters\LocalConnector;
+use PHPUnit\Framework\TestCase;
 
-class LocalConnectorTest extends \PHPUnit_Framework_TestCase
+class LocalConnectorTest extends TestCase
 {
     public function testConnectStandard()
     {

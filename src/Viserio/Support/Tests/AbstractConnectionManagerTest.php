@@ -6,8 +6,9 @@ use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use stdClass;
 use Viserio\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Support\Tests\Fixture\TestConnectionManager;
+use PHPUnit\Framework\TestCase;
 
-class AbstractConnectionManagerTest extends \PHPUnit_Framework_TestCase
+class AbstractConnectionManagerTest extends TestCase
 {
     use MockeryTrait;
 

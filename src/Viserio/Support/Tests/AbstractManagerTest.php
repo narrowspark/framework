@@ -6,8 +6,9 @@ use Narrowspark\TestingHelper\ArrayContainer;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use Viserio\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Support\Tests\Fixture\TestManager;
+use PHPUnit\Framework\TestCase;
 
-class AbstractManagerTest extends \PHPUnit_Framework_TestCase
+class AbstractManagerTest extends TestCase
 {
     use MockeryTrait;
 

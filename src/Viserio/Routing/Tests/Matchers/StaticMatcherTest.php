@@ -3,8 +3,9 @@ declare(strict_types=1);
 namespace Viserio\Routing\Tests\Matchers;
 
 use Viserio\Routing\Matchers\StaticMatcher;
+use PHPUnit\Framework\TestCase;
 
-class StaticMatcherTest extends \PHPUnit_Framework_TestCase
+class StaticMatcherTest extends TestCase
 {
     /**
      * @expectedException \RuntimeException

@@ -7,8 +7,9 @@ use Viserio\Foundation\Commands\DownCommand;
 use Viserio\Foundation\Commands\KeyGenerateCommand;
 use Viserio\Foundation\Commands\UpCommand;
 use Viserio\Foundation\Providers\FoundationCommandsServiceProvider;
+use PHPUnit\Framework\TestCase;
 
-class FoundationCommandsServiceProviderTest extends \PHPUnit_Framework_TestCase
+class FoundationCommandsServiceProviderTest extends TestCase
 {
     public function testGetServices()
     {

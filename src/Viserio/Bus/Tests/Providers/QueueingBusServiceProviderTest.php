@@ -6,8 +6,9 @@ use Viserio\Bus\Providers\QueueingBusServiceProvider;
 use Viserio\Bus\QueueingDispatcher;
 use Viserio\Container\Container;
 use Viserio\Contracts\Bus\QueueingDispatcher as QueueingDispatcherContract;
+use PHPUnit\Framework\TestCase;
 
-class QueueingBusServiceProviderTest extends \PHPUnit_Framework_TestCase
+class QueueingBusServiceProviderTest extends TestCase
 {
     public function testProvider()
     {

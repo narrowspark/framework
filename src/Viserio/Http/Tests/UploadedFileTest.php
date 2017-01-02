@@ -5,8 +5,9 @@ namespace Viserio\Http\Tests;
 use ReflectionProperty;
 use Viserio\Http\Stream;
 use Viserio\Http\UploadedFile;
+use PHPUnit\Framework\TestCase;
 
-class UploadedFileTest extends \PHPUnit_Framework_TestCase
+class UploadedFileTest extends TestCase
 {
     protected $cleanup;
 

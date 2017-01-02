@@ -5,8 +5,9 @@ namespace Viserio\Mail\Tests\Transport;
 use GuzzleHttp\Client as HttpClient;
 use Swift_Message;
 use Viserio\Mail\Transport\SparkPost as SparkPostTransport;
+use PHPUnit\Framework\TestCase;
 
-class SparkPostTest extends \PHPUnit_Framework_TestCase
+class SparkPostTest extends TestCase
 {
     public function testSend()
     {

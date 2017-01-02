@@ -6,8 +6,9 @@ use Viserio\Container\Container;
 use Viserio\Contracts\Validation\Validator as ValidatorContract;
 use Viserio\Validation\Providers\ValidationServiceProvider;
 use Viserio\Validation\Validator;
+use PHPUnit\Framework\TestCase;
 
-class ValidationServiceProviderTest extends \PHPUnit_Framework_TestCase
+class ValidationServiceProviderTest extends TestCase
 {
     public function testProvider()
     {

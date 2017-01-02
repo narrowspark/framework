@@ -5,8 +5,9 @@ namespace Viserio\Contracts\HttpFactory\Tests\Traits;
 use Interop\Http\Factory\ServerRequestInterface;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use Viserio\Contracts\HttpFactory\Traits\ServerRequestFactoryAwareTrait;
+use PHPUnit\Framework\TestCase;
 
-class ServerRequestFactoryAwareTraitTest extends \PHPUnit_Framework_TestCase
+class ServerRequestFactoryAwareTraitTest extends TestCase
 {
     use MockeryTrait;
     use ServerRequestFactoryAwareTrait;

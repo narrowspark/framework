@@ -5,8 +5,9 @@ namespace Viserio\Events\Tests;
 use Narrowspark\TestingHelper\ArrayContainer;
 use Viserio\Events\Dispatcher;
 use Viserio\Events\Tests\Fixture\EventListener;
+use PHPUnit\Framework\TestCase;
 
-class DispatcherTest extends \PHPUnit_Framework_TestCase
+class DispatcherTest extends TestCase
 {
     public const coreRequest   = 'core.request';
     public const coreException = 'core.exception';

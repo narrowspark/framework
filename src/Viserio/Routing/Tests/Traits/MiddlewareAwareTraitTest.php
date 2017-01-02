@@ -4,8 +4,9 @@ namespace Viserio\Routing\Tests\Traits;
 
 use Viserio\Routing\Tests\Fixture\FooMiddleware;
 use Viserio\Routing\Traits\MiddlewareAwareTrait;
+use PHPUnit\Framework\TestCase;
 
-class MiddlewareAwareTraitTest extends \PHPUnit_Framework_TestCase
+class MiddlewareAwareTraitTest extends TestCase
 {
     use MiddlewareAwareTrait;
 

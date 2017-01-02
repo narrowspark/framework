@@ -9,8 +9,9 @@ use StdClass;
 use Viserio\StaticalProxy\StaticalProxy;
 use Viserio\StaticalProxy\StaticalProxyResolver;
 use Viserio\StaticalProxy\Tests\Fixture\FacadeStub;
+use PHPUnit\Framework\TestCase;
 
-class StaticalProxyResolverTest extends \PHPUnit_Framework_TestCase
+class StaticalProxyResolverTest extends TestCase
 {
     use MockeryTrait;
 

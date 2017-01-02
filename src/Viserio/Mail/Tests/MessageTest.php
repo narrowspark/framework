@@ -6,8 +6,9 @@ use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use Swift_Message;
 use Swift_Mime_Message;
 use Viserio\Mail\Message;
+use PHPUnit\Framework\TestCase;
 
-class MessageTest extends \PHPUnit_Framework_TestCase
+class MessageTest extends TestCase
 {
     use MockeryTrait;
 

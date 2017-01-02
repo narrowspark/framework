@@ -5,8 +5,9 @@ namespace Viserio\Contracts\HttpFactory\Tests\Traits;
 use Interop\Http\Factory\StreamFactoryInterface;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use Viserio\Contracts\HttpFactory\Traits\StreamFactoryAwareTrait;
+use PHPUnit\Framework\TestCase;
 
-class StreamFactoryAwareTraitTest extends \PHPUnit_Framework_TestCase
+class StreamFactoryAwareTraitTest extends TestCase
 {
     use MockeryTrait;
     use StreamFactoryAwareTrait;

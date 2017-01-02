@@ -4,8 +4,9 @@ namespace Viserio\Http\Tests;
 
 use Viserio\Http\ServerRequest;
 use Viserio\Http\UploadedFile;
+use PHPUnit\Framework\TestCase;
 
-class ServerRequestTest extends \PHPUnit_Framework_TestCase
+class ServerRequestTest extends TestCase
 {
     public function testUploadedFiles()
     {

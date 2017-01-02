@@ -7,8 +7,9 @@ use Viserio\Console\Application;
 use Viserio\Console\Providers\ConsoleServiceProvider;
 use Viserio\Container\Container;
 use Viserio\Contracts\Config\Repository as RepositoryContract;
+use PHPUnit\Framework\TestCase;
 
-class ConsoleServiceProviderTest extends \PHPUnit_Framework_TestCase
+class ConsoleServiceProviderTest extends TestCase
 {
     public function testProvider()
     {

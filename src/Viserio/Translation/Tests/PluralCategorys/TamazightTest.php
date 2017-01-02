@@ -3,8 +3,9 @@ declare(strict_types=1);
 namespace Viserio\Translation\Tests\PluralCategorys;
 
 use Viserio\Translation\PluralCategorys\Tamazight;
+use PHPUnit\Framework\TestCase;
 
-class TamazightTest extends \PHPUnit_Framework_TestCase
+class TamazightTest extends TestCase
 {
     /**
      * @dataProvider category

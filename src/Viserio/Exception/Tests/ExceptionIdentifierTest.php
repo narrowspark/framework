@@ -4,8 +4,9 @@ namespace Viserio\Exception\Tests;
 
 use Exception;
 use Viserio\Exception\ExceptionIdentifier;
+use PHPUnit\Framework\TestCase;
 
-class ExceptionIdentifierTest extends \PHPUnit_Framework_TestCase
+class ExceptionIdentifierTest extends TestCase
 {
     public function testIdentifyOne()
     {

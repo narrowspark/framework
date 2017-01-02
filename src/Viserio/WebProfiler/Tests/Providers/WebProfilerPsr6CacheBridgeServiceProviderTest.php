@@ -12,8 +12,9 @@ use Viserio\HttpFactory\Providers\HttpFactoryServiceProvider;
 use Viserio\WebProfiler\DataCollectors\Bridge\Cache\TraceableCacheItemDecorater;
 use Viserio\WebProfiler\Providers\WebProfilerPsr6CacheBridgeServiceProvider;
 use Viserio\WebProfiler\Providers\WebProfilerServiceProvider;
+use PHPUnit\Framework\TestCase;
 
-class WebProfilerPsr6CacheBridgeServiceProviderTest extends \PHPUnit_Framework_TestCase
+class WebProfilerPsr6CacheBridgeServiceProviderTest extends TestCase
 {
     use MockeryTrait;
 

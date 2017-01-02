@@ -4,8 +4,9 @@ namespace Viserio\Filesystem\Tests\Adapters;
 
 use League\Flysystem\Adapter\NullAdapter;
 use Viserio\Filesystem\Adapters\NullConnector;
+use PHPUnit\Framework\TestCase;
 
-class NullConnectorTest extends \PHPUnit_Framework_TestCase
+class NullConnectorTest extends TestCase
 {
     public function testConnect()
     {

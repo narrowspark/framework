@@ -17,8 +17,9 @@ use Viserio\HttpFactory\ResponseFactory;
 use Viserio\HttpFactory\ServerRequestFactory;
 use Viserio\Session\Middleware\StartSessionMiddleware;
 use Viserio\Session\SessionManager;
+use PHPUnit\Framework\TestCase;
 
-class StartSessionMiddlewareTest extends \PHPUnit_Framework_TestCase
+class StartSessionMiddlewareTest extends TestCase
 {
     use MockeryTrait;
 

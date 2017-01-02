@@ -22,8 +22,9 @@ use Viserio\Container\Tests\Fixture\ContainerTestContextInjectOneFixture;
 use Viserio\Container\Tests\Fixture\ContainerTestContextInjectTwoFixture;
 use Viserio\Container\Tests\Fixture\ContainerTestNoConstructor;
 use Viserio\Container\Tests\Fixture\FactoryClass;
+use PHPUnit\Framework\TestCase;
 
-class ContainerTest extends \PHPUnit_Framework_TestCase
+class ContainerTest extends TestCase
 {
     use MockeryTrait;
 

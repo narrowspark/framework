@@ -5,8 +5,9 @@ namespace Viserio\Http\Tests;
 use Throwable;
 use Viserio\Http\Stream;
 use Viserio\Http\Stream\NoSeekStream;
+use PHPUnit\Framework\TestCase;
 
-class StreamTest extends \PHPUnit_Framework_TestCase
+class StreamTest extends TestCase
 {
     public static $isFreadError = false;
 

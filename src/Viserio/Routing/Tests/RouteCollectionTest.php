@@ -4,8 +4,9 @@ namespace Viserio\Routing\Tests;
 
 use Viserio\Routing\Route;
 use Viserio\Routing\RouteCollection;
+use PHPUnit\Framework\TestCase;
 
-class RouteCollectionTest extends \PHPUnit_Framework_TestCase
+class RouteCollectionTest extends TestCase
 {
     public function testGet()
     {

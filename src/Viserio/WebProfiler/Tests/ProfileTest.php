@@ -4,8 +4,9 @@ namespace Viserio\WebProfiler\Tests;
 
 use Viserio\WebProfiler\DataCollectors\PhpInfoDataCollector;
 use Viserio\WebProfiler\Profile;
+use PHPUnit\Framework\TestCase;
 
-class ProfileTest extends \PHPUnit_Framework_TestCase
+class ProfileTest extends TestCase
 {
     public function testSetAndGetToken()
     {

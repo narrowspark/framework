@@ -5,8 +5,9 @@ namespace Viserio\Contracts\Events\Tests\Traits;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use Viserio\Contracts\Events\Dispatcher;
 use Viserio\Contracts\Events\Traits\EventsAwareTrait;
+use PHPUnit\Framework\TestCase;
 
-class EventsAwareTraitTest extends \PHPUnit_Framework_TestCase
+class EventsAwareTraitTest extends TestCase
 {
     use MockeryTrait;
     use EventsAwareTrait;

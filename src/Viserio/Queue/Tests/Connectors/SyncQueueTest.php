@@ -13,8 +13,9 @@ use Viserio\Queue\Jobs\SyncJob;
 use Viserio\Queue\QueueClosure;
 use Viserio\Queue\Tests\Fixture\FailingSyncQueueHandler;
 use Viserio\Queue\Tests\Fixture\SyncQueueHandler;
+use PHPUnit\Framework\TestCase;
 
-class SyncQueueTest extends \PHPUnit_Framework_TestCase
+class SyncQueueTest extends TestCase
 {
     use MockeryTrait;
 

@@ -14,8 +14,9 @@ use Viserio\Contracts\Cookie\QueueingFactory as JarContract;
 use Viserio\Contracts\Session\Store as StoreContract;
 use Viserio\Encryption\Encrypter;
 use Viserio\Session\SessionManager;
+use PHPUnit\Framework\TestCase;
 
-class SessionManagerTest extends \PHPUnit_Framework_TestCase
+class SessionManagerTest extends TestCase
 {
     use MockeryTrait;
 

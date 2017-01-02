@@ -4,8 +4,9 @@ namespace Viserio\Hashing\Tests;
 
 use Defuse\Crypto\Key;
 use Viserio\Hashing\Password;
+use PHPUnit\Framework\TestCase;
 
-class PasswordTest extends \PHPUnit_Framework_TestCase
+class PasswordTest extends TestCase
 {
     private $password;
 

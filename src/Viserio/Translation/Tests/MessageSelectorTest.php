@@ -4,8 +4,9 @@ namespace Viserio\Translation\Tests;
 
 use Viserio\Translation\MessageSelector;
 use Viserio\Translation\PluralizationRules;
+use PHPUnit\Framework\TestCase;
 
-class MessageSelectorTest extends \PHPUnit_Framework_TestCase
+class MessageSelectorTest extends TestCase
 {
     /**
      * @dataProvider getChooseTests

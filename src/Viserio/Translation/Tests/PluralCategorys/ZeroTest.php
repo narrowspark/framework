@@ -3,8 +3,9 @@ declare(strict_types=1);
 namespace Viserio\Translation\Tests\PluralCategorys;
 
 use Viserio\Translation\PluralCategorys\Zero;
+use PHPUnit\Framework\TestCase;
 
-class ZeroTest extends \PHPUnit_Framework_TestCase
+class ZeroTest extends TestCase
 {
     /**
      * @dataProvider category

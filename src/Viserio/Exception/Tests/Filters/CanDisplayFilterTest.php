@@ -8,8 +8,9 @@ use Psr\Http\Message\RequestInterface;
 use Viserio\Exception\Displayers\HtmlDisplayer;
 use Viserio\Exception\Displayers\JsonDisplayer;
 use Viserio\Exception\Filters\CanDisplayFilter;
+use PHPUnit\Framework\TestCase;
 
-class CanDisplayFilterTest extends \PHPUnit_Framework_TestCase
+class CanDisplayFilterTest extends TestCase
 {
     use MockeryTrait;
 

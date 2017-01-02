@@ -15,8 +15,9 @@ use Viserio\Contracts\View\Factory as ViewFactoryContract;
 use Viserio\Contracts\View\View as ViewContract;
 use Viserio\Mail\QueueMailer;
 use Viserio\Mail\Tests\Fixture\FailingSwiftMailerStub;
+use PHPUnit\Framework\TestCase;
 
-class QueueMailerTest extends \PHPUnit_Framework_TestCase
+class QueueMailerTest extends TestCase
 {
     use MockeryTrait;
 

@@ -4,8 +4,9 @@ namespace Viserio\Routing\Tests\Matchers;
 
 use Viserio\Contracts\Routing\Pattern;
 use Viserio\Routing\Matchers\RegexMatcher;
+use PHPUnit\Framework\TestCase;
 
-class RegexMatcherTest extends \PHPUnit_Framework_TestCase
+class RegexMatcherTest extends TestCase
 {
     public function testGetGroupCount()
     {

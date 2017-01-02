@@ -5,8 +5,9 @@ namespace Viserio\Routing\Tests\Segments;
 use Viserio\Contracts\Routing\Pattern;
 use Viserio\Routing\Matchers\RegexMatcher;
 use Viserio\Routing\Segments\ParameterSegment;
+use PHPUnit\Framework\TestCase;
 
-class ParameterSegmentTest extends \PHPUnit_Framework_TestCase
+class ParameterSegmentTest extends TestCase
 {
     public function testMatcher()
     {

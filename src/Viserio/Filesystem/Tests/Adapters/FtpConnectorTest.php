@@ -4,8 +4,9 @@ namespace Viserio\Filesystem\Tests\Adapters;
 
 use League\Flysystem\Adapter\Ftp;
 use Viserio\Filesystem\Adapters\FtpConnector;
+use PHPUnit\Framework\TestCase;
 
-class FtpConnectorTest extends \PHPUnit_Framework_TestCase
+class FtpConnectorTest extends TestCase
 {
     public function testConnect()
     {

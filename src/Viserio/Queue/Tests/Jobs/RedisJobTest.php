@@ -7,8 +7,9 @@ use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use stdClass;
 use Viserio\Queue\Connectors\RedisQueue;
 use Viserio\Queue\Jobs\RedisJob;
+use PHPUnit\Framework\TestCase;
 
-class RedisJobTest extends \PHPUnit_Framework_TestCase
+class RedisJobTest extends TestCase
 {
     use MockeryTrait;
 

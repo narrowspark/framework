@@ -7,8 +7,9 @@ use Viserio\Config\Providers\ConfigServiceProvider;
 use Viserio\Container\Container;
 use Viserio\Encryption\Encrypter;
 use Viserio\Encryption\Providers\EncrypterServiceProvider;
+use PHPUnit\Framework\TestCase;
 
-class EncrypterServiceProviderTest extends \PHPUnit_Framework_TestCase
+class EncrypterServiceProviderTest extends TestCase
 {
     public function testProvider()
     {

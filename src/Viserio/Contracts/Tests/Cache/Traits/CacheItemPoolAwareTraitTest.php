@@ -5,8 +5,9 @@ namespace Viserio\Contracts\Cache\Tests\Traits;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use Psr\Cache\CacheItemPoolInterface;
 use Viserio\Contracts\Cache\Traits\CacheItemPoolAwareTrait;
+use PHPUnit\Framework\TestCase;
 
-class CacheItemPoolAwareTraitTest extends \PHPUnit_Framework_TestCase
+class CacheItemPoolAwareTraitTest extends TestCase
 {
     use MockeryTrait;
     use CacheItemPoolAwareTrait;

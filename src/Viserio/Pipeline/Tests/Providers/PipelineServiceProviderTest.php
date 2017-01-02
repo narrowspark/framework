@@ -6,8 +6,9 @@ use Viserio\Container\Container;
 use Viserio\Contracts\Pipeline\Pipeline as PipelineContract;
 use Viserio\Pipeline\Pipeline;
 use Viserio\Pipeline\Providers\PipelineServiceProvider;
+use PHPUnit\Framework\TestCase;
 
-class PipelineServiceProviderTest extends \PHPUnit_Framework_TestCase
+class PipelineServiceProviderTest extends TestCase
 {
     public function testProvider()
     {

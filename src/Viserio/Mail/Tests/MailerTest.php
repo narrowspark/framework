@@ -12,8 +12,9 @@ use Viserio\Contracts\Mail\Message as MessageContract;
 use Viserio\Contracts\View\Factory as ViewFactoryContract;
 use Viserio\Contracts\View\View as ViewContract;
 use Viserio\Mail\Mailer;
+use PHPUnit\Framework\TestCase;
 
-class MailerTest extends \PHPUnit_Framework_TestCase
+class MailerTest extends TestCase
 {
     use MockeryTrait;
 

@@ -10,8 +10,9 @@ use Viserio\Cookie\Middleware\AddQueuedCookiesToResponseMiddleware;
 use Viserio\Cookie\ResponseCookies;
 use Viserio\HttpFactory\ResponseFactory;
 use Viserio\HttpFactory\ServerRequestFactory;
+use PHPUnit\Framework\TestCase;
 
-class AddQueuedCookiesToResponseMiddlewareTest extends \PHPUnit_Framework_TestCase
+class AddQueuedCookiesToResponseMiddlewareTest extends TestCase
 {
     use MockeryTrait;
 

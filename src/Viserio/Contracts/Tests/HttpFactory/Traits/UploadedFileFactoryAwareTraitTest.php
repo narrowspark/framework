@@ -5,8 +5,9 @@ namespace Viserio\Contracts\HttpFactory\Tests\Traits;
 use Interop\Http\Factory\UploadedFactoryInterface;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use Viserio\Contracts\HttpFactory\Traits\UploadedFileFactoryAwareTrait;
+use PHPUnit\Framework\TestCase;
 
-class UploadedFileFactoryAwareTraitTest extends \PHPUnit_Framework_TestCase
+class UploadedFileFactoryAwareTraitTest extends TestCase
 {
     use MockeryTrait;
     use UploadedFileFactoryAwareTrait;

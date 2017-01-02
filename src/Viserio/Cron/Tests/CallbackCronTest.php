@@ -6,8 +6,9 @@ use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use Psr\Cache\CacheItemInterface;
 use Psr\Cache\CacheItemPoolInterface;
 use Viserio\Cron\CallbackCron;
+use PHPUnit\Framework\TestCase;
 
-class CallbackCronTest extends \PHPUnit_Framework_TestCase
+class CallbackCronTest extends TestCase
 {
     use MockeryTrait;
 

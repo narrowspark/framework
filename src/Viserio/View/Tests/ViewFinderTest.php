@@ -6,8 +6,9 @@ use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use Viserio\Contracts\Filesystem\Filesystem;
 use Viserio\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 use Viserio\View\ViewFinder;
+use PHPUnit\Framework\TestCase;
 
-class ViewFinderTest extends \PHPUnit_Framework_TestCase
+class ViewFinderTest extends TestCase
 {
     use MockeryTrait;
     use NormalizePathAndDirectorySeparatorTrait;

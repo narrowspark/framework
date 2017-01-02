@@ -9,8 +9,9 @@ use Viserio\Config\Providers\ConfigServiceProvider;
 use Viserio\Container\Container;
 use Viserio\Cron\Providers\CronServiceProvider;
 use Viserio\Cron\Schedule;
+use PHPUnit\Framework\TestCase;
 
-class CronServiceProviderTest extends \PHPUnit_Framework_TestCase
+class CronServiceProviderTest extends TestCase
 {
     use MockeryTrait;
 

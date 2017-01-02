@@ -4,8 +4,9 @@ namespace Viserio\Filesystem\Tests\Adapters;
 
 use Guzzle\Http\Exception\CurlException;
 use Viserio\Filesystem\Adapters\RackspaceConnector;
+use PHPUnit\Framework\TestCase;
 
-class RackspaceConnectorTest extends \PHPUnit_Framework_TestCase
+class RackspaceConnectorTest extends TestCase
 {
     /**
      * @expectedException \Guzzle\Http\Exception\ClientErrorResponseException

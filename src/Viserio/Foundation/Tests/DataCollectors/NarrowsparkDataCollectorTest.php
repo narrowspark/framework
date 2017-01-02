@@ -8,8 +8,9 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Foundation\Application;
 use Viserio\Foundation\DataCollectors\NarrowsparkDataCollector;
+use PHPUnit\Framework\TestCase;
 
-class NarrowsparkDataCollectorTest extends \PHPUnit_Framework_TestCase
+class NarrowsparkDataCollectorTest extends TestCase
 {
     use MockeryTrait;
 

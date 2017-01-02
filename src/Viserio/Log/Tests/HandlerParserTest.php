@@ -10,8 +10,9 @@ use Monolog\Processor\GitProcessor;
 use Monolog\Processor\PsrLogMessageProcessor;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use Viserio\Log\HandlerParser;
+use PHPUnit\Framework\TestCase;
 
-class HandlerParserTest extends \PHPUnit_Framework_TestCase
+class HandlerParserTest extends TestCase
 {
     use MockeryTrait;
 

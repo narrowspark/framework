@@ -7,8 +7,9 @@ use Viserio\Contracts\Parsers\Loader as LoaderContract;
 use Viserio\Parsers\FileLoader;
 use Viserio\Parsers\Providers\ParsersServiceProvider;
 use Viserio\Parsers\TaggableParser;
+use PHPUnit\Framework\TestCase;
 
-class LoggerServiceProviderTest extends \PHPUnit_Framework_TestCase
+class ParsersServiceProviderTest extends TestCase
 {
     public function testProvider()
     {

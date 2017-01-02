@@ -8,8 +8,9 @@ use Viserio\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Contracts\Encryption\Encrypter as EncrypterContract;
 use Viserio\Queue\QueueManager;
 use Viserio\Queue\Tests\Fixture\TestQueue;
+use PHPUnit\Framework\TestCase;
 
-class QueueManagerTest extends \PHPUnit_Framework_TestCase
+class QueueManagerTest extends TestCase
 {
     use MockeryTrait;
 

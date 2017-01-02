@@ -3,8 +3,9 @@ declare(strict_types=1);
 namespace Viserio\Cookie\Tests;
 
 use Viserio\Cookie\Cookie;
+use PHPUnit\Framework\TestCase;
 
-class CookieTest extends \PHPUnit_Framework_TestCase
+class CookieTest extends TestCase
 {
     public function invalidNames()
     {

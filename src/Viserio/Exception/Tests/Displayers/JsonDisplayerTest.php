@@ -6,8 +6,9 @@ use Exception;
 use InvalidArgumentException;
 use Viserio\Exception\Displayers\JsonDisplayer;
 use Viserio\Exception\ExceptionInfo;
+use PHPUnit\Framework\TestCase;
 
-class JsonDisplayerTest extends \PHPUnit_Framework_TestCase
+class JsonDisplayerTest extends TestCase
 {
     public function testServerError()
     {

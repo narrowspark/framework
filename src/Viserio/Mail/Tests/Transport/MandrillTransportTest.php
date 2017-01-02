@@ -5,8 +5,9 @@ namespace Viserio\Mail\Tests\Transport;
 use GuzzleHttp\Client as HttpClient;
 use Swift_Message;
 use Viserio\Mail\Tests\Fixture\MandrillTransportStub;
+use PHPUnit\Framework\TestCase;
 
-class MandrillTransportTest extends \PHPUnit_Framework_TestCase
+class MandrillTransportTest extends TestCase
 {
     public function testSend()
     {

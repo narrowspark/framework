@@ -6,8 +6,9 @@ use Viserio\Container\Container;
 use Viserio\Log\DataCollectors\LogParser;
 use Viserio\Log\DataCollectors\LogsDataCollector;
 use Viserio\Log\Providers\LogsDataCollectorServiceProvider;
+use PHPUnit\Framework\TestCase;
 
-class LogsDataCollectorServiceProviderTest extends \PHPUnit_Framework_TestCase
+class LogsDataCollectorServiceProviderTest extends TestCase
 {
     public function testProvider()
     {

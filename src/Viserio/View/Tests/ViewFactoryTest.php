@@ -10,8 +10,9 @@ use Viserio\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 use Viserio\View\Engines\EngineResolver;
 use Viserio\View\Engines\PhpEngine;
 use Viserio\View\Factory;
+use PHPUnit\Framework\TestCase;
 
-class ViewFactoryTest extends \PHPUnit_Framework_TestCase
+class ViewFactoryTest extends TestCase
 {
     use MockeryTrait;
     use NormalizePathAndDirectorySeparatorTrait;

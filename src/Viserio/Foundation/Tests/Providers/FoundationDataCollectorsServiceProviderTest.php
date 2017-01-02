@@ -14,8 +14,9 @@ use Viserio\Contracts\WebProfiler\WebProfiler as WebProfilerContract;
 use Viserio\Foundation\Providers\FoundationDataCollectorsServiceProvider;
 use Viserio\HttpFactory\Providers\HttpFactoryServiceProvider;
 use Viserio\WebProfiler\Providers\WebProfilerServiceProvider;
+use PHPUnit\Framework\TestCase;
 
-class FoundationDataCollectorsServiceProviderTest extends \PHPUnit_Framework_TestCase
+class FoundationDataCollectorsServiceProviderTest extends TestCase
 {
     use MockeryTrait;
 

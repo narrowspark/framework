@@ -3,8 +3,9 @@ declare(strict_types=1);
 namespace Viserio\Translation\Tests\PluralCategorys;
 
 use Viserio\Translation\PluralCategorys\Manx;
+use PHPUnit\Framework\TestCase;
 
-class ManxTest extends \PHPUnit_Framework_TestCase
+class ManxTest extends TestCase
 {
     /**
      * @dataProvider category

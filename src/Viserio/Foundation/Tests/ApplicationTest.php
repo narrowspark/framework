@@ -9,8 +9,9 @@ use Viserio\Contracts\Events\Dispatcher as DispatcherContract;
 use Viserio\Contracts\Translation\TranslationManager as TranslationManagerContract;
 use Viserio\Foundation\Application;
 use Viserio\Foundation\Bootstrap\DetectEnvironment;
+use PHPUnit\Framework\TestCase;
 
-class ApplicationTest extends \PHPUnit_Framework_TestCase
+class ApplicationTest extends TestCase
 {
     use MockeryTrait;
 

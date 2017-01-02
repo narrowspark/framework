@@ -3,8 +3,9 @@ declare(strict_types=1);
 namespace Viserio\Translation\Tests;
 
 use Viserio\Translation\MessageCatalogue;
+use PHPUnit\Framework\TestCase;
 
-class MessageCatalogueTest extends \PHPUnit_Framework_TestCase
+class MessageCatalogueTest extends TestCase
 {
     public function testGetLocale()
     {

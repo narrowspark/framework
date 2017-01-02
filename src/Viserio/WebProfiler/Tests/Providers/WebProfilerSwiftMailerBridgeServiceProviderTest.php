@@ -12,8 +12,9 @@ use Viserio\Contracts\WebProfiler\WebProfiler as WebProfilerContract;
 use Viserio\HttpFactory\Providers\HttpFactoryServiceProvider;
 use Viserio\WebProfiler\Providers\WebProfilerServiceProvider;
 use Viserio\WebProfiler\Providers\WebProfilerSwiftMailerBridgeServiceProvider;
+use PHPUnit\Framework\TestCase;
 
-class WebProfilerSwiftMailerBridgeServiceProviderTest extends \PHPUnit_Framework_TestCase
+class WebProfilerSwiftMailerBridgeServiceProviderTest extends TestCase
 {
     use MockeryTrait;
 

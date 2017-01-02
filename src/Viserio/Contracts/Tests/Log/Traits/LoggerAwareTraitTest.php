@@ -5,8 +5,9 @@ namespace Viserio\Contracts\Log\Tests\Traits;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use Psr\Log\LoggerInterface as PsrLoggerInterface;
 use Viserio\Contracts\Log\Traits\LoggerAwareTrait;
+use PHPUnit\Framework\TestCase;
 
-class LoggerAwareTraitTest extends \PHPUnit_Framework_TestCase
+class LoggerAwareTraitTest extends TestCase
 {
     use MockeryTrait;
     use LoggerAwareTrait;

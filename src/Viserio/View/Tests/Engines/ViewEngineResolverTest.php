@@ -5,8 +5,9 @@ namespace Viserio\View\Tests\Engines;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use Viserio\Contracts\View\Engine as EngineContract;
 use Viserio\View\Engines\EngineResolver;
+use PHPUnit\Framework\TestCase;
 
-class ViewEngineResolverTest extends \PHPUnit_Framework_TestCase
+class ViewEngineResolverTest extends TestCase
 {
     use MockeryTrait;
 

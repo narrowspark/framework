@@ -4,8 +4,9 @@ namespace Viserio\Filesystem\Tests\Adapters;
 
 use League\Flysystem\ZipArchive\ZipArchiveAdapter;
 use Viserio\Filesystem\Adapters\ZipConnector;
+use PHPUnit\Framework\TestCase;
 
-class ZipConnectorTest extends \PHPUnit_Framework_TestCase
+class ZipConnectorTest extends TestCase
 {
     public function testConnectStandard()
     {

@@ -8,8 +8,9 @@ use org\bovigo\vfs\vfsStream;
 use org\bovigo\vfs\vfsStreamDirectory;
 use Symfony\Component\Finder\SplFileInfo;
 use Viserio\Filesystem\Filesystem;
+use PHPUnit\Framework\TestCase;
 
-class FilesystemTest extends \PHPUnit_Framework_TestCase
+class FilesystemTest extends TestCase
 {
     /**
      * @var \org\bovigo\vfs\vfsStreamDirectory

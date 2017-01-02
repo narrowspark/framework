@@ -5,8 +5,9 @@ namespace Viserio\HttpFactory\Tests;
 use Psr\Http\Message\RequestInterface;
 use Viserio\HttpFactory\RequestFactory;
 use Viserio\HttpFactory\UriFactory;
+use PHPUnit\Framework\TestCase;
 
-class RequestFactoryTest extends \PHPUnit_Framework_TestCase
+class RequestFactoryTest extends TestCase
 {
     private $factory;
 

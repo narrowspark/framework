@@ -6,8 +6,9 @@ use Viserio\Http\Stream;
 use Viserio\Http\Stream\FnStream;
 use Viserio\Http\UploadedFile;
 use Viserio\Http\Util;
+use PHPUnit\Framework\TestCase;
 
-class UtilTest extends \PHPUnit_Framework_TestCase
+class UtilTest extends TestCase
 {
     public function testCopiesToString()
     {

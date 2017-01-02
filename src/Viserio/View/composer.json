@@ -30,7 +30,7 @@
         "league/plates"                                      : "^3.1",
         "mockery/mockery"                                    : "^0.9",
         "narrowspark/testing-helper"                         : "^2.0",
-        "phpunit/phpunit"                                    : "^5.1",
+        "phpunit/phpunit"                                    : "~5.7",
         "http-interop/http-middleware"                       : "^0.3",
         "twig/twig"                                          : "^1.24",
         "viserio/config"                                     : "self.version",

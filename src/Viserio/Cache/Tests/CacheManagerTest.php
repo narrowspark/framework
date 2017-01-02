@@ -13,8 +13,9 @@ use League\Flysystem\Adapter\Local;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use Viserio\Cache\CacheManager;
 use Viserio\Contracts\Config\Repository as RepositoryContract;
+use PHPUnit\Framework\TestCase;
 
-class CacheManagerTest extends \PHPUnit_Framework_TestCase
+class CacheManagerTest extends TestCase
 {
     use MockeryTrait;
 

@@ -7,6 +7,7 @@ use Psr\Http\Message\StreamInterface;
 use Viserio\Http\Response;
 use Viserio\Http\Stream;
 use Viserio\Http\Stream\FnStream;
+use PHPUnit\Framework\TestCase;
 
 class ResponseTest extends AbstractMessageTest
 {

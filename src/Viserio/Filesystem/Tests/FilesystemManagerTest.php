@@ -14,8 +14,9 @@ use Viserio\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Filesystem\Encryption\EncryptionWrapper;
 use Viserio\Filesystem\FilesystemAdapter;
 use Viserio\Filesystem\FilesystemManager;
+use PHPUnit\Framework\TestCase;
 
-class FilesystemManagerTest extends \PHPUnit_Framework_TestCase
+class FilesystemManagerTest extends TestCase
 {
     use MockeryTrait;
 

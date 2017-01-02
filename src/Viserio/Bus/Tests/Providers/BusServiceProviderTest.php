@@ -6,8 +6,9 @@ use Viserio\Bus\Dispatcher;
 use Viserio\Bus\Providers\BusServiceProvider;
 use Viserio\Container\Container;
 use Viserio\Contracts\Bus\Dispatcher as DispatcherContract;
+use PHPUnit\Framework\TestCase;
 
-class BusServiceProviderTest extends \PHPUnit_Framework_TestCase
+class BusServiceProviderTest extends TestCase
 {
     public function testProvider()
     {

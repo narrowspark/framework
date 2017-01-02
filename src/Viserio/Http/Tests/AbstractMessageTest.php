@@ -7,8 +7,9 @@ use Psr\Http\Message\MessageInterface;
 use Psr\Http\Message\StreamInterface;
 use Viserio\Http\Tests\Constraint\HttpProtocolVersion;
 use Viserio\Http\Tests\Constraint\Immutable;
+use PHPUnit\Framework\TestCase;
 
-abstract class AbstractMessageTest extends \PHPUnit_Framework_TestCase
+abstract class AbstractMessageTest extends TestCase
 {
     use MockeryTrait;
 

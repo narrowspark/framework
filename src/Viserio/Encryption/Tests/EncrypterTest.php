@@ -4,8 +4,9 @@ namespace Viserio\Encryption\Tests;
 
 use Defuse\Crypto\Key;
 use Viserio\Encryption\Encrypter;
+use PHPUnit\Framework\TestCase;
 
-class EncrypterTest extends \PHPUnit_Framework_TestCase
+class EncrypterTest extends TestCase
 {
     public function testCompareEncryptedValues()
     {

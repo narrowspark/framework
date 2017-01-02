@@ -3,8 +3,9 @@ declare(strict_types=1);
 namespace Viserio\WebProfiler\Tests\DataCollectors;
 
 use Viserio\WebProfiler\Tests\Fixture\FixtureDataCollector;
+use PHPUnit\Framework\TestCase;
 
-class DataCollectorTest extends \PHPUnit_Framework_TestCase
+class DataCollectorTest extends TestCase
 {
     public function testGetName()
     {

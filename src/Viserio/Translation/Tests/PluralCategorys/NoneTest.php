@@ -3,8 +3,9 @@ declare(strict_types=1);
 namespace Viserio\Translation\Tests\PluralCategorys;
 
 use Viserio\Translation\PluralCategorys\None;
+use PHPUnit\Framework\TestCase;
 
-class NoneTest extends \PHPUnit_Framework_TestCase
+class NoneTest extends TestCase
 {
     /**
      * @dataProvider category

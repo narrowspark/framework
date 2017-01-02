@@ -348,9 +348,9 @@ class WebProfiler implements WebProfilerContract
     }
 
     /**
-     * Check if response is a json response.
+     * Check if request is a json request.
      *
-     * @param \Psr\Http\Message\ResponseInterface $response
+     * @param \Psr\Http\Message\ServerRequestInterface $request
      *
      * @return bool
      */

@@ -7,8 +7,9 @@ use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\WebProfiler\DataCollectors\MemoryDataCollector;
+use PHPUnit\Framework\TestCase;
 
-class MemoryDataCollectorTest extends \PHPUnit_Framework_TestCase
+class MemoryDataCollectorTest extends TestCase
 {
     use MockeryTrait;
 

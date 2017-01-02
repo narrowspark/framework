@@ -6,8 +6,9 @@ use Viserio\Contracts\Routing\Pattern;
 use Viserio\Routing\Route;
 use Viserio\Routing\Segments\ParameterSegment;
 use Viserio\Routing\Tests\Fixture\Controller;
+use PHPUnit\Framework\TestCase;
 
-class RouteTest extends \PHPUnit_Framework_TestCase
+class RouteTest extends TestCase
 {
     public function testGetMethods()
     {

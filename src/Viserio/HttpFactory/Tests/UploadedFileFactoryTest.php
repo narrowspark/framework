@@ -4,8 +4,9 @@ namespace Viserio\HttpFactory\Tests;
 
 use Psr\Http\Message\UploadedFileInterface;
 use Viserio\HttpFactory\UploadedFileFactory;
+use PHPUnit\Framework\TestCase;
 
-class UploadedFileFactoryTest extends \PHPUnit_Framework_TestCase
+class UploadedFileFactoryTest extends TestCase
 {
     private $fname;
 

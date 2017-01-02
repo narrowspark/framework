@@ -15,8 +15,9 @@ use Viserio\Bus\Tests\Fixture\BusDispatcherSpecificQueueAndDelayCommand;
 use Viserio\Bus\Tests\Fixture\BusDispatcherSpecificQueueCommand;
 use Viserio\Contracts\Queue\QueueConnector as QueueConnectorContract;
 use Viserio\Contracts\Queue\ShouldQueue as ShouldQueueContract;
+use PHPUnit\Framework\TestCase;
 
-class QueueingDispatcherTest extends \PHPUnit_Framework_TestCase
+class QueueingDispatcherTest extends TestCase
 {
     use MockeryTrait;
 

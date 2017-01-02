@@ -4,8 +4,9 @@ namespace Viserio\Exception\Tests\Displayers;
 
 use Exception;
 use Viserio\Exception\Displayers\WhoopsDisplayer;
+use PHPUnit\Framework\TestCase;
 
-class WhoopsDisplayerTest extends \PHPUnit_Framework_TestCase
+class WhoopsDisplayerTest extends TestCase
 {
     public function testServerError()
     {

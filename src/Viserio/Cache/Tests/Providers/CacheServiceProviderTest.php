@@ -8,8 +8,9 @@ use Viserio\Cache\CacheManager;
 use Viserio\Cache\Providers\CacheServiceProvider;
 use Viserio\Config\Providers\ConfigServiceProvider;
 use Viserio\Container\Container;
+use PHPUnit\Framework\TestCase;
 
-class CacheServiceProviderTest extends \PHPUnit_Framework_TestCase
+class CacheServiceProviderTest extends TestCase
 {
     public function testProvider()
     {

@@ -5,8 +5,9 @@ namespace Viserio\Parsers\Tests\Formats\Formats;
 use org\bovigo\vfs\vfsStream;
 use Viserio\Filesystem\Filesystem;
 use Viserio\Parsers\Formats\INI;
+use PHPUnit\Framework\TestCase;
 
-class INITest extends \PHPUnit_Framework_TestCase
+class INITest extends TestCase
 {
     /**
      * @var org\bovigo\vfs\vfsStreamDirectory

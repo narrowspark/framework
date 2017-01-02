@@ -7,8 +7,9 @@ use Viserio\Http\Stream;
 use Viserio\Http\Stream\FnStream;
 use Viserio\Http\Stream\LimitStream;
 use Viserio\Http\Stream\NoSeekStream;
+use PHPUnit\Framework\TestCase;
 
-class LimitStreamTest extends \PHPUnit_Framework_TestCase
+class LimitStreamTest extends TestCase
 {
     /** @var LimitStream */
     protected $body;

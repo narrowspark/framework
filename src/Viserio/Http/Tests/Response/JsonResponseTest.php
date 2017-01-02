@@ -3,8 +3,9 @@ declare(strict_types=1);
 namespace Viserio\Http\Tests\Response;
 
 use Viserio\Http\Response\JsonResponse;
+use PHPUnit\Framework\TestCase;
 
-class JsonResponseTest extends \PHPUnit_Framework_TestCase
+class JsonResponseTest extends TestCase
 {
     public function testConstructorAcceptsDataAndCreatesJsonEncodedMessageBody()
     {

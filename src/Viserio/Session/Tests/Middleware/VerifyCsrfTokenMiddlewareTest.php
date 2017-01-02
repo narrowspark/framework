@@ -18,8 +18,9 @@ use Viserio\HttpFactory\ServerRequestFactory;
 use Viserio\Session\Middleware\StartSessionMiddleware;
 use Viserio\Session\Middleware\VerifyCsrfTokenMiddleware;
 use Viserio\Session\SessionManager;
+use PHPUnit\Framework\TestCase;
 
-class VerifyCsrfTokenMiddlewareTest extends \PHPUnit_Framework_TestCase
+class VerifyCsrfTokenMiddlewareTest extends TestCase
 {
     use MockeryTrait;
 

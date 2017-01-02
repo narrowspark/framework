@@ -4,8 +4,9 @@ namespace Viserio\Validation\Tests;
 
 use Respect\Validation\Validator as RespectValidator;
 use Viserio\Validation\Validator;
+use PHPUnit\Framework\TestCase;
 
-class ValidatorTest extends \PHPUnit_Framework_TestCase
+class ValidatorTest extends TestCase
 {
     public function testValidate()
     {

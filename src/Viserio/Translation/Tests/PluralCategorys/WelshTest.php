@@ -3,8 +3,9 @@ declare(strict_types=1);
 namespace Viserio\Translation\Tests\PluralCategorys;
 
 use Viserio\Translation\PluralCategorys\Welsh;
+use PHPUnit\Framework\TestCase;
 
-class WelshTest extends \PHPUnit_Framework_TestCase
+class WelshTest extends TestCase
 {
     /**
      * @dataProvider category

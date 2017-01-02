@@ -5,8 +5,9 @@ namespace Viserio\HttpFactory\Tests;
 use Psr\Http\Message\StreamInterface;
 use Viserio\Http\Stream;
 use Viserio\HttpFactory\StreamFactory;
+use PHPUnit\Framework\TestCase;
 
-class StreamFactoryTest extends \PHPUnit_Framework_TestCase
+class StreamFactoryTest extends TestCase
 {
     private $factory;
 

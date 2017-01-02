@@ -3,8 +3,9 @@ declare(strict_types=1);
 namespace Viserio\View\Tests\Traits;
 
 use Viserio\View\Traits\NormalizeNameTrait;
+use PHPUnit\Framework\TestCase;
 
-class NormalizeNameTraitTest extends \PHPUnit_Framework_TestCase
+class NormalizeNameTraitTest extends TestCase
 {
     use NormalizeNameTrait;
 

@@ -6,8 +6,9 @@ use ArrayIterator;
 use RuntimeException;
 use Viserio\Http\Stream\LimitStream;
 use Viserio\Http\Stream\PumpStream;
+use PHPUnit\Framework\TestCase;
 
-class PumpStreamTest extends \PHPUnit_Framework_TestCase
+class PumpStreamTest extends TestCase
 {
     public function testHasMetadataAndSize()
     {

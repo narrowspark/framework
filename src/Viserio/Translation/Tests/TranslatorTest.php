@@ -8,8 +8,9 @@ use Viserio\Translation\MessageCatalogue;
 use Viserio\Translation\MessageSelector;
 use Viserio\Translation\PluralizationRules;
 use Viserio\Translation\Translator;
+use PHPUnit\Framework\TestCase;
 
-class TranslatorTest extends \PHPUnit_Framework_TestCase
+class TranslatorTest extends TestCase
 {
     use MockeryTrait;
 

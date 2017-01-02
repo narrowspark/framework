@@ -15,8 +15,9 @@ use Viserio\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 use Viserio\Translation\MessageSelector;
 use Viserio\Translation\PluralizationRules;
 use Viserio\Translation\TranslationManager;
+use PHPUnit\Framework\TestCase;
 
-class TranslationManagerTest extends \PHPUnit_Framework_TestCase
+class TranslationManagerTest extends TestCase
 {
     use MockeryTrait;
     use NormalizePathAndDirectorySeparatorTrait;

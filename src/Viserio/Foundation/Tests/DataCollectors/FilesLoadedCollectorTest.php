@@ -7,8 +7,9 @@ use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Foundation\DataCollectors\FilesLoadedCollector;
+use PHPUnit\Framework\TestCase;
 
-class FilesLoadedCollectorTest extends \PHPUnit_Framework_TestCase
+class FilesLoadedCollectorTest extends TestCase
 {
     use MockeryTrait;
 

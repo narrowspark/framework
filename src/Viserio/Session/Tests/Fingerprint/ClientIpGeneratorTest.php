@@ -6,8 +6,9 @@ use Mockery as Mock;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Session\Fingerprint\ClientIpGenerator;
+use PHPUnit\Framework\TestCase;
 
-class ClientIpGeneratorTest extends \PHPUnit_Framework_TestCase
+class ClientIpGeneratorTest extends TestCase
 {
     use MockeryTrait;
 

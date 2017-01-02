@@ -9,8 +9,9 @@ use Pheanstalk\Pheanstalk;
 use Viserio\Contracts\Encryption\Encrypter as EncrypterContract;
 use Viserio\Queue\Connectors\BeanstalkdQueue;
 use Viserio\Queue\Jobs\BeanstalkdJob;
+use PHPUnit\Framework\TestCase;
 
-class BeanstalkdQueueTest extends \PHPUnit_Framework_TestCase
+class BeanstalkdQueueTest extends TestCase
 {
     use MockeryTrait;
 

@@ -6,8 +6,9 @@ use Cache\Adapter\PHPArray\ArrayCachePool;
 use Mockery as Mock;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use Viserio\WebProfiler\DataCollectors\Bridge\Cache\TraceableCacheItemDecorater;
+use PHPUnit\Framework\TestCase;
 
-class TraceableCacheItemDecoraterTest extends \PHPUnit_Framework_TestCase
+class TraceableCacheItemDecoraterTest extends TestCase
 {
     use MockeryTrait;
 

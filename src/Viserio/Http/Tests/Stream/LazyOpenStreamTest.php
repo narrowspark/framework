@@ -3,8 +3,9 @@ declare(strict_types=1);
 namespace Viserio\Http\Tests\Stream;
 
 use Viserio\Http\Stream\LazyOpenStream;
+use PHPUnit\Framework\TestCase;
 
-class LazyOpenStreamTest extends \PHPUnit_Framework_TestCase
+class LazyOpenStreamTest extends TestCase
 {
     private $fname;
 

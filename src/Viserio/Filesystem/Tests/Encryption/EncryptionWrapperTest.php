@@ -6,8 +6,9 @@ use Defuse\Crypto\Key;
 use Viserio\Filesystem\Adapters\LocalConnector;
 use Viserio\Filesystem\Encryption\EncryptionWrapper;
 use Viserio\Filesystem\FilesystemAdapter;
+use PHPUnit\Framework\TestCase;
 
-class EncryptionWrapperTest extends \PHPUnit_Framework_TestCase
+class EncryptionWrapperTest extends TestCase
 {
     /**
      * @var string

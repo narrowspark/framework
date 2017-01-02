@@ -13,8 +13,9 @@ use Viserio\Queue\CallQueuedHandler;
 use Viserio\Queue\Connectors\RedisQueue;
 use Viserio\Queue\Jobs\RedisJob;
 use Viserio\Queue\Tests\Fixture\InteractsWithQueue;
+use PHPUnit\Framework\TestCase;
 
-class CallQueuedHandlerTest extends \PHPUnit_Framework_TestCase
+class CallQueuedHandlerTest extends TestCase
 {
     use MockeryTrait;
 

@@ -10,8 +10,9 @@ use Viserio\Encryption\Providers\EncrypterServiceProvider;
 use Viserio\Filesystem\Providers\FilesServiceProvider;
 use Viserio\Session\Providers\SessionServiceProvider;
 use Viserio\Session\SessionManager;
+use PHPUnit\Framework\TestCase;
 
-class SessionServiceProviderTest extends \PHPUnit_Framework_TestCase
+class SessionServiceProviderTest extends TestCase
 {
     public function testProvider()
     {

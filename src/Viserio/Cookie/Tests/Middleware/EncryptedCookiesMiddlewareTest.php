@@ -15,8 +15,9 @@ use Viserio\Cookie\SetCookie;
 use Viserio\Encryption\Encrypter;
 use Viserio\HttpFactory\ResponseFactory;
 use Viserio\HttpFactory\ServerRequestFactory;
+use PHPUnit\Framework\TestCase;
 
-class EncryptedCookiesMiddlewareTest extends \PHPUnit_Framework_TestCase
+class EncryptedCookiesMiddlewareTest extends TestCase
 {
     use MockeryTrait;
 

@@ -21,8 +21,9 @@ use Viserio\Exception\Handler;
 use Viserio\Exception\Transformers\CommandLineTransformer;
 use Viserio\HttpFactory\ResponseFactory;
 use Viserio\HttpFactory\StreamFactory;
+use PHPUnit\Framework\TestCase;
 
-class HandlerTest extends \PHPUnit_Framework_TestCase
+class HandlerTest extends TestCase
 {
     use MockeryTrait;
 

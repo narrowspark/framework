@@ -5,8 +5,9 @@ namespace Viserio\Contracts\HttpFactory\Tests\Traits;
 use Interop\Http\Factory\UriFactoryInterface;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use Viserio\Contracts\HttpFactory\Traits\UriFactoryAwareTrait;
+use PHPUnit\Framework\TestCase;
 
-class UriFactoryAwareTraitTest extends \PHPUnit_Framework_TestCase
+class UriFactoryAwareTraitTest extends TestCase
 {
     use MockeryTrait;
     use UriFactoryAwareTrait;

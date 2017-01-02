@@ -8,8 +8,9 @@ use Viserio\Contracts\Routing\Pattern;
 use Viserio\Routing\Matchers\StaticMatcher;
 use Viserio\Routing\RouteParser;
 use Viserio\Routing\Segments\ParameterSegment;
+use PHPUnit\Framework\TestCase;
 
-class RouteParserTest extends \PHPUnit_Framework_TestCase
+class RouteParserTest extends TestCase
 {
     /**
      * @dataProvider routeParsingProvider

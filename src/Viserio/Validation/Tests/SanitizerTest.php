@@ -6,8 +6,9 @@ use Narrowspark\TestingHelper\ArrayContainer;
 use Viserio\Validation\Sanitizer;
 use Viserio\Validation\Tests\Fixture\SanitizerFixture;
 use Viserio\Validation\Tests\Fixture\SuffixFixture;
+use PHPUnit\Framework\TestCase;
 
-class SanitizerTest extends \PHPUnit_Framework_TestCase
+class SanitizerTest extends TestCase
 {
     public function testThatSanitizerCanSanitizeWithClosure()
     {

@@ -11,8 +11,9 @@ use Viserio\WebProfiler\AssetsRenderer;
 use Viserio\WebProfiler\Middleware\WebProfilerMiddleware;
 use Viserio\WebProfiler\TemplateManager;
 use Viserio\WebProfiler\WebProfiler;
+use PHPUnit\Framework\TestCase;
 
-class WebProfilerMiddlewareTest extends \PHPUnit_Framework_TestCase
+class WebProfilerMiddlewareTest extends TestCase
 {
     use MockeryTrait;
 

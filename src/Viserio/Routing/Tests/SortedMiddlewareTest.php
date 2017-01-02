@@ -3,8 +3,9 @@ declare(strict_types=1);
 namespace Viserio\Routing\Tests;
 
 use Viserio\Routing\SortedMiddleware;
+use PHPUnit\Framework\TestCase;
 
-class SortedMiddlewareTest extends \PHPUnit_Framework_TestCase
+class SortedMiddlewareTest extends TestCase
 {
     public function testMiddlewareCanBeSortedByPriority()
     {

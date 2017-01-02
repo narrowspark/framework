@@ -9,8 +9,9 @@ use Pheanstalk\Pheanstalk;
 use stdClass;
 use Viserio\Queue\Jobs\BeanstalkdJob;
 use Viserio\Queue\Tests\Fixture\BeanstalkdJobTestFailed;
+use PHPUnit\Framework\TestCase;
 
-class BeanstalkdJobTest extends \PHPUnit_Framework_TestCase
+class BeanstalkdJobTest extends TestCase
 {
     use MockeryTrait;
 

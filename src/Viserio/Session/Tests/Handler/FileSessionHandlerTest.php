@@ -5,8 +5,9 @@ namespace Viserio\Session\Tests\Handler;
 use org\bovigo\vfs\vfsStream;
 use Viserio\Filesystem\Filesystem;
 use Viserio\Session\Handler\FileSessionHandler;
+use PHPUnit\Framework\TestCase;
 
-class FileSessionHandlerTest extends \PHPUnit_Framework_TestCase
+class FileSessionHandlerTest extends TestCase
 {
     /**
      * @var string

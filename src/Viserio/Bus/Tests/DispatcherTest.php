@@ -8,8 +8,9 @@ use stdClass;
 use Viserio\Bus\Dispatcher;
 use Viserio\Bus\Tests\Fixture\BusDispatcherBasicCommand;
 use Viserio\Bus\Tests\Fixture\BusDispatcherSetCommand;
+use PHPUnit\Framework\TestCase;
 
-class DispatcherTest extends \PHPUnit_Framework_TestCase
+class DispatcherTest extends TestCase
 {
     use MockeryTrait;
 

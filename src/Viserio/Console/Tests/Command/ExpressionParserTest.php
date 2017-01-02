@@ -5,8 +5,9 @@ namespace Viserio\Console\Tests\Command;
 use Viserio\Console\Command\ExpressionParser;
 use Viserio\Console\Input\InputArgument;
 use Viserio\Console\Input\InputOption;
+use PHPUnit\Framework\TestCase;
 
-class ExpressionParserTest extends \PHPUnit_Framework_TestCase
+class ExpressionParserTest extends TestCase
 {
     public function testItParsesCommandNames()
     {

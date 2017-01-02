@@ -4,8 +4,9 @@ namespace Viserio\Filesystem\Tests\Adapters;
 
 use League\Flysystem\Vfs\VfsAdapter;
 use Viserio\Filesystem\Adapters\VfsConnector;
+use PHPUnit\Framework\TestCase;
 
-class VfsConnectorTest extends \PHPUnit_Framework_TestCase
+class VfsConnectorTest extends TestCase
 {
     public function testConnectStandard()
     {

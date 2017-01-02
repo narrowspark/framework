@@ -11,8 +11,9 @@ use Viserio\Cron\Cron;
 use Viserio\Cron\Schedule;
 use Viserio\Cron\Tests\Fixture\ConsoleCerebroCommandFixture;
 use Viserio\Cron\Tests\Fixture\DummyClassFixture;
+use PHPUnit\Framework\TestCase;
 
-class ScheduleTest extends \PHPUnit_Framework_TestCase
+class ScheduleTest extends TestCase
 {
     use MockeryTrait;
 

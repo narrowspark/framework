@@ -4,8 +4,9 @@ namespace Viserio\StaticalProxy\Tests;
 
 use Viserio\StaticalProxy\AliasLoader;
 use Viserio\StaticalProxy\Tests\Fixture\Foo;
+use PHPUnit\Framework\TestCase;
 
-class AliasLoaderTest extends \PHPUnit_Framework_TestCase
+class AliasLoaderTest extends TestCase
 {
     public function testLiteral()
     {

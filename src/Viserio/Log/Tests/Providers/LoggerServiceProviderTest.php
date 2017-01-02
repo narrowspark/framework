@@ -12,8 +12,9 @@ use Viserio\Contracts\Log\Log;
 use Viserio\Events\Providers\EventsServiceProvider;
 use Viserio\Log\Providers\LoggerServiceProvider;
 use Viserio\Log\Writer as MonologWriter;
+use PHPUnit\Framework\TestCase;
 
-class LoggerServiceProviderTest extends \PHPUnit_Framework_TestCase
+class LoggerServiceProviderTest extends TestCase
 {
     public function testProvider()
     {

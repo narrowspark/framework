@@ -9,8 +9,9 @@ use Viserio\Routing\UrlGenerator;
 use Viserio\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 use Viserio\WebProfiler\AssetsRenderer;
 use Viserio\WebProfiler\DataCollectors\AjaxRequestsDataCollector;
+use PHPUnit\Framework\TestCase;
 
-class AssetsRendererTest extends \PHPUnit_Framework_TestCase
+class AssetsRendererTest extends TestCase
 {
     use MockeryTrait;
     use NormalizePathAndDirectorySeparatorTrait;

@@ -127,7 +127,7 @@
         "narrowspark/php-cs-fixer-config"                    : "^2.2",
         "narrowspark/testing-helper"                         : "^2.0",
         "mockery/mockery"                                    : "dev-master",
-        "phpunit/phpunit"                                    : "^5.1",
+        "phpunit/phpunit"                                    : "~5.7",
         "phpbench/phpbench"                                  : "^0.12",
         "predis/predis"                                      : "^1.0",
         "php-amqplib/php-amqplib"                            : "^2.6",

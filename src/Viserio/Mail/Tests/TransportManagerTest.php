@@ -15,8 +15,9 @@ use Viserio\Mail\Transport\Mandrill as MandrillTransport;
 use Viserio\Mail\Transport\Ses as SesTransport;
 use Viserio\Mail\Transport\SparkPost as SparkPostTransport;
 use Viserio\Mail\TransportManager;
+use PHPUnit\Framework\TestCase;
 
-class TransportManagerTest extends \PHPUnit_Framework_TestCase
+class TransportManagerTest extends TestCase
 {
     use MockeryTrait;
 

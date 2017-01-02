@@ -3,8 +3,9 @@ declare(strict_types=1);
 namespace Viserio\Support\Tests;
 
 use Viserio\Support\Str;
+use PHPUnit\Framework\TestCase;
 
-class StrTest extends \PHPUnit_Framework_TestCase
+class StrTest extends TestCase
 {
     public function testStringCanBeLimitedByWords()
     {

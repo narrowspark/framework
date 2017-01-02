@@ -3,8 +3,9 @@ declare(strict_types=1);
 namespace Viserio\Translation\Tests\PluralCategorys;
 
 use Viserio\Translation\PluralCategorys\Irish;
+use PHPUnit\Framework\TestCase;
 
-class IrishTest extends \PHPUnit_Framework_TestCase
+class IrishTest extends TestCase
 {
     /**
      * @dataProvider category

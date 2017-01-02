@@ -3,8 +3,9 @@ declare(strict_types=1);
 namespace Viserio\Translation\Tests\Traits;
 
 use Viserio\Translation\Traits\ValidateLocaleTrait;
+use PHPUnit\Framework\TestCase;
 
-class ValidateLocaleTraitTest extends \PHPUnit_Framework_TestCase
+class ValidateLocaleTraitTest extends TestCase
 {
     use ValidateLocaleTrait;
 

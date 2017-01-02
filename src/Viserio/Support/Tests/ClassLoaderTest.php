@@ -3,8 +3,9 @@ declare(strict_types=1);
 namespace Viserio\Support\Tests;
 
 use Viserio\Support\ClassLoader;
+use PHPUnit\Framework\TestCase;
 
-class ClassLoaderTest extends \PHPUnit_Framework_TestCase
+class ClassLoaderTest extends TestCase
 {
     public function testLoad()
     {

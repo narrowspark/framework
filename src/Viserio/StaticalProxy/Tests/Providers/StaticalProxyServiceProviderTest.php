@@ -6,8 +6,9 @@ use Viserio\Container\Container;
 use Viserio\StaticalProxy\Providers\StaticalProxyServiceProvider;
 use Viserio\StaticalProxy\StaticalProxy;
 use Viserio\StaticalProxy\StaticalProxyResolver;
+use PHPUnit\Framework\TestCase;
 
-class StaticalProxyServiceProviderTest extends \PHPUnit_Framework_TestCase
+class StaticalProxyServiceProviderTest extends TestCase
 {
     public function testProvider()
     {

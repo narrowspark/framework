@@ -8,8 +8,9 @@ use Viserio\HttpFactory\UriFactory;
 use Viserio\Pagination\Adapters\ArrayAdapter;
 use Viserio\Pagination\Adapters\NullAdapter;
 use Viserio\Pagination\Paginator;
+use PHPUnit\Framework\TestCase;
 
-class PaginatorTest extends \PHPUnit_Framework_TestCase
+class PaginatorTest extends TestCase
 {
     use MockeryTrait;
 

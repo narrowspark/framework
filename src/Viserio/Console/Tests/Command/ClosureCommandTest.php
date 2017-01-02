@@ -8,8 +8,9 @@ use Viserio\Console\Application;
 use Viserio\Console\Command\ClosureCommand;
 use Viserio\Console\Tests\Fixture\SpyOutput;
 use Viserio\Support\Invoker;
+use PHPUnit\Framework\TestCase;
 
-class ClosureCommandTest extends \PHPUnit_Framework_TestCase
+class ClosureCommandTest extends TestCase
 {
     /**
      * @var Application

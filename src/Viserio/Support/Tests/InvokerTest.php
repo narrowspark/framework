@@ -4,8 +4,9 @@ namespace Viserio\Support\Tests;
 
 use Narrowspark\TestingHelper\ArrayContainer;
 use Viserio\Support\Invoker;
+use PHPUnit\Framework\TestCase;
 
-class InvokerTest extends \PHPUnit_Framework_TestCase
+class InvokerTest extends TestCase
 {
     public function testCall()
     {

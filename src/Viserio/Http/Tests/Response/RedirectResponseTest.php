@@ -4,8 +4,9 @@ namespace Viserio\Http\Tests\Response;
 
 use Viserio\Http\Response\RedirectResponse;
 use Viserio\Http\Uri;
+use PHPUnit\Framework\TestCase;
 
-class RedirectResponseTest extends \PHPUnit_Framework_TestCase
+class RedirectResponseTest extends TestCase
 {
     public function testConstructorAcceptsStringUriAndProduces302ResponseWithLocationHeader()
     {

@@ -5,7 +5,8 @@ namespace Viserio\Routing\Tests\Matchers;
 use Viserio\Routing\Matchers\ExpressionMatcher;
 use Viserio\Routing\Matchers\StaticMatcher;
 
-class ExpressionMatcherTest extends \PHPUnit_Framework_TestCase
+use PHPUnit\Framework\TestCase;
+class ExpressionMatcherTest extends TestCase
 {
     public function testGetExpression()
     {

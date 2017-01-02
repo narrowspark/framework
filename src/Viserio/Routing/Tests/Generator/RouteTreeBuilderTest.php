@@ -11,8 +11,9 @@ use Viserio\Routing\Generator\RouteTreeNode;
 use Viserio\Routing\Matchers\RegexMatcher;
 use Viserio\Routing\Matchers\StaticMatcher;
 use Viserio\Routing\Route;
+use PHPUnit\Framework\TestCase;
 
-class RouteTreeBuilderTest extends \PHPUnit_Framework_TestCase
+class RouteTreeBuilderTest extends TestCase
 {
     public function routeTreeBuilderCases()
     {

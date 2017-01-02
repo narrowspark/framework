@@ -11,8 +11,9 @@ use Predis\Client;
 use Viserio\Encryption\Encrypter;
 use Viserio\Queue\Connectors\RedisQueue;
 use Viserio\Queue\Tests\Fixture\RedisQueueIntegrationJob;
+use PHPUnit\Framework\TestCase;
 
-class RedisQueueIntegrationTest extends \PHPUnit_Framework_TestCase
+class RedisQueueIntegrationTest extends TestCase
 {
     use MockeryTrait;
 

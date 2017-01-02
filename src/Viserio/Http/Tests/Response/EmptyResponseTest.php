@@ -4,8 +4,9 @@ namespace Viserio\Http\Tests\Response;
 
 use Viserio\Http\Response;
 use Viserio\Http\Response\EmptyResponse;
+use PHPUnit\Framework\TestCase;
 
-class EmptyResponseTest extends \PHPUnit_Framework_TestCase
+class EmptyResponseTest extends TestCase
 {
     public function testConstructor()
     {

@@ -6,8 +6,9 @@ use Mockery as Mock;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Support\Http\ClientIp;
+use PHPUnit\Framework\TestCase;
 
-class ClientIpTest extends \PHPUnit_Framework_TestCase
+class ClientIpTest extends TestCase
 {
     use MockeryTrait;
 

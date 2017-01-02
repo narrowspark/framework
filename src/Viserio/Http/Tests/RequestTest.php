@@ -11,6 +11,7 @@ use Viserio\Http\Request;
 use Viserio\Http\Stream;
 use Viserio\Http\Stream\FnStream;
 use Viserio\Http\Uri;
+use PHPUnit\Framework\TestCase;
 
 class RequestTest extends AbstractMessageTest
 {

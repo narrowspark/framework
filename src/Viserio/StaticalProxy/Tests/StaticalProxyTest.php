@@ -11,8 +11,9 @@ use Viserio\StaticalProxy\Tests\Fixture\ExceptionFacadeStub;
 use Viserio\StaticalProxy\Tests\Fixture\FacadeObjectStub;
 use Viserio\StaticalProxy\Tests\Fixture\FacadeStub;
 use Viserio\StaticalProxy\Tests\Fixture\ProxyStub;
+use PHPUnit\Framework\TestCase;
 
-class StaticalProxyTest extends \PHPUnit_Framework_TestCase
+class StaticalProxyTest extends TestCase
 {
     use MockeryTrait;
 

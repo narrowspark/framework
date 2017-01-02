@@ -4,8 +4,9 @@ namespace Viserio\Http\Tests\Stream;
 
 use Viserio\Http\Stream;
 use Viserio\Http\Stream\FnStream;
+use PHPUnit\Framework\TestCase;
 
-class FnStreamTest extends \PHPUnit_Framework_TestCase
+class FnStreamTest extends TestCase
 {
     /**
      * @expectedException \BadMethodCallException

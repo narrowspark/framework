@@ -5,8 +5,9 @@ namespace Viserio\Parsers\Tests\Formats;
 use org\bovigo\vfs\vfsStream;
 use Viserio\Filesystem\Filesystem;
 use Viserio\Parsers\Formats\XML;
+use PHPUnit\Framework\TestCase;
 
-class XMLTest extends \PHPUnit_Framework_TestCase
+class XMLTest extends TestCase
 {
     /**
      * @var \org\bovigo\vfs\vfsStreamDirectory

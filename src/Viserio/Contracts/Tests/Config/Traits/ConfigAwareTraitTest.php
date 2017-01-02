@@ -5,8 +5,9 @@ namespace Viserio\Contracts\Config\Tests\Traits;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use Viserio\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Contracts\Config\Traits\ConfigAwareTrait;
+use PHPUnit\Framework\TestCase;
 
-class ConfigAwareTraitTest extends \PHPUnit_Framework_TestCase
+class ConfigAwareTraitTest extends TestCase
 {
     use MockeryTrait;
     use ConfigAwareTrait;

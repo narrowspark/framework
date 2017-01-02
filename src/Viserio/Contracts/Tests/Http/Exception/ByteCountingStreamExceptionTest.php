@@ -4,8 +4,9 @@ namespace Viserio\Contracts\Tests\Http\Exception;
 
 use RuntimeException;
 use Viserio\Contracts\Http\Exceptions\ByteCountingStreamException;
+use PHPUnit\Framework\TestCase;
 
-class ByteCountingStreamExceptionTest extends \PHPUnit_Framework_TestCase
+class ByteCountingStreamExceptionTest extends TestCase
 {
     /**
      * @dataProvider getTestCases

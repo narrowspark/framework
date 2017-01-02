@@ -7,8 +7,9 @@ use Viserio\Pipeline\Pipeline;
 use Viserio\Pipeline\Tests\Fixture\PipelineInvokePipe;
 use Viserio\Pipeline\Tests\Fixture\PipelineTestParameterPipe;
 use Viserio\Pipeline\Tests\Fixture\PipelineTestPipeOne;
+use PHPUnit\Framework\TestCase;
 
-class PipelineTest extends \PHPUnit_Framework_TestCase
+class PipelineTest extends TestCase
 {
     protected $container;
 

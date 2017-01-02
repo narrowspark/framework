@@ -3,8 +3,9 @@ declare(strict_types=1);
 namespace Viserio\Http\Tests\Stream;
 
 use Viserio\Http\Stream\BufferStream;
+use PHPUnit\Framework\TestCase;
 
-class BufferStreamTest extends \PHPUnit_Framework_TestCase
+class BufferStreamTest extends TestCase
 {
     public function testHasMetadata()
     {

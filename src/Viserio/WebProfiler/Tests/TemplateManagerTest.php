@@ -10,8 +10,9 @@ use Viserio\WebProfiler\AssetsRenderer;
 use Viserio\WebProfiler\DataCollectors\AjaxRequestsDataCollector;
 use Viserio\WebProfiler\DataCollectors\PhpInfoDataCollector;
 use Viserio\WebProfiler\TemplateManager;
+use PHPUnit\Framework\TestCase;
 
-class TemplateManagerTest extends \PHPUnit_Framework_TestCase
+class TemplateManagerTest extends TestCase
 {
     use MockeryTrait;
 

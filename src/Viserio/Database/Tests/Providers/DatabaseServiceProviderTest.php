@@ -10,8 +10,9 @@ use Viserio\Config\Providers\ConfigServiceProvider;
 use Viserio\Container\Container;
 use Viserio\Database\Connection;
 use Viserio\Database\Providers\DatabaseServiceProvider;
+use PHPUnit\Framework\TestCase;
 
-class DatabaseServiceProviderTest extends \PHPUnit_Framework_TestCase
+class DatabaseServiceProviderTest extends TestCase
 {
     public function testProvider()
     {
