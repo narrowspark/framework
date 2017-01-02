@@ -56,7 +56,10 @@ class WebProfilerTest extends \PHPUnit_Framework_TestCase
 
         static::assertSame(
             [
-                'php-info-data-collector' => $collector,
+                'php-info-data-collector' => [
+                    'collector' => $collector,
+                    'priority' => 100,
+                ]
             ],
             $profiler->getCollectors()
         );
