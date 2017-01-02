@@ -58,8 +58,8 @@ class WebProfilerTest extends \PHPUnit_Framework_TestCase
             [
                 'php-info-data-collector' => [
                     'collector' => $collector,
-                    'priority' => 100,
-                ]
+                    'priority'  => 100,
+                ],
             ],
             $profiler->getCollectors()
         );

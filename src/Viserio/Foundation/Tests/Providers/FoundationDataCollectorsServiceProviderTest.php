@@ -2,20 +2,18 @@
 declare(strict_types=1);
 namespace Viserio\Foundation\Tests\Providers;
 
-use Viserio\Container\Container;
-use Viserio\Foundation\Providers\FoundationDataCollectorsServiceProvider;
-use Viserio\Contracts\WebProfiler\WebProfiler as WebProfilerContract;
 use Mockery as Mock;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
-use Viserio\Config\Providers\ConfigServiceProvider;
-use Viserio\WebProfiler\Providers\WebProfilerServiceProvider;
-use Viserio\Events\Providers\EventsServiceProvider;
-use Viserio\HttpFactory\Providers\HttpFactoryServiceProvider;
-use Viserio\Routing\Providers\RoutingServiceProvider;
 use Psr\Http\Message\ServerRequestInterface;
+use Viserio\Config\Providers\ConfigServiceProvider;
+use Viserio\Container\Container;
 use Viserio\Contracts\Config\Repository as RepositoryContract;
-use Viserio\Contracts\Routing\Router as RouterContract;
 use Viserio\Contracts\Routing\Route as RouteContract;
+use Viserio\Contracts\Routing\Router as RouterContract;
+use Viserio\Contracts\WebProfiler\WebProfiler as WebProfilerContract;
+use Viserio\Foundation\Providers\FoundationDataCollectorsServiceProvider;
+use Viserio\HttpFactory\Providers\HttpFactoryServiceProvider;
+use Viserio\WebProfiler\Providers\WebProfilerServiceProvider;
 
 class FoundationDataCollectorsServiceProviderTest extends \PHPUnit_Framework_TestCase
 {
@@ -34,7 +32,7 @@ class FoundationDataCollectorsServiceProviderTest extends \PHPUnit_Framework_Tes
     public function testGetServices()
     {
         $serverRequest = $this->mock(ServerRequestInterface::class);
-        $route = $this->mock(RouteContract::class);
+        $route         = $this->mock(RouteContract::class);
         $route->shouldReceive('getServerRequest')
             ->once()
             ->andReturn($serverRequest);
@@ -56,10 +54,10 @@ class FoundationDataCollectorsServiceProviderTest extends \PHPUnit_Framework_Tes
         $container->get(RepositoryContract::class)->set('webprofiler', [
             'collector' => [
                 'narrowspark' => true,
-                'viserio' => [
+                'viserio'     => [
                     'http' => true,
                 ],
-                'files' => true
+                'files' => true,
             ],
         ])->set('path.base', '/');
 
