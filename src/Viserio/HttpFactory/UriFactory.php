@@ -4,6 +4,7 @@ namespace Viserio\HttpFactory;
 
 use Interop\Http\Factory\UriFactoryInterface;
 use Viserio\Http\Uri;
+use Psr\Http\Message\UriInterface;
 
 final class UriFactory implements UriFactoryInterface
 {
@@ -12,7 +13,7 @@ final class UriFactory implements UriFactoryInterface
      *
      * @codeCoverageIgnore
      */
-    public function createUri($uri = '')
+    public function createUri($uri = ''): UriInterface
     {
         return new Uri($uri);
     }

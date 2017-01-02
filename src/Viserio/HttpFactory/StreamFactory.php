@@ -4,13 +4,14 @@ namespace Viserio\HttpFactory;
 
 use Interop\Http\Factory\StreamFactoryInterface;
 use Viserio\Http\Stream;
+use Psr\Http\Message\StreamInterface;
 
 final class StreamFactory implements StreamFactoryInterface
 {
     /**
      * {@inheritdoc}
      */
-    public function createStream($content = '')
+    public function createStream($content = ''): StreamInterface
     {
         $stream = fopen('php://memory', 'r+');
 
@@ -23,7 +24,7 @@ final class StreamFactory implements StreamFactoryInterface
     /**
      * {@inheritdoc}
      */
-    public function createStreamFromFile($file, $mode = 'r')
+    public function createStreamFromFile($file, $mode = 'r'): StreamInterface
     {
         $stream = fopen('php://temp', $mode);
 
@@ -36,7 +37,7 @@ final class StreamFactory implements StreamFactoryInterface
     /**
      * {@inheritdoc}
      */
-    public function createStreamFromResource($resource)
+    public function createStreamFromResource($resource): StreamInterface
     {
         return new Stream($resource);
     }

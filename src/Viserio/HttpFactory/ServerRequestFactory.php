@@ -9,6 +9,7 @@ use Viserio\Http\ServerRequest;
 use Viserio\Http\Stream\LazyOpenStream;
 use Viserio\Http\Uri;
 use Viserio\Http\Util;
+use Psr\Http\Message\ServerRequestInterface;
 
 class ServerRequestFactory implements ServerRequestFactoryInterface
 {
@@ -17,7 +18,7 @@ class ServerRequestFactory implements ServerRequestFactoryInterface
      *
      * @codeCoverageIgnore
      */
-    public function createServerRequest(array $server, $method = null, $uri = null)
+    public function createServerRequest(array $server, $method = null, $uri = null): ServerRequestInterface
     {
         $server        = $this->normalizeServer($server);
         $requestMethod = $method ?? $server['REQUEST_METHOD'] ?? 'GET';

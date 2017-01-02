@@ -4,6 +4,7 @@ namespace Viserio\HttpFactory;
 
 use Interop\Http\Factory\UploadedFileFactoryInterface;
 use Viserio\Http\UploadedFile;
+use Psr\Http\Message\UploadedFileInterface;
 
 final class UploadedFileFactory implements UploadedFileFactoryInterface
 {
@@ -16,7 +17,7 @@ final class UploadedFileFactory implements UploadedFileFactoryInterface
         $error = \UPLOAD_ERR_OK,
         $clientFilename = null,
         $clientMediaType = null
-    ) {
+    ): UploadedFileInterface {
         return new UploadedFile(
             $file,
             $this->getSize($file, $size),
