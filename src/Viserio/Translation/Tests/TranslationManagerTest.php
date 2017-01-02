@@ -4,6 +4,7 @@ namespace Viserio\Translation\Tests;
 
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use org\bovigo\vfs\vfsStream;
+use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 use Viserio\Contracts\Parsers\Loader as LoaderContract;
 use Viserio\Contracts\Translation\MessageCatalogue as MessageCatalogueContract;
@@ -15,7 +16,6 @@ use Viserio\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 use Viserio\Translation\MessageSelector;
 use Viserio\Translation\PluralizationRules;
 use Viserio\Translation\TranslationManager;
-use PHPUnit\Framework\TestCase;
 
 class TranslationManagerTest extends TestCase
 {

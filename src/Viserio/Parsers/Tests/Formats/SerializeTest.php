@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Parsers\Tests\Formats;
 
-use Viserio\Parsers\Formats\Serialize;
 use PHPUnit\Framework\TestCase;
+use Viserio\Parsers\Formats\Serialize;
 
 class SerializeTest extends TestCase
 {

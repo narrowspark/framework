@@ -2,9 +2,9 @@
 declare(strict_types=1);
 namespace Viserio\Http\Tests;
 
+use PHPUnit\Framework\TestCase;
 use Viserio\Http\ServerRequest;
 use Viserio\Http\UploadedFile;
-use PHPUnit\Framework\TestCase;
 
 class ServerRequestTest extends TestCase
 {

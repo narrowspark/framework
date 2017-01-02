@@ -5,8 +5,8 @@ namespace Viserio\WebProfiler\Tests\DataCollectors\Bridge\Cache;
 use Cache\Adapter\PHPArray\ArrayCachePool;
 use Mockery as Mock;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
-use Viserio\WebProfiler\DataCollectors\Bridge\Cache\TraceableCacheItemDecorater;
 use PHPUnit\Framework\TestCase;
+use Viserio\WebProfiler\DataCollectors\Bridge\Cache\TraceableCacheItemDecorater;
 
 class TraceableCacheItemDecoraterTest extends TestCase
 {

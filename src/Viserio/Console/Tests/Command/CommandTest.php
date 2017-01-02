@@ -3,13 +3,13 @@ declare(strict_types=1);
 namespace Viserio\Console\Tests\Command;
 
 use Narrowspark\TestingHelper\ArrayContainer;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Input\StringInput;
 use Symfony\Component\Console\Output\NullOutput;
 use Symfony\Component\Console\Output\OutputInterface;
 use Viserio\Console\Application;
 use Viserio\Console\Tests\Fixture\ViserioSecCommand;
 use Viserio\Support\Invoker;
-use PHPUnit\Framework\TestCase;
 
 class CommandTest extends TestCase
 {

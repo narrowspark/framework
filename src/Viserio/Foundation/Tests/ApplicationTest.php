@@ -3,13 +3,13 @@ declare(strict_types=1);
 namespace Viserio\Foundation\Tests;
 
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
+use PHPUnit\Framework\TestCase;
 use StdClass;
 use Viserio\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Contracts\Events\Dispatcher as DispatcherContract;
 use Viserio\Contracts\Translation\TranslationManager as TranslationManagerContract;
 use Viserio\Foundation\Application;
 use Viserio\Foundation\Bootstrap\DetectEnvironment;
-use PHPUnit\Framework\TestCase;
 
 class ApplicationTest extends TestCase
 {

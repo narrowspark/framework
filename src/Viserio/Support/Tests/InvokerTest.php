@@ -3,8 +3,8 @@ declare(strict_types=1);
 namespace Viserio\Support\Tests;
 
 use Narrowspark\TestingHelper\ArrayContainer;
-use Viserio\Support\Invoker;
 use PHPUnit\Framework\TestCase;
+use Viserio\Support\Invoker;
 
 class InvokerTest extends TestCase
 {

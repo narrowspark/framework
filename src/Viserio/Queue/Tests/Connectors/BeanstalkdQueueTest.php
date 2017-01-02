@@ -6,10 +6,10 @@ use Interop\Container\ContainerInterface;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use Pheanstalk\Job;
 use Pheanstalk\Pheanstalk;
+use PHPUnit\Framework\TestCase;
 use Viserio\Contracts\Encryption\Encrypter as EncrypterContract;
 use Viserio\Queue\Connectors\BeanstalkdQueue;
 use Viserio\Queue\Jobs\BeanstalkdJob;
-use PHPUnit\Framework\TestCase;
 
 class BeanstalkdQueueTest extends TestCase
 {

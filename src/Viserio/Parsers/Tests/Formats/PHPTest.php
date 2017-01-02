@@ -3,9 +3,9 @@ declare(strict_types=1);
 namespace Viserio\Parsers\Tests\Formats;
 
 use org\bovigo\vfs\vfsStream;
+use PHPUnit\Framework\TestCase;
 use Viserio\Filesystem\Filesystem;
 use Viserio\Parsers\Formats\PHP;
-use PHPUnit\Framework\TestCase;
 
 class PHPTest extends TestCase
 {

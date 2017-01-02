@@ -2,10 +2,10 @@
 declare(strict_types=1);
 namespace Viserio\Routing\Tests\Segments;
 
+use PHPUnit\Framework\TestCase;
 use Viserio\Contracts\Routing\Pattern;
 use Viserio\Routing\Matchers\RegexMatcher;
 use Viserio\Routing\Segments\ParameterSegment;
-use PHPUnit\Framework\TestCase;
 
 class ParameterSegmentTest extends TestCase
 {

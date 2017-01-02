@@ -4,6 +4,7 @@ namespace Viserio\WebProfiler\Tests\Providers;
 
 use Mockery as Mock;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
+use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ServerRequestInterface;
 use Swift_Mailer;
 use Swift_SmtpTransport;
@@ -12,7 +13,6 @@ use Viserio\Contracts\WebProfiler\WebProfiler as WebProfilerContract;
 use Viserio\HttpFactory\Providers\HttpFactoryServiceProvider;
 use Viserio\WebProfiler\Providers\WebProfilerServiceProvider;
 use Viserio\WebProfiler\Providers\WebProfilerSwiftMailerBridgeServiceProvider;
-use PHPUnit\Framework\TestCase;
 
 class WebProfilerSwiftMailerBridgeServiceProviderTest extends TestCase
 {

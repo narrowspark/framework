@@ -3,12 +3,12 @@ declare(strict_types=1);
 namespace Viserio\View\Tests;
 
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
+use PHPUnit\Framework\TestCase;
 use Viserio\Contracts\Support\Arrayable;
 use Viserio\Contracts\Support\Renderable;
 use Viserio\Contracts\View\Engine;
 use Viserio\View\Factory;
 use Viserio\View\View;
-use PHPUnit\Framework\TestCase;
 
 class ViewTest extends TestCase
 {

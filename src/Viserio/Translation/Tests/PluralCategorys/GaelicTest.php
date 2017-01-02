@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Translation\Tests\PluralCategorys;
 
-use Viserio\Translation\PluralCategorys\Gaelic;
 use PHPUnit\Framework\TestCase;
+use Viserio\Translation\PluralCategorys\Gaelic;
 
 class GaelicTest extends TestCase
 {

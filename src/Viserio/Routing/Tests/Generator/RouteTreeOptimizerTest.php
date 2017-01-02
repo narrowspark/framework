@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Routing\Tests\Generator;
 
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
+use PHPUnit\Framework\TestCase;
 use Viserio\Contracts\Routing\Pattern;
 use Viserio\Contracts\Routing\SegmentMatcher as SegmentMatcherContract;
 use Viserio\Routing\Generator\ChildrenNodeCollection;
@@ -14,7 +15,6 @@ use Viserio\Routing\Matchers\CompoundMatcher;
 use Viserio\Routing\Matchers\ExpressionMatcher;
 use Viserio\Routing\Matchers\RegexMatcher;
 use Viserio\Routing\Matchers\StaticMatcher;
-use PHPUnit\Framework\TestCase;
 
 class RouteTreeOptimizerTest extends TestCase
 {

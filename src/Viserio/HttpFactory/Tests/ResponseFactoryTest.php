@@ -2,9 +2,9 @@
 declare(strict_types=1);
 namespace Viserio\HttpFactory\Tests;
 
+use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ResponseInterface;
 use Viserio\HttpFactory\ResponseFactory;
-use PHPUnit\Framework\TestCase;
 
 class ResponseFactoryTest extends TestCase
 {

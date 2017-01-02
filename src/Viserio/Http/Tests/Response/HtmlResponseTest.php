@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Http\Tests\Response;
 
-use Viserio\Http\Response\HtmlResponse;
 use PHPUnit\Framework\TestCase;
+use Viserio\Http\Response\HtmlResponse;
 
 class HtmlResponseTest extends TestCase
 {

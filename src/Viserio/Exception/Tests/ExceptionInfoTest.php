@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Exception\Tests;
 
-use Viserio\Exception\ExceptionInfo;
 use PHPUnit\Framework\TestCase;
+use Viserio\Exception\ExceptionInfo;
 
 class ExceptionInfoTest extends TestCase
 {

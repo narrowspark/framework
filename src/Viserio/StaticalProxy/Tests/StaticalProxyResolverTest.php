@@ -5,11 +5,11 @@ namespace Viserio\StaticalProxy\Tests;
 use Interop\Container\ContainerInterface;
 use Mockery as Mock;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
+use PHPUnit\Framework\TestCase;
 use StdClass;
 use Viserio\StaticalProxy\StaticalProxy;
 use Viserio\StaticalProxy\StaticalProxyResolver;
 use Viserio\StaticalProxy\Tests\Fixture\FacadeStub;
-use PHPUnit\Framework\TestCase;
 
 class StaticalProxyResolverTest extends TestCase
 {

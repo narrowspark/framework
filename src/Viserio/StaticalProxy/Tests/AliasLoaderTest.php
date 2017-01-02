@@ -2,9 +2,9 @@
 declare(strict_types=1);
 namespace Viserio\StaticalProxy\Tests;
 
+use PHPUnit\Framework\TestCase;
 use Viserio\StaticalProxy\AliasLoader;
 use Viserio\StaticalProxy\Tests\Fixture\Foo;
-use PHPUnit\Framework\TestCase;
 
 class AliasLoaderTest extends TestCase
 {

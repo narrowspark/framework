@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\WebProfiler\Tests\Util;
 
-use Viserio\WebProfiler\Util\HtmlDumperOutput;
 use PHPUnit\Framework\TestCase;
+use Viserio\WebProfiler\Util\HtmlDumperOutput;
 
 class HtmlDumperOutputTest extends TestCase
 {

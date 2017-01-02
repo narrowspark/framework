@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Cookie\Tests;
 
-use Viserio\Cookie\Cookie;
 use PHPUnit\Framework\TestCase;
+use Viserio\Cookie\Cookie;
 
 class CookieTest extends TestCase
 {

@@ -3,10 +3,10 @@ declare(strict_types=1);
 namespace Viserio\Http\Tests\Stream;
 
 use ArrayIterator;
+use PHPUnit\Framework\TestCase;
 use RuntimeException;
 use Viserio\Http\Stream\LimitStream;
 use Viserio\Http\Stream\PumpStream;
-use PHPUnit\Framework\TestCase;
 
 class PumpStreamTest extends TestCase
 {

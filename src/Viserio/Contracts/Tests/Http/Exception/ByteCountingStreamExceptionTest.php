@@ -2,9 +2,9 @@
 declare(strict_types=1);
 namespace Viserio\Contracts\Tests\Http\Exception;
 
+use PHPUnit\Framework\TestCase;
 use RuntimeException;
 use Viserio\Contracts\Http\Exceptions\ByteCountingStreamException;
-use PHPUnit\Framework\TestCase;
 
 class ByteCountingStreamExceptionTest extends TestCase
 {

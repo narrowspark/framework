@@ -2,9 +2,9 @@
 declare(strict_types=1);
 namespace Viserio\Http\Tests\Response;
 
+use PHPUnit\Framework\TestCase;
 use Viserio\Http\Response;
 use Viserio\Http\Response\EmptyResponse;
-use PHPUnit\Framework\TestCase;
 
 class EmptyResponseTest extends TestCase
 {

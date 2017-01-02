@@ -3,7 +3,6 @@ declare(strict_types=1);
 namespace Viserio\Http\Tests\Constraint;
 
 use PHPUnit_Framework_Assert as Assert;
-use PHPUnit\Framework\TestCase;
 
 /**
  * Validate contain only the HTTP version number (e.g., "1.1", "1.0").

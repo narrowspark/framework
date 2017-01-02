@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Http\Tests\Uri\Filter;
 
-use Viserio\Http\Uri\Filter\Query;
 use PHPUnit\Framework\TestCase;
+use Viserio\Http\Uri\Filter\Query;
 
 class QueryTest extends TestCase
 {

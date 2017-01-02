@@ -2,9 +2,9 @@
 declare(strict_types=1);
 namespace Viserio\HttpFactory\Tests;
 
+use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\UploadedFileInterface;
 use Viserio\HttpFactory\UploadedFileFactory;
-use PHPUnit\Framework\TestCase;
 
 class UploadedFileFactoryTest extends TestCase
 {

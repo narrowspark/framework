@@ -4,11 +4,11 @@ namespace Viserio\Foundation\Tests\DataCollectors;
 
 use Mockery as Mock;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
+use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Foundation\Application;
 use Viserio\Foundation\DataCollectors\NarrowsparkDataCollector;
-use PHPUnit\Framework\TestCase;
 
 class NarrowsparkDataCollectorTest extends TestCase
 {

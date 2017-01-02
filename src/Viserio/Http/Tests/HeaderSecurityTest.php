@@ -10,8 +10,8 @@ namespace Viserio\Http\Tests;
  * @license   https://github.com/zendframework/zend-diactoros/blob/master/LICENSE.md New BSD License
  */
 
-use Viserio\Http\HeaderSecurity;
 use PHPUnit\Framework\TestCase;
+use Viserio\Http\HeaderSecurity;
 
 /**
  * Tests for Zend\Diactoros\HeaderSecurity.

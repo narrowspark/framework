@@ -3,13 +3,13 @@ declare(strict_types=1);
 namespace Viserio\Console\Tests;
 
 use Narrowspark\TestingHelper\ArrayContainer;
+use PHPUnit\Framework\TestCase;
 use StdClass;
 use Symfony\Component\Console\Input\StringInput;
 use Symfony\Component\Console\Output\OutputInterface;
 use Viserio\Console\Application;
 use Viserio\Console\Tests\Fixture\SpyOutput;
 use Viserio\Console\Tests\Fixture\ViserioCommand;
-use PHPUnit\Framework\TestCase;
 
 class ApplicationTest extends TestCase
 {

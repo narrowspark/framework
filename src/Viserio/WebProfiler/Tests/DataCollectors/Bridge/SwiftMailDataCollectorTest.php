@@ -4,12 +4,12 @@ namespace Viserio\WebProfiler\Tests\DataCollectors\Bridge;
 
 use Mockery as Mock;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
+use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Swift_Mailer;
 use Swift_SmtpTransport;
 use Viserio\WebProfiler\DataCollectors\Bridge\SwiftMailDataCollector;
-use PHPUnit\Framework\TestCase;
 
 class SwiftMailDataCollectorTest extends TestCase
 {

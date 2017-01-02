@@ -2,13 +2,13 @@
 declare(strict_types=1);
 namespace Viserio\Routing\Tests;
 
+use PHPUnit\Framework\TestCase;
 use RuntimeException;
 use Viserio\Contracts\Routing\Exceptions\InvalidRoutePatternException;
 use Viserio\Contracts\Routing\Pattern;
 use Viserio\Routing\Matchers\StaticMatcher;
 use Viserio\Routing\RouteParser;
 use Viserio\Routing\Segments\ParameterSegment;
-use PHPUnit\Framework\TestCase;
 
 class RouteParserTest extends TestCase
 {

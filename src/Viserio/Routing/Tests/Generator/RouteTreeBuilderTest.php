@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Routing\Tests\Generator;
 
+use PHPUnit\Framework\TestCase;
 use Viserio\Contracts\Routing\Pattern;
 use Viserio\Contracts\Routing\Router as RouterContract;
 use Viserio\Routing\Generator\ChildrenNodeCollection;
@@ -11,7 +12,6 @@ use Viserio\Routing\Generator\RouteTreeNode;
 use Viserio\Routing\Matchers\RegexMatcher;
 use Viserio\Routing\Matchers\StaticMatcher;
 use Viserio\Routing\Route;
-use PHPUnit\Framework\TestCase;
 
 class RouteTreeBuilderTest extends TestCase
 {

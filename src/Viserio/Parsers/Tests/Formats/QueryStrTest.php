@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Parsers\Tests\Formats;
 
-use Viserio\Parsers\Formats\QueryStr;
 use PHPUnit\Framework\TestCase;
+use Viserio\Parsers\Formats\QueryStr;
 
 class QueryStrTest extends TestCase
 {

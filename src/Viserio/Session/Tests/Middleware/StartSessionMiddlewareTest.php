@@ -7,6 +7,7 @@ use Mockery as Mock;
 use Narrowspark\TestingHelper\ArrayContainer;
 use Narrowspark\TestingHelper\Middleware\DelegateMiddleware;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
+use PHPUnit\Framework\TestCase;
 use Viserio\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Contracts\Cookie\QueueingFactory as JarContract;
 use Viserio\Contracts\Filesystem\Filesystem as FilesystemContract;
@@ -17,7 +18,6 @@ use Viserio\HttpFactory\ResponseFactory;
 use Viserio\HttpFactory\ServerRequestFactory;
 use Viserio\Session\Middleware\StartSessionMiddleware;
 use Viserio\Session\SessionManager;
-use PHPUnit\Framework\TestCase;
 
 class StartSessionMiddlewareTest extends TestCase
 {

@@ -2,11 +2,11 @@
 declare(strict_types=1);
 namespace Viserio\StaticalProxy\Tests\Providers;
 
+use PHPUnit\Framework\TestCase;
 use Viserio\Container\Container;
 use Viserio\StaticalProxy\Providers\StaticalProxyServiceProvider;
 use Viserio\StaticalProxy\StaticalProxy;
 use Viserio\StaticalProxy\StaticalProxyResolver;
-use PHPUnit\Framework\TestCase;
 
 class StaticalProxyServiceProviderTest extends TestCase
 {

@@ -3,9 +3,9 @@ declare(strict_types=1);
 namespace Viserio\Contracts\Translation\Tests\Traits;
 
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
+use PHPUnit\Framework\TestCase;
 use Viserio\Contracts\Translation\Traits\TranslatorAwareTrait;
 use Viserio\Contracts\Translation\Translator as TranslatorContract;
-use PHPUnit\Framework\TestCase;
 
 class TranslationAwareTraitTest extends TestCase
 {

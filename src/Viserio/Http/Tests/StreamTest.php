@@ -2,10 +2,10 @@
 declare(strict_types=1);
 namespace Viserio\Http\Tests;
 
+use PHPUnit\Framework\TestCase;
 use Throwable;
 use Viserio\Http\Stream;
 use Viserio\Http\Stream\NoSeekStream;
-use PHPUnit\Framework\TestCase;
 
 class StreamTest extends TestCase
 {

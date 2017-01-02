@@ -5,12 +5,12 @@ namespace Viserio\Cookie\Tests;
 use DateTime;
 use Mockery as Mock;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
+use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ResponseInterface as Response;
 use Viserio\Cookie\Cookie;
 use Viserio\Cookie\ResponseCookies;
 use Viserio\Cookie\SetCookie;
 use Viserio\HttpFactory\ResponseFactory;
-use PHPUnit\Framework\TestCase;
 
 class ResponseCookiesTest extends TestCase
 {

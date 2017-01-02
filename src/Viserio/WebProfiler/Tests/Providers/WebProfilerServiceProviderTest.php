@@ -4,6 +4,7 @@ namespace Viserio\WebProfiler\Tests\Providers;
 
 use Mockery as Mock;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
+use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Config\Providers\ConfigServiceProvider;
 use Viserio\Container\Container;
@@ -15,7 +16,6 @@ use Viserio\Routing\Providers\RoutingServiceProvider;
 use Viserio\WebProfiler\AssetsRenderer;
 use Viserio\WebProfiler\Providers\WebProfilerServiceProvider;
 use Viserio\WebProfiler\WebProfiler;
-use PHPUnit\Framework\TestCase;
 
 class WebProfilerServiceProviderTest extends TestCase
 {

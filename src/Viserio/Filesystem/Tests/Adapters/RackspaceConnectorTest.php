@@ -3,8 +3,8 @@ declare(strict_types=1);
 namespace Viserio\Filesystem\Tests\Adapters;
 
 use Guzzle\Http\Exception\CurlException;
-use Viserio\Filesystem\Adapters\RackspaceConnector;
 use PHPUnit\Framework\TestCase;
+use Viserio\Filesystem\Adapters\RackspaceConnector;
 
 class RackspaceConnectorTest extends TestCase
 {

@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Foundation\Tests;
 
-use Viserio\Foundation\EnvironmentDetector;
 use PHPUnit\Framework\TestCase;
+use Viserio\Foundation\EnvironmentDetector;
 
 class EnvironmentDetectorTest extends TestCase
 {

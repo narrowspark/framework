@@ -6,6 +6,7 @@ use ErrorException;
 use Exception;
 use Interop\Container\ContainerInterface;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
+use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\LoggerInterface;
@@ -21,7 +22,6 @@ use Viserio\Exception\Handler;
 use Viserio\Exception\Transformers\CommandLineTransformer;
 use Viserio\HttpFactory\ResponseFactory;
 use Viserio\HttpFactory\StreamFactory;
-use PHPUnit\Framework\TestCase;
 
 class HandlerTest extends TestCase
 {

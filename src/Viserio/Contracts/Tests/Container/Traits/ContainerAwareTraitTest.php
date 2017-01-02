@@ -4,8 +4,8 @@ namespace Viserio\Contracts\Container\Tests\Traits;
 
 use Interop\Container\ContainerInterface;
 use Narrowspark\TestingHelper\ArrayContainer;
-use Viserio\Contracts\Container\Traits\ContainerAwareTrait;
 use PHPUnit\Framework\TestCase;
+use Viserio\Contracts\Container\Traits\ContainerAwareTrait;
 
 class ContainerAwareTraitTest extends TestCase
 {

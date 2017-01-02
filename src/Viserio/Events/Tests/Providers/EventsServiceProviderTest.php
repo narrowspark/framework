@@ -2,10 +2,10 @@
 declare(strict_types=1);
 namespace Viserio\Events\Tests\Providers;
 
+use PHPUnit\Framework\TestCase;
 use Viserio\Container\Container;
 use Viserio\Events\Dispatcher;
 use Viserio\Events\Providers\EventsServiceProvider;
-use PHPUnit\Framework\TestCase;
 
 class EventsServiceProviderTest extends TestCase
 {

@@ -4,12 +4,12 @@ namespace Viserio\Cookie\Tests;
 
 use Mockery as Mock;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
+use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Viserio\Cookie\Cookie;
 use Viserio\Cookie\RequestCookies;
 use Viserio\Cookie\SetCookie;
 use Viserio\HttpFactory\ServerRequestFactory;
-use PHPUnit\Framework\TestCase;
 
 class RequestCookiesTest extends TestCase
 {

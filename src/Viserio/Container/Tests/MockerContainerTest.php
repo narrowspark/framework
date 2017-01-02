@@ -2,10 +2,10 @@
 declare(strict_types=1);
 namespace Viserio\Container\Tests;
 
+use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use StdClass;
 use Viserio\Container\MockContainer;
-use PHPUnit\Framework\TestCase;
 
 class MockerContainerTest extends TestCase
 {

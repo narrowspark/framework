@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Support\Tests;
 
-use Viserio\Support\Str;
 use PHPUnit\Framework\TestCase;
+use Viserio\Support\Str;
 
 class StrTest extends TestCase
 {

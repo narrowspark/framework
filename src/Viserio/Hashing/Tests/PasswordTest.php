@@ -3,8 +3,8 @@ declare(strict_types=1);
 namespace Viserio\Hashing\Tests;
 
 use Defuse\Crypto\Key;
-use Viserio\Hashing\Password;
 use PHPUnit\Framework\TestCase;
+use Viserio\Hashing\Password;
 
 class PasswordTest extends TestCase
 {

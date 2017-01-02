@@ -2,11 +2,11 @@
 declare(strict_types=1);
 namespace Viserio\Bus\Tests\Providers;
 
+use PHPUnit\Framework\TestCase;
 use Viserio\Bus\Providers\QueueingBusServiceProvider;
 use Viserio\Bus\QueueingDispatcher;
 use Viserio\Container\Container;
 use Viserio\Contracts\Bus\QueueingDispatcher as QueueingDispatcherContract;
-use PHPUnit\Framework\TestCase;
 
 class QueueingBusServiceProviderTest extends TestCase
 {

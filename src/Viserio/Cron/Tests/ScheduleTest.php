@@ -4,6 +4,7 @@ namespace Viserio\Cron\Tests;
 
 use Narrowspark\TestingHelper\ArrayContainer;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
+use PHPUnit\Framework\TestCase;
 use Psr\Cache\CacheItemPoolInterface;
 use Symfony\Component\Process\PhpExecutableFinder;
 use Symfony\Component\Process\ProcessUtils;
@@ -11,7 +12,6 @@ use Viserio\Cron\Cron;
 use Viserio\Cron\Schedule;
 use Viserio\Cron\Tests\Fixture\ConsoleCerebroCommandFixture;
 use Viserio\Cron\Tests\Fixture\DummyClassFixture;
-use PHPUnit\Framework\TestCase;
 
 class ScheduleTest extends TestCase
 {

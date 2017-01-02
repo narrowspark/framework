@@ -5,6 +5,7 @@ namespace Viserio\Bus\Tests;
 use Mockery as Mock;
 use Narrowspark\TestingHelper\ArrayContainer;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
+use PHPUnit\Framework\TestCase;
 use stdClass;
 use Viserio\Bus\QueueingDispatcher;
 use Viserio\Bus\Tests\Fixture\BusDispatcherBasicCommand;
@@ -15,7 +16,6 @@ use Viserio\Bus\Tests\Fixture\BusDispatcherSpecificQueueAndDelayCommand;
 use Viserio\Bus\Tests\Fixture\BusDispatcherSpecificQueueCommand;
 use Viserio\Contracts\Queue\QueueConnector as QueueConnectorContract;
 use Viserio\Contracts\Queue\ShouldQueue as ShouldQueueContract;
-use PHPUnit\Framework\TestCase;
 
 class QueueingDispatcherTest extends TestCase
 {

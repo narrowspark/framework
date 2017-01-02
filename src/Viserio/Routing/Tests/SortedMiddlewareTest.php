@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Routing\Tests;
 
-use Viserio\Routing\SortedMiddleware;
 use PHPUnit\Framework\TestCase;
+use Viserio\Routing\SortedMiddleware;
 
 class SortedMiddlewareTest extends TestCase
 {

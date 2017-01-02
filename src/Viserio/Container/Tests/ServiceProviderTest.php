@@ -2,10 +2,10 @@
 declare(strict_types=1);
 namespace Viserio\Container\Tests;
 
+use PHPUnit\Framework\TestCase;
 use Viserio\Container\Container;
 use Viserio\Container\Tests\Fixture\ServiceFixture;
 use Viserio\Container\Tests\Fixture\SimpleFixtureServiceProvider;
-use PHPUnit\Framework\TestCase;
 
 class ServiceProviderTest extends TestCase
 {

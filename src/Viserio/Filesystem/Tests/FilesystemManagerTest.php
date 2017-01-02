@@ -9,12 +9,12 @@ use League\Flysystem\AdapterInterface;
 use MongoClient;
 use MongoConnectionException;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
+use PHPUnit\Framework\TestCase;
 use Viserio\Contracts\Cache\Manager as CacheManager;
 use Viserio\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Filesystem\Encryption\EncryptionWrapper;
 use Viserio\Filesystem\FilesystemAdapter;
 use Viserio\Filesystem\FilesystemManager;
-use PHPUnit\Framework\TestCase;
 
 class FilesystemManagerTest extends TestCase
 {

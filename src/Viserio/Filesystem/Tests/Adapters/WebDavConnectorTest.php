@@ -3,8 +3,8 @@ declare(strict_types=1);
 namespace Viserio\Filesystem\Tests\Adapters;
 
 use League\Flysystem\WebDAV\WebDAVAdapter;
-use Viserio\Filesystem\Adapters\WebDavConnector;
 use PHPUnit\Framework\TestCase;
+use Viserio\Filesystem\Adapters\WebDavConnector;
 
 class WebDavConnectorTest extends TestCase
 {

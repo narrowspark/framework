@@ -2,10 +2,10 @@
 declare(strict_types=1);
 namespace Viserio\HttpFactory\Tests;
 
+use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\StreamInterface;
 use Viserio\Http\Stream;
 use Viserio\HttpFactory\StreamFactory;
-use PHPUnit\Framework\TestCase;
 
 class StreamFactoryTest extends TestCase
 {

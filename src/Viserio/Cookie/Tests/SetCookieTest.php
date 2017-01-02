@@ -4,8 +4,8 @@ namespace Viserio\Cookie\Tests;
 
 use Cake\Chronos\Chronos;
 use DateTime;
-use Viserio\Cookie\SetCookie;
 use PHPUnit\Framework\TestCase;
+use Viserio\Cookie\SetCookie;
 
 class SetCookieTest extends TestCase
 {

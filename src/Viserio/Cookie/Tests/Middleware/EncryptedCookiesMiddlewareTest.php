@@ -7,6 +7,7 @@ use Mockery as Mock;
 use Narrowspark\TestingHelper\Middleware\CallableMiddleware;
 use Narrowspark\TestingHelper\Middleware\Dispatcher;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
+use PHPUnit\Framework\TestCase;
 use Viserio\Cookie\Cookie;
 use Viserio\Cookie\Middleware\EncryptedCookiesMiddleware;
 use Viserio\Cookie\RequestCookies;
@@ -15,7 +16,6 @@ use Viserio\Cookie\SetCookie;
 use Viserio\Encryption\Encrypter;
 use Viserio\HttpFactory\ResponseFactory;
 use Viserio\HttpFactory\ServerRequestFactory;
-use PHPUnit\Framework\TestCase;
 
 class EncryptedCookiesMiddlewareTest extends TestCase
 {

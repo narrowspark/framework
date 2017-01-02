@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Translation\Tests\PluralCategorys;
 
-use Viserio\Translation\PluralCategorys\Two;
 use PHPUnit\Framework\TestCase;
+use Viserio\Translation\PluralCategorys\Two;
 
 class TwoTest extends TestCase
 {

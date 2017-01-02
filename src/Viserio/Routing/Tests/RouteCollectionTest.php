@@ -2,9 +2,9 @@
 declare(strict_types=1);
 namespace Viserio\Routing\Tests;
 
+use PHPUnit\Framework\TestCase;
 use Viserio\Routing\Route;
 use Viserio\Routing\RouteCollection;
-use PHPUnit\Framework\TestCase;
 
 class RouteCollectionTest extends TestCase
 {

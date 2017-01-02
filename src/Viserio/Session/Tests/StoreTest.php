@@ -5,13 +5,13 @@ namespace Viserio\Session\Tests;
 use Cake\Chronos\Chronos;
 use Defuse\Crypto\Key;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
+use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use SessionHandlerInterface as SessionHandlerContract;
 use Viserio\Contracts\Encryption\Encrypter as EncrypterContract;
 use Viserio\Encryption\Encrypter;
 use Viserio\Session\Fingerprint\UserAgentGenerator;
 use Viserio\Session\Store;
-use PHPUnit\Framework\TestCase;
 
 class StoreTest extends TestCase
 {

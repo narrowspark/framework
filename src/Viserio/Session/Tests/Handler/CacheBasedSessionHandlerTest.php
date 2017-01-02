@@ -3,9 +3,9 @@ declare(strict_types=1);
 namespace Viserio\Session\Tests\Handler;
 
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
+use PHPUnit\Framework\TestCase;
 use Psr\Cache\CacheItemPoolInterface;
 use Viserio\Session\Handler\CacheBasedSessionHandler;
-use PHPUnit\Framework\TestCase;
 
 class CacheBasedSessionHandlerTest extends TestCase
 {

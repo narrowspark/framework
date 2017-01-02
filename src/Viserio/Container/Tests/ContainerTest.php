@@ -4,6 +4,7 @@ namespace Viserio\Container\Tests;
 
 use Mouf\Picotainer\Picotainer;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
+use PHPUnit\Framework\TestCase;
 use StdClass;
 use Viserio\Container\Container;
 use Viserio\Container\Tests\Fixture\ContainerCircularReferenceStubA;
@@ -22,7 +23,6 @@ use Viserio\Container\Tests\Fixture\ContainerTestContextInjectOneFixture;
 use Viserio\Container\Tests\Fixture\ContainerTestContextInjectTwoFixture;
 use Viserio\Container\Tests\Fixture\ContainerTestNoConstructor;
 use Viserio\Container\Tests\Fixture\FactoryClass;
-use PHPUnit\Framework\TestCase;
 
 class ContainerTest extends TestCase
 {

@@ -4,6 +4,7 @@ namespace Viserio\WebProfiler\Tests\Providers;
 
 use Mockery as Mock;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
+use PHPUnit\Framework\TestCase;
 use Psr\Cache\CacheItemPoolInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Container\Container;
@@ -12,7 +13,6 @@ use Viserio\HttpFactory\Providers\HttpFactoryServiceProvider;
 use Viserio\WebProfiler\DataCollectors\Bridge\Cache\TraceableCacheItemDecorater;
 use Viserio\WebProfiler\Providers\WebProfilerPsr6CacheBridgeServiceProvider;
 use Viserio\WebProfiler\Providers\WebProfilerServiceProvider;
-use PHPUnit\Framework\TestCase;
 
 class WebProfilerPsr6CacheBridgeServiceProviderTest extends TestCase
 {

@@ -3,8 +3,8 @@ declare(strict_types=1);
 namespace Viserio\Parsers\Tests;
 
 use org\bovigo\vfs\vfsStream;
-use Viserio\Parsers\TaggableParser;
 use PHPUnit\Framework\TestCase;
+use Viserio\Parsers\TaggableParser;
 
 class TaggableParserTest extends TestCase
 {

@@ -2,10 +2,10 @@
 declare(strict_types=1);
 namespace Viserio\Http\Tests;
 
+use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\UriInterface;
 use Viserio\Http\Tests\Fixture\ExtendedUriTest;
 use Viserio\Http\Uri;
-use PHPUnit\Framework\TestCase;
 
 class UriTest extends TestCase
 {

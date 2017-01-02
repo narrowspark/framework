@@ -3,11 +3,11 @@ declare(strict_types=1);
 namespace Viserio\Http\Tests;
 
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
+use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\MessageInterface;
 use Psr\Http\Message\StreamInterface;
 use Viserio\Http\Tests\Constraint\HttpProtocolVersion;
 use Viserio\Http\Tests\Constraint\Immutable;
-use PHPUnit\Framework\TestCase;
 
 abstract class AbstractMessageTest extends TestCase
 {

@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Session\Tests;
 
-use Viserio\Session\Fingerprint\UserAgentGenerator;
 use PHPUnit\Framework\TestCase;
+use Viserio\Session\Fingerprint\UserAgentGenerator;
 
 class UserAgentGeneratorTest extends TestCase
 {

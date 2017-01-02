@@ -3,8 +3,8 @@ declare(strict_types=1);
 namespace Viserio\Filesystem\Tests\Adapters;
 
 use League\Flysystem\Adapter\NullAdapter;
-use Viserio\Filesystem\Adapters\NullConnector;
 use PHPUnit\Framework\TestCase;
+use Viserio\Filesystem\Adapters\NullConnector;
 
 class NullConnectorTest extends TestCase
 {

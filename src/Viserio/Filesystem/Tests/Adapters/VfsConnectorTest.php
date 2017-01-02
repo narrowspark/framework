@@ -3,8 +3,8 @@ declare(strict_types=1);
 namespace Viserio\Filesystem\Tests\Adapters;
 
 use League\Flysystem\Vfs\VfsAdapter;
-use Viserio\Filesystem\Adapters\VfsConnector;
 use PHPUnit\Framework\TestCase;
+use Viserio\Filesystem\Adapters\VfsConnector;
 
 class VfsConnectorTest extends TestCase
 {

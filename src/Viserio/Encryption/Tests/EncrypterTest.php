@@ -3,8 +3,8 @@ declare(strict_types=1);
 namespace Viserio\Encryption\Tests;
 
 use Defuse\Crypto\Key;
-use Viserio\Encryption\Encrypter;
 use PHPUnit\Framework\TestCase;
+use Viserio\Encryption\Encrypter;
 
 class EncrypterTest extends TestCase
 {

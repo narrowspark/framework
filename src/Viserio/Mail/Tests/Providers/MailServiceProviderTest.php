@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Mail\Tests\Providers;
 
+use PHPUnit\Framework\TestCase;
 use Swift_Mailer;
 use Viserio\Config\Providers\ConfigServiceProvider;
 use Viserio\Container\Container;
@@ -15,7 +16,6 @@ use Viserio\Mail\Providers\MailServiceProvider;
 use Viserio\Mail\QueueMailer;
 use Viserio\Mail\TransportManager;
 use Viserio\View\Providers\ViewServiceProvider;
-use PHPUnit\Framework\TestCase;
 
 class MailServiceProviderTest extends TestCase
 {

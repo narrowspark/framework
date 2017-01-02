@@ -7,11 +7,11 @@ use Exception;
 use Interop\Container\ContainerInterface;
 use Mockery as Mock;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
+use PHPUnit\Framework\TestCase;
 use Predis\Client;
 use Viserio\Encryption\Encrypter;
 use Viserio\Queue\Connectors\RedisQueue;
 use Viserio\Queue\Tests\Fixture\RedisQueueIntegrationJob;
-use PHPUnit\Framework\TestCase;
 
 class RedisQueueIntegrationTest extends TestCase
 {

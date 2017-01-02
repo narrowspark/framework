@@ -3,8 +3,8 @@ declare(strict_types=1);
 namespace Viserio\Filesystem\Tests\Adapters;
 
 use League\Flysystem\ZipArchive\ZipArchiveAdapter;
-use Viserio\Filesystem\Adapters\ZipConnector;
 use PHPUnit\Framework\TestCase;
+use Viserio\Filesystem\Adapters\ZipConnector;
 
 class ZipConnectorTest extends TestCase
 {

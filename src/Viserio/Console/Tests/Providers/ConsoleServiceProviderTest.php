@@ -2,12 +2,12 @@
 declare(strict_types=1);
 namespace Viserio\Console\Tests\Providers;
 
+use PHPUnit\Framework\TestCase;
 use Viserio\Config\Providers\ConfigServiceProvider;
 use Viserio\Console\Application;
 use Viserio\Console\Providers\ConsoleServiceProvider;
 use Viserio\Container\Container;
 use Viserio\Contracts\Config\Repository as RepositoryContract;
-use PHPUnit\Framework\TestCase;
 
 class ConsoleServiceProviderTest extends TestCase
 {

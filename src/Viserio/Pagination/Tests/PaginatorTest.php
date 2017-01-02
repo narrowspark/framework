@@ -3,12 +3,12 @@ declare(strict_types=1);
 namespace Viserio\Pagination\Tests;
 
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
+use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\HttpFactory\UriFactory;
 use Viserio\Pagination\Adapters\ArrayAdapter;
 use Viserio\Pagination\Adapters\NullAdapter;
 use Viserio\Pagination\Paginator;
-use PHPUnit\Framework\TestCase;
 
 class PaginatorTest extends TestCase
 {

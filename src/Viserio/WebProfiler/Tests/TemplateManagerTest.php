@@ -4,13 +4,13 @@ namespace Viserio\WebProfiler\Tests;
 
 use Mockery as Mock;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
+use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\WebProfiler\AssetsRenderer;
 use Viserio\WebProfiler\DataCollectors\AjaxRequestsDataCollector;
 use Viserio\WebProfiler\DataCollectors\PhpInfoDataCollector;
 use Viserio\WebProfiler\TemplateManager;
-use PHPUnit\Framework\TestCase;
 
 class TemplateManagerTest extends TestCase
 {

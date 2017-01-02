@@ -4,11 +4,11 @@ namespace Viserio\Queue\Tests;
 
 use Interop\Container\ContainerInterface as ContainerInteropInterface;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
+use PHPUnit\Framework\TestCase;
 use Viserio\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Contracts\Encryption\Encrypter as EncrypterContract;
 use Viserio\Queue\QueueManager;
 use Viserio\Queue\Tests\Fixture\TestQueue;
-use PHPUnit\Framework\TestCase;
 
 class QueueManagerTest extends TestCase
 {

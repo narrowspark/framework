@@ -3,8 +3,8 @@ declare(strict_types=1);
 namespace Viserio\Filesystem\Tests\Adapters;
 
 use League\Flysystem\AwsS3v3\AwsS3Adapter;
-use Viserio\Filesystem\Adapters\AwsS3Connector;
 use PHPUnit\Framework\TestCase;
+use Viserio\Filesystem\Adapters\AwsS3Connector;
 
 class AwsS3ConnectorTest extends TestCase
 {

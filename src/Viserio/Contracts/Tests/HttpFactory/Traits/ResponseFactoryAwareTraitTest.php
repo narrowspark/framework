@@ -4,8 +4,8 @@ namespace Viserio\Contracts\HttpFactory\Tests\Traits;
 
 use Interop\Http\Factory\ResponseFactoryInterface;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
-use Viserio\Contracts\HttpFactory\Traits\ResponseFactoryAwareTrait;
 use PHPUnit\Framework\TestCase;
+use Viserio\Contracts\HttpFactory\Traits\ResponseFactoryAwareTrait;
 
 class ResponseFactoryAwareTraitTest extends TestCase
 {

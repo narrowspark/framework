@@ -5,6 +5,7 @@ namespace Viserio\WebProfiler\Tests\Providers;
 use Mockery as Mock;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use PDO;
+use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Container\Container;
 use Viserio\Contracts\WebProfiler\WebProfiler as WebProfilerContract;
@@ -12,7 +13,6 @@ use Viserio\HttpFactory\Providers\HttpFactoryServiceProvider;
 use Viserio\WebProfiler\DataCollectors\Bridge\PDO\TraceablePDODecorater;
 use Viserio\WebProfiler\Providers\WebProfilerPDOBridgeServiceProvider;
 use Viserio\WebProfiler\Providers\WebProfilerServiceProvider;
-use PHPUnit\Framework\TestCase;
 
 class WebProfilerPDOBridgeServiceProviderTest extends TestCase
 {

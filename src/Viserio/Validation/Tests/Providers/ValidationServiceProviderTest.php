@@ -2,11 +2,11 @@
 declare(strict_types=1);
 namespace Viserio\Validation\Tests\Providers;
 
+use PHPUnit\Framework\TestCase;
 use Viserio\Container\Container;
 use Viserio\Contracts\Validation\Validator as ValidatorContract;
 use Viserio\Validation\Providers\ValidationServiceProvider;
 use Viserio\Validation\Validator;
-use PHPUnit\Framework\TestCase;
 
 class ValidationServiceProviderTest extends TestCase
 {

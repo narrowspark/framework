@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace Viserio\View\Tests;
 
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
+use PHPUnit\Framework\TestCase;
 use Viserio\Contracts\View\Engine;
 use Viserio\Contracts\View\Finder;
 use Viserio\Contracts\View\View as ViewContract;
@@ -10,7 +11,6 @@ use Viserio\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 use Viserio\View\Engines\EngineResolver;
 use Viserio\View\Engines\PhpEngine;
 use Viserio\View\Factory;
-use PHPUnit\Framework\TestCase;
 
 class ViewFactoryTest extends TestCase
 {

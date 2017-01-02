@@ -2,10 +2,10 @@
 declare(strict_types=1);
 namespace Viserio\Http\Tests;
 
+use PHPUnit\Framework\TestCase;
 use ReflectionProperty;
 use Viserio\Http\Stream;
 use Viserio\Http\UploadedFile;
-use PHPUnit\Framework\TestCase;
 
 class UploadedFileTest extends TestCase
 {

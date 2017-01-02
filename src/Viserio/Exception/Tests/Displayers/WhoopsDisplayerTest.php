@@ -3,8 +3,8 @@ declare(strict_types=1);
 namespace Viserio\Exception\Tests\Displayers;
 
 use Exception;
-use Viserio\Exception\Displayers\WhoopsDisplayer;
 use PHPUnit\Framework\TestCase;
+use Viserio\Exception\Displayers\WhoopsDisplayer;
 
 class WhoopsDisplayerTest extends TestCase
 {

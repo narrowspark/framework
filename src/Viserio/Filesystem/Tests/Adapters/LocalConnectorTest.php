@@ -3,8 +3,8 @@ declare(strict_types=1);
 namespace Viserio\Filesystem\Tests\Adapters;
 
 use League\Flysystem\Adapter\Local;
-use Viserio\Filesystem\Adapters\LocalConnector;
 use PHPUnit\Framework\TestCase;
+use Viserio\Filesystem\Adapters\LocalConnector;
 
 class LocalConnectorTest extends TestCase
 {

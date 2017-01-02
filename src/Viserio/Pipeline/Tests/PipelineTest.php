@@ -3,11 +3,11 @@ declare(strict_types=1);
 namespace Viserio\Pipeline\Tests;
 
 use Narrowspark\TestingHelper\ArrayContainer;
+use PHPUnit\Framework\TestCase;
 use Viserio\Pipeline\Pipeline;
 use Viserio\Pipeline\Tests\Fixture\PipelineInvokePipe;
 use Viserio\Pipeline\Tests\Fixture\PipelineTestParameterPipe;
 use Viserio\Pipeline\Tests\Fixture\PipelineTestPipeOne;
-use PHPUnit\Framework\TestCase;
 
 class PipelineTest extends TestCase
 {

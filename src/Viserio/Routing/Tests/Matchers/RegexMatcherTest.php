@@ -2,9 +2,9 @@
 declare(strict_types=1);
 namespace Viserio\Routing\Tests\Matchers;
 
+use PHPUnit\Framework\TestCase;
 use Viserio\Contracts\Routing\Pattern;
 use Viserio\Routing\Matchers\RegexMatcher;
-use PHPUnit\Framework\TestCase;
 
 class RegexMatcherTest extends TestCase
 {

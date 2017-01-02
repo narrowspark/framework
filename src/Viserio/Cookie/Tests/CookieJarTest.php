@@ -5,9 +5,9 @@ namespace Viserio\Cookie\Tests;
 use Cake\Chronos\Chronos;
 use Mockery as Mock;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
+use PHPUnit\Framework\TestCase;
 use Viserio\Contracts\Cookie\Cookie as CookieContract;
 use Viserio\Cookie\CookieJar;
-use PHPUnit\Framework\TestCase;
 
 class CookieJarTest extends TestCase
 {

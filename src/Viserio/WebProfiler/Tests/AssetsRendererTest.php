@@ -4,12 +4,12 @@ namespace Viserio\WebProfiler\Tests;
 
 use Mockery as Mock;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
+use PHPUnit\Framework\TestCase;
 use Viserio\Contracts\WebProfiler\WebProfiler as WebProfilerContract;
 use Viserio\Routing\UrlGenerator;
 use Viserio\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 use Viserio\WebProfiler\AssetsRenderer;
 use Viserio\WebProfiler\DataCollectors\AjaxRequestsDataCollector;
-use PHPUnit\Framework\TestCase;
 
 class AssetsRendererTest extends TestCase
 {

@@ -4,11 +4,11 @@ namespace Viserio\Exception\Tests\Filters;
 
 use Exception;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
+use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\RequestInterface;
 use Viserio\Exception\Displayers\HtmlDisplayer;
 use Viserio\Exception\Displayers\JsonDisplayer;
 use Viserio\Exception\Filters\CanDisplayFilter;
-use PHPUnit\Framework\TestCase;
 
 class CanDisplayFilterTest extends TestCase
 {

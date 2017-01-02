@@ -3,11 +3,11 @@ declare(strict_types=1);
 namespace Viserio\Exception\Tests\Displayers;
 
 use Exception;
+use PHPUnit\Framework\TestCase;
 use Viserio\Exception\Displayers\HtmlDisplayer;
 use Viserio\Exception\ExceptionInfo;
 use Viserio\HttpFactory\ResponseFactory;
 use Viserio\HttpFactory\StreamFactory;
-use PHPUnit\Framework\TestCase;
 
 class HtmlDisplayerTest extends TestCase
 {

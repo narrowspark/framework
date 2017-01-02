@@ -2,9 +2,9 @@
 declare(strict_types=1);
 namespace Viserio\Http\Tests\Stream;
 
+use PHPUnit\Framework\TestCase;
 use Viserio\Http\Stream;
 use Viserio\Http\Stream\FnStream;
-use PHPUnit\Framework\TestCase;
 
 class FnStreamTest extends TestCase
 {

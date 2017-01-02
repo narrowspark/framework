@@ -3,11 +3,11 @@ declare(strict_types=1);
 namespace Viserio\Mail\Tests\Transport;
 
 use Aws\Ses\SesClient;
+use PHPUnit\Framework\TestCase;
 use Swift_Message;
 use Viserio\Mail\Tests\Transport\Fixture\SendRawEmailMock;
 use Viserio\Mail\Transport\Ses as SesTransport;
 use Viserio\Support\Str;
-use PHPUnit\Framework\TestCase;
 
 class SesTransportTest extends TestCase
 {

@@ -3,9 +3,9 @@ declare(strict_types=1);
 namespace Viserio\View\Tests\Engines;
 
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
+use PHPUnit\Framework\TestCase;
 use Viserio\Contracts\View\Engine as EngineContract;
 use Viserio\View\Engines\EngineResolver;
-use PHPUnit\Framework\TestCase;
 
 class ViewEngineResolverTest extends TestCase
 {

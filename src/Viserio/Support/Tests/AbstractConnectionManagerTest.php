@@ -3,10 +3,10 @@ declare(strict_types=1);
 namespace Viserio\Support\Tests;
 
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
+use PHPUnit\Framework\TestCase;
 use stdClass;
 use Viserio\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Support\Tests\Fixture\TestConnectionManager;
-use PHPUnit\Framework\TestCase;
 
 class AbstractConnectionManagerTest extends TestCase
 {

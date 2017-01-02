@@ -4,6 +4,7 @@ namespace Viserio\WebProfiler\Tests;
 
 use Mockery as Mock;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
+use PHPUnit\Framework\TestCase;
 use Viserio\Contracts\Routing\UrlGenerator as UrlGeneratorContract;
 use Viserio\HttpFactory\ResponseFactory;
 use Viserio\HttpFactory\ServerRequestFactory;
@@ -12,7 +13,6 @@ use Viserio\WebProfiler\AssetsRenderer;
 use Viserio\WebProfiler\DataCollectors\PhpInfoDataCollector;
 use Viserio\WebProfiler\TemplateManager;
 use Viserio\WebProfiler\WebProfiler;
-use PHPUnit\Framework\TestCase;
 
 class WebProfilerTest extends TestCase
 {

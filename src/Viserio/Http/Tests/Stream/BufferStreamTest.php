@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Http\Tests\Stream;
 
-use Viserio\Http\Stream\BufferStream;
 use PHPUnit\Framework\TestCase;
+use Viserio\Http\Stream\BufferStream;
 
 class BufferStreamTest extends TestCase
 {

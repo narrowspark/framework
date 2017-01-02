@@ -5,9 +5,9 @@ namespace Viserio\Cron\Tests;
 use Cake\Chronos\Chronos;
 use Mockery as Mock;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
+use PHPUnit\Framework\TestCase;
 use Psr\Cache\CacheItemPoolInterface;
 use Viserio\Cron\Cron;
-use PHPUnit\Framework\TestCase;
 
 class CronTest extends TestCase
 {

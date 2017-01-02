@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Translation\Tests\PluralCategorys;
 
-use Viserio\Translation\PluralCategorys\None;
 use PHPUnit\Framework\TestCase;
+use Viserio\Translation\PluralCategorys\None;
 
 class NoneTest extends TestCase
 {

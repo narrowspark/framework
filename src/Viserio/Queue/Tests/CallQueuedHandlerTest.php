@@ -5,6 +5,7 @@ namespace Viserio\Queue\Tests;
 use Interop\Container\ContainerInterface;
 use Narrowspark\TestingHelper\ArrayContainer;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
+use PHPUnit\Framework\TestCase;
 use stdClass;
 use Viserio\Bus\QueueingDispatcher;
 use Viserio\Contracts\Encryption\Encrypter as EncrypterContract;
@@ -13,7 +14,6 @@ use Viserio\Queue\CallQueuedHandler;
 use Viserio\Queue\Connectors\RedisQueue;
 use Viserio\Queue\Jobs\RedisJob;
 use Viserio\Queue\Tests\Fixture\InteractsWithQueue;
-use PHPUnit\Framework\TestCase;
 
 class CallQueuedHandlerTest extends TestCase
 {

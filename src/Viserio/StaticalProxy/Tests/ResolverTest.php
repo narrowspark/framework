@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\StaticalProxy\Tests;
 
-use Viserio\StaticalProxy\Resolver;
 use PHPUnit\Framework\TestCase;
+use Viserio\StaticalProxy\Resolver;
 
 class ResolverTest extends TestCase
 {

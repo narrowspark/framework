@@ -4,11 +4,11 @@ namespace Viserio\Bus\Tests;
 
 use Narrowspark\TestingHelper\ArrayContainer;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
+use PHPUnit\Framework\TestCase;
 use stdClass;
 use Viserio\Bus\Dispatcher;
 use Viserio\Bus\Tests\Fixture\BusDispatcherBasicCommand;
 use Viserio\Bus\Tests\Fixture\BusDispatcherSetCommand;
-use PHPUnit\Framework\TestCase;
 
 class DispatcherTest extends TestCase
 {

@@ -2,10 +2,10 @@
 declare(strict_types=1);
 namespace Viserio\Console\Tests\Command;
 
+use PHPUnit\Framework\TestCase;
 use Viserio\Console\Command\ExpressionParser;
 use Viserio\Console\Input\InputArgument;
 use Viserio\Console\Input\InputOption;
-use PHPUnit\Framework\TestCase;
 
 class ExpressionParserTest extends TestCase
 {

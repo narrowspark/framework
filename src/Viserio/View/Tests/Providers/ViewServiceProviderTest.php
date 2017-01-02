@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace Viserio\View\Tests\Providers;
 
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
+use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Container\Container;
 use Viserio\Filesystem\Providers\FilesServiceProvider;
@@ -10,7 +11,6 @@ use Viserio\View\Engines\EngineResolver;
 use Viserio\View\Factory;
 use Viserio\View\Providers\ViewServiceProvider;
 use Viserio\View\ViewFinder;
-use PHPUnit\Framework\TestCase;
 
 class ViewServiceProviderTest extends TestCase
 {

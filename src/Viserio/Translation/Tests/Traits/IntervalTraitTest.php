@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Translation\Tests\Traits;
 
-use Viserio\Translation\Traits\IntervalTrait;
 use PHPUnit\Framework\TestCase;
+use Viserio\Translation\Traits\IntervalTrait;
 
 class IntervalTraitTest extends TestCase
 {

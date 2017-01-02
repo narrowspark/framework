@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Support\Tests;
 
-use Viserio\Support\Env;
 use PHPUnit\Framework\TestCase;
+use Viserio\Support\Env;
 
 class EnvTest extends TestCase
 {

@@ -4,9 +4,9 @@ namespace Viserio\Filesystem\Tests\Traits;
 
 use org\bovigo\vfs\vfsStream;
 use org\bovigo\vfs\vfsStreamDirectory;
+use PHPUnit\Framework\TestCase;
 use Viserio\Filesystem\Tests\Traits\Fixture\FilesystemHelperTraitClass;
 use Viserio\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
-use PHPUnit\Framework\TestCase;
 
 class FilesystemHelperTraitTest extends TestCase
 {

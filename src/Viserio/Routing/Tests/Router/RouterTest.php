@@ -4,10 +4,10 @@ namespace Viserio\Routing\Tests\Router;
 
 use Interop\Container\ContainerInterface;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
+use PHPUnit\Framework\TestCase;
 use Viserio\HttpFactory\ResponseFactory;
 use Viserio\HttpFactory\StreamFactory;
 use Viserio\Routing\Router;
-use PHPUnit\Framework\TestCase;
 
 class RouterTest extends TestCase
 {

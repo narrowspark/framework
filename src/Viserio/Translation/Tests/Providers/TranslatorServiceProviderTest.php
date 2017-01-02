@@ -3,13 +3,13 @@ declare(strict_types=1);
 namespace Viserio\Translation\Tests\Providers;
 
 use org\bovigo\vfs\vfsStream;
+use PHPUnit\Framework\TestCase;
 use Viserio\Config\Providers\ConfigServiceProvider;
 use Viserio\Container\Container;
 use Viserio\Contracts\Translation\Translator as TranslatorContract;
 use Viserio\Parsers\Providers\ParsersServiceProvider;
 use Viserio\Translation\Providers\TranslationServiceProvider;
 use Viserio\Translation\TranslationManager;
-use PHPUnit\Framework\TestCase;
 
 class TranslatorServiceProviderTest extends TestCase
 {

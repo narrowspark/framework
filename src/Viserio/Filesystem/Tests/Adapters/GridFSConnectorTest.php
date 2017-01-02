@@ -5,8 +5,8 @@ namespace Viserio\Filesystem\Tests\Adapters;
 use League\Flysystem\GridFS\GridFSAdapter;
 use MongoClient;
 use MongoConnectionException;
-use Viserio\Filesystem\Adapters\GridFSConnector;
 use PHPUnit\Framework\TestCase;
+use Viserio\Filesystem\Adapters\GridFSConnector;
 
 class GridFSConnectorTest extends TestCase
 {

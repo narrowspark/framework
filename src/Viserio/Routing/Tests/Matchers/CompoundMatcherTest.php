@@ -2,10 +2,10 @@
 declare(strict_types=1);
 namespace Viserio\Routing\Tests\Matchers;
 
+use PHPUnit\Framework\TestCase;
 use Viserio\Routing\Matchers\AnyMatcher;
 use Viserio\Routing\Matchers\CompoundMatcher;
 use Viserio\Routing\Matchers\StaticMatcher;
-use PHPUnit\Framework\TestCase;
 
 class CompoundMatcherTest extends TestCase
 {

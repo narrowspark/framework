@@ -4,9 +4,9 @@ namespace Viserio\Support\Tests;
 
 use Narrowspark\TestingHelper\ArrayContainer;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
+use PHPUnit\Framework\TestCase;
 use Viserio\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Support\Tests\Fixture\TestManager;
-use PHPUnit\Framework\TestCase;
 
 class AbstractManagerTest extends TestCase
 {

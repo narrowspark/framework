@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Support\Tests\Traits;
 
-use Viserio\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 use PHPUnit\Framework\TestCase;
+use Viserio\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
 class NormalizePathAndDirectorySeparatorTraitTest extends TestCase
 {

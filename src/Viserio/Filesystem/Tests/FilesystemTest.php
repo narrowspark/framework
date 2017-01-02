@@ -6,9 +6,9 @@ use League\Flysystem\Util;
 use org\bovigo\vfs\content\LargeFileContent;
 use org\bovigo\vfs\vfsStream;
 use org\bovigo\vfs\vfsStreamDirectory;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Finder\SplFileInfo;
 use Viserio\Filesystem\Filesystem;
-use PHPUnit\Framework\TestCase;
 
 class FilesystemTest extends TestCase
 {

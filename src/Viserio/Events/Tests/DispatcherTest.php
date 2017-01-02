@@ -3,9 +3,9 @@ declare(strict_types=1);
 namespace Viserio\Events\Tests;
 
 use Narrowspark\TestingHelper\ArrayContainer;
+use PHPUnit\Framework\TestCase;
 use Viserio\Events\Dispatcher;
 use Viserio\Events\Tests\Fixture\EventListener;
-use PHPUnit\Framework\TestCase;
 
 class DispatcherTest extends TestCase
 {

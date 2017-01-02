@@ -2,10 +2,10 @@
 declare(strict_types=1);
 namespace Viserio\Routing\Tests\Matchers;
 
+use PHPUnit\Framework\TestCase;
 use Viserio\Routing\Matchers\ExpressionMatcher;
 use Viserio\Routing\Matchers\StaticMatcher;
 
-use PHPUnit\Framework\TestCase;
 class ExpressionMatcherTest extends TestCase
 {
     public function testGetExpression()

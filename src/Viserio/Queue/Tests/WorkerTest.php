@@ -3,13 +3,13 @@ declare(strict_types=1);
 namespace Viserio\Queue\Tests;
 
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
+use PHPUnit\Framework\TestCase;
 use RuntimeException;
 use stdClass;
 use Viserio\Contracts\Queue\FailedJobProvider as FailedJobProviderContract;
 use Viserio\Contracts\Queue\Job as JobContract;
 use Viserio\Queue\QueueManager;
 use Viserio\Queue\Worker;
-use PHPUnit\Framework\TestCase;
 
 class WorkerTest extends TestCase
 {

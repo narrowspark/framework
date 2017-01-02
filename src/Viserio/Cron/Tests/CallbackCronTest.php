@@ -3,10 +3,10 @@ declare(strict_types=1);
 namespace Viserio\Cron\Tests;
 
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
+use PHPUnit\Framework\TestCase;
 use Psr\Cache\CacheItemInterface;
 use Psr\Cache\CacheItemPoolInterface;
 use Viserio\Cron\CallbackCron;
-use PHPUnit\Framework\TestCase;
 
 class CallbackCronTest extends TestCase
 {

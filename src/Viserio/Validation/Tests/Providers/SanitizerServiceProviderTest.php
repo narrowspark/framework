@@ -2,10 +2,10 @@
 declare(strict_types=1);
 namespace Viserio\Validation\Tests\Providers;
 
+use PHPUnit\Framework\TestCase;
 use Viserio\Container\Container;
 use Viserio\Validation\Providers\SanitizerServiceProvider;
 use Viserio\Validation\Sanitizer;
-use PHPUnit\Framework\TestCase;
 
 class SanitizerServiceProviderTest extends TestCase
 {

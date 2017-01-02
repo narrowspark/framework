@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Viserio\Translation\Tests;
 
-use Viserio\Translation\MessageCatalogue;
 use PHPUnit\Framework\TestCase;
+use Viserio\Translation\MessageCatalogue;
 
 class MessageCatalogueTest extends TestCase
 {

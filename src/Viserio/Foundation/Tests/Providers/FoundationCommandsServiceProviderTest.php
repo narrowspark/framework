@@ -2,12 +2,12 @@
 declare(strict_types=1);
 namespace Viserio\Foundation\Tests\Providers;
 
+use PHPUnit\Framework\TestCase;
 use Viserio\Container\Container;
 use Viserio\Foundation\Commands\DownCommand;
 use Viserio\Foundation\Commands\KeyGenerateCommand;
 use Viserio\Foundation\Commands\UpCommand;
 use Viserio\Foundation\Providers\FoundationCommandsServiceProvider;
-use PHPUnit\Framework\TestCase;
 
 class FoundationCommandsServiceProviderTest extends TestCase
 {

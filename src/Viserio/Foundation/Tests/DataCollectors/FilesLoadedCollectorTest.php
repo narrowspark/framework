@@ -4,10 +4,10 @@ namespace Viserio\Foundation\Tests\DataCollectors;
 
 use Mockery as Mock;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
+use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Foundation\DataCollectors\FilesLoadedCollector;
-use PHPUnit\Framework\TestCase;
 
 class FilesLoadedCollectorTest extends TestCase
 {

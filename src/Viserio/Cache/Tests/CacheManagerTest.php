@@ -11,9 +11,9 @@ use Cache\SessionHandler\Psr6SessionHandler;
 use Interop\Container\ContainerInterface;
 use League\Flysystem\Adapter\Local;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
+use PHPUnit\Framework\TestCase;
 use Viserio\Cache\CacheManager;
 use Viserio\Contracts\Config\Repository as RepositoryContract;
-use PHPUnit\Framework\TestCase;
 
 class CacheManagerTest extends TestCase
 {

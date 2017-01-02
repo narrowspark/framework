@@ -3,10 +3,10 @@ declare(strict_types=1);
 namespace Viserio\View\Tests;
 
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
+use PHPUnit\Framework\TestCase;
 use Viserio\Contracts\Filesystem\Filesystem;
 use Viserio\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 use Viserio\View\ViewFinder;
-use PHPUnit\Framework\TestCase;
 
 class ViewFinderTest extends TestCase
 {

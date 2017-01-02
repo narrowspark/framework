@@ -3,9 +3,9 @@ declare(strict_types=1);
 namespace Viserio\Contracts\Parsers\Tests\Traits;
 
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
+use PHPUnit\Framework\TestCase;
 use Viserio\Contracts\Parsers\Loader as LoaderContract;
 use Viserio\Contracts\Parsers\Traits\LoaderAwareTrait;
-use PHPUnit\Framework\TestCase;
 
 class LoaderAwareTraitTest extends TestCase
 {

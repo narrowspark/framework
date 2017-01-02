@@ -2,10 +2,10 @@
 declare(strict_types=1);
 namespace Viserio\HttpFactory\Tests;
 
+use PHPUnit\Framework\TestCase;
 use Viserio\Http\UploadedFile;
 use Viserio\Http\Uri;
 use Viserio\HttpFactory\ServerRequestFactory;
-use PHPUnit\Framework\TestCase;
 
 class ServerRequestFactoryTest extends TestCase
 {

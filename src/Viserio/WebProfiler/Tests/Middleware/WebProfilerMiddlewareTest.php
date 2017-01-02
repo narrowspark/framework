@@ -5,13 +5,13 @@ namespace Viserio\WebProfiler\Test\Middleware;
 use Mockery as Mock;
 use Narrowspark\TestingHelper\Middleware\DelegateMiddleware;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
+use PHPUnit\Framework\TestCase;
 use Viserio\HttpFactory\ResponseFactory;
 use Viserio\HttpFactory\ServerRequestFactory;
 use Viserio\WebProfiler\AssetsRenderer;
 use Viserio\WebProfiler\Middleware\WebProfilerMiddleware;
 use Viserio\WebProfiler\TemplateManager;
 use Viserio\WebProfiler\WebProfiler;
-use PHPUnit\Framework\TestCase;
 
 class WebProfilerMiddlewareTest extends TestCase
 {

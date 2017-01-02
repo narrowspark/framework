@@ -2,9 +2,9 @@
 declare(strict_types=1);
 namespace Viserio\WebProfiler\Tests;
 
+use PHPUnit\Framework\TestCase;
 use Viserio\WebProfiler\DataCollectors\PhpInfoDataCollector;
 use Viserio\WebProfiler\Profile;
-use PHPUnit\Framework\TestCase;
 
 class ProfileTest extends TestCase
 {
