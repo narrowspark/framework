@@ -3,8 +3,8 @@ declare(strict_types=1);
 namespace Viserio\HttpFactory;
 
 use Interop\Http\Factory\UriFactoryInterface;
-use Viserio\Http\Uri;
 use Psr\Http\Message\UriInterface;
+use Viserio\Http\Uri;
 
 final class UriFactory implements UriFactoryInterface
 {

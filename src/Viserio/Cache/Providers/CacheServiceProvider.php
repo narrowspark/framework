@@ -2,7 +2,6 @@
 declare(strict_types=1);
 namespace Viserio\Cache\Providers;
 
-use Cache\Adapter\Chain\CachePoolChain;
 use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
 use Psr\Cache\CacheItemPoolInterface;

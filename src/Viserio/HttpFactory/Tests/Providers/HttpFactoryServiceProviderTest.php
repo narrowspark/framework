@@ -2,15 +2,15 @@
 declare(strict_types=1);
 namespace Viserio\HttpFactory\Tests\Providers;
 
-use PHPUnit\Framework\TestCase;
-use Viserio\Container\Container;
-use Viserio\HttpFactory\Providers\HttpFactoryServiceProvider;
 use Interop\Http\Factory\RequestFactoryInterface;
 use Interop\Http\Factory\ResponseFactoryInterface;
 use Interop\Http\Factory\ServerRequestFactoryInterface;
 use Interop\Http\Factory\StreamFactoryInterface;
 use Interop\Http\Factory\UploadedFileFactoryInterface;
 use Interop\Http\Factory\UriFactoryInterface;
+use PHPUnit\Framework\TestCase;
+use Viserio\Container\Container;
+use Viserio\HttpFactory\Providers\HttpFactoryServiceProvider;
 use Viserio\HttpFactory\RequestFactory;
 use Viserio\HttpFactory\ResponseFactory;
 use Viserio\HttpFactory\ServerRequestFactory;

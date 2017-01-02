@@ -3,13 +3,13 @@ declare(strict_types=1);
 namespace Viserio\HttpFactory;
 
 use Interop\Http\Factory\ServerRequestFactoryInterface;
+use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\UriInterface;
 use UnexpectedValueException;
 use Viserio\Http\ServerRequest;
 use Viserio\Http\Stream\LazyOpenStream;
 use Viserio\Http\Uri;
 use Viserio\Http\Util;
-use Psr\Http\Message\ServerRequestInterface;
 
 class ServerRequestFactory implements ServerRequestFactoryInterface
 {
