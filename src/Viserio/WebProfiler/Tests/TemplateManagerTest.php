@@ -7,13 +7,13 @@ use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Viserio\WebProfiler\AssetsRenderer;
-use Viserio\WebProfiler\DataCollectors\AjaxRequestsDataCollector;
-use Viserio\WebProfiler\DataCollectors\PhpInfoDataCollector;
-use Viserio\WebProfiler\TemplateManager;
 use Swift_Mailer;
 use Swift_SmtpTransport;
+use Viserio\WebProfiler\AssetsRenderer;
+use Viserio\WebProfiler\DataCollectors\AjaxRequestsDataCollector;
 use Viserio\WebProfiler\DataCollectors\Bridge\SwiftMailDataCollector;
+use Viserio\WebProfiler\DataCollectors\PhpInfoDataCollector;
+use Viserio\WebProfiler\TemplateManager;
 
 class TemplateManagerTest extends TestCase
 {
