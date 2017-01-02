@@ -5,13 +5,13 @@ namespace Viserio\Translation\Tests\DataCollectors;
 use Mockery as Mock;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use PHPUnit\Framework\TestCase;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Translation\DataCollectors\ViserioTranslationDataCollector;
 use Viserio\Translation\MessageCatalogue;
 use Viserio\Translation\MessageSelector;
 use Viserio\Translation\PluralizationRules;
 use Viserio\Translation\Translator;
-use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\ServerRequestInterface;
 
 class ViserioTranslationDataCollectorTest extends TestCase
 {
@@ -60,7 +60,7 @@ class ViserioTranslationDataCollectorTest extends TestCase
 
         static::assertEquals(
             [
-            'icon' => file_get_contents(__DIR__ . '/../../DataCollectors/Resources/icons/ic_translate_white_24px.svg'),
+            'icon'      => file_get_contents(__DIR__ . '/../../DataCollectors/Resources/icons/ic_translate_white_24px.svg'),
                 'label' => '',
                 'value' => null,
             ],
