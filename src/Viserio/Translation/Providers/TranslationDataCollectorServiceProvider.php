@@ -6,8 +6,8 @@ use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
 use Viserio\Contracts\Support\Traits\ServiceProviderConfigAwareTrait;
 use Viserio\Contracts\Translation\Translator as TranslatorContract;
-use Viserio\Translation\DataCollectors\ViserioTranslationDataCollector;
 use Viserio\Contracts\WebProfiler\WebProfiler as WebProfilerContract;
+use Viserio\Translation\DataCollectors\ViserioTranslationDataCollector;
 
 class TranslationDataCollectorServiceProvider implements ServiceProvider
 {

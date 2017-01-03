@@ -5,19 +5,19 @@ namespace Viserio\Translation\Tests\Providers;
 use Mockery as Mock;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use PHPUnit\Framework\TestCase;
-use Viserio\Translation\Providers\TranslationDataCollectorServiceProvider;
+use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Config\Providers\ConfigServiceProvider;
-use Viserio\Contracts\WebProfiler\WebProfiler as WebProfilerContract;
 use Viserio\Container\Container;
 use Viserio\Contracts\Config\Repository as RepositoryContract;
-use Psr\Http\Message\ServerRequestInterface;
-use Viserio\WebProfiler\Providers\WebProfilerServiceProvider;
+use Viserio\Contracts\Translation\Translator as TranslatorContract;
+use Viserio\Contracts\WebProfiler\WebProfiler as WebProfilerContract;
 use Viserio\HttpFactory\Providers\HttpFactoryServiceProvider;
 use Viserio\Translation\MessageCatalogue;
 use Viserio\Translation\MessageSelector;
 use Viserio\Translation\PluralizationRules;
+use Viserio\Translation\Providers\TranslationDataCollectorServiceProvider;
 use Viserio\Translation\Translator;
-use Viserio\Contracts\Translation\Translator as TranslatorContract;
+use Viserio\WebProfiler\Providers\WebProfilerServiceProvider;
 
 class TranslationDataCollectorServiceProviderTest extends TestCase
 {
@@ -63,7 +63,7 @@ class TranslationDataCollectorServiceProviderTest extends TestCase
 
         $container->get(RepositoryContract::class)->set('webprofiler', [
             'collector' => [
-                'translation' => true
+                'translation' => true,
             ],
         ]);
 
