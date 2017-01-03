@@ -51,7 +51,6 @@
         "narrowspark/collection"                             : "^0.1",
         "narrowspark/http-status"                            : "^2.0",
         "mtdowling/cron-expression"                          : "^1.1",
-        "micheh/psr7-cache"                                  : "^0.5",
         "opis/closure"                                       : "^2.2",
         "ocramius/proxy-manager"                             : "^2.1",
         "php-di/invoker"                                     : "^1.3",
