@@ -21,6 +21,7 @@
         "php"                                                : "^7.1",
         "viserio/config"                                     : "self.version",
         "viserio/container"                                  : "self.version",
+        "viserio/contracts"                                  : "self.version",
         "viserio/events"                                     : "self.version",
         "viserio/exception"                                  : "self.version",
         "viserio/log"                                        : "self.version",
