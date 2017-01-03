@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\View\Tests;
 
+use Mockery as Mock;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use PHPUnit\Framework\TestCase;
 use Viserio\Contracts\Filesystem\Filesystem;
@@ -12,6 +13,16 @@ class ViewFinderTest extends TestCase
 {
     use MockeryTrait;
     use NormalizePathAndDirectorySeparatorTrait;
+
+    public function tearDown()
+    {
+        parent::tearDown();
+
+        $this->allowMockingNonExistentMethods(true);
+
+        // Verify Mockery expectations.
+        Mock::close();
+    }
 
     public function testBasicViewFinding()
     {

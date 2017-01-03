@@ -51,12 +51,6 @@ class PlatesEngine implements EnginesContract
     {
         $this->config  = $config;
         $this->request = $request;
-
-        $exceptions = $this->config['engine']['plates']['extensions'] ?? null;
-
-        if ($exceptions !== null) {
-            $this->availableExtensions = $exceptions;
-        }
     }
 
     /**
@@ -65,6 +59,7 @@ class PlatesEngine implements EnginesContract
     public function get(array $fileInfo, array $data = []): string
     {
         $engine = $this->getLoader();
+        $config = $this->config['engine']['plates'] ?? [];
 
         if ($this->request !== null) {
             // Set uri extensions
@@ -72,11 +67,13 @@ class PlatesEngine implements EnginesContract
         }
 
         // Set asset extensions
-        $engine->loadExtension(new Asset($this->config['engine']['plates']['asset'] ?? null));
+        $engine->loadExtension(new Asset($config['asset'] ?? null));
 
         // Get all extensions
-        if (! empty($this->availableExtensions)) {
-            foreach ($this->availableExtensions as $extension) {
+        $exceptions = $config['extensions'] ?? null;
+
+        if ($exceptions !== null) {
+            foreach ($exceptions as $extension) {
                 $engine->loadExtension(is_object($extension) ? $extension : new $extension());
             }
         }
@@ -121,7 +118,7 @@ class PlatesEngine implements EnginesContract
             );
 
             if (($paths = $config['template']['paths'] ?? null) !== null) {
-                foreach ($paths as $name => $addPaths) {
+                foreach ((array) $paths as $name => $addPaths) {
                     $this->engine->addFolder($name, $addPaths);
                 }
             }

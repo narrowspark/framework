@@ -394,4 +394,15 @@ class CronTest extends TestCase
 
         unset($_SERVER['test']);
     }
+
+    public function testFrequencyMacro()
+    {
+        $cron = new Cron($this->cache, 'php foo');
+
+        Cron::macro('everyXMinutes', function ($x) {
+            return $this->spliceIntoPosition(1, "*/{$x}");
+        });
+
+        $this->assertEquals('*/6 * * * * *', $cron->everyXMinutes(6)->getExpression());
+      }
 }

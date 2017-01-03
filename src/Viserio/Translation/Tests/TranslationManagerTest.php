@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Translation\Tests;
 
+use Mockery as Mock;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use org\bovigo\vfs\vfsStream;
 use PHPUnit\Framework\TestCase;
@@ -38,6 +39,16 @@ class TranslationManagerTest extends TestCase
         );
 
         parent::setUp();
+    }
+
+    public function tearDown()
+    {
+        parent::tearDown();
+
+        $this->allowMockingNonExistentMethods(true);
+
+        // Verify Mockery expectations.
+        Mock::close();
     }
 
     public function testSetAndGetDirectories()
