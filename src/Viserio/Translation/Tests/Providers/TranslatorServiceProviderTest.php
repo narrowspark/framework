@@ -2,11 +2,11 @@
 declare(strict_types=1);
 namespace Viserio\Translation\Tests\Providers;
 
-use Psr\Log\LoggerInterface as PsrLoggerInterface;
 use Mockery as Mock;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use org\bovigo\vfs\vfsStream;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface as PsrLoggerInterface;
 use Viserio\Config\Providers\ConfigServiceProvider;
 use Viserio\Container\Container;
 use Viserio\Contracts\Translation\Translator as TranslatorContract;
@@ -61,10 +61,10 @@ return [
         $container->register(new ConfigServiceProvider());
 
         $container->get('config')->set('translation', [
-            'locale' => 'en',
-            'files'  => $this->file->url(),
+            'locale'      => 'en',
+            'files'       => $this->file->url(),
             'directories' => [
-                __DIR__
+                __DIR__,
             ],
         ]);
 
