@@ -4,8 +4,6 @@ namespace Viserio\View\Engines;
 
 use Throwable;
 use Twig_Environment;
-use Twig_Extension_Core;
-use Twig_Extension_Optimizer;
 use Twig_Loader_Filesystem;
 use Viserio\Contracts\View\Engine as EngineContract;
 

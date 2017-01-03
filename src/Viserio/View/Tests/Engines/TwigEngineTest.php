@@ -2,7 +2,6 @@
 declare(strict_types=1);
 namespace Viserio\View\Tests\Engines;
 
-use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use PHPUnit\Framework\TestCase;
 use Viserio\View\Engines\TwigEngine;
 
@@ -12,7 +11,7 @@ class TwigEngineTest extends TestCase
     {
         $engine = new TwigEngine([
             'template' => [
-                'default' => __DIR__.'/../Fixture/',
+                'default' => __DIR__ . '/../Fixture/',
             ],
         ]);
 
