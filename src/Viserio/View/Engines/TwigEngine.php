@@ -46,10 +46,17 @@ class TwigEngine implements EngineContract
         ob_start();
 
         try {
-            return $this->getInstance()->render($fileInfo['name'], $data);
+            $template = $this->getInstance()->render($fileInfo['name'], $data);
         } catch (Throwable $exception) {
             $this->handleViewException($exception);
         }
+
+        // @codeCoverageIgnoreStart
+        // Return temporary output buffer content, destroy output buffer
+        ltrim(ob_get_clean());
+        // @codeCoverageIgnoreEnd
+
+        return $template;
     }
 
     /**
@@ -65,9 +72,6 @@ class TwigEngine implements EngineContract
                 $this->loader(),
                 $config['engine']['twig']['options'] ?? []
             );
-
-            $twig->addExtension(new Twig_Extension_Core());
-            $twig->addExtension(new Twig_Extension_Optimizer());
 
             $extensions = $config['engine']['twig']['extensions'] ?? [];
 

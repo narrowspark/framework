@@ -8,6 +8,8 @@ class FileEngine implements EngineContract
 {
     /**
      * {@inheritdoc}
+     *
+     * @codeCoverageIgnore
      */
     public function get(array $fileInfo, array $data = []): string
     {

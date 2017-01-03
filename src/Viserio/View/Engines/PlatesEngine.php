@@ -94,10 +94,17 @@ class PlatesEngine implements EnginesContract
         ob_start();
 
         try {
-            return $template->render($data);
+            $template = $template->render($data);
         } catch (Throwable $exception) {
             $this->handleViewException($exception);
         }
+
+        // @codeCoverageIgnoreStart
+        // Return temporary output buffer content, destroy output buffer
+        ltrim(ob_get_clean());
+        // @codeCoverageIgnoreEnd
+
+        return $template;
     }
 
     /**
