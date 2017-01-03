@@ -12,7 +12,7 @@ class PlatesEngineTest extends TestCase
         $engine = new PlatesEngine([
             'template' => [
                 'default' => __DIR__ . '/../Fixture/',
-            ]
+            ],
         ]);
 
         $template = $engine->get(['name' => 'plates.php']);

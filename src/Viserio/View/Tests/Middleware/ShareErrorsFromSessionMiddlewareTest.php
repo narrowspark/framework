@@ -3,15 +3,15 @@ declare(strict_types=1);
 namespace Viserio\View\Tests\Middleware;
 
 use Mockery as Mock;
+use Narrowspark\TestingHelper\Middleware\DelegateMiddleware;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use PHPUnit\Framework\TestCase;
-use Viserio\View\Middleware\ShareErrorsFromSessionMiddleware;
+use Psr\Http\Message\ResponseInterface;
+use Viserio\Contracts\Session\Store as StoreContract;
 use Viserio\Contracts\View\Factory as FactoryContract;
-use Narrowspark\TestingHelper\Middleware\DelegateMiddleware;
 use Viserio\HttpFactory\ResponseFactory;
 use Viserio\HttpFactory\ServerRequestFactory;
-use Viserio\Contracts\Session\Store as StoreContract;
-use Psr\Http\Message\ResponseInterface;
+use Viserio\View\Middleware\ShareErrorsFromSessionMiddleware;
 
 class ShareErrorsFromSessionMiddlewareTest extends TestCase
 {

@@ -2,8 +2,6 @@
 declare(strict_types=1);
 namespace Viserio\View\Middleware;
 
-use Mockery as Mock;
-use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use Interop\Http\Middleware\DelegateInterface;
 use Interop\Http\Middleware\ServerMiddlewareInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -30,7 +28,7 @@ class ShareErrorsFromSessionMiddleware implements ServerMiddlewareInterface
     }
 
     /**
-     * {@inhertidoc}
+     * {@inhertidoc}.
      */
     public function process(ServerRequestInterface $request, DelegateInterface $delegate): ResponseInterface
     {

@@ -404,5 +404,5 @@ class CronTest extends TestCase
         });
 
         $this->assertEquals('*/6 * * * * *', $cron->everyXMinutes(6)->getExpression());
-      }
+    }
 }
