@@ -65,13 +65,13 @@ class TwigEngine implements EngineContract
     protected function getInstance(): Twig_Environment
     {
         if (! $this->parserInstance) {
-            $config = $this->config;
+            $config = $this->config['engine']['twig'] ?? [];
             $twig   = new Twig_Environment(
                 $this->loader(),
-                $config['engine']['twig']['options'] ?? []
+                $config['options'] ?? []
             );
 
-            $extensions = $config['engine']['twig']['extensions'] ?? [];
+            $extensions = $config['extensions'] ?? [];
 
             if (! empty($extensions)) {
                 foreach ($extensions as $extension) {
@@ -90,10 +90,10 @@ class TwigEngine implements EngineContract
      */
     protected function loader()
     {
-        $config = $this->config;
-        $loader = new Twig_Loader_Filesystem($config['template']['default'] ?? []);
+        $config = $this->config['template'] ?? [];
+        $loader = new Twig_Loader_Filesystem($config['default'] ?? []);
 
-        if (($paths = $config['template']['paths'] ?? []) !== null) {
+        if (($paths = $config['paths'] ?? null) !== null) {
             foreach ($paths as $name => $path) {
                 $loader->addPath($path, $name);
             }

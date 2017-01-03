@@ -7,7 +7,7 @@ use Viserio\View\Engines\TwigEngine;
 
 class TwigEngineTest extends TestCase
 {
-    public function testSimpleGet()
+    public function testGet()
     {
         $engine = new TwigEngine([
             'template' => [
