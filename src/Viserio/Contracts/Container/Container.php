@@ -35,18 +35,18 @@ interface Container extends ContainerInterface
     /**
      * Register a shared binding in the container.
      *
-     * @param string|array         $abstract
+     * @param string               $abstract
      * @param \Closure|string|null $concrete
      */
-    public function singleton($abstract, $concrete = null);
+    public function singleton(string $abstract, $concrete = null);
 
     /**
      * Register an existing instance as shared in the container.
      *
-     * @param string|array $abstract
-     * @param mixed        $instance
+     * @param string $abstract
+     * @param mixed  $instance
      */
-    public function instance($abstract, $instance);
+    public function instance(string $abstract, $instance);
 
     /**
      * Delegate a backup container to be checked for services if it

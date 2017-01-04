@@ -2,18 +2,43 @@
 declare(strict_types=1);
 namespace Viserio\View\Tests\Engines;
 
+use Mockery as Mock;
+use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use PHPUnit\Framework\TestCase;
+use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Message\UriInterface;
 use Viserio\View\Engines\PlatesEngine;
 
 class PlatesEngineTest extends TestCase
 {
+    use MockeryTrait;
+
+    public function tearDown()
+    {
+        parent::tearDown();
+
+        $this->allowMockingNonExistentMethods(true);
+
+        // Verify Mockery expectations.
+        Mock::close();
+    }
+
     public function testGet()
     {
-        $engine = new PlatesEngine([
-            'template' => [
-                'default' => __DIR__ . '/../Fixture/',
+        $uri = $this->mock(UriInterface::class);
+        $request = $this->mock(ServerRequestInterface::class);
+        $request->shouldReceive('getUri')
+            ->once()
+            ->andReturn($uri);
+
+        $engine = new PlatesEngine(
+            [
+                'template' => [
+                    'default' => __DIR__ . '/../Fixture/',
+                ],
             ],
-        ]);
+            $request
+        );
 
         $template = $engine->get(['name' => 'plates.php']);
 

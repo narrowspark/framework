@@ -130,29 +130,19 @@ class Container extends ContainerResolver implements ArrayAccess, ContainerContr
     /**
      * {@inheritdoc}
      */
-    public function instance($abstract, $instance)
+    public function instance(string $abstract, $instance)
     {
-        if (is_array($abstract)) {
-            $this->bindPlain(key($abstract), $instance);
-            $this->alias(key($abstract), current($abstract));
-        } else {
-            $this->bindPlain($abstract, $instance);
-        }
+        $this->bindPlain($abstract, $instance);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function singleton($abstract, $concrete = null)
+    public function singleton(string $abstract, $concrete = null)
     {
         $concrete = ($concrete) ? $concrete : $abstract;
 
-        if (is_array($abstract)) {
-            $this->bindSingleton(key($abstract), $concrete);
-            $this->alias(key($abstract), current($abstract));
-        } else {
-            $this->bindSingleton($abstract, $concrete);
-        }
+        $this->bindSingleton($abstract, $concrete);
     }
 
     /**
@@ -161,6 +151,7 @@ class Container extends ContainerResolver implements ArrayAccess, ContainerContr
     public function alias(string $abstract, string $alias)
     {
         $this->bindings[$alias] = &$this->bindings[$abstract];
+        $this->aliasAbstracts[$abstract][] = $alias;
     }
 
     /**
