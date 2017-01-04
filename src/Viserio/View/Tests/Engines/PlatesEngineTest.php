@@ -25,7 +25,7 @@ class PlatesEngineTest extends TestCase
 
     public function testGet()
     {
-        $uri = $this->mock(UriInterface::class);
+        $uri     = $this->mock(UriInterface::class);
         $request = $this->mock(ServerRequestInterface::class);
         $request->shouldReceive('getUri')
             ->once()

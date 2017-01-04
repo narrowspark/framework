@@ -65,6 +65,7 @@ class TraceablePDODecorater extends PDO
 
     /**
      * {@inhritdoc}.
+     *
      * @param mixed $statement
      */
     public function exec($statement)
@@ -74,6 +75,7 @@ class TraceablePDODecorater extends PDO
 
     /**
      * {@inhritdoc}.
+     *
      * @param mixed $attribute
      */
     public function getAttribute($attribute)
@@ -91,6 +93,7 @@ class TraceablePDODecorater extends PDO
 
     /**
      * {@inhritdoc}.
+     *
      * @param null|mixed $name
      */
     public function lastInsertId($name = null)
@@ -100,6 +103,7 @@ class TraceablePDODecorater extends PDO
 
     /**
      * {@inhritdoc}.
+     *
      * @param mixed $statement
      * @param mixed $driver_options
      */
@@ -110,6 +114,7 @@ class TraceablePDODecorater extends PDO
 
     /**
      * {@inhritdoc}.
+     *
      * @param mixed $statement
      */
     public function query($statement)
@@ -119,6 +124,7 @@ class TraceablePDODecorater extends PDO
 
     /**
      * {@inhritdoc}.
+     *
      * @param mixed $string
      * @param mixed $parameter_type
      */
@@ -137,6 +143,7 @@ class TraceablePDODecorater extends PDO
 
     /**
      * {@inhritdoc}.
+     *
      * @param mixed $attribute
      * @param mixed $value
      */

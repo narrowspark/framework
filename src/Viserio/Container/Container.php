@@ -150,7 +150,7 @@ class Container extends ContainerResolver implements ArrayAccess, ContainerContr
      */
     public function alias(string $abstract, string $alias)
     {
-        $this->bindings[$alias] = &$this->bindings[$abstract];
+        $this->bindings[$alias]            = &$this->bindings[$abstract];
         $this->aliasAbstracts[$abstract][] = $alias;
     }
 

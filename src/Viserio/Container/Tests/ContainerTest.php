@@ -16,14 +16,14 @@ use Viserio\Container\Tests\Fixture\ContainerDependentFixture;
 use Viserio\Container\Tests\Fixture\ContainerImplementationFixture;
 use Viserio\Container\Tests\Fixture\ContainerImplementationTwoFixture;
 use Viserio\Container\Tests\Fixture\ContainerInjectVariableFixture;
+use Viserio\Container\Tests\Fixture\ContainerLazyExtendFixture;
 use Viserio\Container\Tests\Fixture\ContainerMixedPrimitiveFixture;
 use Viserio\Container\Tests\Fixture\ContainerNestedDependentFixture;
 use Viserio\Container\Tests\Fixture\ContainerPrivateConstructor;
+use Viserio\Container\Tests\Fixture\ContainerTestContextInjectInstantiationsFixture;
 use Viserio\Container\Tests\Fixture\ContainerTestContextInjectOneFixture;
 use Viserio\Container\Tests\Fixture\ContainerTestContextInjectTwoFixture;
 use Viserio\Container\Tests\Fixture\ContainerTestNoConstructor;
-use Viserio\Container\Tests\Fixture\ContainerTestContextInjectInstantiationsFixture;
-use Viserio\Container\Tests\Fixture\ContainerLazyExtendFixture;
 use Viserio\Container\Tests\Fixture\FactoryClass;
 
 class ContainerTest extends TestCase
@@ -616,10 +616,11 @@ class ContainerTest extends TestCase
     {
         ContainerLazyExtendFixture::$initialized = false;
 
-        $container = new Container;
+        $container = new Container();
         $container->bind(ContainerLazyExtendFixture::class);
         $container->extend(ContainerLazyExtendFixture::class, function ($obj, $container) {
             $obj->init();
+
             return $obj;
         });
         $this->assertFalse(ContainerLazyExtendFixture::$initialized);
@@ -629,9 +630,9 @@ class ContainerTest extends TestCase
 
     public function testContextualBindingWorksForExistingInstancedBindings()
     {
-        $container = new Container;
+        $container = new Container();
 
-        $container->instance(ContainerContractFixtureInterface::class, new ContainerImplementationFixture);
+        $container->instance(ContainerContractFixtureInterface::class, new ContainerImplementationFixture());
 
         $container->when(ContainerTestContextInjectOneFixture::class)
             ->needs(ContainerContractFixtureInterface::class)
@@ -645,13 +646,13 @@ class ContainerTest extends TestCase
 
     public function testContextualBindingWorksForNewlyInstancedBindings()
     {
-        $container = new Container;
+        $container = new Container();
 
         $container->when(ContainerTestContextInjectOneFixture::class)
             ->needs(ContainerContractFixtureInterface::class)
             ->give(ContainerTestContextInjectTwoFixture::class);
 
-        $container->instance(ContainerContractFixtureInterface::class, new ContainerImplementationFixture);
+        $container->instance(ContainerContractFixtureInterface::class, new ContainerImplementationFixture());
 
         $this->assertInstanceOf(
             ContainerTestContextInjectTwoFixture::class,
@@ -661,9 +662,9 @@ class ContainerTest extends TestCase
 
     public function testContextualBindingWorksOnExistingAliasedInstances()
     {
-        $container = new Container;
+        $container = new Container();
 
-        $container->instance('stub', new ContainerImplementationFixture);
+        $container->instance('stub', new ContainerImplementationFixture());
         $container->alias('stub', ContainerContractFixtureInterface::class);
 
         $container->when(ContainerTestContextInjectOneFixture::class)
@@ -678,13 +679,13 @@ class ContainerTest extends TestCase
 
     public function testContextualBindingWorksOnNewAliasedInstances()
     {
-        $container = new Container;
+        $container = new Container();
 
         $container->when(ContainerTestContextInjectOneFixture::class)
             ->needs(ContainerContractFixtureInterface::class)
             ->give(ContainerTestContextInjectTwoFixture::class);
 
-        $container->instance('stub', new ContainerImplementationFixture);
+        $container->instance('stub', new ContainerImplementationFixture());
         $container->alias('stub', ContainerContractFixtureInterface::class);
 
         $this->assertInstanceOf(
@@ -695,7 +696,7 @@ class ContainerTest extends TestCase
 
     public function testContextualBindingWorksOnNewAliasedBindings()
     {
-        $container = new Container;
+        $container = new Container();
 
         $container->when(ContainerTestContextInjectOneFixture::class)
             ->needs(ContainerContractFixtureInterface::class)
@@ -712,9 +713,9 @@ class ContainerTest extends TestCase
 
     public function testContextualBindingDoesntOverrideNonContextualResolution()
     {
-        $container = new Container;
+        $container = new Container();
 
-        $container->instance('stub', new ContainerImplementationFixture);
+        $container->instance('stub', new ContainerImplementationFixture());
         $container->alias('stub', ContainerContractFixtureInterface::class);
 
         $container->when(ContainerTestContextInjectTwoFixture::class)
@@ -736,10 +737,10 @@ class ContainerTest extends TestCase
     {
         ContainerTestContextInjectInstantiationsFixture::$instantiations = 0;
 
-        $container = new Container;
+        $container = new Container();
 
-        $container->instance(ContainerContractFixtureInterface::class, new ContainerImplementationFixture);
-        $container->instance('ContainerTestContextInjectInstantiationsFixture', new ContainerTestContextInjectInstantiationsFixture);
+        $container->instance(ContainerContractFixtureInterface::class, new ContainerImplementationFixture());
+        $container->instance('ContainerTestContextInjectInstantiationsFixture', new ContainerTestContextInjectInstantiationsFixture());
 
         $this->assertEquals(1, ContainerTestContextInjectInstantiationsFixture::$instantiations);
 

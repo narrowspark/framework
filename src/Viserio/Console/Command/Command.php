@@ -13,10 +13,10 @@ use Symfony\Component\Console\Output\NullOutput;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ChoiceQuestion;
 use Symfony\Component\Console\Question\Question;
+use Symfony\Component\Console\Style\SymfonyStyle;
 use Viserio\Contracts\Container\Traits\ContainerAwareTrait;
 use Viserio\Contracts\Support\Arrayable;
 use Viserio\Support\Invoker;
-use Symfony\Component\Console\Style\SymfonyStyle;
 
 abstract class Command extends BaseCommand implements CompletionAwareInterface
 {
