@@ -84,9 +84,9 @@ class CacheManager extends AbstractManager implements CacheManagerContract
             return $this->namespacedPool($driver, $namespace);
         }
 
-        if ($this->config->get($this->getConfigName() . '.simple_cache')) {
-            // code...
-        }
+        // if ($this->config->get($this->getConfigName() . '.simple_cache')) {
+        //     return new SimpleCacheBridge($driver);
+        // }
 
         return $driver;
     }
