@@ -3,13 +3,12 @@ declare(strict_types=1);
 namespace Viserio\View\Engines;
 
 use Exception;
-use RuntimeException;
 use League\Plates\Engine as LeagueEngine;
 use League\Plates\Extension\Asset;
 use League\Plates\Extension\URI;
 use League\Plates\Template\Template;
 use Psr\Http\Message\ServerRequestInterface;
-use Throwable;
+use RuntimeException;
 use Viserio\Contracts\View\Engine as EnginesContract;
 
 class PlatesEngine implements EnginesContract

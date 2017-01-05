@@ -63,13 +63,13 @@ class PlatesEngineTest extends TestCase
         $engine = new PlatesEngine(
             [
                 'template' => [
-                    'default' => __DIR__ . '/../Fixture/'
+                    'default' => __DIR__ . '/../Fixture/',
                 ],
                 'engine' => [
                     'plates' => [
-                        'asset' => __DIR__
-                    ]
-                ]
+                        'asset' => __DIR__,
+                    ],
+                ],
             ],
             $request
         );
@@ -104,10 +104,10 @@ class PlatesEngineTest extends TestCase
                 'engine' => [
                     'plates' => [
                         'extensions' => [
-                            0
-                        ]
-                    ]
-                ]
+                            0,
+                        ],
+                    ],
+                ],
             ]
         );
 
