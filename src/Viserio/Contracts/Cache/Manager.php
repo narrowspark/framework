@@ -3,7 +3,6 @@ declare(strict_types=1);
 namespace Viserio\Contracts\Cache;
 
 use Cache\Adapter\Chain\CachePoolChain;
-use Psr\Cache\CacheItemPoolInterface;
 use Psr\SimpleCache\CacheInterface;
 
 interface Manager

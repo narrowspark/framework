@@ -13,6 +13,7 @@ use Cache\Adapter\PHPArray\ArrayCachePool;
 use Cache\Adapter\Predis\PredisCachePool;
 use Cache\Adapter\Redis\RedisCachePool;
 use Cache\Adapter\Void\VoidCachePool;
+use Cache\Bridge\SimpleCache\SimpleCacheBridge;
 use Cache\Hierarchy\HierarchicalPoolInterface;
 use Cache\Namespaced\NamespacedCachePool;
 use Cache\SessionHandler\Psr6SessionHandler;
@@ -21,12 +22,11 @@ use Memcache;
 use Memcached;
 use MongoDB\Driver\Manager as MongoDBManager;
 use Predis\Client as PredisClient;
+use Psr\Cache\CacheItemPoolInterface;
+use Psr\SimpleCache\CacheInterface;
 use Redis;
 use Viserio\Contracts\Cache\Manager as CacheManagerContract;
 use Viserio\Support\AbstractManager;
-use Psr\SimpleCache\CacheInterface;
-use Psr\Cache\CacheItemPoolInterface;
-use Cache\Bridge\SimpleCache\SimpleCacheBridge;
 
 class CacheManager extends AbstractManager implements CacheManagerContract
 {
@@ -85,7 +85,7 @@ class CacheManager extends AbstractManager implements CacheManagerContract
         }
 
         if ($this->config->get($this->getConfigName() . '.simple_cache')) {
-            # code...
+            // code...
         }
 
         return $driver;
