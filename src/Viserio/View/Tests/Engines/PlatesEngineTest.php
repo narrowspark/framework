@@ -25,7 +25,36 @@ class PlatesEngineTest extends TestCase
 
     public function testGet()
     {
-        $uri     = $this->mock(UriInterface::class);
+        $engine = new PlatesEngine(
+            [
+                'template' => [
+                    'default' => __DIR__ . '/../Fixture/',
+                ],
+            ]
+        );
+
+        $template = $engine->get(['name' => 'plates.php']);
+
+        static::assertSame(trim('<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title></title>
+    <link rel="stylesheet" href="">
+</head>
+<body>
+    hallo
+</body>
+</html>'), trim($template));
+    }
+
+    public function testGetWithExtensions()
+    {
+        $uri = $this->mock(UriInterface::class);
+        $uri->shouldReceive('getPath')
+            ->once()
+            ->andReturn('');
         $request = $this->mock(ServerRequestInterface::class);
         $request->shouldReceive('getUri')
             ->once()
@@ -34,8 +63,13 @@ class PlatesEngineTest extends TestCase
         $engine = new PlatesEngine(
             [
                 'template' => [
-                    'default' => __DIR__ . '/../Fixture/',
+                    'default' => __DIR__ . '/../Fixture/'
                 ],
+                'engine' => [
+                    'plates' => [
+                        'asset' => __DIR__
+                    ]
+                ]
             ],
             $request
         );
@@ -54,5 +88,46 @@ class PlatesEngineTest extends TestCase
     hallo
 </body>
 </html>'), trim($template));
+    }
+
+    /**
+     * @expectedException \RuntimeException
+     * @expectedExceptionMessage Plates extension [0 => integer] is not a object.
+     */
+    public function testGetWithExtensionsThrowException()
+    {
+        $engine = new PlatesEngine(
+            [
+                'template' => [
+                    'default' => __DIR__ . '/../Fixture/',
+                ],
+                'engine' => [
+                    'plates' => [
+                        'extensions' => [
+                            0
+                        ]
+                    ]
+                ]
+            ]
+        );
+
+        $engine->get(['name' => 'plates.php']);
+    }
+
+    /**
+     * @expectedException \Exception
+     * @expectedExceptionMessage Template [plates.php] dont exist!
+     */
+    public function testGetThrowExceptionOnFileDontExist()
+    {
+        $engine = new PlatesEngine(
+            [
+                'template' => [
+                    'default' => __DIR__,
+                ],
+            ]
+        );
+
+        $engine->get(['name' => 'plates.php']);
     }
 }

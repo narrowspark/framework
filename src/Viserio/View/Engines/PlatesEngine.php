@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace Viserio\View\Engines;
 
 use Exception;
+use RuntimeException;
 use League\Plates\Engine as LeagueEngine;
 use League\Plates\Extension\Asset;
 use League\Plates\Extension\URI;
@@ -74,34 +75,22 @@ class PlatesEngine implements EnginesContract
 
         if ($exceptions !== null) {
             foreach ($exceptions as $extension) {
-                $engine->loadExtension(is_object($extension) ? $extension : new $extension());
+                if (is_object($extension)) {
+                    $engine->loadExtension($extension);
+                } else {
+                    throw new RuntimeException(sprintf('Plates extension [%s => %s] is not a object.', (string) $extension, gettype($extension)));
+                }
             }
         }
 
         if (! $engine->exists($fileInfo['name'])) {
-            throw new Exception('Template "' . $fileInfo['name'] . '" dont exist!');
+            throw new Exception(sprintf('Template [%s] dont exist!', $fileInfo['name']));
         }
 
         // Creat a new template
         $template = new Template($engine, $fileInfo['name']);
 
-        // We'll evaluate the contents of the view inside a try/catch block so we can
-        // flush out any stray output that might get out before an error occurs or
-        // an exception is thrown. This prevents any partial views from leaking.
-        ob_start();
-
-        try {
-            $template = $template->render($data);
-        } catch (Throwable $exception) {
-            $this->handleViewException($exception);
-        }
-
-        // @codeCoverageIgnoreStart
-        // Return temporary output buffer content, destroy output buffer
-        ltrim(ob_get_clean());
-        // @codeCoverageIgnoreEnd
-
-        return $template;
+        return $template->render($data);
     }
 
     /**
@@ -125,19 +114,5 @@ class PlatesEngine implements EnginesContract
         }
 
         return $this->engine;
-    }
-
-    /**
-     * Handle a view exception.
-     *
-     * @param \Throwable $exception
-     *
-     * @throws $exception
-     */
-    protected function handleViewException(Throwable $exception)
-    {
-        ob_get_clean();
-
-        throw $exception;
     }
 }
