@@ -24,6 +24,9 @@ use Predis\Client as PredisClient;
 use Redis;
 use Viserio\Contracts\Cache\Manager as CacheManagerContract;
 use Viserio\Support\AbstractManager;
+use Psr\SimpleCache\CacheInterface;
+use Psr\Cache\CacheItemPoolInterface;
+use Cache\Bridge\SimpleCache\SimpleCacheBridge;
 
 class CacheManager extends AbstractManager implements CacheManagerContract
 {
@@ -36,14 +39,9 @@ class CacheManager extends AbstractManager implements CacheManagerContract
     }
 
     /**
-     *  Chain multiple PSR-6 Cache pools together for performance.
-     *
-     * @param array      $pools
-     * @param array|null $options
-     *
-     * @return \Cache\Adapter\Chain\CachePoolChain
+     * {@inheritdoc}
      */
-    public function chain(array $pools, array $options = null): CachePoolChain
+    public function chain(array $pools, ?array $options = null): CachePoolChain
     {
         $resolvedPools = [];
 
@@ -64,6 +62,18 @@ class CacheManager extends AbstractManager implements CacheManagerContract
     /**
      * {@inheritdoc}
      */
+    public function getSimpleCache($pool = null): CacheInterface
+    {
+        if ($pool instanceof CacheItemPoolInterface) {
+            return new SimpleCacheBridge($pool);
+        }
+
+        return new SimpleCacheBridge($this->driver($pool));
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function createDriver(array $config)
     {
         $driver = parent::createDriver($config);
@@ -72,6 +82,10 @@ class CacheManager extends AbstractManager implements CacheManagerContract
 
         if ($namespace !== null && $driver instanceof HierarchicalPoolInterface) {
             return $this->namespacedPool($driver, $namespace);
+        }
+
+        if ($this->config->get($this->getConfigName() . '.simple_cache')) {
+            # code...
         }
 
         return $driver;

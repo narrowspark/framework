@@ -34,6 +34,7 @@
         "cache/array-adapter"                                : "^0.4",
         "cache/chain-adapter"                                : "^0.4",
         "cache/namespaced-cache"                             : "^0.1",
+        "cache/simple-cache-bridge"                          : "^0.1",
         "cakephp/chronos"                                    : "^1.0",
         "container-interop/container-interop"                : "^1.1",
         "container-interop/service-provider"                 : "^0.3",
@@ -55,7 +56,6 @@
         "ocramius/proxy-manager"                             : "^2.1",
         "php-di/invoker"                                     : "^1.3",
         "paragonie/password_lock"                            : "^3.0",
-        "psr/http-message"                                   : "^1.0",
         "ramsey/uuid"                                        : "^3.4",
         "respect/validation"                                 : "^1.1",
         "schnittstabil/csrf-tokenservice"                    : "^2.0",
@@ -100,6 +100,7 @@
     "provide": {
         "container-interop/container-interop-implementation" : "^1.1",
         "psr/cache-implementation"                           : "^1.0",
+        "psr/simple-cache-implementation"                    : "^1.0",
         "psr/container-implementation"                       : "^1.0",
         "psr/http-message"                                   : "^1.0",
         "psr/http-message-implementation"                    : "^1.0",

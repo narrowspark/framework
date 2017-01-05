@@ -109,7 +109,7 @@ class Application extends SymfonyConsole implements ApplicationContract
      *
      * @return null|\Symfony\Component\Console\Command\Command
      */
-    public function add(SymfonyCommand $command)
+    public function add(SymfonyCommand $command): ?SymfonyCommand
     {
         if ($command instanceof ViserioCommand) {
             $command->setContainer($this->getContainer());
@@ -170,8 +170,10 @@ class Application extends SymfonyConsole implements ApplicationContract
      *
      * @param string $commandName      name of the command
      * @param array  $argumentDefaults default argument values
+     *
+     * @return void
      */
-    public function defaults(string $commandName, array $argumentDefaults = [])
+    public function defaults(string $commandName, array $argumentDefaults = []): void
     {
         $command           = $this->get($commandName);
         $commandDefinition = $command->getDefinition();
@@ -206,10 +208,22 @@ class Application extends SymfonyConsole implements ApplicationContract
      * Register an application starting bootstrapper.
      *
      * @param \Closure $callback
+     *
+     * @return void
      */
-    public static function starting(Closure $callback)
+    public static function starting(Closure $callback): void
     {
         static::$bootstrappers[] = $callback;
+    }
+
+    /**
+     * Clear the console application bootstrappers.
+     *
+     * @return void
+     */
+    public static function clearBootstrappers(): void
+    {
+        static::$bootstrappers = [];
     }
 
     /**
