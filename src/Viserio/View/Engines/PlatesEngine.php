@@ -70,14 +70,16 @@ class PlatesEngine implements EnginesContract
         $engine->loadExtension(new Asset($config['asset'] ?? null));
 
         // Get all extensions
-        $exceptions = $config['extensions'] ?? null;
-
-        if ($exceptions !== null) {
+        if (($exceptions = $config['extensions'] ?? null) !== null) {
             foreach ($exceptions as $extension) {
                 if (is_object($extension)) {
                     $engine->loadExtension($extension);
                 } else {
-                    throw new RuntimeException(sprintf('Plates extension [%s => %s] is not a object.', (string) $extension, gettype($extension)));
+                    throw new RuntimeException(sprintf(
+                        'Plates extension [%s => %s] is not a object.',
+                        (string) $extension,
+                        gettype($extension)
+                    ));
                 }
             }
         }

@@ -418,7 +418,8 @@ abstract class AbstractDataCollector implements DataCollectorContract
             }
 
             if (mb_strpos($var, '\\') !== false) {
-                $c = ($i = mb_strpos($var, '::') !== false) ? mb_substr($var, 0, $i) : $var;
+                $i = mb_strpos($var, '::');
+                $c = ($i !== false) ? mb_substr($var, 0, $i) : $var;
 
                 if (class_exists($c, false) || interface_exists($c, false) || trait_exists($c, false)) {
                     return self::$stubsCache[$var] = new ClassStub($var);

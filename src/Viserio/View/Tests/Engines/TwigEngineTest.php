@@ -12,6 +12,9 @@ class TwigEngineTest extends TestCase
         $engine = new TwigEngine([
             'template' => [
                 'default' => __DIR__ . '/../Fixture/',
+                'paths' => [
+                    __DIR__
+                ],
             ],
         ]);
 

@@ -7,6 +7,8 @@ use Viserio\Container\Container;
 use Viserio\Log\DataCollectors\LogParser;
 use Viserio\Log\DataCollectors\LogsDataCollector;
 use Viserio\Log\Providers\LogsDataCollectorServiceProvider;
+use Viserio\Config\Providers\ConfigServiceProvider;
+use Viserio\Contracts\Config\Repository as RepositoryContract;
 
 class LogsDataCollectorServiceProviderTest extends TestCase
 {
@@ -14,6 +16,19 @@ class LogsDataCollectorServiceProviderTest extends TestCase
     {
         $container = new Container();
         $container->register(new LogsDataCollectorServiceProvider());
+
+        self::assertInstanceOf(LogParser::class, $container->get(LogParser::class));
+        self::assertInstanceOf(LogsDataCollector::class, $container->get(LogsDataCollector::class));
+    }
+
+    public function testProviderWithConfigManager()
+    {
+        $container = new Container();
+        $container->register(new ConfigServiceProvider());
+        $container->register(new LogsDataCollectorServiceProvider());
+
+        $container->get(RepositoryContract::class)
+            ->set('path.storage', __DIR__);
 
         self::assertInstanceOf(LogParser::class, $container->get(LogParser::class));
         self::assertInstanceOf(LogsDataCollector::class, $container->get(LogsDataCollector::class));

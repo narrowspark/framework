@@ -36,7 +36,7 @@ class LogsDataCollectorServiceProvider implements ServiceProvider
         $default = '';
 
         if ($container->has(RepositoryContract::class)) {
-            $default = $container->get(RepositoryContract::class)->get('path.storage') . '/logs/*';
+            $default = $container->get(RepositoryContract::class)->get('path.storage') . '/logs/';
         }
 
         return new LogsDataCollector(

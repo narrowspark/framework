@@ -13,7 +13,7 @@ use Viserio\Filesystem\Filesystem;
 class FilesystemTest extends TestCase
 {
     /**
-     * @var \org\bovigo\vfs\vfsStreamDirectory
+     * @var \org\bovigo\vfs\vfsStream
      */
     private $root;
 
