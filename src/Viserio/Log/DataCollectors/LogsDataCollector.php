@@ -2,9 +2,6 @@
 declare(strict_types=1);
 namespace Viserio\Log\DataCollectors;
 
-use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\ServerRequestInterface;
-use Viserio\Contracts\WebProfiler\MenuAware as MenuAwareContract;
 use Viserio\Contracts\WebProfiler\PanelAware as PanelAwareContract;
 use Viserio\WebProfiler\DataCollectors\MessagesDataCollector;
 

@@ -3,12 +3,12 @@ declare(strict_types=1);
 namespace Viserio\Log\Tests\Providers;
 
 use PHPUnit\Framework\TestCase;
+use Viserio\Config\Providers\ConfigServiceProvider;
 use Viserio\Container\Container;
+use Viserio\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Log\DataCollectors\LogParser;
 use Viserio\Log\DataCollectors\LogsDataCollector;
 use Viserio\Log\Providers\LogsDataCollectorServiceProvider;
-use Viserio\Config\Providers\ConfigServiceProvider;
-use Viserio\Contracts\Config\Repository as RepositoryContract;
 
 class LogsDataCollectorServiceProviderTest extends TestCase
 {

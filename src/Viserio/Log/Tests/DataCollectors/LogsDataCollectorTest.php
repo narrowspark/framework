@@ -5,10 +5,10 @@ namespace Viserio\Log\Tests\DataCollectors;
 use Mockery as Mock;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use PHPUnit\Framework\TestCase;
-use Viserio\Log\DataCollectors\LogsDataCollector;
-use Viserio\Log\DataCollectors\LogParser;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Viserio\Log\DataCollectors\LogParser;
+use Viserio\Log\DataCollectors\LogsDataCollector;
 
 class LogsDataCollectorTest extends TestCase
 {

@@ -2,10 +2,10 @@
 declare(strict_types=1);
 namespace Viserio\View\Tests\Engines;
 
+use League\Plates\Extension\Asset;
 use Mockery as Mock;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use PHPUnit\Framework\TestCase;
-use League\Plates\Extension\Asset;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\UriInterface;
 use Viserio\View\Engines\PlatesEngine;
@@ -30,9 +30,9 @@ class PlatesEngineTest extends TestCase
             [
                 'template' => [
                     'default' => __DIR__ . '/../Fixture/',
-                    'paths' => [
-                        __DIR__
-                    ]
+                    'paths'   => [
+                        __DIR__,
+                    ],
                 ],
             ]
         );
