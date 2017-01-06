@@ -2,7 +2,6 @@
 declare(strict_types=1);
 namespace Viserio\Cache\Tests;
 
-use Mockery as Mock;
 use Cache\Adapter\Chain\CachePoolChain;
 use Cache\Adapter\Filesystem\FilesystemCachePool;
 use Cache\Adapter\PHPArray\ArrayCachePool;
@@ -10,11 +9,12 @@ use Cache\Adapter\Void\VoidCachePool;
 use Cache\Namespaced\NamespacedCachePool;
 use Interop\Container\ContainerInterface;
 use League\Flysystem\Adapter\Local;
+use Mockery as Mock;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface as PsrLoggerInterface;
 use Viserio\Cache\CacheManager;
 use Viserio\Contracts\Config\Repository as RepositoryContract;
-use Psr\Log\LoggerInterface as PsrLoggerInterface;
 
 class CacheManagerTest extends TestCase
 {

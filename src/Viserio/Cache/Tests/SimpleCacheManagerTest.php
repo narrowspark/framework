@@ -2,11 +2,11 @@
 declare(strict_types=1);
 namespace Viserio\Cache\Tests;
 
+use Cache\Bridge\SimpleCache\SimpleCacheBridge;
 use Mockery as Mock;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
-use Viserio\Cache\SimpleCacheManager;
-use Cache\Bridge\SimpleCache\SimpleCacheBridge;
 use PHPUnit\Framework\TestCase;
+use Viserio\Cache\SimpleCacheManager;
 use Viserio\Contracts\Config\Repository as RepositoryContract;
 
 class SimpleCacheManagerTest extends TestCase

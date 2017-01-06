@@ -5,6 +5,7 @@ namespace Viserio\WebProfiler;
 use Psr\Http\Message\MessageInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Psr\Log\LoggerAwareInterface;
 use RuntimeException;
 use Throwable;
 use Viserio\Contracts\Cache\Traits\CacheItemPoolAwareTrait;
@@ -15,7 +16,6 @@ use Viserio\Contracts\Routing\UrlGenerator as UrlGeneratorContract;
 use Viserio\Contracts\WebProfiler\DataCollector as DataCollectorContract;
 use Viserio\Contracts\WebProfiler\WebProfiler as WebProfilerContract;
 use Viserio\Support\Http\ClientIp;
-use Psr\Log\LoggerAwareInterface;
 
 class WebProfiler implements WebProfilerContract, LoggerAwareInterface
 {

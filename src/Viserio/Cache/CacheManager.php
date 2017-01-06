@@ -15,19 +15,16 @@ use Cache\Adapter\Redis\RedisCachePool;
 use Cache\Adapter\Void\VoidCachePool;
 use Cache\Hierarchy\HierarchicalPoolInterface;
 use Cache\Namespaced\NamespacedCachePool;
-use Cache\SessionHandler\Psr6SessionHandler;
 use League\Flysystem\Filesystem as Flysystem;
 use Memcache;
 use Memcached;
 use MongoDB\Driver\Manager as MongoDBManager;
 use Predis\Client as PredisClient;
-use Psr\Cache\CacheItemPoolInterface;
-use Psr\SimpleCache\CacheInterface;
+use Psr\Log\LoggerAwareInterface;
 use Redis;
 use Viserio\Contracts\Cache\Manager as CacheManagerContract;
-use Viserio\Support\AbstractManager;
 use Viserio\Contracts\Log\Traits\LoggerAwareTrait;
-use Psr\Log\LoggerAwareInterface;
+use Viserio\Support\AbstractManager;
 
 class CacheManager extends AbstractManager implements CacheManagerContract, LoggerAwareInterface
 {
@@ -67,7 +64,7 @@ class CacheManager extends AbstractManager implements CacheManagerContract, Logg
      */
     public function createDriver(array $config)
     {
-        $driver = parent::createDriver($config);
+        $driver    = parent::createDriver($config);
         $namespace = $this->config->get($this->getConfigName() . '.namespace', false);
 
         if ($namespace && $driver instanceof HierarchicalPoolInterface) {

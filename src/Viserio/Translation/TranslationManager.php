@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Translation;
 
+use Psr\Log\LoggerAwareInterface;
 use RuntimeException;
 use Viserio\Contracts\Log\Traits\LoggerAwareTrait;
 use Viserio\Contracts\Parsers\Traits\LoaderAwareTrait;
@@ -12,7 +13,6 @@ use Viserio\Contracts\Translation\TranslationManager as TranslationManagerContra
 use Viserio\Contracts\Translation\Translator as TranslatorContract;
 use Viserio\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 use Viserio\Translation\Traits\ValidateLocaleTrait;
-use Psr\Log\LoggerAwareInterface;
 
 class TranslationManager implements TranslationManagerContract, LoggerAwareInterface
 {
