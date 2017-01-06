@@ -2,16 +2,28 @@
 declare(strict_types=1);
 namespace Viserio\View\Tests;
 
+use Mockery as Mock;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
+use PHPUnit\Framework\TestCase;
 use Viserio\Contracts\Support\Arrayable;
 use Viserio\Contracts\Support\Renderable;
 use Viserio\Contracts\View\Engine;
 use Viserio\View\Factory;
 use Viserio\View\View;
 
-class ViewTest extends \PHPUnit_Framework_TestCase
+class ViewTest extends TestCase
 {
     use MockeryTrait;
+
+    public function tearDown()
+    {
+        parent::tearDown();
+
+        $this->allowMockingNonExistentMethods(true);
+
+        // Verify Mockery expectations.
+        Mock::close();
+    }
 
     public function testDataCanBeSetOnView()
     {

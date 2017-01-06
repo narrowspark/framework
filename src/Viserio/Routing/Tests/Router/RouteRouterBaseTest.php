@@ -4,13 +4,14 @@ namespace Viserio\Routing\Tests\Router;
 
 use Interop\Container\ContainerInterface;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
+use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use Viserio\Events\Dispatcher;
 use Viserio\HttpFactory\ResponseFactory;
 use Viserio\HttpFactory\ServerRequestFactory;
 use Viserio\Routing\Router;
 
-abstract class RouteRouterBaseTest extends \PHPUnit_Framework_TestCase
+abstract class RouteRouterBaseTest extends TestCase
 {
     use MockeryTrait;
 

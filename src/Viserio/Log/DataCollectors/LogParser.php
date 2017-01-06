@@ -106,6 +106,8 @@ class LogParser
      * @param int    $lines
      *
      * @return array
+     *
+     * @codeCoverageIgnore
      */
     protected function tailFile(string $file, int $lines): array
     {

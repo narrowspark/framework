@@ -4,11 +4,12 @@ namespace Viserio\Queue\Tests\Jobs;
 
 use Interop\Container\ContainerInterface;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
+use PHPUnit\Framework\TestCase;
 use stdClass;
 use Viserio\Queue\Connectors\RedisQueue;
 use Viserio\Queue\Jobs\RedisJob;
 
-class RedisJobTest extends \PHPUnit_Framework_TestCase
+class RedisJobTest extends TestCase
 {
     use MockeryTrait;
 

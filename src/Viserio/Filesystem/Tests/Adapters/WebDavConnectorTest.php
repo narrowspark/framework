@@ -3,9 +3,10 @@ declare(strict_types=1);
 namespace Viserio\Filesystem\Tests\Adapters;
 
 use League\Flysystem\WebDAV\WebDAVAdapter;
+use PHPUnit\Framework\TestCase;
 use Viserio\Filesystem\Adapters\WebDavConnector;
 
-class WebDavConnectorTest extends \PHPUnit_Framework_TestCase
+class WebDavConnectorTest extends TestCase
 {
     public function testConnect()
     {

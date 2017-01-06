@@ -2,12 +2,13 @@
 declare(strict_types=1);
 namespace Viserio\Pipeline\Tests\Providers;
 
+use PHPUnit\Framework\TestCase;
 use Viserio\Container\Container;
 use Viserio\Contracts\Pipeline\Pipeline as PipelineContract;
 use Viserio\Pipeline\Pipeline;
 use Viserio\Pipeline\Providers\PipelineServiceProvider;
 
-class PipelineServiceProviderTest extends \PHPUnit_Framework_TestCase
+class PipelineServiceProviderTest extends TestCase
 {
     public function testProvider()
     {

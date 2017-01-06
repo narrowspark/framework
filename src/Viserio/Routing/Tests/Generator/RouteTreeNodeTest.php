@@ -3,13 +3,14 @@ declare(strict_types=1);
 namespace Viserio\Routing\Tests\Generator;
 
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
+use PHPUnit\Framework\TestCase;
 use Viserio\Routing\Generator\ChildrenNodeCollection;
 use Viserio\Routing\Generator\MatchedRouteDataMap;
 use Viserio\Routing\Generator\RouteTreeNode;
 use Viserio\Routing\Matchers\AbstractMatcher;
 use Viserio\Routing\Route;
 
-class RouteTreeNodeTest extends \PHPUnit_Framework_TestCase
+class RouteTreeNodeTest extends TestCase
 {
     use MockeryTrait;
 

@@ -2,9 +2,10 @@
 declare(strict_types=1);
 namespace Viserio\Parsers\Tests\Formats;
 
+use PHPUnit\Framework\TestCase;
 use Viserio\Parsers\Formats\QueryStr;
 
-class QueryStrTest extends \PHPUnit_Framework_TestCase
+class QueryStrTest extends TestCase
 {
     /**
      * @var \Viserio\Parsers\Formats\QueryStr

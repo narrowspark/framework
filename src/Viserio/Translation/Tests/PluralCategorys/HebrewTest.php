@@ -2,9 +2,10 @@
 declare(strict_types=1);
 namespace Viserio\Translation\Tests\PluralCategorys;
 
+use PHPUnit\Framework\TestCase;
 use Viserio\Translation\PluralCategorys\Hebrew;
 
-class HebrewTest extends \PHPUnit_Framework_TestCase
+class HebrewTest extends TestCase
 {
     /**
      * @dataProvider category

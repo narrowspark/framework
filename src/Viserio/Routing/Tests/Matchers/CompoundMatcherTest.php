@@ -2,11 +2,12 @@
 declare(strict_types=1);
 namespace Viserio\Routing\Tests\Matchers;
 
+use PHPUnit\Framework\TestCase;
 use Viserio\Routing\Matchers\AnyMatcher;
 use Viserio\Routing\Matchers\CompoundMatcher;
 use Viserio\Routing\Matchers\StaticMatcher;
 
-class CompoundMatcherTest extends \PHPUnit_Framework_TestCase
+class CompoundMatcherTest extends TestCase
 {
     public function testGetConditionExpression()
     {

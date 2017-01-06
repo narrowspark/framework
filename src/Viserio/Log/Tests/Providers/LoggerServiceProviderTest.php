@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Log\Tests\Providers;
 
 use Monolog\Logger;
+use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 use Viserio\Config\Providers\ConfigServiceProvider;
 use Viserio\Container\Container;
@@ -13,7 +14,7 @@ use Viserio\Events\Providers\EventsServiceProvider;
 use Viserio\Log\Providers\LoggerServiceProvider;
 use Viserio\Log\Writer as MonologWriter;
 
-class LoggerServiceProviderTest extends \PHPUnit_Framework_TestCase
+class LoggerServiceProviderTest extends TestCase
 {
     public function testProvider()
     {

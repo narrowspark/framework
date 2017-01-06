@@ -32,7 +32,7 @@
         "guzzlehttp/guzzle"                  : "^6.0",
         "narrowspark/testing-helper"         : "^2.0",
         "opis/closure"                       : "^2.2.1",
-        "phpunit/phpunit"                    : "^5.1",
+        "phpunit/phpunit"                    : "~5.7",
         "viserio/events"                     : "self.version",
         "viserio/queue"                      : "self.version",
         "viserio/view"                       : "self.version"

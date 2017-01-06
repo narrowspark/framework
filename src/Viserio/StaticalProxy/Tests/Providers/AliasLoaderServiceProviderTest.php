@@ -2,12 +2,13 @@
 declare(strict_types=1);
 namespace Viserio\StaticalProxy\Tests\Providers;
 
+use PHPUnit\Framework\TestCase;
 use Viserio\Config\Providers\ConfigServiceProvider;
 use Viserio\Container\Container;
 use Viserio\StaticalProxy\AliasLoader;
 use Viserio\StaticalProxy\Providers\AliasLoaderServiceProvider;
 
-class AliasLoaderServiceProviderTest extends \PHPUnit_Framework_TestCase
+class AliasLoaderServiceProviderTest extends TestCase
 {
     public function testProvider()
     {

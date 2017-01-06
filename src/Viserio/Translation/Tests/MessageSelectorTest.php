@@ -2,10 +2,11 @@
 declare(strict_types=1);
 namespace Viserio\Translation\Tests;
 
+use PHPUnit\Framework\TestCase;
 use Viserio\Translation\MessageSelector;
 use Viserio\Translation\PluralizationRules;
 
-class MessageSelectorTest extends \PHPUnit_Framework_TestCase
+class MessageSelectorTest extends TestCase
 {
     /**
      * @dataProvider getChooseTests

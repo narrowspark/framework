@@ -3,10 +3,11 @@ declare(strict_types=1);
 namespace Viserio\Contracts\Events\Tests\Traits;
 
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
+use PHPUnit\Framework\TestCase;
 use Viserio\Contracts\Events\Dispatcher;
 use Viserio\Contracts\Events\Traits\EventsAwareTrait;
 
-class EventsAwareTraitTest extends \PHPUnit_Framework_TestCase
+class EventsAwareTraitTest extends TestCase
 {
     use MockeryTrait;
     use EventsAwareTrait;

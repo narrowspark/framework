@@ -3,10 +3,11 @@ declare(strict_types=1);
 namespace Viserio\Contracts\View\Tests\Traits;
 
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
+use PHPUnit\Framework\TestCase;
 use Viserio\Contracts\View\Factory as ViewFactoryContract;
 use Viserio\Contracts\View\Traits\ViewAwareTrait;
 
-class ViewAwareTraitTest extends \PHPUnit_Framework_TestCase
+class ViewAwareTraitTest extends TestCase
 {
     use MockeryTrait;
     use ViewAwareTrait;

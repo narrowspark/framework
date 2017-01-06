@@ -2,10 +2,11 @@
 declare(strict_types=1);
 namespace Viserio\Support\Tests\Traits;
 
+use PHPUnit\Framework\TestCase;
 use Viserio\Support\Tests\Fixture\MacroTest;
 use Viserio\Support\Traits\MacroableTrait;
 
-class MacroableTraitTest extends \PHPUnit_Framework_TestCase
+class MacroableTraitTest extends TestCase
 {
     use MacroableTrait;
 

@@ -5,10 +5,11 @@ namespace Viserio\Cron\Tests;
 use Cake\Chronos\Chronos;
 use Mockery as Mock;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
+use PHPUnit\Framework\TestCase;
 use Psr\Cache\CacheItemPoolInterface;
 use Viserio\Cron\Cron;
 
-class CronTest extends \PHPUnit_Framework_TestCase
+class CronTest extends TestCase
 {
     use MockeryTrait;
 
@@ -392,5 +393,16 @@ class CronTest extends \PHPUnit_Framework_TestCase
         self::assertSame('before after', $_SERVER['test']);
 
         unset($_SERVER['test']);
+    }
+
+    public function testFrequencyMacro()
+    {
+        $cron = new Cron($this->cache, 'php foo');
+
+        Cron::macro('everyXMinutes', function ($x) {
+            return $this->spliceIntoPosition(1, "*/{$x}");
+        });
+
+        $this->assertEquals('*/6 * * * * *', $cron->everyXMinutes(6)->getExpression());
     }
 }

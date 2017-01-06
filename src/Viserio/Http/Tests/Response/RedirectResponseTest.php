@@ -2,10 +2,11 @@
 declare(strict_types=1);
 namespace Viserio\Http\Tests\Response;
 
+use PHPUnit\Framework\TestCase;
 use Viserio\Http\Response\RedirectResponse;
 use Viserio\Http\Uri;
 
-class RedirectResponseTest extends \PHPUnit_Framework_TestCase
+class RedirectResponseTest extends TestCase
 {
     public function testConstructorAcceptsStringUriAndProduces302ResponseWithLocationHeader()
     {

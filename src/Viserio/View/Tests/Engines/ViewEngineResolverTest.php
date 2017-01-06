@@ -2,13 +2,25 @@
 declare(strict_types=1);
 namespace Viserio\View\Tests\Engines;
 
+use Mockery as Mock;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
+use PHPUnit\Framework\TestCase;
 use Viserio\Contracts\View\Engine as EngineContract;
 use Viserio\View\Engines\EngineResolver;
 
-class ViewEngineResolverTest extends \PHPUnit_Framework_TestCase
+class ViewEngineResolverTest extends TestCase
 {
     use MockeryTrait;
+
+    public function tearDown()
+    {
+        parent::tearDown();
+
+        $this->allowMockingNonExistentMethods(true);
+
+        // Verify Mockery expectations.
+        Mock::close();
+    }
 
     public function testResolversMayBeResolved()
     {

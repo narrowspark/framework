@@ -2,12 +2,13 @@
 declare(strict_types=1);
 namespace Viserio\Http\Tests;
 
+use PHPUnit\Framework\TestCase;
 use Viserio\Http\Stream;
 use Viserio\Http\Stream\FnStream;
 use Viserio\Http\UploadedFile;
 use Viserio\Http\Util;
 
-class UtilTest extends \PHPUnit_Framework_TestCase
+class UtilTest extends TestCase
 {
     public function testCopiesToString()
     {

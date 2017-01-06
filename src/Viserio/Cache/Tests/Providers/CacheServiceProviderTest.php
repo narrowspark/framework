@@ -3,13 +3,14 @@ declare(strict_types=1);
 namespace Viserio\Cache\Tests\Providers;
 
 use Cache\Adapter\PHPArray\ArrayCachePool;
+use PHPUnit\Framework\TestCase;
 use Psr\Cache\CacheItemPoolInterface;
 use Viserio\Cache\CacheManager;
 use Viserio\Cache\Providers\CacheServiceProvider;
 use Viserio\Config\Providers\ConfigServiceProvider;
 use Viserio\Container\Container;
 
-class CacheServiceProviderTest extends \PHPUnit_Framework_TestCase
+class CacheServiceProviderTest extends TestCase
 {
     public function testProvider()
     {

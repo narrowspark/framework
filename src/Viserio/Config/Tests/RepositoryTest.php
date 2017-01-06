@@ -3,11 +3,12 @@ declare(strict_types=1);
 namespace Viserio\Config\Tests;
 
 use org\bovigo\vfs\vfsStream;
+use PHPUnit\Framework\TestCase;
 use Viserio\Config\Repository;
 use Viserio\Parsers\FileLoader;
 use Viserio\Parsers\TaggableParser;
 
-class RepositoryTest extends \PHPUnit_Framework_TestCase
+class RepositoryTest extends TestCase
 {
     /**
      * @var org\bovigo\vfs\vfsStreamDirectory

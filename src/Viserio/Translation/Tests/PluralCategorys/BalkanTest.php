@@ -2,9 +2,10 @@
 declare(strict_types=1);
 namespace Viserio\Translation\Tests\PluralCategorys;
 
+use PHPUnit\Framework\TestCase;
 use Viserio\Translation\PluralCategorys\Balkan;
 
-class BalkanTest extends \PHPUnit_Framework_TestCase
+class BalkanTest extends TestCase
 {
     /**
      * @dataProvider category

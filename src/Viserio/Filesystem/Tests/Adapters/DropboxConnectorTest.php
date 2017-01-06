@@ -3,9 +3,10 @@ declare(strict_types=1);
 namespace Viserio\Filesystem\Tests\Adapters;
 
 use League\Flysystem\Dropbox\DropboxAdapter;
+use PHPUnit\Framework\TestCase;
 use Viserio\Filesystem\Adapters\DropboxConnector;
 
-class DropboxConnectorTest extends \PHPUnit_Framework_TestCase
+class DropboxConnectorTest extends TestCase
 {
     public function testConnectStandard()
     {

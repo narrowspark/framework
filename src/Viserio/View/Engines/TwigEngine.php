@@ -2,10 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\View\Engines;
 
-use Throwable;
 use Twig_Environment;
-use Twig_Extension_Core;
-use Twig_Extension_Optimizer;
 use Twig_Loader_Filesystem;
 use Viserio\Contracts\View\Engine as EngineContract;
 
@@ -40,16 +37,7 @@ class TwigEngine implements EngineContract
      */
     public function get(array $fileInfo, array $data = []): string
     {
-        // We'll evaluate the contents of the view inside a try/catch block so we can
-        // flush out any stray output that might get out before an error occurs or
-        // an exception is thrown. This prevents any partial views from leaking.
-        ob_start();
-
-        try {
-            return $this->getInstance()->render($fileInfo['name'], $data);
-        } catch (Throwable $exception) {
-            $this->handleViewException($exception);
-        }
+        return $this->getInstance()->render($fileInfo['name'], $data);
     }
 
     /**
@@ -60,22 +48,19 @@ class TwigEngine implements EngineContract
     protected function getInstance(): Twig_Environment
     {
         if (! $this->parserInstance) {
-            $config = $this->config;
+            $config = $this->config['engine']['twig'] ?? [];
             $twig   = new Twig_Environment(
                 $this->loader(),
-                $config['engine']['twig']['options'] ?? []
+                $config['options'] ?? []
             );
 
-            $twig->addExtension(new Twig_Extension_Core());
-            $twig->addExtension(new Twig_Extension_Optimizer());
-
-            $extensions = $config['engine']['twig']['extensions'] ?? [];
-
-            if (! empty($extensions)) {
+            // @codeCoverageIgnoreStart
+            if (($extensions = $config['extensions'] ?? null) !== null) {
                 foreach ($extensions as $extension) {
                     $twig->addExtension(is_object($extension) ? $extension : new $extension());
                 }
             }
+            // @codeCoverageIgnoreEnd
 
             $this->parserInstance = $twig;
         }
@@ -85,32 +70,20 @@ class TwigEngine implements EngineContract
 
     /**
      * Twig paths loader.
+     *
+     * @return \Twig_Loader_Filesystem
      */
-    protected function loader()
+    protected function loader(): Twig_Loader_Filesystem
     {
-        $config = $this->config;
-        $loader = new Twig_Loader_Filesystem($config['template']['default'] ?? []);
+        $config = $this->config['template'] ?? [];
+        $loader = new Twig_Loader_Filesystem($config['default'] ?? []);
 
-        if (($paths = $config['template']['paths'] ?? []) !== null) {
+        if (($paths = $config['paths'] ?? null) !== null) {
             foreach ($paths as $name => $path) {
                 $loader->addPath($path, $name);
             }
         }
 
         return $loader;
-    }
-
-    /**
-     * Handle a view exception.
-     *
-     * @param \Throwable $exception
-     *
-     * @throws \Throwable
-     */
-    protected function handleViewException(Throwable $exception)
-    {
-        ob_end_clean();
-
-        throw $exception;
     }
 }

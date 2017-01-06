@@ -6,11 +6,12 @@ use Interop\Container\ContainerInterface;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use Pheanstalk\Job as PheanstalkJob;
 use Pheanstalk\Pheanstalk;
+use PHPUnit\Framework\TestCase;
 use stdClass;
 use Viserio\Queue\Jobs\BeanstalkdJob;
 use Viserio\Queue\Tests\Fixture\BeanstalkdJobTestFailed;
 
-class BeanstalkdJobTest extends \PHPUnit_Framework_TestCase
+class BeanstalkdJobTest extends TestCase
 {
     use MockeryTrait;
 

@@ -4,9 +4,7 @@ namespace Viserio\Http;
 
 use InvalidArgumentException;
 use Psr\Http\Message\ServerRequestInterface;
-use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\UploadedFileInterface;
-use Psr\Http\Message\UriInterface;
 
 class ServerRequest extends Request implements ServerRequestInterface
 {
@@ -41,24 +39,24 @@ class ServerRequest extends Request implements ServerRequestInterface
      *
      * @var array
      */
-    private $serverParams;
+    private $serverParams = [];
 
     /**
      * List of uploaded files.
      *
-     * @var UploadedFileInterface[]
+     * @var \Psr\Http\Message\UploadedFileInterface[]
      */
     private $uploadedFiles = [];
 
     /**
      * Create a new server request instance.
      *
-     * @param null|string|UriInterface             $uri          uRI for the request
-     * @param string|null                          $method       hTTP method for the request
-     * @param array                                $headers      headers for the message
-     * @param string|null|resource|StreamInterface $body         message body
-     * @param string                               $version      hTTP protocol version
-     * @param array                                $serverParams Typically the $_SERVER superglobal
+     * @param null|string|\Psr\Http\Message\UriInterface             $uri          uRI for the request
+     * @param string|null                                            $method       hTTP method for the request
+     * @param array                                                  $headers      headers for the message
+     * @param string|null|resource|\Psr\Http\Message\StreamInterface $body         message body
+     * @param string                                                 $version      hTTP protocol version
+     * @param array                                                  $serverParams Typically the $_SERVER superglobal
      */
     public function __construct(
         $uri,

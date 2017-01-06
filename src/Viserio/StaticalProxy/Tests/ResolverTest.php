@@ -2,9 +2,10 @@
 declare(strict_types=1);
 namespace Viserio\StaticalProxy\Tests;
 
+use PHPUnit\Framework\TestCase;
 use Viserio\StaticalProxy\Resolver;
 
-class ResolverTest extends \PHPUnit_Framework_TestCase
+class ResolverTest extends TestCase
 {
     public function testResolveWithoutRegex()
     {

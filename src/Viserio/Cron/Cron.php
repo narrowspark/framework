@@ -11,11 +11,13 @@ use Symfony\Component\Process\ProcessUtils;
 use Viserio\Contracts\Container\Traits\ContainerAwareTrait;
 use Viserio\Contracts\Cron\Cron as CronContract;
 use Viserio\Support\Traits\InvokerAwareTrait;
+use Viserio\Support\Traits\MacroableTrait;
 
 class Cron implements CronContract
 {
     use ContainerAwareTrait;
     use InvokerAwareTrait;
+    use MacroableTrait;
 
     /**
      * The cron expression representing the cron job's frequency.

@@ -19,12 +19,12 @@ class View extends StaticalProxy
         return Factory::class;
     }
 
-    public static function createResponseView(string $template)
+    public static function createResponseView(string $template, array $args = [])
     {
         $response = self::$container->get(ResponseFactoryInterface::class)->createResponse();
 
         $stream = self::$container->get(StreamFactoryInterface::class)->createStream();
-        $stream->write((string) self::$container->get(Factory::class)->create($template));
+        $stream->write((string) self::$container->get(Factory::class)->create($template, $args));
 
         return $response->withBody($stream);
     }

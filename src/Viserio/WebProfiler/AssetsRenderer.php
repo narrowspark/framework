@@ -46,6 +46,9 @@ class AssetsRenderer implements RenderableContract
         'ic_mail_outline_white_24px.svg'        => __DIR__ . '/Resources/icons/ic_mail_outline_white_24px.svg',
         'ic_keyboard_arrow_up_white_24px.svg'   => __DIR__ . '/Resources/icons/ic_keyboard_arrow_up_white_24px.svg',
         'ic_keyboard_arrow_down_white_24px.svg' => __DIR__ . '/Resources/icons/ic_keyboard_arrow_down_white_24px.svg',
+        'ic_repeat_white_24px.svg'              => __DIR__ . '/Resources/icons/ic_repeat_white_24px.svg',
+        'ic_layers_white_24px.svg'              => __DIR__ . '/Resources/icons/ic_layers_white_24px.svg',
+        'ic_insert_drive_file_white_24px.svg'   => __DIR__ . '/Resources/icons/ic_insert_drive_file_white_24px.svg',
     ];
 
     /**
@@ -61,13 +64,6 @@ class AssetsRenderer implements RenderableContract
      * @var string
      */
     protected $rootPath;
-
-    /**
-     * Additional assets form collectors.
-     *
-     * @var array
-     */
-    protected $additionalAssets = [];
 
     /**
      * List of ignored collectors.
@@ -117,9 +113,11 @@ class AssetsRenderer implements RenderableContract
      *
      * @return $this
      */
-    public function setIcon($name, $path): self
+    public function setIcon(string $name, string $path): self
     {
-        $this->icons[$name] = self::normalizeDirectorySeparator($path . '/' . $name);
+        $this->icons[$name] = self::normalizePath($path . '/' . $name);
+
+        return $this;
     }
 
     /**
@@ -174,7 +172,7 @@ class AssetsRenderer implements RenderableContract
                 preg_replace('/\Ahttps?:/', '', $cssRoute)
             );
             $html .= sprintf(
-                '<script type="text/javascript" src="{$jsRoute}"></script>',
+                '<script type="text/javascript" src="%s"></script>',
                 preg_replace('/\Ahttps?:/', '', $jsRoute)
             );
 
@@ -210,7 +208,7 @@ class AssetsRenderer implements RenderableContract
      *
      * @return array
      */
-    public function getAssets(string $type = null): array
+    public function getAssets(?string $type = null): array
     {
         $cssFiles = array_map(
             function ($css) {
@@ -230,7 +228,7 @@ class AssetsRenderer implements RenderableContract
             $this->jsFiles
         );
 
-        $additionalAssets = $this->additionalAssets;
+        $additionalAssets = [];
 
         // finds assets provided by collectors
         foreach ($this->webprofiler->getCollectors() as $collector) {
@@ -275,16 +273,18 @@ class AssetsRenderer implements RenderableContract
      *
      * @return array
      */
-    protected function filterAssetArray(array $array, string $type = null): array
+    protected function filterAssetArray(array $array, ?string $type = null): array
     {
-        $type = mb_strtolower($type);
+        if (is_string($type)) {
+            $type = mb_strtolower($type);
 
-        if ($type === 'css') {
-            return $array[0];
-        }
+            if ($type === 'css') {
+                return $array[0];
+            }
 
-        if ($type === 'js') {
-            return $array[1];
+            if ($type === 'js') {
+                return $array[1];
+            }
         }
 
         return $array;

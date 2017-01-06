@@ -2,7 +2,6 @@
 declare(strict_types=1);
 namespace Viserio\Cache\Providers;
 
-use Cache\Adapter\Chain\CachePoolChain;
 use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
 use Psr\Cache\CacheItemPoolInterface;
@@ -34,7 +33,6 @@ class CacheServiceProvider implements ServiceProvider
             'cache.store'                 => function (ContainerInterface $container) {
                 return $container->get(CacheItemPoolInterface::class);
             },
-            CachePoolChain::class => [self::class, 'registerChainAdapter'],
         ];
     }
 
@@ -49,18 +47,5 @@ class CacheServiceProvider implements ServiceProvider
     public static function registerDefaultCache(ContainerInterface $container): CacheItemPoolInterface
     {
         return $container->get(CacheManager::class)->driver();
-    }
-
-    public static function registerChainAdapter(ContainerInterface $container): CachePoolChain
-    {
-        if ($services = self::getConfig($container, 'chains.services', false)) {
-            $chains = [];
-
-            foreach ($services as $service) {
-                $chains[] = $container->get($service);
-            }
-
-            return new CachePoolChain($chains, self::getConfig($container, 'chains.options', []));
-        }
     }
 }

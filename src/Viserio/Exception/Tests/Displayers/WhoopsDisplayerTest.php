@@ -3,9 +3,10 @@ declare(strict_types=1);
 namespace Viserio\Exception\Tests\Displayers;
 
 use Exception;
+use PHPUnit\Framework\TestCase;
 use Viserio\Exception\Displayers\WhoopsDisplayer;
 
-class WhoopsDisplayerTest extends \PHPUnit_Framework_TestCase
+class WhoopsDisplayerTest extends TestCase
 {
     public function testServerError()
     {

@@ -3,9 +3,10 @@ declare(strict_types=1);
 namespace Viserio\Filesystem\Tests\Adapters;
 
 use League\Flysystem\Sftp\SftpAdapter;
+use PHPUnit\Framework\TestCase;
 use Viserio\Filesystem\Adapters\SftpConnector;
 
-class SftpConnectorTest extends \PHPUnit_Framework_TestCase
+class SftpConnectorTest extends TestCase
 {
     public function testConnect()
     {

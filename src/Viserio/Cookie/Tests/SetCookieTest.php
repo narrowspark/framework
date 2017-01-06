@@ -4,9 +4,10 @@ namespace Viserio\Cookie\Tests;
 
 use Cake\Chronos\Chronos;
 use DateTime;
+use PHPUnit\Framework\TestCase;
 use Viserio\Cookie\SetCookie;
 
-class SetCookieTest extends \PHPUnit_Framework_TestCase
+class SetCookieTest extends TestCase
 {
     public function invalidNames()
     {

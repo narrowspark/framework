@@ -3,10 +3,11 @@ declare(strict_types=1);
 namespace Viserio\Contracts\Encryption\Tests\Traits;
 
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
+use PHPUnit\Framework\TestCase;
 use Viserio\Contracts\Encryption\Encrypter;
 use Viserio\Contracts\Encryption\Traits\EncrypterAwareTrait;
 
-class EncrypterAwareTraitTest extends \PHPUnit_Framework_TestCase
+class EncrypterAwareTraitTest extends TestCase
 {
     use MockeryTrait;
     use EncrypterAwareTrait;

@@ -2,11 +2,12 @@
 declare(strict_types=1);
 namespace Viserio\Routing\Tests;
 
+use PHPUnit\Framework\TestCase;
 use StdClass;
 use Viserio\Routing\Tests\Fixture\Controller;
 use Viserio\Routing\VarExporter;
 
-class VarExporterTest extends \PHPUnit_Framework_TestCase
+class VarExporterTest extends TestCase
 {
     public function exportCases()
     {

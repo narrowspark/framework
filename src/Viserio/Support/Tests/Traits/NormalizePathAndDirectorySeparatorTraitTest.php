@@ -2,9 +2,10 @@
 declare(strict_types=1);
 namespace Viserio\Support\Tests\Traits;
 
+use PHPUnit\Framework\TestCase;
 use Viserio\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
-class NormalizePathAndDirectorySeparatorTraitTest extends \PHPUnit_Framework_TestCase
+class NormalizePathAndDirectorySeparatorTraitTest extends TestCase
 {
     use NormalizePathAndDirectorySeparatorTrait;
 
@@ -32,7 +33,7 @@ class NormalizePathAndDirectorySeparatorTraitTest extends \PHPUnit_Framework_Tes
      */
     public function testNormalizePathToThrowException()
     {
-        $this->normalizePath('..//../test/');
+        self::normalizePath('..//../test/');
     }
 
     /**
@@ -43,7 +44,7 @@ class NormalizePathAndDirectorySeparatorTraitTest extends \PHPUnit_Framework_Tes
      */
     public function testNormalizePath($input, $expected)
     {
-        $result = $this->normalizePath($input);
+        $result = self::normalizePath($input);
 
         self::assertEquals($expected, $result);
     }

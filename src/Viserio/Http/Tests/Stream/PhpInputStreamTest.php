@@ -2,9 +2,10 @@
 declare(strict_types=1);
 namespace Viserio\Http\Tests\Stream;
 
+use PHPUnit\Framework\TestCase;
 use Viserio\Http\Stream\PhpInputStream;
 
-class PhpInputStreamTest extends \PHPUnit_Framework_TestCase
+class PhpInputStreamTest extends TestCase
 {
     /**
      * @var string

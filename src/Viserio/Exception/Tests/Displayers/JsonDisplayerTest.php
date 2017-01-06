@@ -4,10 +4,11 @@ namespace Viserio\Exception\Tests\Displayers;
 
 use Exception;
 use InvalidArgumentException;
+use PHPUnit\Framework\TestCase;
 use Viserio\Exception\Displayers\JsonDisplayer;
 use Viserio\Exception\ExceptionInfo;
 
-class JsonDisplayerTest extends \PHPUnit_Framework_TestCase
+class JsonDisplayerTest extends TestCase
 {
     public function testServerError()
     {

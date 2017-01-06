@@ -43,7 +43,7 @@ class MemoryDataCollector extends AbstractDataCollector implements TooltipAwareC
         $memory = $this->data['memory'] / 1024 / 1024;
 
         return [
-            'icon'  => file_get_contents(__DIR__ . '/../Resources/icons/ic_memory_white_24px.svg'),
+            'icon'  => 'ic_memory_white_24px.svg',
             'label' => $memory,
             'value' => 'MB',
             'class' => $memory > 50 ? 'yellow' : '',

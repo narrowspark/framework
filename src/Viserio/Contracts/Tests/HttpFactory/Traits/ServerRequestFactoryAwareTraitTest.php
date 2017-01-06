@@ -4,9 +4,10 @@ namespace Viserio\Contracts\HttpFactory\Tests\Traits;
 
 use Interop\Http\Factory\ServerRequestInterface;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
+use PHPUnit\Framework\TestCase;
 use Viserio\Contracts\HttpFactory\Traits\ServerRequestFactoryAwareTrait;
 
-class ServerRequestFactoryAwareTraitTest extends \PHPUnit_Framework_TestCase
+class ServerRequestFactoryAwareTraitTest extends TestCase
 {
     use MockeryTrait;
     use ServerRequestFactoryAwareTrait;
@@ -15,7 +16,7 @@ class ServerRequestFactoryAwareTraitTest extends \PHPUnit_Framework_TestCase
     {
         $this->setServerRequest($this->mock(ServerRequestInterface::class));
 
-        $this->assertInstanceOf(ServerRequestInterface::class, $this->getServerRequest());
+        static::assertInstanceOf(ServerRequestInterface::class, $this->getServerRequest());
     }
 
     /**

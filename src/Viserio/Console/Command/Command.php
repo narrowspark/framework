@@ -13,7 +13,7 @@ use Symfony\Component\Console\Output\NullOutput;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ChoiceQuestion;
 use Symfony\Component\Console\Question\Question;
-use Viserio\Console\Style\NarrowsparkStyle;
+use Symfony\Component\Console\Style\SymfonyStyle;
 use Viserio\Contracts\Container\Traits\ContainerAwareTrait;
 use Viserio\Contracts\Support\Arrayable;
 use Viserio\Support\Invoker;
@@ -39,7 +39,7 @@ abstract class Command extends BaseCommand implements CompletionAwareInterface
     /**
      * The console command output.
      *
-     * @var \Viserio\Console\Style\NarrowsparkStyle
+     * @var \Symfony\Component\Console\Style\SymfonyStyle
      */
     protected $output;
 
@@ -117,7 +117,7 @@ abstract class Command extends BaseCommand implements CompletionAwareInterface
     public function run(InputInterface $input, OutputInterface $output): int
     {
         $this->input  = $input;
-        $this->output = new NarrowsparkStyle($input, $output);
+        $this->output = new SymfonyStyle($input, $output);
 
         return parent::run($input, $output);
     }
@@ -125,11 +125,11 @@ abstract class Command extends BaseCommand implements CompletionAwareInterface
     /**
      * Get the output implementation.
      *
-     * @return \Viserio\Console\Style\NarrowsparkStyle
+     * @return \Symfony\Component\Console\Style\SymfonyStyle
      *
      * @codeCoverageIgnore
      */
-    public function getOutput(): NarrowsparkStyle
+    public function getOutput(): SymfonyStyle
     {
         return $this->output;
     }

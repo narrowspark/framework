@@ -3,10 +3,11 @@ declare(strict_types=1);
 namespace Viserio\Contracts\Translation\Tests\Traits;
 
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
+use PHPUnit\Framework\TestCase;
 use Viserio\Contracts\Translation\Traits\TranslatorAwareTrait;
 use Viserio\Contracts\Translation\Translator as TranslatorContract;
 
-class TranslationAwareTraitTest extends \PHPUnit_Framework_TestCase
+class TranslationAwareTraitTest extends TestCase
 {
     use MockeryTrait;
     use TranslatorAwareTrait;

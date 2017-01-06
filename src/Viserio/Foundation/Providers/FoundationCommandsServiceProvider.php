@@ -4,6 +4,7 @@ namespace Viserio\Foundation\Providers;
 
 use Interop\Container\ServiceProvider;
 use Viserio\Foundation\Commands\DownCommand;
+use Viserio\Foundation\Commands\KeyGenerateCommand;
 use Viserio\Foundation\Commands\UpCommand;
 
 class FoundationCommandsServiceProvider implements ServiceProvider
@@ -18,11 +19,12 @@ class FoundationCommandsServiceProvider implements ServiceProvider
         ];
     }
 
-    public static function createMigrationsCommands(): array
+    public static function createMaintenanceCommands(): array
     {
         return [
-            new DownCommand(),
+            // new DownCommand(),
             new UpCommand(),
+            // new KeyGenerateCommand(),
         ];
     }
 }

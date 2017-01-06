@@ -2,9 +2,10 @@
 declare(strict_types=1);
 namespace Viserio\Http\Tests\Uri\Filter;
 
+use PHPUnit\Framework\TestCase;
 use Viserio\Http\Uri\Filter\Query;
 
-class QueryTest extends \PHPUnit_Framework_TestCase
+class QueryTest extends TestCase
 {
     /**
      * @dataProvider queryProvider

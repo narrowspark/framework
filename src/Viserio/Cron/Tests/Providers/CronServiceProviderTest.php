@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Cron\Tests\Providers;
 
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
+use PHPUnit\Framework\TestCase;
 use Psr\Cache\CacheItemPoolInterface;
 use Viserio\Cache\Providers\CacheServiceProvider;
 use Viserio\Config\Providers\ConfigServiceProvider;
@@ -10,7 +11,7 @@ use Viserio\Container\Container;
 use Viserio\Cron\Providers\CronServiceProvider;
 use Viserio\Cron\Schedule;
 
-class CronServiceProviderTest extends \PHPUnit_Framework_TestCase
+class CronServiceProviderTest extends TestCase
 {
     use MockeryTrait;
 

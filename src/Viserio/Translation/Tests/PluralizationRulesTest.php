@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Translation\Tests;
 
+use PHPUnit\Framework\TestCase;
 use ReflectionMethod;
 use Viserio\Translation\PluralCategorys\Arabic;
 use Viserio\Translation\PluralCategorys\Balkan;
@@ -30,7 +31,7 @@ use Viserio\Translation\PluralCategorys\Welsh;
 use Viserio\Translation\PluralCategorys\Zero;
 use Viserio\Translation\PluralizationRules;
 
-class PluralizationRulesTest extends \PHPUnit_Framework_TestCase
+class PluralizationRulesTest extends TestCase
 {
     protected $createRules;
 

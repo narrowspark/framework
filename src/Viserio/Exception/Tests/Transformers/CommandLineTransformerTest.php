@@ -4,9 +4,10 @@ namespace Viserio\Exception\Tests\Transformers;
 
 use ErrorException;
 use Exception;
+use PHPUnit\Framework\TestCase;
 use Viserio\Exception\Transformers\CommandLineTransformer;
 
-class CommandLineTransformerTest extends \PHPUnit_Framework_TestCase
+class CommandLineTransformerTest extends TestCase
 {
     public function testHandleErrorsReturnsValidErrorMessage()
     {

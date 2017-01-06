@@ -2,7 +2,9 @@
 declare(strict_types=1);
 namespace Viserio\View\Tests;
 
+use Mockery as Mock;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
+use PHPUnit\Framework\TestCase;
 use Viserio\Contracts\View\Engine;
 use Viserio\Contracts\View\Finder;
 use Viserio\Contracts\View\View as ViewContract;
@@ -11,10 +13,20 @@ use Viserio\View\Engines\EngineResolver;
 use Viserio\View\Engines\PhpEngine;
 use Viserio\View\Factory;
 
-class ViewFactoryTest extends \PHPUnit_Framework_TestCase
+class ViewFactoryTest extends TestCase
 {
     use MockeryTrait;
     use NormalizePathAndDirectorySeparatorTrait;
+
+    public function tearDown()
+    {
+        parent::tearDown();
+
+        $this->allowMockingNonExistentMethods(true);
+
+        // Verify Mockery expectations.
+        Mock::close();
+    }
 
     public function testMakeCreatesNewViewInstanceWithProperPathAndEngine()
     {

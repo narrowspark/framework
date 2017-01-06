@@ -2,7 +2,9 @@
 declare(strict_types=1);
 namespace Viserio\View\Tests\Providers;
 
+use Mockery as Mock;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
+use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Container\Container;
 use Viserio\Filesystem\Providers\FilesServiceProvider;
@@ -11,9 +13,19 @@ use Viserio\View\Factory;
 use Viserio\View\Providers\ViewServiceProvider;
 use Viserio\View\ViewFinder;
 
-class ViewServiceProviderTest extends \PHPUnit_Framework_TestCase
+class ViewServiceProviderTest extends TestCase
 {
     use MockeryTrait;
+
+    public function tearDown()
+    {
+        parent::tearDown();
+
+        $this->allowMockingNonExistentMethods(true);
+
+        // Verify Mockery expectations.
+        Mock::close();
+    }
 
     public function testProvider()
     {

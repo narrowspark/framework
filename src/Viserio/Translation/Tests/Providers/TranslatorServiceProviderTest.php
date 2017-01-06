@@ -2,7 +2,11 @@
 declare(strict_types=1);
 namespace Viserio\Translation\Tests\Providers;
 
+use Mockery as Mock;
+use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use org\bovigo\vfs\vfsStream;
+use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface as PsrLoggerInterface;
 use Viserio\Config\Providers\ConfigServiceProvider;
 use Viserio\Container\Container;
 use Viserio\Contracts\Translation\Translator as TranslatorContract;
@@ -10,8 +14,10 @@ use Viserio\Parsers\Providers\ParsersServiceProvider;
 use Viserio\Translation\Providers\TranslationServiceProvider;
 use Viserio\Translation\TranslationManager;
 
-class TranslatorServiceProviderTest extends \PHPUnit_Framework_TestCase
+class TranslatorServiceProviderTest extends TestCase
 {
+    use MockeryTrait;
+
     /**
      * @var org\bovigo\vfs\vfsStreamDirectory
      */
@@ -36,16 +42,30 @@ return [
         )->at($this->root);
     }
 
+    public function tearDown()
+    {
+        parent::tearDown();
+
+        $this->allowMockingNonExistentMethods(true);
+
+        // Verify Mockery expectations.
+        Mock::close();
+    }
+
     public function testProvider()
     {
         $container = new Container();
+        $container->instance(PsrLoggerInterface::class, $this->mock(PsrLoggerInterface::class));
         $container->register(new TranslationServiceProvider());
         $container->register(new ParsersServiceProvider());
         $container->register(new ConfigServiceProvider());
 
         $container->get('config')->set('translation', [
-            'locale' => 'en',
-            'files'  => $this->file->url(),
+            'locale'      => 'en',
+            'files'       => $this->file->url(),
+            'directories' => [
+                __DIR__,
+            ],
         ]);
 
         self::assertInstanceOf(TranslationManager::class, $container->get(TranslationManager::class));

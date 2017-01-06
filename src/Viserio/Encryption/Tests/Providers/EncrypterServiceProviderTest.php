@@ -3,12 +3,13 @@ declare(strict_types=1);
 namespace Viserio\Encryption\Tests\Providers;
 
 use Defuse\Crypto\Key;
+use PHPUnit\Framework\TestCase;
 use Viserio\Config\Providers\ConfigServiceProvider;
 use Viserio\Container\Container;
 use Viserio\Encryption\Encrypter;
 use Viserio\Encryption\Providers\EncrypterServiceProvider;
 
-class EncrypterServiceProviderTest extends \PHPUnit_Framework_TestCase
+class EncrypterServiceProviderTest extends TestCase
 {
     public function testProvider()
     {

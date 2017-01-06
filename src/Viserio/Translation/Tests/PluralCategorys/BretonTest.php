@@ -2,9 +2,10 @@
 declare(strict_types=1);
 namespace Viserio\Translation\Tests\PluralCategorys;
 
+use PHPUnit\Framework\TestCase;
 use Viserio\Translation\PluralCategorys\Breton;
 
-class BretonTest extends \PHPUnit_Framework_TestCase
+class BretonTest extends TestCase
 {
     /**
      * @dataProvider category

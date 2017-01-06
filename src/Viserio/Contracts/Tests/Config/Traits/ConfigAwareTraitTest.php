@@ -3,10 +3,11 @@ declare(strict_types=1);
 namespace Viserio\Contracts\Config\Tests\Traits;
 
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
+use PHPUnit\Framework\TestCase;
 use Viserio\Contracts\Config\Repository as RepositoryContract;
 use Viserio\Contracts\Config\Traits\ConfigAwareTrait;
 
-class ConfigAwareTraitTest extends \PHPUnit_Framework_TestCase
+class ConfigAwareTraitTest extends TestCase
 {
     use MockeryTrait;
     use ConfigAwareTrait;

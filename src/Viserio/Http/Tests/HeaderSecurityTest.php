@@ -10,6 +10,7 @@ namespace Viserio\Http\Tests;
  * @license   https://github.com/zendframework/zend-diactoros/blob/master/LICENSE.md New BSD License
  */
 
+use PHPUnit\Framework\TestCase;
 use Viserio\Http\HeaderSecurity;
 
 /**
@@ -21,7 +22,7 @@ use Viserio\Http\HeaderSecurity;
  * @copyright Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
  * @license   http://framework.zend.com/license/new-bsd New BSD License
  */
-class HeaderSecurityTest extends \PHPUnit_Framework_TestCase
+class HeaderSecurityTest extends TestCase
 {
     /**
      * Data for filter value.

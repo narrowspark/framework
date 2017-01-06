@@ -2,9 +2,10 @@
 declare(strict_types=1);
 namespace Viserio\Translation\Tests\PluralCategorys;
 
+use PHPUnit\Framework\TestCase;
 use Viserio\Translation\PluralCategorys\Two;
 
-class TwoTest extends \PHPUnit_Framework_TestCase
+class TwoTest extends TestCase
 {
     /**
      * @dataProvider category

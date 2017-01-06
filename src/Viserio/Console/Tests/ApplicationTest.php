@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Console\Tests;
 
 use Narrowspark\TestingHelper\ArrayContainer;
+use PHPUnit\Framework\TestCase;
 use StdClass;
 use Symfony\Component\Console\Input\StringInput;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -10,7 +11,7 @@ use Viserio\Console\Application;
 use Viserio\Console\Tests\Fixture\SpyOutput;
 use Viserio\Console\Tests\Fixture\ViserioCommand;
 
-class ApplicationTest extends \PHPUnit_Framework_TestCase
+class ApplicationTest extends TestCase
 {
     /**
      * @var Application
@@ -240,6 +241,17 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
 
         self::assertOutputIs('foo', '');
         self::assertSame($this->application, $whatIsThis);
+    }
+
+    public function testItCanRunasASingleCommandApplication()
+    {
+        $this->application->command('run', function (OutputInterface $output) {
+            $output->write('hello');
+        });
+
+        $this->application->setDefaultCommand('run');
+
+        $this->assertOutputIs('', 'hello');
     }
 
     /**

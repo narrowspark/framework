@@ -4,11 +4,12 @@ namespace Viserio\Filesystem\Tests;
 
 use League\Flysystem\Util;
 use org\bovigo\vfs\content\LargeFileContent;
+use PHPUnit\Framework\TestCase;
 use Viserio\Filesystem\Adapters\LocalConnector;
 use Viserio\Filesystem\FilesystemAdapter;
 use Viserio\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
-class FilesystemAdapterTest extends \PHPUnit_Framework_TestCase
+class FilesystemAdapterTest extends TestCase
 {
     use NormalizePathAndDirectorySeparatorTrait;
 

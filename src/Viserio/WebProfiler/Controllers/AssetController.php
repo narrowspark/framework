@@ -33,7 +33,7 @@ class AssetController extends AbstractController
     protected $webprofiler;
 
     /**
-     * [__construct description].
+     * Create a new AssetController instance.
      *
      * @param \Interop\Http\Factory\ServerRequestFactoryInterface $serverRequest
      * @param \Interop\Http\Factory\ResponseFactoryInterface      $responseFactory

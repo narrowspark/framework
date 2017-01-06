@@ -2,10 +2,11 @@
 declare(strict_types=1);
 namespace Viserio\Routing\Tests\Matchers;
 
+use PHPUnit\Framework\TestCase;
 use Viserio\Contracts\Routing\Pattern;
 use Viserio\Routing\Matchers\RegexMatcher;
 
-class RegexMatcherTest extends \PHPUnit_Framework_TestCase
+class RegexMatcherTest extends TestCase
 {
     public function testGetGroupCount()
     {

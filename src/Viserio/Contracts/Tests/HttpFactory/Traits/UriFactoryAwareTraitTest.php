@@ -4,9 +4,10 @@ namespace Viserio\Contracts\HttpFactory\Tests\Traits;
 
 use Interop\Http\Factory\UriFactoryInterface;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
+use PHPUnit\Framework\TestCase;
 use Viserio\Contracts\HttpFactory\Traits\UriFactoryAwareTrait;
 
-class UriFactoryAwareTraitTest extends \PHPUnit_Framework_TestCase
+class UriFactoryAwareTraitTest extends TestCase
 {
     use MockeryTrait;
     use UriFactoryAwareTrait;
@@ -15,7 +16,7 @@ class UriFactoryAwareTraitTest extends \PHPUnit_Framework_TestCase
     {
         $this->setUriFactory($this->mock(UriFactoryInterface::class));
 
-        $this->assertInstanceOf(UriFactoryInterface::class, $this->getUriFactory());
+        static::assertInstanceOf(UriFactoryInterface::class, $this->getUriFactory());
     }
 
     /**

@@ -3,13 +3,14 @@ declare(strict_types=1);
 namespace Viserio\Console\Tests;
 
 use Narrowspark\TestingHelper\ArrayContainer;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Input\StringInput;
 use Viserio\Console\Application;
 use Viserio\Console\Tests\Fixture\SpyOutput;
 use Viserio\Console\Tests\Fixture\ViserioConfirmableFalseCommand;
 use Viserio\Console\Tests\Fixture\ViserioConfirmableTrueCommand;
 
-class ConfirmableTraitTest extends \PHPUnit_Framework_TestCase
+class ConfirmableTraitTest extends TestCase
 {
     /**
      * @var Application

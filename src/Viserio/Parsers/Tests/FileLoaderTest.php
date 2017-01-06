@@ -3,11 +3,12 @@ declare(strict_types=1);
 namespace Viserio\Parsers\Tests;
 
 use org\bovigo\vfs\vfsStream;
+use PHPUnit\Framework\TestCase;
 use Viserio\Parsers\FileLoader;
 use Viserio\Parsers\TaggableParser;
 use Viserio\Support\Traits\NormalizePathAndDirectorySeparatorTrait;
 
-class FileLoaderTest extends \PHPUnit_Framework_TestCase
+class FileLoaderTest extends TestCase
 {
     use NormalizePathAndDirectorySeparatorTrait;
 

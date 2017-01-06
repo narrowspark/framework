@@ -3,10 +3,11 @@ declare(strict_types=1);
 namespace Viserio\Events\Tests;
 
 use Narrowspark\TestingHelper\ArrayContainer;
+use PHPUnit\Framework\TestCase;
 use Viserio\Events\Dispatcher;
 use Viserio\Events\Tests\Fixture\EventListener;
 
-class DispatcherTest extends \PHPUnit_Framework_TestCase
+class DispatcherTest extends TestCase
 {
     public const coreRequest   = 'core.request';
     public const coreException = 'core.exception';

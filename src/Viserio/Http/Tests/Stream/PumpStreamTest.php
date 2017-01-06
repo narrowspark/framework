@@ -3,11 +3,12 @@ declare(strict_types=1);
 namespace Viserio\Http\Tests\Stream;
 
 use ArrayIterator;
+use PHPUnit\Framework\TestCase;
 use RuntimeException;
 use Viserio\Http\Stream\LimitStream;
 use Viserio\Http\Stream\PumpStream;
 
-class PumpStreamTest extends \PHPUnit_Framework_TestCase
+class PumpStreamTest extends TestCase
 {
     public function testHasMetadataAndSize()
     {

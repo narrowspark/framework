@@ -3,13 +3,14 @@ declare(strict_types=1);
 namespace Viserio\Console\Tests\Command;
 
 use Narrowspark\TestingHelper\ArrayContainer;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Input\StringInput;
 use Viserio\Console\Application;
 use Viserio\Console\Command\ClosureCommand;
 use Viserio\Console\Tests\Fixture\SpyOutput;
 use Viserio\Support\Invoker;
 
-class ClosureCommandTest extends \PHPUnit_Framework_TestCase
+class ClosureCommandTest extends TestCase
 {
     /**
      * @var Application

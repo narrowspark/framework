@@ -2,12 +2,13 @@
 declare(strict_types=1);
 namespace Viserio\Cookie\Tests\Providers;
 
+use PHPUnit\Framework\TestCase;
 use Viserio\Config\Providers\ConfigServiceProvider;
 use Viserio\Container\Container;
 use Viserio\Cookie\CookieJar;
 use Viserio\Cookie\Providers\CookieServiceProvider;
 
-class CookieServiceProviderTest extends \PHPUnit_Framework_TestCase
+class CookieServiceProviderTest extends TestCase
 {
     public function testProvider()
     {

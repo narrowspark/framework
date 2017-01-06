@@ -3,10 +3,11 @@ declare(strict_types=1);
 namespace Viserio\Contracts\Cache\Tests\Traits;
 
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
+use PHPUnit\Framework\TestCase;
 use Viserio\Contracts\Cache\Manager;
 use Viserio\Contracts\Cache\Traits\CacheManagerAwareTrait;
 
-class CacheManagerAwareTraitTest extends \PHPUnit_Framework_TestCase
+class CacheManagerAwareTraitTest extends TestCase
 {
     use MockeryTrait;
     use CacheManagerAwareTrait;

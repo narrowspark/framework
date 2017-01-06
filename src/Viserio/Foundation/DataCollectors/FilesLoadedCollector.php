@@ -27,7 +27,7 @@ class FilesLoadedCollector extends AbstractDataCollector implements
     protected $included = [];
 
     /**
-     * [$basePath description].
+     * Base path.
      *
      * @var string
      */
@@ -49,30 +49,19 @@ class FilesLoadedCollector extends AbstractDataCollector implements
     public function collect(ServerRequestInterface $serverRequest, ResponseInterface $response)
     {
         // Get the files included on load.
-        $includedFiles = get_included_files();
-        $compiled      = $this->getCompiledFiles();
-
         $included = [];
-        $files    = [
-            'included' => [],
-            'compiled' => [],
-        ];
 
-        foreach ($includedFiles as $file) {
+        foreach (get_included_files() as $file) {
             // Skip the files from webprofiler, they are only loaded for Debugging and confuse the output.
             if (mb_strpos($file, 'vendor/narrowspark/framework/src/Viserio/WebProfiler') !== false ||
                 mb_strpos($file, 'vendor/viserio/web-profiler') !== false
             ) {
                 continue;
-            } elseif (! in_array($file, $compiled)) {
-                $included[] = $files['included'][] = $this->stripBasePath($file);
-            } else {
-                $files['compiled'][] = $this->stripBasePath($file);
             }
+            $included[] = $this->stripBasePath($file);
         }
 
         $this->included = $included;
-        $this->files    = $files;
     }
 
     /**
@@ -92,37 +81,11 @@ class FilesLoadedCollector extends AbstractDataCollector implements
      */
     public function getPanel(): string
     {
-        $included = $this->files['included'];
-        $compiled = $this->files['compiled'];
-
-        return $this->createTabs([
-            [
-                'name'    => 'Included Files <span class="counter">' . count($included) . '</span>',
-                'content' => $this->createTable(
-                    $included,
-                    '',
-                    ['Files']
-                ),
-            ],
-            [
-                'name'    => 'Compiled Files <span class="counter">' . count($compiled) . '</span>',
-                'content' => $this->createTable(
-                    $compiled,
-                    '',
-                    ['Files']
-                ),
-            ],
-        ]);
-    }
-
-    /**
-     * Get the files that are going to be compiled, so they aren't as important.
-     *
-     * @return array
-     */
-    protected function getCompiledFiles(): array
-    {
-        return [];
+        return $this->createTable(
+            $this->included,
+            '',
+            ['Files']
+        );
     }
 
     /**

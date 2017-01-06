@@ -2,12 +2,13 @@
 declare(strict_types=1);
 namespace Viserio\Filesystem\Tests\Providers;
 
+use PHPUnit\Framework\TestCase;
 use Viserio\Container\Container;
 use Viserio\Contracts\Filesystem\Filesystem as FilesystemContract;
 use Viserio\Filesystem\Filesystem;
 use Viserio\Filesystem\Providers\FilesServiceProvider;
 
-class FilesServiceProviderTest extends \PHPUnit_Framework_TestCase
+class FilesServiceProviderTest extends TestCase
 {
     public function testProvider()
     {

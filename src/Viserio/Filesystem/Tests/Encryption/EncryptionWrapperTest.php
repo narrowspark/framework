@@ -3,11 +3,12 @@ declare(strict_types=1);
 namespace Viserio\Filesystem\Tests\Encryption;
 
 use Defuse\Crypto\Key;
+use PHPUnit\Framework\TestCase;
 use Viserio\Filesystem\Adapters\LocalConnector;
 use Viserio\Filesystem\Encryption\EncryptionWrapper;
 use Viserio\Filesystem\FilesystemAdapter;
 
-class EncryptionWrapperTest extends \PHPUnit_Framework_TestCase
+class EncryptionWrapperTest extends TestCase
 {
     /**
      * @var string

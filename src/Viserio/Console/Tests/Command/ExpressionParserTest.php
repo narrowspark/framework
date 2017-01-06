@@ -2,11 +2,12 @@
 declare(strict_types=1);
 namespace Viserio\Console\Tests\Command;
 
+use PHPUnit\Framework\TestCase;
 use Viserio\Console\Command\ExpressionParser;
 use Viserio\Console\Input\InputArgument;
 use Viserio\Console\Input\InputOption;
 
-class ExpressionParserTest extends \PHPUnit_Framework_TestCase
+class ExpressionParserTest extends TestCase
 {
     public function testItParsesCommandNames()
     {
@@ -141,6 +142,7 @@ class ExpressionParserTest extends \PHPUnit_Framework_TestCase
     public function assertParsesTo($expression, $expected)
     {
         $parser = new ExpressionParser();
+
         self::assertEquals($expected, $parser->parse($expression));
     }
 }

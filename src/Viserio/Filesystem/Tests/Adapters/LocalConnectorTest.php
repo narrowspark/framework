@@ -3,9 +3,10 @@ declare(strict_types=1);
 namespace Viserio\Filesystem\Tests\Adapters;
 
 use League\Flysystem\Adapter\Local;
+use PHPUnit\Framework\TestCase;
 use Viserio\Filesystem\Adapters\LocalConnector;
 
-class LocalConnectorTest extends \PHPUnit_Framework_TestCase
+class LocalConnectorTest extends TestCase
 {
     public function testConnectStandard()
     {

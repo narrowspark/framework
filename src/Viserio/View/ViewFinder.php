@@ -205,6 +205,8 @@ class ViewFinder implements FinderContract
 
     /**
      * {@inheritdoc}
+     *
+     * @codeCoverageIgnore
      */
     public function flush(): void
     {

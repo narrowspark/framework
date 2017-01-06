@@ -3,13 +3,14 @@ declare(strict_types=1);
 namespace Viserio\Translation\Tests;
 
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
+use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 use Viserio\Translation\MessageCatalogue;
 use Viserio\Translation\MessageSelector;
 use Viserio\Translation\PluralizationRules;
 use Viserio\Translation\Translator;
 
-class TranslatorTest extends \PHPUnit_Framework_TestCase
+class TranslatorTest extends TestCase
 {
     use MockeryTrait;
 

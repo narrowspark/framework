@@ -4,6 +4,7 @@ namespace Viserio\Filesystem\Tests\Providers;
 
 use League\Flysystem\Filesystem;
 use League\Flysystem\FilesystemInterface;
+use PHPUnit\Framework\TestCase;
 use Viserio\Cache\Providers\CacheServiceProvider;
 use Viserio\Config\Providers\ConfigServiceProvider;
 use Viserio\Container\Container;
@@ -12,7 +13,7 @@ use Viserio\Filesystem\FilesystemAdapter;
 use Viserio\Filesystem\FilesystemManager;
 use Viserio\Filesystem\Providers\FilesystemServiceProvider;
 
-class FilesystemServiceProviderTest extends \PHPUnit_Framework_TestCase
+class FilesystemServiceProviderTest extends TestCase
 {
     public function testProvider()
     {

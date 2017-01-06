@@ -2,9 +2,10 @@
 declare(strict_types=1);
 namespace Viserio\Routing\Tests\Matchers;
 
+use PHPUnit\Framework\TestCase;
 use Viserio\Routing\Matchers\AnyMatcher;
 
-class AnyMatcherTest extends \PHPUnit_Framework_TestCase
+class AnyMatcherTest extends TestCase
 {
     public function testGetConditionExpression()
     {

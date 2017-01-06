@@ -6,11 +6,12 @@ use Cache\Adapter\PHPArray\ArrayCachePool;
 use League\Flysystem\Adapter\Local as FlyLocal;
 use League\Flysystem\Cached\CacheInterface;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
+use PHPUnit\Framework\TestCase;
 use Viserio\Contracts\Cache\Manager as CacheManagerContract;
 use Viserio\Filesystem\Cache\CachedFactory;
 use Viserio\Filesystem\FilesystemManager;
 
-class CachedFactoryTest extends \PHPUnit_Framework_TestCase
+class CachedFactoryTest extends TestCase
 {
     use MockeryTrait;
 

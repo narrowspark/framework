@@ -2,13 +2,14 @@
 declare(strict_types=1);
 namespace Viserio\WebProfiler;
 
-use Interop\Http\Factory\StreamFactoryInterface;
 use Psr\Http\Message\MessageInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use RuntimeException;
+use Throwable;
 use Viserio\Contracts\Cache\Traits\CacheItemPoolAwareTrait;
 use Viserio\Contracts\Events\Traits\EventsAwareTrait;
+use Viserio\Contracts\HttpFactory\Traits\StreamFactoryAwareTrait;
 use Viserio\Contracts\Log\Traits\LoggerAwareTrait;
 use Viserio\Contracts\Routing\UrlGenerator as UrlGeneratorContract;
 use Viserio\Contracts\WebProfiler\DataCollector as DataCollectorContract;
@@ -20,6 +21,7 @@ class WebProfiler implements WebProfilerContract
     use CacheItemPoolAwareTrait;
     use EventsAwareTrait;
     use LoggerAwareTrait;
+    use StreamFactoryAwareTrait;
 
     /**
      * All registered data collectors.
@@ -34,13 +36,6 @@ class WebProfiler implements WebProfilerContract
      * @var \Psr\Http\Message\ServerRequestInterface
      */
     protected $serverRequest;
-
-    /**
-     * Stream factory instance.
-     *
-     * @var \Interop\Http\Factory\StreamFactoryInterface
-     */
-    protected $streamFactory;
 
     /**
      * Url generator instance.
@@ -117,33 +112,9 @@ class WebProfiler implements WebProfilerContract
      *
      * @return \Viserio\Contracts\Routing\UrlGenerator|null
      */
-    public function getUrlGenerator(): ?UrlGenerator
+    public function getUrlGenerator(): ?UrlGeneratorContract
     {
         return $this->urlGenerator;
-    }
-
-    /**
-     * Set stream factory instance.
-     *
-     * @param \Interop\Http\Factory\StreamFactoryInterface $factory
-     *
-     * @return \Viserio\Contracts\WebProfiler\WebProfiler
-     */
-    public function setStreamFactory(StreamFactoryInterface $factory): WebProfiler
-    {
-        $this->streamFactory = $factory;
-
-        return $this;
-    }
-
-    /**
-     * Get stream factory instance.
-     *
-     * @return \Interop\Http\Factory\StreamFactoryInterface
-     */
-    public function getStreamFactory(): StreamFactoryInterface
-    {
-        return $this->streamFactory;
     }
 
     /**
@@ -174,18 +145,22 @@ class WebProfiler implements WebProfilerContract
      * Adds a data collector.
      *
      * @param \Viserio\Contracts\WebProfiler\DataCollector $collector
+     * @param int                                          $priority
      *
      * @throws \RuntimeException
      *
      * @return $this
      */
-    public function addCollector(DataCollectorContract $collector): WebProfilerContract
+    public function addCollector(DataCollectorContract $collector, int $priority = 100): WebProfilerContract
     {
         if (isset($this->collectors[$collector->getName()])) {
-            throw new RuntimeException(sprintf('[%s] is already a registered collector', $collector->getName()));
+            throw new RuntimeException(sprintf('[%s] is already a registered collector.', $collector->getName()));
         }
 
-        $this->collectors[$collector->getName()] = $collector;
+        $this->collectors[$collector->getName()] = [
+            'collector' => $collector,
+            'priority'  => $priority,
+        ];
 
         return $this;
     }
@@ -228,28 +203,25 @@ class WebProfiler implements WebProfilerContract
             return $response;
         }
 
-        foreach ($this->collectors as $name => $collector) {
-            $collector->collect($serverRequest, $response);
-
-            $this->collectors[$name] = $collector;
-        }
-
         $token = mb_substr(hash('sha256', uniqid((string) mt_rand(), true)), 0, 6);
-
-        if ($this->cachePool !== null) {
-            $this->createProfile(
-                $token,
-                (new ClientIp($serverRequest))->getIpAddress(),
-                $serverRequest->getMethod(),
-                (string) $serverRequest->getUri(),
-                $response->getStatusCode(),
-                microtime(true),
-                date('Y-m-d H:i:s'),
-                $this->collectors
-            );
-        }
-
         $response->withHeader('X-Debug-Token', $token);
+
+        try {
+            if ($this->isRedirect($response)) {
+                // $this->stackData();
+            } elseif ($this->isJsonRequest($serverRequest)) {
+                // $this->sendDataInHeaders(true);
+            } elseif ($this->isHtmlResponse($response) || $this->isHtmlAccepted($serverRequest)) {
+                // Just collect + store data, don't inject it.
+                $this->collectData($token, $serverRequest, $response);
+            }
+        } catch (Throwable $exception) {
+            if ($this->logger !== null) {
+                $this->logger->error('WebProfiler exception: ' . $exception->getMessage());
+            } else {
+                throw $exception;
+            }
+        }
 
         return $this->injectWebProfiler($response, $token);
     }
@@ -276,17 +248,8 @@ class WebProfiler implements WebProfilerContract
      */
     protected function injectWebProfiler(ResponseInterface $response, string $token): ResponseInterface
     {
-        $content = (string) $response->getBody();
-
-        $assets   = $this->getAssetsRenderer();
-        $template = new TemplateManager(
-            $this->collectors,
-            $this->template,
-            $assets->getIcons()
-        );
-        $template->setToken($token);
-
-        $renderedContent = $assets->render() . $template->render();
+        $content         = (string) $response->getBody();
+        $renderedContent = $this->createTemplate($token);
 
         $pos = mb_strripos($content, '</body>');
 
@@ -307,6 +270,65 @@ class WebProfiler implements WebProfilerContract
     }
 
     /**
+     * Collect data and create a new profile and save it.
+     *
+     * @param string                                   $token
+     * @param \Psr\Http\Message\ServerRequestInterface $serverRequest
+     * @param \Psr\Http\Message\ResponseInterface      $response
+     *
+     * @return void
+     */
+    private function collectData(
+        string $token,
+        ServerRequestInterface $serverRequest,
+        ResponseInterface $response
+    ): void {
+        // sort on priority
+        usort($this->collectors, function ($a, $b) {
+            return $a['priority'] <=> $b['priority'];
+        });
+
+        foreach ($this->collectors as $name => $collector) {
+            $collector['collector']->collect($serverRequest, $response);
+
+            $this->collectors[$name] = $collector['collector'];
+        }
+
+        if ($this->cachePool !== null) {
+            $this->createProfile(
+                $token,
+                (new ClientIp($serverRequest))->getIpAddress(),
+                $serverRequest->getMethod(),
+                (string) $serverRequest->getUri(),
+                $response->getStatusCode(),
+                microtime(true),
+                date('Y-m-d H:i:s'),
+                $this->collectors
+            );
+        }
+    }
+
+    /**
+     * Create template.
+     *
+     * @param string $token
+     *
+     * @return string
+     */
+    private function createTemplate(string $token): string
+    {
+        $assets   = $this->getAssetsRenderer();
+        $template = new TemplateManager(
+            $this->collectors,
+            $this->template,
+            $token,
+            $assets->getIcons()
+        );
+
+        return $assets->render() . $template->render();
+    }
+
+    /**
      * {@inheritdoc}
      */
     private function runningInConsole(): bool
@@ -323,7 +345,19 @@ class WebProfiler implements WebProfilerContract
      */
     private function isHtmlResponse(ResponseInterface $response): bool
     {
-        return $this->hasHeaderContains($response, 'Content-Type', 'text/html');
+        return $this->hasHeaderContains($response, 'Content-Type', 'html');
+    }
+
+    /**
+     * Check if request is a json request.
+     *
+     * @param \Psr\Http\Message\ServerRequestInterface $request
+     *
+     * @return bool
+     */
+    private function isJsonRequest(ServerRequestInterface $request): bool
+    {
+        return $this->hasHeaderContains($request, 'Accept', 'application/json');
     }
 
     /**
@@ -335,7 +369,7 @@ class WebProfiler implements WebProfilerContract
      */
     private function isHtmlAccepted(ServerRequestInterface $request): bool
     {
-        return $this->hasHeaderContains($request, 'Accept', 'text/html');
+        return $this->hasHeaderContains($request, 'Accept', 'html');
     }
 
     /**
@@ -377,7 +411,7 @@ class WebProfiler implements WebProfilerContract
      * @param string $method
      * @param string $url
      * @param int    $statusCode
-     * @param string $time
+     * @param float  $time
      * @param string $date
      * @param array  $collectors
      *

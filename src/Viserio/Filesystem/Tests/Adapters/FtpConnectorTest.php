@@ -3,9 +3,10 @@ declare(strict_types=1);
 namespace Viserio\Filesystem\Tests\Adapters;
 
 use League\Flysystem\Adapter\Ftp;
+use PHPUnit\Framework\TestCase;
 use Viserio\Filesystem\Adapters\FtpConnector;
 
-class FtpConnectorTest extends \PHPUnit_Framework_TestCase
+class FtpConnectorTest extends TestCase
 {
     public function testConnect()
     {

@@ -4,6 +4,7 @@ namespace Viserio\Exception\Tests\Filters;
 
 use Exception;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
+use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\RequestInterface;
 use Viserio\Exception\Displayers\HtmlDisplayer;
 use Viserio\Exception\Displayers\JsonDisplayer;
@@ -13,7 +14,7 @@ use Viserio\Exception\Filters\VerboseFilter;
 use Viserio\HttpFactory\ResponseFactory;
 use Viserio\HttpFactory\StreamFactory;
 
-class VerboseFilterTest extends \PHPUnit_Framework_TestCase
+class VerboseFilterTest extends TestCase
 {
     use MockeryTrait;
 

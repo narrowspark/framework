@@ -6,6 +6,7 @@ use Defuse\Crypto\Key;
 use Mockery as Mock;
 use Narrowspark\TestingHelper\ArrayContainer;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
+use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Cache\CacheManager;
 use Viserio\Contracts\Cache\Manager as CacheManagerContract;
@@ -15,7 +16,7 @@ use Viserio\Contracts\Session\Store as StoreContract;
 use Viserio\Encryption\Encrypter;
 use Viserio\Session\SessionManager;
 
-class SessionManagerTest extends \PHPUnit_Framework_TestCase
+class SessionManagerTest extends TestCase
 {
     use MockeryTrait;
 

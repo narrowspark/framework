@@ -7,10 +7,11 @@ use Aws\Sqs\SqsClient;
 use Cake\Chronos\Chronos;
 use Interop\Container\ContainerInterface;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
+use PHPUnit\Framework\TestCase;
 use Viserio\Queue\Connectors\SqsQueue;
 use Viserio\Queue\Jobs\SqsJob;
 
-class SqsQueueTest extends \PHPUnit_Framework_TestCase
+class SqsQueueTest extends TestCase
 {
     use MockeryTrait;
 

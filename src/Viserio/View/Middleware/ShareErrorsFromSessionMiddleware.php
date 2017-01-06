@@ -29,16 +29,15 @@ class ShareErrorsFromSessionMiddleware implements ServerMiddlewareInterface
 
     /**
      * {@inhertidoc}.
-     *
-     * @param ServerRequestInterface $request
-     * @param DelegateInterface      $delegate
      */
     public function process(ServerRequestInterface $request, DelegateInterface $delegate): ResponseInterface
     {
-        $this->view->share(
-            'errors',
-            $request->getAttribute('session')->get('errors', [])
-        );
+        if (($session = $request->getAttribute('session')) !== null) {
+            $this->view->share(
+                'errors',
+                $session->get('errors', [])
+            );
+        }
 
         return $delegate->process($request);
     }

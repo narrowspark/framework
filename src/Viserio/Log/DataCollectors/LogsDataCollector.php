@@ -2,15 +2,10 @@
 declare(strict_types=1);
 namespace Viserio\Log\DataCollectors;
 
-use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\ServerRequestInterface;
-use Viserio\Contracts\WebProfiler\MenuAware as MenuAwareContract;
 use Viserio\Contracts\WebProfiler\PanelAware as PanelAwareContract;
-use Viserio\WebProfiler\DataCollectors\AbstractDataCollector;
+use Viserio\WebProfiler\DataCollectors\MessagesDataCollector;
 
-class LogsDataCollector extends AbstractDataCollector implements
-    MenuAwareContract,
-    PanelAwareContract
+class LogsDataCollector extends MessagesDataCollector implements PanelAwareContract
 {
     /**
      * LogParser instance.
@@ -27,19 +22,10 @@ class LogsDataCollector extends AbstractDataCollector implements
      */
     public function __construct(LogParser $logParser, $storages)
     {
+        parent::__construct('logs');
+
         $this->logParser = $logParser;
         $this->storages  = (array) $storages;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function collect(ServerRequestInterface $serverRequest, ResponseInterface $response)
-    {
-        $this->data = [
-            'logs'    => $this->getLogsFiles(),
-            'counted' => count($this->getLogsFiles()),
-        ];
     }
 
     /**
@@ -61,7 +47,7 @@ class LogsDataCollector extends AbstractDataCollector implements
         $html = '';
         $logs = [];
 
-        foreach ($this->data['logs'] as $file) {
+        foreach ($this->data['messages'] as $file) {
             foreach ($this->storages as $storage) {
                 $name = $this->stripBasePath($storage, $file);
             }
@@ -89,16 +75,14 @@ class LogsDataCollector extends AbstractDataCollector implements
     }
 
     /**
-     * Get all logs from given log storages.
-     *
-     * @return array
+     * {@inheritdoc}
      */
-    protected function getLogsFiles(): array
+    public function getMessages(): array
     {
         $files = [];
 
         foreach ($this->storages as $storage) {
-            $files = array_merge($files, glob($storage));
+            $files = array_merge($files, glob($storage . '*.{log,txt}', GLOB_BRACE));
         }
 
         $files = array_reverse($files);

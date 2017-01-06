@@ -2,12 +2,13 @@
 declare(strict_types=1);
 namespace Viserio\Config\Tests\Providers;
 
+use PHPUnit\Framework\TestCase;
 use Viserio\Config\Providers\ConfigServiceProvider;
 use Viserio\Config\Repository;
 use Viserio\Container\Container;
 use Viserio\Contracts\Config\Repository as RepositoryContract;
 
-class ConfigServiceProviderTest extends \PHPUnit_Framework_TestCase
+class ConfigServiceProviderTest extends TestCase
 {
     public function testProvider()
     {

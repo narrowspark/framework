@@ -300,7 +300,7 @@ abstract class AbstractMessage implements MessageInterface
      * @param string          $header
      * @param string|string[] $value
      *
-     * @return array
+     * @return string[]
      */
     private function checkHeaderData(string $header, $value): array
     {
@@ -362,7 +362,7 @@ abstract class AbstractMessage implements MessageInterface
      *
      * @param array $values
      *
-     * @return array
+     * @return string[]
      */
     private function filterHeaderValue(array $values): array
     {

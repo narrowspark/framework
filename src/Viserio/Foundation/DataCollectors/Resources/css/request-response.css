@@ -1,15 +1,20 @@
-.webprofiler .webprofiler-header .webprofiler-menus a.webprofiler-menu.webprofiler-menu-viserio-http-data-collector .webprofiler-menu-status {
-    color: #F5F5F5;
-    padding: 0 10px;
+.webprofiler-menu.webprofiler-menu-viserio-http-data-collector.response-status-green .webprofiler-menu-label,
+.webprofiler-menu.webprofiler-menu-viserio-http-data-collector.response-status-yellow .webprofiler-menu-label,
+.webprofiler-menu.webprofiler-menu-viserio-http-data-collector.response-status-red .webprofiler-menu-label {
+    padding: 0 10px!important;
     margin-right: 5px;
 }
-.webprofiler .webprofiler-header .webprofiler-menus a.webprofiler-menu.webprofiler-menu-viserio-http-data-collector.response-status-green .webprofiler-menu-status {
+.webprofiler-menu.webprofiler-menu-viserio-http-data-collector.response-status-green .webprofiler-menu-label {
     background-color: #4F805D;
 }
-.webprofiler .webprofiler-header .webprofiler-menus a.webprofiler-menu.webprofiler-menu-viserio-http-data-collector.response-status-yellow .webprofiler-menu-status {
+.webprofiler-menu.webprofiler-menu-viserio-http-data-collector.response-status-yellow .webprofiler-menu-label {
     background-color: #A46A1F;
     color: #FFF;
 }
-.webprofiler .webprofiler-header .webprofiler-menus a.webprofiler-menu.webprofiler-menu-viserio-http-data-collector.response-status-red .webprofiler-menu-status {
+.webprofiler-menu.webprofiler-menu-viserio-http-data-collector.response-status-red .webprofiler-menu-label {
     background-color: #B0413E;
+}
+.webprofiler .webprofiler-header .webprofiler-menus .webprofiler-menu-position-left.webprofiler-menu-viserio-http-data-collector .webprofiler-menu-content {
+    padding-left: 0;
+    padding-right: 7px;
 }

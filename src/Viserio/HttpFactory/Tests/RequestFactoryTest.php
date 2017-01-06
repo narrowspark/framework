@@ -2,11 +2,12 @@
 declare(strict_types=1);
 namespace Viserio\HttpFactory\Tests;
 
+use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\RequestInterface;
 use Viserio\HttpFactory\RequestFactory;
 use Viserio\HttpFactory\UriFactory;
 
-class RequestFactoryTest extends \PHPUnit_Framework_TestCase
+class RequestFactoryTest extends TestCase
 {
     private $factory;
 

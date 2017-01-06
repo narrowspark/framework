@@ -4,9 +4,10 @@ namespace Viserio\Contracts\HttpFactory\Tests\Traits;
 
 use Interop\Http\Factory\StreamFactoryInterface;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
+use PHPUnit\Framework\TestCase;
 use Viserio\Contracts\HttpFactory\Traits\StreamFactoryAwareTrait;
 
-class StreamFactoryAwareTraitTest extends \PHPUnit_Framework_TestCase
+class StreamFactoryAwareTraitTest extends TestCase
 {
     use MockeryTrait;
     use StreamFactoryAwareTrait;
@@ -15,7 +16,7 @@ class StreamFactoryAwareTraitTest extends \PHPUnit_Framework_TestCase
     {
         $this->setStreamFactory($this->mock(StreamFactoryInterface::class));
 
-        $this->assertInstanceOf(StreamFactoryInterface::class, $this->getStreamFactory());
+        static::assertInstanceOf(StreamFactoryInterface::class, $this->getStreamFactory());
     }
 
     /**

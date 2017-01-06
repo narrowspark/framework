@@ -13,6 +13,7 @@ use Cache\Adapter\PHPArray\ArrayCachePool;
 use Cache\Adapter\Predis\PredisCachePool;
 use Cache\Adapter\Redis\RedisCachePool;
 use Cache\Adapter\Void\VoidCachePool;
+use Cache\Bridge\SimpleCache\SimpleCacheBridge;
 use Cache\Hierarchy\HierarchicalPoolInterface;
 use Cache\Namespaced\NamespacedCachePool;
 use Cache\SessionHandler\Psr6SessionHandler;
@@ -21,6 +22,8 @@ use Memcache;
 use Memcached;
 use MongoDB\Driver\Manager as MongoDBManager;
 use Predis\Client as PredisClient;
+use Psr\Cache\CacheItemPoolInterface;
+use Psr\SimpleCache\CacheInterface;
 use Redis;
 use Viserio\Contracts\Cache\Manager as CacheManagerContract;
 use Viserio\Support\AbstractManager;
@@ -36,14 +39,9 @@ class CacheManager extends AbstractManager implements CacheManagerContract
     }
 
     /**
-     *  Chain multiple PSR-6 Cache pools together for performance.
-     *
-     * @param array      $pools
-     * @param array|null $options
-     *
-     * @return \Cache\Adapter\Chain\CachePoolChain
+     * {@inheritdoc}
      */
-    public function chain(array $pools, array $options = null): CachePoolChain
+    public function chain(array $pools, ?array $options = null): CachePoolChain
     {
         $resolvedPools = [];
 
@@ -64,6 +62,18 @@ class CacheManager extends AbstractManager implements CacheManagerContract
     /**
      * {@inheritdoc}
      */
+    public function getSimpleCache($pool = null): CacheInterface
+    {
+        if ($pool instanceof CacheItemPoolInterface) {
+            return new SimpleCacheBridge($pool);
+        }
+
+        return new SimpleCacheBridge($this->driver($pool));
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function createDriver(array $config)
     {
         $driver = parent::createDriver($config);
@@ -73,6 +83,10 @@ class CacheManager extends AbstractManager implements CacheManagerContract
         if ($namespace !== null && $driver instanceof HierarchicalPoolInterface) {
             return $this->namespacedPool($driver, $namespace);
         }
+
+        // if ($this->config->get($this->getConfigName() . '.simple_cache')) {
+        //     return new SimpleCacheBridge($driver);
+        // }
 
         return $driver;
     }

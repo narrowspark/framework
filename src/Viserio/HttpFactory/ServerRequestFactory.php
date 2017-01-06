@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace Viserio\HttpFactory;
 
 use Interop\Http\Factory\ServerRequestFactoryInterface;
+use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\UriInterface;
 use UnexpectedValueException;
 use Viserio\Http\ServerRequest;
@@ -17,7 +18,7 @@ class ServerRequestFactory implements ServerRequestFactoryInterface
      *
      * @codeCoverageIgnore
      */
-    public function createServerRequest(array $server, $method = null, $uri = null)
+    public function createServerRequest(array $server, $method = null, $uri = null): ServerRequestInterface
     {
         $server        = $this->normalizeServer($server);
         $requestMethod = $method ?? $server['REQUEST_METHOD'] ?? 'GET';

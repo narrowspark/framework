@@ -3,10 +3,11 @@ declare(strict_types=1);
 namespace Viserio\Session\Tests\Handler;
 
 use org\bovigo\vfs\vfsStream;
+use PHPUnit\Framework\TestCase;
 use Viserio\Filesystem\Filesystem;
 use Viserio\Session\Handler\FileSessionHandler;
 
-class FileSessionHandlerTest extends \PHPUnit_Framework_TestCase
+class FileSessionHandlerTest extends TestCase
 {
     /**
      * @var string

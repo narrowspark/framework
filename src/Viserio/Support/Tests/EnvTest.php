@@ -2,9 +2,10 @@
 declare(strict_types=1);
 namespace Viserio\Support\Tests;
 
+use PHPUnit\Framework\TestCase;
 use Viserio\Support\Env;
 
-class EnvTest extends \PHPUnit_Framework_TestCase
+class EnvTest extends TestCase
 {
     public function setUp()
     {

@@ -3,9 +3,10 @@ declare(strict_types=1);
 namespace Viserio\Encryption\Tests;
 
 use Defuse\Crypto\Key;
+use PHPUnit\Framework\TestCase;
 use Viserio\Encryption\Encrypter;
 
-class EncrypterTest extends \PHPUnit_Framework_TestCase
+class EncrypterTest extends TestCase
 {
     public function testCompareEncryptedValues()
     {

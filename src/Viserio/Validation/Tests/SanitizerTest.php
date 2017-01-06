@@ -3,11 +3,12 @@ declare(strict_types=1);
 namespace Viserio\Validation\Tests;
 
 use Narrowspark\TestingHelper\ArrayContainer;
+use PHPUnit\Framework\TestCase;
 use Viserio\Validation\Sanitizer;
 use Viserio\Validation\Tests\Fixture\SanitizerFixture;
 use Viserio\Validation\Tests\Fixture\SuffixFixture;
 
-class SanitizerTest extends \PHPUnit_Framework_TestCase
+class SanitizerTest extends TestCase
 {
     public function testThatSanitizerCanSanitizeWithClosure()
     {

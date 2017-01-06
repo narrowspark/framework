@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Session\Tests\Providers;
 
 use Defuse\Crypto\Key;
+use PHPUnit\Framework\TestCase;
 use Viserio\Config\Providers\ConfigServiceProvider;
 use Viserio\Container\Container;
 use Viserio\Contracts\Session\Store as StoreContract;
@@ -11,7 +12,7 @@ use Viserio\Filesystem\Providers\FilesServiceProvider;
 use Viserio\Session\Providers\SessionServiceProvider;
 use Viserio\Session\SessionManager;
 
-class SessionServiceProviderTest extends \PHPUnit_Framework_TestCase
+class SessionServiceProviderTest extends TestCase
 {
     public function testProvider()
     {

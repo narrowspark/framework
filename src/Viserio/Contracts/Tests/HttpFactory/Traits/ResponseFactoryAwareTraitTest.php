@@ -4,9 +4,10 @@ namespace Viserio\Contracts\HttpFactory\Tests\Traits;
 
 use Interop\Http\Factory\ResponseFactoryInterface;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
+use PHPUnit\Framework\TestCase;
 use Viserio\Contracts\HttpFactory\Traits\ResponseFactoryAwareTrait;
 
-class ResponseFactoryAwareTraitTest extends \PHPUnit_Framework_TestCase
+class ResponseFactoryAwareTraitTest extends TestCase
 {
     use MockeryTrait;
     use ResponseFactoryAwareTrait;
@@ -15,7 +16,7 @@ class ResponseFactoryAwareTraitTest extends \PHPUnit_Framework_TestCase
     {
         $this->setResponseFactory($this->mock(ResponseFactoryInterface::class));
 
-        $this->assertInstanceOf(ResponseFactoryInterface::class, $this->getResponseFactory());
+        static::assertInstanceOf(ResponseFactoryInterface::class, $this->getResponseFactory());
     }
 
     /**

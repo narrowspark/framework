@@ -6,6 +6,7 @@ use Exception;
 use Interop\Container\ContainerInterface;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
 use Opis\Closure\SerializableClosure;
+use PHPUnit\Framework\TestCase;
 use stdClass;
 use Viserio\Contracts\Encryption\Encrypter as EncrypterContract;
 use Viserio\Queue\Connectors\SyncQueue;
@@ -14,7 +15,7 @@ use Viserio\Queue\QueueClosure;
 use Viserio\Queue\Tests\Fixture\FailingSyncQueueHandler;
 use Viserio\Queue\Tests\Fixture\SyncQueueHandler;
 
-class SyncQueueTest extends \PHPUnit_Framework_TestCase
+class SyncQueueTest extends TestCase
 {
     use MockeryTrait;
 

@@ -4,10 +4,11 @@ namespace Viserio\Session\Tests;
 
 use Mockery as Mock;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
+use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Session\Fingerprint\ClientIpGenerator;
 
-class ClientIpGeneratorTest extends \PHPUnit_Framework_TestCase
+class ClientIpGeneratorTest extends TestCase
 {
     use MockeryTrait;
 

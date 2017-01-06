@@ -27,14 +27,16 @@
         "viserio/support"                     : "self.version"
     },
     "require-dev": {
+        "cache/array-adapter"                 : "^0.4",
         "narrowspark/testing-helper"          : "^1.5",
-        "phpunit/phpunit"                     : "^5.1",
+        "phpunit/phpunit"                     : "~5.7",
         "http-interop/http-middleware"        : "^0.3",
         "viserio/cache"                       : "self.version",
         "viserio/config"                      : "self.version",
         "viserio/container"                   : "self.version",
+        "viserio/events"                      : "self.version",
         "viserio/routing"                     : "self.version",
-        "viserio/events"                      : "self.version"
+        "viserio/http-factory"                : "self.version"
     },
     "autoload": {
         "psr-4": {

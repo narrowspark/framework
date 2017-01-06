@@ -20,14 +20,15 @@
     "require": {
         "php"                                 : "^7.1",
         "monolog/monolog"                     : "^1.17",
-        "psr/log"                             : "^1.0",
         "viserio/cotracts"                    : "self.version"
     },
     "require-dev": {
         "container-interop/service-provider"  : "^0.3",
         "narrowspark/testing-helper"          : "^2.0",
-        "phpunit/phpunit"                     : "^5.1",
-        "viserio/container"                   : "self.version"
+        "phpunit/phpunit"                     : "~5.7",
+        "viserio/config"                      : "self.version",
+        "viserio/container"                   : "self.version",
+        "viserio/web-profiler"                : "self.version"
     },
     "autoload": {
         "psr-4": {

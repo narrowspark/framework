@@ -3,10 +3,11 @@ declare(strict_types=1);
 namespace Viserio\Parsers\Tests\Formats;
 
 use org\bovigo\vfs\vfsStream;
+use PHPUnit\Framework\TestCase;
 use Viserio\Filesystem\Filesystem;
 use Viserio\Parsers\Formats\PHP;
 
-class PHPTest extends \PHPUnit_Framework_TestCase
+class PHPTest extends TestCase
 {
     /**
      * @var \org\bovigo\vfs\vfsStreamDirectory

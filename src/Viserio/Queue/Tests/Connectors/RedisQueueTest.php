@@ -4,11 +4,12 @@ namespace Viserio\Queue\Tests\Connectors;
 
 use Cake\Chronos\Chronos;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
+use PHPUnit\Framework\TestCase;
 use Predis\Client;
 use Viserio\Contracts\Encryption\Encrypter as EncrypterContract;
 use Viserio\Queue\Connectors\RedisQueue;
 
-class RedisQueueTest extends \PHPUnit_Framework_TestCase
+class RedisQueueTest extends TestCase
 {
     use MockeryTrait;
 

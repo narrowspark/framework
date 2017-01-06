@@ -3,9 +3,10 @@ declare(strict_types=1);
 namespace Viserio\Exception\Tests;
 
 use Exception;
+use PHPUnit\Framework\TestCase;
 use Viserio\Exception\ExceptionIdentifier;
 
-class ExceptionIdentifierTest extends \PHPUnit_Framework_TestCase
+class ExceptionIdentifierTest extends TestCase
 {
     public function testIdentifyOne()
     {

@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace Viserio\Mail\Tests;
 
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
+use PHPUnit\Framework\TestCase;
 use StdClass;
 use Swift_Mailer;
 use Swift_Mime_Message;
@@ -13,7 +14,7 @@ use Viserio\Contracts\View\Factory as ViewFactoryContract;
 use Viserio\Contracts\View\View as ViewContract;
 use Viserio\Mail\Mailer;
 
-class MailerTest extends \PHPUnit_Framework_TestCase
+class MailerTest extends TestCase
 {
     use MockeryTrait;
 

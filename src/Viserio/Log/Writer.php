@@ -5,6 +5,7 @@ namespace Viserio\Log;
 use Monolog\Handler\RotatingFileHandler;
 use Monolog\Logger as MonologLogger;
 use Monolog\Processor\PsrLogMessageProcessor;
+use Psr\Log\LoggerTrait;
 use Viserio\Contracts\Events\Traits\EventsAwareTrait;
 use Viserio\Contracts\Log\Log as LogContract;
 use Viserio\Contracts\Support\Arrayable;
@@ -15,6 +16,7 @@ class Writer implements LogContract
 {
     use ParseLevelTrait;
     use EventsAwareTrait;
+    use LoggerTrait;
 
     /**
      * The handler parser instance.
@@ -87,103 +89,20 @@ class Writer implements LogContract
     }
 
     /**
-     * Log an emergency message to the logs.
-     *
-     * @param mixed $message
-     * @param array $context
+     * {@inheritdoc}
      */
-    public function emergency($message, array $context = [])
+    public function log($level, $message, array $context = []): void
     {
-        return $this->writeLog('emergency', $message, $context);
-    }
+        $message = $this->formatMessage($message);
 
-    /**
-     * Log an alert message to the logs.
-     *
-     * @param mixed $message
-     * @param array $context
-     */
-    public function alert($message, array $context = [])
-    {
-        return $this->writeLog('alert', $message, $context);
-    }
+        if ($this->events !== null) {
+            // If the event dispatcher is set, we will pass along the parameters to the
+            // log listeners. These are useful for building profilers or other tools
+            // that aggregate all of the log messages for a given "request" cycle.
+            $this->getEventsDispatcher()->trigger('viserio.log', compact('level', 'message', 'context'));
+        }
 
-    /**
-     * Log a critical message to the logs.
-     *
-     * @param mixed $message
-     * @param array $context
-     */
-    public function critical($message, array $context = [])
-    {
-        return $this->writeLog('critical', $message, $context);
-    }
-
-    /**
-     * Log an error message to the logs.
-     *
-     * @param mixed $message
-     * @param array $context
-     */
-    public function error($message, array $context = [])
-    {
-        return $this->writeLog('error', $message, $context);
-    }
-
-    /**
-     * Log a warning message to the logs.
-     *
-     * @param mixed $message
-     * @param array $context
-     */
-    public function warning($message, array $context = [])
-    {
-        return $this->writeLog('warning', $message, $context);
-    }
-
-    /**
-     * Log a notice to the logs.
-     *
-     * @param mixed $message
-     * @param array $context
-     */
-    public function notice($message, array $context = [])
-    {
-        return $this->writeLog('notice', $message, $context);
-    }
-
-    /**
-     * Log an informational message to the logs.
-     *
-     * @param mixed $message
-     * @param array $context
-     */
-    public function info($message, array $context = [])
-    {
-        return $this->writeLog('info', $message, $context);
-    }
-
-    /**
-     * Log a debug message to the logs.
-     *
-     * @param mixed $message
-     * @param array $context
-     */
-    public function debug($message, array $context = [])
-    {
-        return $this->writeLog('debug', $message, $context);
-    }
-
-    /**
-     * Log a message to the logs.
-     *
-     * @param string $level
-     * @param mixed  $message
-     * @param array  $context
-     */
-    public function log($level, $message, array $context = [])
-    {
-        return $this->writeLog($level, $message, $context);
+        $this->getMonolog()->{$level}($message, $context);
     }
 
     /**
@@ -230,26 +149,5 @@ class Writer implements LogContract
         }
 
         return $message;
-    }
-
-    /**
-     * Write a message to Monolog.
-     *
-     * @param string $level
-     * @param mixed  $message
-     * @param array  $context
-     */
-    protected function writeLog(string $level, $message, array $context)
-    {
-        $message = $this->formatMessage($message);
-
-        if ($this->events !== null) {
-            // If the event dispatcher is set, we will pass along the parameters to the
-            // log listeners. These are useful for building profilers or other tools
-            // that aggregate all of the log messages for a given "request" cycle.
-            $this->getEventsDispatcher()->trigger('viserio.log', compact('level', 'message', 'context'));
-        }
-
-        $this->getMonolog()->{$level}($message, $context);
     }
 }

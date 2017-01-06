@@ -2,10 +2,11 @@
 declare(strict_types=1);
 namespace Viserio\Events\Tests;
 
+use PHPUnit\Framework\TestCase;
 use Viserio\Contracts\Events\Dispatcher;
 use Viserio\Events\ListenerPattern;
 
-class ListenerPatternTest extends \PHPUnit_Framework_TestCase
+class ListenerPatternTest extends TestCase
 {
     /**
      * @dataProvider providePatternsAndMatches

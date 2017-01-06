@@ -4,6 +4,7 @@ namespace Viserio\Mail\Tests;
 
 use Narrowspark\TestingHelper\ArrayContainer;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
+use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 use Swift_MailTransport;
 use Swift_SendmailTransport;
@@ -16,7 +17,7 @@ use Viserio\Mail\Transport\Ses as SesTransport;
 use Viserio\Mail\Transport\SparkPost as SparkPostTransport;
 use Viserio\Mail\TransportManager;
 
-class TransportManagerTest extends \PHPUnit_Framework_TestCase
+class TransportManagerTest extends TestCase
 {
     use MockeryTrait;
 

@@ -2,9 +2,10 @@
 declare(strict_types=1);
 namespace Viserio\Foundation\Tests;
 
+use PHPUnit\Framework\TestCase;
 use Viserio\Foundation\EnvironmentDetector;
 
-class EnvironmentDetectorTest extends \PHPUnit_Framework_TestCase
+class EnvironmentDetectorTest extends TestCase
 {
     /**
      * @var \Viserio\Foundation\EnvironmentDetector
@@ -38,11 +39,6 @@ class EnvironmentDetectorTest extends \PHPUnit_Framework_TestCase
     }
 
     public function testCanBeDetected()
-    {
-        self::assertInternalType('boolean', $this->env->isHHVM());
-    }
-
-    public function testCanBeDetected2()
     {
         self::assertInternalType('boolean', $this->env->isPHP());
     }

@@ -19,7 +19,6 @@ enabled:
   - const_visibility_required
   - declare_strict_types
   - dir_constant
-  - echo_to_print
   - ereg_to_preg
   - mb_str_functions
   - modernize_types_casting
@@ -42,7 +41,6 @@ disabled:
   - unalign_equals
   - self_accessor
   - concat_without_spaces
-  - print_to_echo
   - single_blank_line_before_namespace
   - simplified_null_return
 

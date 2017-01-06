@@ -11,10 +11,11 @@ use Cache\SessionHandler\Psr6SessionHandler;
 use Interop\Container\ContainerInterface;
 use League\Flysystem\Adapter\Local;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
+use PHPUnit\Framework\TestCase;
 use Viserio\Cache\CacheManager;
 use Viserio\Contracts\Config\Repository as RepositoryContract;
 
-class CacheManagerTest extends \PHPUnit_Framework_TestCase
+class CacheManagerTest extends TestCase
 {
     use MockeryTrait;
 
@@ -31,10 +32,12 @@ class CacheManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testArrayPoolCall()
     {
-        $this->manager->getConfig()->shouldReceive('get')
+        $this->manager->getConfig()
+            ->shouldReceive('get')
             ->once()
             ->with('cache.drivers', []);
-        $this->manager->getConfig()->shouldReceive('get')
+        $this->manager->getConfig()
+            ->shouldReceive('get')
             ->once()
             ->with('cache.namespace')
             ->andReturn(null);
@@ -44,11 +47,13 @@ class CacheManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testNamespacedArrayPoolCall()
     {
-        $this->manager->getConfig()->shouldReceive('get')
+        $this->manager->getConfig()
+            ->shouldReceive('get')
             ->once()
             ->with('cache.drivers', []);
 
-        $this->manager->getConfig()->shouldReceive('get')
+        $this->manager->getConfig()
+            ->shouldReceive('get')
             ->once()
             ->with('cache.namespace')
             ->andReturn('viserio');
@@ -58,7 +63,8 @@ class CacheManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testDontNamespceSessionHandler()
     {
-        $this->manager->getConfig()->shouldReceive('get')
+        $this->manager->getConfig()
+            ->shouldReceive('get')
             ->twice()
             ->with('cache.drivers', [])
             ->andReturn([
@@ -67,7 +73,8 @@ class CacheManagerTest extends \PHPUnit_Framework_TestCase
                     'config' => [],
                 ],
             ]);
-        $this->manager->getConfig()->shouldReceive('get')
+        $this->manager->getConfig()
+            ->shouldReceive('get')
             ->twice()
             ->with('cache.namespace')
             ->andReturn('viserio');
@@ -91,16 +98,19 @@ class CacheManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testChain()
     {
-        $this->manager->getConfig()->shouldReceive('get')
+        $this->manager->getConfig()
+            ->shouldReceive('get')
             ->twice()
             ->with('cache.drivers', []);
 
-        $this->manager->getConfig()->shouldReceive('get')
+        $this->manager->getConfig()
+            ->shouldReceive('get')
             ->twice()
             ->with('cache.namespace')
             ->andReturn('viserio');
 
-        $this->manager->getConfig()->shouldReceive('get')
+        $this->manager->getConfig()
+            ->shouldReceive('get')
             ->once()
             ->with('cache.chain.options', [])
             ->andReturn([]);
@@ -112,7 +122,8 @@ class CacheManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testFilesystem()
     {
-        $this->manager->getConfig()->shouldReceive('get')
+        $this->manager->getConfig()
+            ->shouldReceive('get')
             ->once()
             ->with('cache.drivers', [])
             ->andReturn([
@@ -121,7 +132,8 @@ class CacheManagerTest extends \PHPUnit_Framework_TestCase
                 ],
             ]);
 
-        $this->manager->getConfig()->shouldReceive('get')
+        $this->manager->getConfig()
+            ->shouldReceive('get')
             ->once()
             ->with('cache.namespace')
             ->andReturn(null);

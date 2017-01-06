@@ -8,12 +8,13 @@ use Monolog\Handler\RotatingFileHandler;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
+use PHPUnit\Framework\TestCase;
 use Viserio\Events\Dispatcher;
 use Viserio\Log\Tests\Fixture\ArrayableClass;
 use Viserio\Log\Tests\Fixture\JsonableClass;
 use Viserio\Log\Writer;
 
-class WriterTest extends \PHPUnit_Framework_TestCase
+class WriterTest extends TestCase
 {
     use MockeryTrait;
 

@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Exception\Tests\Providers;
 
+use PHPUnit\Framework\TestCase;
 use Viserio\Config\Providers\ConfigServiceProvider;
 use Viserio\Container\Container;
 use Viserio\Exception\Displayers\HtmlDisplayer;
@@ -19,7 +20,7 @@ use Viserio\Filesystem\Providers\FilesServiceProvider;
 use Viserio\HttpFactory\Providers\HttpFactoryServiceProvider;
 use Viserio\View\Providers\ViewServiceProvider;
 
-class ExceptionServiceProviderTest extends \PHPUnit_Framework_TestCase
+class ExceptionServiceProviderTest extends TestCase
 {
     public function testProvider()
     {

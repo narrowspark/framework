@@ -5,13 +5,14 @@ namespace Viserio\Cookie\Tests\Middleware;
 use Mockery as Mock;
 use Narrowspark\TestingHelper\Middleware\DelegateMiddleware;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
+use PHPUnit\Framework\TestCase;
 use Viserio\Cookie\CookieJar;
 use Viserio\Cookie\Middleware\AddQueuedCookiesToResponseMiddleware;
 use Viserio\Cookie\ResponseCookies;
 use Viserio\HttpFactory\ResponseFactory;
 use Viserio\HttpFactory\ServerRequestFactory;
 
-class AddQueuedCookiesToResponseMiddlewareTest extends \PHPUnit_Framework_TestCase
+class AddQueuedCookiesToResponseMiddlewareTest extends TestCase
 {
     use MockeryTrait;
 

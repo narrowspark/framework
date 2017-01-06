@@ -2,9 +2,10 @@
 declare(strict_types=1);
 namespace Viserio\Http\Tests\Uri\Filter;
 
+use PHPUnit\Framework\TestCase;
 use Viserio\Http\Uri\Filter\Path;
 
-class PathTest extends \PHPUnit_Framework_TestCase
+class PathTest extends TestCase
 {
     /**
      * @dataProvider validPathEncoding

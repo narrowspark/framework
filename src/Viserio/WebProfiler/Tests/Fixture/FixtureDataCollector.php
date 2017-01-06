@@ -20,10 +20,23 @@ class FixtureDataCollector extends AbstractDataCollector
         return $this->createTable(['test key' => 'test value'], 'test');
     }
 
+    public function getTableArray()
+    {
+        return $this->createTable([['test key' => 'test value']], 'array');
+    }
+
     public function getTooltippGroupDefault()
     {
         return $this->createTooltipGroup([
             'test' => 'test',
+        ]);
+    }
+
+    public function getTooltippGroupDefaultWithLink()
+    {
+        return $this->createTooltipGroup([
+            'Resources' => '<a href="//narrowspark.de/doc/">Read Narrowspark Doc\'s </a>',
+            'Help'      => '<a href="//narrowspark.de/support">Narrowspark Support Channels</a>',
         ]);
     }
 

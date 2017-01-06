@@ -4,10 +4,11 @@ namespace Viserio\Support\Tests\Http;
 
 use Mockery as Mock;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
+use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ServerRequestInterface;
 use Viserio\Support\Http\ClientIp;
 
-class ClientIpTest extends \PHPUnit_Framework_TestCase
+class ClientIpTest extends TestCase
 {
     use MockeryTrait;
 
@@ -34,7 +35,7 @@ class ClientIpTest extends \PHPUnit_Framework_TestCase
 
         $clientIp = new ClientIp($request);
 
-        $this->assertSame('111.111.111.111', $clientIp->getIpAddress());
+        static::assertSame('111.111.111.111', $clientIp->getIpAddress());
 
         $request = $this->mock(ServerRequestInterface::class);
         $request->shouldReceive('hasHeader')
@@ -51,6 +52,6 @@ class ClientIpTest extends \PHPUnit_Framework_TestCase
 
         $clientIp = new ClientIp($request);
 
-        $this->assertSame('100.8.116.127', $clientIp->getIpAddress());
+        static::assertSame('100.8.116.127', $clientIp->getIpAddress());
     }
 }

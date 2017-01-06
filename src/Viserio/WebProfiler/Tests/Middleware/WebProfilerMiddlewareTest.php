@@ -5,13 +5,15 @@ namespace Viserio\WebProfiler\Test\Middleware;
 use Mockery as Mock;
 use Narrowspark\TestingHelper\Middleware\DelegateMiddleware;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
+use PHPUnit\Framework\TestCase;
 use Viserio\HttpFactory\ResponseFactory;
 use Viserio\HttpFactory\ServerRequestFactory;
 use Viserio\WebProfiler\AssetsRenderer;
 use Viserio\WebProfiler\Middleware\WebProfilerMiddleware;
+use Viserio\WebProfiler\TemplateManager;
 use Viserio\WebProfiler\WebProfiler;
 
-class WebProfilerMiddlewareTest extends \PHPUnit_Framework_TestCase
+class WebProfilerMiddlewareTest extends TestCase
 {
     use MockeryTrait;
 
@@ -27,9 +29,20 @@ class WebProfilerMiddlewareTest extends \PHPUnit_Framework_TestCase
 
     public function testProcess()
     {
-        $profiler = new WebProfiler(new AssetsRenderer());
+        $assets   = new AssetsRenderer();
+        $profiler = new WebProfiler($assets);
+
         $profiler->enable();
+
         $middleware = new WebProfilerMiddleware($profiler);
+        $template   = new TemplateManager(
+            [],
+            $profiler->getTemplate(),
+            '12213435415',
+            $assets->getIcons()
+        );
+
+        $renderedContent = $assets->render() . $template->render();
 
         $request = (new ServerRequestFactory())->createServerRequest($_SERVER);
 
@@ -37,14 +50,20 @@ class WebProfilerMiddlewareTest extends \PHPUnit_Framework_TestCase
             return (new ResponseFactory())->createResponse(200);
         }));
 
-        $this->assertSame(
-            $this->removeId(file_get_contents(__DIR__ . '/../Fixture/View/profiler.html')),
+        static::assertEquals(
+            $this->removeId($renderedContent),
             $this->removeId((string) $response->getBody())
         );
     }
 
     private function removeId(string $html): string
     {
-        return trim(preg_replace('/="webprofiler-(.*?)"/', '', $html));
+        return trim(
+            str_replace(
+                "\r\n",
+                '',
+                preg_replace('/="webprofiler-(.*?)"/', '', $html)
+            )
+        );
     }
 }

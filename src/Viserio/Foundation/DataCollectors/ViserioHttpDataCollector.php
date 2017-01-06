@@ -68,7 +68,7 @@ class ViserioHttpDataCollector extends AbstractDataCollector implements
     public function __construct(RouterContract $router, RepositoryContract $config)
     {
         $this->route         = $router->getCurrentRoute();
-        $this->serverRequest = $router->getCurrentRoute()->getServerRequest();
+        $this->serverRequest = $this->route->getServerRequest();
         $this->config        = $config;
     }
 
@@ -93,14 +93,6 @@ class ViserioHttpDataCollector extends AbstractDataCollector implements
     /**
      * {@inheritdoc}
      */
-    public function getMenuPosition(): string
-    {
-        return 'left';
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getMenu(): array
     {
         $statusCode = $this->response->getStatusCode();
@@ -118,10 +110,8 @@ class ViserioHttpDataCollector extends AbstractDataCollector implements
         }
 
         $tabInfos = [
-            'status' => $statusCode,
-            'class'  => $status,
-            'label'  => '',
-            'value'  => '',
+            'label' => $statusCode,
+            'value' => '',
         ];
 
         if ($this->route !== null && $this->route->getName() !== null) {
@@ -136,8 +126,8 @@ class ViserioHttpDataCollector extends AbstractDataCollector implements
             $tabInfos = array_merge(
                 $tabInfos,
                 [
-                    'label' => '',
-                    'value' => implode(' | ', $this->route->getMethods()),
+                    'class'  => $status,
+                    'value'  => implode(' | ', $this->route->getMethods()),
                 ]
             );
         }

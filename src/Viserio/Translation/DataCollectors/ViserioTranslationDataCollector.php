@@ -113,6 +113,8 @@ class ViserioTranslationDataCollector extends AbstractDataCollector implements
      * Get all collected messages.
      *
      * @return array
+     *
+     * @codeCoverageIgnore
      */
     public function getMessages(): array
     {
@@ -123,6 +125,8 @@ class ViserioTranslationDataCollector extends AbstractDataCollector implements
      * Get counted messages.
      *
      * @return array
+     *
+     * @codeCoverageIgnore
      */
     public function getCountedMessages(): array
     {
@@ -146,7 +150,7 @@ class ViserioTranslationDataCollector extends AbstractDataCollector implements
             if (! isset($result[$messageId])) {
                 $message['count']              = 1;
                 $message['parameters']         = ! empty($message['parameters']) ? [$message['parameters']] : [];
-                $messages[$key]['translation'] = $this->sanitizeString($message['translation']);
+                $messages[$key]['translation'] = $message['translation'];
                 $result[$messageId]            = $message;
             } else {
                 if (! empty($message['parameters'])) {
@@ -181,29 +185,6 @@ class ViserioTranslationDataCollector extends AbstractDataCollector implements
         }
 
         return $count;
-    }
-
-    /**
-     * Sanitize message string.
-     *
-     * @param string $string
-     * @param int    $length
-     *
-     * @return string
-     */
-    protected function sanitizeString(string $string, int $length = 80): string
-    {
-        $string = trim(preg_replace('/\s+/', ' ', $string));
-
-        if (false !== $encoding = mb_detect_encoding($string, null, true)) {
-            if (mb_strlen($string, $encoding) > $length) {
-                return mb_substr($string, 0, $length - 3, $encoding) . '...';
-            }
-        } elseif (mb_strlen($string) > $length) {
-            return mb_substr($string, 0, $length - 3) . '...';
-        }
-
-        return $string;
     }
 
     /**

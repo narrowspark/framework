@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Viserio\Parsers\Tests;
 
+use PHPUnit\Framework\TestCase;
 use Viserio\Parsers\Formats\BSON;
 use Viserio\Parsers\Formats\INI;
 use Viserio\Parsers\Formats\JSON;
@@ -14,7 +15,7 @@ use Viserio\Parsers\Formats\XML;
 use Viserio\Parsers\Formats\YAML;
 use Viserio\Parsers\Parser;
 
-class ParserTest extends \PHPUnit_Framework_TestCase
+class ParserTest extends TestCase
 {
     private $parser;
 

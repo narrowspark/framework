@@ -3,9 +3,10 @@ declare(strict_types=1);
 namespace Viserio\Hashing\Tests;
 
 use Defuse\Crypto\Key;
+use PHPUnit\Framework\TestCase;
 use Viserio\Hashing\Password;
 
-class PasswordTest extends \PHPUnit_Framework_TestCase
+class PasswordTest extends TestCase
 {
     private $password;
 

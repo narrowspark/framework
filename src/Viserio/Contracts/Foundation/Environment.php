@@ -39,13 +39,6 @@ interface Environment
     public function hasXdebug(): bool;
 
     /**
-     * Returns true when the runtime used is HHVM.
-     *
-     * @return bool
-     */
-    public function isHHVM(): bool;
-
-    /**
      * Returns true when the runtime used is PHP.
      *
      * @return bool

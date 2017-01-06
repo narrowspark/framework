@@ -5,6 +5,7 @@ namespace Viserio\Mail\Tests;
 use Interop\Container\ContainerInterface;
 use Mockery;
 use Narrowspark\TestingHelper\Traits\MockeryTrait;
+use PHPUnit\Framework\TestCase;
 use StdClass;
 use Swift_Mailer;
 use Swift_Mime_Message;
@@ -16,7 +17,7 @@ use Viserio\Contracts\View\View as ViewContract;
 use Viserio\Mail\QueueMailer;
 use Viserio\Mail\Tests\Fixture\FailingSwiftMailerStub;
 
-class QueueMailerTest extends \PHPUnit_Framework_TestCase
+class QueueMailerTest extends TestCase
 {
     use MockeryTrait;
 

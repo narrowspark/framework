@@ -2,12 +2,13 @@
 declare(strict_types=1);
 namespace Viserio\Bus\Tests\Providers;
 
+use PHPUnit\Framework\TestCase;
 use Viserio\Bus\Dispatcher;
 use Viserio\Bus\Providers\BusServiceProvider;
 use Viserio\Container\Container;
 use Viserio\Contracts\Bus\Dispatcher as DispatcherContract;
 
-class BusServiceProviderTest extends \PHPUnit_Framework_TestCase
+class BusServiceProviderTest extends TestCase
 {
     public function testProvider()
     {

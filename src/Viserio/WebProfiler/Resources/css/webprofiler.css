@@ -64,22 +64,22 @@
     float: right;
 }
 .webprofiler .webprofiler-header .webprofiler-hide-button svg,
-.webprofiler .webprofiler-header .webprofiler-menus a.webprofiler-menu svg {
+.webprofiler .webprofiler-header .webprofiler-menus .webprofiler-menu svg {
     position: relative;
     top: 6px;
     max-height: 24px;
 }
 
-.webprofiler .webprofiler-header .webprofiler-menus a.webprofiler-menu {
+.webprofiler .webprofiler-header .webprofiler-menus .webprofiler-menu {
     cursor: default;
     display: block;
     height: 36px;
     margin-right: 0;
     white-space: nowrap;
 }
-.webprofiler .webprofiler-header .webprofiler-menus a.webprofiler-menu .status-red,
-.webprofiler .webprofiler-header .webprofiler-menus a.webprofiler-menu .status-yellow,
-.webprofiler .webprofiler-header .webprofiler-menus a.webprofiler-menu .status-green {
+.webprofiler .webprofiler-header .webprofiler-menus .webprofiler-menu .status-red,
+.webprofiler .webprofiler-header .webprofiler-menus .webprofiler-menu .status-yellow,
+.webprofiler .webprofiler-header .webprofiler-menus .webprofiler-menu .status-green {
     display: inline-block;
     color: #FFF;
     background-color: #666;
@@ -90,37 +90,37 @@
     min-height: 13px;
     text-align: center;
 }
-.webprofiler .webprofiler-header .webprofiler-menus a.webprofiler-menu .status-red + .status-red,
-.webprofiler .webprofiler-header .webprofiler-menus a.webprofiler-menu .status-yellow + .status-yellow,
-.webprofiler .webprofiler-header .webprofiler-menus a.webprofiler-menu .status-green + .status-green {
+.webprofiler .webprofiler-header .webprofiler-menus .webprofiler-menu .status-red + .status-red,
+.webprofiler .webprofiler-header .webprofiler-menus .webprofiler-menu .status-yellow + .status-yellow,
+.webprofiler .webprofiler-header .webprofiler-menus .webprofiler-menu .status-green + .status-green {
     border-left: 5px solid #444;
 }
-.webprofiler .webprofiler-header .webprofiler-menus a.webprofiler-menu .status-green {
+.webprofiler .webprofiler-header .webprofiler-menus .webprofiler-menu .status-green {
     background-color: #4F805D;
 }
-.webprofiler .webprofiler-header .webprofiler-menus a.webprofiler-menu .status-yellow {
+.webprofiler .webprofiler-header .webprofiler-menus .webprofiler-menu .status-yellow {
     background-color: #A46A1F;
     color: #FFF;
 }
-.webprofiler .webprofiler-header .webprofiler-menus a.webprofiler-menu .status-red {
+.webprofiler .webprofiler-header .webprofiler-menus .webprofiler-menu .status-red {
     background-color: #B0413E;
 }
-.webprofiler .webprofiler-header .webprofiler-menus a.webprofiler-menu.active,
-.webprofiler .webprofiler-header .webprofiler-menus a.webprofiler-menu:hover {
+.webprofiler .webprofiler-header .webprofiler-menus .webprofiler-menu.active,
+.webprofiler .webprofiler-header .webprofiler-menus .webprofiler-menu:hover {
     background-color: #444;
     position: relative;
     z-index: 10002;
 }
-.webprofiler .webprofiler-header .webprofiler-menus a.webprofiler-menu.webprofiler-menu-has-tooltip:hover {
+.webprofiler .webprofiler-header .webprofiler-menus .webprofiler-menu.webprofiler-menu-has-tooltip:hover {
     cursor: help;
 }
-.webprofiler .webprofiler-header .webprofiler-menus a.webprofiler-menu.webprofiler-menu-has-panel:hover {
+.webprofiler .webprofiler-header .webprofiler-menus .webprofiler-menu.webprofiler-menu-has-panel:hover {
     cursor: pointer;
 }
-.webprofiler .webprofiler-header .webprofiler-menus a.webprofiler-menu.webprofiler-menu-has-tooltip .webprofiler-menu-tooltip {
+.webprofiler .webprofiler-header .webprofiler-menus .webprofiler-menu.webprofiler-menu-has-tooltip .webprofiler-menu-tooltip {
     display: none;
 }
-.webprofiler .webprofiler-header .webprofiler-menus a.webprofiler-menu.webprofiler-menu-has-tooltip:hover .webprofiler-menu-tooltip {
+.webprofiler .webprofiler-header .webprofiler-menus .webprofiler-menu.webprofiler-menu-has-tooltip:hover .webprofiler-menu-tooltip {
     display: block;
     padding: 10px;
     max-width: 480px;
@@ -133,67 +133,65 @@
     color: #F5F5F5;
     position: absolute;
 }
-.webprofiler .webprofiler-header .webprofiler-menus a.webprofiler-menu.webprofiler-menu-has-tooltip:hover .webprofiler-menu-tooltip .webprofiler-menu-tooltip-group {
+.webprofiler .webprofiler-header .webprofiler-menus .webprofiler-menu.webprofiler-menu-has-tooltip:hover .webprofiler-menu-tooltip .webprofiler-menu-tooltip-group {
     margin-bottom: 4px;
     padding-bottom: 4px;
     border-bottom: 1px solid #333333;
 }
-.webprofiler .webprofiler-header .webprofiler-menus a.webprofiler-menu.webprofiler-menu-has-tooltip:hover .webprofiler-menu-tooltip .webprofiler-menu-tooltip-group:last-child {
+.webprofiler .webprofiler-header .webprofiler-menus .webprofiler-menu.webprofiler-menu-has-tooltip:hover .webprofiler-menu-tooltip .webprofiler-menu-tooltip-group:last-child {
     margin-bottom: 0;
     padding-bottom: 0;
     border-bottom: none;
 }
-.webprofiler .webprofiler-header .webprofiler-menus a.webprofiler-menu.webprofiler-menu-has-tooltip:hover .webprofiler-menu-tooltip .webprofiler-menu-tooltip-group-piece {
+.webprofiler .webprofiler-header .webprofiler-menus .webprofiler-menu.webprofiler-menu-has-tooltip:hover .webprofiler-menu-tooltip .webprofiler-menu-tooltip-group-piece {
     border-bottom: solid transparent 3px;
     display: table-row;
 }
-.webprofiler .webprofiler-header .webprofiler-menus a.webprofiler-menu.webprofiler-menu-has-tooltip:hover .webprofiler-menu-tooltip .webprofiler-menu-tooltip-group b {
+.webprofiler .webprofiler-header .webprofiler-menus .webprofiler-menu.webprofiler-menu-has-tooltip:hover .webprofiler-menu-tooltip .webprofiler-menu-tooltip-group b {
     color: #AAA;
     display: table-cell;
     font-size: 11px;
     padding: 4px 8px 4px 0;
 }
-.webprofiler .webprofiler-header .webprofiler-menus a.webprofiler-menu.webprofiler-menu-has-tooltip:hover .webprofiler-menu-tooltip .webprofiler-menu-tooltip-group span {
+.webprofiler .webprofiler-header .webprofiler-menus .webprofiler-menu.webprofiler-menu-has-tooltip:hover .webprofiler-menu-tooltip .webprofiler-menu-tooltip-group span {
     color: #F5F5F5;
     font-size: 12px;
     display: table-cell;
 }
-.webprofiler .webprofiler-header .webprofiler-menus a.webprofiler-menu.webprofiler-menu-position-left.webprofiler-menu-has-tooltip:hover .webprofiler-menu-tooltip {
+.webprofiler .webprofiler-header .webprofiler-menus .webprofiler-menu.webprofiler-menu-has-tooltip:hover .webprofiler-menu-tooltip .webprofiler-menu-tooltip-group a {
+    color: #FFF;
+}
+.webprofiler .webprofiler-header .webprofiler-menus .webprofiler-menu.webprofiler-menu-position-left.webprofiler-menu-has-tooltip:hover .webprofiler-menu-tooltip {
     left: 0;
 }
-.webprofiler .webprofiler-header .webprofiler-menus a.webprofiler-menu.webprofiler-menu-position-right.webprofiler-menu-has-tooltip:hover .webprofiler-menu-tooltip {
+.webprofiler .webprofiler-header .webprofiler-menus .webprofiler-menu.webprofiler-menu-position-right.webprofiler-menu-has-tooltip:hover .webprofiler-menu-tooltip {
     right: 0;
 }
-.webprofiler .webprofiler-header .webprofiler-menus a.webprofiler-menu.webprofiler-menu-position-left {
+.webprofiler .webprofiler-header .webprofiler-menus .webprofiler-menu.webprofiler-menu-position-left {
     float: left;
 }
-.webprofiler .webprofiler-header .webprofiler-menus a.webprofiler-menu.webprofiler-menu-position-right {
+.webprofiler .webprofiler-header .webprofiler-menus .webprofiler-menu.webprofiler-menu-position-right {
     float: right;
 }
-.webprofiler .webprofiler-header .webprofiler-menus a.webprofiler-menu .webprofiler-menu-content {
+.webprofiler .webprofiler-header .webprofiler-menus .webprofiler-menu .webprofiler-menu-content {
     display: block;
     height: 36px;
     line-height: 36px;
 }
-.webprofiler .webprofiler-header .webprofiler-menus .webprofiler-menu-position-left .webprofiler-menu-content {
-    padding-left: 0;
-    padding-right: 7px;
-}
-.webprofiler .webprofiler-header .webprofiler-menus > a.webprofiler-menu.webprofiler-menu-position-left ~ a.webprofiler-menu.webprofiler-menu-position-left .webprofiler-menu-content,
-.webprofiler .webprofiler-header .webprofiler-menus a.webprofiler-menu.webprofiler-menu-position-right .webprofiler-menu-content {
+.webprofiler .webprofiler-header .webprofiler-menus .webprofiler-menu.webprofiler-menu-position-left .webprofiler-menu-content,
+.webprofiler .webprofiler-header .webprofiler-menus .webprofiler-menu.webprofiler-menu-position-right .webprofiler-menu-content {
     padding: 0 7px;
 }
-.webprofiler .webprofiler-header .webprofiler-menus a.webprofiler-menu .webprofiler-menu-content .webprofiler-menu-icon,
-.webprofiler .webprofiler-header .webprofiler-menus a.webprofiler-menu .webprofiler-menu-content .webprofiler-menu-status,
-.webprofiler .webprofiler-header .webprofiler-menus a.webprofiler-menu .webprofiler-menu-content .webprofiler-menu-label,
-.webprofiler .webprofiler-header .webprofiler-menus a.webprofiler-menu .webprofiler-menu-content .webprofiler-menu-value {
+.webprofiler .webprofiler-header .webprofiler-menus .webprofiler-menu .webprofiler-menu-content .webprofiler-menu-icon,
+.webprofiler .webprofiler-header .webprofiler-menus .webprofiler-menu .webprofiler-menu-content .webprofiler-menu-label,
+.webprofiler .webprofiler-header .webprofiler-menus .webprofiler-menu .webprofiler-menu-content .webprofiler-menu-value {
     display: inline-block;
     color: #F5F5F5;
     font-size: 13px;
     line-height: 36px;
     padding: 0;
 }
-.webprofiler .webprofiler-header .webprofiler-menus a.webprofiler-menu .webprofiler-menu-icon .webprofiler-menu-value {
+.webprofiler .webprofiler-header .webprofiler-menus .webprofiler-menu .webprofiler-menu-icon .webprofiler-menu-value {
     margin-left: 4px;
 }
 
@@ -226,7 +224,8 @@
     display: none;
 }
 .webprofiler .webprofiler-body .webprofiler-panel.webprofiler-body-has-table,
-.webprofiler .webprofiler-body .webprofiler-panel.webprofiler-body-has-selector {
+.webprofiler .webprofiler-body .webprofiler-panel.webprofiler-body-has-selector,
+.webprofiler .webprofiler-body .webprofiler-panel.webprofiler-body-has-metrics {
     overflow-y: auto;
     overflow-x: hidden;
     padding: 15px;
@@ -364,6 +363,36 @@
     padding: .5em 2em;
     text-align: center;
     font-weight: bold;
+}
+
+.webprofiler .webprofiler-body .webprofiler-panel .metrics {
+    overflow: auto;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+.webprofiler .webprofiler-body .webprofiler-panel .metrics .metric {
+    margin: 0 1em 1em 0;
+    background: #FFF;
+    box-shadow: 0px 0px 1px rgba(128, 128, 128, .2);
+    min-width: 100px;
+    min-height: 65px;
+    display: inline-block;
+}
+.webprofiler .webprofiler-body .webprofiler-panel .metrics .metric .value {
+    display: block;
+    font-size: 28px;
+    padding: 8px 15px 4px;
+    text-align: center;
+    color: #2B2A28;
+}
+.webprofiler .webprofiler-body .webprofiler-panel .metrics .metric .label {
+    background: #444;
+    color: #FFF;
+    display: block;
+    font-size: 12px;
+    padding: 5px;
+    text-align: center;
 }
 
 .webprofiler .webprofiler-body .webprofiler-panel select {

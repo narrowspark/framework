@@ -3,9 +3,10 @@ declare(strict_types=1);
 namespace Viserio\Filesystem\Tests\Adapters;
 
 use Guzzle\Http\Exception\CurlException;
+use PHPUnit\Framework\TestCase;
 use Viserio\Filesystem\Adapters\RackspaceConnector;
 
-class RackspaceConnectorTest extends \PHPUnit_Framework_TestCase
+class RackspaceConnectorTest extends TestCase
 {
     /**
      * @expectedException \Guzzle\Http\Exception\ClientErrorResponseException

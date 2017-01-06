@@ -2,13 +2,14 @@
 declare(strict_types=1);
 namespace Viserio\Http\Tests\Stream;
 
+use PHPUnit\Framework\TestCase;
 use RuntimeException;
 use Viserio\Http\Stream;
 use Viserio\Http\Stream\FnStream;
 use Viserio\Http\Stream\LimitStream;
 use Viserio\Http\Stream\NoSeekStream;
 
-class LimitStreamTest extends \PHPUnit_Framework_TestCase
+class LimitStreamTest extends TestCase
 {
     /** @var LimitStream */
     protected $body;
